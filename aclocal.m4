@@ -151,12 +151,14 @@ dnl
 AC_DEFUN(RTEMS_GCC_SPECS,
 [AC_REQUIRE([RTEMS_PROG_CC])
 AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts -specs,rtems_cv_gcc_specs,
-[touch confspec
-echo 'void f(){}' >conftest.c
-if test -z "`${CC_FOR_TARGET} -specs confspec -c conftest.c 2>&1`";then
-  rtems_cv_gcc_specs=yes
-else
-  rtems_cv_gcc_specs=no
+[
+rtems_cv_gcc_specs=no
+if test "$rtems_cv_prog_gcc" = "yes"; then
+  touch confspec
+  echo 'void f(){}' >conftest.c
+  if test -z "`${CC_FOR_TARGET} -specs confspec -c conftest.c 2>&1`";then
+    rtems_cv_gcc_specs=yes
+  fi
 fi
 rm -f confspec conftest*
 ])])
@@ -174,20 +176,20 @@ AC_DEFUN(RTEMS_GCC_PIPE,
 AC_REQUIRE([AC_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts --pipe,rtems_cv_gcc_pipe,
 [
+rtems_cv_gcc_pipe=no
+if test "$rtems_cv_prog_gcc" = "yes"; then
 case "$host_os" in
   cygwin32*)
-    rtems_cv_gcc_pipe=no 
     ;;
   *)
     echo 'void f(){}' >conftest.c
     if test -z "`${CC_FOR_TARGET} --pipe -c conftest.c 2>&1`";then
       rtems_cv_gcc_pipe=yes
-    else
-      rtems_cv_gcc_pipe=no
     fi
     rm -f conftest*
     ;;
 esac
+fi
 ])
 ])
 
@@ -261,40 +263,174 @@ dnl $Id$
 dnl
 dnl Set target tools
 dnl
+dnl 98/06/23 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
+dnl		fixing cache/environment variable handling
+dnl		adding checks for cygwin/egcs '\\'-bug
+dnl		adding checks for ranlib/ar -s problem 
+dnl
 dnl 98/02/12 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
 dnl
 
+AC_DEFUN(RTEMS_GCC_PRINT,
+[ case $host_os in
+  *cygwin32*)
+    dnl FIXME: Hack for cygwin/egcs reporting mixed '\\' and '/'
+    dnl        Should be removed once cygwin/egcs reports '/' only
+    $1=`$CC_FOR_TARGET --print-prog-name=$2 | sed -e "s%\\\\%/%g" `
+    ;;
+  *)
+    $1=`$CC_FOR_TARGET --print-prog-name=$2`
+    ;;
+  esac
+])
+
+AC_DEFUN(RTEMS_PATH_TOOL,
+[
+AC_MSG_CHECKING([target's $2])
+AC_CACHE_VAL(ac_cv_path_$1,:)
+AC_MSG_RESULT([$ac_cv_path_$1])
+
+if test -n "$ac_cv_path_$1"; then
+  dnl retrieve the value from the cache
+  $1=$ac_cv_path_$1
+else
+  dnl the cache was not set
+  if test -z "[$]$1" ; then
+    if test "$rtems_cv_prog_gcc" = "yes"; then
+      # We are using gcc, ask it about its tool
+      # NOTE: Necessary if gcc was configured to use the target's 
+      # native tools or uses prefixes for gnutools (e.g. gas instead of as)
+      RTEMS_GCC_PRINT($1,$2)
+    fi
+  else
+    # The user set an environment variable.
+    # Check whether it is an absolute path, otherwise AC_PATH_PROG 
+    # will override the environment variable, which isn't what the user
+    # intends
+    AC_MSG_CHECKING([whether environment variable $1 is an absolute path])
+    case "[$]$1" in
+    /*) # valid
+      AC_MSG_RESULT("yes")
+    ;;
+    *)  # invalid for AC_PATH_PROG
+      AC_MSG_RESULT("no")
+      AC_MSG_ERROR([***]
+        [Environment variable $1 should ether]
+	[be unset (preferred) or contain an absolute path])
+    ;;
+    esac
+  fi
+
+  AC_PATH_PROG($1,"$program_prefix"$2,$3)
+fi
+])
+
 AC_DEFUN(RTEMS_CANONICALIZE_TOOLS,
 [AC_REQUIRE([RTEMS_PROG_CC])dnl
-if test "$rtems_cv_prog_gcc" = "yes" ; then
-  dnl We are using gcc, now ask it about its tools
-  dnl Necessary if gcc was configured to use the target's native tools
-  dnl or uses prefixes for gnutools (e.g. gas instead of as)
-  AR_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ar`
-  AS_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=as`
-  LD_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ld`
-  NM_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=nm`
-  RANLIB_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ranlib`
-fi
 
-dnl check whether the tools exist
-dnl FIXME: What shall be done if they don't exist?
+dnl FIXME: What shall be done if these tools are not available?
+  RTEMS_PATH_TOOL(AR_FOR_TARGET,ar,no)
+  RTEMS_PATH_TOOL(AS_FOR_TARGET,as,no)
+  RTEMS_PATH_TOOL(LD_FOR_TARGET,ld,no)
+  RTEMS_PATH_TOOL(NM_FOR_TARGET,nm,no)
 
-dnl FIXME: This may fail if the compiler has not been recognized as gcc
-dnl       and uses tools with different names
-AC_PATH_PROG(AR_FOR_TARGET,"$program_prefix"ar,no)
-AC_PATH_PROG(AS_FOR_TARGET,"$program_prefix"as,no)
-AC_PATH_PROG(NM_FOR_TARGET,"$program_prefix"nm,no)
-AC_PATH_PROG(LD_FOR_TARGET,"$program_prefix"ld,no)
+dnl special treatment of ranlib
+  RTEMS_PATH_TOOL(RANLIB_FOR_TARGET,ranlib,no)
+  if test "$RANLIB_FOR_TARGET" = "no"; then
+    # ranlib wasn't found; check if ar -s is available
+    RTEMS_AR_FOR_TARGET_S
+    if test $rtems_cv_AR_FOR_TARGET_S = "yes" ; then
+      dnl override RANLIB_FOR_TARGET's cache
+      ac_cv_path_RANLIB_FOR_TARGET="$AR_FOR_TARGET -s"
+      RANLIB_FOR_TARGET=$ac_cv_path_RANLIB_FOR_TARGET
+    else
+      AC_MSG_ERROR([***]
+        [Can't figure out how to build a library index]
+	[Nether ranlib nor ar -s seem to be available] )
+    fi
+  fi
 
-dnl NOTE: This is doubtful, but should not disturb all current rtems'
-dnl 	  targets (remark: solaris fakes ranlib!!)
-AC_PATH_PROG(RANLIB_FOR_TARGET,"$program_prefix"ranlib,no)
-
-dnl NOTE: These may not be available, if not using gnutools
-AC_PATH_PROG(OBJCOPY_FOR_TARGET,"$program_prefix"objcopy,no)
-AC_PATH_PROG(SIZE_FOR_TARGET,"$program_prefix"size,no)
+dnl NOTE: These may not be available if not using gnutools
+  RTEMS_PATH_TOOL(OBJCOPY_FOR_TARGET,objcopy,no)
+  RTEMS_PATH_TOOL(SIZE_FOR_TARGET,size,no)
 ])
+
+AC_DEFUN(RTEMS_AR_FOR_TARGET_S,
+[
+AC_CACHE_CHECK(whether $AR_FOR_TARGET -s works,
+rtems_cv_AR_FOR_TARGET_S,
+[
+cat > conftest.$ac_ext <<EOF
+int foo( int b ) 
+{ return b; }
+EOF
+if AC_TRY_COMMAND($CC_FOR_TARGET -o conftest.o -c conftest.$ac_ext) \
+  && AC_TRY_COMMAND($AR_FOR_TARGET -sr conftest.a conftest.o) \
+  && test -s conftest.a ; \
+then
+  rtems_cv_AR_FOR_TARGET_S="yes"
+else
+  rtems_cv_AR_FOR_TARGET_S="no"
+fi
+  rm -f conftest*
+])
+])
+
+
+dnl Detect the Cygwin32 environment (unix under Win32)
+dnl
+dnl 98/06/16 David Fiddes   	(D.J.Fiddes@hw.ac.uk)
+dnl				Hacked from automake-1.3
+
+# Check to see if we're running under Cygwin32, without using
+# AC_CANONICAL_*.  If so, set output variable CYGWIN32 to "yes".
+# Otherwise set it to "no".
+
+dnl RTEMS_CYGWIN32()
+AC_DEFUN(RTEMS_CYGWIN32,
+[AC_CACHE_CHECK(for Cygwin32 environment, rtems_cv_cygwin32,
+[AC_TRY_COMPILE(,[return __CYGWIN32__;],
+rtems_cv_cygwin32=yes, rtems_cv_cygwin32=no)
+rm -f conftest*])
+CYGWIN32=
+test "$rtems_cv_cygwin32" = yes && CYGWIN32=yes])
+
+
+dnl Set the EXE extension
+dnl
+dnl 98/06/16 David Fiddes   	(D.J.Fiddes@hw.ac.uk)
+dnl				Hacked from automake-1.3
+
+# Check to see if we're running under Win32, without using
+# AC_CANONICAL_*.  If so, set output variable EXEEXT to ".exe".
+# Otherwise set it to "".
+
+dnl RTEMS_EXEEXT()
+dnl This knows we add .exe if we're building in the Cygwin32
+dnl environment. But if we're not, then it compiles a test program
+dnl to see if there is a suffix for executables.
+AC_DEFUN(RTEMS_EXEEXT,
+[AC_REQUIRE([RTEMS_CYGWIN32])
+AC_MSG_CHECKING([for executable suffix])
+AC_CACHE_VAL(rtems_cv_exeext,
+[if test "$CYGWIN32" = yes; then
+rtems_cv_exeext=.exe
+else
+cat > rtems_c_test.c << 'EOF'
+int main() {
+/* Nothing needed here */
+}
+EOF
+${CC-cc} -o rtems_c_test $CFLAGS $CPPFLAGS $LDFLAGS rtems_c_test.c $LIBS 1>&5
+rtems_cv_exeext=`echo rtems_c_test.* | grep -v rtems_c_test.c | sed -e s/rtems_c_test//`
+rm -f rtems_c_test*])
+test x"${rtems_cv_exeext}" = x && rtems_cv_exeext=no
+fi
+EXEEXT=""
+test x"${rtems_cv_exeext}" != xno && EXEEXT=${rtems_cv_exeext}
+AC_MSG_RESULT(${rtems_cv_exeext})
+AC_SUBST(EXEEXT)])
+
 
 dnl $Id$
 

@@ -210,7 +210,6 @@
 
             personality modules specified by the customization file for:
                 compiler            ( make/compilers/??.cfg )
-                operating system    ( make/os/??.cfg )
 
 
         private customization files
@@ -309,10 +308,6 @@
             Aside from command names set by the os and compiler config files,
             a number of MAKE variables are automatically set and maintained by
             the config files.
-
-            CONFIG.$(HOST_ARCH).OS
-                        -- full path of OS config file, set by
-                           custom config file.
 
             CONFIG.$(HOST_ARCH).CC
                         -- full path of C compilation config file, set by custom

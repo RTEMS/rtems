@@ -67,12 +67,12 @@ getNumArg(char *arg)
 {
   char *dummy;
 
-  if (arg[0] == '0')
+  if (arg[0] == '0') {
     if ((arg[1] == 'x') || (arg[1] == 'X'))  /* Hexadecimal */
       return (DWord)strtol(arg, &dummy, 16);
     else  /* Octal */
       return (DWord)strtol(arg, &dummy, 8);
-    else  /* Decimal */
+  } else  /* Decimal */
       return (DWord)strtol(arg, &dummy, 10);
 } /* getNumArg */
 

@@ -16,7 +16,7 @@
 
 #include <ringbuf.h>
 
-Ring_buffer_t  Buffer[ 2 ];
+Ring_buffer_t  Console_Buffer[ 2 ];
 
 rtems_isr C_Receive_ISR(rtems_vector_number vector);
 
@@ -39,8 +39,8 @@ rtems_device_driver console_initialize(
 {
   rtems_status_code status;
 
-  Ring_buffer_Initialize( &Buffer[ 0 ] );
-  Ring_buffer_Initialize( &Buffer[ 1 ] );
+  Ring_buffer_Initialize( &Console_Buffer[ 0 ] );
+  Ring_buffer_Initialize( &Console_Buffer[ 1 ] );
 
   init_pit();
 
@@ -91,10 +91,10 @@ rtems_boolean is_character_ready(
   int   port
 )
 {
-  if ( Ring_buffer_Is_empty( &Buffer[ port ] ) )
+  if ( Ring_buffer_Is_empty( &Console_Buffer[ port ] ) )
     return FALSE;
 
-  Ring_buffer_Remove_character( &Buffer[ port ], *ch );
+  Ring_buffer_Remove_character( &Console_Buffer[ port ], *ch );
   return TRUE;
 }
 
@@ -114,7 +114,7 @@ rtems_boolean quick_char_check(
   int   port
 )
 {
-  if ( Ring_buffer_Is_empty( &Buffer[ port ] ) )
+  if ( Ring_buffer_Is_empty( &Console_Buffer[ port ] ) )
     return FALSE;
 
   return TRUE;

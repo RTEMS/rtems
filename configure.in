@@ -153,7 +153,7 @@ case "${target}" in
         # override these settings
 	RTEMS_HAS_POSIX_API=no
 	;;
-  i[[3456]]86-unknown-freebsd2.[[12]]*) # unix "simulator" port
+  i[[3456]]86-*freebsd2*) # unix "simulator" port
 	target_cpu=unix
         RTEMS_HOST=FreeBSD
         # override these settings
@@ -228,6 +228,16 @@ RTEMS_CANONICALIZE_TOOLS
 
 dnl check host cc
 AC_PROG_CC
+
+RTEMS_CYGWIN32
+RTEMS_EXEEXT
+
+dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*
+case $host_os in
+*cygwin32*)	GCCSED="| sed 's%\\\\%/%g'" ;;
+*) ;;
+esac
+AC_SUBST(GCCSED)
 
 dnl check for host library functions
 dnl NOTE: must be called after AC_PROG_CC

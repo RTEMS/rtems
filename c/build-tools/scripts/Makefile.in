@@ -17,8 +17,8 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 
 DESTDIR=$(PROJECT_RELEASE)/build-tools
 
-PGMS=install-if-change rcs-clean lock-directory unlock-directory rtems-glom search-id.sh
-
+PGMS=install-if-change rcs-clean lock-directory unlock-directory \
+  search-id.sh
 
 INSTALLED=$(PGMS:%=$(DESTDIR)/%)
 

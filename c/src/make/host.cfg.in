@@ -37,6 +37,11 @@ FGREP=@FGREP@
 GREP=@GREP@
 EGREP=@EGREP@
 
+# FIXME: HACK for a bug in cygwin-hosted egcs which returns a mixture
+#        of '\\' and '/' as path separators.
+#        Should be removed as soon as this bug is fixed in egcs.
+GCCSED = @GCCSED@
+
 # ksh (or bash) is used by some shell scripts; ref build-tools/scripts/Makefile
 #
 #  Must have shell functions.  Some ksh's core dump mysteriously and 

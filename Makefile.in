@@ -37,8 +37,10 @@ MTARGETS = all install $(TARGET_VARIANTS) $(TARGET_VARIANTS:%=%_all) \
 
 EXIT_CMD = exit 1
 
-# Don't pass flags from previous make - especially NOT CFLAGS 
-override MAKEFLAGS=
+# Don't pass flags from previous make - especially NOT CFLAGS  
+# NOTE: Previous versions overrode MAKEFLAGS, but this also disables 
+# a lot of useful features
+# override MAKEFLAGS=
 
 $(MTARGETS): 
 	BASEDIR=`pwd`; \
@@ -55,9 +57,10 @@ $(MTARGETS):
 ACLOCAL = aclocal -I aclocal
 AUTOCONF = autoconf
 
+ACLOCAL_FILES := $(wildcard $(srcdir)/aclocal/*.m4)
 ACLOCAL_M4 = aclocal.m4
 
-$(ACLOCAL_M4): configure.in
+$(ACLOCAL_M4): configure.in $(ACLOCAL_FILES)
 	-cd $(RTEMS_ROOT) && $(ACLOCAL)
 
 Makefile: Makefile.in config.status

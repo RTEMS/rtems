@@ -13,27 +13,59 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/lib.cfg
  
-LIB=$(PROJECT_RELEASE)/lib/librtemsall.a
+LIB=$(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
  
 SRCS=$(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
      $(PROJECT_RELEASE)/lib/librtems$(LIB_VARIANT).a \
      $(wildcard $(PROJECT_RELEASE)/lib/libposix$(LIB_VARIANT).a) \
      $(wildcard $(PROJECT_RELEASE)/lib/libka9q$(LIB_VARIANT).a) \
+     $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
      $(PROJECT_RELEASE)/lib/libcsupport$(LIB_VARIANT).a \
      $(PROJECT_RELEASE)/lib/libmisc$(LIB_VARIANT).a \
      $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o) \
      $(wildcard $(PROJECT_RELEASE)/lib/libno-ctor$(LIB_VARIANT).a)
  
-CLEAN_ADDITIONS +=
+CLEAN_ADDITIONS += $(ARCH)/check
 CLOBBER_ADDITIONS +=
  
 all:    $(ARCH) $(LIB)
- 
-$(LIB):  $(SRCS)
-	PROJECT_RELEASE=$(PROJECT_RELEASE) \
-	    $(PROJECT_RELEASE)/build-tools/rtems-glom \
-	        -d $(PROJECT_RELEASE)/lib -v -V "$(LIB_VARIANT)" \
-	        -a $(AR)
- 
+
 install:  all
 
+$(ARCH)/check:: $(SRCS)
+	@$(RM) $@; touch $@;
+	@for f in $(SRCS); do \
+	  case $$f in \
+	  *.o)   echo " `basename $$f`" >> $@ \
+	    ;; \
+	  *.rel) echo " `basename $$f`" >> $@ \
+	    ;; \
+	  *.a) \
+	  ( list=`$(AR) t $$f`;\
+	    for i in $$list; do \
+	      if grep " $$i" $@; then \
+	        echo "ERROR -- $$i in multiple files"; exit 1; \
+	      fi;\
+	      echo " $$i" >> $@;\
+	    done; ) \
+	    ;; \
+	  esac; \
+	done;
+
+$(LIB):: $(ARCH)/check
+	@for f in $(SRCS); do \
+	  case $$f in \
+	  *.o) $(AR) ru $@ $$f \
+	    ;;\
+	  *.rel) $(AR) ru $@ $$f \
+	    ;;\
+	  *.a) \
+	    (cd $(ARCH); \
+	    list=`$(AR) t $$f`; \
+	    $(AR) x $$f $$list; $(AR) ru $@ $$list; \
+	    $(RM) $$list ;)\
+	    ;; \
+	  esac; \
+	done;
+	@$(RANLIB) $@
+	@echo "*** Glommed $@"

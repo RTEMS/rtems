@@ -11,19 +11,19 @@ AC_DEFUN(RTEMS_GCC_PIPE,
 AC_REQUIRE([AC_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts --pipe,rtems_cv_gcc_pipe,
 [
+rtems_cv_gcc_pipe=no
+if test "$rtems_cv_prog_gcc" = "yes"; then
 case "$host_os" in
   cygwin32*)
-    rtems_cv_gcc_pipe=no 
     ;;
   *)
     echo 'void f(){}' >conftest.c
     if test -z "`${CC_FOR_TARGET} --pipe -c conftest.c 2>&1`";then
       rtems_cv_gcc_pipe=yes
-    else
-      rtems_cv_gcc_pipe=no
     fi
     rm -f conftest*
     ;;
 esac
+fi
 ])
 ])

@@ -50,3 +50,9 @@ This is the list of outstanding problems in this release.
     milliseconds.  This only applies to clock drivers which generate
     an ISR each millisecond and only call rtems_clock_tick every
     so many ISRs.
+
++  Cross-check configure --enable-* flags.
+   + warn/refuse to configure when --enable-libcdir and
+     --enable-gcc28 are given.
+   + force --enable-libcdir when --disable-gcc28 is given
+
