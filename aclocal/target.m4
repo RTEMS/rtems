@@ -8,9 +8,7 @@ target_subdirs="RTEMS_TGT_SUBDIRS"
 AC_SUBST(target_subdirs)
 ])
 
-dnl This is a subroutine of AC_OUTPUT.
-dnl It is called after running config.status.
-dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
+dnl Derived from automake-1.4's AC_OUTPUT_SUBDIRS
 AC_DEFUN(RTEMS_OUTPUT_SUBDIRS,
 [
 if test "$no_recursion" != yes; then

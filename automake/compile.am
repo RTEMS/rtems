@@ -4,3 +4,15 @@
 ## In future this file shall take compilation rules, now contained in
 ## gcc-target-default.cfg
 ##
+
+## -------------------------------------------------------------------------
+## NOTE: This is experimental.
+##
+## Expect frequent changes :(
+## -------------------------------------------------------------------------
+
+DEFS = @DEFS@
+
+##
+## FIXME: DEFS and INCLUDES should not be passed as AM_CPPFLAGS
+AM_CPPFLAGS += $(DEFS) $(INCLUDES) $(RTEMS_CPPFLAGS)

@@ -23,5 +23,6 @@ EOF
     RTEMS_GAS_CODE16="$rtems_cv_prog_gas_code16"
   fi
   AC_SUBST(RTEMS_GAS_CODE16)
+  AC_DEFINE_UNQUOTED(NEW_GAS,1,[if using 16 bit mode assembler support])
 ])
 

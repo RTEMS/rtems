@@ -1,3 +1,11 @@
+2000-09-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/enable-rtemsbsp.m4: Add RTEMS_ENABLE_BARE,
+	AC_SUBST(BARE_CPU_MODEL),AC_SUBST(BARE_CPU_CFLAGS).
+	* aclocal/i386-gas-code16.m4: AC_DEFINE NEW_GAS.
+	* aclocal/target.m4: Cleanup comments
+	* Automake/compile.am: Add DEFS support to keep building happy.
+
 2000-09-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/project-root.m4: Introduce PROJECT_TOPdir, add comments.
