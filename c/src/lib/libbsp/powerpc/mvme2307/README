@@ -1,0 +1,58 @@
+BSP NAME:           mvme2307
+BOARD:              Motorola MVME2307
+BUS:                VME/PCI
+CPU FAMILY:         PowerPC
+CPU:                Motorola MPC604
+COPROCESSORS:       none
+MODE:               32 bit mode/big endian
+
+DEBUG MONITOR:      PPCBUG
+
+PERIPHERALS
+===========
+TIMERS:             PPC internal time base register
+  RESOLUTION:       60 ns
+SERIAL PORTS:       PC16550 via PPCBUG
+REAL-TIME CLOCK:    PPC internal decrementer register
+DMA:                none
+VIDEO:              none
+SCSI:               none
+NETWORKING:         DEC21140
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       PPC internal
+IOSUPP DRIVER:      N/A
+SHMSUPP:            N/A
+TIMER DRIVER:       Intel i8254
+TTY DRIVER:         PPC internal
+
+STDIO
+=====
+PORT:               Console port 0
+ELECTRICAL:         RS-232
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             None
+STOP BITS:          1
+
+NOTES
+=====
+PPCBUG interrupt vectors:
+    00100 reset
+    00700 program
+    00c00 syscall
+    02000 run mode
+
+PPCBUG register usage:
+    SPR275 must be restored before returning to PPCBUG
+    SPR272-SPR274 will be changed by PPCBUG
+
+PPCBUG memory usage:
+    top 768K RAM reserved for BUG (at reset R1 points to top of usable area)
+    0000-3fff reserved for vectors
+    MK48T59/559 NVRAM (base = ??)
+        0000-16f7 - available for user
+        16f8-1ef7 - PPCBUG
+        1ef8-1ff7 - configuration data
+        1ff8-1fff - real time clock registers

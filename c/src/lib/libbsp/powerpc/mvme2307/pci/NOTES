@@ -1,0 +1,41 @@
+Device at 0,0,0: Motorola Raven
+        cmd/status: 22800006
+        class/rev:  06000001
+        iobase:     not mapped
+        membase:    3c000000
+
+Device at 0,11,0: Winbond 83C553
+        cmd/status: 02000007
+        class/rev:  06010005
+        iobase:     00000000
+        membase:    00000000
+
+Device at 0,11,1: Winbond 82C105
+        cmd/status: 02800005
+        class/rev:  01018f05
+        iobase:     010000a1
+        membase:    not mapped
+
+Device at 0,13,0: Tundra CA91C042
+        cmd/status: 02000006
+        class/rev:  06800000
+        iobase:     not mapped
+        membase:    00000000
+
+Device at 0,14,0: DEC 21140
+        cmd/status: 02800007
+        class/rev:  02000022
+        iobase:     01000001
+        membase:    3bfeff80
+
+Device at 0,17,0: Intel i960 PCI bridge
+        cmd/status: 02800007
+        class/rev:  ff040003
+        iobase:     00000000
+        membase:    00000000
+
+Device at 0,17,1: Intel i960 ATU
+        cmd/status: 02800106
+        class/rev:  05800003
+        iobase:     not mapped
+        membase:    00000000                          
