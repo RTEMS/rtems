@@ -1,3 +1,8 @@
+2004-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	* include/buffer_test_io.h: Do not use iprintf() if in ANSI compiler
+	mode.
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add PREINSTALL_DIRS.
