@@ -201,9 +201,9 @@ void *POSIX_Init(
 
   /* too may threads error */
 
-  puts( "Init: pthread_create - EINVAL (too many threads)" );
+  puts( "Init: pthread_create - EAGAIN (too many threads)" );
   status = pthread_create( &thread_id, NULL, Task_1_through_3, NULL );
-  assert( status == EINVAL );
+  assert( status == EAGAIN );
 
   puts( "Init: sched_yield to Task_1" );
   status = sched_yield();
