@@ -11,7 +11,7 @@ ACLOCAL_AMFLAGS = -I aclocal
 SUBDIRS = tools make $(BUILD_SUBDIRS) $(HOST_SUBDIRS) $(TARGET_SUBDIRS)
 
 AUTOMAKE_FILES = automake/compile.am automake/host.am automake/lib.am \
-    automake/local.am automake/multilib.am automake/subdirs.am \
+    automake/local.am automake/subdirs.am \
     automake/leaf.am automake/force-preinstall.am
 
 ACLOCAL_FILES = aclocal/bsp-alias.m4 aclocal/canonical-host.m4 \
