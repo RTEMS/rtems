@@ -311,21 +311,6 @@ rtems_create_root_fs ()
       return -1;
 
   /*
-   * /etc/passwd, /etc/group
-   * Maybe needed by some tools.
-   */
-
-  lines[0] = "root::0:0:root:/root:/bin/sh\n";
-  
-  if (rtems_rootfs_file_append ("/etc/passwd", MKFILE_MODE, 1, lines))
-    return -1;
-  
-  lines[0] = "root::0:root\n";
-  
-  if (rtems_rootfs_file_append ("/etc/group", MKFILE_MODE, 1, lines))
-    return -1;
-
-  /*
    * The TCP/IP stack likes this one. If DNS does not work
    * use the host file.
    */
