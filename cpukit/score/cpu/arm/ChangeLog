@@ -1,3 +1,7 @@
+2003-03-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/arm.h: Remove ARM_HAS_THUMB (Unused).
+
 2003-03-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/score/cpu.h: Set up CPU_*_ENDIAN based on -D__ARMEL__ and
