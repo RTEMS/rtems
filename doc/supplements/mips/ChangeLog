@@ -1,3 +1,7 @@
+2001-03-01	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: New file.
+
 2002-02-04	Joel Sherrill <joel@OARcorp.com>
 
 	* bsp.t, BSP_TIMES, callconv.t, ChangeLog, cpumodel.t, cputable.t,
