@@ -41,23 +41,27 @@ _RTEMS_ARG_VAR([CXXFLAGS_FOR_$2],
 AC_DEFUN([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS],
 [
 AC_CONFIG_COMMANDS_PRE([
+
+test -z "$host_alias" && host_alias="$host"
+test -z "$build_alias" && build_alias="$build"
+test -z "$target_alias" && target_alias="$target"
+
 _RTEMS_BUILD_CONFIG_PREPARE
 _RTEMS_HOST_CONFIG_PREPARE
 _RTEMS_TARGET_CONFIG_PREPARE
+
+build_SUBDIRS="${build_configdirs}"
+build_configdirs="${build_configdirs}"
 
 AS_IF([test $build = $host],
 [dnl
   AS_IF([test $host = $target],
   [dnl b=h, h=t, t=b
-    build_SUBDIRS="${build_configdirs}"
-    build_configdirs="${build_configdirs}"
     host_SUBDIRS="${host_configdirs}"
     host_configdirs="${host_configdirs}"
     target_SUBDIRS="${target_configdirs}"
     target_configdirs="${target_configdirs}"],
   [dnl b=h, h!=t, t!=b
-    build_SUBDIRS="${build_configdirs}"
-    build_configdirs="${build_configdirs}"
     host_SUBDIRS="${host_configdirs}"
     host_configdirs="${host_configdirs}"
     target_SUBDIRS=`echo "${target_configdirs}" | \
@@ -67,8 +71,6 @@ AS_IF([test $build = $host],
 ],[dnl
   AS_IF([test $host = $target],
   [ dnl b!=h, h=t, b!=t
-    build_SUBDIRS="${build_configdirs}"
-    build_configdirs="${build_configdirs}"
     host_SUBDIRS=`echo "${host_configdirs}" | \
       sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
     host_configdirs="${host_configdirs}"
@@ -80,8 +82,6 @@ AS_IF([test $build = $host],
   ],[dnl
     AS_IF([test $build = $target],
     [dnl b!=h, h!=t, b=t
-      build_SUBDIRS="${build_configdirs}"
-      build_configdirs="${build_configdirs}"
       host_SUBDIRS=`echo "${host_configdirs}" | \
         sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
       host_configdirs="${host_configdirs}"
@@ -90,8 +90,6 @@ AS_IF([test $build = $host],
         target_configdirs="${target_configdirs}"
       ])
     ],[dnl b!=h, h!=t, b!=t
-      build_SUBDIRS="${build_configdirs}"
-      build_configdirs="${build_configdirs}"
       host_SUBDIRS=`echo "${host_configdirs}" | \
         sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
       host_configdirs="${host_configdirs}"

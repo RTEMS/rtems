@@ -1,5 +1,12 @@
 2003-03-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* acinclude.m4: Reformat build_* handling.
+	Preset *_alias if empty.
+	* configure.ac: Change tools/build to build-config dirs.
+	Conditionally build tools/build as host-config dirs.
+
+2003-03-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* acinclude.m4: Fix broken comments.
 	Add hidden option --enable-experimental.
 	* README.cdn-X: Update.

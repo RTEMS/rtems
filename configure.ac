@@ -52,12 +52,12 @@ fi
 ## * tools/build are host-native tools to be installed on the host.
 ## * tools/cpu are host-native or host-cross-target-tools
 
-RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
+RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/cpu])
 
 # Some BSPs carelessly apply these tools as build-tools
 AS_IF([test $host != $build],[
-RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
+RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
 ])
 
 AS_IF([test x"${enable_docs}" = x"yes"],
