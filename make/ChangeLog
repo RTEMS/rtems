@@ -1,6 +1,13 @@
 
 2001-11-14	Joel Sherrill <joel@OARcorp.com>
 
+	* custom/eth_comm.cfg, custom/mbx860_005b.cfg, custom/mbx8xx.cfg,
+	custom/mcp750.cfg, custom/mpc8260ads.cfg, custom/mvme2307.cfg:
+	These are new exception processing model BSPs and thus do not
+	need to define PPC_USE_SPRG.
+
+2001-11-14	Joel Sherrill <joel@OARcorp.com>
+
 	* ChangeLog: Added missing lines about simcpu32.cfg and sim68000.cfg.
 
 2001-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
