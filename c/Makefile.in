@@ -38,14 +38,15 @@ LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 # directories to be created in install point
 CREATE_DIRS = 	include include/sys \
     include/rtems include/rtems/score include/rtems/rtems include/rtems/posix \
-                include/netinet include/libc include/libc/sys \
-                $(LIBKA9Q) \
-                $(LIBRTEMSCPLUSPLUS) \
-		lib bin samples \
-                tests tests/screens tests/screens/sptests \
-                tests/screens/psxtests tests/screens/mptests \
-                tests/screens/mptests/node1 tests/screens/mptests/node2 \
-		build-tools update-tools
+    include/netinet include/libc include/libc/sys \
+    include/motorola include/zilog \
+    $(LIBKA9Q) \
+    $(LIBRTEMSCPLUSPLUS) \
+    lib bin samples \
+    tests tests/screens tests/screens/sptests \
+    tests/screens/psxtests tests/screens/mptests \
+    tests/screens/mptests/node1 tests/screens/mptests/node2 \
+    build-tools update-tools
 
 # Make all/install must include 'env'
 all $(TARGET_VARIANTS:%=%_install) $(TARGET_VARIANTS:%=%_all): env 
@@ -63,6 +64,7 @@ dirs:
 	-test -d $(PROJECT_ROOT)/c/src/lib/libhwapi && \
 	    (cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs)
 	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
+	-rm -f $(PROJECT_ROOT)/$(RTEMS_BSP)/include
 	-ln -s $(PROJECT_ROOT)/$(RTEMS_BSP)/include \
 		$(PROJECT_ROOT)/$(RTEMS_BSP)/lib/include 
 
