@@ -113,7 +113,18 @@ The value returned is the value returned by the @code{rtems_event_receive}.
 @section Network Driver Makefile
 
 Network drivers are considered part of the BSD network package and as such
-are to be compiled with the appropriate flags.
+are to be compiled with the appropriate flags.  This can be accomplished by 
+adding @code{-D__INSIDE_RTEMS_BSD_TCPIP_STACK__} to the @code{command line}.
+If the driver is inside the RTEMS source tree or is built using the
+RTEMS application Makefiles, then adding the following line accomplishes
+this:
+
+@example
+DEFINES += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+@end example
+
+This is equivalent to the following list of definitions.  Early versions
+of the RTEMS BSD network stack required that all of these be defined.
 
 @example
 -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC -DBOOTP_COMPAT
@@ -134,12 +145,13 @@ of this.  Because of this, network drivers should not include
 of @code{malloc()}.
 
 @b{Application level} code including network servers such as the FTP
-daemon are @b{not} part of the BSD network package and should not be
+daemon are @b{not} part of the BSD kernel network code and should not be
 compiled with the BSD network flags.  They should include
 @code{<stdlib.h>} and not define the network stack visibility
 macros.
 
 @section Write the Driver Attach Function
+
 The driver attach function is responsible for configuring the driver
 and making the connection between the network stack
 and the driver.
