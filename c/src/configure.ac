@@ -154,7 +154,7 @@ BSP_SUBDIRS="$BSP_SUBDIRS lib"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 BSP_SUBDIRS="$BSP_SUBDIRS libnetworking"
 BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
-                                                         
+
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
   AC_CONFIG_SUBDIRS([librtems++])
   BSP_SUBDIRS="$BSP_SUBDIRS librtems++"
@@ -195,7 +195,16 @@ AS_IF([test "$host_cpu" = "sparc"],[
 ])
 
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
+
+# FIXME: This is sick
 AM_CONDITIONAL([HAS_RDBG],[test "$HAS_RDBG" = "yes"])
+AM_CONDITIONAL([HAS_RDBG_i386],[test "$HAS_RDBG" = "yes" \
+ && test $RTEMS_CPU = "i386"])
+AM_CONDITIONAL([HAS_RDBG_m68k],[test "$HAS_RDBG" = "yes" \
+ && test $RTEMS_CPU = "m68k"])
+AM_CONDITIONAL([HAS_RDBG_powerpc],[test "$HAS_RDBG" = "yes" \
+ && test $RTEMS_CPU = "powerpc"])
+
 AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 
 # The posix bsp doesn't support libchip
@@ -242,9 +251,6 @@ libnetworking/rtems_webserver/Makefile
 librdbg/Makefile
 librdbg/include/Makefile
 librdbg/src/Makefile
-librdbg/src/i386/Makefile
-librdbg/src/powerpc/Makefile
-librdbg/src/m68k/Makefile
 
 libchip/Makefile
 
