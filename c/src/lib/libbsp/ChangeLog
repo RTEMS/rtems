@@ -1,3 +1,7 @@
+2000-09-25	Joel Sherrill <joel@OARcorp.com>
+
+	* shmdr/shm_driver.h: Added _AM29K entry.  May not be correct.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shmdr/Makefile.am: Include compile.am

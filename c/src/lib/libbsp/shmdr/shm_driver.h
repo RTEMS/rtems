@@ -141,6 +141,9 @@ extern "C" {
 #elif defined(__unix__)
 #define SHM_LOCK_VALUE    0
 #define SHM_UNLOCK_VALUE  1
+#elif defined(_AM29K)
+#define SHM_LOCK_VALUE    0
+#define SHM_UNLOCK_VALUE  1
 #elif defined(no_cpu)               /* for this values are irrelevant */
 #define SHM_LOCK_VALUE    1
 #define SHM_UNLOCK_VALUE  0
