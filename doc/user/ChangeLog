@@ -1,3 +1,8 @@
+2004-11-05	Joel Sherrill <joel@OARcorp.com>
+
+	PR 706/doc
+	* task.t: Remove not that changes explanation.
+
 2004-09-27	Joel Sherrill <joel@OARcorp.com>
 
 	PR 683/doc
