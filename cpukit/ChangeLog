@@ -1,4 +1,11 @@
-2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/rtems/libio.h: Use rtems_id for semaphores.
+	Use char* for buffer.
+	* backward/ftpd.h: New.
+	* Makefile.am: Reflect having added backward/ftpd.h.
+
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 756/rtems
 	* ftpd/ftpd.c, ftpd/ftpd.h, ftpd/Makefile.am: New (relocated from

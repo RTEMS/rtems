@@ -30,6 +30,10 @@ include_HEADERS += backward/asm.h backward/chain.h backward/clockdrv.h \
     backward/ringbuf.h backward/rtc.h backward/spurious.h \
     backward/timerdrv.h backward/vmeintr.h
 
+if HAS_NETWORKING
+include_HEADERS += backward/ftpd.h
+endif
+
 include_motoroladir = $(includedir)/motorola
 include_motorola_HEADERS = backward/motorola/mc68681.h \
     backward/motorola/mc68230.h
@@ -123,6 +127,12 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/timerdrv.h
 $(PROJECT_INCLUDE)/vmeintr.h: backward/vmeintr.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vmeintr.h
+
+if HAS_NETWORKING
+$(PROJECT_INCLUDE)/ftpd.h: backward/ftpd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ftpd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ftpd.h
+endif
 
 $(PROJECT_INCLUDE)/motorola/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/motorola
