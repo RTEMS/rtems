@@ -10,5 +10,5 @@ SUBDIRS = include tmck tmoverhd tm01 tm02 tm03 tm04 tm05 tm06 tm07 tm08 tm09 \
 
 EXTRA_DIST = tmtests.am
 
-include $(top_srcdir)/../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
