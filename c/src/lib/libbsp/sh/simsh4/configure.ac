@@ -22,11 +22,20 @@ RTEMS_CANONICAL_HOST
 
 ## bsp-specific options
 CPU_CLOCK_RATE_HZ=${CPU_CLOCK_RATE_HZ-10000000}
-AC_SUBST(CPU_CLOCK_RATE_HZ)
 AC_DEFINE_UNQUOTED(
   [CPU_CLOCK_RATE_HZ],
   [$CPU_CLOCK_RATE_HZ],
   [cpu clock rate in HZ])
+
+#  START_HW_INIT
+#	This switch selects whether 'early_hw_init()' is called from
+#	'start.S'; 'bsp_hw_init()' is always called from 'bspstart.c'
+#
+START_HW_INIT=${START_HW_INIT-1}
+AC_DEFINE_UNQUOTED(
+  [START_HW_INIT],
+  [$START_HW_INIT],
+  [Whether to call early_hw_init from start.S])
 
 AM_CONFIG_HEADER(include/bspopts.h)
 

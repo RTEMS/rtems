@@ -1,5 +1,15 @@
 2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Added support for START_HW_INIT.
+	* console/Makefile.am: Removed VPATH.
+	* include/Makefile.am: Added missing ramdisk.h to include_HEADERS.
+	* startup/linkcmds: Do not force output format to coff-sh.
+	* startup/linkcmds-le: Comment out force of output format and add
+	comment questioning need to have special linkcmds for little endian.
+	* wrapup/Makefile.am: Add ramdisk to list of BSP_PIECES.
+
+2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add bspopts.h; Add CPU_CLOCK_RATE_HZ.
 	* startup/bspstart.c: Replace HZ with CPU_CLOCK_RATE_HZ.
 	* include/.cvsignore: Add stamp-h* bspopts.h*

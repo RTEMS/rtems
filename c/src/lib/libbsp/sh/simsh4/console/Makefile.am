@@ -4,8 +4,6 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@
-
 PGM = $(ARCH)/console.rel
 
 C_FILES = console.c

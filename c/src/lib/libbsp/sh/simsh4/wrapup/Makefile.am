@@ -6,14 +6,17 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-BSP_PIECES = startup console clock ramdisk timer
+BSP_PIECES = startup console clock timer
+
+# FIXME: This is missing.
+# BSP_PIECES = ramdisk
 
 # pieces to pick up out of libcpu/sh
 CPU_PIECES = score
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
-    $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/simsh4/$(piece)/$(ARCH)/$(piece).rel)
+    $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/sh7750/$(piece)/$(ARCH)/$(piece).rel)
 
 LIB = $(ARCH)/libbsp.a
 

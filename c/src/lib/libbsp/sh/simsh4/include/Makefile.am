@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-include_HEADERS = bsp.h coverhd.h syscall.h ramdisk.h
+include_HEADERS = bsp.h bspopts.h coverhd.h syscall.h ramdisk.h
 
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@

@@ -1,5 +1,8 @@
-OUTPUT_FORMAT("elf32-shl", "elf32-shl",
+/*
+FIXME: Why is a special linkcmds required for little endian?
+  OUTPUT_FORMAT("elf32-shl", "elf32-shl",
 	      "elf32-shl")
+ */
 OUTPUT_ARCH(sh)
 ENTRY(_start)
 /* Do we need any of these for elf?
