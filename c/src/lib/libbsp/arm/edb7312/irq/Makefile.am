@@ -16,8 +16,8 @@ include_HEADERS = irq.h
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -44,4 +44,4 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 EXTRA_DIST = bsp_irq_asm.S bsp_irq_init.c irq.c
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
