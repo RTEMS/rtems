@@ -27,6 +27,7 @@
 
 #include <libchip/serial.h>
 #include "ns16550_p.h"
+#include "sersupp.h"
 
 /*
  * Flow control is only supported when using interrupts
@@ -45,7 +46,7 @@ console_flow ns16550_flow_DTRCTS =
 
 console_fns ns16550_fns =
 {
-  ns16550_probe,                  /* deviceProbe */
+  libchip_serial_default_probe,   /* deviceProbe */
   ns16550_open,                   /* deviceFirstOpen */
   ns16550_flush,                  /* deviceLastClose */
   NULL,                           /* deviceRead */
@@ -58,7 +59,7 @@ console_fns ns16550_fns =
 
 console_fns ns16550_fns_polled =
 {
-  ns16550_probe,                       /* deviceProbe */
+  libchip_serial_default_probe,        /* deviceProbe */
   ns16550_open,                        /* deviceFirstOpen */
   ns16550_close,                       /* deviceLastClose */
   ns16550_inbyte_nonblocking_polled,   /* deviceRead */
@@ -70,18 +71,6 @@ console_fns ns16550_fns_polled =
 };
 
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
-
-/*
- *  Console Device Driver Entry Points
- */
-NS16550_STATIC boolean ns16550_probe(int minor)
-{
-  /*
-   * If the configuration dependent probe has located the device then
-   * assume it is there
-   */
-  return(TRUE);
-}
 
 NS16550_STATIC void ns16550_init(int minor)
 {
