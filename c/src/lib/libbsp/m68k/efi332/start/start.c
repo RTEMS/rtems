@@ -214,7 +214,8 @@ void  dumby_start() {
   /*
    * Initalize the board.
    */
-  Spurious_Initialize();
+  /* Spurious should be called in the predriver hook */
+  /* Spurious_Initialize(); */
   console_init();
 
   /*

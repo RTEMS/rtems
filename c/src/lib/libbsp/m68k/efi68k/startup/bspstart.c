@@ -46,6 +46,17 @@ void bsp_libc_init( void *, unsigned32, int );
 void bsp_pretasking_hook(void);               /* m68k version */
 
 /*
+ *  Call Spurious_Initialize in bsp_predriver_hook because
+ *  bsp_predriver_hook is call after the _ISR_Vector_Table allocation
+ */
+
+void bsp_predriver_hook(void)
+{
+  void Spurious_Initialize();
+  Spurious_Initialize();
+}
+
+/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
@@ -68,6 +79,7 @@ void bsp_start( void )
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;
+  Cpu_table.predriver_hook  = bsp_predriver_hook;
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
 
   m68k_get_vbr( vbr );
