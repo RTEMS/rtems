@@ -1,7 +1,11 @@
 2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Reflect changes to project_libdir.
+
+2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/env-rtemscpu.m4: Remove obsolete comment.
-	Add MULTISUBDIR to probject_libdir.
+	Add MULTISUBDIR to project_libdir.
 
 2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
