@@ -79,6 +79,10 @@ char *rtems_progname;
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, unsigned32, int );
 
+void  _BSP_GPLED1_on(void);
+void  _BSP_GPLED0_on(void);
+void  cpu_init(void);
+void  initialize_exceptions(void);
 
 void BSP_panic(char *s)
 {
@@ -212,9 +216,6 @@ bsp_pretasking_hook(void)
 void bsp_start(void)
 {
   extern void *_WorkspaceBase;
-  extern int _end;
-  rtems_unsigned32  heap_start;
-  rtems_unsigned32  ws_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
@@ -368,5 +369,7 @@ Thread _Thread_Idle_body(
       "mfmsr 3; oris 3,3,4; sync; mtmsr 3; isync; ori 3,3,0; ori 3,3,0"
     );
   }
+
+  return 0; /* to remove warning */
 }
 

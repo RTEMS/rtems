@@ -1,3 +1,8 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* irq/irq.c, irq/irq_asm.S, startup/bspstart.c: Fixed typos and
+	removed warnings.
+
 2002-11-01	Andy Dachs <a.dachs@sstl.co.uk>
 
 	* irq/irq.c, irq/irq_asm.S, irq/irq_init.c: Per PR288, add support
