@@ -163,7 +163,7 @@ static int use_env          = 0;
 static int exit_code        = 0;
 static char *phone_num      = (char *) 0;
 static char *phone_num2     = (char *) 0;
-/* static */ int pppd_ttyfd;
+static int ttyfd;
 static int timeout   = DEFAULT_CHAT_TIMEOUT;
 
 #ifdef TERMIOS
@@ -246,7 +246,7 @@ int chatmain(int fd, int mode, char *pScript)
 
   /* initialize exit code */
   exit_code = 0;
-  pppd_ttyfd     = fd;
+  ttyfd     = fd;
 
   script=pScript;
   
@@ -271,14 +271,14 @@ int chatmain(int fd, int mode, char *pScript)
       }
     }
   }
-  pppd_ttyfd = (int)-1;
+  ttyfd = (int)-1;
 
   return ( exit_code );
 }
 
 void break_sequence()
 {
-  tcsendbreak(pppd_ttyfd, 0);
+  tcsendbreak(ttyfd, 0);
 }
 
 /*
@@ -639,16 +639,15 @@ register char *s;
     }
 
     if (abort_next) {
-		char *s1;
-	
 		abort_next = 0;
 		if ( n_aborts < MAX_ABORTS ) {
+			char *s1;
 			s1 = clean(s, 0);
-			if (( strlen(s1) <= strlen(s) ) && ( strlen(s1) <  sizeof(fail_buffer))) {
-	  			abort_string[n_aborts++] = s1;
+			if (( strlen(s1) <= strlen(s) ) && ( strlen(s1) <  sizeof(fail_buffer)))
+				abort_string[n_aborts++] = s1;
+			else
+				free(s1);
         	}
-        	free(s1);
-    	}
 		return;
     }
 
@@ -699,7 +698,7 @@ static int get_char()
 
 	while(tries)
 	{
-	    status = read(pppd_ttyfd, &c, 1);
+	    status = read(ttyfd, &c, 1);
 	    switch (status) {
 		   case 1:
 				return ((int)c & 0x7F);
@@ -715,7 +714,7 @@ int c;
 {
   char ch = c;
 
-  return(write(pppd_ttyfd, &ch, 1));
+  return(write(ttyfd, &ch, 1));
 }
 
 static int write_char (c)
@@ -791,10 +790,10 @@ register char *in_string;
 
     memset(temp2, 0, sizeof(temp2));
 
-    tcgetattr(pppd_ttyfd, &tios);
+    tcgetattr(ttyfd, &tios);
     tios.c_cc[VMIN] = 0;
     tios.c_cc[VTIME] = timeout*10/MAX_TIMEOUTS;
-    tcsetattr(pppd_ttyfd, TCSANOW, &tios);
+    tcsetattr(ttyfd, TCSANOW, &tios);
 		
     string = clean(in_string, 0);
     len = strlen(string);
@@ -807,7 +806,8 @@ register char *in_string;
     }
 
     if (len == 0) {
-			return (1);
+	free(string);
+	return (1);
     }
 
    while ( (c = get_char()) >= 0) {

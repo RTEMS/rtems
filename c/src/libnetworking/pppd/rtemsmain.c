@@ -77,7 +77,7 @@ int pppifunit;			/* Interface unit number */
 char hostname[MAXNAMELEN];	/* Our hostname */
 static char ppp_devnam[MAXPATHLEN]; /* name of PPP tty (maybe ttypx) */
 
-/* int pppd_ttyfd;			* Serial port file descriptor */
+int pppd_ttyfd;			/* Serial port file descriptor */
 int baud_rate;			/* Actual bits/second for serial device */
 int hungup;			/* terminal has been hung up */
 int privileged;			/* we're running as real uid root */

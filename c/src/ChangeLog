@@ -1,3 +1,14 @@
+2005-01-31	Sergei Organov <osv@topconrd.ru>
+
+	PR 771/pppd
+	* libnetworking/pppd/chat.c, libnetworking/pppd/rtemsmain.c: The fix
+	committed to fix PR736 breaks pppd. chat.c should have its own static
+	ttyfd for pppd to work correctly. The symptom is that second
+	invokation of chat (for connect script) fails due to pppd_ttyfd set
+	to -1 by previous chat invokation (for init script). In addition,
+	this patch fixes leaving of dangling pointer in the abort_stbring[]
+	by chat_send().
+
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove CFLAGS_DEBUG_V.
