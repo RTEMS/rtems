@@ -27,7 +27,7 @@
 #include <fcntl.h>
 
 /* for sbrk prototype in linux */
-#if defined(linux)
+#if defined(__linux__)
 #define __USE_MISC
 #endif
 #include <unistd.h>

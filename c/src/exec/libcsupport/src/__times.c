@@ -63,6 +63,7 @@ clock_t times(
   return _times( ptms );
 }
 
+#if defined(RTEMS_NEWLIB)
 clock_t _times_r(
    struct _reent *ptr,
    struct tms  *ptms
@@ -70,3 +71,4 @@ clock_t _times_r(
 {
   return _times(ptms);
 }
+#endif
