@@ -232,24 +232,33 @@ int main(
   status = rmdir( "/usr" );
   assert( !status );
 
+  puts( "rmdir /dev" );
   status = rmdir( "/dev" );
   assert( status == -1 );
   assert( errno ==  ENOTEMPTY);
 
+  puts( "rmdir /fred" );
   status = rmdir ("/fred");
   assert (status == -1);
   assert( errno == ENOENT );
 
+  puts( "mknod /dev/test_console" );
   status = mknod( "/dev/test_console", S_IFCHR, 0LL );
   assert( !status );
+
+  puts( "mknod /dev/tty/S3" );
   status = mknod( "/dev/tty/S3", S_IFCHR, 0xFF00000080LL );
   assert( !status );
+
+  puts ("mknod /etc/passwd");
   status = mknod( "/etc/passwd", (S_IFREG | S_IRWXU), 0LL );
   assert( !status );
 
+  puts( "mkdir /tmp/my_dir");
   status = mkdir( "/tmp/my_dir", S_IRWXU );
   assert( status == 0 );
 
+  puts("mkfifo /c/my_dir" );
   status = mkfifo( "/c/my_dir", S_IRWXU );
   assert( status == -1 );
 
@@ -278,13 +287,13 @@ int main(
   puts( "open /tmp/j" );
   fd = open( "/tmp/j", O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO );
   assert( fd != -1 );
-
   printf( "open returned file descriptor %d\n", fd );
 
   puts( "close /tmp/j" );
   status = close( fd );
   assert( !status );
 
+  puts( "close /tmp/j again" );
   status = close( fd );
   assert( status == -1 );
 
@@ -292,6 +301,7 @@ int main(
   status = unlink( "/tmp/j" );
   assert( !status );
 
+  puts( "unlink /tmp" );
   status = unlink( "/tmp" );
   assert( status );
 
@@ -299,13 +309,22 @@ int main(
    *  Simple open failure. Trying to create an existing file.
    */
 
-  fd = open( "/tmp/tom", O_CREAT );
-  status = close( fd );
-  fd1 = open( "/tmp/tom", O_CREAT );
-  assert( fd1 == -1 );
-
-  fd = open( "/tmp/john", O_CREAT );
+  puts("create and close /tmp/tom");
+  fd = open( "/tmp/tom", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO );
   assert( fd != -1 );
+  status = close( fd );
+  assert( status == 0 );
+
+  puts("Attempt to recreate /tmp/tom");
+  fd = open( "/tmp/tom", O_CREAT | O_EXCL, S_IRWXU|S_IRWXG|S_IRWXO );
+  assert( fd == -1 );
+  assert( errno == EEXIST );
+
+  puts("create /tmp/john");
+  fd = open( "/tmp/john", O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO );
+  assert( fd != -1 );
+
+  puts("tcdrain /tmp/john" );
   status = tcdrain( fd );
   assert( status == 0 );
 
@@ -313,6 +332,7 @@ int main(
    *  Test simple write to a file at offset 0
    */
 
+  puts( "mknod /tmp/joel" );
   status = mknod( "/tmp/joel", (S_IFREG | S_IRWXU), 0LL );
   test_write( "/tmp/joel", 0, "the first write!!!\n" );
   test_cat( "/tmp/joel", 0, 0 );
@@ -336,14 +356,17 @@ int main(
    *  try to read from various offsets and lengths.
    */
 
+  puts("unlink /tmp/joel");
   status = unlink( "/tmp/joel" );
   assert( !status );
 
   /* Test a failure path */
 
+  puts( "unlink /tmp/joel" );
   status = unlink( "/tmp/joel" );
   assert( status == -1 );
 
+  puts( "mknod /tmp/joel");
   status = mknod( "/tmp/joel", (S_IFREG | S_IRWXU), 0LL );
   assert( !status );
 
