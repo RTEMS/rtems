@@ -19,7 +19,7 @@ static const struct protoent prototab[] = {
  * Dummy version of BSD getprotobyname()
  */
 struct protoent *
-getprotobyname (const char *name)
+getprotobyname_static (const char *name)
 {
 	int i;
 
@@ -34,7 +34,7 @@ getprotobyname (const char *name)
  * Dummy version of BSD getprotobynumber()
  */
 struct protoent *
-getprotobynumber (int proto)
+getprotobynumber_static (int proto)
 {
 	int i;
 
