@@ -1,5 +1,11 @@
+2003-07-16	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Correct format.
+
 2003-07-15	Chris Johns <cjohns@cybertec.com.au>
-	* src/dosfs/msdos.h: PR431. MSDOS Volume semaphore timeout is now
+	
+	PR 431/filesystem
+	* src/dosfs/msdos.h: MSDOS Volume semaphore timeout is now
 	NO TIMEOUT. MSDOS volume opertations will wait for ever.
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
