@@ -543,7 +543,7 @@ int timer_settime(
               /* XXX error handling */
               break;
 
-           default:
+           default: break;
 
         
         }
@@ -624,12 +624,12 @@ int timer_settime(
               set_errno_and_return_minus_one( EINVAL );
               break;
            
-           default:
+           default: break;
         }
 
         break;
 
-      default:
+      default: break;
 
         /* It does nothing, although it will be probably necessary to 
          * return an error */

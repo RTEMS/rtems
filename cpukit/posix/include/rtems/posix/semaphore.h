@@ -96,7 +96,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
  */
  
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
-  Objects_Id        *id,
+  sem_t        *id,
   Objects_Locations *location
 );
  
@@ -164,7 +164,7 @@ int _POSIX_Semaphore_Wait_support(
 
 int _POSIX_Semaphore_Name_to_id(
   const char          *name,
-  Objects_Id          *id
+  sem_t          *id
 );
 
 #include <rtems/posix/semaphore.inl>

@@ -1,3 +1,11 @@
+2001-01-22	Michael Hamel <mhamel@adi.co.nz>
+
+	* include/rtems/posix/semaphore.h, inline/rtems/posix/semaphore.inl, 
+	src/ptimer1.c, include/rtems/posix/semaphore.h,
+	inline/rtems/posix/semaphore.inl, src/alarm.c, src/ptimer1.c,
+	src/semaphorenametoid.c, src/semopen.c, src/semunlink.c:
+	Modifications to make CodeWarrior happy.
+
 2001-01-12	Joel Sherrill <joel@OARcorp.com>
 
 	* src/README.mqueue: Enhanced example.

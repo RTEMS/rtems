@@ -32,7 +32,7 @@ int sem_unlink(
 {
   int  status;
   register POSIX_Semaphore_Control *the_semaphore;
-  Objects_Id                        the_semaphore_id;
+  sem_t                        the_semaphore_id;
  
   _Thread_Disable_dispatch();
 

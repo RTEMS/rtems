@@ -41,7 +41,7 @@ sem_t *sem_open(
   mode_t                     mode;
   unsigned int               value = 0;
   int                        status;
-  Objects_Id                 the_semaphore_id;
+  sem_t                 		the_semaphore_id;
   POSIX_Semaphore_Control   *the_semaphore;
   Objects_Locations          location;
    
