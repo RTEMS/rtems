@@ -34,7 +34,6 @@ extern int close(int fd);
 #include <rtems/libio.h>
 #include <termios.h>
 #include <bsp/uart.h>
-#include <bsp/consoleIo.h>
 #include <rtems/bspIo.h>	/* printk */
 
 /* Definitions for BSPConsolePort */
@@ -120,7 +119,7 @@ console_initialize(rtems_device_major_number major,
 	  status = rtems_io_register_name ((nm=ttyS[minor].name), major, minor);
 	  if ( RTEMS_SUCCESSFUL==status && BSPConsolePort == minor)
 		{
-		  printk("Registering /dev/console as minor %i (==%s)\n",
+		  printk("Registering /dev/console as minor %d (==%s)\n",
 							minor,
 							ttyS[minor].name);
 		  /* also register an alias */

@@ -1,3 +1,21 @@
+2003-04-10  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 379/bsps
+	* console/polled_io.c: libcpu provides 'printk' already.
+	Therefore, the implementation in this file was removed (still
+	used for the bootloader, though).  It now provides BSP_output_char()
+	for libcpu's printk().
+	* console/uart.c, console/uart.h: BSP_output_char_via_serial()
+	prototype changed to match the BSP_output_char_function_type.  Note
+	that the motorola BSPs use polled-io for the output_char routine, not
+	the uart.c version. The latter can be used be other BSPs however
+	(e.g. SVGM).
+	* console/console.c, console/consoleIo.h, console/polled_io.c,
+	irq/irq_init.c, openpic/openpic.c, pci/detect_raven_bridge.c:
+	Unfortunately, the supported 'printk' format string subset of the
+	polled-io and libcpu implementations are different - hence, a few
+	format strings in the ppc/shared BSP were changed.
+
 2003-04-10	Joel Sherrill <joel@OARcorp.com>
 
 	PR 383/bsps
