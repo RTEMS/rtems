@@ -20,6 +20,7 @@
 #include <string.h>
 #include <libcpu/cpuModel.h>
 #include <bspIo.h>
+#include <rtems.h>
 
 unsigned char Cx86_step = 0;
 static const char *Cx86_type[] = {
