@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 TEST = psx11
 
 MANAGERS = all
@@ -37,7 +36,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/include
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES) $(DOCS)
 

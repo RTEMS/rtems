@@ -1,3 +1,31 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Reformat.
+	* psx01/Makefile.am: Remove all-local: $(ARCH).
+	* psx02/Makefile.am: Remove all-local: $(ARCH).
+	* psx03/Makefile.am: Remove all-local: $(ARCH).
+	* psx04/Makefile.am: Remove all-local: $(ARCH).
+	* psx05/Makefile.am: Remove all-local: $(ARCH).
+	* psx06/Makefile.am: Remove all-local: $(ARCH).
+	* psx07/Makefile.am: Remove all-local: $(ARCH).
+	* psx08/Makefile.am: Remove all-local: $(ARCH).
+	* psx09/Makefile.am: Remove all-local: $(ARCH).
+	* psx10/Makefile.am: Remove all-local: $(ARCH).
+	* psx11/Makefile.am: Remove all-local: $(ARCH).
+	* psx12/Makefile.am: Remove all-local: $(ARCH).
+	* psx13/Makefile.am: Remove all-local: $(ARCH).
+	* psxcancel/Makefile.am: Remove all-local: $(ARCH).
+	* psxchroot01/Makefile.am: Remove all-local: $(ARCH).
+	* psxfile01/Makefile.am: Remove all-local: $(ARCH).
+	* psxhdrs/Makefile.am: Remove all-local: $(ARCH).
+	* psxmount/Makefile.am: Remove all-local: $(ARCH).
+	* psxmsgq01/Makefile.am: Remove all-local: $(ARCH).
+	* psxreaddir/Makefile.am: Remove all-local: $(ARCH).
+	* psxsem01/Makefile.am: Remove all-local: $(ARCH).
+	* psxstat/Makefile.am: Remove all-local: $(ARCH).
+	* psxtime/Makefile.am: Remove all-local: $(ARCH).
+	* psxtimer/Makefile.am: Remove all-local: $(ARCH).
+
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having moved to testsuites/.

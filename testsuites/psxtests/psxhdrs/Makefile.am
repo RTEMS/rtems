@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 C_FILES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c \
     cond01.c cond02.c cond03.c cond04.c cond05.c cond06.c cond07.c cond08.c \
     cond09.c cond10.c key01.c key02.c key03.c key04.c mutex01.c mutex02.c \
@@ -22,8 +21,8 @@ C_FILES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c \
     signal13.c signal14.c signal15.c signal16.c signal17.c signal18.c \
     signal19.c signal20.c signal21.c signal22.c signal23.c sync01.c sync02.c \
     sync03.c time01.c time02.c time03.c time04.c time05.c time06.c time07.c \
-    time08.c time09.c time10.c time11.c time12.c time13.c timer01.c timer02.c \
-    timer03.c timer04.c timer05.c timer06.c timer07.c
+    time08.c time09.c time10.c time11.c time12.c time13.c timer01.c \
+    timer02.c timer03.c timer04.c timer05.c timer06.c timer07.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 SRCS = $(C_FILES)
@@ -33,7 +32,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-all-local: ${ARCH} ${OBJS}
+all-local: ${OBJS}
 
 EXTRA_DIST = $(C_FILES)
 
