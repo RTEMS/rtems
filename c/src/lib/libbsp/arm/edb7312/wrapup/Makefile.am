@@ -25,6 +25,6 @@ $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a: $(LIB)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
 
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
