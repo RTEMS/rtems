@@ -15,7 +15,7 @@ include_libcpu_HEADERS = include/mmu.h
 ## arm920
 noinst_PROGRAMS += arm920.rel
 arm920_rel_SOURCES = arm920/mmu.c
-arm920_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -I$(srcdir)/src
+arm920_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/src
 arm920_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

@@ -1,3 +1,8 @@
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* at91rm9200/Makefile.am, mc9328mxl/Makefile.am, shared/Makefile.am:
+	Eliminate CFLAGS_OPTIMIZE_V.
+
 2005-01-04	Joel Sherrill <joel@OARcorp.com>
 
 	* at91rm9200/clock/clock.c, at91rm9200/irq/irq.c, at91rm9200/pmc/pmc.c,

@@ -17,25 +17,25 @@ include_HEADERS += include/at91rm9200.h include/at91rm9200_dbgu.h \
 ## clock
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clock.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## dbgu
 noinst_PROGRAMS += dbgu.rel
 dbgu_rel_SOURCES = dbgu/dbgu.c
-dbgu_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+dbgu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 dbgu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## timer
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## pmc
 noinst_PROGRAMS += pmc.rel
 pmc_rel_SOURCES = pmc/pmc.c
-pmc_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pmc_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pmc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## interrupt
@@ -45,7 +45,7 @@ noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = irq/irq.c irq/bsp_irq_init.c \
     ../../../libbsp/arm/shared/irq/irq_init.c irq/bsp_irq_asm.S \
     ../../../libbsp/arm/shared/irq/irq_asm.S irq/irq.h
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

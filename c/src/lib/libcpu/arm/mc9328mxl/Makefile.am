@@ -14,13 +14,13 @@ include_HEADERS = include/mc9328mxl.h
 ## clock
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clockdrv.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## timer
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## interrupt
@@ -30,7 +30,7 @@ noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = irq/irq.c irq/bsp_irq_init.c \
     ../../../libbsp/arm/shared/irq/irq_init.c irq/bsp_irq_asm.S \
     ../../../libbsp/arm/shared/irq/irq_asm.S irq/irq.h
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
