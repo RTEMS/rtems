@@ -1,4 +1,11 @@
 
+2000-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/p4600.cfg, custom/p4650.cfg: Commented out RTEMS_CPU
+	definition since this information can be picked up from
+	autoconf generated files.  These BSPs are shared by the 
+	mips and mips64orion "ports."
+
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* compilers/gcc-portsw.cfg: Use gcc style flags.
