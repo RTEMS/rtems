@@ -20,18 +20,6 @@ include $(top_srcdir)/../../../../../automake/lib.am
 
 AM_CPPFLAGS += -I$(srcdir)
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
-    $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/%)
-
-$(PROJECT_INCLUDE):
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/rtems/score:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/%: %
-	$(INSTALL_DATA) $< $@
-
 REL = $(ARCH)/rtems-cpu.rel
 
 $(REL): $(C_O_FILES) $(S_O_FILES)
@@ -42,5 +30,16 @@ all-local: $(TMPINSTALL_FILES) $(REL)
 UNUSED_FILES = irq_stub.S
 
 EXTRA_DIST = TODO $(C_FILES) $(S_FILES) $(UNUSED_FILES)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
+	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: rtems/score/ppc_offs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 
 include $(top_srcdir)/../../../../../automake/local.am
