@@ -1,3 +1,18 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc505/timer/Makefile.am, mpc505/vectors/Makefile.am,
+	mpc6xx/clock/Makefile.am, mpc6xx/exceptions/Makefile.am,
+	mpc6xx/mmu/Makefile.am, mpc6xx/timer/Makefile.am,
+	mpc6xx/wrapup/Makefile.am, ppc403/clock/Makefile.am,
+	ppc403/console/Makefile.am, ppc403/ictrl/Makefile.am,
+	ppc403/timer/Makefile.am, ppc403/vectors/Makefile.am,
+	shared/include/Makefile.am, shared/src/Makefile.am,
+	wrapup/Makefile.am, mpc8xx/clock/Makefile.am,
+	mpc8xx/console-generic/Makefile.am, mpc8xx/cpm/Makefile.am,
+	mpc8xx/mmu/Makefile.am, mpc8xx/timer/Makefile.am,
+	mpc8xx/vectors/Makefile.am, new_exception_processing/Makefile.am,
+	old_exception_processing/Makefile.am: Include compile.am
+
 2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
 	* mpc8xx/console-generic/console-generic.c:

@@ -3,7 +3,6 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 # C source names
 C_FILES = cpu.c
@@ -18,6 +17,7 @@ S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../automake/lib.am
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
@@ -47,7 +47,8 @@ $(REL): $(C_O_FILES) $(S_O_FILES)
 	test -d ../$(ARCH) || mkdir ../$(ARCH)
 	$(make-rel)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(REL) $(ARCH)/rtems.o $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(REL) $(ARCH)/rtems.o \
+    $(TMPINSTALL_FILES)
 
 CLEANDIRS = ../o-optimize ../o-debug ../o-profile
 

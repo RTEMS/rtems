@@ -1,11 +1,12 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-## FIXME
 VPATH = @srcdir@:@srcdir@/../../ppc403/vectors
+
+## FIXME
 
 PGM = ${ARCH}/vectors.rel
 
@@ -15,13 +16,12 @@ S_FILES = vectors.S align_h.S
 vectors_rel_OBJECTS = $(S_FILES:%.S=${ARCH}/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-AM_CFLAGS = $(CFLAGS_OS_V)
 
 $(PGM): $(vectors_rel_OBJECTS)
 	$(make-rel)
