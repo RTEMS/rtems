@@ -154,7 +154,7 @@ void _Init68360 (void)
 	
 	/*
 	 * Step 14: More system initialization
-	 * SDCR (Serial DMA configuratin register)
+	 * SDCR (Serial DMA configuration register)
 	 *	Give SDMA priority over all interrupt handlers
 	 *	Set DMA arbiration level to 4
 	 * CICR (CPM interrupt configuration register):
