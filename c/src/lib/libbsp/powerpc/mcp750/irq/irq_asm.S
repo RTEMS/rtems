@@ -6,6 +6,10 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *  Modified to support the MCP750.
+ *  Modifications Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ *
  * $Id$
  */
   	
@@ -219,6 +223,10 @@ nested:
         /*
          * store it at the right place
          */
+        stw     r2, GPR1_OFFSET(r1)
+	/*
+	 * Call High Level signal handling code
+	 */
 	bl	_ISR_Signals_to_thread_executing
 	/*
 	 * start restoring exception like frame

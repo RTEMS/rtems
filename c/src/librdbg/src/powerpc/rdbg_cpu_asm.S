@@ -25,6 +25,8 @@
         PUBLIC_VAR (copyback_data_cache_and_invalidate_instr_cache)
 
 SYM (copyback_data_cache_and_invalidate_instr_cache):
+	/* make sure the data changed is in the cache */
+	sync
 	/* r3 address to handle, r4 length in bytes */
 	addi	r6, r0, PPC_CACHE_ALIGNMENT
 	/* r5 = last address to handle */
