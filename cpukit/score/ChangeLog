@@ -1,3 +1,12 @@
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu/hppa1.1/.cvsignore, cpu/hppa1.1/ChangeLog,
+	cpu/hppa1.1/Makefile.am, cpu/hppa1.1/configure.ac, cpu/hppa1.1/cpu.c,
+	cpu/hppa1.1/cpu_asm.S, cpu/hppa1.1/rtems/.cvsignore,
+	cpu/hppa1.1/rtems/score/.cvsignore, cpu/hppa1.1/rtems/score/cpu.h,
+	cpu/hppa1.1/rtems/score/cpu_asm.h, cpu/hppa1.1/rtems/score/hppa.h,
+	cpu/hppa1.1/rtems/score/types.h: Removed.
+
 2003-09-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 489/rtems
