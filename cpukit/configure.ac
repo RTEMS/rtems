@@ -137,10 +137,40 @@ AS_IF([test x"${enable_multilib}" = x"yes"],[
   AC_DEFINE_UNQUOTED([RTEMS_MULTILIBS],[1],[using multilib'ed RTEMS])
 ])
 
-AC_CONFIG_SUBDIRS([libmisc])
+# libmisc/shell/* wants to assign file descriptors to stdio file descriptors.
+AC_MSG_CHECKING([for assignable stdio])
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM(
+    [#include <stdio.h>], 
+    [stdin = fopen("/tmp", "r")])],
+  [HAVE_ASSIGNABLE_STDIO=yes],
+  [HAVE_ASSIGNABLE_STDIO=no])
+AC_MSG_RESULT([$HAVE_ASSIGNABLE_STDIO])
+
+# libmisc/serdbg exploits weak symbols
+AC_CACHE_CHECK([whether $CC supports function __attribute__((weak))],
+[rtems_cv_cc_attribute_weak],[
+  AS_IF([test x"$GCC" = xyes],[
+    save_CFLAGS=$CFLAGS
+    CFLAGS=-Werror])
+
+  AC_COMPILE_IFELSE([
+    AC_LANG_PROGRAM(
+    [void myfunc(char c) __attribute__ ((weak));
+     void myfunc(char c) {}],
+    [])],
+    [rtems_cv_cc_attribute_weak=yes],
+    [rtems_cv_cc_attribute_weak=no])
+
+  AS_IF([test x"$GCC" = xyes],[
+    CFLAGS=$save_CFLAGS])
+])
 
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
   && test x"$HAS_POSIX_API" = x"yes"])
+
+AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
+AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
@@ -159,6 +189,22 @@ libfs/src/imfs/Makefile
 libfs/src/dosfs/Makefile])
 
 AC_CONFIG_FILES([ada/Makefile])
+
+AC_CONFIG_FILES([libmisc/Makefile
+libmisc/cpuuse/Makefile
+libmisc/shell/Makefile
+libmisc/devnull/Makefile
+libmisc/dummy/Makefile
+libmisc/dumpbuf/Makefile
+libmisc/monitor/Makefile
+libmisc/rtmonuse/Makefile
+libmisc/serdbg/Makefile
+libmisc/stackchk/Makefile
+libmisc/capture/Makefile
+libmisc/untar/Makefile
+libmisc/mw-fb/Makefile
+libmisc/wrapup/Makefile
+])
 
 AC_CONFIG_FILES([wrapup/Makefile])
 

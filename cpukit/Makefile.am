@@ -6,7 +6,10 @@ ACLOCAL_AMFLAGS = -I aclocal
 
 include $(top_srcdir)/automake/multilib.am
 
-SUBDIRS = . include ada score rtems sapi libblock libfs @subdirs@ wrapup
+SUBDIRS = . include ada score rtems sapi libblock libfs
+SUBDIRS += @subdirs@ 
+SUBDIRS += libmisc
+SUBDIRS += wrapup
 
 noinst_DATA = preinstall-stamp
 
