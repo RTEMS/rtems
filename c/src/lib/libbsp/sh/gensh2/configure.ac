@@ -32,9 +32,5 @@ RTEMS_BSPOPTS_HELP([STANDALONE_EVB],
 [If defined, compiles code to jump-start from FLASH, without a monitor])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-console/Makefile
-scitab/Makefile
-startup/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
