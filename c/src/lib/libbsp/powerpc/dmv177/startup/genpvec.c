@@ -20,7 +20,7 @@
  */
 
 #include <bsp.h>
-#include "chain.h"
+#include <chain.h>
 #include <assert.h>
 
 #define   NUM_LIRQ_HANDLERS   20
