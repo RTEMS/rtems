@@ -10,43 +10,48 @@
 
 @section Introduction
 
-The thread manager ...
+The thread manager implements the functionality required of the thread
+manager as defined by POSIX 1003.1b-1996.  This standard requires that
+a compliant operating system provide the facilties to manage multiple
+threads of control and defines the API that must be provided.
 
 The directives provided by the thread manager are:
 
 @itemize @bullet
-@item @code{pthread_attr_init} - 
-@item @code{pthread_attr_destroy} - 
-@item @code{pthread_attr_setdetachstate} - 
-@item @code{pthread_attr_getdetachstate} - 
-@item @code{pthread_attr_setstacksize} - 
-@item @code{pthread_attr_getstacksize} - 
-@item @code{pthread_attr_setstackaddr} - 
-@item @code{pthread_attr_getstackaddr} - 
-@item @code{pthread_attr_setscope} - 
-@item @code{pthread_attr_getscope} - 
-@item @code{pthread_attr_setinheritsched} - 
-@item @code{pthread_attr_getinheritsched} - 
-@item @code{pthread_attr_setschedpolicy} - 
-@item @code{pthread_attr_getschedpolicy} - 
-@item @code{pthread_attr_setschedparam} - 
-@item @code{pthread_attr_getschedparam} - 
-@item @code{pthread_create} - 
-@item @code{pthread_exit} - 
-@item @code{pthread_detach} - 
-@item @code{pthread_join} - 
-@item @code{pthread_self} - 
-@item @code{pthread_equal} - 
-@item @code{pthread_once} - 
-@item @code{pthread_setschedparam} - 
-@item @code{pthread_getschedparam} - 
+@item @code{pthread_attr_init} - Initialize a Thread Attribute Set
+@item @code{pthread_attr_destroy} - Destroy a Thread Attribute Set
+@item @code{pthread_attr_setdetachstate} - Set Detach State
+@item @code{pthread_attr_getdetachstate} - Get Detach State
+@item @code{pthread_attr_setstacksize} - Set Thread Stack Size
+@item @code{pthread_attr_getstacksize} - Get Thread Stack Size
+@item @code{pthread_attr_setstackaddr} - Set Thread Stack Address
+@item @code{pthread_attr_getstackaddr} - Get Thread Stack Address
+@item @code{pthread_attr_setscope} - Set Thread Scheduling Scope
+@item @code{pthread_attr_getscope} - Get Thread Scheduling Scope
+@item @code{pthread_attr_setinheritsched} - Set Inherit Scheduler Flag
+@item @code{pthread_attr_getinheritsched} - Get Inherit Scheduler Flag
+@item @code{pthread_attr_setschedpolicy} - Set Scheduling Policy
+@item @code{pthread_attr_getschedpolicy} - Get Scheduling Policy
+@item @code{pthread_attr_setschedparam} - Set Scheduling Parameters
+@item @code{pthread_attr_getschedparam} - Get Scheduling Parameters
+@item @code{pthread_create} - Create a Thread
+@item @code{pthread_exit} - Terminate the Current Thread
+@item @code{pthread_detach} - Detach a Thread
+@item @code{pthread_join} - Wait for Thread Termination
+@item @code{pthread_self} - Get Thread ID
+@item @code{pthread_equal} - Compare Thread IDs
+@item @code{pthread_once} - Dynamic Package Initialization
+@item @code{pthread_setschedparam} - Set Thread Scheduling Parameters
+@item @code{pthread_getschedparam} - Get Thread Scheduling Parameters
 @end itemize
 
 @section Background
 
 @subsection Thread Attributes
 
-Thread attributes are utilized only at thread creation time.
+Thread attributes are utilized only at thread creation time.  A thread
+attribute structure may be initialized and passed as an argument to
+the @code{pthread_create} routine.
 
 @table @b
 @item stack address
@@ -94,7 +99,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection pthread_attr_init
+@subsection pthread_attr_init - Initialize a Thread Attribute Set
 
 @subheading CALLING SEQUENCE:
 
@@ -117,10 +122,38 @@ The attribute pointer argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_init} routine initializes the thread attributes
+object specified by @code{attr} with the default value for all of the
+individual attributes.
+
 @subheading NOTES:
 
+The settings in the default attributes are implementation defined.  For 
+RTEMS, the default attributes are as follows:
+
+@itemize @bullet
+
+@item stackadr
+is not set to indicate that RTEMS is to allocate the stack memory.
+
+@item stacksize
+is set to @code{PTHREAD_MINIMUM_STACK_SIZE}.
+
+@item contentionscope
+is set to @code{PTHREAD_SCOPE_PROCESS}.
+
+@item inheritsched
+is set to @code{PTHREAD_INHERIT_SCHED} to indicate that the created
+thread inherits its scheduling attributes from its parent.
+
+@item detachstate
+is set to @code{PTHREAD_CREATE_JOINABLE}.
+
+@end itemize
+
+
 @page
-@subsection pthread_attr_destroy
+@subsection pthread_attr_destroy - Destroy a Thread Attribute Set
 
 @subheading CALLING SEQUENCE:
 
@@ -145,10 +178,16 @@ The attribute set is not initialized.
  
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_destroy} routine is used to destroy a thread
+attributes object.  The behavior of using an attributes object after
+it is destroyed is implementation dependent.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection pthread_attr_setdetachstate
+@subsection pthread_attr_setdetachstate - Set Detach State
 
 @subheading CALLING SEQUENCE:
 
@@ -177,10 +216,22 @@ The detachstate argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_setdetachstate} routine is used to value of the 
+@code{detachstate} attribute.  This attribute controls whether the
+thread is created in a detached state.  
+
+The @code{detachstate} can be either @code{PTHREAD_CREATE_DETACHED} or
+@code{PTHREAD_CREATE_JOINABLE}.  The default value for all threads is 
+@code{PTHREAD_CREATE_JOINABLE}.
+
 @subheading NOTES:
 
+If a thread is in a detached state,
+then the use of the ID with the @code{pthread_detach} or
+@code{pthread_join} routines is an error.
+
 @page
-@subsection pthread_attr_getdetachstate
+@subsection pthread_attr_getdetachstate - Get Detach State
 
 @subheading CALLING SEQUENCE:
 
@@ -209,10 +260,16 @@ The detatchstate pointer argument is invalid.
  
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_getdetachstate} routine is used to obtain the
+current value of the @code{detachstate} attribute as specified
+by the @code{attr} thread attribute object.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection pthread_attr_setstacksize
+@subsection pthread_attr_setstacksize - Set Thread Stack Size
 
 @subheading CALLING SEQUENCE:
 
@@ -238,13 +295,22 @@ The attribute set is not initialized.
  
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_setstacksize} routine is used to set the
+@code{stacksize} attribute in the @code{attr} thread attribute
+object.
+
 @subheading NOTES:
 
-If the specified stacksize is below the minimum required for this CPU, then
-the stacksize will be set to the minimum for this CPU.
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_ATTR_STACKSIZE} to indicate that this
+routine is supported.
+
+If the specified stacksize is below the minimum required for this CPU
+(@code{PTHREAD_STACK_MIN}, then the stacksize will be set to the minimum
+for this CPU.
 
 @page
-@subsection pthread_attr_getstacksize
+@subsection pthread_attr_getstacksize - Get Thread Stack Size
 
 @subheading CALLING SEQUENCE:
 
@@ -273,10 +339,18 @@ The stacksize pointer argument is invalid.
  
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_getstacksize} routine is used to obtain the
+@code{stacksize} attribute in the @code{attr} thread attribute
+object.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_ATTR_STACKSIZE} to indicate that this
+routine is supported.
+
 @page
-@subsection pthread_attr_setstackaddr
+@subsection pthread_attr_setstackaddr - Set Thread Stack Address
 
 @subheading CALLING SEQUENCE:
 
@@ -302,10 +376,21 @@ The attribute set is not initialized.
  
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_setstackaddr} routine is used to set the
+@code{stackaddr} attribute in the @code{attr} thread attribute
+object.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_ATTR_STACKADDR} to indicate that this
+routine is supported.
+
+It is imperative to the proper operation of the system that 
+each thread have sufficient stack space.
+
 @page
-@subsection pthread_attr_getstackaddr
+@subsection pthread_attr_getstackaddr - Get Thread Stack Address
 
 @subheading CALLING SEQUENCE:
 
@@ -334,10 +419,18 @@ The stackaddr pointer argument is invalid.
  
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_getstackaddr} routine is used to obtain the
+@code{stackaddr} attribute in the @code{attr} thread attribute
+object.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_ATTR_STACKADDR} to indicate that this
+routine is supported.
+
 @page
-@subsection pthread_attr_setscope
+@subsection pthread_attr_setscope - Set Thread Scheduling Scope
 
 @subheading CALLING SEQUENCE:
 
@@ -369,10 +462,23 @@ The contention scope specified (PTHREAD_SCOPE_SYSTEM) is not supported.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_setscope} routine is used to set the contention
+scope field in the thread attribute object @code{attr} to the value
+specified by @code{contentionscope}.
+
+The @code{contentionscope} must be either @code{PTHREAD_SCOPE_SYSTEM}
+to indicate that the thread is to be within system scheduling contention
+or @code{PTHREAD_SCOPE_PROCESS} indicating that the thread is to be
+within the process scheduling contention scope.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
+
 @page
-@subsection pthread_attr_getscope
+@subsection pthread_attr_getscope - Get Thread Scheduling Scope
 
 @subheading CALLING SEQUENCE:
 
@@ -401,10 +507,18 @@ The contentionscope pointer argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_getscope} routine is used to obtain the
+value of the contention scope field in the thread attributes
+object @code{attr}.  The current value is returned in
+@code{contentionscope}.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
 @page
-@subsection pthread_attr_setinheritsched
+@subsection pthread_attr_setinheritsched - Set Inherit Scheduler Flag
 
 @subheading CALLING SEQUENCE:
 
@@ -433,10 +547,27 @@ The specified scheduler inheritance argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_setinheritsched} routine is used to set the
+inherit scheduler field in the thread attribute object @code{attr} to
+the value specified by @code{inheritsched}.  
+
+The @code{contentionscope} must be either @code{PTHREAD_INHERIT_SCHED}
+to indicate that the thread is to inherit the scheduling policy
+and parameters fromthe creating thread, or @code{PTHREAD_EXPLICIT_SCHED}
+to indicate that the scheduling policy and parameters for this thread
+are to be set from the corresponding values in the attributes object.
+If @code{contentionscope} is @code{PTHREAD_INHERIT_SCHED}, then the
+scheduling attributes in the @code{attr} structure will be ignored
+at thread creation time.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
+
 @page
-@subsection pthread_attr_getinheritsched
+@subsection pthread_attr_getinheritsched - Get Inherit Scheduler Flag
 
 @subheading CALLING SEQUENCE:
 
@@ -464,10 +595,18 @@ The inheritsched pointer argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_getinheritsched} routine is used to
+object the current value of the inherit scheduler field in
+the thread attribute object @code{attr}.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
+
 @page
-@subsection pthread_attr_setschedpolicy
+@subsection pthread_attr_setschedpolicy - Set Scheduling Policy
 
 @subheading CALLING SEQUENCE:
 
@@ -495,10 +634,33 @@ The specified scheduler policy argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_setschedpolicy} routine is used to set the
+scheduler policy field in the thread attribute object @code{attr} to
+the value specified by @code{policy}.
+
+Scheduling policies may be one of the following:
+
+@itemize @bullet
+
+@item @code{SCHED_DEFAULT}
+@item @code{SCHED_FIFO}
+@item @code{SCHED_RR}
+@item @code{SCHED_SPORADIC}
+@item @code{SCHED_OTHER}
+
+@end itemize
+
+The precise meaning of each of these is discussed elsewhere in this
+manual.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
+
 @page
-@subsection pthread_attr_getschedpolicy
+@subsection pthread_attr_getschedpolicy - Get Scheduling Policy
 
 @subheading CALLING SEQUENCE:
 
@@ -526,10 +688,18 @@ The specified scheduler policy argument pointer is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_getschedpolicy} routine is used to obtain the
+scheduler policy field from the thread attribute object @code{attr}.
+The value of this field is returned in @code{policy}.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
+
 @page
-@subsection pthread_attr_setschedparam
+@subsection pthread_attr_setschedparam - Set Scheduling Parameters
 
 @subheading CALLING SEQUENCE:
 
@@ -557,10 +727,18 @@ The specified scheduler parameter argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_setschedparam} routine is used to set the
+scheduler parameters field in the thread attribute object @code{attr} to
+the value specified by @code{param}.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
+
 @page
-@subsection pthread_attr_getschedparam
+@subsection pthread_attr_getschedparam - Get Scheduling Parameters
 
 @subheading CALLING SEQUENCE:
 
@@ -588,10 +766,18 @@ The specified scheduler parameter argument pointer is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_attr_getschedparam} routine is used to obtain the
+scheduler parameters field from the thread attribute object @code{attr}.
+The value of this field is returned in @code{param}.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
+
 @page
-@subsection pthread_create
+@subsection pthread_create - Create a Thread
 
 @subheading CALLING SEQUENCE:
 
@@ -649,10 +835,32 @@ Invalid argument passed.
  
 @subheading DESCRIPTION:
 
+The @code{pthread_create} routine is used to create a new thread with 
+the attributes specified by @code{attr}.  If the @code{attr} argument
+is @code{NULL}, then the default attribute set will be used.  Modification
+of the contents of @code{attr} after this thread is created does not
+have an impact on this thread.  
+
+The thread begins execution at the address specified by @code{start_routine}
+with @code{arg} as its only argument.  If @code{start_routine} returns,
+then it is functionally equivalent to the thread executing the
+@code{pthread_exit} service.
+
+Upon successful completion, the ID of the created thread is returned in the
+@code{thread} argument.
+
 @subheading NOTES:
 
+There is no concept of a single main thread in RTEMS as there is in 
+a tradition UNIX system.  POSIX requires that the implicit return of
+the main thread results in the same effects as if there were a call
+to @code{exit}.  This does not occur in RTEMS.
+
+The signal mask of the newly created thread is inherited from its
+creator and the set of pending signals for this thread is empty.
+
 @page
-@subsection pthread_exit
+@subsection pthread_exit - Terminate the Current Thread
 
 @subheading CALLING SEQUENCE:
 
@@ -672,10 +880,41 @@ void pthread_exit(
 
 @subheading DESCRIPTION:
 
+The @code{pthread_exit} routine is used to temrinate the calling thread.
+The @code{status} is made available to any successful join with the
+terminating thread.
+
+When a thread returns from its start routine, it results in an 
+implicit call to the @code{pthread_exit} routine with the return
+value of the function serving as the argument to @code{pthread_exit}.
+
 @subheading NOTES:
 
+Any cancellation cleanup handlers that hace been pushed and not yet popped 
+shall be popped in reverse of the order that they were pushed.  After
+all cancellation cleanup handlers have been executed, if the
+thread has any thread-specific data, destructors for that data will
+be invoked.
+
+Thread termination does not release or free any application visible
+resources including byt not limited to mutexes, file descriptors, allocated
+memory, etc..  Similarly, exitting a thread does not result in any
+process-oriented cleanup activity.
+
+There is no concept of a single main thread in RTEMS as there is in 
+a tradition UNIX system.  POSIX requires that the implicit return of
+the main thread results in the same effects as if there were a call
+to @code{exit}.  This does not occur in RTEMS.
+
+All access to any automatic variables allocated by the threads is lost
+when the thread exits.  Thus references (i.e. pointers) to local variables
+of a thread should not be used in a global manner without care.  As
+a specific example, a pointer to a local variable should NOT be used
+as the return value.
+
+
 @page
-@subsection pthread_detach
+@subsection pthread_detach - Detach a Thread
 
 @subheading CALLING SEQUENCE:
 
@@ -699,14 +938,18 @@ The thread specified is not a joinable thread.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_detach} routine is used to to indicate that storage
+for @code{thread} can be reclaimed when the thread terminates without
+another thread joinging with it.
+
 @subheading NOTES:
 
 If any threads have previously joined with the specified thread, then they
-will remain joined with that thread.  Any subsequent calls to pthread_join
-on the specified thread will fail.
+will remain joined with that thread.  Any subsequent calls to
+@code{pthread_join} on the specified thread will fail.
 
 @page
-@subsection pthread_join
+@subsection pthread_join - Wait for Thread Termination
 
 @subheading CALLING SEQUENCE:
 
@@ -734,16 +977,25 @@ A deadlock was detected or thread is the calling thread.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_join} routine suspends execution of the calling thread
+until @code{thread} terminates.  If @code{thread} has already terminated,
+then this routine returns immediately.  The value returned by @code{thread}
+(i.e. passed to @code{pthread_exit} is returned in @code{value_ptr}.
+
+When this routine returns, then @code{thread} has been temrinated.  
+
 @subheading NOTES:
 
+The results of multiple simultaneous joins on the same thread is undefined.
+
 If any threads have previously joined with the specified thread, then they
-will remain joined with that thread.  Any subsequent calls to pthread_join
-on the specified thread will fail.
+will remain joined with that thread.  Any subsequent calls to
+@code{pthread_join} on the specified thread will fail.
 
 If value_ptr is NULL, then no value is returned.
 
 @page
-@subsection pthread_self
+@subsection pthread_self - Get Thread ID
 
 @subheading CALLING SEQUENCE:
 
@@ -755,14 +1007,18 @@ pthread_t pthread_self( void );
 
 @subheading STATUS CODES:
 
-This routine returns the id of the calling thread.
+The value returned is the ID of the calling thread.
 
 @subheading DESCRIPTION:
 
+This routine returns the ID of the calling thread.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection pthread_equal
+@subsection pthread_equal - Compare Thread IDs
 
 @subheading CALLING SEQUENCE:
 
@@ -788,12 +1044,15 @@ The thread ids are equal.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_equal} routine is used to compare two thread
+IDs and determine if they are equal.
+
 @subheading NOTES:
 
 The behavior is undefined if the thread IDs are not valid.
 
 @page
-@subsection pthread_once
+@subsection pthread_once - Dynamic Package Initialization
 
 @subheading CALLING SEQUENCE:
 
@@ -814,10 +1073,23 @@ NONE
 
 @subheading DESCRIPTION:
 
+The @code{pthread_once} routine is used to provide controlled initialization
+of variables.  The first call to @code{pthread_once} by any thread with the
+same @code{once_control} will result in the @code{init_routine} being
+invoked with no arguments.  Subsequent calls to @code{pthread_once} with
+the same @code{once_control} will have no effect.  
+
+The @code{init_routine} is guaranteed to have run to completion when
+this routine returns to the caller.
+
 @subheading NOTES:
 
+The behavior of @code{pthread_once} is undefined if @code{once_control}
+is automatic storage (i.e. on a task stack) or is not initialized using
+@code{PTHREAD_ONCE_INIT}.
+
 @page
-@subsection pthread_setschedparam
+@subsection pthread_setschedparam - Set Thread Scheduling Parameters
 
 @subheading CALLING SEQUENCE:
 
@@ -855,10 +1127,20 @@ The thread indicated was invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_setschedparam} routine is used to set the
+scheduler parameters currently associated with the thread specified
+by @code{thread} to the policy specified by @code{policy}.  The 
+contents of @code{param} are interpreted based upon the @code{policy}
+argument.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
+
 @page
-@subsection pthread_getschedparam
+@subsection pthread_getschedparam - Get Thread Scheduling Parameters
 
 @subheading CALLING SEQUENCE:
 
@@ -888,5 +1170,13 @@ The thread indicated by the parameter thread is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_getschedparam} routine is used to obtain the
+scheduler policy and parameters associated with @code{thread}.
+The current policy and associated parameters values returned in
+@code{policy} and @code{param}, respectively.
+
 @subheading NOTES:
 
+As required by POSIX, RTEMS defines the feature symbol
+@code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
+family of routines to which this routine belongs is supported.
