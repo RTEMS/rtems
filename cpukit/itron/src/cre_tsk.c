@@ -57,7 +57,6 @@ ER cre_tsk(
     _ITRON_return_errorno( E_RSATR );
 
   if (( pk_ctsk->itskpri <= 0 ) || ( pk_ctsk->itskpri >= 256 ))
-  if ( pk_ctsk->itskpri <= 0 )
     _ITRON_return_errorno( E_PAR );
   if ( pk_ctsk->task == NULL )
     _ITRON_return_errorno( E_PAR );
