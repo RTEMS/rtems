@@ -2,16 +2,13 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../shared
-
-S_FILES = start.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
+S_FILES = $(top_srcdir)/../shared/start.S
+S_O_FILES = $(S_FILES:$(top_srcdir)/../shared/%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(S_O_FILES)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
-include $(top_srcdir)/../../bspstart.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -19,9 +16,10 @@ include $(top_srcdir)/../../bspstart.am
 
 project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
 
-all-local: $(TMPINSTALL_FILES)
+$(ARCH)/%$(LIB_VARIANT).$(OBJEXT): $(top_srcdir)/../shared/%.S $(ARCH)/$(dirstamp)
+	${CCASCOMPILE} -DASM -o $@ -c $<
 
-EXTRA_DIST = start.S
+all-local: $(TMPINSTALL_FILES)
 
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)

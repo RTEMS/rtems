@@ -1,3 +1,7 @@
+2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am: Eliminate VPATH.
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
