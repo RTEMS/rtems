@@ -22,4 +22,4 @@ SRCS=README
 #  from the individual .rel files built in other directories
 #
 # XXXX add tools
-SUB_DIRS=include startup clock console consolex timer wrapup
+SUB_DIRS=include startup clock console consolex timer tod wrapup
