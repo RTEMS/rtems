@@ -40,9 +40,9 @@ extern "C" {
 
 #else
 #include <rtems.h>
-#include <console.h>
-#include <clockdrv.h>
-#include <iosupp.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
+#include <rtems/iosupp.h>
 
 /*
  *  We no longer support the first generation board.

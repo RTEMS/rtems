@@ -1,3 +1,13 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* vectors/vectors.S: Include <rtems/asm.h> instead of <asm.h>.
+	* startup/genpvec.c: Include <rtems/chain.h> instead of <chain.h>.
+	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* include/bsp.h: Include <rtems/console.h> instead of <console.h>.
+	* include/bsp.h: Include <rtems/iosupp.h> instead of <iosupp.h>.
+	* console/consolebsp.h: Include <rtems/ringbuf.h> instead of <ringbuf.h>.
+	* startup/vmeintr.c: Include <rtems/vmeintr.h> instead of <vmeintr.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* PCI_bus/PCI.c, PCI_bus/PCI.h, PCI_bus/flash.c, PCI_bus/universe.c,

@@ -14,7 +14,7 @@
  */
 
 #include <bsp.h>
-#include <chain.h>
+#include <rtems/chain.h>
 #include <assert.h>
 
 #include <stdio.h> /* for sprintf */

@@ -16,7 +16,7 @@
 #define __CONSOLEBSP_H
 
 #include <rtems.h>
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
 
 #ifdef __cplusplus
 extern "C" {
