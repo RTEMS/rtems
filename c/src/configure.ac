@@ -90,13 +90,6 @@ AC_SUBST(CFLAGS_DEBUG_V)
 test -n "${CFLAGS_DEBUG_V}" && \
   ac_configure_args="$ac_configure_args 'CFLAGS_DEBUG_V=${CFLAGS_DEBUG_V}'"
 
-AC_CACHE_CHECK([for CFLAGS_PROFILE_V],[ac_cv_env_CFLAGS_PROFILE_V],
-[. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
-CFLAGS_PROFILE_V=$ac_cv_env_CFLAGS_PROFILE_V
-AC_SUBST(CFLAGS_PROFILE_V)
-test -n "${CFLAGS_PROFILE_V}" && \
-  ac_configure_args="$ac_configure_args 'CFLAGS_PROFILE_V=${CFLAGS_PROFILE_V}'"
-
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
