@@ -605,7 +605,7 @@ MC68681_STATIC void mc68681_process(
   unsigned32              pMC68681;
   unsigned32              pMC68681_port;
   volatile unsigned8      ucLineStatus; 
-  char                    cChar;
+  unsigned char           cChar;
   getRegister_f           getReg;
   setRegister_f           setReg;
 

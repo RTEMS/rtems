@@ -539,7 +539,7 @@ Z85C30_STATIC void z85c30_process(
 {
   unsigned32          ulCtrlPort;
   volatile unsigned8  z85c30_status;
-  char                cChar;
+  unsigned char       cChar;
   setRegister_f       setReg;
   getRegister_f       getReg;
 
