@@ -25,7 +25,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
-#include <rtems/score/ppc.h>
+#include <rtems/score/powerpc.h>
 #include <libcpu/raw_exception.h>
 #include <libcpu/cpuIdent.h>
 #include <rtems/bspIo.h>	/* for printk */

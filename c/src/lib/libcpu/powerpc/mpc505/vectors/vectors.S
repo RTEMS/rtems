@@ -21,7 +21,7 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/score/ppc.h>
+#include <rtems/score/powerpc.h>
 #include <rtems/score/ppc_offs.h>
 
 	/* Vector offsets */

@@ -5,7 +5,7 @@
 #include "ictrl.h"
 
 #include <rtems.h>
-#include <rtems/score/ppc.h>
+#include <rtems/score/powerpc.h>
 
 /*
  * Internal routines.

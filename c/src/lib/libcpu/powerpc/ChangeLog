@@ -1,3 +1,12 @@
+2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* mpc505/ictrl/ictrl.c, mpc505/vectors/vectors.S,
+	mpc6xx/exceptions/raw_exception.c,
+	mpc8260/exceptions/raw_exception.c,
+	mpc8xx/exceptions/raw_exception.c, rtems/powerpc/cache.h,
+	mpc5xx/ictrl/ictrl.c, mpc5xx/exceptions/raw_exception.c: Include
+	<rtems/score/powerpc.h> instead of <rtems/score/ppc.h>.
+
 2004-04-12	David Querbach <querbach@realtime.bc.ca>
 
 	* README, configure.ac, mpc5xx/Makefile.am,

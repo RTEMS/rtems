@@ -5,7 +5,7 @@
 #ifndef _rtems_powerpc_cache_h
 #define _rtems_powerpc_cache_h
 
-#include <rtems/score/ppc.h>
+#include <rtems/score/powerpc.h>
 
 #ifdef _OLD_EXCEPTIONS
 
