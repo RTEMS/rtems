@@ -53,10 +53,10 @@ END-INFO-DIR-ENTRY
 @c  Title Page Stuff
 @c
 
-@set edition 970904
-@set version 970904
-@set update-date 4 September 1997
-@set update-month September 1997
+@set edition @value{RTEMS-EDITION}
+@set version @value{RTEMS-VERSION}
+@set update-date @value{RTEMS-UPDATE-DATE}
+@set update-month @value{RTEMS-UPDATE-MONTH}
 
 @c
 @c  I don't really like having a short title page.  --joel
