@@ -16,6 +16,7 @@ if test "$rtems_cv_prog_gcc" = "yes" ; then
   LD_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ld`
   NM_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=nm`
   RANLIB_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ranlib`
+  SIZE_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=size`
 fi
 
 dnl check whether the tools exist
