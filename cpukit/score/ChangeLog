@@ -1,3 +1,8 @@
+2003-08-14	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, include/rtems/score/thread.h: Add fileio to list of
+	interactive tests.
+
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 430/rtems
