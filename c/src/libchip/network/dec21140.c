@@ -58,6 +58,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <rtems/error.h>
+#include <rtems/bspIo.h>
 #include <rtems/rtems_bsdnet.h>
 
 #include <sys/param.h>
@@ -774,7 +775,9 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 	struct ifnet *ifp;
 	int mtu;
 	int i;
+#if defined(__i386__)
     int deviceId = PCI_DEVICE_ID_DEC_21140; /* network card device ID */
+#endif
 	
 	/*
 	 * First, find a DEC board

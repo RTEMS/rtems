@@ -1,3 +1,7 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* network/dec21140.c: Removed warnings.
+
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
 	* New files: New directory ide/, ide/Makefile.am, ide/ide_ctrl_cfg.h,
