@@ -62,7 +62,7 @@ C_FILES = $(STD_C_FILES) $(MP_C_FILES)
 else
 C_FILES = $(STD_C_FILES)
 endif
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
