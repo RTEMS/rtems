@@ -16,13 +16,9 @@ include_rtems_HEADERS = include/rtems/config.h include/rtems/extension.h \
 
 EXTRA_DIST = include/rtems/README
 
-## inline
 if INLINE
 include_rtems_HEADERS += inline/rtems/extension.inl
-endif
-
-## macros
-if MACROS
+else
 include_rtems_HEADERS += macros/rtems/extension.inl
 endif
 
@@ -54,51 +50,56 @@ EXTRA_DIST += $(C_FILES)
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/confdefs.h: include/confdefs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/confdefs.h: include/confdefs.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/confdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/confdefs.h
 
-$(PROJECT_INCLUDE)/rtems:
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/config.h: include/rtems/config.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/config.h: include/rtems/config.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/config.h
 
-$(PROJECT_INCLUDE)/rtems/extension.h: include/rtems/extension.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/extension.h: include/rtems/extension.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.h
 
-$(PROJECT_INCLUDE)/rtems/fatal.h: include/rtems/fatal.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/fatal.h: include/rtems/fatal.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fatal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fatal.h
 
-$(PROJECT_INCLUDE)/rtems/init.h: include/rtems/init.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/init.h: include/rtems/init.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/init.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/init.h
 
-$(PROJECT_INCLUDE)/rtems/io.h: include/rtems/io.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/io.h: include/rtems/io.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/io.h
 
-$(PROJECT_INCLUDE)/rtems/mptables.h: include/rtems/mptables.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/mptables.h: include/rtems/mptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mptables.h
 
-$(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
 
 if INLINE
-$(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
-endif
 
-if MACROS
-$(PROJECT_INCLUDE)/rtems/extension.inl: macros/rtems/extension.inl
-	$(INSTALL_DATA) $< $@
+else
+$(PROJECT_INCLUDE)/rtems/extension.inl: macros/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
 endif
 

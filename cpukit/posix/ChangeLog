@@ -1,3 +1,8 @@
+2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add $(dirstamp) to preinstallation rules.
+	Remove MACROS.
+
 2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reworked.
