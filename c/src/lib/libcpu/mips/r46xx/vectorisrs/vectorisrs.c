@@ -7,7 +7,7 @@
 
 #define mips_get_cause( _cause ) \
   do { \
-    asm volatile( "mfc0 %0, $13; nop" : "=g" (_cause) :  ); \
+    asm volatile( "mfc0 %0, $13; nop" : "=r" (_cause) :  ); \
   } while (0)
 
 #define CALL_ISR(_vector) \
