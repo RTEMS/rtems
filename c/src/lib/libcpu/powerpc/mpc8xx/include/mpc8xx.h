@@ -767,6 +767,90 @@ typedef struct m8xxIDMABufferDescriptor_ {
 
 /*
 *************************************************************************
+*                 PCMCIA Control Registers
+*************************************************************************
+*/
+#define M8xx_PCMCIA_POR_BSIZE_1B    (0x00 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_2B    (0x01 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_4B    (0x03 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_8B    (0x02 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_16B   (0x06 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_32B   (0x07 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_64B   (0x05 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_128B  (0x04 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_256B  (0x0C << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_512B  (0x0D << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_1KB   (0x0F << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_2KB   (0x0E << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_4KB   (0x0A << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_8KB   (0x0B << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_16KB  (0x09 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_32KB  (0x08 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_64KB  (0x18 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_128KB (0x19 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_256KB (0x1B << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_512KB (0x1A << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_1MB   (0x1E << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_2MB   (0x1F << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_4MB   (0x1D << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_8MB   (0x1C << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_16MB  (0x14 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_32MB  (0x15 << (31-4))
+#define M8xx_PCMCIA_POR_BSIZE_64MB  (0x17 << (31-4))
+
+#define M8xx_PCMCIA_POR_PSHT(x)     (((x) & 0x0f) << (31-15))
+#define M8xx_PCMCIA_POR_PSST(x)     (((x) & 0x0f) << (31-19))
+#define M8xx_PCMCIA_POR_PSL(x)      (((x) & 0x1f) << (31-24))
+#define M8xx_PCMCIA_POR_PPS_8       ((0) << (31-19))
+#define M8xx_PCMCIA_POR_PPS_16      ((1) << (31-19))
+
+#define M8xx_PCMCIA_POR_PRS_MEM     ((0) << (31-28))
+#define M8xx_PCMCIA_POR_PRS_ATT     ((2) << (31-28))
+#define M8xx_PCMCIA_POR_PRS_IO      ((3) << (31-28))
+#define M8xx_PCMCIA_POR_PRS_DMA     ((4) << (31-28))
+#define M8xx_PCMCIA_POR_PRS_DML     ((5) << (31-28))
+
+#define M8xx_PCMCIA_POR_PSLOT_A     ((0) << (31-29))
+#define M8xx_PCMCIA_POR_PSLOT_B     ((1) << (31-29))
+
+#define M8xx_PCMCIA_POR_WP          ((1) << (31-30))
+#define M8xx_PCMCIA_POR_VALID       ((1) << (31-31))
+
+#define M8xx_PCMCIA_PGCR_CIRQLVL(x) (((x) & 0xff) << (31- 7))
+#define M8xx_PCMCIA_PGCR_CSCHLVL(x) (((x) & 0xff) << (31-15))
+#define M8xx_PCMCIA_PGCR_CDRQ_OFF    ((0) << (31-17))
+#define M8xx_PCMCIA_PGCR_CDRQ_IOIS16 ((2) << (31-17))
+#define M8xx_PCMCIA_PGCR_CDRQ_SPKR   ((3) << (31-17))
+#define M8xx_PCMCIA_PGCR_COE         ((1) << (31-24))
+#define M8xx_PCMCIA_PGCR_CRESET      ((1) << (31-25))
+
+#define M8xx_PCMCIA_PIPR_CAVS1      ((1) << (31- 0))
+#define M8xx_PCMCIA_PIPR_CAVS2      ((1) << (31- 1))
+#define M8xx_PCMCIA_PIPR_CAWP       ((1) << (31- 2))
+#define M8xx_PCMCIA_PIPR_CACD2      ((1) << (31- 3))
+#define M8xx_PCMCIA_PIPR_CACD1      ((1) << (31- 4))
+#define M8xx_PCMCIA_PIPR_CABVD2     ((1) << (31- 5))
+#define M8xx_PCMCIA_PIPR_CABVD1     ((1) << (31- 6))
+#define M8xx_PCMCIA_PIPR_CARDY      ((1) << (31- 7))
+#define M8xx_PCMCIA_PIPR_CBVS1      ((1) << (31-16))
+#define M8xx_PCMCIA_PIPR_CBVS2      ((1) << (31-17))
+#define M8xx_PCMCIA_PIPR_CBWP       ((1) << (31-18))
+#define M8xx_PCMCIA_PIPR_CBCD2      ((1) << (31-19))
+#define M8xx_PCMCIA_PIPR_CBCD1      ((1) << (31-20))
+#define M8xx_PCMCIA_PIPR_CBBVD2     ((1) << (31-21))
+#define M8xx_PCMCIA_PIPR_CBBVD1     ((1) << (31-22))
+#define M8xx_PCMCIA_PIPR_CBRDY      ((1) << (31-23))
+
+
+#define M8xx_SYPCR_BMT(x)       ((x)<<8)    /* Bus monitor timing */
+#define M8xx_SYPCR_BME          (1<<7)      /* Bus monitor enable */
+#define M8xx_SYPCR_SWF          (1<<3)      /* Software watchdog freeze */
+#define M8xx_SYPCR_SWE          (1<<2)      /* Software watchdog enable */
+#define M8xx_SYPCR_SWRI         (1<<1)      /* Watchdog reset/interrupt sel. */
+#define M8xx_SYPCR_SWP          (1<<0)      /* Software watchdog prescale */
+
+/*
+*************************************************************************
 *                        Memory Control Registers                       *
 *************************************************************************
 */
