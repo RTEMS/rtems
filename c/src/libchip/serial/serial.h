@@ -24,6 +24,16 @@
 
 #include <ringbuf.h>
 
+/*
+ *  Types for get and set register routines
+ */
+
+typedef unsigned8 (*getRegister_f)(unsigned32 port, unsigned8 register);
+typedef void      (*setRegister_f)(
+                            unsigned32 port, unsigned8 reg, unsigned8 value);
+typedef unsigned8 (*getData_f)(unsigned32 port);
+typedef void      (*setData_f)(unsigned32 port, unsigned8 value);
+
 typedef struct _console_fns {
   boolean (*deviceProbe)(int minor);
   int     (*deviceFirstOpen)(int major, int minor, void *arg);
@@ -51,10 +61,10 @@ typedef struct _console_tbl {
   unsigned32     ulCtrlPort1;
   unsigned32     ulCtrlPort2;
   unsigned32     ulDataPort;
-  unsigned8    (*getRegister)(unsigned32 port, unsigned8 register);
-  void         (*setRegister)(unsigned32 port, unsigned8 reg, unsigned8 value);
-  unsigned8    (*getData)(unsigned32 port);
-  void         (*setData)(unsigned32 port, unsigned8 value);
+  getRegister_f  getRegister;
+  setRegister_f  setRegister;
+  getData_f      getData;
+  setData_f      setData;
   unsigned32     ulClock;
   unsigned int   ulIntVector;
 } console_tbl;
