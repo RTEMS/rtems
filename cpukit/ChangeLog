@@ -1,3 +1,11 @@
+2004-10-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libnetworking/opt_atalk.h, libnetworking/opt_bdg.h,
+	libnetworking/opt_inet.h, libnetworking/opt_inet6.h,
+	libnetworking/opt_ipx.h, libnetworking/opt_mac.h,
+	libnetworking/opt_netgraph.h: New (Stubs).
+	* libnetworking/net/if_loop.c: Cosmetical update from FreeBSD.
+
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libnetworking/net/ethernet.h: Remove BYTE_PACK.

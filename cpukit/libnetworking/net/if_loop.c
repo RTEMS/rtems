@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -30,7 +26,11 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	@(#)if_loop.c	8.1 (Berkeley) 6/10/93
+ *	@(#)if_loop.c	8.2 (Berkeley) 1/9/95
+ * $FreeBSD: src/sys/net/if_loop.c,v 1.102 2004/08/27 18:33:07 andre Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -39,6 +39,11 @@
  */
 #include "loop.h"
 #if NLOOP > 0
+
+#include "opt_atalk.h"
+#include "opt_inet.h"
+#include "opt_inet6.h"
+#include "opt_ipx.h"
 
 #include <sys/param.h>
 #include <sys/systm.h>
@@ -67,18 +72,15 @@
 #include <netipx/ipx_if.h>
 #endif
 
-#ifdef NS
-#include <netns/ns.h>
-#include <netns/ns_if.h>
+#ifdef INET6
+#ifndef INET
+#include <netinet/in.h>
 #endif
-
-#ifdef ISO
-#include <netiso/iso.h>
-#include <netiso/iso_var.h>
+#include <netinet6/in6_var.h>
+#include <netinet/ip6.h>
 #endif
 
 #ifdef NETATALK
-#include <netinet/if_ether.h>
 #include <netatalk/at.h>
 #include <netatalk/at_var.h>
 #endif /* NETATALK */
@@ -93,6 +95,8 @@ PSEUDO_SET(loopattach, if_loop);
 
 #ifdef TINY_LOMTU
 #define	LOMTU	(1024+512)
+#elif defined(LARGE_LOMTU)
+#define LOMTU  131072
 #else
 #define LOMTU	16384
 #endif
@@ -147,6 +151,7 @@ looutput(ifp, m, dst, rt)
 		m->m_data += sizeof(int);
 	}
 
+	/* Let BPF see incoming packet */
 	if (ifp->if_bpf) {
 		/*
 		 * We need to prepend the address family as
@@ -186,18 +191,6 @@ looutput(ifp, m, dst, rt)
 	case AF_IPX:
 		ifq = &ipxintrq;
 		isr = NETISR_IPX;
-		break;
-#endif
-#ifdef NS
-	case AF_NS:
-		ifq = &nsintrq;
-		isr = NETISR_NS;
-		break;
-#endif
-#ifdef ISO
-	case AF_ISO:
-		ifq = &clnlintrq;
-		isr = NETISR_ISO;
 		break;
 #endif
 #ifdef NETATALK
