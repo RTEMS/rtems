@@ -15,7 +15,7 @@ The input and output primitives manager is ...
 The directives provided by the input and output primitives manager are:
 
 @itemize @bullet
-@item @code{pipe} - YYY
+@item @code{pipe} - Create an Inter-Process Channel
 @item @code{dup} - Duplicates an open file descriptor
 @item @code{dup2} - Duplicates an open file descriptor
 @item @code{close} - Closes a file
@@ -27,14 +27,14 @@ The directives provided by the input and output primitives manager are:
 @item @code{fdatasync} - Synchronize file in-core data with that on disk
 @item @code{mount} - Mount a file system
 @item @code{umount} - Unmount file systems
-@item @code{aio_read} - YYY
-@item @code{aio_write} - YYY
-@item @code{lio_listio} - YYY
-@item @code{aio_error} - YYY
-@item @code{aio_return} - YYY
-@item @code{aio_cancel} - YYY
-@item @code{aio_suspend} - YYY
-@item @code{aio_fsync} - YYY
+@item @code{aio_read} - Asynchronous Read
+@item @code{aio_write} - Asynchronous Write
+@item @code{lio_listio} - List Directed I/O
+@item @code{aio_error} - Retrieve Error Status of Asynchronous I/O Operation
+@item @code{aio_return} - Retrieve Return Status Asynchronous I/O Operation
+@item @code{aio_cancel} - Cancel Asynchronous I/O Request
+@item @code{aio_suspend} - Wait for Asynchronous I/O Request
+@item @code{aio_fsync} - Asynchronous File Synchronization
 @end itemize
 
 @section Background
@@ -53,7 +53,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection pipe - 
+@subsection pipe - Create an Inter-Process Channel
 
 @subheading CALLING SEQUENCE:
 
@@ -845,7 +845,7 @@ Only the super-user may umount filesystems.
 NONE
 
 @page
-@subsection aio_read - 
+@subsection aio_read - Asynchronous Read
 
 @subheading CALLING SEQUENCE:
 
@@ -875,7 +875,7 @@ This routine is not currently supported by RTEMS but could be
 in a future version.
 
 @page
-@subsection aio_write - 
+@subsection aio_write - Asynchronous Write
 
 @subheading CALLING SEQUENCE:
 
@@ -905,7 +905,7 @@ This routine is not currently supported by RTEMS but could be
 in a future version.
 
 @page
-@subsection lio_listio - 
+@subsection lio_listio - List Directed I/O
 
 @subheading CALLING SEQUENCE:
 
@@ -935,7 +935,7 @@ This routine is not currently supported by RTEMS but could be
 in a future version.
 
 @page
-@subsection aio_error - 
+@subsection aio_error - Retrieve Error Status of Asynchronous I/O Operation
 
 @subheading CALLING SEQUENCE:
 
@@ -965,7 +965,7 @@ This routine is not currently supported by RTEMS but could be
 in a future version.
 
 @page
-@subsection aio_return - 
+@subsection aio_return - Retrieve Return Status Asynchronous I/O Operation
 
 @subheading CALLING SEQUENCE:
 
@@ -995,7 +995,7 @@ This routine is not currently supported by RTEMS but could be
 in a future version.
 
 @page
-@subsection aio_cancel - 
+@subsection aio_cancel - Cancel Asynchronous I/O Request
 
 @subheading CALLING SEQUENCE:
 
@@ -1025,7 +1025,7 @@ This routine is not currently supported by RTEMS but could be
 in a future version.
 
 @page
-@subsection aio_suspend - 
+@subsection aio_suspend - Wait for Asynchronous I/O Request
 
 @subheading CALLING SEQUENCE:
 
@@ -1055,7 +1055,7 @@ This routine is not currently supported by RTEMS but could be
 in a future version.
 
 @page
-@subsection aio_fsync - 
+@subsection aio_fsync - Asynchronous File Synchronization
 
 @subheading CALLING SEQUENCE:
 

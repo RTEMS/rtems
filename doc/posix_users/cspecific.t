@@ -16,27 +16,27 @@ language-specific services for the C programming language manager is ...
 The directives provided by the language-specific services for the C programming language manager are:
 
 @itemize @bullet
-@item @code{setlocale} - 
-@item @code{fileno} - 
-@item @code{fdopen} - 
-@item @code{flcokfile} - 
-@item @code{ftrylockfile} - 
-@item @code{funlockfile} - 
-@item @code{getc_unlocked} - 
-@item @code{getchar_unlocked} - 
-@item @code{putc_unlocked} - 
-@item @code{putchar_unlocked} - 
-@item @code{setjmp} - 
-@item @code{longjmp} - 
-@item @code{sigsetjmp} - 
-@item @code{siglongjmp} - 
-@item @code{tzset} - 
-@item @code{strtok_r} - 
-@item @code{asctime_r} - 
-@item @code{ctime_r} - 
-@item @code{gmtime_r} - 
-@item @code{localtime_r} - 
-@item @code{rand_r} - 
+@item @code{setlocale} - Set the Current Locale
+@item @code{fileno} - Obtain File Descriptor Number for this File
+@item @code{fdopen} - Associate Stream with File Descriptor
+@item @code{flockfile} - Acquire Ownership of File Stream
+@item @code{ftrylockfile} - Poll to Acquire Ownership of File Stream
+@item @code{funlockfile} - Release Ownership of File Stream
+@item @code{getc_unlocked} - Get Character without Locking
+@item @code{getchar_unlocked} - Get Character from stdin without Locking
+@item @code{putc_unlocked} - Put Character without Locking
+@item @code{putchar_unlocked} -  Put Character to stdin without Locking
+@item @code{setjmp} - Save Context for Non-Local Goto
+@item @code{longjmp} - Non-Local Jump to a Saved Context
+@item @code{sigsetjmp} -  Save Context with Signal Status for Non-Local Goto
+@item @code{siglongjmp} - Non-Local Jump with Signal Status to a Saved Context
+@item @code{tzset} - Initialize Time Conversion Information
+@item @code{strtok_r} - Reentrant Extract Token from String
+@item @code{asctime_r} - Reentrant struct tm to ASCII Time Conversion
+@item @code{ctime_r} - Reentrant time_t to ASCII Time Conversion
+@item @code{gmtime_r} - Reentrant UTC Time Conversion
+@item @code{localtime_r} - Reentrant Local Time Conversion
+@item @code{rand_r} - Reentrant Random Number Generation
 @end itemize
 
 @section Background
@@ -55,7 +55,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection setlocale - 
+@subsection setlocale - Set the Current Locale
 
 @subheading CALLING SEQUENCE:
 
@@ -82,7 +82,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection fileno - 
+@subsection fileno - Obtain File Descriptor Number for this File
 
 @subheading CALLING SEQUENCE:
 
@@ -109,7 +109,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection fdopen - 
+@subsection fdopen - Associate Stream with File Descriptor
 
 @subheading CALLING SEQUENCE:
 
@@ -136,7 +136,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection flcokfile - 
+@subsection flockfile - Acquire Ownership of File Stream
 
 @subheading CALLING SEQUENCE:
 
@@ -163,7 +163,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection ftrylockfile - 
+@subsection ftrylockfile - Poll to Acquire Ownership of File Stream
 
 @subheading CALLING SEQUENCE:
 
@@ -190,7 +190,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection funlockfile - 
+@subsection funlockfile - Release Ownership of File Stream
 
 @subheading CALLING SEQUENCE:
 
@@ -217,7 +217,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getc_unlocked - 
+@subsection getc_unlocked - Get Character without Locking
 
 @subheading CALLING SEQUENCE:
 
@@ -244,7 +244,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getchar_unlocked - 
+@subsection getchar_unlocked - Get Character from stdin without Locking
 
 @subheading CALLING SEQUENCE:
 
@@ -271,7 +271,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection putc_unlocked - 
+@subsection putc_unlocked - Put Character without Locking
 
 @subheading CALLING SEQUENCE:
 
@@ -298,7 +298,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection putchar_unlocked - 
+@subsection putchar_unlocked - Put Character to stdin without Locking
 
 @subheading CALLING SEQUENCE:
 
@@ -325,7 +325,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection setjmp - 
+@subsection setjmp - Save Context for Non-Local Goto
 
 @subheading CALLING SEQUENCE:
 
@@ -352,7 +352,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection longjmp - 
+@subsection longjmp - Non-Local Jump to a Saved Context
 
 @subheading CALLING SEQUENCE:
 
@@ -379,7 +379,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection sigsetjmp - 
+@subsection sigsetjmp - Save Context with Signal Status for Non-Local Goto
 
 @subheading CALLING SEQUENCE:
 
@@ -406,7 +406,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection siglongjmp - 
+@subsection siglongjmp - Non-Local Jump with Signal Status to a Saved Context
 
 @subheading CALLING SEQUENCE:
 
@@ -433,7 +433,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection tzset - 
+@subsection tzset - Initialize Time Conversion Information
 
 @subheading CALLING SEQUENCE:
 
@@ -460,7 +460,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection strtok_r - 
+@subsection strtok_r - Reentrant Extract Token from String
 
 @subheading CALLING SEQUENCE:
 
@@ -487,7 +487,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection asctime_r - 
+@subsection asctime_r - Reentrant struct tm to ASCII Time Conversion
 
 @subheading CALLING SEQUENCE:
 
@@ -514,7 +514,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection ctime_r - 
+@subsection ctime_r - Reentrant time_t to ASCII Time Conversion
 
 @subheading CALLING SEQUENCE:
 
@@ -541,7 +541,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection gmtime_r - 
+@subsection gmtime_r - Reentrant UTC Time Conversion
 
 @subheading CALLING SEQUENCE:
 
@@ -568,7 +568,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection localtime_r - 
+@subsection localtime_r - Reentrant Local Time Conversion
 
 @subheading CALLING SEQUENCE:
 
@@ -595,7 +595,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection rand_r - 
+@subsection rand_r - Reentrant Random Number Generation
 
 @subheading CALLING SEQUENCE:
 

@@ -16,16 +16,16 @@ memory management manager is ...
 The directives provided by the memory management manager are:
 
 @itemize @bullet
-@item @code{mlockall} - 
-@item @code{munlockall} - 
-@item @code{mlock} - 
-@item @code{munlock} - 
-@item @code{mmap} - 
-@item @code{munmap} - 
-@item @code{mprotect} - 
-@item @code{msync} - 
-@item @code{shm_open} - 
-@item @code{shm_unlink} - 
+@item @code{mlockall} - Lock the Address Space of a Process
+@item @code{munlockall} - Unlock the Address Space of a Process
+@item @code{mlock} - Lock a Range of the Process Address Space
+@item @code{munlock} - Unlock a Range of the Process Address Space
+@item @code{mmap} - Map Process Addresses to a Memory Object
+@item @code{munmap} - Unmap Previously Mapped Addresses
+@item @code{mprotect} - Change Memory Protection
+@item @code{msync} - Memory Object Synchronization
+@item @code{shm_open} - Open a Shared Memory Object
+@item @code{shm_unlink} - Remove a Shared Memory Object
 @end itemize
 
 @section Background
@@ -44,7 +44,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection mlockall - 
+@subsection mlockall - Lock the Address Space of a Process
 
 @subheading CALLING SEQUENCE:
 
@@ -71,7 +71,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection munlockall - 
+@subsection munlockall - Unlock the Address Space of a Process
 
 @subheading CALLING SEQUENCE:
 
@@ -98,7 +98,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection mlock - 
+@subsection mlock - Lock a Range of the Process Address Space
 
 @subheading CALLING SEQUENCE:
 
@@ -125,7 +125,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection munlock - 
+@subsection munlock - Unlock a Range of the Process Address Space
 
 @subheading CALLING SEQUENCE:
 
@@ -152,7 +152,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection mmap - 
+@subsection mmap - Map Process Addresses to a Memory Object
 
 @subheading CALLING SEQUENCE:
 
@@ -179,7 +179,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection munmap - 
+@subsection munmap - Unmap Previously Mapped Addresses
 
 @subheading CALLING SEQUENCE:
 
@@ -206,7 +206,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection mprotect - 
+@subsection mprotect - Change Memory Protection
 
 @subheading CALLING SEQUENCE:
 
@@ -233,7 +233,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection msync - 
+@subsection msync - Memory Object Synchronization
 
 @subheading CALLING SEQUENCE:
 
@@ -260,7 +260,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection shm_open - 
+@subsection shm_open - Open a Shared Memory Object
 
 @subheading CALLING SEQUENCE:
 
@@ -287,7 +287,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection shm_unlink - 
+@subsection shm_unlink - Remove a Shared Memory Object
 
 @subheading CALLING SEQUENCE:
 
