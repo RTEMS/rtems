@@ -78,8 +78,8 @@ rtems_extension Task_exit_extension(
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 5 ];         /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 5 ];       /* array of task names */
 
 TEST_EXTERN rtems_id   Extension_id[ 4 ];
 TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
