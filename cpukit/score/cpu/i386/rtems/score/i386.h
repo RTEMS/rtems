@@ -46,48 +46,46 @@ extern "C" {
  *
  */
 
-#if defined(rtems_multilib)
-/*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines. 
- */
-
-#define CPU_MODEL_NAME  "rtems_multilib"
-#define I386_HAS_FPU   0
-#define I386_HAS_BSWAP 0
-
-#elif defined(i386_fp)
-
-#define CPU_MODEL_NAME  "i386 with i387"
-#define I386_HAS_BSWAP 0
-
-#elif defined(i386_nofp)
-
-#define CPU_MODEL_NAME  "i386 w/o i387"
-#define I386_HAS_FPU   0
-#define I386_HAS_BSWAP 0
-
-#elif defined(i486dx)
-
-#define CPU_MODEL_NAME  "i486dx"
-
-#elif defined(i486sx)
-
-#define CPU_MODEL_NAME  "i486sx"
+#if defined(_SOFT_FLOAT)
 #define I386_HAS_FPU 0
+#else
+#define I386_HAS_FPU 1
+#endif
 
-#elif defined(pentium)
-
-#define CPU_MODEL_NAME  "Pentium"
-
-#elif defined(pentiumpro)
+#if defined(__pentiumpro__)
 
 #define CPU_MODEL_NAME  "Pentium Pro"
 
+#elif defined(__i586__)
+
+# if defined(__pentium__)
+# define CPU_MODEL_NAME  "Pentium"
+# elsif defined(__k6__)
+# define CPU_MODEL_NAME "K6"
+# else
+# define CPU_MODEL_NAME "i586"
+# endif
+
+#elif defined(__i486__)
+
+# if !defined(_SOFT_FLOAT)
+# define CPU_MODEL_NAME  "i486dx"
+# else
+# define CPU_MODEL_NAME  "i486sx"
+# endif
+
+#elif defined(__i386__)
+
+#define I386_HAS_BSWAP 	0
+
+# if !defined(_SOFT_FLOAT)
+# define CPU_MODEL_NAME	"i386 with i387"
+# else
+# define CPU_MODEL_NAME	"i386 w/o i387"
+# endif
+
 #else
-
-#error "Unsupported CPU Model"
-
+#error "Unknown CPU Model"
 #endif
 
 /*
