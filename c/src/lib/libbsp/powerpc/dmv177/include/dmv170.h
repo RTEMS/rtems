@@ -41,10 +41,16 @@
 extern "C" {
 #endif
 
-/* Note:  Move address defs to the linker files.                            */
-#define  DMV170_RTC_ADDRESS   0xf2c00000 /* Real Time clock Base Address*/
-#define  DUART_ADDR	0xf2800000  /* base address of the DUART(68681)     */
-#define  SCC_ADDR       0xfb000000  /* base address for the SCC (85C30)     */ 
+/* Note:  Move address defs to the linker files. XXX */
+
+/* Real Time Clock Base Address */
+#define  DMV170_RTC_ADDRESS   (unsigned char *)0xf2c00000
+
+/* base address of the DUART(68681) */
+#define  DUART_ADDR	0xf2800000
+
+/* base address for the SCC (85C30) */ 
+#define  SCC_ADDR       0xfb000000
 
 #define DMV170_LOCAL_CONTROL_STATUS_REG                   0xf2400000
 #define DMV170_TIMER0_COUNT_INTERVAL_REG                  0xf2400008
@@ -53,12 +59,11 @@ extern "C" {
 #define DMV170_TIMER_CONTROL_REG                          0xf2400020
 #define DMV170_CARD_RESORCE_REG                           0xf2400040
 
+#define DMV170_WRITE( _reg, _data ) \
+   *((volatile rtems_unsigned16 *)(_reg)) = (_data)
 
-#define DMV170_WRITE( reg,data) \
-   *((volatile rtems_unsigned16 *)(reg)) = (data)
-
-#define DMV170_READ( reg, data ) \
-   (data) = *((volatile rtems_unsigned16 *)(reg))
+#define DMV170_READ( _reg, _data ) \
+   (_data) = *((volatile rtems_unsigned16 *)(_reg))
 
 /*
  *  The following defines the bits in the Local Control and Status Register.
@@ -81,8 +86,11 @@ extern "C" {
 #define DMV170_EEPROM_DATA_HIGH                           0x0080
 #define DMV170_EEPROM_DATA_LOW                            0x0000
 
-/* Bits 8:10 68040 Transfer Modifer Codes represent the Transfer Modifier to be used on MAXPack Accesses. */
-/* Bit  11 68040 Transfer Type (TT) 0:TT are both low 1:TT are both high                                  */
+/* Bits 8-10: 68040 Transfer Modifer Codes represent the Transfer
+ *            Modifier to be used on MAXPack Accesses.
+ *
+ * Bit 11   : 68040 Transfer Type (TT) 0:TT are both low 1:TT are both high
+ */
 
 #define DMV170_USER_LINK0_STATUS_MASK                     0x1000
 #define DMV170_USER_LINK0_OPEN                            0x1000
@@ -206,10 +214,3 @@ extern "C" {
  
 #endif /* !_INCLUDE_DMV170_h */
 /* end of include file */
-
-
-
-
-
-
-

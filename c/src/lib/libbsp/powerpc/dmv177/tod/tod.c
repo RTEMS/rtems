@@ -25,12 +25,12 @@
 
 void ICM7170_GetTOD(
   volatile unsigned char *imc1770_regs,
-  rtems_unsigned8        icm1770_freq,
+  rtems_unsigned8         icm1770_freq,
   rtems_time_of_day      *rtc_tod
 );
 void ICM7170_SetTOD(
   volatile unsigned char *imc1770_regs,
-  rtems_unsigned8        icm1770_freq,
+  rtems_unsigned8         icm1770_freq,
   rtems_time_of_day      *rtc_tod
 );
 
@@ -243,7 +243,6 @@ void ICM7170_SetTOD(
   rtems_time_of_day      *rtc_tod
 )
 {
-  int ticks;
   int year;
 
   year = rtc_tod->year;
@@ -272,11 +271,4 @@ void ICM7170_SetTOD(
 
   ICM7170_SetField( imc1770_regs,  0x11, (0x0c | icm1770_freq) );
 }
-
-
-
-
-
-
-
 

@@ -73,7 +73,6 @@ extern "C" {
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
-
 #define Clear_tm27_intr() \
   do { \
     unsigned32 _clicks = 0xffffffff; \

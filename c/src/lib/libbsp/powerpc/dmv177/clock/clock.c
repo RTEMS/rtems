@@ -21,7 +21,6 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
-#include <assert.h>
 
 /*
  *  The Real Time Clock Counter Timer uses this trap type.
@@ -56,13 +55,7 @@ void Clock_exit( void );
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
-#define PPC_Set_decrementer( _clicks ) \
-  do { \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
-
-
-/*  PAGE
+/*PAGE
  *
  *  Clock_isr
  *
@@ -101,7 +94,7 @@ rtems_isr Clock_isr(
   rtems_clock_tick();
 }
 
-/*  PAGE
+/*PAGE
  *
  *  Install_clock
  *
@@ -133,7 +126,7 @@ void Install_clock(
   }
 }
 
-/*  PAGE
+/*PAGE
  *
  *  Clock_exit
  *
@@ -158,7 +151,7 @@ void Clock_exit( void )
   }
 }
  
-/*  PAGE
+/*PAGE
  *
  *  Clock_initialize
  *

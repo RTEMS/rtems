@@ -18,26 +18,7 @@ rtems_unsigned64 Timer_driver_Start_time;
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
-static inline rtems_unsigned64 PPC_Get_timebase_register( void )
-{
-  rtems_unsigned32 tbr_low;
-  rtems_unsigned32 tbr_high;
-  rtems_unsigned32 tbr_high_old;
-  rtems_unsigned64 tbr;
-
-  do {
-    asm volatile( "mftbu %0" : "=r" (tbr_high_old));
-    asm volatile( "mftb  %0" : "=r" (tbr_low));
-    asm volatile( "mftbu %0" : "=r" (tbr_high));
-  } while ( tbr_high_old != tbr_high );
-
-  tbr = tbr_high;
-  tbr <<= 32;
-  tbr |= tbr_low;
-  return tbr;
-}
-
-/*  PAGE
+/*PAGE
  *
  *  Timer_initialize
  *  

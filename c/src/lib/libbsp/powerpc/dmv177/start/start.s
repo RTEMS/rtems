@@ -108,9 +108,9 @@ _start:
 	stwu	sp,-56(sp)		/* push another stack frame */
 
 	/* Let her rip */
-	bl	FUNC_NAME(main)
+	bl	FUNC_NAME(boot_card)
 
-	/* return value from main is argument to exit */
+	/* return value from boot_card is argument to exit */
 	bl	FUNC_NAME(exit)
 	trap
 .Lstart:

@@ -38,7 +38,7 @@
 
 /* Proto-types for Duart.C */
 void console_initialize_interrupts( void );
-char console_inbyte_polled( int port );
+int console_inbyte_nonblocking( int port );
 void console_outbyte_polled(int  port, char ch);
 rtems_isr console_isr (rtems_vector_number vector);
 volatile void init_mc88681();
@@ -201,9 +201,16 @@ rtems_device_driver console_open(
 {
   rtems_status_code sc;
   int               port = minor;
-#if defined(CONSOLE_USE_INTERRUPTS)
-  rtems_libio_open_close_args_t *args = arg;
-#endif
+  static const rtems_termios_callbacks pollCallbacks = {
+    NULL,                        /* firstOpen */
+    NULL,                        /* lastClose */
+    console_inbyte_nonblocking,  /* pollRead */
+    console_write_support,       /* write */
+    NULL,                        /* setAttributes */
+    NULL,                        /* stopRemoteTx */
+    NULL,                        /* startRemoteTx */
+    0                            /* outputUsesInterrupts */
+  };
 
   /*
    * Verify the minor number is valid.
@@ -217,16 +224,7 @@ rtems_device_driver console_open(
   /*
    *  open the port as a termios console driver.
    */
-#if defined(CONSOLE_USE_INTERRUPTS)
-   sc = rtems_termios_open (major, minor, arg,
-                            NULL, NULL, NULL,
-                            console_write_support, 0);
-#else
-   sc = rtems_termios_open (major, minor, arg, NULL, NULL,
-                            console_inbyte_nonblocking,
-                            console_write_support,
-                            0);
-#endif
+  sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
 
   return sc;
 }
@@ -474,6 +472,3 @@ void console_exit()
    while (!(*_addr & MC68681_TX_EMPTY));
 }
 #endif /* CONSOLE_USE_INTERRUPTS */
-
-
-

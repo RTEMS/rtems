@@ -46,8 +46,47 @@ EE_ISR_Type       ISR_Nodes [NUM_LIRQ_HANDLERS];
 rtems_unsigned16  Nodes_Used; 
 Chain_Control     ISR_Array  [NUM_LIRQ];
 
+/*PAGE
+ *
+ * external_exception_ISR
+ *
+ * This interrupt service routine is called for an External Exception.
+ *
+ *  Input parameters:
+ *    vector - vector number representing the external exception vector.
+ *
+ *  Output parameters:  NONE
+ *
+ *  Return values: 
+ */
 
-/*  PAGE
+rtems_isr external_exception_ISR (
+  rtems_vector_number   vector             /* IN  */
+)
+{ 
+ rtems_unsigned16    index;
+ Chain_Node          *node;
+ EE_ISR_Type         *ee_isr;
+ 
+ /*
+  * Read vector.
+  */
+ index = 0;
+
+ node = ISR_Array[ index ].first;
+ while ( !_Chain_Is_tail( &ISR_Array[ index ], node ) ) {
+   ee_isr = (EE_ISR_Type *) node;
+   (*ee_isr->handler)( ee_isr->vector );
+   node = node->next;
+ }
+
+ /*
+  * Clear the interrupt.
+  */
+}
+
+
+/*PAGE
  *
  *  initialize_external_exception_vector
  *
@@ -80,7 +119,7 @@ void initialize_external_exception_vector ()
            PPC_IRQ_EXTERNAL , (rtems_isr_entry *) &previous_isr );
 }
 
-/*  PAGE
+/*PAGE
  *
  *  set_EE_vector
  *
@@ -95,6 +134,7 @@ void initialize_external_exception_vector ()
  *
  *  Return values:
  */
+
 rtems_isr_entry  set_EE_vector(
   rtems_isr_entry     handler,      /* isr routine        */
   rtems_vector_number vector        /* vector number      */
@@ -143,42 +183,5 @@ rtems_isr_entry  set_EE_vector(
    * No interrupt service routine was removed so return 0
    */
   return 0;
-}
-
-/*  PAGE
- *
- * external_exception_ISR
- *
- * This interrupt service routine is called for an External Exception.
- *
- *  Input parameters:
- *    vector - vector number representing the external exception vector.
- *
- *  Output parameters:  NONE
- *
- *  Return values: 
- */
-
-rtems_isr external_exception_ISR (
-  rtems_vector_number   vector             /* IN  */
-)
-{ 
- rtems_unsigned16    index;
- EE_ISR_Type         *node;
- 
- /*
-  * Read vector.
-  */
- index = 0;
-
- node = ISR_Array[ index ].first;
- while ( !_Chain_Is_tail( &ISR_Array[ index ], node ) ) {
-   (*node->handler)( node->vector );
-   node = node->Node.next;
- }
-
- /*
-  * Clear the interrupt.
-  */
 }
 

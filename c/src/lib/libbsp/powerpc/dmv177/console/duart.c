@@ -38,7 +38,7 @@ rtems_isr console_isr (rtems_vector_number vector);
 Ring_buffer_t TX_Buffer[2];
 Ring_buffer_t RX_Buffer[2];
 
-/*  PAGE
+/*PAGE
  *
  *  init_mc88681
  *
@@ -63,7 +63,7 @@ volatile void init_mc88681()
   Ring_buffer_Initialize( &TX_Buffer[ 1 ] );
 }
 
-/*  PAGE
+/*PAGE
  *
  *  console_isr
  *
@@ -86,7 +86,7 @@ rtems_isr console_isr (rtems_vector_number vector)
 }
 
 
-/*  PAGE
+/*PAGE
  *
  *  console_outbyte_polled
  *
@@ -130,9 +130,9 @@ void console_outbyte_polled(
 }
 
 
-/*  PAGE
+/*PAGE
  *
- *  console_inbyte_polled
+ *  console_inbyte_nonblocking
  *
  *  This routine reads a character from the UART.
  *
@@ -148,7 +148,7 @@ void console_outbyte_polled(
 #define MC68681_RECEIVE_ERRORS \
       (MC68681_OVERRUN_ERROR | MC68681_PARITY_ERROR | MC68681_FRAMING_ERROR)
 
-char console_inbyte_polled( int port )
+int console_inbyte_nonblocking( int port )
 {
   char status;
   char data;
