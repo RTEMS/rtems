@@ -1,5 +1,15 @@
+@c
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
 
-@chapter Preface
+@ifinfo
+@node Preface, Development Tools, Top, Top
+@end ifinfo
+@unnumbered Preface
 
 The purpose of this manual is to provide a roadmap to those people porting
 RTEMS to a new CPU family. This process includes a variety of activities
