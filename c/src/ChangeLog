@@ -1,5 +1,13 @@
 2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* libnetworking/pppd/Makefile.am,
+	libnetworking/rtems_servers/Makefile.am,
+	libnetworking/rtems_telnetd/Makefile.am,
+	libnetworking/rtems_webserver/Makefile.am, optman/Makefile.am,
+	support/Makefile.am: Don't include lib.am.
+
+2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* libchip/Makefile.am: Don't include lib.am.
 	* librdbg/src/i386/Makefile.am,	librdbg/src/m68k/Makefile.am, 
 	librdbg/src/powerpc/Makefile.am: Don't include lib.am. Remove
