@@ -9,8 +9,10 @@ VPATH = @srcdir@:@srcdir@/../../../shared/src
 C_FILES = cache.c cache_aligned_malloc.c cache_manager.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = cache_.h
-INSTALLED_H_FILES =
+include_libcpudir = $(includedir)/libcpu
+
+noinst_HEADERS = cache_.h
+include_libcpu_HEADERS = cache.h
 
 OBJS = $(C_O_FILES)
 
@@ -26,13 +28,15 @@ $(PROJECT_INCLUDE)/libcpu:
 $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/libcpu/cache.h: $(top_srcdir)/../shared/include/cache.h
-	$(INSTALL_DATA) $< $@
+cache.h: $(top_srcdir)/../shared/include/cache.h
+	cp $< $@
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
-    $(PROJECT_INCLUDE)/libcpu/cache.h
+    $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+
+CLEANFILES += cache.h
 
 EXTRA_DIST = cache.c cache_.h
 

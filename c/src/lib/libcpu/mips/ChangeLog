@@ -1,3 +1,8 @@
+2001-03-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/cache/Makefile.am, tx39/include/Makefile.am:
+	Apply include_*HEADERS instead of H_FILES.
+
 2001-01-08	Joel Sherrill <joel@OARcorp.com>
 
 	* Added r46xx directory.
