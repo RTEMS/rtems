@@ -1,3 +1,8 @@
+2004-10-13	Eric Norum <norume@aps.anl.gov>
+
+	PR 688/bsps
+	* Makefile.am clock/todcfg.c: Add support for MC146818A TOD chip.
+
 2004-05-21  Till Strauman <strauman@slac.stanford.edu>
 
 	* PR 624/bsps
