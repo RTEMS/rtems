@@ -42,7 +42,14 @@
 #include <pc386uart.h>
 #include <libcpu/cpuModel.h>
 
-int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
+/*
+ * Possible value for console input/output :
+ *	PC386_CONSOLE_PORT_CONSOLE
+ *	PC386_UART_COM1
+ *	PC386_UART_COM2
+ */
+
+int PC386ConsolePort = PC386_UART_COM2;
 
 static int conSetAttr(int minor, const struct termios *);
 extern BSP_polling_getchar_function_type BSP_poll_char;
@@ -79,8 +86,6 @@ void __assert(const char *file, int line, const char *msg)
 {
   static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
   unsigned char  ch;
-  const    unsigned char *cp;
-	
  
   /*
    * Note we cannot call exit or printf from here, 
@@ -184,15 +189,18 @@ console_initialize(rtems_device_major_number major,
 	{
 	  printk("Initialized console on port COM2 9600-8-N-1\n\n");
 	}
+#define  PRINTK_ON_SERIAL     
+#ifdef PRINTK_ON_SERIAL
+      /*
+       * You can remove the follwoing tree lines if you want to have printk
+       * using the video console for output while printf use serial line.
+       * This may be convenient to debug the serial line driver itself...
+       */
       printk("Warning : This will be the last message displayed on console\n");
       BSP_output_char = (BSP_output_char_function_type) BSP_output_char_via_serial;
       BSP_poll_char   = (BSP_polling_getchar_function_type) BSP_poll_char_via_serial;
+#endif  
     }
-#define  DISPLAY_CPU_INFO 
-#ifdef DISPLAY_CPU_INFO
-  printCpuInfo();
-#endif
-  
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
 
@@ -444,11 +452,5 @@ void BSP_emergency_output_init()
 {
   _IBMPC_initVideo();
 }
-
-
-
-
-
-
 
 

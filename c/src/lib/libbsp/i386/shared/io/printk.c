@@ -20,8 +20,9 @@
 
 
 #include <stdarg.h>
-
+#include <stdio.h>
 #include <bspIo.h>
+#include <libcpu/cpu.h>
 
 /*-------------------------------------------------------------------------+
 |         Function: printNum
@@ -31,13 +32,27 @@
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
 static void
-printNum(long int num, int base)
+printNum(long unsigned int num, int base, int sign)
 {
-  long int n;
+  long unsigned int n;
+  int count;
+  char toPrint[20];
 
-  if ((n = num / base) > 0)
-    printNum(n, base);
-  BSP_output_char("0123456789ABCDEF"[(int)(num % base)]);
+  if ( (sign == 1) && ((long)num <  0) ) {
+    BSP_output_char('-');
+    num = -num;
+  }
+  
+  count = 0;
+  while ((n = num / base) > 0) {
+    toPrint[count++] = (num - (n*base));
+    num = n ;
+  }
+  toPrint[count++] = num;
+
+  for (n = 0; n < count; n++){
+    BSP_output_char("0123456789ABCDEF"[(int)(toPrint[count-(n+1)])]);
+  }
 } /* printNum */
 
 
@@ -54,13 +69,17 @@ printk(char *fmt, ...)
 {
   va_list  ap;      /* points to each unnamed argument in turn */
   char     c, *str;
-  int      lflag, base;
+  int      lflag, base, sign;
+  unsigned int level;
+
+  _CPU_ISR_Disable(level);
  
   va_start(ap, fmt); /* make ap point to 1st unnamed arg */
   for (; *fmt != '\0'; fmt++)
   {
     lflag = 0;
     base  = 0;
+    sign = 0;
     if (*fmt == '%')
     {
       if ((c = *++fmt) == 'l')
@@ -70,9 +89,10 @@ printk(char *fmt, ...)
       }
       switch (c)
       {
-        case 'o': case 'O': base = 8; break;
-        case 'd': case 'D': base = 10; break;
-        case 'x': case 'X': base = 16; break;
+        case 'o': case 'O': base = 8; sign = 0; break;
+        case 'd': case 'D': base = 10; sign = 1; break;
+        case 'u': case 'U': base = 10; sign = 0; break;
+        case 'x': case 'X': base = 16; sign = 0; break;
         case 's':
           for (str = va_arg(ap, char *); *str; str++) 
             BSP_output_char(*str);
@@ -87,7 +107,7 @@ printk(char *fmt, ...)
 
       if (base)
         printNum(lflag ? va_arg(ap, long int) : (long int)va_arg(ap, int),
-                 base);
+                 base, sign);
     }
     else
     {
@@ -95,5 +115,7 @@ printk(char *fmt, ...)
     }
   }
   va_end(ap); /* clean up when done */
+  _CPU_ISR_Enable(level);
+
 } /* printk */
 
