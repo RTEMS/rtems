@@ -1,3 +1,8 @@
+2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Build libnetapps.a. 
+	Don't preinstall libnetapps.a
+
 2002-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove headers. Remove CHANGELOG.

@@ -10,7 +10,7 @@ endif
 NET_O_PIECES = rtems_servers \
     rtems_telnetd pppd $(POSIX_PIECES)
 OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.o)
-LIB = $(ARCH)/libnetworking.a
+LIB = $(ARCH)/libnetapps.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
@@ -23,13 +23,6 @@ include $(top_srcdir)/../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/libnetapps$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libnetapps$(LIB_VARIANT).a
-
-all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(LIB)
+all-local: $(ARCH) $(OBJS) $(LIB)
 
 include $(top_srcdir)/../../../automake/local.am
