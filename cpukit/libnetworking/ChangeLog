@@ -1,5 +1,10 @@
 2002-07-24	Joel Sherrill <joel@OARcorp.com>
 
+	* sys/select.h: Add a prototype of select() to avoid warnings.
+	In particular a C++ application using select() required a prototype.
+
+2002-07-24	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am, libc/res_send.c: Do not install or use <poll.h>
 	since RTEMS does not support it.
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

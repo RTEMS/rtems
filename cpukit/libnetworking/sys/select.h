@@ -54,4 +54,14 @@ void	selrecord __P((struct proc *selector, struct selinfo *));
 void	selwakeup __P((struct selinfo *));
 #endif
 
+/* Check the first NFDS descriptors each in READFDS (if not NULL) for read
+   readiness, in WRITEFDS (if not NULL) for write readiness, and in EXCEPTFDS
+   (if not NULL) for exceptional conditions.  If TIMEOUT is not NULL, time out
+   after waiting the interval specified therein.  Returns the number of ready
+   descriptors, or -1 for errors.  */
+extern int select (int __nfds, fd_set *__readfds,
+                   fd_set *__writefds,
+                   fd_set *__exceptfds,
+                   struct timeval *__timeout);
+
 #endif /* !_SYS_SELECT_H_ */
