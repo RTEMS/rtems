@@ -215,7 +215,7 @@ void
 spiBaudSet(unsigned32 baudrate)
 {
   unsigned32 tmp;
-  tmp = Cpu_table.serial_per_sec / Cpu_table.serial_rate;
+  tmp = Cpu_table.serial_per_sec / baudrate;
   tmp = ((tmp) >> 4) - 1;
   port->BRDL = tmp & 0xff;
   port->BRDH = tmp >> 8;
