@@ -13,10 +13,6 @@
  *  $Id$
  */
 
-/* StM: 
-  One test added for verifying rtems_rate_monotonic_period() with changing period lengths.
- */
-
 #include <tmacros.h>
 
 /* types */

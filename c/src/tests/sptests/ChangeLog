@@ -1,3 +1,8 @@
+2000-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* sp20/sp20.scn: Corrected to reflect new addition.
+	* sp20/system.h: Removed comment reflecting history.
+
 2000-09-29	Stephan Merker <merker@decrc.abb.de>
 
 	* sp20/getall.c, sp20/init.c, sp20/system.h, sp20/task1.c:
