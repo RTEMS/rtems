@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __THREAD_h
-#define __THREAD_h
+#ifndef _RTEMS_SCORE_THREAD_H
+#define _RTEMS_SCORE_THREAD_H
 
 /**
  *  @defgroup ScoreThread Thread Handler

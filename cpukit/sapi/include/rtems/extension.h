@@ -23,8 +23,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_EXTENSION_MANAGER_h
-#define __RTEMS_EXTENSION_MANAGER_h
+#ifndef _RTEMS_EXTENSION_H
+#define _RTEMS_EXTENSION_H
 
 #ifdef __cplusplus
 extern "C" {

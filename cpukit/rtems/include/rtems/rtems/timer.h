@@ -33,8 +33,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_TIMER_h
-#define __RTEMS_TIMER_h
+#ifndef _RTEMS_RTEMS_TIMER_H
+#define _RTEMS_RTEMS_TIMER_H
 
 #ifdef __cplusplus
 extern "C" {

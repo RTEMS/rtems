@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_MPTABLES_h
-#define __RTEMS_MPTABLES_h
+#ifndef _RTEMS_MPTABLES_H
+#define _RTEMS_MPTABLES_H
 
 #ifdef __cplusplus
 extern "C" {

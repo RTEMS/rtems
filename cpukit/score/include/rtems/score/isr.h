@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef __ISR_h
-#define __ISR_h
+#ifndef _RTEMS_SCORE_ISR_H
+#define _RTEMS_SCORE_ISR_H
 
 /**
  *  @defgroup ScoreISR ISR Handler

@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __API_EXTENSIONS_h
-#define __API_EXTENSIONS_h
+#ifndef _RTEMS_SCORE_APIEXT_H
+#define _RTEMS_SCORE_APIEXT_H
 
 /**
  *  @defgroup ScoreAPIExtension API Extension Handler

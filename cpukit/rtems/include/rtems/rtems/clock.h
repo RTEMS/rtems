@@ -24,8 +24,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_CLOCK_h
-#define __RTEMS_CLOCK_h
+#ifndef _RTEMS_RTEMS_CLOCK_H
+#define _RTEMS_RTEMS_CLOCK_H
 
 #ifdef __cplusplus
 extern "C" {

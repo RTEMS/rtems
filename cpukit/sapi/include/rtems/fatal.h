@@ -22,8 +22,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_FATAL_h
-#define __RTEMS_FATAL_h
+#ifndef _RTEMS_FATAL_H
+#define _RTEMS_FATAL_H
 
 #ifdef __cplusplus
 extern "C" {

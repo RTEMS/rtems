@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_ASR_h
-#define __RTEMS_ASR_h
+#ifndef _RTEMS_RTEMS_ASR_H
+#define _RTEMS_RTEMS_ASR_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -28,8 +28,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_HEAP_h
-#define __RTEMS_HEAP_h
+#ifndef _RTEMS_SCORE_HEAP_H
+#define _RTEMS_SCORE_HEAP_H
 
 /**
  *  @defgroup ScoreHeap Heap Handler

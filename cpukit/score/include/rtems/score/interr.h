@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_INTERNAL_ERROR_h
-#define __RTEMS_INTERNAL_ERROR_h
+#ifndef _RTEMS_SCORE_INTERR_H
+#define _RTEMS_SCORE_INTERR_H
 
 /**
  *  @defgroup ScoreIntErr Internal Error Handler

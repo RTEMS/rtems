@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __PRIORITY_h
-#define __PRIORITY_h
+#ifndef _RTEMS_SCORE_PRIORITY_H
+#define _RTEMS_SCORE_PRIORITY_H
 
 /**
  *  @defgroup ScorePriority Priority Handler

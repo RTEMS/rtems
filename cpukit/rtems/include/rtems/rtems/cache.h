@@ -28,8 +28,8 @@
  *  to this Manager.
  */
 
-#ifndef __CACHE_h
-#define __CACHE_h
+#ifndef _RTEMS_RTEMS_CACHE_H
+#define _RTEMS_RTEMS_CACHE_H
 
 #ifdef __cplusplus
 extern "C" {

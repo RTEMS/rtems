@@ -27,8 +27,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_DUAL_PORTED_MEMORY_h
-#define __RTEMS_DUAL_PORTED_MEMORY_h
+#ifndef _RTEMS_RTEMS_DPMEM_H
+#define _RTEMS_RTEMS_DPMEM_H
 
 #ifdef __cplusplus
 extern "C" {

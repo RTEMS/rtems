@@ -25,8 +25,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_RATE_MONOTONIC_h
-#define __RTEMS_RATE_MONOTONIC_h
+#ifndef _RTEMS_RTEMS_RATEMON_H
+#define _RTEMS_RTEMS_RATEMON_H
 
 #ifdef __cplusplus
 extern "C" {

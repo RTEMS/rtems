@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_SYSTEM_STATE_h
-#define __RTEMS_SYSTEM_STATE_h
+#ifndef _RTEMS_SCORE_SYSSTATE_H
+#define _RTEMS_SCORE_SYSSTATE_H
 
 /**
  *  @defgroup ScoreSysState System State Handler

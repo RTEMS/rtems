@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_OBJECTS_MP_h
-#define __RTEMS_OBJECTS_MP_h
+#ifndef _RTEMS_SCORE_OBJECTMP_H
+#define _RTEMS_SCORE_OBJECTMP_H
 
 /**
  *  @defgroup ScoreObjectMP Object Handler Multiprocessing Support

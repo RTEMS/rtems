@@ -26,8 +26,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_SEMAPHORE_h
-#define __RTEMS_SEMAPHORE_h
+#ifndef _RTEMS_RTEMS_SEM_H
+#define _RTEMS_RTEMS_SEM_H
 
 #ifdef __cplusplus
 extern "C" {

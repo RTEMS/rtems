@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __TIME_OF_DAY_h
-#define __TIME_OF_DAY_h
+#ifndef _RTEMS_SCORE_TOD_H
+#define _RTEMS_SCORE_TOD_H
 
 /**
  *  @defgroup ScoreTOD Time Of Day (TOD) Handler

@@ -19,8 +19,8 @@
  *  $Id$
  */
 
-#ifndef __MP_PACKET_h
-#define __MP_PACKET_h
+#ifndef _RTEMS_SCORE_MPPKT_H
+#define _RTEMS_SCORE_MPPKT_H
 
 /**
  *  @defgroup ScoreMPPacket MP Packet Handler

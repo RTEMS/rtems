@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_INTERRUPT_h
-#define __RTEMS_INTERRUPT_h
+#ifndef _RTEMS_RTEMS_INTR_H
+#define _RTEMS_RTEMS_INTR_H
 
 #ifdef __cplusplus
 extern "C" {

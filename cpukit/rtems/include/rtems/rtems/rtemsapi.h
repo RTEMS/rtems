@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_API_h
-#define __RTEMS_API_h
+#ifndef _RTEMS_RTEMS_RTEMSAPI_H
+#define _RTEMS_RTEMS_RTEMSAPI_H
 
 #include <rtems/config.h>
 

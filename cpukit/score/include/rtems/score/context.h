@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_CONTEXT_h
-#define __RTEMS_CONTEXT_h
+#ifndef _RTEMS_SCORE_CONTEXT_H
+#define _RTEMS_SCORE_CONTEXT_H
 
 /**
  *  @defgroup ScoreContext Context Handler

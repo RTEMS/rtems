@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_COPYRIGHT_h
-#define __RTEMS_COPYRIGHT_h
+#ifndef _RTEMS_SCORE_COPYRT_H
+#define _RTEMS_SCORE_COPYRT_H
 
 #ifdef __cplusplus
 extern "C" {

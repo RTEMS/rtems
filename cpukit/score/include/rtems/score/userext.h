@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __USER_EXTENSIONS_h
-#define __USER_EXTENSIONS_h
+#ifndef _RTEMS_SCORE_USEREXT_H
+#define _RTEMS_SCORE_USEREXT_H
 
 /**
  *  @defgroup ScoreUserExt User Extension Handler

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_CORE_MESSAGE_QUEUE_h
-#define __RTEMS_CORE_MESSAGE_QUEUE_h
+#ifndef _RTEMS_SCORE_COREMSG_H
+#define _RTEMS_SCORE_COREMSG_H
 
 /**
  *  @defgroup ScoreMessageQueue Message Queue Handler

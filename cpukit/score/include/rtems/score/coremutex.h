@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_CORE_MUTEX_h
-#define __RTEMS_CORE_MUTEX_h
+#ifndef _RTEMS_SCORE_COREMUTEX_H
+#define _RTEMS_SCORE_COREMUTEX_H
 
 /**
  *  @defgroup ScoreMutex Mutex Handler

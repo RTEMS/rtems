@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_EVENT_SET_h
-#define __RTEMS_EVENT_SET_h
+#ifndef _RTEMS_RTEMS_EVENTSET_H
+#define _RTEMS_RTEMS_EVENTSET_H
 
 #ifdef __cplusplus
 extern "C" {

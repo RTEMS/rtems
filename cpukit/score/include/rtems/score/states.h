@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_STATES_h
-#define __RTEMS_STATES_h
+#ifndef _RTEMS_SCORE_STATES_H
+#define _RTEMS_SCORE_STATES_H
 
 /**
  *  @defgroup ScoreStates Thread States Handler

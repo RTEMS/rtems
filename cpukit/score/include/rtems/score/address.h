@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_ADDRESSES_h
-#define __RTEMS_ADDRESSES_h
+#ifndef _RTEMS_SCORE_ADDRESS_H
+#define _RTEMS_SCORE_ADDRESS_H
 
 /**
  *  @defgroup ScoreAddress Address Handler

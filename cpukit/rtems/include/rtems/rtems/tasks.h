@@ -33,8 +33,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_RTEMS_TASKS_h
-#define __RTEMS_RTEMS_TASKS_h
+#ifndef _RTEMS_RTEMS_TASKS_H
+#define _RTEMS_RTEMS_TASKS_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __THREAD_QUEUE_h
-#define __THREAD_QUEUE_h
+#ifndef _RTEMS_SCORE_THREADQ_H
+#define _RTEMS_SCORE_THREADQ_H
 
 /**
  *  @defgroup ScoreThreadQ Thread Queue Handler

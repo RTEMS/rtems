@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef __OBJECTS_h
-#define __OBJECTS_h
+#ifndef _RTEMS_SCORE_OBJECT_H
+#define _RTEMS_SCORE_OBJECT_H
 
 #ifdef __cplusplus
 extern "C" {

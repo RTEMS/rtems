@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_SIGNAL_MP_h
-#define __RTEMS_SIGNAL_MP_h
+#ifndef _RTEMS_RTEMS_SIGNALMP_H
+#define _RTEMS_RTEMS_SIGNALMP_H
 
 #ifdef __cplusplus
 extern "C" {

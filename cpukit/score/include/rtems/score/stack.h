@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __STACK_h
-#define __STACK_h
+#ifndef _RTEMS_SCORE_STACK_H
+#define _RTEMS_SCORE_STACK_H
 
 /**
  *  @defgroup ScoreStack Stack Handler

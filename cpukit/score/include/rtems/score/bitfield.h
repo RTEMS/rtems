@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_BITFIELD_h
-#define __RTEMS_BITFIELD_h
+#ifndef _RTEMS_SCORE_BITFIELD_H
+#define _RTEMS_SCORE_BITFIELD_H
 
 /**
  *  @defgroup ScoreBitfield Bitfield Handler

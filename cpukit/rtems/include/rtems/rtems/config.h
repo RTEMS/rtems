@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_RTEMS_CONFIGURATION_h
-#define __RTEMS_RTEMS_CONFIGURATION_h
+#ifndef _RTEMS_RTEMS_CONFIG_H
+#define _RTEMS_RTEMS_CONFIG_H
 
 #ifdef __cplusplus
 extern "C" {

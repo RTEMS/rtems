@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __THREAD_QUEUE_DATA_h
-#define __THREAD_QUEUE_DATA_h
+#ifndef _RTEMS_SCORE_TQDATA_H
+#define _RTEMS_SCORE_TQDATA_H
 
 /**
  *  @defgroup ScoreThreadQData Thread Queue Handler Data Definition

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_PARTITION_MP_h
-#define __RTEMS_PARTITION_MP_h
+#ifndef _RTEMS_RTEMS_PARTMP_H
+#define _RTEMS_RTEMS_PARTMP_H
 
 #ifdef __cplusplus
 extern "C" {

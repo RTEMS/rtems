@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __API_MUTEX_h
-#define __API_MUTEX_h
+#ifndef _RTEMS_SCORE_APIMUTEX_H
+#define _RTEMS_SCORE_APIMUTEX_H
 
 /**
  *  @defgroup ScoreAPIMutex API Mutex Handler

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_SET_ERRNO_h
-#define __RTEMS_SET_ERRNO_h
+#ifndef _RTEMS_SETERR_H
+#define _RTEMS_SETERR_H
 
 #define rtems_set_errno_and_return_minus_one( _error ) \
   do { errno = (_error); return -1; } while(0)

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_SPTABLES_h
-#define __RTEMS_SPTABLES_h
+#ifndef _RTEMS_SPTABLES_H
+#define _RTEMS_SPTABLES_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __WATCHDOG_h
-#define __WATCHDOG_h
+#ifndef _RTEMS_SCORE_WATCHDOG_H
+#define _RTEMS_SCORE_WATCHDOG_H
 
 /**
  *  @defgroup ScoreWatchdog Watchdog Handler

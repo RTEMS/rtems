@@ -25,8 +25,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_REGION_h
-#define __RTEMS_REGION_h
+#ifndef _RTEMS_RTEMS_REGION_H
+#define _RTEMS_RTEMS_REGION_H
 
 #ifdef __cplusplus
 extern "C" {

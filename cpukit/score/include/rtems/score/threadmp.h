@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_THREAD_MP_h
-#define __RTEMS_THREAD_MP_h
+#ifndef _RTEMS_SCORE_THREADMP_H
+#define _RTEMS_SCORE_THREADMP_H
 
 /**
  *  @defgroup ScoreThreadMP Thread Handler Multiprocessing Support

@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __WORKSPACE_h
-#define __WORKSPACE_h
+#ifndef _RTEMS_SCORE_WKSPACE_H
+#define _RTEMS_SCORE_WKSPACE_H
 
 /**
  *  @defgroup ScoreWorkspace Workspace Handler

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __MPCI_h
-#define __MPCI_h
+#ifndef _RTEMS_SCORE_MPCI_H
+#define _RTEMS_SCORE_MPCI_H
 
 /**
  *  @defgroup ScoreMPCI MPCI Handler

@@ -27,8 +27,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_IO_h
-#define __RTEMS_IO_h
+#ifndef _RTEMS_IO_H
+#define _RTEMS_IO_H
 
 #ifdef __cplusplus
 extern "C" {

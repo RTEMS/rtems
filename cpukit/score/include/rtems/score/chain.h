@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_CHAIN_h
-#define __RTEMS_CHAIN_h
+#ifndef _RTEMS_SCORE_CHAIN_H
+#define _RTEMS_SCORE_CHAIN_H
 
 /**
  *  @defgroup ScoreChain Chain Handler

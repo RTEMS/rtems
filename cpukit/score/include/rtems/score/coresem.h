@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_CORE_COUNTING_SEMAPHORE_h
-#define __RTEMS_CORE_COUNTING_SEMAPHORE_h
+#ifndef _RTEMS_SCORE_CORESEM_H
+#define _RTEMS_SCORE_CORESEM_H
 
 /**
  *  @defgroup ScoreSemaphore Semaphore Handler
