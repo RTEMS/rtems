@@ -1,3 +1,9 @@
+2004-02-26	Joel Sherrill <joel@OARcorp.com>
+
+	PR 583/tests
+	* tm26/task1.c, tm27/task1.c: Correctly reset
+	_Thread_Dispatch_disable_level so printing is safe.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/timesys.h, tm01/system.h, tm01/task1.c, tm01/tm01.doc,

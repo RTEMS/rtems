@@ -418,6 +418,15 @@ void complete_test( void )
   thread_get_invalid_time = Read_timer();
 
   /*
+   *  This is the running task and we have tricked RTEMS out enough where
+   *  we need to set some internal tracking information to match this.
+   */
+
+  _Thread_Heir = _Thread_Executing;
+  _Context_Switch_necessary = FALSE;
+  _Thread_Dispatch_disable_level = 0;
+
+  /*
    *  Now dump all the times
    */
 

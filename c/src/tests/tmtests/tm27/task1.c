@@ -144,6 +144,8 @@ rtems_task Task_1(
 #endif
   Interrupt_return_time = Read_timer();
 
+  _Thread_Dispatch_disable_level = 0;
+
   put_time(
     "interrupt entry overhead: returns to nested interrupt",
     Interrupt_enter_nested_time,
