@@ -120,4 +120,3 @@ program RUSERSPROG {
 	} = 3;
 
 } = 100002;
-

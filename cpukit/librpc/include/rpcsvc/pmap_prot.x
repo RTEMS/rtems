@@ -282,4 +282,3 @@ program PMAPPROG {
 %
 %#endif		/* ndef _KERNEL */
 #endif
-
