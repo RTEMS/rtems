@@ -245,8 +245,6 @@ lib/Makefile
 lib/libcpu/Makefile
 
 lib/libbsp/Makefile
-lib/libbsp/shmdr/Makefile
-lib/libbsp/shared/Makefile
 
 wrapup/Makefile
 ])

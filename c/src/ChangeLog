@@ -1,3 +1,8 @@
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove lib/libbsp/shared/Makefile,
+	lib/libbsp/shmdr/Makefile.
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove libchip/ide/Makefile, libchip/network/Makefile,
