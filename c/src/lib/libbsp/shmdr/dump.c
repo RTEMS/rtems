@@ -34,6 +34,8 @@ Shm_Print_statistics(void)
   (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );
 
   seconds = ticks / ticks_per_second;
+  if ( seconds == 0 )
+    seconds = 1;
 
   packets_per_second = Shm_Receive_message_count / seconds;
   if ( (Shm_Receive_message_count % seconds) >= (seconds / 2) )
