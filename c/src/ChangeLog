@@ -1,3 +1,7 @@
+2001-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* config-ml.in: New file. Imported from gcc and modified for RTEMS.
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use SUBDIRS = @subdirs@, require automake-1.5.
