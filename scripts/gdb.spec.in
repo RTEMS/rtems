@@ -64,6 +64,14 @@ test -d build || mkdir build
 )
 
 %files
+%dir /opt/rtems
+%dir /opt/rtems/bin
+%dir /opt/rtems/include
+%dir /opt/rtems/info
+%dir /opt/rtems/lib
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
+
 %doc /opt/rtems/info/gdb.info*
 %doc /opt/rtems/info/mmalloc.info*
 %doc /opt/rtems/info/readline.info*

@@ -64,6 +64,19 @@ test -d build || mkdir build
 )
 
 %files
+%dir /opt/rtems
+%dir /opt/rtems/bin
+%dir /opt/rtems/info
+%dir /opt/rtems/lib
+%dir /opt/rtems/@target_alias@
+%dir /opt/rtems/@target_alias@/bin
+%dir /opt/rtems/@target_alias@/include
+%dir /opt/rtems/@target_alias@/sys-include
+%dir /opt/rtems/@target_alias@/lib
+%dir /opt/rtems/@target_alias@/lib/ldscripts
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
+
 %doc /opt/rtems/info/as.info*
 %doc /opt/rtems/info/bfd.info*
 %doc /opt/rtems/info/binutils.info*

@@ -96,6 +96,21 @@ test -d build || mkdir build
 )
 
 %files
+%dir /opt/rtems
+%dir /opt/rtems/bin
+%dir /opt/rtems/info
+%dir /opt/rtems/lib
+%dir /opt/rtems/lib/gcc-lib
+%dir /opt/rtems/lib/gcc-lib/@target_alias@
+%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@
+%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
+%dir /opt/rtems/@target_alias@
+%dir /opt/rtems/@target_alias@/include
+%dir /opt/rtems/@target_alias@/sys-include
+%dir /opt/rtems/@target_alias@/lib
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
+
 %doc /opt/rtems/info/chill.info*
 %doc /opt/rtems/info/cpp.info*
 %doc /opt/rtems/info/gcc.info*

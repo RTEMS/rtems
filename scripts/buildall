@@ -16,15 +16,38 @@ ALL_TARGETS="i386-rtems i960-rtems m68k-rtems \
   powerpc-rtems sh-rtems sh-rtemself sparc-rtems"
 
 # This is what we are building this time
-TARGETS=${ALL_TARGETS}
-#TARGETS="sh-rtems"
+#TARGETS=${ALL_TARGETS}
+TARGETS="sh-rtems"
 
 testing=no
+
+binutils=990901
+gcc=2.95.1
+gdb=4.18
+newlib=1.8.2
+buildroot=/opt/tmp
+
+#
+#  Now get started
+#
+start=`date`
+
 
 echo PATH=$PATH
 
 if [ ${testing} = yes ] ; then
   ECHO=echo
+fi
+
+installed_count=`rpm -qa | grep rtems | wc -l`
+if [ ${installed_count} -ne 0 ] ; then
+  echo This script should be run with NO rtems RPMs installed.
+  echo It appears that the following rtems RPMs are installed:
+  echo
+  rpm -qa | grep rtems
+  echo
+  echo Please remove these and restart this script.
+  exit 1
 fi
 
 # Some linux distributions use /usr/src/packages
@@ -51,46 +74,42 @@ done
 cd ${dst}
 test -d log || mkdir log
 
-binutils=990901
-gcc=2.95.1
-gdb=4.18
-newlib=1.8.2
 
-#  do all the binutils
+#  do all the tools
 for target in ${TARGETS}
 do
-  echo "rpm -ba --buildroot=/opt/tmp \
-     ${dst}/${target}-binutils-${binutils}.spec >log/${target}-binutils 2>&1"
+  logfile=log/${target}-binutils
+  specfile=${dst}/${target}-binutils-${binutils}.spec
+  echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
   if [ ${testing} = no ] ; then
-    rpm -ba --buildroot=/opt/tmp \
-       ${dst}/${target}-binutils-${binutils}.spec >log/${target}-binutils 2>&1
+    rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
   fi
   ${ECHO} rm -rf ${dst}/../BUILD/${target}-binutils*
-  ${ECHO} rm -rf /opt/tmp/opt
+  ${ECHO} rm -rf ${buildroot}/opt
 
   # now build gdb
-  echo "rpm -ba --buildroot=/opt/tmp \
-     ${dst}/${target}-gdb-${gdb}.spec >log/${target}-gdb 2>&1"
+  logfile=log/${target}-gdb
+  specfile=${dst}/${target}-gdb-${gdb}.spec
+  echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
   if [ ${testing} = no ] ; then
-    rpm -ba --buildroot=/opt/tmp \
-       ${dst}/${target}-gdb-${gdb}.spec >log/${target}-gdb 2>&1
+    rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
   fi
   ${ECHO} rm -rf ${dst}/../BUILD/${target}-gdb*
-  ${ECHO} rm -rf /opt/tmp/opt
+  ${ECHO} rm -rf ${buildroot}/opt
 
   # now build gcc/newlib
   #    NOTE: This requires having binutils installed and we immediately
   #          remove it once finished.
   ${ECHO} rpm -i ${dst}/../RPMS/i386/${target}-binutils-${binutils}-0.i386.rpm
 
-  echo "rpm -ba --buildroot=/opt/tmp \
-     ${dst}/${target}-gcc-${gcc}-newlib-${newlib}.spec >log/${target}-gccnewlib 2>&1"
+  logfile=log/${target}-gccnewlib
+  specfile=${dst}/${target}-gcc-${gcc}-newlib-${newlib}.spec
+  echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
   if [ ${testing} = no ] ; then
-    rpm -ba --buildroot=/opt/tmp \
-       ${dst}/${target}-gcc-${gcc}-newlib-${newlib}.spec >log/${target}-gccnewlib 2>&1
+    rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
   fi
   ${ECHO} rm -rf ${dst}/../BUILD/${target}-gcc*
-  ${ECHO} rm -rf /opt/tmp/opt
+  ${ECHO} rm -rf ${buildroot}/opt
 
   echo uninstalling binutils for ${target} 
   if [ ${testing} = no ] ; then
@@ -98,16 +117,29 @@ do
   fi
 done
 
+staging_dir=/usr3/rtems_cds/test_cd/linux
+
+${ECHO} mkdir ${staging_dir}
+${ECHO} mkdir ${staging_dir}/RPMS
+${ECHO} mkdir ${staging_dir}/SRPMS
+
 echo Moving RPMs to CD staging directory
 for file in `ls -1 ${dst}/../RPMS/i386/*.rpm 2>/dev/null`
 do
-  ${ECHO} mv ${file} /usr3/rtems_cds/test_cd/RPMS
+  ${ECHO} mv ${file} ${staging_dir}/RPMS
 done
 
 echo Moving SRPMs to CD staging directory
 for file in `ls -1 ${dst}/../SRPMS/*.rpm 2>/dev/null`
 do
-  ${ECHO} mv ${file} /usr3/rtems_cds/test_cd/SRPMS
+  ${ECHO} mv ${file} ${staging_dir}/SRPMS
 done
 
+# Now we are done
+
+stop=`date`
+
+echo
+echo "Started:  " $start
+echo "Finished: " $stop
 exit 0
