@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
 
 SUBDIRS = include arpa kern machine sys vm lib libc net netinet nfs rtems \
     rtems_servers pppd rtems_webserver wrapup

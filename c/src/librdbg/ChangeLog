@@ -1,3 +1,8 @@
+2000-10-25      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+	Switch to GNU canonicalization.
+
 2000-10-19  Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
 
 	* src/m68k/any/remdeb.h, src/m68k/any/remdeb_xdr.c,

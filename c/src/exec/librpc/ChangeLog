@@ -1,3 +1,8 @@
+2000-10-25      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+	Switch to GNU canonicalization.
+
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
 	* src/xdr/xdr_float.c: Added A29K support.
