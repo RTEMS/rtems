@@ -22,7 +22,7 @@ extern "C" {
 
 #include <rtems/score/sparc.h>               /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/sparctypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
