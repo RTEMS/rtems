@@ -27,7 +27,7 @@ NO ASCII VERSION OF THE TASKING FIGURE IS AVAILABLE
 @example
 @group
 @c why does this not work?
-@c @image{networking}
+@c @image{networkflow}
 NO TEX VERSION OF THE TASKING FIGURE IS AVAILABLE
 @end group
 @end example
@@ -35,7 +35,7 @@ NO TEX VERSION OF THE TASKING FIGURE IS AVAILABLE
 
 @ifset use-html
 @html
-<IMG SRC="networking.gif" ALIGN=CENTER 
+<IMG SRC="networkflow.png" ALIGN=CENTER 
      ALT="Network Task Structure and Data Flow">
 @end html
 @end ifset

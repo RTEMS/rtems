@@ -83,8 +83,10 @@ decdriver.texi: decdriver.t Makefile
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
-	rm -f $(WWW_INSTALL)/$(PROJECT)/networking.gif
-	cp networking.gif $(WWW_INSTALL)/$(PROJECT)/networking.gif
+	rm -f $(WWW_INSTALL)/$(PROJECT)/networkflow.png
+	cp networkflow.png $(WWW_INSTALL)/$(PROJECT)/networkflow.png
+	rm -f $(WWW_INSTALL)/$(PROJECT)/PCIreg.png
+	cp PCIreg.png $(WWW_INSTALL)/$(PROJECT)/PCIreg.png
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
