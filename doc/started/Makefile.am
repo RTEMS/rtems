@@ -6,7 +6,7 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = started
 EDITION = 1
@@ -14,6 +14,7 @@ EDITION = 1
 SUBDIRS = pictures
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 GENERATED_FILES = binaries.texi buildc.texi buildrt.texi intro.texi \
     nt.texi require.texi nextstep.texi sample.texi
