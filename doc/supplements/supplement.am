@@ -4,9 +4,17 @@
 ## Makefile fragment common to all supplements/<cpu>/Makefile.ams
 ##
 
-## Unused
-## REPLACE = $(PERL) $(top_srcdir)/tools/word-replace
 REPLACE2 = $(PERL) $(top_srcdir)/tools/word-replace2
 
 MAINTAINERCLEANFILES += $(GENERATED_FILES)
 CLEANFILES += *.fixed
+
+html_projectdir = $(htmldir)/supplements/$(PROJECT)
+
+TEXI2WWW_ARGS=\
+-I $(srcdir) \
+-dirfile ../../index.html \
+-header $(top_builddir)/rtems_header.html \
+-footer $(top_builddir)/rtems_footer.html \
+-icons ../../images
+

@@ -192,7 +192,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/i386.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="i386/index.html">
+            <A HREF="supplements/i386/index.html">
                RTEMS Intel i386 Applications Supplement</A>
             </LI>
 
@@ -202,7 +202,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/i960.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="i960/index.html">
+            <A HREF="supplements/i960/index.html">
                RTEMS Intel i960 Applications Supplement</A>
             </LI>
 
@@ -222,7 +222,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/m68k.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="m68k/index.html">
+            <A HREF="supplements/m68k/index.html">
                RTEMS Motorola MC68xxx Applications Supplement</A>
             </LI>
 
@@ -232,7 +232,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/powerpc.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="powerpc/index.html">
+            <A HREF="supplements/powerpc/index.html">
                RTEMS PowerPC Applications Supplement</A>
             </LI>
 
@@ -242,7 +242,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/sparc.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="sparc/index.html">
+            <A HREF="supplements/sparc/index.html">
                RTEMS SPARC Applications Supplement</A>
             </LI>
 
@@ -252,7 +252,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/hppa1_1.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="hppa1_1/index.html">
+            <A HREF="supplements/hppa1_1/index.html">
                RTEMS Hewlett Packard PA-RISC Applications Supplement</A>
             </LI>
 
