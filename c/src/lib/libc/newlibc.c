@@ -64,7 +64,7 @@
 
 
 int              libc_reentrant;        /* do we think we are reentrant? */
-struct _reent    libc_global_reent = _REENT_INIT(libc_global_reent);;
+struct _reent    libc_global_reent = _REENT_INIT(libc_global_reent);
 
 /*
  * CYGNUS newlib routine that does atexit() processing and flushes
@@ -114,10 +114,27 @@ libc_start_hook(rtems_tcb *current_task,
      *  it is based on region manager
      */
 
-    ptr = (struct _reent *) malloc(sizeof(struct _reent));
+    ptr = (struct _reent *) calloc(1, sizeof(struct _reent));
 
+    if (!ptr)
+       rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
+ 
+#ifdef __GNUC__
     /* GCC extension: structure constants */
     *ptr = (struct _reent) _REENT_INIT((*ptr));
+#else
+    /* 
+     *  Warning: THIS IS VERY DEPENDENT ON NEWLIB!!! WRITTEN FOR 1.7.0
+     */
+    ptr->_errno=0;
+    ptr->_stdin=&ptr->__sf[0];
+    ptr->_stdout=&ptr->__sf[1];
+    ptr->_stderr=&ptr->__sf[2];
+    ptr->_scanpoint=0;
+    ptr->_asctime[0]=0;
+    ptr->_next=1;
+    ptr->__sdidinit=0;
+#endif
 
     MY_task_set_note(starting_task, LIBC_NOTEPAD, (rtems_unsigned32) ptr);
 }
@@ -329,7 +346,7 @@ int get_errno()
  *
  */
 
-#if !defined(RTEMS_UNIX) && !defined(__GO32__)
+#if !defined(RTEMS_UNIX) && !defined(__GO32__) && !defined(_AM29K)
 void _exit(int status)
 {
     rtems_shutdown_executive(status);
