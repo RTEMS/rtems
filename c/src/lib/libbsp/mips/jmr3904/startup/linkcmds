@@ -18,11 +18,11 @@ SECTIONS
     .text : 
     { 
        _ftext = . ;
-      *(.init)
        eprol  =  .;
       *(.text)
       *(.text.*)
       *(.gnu.linkonce.t*)
+      *(.init)
       *(.mips16.fn.*)
       *(.mips16.call.*)
       PROVIDE (__runtime_reloc_start = .);
@@ -76,6 +76,7 @@ SECTIONS
     *(.data)
     *(.data.*)
     *(.gnu.linkonce.d*)
+     SORT(CONSTRUCTORS)
   }
   . = ALIGN(8);
   _gp = . + 0x8000;
