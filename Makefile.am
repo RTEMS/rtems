@@ -21,7 +21,6 @@ ACLOCAL_FILES += aclocal/bsp-alias.m4
 ACLOCAL_FILES += aclocal/canonical-target-name.m4
 ACLOCAL_FILES += aclocal/check-bsps.m4
 ACLOCAL_FILES += aclocal/check-custom-bsp.m4
-ACLOCAL_FILES += aclocal/config-subdirs.m4
 ACLOCAL_FILES += aclocal/enable-bare.m4
 ACLOCAL_FILES += aclocal/enable-cxx.m4
 ACLOCAL_FILES += aclocal/enable-inlines.m4
