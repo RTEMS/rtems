@@ -53,10 +53,6 @@ NoSource:	1
 %define build_cxx	0
 %endif
 
-%if "@target_alias@" == "i386-rtems"
-%define build_gnat 	1
-%endif
-
 %if "@target_alias@" == "i960-rtems"
 %define build_cxx	0
 %endif
