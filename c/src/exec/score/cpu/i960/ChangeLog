@@ -1,6 +1,13 @@
 2001-04-03	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* rtems/score/m68ktypes.h: Removed.
+	* rtems/score/types.h: New file via CVS magic.
+	* Makefile.am, rtems/score/cpu.h: Account for name change.
+
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
 	* rtems/score/i960types.h: Removed.
 	* rtems/score/types.h: New file via CVS magic.
 	* Makefile.am, rtems/score/cpu.h: Account for name change.
