@@ -1067,15 +1067,6 @@ void _CPU_Fatal_error(
 );
 
 /*
- *  Routines to access the decrementer register
- */
-
-#define PPC_Set_decrementer( _clicks ) \
-  do { \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
-
-/*
  *  Routines to access the time base register
  */
 
