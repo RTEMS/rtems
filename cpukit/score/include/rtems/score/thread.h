@@ -247,10 +247,7 @@ void _Thread_Handler_initialization (
  *  the non-multitasking part of the system initialization.
  */
 
-void _Thread_Start_multitasking (
-  Thread_Control *system_thread,
-  Thread_Control *idle_thread
-);
+void _Thread_Start_multitasking( void );
 
 /*
  *  _Thread_Stop_multitasking
