@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/scitab.rel
 
 C_FILES = scitab.c
