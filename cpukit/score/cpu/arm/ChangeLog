@@ -1,3 +1,7 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Removed warnings.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Removed warning.

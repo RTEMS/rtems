@@ -238,7 +238,6 @@ void do_data_abort(unsigned32 insn, unsigned32 spsr,
     unsigned32 rd;
 
     unsigned8  *src_addr;
-    unsigned8  *dest_addr;
     unsigned32  tmp;
 
     g_data_abort_insn_list[g_data_abort_cnt & 0x3ff] = ctx->register_lr - 8;
@@ -282,7 +281,7 @@ void do_data_abort(unsigned32 insn, unsigned32 spsr,
                 printk("\tUser mode\n");
                 break;
             case 0x10:  /* P=1, W=0 -> base not updated */
-                src_addr = GET_REG(rn, ctx);
+                src_addr = (unsigned8 *)GET_REG(rn, ctx);
                 if (GET_U(insn) == 0) {
                     src_addr -= GET_OFFSET(insn);
                 } else {
