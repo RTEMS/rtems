@@ -1,3 +1,10 @@
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 563/bsps
+	* consolex/consolex.c, consolex/consolex.h, consolex/cTest.c,
+	consolex/Makefile.am, consolex/README:
+	Remove (Abandoned).
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add PREINSTALL_DIRS.
