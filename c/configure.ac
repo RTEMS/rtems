@@ -4,7 +4,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT([rtems-c],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
-AC_CONFIG_SRCDIR([src])
+AC_CONFIG_SRCDIR([TOOL_TARGETS])
 RTEMS_TOP(..)
 
 RTEMS_CANONICAL_TARGET_CPU
@@ -14,12 +14,16 @@ AM_MAINTAINER_MODE
 
 ## These options are used within this file.
 RTEMS_ENABLE_BARE
-RTEMS_ENABLE_RTEMSBSP(rtems_bsp)
+RTEMS_ENABLE_RTEMSBSP
 
 RTEMS_CHECK_CPU
 
-AS_IF([test -z "$rtems_bsp"],
-  [RTEMS_CHECK_BSPS(rtems_bsp)])
+AS_IF([test x"$enable_rtemsbsp" = x"no"],[
+  rtems_bsp=""
+],[
+  AS_IF([test -z "$enable_rtemsbsp"],
+    [RTEMS_CHECK_BSPS(rtems_bsp)],
+    [rtems_bsp="$enable_rtemsbsp"])
 
 for i in $rtems_bsp; do
 
@@ -45,11 +49,12 @@ for i in $rtems_bsp; do
       AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  $i])
     fi
 done
+])
 
 #
 # Compose the configuration arguments to be passed to c/src/configure
 #
- ##
+##
 ## Partially borrowed from autoconf-2.13
 ##
 

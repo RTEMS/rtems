@@ -1,3 +1,8 @@
+2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+	* configure.ac: Add support for --disable-rtemsbsp. Cosmetics.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* ACKNOWLEDGEMENTS: Remove efi68k and efi332 references as they are no
