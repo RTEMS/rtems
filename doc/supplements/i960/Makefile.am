@@ -16,8 +16,7 @@ include $(top_srcdir)/supplements/supplement.am
 GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi timing.texi wksheets.texi \
     timeCVME961.texi
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
 
 FILES = preface.texi
 
