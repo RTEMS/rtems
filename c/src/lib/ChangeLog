@@ -1,4 +1,8 @@
 
+2001-02-06	Joel Sherrill <joel@OARcorp.com>
+
+	* include/ioccom.h: Unreferenced and thus removed.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/zilog/Makefile.am, include/Makefile.am, 
