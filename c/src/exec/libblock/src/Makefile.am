@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 LIBNAME = libblock
 LIB = ${ARCH}/${LIBNAME}.a
