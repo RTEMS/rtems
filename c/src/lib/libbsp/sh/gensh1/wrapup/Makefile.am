@@ -13,7 +13,7 @@ CPU_PIECES = clock timer sci delay score
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/sh7032/$(piece)/$(ARCH)/$(piece).rel)
+    $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel)
 
 LIB = $(ARCH)/libbsp.a
 
