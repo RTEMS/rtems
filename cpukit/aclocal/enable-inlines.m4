@@ -10,12 +10,9 @@ AC_HELP_STRING([--enable-rtems-inlines],[enable RTEMS inline functions (default:
 esac],[RTEMS_USE_MACROS=no])
 AC_SUBST(RTEMS_USE_MACROS)dnl
 
-if test x"${RTEMS_USE_MACROS}" = x"yes";
-then
-  AC_DEFINE_UNQUOTED(USE_MACROS,1,[if using macros])
-else
+AS_IF([test x"${RTEMS_USE_MACROS}" = x"yes"],[],[
   AC_DEFINE_UNQUOTED(USE_INLINES,1,[if using inlines])
-fi
+])
 
 
 ])

@@ -1,3 +1,11 @@
+2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: New.
+	* configure.ac: Don't use AUTOHEADER to generate cpuopts.h.
+	Add local autoheader config.h.
+	* aclocal/canonical-target-name.m4: Require AC_CANONICAL_HOST.
+	* aclocal/enable-inlines.m4: Remove USE_MACROS (Unused).
+
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-posix.m4: Add m4-quotes.

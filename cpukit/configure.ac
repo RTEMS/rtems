@@ -79,15 +79,9 @@ RTEMS_DEFINE_MULTIPROCESSING
 
 # HACK: We should use a feature-based configuration.
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
-  AC_DEFINE_UNQUOTED([RTEMS_UNIX],[1],[to indicate RTEMS unix])
 # HACK: silently accept --enable-unixlib
   test -n "${enable_unixlib}" || enable_unixlib="yes"
 ])
-
-AS_IF([test x"${enable_unixlib}" = x"yes"],
-  [AC_DEFINE_UNQUOTED([RTEMS_UNIXLIB],[1],
-    [to indicate RTEMS using RTEMS's unixlib])]
-)
 
 # BSD-isms, used throughout the sources
 # Not really used by this configure script
@@ -96,32 +90,80 @@ AC_CHECK_FUNCS([strsep strcasecmp snprintf])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
-AM_CONFIG_HEADER([score/include/rtems/score/cpuopts-tmp.h],[
-echo "/* target cpu dependent options file */"         >$tmp/config.h
-echo "/* automatically generated -- DO NOT EDIT!! */" >>$tmp/config.h
-echo                                                  >>$tmp/config.h
-echo "#ifndef __CPU_OPTIONS_h"                        >>$tmp/config.h
-echo "#define __CPU_OPTIONS_h"                        >>$tmp/config.h
-echo                                                  >>$tmp/config.h
-sed -e '/.*PACKAGE.*/d' score/include/rtems/score/cpuopts-tmp.h >> $tmp/config.h
-echo                                                  >>$tmp/config.h
-echo "#endif"                                         >>$tmp/config.h
-AS_IF([cmp -s score/include/rtems/score/cpuopts.h $tmp/config.h 2>/dev/null],
-  [AC_MSG_NOTICE([score/include/rtems/score/cpuopts.h is unchanged])
-   rm -f $tmp/config.h],
-  [AC_MSG_NOTICE([creating score/include/rtems/score/cpuopts.h])
-   rm -f score/include/rtems/score/cpuopts.h
-   mv $tmp/config.h score/include/rtems/score/cpuopts.h])
+cat << EOF > cpuopts.tmp
+/* target cpu dependent options file */
+/* automatically generated -- DO NOT EDIT!! */
+#ifndef __CPU_OPTIONS_h
+#define __CPU_OPTIONS_h
+EOF
+
+RTEMS_CPUOPT([USE_INLINES],
+  [! test x"${RTEMS_USE_MACROS}" = x"yes"],
+  [1],
+  [if using inlines])
+
+RTEMS_CPUOPT([RTEMS_ITRON_API],
+  [test x"$rtems_cv_HAS_ITRON_API" = x"yes"],
+  [1],
+  [if itron api is supported])
+
+RTEMS_CPUOPT([RTEMS_MULTILIBS],
+  [test x"$RTEMS_MULTILIBS" = x"yes"],
+  [1],
+  [using multilib'ed RTEMS])
+
+RTEMS_CPUOPT([RTEMS_MULTIPROCESSING],
+  [test x"$HAS_MP" = "yes"],
+  [1],
+  [if multiprocessing is enabled])
+
+RTEMS_CPUOPT([RTEMS_NEWLIB],
+  [test x"$RTEMS_USE_NEWLIB" = x"yes"],
+  [1],
+  [if using newlib])
+
+RTEMS_CPUOPT([RTEMS_POSIX_API],
+  [test x"$HAS_POSIX_API" = x"yes"],
+  [1],
+  [if posix api is supported])
+
+RTEMS_CPUOPT([RTEMS_UNIX],
+  [test x"$RTEMS_CPU" = x"unix"],
+  [1],
+  [to indicate RTEMS unix])
+
+RTEMS_CPUOPT([RTEMS_UNIXLIB],
+  [test x"${enable_unixlib}" = x"yes"],
+  [1],
+  [to indicate RTEMS using RTEMS's unixlib])
+
+RTEMS_CPUOPT([RTEMS_VERSION],
+  [true],
+  [\"]_RTEMS_VERSION[\"],
+  [RTEMS version string])
+
+echo >> cpuopts.tmp
+echo "#endif" >> cpuopts.tmp
+
+AS_MKDIR_P(score/include/rtems/score)
+AS_IF([test -f score/include/rtems/score/cpuopts.h],
+[
+  AS_IF([cmp -s score/include/rtems/score/cpuopts.h cpuopts.tmp 2>/dev/null],
+  [ 
+    AC_MSG_NOTICE([score/include/rtems/score/cpuopts.h is unchanged])
+    rm -f cpuopts.tmp
+  ],[
+    AC_MSG_NOTICE([creating score/include/rtems/score/cpuopts.h])
+    rm -f score/include/rtems/score/cpuopts.h
+    mv cpuopts.tmp score/include/rtems/score/cpuopts.h
+  ])
+],[
+    AC_MSG_NOTICE([creating score/include/rtems/score/cpuopts.h])
+    rm -f score/include/rtems/score/cpuopts.h
+    mv cpuopts.tmp score/include/rtems/score/cpuopts.h
 ])
 
 AC_ENABLE_MULTILIB([Makefile],[..])
-
-## HACK: Add a define to cpuopts.h to indicate using multilibs
-## Can be applied to produce compiler errors if using
-## multilib-incompatible settings somewhere else (eg. bspopts.h).
-AS_IF([test x"${enable_multilib}" = x"yes"],[
-  AC_DEFINE_UNQUOTED([RTEMS_MULTILIBS],[1],[using multilib'ed RTEMS])
-])
 
 # libmisc/shell/* wants to assign file descriptors to stdio file descriptors.
 AC_MSG_CHECKING([for assignable stdio])
@@ -230,6 +272,8 @@ AM_CONDITIONAL([NEED_INTTYPES_H],[test x"$NEED_INTTYPES_H" = x"yes"])
 
 AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
+
+AC_CONFIG_HEADER(config.h)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([
