@@ -20,7 +20,7 @@
 #include <rtems.h>
 #include <bsp.h>
 
-rtems_unsigned32 Timer_interrupts;
+uint32_t         Timer_interrupts;
 
 rtems_boolean Timer_driver_Find_average_overhead;
 

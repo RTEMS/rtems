@@ -23,7 +23,7 @@
  * Clock_driver_ticks is a monotonically increasing counter of the
  * number of clock ticks since the driver was initialized.
  */
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t         Clock_driver_ticks;
 
 
 /*
@@ -36,7 +36,7 @@ rtems_device_minor_number rtems_clock_minor;
 rtems_isr (*rtems_clock_hook)(rtems_vector_number) = NULL;
 
 static void
-set_clock_period(rtems_unsigned32 period)
+set_clock_period(uint32_t         period)
 {
     asm volatile ("\tmov %0,r0\n"
                   "\ttrapa\t#4\n" 
@@ -98,7 +98,7 @@ Clock_exit(void)
 static void
 Install_clock(rtems_isr_entry clock_isr)
 {
-    rtems_unsigned32 period;
+    uint32_t         period;
     Clock_driver_ticks = 0;
     if (BSP_Configuration.ticks_per_timeslice)
     {
@@ -164,7 +164,7 @@ Clock_control(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void *pargp)
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
 
     if (args)
