@@ -46,7 +46,6 @@ net/Makefile
 netinet/Makefile
 nfs/Makefile
 pppd/Makefile
-modem/Makefile
 rtems/Makefile
 rtems_servers/Makefile
 rtems_telnetd/Makefile

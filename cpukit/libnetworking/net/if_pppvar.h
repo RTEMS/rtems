@@ -45,8 +45,10 @@
  * Supported network protocols.  These values are used for
  * indexing sc_npmode.
  */
-#define NP_IP	0		/* Internet Protocol */
-#define NUM_NP	1		/* Number of NPs. */
+#define NP_IP                 0 /* Internet Protocol */
+#define NUM_NP                1 /* Number of NPs. */
+#define NUM_MBUFQ            64
+
 
 /*
  * Structure describing each ppp unit.
@@ -63,7 +65,6 @@ struct ppp_softc {
 	struct	ifqueue sc_rawq;	/* received packets */
 	struct	ifqueue sc_inq;		/* queue of input packets for daemon */
 	struct	ifqueue sc_fastq;	/* interactive output packet q */
-	struct	mbuf *sc_togo;		/* output packet ready to go */
 	struct	mbuf *sc_npqueue;	/* output packets not to be sent yet */
 	struct	mbuf **sc_npqtail;	/* ptr to last next ptr in npqueue */
 	struct	pppstat sc_stats;	/* count of bytes/pkts sent/rcvd */
@@ -84,18 +85,30 @@ struct ppp_softc {
 #endif
 
 	/* Device-dependent part for async lines. */
-	ext_accm sc_asyncmap;		/* async control character map */
-	u_long	sc_rasyncmap;		/* receive async control char map */
-	struct	mbuf *sc_outm;		/* mbuf chain currently being output */
-	struct	mbuf *sc_m;		/* pointer to input mbuf chain */
-	struct	mbuf *sc_mc;		/* pointer to current input mbuf */
-	char	*sc_mp;			/* ptr to next char in input mbuf */
-	short	sc_ilen;		/* length of input packet so far */
-	u_short	sc_fcs;			/* FCS so far (input) */
-	u_short	sc_outfcs;		/* FCS so far for output packet */
-	u_char	sc_rawin[16];		/* chars as received */
-	int	sc_rawin_count;		/* # in sc_rawin */
-        rtems_id sem_id;                /* ID of comm semaphore         */
+	ext_accm sc_asyncmap;		     /* async control character map */
+	u_long	sc_rasyncmap;		     /* receive async control char map */
+	struct	mbuf *sc_outm;		     /* mbuf chain currently being output */
+	struct	mbuf *sc_outmc;		     /* mbuf currently being output */
+	struct	mbuf *sc_m;		     /* pointer to input mbuf chain */
+	struct	mbuf *sc_mc;		     /* pointer to current input mbuf */
+	char	*sc_mp;			     /* ptr to next char in input mbuf */
+	short	sc_ilen;		     /* length of input packet so far */
+	u_short	sc_fcs;			     /* FCS so far (input) */
+	u_char	sc_rawin[16];		     /* chars as received */
+	int	sc_rawin_count;		     /* # in sc_rawin */
+	u_short	sc_outfcs;		     /* FCS so far for output packet */
+
+	struct	ifqueue sc_freeq;            /* free packets */
+	short	sc_outoff;		     /* output packet byte offset */
+	short	sc_outflag;		     /* output status flag */
+	short	sc_outlen;		     /* length of output packet */
+	short	sc_outfcslen;		     /* length of output fcs data */
+	u_char	sc_outfcsbuf[8];	     /* output packet fcs buffer */
+	u_char *sc_outbuf;		     /* pointer to output data */
+
+	rtems_id sc_rxtask;
+	rtems_id sc_txtask;
+	rtems_id sc_pppdtask;
 };
 
 struct	ppp_softc ppp_softc[NPPP];
@@ -106,6 +119,21 @@ int	pppoutput __P((struct ifnet *, struct mbuf *,
 		       struct sockaddr *, struct rtentry *));
 int	pppioctl __P((struct ppp_softc *sc, int cmd, caddr_t data,
 		      int flag, struct proc *p));
-void	ppp_restart __P((struct ppp_softc *sc));
-void	ppppktin __P((struct ppp_softc *sc, struct mbuf *m, int lost));
 struct	mbuf *ppp_dequeue __P((struct ppp_softc *sc));
+u_short pppfcs __P((u_short fcs, u_char *cp, int len));
+void    pppallocmbuf __P((struct ppp_softc *sc, struct mbuf **mp));
+
+
+/* define event values */
+#define RX_PACKET    RTEMS_EVENT_1
+#define RX_MBUF      RTEMS_EVENT_2
+#define RX_EMPTY     RTEMS_EVENT_3
+#define TX_PACKET    RTEMS_EVENT_1
+#define TX_TRANSMIT  RTEMS_EVENT_2
+#define PPPD_EVENT   RTEMS_EVENT_31
+
+/* define out flag values */
+#define SC_TX_BUSY      0x0001
+#define SC_TX_FCS       0x0002
+#define SC_TX_ESCAPE    0x0004
+#define SC_TX_PENDING   0x0010

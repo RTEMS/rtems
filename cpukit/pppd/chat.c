@@ -156,6 +156,7 @@ char *report_file    = (char *) 0;
 char *chat_file      = (char *) 0;
 char *phone_num      = (char *) 0;
 char *phone_num2     = (char *) 0;
+static int ttyfd;
 static int timeout   = DEFAULT_CHAT_TIMEOUT;
 
 #ifdef TERMIOS
@@ -192,7 +193,7 @@ char *character __P((int c));
 void chat_expect __P((register char *s));
 char *clean __P((register char *s, int sending));
 char *expect_strtok __P((char *, char *));
-int chatmain __P((char *));
+int chatmain __P((int, int, char *));
 
 
 void *dup_mem(b, c)
@@ -224,39 +225,36 @@ char *getnextcommand(char **string)
 	return buf;
 }
 
-int chatmain(argv)
-char *argv;
+int chatmain(int fd, int mode, char *pScript)
 {
   char    *arg;
 
   /* initialize exit code */
   exit_code = 0;
+  ttyfd     = fd;
 
   if ( debug ) {
-    dbglog("chat_main: %s\n", argv);
+    dbglog("chat_main: %s\n", pScript);
   }
 
   /* get first expect string */
-  arg = getnextcommand(&argv);
+  arg = getnextcommand(&pScript);
   while (( arg != NULL ) && ( exit_code == 0 )) {
     /* process the expect string */
     chat_expect(arg);
     if ( exit_code == 0 ) {
       /* get the next send string */
-      arg = getnextcommand(&argv);
+      arg = getnextcommand(&pScript);
       if ( arg != NULL ) {
         /* process the send string */
         chat_send(arg);
 
         /* get the next expect string */
-        arg = getnextcommand(&argv);
+        arg = getnextcommand(&pScript);
       }
     }
   }
-
-  if ( exit_code ) {
-   exit_code = -exit_code;
-  }
+  ttyfd = (int)-1;
 
   return ( exit_code );
 }

@@ -715,6 +715,10 @@ process_option(opt, argv)
 	    sv = strdup(*argv);
 	    if (sv == NULL)
 		novm("option argument");
+            if ( *(char **)(opt->addr) != NULL ) {
+                free((void *)*(char **)(opt->addr));
+                *(char **)(opt->addr) = NULL;
+            }
 	    *(char **)(opt->addr) = sv;
 	}
 	break;

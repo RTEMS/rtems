@@ -1570,24 +1570,26 @@ static void
 create_resolv(peerdns1, peerdns2)
     u_int32_t peerdns1, peerdns2;
 {
-    FILE *f;
+  extern int              rtems_bsdnet_nameserver_count;
+  extern struct in_addr   rtems_bsdnet_nameserver[];
 
-    f = fopen(_PATH_RESOLV, "w");
-    if (f == NULL) {
-	error("Failed to create %s: %m", _PATH_RESOLV);
-	return;
-    }
+  /* initialize values */
+  rtems_bsdnet_nameserver_count = (int)0;
 
-    if (peerdns1)
-	fprintf(f, "nameserver %s\n", ip_ntoa(peerdns1));
+  /* check to see if primary was specified */
+  if ( peerdns1 ) {
+    rtems_bsdnet_nameserver[rtems_bsdnet_nameserver_count].s_addr = peerdns1;
+    rtems_bsdnet_nameserver_count++;
+  }
 
-    if (peerdns2)
-	fprintf(f, "nameserver %s\n", ip_ntoa(peerdns2));
+  /* check to see if secondary was specified */
+  if ( peerdns2 ) {
+    rtems_bsdnet_nameserver[rtems_bsdnet_nameserver_count].s_addr = peerdns2;
+    rtems_bsdnet_nameserver_count++;
+  }
 
-    if (ferror(f))
-	error("Write failed to %s: %m", _PATH_RESOLV);
-
-    fclose(f);
+  /* initialize resolver */
+  __res_init();
 }
 
 /*

@@ -110,7 +110,7 @@ typedef struct chap_state {
 /*
  * Timeouts.
  */
-#define CHAP_DEFTIMEOUT		3	/* Timeout time in seconds */
+#define CHAP_DEFTIMEOUT		5	/* Timeout time in seconds */
 #define CHAP_DEFTRANSMITS	10	/* max # times to send challenge */
 
 extern chap_state chap[];

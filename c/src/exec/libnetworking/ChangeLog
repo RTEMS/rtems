@@ -1,3 +1,33 @@
+2001-01-31	Mike Siers <mikes@poliac.com>
+
+	* Nice Update of PPPD support which eliminates the
+	requiremetn that drivers be in the termios TASK_DRIVEN mode.
+	Mike did significant testing and reports that it seems to be
+	more stable and handle larger packets better.  This patch
+	replaces the termios tasks with more general pppd network
+	driver tasks.  The functions pppinput() and pppstart() get 
+	called from the interrupt service routine.
+	* Makefile.am, configure.ac, net/Makefile.am, net/bpf.h,
+	net/ethernet.h, net/if.c, net/if.h, net/if_arp.h, net/if_dl.h,
+	net/if_ethersubr.c, net/if_llc.h, net/if_loop.c, net/if_ppp.h,
+	net/if_pppvar.h, net/if_types.h, net/netisr.h, net/ppp-comp.h,
+	net/ppp_defs.h, net/pppcompress.h, net/radix.c, net/radix.h,
+	net/raw_cb.c, net/raw_cb.h, net/raw_usrreq.c, net/route.c,
+	net/route.h, net/rtsock.c, pppd/Makefile.am, pppd/README,
+	pppd/STATUS, pppd/auth.c, pppd/cbcp.c, pppd/ccp.c, pppd/ccp.h,
+	pppd/chap.c, pppd/chap.h, pppd/chap_ms.c, pppd/chap_ms.h,
+	pppd/chat.c, pppd/demand.c, pppd/fsm.c, pppd/fsm.h, pppd/ipcp.c,
+	pppd/ipcp.h, pppd/ipxcp.c, pppd/ipxcp.h, pppd/lcp.c, pppd/lcp.h,
+	pppd/magic.c, pppd/magic.h, pppd/options.c, pppd/patchlevel.h,
+	pppd/pathnames.h, pppd/pppd.8, pppd/pppd.h, pppd/rtemsmain.c,
+	pppd/rtemspppd.c, pppd/rtemspppd.h, pppd/sys-rtems.c, pppd/upap.c,
+	pppd/upap.h, pppd/utils.c, pppd/example/README,
+	pppd/example/netconfig.h, wrapup/Makefile.am: Modified.
+	* net/bsd-comp.c, net/if_ppp.c, net/ppp-deflate.c, net/ppp.h,
+	net/ppp_tty.c, net/pppcompress.c, net/zlib.c, net/zlib.h: New file.
+	* modem/, modem/.cvsignore, modem/Makefile.am, modem/ppp.c,
+	modem/ppp.h, modem/ppp_tty.c, modem/pppcompress.c: Subdirectory removed.
+
 2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems_telnetd/pty.c: Move config.h to were it belongs.

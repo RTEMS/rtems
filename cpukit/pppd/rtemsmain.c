@@ -41,9 +41,6 @@
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
-extern void rtems_bsdnet_semaphore_obtain(void);
-extern void rtems_bsdnet_semaphore_release(void);
-extern int  chatmain(char *argv);
 
 #include "pppd.h"
 #include "magic.h"
@@ -58,6 +55,7 @@ extern int  chatmain(char *argv);
 #include "ccp.h"
 #include "pathnames.h"
 #include "patchlevel.h"
+#include "rtemsdialer.h"
 
 #ifdef CBCP_SUPPORT
 #include "cbcp.h"
@@ -94,6 +92,7 @@ int unsuccess;			/* # unsuccessful connection attempts */
 int do_callback;		/* != 0 if we should do callback next */
 int doing_callback;		/* != 0 if we are doing callback */
 char *callback_script;		/* script for doing callback */
+dialerfp pppd_dialer;
 
 int (*holdoff_hook) __P((void)) = NULL;
 int (*new_phase_hook) __P((int)) = NULL;
@@ -129,7 +128,7 @@ static void get_input __P((void));
 static void calltimeout __P((void));
 static struct timeval *timeleft __P((struct timeval *));
 static void holdoff_end __P((void *));
-static int device_script __P((char *, int, int, int));
+static int device_script __P((int, int, char *));
 
 extern	char	*ttyname __P((int));
 extern	char	*getlogin __P((void));
@@ -312,7 +311,7 @@ pppdmain(argc, argv)
 	    }
 
 	    if (initializer && initializer[0]) {
-		if (device_script(initializer, ttyfd, ttyfd, 0) < 0) {
+		if (device_script(ttyfd, DIALER_INIT, initializer) < 0) {
 		    error("Initializer script failed");
 		    status = EXIT_INIT_FAILED;
 		    goto fail;
@@ -324,7 +323,7 @@ pppdmain(argc, argv)
 	    }
 
 	    if (connector && connector[0]) {
-		if (device_script(connector, ttyfd, ttyfd, 0) < 0) {
+		if (device_script(ttyfd, DIALER_CONNECT, connector) < 0) {
 		    error("Connect script failed");
 		    status = EXIT_CONNECT_FAILED;
 		    goto fail;
@@ -364,7 +363,7 @@ pppdmain(argc, argv)
 
 	/* run welcome script, if any */
 	if (welcomer && welcomer[0]) {
-	    if (device_script(welcomer, ttyfd, ttyfd, 0) < 0)
+	    if (device_script(ttyfd, DIALER_WELCOME, welcomer) < 0)
 		warn("Welcome script failed");
 	}
 
@@ -387,10 +386,8 @@ pppdmain(argc, argv)
 	notice("Connect: %s <--> %s", ifname, ppp_devnam);
 	gettimeofday(&start_time, NULL);
 
-	rtems_bsdnet_semaphore_obtain();
 	lcp_lowerup(0);
 	lcp_open(0);		/* Start protocol */
-	rtems_bsdnet_semaphore_release();
 
 	open_ccp_flag = 0;
 	status = EXIT_NEGOTIATION_FAILED;
@@ -398,7 +395,7 @@ pppdmain(argc, argv)
 	while (phase != PHASE_DEAD) {
    	    wait_input(timeleft(&timo));
 	    calltimeout();
-	    get_input();
+            get_input();
 
 	    if (kill_link) {
 		lcp_close(0, "User request");
@@ -435,7 +432,7 @@ pppdmain(argc, argv)
 	    new_phase(PHASE_DISCONNECT);
 	    if (real_ttyfd >= 0)
 		set_up_tty(real_ttyfd, 1);
-	    if (device_script(disconnect_script, ttyfd, ttyfd, 0) < 0) {
+	    if (device_script(ttyfd, DIALER_DISCONNECT, disconnect_script) < 0) {
 		warn("disconnect script failed");
 	    } else {
 		info("Serial link disconnected.");
@@ -477,7 +474,7 @@ pppdmain(argc, argv)
     }
 
     die(status);
-    return 0;
+    return status;
 }
 
 /*
@@ -578,7 +575,7 @@ protocol_name(proto)
  * get_input - called when incoming data is available.
  */
 static void
-get_input()
+get_input(void)
 {
     int len, i;
     u_char *p;
@@ -608,7 +605,6 @@ get_input()
 	return;
     }
 
-    rtems_bsdnet_semaphore_obtain();
     p += 2;				/* Skip address and control */
     GETSHORT(protocol, p);
     len -= PPP_HDRLEN;
@@ -618,7 +614,6 @@ get_input()
      */
     if (protocol != PPP_LCP && lcp_fsm[0].state != OPENED) {
 	MAINDEBUG(("get_input: Received non-LCP packet when LCP not open."));
-        rtems_bsdnet_semaphore_release();
 	return;
     }
 
@@ -631,7 +626,6 @@ get_input()
 	     || protocol == PPP_PAP || protocol == PPP_CHAP)) {
 	MAINDEBUG(("get_input: discarding proto 0x%x in phase %d",
 		   protocol, phase));
-        rtems_bsdnet_semaphore_release();
 	return;
     }
 
@@ -641,13 +635,11 @@ get_input()
     for (i = 0; (protp = protocols[i]) != NULL; ++i) {
 	if (protp->protocol == protocol && protp->enabled_flag) {
 	    (*protp->input)(0, p, len);
-            rtems_bsdnet_semaphore_release();
 	    return;
 	}
         if (protocol == (protp->protocol & ~0x8000) && protp->enabled_flag
 	    && protp->datainput != NULL) {
 	    (*protp->datainput)(0, p, len);
-            rtems_bsdnet_semaphore_release();
 	    return;
 	}
     }
@@ -660,7 +652,8 @@ get_input()
 	    warn("Unsupported protocol 0x%x received", protocol);
     }
     lcp_sprotrej(0, p - PPP_HDRLEN, len + PPP_HDRLEN);
-    rtems_bsdnet_semaphore_release();
+
+    return;
 }
 
 /*
@@ -872,16 +865,27 @@ timeleft(tvp)
  * device_script - run a program to talk to the serial device
  * (e.g. to run the connector or disconnector script).
  */
-static int
-device_script(program, in, out, dont_wait)
-    char *program;
-    int in, out;
-    int dont_wait;
+static int device_script(int fd, int mode, char *program)
 {
-    char   pScript[256];
+    int    iReturn = -1;
+    char   pScript[128];
 
+    /* copyt script into temporary location */
     strcpy(pScript, program);
-    return chatmain(pScript);
+
+    /* check to see if dialer was initialized */
+    if ( !pppd_dialer ) {
+      /* set default dialer to chatmain */
+      pppd_dialer = chatmain;
+    }
+
+    /* check to see if dialer is set */
+    if ( pppd_dialer ) {
+      /* call the dialer */
+      iReturn = (*pppd_dialer)(fd, mode, program);
+    }
+
+    return ( -iReturn );
 }
 
 /*

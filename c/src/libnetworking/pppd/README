@@ -20,5 +20,10 @@ who added an example test.
 Updated the chat program to return the correct errors and support
 the ABORT commands.  Removed some dead code and did a lot of
 testing on a new Coldfire BSP.  Version seems to be very stable.
+
+Update code to use RTEMS pppd network drivers.  Now the pppd
+software is not dependent on using task driven mode.  This
+change improved stablity and performance.  This was updated
+by Mike Siers <mikes@poliac.com>.
 =================================================================
 

@@ -76,7 +76,7 @@ typedef struct upap_state {
 /*
  * Timeouts.
  */
-#define UPAP_DEFTIMEOUT	3	/* Timeout (seconds) for retransmitting req */
+#define UPAP_DEFTIMEOUT	5	/* Timeout (seconds) for retransmitting req */
 #define UPAP_DEFREQTIME	30	/* Time to wait for auth-req from peer */
 
 extern upap_state upap[];

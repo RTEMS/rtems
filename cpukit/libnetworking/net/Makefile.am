@@ -10,7 +10,7 @@ LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
 C_FILES = if.c if_ethersubr.c if_loop.c radix.c route.c rtsock.c raw_cb.c \
-    raw_usrreq.c
+    raw_usrreq.c if_ppp.c ppp_tty.c pppcompress.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)

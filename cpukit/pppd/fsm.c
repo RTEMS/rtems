@@ -59,7 +59,7 @@ fsm_init(f)
 {
     f->state = INITIAL;
     f->flags = 0;
-    f->id = 0;				/* XXX Start with random id? */
+    f->id = 100;		/* XXX Start with random id? */
     f->timeouttime = DEFTIMEOUT;
     f->maxconfreqtransmits = DEFMAXCONFREQS;
     f->maxtermtransmits = DEFMAXTERMREQS;
@@ -413,8 +413,10 @@ fsm_rconfreq(f, id, inp, len)
 	    f->state = OPENED;
 	    if (f->callbacks->up)
 		(*f->callbacks->up)(f);	/* Inform upper layers */
-	} else
+	} else {
 	    f->state = ACKSENT;
+            ppp_delay();
+        }
 	f->nakloops = 0;
 
     } else {

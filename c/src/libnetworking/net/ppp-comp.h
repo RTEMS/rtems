@@ -35,10 +35,10 @@
  * various compression methods.
  */
 #ifndef DO_BSD_COMPRESS
-#define DO_BSD_COMPRESS	1	/* by default, include BSD-Compress */
+#define DO_BSD_COMPRESS	0	/* by default, include BSD-Compress */
 #endif
 #ifndef DO_DEFLATE
-#define DO_DEFLATE	1	/* by default, include Deflate */
+#define DO_DEFLATE	0	/* by default, include Deflate */
 #endif
 #define DO_PREDICTOR_1	0
 #define DO_PREDICTOR_2	0

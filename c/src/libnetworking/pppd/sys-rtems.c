@@ -95,12 +95,6 @@ static int dodefaultroute __P((u_int32_t, int));
 static int get_ether_addr __P((u_int32_t, struct sockaddr_dl *));
 
 
-void
-sys_serialcallback(struct termios *tty, void *arg)
-{
-  rtems_event_send(rtems_pppd_taskid, RTEMS_EVENT_31);
-}
-
 /*
  * sys_init - System-dependent initialization.
  */
@@ -187,6 +181,7 @@ int
 establish_ppp(fd)
     int fd;
 {
+    int taskid  = (int)rtems_pppd_taskid;
     int pppdisc = PPPDISC;
     int x;
 
@@ -205,6 +200,9 @@ establish_ppp(fd)
 	fatal("ioctl(TIOCGETD): %m");
     if (ioctl(fd, TIOCSETD, &pppdisc) < 0)
 	fatal("ioctl(TIOCSETD): %m");
+
+    /* set pppd taskid into the driver */
+    ioctl(fd, PPPIOCSTASK, &taskid);
 
     if (!demand) {
 	/*
@@ -286,6 +284,11 @@ void
 disestablish_ppp(fd)
     int fd;
 {
+    int taskid = (int)0;
+
+    /* clear pppd taskid from the driver */
+    ioctl(fd, PPPIOCSTASK, &taskid);
+
     /* Reset non-blocking mode on fd. */
     if (initfdflags != -1 && fcntl(fd, F_SETFL, initfdflags) < 0)
 	warn("Couldn't restore device fd flags: %m");
@@ -344,7 +347,6 @@ set_up_tty(fd, local)
     int fd, local;
 {
     struct termios     tios;
-    struct ttywakeup   wakeup;
 
     if (tcgetattr(fd, &tios) < 0)
 	fatal("tcgetattr: %m");
@@ -402,11 +404,6 @@ set_up_tty(fd, local)
     if (tcsetattr(fd, TCSADRAIN, &tios) < 0) {
 	fatal("tcsetattr: %m");
     }
-
-    /* set up callback function */
-    wakeup.sw_pfn = sys_serialcallback;
-    wakeup.sw_arg = (void *)fd;
-    ioctl(fd, RTEMS_IO_RCVWAKEUP, &wakeup);
 
     restore_term = 1;
 }
@@ -489,6 +486,7 @@ output(unit, p, len)
 {
     if (debug);
 	dbglog("sent %P", p, len);
+/*    printf("sent packet [%d]\n", len); */
 
     if (write(ttyfd, p, len) < 0) {
 	if (errno != EIO)
@@ -496,6 +494,15 @@ output(unit, p, len)
     }
 }
 
+void
+ppp_delay(void)
+{
+  rtems_interval     ticks;
+
+  /* recommended delay to help negotiation */
+  ticks = 300000/rtems_bsdnet_microseconds_per_tick;
+  rtems_task_wake_after(ticks);
+}
 
 /*
  * wait_input - wait until there is data available,
@@ -525,10 +532,11 @@ read_packet(buf)
     int len;
 
     if ((len = read(ttyfd, buf, PPP_MTU + PPP_HDRLEN)) < 0) {
-	if (errno == EWOULDBLOCK || errno == EINTR)
-	    return -1;
+	if (errno == EWOULDBLOCK || errno == EINTR) len = -1;
 	/*fatal("read: %m"); */
     }
+
+/*    printf("read packet [%d]\n", len); */
     return len;
 }
 
@@ -947,6 +955,7 @@ dodefaultroute(g, cmd)
     u_int32_t g;
     int cmd;
 {
+    int    status;
     struct sockaddr_in address;
     struct sockaddr_in netmask;
     struct sockaddr_in gateway;

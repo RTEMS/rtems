@@ -16,12 +16,10 @@ function, please look at the pppd.8 man page file or the the source code.
 The majority of options that are documented in man page should work
 with this function call.
 
-The pppd application requires the BSP termios driver support task
-driven I/O.  Below is a list of known issues that need to be resolved:
-
-  - pppd locks up when it receives large packet pings (> 1500 bytes)
-  - pppd occasionaly locks up with mbuf allocation error
-    (problem is rare and may be BSP related)
+The pppd code had now been updated to use it's own RTEMS network
+drivers.  This removes the requirement for the task driven termios
+support.  This update has fixed the large packet ping problem.
+Currently, I do not know of any problems with the port.
 
 If you find any other problems or fix some problems, please post your
 changes to the RTEMS mailing list.

@@ -1,15 +1,18 @@
 
 #include <rtems.h>
+#include <rtems/rtems_bsdnet.h>
 #include "pppd.h"
 #include "rtemspppd.h"
 
 
 /* define pppd function prototypes */
 extern void pppasyncattach(void);
-extern int pppdmain(int, char **);
+extern int  pppdmain(int, char **);
 
 /* define global variables */
-rtems_id rtems_pppd_taskid;
+rtems_id                   rtems_pppd_taskid;
+rtems_pppd_hookfunction    rtems_pppd_errorfp;
+rtems_pppd_hookfunction    rtems_pppd_exitfp;
 
 
 static rtems_task pppTask(rtems_task_argument arg)
@@ -18,6 +21,7 @@ static rtems_task pppTask(rtems_task_argument arg)
   rtems_option        options;
   rtems_event_set     in;
   rtems_event_set     out;
+  int                 iStatus;
 
   /* call function to setup ppp line discipline */
   pppasyncattach();
@@ -38,27 +42,48 @@ static rtems_task pppTask(rtems_task_argument arg)
       else if ( out & RTEMS_EVENT_30 ) {
         /* connect request */
         /* execute the pppd main code */
-        pppdmain(0, NULL);
+        iStatus = pppdmain(0, NULL);
+        if ( iStatus == EXIT_OK ) {
+          /* check exit callback */
+          if ( rtems_pppd_exitfp ) {
+            (*rtems_pppd_exitfp)();
+          }
+        }
+        else {
+          /* check error callback */
+          if ( rtems_pppd_errorfp ) {
+            (*rtems_pppd_errorfp)();
+          }
+        }
       }
     }
   }
 
   /* terminate myself */
+  rtems_pppd_taskid = 0;
   rtems_task_delete(RTEMS_SELF);
 }
 
 int rtems_pppd_initialize(void)
 {
-  int                 iReturn = (int)-1;
+  int                 iReturn  = (int)-1;
+  rtems_unsigned32    priority = 100;
   rtems_status_code   status;
   rtems_name          taskName;
 
+  /* determine priority value */
+  if ( rtems_bsdnet_config.network_task_priority ) {
+    priority = rtems_bsdnet_config.network_task_priority;
+  }
+
+  /* initialize the exit hook */
+  rtems_pppd_exitfp = (rtems_pppd_hookfunction)0;
+
+  /* create the rtems task */
   taskName = rtems_build_name( 'p', 'p', 'p', 'd' );
-  status   = rtems_task_create(taskName,
-                               RTEMS_PPPD_TASK_PRIORITY,
-                               RTEMS_PPPD_TASK_STACK_SIZE,
-                               RTEMS_PPPD_TASK_INITIAL_MODES,
-                               RTEMS_DEFAULT_ATTRIBUTES,
+  status   = rtems_task_create(taskName, priority, 8192,
+                               (RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0)),
+                               RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
                                &rtems_pppd_taskid);
   if ( status == RTEMS_SUCCESSFUL ) {
     status = rtems_task_start(rtems_pppd_taskid, pppTask, 0);
@@ -114,12 +139,24 @@ int rtems_pppd_set_hook(int id, rtems_pppd_hookfunction hookfp)
   case RTEMS_PPPD_IPDOWN_HOOK:
     ip_down_hook = hookfp;
     break;
+  case RTEMS_PPPD_ERROR_HOOK:
+    rtems_pppd_errorfp = hookfp;
+    break;
+  case RTEMS_PPPD_EXIT_HOOK:
+    rtems_pppd_exitfp = hookfp;
+    break;
   default:
     iReturn = (int)-1;
     break;
   }
 
   return ( iReturn );
+}
+
+int rtems_pppd_set_dialer(rtems_pppd_dialerfunction dialerfp)
+{
+  pppd_dialer = dialerfp;
+  return ( (int)0 );
 }
 
 int rtems_pppd_set_option(const char *pOption, const char *pValue)

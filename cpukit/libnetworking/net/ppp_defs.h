@@ -77,6 +77,7 @@
 #define PPP_IPCP	0x8021	/* IP Control Protocol */
 #define PPP_ATCP	0x8029	/* AppleTalk Control Protocol */
 #define PPP_IPXCP	0x802b	/* IPX Control Protocol */
+#define PPP_IPV6CP	0x8057	/* IPv6 Control Protocol */
 #define PPP_CCP		0x80fd	/* Compression Control Protocol */
 #define PPP_LCP		0xc021	/* Link Control Protocol */
 #define PPP_PAP		0xc023	/* Password Authentication Protocol */
@@ -96,12 +97,12 @@
  */
 
 #if !defined(__BIT_TYPES_DEFINED__) && !defined(_BITYPES) \
- && !defined(__FreeBSD__) && (NS_TARGET < 40) && !defined(__rtems__)
+ && !defined(__FreeBSD__) && (NS_TARGET < 40)
 #ifdef	UINT32_T
 typedef UINT32_T	u_int32_t;
 #else
-typedef unsigned int	u_int32_t;
-typedef unsigned short  u_int16_t;
+/*typedef unsigned int	u_int32_t;*/
+/*typedef unsigned short  u_int16_t;*/
 #endif
 #endif
 

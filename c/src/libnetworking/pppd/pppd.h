@@ -19,10 +19,6 @@
  * $Id$
  */
 
-/*
- * TODO:
- */
-
 #ifndef __PPPD_H__
 #define __PPPD_H__
 
@@ -32,6 +28,7 @@
 #include <sys/types.h>		/* for u_int32_t, if defined */
 #include <sys/time.h>		/* for struct timeval */
 #include <net/ppp_defs.h>
+#include "rtemsdialer.h"
 
 #if defined(__STDC__)
 #include <stdarg.h>
@@ -167,6 +164,7 @@ extern int	devnam_fixed;	/* can no longer change devnam */
 extern int	unsuccess;	/* # unsuccessful connection attempts */
 extern int	do_callback;	/* set if we want to do callback next */
 extern int	doing_callback;	/* set if this is a callback */
+extern dialerfp pppd_dialer;    /* script dialer function callback */
 
 /* Values for do_callback and doing_callback */
 #define CALLBACK_DIALIN		1	/* we are expecting the call back */
@@ -378,8 +376,9 @@ void set_up_tty __P((int, int)); /* Set up port's speed, parameters, etc. */
 void restore_tty __P((int));	/* Restore port's original parameters */
 void setdtr __P((int, int));	/* Raise or lower port's DTR line */
 void output __P((int, u_char *, int)); /* Output a PPP packet */
-void wait_input __P((struct timeval *));
-				/* Wait for input, with timeout */
+void wait_input __P((struct timeval *)); /* Wait for input, with timeout */
+
+void ppp_delay __P((void));       /* delay task for a little while */
 int  read_packet __P((u_char *)); /* Read PPP packet */
 int  get_loop_output __P((void)); /* Read pkts from loopback */
 void ppp_send_config __P((int, int, u_int32_t, int, int));
