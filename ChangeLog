@@ -1,4 +1,9 @@
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/canonicalize-tools.m4: Remove RTEMS_PATH_TOOL, use
+	AC_CHECK_TOOL instead of RTEMS_PATH_TOOL in RTEMS_CANONICALIZE_TOOLS.
+
+2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
   
 	* aclocal/*: Replace with contents of macros/*.m4
 	* macros/: Remove.
