@@ -94,27 +94,6 @@ char *getcwd( char *_buf, size_t _size)
   errno = ENOSYS;
   return 0;
 }
-
-int fork() {
-  puts( "fork -- not supported!!!" );
-  assert( 0 );
-  errno = ENOSYS;
-  return -1;
-}
-#if 0
-int execv(const char *_path, char * const _argv[] ) {
-  puts( "execv -- not supported!!!" ); 
-  assert( 0 );
-  errno = ENOSYS;
-  return -1;
-}
-#endif
-int wait() {
-  puts( "wait -- not supported!!!" );
-  assert( 0 );
-  errno = ENOSYS;
-  return -1;
-}
 #endif
 
 #endif
