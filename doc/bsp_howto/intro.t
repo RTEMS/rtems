@@ -30,3 +30,8 @@ are provided for the following topics:
 
 @end itemize
 
+The original version of this manual was written by Geoffroy Montel
+<g_montel@yahoo.com>.  When he started development of the gen68340
+BSP, this manual did not exist.  He wrote this manual as the result
+of his experiences.  At that time, this document was viewed internally
+as the most important "missing manual" in the RTEMS documentation set.
