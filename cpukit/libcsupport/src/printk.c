@@ -44,7 +44,7 @@ printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
   if ( (sign == 1) && ((long)num <  0) ) {
     BSP_output_char('-');
     num = -num;
-    maxwidth--;
+    if (maxwidth) maxwidth--;
   }
   
   count = 0;

@@ -1,3 +1,8 @@
+2001-10-10	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/printk.c (printNum): Properly handle a maxwidth of 0 
+	as reported by Nick Hennenfent <NICK.HENNENFENT@ROCHE.COM>.
+
 2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/zilog/Makefile.am: Use 'PREINSTALL_FILES ='.
