@@ -63,7 +63,7 @@ const rtems_multiprocessing_table
  *  This is the version string.
  */
 
-#define RTEMS_VERSION "rtems-19990426"
+#define RTEMS_VERSION "rtems-19990528"
 
 const char _RTEMS_version[] =
   "RTEMS RELEASE " RTEMS_VERSION
