@@ -9,12 +9,12 @@
 #
 # Please send any comments, improvements, or bug reports to:
 #	W. Eric Norum
-#	Saskatchewan Accelerator Laboratory
-#	107 North Road
+#	Deparment of Electrical Engineering
+#	53 Campus Driver
 #	University of Saskatchewan
 #	Saskatoon, Saskatchewan, CANADA
-#	S7N 5C6
-# eric@skatter.usask.ca
+#	S7N 5A9
+# eric.norum@usask.ca
 #
 
 #
@@ -33,13 +33,6 @@
 #	  as described in Chapter 9 of the MC68360 User's Manual.  This
 #	  version works with the Atlas ACE360 card.
 #
-# Decisions to be made a link-edit time are:
-#     - The size of the memory allocator heap.  The default value is
-#       64 kbytes.  If the network package is used the heap
-#       should be at least 256 kbytes.  If your network is large, or
-#       busy, the heap should be even larger.
-#       To choose a heap size of 256 kbytes,
-#	CFLAGS_LD += -Wl,--defsym -Wl,HeapSize=0x40000
 
 BSP NAME:	    gen68360 or gen68360_040
 BOARD:              Generic 68360 as described in Motorola MC68360 User's Manual
@@ -86,7 +79,7 @@ NOTES
 Board description
 -----------------
 clock rate:	25 MHz
-bus width:	8-bit PROM, 32-bit DRAM
+bus width:	8-bit PROM/FLASH, 32-bit DRAM
 ROM:		To 1 MByte, 180 nsec (3 wait states), chip select 0
 RAM:		4 or 16 MBytes of 60 nsec parity DRAM (1Mx36) to RAS1*/CAS1*
 
@@ -299,17 +292,3 @@ The board support package has been tested with:
 		Arnewsh Inc.
 		P.O. Box 270352
 		Fort Collins, CO 80527-0352
-
-Interrupt Notes
-===============
-clock.c:
-        Occasional network lockups have been noted when the PIT has a higher
-interrupt request level than the CPM.  The SCC1 bit in the CISR is set
-even though the SCC1 interrupt handler is not active.  This blocks
-interrupts from SCC1 (and all other CPM sources) and locks up the
-system.  It has not been determined whether the error is within the
-68360 or in the RTEMS interrupt support assembler code.  The solution,
-for now, is to set both PIT and CPM interrupt request levels to the same
-value (4).
-
-
