@@ -1,3 +1,8 @@
+2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/env-rtemsbsp.m4: Add PROJECT_LIB.
+	* automake/compile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/lead-dot.m4: Remove (Provided by automake-1.8).
