@@ -42,7 +42,7 @@
 
 typedef struct {
   jmp_buf   regs;
-  int  isr_level;
+  int       isr_level;
 } Context_Control_overlay;
 
 void  _CPU_Signal_initialize(void);
@@ -200,7 +200,9 @@ void _CPU_Context_From_CPU_Init()
    *  get default values to use in _CPU_Context_Initialize()
    */
 
-
+  if ( sizeof(Context_Control_overlay) < sizeof(Context_Control) )
+    _CPU_Fatal_halt( 0xdeadfood );
+  
   (void) memset(
     &_CPU_Context_Default_with_ISRs_enabled,
     0,
