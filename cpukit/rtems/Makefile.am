@@ -128,11 +128,12 @@ OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 # Add local stuff here using +=
 #
 
+AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: $(PREINSTALL_FILES) $(ARCH) $(LIB)
+all-local: $(PREINSTALL_FILES) $(LIB)
 
-${ARCH}/%.o: src/%.c
+${ARCH}/%.o: src/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
 $(LIB): ${OBJS}

@@ -1,5 +1,10 @@
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Add $(dirstamp) to compilation rules.
+	Add AM_CPPFLAGS += -I$(top_builddir).
+
+2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Add $(dirstamp) to preinstallation rules.
 	Remove MACROS.
 
