@@ -1,5 +1,9 @@
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Fix --enable-rtemsbsp= handling.
+
+2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* .cvsignore: Reformat.
 	Add autom4te*cache.
 	Remove autom4te.cache.

@@ -59,7 +59,7 @@ done
 _RTEMS_ADJUST_SRCDIR([rtems_bsp_configure],[src])
 rtems_bsp_configure="$rtems_bsp_configure/configure"
   RTEMS_CONFIGURE_ARGS_QUOTE([rtems_bsp_configure_args],
-    [--enable-rtemsbsp=* | --enable-rtemsbsp=* ) ;;])
+    [-enable-rtemsbsp=* | --enable-rtemsbsp=* ) ;;])
 
 rtems_bsp_configure="$rtems_bsp_configure $rtems_bsp_configure_args"
 AC_SUBST(rtems_bsp_configure)
