@@ -1,3 +1,8 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h: i960
+	obsoleted and all references removed.
+
 2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* asm.h: Include rtems/score/powerpc.h instead of
