@@ -476,7 +476,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
       irq -= BSP_CPM_IRQ_LOWEST_OFFSET;
       ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cisr = (1 << irq);
     }
-    ppc_cached_irq_mask |= (oldMask & ~(SIU_IvectMask[irq]));
+    ppc_cached_irq_mask = oldMask;
     ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_simask = ppc_cached_irq_mask;
 #ifdef DISPATCH_HANDLER_STAT
     ++ loopCounter;

@@ -1,3 +1,10 @@
+2001-01-16	Eric Valette <valette@crt.canon.fr>
+
+	* irq/irq.c: Correct minor bug in mbx8xx interrupt handling.
+	Quoting Eric, "In theory it should be applied in each mpc8xx
+	related BSP but as I cannot test it plase maintainer/users 
+	submit patch accordingly."
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/console.c: Include rtems/bspIo.h instead of bspIo.h.
