@@ -142,10 +142,10 @@ $(PROJECT_ROOT)/$(RTEMS_BSP)/Makefile.inc: $(PROJECT_ROOT)/make/Templates/Makefi
 #       the tests directory.  This significantly minimizes the install size.
 
 install_files: $(PROJECT_ROOT)/$(RTEMS_BSP)/Makefile.inc
-	@top_srcdir@/mkinstalldirs $(prefix)/rtems
-	-$(RM) -rf $(prefix)/rtems/$(RTEMS_BSP)
+	@top_srcdir@/mkinstalldirs $(prefix)
+	-$(RM) -rf $(prefix)/$(RTEMS_BSP)
 	cd ../; tar cf - $(RTEMS_BSP)/[bilsuM]* | \
-		(cd $(prefix)/rtems; tar xpBf - )
+		(cd $(prefix); tar xpBf - )
 	cd ../make; $(MAKE) RTEMS_BSP=$(RTEMS_BSP) install
 
 tests:

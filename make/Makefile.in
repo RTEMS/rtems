@@ -59,41 +59,37 @@ get: retrieve
 
 all: 
 
-$(prefix)/rtems:
+$(prefix):
 	@top_srcdir@/mkinstalldirs $@
 
-install: $(prefix)/rtems \
-	$(prefix)/rtems/make \
-	$(prefix)/rtems/make/compilers \
-	$(prefix)/rtems/make/custom \
-	$(prefix)/rtems/make/Templates \
+install: $(prefix) \
+	$(prefix)/make \
+	$(prefix)/make/compilers \
+	$(prefix)/make/custom \
+	$(prefix)/make/Templates \
 	install_files
 
-$(prefix)/rtems/make:
+$(prefix)/make:
 	@top_srcdir@/mkinstalldirs $@
 
 install_files::	$(GENERIC_FILES) $(MAKEFILES)
-	$(INSTALL) $(INSTDATAFLAGS) $^ \
-	$(prefix)/rtems/make
+	$(INSTALL_DATA) $^ $(prefix)/make
 
-$(prefix)/rtems/make/compilers:
+$(prefix)/make/compilers:
 	@top_srcdir@/mkinstalldirs $@
 
 install_files:: $(COMPILER_FILES)
-	$(INSTALL) $(INSTDATAFLAGS) $^ \
-	$(prefix)/rtems/make/compilers
+	$(INSTALL_DATA) $^ $(prefix)/make/compilers
 
-$(prefix)/rtems/make/custom:
+$(prefix)/make/custom:
 	@top_srcdir@/mkinstalldirs $@
 
 install_files:: $(CUSTOM_FILES) 
-	$(INSTALL) $(INSTDATAFLAGS) $^ \
-	$(prefix)/rtems/make/custom
+	$(INSTALL_DATA) $^ $(prefix)/make/custom
 
-$(prefix)/rtems/make/Templates:
+$(prefix)/make/Templates:
 	@top_srcdir@/mkinstalldirs $@
 
 
 install_files:: $(TEMPLATE_FILES)
-	$(INSTALL) $(INSTDATAFLAGS) $^ \
-	$(prefix)/rtems/make/Templates
+	$(INSTALL_DATA) $^ $(prefix)/make/Templates

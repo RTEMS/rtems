@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# $Id$
+
+# helps bootstrapping, when checked out from CVS
+# requires GNU autoconf and GNU automake
+
+# this is not meant to be exported outside the source tree
+
+# NOTE: Inspired by libtool's autogen script
+
+# to be run from the toplevel directory of RTEMS'
+# source tree
+
+progname=`basename $0`
+am_verbose="";
+quiet="false"
+
+usage()
+{
+  echo "${progname} [-v|-q]"
+  exit 1;
+}
+
+while test $# -gt 0; do
+case $1 in
+-q|--qu|--qui|--quie|--quiet)
+  quiet="true";
+  shift;;
+-v|--ve|--ver|--verb|--verbo|--verbos|--verbose)
+  verbose="-v";
+  shift;;
+-*) echo "unknown option $1" ;
+  usage ;;
+*) echo "invalid parameter $1" ;
+  usage ;;
+esac
+done
+
+if test ! -d aclocal; then
+  echo "${progname}"
+  echo "	Please change directory to RTEMS's toplevel directory"
+  exit 1;
+fi
+
+pwd=`pwd`;
+confs=`find $pwd -name configure.in`
+
+aclocal_dir=$pwd/aclocal
+for i in $confs; do
+dir=`dirname $i`;
+( test "$quiet" = "true" || echo "$dir";
+  cd $dir;
+  aclocal -I $aclocal_dir;
+  autoconf;
+  test -f Makefile.am && automake $verbose ;
+)
+done
+
