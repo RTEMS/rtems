@@ -1,4 +1,9 @@
 
+2001-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/dmv177.cfg: Remove CONSOLE_USE_INTERRUPTS,
+	CONSOLE_USE_POLLED, HAS_RTC.
+
 2001-05-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/gensh1.cfg: Remove HZ, BSP_CPPFLAGS.
