@@ -1,7 +1,7 @@
 ## $Id$
 
 AC_INIT(binutils)
-AM_INIT_AUTOMAKE(rtems-scripts,20000531-0,no)
+AM_INIT_AUTOMAKE(rtems-scripts,20000606-0,no)
 
 AC_EXEEXT
 
