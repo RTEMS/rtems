@@ -3,8 +3,6 @@
 %rename startfile old_startfile
 %rename link old_link
 
-*cpp:
-%(old_cpp) %{qrtems: -DUSE_ENHANCED_INTR_API}
 
 *lib:
 %{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: --start-group \
