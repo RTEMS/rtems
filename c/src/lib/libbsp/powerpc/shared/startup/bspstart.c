@@ -29,6 +29,7 @@
 #include <bsp/irq.h>
 #include <bsp.h>
 #include <libcpu/bat.h>
+#include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
 #include <bsp/motorola.h>
 
