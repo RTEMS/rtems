@@ -2,8 +2,8 @@
  * raw_execption.h
  *
  *	    This file contains implementation of C function to
- *          Instanciate 60x ppc primary exception entries.
- *	    More detailled information can be found on motorola
+ *          Instantiate 60x ppc primary exception entries.
+ *	    More detailed information can be found on motorola
  *	    site and more precisely in the following book :
  *
  *		MPC750 
@@ -159,10 +159,6 @@ extern int mpc60x_delete_exception (const rtems_raw_except_connect_data*);
  */
 extern int mpc750_vector_is_valid(rtems_vector vector);
 
-inline static  void* mpc60x_get_vector_addr(rtems_vector vector)
-{
-  return ((void*)  (((unsigned) vector) << 8));
-}
 /*
  * Exception global init.
  */

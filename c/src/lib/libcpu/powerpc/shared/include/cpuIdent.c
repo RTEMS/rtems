@@ -40,8 +40,10 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_620:		return "MPC620";
     case PPC_860:		return "MPC860";
     case PPC_8260:		return "MPC8260";
+    case PPC_8245:              return "MPC8245";
     default:
-      printk("Unknown CPU value of 0x%x. Please add it to <libcpu/powerpc/shared/include/cpuIdent.c>\n", cpu );
+      printk("Unknown CPU value of 0x%x. Please add it to "
+             "<libcpu/powerpc/shared/include/cpuIdent.c>\n", cpu );
   }
   return "UNKNOWN";
 }
@@ -62,9 +64,11 @@ ppc_cpu_id_t get_ppc_cpu_type()
     case PPC_620:
     case PPC_860:
     case PPC_8260:
+    case PPC_8245:
       return current_ppc_cpu;
     default:
-      printk("Unknown PVR value of 0x%x. Please add it to <libcpu/powerpc/shared/include/cpuIdent.c>\n", pvr );
+      printk("Unknown PVR value of 0x%x. Please add it to "
+             "<libcpu/powerpc/shared/include/cpuIdent.c>\n", pvr );
     return PPC_UNKNOWN;
   }
 }

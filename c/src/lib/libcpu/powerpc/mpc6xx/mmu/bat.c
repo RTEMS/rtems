@@ -2,8 +2,8 @@
  * bat.c
  *
  *	    This file contains the implementation of C function to
- *          Instanciate 60x/7xx ppc Block Address Translation (BAT) registers.
- *	    More detailled information can be found on motorola
+ *          Instantiate 60x/7xx ppc Block Address Translation (BAT) registers.
+ *	    More detailed information can be found on motorola
  *	    site and more precisely in the following book :
  *
  *		MPC750 

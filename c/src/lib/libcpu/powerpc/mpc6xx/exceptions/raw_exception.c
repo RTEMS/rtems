@@ -1,7 +1,7 @@
 /*
  * raw_exception.c  - This file contains implementation of C function to
- *          	      Instanciate 60x ppc primary exception entries.
- *	 	      More detailled information can be found on motorola
+ *          	      Instantiate 60x ppc primary exception entries.
+ *	 	      More detailed information can be found on motorola
  *	    	      site and more precisely in the following book :
  *
  *		      MPC750 
@@ -33,6 +33,17 @@ static rtems_raw_except_connect_data  		default_raw_except_entry;
 static rtems_raw_except_global_settings* 	local_settings;
 
 void * codemove(void *, const void *, unsigned int, unsigned long);
+
+void* mpc60x_get_vector_addr(rtems_vector vector)
+{
+  extern rtems_cpu_table Cpu_table;
+
+  if ( Cpu_table.exceptions_in_RAM )
+    return ((void*)  (((unsigned) vector) << 8));
+
+  return ((void*)  (((unsigned) vector) << 8) + 0xfff00000);
+}
+
 int mpc750_vector_is_valid(rtems_vector vector)
 
 {
@@ -133,13 +144,17 @@ int mpc60x_vector_is_valid(rtems_vector vector)
         case PPC_603:
         case PPC_603e:
         case PPC_603ev:
+        case PPC_8260:
+        /* case PPC_8240: -- same value as 8260 */
+        case PPC_8245:
             if (!mpc603_vector_is_valid(vector)) {
                 return 0;
             }
             break;
-        default:
-            printk("Please complete libcpu/powerpc/mpc6xx/exceptions/raw_exception.c\n");
-            printk("current_ppc_cpu = %x\n", current_ppc_cpu);
+         default:
+            printk("Please complete "
+                   "libcpu/powerpc/mpc6xx/exceptions/raw_exception.c\n"
+                   "current_ppc_cpu = %x\n", current_ppc_cpu);
             return 0;
      }
      return 1;
@@ -150,6 +165,8 @@ int mpc60x_set_exception  (const rtems_raw_except_connect_data* except)
     unsigned int level;
 
     if (!mpc60x_vector_is_valid(except->exceptIndex)) {
+      printk("mpc60x_set_exception: vector %d is not valid\n",
+              except->exceptIndex);
       return 0;
     }
     /*
@@ -159,7 +176,11 @@ int mpc60x_set_exception  (const rtems_raw_except_connect_data* except)
      * RATIONALE : to always have the same transition by forcing the user
      * to get the previous handler before accepting to disconnect.
      */
-    if (memcmp(mpc60x_get_vector_addr(except->exceptIndex), (void*)default_raw_except_entry.hdl.raw_hdl,default_raw_except_entry.hdl.raw_hdl_size)) {
+
+    if (memcmp(mpc60x_get_vector_addr(except->exceptIndex),
+               (void*)default_raw_except_entry.hdl.raw_hdl,
+               default_raw_except_entry.hdl.raw_hdl_size)) {
+      printk("mpc60x_set_exception: raw vector not installed\n");
       return 0;
     }
 

@@ -35,6 +35,7 @@
 #define PPC_860   0x50
 #define PPC_821   PPC_860
 #define PPC_8260  0x81
+#define PPC_8240  PPC_8260 
 
 /* ALTIVEC instructions (not recognized by off-the shelf gcc yet) */
 #define DSSALL	.long	0x7e00066c		/* DSSALL altivec instruction opcode */
