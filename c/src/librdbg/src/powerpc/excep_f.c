@@ -26,11 +26,11 @@ ExcepToSig (Exception_context *ctx)
 	case ASM_FLOAT_VECTOR	: return SIGFPE;
 	
         case ASM_TRACE_VECTOR	:
+	case ASM_PROG_VECTOR	:
         case ASM_SYS_VECTOR     : return SIGTRAP;
 	
 	case ASM_ISI_VECTOR	: return SIGSEGV;
 	
-	case ASM_PROG_VECTOR	:
 	case ASM_RESET_VECTOR	:
 	case ASM_MACH_VECTOR	:
 	case ASM_EXT_VECTOR	:
