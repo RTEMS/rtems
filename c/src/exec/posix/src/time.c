@@ -166,7 +166,8 @@ int clock_gettime(
   time_t         seconds;
   long           ticks;
 
-  assert( tp );
+  if ( !tp )
+    set_errno_and_return_minus_one( EINVAL );
 
   switch ( clock_id ) {
 
@@ -212,7 +213,7 @@ int clock_getres(
 )
 {
   if ( !res )
-      set_errno_and_return_minus_one( EINVAL );
+    set_errno_and_return_minus_one( EINVAL );
  
   switch ( clock_id ) {
  
