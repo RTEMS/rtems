@@ -12,7 +12,7 @@ if mcf5272
 
 # include
 include_mcf5272dir = $(includedir)/mcf5272
-include_mcf5272_HEADERS = include/mcf5272.h 
+include_mcf5272_HEADERS = include/mcf5272.h
 
 ## clock
 EXTRA_PROGRAMS += clock.rel
@@ -74,7 +74,6 @@ PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5272/$(dirstamp)
 $(PROJECT_INCLUDE)/mcf5272/mcf5272.h: include/mcf5272.h $(PROJECT_INCLUDE)/mcf5272/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5272/mcf5272.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5272/mcf5272.h
-
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)

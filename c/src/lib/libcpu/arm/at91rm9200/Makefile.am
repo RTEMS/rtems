@@ -14,9 +14,8 @@ include_at91rm9200dir = $(includedir)/at91rm9200
 include_libcpudir = $(includedir)/libcpu
 include_HEADERS =
 include_HEADERS += include/at91rm9200.h include/at91rm9200_dbgu.h \
-		   include/at91rm9200_emac.h include/at91rm9200_gpio.h \
-		   include/at91rm9200_mem.h include/at91rm9200_pmc.h \
-		   include/bits.h
+    include/at91rm9200_emac.h include/at91rm9200_gpio.h \
+    include/at91rm9200_mem.h include/at91rm9200_pmc.h include/bits.h
 
 ## clock
 EXTRA_PROGRAMS += clock.rel
@@ -36,7 +35,7 @@ noinst_DATA += clock$(LIB_VARIANT).rel
 ## dbgu
 EXTRA_PROGRAMS += dbgu.rel
 CLEANFILES += dbgu.rel
-dbgu_rel_SOURCES = dbgu/dbgu.c 
+dbgu_rel_SOURCES = dbgu/dbgu.c
 dbgu_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 dbgu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -96,8 +95,6 @@ irq_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 irq_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += irq$(LIB_VARIANT).rel
-
-
 endif
 
 ## --
@@ -153,7 +150,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bits.h
 $(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
-
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
