@@ -5,4 +5,4 @@
 
 noinst_HEADERS = timesys.h
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

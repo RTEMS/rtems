@@ -10,5 +10,5 @@ SUBDIRS = $(ITRON_DIRS)
 
 EXTRA_DIST = tmitrontests.am
 
-include $(top_srcdir)/../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
