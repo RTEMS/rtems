@@ -426,6 +426,7 @@ typedef struct {
     __MIPS_FPU_REGISTER_TYPE fp29;
     __MIPS_FPU_REGISTER_TYPE fp30;
     __MIPS_FPU_REGISTER_TYPE fp31;
+    __MIPS_FPU_REGISTER_TYPE fpcs;
 #endif
 } Context_Control_fp;
 

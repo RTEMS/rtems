@@ -32,6 +32,9 @@
  *          and deferred FP contexts.
  *    2002: Joel Sherrill <joel@OARcorp.com> enhanced the exception processing
  *          by increasing the amount of context saved/restored.
+ *    2004: 24March, Art Ferrer, NASA/GSFC, added save of FP status/control
+ *          register to fix intermittent FP error encountered on ST5 mission
+ *          implementation on Mongoose V processor.
  *  
  *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
@@ -159,6 +162,7 @@
 #define FP29_OFFSET 29 
 #define FP30_OFFSET 30 
 #define FP31_OFFSET 31 
+#define FPCS_OFFSET 32
 
 	
 ASM_EXTERN(__exceptionStackFrame, SZ_INT)
@@ -252,6 +256,12 @@ _CPU_Context_save_fp_from_exception:
         swc1 $f29,FP29_OFFSET*F_SZ(a1)
         swc1 $f30,FP30_OFFSET*F_SZ(a1)
         swc1 $f31,FP31_OFFSET*F_SZ(a1)
+        cfc1 a0,$31                    /* Read FP status/conrol reg */
+        cfc1 a0,$31                    /* Two reads clear pipeline */
+        NOP
+        NOP
+        sw a0, FPCS_OFFSET*F_SZ(a1)    /* Store value to FPCS location */
+        NOP
         j ra
         NOP
         .set at
@@ -346,6 +356,14 @@ _CPU_Context_restore_fp_from_exception:
         lwc1 $f29,FP29_OFFSET*4(a1)
         lwc1 $f30,FP30_OFFSET*4(a1)
         lwc1 $f31,FP31_OFFSET*4(a1)
+        cfc1 a0,$31                  /* Read from FP status/control reg */
+        cfc1 a0,$31                  /* Two reads clear pipeline */
+        NOP                          /* NOPs ensure execution */
+        NOP
+        lw a0,FPCS_OFFSET*4(a1)      /* Load saved FPCS value */
+        NOP
+        ctc1 a0,$31                  /* Restore FPCS register */
+        NOP
         j ra
         NOP
         .set at
