@@ -1,3 +1,12 @@
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tx39/vectorisrs/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* r46xx/vectorisrs/Makefile.am: Ditto.
+	* mongoosev/vectorisrs/Makefile.am: Ditto.
+	* mongoosev/duart/Makefile.am: Ditto.
+	* shared/interrupts/Makefile.am: Ditto.
+	* shared/cache/Makefile.am: Ditto. Eliminate *_O_FILES.
+
 2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* timer/Makefile.am: Don't include @RTEMS_BSP@.cfg.
