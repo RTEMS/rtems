@@ -1,3 +1,8 @@
+2004-01-28	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
+	* asm.h, rtems/score/cpu.h, rtems/score/types.h, rtems/score/unix.h:
+	New header guards.
+
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Remove signed8, signed16, signed32,
