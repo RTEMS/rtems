@@ -184,7 +184,7 @@ do {					\
  *                        Memory Control Registers                       *
  *************************************************************************
  */
-#define USIU_MEMC_BR_BA(x)      (((rtems_unsigned32)x)&0xffff8000)
+#define USIU_MEMC_BR_BA(x)      (((uint32_t)x)&0xffff8000)
 					 /* Base address */
 #define USIU_MEMC_BR_AT(x)      ((x)<<12) /* Address type */
 #define USIU_MEMC_BR_PS8        (1<<10)  /* 8 bit port */
@@ -389,8 +389,8 @@ do {					\
  * Memory controller registers
  */
 typedef struct m5xxMEMCRegisters_ {
-  rtems_unsigned32        _br;
-  rtems_unsigned32        _or;    /* Used to be called 'or'; reserved ANSI C++ keyword */
+  uint32_t        _br;
+  uint32_t        _or;    /* Used to be called 'or'; reserved ANSI C++ keyword */
 } m5xxMEMCRegisters_t;
 
 /*
@@ -400,93 +400,93 @@ typedef struct usiu_ {
   /*
    * SIU Block
    */
-  rtems_unsigned32      siumcr;
-  rtems_unsigned32      sypcr;
-  rtems_unsigned32      _pad70;
-  rtems_unsigned16      _pad0;
-  rtems_unsigned16      swsr;
-  rtems_unsigned32      sipend;
-  rtems_unsigned32      simask;
-  rtems_unsigned32      siel;
-  rtems_unsigned32      sivec;
-  rtems_unsigned32      tesr;
-  rtems_unsigned32      sgpiodt1;
-  rtems_unsigned32      sgpiodt2;
-  rtems_unsigned32      sgpiocr;
-  rtems_unsigned32      emcr;
-  rtems_unsigned8	_pad71[0x03C-0x034];
-  rtems_unsigned32      pdmcr;
-  rtems_unsigned8       _pad2[0x100-0x40];
+  uint32_t      siumcr;
+  uint32_t      sypcr;
+  uint32_t      _pad70;
+  uint16_t      _pad0;
+  uint16_t      swsr;
+  uint32_t      sipend;
+  uint32_t      simask;
+  uint32_t      siel;
+  uint32_t      sivec;
+  uint32_t      tesr;
+  uint32_t      sgpiodt1;
+  uint32_t      sgpiodt2;
+  uint32_t      sgpiocr;
+  uint32_t      emcr;
+  uint8_t	_pad71[0x03C-0x034];
+  uint32_t      pdmcr;
+  uint8_t       _pad2[0x100-0x40];
   
   /*
    * MEMC Block
    */
   m5xxMEMCRegisters_t   memc[4];
-  rtems_unsigned8       _pad7[0x140-0x120];
-  rtems_unsigned32      dmbr;
-  rtems_unsigned32      dmor;
-  rtems_unsigned8       _pad8[0x178-0x148];
-  rtems_unsigned16      mstat;
-  rtems_unsigned8       _pad9[0x200-0x17A];
+  uint8_t       _pad7[0x140-0x120];
+  uint32_t      dmbr;
+  uint32_t      dmor;
+  uint8_t       _pad8[0x178-0x148];
+  uint16_t      mstat;
+  uint8_t       _pad9[0x200-0x17A];
   
   /*
    * System integration timers
    */
-  rtems_unsigned16      tbscr;
-  rtems_unsigned16      _pad10;
-  rtems_unsigned32      tbreff0;
-  rtems_unsigned32      tbreff1;
-  rtems_unsigned8       _pad11[0x220-0x20c];
-  rtems_unsigned16      rtcsc;
-  rtems_unsigned16      _pad12;
-  rtems_unsigned32      rtc;
-  rtems_unsigned32      rtsec;
-  rtems_unsigned32      rtcal;
-  rtems_unsigned32      _pad13[4];
-  rtems_unsigned16      piscr;
-  rtems_unsigned16      _pad14;
-  rtems_unsigned16      pitc;
-  rtems_unsigned16      _pad_14_1;
-  rtems_unsigned16      pitr;
-  rtems_unsigned16      _pad_14_2;
-  rtems_unsigned8       _pad15[0x280-0x24c];
+  uint16_t      tbscr;
+  uint16_t      _pad10;
+  uint32_t      tbreff0;
+  uint32_t      tbreff1;
+  uint8_t       _pad11[0x220-0x20c];
+  uint16_t      rtcsc;
+  uint16_t      _pad12;
+  uint32_t      rtc;
+  uint32_t      rtsec;
+  uint32_t      rtcal;
+  uint32_t      _pad13[4];
+  uint16_t      piscr;
+  uint16_t      _pad14;
+  uint16_t      pitc;
+  uint16_t      _pad_14_1;
+  uint16_t      pitr;
+  uint16_t      _pad_14_2;
+  uint8_t       _pad15[0x280-0x24c];
   
   /*
    * Clocks and Reset
    */
-  rtems_unsigned32      sccr;
-  rtems_unsigned32      plprcr;
-  rtems_unsigned16      rsr;
-  rtems_unsigned16	_pad72;
-  rtems_unsigned16	colir;
-  rtems_unsigned16	_pad73;
-  rtems_unsigned16	vsrmcr;
-  rtems_unsigned8       _pad16[0x300-0x292];
+  uint32_t      sccr;
+  uint32_t      plprcr;
+  uint16_t      rsr;
+  uint16_t	_pad72;
+  uint16_t	colir;
+  uint16_t	_pad73;
+  uint16_t	vsrmcr;
+  uint8_t       _pad16[0x300-0x292];
   
   /*
    * System integration timers keys
    */
-  rtems_unsigned32      tbscrk;
-  rtems_unsigned32      tbreff0k;
-  rtems_unsigned32      tbreff1k;
-  rtems_unsigned32      tbk;
-  rtems_unsigned32      _pad17[4];
-  rtems_unsigned32      rtcsk;
-  rtems_unsigned32      rtck;
-  rtems_unsigned32      rtseck;
-  rtems_unsigned32      rtcalk;
-  rtems_unsigned32      _pad18[4];
-  rtems_unsigned32      piscrk;
-  rtems_unsigned32      pitck;
-  rtems_unsigned8       _pad19[0x380-0x348];
+  uint32_t      tbscrk;
+  uint32_t      tbreff0k;
+  uint32_t      tbreff1k;
+  uint32_t      tbk;
+  uint32_t      _pad17[4];
+  uint32_t      rtcsk;
+  uint32_t      rtck;
+  uint32_t      rtseck;
+  uint32_t      rtcalk;
+  uint32_t      _pad18[4];
+  uint32_t      piscrk;
+  uint32_t      pitck;
+  uint8_t       _pad19[0x380-0x348];
   
   /*
    * Clocks and Reset Keys
    */
-  rtems_unsigned32      sccrk;
-  rtems_unsigned32      plprck;
-  rtems_unsigned32      rsrk;
-  rtems_unsigned8       _pad20[0x400-0x38c];
+  uint32_t      sccrk;
+  uint32_t      plprck;
+  uint32_t      rsrk;
+  uint8_t       _pad20[0x400-0x38c];
 } usiu_t;
 
 extern volatile usiu_t usiu;	/* defined in linkcmds */
@@ -501,96 +501,96 @@ extern volatile usiu_t usiu;	/* defined in linkcmds */
  * Dual-Port TPU RAM (DPTRAM)
  */
 typedef struct m5xxDPTRAMRegisters_ {
-  rtems_unsigned8	pad[0x4000];		/* define later */
+  uint8_t	pad[0x4000];		/* define later */
 } m5xxDPTRAMRegisters_t;
 
 /*
  * Time Processor Unit (TPU)
  */
 typedef struct m5xxTPU3Registers_ {
-  rtems_unsigned8	pad[0x400];		/* define later */
+  uint8_t	pad[0x400];		/* define later */
 } m5xxTPU3Registers_t;
 
 /*
  * Queued A/D Converter (QADC)
  */
 typedef struct m5xxQADC64Registers_ {
-  rtems_unsigned8	pad[0x400];		/* define later */
+  uint8_t	pad[0x400];		/* define later */
 } m5xxQADC64Registers_t;
 
 /*
  * Serial Communications Interface (SCI)
  */
 typedef struct m5xxSCIRegisters_ {
-  rtems_unsigned16        sccr0;
-  rtems_unsigned16        sccr1;
-  rtems_unsigned16        scsr;
-  rtems_unsigned16        scdr;
+  uint16_t        sccr0;
+  uint16_t        sccr1;
+  uint16_t        scsr;
+  uint16_t        scdr;
 } m5xxSCIRegisters_t;
 
 /*
  * Serial Peripheral Interface (SPI)
  */
 typedef struct m5xxSPIRegisters_ {
-  rtems_unsigned16        spcr0;
-  rtems_unsigned16        spcr1;
-  rtems_unsigned16        spcr2;
-  rtems_unsigned8         spcr3;
-  rtems_unsigned8         spsr;
+  uint16_t        spcr0;
+  uint16_t        spcr1;
+  uint16_t        spcr2;
+  uint8_t         spcr3;
+  uint8_t         spsr;
 } m5xxSPIRegisters_t;
 
 /*
  * Queued Serial Multi-Channel Module (QSMCM)
  */ 
 typedef struct m5xxQSMCMRegisters_ {
-  rtems_unsigned16      qsmcmmcr;
-  rtems_unsigned16      qtest;
-  rtems_unsigned16      qdsci_il;
-  rtems_unsigned16      qspi_il;
+  uint16_t      qsmcmmcr;
+  uint16_t      qtest;
+  uint16_t      qdsci_il;
+  uint16_t      qspi_il;
 
   m5xxSCIRegisters_t    sci1;
 
-  rtems_unsigned8       _pad10[0x14-0x10];
+  uint8_t       _pad10[0x14-0x10];
 
-  rtems_unsigned16      portqs;
-  rtems_unsigned16      pqspar;
+  uint16_t      portqs;
+  uint16_t      pqspar;
   m5xxSPIRegisters_t    spi;
 
   m5xxSCIRegisters_t    sci2;
 
-  rtems_unsigned16      qsci1cr;
-  rtems_unsigned16      qsci1sr;
-  rtems_unsigned16      sctq[0x10];
-  rtems_unsigned16      scrq[0x10];
+  uint16_t      qsci1cr;
+  uint16_t      qsci1sr;
+  uint16_t      sctq[0x10];
+  uint16_t      scrq[0x10];
 
-  rtems_unsigned8       _pad6C[0x140-0x06C];
+  uint8_t       _pad6C[0x140-0x06C];
 
-  rtems_unsigned16      recram[0x20];
-  rtems_unsigned16      tranram[0x20];
-  rtems_unsigned16      comdram[0x20];
+  uint16_t      recram[0x20];
+  uint16_t      tranram[0x20];
+  uint16_t      comdram[0x20];
 } m5xxQSMCMRegisters_t;
 
 /*
  * Modular Input/Output System (MIOS)
  */
 typedef struct m5xxMIOS1Registers_ {
-  rtems_unsigned8	pad[0x1000];		/* define later */
+  uint8_t	pad[0x1000];		/* define later */
 } m5xxMIOS1Registers_t;
 
 /*
  * Can 2.0B Controller (TouCAN)
  */
 typedef struct m5xxTouCANRegisters_ {
-  rtems_unsigned8	pad[0x400];		/* define later */
+  uint8_t	pad[0x400];		/* define later */
 } m5xxTouCANRegisters_t;
 
 /*
  * U-Bus to IMB3 Bus Interface Module (UIMB)
  */
 typedef struct m5xxUIMBRegisters_ {
-  rtems_unsigned32      umcr;
-  rtems_unsigned32      utstcreg;
-  rtems_unsigned32      uipend;
+  uint32_t      umcr;
+  uint32_t      utstcreg;
+  uint32_t      uipend;
 } m5xxUIMBRegisters_t;
 
 /*
@@ -601,10 +601,10 @@ typedef struct imb_ {
   m5xxTPU3Registers_t	tpu[2];
   m5xxQADC64Registers_t	qadc[2];
   m5xxQSMCMRegisters_t	qsmcm;
-  rtems_unsigned8       _pad5200[0x6000-0x5200];
+  uint8_t       _pad5200[0x6000-0x5200];
   m5xxMIOS1Registers_t	mios;
   m5xxTouCANRegisters_t	toucan[2];
-  rtems_unsigned8       _pad7800[0x7F80-0x7800];
+  uint8_t       _pad7800[0x7F80-0x7800];
   m5xxUIMBRegisters_t	uimb;
 } imb_t;
 

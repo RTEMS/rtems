@@ -49,7 +49,7 @@
 #include <stdlib.h>                     /* for atexit() */
 #include <mpc5xx.h>
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t Clock_driver_ticks;
 extern int BSP_connect_clock_handler(rtems_isr_entry);
 extern int BSP_disconnect_clock_handler();
 
@@ -78,7 +78,7 @@ rtems_isr Clock_isr(rtems_vector_number vector)
 void clockOn(void* unused)
 {
   unsigned desiredLevel;
-  rtems_unsigned32 pit_value;
+  uint32_t pit_value;
 
   /* calculate and set modulus */  
   pit_value = (rtems_configuration_get_microseconds_per_tick() *
