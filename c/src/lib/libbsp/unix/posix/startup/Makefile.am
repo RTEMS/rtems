@@ -25,8 +25,8 @@ CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.$(OBJEXT)}
 # We install the RTEMS constructor as a separate .$(OBJEXT)
 # so it can be easily place correctly by the compiler config file.
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -56,4 +56,4 @@ endif
 EXTRA_DIST = bspclean.c bspstart.c exit.c main.c no-ctor.c rtems-ctor.cc \
     setvec.c
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

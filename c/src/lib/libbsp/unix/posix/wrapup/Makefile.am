@@ -2,8 +2,8 @@
 ## $Id$
 ##
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 if HAS_MP
 BSP_MP_O_FILES = shmsupp
@@ -31,4 +31,4 @@ $(LIB): $(OBJS)
 
 all-local: $(ARCH) $(LIB)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
