@@ -6,9 +6,10 @@
 #  $Id$
 #
 
-include ../Make.config
-
 PROJECT=develenv
+DISTRIBUTION_LEVEL=public
+
+include ../Make.config
 
 all:  
 

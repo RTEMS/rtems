@@ -6,9 +6,11 @@
 #  $Id$
 #
 
+PROJECT=hppa1_1
+DISTRIBUTION_LEVEL=support
+
 include ../Make.config
 
-PROJECT=hppa1_1
 REPLACE=../tools/word-replace
 
 all:  

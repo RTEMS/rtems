@@ -6,9 +6,10 @@
 #  $Id$
 #
 
-include ../Make.config
-
 PROJECT=c_user
+DISTRIBUTION_LEVEL=support
+
+include ../Make.config
 
 all:  
 

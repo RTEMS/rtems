@@ -6,9 +6,10 @@
 #  $Id$
 #
 
-include ../Make.config
-
 PROJECT=ada_user
+DISTRIBUTION_LEVEL=internal
+
+include ../Make.config
 
 all:  
 

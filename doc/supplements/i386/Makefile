@@ -6,9 +6,11 @@
 #  $Id$
 #
 
+PROJECT=i386
+DISTRIBUTION_LEVEL=support
+
 include ../Make.config
 
-PROJECT=i386
 REPLACE=../tools/word-replace
 
 all:  

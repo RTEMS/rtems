@@ -6,9 +6,11 @@
 #  $Id$
 #
 
+PROJECT=m68k
+DISTRIBUTION_LEVEL=support
+
 include ../Make.config
 
-PROJECT=m68k
 REPLACE=../tools/word-replace
 
 all:  

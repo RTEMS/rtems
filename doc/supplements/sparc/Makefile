@@ -6,9 +6,11 @@
 #  $Id$
 #
 
+PROJECT=sparc
+DISTRIBUTION_LEVEL=support
+
 include ../Make.config
 
-PROJECT=sparc
 REPLACE=../tools/word-replace
 
 all:  

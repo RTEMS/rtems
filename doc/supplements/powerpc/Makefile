@@ -6,9 +6,11 @@
 #  $Id$
 #
 
+PROJECT=powerpc
+DISTRIBUTION_LEVEL=internal
+
 include ../Make.config
 
-PROJECT=powerpc
 REPLACE=../tools/word-replace
 
 all:  

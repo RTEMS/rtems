@@ -6,9 +6,11 @@
 #  $Id$
 #
 
+PROJECT=i960
+DISTRIBUTION_LEVEL=support
+
 include ../Make.config
 
-PROJECT=i960
 REPLACE=../tools/word-replace
 
 all:  
