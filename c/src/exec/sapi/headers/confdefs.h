@@ -78,6 +78,11 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 };
 #endif
 
+#define CONFIGURE_INIT_TASK_TABLE Initialization_tasks
+
+#define CONFIGURE_INIT_TASK_TABLE_SIZE \
+  sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
+
 #endif
 
 /*
@@ -377,9 +382,8 @@ rtems_api_configuration_table Configuration_RTEMS_API = {
   CONFIGURE_MAXIMUM_REGIONS,
   CONFIGURE_MAXIMUM_PORTS,
   CONFIGURE_MAXIMUM_PERIODS,
-  sizeof (Initialization_tasks)/
-   sizeof(rtems_initialization_tasks_table), /* number of init tasks */
-  Initialization_tasks                       /* init task(s) table */
+  CONFIGURE_INIT_TASK_TABLE_SIZE,
+  CONFIGURE_INIT_TASK_TABLE
 };
 
 #ifdef RTEMS_POSIX_API
