@@ -167,8 +167,8 @@ void _CORE_mutex_Seize(
   }
 
   _Thread_queue_Enter_critical_section( &the_mutex->Wait_queue );
-  executing->Wait.queue      = &the_mutex->Wait_queue;
-  executing->Wait.id         = id;
+  executing->Wait.queue = &the_mutex->Wait_queue;
+  executing->Wait.id    = id;
   _ISR_Enable( level );
 
   switch ( the_mutex->Attributes.discipline ) {
