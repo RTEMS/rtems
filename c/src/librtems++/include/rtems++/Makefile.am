@@ -9,7 +9,7 @@ include_rtems__dir = $(includedir)/rtems++
 include_rtems___HEADERS = rtemsEvent.h rtemsInterrupt.h rtemsMessageQueue.h rtemsSemaphore.h \
     rtemsStatusCode.h rtemsTask.h rtemsTaskMode.h rtemsTimer.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems++ \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems++ \
     $(include_rtems___HEADERS:%=$(PROJECT_INCLUDE)/rtems++/%)
 
 $(PROJECT_INCLUDE)/rtems++:
