@@ -1,3 +1,11 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* io/.cvsignore: Remove.
+	* pci/Makefile.am, irq/Makefile.am, io/Makefile.am,
+	comm/Makefile.am: Remove.
+	* Makefile.am: Merge-in Makefile.ams above.
+	Add preinstallation dirstamp support.
+
 2003-10-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* comm/uart.h: Add extern "C" guards.
