@@ -209,6 +209,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
  *  External structures
  */
 typedef struct {
+ rtems_id                         task_id;	
  rtems_filesystem_location_info_t current_directory;
  rtems_filesystem_location_info_t root_directory;
  /* Default mode for all files. */
@@ -229,6 +230,8 @@ extern rtems_user_env_t   rtems_global_user_env;
  */
 
 rtems_status_code rtems_libio_set_private_env(void);
+rtems_status_code rtems_libio_share_private_env(rtems_id task_id) ;
+	
 
 
 /*

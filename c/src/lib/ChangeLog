@@ -1,3 +1,20 @@
+2001-04-20  Correo Fernando-ruiz <correo@fernando-ruiz.com>
+
+	* include/rtems/libio_.h, libc/chroot.c, libc/privateenv.c:
+	Private environment and chroot() enhancements and fixes.  Comments:
+	  + privateenv has been modified to let at chroot() to be more
+	    POSIX like Sergei Organov recommended.
+	  + A task owner lets that rtems_set_private_env() will be
+	    called twice or more times.
+	  + chroot() can be called without a previous
+	    rtems_set_private_env(); (transpanrently)
+	  + The second call of rtems_set_private_env() makes a internal
+	    chroot("/") into global imfs_root.
+	  + chroot() runs like chdir() without a previous chdir("/") with
+	    the global root.
+	  + The current directory can be in a wrong place like Linux and 
+	    many other Unices.
+
 2001-04-16      Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtc.h: New file.
