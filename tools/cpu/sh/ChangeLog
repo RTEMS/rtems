@@ -1,3 +1,7 @@
+2004-01-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Let shgen.1 depend on shgen$(EXEEXT).
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
