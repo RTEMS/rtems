@@ -31,7 +31,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <asm.h>
 
 	BEGIN_CODE
 /*

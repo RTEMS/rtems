@@ -32,7 +32,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <asm.h>
 
 /*
  * Offsets for various Contexts
