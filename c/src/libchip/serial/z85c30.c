@@ -63,7 +63,7 @@ console_fns z85c30_fns =
 {
   libchip_serial_default_probe,  /* deviceProbe */
   z85c30_open,                   /* deviceFirstOpen */
-  z85c30_flush,                  /* deviceLastClose */
+  NULL,                          /* deviceLastClose */
   NULL,                          /* deviceRead */
   z85c30_write_support_int,      /* deviceWrite */
   z85c30_initialize_interrupts,  /* deviceInitialize */
@@ -215,6 +215,9 @@ Z85C30_STATIC int z85c30_open(
   void *arg
 )
 {
+
+  z85c30_initialize_port(minor);
+
   /*
    * Assert DTR
    */
@@ -287,8 +290,6 @@ Z85C30_STATIC void z85c30_init(int minor)
 
     (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR9, SCC_WR9_CH_B_RST);
   }
-
-  z85c30_initialize_port(minor);
 }
 
 /*
@@ -549,6 +550,7 @@ Z85C30_STATIC void z85c30_process(
   /*
    * Deal with any received characters
    */
+
   while (ucIntPend&SCC_RR3_B_RX_IP)
   {
     z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
@@ -569,8 +571,16 @@ Z85C30_STATIC void z85c30_process(
     );
   }
 
-  while (TRUE)
-  {
+  /*
+   *  There could be a race condition here if there is not yet a TX
+   *  interrupt pending but the buffer is empty.  This condition has
+   *  been seen before on other z8530 drivers but has not been seen
+   *  with this one.  The typical solution is to use "vector includes
+   *  status" or to only look at the interrupts actually pending
+   *  in RR3.
+   */
+
+  while (TRUE) {
     z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
     if (!Z85C30_Status_Is_TX_buffer_empty(z85c30_status)) {
       /*
@@ -581,6 +591,7 @@ Z85C30_STATIC void z85c30_process(
       break;
     }
   
+#if 0
     if (!Z85C30_Status_Is_CTS_asserted(z85c30_status)) {
       /*
        * We can't transmit yet
@@ -591,34 +602,22 @@ Z85C30_STATIC void z85c30_process(
        */
       break;
     }
+#endif
   
-    if (Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
-      Console_Port_Data[minor].bActive=FALSE;
-      if (Console_Port_Tbl[minor].pDeviceFlow !=&z85c30_flow_RTSCTS) {
+    if (!rtems_termios_dequeue_characters(
+                Console_Port_Data[minor].termios_data, 1)) {
+      if (Console_Port_Tbl[minor].pDeviceFlow != &z85c30_flow_RTSCTS) {
         z85c30_negate_RTS(minor);
       }
-      /*
-       * There is no data to transmit
-       */
+      Console_Port_Data[minor].bActive = FALSE;
+      z85c30_enable_interrupts(minor, SCC_ENABLE_ALL_INTR_EXCEPT_TX);
       (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_TX_INT);
       break;
     }
 
-    Ring_buffer_Remove_character( &Console_Port_Data[minor].TxBuffer, cChar);
-
-    /*
-     * transmit character
-     */
-    (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR8, cChar);
-
-    /*
-     * Interrupt once FIFO has room
-      */
-    (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_TX_INT);
-    break;
   }
 
-  if (ucIntPend&SCC_RR3_B_EXT_IP) {
+  if (ucIntPend & SCC_RR3_B_EXT_IP) {
     /*
      * Clear the external status interrupt
      */
@@ -670,44 +669,14 @@ Z85C30_STATIC rtems_isr z85c30_isr(
 }
 
 /*
- *  z85c30_flush
- */
-
-Z85C30_STATIC int z85c30_flush(
-  int major,
-  int minor,
-  void *arg
-)
-{
-  while (!Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
-    /*
-     * Yield while we wait
-     */
-    if (_System_state_Is_up(_System_state_Get())) {
-      rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-    }
-  }
-
-  z85c30_close(major, minor, arg);
-
-  return(RTEMS_SUCCESSFUL);
-}
-
-/*
- *  z85c30_initialize_interrupts
+ *  z85c30_enable_interrupts
  *
- *  This routine initializes the console's receive and transmit
- *  ring buffers and loads the appropriate vectors to handle the interrupts.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters: NONE
- *
- *  Return values:     NONE
+ *  This routine enables the specified interrupts for this minor.
  */
 
 Z85C30_STATIC void z85c30_enable_interrupts(
-  int minor
+  int minor,
+  int interrupt_mask
 )
 {
   unsigned32     ulCtrlPort;
@@ -716,45 +685,50 @@ Z85C30_STATIC void z85c30_enable_interrupts(
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
   setReg     = Console_Port_Tbl[minor].setRegister;
 
-  /*
-   * Enable interrupts
-   */
-  (*setReg)(
-    ulCtrlPort,
-    SCC_WR0_SEL_WR1,
-    SCC_WR1_EXT_INT_EN | SCC_WR1_TX_INT_EN | SCC_WR1_INT_ALL_RX
-  );
-  (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR2, 0);
-  (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR9, SCC_WR9_MIE);
-
-  /*
-   * Reset interrupts
-   */
-  (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT);
+  (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR1, interrupt_mask);
 }
+
+/*
+ *  z85c30_initialize_interrupts
+ *
+ *  This routine initializes the port to use interrupts.
+ */
 
 Z85C30_STATIC void z85c30_initialize_interrupts(
   int minor
 )
 {
+  unsigned32     ulCtrlPort1;
+  unsigned32     ulCtrlPort2;
+  setRegister_f  setReg;
+
+  ulCtrlPort1 = Console_Port_Tbl[minor].ulCtrlPort1;
+  ulCtrlPort2 = Console_Port_Tbl[minor].ulCtrlPort2;
+  setReg      = Console_Port_Tbl[minor].setRegister;
+
+
   z85c30_init(minor);
 
-  Ring_buffer_Initialize(&Console_Port_Data[minor].TxBuffer);
-
   Console_Port_Data[minor].bActive=FALSE;
-  if (Console_Port_Tbl[minor].pDeviceFlow !=&z85c30_flow_RTSCTS) {
+
+  z85c30_initialize_port( minor );
+
+  if (Console_Port_Tbl[minor].pDeviceFlow != &z85c30_flow_RTSCTS) {
     z85c30_negate_RTS(minor);
   }
 
-  if (Console_Port_Tbl[minor].ulCtrlPort1== Console_Port_Tbl[minor].ulCtrlPort2) {
-    /*
-     * Only do this for Channel A
-     */
+  set_vector(z85c30_isr, Console_Port_Tbl[minor].ulIntVector, 1);
 
-    set_vector(z85c30_isr, Console_Port_Tbl[minor].ulIntVector, 1);
-  }
+  z85c30_enable_interrupts(minor, SCC_ENABLE_ALL_INTR_EXCEPT_TX);
 
-  z85c30_enable_interrupts(minor);
+  (*setReg)(ulCtrlPort1, SCC_WR0_SEL_WR2, 0);              /* XXX vector */
+  (*setReg)(ulCtrlPort1, SCC_WR0_SEL_WR9, SCC_WR9_MIE);
+
+  /*
+   * Reset interrupts
+   */
+
+  (*setReg)(ulCtrlPort1, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT);
 }
 
 /* 
@@ -769,56 +743,37 @@ Z85C30_STATIC int z85c30_write_support_int(
   const char *buf, 
   int   len)
 {
-  int i;
-  unsigned32 Irql;
+  unsigned32     Irql;
+  unsigned32     ulCtrlPort;
+  setRegister_f  setReg;
 
-  for (i=0; i<len;) {
-    if (Ring_buffer_Is_full(&Console_Port_Data[minor].TxBuffer)) {
-      if (!Console_Port_Data[minor].bActive) {
-        /*
-         * Wake up the device
-         */
-        if (Console_Port_Tbl[minor].pDeviceFlow !=&z85c30_flow_RTSCTS) {
-          z85c30_assert_RTS(minor);
-        }
-        rtems_interrupt_disable(Irql);
-        Console_Port_Data[minor].bActive=TRUE;
-        z85c30_process(minor, SCC_RR3_B_TX_IP);
-        rtems_interrupt_enable(Irql);
-      } else {
-        /*
-         * Yield while we await an interrupt
-         */
-        rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-      }
-
-      /*
-       * Wait for ring buffer to empty
-       */
-      continue;
-    } else {
-      Ring_buffer_Add_character( &Console_Port_Data[minor].TxBuffer, buf[i]);
-      i++;
-    }
-  }
+  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
+  setReg     = Console_Port_Tbl[minor].setRegister;
 
   /*
-   * Ensure that characters are on the way
+   *  We are using interrupt driven output and termios only sends us
+   *  one character at a time.
    */
-  if (!Console_Port_Data[minor].bActive) {
-    /*
-     * Wake up the device
-     */
-    if (Console_Port_Tbl[minor].pDeviceFlow !=&z85c30_flow_RTSCTS) {
-            z85c30_assert_RTS(minor);
-    }
-    rtems_interrupt_disable(Irql);
-    Console_Port_Data[minor].bActive=TRUE;
-    z85c30_process(minor, SCC_RR3_B_TX_IP);
-    rtems_interrupt_enable(Irql);
-  }
 
-  return (len);
+  if ( !len )
+    return 0;
+
+  /*
+   *  Put the character out and enable interrupts if necessary.
+   */
+
+  if (Console_Port_Tbl[minor].pDeviceFlow != &z85c30_flow_RTSCTS) {
+    z85c30_assert_RTS(minor);
+  }
+  rtems_interrupt_disable(Irql);
+    if ( Console_Port_Data[minor].bActive == FALSE) {
+      Console_Port_Data[minor].bActive = TRUE;
+      z85c30_enable_interrupts(minor, SCC_ENABLE_ALL_INTR);
+    }
+    (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR8, *buf);
+  rtems_interrupt_enable(Irql);
+
+  return 1;
 }
 
 /* 
