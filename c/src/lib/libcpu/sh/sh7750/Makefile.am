@@ -27,7 +27,7 @@ clock_C_FILES = clock/ckinit.c
 clock_rel_OBJECTS = $(clock_C_FILES:clock/%.c=$(ARCH)/%.$(OBJEXT))
 EXTRA_DIST = $(clock_C_FILES)
 
-${ARCH}/%.$(OBJEXT): clock/%.c
+${ARCH}/%.$(OBJEXT): clock/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 ${ARCH}/clock.rel: $(clock_rel_OBJECTS)
 	${make-rel}
@@ -40,7 +40,7 @@ sci_C_FILES = sci/sh4uart.c
 sci_rel_OBJECTS = $(sci_C_FILES:sci/%.c=$(ARCH)/%.$(OBJEXT))
 EXTRA_DIST += $(sci_C_FILES)
 
-${ARCH}/%.$(OBJEXT): sci/%.c
+${ARCH}/%.$(OBJEXT): sci/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 ${ARCH}/sci.rel: $(sci_rel_OBJECTS)
 	${make-rel}
@@ -53,7 +53,7 @@ score_C_FILES = score/cpu_asm.c score/ispsh7750.c
 score_rel_OBJECTS = $(score_C_FILES:score/%.c=$(ARCH)/%.$(OBJEXT))
 EXTRA_DIST += $(score_C_FILES)
 
-${ARCH}/%.$(OBJEXT): score/%.c
+${ARCH}/%.$(OBJEXT): score/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 ${ARCH}/score.rel: $(score_rel_OBJECTS)
 	${make-rel}
@@ -66,7 +66,7 @@ timer_C_FILES = timer/timer.c
 timer_rel_OBJECTS = $(timer_C_FILES:timer/%.c=$(ARCH)/%.$(OBJEXT))
 EXTRA_DIST += $(timer_C_FILES)
 
-${ARCH}/%.$(OBJEXT): timer/%.c
+${ARCH}/%.$(OBJEXT): timer/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 ${ARCH}/timer.rel: $(timer_rel_OBJECTS)
 	${make-rel}
