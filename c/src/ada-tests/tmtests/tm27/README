@@ -1,8 +1,0 @@
-#
-#  $Id$
-#
-
-This test requires interfacing to BSP provided macros which aid in
-installing an ISR.  It may or may not be worth the effort to convert.
-Primarily this would require a C file which provided real bodies
-to invoke for these macros.

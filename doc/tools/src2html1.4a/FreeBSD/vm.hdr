@@ -1,9 +1,0 @@
-The <tt>vm</tt> directory holds the virtual memory subsystem used by
-FreeBSD. This was derived from the VM system used in the Mach kernel,
-with the interface to the rest of the kernel rewritten. As such, it is
-not described in the
-4.3BSD Internals book by Leffler, McKusick, Karels and Quarterman,
-but it is described by Kirk KcKusick and Keith Bostic in their
-"UNIX Kernel Internals"
-notes, which they have presented in many places in the past few years.
-<p>

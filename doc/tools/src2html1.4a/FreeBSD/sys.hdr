@@ -1,6 +1,0 @@
-The <tt>sys</tt> directory holds C-language include files that are used
-by all parts of the FreeBSD source tree.<p>
-
-The 4.3BSD Internals book by Leffler, McKusick, Karels and Quarterman
-doesn't cover these files specifically, but discussion of their contents
-crops up everywhere.<p>
