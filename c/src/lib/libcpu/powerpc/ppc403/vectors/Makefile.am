@@ -19,7 +19,7 @@ include $(top_srcdir)/../../../automake/lib.am
 $(PGM): $(vectors_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
+all-local: $(PGM)
 
 EXTRA_DIST = $(S_FILES) README
 

@@ -17,7 +17,7 @@ include $(top_srcdir)/../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(c_clock_rel_OBJECTS)
+all-local: $(PREINSTALL_FILES) $(c_clock_rel_OBJECTS)
 
 EXTRA_DIST = c_clock.c c_clock.h
 

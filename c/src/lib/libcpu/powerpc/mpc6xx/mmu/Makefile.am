@@ -25,7 +25,7 @@ include $(top_srcdir)/../../../automake/lib.am
 $(PGM): $(mmu_rel_OBJECTS)
 	$(make-rel)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(mmu_rel_OBJECTS) $(PGM)
+all-local: $(PREINSTALL_FILES) $(mmu_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

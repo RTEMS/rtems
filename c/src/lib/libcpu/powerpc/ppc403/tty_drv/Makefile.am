@@ -20,7 +20,7 @@ include $(top_srcdir)/../../../automake/lib.am
 $(PGM): $(tty_drv_rel_OBJECTS)
 	$(make-rel)
 
-all-local: $(ARCH) $(tty_drv_rel_OBJECTS) $(PGM)
+all-local: $(tty_drv_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

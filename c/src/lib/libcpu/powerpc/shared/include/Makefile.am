@@ -24,7 +24,7 @@ LIB = $(ARCH)/libcpuspec.a
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
