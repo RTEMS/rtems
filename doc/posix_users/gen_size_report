@@ -12,12 +12,19 @@
 #cpu=sparc
 #bsp=erc32
 
-cpu=powerpc
-bsp=mcp750
+#cpu=powerpc
+#bsp=mcp750
 
-objdir=/usr1/rtems/build/build-${cpu}-rtems/${cpu}-rtems/c/${bsp}/
-libc=/opt/rtems/${cpu}-rtems/lib/libc.a
-libm=/opt/rtems/${cpu}-rtems/lib/libm.a
+cpu=v850
+bsp=bare
+symprefix=_
+
+#objdir=/usr1/rtems/build/build-${cpu}-rtems/${cpu}-rtems/c/${bsp}/
+#libc=/opt/rtems/${cpu}-rtems/lib/libc.a
+#libm=/opt/rtems/${cpu}-rtems/lib/libm.a
+objdir=/usr1/rtems/work/tools-v850/b-rtems/${cpu}-rtems/c/${bsp}/
+libc=/usr2/test-v850/${cpu}-rtems/lib/libc.a
+libm=/usr2/test-v850/${cpu}-rtems/lib/libm.a
 srcdir=$r/src
 docdir=$d
 nm=${cpu}-rtems-nm
@@ -28,7 +35,7 @@ check_objs()
 {
   for i in *.o
   do
-    ${nm} $i | grep "T ${1}$" >/dev/null
+    ${nm} $i | grep "T ${symprefix}${1}$" >/dev/null
     if [ $? -eq  0 ] ; then
       echo $i
       return 0

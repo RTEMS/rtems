@@ -32,7 +32,9 @@ This section lists the routines that provided by the Newlib C Library.
 @item @code{getenv} - Look up environment variable
 @item @code{labs} - Long integer absolute value (magnitude)
 @item @code{ldiv} - Divide two long integers
-@item @code{malloc} - Allocate and manage memory (malloc, realloc, free)
+@item @code{malloc} - Allocate memory 
+@item @code{realloc} - Reallocate memory 
+@item @code{free} - Free previously allocated memory
 @item @code{mallinfo} - Get information about allocated memory
 @item @code{__malloc_lock} - Lock memory pool for malloc and free
 @item @code{mbstowcs} - Minimal multibyte string to wide string converter
