@@ -31,17 +31,19 @@ UNUSED_FILES = irq_stub.S
 
 EXTRA_DIST = TODO $(C_FILES) $(S_FILES) $(UNUSED_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: rtems/score/ppc_offs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 
 CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../../../automake/local.am

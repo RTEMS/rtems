@@ -19,6 +19,8 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = QUIRKS README.net STATUS cable.doc times
 
+PREINSTALL_DIRS =
+
 $(PROJECT_INCLUDE)/dmv170.h: include/dmv170.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dmv170.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dmv170.h
@@ -32,6 +34,7 @@ $(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h $(PRO
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
