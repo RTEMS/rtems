@@ -59,8 +59,6 @@ void	microtime (struct timeval *tv);
 #define hz rtems_bsdnet_ticks_per_second
 #define tick rtems_bsdnet_microseconds_per_tick
 
-#define SHRT_MAX 65535
-
 #define log	rtems_bsdnet_log
 
 /*
