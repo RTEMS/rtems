@@ -13,6 +13,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <signal.h>
+#include <errno.h>
 
 volatile int Signal_occurred;
 volatile int Signal_count;
@@ -59,6 +60,8 @@ void *POSIX_Init(
   sigset_t          mask;
   sigset_t          pending_set;
   sigset_t          oset;
+  struct timespec   timeout;
+  siginfo_t         info;
 
   puts( "\n\n*** POSIX TEST 4 ***" );
 
@@ -113,7 +116,7 @@ void *POSIX_Init(
   Signal_count = 0;
   Signal_occurred = 0;
 
-  printf( "Init: send SIGUSR1 to process\n" );
+  puts( "Init: send SIGUSR1 to process" );
   status = kill( getpid(), SIGUSR1 );
   assert( !status );
 
@@ -131,7 +134,7 @@ void *POSIX_Init(
   status = sigaddset( &mask, SIGUSR1 );
   assert( !status );
 
-  printf( "Init: Block SIGUSR1\n" );
+  puts( "Init: Block SIGUSR1" );
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
  
@@ -142,7 +145,7 @@ void *POSIX_Init(
   Signal_count = 0;
   Signal_occurred = 0;
 
-  printf( "Init: send SIGUSR1 to process\n" );
+  puts( "Init: send SIGUSR1 to process" );
   status = kill( getpid(), SIGUSR1 );
   assert( !status );
 
@@ -158,7 +161,7 @@ void *POSIX_Init(
   status = sigaddset( &mask, SIGUSR1 );
   assert( !status );
 
-  printf( "Init: Block SIGUSR1\n" );
+  puts( "Init: Block SIGUSR1" );
   status = sigprocmask( SIG_BLOCK, &mask, NULL );
   assert( !status );
 
@@ -166,7 +169,7 @@ void *POSIX_Init(
   assert( !status );
   printf( "Init: Signals pending 0x%08x\n", pending_set );
   
-  printf( "Init: send SIGUSR1 to process\n" );
+  puts( "Init: send SIGUSR1 to process" );
   status = kill( getpid(), SIGUSR1 );
   assert( !status );
 
@@ -174,7 +177,7 @@ void *POSIX_Init(
   assert( !status );
   printf( "Init: Signals pending 0x%08x\n", pending_set );
   
-  printf( "Init: Unblock SIGUSR1\n" );
+  puts( "Init: Unblock SIGUSR1" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
   assert( !status );
 
@@ -182,11 +185,11 @@ void *POSIX_Init(
 
   empty_line();
 
-  printf( "Init: create a thread interested in SIGUSR1\n" );
+  puts( "Init: create a thread interested in SIGUSR1" );
   status = pthread_create( &Task1_id, NULL, Task_1, NULL );
   assert( !status );
 
-  printf( "Init: Block SIGUSR1\n" );
+  puts( "Init: Block SIGUSR1" );
   status = sigprocmask( SIG_BLOCK, &mask, NULL );
   assert( !status );
  
@@ -194,13 +197,13 @@ void *POSIX_Init(
   assert( !status );
   printf( "Init: Signals pending 0x%08x\n", pending_set );
 
-  printf( "Init: sleep so the other task can block\n" ); 
+  puts( "Init: sleep so the other task can block" ); 
   status = sleep( 1 );
   assert( !status );
 
      /* switch to task 1 */
 
-  printf( "Init: send SIGUSR1 to process\n" );
+  puts( "Init: send SIGUSR1 to process" );
   status = kill( getpid(), SIGUSR1 );
   assert( !status );
  
@@ -208,7 +211,7 @@ void *POSIX_Init(
   assert( !status );
   printf( "Init: Signals pending 0x%08x\n", pending_set );
 
-  printf( "Init: sleep so the other task can catch signal\n" ); 
+  puts( "Init: sleep so the other task can catch signal" ); 
   status = sleep( 1 );
   assert( !status );
 
@@ -234,23 +237,23 @@ void *POSIX_Init(
   status = sigaddset( &mask, SIGALRM );
   assert( !status );
  
-  printf( "Init: Unblock SIGALRM\n" );
+  puts( "Init: Unblock SIGALRM" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
   assert( !status );
 
   /* schedule the alarm */
  
-  printf( "Init: Firing alarm in 5 seconds\n" );
+  puts( "Init: Firing alarm in 5 seconds" );
   status = alarm( 5 );
   printf( "Init: %d seconds left on previous alarm\n", status );
   assert( !status );
 
-  printf( "Init: Firing alarm in 2 seconds\n" );
+  puts( "Init: Firing alarm in 2 seconds" );
   status = alarm( 2 );
   printf( "Init: %d seconds left on previous alarm\n", status );
   assert( status );
 
-  printf( "Init: Wait 4 seconds for alarm\n" );
+  puts( "Init: Wait 4 seconds for alarm" );
   status = sleep( 4 );
   printf( "Init: %d seconds left in sleep\n", status );
   assert( status );
@@ -268,14 +271,14 @@ void *POSIX_Init(
   status = sigaddset( &mask, SIGUSR2 );
   assert( !status );
 
-  printf( "Init: Block SIGUSR1 and SIGUSR2 only\n" );
+  puts( "Init: Block SIGUSR1 and SIGUSR2 only" );
   status = pthread_sigmask( SIG_SETMASK, &mask, &oset );
   printf( "Init: Previous blocked set was 0x%08x\n", oset );
   assert( !status );
 
   /* test inquiry about current blocked set with pthread_sigmask */
   
-  status = pthread_sigmask( NULL, NULL, &oset );
+  status = pthread_sigmask( 0, NULL, &oset );
   printf( "Init: Current blocked set is 0x%08x\n", oset );
   assert( !status );
 
@@ -284,7 +287,7 @@ void *POSIX_Init(
   status = sigemptyset( &mask );
   assert( !status );
  
-  printf( "Init: Unblock all signals\n" );
+  puts( "Init: Unblock all signals" );
   status = pthread_sigmask( SIG_SETMASK, &mask, &oset );
   printf( "Init: Previous blocked set was 0x%08x\n", oset );
   assert( !status );
@@ -293,14 +296,14 @@ void *POSIX_Init(
 
   empty_line();
 
-  printf( "Init: create a thread to send Init SIGUSR1\n" );
+  puts( "Init: create a thread to send Init SIGUSR1" );
   status = pthread_create( &Task2_id, NULL, Task_2, NULL );
   assert( !status );
 
   status = sigemptyset( &mask );
   assert( !status );
  
-  printf( "Init: sigsuspend for any signal\n" );
+  puts( "Init: sigsuspend for any signal" );
   status = sigsuspend( &mask );
   assert( status );
   printf( "Init: awakended from sigsuspend status=%08d \n", status );
@@ -309,7 +312,7 @@ void *POSIX_Init(
 
   empty_line();
 
-  printf( "Init: create a thread to sent Process SIGUSR1 with SA_SIGINFO\n" );
+  puts( "Init: create a thread to sent Process SIGUSR1 with SA_SIGINFO" );
   status = pthread_create( &Task3_id, NULL, Task_3, NULL );
   assert( !status );
 
@@ -320,7 +323,7 @@ void *POSIX_Init(
  
   sigaction( SIGUSR1, &act, NULL );
 
-  printf( "Init: sleep so the Task_3 can sigqueue SIGUSR1\n" ); 
+  puts( "Init: sleep so the Task_3 can sigqueue SIGUSR1" ); 
   status = sleep( 1 );
   assert( !status );
 
@@ -336,15 +339,15 @@ void *POSIX_Init(
   status = sigaddset( &mask, SIGUSR1 );
   assert( !status );
 
-  printf( "Init: Block SIGUSR1\n" );
+  puts( "Init: Block SIGUSR1" );
   status = sigprocmask( SIG_BLOCK, &mask, NULL );
   assert( !status );
 
-  printf( "Init: send SIGUSR1 to process\n" );
+  puts( "Init: send SIGUSR1 to process" );
   status = kill( getpid(), SIGUSR1 );
   assert( !status );
 
-  printf( "Init: sleep so the Task_3 can receive SIGUSR1\n" ); 
+  puts( "Init: sleep so the Task_3 can receive SIGUSR1" ); 
   status = sleep( 1 );
   assert( !status );
 
@@ -356,15 +359,15 @@ void *POSIX_Init(
   status = sigaddset( &mask, SIGUSR1 );
   assert( !status );
  
-  printf( "Init: Block SIGUSR1\n" );
+  puts( "Init: Block SIGUSR1" );
   status = sigprocmask( SIG_BLOCK, &mask, NULL );
   assert( !status );
  
-  printf( "Init: send SIGUSR1 to process\n" );
+  puts( "Init: send SIGUSR1 to process" );
   status = kill( getpid(), SIGUSR1 );
   assert( !status );
  
-  printf( "Init: sleep so the Task_3 can receive SIGUSR1\n" );
+  puts( "Init: sleep so the Task_3 can receive SIGUSR1" );
   status = sleep( 1 );
   assert( !status );
 
@@ -376,24 +379,175 @@ void *POSIX_Init(
   status = sigaddset( &mask, SIGUSR2 );
   assert( !status );
  
-  printf( "Init: Block SIGUSR2\n" );
+  puts( "Init: Block SIGUSR2" );
   status = sigprocmask( SIG_BLOCK, &mask, NULL );
   assert( !status );
  
-  printf( "Init: send SIGUSR2 to process\n" );
+  puts( "Init: send SIGUSR2 to process" );
   status = kill( getpid(), SIGUSR2 );
   assert( !status );
  
-  printf( "Init: sleep so the Task_3 can receive SIGUSR2\n" );
+  puts( "Init: sleep so the Task_3 can receive SIGUSR2" );
   status = sleep( 1 );
   assert( !status );
 
   /* Suspend for signal that has already be sent */
 
-  printf( "Init: sigsuspend for any signal\n" );
+  puts( "Init: sigsuspend for any signal" );
   status = sigsuspend( &mask );
   assert( status );
   printf( "Init: awakended from sigsuspend status=%d \n", status );
+
+  /* generate error cases for psignal */
+
+  empty_line();
+
+  status = sigemptyset( NULL );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EFAULT );
+  puts( "Init: sigemptyset - EFAULT (set invalid)" );
+
+  status = sigfillset( NULL );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EFAULT );
+  puts( "Init: sigfillset - EFAULT (set invalid)" );
+
+  status = sigaddset( NULL, SIGUSR1 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EFAULT );
+  puts( "Init: sigaddset - EFAULT (set invalid)" );
+
+  status = sigaddset( &mask, 0 );
+  assert( !status );
+  puts( "Init: sigaddset - SUCCESSFUL (signal = 0)" );
+
+  status = sigaddset( &mask, 999 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: sigaddset - EINVAL (set invalid)" );
+
+  status = sigdelset( NULL, SIGUSR1 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EFAULT );
+  puts( "Init: sigdelset - EFAULT (set invalid)" );
+ 
+  status = sigdelset( &mask, 0 );
+  assert( !status );
+  puts( "Init: sigdelset - SUCCESSFUL (signal = 0)" );
+ 
+  status = sigdelset( &mask, 999 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: sigdelset - EINVAL (set invalid)" );
+
+  status = sigismember( NULL, SIGUSR1 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EFAULT );
+  puts( "Init: sigismember - EFAULT (set invalid)" );
+ 
+  status = sigismember( &mask, 0 );
+  assert( !status );
+  puts( "Init: sigismember - SUCCESSFUL (signal = 0)" );
+ 
+  status = sigismember( &mask, 999 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: sigismember - EINVAL (signal invalid)" );
+
+  status = sigaction( 0, &act, 0 );
+  assert( !status );
+  puts( "Init: sigaction - SUCCESSFUL (signal = 0)" );
+ 
+  status = sigaction( 999, &act, NULL );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: sigaction - EINVAL (signal invalid)" );
+
+  status = sigaction( SIGKILL, &act, NULL );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: sigaction - EINVAL (SIGKILL)" );
+
+  status = pthread_sigmask( SIG_BLOCK, NULL, NULL );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EFAULT );
+  puts( "Init: pthread_sigmask - EFAULT (set and oset invalid)" );
+
+  status = pthread_sigmask( 999, &pending_set, NULL );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: pthread_sigmask - EINVAL (how invalid)" );
+
+  status = sigpending( NULL );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EFAULT );
+  puts( "Init: sigpending - EFAULT (set invalid)" );
+
+  timeout.tv_nsec = -1;
+  status = sigtimedwait( &mask, &info, &timeout );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: pthread_sigmask - EINVAL (timout->nsec invalid < 0)" );
+
+  timeout.tv_nsec = 0x7fffffff;
+  status = sigtimedwait( &mask, &info, &timeout );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: pthread_sigmask - EINVAL (timout->nsec invalid to large)" );
+
+  status = pthread_kill( Init_id, 999 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: pthread_kill - EINVAL (sig invalid)" );
+
+  status = pthread_kill( 0, SIGUSR1 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == ENOSYS );
+  puts( "Init: pthread_kill - ENOSYS (signal SA_SIGINFO)" );
+
+  status = pthread_kill( 0, SIGUSR2 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == ESRCH );
+  puts( "Init: pthread_kill - ESRCH (signal SA_SIGINFO)" );
+
+  status = pthread_kill( Init_id, 0 );
+  assert( !status );
+  puts( "Init: pthread_kill - SUCCESSFUL (signal = 0)" );
+
+  act.sa_handler = SIG_IGN;
+  act.sa_flags = 0;
+  sigaction( SIGUSR2, &act, NULL );
+  status = pthread_kill( Init_id, SIGUSR2 );
+  assert( !status );
+  puts( "Init: pthread_kill - SUCCESSFUL (signal = SIG_IGN)" );
+
+  status = kill( 0x7fffffff, SIGUSR1 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == ESRCH );
+  puts( "Init: kill - ESRCH (pid invalid)" );
+
+  status = kill( getpid(), 0 );
+  assert( !status );
+  puts( "Init: kill - SUCCESSFUL (signal = 0)" );
 
   /* exit this thread */
 
