@@ -15,6 +15,8 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
+H_FILES = ej.h uemf.h webs.h wsIntrn.h
+
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/lib.am
 
@@ -27,8 +29,20 @@ AM_CPPFLAGS += -DWEBS -DUEMF -DOS="RTEMS"
 $(LIB): $(OBJS)
 	$(make-library)
 
+$(PROJECT_INCLUDE):
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/goahead:
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/goahead/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/goahead \
+   $(H_FILES:%.h=$(PROJECT_INCLUDE)/goahead/%.h)
+
 if HAS_POSIX
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 endif
 
 .PRECIOUS: $(LIB)
