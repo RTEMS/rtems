@@ -12,6 +12,9 @@
 
 @unnumbered Preface
 
-This lists each section number in POSIX 1003.1 and which functions
-are defined in that document per section number.
+This document lists the functions, constant, macros, feature flags,
+and types defined in the POSIX 1003.1 standard.  Each section in 
+this document corresponds to a section in the 1003.1 standard
+and the implementation status of the items required by the standard
+are listed.
 
