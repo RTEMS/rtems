@@ -294,7 +294,6 @@ libcsupport/Makefile
 libnetworking/Makefile
 libnetworking/lib/Makefile
 libnetworking/libc/Makefile
-libnetworking/wrapup/Makefile
 librpc/Makefile
 librpc/src/Makefile
 librpc/src/xdr/Makefile

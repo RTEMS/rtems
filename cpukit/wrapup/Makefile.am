@@ -35,7 +35,9 @@ LIBS += ../libfs/src/imfs/$(ARCH)/libimfs.a
 LIBS += ../libmisc/wrapup/$(ARCH)/libmisc.a
 
 if HAS_NETWORKING
-LIBS += ../libnetworking/wrapup/$(ARCH)/libnetworking.a
+LIBS += ../libnetworking/$(ARCH)/libnetworking.a
+LIBS += ../libnetworking/lib/$(ARCH)/lib.a
+LIBS += ../libnetworking/libc/$(ARCH)/lib.a
 endif
 
 if LIBRPC
