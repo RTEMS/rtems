@@ -1,3 +1,8 @@
+2004-04-14	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Add RTEMS_ROOT (HACK: This is the last file c/src
+	which still uses RTEMS_ROOT).
+
 2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* start/start.S: Include <rtems/asm.h> instead of <asm.h>.
