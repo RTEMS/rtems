@@ -1,5 +1,11 @@
 2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* binutils/base-binutils.add: Preps for 2.14 (Merger from CVS trunk).
+	* binutils/binutils.add: Use %{binutils_version} instead of
+	@binutils_version@ (Missed in previous patches).
+
+2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* autotools/autoconf.spec.in, autotools/automake.spec.in:
 	Add rpmgroup, rpmprefix support.
 

@@ -14,8 +14,8 @@ Prefix:		%{_prefix}
 BuildPreReq:	/sbin/install-info
 BuildPreReq:	texinfo >= 4.2
 
-Version:      	@binutils_version@
-Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.bz2
+Version:      	%{binutils_version}
+Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}.tar.bz2
 @PATCH1@
 
 #
@@ -45,7 +45,7 @@ This is binutils sources with patches for RTEMS.
 
 %build
   cd build
-  ../binutils-@binutils_version@/configure \
+  ../binutils-%{binutils_version}/configure \
     --build=%_build --host=%_host \
     --target=%{binutils_target} \
     --verbose --prefix=%{_prefix} --disable-nls
@@ -60,7 +60,7 @@ This is binutils sources with patches for RTEMS.
   make prefix=$RPM_BUILD_ROOT%{_prefix} install-info
 # A bug in binutils: binutils does not install share/locale
 # however it uses it
-  ../binutils-@binutils_version@/mkinstalldirs \
+  ../binutils-%{binutils_version}/mkinstalldirs \
     $RPM_BUILD_ROOT%{_prefix}/share/locale
 
   rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
