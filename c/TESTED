@@ -26,11 +26,11 @@ RedHat Linux 4.2 as the host environment:
    m68k    m68332    efi332                       (note 1)
    m68k    m68360    generic 68360                (note 1, 6)
    m68k    m68360    68360 in companion mode      (note 1, 6)
-   i386   i386_fp    Force CPU-386                (note 1) 
-   i386   i386ex     generic i386ex               (note 1) 
-   i386    i486      DJGPP/PC-AT                 NOT TESTED
-   i386   pentium    DJGPP/PC-AT                 NOT TESTED
-   i386    ix86      bare PC (pc386)             NOT TESTED
+   i386   i386_fp    Force CPU-386                (note 1, 7) 
+   i386   i386ex     generic i386ex               (note 1, 6) 
+   i386    ix86      bare PC (pc386)              (note 1, 6)
+   i386    i486      DJGPP/PC-AT                  (note 7)
+   i386   pentium    DJGPP/PC-AT                  (note 7)
    i960   i960ca     Cyclone CVME961              (note 4)
    hppa   hppa7100   simhppa                      (note 1)
    mips   idt4600    p4000                        (note 1)
@@ -70,3 +70,6 @@ immediately preceding the snapshot.
 (5) This BSP is tested on a CPU software simulator.
 
 (6) This BSP was tested by an RTEMS volunteer and reported to work.
+
+(7) The BSP is deprecated.  For information on what would be 
+    required to update it contact rtems@OARcorp.com.
