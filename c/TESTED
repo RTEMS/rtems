@@ -2,36 +2,47 @@
 #  $Id$
 #
 
-This file is current as of the 3.5.17 snapshot.
+This file is current as of Decembter 23, 1997 for the snapshots
+preceding the 4.0.0 release.
 
-The RTEMS project uses SparcStations running the Solaris 2.3 operating
-system internally for development.  This release has been tested on the
-following Languages/CPUs/Targets using Solaris 2.3/SPARC as the host
-environment:
+The RTEMS project uses Intel x86 based computers running the RedHat
+distribution of the Linux operating system internally for development.  
+This release has been tested on the following Languages/CPUs/Targets using
+RedHat Linux 4.2 as the host environment:
 
-            CPU     CPU
-  LANGUAGE FAMILY  MODEL         TARGET             SUITES
-  ======== ====== ========= =================== ===============
-     C      m68k   m68000    efi68k                 (note 1)
-     C      m68k   m68020    Motorola MVME136      ALL TESTS
-     C      m68k   m68020    Motorola MVME147       (note 1)
-     C      m68k  m68lc040   Motorola MVME162       (note 1)
-     C      m68k  m68ec040   Motorola IDP           (note 1)
-     C      m68k   m68020    DY-4 DMV152            (note 1)
-     C      m68k   m68302    generic 68302          (note 1)
-     C      m68k   m68332    efi332                 (note 1)
-     C      m68k   m68302    generic 68360          (note 1)
-     C      i386  i386_fp    Force CPU-386         ALL TESTS
-     C      i386   i486      DJGPP/PC-AT           ALL TESTS
-     C      i386  pentium    DJGPP/PC-AT           ALL TESTS
-     C      i960  i960ca     Cyclone CVME961        (note 4)
-     C      hppa  hppa7100   simhppa                (note 1)
-     C      ppc    403       Papyrus                (note 1)
-     C      UNIX     NA      Solaris 2 (SPARC)     ALL TESTS (inlines)
-     C      UNIX     NA      Solaris 2 (SPARC)     ALL TESTS (macros)
-     C      UNIX     NA      Linux (i386)          NOT TESTED
-     C      UNIX     NA      HPUX (PA-RISC)         (note 2)
-     C     no_cpu    NA      no_bsp                 (note 3)
+   CPU     CPU
+  FAMILY  MODEL             TARGET               SUITES
+  ====== ========= =======================   ===============
+   m68k   m68000    efi68k                       (note 1)
+   m68k   m68020    Motorola MVME136            NOT TESTED
+   m68k   m68030    Motorola MVME147             (note 1)
+   m68k   m68030    Motorola MVME147s            (note 1)
+   m68k  m68lc040   Motorola MVME162             (note 1)
+   m68k  m68lc040   Motorola MVME162LX           (note 1)
+   m68k  m68ec040   Motorola IDP                 (note 1)
+   m68k   m68020    DY-4 DMV152                  (note 1)
+   m68k   m68302    generic 68302                (note 1)
+   m68k   m68332    efi332                       (note 1)
+   m68k   m68360    generic 68360                (note 1)
+   m68k   m68360    68360 in companion mode      (note 1)
+   i386  i386_fp    Force CPU-386                (note 1) 
+   i386  i386ex     generic i386ex               (note 1) 
+   i386   i486      DJGPP/PC-AT                 NOT TESTED
+   i386  pentium    DJGPP/PC-AT                 NOT TESTED
+   i386   ix86      bare PC (pc386)             NOT TESTED
+   i960  i960ca     Cyclone CVME961              (note 4)
+   hppa  hppa7100   simhppa                      (note 1)
+   mips  idt4600    p4000                        (note 1)
+   mips  idt4650    p4000                        (note 1)
+   ppc    403       Papyrus                      (note 1)
+  sparc   erc32     generic erc32               ALL TESTS (note 5)
+   a29k   a29k      port sw                      (note 2)
+   UNIX     NA      Solaris 2 (SPARC)            (note 2) 
+   UNIX     NA      Solaris 2 (SPARC)            (note 2) 
+   UNIX     NA      Linux (i386)                ALL TESTS (inlines)
+   UNIX     NA      Linux (i386)                ALL TESTS (macros)
+   UNIX     NA      HPUX (PA-RISC)               (note 2)
+  no_cpu    NA      no_bsp                       (note 3)
 
 NOTES:
 
@@ -44,8 +55,12 @@ immediately preceding the snapshot.
     "ALL TESTS" does not include the multiprocessor tests.
 
 (2) RTEMS Project cannot internally compile or test this target.
+    As of 4.0.0, the HP-UX is not recognized in the configure script
+    The a29k does not use GNU tools and may suffer from bit rot.
 
 (3) Target is not intended to be executed.  It is only an example.
 
 (4) The board owned by the RTEMS Project is broken.  The BSP is known
     to compile and link with all appropriate tests successfully.
+
+(5) This BSP is tested on the SPARC Instruction Simulator (SIS).
