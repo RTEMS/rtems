@@ -19,7 +19,7 @@
  *
  *      Utah $Hdr: asm.h 1.6 91/12/03$
  *
- *  RTEMS: cpu_asm.h,v 1.2 1995/05/09 20:11:39 joel Exp
+ *  $Id$
  */
 
 /*

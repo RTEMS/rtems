@@ -24,7 +24,7 @@
 #      Division Incorporated makes no representations about the
 #      suitability of this software for any purpose.
 #
-#  cpu_asm.S,v 1.2 1995/05/09 20:11:37 joel Exp
+ *  $Id$
 #
 
 #include <rtems/hppa.h>

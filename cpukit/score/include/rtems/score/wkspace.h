@@ -12,7 +12,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  wkspace.h,v 1.2 1995/05/31 16:47:46 joel Exp
+ *  $Id$
  */
 
 #ifndef __RTEMS_WORKSPACE_h

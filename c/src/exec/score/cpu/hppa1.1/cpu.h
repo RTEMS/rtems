@@ -20,7 +20,7 @@
  * Note:
  *      This file is included by both C and assembler code ( -DASM )
  *
- *  cpu.h,v 1.2 1995/05/09 20:11:36 joel Exp
+ *  $Id$
  */
 
 #ifndef __CPU_h

@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  taskmp.h,v 1.2 1995/05/31 16:47:30 joel Exp
+ *  $Id$
  */
 
 #ifndef __RTEMS_RTEMS_TASKS_MP_h
