@@ -2,31 +2,21 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../../shared
 
-PGM = $(ARCH)/tod.rel
-
-C_FILES = todcfg.c tod.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
+C_FILES = todcfg.c
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+shared_C_FILES = $(top_srcdir)/../../shared/tod.c
+OBJS += $(shared_C_FILES:$(top_srcdir)/../../shared/%.c=$(ARCH)/%.$(OBJEXT))
 
-$(PGM): $(OBJS)
-	$(make-rel)
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../shared/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
 
-# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+noinst_DATA = $(OBJS)
 
-all-local: $(OBJS) $(PGM)
-
-.PRECIOUS: $(PGM)
-
-EXTRA_DIST = todcfg.c
+EXTRA_DIST = $(C_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

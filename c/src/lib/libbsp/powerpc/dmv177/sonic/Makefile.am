@@ -2,33 +2,18 @@
 ## $Id$
 ##
 
-PGM = $(ARCH)/sonic.rel
-
 C_FILES = dmvsonic.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
-
 AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 
-$(PGM): $(OBJS)
-	$(make-rel)
-
-# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-
 if HAS_NETWORKING
-all-local: $(OBJS) $(PGM)
+noinst_DATA = $(OBJS)
 endif
 
-.PRECIOUS: $(PGM)
-
-EXTRA_DIST = dmvsonic.c
+EXTRA_DIST = $(C_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
