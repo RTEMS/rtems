@@ -24,7 +24,7 @@ COMMON_FILES=../../common/cpright.texi ../../common/setup.texi \
 FILES= $(PROJECT).texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
 GENERATED_FILES=\
-  cpumodel.texi
+  cpumodel.texi callconv.texi
 
 #  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
 #  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi wksheets.texi 
@@ -49,6 +49,11 @@ $(PROJECT).dvi: $(FILES)
 
 cpumodel.texi: cpumodel.t Makefile
 	$(BMENU) -p "Preface" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+callconv.texi: callconv.t Makefile
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
