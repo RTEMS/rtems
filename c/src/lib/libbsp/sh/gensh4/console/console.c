@@ -181,7 +181,12 @@ console_first_open(int major, int minor, void *arg)
 static int
 console_last_close(int major, int minor, void *arg)
 {
-    return sh4uart_disable(&sh4_uarts[minor]);
+    if (console_mode != CONSOLE_MODE_IPL)
+    /* working from gdb we should not disable port operations */
+        return sh4uart_disable(&sh4_uarts[minor], 
+	        !(boot_mode == SH4_BOOT_MODE_IPL));
+    else
+	return RTEMS_SUCCESSFUL;
 }
 
 /* console_reserve_resources --

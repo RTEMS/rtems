@@ -1,3 +1,8 @@
+2001-10-26	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* README, console/console.c, hw_init/hw_init.c, include/bsp.h,
+	startup/bspstart.c, startup/linkcmds: Minor fixes post merge.
+
 2001-10-15	Joel Sherrill <joel@OARcorp.com>
 
 	* console/.cvsignore: New file.

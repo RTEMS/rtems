@@ -64,12 +64,12 @@ NOTES
     hw_init.c also provides 'bsp_cache_on'(void) normally called from
     'start.S' after copying all data from rom to ram.
 
-(3) In  'make/custom/gensh4.cfg'  you should properly set 'HZ=XXXX', which
-    is frequency fed to the CPU core (external clock frequency can be
+(3) In 'configure.ac' you should properly set 'CPU_CLOCK_RATE_HZ'.
+    It is frequency fed to the CPU core (external clock frequency can be
     multiplied by on-chip PLLs). Please note that it is not a frequency of
     external oscillator! See Hardware Manual, section 10, for details.
     Global variable 'SH4_CPU_HZ_Frequency' is declared in 'bsp.h' and 
-    initilized in 'bspstart.c' to ${HZ}. It is used by console driver, 
+    initilized in 'bspstart.c' to ${HZ}. It is used by sci driver, 
     which exists in 'libcpu/sh/sh7750'. 
 
 (4) There is SH4_WITH_IPL macro in console driver 'sh4_uart.h'. 

@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
+ *	   Alexandra Kossovsky <sasha@oktet.ru>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -174,9 +175,7 @@ early_hw_init(void)
     /* Time between auto-refresh commands is 15.6 microseconds; refresh
        timer counter frequency is 12 MHz; 1.56e-5*1.2e7= 187.2, therefore
        program the refresh timer divider to 187 */
-    /* Sasha, try to run it with period 187 -- it should work! */
     write16(SH7750_RTCOR_KEY | 187, SH7750_RTCOR); 
-/*    write16(SH7750_RTCOR_KEY | 90, SH7750_RTCOR); */
     
     /* Clear refresh counter */
     write16(SH7750_RFCR_KEY | 0, SH7750_RFCR);

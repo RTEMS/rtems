@@ -46,13 +46,6 @@ rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
 
-#if OBSOLETE
-/*
- * This variable is nesessary for console driver.
- */
-unsigned32 SH4_CPU_HZ_Frequency = CPU_CLOCK_RATE_HZ;
-#endif
-
 /*
  *  Use the shared implementations of the following routines
  */
