@@ -21,6 +21,10 @@ typedef	unsigned int		vm_size_t;
 #define _BSD_PID_T_	rtems_id
 #define _BSD_VA_LIST_	char *
 
+/* make sure we get the network versions of these */
+#include "../machine/types.h"
+#include "../machine/param.h"
+
 #include <sys/time.h>
 struct  itimerval {
   struct  timeval it_interval;
