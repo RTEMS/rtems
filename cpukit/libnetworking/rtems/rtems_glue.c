@@ -117,11 +117,10 @@ rtems_bsdnet_malloc (unsigned long size, int type, int flags)
 			return p;
 		rtems_bsdnet_semaphore_release ();
 		if (++try >= 30) {
-			printf ("rtems_bsdnet_malloc still waiting.\n");
+			rtems_bsdnet_malloc_starvation();
 			try = 0;
 		}
-		while (rtems_bsdnet_seconds_since_boot() == 0)
-			rtems_task_wake_after(1);
+        rtems_task_wake_after (rtems_bsdnet_ticks_per_second);
 		rtems_bsdnet_semaphore_obtain ();
 	}
 }
@@ -272,7 +271,8 @@ rtems_bsdnet_initialize (void)
 	/*
 	 * Ensure that `seconds' is greater than 0
 	 */
-	rtems_task_wake_after (rtems_bsdnet_ticks_per_second);
+    while (rtems_bsdnet_seconds_since_boot() == 0)
+        rtems_task_wake_after(1);
 
 	/*
 	 * Set up BSD-style sockets

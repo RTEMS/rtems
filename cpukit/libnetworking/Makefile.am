@@ -159,7 +159,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
 rtems_C_FILES = rtems/sghostname.c rtems/issetugid.c rtems/rtems_glue.c rtems/rtems_syscall.c \
     rtems/rtems_bootp.c rtems/rtems_showmbuf.c rtems/rtems_showroute.c rtems/rtems_showifstat.c \
     rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c rtems/rtems_showtcpstat.c \
-    rtems/rtems_showudpstat.c rtems/rtems_select.c rtems/mkrootfs.c
+    rtems/rtems_showudpstat.c rtems/rtems_select.c rtems/mkrootfs.c \
+    rtems/rtems_bsdnet_malloc_starvation.c
 OBJS += $(rtems_C_FILES:rtems/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): rtems/%.c
