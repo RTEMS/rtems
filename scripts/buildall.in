@@ -13,13 +13,26 @@ usage()
 {
   echo "$0 [options] <target_alias>"
   echo "  options:"
+  echo "    -b                  -- build binutils"
+  echo "    -g                  -- build gcc/newlib"
+  echo "    -d                  -- build gdb"
+  echo "    -t                  -- enable test/debug mode"
   echo "    -cfg <setup.cache>"
   echo "    -o <rpm-spec-dir>"
   exit 1 ;
 }
 
+testing=no
+do_binutils=no
+do_gccnewlib=no
+do_gdb=no
+
 while test $# -ge 1; do
   case $1 in
+    -b) do_binutils=yes  ; shift;;
+    -g) do_gccnewlib=yes ; shift;; 
+    -d) do_gdb=yes       ; shift;; 
+    -t) do_test=yes      ; shift;; 
     -cfg)
       test $# -ge 2 || usage
       shift
@@ -43,6 +56,12 @@ while test $# -ge 1; do
   esac
 done
 
+if test ${do_binutils} = no -a ${do_gccnewlib} = no -a ${do_gdb} = no ; then
+  echo "You must request building binutils, gcc/newlib, or gdb."
+  usage
+fi
+
+
 # This is the full list .. hppa1.1 does not build now.
 #ALL_TARGETS="hppa1.1-rtems i386-rtems i960-rtems m68k-rtems \
 #  m68k-rtemself mips64orion-rtems \
@@ -62,11 +81,6 @@ gdb=${gdb_version}
 newlib=${newlib_version}
 # also use binutils_rpm_release
 buildroot=/tmp
-
-testing=no
-do_binutils=yes
-do_gccnewlib=yes
-do_gdb=yes
 
 #
 #  Now get started
