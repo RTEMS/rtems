@@ -21,8 +21,8 @@ DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
+include_HEADERS += ../../shared/tod.h
 include_HEADERS += include/coverhd.h include/gen2.h
-include_HEADERS += include/tod.h
 
 EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
@@ -108,6 +108,10 @@ $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 
+$(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
+
 $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
@@ -115,10 +119,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 $(PROJECT_INCLUDE)/gen2.h: include/gen2.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gen2.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/gen2.h
-
-$(PROJECT_INCLUDE)/tod.h: include/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
