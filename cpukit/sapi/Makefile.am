@@ -77,7 +77,6 @@ $(LIB): ${OBJS}
 	$(make-library)
 
 ${ARCH}/%.$(OBJEXT): src/%.c
-	test -d $(ARCH) || mkdir $(ARCH)
 	${COMPILE} -o $@ -c $<
 
 EXTRA_DIST += $(C_FILES)

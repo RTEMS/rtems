@@ -178,7 +178,6 @@ $(LIB): ${OBJS}
 	$(make-library)
 
 ${ARCH}/%.$(OBJEXT): src/%.c
-	test -d $(ARCH) || mkdir $(ARCH)
 	${COMPILE} -o $@ -c $<
 
 # temporary so we can see how many things are left to implement

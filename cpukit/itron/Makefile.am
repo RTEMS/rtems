@@ -133,7 +133,6 @@ $(LIB): ${OBJS}
 	$(make-library)
 
 ${ARCH}/%.$(OBJEXT): src/%.c
-	test -d ${ARCH} || mkdir ${ARCH}
 	${COMPILE} -o $@ -c $<
 
 UNUSED_C_FILES = src/cre_mbx.c src/del_mbx.c src/mboxtranslatereturncode.c src/network.c \
