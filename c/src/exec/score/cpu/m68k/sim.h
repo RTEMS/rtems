@@ -68,16 +68,15 @@
 
 /* SIM_CRB (SIM Control Register Block) base address of the SIM
    control registers */
-/* not included in ram_init.h */
+#ifndef SIM_CRB
 #if SIM_MM == 0
 #define SIM_CRB 0x7ffa00
-#else
+#else /* SIM_MM */
 #undef SIM_MM
 #define SIM_MM 1
 #define SIM_CRB 0xfffa00
-#endif 
-/* end not included in ram_init.h */
-
+#endif /* SIM_MM */
+#endif /* SIM_CRB */
 
 
 #define SIMCR SIM_VOLATILE_USHORT_POINTER(0x00 + SIM_CRB)

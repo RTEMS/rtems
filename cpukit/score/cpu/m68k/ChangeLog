@@ -1,3 +1,17 @@
+2000-10-12	John S Gwynne <jgwynne@mrcday.com>
+
+	* sim.h: These changes enable RTEMS to automatically generate
+	the ram_init file used by gdb with the BDM patches. The 332 has
+	on-board chip select lines (for RAM and FLASH) that must be
+	configured before use of these peripherals. These patches parse
+	data from start.c where the chip select lines are configured in
+	the runtime executable and automatically generates the gdb
+	initialization file using the same settings. A great time saver.
+	A similar file, ram_init_FW (flash writable), is also generated
+	that the flash programming tool uses.
+	* BSP/start/start.c: Must be modified to support above.
+	* BSP/start/ram_init.ld, BSP/start/ram_init.sed: New files.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am.
