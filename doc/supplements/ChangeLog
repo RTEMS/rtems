@@ -1,3 +1,7 @@
+2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add c4x, cosmetical changes.
+
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* supplements.am: Remove AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF.

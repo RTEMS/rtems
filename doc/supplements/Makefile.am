@@ -1,6 +1,17 @@
 ## $Id$
 
 
-SUBDIRS = arm hppa1_1 i386 i960 m68k mips mips64orion powerpc sh sparc template
+SUBDIRS = arm
+SUBDIRS += c4x 
+SUBDIRS += hppa1_1 
+SUBDIRS += i386
+SUBDIRS += i960
+SUBDIRS += m68k
+SUBDIRS += mips
+SUBDIRS += mips64orion
+SUBDIRS += powerpc
+SUBDIRS += sh
+SUBDIRS += sparc
+SUBDIRS += template
 
 EXTRA_DIST = supplement.am
