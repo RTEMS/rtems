@@ -1,5 +1,4 @@
-/*  Shm_isr_cvme961()
- *
+/*
  *  NOTE: This routine is not used when in polling mode.  Either
  *        this routine OR Shm_clockisr is used in a particular system.
  *
@@ -22,7 +21,7 @@
 #include <bsp.h>
 #include "shm.h"
 
-rtems_isr Shm_isr_cvme961(
+rtems_isr Shm_isr_rxgen960(
   rtems_vector_number vector
 )
 {
@@ -60,7 +59,7 @@ void Shm_setvec()
                                         /*   VME slave address */
     (*(rtems_unsigned8 *)0xc00000b0) =
       (Shm_RTEMS_MP_Configuration->node - 1) | 0x10;
-    set_vector( Shm_isr_cvme961, 6, 1 );
+    set_vector( Shm_isr_rxgen960, 6, 1 );
                                         /* set ICMS Bector Base Register */
     (*(rtems_unsigned8 *)0xa0000053) = 0x60;  /* XINT6 vector is 0x62 */
                                         /* set  ICMS Intr Control Reg */
