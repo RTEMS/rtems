@@ -12,6 +12,7 @@
 /*
  * $Revision$   $Date$   $Author$
  * $State$
+ * $Id$
  */
 
 #ifndef _SONIC_DP83932_
@@ -248,7 +249,7 @@ struct TransmitDescriptor {
   rtems_unsigned32        link_pad;
 
   /*
-   * Extra RTEMS/KA9Q stuff 
+   * Extra RTEMS stuff 
    */
   struct TransmitDescriptor       *next;  /* Circularly-linked list */
   struct mbuf                     *mbufp; /* First mbuf in packet */
@@ -325,7 +326,7 @@ struct ReceiveDescriptor {
   rtems_unsigned32        in_use;
 
   /*
-   * Extra RTEMS/KA9Q stuff 
+   * Extra RTEMS stuff 
    */
   volatile struct ReceiveDescriptor  *next;  /* Circularly-linked list */
 };

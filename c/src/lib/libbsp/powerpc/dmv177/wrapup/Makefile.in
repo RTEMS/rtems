@@ -8,12 +8,12 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-# We only build the ka9q device driver if HAS_KA9Q was defined
-KA9Q_DRIVER_yes_V = sonic
-KA9Q_DRIVER = $(KA9Q_DRIVER_$(HAS_KA9Q)_V)
+# We only build the networking device driver if HAS_NETWORKING was defined
+NETWORKING_DRIVER_yes_V = sonic
+NETWORKING_DRIVER = $(NETWORKING_DRIVER_$(HAS_NETWORKING)_V)
 
 # pieces specific to this BSP
-BSP_PIECES=startup clock console scv64 timer tod $(KA9Q_DRIVER)
+BSP_PIECES=startup clock console scv64 timer tod $(NETWORKING_DRIVER)
 
 # pieces to pick up out of libcpu/$(RTEMS_CPU)
 CPU_PIECES=

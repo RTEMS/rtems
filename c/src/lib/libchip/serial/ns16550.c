@@ -487,8 +487,8 @@ NS16550_STATIC void ns16550_process(
         }
 #endif
 
-      if (!rtems_termios_dequeue_characters(
-                  Console_Port_Data[minor].termios_data, 1)) {
+    rtems_termios_dequeue_characters(Console_Port_Data[minor].termios_data, 1);
+    if (rtems_termios_is_more_to_tx( Console_Port_Data[minor].termios_data )) {
         if (Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_RTSCTS) {
           ns16550_negate_RTS(minor);
         }

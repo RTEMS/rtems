@@ -603,8 +603,8 @@ Z85C30_STATIC void z85c30_process(
     }
 #endif
   
-    if (!rtems_termios_dequeue_characters(
-                Console_Port_Data[minor].termios_data, 1)) {
+    rtems_termios_dequeue_characters(Console_Port_Data[minor].termios_data, 1);
+    if (rtems_termios_is_more_to_tx( Console_Port_Data[minor].termios_data )) {
       if (Console_Port_Tbl[minor].pDeviceFlow != &z85c30_flow_RTSCTS) {
         z85c30_negate_RTS(minor);
       }
