@@ -24,8 +24,8 @@
  */
 /* @(#)asm.h       03/15/96     1.1 */
 
-#ifndef __NO_CPU_ASM_h
-#define __NO_CPU_ASM_h
+#ifndef __MIPS64ORION_ASM_h
+#define __MIPS64ORION_ASM_h
 
 /*
  *  Indicate we are in an assembly file and get the basic CPU definitions.

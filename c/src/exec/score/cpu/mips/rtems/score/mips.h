@@ -15,7 +15,7 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from c/src/exec/score/cpu/no_cpu/no_cpu.h:
+ *  Derived from source copyrighted as follows:
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
