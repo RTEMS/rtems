@@ -53,12 +53,16 @@ Objects_Control *_Objects_Get(
   Objects_Control *the_object;
   unsigned32       index;
 
+#if defined(RTEMS_MULTIPROCESSING)
+  index = id - information->minimum_id + 1;
+#else
   /* index = _Objects_Get_index( id ); */
   index = id & 0x0000ffff;
   /* This should work but doesn't always :( */
   /* index = (unsigned16) id; */
+#endif
 
-  if ( information->maximum >= index ) {
+   if ( information->maximum >= index ) { 
     _Thread_Disable_dispatch();
     if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;

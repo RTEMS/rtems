@@ -57,10 +57,14 @@ Objects_Control *_Objects_Get_isr_disable(
   unsigned32       index;
   ISR_Level        level;
 
+#if defined(RTEMS_MULTIPROCESSING)
+  index = id - information->minimum_id + 1;
+#else
   /* index = _Objects_Get_index( id ); */
   index = id & 0x0000ffff;
   /* This should work but doesn't always :( */
   /* index = (unsigned16) id; */
+#endif
 
   _ISR_Disable( level );
   if ( information->maximum >= index ) {

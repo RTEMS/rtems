@@ -454,6 +454,11 @@ Objects_Control *_Objects_Get_isr_disable(
   ISR_Level           *level
 );
 
+Objects_Control *_Objects_Get_by_index (
+  Objects_Information *information,
+  Objects_Id           id,
+  Objects_Locations   *location
+);
 /*
  *  _Objects_Get_next
  *
