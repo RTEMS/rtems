@@ -8,8 +8,8 @@ include $(top_srcdir)/../../../../automake/lib.am
 BSP_PIECES = startup clock console timer
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(wildcard \
+OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 

@@ -32,18 +32,11 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-bsplib_DATA = linkcmds
-
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
+project_lib_DATA = linkcmds
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
-
-all-local: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(PGM)
+all-local: $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = asmfault.S asmfault.h asmstub.S asmstub.h bspstart.c cntrltbl.c \
     cntrltbl.h dram.ld exit.c fault.c fault.h faultret.h flttbl.c flttbl.h \
@@ -52,5 +45,9 @@ EXTRA_DIST = asmfault.S asmfault.h asmstub.S asmstub.h bspstart.c cntrltbl.c \
     prcb.c prcb.h rom.ld rom_cntrltbl.c rom_ibr.c rom_ibr.h rom_prcb.c \
     rommon.h rxgen_romld.S sctns.c sctns.h setvec.c systbl.c systbl.h \
     time.h
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
 
 include $(top_srcdir)/../../../../automake/local.am
