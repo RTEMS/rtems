@@ -1,3 +1,8 @@
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* cache/Makefile.am: Removed automake warning by introducing a
+	simple variable.
+
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
 	* cache/cache.h: Fix reference to MC68040 and put in stubs

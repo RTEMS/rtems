@@ -19,10 +19,10 @@ include $(top_srcdir)/../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../automake/lib.am
 
 if has_instruction_cache
-AM_CPPFLAGS += -I$(srcdir) -DHAS_INSTRUCTION_CACHE
-else
-AM_CPPFLAGS += -I$(srcdir)
+CACHE_DEFINE = -DHAS_INSTRUCTION_CACHE
 endif
+
+AM_CPPFLAGS += -I$(srcdir) $(CACHE_DEFINE)
 
 $(PROJECT_INCLUDE)/libcpu:
 	$(mkinstalldirs) $@
