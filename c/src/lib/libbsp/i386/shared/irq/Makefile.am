@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = irq.h irq_asm.h
+include_HEADERS = irq.h irq_asm.h
 
 C_FILES = idt.c irq.c irq_init.c
 S_FILES = irq_asm.S
@@ -14,10 +14,11 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = idt.c irq.c irq.h irq_asm.S irq_asm.h irq_init.c
+EXTRA_DIST = idt.c irq.c irq_asm.S irq_init.c
 
 include $(top_srcdir)/../../../../../automake/local.am

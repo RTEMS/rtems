@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = uart.h tty_drv.h i386_io.h
+include_HEADERS = uart.h tty_drv.h i386_io.h
 
 C_FILES = i386-stub-glue.c i386-stub.c uart.c tty_drv.c gdb_glue.c
 
@@ -15,7 +15,8 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(PREINSTALL_FILES)
 

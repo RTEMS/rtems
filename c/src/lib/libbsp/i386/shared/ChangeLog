@@ -1,4 +1,11 @@
 
+	* comm/Makefile.am: Use *_HEADERS instead of *H_FILES.
+	* io/Makefile.am: Ditto.
+	* irq/Makefile.am: Ditto.
+	* pci/Makefile.am: Ditto.
+
+2000-10-19	Joel Sherrill <joel@OARcorp.com>
+
 	* common/uart.h: Added prototype for BSP_uart_set_baud().
 
 2000-10-19	   Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
