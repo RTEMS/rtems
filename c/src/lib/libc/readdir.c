@@ -42,6 +42,12 @@ static char sccsid[] = "@(#)readdir.c	5.7 (Berkeley) 6/1/90";
 
 #include <dirent.h>
 
+long getdents(
+  int dd_fd,
+  char *dd_buf,
+  int dd_len
+);
+
 /*
  * get next entry in a directory.
  */

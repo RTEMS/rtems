@@ -26,12 +26,6 @@
 #include "imfs.h"
 #include "libio_.h"
 
-long getdents(
-  int dd_fd,
-  char *dd_buf,
-  int dd_len
-);
-
 /* -----------------------------------------------------------------------
  * This rountine will verify that the node being opened as a directory is
  * in fact a directory node. If it is then the offset into the directory 
