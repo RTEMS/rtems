@@ -9,112 +9,121 @@
 
 @chapter Base File System
 
-RTEMS initially mounts a RAM based file system known as the base file system. 
-The root directory of this file system tree serves as the logical root of the directory 
-hierarchy (Figure 3). Under the root directory a `/dev' directory is created under which all 
-I/O device directories and files are registered as part of the file system hierarchy. 
+RTEMS initially mounts a RAM based file system known as the base file system.  
+The root directory of this file system tree serves as the logical root of the
+directory hierarchy (Figure 3). Under the root directory a `/dev' directory
+is created under which all I/O device directories and files are registered as
+part of the file system hierarchy.
 
-A RAM based file system draws its management resources from memory. File 
-and directory nodes are simply allocated blocks of memory. Data associated with regular 
-files is stored in collections of memory blocks. When the system is turned off or restarted 
-all memory-based components of the file system are lost.
+@example
+Figure of the tree structure goes here.
+@end example
 
-The base file system serves as a starting point for the mounting of file systems 
-that are resident on semi-permanent storage media. Examples of such media include non-
-volatile memory, flash memory and IDE hard disk drives (Figure 3). File systems of other 
-types will be mounted onto mount points within the base file system or other file systems 
-that are subordinate to the base file system. The framework set up under the base file 
-system will allow for these new file system types and the unique data and functionality 
-that is required to manage the future file systems.
+A RAM based file system draws its management resources from memory. File and
+directory nodes are simply allocated blocks of memory. Data associated with
+regular files is stored in collections of memory blocks. When the system is
+turned off or restarted all memory-based components of the file system are
+lost.
+
+The base file system serves as a starting point for the mounting of file
+systems that are resident on semi-permanent storage media. Examples of such
+media include non- volatile memory, flash memory and IDE hard disk drives
+(Figure 3). File systems of other types will be mounted onto mount points
+within the base file system or other file systems that are subordinate to the
+base file system. The framework set up under the base file system will allow
+for these new file system types and the unique data and functionality that is
+required to manage the future file systems.
 
 @section Base File System Mounting
 
-At present, the first file system to be mounted is the `In Memory File System'. It 
-is mounted using a standard MOUNT() command in which the mount point is NULL. 
-This flags the mount as the first file system to be registered under the operating system 
-and appropriate initialization of file system management information is performed (See 
-figures 4 and 5). If a different file system type is desired as the base file system, 
-alterations must be made to base_fs.c. This routine handles the mount of the base file 
+At present, the first file system to be mounted is the `In Memory File
+System'. It is mounted using a standard MOUNT() command in which the mount
+point is NULL.  This flags the mount as the first file system to be
+registered under the operating system and appropriate initialization of file
+system management information is performed (See figures 4 and 5). If a
+different file system type is desired as the base file system, alterations
+must be made to base_fs.c. This routine handles the mount of the base file
 system.
 
 
 @example
-Figure 4
+Figure of the mount table chain goes here.
 @end example
 
 
-Once the root of the base file system has been established and it has been 
-recorded as the mount point of the base file system, devices are integrated into the base 
-file system. For every device that is configured into the system (See ioman.c) a device 
-registration process is performed. Device registration produces a unique dev_t handle that 
-consists of a major and minor device number. In addition, the configuration information 
-for each device contains a text string that represents the fully qualified pathname to that 
-device's place in the base file system's hierarchy. A file system node is created for the 
-device along the specified registration path.
-
+Once the root of the base file system has been established and it has been
+recorded as the mount point of the base file system, devices are integrated
+into the base file system. For every device that is configured into the
+system (See ioman.c) a device registration process is performed. Device
+registration produces a unique dev_t handle that consists of a major and
+minor device number. In addition, the configuration information for each
+device contains a text string that represents the fully qualified pathname to
+that device's place in the base file system's hierarchy. A file system node
+is created for the device along the specified registration path.
 
 
 @example
-Figure 5
+Figure  of the Mount Table Processing goes here.
 @end example
 
 
-Note: Other file systems can be mounted but they are mounted onto points (directory 
-mount points) in the base file system.
+Note: Other file systems can be mounted but they are mounted onto points
+(directory mount points) in the base file system.
 
 
 @subsection Base File System Node Structure and Function
 
-Each regular file, device, hard link, and directory is represented by a data 
-structure called a @code{jnode}. The -jnode- is formally represented by the structure:
+Each regular file, device, hard link, and directory is represented by a data
+structure called a @code{jnode}. The @code{jnode} is formally represented by the
+structure:
 
 @example
 struct IMFS_jnode_tt @{
-  Chain_Node                 Node;             /* for chaining them together */
-  IMFS_jnode_t              *Parent;           /* Parent node */
-  char                       name[NAME_MAX+1]; /* "basename" */
-  mode_t                     st_mode;          /* File mode */
-  nlink_t                    st_nlink;         /* Link count */
-  ino_t                      st_ino;           /* inode */
+  Chain_Node          Node;             /* for chaining them together */
+  IMFS_jnode_t       *Parent;           /* Parent node */
+  char                name[NAME_MAX+1]; /* "basename" */
+  mode_t              st_mode;          /* File mode */
+  nlink_t             st_nlink;         /* Link count */
+  ino_t               st_ino;           /* inode */
 
-  uid_t                      st_uid;           /* User ID of owner */
-  gid_t                      st_gid;           /* Group ID of owner */
-
-  time_t                     st_atime;         /* Time of last access */
-  time_t                     st_mtime;         /* Time of last modification */
-  time_t                     st_ctime;         /* Time of last status change */
-  IMFS_jnode_types_t         type;             /* Type of this entry */
-  IMFS_typs_union            info;
+  uid_t               st_uid;           /* User ID of owner */
+  gid_t               st_gid;           /* Group ID of owner */
+  time_t              st_atime;         /* Time of last access */
+  time_t              st_mtime;         /* Time of last modification */
+  time_t              st_ctime;         /* Time of last status change */
+  IMFS_jnode_types_t  type;             /* Type of this entry */
+  IMFS_typs_union     info;
 @};
 @end example
 
-The key elements of this structure are listed below together with a brief explanation of 
-their role in the file system.
+The key elements of this structure are listed below together with a brief
+explanation of their role in the file system.
 
 @table @b
 
-@item node
-This element exists simply to allow the entire @code{jnode} structure to be 
+@item Node
+This element exists simply to allow the entire @code{jnode} structure to be
 included in a chain.
 
-@item parent
-A pointer to another @code{jnode} structure that is the logical parent of the 
-node in which it appears. There are circumstances that will produce a null parent 
-pointer within a @code{jnode}. This can occur when a hard link is created to a file and 
-the file is then removed without removing the hard link.
+@item Parent
+A pointer to another @code{jnode} structure that is the logical parent of the
+node in which it appears. There are circumstances that will produce a null
+parent pointer within a @code{jnode}. This can occur when a hard link is
+created to a file and the file is then removed without removing the hard
+link.
 
 @item name
-The name of this node within the file system hierarchical tree. Example: 
-If the fully qualified pathname to the @code{jnode} was /a/b/c, the -jnode- name field 
-would contain the null terminated string "c"
+The name of this node within the file system hierarchical tree. Example:  If
+the fully qualified pathname to the @code{jnode} was /a/b/c, the @code{jnode} name
+field would contain the null terminated string "c"
 
 @item st_mode
 The standard Unix access permissions for the file or directory.
 
 @item st_nlink
-The number of hard links to this file. When a @code{jnode} is first created its 
-link count is set to 1. A @code{jnode} and its associated resources cannot be deleted 
-unless its link count is less than 1.
+The number of hard links to this file. When a @code{jnode} is first created
+its link count is set to 1. A @code{jnode} and its associated resources
+cannot be deleted unless its link count is less than 1.
 
 @item st_ino
 A unique node identification number
@@ -147,41 +156,45 @@ The indication of node type must be one of the following states:
 
 
 @item info
-This contains a structure that is unique to file type(See IMFS_typs_union in 
-imfs.h )
+This contains a structure that is unique to file type (See IMFS_typs_union
+in imfs.h).
 
 @itemize @bullet
 
 @item IMFS_DIRECTORY
-An in memory file system directory contains a 
-dynamic chain structure that records all files and directories that are 
-subordinate to the directory node. 
+
+An in memory file system directory contains a dynamic chain structure that
+records all files and directories that are subordinate to the directory node.
 
 @item IMFS_MEMORY_FILE
-Under the in memory file system regular files hold 
-data. Data is dynamically allocated to the file in 128 byte chunks of memory. 
-The individual chunks of memory are tracked by arrays of pointers that record 
-the address of the allocated chunk of memory. Single, double, and triple 
-indirection pointers are used to record the locations of all segments of the file. 
-These memory-tracking techniques are graphically depicted in figures XXX 
-and XXX of appendix A.
+
+Under the in memory file system regular files hold data. Data is dynamically
+allocated to the file in 128 byte chunks of memory.  The individual chunks of
+memory are tracked by arrays of pointers that record the address of the
+allocated chunk of memory. Single, double, and triple indirection pointers
+are used to record the locations of all segments of the file.  These
+memory-tracking techniques are graphically depicted in figures XXX and XXX of
+appendix A.
 
 @item IMFS_HARD_LINK
-The IMFS file system supports the concept of hard 
-links to other nodes in the IMFS file system. These hard links are actual 
-pointers to the memory associated with other nodes in the file system. This 
-type of link cannot cross-file system boundaries.
+
+The IMFS file system supports the concept of hard links to other nodes in the
+IMFS file system. These hard links are actual pointers to the memory
+associated with other nodes in the file system. This type of link cannot
+cross-file system boundaries.
 
 @item IMFS_SYM_LINK
-The IMFS file system supports the concept of symbolic 
-links to other nodes in any file system. A symbolic link consists of a pointer to 
-a character string that represents the pathname to the target node. This type of 
-link can cross-file system boundaries. 
+
+The IMFS file system supports the concept of symbolic links to other nodes in
+any file system. A symbolic link consists of a pointer to a character string
+that represents the pathname to the target node. This type of link can
+cross-file system boundaries.
 
 @item IMFS_DEVICE
-All RTEMS devices now appear as files under the in 
-memory file system. On system initialization, all devices are registered as 
-nodes under the file system.
+
+All RTEMS devices now appear as files under the in memory file system. On
+system initialization, all devices are registered as nodes under the file
+system.
 
 @end itemize
 
@@ -193,6 +206,7 @@ nodes under the file system.
 @itemize @bullet 
 
 @item If a node is a directory with children it cannot be removed.
+
 @item The root node of the base file system or the mounted file system 
 cannot be removed.
 
@@ -208,13 +222,13 @@ link count must be less than one to allow for removal of the node.
 
 @itemize @bullet 
 
-@item If the global variable rtems_filesystem_current refers to the node that 
-we are trying to remove, the node_access element of this structure 
-must be set to NULL to invalidate it.
+@item If the global variable rtems_filesystem_current refers to the node that
+we are trying to remove, the node_access element of this structure must be
+set to NULL to invalidate it.
 
-@item If the node was of IMFS_MEMORY_FILE type, free the memory 
-associated with the memory file before freeing the node. Use the 
-IMFS_memfile_remove() function.
+@item If the node was of IMFS_MEMORY_FILE type, free the memory associated
+with the memory file before freeing the node. Use the IMFS_memfile_remove()
+function.
 
 @end itemize
 
@@ -224,6 +238,7 @@ IMFS_memfile_remove() function.
 @subsection OPS Table Functions for the In Memory File System (IMFS)
 
 @example
+
 OPS Table Functions             File                    Routine Name
 
 Evalpath Imfs_eval.c IMFS_eval_path()

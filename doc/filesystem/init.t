@@ -18,10 +18,10 @@ of the following:
 
 @item Initialization of mount table chain control structure
 
-@item Allocation of a -jnode- structure that will server as the root node
+@item Allocation of a @code{jnode} structure that will server as the root node
 of the `In Memory File System'
 
-@item Initialization of the allocated -jnode- with the appropriate OPS,
+@item Initialization of the allocated @code{jnode} with the appropriate OPS,
 directory handlers and pathconf limits and options.
 
 @item Allocation of a memory region for file system specific global

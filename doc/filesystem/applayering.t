@@ -18,8 +18,23 @@ and 7).
 
 
 @example
-Figure 6
+Figure of the File System Functional Layering goes here.
+This figure includes networking and disk caching layering.
 @end example
+
+@ifset use-ascii
+@example
+@group
+@end group
+@end example
+@end ifset
+
+@ifset use-tex
+@c @image{FunctionalLayerCake,6in,4in}
+@end ifset
+
+@ifset use-html
+@end ifset
 
 @enumerate
 
@@ -66,7 +81,8 @@ interface routines.
 
 
 @example
-Figure 7
+Figure of the File System Functional Layering goes here.
+This figure focuses on the Base File System and IMFS.
 @end example
 
 
@@ -74,7 +90,7 @@ Figure 7
 
 
 @example
-Figure 8
+Figure of the IMFS Memfile control blocks 
 @end example
 
 

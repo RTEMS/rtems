@@ -243,12 +243,12 @@ This routine will examine the mode argument to determine is we are trying to
 create a directory, regular file and a device node. The creation of other
 node types is not permitted and will cause an assert.
 
-Memory space will be allocated for a -jnode- and the node will be set up
+Memory space will be allocated for a @code{jnode} and the node will be set up
 according to the nodal type that was specified. The IMFS_create_node()
 function performs the allocation and setup of the node.
 
 The only problem that is currently reported is the lack of memory when we
-attempt to allocate space for the -jnode- (ENOMEN).
+attempt to allocate space for the @code{jnode} (ENOMEN).
 
 
 @c
@@ -731,16 +731,16 @@ memfile.c
 
 @subheading Development Comments:
 
-This routine will determine the -jnode- that is associated with this file.
+This routine will determine the @code{jnode} that is associated with this file.
 
-It will then call IMFS_memfile_read() with the -jnode-, file position index,
+It will then call IMFS_memfile_read() with the @code{jnode}, file position index,
 buffer and transfer count as arguments.
 
 IMFS_memfile_read() will do the following:
 
 @itemize @bullet
 
-@item Verify that the -jnode- is associated with a memory file
+@item Verify that the @code{jnode} is associated with a memory file
 
 @item Verify that the destination of the read is valid
 
@@ -1093,7 +1093,7 @@ imfs_directory.c
 
 @subheading Development Comments:
 
-This routine will look into the file control block to find the -jnode- that
+This routine will look into the file control block to find the @code{jnode} that
 is associated with the directory.
 
 The routine will verify that the node is a directory. If its not a directory
@@ -1482,7 +1482,7 @@ deviceio.c
 This routine will use the file control block to locate the node structure for
 the device.
 
-It will extract the major and minor device numbers from the -jnode-.
+It will extract the major and minor device numbers from the @code{jnode}.
 
 The major and minor device numbers will be used to make a rtems_io_open()  
 function call to open the device driver. An argument list is sent to the
