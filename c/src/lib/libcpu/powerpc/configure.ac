@@ -79,7 +79,5 @@ mpc8260/exceptions/Makefile
 mpc8260/mmu/Makefile
 mpc8260/cpm/Makefile
 shared/Makefile
-shared/include/Makefile
-shared/src/Makefile
 wrapup/Makefile])
 AC_OUTPUT
