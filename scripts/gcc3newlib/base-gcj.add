@@ -20,7 +20,9 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 
 %dir %{_prefix}/info
 %doc %{_prefix}/info/gcj.info*.gz
-
+%if "%{gcc_version}" >= "3.3"
+%doc %{_prefix}/info/fastjar.info*gz
+%endif
 %dir %{_prefix}/man/man1
 %doc %{_prefix}/man/man1/gcjh.1*
 %doc %{_prefix}/man/man1/jv-scan.1*
@@ -29,5 +31,9 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %doc %{_prefix}/man/man1/jv-convert.1*
 %doc %{_prefix}/man/man1/rmic.1*
 %doc %{_prefix}/man/man1/rmiregistry.1*
+%if "%{gcc_version}" >= "3.3"
+%doc %{_prefix}/man/man1/jar.1*
+%doc %{_prefix}/man/man1/grepjar.1*
+%endif
 
 %endif

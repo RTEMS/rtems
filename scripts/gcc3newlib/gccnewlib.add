@@ -199,8 +199,6 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   cp ../gcc-%{gcc_version}/gcc/gsyslimits.h gcc/include/syslimits.h
 %endif
 
-  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-c++filt%{_exeext}
-
 %if %build_gnat
   cd ../gcc-%{gcc_version}/gcc/ada
   touch treeprs.ads [es]info.h nmake.ad[bs]
@@ -265,10 +263,8 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # host library
   rm -f  ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty.a
 
-%if "%{gcc_version}" < "3.3"
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-c++filt%{_exeext}
-%endif
 
 %if "%{gcc_version}" < "3.0"
   # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.

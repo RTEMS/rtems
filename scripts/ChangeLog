@@ -1,3 +1,9 @@
+2003-09-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/gccnewlib.add: Fix duplicate removal of c++filt.
+	* gcc3newlib/base-gcj.add: Add fastjar.info, jar.1, grepjar.1.
+	* setup.def: gcc3newlib_rpm_release=4.
+
 2003-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* binutils/base-binutils.add: Add osversion support.

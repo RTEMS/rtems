@@ -21,4 +21,4 @@ gcc3newlib_version=1.11.0
 gcc3newlib_patch_version=20030507
 gcc3_version=3.2.3
 gcc3_patch_version=20030507a
-gcc3newlib_rpm_release=3
+gcc3newlib_rpm_release=4
