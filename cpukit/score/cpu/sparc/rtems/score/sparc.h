@@ -10,13 +10,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
- *  Agency (ESA).
- *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
- *  European Space Agency.
- *
  *  $Id$
  */
 
@@ -47,37 +40,37 @@ extern "C" {
  *    + SPARC_NUMBER_OF_REGISTER_WINDOWS
  *        8 is the most common number supported by SPARC implementations.
  *        SPARC_PSR_CWP_MASK is derived from this value.
- * 
- *    + SPARC_HAS_LOW_POWER_MODE
- *        0 - does not have low power mode support (or not supported)
- *        1 - has low power mode and thus a CPU model dependent idle task.
- *
  */
  
-#if defined(rtems_multilib)
 /*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines. 
+ *  Some higher end SPARCs have a bitscan instructions. It would
+ *  be nice to take advantage of them.  Right now, there is no
+ *  port to a CPU model with this feature and no (untested) code
+ *  that is based on this feature flag.
  */
 
-#define CPU_MODEL_NAME                   "rtems_multilib"
-#define SPARC_HAS_FPU                    1
 #define SPARC_HAS_BITSCAN                0
-#define SPARC_NUMBER_OF_REGISTER_WINDOWS 8
-#define SPARC_HAS_LOW_POWER_MODE         1
 
-#elif defined(erc32)
- 
-#define CPU_MODEL_NAME                   "erc32"
-#define SPARC_HAS_FPU                    1
-#define SPARC_HAS_BITSCAN                0
+/*
+ *  This should be OK until a port to a higher end SPARC processor
+ *  is made that has more than 8 register windows.  If this cannot
+ *  be determined based on multilib settings (v7/v8/v9), then the
+ *  cpu_asm.S code that depends on this will have to move to libcpu.
+ */
+
 #define SPARC_NUMBER_OF_REGISTER_WINDOWS 8
-#define SPARC_HAS_LOW_POWER_MODE         1
  
+/*
+ *  This should be determined based on some soft float derived 
+ *  cpp predefine but gcc does not currently give us that information.
+ */
+
+#define SPARC_HAS_FPU                    1
+
+#if SPARC_HAS_FPU
+#define CPU_MODEL_NAME "w/FPU"
 #else
- 
-#error "Unsupported CPU Model"
- 
+#define CPU_MODEL_NAME "w/soft-float"
 #endif
 
 /*

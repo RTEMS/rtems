@@ -6,9 +6,6 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 H_FILES = i960CA.h i960HA.h i960KA.h i960RP.h i960JX_RP_common.h
 
-# NOTE: Unlike other CPUS, we install into a subdirectory to avoid
-#       file name conflicts
-
 $(PROJECT_INCLUDE)/libcpu:
 	$(mkinstalldirs) $@
 

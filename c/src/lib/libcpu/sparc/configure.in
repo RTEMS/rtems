@@ -29,6 +29,7 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
+include/Makefile
 reg_win/Makefile
 syscall/Makefile)
 

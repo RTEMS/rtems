@@ -19,8 +19,8 @@
  *  $Id$
  */
 
-#ifndef __SIS_h
-#define __SIS_h
+#ifndef __ERC32_BSP_h
+#define __ERC32_BSP_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,7 +28,7 @@ extern "C" {
 
 #include <rtems.h>
 #include <iosupp.h>
-#include <erc32.h>
+#include <libcpu/erc32.h>
 #include <clockdrv.h>
 
 #include <console.h>

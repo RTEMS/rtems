@@ -45,6 +45,12 @@ rtems_cpu_table   Cpu_table;
 extern rtems_unsigned32  rdb_start;
 
 /*
+ *  Mirror of the Timer Control Register
+ */
+
+unsigned32 _ERC32_MEC_Timer_Control_Mirror;
+
+/*
  * Amount to increment itimer by each pass
  * It is a variable instead of a #define to allow the 'looptest'
  * script to bump it without recompiling rtems
@@ -165,6 +171,21 @@ void bsp_pretasking_hook(void)
 }
 
 /*
+ *  ERC32_Idle_thread_body
+ *
+ *  ERC32 specific idle task that enters low power mode.
+ */
+
+void ERC32_Idle_thread_body( void ) 
+{
+  while (1) {
+    ERC32_MEC.Power_Down = 0;   /* value is irrelevant */
+  }
+}
+
+
+
+/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
@@ -191,6 +212,15 @@ void bsp_start( void )
     ERC32_MEC.Wait_State_Configuration = 0; 
 
   }
+
+  /*
+   *  Initialize the mirror of the Timer Control register.
+   */
+
+  _ERC32_MEC_Timer_Control_Mirror = 0;
+  ERC32_MEC.Timer_Control = 0;
+
+  ERC32_MEC.Control |= ERC32_CONFIGURATION_POWER_DOWN_ALLOWED;
   
   /*
    * Set up our hooks
@@ -207,6 +237,12 @@ void bsp_start( void )
    *  begin execution of OUR application, then we must zero the workspace.
    */
   Cpu_table.do_zero_of_workspace = TRUE;
+
+  /*
+   *  ERC32 specific idle task.
+   */
+
+  Cpu_table.idle_task = ERC32_Idle_thread_body;
 
   /*
    *  This should be enough interrupt stack.

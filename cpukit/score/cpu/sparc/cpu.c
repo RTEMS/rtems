@@ -8,22 +8,11 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
- *  Agency (ESA).
- *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
- *  European Space Agency.
- *
  *  $Id$
  */
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-
-#if defined(erc32)
-#include <erc32.h>
-#endif
 
 /*
  *  This initializes the set of opcodes placed in each trap 
@@ -111,20 +100,6 @@ void _CPU_Initialize(
    */
 
   _CPU_Table = *cpu_table;
-
-#if defined(erc32)
-
-  /*
-   *  ERC32 specific initialization
-   */
-
-  _ERC32_MEC_Timer_Control_Mirror = 0;
-  ERC32_MEC.Timer_Control = 0;
-
-  ERC32_MEC.Control |= ERC32_CONFIGURATION_POWER_DOWN_ALLOWED;
-
-#endif
-
 }
 
 /*PAGE
@@ -377,32 +352,3 @@ void _CPU_Context_Initialize(
 #endif
     the_context->psr = tmp_psr;
 }
-
-/*PAGE
- *
- *  _CPU_Thread_Idle_body
- *
- *  Some SPARC implementations have low power, sleep, or idle modes.  This
- *  tries to take advantage of those models.  
- */
- 
-#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
-
-/*
- *  This is the implementation for the erc32.
- *
- *  NOTE: Low power mode was enabled at initialization time.
- */
-
-#if defined(erc32)
-
-void _CPU_Thread_Idle_body( void )
-{
-  while (1) {
-    ERC32_MEC.Power_Down = 0;   /* value is irrelevant */
-  }
-}
-
-#endif
-
-#endif /* CPU_PROVIDES_IDLE_THREAD_BODY */

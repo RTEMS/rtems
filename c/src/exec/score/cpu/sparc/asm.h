@@ -108,7 +108,7 @@
   mov   _vector, %l3
 
 /*
- *  Used for the reset trap for ERC32 to avoid a supervisor instruction
+ *  Used for the reset trap to avoid a supervisor instruction
  */
  
 #define RTRAP(_vector, _handler)  \

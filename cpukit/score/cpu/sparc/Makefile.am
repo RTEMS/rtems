@@ -10,7 +10,7 @@ SUBDIRS = rtems
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = asm.h erc32.h
+H_FILES = asm.h
 
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -43,7 +43,7 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
 
 .PRECIOUS: $(REL)
 
-EXTRA_DIST = asm.h cpu.c cpu_asm.S erc32.h rtems.S
+EXTRA_DIST = asm.h cpu.c cpu_asm.S rtems.S
 
 include $(top_srcdir)/../../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../../automake/local.am

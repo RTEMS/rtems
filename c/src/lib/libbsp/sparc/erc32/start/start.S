@@ -11,7 +11,7 @@
  */
 
 #include <asm.h>
-#include <erc32.h>
+#include <libcpu/erc32.h>
 
 /*
  *  Unexpected trap will halt the processor by forcing it to error state

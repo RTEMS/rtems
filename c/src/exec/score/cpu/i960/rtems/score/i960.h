@@ -72,9 +72,9 @@ extern "C" {
  */
 
 #if I960_HAS_FPU
-#define CPU_MODEL_NAME "i960 w/FPU"
+#define CPU_MODEL_NAME "w/FPU"
 #else
-#define CPU_MODEL_NAME "i960 w/soft-float"
+#define CPU_MODEL_NAME "w/soft-float"
 #endif
 #ifndef ASM
 

@@ -10,13 +10,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
- *  Agency (ESA).
- *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
- *  European Space Agency.
- *
  *  $Id$
  */
 
@@ -160,11 +153,7 @@ extern "C" {
  *  not provide one.
  */
 
-#if (SPARC_HAS_LOW_POWER_MODE == 1)
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
-#else
 #define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
-#endif
 
 /*
  *  Does the stack grow up (toward higher addresses) or down
@@ -559,16 +548,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
 
 SCORE_EXTERN void *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void *_CPU_Interrupt_stack_high;
-
-#if defined(erc32)
-
-/*
- *  ERC32 Specific Variables
- */
-
-SCORE_EXTERN unsigned32 _ERC32_MEC_Timer_Control_Mirror;
-
-#endif
 
 /*
  *  The following type defines an entry in the SPARC's trap table.

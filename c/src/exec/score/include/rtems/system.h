@@ -30,14 +30,15 @@ extern "C" {
 /*
  * FIXME: cpuopts.h should be included here.
  */
-#if defined(__sh__) \
+#if defined(__h8300__) \
+  || defined(__i960__) \
   || defined(__mc68000__) \
-  || defined(__h8300__) \
-  || defined(__i960__)
+  || defined(__sh__) \
+  || defined(__sparc__)
   /* these cpus are ready to apply cpuopts.h */
 #include <rtems/score/cpuopts.h>
 #else
-  /* fallback to targopts.h */
+  /* fallback to targopts.h for hppa1.1, i386, mips, and powerpc */
 #include <rtems/score/targopts.h>
 #endif
 
