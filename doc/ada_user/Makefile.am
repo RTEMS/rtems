@@ -44,7 +44,7 @@ states.png: $(top_srcdir)/user/states.png
 	$(LN_S) $<
 
 info_TEXINFOS = ada_user.texi
-ada_user_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
+ada_user_TEXINFOS = $(FILES) $(COMMON_FILES)
 
 if USE_HTML
 html_project_DATA += rtemsarc.png rtemspie.png states.png

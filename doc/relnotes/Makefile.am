@@ -19,4 +19,4 @@ COMMON_FILES = $(top_srcdir)/common/setup.texi \
 FILES = install.texi intro.texi probrep.texi relnotes.texi status.texi
 
 info_TEXINFOS = relnotes.texi
-relnotes_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
+relnotes_TEXINFOS = $(FILES) $(COMMON_FILES)

@@ -19,4 +19,4 @@ COMMON_FILES = $(top_srcdir)/common/setup.texi \
     $(top_srcdir)/common/cpright.texi
 
 info_TEXINFOS = develenv.texi
-develenv_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
+develenv_TEXINFOS = $(FILES) $(COMMON_FILES)
