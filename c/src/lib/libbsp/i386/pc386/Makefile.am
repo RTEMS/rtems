@@ -10,6 +10,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
+dist_project_lib_DATA = bsp_specs
+
+include_HEADERS = include/bsp.h
+nodist_include_HEADERS = include/bspopts.h
+
 EXTRA_PROGRAMS =
 CLEANFILES =
 noinst_DATA =
@@ -27,7 +32,7 @@ project_lib_DATA = start$(LIB_VARIANT).$(OBJEXT)
 
 EXTRA_DIST += start/start16.S
 start16.$(OBJEXT): start/start16.S
-	$(COMPILE.S) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ $<
+	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ -c $<
 
 start16$(LIB_VARIANT)-elf32.$(OBJEXT): start16.$(OBJEXT)
 	$(LD) -N -T $(top_srcdir)/startup/linkcmds -Ttext $(START16ADDR) -e start16 -nostdlib \
@@ -54,7 +59,7 @@ clock_g_rel_SOURCES = $(clock_rel_SOURCES)
 clock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 clock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += clock$(LIB_VARIANT).rel
+noinst_DATA += clock$(LIB_VARIANT).rel
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = console/keyboard.h console/kd.h \
@@ -76,7 +81,7 @@ console_g_rel_SOURCES = $(console_rel_SOURCES)
 console_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 console_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += console$(LIB_VARIANT).rel
+noinst_DATA += console$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += gdb.rel
 CLEANFILES += gdb.rel
@@ -92,7 +97,7 @@ gdb_g_rel_SOURCES = $(gdb_rel_SOURCES)
 gdb_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 gdb_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += gdb$(LIB_VARIANT).rel
+noinst_DATA += gdb$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += gnat.rel
 CLEANFILES += gnat.rel
@@ -106,7 +111,7 @@ gnat_g_rel_SOURCES = $(gnat_rel_SOURCES)
 gnat_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 gnat_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += gnat$(LIB_VARIANT).rel
+noinst_DATA += gnat$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += pci.rel
 CLEANFILES += pci.rel
@@ -120,7 +125,7 @@ pci_g_rel_SOURCES = $(pci_rel_SOURCES)
 pci_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 pci_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += pci$(LIB_VARIANT).rel
+noinst_DATA += pci$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += startup.rel
 CLEANFILES += startup.rel
@@ -138,7 +143,7 @@ startup_g_rel_SOURCES = $(startup_rel_SOURCES)
 startup_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 startup_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += startup$(LIB_VARIANT).rel
+noinst_DATA += startup$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += timer.rel
 CLEANFILES += timer.rel
@@ -152,7 +157,7 @@ timer_g_rel_SOURCES = $(timer_rel_SOURCES)
 timer_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += timer$(LIB_VARIANT).rel
+noinst_DATA += timer$(LIB_VARIANT).rel
 
 if HAS_NETWORKING
 ne2000_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -223,7 +228,7 @@ ide_g_rel_SOURCES = $(ide_rel_SOURCES)
 ide_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 ide_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += ide$(LIB_VARIANT).rel
+noinst_DATA += ide$(LIB_VARIANT).rel
 
 EXTRA_LIBRARIES = libbsp.a
 CLEANFILES += libbsp.a
@@ -253,7 +258,30 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 EXTRA_DIST += HOWTO README.dec21140 STATUS times_i486dx times_p5
 
 PREINSTALL_DIRS =
+PREINSTALL_FILES =
 TMPINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
+
+$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
+PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
+
+$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
+
+$(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 
 $(PROJECT_INCLUDE)/crt.h: include/crt.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/crt.h
@@ -273,11 +301,7 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/start16$(LIB_VARIANT).bin
 
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
-TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
-
-$(PROJECT_LIB)/clock$(LIB_VARIANT).rel: clock$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/clock$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/clock$(LIB_VARIANT).rel
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
@@ -304,42 +328,14 @@ $(PROJECT_INCLUDE)/rtems/fb_vga.h: console/fb_vga.h $(PROJECT_INCLUDE)/rtems/$(d
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fb_vga.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fb_vga.h
 
-$(PROJECT_LIB)/console$(LIB_VARIANT).rel: console$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/console$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/console$(LIB_VARIANT).rel
-
-$(PROJECT_LIB)/gdb$(LIB_VARIANT).rel: gdb$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/gdb$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/gdb$(LIB_VARIANT).rel
-
-$(PROJECT_LIB)/gnat$(LIB_VARIANT).rel: gnat$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/gnat$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/gnat$(LIB_VARIANT).rel
-
-$(PROJECT_LIB)/pci$(LIB_VARIANT).rel: pci$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/pci$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/pci$(LIB_VARIANT).rel
-
-$(PROJECT_LIB)/startup$(LIB_VARIANT).rel: startup$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/startup$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/startup$(LIB_VARIANT).rel
-
-$(PROJECT_LIB)/timer$(LIB_VARIANT).rel: timer$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/timer$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/timer$(LIB_VARIANT).rel
-
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/wd80x3.h: include/wd80x3.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/wd80x3.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/wd80x3.h
 endif
 
-$(PROJECT_LIB)/ide$(LIB_VARIANT).rel: ide$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/ide$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/ide$(LIB_VARIANT).rel
-
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES += $(PREINSTALL_DIRS)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
