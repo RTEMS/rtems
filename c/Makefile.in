@@ -49,7 +49,10 @@ CREATE_DIRS = 	include include/sys \
     build-tools update-tools
 
 # Make all/install must include 'env'
-all $(TARGET_VARIANTS:%=%_install) $(TARGET_VARIANTS:%=%_all): env 
+all: env
+$(TARGET_VARIANTS): env
+$(TARGET_VARIANTS:%=%_install): env 
+$(TARGET_VARIANTS:%=%_all): env 
 
 # top level clean/clobber will delete the install points
 clean_WRAPUP = $(MAKE) clean_wrapup
