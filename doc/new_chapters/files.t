@@ -374,7 +374,7 @@ Search permission is denied for a directory in a file's path prefix.
 
 The @code{getcwd()} function copies the absolute pathname of the current
 working directory to the character array pointed to by @code{buf}.  The
-@code{size} argument is the number of bytes available in @cdoe{buf}
+@code{size} argument is the number of bytes available in @code{buf}
 
 @subheading NOTES:
 
@@ -859,7 +859,7 @@ of @code{old}.
 If a file already exists by the name @code{new}, it is removed.  The 
 @code{rename()} function is atomic.  If the @code{rename()} detects an
 error, no files are removed.  This guarantees that the
-@code{rename("x", "x") does not remove @code{x}.
+@code{rename("x", "x")} does not remove @code{x}.
 
 You may not rename dot or dot-dot.
 
