@@ -2,14 +2,10 @@
  *
  *  This file implements a benchmark timer using the General Purpose Timer.
  *
- *  Notes:
+ *  Notes: NONE
  *
- *  BSP_TIMER_AVG_OVERHEAD and BSP_TIMER_LEAST_VALID are required to be
- *  provided in bsp.h
- *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
