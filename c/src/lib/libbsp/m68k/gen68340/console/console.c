@@ -174,11 +174,11 @@ static int
 InterruptWrite (int minor, const char *buf, int len)
 {
  if (minor==UART_CHANNEL_A) {
-    if (len>0) (char)DUTBA=*buf;
+    if (len>0) DUTBA=*buf;
     Enable_Interrupts_Tx_A;
  }
  else if (minor==UART_CHANNEL_B) {
-    if (len>0) (char)DUTBB=*buf;
+    if (len>0) DUTBB=*buf;
     Enable_Interrupts_Tx_B;
  }
  return 0;
