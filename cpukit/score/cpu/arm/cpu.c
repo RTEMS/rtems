@@ -13,7 +13,7 @@
 
 #include <rtems/system.h>
 #include <rtems.h>
-#include <bspio.h>
+#include <bspIo.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/thread.h>
@@ -155,11 +155,12 @@ extern void _Exception_Handler_Abort();
 
 void rtems_exception_init_mngt()
 {
+	ISR_Level level;
       
       _CPU_ISR_Disable(level);
-      _CPU_ISR_install_vector(ARM_EXCEPTION_UNDEF,      _Exception_Handler_Undef_Swi, NULL); 	
-      _CPU_ISR_install_vector(ARM_EXCEPTION_SWI,        _Exception_Handler_Undef_Swi, NULL); 	
-      _CPU_ISR_install_vector(ARM_EXCEPTION_PREF_ABORT, _Exception_Handler_Abort    , NULL); 	
+      _CPU_ISR_install_vector(ARM_EXCEPTION_UNDEF,      _Exception_Handler_Undef_Swi, NULL); 
+      _CPU_ISR_install_vector(ARM_EXCEPTION_SWI,        _Exception_Handler_Undef_Swi, NULL); 
+      _CPU_ISR_install_vector(ARM_EXCEPTION_PREF_ABORT, _Exception_Handler_Abort    , NULL); 
       _CPU_ISR_install_vector(ARM_EXCEPTION_DATA_ABORT, _Exception_Handler_Abort    , NULL);
       _CPU_ISR_install_vector(ARM_EXCEPTION_FIQ, 	_Exception_Handler_Abort    , NULL);
       _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, 	_Exception_Handler_Abort    , NULL);

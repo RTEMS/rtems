@@ -525,6 +525,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 #define _CPU_ISR_Disable( _level ) \
   { \
+    (_level) = 0; \
     asm volatile ("MRS	r0, cpsr \n" ); \
     asm volatile ("ORR  r0, r0, #0xc0 \n" ); \
     asm volatile ("MSR  cpsr, r0 \n" ); \
