@@ -31,7 +31,8 @@
  *  _Thread_Create_idle
  */
 
-char *_Thread_Idle_name = "IDLE";
+/* 'I','D','L','E' */
+const Objects_Name _Thread_Idle_name = (Objects_Name) 0x49444C45;
 
 void _Thread_Create_idle( void )
 {

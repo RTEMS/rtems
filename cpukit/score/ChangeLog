@@ -1,3 +1,8 @@
+2003-09-08	Derick Hammond <derick@perkinstechnologies.com.au>
+
+	PR 484/rtems
+	* src/threadcreateidle.c: Idle task name was initialized incorrectly.
+
 2003-09-08	Mikec Ivica <mikici@acm.org>
 
 	* inline/rtems/score/userext.inl, macros/rtems/score/userext.inl:
