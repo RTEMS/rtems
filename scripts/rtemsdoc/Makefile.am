@@ -14,7 +14,6 @@ MKSPEC_DEPS = mkspec rtemsdoc.spec.in \
 SUPPLEMENTS = \
   arm \
   c4x \
-  hppa1_1 \
   i386 \
   i960 \
   m68k \

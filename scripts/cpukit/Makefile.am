@@ -22,10 +22,6 @@ c4x-rtems-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . c4x-rtems > $@
 RPM_SPECS_DATA = c4x-rtems-cpukit.spec
 
-hppa1.1-rtems-cpukit.spec: $(MKSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems > $@
-RPM_SPECS_DATA += hppa1.1-rtems-cpukit.spec
-
 h8300-rtems-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . h8300-rtems > $@
 RPM_SPECS_DATA += h8300-rtems-cpukit.spec

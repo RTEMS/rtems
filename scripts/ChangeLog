@@ -1,3 +1,10 @@
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* buildall.in, buildalltar.in, binutils/Makefile.am,
+	cpukit/Makefile.am, gcc3newlib/Makefile.am, gccnewlib/Makefile.am,
+	gdb/Makefile.am, rtems/Makefile.am, rtemsdoc/.cvsignore,
+	rtemsdoc/Makefile.am: Obsoleting HP PA-RISC port.
+
 2003-09-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* autotools/automake-rtems.spec.in: Automake-1.7.7.

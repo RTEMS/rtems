@@ -43,9 +43,6 @@ c4x-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIB_C_ONLY_SPEC_DEPS)
 h8300-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIB_C_ONLY_SPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) $(C_ONLY_ARG) -cfg $(top_builddir)/setup.cache -o . h8300-rtems
 
-hppa1.1-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
-	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
-
 i386-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems
 
@@ -77,7 +74,6 @@ RPM_SPECS_DATA = \
     arm-rtems-$(GCCNEWLIBVERS).spec \
     c4x-rtems-$(GCCNEWLIBVERS).spec \
     h8300-rtems-$(GCCNEWLIBVERS).spec \
-    hppa1.1-rtems-$(GCCNEWLIBVERS).spec \
     i386-rtems-$(GCCNEWLIBVERS).spec i960-rtems-$(GCCNEWLIBVERS).spec \
     m68k-rtems-$(GCCNEWLIBVERS).spec  \
     mips-rtems-$(GCCNEWLIBVERS).spec mips64orion-rtems-$(GCCNEWLIBVERS).spec \

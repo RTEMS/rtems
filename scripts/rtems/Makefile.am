@@ -9,9 +9,6 @@ MKBSPSPEC = $(SHELL) $(top_builddir)/mkbspspec
 MKBSPSPEC_DEPS = $(top_builddir)/mkbspspec rtems.spec.in \
     $(top_builddir)/setup.cache
 
-hppa1.1-rtems-simhppa-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
-	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems simhppa
-
 i386-rtems-pc386-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems pc386
 
@@ -38,7 +35,7 @@ sparc-rtems-erc32-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 
 TEMPLATES = rtems.spec.in
 
-RPM_SPECS_DATA = hppa1.1-rtems-simhppa-$(BSPVERS).spec \
+RPM_SPECS_DATA = \
     i386-rtems-pc386-$(BSPVERS).spec i960-rtems-cvme961-$(BSPVERS).spec \
     m68k-rtems-gen68360-$(BSPVERS).spec \
     mips64orion-rtems-p4600-$(BSPVERS).spec \

@@ -36,11 +36,6 @@ h8300-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(GDBVERS).spec
 
-# does not build with 5.2
-# hppa1.1-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-# 	$(MKSPEC) -cfg $(top_builddir)/setup.cache hppa1.1-rtems@osversion@ > $@
-# RPM_SPECS_DATA += hppa1.1-rtems@osversion@-$(GDBVERS).spec
-
 RPM_SPECS_DATA += i386-rtems@osversion@-$(GDBVERS).spec
 i386-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@

@@ -31,10 +31,6 @@ h8300-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(BINUTILSVERS).spec
 
-hppa1.1-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache hppa1.1-rtems@osversion@ > $@
-RPM_SPECS_DATA += hppa1.1-rtems@osversion@-$(BINUTILSVERS).spec
-
 i386-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
 RPM_SPECS_DATA += i386-rtems@osversion@-$(BINUTILSVERS).spec

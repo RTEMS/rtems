@@ -40,10 +40,6 @@ h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-hppa1.1-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache hppa1.1-rtems@osversion@ > $@
-RPM_SPECS_DATA += hppa1.1-rtems@osversion@-$(GCC3NEWLIBVERS).spec
-
 i386-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
 RPM_SPECS_DATA += i386-rtems@osversion@-$(GCC3NEWLIBVERS).spec

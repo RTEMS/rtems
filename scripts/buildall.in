@@ -62,14 +62,14 @@ if test ${do_binutils} = no -a ${do_gccnewlib} = no -a ${do_gdb} = no ; then
 fi
 
 
-# This is the full list .. hppa1.1 does not build now.
-#ALL_TARGETS="hppa1.1-rtems i386-rtems i960-rtems m68k-rtems \
+# This is the full list .. some may not build at any given time.
+#ALL_TARGETS="i386-rtems i960-rtems m68k-rtems \
 #  m68k-rtemself mips-rtems mips64orion-rtems \
 #  powerpc-rtems sh-rtems sh-rtemself sparc-rtems"
 
 # This is the full buildable set.
 if [ "X${TARGETS}" = "X" ] ; then
-  # do not include c4x or hppa primary targets
+  # do not include c4x as primary targets
   # do not include sh-elf or i960-elf secondary targets
   TARGETS="arm-rtems h8300-rtems i386-rtems i960-rtems m68k-rtems \
     mips-rtems mips64orion-rtems powerpc-rtems sh-rtems sparc-rtems"
