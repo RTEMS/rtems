@@ -116,7 +116,7 @@ It merely returns the value stored by a previous call to @code{tcgetattr()}.
 
 @subheading NOTES:
 
-Baud reates are defined by symbols, such as B110, B1200, B2400.  The actual
+Baud rates are defined by symbols, such as B110, B1200, B2400.  The actual
 number returned for any given speed may change from system to system.
 
 @page
