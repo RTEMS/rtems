@@ -34,7 +34,7 @@ begin
       1,
       RTEMS.MINIMUM_STACK_SIZE,
       RTEMS.NO_PREEMPT,
-      RTEMS.DEFAULT_ATTRIBUTES,
+      RTEMS.FLOATING_POINT,
       INIT_ID,
       STATUS
    );
