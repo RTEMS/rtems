@@ -145,7 +145,7 @@ const unsigned16 _TOD_Days_to_date[2][13] = {
  *  year otherwise.
  */
 
-const unsigned16 _TOD_Days_since_last_leap_year[4] = { 0, 366, 761, 1126 };
+const unsigned16 _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
 
 #else
 
