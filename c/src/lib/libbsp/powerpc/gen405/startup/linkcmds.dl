@@ -1,0 +1,142 @@
+/*
+ *  This file contains directives for the GNU linker which are specific
+ *  to the helas403
+ *  This file is intended to be used together with dlentry.s
+ *  it will generate downloadable code
+ *
+ *  $Id$
+ */
+
+OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
+              "elf32-powerpc")
+OUTPUT_ARCH(powerpc)
+ SEARCH_DIR(/usr/local/powerpc-rtems/lib);
+ 
+ENTRY(download_entry)
+ 
+MEMORY
+  {
+        RAM : ORIGIN = 0, LENGTH = 8M
+        FLASH : ORIGIN = 0xFFF00000, LENGTH = 512K
+  }
+ 
+SECTIONS
+{
+  .vectors : 0x00010100
+  {
+    *(.vectors)
+  } > RAM
+
+  .text :
+  {
+     text.start = . ;
+     *(.entry)
+     *(.entry2)
+     *(.text)
+     *(.rodata)
+     *(.rodata1)
+     *(.descriptors)
+     *(rom_ver)
+     etext = ALIGN(0x10);
+     _etext = .;
+
+
+     __CTOR_LIST__ = .;
+     LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+     *(.ctors)
+     LONG(0)
+     __CTOR_END__ = .;
+
+     __DTOR_LIST__ = .;
+     LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+     *(.dtors)
+     LONG(0)
+     __DTOR_END__ = .;
+
+     *(.lit)
+     *(.shdata)
+     *(.init)
+     *(.fini)
+     _endtext = ALIGN(0x10);
+     text.end = .;
+  } > RAM
+
+  text.size = text.end - text.start;
+
+  /* R/W Data */
+  .data :
+  {
+    *(.data)
+    *(.data1)
+    PROVIDE (__SDATA_START__ = .);
+    *(.sdata)
+  } > RAM
+ 
+  PROVIDE (__EXCEPT_START__ = .);
+  .gcc_except_table   :
+  { 
+	*(.gcc_except_table) 
+  } >RAM
+  PROVIDE (__EXCEPT_END__ = .);
+
+  __GOT_START__ = .;
+  .got :
+  {
+     s.got = .;
+     *(.got.plt) *(.got)
+  } > RAM
+  __GOT_END__ = .;
+
+  .got1 : 
+  { 
+	*(.got1) 		
+  } >RAM
+
+  PROVIDE (__GOT2_START__ = .);
+  PROVIDE (_GOT2_START_ = .);
+  .got2		  :  
+  { 
+	*(.got2) 	
+  } >RAM
+  PROVIDE (__GOT2_END__ = .);
+  PROVIDE (_GOT2_END_ = .);
+
+  PROVIDE (__FIXUP_START__ = .);
+  PROVIDE (_FIXUP_START_ = .);
+  .fixup	  : { *(.fixup) 	} >RAM
+  PROVIDE (_FIXUP_END_ = .);
+  PROVIDE (__FIXUP_END__ = .);
+ 
+  PROVIDE (__SDATA2_START__ = .);
+  .sdata2   	  : { *(.sdata2) 	} >RAM
+  .sbss2   	  : { *(.sbss2) 	} >RAM
+  PROVIDE (__SBSS2_END__ = .);
+
+  .sbss2   	  : { *(.sbss2) 	} >RAM
+  PROVIDE (__SBSS2_END__ = .);
+
+  __SBSS_START__ = .;
+  .bss :
+  {
+    bss.start = .;
+    *(.bss) *(.sbss) *(COMMON)
+    bss.end = ALIGN(4);
+  } > RAM
+  __SBSS_END__ = .;
+ 
+  bss.size = bss.end - bss.start;
+  PROVIDE(_end = bss.end);
+
+  .line 0 : { *(.line) }
+  .debug 0 : { *(.debug) }
+  .debug_sfnames 0 : { *(.debug_sfnames) }
+  .debug_srcinfo 0 : { *(.debug_srcinfo) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  .debug_aranges 0 : { *(.debug_aranges) }
+  .debug_aregion 0 : { *(.debug_aregion) }
+  .debug_macinfo 0 : { *(.debug_macinfo) }
+  .stab 0 : { *(.stab) }
+  .stabstr 0 : { *(.stabstr) }
+}
+
+

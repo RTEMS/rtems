@@ -1,0 +1,16 @@
+2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
+
+	This modification is part of the submitted modifications necessary to
+	support the IBM PPC405 family.  This submission was reviewed by
+	Thomas Doerfler <Thomas.Doerfler@imd-systems.de> who ensured it did
+	not negatively impact the ppc403 BSPs.  The submission and tracking
+	process was captured as PR50.
+	* ChangeLog, Makefile.am, README, bsp_specs, bsp_specs.dl, configure.ac,
+	times, dlentry/.cvsignore, dlentry/Makefile.am, dlentry/dlentry.S,
+	include/.cvsignore, include/Makefile.am, include/bsp.h,
+	include/bspopts.h.in, include/coverhd.h, startup/.cvsignore,
+	startup/Makefile.am, startup/bspclean.c, startup/bspstart.c,
+	startup/linkcmds, startup/linkcmds.dl, startup/setvec.c,
+	wrapup/.cvsignore, wrapup/Makefile.am: New files that are
+	part of the new gen405 BSP.
+

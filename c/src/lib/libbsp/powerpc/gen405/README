@@ -1,0 +1,79 @@
+#
+#  $Id$
+#
+
+BSP NAME:           gen405
+BOARD:              generic 405
+BUS:                N/A
+CPU FAMILY:         ppc
+CPU:                PowerPC 405GP
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+
+DEBUG MONITOR:      
+
+PERIPHERALS
+===========
+TIMERS:             405GP internal
+SERIAL PORTS:       405GP internal 
+REAL-TIME CLOCK:    405GP internal
+DMA:                405GP internal
+VIDEO:              none
+SCSI:               none
+NETWORKING:         none
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       405GP internal
+IOSUPP DRIVER:      405GP internal
+SHMSUPP:            N/A
+TIMER DRIVER:       405GP internal
+TTY DRIVER:         405GP internal
+
+STDIO
+=====
+PORT:               Console port 0
+ELECTRICAL:         RS-232
+BAUD:               115200
+BITS PER CHARACTER: 8
+PARITY:             None
+STOP BITS:          1
+
+Notes
+=====
+
+Board description
+-----------------
+clock rate:	234 MHz
+ROM:		16MByte FLASH
+RAM:		64MByte DRAM
+
+gen405 only supports single processor operations.
+
+Porting
+-------
+This board support package is written for a typical PPC405GP
+system. The rough features of this board are described above.
+
+
+For adapting this BSP to other boards, the following files should be
+modified:
+
+- c/src/lib/libbsp/powerpc/gen405/startup/linkcmds
+	for the memory layout required
+
+- c/src/lib/libbsp/powerpc/gen405/startup/bspstart.c
+	for adaption of BSP_Configuration. here you can select
+	the clock source for the timers and the serial interface
+	(system clock or external clock pin), the clock rates, initial
+	baud rate and other stuff
+
+- c/src/lib/libbsp/powerpc/gen405/include/bsp.h
+	some BSP-related constants
+
+The actual drivers are placed in 
+- c/src/lib/libcpu/powerpc/ppc403/*
+	well, they should be generic, so there _should_ be no reason
+	to mess around there (but who knows...)
+
+
