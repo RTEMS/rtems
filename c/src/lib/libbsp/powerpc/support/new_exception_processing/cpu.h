@@ -938,38 +938,6 @@ static inline unsigned int CPU_swap_u32(
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
 
-/*
- *  Routines to access the decrementer register
- */
-
-#define PPC_Set_decrementer( _clicks ) \
-  do { \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
-
-/*
- *  Routines to access the time base register
- */
-
-static inline unsigned64 PPC_Get_timebase_register( void )
-{
-  unsigned32 tbr_low;
-  unsigned32 tbr_high;
-  unsigned32 tbr_high_old;
-  unsigned64 tbr;
-
-  do {
-    asm volatile( "mftbu %0" : "=r" (tbr_high_old));
-    asm volatile( "mftb  %0" : "=r" (tbr_low));
-    asm volatile( "mftbu %0" : "=r" (tbr_high));
-  } while ( tbr_high_old != tbr_high );
-
-  tbr = tbr_high;
-  tbr <<= 32;
-  tbr |= tbr_low;
-  return tbr;
-}
-
 #endif /* ndef ASM */
 
 #ifdef __cplusplus
