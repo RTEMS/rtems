@@ -78,7 +78,7 @@
 
 struct scidev_t {
   char *			name ;
-  unsigned32			addr ;
+  uint32_t  			addr ;
   rtems_device_minor_number	minor ;
   unsigned short		opened ;
   tcflag_t			cflags ;
@@ -104,8 +104,8 @@ static int _sci_set_cflags(
   struct scidev_t      *sci_dev,
   tcflag_t      c_cflag )
 {
-  unsigned8	smr ;
-  unsigned8	brr ;
+  uint8_t  	smr ;
+  uint8_t  	brr ;
   
   if ( c_cflag & CBAUD )
   {
@@ -150,7 +150,7 @@ static int _sci_set_cflags(
  */
 rtems_boolean wrtSCI0(unsigned char ch)
 {
-  unsigned8 temp;
+  uint8_t   temp;
   rtems_boolean result=FALSE;
 
   if ((read8(SCI_SSR0) & SCI_TDRE) != 0x00) {
@@ -166,7 +166,7 @@ rtems_boolean wrtSCI0(unsigned char ch)
 
 rtems_boolean wrtSCI1(unsigned char ch)
 {
-  unsigned8 temp;
+  uint8_t   temp;
   rtems_boolean result=FALSE;
 
   if ((read8(SCI_SSR1) & SCI_TDRE) != 0x00) {
@@ -203,7 +203,7 @@ void outbyte(
 
 rtems_boolean rdSCI0(unsigned char *ch)
 {
-  unsigned8 temp;
+  uint8_t   temp;
   rtems_boolean result=FALSE;
 
   if ((read8(SCI_SSR0) & SCI_RDRF) != 0x00) {
@@ -227,7 +227,7 @@ rtems_boolean rdSCI0(unsigned char *ch)
 
 rtems_boolean rdSCI1(unsigned char *ch)
 {
-  unsigned8 temp;
+  uint8_t   temp;
   rtems_boolean result=FALSE;
 
   if ((read8(SCI_SSR1) & SCI_RDRF) != 0x00) {
@@ -339,8 +339,8 @@ rtems_device_driver sh_sci_open(
   rtems_device_minor_number minor,
   void                    * arg )
 {
-  unsigned8 temp8;
-  unsigned16 temp16;
+  uint8_t   temp8;
+  uint16_t   temp16;
   
   unsigned 	a ;
   

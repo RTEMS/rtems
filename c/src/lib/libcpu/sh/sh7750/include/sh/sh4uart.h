@@ -35,35 +35,35 @@
 /*
  * Macros to call UART registers
  */
-#define SCRDR(n) (*(volatile rtems_unsigned8 *)SH7750_SCRDR(n))
+#define SCRDR(n) (*(volatile uint8_t   *)SH7750_SCRDR(n))
 #define SCRDR1 SCRDR(1)
 #define SCRDR2 SCRDR(2)
-#define SCTDR(n) (*(volatile rtems_unsigned8 *)SH7750_SCTDR(n))
+#define SCTDR(n) (*(volatile uint8_t   *)SH7750_SCTDR(n))
 #define SCTDR1 SCTDR(1)
 #define SCTDR2 SCTDR(2)
-#define SCSMR(n) ((n) == 1 ? *(volatile rtems_unsigned8 *)SH7750_SCSMR1 : \
-        *(volatile rtems_unsigned16 *)SH7750_SCSMR2)
+#define SCSMR(n) ((n) == 1 ? *(volatile uint8_t   *)SH7750_SCSMR1 : \
+        *(volatile uint16_t   *)SH7750_SCSMR2)
 #define SCSMR1 SCSMR(1)
 #define SCSMR2 SCSMR(2)
-#define SCSCR(n) ((n) == 1 ? *(volatile rtems_unsigned8 *)SH7750_SCSCR1 : \
-        *(volatile rtems_unsigned16 *)SH7750_SCSCR2)
+#define SCSCR(n) ((n) == 1 ? *(volatile uint8_t   *)SH7750_SCSCR1 : \
+        *(volatile uint16_t   *)SH7750_SCSCR2)
 #define SCSCR1 SCSCR(1)
 #define SCSCR2 SCSCR(2)
-#define SCSSR(n) ((n) == 1 ? *(volatile rtems_unsigned8 *)SH7750_SCSSR1 : \
-        *(volatile rtems_unsigned16 *)SH7750_SCSSR2)
+#define SCSSR(n) ((n) == 1 ? *(volatile uint8_t   *)SH7750_SCSSR1 : \
+        *(volatile uint16_t   *)SH7750_SCSSR2)
 #define SCSSR1 SCSSR(1)
 #define SCSSR2 SCSSR(2)
-#define SCSPTR1 (*(volatile rtems_unsigned8 *)SH7750_SCSPTR1)
-#define SCSPTR2 (*(volatile rtems_unsigned16 *)SH7750_SCSPTR2)
-#define SCBRR(n) (*(volatile rtems_unsigned8 *)SH7750_SCBRR(n))
+#define SCSPTR1 (*(volatile uint8_t   *)SH7750_SCSPTR1)
+#define SCSPTR2 (*(volatile uint16_t   *)SH7750_SCSPTR2)
+#define SCBRR(n) (*(volatile uint8_t   *)SH7750_SCBRR(n))
 #define SCBRR1 SCBRR(1)
 #define SCBRR2 SCBRR(2)
-#define SCFCR2 (*(volatile rtems_unsigned16 *)SH7750_SCFCR2)
-#define SCFDR2 (*(volatile rtems_unsigned16 *)SH7750_SCFDR2)
-#define SCLSR2 (*(volatile rtems_unsigned16 *)SH7750_SCLSR2)
+#define SCFCR2 (*(volatile uint16_t   *)SH7750_SCFCR2)
+#define SCFDR2 (*(volatile uint16_t   *)SH7750_SCFDR2)
+#define SCLSR2 (*(volatile uint16_t   *)SH7750_SCLSR2)
 
-#define IPRB (*(volatile rtems_unsigned16 *)SH7750_IPRB)
-#define IPRC (*(volatile rtems_unsigned16 *)SH7750_IPRC)
+#define IPRB (*(volatile uint16_t   *)SH7750_IPRB)
+#define IPRC (*(volatile uint16_t   *)SH7750_IPRC)
 
 /*
  * The following structure is a descriptor of single UART channel.
@@ -71,14 +71,14 @@
  * current operating values
  */
 typedef struct sh4uart {
-   rtems_unsigned8      chn;        /* UART channel number */
-   rtems_unsigned8      int_driven; /* UART interrupt vector number, or
+   uint8_t        chn;        /* UART channel number */
+   uint8_t        int_driven; /* UART interrupt vector number, or
                                        0 if polled I/O */
    void                *tty;        /* termios channel descriptor */
 
    volatile const char         *tx_buf;     /* Transmit buffer from termios */
-   volatile rtems_unsigned32    tx_buf_len; /* Transmit buffer length */
-   volatile rtems_unsigned32    tx_ptr;     /* Index of next char to transmit*/
+   volatile uint32_t      tx_buf_len; /* Transmit buffer length */
+   volatile uint32_t      tx_ptr;     /* Index of next char to transmit*/
 
    rtems_isr_entry      old_handler_transmit;   /* Saved interrupt handlers */
    rtems_isr_entry      old_handler_receive;

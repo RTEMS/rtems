@@ -39,13 +39,13 @@
 
 rtems_isr timerisr();
 
-static rtems_unsigned32 Timer_interrupts;
+static uint32_t   Timer_interrupts;
 
 /* Counter should be divided to this value to obtain time in microseconds */
-static rtems_unsigned32 microseconds_divider;
+static uint32_t   microseconds_divider;
 
 /* Interrupt period in microseconds */
-static rtems_unsigned32 microseconds_per_int;
+static uint32_t   microseconds_per_int;
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
@@ -65,8 +65,8 @@ rtems_boolean Timer_driver_Find_average_overhead;
 void 
 Timer_initialize(void)
 {
-    rtems_unsigned8       temp8;
-    rtems_unsigned16      temp16;
+    uint8_t         temp8;
+    uint16_t        temp16;
     rtems_interrupt_level level;
     rtems_isr            *ignored;
     int                   cpudiv = 1;
@@ -203,11 +203,11 @@ Timer_initialize(void)
 int 
 Read_timer(void)
 {
-    rtems_unsigned32 clicks;
-    rtems_unsigned32 ints;
-    rtems_unsigned32 total ;
+    uint32_t   clicks;
+    uint32_t   ints;
+    uint32_t   total ;
     rtems_interrupt_level level;
-    rtems_unsigned32 tcr;
+    uint32_t   tcr;
     
 
     _CPU_ISR_Disable(level);
@@ -281,7 +281,7 @@ Set_find_average_overhead(rtems_boolean find_flag)
 void 
 timerisr(void)
 {
-  unsigned8 temp8;
+  uint8_t   temp8;
 
   /* reset the flags of the status register */
   temp8 = read8(SH7750_TCR1) & ~SH7750_TCR_UNF;

@@ -67,10 +67,10 @@ unsigned int sh_set_irq_priority(
   unsigned int irq, 
   unsigned int prio )
 {
-  unsigned32 shiftcount;
-  unsigned32 prioreg;
-  unsigned16 temp16;
-  unsigned32 level;
+  uint32_t   shiftcount;
+  uint32_t   prioreg;
+  uint16_t   temp16;
+  uint32_t   level;
 
   /*
    * first check for valid interrupt
@@ -257,9 +257,9 @@ __CPU_Context_restore:\n\
  *  This routine provides the RTEMS interrupt management.
  */
  
-void __ISR_Handler( unsigned32 vector)
+void __ISR_Handler( uint32_t   vector)
 {
-  register unsigned32 level;
+  register uint32_t   level;
 
   _CPU_ISR_Disable( level );
 

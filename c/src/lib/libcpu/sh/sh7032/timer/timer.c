@@ -64,17 +64,17 @@
 
 rtems_isr timerisr();
 
-static rtems_unsigned32 Timer_interrupts;
+static uint32_t   Timer_interrupts;
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
-static rtems_unsigned32 Timer_HZ ;
+static uint32_t   Timer_HZ ;
 
 void Timer_initialize( void )
 {
-  rtems_unsigned8  temp8;
-  rtems_unsigned16 temp16;
-  rtems_unsigned32 level;
+  uint8_t    temp8;
+  uint16_t   temp16;
+  uint32_t   level;
   rtems_isr	   *ignored;
 
   Timer_HZ = rtems_cpu_configuration_get_clicks_per_second() / CLOCK_SCALE ;
@@ -149,8 +149,8 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  rtems_unsigned32 cclicks;
-  rtems_unsigned32 total ;
+  uint32_t   cclicks;
+  uint32_t   total ;
   /*
    *  Read the timer and see how many clicks it has been since we started.
    */
@@ -201,7 +201,7 @@ void Set_find_average_overhead(
 #pragma interrupt
 void timerisr( void )
 {
-  unsigned8 temp8;
+  uint8_t   temp8;
 
   /* reset the flags of the status register */
   temp8 = read8( ITU_TSR1) & ITU1_STAT_MASK;

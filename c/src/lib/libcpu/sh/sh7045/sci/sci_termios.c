@@ -71,8 +71,8 @@ int sh_sci_set_attributes(
   const struct termios *t
 )
 {
-    unsigned8	smr ;
-    unsigned8	brr ;
+    uint8_t  	smr ;
+    uint8_t  	brr ;
     int a;
     
     tcflag_t c_cflag = t->c_cflag;
@@ -135,7 +135,7 @@ rtems_isr sh_sci_rx_isr(rtems_vector_number vector)
     {
         if(Console_Port_Tbl[minor].ulIntVector == vector)
         {              
-            unsigned8 temp8;
+            uint8_t   temp8;
             
             /*
              * FIXME: error handling should be added
@@ -193,7 +193,7 @@ rtems_isr sh_sci_tx_isr(rtems_vector_number vector)
  */
 void sh_sci_init(int minor)
 {
-    unsigned16 temp16;
+    uint16_t   temp16;
     
     /* 
      * set PFC registers to enable I/O pins 
@@ -285,7 +285,7 @@ int sh_sci_first_open(
   int minor,
   void *arg )
 {
-    unsigned8 temp8;
+    uint8_t   temp8;
     unsigned int a ;
   
     /* 
@@ -439,7 +439,7 @@ void sh_sci_write_polled(
  */
 int sh_sci_inbyte_nonblocking_polled(int minor)
 {
-    unsigned8 inbyte;
+    uint8_t   inbyte;
 
     /* 
      * Check if input buffer is full

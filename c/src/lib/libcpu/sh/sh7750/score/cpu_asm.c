@@ -254,9 +254,9 @@ __CPU_Context_restore:\n\
  *  This routine provides the RTEMS interrupt management.
  */
  
-void __ISR_Handler( unsigned32 vector)
+void __ISR_Handler( uint32_t   vector)
 {
-  register unsigned32 level;
+  register uint32_t   level;
 
   _CPU_ISR_Disable( level );
 

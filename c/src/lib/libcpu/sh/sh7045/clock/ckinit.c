@@ -71,11 +71,11 @@
  *  number of clock ticks since the driver was initialized.
  */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t   Clock_driver_ticks;
 
 static void Clock_exit( void );
 static rtems_isr Clock_isr( rtems_vector_number vector );
-static rtems_unsigned32 Clock_MHZ ;
+static uint32_t   Clock_MHZ ;
 
 /*
  *  Clock_isrs is the number of clock ISRs until the next invocation of
@@ -85,8 +85,8 @@ static rtems_unsigned32 Clock_MHZ ;
  *  has passed.
  */
 
-rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
-static rtems_unsigned32 Clock_isrs_const;        /* only calculated once */
+uint32_t   Clock_isrs;              /* ISRs until next tick */
+static uint32_t   Clock_isrs_const;        /* only calculated once */
 
 /*
  * These are set by clock driver during its init
@@ -118,7 +118,7 @@ rtems_isr Clock_isr(
    *
    * perform any timer dependent tasks
    */
-  unsigned8 temp;
+  uint8_t   temp;
 
   /* reset the flags of the status register */
   temp = read8( MTU_TSR0) & MTU0_STAT_MASK;
@@ -148,8 +148,8 @@ void Install_clock(
   rtems_isr_entry clock_isr
 )
 {
-  unsigned8 temp8 = 0;
-  unsigned32 factor = 1000000;
+  uint8_t   temp8 = 0;
+  uint32_t   factor = 1000000;
   
   
   /*
@@ -222,7 +222,7 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  unsigned8 temp8 = 0;
+  uint8_t   temp8 = 0;
 
   /* turn off the timer interrupts */
   /* set interrupt priority to 0 */
@@ -271,7 +271,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-  rtems_unsigned32 isrlevel;
+  uint32_t   isrlevel;
   rtems_libio_ioctl_args_t *args = pargp;
   
   if (args != 0)

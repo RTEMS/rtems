@@ -31,7 +31,7 @@ extern "C" {
 
 #include <rtems/score/types.h>
 
-extern void __ISR_Handler( unsigned32 vector );
+extern void __ISR_Handler( uint32_t   vector );
 
 
 /*

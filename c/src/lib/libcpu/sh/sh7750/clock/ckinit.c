@@ -44,7 +44,7 @@
  *  number of clock ticks since the driver was initialized.
  */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t   Clock_driver_ticks;
 
 static void Clock_exit( void );
 static rtems_isr Clock_isr( rtems_vector_number vector );
@@ -77,7 +77,7 @@ rtems_isr_entry  Old_ticker;
 rtems_isr 
 Clock_isr(rtems_vector_number vector)
 {
-    unsigned16 tcr;
+    uint16_t   tcr;
 
     /* reset the timer underflow flag */
     tcr = read16(SH7750_TCR0);
@@ -108,9 +108,9 @@ Install_clock(rtems_isr_entry clock_isr)
 {
     int cpudiv = 1; /* CPU frequency divider */
     int tidiv = 1;  /* Timer input frequency divider */
-    unsigned32 timer_divider; /* Calculated Timer Divider value */
-    unsigned8 temp8;
-    unsigned16 temp16;
+    uint32_t   timer_divider; /* Calculated Timer Divider value */
+    uint8_t   temp8;
+    uint16_t   temp16;
   
     /*
      *  Initialize the clock tick device driver variables
@@ -236,8 +236,8 @@ Install_clock(rtems_isr_entry clock_isr)
 void 
 Clock_exit(void)
 {
-    unsigned8 temp8 = 0;
-    unsigned16 temp16 = 0;
+    uint8_t   temp8 = 0;
+    uint16_t   temp16 = 0;
 
     /* turn off the timer interrupts */
     /* Stop the Timer 0 */
@@ -296,7 +296,7 @@ Clock_control(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void *pargp)
 {
-  rtems_unsigned32 isrlevel;
+  uint32_t   isrlevel;
   rtems_libio_ioctl_args_t *args = pargp;
   
   if (args != 0)

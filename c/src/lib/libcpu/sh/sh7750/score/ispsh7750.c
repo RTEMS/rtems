@@ -72,7 +72,7 @@ void *_VBR_Saved;
  *
  */
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )

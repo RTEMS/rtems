@@ -44,7 +44,7 @@
 
 struct scidev_t {
   char *			name ;
-  unsigned32			addr ;
+  uint32_t  			addr ;
   rtems_device_minor_number	minor ;
   unsigned short		opened ;
   tcflag_t			cflags ;
@@ -65,8 +65,8 @@ static int _sci_set_cflags(
   struct scidev_t      *sci_dev,
   tcflag_t      c_cflag )
 {
-  unsigned8	smr ;
-  unsigned8	brr ;
+  uint8_t  	smr ;
+  uint8_t  	brr ;
   
   if ( c_cflag & CBAUD )
   {
@@ -108,7 +108,7 @@ static int _sci_set_cflags(
 static void _sci_init( 
   rtems_device_minor_number minor )
 {
-  unsigned16	temp16 ;
+  uint16_t  	temp16 ;
 
   /* Pin function controller initialisation for asynchronous mode */  
   if( minor == 0)
@@ -146,7 +146,7 @@ static void _sci_tx_polled(
   const char buf )
 {
   struct scidev_t *scidev = &sci_device[minor] ;
-  signed8         ssr ;
+  int8_t           ssr ;
                 
   while ( !inb((scidev->addr + SCI_SSR) & SCI_TDRE ))
       ;
@@ -220,7 +220,7 @@ rtems_device_driver sh_sci_open(
   rtems_device_minor_number minor,
   void                    * arg )
 {
-  unsigned8 temp8;
+  uint8_t   temp8;
   
  /* check for valid minor number */
    if(( minor > ( SCI_MINOR_DEVICES -1 )) || ( minor < 0 ))

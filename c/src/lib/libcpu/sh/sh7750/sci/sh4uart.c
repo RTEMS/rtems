@@ -80,11 +80,11 @@ sh4uart_init(sh4uart *uart, void *tty, int chn, int int_driven)
  * RETURNS:
  *    peripheral module clock in Hz.
  */
-rtems_unsigned32
+uint32_t  
 sh4uart_get_Pph(void)
 {
-    rtems_unsigned16 frqcr = *(volatile rtems_unsigned16 *)SH7750_FRQCR;
-    rtems_unsigned32 Pph = CPU_CLOCK_RATE_HZ;
+    uint16_t   frqcr = *(volatile uint16_t   *)SH7750_FRQCR;
+    uint32_t   Pph = CPU_CLOCK_RATE_HZ;
 
     switch (frqcr & SH7750_FRQCR_IFC)
     {
@@ -161,10 +161,10 @@ sh4uart_get_Pph(void)
 static void
 sh4uart_set_baudrate(sh4uart *uart, speed_t baud)
 {
-    rtems_unsigned32 rate;
-    rtems_signed16 div;
+    uint32_t   rate;
+    int16_t   div;
     int n;
-    rtems_unsigned32 Pph = sh4uart_get_Pph();
+    uint32_t   Pph = sh4uart_get_Pph();
 
     switch (baud)
     {
@@ -250,7 +250,7 @@ sh4uart_reset(sh4uart *uart)
 
     if (int_driven)
     {
-        rtems_unsigned16 ipr;
+        uint16_t   ipr;
 
         if (chn == SH4_SCI)
         {
@@ -358,9 +358,9 @@ sh4uart_set_attributes(sh4uart *uart, const struct termios *t)
 {
     int level;
     speed_t baud;
-    rtems_unsigned16 smr;
+    uint16_t   smr;
    
-    smr = (rtems_unsigned16)(*(rtems_unsigned8 *)SH7750_SCSMR(uart->chn));
+    smr = (uint16_t  )(*(uint8_t   *)SH7750_SCSMR(uart->chn));
 
     baud = cfgetospeed(t);
 
@@ -403,7 +403,7 @@ sh4uart_set_attributes(sh4uart *uart, const struct termios *t)
     SCSCR(uart->chn) &= ~(SH7750_SCSCR_TE | SH7750_SCSCR_RE);
 
     sh4uart_set_baudrate(uart, baud);
-    SCSMR(uart->chn) = (rtems_unsigned8)smr;
+    SCSMR(uart->chn) = (uint8_t  )smr;
 
     /* enable operations */
     SCSCR(uart->chn) |= SH7750_SCSCR_TE | SH7750_SCSCR_RE;

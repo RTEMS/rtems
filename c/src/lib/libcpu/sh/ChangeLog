@@ -1,3 +1,16 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* sh7032/clock/ckinit.c, sh7032/delay/delay.c,
+	sh7032/include/ispsh7032.h, sh7032/sci/sci.c,
+	sh7032/score/cpu_asm.c, sh7032/timer/timer.c, sh7045/clock/ckinit.c,
+	sh7045/include/ispsh7045.h, sh7045/sci/sci.c,
+	sh7045/sci/sci_termios.c, sh7045/score/cpu_asm.c,
+	sh7045/timer/timer.c, sh7750/clock/ckinit.c,
+	sh7750/include/rtems/score/ispsh7750.h, sh7750/include/sh/sh4uart.h,
+	sh7750/sci/sh4uart.c, sh7750/score/cpu_asm.c,
+	sh7750/score/ispsh7750.c, sh7750/timer/timer.c: Convert to using c99
+	fixed size types.
+
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Add 2nd argument (rtems_updir) to RTEMS_TOP.

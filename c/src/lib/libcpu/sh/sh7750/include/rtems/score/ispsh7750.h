@@ -50,7 +50,7 @@ extern "C" {
 /* dummy ISP */
 extern void _dummy_isp( void );
 
-extern void __ISR_Handler( unsigned32 vector );
+extern void __ISR_Handler( uint32_t   vector );
 
 /* This variable contains VBR value used to pass control when debug, error
  * or virtual memory exceptions occured.

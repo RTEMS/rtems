@@ -103,7 +103,7 @@ static unsigned int sh_clicks_per_tick(
 #else
   double fclicks_per_tick = 
     ((double) clicks_per_sec * (double) usec_per_tick) / 1000000.0 ;
-  return (unsigned32) fclicks_per_tick ;
+  return (uint32_t  ) fclicks_per_tick ;
 #endif
 }
 
@@ -119,7 +119,7 @@ static unsigned int sh_clicks_per_tick(
  *  number of clock ticks since the driver was initialized.
  */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t   Clock_driver_ticks;
 
 static void Clock_exit( void );
 static rtems_isr Clock_isr( rtems_vector_number vector );
@@ -132,8 +132,8 @@ static rtems_isr Clock_isr( rtems_vector_number vector );
  *  has passed.
  */
 
-rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
-static rtems_unsigned32 Clock_isrs_const;        /* only calculated once */
+uint32_t   Clock_isrs;              /* ISRs until next tick */
+static uint32_t   Clock_isrs_const;        /* only calculated once */
 
 /*
  * These are set by clock driver during its init
@@ -164,7 +164,7 @@ rtems_isr Clock_isr(
    *
    * perform any timer dependent tasks
    */
-  unsigned8 temp;
+  uint8_t   temp;
 
   /* reset the flags of the status register */
   temp = read8( ITU_TSR0) & ITU_STAT_MASK;
@@ -194,10 +194,10 @@ void Install_clock(
   rtems_isr_entry clock_isr
 )
 {
-  unsigned8 temp8 = 0;
-  unsigned32 microseconds_per_tick ;
-  unsigned32 cclicks_per_tick ;
-  unsigned16 Clock_limit ;
+  uint8_t   temp8 = 0;
+  uint32_t   microseconds_per_tick ;
+  uint32_t   cclicks_per_tick ;
+  uint16_t   Clock_limit ;
   
   /*
    *  Initialize the clock tick device driver variables
@@ -280,7 +280,7 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  unsigned8 temp8 = 0;
+  uint8_t   temp8 = 0;
 
   /* turn off the timer interrupts */
   /* set interrupt priority to 0 */
@@ -329,7 +329,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-  rtems_unsigned32 isrlevel;
+  uint32_t   isrlevel;
   rtems_libio_ioctl_args_t *args = pargp;
   
   if (args != 0)
