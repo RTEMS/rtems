@@ -1,3 +1,7 @@
+2001-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* spsize/size.c: Use #if !defined(RTEMS_UNIX).
+
 2001-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* sp21/Makefile.am: Remove libtest.
