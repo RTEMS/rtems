@@ -1,5 +1,9 @@
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* bootstrap: RTEMS_CHECK_BSPDIR(RTEMS_BSP_FAMILY).
+
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* VERSION: 4.6.99.0.
 	* aclocal/version.m4: 4.6.99.0.
 

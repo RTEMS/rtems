@@ -36,10 +36,10 @@ usage()
 generate_bspdir_acinclude()
 {
 cat << EOF > acinclude.m4~
-# RTEMS_CHECK_BSPDIR(RTEMS_BSP)
+# RTEMS_CHECK_BSPDIR(RTEMS_BSP_FAMILY)
 AC_DEFUN([RTEMS_CHECK_BSPDIR],
 [
-  case "\$RTEMS_BSP_FAMILY" in
+  case "\$1" in
 EOF
 
 for i in */bsp_specs; do
