@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/spurious.rel
 
 C_FILES = spinit.c
