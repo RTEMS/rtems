@@ -1,6 +1,10 @@
-Name:         @target_alias@-binutils-collection
-Summary:      binutils for target @target_alias@
-Group:        rtems
+
+%define binutils_version     @binutils_version@
+%define binutils_target      @target_alias@
+
+Name:         %{rpmprefix}%{binutils_target}-binutils-collection
+Summary:      binutils for target %{binutils_target}
+Group:        %{rpmgroup}
 Release:      @Release@
 License:      GPL/LGPL
 
@@ -34,8 +38,8 @@ RTEMS is an open source operating system for embedded systems.
 This is binutils sources with patches for RTEMS.
 
 %prep
-# untar the sources inside @target_alias@-binutils
-%setup -c -n @target_alias@-binutils
+# untar the sources inside %{binutils_target}-binutils
+%setup -c -n %{binutils_target}-binutils
 @PATCH2@
   test -d build || mkdir build
 
@@ -43,7 +47,7 @@ This is binutils sources with patches for RTEMS.
   cd build
   ../binutils-@binutils_version@/configure \
     --build=%_build --host=%_host \
-    --target=@target_alias@ \
+    --target=%{binutils_target} \
     --verbose --prefix=%{_prefix} --disable-nls
 
   make all
@@ -59,7 +63,7 @@ This is binutils sources with patches for RTEMS.
   ../binutils-@binutils_version@/mkinstalldirs \
     $RPM_BUILD_ROOT%{_prefix}/share/locale
 
-  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-c++filt%{_exeext}
+  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
 # gzip info files
   gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
   gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info-* 2>/dev/null

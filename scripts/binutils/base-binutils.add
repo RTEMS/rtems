@@ -1,19 +1,18 @@
 # ==============================================================
 # rtems-base-binutils
 # ==============================================================
-%package -n rtems-base-binutils
-Provides:	rtems-base-binutils
+%package -n %{rpmprefix}rtems-base-binutils
 Summary:      base package for rtems binutils
-Group: rtems
+Group: %{rpmgroup}
 PreReq:		/sbin/install-info
 
-%description -n rtems-base-binutils
+%description -n %{rpmprefix}rtems-base-binutils
 
 RTEMS is an open source operating system for embedded systems.
 
 This is the base for binutils regardless of target CPU.
 
-%post -n rtems-base-binutils
+%post -n %{rpmprefix}rtems-base-binutils
   if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
     rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
@@ -23,7 +22,7 @@ This is the base for binutils regardless of target CPU.
     done
   fi
 
-%postun -n rtems-base-binutils
+%postun -n %{rpmprefix}rtems-base-binutils
   if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
     rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
@@ -33,7 +32,7 @@ This is the base for binutils regardless of target CPU.
     done
   fi
 
-%files -n rtems-base-binutils -f files
+%files -n %{rpmprefix}rtems-base-binutils -f files
 %defattr(-,root,root)
 %dir %{_prefix}/info
 %doc %{_prefix}/info/dir
