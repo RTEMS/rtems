@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = rgdb_specs
 EDITION = 1

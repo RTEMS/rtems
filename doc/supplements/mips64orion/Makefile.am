@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = mips64orion
 EDITION = 1

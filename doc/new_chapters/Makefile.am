@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = new_chapters
 EDITION = 1

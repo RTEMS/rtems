@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 SRC2HTMLDIR = $(top_srcdir)/src2html1.4a
 
