@@ -42,10 +42,10 @@ uint32_t   _Thread_Stack_Allocate(
 )
 {
   void *stack_addr = 0;
- 
+
   if ( !_Stack_Is_enough( stack_size ) )
     stack_size = STACK_MINIMUM_SIZE;
- 
+
   /*
    * Call ONLY the CPU table stack allocate hook, _or_ the
    * the RTEMS workspace allocate.  This is so the stack free
@@ -71,11 +71,11 @@ uint32_t   _Thread_Stack_Allocate(
     stack_size = _Stack_Adjust_size( stack_size );
     stack_addr = _Workspace_Allocate( stack_size );
   }
- 
+
   if ( !stack_addr )
       stack_size = 0;
- 
+
   the_thread->Start.stack = stack_addr;
- 
+
   return stack_size;
 }

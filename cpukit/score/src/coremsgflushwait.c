@@ -42,7 +42,7 @@
  *  Output parameters:
  *    returns - the number of messages flushed from the queue
  */
- 
+
 void _CORE_message_queue_Flush_waiting_threads(
   CORE_message_queue_Control *the_message_queue
 )

@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_CORE_MESSAGE_QUEUE_h
 #define __RTEMS_CORE_MESSAGE_QUEUE_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -25,12 +25,12 @@ extern "C" {
 #include <rtems/score/threadq.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
- 
+
 /*
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on message_queues.
  */
- 
+
 typedef void ( *CORE_message_queue_API_mp_support_callout )(
                  Thread_Control *,
                  Objects_Id
@@ -43,17 +43,17 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
  *  NOTE:  The buffer field is normally longer than a single uint32_t  .
  *         but since messages are variable length we just make a ptr to 1.  
  */
- 
+
 typedef struct {
     uint32_t    size;
     uint32_t    buffer[1];
 } CORE_message_queue_Buffer;
- 
+
 /*
  *  The following records define the organization of a message
  *  buffer.
  */
- 
+
 typedef struct {
   Chain_Node                 Node;
   int                        priority;
@@ -81,13 +81,13 @@ typedef enum {
 
 #define  CORE_MESSAGE_QUEUE_SEND_REQUEST   INT_MAX
 #define  CORE_MESSAGE_QUEUE_URGENT_REQUEST INT_MIN
- 
+
 typedef int CORE_message_queue_Submit_types;
 
 /*
  *  Core Message queue handler return statuses.
  */
- 
+
 typedef enum {
   CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL,
   CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE,
@@ -107,7 +107,7 @@ typedef enum {
 typedef struct {
   CORE_message_queue_Disciplines  discipline;
 }   CORE_message_queue_Attributes;
- 
+
 /*
  *  The following defines the type for a Notification handler.  A notification
  *  handler is invoked when the message queue makes a 0->1 transition on
@@ -120,7 +120,7 @@ typedef void (*CORE_message_queue_Notify_Handler)( void * );
  *  The following defines the control block used to manage each 
  *  counting message_queue.
  */
- 
+
 typedef struct {
   Thread_queue_Control               Wait_queue;
   CORE_message_queue_Attributes      Attributes;
@@ -148,7 +148,7 @@ boolean _CORE_message_queue_Initialize(
   uint32_t                       maximum_pending_messages,
   uint32_t                       maximum_message_size
 );
- 
+
 /*
  *  _CORE_message_queue_Close
  *
@@ -157,7 +157,7 @@ boolean _CORE_message_queue_Initialize(
  *  This function closes a message by returning all allocated space and
  *  flushing the message_queue's task wait queue.
  */
- 
+
 void _CORE_message_queue_Close(
   CORE_message_queue_Control *the_message_queue,
   Thread_queue_Flush_callout  remote_extract_callout,
@@ -186,11 +186,11 @@ uint32_t   _CORE_message_queue_Flush(
  *  This routine flushes all outstanding messages and returns
  *  them to the inactive message chain.
  */
- 
+
 uint32_t   _CORE_message_queue_Flush_support(
   CORE_message_queue_Control *the_message_queue
 );
- 
+
 /*
  *  _CORE_message_queue_Flush_waiting_threads
  *
@@ -214,7 +214,7 @@ void _CORE_message_queue_Flush_waiting_threads(
  *  returns the number of threads made ready by the message.
  *
  */
- 
+
 CORE_message_queue_Status _CORE_message_queue_Broadcast(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
@@ -237,7 +237,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  *  at the front of the queue.
  *
  */
- 
+
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
@@ -261,7 +261,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  *
  *  NOTE: Returns message priority via return are in TCB.
  */
- 
+
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
   Objects_Id                       id,
@@ -294,6 +294,6 @@ void _CORE_message_queue_Insert_message(
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

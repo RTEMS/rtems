@@ -42,7 +42,7 @@
  *  Output parameters:
  *    returns - the number of messages flushed from the queue
  */
- 
+
 uint32_t   _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue
 )

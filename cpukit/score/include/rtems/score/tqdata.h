@@ -38,7 +38,7 @@ typedef enum {
  *  The following enumerated types indicate what happened while the thread
  *  queue was in the synchronization window.
  */
- 
+
 typedef enum {
   THREAD_QUEUE_SYNCHRONIZED,
   THREAD_QUEUE_NOTHING_HAPPENED,

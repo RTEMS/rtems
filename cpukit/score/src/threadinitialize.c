@@ -75,7 +75,7 @@ boolean _Thread_Initialize(
       actual_stack_size = stack_size;
 
     actual_stack_size = _Thread_Stack_Allocate( the_thread, actual_stack_size );
- 
+
     if ( !actual_stack_size ) 
       return FALSE;                     /* stack allocation failed */
 
@@ -96,7 +96,7 @@ boolean _Thread_Initialize(
   /*
    *  Allocate the floating point area for this thread
    */
-  
+
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( is_fp ) {
 
@@ -117,9 +117,9 @@ boolean _Thread_Initialize(
   /*
    * Clear the libc reent hook.
    */
-  
+
   the_thread->libc_reent = NULL;
-  
+
   /*
    *  Allocate the extensions area for this thread
    */
@@ -141,7 +141,7 @@ boolean _Thread_Initialize(
     }
   } else 
     extensions_area = NULL;
-  
+
   the_thread->extensions = (void **) extensions_area;
 
   /*
@@ -185,7 +185,7 @@ boolean _Thread_Initialize(
   the_thread->real_priority          = priority;
   the_thread->Start.initial_priority = priority;
   the_thread->ticks_executed         = 0;
- 
+
   _Thread_Set_priority( the_thread, priority );
 
   /*
@@ -214,5 +214,5 @@ boolean _Thread_Initialize(
   }
 
   return TRUE;
-   
+
 }

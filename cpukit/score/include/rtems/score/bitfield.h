@@ -61,7 +61,7 @@ const unsigned char __log2table[256] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 #endif
- 
+
 #endif
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )

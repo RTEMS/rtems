@@ -57,7 +57,7 @@ void _MPCI_Handler_initialization(
   /*
    *  Register the MP Process Packet routine.
    */
- 
+
   _MPCI_Register_packet_processor(
     MP_PACKET_MPCI_INTERNAL,
     _MPCI_Internal_packets_Process_packet
@@ -103,7 +103,7 @@ void _MPCI_Create_server( void )
    */
 
   _MPCI_Receive_server_tcb = _Thread_Internal_allocate();
- 
+
   _Thread_Initialize(
     &_Thread_Internal_information,
     _MPCI_Receive_server_tcb,
@@ -117,7 +117,7 @@ void _MPCI_Create_server( void )
     0,           /* all interrupts enabled */
     _MPCI_Internal_name
   );
- 
+
   _Thread_Start(
     _MPCI_Receive_server_tcb,
     THREAD_START_NUMERIC,
@@ -147,11 +147,11 @@ void _MPCI_Initialization ( void )
  *  This routine registers the MPCI packet processor for the
  *  designated object class.
  */
- 
+
 void _MPCI_Register_packet_processor(
   MP_packet_Classes      the_class,
   MPCI_Packet_processor  the_packet_processor
- 
+
 )
 {
   _MPCI_Packet_processors[ the_class ] = the_packet_processor;
@@ -347,41 +347,41 @@ Thread _MPCI_Receive_server(
   uint32_t   ignored
 )
 {
- 
+
   MP_packet_Prefix         *the_packet;
   MPCI_Packet_processor     the_function;
   Thread_Control           *executing;
- 
+
   executing = _Thread_Executing;
 
   for ( ; ; ) {
- 
+
     executing->receive_packet = NULL;
 
     _Thread_Disable_dispatch();
     _CORE_semaphore_Seize( &_MPCI_Semaphore, 0, TRUE, WATCHDOG_NO_TIMEOUT );
     _Thread_Enable_dispatch();
- 
+
     for ( ; ; ) {
       the_packet = _MPCI_Receive_packet();
- 
+
       if ( !the_packet )
         break;
- 
+
       executing->receive_packet = the_packet;
- 
+
       if ( !_Mp_packet_Is_valid_packet_class ( the_packet->the_class ) )
         break;
- 
+
       the_function = _MPCI_Packet_processors[ the_packet->the_class ];
- 
+
       if ( !the_function )
         _Internal_error_Occurred(
           INTERNAL_ERROR_CORE,
           TRUE,
           INTERNAL_ERROR_BAD_PACKET
         );
- 
+
         (*the_function)( the_packet );
     }
   }
@@ -394,7 +394,7 @@ Thread _MPCI_Receive_server(
  *  _MPCI_Announce
  *
  */
- 
+
 void _MPCI_Announce ( void )
 {
   _Thread_Disable_dispatch();
@@ -407,32 +407,32 @@ void _MPCI_Announce ( void )
  *  _MPCI_Internal_packets_Send_process_packet
  *
  */
- 
+
 void _MPCI_Internal_packets_Send_process_packet (
    MPCI_Internal_Remote_operations operation
 )
 {
   MPCI_Internal_packet *the_packet;
- 
+
   switch ( operation ) {
- 
+
     case MPCI_PACKETS_SYSTEM_VERIFY:
- 
+
       the_packet                    = _MPCI_Internal_packets_Get_packet();
       the_packet->Prefix.the_class  = MP_PACKET_MPCI_INTERNAL;
       the_packet->Prefix.length     = sizeof ( MPCI_Internal_packet );
       the_packet->Prefix.to_convert = sizeof ( MPCI_Internal_packet );
       the_packet->operation         = operation;
- 
+
       the_packet->maximum_nodes = _Objects_Maximum_nodes;
- 
+
       the_packet->maximum_global_objects = _Objects_MP_Maximum_global_objects;
- 
+
       _MPCI_Send_process_packet( MPCI_ALL_NODES, &the_packet->Prefix );
       break;
   }
 }
- 
+
 /*PAGE
  *
  *  _MPCI_Internal_packets_Send_request_packet
@@ -441,7 +441,7 @@ void _MPCI_Internal_packets_Send_process_packet (
  *  packets to be sent by this manager.
  *
  */
- 
+
 /*PAGE
  *
  *  _MPCI_Internal_packets_Send_response_packet
@@ -450,14 +450,14 @@ void _MPCI_Internal_packets_Send_process_packet (
  *  packets to be sent by this manager.
  *
  */
- 
+
 /*PAGE
  *
  *
  *  _MPCI_Internal_packets_Process_packet
  *
  */
- 
+
 void _MPCI_Internal_packets_Process_packet (
   MP_packet_Prefix  *the_packet_prefix
 )
@@ -465,33 +465,33 @@ void _MPCI_Internal_packets_Process_packet (
   MPCI_Internal_packet *the_packet;
   uint32_t                    maximum_nodes;
   uint32_t                    maximum_global_objects;
- 
+
   the_packet = (MPCI_Internal_packet *) the_packet_prefix;
- 
+
   switch ( the_packet->operation ) {
- 
+
     case MPCI_PACKETS_SYSTEM_VERIFY:
- 
+
       maximum_nodes          = the_packet->maximum_nodes;
       maximum_global_objects = the_packet->maximum_global_objects;
       if ( maximum_nodes != _Objects_Maximum_nodes ||
            maximum_global_objects != _Objects_MP_Maximum_global_objects ) {
- 
+
         _MPCI_Return_packet( the_packet_prefix );
- 
+
         _Internal_error_Occurred(
           INTERNAL_ERROR_CORE,
           TRUE,
           INTERNAL_ERROR_INCONSISTENT_MP_INFORMATION
         );
       }
- 
+
       _MPCI_Return_packet( the_packet_prefix );
- 
+
       break;
   }
 }
- 
+
 /*PAGE
  *
  *  _MPCI_Internal_packets_Send_object_was_deleted
@@ -500,7 +500,7 @@ void _MPCI_Internal_packets_Process_packet (
  *  deleted by this manager.
  *
  */
- 
+
 /*PAGE
  *
  *  _MPCI_Internal_packets_Send_extract_proxy
@@ -509,13 +509,13 @@ void _MPCI_Internal_packets_Process_packet (
  *  deleted by this manager.
  *
  */
- 
+
 /*PAGE
  *
  *  _MPCI_Internal_packets_Get_packet
  *
  */
- 
+
 MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void )
 {
   return ( (MPCI_Internal_packet *) _MPCI_Get_packet() );

@@ -88,7 +88,7 @@ void _Heap_Walk(
     passes++;
     if (error && (passes > 10))
         abort();
-    
+
     if (do_dump == TRUE) {
       printf("PASS: %d  Block @ 0x%p   Back %d,   Front %d",
               source, the_block,

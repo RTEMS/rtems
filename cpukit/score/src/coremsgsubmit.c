@@ -75,7 +75,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   /*
    *  Is there a thread currently waiting on this message queue?
    */
-      
+
   if ( the_message_queue->number_of_pending_messages == 0 ) {
     the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
     if ( the_thread ) {
@@ -86,7 +86,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       );
       *(uint32_t   *)the_thread->Wait.return_argument_1 = size;
       the_thread->Wait.count = submit_type;
-    
+
 #if defined(RTEMS_MULTIPROCESSING)
       if ( !_Objects_Is_local_id( the_thread->Object.id ) )
         (*api_message_queue_mp_support) ( the_thread, id );

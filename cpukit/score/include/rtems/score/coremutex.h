@@ -14,10 +14,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_CORE_MUTEX_h
 #define __RTEMS_CORE_MUTEX_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,12 +28,12 @@ extern "C" {
 #include <rtems/score/watchdog.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/sysstate.h>
- 
+
 /*
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on mutexes.
  */
- 
+
 typedef void ( *CORE_mutex_API_mp_support_callout )(
                  Thread_Control *,
                  Objects_Id
@@ -53,7 +53,7 @@ typedef enum {
 /*
  *  Mutex handler return statuses.
  */
- 
+
 typedef enum {
   CORE_MUTEX_STATUS_SUCCESSFUL,
   CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT,
@@ -92,7 +92,7 @@ typedef enum {
   CORE_MUTEX_NESTING_IS_ERROR,
   CORE_MUTEX_NESTING_BLOCKS
 }  CORE_mutex_Nesting_behaviors;
- 
+
 /*
  *  Locked and unlocked values
  */
@@ -111,11 +111,11 @@ typedef struct {
   CORE_mutex_Disciplines       discipline;
   Priority_Control             priority_ceiling;
 }   CORE_mutex_Attributes;
- 
+
 /*
  *  The following defines the control block used to manage each mutex.
  */
- 
+
 typedef struct {
   Thread_queue_Control    Wait_queue;
   CORE_mutex_Attributes   Attributes;
@@ -139,7 +139,7 @@ void _CORE_mutex_Initialize(
   CORE_mutex_Attributes        *the_mutex_attributes,
   uint32_t                      initial_lock
 );
- 
+
 /*
  *  _CORE_mutex_Seize
  *
@@ -209,7 +209,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   Objects_Id                         id,
   CORE_mutex_API_mp_support_callout  api_mutex_mp_support
 );
- 
+
 /*
  *  _CORE_mutex_Flush
  *
@@ -218,19 +218,19 @@ CORE_mutex_Status _CORE_mutex_Surrender(
  *  This routine assists in the deletion of a mutex by flushing the associated
  *  wait queue.
  */
- 
+
 void _CORE_mutex_Flush(
   CORE_mutex_Control         *the_mutex,
   Thread_queue_Flush_callout  remote_extract_callout,
   uint32_t                    status
 );
- 
+
 #include <rtems/score/coremutex.inl>
 #endif
 
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

@@ -68,14 +68,14 @@ void _Objects_Initialize_information(
   information->the_api            = the_api;
   information->the_class          = the_class; 
   information->is_string          = is_string; 
-  
+
   information->local_table        = 0;
   information->name_table         = 0;
   information->inactive_per_block = 0;
   information->object_blocks      = 0;
-  
+
   information->inactive           = 0;
-  
+
   /*
    *  Set the entry in the object information table.
    */
@@ -87,14 +87,14 @@ void _Objects_Initialize_information(
    */
 
   information->size = size;
-  
+
   /*
    *  Are we operating in unlimited, or auto-extend mode
    */
 
   information->auto_extend = (maximum & OBJECTS_UNLIMITED_OBJECTS) ? TRUE : FALSE;
   maximum                 &= ~OBJECTS_UNLIMITED_OBJECTS;
-  
+
   /*
    *  The allocation unit is the maximum value
    */
@@ -130,7 +130,7 @@ void _Objects_Initialize_information(
   information->name_length = name_length;
 
   _Chain_Initialize_empty( &information->Inactive );
-    
+
   /*
    *  Initialize objects .. if there are any
    */
@@ -141,17 +141,17 @@ void _Objects_Initialize_information(
      *  Reset the maximum value. It will be updated when the information is
      *  extended.
      */
-    
+
     information->maximum = 0;
-    
+
     /*
      *  Always have the maximum size available so the current performance
      *  figures are create are met.  If the user moves past the maximum
      *  number then a performance hit is taken.
      */
-    
+
     _Objects_Extend_information( information );
-    
+
   }
 
   /*

@@ -39,7 +39,7 @@ Watchdog_States _Watchdog_Remove(
       break;
 
     case WATCHDOG_BEING_INSERTED:  
-   
+
       /*
        *  It is not actually on the chain so just change the state and
        *  the Insert operation we interrupted will be aborted.

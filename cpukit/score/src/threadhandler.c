@@ -68,14 +68,14 @@ void _Thread_Handler( void )
 #if defined(__USE__MAIN__)
   extern void _main(void);
 #endif
- 
+
   executing = _Thread_Executing;
- 
+
   /*
    * have to put level into a register for those cpu's that use
    * inline asm here
    */
- 
+
   level = executing->Start.isr_level;
   _ISR_Set_level(level);
 
@@ -100,9 +100,9 @@ void _Thread_Handler( void )
    * 'switch' extensions can run.  This means must keep dispatch
    * disabled until all 'begin' extensions complete.
    */
- 
+
   _User_extensions_Thread_begin( executing );
- 
+
   /*
    *  At this point, the dispatch disable level BETTER be 1.
    */
@@ -117,7 +117,7 @@ void _Thread_Handler( void )
     __main ();
 #endif
 
- 
+
   switch ( executing->Start.prototype ) {
     case THREAD_START_NUMERIC:
       executing->Wait.return_argument = 

@@ -83,9 +83,9 @@ int _CORE_mutex_Seize_interrupt_trylock(
 { 
   Thread_Control   *executing;
   ISR_Level         level = *level_p;
-  
+
   /* disabled when you get here */
-    
+
   executing = _Thread_Executing;
   executing->Wait.return_code = CORE_MUTEX_STATUS_SUCCESSFUL;
   if ( !_CORE_mutex_Is_locked( the_mutex ) ) {

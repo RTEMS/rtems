@@ -45,7 +45,7 @@ boolean _Heap_Size_of_user_area(
   uint32_t           the_size;
 
   the_block = _Heap_User_block_at( starting_address );
-  
+
   if ( !_Heap_Is_block_in( the_heap, the_block ) ||
         _Heap_Is_block_free( the_block ) )
     return( FALSE );

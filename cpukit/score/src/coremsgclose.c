@@ -43,7 +43,7 @@
  *
  *  Output parameters:  NONE
  */
- 
+
 void _CORE_message_queue_Close(
   CORE_message_queue_Control *the_message_queue,
   Thread_queue_Flush_callout  remote_extract_callout,
@@ -67,7 +67,7 @@ void _CORE_message_queue_Close(
    *  we just flushed all waiting threads, we don't have to worry about
    *  the flush satisfying any blocked senders as a side-effect.
    */
- 
+
   if ( the_message_queue->number_of_pending_messages != 0 )
     (void) _CORE_message_queue_Flush_support( the_message_queue );
 

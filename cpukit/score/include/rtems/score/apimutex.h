@@ -109,7 +109,7 @@ SCORE_EXTERN Objects_Information  _API_Mutex_Information;
     _CORE_mutex_Seize( \
       &(_the_mutex)->Mutex, (_the_mutex)->Object.id, TRUE, 0, (_level) ); \
   } while (0)
-  
+
 /*
  *  _API_Mutex_Unlock
  *

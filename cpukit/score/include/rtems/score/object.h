@@ -377,7 +377,7 @@ void _Objects_Free(
  *
  *  This method zeroes out the name.
  */
- 
+
 void _Objects_Clear_name(
   void       *name,
   uint32_t    length

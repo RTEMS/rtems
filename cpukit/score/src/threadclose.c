@@ -35,18 +35,18 @@
  *  thread and removes it from the local object table so no further
  *  operations on this thread are allowed.
  */
- 
+
 void _Thread_Close(
   Objects_Information  *information,
   Thread_Control       *the_thread
 )
 {
   _User_extensions_Thread_delete( the_thread );
- 
+
   _Objects_Close( information, &the_thread->Object );
- 
+
   _Thread_Set_state( the_thread, STATES_TRANSIENT );
- 
+
   if ( !_Thread_queue_Extract_with_proxy( the_thread ) ) {
     if ( _Watchdog_Is_active( &the_thread->Timer ) )
       (void) _Watchdog_Remove( &the_thread->Timer );

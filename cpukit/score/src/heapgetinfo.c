@@ -67,7 +67,7 @@ Heap_Get_information_status _Heap_Get_information(
   }
 
   while (notdone) {
-      
+
       /*
        * Accumulate size
        */
@@ -79,7 +79,7 @@ Heap_Get_information_status _Heap_Get_information(
         the_info->used_blocks++;
         the_info->used_size += _Heap_Block_size(the_block);
       }
-    
+
       /*
        * Handle the last block
        */

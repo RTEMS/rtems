@@ -183,18 +183,18 @@ synchronize:
        *  enter a thread queue critical section.
        */
       break;
- 
+
     case THREAD_QUEUE_NOTHING_HAPPENED:
       /*
        *  This should never happen.  All of this was dealt with above.
        */
       break;
- 
+
     case THREAD_QUEUE_TIMEOUT:
       the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
       _ISR_Enable( level );
       break;
- 
+
     case THREAD_QUEUE_SATISFIED:
       if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
         _Watchdog_Deactivate( &the_thread->Timer );
@@ -204,15 +204,15 @@ synchronize:
         _ISR_Enable( level );
       break;
   }
- 
+
   /*
    *  Global objects with thread queue's should not be operated on from an
    *  ISR.  But the sync code still must allow short timeouts to be processed
    *  correctly.
    */
- 
+
   _Thread_Unblock( the_thread );
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );

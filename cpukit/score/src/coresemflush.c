@@ -40,18 +40,18 @@
  *
  *  Output parameters:  NONE
  */
- 
+
 void _CORE_semaphore_Flush(
   CORE_semaphore_Control     *the_semaphore,
   Thread_queue_Flush_callout  remote_extract_callout,
   uint32_t                    status
 )
 {
- 
+
   _Thread_queue_Flush(
     &the_semaphore->Wait_queue,
     remote_extract_callout,
     status
   );
- 
+
 }

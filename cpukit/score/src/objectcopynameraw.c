@@ -30,7 +30,7 @@
  *
  *  XXX
  */
- 
+
 void _Objects_Copy_name_raw(
   void       *source,
   void       *destination,
@@ -40,7 +40,7 @@ void _Objects_Copy_name_raw(
   uint32_t   *source_p = (uint32_t   *) source;
   uint32_t   *destination_p = (uint32_t   *) destination;
   uint32_t    tmp_length = length / OBJECTS_NAME_ALIGNMENT;
- 
+
   while ( tmp_length-- )
     *destination_p++ = *source_p++;
 }

@@ -29,7 +29,7 @@ extern "C" {
 /*
  *  Constant for indefinite wait.
  */
- 
+
 #define THREAD_QUEUE_WAIT_FOREVER  WATCHDOG_NO_TIMEOUT
 
 /*
@@ -46,7 +46,7 @@ typedef void ( *Thread_queue_Flush_callout )(
  *  is extracted from a remote thread queue (i.e. it's proxy must
  *  extracted from the remote queue).
  */
- 
+
 #if 0
 typedef void ( *Thread_queue_Extract_callout )(
                  Thread_Control *
@@ -108,7 +108,7 @@ void _Thread_queue_Extract(
  *  and ensures that if there is a proxy for this task on 
  *  another node, it is also dealt with.
  */
- 
+
 boolean _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 );

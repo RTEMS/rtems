@@ -31,54 +31,54 @@ extern "C" {
  *  are invoked at critical points in the life of each thread and
  *  the system as a whole.
  */
- 
+
 typedef void User_extensions_routine;
- 
+
 typedef boolean ( *User_extensions_thread_create_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
- 
+
 typedef User_extensions_routine ( *User_extensions_thread_delete_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
- 
+
 typedef User_extensions_routine ( *User_extensions_thread_start_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
- 
+
 typedef User_extensions_routine ( *User_extensions_thread_restart_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
- 
+
 typedef User_extensions_routine ( *User_extensions_thread_switch_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
- 
+
 typedef User_extensions_routine (
                                 *User_extensions_thread_post_switch_extension )(
                  Thread_Control *
              );
- 
+
 typedef User_extensions_routine ( *User_extensions_thread_begin_extension )(
                  Thread_Control *
              );
- 
+
 typedef User_extensions_routine ( *User_extensions_thread_exitted_extension )(
                  Thread_Control *
              );
- 
+
 typedef User_extensions_routine ( *User_extensions_fatal_extension )(
                  Internal_errors_Source  /* the_source  */,
                  boolean                 /* is_internal */,
                  uint32_t                /* the_error   */
              );
 
- 
+
 typedef struct {
   User_extensions_thread_create_extension       thread_create;
   User_extensions_thread_start_extension        thread_start;

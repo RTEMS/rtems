@@ -40,7 +40,7 @@
  * Output parameters:
  *   returns  - TRUE on a match
  */
- 
+
 boolean _Objects_Compare_name_string(
   void       *name_1,
   void       *name_2,

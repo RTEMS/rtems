@@ -23,7 +23,7 @@
  *
  *  _Workspace_Handler_initialization
  */
- 
+
 void _Workspace_Handler_initialization(
   void       *starting_address,
   uint32_t    size
@@ -32,28 +32,28 @@ void _Workspace_Handler_initialization(
   uint32_t   *zero_out_array;
   uint32_t    index;
   uint32_t    memory_available;
- 
+
   if ( !starting_address || !_Addresses_Is_aligned( starting_address ) )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       TRUE,
       INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS
     );
- 
+
   if ( _CPU_Table.do_zero_of_workspace ) {
     for( zero_out_array  = (uint32_t   *) starting_address, index = 0 ;
          index < size / sizeof( uint32_t   ) ;
          index++ )
       zero_out_array[ index ] = 0;
   }
- 
+
   memory_available = _Heap_Initialize(
     &_Workspace_Area,
     starting_address,
     size,
     CPU_HEAP_ALIGNMENT
   );
- 
+
   if ( memory_available == 0 )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,

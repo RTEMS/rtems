@@ -60,7 +60,7 @@ typedef ISR_Handler ( *ISR_Handler_entry )(
  *  the current CPU being used.  This is usually the number of distinct vectors
  *  the cpu can vector.
  */
- 
+
 #define ISR_NUMBER_OF_VECTORS                CPU_INTERRUPT_NUMBER_OF_VECTORS
 
 /*
@@ -166,10 +166,10 @@ void _ISR_Handler_initialization ( void );
  *
  *  This routine returns the current interrupt level.
  */
- 
+
 #define _ISR_Get_level() \
         _CPU_ISR_Get_level()
- 
+
 /*
  *  _ISR_Set_level
  *

@@ -35,7 +35,7 @@
  *  and makes it ready to execute.  After this routine executes, the
  *  thread competes with all other threads for CPU time.
  */
- 
+
 boolean _Thread_Start(
   Thread_Control       *the_thread,
   Thread_Start_types    the_prototype,
@@ -45,22 +45,22 @@ boolean _Thread_Start(
 )
 {
   if ( _States_Is_dormant( the_thread->current_state ) ) {
- 
+
     the_thread->Start.entry_point      = (Thread_Entry) entry_point;
-   
+
     the_thread->Start.prototype        = the_prototype;
     the_thread->Start.pointer_argument = pointer_argument;
     the_thread->Start.numeric_argument = numeric_argument;
- 
+
     _Thread_Load_environment( the_thread );
- 
+
     _Thread_Ready( the_thread );
- 
+
     _User_extensions_Thread_start( the_thread );
- 
+
     return TRUE;
   }
- 
+
   return FALSE;
- 
+
 }

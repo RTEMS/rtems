@@ -59,12 +59,12 @@ void _Objects_Extend_information(
   minimum_index = _Objects_Get_index( information->minimum_id );
   index_base    = minimum_index;
   block         = 0;
-  
+
   if ( information->maximum < minimum_index )
     block_count = 0;
   else {
     block_count = information->maximum / information->allocation_size;
-  
+
     for ( ; block < block_count; block++ ) {
       if ( information->object_blocks[ block ] == NULL )
         break;
@@ -85,7 +85,7 @@ void _Objects_Extend_information(
     Objects_Control **local_table;
     uint32_t          maximum;
     void             *old_tables;    
-    
+
     /*
      *  Growing the tables means allocating a new area, doing a copy and
      *  updating the information table.
@@ -109,13 +109,13 @@ void _Objects_Extend_information(
      */
 
     block_count++;
-    
+
     maximum = information->maximum + information->allocation_size;
 
     /*
      *  Allocate the tables and break it up.
      */
-    
+
     if ( information->auto_extend ) {
       object_blocks = (void**)
         _Workspace_Allocate(
@@ -140,28 +140,28 @@ void _Objects_Extend_information(
      *  Break the block into the various sections.
      *
      */
-     
+
     inactive_per_block = (uint32_t   *) _Addresses_Add_offset(
         object_blocks, block_count * sizeof(void*) );
     name_table = (Objects_Name *) _Addresses_Add_offset(
         inactive_per_block, block_count * sizeof(uint32_t  ) );
     local_table = (Objects_Control **) _Addresses_Add_offset(
         name_table, block_count * sizeof(Objects_Name *) );
-    
+
     /*
      *  Take the block count down. Saves all the (block_count - 1)
      *  in the copies.
      */
 
     block_count--;
-    
+
     if ( information->maximum > minimum_index ) {
-      
+
       /*
        *  Copy each section of the table over. This has to be performed as
        *  separate parts as size of each block has changed.
        */
-    
+
       memcpy( object_blocks,
               information->object_blocks,
               block_count * sizeof(void*) );
@@ -184,11 +184,11 @@ void _Objects_Extend_information(
         local_table[ index ] = NULL;
       }
     }
-    
+
     /*
      *  Initialise the new entries in the table.
      */
-    
+
     object_blocks[block_count] = NULL;
     inactive_per_block[block_count] = 0;
     name_table[block_count] = NULL;
@@ -198,11 +198,11 @@ void _Objects_Extend_information(
           index++ ) {
       local_table[ index ] = NULL;
     }
-    
+
     _ISR_Disable( level );
 
     old_tables = information->object_blocks;
-    
+
     information->object_blocks = object_blocks;
     information->inactive_per_block = inactive_per_block;
     information->name_table = name_table;
@@ -219,10 +219,10 @@ void _Objects_Extend_information(
 
     if ( old_tables )
       _Workspace_Free( old_tables );
-    
+
     block_count++;
   }
-           
+
   /*
    *  Allocate the name table, and the objects
    */
@@ -244,7 +244,7 @@ void _Objects_Extend_information(
         (information->allocation_size * information->size)
       );
   }
-  
+
   name_area = (Objects_Name *) _Addresses_Add_offset(
     information->object_blocks[ block ],
     (information->allocation_size * information->size)
@@ -267,16 +267,16 @@ void _Objects_Extend_information(
    */
 
   index = index_base;
-  
+
   while ( (the_object = (Objects_Control *) _Chain_Get( &Inactive ) ) != NULL ) {
-    
+
     the_object->id = _Objects_Build_id(
         information->the_api, 
         information->the_class,
         _Objects_Local_node,
         index
       );
-      
+
     the_object->name = (void *) name_area;
 
     name_area = _Addresses_Add_offset( name_area, information->name_length );
@@ -285,7 +285,7 @@ void _Objects_Extend_information(
 
     index++;
   }
-  
+
   information->inactive_per_block[ block ] = information->allocation_size;
   information->inactive += information->allocation_size;
 }

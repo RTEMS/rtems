@@ -53,7 +53,7 @@ void _Objects_MP_Handler_initialization (
  *  _Objects_MP_Open
  *
  */
- 
+
 void _Objects_MP_Open (
   Objects_Information *information,
   Objects_MP_Control  *the_global_object,
@@ -63,7 +63,7 @@ void _Objects_MP_Open (
 {
   the_global_object->Object.id = the_id;
   the_global_object->name      = the_name;
- 
+
   _Chain_Prepend(
     &information->global_table[ _Objects_Get_node( the_id ) ],
     &the_global_object->Object.Node

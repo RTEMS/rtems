@@ -54,7 +54,7 @@ void *_Heap_Allocate(
 
   excess   = size % the_heap->page_size;
   the_size = size + the_heap->page_size + HEAP_BLOCK_USED_OVERHEAD;
-  
+
   if ( excess )
     the_size += the_heap->page_size - excess;
 
@@ -90,12 +90,12 @@ void *_Heap_Allocate(
     the_block->previous->next = the_block->next;
     ptr = _Heap_Start_of_user_area( the_block );
   }
-  
+
   /*
    * round ptr up to a multiple of page size
    * Have to save the bump amount in the buffer so that free can figure it out
    */
-  
+
   offset = the_heap->page_size - (((uint32_t  ) ptr) & (the_heap->page_size - 1));
   ptr = _Addresses_Add_offset( ptr, offset );
   *(((uint32_t   *) ptr) - 1) = offset;

@@ -14,10 +14,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_CORE_COUNTING_SEMAPHORE_h
 #define __RTEMS_CORE_COUNTING_SEMAPHORE_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,12 +26,12 @@ extern "C" {
 #include <rtems/score/threadq.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
- 
+
 /*
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on semaphores.
  */
- 
+
 typedef void ( *CORE_semaphore_API_mp_support_callout )(
                  Thread_Control *,
                  Objects_Id
@@ -49,7 +49,7 @@ typedef enum {
 /*
  *  Core Semaphore handler return statuses.
  */
- 
+
 typedef enum {
   CORE_SEMAPHORE_STATUS_SUCCESSFUL,
   CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT,
@@ -67,12 +67,12 @@ typedef struct {
   uint32_t                    maximum_count;
   CORE_semaphore_Disciplines  discipline;
 }   CORE_semaphore_Attributes;
- 
+
 /*
  *  The following defines the control block used to manage each 
  *  counting semaphore.
  */
- 
+
 typedef struct {
   Thread_queue_Control        Wait_queue;
   CORE_semaphore_Attributes   Attributes;
@@ -92,7 +92,7 @@ void _CORE_semaphore_Initialize(
   CORE_semaphore_Attributes    *the_semaphore_attributes,
   uint32_t                      initial_value
 );
- 
+
 /*
  *  _CORE_semaphore_Seize
  *
@@ -110,7 +110,7 @@ void _CORE_semaphore_Seize(
   boolean                  wait,
   Watchdog_Interval        timeout
 );
- 
+
 /*
  *  _CORE_semaphore_Surrender
  *
@@ -126,7 +126,7 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
   Objects_Id                             id,
   CORE_semaphore_API_mp_support_callout  api_semaphore_mp_support
 );
- 
+
 /*
  *  _CORE_semaphore_Flush
  *
@@ -149,6 +149,6 @@ void _CORE_semaphore_Flush(
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

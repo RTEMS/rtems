@@ -62,35 +62,35 @@ boolean _CORE_message_queue_Initialize(
   the_message_queue->number_of_pending_messages = 0;
   the_message_queue->maximum_message_size       = maximum_message_size;
   _CORE_message_queue_Set_notify( the_message_queue, NULL, NULL );
- 
+
   /*
    * round size up to multiple of a ptr for chain init
    */
- 
+
   allocated_message_size = maximum_message_size;
   if (allocated_message_size & (sizeof(uint32_t  ) - 1)) {
       allocated_message_size += sizeof(uint32_t  );
       allocated_message_size &= ~(sizeof(uint32_t  ) - 1);
   }
-   
+
   message_buffering_required = maximum_pending_messages *
        (allocated_message_size + sizeof(CORE_message_queue_Buffer_control));
- 
+
   the_message_queue->message_buffers = (CORE_message_queue_Buffer *) 
      _Workspace_Allocate( message_buffering_required );
- 
+
   if (the_message_queue->message_buffers == 0)
     return FALSE;
- 
+
   _Chain_Initialize (
     &the_message_queue->Inactive_messages,
     the_message_queue->message_buffers,
     maximum_pending_messages,
     allocated_message_size + sizeof( CORE_message_queue_Buffer_control )
   );
- 
+
   _Chain_Initialize_empty( &the_message_queue->Pending_messages );
- 
+
   _Thread_queue_Initialize(
     &the_message_queue->Wait_queue,
     _CORE_message_queue_Is_priority( the_message_queue_attributes ) ?

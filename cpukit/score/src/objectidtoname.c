@@ -41,20 +41,20 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Information *information;
   Objects_Control     *the_object = (Objects_Control *) 0;
   Objects_Locations    ignored_location;
- 
+
   if ( !name )
     return OBJECTS_INVALID_NAME;
 
   the_api = _Objects_Get_API( id );
   if ( the_api && the_api > OBJECTS_APIS_LAST )
     return OBJECTS_INVALID_ID;
-  
+
   the_class = _Objects_Get_class( id );
 
   information = _Objects_Information_table[ the_api ][ the_class ];
   if ( !information )
     return OBJECTS_INVALID_ID;
- 
+
   if ( information->is_string )
     return OBJECTS_INVALID_ID;
 

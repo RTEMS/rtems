@@ -68,5 +68,5 @@ void _Thread_queue_Extract_fifo(
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
 #endif
- 
+
 }

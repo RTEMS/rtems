@@ -35,7 +35,7 @@
  *  not actually restart it.  Some APIs do this in separate
  *  operations and this division helps support this.
  */
- 
+
 void _Thread_Reset(
   Thread_Control      *the_thread,
   void                *pointer_argument,

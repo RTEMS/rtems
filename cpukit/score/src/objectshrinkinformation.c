@@ -56,7 +56,7 @@ void _Objects_Shrink_information(
 
   index_base = _Objects_Get_index( information->minimum_id );
   block_count = ( information->maximum - index_base ) / information->allocation_size;
-  
+
   for ( block = 0; block < block_count; block++ ) {
     if ( information->inactive_per_block[ block ] == information->allocation_size ) {
 
@@ -64,7 +64,7 @@ void _Objects_Shrink_information(
        * XXX - Not to sure how to use a chain where you need to iterate and
        *       and remove elements.
        */
-      
+
       the_object = (Objects_Control *) information->Inactive.first;
 
       /*
@@ -76,18 +76,18 @@ void _Objects_Shrink_information(
 
         if ((index >= index_base) &&
             (index < (index_base + information->allocation_size))) {
-          
+
           /*
            *  Get the next node before the node is extracted
            */
-          
+
           extract_me = the_object;
 
           if ( !_Chain_Is_last( &the_object->Node ) )
             the_object = (Objects_Control *) the_object->Node.next;
           else
             the_object = NULL;
-          
+
           _Chain_Extract( &extract_me->Node );
         }
         else {
@@ -106,10 +106,10 @@ void _Objects_Shrink_information(
       information->inactive_per_block[ block ] = 0;
 
       information->inactive -= information->allocation_size;
-      
+
       return;
     }
-    
+
     index_base += information->allocation_size;
   }
 }

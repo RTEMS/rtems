@@ -45,14 +45,14 @@ void _Objects_Free(
 
   if ( information->auto_extend ) {
     uint32_t    block;
-    
+
     block = 
       _Objects_Get_index( the_object->id ) - _Objects_Get_index( information->minimum_id );
     block /= information->allocation_size;
-      
+
     information->inactive_per_block[ block ]++;
     information->inactive++;
-  
+
     /*
      *  Check if the threshold level has been met of
      *  1.5 x allocation_size are free.

@@ -60,7 +60,7 @@ _Objects_Get_next(
 {
     Objects_Control *object;
     Objects_Id       next_id;
-    
+
     if (_Objects_Get_index(id) == OBJECTS_ID_INITIAL_INDEX)
         next_id = information->minimum_id;
     else
@@ -73,7 +73,7 @@ _Objects_Get_next(
             *location_p = OBJECTS_ERROR;
             goto final;
         }
-        
+
         /* try to grab one */
         object = _Objects_Get(information, next_id, location_p);
 

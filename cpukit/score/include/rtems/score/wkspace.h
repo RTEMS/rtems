@@ -38,7 +38,7 @@ SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
  *
  *  This routine performs the initialization necessary for this handler.
  */
- 
+
 void _Workspace_Handler_initialization(
   void       *starting_address,
   uint32_t    size

@@ -57,7 +57,7 @@ void _Thread_Resume(
   States_Control  current_state;
 
   _ISR_Disable( level );
-  
+
   if ( force == TRUE )
     the_thread->suspend_count = 0;
   else

@@ -110,7 +110,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
 #if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
-      
+
       the_mutex->holder     = NULL;
       the_mutex->holder_id  = the_thread->Object.id;
       the_mutex->nest_count = 1;

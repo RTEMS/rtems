@@ -231,19 +231,19 @@ struct Thread_Control_struct {
  */
 
 SCORE_EXTERN void *rtems_ada_self;
- 
+
 /*
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
- 
+
 SCORE_EXTERN Objects_Information _Thread_Internal_information;
- 
+
 /*
  *  The following define the thread control pointers used to access
  *  and manipulate the idle thread.
  */
- 
+
 SCORE_EXTERN Thread_Control *_Thread_Idle;
 
 /*
@@ -253,9 +253,9 @@ SCORE_EXTERN Thread_Control *_Thread_Idle;
  *  control of the processor can be returned to the environment
  *  which initiated the system.
  */
- 
+
 SCORE_EXTERN Context_Control _Thread_BSP_context;
- 
+
 /*
  *  The following declares the dispatch critical section nesting
  *  counter which is used to prevent context switches at inopportune
@@ -348,7 +348,7 @@ void _Thread_Handler_initialization (
  *
  *  WARNING!! No thread should be created before this one.
  */
- 
+
 void _Thread_Create_idle( void );
 
 /*
@@ -453,7 +453,7 @@ boolean _Thread_Initialize(
  *  and makes it ready to execute.  After this routine executes, the
  *  thread competes with all other threads for CPU time.
  */
- 
+
 boolean _Thread_Start(
   Thread_Control           *the_thread,
   Thread_Start_types        the_prototype,
@@ -471,9 +471,9 @@ boolean _Thread_Start(
  *  next time this thread executes, it will begin execution at its
  *  original starting point.
  */
- 
+
 /* XXX multiple task arg profiles */
- 
+
 boolean _Thread_Restart(
   Thread_Control           *the_thread,
   void                     *pointer_argument,
@@ -488,7 +488,7 @@ boolean _Thread_Restart(
  *  This routine resets a thread to its initial state but does
  *  not restart it.
  */
- 
+
 void _Thread_Reset(
   Thread_Control      *the_thread,
   void                *pointer_argument,
@@ -504,7 +504,7 @@ void _Thread_Reset(
  *  thread and removes it from the local object table so no further
  *  operations on this thread are allowed.
  */
- 
+
 void _Thread_Close(
   Objects_Information  *information,
   Thread_Control       *the_thread
@@ -740,7 +740,7 @@ boolean _Thread_Evaluate_mode( void );
  *  NOTE:  If we are not using static inlines, this must be a real
  *         subroutine call.
  */
- 
+
 #ifndef RTEMS_INLINES
 Thread_Control *_Thread_Get (
   Objects_Id           id,
@@ -755,7 +755,7 @@ Thread_Control *_Thread_Get (
  *
  *  This routine is the body of the system idle thread.
  */
- 
+
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 Thread _Thread_Idle_body(
   uint32_t   ignored
@@ -770,7 +770,7 @@ Thread _Thread_Idle_body(
  *  This routine iterates over all threads regardless of API and
  *  invokes the specified routine.
  */
- 
+
 typedef void (*rtems_per_thread_routine)( Thread_Control * );
 
 void rtems_iterate_over_all_threads(

@@ -24,7 +24,7 @@ void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
   uint32_t             api_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
- 
+
   for ( api_index = 1 ;
         api_index <= OBJECTS_APIS_LAST ;
         api_index++ ) {
@@ -34,13 +34,13 @@ void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
     if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
- 
+
         if ( !the_thread )
           continue;
- 
+
         (*routine)(the_thread);
       }
     }
   }
- 
+
 }

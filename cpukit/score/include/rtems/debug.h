@@ -70,11 +70,11 @@ void rtems_debug_enable (
  *
  *  This routine disables the specified types of debug checks.
  */
- 
+
 void rtems_debug_disable (
   rtems_debug_control  to_be_disabled
 );
- 
+
 /*
  *
  *  _Debug_Is_enabled

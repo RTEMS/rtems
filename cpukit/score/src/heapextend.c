@@ -41,7 +41,7 @@ Heap_Extend_status _Heap_Extend(
 {
   Heap_Block        *the_block;
   uint32_t          *p;
-  
+
   /*
    *  The overhead was taken from the original heap memory.
    */
@@ -106,6 +106,6 @@ Heap_Extend_status _Heap_Extend(
   *p = sizeof(uint32_t  );
   p++;
   _Heap_Free( the_heap, p );
-  
+
   return HEAP_EXTEND_SUCCESSFUL;
 }

@@ -54,13 +54,13 @@ Objects_Control *_Objects_Allocate_by_index(
      *    +  The pointer arithmetic is probably too expensive.
      *    +  etc.
      */
-    
+
     the_object = (Objects_Control *) _Addresses_Add_offset(
       information->object_blocks[ 0 ],
       (sizeof_control * (index - 1))
     );
     _Chain_Extract( &the_object->Node );
- 
+
     return the_object;   
   }    
 

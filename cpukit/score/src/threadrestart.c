@@ -35,7 +35,7 @@
  *  next time this thread executes, it will begin execution at its
  *  original starting point.
  */
- 
+
 boolean _Thread_Restart(
   Thread_Control      *the_thread,
   void                *pointer_argument,
@@ -43,22 +43,22 @@ boolean _Thread_Restart(
 )
 {
   if ( !_States_Is_dormant( the_thread->current_state ) ) {
- 
+
     _Thread_Set_transient( the_thread );
 
     _Thread_Reset( the_thread, pointer_argument, numeric_argument );
- 
+
     _Thread_Load_environment( the_thread );
- 
+
     _Thread_Ready( the_thread );
- 
+
     _User_extensions_Thread_restart( the_thread );
- 
+
     if ( _Thread_Is_executing ( the_thread ) )
       _Thread_Restart_self();
- 
+
     return TRUE;
   }
- 
+
   return FALSE;
 }

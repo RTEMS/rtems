@@ -30,7 +30,7 @@
  *
  *  XXX
  */
- 
+
 void _Objects_Copy_name_string(
   void       *source,
   void       *destination
@@ -38,7 +38,7 @@ void _Objects_Copy_name_string(
 {
   uint8_t   *source_p = (uint8_t   *) source;
   uint8_t   *destination_p = (uint8_t   *) destination;
- 
+
   *destination_p = '\0';
   if ( source_p ) {
     do {

@@ -56,7 +56,7 @@ void _Thread_Clear_state(
 
   _ISR_Disable( level );
     current_state = the_thread->current_state;
-    
+
     if ( current_state & state ) {
       current_state = 
       the_thread->current_state = _States_Clear( state, current_state );

@@ -23,13 +23,13 @@
  *  The control structure which defines the points at which an API
  *  can add an extension to the system initialization thread.
  */
- 
+
 typedef void (*API_extensions_Predriver_hook)(void);
 typedef void (*API_extensions_Postdriver_hook)(void);
 typedef void (*API_extensions_Postswitch_hook)(
                  Thread_Control *
              );
- 
+
  
 typedef struct {
   Chain_Node                      Node;
@@ -41,7 +41,7 @@ typedef struct {
 /*
  *  This is the list of API extensions to the system initialization.
  */
- 
+
 SCORE_EXTERN Chain_Control _API_extensions_List;
 
 /*
@@ -52,9 +52,9 @@ SCORE_EXTERN Chain_Control _API_extensions_List;
  *  This routine initializes the API extension handler.
  *
  */
- 
+
 void _API_extensions_Initialization( void );
- 
+
 /*
  *  _API_extensions_Add
  *
@@ -62,7 +62,7 @@ void _API_extensions_Initialization( void );
  *
  *  XXX
  */
- 
+
 void _API_extensions_Add(
   API_extensions_Control *the_extension
 );
@@ -74,7 +74,7 @@ void _API_extensions_Add(
  *
  *  XXX
  */
- 
+
 void _API_extensions_Run_predriver( void );
 
 /*

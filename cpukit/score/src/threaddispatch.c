@@ -137,5 +137,5 @@ void _Thread_Dispatch( void )
     executing->do_post_task_switch_extension = FALSE;
     _API_extensions_Run_postswitch();
   }
- 
+
 }

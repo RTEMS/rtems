@@ -32,7 +32,7 @@ extern "C" {
  *  The following constants define the stack size requirements for
  *  the system threads.
  */
- 
+
 #define MPCI_RECEIVE_SERVER_STACK_SIZE \
   ( STACK_MINIMUM_SIZE + \
     CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK + \
@@ -100,21 +100,21 @@ typedef struct {
  */
 
 typedef void (*MPCI_Packet_processor)( MP_packet_Prefix * );
- 
+
 /*
  *  The following enumerated type defines the list of
  *  internal MP operations.
  */
- 
+
 typedef enum {
   MPCI_PACKETS_SYSTEM_VERIFY  =  0
 }   MPCI_Internal_Remote_operations;
- 
+
 /*
  *  The following data structure defines the packet used to perform
  *  remote event operations.
  */
- 
+
 typedef struct {
   MP_packet_Prefix                 Prefix;
   MPCI_Internal_Remote_operations  operation;
@@ -138,13 +138,13 @@ SCORE_EXTERN Thread_queue_Control _MPCI_Remote_blocked_threads;
  *  The following define the internal pointers to the user's
  *  configuration information.
  */
- 
+
 SCORE_EXTERN MPCI_Control *_MPCI_table;
 
 /*
  *  The following points to the MPCI Receive Server.
  */
- 
+
 SCORE_EXTERN Thread_Control *_MPCI_Receive_server_tcb;
 
 /*
@@ -197,13 +197,13 @@ void _MPCI_Initialization ( void );
  *  This routine registers the MPCI packet processor for the
  *  designated object class.
  */
- 
+
 void _MPCI_Register_packet_processor( 
   MP_packet_Classes      the_class,
   MPCI_Packet_processor  the_packet_processor
-  
+
 );
- 
+
 /*
  *  _MPCI_Get_packet
  *
@@ -300,7 +300,7 @@ Thread_Control *_MPCI_Process_response (
  *  _MPCI_Receive_server
  *
  */
- 
+
 Thread _MPCI_Receive_server(
   uint32_t   ignored
 );
@@ -313,7 +313,7 @@ Thread _MPCI_Receive_server(
  *
  *  XXX
  */
- 
+
 void _MPCI_Announce ( void );
 
 /*
@@ -324,11 +324,11 @@ void _MPCI_Announce ( void );
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
  */
- 
+
 void _MPCI_Internal_packets_Send_process_packet (
    MPCI_Internal_Remote_operations operation
 );
- 
+
 /*
  *  _MPCI_Internal_packets_Send_request_packet
  *
@@ -340,7 +340,7 @@ void _MPCI_Internal_packets_Send_process_packet (
  *  This routine is not needed since there are no request
  *  packets to be sent by this manager.
  */
- 
+
 /*
  *  _MPCI_Internal_packets_Send_response_packet
  *
@@ -352,7 +352,7 @@ void _MPCI_Internal_packets_Send_process_packet (
  *  This routine is not needed since there are no response
  *  packets to be sent by this manager.
  */
- 
+
 /*
  *
  *  _MPCI_Internal_packets_Process_packet
@@ -362,11 +362,11 @@ void _MPCI_Internal_packets_Send_process_packet (
  *  This routine performs the actions specific to this package for
  *  the request from another node.
  */
- 
+
 void _MPCI_Internal_packets_Process_packet (
   MP_packet_Prefix *the_packet_prefix
 );
- 
+
 /*
  *  _MPCI_Internal_packets_Send_object_was_deleted
  *
@@ -379,7 +379,7 @@ void _MPCI_Internal_packets_Process_packet (
  *  This routine is not needed since there are no objects
  *  deleted by this manager.
  */
- 
+
 /*
  *  _MPCI_Internal_packets_Send_extract_proxy
  *
@@ -392,7 +392,7 @@ void _MPCI_Internal_packets_Process_packet (
  *  This routine is not needed since there are no objects
  *  deleted by this manager.
  */
- 
+
 /*
  *  _MPCI_Internal_packets_Get_packet
  *
@@ -400,7 +400,7 @@ void _MPCI_Internal_packets_Process_packet (
  *
  *  This routine is used to obtain a internal threads mp packet.
  */
- 
+
  MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void );
 
 #ifdef __cplusplus

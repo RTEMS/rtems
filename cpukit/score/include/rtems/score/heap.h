@@ -44,7 +44,7 @@ typedef enum {
     HEAP_GET_INFORMATION_SYSTEM_STATE_ERROR,
     HEAP_GET_INFORMATION_BLOCK_ERROR
 }  Heap_Get_information_status;
-        
+
 /*
  *  Information block returned by _Heap_Get_information
  */

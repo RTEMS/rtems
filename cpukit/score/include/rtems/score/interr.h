@@ -60,7 +60,7 @@ typedef enum {
 /*
  *  This type holds the fatal error information.
  */
- 
+
 typedef struct {
   Internal_errors_Source  the_source;
   boolean                 is_internal;

@@ -62,7 +62,7 @@ void _Thread_Change_priority(
    *  change calls (e.g. rtems_task_set_priority) should always do an
    *  append not a prepend.
    */
- 
+
   /*
    *  Techically, the prepend should conditional on the thread lowering
    *  its priority but that does allow cxd2004 of the acvc 2.0.1 to 
@@ -75,7 +75,7 @@ void _Thread_Change_priority(
        new_priority >= the_thread->current_priority )
     prepend_it = TRUE;
 */
-                  
+
   _Thread_Set_transient( the_thread );
 
   if ( the_thread->current_priority != new_priority )

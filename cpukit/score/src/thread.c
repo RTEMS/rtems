@@ -87,7 +87,7 @@ void _Thread_Handler_initialization(
   /*
    *  Initialize this class of objects.
    */
- 
+
   _Objects_Initialize_information(
     &_Thread_Internal_information,
     OBJECTS_INTERNAL_API,

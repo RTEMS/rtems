@@ -46,23 +46,23 @@ Objects_Control *_Objects_Allocate(
      *  If the list is empty then we are out of objects and need to
      *  extend information base.
      */
-  
+
     if ( !the_object ) {
       _Objects_Extend_information( information );
       the_object =  (Objects_Control *) _Chain_Get( &information->Inactive );
     }
-  
+
     if ( the_object ) {
       uint32_t   block;
-    
+
       block = _Objects_Get_index( the_object->id ) -
               _Objects_Get_index( information->minimum_id );
       block /= information->allocation_size;
-      
+
       information->inactive_per_block[ block ]--;
       information->inactive--;
     }
   }
-  
+
   return the_object;
 }

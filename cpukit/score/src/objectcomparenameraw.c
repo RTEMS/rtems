@@ -30,7 +30,7 @@
  *
  *  XXX
  */
- 
+
 boolean _Objects_Compare_name_raw(
   void       *name_1,
   void       *name_2,
@@ -42,7 +42,7 @@ boolean _Objects_Compare_name_raw(
   uint32_t   *name_2_p = (uint32_t   *) name_2;
   uint32_t    tmp_length = length / OBJECTS_NAME_ALIGNMENT;
 #endif
- 
+
   if ( name_1 == name_2 )
     return TRUE;
   return FALSE;

@@ -33,7 +33,7 @@ void _Watchdog_Insert(
   Watchdog_Control  *after;
   uint32_t           insert_isr_nest_level;
   Watchdog_Interval  delta_interval;
-  
+
 
   insert_isr_nest_level   = _ISR_Nest_level;
   the_watchdog->state = WATCHDOG_BEING_INSERTED;

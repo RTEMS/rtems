@@ -55,7 +55,7 @@ void _Objects_MP_Handler_initialization (
  *  This routine place the specified global object in the 
  *  specified information table.  
  */
- 
+
 void _Objects_MP_Open (
   Objects_Information *information,
   Objects_MP_Control  *the_global_object,

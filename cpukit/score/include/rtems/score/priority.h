@@ -73,17 +73,17 @@ SCORE_EXTERN Priority_Bit_map_control
  *
  *  These may simply be pass throughs to CPU dependent routines.
  */
- 
+
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
 
 #define _Priority_Mask( _bit_number ) \
   _CPU_Priority_Mask( _bit_number )
- 
+
 #define _Priority_Bits_index( _priority ) \
   _CPU_Priority_bits_index( _priority )
 
 #endif
- 
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/priority.inl>
 #endif
