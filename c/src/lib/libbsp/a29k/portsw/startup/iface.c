@@ -19,7 +19,7 @@ read(int fd,
      char *buf,
      int nbytes)
 {
-    return __read(fd, buf, nbytes);
+    return __rtems_read(fd, buf, nbytes);
 }
 
 int
@@ -27,7 +27,7 @@ write(int fd,
       char *buf,
       int nbytes)
 {
-    return __write(fd, buf, nbytes);
+    return __rtems_write(fd, buf, nbytes);
 }
 
 int
@@ -35,13 +35,13 @@ open(char *buf,
      int flags,
      int mode)
 {
-    return __open(buf, flags, mode);
+    return __rtems_open(buf, flags, mode);
 }
 
 int
 close(int fd)
 {
-    return __close(fd);
+    return __rtems_close(fd);
 }
 
 /*
@@ -51,7 +51,7 @@ close(int fd)
 int
 isatty(int fd)
 {
-    return __isatty(fd);
+    return __rtems_isatty(fd);
 }
 
 /*
@@ -63,7 +63,7 @@ lseek(int fd,
       off_t offset,
       int whence)
 {
-    return __lseek(fd, offset, whence);
+    return __rtems_lseek(fd, offset, whence);
 }
 
 /*
@@ -74,13 +74,13 @@ int
 fstat(int fd,
       struct stat *buf)
 {
-    return __fstat(fd, buf);
+    return __rtems_fstat(fd, buf);
 }
 
 int
 getpid()
 {
-  return __getpid();
+  return __rtems_getpid();
 }
 
 /*
@@ -90,7 +90,7 @@ int
 kill(int pid,
      int sig)
 {
-    return __kill(pid, sig);
+    return __rtems_kill(pid, sig);
 }
 
 

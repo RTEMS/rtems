@@ -67,7 +67,7 @@ void bsp_libc_init()
 
     /*
      *  Init the RTEMS libio facility to provide UNIX-like system
-     *  calls for use by newlib (ie: provide __open, __close, etc)
+     *  calls for use by newlib (ie: provide __rtems_open, __rtems_close, etc)
      *  Uses malloc() to get area for the iops, so must be after malloc init
      */
 
@@ -133,13 +133,13 @@ bsp_postdriver_hook(void)
  
   error_code = 'S' << 24 | 'T' << 16;
  
-  if ((stdin_fd = __open("/dev/console", O_RDONLY, 0)) == -1)
+  if ((stdin_fd = __rtems_open("/dev/console", O_RDONLY, 0)) == -1)
     rtems_fatal_error_occurred( error_code | 'D' << 8 | '0' );
  
-  if ((stdout_fd = __open("/dev/console", O_WRONLY, 0)) == -1)
+  if ((stdout_fd = __rtems_open("/dev/console", O_WRONLY, 0)) == -1)
     rtems_fatal_error_occurred( error_code | 'D' << 8 | '1' );
  
-  if ((stderr_fd = __open("/dev/console", O_WRONLY, 0)) == -1)
+  if ((stderr_fd = __rtems_open("/dev/console", O_WRONLY, 0)) == -1)
     rtems_fatal_error_occurred( error_code | 'D' << 8 | '2' );
  
   if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
