@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h $(srcdir)/page_table.h \
   $(srcdir)/fatal.h
 
