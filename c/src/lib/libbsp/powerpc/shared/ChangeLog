@@ -1,3 +1,14 @@
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
+	* console/console.c, console/uart.c, console/uart.h: implement
+	IOCTLs for the serial (UART) console to install/retrieve a BREAK-IRQ
+	callback.  The callback routine (if installed) is invoked from the
+	UART ISR when a BREAK interrupt is detected.  This can be used
+	e.g. to enforce a "hotkey" reboot a la vxWorks Ctrl-X (although we
+	use the serial line break condition) NOTE: The callback runs in
+	ISR context.  
+
 2003-01-20	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds*: Add FreeBSD sysctl() sections.
