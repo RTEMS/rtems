@@ -1,5 +1,10 @@
 2000-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* cpu.c: Spacing issues.
+	* rtems/score/cpu.h: Removed warning by setting _level.
+
+2000-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am: Added S_O_FILES to list of objects.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
