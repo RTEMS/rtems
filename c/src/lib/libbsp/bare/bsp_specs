@@ -5,8 +5,7 @@
 %rename link old_link
 
 *cpp:
-%(old_cpp) %{msoft-float: -D__soft_float__} \
-  %{qrtems: -D__embedded__} -Asystem(embedded)
+%(old_cpp) %{msoft-float: -D__soft_float__}
 
 *lib:
 %{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: --start-group \

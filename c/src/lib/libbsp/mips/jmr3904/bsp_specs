@@ -5,7 +5,7 @@
 %rename link old_link
 
 *cpp:
-%(old_cpp) %{qrtems: -D__embedded__ -D__USE_INIT_FINI__} -Asystem(embedded)
+%(old_cpp) %{qrtems: -D__USE_INIT_FINI__}
 
 *lib:
 %{!qrtems: %(old_lib)} %{!nostdlibs: %{qrtems: --start-group \
