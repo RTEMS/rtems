@@ -23,6 +23,7 @@ void *POSIX_Init(
   pthread_t           thread_id;
   pthread_condattr_t  attr;
   int                 pshared;
+  pthread_cond_t      cond = PTHREAD_COND_INITIALIZER;
 
   puts( "\n\n*** POSIX TEST 10 ***" );
 
@@ -78,6 +79,14 @@ void *POSIX_Init(
 
   Init_id = pthread_self();
   printf( "Init: ID is 0x%08x\n", Init_id );
+
+  puts( "Init: pthread_cond_init - NULL attr" );
+  status = pthread_cond_init( &cond, NULL );
+  assert( !status );
+
+  puts( "Init: pthread_cond_destroy" );
+  status = pthread_cond_destroy( &cond );
+  assert( !status );
 
   /* create a thread */
 
