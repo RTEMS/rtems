@@ -6,6 +6,7 @@ BSP_PIECES = startup clock console timer
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
+    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/memcpy.o) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel)
 LIB = $(ARCH)/libbsp.a
 

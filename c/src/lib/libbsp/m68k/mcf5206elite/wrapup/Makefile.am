@@ -8,8 +8,9 @@ CPU_PIECES = clock console timer mbus
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-       $(foreach piece, $(CPU_PIECES), $(wildcard \
-           ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel)) \
+    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/memcpy.o) \
+    $(foreach piece, $(CPU_PIECES), $(wildcard \
+       ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel)) \
     $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel)
 LIB = $(ARCH)/libbsp.a

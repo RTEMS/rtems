@@ -1,3 +1,11 @@
+2002-08-05	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR260 eliminate use of make-target-options.  This impacted
+	RTEMS allowing a distinction between the CPU32 and CPU32+ in the
+	SuperCore and required that the m68k optimized memcpy be moved
+	to libcpu.
+	* wrapup/Makefile.am: Pick up memcpy.o from libcpu.
+
 2002-07-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Eliminate PGM.
