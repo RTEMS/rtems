@@ -1,3 +1,8 @@
+2005-02-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* mpc505/vectors/vectors.S, ppc403/vectors/vectors.S:
+	Remove PPC_ABI_POWEROPEN.
+
 2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* mpc505/vectors/vectors.S, ppc403/vectors/vectors.S:

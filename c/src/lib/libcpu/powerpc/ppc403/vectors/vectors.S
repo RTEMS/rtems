@@ -49,11 +49,8 @@
 	/* Offset to store reg 0 */
 
 	.set	IP_LINK, 0
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-	.set	IP_0, (IP_LINK + 56)
-#else
+/* PPC_ABI_EABI */
 	.set	IP_0, (IP_LINK + 8)
-#endif
 	.set	IP_2, (IP_0 + 4)
 
 	.set	IP_3, (IP_2 + 4)
@@ -110,15 +107,7 @@ SYM (__vectors):
 	
 /* Critical error handling */
 	.org	crit_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_CRIT
@@ -126,15 +115,7 @@ SYM (__vectors):
 	
 /* Machine check exception */
 	.org	mach_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_MCHECK
@@ -142,15 +123,7 @@ SYM (__vectors):
 	
 /* Protection exception */
 	.org	prot_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_PROTECT
@@ -158,15 +131,7 @@ SYM (__vectors):
 
 /* External interrupt */
 	.org	ext_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_EXTERNAL
@@ -179,15 +144,7 @@ SYM (__vectors):
 	
 /* Program exception */
 	.org	prog_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_PROGRAM
@@ -195,15 +152,7 @@ SYM (__vectors):
 	
 /* Decrementer exception */
 	.org	dec_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_PROGRAM
@@ -211,15 +160,7 @@ SYM (__vectors):
 	
 /* System call */
 	.org	sys_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_SCALL
@@ -227,15 +168,7 @@ SYM (__vectors):
 			
 /* PIT interrupt */
 	.org	pit_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_PIT
@@ -243,15 +176,7 @@ SYM (__vectors):
 			
 /* FIT interrupt */
 	.org	fit_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_FIT
@@ -259,15 +184,7 @@ SYM (__vectors):
 			
 /* Watchdog interrupt */
 	.org	wadt_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_WATCHDOG
@@ -275,15 +192,7 @@ SYM (__vectors):
 	
 /* Debug exception */
 debug:
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#if (PPC_HAS_FPU)
-	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
-#else
-	stwu	r1, -(20*4 + IP_END)(r1)
-#endif
-#else
 	stwu	r1, -(IP_END)(r1)
-#endif
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_DEBUG
