@@ -5,8 +5,6 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  Called by RTEMS::RTEMS constructor in rtems-ctor.cc
- *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994, 1997.
  *  On-Line Applications Research Corporation (OAR).
  *  All rights assigned to U.S. Government, 1994.
@@ -72,11 +70,6 @@ void bsp_pretasking_hook(void)
  *  bsp_predriver_hook
  *
  *  Initialization before drivers are setup.
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values: NONE
  */ 
 
 void bsp_predriver_hook(void)
