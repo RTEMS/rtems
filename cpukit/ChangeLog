@@ -1,5 +1,9 @@
 2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* wrapup/Makefile.am: Add libblock for !UNIX only.
+
+2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libblock/Makefile.am: Build libblock for !UNIX only.
 	* libcsupport/Makefile.am: Build $(TERMIOS_C_FILES) for !UNIX only.
 

@@ -33,9 +33,8 @@ TMP_LIBS += ../itron/libitron$(LIB_VARIANT).a
 endif
 
 TMP_LIBS += ../libcsupport/libcsupport$(LIB_VARIANT).a
-
-TMP_LIBS += ../libblock/libblock$(LIB_VARIANT).a
 if !UNIX
+TMP_LIBS += ../libblock/libblock$(LIB_VARIANT).a
 TMP_LIBS += ../libfs/libdosfs$(LIB_VARIANT).a
 endif
 TMP_LIBS += ../libfs/libimfs$(LIB_VARIANT).a
