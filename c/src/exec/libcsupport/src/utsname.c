@@ -8,7 +8,6 @@
 #include <sys/utsname.h>
 
 #include <rtems/system.h>
-#include <rtems/score/system.h>
 #include <rtems/score/object.h>
 
 /*PAGE
@@ -33,7 +32,7 @@ int uname(
   sprintf( name->nodename, "Node %d\n", _Objects_Local_node );
 
   /* XXX release string is in BAD format for this routine!!! */ 
-  strcpy( name->release, "3.2.0" );
+  strcpy( name->release, "4.0.0+" );
  
   /* XXX does this have any meaning for RTEMS */
    
