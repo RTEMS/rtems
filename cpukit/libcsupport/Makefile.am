@@ -5,8 +5,8 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 include $(top_srcdir)/../automake/multilib.am
-
-SUBDIRS = . src
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h \
@@ -87,5 +87,79 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog \
 ##  General stuff
 all-local: $(PREINSTALL_FILES)
 
-include $(top_srcdir)/../automake/subdirs.am
+LIBNAME = libcsupport
+LIB = ${ARCH}/${LIBNAME}.a
+
+INCLUDES = -Isrc
+
+ERROR_C_FILES = src/error.c
+
+ASSOCIATION_C_FILES = src/assoc.c src/assocnamebad.c
+
+BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
+    src/libio_sockets.c src/eval.c src/fs_null_handlers.c src/privateenv.c
+
+TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c src/cfsetospeed.c \
+    src/tcgetattr.c src/tcsetattr.c src/tcdrain.c src/tcflow.c src/tcflush.c src/tcgetprgrp.c \
+    src/tcsendbreak.c src/tcsetpgrp.c src/termios.c src/termiosinitialize.c \
+    src/termiosreserveresources.c
+
+SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c src/lseek.c src/ioctl.c src/mkdir.c \
+    src/mknod.c src/mkfifo.c src/rmdir.c src/chdir.c src/chmod.c src/fchdir.c src/fchmod.c src/chown.c \
+    src/link.c src/unlink.c src/umask.c src/ftruncate.c src/utime.c src/fstat.c src/fcntl.c src/fpathconf.c \
+    src/getdents.c src/fsync.c src/fdatasync.c src/pipe.c src/dup.c src/dup2.c src/symlink.c src/readlink.c \
+    src/creat.c src/chroot.c
+
+DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c src/rewinddir.c \
+    src/scandir.c src/seekdir.c src/telldir.c src/getcwd.c
+
+MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c src/__sbrk.c
+
+PASSWORD_GROUP_C_FILES = src/getpwent.c src/getgrent.c
+
+TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c src/ttyname.c src/ttyname_r.c
+
+LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c src/truncate.c src/access.c \
+    src/stat.c src/lstat.c src/pathconf.c src/newlibc.c src/no_posix.c src/no_libc.c src/utsname.c
+
+UNIX_LIBC_C_FILES = src/unixlibc.c src/hosterr.c
+
+COMMON_C_FILES = src/gxx_wrappers.c src/printk.c $(BASE_FS_C_FILES) \
+    $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
+    $(ASSOCIATION_C_FILES)
+
+UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
+
+EMBEDDED_C_FILES = $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
+    $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
+    $(DIRECTORY_SCAN_C_FILES)
+
+if UNIX
+C_FILES = $(COMMON_C_FILES) $(UNIX_C_FILES)
+else
+C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
+endif
+
+C_O_FILES = $(C_FILES:src/%.c=${ARCH}/%.o)
+OBJS = $(C_O_FILES)
+
+#
+# Add local stuff here using +=
+#
+
+AM_CFLAGS += $(LIBC_DEFINES)
+
+all-local: ${ARCH} ${LIB}
+
+${ARCH}/%.o: src/%.c
+	${COMPILE} -o $@ -c $<
+
+$(LIB): ${OBJS}
+	$(make-library)
+
+DOC_FILES = TODO CASES
+
+EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
+    $(UNIX_C_FILES)
+
 include $(top_srcdir)/../automake/local.am

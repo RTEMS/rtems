@@ -1,5 +1,11 @@
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Merge src/Makefile.am.
+	* configure.ac: Reflect changes above.
+	* src/Makefile.am: Remove.
+
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	Use ../aclocal.
 	* src/Makefile.am: Include $(top_srcdir)/../automake/*.am.

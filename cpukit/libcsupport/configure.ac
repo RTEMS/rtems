@@ -31,6 +31,5 @@ AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 AM_CONFIG_HEADER(src/config.h)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-src/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
