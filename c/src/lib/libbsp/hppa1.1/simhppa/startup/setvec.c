@@ -24,7 +24,7 @@
  *  $Id$
  */
 
-#include <rtems.h>
+#include <bsp.h>
 
 /*
  * Install an interrupt handler in the right place
