@@ -10,7 +10,7 @@ C_FILES = sghostname.c issetugid.c rtems_glue.c rtems_syscall.c \
     rtems_bootp.c rtems_showmbuf.c rtems_showroute.c rtems_showifstat.c \
     rtems_showipstat.c rtems_showicmpstat.c rtems_showtcpstat.c \
     rtems_showudpstat.c rtems_select.c mkrootfs.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

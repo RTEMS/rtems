@@ -1,5 +1,16 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* kern/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* lib/Makefile.am: Ditto.
+	* libc/Makefile.am: Ditto.
+	* net/Makefile.am: Ditto.
+	* netinet/Makefile.am: Ditto.
+	* nfs/Makefile.am: Ditto.
+	* rtems/Makefile.am: Ditto.
+	* wrapup/Makefile.am: Ditto.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* kern/Makefile.am: Eliminate LIBNAME.
 	* lib/Makefile.am: Ditto.
 	* libc/Makefile.am: Ditto.

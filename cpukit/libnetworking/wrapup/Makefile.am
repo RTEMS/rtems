@@ -4,7 +4,7 @@
 
 
 NET_O_PIECES = kern lib libc net netinet nfs rtems
-OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.o)
+OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libnetworking.a
 
 include $(top_srcdir)/../automake/multilib.am

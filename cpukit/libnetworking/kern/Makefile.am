@@ -5,7 +5,7 @@
 LIB = $(ARCH)/lib.a
 
 C_FILES = kern_subr.c uipc_domain.c uipc_mbuf.c uipc_socket.c uipc_socket2.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

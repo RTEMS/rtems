@@ -10,7 +10,7 @@ C_FILES = if_ether.c igmp.c in.c in_cksum.c in_pcb.c in_proto.c in_rmx.c \
     ip_divert.c ip_fw.c ip_icmp.c ip_input.c ip_mroute.c ip_output.c \
     raw_ip.c tcp_debug.c tcp_input.c tcp_output.c tcp_subr.c tcp_timer.c \
     tcp_usrreq.c udp_usrreq.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

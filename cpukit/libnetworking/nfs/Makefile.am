@@ -7,7 +7,7 @@ include_nfsdir = $(includedir)/nfs
 LIB = $(ARCH)/lib.a
 
 C_FILES = bootp_subr.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

@@ -13,7 +13,7 @@ C_FILES = addr2ascii.c ascii2addr.c base64.c gethostbydns.c gethostbyht.c \
     ns_parse.c ns_print.c ns_ttl.c res_comp.c res_data.c res_debug.c \
     res_init.c res_mkquery.c res_mkupdate.c res_query.c res_send.c \
     res_stubs.c res_update.c strsep.c rcmd.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
