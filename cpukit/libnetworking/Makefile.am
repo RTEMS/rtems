@@ -41,7 +41,7 @@ TMP_LIBS = libnetworking$(LIB_VARIANT).a
 include_HEADERS = bpfilter.h loop.h netdb.h
 include_HEADERS += resolv.h syslog.h memory.h
 
-libnetworking_a_SOURCES += opt_ipfw.h opt_mrouting.h opt_tcpdebug.h
+libnetworking_a_SOURCES = opt_ipfw.h opt_mrouting.h opt_tcpdebug.h
 
 # arpa
 
@@ -52,7 +52,7 @@ include_arpa_HEADERS = arpa/ftp.h arpa/inet.h arpa/nameser.h \
 
 ## kern
 
-libnetworking_a_SOURCES = kern/kern_mib.c kern/kern_subr.c \
+libnetworking_a_SOURCES += kern/kern_mib.c kern/kern_subr.c \
     kern/kern_sysctl.c kern/uipc_domain.c kern/uipc_mbuf.c \
     kern/uipc_socket.c kern/uipc_socket2.c
 
