@@ -17,5 +17,5 @@ PREINSTALL_FILES += $(PROJECT_RELEASE)/lib/bsp_specs.dl
 
 EXTRA_DIST = bsp_specs bsp_specs.dl times
 
-include $(top_srcdir)/../../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/subdirs.am
+include $(top_srcdir)/../../../../automake/local.am
