@@ -38,7 +38,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 
 DEFINES  += -I$(srcdir) -DBSP_IS_I386EX=1 
 CPPFLAGS +=
-CFLAGS   += -g 
+CFLAGS   += 
 
 LD_PATHS  += 
 LD_LIBS   +=

@@ -32,7 +32,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 # Add local stuff here using +=
 #
 
-DEFINES  += -Wall
+DEFINES  += 
 CPPFLAGS += -I.
 CFLAGS   +=
 
