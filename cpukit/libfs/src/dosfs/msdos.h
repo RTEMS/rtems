@@ -100,7 +100,7 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 
 #define MSDOS_EXTRACT_CLUSTER_NUM(p)                                         \
             (unsigned32)( (CF_LE_W(*MSDOS_DIR_FIRST_CLUSTER_LOW(p))) |       \
-                          ((CF_LE_W((*MSDOS_DIR_FIRST_CLUSTER_HI(p))))<<16) )
+                          ((unsigned32)(CF_LE_W((*MSDOS_DIR_FIRST_CLUSTER_HI(p))))<<16) )
 
 /*
  * Fields offset in 32 bytes long FAT Directory Entry

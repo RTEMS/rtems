@@ -51,10 +51,10 @@ extern "C" {
  */
 
 #if (CPU_BIG_ENDIAN == TRUE)
-#    define CF_LE_W(v) CPU_swap_u16(v)
-#    define CF_LE_L(v) CPU_swap_u32(v)
-#    define CT_LE_W(v) CPU_swap_u16(v)
-#    define CT_LE_L(v) CPU_swap_u32(v)
+#    define CF_LE_W(v) CPU_swap_u16((unsigned16)v)
+#    define CF_LE_L(v) CPU_swap_u32((unsigned32)v)
+#    define CT_LE_W(v) CPU_swap_u16((unsigned16)v)
+#    define CT_LE_L(v) CPU_swap_u32((unsigned32)v)
 #else  
 #    define CF_LE_W(v) (v)
 #    define CF_LE_L(v) (v)
@@ -81,24 +81,24 @@ extern "C" {
 #define FAT_FAT16              0x02
 #define FAT_FAT32              0x04
  
-#define FAT_UNDEFINED_VALUE     0xFFFFFFFF 
+#define FAT_UNDEFINED_VALUE     (unsigned32)0xFFFFFFFF 
 
 #define FAT_FAT12_EOC          0x0FFF
 #define FAT_FAT16_EOC          0xFFFF
-#define FAT_FAT32_EOC          0x0FFFFFFF
+#define FAT_FAT32_EOC          (unsigned32)0x0FFFFFFF
 
 #define FAT_FAT12_FREE         0x0000
 #define FAT_FAT16_FREE         0x0000
 #define FAT_FAT32_FREE         0x00000000
 
-#define FAT_GENFAT_EOC         0xFFFFFFFF
-#define FAT_GENFAT_FREE        0x00000000
+#define FAT_GENFAT_EOC         (unsigned32)0xFFFFFFFF
+#define FAT_GENFAT_FREE        (unsigned32)0x00000000
 
 #define FAT_FAT12_SHIFT        0x04
 
 #define FAT_FAT12_MASK         0x00000FFF
 #define FAT_FAT16_MASK         0x0000FFFF
-#define FAT_FAT32_MASK         0x0FFFFFFF
+#define FAT_FAT32_MASK         (unsigned32)0x0FFFFFFF
 
 #define FAT_MAX_BPB_SIZE       90
 
@@ -111,11 +111,11 @@ extern "C" {
     (unsigned16)( (*((unsigned8 *)(x) + (ofs))) |           \
                   ((*((unsigned8 *)(x) + (ofs) + 1)) << 8) )
 
-#define FAT_VAL32(x, ofs)                                          \
-    (unsigned32)( (*((unsigned8 *)(x) + (ofs))) |                  \
-                  ((*((unsigned8 *)(x) + (ofs) + 1)) << 8) |       \
-                  ((*((unsigned8 *)(x) + (ofs) + 2)) << 16) |      \
-                  ((*((unsigned8 *)(x) + (ofs) + 3)) << 24) )
+#define FAT_VAL32(x, ofs)                                                 \
+    (unsigned32)( (unsigned32)(*((unsigned8 *)(x) + (ofs))) |             \
+                  ((unsigned32)(*((unsigned8 *)(x) + (ofs) + 1)) << 8)  | \
+                  ((unsigned32)(*((unsigned8 *)(x) + (ofs) + 2)) << 16) | \
+                  ((unsigned32)(*((unsigned8 *)(x) + (ofs) + 3)) << 24) )
                     
 /* macros to access boot sector fields */
 #define FAT_BR_BYTES_PER_SECTOR(x)       FAT_VAL16(x, 11)
