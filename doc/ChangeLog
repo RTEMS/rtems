@@ -1,28 +1,24 @@
 2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ChangeLog: Merge-in supplements/ChangeLog.
-	* supplements/ChangeLog: Remove.
 	* ChangeLog: Merge-in ada_user/ChangeLog.
 	* ChangeLog: Merge-in started_ada/ChangeLog.
-	* ada_user/ChangeLog, started_ada/ChangeLog: Remove.
 	* ChangeLog: Merge-in bsp_howto/ChangeLog.
 	* ChangeLog: Merge-in porting/ChangeLog.
 	* ChangeLog: Merge-in rgdb_specs/ChangeLog.
 	* ChangeLog: Merge-in rtems_gdb/ChangeLog.
-	* bsp_howto/ChangeLog, porting/ChangeLog, rgdb_specs/ChangeLog,
-	rtems_gdb/ChangeLog: Remove.
 	* ChangeLog: Merge-in filesystem/ChangeLog.
 	* ChangeLog: Merge-in networking/ChangeLog.
-	* filesystem/ChangeLog, networking/ChangeLog: Remove.
 	* ChangeLog: Merge-in posix_users/ChangeLog.
 	* ChangeLog: Merge-in posix1003.1/ChangeLog.
 	* ChangeLog: Merge-in itron3.0/ChangeLog.
-	* posix_users/ChangeLog, posix1003.1/ChangeLog, itron3.0/ChangeLog:
-	Remove.
 	* ChangeLog: Merge-in FAQ/ChangeLog.
-	* FAQ/ChangeLog: Remove.
 	* ChangeLog: Merge-in user/ChangeLog.
-	* user/ChangeLog: Remove.
+	* posix_users/ChangeLog, posix1003.1/ChangeLog, itron3.0/ChangeLog,
+	supplements/ChangeLog, bsp_howto/ChangeLog, porting/ChangeLog,
+	rgdb_specs/ChangeLog, rtems_gdb/ChangeLog, ada_user/ChangeLog,
+	started_ada/ChangeLog, filesystem/ChangeLog, networking/ChangeLog,
+	FAQ/ChangeLog, user/ChangeLog: Remove.
 
 2004-02-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -35,9 +31,8 @@
 
 2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Add RTEMSRPMGROUP.
-	* common/rtems.texi.in: Add RTEMSRPMGROUP.
-	* started/binaries.t: Add RTEMSRPMGROUP.
+	* configure.ac, common/rtems.texi.in, started/binaries.t: Add
+	RTEMSRPMGROUP.
 	* ChangeLog: Merge-in started/ChangeLog.
 	* started/ChangeLog: Remove.
 	* configure.ac: Add RTEMS_ENABLE_RPMPREFIX. Add RTEMSRPMPREFIX.
@@ -64,18 +59,14 @@
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
-	* configure.ac, index.html.in: mips64orion port removed as mips port
-	more completely covers the MIPS family.
-	* rtems_support.html.in: Removed.
-	* started_ada/buildada.t: mips64orion port removed as mips port more
+	* configure.ac, index.html.in, started_ada/buildada.t,
+	supplements/Makefile.am: mips64orion port removed as mips port more
 	completely covers the MIPS family.
-	* supplements/Makefile.am: mips64orion port removed as mips port more
-	completely covers the MIPS family.
-	* supplements/mips64orion/.cvsignore, supplements/mips64orion/BSP_TIMES,
-	supplements/mips64orion/ChangeLog, supplements/mips64orion/Makefile.am,
-	supplements/mips64orion/bsp.t, supplements/mips64orion/callconv.t,
-	supplements/mips64orion/cpumodel.t, supplements/mips64orion/cputable.t,
-	supplements/mips64orion/fatalerr.t,
+	* rtems_support.html.in, supplements/mips64orion/.cvsignore,
+	supplements/mips64orion/BSP_TIMES, supplements/mips64orion/ChangeLog,
+	supplements/mips64orion/Makefile.am, supplements/mips64orion/bsp.t,
+	supplements/mips64orion/callconv.t, supplements/mips64orion/cpumodel.t,
+	supplements/mips64orion/cputable.t, supplements/mips64orion/fatalerr.t,
 	supplements/mips64orion/intr_NOTIMES.t,
 	supplements/mips64orion/memmodel.t,
 	supplements/mips64orion/mips64orion.texi,
@@ -85,72 +76,32 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
-	* develenv/Makefile.am: Cosmetics.
-	* user/Makefile.am: Cosmetics.
-	* FAQ/Makefile.am: Cosmetics.
-	* posix_users/Makefile.am: Cosmetics.
-	* posix1003.1/Makefile.am: Cosmetics.
-	* itron3.0/Makefile.am: Cosmetics.
-	* filesystem/Makefile.am: Cosmetics.
-	* networking/Makefile.am: Cosmetics.
-	* bsp_howto/Makefile.am: Cosmetics.
-	* porting/Makefile.am: Cosmetics.
-	* rgdb_specs/Makefile.am: Cosmetics.
-	* rtems_gdb/Makefile.am: Cosmetics.
-	* ada_user/Makefile.am: Cosmetics.
-	* started_ada/Makefile.am: Cosmetics.
-	* supplements/Makefile.am: Cosmetics.
+	* develenv/Makefile.am, user/Makefile.am, FAQ/Makefile.am,
+	posix_users/Makefile.am, posix1003.1/Makefile.am, itron3.0/Makefile.am,
+	filesystem/Makefile.am, networking/Makefile.am, bsp_howto/Makefile.am,
+	porting/Makefile.am, rgdb_specs/Makefile.am, rtems_gdb/Makefile.am,
+	ada_user/Makefile.am, started_ada/Makefile.am, supplements/Makefile.am:
+	Cosmetics.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* develenv/Makefile.am: Cosmetics.
-	* user/Makefile.am: Cosmetics.
-	* FAQ/Makefile.am: Cosmetics.
-	* posix_users/Makefile.am: Cosmetics.
-	* posix1003.1/Makefile.am: Cosmetics.
-	* itron3.0/Makefile.am: Cosmetics.
-	* filesystem/Makefile.am: Cosmetics.
-	* networking/Makefile.am: Cosmetics.
-	* bsp_howto/Makefile.am: Cosmetics.
-	* porting/Makefile.am: Cosmetics.
-	* rgdb_specs/Makefile.am: Cosmetics.
-	* rtems_gdb/Makefile.am: Cosmetics.
-	* ada_user/Makefile.am: Cosmetics.
-	* started_ada/Makefile.am: Cosmetics.
-	* supplements/Makefile.am: Cosmetics.
+	* develenv/Makefile.am, user/Makefile.am, FAQ/Makefile.am,
+	posix_users/Makefile.am, posix1003.1/Makefile.am, itron3.0/Makefile.am,
+	filesystem/Makefile.am, networking/Makefile.am, bsp_howto/Makefile.am,
+	porting/Makefile.am, rgdb_specs/Makefile.am, rtems_gdb/Makefile.am,
+	ada_user/Makefile.am, started_ada/Makefile.am, supplements/Makefile.am:
+	Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* project.am: Remove $(PROJECT).info* from CLEANFILES (Doesn't work with
 	automake-1.7f/1.8 anymore).
-	* develenv/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* user/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* FAQ/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* posix_users/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* posix1003.1/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* itron3.0/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* filesystem/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* networking/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* bsp_howto/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* porting/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* rgdb_specs/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* rtems_gdb/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* ada_user/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
-	* started_ada/Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
+	* develenv/Makefile.am, user/Makefile.am, FAQ/Makefile.am,
+	posix_users/Makefile.am, posix1003.1/Makefile.am, itron3.0/Makefile.am,
+	filesystem/Makefile.am, networking/Makefile.am, bsp_howto/Makefile.am,
+	porting/Makefile.am, rgdb_specs/Makefile.am, rtems_gdb/Makefile.am,
+	ada_user/Makefile.am, started_ada/Makefile.am: Add *.info to CLEANFILES
+	to accomodate automake-1.7f/1.8 breaking building infos.
 
 2003-11-25	Joel Sherrill <joel@OARcorp.com>
 
@@ -185,10 +136,8 @@
 
 2003-09-26	Joel Sherrill <joel@OARcorp.com>
 
-	* FAQ/basic.t, FAQ/entry: Obsoleting HP PA-RISC port and removing all
-	references.
-	* porting/cpumodels.t: Obsoleting HP PA-RISC port and removing all
-	references.
+	* FAQ/basic.t, FAQ/entry, porting/cpumodels.t: Obsoleting HP PA-RISC
+	port and removing all references.
 	* supplements/hppa1_1/.cvsignore, supplements/hppa1_1/ChangeLog,
 	supplements/hppa1_1/Makefile.am, supplements/hppa1_1/SIMHPPA_TIMES,
 	supplements/hppa1_1/bsp.t, supplements/hppa1_1/callconv.t,
@@ -200,30 +149,18 @@
 
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* images/ChangeLog: Removed.
 	* ChangeLog: Merge images/ChangeLog.
-	* common/ChangeLog: Removed.
 	* ChangeLog: Merge common/ChangeLog.
+	* images/ChangeLog, common/ChangeLog: Removed.
+	* rtems_support.html.in, index.html.in: Purge hppa1.1.
 	* common/.cvsignore: Add rtems.texi, rtems.sed.
-	* Makefile.am: Merger from rtems-4-6-branch.
 	* configure.ac: Merger from rtems-4-6-branch. Purge hppa1.1.
-	* index.html.in: Purge hppa1.1.
-	* project.am: Merger from rtems-4-6-branch.
-	* rtems_support.html.in: Purge hppa1.1.
-	* develenv/Makefile.am: Merger from rtems-4-6-branch.
-	* user/Makefile.am: Merger from rtems-4-6-branch.
-	* FAQ/Makefile.am: Merger from rtems-4-6-branch.
-	* posix_users/Makefile.am: Merger from rtems-4-6-branch.
-	* posix1003.1/Makefile.am: Merger from rtems-4-6-branch.
-	* itron3.0/Makefile.am: Merger from rtems-4-6-branch.
-	* filesystem/Makefile.am: Merger from rtems-4-6-branch.
-	* networking/Makefile.am: Merger from rtems-4-6-branch.
-	* bsp_howto/Makefile.am: Merger from rtems-4-6-branch.
-	* porting/Makefile.am: Merger from rtems-4-6-branch.
-	* rgdb_specs/Makefile.am: Merger from rtems-4-6-branch.
-	* rtems_gdb/Makefile.am: Merger from rtems-4-6-branch.
-	* ada_user/Makefile.am: Merger from rtems-4-6-branch.
-	* started_ada/Makefile.am: Merger from rtems-4-6-branch.
+	* Makefile.am, project.am, develenv/Makefile.am, user/Makefile.am,
+	FAQ/Makefile.am, posix_users/Makefile.am, posix1003.1/Makefile.am,
+	itron3.0/Makefile.am, filesystem/Makefile.am, networking/Makefile.am,
+	bsp_howto/Makefile.am, porting/Makefile.am, rgdb_specs/Makefile.am,
+	rtems_gdb/Makefile.am, ada_user/Makefile.am, started_ada/Makefile.am:
+	Merger from rtems-4-6-branch.
 
 2003-09-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -232,30 +169,22 @@
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
-	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,
-	rtems_support.html.in, ada_user/ada_user.texi: Merge from branch.
+	* common/rtems.texi.in: New file.
 	* acinclude.m4, images/rtems_logo.jpg: New files.
 	* SUPPORT, tools/texi2www/archive/texi2www-960103.tgz: Removed.
-	* common/cpright.texi, common/setup.texi: Merge from branch.
-	* common/rtems.texi.in: New file.
-	* develenv/develenv.texi, develenv/direct.t, develenv/sample.t,
-	develenv/utils.t: Merge from branch.
-	* user/c_user.texi, user/fatal.t, user/preface.texi, user/rtmon.t: Merge
-	from branch.
-	* FAQ/FAQ.texi, FAQ/basic.t, FAQ/build45.t, FAQ/entry, FAQ/tools.t:
-	Merge from branch.
-	* posix_users/posix_users.texi: Merge from branch.
-	* posix1003.1/ch07.t, posix1003.1/posix1003_1.texi,
-	posix1003.1/preface.texi: Merge from branch.
-	* itron3.0/itron.texi: Merge from branch.
-	* filesystem/filesystem.texi: Merge from branch.
-	* networking/networking.texi: Merge from branch.
-	* bsp_howto/analog.t, bsp_howto/bsp_howto.texi, bsp_howto/discrete.t,
-	bsp_howto/nvmem.t, bsp_howto/target.t: Merge from branch.
-	* porting/porting.texi: Merge from branch.
-	* rgdb_specs/rgdb_specs.texi: Merge from branch.
-	* rtems_gdb/rtems_gdb.texi: Merge from branch.
-	* started_ada/intro.t, started_ada/started_ada.texi,
+	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,
+	rtems_support.html.in, ada_user/ada_user.texi, common/cpright.texi,
+	common/setup.texi, develenv/develenv.texi, develenv/direct.t,
+	develenv/sample.t, develenv/utils.t, user/c_user.texi, user/fatal.t,
+	user/preface.texi, user/rtmon.t, FAQ/FAQ.texi, FAQ/basic.t,
+	FAQ/build45.t, FAQ/entry, FAQ/tools.t, posix_users/posix_users.texi,
+	posix1003.1/ch07.t, posix1003.1/posix1003_1.texi,
+	posix1003.1/preface.texi, itron3.0/itron.texi,
+	filesystem/filesystem.texi, networking/networking.texi,
+	bsp_howto/analog.t, bsp_howto/bsp_howto.texi, bsp_howto/discrete.t,
+	bsp_howto/nvmem.t, bsp_howto/target.t, porting/porting.texi,
+	rgdb_specs/rgdb_specs.texi, rtems_gdb/rtems_gdb.texi,
+	started_ada/intro.t, started_ada/started_ada.texi,
 	started_ada/tversions.texi: Merge from branch.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
@@ -271,10 +200,9 @@
 
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
-	* bsp_howto/adaintr.t, bsp_howto/ata.t, bsp_howto/target.t: Reconcile
-	differences between CVS trunk and 4.6 branch.
-	* porting/cpumodels.t, porting/sourcecode.t: Reconcile differences
-	between CVS trunk and 4.6 branch.
+	* bsp_howto/adaintr.t, bsp_howto/ata.t, bsp_howto/target.t,
+	porting/cpumodels.t, porting/sourcecode.t: Reconcile differences between
+	CVS trunk and 4.6 branch.
 
 2003-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -288,8 +216,8 @@
 
 	* user/fatal.t: Reflect c/src/exec having moved to cpukit.
 	* FAQ/build45.t: Fix typo (config.long).
-	* rgdb_specs/daemon.t: Reflect c/src/exec having moved to cpukit.
-	* rtems_gdb/example.t: Reflect c/src/exec having moved to cpukit.
+	* rgdb_specs/daemon.t, rtems_gdb/example.t: Reflect c/src/exec having
+	moved to cpukit.
 
 2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -324,13 +252,13 @@
 	* develenv/direct.t, develenv/sample.t, develenv/utils.t: New files.
 	* develenv/direct.texi, develenv/sample.texi, develenv/utils.texi:
 	Removed. Now generated from corresponding .t files which are in the
-	process of being updated. This commit is a anspshot of the update effort.
+	process of being updated.
 
 2003-02-14	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Removed a29k reference.
-	* FAQ/basic.t, FAQ/entry: Remove A29k references and update.
-	* porting/cpumodels.t: Removed a29k reference and updated.
+	* FAQ/basic.t, FAQ/entry, porting/cpumodels.t: Remove a29k references
+	and update.
 
 2003-02-11	Mike Siers <mikes@poliac.com>
 
@@ -372,8 +300,7 @@
 
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* index.html.in: Add c4x.
-	* configure.ac: Add c4x.
+	* index.html.in, configure.ac: Add c4x.
 	* project.am: Add version.texi hack.
 	* develenv/develenv.texi: Set @setfilename develenv.info.
 	* user/c_user.texi: Set @setfilename c_user.info.
@@ -397,19 +324,11 @@
 	$(top_builddir) to TEXI2WWW_ARGS.
 	* project.am: Add AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF. Override
 	automake's .dvi.ps:-rule.
-	* user/Makefile.am: Put GENERATED_FILES into $builddir.
-	* FAQ/Makefile.am: Put GENERATED_FILES into $builddir.
-	* posix_users/Makefile.am: Put GENERATED_FILES into $builddir.
-	* posix1003.1/Makefile.am: Put GENERATED_FILES into $builddir.
-	* itron3.0/Makefile.am: Put GENERATED_FILES into $builddir.
-	* filesystem/Makefile.am: Put GENERATED_FILES into $builddir.
-	* networking/Makefile.am: Put GENERATED_FILES into $builddir.
-	* bsp_howto/Makefile.am: Put GENERATED_FILES into $builddir.
-	* porting/Makefile.am: Put GENERATED_FILES into $builddir.
-	* rgdb_specs/Makefile.am: Put GENERATED_FILES into $builddir.
-	* rtems_gdb/Makefile.am: Put GENERATED_FILES into $builddir.
-	* ada_user/Makefile.am: Put GENERATED_FILES into $builddir.
-	* started_ada/Makefile.am: Put GENERATED_FILES into $builddir.
+	* user/Makefile.am, FAQ/Makefile.am, posix_users/Makefile.am,
+	posix1003.1/Makefile.am, itron3.0/Makefile.am, filesystem/Makefile.am,
+	networking/Makefile.am, bsp_howto/Makefile.am, porting/Makefile.am,
+	rgdb_specs/Makefile.am, rtems_gdb/Makefile.am, ada_user/Makefile.am,
+	started_ada/Makefile.am: Put GENERATED_FILES into $builddir.
 	* supplements/supplements.am: Remove AM_MAKEINFOFLAGS, TEXI2DVI,
 	TEXI2PDF.
 
@@ -422,124 +341,85 @@
 	started/pictures/Makefile.
 	* started/Makefile.am: Merge-in pictures/Makefile.am	.
 	* started/pictures/Makefile.am: Remove.
-	* develenv/version.texi: Remove from CVS.
-	* develenv/stamp-vti: Remove from CVS.
-	* develenv/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* user/version.texi: Remove from CVS.
-	* user/stamp-vti: Remove from CVS.
-	* user/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
 	* FAQ/build45.t: Fix typo in previous patch.
 	* FAQ/build45.t: Several fixes and additions.
 	* FAQ/FAQ.texi: Rename section "Building RTEMS 4.5" into "Building
 	RTEMS". build45.t: Remove references to 4.5. Several minor updates.
-	* FAQ/version.texi: Remove from CVS.
-	* FAQ/stamp-vti: Remove from CVS.
-	* FAQ/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* posix_users/version.texi: Remove from CVS.
-	* posix_users/stamp-vti: Remove from CVS.
-	* posix_users/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* posix1003.1/version.texi: Remove from CVS.
-	* posix1003.1/stamp-vti: Remove from CVS.
-	* posix1003.1/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* itron3.0/version.texi: Remove from CVS.
-	* itron3.0/stamp-vti: Remove from CVS.
-	* itron3.0/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* filesystem/version.texi: Remove from CVS.
-	* filesystem/stamp-vti: Remove from CVS.
-	* filesystem/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* networking/version.texi: Remove from CVS.
-	* networking/stamp-vti: Remove from CVS.
-	* networking/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* bsp_howto/version.texi: Remove from CVS.
-	* bsp_howto/stamp-vti: Remove from CVS.
-	* bsp_howto/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* porting/version.texi: Remove from CVS.
-	* porting/stamp-vti: Remove from CVS.
-	* porting/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* rgdb_specs/version.texi: Remove from CVS.
-	* rgdb_specs/stamp-vti: Remove from CVS.
-	* rgdb_specs/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* rtems_gdb/version.texi: Remove from CVS.
-	* rtems_gdb/stamp-vti: Remove from CVS.
-	* rtems_gdb/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* ada_user/version.texi: Remove from CVS.
-	* ada_user/stamp-vti: Remove from CVS.
-	* ada_user/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
-	* started_ada/version.texi: Remove from CVS.
-	* started_ada/stamp-vti: Remove from CVS.
-	* started_ada/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* develenv/.cvsignore, FAQ/.cvsignore, posix_users/.cvsignore,
+	posix1003.1/.cvsignore, itron3.0/.cvsignore, filesystem/.cvsignore,
+	networking/.cvsignore, bsp_howto/.cvsignore, porting/.cvsignore,
+	rgdb_specs/.cvsignore, rtems_gdb/.cvsignore, started_ada/.cvsignore,
+	ada_user/.cvsignore, user/.cvsignore: Add version.texi. Add stamp-vti.
+	Re-sort.
+	* develenv/version.texi, develenv/stamp-vti, user/version.texi,
+	user/stamp-vti, FAQ/version.texi, FAQ/stamp-vti,
+	posix_users/version.texi, posix_users/stamp-vti,
+	posix1003.1/version.texi, posix1003.1/stamp-vti, itron3.0/version.texi,
+	itron3.0/stamp-vti, filesystem/version.texi, filesystem/stamp-vti,
+	networking/version.texi, networking/stamp-vti, bsp_howto/version.texi,
+	bsp_howto/stamp-vti, porting/version.texi, porting/stamp-vti,
+	rgdb_specs/version.texi, rgdb_specs/stamp-vti, rtems_gdb/version.texi,
+	rtems_gdb/stamp-vti, ada_user/version.texi, ada_user/stamp-vti,
+	started_ada/version.texi, started_ada/stamp-vti: Remove from CVS.
 	* supplements/supplements.am: Use automake rules to build ps, pdf, info.
 	Various minor changes.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
-	* develenv/stamp-vti, develenv/version.texi: Regenerated.
-	* user/stamp-vti, user/version.texi: Regenerated.
-	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
-	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
-	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
-	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
-	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
-	* networking/stamp-vti, networking/version.texi: Regenerated.
-	* bsp_howto/stamp-vti, bsp_howto/version.texi: Regenerated.
-	* porting/stamp-vti, porting/version.texi: Regenerated.
-	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
-	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
-	* ada_user/stamp-vti, ada_user/version.texi: Regenerated.
-	* started_ada/stamp-vti, started_ada/version.texi: Regenerated.
+	* develenv/stamp-vti, develenv/version.texi, user/stamp-vti,
+	user/version.texi, FAQ/stamp-vti, FAQ/version.texi,
+	posix_users/stamp-vti, posix_users/version.texi, posix1003.1/stamp-vti,
+	posix1003.1/version.texi, itron3.0/stamp-vti, itron3.0/version.texi,
+	filesystem/stamp-vti, filesystem/version.texi, networking/stamp-vti,
+	networking/version.texi, bsp_howto/stamp-vti, bsp_howto/version.texi,
+	porting/stamp-vti, porting/version.texi, rgdb_specs/stamp-vti,
+	rgdb_specs/version.texi, rtems_gdb/stamp-vti, rtems_gdb/version.texi,
+	ada_user/stamp-vti, ada_user/version.texi, started_ada/stamp-vti,
+	started_ada/version.texi: Regenerated.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in images/Makefile.am, common/Makefile.am.
-	* images/Makefile.am: Remove.
-	* common/Makefile.am: Remove.
+	* images/Makefile.am, common/Makefile.am: Remove.
 	* configure.ac: Reflect changes above.
-	* main.am: Append -I $(topsrc_dir) to AM_MAKEINFOFLAGS.
-	* supplements/supplement.am: Append -I $(topsrc_dir) to AM_MAKEINFOFLAGS.
+	* main.am, supplements/supplement.am: Append -I $(topsrc_dir) to
+	AM_MAKEINFOFLAGS.
 
 2002-11-13	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Note that the Getting Started with GNAT/RTEMS  manual
 	is largely obsolete now that GNAT is in GCC.
-	* develenv/stamp-vti, develenv/version.texi: Regenerated.
-	* user/stamp-vti, user/version.texi: Regenerated.
-	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
-	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
-	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
-	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
-	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
-	* networking/stamp-vti, networking/version.texi: Regenerated.
-	* bsp_howto/stamp-vti, bsp_howto/version.texi: Regenerated.
-	* porting/stamp-vti, porting/version.texi: Regenerated.
-	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
-	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
-	* ada_user/stamp-vti, ada_user/version.texi: Regenerated.
+	* develenv/stamp-vti, develenv/version.texi, user/stamp-vti,
+	user/version.texi, FAQ/stamp-vti, FAQ/version.texi,
+	posix_users/stamp-vti, posix_users/version.texi, posix1003.1/stamp-vti,
+	posix1003.1/version.texi, itron3.0/stamp-vti, itron3.0/version.texi,
+	filesystem/stamp-vti, filesystem/version.texi, networking/stamp-vti,
+	networking/version.texi, bsp_howto/stamp-vti, bsp_howto/version.texi,
+	porting/stamp-vti, porting/version.texi, rgdb_specs/stamp-vti,
+	rgdb_specs/version.texi, rtems_gdb/stamp-vti, rtems_gdb/version.texi,
+	ada_user/stamp-vti, ada_user/version.texi: Regenerated.
 	* started_ada/Makefile.am: Corrected link.
 	* started_ada/stamp-vti, started_ada/version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Add links to multiple missing CPU supplements.
-	* develenv/stamp-vti, develenv/version.texi: Regenerated.
-	* user/stamp-vti, user/version.texi: Regenerated.
-	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
-	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
-	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
-	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
-	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
-	* networking/stamp-vti, networking/version.texi: Regenerated.
-	* bsp_howto/stamp-vti, bsp_howto/version.texi: Regenerated.
-	* porting/stamp-vti, porting/version.texi: Regenerated.
-	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
-	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
-	* ada_user/stamp-vti, ada_user/version.texi: Regenerated.
-	* started_ada/stamp-vti, started_ada/version.texi: Regenerated.
+	* develenv/stamp-vti, develenv/version.texi, user/stamp-vti,
+	user/version.texi, FAQ/stamp-vti, FAQ/version.texi,
+	posix_users/stamp-vti, posix_users/version.texi, posix1003.1/stamp-vti,
+	posix1003.1/version.texi, itron3.0/stamp-vti, itron3.0/version.texi,
+	filesystem/stamp-vti, filesystem/version.texi, networking/stamp-vti,
+	networking/version.texi, bsp_howto/stamp-vti, bsp_howto/version.texi,
+	porting/stamp-vti, porting/version.texi, rgdb_specs/stamp-vti,
+	rgdb_specs/version.texi, rtems_gdb/stamp-vti, rtems_gdb/version.texi,
+	ada_user/stamp-vti, ada_user/version.texi, started_ada/stamp-vti,
+	started_ada/version.texi: Regenerated.
 
 2002-10-24	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
 	* bsp_howto/ata.t, bsp_howto/ide-ctrl.t: New file.
 	* bsp_howto/.cvsignore: Added new .texi files.
-	* bsp_howto/Makefile.am:: Added new files to generate.
+	* bsp_howto/Makefile.am: Added new files to generate.
 	* bsp_howto/bsp_howto.texi: Added new chapters.
 	* bsp_howto/stamp-vti, bsp_howto/version.texi: Regenerated.
 
@@ -586,9 +466,8 @@
 
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* bootstrap: Remove.
-	* VERSION: Remove.
-	* Makefile.am:  Remove bootstrap. Add ACLOCAL_AMFLAGS.
+	* bootstrap, VERSION: Remove.
+	* Makefile.am: Remove bootstrap. Add ACLOCAL_AMFLAGS.
 	* configure.ac: Add RTEMS_TOP.
 
 2002-04-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -600,23 +479,13 @@
 	* common/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* images/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* develenv/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* user/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* FAQ/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* posix_users/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* posix1003.1/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* itron3.0/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* filesystem/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* networking/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* bsp_howto/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* porting/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* rgdb_specs/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* rtems_gdb/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* ada_user/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* started_ada/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* supplements/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am, images/Makefile.am, develenv/Makefile.am,
+	user/Makefile.am, FAQ/Makefile.am, posix_users/Makefile.am,
+	posix1003.1/Makefile.am, itron3.0/Makefile.am, filesystem/Makefile.am,
+	networking/Makefile.am, bsp_howto/Makefile.am, porting/Makefile.am,
+	rgdb_specs/Makefile.am, rtems_gdb/Makefile.am, ada_user/Makefile.am,
+	started_ada/Makefile.am, supplements/Makefile.am: Remove
+	AUTOMAKE_OPTIONS.
 
 2002-03-27	Eric Norum <eric.norum@usask.ca>
 
@@ -651,33 +520,23 @@
 	* Makefile.am: Add main.am to AUTOMAKE_FILES.
 	* configure.ac: Add AC_CONFIG_AUX_DIR([.]).
 	* project.am: Remove custom .texi and stamp-vti rules.
-	* main.am: Replace TEXI_COMMON with AM_MAKEINFOFLAGS.
-	* supplements/supplement.am: Replace TEXI_COMMON with AM_MAKEINFOFLAGS.
+	* main.am, supplements/supplement.am: Replace TEXI_COMMON with
+	AM_MAKEINFOFLAGS.
 
 2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Require automake-1.5.
 	* project.am: Reworked.
-	* main.am: New.
-	* configure.ac: New.
+	* main.am, configure.ac: New.
 	* configure.in: Removed.
 	* bootstrap: Sync with RTEMS's toplevel bootstrap.sh.
-	* common/Makefile.am: Require automake-1.5.
-	* images/Makefile.am: Require automake-1.5.
-	* develenv/Makefile.am: include main.am, require automake-1.5.
-	* user/Makefile.am: include main.am, require automake-1.5.
-	* FAQ/Makefile.am: include main.am, require automake-1.5.
-	* posix_users/Makefile.am: include main.am, require automake-1.5.
-	* posix1003.1/Makefile.am: include main.am, require automake-1.5.
-	* itron3.0/Makefile.am: include main.am, require automake-1.5.
-	* filesystem/Makefile.am: include main.am, require automake-1.5.
-	* networking/Makefile.am: include main.am, require automake-1.5.
-	* bsp_howto/Makefile.am: include main.am, require automake-1.5.
-	* porting/Makefile.am: include main.am, require automake-1.5.
-	* rgdb_specs/Makefile.am: include main.am, require automake-1.5.
-	* rtems_gdb/Makefile.am: include main.am, require automake-1.5.
-	* ada_user/Makefile.am: include main.am, require automake-1.5.
-	* started_ada/Makefile.am: include main.am, require automake-1.5.
+	* common/Makefile.am, images/Makefile.am: Require automake-1.5.
+	* develenv/Makefile.am, user/Makefile.am, FAQ/Makefile.am,
+	posix_users/Makefile.am, posix1003.1/Makefile.am, itron3.0/Makefile.am,
+	filesystem/Makefile.am, networking/Makefile.am, bsp_howto/Makefile.am,
+	porting/Makefile.am, rgdb_specs/Makefile.am, rtems_gdb/Makefile.am,
+	ada_user/Makefile.am, started_ada/Makefile.am: include main.am, require
+	automake-1.5.
 	* supplements/Makefile.am: Require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
@@ -708,45 +567,28 @@
 	* Numerous files touched as part of merging the 4.5 branch onto the
 	mainline development trunk and ensuring that the script that cuts
 	snapshots and releases works on the documentation.
-	* develenv/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* user/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* develenv/.cvsignore, user/.cvsignore: Added rtems_header.html and
+	rtems_footer.html.
 	* user/timer.t: Added task-based timer information including the new
 	directives rtems_timer_initiate(), rtems_timer_server_fire_after(), and
 	rtems_timer_server_fire_when().
-	* FAQ/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* posix_users/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* posix1003.1/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* itron3.0/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* filesystem/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* networking/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* bsp_howto/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* porting/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* rgdb_specs/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* rtems_gdb/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* ada_user/.cvsignore: Added rtems_header.html and rtems_footer.html.
-	* started_ada/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* FAQ/.cvsignore, posix_users/.cvsignore, posix1003.1/.cvsignore,
+	itron3.0/.cvsignore, filesystem/.cvsignore, networking/.cvsignore,
+	bsp_howto/.cvsignore, porting/.cvsignore, rgdb_specs/.cvsignore,
+	rtems_gdb/.cvsignore, ada_user/.cvsignore, started_ada/.cvsignore: Added
+	rtems_header.html and rtems_footer.html.
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
-	* Makefile.am: Removed GENERATED_FILES from list of TEXINFOS.
-	* develenv/Makefile.am: Removed GENERATED_FILES from list of TEXINFOS.
+	* Makefile.am, develenv/Makefile.am: Removed GENERATED_FILES from list
+	of TEXINFOS.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: New file.
-	* develenv/ChangeLog: New file.
-	* user/ChangeLog: New file.
-	* FAQ/ChangeLog: New file.
-	* posix_users/ChangeLog: New file.
-	* posix1003.1/ChangeLog: New file.
-	* itron3.0/ChangeLog: New file.
-	* filesystem/ChangeLog: New file.
-	* networking/ChangeLog: New file.
-	* bsp_howto/ChangeLog: New file.
-	* porting/ChangeLog: New file.
-	* rgdb_specs/ChangeLog: New file.
-	* rtems_gdb/ChangeLog: New file.
-	* ada_user/ChangeLog: New file.
-	* started_ada/ChangeLog: New file.
-	* supplements/ChangeLog: New file.
+	* ChangeLog, develenv/ChangeLog, user/ChangeLog, FAQ/ChangeLog,
+	posix_users/ChangeLog, posix1003.1/ChangeLog, itron3.0/ChangeLog,
+	filesystem/ChangeLog, networking/ChangeLog, bsp_howto/ChangeLog,
+	porting/ChangeLog, rgdb_specs/ChangeLog, rtems_gdb/ChangeLog,
+	ada_user/ChangeLog, started_ada/ChangeLog, supplements/ChangeLog: New
+	file.
 
