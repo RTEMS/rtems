@@ -8,8 +8,8 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 OBJS = $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -46,4 +46,4 @@ all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.S start16.S
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

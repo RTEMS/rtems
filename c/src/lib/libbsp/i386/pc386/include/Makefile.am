@@ -28,4 +28,4 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = wd80x3.h
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

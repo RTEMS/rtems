@@ -14,8 +14,8 @@ S_FILES = videoAsm.S
 
 console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(PROJECT_INCLUDE)/rtems \
@@ -43,4 +43,4 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(console_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = $(C_FILES) $(S_FILES)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

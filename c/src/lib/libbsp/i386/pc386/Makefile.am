@@ -18,5 +18,5 @@ TMPINSTALL_FILES = $(PROJECT_RELEASE)/BootImgs
 
 EXTRA_DIST = HOWTO README.dec21140 STATUS bsp_specs times_i486dx times_p5
 
-include $(top_srcdir)/../../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/subdirs.am
+include $(top_srcdir)/../../../../automake/local.am

@@ -15,8 +15,8 @@ OBJS = $(foreach piece, $(BSP_FILES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT)
     $(wildcard ../../../../libcpu/i386/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -27,4 +27,4 @@ $(LIB): $(OBJS)
 
 all-local: $(ARCH) $(LIB)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
