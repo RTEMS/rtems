@@ -62,7 +62,7 @@
  */
  
 #define _Objects_Is_class_valid( _the_class ) \
-  ( (_the_class) <= OBJECTS_CLASSES_LAST )
+  ( (_the_class) && (_the_class) <= OBJECTS_CLASSES_LAST )
 
 /*PAGE
  *

@@ -101,7 +101,7 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
   Objects_Classes the_class
 )
 {
-  return the_class <= OBJECTS_CLASSES_LAST;
+  return the_class && the_class <= OBJECTS_CLASSES_LAST;
 }
 
 /*PAGE
