@@ -1,3 +1,8 @@
+2003-11-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/HPUX9-posix.cfg: Remove INLINE, INLINE_UPCASE.
+	* custom/default.cfg: Remove INLINE,INLINE_UPCASE.
+
 2003-09-26	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/simhppa.cfg: Removed.
