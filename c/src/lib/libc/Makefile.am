@@ -29,8 +29,8 @@ TERMIOS_C_FILES = cfgetispeed.c cfgetospeed.c cfsetispeed.c cfsetospeed.c \
     termiosreserveresources.c
 
 SYSTEM_CALL_C_FILES = open.c close.c read.c write.c lseek.c ioctl.c mkdir.c \
-    mknod.c mkfifo.c rmdir.c chdir.c chmod.c fchdir.c fchmod.c chown.c link.c \
-    unlink.c umask.c ftruncate.c utime.c fstat.c fcntl.c fpathconf.c \
+    mknod.c mkfifo.c rmdir.c chdir.c chmod.c fchdir.c fchmod.c chown.c \
+    link.c unlink.c umask.c ftruncate.c utime.c fstat.c fcntl.c fpathconf.c \
     getdents.c fsync.c fdatasync.c pipe.c dup.c dup2.c symlink.c readlink.c \
     creat.c
 
@@ -49,8 +49,8 @@ LIBC_GLUE_C_FILES = __getpid.c __gettod.c __times.c truncate.c access.c \
 UNIX_LIBC_C_FILES = unixlibc.c hosterr.c
 
 COMMON_C_FILES = gxx_wrappers.c printk.c $(BASE_FS_C_FILES) \
-    $(MALLOC_C_FILES) $(TERMIOS_C_FILES) \
-    $(ERROR_C_FILES) $(ASSOCIATION_C_FILES)
+    $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
+    $(ASSOCIATION_C_FILES)
 
 UNIX_C_FILES = $(UNIX_LIBC_C_FILES) imfs_unixstub.c
 
@@ -71,6 +71,7 @@ RTEMS_H_FILES = assoc.h error.h libio.h
 noinst_HEADERS = libio_.h
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems \

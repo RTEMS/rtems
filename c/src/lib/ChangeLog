@@ -1,4 +1,8 @@
 
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libc/Makefile.am: Include compile.am
+
 2000-09-05	Joel Sherrill <joel@OARcorp.com>
 
 	* libio.c: Added O_NONBLOCK to list of flags.
