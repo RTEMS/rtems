@@ -142,6 +142,8 @@ int sched_rr_get_interval(
 
 int sched_yield( void )
 {
-  _Thread_Yield_processor();
+  _Thread_Disable_dispatch();
+    _Thread_Yield_processor();
+  _Thread_Enable_dispatch();
   return 0;
 }
