@@ -15,7 +15,12 @@
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
+#include <rtems/libio_.h>
+
+/*
+ * MACRO in libio_.h
 gid_t _POSIX_types_Egid = 0;
+*/
 
 /*PAGE
  *

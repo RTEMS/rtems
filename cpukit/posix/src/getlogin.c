@@ -15,6 +15,11 @@
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
+#include <rtems/libio_.h>
+#include <string.h>
+#include <unistd.h>
+#include <pwd.h>
+
 /*PAGE
  *
  *  4.2.4 Get User Name, P1003.1b-1993, p. 87
@@ -22,7 +27,11 @@
  *  NOTE:  P1003.1c/D10, p. 49 adds getlogin_r().
  */
 
+/*
+ * MACRO in libio_.h
+ * 
 static char _POSIX_types_Getlogin_buffer[ LOGIN_NAME_MAX ];
+*/
 
 char *getlogin( void )
 {
@@ -42,9 +51,15 @@ int getlogin_r(
   size_t  namesize
 )
 {
+  struct passwd *pw;	
   if ( namesize < LOGIN_NAME_MAX )
     return ERANGE;
 
-  strcpy( name, "posixapp" );
+  pw=getpwuid(getuid());
+  if (!pw) {
+   strcpy(name,"");
+  } else {
+   strncpy(name,pw->pw_name,LOGIN_NAME_MAX);
+  };
   return 0;
 }

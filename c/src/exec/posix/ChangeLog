@@ -1,3 +1,8 @@
+2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
+
+	* src/getegid.c, src/geteuid.c, src/getgid.c, src/getlogin.c,
+	src/getuid.c: Now save their values in private user environment.
+
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
