@@ -25,6 +25,10 @@
 #include <rtems.h>
 #include <termios.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
   unsigned32 baudrate;      /* debug baud rate, e.g. 57600            */
   void (*callout)(void);    /* callout pointer during polling         */
@@ -92,4 +96,9 @@ int termios_printk_open
 | Return Value:                                                             |
 |    0 on success, -1 and errno otherwise                                   |
 \*=========================================================================*/
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* _TERMIOS_PRINTK_H */

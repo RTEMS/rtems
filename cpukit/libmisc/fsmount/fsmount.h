@@ -21,11 +21,17 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | 02.07.03  creation                                         doe  |
 \*===============================================================*/
+
 #ifndef _FSMOUNT_H
 #define _FSMOUNT_H
+
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * bits to define, what errors will cause reporting (via printf) and
@@ -67,5 +73,9 @@ int rtems_fsmount
 | Return Value:                                                             |
 |    0, if success, -1 and errno if failed                                  |
 \*=========================================================================*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _FSMOUNT_H */

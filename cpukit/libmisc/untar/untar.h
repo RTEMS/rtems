@@ -11,6 +11,9 @@
 #ifndef __UNTAR_H__
 #define __UNTAR_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define UNTAR_SUCCESSFUL         0
 #define UNTAR_FAIL               1
@@ -21,5 +24,8 @@
 int Untar_FromMemory(unsigned char *tar_buf, unsigned long size);
 int Untar_FromFile(char *tar_name);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* __UNTAR_H__ */

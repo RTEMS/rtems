@@ -1,3 +1,10 @@
+2004-09-17	Joel Sherrill <joel@OARcorp.com>
+
+	PR 677/misc
+	* dumpbuf/dumpbuf.h, fsmount/fsmount.h, rtmonuse/rtmonuse.h,
+	serdbg/serdbg.h, serdbg/serdbgcnf.h, serdbg/termios_printk.h,
+	serdbg/termios_printk_cnf.h, untar/untar.h: Add extern C wrappers.
+
 2003-12-11	Joel Sherrill <joel@OARcorp.com>
 
 	PR 540/rtems_misc

@@ -25,6 +25,9 @@
 #include <rtems.h>
 #include <termios.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 typedef struct {
   unsigned32 baudrate;      /* debug baud rate, e.g. 57600            */
   void (*callout)(void);    /* callout pointer during polling         */
@@ -170,5 +173,9 @@ int getDebugChar
 | Return Value:                                                             |
 |    received character                                                     |
 \*=========================================================================*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _SERDBG_H */
