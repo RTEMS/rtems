@@ -6,7 +6,7 @@
 PGM = $(ARCH)/shmsupp.rel
 
 C_FILES = addrconv.c getcfg.c cause_intr.c lock.c mpisr.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
