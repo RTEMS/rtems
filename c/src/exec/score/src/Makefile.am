@@ -22,7 +22,7 @@ CORE_SEMAPHORE_C_FILES = coresem.c coresemflush.c coresemseize.c \
     coresemsurrender.c
 
 HEAP_C_FILES = heap.c heapallocate.c heapextend.c heapfree.c \
-    heapsizeofuserarea.c heapwalk.c
+    heapsizeofuserarea.c heapwalk.c heapgetinfo.c
 
 OBJECT_C_FILES = object.c objectallocate.c objectallocatebyindex.c \
     objectclearname.c objectcomparenameraw.c objectcomparenamestring.c \

@@ -1,4 +1,10 @@
 
+2000-10-18	Nick Simon <Nick.SIMON@syntegra.bt.co.uk>
+
+	* src/heapgetinfo.c, include/rtems/score/heap.h, src/Makefile.am:
+	Added _Heap_Get_information() and information control block.
+	* src/heapgetinfo.c: New file.
+
 2000-09-25	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/system.h: Switched a29k and hppa1.1 to using cpuopts.h not

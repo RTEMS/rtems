@@ -36,6 +36,27 @@ typedef enum {
 }  Heap_Extend_status;
 
 /*
+ *  Status codes for _Heap_Get_information
+ */
+
+typedef enum {
+    HEAP_GET_INFORMATION_SUCCESSFUL = 0,
+    HEAP_GET_INFORMATION_SYSTEM_STATE_ERROR,
+    HEAP_GET_INFORMATION_BLOCK_ERROR
+}  Heap_Get_information_status;
+        
+/*
+ *  Information block returned by _Heap_Get_information
+ */
+
+typedef struct {
+  unsigned32   free_blocks;
+  unsigned32   free_size;
+  unsigned32   used_blocks;
+  unsigned32   used_size;
+} Heap_Information_block;
+
+/*
  *  Constants used in the size/used field of each heap block to
  *  indicate when a block is free or in use.
  */
@@ -212,6 +233,29 @@ void _Heap_Walk(
   int           source,
   boolean       do_dump
 );
+
+/*PAGE
+ *
+ *  _Heap_Get_information
+ *
+ *  This kernel routine walks the heap and tots up the free and allocated
+ *  sizes.  Derived from _Heap_Walk.
+ *
+ *  Input parameters:
+ *    the_heap  - pointer to heap header
+ *    the_info  - pointer to information block
+ *
+ *  Output parameters: 
+ *    *the_info - status information
+ *    return 0=success, otherwise heap is corrupt.
+ */
+
+
+Heap_Get_information_status _Heap_Get_information(
+  Heap_Control            *the_heap,
+  Heap_Information_block  *the_info
+);
+
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/heap.inl>
