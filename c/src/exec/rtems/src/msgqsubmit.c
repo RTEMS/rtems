@@ -61,6 +61,7 @@ rtems_status_code _Message_queue_Submit(
 {
   register Message_queue_Control  *the_message_queue;
   Objects_Locations                location;
+  CORE_message_queue_Status        msg_status;
 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location )
@@ -97,7 +98,7 @@ rtems_status_code _Message_queue_Submit(
     case OBJECTS_LOCAL:
       switch ( submit_type ) {
         case MESSAGE_QUEUE_SEND_REQUEST:
-          _CORE_message_queue_Send(
+          msg_status = _CORE_message_queue_Send(
             &the_message_queue->message_queue,
             buffer,
             size,
@@ -112,7 +113,7 @@ rtems_status_code _Message_queue_Submit(
           );
           break;
         case MESSAGE_QUEUE_URGENT_REQUEST:
-          _CORE_message_queue_Urgent(
+          msg_status = _CORE_message_queue_Urgent(
             &the_message_queue->message_queue,
             buffer,
             size,
@@ -131,9 +132,8 @@ rtems_status_code _Message_queue_Submit(
       }
 
       _Thread_Enable_dispatch();
-      return _Message_queue_Translate_core_message_queue_return_code(
-        _Thread_Executing->Wait.return_code
-      );
+      return
+        _Message_queue_Translate_core_message_queue_return_code( msg_status );
           
   }
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */

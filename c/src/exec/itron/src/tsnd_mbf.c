@@ -33,6 +33,7 @@ ER tsnd_mbf(
   Objects_Locations              location;
   Watchdog_Interval              interval;
   boolean                        wait;
+  CORE_message_queue_Status      msg_status;
 
   if (msgsz <= 0 || !msg)
     return E_PAR;
@@ -57,7 +58,7 @@ ER tsnd_mbf(
 
     case OBJECTS_LOCAL:
       /* XXX Submit needs to take into account blocking */
-      _CORE_message_queue_Submit(
+      msg_status = _CORE_message_queue_Submit(
         &the_message_buffer->message_queue,
         msg,
         msgsz,
@@ -69,7 +70,7 @@ ER tsnd_mbf(
       );
       _Thread_Enable_dispatch();
       return _ITRON_Message_buffer_Translate_core_message_buffer_return_code(
-          _Thread_Executing->Wait.return_code
+          msg_status
       );
     }
 

@@ -44,6 +44,7 @@ int _POSIX_Message_queue_Send_support(
 {
   register POSIX_Message_queue_Control *the_mq;
   Objects_Locations                     location;
+  CORE_message_queue_Status             msg_status;
 
   /*
    * Validate the priority.
@@ -70,7 +71,7 @@ int _POSIX_Message_queue_Send_support(
         set_errno_and_return_minus_one( EBADF );
       }
 
-      _CORE_message_queue_Submit(
+      msg_status = _CORE_message_queue_Submit(
         &the_mq->Message_queue,
         (void *) msg_ptr,
         msg_len,
@@ -86,12 +87,12 @@ int _POSIX_Message_queue_Send_support(
       );
 
       _Thread_Enable_dispatch();
-      if ( !_Thread_Executing->Wait.return_code )
+      if ( !msg_status )
         return 0;
 
       set_errno_and_return_minus_one(
         _POSIX_Message_queue_Translate_core_message_queue_return_code(
-          _Thread_Executing->Wait.return_code
+          msg_status 
         )
       );
   }
