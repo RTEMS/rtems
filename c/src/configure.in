@@ -55,7 +55,7 @@ AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes" )
 AM_CONDITIONAL(HAS_RDBG, test "$HAS_RDBG" = "yes" )
 
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-  cfg_subdirs2="$cfg_subdirs2 librtems++";
+  hst_subdirs="$hst_subdirs librtems++";
 fi 
 
 RTEMS_CONFIG_HOST_SUBDIRS($hst_subdirs)
@@ -63,9 +63,6 @@ AC_SUBST(hst_subdirs)
 
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 AC_SUBST(cfg_subdirs)
-
-AC_CONFIG_SUBDIRS($cfg_subdirs2)
-AC_SUBST(cfg_subdirs2)
 
 AC_CONFIG_SUBDIRS(tests)
 
