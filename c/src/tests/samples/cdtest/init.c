@@ -23,3 +23,4 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <stdio.h>
+#include <tmacros.h>
