@@ -11,6 +11,8 @@
  *  $Id$
  */
 
+#warning "This file is obsolete, use rtems/score/registers.h instead."
+
 #ifndef _LIBCPU_i386_REGISTERS_H
 #define _LIBCPU_i386_REGISTERS_H
 

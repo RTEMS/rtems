@@ -1,3 +1,10 @@
+2002-03-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cache.c: Include <rtems/score/registers.h> instead of
+	<libcpu/registers.h>.
+	* cpu.h: Ditto. Remove parts moved to score/cpu/i386.
+	* registers.h: Add BIG-FAT warning.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

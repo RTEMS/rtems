@@ -5,7 +5,7 @@
  */
 
 #include <rtems.h>
-#include <libcpu/registers.h>
+#include <rtems/score/registers.h>
 #include "cache_.h"
 
 void _CPU_disable_cache() {

@@ -21,56 +21,15 @@
 #ifndef _LIBCPU_i386_CPU_H
 #define _LIBCPU_i386_CPU_H
 
-#include <libcpu/registers.h>
-
+#include <rtems/score/registers.h>
 
 #ifndef ASM
 
 /*
  *  Interrupt Level Macros
  */
+#include <rtems/score/interrupts.h>
 
-#define i386_disable_interrupts( _level ) \
-  { \
-    asm volatile ( "pushf ; \
-                    cli ; \
-                    pop %0" \
-                   : "=rm" ((_level)) \
-    ); \
-  }
-
-#define i386_enable_interrupts( _level )  \
-  { \
-    asm volatile ( "push %0 ; \
-                    popf" \
-                    : : "rm" ((_level)) : "cc" \
-    ); \
-  }
-
-#define i386_flash_interrupts( _level ) \
-  { \
-    asm volatile ( "push %0 ; \
-                    popf ; \
-                    cli" \
-                    : : "rm" ((_level)) : "cc" \
-    ); \
-  }
-
-#define i386_get_interrupt_level( _level ) \
-  do { \
-    register unsigned32 _eflags; \
-    \
-    asm volatile ( "pushf ; \
-                    pop %0" \
-                    : "=rm" ((_eflags)) \
-    ); \
-    \
-    _level = (_eflags & EFLAGS_INTR_ENABLE) ? 0 : 1; \
-  } while (0)
-
-#define _CPU_ISR_Disable( _level ) i386_disable_interrupts( _level )
-#define _CPU_ISR_Enable( _level ) i386_enable_interrupts( _level )
-     
 /*
  *  Segment Access Routines
  *
@@ -193,13 +152,6 @@ do { register unsigned short __port  = _port; \
 
 typedef unsigned char  rtems_vector_offset;
 
-struct 	__rtems_raw_irq_connect_data__;
-
-typedef void (*rtems_raw_irq_hdl)		(void);
-typedef void (*rtems_raw_irq_enable)		(const struct __rtems_raw_irq_connect_data__*);
-typedef void (*rtems_raw_irq_disable)		(const struct __rtems_raw_irq_connect_data__*);
-typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_data__*);
-
 typedef struct __rtems_raw_irq_connect_data__{
  /*
   * IDT vector offset (IRQ line + PC386_IRQ_VECTOR_BASE)
@@ -248,44 +200,13 @@ typedef struct {
   rtems_raw_irq_connect_data*	rawIrqHdlTbl;
 }rtems_raw_irq_global_settings;
 
-/*
- * See page 14.9 Figure 14-2.
- *
- */
-typedef struct {
-  unsigned int low_offsets_bits : 16;
-  unsigned int segment_selector : 16;
-  unsigned int fixed_value_bits : 8;
-  unsigned int gate_type	: 5;
-  unsigned int privilege	: 2;
-  unsigned int present		: 1;
-  unsigned int high_offsets_bits: 16;
-}interrupt_gate_descriptor;
-
-
-/*
- * C callable function enabling to create a interrupt_gate_descriptor
- */
-void create_interrupt_gate_descriptor (interrupt_gate_descriptor*, rtems_raw_irq_hdl);
+#include <rtems/score/idtr.h>
 
 /*
  * C callable function enabling to get handler currently connected to a vector
  * 
  */
 rtems_raw_irq_hdl get_hdl_from_vector(rtems_vector_offset);
-
-/*
- * C callable function enabling to get easilly usable info from
- * the actual value of IDT register.
- */
-extern void i386_get_info_from_IDTR (interrupt_gate_descriptor** table,
-				unsigned* limit);
-/*
- * C callable function enabling to change the value of IDT register. Must be called
- * with interrupts masked at processor level!!!.
- */
-extern void i386_set_IDTR (interrupt_gate_descriptor* table,
-		      unsigned limit);
 
 /*
  * C callable function enabling to set up one raw idt entry
