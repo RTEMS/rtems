@@ -134,16 +134,15 @@ structure.
 
 @item ifp->if_name
 The name of the device.  The network stack uses this string
-and the device number for device name lookups.  The name should not
-contain digits as these will be assumed to be part of the unit number
-and not part of the device name.
-
+and the device number for device name lookups.  The device name should
+be obtained from the @code{name} entry in the configuration structure.
 
 @item ifp->if_unit
 The device number.  The network stack uses this number and the
 device name for device name lookups.  For example, if
-@code{ifp->if_name} is @samp{scc}, and @code{ifp->if_unit} is @samp{1},
-the full device name would be @samp{scc1}.
+@code{ifp->if_name} is @samp{scc} and @code{ifp->if_unit} is @samp{1},
+the full device name would be @samp{scc1}.  The unit number should be
+obtained from the `name' entry in the configuration structure.
 
 @item ifp->if_mtu
 The maximum transmission unit for the device.  For Ethernet
@@ -173,6 +172,23 @@ The address of the output function.  Ethernet devices
 should set this to @code{ether_output}.
 @end table
 
+RTEMS provides a function to parse the driver name in the
+configuration structure into a device name and unit number.
+
+@example
+int rtems_bsdnet_parse_driver_name (
+  const struct rtems_bsdnet_ifconfig *config,
+  char **namep
+);
+@end example
+
+The function takes two arguments; a pointer to the configuration
+structure and a pointer to a pointer to a character.  The function
+parses the configuration name entry, allocates memory for the driver
+name, places the driver name in this memory, sets the second argument
+to point to the name and returns the unit number. 
+On error, a message is printed and -1 is returned.
+
 Once the attach function  has set up the above entries it must link the
 driver data structure onto the list of devices by
 calling @code{if_attach}.  Ethernet devices should then
@@ -181,9 +197,6 @@ device's @code{ifnet} structure as their only argument.
 
 The attach function should return a non-zero value to indicate that
 the driver has been successfully configured and attached.
-
-
-
 
 @section Write the Driver Start Function.
 This function is called each time the network stack wants to start the
