@@ -28,6 +28,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/wkspace.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
@@ -42,6 +43,10 @@ void _POSIX_Message_queue_Delete(
 )
 {
   if ( !the_mq->linked && !the_mq->open_count ) {
+      /* the name memory may have been freed by unlink. */
+      if ( the_mq->Object.name )
+        _Workspace_Free( the_mq->Object.name );
+
       _Objects_Close( &_POSIX_Message_queue_Information, &the_mq->Object );
  
       _CORE_message_queue_Close(

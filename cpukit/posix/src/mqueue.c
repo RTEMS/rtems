@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <mqueue.h>
+#include <limits.h>
 
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
@@ -70,8 +71,8 @@ void _POSIX_Message_queue_Manager_initialization(
     maximum_message_queues,
     sizeof( POSIX_Message_queue_Control_fd ),
                                 /* size of this object's control block */
-    FALSE,                      /* TRUE if names for this object are strings */
-    0                           /* maximum length of each object's name */
+    TRUE,                       /* TRUE if names for this object are strings */
+    NAME_MAX                    /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
     FALSE,                      /* TRUE if this is a global object class */

@@ -18,6 +18,7 @@
 #include "config.h"
 #endif
 
+#include <string.h>
 #include <stdarg.h>
 #include <stdlib.h>
 
@@ -29,9 +30,13 @@
 
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/wkspace.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
+
+/* pure ANSI mode does not have this prototype */
+size_t strnlen(const char *, size_t);
 
 /*PAGE
  *
@@ -42,7 +47,7 @@
  */
  
 int _POSIX_Message_queue_Create_support(
-  const char                    *_name,
+  const char                    *name_arg,
   int                            pshared,
   struct mq_attr                *attr_ptr,
   POSIX_Message_queue_Control  **message_queue
@@ -51,7 +56,12 @@ int _POSIX_Message_queue_Create_support(
   POSIX_Message_queue_Control   *the_mq;
   CORE_message_queue_Attributes *the_mq_attr;
   struct mq_attr                 attr;
-  char *name;
+  char                          *name;
+  size_t                         n;
+
+  n = strnlen( name_arg, NAME_MAX );
+  if ( n > NAME_MAX ) 
+    return ENAMETOOLONG;
 
   _Thread_Disable_dispatch();
  
@@ -100,6 +110,18 @@ int _POSIX_Message_queue_Create_support(
   the_mq->open_count = 1;
   the_mq->linked = TRUE;
 
+  /*
+   * Make a copy of the user's string for name just in case it was
+   * dynamically constructed.
+   */
+
+  name = _Workspace_Allocate(n);
+  if (!name) {
+    _POSIX_Message_queue_Free( the_mq );
+    _Thread_Enable_dispatch();
+    rtems_set_errno_and_return_minus_one( ENOMEM );
+  }
+  strcpy( name, name_arg );
  
   /* XXX
    *
@@ -123,12 +145,11 @@ int _POSIX_Message_queue_Create_support(
 #endif
  
     _POSIX_Message_queue_Free( the_mq );
+    _Workspace_Free(name);
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( ENOSPC );
   }
 
-  name = malloc(256);
-  strcpy( name, _name );
   _Objects_Open(
     &_POSIX_Message_queue_Information,
     &the_mq->Object,
