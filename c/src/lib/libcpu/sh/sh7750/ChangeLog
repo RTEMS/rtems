@@ -1,3 +1,15 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sci/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* score/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* timer/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-10-28	Alexandra Kossovsky <sasha@oktet.ru>
 
 	* include/rtems/score/sh7750_regs.h: Fix definitions of 
