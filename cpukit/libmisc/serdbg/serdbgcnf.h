@@ -22,7 +22,7 @@
 #ifndef _SERDBGCNF_H
 #define _SERDBGCNF_H
 
-#include "serdbg.h"
+#include <rtems/serdbg.h>
 
 #ifdef CONFIGURE_INIT
 

@@ -22,7 +22,7 @@
 #ifndef _TERMIOS_PRINTK_CNF_H
 #define _TERMIOS_PRINTK_CNF_H
 
-#include "termios_printk.h"
+#include <rtems/termios_printk.h>
 
 #ifdef CONFIGURE_INIT
 

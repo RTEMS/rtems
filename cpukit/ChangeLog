@@ -1,5 +1,12 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libmisc/serdbg/serdbgcnf.h: Include <rtems/serdbg.h> instead of
+        <serdbg.h>
+	* libmisc/serdbg/termios_printk_cnf.h: Include <rtems/termios_printk.h>
+        instead of <termios_printk.h>.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libmisc/Makefile.am: Install serdbg.h, serdbgcnf.h,
 	termios_printk.h, termios_printk_cnf.h to $(includedir)/rtems.
 	* libmisc/serdbg/serdbg.c: Include <rtems/serdbg.h> instead of
