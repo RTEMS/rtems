@@ -53,8 +53,11 @@ void break_when_you_get_here();
 #define SONIC_DEBUG_MEMORY_ALLOCATE  0x0004
 #define SONIC_DEBUG_FRAGMENTS        0x0008
 #define SONIC_DEBUG_CAM              0x0008
+#define SONIC_DEBUG_DESCRIPTORS      0x0010
 
-#define SONIC_DEBUG      (SONIC_DEBUG_MEMORY|SONIC_DEBUG_CAM) 
+#define SONIC_DEBUG \
+    (SONIC_DEBUG_MEMORY|SONIC_DEBUG_DESCRIPTORS)
+
 /* SONIC_DEBUG_ALL */
 
 
@@ -423,7 +426,10 @@ SONIC_STATIC void sonic_retire_tda (struct sonic *dp)
   while ((dp->tdaActiveCount != 0)
       && ((status = dp->tdaTail->status) != 0)) {
 
-printf( "retire TDA %p (0x%04x)\n", dp->tdaTail, status );
+#if (SONIC_DEBUG & SONIC_DEBUG_DESCRIPTORS)
+    printf( "retire TDA %p (0x%04x)\n", dp->tdaTail, status );
+#endif
+
     /*
      * Check for errors which stop the transmitter.
      */
@@ -485,7 +491,9 @@ printf( "retire TDA %p (0x%04x)\n", dp->tdaTail, status );
      * Move to the next transmit descriptor
      */
     dp->tdaTail = dp->tdaTail->next;
-printf( "next TDA %p\n", dp->tdaTail );
+#if (SONIC_DEBUG & SONIC_DEBUG_DESCRIPTORS)
+    printf( "next TDA %p\n", dp->tdaTail );
+#endif
   }
 }
 
