@@ -25,8 +25,8 @@ OBJS = $(C_O_FILES)
 PRINT_SRCS = $(DOCS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../../../automake/leaf.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/sample.am
 
 AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I.
@@ -47,4 +47,4 @@ endif
 
 EXTRA_DIST = $(DOCS)
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

@@ -22,5 +22,5 @@ AUTOMAKE_FILES = sample.am
 
 EXTRA_DIST = $(AUTOMAKE_FILES)
 
-include $(top_srcdir)/../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
