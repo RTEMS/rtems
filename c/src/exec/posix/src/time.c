@@ -62,7 +62,10 @@ Watchdog_Interval _POSIX_Timespec_to_interval(
   ticks += (time->tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND) / 
              _TOD_Microseconds_per_tick;
 
-  return ticks;
+  if (ticks)
+    return ticks;
+
+  return 1;
 }
 
 /*PAGE
