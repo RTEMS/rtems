@@ -37,6 +37,7 @@
 
 #include <libchip/serial.h>
 #include "z85c30_p.h"
+#include "sersupp.h"
 
 /*
  * Flow control is only supported when using interrupts
@@ -60,7 +61,7 @@ console_flow z85c30_flow_DTRCTS =
 
 console_fns z85c30_fns =
 {
-  z85c30_probe,                  /* deviceProbe */
+  libchip_serial_default_probe,  /* deviceProbe */
   z85c30_open,                   /* deviceFirstOpen */
   z85c30_flush,                  /* deviceLastClose */
   NULL,                          /* deviceRead */
@@ -73,7 +74,7 @@ console_fns z85c30_fns =
 
 console_fns z85c30_fns_polled =
 {
-  z85c30_probe,                      /* deviceProbe */
+  libchip_serial_default_probe,      /* deviceProbe */
   z85c30_open,                       /* deviceFirstOpen */
   z85c30_close,                      /* deviceLastClose */
   z85c30_inbyte_nonblocking_polled,  /* deviceRead */
@@ -289,16 +290,6 @@ Z85C30_STATIC void z85c30_write_polled(
  *  Console Device Driver Entry Points
  */
 
-Z85C30_STATIC boolean z85c30_probe(int minor)
-{
-  /*
-   * If the configuration dependent probe has located the device then
-   * assume it is there
-   */
-
-  return(TRUE);
-}
-
 Z85C30_STATIC void z85c30_init(int minor)
 {
   unsigned32       ulCtrlPort;
@@ -465,6 +456,108 @@ Z85C30_STATIC int z85c30_negate_DTR(int minor)
       pz85c30Context->ucModemCtrl
   );
   rtems_interrupt_enable(Irql);
+  return 0;
+}
+
+/*
+ *  z85c30_set_attributes
+ *
+ *  This function sets the SCC channel to reflect the requested termios
+ *  port settings.
+ */
+
+Z85C30_STATIC int z85c30_set_attributes(
+  int                   minor,
+  const struct termios *t
+)
+{
+  unsigned32             ulCtrlPort;
+  unsigned32             ulBaudDivisor;
+  unsigned32             wr3;
+  unsigned32             wr4;
+  unsigned32             wr5;
+  int                    baud_requested;
+  setRegister_f          setReg;
+  rtems_interrupt_level  Irql;
+
+  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
+  setReg     = Console_Port_Tbl[minor].setRegister;
+
+  /*
+   *  Calculate the baud rate divisor
+   */
+
+  baud_requested = t->c_cflag & CBAUD;
+  if (!baud_requested)
+    baud_requested = B9600;              /* default to 9600 baud */
+
+  ulBaudDivisor = Z85C30_Baud( 
+    (unsigned32) Console_Port_Tbl[minor].ulClock,
+    (unsigned32) termios_baud_to_number( baud_requested )
+  );
+
+  wr3 = SCC_WR3_RX_EN;
+  wr4 = SCC_WR4_16_CLOCK;
+  wr5 = SCC_WR5_TX_EN;
+
+  /*
+   *  Parity
+   */
+
+  if (t->c_cflag & PARENB) {
+    wr4 |= SCC_WR4_PAR_EN;
+    if (!(t->c_cflag & PARODD))
+      wr4 |= SCC_WR4_PAR_EVEN;
+  } 
+
+  /*
+   *  Character Size
+   */
+
+  if (t->c_cflag & CSIZE) {
+    switch (t->c_cflag & CSIZE) {
+      case CS5:   break;
+      case CS6:  wr3 |= SCC_WR3_RX_6_BITS;  wr5 |= SCC_WR5_TX_6_BITS;  break;
+      case CS7:  wr3 |= SCC_WR3_RX_7_BITS;  wr5 |= SCC_WR5_TX_7_BITS;  break;
+      case CS8:  wr3 |= SCC_WR3_RX_8_BITS;  wr5 |= SCC_WR5_TX_8_BITS;  break;
+    }
+  } else {
+    wr3 |= SCC_WR3_RX_8_BITS;       /* default to 9600,8,N,1 */
+    wr5 |= SCC_WR5_TX_8_BITS;       /* default to 9600,8,N,1 */
+  }
+
+  /*
+   *  Stop Bits
+   */
+
+  if (t->c_cflag & CSTOPB) {
+    wr4 |= SCC_WR4_2_STOP;                      /* 2 stop bits */
+  } else {
+    wr4 |= SCC_WR4_1_STOP;                      /* 1 stop bits */
+  }
+
+  rtems_interrupt_disable(Irql);
+    (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR4, wr4 );
+    (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR3, wr3 );
+    (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR5, wr5 );
+
+    /*
+     * Setup the lower 8 bits time constants=1E.
+     * If the time constans=1E, then the desire
+     * baud rate will be equilvalent to 9600, via register 12.
+     */
+
+    (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR12, ulBaudDivisor & 0xff );
+
+    /*
+     * using register 13
+     * Setup the upper 8 bits time constant
+     */
+
+    (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR13, (ulBaudDivisor>>8) & 0xff );
+
+  rtems_interrupt_enable(Irql);
+
   return 0;
 }
 

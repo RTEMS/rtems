@@ -331,9 +331,13 @@ typedef struct _z85c30_context
 /*
  * Private routines
  */
-Z85C30_STATIC boolean z85c30_probe(int minor);
 
 Z85C30_STATIC void z85c30_init(int minor);
+
+Z85C30_STATIC int z85c30_set_attributes(
+  int                   minor,
+  const struct termios *t
+);
 
 Z85C30_STATIC int z85c30_open(
   int major,
