@@ -1,7 +1,17 @@
+
+2001-05-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* leaf.cfg: Remove CFLAGS_DEBUG_OPTIMIZE_V.
+	* compilers/gcc-no_bsp.cfg: Remove CPP_CC_FLAGS.
+	* compilers/gcc-portsw.cfg: Remove CPP_CC_FLAGS.
+	* compilers/gcc-target-default.cfg: Remove *_DEBUG_OPTIMIZE_*-flags,
+	remove unused flags, remove -ansi from CPP.
+	* custom/eth_comm.cfg: Remove CPU_DEFINES.
+	* custom/sim68000.cfg: Remove CPU_DEFINES.
 	
 2001-04-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* compilers/gcc-default.cfg: Dito.
+	* compilers/gcc-no_bsp.cfg: Remove -ansi -fasm.
 	* compilers/gcc-target-default.cfg: Dito.
 	* compilers/gcc-portsw.cfg: Remove -Hansi.
 	* custom/posix.cfg: Remove inclusion of target.cfg.
