@@ -88,7 +88,7 @@ void Screen12()
   status = rtems_region_create(
     Region_name[ 1 ],
     Region_good_area,
-    512,
+    REGION_LENGTH,
     0x40,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
