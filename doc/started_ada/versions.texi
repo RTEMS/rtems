@@ -32,12 +32,12 @@
 @c  GNAT Version
 @c
 
-@set GNAT-VERSION     gnat 3.10p
-@set GNAT-TAR         gnat-3.10p-src.tar.gz
-@set GNAT-UNTAR       gnat-3.10p-src
-@set GNAT-FTPSITE     cs.nyu.edu
-@set GNAT-FTPDIR      /pub/gnat
-@set GNAT-RTEMSPATCH  gnat-3.10p-rtems-diff-19971106.gz
+@set GNAT-VERSION     gnat 3.11b
+@set GNAT-TAR         gnat-3.11b-src.tar.gz
+@set GNAT-UNTAR       gnat-3.11b-src
+@set GNAT-FTPSITE     NONE
+@set GNAT-FTPDIR      NO_DIRECTORY
+@set GNAT-RTEMSPATCH  gnat-3.11b-rtems-diff-19981105.gz
 
 @c
 @c  BINUTILS Version
@@ -63,12 +63,12 @@
 @c  NEWLIB Version
 @c
 
-@set NEWLIB-VERSION     newlib 1.8.0
-@set NEWLIB-TAR         newlib-1.8.0.tar.gz
-@set NEWLIB-UNTAR       newlib-1.8.0
+@set NEWLIB-VERSION     newlib 1.8.1
+@set NEWLIB-TAR         newlib-1.8.1.tar.gz
+@set NEWLIB-UNTAR       newlib-1.8.1
 @set NEWLIB-FTPSITE     ftp.cygnus.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.8.0-rtems-diff-19981027.gz
+@set NEWLIB-RTEMSPATCH  newlib-1.8.1-rtems-diff-19980121.gz
 
 @c
 @c  GDB Version
