@@ -26,7 +26,7 @@
  *  This function allocates a Global Object control block.
  */
 
-STATIC INLINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
+RTEMS_INLINE_ROUTINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
   void
 )
 {
@@ -43,7 +43,7 @@ STATIC INLINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
  *  This routine deallocates a Global Object control block.
  */
 
-STATIC INLINE void _Objects_MP_Free_global_object (
+RTEMS_INLINE_ROUTINE void _Objects_MP_Free_global_object (
   Objects_MP_Control *the_object
 )
 {
@@ -62,7 +62,7 @@ STATIC INLINE void _Objects_MP_Free_global_object (
  *  This function returns whether the global object is NULL or not.
  */
 
-STATIC INLINE boolean _Objects_MP_Is_null_global_object (
+RTEMS_INLINE_ROUTINE boolean _Objects_MP_Is_null_global_object (
   Objects_MP_Control *the_object
 )
 {

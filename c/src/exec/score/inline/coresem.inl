@@ -27,7 +27,7 @@
  *  enabled in the attribute_set and FALSE otherwise.
  */
 
-STATIC INLINE boolean _CORE_semaphore_Is_priority(
+RTEMS_INLINE_ROUTINE boolean _CORE_semaphore_Is_priority(
   CORE_semaphore_Attributes *the_attribute
 )
 {
@@ -43,7 +43,7 @@ STATIC INLINE boolean _CORE_semaphore_Is_priority(
  *  This routine returns the current count associated with the semaphore.
  */
  
-STATIC INLINE unsigned32 _CORE_semaphore_Get_count(
+RTEMS_INLINE_ROUTINE unsigned32 _CORE_semaphore_Get_count(
   CORE_semaphore_Control  *the_semaphore
 )
 {

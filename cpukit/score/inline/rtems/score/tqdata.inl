@@ -27,7 +27,7 @@
  *  a thread of the_priority should be placed.
  */
 
-STATIC INLINE unsigned32 _Thread_queue_Header_number (
+RTEMS_INLINE_ROUTINE unsigned32 _Thread_queue_Header_number (
   Priority_Control the_priority
 )
 {
@@ -45,7 +45,7 @@ STATIC INLINE unsigned32 _Thread_queue_Header_number (
  *  group chain, and FALSE if the search should start at the rear.
  */
 
-STATIC INLINE boolean _Thread_queue_Is_reverse_search (
+RTEMS_INLINE_ROUTINE boolean _Thread_queue_Is_reverse_search (
   Priority_Control the_priority
 )
 {
@@ -61,7 +61,7 @@ STATIC INLINE boolean _Thread_queue_Is_reverse_search (
  *  This function returns the number of threads waiting on this thread queue.
  */
  
-STATIC INLINE unsigned32 _Thread_queue_Get_number_waiting (
+RTEMS_INLINE_ROUTINE unsigned32 _Thread_queue_Get_number_waiting (
   Thread_queue_Control *the_thread_queue
 )
 {
@@ -78,7 +78,7 @@ STATIC INLINE unsigned32 _Thread_queue_Get_number_waiting (
  *  entering a critical section.
  */
  
-STATIC INLINE void _Thread_queue_Enter_critical_section (
+RTEMS_INLINE_ROUTINE void _Thread_queue_Enter_critical_section (
   Thread_queue_Control *the_thread_queue
 )
 {

@@ -28,7 +28,7 @@
  *  reserved for a stack.
  */
 
-STATIC INLINE void _Stack_Initialize (
+RTEMS_INLINE_ROUTINE void _Stack_Initialize (
   Stack_Control *the_stack,
   void          *starting_address,
   unsigned32     size
@@ -48,7 +48,7 @@ STATIC INLINE void _Stack_Initialize (
  *  a valid stack area on this processor, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Stack_Is_enough (
+RTEMS_INLINE_ROUTINE boolean _Stack_Is_enough (
   unsigned32 size
 )
 {
@@ -70,7 +70,7 @@ STATIC INLINE boolean _Stack_Is_enough (
  *  The amount of adjustment for alignment is CPU dependent.
  */
 
-STATIC INLINE unsigned32 _Stack_Adjust_size (
+RTEMS_INLINE_ROUTINE unsigned32 _Stack_Adjust_size (
   unsigned32 size
 )
 {

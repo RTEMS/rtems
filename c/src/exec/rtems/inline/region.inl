@@ -27,7 +27,7 @@
  *  the inactive chain of free region control blocks.
  */
 
-STATIC INLINE Region_Control *_Region_Allocate( void )
+RTEMS_INLINE_ROUTINE Region_Control *_Region_Allocate( void )
 {
   return (Region_Control *) _Objects_Allocate( &_Region_Information );
 }
@@ -42,7 +42,7 @@ STATIC INLINE Region_Control *_Region_Allocate( void )
  *  inactive chain of free region control blocks.
  */
 
-STATIC INLINE void _Region_Free (
+RTEMS_INLINE_ROUTINE void _Region_Free (
   Region_Control *the_region
 )
 {
@@ -62,7 +62,7 @@ STATIC INLINE void _Region_Free (
  *  to OBJECTS_ERROR and the_region is undefined.
  */
 
-STATIC INLINE Region_Control *_Region_Get (
+RTEMS_INLINE_ROUTINE Region_Control *_Region_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -82,7 +82,7 @@ STATIC INLINE Region_Control *_Region_Get (
  *  Otherwise, it returns NULL.
  */
 
-STATIC INLINE void *_Region_Allocate_segment (
+RTEMS_INLINE_ROUTINE void *_Region_Allocate_segment (
   Region_Control *the_region,
   unsigned32      size
 )
@@ -99,7 +99,7 @@ STATIC INLINE void *_Region_Allocate_segment (
  *  This function frees the_segment to the_region.
  */
 
-STATIC INLINE boolean _Region_Free_segment (
+RTEMS_INLINE_ROUTINE boolean _Region_Free_segment (
   Region_Control *the_region,
   void           *the_segment
 )
@@ -116,7 +116,7 @@ STATIC INLINE boolean _Region_Free_segment (
  *  This function returns TRUE if the_region is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Region_Is_null (
+RTEMS_INLINE_ROUTINE boolean _Region_Is_null (
   Region_Control *the_region
 )
 {

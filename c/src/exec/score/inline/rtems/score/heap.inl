@@ -28,7 +28,7 @@
  *  This function returns the head of the specified heap.
  */
 
-STATIC INLINE Heap_Block *_Heap_Head (
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Head (
   Heap_Control *the_heap
 )
 {
@@ -44,7 +44,7 @@ STATIC INLINE Heap_Block *_Heap_Head (
  *  This function returns the tail of the specified heap.
  */
 
-STATIC INLINE Heap_Block *_Heap_Tail (
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Tail (
   Heap_Control *the_heap
 )
 {
@@ -61,7 +61,7 @@ STATIC INLINE Heap_Block *_Heap_Tail (
  *  precedes the_block in memory.
  */
 
-STATIC INLINE Heap_Block *_Heap_Previous_block (
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Previous_block (
   Heap_Block *the_block
 )
 {
@@ -83,7 +83,7 @@ STATIC INLINE Heap_Block *_Heap_Previous_block (
  *  NOTE: Next_block assumes that the block is free.
  */
 
-STATIC INLINE Heap_Block *_Heap_Next_block (
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Next_block (
   Heap_Block *the_block
 )
 {
@@ -103,7 +103,7 @@ STATIC INLINE Heap_Block *_Heap_Next_block (
  *  in the heap based upad a base address and an offset.
  */
 
-STATIC INLINE Heap_Block *_Heap_Block_at(
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_at(
   void       *base,
   unsigned32  offset
 )
@@ -120,7 +120,7 @@ STATIC INLINE Heap_Block *_Heap_Block_at(
  *  XXX
  */
  
-STATIC INLINE Heap_Block *_Heap_User_block_at(
+RTEMS_INLINE_ROUTINE Heap_Block *_Heap_User_block_at(
   void       *base
 )
 {
@@ -140,7 +140,7 @@ STATIC INLINE Heap_Block *_Heap_User_block_at(
  *  is free, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Heap_Is_previous_block_free (
+RTEMS_INLINE_ROUTINE boolean _Heap_Is_previous_block_free (
   Heap_Block *the_block
 )
 {
@@ -156,7 +156,7 @@ STATIC INLINE boolean _Heap_Is_previous_block_free (
  *  This function returns TRUE if the block is free, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Heap_Is_block_free (
+RTEMS_INLINE_ROUTINE boolean _Heap_Is_block_free (
   Heap_Block *the_block
 )
 {
@@ -173,7 +173,7 @@ STATIC INLINE boolean _Heap_Is_block_free (
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Heap_Is_block_used (
+RTEMS_INLINE_ROUTINE boolean _Heap_Is_block_used (
   Heap_Block *the_block
 )
 {
@@ -189,7 +189,7 @@ STATIC INLINE boolean _Heap_Is_block_used (
  *  This function returns the size of the_block in bytes.
  */
 
-STATIC INLINE unsigned32 _Heap_Block_size (
+RTEMS_INLINE_ROUTINE unsigned32 _Heap_Block_size (
   Heap_Block *the_block
 )
 {
@@ -206,7 +206,7 @@ STATIC INLINE unsigned32 _Heap_Block_size (
  *  which the user may access.
  */
 
-STATIC INLINE void *_Heap_Start_of_user_area (
+RTEMS_INLINE_ROUTINE void *_Heap_Start_of_user_area (
   Heap_Block *the_block
 )
 {
@@ -223,7 +223,7 @@ STATIC INLINE void *_Heap_Start_of_user_area (
  *  managed by the_heap, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Heap_Is_block_in (
+RTEMS_INLINE_ROUTINE boolean _Heap_Is_block_in (
   Heap_Control *the_heap,
   Heap_Block   *the_block
 )
@@ -243,7 +243,7 @@ STATIC INLINE boolean _Heap_Is_block_in (
  *  returned.
  */
 
-STATIC INLINE boolean _Heap_Is_page_size_valid(
+RTEMS_INLINE_ROUTINE boolean _Heap_Is_page_size_valid(
   unsigned32 page_size
 )
 {
@@ -262,7 +262,7 @@ STATIC INLINE boolean _Heap_Is_page_size_valid(
  *  heap block.
  */
 
-STATIC INLINE unsigned32 _Heap_Build_flag (
+RTEMS_INLINE_ROUTINE unsigned32 _Heap_Build_flag (
   unsigned32 size,
   unsigned32 in_use_flag
 )

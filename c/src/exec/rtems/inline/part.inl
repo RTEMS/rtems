@@ -28,7 +28,7 @@
  *  Otherwise, it returns NULL.
  */
 
-STATIC INLINE void *_Partition_Allocate_buffer (
+RTEMS_INLINE_ROUTINE void *_Partition_Allocate_buffer (
    Partition_Control *the_partition
 )
 {
@@ -44,7 +44,7 @@ STATIC INLINE void *_Partition_Allocate_buffer (
  *  This routine frees the_buffer to the_partition.
  */
 
-STATIC INLINE void _Partition_Free_buffer (
+RTEMS_INLINE_ROUTINE void _Partition_Free_buffer (
   Partition_Control *the_partition,
   Chain_Node        *the_buffer
 )
@@ -62,7 +62,7 @@ STATIC INLINE void _Partition_Free_buffer (
  *  boundary for the_partition, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Partition_Is_buffer_on_boundary (
+RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_on_boundary (
   void              *the_buffer,
   Partition_Control *the_partition
 )
@@ -87,7 +87,7 @@ STATIC INLINE boolean _Partition_Is_buffer_on_boundary (
  *  the_partition, otherwise FALSE is returned.
  */
 
-STATIC INLINE boolean _Partition_Is_buffer_valid (
+RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_valid (
    Chain_Node        *the_buffer,
    Partition_Control *the_partition
 )
@@ -115,7 +115,7 @@ STATIC INLINE boolean _Partition_Is_buffer_valid (
  *  properly aligned, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Partition_Is_buffer_size_aligned (
+RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_size_aligned (
    unsigned32 buffer_size
 )
 {
@@ -132,7 +132,7 @@ STATIC INLINE boolean _Partition_Is_buffer_size_aligned (
  *  the inactive chain of free partition control blocks.
  */
 
-STATIC INLINE Partition_Control *_Partition_Allocate ( void )
+RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Allocate ( void )
 {
   return (Partition_Control *) _Objects_Allocate( &_Partition_Information );
 }
@@ -147,7 +147,7 @@ STATIC INLINE Partition_Control *_Partition_Allocate ( void )
  *  inactive chain of free partition control blocks.
  */
 
-STATIC INLINE void _Partition_Free (
+RTEMS_INLINE_ROUTINE void _Partition_Free (
    Partition_Control *the_partition
 )
 {
@@ -169,7 +169,7 @@ STATIC INLINE void _Partition_Free (
  *  to OBJECTS_ERROR and the_partition is undefined.
  */
 
-STATIC INLINE Partition_Control *_Partition_Get (
+RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -188,7 +188,7 @@ STATIC INLINE Partition_Control *_Partition_Get (
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Partition_Is_null (
+RTEMS_INLINE_ROUTINE boolean _Partition_Is_null (
    Partition_Control *the_partition
 )
 {

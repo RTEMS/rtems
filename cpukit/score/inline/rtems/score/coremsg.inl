@@ -28,7 +28,7 @@
  *  This routine sends a message to the end of the specified message queue.
  */
  
-STATIC INLINE CORE_message_queue_Status _CORE_message_queue_Send(
+RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
   unsigned32                                 size,
@@ -55,7 +55,7 @@ STATIC INLINE CORE_message_queue_Status _CORE_message_queue_Send(
  *  This routine sends a message to the front of the specified message queue.
  */
  
-STATIC INLINE CORE_message_queue_Status _CORE_message_queue_Urgent(
+RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
   unsigned32                                 size,
@@ -83,7 +83,7 @@ STATIC INLINE CORE_message_queue_Status _CORE_message_queue_Urgent(
  *  to the destination message buffer.
  */
 
-STATIC INLINE void _CORE_message_queue_Copy_buffer (
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Copy_buffer (
   void      *source,
   void      *destination,
   unsigned32 size
@@ -102,7 +102,7 @@ STATIC INLINE void _CORE_message_queue_Copy_buffer (
  *  message buffer chain.
  */
 
-STATIC INLINE CORE_message_queue_Buffer_control *
+RTEMS_INLINE_ROUTINE CORE_message_queue_Buffer_control *
 _CORE_message_queue_Allocate_message_buffer (
     CORE_message_queue_Control *the_message_queue
 )
@@ -121,7 +121,7 @@ _CORE_message_queue_Allocate_message_buffer (
  *  message buffer chain.
  */
 
-STATIC INLINE void _CORE_message_queue_Free_message_buffer (
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Free_message_buffer (
     CORE_message_queue_Control        *the_message_queue,
     CORE_message_queue_Buffer_control *the_message
 )
@@ -139,7 +139,7 @@ STATIC INLINE void _CORE_message_queue_Free_message_buffer (
  *  and returns a pointer to it.
  */
 
-STATIC INLINE
+RTEMS_INLINE_ROUTINE
   CORE_message_queue_Buffer_control *_CORE_message_queue_Get_pending_message (
   CORE_message_queue_Control *the_message_queue
 )
@@ -158,7 +158,7 @@ STATIC INLINE
  *  enabled in the attribute_set and FALSE otherwise.
  */
  
-STATIC INLINE boolean _CORE_message_queue_Is_priority(
+RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_priority(
   CORE_message_queue_Attributes *the_attribute
 )
 {
@@ -175,7 +175,7 @@ STATIC INLINE boolean _CORE_message_queue_Is_priority(
  *  messages on the_message_queue.
  */
 
-STATIC INLINE void _CORE_message_queue_Append (
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Append (
   CORE_message_queue_Control        *the_message_queue,
   CORE_message_queue_Buffer_control *the_message
 )
@@ -193,7 +193,7 @@ STATIC INLINE void _CORE_message_queue_Append (
  *  messages on the_message_queue.
  */
 
-STATIC INLINE void _CORE_message_queue_Prepend (
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Prepend (
   CORE_message_queue_Control        *the_message_queue,
   CORE_message_queue_Buffer_control *the_message
 )
@@ -213,7 +213,7 @@ STATIC INLINE void _CORE_message_queue_Prepend (
  *  This function returns TRUE if the_message_queue is TRUE and FALSE otherwise.
  */
 
-STATIC INLINE boolean _CORE_message_queue_Is_null (
+RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_null (
   CORE_message_queue_Control *the_message_queue
 )
 {
@@ -230,7 +230,7 @@ STATIC INLINE boolean _CORE_message_queue_Is_null (
  *  queue and FALSE otherwise.
  */
  
-STATIC INLINE boolean _CORE_message_queue_Is_notify_enabled (
+RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_notify_enabled (
   CORE_message_queue_Control *the_message_queue
 )
 {
@@ -246,7 +246,7 @@ STATIC INLINE boolean _CORE_message_queue_Is_notify_enabled (
  *  This routine initializes the notification information for the_message_queue.
  */
  
-STATIC INLINE void _CORE_message_queue_Set_notify (
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_notify (
   CORE_message_queue_Control        *the_message_queue,
   CORE_message_queue_Notify_Handler  the_handler,
   void                              *the_argument

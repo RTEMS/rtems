@@ -28,7 +28,7 @@
  *  This routine initializes the given RTEMS_ASR information record.
  */
 
-STATIC INLINE void _ASR_Initialize (
+RTEMS_INLINE_ROUTINE void _ASR_Initialize (
   ASR_Information *information
 )
 {
@@ -51,7 +51,7 @@ STATIC INLINE void _ASR_Initialize (
  *  way that the RTEMS_ASR disable/enable flag changes.
  */
 
-STATIC INLINE void _ASR_Swap_signals (
+RTEMS_INLINE_ROUTINE void _ASR_Swap_signals (
   ASR_Information *information
 )
 {
@@ -75,7 +75,7 @@ STATIC INLINE void _ASR_Swap_signals (
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _ASR_Is_null_handler (
+RTEMS_INLINE_ROUTINE boolean _ASR_Is_null_handler (
   rtems_asr_entry asr_handler
 )
 {
@@ -92,7 +92,7 @@ STATIC INLINE boolean _ASR_Is_null_handler (
  *  given RTEMS_ASR information record and FALSE otherwise.
  */
 
-STATIC INLINE boolean _ASR_Are_signals_pending (
+RTEMS_INLINE_ROUTINE boolean _ASR_Are_signals_pending (
   ASR_Information *information
 )
 {
@@ -111,7 +111,7 @@ STATIC INLINE boolean _ASR_Are_signals_pending (
  *  NOTE:  This must be implemented as a macro.
  */
 
-STATIC INLINE void _ASR_Post_signals(
+RTEMS_INLINE_ROUTINE void _ASR_Post_signals(
   rtems_signal_set  signals,
   rtems_signal_set *signal_set
 )

@@ -27,7 +27,7 @@
  *  the inactive chain of free timer control blocks.
  */
 
-STATIC INLINE Timer_Control *_Timer_Allocate( void )
+RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Allocate( void )
 {
   return (Timer_Control *) _Objects_Allocate( &_Timer_Information );
 }
@@ -42,7 +42,7 @@ STATIC INLINE Timer_Control *_Timer_Allocate( void )
  *  inactive chain of free timer control blocks.
  */
 
-STATIC INLINE void _Timer_Free (
+RTEMS_INLINE_ROUTINE void _Timer_Free (
   Timer_Control *the_timer
 )
 {
@@ -62,7 +62,7 @@ STATIC INLINE void _Timer_Free (
  *  to OBJECTS_ERROR and the returned value is undefined.
  */
 
-STATIC INLINE Timer_Control *_Timer_Get (
+RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -81,7 +81,7 @@ STATIC INLINE Timer_Control *_Timer_Get (
  *  timer, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Timer_Is_interval_class (
+RTEMS_INLINE_ROUTINE boolean _Timer_Is_interval_class (
   Timer_Classes the_class
 )
 {
@@ -98,7 +98,7 @@ STATIC INLINE boolean _Timer_Is_interval_class (
  *  timer, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Timer_Is_timer_of_day_class (
+RTEMS_INLINE_ROUTINE boolean _Timer_Is_timer_of_day_class (
   Timer_Classes the_class
 )
 {
@@ -115,7 +115,7 @@ STATIC INLINE boolean _Timer_Is_timer_of_day_class (
  *  timer, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Timer_Is_dormant_class (
+RTEMS_INLINE_ROUTINE boolean _Timer_Is_dormant_class (
   Timer_Classes the_class
 )
 {
@@ -131,7 +131,7 @@ STATIC INLINE boolean _Timer_Is_dormant_class (
  *  This function returns TRUE if the_timer is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Timer_Is_null (
+RTEMS_INLINE_ROUTINE boolean _Timer_Is_null (
   Timer_Control *the_timer
 )
 {

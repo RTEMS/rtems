@@ -27,7 +27,7 @@
  *  are set in mode_set, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Modes_Mask_changed (
+RTEMS_INLINE_ROUTINE boolean _Modes_Mask_changed (
   Modes_Control mode_set,
   Modes_Control masks
 )
@@ -45,7 +45,7 @@ STATIC INLINE boolean _Modes_Mask_changed (
  *  Signal Processing is disabled, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Modes_Is_asr_disabled (
+RTEMS_INLINE_ROUTINE boolean _Modes_Is_asr_disabled (
   Modes_Control mode_set
 )
 {
@@ -62,7 +62,7 @@ STATIC INLINE boolean _Modes_Is_asr_disabled (
  *  is enabled, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Modes_Is_preempt (
+RTEMS_INLINE_ROUTINE boolean _Modes_Is_preempt (
   Modes_Control mode_set
 )
 {
@@ -79,7 +79,7 @@ STATIC INLINE boolean _Modes_Is_preempt (
  *  is enabled, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Modes_Is_timeslice (
+RTEMS_INLINE_ROUTINE boolean _Modes_Is_timeslice (
   Modes_Control mode_set
 )
 {
@@ -95,7 +95,7 @@ STATIC INLINE boolean _Modes_Is_timeslice (
  *  This function returns the interrupt level portion of the mode_set.
  */
 
-STATIC INLINE ISR_Level _Modes_Get_interrupt_level (
+RTEMS_INLINE_ROUTINE ISR_Level _Modes_Get_interrupt_level (
   Modes_Control mode_set
 )
 {
@@ -112,7 +112,7 @@ STATIC INLINE ISR_Level _Modes_Get_interrupt_level (
  *  in the mode_set.
  */
 
-STATIC INLINE void _Modes_Set_interrupt_level (
+RTEMS_INLINE_ROUTINE void _Modes_Set_interrupt_level (
   Modes_Control mode_set
 )
 {
@@ -131,7 +131,7 @@ STATIC INLINE void _Modes_Set_interrupt_level (
  *  is returned in changed.
  */
 
-STATIC INLINE void _Modes_Change (
+RTEMS_INLINE_ROUTINE void _Modes_Change (
   Modes_Control  old_mode_set,
   Modes_Control  new_mode_set,
   Modes_Control  mask,

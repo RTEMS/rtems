@@ -27,7 +27,7 @@
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean rtems_is_status_successful(
+RTEMS_INLINE_ROUTINE boolean rtems_is_status_successful(
   rtems_status_code code
 )
 {
@@ -44,7 +44,7 @@ STATIC INLINE boolean rtems_is_status_successful(
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean rtems_are_statuses_equal(
+RTEMS_INLINE_ROUTINE boolean rtems_are_statuses_equal(
   rtems_status_code code1,
   rtems_status_code code2
 )

@@ -62,7 +62,7 @@ void _POSIX_Mutex_Manager_initialization(
  *  the inactive chain of free mutexes control blocks.
  */
  
-STATIC INLINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void );
+RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void );
  
 /*
  *  _POSIX_Mutex_Free
@@ -73,7 +73,7 @@ STATIC INLINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void );
  *  inactive chain of free mutexes control blocks.
  */
  
-STATIC INLINE void _POSIX_Mutex_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
   POSIX_Mutex_Control *the_mutex
 );
  
@@ -91,7 +91,7 @@ STATIC INLINE void _POSIX_Mutex_Free (
  *  to OBJECTS_ERROR and the_mutex is undefined.
  */
  
-STATIC INLINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
+RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
   Objects_Id        *id,
   Objects_Locations *location
 );
@@ -104,7 +104,7 @@ STATIC INLINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
  *  This function returns TRUE if the_mutex is NULL and FALSE otherwise.
  */
  
-STATIC INLINE boolean _POSIX_Mutex_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
   POSIX_Mutex_Control *the_mutex
 );
 

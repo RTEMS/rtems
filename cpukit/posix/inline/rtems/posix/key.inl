@@ -22,7 +22,7 @@
  *  _POSIX_Keys_Allocate
  */
  
-STATIC INLINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
+RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
 {
   return (POSIX_Keys_Control *) _Objects_Allocate( &_POSIX_Keys_Information );
 }
@@ -32,7 +32,7 @@ STATIC INLINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
  *  _POSIX_Keys_Free
  */
  
-STATIC INLINE void _POSIX_Keys_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
   POSIX_Keys_Control *the_key
 )
 {
@@ -44,7 +44,7 @@ STATIC INLINE void _POSIX_Keys_Free (
  *  _POSIX_Keys_Get
  */
  
-STATIC INLINE POSIX_Keys_Control *_POSIX_Keys_Get (
+RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -58,7 +58,7 @@ STATIC INLINE POSIX_Keys_Control *_POSIX_Keys_Get (
  *  _POSIX_Keys_Is_null
  */
  
-STATIC INLINE boolean _POSIX_Keys_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Keys_Is_null (
   POSIX_Keys_Control *the_key
 )
 {

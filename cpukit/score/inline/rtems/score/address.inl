@@ -28,7 +28,7 @@
  *  converted to an access type before being used further.
  */
 
-STATIC INLINE void *_Addresses_Add_offset (
+RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
   void       *base,
   unsigned32  offset
 )
@@ -47,7 +47,7 @@ STATIC INLINE void *_Addresses_Add_offset (
  *  typically converted to an access type before being used further.
  */
 
-STATIC INLINE void *_Addresses_Subtract_offset (
+RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
   void       *base,
   unsigned32  offset
 )
@@ -68,7 +68,7 @@ STATIC INLINE void *_Addresses_Subtract_offset (
  *         dependent on an addresses being thirty two bits.
  */
 
-STATIC INLINE unsigned32 _Addresses_Subtract (
+RTEMS_INLINE_ROUTINE unsigned32 _Addresses_Subtract (
   void *left,
   void *right
 )
@@ -87,7 +87,7 @@ STATIC INLINE unsigned32 _Addresses_Subtract (
  *  is based on correctness and efficiency.
  */
 
-STATIC INLINE boolean _Addresses_Is_aligned (
+RTEMS_INLINE_ROUTINE boolean _Addresses_Is_aligned (
   void *address
 )
 {
@@ -107,7 +107,7 @@ STATIC INLINE boolean _Addresses_Is_aligned (
  *  assumed to be lower than the limit address.
  */
 
-STATIC INLINE boolean _Addresses_Is_in_range (
+RTEMS_INLINE_ROUTINE boolean _Addresses_Is_in_range (
   void *address,
   void *base,
   void *limit

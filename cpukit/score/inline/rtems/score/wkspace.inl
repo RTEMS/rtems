@@ -28,7 +28,7 @@
  *  from the workspace, then NULL is returned.
  */
 
-STATIC INLINE void *_Workspace_Allocate(
+RTEMS_INLINE_ROUTINE void *_Workspace_Allocate(
   unsigned32 size
 )
 {
@@ -46,7 +46,7 @@ STATIC INLINE void *_Workspace_Allocate(
  *  TRUE is returned.  Otherwise FALSE is returned.
  */
 
-STATIC INLINE boolean _Workspace_Free(
+RTEMS_INLINE_ROUTINE boolean _Workspace_Free(
   void *block
 )
 {

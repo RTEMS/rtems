@@ -27,7 +27,7 @@
  *  the inactive chain of free semaphore control blocks.
  */
 
-STATIC INLINE Semaphore_Control *_Semaphore_Allocate( void )
+RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Allocate( void )
 {
   return (Semaphore_Control *) _Objects_Allocate( &_Semaphore_Information );
 }
@@ -42,7 +42,7 @@ STATIC INLINE Semaphore_Control *_Semaphore_Allocate( void )
  *  inactive chain of free semaphore control blocks.
  */
 
-STATIC INLINE void _Semaphore_Free (
+RTEMS_INLINE_ROUTINE void _Semaphore_Free (
   Semaphore_Control *the_semaphore
 )
 {
@@ -64,7 +64,7 @@ STATIC INLINE void _Semaphore_Free (
  *  to OBJECTS_ERROR and the_semaphore is undefined.
  */
 
-STATIC INLINE Semaphore_Control *_Semaphore_Get (
+RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -82,7 +82,7 @@ STATIC INLINE Semaphore_Control *_Semaphore_Get (
  *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Semaphore_Is_null (
+RTEMS_INLINE_ROUTINE boolean _Semaphore_Is_null (
   Semaphore_Control *the_semaphore
 )
 {

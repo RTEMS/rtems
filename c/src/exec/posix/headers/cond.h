@@ -63,7 +63,7 @@ void _POSIX_Condition_variables_Manager_initialization(
  *  the inactive chain of free condition variable control blocks.
  */
  
-STATIC INLINE POSIX_Condition_variables_Control * 
+RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control * 
   _POSIX_Condition_variables_Allocate( void );
  
 /*
@@ -75,7 +75,7 @@ STATIC INLINE POSIX_Condition_variables_Control *
  *  inactive chain of free condition variable control blocks.
  */
  
-STATIC INLINE void _POSIX_Condition_variables_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
   POSIX_Condition_variables_Control *the_condition_variable
 );
  
@@ -93,7 +93,7 @@ STATIC INLINE void _POSIX_Condition_variables_Free (
  *  to OBJECTS_ERROR and the_condition variable is undefined.
  */
  
-STATIC INLINE POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
+RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
   Objects_Id        *id,
   Objects_Locations *location
 );
@@ -107,7 +107,7 @@ STATIC INLINE POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get 
  *  and FALSE otherwise.
  */
  
-STATIC INLINE boolean _POSIX_Condition_variables_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Condition_variables_Is_null (
   POSIX_Condition_variables_Control *the_condition_variable
 );
 

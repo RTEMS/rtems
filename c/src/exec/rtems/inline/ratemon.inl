@@ -27,7 +27,7 @@
  *  the inactive chain of free period control blocks.
  */
 
-STATIC INLINE Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
+RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
 {
   return (Rate_monotonic_Control *)
     _Objects_Allocate( &_Rate_monotonic_Information );
@@ -43,7 +43,7 @@ STATIC INLINE Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
  *  the inactive chain of free period control blocks.
  */
 
-STATIC INLINE void _Rate_monotonic_Free (
+RTEMS_INLINE_ROUTINE void _Rate_monotonic_Free (
   Rate_monotonic_Control *the_period
 )
 {
@@ -63,7 +63,7 @@ STATIC INLINE void _Rate_monotonic_Free (
  *  to OBJECTS_ERROR and the_period is undefined.
  */
 
-STATIC INLINE Rate_monotonic_Control *_Rate_monotonic_Get (
+RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -82,7 +82,7 @@ STATIC INLINE Rate_monotonic_Control *_Rate_monotonic_Get (
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Rate_monotonic_Is_active (
+RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_active (
   Rate_monotonic_Control *the_period
 )
 {
@@ -99,7 +99,7 @@ STATIC INLINE boolean _Rate_monotonic_Is_active (
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Rate_monotonic_Is_inactive (
+RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_inactive (
   Rate_monotonic_Control *the_period
 )
 {
@@ -116,7 +116,7 @@ STATIC INLINE boolean _Rate_monotonic_Is_inactive (
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Rate_monotonic_Is_expired (
+RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_expired (
   Rate_monotonic_Control *the_period
 )
 {
@@ -132,7 +132,7 @@ STATIC INLINE boolean _Rate_monotonic_Is_expired (
  *  This function returns TRUE if the_period is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Rate_monotonic_Is_null (
+RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_null (
   Rate_monotonic_Control *the_period
 )
 {

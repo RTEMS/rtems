@@ -27,7 +27,7 @@
  *  the inactive chain of free extension control blocks.
  */
 
-STATIC INLINE Extension_Control *_Extension_Allocate( void )
+RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Allocate( void )
 {
   return (Extension_Control *) _Objects_Allocate( &_Extension_Information );
 }
@@ -42,7 +42,7 @@ STATIC INLINE Extension_Control *_Extension_Allocate( void )
  *  inactive chain of free extension control blocks.
  */
 
-STATIC INLINE void _Extension_Free (
+RTEMS_INLINE_ROUTINE void _Extension_Free (
   Extension_Control *the_extension
 )
 {
@@ -62,7 +62,7 @@ STATIC INLINE void _Extension_Free (
  *  to OBJECTS_ERROR and the returned value is undefined.
  */
 
-STATIC INLINE Extension_Control *_Extension_Get (
+RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -80,7 +80,7 @@ STATIC INLINE Extension_Control *_Extension_Get (
  *  This function returns TRUE if the_extension is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Extension_Is_null (
+RTEMS_INLINE_ROUTINE boolean _Extension_Is_null (
   Extension_Control *the_extension
 )
 {

@@ -22,7 +22,7 @@
  *  _POSIX_Condition_variables_Allocate
  */
  
-STATIC INLINE POSIX_Condition_variables_Control
+RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control
   *_POSIX_Condition_variables_Allocate( void )
 {
   return (POSIX_Condition_variables_Control *) 
@@ -34,7 +34,7 @@ STATIC INLINE POSIX_Condition_variables_Control
  *  _POSIX_Condition_variables_Free
  */
  
-STATIC INLINE void _POSIX_Condition_variables_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
   POSIX_Condition_variables_Control *the_condition_variable
 )
 {
@@ -49,7 +49,7 @@ STATIC INLINE void _POSIX_Condition_variables_Free (
  *  _POSIX_Condition_variables_Get
  */
  
-STATIC INLINE POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
+RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
   Objects_Id        *id,
   Objects_Locations *location
 )
@@ -64,7 +64,7 @@ STATIC INLINE POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get 
  *  _POSIX_Condition_variables_Is_null
  */
  
-STATIC INLINE boolean _POSIX_Condition_variables_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Condition_variables_Is_null (
   POSIX_Condition_variables_Control *the_condition_variable
 )
 {

@@ -28,7 +28,7 @@
  *  specified values.
  */
 
-STATIC INLINE void _Watchdog_Initialize(
+RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
   Watchdog_Control               *the_watchdog,
   Watchdog_Service_routine_entry  routine,
   Objects_Id                      id,
@@ -51,7 +51,7 @@ STATIC INLINE void _Watchdog_Initialize(
  *  state, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Watchdog_Is_active(
+RTEMS_INLINE_ROUTINE boolean _Watchdog_Is_active(
   Watchdog_Control *the_watchdog
 )
 {
@@ -70,7 +70,7 @@ STATIC INLINE boolean _Watchdog_Is_active(
  *  on a watchdog chain.
  */
 
-STATIC INLINE void _Watchdog_Activate(
+RTEMS_INLINE_ROUTINE void _Watchdog_Activate(
   Watchdog_Control *the_watchdog
 )
 {
@@ -89,7 +89,7 @@ STATIC INLINE void _Watchdog_Activate(
  *  on a watchdog chain.
  */
 
-STATIC INLINE void _Watchdog_Deactivate(
+RTEMS_INLINE_ROUTINE void _Watchdog_Deactivate(
   Watchdog_Control *the_watchdog
 )
 {
@@ -108,7 +108,7 @@ STATIC INLINE void _Watchdog_Deactivate(
  *  watchdog chain.
  */
 
-STATIC INLINE void _Watchdog_Tickle_ticks( void )
+RTEMS_INLINE_ROUTINE void _Watchdog_Tickle_ticks( void )
 {
 
   _Watchdog_Tickle( &_Watchdog_Ticks_chain );
@@ -125,7 +125,7 @@ STATIC INLINE void _Watchdog_Tickle_ticks( void )
  *  watchdog chain.
  */
 
-STATIC INLINE void _Watchdog_Tickle_seconds( void )
+RTEMS_INLINE_ROUTINE void _Watchdog_Tickle_seconds( void )
 {
 
   _Watchdog_Tickle( &_Watchdog_Seconds_chain );
@@ -144,7 +144,7 @@ STATIC INLINE void _Watchdog_Tickle_seconds( void )
  *  by the caller.
  */
 
-STATIC INLINE void _Watchdog_Insert_ticks(
+RTEMS_INLINE_ROUTINE void _Watchdog_Insert_ticks(
   Watchdog_Control      *the_watchdog,
   Watchdog_Interval      units
 )
@@ -168,7 +168,7 @@ STATIC INLINE void _Watchdog_Insert_ticks(
  *  by the caller.
  */
 
-STATIC INLINE void _Watchdog_Insert_seconds(
+RTEMS_INLINE_ROUTINE void _Watchdog_Insert_seconds(
   Watchdog_Control      *the_watchdog,
   Watchdog_Interval      units
 )
@@ -191,7 +191,7 @@ STATIC INLINE void _Watchdog_Insert_seconds(
  *  current time of day is changed.
  */
 
-STATIC INLINE void _Watchdog_Adjust_seconds(
+RTEMS_INLINE_ROUTINE void _Watchdog_Adjust_seconds(
   Watchdog_Adjust_directions direction,
   Watchdog_Interval          units
 )
@@ -211,7 +211,7 @@ STATIC INLINE void _Watchdog_Adjust_seconds(
  *  or backward DIRECTION for UNITS ticks.
  */
 
-STATIC INLINE void _Watchdog_Adjust_ticks(
+RTEMS_INLINE_ROUTINE void _Watchdog_Adjust_ticks(
   Watchdog_Adjust_directions direction,
   Watchdog_Interval          units
 )
@@ -233,7 +233,7 @@ STATIC INLINE void _Watchdog_Adjust_ticks(
  *  many ticks.
  */
 
-STATIC INLINE void _Watchdog_Reset(
+RTEMS_INLINE_ROUTINE void _Watchdog_Reset(
   Watchdog_Control *the_watchdog
 )
 {
@@ -254,7 +254,7 @@ STATIC INLINE void _Watchdog_Reset(
  *  THE_WATCHDOG on the watchdog chain.
  */
 
-STATIC INLINE Watchdog_Control *_Watchdog_Next(
+RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Next(
   Watchdog_Control *the_watchdog
 )
 {
@@ -273,7 +273,7 @@ STATIC INLINE Watchdog_Control *_Watchdog_Next(
  *  THE_WATCHDOG on the watchdog chain.
  */
 
-STATIC INLINE Watchdog_Control *_Watchdog_Previous(
+RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Previous(
   Watchdog_Control *the_watchdog
 )
 {
@@ -292,7 +292,7 @@ STATIC INLINE Watchdog_Control *_Watchdog_Previous(
  *  on the watchdog chain HEADER.
  */
 
-STATIC INLINE Watchdog_Control *_Watchdog_First(
+RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_First(
   Chain_Control *header
 )
 {
@@ -311,7 +311,7 @@ STATIC INLINE Watchdog_Control *_Watchdog_First(
  *  on the watchdog chain HEADER.
  */
 
-STATIC INLINE Watchdog_Control *_Watchdog_Last(
+RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Last(
   Chain_Control *header
 )
 {

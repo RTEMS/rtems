@@ -22,7 +22,7 @@
  *  _POSIX_Semaphore_Allocate
  */
  
-STATIC INLINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void )
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void )
 {
   return (POSIX_Semaphore_Control *)
     _Objects_Allocate( &_POSIX_Semaphore_Information );
@@ -33,7 +33,7 @@ STATIC INLINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void )
  *  _POSIX_Semaphore_Free
  */
  
-STATIC INLINE void _POSIX_Semaphore_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
   POSIX_Semaphore_Control *the_semaphore
 )
 {
@@ -45,7 +45,7 @@ STATIC INLINE void _POSIX_Semaphore_Free (
  *  _POSIX_Semaphore_Get
  */
  
-STATIC INLINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
   Objects_Id        *id,
   Objects_Locations *location
 )
@@ -59,7 +59,7 @@ STATIC INLINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
  *  _POSIX_Semaphore_Is_null
  */
  
-STATIC INLINE boolean _POSIX_Semaphore_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Semaphore_Is_null (
   POSIX_Semaphore_Control *the_semaphore
 )
 {

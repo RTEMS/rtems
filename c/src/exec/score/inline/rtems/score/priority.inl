@@ -28,7 +28,7 @@
  *  This routine performs the initialization necessary for this handler.
  */
 
-STATIC INLINE void _Priority_Handler_initialization( void )
+RTEMS_INLINE_ROUTINE void _Priority_Handler_initialization( void )
 {
   unsigned32 index;
 
@@ -47,7 +47,7 @@ STATIC INLINE void _Priority_Handler_initialization( void )
  *  user task, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Priority_Is_valid (
+RTEMS_INLINE_ROUTINE boolean _Priority_Is_valid (
   Priority_Control the_priority
 )
 {
@@ -68,7 +68,7 @@ STATIC INLINE boolean _Priority_Is_valid (
  *  This function returns the major portion of the_priority.
  */
 
-STATIC INLINE unsigned32 _Priority_Major (
+RTEMS_INLINE_ROUTINE unsigned32 _Priority_Major (
   Priority_Control the_priority
 )
 {
@@ -84,7 +84,7 @@ STATIC INLINE unsigned32 _Priority_Major (
  *  This function returns the minor portion of the_priority.
  */
 
-STATIC INLINE unsigned32 _Priority_Minor (
+RTEMS_INLINE_ROUTINE unsigned32 _Priority_Minor (
   Priority_Control the_priority
 )
 {
@@ -103,7 +103,7 @@ STATIC INLINE unsigned32 _Priority_Minor (
  *  number passed to it.
  */
  
-STATIC INLINE unsigned32 _Priority_Mask (
+RTEMS_INLINE_ROUTINE unsigned32 _Priority_Mask (
   unsigned32 bit_number
 )
 {
@@ -122,7 +122,7 @@ STATIC INLINE unsigned32 _Priority_Mask (
  *  a major or minor component of a priority.
  */
  
-STATIC INLINE unsigned32 _Priority_Bits_index (
+RTEMS_INLINE_ROUTINE unsigned32 _Priority_Bits_index (
   unsigned32 bit_number
 )
 {
@@ -141,7 +141,7 @@ STATIC INLINE unsigned32 _Priority_Bits_index (
  *  bit maps to indicate that a thread has been readied.
  */
 
-STATIC INLINE void _Priority_Add_to_bit_map (
+RTEMS_INLINE_ROUTINE void _Priority_Add_to_bit_map (
   Priority_Information *the_priority_map
 )
 {
@@ -160,7 +160,7 @@ STATIC INLINE void _Priority_Add_to_bit_map (
  *  ready state.
  */
 
-STATIC INLINE void _Priority_Remove_from_bit_map (
+RTEMS_INLINE_ROUTINE void _Priority_Remove_from_bit_map (
   Priority_Information *the_priority_map
 )
 {
@@ -179,7 +179,7 @@ STATIC INLINE void _Priority_Remove_from_bit_map (
  *  ready thread.
  */
 
-STATIC INLINE Priority_Control _Priority_Get_highest( void )
+RTEMS_INLINE_ROUTINE Priority_Control _Priority_Get_highest( void )
 {
   Priority_Bit_map_control minor;
   Priority_Bit_map_control major;
@@ -202,7 +202,7 @@ STATIC INLINE Priority_Control _Priority_Get_highest( void )
  *  at new_priority.
  */
 
-STATIC INLINE void _Priority_Initialize_information(
+RTEMS_INLINE_ROUTINE void _Priority_Initialize_information(
   Priority_Information *the_priority_map,
   Priority_Control      new_priority
 )
@@ -236,7 +236,7 @@ STATIC INLINE void _Priority_Initialize_information(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Priority_Is_group_empty (
+RTEMS_INLINE_ROUTINE boolean _Priority_Is_group_empty (
   Priority_Control      the_priority
 )
 {

@@ -79,7 +79,7 @@ void _POSIX_Keys_Run_destructors(
  *  the inactive chain of free keys control blocks.
  */
  
-STATIC INLINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void );
+RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void );
  
 /*
  *  _POSIX_Keys_Free
@@ -90,7 +90,7 @@ STATIC INLINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void );
  *  inactive chain of free keys control blocks.
  */
  
-STATIC INLINE void _POSIX_Keys_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
   POSIX_Keys_Control *the_key
 );
  
@@ -108,7 +108,7 @@ STATIC INLINE void _POSIX_Keys_Free (
  *  to OBJECTS_ERROR and the_key is undefined.
  */
  
-STATIC INLINE POSIX_Keys_Control *_POSIX_Keys_Get (
+RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
   Objects_Id         id,
   Objects_Locations *location
 );
@@ -121,7 +121,7 @@ STATIC INLINE POSIX_Keys_Control *_POSIX_Keys_Get (
  *  This function returns TRUE if the_key is NULL and FALSE otherwise.
  */
  
-STATIC INLINE boolean _POSIX_Keys_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Keys_Is_null (
   POSIX_Keys_Control *the_key
 );
 

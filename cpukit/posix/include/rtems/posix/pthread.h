@@ -63,7 +63,7 @@ void _POSIX_Threads_Manager_initialization(
  *  the inactive chain of free pthread control blocks.
  */
  
-STATIC INLINE Thread_Control *_POSIX_Threads_Allocate( void );
+RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void );
  
 /*
  *  _POSIX_Threads_Free
@@ -74,7 +74,7 @@ STATIC INLINE Thread_Control *_POSIX_Threads_Allocate( void );
  *  inactive chain of free pthread control blocks.
  */
  
-STATIC INLINE void _POSIX_Threads_Free(
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free(
   Thread_Control *the_pthread
 );
  
@@ -92,7 +92,7 @@ STATIC INLINE void _POSIX_Threads_Free(
  *  to OBJECTS_ERROR and the_pthread is undefined.
  */
  
-STATIC INLINE Thread_Control *_POSIX_Threads_Get(
+RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get(
   pthread_t          id,
   Objects_Locations *location
 );
@@ -105,7 +105,7 @@ STATIC INLINE Thread_Control *_POSIX_Threads_Get(
  *  This function returns TRUE if the_pthread is NULL and FALSE otherwise.
  */
  
-STATIC INLINE boolean _POSIX_Threads_Is_null(
+RTEMS_INLINE_ROUTINE boolean _POSIX_Threads_Is_null(
   Thread_Control *the_pthread
 );
 

@@ -103,7 +103,7 @@ int _POSIX_Message_queue_Send_support(
  *  the inactive chain of free message queue control blocks.
  */
  
-STATIC INLINE POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void );
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void );
  
 /*
  *  _POSIX_Message_queue_Free
@@ -114,7 +114,7 @@ STATIC INLINE POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void )
  *  inactive chain of free message queue control blocks.
  */
  
-STATIC INLINE void _POSIX_Message_queue_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
   POSIX_Message_queue_Control *the_mq
 );
  
@@ -132,7 +132,7 @@ STATIC INLINE void _POSIX_Message_queue_Free (
  *  to OBJECTS_ERROR and the_mq is undefined.
  */
  
-STATIC INLINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
   Objects_Id         id,
   Objects_Locations *location
 );
@@ -145,7 +145,7 @@ STATIC INLINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
  *  This function returns TRUE if the_message_queue is NULL and FALSE otherwise.
  */
  
-STATIC INLINE boolean _POSIX_Message_queue_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Message_queue_Is_null (
   POSIX_Message_queue_Control *the_mq
 );
 
@@ -170,7 +170,7 @@ int _POSIX_Message_queue_Name_to_id(
  *  XXX
  */
  
-STATIC INLINE Priority_Control _POSIX_Message_queue_Priority_to_core(
+RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Message_queue_Priority_to_core(
   unsigned int priority
 );
 

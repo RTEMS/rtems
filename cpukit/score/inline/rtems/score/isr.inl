@@ -29,7 +29,7 @@
  *  directives available to an interrupt service routine are restricted.
  */
 
-STATIC INLINE boolean _ISR_Is_in_progress( void )
+RTEMS_INLINE_ROUTINE boolean _ISR_Is_in_progress( void )
 {
   return (_ISR_Nest_level != 0);
 }
@@ -44,7 +44,7 @@ STATIC INLINE boolean _ISR_Is_in_progress( void )
  *  for this processor and FALSE otherwise.
  */
 
-STATIC INLINE boolean _ISR_Is_vector_number_valid (
+RTEMS_INLINE_ROUTINE boolean _ISR_Is_vector_number_valid (
   unsigned32 vector
 )
 {
@@ -62,7 +62,7 @@ STATIC INLINE boolean _ISR_Is_vector_number_valid (
  *  use interrupt service routine and FALSE otherwise.
  */
 
-STATIC INLINE boolean _ISR_Is_valid_user_handler (
+RTEMS_INLINE_ROUTINE boolean _ISR_Is_valid_user_handler (
   void *handler
 )
 {

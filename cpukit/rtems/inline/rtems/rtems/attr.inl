@@ -27,7 +27,7 @@
  *  passed in.  The result is returned to the user.
  */
 
-STATIC INLINE rtems_attribute _Attributes_Set (
+RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Set (
    rtems_attribute new_attributes,
    rtems_attribute attribute_set
 )
@@ -45,7 +45,7 @@ STATIC INLINE rtems_attribute _Attributes_Set (
  *  passed in.  The result is returned to the user.
  */
 
-STATIC INLINE rtems_attribute _Attributes_Clear (
+RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Clear (
    rtems_attribute attribute_set,
    rtems_attribute mask
 )
@@ -63,7 +63,7 @@ STATIC INLINE rtems_attribute _Attributes_Clear (
  *  enabled in the attribute_set and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Attributes_Is_floating_point(
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_floating_point(
   rtems_attribute attribute_set
 )
 {
@@ -80,7 +80,7 @@ STATIC INLINE boolean _Attributes_Is_floating_point(
  *  enabled in the attribute_set and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Attributes_Is_global(
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_global(
   rtems_attribute attribute_set
 )
 {
@@ -97,7 +97,7 @@ STATIC INLINE boolean _Attributes_Is_global(
  *  enabled in the attribute_set and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Attributes_Is_priority(
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority(
   rtems_attribute attribute_set
 )
 {
@@ -114,7 +114,7 @@ STATIC INLINE boolean _Attributes_Is_priority(
  *  enabled in the attribute_set and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Attributes_Is_binary_semaphore(
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_binary_semaphore(
   rtems_attribute attribute_set
 )
 {
@@ -131,7 +131,7 @@ STATIC INLINE boolean _Attributes_Is_binary_semaphore(
  *  is enabled in the attribute_set and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Attributes_Is_inherit_priority(
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_inherit_priority(
   rtems_attribute attribute_set
 )
 {
@@ -148,7 +148,7 @@ STATIC INLINE boolean _Attributes_Is_inherit_priority(
  *  is enabled in the attribute_set and FALSE otherwise.
  */
  
-STATIC INLINE boolean _Attributes_Is_priority_ceiling(
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority_ceiling(
   rtems_attribute attribute_set
 )
 {

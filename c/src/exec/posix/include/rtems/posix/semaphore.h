@@ -64,7 +64,7 @@ void _POSIX_Semaphore_Manager_initialization(
  *  the inactive chain of free semaphore control blocks.
  */
  
-STATIC INLINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void );
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void );
  
 /*
  *  _POSIX_Semaphore_Free
@@ -75,7 +75,7 @@ STATIC INLINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void );
  *  inactive chain of free semaphore control blocks.
  */
  
-STATIC INLINE void _POSIX_Semaphore_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
   POSIX_Semaphore_Control *the_semaphore
 );
  
@@ -93,7 +93,7 @@ STATIC INLINE void _POSIX_Semaphore_Free (
  *  to OBJECTS_ERROR and the_semaphore is undefined.
  */
  
-STATIC INLINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
   Objects_Id        *id,
   Objects_Locations *location
 );
@@ -106,7 +106,7 @@ STATIC INLINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
  *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
  */
  
-STATIC INLINE boolean _POSIX_Semaphore_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Semaphore_Is_null (
   POSIX_Semaphore_Control *the_semaphore
 );
 

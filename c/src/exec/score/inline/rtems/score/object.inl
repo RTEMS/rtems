@@ -27,7 +27,7 @@
  *  values specified.
  */
 
-STATIC INLINE Objects_Id _Objects_Build_id(
+RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
   Objects_Classes  the_class,
   unsigned32       node,
   unsigned32       index
@@ -47,7 +47,7 @@ STATIC INLINE Objects_Id _Objects_Build_id(
  *  This function returns the class portion of the ID.
  */
  
-STATIC INLINE Objects_Classes _Objects_Get_class(
+RTEMS_INLINE_ROUTINE Objects_Classes _Objects_Get_class(
   Objects_Id id
 )
 {
@@ -65,7 +65,7 @@ STATIC INLINE Objects_Classes _Objects_Get_class(
  *  This function returns the node portion of the ID.
  */
 
-STATIC INLINE unsigned32 _Objects_Get_node(
+RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_node(
   Objects_Id id
 )
 {
@@ -81,7 +81,7 @@ STATIC INLINE unsigned32 _Objects_Get_node(
  *  This function returns the index portion of the ID.
  */
 
-STATIC INLINE unsigned32 _Objects_Get_index(
+RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_index(
   Objects_Id id
 )
 {
@@ -97,7 +97,7 @@ STATIC INLINE unsigned32 _Objects_Get_index(
  *  This function returns TRUE if the class is valid.
  */
  
-STATIC INLINE boolean _Objects_Is_class_valid(
+RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
   Objects_Classes the_class
 )
 {
@@ -114,7 +114,7 @@ STATIC INLINE boolean _Objects_Is_class_valid(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Objects_Is_local_node(
+RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
   unsigned32 node
 )
 {
@@ -131,7 +131,7 @@ STATIC INLINE boolean _Objects_Is_local_node(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Objects_Is_local_id(
+RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_id(
   Objects_Id id
 )
 {
@@ -148,7 +148,7 @@ STATIC INLINE boolean _Objects_Is_local_id(
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Objects_Are_ids_equal(
+RTEMS_INLINE_ROUTINE boolean _Objects_Are_ids_equal(
   Objects_Id left,
   Objects_Id right
 )
@@ -166,7 +166,7 @@ STATIC INLINE boolean _Objects_Are_ids_equal(
  *  the inactive chain of free object control blocks.
  */
 
-STATIC INLINE Objects_Control *_Objects_Allocate(
+RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate(
   Objects_Information *information
 )
 {
@@ -183,7 +183,7 @@ STATIC INLINE Objects_Control *_Objects_Allocate(
  *  inactive chain of free object control blocks.
  */
 
-STATIC INLINE void _Objects_Free(
+RTEMS_INLINE_ROUTINE void _Objects_Free(
   Objects_Information *information,
   Objects_Control     *the_object
 )
@@ -201,7 +201,7 @@ STATIC INLINE void _Objects_Free(
  *  in the Local Pointer and Local Name Tables, respectively.
  */
 
-STATIC INLINE void _Objects_Open(
+RTEMS_INLINE_ROUTINE void _Objects_Open(
   Objects_Information *information,
   Objects_Control     *the_object,
   Objects_Name         name
@@ -228,7 +228,7 @@ STATIC INLINE void _Objects_Open(
  *  in the Local Pointer and Local Name Tables.
  */
 
-STATIC INLINE void _Objects_Close(
+RTEMS_INLINE_ROUTINE void _Objects_Close(
   Objects_Information  *information,
   Objects_Control      *the_object
 )

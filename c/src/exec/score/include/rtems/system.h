@@ -81,15 +81,13 @@ extern "C" {
  */
 
 #ifdef USE_INLINES
-# define STATIC static
 # ifdef __GNUC__
-#  define INLINE __inline__
+#  define RTEMS_INLINE_ROUTINE static __inline__
 # else
-#  define INLINE inline
+#  define RTEMS_INLINE_ROUTINE static inline
 # endif
 #else
-# define STATIC
-# define INLINE
+# define RTEMS_INLINE_ROUTINE
 #endif
 
 /*

@@ -31,7 +31,7 @@
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Are_nodes_equal(
+RTEMS_INLINE_ROUTINE boolean _Chain_Are_nodes_equal(
   Chain_Node *left,
   Chain_Node *right
 )
@@ -48,7 +48,7 @@ STATIC INLINE boolean _Chain_Are_nodes_equal(
  *  This function returns TRUE if the_chain is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Is_null(
+RTEMS_INLINE_ROUTINE boolean _Chain_Is_null(
   Chain_Control *the_chain
 )
 {
@@ -64,7 +64,7 @@ STATIC INLINE boolean _Chain_Is_null(
  *  This function returns TRUE if the_node is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Is_null_node(
+RTEMS_INLINE_ROUTINE boolean _Chain_Is_null_node(
   Chain_Node *the_node
 )
 {
@@ -80,7 +80,7 @@ STATIC INLINE boolean _Chain_Is_null_node(
  *  This function returns a pointer to the first node on the chain.
  */
 
-STATIC INLINE Chain_Node *_Chain_Head(
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Head(
   Chain_Control *the_chain
 )
 {
@@ -96,7 +96,7 @@ STATIC INLINE Chain_Node *_Chain_Head(
  *  This function returns a pointer to the last node on the chain.
  */
 
-STATIC INLINE Chain_Node *_Chain_Tail(
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Tail(
   Chain_Control *the_chain
 )
 {
@@ -113,7 +113,7 @@ STATIC INLINE Chain_Node *_Chain_Tail(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Is_empty(
+RTEMS_INLINE_ROUTINE boolean _Chain_Is_empty(
   Chain_Control *the_chain
 )
 {
@@ -130,7 +130,7 @@ STATIC INLINE boolean _Chain_Is_empty(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Is_first(
+RTEMS_INLINE_ROUTINE boolean _Chain_Is_first(
   Chain_Node *the_node
 )
 {
@@ -147,7 +147,7 @@ STATIC INLINE boolean _Chain_Is_first(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Is_last(
+RTEMS_INLINE_ROUTINE boolean _Chain_Is_last(
   Chain_Node *the_node
 )
 {
@@ -164,7 +164,7 @@ STATIC INLINE boolean _Chain_Is_last(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Has_only_one_node(
+RTEMS_INLINE_ROUTINE boolean _Chain_Has_only_one_node(
   Chain_Control *the_chain
 )
 {
@@ -181,7 +181,7 @@ STATIC INLINE boolean _Chain_Has_only_one_node(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Is_head(
+RTEMS_INLINE_ROUTINE boolean _Chain_Is_head(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -199,7 +199,7 @@ STATIC INLINE boolean _Chain_Is_head(
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Chain_Is_tail(
+RTEMS_INLINE_ROUTINE boolean _Chain_Is_tail(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -216,7 +216,7 @@ STATIC INLINE boolean _Chain_Is_tail(
  *  This routine initializes the specified chain to contain zero nodes.
  */
 
-STATIC INLINE void _Chain_Initialize_empty(
+RTEMS_INLINE_ROUTINE void _Chain_Initialize_empty(
   Chain_Control *the_chain
 )
 {
@@ -236,7 +236,7 @@ STATIC INLINE void _Chain_Initialize_empty(
  *  extract operation.
  */
 
-STATIC INLINE void _Chain_Extract_unprotected(
+RTEMS_INLINE_ROUTINE void _Chain_Extract_unprotected(
   Chain_Node *the_node
 )
 {
@@ -260,7 +260,7 @@ STATIC INLINE void _Chain_Extract_unprotected(
  *  the atomicity of the get operation.
  */
 
-STATIC INLINE Chain_Node *_Chain_Get_first_unprotected(
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Get_first_unprotected(
   Chain_Control *the_chain
 )
 {
@@ -287,7 +287,7 @@ STATIC INLINE Chain_Node *_Chain_Get_first_unprotected(
  *  get operation.
  */
 
-STATIC INLINE Chain_Node *_Chain_Get_unprotected(
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Get_unprotected(
   Chain_Control *the_chain
 )
 {
@@ -308,7 +308,7 @@ STATIC INLINE Chain_Node *_Chain_Get_unprotected(
  *  of the extract operation.
  */
 
-STATIC INLINE void _Chain_Insert_unprotected(
+RTEMS_INLINE_ROUTINE void _Chain_Insert_unprotected(
   Chain_Node *after_node,
   Chain_Node *the_node
 )
@@ -333,7 +333,7 @@ STATIC INLINE void _Chain_Insert_unprotected(
  *  append operation.
  */
 
-STATIC INLINE void _Chain_Append_unprotected(
+RTEMS_INLINE_ROUTINE void _Chain_Append_unprotected(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -358,7 +358,7 @@ STATIC INLINE void _Chain_Append_unprotected(
  *  prepend operation.
  */
 
-STATIC INLINE void _Chain_Prepend_unprotected(
+RTEMS_INLINE_ROUTINE void _Chain_Prepend_unprotected(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )
@@ -378,7 +378,7 @@ STATIC INLINE void _Chain_Prepend_unprotected(
  *  prepend operation.
  */
 
-STATIC INLINE void _Chain_Prepend(
+RTEMS_INLINE_ROUTINE void _Chain_Prepend(
   Chain_Control *the_chain,
   Chain_Node    *the_node
 )

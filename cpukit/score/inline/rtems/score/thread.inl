@@ -28,7 +28,7 @@
  *  routine which initialized the system.
  */
 
-STATIC INLINE void _Thread_Stop_multitasking( void )
+RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
 {
   _Context_Switch( &_Thread_Executing->Registers, &_Thread_BSP_context );
 }
@@ -43,7 +43,7 @@ STATIC INLINE void _Thread_Stop_multitasking( void )
  *  thread, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Thread_Is_executing (
+RTEMS_INLINE_ROUTINE boolean _Thread_Is_executing (
   Thread_Control *the_thread
 )
 {
@@ -60,7 +60,7 @@ STATIC INLINE boolean _Thread_Is_executing (
  *  thread, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Thread_Is_heir (
+RTEMS_INLINE_ROUTINE boolean _Thread_Is_heir (
   Thread_Control *the_thread
 )
 {
@@ -77,7 +77,7 @@ STATIC INLINE boolean _Thread_Is_heir (
  *  is also the heir thread, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Thread_Is_executing_also_the_heir( void )
+RTEMS_INLINE_ROUTINE boolean _Thread_Is_executing_also_the_heir( void )
 {
   return ( _Thread_Executing == _Thread_Heir );
 }
@@ -93,7 +93,7 @@ STATIC INLINE boolean _Thread_Is_executing_also_the_heir( void )
  *  a new heir thread.
  */
 
-STATIC INLINE void _Thread_Resume (
+RTEMS_INLINE_ROUTINE void _Thread_Resume (
   Thread_Control *the_thread
 )
 {
@@ -111,7 +111,7 @@ STATIC INLINE void _Thread_Resume (
  *  a new heir thread.
  */
 
-STATIC INLINE void _Thread_Unblock (
+RTEMS_INLINE_ROUTINE void _Thread_Unblock (
   Thread_Control *the_thread
 )
 {
@@ -128,7 +128,7 @@ STATIC INLINE void _Thread_Unblock (
  *  to that of its initial state.
  */
 
-STATIC INLINE void _Thread_Restart_self( void )
+RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
 {
   if ( _Thread_Executing->fp_context != NULL )
     _Context_Restore_fp( &_Thread_Executing->fp_context );
@@ -146,7 +146,7 @@ STATIC INLINE void _Thread_Restart_self( void )
  *  ready thread.
  */
 
-STATIC INLINE void _Thread_Calculate_heir( void )
+RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
 {
   _Thread_Heir = (Thread_Control *)
     _Thread_Ready_chain[ _Priority_Get_highest() ].first;
@@ -163,7 +163,7 @@ STATIC INLINE void _Thread_Calculate_heir( void )
  *  FALSE otherwise.
  */
 
-STATIC INLINE boolean _Thread_Is_allocated_fp (
+RTEMS_INLINE_ROUTINE boolean _Thread_Is_allocated_fp (
   Thread_Control *the_thread
 )
 {
@@ -180,7 +180,7 @@ STATIC INLINE boolean _Thread_Is_allocated_fp (
  *  point context is now longer associated with an active thread.
  */
 
-STATIC INLINE void _Thread_Deallocate_fp( void )
+RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
 {
   _Thread_Allocated_fp = NULL;
 }
@@ -194,7 +194,7 @@ STATIC INLINE void _Thread_Deallocate_fp( void )
  *  This routine prevents dispatching.
  */
 
-STATIC INLINE void _Thread_Disable_dispatch( void )
+RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 {
   _Thread_Dispatch_disable_level += 1;
 }
@@ -212,7 +212,7 @@ STATIC INLINE void _Thread_Disable_dispatch( void )
  */
 
 #if ( CPU_INLINE_ENABLE_DISPATCH == TRUE )
-STATIC INLINE void _Thread_Enable_dispatch()
+RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch()
 {
   if ( (--_Thread_Dispatch_disable_level) == 0 )
     _Thread_Dispatch();
@@ -234,7 +234,7 @@ void _Thread_Enable_dispatch( void );
  *  most dispatching critical section.
  */
 
-STATIC INLINE void _Thread_Unnest_dispatch( void )
+RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
 {
   _Thread_Dispatch_disable_level -= 1;
 }
@@ -249,7 +249,7 @@ STATIC INLINE void _Thread_Unnest_dispatch( void )
  *  otherwise.
  */
 
-STATIC INLINE boolean _Thread_Is_dispatching_enabled( void )
+RTEMS_INLINE_ROUTINE boolean _Thread_Is_dispatching_enabled( void )
 {
   return ( _Thread_Dispatch_disable_level == 0 );
 }
@@ -264,7 +264,7 @@ STATIC INLINE boolean _Thread_Is_dispatching_enabled( void )
  *  otherwise.
  */
 
-STATIC INLINE boolean _Thread_Is_context_switch_necessary( void )
+RTEMS_INLINE_ROUTINE boolean _Thread_Is_context_switch_necessary( void )
 {
   return ( _Context_Switch_necessary );
 }
@@ -278,7 +278,7 @@ STATIC INLINE boolean _Thread_Is_context_switch_necessary( void )
  *  This routine initializes the thread dispatching subsystem.
  */
 
-STATIC INLINE void _Thread_Dispatch_initialization( void )
+RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
 {
   _Thread_Dispatch_disable_level = 1;
 }
@@ -292,7 +292,7 @@ STATIC INLINE void _Thread_Dispatch_initialization( void )
  *  This function returns TRUE if the_thread is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Thread_Is_null (
+RTEMS_INLINE_ROUTINE boolean _Thread_Is_null (
   Thread_Control *the_thread
 )
 {
@@ -317,7 +317,7 @@ STATIC INLINE boolean _Thread_Is_null (
  *  NOTE:  XXX... This routine may be able to be optimized.
  */
 
-STATIC INLINE Thread_Control *_Thread_Get (
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -363,7 +363,7 @@ done:
  *  status which indicates that a proxy is blocking, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Thread_Is_proxy_blocking (
+RTEMS_INLINE_ROUTINE boolean _Thread_Is_proxy_blocking (
   unsigned32 code
 )
 {
@@ -379,7 +379,7 @@ STATIC INLINE boolean _Thread_Is_proxy_blocking (
  *  This routine allocates an internal thread.
  */
  
-STATIC INLINE Thread_Control *_Thread_Internal_allocate( void )
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
 {
   return (Thread_Control *) _Objects_Allocate( &_Thread_Internal_information );
 }
@@ -393,7 +393,7 @@ STATIC INLINE Thread_Control *_Thread_Internal_allocate( void )
  *  This routine frees an internal thread.
  */
  
-STATIC INLINE void _Thread_Internal_free (
+RTEMS_INLINE_ROUTINE void _Thread_Internal_free (
   Thread_Control *the_task
 )
 {

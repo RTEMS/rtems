@@ -26,7 +26,7 @@
  *  and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Event_sets_Is_empty(
+RTEMS_INLINE_ROUTINE boolean _Event_sets_Is_empty(
   rtems_event_set the_event_set
 )
 {
@@ -43,7 +43,7 @@ STATIC INLINE boolean _Event_sets_Is_empty(
  *  passed in.  The result is returned to the user in event_set.
  */
 
-STATIC INLINE void _Event_sets_Post(
+RTEMS_INLINE_ROUTINE void _Event_sets_Post(
   rtems_event_set  the_new_events,
   rtems_event_set *the_event_set
 )
@@ -61,7 +61,7 @@ STATIC INLINE void _Event_sets_Post(
  *  set in event_set.
  */
 
-STATIC INLINE rtems_event_set _Event_sets_Get(
+RTEMS_INLINE_ROUTINE rtems_event_set _Event_sets_Get(
   rtems_event_set the_event_set,
   rtems_event_set the_event_condition
 )
@@ -79,7 +79,7 @@ STATIC INLINE rtems_event_set _Event_sets_Get(
  *  passed in.  The result is returned to the user in event_set.
  */
 
-STATIC INLINE rtems_event_set _Event_sets_Clear(
+RTEMS_INLINE_ROUTINE rtems_event_set _Event_sets_Clear(
  rtems_event_set the_event_set,
  rtems_event_set the_mask
 )

@@ -26,7 +26,7 @@
  *  This routine performs the initialization necessary for this handler.
  */
 
-STATIC INLINE void _User_extensions_Handler_initialization (
+RTEMS_INLINE_ROUTINE void _User_extensions_Handler_initialization (
     User_extensions_Table  *initial_extensions
 )
 {
@@ -47,7 +47,7 @@ STATIC INLINE void _User_extensions_Handler_initialization (
  *  This routine is used to add a user extension set to the active list.
  */
 
-STATIC INLINE void _User_extensions_Add_set (
+RTEMS_INLINE_ROUTINE void _User_extensions_Add_set (
   User_extensions_Control *the_extension,
   User_extensions_Table   *extension_table
 )
@@ -65,7 +65,7 @@ STATIC INLINE void _User_extensions_Add_set (
  *  This routine is used to add an API extension set to the active list.
  */
  
-STATIC INLINE void _User_extensions_Add_API_set (
+RTEMS_INLINE_ROUTINE void _User_extensions_Add_API_set (
   User_extensions_Control *the_extension
 )
 {
@@ -81,7 +81,7 @@ STATIC INLINE void _User_extensions_Add_API_set (
  *  This routine is used to remove a user extension set from the active list.
  */
 
-STATIC INLINE void _User_extensions_Remove_set (
+RTEMS_INLINE_ROUTINE void _User_extensions_Remove_set (
   User_extensions_Control  *the_extension
 )
 {
@@ -98,7 +98,7 @@ STATIC INLINE void _User_extensions_Remove_set (
  *  is invoked when a context switch occurs.
  */
 
-STATIC INLINE void _User_extensions_Thread_switch (
+RTEMS_INLINE_ROUTINE void _User_extensions_Thread_switch (
   Thread_Control *executing,
   Thread_Control *heir
 )

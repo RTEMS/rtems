@@ -27,7 +27,7 @@
  *  time of day, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _TOD_Is_set( void )
+RTEMS_INLINE_ROUTINE boolean _TOD_Is_set( void )
 {
   return _Watchdog_Is_active( &_TOD_Seconds_watchdog );
 }
@@ -42,7 +42,7 @@ STATIC INLINE boolean _TOD_Is_set( void )
  *  day at each clock tick.
  */
 
-STATIC INLINE void _TOD_Tickle_ticks( void )
+RTEMS_INLINE_ROUTINE void _TOD_Tickle_ticks( void )
 {
   _TOD_Current.ticks += 1;
   _Watchdog_Ticks_since_boot += 1;
@@ -57,7 +57,7 @@ STATIC INLINE void _TOD_Tickle_ticks( void )
  *  This routine deactivates updating of the current time of day.
  */
 
-STATIC INLINE void _TOD_Deactivate( void )
+RTEMS_INLINE_ROUTINE void _TOD_Deactivate( void )
 {
   _Watchdog_Remove( &_TOD_Seconds_watchdog );
 }
@@ -71,7 +71,7 @@ STATIC INLINE void _TOD_Deactivate( void )
  *  This routine activates updating of the current time of day.
  */
 
-STATIC INLINE void _TOD_Activate(
+RTEMS_INLINE_ROUTINE void _TOD_Activate(
   Watchdog_Interval ticks
 )
 {

@@ -29,7 +29,7 @@
  *  messages on the_message_queue.
  */
 
-STATIC INLINE boolean _Message_queue_Is_null (
+RTEMS_INLINE_ROUTINE boolean _Message_queue_Is_null (
   Message_queue_Control *the_message_queue
 )
 {
@@ -47,7 +47,7 @@ STATIC INLINE boolean _Message_queue_Is_null (
  *  the inactive chain of free message queue control blocks.
  */
 
-STATIC INLINE void _Message_queue_Free (
+RTEMS_INLINE_ROUTINE void _Message_queue_Free (
   Message_queue_Control *the_message_queue
 )
 {
@@ -70,7 +70,7 @@ STATIC INLINE void _Message_queue_Free (
  *  the_message_queue is undefined.
  */
 
-STATIC INLINE Message_queue_Control *_Message_queue_Get (
+RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Get (
   Objects_Id         id,
   Objects_Locations *location
 )

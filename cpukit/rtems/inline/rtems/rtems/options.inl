@@ -27,7 +27,7 @@
  *  option_set, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Options_Is_no_wait (
+RTEMS_INLINE_ROUTINE boolean _Options_Is_no_wait (
   rtems_option option_set
 )
 {
@@ -44,7 +44,7 @@ STATIC INLINE boolean _Options_Is_no_wait (
  *  OPTION_SET, and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Options_Is_any (
+RTEMS_INLINE_ROUTINE boolean _Options_Is_any (
   rtems_option option_set
 )
 {

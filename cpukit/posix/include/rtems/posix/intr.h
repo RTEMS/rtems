@@ -84,7 +84,7 @@ void _POSIX_Interrupt_Manager_initialization(
  *  the inactive chain of free interrupt handler control blocks.
  */
  
-STATIC INLINE POSIX_Interrupt_Handler_control *
+RTEMS_INLINE_ROUTINE POSIX_Interrupt_Handler_control *
   _POSIX_Interrupt_Allocate( void );
  
 /*
@@ -96,7 +96,7 @@ STATIC INLINE POSIX_Interrupt_Handler_control *
  *  inactive chain of free interrupt handler control blocks.
  */
  
-STATIC INLINE void _POSIX_Interrupt_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Interrupt_Free (
   POSIX_Interrupt_Handler_control *the_intr
 );
  
@@ -114,7 +114,7 @@ STATIC INLINE void _POSIX_Interrupt_Free (
  *  to OBJECTS_ERROR and the_intr is undefined.
  */
  
-STATIC INLINE POSIX_Interrupt_Control *_POSIX_Interrupt_Get (
+RTEMS_INLINE_ROUTINE POSIX_Interrupt_Control *_POSIX_Interrupt_Get (
   Objects_Id         id,
   Objects_Locations *location
 );
@@ -127,7 +127,7 @@ STATIC INLINE POSIX_Interrupt_Control *_POSIX_Interrupt_Get (
  *  This function returns TRUE if the_intr is NULL and FALSE otherwise.
  */
  
-STATIC INLINE boolean _POSIX_Interrupt_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Interrupt_Is_null (
   POSIX_Interrupt_Handler_control *the_intr
 );
  

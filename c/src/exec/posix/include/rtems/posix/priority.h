@@ -21,15 +21,15 @@
   
 #define POSIX_SCHEDULER_MINIMUM_PRIORITY (1)
 
-STATIC INLINE boolean _POSIX_Priority_Is_valid(
+RTEMS_INLINE_ROUTINE boolean _POSIX_Priority_Is_valid(
   int priority
 );
 
-STATIC INLINE Priority_Control _POSIX_Priority_To_core(
+RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Priority_To_core(
   int priority
 );
 
-STATIC INLINE int _POSIX_Priority_From_core(
+RTEMS_INLINE_ROUTINE int _POSIX_Priority_From_core(
   Priority_Control priority
 );
 

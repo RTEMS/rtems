@@ -22,7 +22,7 @@
  *  _POSIX_Mutex_Allocate
  */
  
-STATIC INLINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void )
+RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void )
 {
   return (POSIX_Mutex_Control *) _Objects_Allocate( &_POSIX_Mutex_Information );
 }
@@ -32,7 +32,7 @@ STATIC INLINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void )
  *  _POSIX_Mutex_Free
  */
  
-STATIC INLINE void _POSIX_Mutex_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
   POSIX_Mutex_Control *the_mutex
 )
 {
@@ -44,7 +44,7 @@ STATIC INLINE void _POSIX_Mutex_Free (
  *  _POSIX_Mutex_Get
  */
  
-STATIC INLINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
+RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
   Objects_Id        *id,
   Objects_Locations *location
 )
@@ -76,7 +76,7 @@ STATIC INLINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
  *  _POSIX_Mutex_Is_null
  */
  
-STATIC INLINE boolean _POSIX_Mutex_Is_null (
+RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
   POSIX_Mutex_Control *the_mutex
 )
 {

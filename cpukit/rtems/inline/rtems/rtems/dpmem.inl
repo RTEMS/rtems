@@ -28,7 +28,7 @@
  *  of free port control blocks.
  */
 
-STATIC INLINE Dual_ported_memory_Control
+RTEMS_INLINE_ROUTINE Dual_ported_memory_Control
    *_Dual_ported_memory_Allocate ( void )
 {
   return (Dual_ported_memory_Control *)
@@ -45,7 +45,7 @@ STATIC INLINE Dual_ported_memory_Control
  *  of free port control blocks.
  */
 
-STATIC INLINE void _Dual_ported_memory_Free (
+RTEMS_INLINE_ROUTINE void _Dual_ported_memory_Free (
    Dual_ported_memory_Control *the_port
 )
 {
@@ -66,7 +66,7 @@ STATIC INLINE void _Dual_ported_memory_Free (
  *  undefined.
  */
 
-STATIC INLINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
+RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
   Objects_Id         id,
   Objects_Locations *location
 )
@@ -84,7 +84,7 @@ STATIC INLINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
  *  This function returns TRUE if the_port is NULL and FALSE otherwise.
  */
 
-STATIC INLINE boolean _Dual_ported_memory_Is_null(
+RTEMS_INLINE_ROUTINE boolean _Dual_ported_memory_Is_null(
   Dual_ported_memory_Control *the_port
 )
 {

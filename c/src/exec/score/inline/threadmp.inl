@@ -27,7 +27,7 @@
  *  multiprocessing receive thread.
  */
 
-STATIC INLINE boolean _Thread_MP_Is_receive (
+RTEMS_INLINE_ROUTINE boolean _Thread_MP_Is_receive (
   Thread_Control *the_thread
 )
 {
@@ -44,7 +44,7 @@ STATIC INLINE boolean _Thread_MP_Is_receive (
  *  inactive chain of free proxy control blocks.
  */
 
-STATIC INLINE void _Thread_MP_Free_proxy (
+RTEMS_INLINE_ROUTINE void _Thread_MP_Free_proxy (
   Thread_Control *the_thread
 )
 {

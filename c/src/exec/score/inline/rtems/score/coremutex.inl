@@ -27,7 +27,7 @@
  *  otherwise.
  */
  
-STATIC INLINE boolean _CORE_mutex_Is_locked(
+RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_locked(
   CORE_mutex_Control  *the_mutex
 )
 {
@@ -44,7 +44,7 @@ STATIC INLINE boolean _CORE_mutex_Is_locked(
  *  otherwise.
  */
  
-STATIC INLINE boolean _CORE_mutex_Is_fifo(
+RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_fifo(
   CORE_mutex_Attributes *the_attribute
 )
 {
@@ -61,7 +61,7 @@ STATIC INLINE boolean _CORE_mutex_Is_fifo(
  *  FALSE otherwise.
  */
  
-STATIC INLINE boolean _CORE_mutex_Is_priority(
+RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority(
   CORE_mutex_Attributes *the_attribute
 )
 {
@@ -78,7 +78,7 @@ STATIC INLINE boolean _CORE_mutex_Is_priority(
  *  INHERIT_PRIORITY and FALSE otherwise.
  */
  
-STATIC INLINE boolean _CORE_mutex_Is_inherit_priority(
+RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_inherit_priority(
   CORE_mutex_Attributes *the_attribute
 )
 {
@@ -95,7 +95,7 @@ STATIC INLINE boolean _CORE_mutex_Is_inherit_priority(
  *  PRIORITY_CEILING and FALSE otherwise.
  */
  
-STATIC INLINE boolean _CORE_mutex_Is_priority_ceiling(
+RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
   CORE_mutex_Attributes *the_attribute
 )
 {
@@ -112,7 +112,7 @@ STATIC INLINE boolean _CORE_mutex_Is_priority_ceiling(
  *  semaphore more than once and nest.
  */
  
-STATIC INLINE boolean _CORE_mutex_Is_nesting_allowed(
+RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_nesting_allowed(
   CORE_mutex_Attributes *the_attribute
 )
 {
