@@ -1,3 +1,13 @@
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* mips64orion/.cvsignore, mips64orion/ChangeLog,
+	mips64orion/Makefile.am, mips64orion/configure.ac,
+	mips64orion/clock/.cvsignore, mips64orion/clock/Makefile.am,
+	mips64orion/clock/ckinit.c, mips64orion/clock/clock.S,
+	mips64orion/clock/clock.h, mips64orion/timer/.cvsignore,
+	mips64orion/timer/Makefile.am, mips64orion/timer/gettime.S,
+	mips64orion/timer/timer.c: Removed.
+
 2003-12-01	Ralf Corsepius <corsepius@faw.uni-ulm.de>
 
 	* Makefile.am: Reformat.
