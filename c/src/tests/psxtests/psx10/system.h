@@ -24,7 +24,11 @@ void *POSIX_Init(
   void *argument
 );
 
-void *Task_1_through_3(
+void *Task_1(
+  void *argument
+);
+
+void *Task_2(
   void *argument
 );
 
@@ -39,6 +43,8 @@ void *Task_1_through_3(
 
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  10
 
+#define CONFIGURE_MAXIMUM_POSIX_MUTEXES  2
+
 #include <confdefs.h>
 
 /* global variables */
@@ -51,5 +57,8 @@ void *Task_1_through_3(
 
 TEST_EXTERN pthread_t        Init_id;
 TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t        Task2_id;
+TEST_EXTERN pthread_cond_t   Cond1_id;
+TEST_EXTERN pthread_mutex_t  Mutex_id;
 
 /* end of include file */
