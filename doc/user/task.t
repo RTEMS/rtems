@@ -22,6 +22,7 @@ by the task manager are:
 @item @code{@value{DIRPREFIX}task_delete} - Delete a task 
 @item @code{@value{DIRPREFIX}task_suspend} - Suspend a task 
 @item @code{@value{DIRPREFIX}task_resume} - Resume a task 
+@item @code{@value{DIRPREFIX}task_is_suspended} - Determine if a task is Suspended
 @item @code{@value{DIRPREFIX}task_set_priority} - Set task priority 
 @item @code{@value{DIRPREFIX}task_mode} - Change current task's mode 
 @item @code{@value{DIRPREFIX}task_get_note} - Get task notepad entry 
@@ -496,6 +497,8 @@ suspension and leaves the task in the blocked state.
 
 Suspending a task which is already suspended or resuming a 
 task which is not suspended is considered an error.
+The @code{@value{DIRPREFIX}task_is_suspended} can be used to
+determine if a task is currently suspended.
 
 @subsection Delaying the Currently Executing Task
 
@@ -1025,6 +1028,45 @@ specified task.
 
 If the task specified by id is not suspended, then the
 @code{@value{RPREFIX}INCORRECT_STATE} status code is returned.
+
+@page
+
+@subsection TASK_IS_SUSPENDED - Determine if a task is Suspended
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@c @findex rtems_task_is_suspended
+@example
+rtems_status_code rtems_task_is_suspended(
+  rtems_id id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Is_Suspended (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - task is not suspended@*
+@code{@value{RPREFIX}ALREADY_SUSPENDED} - task is not suspended@*
+@code{@value{RPREFIX}INVALID_ID} - task id invalid@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks
+
+@subheading DESCRIPTION:
+
+This directive returns a status code indicating whether or
+not the specified task is currently suspended.
+
+@subheading NOTES:
+
+This operation is not currently supported on remote tasks.
 
 @page
 
