@@ -99,9 +99,9 @@ void *POSIX_Init(
   /* must go around pthread_attr_setstacksize to set a bad stack size */
   attr.stacksize = 0;
  
-  puts( "Init: pthread_create - EINVAL (stacksize too small)" );
+  puts( "Init: pthread_create - EAGAIN (stacksize too small)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  assert( status == EINVAL );
+  assert( status == EAGAIN );
 
   attr.stacksize = BSP_Configuration.work_space_size;
   puts( "Init: pthread_create - EINVAL (stacksize too large)" );
