@@ -2,14 +2,10 @@
 #  $Id$
 #
 
-NOTE:  The string <release> should be replaced with
-       the appropriate release number of RTEMS.
+Building RTEMS
+==============
+See the file README.configure.
 
-This file only discusses the installation of .tgz files.
-For more detailed information on the installation of RTEMS,
-refer to the Release Notes manual in the file 
-/pub/rtems/releases/<release>/doc/c_or_ada/relnotes.tgz on
-lancelot.gcs.redstone.army.mil.
 
 UNCOMPRESSING .tgz FILES
 ===========================
