@@ -614,7 +614,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 #define _CPU_Initialize_vectors()
 
 /* COPE With Brain dead version of GCC distributed with Hitachi HIView Tools.
-   Note requires ISR_Level be uint16_t   or assembler croaks.
+   Note requires ISR_Level be uint16_t or assembler croaks.
 */
 
 #if (__GNUC__ == 2 && __GNUC_MINOR__ == 7 )
@@ -632,7 +632,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 
 /*
- *  Enable interrupts to the previois level (returned by _CPU_ISR_Disable).
+ *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
  *  This indicates the end of an RTEMS critical section.  The parameter
  *  _level is not modified.
  */
@@ -684,7 +684,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 
 /*
- *  Enable interrupts to the previois level (returned by _CPU_ISR_Disable).
+ *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
  *  This indicates the end of an RTEMS critical section.  The parameter
  *  _level is not modified.
  *
