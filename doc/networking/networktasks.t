@@ -35,7 +35,7 @@ NO TEX VERSION OF THE TASKING FIGURE IS AVAILABLE
 
 @ifset use-html
 @html
-<IMG SRC="networkflow.png" ALIGN=CENTER 
+<IMG SRC="networkflow.jpg" ALIGN=CENTER 
      ALT="Network Task Structure and Data Flow">
 @end html
 @end ifset
