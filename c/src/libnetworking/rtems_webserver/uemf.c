@@ -47,7 +47,7 @@ void error(E_ARGS_DEC, int flags, char_t *fmt, ...)
  *	Trace log. Customize this function to log trace output
  */
 
-void trace(int level, char_t *afmt, ...)
+void goahead_trace(int level, char_t *afmt, ...)
 {
 #if DEBUG
 	va_list 	args;
