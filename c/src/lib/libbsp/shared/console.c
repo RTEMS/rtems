@@ -36,7 +36,7 @@
 #include <libchip/serial.h>
 
 /*
- * Load configuration table
+ *  Configuration Information
  */
 
 extern console_data  Console_Port_Data[];
@@ -212,11 +212,12 @@ rtems_device_driver console_control(
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
+  rtems_device_minor_number  minor_arg,
   void                      *arg
 )
 {
-  rtems_status_code        status;
+  rtems_status_code          status;
+  rtems_device_minor_number  minor;
 
   /*
    * initialize the termio interface.
@@ -224,7 +225,7 @@ rtems_device_driver console_initialize(
 
   rtems_termios_initialize();
 
-  for (minor=0; minor<Console_Port_Count; minor++) {
+  for (minor=0; minor < Console_Port_Count ; minor++) {
     /*
      * First perform the configuration dependent probe, then the
      * device dependent probe
