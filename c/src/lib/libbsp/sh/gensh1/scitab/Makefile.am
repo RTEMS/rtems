@@ -15,7 +15,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
-SHGEN = $(PROJECT_ROOT)/tools/cpu/sh/shgen
+SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
 
 #
 # (OPTIONAL) Add local stuff here using +=

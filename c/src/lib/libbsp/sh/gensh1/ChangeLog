@@ -1,3 +1,7 @@
+2000-09-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* scitab/Makefile.am: PROJECT_TOPdir.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/Makefile.am, scitab/Makefile.am, start/Makefile.am,
