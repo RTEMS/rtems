@@ -324,19 +324,30 @@ rtems_termios_close (void *arg)
 		drainOutput (tty);
 		if (tty->device.lastClose)
 			 (*tty->device.lastClose)(tty->major, tty->minor, arg);
-		if (tty->forw == NULL)
+		if (tty->forw == NULL) {
 			rtems_termios_ttyTail = tty->back;
-		else
+			if ( rtems_termios_ttyTail != NULL ) {
+				rtems_termios_ttyTail->forw = NULL;
+			}
+		}
+		else {
 			tty->forw->back = tty->back;
-		if (tty->back == NULL)
+		}
+		if (tty->back == NULL) {
 			rtems_termios_ttyHead = tty->forw;
-		else
+			if ( rtems_termios_ttyHead != NULL ) {
+				rtems_termios_ttyHead->back = NULL;
+			}
+		}
+		else {
 			tty->back->forw = tty->forw;
+		}
 		rtems_semaphore_delete (tty->isem);
 		rtems_semaphore_delete (tty->osem);
 		rtems_semaphore_delete (tty->rawOutBufSemaphore);
 		if (!tty->device.pollRead)
 			rtems_semaphore_delete (tty->rawInBufSemaphore);
+		free (tty->cbuf);
 		free (tty);
 	}
 	rtems_semaphore_release (rtems_termios_ttyMutex);
