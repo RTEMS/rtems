@@ -1,3 +1,9 @@
+2004-09-17	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 676/networking
+	* nfs/bootp_subr.c: /etc/resolv.conf contains NTP instead of DNS
+	servers.
+
 2004-05-21	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 626/networking
