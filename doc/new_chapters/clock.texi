@@ -244,7 +244,7 @@ This call is interruptible by a signal.
 @end ifinfo
 @subsection nanosleep
  
-@subheading time SEQUENCE:
+@subheading CALLING SEQUENCE:
  
 @example
 #include <time.h>

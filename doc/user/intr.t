@@ -315,7 +315,7 @@ procedure Interrupt_Catch (
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - ISR established successfully@*
 @code{INVALID_NUMBER} - illegal vector number@*
-@code{INVALID_ADDRESS} - illegal ISR entry point
+@code{INVALID_ADDRESS} - illegal ISR entry point or invalid old_isr_handler
 
 @subheading DESCRIPTION:
 

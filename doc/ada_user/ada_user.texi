@@ -53,9 +53,10 @@ END-INFO-DIR-ENTRY
 @c  Title Page Stuff
 @c
 
-@set edition 4.2.0-beta1
-@set update-date 1 June 1997
-@set update-month June 1997
+@set edition 970904
+@set version 970904
+@set update-date 4 September 1997
+@set update-month September 1997
 
 @c
 @c  I don't really like having a short title page.  --joel
@@ -68,7 +69,7 @@ END-INFO-DIR-ENTRY
 @finalout
 
 @title RTEMS Applications Ada User's Guide
-@subtitle Edition @value{edition}, for RTEMS 4.2.0-prerelease
+@subtitle Edition @value{edition}, for RTEMS @value{version}
 @sp 1
 @subtitle @value{update-month}
 @author On-Line Applications Research Corporation

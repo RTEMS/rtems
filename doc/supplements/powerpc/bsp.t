@@ -87,7 +87,7 @@ rtems_initialize executive, the PowrePC version has the following
 specific requirements:
 
 @itemize @bullet
-@item Must leave the PR bit of the machine state  register set so that
+@item Must leave the PR bit of the machine state register set so that
 the PowerPC remains in the supervisor state.
 
 @item Must set stack pointer (sp) such that a minimum stack
