@@ -70,6 +70,18 @@
 
 /*PAGE
  *
+ *  _Heap_User_Block_at
+ *
+ */
+ 
+#define _Heap_User_Block_at( _base ) \
+  _Heap_Block_at( \
+    (_base), \
+    -*(((unsigned32 *) (_base)) - 1) + -HEAP_BLOCK_USED_OVERHEAD \
+  )
+
+/*PAGE
+ *
  *  _Heap_Is_previous_block_free
  */
 

@@ -94,6 +94,22 @@ STATIC INLINE Heap_Block *_Heap_Block_at(
 
 /*PAGE
  *
+ *  _Heap_User_Block_at
+ *
+ */
+ 
+STATIC INLINE Heap_Block *_Heap_User_Block_at(
+  void       *base
+)
+{
+  unsigned32         offset;
+ 
+  offset = *(((unsigned32 *) base) - 1);
+  return _Heap_Block_at( base, -offset + -HEAP_BLOCK_USED_OVERHEAD);
+}
+
+/*PAGE
+ *
  *  _Heap_Is_previous_block_free
  *
  */
