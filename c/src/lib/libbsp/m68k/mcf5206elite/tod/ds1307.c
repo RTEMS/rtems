@@ -50,7 +50,7 @@ ds1307_initialize(int minor)
 {
     i2c_message_status status;
     int try;
-    rtems_unsigned8 sec;
+    uint8_t         sec;
     i2c_bus_number bus;
     i2c_address addr;
     
@@ -67,7 +67,7 @@ ds1307_initialize(int minor)
     /* If clock is halted, reset and start the clock */
     if ((sec & DS1307_SECOND_HALT) != 0)
     {
-        rtems_unsigned8 start[8];
+        uint8_t         start[8];
         memset(start, 0, sizeof(start));
         start[0] = DS1307_SECOND;
         try = 0;
@@ -94,8 +94,8 @@ ds1307_get_time(int minor, rtems_time_of_day *time)
 {
     i2c_bus_number bus;
     i2c_address addr;
-    rtems_unsigned8 info[8];
-    rtems_unsigned32 v1, v2;
+    uint8_t         info[8];
+    uint32_t         v1, v2;
     i2c_message_status status;
     int try;
     
@@ -175,7 +175,7 @@ ds1307_set_time(int minor, rtems_time_of_day *time)
 {
     i2c_bus_number bus;
     i2c_address addr;
-    rtems_unsigned8 info[8];
+    uint8_t         info[8];
     i2c_message_status status;
     int try;
     

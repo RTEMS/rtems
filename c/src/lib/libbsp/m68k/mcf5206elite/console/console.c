@@ -153,7 +153,7 @@ console_first_open(int major, int minor, void *arg)
 {
     rtems_libio_open_close_args_t *args = arg;
     rtems_status_code sc;
-    rtems_unsigned8 intvec;
+    uint8_t         intvec;
     
     switch (minor)
     {

@@ -23,7 +23,7 @@
  *     arg - done function argument; it is RTEMS semaphore ID.
  */
 static void
-i2c_transfer_sema_done_func(rtems_unsigned32 arg)
+i2c_transfer_sema_done_func(uint32_t         arg)
 {
     rtems_id sema = (rtems_id)arg;
     rtems_semaphore_release(sema);
@@ -38,7 +38,7 @@ i2c_transfer_sema_done_func(rtems_unsigned32 arg)
  *     arg - done function argument; address of poll_done_flag
  */
 static void
-i2c_transfer_poll_done_func(rtems_unsigned32 arg)
+i2c_transfer_poll_done_func(uint32_t         arg)
 {
     rtems_boolean *poll_done_flag = (rtems_boolean *)arg;
     *poll_done_flag = 1;
@@ -102,7 +102,7 @@ i2c_transfer_wait_poll(i2c_bus_number bus, i2c_message *msg, int nmsg)
     rtems_status_code sc;
     poll_done_flag = 0;
     sc = i2c_transfer(bus, nmsg, msg, i2c_transfer_poll_done_func, 
-                      (rtems_unsigned32)&poll_done_flag);
+                      (uint32_t)&poll_done_flag);
     if (sc != RTEMS_SUCCESSFUL)
         return sc;
     while (poll_done_flag == 0)
@@ -196,10 +196,10 @@ i2c_write(i2c_bus_number bus, i2c_address addr, void *buf, int size)
  *     transfer status
  */
 i2c_message_status
-i2c_wrbyte(i2c_bus_number bus, i2c_address addr, rtems_unsigned8 cmd)
+i2c_wrbyte(i2c_bus_number bus, i2c_address addr, uint8_t         cmd)
 {
     i2c_message msg;
-    rtems_unsigned8 data = cmd;
+    uint8_t         data = cmd;
     msg.addr = addr;
     msg.flags = I2C_MSG_WR;
     if (addr > 0xff)
@@ -291,11 +291,11 @@ i2c_wrrd(i2c_bus_number bus, i2c_address addr, void *bufw, int sizew,
  *     transfer status
  */
 i2c_message_status
-i2c_wbrd(i2c_bus_number bus, i2c_address addr, rtems_unsigned8 cmd,
+i2c_wbrd(i2c_bus_number bus, i2c_address addr, uint8_t         cmd,
          void *bufr, int sizer)
 {
     i2c_message msg[2];
-    rtems_unsigned8 bufw = cmd;
+    uint8_t         bufw = cmd;
     msg[0].addr = addr;
     msg[0].flags = I2C_MSG_WR | I2C_MSG_ERRSKIP;
     if (addr > 0xff)

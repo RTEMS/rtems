@@ -95,7 +95,7 @@ nvram_driver_read(rtems_device_major_number major,
                   void *arg)
 {
     rtems_libio_rw_args_t *args = arg;
-    unsigned32 count;
+    uint32_t   count;
     i2c_bus_number bus = DS1307_I2C_BUS_NUMBER;
     i2c_address    addr = DS1307_I2C_ADDRESS;
     i2c_message_status status;
@@ -138,7 +138,7 @@ nvram_driver_write(rtems_device_major_number major,
                    void *arg)
 {
     rtems_libio_rw_args_t *args = arg;
-    unsigned32 count;
+    uint32_t   count;
     i2c_bus_number bus = DS1307_I2C_BUS_NUMBER;
     i2c_address    addr = DS1307_I2C_ADDRESS;
     i2c_message_status status;
@@ -159,7 +159,7 @@ nvram_driver_write(rtems_device_major_number major,
     {
         int try = 0;
         do {
-            rtems_unsigned8 buf[DS1307_NVRAM_SIZE + 1];
+            uint8_t         buf[DS1307_NVRAM_SIZE + 1];
             buf[0] = DS1307_NVRAM_START + args->offset;
             memcpy(buf+1, args->buffer, count);
             status = i2c_write(bus, addr, buf, count+1);

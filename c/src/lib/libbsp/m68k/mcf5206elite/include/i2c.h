@@ -35,10 +35,10 @@
  */
 
 /* I2C Bus Number type */
-typedef rtems_unsigned32 i2c_bus_number;
+typedef uint32_t         i2c_bus_number;
 
 /* I2C device address */
-typedef rtems_unsigned16 i2c_address;
+typedef uint16_t         i2c_address;
 
 /* I2C error codes generated during message transfer */
 typedef enum i2c_message_status {
@@ -54,10 +54,10 @@ typedef enum i2c_message_status {
 /* I2C Message */
 typedef struct i2c_message {
     i2c_address        addr;   /* I2C slave device address */
-    rtems_unsigned16   flags;  /* message flags (see below) */
+    uint16_t           flags;  /* message flags (see below) */
     i2c_message_status status; /* message transfer status code */
-    rtems_unsigned16   len;    /* Number of bytes to read or write */
-    rtems_unsigned8   *buf;    /* pointer to data array */
+    uint16_t           len;    /* Number of bytes to read or write */
+    uint8_t           *buf;    /* pointer to data array */
 } i2c_message;
 
 /* I2C message flag */
@@ -67,7 +67,7 @@ typedef struct i2c_message {
 #define I2C_MSG_ERRSKIP (0x04)  /* Skip message if last transfered message
                                    is failed */
 /* Type for function which is called when transfer over I2C bus is finished */
-typedef void (*i2c_transfer_done) (rtems_unsigned32 arg);
+typedef void (*i2c_transfer_done) (uint32_t         arg);
 
 /* i2c_initialize --
  *     I2C driver initialization. This function usually called on device
@@ -124,7 +124,7 @@ i2c_select_clock_rate(i2c_bus_number bus, int bps);
  */
 rtems_status_code
 i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg, 
-             i2c_transfer_done done, rtems_unsigned32 done_arg);
+             i2c_transfer_done done, uint32_t         done_arg);
 
 /* i2c_transfer_wait --
  *     Initiate I2C bus transfer and block until this transfer will be
@@ -187,7 +187,7 @@ i2c_write(i2c_bus_number bus, i2c_address addr, void *buf, int size);
  *     transfer status
  */
 i2c_message_status
-i2c_wrbyte(i2c_bus_number bus, i2c_address addr, rtems_unsigned8 cmd);
+i2c_wrbyte(i2c_bus_number bus, i2c_address addr, uint8_t         cmd);
 
 /* i2c_read --
  *     receive single message over specified I2C bus from addressed device.
@@ -239,7 +239,7 @@ i2c_wrrd(i2c_bus_number bus, i2c_address addr, void *bufw, int sizew,
  *     transfer status
  */
 i2c_message_status
-i2c_wbrd(i2c_bus_number bus, i2c_address addr, rtems_unsigned8 cmd,
+i2c_wbrd(i2c_bus_number bus, i2c_address addr, uint8_t         cmd,
          void *bufr, int sizer);
 
 #endif

@@ -49,7 +49,7 @@ typedef struct i2c_qel {
     i2c_message      *msg;      /* pointer to the transfer' messages array */
     int               nmsg;     /* number of messages in transfer */
     i2c_transfer_done done;     /* transfer done callback function */
-    rtems_unsigned32  done_arg; /* arbitrary argument to done callback */
+    uint32_t          done_arg; /* arbitrary argument to done callback */
 } i2c_qel;
 
 /* Memory for I2C transfer queue. This queue represented like a ring buffer */
@@ -85,7 +85,7 @@ static void i2cdrv_unload(void);
  *     transfer is finished.
  */
 static void
-i2cdrv_done(rtems_unsigned32 arg)
+i2cdrv_done(uint32_t         arg)
 {
     rtems_interrupt_level level;
     i2c_qel *qel = tqueue + tqueue_tail;
@@ -121,7 +121,7 @@ i2cdrv_unload(void)
             mcfmbus_select_clock_divider(&mbus, i2cdrv_bus_clock_div_current);
         }
         sc = mcfmbus_i2c_transfer(&mbus, qel->nmsg, qel->msg, i2cdrv_done,
-                                  (rtems_unsigned32)qel);
+                                  (uint32_t)qel);
         if (sc != RTEMS_SUCCESSFUL)
         {
             int i;
@@ -129,7 +129,7 @@ i2cdrv_unload(void)
             {
                 qel->msg[i].status = I2C_RESOURCE_NOT_AVAILABLE;
             }
-            i2cdrv_done((rtems_unsigned32)qel);
+            i2cdrv_done((uint32_t)qel);
         }
     }
     else
@@ -156,7 +156,7 @@ i2cdrv_unload(void)
  */
 rtems_status_code
 i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg,
-             i2c_transfer_done done, rtems_unsigned32 done_arg)
+             i2c_transfer_done done, uint32_t         done_arg)
 {
     i2c_qel qel;
     rtems_interrupt_level level;
