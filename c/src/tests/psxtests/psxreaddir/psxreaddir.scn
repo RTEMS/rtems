@@ -1,0 +1,156 @@
+
+
+*** READDIR TEST ***
+
+chdir to the root directory
+chdir() status : 0
+
+
+Creating a series of directories under /
+Creating directory: a      0 0    Success
+Creating directory: b      0 0    Success
+Creating directory: c      0 0    Success
+Creating directory: d      0 0    Success
+Creating directory: e      0 0    Success
+Creating directory: f      0 0    Success
+Creating directory: c/y      0 0    Success
+Creating directory: c/z      0 0    Success
+Creating directory: c/x      0 0    Success
+Creating directory: c/y/a3333      0 0    Success
+Creating directory: c/y/j123      0 0    Success
+
+Performing stat of directory /
+status for stat : 0, size of directory: 196
+
+
+Opening directory /
+         name               inode   offset   reclen  type
+    dev                         1        0     28   0x001c
+    a                           1       28     28   0x001c
+    b                           1       56     28   0x001c
+    c                           1       84     28   0x001c
+    d                           1      112     28   0x001c
+    e                           1      140     28   0x001c
+    f                           1      168     28   0x001c
+
+Opening directory /c
+         name               inode   offset   reclen  type
+    y                           1        0     28   0x001c
+    z                           1       28     28   0x001c
+    x                           1       56     28   0x001c
+
+Opening directory /c/y
+         name               inode   offset   reclen  type
+    a3333                       1        0     28   0x001c
+    j123                        1       28     28   0x001c
+
+LSEEK to the start of the open directory
+         name               inode   offset   reclen  type
+    dev                         1        0     28   0x001c
+    a                           1       28     28   0x001c
+    b                           1       56     28   0x001c
+    c                           1       84     28   0x001c
+    d                           1      112     28   0x001c
+    e                           1      140     28   0x001c
+    f                           1      168     28   0x001c
+
+Rewinding directory
+         name               inode   offset   reclen  type
+    dev                         1        0     28   0x001c
+    a                           1       28     28   0x001c
+    b                           1       56     28   0x001c
+    c                           1       84     28   0x001c
+    d                           1      112     28   0x001c
+    e                           1      140     28   0x001c
+    f                           1      168     28   0x001c
+
+Seek directory
+telldir() should report only sizeof(struct dirent) increments 
+in position. Sizeof(struct dirent): 28
+seeked to  0 -- currently at  0
+seeked to  7 -- currently at  0
+seeked to 14 -- currently at  0
+seeked to 21 -- currently at  0
+seeked to 28 -- currently at 28
+seeked to 35 -- currently at 28
+seeked to 42 -- currently at 28
+seeked to 49 -- currently at 28
+seeked to 56 -- currently at 56
+seeked to 63 -- currently at 56
+seeked to 70 -- currently at 56
+seeked to 77 -- currently at 56
+seeked to 84 -- currently at 84
+seeked to 91 -- currently at 84
+seeked to 98 -- currently at 84
+seeked to 105 -- currently at 84
+seeked to 112 -- currently at 112
+seeked to 119 -- currently at 112
+seeked to 126 -- currently at 112
+seeked to 133 -- currently at 112
+seeked to 140 -- currently at 140
+seeked to 147 -- currently at 140
+seeked to 154 -- currently at 140
+seeked to 161 -- currently at 140
+seeked to 168 -- currently at 168
+seeked to 175 -- currently at 168
+seeked to 182 -- currently at 168
+seeked to 189 -- currently at 168
+seeked to 196 -- currently at 196
+
+Closing directory
+
+SCANDIR TEST
+
+selection rule 1
+scanning for any entry under directory /c
+
+SCANDIR SELECT1 accepts  nodename: y
+SCANDIR SELECT1 accepts  nodename: z
+SCANDIR SELECT1 accepts  nodename: x
+
+scandir status: 3
+Selected Node Name: y
+Selected Node Name: z
+Selected Node Name: x
+
+selection rule 2
+scanning for any entry under directory /c whose name = y
+
+SCANDIR SELECT accepted nodename: y
+SCANDIR SELECT rejected nodename: z
+SCANDIR SELECT rejected nodename: x
+
+scandir status: 1
+Selected Node Name: y
+
+SCANDIR with sorting
+
+selection rule 1
+scanning for any entry under directory /c
+sort in ascending order
+
+SCANDIR SELECT1 accepts  nodename: y
+SCANDIR SELECT1 accepts  nodename: z
+SCANDIR SELECT1 accepts  nodename: x
+
+scandir status: 3
+Selected and Sorted Node Name: x
+Selected and Sorted Node Name: y
+Selected and Sorted Node Name: z
+
+SCANDIR with sorting
+
+selection rule 1
+scanning for any entry under directory /c
+sort in descending order
+
+SCANDIR SELECT1 accepts  nodename: y
+SCANDIR SELECT1 accepts  nodename: z
+SCANDIR SELECT1 accepts  nodename: x
+scandir status: 3
+Selected and Sorted Node Name: z
+Selected and Sorted Node Name: y
+Selected and Sorted Node Name: x
+
+
+*** END OF READDIR TEST ***
