@@ -402,7 +402,8 @@ NS16550_STATIC rtems_isr ns16550_isr(
   int     minor;
 
   for(minor=0;minor<Console_Port_Count;minor++) {
-    if(vector==Console_Port_Tbl[minor].ulIntVector) {
+    if(Console_Port_Tbl[minor].ulIntVector == vector && 
+       Console_Port_Tbl[minor].deviceType == SERIAL_NS16550 ) {
       ns16550_process(minor);
     }
   }

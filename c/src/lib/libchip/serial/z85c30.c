@@ -692,7 +692,8 @@ Z85C30_STATIC rtems_isr z85c30_isr(
   getRegister_f    getReg;
 
   for (minor=0;minor<Console_Port_Count;minor++) {
-    if (vector==Console_Port_Tbl[minor].ulIntVector) {
+    if(Console_Port_Tbl[minor].ulIntVector == vector && 
+       Console_Port_Tbl[minor].deviceType == SERIAL_Z85C30 ) {
       ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort2;
       getReg     = Console_Port_Tbl[minor].getRegister;
       do {
