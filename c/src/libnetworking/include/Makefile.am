@@ -8,7 +8,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 H_FILES = ../bpfilter.h ../loop.h ../netdb.h ../opt_ipfw.h ../opt_mrouting.h \
-    ../opt_tcpdebug.h ../poll.h ../resolv.h ../syslog.h
+    ../opt_tcpdebug.h ../poll.h ../resolv.h ../syslog.h ../memory.h
 
 SYS_H_FILES = ../sys/buf.h ../sys/callout.h ../sys/cdefs.h ../sys/conf.h \
     ../sys/domain.h ../sys/filio.h ../sys/ioccom.h ../sys/ioctl.h \
@@ -18,7 +18,7 @@ SYS_H_FILES = ../sys/buf.h ../sys/callout.h ../sys/cdefs.h ../sys/conf.h \
     ../sys/select.h ../sys/signalvar.h ../sys/socket.h ../sys/socketvar.h \
     ../sys/sockio.h ../sys/sysctl.h ../sys/syslimits.h ../sys/syslog.h \
     ../sys/systm.h ../sys/ttycom.h ../sys/ttydefaults.h ../sys/ucred.h \
-    ../sys/uio.h
+    ../sys/uio.h ../sys/un.h
 
 RTEMS_H_FILES = ../rtems/rtems_bsdnet.h ../rtems/rtems_bsdnet_internal.h \
     ../rtems/tftp.h
@@ -88,6 +88,9 @@ $(PROJECT_INCLUDE)/resolv.h: ../resolv.h
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE)/syslog.h: ../syslog.h
+	$(INSTALL_DATA) $< $@
+
+$(PROJECT_INCLUDE)/memory.h: ../memory.h
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE)/sys/buf.h: ../sys/buf.h
@@ -187,6 +190,9 @@ $(PROJECT_INCLUDE)/sys/ucred.h: ../sys/ucred.h
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE)/sys/uio.h: ../sys/uio.h
+	$(INSTALL_DATA) $< $@
+
+$(PROJECT_INCLUDE)/sys/un.h: ../sys/un.h
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h: ../rtems/rtems_bsdnet.h
@@ -390,6 +396,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bpfilter.h \
     $(PROJECT_INCLUDE)/opt_ipfw.h $(PROJECT_INCLUDE)/opt_mrouting.h \
     $(PROJECT_INCLUDE)/opt_tcpdebug.h $(PROJECT_INCLUDE)/poll.h \
     $(PROJECT_INCLUDE)/resolv.h $(PROJECT_INCLUDE)/syslog.h \
+    $(PROJECT_INCLUDE)/memory.h \
     $(PROJECT_INCLUDE)/sys $(PROJECT_INCLUDE)/sys/buf.h \
     $(PROJECT_INCLUDE)/sys/callout.h $(PROJECT_INCLUDE)/sys/cdefs.h \
     $(PROJECT_INCLUDE)/sys/conf.h $(PROJECT_INCLUDE)/sys/domain.h \
@@ -407,6 +414,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bpfilter.h \
     $(PROJECT_INCLUDE)/sys/syslog.h $(PROJECT_INCLUDE)/sys/systm.h \
     $(PROJECT_INCLUDE)/sys/ttycom.h $(PROJECT_INCLUDE)/sys/ttydefaults.h \
     $(PROJECT_INCLUDE)/sys/ucred.h $(PROJECT_INCLUDE)/sys/uio.h \
+    $(PROJECT_INCLUDE)/sys/un.h \
     $(PROJECT_INCLUDE)/rtems $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h \
     $(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h \
     $(PROJECT_INCLUDE)/rtems/tftp.h $(PROJECT_INCLUDE)/machine \
