@@ -408,6 +408,9 @@ void Stack_check_Dump_threads_usage(
   void           *low;
   void           *high_water_mark;
   Stack_Control  *stack;
+  unsigned32      u32_name;
+  char            name[5];
+
 
   if ( !the_thread )
     return;
@@ -439,10 +442,20 @@ void Stack_check_Dump_threads_usage(
   else
     used = 0;
 
-  printf( "0x%08x  0x%08x  0x%08x  0x%08x   %8d   %8d\n",
+  if ( the_thread )
+    u32_name = *(unsigned32 *)the_thread->Object.name;
+  else
+    u32_name = rtems_build_name('I', 'N', 'T', 'R');
+
+  name[ 0 ] = (u32_name >> 24) & 0xff;
+  name[ 1 ] = (u32_name >> 16) & 0xff;
+  name[ 2 ] = (u32_name >>  8) & 0xff;
+  name[ 3 ] = (u32_name >>  0) & 0xff;
+  name[ 4 ] = '\0';
+
+  printf( "0x%08x  %4s  0x%08x  0x%08x   %8d   %8d\n",
           the_thread ? the_thread->Object.id : ~0,
-          the_thread ? *(unsigned32 *)the_thread->Object.name :
-                       rtems_build_name('I', 'N', 'T', 'R'),
+          name,
           (unsigned32) stack->area,
           (unsigned32) stack->area + (unsigned32) stack->size - 1,
           size,
