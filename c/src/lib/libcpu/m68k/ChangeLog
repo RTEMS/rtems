@@ -1,3 +1,7 @@
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* mcf5206/timer/timerisr.S: Include <rtems/asm.h> instead of <asm.h>.
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* m68040/fpsp/rtems_skel.S: Include <rtems/asm.h> instead of <asm.h>.
