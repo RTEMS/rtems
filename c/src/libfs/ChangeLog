@@ -1,3 +1,7 @@
+2000-11-17	Jennifer Averret <jennifer@OARcorp.com>
+
+	* src/imfs/imfs_eval.c: Always return imaginary node at mount points.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

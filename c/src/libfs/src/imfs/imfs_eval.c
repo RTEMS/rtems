@@ -608,16 +608,25 @@ int IMFS_eval_path(
   }
 
   /*
-   *  Only return root node if this is the base file system.
+   *  Always return the root node.
+   *
+   *  If we are at a node that is a mount point. Set loc to the
+   *  new fs root node and let let the mounted filesystem set the handlers.
+   *
+   *  NOTE: The behavior of stat() on a mount point appears to be questionable.
    */
 
-  if ((pathloc->node_access == pathloc->mt_entry->mt_fs_root.node_access) &&
-      (pathloc->node_access != rtems_filesystem_root.node_access) ) {
-    newloc = pathloc->mt_entry->mt_point_node;
-    *pathloc = newloc;
+  if ( node->type == IMFS_DIRECTORY ) {
+    if ( node->info.directory.mt_fs != NULL ) {
+      newloc   = node->info.directory.mt_fs->mt_fs_root;
+      *pathloc = newloc;
+      return (*pathloc->ops->evalpath_h)( &pathname[i-len], flags, pathloc );
+    } else {
+      result = IMFS_Set_handlers( pathloc );
+    }
+  } else {
+    result = IMFS_Set_handlers( pathloc );
   }
-
-  result = IMFS_Set_handlers( pathloc );
 
   /*
    * Verify we have the correct permissions for this node.
@@ -628,12 +637,3 @@ int IMFS_eval_path(
 
   return result;
 }
-
-
-
-
-
-
-
-
-
