@@ -7,7 +7,7 @@
 @c
 
 @ifinfo
-@node Preface, Thread Manager, Top, Top
+@node Preface, , Top, Top
 @end ifinfo
 @unnumbered Preface
 

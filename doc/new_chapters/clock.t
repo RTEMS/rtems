@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Clock Manager, Clock Manager Introduction, pthread_getspecific, Top
-@end ifinfo
 @chapter Clock Manager
-@ifinfo
-@menu
-* Clock Manager Introduction::
-* Clock Manager Background::
-* Clock Manager Operations::
-* Clock Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Clock Manager Introduction, Clock Manager Background, Clock Manager, Clock Manager
-@end ifinfo
 @section Introduction
 
 The clock manager ...
@@ -36,40 +22,17 @@ The directives provided by the clock manager are:
 @item @code{time} -
 @end itemize
 
-@ifinfo
-@node Clock Manager Background, Clock Manager Operations, Clock Manager Introduction, Clock Manager
-@end ifinfo
 @section Background
 
-@ifinfo
-@node Clock Manager Operations, Clock Manager Directives, Clock Manager Background, Clock Manager
-@end ifinfo
 @section Operations
 
-@ifinfo
-@node Clock Manager Directives, clock_gettime, Clock Manager Operations, Clock Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* clock_gettime::
-* clock_settime::
-* clock_getres::
-* sleep::
-* nanosleep::
-* time::
-@end menu
-@end ifinfo
 
 This section details the clock manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
-@page
-@ifinfo
-@node clock_gettime, clock_settime, Clock Manager Directives, Clock Manager Directives
-@end ifinfo
 @subsection clock_gettime
 
 @subheading CALLING SEQUENCE:
@@ -100,9 +63,6 @@ The clock_id specified is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node clock_settime, clock_getres, clock_gettime, Clock Manager Directives
-@end ifinfo
 @subsection clock_settime
  
 @subheading CALLING SEQUENCE:
@@ -137,9 +97,6 @@ The contents of the tp structure are invalid.
 @subheading NOTES:
  
 @page
-@ifinfo
-@node clock_getres, sleep, clock_settime, Clock Manager Directives
-@end ifinfo
 @subsection clock_getres
  
 @subheading CALLING SEQUENCE:
@@ -173,9 +130,6 @@ The clock_id specified is invalid.
 If res is NULL, then the resolution is not returned.
 
 @page
-@ifinfo
-@node sleep, nanosleep, clock_getres, Clock Manager Directives
-@end ifinfo
 @subsection sleep
  
 @subheading CALLING SEQUENCE:
@@ -199,9 +153,6 @@ This routine returns the number of unslept seconds.
 This call is interruptible by a signal.
  
 @page
-@ifinfo
-@node nanosleep, time, sleep, Clock Manager Directives
-@end ifinfo
 @subsection nanosleep
  
 @subheading CALLING SEQUENCE:
@@ -239,10 +190,7 @@ field.
 This call is interruptible by a signal.
 
 @page
-@ifinfo
-@node time, Scheduler Manager, nanosleep, Clock Manager Directives
-@end ifinfo
-@subsection nanosleep
+@subsection time
  
 @subheading CALLING SEQUENCE:
  

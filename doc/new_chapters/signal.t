@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Signal Manager, Signal Manager Introduction, pthread_getschedparam, Top
-@end ifinfo
 @chapter Signal Manager
-@ifinfo
-@menu
-* Signal Manager Introduction::
-* Signal Manager Background::
-* Signal Manager Operations::
-* Signal Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Signal Manager Introduction, Signal Manager Background, Signal Manager, Signal Manager
-@end ifinfo
 @section Introduction
 
 The signal manager ...
@@ -49,20 +35,8 @@ The directives provided by the signal manager are:
 @item @code{alarm} - 
 @end itemize
 
-@ifinfo
-@node Signal Manager Background, Signal Delivery, Signal Manager Introduction, Signal Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Signal Delivery::
-@end menu
-@end ifinfo
 
-
-@ifinfo
-@node Signal Delivery, Signal Manager Operations, Signal Manager Background, Signal Manager Background
-@end ifinfo
 @subsection Signal Delivery
 
 Signals directed at a thread are delivered to the specified thread.
@@ -95,37 +69,9 @@ the recipient of the signal.
 
 @end enumerate
 
-@ifinfo
-@node Signal Manager Operations, Signal Manager Directives, Signal Delivery, Signal Manager
-@end ifinfo
 @section Operations
 
-@ifinfo
-@node Signal Manager Directives, sigaddset, Signal Manager Operations, Signal Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* sigaddset::
-* sigdelset::
-* sigfillset::
-* sigismember::
-* sigemptyset::
-* sigaction::
-* pthread_kill::
-* sigprocmask::
-* pthread_sigmask::
-* kill::
-* sigpending::
-* sigsuspend::
-* pause::
-* sigwait::
-* sigwaitinfo::
-* sigtimedwait::
-* sigqueue::
-* alarm::
-@end menu
-@end ifinfo
 
 This section details the signal manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -133,9 +79,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node sigaddset, sigdelset, Signal Manager Directives, Signal Manager Directives
-@end ifinfo
 @subsection sigaddset
 
 @subheading CALLING SEQUENCE:
@@ -162,9 +105,6 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigdelset, sigfillset, sigaddset, Signal Manager Directives
-@end ifinfo
 @subsection sigdelset
 
 @subheading CALLING SEQUENCE:
@@ -191,9 +131,6 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigfillset, sigismember, sigdelset, Signal Manager Directives
-@end ifinfo
 @subsection sigfillset
 
 @subheading CALLING SEQUENCE:
@@ -218,9 +155,6 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigismember, sigemptyset, sigfillset, Signal Manager Directives
-@end ifinfo
 @subsection sigismember
 
 @subheading CALLING SEQUENCE:
@@ -246,9 +180,6 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigemptyset, sigaction,  sigismember, Signal Manager Directives
-@end ifinfo
 @subsection sigemptyset
 
 @subheading CALLING SEQUENCE:
@@ -274,9 +205,6 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigaction, pthread_kill, sigemptyset, Signal Manager Directives
-@end ifinfo
 @subsection sigaction
 
 @subheading CALLING SEQUENCE:
@@ -308,9 +236,6 @@ Realtime Signals Extension option not supported.
 
 The signal number cannot be SIGKILL.
 @page
-@ifinfo
-@node pthread_kill, sigprocmask, sigaction, Signal Manager Directives
-@end ifinfo
 @subsection pthread_kill
 
 @subheading CALLING SEQUENCE:
@@ -339,9 +264,6 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigprocmask, pthread_sigmask, pthread_kill, Signal Manager Directives
-@end ifinfo
 @subsection sigprocmask
  
 @subheading CALLING SEQUENCE:
@@ -369,9 +291,6 @@ Invalid argument passed.
  
 
 @page
-@ifinfo
-@node pthread_sigmask, kill, sigprocmask, Signal Manager Directives
-@end ifinfo
 @subsection pthread_sigmask
 
 @subheading CALLING SEQUENCE:
@@ -399,9 +318,6 @@ Invalid argument passed.
 
 
 @page
-@ifinfo
-@node kill, sigpending, pthread_sigmask, Signal Manager Directives
-@end ifinfo
 @subsection kill
 
 @subheading CALLING SEQUENCE:
@@ -435,9 +351,6 @@ The process indicated by the parameter pid is invalid.
 
  
 @page
-@ifinfo
-@node sigpending, sigsuspend, kill, Signal Manager Directives
-@end ifinfo
 @subsection sigpending
  
 @subheading CALLING SEQUENCE:
@@ -465,9 +378,6 @@ Invalid address for set.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigsuspend, pause, sigpending, Signal Manager Directives
-@end ifinfo
 @subsection sigsuspend
  
 @subheading CALLING SEQUENCE:
@@ -494,9 +404,6 @@ Signal interrupted this function.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pause, sigwait, sigsuspend, Signal Manager Directives
-@end ifinfo
 @subsection pause
  
 @subheading CALLING SEQUENCE:
@@ -521,9 +428,6 @@ Signal interrupted this function.
 @subheading NOTES:
  
 @page
-@ifinfo
-@node sigwait, sigwaitinfo, pause, Signal Manager Directives
-@end ifinfo
 @subsection sigwait
 
 @subheading CALLING SEQUENCE:
@@ -552,9 +456,6 @@ Signal interrupted this function.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigwaitinfo, sigtimedwait, sigwait, Signal Manager Directives
-@end ifinfo
 @subsection sigwaitinfo
  
 @subheading CALLING SEQUENCE:
@@ -580,9 +481,6 @@ Signal interrupted this function.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sigtimedwait, sigqueue, sigwaitinfo, Signal Manager Directives
-@end ifinfo
 @subsection sigtimedwait
  
 @subheading CALLING SEQUENCE:
@@ -618,9 +516,6 @@ If timeout is NULL, then the thread will wait forever for the specified
 signal set.
 
 @page
-@ifinfo
-@node sigqueue, alarm, sigtimedwait, Signal Manager Directives
-@end ifinfo
 @subsection sigqueue
  
 @subheading CALLING SEQUENCE:
@@ -663,9 +558,6 @@ The process pid does not exist.
 
 
 @page
-@ifinfo
-@node alarm, Mutex Manager, sigqueue, Signal Manager Directives
-@end ifinfo
 @subsection alarm
  
 @subheading CALLING SEQUENCE:

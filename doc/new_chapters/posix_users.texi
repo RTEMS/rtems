@@ -108,7 +108,7 @@ This is the online version of the RTEMS POSIX API User's Guide
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, sched_yield, Top
+@node Command and Variable Index, Concept Index, , Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.
