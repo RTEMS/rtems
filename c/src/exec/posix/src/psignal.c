@@ -2,10 +2,23 @@
  *  $Id$
  */
 
+#include <assert.h>
+#include <errno.h>
 #include <signal.h>
 
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
+
+/*
+ *  Currently only 20 signals numbered 1-20 are defined
+ */
+
+#define SIGNAL_ALL_MASK  0x000fffff
+
+#define signo_to_mask( _sig ) (1 << ((_sig) - 1))
+
+#define is_valid_signo( _sig ) \
+  ((signo_to_mask(_sig) & SIGNAL_ALL_MASK) != 0 )
 
 /*
  *  3.3.2 Send a Signal to a Process, P1003.1b-1993, p. 68
@@ -33,7 +46,10 @@ int sigemptyset(
   sigset_t   *set
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  assert( set );  /* no word from posix, solaris returns EFAULT */
+
+  *set = 0;
+  return 0;
 }
 
 /*
@@ -44,7 +60,10 @@ int sigfillset(
   sigset_t   *set
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  assert( set );
+
+  *set = SIGNAL_ALL_MASK;
+  return 0;
 }
 
 /*
@@ -56,7 +75,15 @@ int sigaddset(
   int         signo
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  assert( set );
+
+  if ( !is_valid_signo(signo) ) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  *set |= signo_to_mask(signo);
+  return 0;
 }
 
 /*
@@ -68,7 +95,15 @@ int sigdelset(
   int         signo
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  assert( set );
+ 
+  if ( !is_valid_signo(signo) ) {
+    errno = EINVAL;
+    return -1;
+  }
+ 
+  *set &= ~signo_to_mask(signo);
+  return 0;
 }
 
 /*
@@ -80,7 +115,17 @@ int sigismember(
   int               signo
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  assert( set );
+ 
+  if ( !is_valid_signo(signo) ) {
+    errno = EINVAL;
+    return -1;
+  }
+ 
+  if ( *set & signo_to_mask(signo) )
+    return 1;
+
+  return 0;
 }
 
 /*
@@ -228,27 +273,10 @@ unsigned int alarm(
 }
 
 /*
- *  3.4.2 Suspend Process Execution, P1003.1b-1993, p. 80
+ *  3.4.2 Suspend Process Execution, P1003.1b-1993, p. 81
  */
 
 int pause( void )
 {
   return POSIX_NOT_IMPLEMENTED();
-}
-
-/*
- *  3.4.3 Delay Process Execution, P1003.1b-1993, p. 73
- */
-
-unsigned int sleep(
-  unsigned int seconds
-)
-{
-  /* XXX can we get away with this implementation? */
-  struct timespec tp;
-
-  tp.tv_sec = seconds;
-  tp.tv_nsec = 0;
-
-  return nanosleep( &tp, NULL );
 }

@@ -222,6 +222,14 @@ int pthread_attr_setscope(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
+  switch ( contentionscope ) {
+    case PTHREAD_SCOPE_PROCESS:
+    case PTHREAD_SCOPE_SYSTEM:
+      break;
+    default:
+      return EINVAL;
+  }
+
   attr->contentionscope = contentionscope;
   return 0;
 }
@@ -255,6 +263,14 @@ int pthread_attr_setinheritsched(
 {
   if ( !attr || !attr->is_initialized )
     return EINVAL;
+
+  switch ( inheritsched ) {
+    case PTHREAD_INHERIT_SCHED:
+    case PTHREAD_EXPLICIT_SCHED:
+      break;
+    default:
+      return EINVAL;
+  }
 
   attr->inheritsched = inheritsched;
   return 0;
@@ -567,6 +583,22 @@ int pthread_create(
 #endif
   int  detachstate;
 #endif
+
+  /*
+   *  P1003.1c/D10, p. 121.
+   *
+   *  If inheritsched is set to PTHREAD_INHERIT_SCHED, then this thread
+   *  inherits scheduling attributes from the creating thread.   If it is
+   *  PTHREAD_EXPLICIT_SCHED, then scheduling parameters come from the 
+   *  attributes structure.
+   */
+
+  switch ( attrp->inheritsched ) {
+    case PTHREAD_INHERIT_SCHED:
+      break; 
+    case PTHREAD_EXPLICIT_SCHED:
+      break; 
+  }
 
   /*
    *  Validate the RTEMS API priority and convert it to the core priority range.

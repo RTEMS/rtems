@@ -298,11 +298,14 @@ int nanosleep(
 {
   Watchdog_Interval ticks;
 
+  if ( rqtp->tv_nsec < 0 || rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
+    errno = EINVAL;
+    return -1;
+  }
+ 
 /* XXX this is interruptible by a posix signal */
 
 /* XXX rmtp is the time remaining on the timer -- we do not support this */
-
-/* XXX rmtp may be NULL */
 
   ticks = _POSIX_Time_Spec_to_interval( rqtp );
   
@@ -316,7 +319,12 @@ int nanosleep(
     );
     _Watchdog_Insert_ticks( &_Thread_Executing->Timer, ticks );
   _Thread_Enable_dispatch();
-  return 0;                    /* XXX should account for signal/remaining */
+
+  if ( rmtp ) {
+    /* XXX calculate time remaining */
+  }
+
+  return 0;                    /* XXX should account for signal */
 
 }
 
