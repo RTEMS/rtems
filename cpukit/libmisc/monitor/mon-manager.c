@@ -34,8 +34,10 @@ rtems_monitor_manager_next(
      * When we are called, it must be local
      */
 
-    if ( ! _Objects_Is_local_id(*next_id))
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( ! _Objects_Is_local_id(*next_id) )
         goto done;
+#endif
 
     object = _Objects_Get_next(table, *next_id, &location, next_id);
 
@@ -49,6 +51,8 @@ rtems_monitor_manager_next(
 	        _Objects_Copy_name_raw(&object->name, &copy->name, sizeof(copy->name));
 	}
 
+#if defined(RTEMS_MULTIPROCESSING)
 done:
+#endif
     return object;
 }

@@ -1,5 +1,10 @@
 2004-11-01	Joel Sherrill <joel@OARcorp.com>
 
+	* libmisc/monitor/mon-manager.c, libmisc/monitor/mon-object.c: Remove
+	references to _Object_Is_local in single processor configurations.
+
+2004-11-01	Joel Sherrill <joel@OARcorp.com>
+
 	* score/src/coresemsurrender.c, score/src/objectnametoid.c: All
 	_Objects_Is_Local... should only be called if multiprocessing is
 	enabled.

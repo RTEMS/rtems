@@ -203,28 +203,33 @@ rtems_monitor_object_canonical_next(
     void                        *canonical
 )
 {
-    rtems_id                     next_id;
-    void                        *raw_item;
+  rtems_id  next_id;
+  void     *raw_item;
 
-    if ( ! _Objects_Is_local_id(id))
-        next_id = rtems_monitor_object_canonical_next_remote(info->type,
-                                                             id,
-                                                             canonical);
-    else
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( ! _Objects_Is_local_id(id) ) {
+       next_id = rtems_monitor_object_canonical_next_remote(
+         info->type,
+         id,
+         canonical
+      );
+    } else
+#endif
     {
-        next_id = id;
+      next_id = id;
 
-        raw_item = (void *) info->next(info->object_information,
-                                       canonical,
-                                       &next_id);
+      raw_item = (void *) info->next(
+        info->object_information,
+        canonical,
+        &next_id
+      );
 
-        if (raw_item)
-        {
-            info->canonical(canonical, raw_item);
-            _Thread_Enable_dispatch();
-        }
-    }
-    return next_id;
+     if (raw_item) {
+       info->canonical(canonical, raw_item);
+       _Thread_Enable_dispatch();
+     }
+  }
+  return next_id;
 }
 
 
