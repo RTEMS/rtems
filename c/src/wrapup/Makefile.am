@@ -9,7 +9,7 @@ include $(top_srcdir)/automake/compile.am
 ## Setup the variant build subdirectory
 ARCH_OPTIMIZE_V = o-optimize
 ARCH_DEBUG_V = o-debug
-                                                                                
+
 ARCH__V = $(ARCH_OPTIMIZE_V)
 ARCH = $(ARCH_$(VARIANT_V)_V)
 
@@ -24,8 +24,7 @@ if HAS_WRAPUP_LIBBSP
 SRCS += \
     ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/wrapup/$(ARCH)/libbsp.a
 else
-SRCS += \
-    ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp$(LIB_VARIANT).a
+SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp$(LIB_VARIANT).a
 endif
 endif
 
@@ -98,12 +97,13 @@ TMPINSTALL_FILES =
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
-TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a: $(ARCH)/librtemsbsp$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a
 TMPINSTALL_FILES += $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a
 
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

@@ -1,3 +1,12 @@
+2004-02-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/Makefile.am, librdbg/Makefile.am, optman/Makefile.am:
+	Preinstall dirs.
+	* wrapup/Makefile.am: Preinstall dirs. Cosmetics.
+	* aclocal/check-multiprocessing.m4: Cosmetics.
+	* aclocal/env-rtemsbsp.m4: Remove RTEMS_ROOT.
+	* aclocal/project-root.m4: Remove obsolete comments. Remove PACKHEX.
+
 2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* librdbg/Makefile.am: Merge-in librdbg/include/Makefile.am,

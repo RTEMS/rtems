@@ -37,5 +37,5 @@ AC_MSG_ERROR([multiprocessing requested but not supported])
 fi
 ],[rtems_cv_HAS_MP="no";])
 
-AM_CONDITIONAL(HAS_MP,[test "$rtems_cv_HAS_MP" = "yes"])
+AM_CONDITIONAL(HAS_MP,[test x"$rtems_cv_HAS_MP" = x"yes"])
 ])
