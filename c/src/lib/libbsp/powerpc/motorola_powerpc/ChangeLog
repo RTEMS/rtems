@@ -1,3 +1,8 @@
+2004-11-16	Richard Campbell <richard.campbell@OARcorp.com>
+
+	* README.MVME2100: Update to include DBAT0.
+	* bsp_specs: Fix spacing.
+
 2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
 
 	* Makefile.am, configure.ac, bootloader/Makefile.am,
