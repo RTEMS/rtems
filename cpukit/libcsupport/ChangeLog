@@ -1,3 +1,20 @@
+2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 449/rtems:
+	* src/getegid.c: New (Copied from ../posix/src).
+	* src/geteuid.c: New (Copied from ../posix/src).
+	* src/getgid.c: New (Copied from ../posix/src).
+	* src/getgroups.c: New (Copied from ../posix/src).
+	* src/getlogin.c: New (Copied from ../posix/src).
+	* src/getpgrp.c: New (Copied from ../posix/src).
+	* src/getpid.c: New (Copied from ../posix/src).
+	* src/getppid.c: New (Copied from ../posix/src).
+	* src/getuid.c: New (Copied from ../posix/src).
+	* src/setpgid.c: New (Copied from ../posix/src).
+	* src/setsid.c: New (Copied from ../posix/src).
+	* src/no_posix: Remove getpid and _getpid_r.
+	* Makefile.am: Reflect changes above.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
