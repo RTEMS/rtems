@@ -2,11 +2,10 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.54)
+AC_PREREQ(2.57)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([score])
 RTEMS_TOP(..)
-AC_CONFIG_AUX_DIR(..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
@@ -150,7 +149,6 @@ AC_CONFIG_FILES([Makefile
 include/Makefile
 rtems/Makefile
 sapi/Makefile
-sapi/include/rtems/sptables.h
 score/Makefile
 score/cpu/Makefile
 wrapup/Makefile
