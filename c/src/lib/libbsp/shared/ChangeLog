@@ -1,9 +1,15 @@
+2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* vmeUniverse/vmeUniverse.c: Remove CVS-Log (skrews up on
+	CVS-mergers).
+
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 349/bsps
-	* shared/README.universe, shared/vmeUniverse/README.porting
-	shared/vmeUniverse/README.universe, shared/vmeUniverse/vmeUniverse.c,
-	shared/vmeUniverse/vmeUniverse.h: Update of the VME universe driver.
+	* README.universe, vmeUniverse/README.porting
+	vmeUniverse/README.universe, vmeUniverse/vmeUniverse.c,
+	vmeUniverse/vmeUniverse.h: Update of the VME universe driver.
+	* vmeUniverse/README.porting: New file.
 
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
