@@ -17,7 +17,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-noinst_DATA = $(ARCH)
 bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
 $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o

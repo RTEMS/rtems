@@ -26,14 +26,14 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # to create the program's environment.
 AM_CPPFLAGS += -DARM_RDI_MONITOR
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(PGM)
+$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(ARCH)/start.o $(TMPINSTALL_FILES)
 
-.PRECIOUS: $(PGM)
+.PRECIOUS: $(ARCH)/start.o
 
 EXTRA_DIST = start.S
 

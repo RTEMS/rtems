@@ -2,9 +2,6 @@
 ## $Id$
 ##
 
-
-PGMS = $(ARCH)/start.o
-
 S_FILES = start.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
@@ -18,12 +15,14 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
+bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
+
 $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
-all: $(ARCH) $(OBJS) $(PGMS) $(TMPINSTALL_FILES)
+all: $(ARCH) $(OBJS) $(ARCH)/start.o $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.S
 
