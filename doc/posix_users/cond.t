@@ -43,7 +43,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection pthread_condattr_init
+@subsection pthread_condattr_init - 
 
 @subheading CALLING SEQUENCE:
 
@@ -68,7 +68,7 @@ attributes object.
 @subheading NOTES:
 
 @page
-@subsection pthread_condattr_destroy
+@subsection pthread_condattr_destroy - 
 
 @subheading CALLING SEQUENCE:
 
@@ -92,7 +92,7 @@ The attribute object specified is invalid.
 @subheading NOTES:
 
 @page
-@subsection pthread_condattr_setpshared
+@subsection pthread_condattr_setpshared - 
 
 @subheading CALLING SEQUENCE:
 
@@ -118,7 +118,7 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@subsection pthread_condattr_getpshared
+@subsection pthread_condattr_getpshared - 
 
 @subheading CALLING SEQUENCE:
 
@@ -145,7 +145,7 @@ Invalid argument passed.
 
 
 @page
-@subsection pthread_cond_init
+@subsection pthread_cond_init - 
 
 @subheading CALLING SEQUENCE:
 
@@ -180,7 +180,7 @@ The specified attribute value is invalid.
 @subheading NOTES:
 
 @page
-@subsection pthread_cond_destroy
+@subsection pthread_cond_destroy - 
 
 @subheading CALLING SEQUENCE:
 
@@ -207,7 +207,7 @@ The specified condition variable is currently in use.
 @subheading NOTES:
 
 @page
-@subsection pthread_cond_signal
+@subsection pthread_cond_signal - 
 
 @subheading CALLING SEQUENCE:
 
@@ -234,7 +234,7 @@ This routine should not be invoked from a handler from an asynchronous signal
 handler or an interrupt service routine.
 
 @page
-@subsection pthread_cond_broadcast
+@subsection pthread_cond_broadcast - 
 
 @subheading CALLING SEQUENCE:
 
@@ -261,7 +261,7 @@ This routine should not be invoked from a handler from an asynchronous signal
 handler or an interrupt service routine.
 
 @page
-@subsection pthread_cond_wait
+@subsection pthread_cond_wait - 
 
 @subheading CALLING SEQUENCE:
 
@@ -289,7 +289,7 @@ the mutex was not owned by the current thread at the time of the call.
 @subheading NOTES:
 
 @page
-@subsection pthread_cond_timedwait
+@subsection pthread_cond_timedwait - 
 
 @subheading CALLING SEQUENCE:
 
