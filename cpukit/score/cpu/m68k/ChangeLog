@@ -1,3 +1,7 @@
+2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Convert to using automake compilation rules.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* qsm.h, sim.h: Remove efi68k and efi332 references as they are no

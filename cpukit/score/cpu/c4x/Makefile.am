@@ -5,8 +5,7 @@
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/multilib.am
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../../automake/amcompile.am
 
 include_HEADERS = asm.h c4xio.h
 
@@ -14,20 +13,17 @@ include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/c4x.h \
     rtems/score/types.h rtems/score/cpu_asm.h
 
-C_FILES = cpu.c irq.c
-OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+EXTRA_LIBRARIES = libscorecpu.a
+CLEANFILES = libscorecpu.a
+libscorecpu_a_SOURCES = cpu.c irq.c cpu_asm.S
+libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-S_FILES = cpu_asm.S
-OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
+EXTRA_LIBRARIES += libscorecpu_g.a
+CLEANFILES += libscorecpu_g.a
+libscorecpu_g_a_SOURCES = $(libscorecpu_a_SOURCES)
+libscorecpu_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-LIB = $(ARCH)/libscorecpu.a
-
-$(LIB): $(OBJS)
-	$(make-library)
-
-all-local: $(PREINSTALL_FILES) $(LIB)
-
-EXTRA_DIST = cpu.c irq.c cpu_asm.S
+all-local: $(PREINSTALL_FILES) libscorecpu$(LIB_VARIANT).a
 
 PREINSTALL_FILES =
 
