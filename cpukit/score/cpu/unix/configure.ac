@@ -43,7 +43,22 @@ typedef struct {
 } CPU_CONTEXT;
 ])
 
-AM_CONFIG_HEADER(rtems/score/unixsize.h)
+AM_CONFIG_HEADER([rtems/score/unixsize-tmp.h],[
+echo "/* automatically generated -- DO NOT EDIT!! */" >$tmp/config.h
+echo                                                  >>$tmp/config.h
+echo "#ifndef __rtems_score_unixsize_h"               >>$tmp/config.h
+echo "#define __rtems_score_unixsize_h"               >>$tmp/config.h
+echo                                                  >>$tmp/config.h
+sed -e '/.*PACKAGE.*/d' rtems/score/unixsize-tmp.h >> $tmp/config.h
+echo                                                  >>$tmp/config.h
+echo "#endif"                                         >>$tmp/config.h
+AS_IF([cmp -s rtems/score/unixsize.h $tmp/config.h 2>/dev/null],
+  [AC_MSG_NOTICE([rtems/score/unixsize.h is unchanged])
+   rm -f $tmp/config.h],
+  [AC_MSG_NOTICE([creating rtems/score/unixsize.h])
+   rm -f rtems/score/unixsize.h
+   mv $tmp/config.h rtems/score/unixsize.h])
+])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

@@ -1,3 +1,9 @@
+2002-11-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Generate unixsize.h on the fly, filter out
+	autoconf-2.53 PACKAGE crap.
+	* rtems/score/.cvsignore: unixsize*
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.

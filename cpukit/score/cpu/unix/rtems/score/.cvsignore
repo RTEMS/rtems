@@ -1,4 +1,4 @@
 Makefile
 Makefile.in
-unixsize.h*
+unixsize*
 stamp-h*
