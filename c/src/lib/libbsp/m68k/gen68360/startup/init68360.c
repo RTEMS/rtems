@@ -154,7 +154,7 @@ void _Init68360 (void)
 	/*
 	 * Step 14: More system initialization
 	 * SDCR (Serial DMA configuration register)
-	 *	Disable SDMA during FREEZE
+	 *	Enable SDMA during FREEZE
 	 *	Give SDMA priority over all interrupt handlers
 	 *	Set DMA arbiration level to 4
 	 * CICR (CPM interrupt configuration register):
@@ -167,7 +167,7 @@ void _Init68360 (void)
 	 *	Vector base 128
 	 *	SCCs priority grouped at top of table
 	 */
-	m360.sdcr = M360_SDMA_FREEZE | M360_SDMA_SISM_7 | M360_SDMA_SAID_4;
+	m360.sdcr = M360_SDMA_SISM_7 | M360_SDMA_SAID_4;
 	m360.cicr = (3 << 22) | (2 << 20) | (1 << 18) | (0 << 16) |
 						(4 << 13) | (0x1F << 8) | (128);
 
