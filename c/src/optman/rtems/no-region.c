@@ -88,7 +88,7 @@ rtems_status_code rtems_region_get_segment(
 rtems_status_code rtems_region_get_segment_size(
   Objects_Id         id,
   void              *segment,
-  uint32_t          *size
+  size_t            *size
 )
 {
   _Internal_error_Occurred(
