@@ -39,7 +39,7 @@ void *Task_2(
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     10
+#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
 
 #include <confdefs.h>
 
