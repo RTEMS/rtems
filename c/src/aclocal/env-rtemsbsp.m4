@@ -51,6 +51,6 @@ AM_CONDITIONAL([MULTILIB],[false])
 includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
 libdir="\${exec_prefix}/${RTEMS_BSP}/lib"
 
-bsplibdir="\${exec_prefix}/${RTEMS_BSP}/lib"
-AC_SUBST(bsplibdir)
+AC_SUBST([bsplibdir],["\${exec_prefix}/${RTEMS_BSP}/lib"])
+AC_SUBST([project_libdir],["\$(libdir)"])
 ])

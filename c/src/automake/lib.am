@@ -15,8 +15,6 @@ $(AR) $(ARFLAGS) $@ $^
 $(RANLIB) $@
 endef
 
-project_libdir = $(libdir)
-
 $(PROJECT_RELEASE)/lib/$(dirstamp):
 	@$(mkinstalldirs) $@
 	@: > $(PROJECT_RELEASE)/lib/$(dirstamp)
