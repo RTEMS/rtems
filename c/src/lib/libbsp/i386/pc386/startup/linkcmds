@@ -67,7 +67,12 @@ SECTIONS
 
     _etext = ALIGN( 0x10 ) ;
   }
-  .data ADDR( .text ) + SIZEOF( .text ):
+  .init : 
+  { *( .init ) } = 0x9090
+  .fini :
+  { *( .fini ) } = 0x9090
+
+  .data ADDR( .fini ) + SIZEOF( .fini ):
   {
     _data_start = . ;
     *(.data)

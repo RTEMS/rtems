@@ -39,7 +39,9 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  +=
+# USE_INIT_FINI tells main.c what C++ help we need.
+
+DEFINES  += -DUSE_INIT_FINI
 CPPFLAGS +=
 CFLAGS   +=
 
