@@ -1,5 +1,13 @@
 2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* custom/Cygwin-posix.cfg: Remove -DMALLOC_PROVIDED.
+	* custom/FreeBSD-posix.cfg: Ditto.
+	* custom/HPUX9-posix.cfg: Ditto.
+	* custom/Linux-posix.cfg: Ditto.
+	* custom/Solaris-posix.cfg: Ditto.
+
+2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* custom/erc32.cfg: Remove erc32nfp support, GCC272.
 	* custom/erc32nfp.cfg: Merge in portions from erc32.cfg.
 
