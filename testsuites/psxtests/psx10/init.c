@@ -23,7 +23,8 @@ void *POSIX_Init(
   pthread_t           thread_id;
   pthread_condattr_t  attr;
   int                 pshared;
-  pthread_cond_t      cond = PTHREAD_COND_INITIALIZER;
+  pthread_cond_t      cond;
+  struct timespec     timeout;
 
   puts( "\n\n*** POSIX TEST 10 ***" );
 
@@ -89,16 +90,20 @@ void *POSIX_Init(
   status = pthread_cond_destroy( &cond );
   assert( !status );
 
+/* initiailize the attribute for the rest of the test */
+
   puts( "Init: pthread_cond_init - attr" );
   status = pthread_cond_init( &Cond1_id, &attr );
   assert( !status );
 
-  /* create a thread */
+/* signal task1 with a condition variable */
 
   empty_line();
 
   status = pthread_create( &Task_id, NULL, Task_1, NULL );
   assert( !status );
+
+/* switch to task1 to allow it to wait for a condition variable */
 
   puts( "Init: sleep to switch to Task_1" );
   sleep( 1 );
@@ -112,16 +117,36 @@ void *POSIX_Init(
   status = pthread_create( &Task2_id, NULL, Task_2, NULL );
   assert( !status );
 
+/* switch to task1 and task2 to allow them to wait for broadcast signal */
+
   puts( "Init: sleep - switch to Task_1 and Task_2" );
   sleep( 1 );
+
+/* broadcast a condition variable to task1 and task2 */
 
   puts( "Init: pthread_cond_broadcast" );
   status = pthread_cond_broadcast( &Cond1_id );
   assert( !status );
 
   puts( "Init: sleep - switch to Task_1" );
-  sleep( 1 );
+  sleep( 0 );
 
+/* timedwait case - timeout */
+
+  status = pthread_mutex_lock( &Mutex_id );
+  assert( !status );
+
+/* set timeout to 3 seconds */
+
+  timeout.tv_sec = 3;
+
+  puts( "Init: pthread_cond_timedwait for 3 seconds" );
+  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
+  if ( status != ETIMEDOUT )
+    printf( "status = %d\n", status );
+  assert( status == ETIMEDOUT );
+
+  puts( "Init: timedout on pthread_cond_timedwait release mutex" );
   /* exit this thread */
 
   puts( "*** END OF POSIX TEST 5 ***" );
