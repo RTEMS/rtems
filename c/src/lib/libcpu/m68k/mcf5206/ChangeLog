@@ -1,5 +1,11 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/ckinit.c, console/mcfuart.c, include/mcf5206e.h,
+	include/mcfmbus.h, include/mcfuart.h, mbus/mcfmbus.c, timer/timer.c,
+	timer/timerisr.S: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* clock/ckinit.c, console/mcfuart.c, timer/timer.c, timer/timerisr.S:
 	Removed incorrect statement about copyright assignment.
 
