@@ -35,6 +35,8 @@ AC_OUTPUT(
 Makefile
 mkbinutilspec
 mkgccnewlibspec
+mkgdbspec
 binutils/Makefile
 gccnewlib/Makefile
+gdb/Makefile
 )

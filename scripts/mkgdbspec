@@ -1,33 +1,55 @@
 #!/bin/sh 
 #
-#  Usage: mktoolspec CPU
+#  Usage: mkgdbspec CPU
 #
 
 RTEMS_DIR=`dirname $0`
-RTEMS_VERSION=`grep Version ${RTEMS_DIR}/../VERSION | \
-sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
+CFG=user.cfg
+dst=/usr/src/redhat/SPECS
 
-target_alias=$1
-release=0
+usage()
 
-# Some linux distributions use /usr/src/packages
-# redhat uses /usr/src/redhat
-# others might use /usr/src
-if test -d /usr/src/packages/SPECS; 
+  echo "$0 [options] <target_alias>"
+  echo "  options:"
+  echo "    -cfg <user.cfg>"
+  echo "    -o <rpm-spec-dir>"
+  exit 1 ;
+
+
+while test $# -ge 2; do
+case $1 in
+-cfg)
+  shift
+  CFG=$1
+  shift
+  ;;
+-o)
+  shift
+  dst=$1
+  shift
+  ;;
+-*)
+  echo "invalid option $1";
+  usage
+  ;;
+esac
+done
+
+if test ! $# -eq 1;
 then
-dst=/usr/src/packages/SPECS;
-elif test -d /usr/src/redhat/SPECS;
- then
-dst=/usr/src/redhat/SPECS;
-elif test -d /usr/src/SPECS/; 
-then
-dst=/usr/src/SPECS;
+  echo "Invalid number of arguments"
+  usage
 fi
 
-sed -e "s%@Version@%${RTEMS_VERSION}%g" \
--e "s%@bsp@%${bsp}%g" \
--e "s%@Release@%${release}%g" \
--e "s%@target_alias@%${target_alias}%g" \
+# target to build for
+target_alias=$1
+
+rpm_release=0
+
+sed -e "s%@Release@%${rpm_release}%g" \
+    -e "s%@target_alias@%${target_alias}%g" \
+    -e "s%@gdb_version@%${gdb_version}%g" \
+    -e "s%@gdb_patch_version@%${gdb_patch_version}%g" \
 < ${RTEMS_DIR}/gdb.spec.in \
 > ${dst}/$target_alias-gdb.spec
 

@@ -1,25 +1,24 @@
 #!/bin/sh 
 #
-#  Usage: mkbinutilspec CPU
+#  Usage: mkgdbspec CPU
 #
 
 RTEMS_DIR=`dirname $0`
-
 CFG=user.cfg
-dst=/usr/src/redhat/SPECS
+dst=@RPM_SPECSdir@
 
 usage()
-{
+
   echo "$0 [options] <target_alias>"
   echo "  options:"
   echo "    -cfg <user.cfg>"
   echo "    -o <rpm-spec-dir>"
   exit 1 ;
-}
+
 
 while test $# -ge 2; do
 case $1 in
--cfg) 
+-cfg)
   shift
   CFG=$1
   shift
@@ -45,18 +44,24 @@ fi
 # target to build for
 target_alias=$1
 
-# RPM release number
 rpm_release=0
-
-. ./$CFG
-
-specfile=${dst}/$target_alias-binutils-${binutils_version}.spec
 
 sed -e "s%@Release@%${rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
-    -e "s%@binutils_version@%${binutils_version}%g" \
-    -e "s%@binutils_patch_version@%${binutils_patch_version}%g" \
-< ${RTEMS_DIR}/binutils/binutils.spec.in \
-> ${specfile}
+    -e "s%@gdb_version@%${gdb_version}%g" \
+    -e "s%@gdb_patch_version@%${gdb_patch_version}%g" \
+< ${RTEMS_DIR}/gdb.spec.in \
+> ${dst}/$target_alias-gdb.spec
 
-echo Generated ${specfile}
+case ${target} in
+  powerpc*)
+     echo "/opt/rtems/bin/@target_alias@-run" 
+     ;;
+  sparc*)
+     echo "/opt/rtems/bin/@target_alias@-run" 
+     echo "/opt/rtems/bin/@target_alias@-sis" 
+     ;;
+  *) ;;
+esac >> ${dst}/$target_alias-gdb.spec
+
+echo Generated ${dst}/$target_alias-gdb.spec.

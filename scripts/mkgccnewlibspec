@@ -6,7 +6,7 @@
 RTEMS_DIR=`dirname $0`
 
 CFG=user.cfg
-dst=/usr/src/packages/SPECS
+dst=/usr/src/redhat/SPECS
 
 usage()
 {
