@@ -1,3 +1,7 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* m68k-stub.c: Fixed warnings about multi-line strings in asm.
+
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
 	* m68k-stub.c: Eliminated multi-line asm statements for gcc 3.x.

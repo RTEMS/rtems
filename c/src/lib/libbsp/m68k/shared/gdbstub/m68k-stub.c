@@ -349,75 +349,75 @@ asm("									\n\
 	move.l	lastFrame,%a0	/* last frame pointer */		\n\
 ");
 SAVE_FP_REGS();        
-asm("
-	lea     registers,%a5   /* get address of registers     */
-        move.w  (%sp),%d1        /* get status register          */
-        move.w   %d1,66(%a5)      /* save sr		 	*/	
-	move.l   2(%sp),%a4      /* save pc in a4 for later use  */
-	move.w   6(%sp),%d0	/* get '020 exception format	*/
-        move.w   %d0,%d2        /* make a copy of format word   */
-#
-# compute exception number
-	and.l    #0xfff,%d2   	/* mask off vector offset	*/
-	lsr.w    #2,%d2   	/* divide by 4 to get vect num	*/
-#if 1
-        cmp.l    #33,%d2
-        bne      nopc_adjust
-        subq.l   #2,%a4
-nopc_adjust:
-#endif
-        move.l   %a4,68(%a5)     /* save pc in _regisers[]      	*/
-
-#
-# figure out how many bytes in the stack frame
-        andi.w   #0xf000,%d0    /* mask off format type         */
-        rol.w    #5,%d0         /* rotate into the low byte *2  */
-        lea     exceptionSize,%a1   
-        add.w    %d0,%a1        /* index into the table         */
-	move.w   (%a1),%d0      /* get number of words in frame */
-        move.w   %d0,%d3        /* save it                      */
-        sub.w    %d0,%a0	/* adjust save pointer          */
-        sub.w    %d0,%a0	/* adjust save pointer(bytes)   */
-	move.l   %a0,%a1        /* copy save pointer            */
-	subq.l   #1,%d0         /* predecrement loop counter    */
-#
-# copy the frame
-saveFrameLoop:
-	move.w 	(%sp)+,(%a1)+
-	dbf     %d0,saveFrameLoop
-#
-# now that the stack has been clenaed,
-# save the a7 in use at time of exception
-        move.l   %sp,superStack  /* save supervisor sp           */
-        andi.w   #0x2000,%d1      /* were we in supervisor mode ? */
-        beq      userMode       
-        move.l   %a7,60(%a5)      /* save a7                  */
-        bra      a7saveDone
-userMode:  
-	move.l   %usp,%a1    	
-        move.l   %a1,60(%a5)      /* save user stack pointer	*/
-a7saveDone:
-
-#
-# save size of frame
-        move.w   %d3,-(%a0)
-
-        move.l   %d2,-(%a0)     /* save vector number           */
-#
-# save pc causing exception
-        move.l   %a4,-(%a0)
-#
-# save old frame link and set the new value
-	move.l	lastFrame,%a1	/* last frame pointer */
-	move.l   %a1,-(%a0)		/* save pointer to prev frame	*/
-        move.l   %a0,lastFrame
-
-        move.l   %d2,-(%sp)  	    /* push exception num           */
-	move.l   exceptionHook,%a0  /* get address of handler */
-        jbsr    (%a0)             /* and call it */
-        clr.l   (%sp)            /* replace exception num parm with frame ptr */
-        jbsr     _returnFromException   /* jbsr, but never returns */
-");
+asm("\n\
+	lea     registers,%a5   /* get address of registers     */\n\
+        move.w  (%sp),%d1        /* get status register          */\n\
+        move.w   %d1,66(%a5)      /* save sr		 	*/	\n\
+	move.l   2(%sp),%a4      /* save pc in a4 for later use  */\n\
+	move.w   6(%sp),%d0	/* get '020 exception format	*/\n\
+        move.w   %d0,%d2        /* make a copy of format word   */\n\
+#\n\
+# compute exception number\n\
+	and.l    #0xfff,%d2   	/* mask off vector offset	*/\n\
+	lsr.w    #2,%d2   	/* divide by 4 to get vect num	*/\n\
+/* #if 1 */\n\
+        cmp.l    #33,%d2\n\
+        bne      nopc_adjust\n\
+        subq.l   #2,%a4\n\
+nopc_adjust:\n\
+/* #endif */\n\
+        move.l   %a4,68(%a5)     /* save pc in _regisers[]      	*/\n\
+\n\
+#\n\
+# figure out how many bytes in the stack frame\n\
+        andi.w   #0xf000,%d0    /* mask off format type         */\n\
+        rol.w    #5,%d0         /* rotate into the low byte *2  */\n\
+        lea     exceptionSize,%a1   \n\
+        add.w    %d0,%a1        /* index into the table         */\n\
+	move.w   (%a1),%d0      /* get number of words in frame */\n\
+        move.w   %d0,%d3        /* save it                      */\n\
+        sub.w    %d0,%a0	/* adjust save pointer          */\n\
+        sub.w    %d0,%a0	/* adjust save pointer(bytes)   */\n\
+	move.l   %a0,%a1        /* copy save pointer            */\n\
+	subq.l   #1,%d0         /* predecrement loop counter    */\n\
+#\n\
+# copy the frame\n\
+saveFrameLoop:\n\
+	move.w 	(%sp)+,(%a1)+\n\
+	dbf     %d0,saveFrameLoop\n\
+#\n\
+# now that the stack has been clenaed,\n\
+# save the a7 in use at time of exception\n\
+        move.l   %sp,superStack  /* save supervisor sp           */\n\
+        andi.w   #0x2000,%d1      /* were we in supervisor mode ? */\n\
+        beq      userMode       \n\
+        move.l   %a7,60(%a5)      /* save a7                  */\n\
+        bra      a7saveDone\n\
+userMode:  \n\
+	move.l   %usp,%a1    	\n\
+        move.l   %a1,60(%a5)      /* save user stack pointer	*/\n\
+a7saveDone:\n\
+\n\
+#\n\
+# save size of frame\n\
+        move.w   %d3,-(%a0)\n\
+\n\
+        move.l   %d2,-(%a0)     /* save vector number           */\n\
+#\n\
+# save pc causing exception\n\
+        move.l   %a4,-(%a0)\n\
+#\n\
+# save old frame link and set the new value\n\
+	move.l	lastFrame,%a1	/* last frame pointer */\n\
+	move.l   %a1,-(%a0)		/* save pointer to prev frame	*/\n\
+        move.l   %a0,lastFrame\n\
+\n\
+        move.l   %d2,-(%sp)  	    /* push exception num           */\n\
+	move.l   exceptionHook,%a0  /* get address of handler */\n\
+        jbsr    (%a0)             /* and call it */\n\
+        clr.l   (%sp)            /* replace exception num parm with frame ptr */\n\
+        jbsr     _returnFromException   /* jbsr, but never returns */\n\
+");\n\
 #else /* mc68000 */
 /* This function is called when an exception occurs.  It translates the
  * return address found on the stack into an exception vector # which
@@ -431,12 +431,12 @@ a7saveDone:
  *   Return Address  MSWord              
  *   Return Address  LSWord             
  */
-asm("
-.text
-.globl _catchException
+asm("\n\
+.text\n\
+.globl _catchException\n\
 _catchException:");
 DISABLE_INTERRUPTS();
-asm("
+asm("\
         moveml %d0-%d7/%a0-%a6,registers  /* save registers               */ \n\
 	movel	lastFrame,%a0	/* last frame pointer */ \n\
 ");
@@ -665,9 +665,10 @@ char  remcomOutBuffer[BUFMAX];
 static short error;
 
 
-void debug_error(format, parm)
-char * format;
-char * parm;
+void debug_error(
+char * format,
+char * parm
+)
 {
   if (remote_debug) fprintf (stderr,format,parm);
 }
