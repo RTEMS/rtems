@@ -34,7 +34,7 @@ unsigned int PPC_DECREMENTER_CLICKS;
     _old = (rtems_isr_entry) set_vector( _new, CLOCK_VECTOR, 1 ); \
     PPC_DECREMENTER_CLICKS = (unsigned int)&PSIM_INSTRUCTIONS_PER_MICROSECOND; \
     PPC_DECREMENTER_CLICKS *= rtems_configuration_get_microseconds_per_tick(); \
-    PPC_DECREMENTER_CLICKS = 1000; \
+    /* PPC_DECREMENTER_CLICKS = 5000; */ \
   } while(0)
 
 #define Clock_driver_support_initialize_hardware() \
