@@ -194,7 +194,7 @@ void stat_a_file(
 
 
     printf("\n\tst_dev     (0x%x:0x%x)\n", major1, minor1 );
-    printf(  "...st_ino     %x\n", statbuf.st_ino );
+    printf(  "...st_ino     %x\n", (int) statbuf.st_ino );
     printf(  "...st_mode    %o\n", statbuf.st_mode );
     printf(  "...st_nlink   %x\n", statbuf.st_nlink );
     printf(  "...st_uid     %d\n", statbuf.st_uid );
