@@ -47,28 +47,9 @@
  * Data for the signals 
  */
 
-struct sigaction signal_inf[SIGRTMAX];
-
 /***********************************
  * Definition of Internal Functions
  ***********************************/
-
-/* ***************************************************************************
- * PRINT_MSG_S 
- * 
- *  Description: This function write a message in the display.
- *               It is used for debugging and all the calls must be deleted
- *               when the tests finish 
- * ***************************************************************************/
-
-static void PRINT_MSG_S ( char *msg )
-{
-
-#ifdef DEBUG_MESSAGES
-   printf("%s\n", msg);
-#endif
-
-}
 
 /* ***************************************************************************
  * TIMER_INITIALIZE_S
@@ -215,8 +196,6 @@ rtems_timer_service_routine FIRE_TIMER_S (rtems_id timer, void *data)
    * expired timer will be stored in "timer_pos". In theory a timer can not
    * expire if it has not been created or has been deleted */ 
 
-  PRINT_MSG_S ("FIRE_TIMER_S");
-
   timer_pos = TIMER_POSITION_F(timer);
 
   /* Increases the number of expiration of the timer in one unit. */
@@ -257,10 +236,8 @@ rtems_timer_service_routine FIRE_TIMER_S (rtems_id timer, void *data)
 
   if( pthread_kill ( timer_struct[timer_pos].thread_id ,
                      timer_struct[timer_pos].inf.sigev_signo ) ) {
-     PRINT_MSG_S ("ERROR_PTHREAD_KILL");
-  } else {
-     PRINT_MSG_S ("SUCCESS_PTHREAD_KILL");
-  }
+     /* XXX error handling */
+  } 
 
   /*
    * After the signal handler returns, the count of expirations of the
@@ -313,8 +290,6 @@ int timer_create(
   switch (return_v) {
      case RTEMS_SUCCESSFUL : 
 
-       PRINT_MSG_S("SUCCESS: rtems create timer RTEMS_SUCCESSFUL");
-      
        /*
         * The timer has been created properly
         */
@@ -359,13 +334,11 @@ int timer_create(
 
      case RTEMS_INVALID_NAME : /* The assigned name is not valid */
 
-       PRINT_MSG_S ("ERROR: rtems create timer RTEMS_INVALID_NAME");
        set_errno_and_return_minus_one( EINVAL );
 
      case RTEMS_TOO_MANY :
 
        /* There has been created too much timers for the same process */
-       PRINT_MSG_S ("ERROR: rtems create timer RTEMS_TOO_MANY ");
        set_errno_and_return_minus_one( EAGAIN );
      
      default :
@@ -534,8 +507,6 @@ int timer_settime(
         switch ( return_v ) {
            case RTEMS_SUCCESSFUL:
 
-              PRINT_MSG_S ("SUCCESS: timer_settime RTEMS_SUCCESSFUL");
-
               /* The timer has been started and is running */
 
               /* Actualizes the data of the structure and 
@@ -559,17 +530,17 @@ int timer_settime(
 
            case RTEMS_INVALID_ID:
 
-              PRINT_MSG_S ("ERROR: timer_settime RTEMS_INVALID_ID");
+              /* XXX error handling */
               break;
 
            case RTEMS_NOT_DEFINED:
 
-              PRINT_MSG_S ("ERROR: timer_settime RTEMS_NOT_DEFINED");
+              /* XXX error handling */
               break;
 
            case RTEMS_INVALID_CLOCK:
 
-              PRINT_MSG_S ("ERROR: timer_settime RTEMS_INVALID_CLOCK");
+              /* XXX error handling */
               break;
 
            default:
@@ -608,8 +579,6 @@ int timer_settime(
         switch (return_v) {
            case RTEMS_SUCCESSFUL:
 
-              PRINT_MSG_S ( "SUCCESS: timer_settime RTEMS_SUCCESSFUL");
-              
               /* The timer has been started and is running */
 
               /* Actualizes the data of the structure and 
@@ -634,8 +603,6 @@ int timer_settime(
 
            case RTEMS_INVALID_ID:
 
-              PRINT_MSG_S ( "ERROR: timer_settime RTEMS_INVALID_ID");
-
               /* The timer identifier is not correct. In theory, this 
                * situation can not occur, but the solution is easy */ 
 
@@ -644,8 +611,6 @@ int timer_settime(
               break;
 
            case RTEMS_INVALID_NUMBER:
-
-              PRINT_MSG_S ( "ERROR: timer_settime RTEMS_INVALID_NUMBER");
 
               /* In this case, RTEMS fails because the values of timing
                * are incorrect */
@@ -668,13 +633,10 @@ int timer_settime(
 
         /* It does nothing, although it will be probably necessary to 
          * return an error */
-
    }
 
    /* To avoid problems */
-
    return 0;
-
 }
 
 

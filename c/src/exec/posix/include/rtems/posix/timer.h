@@ -35,6 +35,9 @@
  */
 
 typedef struct {
+  Objects_Control   Object;
+  Watchdog_Control  Ticker;
+
   pthread_t         thread_id;  /* Thread identifier                     */
   char              state;      /* State of the timer                    */
   struct sigevent   inf;        /* Information associated to the timer   */
@@ -51,6 +54,17 @@ typedef struct {
 
 extern int timer_max;
 extern POSIX_Timer_Control *timer_struct;
+
+/*
+ *  The following defines the information control block used to manage
+ *  this class of objects.
+ */
+
+RTEMS_EXTERN Objects_Information  _POSIX_Timer_Information;
+
+#ifndef __RTEMS_APPLICATION__
+#include <rtems/posix/timer.inl>
+#endif
 
 #endif
 /* end of include file */

@@ -1,3 +1,11 @@
+2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* inline/rtems/posix/timer.inl, include/rtems/posix/timer.h, 
+	inline/rtems/posix/Makefile.am, src/ptimer1.c: Redid the
+	style of src/ptimer1.c.  Continued effort to make the
+	POSIX Timer implementation match that of other managers.
+	Added data structures required to use SuperCore Object Handler.
+
 2000-08-15	Joel Sherrill <joel@OARcorp.com>
 
 	* src/ptimer1.c: Minor formatting fixes.

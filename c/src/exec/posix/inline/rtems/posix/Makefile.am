@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 #I_FILES= intr.inl
 I_FILES = cond.inl key.inl mqueue.inl mutex.inl pthread.inl priority.inl \
-    semaphore.inl
+    semaphore.inl timer.inl
 
 noinst_HEADERS = $(I_FILES)
 
