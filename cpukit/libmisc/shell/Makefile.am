@@ -15,8 +15,10 @@ if LIBSHELL
 include_rtems_HEADERS = shell.h
 endif
 
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+noinst_HEADERS = config.h
+
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -41,4 +43,4 @@ endif
 
 EXTRA_DIST = README shell.c cmds.c shell.h
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am

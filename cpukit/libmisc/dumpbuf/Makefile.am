@@ -13,8 +13,10 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = dumpbuf.h
 
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+noinst_HEADERS = config.h
+
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -37,4 +39,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 
 EXTRA_DIST = dumpbuf.c
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am

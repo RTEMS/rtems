@@ -9,8 +9,10 @@ LIB = $(ARCH)/$(LIBNAME).a
 C_FILES = dummy.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+noinst_HEADERS = config.h
+
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -25,4 +27,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 
 EXTRA_DIST = README dummy.c
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am

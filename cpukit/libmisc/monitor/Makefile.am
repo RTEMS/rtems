@@ -22,8 +22,10 @@ endif
 
 include_rtems_HEADERS = monitor.h symbols.h
 
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+noinst_HEADERS = config.h
+
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
 	$(mkinstalldirs) $@
@@ -49,4 +51,4 @@ EXTRA_DIST = README mon-command.c mon-config.c mon-dname.c mon-driver.c \
     mon-object.c mon-prmisc.c mon-queue.c mon-server.c mon-symbols.c \
     mon-task.c
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am

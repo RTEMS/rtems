@@ -1,5 +1,49 @@
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove (Merged into ../configure.ac).
+	* Makefile.am: 
+	Reflect having merged configure.ac into ../configure.ac.
+	* capture/config.h: New.
+	* capture/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* cpuuse/config.h: New.
+	* cpuuse/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* devnull/config.h: New.
+	* devnull/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* dummy/config.h: New.
+	* dummy/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* dumpbuf/config.h: New.
+	* dumpbuf/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* monitor/config.h: New.
+	* monitor/Makefile.am: Add config.h. 
+	Reflect having merged configure.ac into ../configure.ac.
+	* mw-fb/config.h: New.
+	* mw-fb/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* rtmonuse/config.h: New.
+	* rtmonuse/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* serdbg/config.h: New.
+	* serdbg/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* shell/config.h: New.
+	* shell/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* stackchk/config.h: New.
+	* stackchk/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* untar/config.h: New.
+	* untar/Makefile.am: Add config.h.
+	Reflect having merged configure.ac into ../configure.ac.
+	* wrapup/Makefile.am:
+	Reflect having merged configure.ac into ../configure.ac.
+
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* capture/capture-cli.c: Add config-header support.
 	* capture/capture.c: Add config-header support.
 	* cpuuse/cpuuse.c: Add config-header support.

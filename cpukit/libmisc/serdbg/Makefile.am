@@ -10,14 +10,15 @@ LIB = $(ARCH)/$(LIBNAME).a
 C_FILES = serdbg.c serdbgio.c termios_printk.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-noinst_HEADERS = 
 if LIBSERDBG
 include_HEADERS = serdbgcnf.h serdbg.h termios_printk_cnf.h \
                   termios_printk.h
 endif
 
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+noinst_HEADERS = config.h
+
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 $(PROJECT_INCLUDE):
 	@$(mkinstalldirs) $@
@@ -43,4 +44,4 @@ endif
 EXTRA_DIST = README serdbg.c serdbgio.c serdbgcnf.h serdbg.h \
              termios_printk.c termios_printk.h termios_printk_cnf.h
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am
