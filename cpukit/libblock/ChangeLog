@@ -1,3 +1,8 @@
+2003-01-03	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* src/ata.c, src/bdbuf.c: Correct invocation of rtems_task_mode()
+	so the task's preemption mode setting is properly maintained.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Eliminate C_O_FILES.

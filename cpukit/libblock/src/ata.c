@@ -38,13 +38,13 @@ typedef rtems_mode preemption_key;
 
 #define DISABLE_PREEMPTION(key) \
     do {                                                               \
-        rtems_task_mode(RTEMS_PREEMPT_MASK, RTEMS_NO_PREEMPT, &(key)); \
+        rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &(key)); \
     } while (0)
 
 #define ENABLE_PREEMPTION(key) \
     do {                                                        \
         rtems_mode temp;                                        \
-        rtems_task_mode(RTEMS_PREEMPT_MASK, (key), &temp);      \
+        rtems_task_mode((key), RTEMS_PREEMPT_MASK, &temp);      \
     } while (0)
 
 #else
