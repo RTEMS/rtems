@@ -146,7 +146,7 @@ int pthread_mutexattr_destroy(
   pthread_mutexattr_t *attr
 )
 {
-  if ( !attr || attr->is_initialized == FALSE )
+  if ( !attr || !attr->is_initialized )
     return EINVAL;
 
   attr->is_initialized = FALSE;
@@ -163,7 +163,7 @@ int pthread_mutexattr_getpshared(
   int                       *pshared
 )
 {
-  if ( !attr || attr->is_initialized == FALSE )
+  if ( !attr || !attr->is_initialized || !pshared )
     return EINVAL;
 
   *pshared = attr->process_shared;
@@ -180,7 +180,7 @@ int pthread_mutexattr_setpshared(
   int                  pshared
 )
 {
-  if ( !attr || attr->is_initialized == FALSE )
+  if ( !attr || !attr->is_initialized )
     return EINVAL;
 
   switch ( pshared ) {
@@ -531,7 +531,7 @@ int pthread_mutexattr_getprotocol(
   int                         *protocol
 )
 {
-  if ( !attr || attr->is_initialized == FALSE )
+  if ( !attr || !attr->is_initialized || !protocol )
     return EINVAL;
 
   *protocol = attr->protocol;
@@ -548,7 +548,7 @@ int pthread_mutexattr_setprioceiling(
   int                    prioceiling
 )
 {
-  if ( !attr || attr->is_initialized == FALSE )
+  if ( !attr || !attr->is_initialized )
     return EINVAL;
 
   if ( !_POSIX_Priority_Is_valid( attr->prio_ceiling ) )
@@ -568,7 +568,7 @@ int pthread_mutexattr_getprioceiling(
   int                         *prioceiling
 )
 {
-  if ( !attr || attr->is_initialized == FALSE )
+  if ( !attr || !attr->is_initialized || !prioceiling )
     return EINVAL;
 
   *prioceiling = attr->prio_ceiling;
@@ -638,6 +638,9 @@ int pthread_mutex_getprioceiling(
 {
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
+
+  if ( !prioceiling )
+    return EINVAL;
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
