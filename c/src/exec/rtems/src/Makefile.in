@@ -35,7 +35,7 @@ CLOCK_PIECES=\
   clock clockget clockset clocktick
 
 TIMER_PIECES=\
-  timer timercancel timercreate timerdelete timerfireafter \
+  rtemstimer timercancel timercreate timerdelete timerfireafter \
   timerfirewhen timerident timerreset
 
 MESSAGE_QUEUE_PIECES=\
@@ -55,7 +55,7 @@ SIGNAL_PIECES=\
 
 REGION_PIECES=\
   region regioncreate regiondelete regionextend regiongetsegment \
-  regiongetsegmentsize regionident regionreturnsegemnt regionreturnsegemnt
+  regiongetsegmentsize regionident regionreturnsegment regionreturnsegment
 
 PARTITION_PIECES=\
   part partcreate partdelete partgetbuffer partident partreturnbuffer
