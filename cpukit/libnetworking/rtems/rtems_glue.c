@@ -114,7 +114,8 @@ rtems_bsdnet_malloc (unsigned long size, int type, int flags)
 			printf ("rtems_bsdnet_malloc still waiting.\n");
 			try = 0;
 		}
-		rtems_task_wake_after (rtems_bsdnet_ticks_per_second);
+		while (rtems_bsdnet_seconds_since_boot() == 0)
+			rtems_task_wake_after(1);
 		rtems_bsdnet_semaphore_obtain ();
 	}
 }
