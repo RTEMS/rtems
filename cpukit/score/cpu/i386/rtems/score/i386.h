@@ -134,8 +134,8 @@ static inline unsigned int i386_swap_u32(
   return( lout );
 }
 
-static inline unsigned int i386_swap_u16(
-  unsigned int value
+static inline uint16_t i386_swap_u16(
+  uint16_t value
 )
 {
     unsigned short      sout;
