@@ -1,3 +1,8 @@
+2005-03-17	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/score/object.h, src/objectinitializeinformation.c: Fix
+	warning.
+
 2005-01-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 742/rtems
