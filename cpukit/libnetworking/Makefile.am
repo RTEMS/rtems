@@ -4,7 +4,17 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = . kern lib libc net netinet nfs rtems
+include $(top_srcdir)/../automake/multilib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
+
+# Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
+AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
+    -DBOOTP_COMPAT
+
+LIB = $(ARCH)/libnetworking.a
+
+SUBDIRS = . lib libc
 SUBDIRS += wrapup
 
 ## poll.h is not in the list because RTEMS does not have poll()
@@ -31,6 +41,17 @@ $(PROJECT_INCLUDE)/arpa:
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa \
     $(include_arpa_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+## kern
+
+kern_C_FILES = kern/kern_subr.c kern/uipc_domain.c kern/uipc_mbuf.c \
+   kern/uipc_socket.c kern/uipc_socket2.c
+OBJS = $(kern_C_FILES:kern/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): kern/%.c
+	${COMPILE} -o $@ -c $<
+
+EXTRA_DIST = $(kern_C_FILES)
 
 ## machine
 
@@ -60,6 +81,16 @@ $(PROJECT_INCLUDE)/net:
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net \
     $(include_net_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
+net_C_FILES = net/if.c net/if_ethersubr.c net/if_loop.c net/radix.c \
+    net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c net/if_ppp.c \
+    net/ppp_tty.c net/pppcompress.c
+OBJS += $(net_C_FILES:net/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): net/%.c
+	${COMPILE} -o $@ -c $<
+
+EXTRA_DIST += $(net_C_FILES)
+
 ## netinet
 
 include_netinetdir = $(includedir)/netinet
@@ -77,6 +108,20 @@ $(PROJECT_INCLUDE)/netinet:
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet \
     $(include_netinet_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
+netinet_C_FILES = netinet/if_ether.c netinet/igmp.c netinet/in.c \
+    netinet/in_cksum.c netinet/in_pcb.c netinet/in_proto.c netinet/in_rmx.c \
+    netinet/ip_divert.c netinet/ip_fw.c netinet/ip_icmp.c netinet/ip_input.c \
+    netinet/ip_mroute.c netinet/ip_output.c netinet/raw_ip.c \
+    netinet/tcp_debug.c netinet/tcp_input.c netinet/tcp_output.c \
+    netinet/tcp_subr.c netinet/tcp_timer.c netinet/tcp_usrreq.c \
+    netinet/udp_usrreq.c
+OBJS += $(C_FILES:netinet/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): netinet/%.c
+	${COMPILE} -o $@ -c $<
+
+EXTRA_DIST += $(netinet_C_FILES)
+
 ## nfs
 
 include_nfsdir = $(includedir)/nfs
@@ -89,6 +134,38 @@ $(PROJECT_INCLUDE)/nfs:
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs \
     $(include_nfs_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+nfs_C_FILES = nfs/bootp_subr.c
+OBJS += $(nfs_C_FILES:nfs/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): nfs/%.c
+	${COMPILE} -o $@ -c $<
+
+EXTRA_DIST += $(nfs_C_FILES)
+
+## rtems
+
+include_rtemsdir = $(includedir)/rtems
+
+include_rtems_HEADERS = rtems/rtems_bsdnet.h rtems/rtems_bsdnet_internal.h \
+    rtems/tftp.h rtems/ftpfs.h rtems/mkrootfs.h
+
+$(PROJECT_INCLUDE)/rtems:
+	@$(mkinstalldirs) $@
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+rtems_C_FILES = rtems/sghostname.c rtems/issetugid.c rtems/rtems_glue.c rtems/rtems_syscall.c \
+    rtems/rtems_bootp.c rtems/rtems_showmbuf.c rtems/rtems_showroute.c rtems/rtems_showifstat.c \
+    rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c rtems/rtems_showtcpstat.c \
+    rtems/rtems_showudpstat.c rtems/rtems_select.c rtems/mkrootfs.c
+OBJS += $(rtems_C_FILES:rtems/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): rtems/%.c
+	${COMPILE} -o $@ -c $<
+
+EXTRA_DIST += $(rtems_C_FILES)
 
 ## sys
 
@@ -124,7 +201,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm \
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-local: $(PREINSTALL_FILES)
+$(LIB): $(OBJS)
+	$(make-library)
+
+all-local: $(PREINSTALL_FILES) $(ARCH) $(LIB)
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

@@ -1,3 +1,16 @@
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in kern/Makefile.am, net/Makefile.am,
+	netinet/Makefile.am, netinet/Makefile.am, nfs/Makefile.am, 
+	rtems/Makefile.am.
+	* kern/Makefile.am: Remove.
+	* net/Makefile.am: Remove.
+	* netinet/Makefile.am: Remove.
+	* nfs/Makefile.am: Remove.
+	* rtems/Makefile.am: Remove.
+	* wrapup/Makefile.am: Reflect changes above.
+	* configure.ac: Ditto.
+
 2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* kern/Makefile.am: Remove C_O_FILES; 

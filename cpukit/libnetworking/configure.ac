@@ -28,13 +28,8 @@ RTEMS_CHECK_NETWORKING
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-kern/Makefile
 lib/Makefile
 libc/Makefile
-net/Makefile
-netinet/Makefile
-nfs/Makefile
-rtems/Makefile
 wrapup/Makefile
 ])
 AC_OUTPUT
