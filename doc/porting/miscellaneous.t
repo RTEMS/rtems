@@ -10,7 +10,7 @@
 
 @section Fatal Error Default Handler
 
-The _CPU_Fatal_halt routine is the default fatal error handler. This
+The @code{_CPU_Fatal_halt} routine is the default fatal error handler. This
 routine copies _error into a known place -- typically a stack location or
 a register, optionally disables interrupts, and halts/stops the CPU.  It
 is prototyped as follows and is often implemented as a macro:
@@ -46,7 +46,8 @@ peripheral controllers.
 
 @subsection Specifying Processor Endianness
 
-The CPU_BIG_ENDIAN and CPU_LITTLE_ENDIAN are set to specify the endian
+The @code{CPU_BIG_ENDIAN} and @code{CPU_LITTLE_ENDIAN} are
+set to specify the endian
 format used by this microprocessor.  These macros should not be set to the
 same value.  The following example illustrates how these macros should be
 set on a processor family that is big endian.
@@ -60,18 +61,22 @@ set on a processor family that is big endian.
 
 In a networked environment, each program communicating must agree on the
 format of data passed between the various systems in the networked
-application.  Routines such as ntohl() and htonl() are used to convert
+application.  Routines such as @code{ntohl()}
+and @code{htonl()} are used to convert
 between the common network format and the native format used on this
 particular host system.  Although RTEMS has a portable implementation of
 these endian conversion routines, it is often possible to implement these
 routines more efficiently in a processor specific fashion.
 
-The CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES is set to TRUE when the port
+The @code{CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES} is set to TRUE when the port
 provides its own implementation of the network to host and host to network
 family of routines.  This set of routines include the following:
 
 @itemize @bullet
-@item XXX list of routines in bullets
+@item @code{ntohl()}
+@item @code{ntohs()}
+@item @code{htonl()}
+@item @code{htons()}
 @end itemize
 
 The following example illustrates how this macro should be set when the
@@ -84,7 +89,7 @@ by this port:
 
 @section Extra Stack for MPCI Receive Thread
 
-The CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK macro is set to the amount of
+The @code{CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK} macro is set to the amount of
 stack space above the minimum thread stack space required by the MPCI
 Receive Server Thread.  This macro is needed because in a multiprocessor
 system the MPCI Receive Server Thread must be able to process all
@@ -96,12 +101,12 @@ directives.
 
 @subsection Endian Swap Unsigned Integers
 
-The port should provide routines to swap sixteen (CPU_swap_u16) and
-thirty-bit (CPU_swap_u32) unsigned integers.  These are primarily used in
+The port should provide routines to swap sixteen (@code{CPU_swap_u16}) and
+thirty-bit (@code{CPU_swap_u32}) unsigned integers.  These are primarily used in
 two areas of RTEMS - multiprocessing support and the network endian swap
-routines.  The CPU_swap_u32 routine must be implemented as a static
+routines.  The @code{CPU_swap_u32} routine must be implemented as a static
 routine rather than a macro because its address is taken and used
-indirectly.  On the other hand, the CPU_swap_u16 routine may be
+indirectly.  On the other hand, the @code{CPU_swap_u16} routine may be
 implemented as a macro.
 
 Some CPUs have special instructions that swap a 32-bit quantity in a
@@ -112,7 +117,7 @@ try to access the same "chunk" with the wrong endian.  Another good reason
 is that on some CPUs, the endian bit endianness for ALL fetches -- both
 code and data -- so the code will be fetched incorrectly.
 
-The following is an implementation of the CPU_swap_u32 routine that will
+The following is an implementation of the @code{CPU_swap_u32} routine that will
 work on any CPU.  It operates by breaking the unsigned thirty-two bit
 integer into four byte-wide quantities and reassemblying them.
 
@@ -141,8 +146,8 @@ in the shared memory driver and in network applications using the ntohl()
 family of routines.
 
 Most microprocessor families have rotate instructions which can be used to
-greatly improve the CPU_swap_u32 routine.  The most common way to do this
-is to:
+greatly improve the @code{CPU_swap_u32} routine.  The most common
+way to do this is to:
 
 @example
 swap least significant two bytes with 16-bit rotate
@@ -158,9 +163,9 @@ try to access the same "chunk" with the wrong endian.  Another good reason
 is that on some CPUs, the endian bit endianness for ALL fetches -- both
 code and data -- so the code will be fetched incorrectly.
 
-Similarly, here is a portable implementation of the CPU_swap_u16 routine.  
-Just as with the CPU_swap_u32 routine, the porter should provide a better
-implementation if possible.
+Similarly, here is a portable implementation of the @code{CPU_swap_u16}
+routine.  Just as with the @code{CPU_swap_u32} routine, the porter
+should provide a better implementation if possible.
 
 @example
 #define CPU_swap_u16( value ) \

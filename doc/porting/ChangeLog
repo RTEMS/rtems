@@ -1,3 +1,8 @@
+2002-07-30	Joel Sherrill <joel@OARcorp.com>
+
+	* miscellaneous.t: Added some markups for fonts and clarified
+	some places.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
