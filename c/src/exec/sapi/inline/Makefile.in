@@ -16,7 +16,7 @@ I_FILES=$(I_PIECES:%=$(srcdir)/%.inl)
 SRCS=$(I_FILES)
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/lib.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
 
 #
 # Add your list of files to delete here.  The config files

@@ -25,7 +25,7 @@ OBJS=$(C_O_FILES)
 PGM=${ARCH}/size.exe
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
 
 #
 # (OPTIONAL) Add local stuff here using +=

@@ -19,7 +19,7 @@ OBJS=$(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS)
 LIB=$(ARCH)/librtems.a
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/lib.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
 
 #
 # (OPTIONAL) Add local stuff here using +=

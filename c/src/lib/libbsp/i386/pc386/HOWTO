@@ -414,24 +414,9 @@ Modules.
     7.5. Building RTEMS
     -------------------
 
-    By default, the PC386 RTEMS BSP is installed into the directory
-'c/pc386_i386'. If this is not the desired installation point, then
-modify the following line in the file 'c/make/custom/pc386.cfg':
+    See the file README.configure in the top level directory for
+    more information.
 
-      PROJECT_HOME=$(PROJECT_ROOT)/$(RTEMS_BSP)
-
-    Once the root directory of the install point has been set, the
-following steps are required to build and install RTEMS (NOTE: If the
-Modules files are used, the environment variable '$r' is set to point
-to the top directory for the RTEMS implementation selected in the
-current environment. This is the directory 'c' in the RTEMS
-distribution.):
-
-      cd $r
-      make install
-
-    If this completes successfully, then RTEMS has been built and
-installed.
 
 8. RTEMS Tests
 --------------

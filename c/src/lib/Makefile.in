@@ -11,7 +11,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/directory.cfg
+include $(RTEMS_ROOT)/make/directory.cfg
 
 # We only build the KA9Q library if HAS_KA9Q was defined
 LIBKA9Q_yes_V = libka9q

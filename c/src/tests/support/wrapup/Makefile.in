@@ -17,7 +17,7 @@ OBJS=$(foreach piece, $(GENERIC_PIECES), ../$(piece)/$(ARCH)/$(piece).rel)
 LIB=$(ARCH)/libtest.a
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/lib.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
 
 #
 # (OPTIONAL) Add local stuff here using +=

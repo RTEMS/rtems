@@ -23,7 +23,7 @@ SRCS=$(CC_FILES)
 OBJS=$(CC_O_FILES)
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/lib.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
 
 #
 # Add local stuff here using +=

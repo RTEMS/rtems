@@ -22,7 +22,7 @@ OBJS=$(CPU_OBJS) $(CORE_OBJS) $(POSIX_OBJS) $(SAPI_OBJS)
 LIB=$(ARCH)/libposix.a
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/lib.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
 
 #
 # (OPTIONAL) Add local stuff here using +=

@@ -17,7 +17,7 @@ SYS_H_FILES=
 SRCS=$(H_FILES) $(SYS_H_FILES)
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
 
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=

@@ -25,9 +25,6 @@ RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_CUSTOM)
 include $(RTEMS_ROOT)/make/directory.cfg
 
-# dubious, but needed by rtems-glom ...
-export PROJECT_HOME
-
 SUB_DIRS=build-tools src
 
 # We only make the install point for the KA9Q header files if it is enabled.
@@ -74,9 +71,9 @@ clean_wrapup: clean_tools clean_dirs clean_modules
 .PHONY:	dirs clean_wrapup clean_dirs clean_tools clean_modules env install
 
 dirs:
+	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
 	-test -d $(PROJECT_ROOT)/c/src/lib/libhwapi && \
 	    (cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs)
-	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
 #	@echo Making directories in build tree ...
 #	-$(foreach dir,$(CREATE_DIRS), \
 #	    $(shell $(MKDIR) $(PROJECT_ROOT)/$(RTEMS_BSP)/$(dir)))
@@ -89,21 +86,20 @@ clean_dirs:
 clean_tools:
 	cd build-tools; $(MAKE) clean
 
+$(PROJECT_ROOT)/$(RTEMS_BSP)/Makefile.inc: $(PROJECT_ROOT)/make/Templates/Makefile.inc
+	echo "RTEMS_BSP = $(RTEMS_BSP)" > $@
+	$(CAT) $< >> $@
+
 # NOTE: The wildcard on the install should pick up everything except
 #       the tests directory.  This significantly minimizes the install size.
 
-
-install_files:
-	 -$(MKDIR) $(prefix)/
-	 -$(MKDIR) $(prefix)/rtems
-	 -$(MKDIR) $(prefix)/rtems/make
-	 -$(MKDIR) $(prefix)/rtems/make/compilers
-	 -$(MKDIR) $(prefix)/rtems/make/custom
-	-rm -rf $(prefix)/rtems/$(RTEMS_BSP)
-	cd ../; tar cf - make $(RTEMS_BSP)/[bilsu]* | \
+install_files: $(PROJECT_ROOT)/$(RTEMS_BSP)/Makefile.inc
+	-$(MKDIR) $(prefix)/
+	-$(MKDIR) $(prefix)/rtems
+	-$(RM) -rf $(prefix)/rtems/$(RTEMS_BSP)
+	cd ../; tar cf - $(RTEMS_BSP)/[bilsuM]* | \
 		(cd $(prefix)/rtems; tar xpBf - )
-	(echo RTEMS_BSP = $(RTEMS_BSP) ; $(CAT) make/Templates/Makefile.inc ) \
-		> $(prefix)/rtems/$(RTEMS_BSP)/Makefile.inc
+	cd ../make; make RTEMS_BSP=$(RTEMS_BSP) install
 
 tests:
 	cd src/tests; $(MAKE) all

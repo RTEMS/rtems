@@ -11,7 +11,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/directory.cfg
+include $(RTEMS_ROOT)/make/directory.cfg
 
 # Descend into the $(RTEMS_BSP_FAMILY) directory
 SUB_DIRS=$(RTEMS_BSP_FAMILY)

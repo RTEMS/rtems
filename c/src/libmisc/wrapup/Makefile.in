@@ -13,7 +13,7 @@ RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 LIB=$(ARCH)/libmisc.a
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/lib.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
 
 #  Using the wildcard on the Purify support makes sure it may not be there
 

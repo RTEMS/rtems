@@ -25,7 +25,7 @@ EQ_FILES =
 SRCS=$(H_FILES) $(EQ_FILES)
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
 
 CLEAN_ADDITIONS += 
 CLOBBER_ADDITIONS +=

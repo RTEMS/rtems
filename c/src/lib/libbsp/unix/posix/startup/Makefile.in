@@ -32,7 +32,7 @@ OBJS=$(C_O_FILES)
 INSTALLED_O_FILES=$(ARCH)/rtems-ctor.o
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
 
 #
 # (OPTIONAL) Add local stuff here using +=

@@ -11,7 +11,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/directory.cfg
+include $(RTEMS_ROOT)/make/directory.cfg
 
 # We only build the tests for the rtems++ library if HAS_CPLUSPLUS was defined
 LIBRTEMSCPLUSPLUS_yes_V = rtems++

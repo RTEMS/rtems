@@ -20,7 +20,7 @@ H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 SRCS=$(H_FILES)
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
 
 #
 # Add your list of files to delete here.  The config files
