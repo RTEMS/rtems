@@ -1,5 +1,8 @@
-/*  sparctypes.h
- *
+/**
+ * @file rtems/score/types.h
+ */
+
+/*
  *  This include file contains type definitions pertaining to the 
  *  SPARC processor family.
  *

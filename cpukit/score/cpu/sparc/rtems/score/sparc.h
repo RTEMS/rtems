@@ -1,5 +1,8 @@
-/*  sparc.h
- *
+/**
+ * @file rtems/score/sparc.h
+ */
+
+/*
  *  This include file contains information pertaining to the SPARC 
  *  processor family.
  *
