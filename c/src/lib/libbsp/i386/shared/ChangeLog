@@ -1,3 +1,8 @@
+2003-12-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/io/Makefile.am: Remove (Unused).
+	* shared/Makefile.am: Remove io.
+
 2003-10-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* comm/uart.h: Add extern "C" guards.
