@@ -245,10 +245,13 @@ int nanosleep(
   struct timespec        *rmtp
 )
 {
-  Watchdog_Interval ticks;
+  Watchdog_Interval  ticks;
+  struct timespec   *the_rqtp;
 
   if ( !rqtp )
     set_errno_and_return_minus_one( EINVAL );
+
+  the_rqtp = (struct timespec *)rqtp;
 
   /*
    *  Return EAGAIN if the delay interval is negative.  
@@ -257,13 +260,16 @@ int nanosleep(
    *         FSU pthreads shares this behavior.
    */
 
-  if ( rqtp->tv_sec < 0 || rqtp->tv_nsec < 0 )
+  if ( the_rqtp->tv_sec < 0 )
+    the_rqtp->tv_sec = 0;
+
+  if ( /* the_rqtp->tv_sec < 0 || */ the_rqtp->tv_nsec < 0 )
     set_errno_and_return_minus_one( EAGAIN );
 
-  if ( rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
+  if ( the_rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
     set_errno_and_return_minus_one( EINVAL );
  
-  ticks = _POSIX_Timespec_to_interval( rqtp );
+  ticks = _POSIX_Timespec_to_interval( the_rqtp );
 
   /*
    *  This behavior is also beyond the POSIX specification but is
