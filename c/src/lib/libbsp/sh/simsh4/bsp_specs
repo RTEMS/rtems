@@ -1,0 +1,22 @@
+%rename cpp old_cpp
+%rename lib old_lib
+%rename endfile old_endfile
+%rename startfile old_startfile
+%rename link old_link
+
+*cpp:
+%(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
+
+*lib:
+%{!qrtems: %(old_lib)} \
+%{qrtems: --start-group %{!qrtems_debug: -lrtemsall } %{qrtems_debug: -lrtemsall_g} \
+ -lc -lgcc --end-group \
+ %{!qnolinkcmds: %{ml: -T linkcmds-le%s} %{!ml: -T linkcmds%s}}}
+
+*startfile:
+%{!qrtems: %(old_startfile)} \
+%{qrtems: %{qrtems_debug: start_g.o%s} %{!qrtems_debug: start.o%s}}
+
+*link:
+%(old_link) %{qrtems: -dc -dp -N -e _start}
+

@@ -1,0 +1,47 @@
+#
+#  $Id$
+#
+#  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
+#  Author: Victor V. Vengerov <vvv@oktet.ru>
+#
+
+BSP NAME:           simsh4 (SH4 BSP working together with gdb simulator)
+BOARD:              n/a
+BUS:                n/a
+CPU FAMILY:         Hitachi SH
+CPU:                SH4
+COPROCESSORS:	    none
+MODE:               n/a
+
+DEBUG MONITOR:      gdb
+
+PERIPHERALS
+===========
+TIMERS:             not supported now
+SERIAL PORTS:       implemented using simulator 'trap 34' hook (stdio redir).
+REAL-TIME CLOCK:    none
+DMA:                not used
+VIDEO:              none
+SCSI:               none
+NETWORKING:         none
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       not supported now
+IOSUPP DRIVER:      default
+SHMSUPP:            default
+TIMER DRIVER:       not supported now
+TTY DRIVER:         /dev/console
+
+STDIO
+=====
+PORT:               n/a
+ELECTRICAL:         n/a
+BAUD:               n/a
+BITS PER CHARACTER: n/a
+PARITY:             n/a
+STOP BITS:          n/a
+
+NOTES
+=====
+

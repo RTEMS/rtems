@@ -1,0 +1,15 @@
+2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* clock/Makefile.am, clock/ckinit.c, clock/.cvsignore, Makefile.am,
+	README, bsp_specs, console/Makefile.am, console/console.c,
+	console/.cvsignore, include/Makefile.am, include/bsp.h,
+	include/coverhd.h, include/syscall.h, include/ramdisk.h,
+	include/.cvsignore, start/Makefile.am, start/start.S,
+	start/.cvsignore, startup/Makefile.am, startup/bspstart.c,
+	startup/hw_init.c, startup/linkcmds, startup/linkcmds-le,
+	startup/linkcmds-le.coff, startup/.cvsignore, timer/Makefile.am,
+	timer/timer.c, timer/.cvsignore, wrapup/Makefile.am, wrapup/.cvsignore,
+	configure.ac, .cvsignore, ChangeLog:  New files.  
+	Reviewed and updated to latest automake and autoconf standards
+	by Ralf Corsepius <corsepiu@faw.uni-ulm.de>.
+
