@@ -32,7 +32,8 @@
  *
  *  _POSIX_Message_queue_Name_to_id
  *
- *  XXX
+ *  Look up the specified name and attempt to locate the id
+ *  for the associated message queue.
  */
 
 int _POSIX_Message_queue_Name_to_id(
@@ -48,7 +49,7 @@ int _POSIX_Message_queue_Name_to_id(
   if ( !name[0] )
     return EINVAL;
 
-  if( strlen(name) > PATH_MAX )  /* XXX - Is strlen ok to use here ? */
+  if( strlen(name) > PATH_MAX )
     return ENAMETOOLONG;
 
   status = _Objects_Name_to_id( 

@@ -51,7 +51,6 @@ mqd_t mq_open(
  
   _Thread_Disable_dispatch();
 
-  /* XXX is attr used with out being initialized otherwise? */
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
     mode = (mode_t) va_arg( arg, mode_t );
@@ -104,8 +103,7 @@ mqd_t mq_open(
  
   }
  
-  /* XXX verify this comment...
-   *
+  /* 
    *  At this point, the message queue does not exist and everything has been
    *  checked. We should go ahead and create a message queue.
    */
@@ -129,4 +127,8 @@ mqd_t mq_open(
  
   return (mqd_t) the_mq->Object.id;
 }
+
+
+
+
 

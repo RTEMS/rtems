@@ -31,6 +31,9 @@
 /*PAGE
  *
  *  _POSIX_Message_queue_Create_support
+ *
+ *  This routine does the actual creation and initialization of
+ *  a poxix message queue.  
  */
  
 int _POSIX_Message_queue_Create_support(
@@ -126,8 +129,6 @@ int _POSIX_Message_queue_Create_support(
     set_errno_and_return_minus_one( ENOSPC );
   }
 
- 
-  /* XXX - need Names to be a string!!! */
   _Objects_Open(
     &_POSIX_Message_queue_Information,
     &the_mq->Object,
