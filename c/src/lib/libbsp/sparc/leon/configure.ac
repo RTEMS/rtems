@@ -14,6 +14,10 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
+RTEMS_CHECK_NETWORKING
+
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 ## bsp-specific options
@@ -36,6 +40,7 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
+leon_open_eth/Makefile
 gnatsupp/Makefile
 include/Makefile
 start/Makefile

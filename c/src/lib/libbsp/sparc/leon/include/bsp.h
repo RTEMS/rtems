@@ -45,6 +45,15 @@ extern "C" {
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
+/*
+ * Network driver configuration
+ */
+
+struct rtems_bsdnet_ifconfig;
+extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *config);
+#define RTEMS_BSP_NETWORK_DRIVER_NAME	"open_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_leon_open_eth_driver_attach
+
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
