@@ -89,6 +89,7 @@ rtems_assoc_t rtems_status_assoc[] = {
     { "directive not implemented",          RTEMS_NOT_IMPLEMENTED, },
     { "RTEMS inconsistency detected",       RTEMS_INTERNAL_ERROR, },
     { "could not get enough memory",        RTEMS_NO_MEMORY, },
+    { "driver IO error",                    RTEMS_IO_ERROR, },
     { "internal multiprocessing only",      THREAD_STATUS_PROXY_BLOCKING, },
     { 0, 0, 0 },
 };
