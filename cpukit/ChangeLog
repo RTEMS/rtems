@@ -1,3 +1,7 @@
+2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* score/inline/rtems/score/userext.inl: Include <string.h>.
+
 2005-01-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 742/rtems

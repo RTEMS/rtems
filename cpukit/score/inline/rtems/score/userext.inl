@@ -21,6 +21,8 @@
 
 #include <rtems/score/wkspace.h>
 
+#include <string.h> /* memset */
+
 /**
  *  @addtogroup ScoreUserExt 
  *  @{
