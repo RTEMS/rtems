@@ -30,6 +30,9 @@ RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 AC_PROG_RANLIB
 
+# FIXME: For the moment, no reason to check for ada
+# RTEMS_PROG_GNAT
+
 RTEMS_CHECK_NEWLIB
 
 RTEMS_CHECK_MULTIPROCESSING
@@ -90,12 +93,6 @@ AC_ARG_ENABLE([ada],
   *)  AC_MSG_ERROR([bad value ${enable_ada} for --enable-ada]) ;;
 esac],[enable_ada=no])
 
-AS_IF([test x"$enable_ada" = x"yes"],[
-  AS_IF([test x"$HAS_POSIX_API" = x"yes"],[
-    AC_CONFIG_SUBDIRS([ada])
-  ])
-])
-
 RTEMS_DEFINE_POSIX_API
 RTEMS_DEFINE_ITRON_API
 RTEMS_DEFINE_MULTIPROCESSING
@@ -144,6 +141,9 @@ AS_IF([test x"${enable_multilib}" = x"yes"],[
 
 AC_CONFIG_SUBDIRS([libmisc])
 
+AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
+  && test x"$HAS_POSIX_API" = x"yes"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 include/Makefile
@@ -153,4 +153,7 @@ score/Makefile
 score/cpu/Makefile
 wrapup/Makefile
 ])
+
+AC_CONFIG_FILES([ada/Makefile])
+
 AC_OUTPUT
