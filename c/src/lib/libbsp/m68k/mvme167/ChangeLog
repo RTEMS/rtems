@@ -1,3 +1,29 @@
+2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
+
+	* README: Updated
+	* console/console.c: Fix polled input.
+	Add support for shared printk.
+	Add support for more flexible polled I/O with and without termios.
+	I/O mode and console is selectable either from NVRAM or from
+	mvme167.cfg.  Clean up comments.
+
+2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
+
+	* startup/page_table.c (page_table_init): Reorganize NVRAM parameters. 
+	* include/bsp.h: Reorganize NVRAM parameters.
+	Add support for shared printk.
+	* times: These are the times for the MVME167, not the MBX860-002.
+
+2000-08-11  John Cotton  <john.cotton@nrc.ca>
+
+	* network/network.c: Fix NVRAM configuration parameter
+	handling from previous revision.
+	Check J1-4,  restructure NVRAM parameter handling.
+
+2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
+
+	* network/network.c: Cleanup of network driver to reduce warnings.
+	Addition of second parameter to uti596_attach.
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.

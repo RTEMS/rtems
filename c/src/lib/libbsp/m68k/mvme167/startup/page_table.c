@@ -33,12 +33,12 @@
  *  errors if we address non-existent memory within this range. Our two
  *  MVME167s are configured to exist at physical addresses 0x00800000 to
  *  0x00BFFFFF and 0x00C00000 to 0x00FFFFFF respectively. If jumper J1-4 is
- *  installed, memeory and cache control can be done by providing parameters
- *  in NVRAM. See the README for details. If J1-4 is removed, behaviour
- *  defaults to the following. We map the space from 0x0 to 0x7FFFFFFF as
- *  copyback, unless jumper J1-5 is removed, in which case we map as writethrough.
- *  If jumper J1-7 is removed, the data cache is NOT enabled. If jumper J1-6
- *  is removed, the instruction cache is not enabled.
+ *  installed, memory and cache control can be done by providing parameters
+ *  in NVRAM and jumpers J1-[5-7] are ignored. See the README for details.
+ *  If J1-4 is removed, behaviour defaults to the following. We map the space
+ *  from 0x0 to 0x7FFFFFFF as copyback, unless jumper J1-5 is removed, in which
+ *  case we map as writethrough. If jumper J1-7 is removed, the data cache is
+ *  NOT enabled. If jumper J1-6 is removed, the instruction cache is not enabled.
  *
  *  Copyright (c) 1998, National Research Council of Canada
  *
@@ -94,25 +94,25 @@ void page_table_init(
   if ( !(j1 & 0x10) ) {
   	/* Jumper J1-4 is on, configure from NVRAM */
 
-  	if ( nvram->dcache_enable )
+  	if ( nvram->cache_mode & 0x01 )
   		cacr |= 0x80000000;
 
-  	if ( nvram->icache_enable )
+  	if ( nvram->cache_mode & 0x02 )
   		cacr |= 0x00008000;
 
   	if ( nvram->cache_mode )
-  		dtt0 = ((nvram->cache_mode & 0x0003) << 5) | (dtt0 & 0xFFFFFF9F);
+  		dtt0 = ((nvram->cache_mode & 0x0C) << 3) | (dtt0 & 0xFFFFFF9F);
   }
 	else {
 		/* Configure according to other jumper settings */
   
-	  if ( j1 & 0x80 )
-  	  /* Jumper J1-7 if off, disable data caching */
-   		cacr &= 0x7FFFFFFF;
+	  if ( !(j1 & 0x80) )
+  	  /* Jumper J1-7 if on, enable data caching */
+   		cacr |= 0x80000000;
       
-	  if ( j1 & 0x40 )
-	    /* Jumper J1-6 if off, disable instruction caching */
-	    cacr &= 0xFFFF7FFF;
+	  if ( !(j1 & 0x40) )
+	    /* Jumper J1-6 if on, enable instruction caching */
+	    cacr |= 0x00008000;
       
 	  if ( j1 & 0x20 )
 	    /* Jumper J1-5 is off, enable writethrough caching */

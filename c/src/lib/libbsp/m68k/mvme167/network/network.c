@@ -1657,6 +1657,7 @@ int uti596_attach(
 {
   uti596_softc_ *sc = &uti596_softc;				/* device dependent data structure */
   struct ifnet * ifp = (struct ifnet *)&sc->arpcom.ac_if;       /* ifnet structure */
+  unsigned char j1;    /* State of J1 jumpers */
   int unitNumber;
   char *unitName;
   char *pAddr;
@@ -1687,38 +1688,72 @@ int uti596_attach(
     ifp->if_mtu = ETHERMTU;
 
   /* 
-   * If an IP address and netmask are provided in NVRAM, cheat,
-   * and stuff them into the ifconfig structure, overriding any
-   * existing or NULL values.
+   * Check whether parameters should be obtained from NVRAM. If
+   * yes, and if an IP address, netmask, or ethernet address are
+   * provided in NVRAM, cheat, and stuff them into the ifconfig
+   * structure, OVERRIDING and existing or NULL values.
    * 
    * Warning: If values are provided in NVRAM, the ifconfig entries
-   * should be NULL because buffer memory allocated to hold the
+   * must be NULL because buffer memory allocated to hold the
    * structure values is unrecoverable and would be lost here.
    */
-  if ( (addr = nvram->ipaddr) ) {
-    if ( (pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT )) )
-      pConfig->ip_address = (char *)inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
-    else
-      rtems_panic("Can't allocate ip_address buffer!\n");
-  }
-  if ( (addr = nvram->netmask) ) {
-    if ( (pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT )) )
-      pConfig->ip_netmask = (char *)inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
-    else
-      rtems_panic("Can't allocate ip_netmask buffer!\n");
-  }
 
-  /* Ethernet address can be specified in NVRAM, or in the ifconfig
-   * structure. It will be read by default from BBRAM at $FFFC1F2C
-   * (6 bytes) mvme167 manual p. 1-47
-   */
-  if ( nvram->enaddr ) {
-  	memcpy ((void *)sc->arpcom.ac_enaddr, &nvram->enaddr, ETHER_ADDR_LEN);
+  /* Read the J1 header */
+  j1 = (unsigned char)(lcsr->vector_base & 0xFF);
+
+  if ( !(j1 & 0x10) ) {
+  	/* Jumper J1-4 is on, configure from NVRAM */
+  
+    if ( (addr = nvram->ipaddr) ) {
+      /* We have a non-zero entry, copy the value */
+      if ( (pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT )) )
+        pConfig->ip_address = (char *)inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
+      else
+        rtems_panic("Can't allocate ip_address buffer!\n");
+    }
+    
+    if ( (addr = nvram->netmask) ) {
+      /* We have a non-zero entry, copy the value */
+      if ( (pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT )) )
+        pConfig->ip_netmask = (char *)inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
+      else
+        rtems_panic("Can't allocate ip_netmask buffer!\n");
+    }
+
+    /* Ethernet address requires special handling -- it must be copied into
+     * the arpcom struct. The following if construct serves only to give the
+     * NVRAM parameter the highest priority if J1-4 indicates we are configuring
+     * from NVRAM.
+     * 
+     * If the ethernet address is specified in NVRAM, go ahead and copy it.
+     * (ETHER_ADDR_LEN = 6 bytes).
+     */
+    if ( nvram->enaddr[0] || nvram->enaddr[1] || nvram->enaddr[2] ) {
+      /* Anything in the first three bytes indicates a non-zero entry, copy value */
+  	  memcpy ((void *)sc->arpcom.ac_enaddr, &nvram->enaddr, ETHER_ADDR_LEN);
+    }
+    else if ( pConfig->hardware_address) {
+      /* There is no entry in NVRAM, but there is in the ifconfig struct, so use it. */
+      memcpy ((void *)sc->arpcom.ac_enaddr, pConfig->hardware_address, ETHER_ADDR_LEN);
+    }
+    else {
+      /* There is no ethernet address provided, so it will be read
+       * from BBRAM at $FFFC1F2C by default. [mvme167 manual p. 1-47]
+       */
+      memcpy ((void *)sc->arpcom.ac_enaddr, (char *)0xFFFC1F2C, ETHER_ADDR_LEN);
+    }
   }
   else if ( pConfig->hardware_address) {
+    /* We are not configuring from NVRAM (J1-4 is off), and the ethernet address
+     * is given in the ifconfig structure. Copy it.
+     */
     memcpy ((void *)sc->arpcom.ac_enaddr, pConfig->hardware_address, ETHER_ADDR_LEN);
   }
   else {
+    /* We are not configuring from NVRAM (J1-4 is off), and there is no ethernet
+     * address provided in the ifconfig struct, so it will be read from BBRAM at
+     * $FFFC1F2C by default. [mvme167 manual p. 1-47]
+     */
     memcpy ((void *)sc->arpcom.ac_enaddr, (char *)0xFFFC1F2C, ETHER_ADDR_LEN);
   }
 

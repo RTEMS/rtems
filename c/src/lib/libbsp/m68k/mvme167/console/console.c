@@ -133,6 +133,35 @@
 #include <bsp.h>                /* Must be before libio.h */
 #include <rtems/libio.h>
 
+/* Utility functions */
+void cd2401_udelay( unsigned long delay );
+void cd2401_chan_cmd( rtems_unsigned8 channel, rtems_unsigned8 cmd, rtems_unsigned8 wait );
+rtems_unsigned16 cd2401_bitrate_divisor( rtems_unsigned32 clkrate, rtems_unsigned32* bitrate );
+void cd2401_initialize( void );
+void cd2401_interrupts_initialize( rtems_boolean enable );
+
+/* ISRs */
+rtems_isr cd2401_modem_isr( rtems_vector_number vector );
+rtems_isr cd2401_re_isr( rtems_vector_number vector );
+rtems_isr cd2401_rx_isr( rtems_vector_number vector );
+rtems_isr cd2401_tx_isr( rtems_vector_number vector );
+
+/* Termios callbacks */
+int cd2401_firstOpen( int major, int minor, void *arg );
+int cd2401_lastClose( int major, int minor, void *arg );
+int cd2401_setAttributes( int minor, const struct termios *t );
+int cd2401_startRemoteTx( int minor );
+int cd2401_stopRemoteTx( int minor );
+int cd2401_write( int minor, const char *buf, int len );
+int cd2401_drainOutput( int minor );
+int _167Bug_pollRead( int minor );
+int _167Bug_pollWrite( int minor, const char *buf, int len );
+
+
+/* Printk function */
+static void _BSP_output_char( char c );
+BSP_output_char_function_type BSP_output_char = _BSP_output_char;
+
 
 /* Channel info */
 /* static */ volatile struct {
@@ -145,7 +174,7 @@
   rtems_unsigned32 buserr_type; /* Reason of bus error during DMA */
   rtems_unsigned8  own_buf_A;   /* If true, buffer A belongs to the driver */
   rtems_unsigned8  own_buf_B;   /* If true, buffer B belongs to the driver */
-  rtems_unsigned8  txEmpty;     /* If true, the output FIFO is supposed to be empty */
+  rtems_unsigned8  txEmpty;     /* If true, the output FIFO should be empty */
 } CD2401_Channel_Info[4];
 
 /*
@@ -170,31 +199,6 @@ rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
 /* Define the following symbol to trace the calls to this driver */
 /* #define CD2401_RECORD_DEBUG_INFO */
 #include "console-recording.c"
-
-
-/* Utility functions */
-void cd2401_udelay( unsigned long delay );
-void cd2401_chan_cmd( rtems_unsigned8 channel, rtems_unsigned8 cmd, rtems_unsigned8 wait );
-rtems_unsigned16 cd2401_bitrate_divisor( rtems_unsigned32 clkrate, rtems_unsigned32* bitrate );
-void cd2401_initialize( void );
-void cd2401_interrupts_initialize( rtems_boolean enable );
-
-/* ISRs */
-rtems_isr cd2401_modem_isr( rtems_vector_number vector );
-rtems_isr cd2401_re_isr( rtems_vector_number vector );
-rtems_isr cd2401_rx_isr( rtems_vector_number vector );
-rtems_isr cd2401_tx_isr( rtems_vector_number vector );
-
-/* Termios callbacks */
-int cd2401_firstOpen( int major, int minor, void *arg );
-int cd2401_lastClose( int major, int minor, void *arg );
-int cd2401_setAttributes( int minor, const struct termios *t );
-int cd2401_startRemoteTx( int minor );
-int cd2401_stopRemoteTx( int minor );
-int cd2401_write( int minor, const char *buf, int len );
-int cd2401_drainOutput( int minor );
-int _167Bug_pollRead( int minor );
-int _167Bug_pollWrite( int minor, const char *buf, int len );
 
 
 /*
@@ -259,7 +263,7 @@ void cd2401_chan_cmd(
   if ( channel < 4 ) {
     cd2401->car = channel;      /* Select channel */
 
-    while ( cd2401->ccr != 0 ); /* Wait for completion of any previous command */
+    while ( cd2401->ccr != 0 ); /* Wait for completion of previous command */
     cd2401->ccr = cmd;          /* Send command */
     if ( wait )
       while( cd2401->ccr != 0 );/* Wait for completion */
@@ -298,7 +302,7 @@ rtems_unsigned16 cd2401_bitrate_divisor(
   divisor = *bitrate << 3;          /* temporary; multiply by 8 for CLK/8 */
   divisor = (clkrate + (divisor>>1)) / divisor; /* divisor for clk0 (CLK/8) */
 
-  /*  Use highest speed clock source for best precision - try from clk0 to clk4:  */
+  /* Use highest speed clock source for best precision - try clk0 to clk4 */
   for( clksource = 0; clksource < 0x0400 && divisor > 0x100; clksource += 0x0100 )
       divisor >>= 2;
   divisor--;                        /* adjustment, see specs */
@@ -358,10 +362,10 @@ void cd2401_initialize( void )
    *  THE USER MUST PROGRAM CHANNEL NUMBER IN LICR! It is not set automatically
    *  by the hardware, as suggested by the manual.
    *
-   *  The updated manual (part no 542400-007) has the story strait. The CD2401
-   *  automatically initializes the LICR to contain the channel number in bits
-   *  2 and 3. However, these bits are not preserved when the user defined bits
-   *  are written.
+   *  The updated manual (part no 542400-007) has the story straight. The
+   *  CD2401 automatically initializes the LICR to contain the channel number
+   *  in bits 2 and 3. However, these bits are not preserved when the user
+   *  defined bits are written.
    *
    *  The same vector number is used for all four channels. Different vector
    *  numbers could be programmed for each channel, thus avoiding the need to
@@ -603,7 +607,8 @@ rtems_isr cd2401_tx_isr(
   if ( status & 0x80 ) {
     /*
      *  Bus error occurred during DMA transfer. For now, just record.
-     *  Get reason for DMA bus error and clear the report for the next occurrence
+     *  Get reason for DMA bus error and clear the report for the next
+     *  occurrence
      */
     buserr = pccchip2->SCC_error;
     pccchip2->SCC_error = 0x01;
@@ -1017,15 +1022,15 @@ int cd2401_setAttributes(
     /* Clear channel */
     cd2401_chan_cmd (minor, 0x40, 1);
 
-    cd2401->car = minor;        /* Select channel */
-    cd2401->cmr = 0x42;         /* Interrupt Rx, DMA Tx, async mode */
+    cd2401->car = minor;    /* Select channel */
+    cd2401->cmr = 0x42;     /* Interrupt Rx, DMA Tx, async mode */
     cd2401->cor1 = parodd | parenb | ignpar | csize;
     cd2401->cor2 = sw_flow_ctl | hw_flow_ctl;
     cd2401->cor3 = extra_flow_ctl | cstopb;
-    cd2401->cor4 = 0x0A;        /* No DSR/DCD/CTS detect; FIFO threshold of 10 */
-    cd2401->cor5 = 0x0A;        /* No DSR/DCD/CTS detect; DTR threshold of 10 */
+    cd2401->cor4 = 0x0A;    /* No DSR/DCD/CTS detect; FIFO threshold of 10 */
+    cd2401->cor5 = 0x0A;    /* No DSR/DCD/CTS detect; DTR threshold of 10 */
     cd2401->cor6 = igncr | icrnl | inlcr | ignbrk | brkint | parmrk | inpck;
-    cd2401->cor7 = istrip;      /* No LNext; ignore XON/XOFF if frame error; no tx translations */
+    cd2401->cor7 = istrip;  /* No LNext; ignore XON/XOFF if frame error; no tx translations */
     /* Special char 1: XON character */
     cd2401->u1.async.schr1 = t->c_cc[VSTART]; 
     /* special char 2: XOFF character */
@@ -1040,7 +1045,7 @@ int cd2401_setAttributes(
     cd2401->rbpr = (unsigned char)rx_period;
     cd2401->rcor = (unsigned char)(rx_period >> 8); /* no DPLL */
     cd2401->tbpr = (unsigned char)tx_period;
-    cd2401->tcor = (tx_period >> 3) & 0xE0;         /* no x1 ext clk, no loopback */
+    cd2401->tcor = (tx_period >> 3) & 0xE0; /* no x1 ext clk, no loopback */
   
     /* Timeout for 4 chars at 9600, 8 bits per char, 1 stop bit */
     cd2401->u2.w.rtpr  = 0x04;  /* NEED TO LOOK AT THIS LINE! */
@@ -1238,6 +1243,10 @@ int cd2401_write(
  *
  *  MUST NOT BE EXECUTED WITH THE CD2401 INTERRUPTS DISABLED!
  *  The txEmpty flag is set by the tx ISR.
+ *
+ *  DOES NOT WORK! DO NOT ENABLE THIS CODE. THE CD2401 DOES NOT COOPERATE!
+ *  The code is here to document that the output FIFO is NOT empty when
+ *  the CD2401 reports that the Tx buffer is empty.
  */
 int cd2401_drainOutput(
   int minor
@@ -1272,8 +1281,6 @@ int cd2401_drainOutput(
  *                -1 if no character is present in the input FIFO.
  *
  *  CANNOT BE COMBINED WITH INTERRUPT DRIVEN I/O!
- *  This function is invoked when the device driver is compiled with
- *  CD2401_POLLED_IO set to 1 above. All I/O is then done through 167Bug.
  */
 int _167Bug_pollRead(
   int minor
@@ -1281,28 +1288,38 @@ int _167Bug_pollRead(
 {
   int char_not_available;
   unsigned char c;
+  rtems_interrupt_level previous_level;
 
-  /* Check for a char in the input FIFO */
-  asm volatile( "movew  #0x1, -(%%sp)   /* Code for .INSTAT */
-                 movew  %1, -(%%sp)     /* Channel */
+  /* 
+   *  Redirection of .INSTAT does not work: 167-Bug crashes.
+   *  Switch the input stream to the specified port.
+   *  Make sure this is atomic code.
+   */
+  rtems_interrupt_disable( previous_level );
+  
+  asm volatile( "movew  %1, -(%%sp)     /* Channel */
                  trap   #15             /* Trap to 167Bug */
-                 .short 0x60            /* Code for .REDIR */
+                 .short 0x61            /* Code for .REDIR_I */
+                 trap   #15             /* Trap to 167Bug */
+			           .short 0x01            /* Code for .INSTAT */
                  move   %%cc, %0        /* Get condition codes */
                  andil  #4, %0"         /* Keep the Zero bit */
     : "=d" (char_not_available) : "d" (minor): "%%cc" );
 
-  if (char_not_available)
+  if (char_not_available) {
+    rtems_interrupt_enable( previous_level );
     return -1;
+  }
 
   /* Read the char and return it */
   asm volatile( "subq.l #2,%%a7         /* Space for result */
-                 movew  #0x0, -(%%sp)   /* Code for .INCHR */
-                 movew  %1, -(%%sp)     /* Channel */
                  trap   #15             /* Trap to 167 Bug */
-                 .short 0x60            /* Code for .REDIR */
+                 .short 0x00            /* Code for .INCHR */
                  moveb  (%%a7)+, %0"    /* Pop char into c */
-    : "=d" (c) : "d" (minor) );
+    : "=d" (c) : );
 
+  rtems_interrupt_enable( previous_level );
+  
   return (int)c;
 }
 
@@ -1323,8 +1340,6 @@ int _167Bug_pollRead(
  *  Return value: IGNORED
  *
  *  CANNOT BE COMBINED WITH INTERRUPT DRIVEN I/O!
- *  This function is invoked when the device driver is compiled with
- *  CD2401_POLLED_IO set to 1 above. All I/O is then done through 167Bug.
  */
 int _167Bug_pollWrite(
   int minor,
@@ -1348,40 +1363,109 @@ int _167Bug_pollWrite(
 
 
 /*
- *  Print functions: prototyped in bsp.h
- *  Debug printing on Channel 1
+ *  do_poll_read
+ *
+ *  Input characters through 167Bug. Returns has soon as a character has been
+ *  received. Otherwise, if we wait for the number of requested characters, we
+ *  could be here forever!
+ *
+ *  CR is converted to LF on input. The terminal should not send a CR/LF pair
+ *  when the return or enter key is pressed.
+ *
+ *  Input parameters:
+ *    major - ignored. Should be the major number for this driver.
+ *    minor - selected channel.
+ *    arg->buffer - where to put the received characters.
+ *    arg->count  - number of characters to receive before returning--Ignored.
+ *
+ *  Output parameters:
+ *    arg->bytes_moved - the number of characters read. Always 1.
+ *
+ *  Return value: RTEMS_SUCCESSFUL
+ *
+ *  CANNOT BE COMBINED WITH INTERRUPT DRIVEN I/O!
  */
- 
-void printk( char *fmt, ... )
+rtems_status_code do_poll_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
 {
-  va_list  ap;      		/* points to each unnamed argument in turn */
-  static char buf[256];
-  unsigned int level;
-  
-  _CPU_ISR_Disable(level);
-  
-  va_start(ap, fmt); 		/* make ap point to 1st unnamed arg */
-  vsprintf(buf, fmt, ap);	/* send output to buffer */
-  
-  BSP_output_string(buf);	/* print buffer -- Channel 1 */
-  
-  va_end(ap);				/* clean up and re-enable interrupts */
-  _CPU_ISR_Enable(level);
+  rtems_libio_rw_args_t *rw_args = arg;
+  int c;
+
+  while( (c = _167Bug_pollRead (minor)) == -1 );
+  rw_args->buffer[0] = (unsigned8)c;
+  if( rw_args->buffer[0] == '\r' )
+      rw_args->buffer[0] = '\n';
+  rw_args->bytes_moved = 1;
+  return RTEMS_SUCCESSFUL;
+}
+
+/*
+ *  do_poll_write
+ *
+ *  Output characters through 167Bug. Returns only once every character has
+ *  been sent.
+ *
+ *  CR is transmitted AFTER a LF on output. 
+ *
+ *  Input parameters:
+ *    major - ignored. Should be the major number for this driver.
+ *    minor - selected channel
+ *    arg->buffer - where to get the characters to transmit.
+ *    arg->count  - the number of characters to transmit before returning.
+ *
+ *  Output parameters:
+ *    arg->bytes_moved - the number of characters read
+ *
+ *  Return value: RTEMS_SUCCESSFUL
+ *
+ *  CANNOT BE COMBINED WITH INTERRUPT DRIVEN I/O!
+ */
+rtems_status_code do_poll_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  rtems_libio_rw_args_t *rw_args = arg;
+  unsigned32 i;
+  char cr ='\r';
+
+  for( i = 0; i < rw_args->count; i++ ) {
+    _167Bug_pollWrite(minor, &(rw_args->buffer[i]), 1);
+    if ( rw_args->buffer[i] == '\n' )
+      _167Bug_pollWrite(minor, &cr, 1);
+  }
+  rw_args->bytes_moved = i;
+  return RTEMS_SUCCESSFUL;
 }
 
 
-void BSP_output_string( char * buf )
+/*
+ *  _BSP_output_char
+ *
+ *  printk() function prototyped in bspIo.h. Does not use termios.
+ */
+void _BSP_output_char(char c)
 {
-  int len = strlen(buf);			
-  rtems_status_code sc;
+  rtems_device_minor_number printk_minor;
   
-  /* The first argument forces a print to Port2 (ttyS1) */
-  sc = _167Bug_pollWrite(1, buf, len);
-  if (sc != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred (sc);
+  /* 
+   *  Can't rely on console_initialize having been called before this function
+   *  is used.
+   */
+  if ( NVRAM_CONFIGURE )
+    /* J1-4 is on, use NVRAM info for configuration */
+    printk_minor = nvram->console_printk_port & 0x30;
+  else
+    printk_minor = PRINTK_MINOR;
+   
+  _167Bug_pollWrite(printk_minor, &c, 1);
 }
 
-
+  
 /*
  ***************
  * BOILERPLATE *
@@ -1400,14 +1484,29 @@ rtems_device_driver console_initialize(
 )
 {
   rtems_status_code status;
+  rtems_device_minor_number console_minor;
 
   /*
-   * Set up TERMIOS
+   * Set up TERMIOS if needed
    */
-  rtems_termios_initialize ();
+  if ( NVRAM_CONFIGURE ) {
+    /* J1-4 is on, use NVRAM info for configuration */
+    console_minor = nvram->console_printk_port & 0x03;
+          
+    if ( nvram->console_mode & 0x01 )
+      /* termios */
+      rtems_termios_initialize ();
+  }
+  else {
+    console_minor = CONSOLE_MINOR;
+#if CD2401_USE_TERMIOS == 1
+    rtems_termios_initialize ();
+#endif
+  }
 
   /*
    * Do device-specific initialization
+   * Does not affect 167-Bug.
    */
   cd2401_initialize ();
 
@@ -1422,7 +1521,7 @@ rtems_device_driver console_initialize(
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
 
-  status = rtems_io_register_name ("/dev/console", major, 1);
+  status = rtems_io_register_name ("/dev/console", major, console_minor);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
 
@@ -1446,10 +1545,7 @@ rtems_device_driver console_open(
   void                    * arg
 )
 {
-#if CD2401_POLLED_IO
-
-  /* I/O is limited to 167Bug console. minor is ignored! */
-  static const rtems_termios_callbacks callbacks = {
+  static const rtems_termios_callbacks pollCallbacks = {
     NULL,                       /* firstOpen */
     NULL,                       /* lastClose */
     _167Bug_pollRead,           /* pollRead */
@@ -1459,10 +1555,8 @@ rtems_device_driver console_open(
     NULL,                       /* startRemoteTx */
     0                           /* outputUsesInterrupts */
   };
-
-#else
-
-  static const rtems_termios_callbacks callbacks = {
+  
+  static const rtems_termios_callbacks intrCallbacks = {
     cd2401_firstOpen,           /* firstOpen */
     cd2401_lastClose,           /* lastClose */
     NULL,                       /* pollRead */
@@ -1473,10 +1567,36 @@ rtems_device_driver console_open(
     1                           /* outputUsesInterrupts */
   };
 
+  if ( NVRAM_CONFIGURE )
+    /* J1-4 is on, use NVRAM info for configuration */ 
+    if ( nvram->console_mode & 0x01 )
+      /* termios */
+      if ( nvram->console_mode & 0x02 )
+        /* interrupt-driven I/O */
+        return rtems_termios_open (major, minor, arg, &intrCallbacks);
+	    else
+        /* polled I/O */
+        return rtems_termios_open (major, minor, arg, &pollCallbacks);
+	  else
+	    /* no termios -- default to polled I/O */
+	    return RTEMS_SUCCESSFUL;
+#if CD2401_USE_TERMIOS == 1
+#if CD2401_IO_MODE != 1
+  else
+    /* termios & polled I/O*/
+    return rtems_termios_open (major, minor, arg, &pollCallbacks);
+#else
+  else
+    /* termios & interrupt-driven I/O*/
+    return rtems_termios_open (major, minor, arg, &intrCallbacks);
 #endif
-
-  return rtems_termios_open (major, minor, arg, &callbacks);
+#else
+  else
+    /* no termios -- default to polled I/O */
+    return RTEMS_SUCCESSFUL;
+#endif
 }
+
 
 /*
  * Close the device
@@ -1487,8 +1607,26 @@ rtems_device_driver console_close(
   void                    * arg
 )
 {
-  return rtems_termios_close (arg);
+  if ( NVRAM_CONFIGURE ) {
+    /* J1-4 is on, use NVRAM info for configuration */ 
+    if ( nvram->console_mode & 0x01 )
+      /* termios */
+      return rtems_termios_close (arg);
+    else
+      /* no termios */
+      return RTEMS_SUCCESSFUL;
+  }
+#if CD2401_USE_TERMIOS == 1
+  else
+    /* termios */
+    return rtems_termios_close (arg);
+#else
+  else
+    /* no termios */
+    return RTEMS_SUCCESSFUL;
+#endif
 }
+
 
 /*
  * Read from the device
@@ -1499,8 +1637,26 @@ rtems_device_driver console_read(
   void                    * arg
 )
 {
-  return rtems_termios_read (arg);
+  if ( NVRAM_CONFIGURE ) {
+    /* J1-4 is on, use NVRAM info for configuration */ 
+    if ( nvram->console_mode & 0x01 )
+      /* termios */
+      return rtems_termios_read (arg);
+    else
+      /* no termios -- default to polled */
+      return do_poll_read (major, minor, arg);
+  }
+#if CD2401_USE_TERMIOS == 1
+  else
+    /* termios */
+    return rtems_termios_read (arg);
+#else
+  else
+    /* no termios -- default to polled */
+    return do_poll_read (major, minor, arg);
+#endif
 }
+
 
 /*
  * Write to the device
@@ -1511,8 +1667,26 @@ rtems_device_driver console_write(
   void                    * arg
 )
 {
-  return rtems_termios_write (arg);
+  if ( NVRAM_CONFIGURE ) {
+    /* J1-4 is on, use NVRAM info for configuration */ 
+    if ( nvram->console_mode & 0x01 )
+      /* termios */
+      return rtems_termios_write (arg);
+    else
+      /* no termios -- default to polled */
+      return do_poll_write (major, minor, arg);
+  }
+#if CD2401_USE_TERMIOS == 1
+  else
+    /* termios */
+    return rtems_termios_write (arg);
+#else
+  else
+    /* no termios -- default to polled */
+    return do_poll_write (major, minor, arg);
+#endif
 }
+
 
 /*
  * Handle ioctl request.
@@ -1523,5 +1697,22 @@ rtems_device_driver console_control(
   void                    * arg
 )
 {
-  return rtems_termios_ioctl (arg);
+  if ( NVRAM_CONFIGURE ) {
+    /* J1-4 is on, use NVRAM info for configuration */ 
+    if ( nvram->console_mode & 0x01 )
+      /* termios */
+      return rtems_termios_ioctl (arg);
+    else
+      /* no termios -- default to polled */
+      return RTEMS_SUCCESSFUL;
+  }
+#if CD2401_USE_TERMIOS == 1
+  else
+    /* termios */
+    return rtems_termios_ioctl (arg);
+#else
+  else
+    /* no termios -- default to polled */
+    return RTEMS_SUCCESSFUL;
+#endif
 }
