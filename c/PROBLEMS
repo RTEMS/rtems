@@ -4,12 +4,15 @@
 
 This is the list of outstanding problems in this release.
 
-+   The m68000 support is not quite complete yet.  The missing piece
++   The POSIX threads and real time extensions code in this tree does
+    not work yet and is intentionally not in the normal build path.
+
++   The m68000 support is nearly complete now.  The missing piece
     inside the executive proper is support for the software interrupt 
     stack.  Also, the m68k family has become quite large and an 
     understanding of the compatibility of the peripherals on the various 
     members of the 683xx family would allow someone to designate some
-    of the drivers submitted for the gen68302 BSP as useful on other
+    of the drivers submitted for the gen683xx BSPs as useful on other
     members.
 
 +   The only i960 family member tested is the CA.  No support for the
@@ -30,11 +33,9 @@ This is the list of outstanding problems in this release.
 
        + sometimes a stray SIGALRM is reported as spfatal completes.
 
-       +  Currently the routines which need to make access to the 
-          native library (not newlib) are spread across a number of 
-          directories.  There should be a "unix_XYZ" wrapper for every 
-          one of these routines so there is only 1 directory which directly 
-          references the "real" native library.
+       + There are conflicts between the names of native library routines
+         which MUST be used and those in the POSIX support.  This must
+         be addressed. 
 
 +   Some of the tests may execute correctly and not produce the exact
     ordering of lines in the screen file.  This appears to be a combination
@@ -52,9 +53,3 @@ This is the list of outstanding problems in this release.
     milliseconds.  This only applies to clock drivers which generate
     an ISR each millisecond and only call rtems_clock_tick every
     so many ISRs.
- 
-+   The MP code for the Message Manager copies the message buffer
-    in and out of the MPCI packet at at least two unecessary times:
- 
-      + as part of some send requests
-      + on a non-successful receive response
