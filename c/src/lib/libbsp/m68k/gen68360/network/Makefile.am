@@ -9,7 +9,7 @@ PGM = ${ARCH}/network.rel
 C_FILES = network.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-H_FILES = netexterns.h uti596.h
+H_FILES =
 noinst_HEADERS = $(H_FILES)
 
 network_rel_OBJECTS = $(C_O_FILES)
