@@ -13,136 +13,126 @@ include_libchip_HEADERS =
 endif
 
 EXTRA_DIST =
-noinst_HEADERS =
+EXTRA_LIBRARIES =
+EXTRA_PROGRAMS =
+CLEANFILES =
 
 # ide
-libide_C_FILES = ide/ata.c ide/ide_controller.c
-libide_OBJS = $(libide_C_FILES:ide/%.c=ide/$(ARCH)/%.$(OBJEXT))
-
-noinst_HEADERS += ide/ata_internal.h
-
 if LIBCHIP
 include_libchip_HEADERS += ide/ata.h ide/ide_ctrl_cfg.h ide/ide_ctrl.h \
     ide/ide_ctrl_io.h
 
-ide/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) ide/$(ARCH)
-	@: > ide/$(ARCH)/$(dirstamp)
-ide/$(ARCH)/%.$(OBJEXT): ide/%.c ide/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-ide/$(ARCH)/libide.a: $(libide_OBJS)
-	$(make-library)
-noinst_DATA += ide/$(ARCH)/libide.a
+EXTRA_LIBRARIES += libide.a
+CLEANFILES += libide.a
+libide_a_SOURCES = ide/ata.c ide/ide_controller.c ide/ata_internal.h
+libide_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += libide_g.a
+CLEANFILES += libide_g.a
+libide_g_a_SOURCES = $(libide_a_SOURCES)
+libide_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
+noinst_DATA += libide$(LIB_VARIANT).a
 endif
 
-EXTRA_DIST += $(libide_C_FILES)
-
 # network
-
-libnetchip_C_FILES = network/cs8900.c network/dec21140.c network/i82586.c \
-    network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c
-libnetchip_OBJS = \
-    $(libnetchip_C_FILES:network/%.c=network/$(ARCH)/%.$(OBJEXT))
-
-libnetchip_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-
 if LIBCHIP
 if HAS_NETWORKING
 include_libchip_HEADERS += network/cs8900.h network/i82586var.h \
     network/if_fxpvar.h network/sonic.h network/if_media.h network/mii.h \
     network/open_eth.h
 
-network/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) network/$(ARCH)
-	@: > network/$(ARCH)/$(dirstamp)
-network/$(ARCH)/%.$(OBJEXT): network/%.c network/$(ARCH)/$(dirstamp)
-	${COMPILE} $(libnetchip_CPPFLAGS) -o $@ -c $<
-network/$(ARCH)/libnetchip$(LIB_VARIANT).a: $(libnetchip_OBJS)
-	$(make-library)
-project_lib_DATA = network/$(ARCH)/libnetchip$(LIB_VARIANT).a
+libnetchip_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+EXTRA_LIBRARIES += libnetchip.a
+CLEANFILES += libnetchip.a
+libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
+    network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c
+libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+    $(libnetchip_CPPFLAGS)
+
+EXTRA_LIBRARIES += libnetchip_g.a
+CLEANFILES += libnetchip_g.a
+libnetchip_g_a_SOURCES = $(libnetchip_a_SOURCES)
+libnetchip_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
+    $(libnetchip_CPPFLAGS)
+
+# FIXME: Why is this lib installed?
+project_lib_DATA = libnetchip$(LIB_VARIANT).a
 endif
 endif
 
-libnetchip_DOC_FILES = network/README network/README.cs8900 \
-    network/README.dec21140 network/README.i82586 network/README.open_eth \
-    network/README.sonic network/cs8900.c.bsp
-
-EXTRA_DIST += $(libnetchip_C_FILES) $(libnetchip_DOC_FILES)
+EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
+    network/README.i82586 network/README.open_eth network/README.sonic \
+    network/cs8900.c.bsp
 
 # rtc
-librtcio_C_FILES = rtc/rtcprobe.c rtc/icm7170.c rtc/icm7170_reg.c \
-    rtc/icm7170_reg2.c rtc/icm7170_reg4.c rtc/icm7170_reg8.c rtc/m48t08.c \
-    rtc/m48t08_reg.c rtc/m48t08_reg2.c rtc/m48t08_reg4.c rtc/m48t08_reg8.c
-
-librtcio_OBJS = $(librtcio_C_FILES:rtc/%.c=rtc/$(ARCH)/%.$(OBJEXT))
-
 if LIBCHIP
 include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h
 
-rtc/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) rtc/$(ARCH)
-	@: > rtc/$(ARCH)/$(dirstamp)
-rtc/$(ARCH)/%.$(OBJEXT): rtc/%.c rtc/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-rtc/$(ARCH)/librtcio.a: $(librtcio_OBJS)
-	$(make-library)
-noinst_DATA += rtc/$(ARCH)/librtcio.a
+EXTRA_LIBRARIES += librtcio.a
+CLEANFILES += librtcio.a
+librtcio_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+librtcio_a_SOURCES = rtc/rtcprobe.c rtc/icm7170.c rtc/icm7170_reg.c \
+    rtc/icm7170_reg2.c rtc/icm7170_reg4.c rtc/icm7170_reg8.c rtc/m48t08.c \
+    rtc/m48t08_reg.c rtc/m48t08_reg2.c rtc/m48t08_reg4.c rtc/m48t08_reg8.c
+
+EXTRA_LIBRARIES += librtcio_g.a
+CLEANFILES += librtcio_g.a
+librtcio_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+librtcio_g_a_SOURCES = $(librtcio_a_SOURCES)
+
+noinst_DATA += librtcio$(LIB_VARIANT).a
 endif
 
-librtcio_DOC_FILES = rtc/README.ds1643 rtc/README.icm7170 rtc/README.m48t08 \
+EXTRA_DIST += rtc/README.ds1643 rtc/README.icm7170 rtc/README.m48t08 \
     rtc/README.m48t18 rtc/STATUS
 
-EXTRA_DIST += $(librtcio_C_FILES) $(librtcio_DOC_FILES)
-
 # serial
-libserialio_C_FILES = serial/mc68681.c serial/mc68681_baud.c \
-    serial/mc68681_reg.c serial/mc68681_reg2.c serial/mc68681_reg4.c \
-    serial/mc68681_reg8.c serial/ns16550.c serial/z85c30.c \
-    serial/z85c30_reg.c serial/serprobe.c serial/termios_baud2index.c \
-    serial/termios_baud2num.c
-EXTRA_DIST += $(libserialio_C_FILES)
-libserialio_OBJS = \
-    $(libserialio_C_FILES:serial/%.c=serial/$(ARCH)/%.$(OBJEXT))
-
-noinst_HEADERS += serial/mc68681_p.h serial/ns16550_p.h serial/z85c30_p.h
-
 if LIBCHIP
 include_libchip_HEADERS += serial/mc68681.h serial/ns16550.h serial/z85c30.h \
     serial/serial.h serial/sersupp.h
 
-serial/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) serial/$(ARCH)
-	@: > serial/$(ARCH)/$(dirstamp)
-serial/$(ARCH)/%.$(OBJEXT): serial/%.c serial/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-serial/$(ARCH)/libserialio.a: $(libserialio_OBJS)
-	$(make-library)
-noinst_DATA += serial/$(ARCH)/libserialio.a
+EXTRA_LIBRARIES += libserialio.a
+CLEANFILES += libserialio.a
+libserialio_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libserialio_a_SOURCES = serial/mc68681.c serial/mc68681_baud.c \
+    serial/mc68681_reg.c serial/mc68681_reg2.c serial/mc68681_reg4.c \
+    serial/mc68681_reg8.c serial/ns16550.c serial/z85c30.c \
+    serial/z85c30_reg.c serial/serprobe.c serial/termios_baud2index.c \
+    serial/termios_baud2num.c serial/mc68681_p.h serial/ns16550_p.h \
+    serial/z85c30_p.h
+
+EXTRA_LIBRARIES += libserialio_g.a
+CLEANFILES += libserialio_g.a
+libserialio_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+libserialio_g_a_SOURCES = $(libserialio_a_SOURCES)
+
+noinst_DATA += libserialio$(LIB_VARIANT).a
 endif
 
-libserialio_DOC_FILES = serial/README.mc68681 serial/README.ns16550 \
+EXTRA_DIST += serial/README.mc68681 serial/README.ns16550 \
     serial/README.xr88681 serial/README.z85c30 serial/STATUS
-EXTRA_DIST += $(libserialio_DOC_FILES)
 
 ## shmdr
-shmdr_C_FILES = shmdr/addlq.c shmdr/cnvpkt.c shmdr/getlq.c shmdr/dump.c \
+if HAS_MP
+include_HEADERS = shmdr/shm_driver.h shmdr/mpci.h
+
+EXTRA_PROGRAMS += shmdr.rel
+CLEANFILES += shmdr.rel
+shmdr_rel_SOURCES = shmdr/addlq.c shmdr/cnvpkt.c shmdr/getlq.c shmdr/dump.c \
     shmdr/fatal.c shmdr/getpkt.c shmdr/init.c shmdr/initlq.c shmdr/intr.c \
     shmdr/mpisr.c shmdr/poll.c shmdr/receive.c shmdr/retpkt.c shmdr/send.c \
     shmdr/setckvec.c
-EXTRA_DIST += $(shmdr_C_FILES)
-shmdr_OBJECTS = $(shmdr_C_FILES:shmdr/%.c=shmdr/$(ARCH)/%.$(OBJEXT))
+shmdr_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+shmdr_rel_LDFLAGS = $(RTEMS_REL_LDFLAGS)
 
-shmdr/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) shmdr/$(ARCH)
-	@: > shmdr/$(ARCH)/$(dirstamp)
-shmdr/$(ARCH)/%.$(OBJEXT): shmdr/%.c shmdr/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel: $(shmdr_OBJECTS)
-	$(make-rel)
+EXTRA_PROGRAMS += shmdr_g.rel
+CLEANFILES += shmdr_g.rel
+shmdr_g_rel_SOURCES = $(no_shmdr_rel_SOURCES)
+shmdr_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+shmdr_g_rel_LDFLAGS = $(RTEMS_REL_LDFLAGS)
 
-if HAS_MP
-include_HEADERS = shmdr/shm_driver.h shmdr/mpci.h
-project_lib_DATA = shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel
+project_lib_DATA = shmdr$(LIB_VARIANT).rel
 endif
 
 EXTRA_DIST += shmdr/README
@@ -150,10 +140,6 @@ EXTRA_DIST += shmdr/README
 ## --
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
-EXTRA_DIST += $(libserialio_C_FILES) $(libserialio_DOC_FILES)
-
-CLEANDIRS = */$(ARCH)
 
 PREINSTALL_FILES =
 TMPINSTALL_FILES =
@@ -223,7 +209,7 @@ $(PROJECT_INCLUDE)/libchip/open_eth.h: network/open_eth.h $(PROJECT_INCLUDE)/lib
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/open_eth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/open_eth.h
 
-$(PROJECT_LIB)/libnetchip$(LIB_VARIANT).a: network/$(ARCH)/libnetchip$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
+$(PROJECT_LIB)/libnetchip$(LIB_VARIANT).a: libnetchip$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libnetchip$(LIB_VARIANT).a
 TMPINSTALL_FILES += $(PROJECT_LIB)/libnetchip$(LIB_VARIANT).a
 endif
@@ -274,12 +260,12 @@ $(PROJECT_INCLUDE)/mpci.h: shmdr/mpci.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpci.h
 
-$(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel: shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+$(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel: shmdr$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
 TMPINSTALL_FILES += $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
 endif
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
