@@ -333,7 +333,7 @@ libc_init(int reentrant)
 
 #include <stdio.h>
 
-#if !defined(RTEMS_UNIX) && !defined(_AM29K)
+#if !defined(RTEMS_UNIX)
 void _exit(int status)
 {
   /*

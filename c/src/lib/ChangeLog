@@ -1,4 +1,8 @@
 
+2000-09-22	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/newlibc.c: Removed _A29K specific ifdef.
+
 2000-09-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Cleanup comments.
