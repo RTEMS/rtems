@@ -37,6 +37,8 @@ void _ISR_Handler_initialization( void )
      sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS
   );
 
+  _CPU_Initialize_vectors();
+
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
 
   if ( _CPU_Table.interrupt_stack_size < STACK_MINIMUM_SIZE )

@@ -520,8 +520,18 @@ SCORE_EXTERN void CPU_delay( unsigned32 microseconds );
 
 #define CPU_STACK_ALIGNMENT        CPU_ALIGNMENT
 
-/* ISR handler macros */
+/*
+ *  ISR handler macros
+ */
 
+/*
+ *  Support routine to initialize the RTEMS vector table after it is allocated.
+ *
+ *  SH Specific Information: NONE
+ */
+ 
+#define _CPU_Initialize_vectors()
+ 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.

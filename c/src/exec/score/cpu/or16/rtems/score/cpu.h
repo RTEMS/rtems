@@ -636,7 +636,19 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 #define CPU_STACK_ALIGNMENT        0
 
-/* ISR handler macros */
+/*
+ *  ISR handler macros
+ */
+
+/*
+ *  Support routine to initialize the RTEMS vector table after it is allocated.
+ *
+ *  OR16 Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
+ */
+ 
+#define _CPU_Initialize_vectors()
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous

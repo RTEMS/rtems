@@ -1,4 +1,9 @@
 
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* src/isr.c: Modify to properly dereference _ISR_Vector_table
+	now that it is dynamically allocated.
+
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* src/isr.c: Allocate the _ISR_Vector_table all the time not just when
