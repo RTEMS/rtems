@@ -33,7 +33,7 @@
 
 /* msdos_node_type --
  *     Determine type of the node that the pathloc refers to.
- * 
+ *
  * PARAMETERS:
  *     pathloc - node description
  *
@@ -41,18 +41,18 @@
  *     node type
  *
  */
-rtems_filesystem_node_types_t 
+rtems_filesystem_node_types_t
 msdos_node_type(rtems_filesystem_location_info_t *pathloc)
 {
     fat_file_fd_t *fat_fd;
 
-    /* 
-     * we don't need to obtain the volume semaphore here because node_type_h 
-     * call always follows evalpath_h call(hence link increment occured) and 
-     * hence node_access memory can't be freed during processing node_type_h 
+    /*
+     * we don't need to obtain the volume semaphore here because node_type_h
+     * call always follows evalpath_h call(hence link increment occured) and
+     * hence node_access memory can't be freed during processing node_type_h
      * call
      */
     fat_fd = pathloc->node_access;
- 
-    return fat_fd->fat_file_type;  
+
+    return fat_fd->fat_file_type;
 }

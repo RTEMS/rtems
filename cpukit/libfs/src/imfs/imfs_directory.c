@@ -34,11 +34,11 @@
  *  imfs_dir_open
  *
  *  This rountine will verify that the node being opened as a directory is
- *  in fact a directory node. If it is then the offset into the directory 
+ *  in fact a directory node. If it is then the offset into the directory
  *  will be set to 0 to position to the first directory entry.
  */
 
-int imfs_dir_open( 
+int imfs_dir_open(
   rtems_libio_t  *iop,
   const char *pathname,
   uint32_t   flag,
@@ -60,14 +60,14 @@ int imfs_dir_open(
 /*
  *  imfs_dir_read
  *
- *  This routine will read the next directory entry based on the directory 
+ *  This routine will read the next directory entry based on the directory
  *  offset. The offset should be equal to -n- time the size of an individual
- *  dirent structure. If n is not an integer multiple of the sizeof a 
- *  dirent structure, an integer division will be performed to determine 
+ *  dirent structure. If n is not an integer multiple of the sizeof a
+ *  dirent structure, an integer division will be performed to determine
  *  directory entry that will be returned in the buffer. Count should reflect
  *  -m- times the sizeof dirent bytes to be placed in the buffer.
  *  If there are not -m- dirent elements from the current directory position
- *  to the end of the exisiting file, the remaining entries will be placed in 
+ *  to the end of the exisiting file, the remaining entries will be placed in
  *  the buffer and the returned value will be equal to -m actual- times the
  *  size of a directory entry.
  */
@@ -93,7 +93,7 @@ ssize_t imfs_dir_read(
 
    the_jnode = (IMFS_jnode_t *)iop->file_info;
    the_chain = &the_jnode->info.directory.Entries;
-   
+
    if ( Chain_Is_empty( the_chain ) )
       return 0;
 
@@ -107,18 +107,18 @@ ssize_t imfs_dir_read(
    last_entry = first_entry + (count/sizeof(struct dirent)) * sizeof(struct dirent);
 
    /* The directory was not empty so try to move to the desired entry in chain*/
-   for ( 
-      current_entry = 0; 
-      current_entry < last_entry; 
+   for (
+      current_entry = 0;
+      current_entry < last_entry;
       current_entry = current_entry + sizeof(struct dirent) ){
 
-      if ( Chain_Is_tail( the_chain, the_node ) ){ 
+      if ( Chain_Is_tail( the_chain, the_node ) ){
          /* We hit the tail of the chain while trying to move to the first */
          /* entry in the read */
          return bytes_transferred;  /* Indicate that there are no more */
                                     /* entries to return */
       }
-    
+
       if( current_entry >= first_entry ) {
          /* Move the entry to the return buffer */
          tmp_dirent.d_off = current_entry;
@@ -127,10 +127,10 @@ ssize_t imfs_dir_read(
          tmp_dirent.d_ino = the_jnode->st_ino;
          tmp_dirent.d_namlen = strlen( the_jnode->name );
          strcpy( tmp_dirent.d_name, the_jnode->name );
-         memcpy( 
-            buffer + bytes_transferred, 
-            (void *)&tmp_dirent, 
-            sizeof( struct dirent ) 
+         memcpy(
+            buffer + bytes_transferred,
+            (void *)&tmp_dirent,
+            sizeof( struct dirent )
          );
          iop->offset = iop->offset + sizeof(struct dirent);
          bytes_transferred = bytes_transferred + sizeof( struct dirent );
@@ -161,7 +161,7 @@ int imfs_dir_close(
    *  and associated memory. At present the imfs_dir_close simply
    *  returns a successful completion status.
    */
- 
+
   return 0;
 }
 
@@ -170,7 +170,7 @@ int imfs_dir_close(
 /*
  *  imfs_dir_lseek
  *
- *  This routine will behave in one of three ways based on the state of 
+ *  This routine will behave in one of three ways based on the state of
  *  argument whence. Based on the state of its value the offset argument will
  *  be interpreted using one of the following methods:
  *
@@ -210,7 +210,7 @@ int imfs_dir_lseek(
 /*
  *  imfs_dir_fstat
  *
- *  This routine will obtain the following information concerning the current 
+ *  This routine will obtain the following information concerning the current
  *  directory:
  *        st_dev      0ll
  *        st_ino      1
@@ -219,9 +219,9 @@ int imfs_dir_lseek(
  *        st_uid      uid extracted from the jnode
  *        st_gid      gid extracted from the jnode
  *        st_rdev     0ll
- *        st_size     the number of bytes in the directory 
+ *        st_size     the number of bytes in the directory
  *                    This is calculated by taking the number of entries
- *                    in the directory and multiplying by the size of a 
+ *                    in the directory and multiplying by the size of a
  *                    dirent structure
  *        st_blksize  0
  *        st_blocks   0
@@ -267,7 +267,7 @@ int imfs_dir_fstat(
    for ( the_node = the_chain->first ;
          !_Chain_Is_tail( the_chain, the_node ) ;
          the_node = the_node->next ) {
- 
+
       buf->st_size = buf->st_size + sizeof( struct dirent );
    }
 
@@ -277,7 +277,7 @@ int imfs_dir_fstat(
 /*
  *  IMFS_dir_rmnod
  *
- *  This routine is available from the optable to remove a node 
+ *  This routine is available from the optable to remove a node
  *  from the IMFS file system.
  */
 
@@ -285,33 +285,33 @@ int imfs_dir_rmnod(
   rtems_filesystem_location_info_t      *pathloc       /* IN */
 )
 {
-  IMFS_jnode_t *the_jnode;  
+  IMFS_jnode_t *the_jnode;
 
   the_jnode = (IMFS_jnode_t *) pathloc->node_access;
 
-  /* 
-   * You cannot remove a node that still has children 
+  /*
+   * You cannot remove a node that still has children
    */
 
   if ( ! Chain_Is_empty( &the_jnode->info.directory.Entries ) )
      rtems_set_errno_and_return_minus_one( ENOTEMPTY );
 
-  /* 
+  /*
    * You cannot remove the file system root node.
    */
 
   if ( pathloc->mt_entry->mt_fs_root.node_access == pathloc->node_access )
      rtems_set_errno_and_return_minus_one( EBUSY );
 
-  /* 
+  /*
    * You cannot remove a mountpoint.
    */
 
    if ( the_jnode->info.directory.mt_fs != NULL )
-     rtems_set_errno_and_return_minus_one( EBUSY );          
- 
-  /* 
-   * Take the node out of the parent's chain that contains this node 
+     rtems_set_errno_and_return_minus_one( EBUSY );
+
+  /*
+   * Take the node out of the parent's chain that contains this node
    */
 
   if ( the_jnode->Parent != NULL ) {
@@ -332,7 +332,7 @@ int imfs_dir_rmnod(
 
   if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
 
-    /* 
+    /*
      * Is the rtems_filesystem_current is this node?
      */
 

@@ -51,17 +51,17 @@ int IMFS_fsunmount(
 {
    IMFS_jnode_t                     *jnode;
    IMFS_jnode_t                     *next;
-   rtems_filesystem_location_info_t loc;       
+   rtems_filesystem_location_info_t loc;
    int                              result = 0;
 
-   /* 
-    * Traverse tree that starts at the mt_fs_root and deallocate memory 
+   /*
+    * Traverse tree that starts at the mt_fs_root and deallocate memory
     * associated memory space
     */
-    
+
    jnode = (IMFS_jnode_t *)temp_mt_entry->mt_fs_root.node_access;
    loc = temp_mt_entry->mt_fs_root;
-   
+
    /*
     *  Set this to null to indicate that it is being unmounted.
     */

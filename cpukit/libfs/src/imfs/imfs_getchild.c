@@ -26,7 +26,7 @@ static char dotname[2] = ".";
 static char dotdotname[3] = "..";
 
 IMFS_jnode_t *IMFS_find_match_in_dir(
-  IMFS_jnode_t *directory, 
+  IMFS_jnode_t *directory,
   char         *name
 )
 {

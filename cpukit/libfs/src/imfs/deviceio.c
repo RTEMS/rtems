@@ -47,7 +47,7 @@ static int
 rtems_deviceio_errno(rtems_status_code code)
 {
     int rc;
-    
+
     if ((rc = rtems_assoc_remote_by_local(errno_assoc, (uint32_t  ) code)))
     {
         errno = rc;

@@ -31,7 +31,7 @@
 #include "msdos.h"
 
 /* msdos_dir_open --
- *     Open fat-file which correspondes to the directory being opened and 
+ *     Open fat-file which correspondes to the directory being opened and
  *     set offset field of file control block to zero.
  *
  * PARAMETERS:
@@ -41,34 +41,34 @@
  *     mode       - mode
  *
  * RETURNS:
- *     RC_OK, if directory opened successfully, or -1 if error occured (errno 
+ *     RC_OK, if directory opened successfully, or -1 if error occured (errno
  *     set apropriately)
  */
-int 
+int
 msdos_dir_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
                uint32_t   mode)
 {
-    int                rc = RC_OK;  
+    int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one( EIO );
-  
+
     rc = fat_file_reopen(fat_fd);
     if (rc != RC_OK)
     {
         rtems_semaphore_release(fs_info->vol_sema);
-        return rc; 
+        return rc;
     }
 
     iop->offset = 0;
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;
-} 
+}
 
 /* msdos_dir_close --
  *     Close  fat-file which correspondes to the directory being closed
@@ -77,27 +77,27 @@ msdos_dir_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
  *     iop - file control block
  *
  * RETURNS:
- *     RC_OK, if directory closed successfully, or -1 if error occured (errno 
+ *     RC_OK, if directory closed successfully, or -1 if error occured (errno
  *     set apropriately.
  */
-int 
+int
 msdos_dir_close(rtems_libio_t *iop)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one( EIO );
-  
+
     rc = fat_file_close(iop->pathinfo.mt_entry, fat_fd);
     if (rc != RC_OK)
     {
         rtems_semaphore_release(fs_info->vol_sema);
-        return rc; 
+        return rc;
     }
 
     rtems_semaphore_release(fs_info->vol_sema);
@@ -105,9 +105,9 @@ msdos_dir_close(rtems_libio_t *iop)
 }
 
 /*  msdos_format_dirent_with_dot --
- *      This routine convert a (short) MSDOS filename as present on disk 
+ *      This routine convert a (short) MSDOS filename as present on disk
  *      (fixed 8+3 characters, filled with blanks, without separator dot)
- *      to a "normal" format, with between 0 and 8 name chars, 
+ *      to a "normal" format, with between 0 and 8 name chars,
  *      a separating dot and up to 3 extension characters
  *   Rules to work:
  *      - copy any (0-8) "name" part characters that are non-blank
@@ -121,9 +121,9 @@ msdos_dir_close(rtems_libio_t *iop)
  *
  *
  * RETURNS:
- *     the number of bytes (without trailing '\0'(written to destination 
+ *     the number of bytes (without trailing '\0'(written to destination
  */
-static ssize_t 
+static ssize_t
 msdos_format_dirent_with_dot(char *dst,const char *src)
 {
   ssize_t len;
@@ -152,7 +152,7 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
    */
   for ((i       =                            MSDOS_SHORT_EXT_LEN  ,
 	src_tmp = src + MSDOS_SHORT_BASE_LEN+MSDOS_SHORT_EXT_LEN-1);
-       ((i > 0) && 
+       ((i > 0) &&
 	(*src_tmp == ' '));
        i--,src_tmp--)
     {};
@@ -175,15 +175,15 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
 
 /*  msdos_dir_read --
  *      This routine will read the next directory entry based on the directory
- *      offset. The offset should be equal to -n- time the size of an 
- *      individual dirent structure. If n is not an integer multiple of the 
- *      sizeof a dirent structure, an integer division will be performed to 
- *      determine directory entry that will be returned in the buffer. Count 
- *      should reflect -m- times the sizeof dirent bytes to be placed in the 
+ *      offset. The offset should be equal to -n- time the size of an
+ *      individual dirent structure. If n is not an integer multiple of the
+ *      sizeof a dirent structure, an integer division will be performed to
+ *      determine directory entry that will be returned in the buffer. Count
+ *      should reflect -m- times the sizeof dirent bytes to be placed in the
  *      buffer.
- *      If there are not -m- dirent elements from the current directory 
- *      position to the end of the exisiting file, the remaining entries will 
- *      be placed in the buffer and the returned value will be equal to 
+ *      If there are not -m- dirent elements from the current directory
+ *      position to the end of the exisiting file, the remaining entries will
+ *      be placed in the buffer and the returned value will be equal to
  *      -m actual- times the size of a directory entry.
  *
  * PARAMETERS:
@@ -192,15 +192,15 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
  *     count  - count of bytes to read
  *
  * RETURNS:
- *     the number of bytes read on success, or -1 if error occured (errno 
+ *     the number of bytes read on success, or -1 if error occured (errno
  *     set apropriately).
  */
-ssize_t 
+ssize_t
 msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
     fat_file_fd_t     *tmp_fat_fd = NULL;
     struct dirent      tmp_dirent;
@@ -210,40 +210,40 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
     uint32_t           j = 0, i = 0;
     uint32_t           bts2rd = 0;
     uint32_t           cur_cln = 0;
-  
-    /* 
-     * cast start and count - protect against using sizes that are not exact 
-     * multiples of the -dirent- size. These could result in unexpected 
-     * results 
+
+    /*
+     * cast start and count - protect against using sizes that are not exact
+     * multiples of the -dirent- size. These could result in unexpected
+     * results
      */
     start = iop->offset / sizeof(struct dirent);
-    count = (count / sizeof(struct dirent)) * sizeof(struct dirent);           
-  
-    /* 
-     * optimization: we know that root directory for FAT12/16 volumes is 
+    count = (count / sizeof(struct dirent)) * sizeof(struct dirent);
+
+    /*
+     * optimization: we know that root directory for FAT12/16 volumes is
      * sequential set of sectors and any cluster is sequential set of sectors
-     * too, so read such set of sectors is quick operation for low-level IO 
+     * too, so read such set of sectors is quick operation for low-level IO
      * layer.
      */
     bts2rd = (FAT_FD_OF_ROOT_DIR(fat_fd) &&
-             (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16))) ? 
+             (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16))) ?
              fat_fd->fat_file_size                              :
-             fs_info->fat.vol.bpc;     
+             fs_info->fat.vol.bpc;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
- 
+
     while (count > 0)
-    {  
-        /* 
-         * fat-file is already opened by open call, so read it 
+    {
+        /*
+         * fat-file is already opened by open call, so read it
          * Always read directory fat-file from the beggining because of MSDOS
-         * directories feature :( - we should count elements currently 
+         * directories feature :( - we should count elements currently
          * present in the directory because there may be holes :)
          */
-        ret = fat_file_read(iop->pathinfo.mt_entry, fat_fd, (j * bts2rd), 
+        ret = fat_file_read(iop->pathinfo.mt_entry, fat_fd, (j * bts2rd),
                             bts2rd, fs_info->cl_buf);
         if (ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
@@ -253,33 +253,33 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
 
         for (i = 0; i < ret; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
-            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) == 
+            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                 MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY)
             {
-                rtems_semaphore_release(fs_info->vol_sema);          
+                rtems_semaphore_release(fs_info->vol_sema);
                 return cmpltd;
-            }  
-            
-            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) == 
+            }
+
+            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                 MSDOS_THIS_DIR_ENTRY_EMPTY)
                 continue;
-      
-            /* 
+
+            /*
              * skip active entries until get the entry to start from
              */
             if (start)
             {
-                start--;  
+                start--;
                 continue;
-            }  
-        
-            /* 
+            }
+
+            /*
              * Move the entry to the return buffer
              *
-             * unfortunately there is no method to extract ino except to 
+             * unfortunately there is no method to extract ino except to
              * open fat-file descriptor :( ... so, open it
              */
-      
+
             /* get number of cluster we are working with */
             rc = fat_file_ioctl(iop->pathinfo.mt_entry, fat_fd, F_CLU_NUM,
                                 j * bts2rd, &cur_cln);
@@ -289,7 +289,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
                 return rc;
             }
 
-            rc = fat_file_open(iop->pathinfo.mt_entry, cur_cln, i, 
+            rc = fat_file_open(iop->pathinfo.mt_entry, cur_cln, i,
                                &tmp_fat_fd);
             if (rc != RC_OK)
             {
@@ -309,15 +309,15 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
 	     * convert dir entry from fixed 8+3 format (without dot)
 	     * to 0..8 + 1dot + 0..3 format
 	     */
-	    tmp_dirent.d_namlen = 
+	    tmp_dirent.d_namlen =
 	      msdos_format_dirent_with_dot(tmp_dirent.d_name,
 					 fs_info->cl_buf + i); /* src text */
             memcpy(buffer + cmpltd, &tmp_dirent, sizeof(struct dirent));
-   
+
             iop->offset = iop->offset + sizeof(struct dirent);
             cmpltd += (sizeof(struct dirent));
             count -= (sizeof(struct dirent));
-      
+
             /* inode number extracted, close fat-file */
             rc = fat_file_close(iop->pathinfo.mt_entry, tmp_fat_fd);
             if (rc != RC_OK)
@@ -359,19 +359,19 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
  *     whence - predefine directive
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno 
+ *     RC_OK on success, or -1 if error occured (errno
  *     set apropriately).
  */
-int 
+int
 msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
 {
-    switch (whence) 
+    switch (whence)
     {
         case SEEK_SET:
-        case SEEK_CUR: 
+        case SEEK_CUR:
             break;
-        /* 
-         * Movement past the end of the directory via lseek is not a 
+        /*
+         * Movement past the end of the directory via lseek is not a
          * permitted operation
          */
         case SEEK_END:
@@ -383,7 +383,7 @@ msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
 }
 
 /* msdos_dir_stat --
- * 
+ *
  * This routine will obtain the following information concerning the current
  * directory:
  *     st_dev      device id
@@ -391,7 +391,7 @@ msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
  *     st_mode     mode extracted from the node
  *     st_size     total size in bytes
  *     st_blksize  blocksize for filesystem I/O
- *     st_blocks   number of blocks allocated 
+ *     st_blocks   number of blocks allocated
  *     stat_mtime  time of last modification
  *
  * PARAMETERS:
@@ -399,24 +399,24 @@ msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
  *     buf - stat buffer provided by user
  *
  * RETURNS:
- *     RC_OK and filled stat buffer on success, or -1 if error occured (errno 
+ *     RC_OK and filled stat buffer on success, or -1 if error occured (errno
  *     set apropriately).
  */
-int 
+int
 msdos_dir_stat(
     rtems_filesystem_location_info_t *loc,
     struct stat                      *buf
     )
 {
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = loc->mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = loc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = loc->node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
-  
+
     buf->st_dev = fs_info->fat.vol.dev;
     buf->st_ino = fat_fd->ino;
     buf->st_mode  = S_IFDIR;
@@ -425,7 +425,7 @@ msdos_dir_stat(
     buf->st_blocks = fat_fd->fat_file_size >> FAT_SECTOR512_BITS;
     buf->st_blksize = fs_info->fat.vol.bps;
     buf->st_mtime = fat_fd->mtime;
-  
+
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;
 }
@@ -441,8 +441,8 @@ msdos_dir_stat(
 
 /* msdos_dir_sync --
  *     The following routine does a syncronization on a MSDOS directory node.
- *     DIR_WrtTime, DIR_WrtDate and DIR_fileSize fields of 32 Bytes Directory 
- *     Entry Structure should not be updated for directories, so only call 
+ *     DIR_WrtTime, DIR_WrtDate and DIR_fileSize fields of 32 Bytes Directory
+ *     Entry Structure should not be updated for directories, so only call
  *     to corresponding fat-file routine.
  *
  * PARAMETERS:
@@ -458,12 +458,12 @@ msdos_dir_sync(rtems_libio_t *iop)
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     fat_file_fd_t     *fat_fd = iop->file_info;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-  
+
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
-  
+
     rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
 
     rtems_semaphore_release(fs_info->vol_sema);
@@ -471,9 +471,9 @@ msdos_dir_sync(rtems_libio_t *iop)
 }
 
 /* msdos_dir_rmnod --
- *     Remove directory node. 
+ *     Remove directory node.
  *
- *     Check that this directory node is not opened as fat-file, is empty and 
+ *     Check that this directory node is not opened as fat-file, is empty and
  *     not filesystem root node. If all this conditions met then delete.
  *
  * PARAMETERS:
@@ -482,34 +482,34 @@ msdos_dir_sync(rtems_libio_t *iop)
  * RETURNS:
  *     RC_OK on success, or -1 if error occured (errno set apropriately).
  */
-int 
+int
 msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = pathloc->node_access;
     rtems_boolean      is_empty = FALSE;
-  
+
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
-  
+
     /*
-     * We deny attemp to delete open directory (if directory is current 
+     * We deny attemp to delete open directory (if directory is current
      * directory we assume it is open one)
      */
     if (fat_fd->links_num > 1)
     {
         rtems_semaphore_release(fs_info->vol_sema);
         set_errno_and_return_minus_one(EBUSY);
-    } 
-  
+    }
+
     /*
      * You cannot remove a node that still has children
      */
-    rc = msdos_dir_is_empty(pathloc->mt_entry, fat_fd, &is_empty); 
+    rc = msdos_dir_is_empty(pathloc->mt_entry, fat_fd, &is_empty);
     if (rc != RC_OK)
     {
         rtems_semaphore_release(fs_info->vol_sema);
@@ -518,9 +518,9 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
 
     if (!is_empty)
     {
-        rtems_semaphore_release(fs_info->vol_sema); 
+        rtems_semaphore_release(fs_info->vol_sema);
         set_errno_and_return_minus_one(ENOTEMPTY);
-    }     
+    }
 
     /*
      * You cannot remove the file system root node.
@@ -537,8 +537,8 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
      */
 
     /* mark file removed */
-    rc = msdos_set_first_char4file_name(pathloc->mt_entry, fat_fd->info_cln, 
-                                        fat_fd->info_ofs, 
+    rc = msdos_set_first_char4file_name(pathloc->mt_entry, fat_fd->info_cln,
+                                        fat_fd->info_ofs,
                                         MSDOS_THIS_DIR_ENTRY_EMPTY);
     if (rc != RC_OK)
     {
@@ -546,7 +546,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
         return rc;
     }
 
-    fat_file_mark_removed(pathloc->mt_entry, fat_fd); 
+    fat_file_mark_removed(pathloc->mt_entry, fat_fd);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;

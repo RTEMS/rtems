@@ -1,7 +1,7 @@
 /*
  *  fat_fat_operations.h
  *
- *  Constants/data structures/prototypes for operations on Files Allocation 
+ *  Constants/data structures/prototypes for operations on Files Allocation
  *  Table
  *
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
@@ -42,7 +42,7 @@ fat_scan_fat_for_free_clusters(
     uint32_t                             *chain,
     uint32_t                              count,
     uint32_t                             *cls_added,
-    uint32_t                             *last_cl 
+    uint32_t                             *last_cl
 );
 
 int

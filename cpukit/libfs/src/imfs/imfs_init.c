@@ -29,7 +29,7 @@
 #include <stdio.h>
 #endif
 
-/*  
+/*
  *  IMFS file system operations table
  */
 

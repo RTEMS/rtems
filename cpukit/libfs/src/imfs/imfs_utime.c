@@ -1,7 +1,7 @@
 /*
  *  IMFS_utime
  *
- *  This routine is the implementation of the utime() system 
+ *  This routine is the implementation of the utime() system
  *  call for the IMFS.
  *
  *  COPYRIGHT (c) 1989-1999.

@@ -1,5 +1,5 @@
 /*
- *  IMFS_link 
+ *  IMFS_link
  *
  *  The following rouine creates a new link node under parent with the
  *  name given in name.  The link node is set to point to the node at
@@ -42,7 +42,7 @@ int IMFS_link(
   info.hard_link.link_node = to_loc->node_access;
   if ( info.hard_link.link_node->st_nlink >= LINK_MAX )
     rtems_set_errno_and_return_minus_one( EMLINK );
- 
+
   /*
    * Remove any separators at the end of the string.
    */
@@ -56,7 +56,7 @@ int IMFS_link(
   new_node = IMFS_create_node(
     parent_loc,
     IMFS_HARD_LINK,
-    new_name, 
+    new_name,
     ( S_IFLNK | ( S_IRWXU | S_IRWXG | S_IRWXO )),
     &info
   );

@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 
-/*  
+/*
  *  IMFS file system operations table
  */
 
@@ -50,7 +50,7 @@ rtems_filesystem_operations_table  IMFS_ops = {
   NULL
 };
 
-/*  
+/*
  *  IMFS file system operations table
  */
 

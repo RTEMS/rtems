@@ -1,6 +1,6 @@
 /*
  *  IMFS_stat
- *  
+ *
  *  This routine provides a stat for the IMFS file system.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -44,11 +44,11 @@ int IMFS_stat(
     case IMFS_MEMORY_FILE:
       buf->st_size = the_jnode->info.file.size;
       break;
-   
+
     case IMFS_SYM_LINK:
       buf->st_size = 0;
       break;
-   
+
     default:
       rtems_set_errno_and_return_minus_one( ENOTSUP );
       break;

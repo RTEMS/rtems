@@ -28,8 +28,8 @@ rtems_filesystem_file_handlers_r msdos_file_handlers = {
     msdos_file_stat,
     NULL,
     msdos_file_ftruncate,
-    NULL,                
-    msdos_file_sync, 
+    NULL,
+    msdos_file_sync,
     msdos_file_datasync,
     NULL,                 /* msdos_file_fcntl */
     msdos_file_rmnod

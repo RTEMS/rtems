@@ -41,13 +41,13 @@
  *     RC_OK, if file opened successfully, or -1 if error occured
  *     and errno set appropriately
  */
-int 
+int
 msdos_file_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
                 uint32_t   mode)
 {
-    int                rc = RC_OK; 
+    int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
@@ -59,49 +59,49 @@ msdos_file_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
     if (rc != RC_OK)
     {
         rtems_semaphore_release(fs_info->vol_sema);
-        return rc; 
+        return rc;
     }
 
     if (iop->flags & LIBIO_FLAGS_APPEND)
         iop->offset = fat_fd->fat_file_size;
- 
+
     iop->size = fat_fd->fat_file_size;
-  
+
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;
 }
 
 /* msdos_file_close --
- *     Close fat-file which correspondes to the file. If fat-file descriptor 
- *     which correspondes to the file is not marked "removed", synchronize 
+ *     Close fat-file which correspondes to the file. If fat-file descriptor
+ *     which correspondes to the file is not marked "removed", synchronize
  *     size, first cluster number, write time and date fields of the file.
  *
  * PARAMETERS:
  *     iop - file control block
  *
  * RETURNS:
- *     RC_OK, if file closed successfully, or -1 if error occured (errno set 
+ *     RC_OK, if file closed successfully, or -1 if error occured (errno set
  *     appropriately)
  */
-int 
+int
 msdos_file_close(rtems_libio_t *iop)
 {
-    int                rc = RC_OK; 
+    int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
 
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT, 
+    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
-  
-    /* 
-     * if fat-file descriptor is not marked as "removed", synchronize 
+
+    /*
+     * if fat-file descriptor is not marked as "removed", synchronize
      * size, first cluster number, write time and date fields of the file
      */
     if (!FAT_FILE_IS_REMOVED(fat_fd))
-    { 
+    {
         rc = msdos_set_first_cluster_num(iop->pathinfo.mt_entry, fat_fd);
         if (rc != RC_OK)
         {
@@ -111,19 +111,19 @@ msdos_file_close(rtems_libio_t *iop)
 
         rc = msdos_set_file_size(iop->pathinfo.mt_entry, fat_fd);
         if (rc != RC_OK)
-        { 
+        {
             rtems_semaphore_release(fs_info->vol_sema);
             return rc;
-        } 
+        }
 
         rc = msdos_set_dir_wrt_time_and_date(iop->pathinfo.mt_entry, fat_fd);
         if (rc != RC_OK)
         {
             rtems_semaphore_release(fs_info->vol_sema);
             return rc;
-        } 
+        }
     }
-  
+
     rc = fat_file_close(iop->pathinfo.mt_entry, fat_fd);
 
     rtems_semaphore_release(fs_info->vol_sema);
@@ -140,15 +140,15 @@ msdos_file_close(rtems_libio_t *iop)
  *     count  - the number of bytes to read
  *
  * RETURNS:
- *     the number of bytes read on success, or -1 if error occured (errno set 
+ *     the number of bytes read on success, or -1 if error occured (errno set
  *     appropriately)
  */
-ssize_t 
+ssize_t
 msdos_file_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
 {
     ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
@@ -156,7 +156,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
 
-    ret = fat_file_read(iop->pathinfo.mt_entry, fat_fd, iop->offset, count, 
+    ret = fat_file_read(iop->pathinfo.mt_entry, fat_fd, iop->offset, count,
                         buffer);
 
     rtems_semaphore_release(fs_info->vol_sema);
@@ -164,7 +164,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
 }
 
 /* msdos_file_write --
- *     This routine writes the specified data buffer into the file pointed to 
+ *     This routine writes the specified data buffer into the file pointed to
  *     by file control block.
  *
  * PARAMETERS:
@@ -176,12 +176,12 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
  *     the number of bytes written on success, or -1 if error occured
  *     and errno set appropriately
  */
-ssize_t 
+ssize_t
 msdos_file_write(rtems_libio_t *iop,const void *buffer, uint32_t   count)
 {
-    ssize_t            ret = 0; 
+    ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
@@ -189,16 +189,16 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, uint32_t   count)
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
 
-    ret = fat_file_write(iop->pathinfo.mt_entry, fat_fd, iop->offset, count, 
+    ret = fat_file_write(iop->pathinfo.mt_entry, fat_fd, iop->offset, count,
                          buffer);
     if (ret < 0)
     {
-        rtems_semaphore_release(fs_info->vol_sema); 
+        rtems_semaphore_release(fs_info->vol_sema);
         return -1;
     }
 
-    /* 
-     * update file size in both fat-file descriptor and file control block if 
+    /*
+     * update file size in both fat-file descriptor and file control block if
      * file was extended
      */
     if (iop->offset + ret > fat_fd->fat_file_size)
@@ -211,7 +211,7 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, uint32_t   count)
 }
 
 /* msdos_file_lseek --
- *     Process lseek call to the file: extend file if lseek is up to the end 
+ *     Process lseek call to the file: extend file if lseek is up to the end
  *     of the file.
  *
  * PARAMETERS:
@@ -220,15 +220,15 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, uint32_t   count)
  *     whence - predefine directive
  *
  * RETURNS:
- *     new offset on success, or -1 if error occured (errno set 
+ *     new offset on success, or -1 if error occured (errno set
  *     appropriately).
  */
-int 
+int
 msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
     uint32_t           real_size = 0;
 
@@ -237,7 +237,7 @@ msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
 
-    rc = fat_file_extend(iop->pathinfo.mt_entry, fat_fd, iop->offset, 
+    rc = fat_file_extend(iop->pathinfo.mt_entry, fat_fd, iop->offset,
                          &real_size);
     if (rc != RC_OK)
     {
@@ -247,7 +247,7 @@ msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
 
     if (real_size > fat_fd->fat_file_size)
         fat_fd->fat_file_size = iop->offset = real_size;
-     
+
     iop->size = fat_fd->fat_file_size;
 
     rtems_semaphore_release(fs_info->vol_sema);
@@ -263,21 +263,21 @@ msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
  * RETURNS:
  *     RC_OK on success, or -1 if error occured (errno set appropriately)
  */
-int 
+int
 msdos_file_stat(
     rtems_filesystem_location_info_t *loc,
     struct stat                      *buf
     )
 {
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = loc->mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = loc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = loc->node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
-  
+
     buf->st_dev = fs_info->fat.vol.dev;
     buf->st_ino = fat_fd->ino;
     buf->st_mode  = S_IFREG;
@@ -296,17 +296,17 @@ msdos_file_stat(
  *
  * PARAMETERS:
  *     iop    - file control block
- *     length - new length 
+ *     length - new length
  *
  * RETURNS:
  *     RC_OK on success, or -1 if error occured (errno set appropriately).
  */
-int 
+int
 msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->file_info;
 
     if (length >= fat_fd->fat_file_size)
@@ -316,7 +316,7 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
-  
+
     rc = fat_file_truncate(iop->pathinfo.mt_entry, fat_fd, length);
     if (rc != RC_OK)
     {
@@ -324,19 +324,19 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
         return rc;
     }
 
-    /* 
-     * fat_file_truncate do nothing if new length >= fat-file size, so update 
+    /*
+     * fat_file_truncate do nothing if new length >= fat-file size, so update
      * file size only if length < fat-file size
      */
     if (length < fat_fd->fat_file_size)
         iop->size = fat_fd->fat_file_size = length;
-     
+
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;
 }
 
 /* msdos_file_sync --
- *     Synchronize file - synchronize file data and if file is not removed 
+ *     Synchronize file - synchronize file data and if file is not removed
  *     synchronize file metadata.
  *
  * PARAMETERS:
@@ -352,12 +352,12 @@ msdos_file_sync(rtems_libio_t *iop)
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     fat_file_fd_t     *fat_fd = iop->file_info;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-  
+
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
-  
+
     /* synchronize file data */
     rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
     if (rc != RC_OK)
@@ -366,12 +366,12 @@ msdos_file_sync(rtems_libio_t *iop)
         return rc;
     }
 
-    /* 
-     * if fat-file descriptor is not marked "removed" - synchronize file  
+    /*
+     * if fat-file descriptor is not marked "removed" - synchronize file
      * metadata
      */
     if (!FAT_FILE_IS_REMOVED(fat_fd))
-    { 
+    {
         rc = msdos_set_first_cluster_num(iop->pathinfo.mt_entry, fat_fd);
         if (rc != RC_OK)
         {
@@ -383,15 +383,15 @@ msdos_file_sync(rtems_libio_t *iop)
         {
             rtems_semaphore_release(fs_info->vol_sema);
             return rc;
-        } 
+        }
         rc = msdos_set_dir_wrt_time_and_date(iop->pathinfo.mt_entry, fat_fd);
         if (rc != RC_OK)
         {
             rtems_semaphore_release(fs_info->vol_sema);
             return rc;
-        } 
+        }
     }
- 
+
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;
 }
@@ -412,15 +412,15 @@ msdos_file_datasync(rtems_libio_t *iop)
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     fat_file_fd_t     *fat_fd = iop->file_info;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-  
+
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         set_errno_and_return_minus_one(EIO);
-  
+
     /* synchronize file data */
     rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
- 
+
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;
 }
@@ -436,7 +436,7 @@ msdos_file_datasync(rtems_libio_t *iop)
  * RETURNS:
  *
  */
-int 
+int
 msdos_file_ioctl(rtems_libio_t *iop,uint32_t   command, void *buffer)
 {
     int rc = RC_OK;
@@ -445,8 +445,8 @@ msdos_file_ioctl(rtems_libio_t *iop,uint32_t   command, void *buffer)
 }
 
 /* msdos_file_rmnod --
- *     Remove node associated with a file - set up first name character to 
- *     predefined value(and write it to the disk), and mark fat-file which 
+ *     Remove node associated with a file - set up first name character to
+ *     predefined value(and write it to the disk), and mark fat-file which
  *     correspondes to the file as "removed"
  *
  * PARAMETERS:
@@ -455,7 +455,7 @@ msdos_file_ioctl(rtems_libio_t *iop,uint32_t   command, void *buffer)
  * RETURNS:
  *     RC_OK on success, or -1 if error occured (errno set appropriately)
  */
-int 
+int
 msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc)
 {
     int                rc = RC_OK;
@@ -469,8 +469,8 @@ msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc)
         set_errno_and_return_minus_one(EIO);
 
     /* mark file removed */
-    rc = msdos_set_first_char4file_name(pathloc->mt_entry, fat_fd->info_cln, 
-                                        fat_fd->info_ofs, 
+    rc = msdos_set_first_char4file_name(pathloc->mt_entry, fat_fd->info_cln,
+                                        fat_fd->info_ofs,
                                         MSDOS_THIS_DIR_ENTRY_EMPTY);
     if (rc != RC_OK)
     {
@@ -478,7 +478,7 @@ msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc)
         return rc;
     }
 
-    fat_file_mark_removed(pathloc->mt_entry, fat_fd); 
+    fat_file_mark_removed(pathloc->mt_entry, fat_fd);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;

@@ -33,7 +33,7 @@
 #define S_IFCHR __S_IFCHR
 #endif
 
-/* 
+/*
  *  rtems_io_register_name
  *
  *  This assumes that all registered devices are character devices.
@@ -55,17 +55,17 @@ rtems_status_code rtems_io_register_name(
   /* this is the only error returned by the old version */
   if ( status )
     return RTEMS_TOO_MANY;
- 
+
 #endif
   return RTEMS_SUCCESSFUL;
 }
 
-/* 
+/*
  *  rtems_io_lookup_name
  *
  *  This version is reentrant.
  *
- *  XXX - This is dependent upon IMFS and should not be.  
+ *  XXX - This is dependent upon IMFS and should not be.
  *        Suggest adding a filesystem routine to fill in the device_info.
  */
 
@@ -101,7 +101,7 @@ rtems_status_code rtems_io_lookup_name(
   device_info->minor              = the_jnode->info.device.minor;
 
   rtems_filesystem_freenode( &loc );
-   
+
 #endif
   return RTEMS_SUCCESSFUL;
 }

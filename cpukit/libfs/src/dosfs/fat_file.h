@@ -24,10 +24,10 @@ extern "C" {
 
 #include <time.h>
 
-/* "fat-file" representation 
- * 
- * the idea is: fat-file is nothing but a cluster chain, any open fat-file is 
- * represented in system by fat-file descriptor and has well-known 
+/* "fat-file" representation
+ *
+ * the idea is: fat-file is nothing but a cluster chain, any open fat-file is
+ * represented in system by fat-file descriptor and has well-known
  * file interface:
  *
  * fat_file_open()
@@ -35,10 +35,10 @@ extern "C" {
  * fat_file_read()
  * fat_file_write()
  *
- * Such interface hides the architecture of fat-file and represents it like 
+ * Such interface hides the architecture of fat-file and represents it like
  * linear file
  */
-  
+
 typedef rtems_filesystem_node_types_t fat_file_type_t;
 
 #define FAT_DIRECTORY     RTEMS_FILESYSTEM_DIRECTORY
@@ -50,34 +50,34 @@ typedef struct fat_file_map_s
     uint32_t   disk_cln;
     uint32_t   last_cln;
 } fat_file_map_t;
-/* 
- * descriptor of a fat-file 
+/*
+ * descriptor of a fat-file
  *
- * To each particular clusters chain 
+ * To each particular clusters chain
  */
 typedef struct fat_file_fd_s
 {
-    Chain_Node      link;          /*  
+    Chain_Node      link;          /*
                                     * fat-file descriptors organized into hash;
-                                    * collision lists are handled via link 
+                                    * collision lists are handled via link
                                     * field
                                     */
-    uint32_t        links_num;     /* 
-                                    * the number of fat_file_open call on 
+    uint32_t        links_num;     /*
+                                    * the number of fat_file_open call on
                                     * this fat-file
                                     */
-    uint32_t        ino;           /* inode, file serial number :)))) */                                
+    uint32_t        ino;           /* inode, file serial number :)))) */
     fat_file_type_t fat_file_type;
     uint32_t        size_limit;
     uint32_t        fat_file_size; /* length  */
     uint32_t        info_cln;
     uint32_t        cln;
-    uint16_t        info_ofs;     
+    uint16_t        info_ofs;
     unsigned char   first_char;
     uint8_t         flags;
     fat_file_map_t  map;
     time_t          mtime;
-    
+
 } fat_file_fd_t;
 
 
@@ -89,16 +89,16 @@ typedef struct fat_file_fd_s
 /* ioctl macros */
 #define F_CLU_NUM  0x01
 
-/* 
- * Each file and directory on a MSDOS volume is unique identified by it 
- * location, i.e. location of it 32 Bytes Directory Entry Structure. We can 
- * distinguish them by cluster number it locates on and offset inside this 
+/*
+ * Each file and directory on a MSDOS volume is unique identified by it
+ * location, i.e. location of it 32 Bytes Directory Entry Structure. We can
+ * distinguish them by cluster number it locates on and offset inside this
  * cluster. But root directory on any volumes (FAT12/16/32) has no 32 Bytes
  * Directory Entry Structure corresponded to it. So we assume 32 Bytes
  * Directory Entry Structure of root directory locates at cluster 1 (invalid
  * cluaster number) and offset 0
  */
-#define FAT_ROOTDIR_CLUSTER_NUM 0x01 
+#define FAT_ROOTDIR_CLUSTER_NUM 0x01
 
 #define FAT_FD_OF_ROOT_DIR(fat_fd)  \
   ((fat_fd->info_cln == FAT_ROOTDIR_CLUSTER_NUM ) && \
@@ -108,7 +108,7 @@ typedef struct fat_file_fd_s
 
 /* fat_construct_key --
  *     Construct key for hash access: convert (cluster num, offset) to
- *     (sector512 num, new offset) and than construct key as 
+ *     (sector512 num, new offset) and than construct key as
  *     key = (sector512 num) << 4 | (new offset)
  *
  * PARAMETERS:
@@ -119,28 +119,28 @@ typedef struct fat_file_fd_s
  * RETURNS:
  *     constructed key
  */
-static inline uint32_t   
+static inline uint32_t
 fat_construct_key(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    uint32_t                              cl, 
+    uint32_t                              cl,
     uint32_t                              ofs)
 {
-    return ( ((fat_cluster_num_to_sector512_num(mt_entry, cl) + 
-              (ofs >> FAT_SECTOR512_BITS)) << 4)              + 
+    return ( ((fat_cluster_num_to_sector512_num(mt_entry, cl) +
+              (ofs >> FAT_SECTOR512_BITS)) << 4)              +
               ((ofs >> 5) & (FAT_DIRENTRIES_PER_SEC512 - 1)) );
 }
 
 /* Prototypes for "fat-file" operations */
-int 
+int
 fat_file_open(rtems_filesystem_mount_table_entry_t  *mt_entry,
-              uint32_t                               cln, 
+              uint32_t                               cln,
               uint32_t                               ofs,
               fat_file_fd_t                        **fat_fd);
 
 int
 fat_file_reopen(fat_file_fd_t *fat_fd);
 
-int 
+int
 fat_file_close(rtems_filesystem_mount_table_entry_t *mt_entry,
                fat_file_fd_t                        *fat_fd);
 
@@ -168,11 +168,11 @@ int
 fat_file_truncate(rtems_filesystem_mount_table_entry_t *mt_entry,
                   fat_file_fd_t                        *fat_fd,
                   uint32_t                              new_length);
-                  
+
 int
 fat_file_datasync(rtems_filesystem_mount_table_entry_t *mt_entry,
                   fat_file_fd_t                        *fat_fd);
-                  
+
 
 int
 fat_file_ioctl(rtems_filesystem_mount_table_entry_t *mt_entry,

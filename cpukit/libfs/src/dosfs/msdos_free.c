@@ -17,7 +17,7 @@
 #endif
 
 #include <rtems.h>
-#include <rtems/libio_.h>                
+#include <rtems/libio_.h>
 
 #include <errno.h>
 
@@ -40,7 +40,7 @@
 int
 msdos_free_node_info(rtems_filesystem_location_info_t *pathloc)
 {
-    int                rc = RC_OK; 
+    int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info;
 
@@ -52,5 +52,5 @@ msdos_free_node_info(rtems_filesystem_location_info_t *pathloc)
     rc = fat_file_close(pathloc->mt_entry, pathloc->node_access);
 
     rtems_semaphore_release(fs_info->vol_sema);
-    return rc;  
+    return rc;
 }

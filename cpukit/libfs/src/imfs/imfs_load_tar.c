@@ -47,7 +47,7 @@
  *   345    167 bytes  Padding
  *   512   (s+p)bytes  File contents (s+p) := (((s) + 511) & ~511),
  *                     round up to 512 bytes
- * 
+ *
  *   Checksum:
  *   int i, sum;
  *   char* header = tar_header_pointer;
@@ -81,7 +81,7 @@ static int compute_tar_header_checksum(char *bufr);
  * tar image and perform as follows:
  *  - For directories, simply call mkdir().  The IMFS creates nodes as
  *    needed.
- *  - For files, we make our own calls to IMFS eval_for_make and 
+ *  - For files, we make our own calls to IMFS eval_for_make and
  *    create_node.
  *************************************************************************/
 int
@@ -141,7 +141,7 @@ rtems_tarfs_load(char *mountpoint,
 
       /******************************************************************
        * Generate an IMFS node depending on the file type.
-       * - For directories, just create directories as usual.  IMFS 
+       * - For directories, just create directories as usual.  IMFS
        *   will take care of the rest.
        * - For files, create a file node with special tarfs properties.
        *****************************************************************/
@@ -225,7 +225,7 @@ octal2ulong(char *octascii, int len)
    mult = 1;
    for (i=len-1; i>=0; i--)
    {
-      if (octascii[i] < '0') 
+      if (octascii[i] < '0')
          continue;
       if (octascii[i] > '9')
          continue;
@@ -238,7 +238,7 @@ octal2ulong(char *octascii, int len)
 
 
 /************************************************************************
- * Compute the TAR checksum and check with the value in 
+ * Compute the TAR checksum and check with the value in
  * the archive.  The checksum is computed over the entire
  * header, but the checksum field is substituted with blanks.
  ************************************************************************/

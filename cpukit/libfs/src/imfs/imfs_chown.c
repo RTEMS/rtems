@@ -1,7 +1,7 @@
 /*
  *  IMFS_chown
  *
- *  This routine is the implementation of the chown() system 
+ *  This routine is the implementation of the chown() system
  *  call for the IMFS.
  *
  *  COPYRIGHT (c) 1989-1999.

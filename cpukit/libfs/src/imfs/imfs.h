@@ -138,9 +138,9 @@ typedef union {
   IMFS_directory_t   directory;
   IMFS_device_t      device;
   IMFS_link_t        hard_link;
-  IMFS_sym_link_t    sym_link;   
-  IMFS_memfile_t     file;   
-  IMFS_linearfile_t  linearfile;   
+  IMFS_sym_link_t    sym_link;
+  IMFS_memfile_t     file;
+  IMFS_linearfile_t  linearfile;
 } IMFS_types_union;
 
 /*
@@ -156,7 +156,7 @@ typedef union {
 struct IMFS_jnode_tt {
   Chain_Node          Node;                  /* for chaining them together */
   IMFS_jnode_t       *Parent;                /* Parent node */
-  char                name[IMFS_NAME_MAX+1]; /* "basename" */ 
+  char                name[IMFS_NAME_MAX+1]; /* "basename" */
   mode_t              st_mode;               /* File mode */
   nlink_t             st_nlink;              /* Link count */
   ino_t               st_ino;                /* inode */
@@ -177,14 +177,14 @@ struct IMFS_jnode_tt {
     gettimeofday( &tv, 0 );                 \
     _jnode->stat_atime  = (time_t) tv.tv_sec; \
   } while (0)
-                
+
 #define IMFS_update_mtime( _jnode )         \
   do {                                      \
     struct timeval tv;                      \
     gettimeofday( &tv, 0 );                 \
     _jnode->stat_mtime  = (time_t) tv.tv_sec; \
   } while (0)
-                
+
 #define IMFS_update_ctime( _jnode )         \
   do {                                      \
     struct timeval tv;                      \
@@ -216,7 +216,7 @@ typedef struct {
 #endif
 
 #define decrement_linkcounts(  _fs_info )             \
-  ((IMFS_fs_info_t * )_fs_info)->link_counts--;        
+  ((IMFS_fs_info_t * )_fs_info)->link_counts--;
 
 /*
  *  Type defination for tokens returned from IMFS_get_token
@@ -241,21 +241,21 @@ extern rtems_filesystem_file_handlers_r       IMFS_linearfile_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern rtems_filesystem_operations_table      IMFS_ops;
 extern rtems_filesystem_operations_table      miniIMFS_ops;
-extern rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS; 
+extern rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
 
 /*
  *  Routines
  */
 
-int IMFS_initialize( 
+int IMFS_initialize(
    rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
-int miniIMFS_initialize( 
+int miniIMFS_initialize(
    rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
-int IMFS_initialize_support( 
+int IMFS_initialize_support(
    rtems_filesystem_mount_table_entry_t *mt_entry,
    rtems_filesystem_operations_table    *op_table,
    rtems_filesystem_file_handlers_r     *linearfile_handlers,
@@ -306,8 +306,8 @@ int IMFS_stat(
   struct stat                      *buf            /* OUT */
 );
 
-int IMFS_Set_handlers(  
-  rtems_filesystem_location_info_t   *loc 
+int IMFS_Set_handlers(
+  rtems_filesystem_location_info_t   *loc
 );
 
 int IMFS_evaluate_link(
@@ -315,7 +315,7 @@ int IMFS_evaluate_link(
   int                               flags        /* IN     */
 );
 
-int IMFS_eval_path(  
+int IMFS_eval_path(
   const char                        *pathname,     /* IN     */
   int                               flags,         /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
@@ -522,7 +522,7 @@ int IMFS_symlink(
 int IMFS_readlink(
  rtems_filesystem_location_info_t   *loc,         /* IN */
  char                               *buf,         /* OUT */
- size_t                             bufsize    
+ size_t                             bufsize
 );
 
 int IMFS_fdatasync(

@@ -28,8 +28,8 @@ rtems_filesystem_file_handlers_r msdos_dir_handlers = {
     msdos_dir_stat,
     NULL,
     NULL,             /* msdos_dir_ftruncate */
-    NULL,                
-    msdos_dir_sync, 
+    NULL,
+    msdos_dir_sync,
     msdos_dir_sync,
     NULL,                 /* msdos_dir_fcntl */
     msdos_dir_rmnod

@@ -8,14 +8,14 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id$ 
+ *  @(#) $Id$
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -38,14 +38,14 @@
  *     temp_mt_entry      - mount table entry
  *     op_table           - filesystem operations table
  *     file_handlers      - file operations table
- *     directory_handlers - directory operations table 
+ *     directory_handlers - directory operations table
  *
  * RETURNS:
- *     RC_OK and filled temp_mt_entry on success, or -1 if error occured 
+ *     RC_OK and filled temp_mt_entry on success, or -1 if error occured
  *     (errno set apropriately)
  *
  */
-int 
+int
 msdos_initialize_support(
     rtems_filesystem_mount_table_entry_t *temp_mt_entry,
     rtems_filesystem_operations_table    *op_table,
@@ -75,11 +75,11 @@ msdos_initialize_support(
     fs_info->file_handlers      = file_handlers;
     fs_info->directory_handlers = directory_handlers;
 
-    /* 
+    /*
      * open fat-file which correspondes to  root directory
      * (so inode number 0x00000010 is always used for root directory)
      */
-    rc = fat_file_open(temp_mt_entry, FAT_ROOTDIR_CLUSTER_NUM, 0, &fat_fd);   
+    rc = fat_file_open(temp_mt_entry, FAT_ROOTDIR_CLUSTER_NUM, 0, &fat_fd);
     if (rc != RC_OK)
     {
         fat_shutdown_drive(temp_mt_entry);
@@ -93,7 +93,7 @@ msdos_initialize_support(
     fat_fd->info_cln = FAT_ROOTDIR_CLUSTER_NUM;
     fat_fd->info_ofs = 0;
     fat_fd->cln = fs_info->fat.vol.rdir_cl;
-    
+
     fat_fd->map.file_cln = 0;
     fat_fd->map.disk_cln = fat_fd->cln;
 
@@ -101,13 +101,13 @@ msdos_initialize_support(
     if ( fat_fd->cln == 0 )
     {
         fat_fd->fat_file_size = fs_info->fat.vol.rdir_size;
-        cl_buf_size = (fs_info->fat.vol.bpc > fs_info->fat.vol.rdir_size) ? 
+        cl_buf_size = (fs_info->fat.vol.bpc > fs_info->fat.vol.rdir_size) ?
                       fs_info->fat.vol.bpc                                :
-                      fs_info->fat.vol.rdir_size;  
-    }    
+                      fs_info->fat.vol.rdir_size;
+    }
     else
     {
-        rc = fat_file_size(temp_mt_entry, fat_fd); 
+        rc = fat_file_size(temp_mt_entry, fat_fd);
         if ( rc != RC_OK )
         {
             fat_file_close(temp_mt_entry, fat_fd);
@@ -117,7 +117,7 @@ msdos_initialize_support(
         }
         cl_buf_size = fs_info->fat.vol.bpc;
     }
-  
+
     fs_info->cl_buf = (char *)calloc(cl_buf_size, sizeof(char));
     if (fs_info->cl_buf == NULL)
     {
@@ -144,6 +144,6 @@ msdos_initialize_support(
     temp_mt_entry->mt_fs_root.node_access = fat_fd;
     temp_mt_entry->mt_fs_root.handlers = directory_handlers;
     temp_mt_entry->mt_fs_root.ops = op_table;
-  
+
     return rc;
 }

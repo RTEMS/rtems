@@ -1,6 +1,6 @@
 /*
- *  IMFS_unlink 
- *  
+ *  IMFS_unlink
+ *
  *  Routine to remove a link node from the tree.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -31,7 +31,7 @@ int IMFS_unlink(
   IMFS_jnode_t                      *node;
   rtems_filesystem_location_info_t   the_link;
   int                                result = 0;
-  
+
   node = loc->node_access;
 
   /*

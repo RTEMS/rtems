@@ -1,6 +1,6 @@
 /*
  *  IMFS_mount
- *  
+ *
  *  This routine will look at a mount table entry that we are going to
  *  add to the mount table. If the mount point rtems_filesystem
  *  location_info_t struct refers to a node that is a directory,
@@ -39,7 +39,7 @@ int IMFS_mount(
   /*
    *  Is the node that we are mounting onto a directory node ?
    */
-  
+
   if ( node->type != IMFS_DIRECTORY )
     rtems_set_errno_and_return_minus_one( ENOTDIR );
 

@@ -37,26 +37,26 @@ int IMFS_unmount(
 
   node = mt_entry->mt_point_node.node_access;
 
-  /* 
-   * Is the node that we are mounting onto a directory node ? 
+  /*
+   * Is the node that we are mounting onto a directory node ?
    */
 
   if ( node->type != IMFS_DIRECTORY )
     rtems_set_errno_and_return_minus_one( ENOTDIR );
 
-  /* 
-   * Did the node indicate that there was a directory mounted here? 
+  /*
+   * Did the node indicate that there was a directory mounted here?
    */
 
   if ( node->info.directory.mt_fs == NULL )
     rtems_set_errno_and_return_minus_one( EINVAL );  /* XXX */
 
-  /* 
-   * Set the mt_fs pointer to indicate that there is no longer 
+  /*
+   * Set the mt_fs pointer to indicate that there is no longer
    * a file system mounted to this point.
    */
-  
+
   node->info.directory.mt_fs = NULL;
 
-  return 0; 
+  return 0;
 }

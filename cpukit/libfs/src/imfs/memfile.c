@@ -4,7 +4,7 @@
  *  This file contains the set of handlers used to process operations on
  *  IMFS memory file nodes.  The memory files are created in memory using
  *  malloc'ed memory.  Thus any data stored in one of these files is lost
- *  at system shutdown unless special arrangements to copy the data to 
+ *  at system shutdown unless special arrangements to copy the data to
  *  some type of non-volailte storage are made by the application.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -32,10 +32,10 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-#define MEMFILE_STATIC 
+#define MEMFILE_STATIC
 
 /*
- *  Prototypes of private routines 
+ *  Prototypes of private routines
  */
 
 MEMFILE_STATIC int IMFS_memfile_extend(
@@ -268,7 +268,7 @@ int memfile_ftruncate(
  *  IMFS_memfile_extend
  *
  *  This routine insures that the in-memory file is of the length
- *  specified.  If necessary, it will allocate memory blocks to 
+ *  specified.  If necessary, it will allocate memory blocks to
  *  extend the file.
  */
 
@@ -431,7 +431,7 @@ void memfile_free_blocks_in_table(
   }
 
   /*
-   *  Now that all the blocks in the block table are free, we can 
+   *  Now that all the blocks in the block table are free, we can
    *  free the block table itself.
    */
 
@@ -444,7 +444,7 @@ void memfile_free_blocks_in_table(
  *
  *  This routine frees all memory associated with an in memory file.
  *
- *  NOTE:  This is an exceptionally conservative implementation.  
+ *  NOTE:  This is an exceptionally conservative implementation.
  *         It will check EVERY pointer which is non-NULL and insure
  *         any child non-NULL pointers are freed.  Optimistically, all that
  *         is necessary is to scan until a NULL pointer is found.  There
@@ -511,7 +511,7 @@ int IMFS_memfile_remove(
     memfile_free_blocks_in_table( &info->doubly_indirect, to_free );
 
   }
-  
+
   if ( info->triply_indirect ) {
     for ( i=0 ; i<IMFS_MEMFILE_BLOCK_SLOTS ; i++ ) {
       p = (block_p *) info->triply_indirect[i];
@@ -539,7 +539,7 @@ int IMFS_memfile_remove(
  *  the specified data buffer specified by destination.  The file
  *  is NOT extended.  An offset greater than the length of the file
  *  is considered an error.  Read from an offset for more bytes than
- *  are between the offset and the end of the file will result in 
+ *  are between the offset and the end of the file will result in
  *  reading the data between offset and the end of the file (truncated
  *  read).
  */
@@ -962,7 +962,7 @@ fflush(stdout);
       return 0;
 
     p = (block_p *)p[ doubly ];
-    if ( !p ) 
+    if ( !p )
       return 0;
 
 #if 0
@@ -1083,7 +1083,7 @@ fflush(stdout);
 /*
  *  memfile_rmnod
  *
- *  This routine is available from the optable to remove a node 
+ *  This routine is available from the optable to remove a node
  *  from the IMFS file system.
  */
 
@@ -1091,12 +1091,12 @@ int memfile_rmnod(
   rtems_filesystem_location_info_t      *pathloc       /* IN */
 )
 {
-  IMFS_jnode_t *the_jnode;  
+  IMFS_jnode_t *the_jnode;
 
   the_jnode = (IMFS_jnode_t *) pathloc->node_access;
 
-  /* 
-   * Take the node out of the parent's chain that contains this node 
+  /*
+   * Take the node out of the parent's chain that contains this node
    */
 
   if ( the_jnode->Parent != NULL ) {
@@ -1123,7 +1123,7 @@ int  memfile_check_rmnod( IMFS_jnode_t *the_jnode ){
 
   if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
 
-    /* 
+    /*
      * Is the rtems_filesystem_current is this node?
      */
 

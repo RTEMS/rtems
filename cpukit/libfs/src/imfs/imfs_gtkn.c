@@ -1,5 +1,5 @@
 /*
- *  IMFS_get_token 
+ *  IMFS_get_token
  *
  *  Routine to get a token (name or separator) from the path
  *  the length of the token is returned in token_len.
@@ -34,7 +34,7 @@ IMFS_token_types IMFS_get_token(
   IMFS_token_types  type = IMFS_NAME;
   register char c;
 
-  /* 
+  /*
    *  Copy a name into token.  (Remember NULL is a token.)
    */
   c = path[i];
@@ -46,7 +46,7 @@ IMFS_token_types IMFS_get_token(
        return IMFS_INVALID_TOKEN;
 
      if ( !IMFS_is_valid_name_char(c) )
-       type = IMFS_INVALID_TOKEN;   
+       type = IMFS_INVALID_TOKEN;
 
      c = path [++i];
   }

@@ -1,7 +1,7 @@
 /*
  *  IMFS_fcntl
  *
- *  The following routine does a fcntl on an IMFS node. 
+ *  The following routine does a fcntl on an IMFS node.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

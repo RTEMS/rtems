@@ -81,30 +81,30 @@ int IMFS_evaluate_permission(
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
     assert( 0 );
-    rtems_set_errno_and_return_minus_one( EIO );    
+    rtems_set_errno_and_return_minus_one( EIO );
   }
 
   jnode = node->node_access;
 
 #if defined(RTEMS_POSIX_API)
   st_uid = geteuid();
-  st_gid = getegid(); 
+  st_gid = getegid();
 #else
   st_uid = jnode->st_uid;
   st_gid = jnode->st_gid;
 #endif
-  
+
   /*
    * Check if I am owner or a group member or someone else.
    */
-  
+
   flags_to_test = flags;
 
   if ( st_uid == jnode->st_uid )
     flags_to_test <<= 6;
   else if ( st_gid == jnode->st_gid )
     flags_to_test <<= 3;
-  else 
+  else
     /* must be other - do nothing */;
 
   /*
@@ -143,7 +143,7 @@ int IMFS_evaluate_hard_link(
    */
 
   node->node_access = jnode->info.hard_link.link_node;
-  
+
   IMFS_Set_handlers( node );
 
   /*
@@ -157,13 +157,13 @@ int IMFS_evaluate_hard_link(
 }
 
 
-/* 
+/*
  *  IMFS_evaluate_sym_link
  *
  *  The following routine evaluates a symbolic link to the actual node.
  */
 
-int IMFS_evaluate_sym_link( 
+int IMFS_evaluate_sym_link(
   rtems_filesystem_location_info_t  *node,   /* IN/OUT */
   int                                flags   /* IN     */
 )
@@ -190,7 +190,7 @@ int IMFS_evaluate_sym_link(
 
   node->node_access = jnode->Parent;
 
-  rtems_filesystem_get_sym_start_loc( 
+  rtems_filesystem_get_sym_start_loc(
     jnode->info.sym_link.name,
     &i,
     node
@@ -200,7 +200,7 @@ int IMFS_evaluate_sym_link(
    * Use eval path to evaluate the path of the symbolic link.
    */
 
-  result = IMFS_eval_path(  
+  result = IMFS_eval_path(
     &jnode->info.sym_link.name[i],
     flags,
     node
@@ -224,7 +224,7 @@ int IMFS_evaluate_sym_link(
  *  The following routine returns the real node pointed to by a link.
  */
 
-int IMFS_evaluate_link( 
+int IMFS_evaluate_link(
   rtems_filesystem_location_info_t  *node,   /* IN/OUT */
   int                                flags   /* IN     */
 )
@@ -255,7 +255,7 @@ int IMFS_evaluate_link(
     else if (jnode->type == IMFS_SYM_LINK )
       result = IMFS_evaluate_sym_link( node, flags );
 
-  } while ( ( result == 0 ) && ( ( jnode->type == IMFS_SYM_LINK  ) || 
+  } while ( ( result == 0 ) && ( ( jnode->type == IMFS_SYM_LINK  ) ||
                                  ( jnode->type == IMFS_HARD_LINK ) ) );
 
   /*
@@ -265,7 +265,7 @@ int IMFS_evaluate_link(
   rtems_filesystem_link_counts = 0;
 
   return result;
-}  
+}
 
 
 /*
@@ -273,7 +273,7 @@ int IMFS_evaluate_link(
  *
  *  The following routine evaluate path for a new node to be created.
  *  pathloc is returned with a pointer to the parent of the new node.
- *  name is returned with a pointer to the first character in the 
+ *  name is returned with a pointer to the first character in the
  *  new node name.  The parent node is verified to be a directory.
  */
 
@@ -290,8 +290,8 @@ int IMFS_evaluate_for_make(
   rtems_filesystem_location_info_t    newloc;
   IMFS_jnode_t                       *node;
   int                                 done = 0;
-  int                                 result; 
-  
+  int                                 result;
+
   /*
    * This was filled in by the caller and is valid in the
    * mount table.
@@ -306,7 +306,7 @@ int IMFS_evaluate_for_make(
 
     type = IMFS_get_token( &path[i], token, &len );
     i +=  len;
-    
+
     if ( !pathloc->node_access )
       rtems_set_errno_and_return_minus_one( ENOENT );
 
@@ -343,7 +343,7 @@ int IMFS_evaluate_for_make(
 	   */
 
           if ( pathloc->node_access == rtems_filesystem_root.node_access ) {
-            break; 
+            break;
 
 	  } else {
             newloc = pathloc->mt_entry->mt_point_node;
@@ -379,7 +379,7 @@ int IMFS_evaluate_for_make(
 
         node = pathloc->node_access;
         if ( !node )
-          rtems_set_errno_and_return_minus_one( ENOTDIR ); 
+          rtems_set_errno_and_return_minus_one( ENOTDIR );
 
         /*
          * Only a directory can be decended into.
@@ -406,7 +406,7 @@ int IMFS_evaluate_for_make(
         node = IMFS_find_match_in_dir( node, token );
 
 	/*
-	 * If there is no node we have found the name of the node we 
+	 * If there is no node we have found the name of the node we
          * wish to create.
 	 */
 
@@ -416,7 +416,7 @@ int IMFS_evaluate_for_make(
           pathloc->node_access = node;
 
         break;
- 
+
       case IMFS_NO_MORE_PATH:
         rtems_set_errno_and_return_minus_one( EEXIST );
         break;
@@ -431,18 +431,18 @@ int IMFS_evaluate_for_make(
   }
 
   *name = &path[ i - len ];
-   
+
   /*
    * We have evaluated the path as far as we can.
-   * Verify there is not any invalid stuff at the end of the name. 
+   * Verify there is not any invalid stuff at the end of the name.
    */
 
   for( ; path[i] != '\0'; i++) {
-    if ( !IMFS_is_separator( path[ i ] ) ) 
+    if ( !IMFS_is_separator( path[ i ] ) )
       rtems_set_errno_and_return_minus_one( ENOENT );
   }
 
-  /* 
+  /*
    * Verify we can execute and write to this directory.
    */
 
@@ -461,7 +461,7 @@ int IMFS_evaluate_for_make(
 
   if ( !IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_WX ) )
     rtems_set_errno_and_return_minus_one( EACCES );
-  
+
   return result;
 }
 
@@ -474,7 +474,7 @@ int IMFS_evaluate_for_make(
  *  node to be accessed.
  */
 
-int IMFS_eval_path(  
+int IMFS_eval_path(
   const char                        *pathname,     /* IN     */
   int                                flags,        /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
@@ -486,15 +486,15 @@ int IMFS_eval_path(
   char                                token[ IMFS_NAME_MAX + 1 ];
   rtems_filesystem_location_info_t    newloc;
   IMFS_jnode_t                       *node;
-  int                                 result; 
+  int                                 result;
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
     assert( 0 );
-    rtems_set_errno_and_return_minus_one( EIO );    
+    rtems_set_errno_and_return_minus_one( EIO );
   }
 
   /*
-   *  This was filled in by the caller and is valid in the 
+   *  This was filled in by the caller and is valid in the
    *  mount table.
    */
 
@@ -508,7 +508,7 @@ int IMFS_eval_path(
 
     type = IMFS_get_token( &pathname[i], token, &len );
     i +=  len;
-    
+
     if ( !pathloc->node_access )
       rtems_set_errno_and_return_minus_one( ENOENT );
 
@@ -535,7 +535,7 @@ int IMFS_eval_path(
 	 *  Am I at the root of this mounted filesystem?
 	 */
 
-        if (pathloc->node_access == 
+        if (pathloc->node_access ==
             pathloc->mt_entry->mt_fs_root.node_access) {
 
           /*
@@ -565,7 +565,7 @@ int IMFS_eval_path(
       case IMFS_NAME:
 	/*
 	 *  If we are at a link follow it.
-	 */        
+	 */
 
 	if ( node->type == IMFS_HARD_LINK ) {
 

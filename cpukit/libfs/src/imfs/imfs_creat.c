@@ -61,7 +61,7 @@ IMFS_jnode_t *IMFS_create_node(
    */
 
   node->st_mode = mode & ~rtems_filesystem_umask;
-  
+
 #if defined(RTEMS_POSIX_API)
   node->st_uid = geteuid();
   node->st_gid = getegid();

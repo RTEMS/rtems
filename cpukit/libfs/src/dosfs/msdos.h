@@ -24,44 +24,44 @@ extern "C" {
 
 #include "fat.h"
 #include "fat_file.h"
- 
+
 #ifndef RC_OK
 #define RC_OK 0x00000000
 #endif
 
-#define MSDOS_NAME_NOT_FOUND_ERR  0xDD000001 
+#define MSDOS_NAME_NOT_FOUND_ERR  0xDD000001
 
 /*
- * This structure identifies the instance of the filesystem on the MSDOS 
- * level. 
+ * This structure identifies the instance of the filesystem on the MSDOS
+ * level.
  */
 typedef struct msdos_fs_info_s
 {
-    fat_fs_info_t                     fat;                /* 
-                                                           * volume 
+    fat_fs_info_t                     fat;                /*
+                                                           * volume
                                                            * description
                                                            */
-    rtems_filesystem_file_handlers_r *directory_handlers; /* 
+    rtems_filesystem_file_handlers_r *directory_handlers; /*
                                                            * a set of routines
-                                                           * that handles the 
-                                                           * nodes of directory 
+                                                           * that handles the
+                                                           * nodes of directory
                                                            * type
                                                            */
-    rtems_filesystem_file_handlers_r *file_handlers;      /* 
+    rtems_filesystem_file_handlers_r *file_handlers;      /*
                                                            * a set of routines
-                                                           * that handles the 
-                                                           * nodes of file 
+                                                           * that handles the
+                                                           * nodes of file
                                                            * type
                                                            */
-    rtems_id                          vol_sema;           /* 
-                                                           * semaphore 
-                                                           * associated with 
+    rtems_id                          vol_sema;           /*
+                                                           * semaphore
+                                                           * associated with
                                                            * the volume
                                                            */
-    uint8_t                          *cl_buf;              /* 
+    uint8_t                          *cl_buf;              /*
                                                             * just placeholder
-                                                            * for anything 
-                                                            */ 
+                                                            * for anything
+                                                            */
 } msdos_fs_info_t;
 
 /* a set of routines that handle the nodes which are directories */
@@ -78,11 +78,11 @@ extern rtems_filesystem_file_handlers_r  msdos_file_handlers;
 #define MSDOS_DIRECTORY     RTEMS_FILESYSTEM_DIRECTORY
 #define MSDOS_REGULAR_FILE  RTEMS_FILESYSTEM_MEMORY_FILE
 #define MSDOS_HARD_LINK     RTEMS_FILESYSTEM_HARD_LINK /* pseudo type */
-   
+
 typedef rtems_filesystem_node_types_t msdos_node_type_t;
 
-/* 
- * Macros for fetching fields from 32 bytes long FAT Directory Entry 
+/*
+ * Macros for fetching fields from 32 bytes long FAT Directory Entry
  * Structure
  */
 #define MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE    32 /* 32 bytes */
@@ -165,7 +165,7 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define MSDOS_DOT_NAME     ".          " /* ".", padded to MSDOS_NAME chars */
 #define MSDOS_DOTDOT_NAME  "..         " /* "..", padded to MSDOS_NAME chars */
 
-typedef enum msdos_token_types_e 
+typedef enum msdos_token_types_e
 {
     MSDOS_NO_MORE_PATH,
     MSDOS_CURRENT_DIR,
@@ -192,45 +192,45 @@ typedef enum msdos_token_types_e
 #define MSDOS_MAX_DIR_LENGHT               0x200000   /* 2,097,152 bytes */
 #define MSDOS_MAX_FILE_SIZE                0xFFFFFFFF /* 4 Gb */
 
-/* 
+/*
  * The number of 32 bytes long FAT Directory Entry
- * Structures per 512 bytes sector 
- */ 
+ * Structures per 512 bytes sector
+ */
 #define MSDOS_DPS512_NUM    16
 
 /* Prototypes */
-int 
+int
 msdos_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
-int 
+int
 msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
-int 
+int
 msdos_eval_path(const char                       *pathname, /* IN */
                 int                               flags,    /* IN */
                 rtems_filesystem_location_info_t *pathloc   /* IN/OUT */);
 
-int 
+int
 msdos_eval4make(const char                       *path,     /* IN */
                 rtems_filesystem_location_info_t *pathloc,  /* IN/OUT */
-                const char                       **name     /* OUT    */); 
-         
-int 
+                const char                       **name     /* OUT    */);
+
+int
 msdos_unlink(rtems_filesystem_location_info_t *pathloc /* IN */);
 
-int 
+int
 msdos_free_node_info(rtems_filesystem_location_info_t *pathloc /* IN */);
 
-rtems_filesystem_node_types_t 
+rtems_filesystem_node_types_t
 msdos_node_type(rtems_filesystem_location_info_t    *pathloc);
 
-int 
+int
 msdos_mknod(const char                       *path,   /* IN */
             mode_t                            mode,   /* IN */
             dev_t                             dev,    /* IN */
             rtems_filesystem_location_info_t *pathloc /* IN/OUT */);
 
-int 
+int
 msdos_utime(rtems_filesystem_location_info_t *pathloc, /* IN */
             time_t                            actime,  /* IN */
             time_t                            modtime  /* IN */);
@@ -243,7 +243,7 @@ msdos_initialize_support(
   rtems_filesystem_file_handlers_r     *directory_handlers
 );
 
-int 
+int
 msdos_file_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
@@ -251,62 +251,62 @@ msdos_file_open(
   uint32_t       mode             /* IN  */
 );
 
-int 
+int
 msdos_file_close(rtems_libio_t *iop /* IN  */);
 
-ssize_t 
+ssize_t
 msdos_file_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
   uint32_t       count             /* IN  */
 );
 
-ssize_t 
+ssize_t
 msdos_file_write(
   rtems_libio_t *iop,             /* IN  */
   const void    *buffer,          /* IN  */
   uint32_t       count            /* IN  */
 );
 
-int 
+int
 msdos_file_lseek(
   rtems_libio_t        *iop,              /* IN  */
   off_t                 offset,           /* IN  */
   int                   whence            /* IN  */
 );
 
-int 
+int
 msdos_file_stat(rtems_filesystem_location_info_t *loc, /* IN  */
                 struct stat                      *buf  /* OUT */);
 
-int 
+int
 msdos_file_ftruncate(
   rtems_libio_t *iop,               /* IN  */
   off_t          length             /* IN  */
 );
 
-int 
+int
 msdos_file_sync(rtems_libio_t *iop);
 
-int 
+int
 msdos_file_datasync(rtems_libio_t *iop);
- 
-int 
+
+int
 msdos_file_ioctl(
   rtems_libio_t *iop,             /* IN  */
   uint32_t       command,         /* IN  */
   void          *buffer           /* IN  */
 );
 
-int 
+int
 msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc /* IN */);
- 
-int 
+
+int
 msdos_file_link(rtems_filesystem_location_info_t *to_loc,
 		rtems_filesystem_location_info_t *pa_loc,
 		const char                       *token);
 
-int 
+int
 msdos_dir_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
@@ -314,30 +314,30 @@ msdos_dir_open(
   uint32_t       mode             /* IN  */
 );
 
-int 
+int
 msdos_dir_close(rtems_libio_t *iop /* IN  */);
 
-ssize_t 
+ssize_t
 msdos_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
   uint32_t       count             /* IN  */
 );
 
-int 
+int
 msdos_dir_lseek(
   rtems_libio_t        *iop,              /* IN  */
   off_t                 offset,           /* IN  */
   int                   whence            /* IN  */
 );
 
-int 
+int
 msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc /* IN */);
 
-int 
+int
 msdos_dir_sync(rtems_libio_t *iop);
 
-int 
+int
 msdos_dir_stat(
   rtems_filesystem_location_info_t *loc,         /* IN  */
   struct stat                      *buf          /* OUT */
@@ -372,7 +372,7 @@ int
 msdos_filename_unix2dos(char *un, int unlen, char *dn);
 
 void
-msdos_date_unix2dos(unsigned int tsp, unsigned short *ddp, 
+msdos_date_unix2dos(unsigned int tsp, unsigned short *ddp,
                     unsigned short *dtp);
 
 unsigned int
@@ -386,7 +386,7 @@ int
 msdos_set_file_size(rtems_filesystem_mount_table_entry_t *mt_entry,
                     fat_file_fd_t                        *fat_fd);
 
-int 
+int
 msdos_set_first_char4file_name(rtems_filesystem_mount_table_entry_t *mt_entry,
                                uint32_t    cl,
                                uint32_t    ofs,
@@ -397,26 +397,26 @@ msdos_set_dir_wrt_time_and_date(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd
 );
-                               
+
 
 int
 msdos_dir_is_empty(rtems_filesystem_mount_table_entry_t *mt_entry,
-                   fat_file_fd_t                        *fat_fd, 
+                   fat_file_fd_t                        *fat_fd,
                    rtems_boolean                        *ret_val);
 
 int
 msdos_find_name_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    fat_file_fd_t                        *fat_fd, 
-    char                                 *name, 
+    fat_file_fd_t                        *fat_fd,
+    char                                 *name,
     fat_auxiliary_t                      *paux,
     char                                 *name_dir_entry);
-                            
+
 int
 msdos_find_node_by_cluster_num_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
-    uint32_t                              cl4find, 
+    uint32_t                              cl4find,
     fat_auxiliary_t                      *paux,
     char                                 *dir_entry
 );

@@ -37,7 +37,7 @@ int IMFS_fchmod(
       unsigned int           length
    );
 
-    
+
   jnode = loc->node_access;
 
   /*

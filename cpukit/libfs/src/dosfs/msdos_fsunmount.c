@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id$ 
+ *  @(#) $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -32,8 +32,8 @@
 #include "msdos.h"
 
 /* msdos_shut_down --
- *     Shut down MSDOS filesystem - free all allocated resources (don't 
- *     return if deallocation of some resource failed - free as much as 
+ *     Shut down MSDOS filesystem - free all allocated resources (don't
+ *     return if deallocation of some resource failed - free as much as
  *     possible).
  *
  * PARAMETERS:
@@ -43,10 +43,10 @@
  *     RC_OK on success, or -1 if error occured (errno set apropriately).
  *
  */
-int 
+int
 msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
 {
-    int              rc = RC_OK; 
+    int              rc = RC_OK;
     msdos_fs_info_t *fs_info = temp_mt_entry->fs_info;
     fat_file_fd_t   *fat_fd = temp_mt_entry->mt_fs_root.node_access;
 
@@ -62,10 +62,10 @@ msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
         /* no return - try to free as much as possible */
         rc = -1;
     }
-  
+
     rtems_semaphore_delete(fs_info->vol_sema);
     free(fs_info->cl_buf);
     free(temp_mt_entry->fs_info);
-  
+
     return rc;
 }

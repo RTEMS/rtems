@@ -1,7 +1,7 @@
 /*
  *  IMFS_readlink
  *
- *  The following rouine puts the symblic links destination name into 
+ *  The following rouine puts the symblic links destination name into
  *  buff.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -26,12 +26,12 @@
 int IMFS_readlink(
   rtems_filesystem_location_info_t  *loc,
  char                               *buf,         /* OUT */
- size_t                             bufsize    
+ size_t                             bufsize
 )
 {
   IMFS_jnode_t      *node;
   int                i;
-  
+
   node = loc->node_access;
 
   if ( node->type != IMFS_SYM_LINK )

@@ -25,8 +25,8 @@
  *  IMFS_freenodinfo
  *
  *  This routine is the IMFS free node handler for the file system
- *  operations table.  
- * 
+ *  operations table.
+ *
  *  The In Memory File System keeps its nodes in memory.  This routine
  *  is for file sytems that do not.
  */

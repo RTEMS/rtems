@@ -34,12 +34,12 @@ int IMFS_rmnod(
   rtems_filesystem_location_info_t      *pathloc       /* IN */
 )
 {
-  IMFS_jnode_t *the_jnode;  
+  IMFS_jnode_t *the_jnode;
 
   the_jnode = (IMFS_jnode_t *) pathloc->node_access;
 
-  /* 
-   * Take the node out of the parent's chain that contains this node 
+  /*
+   * Take the node out of the parent's chain that contains this node
    */
 
   if ( the_jnode->Parent != NULL ) {
@@ -60,7 +60,7 @@ int IMFS_rmnod(
 
   if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
 
-    /* 
+    /*
      * Is rtems_filesystem_current this node?
      */
 

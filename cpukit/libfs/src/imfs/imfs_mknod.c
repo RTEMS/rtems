@@ -30,7 +30,7 @@
 
 int IMFS_mknod(
   const char                        *token,      /* IN */
-  mode_t                             mode,       /* IN */ 
+  mode_t                             mode,       /* IN */
   dev_t                              dev,        /* IN */
   rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
 )
@@ -40,7 +40,7 @@ int IMFS_mknod(
   int                result;
   char               new_name[ IMFS_NAME_MAX + 1 ];
   IMFS_types_union   info;
-  
+
   IMFS_get_token( token, new_name, &result );
 
   /*
@@ -57,7 +57,7 @@ int IMFS_mknod(
   } else  {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
- 
+
   /*
    *  Allocate and fill in an IMFS jnode
    */
@@ -65,7 +65,7 @@ int IMFS_mknod(
   new_node = IMFS_create_node(
     pathloc,
     type,
-    new_name, 
+    new_name,
     mode,
     &info
   );

@@ -45,22 +45,22 @@
  *     RC_OK on succes, or -1 if error occured and set errno
  *
  */
-int 
+int
 msdos_mknod(
     const char                        *token,
-    mode_t                             mode, 
+    mode_t                             mode,
     dev_t                              dev,
-    rtems_filesystem_location_info_t  *pathloc 
+    rtems_filesystem_location_info_t  *pathloc
     )
 {
-    int                  rc = RC_OK;  
+    int                  rc = RC_OK;
     rtems_status_code    sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t     *fs_info = pathloc->mt_entry->fs_info; 
+    msdos_fs_info_t     *fs_info = pathloc->mt_entry->fs_info;
     msdos_token_types_t  type = 0;
     char                 new_name[ MSDOS_NAME_MAX + 1 ];
     int                  len;
 
-    /* check spelling and format new node name */ 
+    /* check spelling and format new node name */
     msdos_get_token(token, new_name, &len);
 
     /*
@@ -69,12 +69,12 @@ msdos_mknod(
     if (S_ISDIR(mode))
     {
        type = MSDOS_DIRECTORY;
-    }   
+    }
     else if (S_ISREG(mode))
     {
         type = MSDOS_REGULAR_FILE;
-    }  
-    else 
+    }
+    else
         set_errno_and_return_minus_one(EINVAL);
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,

@@ -37,47 +37,47 @@
  *     token_len - length of returned token
  *
  * RETURNS:
- *     token type, token and token length 
+ *     token type, token and token length
  *
  */
-msdos_token_types_t 
+msdos_token_types_t
 msdos_get_token(const char *path, char *ret_token, int *token_len)
 {
     int                 rc = RC_OK;
     register int        i = 0;
     msdos_token_types_t type = MSDOS_NAME;
-    char                token[MSDOS_NAME_MAX_WITH_DOT+1];  
+    char                token[MSDOS_NAME_MAX_WITH_DOT+1];
     register char       c;
 
-    /* 
+    /*
      *  Copy a name into token.  (Remember NULL is a token.)
      */
     c = path[i];
-    while ( (!msdos_is_separator(c)) && (i <= MSDOS_NAME_MAX_WITH_DOT) ) 
+    while ( (!msdos_is_separator(c)) && (i <= MSDOS_NAME_MAX_WITH_DOT) )
     {
         token[i] = c;
         if ( i == MSDOS_NAME_MAX_WITH_DOT )
             return MSDOS_INVALID_TOKEN;
         if ( !msdos_is_valid_name_char(c) )
-            return MSDOS_INVALID_TOKEN;   
+            return MSDOS_INVALID_TOKEN;
         c = path [++i];
     }
 
     /*
      *  Copy a seperator into token.
      */
-    if ( i == 0 ) 
+    if ( i == 0 )
     {
         token[i] = c;
-        if ( token[i] != '\0' ) 
+        if ( token[i] != '\0' )
         {
             i++;
             type = MSDOS_CURRENT_DIR;
-        } 
-        else  
+        }
+        else
             type = MSDOS_NO_MORE_PATH;
-    } 
-    else if (token[ i-1 ] != '\0') 
+    }
+    else if (token[ i-1 ] != '\0')
         token[i] = '\0';
 
     /*
@@ -89,25 +89,25 @@ msdos_get_token(const char *path, char *ret_token, int *token_len)
      *  If we copied something that was not a seperator see if
      *  it was a special name.
      */
-    if ( type == MSDOS_NAME ) 
+    if ( type == MSDOS_NAME )
     {
         if ( strcmp( token, "..") == 0 )
         {
             strcpy(ret_token, MSDOS_DOTDOT_NAME);
             type = MSDOS_UP_DIR;
             return type;
-        }  
+        }
 
         if ( strcmp( token, "." ) == 0 )
         {
             strcpy(ret_token, MSDOS_DOT_NAME);
             type = MSDOS_CURRENT_DIR;
-            return type;        
+            return type;
         }
 
         rc = msdos_filename_unix2dos(token, *token_len, ret_token);
         if ( rc != RC_OK )
-            return MSDOS_INVALID_TOKEN;     
+            return MSDOS_INVALID_TOKEN;
     }
     ret_token[MSDOS_NAME_MAX] = '\0';
     return type;
@@ -115,8 +115,8 @@ msdos_get_token(const char *path, char *ret_token, int *token_len)
 
 
 /* msdos_find_name --
- *     Find the node which correspondes to the name, open fat-file which 
- *     correspondes to the found node and close fat-file which correspondes 
+ *     Find the node which correspondes to the name, open fat-file which
+ *     correspondes to the found node and close fat-file which correspondes
  *     to the node we searched in.
  *
  * PARAMETERS:
@@ -124,11 +124,11 @@ msdos_get_token(const char *path, char *ret_token, int *token_len)
  *     name       - name to find
  *
  * RETURNS:
- *     RC_OK and updated 'parent_loc' on success, or -1 if error 
+ *     RC_OK and updated 'parent_loc' on success, or -1 if error
  *     occured (errno set apropriately)
  *
  */
-int 
+int
 msdos_find_name(
     rtems_filesystem_location_info_t *parent_loc,
     char                             *name
@@ -141,11 +141,11 @@ msdos_find_name(
     unsigned short   time_val = 0;
     unsigned short   date = 0;
     unsigned char    node_entry[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
-  
+
     memset(node_entry, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
-  
-    /* 
-     * find the node which correspondes to the name in the directory pointed by 
+
+    /*
+     * find the node which correspondes to the name in the directory pointed by
      * 'parent_loc'
      */
     rc = msdos_get_name_node(parent_loc, name, &aux, node_entry);
@@ -156,12 +156,12 @@ msdos_find_name(
     rc = fat_file_open(parent_loc->mt_entry, aux.cln, aux.ofs, &fat_fd);
     if (rc != RC_OK)
         return rc;
-  
+
     /*
-     * I don't like this if, but: we should do it , or should write new file 
-     * size and first cluster num to the disk after each write operation 
-     * (even if one byte is written  - that is TOO non-optimize) because 
-     * otherwise real values of these fields stored in fat-file descriptor 
+     * I don't like this if, but: we should do it , or should write new file
+     * size and first cluster num to the disk after each write operation
+     * (even if one byte is written  - that is TOO non-optimize) because
+     * otherwise real values of these fields stored in fat-file descriptor
      * may be accidentely rewritten with wrong values stored on the disk
      */
     if (fat_fd->links_num == 1)
@@ -170,17 +170,17 @@ msdos_find_name(
         fat_fd->info_ofs = aux.ofs;
         fat_fd->cln = MSDOS_EXTRACT_CLUSTER_NUM(node_entry);
         fat_fd->first_char = *MSDOS_DIR_NAME(node_entry);
-    
+
         time_val = *MSDOS_DIR_WRITE_TIME(node_entry);
         date = *MSDOS_DIR_WRITE_DATE(node_entry);
-    
+
         fat_fd->mtime = msdos_date_dos2unix(CF_LE_W(time_val), CF_LE_W(date));
- 
+
         if ((*MSDOS_DIR_ATTR(node_entry)) & MSDOS_ATTR_DIRECTORY)
         {
             fat_fd->fat_file_type = FAT_DIRECTORY;
-            fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;                                    
-  
+            fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
+
             rc = fat_file_size(parent_loc->mt_entry, fat_fd);
             if (rc != RC_OK)
             {
@@ -190,16 +190,16 @@ msdos_find_name(
         }
         else
         {
-            fat_fd->fat_file_size = CF_LE_L(*MSDOS_DIR_FILE_SIZE(node_entry)); 
-            fat_fd->fat_file_type = FAT_FILE;                                    
+            fat_fd->fat_file_size = CF_LE_L(*MSDOS_DIR_FILE_SIZE(node_entry));
+            fat_fd->fat_file_type = FAT_FILE;
             fat_fd->size_limit = MSDOS_MAX_FILE_SIZE;
         }
-        
+
         /* these data is not actual for zero-length fat-file */
         fat_fd->map.file_cln = 0;
         fat_fd->map.disk_cln = fat_fd->cln;
-        
-        if ((fat_fd->fat_file_size != 0) && 
+
+        if ((fat_fd->fat_file_size != 0) &&
             (fat_fd->fat_file_size <= fs_info->fat.vol.bpc))
         {
             fat_fd->map.last_cln = fat_fd->cln;
@@ -208,7 +208,7 @@ msdos_find_name(
         {
             fat_fd->map.last_cln = FAT_UNDEFINED_VALUE;
         }
-    }  
+    }
 
     /* close fat-file corresponded to the node we searched in */
     rc = fat_file_close(parent_loc->mt_entry, parent_loc->node_access);
@@ -220,23 +220,23 @@ msdos_find_name(
 
     /* update node_info_ptr field */
     parent_loc->node_access = fat_fd;
-  
+
     return rc;
-}  
+}
 
 /* msdos_get_name_node --
  *     This routine is used in two ways: for a new mode creation (a) or for
  *     search the node which correspondes to the name parameter (b).
- *     In case (a) 'name' should be set up to NULL and 'name_dir_entry' should 
- *     point to initialized 32 bytes structure described a new node. 
+ *     In case (a) 'name' should be set up to NULL and 'name_dir_entry' should
+ *     point to initialized 32 bytes structure described a new node.
  *     In case (b) 'name' should contain a valid string.
  *
- *     (a): reading fat-file which correspondes to directory we are going to 
- *          create node in. If free slot is found write contents of 
- *          'name_dir_entry' into it. If reach end of fat-file and no free 
+ *     (a): reading fat-file which correspondes to directory we are going to
+ *          create node in. If free slot is found write contents of
+ *          'name_dir_entry' into it. If reach end of fat-file and no free
  *          slot found, write 32 bytes to the end of fat-file.
  *
- *     (b): reading fat-file which correspondes to directory and trying to 
+ *     (b): reading fat-file which correspondes to directory and trying to
  *          find slot with the name field == 'name' parameter
  *
  *
@@ -244,18 +244,18 @@ msdos_find_name(
  *     parent_loc     - node description to create node in or to find name in
  *     name           - NULL or name to find
  *     paux           - identify a node location on the disk -
- *                      cluster num and offset inside the cluster 
+ *                      cluster num and offset inside the cluster
  *     name_dir_entry - node to create/placeholder for found node (IN/OUT)
  *
  * RETURNS:
- *     RC_OK, filled aux_struct_ptr and name_dir_entry on success, or -1 if 
+ *     RC_OK, filled aux_struct_ptr and name_dir_entry on success, or -1 if
  *     error occured (errno set apropriately)
  *
  */
 int
 msdos_get_name_node(
-    rtems_filesystem_location_info_t *parent_loc, 
-    char                             *name, 
+    rtems_filesystem_location_info_t *parent_loc,
+    char                             *name,
     fat_auxiliary_t                  *paux,
     char                             *name_dir_entry
     )
@@ -271,44 +271,44 @@ msdos_get_name_node(
                                      name_dir_entry);
     if ((rc != RC_OK) && (rc != MSDOS_NAME_NOT_FOUND_ERR))
         return rc;
-  
+
     /* if we search for valid name and name not found -> return */
     if ((rc == MSDOS_NAME_NOT_FOUND_ERR) && (name != NULL))
         return rc;
-  
-    /* 
-     * if we try to create new entry and the directory is not big enough 
-     * currently - try to enlarge directory   
+
+    /*
+     * if we try to create new entry and the directory is not big enough
+     * currently - try to enlarge directory
      */
     if ((rc == MSDOS_NAME_NOT_FOUND_ERR) && (name == NULL))
     {
-        ret = fat_file_write(parent_loc->mt_entry, fat_fd, 
-                             fat_fd->fat_file_size, 
-                             MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE, 
+        ret = fat_file_write(parent_loc->mt_entry, fat_fd,
+                             fat_fd->fat_file_size,
+                             MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
                              name_dir_entry);
         if (ret == -1)
-            return -1;  
+            return -1;
 
         /* on success directory is enlarged by a new cluster */
         fat_fd->fat_file_size += fs_info->fat.vol.bpc;
-    
+
         /* get cluster num where a new node located */
         rc = fat_file_ioctl(parent_loc->mt_entry, fat_fd, F_CLU_NUM,
                             fat_fd->fat_file_size - 1, &paux->cln);
-                        
+
         if (rc != RC_OK)
             return rc;
 
-        /* 
-         * if new cluster allocated succesfully then new node is at very 
-         * beginning of the cluster (offset is computed in bytes) 
+        /*
+         * if new cluster allocated succesfully then new node is at very
+         * beginning of the cluster (offset is computed in bytes)
          */
         paux->ofs = 0;
-        return RC_OK;                                                 
-    }                                   
-                                   
-    /* 
-     * if we have deal with ".." - it is a special case :((( 
+        return RC_OK;
+    }
+
+    /*
+     * if we have deal with ".." - it is a special case :(((
      *
      * Really, we should return cluster num and offset not of ".." slot, but
      * slot which correspondes to real directory name.
@@ -321,14 +321,14 @@ msdos_get_name_node(
 
             /* are we right under root dir ? */
             if (dotdot_cln == 0)
-            { 
-                /* 
-                 * we can relax about first_char field - it never should be 
+            {
+                /*
+                 * we can relax about first_char field - it never should be
                  * used for root dir
                  */
                 paux->cln = FAT_ROOTDIR_CLUSTER_NUM;
                 paux->ofs = 0;
-            }  
+            }
             else
             {
                 rc = msdos_get_dotdot_dir_info_cluster_num_and_offset(
@@ -340,7 +340,7 @@ msdos_get_name_node(
                 if (rc != RC_OK)
                     return rc;
             }
-        }  
+        }
     }
     return rc;
 }
@@ -348,26 +348,26 @@ msdos_get_name_node(
 /*
  * msdos_get_dotdot_dir_info_cluster_num_and_offset
  *
- * Unfortunately, in general, we cann't work here in fat-file ideologic 
- * (open fat_file "..", get ".." and ".", open "..", find an entry ...) 
+ * Unfortunately, in general, we cann't work here in fat-file ideologic
+ * (open fat_file "..", get ".." and ".", open "..", find an entry ...)
  * because if we open
  * fat-file ".." it may happend that we have two different fat-file
- * descriptors ( for real name of directory and ".." name ) for a single 
+ * descriptors ( for real name of directory and ".." name ) for a single
  * file  ( cluster num of both pointers to the same cluster )
  * But...we do it because we protected by semaphore
- * 
+ *
  */
 
 /* msdos_get_dotdot_dir_info_cluster_num_and_offset --
- *     Get cluster num and offset not of ".." slot, but slot which correspondes 
- *     to real directory name.   
+ *     Get cluster num and offset not of ".." slot, but slot which correspondes
+ *     to real directory name.
  *
  * PARAMETERS:
  *     mt_entry       - mount table entry
  *     cln            - data cluster num extracted drom ".." slot
  *     paux           - identify a node location on the disk -
  *                      number of cluster and offset inside the cluster
- *     dir_entry      - placeholder for found node 
+ *     dir_entry      - placeholder for found node
  *
  * RETURNS:
  *     RC_OK, filled 'paux' and 'dir_entry' on success, or -1 if error occured
@@ -376,7 +376,7 @@ msdos_get_name_node(
  */
 int
 msdos_get_dotdot_dir_info_cluster_num_and_offset(
-    rtems_filesystem_mount_table_entry_t *mt_entry, 
+    rtems_filesystem_mount_table_entry_t *mt_entry,
     uint32_t                              cln,
     fat_auxiliary_t                      *paux,
     char                                 *dir_entry
@@ -389,24 +389,24 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
     unsigned char    dotdot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     unsigned char    cur_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     uint32_t         cl4find = 0;
-  
-    memset(dot_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);  
+
+    memset(dot_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
     memset(dotdot_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
     memset(cur_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
-  
+
     /*
      * open fat-file corresponded to ".."
      */
     rc = fat_file_open(mt_entry, paux->cln, paux->ofs, &fat_fd);
     if (rc != RC_OK)
         return rc;
-  
+
     fat_fd->info_cln = paux->cln;
     fat_fd->info_ofs = paux->ofs;
     fat_fd->cln = cln;
     fat_fd->fat_file_type = FAT_DIRECTORY;
     fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
-    
+
     fat_fd->map.file_cln = 0;
     fat_fd->map.disk_cln = fat_fd->cln;
 
@@ -415,30 +415,30 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
     {
         fat_file_close(mt_entry, fat_fd);
         return rc;
-    }  
-  
+    }
+
     /* find "." node in opened directory */
-    rc = msdos_find_name_in_fat_file(mt_entry, fat_fd, MSDOS_DOT_NAME, paux, 
+    rc = msdos_find_name_in_fat_file(mt_entry, fat_fd, MSDOS_DOT_NAME, paux,
                                      dot_node);
-                                   
+
     if (rc != RC_OK)
     {
         fat_file_close(mt_entry, fat_fd);
         return rc;
     }
-  
+
     /* find ".." node in opened directory */
-    rc = msdos_find_name_in_fat_file(mt_entry, fat_fd, MSDOS_DOTDOT_NAME, paux, 
+    rc = msdos_find_name_in_fat_file(mt_entry, fat_fd, MSDOS_DOTDOT_NAME, paux,
                                      dotdot_node);
-                                   
-    if (rc != RC_OK) 
+
+    if (rc != RC_OK)
     {
         fat_file_close(mt_entry, fat_fd);
         return rc;
     }
 
     cl4find = MSDOS_EXTRACT_CLUSTER_NUM(dot_node);
-  
+
     /* close fat-file corresponded to ".." directory */
     rc = fat_file_close(mt_entry, fat_fd);
     if ( rc != RC_OK )
@@ -446,8 +446,8 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
 
     if ( (MSDOS_EXTRACT_CLUSTER_NUM(dotdot_node)) == 0)
     {
-        /* 
-         * we handle root dir for all FAT types in the same way with the 
+        /*
+         * we handle root dir for all FAT types in the same way with the
          * ordinary directories ( through fat_file_* calls )
          */
         paux->cln = FAT_ROOTDIR_CLUSTER_NUM;
@@ -469,7 +469,7 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
 
     fat_fd->fat_file_type = FAT_DIRECTORY;
     fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
-    
+
     fat_fd->map.file_cln = 0;
     fat_fd->map.disk_cln = fat_fd->cln;
 
@@ -478,10 +478,10 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
     {
         fat_file_close(mt_entry, fat_fd);
         return rc;
-    }  
-  
+    }
+
     /* in this directory find slot with specified cluster num */
-    rc = msdos_find_node_by_cluster_num_in_fat_file(mt_entry, fat_fd, cl4find, 
+    rc = msdos_find_node_by_cluster_num_in_fat_file(mt_entry, fat_fd, cl4find,
                                                     paux, dir_entry);
     if (rc != RC_OK)
     {
@@ -494,11 +494,11 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
 
 
 /* msdos_set_dir_wrt_time_and_date --
- *     Write last write date and time for a file to the disk (to corresponded 
- *     32bytes node)      
+ *     Write last write date and time for a file to the disk (to corresponded
+ *     32bytes node)
  *
  * PARAMETERS:
- *     mt_entry - mount table entry 
+ *     mt_entry - mount table entry
  *     fat_fd   - fat-file descriptor
  *
  * RETURNS:
@@ -507,7 +507,7 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
  */
 int
 msdos_set_dir_wrt_time_and_date(
-    rtems_filesystem_mount_table_entry_t *mt_entry, 
+    rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd
     )
 {
@@ -517,10 +517,10 @@ msdos_set_dir_wrt_time_and_date(
     unsigned short   date;
     uint32_t         sec = 0;
     uint32_t         byte = 0;
-  
+
     msdos_date_unix2dos(fat_fd->mtime, &time_val, &date);
-  
-    /* 
+
+    /*
      * calculate input for _fat_block_write: convert (cluster num, offset) to
      * (sector num, new offset)
      */
@@ -528,7 +528,7 @@ msdos_set_dir_wrt_time_and_date(
     sec += (fat_fd->info_ofs >> fs_info->fat.vol.sec_log2);
     /* byte points to start of 32bytes structure */
     byte = fat_fd->info_ofs & (fs_info->fat.vol.bps - 1);
-   
+
     time_val = CT_LE_W(time_val);
     ret1 = _fat_block_write(mt_entry, sec, byte + MSDOS_FILE_WTIME_OFFSET,
                             2, (char *)(&time_val));
@@ -543,11 +543,11 @@ msdos_set_dir_wrt_time_and_date(
 }
 
 /* msdos_set_first_cluster_num --
- *     Write number of first cluster of the file to the disk (to corresponded 
- *     32bytes slot)      
+ *     Write number of first cluster of the file to the disk (to corresponded
+ *     32bytes slot)
  *
  * PARAMETERS:
- *     mt_entry - mount table entry 
+ *     mt_entry - mount table entry
  *     fat_fd   - fat-file descriptor
  *
  * RETURNS:
@@ -556,7 +556,7 @@ msdos_set_dir_wrt_time_and_date(
  */
 int
 msdos_set_first_cluster_num(
-    rtems_filesystem_mount_table_entry_t *mt_entry, 
+    rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd
     )
 {
@@ -564,11 +564,11 @@ msdos_set_first_cluster_num(
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t         new_cln = fat_fd->cln;
     uint16_t         le_cl_low = 0;
-    uint16_t         le_cl_hi = 0;  
+    uint16_t         le_cl_hi = 0;
     uint32_t         sec = 0;
     uint32_t         byte = 0;
 
-    /* 
+    /*
      * calculate input for _fat_block_write: convert (cluster num, offset) to
      * (sector num, new offset)
      */
@@ -576,9 +576,9 @@ msdos_set_first_cluster_num(
     sec += (fat_fd->info_ofs >> fs_info->fat.vol.sec_log2);
     /* byte from points to start of 32bytes structure */
     byte = fat_fd->info_ofs & (fs_info->fat.vol.bps - 1);
- 
+
     le_cl_low = CT_LE_W((uint16_t  )(new_cln & 0x0000FFFF));
-    ret1 = _fat_block_write(mt_entry, sec, 
+    ret1 = _fat_block_write(mt_entry, sec,
                             byte + MSDOS_FIRST_CLUSTER_LOW_OFFSET, 2,
                             (char *)(&le_cl_low));
     le_cl_hi = CT_LE_W((uint16_t  )((new_cln & 0xFFFF0000) >> 16));
@@ -593,10 +593,10 @@ msdos_set_first_cluster_num(
 
 
 /* msdos_set_file size --
- *     Write file size of the file to the disk (to corresponded 32bytes slot)      
+ *     Write file size of the file to the disk (to corresponded 32bytes slot)
  *
  * PARAMETERS:
- *     mt_entry - mount table entry 
+ *     mt_entry - mount table entry
  *     fat_fd   - fat-file descriptor
  *
  * RETURNS:
@@ -605,7 +605,7 @@ msdos_set_first_cluster_num(
  */
 int
 msdos_set_file_size(
-    rtems_filesystem_mount_table_entry_t *mt_entry, 
+    rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd
     )
 {
@@ -634,11 +634,11 @@ msdos_set_file_size(
  */
 
 /* msdos_set_first_char4file_name --
- *     Write first character of the name of the file to the disk (to 
- *     corresponded 32bytes slot)      
+ *     Write first character of the name of the file to the disk (to
+ *     corresponded 32bytes slot)
  *
  * PARAMETERS:
- *     mt_entry - mount table entry 
+ *     mt_entry - mount table entry
  *     cl       - number of cluster
  *     ofs      - offset inside cluster
  *     fchar    - character to set up
@@ -647,9 +647,9 @@ msdos_set_file_size(
  *     RC_OK on success, or -1 if error occured (errno set apropriately)
  *
  */
-int 
+int
 msdos_set_first_char4file_name(
-    rtems_filesystem_mount_table_entry_t *mt_entry, 
+    rtems_filesystem_mount_table_entry_t *mt_entry,
     uint32_t                              cl,
     uint32_t                              ofs,
     unsigned char                         fchar
@@ -664,22 +664,22 @@ msdos_set_first_char4file_name(
     sec += (ofs >> fs_info->fat.vol.sec_log2);
     byte = (ofs & (fs_info->fat.vol.bps - 1));
 
-    ret = _fat_block_write(mt_entry, sec, byte + MSDOS_FILE_NAME_OFFSET, 1, 
+    ret = _fat_block_write(mt_entry, sec, byte + MSDOS_FILE_NAME_OFFSET, 1,
                            &fchar);
     if ( ret < 0)
         return -1;
 
     return  RC_OK;
-}                        
+}
 
 /* msdos_dir_is_empty --
- *     Check whether directory which correspondes to the fat-file descriptor is 
- *     empty.      
+ *     Check whether directory which correspondes to the fat-file descriptor is
+ *     empty.
  *
  * PARAMETERS:
- *     mt_entry - mount table entry 
- *     fat_fd   - fat-file descriptor   
- *     ret_val  - placeholder for result 
+ *     mt_entry - mount table entry
+ *     fat_fd   - fat-file descriptor
+ *     ret_val  - placeholder for result
  *
  * RETURNS:
  *     RC_OK on success, or -1 if error occured
@@ -688,48 +688,48 @@ msdos_set_first_char4file_name(
 int
 msdos_dir_is_empty(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    fat_file_fd_t                        *fat_fd, 
+    fat_file_fd_t                        *fat_fd,
     rtems_boolean                        *ret_val
     )
 {
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t         j = 0, i = 0;
-  
+
     /* dir is not empty */
     *ret_val = FALSE;
 
     while ((ret = fat_file_read(mt_entry, fat_fd, j * fs_info->fat.vol.bps,
-                                  fs_info->fat.vol.bps, 
+                                  fs_info->fat.vol.bps,
                                   fs_info->cl_buf)) != FAT_EOF)
     {
         if (ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
             return -1;
 
         assert(ret == fs_info->fat.vol.bps);
-        
-        for (i = 0; 
-             i < fs_info->fat.vol.bps; 
+
+        for (i = 0;
+             i < fs_info->fat.vol.bps;
              i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
-            if (((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) == 
-                 MSDOS_THIS_DIR_ENTRY_EMPTY) || 
-                (strncmp(MSDOS_DIR_NAME((fs_info->cl_buf + i)), MSDOS_DOT_NAME, 
+            if (((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
+                 MSDOS_THIS_DIR_ENTRY_EMPTY) ||
+                (strncmp(MSDOS_DIR_NAME((fs_info->cl_buf + i)), MSDOS_DOT_NAME,
                          MSDOS_SHORT_NAME_LEN) == 0) ||
                 (strncmp(MSDOS_DIR_NAME((fs_info->cl_buf + i)),
-                         MSDOS_DOTDOT_NAME, 
+                         MSDOS_DOTDOT_NAME,
                          MSDOS_SHORT_NAME_LEN) == 0))
                 continue;
 
-            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==  
+            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                 MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY)
             {
                 *ret_val = TRUE;
                 return RC_OK;
             }
             return RC_OK;
-        }    
-        j++; 
+        }
+        j++;
     }
     *ret_val = TRUE;
     return RC_OK;
@@ -739,35 +739,35 @@ msdos_dir_is_empty(
 /* msdos_find_name_in_fat_file --
  *     This routine is used in two ways: for a new mode creation (a) or for
  *     search the node which correspondes to the 'name' parameter (b).
- *     In case (a) name should be set up to NULL and 'name_dir_entry' should 
- *     point to initialized 32 bytes structure described a new node. 
+ *     In case (a) name should be set up to NULL and 'name_dir_entry' should
+ *     point to initialized 32 bytes structure described a new node.
  *     In case (b) 'name' should contain a valid string.
  *
  *     (a): reading fat-file corresponded to directory we are going to create
  *          node in. If found free slot write contents of name_dir_entry into
- *          it.  
+ *          it.
  *
  *     (b): reading fat-file corresponded to directory and trying to find slot
  *          with the name field == name parameter
  *
  * PARAMETERS:
- *     mt_entry       - mount table entry 
- *     fat_fd         - fat-file descriptor   
- *     name           - NULL or name to find 
+ *     mt_entry       - mount table entry
+ *     fat_fd         - fat-file descriptor
+ *     name           - NULL or name to find
  *     paux           - identify a node location on the disk -
  *                      number of cluster and offset inside the cluster
  *     name_dir_entry - node to create/placeholder for found node
  *
  * RETURNS:
- *     RC_OK on success, or error code if error occured (errno set 
+ *     RC_OK on success, or error code if error occured (errno set
  *     appropriately)
  *
  */
 int
 msdos_find_name_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    fat_file_fd_t                        *fat_fd, 
-    char                                 *name, 
+    fat_file_fd_t                        *fat_fd,
+    char                                 *name,
     fat_auxiliary_t                      *paux,
     char                                 *name_dir_entry
     )
@@ -778,75 +778,75 @@ msdos_find_name_in_fat_file(
     uint32_t         i = 0, j = 0;
     uint32_t         bts2rd = 0;
 
-    if (FAT_FD_OF_ROOT_DIR(fat_fd) && 
+    if (FAT_FD_OF_ROOT_DIR(fat_fd) &&
        (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16)))
-        bts2rd = fat_fd->fat_file_size;  
+        bts2rd = fat_fd->fat_file_size;
     else
         bts2rd = fs_info->fat.vol.bpc;
-  
-    while ((ret = fat_file_read(mt_entry, fat_fd, (j * bts2rd), bts2rd, 
-                                fs_info->cl_buf)) != FAT_EOF) 
+
+    while ((ret = fat_file_read(mt_entry, fat_fd, (j * bts2rd), bts2rd,
+                                fs_info->cl_buf)) != FAT_EOF)
     {
         if (ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
             set_errno_and_return_minus_one(EIO);
-            
-        assert(ret == bts2rd);    
+
+        assert(ret == bts2rd);
 
         for (i = 0; i < bts2rd; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
             /* is the entry empty ? */
-            if (((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) == 
+            if (((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                  MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY) ||
-                 ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) == 
+                 ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                  MSDOS_THIS_DIR_ENTRY_EMPTY))
             {
                 /* whether we are looking for an empty entry */
                 if (name == NULL)
                 {
                     /* get current cluster number */
-                    rc = fat_file_ioctl(mt_entry, fat_fd, F_CLU_NUM, 
+                    rc = fat_file_ioctl(mt_entry, fat_fd, F_CLU_NUM,
                                         j * bts2rd, &paux->cln);
                     if (rc != RC_OK)
                         return rc;
 
                     /* offset is computed in bytes */
                     paux->ofs = i;
-          
+
                     /* write new node entry */
-                    ret = fat_file_write(mt_entry, fat_fd, j * bts2rd + i, 
+                    ret = fat_file_write(mt_entry, fat_fd, j * bts2rd + i,
                                          MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
                                          name_dir_entry);
                     if (ret != MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
                         return -1;
 
-                    /* 
-                     * we don't update fat_file_size here - it should not 
-                     * increase 
+                    /*
+                     * we don't update fat_file_size here - it should not
+                     * increase
                      */
                     return RC_OK;
                 }
 
-                /* 
-                 * if name != NULL and there is no more entries in the 
+                /*
+                 * if name != NULL and there is no more entries in the
                  * directory - return name-not-found
                  */
-                if (((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) == 
+                if (((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                      MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY))
                     return MSDOS_NAME_NOT_FOUND_ERR;
-            }     
+            }
             else
             {
                 /* entry not empty and name != NULL -> compare names */
                 if (name != NULL)
                 {
-                    if (strncmp(MSDOS_DIR_NAME((fs_info->cl_buf + i)), name, 
+                    if (strncmp(MSDOS_DIR_NAME((fs_info->cl_buf + i)), name,
                                 MSDOS_SHORT_NAME_LEN) == 0)
                     {
-                        /* 
-                         * we get the entry we looked for - fill auxiliary 
+                        /*
+                         * we get the entry we looked for - fill auxiliary
                          * structure and copy all 32 bytes of the entry
                          */
-                        rc = fat_file_ioctl(mt_entry, fat_fd, F_CLU_NUM, 
+                        rc = fat_file_ioctl(mt_entry, fat_fd, F_CLU_NUM,
                                             j * bts2rd, &paux->cln);
                         if (rc != RC_OK)
                             return rc;
@@ -857,11 +857,11 @@ msdos_find_name_in_fat_file(
                                MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
                         return RC_OK;
                     }
-                }  
-            }      
-        }                          
+                }
+            }
+        }
         j++;
-    }                        
+    }
     return MSDOS_NAME_NOT_FOUND_ERR;
 }
 
@@ -869,9 +869,9 @@ msdos_find_name_in_fat_file(
  *     Find node with specified number of cluster in fat-file.
  *
  * PARAMETERS:
- *     mt_entry  - mount table entry 
- *     fat_fd    - fat-file descriptor   
- *     cl4find   - number of cluster to find 
+ *     mt_entry  - mount table entry
+ *     fat_fd    - fat-file descriptor
+ *     cl4find   - number of cluster to find
  *     paux      - identify a node location on the disk -
  *                 cluster num and offset inside the cluster
  *     dir_entry - placeholder for found node
@@ -884,7 +884,7 @@ int
 msdos_find_node_by_cluster_num_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
-    uint32_t                              cl4find, 
+    uint32_t                              cl4find,
     fat_auxiliary_t                      *paux,
     char                                 *dir_entry
     )
@@ -892,12 +892,12 @@ msdos_find_node_by_cluster_num_in_fat_file(
     int              rc = RC_OK;
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
-    uint32_t         bts2rd = 0;  
+    uint32_t         bts2rd = 0;
     uint32_t         i = 0, j = 0;
 
-    if (FAT_FD_OF_ROOT_DIR(fat_fd) && 
+    if (FAT_FD_OF_ROOT_DIR(fat_fd) &&
        (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16)))
-        bts2rd = fat_fd->fat_file_size;  
+        bts2rd = fat_fd->fat_file_size;
     else
         bts2rd = fs_info->fat.vol.bpc;
 
@@ -908,7 +908,7 @@ msdos_find_node_by_cluster_num_in_fat_file(
             set_errno_and_return_minus_one( EIO );
 
         assert(ret == bts2rd);
-        
+
         for (i = 0; i < bts2rd; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
             /* if this and all rest entries are empty - return not-found */
@@ -916,7 +916,7 @@ msdos_find_node_by_cluster_num_in_fat_file(
                 MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY)
                 return MSDOS_NAME_NOT_FOUND_ERR;
 
-            /* if this entry is empty - skip it */ 
+            /* if this entry is empty - skip it */
             if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                 MSDOS_THIS_DIR_ENTRY_EMPTY)
                 continue;
@@ -925,18 +925,18 @@ msdos_find_node_by_cluster_num_in_fat_file(
             if (MSDOS_EXTRACT_CLUSTER_NUM((fs_info->cl_buf + i)) == cl4find)
             {
                 /* on success fill aux structure and copy all 32 bytes */
-                rc = fat_file_ioctl(mt_entry, fat_fd, F_CLU_NUM, j * bts2rd, 
+                rc = fat_file_ioctl(mt_entry, fat_fd, F_CLU_NUM, j * bts2rd,
                                     &paux->cln);
                 if (rc != RC_OK)
                     return rc;
 
                 paux->ofs = i;
-                memcpy(dir_entry, fs_info->cl_buf + i, 
+                memcpy(dir_entry, fs_info->cl_buf + i,
                        MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
                 return RC_OK;
             }
-        }                          
+        }
         j++;
-    }                        
+    }
     return MSDOS_NAME_NOT_FOUND_ERR;
 }

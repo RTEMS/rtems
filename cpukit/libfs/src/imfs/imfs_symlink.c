@@ -1,7 +1,7 @@
 /*
  *  IMFS_symlink
  *
- *  The following rouine creates a new symbolic link node under parent 
+ *  The following rouine creates a new symbolic link node under parent
  *  with the name given in name.  The node is set to point to the node at
  *  to_loc.
  *

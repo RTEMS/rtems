@@ -4,17 +4,17 @@
 /*	$NetBSD: msdosfs_conv.c,v 1.10 1994/12/27 18:36:24 mycroft Exp $	*/
 /*
  * Written by Paul Popelka (paulp@uts.amdahl.com)
- * 
+ *
  * You can do anything you want with this software, just don't say you wrote
  * it, and don't remove this notice.
- * 
+ *
  * This software is provided "as is".
- * 
+ *
  * The author supplies this software to be publicly redistributed on the
  * understanding that the author is not responsible for the correct
  * functioning of this software in any circumstances and is not liable for
  * any damages caused by this software.
- * 
+ *
  * October 1992
  */
 
@@ -54,7 +54,7 @@ static u_short lastdtime;
  * file timestamps. The passed in unix time is assumed to be in GMT.
  */
 void
-msdos_date_unix2dos(unsigned int t, unsigned short *ddp, 
+msdos_date_unix2dos(unsigned int t, unsigned short *ddp,
                     unsigned short *dtp)
 {
 	u_long days;
@@ -102,7 +102,7 @@ msdos_date_unix2dos(unsigned int t, unsigned short *ddp,
 			 * results.
 			 */
 			if (year > 1980)
-				lastddate += (year - 1980) << 
+				lastddate += (year - 1980) <<
 				             MSDOS_DD_YEAR_SHIFT;
 		}
 	}

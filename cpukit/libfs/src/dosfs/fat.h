@@ -38,9 +38,9 @@ extern "C" {
 #define RC_OK 0x00000000
 #endif
 
-/* 
- * Remember that all FAT file system on disk data structure is 
- * "little endian"! 
+/*
+ * Remember that all FAT file system on disk data structure is
+ * "little endian"!
  * (derived from linux)
  */
 /*
@@ -55,12 +55,12 @@ extern "C" {
 #    define CF_LE_L(v) CPU_swap_u32((uint32_t  )v)
 #    define CT_LE_W(v) CPU_swap_u16((uint16_t  )v)
 #    define CT_LE_L(v) CPU_swap_u32((uint32_t  )v)
-#else  
+#else
 #    define CF_LE_W(v) (v)
 #    define CF_LE_L(v) (v)
 #    define CT_LE_W(v) (v)
 #    define CT_LE_L(v) (v)
-#endif  
+#endif
 
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
 
@@ -72,16 +72,16 @@ extern "C" {
 #define FAT_SECTOR512_BITS       9 /* log2(SECTOR_SIZE) */
 
 /* maximum + 1 number of clusters for FAT12 */
-#define FAT_FAT12_MAX_CLN      4085 
+#define FAT_FAT12_MAX_CLN      4085
 
 /* maximum + 1 number of clusters for FAT16 */
-#define FAT_FAT16_MAX_CLN      65525 
+#define FAT_FAT16_MAX_CLN      65525
 
 #define FAT_FAT12              0x01
 #define FAT_FAT16              0x02
 #define FAT_FAT32              0x04
- 
-#define FAT_UNDEFINED_VALUE     (uint32_t  )0xFFFFFFFF 
+
+#define FAT_UNDEFINED_VALUE     (uint32_t  )0xFFFFFFFF
 
 #define FAT_FAT12_EOC          0x0FF8
 #define FAT_FAT16_EOC          0xFFF8
@@ -106,7 +106,7 @@ extern "C" {
 #define FAT_USEFUL_INFO_SIZE   12
 
 #define FAT_VAL8(x, ofs)       (uint8_t  )(*((uint8_t   *)(x) + (ofs)))
- 
+
 #define FAT_VAL16(x, ofs)                                   \
     (uint16_t  )( (*((uint8_t   *)(x) + (ofs))) |           \
                   ((*((uint8_t   *)(x) + (ofs) + 1)) << 8) )
@@ -116,15 +116,15 @@ extern "C" {
                   ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 1)) << 8)  | \
                   ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 2)) << 16) | \
                   ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 3)) << 24) )
-                    
+
 /* macros to access boot sector fields */
 #define FAT_BR_BYTES_PER_SECTOR(x)       FAT_VAL16(x, 11)
-#define FAT_BR_SECTORS_PER_CLUSTER(x)    FAT_VAL8(x, 13) 
+#define FAT_BR_SECTORS_PER_CLUSTER(x)    FAT_VAL8(x, 13)
 #define FAT_BR_RESERVED_SECTORS_NUM(x)   FAT_VAL16(x, 14)
 #define FAT_BR_FAT_NUM(x)                FAT_VAL8(x, 16)
 #define FAT_BR_FILES_PER_ROOT_DIR(x)     FAT_VAL16(x, 17)
 #define FAT_BR_TOTAL_SECTORS_NUM16(x)    FAT_VAL16(x, 19)
-#define FAT_BR_MEDIA(x)                  FAT_VAL8(x, 21) 
+#define FAT_BR_MEDIA(x)                  FAT_VAL8(x, 21)
 #define FAT_BR_SECTORS_PER_FAT(x)        FAT_VAL16(x, 22)
 #define FAT_BR_TOTAL_SECTORS_NUM32(x)    FAT_VAL32(x, 32)
 #define FAT_BR_SECTORS_PER_FAT32(x)      FAT_VAL32(x, 36)
@@ -132,8 +132,8 @@ extern "C" {
 #define FAT_BR_FAT32_ROOT_CLUSTER(x)     FAT_VAL32(x, 44)
 #define FAT_BR_FAT32_FS_INFO_SECTOR(x)   FAT_VAL16(x, 48)
 #define FAT_FSINFO_LEAD_SIGNATURE(x)     FAT_VAL32(x, 0)
-/* 
- * I read FSInfo sector from offset 484 to access the information, so offsets 
+/*
+ * I read FSInfo sector from offset 484 to access the information, so offsets
  * of these fields a relative
  */
 #define FAT_FSINFO_FREE_CLUSTER_COUNT(x) FAT_VAL32(x, 4)
@@ -143,7 +143,7 @@ extern "C" {
 
 #define FAT_FSINFO_NEXT_FREE_CLUSTER_OFFSET  492
 
-#define FAT_RSRVD_CLN                        0x02  
+#define FAT_RSRVD_CLN                        0x02
 
 #define FAT_FSINFO_LEAD_SIGNATURE_VALUE      0x41615252
 
@@ -158,17 +158,17 @@ extern "C" {
 #define FAT_BR_EXT_FLAGS_FAT_NUM             0x000F
 
 
-#define FAT_DIRENTRY_SIZE          32 
- 
+#define FAT_DIRENTRY_SIZE          32
+
 #define FAT_DIRENTRIES_PER_SEC512  16
 
-/* 
+/*
  * Volume descriptor
- * Description of the volume the FAT filesystem is located on - generally 
+ * Description of the volume the FAT filesystem is located on - generally
  * the fields of the structure corresponde to Boot Sector and BPB Srtucture
  * fields
  */
-typedef struct fat_vol_s 
+typedef struct fat_vol_s
 {
     uint16_t     bps;            /* bytes per sector */
     uint8_t      sec_log2;       /* log2 of bps */
@@ -210,9 +210,9 @@ typedef struct fat_cache_s
     uint8_t        state;
     bdbuf_buffer   *buf;
 } fat_cache_t;
-    
-/*  
- * This structure identifies the instance of the filesystem on the FAT 
+
+/*
+ * This structure identifies the instance of the filesystem on the FAT
  * ("fat-file") level.
  */
 typedef struct fat_fs_info_s
@@ -228,9 +228,9 @@ typedef struct fat_fs_info_s
     uint8_t       *sec_buf; /* just placeholder for anything */
 } fat_fs_info_t;
 
-/* 
+/*
  * if the name we looking for is file we store not only first data cluster
- * number, but and cluster number and offset for directory entry for this 
+ * number, but and cluster number and offset for directory entry for this
  * name
  */
 typedef struct fat_auxiliary_s
@@ -258,22 +258,22 @@ typedef struct fat_auxiliary_s
 #define FAT_OP_TYPE_READ  0x1
 #define FAT_OP_TYPE_GET   0x2
 
-static inline uint32_t  
+static inline uint32_t
 fat_cluster_num_to_sector_num(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     uint32_t                              cln
     )
 {
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
-  
+
     if ( (cln == 0) && (fs_info->vol.type & (FAT_FAT12 | FAT_FAT16)) )
-        return fs_info->vol.rdir_loc;  
+        return fs_info->vol.rdir_loc;
 
-    return (((cln - FAT_RSRVD_CLN) << fs_info->vol.spc_log2) + 
+    return (((cln - FAT_RSRVD_CLN) << fs_info->vol.spc_log2) +
             fs_info->vol.data_fsec);
-} 
+}
 
-static inline uint32_t  
+static inline uint32_t
 fat_cluster_num_to_sector512_num(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     uint32_t                              cln
@@ -286,31 +286,31 @@ fat_cluster_num_to_sector512_num(
 
     return (fat_cluster_num_to_sector_num(mt_entry, cln) <<
             fs_info->vol.sec_mul);
-} 
+}
 
 static inline int
-fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type, 
+fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
                bdbuf_buffer **buf)
 {
     rtems_status_code sc = RTEMS_SUCCESSFUL;
     uint8_t           i;
     rtems_boolean     sec_of_fat;
-    
+
 
     if (fs_info->c.state == FAT_CACHE_EMPTY)
     {
         if (op_type == FAT_OP_TYPE_READ)
             sc = rtems_bdbuf_read(fs_info->vol.dev, blk, &fs_info->c.buf);
         else
-            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);    
+            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);
         if (sc != RTEMS_SUCCESSFUL)
             set_errno_and_return_minus_one(EIO);
-        fs_info->c.blk_num = blk;    
-	fs_info->c.modified = 0;    
-        fs_info->c.state = FAT_CACHE_ACTUAL;    
+        fs_info->c.blk_num = blk;
+	fs_info->c.modified = 0;
+        fs_info->c.state = FAT_CACHE_ACTUAL;
     }
-    
-    sec_of_fat = ((fs_info->c.blk_num >= fs_info->vol.fat_loc) && 
+
+    sec_of_fat = ((fs_info->c.blk_num >= fs_info->vol.fat_loc) &&
                   (fs_info->c.blk_num < fs_info->vol.rdir_loc));
 
     if (fs_info->c.blk_num != blk)
@@ -318,24 +318,24 @@ fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
         if (fs_info->c.modified)
         {
             if (sec_of_fat && !fs_info->vol.mirror)
-                memcpy(fs_info->sec_buf, fs_info->c.buf->buffer, 
+                memcpy(fs_info->sec_buf, fs_info->c.buf->buffer,
                        fs_info->vol.bps);
-            
+
             sc = rtems_bdbuf_release_modified(fs_info->c.buf);
 	    fs_info->c.state = FAT_CACHE_EMPTY;
-            fs_info->c.modified = 0;    
+            fs_info->c.modified = 0;
             if (sc != RTEMS_SUCCESSFUL)
                 set_errno_and_return_minus_one(EIO);
-            
+
             if (sec_of_fat && !fs_info->vol.mirror)
             {
                 bdbuf_buffer *b;
-            
+
                 for (i = 1; i < fs_info->vol.fats; i++)
                 {
                     sc = rtems_bdbuf_get(fs_info->vol.dev,
-                                         fs_info->c.blk_num + 
-                                         fs_info->vol.fat_length * i, 
+                                         fs_info->c.blk_num +
+                                         fs_info->vol.fat_length * i,
                                          &b);
                     if ( sc != RTEMS_SUCCESSFUL)
                         set_errno_and_return_minus_one(ENOMEM);
@@ -344,7 +344,7 @@ fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
                     if ( sc != RTEMS_SUCCESSFUL)
                         set_errno_and_return_minus_one(ENOMEM);
                 }
-            }    
+            }
         }
         else
         {
@@ -352,12 +352,12 @@ fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
 	    fs_info->c.state = FAT_CACHE_EMPTY;
             if (sc != RTEMS_SUCCESSFUL)
                 set_errno_and_return_minus_one(EIO);
-        
-        }         
+
+        }
         if (op_type == FAT_OP_TYPE_READ)
             sc = rtems_bdbuf_read(fs_info->vol.dev, blk, &fs_info->c.buf);
         else
-            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);    
+            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);
         if (sc != RTEMS_SUCCESSFUL)
             set_errno_and_return_minus_one(EIO);
         fs_info->c.blk_num = blk;
@@ -368,38 +368,38 @@ fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
 }
 
 
-static inline int 
+static inline int
 fat_buf_release(fat_fs_info_t *fs_info)
 {
     rtems_status_code sc = RTEMS_SUCCESSFUL;
     uint8_t           i;
     rtems_boolean     sec_of_fat;
-        
+
     if (fs_info->c.state == FAT_CACHE_EMPTY)
         return RC_OK;
-            
-    sec_of_fat = ((fs_info->c.blk_num >= fs_info->vol.fat_loc) && 
+
+    sec_of_fat = ((fs_info->c.blk_num >= fs_info->vol.fat_loc) &&
                   (fs_info->c.blk_num < fs_info->vol.rdir_loc));
 
     if (fs_info->c.modified)
     {
         if (sec_of_fat && !fs_info->vol.mirror)
             memcpy(fs_info->sec_buf, fs_info->c.buf->buffer, fs_info->vol.bps);
-            
+
         sc = rtems_bdbuf_release_modified(fs_info->c.buf);
         if (sc != RTEMS_SUCCESSFUL)
             set_errno_and_return_minus_one(EIO);
-        fs_info->c.modified = 0;    
-          
+        fs_info->c.modified = 0;
+
         if (sec_of_fat && !fs_info->vol.mirror)
         {
             bdbuf_buffer *b;
-            
+
             for (i = 1; i < fs_info->vol.fats; i++)
             {
                 sc = rtems_bdbuf_get(fs_info->vol.dev,
-                                     fs_info->c.blk_num + 
-                                     fs_info->vol.fat_length * i, 
+                                     fs_info->c.blk_num +
+                                     fs_info->vol.fat_length * i,
                                      &b);
                 if ( sc != RTEMS_SUCCESSFUL)
                     set_errno_and_return_minus_one(ENOMEM);
@@ -408,14 +408,14 @@ fat_buf_release(fat_fs_info_t *fs_info)
                 if ( sc != RTEMS_SUCCESSFUL)
                     set_errno_and_return_minus_one(ENOMEM);
             }
-        }    
+        }
     }
     else
     {
         sc = rtems_bdbuf_release(fs_info->c.buf);
         if (sc != RTEMS_SUCCESSFUL)
             set_errno_and_return_minus_one(EIO);
-    }         
+    }
     fs_info->c.state = FAT_CACHE_EMPTY;
     return RC_OK;
 }
@@ -459,7 +459,7 @@ int
 fat_init_clusters_chain(rtems_filesystem_mount_table_entry_t *mt_entry,
                         uint32_t                              start_cln);
 
-uint32_t  
+uint32_t
 fat_cluster_num_to_sector_num(rtems_filesystem_mount_table_entry_t *mt_entry,
                               uint32_t                              cln);
 
@@ -467,9 +467,9 @@ int
 fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry);
 
 
-uint32_t  
+uint32_t
 fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry);
-                                                           
+
 rtems_boolean
 fat_ino_is_unique(rtems_filesystem_mount_table_entry_t *mt_entry,
                   uint32_t                              ino);
@@ -484,9 +484,9 @@ fat_fat32_update_fsinfo_sector(
   uint32_t                              free_count,
   uint32_t                              next_free
   );
-                       
+
 #ifdef __cplusplus
 }
 #endif
-                                            
+
 #endif /* __DOSFS_FAT_H__ */

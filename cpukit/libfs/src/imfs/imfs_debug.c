@@ -33,7 +33,7 @@
  *
  *  Printable names for each of the IMFS file system types.
  */
- 
+
 char *IMFS_types[ IMFS_NUMBER_OF_TYPES ] = {
   "directory",
   "device",
@@ -48,7 +48,7 @@ char *IMFS_types[ IMFS_NUMBER_OF_TYPES ] = {
  *  This routine prints the contents of the specified jnode.
  */
 
-void IMFS_print_jnode( 
+void IMFS_print_jnode(
   IMFS_jnode_t *the_jnode
 )
 {
