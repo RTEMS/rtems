@@ -18,6 +18,9 @@ General
 + A termios structure should be included to specify  the initial settings.
   Right now all drivers default to 9600, 8N1.
  
++ Need to switch to passing pointers rather than a minor number to 
+  functions which are strictly internal to each chip driver.  This
+  should be a performance win.
 
 MC68681
 =======
