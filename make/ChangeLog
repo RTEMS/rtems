@@ -1,16 +1,20 @@
 
+2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ChangeLog: File paths corrected.
+
 2000-08-04	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
-	* mvme167.cfg: Add specification of printk port, console port
+
 	* custom/mvme167.cfg: Add specification of printk port, console port
 	and serial I/O mode.  Arrange for the stripped executable to
 	be copied up the build tree.
         
 2000-08-10	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
-	* mbx8xx.cfg: Support for shared printk and no termios.
+
 	* custom/mbx8xx.cfg: Support for shared printk and no termios.
 
 2000-08-10	John Cotton  <john.cotton@nrc.ca>
-	* mbx8xx.cfg: Support added for dejagnu test harness.
+
 	* custom/mbx8xx.cfg: Support added for dejagnu test harness.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>

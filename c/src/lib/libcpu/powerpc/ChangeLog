@@ -1,11 +1,15 @@
+2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ChangeLog: File paths corrected.
+
 2000-08-10	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
-	* console-generic/console-generic.c: Addition of support for shared
-	printk and no termios.
+	* mpx8xx/console-generic/console-generic.c: Addition of support
+	for shared printk and no termios.
 
 2000-08-10	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
-	* console-generic/console-generic.c(m8xx_uart_pollWrite):
+	* mpx8xx/console-generic/console-generic.c(m8xx_uart_pollWrite):
 	Flush actual buffer.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
