@@ -23,7 +23,9 @@ extern "C" {
 #include <iosupp.h>
 #include <console.h>
 #include <clockdrv.h>
-
+#include <bspIo.h>
+#include <irq.h>
+  
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
@@ -128,12 +130,6 @@ BSP_EXTERN unsigned int   Idt_base;
 BSP_EXTERN unsigned int   Gdt_base;
 
 /* routines */
-
-i386_isr_entry set_vector(
-  rtems_isr_entry     handler,
-  rtems_vector_number vector,
-  int                 type
-);
 
 #ifdef __cplusplus
 }

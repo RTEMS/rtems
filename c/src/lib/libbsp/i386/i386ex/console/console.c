@@ -16,7 +16,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
- 
+#include <bspIo.h>
 #include <stdlib.h>
 
 #include "../start/80386ex.h"
@@ -109,6 +109,18 @@ rtems_boolean is_character_ready(
   return FALSE;
 }
 
+/*
+ * Wait for an input. May be used before  intr are ON.
+ */
+char BSP_wait_polled_input( void )
+{
+  char c;
+  while (!is_character_ready(&c))
+    continue;
+
+  return c;
+}
+     
 /*  inbyte
  *
  *  This routine reads a character from the UART.
@@ -277,3 +289,8 @@ rtems_device_driver console_control(
 {
   return RTEMS_SUCCESSFUL;
 }
+
+BSP_output_char_function_type 		BSP_output_char = outbyte;
+BSP_polling_getchar_function_type 	BSP_poll_char = BSP_wait_polled_input;
+
+void BSP_emergency_output_init() {}

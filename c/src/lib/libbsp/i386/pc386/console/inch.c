@@ -295,7 +295,7 @@ _IBMPC_inch(void)
   */
  
 char
-debugPollingGetChar(void)
+BSP_wait_polled_input(void)
 {
   char c;
   while (!_IBMPC_scankey(&c))

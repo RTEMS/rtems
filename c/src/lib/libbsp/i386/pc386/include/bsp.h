@@ -52,6 +52,7 @@ extern "C" {
 #include <console.h>
 #include <clockdrv.h>
 #include <libcpu/cpu.h>
+#include <bspIo.h>
   
 /*-------------------------------------------------------------------------+
 | Constants

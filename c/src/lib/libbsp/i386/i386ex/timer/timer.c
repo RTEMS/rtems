@@ -27,11 +27,13 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <stdlib.h>
 
 int Ttimer_val;
 rtems_boolean Timer_driver_Find_average_overhead;
 
-rtems_isr timerisr();
+extern void timerisr();
+extern int ClockIsOn(const rtems_raw_irq_connect_data*);
 
 #define TMR0	  0xF040
 #define TMR1	  0xF041
@@ -39,10 +41,8 @@ rtems_isr timerisr();
 #define TMRCON	  0xF043
 #define TMRCFG    0xF834
 
-void Timer_initialize()
+void TimerOn(const rtems_raw_irq_connect_data* used)
 {
-
-  (void) set_vector( timerisr, 0x2a, 0 );   /* install ISR ( IR2 ) was 0x38*/
 
   Ttimer_val = 0;                           /* clear timer ISR count */
 
@@ -51,8 +51,58 @@ void Timer_initialize()
   outport_byte	( TMR1   , 0x00 );
   outport_byte  ( TMRCON , 0x64 ); /* change to mode 2 ( starts timer ) */ 
                                    /* interrupts ARE enabled */
-/*  outport_byte( IERA, 0x41 );             enable interrupt */
+  /*  outport_byte( IERA, 0x41 );             enable interrupt */
+  /*
+   * enable interrrupt at i8259 level
+   */
+  pc386_irq_enable_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);
+}
 
+void TimerOff(const rtems_raw_irq_connect_data* used)
+{
+    /*
+     * disable interrrupt at i8259 level
+     */
+     pc386_irq_disable_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);
+     /* reset timer mode to standard (DOS) value */
+}
+
+static rtems_raw_irq_connect_data timer_raw_irq_data = {
+  PC_386_RT_TIMER3 + PC386_IRQ_VECTOR_BASE,
+  timerisr,
+  TimerOn,
+  TimerOff,
+  ClockIsOn
+};
+
+void Timer_exit()
+{
+ if (!i386_delete_idt_entry(&timer_raw_irq_data)) {
+      printk("Timer raw handler deconnexion failed\n");
+      rtems_fatal_error_occurred(1);
+ }
+}
+
+void Timer_initialize()
+{
+
+  static rtems_boolean First = TRUE;
+
+  if (First)
+  {
+    First = FALSE;
+
+    atexit(Timer_exit); /* Try not to hose the system at exit. */
+    if (!i386_set_idt_entry (&timer_raw_irq_data)) {
+      printk("raw handler connexion failed\n");
+      rtems_fatal_error_occurred(1);
+    }
+  }
+  /* wait for ISR to be called at least once */
+  Ttimer_val = 0;
+  while (Ttimer_val == 0)
+    continue;
+  Ttimer_val = 0;
 }
 
 #define AVG_OVERHEAD      3  /* It typically takes 3.0 microseconds */

@@ -61,6 +61,8 @@ static rtems_irq_connect_data console_isr_data = {PC_386_KEYBOARD,
 						   
 
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
+extern BSP_polling_getchar_function_type BSP_wait_polled_input();
+extern void _IBMPC_initVideo();
 
 void console_reserve_resources(rtems_configuration_table *conf)
 {
@@ -475,6 +477,16 @@ conSetAttr(int minor, const struct termios *t)
   return 0;
 }
 
+/*
+ * BSP initialization
+ */
+
+BSP_output_char_function_type BSP_output_char = (BSP_output_char_function_type) _IBMPC_outch;
+BSP_polling_getchar_function_type 	BSP_poll_char = BSP_wait_polled_input;
+void BSP_emergency_output_init()
+{
+  _IBMPC_initVideo();
+}
 
 
 

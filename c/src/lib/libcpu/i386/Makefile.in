@@ -8,7 +8,6 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-PGM=${ARCH}/libcpu.rel
 
 # C source names, if any, go here -- minus the .c
 C_PIECES=cpu displayCpu
@@ -26,7 +25,9 @@ SRCS=$(C_FILES) $(H_FILES)
 OBJS=$(C_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
+
+LIB=${ARCH}/libcpuspec.a
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -50,14 +51,14 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-${PGM}: ${SRCS} ${OBJS}
-	$(make-rel)
+${LIB}: ${SRCS} ${OBJS}
+	$(make-library)
 
 preinstall :
 	$(MKDIR) $(PROJECT_INCLUDE)/libcpu
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/libcpu
 
-all:	${ARCH} $(SRCS) preinstall $(OBJ) $(PGM)
+all:	${ARCH} $(SRCS) preinstall $(OBJ) $(LIB)
 	cd wrapup; $(MAKE)
 
 # the .rel file built here will be put into libcpu.a by ../wrapup/Makefile

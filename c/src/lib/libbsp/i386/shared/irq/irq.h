@@ -55,8 +55,9 @@ typedef enum {
 
   PC386_UART_COM1_IRQ		=	4,
 
-  PC_386_RT_TIMER1	      	= 	8
-
+  PC_386_RT_TIMER1	      	= 	8,
+  
+  PC_386_RT_TIMER3		= 	10
 }rtems_irq_symbolic_name;
 
     

@@ -114,5 +114,8 @@ void bsp_start( void )
    */
 
   /*   console_reserve_resources( &BSP_Configuration ); */
-
+  /*
+   * Init rtems_interrupt_management
+   */
+  rtems_irq_mngt_init();
 }

@@ -173,7 +173,7 @@ static const char * getmodel(int x86, int model)
 
 void printCpuInfo()
 {
-  int i, len = 0;
+  int i;
   static const char *x86_cap_flags[] = {
     "fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
     "cx8", "apic", "10", "11", "mtrr", "pge", "mca", "cmov",

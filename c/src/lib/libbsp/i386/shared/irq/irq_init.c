@@ -15,6 +15,7 @@
 #include <libcpu/cpu.h>
 #include <irq.h>
 #include <bsp.h>
+#include <bspIo.h>
 
 /*
  * rtems prologue generated in irq_asm.S
@@ -137,7 +138,7 @@ void  rtems_irq_mngt_init()
       /*
        * put something here that will show the failure...
        */
-      _IBMPC_initVideo();
+      BSP_emergency_output_init();
       printk("Unable to initialize IDT!!! System locked\n");
       while (1);
     }
@@ -172,7 +173,7 @@ void  rtems_irq_mngt_init()
       /*
        * put something here that will show the failure...
        */
-      _IBMPC_initVideo();
+      BSP_emergency_output_init();
       printk("Unable to initialize RTEMS interrupt Management!!! System locked\n");
       while (1);
     }
@@ -187,7 +188,7 @@ void  rtems_irq_mngt_init()
        */
       unsigned tmp;
 
-      _IBMPC_initVideo();
+      BSP_emergency_output_init();
       
       printk("idt_entry_tbl =  %x Interrupt_descriptor_table addr = %x\n",
 	     idt_entry_tbl, &Interrupt_descriptor_table);
@@ -196,7 +197,7 @@ void  rtems_irq_mngt_init()
 	     tmp, (unsigned) rtems_irq_prologue_0);
     }
     printk("i8259s_cache = %x\n", * (unsigned short*) &i8259s_cache);
-    debugPollingGetChar();
+    BSP_wait_polled_input();
 #endif    
     asm volatile ("sti");
 }

@@ -176,7 +176,7 @@ void timerOn(const rtems_raw_irq_connect_data* used)
      outport_byte(TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 0 & 0xff);
      outport_byte(TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 8 & 0xff);
     /*
-     * disable interrrupt at i8259 level
+     * enable interrrupt at i8259 level
      */
      pc386_irq_enable_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);
 }

@@ -29,4 +29,4 @@ extern char x86_vendor_id[13];
 extern int have_cpuid;  
 extern unsigned char Cx86_step; /* cyrix processor identification */
 
-extern voidget_cpuinfo(); /* Display this information in ascii form */
+extern void printCpuInfo(); /* Display this information on console in ascii form */

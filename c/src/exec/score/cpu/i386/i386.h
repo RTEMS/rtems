@@ -129,67 +129,6 @@ static inline unsigned int i386_swap_U16(
     return (sout);
 }
 
-/*
- *  IO Port Access Routines
- */
-
-#define i386_outport_byte( _port, _value ) \
-   { register unsigned short __port  = _port; \
-     register unsigned char  __value = _value; \
-     \
-     asm volatile ( "outb %0,%1" : "=a" (__value), "=d" (__port) \
-                                 : "0"   (__value), "1"  (__port) \
-                  ); \
-   }
-
-#define i386_outport_word( _port, _value ) \
-   { register unsigned short __port  = _port; \
-     register unsigned short __value = _value; \
-     \
-     asm volatile ( "outw %0,%1" : "=a" (__value), "=d" (__port) \
-                                 : "0"   (__value), "1"  (__port) \
-                  ); \
-   }
-
-#define i386_outport_long( _port, _value ) \
-   { register unsigned short __port  = _port; \
-     register unsigned int  __value = _value; \
-     \
-     asm volatile ( "outl %0,%1" : "=a" (__value), "=d" (__port) \
-                                 : "0"   (__value), "1"  (__port) \
-                  ); \
-   }
-
-#define i386_inport_byte( _port, _value ) \
-   { register unsigned short __port  = _port; \
-     register unsigned char  __value = 0; \
-     \
-     asm volatile ( "inb %1,%0" : "=a" (__value), "=d" (__port) \
-                                : "0"   (__value), "1"  (__port) \
-                  ); \
-     _value = __value; \
-   }
-
-#define i386_inport_word( _port, _value ) \
-   { register unsigned short __port  = _port; \
-     register unsigned short __value = 0; \
-     \
-     asm volatile ( "inw %1,%0" : "=a" (__value), "=d" (__port) \
-                                : "0"   (__value), "1"  (__port) \
-                  ); \
-     _value = __value; \
-   }
-
-#define i386_inport_long( _port, _value ) \
-   { register unsigned short __port  = _port; \
-     register unsigned int  __value = 0; \
-     \
-     asm volatile ( "inl %1,%0" : "=a" (__value), "=d" (__port) \
-                                : "0"   (__value), "1"  (__port) \
-                  ); \
-     _value = __value; \
-   }
-
 
 /* routines */
 

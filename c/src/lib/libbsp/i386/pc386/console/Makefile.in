@@ -10,6 +10,8 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 PGM=${ARCH}/console.rel
 
+IMPORT_SRC=$(srcdir)/../../shared/io/printk.c
+
 # C source names, if any, go here -- minus the .c
 C_PIECES=console inch outch printk
 C_FILES=$(C_PIECES:%=%.c)
@@ -50,10 +52,13 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
+preinstall:
+	${CP} ${IMPORT_SRC} .
+
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
-all:	${ARCH} $(SRCS) $(PGM)
+all:	${ARCH} preinstall $(SRCS) $(PGM)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install:  all

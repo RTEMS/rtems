@@ -28,6 +28,12 @@
         PUBLIC (timerisr)
 SYM (timerisr):
         addl    $250, SYM (Ttimer_val)   # another 250 microseconds
+	pushl	eax
+	movb	0xa0,al		/* signal generic End Of Interrupt (EOI) to slave PIC */
+	outb	al, $0x20
+	movb	$0x20, al
+	outb	al, $0x20	/* signal generic EOI to Master PIC */
+	popl	eax
         iret
 
 END_CODE

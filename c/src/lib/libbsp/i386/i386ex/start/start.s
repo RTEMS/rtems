@@ -33,6 +33,10 @@
 #include "macros.inc"
 #include "80386ex.inc"
 
+/*
+ * Needed for binutils 2.9.1.0.7 and higher
+ * #define NEXT_GAS
+ */			
 
         EXTERN (main)              /* exits to bspstart   */ 
 	EXTERN (stack_start)       /* defined in startup/linkcmds */
@@ -179,6 +183,9 @@ SYM(reset):
 	.code16
 	nop
 	cli
+#ifdef NEXT_GAS	
+	addr32
+#endif	
 	jmp     SYM(_initInternalRegisters) /* different section in this file */
 	.code32                             /* in case this section moves     */
 	nop                                 /* required by CHIP LAB to pad out size */
@@ -192,8 +199,8 @@ SYM(reset):
 /*
  * Enable access to peripheral register at expanded I/O addresses
  */
-	.code16
 SYM(_initInternalRegisters):	
+	.code16
 	movw    $0x8000	, ax           
 	outb	al	, $REMAPCFGH
 	xchg	al	, ah
@@ -406,8 +413,8 @@ SYM(InitInt):
 
 	SetExRegByte(ICW1M  , 0x11 ) # edge triggered
 	SetExRegByte(ICW2M  , 0x20 )  # base vector starts at byte 32
-	SetExRegByte(ICW3M  , 0x04 ) # IR2 is cascaded internally
-	SetExRegByte(ICW4M  , 0X03 ) # AEOI MODE FIRST!
+	SetExRegByte(ICW3M  , 0x02 ) # IR2 is cascaded internally
+	SetExRegByte(ICW4M  , 0x01 ) # idem
 	
 	SetExRegByte(OCW1M  , 0xde ) # IR0  only = 0xfe.  for IR5 and IR0 active use 0xde
 	SetExRegByte(INTCFG , 0x00 )
@@ -481,7 +488,10 @@ SYM(xfer_gdt):
 	
 	movw $ _ram_gdt_segment, ax
 	mov    ax              , ds
-
+#ifdef NEXT_GAS	
+	data32
+	addr32
+#endif	
         lgdt	_ram_gdt_offset	    #  location of GDT
 
 	
@@ -494,16 +504,16 @@ SYM(SetUCS):
 /***************************
  * Switch to Protected Mode
  ***************************/
-	mov	%cr0, eax
+	mov	cr0, eax
 	orw	$0x1, ax
-	mov	eax, %cr0
+	mov	eax, cr0
 	
 /**************************
  * Flush prefetch queue,
  * and load CS selector
  *********************/
 
-	ljmp $ GDT_CODE_PTR , $  SYM(_copy_data) # sets the code selector
+	ljmpl $ GDT_CODE_PTR , $  SYM(_copy_data) # sets the code selector
 /*
  * Copy the data section down to RAM
  */

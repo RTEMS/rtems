@@ -21,18 +21,15 @@
  */
 
 #include <bsp.h>
+#include <irq.h>
 
 #include <rtems/libio.h>
 
 #include <stdlib.h>
 
-#define CLOCK_VECTOR 0x20
-
 rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
 
 volatile rtems_unsigned32 Clock_driver_ticks;
-
-rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
 
@@ -47,9 +44,7 @@ rtems_device_major_number rtems_clock_minor = 0;
  *  This is the ISR handler.
  */
 
-rtems_isr Clock_isr(
-  rtems_vector_number vector
-)
+void Clock_isr()
 {
   /* enable_tracing(); */
   Clock_driver_ticks += 1;
@@ -61,16 +56,13 @@ rtems_isr Clock_isr(
     Clock_isrs -= 1;
 }
 
-void Install_clock(
-  rtems_isr_entry clock_isr
-)
+void ClockOff(const rtems_irq_connect_data* unused)
 {
-  Clock_driver_ticks = 0;
-  Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+     /* should do something here */;
+}
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = ( rtems_isr_entry ) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-
+void ClockOn(const rtems_irq_connect_data* unused)
+{
 /*  The following is already set up in interns.s -> 
     ( This is test code only... production code will move the 
       TMRCFG stuff here )
@@ -81,24 +73,25 @@ void Install_clock(
 #define TMRCON	  0xF043
 #define TMRCFG    0xF834
 	
-	outport_byte	( TMRCFG , 0x80 );
+  outport_byte	( TMRCFG , 0x80 );
 
-	outport_byte    ( TMRCON , 0x34 ); 
-	outport_byte	( TMR0   , 0xA8 ); 
-	outport_byte    ( TMR0   , 0x04 ); 
+  outport_byte    ( TMRCON , 0x34 ); 
+  outport_byte	( TMR0   , 0xA8 ); 
+  outport_byte    ( TMR0   , 0x04 ); 
 
-	outport_byte    ( TMRCFG , 0x00 ); 
-  }
-  atexit( Clock_exit );
+  outport_byte    ( TMRCFG , 0x00 ); 
 }
 
-void Clock_exit( void )
+int ClockIsOn(const rtems_irq_connect_data* unused)
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-     /* should do something here */;
-  }
+  return ((i8259s_cache & 0x1) == 0);
 }
 
+static rtems_irq_connect_data clockIrqData = {PC_386_PERIODIC_TIMER,
+					      Clock_isr,
+					      ClockOn,
+					      ClockOff,
+					      ClockIsOn};
 
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
@@ -106,8 +99,12 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
-  Install_clock( Clock_isr );
-
+  Clock_driver_ticks = 0;
+  Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+  if (!pc386_install_rtems_irq_handler (&clockIrqData)) {
+    printk("Unable to initialize system clock\n");
+    rtems_fatal_error_occurred(1);
+  }
   /*
    * make major/minor avail to others such as shared memory driver
    */
@@ -124,7 +121,6 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)
@@ -137,16 +133,21 @@ rtems_device_driver Clock_control(
  
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
-        Clock_isr(CLOCK_VECTOR);
+        Clock_isr();
     }
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-      rtems_interrupt_disable( isrlevel );
-       (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
-      rtems_interrupt_enable( isrlevel );
+      if (!pc386_install_rtems_irq_handler (&clockIrqData)) {
+	printk("Error installing clock interrupt handler!\n");
+	rtems_fatal_error_occurred(1);
+      }
     }
  
 done:
     return RTEMS_SUCCESSFUL;
 }
 
+void Clock_exit()
+{
+  pc386_remove_rtems_irq_handler (&clockIrqData);
+}
