@@ -380,7 +380,7 @@ int _POSIX_Condition_variables_Wait_support(
  
       status = pthread_mutex_unlock( mutex );
       if ( status )
-        return _POSIX_Mutex_From_core_mutex_status( status );
+        return status;
  
       the_cond->Mutex = *mutex;
  
@@ -392,7 +392,7 @@ int _POSIX_Condition_variables_Wait_support(
 
       status = pthread_mutex_lock( mutex );
       if ( status )
-        return _POSIX_Mutex_From_core_mutex_status( status );
+        return status;
     
       return _Thread_Executing->Wait.return_code;
   }
