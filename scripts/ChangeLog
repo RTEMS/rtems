@@ -1,3 +1,7 @@
+2004-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use RTEMS_ENABLE_RPMPREFIX.
+
 2004-01-28	RTEMS
 
 	* buildall.in, buildalltar.in, binutils/Makefile.am,
