@@ -15,6 +15,9 @@
 
 #include <pthread.h>
  
+#ifndef _POSIX_THREADS
+#error "rtems is supposed to have pthread_self"
+#endif
 
 void test( void )
 {

@@ -24,5 +24,16 @@ void test( void )
 
   signal_number = SIGALRM;
 
+  /*
+   *  Really should not reference sa_handler and sa_signction simultaneously.
+   */
+
+  act.sa_handler = SIG_DFL;
+  act.sa_handler = SIG_IGN;
+  act.sa_mask  = 0;
+  act.sa_flags = SA_NOCLDSTOP;
+  act.sa_flags = SA_SIGINFO;
+  act.sa_sigaction = NULL;
+
   result = sigaction( signal_number, &act, &oact );
 }

@@ -16,6 +16,14 @@
 #include <pthread.h>
 #include <limits.h>  /* only for PTHREAD_STACK_MIN */
 
+#ifndef _POSIX_THREADS
+#error "rtems is supposed to have pthread_setstacksize"
+#endif
+
+#ifndef _POSIX_THREAD_ATTR_STACKSIZE
+#error "rtems is supposed to have pthread_setstacksize"
+#endif
+
 void test( void )
 {
   int             result;

@@ -15,6 +15,10 @@
 
 #include <pthread.h>
 
+#ifndef _POSIX_THREADS
+#error "rtems is supposed to have pthread_exit"
+#endif
+
 void test( void )
 {
   void   *status = NULL;

@@ -15,6 +15,10 @@
 
 #include <pthread.h>
 
+#ifndef _POSIX_THREADS
+#error "rtems is supposed to have pthread_attr_destroy"
+#endif
+
 void test( void )
 {
   int             result;

@@ -22,11 +22,11 @@
 void test( void )
 {
   pthread_attr_t  attr;
-  int             contentsionscope;
+  int             contentionscope;
   int             status;
 
-  contentsionscope = PTHREAD_SCOPE_SYSTEM;
-  contentsionscope = PTHREAD_SCOPE_PROCESS;
+  contentionscope = PTHREAD_SCOPE_SYSTEM;
+  contentionscope = PTHREAD_SCOPE_PROCESS;
 
-  status = pthread_attr_setscope( &attr, contentsionscope );
+  status = pthread_attr_setscope( &attr, contentionscope );
 }

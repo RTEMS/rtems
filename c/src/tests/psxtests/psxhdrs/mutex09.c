@@ -15,6 +15,13 @@
 
 #include <pthread.h>
  
+#ifndef _POSIX_THREAD_PRIO_INHERIT
+#error "rtems is supposed to have pthread_mutexattr_setprioceiling"
+#endif
+#ifndef _POSIX_THREAD_PRIO_PROTECT
+#error "rtems is supposed to have pthread_mutexattr_setprioceiling"
+#endif
+
 void test( void )
 {
   pthread_mutexattr_t attribute;

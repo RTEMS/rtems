@@ -15,9 +15,13 @@
 
 #include <pthread.h>
  
+#ifndef _POSIX_THREADS
+#error "rtems is supposed to have pthread_mutex_destroy"
+#endif
+
 void test( void )
 {
-  pthread_mutex_t     mutex = PTHREAD_MUTEX_INITIALIZER;
+  pthread_mutex_t  mutex = PTHREAD_MUTEX_INITIALIZER;
   int result;
 
   result = pthread_mutex_destroy( &mutex );

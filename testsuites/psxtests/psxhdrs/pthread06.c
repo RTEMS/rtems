@@ -15,6 +15,14 @@
 
 #include <pthread.h>
  
+#ifndef _POSIX_THREADS
+#error "rtems is supposed to have pthread_getstacksize"
+#endif
+
+#ifndef _POSIX_THREAD_ATTR_STACKSIZE
+#error "rtems is supposed to have pthread_getstacksize"
+#endif
+
 void test( void )
 {
   int             result;

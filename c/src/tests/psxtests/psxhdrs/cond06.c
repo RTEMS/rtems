@@ -15,6 +15,10 @@
 
 #include <pthread.h>
  
+#ifndef _POSIX_THREADS
+#error "rtems is supposed to have pthread_cond_wait"
+#endif
+
 void test( void )
 {
   pthread_cond_t  cond  = PTHREAD_COND_INITIALIZER;
