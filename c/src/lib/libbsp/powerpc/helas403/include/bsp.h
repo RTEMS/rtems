@@ -44,6 +44,8 @@
 extern "C" {
 #endif
 
+#include <bspopts.h>
+
 /*
  *  confdefs.h overrides for this BSP:
  *   - number of termios serial ports (defaults to 1)

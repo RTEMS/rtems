@@ -29,6 +29,8 @@
 #ifndef __BSP_h
 #define __BSP_h
 
+#include <bspopts.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

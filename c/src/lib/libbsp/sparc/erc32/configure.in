@@ -24,6 +24,13 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
+## bsp-specific options
+CONSOLE_USE_INTERRUPTS=${CONSOLE_USE_INTERRUPTS-0}
+AC_DEFINE_UNQUOTED([CONSOLE_USE_INTERRUPTS],
+  [$CONSOLE_USE_INTERRUPTS],
+  [whether using console interrupts])
+
+AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here

@@ -26,6 +26,8 @@
 extern "C" {
 #endif
 
+#include <bspopts.h>
+
 #include <rtems.h>
 #include <iosupp.h>
 #include <libcpu/erc32.h>
