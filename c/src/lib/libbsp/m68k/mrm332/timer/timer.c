@@ -1,6 +1,6 @@
 /*  Timer_init()
  *
- *  This routine initializes a timer in efi68k's DP8570A TCP
+ *  This routine is not implemented for this BSP.
  *
  *  Input parameters:  NONE
  *
