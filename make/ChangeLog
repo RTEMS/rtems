@@ -1,4 +1,9 @@
 
+2000-12-14	Emmanuel Raguet <raguet@crf.canon.fr>
+
+	* custom/mcp750.cfg: Fix problems in generation of .exe file.
+	Still need to fix to avoid touching install point on non-install stanza.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/vegaplus.cfg: Fix make-exe rule and eliminate mkdir
