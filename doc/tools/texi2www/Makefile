@@ -16,11 +16,12 @@ all: html info ps
 dirs:
 	$(make-dirs)
 
-FILES= texi2wwwdoc.texi
+FILES= texi2www.texi
 
 info: 
 
 dvi: $(PROJECT).dvi
+
 ps: dirs $(PROJECT).ps
 	
 $(PROJECT).ps: $(PROJECT).dvi
@@ -30,7 +31,6 @@ $(PROJECT).ps: $(PROJECT).dvi
 # run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) -v $(PROJECT).texi
-	texi2dvi -v $(PROJECT).texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
@@ -39,7 +39,8 @@ html: dirs $(FILES)
 
 clean:
 	rm -f *.o $(PROG) *.txt core 
-	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
+	rm -f *.dvi *.ps *.log *.aux *.cp *.cps \
+	rm -f *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT)-* $(GENERATED_FILES)
 	rm -f *.fixed _*
 
