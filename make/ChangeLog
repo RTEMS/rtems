@@ -1,4 +1,10 @@
 
+2001-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/p4000.cfg, custom/p4600.cfg, custom/p4650.cfg: Remove
+	unneeded definitions when compiled for "mips" rather than "mips64orion."
+	Correct CPU_CFLAGS.
+
 2001-01-05	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/gensh1.cfg: Removed rest of make-target-options and
