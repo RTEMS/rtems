@@ -192,7 +192,7 @@ rtems_status_code rtems_io_initialize(
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].initialization;
+    callout = _IO_Driver_address_table[major].initialization_entry;
     return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
@@ -222,7 +222,7 @@ rtems_status_code rtems_io_open(
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].open;
+    callout = _IO_Driver_address_table[major].open_entry;
     return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
@@ -252,7 +252,7 @@ rtems_status_code rtems_io_close(
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].close;
+    callout = _IO_Driver_address_table[major].close_entry;
     return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
@@ -282,7 +282,7 @@ rtems_status_code rtems_io_read(
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].read;
+    callout = _IO_Driver_address_table[major].read_entry;
     return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
@@ -312,7 +312,7 @@ rtems_status_code rtems_io_write(
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].write;
+    callout = _IO_Driver_address_table[major].write_entry;
     return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
@@ -342,7 +342,7 @@ rtems_status_code rtems_io_control(
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].control;
+    callout = _IO_Driver_address_table[major].control_entry;
     return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 

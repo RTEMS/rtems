@@ -57,12 +57,12 @@ typedef rtems_device_driver ( *rtems_device_driver_entry )(
              );
 
 typedef struct {
-  rtems_device_driver_entry initialization; /* initialization procedure */
-  rtems_device_driver_entry open;           /* open request procedure */
-  rtems_device_driver_entry close;          /* close request procedure */
-  rtems_device_driver_entry read;           /* read request procedure */
-  rtems_device_driver_entry write;          /* write request procedure */
-  rtems_device_driver_entry control;        /* special functions procedure */
+  rtems_device_driver_entry initialization_entry; /* initialization procedure */
+  rtems_device_driver_entry open_entry;        /* open request procedure */
+  rtems_device_driver_entry close_entry;       /* close request procedure */
+  rtems_device_driver_entry read_entry;        /* read request procedure */
+  rtems_device_driver_entry write_entry;       /* write request procedure */
+  rtems_device_driver_entry control_entry;     /* special functions procedure */
 }   rtems_driver_address_table;
  
 /*
