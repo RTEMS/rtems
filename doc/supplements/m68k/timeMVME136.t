@@ -11,36 +11,8 @@
 \global\advance \smallskipamount by -4pt
 @end tex
 
-@ifinfo
-@node MVME136 Timing Data, MVME136 Timing Data Introduction, Timing Specification Terminology, Top
-@end ifinfo
 @chapter MVME136 Timing Data
-@ifinfo
-@menu
-* MVME136 Timing Data Introduction::
-* MVME136 Timing Data Hardware Platform::
-* MVME136 Timing Data Interrupt Latency::
-* MVME136 Timing Data Context Switch::
-* MVME136 Timing Data Directive Times::
-* MVME136 Timing Data Task Manager::
-* MVME136 Timing Data Interrupt Manager::
-* MVME136 Timing Data Clock Manager::
-* MVME136 Timing Data Timer Manager::
-* MVME136 Timing Data Semaphore Manager::
-* MVME136 Timing Data Message Manager::
-* MVME136 Timing Data Event Manager::
-* MVME136 Timing Data Signal Manager::
-* MVME136 Timing Data Partition Manager::
-* MVME136 Timing Data Region Manager::
-* MVME136 Timing Data Dual-Ported Memory Manager::
-* MVME136 Timing Data I/O Manager::
-* MVME136 Timing Data Rate Monotonic Manager::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node MVME136 Timing Data Introduction, MVME136 Timing Data Hardware Platform, MVME136 Timing Data, MVME136 Timing Data
-@end ifinfo
 @section Introduction
 
 The timing data for the MC68020 version of RTEMS is
@@ -51,9 +23,6 @@ understanding of each directive time provided.  Also, provided
 is a description of the interrupt latency and the context switch
 times as they pertain to the MC68020 version of RTEMS.
 
-@ifinfo
-@node MVME136 Timing Data Hardware Platform, MVME136 Timing Data Interrupt Latency, MVME136 Timing Data Introduction, MVME136 Timing Data
-@end ifinfo
 @section Hardware Platform
 
 All times reported except for the maximum period
@@ -77,9 +46,6 @@ should be noted that the worst case instruction times for the
 MC68020 assume that the internal cache is disabled and that no
 instructions overlap.
 
-@ifinfo
-@node MVME136 Timing Data Interrupt Latency, MVME136 Timing Data Context Switch, MVME136 Timing Data Hardware Platform, MVME136 Timing Data
-@end ifinfo
 @section Interrupt Latency
 
 The maximum period with interrupts disabled within
@@ -104,9 +70,6 @@ overhead time was generated on an MVME135 benchmark platform
 using the Multiprocessing Communications registers to generate
 as the interrupt source.
 
-@ifinfo
-@node MVME136 Timing Data Context Switch, MVME136 Timing Data Directive Times, MVME136 Timing Data Interrupt Latency, MVME136 Timing Data
-@end ifinfo
 @section Context Switch
 
 The RTEMS processor context switch time is RTEMS_NO_FP_CONTEXTS
@@ -143,8 +106,3 @@ are executing.  The state of the coprocessor is task specific.
 The following table summarizes the context switch
 times for the MVME135 benchmark platform:
 
-@include timetbl.texi
-
-@tex
-\global\advance \smallskipamount by 4pt
-@end tex

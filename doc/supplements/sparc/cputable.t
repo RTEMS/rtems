@@ -6,20 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Processor Dependent Information Table, Processor Dependent Information Table Introduction, Board Support Packages Processor Initialization, Top
-@end ifinfo
 @chapter Processor Dependent Information Table
-@ifinfo
-@menu
-* Processor Dependent Information Table Introduction::
-* Processor Dependent Information Table CPU Dependent Information Table::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Processor Dependent Information Table Introduction, Processor Dependent Information Table CPU Dependent Information Table, Processor Dependent Information Table, Processor Dependent Information Table
-@end ifinfo
 @section Introduction
 
 Any highly processor dependent information required
@@ -28,9 +16,6 @@ Dependent Information Table.  This table is not required for all
 processors supported by RTEMS.  This chapter describes the
 contents, if any, for a particular processor type.
 
-@ifinfo
-@node Processor Dependent Information Table CPU Dependent Information Table, Memory Requirements, Processor Dependent Information Table Introduction, Processor Dependent Information Table
-@end ifinfo
 @section CPU Dependent Information Table
 
 The SPARC version of the RTEMS CPU Dependent

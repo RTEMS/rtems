@@ -73,7 +73,7 @@ END-INFO-DIR-ENTRY
 @include cputable.texi
 @include wksheets.texi
 @include timing.texi
-@include timedata.texi
+@include timeMVME136.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top c_m68k

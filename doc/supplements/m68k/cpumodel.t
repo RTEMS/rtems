@@ -6,26 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node CPU Model Dependent Features, CPU Model Dependent Features Introduction, Preface, Top
-@end ifinfo
 @chapter CPU Model Dependent Features
-@ifinfo
-@menu
-* CPU Model Dependent Features Introduction::
-* CPU Model Dependent Features CPU Model Name::
-* CPU Model Dependent Features Floating Point Unit::
-* CPU Model Dependent Features BFFFO Instruction::
-* CPU Model Dependent Features Vector Base Register::
-* CPU Model Dependent Features Separate Stacks::
-* CPU Model Dependent Features Pre-Indexing Address Mode::
-* CPU Model Dependent Features Extend Byte to Long Instruction::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node CPU Model Dependent Features Introduction, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features, CPU Model Dependent Features
-@end ifinfo
 @section Introduction
 
 Microprocessors are generally classified into
@@ -67,18 +49,12 @@ The set of CPU model feature macros are defined in the file
 c/src/exec/score/cpu/m68k/m68k.h based upon the particular CPU
 model defined on the compilation command line.
 
-@ifinfo
-@node CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features Introduction, CPU Model Dependent Features
-@end ifinfo
 @section CPU Model Name
 
 The macro CPU_MODEL_NAME is a string which designates
 the name of this CPU model.  For example, for the MC68020
 processor, this macro is set to the string "mc68020".
 
-@ifinfo
-@node CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features BFFFO Instruction, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features
-@end ifinfo
 @section Floating Point Unit
 
 The macro M68K_HAS_FPU is set to 1 to indicate that
@@ -87,42 +63,27 @@ otherwise.  It does not matter whether the hardware floating
 point support is incorporated on-chip or is an external
 coprocessor.
 
-@ifinfo
-@node CPU Model Dependent Features BFFFO Instruction, CPU Model Dependent Features Vector Base Register, CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features
-@end ifinfo
 @section BFFFO Instruction
 
 The macro M68K_HAS_BFFFO is set to 1 to indicate that
 this CPU model has the bfffo instruction.
 
-@ifinfo
-@node CPU Model Dependent Features Vector Base Register, CPU Model Dependent Features Separate Stacks, CPU Model Dependent Features BFFFO Instruction, CPU Model Dependent Features
-@end ifinfo
 @section Vector Base Register
 
 The macro M68K_HAS_VBR is set to 1 to indicate that
 this CPU model has a vector base register (vbr).
 
-@ifinfo
-@node CPU Model Dependent Features Separate Stacks, CPU Model Dependent Features Pre-Indexing Address Mode, CPU Model Dependent Features Vector Base Register, CPU Model Dependent Features
-@end ifinfo
 @section Separate Stacks
 
 The macro M68K_HAS_SEPARATE_STACKS is set to 1 to
 indicate that this CPU model has separate interrupt, user, and
 supervisor mode stacks.
 
-@ifinfo
-@node CPU Model Dependent Features Pre-Indexing Address Mode, CPU Model Dependent Features Extend Byte to Long Instruction, CPU Model Dependent Features Separate Stacks, CPU Model Dependent Features
-@end ifinfo
 @section Pre-Indexing Address Mode
 
 The macro M68K_HAS_PREINDEXING is set to 1 to indicate that
 this CPU model has the pre-indexing address mode.
 
-@ifinfo
-@node CPU Model Dependent Features Extend Byte to Long Instruction, Calling Conventions, CPU Model Dependent Features Pre-Indexing Address Mode, CPU Model Dependent Features
-@end ifinfo
 @section Extend Byte to Long Instruction
  
 The macro M68K_HAS_EXTB_L is set to 1 to indicate that this CPU model 

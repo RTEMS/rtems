@@ -15,6 +15,8 @@ REPLACE=../../tools/word-replace
 
 all: html info ps
 
+COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
+
 GENERATED_FILES=\
   cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
   bsp.texi cputable.texi timing.texi wksheets.texi timeFORCE386.texi
@@ -26,8 +28,6 @@ FILES= $(PROJECT).texi \
 
 dirs:
 	$(make-dirs)
-
-COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
 info: dirs c_i386
 	cp c_$(PROJECT) $(INFO_INSTALL)
@@ -45,8 +45,6 @@ $(PROJECT).ps: $(PROJECT).dvi
 
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
-
-replace: timedata.texi
 
 #
 #  Chapters which get automatic processing
@@ -151,20 +149,6 @@ timeFORCE386.texi: timeFORCE386_.t Makefile
 	    -n "Command and Variable Index" timeFORCE386_.t
 	mv timeFORCE386_.texi timeFORCE386.texi
 
-## Timing Chapter
-#
-#timetbl.t: ../../common/timetbl.t
-#	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-#            <../../common/timetbl.t >timetbl.t
-#
-#timetbl.texi: timetbl.t FORCE386_TIMES
-#	${REPLACE} -p FORCE386_TIMES timetbl.t
-#	mv timetbl.t.fixed timetbl.texi
-#
-#timedata.texi: timedata.t FORCE386_TIMES
-#	${REPLACE} -p FORCE386_TIMES timedata.t
-#	mv timedata.t.fixed timedata.texi
-
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_i386
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
@@ -175,8 +159,8 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_i386 c_i386-*
-	rm -f timedata.texi timetbl.texi intr.texi $(GENERATED_FILES)
-	rm -f timetbl.t wksheets.t wksheets_NOTIMES.t timing.t intr.t
-	rm -f timeFORCE386_.t
+	rm -f intr.t $(GENERATED_FILES)
+	rm -f wksheets.t wksheets_NOTIMES.t timing.t intr.t
+	rm -f timeFORCE386_.t timeFORCE386_.texi
 	rm -f *.fixed _*
 

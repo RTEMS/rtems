@@ -20,12 +20,12 @@ dirs:
 
 COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
-GENERATED_FILES= \
-  timing.texi wksheets.texi
+GENERATED_FILES=\
+  cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
+  bsp.texi cputable.texi timing.texi wksheets.texi timeMVME136.texi
 
 FILES= $(PROJECT).texi \
-  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
-  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi \
+  preface.texi \
   $(GENERATED_FILES)
 
 info: dirs c_m68k
@@ -44,27 +44,61 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-replace: timedata.texi
-
 #
 #  Chapters which get automatic processing
 #
 
-# CPU Model
-# Calling Conventions
-# Memory Model
+cpumodel.texi: cpumodel.t Makefile
+	$(BMENU) -p "Preface" \
+	    -u "Top" \
+	    -n "Calling Conventions" ${*}.t
+
+callconv.texi: callconv.t Makefile
+	$(BMENU) -p "CPU Model Dependent Features Extend Byte to Long Instruction" \
+	    -u "Top" \
+	    -n "Memory Model" ${*}.t
+
+memmodel.texi: memmodel.t Makefile
+	$(BMENU) -p "Calling Conventions User-Provided Routines" \
+	    -u "Top" \
+	    -n "Interrupt Processing" ${*}.t
+
+
+## Interrupt Chapter:
+##  1.  Replace Times and Sizes
+##  2.  Build Node Structure
+#
+#intr.texi: intr.t MVME136_TIMES
+#	${REPLACE} -p MVME136_TIMES intr.t
+#	mv intr.t.fixed intr.texi
 
 # Interrupt Chapter:
 #  1.  Replace Times and Sizes
 #  2.  Build Node Structure
+intr.t: intr_NOTIMES.t MVME136_TIMES
+	${REPLACE} -p MVME136_TIMES intr_NOTIMES.t
+	mv intr_NOTIMES.t.fixed intr.t
 
-intr.texi: intr.t MVME136_TIMES
-	${REPLACE} -p MVME136_TIMES intr.t
-	mv intr.t.fixed intr.texi
+intr.texi: intr.t Makefile
+	$(BMENU) -p "Memory Model Flat Memory Model" \
+	    -u "Top" \
+	    -n "Default Fatal Error Processing" ${*}.t
 
-# Fatal Error
-# BSP
-# CPU Table
+fatalerr.texi: fatalerr.t Makefile
+	$(BMENU) -p "Interrupt Processing Interrupt Stack" \
+	    -u "Top" \
+	    -n "Board Support Packages" ${*}.t
+
+bsp.texi: bsp.t Makefile
+	$(BMENU) -p "Default Fatal Error Processing Default Fatal Error Handler Operations" \
+	    -u "Top" \
+	    -n "Processor Dependent Information Table" ${*}.t
+
+cputable.texi: cputable.t Makefile
+	$(BMENU) -p "Board Support Packages Processor Initialization" \
+	    -u "Top" \
+	    -n "Memory Requirements" ${*}.t
+
 
 # Worksheets Chapter:
 #  1.  Obtain the Shared File
@@ -95,17 +129,25 @@ timing.texi: timing.t Makefile
             -u "Top" \
             -n "MVME136 Timing Data" ${*}.t
 
-timetbl.t: ../../common/timetbl.t
-	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-	      <../../common/timetbl.t >timetbl.t
+# Timing Data for BSP Chapter:
+#  1.  Copy the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
 
-timetbl.texi: timetbl.t MVME136_TIMES
-	${REPLACE} -p MVME136_TIMES timetbl.t
-	mv timetbl.t.fixed timetbl.texi
+timeMVME136_.t: ../../common/timetbl.t timeMVME136.t
+	cat timeMVME136.t ../../common/timetbl.t             >timeMVME136_.t
+	@echo                                               >>timeMVME136_.t
+	@echo "@tex"                                        >>timeMVME136_.t
+	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeMVME136_.t
+	@echo "@end tex"                                    >>timeMVME136_.t
+	${REPLACE} -p MVME136_TIMES timeMVME136_.t
+	mv timeMVME136_.t.fixed timeMVME136_.t
 
-timedata.texi: timedata.t MVME136_TIMES
-	${REPLACE} -p MVME136_TIMES timedata.t
-	mv timedata.t.fixed timedata.texi
+timeMVME136.texi: timeMVME136_.t Makefile
+	$(BMENU) -p "Timing Specification Terminology" \
+	    -u "Top" \
+	    -n "Command and Variable Index" timeMVME136_.t
+	mv timeMVME136_.texi timeMVME136.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_m68k
@@ -117,6 +159,7 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_m68k c_m68k-*
-	rm -f timedata.texi timetbl.texi intr.texi $(GENERATED_FILES)
-	rm -f timetbl.t wksheets.t wksheets_NOTIMES.t
+	rm -f intr.t $(GENERATED_FILES)
+	rm -f wksheets.t wksheets_NOTIMES.t
+	rm -f timeMVME136_.t timeMVME136_.texi
 	rm -f *.fixed _* timing.t

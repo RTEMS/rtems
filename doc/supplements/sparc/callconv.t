@@ -6,26 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Calling Conventions, Calling Conventions Introduction, CPU Model Dependent Features CPU Model Implementation Notes, Top
-@end ifinfo
 @chapter Calling Conventions
-@ifinfo
-@menu
-* Calling Conventions Introduction::
-* Calling Conventions Programming Model::
-* Calling Conventions Register Windows::
-* Calling Conventions Call and Return Mechanism::
-* Calling Conventions Calling Mechanism::
-* Calling Conventions Register Usage::
-* Calling Conventions Parameter Passing::
-* Calling Conventions User-Provided Routines::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Calling Conventions Introduction, Calling Conventions Programming Model, Calling Conventions, Calling Conventions
-@end ifinfo
 @section Introduction
 
 Each high-level language compiler generates
@@ -48,24 +30,11 @@ target processor are the same, different compilers may use
 different calling conventions.  As a result, calling conventions
 are both processor and compiler dependent.
 
-@ifinfo
-@node Calling Conventions Programming Model, Non-Floating Point Registers, Calling Conventions Introduction, Calling Conventions
-@end ifinfo
 @section Programming Model
-@ifinfo
-@menu
-* Non-Floating Point Registers::
-* Floating Point Registers::
-* Special Registers::
-@end menu
-@end ifinfo
 
 This section discusses the programming model for the
 SPARC architecture.
 
-@ifinfo
-@node Non-Floating Point Registers, Floating Point Registers, Calling Conventions Programming Model, Calling Conventions Programming Model
-@end ifinfo
 @subsection Non-Floating Point Registers
 
 The SPARC architecture defines thirty-two
@@ -224,9 +193,6 @@ describes the role of each of these registers:
 @end ifset
 
 
-@ifinfo
-@node Floating Point Registers, Special Registers, Non-Floating Point Registers, Calling Conventions Programming Model
-@end ifinfo
 @subsection Floating Point Registers
 
 The SPARC V7 architecture includes thirty-two,
@@ -260,9 +226,6 @@ outstanding instructions and by floating point exception
 handlers with the store double floating point queue (stdfq)
 instruction.
 
-@ifinfo
-@node Special Registers, Calling Conventions Register Windows, Floating Point Registers, Calling Conventions Programming Model
-@end ifinfo
 @subsection Special Registers
 
 The SPARC architecture includes two special registers
@@ -276,9 +239,6 @@ the psr and wim register are used to manage the register windows
 in the SPARC architecture.  The register windows are discussed
 in more detail below.
 
-@ifinfo
-@node Calling Conventions Register Windows, Calling Conventions Call and Return Mechanism, Special Registers, Calling Conventions
-@end ifinfo
 @section Register Windows
 
 The SPARC architecture includes the concept of
@@ -370,9 +330,6 @@ those parameters are available in its input registers.  This is
 a very efficient way to pass parameters as no data is actually
 moved by the save or restore instructions.
 
-@ifinfo
-@node Calling Conventions Call and Return Mechanism, Calling Conventions Calling Mechanism, Calling Conventions Register Windows, Calling Conventions
-@end ifinfo
 @section Call and Return Mechanism
 
 The SPARC architecture supports a simple yet
@@ -394,17 +351,11 @@ call and return mechanism does not automatically save and
 restore any registers.  This is accomplished via the save and
 restore instructions which manage the set of registers windows.
 
-@ifinfo
-@node Calling Conventions Calling Mechanism, Calling Conventions Register Usage, Calling Conventions Call and Return Mechanism, Calling Conventions
-@end ifinfo
 @section Calling Mechanism
 
 All RTEMS directives are invoked using the regular
 SPARC calling convention via the call instruction.
 
-@ifinfo
-@node Calling Conventions Register Usage, Calling Conventions Parameter Passing, Calling Conventions Calling Mechanism, Calling Conventions
-@end ifinfo
 @section Register Usage
 
 As discussed above, the call instruction does not
@@ -414,9 +365,6 @@ windows.  When a register window is allocated, the new set of
 local registers are available for the exclusive use of the
 subroutine which allocated this register set.
 
-@ifinfo
-@node Calling Conventions Parameter Passing, Calling Conventions User-Provided Routines, Calling Conventions Register Usage, Calling Conventions
-@end ifinfo
 @section Parameter Passing
 
 RTEMS assumes that arguments are placed in the
@@ -436,9 +384,6 @@ load first argument into o0
 invoke directive
 @end example
 
-@ifinfo
-@node Calling Conventions User-Provided Routines, Memory Model, Calling Conventions Parameter Passing, Calling Conventions
-@end ifinfo
 @section User-Provided Routines
 
 All user-provided routines invoked by RTEMS, such as

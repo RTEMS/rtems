@@ -8,23 +8,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Interrupt Processing, Interrupt Processing Introduction, Memory Model Flat Memory Model, Top
-@end ifinfo
 @chapter Interrupt Processing
-@ifinfo
-@menu
-* Interrupt Processing Introduction::
-* Interrupt Processing Vectoring of an Interrupt Handler::
-* Interrupt Processing Interrupt Levels::
-* Interrupt Processing Disabling of Interrupts by RTEMS::
-* Interrupt Processing Interrupt Stack::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Interrupt Processing Introduction, Interrupt Processing Vectoring of an Interrupt Handler, Interrupt Processing, Interrupt Processing
-@end ifinfo
 @section Introduction
 
 Different types of processors respond to the
@@ -42,24 +27,12 @@ unique architecture. Discussed in this chapter are the MC68xxx's
 interrupt response and control mechanisms as they pertain to
 RTEMS.
 
-@ifinfo
-@node Interrupt Processing Vectoring of an Interrupt Handler, Models Without Separate Interrupt Stacks, Interrupt Processing Introduction, Interrupt Processing
-@end ifinfo
 @section Vectoring of an Interrupt Handler
-@ifinfo
-@menu
-* Models Without Separate Interrupt Stacks::
-* Models With Separate Interrupt Stacks::
-@end menu
-@end ifinfo
 
 Depending on whether or not the particular CPU
 supports a separate interrupt stack, the MC68xxx family has two
 different interrupt handling models.
 
-@ifinfo
-@node Models Without Separate Interrupt Stacks, Models With Separate Interrupt Stacks, Interrupt Processing Vectoring of an Interrupt Handler, Interrupt Processing Vectoring of an Interrupt Handler
-@end ifinfo
 @subsection Models Without Separate Interrupt Stacks
 
 Upon receipt of an interrupt the MC68xxx family
@@ -70,9 +43,6 @@ the following actions:
 @item To Be Written
 @end itemize
 
-@ifinfo
-@node Models With Separate Interrupt Stacks, Interrupt Processing Interrupt Levels, Models Without Separate Interrupt Stacks, Interrupt Processing Vectoring of an Interrupt Handler
-@end ifinfo
 @subsection Models With Separate Interrupt Stacks
 
 Upon receipt of an interrupt the MC68xxx family
@@ -173,9 +143,6 @@ MC68xxx CPU models with separate interrupt stacks:
 @end html
 @end ifset
 
-@ifinfo
-@node Interrupt Processing Interrupt Levels, Interrupt Processing Disabling of Interrupts by RTEMS, Models With Separate Interrupt Stacks, Interrupt Processing
-@end ifinfo
 @section Interrupt Levels
 
 Eight levels (0-7) of interrupt priorities are
@@ -191,9 +158,6 @@ through 7 directly correspond to MC68xxx interrupt levels.  All
 other RTEMS interrupt levels are undefined and their behavior is
 unpredictable.
 
-@ifinfo
-@node Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing Interrupt Stack, Interrupt Processing Interrupt Levels, Interrupt Processing
-@end ifinfo
 @section Disabling of Interrupts by RTEMS
 
 During the execution of directive calls, critical
@@ -217,9 +181,6 @@ occur due to the inability of RTEMS to protect its critical
 sections.  However, ISRs that make no system calls may safely
 execute as non-maskable interrupts.
 
-@ifinfo
-@node Interrupt Processing Interrupt Stack, Default Fatal Error Processing, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing
-@end ifinfo
 @section Interrupt Stack
 
 RTEMS allocates the interrupt stack from the

@@ -20,12 +20,12 @@ dirs:
 
 COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
-GENERATED_FILES= \
-  timing.texi wksheets.texi
+GENERATED_FILES=\
+  cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
+  bsp.texi cputable.texi timing.texi wksheets.texi timeERC32.texi
 
 FILES= $(PROJECT).texi \
-  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
-  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi \
+  preface.texi \
   $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
@@ -46,27 +46,52 @@ $(PROJECT).ps: dirs $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-replace: timedata.texi
-
 #
 #  Chapters which get automatic processing
 #
 
-# CPU Model
-# Calling Conventions
-# Memory Model
+cpumodel.texi: cpumodel.t Makefile
+	$(BMENU) -p "Preface" \
+	    -u "Top" \
+	    -n "Calling Conventions" ${*}.t
+
+callconv.texi: callconv.t Makefile
+	$(BMENU) -p "CPU Model Dependent Features CPU Model Implementation Notes" \
+	    -u "Top" \
+	    -n "Memory Model" ${*}.t
+
+memmodel.texi: memmodel.t Makefile
+	$(BMENU) -p "Calling Conventions User-Provided Routines" \
+	    -u "Top" \
+	    -n "Interrupt Processing" ${*}.t
 
 # Interrupt Chapter:
 #  1.  Replace Times and Sizes
 #  2.  Build Node Structure
+intr.t: intr_NOTIMES.t ERC32_TIMES
+	${REPLACE} -p ERC32_TIMES intr_NOTIMES.t
+	mv intr_NOTIMES.t.fixed intr.t
 
-intr.texi: intr.t SIS_TIMES
-	${REPLACE} -p SIS_TIMES intr.t
-	mv intr.t.fixed intr.texi
+intr.texi: intr.t Makefile
+	$(BMENU) -p "Memory Model Flat Memory Model" \
+	    -u "Top" \
+	    -n "Default Fatal Error Processing" ${*}.t
 
-# Fatal Error
-# BSP
-# CPU Table
+fatalerr.texi: fatalerr.t Makefile
+	$(BMENU) -p "Interrupt Processing Interrupt Stack" \
+	    -u "Top" \
+	    -n "Board Support Packages" ${*}.t
+
+bsp.texi: bsp.t Makefile
+	$(BMENU) -p "Default Fatal Error Processing Default Fatal Error Handler Operations" \
+	    -u "Top" \
+	    -n "Processor Dependent Information Table" ${*}.t
+
+cputable.texi: cputable.t Makefile
+	$(BMENU) -p "Board Support Packages Processor Initialization" \
+	    -u "Top" \
+	    -n "Memory Requirements" ${*}.t
+
 
 # Worksheets Chapter:
 #  1.  Obtain the Shared File
@@ -76,8 +101,8 @@ intr.texi: intr.t SIS_TIMES
 wksheets_NOTIMES.t: ../../common/wksheets.t
 	cp ../../common/wksheets.t wksheets_NOTIMES.t
 
-wksheets.t: wksheets_NOTIMES.t SIS_TIMES
-	${REPLACE} -p SIS_TIMES wksheets_NOTIMES.t
+wksheets.t: wksheets_NOTIMES.t ERC32_TIMES
+	${REPLACE} -p ERC32_TIMES wksheets_NOTIMES.t
 	mv wksheets_NOTIMES.t.fixed wksheets.t
 
 wksheets.texi: wksheets.t Makefile
@@ -97,19 +122,26 @@ timing.texi: timing.t Makefile
             -u "Top" \
             -n "ERC32 Timing Data" ${*}.t
 
-# Timing Chapter
+# Timing Data for ERC32 BSP Chapter:
+#  1.  Copy the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
 
-timetbl.t: ../../common/timetbl.t
-	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-            <../../common/timetbl.t >timetbl.t
+timeERC32_.t: ../../common/timetbl.t timeERC32.t
+	cat timeERC32.t ../../common/timetbl.t               >timeERC32_.t
+	@echo                                               >>timeERC32_.t
+	@echo "@tex"                                        >>timeERC32_.t
+	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeERC32_.t
+	@echo "@end tex"                                    >>timeERC32_.t
+	${REPLACE} -p ERC32_TIMES timeERC32_.t
+	mv timeERC32_.t.fixed timeERC32_.t
 
-timetbl.texi: timetbl.t SIS_TIMES
-	${REPLACE} -p SIS_TIMES timetbl.t
-	mv timetbl.t.fixed timetbl.texi
+timeERC32.texi: timeERC32_.t Makefile
+	$(BMENU) -p "Timing Specification Terminology" \
+	    -u "Top" \
+	    -n "Command and Variable Index" timeERC32_.t
+	mv timeERC32_.texi timeERC32.texi
 
-timedata.texi: timedata.t SIS_TIMES
-	${REPLACE} -p SIS_TIMES timedata.t
-	mv timedata.t.fixed timedata.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
@@ -120,8 +152,9 @@ clean:
 	rm -f *.o $(PROG) *.txt core 
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
-	rm -f c_sparc c_sparc-*
-	rm -f timedata.texi timetbl.texi intr.texi $(GENERATED_FILES)
-	rm -f timetbl.t wksheets.t wksheets_NOTIMES.t timing.t
+	rm -f c_$(PROJECT) c_$(PROJECT)-*
+	rm -f intr.t $(GENERATED_FILES)
+	rm -f wksheets.t wksheets_NOTIMES.t timing.t
+	rm -f timeERC32_.t timeERC32_.texi
 	rm -f *.fixed _*
 

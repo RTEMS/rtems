@@ -127,7 +127,7 @@ timing.texi: timing.t Makefile
 #  3.  Build Node Structure
 
 timePSIM_.t: ../../common/timetbl.t timePSIM.t
-	cat timePSIM.t ../../common/timetbl.t             >timePSIM_.t
+	cat timePSIM.t ../../common/timetbl.t                >timePSIM_.t
 	@echo                                               >>timePSIM_.t
 	@echo "@tex"                                        >>timePSIM_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timePSIM_.t
@@ -147,7 +147,7 @@ timePSIM.texi: timePSIM_.t Makefile
 #  3.  Build Node Structure
 
 timeDMV177_.t: ../../common/timetbl.t timeDMV177.t
-	cat timeDMV177.t ../../common/timetbl.t             >timeDMV177_.t
+	cat timeDMV177.t ../../common/timetbl.t              >timeDMV177_.t
 	@echo                                               >>timeDMV177_.t
 	@echo "@tex"                                        >>timeDMV177_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeDMV177_.t
@@ -172,7 +172,7 @@ clean:
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_$(PROJECT) c_$(PROJECT)-*
 	rm -f intr.t $(GENERATED_FILES)
-	rm -f timetbl.t wksheets.t wksheets_NOTIMES.t timing.t
+	rm -f wksheets.t wksheets_NOTIMES.t timing.t
 	rm -f timePSIM_.t timePSIM_.texi
 	rm -f timeDMV177_.t timeDMV177_.texi
 	rm -f *.fixed _*

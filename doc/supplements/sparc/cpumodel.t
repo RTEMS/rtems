@@ -6,21 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node CPU Model Dependent Features, CPU Model Dependent Features Introduction, Preface, Top
-@end ifinfo
 @chapter CPU Model Dependent Features
-@ifinfo
-@menu
-* CPU Model Dependent Features Introduction::
-* CPU Model Dependent Features CPU Model Feature Flags::
-* CPU Model Dependent Features CPU Model Implementation Notes::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node CPU Model Dependent Features Introduction, CPU Model Dependent Features CPU Model Feature Flags, CPU Model Dependent Features, CPU Model Dependent Features
-@end ifinfo
 @section Introduction
 
 Microprocessors are generally classified into
@@ -42,19 +29,7 @@ in significant ways, the high level of compatibility makes it
 possible to share the bulk of the CPU dependent executive code
 across the entire family.
 
-@ifinfo
-@node CPU Model Dependent Features CPU Model Feature Flags, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features Introduction, CPU Model Dependent Features
-@end ifinfo
 @section CPU Model Feature Flags
-@ifinfo
-@menu
-* CPU Model Dependent Features CPU Model Name::
-* CPU Model Dependent Features Floating Point Unit::
-* CPU Model Dependent Features Bitscan Instruction::
-* CPU Model Dependent Features Number of Register Windows::
-* CPU Model Dependent Features Low Power Mode::
-@end menu
-@end ifinfo
 
 Each processor family supported by RTEMS has a
 list of features which vary between CPU models
@@ -78,9 +53,6 @@ The set of CPU model feature macros are defined in the file
 c/src/exec/score/cpu/sparc/sparc.h based upon the particular CPU
 model defined on the compilation command line.
 
-@ifinfo
-@node CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features CPU Model Feature Flags, CPU Model Dependent Features CPU Model Feature Flags
-@end ifinfo
 @subsection CPU Model Name
 
 The macro CPU_MODEL_NAME is a string which designates
@@ -88,27 +60,18 @@ the name of this CPU model.  For example, for the European Space
 Agency's ERC32 SPARC model, this macro is set to the string
 "erc32".
 
-@ifinfo
-@node CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features Bitscan Instruction, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features CPU Model Feature Flags
-@end ifinfo
 @subsection Floating Point Unit
 
 The macro SPARC_HAS_FPU is set to 1 to indicate that
 this CPU model has a hardware floating point unit and 0
 otherwise.
 
-@ifinfo
-@node CPU Model Dependent Features Bitscan Instruction, CPU Model Dependent Features Number of Register Windows, CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features CPU Model Feature Flags
-@end ifinfo
 @subsection Bitscan Instruction
 
 The macro SPARC_HAS_BITSCAN is set to 1 to indicate
 that this CPU model has the bitscan instruction.  For example,
 this instruction is supported by the Fujitsu SPARClite family.
 
-@ifinfo
-@node CPU Model Dependent Features Number of Register Windows, CPU Model Dependent Features Low Power Mode, CPU Model Dependent Features Bitscan Instruction, CPU Model Dependent Features CPU Model Feature Flags
-@end ifinfo
 @subsection Number of Register Windows
 
 The macro SPARC_NUMBER_OF_REGISTER_WINDOWS is set to
@@ -117,9 +80,6 @@ CPU model.  The SPARC architecture allows a for a maximum of
 thirty-two register window sets although most implementations
 only include eight.
 
-@ifinfo
-@node CPU Model Dependent Features Low Power Mode, CPU Model Dependent Features CPU Model Implementation Notes, CPU Model Dependent Features Number of Register Windows, CPU Model Dependent Features CPU Model Feature Flags
-@end ifinfo
 @subsection Low Power Mode
 
 The macro SPARC_HAS_LOW_POWER_MODE is set to one to
@@ -136,9 +96,6 @@ while ( TRUE ) @{
 
 The code required to enter low power mode is CPU model specific.
 
-@ifinfo
-@node CPU Model Dependent Features CPU Model Implementation Notes, Calling Conventions, CPU Model Dependent Features Low Power Mode, CPU Model Dependent Features
-@end ifinfo
 @section CPU Model Implementation Notes 
 
 The ERC32 is a custom SPARC V7 implementation based on the Cypress 601/602

@@ -24,8 +24,6 @@ GENERATED_FILES=\
   cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
   bsp.texi cputable.texi wksheets.texi timing.texi timeBSP.texi
 
-#  timetbl.texi timedata.texi wksheets.texi 
-
 FILES= $(PROJECT).texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
 
@@ -136,7 +134,8 @@ timeBSP_.t: ../../common/timetbl.t timeBSP.t
 timeBSP.texi: timeBSP_.t Makefile
 	$(BMENU) -p "Timing Specification Terminology" \
 	    -u "Top" \
-	    -n "Command and Variable Index" ${*}.t
+	    -n "Command and Variable Index" timeBSP_.t
+	mv timeBSP_.t timeBSP.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
@@ -152,3 +151,4 @@ clean:
 	rm -f intr.t 
 	rm -f timeBSP_.t timing.t
 	rm -f *.fixed _* $(GENERATED_FILES)
+	rm -f timeBSP_.t
