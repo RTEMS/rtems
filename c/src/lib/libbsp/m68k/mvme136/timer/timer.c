@@ -25,7 +25,6 @@
  */
 
 
-#include <rtems.h>
 #include <bsp.h>
 #include <z8036.h>
 

@@ -9,6 +9,9 @@
  *
  * $Id$
  * $Log$
+ * Revision 1.3  1995/10/06 16:32:21  joel
+ * moved to new development machine and went to gcc 2.7.0
+ *
  * Revision 1.2  1995/05/31  16:44:28  joel
  * fixing revision
  *
@@ -28,6 +31,7 @@ Strip the white space from the end of every line on the list of files.\n\
 ";
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <ctype.h>
 #include <stdlib.h>

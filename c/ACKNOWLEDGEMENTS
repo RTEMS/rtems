@@ -64,6 +64,12 @@ The following persons/organizations have made contributions:
   be considered general purpose controllers when used without the EFI 
   companion board(s). See the README in each BSP for more information.
 
++ The European Space Agency for sponsoring On-Line Applications Research 
+  to port RTEMS to the SPARC V7 architecture for use with their ERC32
+  radiation-hardened CPU.  Jiri Gaisler (jgais@wd.estec.esa.nl) deserves
+  special thanks for championing this port within the ESA was well as
+  for developing the SPARC Instruction Simulator used to test this port.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU

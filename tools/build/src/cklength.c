@@ -11,6 +11,9 @@
  *
  * $Id$
  * $Log$
+ * Revision 1.3  1995/10/06 16:32:20  joel
+ * moved to new development machine and went to gcc 2.7.0
+ *
  * Revision 1.2  1995/05/31  16:44:26  joel
  * fixing revision
  *
@@ -33,6 +36,7 @@ maximum line length.  The default maximum line length is 80.\n\
 ";
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <ctype.h>
 #include <stdlib.h>
