@@ -57,10 +57,13 @@ SYM (start_around):
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movec   isp,a0
         move.l  a0, SYM (initial_isp)
-#endif
-        move    usp,a0
+        movec   usp,a0
         move.l  a0, SYM (initial_usp)
+        movec   msp,a0
+        move.l  a0, SYM (initial_msp)
+#else
         move.l  a7, SYM (initial_msp)
+#endif
 
         |
         | zero out uninitialized data area
