@@ -1,3 +1,7 @@
+2001-10-23	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/rtems/asr.nil: Fixed typo.
+
 2001-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* macros/Makefile.am: Replace INLINES w/ MACROS (Fix stupid typo in

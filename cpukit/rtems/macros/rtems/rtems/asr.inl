@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_ASR_h
-#define __INLINE_ASR_h
+#ifndef __MACROS_ASR_h
+#define __MACROS_ASR_h
 
 #include <rtems/score/isr.h>
 
