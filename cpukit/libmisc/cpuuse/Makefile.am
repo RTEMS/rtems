@@ -5,7 +5,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libcpuuse-tmp
+LIBNAME = libcpuuse
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = cpuuse.c

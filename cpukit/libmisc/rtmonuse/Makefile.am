@@ -5,7 +5,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = librtmonuse-tmp
+LIBNAME = librtmonuse
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = rtmonuse.c

@@ -5,7 +5,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libuntar-tmp
+LIBNAME = libuntar
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = untar.c

@@ -7,20 +7,27 @@ LIB = $(ARCH)/libmisc.a
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am
 
-## XXX temporarily remove this from the list because it causes a 
-## XXX number of BSPs to not link "main(){}" used by autoconf
-##    ../serdbg/$(ARCH)/libserdbg-tmp.a
+TMP_LIBS = ../monitor/$(ARCH)/libmonitor.a
+TMP_LIBS += ../untar/$(ARCH)/libuntar.a
+TMP_LIBS += ../stackchk/$(ARCH)/libstackchk.a
+TMP_LIBS += ../cpuuse/$(ARCH)/libcpuuse.a
+TMP_LIBS += ../rtmonuse/$(ARCH)/librtmonuse.a
 
-if RTEMS_LIBSHELL
-RTEMS_LIBSHELL = ../shell/$(ARCH)/libshell-tmp.a
+## XXX temporarily remove this from the list because it causes a
+## XXX number of BSPs to not link "main(){}" used by autoconf
+# if LIBSERDBG
+# TMP_LIBS += ../serdbg/$(ARCH)/libserdbg.a
+# endif
+
+if LIBSHELL
+TMP_LIBS += ../shell/$(ARCH)/libshell.a
 endif
 
-TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a \
-    ../untar/$(ARCH)/libuntar-tmp.a ../stackchk/$(ARCH)/libstackchk-tmp.a \
-    ../cpuuse/$(ARCH)/libcpuuse-tmp.a ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \
-    $(RTEMS_LIBSHELL) ../dumpbuf/$(ARCH)/libdumpbuf-tmp.a \
-    ../devnull/$(ARCH)/libdevnull-tmp.a ../dummy/$(ARCH)/libdummy-tmp.a \
-    ../mw-fb/$(ARCH)/libmw-fb-tmp.a ../capture/$(ARCH)/libcapture-tmp.a
+TMP_LIBS += ../dumpbuf/$(ARCH)/libdumpbuf.a
+TMP_LIBS += ../devnull/$(ARCH)/libdevnull.a
+TMP_LIBS += ../dummy/$(ARCH)/libdummy.a
+TMP_LIBS += ../mw-fb/$(ARCH)/libmw-fb.a
+TMP_LIBS += ../capture/$(ARCH)/libcapture.a
 
 #
 # (OPTIONAL) Add local stuff here using +=

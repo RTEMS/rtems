@@ -4,15 +4,17 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libserdbg-tmp
+LIBNAME = libserdbg
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = serdbg.c serdbgio.c termios_printk.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 noinst_HEADERS = 
+if LIBSERDBG
 include_HEADERS = serdbgcnf.h serdbg.h termios_printk_cnf.h \
                   termios_printk.h
+endif
 
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am
@@ -32,7 +34,9 @@ $(LIB): $(OBJS)
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
+if LIBSERDBG
 all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
+endif
 
 .PRECIOUS: $(LIB)
 

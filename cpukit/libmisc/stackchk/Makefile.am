@@ -5,7 +5,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libstackchk-tmp
+LIBNAME = libstackchk
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = check.c

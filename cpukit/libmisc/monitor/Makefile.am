@@ -5,7 +5,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libmonitor-tmp
+LIBNAME = libmonitor
 LIB = $(ARCH)/$(LIBNAME).a
 
 # We only build multiprocessing related files if HAS_MP was defined

@@ -5,7 +5,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libmw-fb-tmp
+LIBNAME = libmw-fb
 LIB = ${ARCH}/${LIBNAME}.a
 
 C_FILES = mw_fb.c mw_uid.c

@@ -5,7 +5,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libdevnull-tmp
+LIBNAME = libdevnull
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = devnull.c

@@ -36,7 +36,27 @@ AC_COMPILE_IFELSE(
   [HAVE_ASSIGNABLE_STDIO=no])
 AC_MSG_RESULT([$HAVE_ASSIGNABLE_STDIO])
 
-AM_CONDITIONAL([RTEMS_LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
+# serdbg exploits weak symbols
+AC_CACHE_CHECK([whether $CC supports function __attribute__((weak))],
+[rtems_cv_cc_attribute_weak],[
+  AS_IF([test $GCC = yes],[
+    save_CFLAGS=$CFLAGS
+    CFLAGS=-Werror])
+
+  AC_COMPILE_IFELSE([
+    AC_LANG_PROGRAM(
+    [void myfunc(char c) __attribute__ ((weak));
+     void myfunc(char c) {}],
+    [])],
+    [rtems_cv_cc_attribute_weak=yes],
+    [rtems_cv_cc_attribute_weak=no])
+
+  AS_IF([test $GCC = yes],[
+    CFLAGS=$save_CFLAGS])
+])
+
+AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
+AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

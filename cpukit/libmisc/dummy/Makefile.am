@@ -3,7 +3,7 @@
 ##
 
 
-LIBNAME = libdummy-tmp
+LIBNAME = libdummy
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = dummy.c

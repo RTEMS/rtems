@@ -4,7 +4,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libcapture-tmp
+LIBNAME = libcapture
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = capture.c capture-cli.c

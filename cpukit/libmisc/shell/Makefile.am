@@ -5,13 +5,13 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libshell-tmp
+LIBNAME = libshell
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = cmds.c shell.c 
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-if RTEMS_LIBSHELL
+if LIBSHELL
 include_rtems_HEADERS = shell.h
 endif
 
@@ -33,7 +33,7 @@ $(LIB): $(OBJS)
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
-if RTEMS_LIBSHELL
+if LIBSHELL
 all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 endif
 

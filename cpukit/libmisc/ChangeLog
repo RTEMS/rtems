@@ -1,3 +1,24 @@
+2002-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add check for weak function attribute.
+	Remove AM_CONDITIONAL([RTEMS_LIBSHELL].
+	Add AM_CONDITIONAL(LIBSHELL), AM_CONDITIONAL(LIBSERDBG).
+	* capture/Makefile.am:  Use *.a instead of *-tmp.a.
+	* cpuuse/Makefile.am:  Use *.a instead of *-tmp.a.
+	* devnull/Makefile.am:  Use *.a instead of *-tmp.a.
+	* dummy/Makefile.am:  Use *.a instead of *-tmp.a.
+	* dumpbuf/Makefile.am:  Use *.a instead of *-tmp.a.
+	* monitor/Makefile.am:  Use *.a instead of *-tmp.a.
+	* mw-fb/Makefile.am:  Use *.a instead of *-tmp.a.
+	* rtmonuse/Makefile.am:  Use *.a instead of *-tmp.a.
+	* serdbg/Makefile.am:  Use *.a instead of *-tmp.a.
+	Build iff LIBSERDBG is true.
+	* shell/Makefile.am:  Use *.a instead of *-tmp.a.
+	Build iff LIBSHELL is true.
+	* stackchk/Makefile.am:  Use *.a instead of *-tmp.a.
+	* untar/Makefile.am:  Use *.a instead of *-tmp.a.
+	* wrapup/Makefile.am: Reflect changes above.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require autoconf-2.57+automake-1.7.2.

@@ -5,7 +5,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = libdumpbuf-tmp
+LIBNAME = libdumpbuf
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = dumpbuf.c
