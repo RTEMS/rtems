@@ -357,7 +357,14 @@ start:
         |
 
         moveq   #0,%d0
-        move.w  #(MC68302_BASE >> 12),%d0
+        | Joel: With the change of MC68302_BASE from a #define to a linker
+	|       symbol, the following 4 instructions replace this one:
+        |          move.w  #(MC68302_BASE >> 12),%d0
+        move.l  #MC68302_BASE,%d0
+        moveq.l #12,%d1
+        lsr.l   %d1,%d0
+        and.l   #0xFFFF,%d0
+
         or.w    #(MC68302_BAR_FC_CFC << 12),%d0
         move.l  #MC68302_BAR,%a0
         move.w  %d0,%a0@(0)

@@ -38,6 +38,9 @@ extern "C" {
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
+#ifndef VARIANT
+#define VARIANT bare
+#endif
 #if defined(VARIANT)
 
 #define __bsp_cat(x, y) x ## y
