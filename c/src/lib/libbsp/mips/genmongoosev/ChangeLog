@@ -1,3 +1,7 @@
+2001-02-27	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/Makefile.am: Added rtems-stub-glue.c to C_FILES.
+
 2002-02-08	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/Makefile.am: Now compile the gdb stub.

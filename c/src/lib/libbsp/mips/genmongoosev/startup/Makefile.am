@@ -9,7 +9,7 @@ VPATH = @srcdir@:@srcdir@/../../shared/gdbstub:@srcdir@/../../../shared
 PGM = $(ARCH)/startup.rel
 
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c main.c sbrk.c \
-    gnatinstallhandler.c setvec.c mips-stub.c gdb-support.c
+    gnatinstallhandler.c setvec.c mips-stub.c gdb-support.c rtems-stub-glue.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
