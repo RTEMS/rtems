@@ -20,8 +20,7 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi bsp.texi userext.texi conf.texi mp.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 info_TEXINFOS = c_user.texi
 c_user_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)

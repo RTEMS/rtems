@@ -10,8 +10,7 @@
 noinst_SCRIPTS = texi2www texi2dvi
 
 EXTRA_DIST = $(noinst_SCRIPTS) dir-arrow.gif prev-arrow.gif \
-    missing-arrow.gif up-arrow.gif next-arrow.gif texi2www.texi \
-    archive/texi2www-960103.tgz
+    missing-arrow.gif up-arrow.gif next-arrow.gif texi2www.texi
 
 PROJECT = texi2www
 
