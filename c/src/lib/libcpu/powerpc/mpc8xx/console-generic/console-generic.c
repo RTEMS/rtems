@@ -59,7 +59,7 @@ extern rtems_cpu_table Cpu_table;
 
 #ifdef EPPCBUG_SMC1
 extern unsigned32 simask_copy;
-#endif /* EPPCBUG_SMC1 */
+#endif
 
 /*
  * Interrupt-driven input buffer
@@ -703,7 +703,7 @@ m8xx_uart_scc_initialize (int minor)
 
   sccparms->rfcr = M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0);
   sccparms->tfcr = M8xx_TFCR_MOT | M8xx_TFCR_DMA_SPACE(0);
-#ifdef UARTS_USE_INTERRUPTS
+#if UARTS_IO_MODE == 1
   sccparms->mrblr = RXBUFSIZE;      /* Maximum Rx buffer size */
 #else
   sccparms->mrblr = 1;              /* Maximum Rx buffer size */
@@ -774,7 +774,7 @@ m8xx_uart_scc_initialize (int minor)
       break;
 #endif
   }
-#ifdef UARTS_USE_INTERRUPTS
+#if UARTS_IO_MODE == 1
   switch (minor) {
     case SCC2_MINOR:
       rtems_interrupt_catch (m8xx_scc2_interrupt_handler,
@@ -805,7 +805,7 @@ m8xx_uart_scc_initialize (int minor)
       break;
 #endif /* mpc860 */
   }
-#endif /* UARTS_USE_INTERRUPTS */
+#endif /* UARTS_IO_MODE */
 }
 
 
@@ -874,7 +874,7 @@ m8xx_uart_smc_initialize (int minor)
   smcparms->tbase = (char *)TxBd[minor] - (char *)&m8xx;
   smcparms->rfcr = M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0);
   smcparms->tfcr = M8xx_TFCR_MOT | M8xx_TFCR_DMA_SPACE(0);
-#ifdef UARTS_USE_INTERRUPTS  
+#if UARTS_IO_MODE == 1
   smcparms->mrblr = RXBUFSIZE;      /* Maximum Rx buffer size */
 #else
   smcparms->mrblr = 1;              /* Maximum Rx buffer size */
@@ -923,7 +923,7 @@ m8xx_uart_smc_initialize (int minor)
    * Enable receiver and transmitter
    */
   smcregs->smcmr |= M8xx_SMCMR_TEN | M8xx_SMCMR_REN;
-#ifdef UARTS_USE_INTERRUPTS
+#if UARTS_IO_MODE == 1
   switch (minor) {
     case SMC1_MINOR:
       rtems_interrupt_catch (m8xx_smc1_interrupt_handler,
@@ -967,10 +967,10 @@ m8xx_uart_interrupts_initialize(void)
 #else
   m8xx.cicr = 0x00043F80;           /* SCaP=SCC1, SCbP=SCC2, IRL=1, HP=PC15, IEN=1 */
 #endif
+  m8xx.simask |= M8xx_SIMASK_LVM1;  /* Enable level interrupts */
 #ifdef EPPCBUG_SMC1
-  simask_copy = m8xx.simask | M8xx_SIMASK_LVM1;
-#endif /* EPPCBUG_SMC1 */
-  m8xx.simask |= M8xx_SIMASK_LVM1; /* Enable level interrupts */
+  simask_copy = m8xx.simask;
+#endif
 }
 
 
@@ -1023,10 +1023,7 @@ m8xx_uart_pollWrite(
     while (TxBd[minor]->status & M8xx_BD_READY)
       continue;
     txBuf[minor] = *buf++;
-    rtems_cache_flush_multiple_data_lines(
-       (const void *) TxBd[minor]->buffer,
-       TxBd[minor]->length
-    );
+    rtems_cache_flush_multiple_data_lines( &txBuf[minor], 1 );
     TxBd[minor]->buffer = &txBuf[minor];
     TxBd[minor]->length = 1;
     TxBd[minor]->status = M8xx_BD_READY | M8xx_BD_WRAP;
