@@ -1,3 +1,8 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove shared/io/Makefile, shared/comm/Makefile,
+	shared/pci/Makefile, shared/irq/Makefile.
+
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Reflect changes to bootstrap.

@@ -18,9 +18,5 @@ RTEMS_CHECK_BSPDIR([$RTEMS_BSP])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-shared/Makefile
-shared/comm/Makefile
-shared/io/Makefile
-shared/irq/Makefile
-shared/pci/Makefile])
+shared/Makefile])
 AC_OUTPUT
