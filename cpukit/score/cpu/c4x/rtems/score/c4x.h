@@ -1,5 +1,8 @@
-/*  c4x.h
- *
+/**
+ * @file rtems/score/c4x.h
+ */
+
+/*
  *  This file is an example (i.e. "no CPU") of the file which is
  *  created for each CPU family port of RTEMS.
  *

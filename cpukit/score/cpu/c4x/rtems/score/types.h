@@ -1,5 +1,8 @@
-/*  c4xtypes.h
- *
+/**
+ * @file rtems/score/types.h
+ */
+
+/*
  *  This include file contains type definitions pertaining to the
  *  Texas Instruments C4x processor family.
  *
