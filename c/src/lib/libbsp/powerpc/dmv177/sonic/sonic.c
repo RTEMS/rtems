@@ -1374,41 +1374,41 @@ sonic_ioctl (struct ifnet *ifp, int command, caddr_t data)
   int error = 0;
 
   switch (command) {
-  case SIOCGIFADDR:
-  case SIOCSIFADDR:
-    ether_ioctl (ifp, command, data);
-    break;
-
-  case SIOCSIFFLAGS:
-    switch (ifp->if_flags & (IFF_UP | IFF_RUNNING)) {
-    case IFF_RUNNING:
-      sonic_stop (sc);
+    case SIOCGIFADDR:
+    case SIOCSIFADDR:
+      ether_ioctl (ifp, command, data);
       break;
 
-    case IFF_UP:
-      sonic_init (sc);
+    case SIOCSIFFLAGS:
+      switch (ifp->if_flags & (IFF_UP | IFF_RUNNING)) {
+        case IFF_RUNNING:
+          sonic_stop (sc);
+          break;
+
+        case IFF_UP:
+          sonic_init (sc);
+          break;
+
+        case IFF_UP | IFF_RUNNING:
+          sonic_stop (sc);
+          sonic_init (sc);
+          break;
+
+        default:
+          break;
+        }
       break;
 
-    case IFF_UP | IFF_RUNNING:
-      sonic_stop (sc);
-      sonic_init (sc);
+    case SIO_RTEMS_SHOW_STATS:
+      sonic_stats (sc);
       break;
-
-    default:
-      break;
-    }
-    break;
-
-  case SIO_RTEMS_SHOW_STATS:
-    sonic_stats (sc);
-    break;
     
-  /*
-   * FIXME: All sorts of multicast commands need to be added here!
-   */
-  default:
-    error = EINVAL;
-    break;
+    /*
+     * FIXME: All sorts of multicast commands need to be added here!
+     */
+    default:
+      error = EINVAL;
+      break;
   }
   return error;
 }
