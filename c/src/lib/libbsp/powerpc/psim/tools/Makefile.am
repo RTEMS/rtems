@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
 
 noinst_SCRIPTS = psim runtest
 
-TMPINSTALL_FILES += $(PROJECT_ROOT)/psim/tests \
+TMPINSTALL_FILES = $(PROJECT_ROOT)/psim/tests \
     $(PROJECT_ROOT)/psim/tests/runtest $(PROJECT_ROOT)/psim/tests/psim \
     $(PROJECT_ROOT)/psim/tests/psim-gdb
 

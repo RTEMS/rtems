@@ -21,7 +21,7 @@ $(PROJECT_INCLUDE)/sh/%.h: %.h
 $(PROJECT_INCLUDE)/rtems/score/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE)/sh \
+TMPINSTALL_FILES = $(PROJECT_INCLUDE)/sh \
     $(include_sh_HEADERS:%=$(PROJECT_INCLUDE)/sh/%) \
     $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
