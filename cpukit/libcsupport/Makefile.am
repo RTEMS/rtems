@@ -97,28 +97,34 @@ ASSOCIATION_C_FILES = src/assoc.c src/assocnamebad.c
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/libio_sockets.c src/eval.c src/fs_null_handlers.c src/privateenv.c
 
-TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c src/cfsetospeed.c \
-    src/tcgetattr.c src/tcsetattr.c src/tcdrain.c src/tcflow.c src/tcflush.c src/tcgetprgrp.c \
-    src/tcsendbreak.c src/tcsetpgrp.c src/termios.c src/termiosinitialize.c \
+TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
+    src/cfsetospeed.c src/tcgetattr.c src/tcsetattr.c src/tcdrain.c \
+    src/tcflow.c src/tcflush.c src/tcgetprgrp.c src/tcsendbreak.c \
+    src/tcsetpgrp.c src/termios.c src/termiosinitialize.c \
     src/termiosreserveresources.c
 
-SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c src/lseek.c src/ioctl.c src/mkdir.c \
-    src/mknod.c src/mkfifo.c src/rmdir.c src/chdir.c src/chmod.c src/fchdir.c src/fchmod.c src/chown.c \
-    src/link.c src/unlink.c src/umask.c src/ftruncate.c src/utime.c src/fstat.c src/fcntl.c src/fpathconf.c \
-    src/getdents.c src/fsync.c src/fdatasync.c src/pipe.c src/dup.c src/dup2.c src/symlink.c src/readlink.c \
-    src/creat.c src/chroot.c
+SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
+    src/lseek.c src/ioctl.c src/mkdir.c src/mknod.c src/mkfifo.c src/rmdir.c \
+    src/chdir.c src/chmod.c src/fchdir.c src/fchmod.c src/chown.c src/link.c \
+    src/unlink.c src/umask.c src/ftruncate.c src/utime.c src/fstat.c \
+    src/fcntl.c src/fpathconf.c src/getdents.c src/fsync.c src/fdatasync.c \
+    src/pipe.c src/dup.c src/dup2.c src/symlink.c src/readlink.c src/creat.c \
+    src/chroot.c
 
-DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c src/rewinddir.c \
-    src/scandir.c src/seekdir.c src/telldir.c src/getcwd.c
+DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
+    src/readdir_r.c src/rewinddir.c src/scandir.c src/seekdir.c \
+    src/telldir.c src/getcwd.c
 
 MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c src/__sbrk.c
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c src/getgrent.c
 
-TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c src/ttyname.c src/ttyname_r.c
+TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c src/ttyname.c \
+    src/ttyname_r.c
 
-LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c src/truncate.c src/access.c \
-    src/stat.c src/lstat.c src/pathconf.c src/newlibc.c src/no_posix.c src/no_libc.c src/utsname.c
+LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
+    src/truncate.c src/access.c src/stat.c src/lstat.c src/pathconf.c \
+    src/newlibc.c src/no_posix.c src/no_libc.c src/utsname.c
 
 UNIX_LIBC_C_FILES = src/unixlibc.c src/hosterr.c
 
