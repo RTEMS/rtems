@@ -1,5 +1,12 @@
 2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* lib/Makefile.am: New (Required by 'make dist').
+	* lib/ChangeLog: Remove.
+	* lib/.cvsignore: Cleanup.
+	* configure.ac: Reflect having added lib/Makefile.am.
+
+2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Merge-in lib/libcpu/configure.ac.
 	Merge-in lib/libbsp/configure.ac.
 
