@@ -4,7 +4,7 @@ SUFFIXES += .t
 
 ## Texinfo support
 TEXINFO_TEX = ../texinfo/texinfo.tex
-TEXINPUTS = $(srcdir):$(top_srcdir)
+## TEXINPUTS = $(srcdir):$(top_srcdir)
 TEXI_COMMON = -I ..
 
 .texi:
@@ -45,13 +45,6 @@ SUFFIXES += .eps
 if EPSTOPDF
 .eps.pdf:
 	$(EPSTOPDF) $< --outfile=$@
-endif
-
-if TEXI2PDF
-.texi.pdf:
-	TEXINPUTS=$(srcdir)/$(top_srcdir)/texinfo:$$TEXINPUTS \
-          MAKEINFO='$(MAKEINFO)' \
-	  $(TEXI2PDF) $<
 endif
 
 $(PROJECT).pdf: $(PROJECT).texi $($(PROJECT)_TEXINFOS) $(PDF_IMAGES)
@@ -95,12 +88,25 @@ endif
 
 if USE_DVI
 dvi_DATA += $(PROJECT).dvi
-endif
+
+.texi.dvi:
+	$(TEXI2DVI) -I $(srcdir) -I $(top_srcdir) $<
 
 if USE_PS
 ps_DATA += $(PROJECT).ps
-endif
+.dvi.ps:
+	TEXINPUTS=$(srcdir):$$TEXINPUTS \
+	$(DVIPS) $< -o $@
+endif # USE_PS
+
+endif # USE_DVI
 
 if USE_PDF
 pdf_DATA += $(PROJECT).pdf
+
+if TEXI2PDF
+.texi.pdf:
+	$(TEXI2PDF) -I $(srcdir) -I $(top_srcdir) $<
+endif
+
 endif
