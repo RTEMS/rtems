@@ -1,5 +1,9 @@
 2001-03-29	Joel Sherrill <joel@OARcorp.com>
 
+	* .cvsignore: Added mkgcc3newlib.
+
+2001-03-29	Joel Sherrill <joel@OARcorp.com>
+
 	* gcc3newlib/.cvsignore: New file.
 
 2001-03-28	Joel Sherrill <joel@OARcorp.com>

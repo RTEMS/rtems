@@ -14,5 +14,6 @@ depcomp
 mkbinutilspec
 mkbspspec
 mkgccnewlibspec
+mkgcc3newlibspec
 mkgdbspec
 setup.cache
