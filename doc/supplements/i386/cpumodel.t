@@ -14,6 +14,7 @@
 @menu
 * CPU Model Dependent Features Introduction::
 * CPU Model Dependent Features CPU Model Name::
+* CPU Model Dependent Features bswap Instruction::
 * CPU Model Dependent Features Floating Point Unit::
 @end menu
 @end ifinfo
@@ -63,7 +64,7 @@ c/src/exec/score/cpu/i386/i386.h based upon the particular CPU
 model defined on the compilation command line.
 
 @ifinfo
-@node CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features Introduction, CPU Model Dependent Features
+@node CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features bswap Instruction, CPU Model Dependent Features Introduction, CPU Model Dependent Features
 @end ifinfo
 @section CPU Model Name
 
@@ -72,7 +73,19 @@ the name of this CPU model.  For example, for the Intel i386 without an
 i387 coprocessor, this macro is set to the string "i386 with i387".
 
 @ifinfo
-@node CPU Model Dependent Features Floating Point Unit, Calling Conventions, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features
+@node CPU Model Dependent Features bswap Instruction, CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features
+@end ifinfo
+@section bswap Instruction
+
+The macro I386_HAS_BSWAP is set to 1 to indicate that
+this CPU model has the @code{bswap} instruction which
+endian swaps a thirty-two bit quantity.  This instruction
+appears to be present in all CPU models
+i486's and above.
+
+
+@ifinfo
+@node CPU Model Dependent Features Floating Point Unit, Calling Conventions, CPU Model Dependent Features bswap Instruction , CPU Model Dependent Features
 @end ifinfo
 @section Floating Point Unit
 
