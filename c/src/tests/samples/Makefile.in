@@ -15,7 +15,7 @@ include $(RTEMS_ROOT)/make/directory.cfg
 # We only build it if HAS_CPLUSCPLUS was defined
 
 CPLUSPLUS_TESTS_yes_V = cdtest
-CPLUSPLUS_TESTS = $(CPLUSPLUS_TESTS_$(HAS_CPLUSPLUS)_V)
+CPLUSPLUS_TESTS = $(CPLUSPLUS_TESTS_$(RTEMS_HAS_CPLUSPLUS)_V)
 
 # base_mp is a sample multiprocessing test
 # We only build it if HAS_MP was defined
