@@ -10,8 +10,6 @@ GENERIC_FILES = shared
 CPU_SPECIFIC_OBJS = $(wildcard ../$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.$(OBJEXT))
 FAMILY_OBJS = \
     $(wildcard ../shared/$(ARCH)/*.$(OBJEXT) ../shared/*/$(ARCH)/*.$(OBJEXT) \
-	../old_exception_processing/*/$(ARCH)/*.$(OBJEXT) \
-	../new_exception_processing/*/$(ARCH)/*.$(OBJEXT) \
 	../mpc6xx/*/$(ARCH)/*.$(OBJEXT))
 
 LIB = $(ARCH)/libcpu.a
