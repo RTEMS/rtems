@@ -269,6 +269,14 @@ void *POSIX_Init(
   status = pthread_mutexattr_init( &attr );
   assert( !status );
 
+  /*
+   *  Set the protocol to priority ceiling so the owner check happens
+   *  and the EPERM test (later) will work.
+   */
+
+  status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_INHERIT );
+  assert( !status );
+ 
   puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex_id, &attr );
   if ( status )
