@@ -139,6 +139,20 @@ boolean _Thread_Initialize(
   the_thread->extensions = (void **) extensions_area;
 
   /*
+   * Clear the extensions area so extension users can determine
+   * if they are linked to the thread. An extension user may
+   * create the extension long after tasks have been created
+   * so they cannot rely on the thread create user extension
+   * call.
+   */
+
+  if ( the_thread->extensions ) {
+    int i;
+    for ( i = 0; i < (_Thread_Maximum_extensions + 1); i++ )
+      the_thread->extensions[i] = NULL;
+  }
+
+  /*
    *  General initialization
    */
 

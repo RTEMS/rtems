@@ -1,3 +1,10 @@
+2002-04-16	Chris Johns <ccj@acm.org>
+
+	* src/threadinitialize.c: Per PR181, clear the array of user extension
+	pointers. This lets user extensions that have hooked the switch handler
+	know if a task has been processed by the user extension before. If a
+	user extension is created after a task is started it may not know it.
+
 2002-04-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/system.h: Add i386 to multilib-able targets.
