@@ -1,5 +1,10 @@
 2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Eliminate *_O_FILES.
+	Don't create $ARCH in %.o: %.c rules.
+
+2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Use .$(OBJEXT) instead of .o.
 
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
