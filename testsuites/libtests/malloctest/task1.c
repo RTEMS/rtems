@@ -14,7 +14,7 @@
  */
 
 #include "system.h"
-#include <libcsupport.h>    /* for malloc_dump, malloc_walk */
+#include <rtems/libcsupport.h>    /* for malloc_dump, malloc_walk */
 #include <string.h>         /* for memset */
 #include <stdlib.h>
 
