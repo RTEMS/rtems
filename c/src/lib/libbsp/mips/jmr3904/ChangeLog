@@ -1,3 +1,10 @@
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* README: Updated to reflect current status.  Misaligned reference
+	during initialization may be compiler problem.
+	* console/console-io.c: Added support for printk().
+	* startup/linkcmds: Reserve 512K for RTEMS Workspace.
+
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Fix typo and add extra 0 to base address.

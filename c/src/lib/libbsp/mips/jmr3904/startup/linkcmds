@@ -77,7 +77,7 @@ SECTIONS
     . += _StackSize;
     _clear_end = .;
     WorkspaceBase = .;
-    . += 64K;    /* reserve some memory for workspace */
+    . += 512K;    /* reserve some memory for workspace */
     HeapBase = .;
     . += HeapSize;    /* reserve some memory for heap */
   }

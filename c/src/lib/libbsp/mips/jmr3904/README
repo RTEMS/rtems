@@ -8,16 +8,24 @@ Simulator Invocation
 ====================
 The following is not 100% correct since it does not work.   :)
 
-target sim --board=jmr3904pal --memory-region 0xffff8000,0x900 \ 
-  --memory-region 0xffffe000,0x4 --memory-region 0xb2100000,0x4 
-  --memory-region 0x8800000,0x100000 -memory-region 0x80000000,0x40000 \
-  --memory-region 0xfffff300,0x10
+target sim --board=jmr3904pal --memory-region 0x8800000,0x100000
 
 Status
 ======
-This BSP is not working.  It gets to the point where the 
-console_outbyte_polled() routine is called during printf
-and it locks up checking for a status bit.  This is probably
-a simulator initialization issue related to the setup command.
-As of 25 Nov 2000, email was sent to the gdb and newlib maintainers
-asking for advice.
+
++ printk() works and is being called from bsp_start as prove.
+
++ There appears to be a compilation problem in _Thread_Handler_initialization
+where _Thread_Ready_chain[1] is only 1 byte -- not 12 from
+_Thread_Ready_chain[0].   I am throwing this to the RTEMS list
+first before reporting it.
+
+Made it to bsp_start
+mips-core: 4 byte write to unaligned address 0x8803bb01 at 0x8800d83c
+
+Program received signal SIGBUS, Bus error.
+0x8800d83c in _Chain_Initialize_empty (the_chain=0x8803bb01)
+    at ../../../../../jmr3904/lib/include/rtems/score/chain.inl:222
+222	  the_chain->first          = _Chain_Tail( the_chain );
+(gdb) q
+

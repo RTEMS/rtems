@@ -121,3 +121,10 @@ int console_inbyte_nonblocking(
   return -1;
 }
 
+#include <bspIo.h>
+
+void JMR3904_output_char(char c) { console_outbyte_polled( 0, c ); }
+
+BSP_output_char_function_type           BSP_output_char = JMR3904_output_char;
+BSP_polling_getchar_function_type       BSP_poll_char = NULL;
+
