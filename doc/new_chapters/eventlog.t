@@ -19,13 +19,13 @@ Available, and Serviceable Systems}.
 The directives provided by the event logging manager are:
 
 @itemize @bullet
-@item @code{log_write} - Write to the Log
+@item @code{log_write} - Write to the system Log
 @item @code{log_write_any} - Write to any log file
+@item @code{log_write_entry} - Write entry to any log file
 @item @code{log_open} - Open a log file
 @item @code{log_read} - Read from the system Log
 @item @code{log_notify} - Notify Process of writes to the system log
 @item @code{log_close} - Close log descriptor
-@item @code{log_copy} - 
 @item @code{log_seek} - Reposition log file offset
 @item @code{log_severity_before} - Compare event record severities
 @item @code{log_facilityemptyset} - Manipulate log facility sets
@@ -76,7 +76,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection log_write - Write to the Log
+@subsection log_write - Write to the system Log
 
 @subheading CALLING SEQUENCE:
 
@@ -100,66 +100,80 @@ int log_write(
 @subheading STATUS CODES:
 
 @table @b
-@item EINVAL
-The facility argument is not a valid log_facility.
+@item E2BIG
+This error indicates an inconsistency in the implementation.
+Report this as a bug.
 
 @item EINVAL
-The severity argument exceeds @code{LOG_SEVERITY_MAX}
+The @code{facility} argument is not a valid log facility.
 
 @item EINVAL
-The len argument exceeds @code{LOG_ENTRY_MAXLEN}
+The @code{severity} argument exceeds @code{LOG_SEVERITY_MAX}.
+
+@item EINVAL
+The @code{len} argument exceeds @code{LOG_MAXIUM_BUFFER_SIZE}.
+
+@item EINVAL
+The @code{len} argument was non-zero and @code{buf} is NULL.
 
 @item ENOSPC
-The log file has run out of space on the device.
-
-@item EPERM
-The caller does not have appropriate permission for writing to
-the given facility.
+The device which contains the log file has run out of space.
 
 @item EIO
-An I/O error occurred in writing to the system event log.
+An I/O error occurred in writing to the log file.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{log_write} function writes an event record, consisting 
-of event attributes, and the data identified by the @code{buf} 
-argument, to the system log.  The @code{len} argument specifies
-the length in bytes of the buffer pointed to by @code{buf}.  The
-@code{len} argument shall specify the value of the event record
-length attribute.  The value of @code{len} shall be less than or 
-equal to @code{LOG_ENTRY_MAXLEN} or the @code{log_write} shall fail.
+The @code{log_write_any} function writes an event record to the 
+system log file.  The event record written consists of the
+event attributes specified by the @code{facility}, @code{event_id},
+and @code{severity} arguments as well as the data identified by the
+@code{buf} and @code{len} arguments.  The fields of the event record
+structure to be written are filled in as follows:
 
-The @code{event_id} argument identifies the type of event record
-being written.  The @code{event_id} argument shall specify the value
-of the event ID attribute of the event record.
+@table @b
+@item log_recid
+This is set to a monotonically increasing log record id
+maintained by the system for this individual log file.
 
-The argument @code{facility} indicates the facility from which the
-event type is drawn.  The @code{facility} argument shall specify the
-value of the event record facility attribute.  The value of the
-@code{facility} argument shall be a valid log facility or the 
-@code{log_write} function shall fail.
+@item log_size
+This is set to the value of the @code{len} argument.
 
-The @code{severity} argument indicates the severity level of the
-event record.  The @code{severity} argument shall specify the value
-of the event record severity attribute.  The value of the 
-@code{severity} argument shall be less than or equal to 
-@code{LOG_SEVERITY_MAX} or the @code{log_write} function shall fail.  
+@item log_event_id
+This is set to the value of the @code{event_id} argument.
 
-The effective_UID of the calling process shall specify the event
-record UID attribute.  The effective-GID of the calling process 
-shall specify the event record GID attribute.  The process ID
-of the calling process shall specify the event record process ID
-attribute.  The process group ID of the calling process shall
-specify the event record process group ID attribute.  The current
-value of the system clock shall specify the event record timestamp
-attribute.
+@item log_facility
+This is set to the value of the @code{facility} argument.
+
+@item log_severity
+This is set to the value of the @code{severity} argument.
+
+@item log_uid
+This is set to the value returned by @code{geteuid}.
+
+@item log_gid
+This is set to the value returned by @code{getegid}.
+
+@item log_pid
+This is set to the value returned by @code{getpid}.
+
+@item log_pgrp
+This is set to the value returned by @code{getpgrp}.
+
+@item log_time
+This is set to the value returned by @code{clock_gettime} for the 
+CLOCK_REALTIME clock source.
+
+@end table
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+This implementation can not return the @code{EPERM} error.
 
 @page
 @subsection log_write_any - Write to the any log file
@@ -187,66 +201,170 @@ int log_write_any(
 @subheading STATUS CODES:
 
 @table @b
-@item EINVAL
-The facility argument is not a valid log_facility.
+@item E2BIG
+This error indicates an inconsistency in the implementation.
+Report this as a bug.
+
+@item EBADF
+The @code{logdes} argument is not a valid log descriptor.
 
 @item EINVAL
-The severity argument exceeds @code{LOG_SEVERITY_MAX}
+The @code{facility} argument is not a valid log facility.
 
 @item EINVAL
-The len argument exceeds @code{LOG_ENTRY_MAXLEN}
+The @code{severity} argument exceeds @code{LOG_SEVERITY_MAX}.
+
+@item EINVAL
+The @code{len} argument exceeds @code{LOG_MAXIMUM_BUFFER_SIZE}.
+
+@item EINVAL
+The @code{len} argument was non-zero and @code{buf} is NULL.
 
 @item ENOSPC
-The log file has run out of space on the device.
-
-@item EPERM
-The caller does not have appropriate permission for writing to
-the given facility.
+The device which contains the log file has run out of space.
 
 @item EIO
-An I/O error occurred in writing to the system event log.
+An I/O error occurred in writing to the log file.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{log_write} function writes an event record, consisting 
-of event attributes, and the data identified by the @code{buf} 
-argument, to a log file.  The @code{len} argument specifies
-the length in bytes of the buffer pointed to by @code{buf}.  The
-@code{len} argument shall specify the value of the event record
-length attribute.  The value of @code{len} shall be less than or 
-equal to @code{LOG_ENTRY_MAXLEN} or the @code{log_write} shall fail.
+The @code{log_write_any} function writes an event record to the log file
+specified by @code{logdes}.  The event record written consists of the
+event attributes specified by the @code{facility}, @code{event_id},
+and @code{severity} arguments as well as the data identified by the
+@code{buf} and @code{len} arguments.  The fields of the event record
+structure to be written are filled in as follows:
 
-The @code{event_id} argument identifies the type of event record
-being written.  The @code{event_id} argument shall specify the value
-of the event ID attribute of the event record.
+@table @b
+@item log_recid
+This is set to a monotonically increasing log record id
+maintained by the system for this individual log file.
 
-The argument @code{facility} indicates the facility from which the
-event type is drawn.  The @code{facility} argument shall specify the
-value of the event record facility attribute.  The value of the
-@code{facility} argument shall be a valid log facility or the 
-@code{log_write} function shall fail.
+@item log_size
+This is set to the value of the @code{len} argument.
 
-The @code{severity} argument indicates the severity level of the
-event record.  The @code{severity} argument shall specify the value
-of the event record severity attribute.  The value of the 
-@code{severity} argument shall be less than or equal to 
-@code{LOG_SEVERITY_MAX} or the @code{log_write} function shall fail.  
+@item log_event_id
+This is set to the value of the @code{event_id} argument.
 
-The effective_UID of the calling process shall specify the event
-record UID attribute.  The effective-GID of the calling process 
-shall specify the event record GID attribute.  The process ID
-of the calling process shall specify the event record process ID
-attribute.  The process group ID of the calling process shall
-specify the event record process group ID attribute.  The current
-value of the system clock shall specify the event record timestamp
-attribute.
+@item log_facility
+This is set to the value of the @code{facility} argument.
+
+@item log_severity
+This is set to the value of the @code{severity} argument.
+
+@item log_uid
+This is set to the value returned by @code{geteuid}.
+
+@item log_gid
+This is set to the value returned by @code{getegid}.
+
+@item log_pid
+This is set to the value returned by @code{getpid}.
+
+@item log_pgrp
+This is set to the value returned by @code{getpgrp}.
+
+@item log_time
+This is set to the value returned by @code{clock_gettime} for the 
+CLOCK_REALTIME clock source.
+
+@end table
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+This implementation can not return the @code{EPERM} error.
+
+This function is not defined in the POSIX specification.  It is 
+an extension provided by this implementation.
+
+@page
+@subsection log_write_entry - Write entry to any log file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <evlog.h>
+
+int log_write_entry(
+  const logd_t      logdes,
+  struct log_entry *entry,
+  const void       *buf,
+  const size_t      len
+);
+@end example
+@end ifset
+ 
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item E2BIG
+This error indicates an inconsistency in the implementation.
+Report this as a bug.
+
+@item EBADF
+The @code{logdes} argument is not a valid log descriptor.
+
+@item EFAULT
+The @code{entry} argument is not a valid pointer to a log entry.
+
+@item EINVAL
+The @code{facility} field in @code{entry} is not a valid log facility.
+
+@item EINVAL
+The @code{severity} field in @code{entry} exceeds @code{LOG_SEVERITY_MAX}.
+
+@item EINVAL
+The @code{len} argument exceeds @code{LOG_MAXIMUM_BUFFER_SIZE}.
+
+@item EINVAL
+The @code{len} argument was non-zero and @code{buf} is NULL.
+
+@item ENOSPC
+The device which contains the log file has run out of space.
+
+@item EIO
+An I/O error occurred in writing to the log file.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{log_write_entry} function writes an event record 
+specified by the @code{entry}, @code{buf}, and @code{len} arguments.
+Most of the fields of the event record pointed to by @code{entry}
+are left intact.  The following fields are filled in as follows:
+
+@table @b
+@item log_recid
+This is set to a monotonically increasing log record id
+maintained by the system for this individual log file.
+
+@item log_size
+This is set to the value of the @code{len} argument.
+
+@end table
+
+This allows existing log entries from one log file to be written to 
+another log file without destroying the logged information.
+
+@subheading NOTES:
+
+The @code{_POSIX_LOGGING} feature flag is defined to indicate
+this service is available.
+
+This implementation can not return the @code{EPERM} error.
+
+This function is not defined in the POSIX specification.  It is 
+an extension provided by this implementation.
 
 @page
 @subsection log_open - Open a log file
