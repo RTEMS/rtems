@@ -1,5 +1,11 @@
 2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/types.h: Partial update from FreeBSD. 
+	Use stdint.h types instead of sys/types.h.
+	* librpc/src/rpc/bindresvport.c: Partial update from FreeBSD.
+
+2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	PR 755/rtems
 	* libnetworking/libc/res_init.c, libnetworking/lib/rtems_bsdnet_ntp.c,
 	libnetworking/nfs/bootp_subr.c: Include <rtems/bsdnet/servers.h>.

@@ -1,3 +1,5 @@
+/*	$NetBSD: bindresvport.c,v 1.19 2000/07/06 03:03:59 christos Exp $	*/
+
 /*
  * Sun RPC is a product of Sun Microsystems, Inc. and is provided for
  * unrestricted use provided that this legend is included on all tape
@@ -41,14 +43,29 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/bindresvport.c,v 1.12 2000/01/2
  */
 
 #include <sys/types.h>
-#include <sys/errno.h>
 #include <sys/socket.h>
+
 #include <netinet/in.h>
-#include <unistd.h>
+
+#include <errno.h>
 #include <string.h>
+#include <unistd.h>
+
+#include <rpc/rpc.h>
 
 /*
- * Bind a socket to a privileged port for whatever protocol.
+ * Bind a socket to a privileged IP port
+ */
+int
+bindresvport(sd, sin)
+	int sd;
+	struct sockaddr_in *sin;
+{
+	return bindresvport_sa(sd, (struct sockaddr *)sin);
+}
+
+/*
+ * Bind a socket to a privileged IP port
  */
 int
 bindresvport_sa(sd, sa)
@@ -58,7 +75,7 @@ bindresvport_sa(sd, sa)
 	int old, error, af;
 	struct sockaddr myaddr;
 	struct sockaddr_in *sin;
-#if (defined(AF_INET6) && defined(IPPROTO_IPV6))
+#ifdef INET6
 	struct sockaddr_in6 *sin6;
 #endif
 	int proto, portrange, portlow;
@@ -77,23 +94,26 @@ bindresvport_sa(sd, sa)
 	} else
 		af = sa->sa_family;
 
-	if (af == AF_INET) {
+	switch (af) {
+	case AF_INET:
 		proto = IPPROTO_IP;
 		portrange = IP_PORTRANGE;
 		portlow = IP_PORTRANGE_LOW;
 		sin = (struct sockaddr_in *)sa;
 		salen = sizeof(struct sockaddr_in);
 		port = sin->sin_port;
-#if (defined(AF_INET6) && defined(IPPROTO_IPV6))
-	} else if (af == AF_INET6) {
+		break;
+#ifdef INET6
+	case AF_INET6:
 		proto = IPPROTO_IPV6;
 		portrange = IPV6_PORTRANGE;
 		portlow = IPV6_PORTRANGE_LOW;
 		sin6 = (struct sockaddr_in6 *)sa;
 		salen = sizeof(struct sockaddr_in6);
 		port = sin6->sin6_port;
+		break;
 #endif
-	} else {
+	default:
 		errno = EPFNOSUPPORT;
 		return (-1);
 	}
@@ -126,22 +146,11 @@ bindresvport_sa(sd, sa)
 		}
 
 		if (sa != (struct sockaddr *)&myaddr) {
-			/* Hmm, what did the kernel assign... */
+			/* Hmm, what did the kernel assign? */
 			if (getsockname(sd, sa, &salen) < 0)
 				errno = saved_errno;
 			return (error);
 		}
 	}
 	return (error);
-}
-
-/*
- * Bind a socket to a privileged IP port
- */
-int
-bindresvport(sd, sin)
-	int sd;
-	struct sockaddr_in *sin;
-{
-	return bindresvport_sa(sd, (struct sockaddr *)sin);
 }
