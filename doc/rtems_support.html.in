@@ -47,8 +47,6 @@ RTEMS LogoMENU>
              RTEMS PowerPC Applications Supplement</A>
       <LI><A HREF="support/c_sparc/index.html">
              RTEMS SPARC Applications Supplement</A>
-      <LI><A HREF="support/c_hppa1_1/index.html">
-             RTEMS Hewlett Packard PA-RISC Applications Supplement</A>
       <LI><A HREF="HELP.html">RTEMS UNIX Port Applications Supplement</A>
     </MENU>
 </LI>

@@ -1,3 +1,12 @@
+2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merger from rtems-4-6-branch.
+	* configure.ac: Merger from rtems-4-6-branch.
+	Purge hppa1.1.
+	* index.html.in: Purge hppa1.1.
+	* project.am: Merger from rtems-4-6-branch.
+	* rtems_support.html.in: Purge hppa1.1.
+
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
 	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,

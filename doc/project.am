@@ -78,3 +78,10 @@ endif # USE_PS
 if USE_PDF
 pdf_DATA = $(PROJECT).pdf
 endif
+
+COMMON_FILES = $(top_srcdir)/common/setup.texi
+COMMON_FILES += $(top_builddir)/common/rtems.texi
+
+$(top_builddir)/common/rtems.texi: $(top_srcdir)/common/rtems.texi.in $(top_builddir)/common/rtems.sed
+	sed -f $(top_builddir)/common/rtems.sed \
+          $(top_srcdir)/common/rtems.texi.in > $(top_builddir)/common/rtems.texi

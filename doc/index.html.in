@@ -295,17 +295,6 @@
             <A HREF="HELP.html">
                RTEMS MIPS64 ORION Applications Supplement</A>
             </LI>
-
-        <LI><A HREF="../pdf/hppa1_1.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/hppa1_1.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/hppa1_1.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/hppa1_1/index.html">
-               RTEMS Hewlett Packard PA-RISC Applications Supplement</A>
-            </LI>
-
     </MENU>
 </LI>
 

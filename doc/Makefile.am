@@ -34,3 +34,6 @@ html_images_DATA = $(HTML_IMAGES)
 endif
 
 EXTRA_DIST += $(HTML_IMAGES)
+
+CLEANFILES = common/rtems.texi
+DISTCLEANFILES = common/rtems.sed

@@ -10,7 +10,7 @@ AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 AM_MAINTAINER_MODE
 
 AC_ARG_ENABLE(html,
-[  --disable-html           disable html support ],
+[  --disable-html          disable html support ],
 [case $enableval in
 yes) ;;
 no) ;;
@@ -135,16 +135,70 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
+AC_MSG_CHECKING([for ../scripts/setup.def])
+AS_IF([test -f ${srcdir}/../scripts/setup.def],[
+. ${srcdir}/../scripts/setup.def
+AC_MSG_RESULT([done])
+],[
+AC_MSG_ERROR([missing])
+])
+
+AS_IF([test -z "$binutils_patch_version"],
+[set_binutils_patch="@clear BINUTILSPATCHVERSION"],
+[set_binutils_patch="@set BINUTILSPATCHVERSION $binutils_patch_version"])
+
+AS_IF([test -z "$gcc3newlib_patch_version"],
+[set_newlib_patch="@clear NEWLIBPATCHVERSION"],
+[set_newlib_patch="@set NEWLIBPATCHVERSION $gcc3newlib_patch_version"])
+
+AS_IF([test -z "$gcc3_patch_version"],
+[set_gcc3_patch="@clear GCCPATCHVERSION"],
+[set_gcc_patch="@set GCCPATCHVERSION $gcc3_patch_version"])
+
+AS_IF([test -z "$gdb_patch_version"],
+[set_gdb_patch="@clear GDBPATCHVERSION"],
+[set_gdb_patch="@set GDBPATCHVERSION $gdb_patch_version"])
+
 AC_CONFIG_SUBDIRS(tools)
 
-AC_CONFIG_FILES([Makefile
+AC_CONFIG_FILES([Makefile],[],[
+test -d common || mkdir common
+cat << EOF > common/rtems.sed~
+:t
+s/@RTEMSAPI@/RTEMS_API/;t t
+s,@RTEMSPREFIX@,$prefix,;t t
+EOF
+_RTEMS_UPDATE_CONDITIONAL([common/rtems.sed],[common/rtems.sed~])
+])
+
+AC_CONFIG_FILES([
 rtems_support.html
 index.html
 FAQ/Makefile
 develenv/Makefile
 user/Makefile
-bsp_howto/Makefile
-started/Makefile
+bsp_howto/Makefile])
+
+AC_CONFIG_FILES([started/Makefile],[],[
+test -d started || mkdir started
+cat << EOF > started/tversions.sed~
+:t
+s/@GCCVERSION@/$gcc3_version/;t t
+s/@BINUTILSVERSION@/$binutils_version/;t t
+s/@NEWLIBVERSION@/$gcc3newlib_version/;t t
+s/@GDBVERSION@/$gdb_version/;t t
+s/@SETBINUTILSPATCHVERSION@/$set_binutils_patch/;t t
+s/@SETGCCPATCHVERSION@/$set_gcc_patch/;t t
+s/@SETNEWLIBPATCHVERSION@/$set_newlib_patch/;t t
+s/@SETGDBPATCHVERSION@/$set_gdb_patch/;t t
+s/@GCCRPMRELEASE@/$gcc3newlib_rpm_release/;t t
+s/@BINUTILSRPMRELEASE@/$binutils_rpm_release/;t t
+s/@GDBRPMRELEASE@/$gdb_rpm_release/;t t
+EOF
+_RTEMS_UPDATE_CONDITIONAL([started/tversions.sed],[started/tversions.sed~])
+])
+
+AC_CONFIG_FILES([
 porting/Makefile
 networking/Makefile
 posix_users/Makefile
@@ -160,7 +214,6 @@ new_chapters/Makefile
 supplements/Makefile
 supplements/arm/Makefile
 supplements/c4x/Makefile
-supplements/hppa1_1/Makefile
 supplements/i386/Makefile
 supplements/i960/Makefile
 supplements/m68k/Makefile
