@@ -26,7 +26,7 @@
 #include <ringbuf.h>
 
 rtems_isr C_Receive_ISR(rtems_vector_number vector);
-extern Ring_buffer_t  Buffer[];
+extern Ring_buffer_t  Console_Buffer[];
 
 extern unsigned char inbuf[];
 extern unsigned char inbuf_portb[];
@@ -200,7 +200,7 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector)
   if (*_addr & MC68681_RX_READY)  /* extract rcvrdy on port A */
   {
     _addr = (unsigned char *) (DUART_ADDR + MC68681_RECEIVE_BUFFER_A);
-    Ring_buffer_Add_character( &Buffer[ 0 ], *_addr );
+    Ring_buffer_Add_character( &Console_Buffer[ 0 ], *_addr );
   }
 
   /* 
@@ -214,7 +214,7 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector)
     if (*_addr & MC68681_RX_READY)  /* extract rcvrdy on port B */
     {
       _addr = (unsigned char *) (DUART_ADDR + MC68681_RECEIVE_BUFFER_B);
-      Ring_buffer_Add_character( &Buffer[ 1 ], *_addr );
+      Ring_buffer_Add_character( &Console_Buffer[ 1 ], *_addr );
     }
 
     /* 
