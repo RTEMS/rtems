@@ -458,7 +458,8 @@ void  au1x00_emac_init_hw(au1x00_emac_softc_t *sc)
          * boundary. 
          */
         if (mtod(m, unsigned32) & 0x1f) {
-            mtod(m, unsigned32) = (mtod(m, unsigned32) + 0x1f) & 0x1f;
+	  unsigned32 *p = &mtod(m, unsigned32);
+          *p = (mtod(m, unsigned32) + 0x1f) & 0x1f;
         }
         sc->rx_dma[i].addr = (mtod(m, unsigned32) & ~0xe0000000);
         sc->rx_mbuf[i] = m;
@@ -652,7 +653,9 @@ void au1x00_emac_rx_daemon (void *arg)
                  * The receive buffer must be aligned with a cache line
                  * boundary. 
                  */
-                mtod(m, unsigned32) = (mtod(m, unsigned32) + 0x1f) & ~0x1f;
+		{ unsigned32 *p = &mtod(m, unsigned32);
+                  *p = (mtod(m, unsigned32) + 0x1f) & ~0x1f;
+		}
             
             } else {
                 sc->rx_dropped++;
@@ -824,7 +827,7 @@ au1x00_emac_ioctl (struct ifnet *ifp, int command, caddr_t data)
 /* interrupt handler */
 rtems_isr au1x00_emac_isr (rtems_vector_number v)
 {
-    au1x00_emac_softc_t *sc;
+    volatile au1x00_emac_softc_t *sc;
     int index;
     int tx_flag = 0;
     int rx_flag = 0;
