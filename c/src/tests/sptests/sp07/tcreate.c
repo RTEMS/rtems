@@ -25,10 +25,18 @@ rtems_boolean Task_create_extension(
   rtems_tcb *created_task
 )
 {
+  char line[80];
+  rtems_name name;
+
   if ( task_number( created_task->Object.id ) > 0 ) {
-    puts_nocr( "TASK_CREATE - " );
-    put_name( Task_name[ task_number( created_task->Object.id ) ], FALSE );
-    puts( " - created." );
+    name = Task_name[ task_number( created_task->Object.id ) ];
+    sprintf( line, "TASK_CREATE - %c%c%c%c - created\n",
+      (name >> 24) & 0xff, 
+      (name >> 16) & 0xff,
+      (name >> 8) & 0xff,
+      name & 0xff
+    );
+    buffered_io_add_string( line );
   }
   return TRUE;
 }

@@ -7,8 +7,8 @@ TEST = sp07
 
 MANAGERS = io
 
-C_FILES = init.c task1.c task2.c task3.c task4.c taskexit.c tcreate.c \
-    tdelete.c trestart.c tstart.c
+C_FILES = init.c buffered_io.c task1.c task2.c task3.c task4.c taskexit.c \
+    tcreate.c tdelete.c trestart.c tstart.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h

@@ -43,6 +43,8 @@ rtems_task Init(
 
   puts( "\n\n*** TEST 7 ***" );
 
+  buffered_io_initialize();
+
   Extension_name[ 1 ] =  rtems_build_name( 'E', 'X', 'T', ' ' );
 
   status = rtems_extension_create(
@@ -111,6 +113,8 @@ rtems_task Init(
 
   status = rtems_task_restart( Task_id[ 3 ], 0 );
   directive_failed( status, "rtems_task_restart of TA3" );
+
+  buffered_io_flush();
 
   status = rtems_task_set_note( Task_id[ 1 ], RTEMS_NOTEPAD_8, 4 );
   directive_failed( status, "task_set_node of TA1" );

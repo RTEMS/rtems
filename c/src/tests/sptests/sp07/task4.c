@@ -25,5 +25,7 @@ rtems_task Task_4(
   rtems_task_argument argument
 )
 {
+  buffered_io_flush();
+
   puts( "TA4 - exitting task" );
 }
