@@ -1,5 +1,9 @@
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* netinet/in_chksum.c: Remove duplicate case to include
 	in_chksum_arm.c.
 

@@ -5,8 +5,7 @@
 AC_PREREQ(2.57)
 AC_INIT([rtems-cpukit-posix],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([src/pthread.c])
-RTEMS_TOP(../..)
-AC_CONFIG_AUX_DIR(../..)
+RTEMS_TOP([../..])
 
 RTEMS_CANONICAL_TARGET_CPU
 
