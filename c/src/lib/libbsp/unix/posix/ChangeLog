@@ -1,3 +1,8 @@
+2001-11-07	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/Makefile.am: Do NOT use the standard bootcard.c.
+	NOTE: With this fix all test including the mptest ran as expected.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

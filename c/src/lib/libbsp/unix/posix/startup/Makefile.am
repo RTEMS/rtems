@@ -11,7 +11,7 @@ PGM = ${ARCH}/startup.rel
 if HAS_CXX
 C_MAIN_C_FILES =
 else
-C_MAIN_C_FILES = main.c bootcard.c
+C_MAIN_C_FILES = main.c
 endif
 
 # C sources
