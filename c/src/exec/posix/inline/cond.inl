@@ -55,6 +55,7 @@ RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *_POSIX_Condition_variabl
 )
 {
 /* XXX really should validate pointer */
+/* XXX should support COND_INITIALIZER */
   return (POSIX_Condition_variables_Control *)
     _Objects_Get( &_POSIX_Condition_variables_Information, *id, location );
 }
