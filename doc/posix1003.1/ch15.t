@@ -14,7 +14,7 @@
 
 @example
 mqd_t, Type, Untested Implementation
-mq_attr, Type, Untested Implementation
+struct mq_attr, Type, Untested Implementation
 @end example
 
 @section Message Passing Functions

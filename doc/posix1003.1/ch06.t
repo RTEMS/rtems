@@ -83,7 +83,7 @@ fdatasync(), Function, Unimplemented
 @subsection Data Definitions for Asynchronous Input and Output
 
 @example
-struct aiocb, Type, Dummy Implementation
+struct aiocb, Type, Untested Implementation
 @end example
 
 @subsection Asynchronous Read

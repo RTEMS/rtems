@@ -54,10 +54,10 @@ _exit(), Function, Unimplemented
 @subsection Signal Concepts
 
 @example
-sigset_t, Type,
-struct sigevent, Type,
-union sigval, Type,
-siginfo_t, Type,
+sigset_t, Type, Implemented
+struct sigevent, Type, Implemented
+union sigval, Type, Implemented
+siginfo_t, Type, Implemented
 @end example
 
 @subsection Send a Signal to a Process
@@ -80,7 +80,7 @@ sigismember(), Function, Implemented
 
 @example
 sigaction(), Function, Implemented
-sigaction, Type, 
+sigaction, Type, Implemented
 @end example
 
 @subsection Examine and Change Blocked Signals

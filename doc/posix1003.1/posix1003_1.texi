@@ -120,7 +120,7 @@ This is the online version of the RTEMS POSIX 1003.1 Compliance Guide.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, Thread Cancellation Chapter, Top
+@node Command and Variable Index, Concept Index, Overall Summary, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.

@@ -10,6 +10,10 @@
 
 @section Semaphore Characteristics
 
+@example
+sem_t, Type, Untested Implementation
+@end example
+
 @section Semaphore Functions
 
 @subsection Initialize an Unnamed Semaphore

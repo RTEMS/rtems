@@ -134,7 +134,7 @@ chown(), Function, Unimplemented
 @subsection Set File Access and Modification Times
 
 @example
-struct utimbuf, Type, 
+struct utimbuf, Type, Unimplemented
 utime(), Function, Unimplemented
 @end example
 

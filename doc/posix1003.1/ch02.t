@@ -19,24 +19,28 @@
 @section Primitive System Types
 
 @example
-dev_t, Type,
-gid_t, Type,
-ino_t, Type,
-mode_t, Type,
-nlink_t, Type,
-off_t, Type,
-pid_t, Type,
-pthread_t, Type,
-pthread_attr_t, Type,
-pthread_mutex_t, Type,
-pthread_mutex_attr_t, Type,
-pthread_cond_t, Type,
-pthread_cond_attr_t, Type,
-pthread_key_t, Type,
-pthread_once_t, Type,
-size_t, Type,
-ssize_t, Type,
+dev_t, Type, Implemented
+gid_t, Type, Implemented
+ino_t, Type, Implemented
+mode_t, Type, Implemented
+nlink_t, Type, Implemented
+off_t, Type, Implemented
+pid_t, Type, Implemented
+pthread_t, Type, Implemented
+pthread_attr_t, Type, Implemented
+pthread_mutex_t, Type, Implemented
+pthread_mutex_attr_t, Type, Implemented
+pthread_cond_t, Type, Implemented
+pthread_cond_attr_t, Type, Implemented
+pthread_key_t, Type, Implemented
+pthread_once_t, Type, Implemented
+size_t, Type, Implemented
+ssize_t, Type, Implemented
+time_t, Type, Implemented
+uid_t, Type, Implemented
 @end example
+
+NOTE: time_t is not listed in this section but is used by many functions.
 
 @section Environment Description
 

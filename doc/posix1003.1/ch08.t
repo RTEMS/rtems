@@ -77,6 +77,7 @@ longjmp(), Function, Implemented
 ANSI C Section 4.9 --- Input/Output
 
 @example
+FILE, Type, Implemented
 clearerr(), Function, Implemented
 fclose(), Function, Implemented
 feof(), Function, Implemented
@@ -213,6 +214,7 @@ putchar_unlocked(), Function, Unimplemented
 @subsection Nonlocal Jumps
 
 @example
+sigjmp_buf, Type, Unimplemented
 sigsetjmp(), Function, Unimplemented
 siglongjmp(), Function, Unimplemented
 @end example

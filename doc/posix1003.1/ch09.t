@@ -15,7 +15,7 @@
 @subsection Group Database Access
 
 @example
-struct group, Type, 
+struct group, Type, Untested Implementation
 getgrgid(), Function, Unimplemented
 getgrgid_r(), Function, Unimplemented
 getgrname(), Function, Unimplemented
@@ -25,7 +25,7 @@ getgrnam_r(), Function, Unimplemented
 @subsection User Database Access
 
 @example
-struct passwd, Type, 
+struct passwd, Type, Untested Implementation
 getpwuid(), Function, Untested Implemented, assumes /etc/passwd exists
 getpwuid_r(), Function, Unimplemented
 getpwnam(), Function, Untested Implemented, assumes /etc/passwd exists

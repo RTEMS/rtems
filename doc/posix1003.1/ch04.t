@@ -73,7 +73,7 @@ setpgid(), Function, Dummy Implementation
 @subsection Get System Name
 
 @example
-struct utsname, Type, 
+struct utsname, Type, Untested Implementation
 uname(), Function, Untested Implementation
 @end example
 
@@ -88,7 +88,7 @@ time(), Function, Implemented
 @subsection Get Process Times
 
 @example
-struct tms, Type,
+struct tms, Type, Implemented
 times(), Function, Implemented
 @end example
 

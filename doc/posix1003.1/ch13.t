@@ -94,7 +94,7 @@ pthread_setschedparam(), Function, Implemented
 pthread_getschedparam(), Function, Implemented
 @end example
 
-@section Synchronization Scheduling, Implemented
+@section Synchronization Scheduling
 
 @subsection Mutex Initialization Scheduling Attributes
 
