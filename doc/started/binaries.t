@@ -58,13 +58,13 @@ The following is a sample session illustrating the installation
 of a C/C++ toolset targeting the SPARC architecture.  
 
 @example
-rpm -i rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -i sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -i rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -i sparc-rtems-c++-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -i sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -i rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-rpm -i sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -i @value{RTEMSRPMPREFIX}rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -i @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -i @value{RTEMSRPMPREFIX}rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -i @value{RTEMSRPMPREFIX}sparc-rtems-c++-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -i @value{RTEMSRPMPREFIX}sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -i @value{RTEMSRPMPREFIX}rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -i @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 @end example
 
 Upon successful completion of the above command sequence, a 
@@ -91,13 +91,13 @@ The following is a sample session illustrating the removal
 of a C/C++ toolset targeting the SPARC architecture.
 
 @example
-rpm -e sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-rpm -e rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-rpm -e sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -e sparc-rtems-c++-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -e rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -e sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -e rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -e @value{RTEMSRPMPREFIX}rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-c++-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -e @value{RTEMSRPMPREFIX}rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -e @value{RTEMSRPMPREFIX}rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 @end example
 
 NOTE:  If you have installed any RTEMS BSPs, then it is likely that
