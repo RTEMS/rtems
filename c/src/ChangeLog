@@ -1,5 +1,10 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* acinclude.m4: Add test "$multilib" != "yes".
+	* config-ml.in: Remove.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* acinclude.m4: Cleanups.
 	* configure.ac: Build ${srcdir}/../../cpukit/ as ./exec/ instead of
 	${srcdir}/exec/.

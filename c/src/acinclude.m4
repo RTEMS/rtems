@@ -9,6 +9,7 @@ AC_DEFUN([RTEMS_CONFIG_SUBDIR],
 [
 AC_CONFIG_COMMANDS_POST(
 [
+if test "$multilib" != "yes"; then
  ac_sub_sourcedir=$2
  ac_sub_builddir=$1
 
@@ -105,6 +106,7 @@ if test "$no_recursion" != yes; then
 
     cd $ac_popdir
   done
+fi
 fi
 ])
 ])
