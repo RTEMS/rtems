@@ -34,8 +34,6 @@ interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
     $(interrupts_CPPFLAGS)
 interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-    $(interrupts_CPPFLAGS)
-
 all-local: $(PREINSTALL_FILES)
 
 ## --

@@ -1,3 +1,7 @@
+2005-01-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/Makefile.am: Fix typo.
+
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* mongoosev/Makefile.am, r46xx/Makefile.am, shared/Makefile.am,
