@@ -1,5 +1,12 @@
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
+	PR 288/rtems
+	* irq/irq_asm.S, startup/bspstart.c: _ISR_Nest_level is now properly
+	maintained and any BSP which does not do so will trip a panic in the
+	shared code.
+
+2003-07-18	Till Straumann <strauman@slac.stanford.edu>
+
 	PR 415/bsps
 	* pci/detect_raven_bridge.c, startup/bspstart.c:
 	This patch reverts enabling MCP interrupts for the motorola_powerpc
