@@ -18,10 +18,10 @@
  */
 
 unsigned int SCORE603e_FLASH_Disable(
-  rtems_unsigned32               area                           /* IN  */
+  uint32_t                       area                           /* IN  */
 )
 {
-  rtems_unsigned8 value;
+  uint8_t         value;
  
   value = *SCORE603E_BOARD_CTRL_REG;
   value = value | (~SCORE603E_BRD_FLASH_DISABLE_MASK);
@@ -32,10 +32,10 @@ unsigned int SCORE603e_FLASH_Disable(
 
 unsigned int SCORE603e_FLASH_verify_enable()
 {
-  volatile rtems_unsigned8 *Ctrl_Status_Register = 
+  volatile uint8_t         *Ctrl_Status_Register = 
            (void *)SCORE603E_BOARD_CTRL_REG;
-  rtems_unsigned8  ctrl_value;
-  rtems_unsigned32 pci_value;
+  uint8_t          ctrl_value;
+  uint32_t         pci_value;
 
   ctrl_value = *Ctrl_Status_Register;
   if ( ctrl_value & SCORE603E_BRD_FLASH_DISABLE_MASK ) {
@@ -59,13 +59,13 @@ unsigned int SCORE603e_FLASH_verify_enable()
 }
 
 unsigned int SCORE603e_FLASH_pci_reset_reg(
-  rtems_unsigned8  reg,
-  rtems_unsigned32 cmask,
-  rtems_unsigned32 mask
+  uint8_t          reg,
+  uint32_t         cmask,
+  uint32_t         mask
 )
 {
-  rtems_unsigned32 pci_value;
-  rtems_unsigned32 value;
+  uint32_t         pci_value;
+  uint32_t         value;
 
   pci_value = Read_pci_device_register( reg );
   pci_value &= cmask;
@@ -83,11 +83,11 @@ unsigned int SCORE603e_FLASH_pci_reset_reg(
  *  SCORE603e_FLASH_Enable_writes
  */
 unsigned int SCORE603e_FLASH_Enable_writes(
-  rtems_unsigned32               area                           /* IN  */
+  uint32_t                       area                           /* IN  */
 )
 {
-  rtems_unsigned8  ctrl_value;
-  rtems_unsigned32 pci_value;
+  uint8_t          ctrl_value;
+  uint32_t         pci_value;
 
   ctrl_value = *SCORE603E_BOARD_CTRL_REG;
   ctrl_value = ctrl_value & 0xbf;

@@ -172,7 +172,7 @@ rtems_isr bsp_spurious_handler(
 
 void bsp_spurious_initialize()
 {
-  rtems_unsigned32 trap;
+  uint32_t         trap;
 
   for ( trap=0 ; trap < PPC_IRQ_LAST ; trap++ ) {
     if (trap == PPC_IRQ_DECREMENTER)
@@ -185,70 +185,70 @@ void bsp_spurious_initialize()
 
 void bsp_set_trap_vectors( void )
 {
-  volatile rtems_unsigned32 *ptr;
+  volatile uint32_t         *ptr;
 
   /* reset_vector  */
-  ptr = (rtems_unsigned32 *)0x00100  ;
+  ptr = (uint32_t*)0x00100  ;
   *ptr = 0x48000000;
 
   /* org    mach_vector  */
-  ptr = (rtems_unsigned32 *)0x00200;
+  ptr = (uint32_t*)0x00200;
   *ptr = 0x48000000;
 
   /* org    prot_vector  */
-  ptr = (rtems_unsigned32 *)0x00300;
+  ptr = (uint32_t*)0x00300;
   *ptr = 0x48000000;
 
   /* org    isi_vector  */
-  ptr = (rtems_unsigned32 *)0x00400;
+  ptr = (uint32_t*)0x00400;
   *ptr = 0x48000000;
 
   /* org    ext_vector  */
-  ptr = (rtems_unsigned32 *)0x0500  ;
+  ptr = (uint32_t*)0x0500  ;
   *ptr = 0x48000000;
 
   /* org    align_vector  */
-  ptr = (rtems_unsigned32 *)0x00600  ;
+  ptr = (uint32_t*)0x00600  ;
   *ptr = 0x48000000;
 
   /* org    prog_vector  */
-  ptr = (rtems_unsigned32 *)0x00700  ;
+  ptr = (uint32_t*)0x00700  ;
   *ptr = 0x48000000;
 
   /* org    float_vector  */
-  ptr = (rtems_unsigned32 *)0x00800;
+  ptr = (uint32_t*)0x00800;
   *ptr = 0x48000000;
 
   /* org    dec_vector  - rfi */
-  ptr = (rtems_unsigned32 *)0x900;
+  ptr = (uint32_t*)0x900;
   *ptr = 0x4c000064;
 
   /* org    sys_vector  */
-  ptr = (rtems_unsigned32 *)0x0c00  ;
+  ptr = (uint32_t*)0x0c00  ;
   *ptr = 0x48000000;
 
   /* org    trace_vector  */
-  ptr = (rtems_unsigned32 *)0x0d00  ;
+  ptr = (uint32_t*)0x0d00  ;
   *ptr = 0x48000000;
 
   /* org    itm_vector  */
-  ptr = (rtems_unsigned32 *)0x01000  ;
+  ptr = (uint32_t*)0x01000  ;
   *ptr = 0x48000000;
 
   /* org    dltm_vector  */
-  ptr = (rtems_unsigned32 *)0x01100  ;
+  ptr = (uint32_t*)0x01100  ;
   *ptr = 0x48000000;
 
   /* org    dstm_vector  */
-  ptr = (rtems_unsigned32 *)0x1200  ;
+  ptr = (uint32_t*)0x1200  ;
   *ptr = 0x48000000;
 
   /* org    addr_vector  */
-  ptr = (rtems_unsigned32 *)0x1300  ;
+  ptr = (uint32_t*)0x1300  ;
   *ptr = 0x48000000;
 
   /* org    sysmgmt_vector  */
-  ptr = (rtems_unsigned32 *)0x1400  ;
+  ptr = (uint32_t*)0x1400  ;
   *ptr = 0x48000000;
 
 }

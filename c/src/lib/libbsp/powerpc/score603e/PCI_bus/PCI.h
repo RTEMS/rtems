@@ -20,21 +20,21 @@
  */
 
 void PCI_bus_write(
-  volatile rtems_unsigned32 * _addr, 
-  rtems_unsigned32 _data 
+  volatile uint32_t         * _addr, 
+  uint32_t         _data 
 ); 
 
-rtems_unsigned32 PCI_bus_read(
-  volatile rtems_unsigned32 *  _addr 
+uint32_t         PCI_bus_read(
+  volatile uint32_t         *  _addr 
 );
 
-rtems_unsigned32 Read_pci_device_register(
-  rtems_unsigned32 address
+uint32_t         Read_pci_device_register(
+  uint32_t         address
 );
 
 void  Write_pci_device_register(
-  rtems_unsigned32 address,
-  rtems_unsigned32 data 
+  uint32_t         address,
+  uint32_t         data 
 );
 
 #endif

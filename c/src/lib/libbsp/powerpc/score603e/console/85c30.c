@@ -130,10 +130,10 @@ void initialize_85c30_port(
   const Port_85C30_info *Port
 )
 {
-  rtems_unsigned16        value;
+  uint16_t                value;
   volatile unsigned char *ctrl;
   Console_Protocol        *Setup;
-  rtems_unsigned16        baud_constant;
+  uint16_t                baud_constant;
 
   Setup = Port->Protocol;
   ctrl  = Port->ctrl;
@@ -310,7 +310,7 @@ void outbyte_polled_85c30(
 )
 {
   unsigned char       z8530_status;
-  rtems_unsigned32    isrlevel;
+  uint32_t            isrlevel;
  
   rtems_interrupt_disable( isrlevel );
 
@@ -342,7 +342,7 @@ int inbyte_nonblocking_85c30(
 {
   volatile unsigned char  *csr;
   unsigned char   z8530_status;
-  rtems_unsigned8 data;
+  uint8_t         data;
 
   csr = Port->ctrl;
 
@@ -380,7 +380,7 @@ rtems_isr ISR_85c30_Async(
    const Port_85C30_info   *Port
 )
 {
-  rtems_unsigned16           status;
+  uint16_t                   status;
   volatile Console_Protocol *Protocol;
   unsigned char              data;
   rtems_boolean              did_something = FALSE;

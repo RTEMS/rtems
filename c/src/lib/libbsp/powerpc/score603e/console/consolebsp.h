@@ -71,7 +71,7 @@ typedef enum {
 } CONSOLE_Character_bits;
 
 typedef struct {
-  rtems_unsigned32        baud_rate;         /* baud rate value */
+  uint32_t                baud_rate;         /* baud rate value */
   CONSOLE_Stop_bits        stop_bits;         
   CONSOLE_Parity           parity;
   CONSOLE_Character_bits   read_char_bits;
@@ -90,9 +90,9 @@ typedef struct {
  * Structure used for chip level information.
  */
 typedef struct {
-  rtems_unsigned32       vector;
-  rtems_unsigned32       clock_frequency;
-  rtems_unsigned16       clock_x;
+  uint32_t               vector;
+  uint32_t               clock_frequency;
+  uint16_t               clock_x;
   CONSOLE_Clock_speed     clock_speed;
 } Chip_85C30_info;
 

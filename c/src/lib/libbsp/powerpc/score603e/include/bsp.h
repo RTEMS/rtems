@@ -93,20 +93,20 @@ extern "C" {
 
 #define Cause_tm27_intr()  \
   do { \
-    unsigned32 _clicks = 8; \
+    uint32_t   _clicks = 8; \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
 
 #define Clear_tm27_intr() \
   do { \
-    unsigned32 _clicks = 0xffffffff; \
+    uint32_t   _clicks = 0xffffffff; \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
 #define Lower_tm27_intr() \
   do { \
-    unsigned32 _msr = 0; \
+    uint32_t   _msr = 0; \
     _ISR_Set_level( 0 ); \
     asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
     _msr |=  0x8002; \
@@ -200,11 +200,11 @@ void data_cache_enable ();
 
 
 void initialize_PCI_bridge ();
-rtems_unsigned16 read_and_clear_irq ();
+uint16_t         read_and_clear_irq ();
 void set_irq_mask(
-  rtems_unsigned16 value
+  uint16_t         value
 );
-rtems_unsigned16 get_irq_mask();
+uint16_t         get_irq_mask();
 
 /*
  * universe.c
@@ -212,27 +212,27 @@ rtems_unsigned16 get_irq_mask();
 void initialize_universe();
 
 void set_irq_mask(
-  rtems_unsigned16 value
+  uint16_t         value
 );
 
-rtems_unsigned16 get_irq_mask();
+uint16_t         get_irq_mask();
 
 void unmask_irq( 
-  rtems_unsigned16 irq_idx
+  uint16_t         irq_idx
 );
 
 void init_irq_data_register();
 
-rtems_unsigned16 read_and_clear_PMC_irq(
-  rtems_unsigned16    irq
+uint16_t         read_and_clear_PMC_irq(
+  uint16_t            irq
 );
 
 rtems_boolean Is_PMC_IRQ(
-  rtems_unsigned32   pmc_irq,
-  rtems_unsigned16   status_word
+  uint32_t           pmc_irq,
+  uint16_t           status_word
 );
 
-rtems_unsigned16 read_and_clear_irq();
+uint16_t         read_and_clear_irq();
 
 /*
  * FPGA.c
@@ -242,11 +242,11 @@ void initialize_PCI_bridge ();
 /* flash.c */
 
 unsigned int SCORE603e_FLASH_Disable(
-  rtems_unsigned32               unused
+  uint32_t                       unused
 );
 unsigned int SCORE603e_FLASH_verify_enable();
 unsigned int SCORE603e_FLASH_Enable_writes(
-  rtems_unsigned32               area        /* Unused  */
+  uint32_t                       area        /* Unused  */
 );
 
 #define Convert_Endian_32( _data ) \
@@ -258,7 +258,7 @@ unsigned int SCORE603e_FLASH_Enable_writes(
 
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-extern rtems_unsigned32          bsp_isr_level;
+extern uint32_t                  bsp_isr_level;
 
 #endif /* ASM */
 

@@ -24,7 +24,7 @@
 void initialize_PCI_bridge ()
 {
 #if (!SCORE603E_USE_DINK)
-  rtems_unsigned16 mask, shift, data;
+  uint16_t         mask, shift, data;
 
   shift = SCORE603E_85C30_0_IRQ - Score_IRQ_First;
   mask = 1 << shift;
@@ -41,22 +41,22 @@ void initialize_PCI_bridge ()
 }
 
 void set_irq_mask(
-  rtems_unsigned16 value
+  uint16_t         value
 )
 {
-  rtems_unsigned16  *loc;
+  uint16_t          *loc;
 
-  loc = (rtems_unsigned16  *)SCORE603E_FPGA_MASK_DATA;
+  loc = (uint16_t*)SCORE603E_FPGA_MASK_DATA;
 
   *loc = value;
 }
 
-rtems_unsigned16 get_irq_mask()
+uint16_t         get_irq_mask()
 {
-  rtems_unsigned16  *loc;
-  rtems_unsigned16  value;
+  uint16_t          *loc;
+  uint16_t          value;
 
-  loc =  (rtems_unsigned16  *)SCORE603E_FPGA_MASK_DATA;
+  loc =  (uint16_t*)SCORE603E_FPGA_MASK_DATA;
 
   value = *loc;
 
@@ -64,11 +64,11 @@ rtems_unsigned16 get_irq_mask()
 }
 
 void unmask_irq( 
-  rtems_unsigned16 irq_idx
+  uint16_t         irq_idx
 )
 {
-  rtems_unsigned16 value;
-  rtems_unsigned32 mask_idx = irq_idx;
+  uint16_t         value;
+  uint32_t         mask_idx = irq_idx;
 
   value = get_irq_mask();
 
@@ -92,8 +92,8 @@ void unmask_irq(
 
 void init_irq_data_register()
 {
-  rtems_unsigned32 index;
-  rtems_unsigned32 i;
+  uint32_t         index;
+  uint32_t         i;
 
 #if (SCORE603E_USE_DINK)
   set_irq_mask( 0xffff );
@@ -109,11 +109,11 @@ void init_irq_data_register()
   }
 }
 
-rtems_unsigned16 read_and_clear_PMC_irq(
-  rtems_unsigned16    irq
+uint16_t         read_and_clear_PMC_irq(
+  uint16_t            irq
 ) 
 {
-  rtems_unsigned16    status_word = irq;
+  uint16_t            status_word = irq;
 
   status_word = (*SCORE603E_PMC_STATUS_ADDRESS);
 
@@ -121,8 +121,8 @@ rtems_unsigned16 read_and_clear_PMC_irq(
 }
 
 rtems_boolean Is_PMC_IRQ(
-  rtems_unsigned32   pmc_irq,
-  rtems_unsigned16   status_word
+  uint32_t           pmc_irq,
+  uint16_t           status_word
 )
 {
   rtems_boolean   result= FALSE;
@@ -148,9 +148,9 @@ rtems_boolean Is_PMC_IRQ(
   return result;
 }
 
-rtems_unsigned16 read_and_clear_irq()
+uint16_t         read_and_clear_irq()
 {
-  rtems_unsigned16    irq;
+  uint16_t            irq;
 
   irq = (*SCORE603E_FPGA_VECT_DATA);
 

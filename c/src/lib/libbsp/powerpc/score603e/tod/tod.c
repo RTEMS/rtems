@@ -25,12 +25,12 @@
 
 void ICM7170_GetTOD(
   volatile unsigned char *imc1770_regs,
-  rtems_unsigned8        icm1770_freq,
+  uint8_t                icm1770_freq,
   rtems_time_of_day      *rtc_tod
 );
 void ICM7170_SetTOD(
   volatile unsigned char *imc1770_regs,
-  rtems_unsigned8        icm1770_freq,
+  uint8_t                icm1770_freq,
   rtems_time_of_day      *rtc_tod
 );
 
@@ -101,7 +101,7 @@ static void ICM7170_SetField(
 
 void ICM7170_GetTOD(
   volatile unsigned char *imc1770_regs,
-  rtems_unsigned8        icm1770_freq,
+  uint8_t                icm1770_freq,
   rtems_time_of_day      *rtc_tod
 )
 {
@@ -137,7 +137,7 @@ void ICM7170_GetTOD(
 
 void ICM7170_SetTOD(
   volatile unsigned char *imc1770_regs,
-  rtems_unsigned8        icm1770_freq,
+  uint8_t                icm1770_freq,
   rtems_time_of_day      *rtc_tod
 )
 {

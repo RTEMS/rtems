@@ -35,19 +35,19 @@ void PCI_bus_delay ()
  * PCI_bus_write
  */
 void PCI_bus_write(
-  volatile rtems_unsigned32 * _addr,                  /* IN */
-  rtems_unsigned32 _data                              /* IN */
+  volatile uint32_t         * _addr,                  /* IN */
+  uint32_t         _data                              /* IN */
 ) 
 {
   _data = Convert_Endian_32( _data );
   *_addr = _data;
 }
 
-rtems_unsigned32 PCI_bus_read(
-  volatile rtems_unsigned32 *  _addr                  /* IN */
+uint32_t         PCI_bus_read(
+  volatile uint32_t         *  _addr                  /* IN */
 )
 {
-  rtems_unsigned32 data;
+  uint32_t         data;
  
   data = *_addr;
   data = Convert_Endian_32( data );
@@ -58,16 +58,16 @@ rtems_unsigned32 PCI_bus_read(
  * devices registers on the PCI bus.  i.e.: Universe, Ethernet & PMC.
  */
 
-rtems_unsigned32 Read_pci_device_register(
-  rtems_unsigned32 address
+uint32_t         Read_pci_device_register(
+  uint32_t         address
 )
 {
-  rtems_unsigned32 data;
+  uint32_t         data;
 
   /*
    * Write the PCI configuration address
    */
-   PCI_bus_write( (volatile rtems_unsigned32 *)SCORE603E_PCI_IO_CFG_ADDR, address );
+   PCI_bus_write( (volatile uint32_t*)SCORE603E_PCI_IO_CFG_ADDR, address );
   
   /*
    *  Delay needed when running out of DRAM
@@ -77,20 +77,20 @@ rtems_unsigned32 Read_pci_device_register(
   /*
    * read data
    */
-  data = PCI_bus_read( (volatile rtems_unsigned32 *)SCORE603E_PCI_IO_CFG_DATA );
+  data = PCI_bus_read( (volatile uint32_t*)SCORE603E_PCI_IO_CFG_DATA );
   
   return data;
 }
 
 void  Write_pci_device_register(
-  rtems_unsigned32 address,
-  rtems_unsigned32 data 
+  uint32_t         address,
+  uint32_t         data 
 )
 {
   /*
    * Write the PCI configuration address
    */
-   PCI_bus_write( (volatile rtems_unsigned32 *)SCORE603E_PCI_IO_CFG_ADDR, address );
+   PCI_bus_write( (volatile uint32_t*)SCORE603E_PCI_IO_CFG_ADDR, address );
   
   /*
    *  Delay needed when running out of DRAM
@@ -100,6 +100,6 @@ void  Write_pci_device_register(
   /*
    * write data
    */
-  PCI_bus_write( (volatile rtems_unsigned32 *)SCORE603E_PCI_IO_CFG_DATA, data );
+  PCI_bus_write( (volatile uint32_t*)SCORE603E_PCI_IO_CFG_DATA, data );
 }
 

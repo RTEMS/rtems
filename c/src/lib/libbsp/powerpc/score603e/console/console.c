@@ -81,7 +81,7 @@ void DEBUG_puts(
 {
   char *s;
   int   console;
-  volatile rtems_unsigned8 *csr;
+  volatile uint8_t         *csr;
 
   console = USE_FOR_CONSOLE;
 
@@ -187,7 +187,7 @@ void console_exit()
 {
   int i;
   volatile Ring_buffer_t *buffer;
-  rtems_unsigned32 ch;
+  uint32_t         ch;
 
   for ( i=0 ; i < NUM_Z85C30_PORTS ; i++ ) {
     
@@ -332,7 +332,7 @@ int console_write_support(
   int   len)
 {
   int nwrite = 0;
-  volatile rtems_unsigned8 *csr;
+  volatile uint8_t         *csr;
   int                       port = minor;
 
   /* 
@@ -450,7 +450,7 @@ void console_outbyte_interrupts(
 )
 {
   Console_Protocol   *protocol;
-  rtems_unsigned32    isrlevel;
+  uint32_t            isrlevel;
 
   protocol = Port->Protocol;
   

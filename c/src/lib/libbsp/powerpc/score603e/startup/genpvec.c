@@ -47,7 +47,7 @@ typedef struct
  *        handlers at a later time.
  */
   EE_ISR_Type       ISR_Nodes [NUM_LIRQ_HANDLERS];
-  rtems_unsigned16  Nodes_Used; 
+  uint16_t          Nodes_Used; 
   Chain_Control     ISR_Array  [NUM_LIRQ];
 
 /* XXX */
@@ -91,8 +91,8 @@ rtems_isr_entry  set_EE_vector(
   rtems_vector_number vector        /* vector number      */
 )
 {
-  rtems_unsigned16 vec_idx  = vector - Score_IRQ_First;
-  rtems_unsigned32 index;
+  uint16_t         vec_idx  = vector - Score_IRQ_First;
+  uint32_t         index;
   
   assert  (Nodes_Used < NUM_LIRQ_HANDLERS);
    
@@ -138,14 +138,14 @@ rtems_isr external_exception_ISR (
   rtems_vector_number   vector             /* IN  */
 )
 { 
- rtems_unsigned16    index;
+ uint16_t            index;
  EE_ISR_Type         *node;
- rtems_unsigned16    value;
+ uint16_t            value;
  char                err_msg[100];
 #if (HAS_PMC_PSC8)
- rtems_unsigned16    PMC_irq;
- rtems_unsigned16    check_irq;
- rtems_unsigned16    status_word;
+ uint16_t            PMC_irq;
+ uint16_t            check_irq;
+ uint16_t            status_word;
 #endif
 
  index = read_and_clear_irq();

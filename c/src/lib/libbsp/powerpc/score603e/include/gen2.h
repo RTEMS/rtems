@@ -32,17 +32,17 @@ extern "C" {
 #define SCORE603E_TIMER_PORT_B         0xfd000008
 #define SCORE603E_TIMER_PORT_A         0xfd000004
 
-#define SCORE603E_BOARD_CTRL_REG       ((volatile rtems_unsigned8 *)0xfd00002c)
+#define SCORE603E_BOARD_CTRL_REG       ((volatile uint8_t*)0xfd00002c)
 #define SCORE603E_BRD_FLASH_DISABLE_MASK     0x40
 
-#define SCORE603E_85C30_CTRL_0         ((volatile rtems_unsigned8 *)0xfe200020)
-#define SCORE603E_85C30_DATA_0         ((volatile rtems_unsigned8 *)0xfe200024)
-#define SCORE603E_85C30_CTRL_1         ((volatile rtems_unsigned8 *)0xfe200028)
-#define SCORE603E_85C30_DATA_1         ((volatile rtems_unsigned8 *)0xfe20002c)
-#define SCORE603E_85C30_CTRL_2         ((volatile rtems_unsigned8 *)0xfe200000)
-#define SCORE603E_85C30_DATA_2         ((volatile rtems_unsigned8 *)0xfe200004)
-#define SCORE603E_85C30_CTRL_3         ((volatile rtems_unsigned8 *)0xfe200008)
-#define SCORE603E_85C30_DATA_3         ((volatile rtems_unsigned8 *)0xfe20000c)
+#define SCORE603E_85C30_CTRL_0         ((volatile uint8_t*)0xfe200020)
+#define SCORE603E_85C30_DATA_0         ((volatile uint8_t*)0xfe200024)
+#define SCORE603E_85C30_CTRL_1         ((volatile uint8_t*)0xfe200028)
+#define SCORE603E_85C30_DATA_1         ((volatile uint8_t*)0xfe20002c)
+#define SCORE603E_85C30_CTRL_2         ((volatile uint8_t*)0xfe200000)
+#define SCORE603E_85C30_DATA_2         ((volatile uint8_t*)0xfe200004)
+#define SCORE603E_85C30_CTRL_3         ((volatile uint8_t*)0xfe200008)
+#define SCORE603E_85C30_DATA_3         ((volatile uint8_t*)0xfe20000c)
 
 /*
  * PSC8 - PMC Card 
@@ -54,11 +54,11 @@ extern "C" {
 #define SCORE603E_PCI_REGISTER_BASE        0xfc000000
 
 #define SCORE603E_PCI_DEVICE_ADDRESS( _offset) \
-         ((volatile rtems_unsigned32 *)( SCORE603E_PCI_PMC_DEVICE_BASE + _offset ))
+         ((volatile uint32_t*)( SCORE603E_PCI_PMC_DEVICE_BASE + _offset ))
   
 
 #define SCORE603E_PMC_SERIAL_ADDRESS( _offset )    \
-        ((volatile rtems_unsigned8 *)(SCORE603E_PCI_REGISTER_BASE + _offset))
+        ((volatile uint8_t*)(SCORE603E_PCI_REGISTER_BASE + _offset))
 
 /*
  * PMC serial channels - (4-7: 232 and 8-11: 422)
@@ -150,10 +150,10 @@ extern "C" {
 /*
  * FPGA Interupt Address Definations.
  */
-#define SCORE603E_FPGA_VECT_DATA    ((volatile rtems_unsigned16 *)0xfd000040)
-#define SCORE603E_FPGA_BIT1_15_0    ((volatile rtems_unsigned16 *)0xfd000044)
-#define SCORE603E_FPGA_MASK_DATA    ((volatile rtems_unsigned16 *)0xfd000048)
-#define SCORE603E_FPGA_IRQ_INPUT    ((volatile rtems_unsigned16 *)0xfd00004c)
+#define SCORE603E_FPGA_VECT_DATA    ((volatile uint16_t*)0xfd000040)
+#define SCORE603E_FPGA_BIT1_15_0    ((volatile uint16_t*)0xfd000044)
+#define SCORE603E_FPGA_MASK_DATA    ((volatile uint16_t*)0xfd000048)
+#define SCORE603E_FPGA_IRQ_INPUT    ((volatile uint16_t*)0xfd00004c)
 
 /*
  * The PMC status word is at the PMC base address 

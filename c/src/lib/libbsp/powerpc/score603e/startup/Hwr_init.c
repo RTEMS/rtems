@@ -52,24 +52,24 @@
 
 
 typedef struct {
-  rtems_unsigned32  counter_1_100;
-  rtems_unsigned32  counter_hours;
-  rtems_unsigned32  counter_min;
-  rtems_unsigned32  counter_sec;
-  rtems_unsigned32  counter_month;
-  rtems_unsigned32  counter_date;
-  rtems_unsigned32  counter_year;
-  rtems_unsigned32  counter_day_of_week;
+  uint32_t          counter_1_100;
+  uint32_t          counter_hours;
+  uint32_t          counter_min;
+  uint32_t          counter_sec;
+  uint32_t          counter_month;
+  uint32_t          counter_date;
+  uint32_t          counter_year;
+  uint32_t          counter_day_of_week;
 
-  rtems_unsigned32  RAM_1_100;
-  rtems_unsigned32  RAM_hours;
-  rtems_unsigned32  RAM_month;
-  rtems_unsigned32  RAM_date;
-  rtems_unsigned32  RAM_year;
-  rtems_unsigned32  RAM_day_of_week;
+  uint32_t          RAM_1_100;
+  uint32_t          RAM_hours;
+  uint32_t          RAM_month;
+  uint32_t          RAM_date;
+  uint32_t          RAM_year;
+  uint32_t          RAM_day_of_week;
 
-  rtems_unsigned32  interupt_status_mask;
-  rtems_unsigned32  command_register;
+  uint32_t          interupt_status_mask;
+  uint32_t          command_register;
 }Harris_RTC;
 
 void init_RTC()
@@ -84,7 +84,7 @@ void init_RTC()
 void init_PCI()
 {  
 #if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
-  rtems_unsigned32 value;
+  uint32_t         value;
 
  /*
   * NOTE:  Accessing any memory location not mapped by the BAT 
@@ -174,7 +174,7 @@ void init_PCI()
 
 void instruction_cache_enable ()
 {
-  rtems_unsigned32 value;
+  uint32_t         value;
 
   /*
    * Enable the instruction cache
@@ -189,7 +189,7 @@ void instruction_cache_enable ()
 
 void data_cache_enable ()
 {
-  rtems_unsigned32 value;
+  uint32_t         value;
 
   /*
    * enable data cache 

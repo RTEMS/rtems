@@ -29,14 +29,14 @@
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 rtems_cpu_table                   Cpu_table;
-rtems_unsigned32                  bsp_isr_level;
+uint32_t                          bsp_isr_level;
 
 /*
  *  Use the shared implementations of the following routines
  */
 
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*PAGE
  *
@@ -49,10 +49,10 @@ void bsp_libc_init( void *, unsigned32, int );
 void bsp_pretasking_hook(void)
 {
   extern int end;
-  rtems_unsigned32 heap_start;
-  rtems_unsigned32 heap_size;
+  uint32_t         heap_start;
+  uint32_t         heap_size;
 
-  heap_start = (rtems_unsigned32) &end;
+  heap_start = (uint32_t) &end;
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
@@ -109,8 +109,8 @@ void bsp_predriver_hook(void)
  */
 
 void initialize_PMC() {
-  volatile rtems_unsigned32 *PMC_addr;
-  rtems_unsigned8  data;
+  volatile uint32_t         *PMC_addr;
+  uint8_t          data;
 
 #if (0) /* First Values sent */
   /*
@@ -128,7 +128,7 @@ void initialize_PMC() {
   /*
    * Bit 0 and 1 HI cause Medium Loopback to occur.
    */
-  PMC_addr = (volatile rtems_unsigned32 *)
+  PMC_addr = (volatile uint32_t*)
         SCORE603E_PMC_SERIAL_ADDRESS( 0x100000 );
   data = *PMC_addr;
   /*   *PMC_addr = data | 0x3;  */
@@ -151,7 +151,7 @@ void initialize_PMC() {
   PMC_addr  = SCORE603E_PCI_DEVICE_ADDRESS( 0x14 );
   *PMC_addr = (SCORE603E_PCI_REGISTER_BASE >> 24) & 0x3f;
 
-  PMC_addr = (volatile rtems_unsigned32 *)
+  PMC_addr = (volatile uint32_t*)
       SCORE603E_PMC_SERIAL_ADDRESS( 0x100000 );
   data = *PMC_addr;
   *PMC_addr = data & 0xfc;
@@ -190,7 +190,7 @@ void bsp_start( void )
 {
   unsigned char *work_space_start;
   unsigned int  msr_value = 0x0000;
-  volatile rtems_unsigned32 *ptr;
+  volatile uint32_t         *ptr;
 
   rtems_bsp_delay( 1000 );
 
@@ -215,13 +215,13 @@ void bsp_start( void )
     
    Code = 0x4bf00002;          
    for (Address = 0x100; Address <= 0xe00; Address += 0x100) { 
-     A_Vector = (unsigned32    *)Address;
+     A_Vector = (uint32_t*)Address;
      Code = 0x4bf00002 + Address;
      *A_Vector = Code;
    }
     
    for (Address = 0x1000; Address <= 0x1400; Address += 0x100) { 
-     A_Vector = (unsigned32    *)Address;
+     A_Vector = (uint32_t*)Address;
      Code = 0x4bf00002 + Address;
      *A_Vector = Code;
    }
@@ -248,7 +248,7 @@ void bsp_start( void )
    * Override the DINK error on a Decrementor interrupt.
    */
   /* org    dec_vector  - rfi */
-  ptr = (rtems_unsigned32 *)0x900;
+  ptr = (uint32_t*)0x900;
   *ptr = 0x4c000064;
 
 #else
