@@ -22,6 +22,9 @@ FILES= tversions.texi
 info_TEXINFOS = started_ada.texi
 started_ada_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
+buildrt.t: $(top_srcdir)/started/buildrt.t
+	$(LN_S) $<
+
 intro.texi: intro.t tversions.texi
 	$(BMENU) -c -p "Top" \
 	    -u "Top" \
@@ -53,3 +56,4 @@ gdb.texi: gdb.t tversions.texi
 	    -n "" $<
 
 EXTRA_DIST = *.t
+CLEANFILES += buildrt.t
