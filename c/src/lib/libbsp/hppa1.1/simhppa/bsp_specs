@@ -10,7 +10,8 @@
 *lib:
 %{!qrtems: %(old_lib)} %{qrtems: --start-group \
 %{!qrtems_debug: -lrtemsbsp -lrtemscpu} %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
--lc -lgcc --end-group}
+-lc -lgcc --end-group \
+%{!qnolinkcmds: -T linkcmds%s}}
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{qrtems: \
