@@ -26,12 +26,24 @@ AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = bpf.h ethernet.h if.c if.h if_arp.h if_dl.h if_ethersubr.c \
-    if_llc.h if_loop.c if_ppp.h if_types.h netisr.h ppp-comp.h ppp_defs.h \
-    radix.c radix.h raw_cb.c raw_cb.h raw_usrreq.c route.c route.h rtsock.c
+EXTRA_DIST = if.c if_ethersubr.c if_loop.c \
+    radix.c raw_cb.c raw_usrreq.c route.c rtsock.c
+
+H_FILES = bpf.h ethernet.h if.h if_arp.h if_dl.h if_llc.h if_ppp.h if_types.h \
+    netisr.h ppp-comp.h ppp_defs.h radix.h raw_cb.h route.h
+
+noinst_HEADERS = $(H_FILES)
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net $(H_FILES:%=$(PROJECT_INCLUDE)/net/%)
+
+$(PROJECT_INCLUDE)/net:
+	@$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/net/%.h: %.h
+	$(INSTALL_DATA) $< $@
 
 include $(top_srcdir)/../../../automake/local.am

@@ -22,10 +22,19 @@ include $(top_srcdir)/../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
 EXTRA_DIST = ftpd.c ftpd.h
+
+H_FILES = ftpd.h
+
+noinst_HEADERS = $(H_FILES)
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%=$(PROJECT_INCLUDE)/%)
+
+$(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
 
 include $(top_srcdir)/../../../automake/local.am
