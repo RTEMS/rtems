@@ -154,7 +154,9 @@ This is the online version of the RTEMS C User's Guide.
 @node Command and Variable Index, Concept Index, Glossary, Top
 @unnumbered Command and Variable Index
 
-@printindex fn
+There are currently no Command and Variable Index entries.
+
+@c @printindex fn
 
 @node Concept Index, , Command and Variable Index, Top
 @unnumbered Concept Index

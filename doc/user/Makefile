@@ -18,10 +18,10 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi
 FILES= bsp.texi c_user.texi clock.texi concepts.texi conf.texi \
-dirstat.texi dpmem.texi event.texi example.texi fatal.texi \
-glossary.texi init.texi intr.texi io.texi mp.texi msg.texi overview.texi \
-part.texi preface.texi region.texi rtmon.texi schedule.texi sem.texi \
-signal.texi task.texi timer.texi userext.texi $(COMMON_FILES)
+    dirstat.texi dpmem.texi event.texi example.texi fatal.texi \
+    glossary.texi init.texi intr.texi io.texi mp.texi msg.texi overview.texi \
+    part.texi preface.texi region.texi rtmon.texi schedule.texi sem.texi \
+    signal.texi task.texi timer.texi userext.texi $(COMMON_FILES)
 
 GENERATED_FILES=overview.texi concepts.texi init.texi task.texi \
     intr.texi clock.texi timer.texi sem.texi msg.texi \
