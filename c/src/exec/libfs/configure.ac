@@ -7,7 +7,7 @@ AC_INIT([rtems-c-src-libfs],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([src/imfs/imfs.h])
 
 RTEMS_TOP(../../../..)
-AC_CONFIG_AUX_DIR(../../../..)
+AC_CONFIG_AUX_DIR(../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
@@ -23,6 +23,7 @@ RTEMS_PROJECT_ROOT
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
+AC_PROG_RANLIB
 
 AM_CONDITIONAL(UNIX,test x"$RTEMS_CPU" = x"unix")
 AM_CONFIG_HEADER(config.h)

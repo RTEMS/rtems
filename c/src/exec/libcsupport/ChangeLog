@@ -1,3 +1,8 @@
+2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use AC_CONFIG_AUX_DIR(../..).
+	Add AC_PROG_RANLIB.
+
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge src/Makefile.am.
