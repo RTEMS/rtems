@@ -94,8 +94,12 @@ AC_CHECK_HEADER([inttypes.h])
 AC_CHECK_HEADER([tar.h])
 
 ## if using newlib, we provide stdint.h and inttypes.h
-AM_CONDITIONAL([RTEMS_PROVIDES_STDINT_H],[test x"${RTEMS_USE_NEWLIB}" = xyes])
-AM_CONDITIONAL([RTEMS_PROVIDES_INTTYPES_H],[test x"${RTEMS_USE_NEWLIB}" = xyes])
+AM_CONDITIONAL([RTEMS_PROVIDES_STDINT_H],
+  [test x"${RTEMS_USE_NEWLIB}" = xyes \
+  && test x"${ac_cv_header_stdint_h}" = xno])
+AM_CONDITIONAL([RTEMS_PROVIDES_INTTYPES_H],
+  [test x"${RTEMS_USE_NEWLIB}" = xyes \
+  && test x"${ac_cv_header_inttypes_h}" = xno])
 
 ## if using newlib, force using stdint.h
 AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],

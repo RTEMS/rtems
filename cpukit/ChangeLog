@@ -1,3 +1,9 @@
+2005-03-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for newlib with stdint.h/inttypes.h.
+	* Makefile.am: Conditionally use external stdint.h/inttypes.h for 
+	newlib.
+
 2005-02-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Rework rtems_updir handling to work around
