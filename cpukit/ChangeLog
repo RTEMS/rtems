@@ -1,3 +1,11 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* backward/asm.h, backward/chain.h, backward/clockdrv.h,
+	backward/console.h, backward/dosfs.h, backward/imfs.h,
+	backward/iosupp.h, backward/itron.h, backward/ringbuf.h,
+	backward/rtc.h, backward/spurious.h, backward/timerdrv.h,
+	backward/vmeintr.h: New.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/include/rtems/rtems/region.h:
