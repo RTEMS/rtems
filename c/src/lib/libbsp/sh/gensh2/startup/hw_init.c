@@ -76,7 +76,7 @@ void early_hw_init (void)
 /*  to be called from 'bspstart.c' */
 void bsp_hw_init (void) 
 {
-  unsigned16 temp16;
+  uint16_t   temp16;
 
 #ifdef STANDALONE_EVB
   /* STANDALONE_EVB: sets up PFC */

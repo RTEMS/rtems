@@ -50,7 +50,7 @@ char *rtems_progname;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -111,8 +111,7 @@ void bsp_start(void)
 
   BSP_Configuration.work_space_start = (void *) &WorkSpaceStart ;
   BSP_Configuration.work_space_size  = 
-    (unsigned32) &WorkSpaceEnd - 
-    (unsigned32) &WorkSpaceStart ;
+    &WorkSpaceEnd - &WorkSpaceStart ;
   
   /*
    *  initialize the CPU table for this BSP
@@ -124,8 +123,7 @@ void bsp_start(void)
 
   /* This isn't used anywhere */
   Cpu_table.interrupt_stack_size = 
-    (unsigned32) (&CPU_Interrupt_stack_high) -
-    (unsigned32) (&CPU_Interrupt_stack_low) ;
+    &CPU_Interrupt_stack_high - &CPU_Interrupt_stack_low ;
 #endif
 
 
