@@ -173,9 +173,13 @@ struct termios {
 #define	TCSADRAIN	1
 #define	TCSAFLUSH	2
 
-/* Currently we support only tcgetattr and tcsetattr */
 int	tcgetattr(int, struct termios *);
 int	tcsetattr(int, int, struct termios *);
+int	tcdrain(int);
+speed_t	cfgetospeed(const struct termios *tp);
+int	cfsetospeed(struct termios *tp, speed_t speed);
+speed_t	cfgetispeed(const struct termios *tp);
+int	cfsetispeed(struct termios *tp, speed_t speed);
 
 #ifdef __cplusplus
 }
