@@ -2,9 +2,9 @@
 ##  $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../aclocal
 
-include $(top_srcdir)/../../../../automake/multilib.am
+include $(top_srcdir)/../automake/multilib.am
 
 SUBDIRS = . src
 
@@ -87,5 +87,5 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog \
 ##  General stuff
 all-local: $(PREINSTALL_FILES)
 
-include $(top_srcdir)/../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
