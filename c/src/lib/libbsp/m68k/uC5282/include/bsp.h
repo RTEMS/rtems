@@ -68,7 +68,7 @@ extern rtems_configuration_table BSP_Configuration;
 /* functions */
 
 unsigned32 bsp_get_CPU_clock_speed(void);
-int bsp_allocate_interrupt(int level, int priority);
+rtems_status_code bsp_allocate_interrupt(int level, int priority);
 unsigned const char *uC5282_gethwaddr(int a);
 const char *uC5282_getbenv(const char *a);
 
@@ -97,6 +97,38 @@ m68k_isr_entry set_vector(
 #define UART1_IRQ_PRIORITY  6
 #define UART2_IRQ_LEVEL     3
 #define UART2_IRQ_PRIORITY  5
+
+/*
+ * Fake VME support
+ * This makes it easier to use EPICS driver support on this BSP.
+ */
+#define VME_AM_STD_SUP_ASCENDING   0x3f
+#define VME_AM_STD_SUP_PGM         0x3e
+#define VME_AM_STD_USR_ASCENDING   0x3b
+#define VME_AM_STD_USR_PGM         0x3a
+#define VME_AM_STD_SUP_DATA        0x3d
+#define VME_AM_STD_USR_DATA        0x39
+#define VME_AM_EXT_SUP_ASCENDING   0x0f
+#define VME_AM_EXT_SUP_PGM         0x0e
+#define VME_AM_EXT_USR_ASCENDING   0x0b
+#define VME_AM_EXT_USR_PGM         0x0a
+#define VME_AM_EXT_SUP_DATA        0x0d
+#define VME_AM_EXT_USR_DATA        0x09
+#define VME_AM_SUP_SHORT_IO        0x2d
+#define VME_AM_USR_SHORT_IO        0x29
+
+/*
+ * 'Extended' BSP support
+ */
+rtems_status_code bspExtInit(void);
+typedef void (*BSP_VME_ISR_t)(void *usrArg, unsigned long vector);
+BSP_VME_ISR_t BSP_getVME_isr(unsigned long vector, void **parg);
+int BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg);
+int BSP_removeVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg);
+int BSP_enableVME_int_lvl(unsigned int level);
+int BSP_disableVME_int_lvl(unsigned int level);
+int BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr);
+
 
 #ifdef __cplusplus
 }

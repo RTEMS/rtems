@@ -1,3 +1,7 @@
+2005-02-03  Eric Norum <norume@aps.anl.gov>
+
+	* include/bsp.h, startup/bspstart.c: Add 'extended' BSP support (pseudo-VME)
+
 2005-02-02  Eric Norum <norume@aps.anl.gov>
 
 	* network/network.c: Lock FEC/PHYS at 100 Mbs, full-duplex

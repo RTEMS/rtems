@@ -4,9 +4,10 @@
 
 Description: Arcturus Networks uC DIMM ColdFire 5282 
 ============
-CPU: MCF5282, 64MHz
-RAM: 16M
-ROM: 4M
+ CPU: MCF5282, 64MHz
+ RAM: 16M
+SRAM: 64k (BSP places FEC buffer descriptors here)
+ ROM: 4M
 
 This is a credit-card sized board in a DIMM format. It is part of a family
 which includes Dragonball and Coldfire CPUs, with a standardized DIMM-based bus. 
@@ -15,6 +16,7 @@ ACKNOWLEDGEMENTS:
 =================
 This BSP is based on the work of:
     D. Peter Siddons
+    Till Straumann
     Brett Swimley
     Jay Monkman
 

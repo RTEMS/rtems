@@ -157,7 +157,7 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
  */
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, unsigned32, int );
-void bsp_pretasking_hook(void);			/* m68k version */
+void bsp_pretasking_hook(void);         /* m68k version */
 
 /*
  *  bsp_start
@@ -170,7 +170,7 @@ void bsp_start( void )
   extern char _RamSize[];
   extern unsigned long  _M68k_Ramsize;
 
-  _M68k_Ramsize = (unsigned long)_RamSize;		/* RAM size set in linker script */
+  _M68k_Ramsize = (unsigned long)_RamSize;      /* RAM size set in linker script */
 
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
@@ -255,18 +255,19 @@ unsigned32 bsp_get_CPU_clock_speed(void)
 /*
  * Interrupt controller allocation
  */
-int bsp_allocate_interrupt(int level, int priority)
+rtems_status_code
+bsp_allocate_interrupt(int level, int priority)
 {
     static char used[7];
     rtems_interrupt_level l;
-    int ret = -1;
+    rtems_status_code ret = RTEMS_RESOURCE_IN_USE;
 
     if ((level < 1) || (level > 7) || (priority < 0) || (priority > 7))
-        return ret;
+        return RTEMS_INVALID_NUMBER;
     rtems_interrupt_disable(l);
     if ((used[level-1] & (1 << priority)) == 0) {
         used[level-1] |= (1 << priority);
-        ret = 0;
+        ret = RTEMS_SUCCESSFUL;
     }
     rtems_interrupt_enable(l);
     return ret;
@@ -301,3 +302,105 @@ type uC5282_##name(d1type d1)                               \
 #define SysCode_setbenv      15 /* get bootloader environment variable */
 syscall_1(unsigned const char *, gethwaddr, int, a)
 syscall_1(const char *, getbenv, const char *, a)
+
+
+/*
+ * 'Extended BSP' routines
+ * Should move to cpukit/score/cpu/m68k/cpu.c someday.
+ */
+
+rtems_status_code bspExtInit(void) { return RTEMS_SUCCESSFUL; }
+int BSP_enableVME_int_lvl(unsigned int level) { return 0; }
+int BSP_disableVME_int_lvl(unsigned int level) { return 0; }
+
+/*
+ * VME interrupt support
+ */
+static struct handlerTab {
+    BSP_VME_ISR_t func;
+    void         *arg;
+} handlerTab[256];
+
+BSP_VME_ISR_t
+BSP_getVME_isr(unsigned long vector, void **pusrArg)
+{
+    if (vector > 255)
+        return (BSP_VME_ISR_t)NULL;
+    if (pusrArg)
+        *pusrArg = handlerTab[vector].arg;
+    return handlerTab[vector].func;
+}
+
+static rtems_isr
+trampoline (int v)
+{
+    if (*handlerTab[v].func) 
+        (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
+}
+
+int
+BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
+{
+    rtems_isr_entry old_handler;
+
+    if (vector > 255)
+        return -1;
+    handlerTab[vector].func = handler;
+    handlerTab[vector].arg = usrArg;
+    rtems_interrupt_catch(trampoline, vector, old_handler);
+
+    /*
+     * Find an unused level/priority
+     */
+    if ((vector >= 65) && (vector <= 127)) {
+        int l, p;
+        int voffset = vector - 64;
+        rtems_interrupt_level level;
+
+        for (l = 1 ; l < 7 ; l++) {
+            for (p = 0 ; p < 7 ; p++) {
+                if (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL) {
+                    *(&MCF5282_INTC0_ICR1 + (vector - 65)) = 
+                                                       MCF5282_INTC_ICR_IL(l) |
+                                                       MCF5282_INTC_ICR_IP(p);
+                    rtems_interrupt_disable(level);
+                    if (voffset >= 32)
+                        MCF5282_INTC0_IMRH &= ~(1 << (voffset - 32));
+                    else
+                        MCF5282_INTC0_IMRL &= ~((1 << voffset) |
+                                                MCF5282_INTC_IMRL_MASKALL);
+                    rtems_interrupt_enable(level);
+                    return 0;
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+int
+BSP_removeVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
+{
+    if (vector > 255)
+        return -1;
+    if ((handlerTab[vector].func != handler)
+     || (handlerTab[vector].arg != usrArg))
+        return -1;
+    handlerTab[vector].func = (BSP_VME_ISR_t)NULL;
+    return 0;
+}
+
+int
+BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr)
+{
+    unsigned long offset;
+
+    switch (am) {
+    default:    return -1;
+    case VME_AM_SUP_SHORT_IO: offset = 0x31000000; break; /* A16/D16 */
+    case VME_AM_STD_SUP_DATA: offset = 0x30000000; break; /* A24/D16 */
+    case VME_AM_EXT_SUP_DATA: return -1;                  /* A32/D32 */
+    }
+    *plocaladdr = vmeaddr + offset;
+    return 0;
+}
