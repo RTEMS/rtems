@@ -105,6 +105,7 @@ END-INFO-DIR-ENTRY
 @include key.texi
 @include cancel.texi
 @include libc.texi
+@include libm.texi
 @include status.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
@@ -133,7 +134,8 @@ This is the online version of the RTEMS POSIX API User's Guide
 * Thread Manager::
 * Key Manager::
 * Thread Cancellation Manager::
-* Services Provided by C Library::
+* Services Provided by C Library (libc)::
+* Services Provided by the Math Library (libm)::
 * Status of Implementation::
 * Command and Variable Index::
 * Concept Index::

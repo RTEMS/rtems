@@ -6,7 +6,7 @@
 @c $Id$
 @c
 
-@chapter Services Provided by C Library
+@chapter Services Provided by C Library (libc)
 
 @section Introduction
 
@@ -305,22 +305,42 @@ This section lists the routines that provided by the Newlib C Library.
 @item unctrl - Return printable representation of a character
 @end itemize
 
-@section Reentrant System Calls
+@section Variable Argument Lists
 
 
 @itemize @bullet
-@item open_r  - XXX
-@item close_r  - XXX
-@item lseek_r  - XXX
-@item read_r  - XXX
-@item write_r  - XXX
-@item fork_r  - XXX
-@item wait_r  - XXX
-@item stat_r  - XXX
-@item fstat_r  - XXX
-@item link_r  - XXX
-@item unlink_r  - XXX
-@item sbrk_r  - XXX
+
+@item Stdarg (stdarg.h):
+@itemize @bullet
+@item va_start - XXX
+@item va_arg - XXX
+@item va_end - XXX
+@end itemize
+
+@item Vararg (varargs.h):
+@itemize @bullet
+@item va_alist - XXX
+@item va_start-trad - XXX
+@item va_arg-trad - XXX
+@item va_end-trad - XXX
+@end itemize
+@end itemize
+
+@section Reentrant System Calls
+
+@itemize @bullet
+@item open_r - XXX
+@item close_r - XXX
+@item lseek_r - XXX
+@item read_r - XXX
+@item write_r - XXX
+@item fork_r - XXX
+@item wait_r - XXX
+@item stat_r - XXX
+@item fstat_r - XXX
+@item link_r - XXX
+@item unlink_r - XXX
+@item sbrk_r - XXX
 @end itemize
 
 

@@ -22,7 +22,7 @@ GENERATED_FILES= \
    cspecific.texi device.texi files.texi \
    io.texi key.texi memorymgmt.texi message.texi mutex.texi procenv.texi \
    process.texi sched.texi semaphores.texi signal.texi status.texi \
-   systemdb.texi thread.texi timer.texi libc.texi
+   systemdb.texi thread.texi timer.texi libc.texi libm.texi
 
 FILES= posix_users.texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
@@ -164,8 +164,13 @@ status.texi: status.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
-
 libc.texi: libc.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+
+libm.texi: libm.t Makefile
 	 $(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
