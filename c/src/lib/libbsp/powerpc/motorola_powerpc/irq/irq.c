@@ -354,7 +354,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     newMask = oldMask | irq_mask_or_tbl [irq];
     i8259s_cache = newMask;
     outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) > 8));
+    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
     BSP_irq_ack_at_i8259s (irq);
     openpic_eoi(0);
   }
@@ -369,7 +369,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   if (isaIntr)  {
     i8259s_cache = oldMask;
     outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) > 8));
+    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
   else {
     openpic_eoi(0);
