@@ -13,7 +13,7 @@ EDITION = 1
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
-COMMON_FILES = $(top_builddir)/user/bsp.texi $(top_builddir)/user/clock.texi \
+COMMON_FILES += $(top_builddir)/user/bsp.texi $(top_builddir)/user/clock.texi \
     $(top_builddir)/user/concepts.texi $(top_builddir)/user/datatypes.texi \
     $(top_builddir)/user/conf.texi $(top_builddir)/user/dirstat.texi \
     $(top_builddir)/user/dpmem.texi $(top_builddir)/user/event.texi \
@@ -26,7 +26,7 @@ COMMON_FILES = $(top_builddir)/user/bsp.texi $(top_builddir)/user/clock.texi \
     $(top_builddir)/user/schedule.texi $(top_builddir)/user/sem.texi \
     $(top_builddir)/user/signal.texi $(top_builddir)/user/task.texi \
     $(top_builddir)/user/timer.texi $(top_builddir)/user/userext.texi \
-    $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+    $(top_srcdir)/common/cpright.texi
 
 FILES = example.texi
 
