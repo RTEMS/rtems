@@ -114,44 +114,6 @@ Thread _Multiprocessing_Receive_server (
         break;
 
       (*the_function)( the_packet );
-#if 0
-      switch ( the_packet->the_class ) {
- 
-        case RTEMS_MP_PACKET_INTERNAL_THREADS:
-          _Internal_threads_MP_Process_packet( the_packet );
-          break;
- 
-        case RTEMS_MP_PACKET_TASKS:
-          _RTEMS_tasks_MP_Process_packet( the_packet );
-          break;
- 
-        case RTEMS_MP_PACKET_MESSAGE_QUEUE:
-          _Message_queue_MP_Process_packet( the_packet );
-          break;
- 
-        case RTEMS_MP_PACKET_SEMAPHORE:
-          _Semaphore_MP_Process_packet( the_packet );
-          break;
- 
-        case RTEMS_MP_PACKET_PARTITION:
-          _Partition_MP_Process_packet( the_packet );
-          break;
- 
-        case RTEMS_MP_PACKET_REGION:
-          /* Global regions are unsupported at this time */
-          break;
- 
-        case RTEMS_MP_PACKET_EVENT:
-          _Event_MP_Process_packet( the_packet );
-          break;
- 
-        case RTEMS_MP_PACKET_SIGNAL:
-          _Signal_MP_Process_packet( the_packet );
-          break;
-      }
-#endif
-
-
     }
   }
 }
