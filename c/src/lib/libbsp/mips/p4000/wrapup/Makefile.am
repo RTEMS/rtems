@@ -26,6 +26,6 @@ LIB = $(ARCH)/libbsp.a
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(LIB)
+all-local: $(LIB)
 
 include $(top_srcdir)/../../../../automake/local.am
