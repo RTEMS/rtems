@@ -7,6 +7,15 @@
 
 AC_DEFUN([RTEMS_PPC_EXCEPTIONS],
 [
-exceptions="$1-exceptions"
-AC_SUBST(exceptions)
+AC_MSG_CHECKING([for style of powerpc exceptions])
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM(
+    [],
+    [#if defined(_OLD_EXCEPTIONS)
+     choke me
+     #endif])],
+  [EXCEPTIONS=new],
+  [EXCEPTIONS=old])
+AC_MSG_RESULT([$EXCEPTIONS])
+AC_SUBST([exceptions],[$EXCEPTIONS-exceptions])
 ])

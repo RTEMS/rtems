@@ -1,3 +1,8 @@
+2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/ppc.m4; Dynamically switch between {old|new} exceptions 
+	depending upon presence of _OLD_EXCEPTIONS in CFLAGS.
+
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove HAS_WRAPUP_LIBBSP.
