@@ -3,7 +3,6 @@
 ##
 
 include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
 
 SUBDIRS = @libbsp_cpu_subdir@
 DIST_SUBDIRS = @libbsp_cpu_subdir@
