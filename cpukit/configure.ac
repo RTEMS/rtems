@@ -23,7 +23,14 @@ RTEMS_ENABLE_NETWORKING
 RTEMS_ENV_RTEMSCPU
 RTEMS_CHECK_RTEMS_DEBUG
 
-RTEMS_CHECK_CPU
+# Is this a supported CPU?
+AC_MSG_CHECKING([if cpu $RTEMS_CPU is supported])
+if test -d "$srcdir/score/cpu/$RTEMS_CPU"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_ERROR(no)
+fi
+
 RTEMS_CANONICAL_HOST
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
