@@ -30,6 +30,7 @@ case $1 in
   shift
   dst=$1
   shift
+  ;;
 -a)        # alternate specs file
   shift
   specsrc=$1
