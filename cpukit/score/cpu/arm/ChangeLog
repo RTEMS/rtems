@@ -1,3 +1,7 @@
+2002-08-05	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h, rtems/score/types.h: Updated to fix some typos.
+
 2002-07-30	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* cpu.c, cpu_asm.S, rtems/score/arm.h, rtems/score/cpu.h,

@@ -1,4 +1,4 @@
-/*  armtypes.h
+/*  types.h for ARM
  *
  *  This include file contains type definitions pertaining to the
  *  arm processor family.
