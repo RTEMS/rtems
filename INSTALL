@@ -39,8 +39,7 @@ NOTES:
     (most) UNIX machines, zcat is associated with compress (.Z files).
 
 (3) If you do not have gzip 1.2.4, it is available from numerous sites
-    including this one.  Other sites include prep.ai.mit.edu and
-    gatekeeper.dec.com.
+    including this one.  Other sites include ftp.gnu.org and ftp.cdrom.com.
     
 (4) The GNU archive files included in this distribution are packaged
     exactly like they are on official GNU ftp sites.  When extracting

@@ -2,10 +2,9 @@
 #  $Id$
 #
 
-RTEMS was developed by On-Line Applications Research Corporation (OAR)
-for the U.S. Army Missile Command.  OAR offers support, customization,
-and training for RTEMS.  Custom RTEMS development services includes
-porting RTEMS to new processors and the development of custom board
+On-Line Applications Research Corporation (OAR) offers support,
+customization, and training for RTEMS.  Custom RTEMS development services
+includes porting RTEMS to new processors and the development of custom board
 support packages and device drivers.   In addition, OAR is available
 to assist in the development of your real-time embedded application.
 
@@ -18,8 +17,6 @@ Huntsville AL 35805
 Voice: (205) 722-9985
 Fax:   (205 722-0985
 
-In the past, RTEMS maintainance and enhancements were primarily funded
-by the development contracts sponsored by the U.S. Army.  Now RTEMS 
-is funded solely by RTEMS users.  The future of RTEMS depends on
-its user base.
+RTEMS maintenance and development is funded solely by RTEMS users.  
+The future of RTEMS depends on its user base.
 

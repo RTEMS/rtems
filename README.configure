@@ -21,15 +21,17 @@ RTEMS-specific option are supported:
 
 	--disable-rtems-inlines
 	--disable-posix
+	--disable-itron
 	--disable-networking
         --enable-cxx
         --enable-bare-cpu-model=<MODEL>
         --enable-bare-cpu-cflags=<FLAGS>
         --enable-gcc28               (also use enable-libcdir when disabled)
         --enable-libcdir=<DIRECTORY>      (do not use if gcc 2.8 is enabled)
+        --enable-multiprocessing
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 	--enable-tests
-	--enable-rdbg            (only valid for pc386 BSP)
+	--enable-rdbg            (only valid for i386 and some PowerPC BSPs)
 
 In addition, the following standard autoconf options are frequently
 used when configuring RTEMS installations:
@@ -37,8 +39,15 @@ used when configuring RTEMS installations:
         --prefix=INSTALL_DIRECTORY
         --program-prefix=
 
-By default, the RTEMS posix interface is built for targets that support
+By default, inline routines are used instead of macros where possible.
+Macros can be selected using the --disable-inlines option.  [NOTE:
+Some APIs may not support macro versions of their inline routines.]
+
+By default, the RTEMS POSIX 1003.1b interface is built for targets that support
 it. It can be disabled with the --disable-posix option.
+
+By default, the RTEMS uITRON interface is built for targets that support
+it. It can be disabled with the --disable-itron option.
 
 By default, the RTEMS networking support is built for targets which
 support it.  It can be specifically disabled for those targets
@@ -53,8 +62,9 @@ By default, the RTEMS support of C++ is disabled.  It can be enabled
 with the --enable-cxx option. If the rtems++ C++ library is installed
 it will also be build.
 
-By default, the RTEMS test suites are NOT configured.  The --enable-tests
-will not configure the RTEMS test suite. The default speeds up the build
+By default, the RTEMS test suites are NOT configured -- only the 
+sample tests are built.  The --enable-tests will not configure
+the RTEMS test suite. The default speeds up the build
 and configure process when the tests are not desired.
 
 By default, RTEMS is built using arguments and build rules which are 
@@ -63,7 +73,12 @@ NOT compatible with gcc 2.7.2.2.  If using a gcc which supports the
 this feature.  You should use the --enable-gcc28 option when using
 either the egcs source tree, testgcc snapshots, or gcc 2.8.0 or newer.
 If you --disable-gcc28, then you MUST  specify the location of the
-Standard C Library with the --enable-libcdir option.  
+Standard C Library with the --enable-libcdir option.   [NOTE: These
+options are considered obsolete and may be removed in a future
+RTEMS release.]
+
+By default, multiprocessing is is not built.  It can be enabled
+for those BSPs supporting it by the --enable-multiprocessing option.
 
 By default, all bsps for a target are built. The bare BSP is not built
 unless directlty specified. There are  two ways of changing this:
