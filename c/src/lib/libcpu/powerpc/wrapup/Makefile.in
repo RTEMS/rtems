@@ -17,10 +17,10 @@ GENERIC_PIECES = shared
 CPU_PIECES = $(RTEMS_CPU_MODEL)
 
 # Use two variables so that I can make two ar command.
-# So far FAMILLY_OBJ is empty and ar dislike it...
+# So far FAMILY_OBJ is empty and ar dislike it...
 CPU_SPECIFIC_OBJS = $(foreach piece, $(CPU_PIECES), \
     ../$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.o)
-FAMILLY_OBJS = $(foreach piece, $(GENERIC_PIECES), ../shared/*/$(ARCH)/*.o)
+FAMILY_OBJS = $(foreach piece, $(GENERIC_PIECES), ../shared/*/$(ARCH)/*.o)
 
 LIB = $(ARCH)/libcpu.a
 
@@ -52,10 +52,10 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 $(LIB): ${OBJS}
-	@ echo $(CPU_SPECIFIC_OBJS) $(FAMILLY_OBJ) ;\
+	@ echo $(CPU_SPECIFIC_OBJS) $(FAMILY_OBJ) ;\
 	$(RM) $@ ;\
 	$(AR) $(ARFLAGS) $@ $(CPU_SPECIFIC_OBJS) ;\
-	$(AR) $(ARFLAGS) $@ $(FAMILLY_OBJS) ;\
+	$(AR) $(ARFLAGS) $@ $(FAMILY_OBJS) ;\
 	$(RANLIB) $@
 
 all: ${ARCH} $(SRCS) $(LIB)
