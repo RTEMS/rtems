@@ -86,8 +86,8 @@ extern u_int32_t netmask;	/* IP netmask to set on interface */
 extern int	lockflag;	/* Create lock file to lock the serial dev */
 extern int	nodetach;	/* Don't detach from controlling tty */
 extern char	*connector[];	/* Script to establish physical link */
-extern char	*disconnector[];	/* Script to disestablish physical link */
-extern char	*welcomer[];	/* Script to welcome client after connection */
+extern char	**disconnector;	/* Script to disestablish physical link */
+extern char	**welcomer;	/* Script to welcome client after connection */
 extern int	maxconnect;	/* Maximum connect time (seconds) */
 extern char	user[];		/* Our name for authenticating ourselves */
 extern char	passwd[];	/* Password for PAP */

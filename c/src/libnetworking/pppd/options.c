@@ -93,8 +93,8 @@ char *connector[]={"TIMEOUT","3","ABORT","\nBUSY\r","ABORT","\nNO DIALTONE\r","A
 /*char *connector[]={"TIMEOUT","3","ABORT","\nBUSY\r","ABORT","\nNO DIALTONE\r","ABORT","\nNO CARRIER\r","ABORT","\nNO ANSWER\r","ABORT","\nRINGING\r\n\r\nRINGING\r",
 												"","\rAT","OK-+++\\c-OK","ATH0","TIMEOUT","30","OK","ATDT0202122","CONNECT","","ppp","","Username:","ppp","Password:","ppp"};
 */
-char	*disconnector [];	/* Script to disestablish physical link */
-char	*welcomer [];	/* Script to run after phys link estab. */
+char	**disconnector;	/* Script to disestablish physical link */
+char	**welcomer;	/* Script to run after phys link estab. */
 int	maxconnect = 0;		/* Maximum connect time */
 char	user[MAXNAMELEN]="stb";	/* Username for PAP */
 char	passwd[MAXSECRETLEN]="stb";	/* Password for PAP */

@@ -507,8 +507,8 @@ output(unit, p, len)
 }
 
 extern int rtems_bsdnet_microseconds_per_tick;
-#include <rtems/rtems_bsdnet_internal.h>
-#include <rtems/rtems/event.h>
+#include <rtems.h>
+#include <rtems/rtems_bsdnet.h>
 /*
  * wait_input - wait until there is data available on ttyfd,
  * for the length of time specified by *timo (indefinite
@@ -1039,7 +1039,7 @@ dodefaultroute(g, cmd)
 
 	struct sockaddr_in address;
 	struct sockaddr_in netmask;
-	struct sockaddr_in broadcast;
+	/* struct sockaddr_in broadcast; */
 	struct sockaddr_in gateway;
    
 /*    struct {
