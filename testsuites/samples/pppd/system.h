@@ -19,9 +19,10 @@ extern rtems_task Init(rtems_task_argument argument);
 rtems_driver_address_table Device_drivers[5] = {
   CONSOLE_DRIVER_TABLE_ENTRY,
   CLOCK_DRIVER_TABLE_ENTRY,
-/* HACK */
-#if defined(__i386__)
+#if defined(TTY1_DRIVER_TABLE_ENTRY)
   TTY1_DRIVER_TABLE_ENTRY,
+#endif
+#if defined(TTY2_DRIVER_TABLE_ENTRY)
   TTY2_DRIVER_TABLE_ENTRY,
 #endif
   {NULL, NULL, NULL, NULL, NULL, NULL}

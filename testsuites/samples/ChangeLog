@@ -1,3 +1,8 @@
+2003-08-13	Joel Sherrill <joel@OARcorp.com>
+
+	PR 451/bsps
+	* pppd/system.h: Depend on TTY driver being in BSPs not simply i386.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
