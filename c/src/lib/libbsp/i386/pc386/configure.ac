@@ -40,5 +40,3 @@ ne2000/Makefile
 wd8003/Makefile
 wrapup/Makefile])
 AC_OUTPUT
-
-RTEMS_OUTPUT_BUILD_SUBDIRS(RTEMS_BUILD_SUBDIRS)
