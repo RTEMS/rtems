@@ -174,9 +174,11 @@ AS_IF([test x"$enable_ada" = x"yes"],[
   ])
 ])
 
-AS_IF([test -d ${srcdir}/tests],[
-    AC_CONFIG_SUBDIRS([tests])
-    BSP_SUBDIRS="$BSP_SUBDIRS tests"
+AS_IF([test -d ${srcdir}/../../testsuites],[
+  RTEMS_CONFIG_SUBDIR([testsuites],[../../testsuites],
+  ['--with-project-root=../../' '--enable-rtemsbsp=$RTEMS_BSP'
+  ])
+  BSP_SUBDIRS="$BSP_SUBDIRS testsuites"
 ])
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])

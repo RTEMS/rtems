@@ -1,3 +1,7 @@
+2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Reflect having moved tests to ../../testsuites.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/bsp-configure.m4: AC_PREREQ(2.57).
