@@ -74,6 +74,7 @@
 #include <fcntl.h>
 #include <rtems/mkrootfs.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/bsdnet/servers.h>
 
 #define BOOTP_MIN_LEN		300	/* Minimum size of bootp udp packet */
 

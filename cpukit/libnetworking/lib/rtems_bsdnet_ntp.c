@@ -27,6 +27,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#include <rtems/bsdnet/servers.h>
+
 /*
  * RTEMS base: 1988, January 1
  *  UNIX base: 1970, January 1

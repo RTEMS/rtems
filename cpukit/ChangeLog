@@ -1,6 +1,12 @@
 2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 755/rtems
+	* libnetworking/libc/res_init.c, libnetworking/lib/rtems_bsdnet_ntp.c,
+	libnetworking/nfs/bootp_subr.c: Include <rtems/bsdnet/servers.h>.
+
+2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 755/rtems
 	* libnetworking/rtems_glue.c: 
 	Rename rtems_bsdnet_nameservers to _rtems_bsdnet_nameservers.
 	Rename rtems_bsdnet_ntpservers to _rtems_bsdnet_ntpservers.

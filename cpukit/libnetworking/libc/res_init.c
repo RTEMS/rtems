@@ -94,6 +94,7 @@ static char rcsid[] = "$Id$";
  * RTEMS -- set up name servers from global variable
  */
 #include <rtems/rtems_bsdnet_internal.h>
+#include <rtems/bsdnet/servers.h>
 
 static void res_setoptions __P((char *, char *));
 
