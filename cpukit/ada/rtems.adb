@@ -1615,26 +1615,17 @@ package body RTEMS is
       Major        : in     RTEMS.Device_Major_Number;
       Minor        : in     RTEMS.Device_Minor_Number;
       Argument     : in     RTEMS.Address;
-      Return_Value :    out RTEMS.Unsigned32;
       Result       :    out RTEMS.Status_Codes
    ) is
       function IO_Initialize_Base (
          Major        : RTEMS.Device_Major_Number;
          Minor        : RTEMS.Device_Minor_Number;
-         Argument     : RTEMS.Address;
-         Return_Value : access RTEMS.Unsigned32
+         Argument     : RTEMS.Address
       )  return RTEMS.Status_Codes;
       pragma Import (C, IO_Initialize_Base, "rtems_io_initialize");
-      Return_Value_Base : aliased RTEMS.Unsigned32 := Return_Value;
    begin
  
-      Result := IO_Initialize_Base (
-         Major,
-         Minor,
-         Argument,
-         Return_Value_Base'Unchecked_Access
-      );
-      Return_Value := Return_Value_Base;
+      Result := IO_Initialize_Base ( Major, Minor, Argument );
 
    end IO_Initialize;
  
