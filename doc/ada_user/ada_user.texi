@@ -100,7 +100,7 @@ END-INFO-DIR-ENTRY
 @include ../user/conf.texi
 @include ../user/mp.texi
 @include ../user/dirstat.texi
-@include ../user/example.texi
+@include example.texi
 @include ../user/glossary.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)

@@ -12,14 +12,14 @@ all:
 
 COMMON_FILES=../common/cpright.texi ../user/bsp.texi ../user/clock.texi \
   ../user/concepts.texi ../user/conf.texi ../user/dirstat.texi \
-  ../user/dpmem.texi ../user/event.texi ../user/example.texi \
+  ../user/dpmem.texi ../user/event.texi \
   ../user/fatal.texi ../user/glossary.texi ../user/init.texi \
   ../user/intr.texi ../user/io.texi ../user/mp.texi ../user/msg.texi \
   ../user/overview.texi ../user/part.texi ../user/preface.texi \
   ../user/region.texi ../user/rtmon.texi ../user/schedule.texi \
   ../user/sem.texi ../user/signal.texi ../user/task.texi \
   ../user/timer.texi ../user/userext.texi 
-FILES= ada_user.texi $(COMMON_FILES)
+FILES= ada_user.texi example.texi $(COMMON_FILES)
 
 all:
 
