@@ -72,9 +72,9 @@ sh-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtems@osversion@ > $@
 RPM_SPECS_DATA += sh-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-sh-rtemself-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+sh-rtemself@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtemself@osversion@ > $@
-RPM_SPECS_DATA += sh-rtemself-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += sh-rtemself@osversion@-$(GCC3NEWLIBVERS).spec
 
 sparc-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems@osversion@ > $@

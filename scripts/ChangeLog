@@ -1,5 +1,10 @@
 2003-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* binutils/Makefile.am: Fix osversion support for sh-rtemself.
+	* gcc3newlib/Makefile.am: Fix osversion support for sh-rtemself.
+
+2003-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add --enable-osversions (OS-versioned RPMS support).
 	* binutils/Makefile.am: Add osversion support.
 	* binutils/mkspec.in: Add osversion support.

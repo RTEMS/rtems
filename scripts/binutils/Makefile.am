@@ -67,9 +67,9 @@ sh-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sh-rtems@osversion@ > $@
 RPM_SPECS_DATA += sh-rtems@osversion@-$(BINUTILSVERS).spec
 
-sh-rtemself-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+sh-rtemself@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sh-rtemself@osversion@ > $@
-RPM_SPECS_DATA += sh-rtemself-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += sh-rtemself@osversion@-$(BINUTILSVERS).spec
 
 sparc-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems@osversion@ > $@
