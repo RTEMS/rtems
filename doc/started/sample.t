@@ -23,12 +23,15 @@ It must point to the appropriate directory containing RTEMS build for our
 target and board support package combination. 
 
 @example
-export RTEMS_MAKEFILE_PATH = \
-<INSTALLATION_POINT>/rtems/<BOARD_SUPPORT_PACKAGE>
+export RTEMS_MAKEFILE_PATH = <INSTALLATION_POINT>/<BOARD_SUPPORT_PACKAGE>
 @end example
 
 Where <INSTALLATION_POINT> and <BOARD_SUPPORT_PACKAGE> are those used when
 configuring and installing RTEMS.
+
+NOTE:  In release 4.0, BSPs were installed at
+@code{<INSTALLATION_POINT>/rtems/<BOARD_SUPPORT_PACKAGE>}.  This
+was changed to be more in compliance with GNU standards.
 
 @section Build the Sample Application
 
