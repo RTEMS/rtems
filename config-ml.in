@@ -627,11 +627,11 @@ if [ -n "${multidirs}" ] && [ -z "${ml_norecursion}" ]; then
       exit 1
     fi
 
-    cd ${ML_POPDIR}
+    cd "${ML_POPDIR}"
 
   done
 
-  cd ${ml_origdir}
+  cd "${ml_origdir}"
 fi
 
 fi # ${ml_toplevel_p} = yes

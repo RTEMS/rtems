@@ -1,5 +1,12 @@
 2004-08-18	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	PR 673/make_build
+	* config-ml.in: Quote 'cd "${ml_origdir}"'.
+	Quote 'cd "${ML_POPDIR}"'.
+
+2004-08-18	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 673/make_build
 	* aclocal/ppc.m4 (RTEMS_PPC_EXCEPTIONS): Quote ac_popdir uses.
 	* aclocal/target.m4 (_RTEMS_POP_BUILDDIR): Ditto.
 	* acinclude.m4 (_RTEMS_CONFIG_SUBDIR): Quote ac_popdir uses.
