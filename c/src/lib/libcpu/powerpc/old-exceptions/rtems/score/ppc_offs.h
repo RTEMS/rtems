@@ -106,7 +106,7 @@
 #endif
 
 	.set	IP_LINK, 0
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 	.set	IP_0, (IP_LINK + 56)
 #else
 	.set	IP_0, (IP_LINK + 8)
@@ -153,12 +153,8 @@
 	.set	Switch_necessary, 20
 #else
 	.set	Default_r2, 16
-#if (PPC_ABI != PPC_ABI_GCC27)
 	.set	Default_r13, 20
 	.set	Switch_necessary, 24
-#else
-	.set	Switch_necessary, 20
-#endif
 #endif
 	.set	Signal, Switch_necessary + 4
         .set    msr_initial, Signal + 4

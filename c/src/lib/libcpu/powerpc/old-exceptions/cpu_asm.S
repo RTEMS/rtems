@@ -570,7 +570,7 @@ PROC (_CPU_Context_restore):
 	blr
 
 /*  Individual interrupt prologues look like this:
- * #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+ * #if (PPC_ABI == PPC_ABI_POWEROPEN)
  * #if (PPC_HAS_FPU)
  *	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
  * #else

@@ -1,3 +1,8 @@
+2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* cpu.c, cpu_asm.S, irq_stub.S, rtems/score/ppc_offs.h:
+	Remove PPC_ABI_GCC27.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.

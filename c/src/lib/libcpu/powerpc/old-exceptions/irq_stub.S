@@ -134,11 +134,6 @@ LABEL (nested):
 	mtlr	r6
 	lwz	r11,8(r4)
 #endif
-#if (PPC_ABI == PPC_ABI_GCC27)
-	lwz	r2, Default_r2(r11)
-	mtlr	r4
-	#lwz	r2, 0(r2)
-#endif
 #if (PPC_ABI == PPC_ABI_SVR4 || PPC_ABI == PPC_ABI_EABI)
 	mtlr	r4
 	lwz	r2, Default_r2(r11)

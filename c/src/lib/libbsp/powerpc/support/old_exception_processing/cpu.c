@@ -65,12 +65,10 @@ void _CPU_Initialize(
 #endif
 #if (PPC_ABI != PPC_ABI_POWEROPEN)
   register uint32_t   r2 = 0;
-#if (PPC_ABI != PPC_ABI_GCC27)
   register uint32_t   r13 = 0;
 
   asm ("mr %0,13" : "=r" ((r13)) : "0" ((r13)));
   _CPU_IRQ_info.Default_r13 = r13;
-#endif
 
   asm ("mr %0,2" : "=r" ((r2)) : "0" ((r2)));
   _CPU_IRQ_info.Default_r2 = r2;
@@ -356,7 +354,7 @@ void _CPU_ISR_install_vector(
 
 void _CPU_Install_interrupt_stack( void )
 {
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
   _CPU_IRQ_info.Stack = _CPU_Interrupt_stack_high - 56;
 #else
   _CPU_IRQ_info.Stack = _CPU_Interrupt_stack_high - 8;
@@ -412,7 +410,7 @@ void _CPU_Fatal_error(uint32_t   _error)
 
 const CPU_Trap_table_entry _CPU_Trap_slot_template = {
 
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #error " Vector install not tested."
 #if (PPC_HAS_FPU)
 #error " Vector install not tested."
