@@ -1,3 +1,10 @@
+2002-03-20	Chris Johns <ccj@acm.org>
+
+	* monitor/mon-command.c: Per PR192 the RTEMS monitor makes everything
+	lowercase. The capture engine need to set triggers or watches on task
+	with uppercase names.  
+	Also stop the monitor repeating command when enter is pressed.
+
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* monitor/mon-monitor.c: Replace done with return (gcc3).

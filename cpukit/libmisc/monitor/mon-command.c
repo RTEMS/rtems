@@ -394,9 +394,11 @@ rtems_monitor_line_editor (
             }
             else
             {
+#ifdef ENABLE_ENTER_REPEATS
               if (history_next)
                 memcpy (buffer, history_buffer[history_next - 1],
                         RTEMS_COMMAND_BUFFER_SIZE);
+#endif
             }
             memmove (command, buffer, RTEMS_COMMAND_BUFFER_SIZE);
             return repeating;
@@ -407,8 +409,6 @@ rtems_monitor_line_editor (
                 (c >= ' ') && (c <= 'z'))
             {
               int end;
-              if (c >= 'A' && c <= 'Z')
-                c += 'a' - 'A';
               end = strlen (buffer);
               if ((pos < end) && (end < RTEMS_COMMAND_BUFFER_SIZE))
               {
