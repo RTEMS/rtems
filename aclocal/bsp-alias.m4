@@ -6,12 +6,14 @@ dnl RTEMS_BSP_ALIAS(BSP_ALIAS,BSP_RETURNED)
 dnl convert a bsp alias $1 into its bsp directory $2
 AC_DEFUN(RTEMS_BSP_ALIAS,
 [
-    # account for "aliased" bsps which share source code
-    case $1 in
-      mvme162lx)    $2=mvme162  ;;  # mvme162 board variant
-      gen68360_040) $2=gen68360 ;;  # 68360 in companion mode
-      p4600)        $2=p4000    ;;  # p4000 board with IDT 4600
-      p4650)        $2=p4000    ;;  # p4000 board with IDT 4650
-      *)            $2=$1;;
-    esac
+  # account for "aliased" bsps which share source code
+  case $1 in
+    mcp750)       $2=motorola_powerpc ;; # Motorola PPC board variant
+    mvme2307)     $2=motorola_powerpc ;; # Motorola PPC board variant
+    mvme162lx)    $2=mvme162          ;; # m68k - mvme162 board variant
+    gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
+    p4600)        $2=p4000            ;; # mips64orion - p4000 board w/IDT 4600
+    p4650)        $2=p4000            ;; # mips64orion - p4000 board w/IDT 4650
+    *)            $2=$1;;
+  esac
 ])
