@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
+#include <sys/time.h>
 
 #ifndef SA_RESTART
 #define SA_RESTART 0
@@ -104,12 +105,16 @@ void _CPU_Signal_initialize( void )
   sigaction(SIGINT, &act, 0);
   sigaction(SIGQUIT, &act, 0);
   sigaction(SIGILL, &act, 0);
+#ifdef SIGEMT
   sigaction(SIGEMT, &act, 0);
+#endif
   sigaction(SIGFPE, &act, 0);
   sigaction(SIGKILL, &act, 0);
   sigaction(SIGBUS, &act, 0);
   sigaction(SIGSEGV, &act, 0);
+#ifdef SIGSYS
   sigaction(SIGSYS, &act, 0);
+#endif
   sigaction(SIGPIPE, &act, 0);
   sigaction(SIGALRM, &act, 0);
   sigaction(SIGTERM, &act, 0);
@@ -397,21 +402,25 @@ void _CPU_Context_Initialize(
     /*
      *  This information was gathered by disassembling setjmp().
      */
+
+    {
+      unsigned32 stack_ptr;
+
+      stack_ptr = _stack_high - CPU_FRAME_SIZE;
+
+      *(addr + EBX_OFF) = 0xFEEDFEED;
+      *(addr + ESI_OFF) = 0xDEADDEAD;
+      *(addr + EDI_OFF) = 0xDEAFDEAF;
+      *(addr + EBP_OFF) = stack_ptr;
+      *(addr + ESP_OFF) = stack_ptr;
+      *(addr + RET_OFF) = jmp_addr;
  
-    stack_ptr = _stack_high - CPU_FRAME_SIZE;
-    *(addr + EBX_OFF) = 0xFEEDFEED;
-    *(addr + ESI_OFF) = 0xDEADDEAD;
-    *(addr + EDI_OFF) = 0xDEAFDEAF;
-    *(addr + EBP_OFF) = stack_ptr;
-    *(addr + ESP_OFF) = stack_ptr;
-    *(addr + RET_OFF) = jmp_addr;
+      addr = (unsigned32 *) stack_ptr;
  
- 
-    addr = (unsigned32 *) stack_ptr;
- 
-    addr[ 0 ] = jmp_addr;
-    addr[ 1 ] = (unsigned32) stack_ptr;
-    addr[ 2 ] = (unsigned32) stack_ptr;
+      addr[ 0 ] = jmp_addr;
+      addr[ 1 ] = (unsigned32) stack_ptr;
+      addr[ 2 ] = (unsigned32) stack_ptr;
+    }
 
 #else
 #error "UNKNOWN CPU!!!"
@@ -582,7 +591,9 @@ void _CPU_Stray_signal(int sig_num)
       case SIGHUP:
       case SIGQUIT:
       case SIGILL:
+#ifdef SIGEMT
       case SIGEMT:
+#endif
       case SIGKILL:
       case SIGBUS:
       case SIGSEGV:
