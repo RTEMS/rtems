@@ -1,3 +1,8 @@
+2002-07-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* autotools/automake-rtems.spec.in: Automake-1.6.3.
+	* cpukit/.cvsignore: Add mkspec. Remove rtems.spec.
+
 2002-07-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use AC_CONFIG_FILES(script, chmod +x script) 
