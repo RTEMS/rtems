@@ -40,7 +40,7 @@ static void *smc1ttyp;
 /*
  * I/O buffers and pointers to buffer descriptors
  */
-static volatile char rxBuf[RXBUFSIZE], txBuf;
+static volatile char rxBuf[RXBUFSIZE];
 static volatile m360BufferDescriptor_t *smcRxBd, *smcTxBd;
 
 /*
@@ -61,6 +61,15 @@ smc1InterruptHandler (rtems_vector_number v)
 							smcRxBd->length);
 			smcRxBd->status = M360_BD_EMPTY | M360_BD_WRAP | M360_BD_INTERRUPT;
 		}
+	}
+
+	/*
+	 * Buffer transmitted?
+	 */
+	if (m360.smc1.smce & 0x2) {
+		m360.smc1.smce = 0x2;
+		if ((smcTxBd->status & M360_BD_READY) == 0)
+			rtems_termios_dequeue_characters (smc1ttyp, smcTxBd->length);
 	}
 	m360.cisr = 1UL << 4;	/* Clear SMC1 interrupt-in-service bit */
 }
@@ -122,8 +131,6 @@ smc1Initialize (void)
 	 * Setup the Transmit Buffer Descriptor
 	 */
 	smcTxBd->status = M360_BD_WRAP;
-	smcTxBd->length = 1;
-	smcTxBd->buffer = &txBuf;
 	 
 	/*
 	 * Set up SMC1 general and protocol-specific mode registers
@@ -150,7 +157,7 @@ smc1Initialize (void)
 	sc = rtems_interrupt_catch (smc1InterruptHandler,
 						(m360.cicr & 0xE0) | 0x04,
 						&old_handler);
-	m360.smc1.smcm = 1;	/* Enable SMC1 receiver interrupt */
+	m360.smc1.smcm = 3;	/* Enable SMC1 TX and RX interrupts */
 	m360.cimr |= 1UL << 4;	/* Enable SMC1 interrupts */
 	}
 #endif
@@ -168,19 +175,32 @@ smc1Read (int minor)
 	return c;
 }
 
+/*
+ * Device-dependent write routine
+ * Interrupt-driven devices:
+ *	Begin transmission of as many characters as possible (minimum is 1).
+ * Polling devices:
+ *	Transmit all characters.
+ */
 static int
 smc1Write (int minor, char *buf, int len)
 {
-	int nwrite = 0;
-
-	while (nwrite < len) {
+#if (defined (M360_SMC1_INTERRUPT))
+	smcTxBd->buffer = buf;
+	smcTxBd->length = len;
+	smcTxBd->status = M360_BD_READY | M360_BD_WRAP | M360_BD_INTERRUPT;
+#else
+	while (len--) {
+		static char txBuf;
 		while (smcTxBd->status & M360_BD_READY)
 			continue;
 		txBuf = *buf++;
+		smcTxBd->buffer = &txBuf;
+		smcTxBd->length = 1;
 		smcTxBd->status = M360_BD_READY | M360_BD_WRAP;
-		nwrite++;
 	}
-	return nwrite;
+#endif
+	return 0;
 }
 
 /*
@@ -188,6 +208,16 @@ smc1Write (int minor, char *buf, int len)
  * BOILERPLATE *
  ***************
  */
+
+/*
+ * Reserve resources consumed by this driver
+ */
+void console_reserve_resources(
+  rtems_configuration_table *configuration
+)
+{
+	rtems_termios_reserve_resources (configuration, 1);
+}
 
 /*
  * Initialize and register the device
@@ -237,14 +267,16 @@ rtems_device_driver console_open(
 			NULL,
 			NULL,
 			NULL,
-			smc1Write);
+			smc1Write,
+			1);
 	smc1ttyp = args->iop->data1;
 #else
 	sc = rtems_termios_open (major, minor, arg,
 			NULL,
 			NULL,
 			smc1Read,
-			smc1Write);
+			smc1Write,
+			0);
 #endif
 	return sc;
 }

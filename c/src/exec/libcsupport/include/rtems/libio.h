@@ -139,7 +139,8 @@ rtems_status_code rtems_termios_open (
   int                       (*deviceFirstOpen)(int major, int minor, void *arg),
   int                       (*deviceLastClose)(int major, int minor, void *arg),
   int                       (*deviceRead)(int minor),
-  int                       (*deviceWrite)(int minor, char *buf, int len)
+  int                       (*deviceWrite)(int minor, char *buf, int len),
+  int                         deviceOutputUsesInterrupts
   );
 
 rtems_status_code rtems_termios_close (void *arg);
