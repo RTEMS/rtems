@@ -1,3 +1,8 @@
+2002-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* monitor/mon-command.c: Don't build rtems_monitor_line_editor for
+	RTEMS_UNIX to avoid gcc warning.
+
 2002-10-24	Fabrizio Pirovano <pirovano.thysys@tiscalinet.it>
 
 	* capture/capture.c, monitor/mon-manager.c, stackchk/check.c:

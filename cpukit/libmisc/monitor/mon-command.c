@@ -203,6 +203,7 @@ rtems_monitor_getchar (
   }
 }
 
+#ifndef RTEMS_UNIX
 /*
  * The line editor with history.
  */
@@ -430,6 +431,7 @@ rtems_monitor_line_editor (
     }
   }
 }
+#endif
 
 /*
  * make_argv(cp): token-count
