@@ -50,13 +50,13 @@ void _CPU_Initialize(
   _CPU_Thread_dispatch_pointer = thread_dispatch;
 
   /*
-   * XXX; If there is not an easy way to initialize the FP context
-   *      during Context_Initialize, then it is usually easier to
-   *      save an "uninitialized" FP context here and copy it to
-   *      the task's during Context_Initialize.
+   *  If there is not an easy way to initialize the FP context
+   *  during Context_Initialize, then it is usually easier to
+   *  save an "uninitialized" FP context here and copy it to
+   *  the task's during Context_Initialize.
    */
 
-  /* XXX: FP context initialization support */
+  /* FP context initialization support goes here */
 
   _CPU_Table = *cpu_table;
 }
