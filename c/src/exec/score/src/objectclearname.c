@@ -28,7 +28,8 @@
  *
  *  _Objects_Clear_name
  *
- *  XXX
+ *  This method clears the specified name so that no caller can do a name to
+ *  ID/object lookup past this point.
  */
 
 void _Objects_Clear_name(
