@@ -1,0 +1,26 @@
+#
+#  Cable information for the DY-4 DMV177
+#
+#  $Id$
+#
+
+DY-4 177 Cable configuration to a PC
+====================================
+
+Board's DB-25    PC's DB-9   Color in
+  Channel A         COM1       Shell
+=============   ============  =========
+ RX on pin 2     TX on pin 2    Red
+ TX on pin 3     RX on pin 3    Blue
+GND on pin 7    GND on pin 5    Black
+DTR on pin 20   DTR on pin 4    Brown
+
+No other signals are used.
+
+References:
+
+  - Linux Serial FAQ
+  - http://ahmed.egypt.com/electronics/serial 
+  - DY-4 Documentation
+
+
