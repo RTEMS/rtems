@@ -1,4 +1,9 @@
-2004-10-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-11-19	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* rtems/score/m68k.h: Use (defined(__mc68020__) && !defined(__mcpu32__))
+	instead of defined(__mc68020__) to reflect GCC-3.4's expectations.
+
+2004-11-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/score/cpu.h: Add doxygen preamble.
 	* rtems/score/m68k.h: Add doxygen preamble.

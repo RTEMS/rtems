@@ -91,7 +91,7 @@ extern "C" {
  *  but less efficient CPU32 rules are used for the CPU32+.
  */
 
-#if defined(__mc68020__)
+#if (defined(__mc68020__) && !defined(__mcpu32__))
  
 #define CPU_MODEL_NAME          "m68020"
 #define M68K_HAS_VBR             1
