@@ -60,14 +60,14 @@ MTARGETS = all install $(TARGET_VARIANTS) $(TARGET_VARIANTS:%=%_all) \
   $(TARGET_VARIANTS:%=%_install) $(TARGET_VARIANTS:%=%_tests) \
   clean_wrapup distclean clean_dirs clean_tools tests clean depend
 
-.PHONY: clean_modules mlink
+.PHONY: clean_modules make_subdir
 
 EXIT_CMD = exit 1
 
 # Don't pass flags from previous make - especially NOT CFLAGS 
 override MAKEFLAGS=
 
-$(MTARGETS): mlink
+$(MTARGETS): make_subdir
 	BASEDIR=`pwd`; \
 	for bsp in $(RTEMS_BSP) xxx; \
 	do if [ $$bsp != xxx ] ; then  \
@@ -103,8 +103,7 @@ clean_modules:
 	rm -f src/Modules/rtems/.moduleavailcache
 	rm -f src/Modules/rtems/.moduleavailcachedir
 
-make/directory.cfg make/leaf.cfg make/lib.cfg make/main.cfg
-mlink:
+make_subdir:
 	if [ ! -d make ] ; then \
 	  (cd $(srcdir)/c; tar cf - make/compilers make/custom make/os \
 	        make/directory.cfg make/leaf.cfg make/lib.cfg make/main.cfg \
