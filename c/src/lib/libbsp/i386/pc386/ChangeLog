@@ -1,3 +1,8 @@
+2004-10-13	Eric Norum <norume@aps.anl.gov>
+
+	PR 688/bsps
+	* Makefile.am clock/todcfg.c: Add support for MC146818A TOD chip.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
