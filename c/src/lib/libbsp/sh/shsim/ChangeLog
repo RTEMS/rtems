@@ -1,3 +1,10 @@
+2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Apply RTEMS_BSPOPTS_*(CPU_CLOCK_RATE_HZ).
+	* console/Makefile.am: C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o).
+	* wrapup/Makefile.am: Add gdbsci, scitab to BSP_FILES, add
+	CPU_FILES.
+
 2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.

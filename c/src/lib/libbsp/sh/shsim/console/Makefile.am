@@ -9,7 +9,7 @@ VPATH = @srcdir@:@srcdir@/../../shared
 PGM = $(ARCH)/console.rel
 
 C_FILES = console.c
-C_O_FILES = $(C_FILES:shared/%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 

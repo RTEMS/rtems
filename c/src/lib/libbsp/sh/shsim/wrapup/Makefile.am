@@ -4,9 +4,9 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-BSP_FILES = startup clock console timer
+BSP_FILES = startup clock console timer gdbsci scitab
 
-# CPU_PIECES = score
+CPU_PIECES = score
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
@@ -14,7 +14,8 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_FILES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/*.o) \
+    $(foreach piece, $(CPU_PIECES), \
+	../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel) \
     $(foreach piece, $(GENERIC_FILES), ../../../$(piece)/$(ARCH)/$(piece).rel)
 
 LIB = $(ARCH)/libbsp.a
