@@ -6,14 +6,14 @@ ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
 
 # C source names
 C_FILES = cpu.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/ppc_offs.h
 
 # Assembly source names
 S_FILES = cpu_asm.S
-S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
+S_O_FILES = $(S_FILES:%.S=${ARCH}/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../../automake/compile.am
