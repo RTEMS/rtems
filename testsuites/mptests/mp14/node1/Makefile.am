@@ -31,6 +31,7 @@ include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/mptests.am
 
 AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I$(srcdir)/..
+AM_CPPFLAGS += -DMAX_LONG_TEST_DURATION=$(MAX_LONG_TEST_DURATION)
 
 if HAS_MP
 

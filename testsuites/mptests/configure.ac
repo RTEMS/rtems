@@ -30,6 +30,10 @@ AC_SUBST(BARE_CPU_MODEL)
 
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
+MAX_LONG_TEST_DURATION=${MAX_LONG_TEST_DURATION-100}
+AC_ARG_VAR([MAX_LONG_TEST_DURATION],
+[The longest length of time a "long running" test should run])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 mp01/Makefile

@@ -1,3 +1,10 @@
+2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 613/bsps
+	* configure.ac: Add AC_ARG_VAR([MAX_LONG_TEST_DURATION],...).
+	* mp14/node1/Makefile.am, mp14/node2/Makefile.am: Add AM_CPPFLAGS +=
+	-DMAX_LONG_TEST_DURATION=$(MAX_LONG_TEST_DURATION).
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* mp01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
