@@ -48,6 +48,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/confdefs.h: include/confdefs.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/confdefs.h
@@ -56,6 +57,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/confdefs.h
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/config.h: include/rtems/config.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/config.h
@@ -95,5 +97,7 @@ $(PROJECT_INCLUDE)/rtems/extension.inl: macros/rtems/extension.inl $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
 endif
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

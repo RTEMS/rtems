@@ -5,6 +5,17 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
+AM_CPPFLAGS += -I$(top_builddir)
+AM_CPPFLAGS += -D__RTEMS_INSIDE__
+
+EXTRA_LIBRARIES = librtems.a
+CLEANFILES = librtems.a
+librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += librtems_g.a
+CLEANFILES += librtems_g.a
+librtems_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
 # include
 
 include_HEADERS = include/rtems.h
@@ -57,9 +68,7 @@ include_rtems_rtems_HEADERS += macros/rtems/rtems/asr.inl \
 endif
 
 ## src
-# We only build multiprocessing related files if HAS_MP was defined
-MP_C_FILES = src/eventmp.c src/mp.c src/msgmp.c src/partmp.c src/regionmp.c \
-    src/semmp.c src/signalmp.c src/taskmp.c
+librtems_a_SOURCES =
 
 TASK_C_FILES = src/tasks.c src/taskcreate.c src/taskdelete.c \
     src/taskgetnote.c src/taskident.c src/taskinitusers.c \
@@ -107,40 +116,27 @@ DPMEM_C_FILES = src/dpmem.c src/dpmemcreate.c src/dpmemdelete.c \
     src/dpmemexternal2internal.c src/dpmemident.c \
     src/dpmeminternal2external.c
 
-STD_C_FILES = src/attr.c src/rtemsidtoname.c $(TASK_C_FILES) \
+librtems_a_SOURCES += src/attr.c src/rtemsidtoname.c $(TASK_C_FILES) \
     $(RATEMON_C_FILES) $(INTR_C_FILES) $(CLOCK_C_FILES) $(TIMER_C_FILES) \
     $(SEMAPHORE_C_FILES) $(MESSAGE_QUEUE_C_FILES) $(EVENT_C_FILES) \
     $(SIGNAL_C_FILES) $(PARTITION_C_FILES) $(REGION_C_FILES) \
     $(DPMEM_C_FILES)
 
 if HAS_MP
-C_FILES = $(STD_C_FILES) $(MP_C_FILES)
-else
-C_FILES = $(STD_C_FILES)
+# We only build multiprocessing related files if HAS_MP was defined
+librtems_a_SOURCES += src/eventmp.c src/mp.c src/msgmp.c src/partmp.c \
+    src/regionmp.c src/semmp.c src/signalmp.c src/taskmp.c
 endif
-
-AM_CPPFLAGS += -I$(top_builddir)
-AM_CPPFLAGS += -D__RTEMS_INSIDE__
-
-EXTRA_LIBRARIES = librtems.a
-CLEANFILES = librtems.a
-librtems_a_SOURCES = $(C_FILES)
-librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += librtems_g.a
-CLEANFILES += librtems_g.a
 librtems_g_a_SOURCES = $(librtems_a_SOURCES)
-librtems_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 all-local: $(PREINSTALL_FILES) librtems$(LIB_VARIANT).a
-
-EXTRA_DIST = $(STD_C_FILES) $(MP_C_FILES)
 
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems.h: include/rtems.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems.h
@@ -149,6 +145,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems.h
 $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/rtems/asr.h: include/rtems/rtems/asr.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/asr.h
@@ -406,5 +403,7 @@ $(PROJECT_INCLUDE)/rtems/rtems/timer.inl: macros/rtems/rtems/timer.inl $(PROJECT
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/timer.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timer.inl
 endif
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

@@ -6,6 +6,7 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
+CLEANFILES =
 
 if LIBRPC
 include_rpcdir = $(includedir)/rpc
@@ -19,7 +20,7 @@ include_rpc_HEADERS = include/rpc/auth.h include/rpc/auth_des.h \
 man_MANS =
 
 EXTRA_LIBRARIES = libxdr.a
-CLEANFILES = libxdr.a
+CLEANFILES += libxdr.a
 libxdr_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libxdr_g.a
@@ -112,6 +113,7 @@ if LIBRPC
 $(PROJECT_INCLUDE)/rpc/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rpc
 	@: > $(PROJECT_INCLUDE)/rpc/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rpc/auth.h: include/rpc/auth.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth.h
@@ -177,5 +179,7 @@ $(PROJECT_INCLUDE)/rpc/xdr.h: include/rpc/xdr.h $(PROJECT_INCLUDE)/rpc/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/xdr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/xdr.h
 endif
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

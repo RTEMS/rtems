@@ -30,6 +30,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
@@ -46,5 +47,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/unix.h
 $(PROJECT_INCLUDE)/rtems/score/unixsize.h: rtems/score/unixsize.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/unixsize.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/unixsize.h
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am
