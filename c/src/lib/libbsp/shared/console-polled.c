@@ -29,6 +29,8 @@ int console_inbyte_nonblocking(
   int port
 );
 
+void console_initialize_hardware(void);
+
 /*
  *  Console Termios Support Entry Points
  *
@@ -64,6 +66,12 @@ rtems_device_driver console_initialize(
   rtems_status_code status;
 
   rtems_termios_initialize();
+
+  /*
+   *  Make sure the hardware is initialized.
+   */
+
+  console_initialize_hardware();
 
   /*
    *  Register Device Names

@@ -51,8 +51,20 @@ rtems_isr Clock_isr(
   rtems_vector_number vector
 )
 {
+#ifdef CLOCK_DRIVER_USE_FAST_IDLE
+  do { 
+    Clock_driver_ticks += 1;
+    rtems_clock_tick();
+  } while ( _Thread_Executing == _Thread_Idle &&
+          _Thread_Heir == _Thread_Executing)
+
+  Clock_driver_support_at_tick();
+  return;
+#else
   /*
    *  Do the hardware specific per-tick action.
+   *
+   *  The counter/timer may or may not be set to automatically reload.
    */
 
   Clock_driver_support_at_tick();
@@ -64,13 +76,14 @@ rtems_isr Clock_isr(
   Clock_driver_ticks += 1;
 
   /*
-   *  Real Time Clock counter/timer is set to automatically reload.
    */
 
 #ifndef CLOCK_DRIVER_ISRS_ARE_ONE_MILLISECOND
   rtems_clock_tick();
 #else
 #error "Clock driver shell: Does not currently support counting mseconds."
+#endif
+
 #endif
 }
 
