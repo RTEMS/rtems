@@ -32,12 +32,12 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 /* 950308: Ketan patched a few tlb functions that would not have worked.*/
 #include <iregdef.h>
 #include <idtcpu.h>
-#include <idtmon.h>
+#include <asm.h>
 
 
 	.text
 
-#if defined(CPU_R3000)
+#if __mips == 1
 /*
 ** ret_tlblo -- returns the 'entrylo' contents for the TLB
 **	'c' callable - as ret_tlblo(index) - where index is the
@@ -64,7 +64,7 @@ FRAME(ret_tlblo,sp,0,ra)
 	.set	reorder
 ENDFRAME(ret_tlblo)
 #endif
-#if defined(CPU_R4000)
+#if __mips == 3
 /*
 ** ret_tlblo[01] -- returns the 'entrylo' contents for the TLB
 **	'c' callable - as ret_tlblo(index) - where index is the
@@ -142,7 +142,7 @@ ENDFRAME(ret_tlbwired)
 **			index
 */
 FRAME(ret_tlbhi,sp,0,ra)
-#if defined(CPU_R3000)
+#if __mips == 1
 	.set	noreorder
 	mfc0	t0,C0_SR		# save sr
 	nop
@@ -161,7 +161,7 @@ FRAME(ret_tlbhi,sp,0,ra)
 	nop
 	.set	reorder
 #endif
-#if defined(CPU_R4000)
+#if __mips == 3
 	mfc0	t0,C0_SR		# save sr
 	mtc0	zero,C0_SR		# disable interrupts
 	mfc0	t1,C0_TLBHI		# save current pid
@@ -184,7 +184,7 @@ ENDFRAME(ret_tlbhi)
 ** ret_tlbpid() -- return tlb pid contained in the current entry hi
 */
 FRAME(ret_tlbpid,sp,0,ra)
-#if defined(CPU_R3000)
+#if __mips == 1
 	.set	noreorder
 	mfc0	v0,C0_TLBHI		# fetch tlb high 
 	nop
@@ -194,7 +194,7 @@ FRAME(ret_tlbpid,sp,0,ra)
 	nop
 	.set	reorder
 #endif
-#if defined(CPU_R4000)
+#if __mips == 3
 	mfc0	v0,C0_TLBHI	# to return value
 	nop
 	and	v0,TLBHI_PIDMASK
@@ -214,7 +214,7 @@ ENDFRAME(ret_tlbpid)
 **	returns an index value (0-63) if successful -1 -f not
 */
 FRAME(tlbprobe,sp,0,ra)
-#if defined(CPU_R3000)
+#if __mips == 1
 	.set	noreorder
 	mfc0	t0,C0_SR		/* fetch status reg */
 	and	a0,TLBHI_VPNMASK	/* isolate just the vpn */
@@ -240,7 +240,7 @@ FRAME(tlbprobe,sp,0,ra)
 	nop
 	.set	reorder
 #endif
-#if defined(CPU_R4000)
+#if __mips == 3
 	mfc0	t0,C0_SR		# save sr
 	mtc0	zero,C0_SR		# disable interrupts
 	mfc0	t1,C0_TLBHI		# save current pid
@@ -269,7 +269,7 @@ ENDFRAME(tlbprobe)
 ** resettlb(index) Invalidate the  TLB entry specified by index
 */
 FRAME(resettlb,sp,0,ra)
-#if defined(CPU_R3000)
+#if __mips == 1
 	.set	noreorder
 	mfc0	t0,C0_TLBHI		# fetch the current hi 
 	mfc0	v0,C0_SR		# fetch the status reg.
@@ -289,7 +289,7 @@ FRAME(resettlb,sp,0,ra)
 	nop
 	.set	reorder
 #endif
-#if defined(CPU_R4000)
+#if __mips == 3
 	li	t2,K0BASE&TLBHI_VPN2MASK
 	mfc0	t0,C0_TLBHI		# save current TLBHI
 	mfc0	v0,C0_SR		# save SR and disable interrupts
@@ -311,7 +311,7 @@ FRAME(resettlb,sp,0,ra)
 #endif
 ENDFRAME(resettlb)
 
-#if defined(CPU_R3000)
+#if __mips == 1
 /*
 ** Setup TLB entry
 **
@@ -340,8 +340,8 @@ FRAME(map_tlb,sp,0,ra)
 	nop
 	.set	reorder
 ENDFRAME(map_tlb)
- #endif
-#if defined(CPU_R4000)
+#endif
+#if __mips == 3
 /*
 ** Setup R4000 TLB entry
 **

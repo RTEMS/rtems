@@ -40,7 +40,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
 #include <iregdef.h>
 #include <idtcpu.h>
-#include <idtmon.h>
+#include <asm.h>
 
 	.data
 mem_size:
@@ -48,14 +48,14 @@ mem_size:
 dcache_size:
 	.word 	0		
 icache_size:
-#if defined(CPU_R3000)
+#if __mips == 1
 	.word	MINCACHE	
 #endif
-#if defined(CPU_R4000)
+#if __mips == 3
 	.word	0
 #endif
 
-#if defined(CPU_R4000)
+#if __mips == 3
 	.data
 scache_size:
 	.word 	0
@@ -70,7 +70,7 @@ scache_linesize:
 
 		.text
 
-#if defined (CPU_R3000)
+#if __mips == 1
 #define CONFIGFRM ((2*4)+4)	
 
 /*************************************************************************
@@ -402,9 +402,9 @@ FRAME(get_mem_conf,sp,0,ra)
 	j	ra
 
 ENDFRAME(get_mem_conf)
-#endif /* defined CPU_R3000 */
+#endif /* __mips == 1 */
 
-#if defined(CPU_R4000)
+#if __mips == 3
 #define LEAF(label)	FRAME(label,sp,0,ra)
 #define XLEAF(label) \
 	.globl label ; \
@@ -922,7 +922,7 @@ FRAME(get_mem_conf,sp,0,ra)
 
 ENDFRAME(get_mem_conf)
 
-#endif /* defined(CPU_R4000) */
+#endif /* __mips == 3 */
 
 /*
  * void set_mem_size (mem_size) 

@@ -33,7 +33,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 **************************************************************************/
 #include <iregdef.h>
 #include <idtcpu.h>
-#include <idtmon.h>
+#include <asm.h>
 
 
 .extern _fbss,4		  /* this is defined by the linker */
@@ -211,6 +211,12 @@ FRAME(start,sp,0,ra)
 12:
 #endif
 
+
+/*
+ * P_STACKSIZE is the size of the Prom Stack.
+ * the prom stack grows downward
+ */
+#define P_STACKSIZE     0x2000   /* sets stack size to 8k */
 
 
 /**************************************************************************

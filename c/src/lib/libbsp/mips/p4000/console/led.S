@@ -3,8 +3,8 @@
  */
 
 #include <iregdef.h>
-#include <idtmon.h>
 #include <idtcpu.h>
+#include <asm.h>
 
 
 FRAME(mips_leddisplay,sp,0,ra)
