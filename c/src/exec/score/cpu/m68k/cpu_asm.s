@@ -208,19 +208,11 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movec   msp,a0                   | a0 = master stack pointer
         movew   #0,a0@-                  | push format word
-        movel   # SYM (_ISR_Dispatch),a0@- | push return addr
-        | filter out the trace bit to stop single step debugging breaking
-        movew   a0@(6+SR_OFFSET),d0
-        andw    #0x7FFF,d0
-        movew   d0,a0@-                  | push thread sr
+        movel   #SYM(_ISR_Dispatch),a0@- | push return addr
+        movew   sr,a0@-                  | push existing sr
         movec   a0,msp                   | set master stack pointer
 #else
-
-        | filter out the trace bit to stop single step debugging breaking
-        movew   a7@(16+SR_OFFSET),d0
-        andw    #0x7FFF,d0
-        movew   d0,sr
-        jsr SYM (_Thread_Dispatch)
+        jsr SYM (_Thread_Dispatch)       | Perform context switch
 #endif
 
 exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
