@@ -1,3 +1,8 @@
+2005-03-04	Joel Sherrill <joel@OARcorp.com>
+
+	* networking/decdriver.t: Make PCI initialize function part of the
+	unified PCI API as pci_initialize().
+
 2004-11-05	Joel Sherrill <joel@OARcorp.com>
 
 	PR 706/doc

@@ -87,7 +87,7 @@ on a PowerPC target.
 @c XXX add crossreference to PCI Register Figure
 
 On RTEMS, a PCI API exists. We have used it to configure the board. After initializing
-this PCI module via the @code{pcib_init()} function, we try to detect
+this PCI module via the @code{pci_initialize()} function, we try to detect
 the DEC21140 based ethernet board. This board is characterized by its Vendor
 ID (0x1011) and its Device ID (0x0009). We give these arguments to the
 @code{pcib_find_by_deviceid}
