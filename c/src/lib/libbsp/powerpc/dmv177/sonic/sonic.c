@@ -54,8 +54,9 @@ void break_when_you_get_here();
 #define SONIC_DEBUG_FRAGMENTS        0x0008
 #define SONIC_DEBUG_CAM              0x0008
 #define SONIC_DEBUG_DESCRIPTORS      0x0010
+#define SONIC_DEBUG_ERRORS           0x0020
 
-#define SONIC_DEBUG (SONIC_DEBUG_NONE)
+#define SONIC_DEBUG (SONIC_DEBUG_ERRORS)
 
 /* (SONIC_DEBUG_MEMORY|SONIC_DEBUG_DESCRIPTORS) */
 
@@ -118,7 +119,7 @@ void break_when_you_get_here();
  *      No reject on CAM match
  */
 #define SONIC_DCR \
-   (DCR_DW32 | DCR_WAIT0 | DCR_PO0 | DCR_PO1  | DCR_RFT24 | DCR_TFT28)
+   (DCR_DW32 | DCR_WAIT0 | DCR_PO0 | DCR_PO1  | DCR_RFT4 | DCR_TFT8)
 #ifndef SONIC_DCR
 # define SONIC_DCR (DCR_DW32 | DCR_TFT28)
 #endif
@@ -130,14 +131,14 @@ void break_when_you_get_here();
  * Default sizes of transmit and receive descriptor areas
  */
 #define RDA_COUNT     20
-#define TDA_COUNT     10
+#define TDA_COUNT     100
 
 /*
  * 
  * As suggested by National Application Note 746, make the
  * receive resource area bigger than the receive descriptor area.
  */
-#define RRA_EXTRA_COUNT  3
+#define RRA_EXTRA_COUNT  0
 
 /*
  * RTEMS event used by interrupt handler to signal daemons.
@@ -252,6 +253,22 @@ unsigned32 sonic_read_register(
   unsigned32  regno
 );
 
+void sonic_enable_interrupts(
+  void       *rp,
+  unsigned32  mask
+)
+{
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable( level );
+      sonic_write_register(
+         rp,
+         SONIC_REG_IMR,
+         sonic_read_register(rp, SONIC_REG_IMR) | mask
+      );
+  rtems_interrupt_enable( level );
+}
+
 /*
  * Allocate non-cacheable memory on a single 64k page.
  * Very simple minded -- just keeps trying till the memory is on a single page.
@@ -292,6 +309,7 @@ SONIC_STATIC int sonic_stop (struct iface *iface)
   struct sonic *dp = &sonic[iface->dev];
   void *rp = dp->sonic;
 
+printf( "sonic_stop\n" );
   /*
    * Stop the transmitter and receiver.
    */
@@ -432,6 +450,11 @@ SONIC_STATIC void sonic_retire_tda (struct sonic *dp)
     printf( "retire TDA %p (0x%04x)\n", dp->tdaTail, status );
 #endif
 
+#if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
+    if ( status != 0x0001 )
+      printf( "ERROR: retire TDA %p (0x%04x)\n", dp->tdaTail, status );
+#endif
+
     /*
      * Check for errors which stop the transmitter.
      */
@@ -537,6 +560,7 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
    * txWaitTid variable.
    */
   if (dp->txWaitTid) {
+printf( "TX: conflict delay\n" );
     dp->txRawWait++;
     while (dp->txWaitTid)
       rtems_ka9q_ppause (10);
@@ -576,12 +600,7 @@ puts( "Wait for more TDAs" );
       /*
        * Enable transmitter interrupts.
        */
-      sonic_write_register(
-         rp,
-         SONIC_REG_IMR,
-         sonic_read_register( rp, SONIC_REG_IMR) |
-                (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN)
-      );
+      sonic_enable_interrupts( rp, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) );
 
       /*
        * Wait for interrupt
@@ -661,12 +680,7 @@ puts( "Wait for more TDAs" );
   dp->tdaActiveCount++;
   dp->tdaHead = tdp;
 
-  sonic_write_register(
-     rp,
-     SONIC_REG_IMR,
-     sonic_read_register( rp, SONIC_REG_IMR) |
-            (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN)
-  );
+  sonic_enable_interrupts( rp, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) );
   sonic_write_register( rp, SONIC_REG_CR, CR_TXP );
 
   /*
@@ -727,12 +741,21 @@ SONIC_STATIC void sonic_rda_wait(
      * This would be more difficult to recover from....
      */
     if (sonic_read_register( rp, SONIC_REG_ISR ) & ISR_RBAE) {
+
+#if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
+      printf( "ERROR: looks like a giant packet -- RBAE\n" );
+#endif
+
       /*
        * One more check to soak up any Receive Descriptors
        * that may already have been handed back to the driver.
        */
-      if (rdp->in_use == RDA_IN_USE)
+      if (rdp->in_use == RDA_IN_USE) {
+#if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
+      printf( "ERROR: nope just an RBAE\n" );
+#endif
         break;
+      }
 
       /*
        * Check my interpretation of the SONIC manual.
@@ -792,11 +815,7 @@ SONIC_STATIC void sonic_rda_wait(
     /*
      * Enable interrupts.
      */
-    sonic_write_register(
-       rp,
-       SONIC_REG_IMR,
-       sonic_read_register( rp, SONIC_REG_IMR) | (IMR_PRXEN | IMR_RBAEEN)
-    );
+    sonic_enable_interrupts( rp, (IMR_PRXEN | IMR_RBAEEN) );
 
     /*
      * Wait for interrupt.
@@ -808,6 +827,12 @@ SONIC_STATIC void sonic_rda_wait(
 #if (SONIC_DEBUG & SONIC_DEBUG_DESCRIPTORS)
   printf( "RDA %p\n", rdp );
 #endif
+
+#if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
+    if (rdp->status & 0x000E)
+      printf( "ERROR: RDA %p (0x%04x)\n", rdp, rdp->status );
+#endif
+
 }
 
 /*
@@ -888,8 +913,12 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
        * incoming packets (usually an ARP storm) from
        * using up all the available memory.
        */
-      if (++continuousCount >= dp->rdaCount)
+      if (++continuousCount >= dp->rdaCount) {
+#if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
+        printf( "ERROR: RX processed too many in a row\n" );
+#endif
         kwait_null ();
+      }
 
       /*
        * Sanity check that Receive Resource Area is
@@ -954,7 +983,7 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
     /*
      * Move to next receive descriptor
      */
-    rdp->link |= RDA_LINK_EOL;
+    /* rdp->link |= RDA_LINK_EOL; XXX */
     rdp->in_use = RDA_FREE;
     rdp = rdp->next;
     rdp->link &= ~RDA_LINK_EOL;
