@@ -74,7 +74,6 @@ AC_CONFIG_FILES([Makefile
 tools/Makefile
 make/Makefile
 make/custom/Makefile
-make/compilers/Makefile 
 ])
 
 AC_OUTPUT
