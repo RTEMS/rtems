@@ -39,6 +39,14 @@ Chain_Control _Timer_Ticks_chain;
 Chain_Control _Timer_Seconds_chain;
 
 /*
+ *  These variables keep track of the last time the Timer Server actually
+ *  processed the chain.
+ */
+
+Watchdog_Interval _Timer_Server_seconds_last_time;
+Watchdog_Interval _Timer_Server_ticks_last_time;
+
+/*
  *  The timer used to control when the Timer Server wakes up to service
  *  "when" timers.
  *
@@ -46,6 +54,13 @@ Chain_Control _Timer_Seconds_chain;
  */
 
 Watchdog_Control _Timer_Seconds_timer;
+
+/*
+ *  prototypes for support routines to process the chains
+ */
+
+void _Timer_Process_ticks_chain(void);
+void _Timer_Process_seconds_chain(void);
 
 /*PAGE
  *
@@ -66,18 +81,13 @@ Thread _Timer_Server_body(
   unsigned32 ignored
 )
 {
-  Watchdog_Interval snapshot;
-  Watchdog_Interval ticks_last_time;
-  Watchdog_Interval seconds_last_time;
-  Watchdog_Interval ticks;
-
   /*
    *  Initialize the "last time" markers to indicate the timer that
    *  the server was initiated.
    */
 
-  ticks_last_time   = _Watchdog_Ticks_since_boot;
-  seconds_last_time = _TOD_Seconds_since_epoch;
+  _Timer_Server_ticks_last_time   = _Watchdog_Ticks_since_boot;
+  _Timer_Server_seconds_last_time = _TOD_Seconds_since_epoch;
 
   _Thread_Disable_dispatch();
   while(1) {
@@ -100,42 +110,8 @@ Thread _Timer_Server_body(
      */
 
     _Thread_Disable_dispatch();
-
-    /*
-     *  Process the ticks chain
-     */
-
-    snapshot = _Watchdog_Ticks_since_boot;
-    ticks = snapshot - ticks_last_time;
-    ticks_last_time = snapshot;
-    _Watchdog_Adjust( &_Timer_Ticks_chain, WATCHDOG_FORWARD, ticks );
-
-    /*
-     *  Process the seconds chain.  Start by checking that the Time 
-     *  of Day (TOD) has not been set backwards.  If it has then
-     *  we want to adjust the _Timer_Seconds_chain to indicate this.
-     */
-
-    snapshot =  _TOD_Seconds_since_epoch;
-    if ( snapshot > seconds_last_time ) {
-      /*
-       *  This path is for normal forward movement and cases where the
-       *  TOD has been set forward.
-       */
-
-      ticks = snapshot - seconds_last_time;
-      _Watchdog_Adjust( &_Timer_Seconds_chain, WATCHDOG_FORWARD, ticks );
-
-    } else if ( snapshot < seconds_last_time ) { 
-       /*
-        *  The current TOD is before the last TOD which indicates that
-        *  TOD has been set backwards.
-        */
-
-       ticks = seconds_last_time - snapshot;
-       _Watchdog_Adjust( &_Timer_Seconds_chain, WATCHDOG_BACKWARD, ticks );
-    }
-    seconds_last_time = snapshot;
+      _Timer_Process_ticks_chain();
+      _Timer_Process_seconds_chain();
   }
 }
 
@@ -289,15 +265,93 @@ void _Timer_Server_reset(
 
   switch ( reset_mode ) {
     case TIMER_SERVER_RESET_TICKS:
-      _Watchdog_Remove(  &_Timer_Server->Timer );
-      units = ((Watchdog_Control *)_Timer_Ticks_chain.first)->delta_interval;
-      _Watchdog_Insert_ticks( &_Timer_Server->Timer, units );
+      _Watchdog_Remove( &_Timer_Server->Timer );
+      _Timer_Process_ticks_chain();
+      if ( !_Chain_Is_empty( &_Timer_Ticks_chain ) ) {
+        units = ((Watchdog_Control *)_Timer_Ticks_chain.first)->delta_interval;
+        _Watchdog_Insert_ticks( &_Timer_Server->Timer, units );
+      }
       break;
     case TIMER_SERVER_RESET_SECONDS:
       _Watchdog_Remove(  &_Timer_Seconds_timer );
-      units = ((Watchdog_Control *)_Timer_Seconds_chain.first)->delta_interval;
-      _Watchdog_Insert_seconds( &_Timer_Seconds_timer, units );
+      _Timer_Process_seconds_chain();
+      if ( !_Chain_Is_empty( &_Timer_Seconds_chain ) ) {
+        units = ((Watchdog_Control *)_Timer_Seconds_chain.first)->delta_interval;
+        _Watchdog_Insert_seconds( &_Timer_Seconds_timer, units );
+      }
       break;
   }
+}
+
+/*PAGE
+ *
+ *  _Timer_Server_Process_ticks_chain
+ *
+ *  This routine is responsible for adjusting the list of task-based 
+ *  interval timers to reflect the passage of time.
+ *
+ *  Input parameters:   NONE
+ *
+ *  Output parameters:  NONE
+ */
+
+void _Timer_Process_ticks_chain(void)
+{
+  Watchdog_Interval snapshot;
+  Watchdog_Interval ticks;
+
+  snapshot = _Watchdog_Ticks_since_boot;
+  if ( snapshot >= _Timer_Server_ticks_last_time )
+     ticks = snapshot - _Timer_Server_ticks_last_time;
+  else
+     ticks = (0xFFFFFFFF - _Timer_Server_ticks_last_time) + snapshot;
+ 
+  _Timer_Server_ticks_last_time = snapshot;
+  _Watchdog_Adjust( &_Timer_Ticks_chain, WATCHDOG_FORWARD, ticks );
+}
+
+/*PAGE
+ *
+ *  _Timer_Server_Process_seconds_chain
+ *
+ *  This routine is responsible for adjusting the list of task-based 
+ *  time of day timers to reflect the passage of time.
+ *
+ *  Input parameters:   NONE
+ *
+ *  Output parameters:  NONE
+ */
+
+void _Timer_Process_seconds_chain(void)
+{
+  Watchdog_Interval snapshot;
+  Watchdog_Interval ticks;
+
+  /*
+   *  Process the seconds chain.  Start by checking that the Time 
+   *  of Day (TOD) has not been set backwards.  If it has then
+   *  we want to adjust the _Timer_Seconds_chain to indicate this.
+   */
+
+  snapshot =  _TOD_Seconds_since_epoch;
+  if ( snapshot > _Timer_Server_seconds_last_time ) {
+    /*
+     *  This path is for normal forward movement and cases where the
+     *  TOD has been set forward.
+     */
+
+    ticks = snapshot - _Timer_Server_seconds_last_time;
+    _Watchdog_Adjust( &_Timer_Seconds_chain, WATCHDOG_FORWARD, ticks );
+
+  } else if ( snapshot < _Timer_Server_seconds_last_time ) { 
+     /*
+      *  The current TOD is before the last TOD which indicates that
+      *  TOD has been set backwards.
+      */
+
+     ticks = _Timer_Server_seconds_last_time - snapshot;
+     _Watchdog_Adjust( &_Timer_Seconds_chain, WATCHDOG_BACKWARD, ticks );
+  }
+  _Timer_Server_seconds_last_time = snapshot;
 }
 
