@@ -33,4 +33,20 @@ fi
 RTEMS_BSP="$rtems_cv_RTEMS_BSP"
 AC_MSG_RESULT(${RTEMS_BSP})
 AC_SUBST(RTEMS_BSP)
+
+## RTEMS_ROOT=$RTEMS_TOPdir/'$(top_builddir)'/c/$RTEMS_BSP
+## AC_SUBST(RTEMS_ROOT)
+])
+
+AC_DEFUN(RTEMS_ENV_RTEMSCPU,
+[AC_REQUIRE([RTEMS_ENABLE_MULTILIB])
+if test x"$multilib" = x"no"; then
+  RTEMS_ENV_RTEMSBSP
+else
+  rtems_cv_RTEMS_BSP="multilib"
+  RTEMS_BSP="$rtems_cv_RTEMS_BSP"
+  AC_SUBST(RTEMS_BSP)
+## RTEMS_ROOT=$RTEMS_TOPdir/'$(top_builddir)'/c
+## AC_SUBST(RTEMS_ROOT)
+fi
 ])

@@ -17,6 +17,7 @@ RTEMS_CANONICAL_HOST
 AM_INIT_AUTOMAKE(rtems-c-src,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
+RTEMS_ENABLE_MULTILIB
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_CPU
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
@@ -25,7 +26,10 @@ RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
 ## Note: the order of the directories below is essential
 cfg_subdirs="make"
+## Exclude exec from building if multilibs are enabled
+if test x"$multilib" = x"no"; then
 cfg_subdirs="$cfg_subdirs exec"
+fi
 cfg_subdirs="$cfg_subdirs lib"
 cfg_subdirs="$cfg_subdirs libmisc"
 

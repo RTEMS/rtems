@@ -5,7 +5,7 @@ AC_DEFUN(RTEMS_CHECK_ITRON_API,
 AC_REQUIRE([RTEMS_CHECK_CPU])dnl
 AC_REQUIRE([RTEMS_ENABLE_ITRON])dnl
 
-AC_CACHE_CHECK([whether BSP supports libitron],
+AC_CACHE_CHECK([whether CPU supports libitron],
   rtems_cv_HAS_ITRON_API,
   [dnl
     case "$RTEMS_CPU" in
@@ -26,4 +26,9 @@ else
   HAS_ITRON_API="no";
 fi
 AC_SUBST(HAS_ITRON_API)dnl
+
+if test x"${HAS_ITRON_API}" = x"yes";
+then
+  AC_DEFINE_UNQUOTED(RTEMS_ITRON_API,1,[if itron api is supported])
+fi
 ])

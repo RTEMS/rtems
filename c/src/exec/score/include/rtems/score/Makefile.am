@@ -5,7 +5,6 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
 
 # We only build multiprocessing related files if HAS_MP was defined
 MP_H_FILES = mpci.h mppkt.h objectmp.h threadmp.h
