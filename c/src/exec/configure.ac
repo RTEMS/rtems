@@ -66,19 +66,26 @@ RTEMS_DEFINE_MULTIPROCESSING
 
 # HACK: We should use a feature-based configuration.
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
-  AC_DEFINE_UNQUOTED(RTEMS_UNIX,1,[to indicate RTEMS unix])
+  AC_DEFINE_UNQUOTED([RTEMS_UNIX],[1],[to indicate RTEMS unix])
 # HACK: silently accept --enable-unixlib
-  test "${enable_unixlib}+set" != set || enable_unixlib="yes"
+  test -n "${enable_unixlib}" || enable_unixlib="yes"
 ])
 
 AS_IF([test x"${enable_unixlib}" = x"yes"],
-  [AC_DEFINE_UNQUOTED(RTEMS_UNIXLIB,[1],
+  [AC_DEFINE_UNQUOTED([RTEMS_UNIXLIB],[1],
     [to indicate RTEMS using RTEMS's unixlib])]
 )
 
 AM_CONFIG_HEADER(score/include/rtems/score/cpuopts-tmp.h)
 
 AC_ENABLE_MULTILIB([Makefile],[..])
+
+## HACK: Add a define to cpuopts.h to indicate using multilibs
+## Can be applied to produce compiler errors if using
+## multilib-incompatible settings somewhere else (eg. bspopts.h).
+AS_IF([test x"${enable_multilib}" = x"yes"],[
+  AC_DEFINE_UNQUOTED([RTEMS_MULTILIBS],[1],[using multilib'ed RTEMS])
+])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

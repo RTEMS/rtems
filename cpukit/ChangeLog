@@ -1,3 +1,13 @@
+2002-01-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Apply @subdirs. Remove POSIX_SUBDIRS. Remove
+	ITRON_SUBDIRS.
+	* configure.ac: Rework enable_unixlib handling. 
+	Add RTEMS_MULTILIBS to cpuopts.h.
+	* include/Makefile.am: Add rtems/fs.h, rtems/userenv.h.
+	Add $(PROJECT_INCLUDE)/rtems. Remove libio_.h.
+
+
 2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Add install-hook. 
