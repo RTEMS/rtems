@@ -1,3 +1,9 @@
+2001-03-29	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR150, unix directory and contents removed.
+	* unix/, unix/ChangeLog, unix/Makefile.am, unix/configure.ac,
+	unix/gensize.c: Deleted.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
