@@ -95,11 +95,14 @@ static char rcsid[] = "$Id$";
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#if !defined(__rtems__)
 #include <poll.h>
+#endif
 
 #include "res_config.h"
 
 #if !defined(__rtems__)
+
 #ifdef NOPOLL			/* libc_r doesn't wrap poll yet() */
 static int use_poll = 0;
 #else
