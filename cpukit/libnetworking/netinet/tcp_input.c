@@ -201,7 +201,7 @@ tcp_reass(tp, ti, m)
 	}
 	tcpstat.tcps_rcvoopack++;
 	tcpstat.tcps_rcvoobyte += ti->ti_len;
-#if (defined(__GNUC__) && defined(__arm__))
+#if (defined(__GNUC__) && (defined(__arm__) || defined(__mips__)))
     STR32_UNALGN(ti,m);
 #else
 	REASS_MBUF(ti) = m;		/* XXX */
@@ -217,7 +217,7 @@ tcp_reass(tp, ti, m)
 		if (i < q->ti_len) {
 			q->ti_seq += i;
 			q->ti_len -= i;
-#if (defined(__GNUC__) && defined(__arm__))
+#if (defined(__GNUC__) && (defined(__arm__) || defined(__mips__)))
             LD32_UNALGN(q,m);
             m_adj(m, i);
 #else
@@ -226,7 +226,7 @@ tcp_reass(tp, ti, m)
 			break;
 		}
 		q = (struct tcpiphdr *)q->ti_next;
-#if (defined(__GNUC__) && defined(__arm__))
+#if (defined(__GNUC__) && (defined(__arm__) || defined(__mips__)))
         LD32_UNALGN((struct tcpiphdr *)q->ti_prev,m);
 #else
 		m = REASS_MBUF((struct tcpiphdr *)q->ti_prev);
@@ -254,7 +254,7 @@ present:
 		tp->rcv_nxt += ti->ti_len;
 		flags = ti->ti_flags & TH_FIN;
 		remque(ti);
-#if (defined(__GNUC__) && defined(__arm__))
+#if (defined(__GNUC__) && (defined(__arm__) || defined(__mips__)))
         LD32_UNALGN(ti,m);
 #else
 		m = REASS_MBUF(ti);

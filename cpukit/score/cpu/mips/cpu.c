@@ -99,9 +99,11 @@ uint32_t   _CPU_ISR_Get_level( void )
 
   mips_get_sr(sr);
 
-#if __mips == 3
-/* EXL bit and shift down hardware ints into bits 1 thru 6 */
-  sr = ((sr & SR_EXL) >> 1) | ((sr & 0xfc00) >> 9);
+  /* printf("current sr=%08X, ",sr); */
+
+#if (__mips == 3) || (__mips == 32)
+/* IE bit and shift down hardware ints into bits 1 thru 6 */
+  sr = (sr & SR_IE) | ((sr & 0xfc00) >> 9);
 
 #elif __mips == 1
 /* IEC bit and shift down hardware ints into bits 1 thru 6 */
@@ -131,14 +133,14 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
 
   mips_get_sr(sr);
 
-#if __mips == 3
+#if (__mips == 3) || (__mips == 32)
   mips_set_sr( (sr & ~SR_IE) );                 /* first disable ie bit (recommended) */
 
-  srbits = sr & ~(0xfc00 | SR_EXL | SR_IE);
+   srbits = sr & ~(0xfc00 | SR_IE);
 
-  sr = srbits | ((new_level==0)? (0xfc00 | SR_EXL | SR_IE): \
+   sr = srbits | ((new_level==0)? (0xfc00 | SR_IE): \
 		 (((new_level<<9) & 0xfc00) | \
-		  (new_level & 1)?(SR_EXL | SR_IE):0));
+                   ((new_level & 1)?SR_IE:0)));
 /*
   if ( (new_level & SR_EXL) == (sr & SR_EXL) )
     return;
@@ -263,7 +265,7 @@ void _CPU_Install_interrupt_stack( void )
 
 void _CPU_Thread_Idle_body( void )
 {
-#if __mips == 3
+#if (__mips == 3) || (__mips == 32)
    for( ; ; )
      asm volatile("wait"); /* use wait to enter low power mode */
 #elif __mips == 1

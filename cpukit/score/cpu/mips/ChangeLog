@@ -1,43 +1,18 @@
-2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* rtems/score/types.h: Use __rtems_score_types_h as preprocessor
-	guard.
-
-2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* asm.h: Add doxygen preamble.
-
-2004-10-02	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* rtems/score/cpu.h: Add doxygen preamble.
-	* rtems/score/mips.h: Add doxygen preamble.
-	* rtems/score/types.h: Add doxygen preamble.
-
-2004-09-29	Joel Sherrill <joel@OARcorp.com>
-
-	* rtems/score/cpu.h: i960 obsoleted and all references removed.
-
-2004-07-25	Joel Sherrill <joel@OARcorp.com>
-
-	* cpu_asm.S: Remove use of C++ style comments and make this compile
-	again.
-
-2004-04-14	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	PR 605/bsps
-	* cpu.c: Remove further c++ style comments having been missed in
-	previous patch. Remove printf's entirely.
+2004-12-02	Greg Menke <gregory.menke@gsfc.nasa.gov>
+	PR 730 
+	* cpu_asm.S: Collected PR 601 changes for commit to cvshead
+	for rtems-4.7
 
 2004-04-09	Joel Sherrill <joel@OARcorp.com>
 
 	PR 605/bsps
 	* cpu.c: Do not use C++ style comments.
 
-2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* configure.ac: Remove (Merged into $(top_srcdir)/configure.ac).
-	* Makefile.am: Don't include multilib.am.
-	Reflect merging configure.ac into $(top_srcdir)/configure.ac.
+2004-04-07	Greg Menke <gregory.menke@gsfc.nasa.gov>
+	PR 601
+	* cpu_asm.S: Added __mips==32 support for R4000 processors running
+	32 bit code.  Fixed #define problems that caused fpu code to
+	always be included even when no fpu is present.
 
 2004-04-03	Art Ferrer <arturo.b.ferrer@nasa.gov>
 
@@ -45,92 +20,6 @@
 	* cpu_asm.S, rtems/score/cpu.h: Add save of floating point
 	status/control register on context switches. Missing this register
 	was causing intermittent floating point errors.
-
-2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* Makefile.am: Install iregdefs.h and idtcpu.h to 
-	$(includedir)/rtems/mips.
-	* cpu_asm.S: Include <rtems/mips/iregdef.h> instead of <iregdef.h>.
-	* rtems/score/mips.h, cpu_asm.S: Include <rtems/mips/idtcpu.h>
-	instead of <idtcpu.h>.
-
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* Makefile.am: Install asm.h to $(includedir)/rtems.
-
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.
-
-2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* cpu.c, rtems/score/cpu.h: Convert to using c99 fixed size types.
-
-2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* configure.ac: RTEMS_TOP([../../../..]).
-
-2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Move RTEMS_TOP one subdir down.
-
-2004-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Add PREINSTALL_DIRS.
-
-2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
-	Add PREINSTALL_FILES to CLEANFILES.
-
-2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Requires automake >= 1.8.1.
-
-2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Include compile.am, again.
-
-2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Convert to using automake compilation rules.
-
-2004-01-07	Joel Sherrill <joel@OARcorp.com>
-
-	* rtems/score/mips.h: Removed junk revision line.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Use mkdir_p. Remove dirs from PREINSTALL_FILES.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
-
-2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Remove TMPINSTALL_FILES.
-
-2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Add $(dirstamp) to preinstallation rules.
-
-2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Don't use gmake rules for preinstallation.
-
-2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Remove RTEMS_CANONICAL_HOST.
-
-2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Remove RTEMS_CHECK_CPU.
-
-2003-09-26	Joel Sherrill <joel@OARcorp.com>
-
-	* rtems/score/cpu.h: Obsoleting HP PA-RISC port and removing all
-	references.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 

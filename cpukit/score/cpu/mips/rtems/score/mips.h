@@ -30,7 +30,7 @@ extern "C" {
  *  NOTE: XXX what about SR_ERL?
  */
 
-#if __mips == 3
+#if (__mips == 3) || (__mips == 32)
 #ifdef ASM
 #define SR_INTERRUPT_ENABLE_BITS 0x01
 #else
@@ -59,9 +59,10 @@ extern "C" {
 #define MIPS_HAS_FPU 1
 #endif 
 
+
 #if (__mips == 1)
 #define CPU_MODEL_NAME  "ISA Level 1 or 2"
-#elif (__mips == 3)
+#elif (__mips == 3) || (__mips == 32)
 #if defined(__mips64)
 #define CPU_MODEL_NAME  "ISA Level 4"
 #else
@@ -218,6 +219,8 @@ extern "C" {
  *  Access FCR31
  */
 
+#if ( MIPS_HAS_FPU == 1 )
+
 #define mips_get_fcr31( _x ) \
   do { \
     asm volatile( "cfc1 %0, $31; nop" : "=r" (_x) : ); \
@@ -230,6 +233,12 @@ extern "C" {
     asm volatile( "ctc1 %0, $31; nop" : : "r" (__x) ); \
   } while(0)
 
+#else
+
+#define mips_get_fcr31( _x )
+#define mips_set_fcr31( _x )
+
+#endif
 
 /*
  *  Manipulate interrupt mask 
@@ -271,3 +280,4 @@ extern "C" {
 #endif
 
 #endif /* ! _INCLUDE_MIPS_h */
+/* end of include file */

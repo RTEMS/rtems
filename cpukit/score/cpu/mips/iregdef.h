@@ -229,7 +229,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #if __mips == 1
 #define	R_TLBLO		73
 #endif
-#if  __mips == 3
+#if  (__mips == 3 ) || ( __mips == 32)
 #define	R_TLBLO0	73
 #endif
 
@@ -243,7 +243,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #if __mips == 1
 #define NREGS		81
 #endif
-#if  __mips == 3
+#if  (__mips == 3 ) || ( __mips == 32)
 #define	R_TLBLO1	81
 #define R_PAGEMASK	82
 #define R_WIRED		83
@@ -298,7 +298,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	R_SP		R_R29
 #define	R_FP		R_R30
 #define	R_RA		R_R31
-
+#define R_SZ 4
 /* disabled for RTEMS */
 #if 0
 /* Ketan added the following */
@@ -329,3 +329,4 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #endif
 
 #endif /* __IREGDEF_H__ */
+

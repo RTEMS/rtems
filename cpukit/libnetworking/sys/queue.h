@@ -568,7 +568,7 @@ struct {								\
 #ifdef	__GNUC__
 
 struct quehead {
-#if defined(__arm__)
+#if (defined(__arm__) || defined(__mips__))
     struct quehead *qh_link  __attribute__((packed));
     struct quehead *qh_rlink __attribute__((packed));
 #else /* !defined(__arm__)) */

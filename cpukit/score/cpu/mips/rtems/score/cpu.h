@@ -1,7 +1,3 @@
-/**
- * @file rtems/score/cpu.h
- */
-
 /*
  *  Mips CPU Dependent Header File
  *
@@ -51,6 +47,16 @@ extern "C" {
 #ifndef ASM
 #include <rtems/score/types.h>
 #endif
+
+#ifndef TRUE
+#define TRUE 1
+#warning "TRUE was not defined, assuming default of 1"
+#endif
+#ifndef FALSE
+#define FALSE 0
+#warning "FALSE was not defined, assuming default of 0"
+#endif
+
 
 /* conditional compilation parameters */
 
@@ -187,6 +193,13 @@ extern "C" {
  *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is assumed.
  *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is followed.
  *
+ *  So far, the only CPU in which this option has been used is the
+ *  HP PA-RISC.  The HP C compiler and gcc both implicitly use the
+ *  floating point registers to perform integer multiplies.  If
+ *  a function which you would not think utilize the FP unit DOES,
+ *  then one can not easily predict which tasks will use the FP hardware.
+ *  In this case, this option should be TRUE.
+ *
  *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
  */
 
@@ -314,7 +327,10 @@ extern "C" {
 #define CPU_MODES_INTERRUPT_MASK   0x000000ff
 
 /*
- *  Processor defined structures required for cpukit/score.
+ *  Processor defined structures
+ *
+ *  Examples structures include the descriptor tables from the i386
+ *  and the processor control structure on the i960ca.
  */
 
 /* may need to put some structures here.  */
@@ -357,7 +373,7 @@ extern "C" {
 #ifndef ASSEMBLY_ONLY
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
-#if __mips == 1
+#if (__mips == 1) || (__mips == 32)
 #define __MIPS_REGISTER_TYPE     uint32_t  
 #define __MIPS_FPU_REGISTER_TYPE uint32_t  
 #elif __mips == 3
@@ -534,7 +550,7 @@ typedef struct
   __MIPS_REGISTER_TYPE  tlblo;    /* 73 - NOT FILLED IN, doesn't exist on */
                                   /*         all MIPS CPUs (at least MGV) */
 #endif
-#if  __mips == 3
+#if  (__mips == 3) || (__mips == 32)
   __MIPS_REGISTER_TYPE  tlblo0;   /* 73 - NOT FILLED IN, doesn't exist on */
                                   /*         all MIPS CPUs (at least MGV) */
 #endif
@@ -550,7 +566,7 @@ typedef struct
   __MIPS_REGISTER_TYPE  prid;     /* 79 -- NOT FILLED IN (not need to do so) */
   __MIPS_REGISTER_TYPE  tar ;     /* 80 -- target address register, filled on exceptions */
   /* end of __mips == 1 so NREGS == 81 */
-#if  __mips == 3
+#if  (__mips == 3) || (__mips == 32)
   __MIPS_REGISTER_TYPE  tlblo1;   /* 81 -- NOT FILLED IN */
   __MIPS_REGISTER_TYPE  pagemask; /* 82 -- NOT FILLED IN */
   __MIPS_REGISTER_TYPE  wired;    /* 83 -- NOT FILLED IN */
@@ -685,7 +701,7 @@ extern unsigned int mips_interrupt_number_of_vectors;
  *  that a "reasonable" small application should not have any problems.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (2048*sizeof(uint32_t  ))
+#define CPU_STACK_MINIMUM_SIZE          (2048*sizeof(unsigned32))
 
 
 /*
@@ -848,8 +864,8 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
  */
 
 
-#if __mips == 3
-#define _INTON	(SR_EXL | SR_IE)
+#if (__mips == 3) || (__mips == 32)
+#define _INTON	        SR_IE
 #define _EXTRABITS      0
 #endif
 #if __mips == 1
@@ -865,7 +881,7 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
   	_stack_tmp &= ~(CPU_STACK_ALIGNMENT - 1); \
   	(_the_context)->sp = _stack_tmp; \
   	(_the_context)->fp = _stack_tmp; \
-	(_the_context)->ra = (uint64_t  )_entry_point; \
+	(_the_context)->ra = (__MIPS_REGISTER_TYPE)_entry_point; \
 	(_the_context)->c0_sr = ((_intlvl==0)?(0xFF00 | _INTON):( ((_intlvl<<9) & 0xfc00) | \
 						       0x300 | \
 						       ((_intlvl & 1)?_INTON:0)) ) | \

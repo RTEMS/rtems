@@ -399,7 +399,7 @@ tcp_close(tp)
 	t = tp->seg_next;
 	while (t != (struct tcpiphdr *)tp) {
 		t = (struct tcpiphdr *)t->ti_next;
-#if (defined(__GNUC__) && defined(__arm__))
+#if (defined(__GNUC__) && (defined(__arm__) || defined(__mips__)))
         LD32_UNALGN((struct tcpiphdr *)t->ti_prev,m);
 #else
 		m = REASS_MBUF((struct tcpiphdr *)t->ti_prev);

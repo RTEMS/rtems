@@ -225,7 +225,7 @@ struct rmxp_tao {
  * port numbers (which are no longer needed once we've located the
  * tcpcb) are overlayed with an mbuf pointer.
  */
-#if (defined(__GNUC__) && defined(__arm__))
+#if (defined(__GNUC__) && (defined(__arm__) || defined(__mips__)))
 #define STR32_UNALGN(ti,m) \
         (ti)->ti_sport = (unsigned short)(((unsigned int) m & 0xffff0000) >> 16); \
          (ti)->ti_dport = (unsigned short) ((unsigned int) m & 0x0000ffff);

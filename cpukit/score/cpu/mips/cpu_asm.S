@@ -35,6 +35,10 @@
  *    2004: 24March, Art Ferrer, NASA/GSFC, added save of FP status/control
  *          register to fix intermittent FP error encountered on ST5 mission
  *          implementation on Mongoose V processor.
+ *    2004: April 7, Greg Menke <gregory.menke@gsfc.nasa.gov> Added __mips==32
+ *          support for R4000 processors running 32 bit code.  Fixed #define
+ *          problems that caused fpu code to always be included even when no
+ *          fpu is present.
  *  
  *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
@@ -53,6 +57,23 @@
 #define ASSEMBLY_ONLY
 #include <rtems/score/cpu.h>
 
+#if TRUE
+#else
+#error TRUE is not true
+#endif
+#if FALSE
+#error FALSE is not false
+#else
+#endif
+
+/*		
+#if ( CPU_HARDWARE_FP == TRUE )
+#warning CPU_HARDWARE_FP == TRUE
+#else
+#warning CPU_HARDWARE_FP != TRUE
+#endif
+*/
+	
 		
 /* enable debugging shadow writes to misc ram, this is a vestigal
 * Mongoose-ism debug tool- but may be handy in the future so we
@@ -70,12 +91,17 @@
 
 #if __mips == 3
 /* 64 bit register operations */
-#define NOP	
+#define NOP	nop
+/*
 #define ADD	dadd
-#define STREG	sd
-#define LDREG	ld
 #define MFCO	dmfc0
 #define MTCO	dmtc0
+*/
+#define ADD	add	
+#define MFCO	mfc0
+#define MTCO	mtc0
+#define STREG	sd
+#define LDREG	ld
 #define ADDU	addu
 #define ADDIU	addiu
 #define R_SZ	8
@@ -85,7 +111,7 @@
 
 /* XXX if we don't always want 64 bit register ops, then another ifdef */
 
-#elif __mips == 1
+#elif (__mips == 1 ) || (__mips == 32)
 /* 32 bit register operations*/
 #define NOP	nop
 #define ADD	add
@@ -385,8 +411,8 @@ FRAME(_CPU_Context_switch,sp,0,ra)
         .set noreorder
 
         MFC0	t0,C0_SR
-#if __mips == 3
-	li	t1,SR_EXL | SR_IE
+#if (__mips == 3) || (__mips == 32)
+	li	t1,SR_IE
 #elif __mips == 1
 	li	t1,SR_IEC
 #endif
@@ -450,44 +476,67 @@ _CPU_Context_switch_restore:
 
         LDREG t0, C0_SR_OFFSET*R_SZ(a1)
 	
+/*	NOP */
+/*#if __mips == 3 */
+/*        andi  t0,SR_EXL */
+/*        bnez  t0,_CPU_Context_1 */   /* set exception level from restore context */
+/*        li    t0,~SR_EXL */
+/*        MFC0  t1,C0_SR */
+/*        NOP */
+/*        and   t1,t0 */
+/*        MTC0  t1,C0_SR */
+/* */
+/*#elif __mips == 1 */
+/* */
+/*        andi  t0,(SR_INTERRUPT_ENABLE_BITS) */ /* we know 0 disabled */
+/*        beq   t0,$0,_CPU_Context_1  */         /* set level from restore context */
+/*        MFC0  t0,C0_SR */
+/*        NOP */
+/*        or    t0,(SR_INTERRUPT_ENABLE_BITS) */ /* new_sr = old sr with enabled  */
+/*        MTC0  t0,C0_SR */                     /* set with enabled */
+/*	  NOP */
+
 
 /*
- * Incorporate the incoming task's FP coprocessor state and interrupt
- * mask/enable into the status register.  We jump thru the requisite hoops
- * to ensure we maintain all other SR bits as global values.
- *
- * Get the task's FPU enable, int mask & int enable bits.  Although we keep the 
- * software int enables on a per-task basis, the rtems_task_create
- * Interrupt Level & int level manipulation functions cannot enable/disable
- * them, so they are automatically enabled for all tasks.  To turn them off,
- * a task must itself manipulate the SR register.  
- *
- * Although something of a hack on this processor, we treat the SR register
- * int enables as the RTEMS interrupt level.  We use the int level
- * value as a bitmask, not as any sort of greater than/less than metric.
- * Manipulation of a task's interrupt level directly corresponds to manipulation
- * of that task's SR bits, as seen in cpu.c
- *
- * Note, interrupts are disabled before context is saved, though the task's
- * interrupt enable state is recorded.  The task swapping in will apply its
- * specific SR bits, including interrupt enable.  If further task-specific
- * SR bits are arranged, it is this code, the cpu.c interrupt level stuff and
- * cpu.h task initialization code that will be affected.  
- */
+** Incorporate the incoming task's FP coprocessor state and interrupt mask/enable
+** into the status register.  We jump thru the requisite hoops to ensure we 
+** maintain all other SR bits as global values.
+**
+** Get the task's FPU enable, int mask & int enable bits.  Although we keep the 
+** software int enables on a per-task basis, the rtems_task_create
+** Interrupt Level & int level manipulation functions cannot enable/disable them, 
+** so they are automatically enabled for all tasks.  To turn them off, a task  
+** must itself manipulate the SR register.  
+**
+** Although something of a hack on this processor, we treat the SR register
+** int enables as the RTEMS interrupt level.  We use the int level
+** value as a bitmask, not as any sort of greater than/less than metric.
+** Manipulation of a task's interrupt level corresponds directly to manipulation
+** of that task's SR bits, as seen in cpu.c
+**
+** Note, interrupts are disabled before context is saved, though the task's
+** interrupt enable state is recorded.  The task swapping in will apply its
+** specific SR bits, including interrupt enable.  If further task-specific
+** SR bits are arranged, it is this code, the cpu.c interrupt level stuff and
+** cpu.h task initialization code that will be affected.  
+*/
 
 	li	t2,SR_CU1
 	or	t2,SR_IMASK
 
 	/* int enable bits */
-#if __mips == 3
-	or	t2,SR_EXL + SR_IE
+#if (__mips == 3) || (__mips == 32)
+	/* 
+	** Save IE
+	*/
+	or	t2, SR_IE
 #elif __mips == 1
 	/* 
 	** Save current, previous & old int enables.  This is key because
 	** we can dispatch from within the stack frame used by an
 	** interrupt service.  The int enables nest, but not beyond
 	** previous and old because of the dispatch interlock seen
-	** in the interrupt processing code
+	** in the interrupt processing code.
 	*/
 	or	t2,SR_IEC + SR_IEP + SR_IEO
 #endif
@@ -495,7 +544,7 @@ _CPU_Context_switch_restore:
 		
 	MFC0	t1,C0_SR	/* grab the current SR */
 	not	t2		
-	and	t1,t2		/* mask off the old task's bits */
+	and	t1,t2		/* mask off the old task's per-task bits */
 	or	t1,t0		/* or in the new task's bits */
         MTC0	t1,C0_SR	/* and load the new SR */
 	NOP
@@ -687,7 +736,7 @@ _ISR_Handler_Exception:
         STREG    t1,R_BADVADDR*R_SZ(sp)
 	
 #if ( CPU_HARDWARE_FP == TRUE )
-        MFC0     t0,C0_SR                 /* FPU is enabled, save state */
+        MFC0     t0,C0_SR                 /* we have a FPU, save state if enabled */
 	NOP
         srl      t0,t0,16
         andi     t0,t0,(SR_CU1 >> 16)
@@ -711,7 +760,7 @@ _ISR_Handler_Exception:
 
 	
 	/* 
-	** note, if the exception vector returns, rely on it to have
+	** Note, if the exception vector returns, rely on it to have
 	** adjusted EPC so we will return to some correct address.  If
 	** this is not done, we might get stuck in an infinite loop because 
 	** we'll return to the instruction where the exception occured and
@@ -779,7 +828,7 @@ excreturn:
 	
 		
 #if ( CPU_HARDWARE_FP == TRUE )
-        MFC0     t0,C0_SR               /* FPU is enabled, restore state */
+        MFC0     t0,C0_SR               /* FPU is present, restore state if enabled */
 	NOP
         srl      t0,t0,16
         andi     t0,t0,(SR_CU1 >> 16)
@@ -935,12 +984,22 @@ _ISR_Handler_1:
 */
 
         MFC0    t0, C0_SR
-#if __mips == 3
-	li	t1,SR_EXL | SR_IE
-#elif __mips == 1
+#if __mips == 1
+	
 	li	t1,SR_IEC
-#endif
 	or	t0, t1
+	
+#elif (__mips == 3) || (__mips == 32)
+	
+	/* 
+	** clear XL and set IE so we can get interrupts.
+	*/
+	li	t1, SR_EXL
+	not	t1
+	and	t0,t1
+	or	t0, SR_IE
+	
+#endif
         MTC0    t0, C0_SR
 	NOP
 
@@ -951,40 +1010,56 @@ _ISR_Handler_1:
         jal     _Thread_Dispatch
         NOP
 
-	/* and make sure its clear in case we didn't dispatch.  if we did, its
-	** already cleared */
+	/* 
+	** And make sure its clear in case we didn't dispatch.  if we did, its
+	** already cleared 
+	*/
 	la	t0,__exceptionStackFrame
 	STREG	zero,(t0)
 	NOP
 
 /* 
 ** turn interrupts back off while we restore context so
-** a badly timed interrupt won't accidentally mess things up
+** a badly timed interrupt won't mess things up
 */
         MFC0    t0, C0_SR
-#if __mips == 3
-	li	t1,SR_EXL | SR_IE
-#elif __mips == 1
-	/* ints off, current & prev kernel mode on (kernel mode enabled is bit clear..argh!) */
-	li	t1,SR_IEC | SR_KUP | SR_KUC	
-#endif
-	not	t1
-	and	t0, t1
 
 #if __mips == 1
-	/* disabled 7/29, gregm, this tasks context was saved previously in an interrupt,
-	** so we'll just restore the task's previous interrupt enables.
-
-	**
-	** make sure previous int enable is on  because we're returning from an interrupt
-	** which means interrupts have to be enabled
-	
-	li	t1,SR_IEP
-	or	t0,t1
-	*/
-#endif
+ 
+	/* ints off, current & prev kernel mode on (kernel mode enabled is bit clear..argh!) */
+	li	t1,SR_IEC | SR_KUP | SR_KUC	
+	not	t1
+	and	t0, t1
         MTC0    t0, C0_SR
+ 	NOP
+
+ #elif (__mips == 3) || (__mips == 32)
+
+ 	move	t2, t0
+	
+  /* make sure XL & IE are clear so ints are disabled & we can update EPC for the return */ 
+        li   t1,SR_EXL | SR_IE 
+        not  t1 
+        and  t0,t1 
+        MTC0 t0,C0_SR
+  	NOP
+  	
+ 	/* store new EPC value, which we can do since XL=0 */
+        LDREG   t0, R_EPC*R_SZ(sp)
 	NOP
+ 	MTC0	t0, C0_EPC
+ 	NOP
+ 	
+ 	/* apply task's SR with XL set so the eret will return properly */
+ 	or	t2, SR_EXL
+ 	MTC0	t2, C0_SR
+ 	NOP
+#endif
+ 
+ 
+ 
+ 
+ 
 	
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,_Thread_Executing
@@ -1041,15 +1116,22 @@ _ISR_Handler_exit:
         LDREG v1, R_V1*R_SZ(sp)
         LDREG v0, R_V0*R_SZ(sp)
 	
-        LDREG     k1, R_EPC*R_SZ(sp)
-	
+#if __mips == 1
+	LDREG     k1, R_EPC*R_SZ(sp)
+#endif
+		
 	.set noat
         LDREG     AT, R_AT*R_SZ(sp)
         .set at
 
         ADDIU     sp,sp,EXCP_STACK_SIZE
-	j         k1
-	rfe
+
+#if (__mips == 3) || (__mips == 32)
+	eret
+#elif __mips == 1
+  	j         k1
+  	rfe
+#endif
         NOP
 
        .set    reorder
@@ -1066,3 +1148,4 @@ FRAME(mips_break,sp,0,ra)
         NOP
        .set    reorder
 ENDFRAME(mips_break)
+
