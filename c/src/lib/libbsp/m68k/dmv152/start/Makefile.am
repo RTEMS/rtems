@@ -2,10 +2,7 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../shared
-
-PGM = $(ARCH)/start.o
 
 S_FILES = start.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -20,13 +17,15 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(PGM)
+bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
+
+$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(ARCH)/start.o $(TMPINSTALL_FILES)
 
-.PRECIOUS: $(PGM)
+.PRECIOUS: $(ARCH)/start.o
 
 include $(top_srcdir)/../../../../../../automake/local.am
