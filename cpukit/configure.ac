@@ -67,7 +67,6 @@ AM_CONDITIONAL([LIBSCORECPU],
 [test -f "${srcdir}/score/cpu/${RTEMS_CPU}/cpu.c"])
 
 AC_CONFIG_SUBDIRS([libcsupport])
-AC_CONFIG_SUBDIRS([libfs])
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
   AC_CONFIG_SUBDIRS(libnetworking)
 ## FIXME: Should better use a feature-based test
@@ -153,7 +152,14 @@ score/cpu/Makefile
 ])
 
 AC_CONFIG_FILES([libblock/Makefile])
+
+AC_CONFIG_FILES([libfs/Makefile
+libfs/src/Makefile
+libfs/src/imfs/Makefile
+libfs/src/dosfs/Makefile])
+
 AC_CONFIG_FILES([ada/Makefile])
+
 AC_CONFIG_FILES([wrapup/Makefile])
 
 AC_OUTPUT

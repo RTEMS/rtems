@@ -1,5 +1,10 @@
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Merge-in libfs/configure.ac.
+	* Makefile.am: Add libfs to SUBDIRS.
+
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Merge-in libblock/configure.ac.
 	* Makefile.am: Add libblock to SUBDIRS.
 
