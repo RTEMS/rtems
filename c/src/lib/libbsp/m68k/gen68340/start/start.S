@@ -402,8 +402,14 @@ BEGIN_DATA
 
 /* -- Initialization stack and vars -- */
 
+/* When using DWARF, everything must be a multiple of 16-bits. */
+#if 1
+_AsteccBusWidth:	ds.w 0x0101
+_AsteccCsSwitch:	ds.w 0x0101
+#else
 _AsteccBusWidth:	ds.b 1
 _AsteccCsSwitch:	ds.b 1
+#endif
 _AsteccCpuName:		ds.l 1
 
 .align 4
@@ -420,7 +426,9 @@ BEGIN_CODE
 		dc.l    _crt0_cold_start         /* reset PC */
 		dc.l    _crt0_warm_start
 
-		.ascii	"BOOT XHM68K/Spectra for ASTECC 68349 and 68340 boards"
+/* When using DWARF, everything must be a multiple of 16-bits. */
+		.ascii	"BOOT XHM68K/Spectra for ASTECC 68349 and 68340 boards "
+		.text
 		dc.w	0
 .align 4
 
@@ -525,10 +533,17 @@ _copy_start_code:
 	/*  Astecc  68349 board : chip-select initialization values */
 
 _table_csepld:
-	dc.b	(_EPLD_CS_BASE&0x0F)+0x80			| 16 bits, 0ws
-	dc.b	0x80						| 16 bits, 0 ws
-	dc.b	0x90						| 16 bits, ext /dsack
-	dc.b	0x90						| 16 bits, ext /dsack
+/* When using DWARF, everything must be a multiple of 16-bits. */
+#if 1
+	dc.w (((_EPLD_CS_BASE&0x0F)+0x80) << 8)	| 0x80 | 16 bits, 0ws
+	dc.w 0x9090				| 16 bits, ext /dsack
+      
+#else
+	dc.b	(_EPLD_CS_BASE&0x0F)+0x80	| 16 bits, 0ws
+	dc.b	0x80				| 16 bits, 0 ws
+	dc.b	0x90				| 16 bits, ext /dsack
+	dc.b	0x90				| 16 bits, ext /dsack
+#endif
 
 _table_cs349:
 	dc.l	0x003FFFF4               			| Mask CS0 (4Mbytes PROM, 32bits, 1WS)
