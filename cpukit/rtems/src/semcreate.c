@@ -93,6 +93,7 @@ rtems_status_code rtems_semaphore_create(
 
   } else 
 #endif
+
   if ( _Attributes_Is_inherit_priority( attribute_set ) || 
               _Attributes_Is_priority_ceiling( attribute_set ) ) {
 
@@ -164,6 +165,12 @@ rtems_status_code rtems_semaphore_create(
       the_semaphore_attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_PRIORITY;
     else
       the_semaphore_attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
+
+    /*
+     *  This effectively disables limit checking.
+     */
+
+    the_semaphore_attributes.maximum_count = 0xFFFFFFFF;
 
     /*
      *  The following are just to make Purify happy.
