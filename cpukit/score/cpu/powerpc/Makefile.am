@@ -23,17 +23,7 @@ include_rtems_new_exceptions_HEADERS = rtems/new-exceptions/cpu.h
 include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/registers.h
 
-C_FILES = # cpu.c
-OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-S_FILES = # cpu_asm.S
-OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
-
-$(LIB): $(OBJS)
-	$(make-library)
-
-all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB) \
-    $(TMPINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 
