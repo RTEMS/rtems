@@ -2,9 +2,6 @@
 ## $Id$
 ##
 
-
-PGM = $(ARCH)/rxgen_romld.o
-
 S_FILES = rxgen_romld.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
@@ -18,14 +15,16 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).o: $(PGM)
+bsplib_DATA = $(ARCH)/rxgen_romld.o
+
+$(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).o: $(ARCH)/rxgen_romld.o
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).o
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(ARCH)/rxgen_romld.o $(TMPINSTALL_FILES)
 
-.PRECIOUS: $(PGM)
+.PRECIOUS: $(ARCH)/rxgen_romld.o
 
 EXTRA_DIST = rxgen_romld.S
 
