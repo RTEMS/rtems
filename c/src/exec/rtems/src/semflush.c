@@ -58,7 +58,6 @@ rtems_status_code rtems_semaphore_flush(
 {
   register Semaphore_Control *the_semaphore;
   Objects_Locations           location;
-  boolean                     wait;
 
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
