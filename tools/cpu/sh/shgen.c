@@ -55,7 +55,7 @@ static void shgen_header( FILE *file )
 
 int main( int argc, char *argv[] )
 {
-  double 	Phi = 20.0 ;
+  double 	Phi = 20000000.0 ;
 
 #if HAVE_GETOPT_LONG  
   int option_index = 0 ;

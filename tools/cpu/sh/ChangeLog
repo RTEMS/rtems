@@ -1,4 +1,8 @@
-2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shgen.c: Set default Phi to 20MHz (BUG-FIX).
+
+2000l-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 
