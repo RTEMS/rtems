@@ -1,0 +1,80 @@
+#
+# spec file for package rtems
+# 
+# Copyright  (c)  1999  OARCorp, Huntsville, AL
+#
+# please send bugfixes or comments to joel@OARcorp.com
+#
+
+Vendor:       OAR Corporation
+Distribution: Linux
+Name:         rtems-@target_alias@-@bsp@
+Release:      @Release@
+Copyright:    1999 OARCorp
+Group:        unsorted
+Provides:     rtems-@target_alias@-@bsp@
+
+Autoreqprov:  on
+Packager:     corsepiu@faw.uni-ulm.de
+
+Version:      @Version@
+Summary:      A free operating system for embedded systems
+Source:       rtems-@Version@.tar.gz
+# We claim to be relocatible, but in fact we are not
+Prefix:	      /opt
+Buildroot:    /opt/tmp
+# Patch:
+%description
+RTEMS is a free operating system for embedded systems.
+
+Authors:
+--------
+    Joel Sherrill (joel@oarcorp.com)
+    ...
+
+%prep
+# untar the sources inside rtems-@target_alias@-@bsp@-@Version@
+%setup -c -n rtems-@target_alias@-@bsp@-@Version@
+# no patch needed
+# %patch
+%build
+# rtems does not support building inside the source tree
+  if test ! -f rtems-@Version@/configure;
+  then
+  ( cd rtems-@Version@; ./autogen )
+  fi  
+  ./rtems-@Version@/configure \
+  --target=@target_alias@ \
+  --prefix=/opt/rtems/@target_alias@ \
+  --enable-networking \
+  --enable-posix \
+  --enable-cxx \
+  --disable-tests \
+  --enable-rdbg \
+  --disable-multiprocessing
+  make RTEMS_BSP=@bsp@ 
+%install
+  make RTEMS_BSP=@bsp@ prefix=$RPM_BUILD_ROOT/opt/rtems/@target_alias@ install
+  find $RPM_BUILD_ROOT/opt/rtems/@target_alias@/@bsp@ -type d | \
+    sed "s,^$RPM_BUILD_ROOT,%dir ,g" > files
+  find $RPM_BUILD_ROOT/opt/rtems/@target_alias@/@bsp@ -type f | \
+    sed "s,^$RPM_BUILD_ROOT,,g" >> files
+  find $RPM_BUILD_ROOT/opt/rtems/@target_alias@/make -type d | \
+    sed "s,^$RPM_BUILD_ROOT,%dir ,g" >> files
+  find $RPM_BUILD_ROOT/opt/rtems/@target_alias@/make -type f | \
+    sed "s,^$RPM_BUILD_ROOT,,g" >> files
+
+%post
+  if test "$RPM_INSTALL_PREFIX" != "/opt/";
+  then
+    if test -f $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg; 
+    then
+    sed -e 's,/opt/rtems/,$RPM_INSTALL_PREFIX/rtems,g' \
+      < $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg \
+      > $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg~
+    mv $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg~ \
+      $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg
+    fi
+  fi
+
+%files -f files
