@@ -1,3 +1,11 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* score/cpu/i960/.cvsignore, score/cpu/i960/ChangeLog,
+	score/cpu/i960/Makefile.am, score/cpu/i960/asm.h,
+	score/cpu/i960/cpu.c, score/cpu/i960/cpu_asm.S,
+	score/cpu/i960/rtems/score/cpu.h, score/cpu/i960/rtems/score/i960.h,
+	score/cpu/i960/rtems/score/types.h: Removed.
+
 2004-09-27	Joel Sherrill <joel@OARcorp.com>
 
 	PR 294/rtems
