@@ -23,32 +23,34 @@
 
 /*PAGE
  *
- *  _Rate_monotonic_Manager_initialization
+ *  rtems_rate_monotonic_ident
  *
- *  This routine initializes all Rate Monotonic Manager related
- *  data structures.
+ *  This directive returns the system ID associated with
+ *  the rate monotonic period name.
  *
  *  Input parameters:
- *    maximum_periods - number of periods timers to initialize
+ *    name - user defined period name
+ *    id   - pointer to period id
  *
- *  Output parameters:  NONE
- *
- *  NOTE: The Rate Monotonic Manager is built on top of the Watchdog
- *        Handler.
+ *  Output parameters:
+ *    *id               - region id
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code        - if unsuccessful
  */
 
-void _Rate_monotonic_Manager_initialization(
-  unsigned32 maximum_periods
+rtems_status_code rtems_rate_monotonic_ident(
+  rtems_name    name,
+  Objects_Id   *id
 )
 {
-  _Objects_Initialize_information(
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
     &_Rate_monotonic_Information,
-    OBJECTS_RTEMS_PERIODS,
-    FALSE,
-    maximum_periods,
-    sizeof( Rate_monotonic_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+    &name,
+    OBJECTS_SEARCH_LOCAL_NODE,
+    id
   );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
