@@ -1,8 +1,7 @@
 ## $Id$
 
-
 SUBDIRS = arm
-SUBDIRS += c4x 
+SUBDIRS += c4x
 SUBDIRS += i386
 SUBDIRS += i960
 SUBDIRS += m68k
@@ -14,3 +13,4 @@ SUBDIRS += sparc
 SUBDIRS += template
 
 EXTRA_DIST = supplement.am
+

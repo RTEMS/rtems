@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = started_ada
 EDITION = 1
 
@@ -55,3 +54,4 @@ gdb.texi: gdb.t tversions.texi
 
 EXTRA_DIST = buildada.t gdb.t intro.t require.t sample.t
 CLEANFILES += started_ada.info
+

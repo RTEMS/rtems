@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = porting
 EDITION = 1
 
@@ -77,6 +76,8 @@ miscellaneous.texi: miscellaneous.t
 	    -n "Command and Variable Index" < $< > $@
 
 EXTRA_DIST = codetuning.t cpuinit.t cpumodels.t developtools.t idlethread.t \
-    interrupts.t miscellaneous.t prioritybitmap.t sourcecode.t taskcontext.t
+    interrupts.t miscellaneous.t prioritybitmap.t sourcecode.t \
+    taskcontext.t
 
 CLEANFILES += porting.info porting.info-?
+

@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = posix1003_1
 EDITION = 1
 
@@ -128,3 +127,4 @@ EXTRA_DIST = ch01.t ch02.t ch03.t ch04.t ch05.t ch06.t ch07.t ch08.t ch09.t \
     compliance_list summarize
 
 CLEANFILES += posix1003_1.info posix1003_1.info-?
+

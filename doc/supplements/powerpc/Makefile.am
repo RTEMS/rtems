@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = powerpc
 EDITION = 1
 
@@ -16,7 +15,8 @@ include $(top_srcdir)/supplements/supplement.am
 GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi timing.texi wksheets.texi \
     timePSIM.texi timeDMV177.texi
-COMMON_FILES += $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi \
+    $(top_srcdir)/common/timemac.texi
 
 FILES = preface.texi
 
@@ -123,3 +123,4 @@ EXTRA_DIST = DMV177_TIMES PSIM_TIMES bsp.t callconv.t cpumodel.t cputable.t \
     fatalerr.t intr_NOTIMES.t memmodel.t timeDMV177.t timePSIM.t
 
 CLEANFILES += powerpc.info powerpc.info-?
+

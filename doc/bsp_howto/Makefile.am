@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = bsp_howto
 EDITION = 1
 
@@ -126,3 +125,4 @@ EXTRA_DIST = adaintr.t analog.t clock.t console.t discrete.t init.t intro.t \
     timer.t
 
 CLEANFILES += bsp_howto.info bsp_howto.info-?
+

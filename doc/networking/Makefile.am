@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = networking
 EDITION = 1
 
@@ -70,3 +69,4 @@ EXTRA_DIST = decdriver.t driver.t networkapp.t networktasks.t servers.t \
     testing.t $(PICTURE_FILES)
 
 CLEANFILES += networking.info networking.info-?
+

@@ -6,15 +6,14 @@
 #  $Id$
 #
 
-
 PROJECT = started
 EDITION = 1
 
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
-GENERATED_FILES = binaries.texi buildc.texi buildrt.texi intro.texi \
-    nt.texi require.texi nextstep.texi sample.texi
+GENERATED_FILES = binaries.texi buildc.texi buildrt.texi intro.texi nt.texi \
+    require.texi nextstep.texi sample.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -63,20 +62,23 @@ nt.texi: nt.t tversions.texi
 	    -u "Top" \
 	    -n "" < $< > $@
 
-EXTRA_DIST = binaries.t buildc.t buildrt.t intro.t nextstep.t nt.t \
-    require.t sample.t
-
+EXTRA_DIST = binaries.t buildc.t buildrt.t intro.t nextstep.t nt.t require.t \
+    sample.t
 
 if USE_HTML
 html_project_DATA += pictures/sfile12c.jpg pictures/bit_c.jpg
 endif
 
-PICTURES = pictures/bit_ada.jpg pictures/bit_ada.vsd pictures/bit_c.jpg pictures/bit_c.vsd pictures/scfile10.jpg \
-    pictures/scfile10.vsd pictures/scfile11.jpg pictures/scfile11.vsd pictures/scfile12.jpg pictures/scfile12.vsd \
-    pictures/scfile13.jpg pictures/scfile13.vsd pictures/scsfile1.jpg pictures/scsfile1.vsd pictures/scsfile2.jpg \
-    pictures/scsfile2.vsd pictures/scsfile3.jpg pictures/scsfile3.vsd pictures/scsfile4.jpg pictures/scsfile4.vsd \
-    pictures/scsfile5.jpg pictures/scsfile5.vsd pictures/scsfile6.jpg pictures/scsfile6.vsd pictures/scsfile7.jpg \
-    pictures/scsfile7.vsd pictures/scsfile8.jpg pictures/scsfile8.vsd pictures/scsfile9.jpg pictures/scsfile9.vsd \
+PICTURES = pictures/bit_ada.jpg pictures/bit_ada.vsd pictures/bit_c.jpg \
+    pictures/bit_c.vsd pictures/scfile10.jpg pictures/scfile10.vsd \
+    pictures/scfile11.jpg pictures/scfile11.vsd pictures/scfile12.jpg \
+    pictures/scfile12.vsd pictures/scfile13.jpg pictures/scfile13.vsd \
+    pictures/scsfile1.jpg pictures/scsfile1.vsd pictures/scsfile2.jpg \
+    pictures/scsfile2.vsd pictures/scsfile3.jpg pictures/scsfile3.vsd \
+    pictures/scsfile4.jpg pictures/scsfile4.vsd pictures/scsfile5.jpg \
+    pictures/scsfile5.vsd pictures/scsfile6.jpg pictures/scsfile6.vsd \
+    pictures/scsfile7.jpg pictures/scsfile7.vsd pictures/scsfile8.jpg \
+    pictures/scsfile8.vsd pictures/scsfile9.jpg pictures/scsfile9.vsd \
     pictures/sfile12c.jpg pictures/sfile12c.vsd
 
 EXTRA_DIST += $(PICTURES)
@@ -86,5 +88,6 @@ tversions.texi: tversions.texi.in tversions.sed
 CLEANFILES += tversions.texi
 
 DISTCLEANFILES = tversions.sed
- 
+
 CLEANFILES += started.info started.info-?
+

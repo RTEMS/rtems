@@ -1,3 +1,7 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+
 2003-09-26	Joel Sherrill <joel@OARcorp.com>
 
 	* hppa1_1/.cvsignore, hppa1_1/ChangeLog, hppa1_1/Makefile.am,

@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = posix_users
 EDITION = 1
 
@@ -142,3 +141,4 @@ EXTRA_DIST = cancel.t clock.t cond.t cspecific.t device.t files.t io.t key.t \
     gen_size_report
 
 CLEANFILES += posix_users.info posix_users.info-? posix_users.info-??
+

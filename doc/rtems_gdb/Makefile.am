@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = rtems_gdb
 EDITION = 1
 
@@ -60,3 +59,4 @@ example.texi: example.t
 EXTRA_DIST = commands.t example.t intro.t started.t swarch.t trouble.t
 
 CLEANFILES += rtems_gdb.info
+

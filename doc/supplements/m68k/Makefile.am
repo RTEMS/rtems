@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = m68k
 EDITION = 1
 
@@ -17,7 +16,8 @@ GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi timing.texi wksheets.texi \
     timeMVME136.texi
 
-COMMON_FILES += $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi \
+    $(top_srcdir)/common/timemac.texi
 
 FILES = preface.texi
 
@@ -109,3 +109,4 @@ EXTRA_DIST = MVME136_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
     intr_NOTIMES.t memmodel.t timeMVME136.t timedata.t
 
 CLEANFILES += m68k.info m68k.info-?
+

@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 PROJECT = i386
 EDITION = 1
 
@@ -17,7 +16,8 @@ GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi timing.texi wksheets.texi \
     timeFORCE386.texi
 
-COMMON_FILES += $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi \
+    $(top_srcdir)/common/timemac.texi
 
 FILES = preface.texi
 
@@ -109,3 +109,4 @@ EXTRA_DIST = FORCE386_TIMES bsp.t callconv.t cpumodel.t cputable.t \
     fatalerr.t intr_NOTIMES.t memmodel.t timeFORCE386.t
 
 CLEANFILES += i386.info i386.info-?
+
