@@ -22,8 +22,8 @@ Fri May 24 11:05:03 1996
 Init: seconds remaining (0)
  
 Init: nanosleep - EINVAL (NULL time)
-Init: nanosleep - negative seconds small delay
 Init: nanosleep - EINVAL (too many nanoseconds)
+Init: nanosleep - negative seconds small delay
 Init: nanosleep - yield
 Init: nanosleep - 3.05 seconds
 Fri May 24 11:05:06 1996
