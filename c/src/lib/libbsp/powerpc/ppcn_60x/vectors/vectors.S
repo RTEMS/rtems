@@ -50,11 +50,8 @@
 #endif
 
     .set    IP_LINK, 0
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-    .set    IP_0, (IP_LINK + 56)
-#else
+/* PPC_ABI_EABI */
     .set    IP_0, (IP_LINK + 8)
-#endif
     .set    IP_2, (IP_0 + 4)
 
     .set    IP_3, (IP_2 + 4)
