@@ -4,31 +4,24 @@
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
-	Add PREINSTALL_FILES to CLEANFILES.
+	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
 
-2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Include compile.am, again.
-	Eliminate C_FILES. Reformat.
+	* Makefile.am: Include compile.am, again. Eliminate C_FILES. Reformat.
 
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Add libs to CLEANFILES
-	Set lib*_g_a_SOURCES = lib*_a_SOURCES.
-
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* include/rtems/blkdev.h, include/rtems/ide_part_table.h,
-	src/bdbuf.c, src/ide_part_table.c, src/ramdisk.c: 
-	Switch to using c99 fixed size types instead of RTEMS-types.
-
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* Makefile.am: Add libs to CLEANFILES Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
+	* include/rtems/blkdev.h, include/rtems/ide_part_table.h, src/bdbuf.c,
+	src/ide_part_table.c, src/ramdisk.c:  Switch to using c99 fixed size
+	types instead of RTEMS-types.
 	* Makefile.am: Build libblock$(LIB_VARIANT).a instead of
 	$(ARCH)/libblock.a.
 
-2004-01-07  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Build library using EXTRA_LIBRARIES and automake rules.
 
@@ -43,9 +36,6 @@
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add $(dirstamp) to compilation rules.
-
-2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* Makefile.am: Add $(dirstamp) to preinstallation rules.
 
 2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -54,8 +44,8 @@
 
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: AM_CPPFLAGS += -I$(top_builddir).
-	Use AM_CPPFLAGS instead of AM_CFLAGS.
+	* Makefile.am: AM_CPPFLAGS += -I$(top_builddir). Use AM_CPPFLAGS instead
+	of AM_CFLAGS.
 	* src/ata.c: Include config.h.
 	* src/bdbuf.c: Ditto.
 	* src/blkdev.c: Ditto.
@@ -71,32 +61,17 @@
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove (Merged into ../configure.ac).
-	* Makefile.am: Reflect having merged configure.ac into
-	../configure.ac.
+	* Makefile.am: Reflect having merged configure.ac into ../configure.ac.
 
 2003-06-04	Joel Sherrill <joel@OARcorp.com>
 
 	* src/ide_part_table.c: Removed warnings.
 
-2002-04-10      Victor V. Vengerov <vvv@oktet.ru>
-
-	PR 385/filesystem
-	* src/ramdisk.c: The "from" and "to" locations are calculated as
-	the start of the block within the ram that data is to be transferred
-	from/to for reads and writes respectively.  However, within
-	the loops, the "from" and "to" locations are never updated.  The loop
-	should have been updated as:
-	    from += rd->block_size;
-	and
-	    to += rd->block_size;
-	within the for loops in the ramdisk_read and ramdisk_write routines,
-	respectively.
-
 2003-03-27	Joel Sherrill <joel@OARcorp.com>
 
-	* Makefile.am: ATA code depends upon libchip/ide which is not allowed
-	in the cpukit source code since it must be buildable independent of
-	any BSP. These files were moved to libchip/ide.
+	* Makefile.am: ATA code depends upon libchip/ide which is not allowed in
+	the cpukit source code since it must be buildable independent of any
+	BSP. These files were moved to libchip/ide.
 	* include/rtems/ata.h, include/rtems/ata_internal.h, src/ata.c: Removed.
 
 2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
@@ -104,10 +79,9 @@
 	PR 367/filesystem
 	* Makefile.am, include/rtems/ide_part_table.h, src/ata.c,
 	src/ide_part_table.c: Some bugs were still present in the DOSFS
-	implementation:
-	    - FAT12 did not work properly on Big-Endian machines
-	    - Some synchronization and error handling problems were present
-	    - Some legal codings for EOC were not recognized
+	implementation: - FAT12 did not work properly on Big-Endian machines -
+	Some synchronization and error handling problems were present - Some
+	legal codings for EOC were not recognized.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -116,9 +90,6 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2003-01-27	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
@@ -128,13 +99,12 @@
 
 2003-01-03	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
-	* src/ata.c, src/bdbuf.c: Correct invocation of rtems_task_mode()
-	so the task's preemption mode setting is properly maintained.
+	* src/ata.c, src/bdbuf.c: Correct invocation of rtems_task_mode() so the
+	task's preemption mode setting is properly maintained.
 
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Eliminate C_O_FILES.
-	Eliminate SRCS.
+	* Makefile.am: Eliminate C_O_FILES. Eliminate SRCS.
 
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
@@ -162,66 +132,58 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-09-07	Joel Sherrill <joel@OARcorp.com>
 
-	* src/bdbuf.c: Previous fix for PR282 regressed mutex changes. 
+	* src/bdbuf.c: Previous fix for PR282 regressed mutex changes.
 
 2002-09-06	Alexander M. Kukuta <kam@oktet.ru>
 
-	* src/bdbuf.c: Per PR282, correct problem in function
-	rtems_bdbuf_read() where device ioctl() is called with the
-	logical device number used instead of corresponding physical
-	device number.
+	* src/bdbuf.c: Per PR282, correct problem in function rtems_bdbuf_read()
+	where device ioctl() is called with the logical device number used
+	instead of corresponding physical device number.
 
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge src/Makefile.am.
 	* src/Makefile.am: Remove.
-	* configure.ac: Remove src/Makefile.am
+	* configure.ac: Remove src/Makefile.am.
 
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/Makefile.am: Use .$(OBJEXT) instead of .o.
-
-2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* src/Makefile.am: Eliminate LIBNAME. Cosmetical cleanups.
 
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_TOP(../..).
 
-2002-07-01    Joel Sherrill <joel@OARcorp.com>
-
-	* Mega patch merge to change the format of the object IDs to
-	loosen the dependency between the SCORE and the various APIs.
-	There was considerable work to simplify the object name management
-        and it appears that the name_table field is no longer needed.
-	This patch also includes the addition of the internal mutex
-	which is currently only used to protect some types of allocation
-	and deallocation.  This significantly can reduce context 
-	switch latency under certain circumstances.  In particular,
-	some heap/region operations were O(n) and had dispatching
-	disabled.  This should help enormously.  With this merge,
-	the patch is not as clean as it should be.  In particular,
-	the documentation has not been modified to reflect the new object
-	ID layout, the IDs in the test screens are not updated, and
-	_Objects_Get_information needs to be a real routine not inlined.
-	As part of this patch a lot of MP code for thread/proxy blocking
-	was made conditional and cleaned up.
-	* src/bdbuf.c:  Modified as part of above.
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_PROJECT_ROOT.
 
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Mega patch merge to change the format of the object IDs to loosen the
+	dependency between the SCORE and the various APIs. There was
+	considerable work to simplify the object name management and it appears
+	that the name_table field is no longer needed. This patch also includes
+	the addition of the internal mutex which is currently only used to
+	protect some types of allocation and deallocation.  This significantly
+	can reduce context  switch latency under certain circumstances.  In
+	particular, some heap/region operations were O(n) and had dispatching
+	disabled.  This should help enormously.  With this merge, the patch is
+	not as clean as it should be.  In particular, the documentation has not
+	been modified to reflect the new object ID layout, the IDs in the test
+	screens are not updated, and _Objects_Get_information needs to be a real
+	routine not inlined. As part of this patch a lot of MP code for
+	thread/proxy blocking was made conditional and cleaned up.
+	* src/bdbuf.c:  Modified as part of above.
+
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use AC_CONFIG_AUX_DIR(../..).
-	Add AC_PROG_RANLIB.
+	* configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -236,73 +198,81 @@
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	Use ../aclocal.
+	* Makefile.am: Include $(top_srcdir)/../automake/*.am. Use ../aclocal.
 	* src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 
 2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Move from c/src/libblock to c/src/exec/libblock
-	* configure.ac: Reflect move.
-	* Makefile.am: Ditto.
-	* include/Makefile.am: Ditto.
-	* src/Makefile.am: Ditto.
+	* configure.ac, Makefile.am, include/Makefile.am, src/Makefile.am:
+	Reflect move from c/src/libblock to c/src/exec/libblock.
+
+2002-04-10	Victor V. Vengerov <vvv@oktet.ru>
+
+	PR 385/filesystem
+	* src/ramdisk.c: The "from" and "to" locations are calculated as the
+	start of the block within the ram that data is to be transferred from/to
+	for reads and writes respectively.  However, within the loops, the
+	"from" and "to" locations are never updated.  The loop should have been
+	updated as: from += rd->block_size; and to += rd->block_size; within the
+	for loops in the ramdisk_read and ramdisk_write routines, respectively.
 
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/ramdisk.c: include <string.h>.
 	* src/blkdev.c: include <string.h>.
 
-2002-04-03      Alexander Kukuta <kam@oktet.ru>
+2002-04-03	Alexander Kukuta <kam@oktet.ru>
 
-        * include/rtems/bdbuf.h: Address PR168 by changing bdbuf_buffer.avl.bal
+	* include/rtems/bdbuf.h: Address PR168 by changing bdbuf_buffer.avl.bal
 	and bdbuf_buffer.avl.cache to signed char instead of char.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* src/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
-2002-03-21      Alexander Kukuta <kam@oktet.ru>
+2002-03-21	Alexander Kukuta <kam@oktet.ru>
 
-        * src/bdbuf.c (avl_insert, avl_remove): Reimplemented from scratch
-          to avoid using GPLed sources in RTEMS core.
-        * src/bdbuf.c, include/rtems/bdbuf.h: Remove "binary tree"
-          implementation which was used for debugging only.
+	* src/bdbuf.c (avl_insert, avl_remove): Reimplemented from scratch to
+	avoid using GPLed sources in RTEMS core.
+	* src/bdbuf.c, include/rtems/bdbuf.h: Remove "binary tree"
+	implementation which was used for debugging only.
 
-2002-03-13      Victor V. Vengerov <vvv@oktet.ru>
+2002-03-13	Victor V. Vengerov <vvv@oktet.ru>
 
-        * src/bdbuf.c (find_or_assign_buffer, rtems_bdbuf_read,
-          rtems_bdbuf_sync, rtems_bdbuf_syncdev, bdbuf_swapout_task):
-          Fix bug: disable interrupts and set level properly before
-          _CORE_mutex_Seize invocation).
+	* src/bdbuf.c (find_or_assign_buffer, rtems_bdbuf_read,
+	rtems_bdbuf_sync, rtems_bdbuf_syncdev, bdbuf_swapout_task): Fix bug:
+	disable interrupts and set level properly before _CORE_mutex_Seize
+	invocation).
 
 2002-02-28	Joel Sherrill <joel@OARcorp.com>
 
-	* Submitted by Victor V. Vengerov <vvv@oktet.ru> and merged
-	into the RTEMS source.
+	* Submitted by Victor V. Vengerov <vvv@oktet.ru> and merged into the
+	RTEMS source.
 	* ChangeLog, Makefile.am, README, configure.ac, include/Makefile.am,
 	include/rtems/bdbuf.h, include/rtems/blkdev.h, include/rtems/diskdevs.h,
 	include/rtems/ramdisk.h, include/rtems/.cvsignore, include/.cvsignore,
 	src/Makefile.am, src/bdbuf.c, src/blkdev.c, src/diskdevs.c,
 	src/ramdisk.c, src/.cvsignore, .cvsignore: New files.
 
-2001-11-29      Victor V. Vengerov <vvv@oktet.ru>
-        * AVL trees implementation added.
+2001-11-29	Victor V. Vengerov <vvv@oktet.ru>
 
-2001-11-16      Victor V. Vengerov <vvv@oktet.ru>
-        * include/rtems/bdbuf.h, src/bdbuf.c(rtems_bdbuf_syncdev): New.
+	* AVL trees implementation added.
 
-2001-11-07      Victor V. Vengerov <vvv@oktet.ru>
+2001-11-16	Victor V. Vengerov <vvv@oktet.ru>
+
+	* include/rtems/bdbuf.h, src/bdbuf.c(rtems_bdbuf_syncdev): New.
+
+2001-11-07	Victor V. Vengerov <vvv@oktet.ru>
 
 	* ChangeLog: New file.
-        * src/, include/, include/rtems/: New directories.
-        * README, configure.ac, Makefile.am, src/Makefile.am,
-          include/Makefile.am: New files.
-        * include/rtems/bdbuf.h include/rtems/blkdev.h  
-          include/rtems/diskdevs.h include/rtems/ramdisk.h
-          src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c: New files.
+	* src/, include/, include/rtems/: New directories.
+	* README, configure.ac, Makefile.am, src/Makefile.am,
+	include/Makefile.am: New files.
+	* include/rtems/bdbuf.h include/rtems/blkdev.h  
+	include/rtems/diskdevs.h include/rtems/ramdisk.h src/bdbuf.c
+	src/blkdev.c src/diskdevs.c src/ramdisk.c: New files.
+
