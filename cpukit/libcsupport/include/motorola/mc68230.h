@@ -1,3 +1,7 @@
+/**
+ * @file rtems/motorola/mc68230.h
+ */
+
 /*
  * mc68230.h -- Low level support code for the Motorola 68230 Parallel
  *              Interface/Timer (PIT)

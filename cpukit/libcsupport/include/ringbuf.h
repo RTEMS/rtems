@@ -1,8 +1,10 @@
-/*
- *  ringbuf.h
+/**
+ *  @file rtems/ringbuf.h
  *
  *  This file provides simple ring buffer functionality.
- *
+ */
+
+/*
  *  $Id$
  */
 

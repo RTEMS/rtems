@@ -1,3 +1,7 @@
+/**
+ * @file rtems/console.h
+ */
+
 /*  console.h
  *
  *  This file describes the Console Device Driver for all boards.

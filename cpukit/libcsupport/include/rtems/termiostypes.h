@@ -1,3 +1,7 @@
+/**
+ * @file rtems/termiostypes.h
+ */
+
 /*
  *  RTEMS termios device support internal data structures
  *

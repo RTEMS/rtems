@@ -1,3 +1,7 @@
+/**
+ * @file rtems/error.h
+ */
+
 /*
  *  Defines and externs for rtems error reporting
  *

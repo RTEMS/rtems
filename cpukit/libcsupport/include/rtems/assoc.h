@@ -1,3 +1,7 @@
+/**
+ * @file rtems/assoc.h
+ */
+
 /*
  *
  *  Rtems associativity routines.  Mainly used to convert a value from

@@ -1,6 +1,10 @@
-/*  timerdrv.h
+/**
+ * @file rtems/timerdrv.h
  *
  *  This file describes the Timer Driver for all boards.
+ */
+ 
+/*
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -36,4 +40,3 @@ void Set_find_average_overhead(
 #endif
 
 #endif
-/* end of include file */

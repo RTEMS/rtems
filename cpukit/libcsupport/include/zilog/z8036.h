@@ -1,11 +1,10 @@
-/*  z8036.h
- *
+/**
+ * @file rtems/zilog/z8036.h
+ */
+ 
+/*
  *  This include file defines information related to a Zilog Z8036
  *  Counter/Timer/IO Chip.  It is a memory mapped part.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
  *
  *  NOTE: This file shares as much as possible with the include
  *        file for the Z8536 via z8x36.h.

@@ -1,11 +1,10 @@
-/*  z8530.h
- *
+/**
+ * @file rtems/zilog/z8530.h
+ */
+
+/*
  *  This include file defines information related to a Zilog Z8530
  *  SCC Chip.  It is a IO mapped part.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

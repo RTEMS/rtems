@@ -1,6 +1,12 @@
-/*
+/**
+ * @file rtems/motorola/mc68681.h
+ *
+ *
  * mc68681-duart.h -- Low level support code for the Motorola mc68681
  *                   DUART.
+ */
+
+/*
  *
  *  Originally written by rob@cygnus.com (Rob Savoye) for the libgloss
  *    IDP support.

@@ -1,3 +1,7 @@
+/**
+ * @file rtems/clockdrv.h
+ */
+
 /*  clock.h
  *
  *  This file describes the Clock Driver for all boards.

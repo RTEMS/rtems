@@ -1,9 +1,12 @@
-/*  rtc.h
+/**
+ *  @file rtems/rtc.h
  *
  *  This file describes the Real-Time Clock driver for all boards.
  *  This driver provides support for the standard RTEMS routines
  *  that set the tod based on an RTC.
- *
+ */
+ 
+/*
  *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
