@@ -243,12 +243,6 @@ dnl is not available at bootstrap
 AC_TRY_COMPILER(
   [main(){return(0);}], 
   rtems_cv_prog_cxx_works, rtems_cv_prog_cxx_cross)
-if test "$rtems_cv_prog_cxx_works" = "no"; then
-  dnl now retry with our own version of malloc
-  AC_TRY_COMPILER(
-    [ main(){return(0);}],
-    rtems_cv_prog_cxx_works, rtems_cv_prog_cxx_cross)
-fi
 AC_LANG_RESTORE
 AC_MSG_RESULT($rtems_cv_prog_cxx_works)
 if test $rtems_cv_prog_cxx_works = no; then
