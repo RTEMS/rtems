@@ -1,3 +1,7 @@
+2001-10-17	Joel Sherrill <joel@OARcorp.com>
+
+	* timerstub.c: New stub file for BSPs that don't have timer hardware.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* console-polled.c, console.c: Fixed typo.
