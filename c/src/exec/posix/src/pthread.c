@@ -232,6 +232,11 @@ void _POSIX_Threads_Initialize_user_threads( void )
   }
 }
 
+/*PAGE
+ *
+ *  API Extension control structures
+ */
+
 API_extensions_Control _POSIX_Threads_API_extensions = {
   { NULL, NULL },
   NULL,                                     /* predriver */
@@ -434,7 +439,7 @@ int pthread_attr_setschedpolicy(
 
 /*PAGE
  *
- *  13.5.1 Thread Creation Scheduling Attributes, P1003.1c/Draft 10, p. 120
+ *  13.5.1 Thread Creation Scheduling Parameters, P1003.1c/Draft 10, p. 120
  */
 
 int pthread_attr_getschedpolicy(
@@ -451,12 +456,12 @@ int pthread_attr_getschedpolicy(
 
 /*PAGE
  *
- *  13.5.1 Thread Creation Scheduling Attributes, P1003.1c/Draft 10, p. 120
+ *  13.5.1 Thread Creation Scheduling Parameters, P1003.1c/Draft 10, p. 120
  */
 
 int pthread_attr_setschedparam(
-  pthread_attr_t            *attr,
-  const struct sched_param  *param
+  pthread_attr_t           *attr,
+  const struct sched_param *param
 )
 {
   if ( !attr || !attr->is_initialized )

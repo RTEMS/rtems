@@ -81,7 +81,8 @@ time_t time(
   return seconds_since_epoch;
 }
 
-/*
+/*PAGE
+ *
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
  */
 
@@ -149,7 +150,8 @@ int clock_settime(
   return 0;
 }
 
-/*
+/*PAGE
+ *
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
  */
 
@@ -167,8 +169,10 @@ int clock_gettime(
   switch ( clock_id ) {
 
     case CLOCK_REALTIME:
+#if 0
       if ( !_TOD_Is_set() )    /* XXX does posix allow it to not be set? */
         set_errno_and_return_minus_one( EINVAL );
+#endif
  
       _ISR_Disable( level );
         seconds = _TOD_Seconds_since_epoch;
@@ -199,7 +203,8 @@ int clock_gettime(
   return 0;
 }
 
-/*
+/*PAGE
+ *
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
  */
 
@@ -228,7 +233,8 @@ int clock_getres(
   return 0;
 }
 
-/*
+/*PAGE
+ *
  *  14.2.5 High Resolution Sleep, P1003.1b-1993, p. 269
  */
 
@@ -294,7 +300,8 @@ int nanosleep(
 
 }
 
-/*
+/*PAGE
+ *
  *  20.1.3 Accessing a Process CPU-time CLock, P1003.4b/D8, p. 55
  */
 
@@ -306,7 +313,8 @@ int clock_getcpuclockid(
   return POSIX_NOT_IMPLEMENTED();
 }
 
-/*
+/*PAGE
+ *
  *  20.1.5 CPU-time Clock Attribute Access, P1003.4b/D8, p. 58
  */
 
@@ -318,7 +326,8 @@ int clock_setenable_attr(
   return POSIX_NOT_IMPLEMENTED();
 }
 
-/*
+/*PAGE
+ *
  *  20.1.5 CPU-time Clock Attribute Access, P1003.4b/D8, p. 58
  */
 
