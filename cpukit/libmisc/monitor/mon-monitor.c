@@ -124,7 +124,11 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  symbol [ symbolname [symbolname ... ] ]",
       0,
       rtems_monitor_symbol_cmd,
+#if defined(RTEMS_CPU_HAS_16_BIT_ADDRESSES)
+      0,    /* XXX find a way to fix the compile time error on h8 */
+#else
       (unsigned32) &rtems_monitor_symbols,
+#endif
       &rtems_monitor_commands[8],
     },
     { "extension",
@@ -209,7 +213,11 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "help [ command [ command ] ]",
       0,
       rtems_monitor_help_cmd,
+#if defined(RTEMS_CPU_HAS_16_BIT_ADDRESSES)
+      0,    /* XXX find a way to fix the compile time error on h8 */
+#else
       (unsigned32) rtems_monitor_commands,
+#endif
       &rtems_monitor_commands[18],
     },
 #ifdef CPU_INVOKE_DEBUGGER
