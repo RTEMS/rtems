@@ -1,5 +1,9 @@
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am: Remove depend: (Redundant).
+
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/include/rtems/rtems/sem.h, rtems/src/semcreate.c,
 	rtems/src/semdelete.c, rtems/src/semflush.c,
 	rtems/src/semident.c, rtems/src/semobtain.c,

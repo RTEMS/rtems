@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-depend:
-
 AM_CPPFLAGS = -I$(top_builddir) -I$(PROJECT_INCLUDE)
 AM_CFLAGS = $(RTEMS_CFLAGS)
 AM_CCASFLAGS = -I$(top_builddir) -I$(PROJECT_INCLUDE) $(RTEMS_ASFLAGS)
