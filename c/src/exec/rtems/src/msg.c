@@ -307,13 +307,15 @@ rtems_status_code rtems_message_queue_delete(
       _Objects_Close( &_Message_queue_Information,
                       &the_message_queue->Object );
 
-#if defined(RTEMS_MULTIPROCESSING)
       _CORE_message_queue_Close(
         &the_message_queue->message_queue,
+#if defined(RTEMS_MULTIPROCESSING)
         _Message_queue_MP_Send_object_was_deleted,
+#else
+        NULL,
+#endif
         CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED
       );
-#endif
 
       _Message_queue_Free( the_message_queue );
 
