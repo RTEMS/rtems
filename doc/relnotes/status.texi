@@ -94,11 +94,6 @@ following processors and target boards:
 @item Cyclone CVME960, CVME961
 @end itemize
 
-@item Hewlett Packard PA-RISC family
-@itemize -
-@item Processor Simulator
-@end itemize
-
 @item PowerPC
 @itemize -
 @item Papyrus (proprietary controller)
