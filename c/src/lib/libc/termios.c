@@ -23,17 +23,12 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <ringbuf.h>
 
 /*
  * The size of the cooked buffer
  */
 #define CBUFSIZE  256
-
-/*
- * The size of the raw input message queue
- */
-#define RAW_MESSAGE_QUEUE_COUNT 10
-#define RAW_MESSAGE_QUEUE_SIZE  16
 
 /*
  * Variables associated with each termios instance.
@@ -85,10 +80,9 @@ struct rtems_termios_tty {
   /*
    * Raw character buffer
    */
-  rtems_id  rawInputQueue;
-  char    rawBuf[RAW_MESSAGE_QUEUE_SIZE];
-  int   rawBufCount;
-  int   rawBufIndex;
+  rtems_id      rawInputSem;
+  Ring_buffer_t rawInputBuffer;
+
   rtems_unsigned32  rawMessageOptions;
   rtems_interval  rawMessageTimeout;
   rtems_interval  rawMessageFirstTimeout;
@@ -97,7 +91,7 @@ struct rtems_termios_tty {
    * Callbacks to device-specific routines
    */
   int   (*lastClose)(int major, int minor, void *arg);
-  int   (*read)(int minor, char *buf /*, int len */);
+  int   (*read)(int minor, char *buf );
   int   (*write)(int minor, char *buf, int len);
 };
 static struct rtems_termios_tty *ttyHead, *ttyTail;
@@ -194,15 +188,14 @@ rtems_termios_open (
     tty->write = deviceWrite;
     tty->lastClose = deviceLastClose;
     if ((tty->read = deviceRead) == NULL) {
-      sc = rtems_message_queue_create (
-        rtems_build_name ('T', 'R', 'i', c),
-        RAW_MESSAGE_QUEUE_COUNT,
-        RAW_MESSAGE_QUEUE_SIZE,
-        RTEMS_FIFO | RTEMS_LOCAL,
-        &tty->rawInputQueue);
+      sc = rtems_semaphore_create (
+        rtems_build_name ('T', 'R', 'r', c),
+        0,
+        RTEMS_COUNTING_SEMAPHORE | RTEMS_FIFO | RTEMS_LOCAL,
+        RTEMS_NO_PRIORITY,
+        &tty->rawInputSem);
       if (sc != RTEMS_SUCCESSFUL)
         rtems_fatal_error_occurred (sc);
-      tty->rawBufCount = tty->rawBufIndex = 0;
     }
 
     /*
@@ -275,7 +268,7 @@ rtems_termios_close (void *arg)
     rtems_semaphore_delete (tty->isem);
     rtems_semaphore_delete (tty->osem);
     if (tty->read == NULL)
-      rtems_message_queue_delete (tty->rawInputQueue);
+      rtems_semaphore_delete (tty->rawInputSem);
     free (tty);
   }
   rtems_semaphore_release (ttyMutex);
@@ -668,38 +661,33 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 {
   rtems_interval timeout = tty->rawMessageFirstTimeout;
   rtems_status_code sc;
-  rtems_unsigned32 msgSize;
+  rtems_unsigned8   c;
 
   for (;;) {
-    /*
-     * Process characters read from raw queue
-     */
-    while (tty->rawBufIndex < tty->rawBufCount) {
-      unsigned char c = tty->rawBuf[tty->rawBufIndex++];
-      if (tty->termios.c_lflag & ICANON) {
-        if  (siproc (c, tty))
-          return RTEMS_SUCCESSFUL;
-      }
-      else {
-        siproc (c, tty);
-        if (tty->ccount >= tty->termios.c_cc[VMIN])
-          return RTEMS_SUCCESSFUL;
-      }
-    }
 
     /*
      * Read characters from raw queue
      */
-    msgSize = RAW_MESSAGE_QUEUE_SIZE;
-    sc = rtems_message_queue_receive (tty->rawInputQueue,
-              tty->rawBuf,
-              &msgSize,
+    sc = rtems_semaphore_obtain (tty->rawInputSem,
               tty->rawMessageOptions,
               timeout);
     if (sc != RTEMS_SUCCESSFUL)
       break;
-    tty->rawBufIndex = 0;
-    tty->rawBufCount = msgSize;
+    Ring_buffer_Remove_character( &tty->rawInputBuffer, c );
+
+   /*
+    * Process characters read from raw queue
+    */
+    if (tty->termios.c_lflag & ICANON) {
+      if  (siproc (c, tty))
+        return RTEMS_SUCCESSFUL;
+    }
+    else {
+      siproc (c, tty);
+      if (tty->ccount >= tty->termios.c_cc[VMIN])
+        return RTEMS_SUCCESSFUL;
+    }
+
     timeout = tty->rawMessageTimeout;
   }
   return RTEMS_SUCCESSFUL;
@@ -744,17 +732,15 @@ void
 rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 {
   struct rtems_termios_tty *tty = ttyp;
-  int ncopy;
 
   while (len) {
-    if (len < RAW_MESSAGE_QUEUE_SIZE)
-      ncopy = len;
-    else
-      ncopy = RAW_MESSAGE_QUEUE_SIZE;
-    if (rtems_message_queue_send (tty->rawInputQueue, buf, ncopy) != RTEMS_SUCCESSFUL)
+    if (Ring_buffer_Is_full(&tty->rawInputBuffer))
       break;
-    len -= ncopy;
-    buf += ncopy;
+    Ring_buffer_Add_character(&tty->rawInputBuffer, *buf);
+    if (rtems_semaphore_release(tty->rawInputSem) != RTEMS_SUCCESSFUL)
+      break;
+    len -= 1;
+    buf += 1;
   }
 }
 
