@@ -20,5 +20,5 @@ rpm_build_root=/tmp
 gcc3newlib_version=1.10.0
 gcc3newlib_patch_version=20020322
 gcc3_version=3.0.4
-gcc3_patch_version=20020322
-gcc3newlib_rpm_release=1
+gcc3_patch_version=20020415
+gcc3newlib_rpm_release=2

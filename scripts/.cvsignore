@@ -11,9 +11,12 @@ config.status
 config.sub
 configure
 depcomp
+install-sh
+missing
 mkbinutilspec
 mkbspspec
 mkgccnewlibspec
 mkgcc3newlibspec
 mkgdbspec
+mkinstalldirs
 setup.cache

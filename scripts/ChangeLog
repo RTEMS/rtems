@@ -1,3 +1,11 @@
+2001-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Added files added by automake 1.6.1.
+	* setup.def: New shot at gcc 3.0.4 RPMs.
+	* binutils/Makefile.am, gdb/Makefile.am, rtems/Makefile.am:
+	Deleted m68k-rtemself.
+	* gcc3newlib/gccnewlib.add: Commented out host/target OS check. 
+ 
 2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* autotools/automake-rtems.spec.in: Update to automake-1.6.1.

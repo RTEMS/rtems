@@ -38,9 +38,6 @@ i960-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 m68k-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems
 
-m68k-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtemself
-
 mips64orion-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems
 

@@ -20,9 +20,6 @@ i960-rtems-cvme961-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 m68k-rtems-gen68360-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems gen68360
 
-m68k-rtemself-gen68360-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
-	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtemself gen68360
-
 mips64orion-rtems-p4600-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems p4600
 
