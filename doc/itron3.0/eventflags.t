@@ -49,7 +49,8 @@ and status codes.
 
 @ifset is-C
 @example
-int cre_flg(
+ER cre_flg (
+ ID flgid, T_CFLG *pk_cflg
 );
 @end example
 @end ifset
@@ -77,7 +78,8 @@ int cre_flg(
 
 @ifset is-C
 @example
-int del_flg(
+ER del_flg (
+ ID flgid
 );
 @end example
 @end ifset
@@ -105,7 +107,8 @@ int del_flg(
 
 @ifset is-C
 @example
-int set_flg(
+ER set_flg (
+ ID flgid, UINT setptn
 );
 @end example
 @end ifset
@@ -133,7 +136,8 @@ int set_flg(
 
 @ifset is-C
 @example
-int clr_flg(
+ER clr_flg (
+ ID flgid, UINT clrptn
 );
 @end example
 @end ifset
@@ -161,7 +165,8 @@ int clr_flg(
 
 @ifset is-C
 @example
-int wai_flg(
+ER wai_flg (
+ UINT *p_flgptn, ID flgid, UINT waiptn, UINT wfmode ER ercd =twai_flg 
 );
 @end example
 @end ifset
@@ -189,7 +194,8 @@ int wai_flg(
 
 @ifset is-C
 @example
-int pol_flg(
+ER pol_flg (
+ UINT *p_flgptn, ID flgid, UINT waiptn, UINT wfmode
 );
 @end example
 @end ifset
@@ -217,7 +223,8 @@ int pol_flg(
 
 @ifset is-C
 @example
-int twai_flg(
+ER ercd =twai_flg (
+ UINT *p_flgptn, ID flgid, UINT waiptn, UINT wfmode,
 );
 @end example
 @end ifset
@@ -245,7 +252,8 @@ int twai_flg(
 
 @ifset is-C
 @example
-int ref_flg(
+ER ref_flg (
+ T_RFLG *pk_rflg, ID flgid
 );
 @end example
 @end ifset

@@ -52,7 +52,8 @@ and status codes.
 
 @ifset is-C
 @example
-int cre_por(
+ER cre_por (
+ ID porid, T_CPOR *pk_cpor
 );
 @end example
 @end ifset
@@ -80,7 +81,8 @@ int cre_por(
 
 @ifset is-C
 @example
-int del_por(
+ER del_por (
+ ID porid
 );
 @end example
 @end ifset
@@ -108,7 +110,8 @@ int del_por(
 
 @ifset is-C
 @example
-int cal_por(
+ER cal_por (
+ VP msg, INT *p_rmsgsz, ID porid, UINT calptn, INT ER ercd =pcal_por 
 );
 @end example
 @end ifset
@@ -136,7 +139,8 @@ int cal_por(
 
 @ifset is-C
 @example
-int pcal_por(
+ER ercd =pcal_por (
+ VP msg, INT *p_rmsgsz, ID porid, UINT calptn, INT
 );
 @end example
 @end ifset
@@ -164,7 +168,8 @@ int pcal_por(
 
 @ifset is-C
 @example
-int tcal_por(
+ER ercd =tcal_por (
+ VP msg, INT *p_rmsgsz, ID porid, UINT calptn, INT
 );
 @end example
 @end ifset
@@ -192,7 +197,8 @@ int tcal_por(
 
 @ifset is-C
 @example
-int acp_por(
+ER acp_por (
+ RNO *p_rdvno, VP msg, INT *p_cmsgsz, ID porid, UINT ER ercd =pacp_por 
 );
 @end example
 @end ifset
@@ -220,7 +226,8 @@ int acp_por(
 
 @ifset is-C
 @example
-int pacp_por(
+ER ercd =pacp_por (
+ RNO *p_rdvno, VP msg, INT *p_cmsgsz, ID porid, UINT
 );
 @end example
 @end ifset
@@ -248,7 +255,8 @@ int pacp_por(
 
 @ifset is-C
 @example
-int tacp_por(
+ER ercd =tacp_por (
+ RNO *p_rdvno, VP msg, INT *p_cmsgsz, ID porid, UINT
 );
 @end example
 @end ifset
@@ -276,7 +284,8 @@ int tacp_por(
 
 @ifset is-C
 @example
-int fwd_por(
+ER fwd_por (
+ ID porid, UINT calptn, RNO rdvno, VP msg, INT cmsgsz
 );
 @end example
 @end ifset
@@ -304,7 +313,8 @@ int fwd_por(
 
 @ifset is-C
 @example
-int rpl_rdv(
+ER rpl_rdv (
+ RNO rdvno, VP msg, INT rmsgsz
 );
 @end example
 @end ifset
@@ -332,7 +342,8 @@ int rpl_rdv(
 
 @ifset is-C
 @example
-int ref_por(
+ER ref_por (
+ T_RPOR *pk_rpor, ID porid
 );
 @end example
 @end ifset

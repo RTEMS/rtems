@@ -50,7 +50,8 @@ and status codes.
 
 @ifset is-C
 @example
-int cre_mbf(
+ER cre_mbf (
+ ID mbfid, T_CMBF *pk_cmbf
 );
 @end example
 @end ifset
@@ -78,7 +79,8 @@ int cre_mbf(
 
 @ifset is-C
 @example
-int del_mbf(
+ER del_mbf (
+ ID mbfid
 );
 @end example
 @end ifset
@@ -106,7 +108,8 @@ int del_mbf(
 
 @ifset is-C
 @example
-int snd_mbf(
+ER snd_mbf (
+ ID mbfid, VP msg, INT msgsz ER ercd =psnd_mbf 
 );
 @end example
 @end ifset
@@ -134,7 +137,8 @@ int snd_mbf(
 
 @ifset is-C
 @example
-int psnd_mbf(
+ER ercd =psnd_mbf (
+ ID mbfid, VP msg, INT msgsz
 );
 @end example
 @end ifset
@@ -162,7 +166,8 @@ int psnd_mbf(
 
 @ifset is-C
 @example
-int tsnd_mbf(
+ER ercd =tsnd_mbf (
+ ID mbfid, VP msg, INT msgsz, TMO tmout
 );
 @end example
 @end ifset
@@ -190,7 +195,8 @@ int tsnd_mbf(
 
 @ifset is-C
 @example
-int rcv_mbf(
+ER rcv_mbf (
+ VP msg, INT *p_msgsz, ID mbfid ER ercd =prcv_mbf 
 );
 @end example
 @end ifset
@@ -218,7 +224,8 @@ int rcv_mbf(
 
 @ifset is-C
 @example
-int prcv_mbf(
+ER ercd =prcv_mbf (
+ VP msg, INT *p_msgsz, ID mbfid
 );
 @end example
 @end ifset
@@ -246,7 +253,8 @@ int prcv_mbf(
 
 @ifset is-C
 @example
-int trcv_mbf(
+ER ercd =trcv_mbf (
+ VP msg, INT *p_msgsz, ID mbfid, TMO tmout
 );
 @end example
 @end ifset
@@ -274,7 +282,8 @@ int trcv_mbf(
 
 @ifset is-C
 @example
-int ref_mbf(
+ER ref_mbf (
+ T_RMBF *pk_rmbf, ID mbfid
 );
 @end example
 @end ifset

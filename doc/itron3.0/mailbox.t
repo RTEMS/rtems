@@ -48,7 +48,8 @@ and status codes.
 
 @ifset is-C
 @example
-int cre_mbx(
+ER cre_mbx (
+ ID mbxid, T_CMBX* pk_cmbx
 );
 @end example
 @end ifset
@@ -76,7 +77,8 @@ int cre_mbx(
 
 @ifset is-C
 @example
-int del_mbx(
+ER del_mbx (
+ ID mbxid
 );
 @end example
 @end ifset
@@ -104,7 +106,8 @@ int del_mbx(
 
 @ifset is-C
 @example
-int snd_msg(
+ER snd_msg (
+ ID mbxid, T_MSG *pk_msg
 );
 @end example
 @end ifset
@@ -132,7 +135,8 @@ int snd_msg(
 
 @ifset is-C
 @example
-int rcv_msg(
+ER rcv_msg (
+ T_MSG **ppk_msg, ID mbxid ER ercd =prcv_msg 
 );
 @end example
 @end ifset
@@ -160,7 +164,8 @@ int rcv_msg(
 
 @ifset is-C
 @example
-int prcv_msg(
+ER ercd =prcv_msg (
+ T_MSG **ppk_msg, ID mbxid
 );
 @end example
 @end ifset
@@ -188,7 +193,8 @@ int prcv_msg(
 
 @ifset is-C
 @example
-int trcv_msg(
+ER ercd =trcv_msg (
+ T_MSG **ppk_msg, ID mbxid, TMO tmout
 );
 @end example
 @end ifset
@@ -216,7 +222,8 @@ int trcv_msg(
 
 @ifset is-C
 @example
-int ref_mbx(
+ER ref_mbx (
+ T_RMBX *pk_rmbx, ID mbxid
 );
 @end example
 @end ifset

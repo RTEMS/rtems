@@ -50,7 +50,8 @@ and status codes.
 
 @ifset is-C
 @example
-int def_int(
+ER def_int (
+ UINT dintno, T_DINT *pk_dint
 );
 @end example
 @end ifset
@@ -78,7 +79,8 @@ int def_int(
 
 @ifset is-C
 @example
-int ret_int(
+void ret_int (
+
 );
 @end example
 @end ifset
@@ -106,7 +108,8 @@ int ret_int(
 
 @ifset is-C
 @example
-int ret_wup(
+void ret_wup (
+ ID tskid
 );
 @end example
 @end ifset
@@ -134,7 +137,8 @@ int ret_wup(
 
 @ifset is-C
 @example
-int loc_cpu(
+ER loc_cpu (
+
 );
 @end example
 @end ifset
@@ -162,7 +166,8 @@ int loc_cpu(
 
 @ifset is-C
 @example
-int unl_cpu(
+ER unl_cpu (
+
 );
 @end example
 @end ifset
@@ -190,7 +195,8 @@ int unl_cpu(
 
 @ifset is-C
 @example
-int dis_int(
+ER dis_int (
+ UINT eintno
 );
 @end example
 @end ifset
@@ -218,7 +224,8 @@ int dis_int(
 
 @ifset is-C
 @example
-int ena_int(
+ER ena_int (
+ UINT eintno
 );
 @end example
 @end ifset
@@ -246,7 +253,8 @@ int ena_int(
 
 @ifset is-C
 @example
-int chg_iXX(
+ER chg_iXX (
+ UINT iXXXX
 );
 @end example
 @end ifset
@@ -274,7 +282,8 @@ int chg_iXX(
 
 @ifset is-C
 @example
-int ref_iXX(
+ER ref_iXX (
+ UINT *p_iXXXX
 );
 @end example
 @end ifset

@@ -45,7 +45,8 @@ and status codes.
 
 @ifset is-C
 @example
-int nrea_dat(
+ER nrea_dat (
+ INT *p_reasz, VP dstadr, NODE srcnode, VP srcadr,
 );
 @end example
 @end ifset
@@ -73,7 +74,8 @@ int nrea_dat(
 
 @ifset is-C
 @example
-int nwri_dat(
+ER nwri_dat (
+ INT *p_wrisz, NODE dstnode, VP dstadr, VP srcadr,
 );
 @end example
 @end ifset
@@ -101,7 +103,8 @@ int nwri_dat(
 
 @ifset is-C
 @example
-int nget_nod(
+ER nget_nod (
+ NODE *p_node
 );
 @end example
 @end ifset
@@ -129,7 +132,8 @@ int nget_nod(
 
 @ifset is-C
 @example
-int nget_ver(
+ER nget_ver (
+ T_VER *pk_ver, NODE node
 );
 @end example
 @end ifset

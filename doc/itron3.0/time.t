@@ -50,7 +50,8 @@ and status codes.
 
 @ifset is-C
 @example
-int get_tim(
+ER get_tim (
+ SYSTIME *pk_tim
 );
 @end example
 @end ifset
@@ -78,7 +79,8 @@ int get_tim(
 
 @ifset is-C
 @example
-int set_tim(
+ER set_tim (
+ SYSTIME *pk_tim
 );
 @end example
 @end ifset
@@ -106,7 +108,8 @@ int set_tim(
 
 @ifset is-C
 @example
-int dly_tsk(
+ER dly_tsk (
+ DLYTIME dlytim
 );
 @end example
 @end ifset
@@ -134,7 +137,8 @@ int dly_tsk(
 
 @ifset is-C
 @example
-int def_cyc(
+ER def_cyc (
+ HNO cycno, T_DCYC *pk_dcyc
 );
 @end example
 @end ifset
@@ -162,7 +166,8 @@ int def_cyc(
 
 @ifset is-C
 @example
-int act_cyc(
+ER act_cyc (
+ HNO cycno, UINT cycact
 );
 @end example
 @end ifset
@@ -190,7 +195,8 @@ int act_cyc(
 
 @ifset is-C
 @example
-int ref_cyc(
+ER ref_cyc (
+ T_RCYC *pk_rcyc, HNO cycno
 );
 @end example
 @end ifset
@@ -218,7 +224,8 @@ int ref_cyc(
 
 @ifset is-C
 @example
-int def_alm(
+ER def_alm (
+ HNO almno, T_DALM *pk_dalm
 );
 @end example
 @end ifset
@@ -246,7 +253,8 @@ int def_alm(
 
 @ifset is-C
 @example
-int ref_alm(
+ER ref_alm (
+ T_RALM *pk_ralm, HNO almno
 );
 @end example
 @end ifset
@@ -274,7 +282,8 @@ int ref_alm(
 
 @ifset is-C
 @example
-int ret_tmr(
+void ret_tmr (
+
 );
 @end example
 @end ifset

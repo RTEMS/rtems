@@ -48,7 +48,8 @@ and status codes.
 
 @ifset is-C
 @example
-int cre_mpl(
+ER cre_mpl (
+ ID mplid, T_CMPL *pk_cmpl
 );
 @end example
 @end ifset
@@ -76,7 +77,8 @@ int cre_mpl(
 
 @ifset is-C
 @example
-int del_mpl(
+ER del_mpl (
+ ID mplid
 );
 @end example
 @end ifset
@@ -104,7 +106,8 @@ int del_mpl(
 
 @ifset is-C
 @example
-int get_blk(
+ER get_blk (
+ VP *p_blk, ID mplid, INT blksz ER ercd =pget_blk 
 );
 @end example
 @end ifset
@@ -132,7 +135,8 @@ int get_blk(
 
 @ifset is-C
 @example
-int pget_blk(
+ER ercd =pget_blk (
+ VP *p_blk, ID mplid, INT blksz
 );
 @end example
 @end ifset
@@ -160,7 +164,8 @@ int pget_blk(
 
 @ifset is-C
 @example
-int tget_blk(
+ER ercd =tget_blk (
+ VP *p_blk, ID mplid, INT blksz, TMO tmout
 );
 @end example
 @end ifset
@@ -188,7 +193,8 @@ int tget_blk(
 
 @ifset is-C
 @example
-int rel_blk(
+ER rel_blk (
+ ID mplid, VP blk
 );
 @end example
 @end ifset
@@ -216,7 +222,8 @@ int rel_blk(
 
 @ifset is-C
 @example
-int ref_mpl(
+ER ref_mpl (
+ T_RMPL *pk_rmpl, ID mplid
 );
 @end example
 @end ifset

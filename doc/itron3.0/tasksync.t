@@ -48,7 +48,8 @@ and status codes.
 
 @ifset is-C
 @example
-int sus_tsk(
+ER sus_tsk (
+ ID tskid
 );
 @end example
 @end ifset
@@ -76,7 +77,8 @@ int sus_tsk(
 
 @ifset is-C
 @example
-int rsm_tsk(
+ER rsm_tsk (
+ ID tskid ER ercd =frsm_tsk 
 );
 @end example
 @end ifset
@@ -104,7 +106,8 @@ int rsm_tsk(
 
 @ifset is-C
 @example
-int frsm_tsk(
+ER ercd =frsm_tsk (
+ ID tskid
 );
 @end example
 @end ifset
@@ -132,7 +135,8 @@ int frsm_tsk(
 
 @ifset is-C
 @example
-int slp_tsk(
+ER slp_tsk (
+ ER ercd =tslp_tsk 
 );
 @end example
 @end ifset
@@ -160,7 +164,8 @@ No polling function for slp_tsk is provided.  A similar function can be implemen
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-int tslp_tsk(
+ER ercd =tslp_tsk (
+ TMO tmout
   TMO tmout
 );
 @end example
@@ -188,7 +193,8 @@ If you simply wish to delay a task (make it wait for a while), use dly_tsk rathe
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-int wup_tsk(
+ER wup_tsk (
+ ID tskid
   ID tskid
 );
 @end example
@@ -216,7 +222,8 @@ An E_QOVR error will result if wup_tsk is issued more than the maximum value all
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-int can_wup(
+ER can_wup (
+ INT *p_wupcnt, ID tskid
   ID tskid
 );
 @end example

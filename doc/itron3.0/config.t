@@ -46,7 +46,8 @@ and status codes.
 
 @ifset is-C
 @example
-int get_ver(
+ER get_ver (
+ T_VER *pk_ver ER nget_ver 
 );
 @end example
 @end ifset
@@ -74,7 +75,8 @@ int get_ver(
 
 @ifset is-C
 @example
-int ref_sys(
+ER ref_sys (
+ T_RSYS *pk_rsys
 );
 @end example
 @end ifset
@@ -102,7 +104,8 @@ int ref_sys(
 
 @ifset is-C
 @example
-int ref_cfg(
+ER ref_cfg (
+ T_RCFG *pk_rcfg
 );
 @end example
 @end ifset
@@ -130,7 +133,8 @@ int ref_cfg(
 
 @ifset is-C
 @example
-int def_svc(
+ER def_svc (
+ FN s_fncd, T_DSVC *pk_dsvc
 );
 @end example
 @end ifset
@@ -158,7 +162,8 @@ int def_svc(
 
 @ifset is-C
 @example
-int def_exc(
+ER def_exc (
+ UINT exckind, T_DEXC *pk_dexc
 );
 @end example
 @end ifset

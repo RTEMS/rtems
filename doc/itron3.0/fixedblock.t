@@ -48,7 +48,8 @@ and status codes.
 
 @ifset is-C
 @example
-int cre_mpf(
+ER cre_mpf (
+ ID mpfid, T_CMPF *pk_cmpf
 );
 @end example
 @end ifset
@@ -76,7 +77,8 @@ int cre_mpf(
 
 @ifset is-C
 @example
-int del_mpf(
+ER del_mpf (
+ ID mpfid
 );
 @end example
 @end ifset
@@ -104,7 +106,8 @@ int del_mpf(
 
 @ifset is-C
 @example
-int get_blf(
+ER get_blf (
+ VP *p_blf, ID mpfid ER ercd =pget_blf 
 );
 @end example
 @end ifset
@@ -132,7 +135,8 @@ int get_blf(
 
 @ifset is-C
 @example
-int pget_blf(
+ER ercd =pget_blf (
+ VP *p_blf, ID mpfid
 );
 @end example
 @end ifset
@@ -160,7 +164,8 @@ int pget_blf(
 
 @ifset is-C
 @example
-int tget_blf(
+ER ercd =tget_blf (
+ VP *p_blf, ID mpfid, TMO tmout
 );
 @end example
 @end ifset
@@ -188,7 +193,8 @@ int tget_blf(
 
 @ifset is-C
 @example
-int rel_blf(
+ER rel_blf (
+ ID mpfid, VP blf
 );
 @end example
 @end ifset
@@ -216,7 +222,8 @@ int rel_blf(
 
 @ifset is-C
 @example
-int ref_mpf(
+ER ref_mpf (
+ T_RMPF *pk_rmpf, ID mpfid
 );
 @end example
 @end ifset
