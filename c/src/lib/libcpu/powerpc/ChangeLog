@@ -1,5 +1,10 @@
 2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/powerpc/powerpc.h: Remove mpc603e specific 
+	PPC_TLB_*/PPC_IRQ_* defines. Use mpc603 specific defines on mpc603e.
+
+2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/powerpc/powerpc.h: Remove PPC_ALIGNMENT.
 
 2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>

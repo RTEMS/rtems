@@ -490,22 +490,13 @@ extern "C" {
 #elif defined(ppc602)
 #define PPC_IRQ_LAST     (PPC_STD_IRQ_LAST) 
 
-#elif defined(ppc603)
+#elif defined(ppc603) || defined(ppc603e)
 #define PPC_IRQ_TRANS_MISS (PPC_STD_IRQ_LAST+1) /*0x1000-Ins Translation Miss*/
 #define PPC_IRQ_DATA_LOAD  (PPC_STD_IRQ_LAST+2) /*0x1100-Data Load Trans Miss*/
 #define PPC_IRQ_DATA_STORE (PPC_STD_IRQ_LAST+3) /*0x1200-Data Store Miss     */
 #define PPC_IRQ_ADDR_BRK   (PPC_STD_IRQ_LAST+4) /*0x1300-Instruction Bkpoint */
 #define PPC_IRQ_SYS_MGT    (PPC_STD_IRQ_LAST+5) /*0x1400-System Management   */
 #define PPC_IRQ_LAST       PPC_IRQ_SYS_MGT    
-
-#elif defined(ppc603e)
-#define PPC_TLB_INST_MISS  (PPC_STD_IRQ_LAST+1) /*0x1000-Instruction TLB Miss*/
-#define PPC_TLB_LOAD_MISS  (PPC_STD_IRQ_LAST+2) /*0x1100-TLB miss on load  */
-#define PPC_TLB_STORE_MISS (PPC_STD_IRQ_LAST+3) /*0x1200-TLB Miss on store */
-#define PPC_IRQ_ADDRBRK    (PPC_STD_IRQ_LAST+4) /*0x1300-Instruct addr break */
-#define PPC_IRQ_SYS_MGT    (PPC_STD_IRQ_LAST+5) /*0x1400-System Management   */
-#define PPC_IRQ_LAST       PPC_IRQ_SYS_MGT    
-
 
 #elif defined(mpc604)
 #define PPC_IRQ_ADDR_BRK (PPC_STD_IRQ_LAST+1) /*0x1300- Inst. addr break  */
