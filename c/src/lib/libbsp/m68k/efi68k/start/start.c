@@ -21,6 +21,7 @@ char * const __env[]= {""};
 
 void dumby_start ();
 void  dumby_start() {
+void  boot_card();
 
   /* We need to by-pass the link instruction since the RAM chip-
      select pins are not yet configured. */
