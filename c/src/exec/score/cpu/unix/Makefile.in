@@ -34,7 +34,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 
 DEFINES  +=
 CPPFLAGS += 
-CFLAGS   += $(CFLAGS_OS_V) -DCPU_SYNC_IO
+CFLAGS   += $(CFLAGS_OS_V) -DCPU_SYNC_IO $(LIBC_DEFINES)
 
 LD_PATHS  +=
 LD_LIBS   +=

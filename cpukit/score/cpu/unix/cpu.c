@@ -243,7 +243,6 @@ void _CPU_Sync_io_Init()
 unsigned32 _CPU_ISR_Get_level( void )
 {
   sigset_t old_mask;
-  sigset_t new_mask;
 
 #if defined(__linux__)
   sigemptyset( &old_mask );
