@@ -6,7 +6,6 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -I$(top_builddir)
-AM_CFLAGS += $(LIBC_DEFINES)
 
 EXTRA_LIBRARIES = libcsupport.a
 CLEANFILES = libcsupport.a
@@ -31,9 +30,9 @@ endif
 
 ## motorola
 
-include_motoroladir = $(includedir)/motorola
+include_rtems_motoroladir = $(includedir)/rtems/motorola
 
-include_motorola_HEADERS = include/motorola/mc68230.h \
+include_rtems_motorola_HEADERS = include/rtems/motorola/mc68230.h \
     include/motorola/mc68681.h
 
 ## rtems
@@ -59,9 +58,9 @@ endif
 
 ## zilog
 
-include_zilogdir = $(includedir)/zilog
+include_rtems_zilogdir = $(includedir)/rtems/zilog
 
-include_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
+include_rtems_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
     include/zilog/z8536.h
 
 ##  General stuff
@@ -190,18 +189,18 @@ $(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
 endif
 
-$(PROJECT_INCLUDE)/motorola/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/motorola
-	@: > $(PROJECT_INCLUDE)/motorola/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/motorola
+	@: > $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
 
-$(PROJECT_INCLUDE)/motorola/mc68230.h: include/motorola/mc68230.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68230.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68230.h
+$(PROJECT_INCLUDE)/rtems/motorola/mc68230.h: include/rtems/motorola/mc68230.h $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/motorola/mc68230.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/motorola/mc68230.h
 
-$(PROJECT_INCLUDE)/motorola/mc68681.h: include/motorola/mc68681.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68681.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68681.h
+$(PROJECT_INCLUDE)/rtems/motorola/mc68681.h: include/motorola/mc68681.h $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/motorola/mc68681.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/motorola/mc68681.h
 
 $(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/assoc.h
@@ -272,22 +271,22 @@ $(PROJECT_INCLUDE)/sys/cdefs.h: include/sys/cdefs.h $(PROJECT_INCLUDE)/sys/$(dir
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
 endif
 
-$(PROJECT_INCLUDE)/zilog/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/zilog
-	@: > $(PROJECT_INCLUDE)/zilog/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/zilog
+	@: > $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
 
-$(PROJECT_INCLUDE)/zilog/z8036.h: include/zilog/z8036.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8036.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8036.h
+$(PROJECT_INCLUDE)/rtems/zilog/z8036.h: include/zilog/z8036.h $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8036.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8036.h
 
-$(PROJECT_INCLUDE)/zilog/z8530.h: include/zilog/z8530.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8530.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8530.h
+$(PROJECT_INCLUDE)/rtems/zilog/z8530.h: include/zilog/z8530.h $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8530.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8530.h
 
-$(PROJECT_INCLUDE)/zilog/z8536.h: include/zilog/z8536.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8536.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8536.h
+$(PROJECT_INCLUDE)/rtems/zilog/z8536.h: include/zilog/z8536.h $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8536.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8536.h
 
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES += $(PREINSTALL_DIRS)
