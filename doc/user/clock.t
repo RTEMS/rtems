@@ -372,6 +372,42 @@ obtain the number of ticks per second (option is
 @code{CLOCK_GET_TICKS_PER_SECOND}) and the number of ticks since the
 executive was initialized option is @code{CLOCK_GET_TICKS_SINCE_BOOT}).
 
+The data type expected for time_buffer is indicated below:
+
+@ifset is-C
+@itemize @bullet
+@item @code{CLOCK_GET_TOD} - (rtems_time_of_day *)
+
+@item @code{CLOCK_GET_TIME_VALUE} - (rtems_clock_time_value *)
+
+@item @code{CLOCK_GET_TICKS_SINCE_BOOT} - (rtems_interval *)
+
+@item @code{CLOCK_GET_SECONDS_SINCE_EPOCH} - (rtems_interval *)
+
+@item @code{CLOCK_GET_TICKS_PER_SECOND} - (rtems_interval *)
+
+@end itemize
+@end ifset
+
+@ifset is-Ada
+@itemize @bullet
+@item @code{CLOCK_GET_TOD} - Address of an variable of type RTEMS.Time_Of_Day
+
+@item @code{CLOCK_GET_TIME_VALUE} - Address of an variable of
+type RTEMS.Clock_Time_Value
+
+@item @code{CLOCK_GET_TICKS_SINCE_BOOT} - Address of an variable of
+type RTEMS.Interval
+
+@item @code{CLOCK_GET_SECONDS_SINCE_EPOCH} - Address of an variable of
+type RTEMS.Interval
+
+@item @code{CLOCK_GET_TICKS_PER_SECOND} - Address of an variable of
+type RTEMS.Interval
+
+@end itemize
+@end ifset
+
 @subheading NOTES:
 
 This directive is callable from an ISR.
