@@ -1,3 +1,10 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-top.m4: Remove PROJECT_ROOT.
+	Prepend ../ to $1.
+	* aclocal/env-rtemscpu.m4: Reworked.
+	* configure.ac: RTEMS_TOP([.]).
+
 2004-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add PREINSTALL_DIRS.

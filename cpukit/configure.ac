@@ -5,7 +5,7 @@
 AC_PREREQ(2.59)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([score])
-RTEMS_TOP(..)
+RTEMS_TOP([.])
 
 RTEMS_CANONICAL_TARGET_CPU
 
