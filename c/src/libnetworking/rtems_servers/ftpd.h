@@ -10,6 +10,14 @@
 
 #define FTPD_CONTROL_PORT   21
 
+/* FTPD access control flags */
+enum
+{
+  FTPD_NO_WRITE = 0x1,
+  FTPD_NO_READ  = 0x2,
+  FTPD_NO_RW    = FTPD_NO_WRITE | FTPD_NO_READ
+};
+
 typedef int (*rtems_ftpd_hookfunction)(unsigned char *, unsigned long);
 
 struct rtems_ftpd_hook
@@ -27,6 +35,11 @@ struct rtems_ftpd_configuration
    struct rtems_ftpd_hook  *hooks;             /* List of hooks       */
    char const              *root;              /* Root for FTPD or 0 for / */
    int                     tasks_count;        /* Max. connections    */
+   int                     idle;               /* Idle timeout in seoconds
+                                                  or 0 for no (inf) timeout */
+   int                     access;             /* 0 - r/w, 1 - read-only,
+                                                  2 - write-only,
+                                                  3 - browse-only */
 };
 
 /*

@@ -1,106 +1,137 @@
 /* FIXME: 1. Parse command is a hack.  We can do better.
  *        2. Some sort of access control?
- *        3. OSV: Timeouts on sockets.
- *        4. OSV: hooks support seems to be a joke, as it requires storing of
- *           entire input file in memory. Seem to be better to change it to
+ *        3. OSV: hooks support seems to be bad, as it requires storing of
+ *           entire input file in memory.  Seem to be better to change it to
  *           something more reasonable, like having
  *           'hook_write(void const *buf, int count)' routine that will be
  *           called multiple times while file is being received.
- *        5. OSV: Remove hack with "/dev/null"?
- *        6. OSV: data_addr field of SessionInfo structure is not initialized.
- *           This will lead to undefined behavior if FTP client doesn't send
- *           PORT command. Seems we need to implement usage of default port
- *           (ftp port - 1). I didn't find any FTP client that doesn't send
- *           PORT command though.
- *        7. OSV: while server claims TYPE ASCII command succeeds (to make
- *           happy some clients), ASCII mode isn't actually implemented.
- *        8. Passive Mode?
+ *        4. OSV: Remove hack with "/dev/null"?
  *
  *  FTP Server Daemon
  *
  *  Submitted by: Jake Janovetz <janovetz@tempest.ece.uiuc.edu>
  *
  *  Changed by:   Sergei Organov <osv@javad.ru> (OSV)
- *    Changes:
- *      - use pool of pre-created threads to handle sessions
- *      - LIST output now similar to what "/bin/ls -al" would output, thus
+ *
+ *  Changes:
+ *
+ *    2001-01-22        Sergei Organov <osv@javad.ru>
+ *
+ *      * Timeouts on sockets implemented. 'idle' field added to
+ *        configuration. No timeout by default to keep backward compatibility.
+ *        Note: SITE IDLE command not implemented yet.
+ *      * Basic global access control implemented. 'access' field added to
+ *        configuration. No access limitations by default to keep backward
+ *        compatibility.
+ *
+ *    2001-01-17        Sergei Organov <osv@javad.ru>
+ *
+ *      * Anchor data socket for active mode (using self IP and port 20.)
+ *      * Fixed default data port support (still not tested).
+ *      * Don't allow IP address different from originating host in
+ *        PORT command to improve security.
+ *      * Fixed bug in MDTM command.
+ *      * Check for correctness of parsing of argument in command_port().
+ *      * Fixed squeeze_path() to don't allow names like 'NAME/smth' where
+ *        'NAME' is not a directory.
+ *      * Command parsing a little bit improved: command names are now
+ *        converted to upper-case to be more compatible with RFC (command
+ *        names are not case-sensitive.)
+ *      * Reformat comments so that they have RTEMS look-and-feel.
+ *
+ *    2001-01-16        Sergei Organov <osv@javad.ru>
+ *
+ *      * Fixed DELE, SITE CHMOD, RMD, MKD broken by previous changes
+ *      * True ASCII mode implemented (doesn't work for hooks and /dev/null)
+ *      * Passive mode implemented, PASV command added.
+ *      * Default port for data connection could be used (untested, can't find
+ *        ftp client that doesn't send PORT command)
+ *      * SYST reply changed to UNIX, as former RTEMS isn't registered name.
+ *      * Reply codes reviewed and fixed.
+ *
+ *    2001-01-08        Sergei Organov <osv@javad.ru>
+ *
+ *      * use pool of pre-created threads to handle sessions
+ *      * LIST output now similar to what "/bin/ls -al" would output, thus
  *        FTP clients could parse it.
- *      - LIST NAME now works (both for files and directories)
- *      - keep track of CWD for every session separately
- *      - ability to specify root directory name in configuration table
- *      - options sent in commands are ignored, thus LIST -al FILE works
- *      - added support for NLST, CDUP and MDTM commands
- *      - buffers are allocated on stack instead of heap where possible
- *      - drop using of task notepad to pass parameters - use function
+ *      * LIST NAME now works (both for files and directories)
+ *      * keep track of CWD for every session separately
+ *      * ability to specify root directory name in configuration table
+ *      * options sent in commands are ignored, thus LIST -al FILE works
+ *      * added support for NLST, CDUP and MDTM commands
+ *      * buffers are allocated on stack instead of heap where possible
+ *      * drop using of task notepad to pass parameters - use function
  *        arguments instead
- *      - various bug-fixes, e.g., use of PF_INET in socket() instead of
+ *      * various bug-fixes, e.g., use of PF_INET in socket() instead of
  *        AF_INET, use snprintf() instead of sprintf() everywhere for safety,
  *        etc.
  *
  *  $Id$
  */
 
-/**************************************************************************
- *                                 ftpd.c                                 *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    This file contains the daemon which services requests that appear   *
- *    on the FTP port.  This server is compatible with FTP, but it        *
- *    also provides 'hooks' to make it usable in situations where files   *
- *    are not used/necessary.  Once the server is started, it runs        *
- *    forever.                                                            *
- *                                                                        *
- *                                                                        *
- *    Organization:                                                       *
- *                                                                        *
- *       The FTP daemon is started upon boot along with a (configurable)  *
- *       number of tasks to handle sessions. It runs all the time and     *
- *       waits for connections on the known FTP port (21).  When          *
- *       a connection is made, it wakeups a 'session' task.  That         *
- *       session then interacts with the remote host.  When the session   *
- *       is complete, the session task goes to sleep.  The daemon still   *
- *       runs, however.                                                   *
- *                                                                        *
- *                                                                        *
- * Supported commands are:                                                *
- *                                                                        *
- * RETR xxx     - Sends a file from the client.                           *
- * STOR xxx     - Receives a file from the client.  xxx = filename.       *
- * LIST xxx     - Sends a file list to the client.                        *
- * NLST xxx     - Sends a file list to the client.                        *
- * USER         - Does nothing.                                           *
- * PASS         - Does nothing.                                           *
- * SYST         - Replies with the system type (`RTEMS').                 *
- * DELE xxx     - Delete file xxx.                                        *
- * MKD xxx      - Create directory xxx.                                   *
- * RMD xxx      - Remove directory xxx.                                   *
- * PWD          - Print working directory.                                *
- * CWD xxx      - Change working directory.                               *
- * CDUP         - Change to upper directory.                              *
- * SITE CHMOD xxx yyy - Change permissions on file yyy to xxx.            *
- * PORT a,b,c,d,x,y   - Setup for a data port to IP address a.b.c.d       *
- *                      and port (x*256 + y).                             *
- * MDTM xxx     - Send date/time to the client. xxx = filename.           *
- *                                                                        *
- *                                                                        *
- * The public routines contained in this file are:                        *
- *                                                                        *
- *    rtems_initialize_ftpd - Initializes and starts the server daemon,   *
- *                            then returns to its caller.                 *
- *                                                                        *
- *------------------------------------------------------------------------*
- * Jake Janovetz                                                          *
- * University of Illinois                                                 *
- * 1406 West Green Street                                                 *
- * Urbana IL  61801                                                       *
- **************************************************************************
- * Change History:                                                        *
- *  12/01/97   - Creation (JWJ)                                           *
- *  2001-01-08 - Changes by OSV                                           *
+/*************************************************************************
+ *                                 ftpd.c
+ *************************************************************************
+ * Description:
+ *
+ *    This file contains the daemon which services requests that appear
+ *    on the FTP port.  This server is compatible with FTP, but it
+ *    also provides 'hooks' to make it usable in situations where files
+ *    are not used/necessary.  Once the server is started, it runs
+ *    forever.
+ *
+ *
+ *    Organization:
+ *
+ *       The FTP daemon is started upon boot along with a (configurable)
+ *       number of tasks to handle sessions.  It runs all the time and
+ *       waits for connections on the known FTP port (21).  When
+ *       a connection is made, it wakes-up a 'session' task.  That
+ *       session then interacts with the remote host.  When the session
+ *       is complete, the session task goes to sleep.  The daemon still
+ *       runs, however.
+ *
+ *
+ * Supported commands are:
+ *
+ * RETR xxx     - Sends a file from the client.
+ * STOR xxx     - Receives a file from the client.  xxx = filename.
+ * LIST xxx     - Sends a file list to the client.
+ * NLST xxx     - Sends a file list to the client.
+ * USER         - Does nothing.
+ * PASS         - Does nothing.
+ * SYST         - Replies with the system type (`RTEMS').
+ * DELE xxx     - Delete file xxx.
+ * MKD xxx      - Create directory xxx.
+ * RMD xxx      - Remove directory xxx.
+ * PWD          - Print working directory.
+ * CWD xxx      - Change working directory.
+ * CDUP         - Change to upper directory.
+ * SITE CHMOD xxx yyy - Change permissions on file yyy to xxx.
+ * PORT a,b,c,d,x,y   - Setup for a data port to IP address a.b.c.d
+ *                      and port (x*256 + y).
+ * MDTM xxx     - Send file modification date/time to the client.
+ *                xxx = filename.
+ * PASV         - Use passive mode data connection.
+ *
+ *
+ * The public routines contained in this file are:
+ *
+ *    rtems_initialize_ftpd - Initializes and starts the server daemon,
+ *                            then returns to its caller.
+ *
+ *------------------------------------------------------------------------
+ * Jake Janovetz
+ * University of Illinois
+ * 1406 West Green Street
+ * Urbana IL  61801
+ *************************************************************************
+ * Change History:
+ *  12/01/97   - Creation (JWJ)
+ *  2001-01-08 - Changes by OSV
  *************************************************************************/
 
-/**************************************************************************
+/*************************************************************************
  * Meanings of first and second digits of reply codes:
  *
  * Reply:  Description:
@@ -108,7 +139,7 @@
  *  1yz    Positive preliminary reply.  The action is being started but
  *         expect another reply before sending another command.
  *  2yz    Positive completion reply.  A new command can be sent.
- *  3yz    Positive intermediate reply.  The command has been accpeted
+ *  3yz    Positive intermediate reply.  The command has been accepted
  *         but another command must be sent.
  *  4yz    Transient negative completion reply.  The requested action did
  *         not take place, but the error condition is temporary so the
@@ -133,6 +164,7 @@
 #include <fcntl.h>
 #include <dirent.h>
 #include <errno.h>
+#include <ctype.h>
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
@@ -157,7 +189,7 @@
 
 #define FTPD_SERVER_MESSAGE  "RTEMS FTP server (Version 1.1-JWJ) ready."
 
-#define FTPD_SYSTYPE "RTEMS"
+#define FTPD_SYSTYPE "UNIX Type: L8"
 
 /* Seem to be unused */
 #if 0
@@ -187,18 +219,23 @@ extern struct rtems_ftpd_configuration rtems_ftpd_configuration;
 /* this is not prototyped in strict ansi mode */
 FILE *fdopen (int fildes, const char *mode);
 
-/*
+/*PAGE
  * SessionInfo structure.
  *
  * The following structure is allocated for each session.
  */
 typedef struct
 {
-  struct sockaddr_in  data_addr;   /* Data address for PORT commands */
+  struct sockaddr_in  ctrl_addr;   /* Control connection self address */
+  struct sockaddr_in  data_addr;   /* Data address set by PORT command */
+  struct sockaddr_in  def_addr;    /* Default address for data */
+  int                 use_default; /* 1 - use default address for data */
   FILE                *ctrl_fp;    /* File pointer for control connection */
-  int                 socket;      /* Socket descriptor for ctrl connection */
+  int                 ctrl_socket; /* Socket for ctrl connection */
+  int                 pasv_socket; /* Socket for PASV connection */
+  int                 data_socket; /* Socket for data connection */
+  int                 idle;        /* Timeout in seconds */
   char                cwd[FTPD_BUFSIZE];  /* Current working directory */
-  /* Login -- future use -- */
   int                 xfer_mode;   /* Transfer mode (ASCII/binary) */
   rtems_id            tid;         /* Task id */
 } FTPD_SessionInfo_t;
@@ -224,17 +261,26 @@ typedef struct
 static FTPD_TaskPool_t task_pool;
 
 /*
- * Root node for FTPD without trailing slash. Even '/' node is denoted as
+ * Root node for FTPD without trailing slash.  Even '/' node is denoted as
  * empty string here.
  */
-static char root[FTPD_BUFSIZE];
+static char ftpd_root[FTPD_BUFSIZE];
 
+/*
+ * Default idle timeout for sockets in seconds.
+ */
+static int ftpd_timeout = 0;
+
+/*
+ * Global access flags.
+ */
+static int ftpd_access = 0;
 
 /*PAGE
  *
  * serr
  *
- * Return errror string corresponding to current 'errno'.
+ * Return error string corresponding to current 'errno'.
  *
  */
 static char const*
@@ -243,31 +289,70 @@ serr(void)
   return strerror(errno);
 }
 
-
-/*
- *  Utility routines to manage root directory and session local
- *  current working directory.
+/*PAGE
+ *
+ * Utility routines for access control.
+ *
  */
 
+static int
+can_read(void)
+{
+  return (ftpd_access & FTPD_NO_READ) == 0;
+}
+
+static int
+can_write(void)
+{
+  return (ftpd_access & FTPD_NO_WRITE) == 0;
+}
+
+/*PAGE
+ *
+ *  Utility routines to manage root directory and session local
+ *  current working directory.
+ *
+ */
+
+
+/*PAGE
+ *
+ * is_dir
+ *
+ * Return 1 if file with given 'name' exists and is directory, 0 otherwise.
+ *
+ */
+static int
+is_dir(char const* name)
+{
+  struct stat s;
+  int res = stat(name, &s) == 0 && S_ISDIR(s.st_mode);
+  return res;
+}
 
 /*PAGE
  *
  * squeeze_path
  *
  * Squeezes path according to OS rules, i.e., eliminates /./, /../, and //
- * from the path. Does nothing if the path is relative, i.e. doesn't begin
- * with '/'. The trailing slash is always removed, even when alone, i.e. "/"
+ * from the path.  Does nothing if the path is relative, i.e. doesn't begin
+ * with '/'.  The trailing slash is always removed, even when alone, i.e. "/"
  * will be "" after squeeze.
  *
  * Input parameters:
  *   path - the path to be squeezed
+ *   full - full file name or NULL (assumed that it points to the beginning of
+ *          buffer, and 'path' also points somewhere into the same buffer). Is
+ *          used to check if intermediate names are directories.
  *
  * Output parameters:
  *   path - squeezed path
+ *   returns 1 on success, 0 on failure (if any name that supposed to denote
+ *     directory is not a directory).
  *
  */
-static void
-squeeze_path(char* path)
+static int
+squeeze_path(char* path, char* full)
 {
   if(path[0] == '/')
   {
@@ -279,7 +364,16 @@ squeeze_path(char* path)
       char* s = e;
       e = strchr(s, '/');
       if(e)
-        ++e;
+      {
+        char c = *e;
+        *e = '\0';
+        if(full && !is_dir(full))
+        {
+          *e = c;
+          return 0;
+        }
+        *e++ = c;
+      }
       else
         e = s + rest + 1;
       len = e - s;
@@ -308,8 +402,13 @@ squeeze_path(char* path)
       }
     }
     if(e[-2] == '/')
+    {
       e[-2] = '\0';
+      if(full && !is_dir(full))
+        return 0;
+    }
   }
+  return 1;
 }
 
 
@@ -336,7 +435,7 @@ make_path(char* buf, char const* cwd, char const* name)
 {
   char* res = NULL;
 
-  int rlen = strlen(root);
+  int rlen = strlen(ftpd_root);
   int clen = strlen(cwd);
   int nlen = strlen(name);
   int len = rlen + nlen;
@@ -351,7 +450,7 @@ make_path(char* buf, char const* cwd, char const* name)
   if (FTPD_BUFSIZE > len)
   {
     char* b = buf;
-    memcpy(b, root, rlen); b += rlen;
+    memcpy(b, ftpd_root, rlen); b += rlen;
     if (name[0] != '/')
     {
       *b++ = '/';
@@ -367,14 +466,17 @@ make_path(char* buf, char const* cwd, char const* name)
     res = buf + rlen;
     while(rlen-- > 0 && res[-1] == '/')
       --res;
-    squeeze_path(res);
+    if(!squeeze_path(res, buf))
+      res = NULL;
   }
 
   return res;
 }
 
-/*
+/*PAGE
+ *
  * Task pool management routines
+ *
  */
 
 
@@ -412,9 +514,6 @@ task_pool_done(int count)
   task_pool.mutex = -1;
 }
 
-/* Forward declare */
-static void session(rtems_task_argument arg);
-
 /*PAGE
  *
  * task_pool_init
@@ -429,6 +528,8 @@ static void session(rtems_task_argument arg);
  *   returns 1 on success, 0 on failure.
  *
  */
+static void session(rtems_task_argument arg); /* Forward declare */
+
 static int
 task_pool_init(int count, rtems_task_priority priority)
 {
@@ -502,7 +603,7 @@ task_pool_init(int count, rtems_task_priority priority)
     }
     task_pool.queue[i] = task_pool.info + i;
     info->ctrl_fp = NULL;
-    info->socket  = -1;
+    info->ctrl_socket  = -1;
     if (++id > 'z')
       id = 'a';
   }
@@ -536,7 +637,7 @@ task_pool_obtain()
     info = task_pool.queue[task_pool.head];
     if(++task_pool.head >= task_pool.count)
       task_pool.head = 0;
-    info->socket = -1;
+    info->ctrl_socket = -1;
     info->ctrl_fp = NULL;
     rtems_semaphore_release(task_pool.mutex);
   }
@@ -573,6 +674,69 @@ task_pool_release(FTPD_SessionInfo_t* info)
 
 /*PAGE
  *
+ * Function: send_reply
+ *
+ *
+ *    This procedure sends a reply to the client via the control
+ *    connection.
+ *
+ *
+ * Input parameters:
+ *   code  - 3-digit reply code.
+ *   text  - Reply text.
+ *
+ * Output parameters:
+ *   NONE
+ */
+static void
+send_reply(FTPD_SessionInfo_t  *info, int code, char *text)
+{
+  char const* s = (info->xfer_mode == TYPE_A) ? "\r" : "";
+  /* If a text reply exists, add it to the reply data. */
+  if (text != NULL)
+    fprintf(info->ctrl_fp, "%d %.70s%s\n", code, text, s);
+  else
+    fprintf(info->ctrl_fp, "%d%s\n", code, s);
+  fflush(info->ctrl_fp);
+}
+
+
+/*PAGE
+ *
+ * close_socket
+ *
+ * Close socket.
+ *
+ * Input parameters:
+ *   s - socket descriptor.
+ *   seconds - number of seconds the timeout should be,
+ *             if >= 0 - infinite timeout (no timeout).
+ *
+ * Output parameters:
+ *   returns 1 on success, 0 on failure.
+ */
+static int
+set_socket_timeout(int s, int seconds)
+{
+  int res = 0;
+  struct timeval tv;
+  int len = sizeof(tv);
+
+  if(seconds < 0)
+    seconds = 0;
+  tv.tv_usec = 0;
+  tv.tv_sec  = seconds;
+  if(0 != setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, &tv, len))
+    syslog(LOG_ERR, "ftpd: Can't set send timeout on socket: %s.", serr());
+  else if(0 != setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &tv, len))
+    syslog(LOG_ERR, "ftpd: Can't set receive timeout on socket: %s.", serr());
+  else
+    res = 1;
+  return res;
+}
+
+/*PAGE
+ *
  * close_socket
  *
  * Close socket.
@@ -582,7 +746,6 @@ task_pool_release(FTPD_SessionInfo_t* info)
  *
  * Output parameters:
  *   returns 1 on success, 0 on failure
- *
  */
 static int
 close_socket(int s)
@@ -601,9 +764,106 @@ close_socket(int s)
 
 /*PAGE
  *
+ * data_socket
+ *
+ * Create data socket for session.
+ *
+ * Input parameters:
+ *   info - corresponding SessionInfo structure
+ *
+ * Output parameters:
+ *   returns socket descriptor, or -1 if failure
+ *
+ */
+static int
+data_socket(FTPD_SessionInfo_t *info)
+{
+  int s = info->pasv_socket;
+  if(0 > s)
+  {
+    int on = 1;
+    s = socket(PF_INET, SOCK_STREAM, 0);
+    if(0 > s)
+      send_reply(info, 425, "Can't create data socket.");
+    else if(0 > setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)))
+    {
+      close_socket(s);
+      s = -1;
+    }
+    else
+    {
+      struct sockaddr_in data_source;
+      int tries;
+
+      /* anchor socket to avoid multi-homing problems */
+      data_source = info->ctrl_addr;
+      data_source.sin_port = htons(20); /* ftp-data port */
+      for(tries = 1; tries < 10; ++tries)
+      {
+        if(bind(s, (struct sockaddr *)&data_source, sizeof(data_source)) >= 0)
+          break;
+        if (errno != EADDRINUSE)
+          tries = 10;
+        else
+          rtems_task_wake_after(tries * 10);
+      }
+      if(tries >= 10)
+      {
+        send_reply(info, 425, "Can't bind data socket.");
+        close_socket(s);
+        s = -1;
+      }
+      else
+      {
+        struct sockaddr_in *data_dest =
+          (info->use_default) ? &info->def_addr : &info->data_addr;
+        if(0 > connect(s, (struct sockaddr *)data_dest, sizeof(*data_dest)))
+        {
+          send_reply(info, 425, "Can't connect data socket.");
+          close_socket(s);
+          s = -1;
+        }
+      }
+    }
+  }
+  info->data_socket = s;
+  info->use_default = 1;
+  if(s >= 0)
+    set_socket_timeout(s, info->idle);
+  return s;
+}
+
+/*PAGE
+ *
+ * close_data_socket
+ *
+ * Close data socket for session.
+ *
+ * Input parameters:
+ *   info - corresponding SessionInfo structure
+ *
+ * Output parameters:
+ *   NONE
+ *
+ */
+static void
+close_data_socket(FTPD_SessionInfo_t *info)
+{
+  int s = info->pasv_socket;
+  if(0 > s)
+    s = info->data_socket;
+  if(!close_socket(s))
+    syslog(LOG_ERR, "ftpd: Error closing data socket.");
+  info->data_socket = -1;
+  info->pasv_socket = -1;
+  info->use_default = 1;
+}
+
+/*PAGE
+ *
  * close_stream
  *
- * Close data stream of session.
+ * Close control stream of session.
  *
  * Input parameters:
  *   info - corresponding SessionInfo structure
@@ -622,60 +882,14 @@ close_stream(FTPD_SessionInfo_t* info)
       syslog(LOG_ERR, "ftpd: Could not close control stream: %s", serr());
     }
     else
-      info->socket = -1;
+      info->ctrl_socket = -1;
   }
 
-  if (!close_socket(info->socket))
+  if (!close_socket(info->ctrl_socket))
     syslog(LOG_ERR, "ftpd: Could not close control socket: %s", serr());
 
   info->ctrl_fp = NULL;
-  info->socket = -1;
-}
-
-
-/**************************************************************************
- * Function: send_reply                                                   *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    This procedure sends a reply to the client via the control          *
- *    connection.                                                         *
- *                                                                        *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- *    int  code  - The 3-digit reply code.                                *
- *    char *text - Reply text.                                            *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    none                                                                *
- *                                                                        *
- *************************************************************************/
-static void
-send_reply(FTPD_SessionInfo_t  *info, int code, char *text)
-{
-  char const* s;
-
-
-  /***********************************************************************
-   * code must be a 3-digit number.
-   **********************************************************************/
-  if ((code < 100) || (code > 999))
-  {
-    syslog(LOG_ERR, "ftpd: Code not 3-digits.");
-    return;
-  }
-
-  /***********************************************************************
-   * If a text reply exists, add it to the reply data.
-   **********************************************************************/
-  s  = (info->xfer_mode == TYPE_A) ? "\r" : "";
-  if (text != NULL)
-    fprintf(info->ctrl_fp, "%d %.70s%s\n", code, text, s);
-  else
-    fprintf(info->ctrl_fp, "%d%s\n", code, s);
-  fflush(info->ctrl_fp);
+  info->ctrl_socket = -1;
 }
 
 
@@ -703,84 +917,91 @@ send_mode_reply(FTPD_SessionInfo_t *info)
 
 /*PAGE
  *
- * data_socket
+ * command_retrieve
  *
- * Create data socket for session.
+ * Perform the "RETR" command (send file to client).
  *
  * Input parameters:
  *   info - corresponding SessionInfo structure
+ *   char *filename  - source filename.
  *
  * Output parameters:
- *   returns socket descriptor, or -1 if failure
+ *   NONE
  *
  */
-static int
-data_socket(FTPD_SessionInfo_t *info)
-{
-  int s = socket(PF_INET, SOCK_STREAM, 0);
-  if(0 > s)
-    send_reply(info, 420, "Server error - could not create socket.");
-  else if(0 > connect(s, (struct sockaddr *)&info->data_addr,
-    sizeof(struct sockaddr)))
-  {
-    send_reply(info, 420, "Server error - could not connect socket.");
-    close_socket(s);
-    s = -1;
-  }
-  return s;
-}
-
-/**************************************************************************
- * Function: command_retrieve                                             *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    This performs the "RETR" command.  A data connection must already   *
- *    be open (via the "PORT" command.)  Here, we send the data to the    *
- *    connection.                                                         *
- *                                                                        *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- *    char *filename   - Source filename.                                 *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    int  - 0 for reply sent.                                            *
- *           1 for no reply sent.                                         *
- *                                                                        *
- *************************************************************************/
-static int
-command_retrieve(FTPD_SessionInfo_t  *info, char *filename)
+static void
+command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
 {
   int                 s = -1;
-  int                 n;
   int                 fd = -1;
   char                buf[FTPD_DATASIZE];
   int                 res = 0;
+  char const* r = NULL;
 
-  char const* r = make_path(buf, info->cwd, filename);
+  if(!can_read())
+  {
+    send_reply(info, 550, "Access denied.");
+    return;
+  }
+
+  r = make_path(buf, info->cwd, filename);
 
   if (NULL == r || 0 > (fd = open(buf, O_RDONLY)))
   {
-    send_reply(info, 450, "Error opening file.");
-    return(res);
+    send_reply(info, 550, "Error opening file.");
+    return;
   }
 
   send_mode_reply(info);
 
-  /***********************************************************************
-   * Connect to the data connection (PORT made in an earlier PORT call).
-   **********************************************************************/
   s = data_socket(info);
+
   if (0 <= s)
   {
-    /***********************************************************************
-     * Send the data over the ether.
-     **********************************************************************/
-    while ((n = read(fd, buf, FTPD_DATASIZE)) > 0)
+    int n = -1;
+
+    if(info->xfer_mode == TYPE_I)
     {
-      send(s, buf, n, 0);
+      while ((n = read(fd, buf, FTPD_DATASIZE)) > 0)
+      {
+        if(send(s, buf, n, 0) != n)
+          break;
+      }
+    }
+    else if (info->xfer_mode == TYPE_A)
+    {
+      int rest = 0;
+      while (rest == 0 && (n = read(fd, buf, FTPD_DATASIZE)) > 0)
+      {
+        char const* e = buf;
+        char const* b;
+        int i;
+        rest = n;
+        do
+        {
+          char lf = '\0';
+
+          b = e;
+          for(i = 0; i < rest; ++i, ++e)
+          {
+            if(*e == '\n')
+            {
+              lf = '\n';
+              break;
+            }
+          }
+          if(send(s, b, i, 0) != i)
+            break;
+          if(lf == '\n')
+          {
+            if(send(s, "\r\n", 2, 0) != 2)
+              break;
+            ++e;
+            ++i;
+          }
+        }
+        while((rest -= i) > 0);
+      }
     }
 
     if (0 == n)
@@ -793,58 +1014,58 @@ command_retrieve(FTPD_SessionInfo_t  *info, char *filename)
     }
   }
 
-  if (0 == res)
-    send_reply(info, 450, "Retrieve failed.");
-  else
-    send_reply(info, 210, "File sent successfully.");
-
   if (-1 != fd)
     close(fd);
 
-  if (!close_socket(s))
-    syslog(LOG_ERR, "ftpd: Error closing data socket");
+  if (0 == res)
+    send_reply(info, 451, "File read error.");
+  else
+    send_reply(info, 226, "Transfer complete.");
 
-  return(res);
+  close_data_socket(info);
+
+  return;
 }
 
 
-/**************************************************************************
- * Function: command_store                                                *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    This performs the "STOR" command.  A data connection must already   *
- *    be open (via the "PORT" command.)  Here, we get the data from the   *
- *    connection and figure out what to do with it.                       *
- *                                                                        *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- *    char *filename   - Destination filename.                            *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    int  - 0 for success.                                               *
- *           1 for failure.                                               *
- *                                                                        *
- *************************************************************************/
-static int
-command_store(FTPD_SessionInfo_t *info, char *filename)
+/*PAGE
+ *
+ * command_store
+ *
+ * Performs the "STOR" command (receive data from client).
+ *
+ * Input parameters:
+ *   info - corresponding SessionInfo structure
+ *   char *filename   - Destination filename.
+ *
+ * Output parameters:
+ *   NONE
+ */
+static void
+command_store(FTPD_SessionInfo_t *info, char const *filename)
 {
   int                    s;
   int                    n;
   unsigned long          size = 0;
   struct rtems_ftpd_hook *usehook = NULL;
   char                   buf[FTPD_DATASIZE];
+  int                    res = 1;
+  int                    bare_lfs = 0;
 
   int null = !strcmp("/dev/null", filename);
+
+  if(!can_write())
+  {
+    send_reply(info, 550, "Access denied.");
+    return;
+  }
 
   if(!null)
   {
     if (NULL == make_path(buf, info->cwd, filename))
     {
-      send_reply(info, 450, "Error creating file.");
-      return(0);
+      send_reply(info, 550, "Error creating file.");
+      return;
     }
   }
 
@@ -852,25 +1073,23 @@ command_store(FTPD_SessionInfo_t *info, char *filename)
 
   s = data_socket(info);
   if(0 > s)
-  {
-    return(1);
-  }
+    return;
 
 
-  /***********************************************************************
-   * File: "/dev/null" just throws the data away.
-   * Otherwise, search our list of hooks to see if we need to do something
-   *   special.
-   * OSV: FIXME: this is hack. Using /dev/null filesystem entry would be
-   *             better. However, it's not clear how to handle root directory
-   *             other than '/' then.
-   **********************************************************************/
   if (null)
   {
-    while ((n = read(s, buf, FTPD_DATASIZE)) > 0);
+    /* File "/dev/null" just throws data away.
+     *  FIXME: this is hack.  Using /dev/null filesystem entry would be
+     *  better.  However, it's not clear how to handle root directory other
+     *  than '/' then.
+     */
+    while ((n = recv(s, buf, FTPD_DATASIZE, 0)) > 0)
+      ;
   }
   else if (rtems_ftpd_configuration.hooks != NULL)
   {
+
+    /* Search our list of hooks to see if we need to do something special. */
     struct rtems_ftpd_hook *hook;
     int i;
 
@@ -891,7 +1110,7 @@ command_store(FTPD_SessionInfo_t *info, char *filename)
   {
     /*
      * OSV: FIXME: Small buffer could be used and hook routine
-     * called multiple times instead. Alternatively, the support could be
+     * called multiple times instead.  Alternatively, the support could be
      * removed entirely in favor of configuring RTEMS pseudo-device with
      * given name.
      */
@@ -899,79 +1118,150 @@ command_store(FTPD_SessionInfo_t *info, char *filename)
     char                *bigBufr;
     size_t filesize = rtems_ftpd_configuration.max_hook_filesize + 1;
 
-    /***********************************************************************
+    /*
      * Allocate space for our "file".
-     **********************************************************************/
+     */
     bigBufr = (char *)malloc(filesize);
     if (bigBufr == NULL)
     {
-      send_reply(info, 440, "Server error - malloc fail.");
-      return(1);
+      send_reply(info, 451, "Local resource failure: malloc.");
+      close_data_socket(info);
+      return;
     }
 
-    /***********************************************************************
+    /*
      * Retrieve the file into our buffer space.
-     **********************************************************************/
+     */
     size = 0;
-    while ((n = read(s, bigBufr + size, filesize - size)) > 0)
+    while ((n = recv(s, bigBufr + size, filesize - size, 0)) > 0)
     {
       size += n;
     }
     if (size >= filesize)
     {
-      send_reply(info, 440, "Server error - Buffer size exceeded.");
+      send_reply(info, 451, "File too long: buffer size exceeded.");
       free(bigBufr);
-      close_socket(s);
-      return(1);
+      close_data_socket(info);
+      return;
     }
-    close_socket(s);
 
-    /***********************************************************************
+    /*
      * Call our hook.
-     **********************************************************************/
-    if ((usehook->hook_function)(bigBufr, size) == 0)
-    {
-      send_reply(info, 210, "File transferred successfully.");
-    }
-    else
-    {
-      send_reply(info, 440, "File transfer failed.");
-    }
+     */
+    res = (usehook->hook_function)(bigBufr, size) == 0;
     free(bigBufr);
+    if(!res)
+    {
+      send_reply(info, 451, "File processing failed.");
+      close_data_socket(info);
+      return;
+    }
   }
   else
   {
+    /* Data transfer to regular file. */
     int fd =
       creat(buf, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 
     if (0 > fd)
     {
-      send_reply(info, 450, "Error creating file.");
-      close_socket(s);
-      return(0);
+      send_reply(info, 550, "Error creating file.");
+      close_data_socket(info);
+      return;
     }
 
-    while ((n = read(s, buf, FTPD_DATASIZE)) > 0)
+    if(info->xfer_mode == TYPE_I)
     {
-      if (0 > write(fd, buf, n))
+      while ((n = recv(s, buf, FTPD_DATASIZE, 0)) > 0)
       {
-        send_reply(info, 450, "Error during write.");
-        close(fd);
-        close_socket(s);
-        return(1);
+        if (write(fd, buf, n) != n)
+        {
+          res = 0;
+          break;
+        }
       }
     }
-    if (0 > close(fd))
+    else if(info->xfer_mode == TYPE_A)
     {
-      send_reply(info, 450, "Error during write.");
-      close_socket(s);
-      return(1);
+      int rest = 0;
+      int pended_cr = 0;
+      while (res && rest == 0 && (n = recv(s, buf, FTPD_DATASIZE, 0)) > 0)
+      {
+        char const* e = buf;
+        char const* b;
+        int i;
+
+        rest = n;
+        if(pended_cr && *e != '\n')
+        {
+          char const lf = '\r';
+          pended_cr = 0;
+          if(write(fd, &lf, 1) != 1)
+          {
+            res = 0;
+            break;
+          }
+        }
+        do
+        {
+          int count;
+          int sub = 0;
+
+          b = e;
+          for(i = 0; i < rest; ++i, ++e)
+          {
+            int pcr = pended_cr;
+            pended_cr = 0;
+            if(*e == '\r')
+            {
+              pended_cr = 1;
+            }
+            else if(*e == '\n')
+            {
+              if(pcr)
+              {
+                sub = 2;
+                ++i;
+                ++e;
+                break;
+              }
+              ++bare_lfs;
+            }
+          }
+          if(res == 0)
+            break;
+          count = i - sub - pended_cr;
+          if(count > 0 && write(fd, b, count) != count)
+          {
+            res = 0;
+            break;
+          }
+          if(sub == 2 && write(fd, e - 1, 1) != 1)
+            res = 0;
+        }
+        while((rest -= i) > 0);
+      }
     }
-    close_socket(s);
-    send_reply(info, 226, "Transfer complete.");
+
+    if (0 > close(fd) || res == 0)
+    {
+      send_reply(info, 452, "Error writing file.");
+      close_data_socket(info);
+      return;
+    }
   }
 
-  return(0);
+  if (bare_lfs > 0)
+  {
+    snprintf(buf, FTPD_BUFSIZE,
+      "Transfer complete. WARNING! %d bare linefeeds received in ASCII mode.",
+      bare_lfs);
+    send_reply(info, 226, buf);
+  }
+  else
+    send_reply(info, 226, "Transfer complete.");
+  close_data_socket(info);
+
 }
 
 
@@ -983,7 +1273,7 @@ command_store(FTPD_SessionInfo_t *info, char *filename)
  *
  * Input parameters:
  *   s - socket descriptor to send data to
- *   wide - if 0, send only file name. If not 0, send 'stat' info as well in
+ *   wide - if 0, send only file name.  If not 0, send 'stat' info as well in
  *          "ls -l" format.
  *   curTime - current time
  *   path - path to be prepended to what is given by 'add'
@@ -993,10 +1283,10 @@ command_store(FTPD_SessionInfo_t *info, char *filename)
  *   buf  - buffer for temporary data
  *
  * Output parameters:
- *   NONE
+ *   returns 0 on failure, 1 on success
  *
  */
-static void
+static int
 send_dirline(int s, int wide, time_t curTime, char const* path,
   char const* add, char const* fname, char* buf)
 {
@@ -1018,12 +1308,12 @@ send_dirline(int s, int wide, time_t curTime, char const* path,
       {
         buf[plen++] = '/';
         if(plen >= FTPD_BUFSIZE)
-          return;
+          return 0;
         buf[plen] = '\0';
       }
     }
     if(plen + alen >= FTPD_BUFSIZE)
-      return;
+      return 0;
     strcpy(buf + plen, add);
 
     if (stat(buf, &stat_buf) == 0)
@@ -1060,34 +1350,32 @@ send_dirline(int s, int wide, time_t curTime, char const* path,
         fname
       );
 
-      send(s, buf, len, 0);
+      if(send(s, buf, len, 0) != len)
+        return 0;
     }
   }
   else
   {
     int len = snprintf(buf, FTPD_BUFSIZE, "%s\r\n", fname);
-    send(s, buf, len, 0);
+    if(send(s, buf, len, 0) != len)
+      return 0;
   }
+  return 1;
 }
 
-/**************************************************************************
- * Function: command_list                                      *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    Sends a file list through a data connection.  The data              *
- *    connection must have already been opened with the "PORT" command.   *
- *                                                                        *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- *    char *fname  - File (or directory) to list.                         *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    none                                                                *
- *                                                                        *
- *************************************************************************/
+/*PAGE
+ *
+ * command_list
+ *
+ * Send file list to client.
+ *
+ * Input parameters:
+ *   info - corresponding SessionInfo structure
+ *   char *fname  - File (or directory) to list.
+ *
+ * Output parameters:
+ *   NONE
+ */
 static void
 command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
 {
@@ -1100,6 +1388,7 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
   time_t curTime;
   char const* res;
   char const* cwd = info->cwd;
+  int sc = 1;
 
   send_reply(info, 150, "Opening ASCII mode data connection for LIST.");
 
@@ -1130,24 +1419,27 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
   else
   {
     time(&curTime);
-    if(!dirp)
-      send_dirline(s, wide, curTime, path, "", fname, buf);
+    if(!dirp && *fname)
+      sc = sc && send_dirline(s, wide, curTime, path, "", fname, buf);
     else {
       /* FIXME: need "." and ".." only when '-a' option is given */
-      send_dirline(s, wide, curTime, path, "", ".", buf);
-      if(!strcmp(path, root))
-        send_dirline(s, wide, curTime, path, "", "..", buf);
-      else
-        send_dirline(s, wide, curTime, path, "..", "..", buf);
-      while ((dp = readdir(dirp)) != NULL)
-        send_dirline(s, wide, curTime, path, dp->d_name, dp->d_name, buf);
+      sc = sc && send_dirline(s, wide, curTime, path, "", ".", buf);
+      sc = sc && send_dirline(s, wide, curTime, path,
+        (strcmp(path, ftpd_root) ? ".." : ""), "..", buf);
+      while (sc && (dp = readdir(dirp)) != NULL)
+        sc = sc &&
+          send_dirline(s, wide, curTime, path, dp->d_name, dp->d_name, buf);
     }
   }
 
   if(dirp)
     closedir(dirp);
-  close_socket(s);
-  send_reply(info, 226, "Transfer complete.");
+  close_data_socket(info);
+
+  if(sc)
+    send_reply(info, 226, "Transfer complete.");
+  else
+    send_reply(info, 426, "Connection aborted.");
 }
 
 
@@ -1155,8 +1447,8 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
  *
  * rtems_ftpd_cwd
  *
- * Change current working directory. We use 'chdir' here only to validate the
- * new directory. We keep track of current working directory ourselves because
+ * Change current working directory.  We use 'chdir' here only to validate the
+ * new directory.  We keep track of current working directory ourselves because
  * current working directory in RTEMS isn't thread local, but we need it to be
  * session local.
  *
@@ -1190,7 +1482,7 @@ rtems_ftpd_cwd(FTPD_SessionInfo_t  *info, char *dir)
  *
  * command_mdtm
  *
- * Handle FTP MDTM command
+ * Handle FTP MDTM command (send file modification time to client)/
  *
  * Input parameters:
  *   info - corresponding SessionInfo structure
@@ -1198,7 +1490,6 @@ rtems_ftpd_cwd(FTPD_SessionInfo_t  *info, char *dir)
  *
  * Output parameters:
  *   info->cwd is set to new CWD value.
- *
  */
 static void
 command_mdtm(FTPD_SessionInfo_t  *info, char const* fname)
@@ -1206,10 +1497,7 @@ command_mdtm(FTPD_SessionInfo_t  *info, char const* fname)
   struct stat stbuf;
   char buf[FTPD_BUFSIZE];
 
-  if(*fname == '\0')
-    fname = ".";
-
-  if (stat(fname, &stbuf) < 0)
+  if (NULL == make_path(buf, info->cwd, fname) || 0 > stat(buf, &stbuf))
   {
     snprintf(buf, FTPD_BUFSIZE, "%s: %s.", fname, serr());
     send_reply(info, 550, buf);
@@ -1225,43 +1513,137 @@ command_mdtm(FTPD_SessionInfo_t  *info, char const* fname)
   }
 }
 
-/**************************************************************************
- * Function: command_port                                                 *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    This procedure opens up a data port given the IP address of the     *
- *    remote machine and the port on the remote machine.  This connection *
- *    will then be used to transfer data between the hosts.               *
- *                                                                        *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- *    char *bufr - Arguments to the "PORT" command.                       *
- *                                                                        *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    none                                                                *
- *                                                                        *
- *************************************************************************/
+/*PAGE
+ *
+ * command_port
+ *
+ * This procedure fills address for data connection given the IP address and
+ * port of the remote machine.
+ *
+ * Input parameters:
+ *   info - corresponding SessionInfo structure
+ *   args - arguments to the "PORT" command.
+ *
+ * Output parameters:
+ *   info->data_addr is set according to arguments of the PORT command.
+ *   info->use_default is set to 0 on success, 1 on failure.
+ */
 static void
-command_port(FTPD_SessionInfo_t *info, char *bufr)
+command_port(FTPD_SessionInfo_t *info, char const *args)
 {
-  char                *ip;
-  char                *port;
-  int                 ip0, ip1, ip2, ip3, port0, port1;
+  enum { NUM_FIELDS = 6 };
+  unsigned int a[NUM_FIELDS];
+  int n;
 
-  sscanf(bufr, "%d,%d,%d,%d,%d,%d", &ip0, &ip1, &ip2, &ip3, &port0, &port1);
-  ip = (char *)&(info->data_addr.sin_addr);
-  ip[0] = ip0 & 0xff;
-  ip[1] = ip1 & 0xff;
-  ip[2] = ip2 & 0xff;
-  ip[3] = ip3 & 0xff;
-  port = (char *)&(info->data_addr.sin_port);
-  port[0] = port0 & 0xff;
-  port[1] = port1 & 0xff;
-  info->data_addr.sin_family = AF_INET;
+  close_data_socket(info);
+
+  n = sscanf(args, "%u,%u,%u,%u,%u,%u", a+0, a+1, a+2, a+3, a+4, a+5);
+  if(NUM_FIELDS == n)
+  {
+    int i;
+    unsigned8 b[NUM_FIELDS];
+
+    for(i = 0; i < NUM_FIELDS; ++i)
+    {
+      if(a[i] > 255)
+        break;
+      b[i] = (unsigned8)a[i];
+    }
+
+    if(i == NUM_FIELDS)
+    {
+      /* Note: while it contradicts with RFC959, we don't allow PORT command
+       * to specify IP address different than those of the originating client
+       * for the sake of safety. */
+      unsigned32 const *ip   = (unsigned32 *)b;
+      if(*ip == info->def_addr.sin_addr.s_addr)
+      {
+        info->data_addr.sin_addr.s_addr = *ip;
+        info->data_addr.sin_port        = *(unsigned16 *)(b + 4);
+        info->data_addr.sin_family      = AF_INET;
+        memset(info->data_addr.sin_zero, 0, sizeof(info->data_addr.sin_zero));
+
+        info->use_default = 0;
+        send_reply(info, 200, "PORT command successful.");
+        return; /* success */
+      }
+      else
+      {
+        send_reply(info, 425, "Address doesn't match peer's IP.");
+        return;
+      }
+    }
+  }
+  send_reply(info, 501, "Syntax error.");
+}
+
+
+/*PAGE
+ *
+ * command_pasv
+ *
+ * Handle FTP PASV command.
+ * Open socket, listen for and accept connection on it.
+ *
+ * Input parameters:
+ *   info - corresponding SessionInfo structure
+ *
+ * Output parameters:
+ *   info->pasv_socket is set to the descriptor of the data socket
+ */
+static void
+command_pasv(FTPD_SessionInfo_t *info)
+{
+  int s = -1;
+  int err = 1;
+
+  close_data_socket(info);
+
+  s = socket(PF_INET, SOCK_STREAM, 0);
+  if (s < 0)
+    syslog(LOG_ERR, "ftpd: Error creating PASV socket: %s", serr());
+  else
+  {
+    struct sockaddr_in addr;
+    int addrLen = sizeof(addr);
+
+    addr = info->ctrl_addr;
+    addr.sin_port = htons(0);
+
+    if (0 > bind(s, (struct sockaddr *)&addr, addrLen))
+      syslog(LOG_ERR, "ftpd: Error binding PASV socket: %s", serr());
+    else if (0 > listen(s, 1))
+      syslog(LOG_ERR, "ftpd: Error listening on PASV socket: %s", serr());
+    else
+    {
+      char buf[FTPD_BUFSIZE];
+      unsigned char const *ip, *p;
+
+      getsockname(s, (struct sockaddr *)&addr, &addrLen);
+      ip = (unsigned char const*)&(addr.sin_addr);
+      p  = (unsigned char const*)&(addr.sin_port);
+      snprintf(buf, FTPD_BUFSIZE, "Entering passive mode (%u,%u,%u,%u,%u,%u).",
+        ip[0], ip[1], ip[2], ip[3], p[0], p[1]);
+      send_reply(info, 227, buf);
+
+      info->pasv_socket = accept(s, (struct sockaddr *)&addr, &addrLen);
+      close_socket(s);
+      if (0 > info->pasv_socket)
+        syslog(LOG_ERR, "ftpd: Error accepting PASV connection: %s", serr());
+      else
+        err = 0;
+    }
+  }
+  if(err)
+  {
+    /* (OSV) The note is from FreeBSD FTPD.
+     * Note: a response of 425 is not mentioned as a possible response to
+     * the PASV command in RFC959.  However, it has been blessed as a
+     * legitimate response by Jon Postel in a telephone conversation
+     * with Rick Adams on 25 Jan 89. */
+    send_reply(info, 425, "Can't open passive connection.");
+    close_socket(s);
+  }
 }
 
 
@@ -1276,111 +1658,151 @@ command_port(FTPD_SessionInfo_t *info, char *bufr)
  *
  * Output parameters:
  *   p  - is changed to point to first non-option argument
- *
  */
 static void
 skip_options(char **p)
 {
   char* buf = *p;
+  char* last = NULL;
   while(1) {
-    while(*buf == ' ')
+    while(isspace(*buf))
       ++buf;
     if(*buf == '-') {
       if(*++buf == '-') { /* `--' should terminate options */
-        ++buf;
-        while(*buf == ' ')
-          ++buf;
-        break;
+        if(isspace(*++buf)) {
+          last = buf;
+          do ++buf;
+          while(isspace(*buf));
+          break;
+        }
       }
-      while(*buf != ' ' && *buf != '\0')
+      while(*buf && !isspace(*buf))
         ++buf;
+      last = buf;
     }
     else
       break;
   }
+  if(last)
+    *last = '\0';
   *p = buf;
 }
 
-/**************************************************************************
- * Function: parse_command                                     *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    Here, we parse the commands that have come through the control      *
- *    connection.                                                         *
- *                                                                        *
- * FIXME: This section is somewhat of a hack.  We should have a better    *
- *        way to parse commands.                                          *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- *    char *bufr     - Pointer to the buffer which contains the command   *
- *                     text.                                              *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    none                                                                *
- *                                                                        *
- *************************************************************************/
+/*PAGE
+ *
+ * split_command
+ *
+ * Split command into command itself, options, and arguments. Command itself
+ * is converted to upper case.
+ *
+ * Input parameters:
+ *   buf - initial command string
+ *
+ * Output parameter:
+ *   buf  - is modified by inserting '\0' at ends of split entities
+ *   cmd  - upper-cased command code
+ *   opts - string containing all the options
+ *   args - string containing all the arguments
+ */
+void
+split_command(char *buf, char **cmd, char **opts, char **args)
+{
+  char* eoc;
+  char* p = buf;
+  while(isspace(*p))
+    ++p;
+  *cmd = p;
+  while(*p && !isspace(*p))
+  {
+    *p = toupper(*p);
+    ++p;
+  }
+  eoc = p;
+  if(*p)
+    *p++ = '\0';
+  while(isspace(*p))
+    ++p;
+  *opts = p;
+  skip_options(&p);
+  *args = p;
+  if(*opts == p)
+    *opts = eoc;
+  while(*p && *p != '\r' && *p != '\n')
+    ++p;
+  if(*p)
+    *p++ = '\0';
+}
+
+/*PAGE
+ *
+ * exec_command
+ *
+ * Parse and execute FTP command.
+ *
+ * FIXME: This section is somewhat of a hack.  We should have a better
+ *        way to parse commands.
+ *
+ * Input parameters:
+ *   info - corresponding SessionInfo structure
+ *   cmd  - command to be executed (upper-case)
+ *   args - arguments of the command
+ *   buf  - beginning of buffer where 'cmd' and 'args' reside.
+ *
+ * Output parameters:
+ *    NONE
+ */
 static void
-parse_command(FTPD_SessionInfo_t *info, char *bufr)
+exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args, char* buf)
 {
   char fname[FTPD_BUFSIZE];
+  int wrong_command = 0;
 
-  if (!strncmp("PORT", bufr, 4))
+  if (!strcmp("PORT", cmd))
   {
-    send_reply(info, 200, "PORT command successful.");
-    command_port(info, &bufr[5]);
+    command_port(info, args);
   }
-  else if (!strncmp("RETR", bufr, 4))
+  else if (!strcmp("PASV", cmd))
   {
-    sscanf(&bufr[5], "%254s", fname);
+    command_pasv(info);
+  }
+  else if (!strcmp("RETR", cmd))
+  {
+    sscanf(args, "%254s", fname);
     command_retrieve(info, fname);
   }
-  else if (!strncmp("STOR", bufr, 4))
+  else if (!strcmp("STOR", cmd))
   {
-    sscanf(&bufr[5], "%254s", fname);
+    sscanf(args, "%254s", fname);
     command_store(info, fname);
   }
-  else if (!strncmp("LIST", bufr, 4))
+  else if (!strcmp("LIST", cmd))
   {
-    bufr += 4;
-    skip_options(&bufr);
-    sscanf(bufr, "%254s", fname);
+    sscanf(args, "%254s", fname);
     command_list(info, fname, 1);
   }
-  else if (!strncmp("NLST", bufr, 4))
+  else if (!strcmp("NLST", cmd))
   {
-    bufr += 4;
-    skip_options(&bufr);
-    sscanf(bufr, "%254s", fname);
+    sscanf(args, "%254s", fname);
     command_list(info, fname, 0);
   }
-  else if (!strncmp("MDTM", bufr, 4))
+  else if (!strcmp("MDTM", cmd))
   {
-    bufr += 4;
-    skip_options(&bufr);
-    sscanf(bufr, "%254s", fname);
+    sscanf(args, "%254s", fname);
     command_mdtm(info, fname);
   }
-  else if (!strncmp("USER", bufr, 4))
+  else if (!strcmp("SYST", cmd))
   {
-    send_reply(info, 230, "User logged in.");
+    send_reply(info, 215, FTPD_SYSTYPE);
   }
-  else if (!strncmp("SYST", bufr, 4))
+  else if (!strcmp("TYPE", cmd))
   {
-    send_reply(info, 240, FTPD_SYSTYPE);
-  }
-  else if (!strncmp("TYPE", bufr, 4))
-  {
-    if (bufr[5] == 'I')
+    if (args[0] == 'I')
     {
       info->xfer_mode = TYPE_I;
       send_reply(info, 200, "Type set to I.");
     }
-    else if (bufr[5] == 'A')
+    else if (args[0] == 'A')
     {
-      /* FIXME: ASCII mode isn't actually supported yet. */
       info->xfer_mode = TYPE_A;
       send_reply(info, 200, "Type set to A.");
     }
@@ -1390,14 +1812,20 @@ parse_command(FTPD_SessionInfo_t *info, char *bufr)
       send_reply(info, 504, "Type not implemented.  Set to I.");
     }
   }
-  else if (!strncmp("PASS", bufr, 4))
+  else if (!strcmp("USER", cmd) || !strcmp("PASS", cmd))
   {
     send_reply(info, 230, "User logged in.");
   }
-  else if (!strncmp("DELE", bufr, 4))
+  else if (!strcmp("DELE", cmd))
   {
-    sscanf(&bufr[4], "%254s", fname);
-    if (unlink(fname) == 0)
+    if(!can_write())
+    {
+      send_reply(info, 550, "Access denied.");
+    }
+    else if (
+      1 == sscanf(args, "%254s", fname) &&
+      NULL != make_path(buf, info->cwd, fname) &&
+      unlink(buf) == 0)
     {
       send_reply(info, 257, "DELE successful.");
     }
@@ -1406,24 +1834,43 @@ parse_command(FTPD_SessionInfo_t *info, char *bufr)
       send_reply(info, 550, "DELE failed.");
     }
   }
-  else if (!strncmp("SITE CHMOD", bufr, 10))
+  else if (!strcmp("SITE", cmd))
   {
-    int mask;
-
-    sscanf(&bufr[11], "%o %254s", &mask, fname);
-    if (chmod(fname, (mode_t)mask) == 0)
+    char* opts;
+    split_command(args, &cmd, &opts, &args);
+    if(!strcmp("CHMOD", cmd))
     {
-      send_reply(info, 257, "CHMOD successful.");
+      int mask;
+
+      if(!can_write())
+      {
+        send_reply(info, 550, "Access denied.");
+      }
+      else if(
+        2 == sscanf(args, "%o %254s", &mask, fname) &&
+        NULL != make_path(buf, info->cwd, fname) &&
+        chmod(buf, (mode_t)mask) == 0)
+      {
+        send_reply(info, 257, "CHMOD successful.");
+      }
+      else
+      {
+        send_reply(info, 550, "CHMOD failed.");
+      }
     }
     else
-    {
-      send_reply(info, 550, "CHMOD failed.");
-    }
+      wrong_command = 1;
   }
-  else if (!strncmp("RMD", bufr, 3))
+  else if (!strcmp("RMD", cmd))
   {
-    sscanf(&bufr[4], "%254s", fname);
-    if (rmdir(fname) == 0)
+    if(!can_write())
+    {
+      send_reply(info, 550, "Access denied.");
+    }
+    else if (
+      1 == sscanf(args, "%254s", fname) &&
+      NULL != make_path(buf, info->cwd, fname) &&
+      rmdir(buf) == 0)
     {
       send_reply(info, 257, "RMD successful.");
     }
@@ -1432,10 +1879,16 @@ parse_command(FTPD_SessionInfo_t *info, char *bufr)
       send_reply(info, 550, "RMD failed.");
     }
   }
-  else if (!strncmp("MKD", bufr, 3))
+  else if (!strcmp("MKD", cmd))
   {
-    sscanf(&bufr[4], "%254s", fname);
-    if (mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
+    if(!can_write())
+    {
+      send_reply(info, 550, "Access denied.");
+    }
+    else if (
+      1 == sscanf(args, "%254s", fname) &&
+      NULL != make_path(buf, info->cwd, fname) &&
+      mkdir(buf, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
     {
       send_reply(info, 257, "MKD successful.");
     }
@@ -1444,152 +1897,139 @@ parse_command(FTPD_SessionInfo_t *info, char *bufr)
       send_reply(info, 550, "MKD failed.");
     }
   }
-  else if (!strncmp("CWD", bufr, 3))
+  else if (!strcmp("CWD", cmd))
   {
-    sscanf(&bufr[4], "%254s", fname);
+    sscanf(args, "%254s", fname);
     rtems_ftpd_cwd(info, fname);
   }
-  else if (!strncmp("CDUP", bufr, 4))
+  else if (!strcmp("CDUP", cmd))
   {
     rtems_ftpd_cwd(info, "..");
   }
-  else if (!strncmp("PWD", bufr, 3))
+  else if (!strcmp("PWD", cmd))
   {
     char const* cwd = "/";
     if(info->cwd[0])
       cwd = info->cwd;
-    snprintf(bufr, FTPD_BUFSIZE,
+    snprintf(buf, FTPD_BUFSIZE,
       "\"%s\" is the current directory.", cwd);
-    send_reply(info, 250, bufr);
+    send_reply(info, 250, buf);
   }
   else
-  {
-    send_reply(info, 500, "Unrecognized/unsupported command.");
-  }
+    wrong_command = 1;
+
+  if(wrong_command)
+    send_reply(info, 500, "Command not understood.");
 }
 
 
-/**************************************************************************
- * Function: session                                           *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    This task is started when the FTP daemon gets a service request     *
- *    from a remote machine.  Here, we watch for commands that will       *
- *    come through the "control" connection.  These commands are then     *
- *    parsed and executed until the connection is closed, either          *
- *    unintentionally or intentionally with the "QUIT" command.           *
- *                                                                        *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- *    rtems_task_argument arg - The daemon task passes the socket         *
- *                              which serves as the control connection.   *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    none                                                                *
- *                                                                        *
- *************************************************************************/
+/*PAGE
+ *
+ * session
+ *
+ * This task handles single session.  It is waked up when the FTP daemon gets a
+ * service request from a remote machine.  Here, we watch for commands that
+ * will come through the control connection.  These commands are then parsed
+ * and executed until the connection is closed, either unintentionally or
+ * intentionally with the "QUIT" command.
+ *
+ * Input parameters:
+ *   arg - pointer to corresponding SessionInfo.
+ *
+ * Output parameters:
+ *   NONE
+ */
 static void
 session(rtems_task_argument arg)
 {
-  char cmd[FTPD_BUFSIZE];
-  FTPD_SessionInfo_t  *info = (FTPD_SessionInfo_t  *)arg;
-  rtems_event_set set;
+  FTPD_SessionInfo_t  *const info = (FTPD_SessionInfo_t  *)arg;
 
-  while(1) {
+  while(1)
+  {
+    rtems_event_set set;
+
     rtems_event_receive(FTPD_RTEMS_EVENT, RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT,
       &set);
 
     send_reply(info, 220, FTPD_SERVER_MESSAGE);
 
-    info->cwd[0] = 0;
-    info->xfer_mode = TYPE_I;
-
     while (1)
     {
-      if (fgets(cmd, FTPD_BUFSIZE, info->ctrl_fp) == NULL)
+      char buf[FTPD_BUFSIZE];
+      char *cmd, *opts, *args;
+
+      if (fgets(buf, FTPD_BUFSIZE, info->ctrl_fp) == NULL)
       {
         syslog(LOG_INFO, "ftpd: Connection aborted.");
         break;
       }
 
-      if (!strncmp("QUIT", cmd, 4))
+      split_command(buf, &cmd, &opts, &args);
+
+      if (!strcmp("QUIT", cmd))
       {
         send_reply(info, 221, "Goodbye.");
         break;
       }
       else
       {
-        parse_command(info, cmd);
+        exec_command(info, cmd, args, buf);
       }
     }
 
     /* Close connection and put ourselves back into the task pool. */
+    close_data_socket(info);
     close_stream(info);
     task_pool_release(info);
   }
 }
 
 
-/**************************************************************************
- * Function: daemon                                            *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    This task runs in the background forever.  It waits for service     *
- *    requests on the FTP port (port 21).  When a request is received,    *
- *    it opens a new session to handle those requests until the           *
- *    connection is closed.                                               *
- *                                                                        *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- *    none                                                                *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    none                                                                *
- *                                                                        *
- *************************************************************************/
+/*PAGE
+ *
+ * daemon
+ *
+ * This task runs forever.  It waits for service requests on the FTP port
+ * (port 21 by default).  When a request is received, it opens a new session
+ * to handle those requests until the connection is closed.
+ *
+ * Input parameters:
+ *   NONE
+ *
+ * Output parameters:
+ *   NONE
+ */
 static void
 daemon()
 {
   int                 s;
   int                 addrLen;
-  struct sockaddr_in  remoteAddr;
-  struct sockaddr_in  localAddr;
-  char                sessionID;
+  struct sockaddr_in  addr;
   FTPD_SessionInfo_t  *info = NULL;
 
-
-  sessionID = 'a';
 
   s = socket(PF_INET, SOCK_STREAM, 0);
   if (s < 0)
     syslog(LOG_ERR, "ftpd: Error creating socket: %s", serr());
 
-  localAddr.sin_family      = AF_INET;
-  localAddr.sin_port        = htons(rtems_ftpd_configuration.port);
-  localAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-  memset(localAddr.sin_zero, '\0', sizeof(localAddr.sin_zero));
+  addr.sin_family      = AF_INET;
+  addr.sin_port        = htons(rtems_ftpd_configuration.port);
+  addr.sin_addr.s_addr = htonl(INADDR_ANY);
+  memset(addr.sin_zero, 0, sizeof(addr.sin_zero));
 
-  if (0 > bind(s, (struct sockaddr *)&localAddr, sizeof(localAddr)))
+  if (0 > bind(s, (struct sockaddr *)&addr, sizeof(addr)))
     syslog(LOG_ERR, "ftpd: Error binding control socket: %s", serr());
-
-  if (0 > listen(s, 1))
+  else if (0 > listen(s, 1))
     syslog(LOG_ERR, "ftpd: Error listening on control socket: %s", serr());
-
-  while (1)
+  else while (1)
   {
     int ss;
-    addrLen = sizeof(remoteAddr);
-    ss = accept(s, (struct sockaddr *)&remoteAddr, &addrLen);
+    addrLen = sizeof(addr);
+    ss = accept(s, (struct sockaddr *)&addr, &addrLen);
     if (0 > ss)
-    {
       syslog(LOG_ERR, "ftpd: Error accepting control connection: %s", serr());
-    }
+    else if(!set_socket_timeout(ss, ftpd_timeout))
+      close_socket(ss);
     else
     {
       info = task_pool_obtain();
@@ -1599,8 +2039,8 @@ daemon()
       }
       else
       {
-        info->socket = ss;
-        if ((info->ctrl_fp = fdopen(info->socket, "r+")) == NULL)
+        info->ctrl_socket = ss;
+        if ((info->ctrl_fp = fdopen(info->ctrl_socket, "r+")) == NULL)
         {
           syslog(LOG_ERR, "ftpd: fdopen() on socket failed: %s", serr());
           close_stream(info);
@@ -1608,33 +2048,49 @@ daemon()
         }
         else
         {
-          /* Wakeup the session task. The task will call task_pool_release
-             after it closes connection. */
-          rtems_event_send(info->tid, FTPD_RTEMS_EVENT);
+          /* Initialize corresponding SessionInfo structure */
+          info->def_addr = addr;
+          if(0 > getsockname(ss, (struct sockaddr *)&addr, &addrLen))
+          {
+            syslog(LOG_ERR, "ftpd: getsockname(): %s", serr());
+            close_stream(info);
+            task_pool_release(info);
+          }
+          else
+          {
+            info->use_default = 1;
+            info->ctrl_addr  = addr;
+            info->pasv_socket = -1;
+            info->xfer_mode = TYPE_A;
+            info->cwd[0] = '\0';
+            info->data_addr.sin_port =
+              htons(ntohs(info->ctrl_addr.sin_port) - 1);
+            info->idle = ftpd_timeout;
+            /* Wakeup the session task.  The task will call task_pool_release
+               after it closes connection. */
+            rtems_event_send(info->tid, FTPD_RTEMS_EVENT);
+          }
         }
       }
     }
   }
+  rtems_task_delete(RTEMS_SELF);
 }
 
 
-/**************************************************************************
- * Function: rtems_ftpd_start                                             *
- **************************************************************************
- * Description:                                                           *
- *                                                                        *
- *    Here, we start the FTPD task which waits for FTP requests and       *
- *    services them.  This procedure returns to its caller once the       *
- *    task is started.                                                    *
- *                                                                        *
- *                                                                        *
- * Inputs:                                                                *
- *                                                                        *
- * Output:                                                                *
- *                                                                        *
- *    int - RTEMS_SUCCESSFUL on successful start of the daemon.           *
- *                                                                        *
- *************************************************************************/
+/*PAGE
+ *
+ * rtems_ftpd_start
+ *
+ * Here, we start the FTPD task which waits for FTP requests and services
+ * them.  This procedure returns to its caller once the task is started.
+ *
+ *
+ * Input parameters:
+ *
+ * Output parameters:
+ *    returns RTEMS_SUCCESSFUL on successful start of the daemon.
+ */
 int
 rtems_initialize_ftpd()
 {
@@ -1653,6 +2109,13 @@ rtems_initialize_ftpd()
     rtems_ftpd_configuration.priority = 40;
   }
   priority = rtems_ftpd_configuration.priority;
+
+  ftpd_timeout = rtems_ftpd_configuration.idle;
+  if (ftpd_timeout < 0)
+    ftpd_timeout = 0;
+  rtems_ftpd_configuration.idle = ftpd_timeout;
+
+  ftpd_access = rtems_ftpd_configuration.access;
 
   if (rtems_ftpd_configuration.tasks_count <= 0)
     rtems_ftpd_configuration.tasks_count = 1;
@@ -1686,15 +2149,15 @@ rtems_initialize_ftpd()
     return RTEMS_UNSATISFIED;
   }
 
-  root[0] = '\0';
+  ftpd_root[0] = '\0';
   if (
     rtems_ftpd_configuration.root &&
     strlen(rtems_ftpd_configuration.root) < FTPD_BUFSIZE &&
     rtems_ftpd_configuration.root[0] == '/')
   {
-    strcpy(root, rtems_ftpd_configuration.root);
-    squeeze_path(root);
-    rtems_ftpd_configuration.root = root;
+    strcpy(ftpd_root, rtems_ftpd_configuration.root);
+    squeeze_path(ftpd_root, NULL);
+    rtems_ftpd_configuration.root = ftpd_root;
   }
 
   syslog(LOG_INFO, "ftpd: FTP daemon started (%d session%s max)",

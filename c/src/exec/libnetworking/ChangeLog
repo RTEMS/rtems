@@ -1,3 +1,33 @@
+2001-01-24	Sergei Organov <osv@javad.ru>
+
+	* rtems_servers/ftpd.c, rtems_servers/ftpd.h: Major enhancements
+	as listed below:
+	  - Timeouts on sockets implemented. 'idle' field added to
+	    configuration. No timeout by default to keep backward compatibility.
+	    Note: SITE IDLE command not implemented yet.
+	  - Basic global access control implemented. 'access' field added to
+	    configuration. No access limitations by default to keep backward
+	    compatibility.
+	  - Anchor data socket for active mode (using self IP and port 20.)
+	  - Fixed default data port support (still not tested).
+	  - Don't allow IP address different from originating host in
+	    PORT command to improve security.
+	  - Fixed bug in MDTM command.
+	  - Check for correctness of parsing of argument in command_port().
+	  - Fixed squeeze_path() to don't allow names like 'NAME/smth' where
+	    'NAME' is not a directory.
+	  - Command parsing a little bit improved: command names are now
+	    converted to upper-case to be more compatible with RFC (command
+	    names are not case-sensitive.)
+	  - Reformat comments so that they have RTEMS look-and-feel.
+	  - Fixed DELE, SITE CHMOD, RMD, MKD broken by previous changes
+	  - True ASCII mode implemented (doesn't work for hooks and /dev/null)
+	  - Passive mode implemented, PASV command added.
+	  - Default port for data connection could be used (untested, can't find
+	    ftp client that doesn't send PORT command)
+	  - SYST reply changed to UNIX, as former RTEMS isn't registered name.
+	  - Reply codes reviewed and fixed.
+
 2001-01-12	Sergei Organov <osv@javad.ru>
 
 	* rtems_servers/ftpd.c, rtems_servers/ftpd.h: Major enhancements
