@@ -1,3 +1,8 @@
+2005-02-17	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/pci.h: Merge differences from
+	libbsp/powerpc/shared/pci/pci.h.
+
 2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/vm/vm_param.h: Update from FreeBSD.

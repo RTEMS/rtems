@@ -1082,7 +1082,10 @@
 #define PCIBIOS_SET_FAILED		0x88
 #define PCIBIOS_BUFFER_TOO_SMALL	0x89
 
-#define PCI_MAX_DEVICES			16
+/* T. Straumann, 7/31/2001: increased to 32 - PMC slots are not
+ * scanned on mvme2306 otherwise
+ */
+#define PCI_MAX_DEVICES			32
 #define PCI_MAX_FUNCTIONS		8
 
 typedef struct  {
@@ -1101,9 +1104,9 @@ typedef struct  {
 }pci_config_access_functions;
 
 typedef struct {
-  volatile unsigned char*	pci_config_addr;
-  volatile unsigned char*	pci_config_data;
-  pci_config_access_functions*	pci_functions;
+  volatile unsigned char*	      pci_config_addr;
+  volatile unsigned char*	      pci_config_data;
+  const pci_config_access_functions*  pci_functions;
 } pci_config;
 
 extern pci_config BSP_pci_configuration;
