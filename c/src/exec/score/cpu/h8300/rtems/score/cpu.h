@@ -25,6 +25,8 @@ extern "C" {
 #include <rtems/score/h8300types.h>
 #endif
 
+#include <rtems/bspIo.h>	/* printk */
+
 /* conditional compilation parameters */
 
 /*
