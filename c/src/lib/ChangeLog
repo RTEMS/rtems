@@ -1,5 +1,10 @@
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* include/sys/Makefile.am: Use = instead of += to setup
+	NETWORKING_H_FILES and NEWLIB_H_FILES.
+
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* libc/Makefile.am: Revamp INCLUDES handling to make automake-1.5
 	happy.
 

@@ -8,11 +8,11 @@ include_sysdir = $(includedir)/sys
 
 if HAS_NETWORKING
 else
-NETWORKING_H_FILES += ioctl.h
+NETWORKING_H_FILES = ioctl.h
 endif
 
 if NEWLIB
-NEWLIB_H_FILES += termios.h cdefs.h
+NEWLIB_H_FILES = termios.h cdefs.h
 endif
 
 include_sys_HEADERS = ioccom.h ttycom.h utime.h \
