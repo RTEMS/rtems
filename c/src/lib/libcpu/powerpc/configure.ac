@@ -48,17 +48,8 @@ AM_CONDITIONAL(ppc405, test "$RTEMS_CPU_MODEL" = "ppc405")
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 mpc505/Makefile
-mpc505/timer/Makefile
-mpc505/vectors/Makefile
-mpc505/ictrl/Makefile
 mpc8xx/Makefile
 ppc403/Makefile
-ppc403/clock/Makefile
-ppc403/console/Makefile
-ppc403/tty_drv/Makefile
-ppc403/ictrl/Makefile
-ppc403/timer/Makefile
-ppc403/vectors/Makefile
 mpc6xx/Makefile
 mpc8260/Makefile
 shared/Makefile

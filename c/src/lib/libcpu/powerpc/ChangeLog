@@ -1,10 +1,21 @@
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ppc403/clock/Makefile.am: Remove.
+	* ppc403/console/Makefile.am: Remove.
+	* ppc403/ictrl/Makefile.am: Remove.
+	* ppc403/timer/Makefile.am: Remove.
+	* ppc403/tty_drv/Makefile.am: Remove.
+	* ppc403/vectors/Makefile.am: Remove.
+	* ppc403/Makefile.am: Merge-in Makefile.ams above.
+	* configure.ac: Reflect changes to ppc403/Makefile.ams.
+
+2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mpc505/ictrl/Makefile.am: Remove.
 	* mpc505/timer/Makefile.am: Remove.
 	* mpc505/vectors/Makefile.am: Remove.
 	* mpc505/Makefile.am: Merge-in Makefile.ams above.
-	* configure.ac: Reflect changes to mpc8xx/Makefile.ams.
+	* configure.ac: Reflect changes to mpc505/Makefile.ams.
 
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
