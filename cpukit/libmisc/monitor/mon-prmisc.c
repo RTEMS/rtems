@@ -41,7 +41,7 @@ rtems_monitor_pad(
     return fprintf(stdout,"%*s", pad_length, "");
 }
 
-uint32_t
+int
 rtems_monitor_dump_char(char ch)
 {
     if (isprint(ch))
@@ -50,19 +50,19 @@ rtems_monitor_dump_char(char ch)
         return fprintf(stdout,"%02x", ch);
 }
 
-uint32_t
+int
 rtems_monitor_dump_decimal(uint32_t   num)
 {
     return fprintf(stdout,"%4d", num);
 }
 
-uint32_t
+int
 rtems_monitor_dump_hex(uint32_t   num)
 {
     return fprintf(stdout,"0x%x", num);
 }
 
-uint32_t
+int
 rtems_monitor_dump_assoc_bitfield(
     rtems_assoc_t *ap,
     char          *separator,
@@ -90,17 +90,17 @@ rtems_monitor_dump_assoc_bitfield(
     return length;
 }
 
-uint32_t
+int
 rtems_monitor_dump_id(rtems_id id)
 {
     return fprintf(stdout,"%08x", id);
 }
 
-uint32_t
+int
 rtems_monitor_dump_name(rtems_name name)
 {
     uint32_t   i;
-    uint32_t   length = 0;
+    int   length = 0;
     union {
         uint32_t   ui;
         char       c[4];
@@ -118,7 +118,7 @@ rtems_monitor_dump_name(rtems_name name)
     return length;
 }
 
-uint32_t
+int
 rtems_monitor_dump_priority(rtems_task_priority priority)
 {
     return fprintf(stdout,"%3d", priority);
@@ -146,10 +146,10 @@ rtems_assoc_t rtems_monitor_state_assoc[] = {
     { 0, 0, 0 },
 };
 
-uint32_t
+int
 rtems_monitor_dump_state(States_Control state)
 {
-    uint32_t   length = 0;
+    int   length = 0;
 
     if (state == STATES_READY)  /* assoc doesn't deal with this as it is 0 */
         length += fprintf(stdout,"READY");
@@ -169,10 +169,10 @@ rtems_assoc_t rtems_monitor_attribute_assoc[] = {
     { 0, 0, 0 },
 };
 
-uint32_t
+int
 rtems_monitor_dump_attributes(rtems_attribute attributes)
 {
-    uint32_t   length = 0;
+    int   length = 0;
 
     if (attributes == RTEMS_DEFAULT_ATTRIBUTES)  /* value is 0 */
         length += fprintf(stdout,"DEFAULT");
@@ -190,7 +190,7 @@ rtems_assoc_t rtems_monitor_modes_assoc[] = {
     { 0, 0, 0 },
 };
 
-uint32_t
+int
 rtems_monitor_dump_modes(rtems_mode modes)
 {
     uint32_t   length = 0;
@@ -240,7 +240,7 @@ rtems_assoc_t rtems_monitor_events_assoc[] = {
     { 0, 0, 0 },
 };
 
-uint32_t
+int
 rtems_monitor_dump_events(rtems_event_set events)
 {
     uint32_t   length = 0;
@@ -254,10 +254,10 @@ rtems_monitor_dump_events(rtems_event_set events)
     return length;
 }
 
-uint32_t
+int
 rtems_monitor_dump_notepad(uint32_t   *notepad)
 {
-    uint32_t   length = 0;
+    int   length = 0;
     int i;
 
     for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)

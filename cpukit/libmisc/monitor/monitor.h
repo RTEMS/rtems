@@ -359,17 +359,17 @@ void    rtems_monitor_help_cmd(int, char **, rtems_monitor_command_arg_t *, bool
 /* prmisc.c */
 void       rtems_monitor_separator(void);
 uint32_t   rtems_monitor_pad(uint32_t   dest_col, uint32_t   curr_col);
-uint32_t   rtems_monitor_dump_char(char   ch);
-uint32_t   rtems_monitor_dump_decimal(uint32_t   num);
-uint32_t   rtems_monitor_dump_hex(uint32_t   num);
-uint32_t   rtems_monitor_dump_id(rtems_id id);
-uint32_t   rtems_monitor_dump_name(rtems_name name);
-uint32_t   rtems_monitor_dump_priority(rtems_task_priority priority);
-uint32_t   rtems_monitor_dump_state(States_Control state);
-uint32_t   rtems_monitor_dump_modes(rtems_mode modes);
-uint32_t   rtems_monitor_dump_attributes(rtems_attribute attributes);
-uint32_t   rtems_monitor_dump_events(rtems_event_set events);
-uint32_t   rtems_monitor_dump_notepad(uint32_t   *notepad);
+int        rtems_monitor_dump_char(char   ch);
+int        rtems_monitor_dump_decimal(uint32_t   num);
+int        rtems_monitor_dump_hex(uint32_t   num);
+int        rtems_monitor_dump_id(rtems_id id);
+int        rtems_monitor_dump_name(rtems_name name);
+int        rtems_monitor_dump_priority(rtems_task_priority priority);
+int        rtems_monitor_dump_state(States_Control state);
+int        rtems_monitor_dump_modes(rtems_mode modes);
+int        rtems_monitor_dump_attributes(rtems_attribute attributes);
+int        rtems_monitor_dump_events(rtems_event_set events);
+int        rtems_monitor_dump_notepad(uint32_t   *notepad);
 
 /* object.c */
 rtems_id   rtems_monitor_id_fixup(rtems_id, uint32_t  , rtems_monitor_object_type_t);
