@@ -370,29 +370,33 @@ sub subst_line
       }
     }
     elsif ( /^[\s]*([^\s+=]+)[\s]*\=[\s]*(.*)$/o )
-    { # makefile variable
+    { # makefile variables
       if ( ( "$1" eq "subdir" )
-        or ( "$1" eq "top_srcdir" )
+	or ( "$1" eq "top_srcdir" )
 	or ( "$1" eq "top_builddir" )
 	or ( "$1" eq "RTEMS_ROOT" )
-        or ( "$1" eq "PROJECT_ROOT" )
+	or ( "$1" eq "PROJECT_ROOT" )
 	or ( "$1" eq "INSTALL" )
 	or ( "$1" eq "PACKHEX" )
-        or ( "$1" eq "INSTALL_CHANGE" )
+	or ( "$1" eq "INSTALL_CHANGE" )
 	or ( "$1" eq "mkinstalldirs" )
+	or ( "$1" eq "ACLOCAL" )
+	or ( "$1" eq "AUTOCONF" )
+	or ( "$1" eq "ACLOCAL_M4" )
+	or ( "$1" eq "ACLOCAL_AMFLAGS" )
       )
       {
-        print STDERR "REMOVE: $1\n" if $verbose ;
+	print STDERR "REMOVE: $1\n" if $verbose ;
       }
       elsif ( "$1" eq "srcdir" )
       { # place marker
-        push @tbuf, "§0\n";
+	push @tbuf, "§0\n";
       }
       elsif ( "$1" eq "INSTALLDIRS" )
       { # process the block
 	my $input = $2 ;
 	$input =~ s/\\\\/ /g ;
-        my @l = split(' ',$input);
+	my @l = split(' ',$input);
         foreach (@l)
         {
           if ( /[\s]*([^\s]+)[\s]*$/o )
@@ -467,7 +471,11 @@ sub subst_line
       }
 
       if ( ( "$1" eq "Makefile" )
-        or ( "$1" eq "\$\(INSTALLDIRS\)" ) )
+        or ( "$1" eq "\$\(INSTALLDIRS\)" )
+        or ( "$1" eq "\$\(ACLOCAL_M4\)" )
+        or ( "$1" eq "config\.status" )
+        or ( "$1" eq "\$\(srcdir\)/configure" )
+      )
       { # delete entry 
         shift @buffer ;
       }
@@ -578,7 +586,17 @@ if ( $experimental > 1 )
       print "srcdir = \@srcdir\@\n" ;
       print "top_srcdir = \@top_srcdir\@\n" ; 
       print "top_builddir = $top_builddir\n" ;
-      print "subdir = $subdir\n" if "$subdir" ;
+      if ( "$subdir" )
+      {
+	print "subdir = $subdir\n";
+      }
+      else
+      {
+	print "\nACLOCAL = aclocal\n" ;
+	print "AUTOCONF = autoconf\n" ;
+	print "ACLOCAL_M4 = \$(top_srcdir)/aclocal.m4\n" ;
+	print "ACLOCAL_AMFLAGS = -I \@RTEMS_TOPdir\@/aclocal\n" ;
+      }
       print "\nRTEMS_ROOT = \@RTEMS_ROOT\@\n" ;
       print "PROJECT_ROOT = \@PROJECT_ROOT\@\n\n" ;
       $nl_seen = 1 ;
@@ -639,10 +657,21 @@ print "\$@ CONFIG_HEADERS= \$(SHELL) ./config.status\n";
 else
 {
 print "Makefile: \$(srcdir)/Makefile.in \$(top_builddir)/config.status\n" ;
-print "	cd \$(top_builddir) \\\n" ;
-print "	 && CONFIG_FILES=" ;
+print "\tcd \$(top_builddir) \\\n" ;
+print "\t && CONFIG_FILES=" ;
 print "\$(subdir)/" if ( "$subdir" );
 print "\$@ CONFIG_HEADERS= \$(SHELL) ./config.status\n";
+}
+
+if ( ! "$subdir" )
+{
+print "\n\$(ACLOCAL_M4): \@MAINTAINER_MODE_TRUE\@ configure.in\n" ;
+print "\tcd \$(srcdir) && \$(ACLOCAL) \$(ACLOCAL_AMFLAGS)\n" ;
+print "\nconfig.status: \$(srcdir)/configure \$(CONFIG_STATUS_DEPENDENCIES)\n" ;
+print "\t\$(SHELL) ./config.status --recheck\n" ;
+print "\$(srcdir)/configure: \@MAINTAINER_MODE_TRUE\@\$(srcdir)/configure.in";
+print " \$(ACLOCAL_M4)\n" ;
+print "\tcd \$(srcdir) && \$(AUTOCONF)\n"
 }
 
 ;1
