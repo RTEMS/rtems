@@ -19,6 +19,7 @@
 #include <pmacros.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sched.h>
 
 void *POSIX_Init(
   void *argument
@@ -36,6 +37,8 @@ void *Task_1_through_3(
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
+
+#define CONFIGURE_MAXIMUM_POSIX_THREADS     2
 
 #include <confdefs.h>
 
