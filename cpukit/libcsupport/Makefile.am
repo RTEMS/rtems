@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS = start include libc libcpu libbsp \
+SUBDIRS = include libc libcpu libbsp \
     $(LIBHWAPI)
 
 include $(top_srcdir)/../../../automake/subdirs.am

@@ -52,12 +52,6 @@ if test "$RTEMS_HAS_HWAPI" = "yes"; then
 fi
 AC_SUBST(LIBHWAPI)
 
-if test -d "${srcdir}/start/$RTEMS_CPU"; then
-cfg_subdirs="$cfg_subdirs start/$RTEMS_CPU"
-RTEMS_CPU_STARTdir="$RTEMS_CPU"
-fi
-AC_SUBST(RTEMS_CPU_STARTdir)
-
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 AC_CONFIG_SUBDIRS($cfg_subdirs)
@@ -72,5 +66,4 @@ include/Makefile
 include/sys/Makefile
 include/motorola/Makefile
 include/zilog/Makefile
-libc/Makefile
-start/Makefile)
+libc/Makefile)
