@@ -1,3 +1,30 @@
+2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* psx01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx11/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxcancel/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx02/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx13/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxtime/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxchroot01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx07/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxmsgq01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxtimer/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx10/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx08/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxhdrs/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxfile01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx05/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx09/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxmount/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxstat/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx12/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxreaddir/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psxsem01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx03/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx04/Makefile.am: include leaf.am instead of leaf.cfg.
+	* psx06/Makefile.am: include leaf.am instead of leaf.cfg.
+
 2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
 
 	* psxchroot01/.cvsignore, psxchroot01/Makefile.am, psxchroot01/main.c,
