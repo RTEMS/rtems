@@ -206,7 +206,7 @@ rtems_termios_open (
 		/*
 		 * Create a new device
 		 */
-		tty = malloc (sizeof (struct rtems_termios_tty));
+		tty = calloc (1, sizeof (struct rtems_termios_tty));
 		if (tty == NULL) {
 			rtems_semaphore_release (ttyMutex);
 			return RTEMS_NO_MEMORY;
@@ -219,7 +219,6 @@ rtems_termios_open (
 
 		tty->minor = minor;
 		tty->major = major;
-		tty->refcount = 0;
 
 		/*
 		 * Set up mutex semaphores
@@ -250,6 +249,8 @@ rtems_termios_open (
 			rtems_fatal_error_occurred (sc);
 		tty->rawOutBufHead = 0;
 		tty->rawOutBufTail = 0;
+		tty->refcount = 0;
+		tty->rawOutBufState = rob_idle;
 
 		/*
 		 * Set callbacks
