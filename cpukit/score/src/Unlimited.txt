@@ -192,22 +192,22 @@ o Object Information Structure
       all memory is used. When false the current functionallity is
       maintained.
 
-    unsigned32 allocation_size -
+    uint32_t   allocation_size -
     
       When auto_extend is true, it is the value in the Configuration
       table and is the number of objects the object's information
       tables are extended or shrunk.
 
-   unsigned32 size -
+   uint32_t   size -
    
       The size of the object. It is used to calculate the size of
       memory required to be allocated when extending the table.
 
-   unsigned32 inactive -
+   uint32_t   inactive -
    
       The number of elements on the Inactive chain.
 
-   unsigned32 *inactive_per_block -
+   uint32_t   *inactive_per_block -
    
       Pointer to a table of counts of the inactive objects from a
       block on the Inactive chain. It is used to know which blocks are

@@ -36,7 +36,7 @@ const char *_Thread_Idle_name = "IDLE";
 void _Thread_Create_idle( void )
 {
   void       *idle;
-  unsigned32  idle_task_stack_size;
+  uint32_t    idle_task_stack_size;
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all

@@ -183,7 +183,7 @@ void _User_extensions_Thread_exitted (
 void _User_extensions_Fatal (
   Internal_errors_Source  the_source,
   boolean                 is_internal,
-  unsigned32              the_error
+  uint32_t                the_error
 )
 {
   Chain_Node              *the_node;

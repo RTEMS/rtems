@@ -45,7 +45,7 @@
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control       *the_semaphore,
   CORE_semaphore_Attributes    *the_semaphore_attributes,
-  unsigned32                    initial_value
+  uint32_t                      initial_value
 )
 {
 

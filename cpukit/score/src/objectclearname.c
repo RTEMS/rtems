@@ -34,12 +34,12 @@
 
 void _Objects_Clear_name(
   void       *name,
-  unsigned32  length
+  uint32_t    length
 )
 {
-  unsigned32  index;
-  unsigned32  maximum = length / OBJECTS_NAME_ALIGNMENT;
-  unsigned32 *name_ptr = (unsigned32 *) name;
+  uint32_t    index;
+  uint32_t    maximum = length / OBJECTS_NAME_ALIGNMENT;
+  uint32_t   *name_ptr = (uint32_t   *) name;
 
   for ( index=0 ; index < maximum ; index++ ) 
     *name_ptr++ = 0;

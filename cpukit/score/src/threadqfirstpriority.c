@@ -39,7 +39,7 @@ Thread_Control *_Thread_queue_First_priority (
   Thread_queue_Control *the_thread_queue
 )
 {
-  unsigned32 index;
+  uint32_t   index;
 
   for( index=0 ;
        index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;

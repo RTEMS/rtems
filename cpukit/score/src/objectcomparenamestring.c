@@ -44,7 +44,7 @@
 boolean _Objects_Compare_name_string(
   void       *name_1,
   void       *name_2,
-  unsigned32  length
+  uint32_t    length
 )
 {
   if ( !strncmp( name_1, name_2, length ) )

@@ -31,7 +31,7 @@ void _Watchdog_Insert(
 {
   ISR_Level          level;
   Watchdog_Control  *after;
-  unsigned32         insert_isr_nest_level;
+  uint32_t           insert_isr_nest_level;
   Watchdog_Interval  delta_interval;
   
 

@@ -42,7 +42,7 @@
  
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 Thread _Thread_Idle_body(
-  unsigned32 ignored
+  uint32_t   ignored
 )
 {
   for( ; ; ) ;

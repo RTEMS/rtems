@@ -54,7 +54,7 @@ Objects_Control *_Objects_Get_isr_disable(
 )
 {
   Objects_Control *the_object;
-  unsigned32       index;
+  uint32_t         index;
   ISR_Level        level;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -63,7 +63,7 @@ Objects_Control *_Objects_Get_isr_disable(
   /* index = _Objects_Get_index( id ); */
   index = id & 0x0000ffff;
   /* This should work but doesn't always :( */
-  /* index = (unsigned16) id; */
+  /* index = (uint16_t  ) id; */
 #endif
 
   _ISR_Disable( level );

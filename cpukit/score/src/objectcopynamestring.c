@@ -36,8 +36,8 @@ void _Objects_Copy_name_string(
   void       *destination
 )
 {
-  unsigned8 *source_p = (unsigned8 *) source;
-  unsigned8 *destination_p = (unsigned8 *) destination;
+  uint8_t   *source_p = (uint8_t   *) source;
+  uint8_t   *destination_p = (uint8_t   *) destination;
  
   *destination_p = '\0';
   if ( source_p ) {

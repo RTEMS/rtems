@@ -26,12 +26,12 @@
  
 void _Workspace_Handler_initialization(
   void       *starting_address,
-  unsigned32  size
+  uint32_t    size
 )
 {
-  unsigned32 *zero_out_array;
-  unsigned32  index;
-  unsigned32  memory_available;
+  uint32_t   *zero_out_array;
+  uint32_t    index;
+  uint32_t    memory_available;
  
   if ( !starting_address || !_Addresses_Is_aligned( starting_address ) )
     _Internal_error_Occurred(
@@ -41,8 +41,8 @@ void _Workspace_Handler_initialization(
     );
  
   if ( _CPU_Table.do_zero_of_workspace ) {
-    for( zero_out_array  = (unsigned32 *) starting_address, index = 0 ;
-         index < size / sizeof( unsigned32 ) ;
+    for( zero_out_array  = (uint32_t   *) starting_address, index = 0 ;
+         index < size / sizeof( uint32_t   ) ;
          index++ )
       zero_out_array[ index ] = 0;
   }
@@ -69,7 +69,7 @@ void _Workspace_Handler_initialization(
  */
 
 void *_Workspace_Allocate_or_fatal_error(
-  unsigned32   size
+  uint32_t     size
 )
 {
   void        *memory;

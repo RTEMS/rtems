@@ -43,8 +43,8 @@ Thread_Control *_Thread_Get (
   Objects_Locations   *location
 )
 {
-  unsigned32           the_api;
-  unsigned32           the_class;
+  uint32_t             the_api;
+  uint32_t             the_class;
   Objects_Information *information;
   Thread_Control      *tp = (Thread_Control *) 0;
  

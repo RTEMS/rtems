@@ -49,7 +49,7 @@ void _Thread_Set_transient(
 )
 {
   ISR_Level             level;
-  unsigned32            old_state;
+  uint32_t              old_state;
   Chain_Control *ready;
 
   ready = the_thread->ready;

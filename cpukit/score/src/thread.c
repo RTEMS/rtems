@@ -40,12 +40,12 @@
  */
 
 void _Thread_Handler_initialization(
-  unsigned32   ticks_per_timeslice,
-  unsigned32   maximum_extensions,
-  unsigned32   maximum_proxies
+  uint32_t     ticks_per_timeslice,
+  uint32_t     maximum_extensions,
+  uint32_t     maximum_proxies
 )
 {
-  unsigned32      index;
+  uint32_t        index;
 
   /*
    * BOTH stacks hooks must be set or both must be NULL.

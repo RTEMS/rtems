@@ -35,12 +35,12 @@
 Heap_Extend_status _Heap_Extend(
   Heap_Control        *the_heap,
   void                *starting_address,
-  unsigned32           size,
-  unsigned32          *amount_extended
+  uint32_t             size,
+  uint32_t            *amount_extended
 )
 {
   Heap_Block        *the_block;
-  unsigned32        *p;
+  uint32_t          *p;
   
   /*
    *  The overhead was taken from the original heap memory.
@@ -102,8 +102,8 @@ Heap_Extend_status _Heap_Extend(
    *  So add in the offset field.
    */
 
-  p = (unsigned32 *) &old_final->next;
-  *p = sizeof(unsigned32);
+  p = (uint32_t   *) &old_final->next;
+  *p = sizeof(uint32_t  );
   p++;
   _Heap_Free( the_heap, p );
   

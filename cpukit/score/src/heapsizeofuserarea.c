@@ -37,12 +37,12 @@
 boolean _Heap_Size_of_user_area(
   Heap_Control        *the_heap,
   void                *starting_address,
-  unsigned32          *size
+  uint32_t            *size
 )
 {
   Heap_Block        *the_block;
   Heap_Block        *next_block;
-  unsigned32         the_size;
+  uint32_t           the_size;
 
   the_block = _Heap_User_block_at( starting_address );
   

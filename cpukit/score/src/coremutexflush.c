@@ -40,7 +40,7 @@
 void _CORE_mutex_Flush(
   CORE_mutex_Control         *the_mutex,
   Thread_queue_Flush_callout  remote_extract_callout,
-  unsigned32                  status
+  uint32_t                    status
 )
 {
   _Thread_queue_Flush(

@@ -25,7 +25,7 @@
  */
 
 void _Thread_MP_Handler_initialization (
-  unsigned32  maximum_proxies
+  uint32_t    maximum_proxies
 )
 {
 
@@ -112,7 +112,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
  */
 
 #define _Thread_MP_Proxy_Active_offset \
-     ((unsigned32)&(((Thread_Proxy_control *)0))->Active)
+     ((uint32_t  )&(((Thread_Proxy_control *)0))->Active)
 
 Thread_Control *_Thread_MP_Find_proxy (
   Objects_Id  the_id

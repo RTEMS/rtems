@@ -39,9 +39,9 @@
  */
 
 void _Objects_Handler_initialization(
-  unsigned32 node,
-  unsigned32 maximum_nodes,
-  unsigned32 maximum_global_objects
+  uint32_t   node,
+  uint32_t   maximum_nodes,
+  uint32_t   maximum_global_objects
 )
 {
   if ( node < 1 || node > maximum_nodes )

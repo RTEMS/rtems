@@ -36,9 +36,9 @@
  *  Set the Start.stack field to the address of the stack
  */
 
-unsigned32 _Thread_Stack_Allocate(
+uint32_t   _Thread_Stack_Allocate(
   Thread_Control *the_thread,
-  unsigned32 stack_size
+  uint32_t   stack_size
 )
 {
   void *stack_addr = 0;

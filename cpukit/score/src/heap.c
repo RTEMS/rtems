@@ -55,15 +55,15 @@
  *            +--------------------------------+
  */
 
-unsigned32 _Heap_Initialize(
+uint32_t   _Heap_Initialize(
   Heap_Control        *the_heap,
   void                *starting_address,
-  unsigned32           size,
-  unsigned32           page_size
+  uint32_t             size,
+  uint32_t             page_size
 )
 {
   Heap_Block        *the_block;
-  unsigned32         the_size;
+  uint32_t           the_size;
 
   if ( !_Heap_Is_page_size_valid( page_size ) ||
        (size < HEAP_MINIMUM_SIZE) )

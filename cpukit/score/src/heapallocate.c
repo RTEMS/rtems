@@ -33,20 +33,20 @@
 
 void *_Heap_Allocate(
   Heap_Control        *the_heap,
-  unsigned32           size
+  uint32_t             size
 )
 {
-  unsigned32  excess;
-  unsigned32  the_size;
+  uint32_t    excess;
+  uint32_t    the_size;
   Heap_Block *the_block;
   Heap_Block *next_block;
   Heap_Block *temporary_block;
   void       *ptr;
-  unsigned32  offset;
+  uint32_t    offset;
 
   /*
    * Catch the case of a user allocating close to the limit of the
-   * unsigned32.
+   * uint32_t  .
    */
 
   if ( size >= (-1 - HEAP_BLOCK_USED_OVERHEAD) )
@@ -96,14 +96,14 @@ void *_Heap_Allocate(
    * Have to save the bump amount in the buffer so that free can figure it out
    */
   
-  offset = the_heap->page_size - (((unsigned32) ptr) & (the_heap->page_size - 1));
+  offset = the_heap->page_size - (((uint32_t  ) ptr) & (the_heap->page_size - 1));
   ptr = _Addresses_Add_offset( ptr, offset );
-  *(((unsigned32 *) ptr) - 1) = offset;
+  *(((uint32_t   *) ptr) - 1) = offset;
 
 #ifdef RTEMS_DEBUG
   {
-      unsigned32 ptr_u32;
-      ptr_u32 = (unsigned32) ptr;
+      uint32_t   ptr_u32;
+      ptr_u32 = (uint32_t  ) ptr;
       if (ptr_u32 & (the_heap->page_size - 1))
           abort();
   }

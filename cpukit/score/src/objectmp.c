@@ -25,9 +25,9 @@
  */
 
 void _Objects_MP_Handler_initialization (
-  unsigned32 node,
-  unsigned32 maximum_nodes,
-  unsigned32 maximum_global_objects
+  uint32_t   node,
+  uint32_t   maximum_nodes,
+  uint32_t   maximum_global_objects
 )
 {
   _Objects_MP_Maximum_global_objects = maximum_global_objects;
@@ -57,7 +57,7 @@ void _Objects_MP_Handler_initialization (
 void _Objects_MP_Open (
   Objects_Information *information,
   Objects_MP_Control  *the_global_object,
-  unsigned32           the_name,      /* XXX -- wrong for variable */
+  uint32_t             the_name,      /* XXX -- wrong for variable */
   Objects_Id           the_id
 )
 {
@@ -79,7 +79,7 @@ void _Objects_MP_Open (
 
 boolean _Objects_MP_Allocate_and_open (
   Objects_Information *information,
-  unsigned32           the_name,      /* XXX -- wrong for variable */
+  uint32_t             the_name,      /* XXX -- wrong for variable */
   Objects_Id           the_id,
   boolean              is_fatal_error
 )
@@ -153,19 +153,19 @@ void _Objects_MP_Close (
 Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
   Objects_Information *information,
   Objects_Name         the_name,
-  unsigned32           nodes_to_search,
+  uint32_t             nodes_to_search,
   Objects_Id          *the_id
 )
 {
-  unsigned32          low_node;
-  unsigned32          high_node;
-  unsigned32          node_index;
+  uint32_t            low_node;
+  uint32_t            high_node;
+  uint32_t            node_index;
   Chain_Control      *the_chain;
   Chain_Node         *the_node;
   Objects_MP_Control *the_object;
-  unsigned32          name_to_use;
+  uint32_t            name_to_use;
 
-  name_to_use = *(unsigned32 *)the_name;  /* XXX only fixed length names */
+  name_to_use = *(uint32_t   *)the_name;  /* XXX only fixed length names */
 
   if ( nodes_to_search > _Objects_Maximum_nodes )
     return OBJECTS_INVALID_NODE;
@@ -226,7 +226,7 @@ void _Objects_MP_Is_remote (
   Objects_Control     **the_object
 )
 {
-  unsigned32          node;
+  uint32_t            node;
   Chain_Control      *the_chain;
   Chain_Node         *the_node;
   Objects_MP_Control *the_global_object;

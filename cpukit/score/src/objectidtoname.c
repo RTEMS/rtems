@@ -36,8 +36,8 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Name   *name
 )
 {
-  unsigned32           the_api;
-  unsigned32           the_class;
+  uint32_t             the_api;
+  uint32_t             the_class;
   Objects_Information *information;
   Objects_Control     *the_object = (Objects_Control *) 0;
   Objects_Locations    ignored_location;

@@ -41,7 +41,7 @@
 void _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
   CORE_mutex_Attributes        *the_mutex_attributes,
-  unsigned32                    initial_lock
+  uint32_t                      initial_lock
 )
 {
 

@@ -51,12 +51,12 @@
 boolean _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
   CORE_message_queue_Attributes *the_message_queue_attributes,
-  unsigned32                     maximum_pending_messages,
-  unsigned32                     maximum_message_size
+  uint32_t                       maximum_pending_messages,
+  uint32_t                       maximum_message_size
 )
 {
-  unsigned32 message_buffering_required;
-  unsigned32 allocated_message_size;
+  uint32_t   message_buffering_required;
+  uint32_t   allocated_message_size;
 
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
@@ -68,9 +68,9 @@ boolean _CORE_message_queue_Initialize(
    */
  
   allocated_message_size = maximum_message_size;
-  if (allocated_message_size & (sizeof(unsigned32) - 1)) {
-      allocated_message_size += sizeof(unsigned32);
-      allocated_message_size &= ~(sizeof(unsigned32) - 1);
+  if (allocated_message_size & (sizeof(uint32_t  ) - 1)) {
+      allocated_message_size += sizeof(uint32_t  );
+      allocated_message_size &= ~(sizeof(uint32_t  ) - 1);
   }
    
   message_buffering_required = maximum_pending_messages *

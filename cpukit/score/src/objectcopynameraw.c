@@ -34,12 +34,12 @@
 void _Objects_Copy_name_raw(
   void       *source,
   void       *destination,
-  unsigned32  length
+  uint32_t    length
 )
 {
-  unsigned32 *source_p = (unsigned32 *) source;
-  unsigned32 *destination_p = (unsigned32 *) destination;
-  unsigned32  tmp_length = length / OBJECTS_NAME_ALIGNMENT;
+  uint32_t   *source_p = (uint32_t   *) source;
+  uint32_t   *destination_p = (uint32_t   *) destination;
+  uint32_t    tmp_length = length / OBJECTS_NAME_ALIGNMENT;
  
   while ( tmp_length-- )
     *destination_p++ = *source_p++;

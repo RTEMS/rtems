@@ -38,7 +38,7 @@
 void _Thread_queue_Flush(
   Thread_queue_Control       *the_thread_queue,
   Thread_queue_Flush_callout  remote_extract_callout,
-  unsigned32                  status
+  uint32_t                    status
 )
 {
   Thread_Control *the_thread;

@@ -44,7 +44,7 @@
 void _CORE_semaphore_Flush(
   CORE_semaphore_Control     *the_semaphore,
   Thread_queue_Flush_callout  remote_extract_callout,
-  unsigned32                  status
+  uint32_t                    status
 )
 {
  

@@ -46,14 +46,14 @@
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   Objects_Information *information,
   Objects_Name         name,
-  unsigned32           node,
+  uint32_t             node,
   Objects_Id          *id
 )
 {
   boolean                    search_local_node;
   Objects_Control           *the_object;
-  unsigned32                 index;
-  unsigned32                 name_length;
+  uint32_t                   index;
+  uint32_t                   name_length;
   Objects_Name_comparators   compare_them;
 
   if ( name == 0 )

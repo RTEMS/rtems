@@ -39,12 +39,12 @@ void _Objects_Free(
   Objects_Control     *the_object
 )
 {
-  unsigned32  allocation_size = information->allocation_size;
+  uint32_t    allocation_size = information->allocation_size;
 
   _Chain_Append( &information->Inactive, &the_object->Node );
 
   if ( information->auto_extend ) {
-    unsigned32  block;
+    uint32_t    block;
     
     block = 
       _Objects_Get_index( the_object->id ) - _Objects_Get_index( information->minimum_id );

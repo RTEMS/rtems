@@ -41,7 +41,7 @@ boolean _Thread_Start(
   Thread_Start_types    the_prototype,
   void                 *entry_point,
   void                 *pointer_argument,
-  unsigned32            numeric_argument
+  uint32_t              numeric_argument
 )
 {
   if ( _States_Is_dormant( the_thread->current_state ) ) {

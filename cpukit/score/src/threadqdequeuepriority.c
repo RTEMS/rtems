@@ -42,7 +42,7 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   Thread_queue_Control *the_thread_queue
 )
 {
-  unsigned32      index;
+  uint32_t        index;
   ISR_Level       level;
   Thread_Control *the_thread = NULL;  /* just to remove warnings */
   Thread_Control *new_first_thread;

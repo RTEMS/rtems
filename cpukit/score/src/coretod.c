@@ -31,7 +31,7 @@
  */
 
 void _TOD_Handler_initialization(
-  unsigned32 microseconds_per_tick
+  uint32_t   microseconds_per_tick
 )
 {
   _TOD_Microseconds_per_tick = microseconds_per_tick;

@@ -46,7 +46,7 @@
 
 Objects_Control *_Objects_Get_by_index(
   Objects_Information *information,
-  unsigned32           index,
+  uint32_t             index,
   Objects_Locations   *location
 )
 {

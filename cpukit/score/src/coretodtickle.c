@@ -38,7 +38,7 @@ void _TOD_Tickle(
   void       *ignored
 )
 {
-  unsigned32 leap;
+  uint32_t   leap;
 
   _TOD_Current.ticks = 0;
   ++_TOD_Seconds_since_epoch;

@@ -20,8 +20,8 @@
 
 void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
 {
-  unsigned32           i;
-  unsigned32           api_index;
+  uint32_t             i;
+  uint32_t             api_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
  

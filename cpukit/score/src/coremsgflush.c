@@ -43,7 +43,7 @@
  *    returns - the number of messages flushed from the queue
  */
  
-unsigned32 _CORE_message_queue_Flush(
+uint32_t   _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue
 )
 {

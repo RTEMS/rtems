@@ -37,7 +37,7 @@
 
 void _MPCI_Handler_initialization( 
   MPCI_Control            *users_mpci_table,
-  unsigned32               timeout_status
+  uint32_t                 timeout_status
 )
 {
   CORE_semaphore_Attributes    attributes;
@@ -212,14 +212,14 @@ void _MPCI_Return_packet (
  */
 
 void _MPCI_Send_process_packet (
-  unsigned32          destination,
+  uint32_t            destination,
   MP_packet_Prefix   *the_packet
 )
 {
   the_packet->source_tid = _Thread_Executing->Object.id;
   the_packet->to_convert =
      ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) /
-       sizeof(unsigned32);
+       sizeof(uint32_t  );
 
   (*_MPCI_table->send_packet)( destination, the_packet );
 }
@@ -232,8 +232,8 @@ void _MPCI_Send_process_packet (
  *  MPCI send callout.
  */
 
-unsigned32 _MPCI_Send_request_packet (
-  unsigned32          destination,
+uint32_t   _MPCI_Send_request_packet (
+  uint32_t            destination,
   MP_packet_Prefix   *the_packet,
   States_Control      extra_state
 )
@@ -242,7 +242,7 @@ unsigned32 _MPCI_Send_request_packet (
   the_packet->source_priority = _Thread_Executing->current_priority;
   the_packet->to_convert =
      ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) /
-       sizeof(unsigned32);
+       sizeof(uint32_t  );
 
   _Thread_Executing->Wait.id = the_packet->id;
 
@@ -280,7 +280,7 @@ unsigned32 _MPCI_Send_request_packet (
  */
 
 void _MPCI_Send_response_packet (
-  unsigned32          destination,
+  uint32_t            destination,
   MP_packet_Prefix   *the_packet
 )
 {
@@ -344,7 +344,7 @@ Thread_Control *_MPCI_Process_response (
  */
 
 Thread _MPCI_Receive_server(
-  unsigned32 ignored
+  uint32_t   ignored
 )
 {
  
@@ -463,8 +463,8 @@ void _MPCI_Internal_packets_Process_packet (
 )
 {
   MPCI_Internal_packet *the_packet;
-  unsigned32                  maximum_nodes;
-  unsigned32                  maximum_global_objects;
+  uint32_t                    maximum_nodes;
+  uint32_t                    maximum_global_objects;
  
   the_packet = (MPCI_Internal_packet *) the_packet_prefix;
  

@@ -53,7 +53,7 @@ Objects_Control *_Objects_Allocate(
     }
   
     if ( the_object ) {
-      unsigned32 block;
+      uint32_t   block;
     
       block = _Objects_Get_index( the_object->id ) -
               _Objects_Get_index( information->minimum_id );

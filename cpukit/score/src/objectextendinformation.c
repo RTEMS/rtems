@@ -45,11 +45,11 @@ void _Objects_Extend_information(
   Objects_Control  *the_object;
   void             *name_area;
   Chain_Control     Inactive;
-  unsigned32        block_count;
-  unsigned32        block;
-  unsigned32        index_base;
-  unsigned32        minimum_index;
-  unsigned32        index;
+  uint32_t          block_count;
+  uint32_t          block;
+  uint32_t          index_base;
+  uint32_t          minimum_index;
+  uint32_t          index;
 
   /*
    *  Search for a free block of indexes. The block variable ends up set
@@ -81,9 +81,9 @@ void _Objects_Extend_information(
     ISR_Level         level;
     void            **object_blocks;
     Objects_Name     *name_table;
-    unsigned32       *inactive_per_block;
+    uint32_t         *inactive_per_block;
     Objects_Control **local_table;
-    unsigned32        maximum;
+    uint32_t          maximum;
     void             *old_tables;    
     
     /*
@@ -96,7 +96,7 @@ void _Objects_Extend_information(
      *  The allocation has :
      *
      *      void            *objects[block_count];
-     *      unsigned32       inactive_count[block_count];
+     *      uint32_t         inactive_count[block_count];
      *      Objects_Name    *name_table[block_count];
      *      Objects_Control *local_table[maximum];
      *
@@ -120,7 +120,7 @@ void _Objects_Extend_information(
       object_blocks = (void**)
         _Workspace_Allocate(
           block_count *
-             (sizeof(void *) + sizeof(unsigned32) + sizeof(Objects_Name *)) +
+             (sizeof(void *) + sizeof(uint32_t  ) + sizeof(Objects_Name *)) +
           ((maximum + minimum_index) * sizeof(Objects_Control *))
           );
 
@@ -131,7 +131,7 @@ void _Objects_Extend_information(
       object_blocks = (void**)
         _Workspace_Allocate_or_fatal_error(
           block_count * 
-             (sizeof(void *) + sizeof(unsigned32) + sizeof(Objects_Name *)) +
+             (sizeof(void *) + sizeof(uint32_t  ) + sizeof(Objects_Name *)) +
           ((maximum + minimum_index) * sizeof(Objects_Control *))
         );
     }
@@ -141,10 +141,10 @@ void _Objects_Extend_information(
      *
      */
      
-    inactive_per_block = (unsigned32 *) _Addresses_Add_offset(
+    inactive_per_block = (uint32_t   *) _Addresses_Add_offset(
         object_blocks, block_count * sizeof(void*) );
     name_table = (Objects_Name *) _Addresses_Add_offset(
-        inactive_per_block, block_count * sizeof(unsigned32) );
+        inactive_per_block, block_count * sizeof(uint32_t  ) );
     local_table = (Objects_Control **) _Addresses_Add_offset(
         name_table, block_count * sizeof(Objects_Name *) );
     
@@ -167,7 +167,7 @@ void _Objects_Extend_information(
               block_count * sizeof(void*) );
       memcpy( inactive_per_block,
               information->inactive_per_block,
-              block_count * sizeof(unsigned32) );
+              block_count * sizeof(uint32_t  ) );
       memcpy( name_table,
               information->name_table,
               block_count * sizeof(Objects_Name *) );

@@ -42,7 +42,7 @@ boolean _Heap_Free(
   Heap_Block        *new_next_block;
   Heap_Block        *previous_block;
   Heap_Block        *temporary_block;
-  unsigned32         the_size;
+  uint32_t           the_size;
 
   the_block = _Heap_User_block_at( starting_address );
 

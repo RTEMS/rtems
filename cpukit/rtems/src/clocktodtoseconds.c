@@ -32,12 +32,12 @@
  *    returns    - seconds since epoch until the_tod
  */
 
-unsigned32 _TOD_To_seconds(
+uint32_t   _TOD_To_seconds(
   TOD_Control *the_tod
 )
 {
-  unsigned32 time;
-  unsigned32 year_mod_4;
+  uint32_t   time;
+  uint32_t   year_mod_4;
 
   time = the_tod->day - 1;
   year_mod_4 = the_tod->year & 3;

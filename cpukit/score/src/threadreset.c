@@ -39,7 +39,7 @@
 void _Thread_Reset(
   Thread_Control      *the_thread,
   void                *pointer_argument,
-  unsigned32           numeric_argument
+  uint32_t             numeric_argument
 )
 {
   the_thread->resource_count   = 0;

@@ -38,7 +38,7 @@ boolean _TOD_Validate(
   TOD_Control *the_tod
 )
 {
-  unsigned32 days_in_month;
+  uint32_t   days_in_month;
 
   if ((the_tod->ticks  >= _TOD_Ticks_per_second)  ||
       (the_tod->second >= TOD_SECONDS_PER_MINUTE) ||

@@ -59,7 +59,7 @@ void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
   Objects_Id                       id,
   void                            *buffer,
-  unsigned32                      *size,
+  uint32_t                        *size,
   boolean                          wait,
   Watchdog_Interval                timeout
 )
@@ -103,7 +103,7 @@ void _CORE_message_queue_Seize(
      */
 
     the_message->priority  = the_thread->Wait.count;
-    the_message->Contents.size = (unsigned32)the_thread->Wait.return_argument_1;
+    the_message->Contents.size = (uint32_t  )the_thread->Wait.return_argument_1;
     _CORE_message_queue_Copy_buffer(
       the_thread->Wait.return_argument,
       the_message->Contents.buffer,

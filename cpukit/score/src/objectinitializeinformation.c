@@ -46,11 +46,11 @@
 void _Objects_Initialize_information(
   Objects_Information *information,
   Objects_APIs         the_api,
-  unsigned32           the_class,
-  unsigned32           maximum,
-  unsigned32           size,
+  uint32_t             the_class,
+  uint32_t             maximum,
+  uint32_t             size,
   boolean              is_string,
-  unsigned32           maximum_name_length
+  uint32_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
   boolean              supports_global,
@@ -59,10 +59,10 @@ void _Objects_Initialize_information(
 )
 {
   static Objects_Control *null_local_table = NULL;
-  unsigned32       minimum_index;
-  unsigned32       name_length;
+  uint32_t         minimum_index;
+  uint32_t         name_length;
 #if defined(RTEMS_MULTIPROCESSING)
-  unsigned32       index;
+  uint32_t         index;
 #endif
 
   information->the_api            = the_api;

@@ -45,10 +45,10 @@ void _Objects_Shrink_information(
 {
   Objects_Control  *the_object;
   Objects_Control  *extract_me;
-  unsigned32        block_count;
-  unsigned32        block;
-  unsigned32        index_base;
-  unsigned32        index;
+  uint32_t          block_count;
+  uint32_t          block;
+  uint32_t          index_base;
+  uint32_t          index;
 
   /*
    * Search the list to find block or chunnk with all objects inactive.

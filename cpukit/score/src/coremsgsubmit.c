@@ -56,7 +56,7 @@
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
-  unsigned32                                 size,
+  uint32_t                                   size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   CORE_message_queue_Submit_types            submit_type,
@@ -84,7 +84,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
         the_thread->Wait.return_argument,
         size
       );
-      *(unsigned32 *)the_thread->Wait.return_argument_1 = size;
+      *(uint32_t   *)the_thread->Wait.return_argument_1 = size;
       the_thread->Wait.count = submit_type;
     
 #if defined(RTEMS_MULTIPROCESSING)

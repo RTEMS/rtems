@@ -40,10 +40,10 @@ void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,
   Thread_queue_Disciplines      the_discipline,
   States_Control                state,
-  unsigned32                    timeout_status
+  uint32_t                      timeout_status
 )
 {
-  unsigned32 index;
+  uint32_t   index;
 
   the_thread_queue->state          = state;
   the_thread_queue->discipline     = the_discipline;

@@ -47,7 +47,7 @@
  *    only case
  */
 
-unsigned32 _CORE_message_queue_Flush_support(
+uint32_t   _CORE_message_queue_Flush_support(
   CORE_message_queue_Control *the_message_queue
 )
 {
@@ -55,7 +55,7 @@ unsigned32 _CORE_message_queue_Flush_support(
   Chain_Node *inactive_first;
   Chain_Node *message_queue_first;
   Chain_Node *message_queue_last;
-  unsigned32  count;
+  uint32_t    count;
 
   /*
    *  Currently, RTEMS supports no API that has both flush and blocking

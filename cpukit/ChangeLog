@@ -1,10 +1,46 @@
+2004-04-29	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* score/src/Unlimited.txt, score/src/chain.c, score/src/coremsg.c,
+	score/src/coremsgbroadcast.c, score/src/coremsgclose.c,
+	score/src/coremsgflush.c, score/src/coremsgflushsupp.c,
+	score/src/coremsgseize.c, score/src/coremsgsubmit.c,
+	score/src/coremutex.c, score/src/coremutexflush.c,
+	score/src/coresem.c, score/src/coresemflush.c, score/src/coretod.c,
+	score/src/coretodtickle.c, score/src/coretodtoseconds.c,
+	score/src/coretodvalidate.c, score/src/heap.c,
+	score/src/heapallocate.c, score/src/heapextend.c,
+	score/src/heapfree.c, score/src/heapsizeofuserarea.c,
+	score/src/interr.c, score/src/iterateoverthreads.c,
+	score/src/mpci.c, score/src/object.c, score/src/objectallocate.c,
+	score/src/objectallocatebyindex.c, score/src/objectclearname.c,
+	score/src/objectcomparenameraw.c,
+	score/src/objectcomparenamestring.c, score/src/objectcopynameraw.c,
+	score/src/objectcopynamestring.c,
+	score/src/objectextendinformation.c, score/src/objectfree.c,
+	score/src/objectget.c, score/src/objectgetbyindex.c,
+	score/src/objectgetisr.c, score/src/objectgetnoprotection.c,
+	score/src/objectidtoname.c, score/src/objectinitializeinformation.c,
+	score/src/objectmp.c, score/src/objectnametoid.c,
+	score/src/objectshrinkinformation.c, score/src/thread.c,
+	score/src/threadcreateidle.c, score/src/threadget.c,
+	score/src/threadidlebody.c, score/src/threadinitialize.c,
+	score/src/threadmp.c, score/src/threadq.c,
+	score/src/threadqdequeuepriority.c,
+	score/src/threadqenqueuepriority.c,
+	score/src/threadqfirstpriority.c, score/src/threadqflush.c,
+	score/src/threadreset.c, score/src/threadrestart.c,
+	score/src/threadsettransient.c, score/src/threadstackallocate.c,
+	score/src/threadstart.c, score/src/userext.c,
+	score/src/watchdoginsert.c, score/src/wkspace.c: Convert to using
+	c99 fixed size types.
+
 2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	PR 561/rtems
 	* include/rtems/concat.h: New.
 	* Makefile.am: Add include/rtems/concat.h.
 	
-	PR/589 rtems
+	PR 589/rtems
 	* Makefile.am: Add include/rtems/pci.h.
 
 	* Makefile.am: Include automake/compile.am.

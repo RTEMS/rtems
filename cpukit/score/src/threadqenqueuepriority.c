@@ -50,7 +50,7 @@ void _Thread_queue_Enqueue_priority(
   Thread_Control      *search_thread;
   ISR_Level            level;
   Chain_Control       *header;
-  unsigned32           header_index;
+  uint32_t             header_index;
   Chain_Node          *the_node;
   Chain_Node          *next_node;
   Chain_Node          *previous_node;
