@@ -1,3 +1,8 @@
+2003-07-08	Joel Sherrill <joel@OARcorp.com>
+
+	PR 419/rtems
+	* src/termios.c: Removed warning.
+
 2003-07-02	Chris Johns <cjohns@cybertec.com.au>
 
 	* include/rtems/libio.h, src/termios.c: Patch by Chris Johns
