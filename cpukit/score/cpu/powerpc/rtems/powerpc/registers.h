@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __rtems_powerpc_registers_h
-#define __rtems_powerpc_registers_h
+#ifndef _RTEMS_POWERPC_REGISTERS_H
+#define _RTEMS_POWERPC_REGISTERS_H
 
 #ifdef __cplusplus
 extern "C" {

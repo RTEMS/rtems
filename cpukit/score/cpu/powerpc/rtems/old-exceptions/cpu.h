@@ -30,10 +30,10 @@
  *  $Id$
  */
 
-#ifndef __CPU_h
-#define __CPU_h
+#ifndef _RTEMS_OLD_EXCEPTIONS_CPU_H
+#define _RTEMS_OLD_EXCEPTIONS_CPU_H
 
-#ifndef _rtems_score_cpu_h
+#ifndef _RTEMS_SCORE_CPU_H
 #error "You should include <rtems/score/cpu.h>"
 #endif
 
