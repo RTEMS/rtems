@@ -23,7 +23,7 @@ $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
 
-all-local: $(ARCH) $(OBJS) $(ARCH)/start.$(OBJEXT) $(TMPINSTALL_FILES)
+all-local: $(OBJS) $(ARCH)/start.$(OBJEXT) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(ARCH)/start.$(OBJEXT)
 
