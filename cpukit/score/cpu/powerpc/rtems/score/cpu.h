@@ -5,7 +5,7 @@
 #ifndef _rtems_score_cpu_h
 #define _rtems_score_cpu_h
 
-#include <rtems/score/ppc.h>              /* pick up machine definitions */
+#include <rtems/score/powerpc.h>              /* pick up machine definitions */
 #ifndef ASM
 #include <rtems/score/types.h>
 #endif

@@ -8,8 +8,11 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = asm.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
-include_rtems_score_HEADERS = rtems/score/ppc.h rtems/score/types.h
-include_rtems_score_HEADERS += rtems/score/cpu.h
+include_rtems_score_HEADERS = rtems/score/powerpc.h rtems/score/cpu.h \
+    rtems/score/types.h
+if DEPRECATED
+include_rtems_score_HEADERS += rtems/score/ppc.h
+endif
 
 include_rtems_old_exceptionsdir = $(includedir)/rtems/old-exceptions
 include_rtems_old_exceptions_HEADERS = rtems/old-exceptions/cpu.h
@@ -39,17 +42,23 @@ $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/score/ppc.h: rtems/score/ppc.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc.h
+$(PROJECT_INCLUDE)/rtems/score/powerpc.h: rtems/score/powerpc.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/powerpc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/powerpc.h
+
+$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu.h
 
 $(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
-$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu.h
+if DEPRECATED
+$(PROJECT_INCLUDE)/rtems/score/ppc.h: rtems/score/ppc.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc.h
+endif
 
 $(PROJECT_INCLUDE)/rtems/old-exceptions/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/old-exceptions
