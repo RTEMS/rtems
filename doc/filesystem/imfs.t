@@ -473,7 +473,6 @@ memory based filesystem, no further action is required to alter the
 ownership of the IMFS_jnode_t structure.
 
 
-
 @c
 @c
 @c
@@ -483,19 +482,52 @@ ownership of the IMFS_jnode_t structure.
 
 @subheading Corresponding Structure Element:
 
-XXX
+IMFS_freenod()
 
 @subheading Arguments:
 
-XXX
+@example
+rtems_filesystem_location_info_t      *pathloc       /* IN */
+@end example
 
 @subheading File:
 
-XXX
+imfs_free.c
 
 @subheading Description:
 
-XXX 
+This method is a private function to the IMFS.  It is called by IMFS routines
+to free nodes that have been allocated.  Examples of where this routine
+may be called from are unlink and rmnod.  
+
+Note:  This routine should not be confused with the filesystem callback
+freenod.  The IMFS allocates memory until the node no longer exists.
+
+@c
+@c
+@c
+@c @page
+
+@subsubsection IMFS_freenodinfo()
+
+@subheading Corresponding Structure Element:
+
+IMFS_freenodinfo()
+
+@subheading Arguments:
+
+@example
+rtems_filesystem_location_info_t      *pathloc       /* IN */
+@end example
+
+@subheading File:
+
+imfs_free.c
+
+@subheading Description:
+
+The In-Memory File System does not need to allocate memory during the
+evaluate routines. Therefore, this routine simply routines PASS.
 
 
 @c
@@ -681,31 +713,7 @@ otherwise a 1 will be returned.
 
 @subheading Corresponding Structure Element:
 
-XXX
-
-@subheading Arguments:
-
-XXX
-
-@subheading File:
-
-XXX
-
-@subheading Description:
-
-XXX 
-
-
-@c
-@c
-@c
-@c @page
-
-@subsubsection IMFS_fsunmount_me()
-
-@subheading Corresponding Structure Element:
-
-imfs_fsunmount_me()
+IMFS_unmount()
 
 @subheading Arguments:
 
@@ -715,12 +723,49 @@ rtems_filesystem_mount_table_entry_t   *mt_entry
 
 @subheading File:
 
-imfs_fsunmount_me.c
+imfs_unmount.c
 
 @subheading Description:
 
-XXX 
+This routine allows the IMFS to unmount a filesystem that has been
+mounted onto a IMFS directory.  
 
+The mount entry mount point node access is verified to be a mounted
+directory.  It's mt_fs is set to NULL.  This identifies to future
+calles into the IMFS that this directory node is no longer a mount
+point.  Additionally, it will allow any directories that were hidden
+by the mounted system to again become visible.
+
+@c
+@c
+@c
+@c @page
+
+@subsubsection IMFS_fsunmount()
+
+@subheading Corresponding Structure Element:
+
+imfs_fsunmount()
+
+@subheading Arguments:
+
+@example
+rtems_filesystem_mount_table_entry_t   *mt_entry    
+@end example
+
+@subheading File:
+
+imfs_init.c
+
+@subheading Description:
+
+This method unmounts this instance of the IMFS file system.  It is the
+counterpart to the IMFS_initialize routine.  It is called by the generic
+code under the fsunmount_me callback.
+
+All method loops finding the first encountered node with no children and
+removing the node from the tree, thus returning allocated resources.  This
+is done until all allocated nodes are returned.
 
 @c
 @c
