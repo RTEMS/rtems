@@ -263,9 +263,9 @@ typedef struct m360SCCENparms_ {
 			unsigned short		iaddr3;
 			unsigned short		iaddr4;
 			unsigned short		_boff_cnt;
-			unsigned short		taddr_l;
-			unsigned short		taddr_m;
 			unsigned short		taddr_h;
+			unsigned short		taddr_m;
+			unsigned short		taddr_l;
 		} ethernet;
 		struct {
 			unsigned long		crc_p;
