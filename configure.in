@@ -336,7 +336,7 @@ if test "$tests_enabled" = "yes"; then
    RTEMS_CHECK_MAKEFILE(c/src/tests/sptests)
    RTEMS_CHECK_MAKEFILE(c/src/tests/tmtests)
    RTEMS_CHECK_MAKEFILE(c/src/tests/mptests)
-   if test "$RTEMS_HAS_POSIX" = "yes"; then
+   if test "$RTEMS_HAS_POSIX_API" = "yes"; then
      RTEMS_CHECK_MAKEFILE(c/src/tests/psxtests)
    fi
 fi 

@@ -2566,7 +2566,7 @@ else
 fi
 
 
-   if test "$RTEMS_HAS_POSIX" = "yes"; then
+   if test "$RTEMS_HAS_POSIX_API" = "yes"; then
      
 echo $ac_n "checking for Makefile.in in c/src/tests/psxtests""... $ac_c" 1>&6
 echo "configure:2573: checking for Makefile.in in c/src/tests/psxtests" >&5
