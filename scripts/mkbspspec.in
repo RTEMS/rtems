@@ -47,11 +47,11 @@ bsp=$2
 
 . ./$CFG
 
-specfile=${dst}/$target_alias-$bsp-$RTEMS_VERSION.spec
+specfile=${dst}/$target_alias-$bsp-${rtems_version}.spec
 
-sed -e "s%@Version@%${RTEMS_VERSION}%g" \
+sed -e "s%@Release@%${rtems_rpm_release}%g" \
     -e "s%@bsp@%${bsp}%g" \
-    -e "s%@Release@%${rtems_release}%g" \
+    -e "s%@rtems_version@%${rtems_version}%g" \
     -e "s%@rpm_build_root@%${rpm_build_root}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
 < ${RTEMS_DIR}/rtems/rtems.spec.in \

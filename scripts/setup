@@ -34,10 +34,12 @@ do
   echo "8 gdb version             : $gdb_version"
   echo "9 gdb patch version       : $gdb_patch_version"
   echo "a gdb rpm release         : $gdb_rpm_release"
-  echo "b rpm build root          : $rpm_build_root"
+  echo "b rtems version           : $rtems_version"
+  echo "c rtems rpm release       : $rtems_rpm_release"
+  echo "d rpm build root          : $rpm_build_root"
   echo
 
-  echo -n "[0-9ab] or any other key to quit >"
+  echo -n "[0-9a-d] or any other key to quit >"
   read sel
   case $sel in
   0) echo -n "BINUTILS source >"
@@ -57,12 +59,16 @@ do
   7) echo -n "GCC/NEWLIB RPM release >"
      read gccnewlib_rpm_release ;;
   8) echo -n "GDB source >"
-     read GDB_SOURCE ;;
+     read gdb_version ;;
   9) echo -n "GDB patch version>"
      read gdb_patch_version ;;
   a) echo -n "GDB RPM release >"
      read gdb_rpm_release ;;
-  b) echo -n "RPM build root >"
+  b) echo -n "RTEMS source >"
+     read rtems_version ;;
+  c) echo -n "RTEMS RPM release >"
+     read rtems_rpm_release ;;
+  d) echo -n "RPM build root >"
      read rpm_build_root ;;
   *) 
      return 0 ;;
@@ -87,6 +93,8 @@ echo "gccnewlib_rpm_release=$gccnewlib_rpm_release" >> $CFG
 echo "gdb_version=$gdb_version" >> $CFG
 echo "gdb_patch_version=$gdb_patch_version" >> $CFG
 echo "gdb_rpm_release=$gdb_rpm_release" >> $CFG
+echo "rtems_version=$rtems_version" >> $CFG
+echo "rtems_rpm_release=$rtems_rpm_release" >> $CFG
 echo "rpm_build_root=$rpm_build_root" >> $CFG
 
 echo " done"
