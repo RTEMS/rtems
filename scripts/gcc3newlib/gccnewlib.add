@@ -15,6 +15,7 @@ Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      	gcc%{gcc_version}newlib%{newlib_version}
+
 %if "%{gcc_version}" >= "3.2.2"
 Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.bz2
 %else
@@ -320,12 +321,12 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %endif
 
   # gzip info files
-  gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info 2>/dev/null
-%if "%{gcc_version}" < "3.3" || "%{gcc_version}" >= "3.4"
-  # gcc-3.3 ships monolytic *.infos
-  gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info-? 2>/dev/null
-  gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info-?? 2>/dev/null
-%endif
+  ls $RPM_BUILD_ROOT%{_infodir}/*.info \
+    $RPM_BUILD_ROOT%{_infodir}/*.info-? \
+    $RPM_BUILD_ROOT%{_infodir}/*.info-?? \
+  | while read a; do \
+    gzip -9qf $a 2>/dev/null; \
+  done
 
   # gzip man pages
   gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/*.? 2>/dev/null
