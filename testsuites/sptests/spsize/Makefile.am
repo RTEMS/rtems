@@ -32,4 +32,6 @@ all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES) $(DOCS)
 
+CLEANFILES = $(TMPINSTALL_FILES)
+
 include $(top_srcdir)/../automake/local.am
