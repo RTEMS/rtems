@@ -34,9 +34,17 @@ EXTRA_DIST = ftpd.c ftpd.h
 
 include_HEADERS = ftpd.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
+include_rtems_HEADERS = telnetd.h
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+   $(include_HEADERS:%=$(PROJECT_INCLUDE)/%) \
+   $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems:
+	@$(mkinstalldirs) $@
+$(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 include $(top_srcdir)/../../../automake/local.am
