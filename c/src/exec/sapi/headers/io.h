@@ -99,7 +99,7 @@ EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
  *  This routine performs the initialization necessary for this manager.
  */
 
-STATIC INLINE void _IO_Manager_initialization(
+void _IO_Manager_initialization(
   rtems_driver_address_table *driver_table,
   unsigned32                  number_of_drivers,
   unsigned32                  number_of_devices
@@ -235,8 +235,6 @@ rtems_status_code rtems_io_control(
  */
 
 void _IO_Initialize_all_drivers( void );
-
-#include <rtems/io.inl>
 
 #ifdef __cplusplus
 }
