@@ -65,8 +65,7 @@ if HAS_NETWORKING
 leon_open_eth_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += leon_open_eth.rel
 leon_open_eth_rel_SOURCES = leon_open_eth/leon_open_eth.c
-leon_open_eth_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(leon_open_eth_CPPFLAGS)
+leon_open_eth_rel_CPPFLAGS = $(AM_CPPFLAGS) $(leon_open_eth_CPPFLAGS)
 leon_open_eth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

@@ -62,8 +62,7 @@ if HAS_NETWORKING
 erc32sonic_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += erc32sonic.rel
 erc32sonic_rel_SOURCES = erc32sonic/erc32sonic.c
-erc32sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(erc32sonic_CPPFLAGS)
+erc32sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(erc32sonic_CPPFLAGS)
 erc32sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
