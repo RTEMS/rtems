@@ -1,3 +1,11 @@
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/lseek.c: Modified after discussion with Eugeny S. Mints
+	<jack@oktet.ru> to correct the behavior.  There were two mistakes.
+	First, iop->offset was incorrectly set for SEEK_END.  Second,
+	iop->offset should be left unmodified if there are errors.
+	This modification attempts to fix both situations.
+
 2001-08-16	Mike Siers <mikes@poliac.com>
 
 	* include/rtems/termiostypes.h, include/sys/ioccom.h:
