@@ -1,5 +1,15 @@
 2003-03-25  Till Straumann <strauman@slac.stanford.edu>
 
+	PR 360/bsps
+	* irq/irq.c, irq/irq_init.c, openpic/openpic.c, openpic/openpic.h:
+	BSP code had set the task priority register multiple times of
+	the OpenPIC instead of setting the individual source priorities.
+	This patch adds openpic_get_source_priority() and
+	openpic_set_source_priority() calls and lets IRQ management code
+	use them.
+
+2003-03-25  Till Straumann <strauman@slac.stanford.edu>
+
 	PR 349/bsps
 	* irq/irq.c, vme/VME.h, vme/vmeconfig.c: Fixes library dependency
 	on the vmeUniverse driver. It is now possible to use the ppc/shared/irq

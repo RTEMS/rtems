@@ -19,6 +19,7 @@
  *  Note: Interprocessor Interrupt (IPI) and Timer support is incomplete
  */
 
+#include <rtems.h>
 #include <rtems/bspIo.h>
 #include <bsp/openpic.h>
 #include <bsp/pci.h>
@@ -94,7 +95,7 @@ static inline unsigned int openpic_read(volatile unsigned int *addr)
 {
     unsigned int val;
 
-    val = ld_le32(addr);
+    val = in_le32(addr);
 #ifdef REGISTER_DEBUG
     printk("openpic_read(0x%08x) = 0x%08x\n", (unsigned int)addr, val);
 #endif
@@ -251,10 +252,6 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 	    }
 	    
 	    /* Initialize external interrupts */
-	    /* SIOint (8259 cascade) is special */
-	    openpic_initirq(0, 8, OPENPIC_VEC_SOURCE, 1, 1);
-	    /* Processor 0 */
-	    openpic_mapirq(0, 1<<0);
 	    for (i = 0; i < NumSources; i++) {
 		    /* Enabled, Priority 8 */
 		    openpic_initirq(i, 8, OPENPIC_VEC_SOURCE+i,
@@ -454,14 +451,20 @@ void openpic_maptimer(unsigned int timer, unsigned int cpumask)
 
 void openpic_enable_irq(unsigned int irq)
 {
+unsigned long flags;
     check_arg_irq(irq);
+	rtems_interrupt_disable(flags);
     openpic_clearfield(&OpenPIC->Source[irq].Vector_Priority, OPENPIC_MASK);
+	rtems_interrupt_enable(flags);
 }
 
 void openpic_disable_irq(unsigned int irq)
 {
+unsigned long flags;
     check_arg_irq(irq);
+	rtems_interrupt_disable(flags);
     openpic_setfield(&OpenPIC->Source[irq].Vector_Priority, OPENPIC_MASK);
+	rtems_interrupt_enable(flags);
 }
 
 
@@ -499,7 +502,28 @@ void openpic_mapirq(unsigned int irq, unsigned int cpumask)
     openpic_write(&OpenPIC->Source[irq].Destination, cpumask);
 }
 
+	/*
+	 * Get the current priority of an external interrupt
+	 */
+unsigned int openpic_get_source_priority(unsigned int irq)
+{
+    check_arg_irq(irq);
+	return openpic_readfield(&OpenPIC->Source[irq].Vector_Priority,
+							 OPENPIC_PRIORITY_MASK) >> OPENPIC_PRIORITY_SHIFT;
+}
 
+void openpic_set_source_priority(unsigned int irq, unsigned int pri)
+{
+unsigned long flags;
+    check_arg_irq(irq);
+    check_arg_pri(pri);
+	rtems_interrupt_disable(flags);
+	openpic_writefield(
+					&OpenPIC->Source[irq].Vector_Priority,
+					OPENPIC_PRIORITY_MASK,
+					pri << OPENPIC_PRIORITY_SHIFT);
+	rtems_interrupt_enable(flags);
+}
     /*
      *  Set the sense for an interrupt source (and disable it!)
      *
