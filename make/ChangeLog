@@ -1,4 +1,9 @@
 
+2000-09-13	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/arm_bare_bsp.cfg, custom/armulator.cfg, custom/dmv177.cfg,
+	custom/mcp750.cfg, custom/vegaplus.cfg: Clean up.
+
 2000-09-13	Emmanuel Raguet <raguet@crf.canon.fr>
 
 	* vegaplus BSP submitted by Emmanuel Raguet <raguet@crf.canon.fr> and
