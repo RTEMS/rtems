@@ -1,3 +1,7 @@
+2001-08-30	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/posix/mqueue.inl: Add cast so negation works.
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* src/mqueuesendsupp.c: Account for possibly blocking during the

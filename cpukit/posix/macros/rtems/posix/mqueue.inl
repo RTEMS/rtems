@@ -73,7 +73,9 @@
  
 /* absolute value without a library dependency */
 #define _POSIX_Message_queue_Priority_from_core( _priority ) \
-  ((((_priority) >= 0) ? (_priority) : -(_priority)))
+  ((((CORE_message_queue_Submit_types)(_priority)) >= 0) ? \
+    (_priority) : \
+    -((CORE_message_queue_Submit_types)(_priority)))
 
 #endif
 /*  end of include file */
