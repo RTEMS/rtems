@@ -69,9 +69,9 @@ Search permission is denied for a component of the path prefix.
 @item EEXIST
 The file specified by the file argument does not exist
 @item ENAMETOOLONG
-A component of a pathname exceeded {NAME_MAX} characters,
-or an entire path name exceed {PATH_MAX} characters while
-{_POSIX_NO_TRUNC} is in effect.
+A component of a pathname exceeded @code{NAME_MAX} characters,
+or an entire path name exceed @code{PATH_MAX} characters while
+@code{_POSIX_NO_TRUNC} is in effect.
 @item ENOENT
 A component of cfgpath does not exist.
 @item ENOTDIR
@@ -87,7 +87,7 @@ The cfg_mount() function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The @code{cfg_mount} function maps a configuration space defined
    by the file identified by the the @code{file} argument.  The 
@@ -137,9 +137,9 @@ Search permission is denied for a component of the path prefix.
 @item ENOENT
 A component of cfgpath does not exist.
 @item ENAMETOOLONG
-A component of a pathname exceeded {NAME_MAX} characters,
-or an entire path name exceed {PATH_MAX} characters while
-{_POSIX_NO_TRUNC} is in effect.
+A component of a pathname exceeded @code{NAME_MAX} characters,
+or an entire path name exceed @code{PATH_MAX} characters while
+@code{_POSIX_NO_TRUNC} is in effect.
 @item EINVAL
 The requested node is not the distinguished node of a mounted
 configuration space.
@@ -153,14 +153,14 @@ The cfg_umount function is not supported by this implementation.
 A node appears more than once in the path specified by the 
 cfg_path argument
 @item ELOOP
-More than {SYMLOOP_MAX} symbolic links were encountered during
+More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument
 
 @end table
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The @code{cfg_umount} function unmaps the configuration space whose 
    distinguished node is mapped in the active space at the location defined
@@ -195,9 +195,9 @@ int cfg_mknod(
 
 @table @b
 @item ENAMETOOLONG
-A component of a pathname exceeded {NAME_MAX} characters,
-or an entire path name exceed {PATH_MAX} characters while
-{_POSIX_NO_TRUNC} is in effect.
+A component of a pathname exceeded @code{NAME_MAX} characters,
+or an entire path name exceed @code{PATH_MAX} characters while
+@code{_POSIX_NO_TRUNC} is in effect.
 @item ENOENT
 A compent of the path prefix does not exist.
 @item EACCES
@@ -219,7 +219,7 @@ The function cfg_mknod() is not supported by this implementation.
 A node appears more than once in the path specified by the 
 cfg_path argument
 @item ELOOP
-More than {SYMLOOP_MAX} symbolic links were encountered during
+More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument.
 @item EROFS
 The named node resides on a read-only configuration space.
@@ -228,10 +228,10 @@ The named node resides on a read-only configuration space.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The @code{cfg_mknod} function creates a new node in the configuration
-   space which contains the pathname prefix of @cod{cfgpath}.  T he node
+   space which contains the pathname prefix of @code{cfgpath}.  T he node
    name shall be defined by the pathname suffix of @code{cfgpath}.  The
    node name shall be defined by the pathname suffix of @code{cfgpath}. 
    The node permissions shall be specified by the value of @code{mode}.
@@ -264,9 +264,9 @@ int cfg_get(
 
 @table @b
 @item ENAMETOOLONG
-A component of a pathname exceeded {NAME_MAX} characters,
-or an entire path name exceed {PATH_MAX} characters while
-{_POSIX_NO_TRUNC} is in effect.
+A component of a pathname exceeded @code{NAME_MAX} characters,
+or an entire path name exceed @code{PATH_MAX} characters while
+@code{_POSIX_NO_TRUNC} is in effect.
 @item ENOENT
 A component of cfgpath does not exist.
 @item EACCES
@@ -279,14 +279,14 @@ The function cfg_get() is not supported by this implementation
 A node appears more than once in the path specified by the 
 cfg_path argument
 @item ELOOP
-More than {SYMLOOP_MAX} symbolic links were encountered during
+More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument.
 
 @end table
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The @code{cfg_get} function stores the value attribute of the
    configuration node identified by @code{cfgpath}, into the buffer
@@ -320,9 +320,9 @@ int cfg_set(
 
 @table @b
 @item ENAMETOOLONG
-A component of a pathname exceeded {NAME_MAX} characters,
-or an entire path name exceed {PATH_MAX} characters while
-{_POSIX_NO_TRUNC} is in effect.
+A component of a pathname exceeded @code{NAME_MAX} characters,
+or an entire path name exceed @code{PATH_MAX} characters while
+@code{_POSIX_NO_TRUNC} is in effect.
 @item ENOENT
 A component of cfgpath does not exist
 @item EACCES
@@ -335,14 +335,14 @@ The function cfg_set() is not supported by this implementation.
 A node appears more than once in the path specified by the
 cfg-path argument.
 @item ELOOP
-More than {SYMLOOP_MAX} symbolic links were encountered during
+More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument.
 
 @end table
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The @code{cfg_set} function stores the value specified by the
    @code{value} argument in the configuration node defined by the 
@@ -376,9 +376,9 @@ int cfg_link(
 
 @table @b
 @item ENAMETOOLONG
-A component of a pathname exceeded {NAME_MAX} characters,
-or an entire path name exceed {PATH_MAX} characters while
-{_POSIX_NO_TRUNC} is in effect.
+A component of a pathname exceeded @code{NAME_MAX} characters,
+or an entire path name exceed @code{PATH_MAX} characters while
+@code{_POSIX_NO_TRUNC} is in effect.
 @item ENOENT
 A component of either path prefix does not exist.
 @item EACCES
@@ -412,14 +412,14 @@ The function cfg_link() is not supported by this implementation.
 A node appears more than once in the path specified by the
 cfg-path argument.
 @item ELOOP
-More than {SYMLOOP_MAX} symbolic links were encountered during
+More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument.
 
 @end table
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The @code{src} and @code{dest}arguments point to pathnnames which 
    name existing nodes.  The @code{cfg_link} function shall atomically 
@@ -459,8 +459,8 @@ int cfg_unlink(
 
 @table @b
 @item ENAMETOOLONG
-A component of a pathname exceeded {NAME_MAX} characters,
-or an entire path name exceed {PATH_MAX} characters.
+A component of a pathname exceeded @code{NAME_MAX} characters,
+or an entire path name exceed @code{PATH_MAX} characters.
 @item ENOENT
 The named  node does not exist.
 @item EACCES
@@ -489,14 +489,14 @@ The function cfg_unlink() is not supported by this implementation.
 A node appears more than once in the path specified by the
 cfg-path argument.
 @item ELOOP
-More than {SYMLOOP_MAX} symbolic links were encountered during
+More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument.
 
 @end table
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The @code{cfg_unlink} function removes the link between the node
    specified by the @code{cfgpath} path prefix and the parent node 
@@ -540,8 +540,8 @@ Search permission is denied for any component of a pathname.
 A loop exists in symbolic links encountered during resolution 
 of a pathname.
 @item ENAMETOOLONG
-The length of a pathname exceeds {PATH_MAX}, or a pathname
-component is longer than {NAME_MAX} while {_POSIX_NO_TRUNC}
+The length of a pathname exceeds @code{PATH_MAX}, or a pathname
+component is longer than @code{NAME_MAX} while @code{_POSIX_NO_TRUNC}
 @item ENOENT
 The pathname argument is an empty string or the named node
 does not exist.
@@ -553,18 +553,18 @@ Not enough memory is available to create the necessary structures.
 @item ENOSYS
 The function cfg_open() is not supported by this implementation.
 @item ELOOP
-More than {SYMLOOP_MAX} symbolic links were encountered during
+More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the pathnames argument.
 @item ENAMETOOLONG
 As a result of encountering a symbolic link in resolution of the
 pathname specified by the pathnames argument, the lenght of
-the substituted pathname string exceeded {PATH_MAX}.
+the substituted pathname string exceeded @code{PATH_MAX}.
 
 @end table
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The @code{cfg_open} function shall open a configuration traversal stream
    rooted in the configuration nodes name by the @code{pathnames} argument.
@@ -588,7 +588,7 @@ If {_POSIX_CFG} is defined:
                       be done.
                     
       CFG_PHYSICAL  - When symbolic links are encountered during the traversal,
-                      the @codce{cfg_info} field shall describe the symbolic 
+                      the @code{cfg_info} field shall describe the symbolic 
                       link.
                     
 
@@ -668,18 +668,18 @@ Not enough memory is available to create the necessary structures.
 @item ENOSYS
 The function cfg_read() is not suported by this implementation.
 @item ELOOP
-More than {SYMLOOP_MAX} symbolic links were encountered during
+More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument.
 @item ENAMETOOLONG
 As aresult of encountering a symbolic link in resolution of the
 pathname specified by the pathnames argument, the length of the
-substituted pathname string exceeded {PATH_MATH}.
+substituted pathname string exceeded @code{PATH_MATH}.
 
 @end table
 
 @subheading DESCRIPTION:
 
-if {_POSIX_CFG} is defined:
+if @code{_POSIX_CFG} is defined:
 
    The @code{cfg_read} function returns a pointer to a CFGENT sturcture
    representing a node in the configuration space to which @code{cfgp}
@@ -738,7 +738,7 @@ if {_POSIX_CFG} is defined:
       cfg_path    - A pathname for the node including and relative to the 
                     argument supplied to the @code{cfg_open} routine for this
                     configuration space.  This pathname may be logner than
-                    {PATH_MAX} bytes.  This patname shall be NULL-terminated.
+                    @code{PATH_MAX} bytes.  This patname shall be NULL-terminated.
       cfg_name    - The nodename of the node.
       cfg_pathlen - The length of the string pointed at by the @code{cfg_path}
                     field when returned by @code{cfg_read}.
@@ -829,8 +829,8 @@ The cfgp argument does not refer to an open configuration space.
 A loop exists in symbolic links encountered during resolution of 
 a pathname.
 @item ENAMETOOLONG
-The length of a pathname exceeds {PATH_MAX}, or a pathname
-component is longer than {NAME_MAX} while {_POSIX_NO_TRUNC} is
+The length of a pathname exceeds @code{PATH_MAX}, or a pathname
+component is longer than @code{NAME_MAX} while @code{_POSIX_NO_TRUNC} is
 in effect.
 @item EINVAL
 The specified value of the optiions argument is invalid.
@@ -845,11 +845,11 @@ The function cfg_children() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CFG} is defined:
+If @code{_POSIX_CFG} is defined:
 
    The first @code{cfg_children} call after a @code{cfg_read} shall 
    return information about the first node without children under the
-   node returned by @code}{cfg_read}.  Subsequent calls to 
+   node returned by @code{cfg_read}.  Subsequent calls to 
    @code{cfg_children} without the intervening @code{cfg_read} shall
    return information about the remaining nodes without children under
    that same node.
@@ -902,7 +902,7 @@ The function cfg_mark() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_CF} is defined:
+If @code{_POSIX_CF} is defined:
 
    The @code{cfg_mark} function modifies the subsequent behavior of
    the cfg functions with regard to the node referenced by the structure
@@ -985,7 +985,7 @@ The function cfg_close() is not supported by this implementatioin.
 
 @subheading DESCRIPTION:
 
-if {_POSIX_CFG} is defined:
+if @code{_POSIX_CFG} is defined:
 
    The @code{cfg_close} function closes a configuration space transversal
    stream represented by the CFG structure pointed at by the @code{cfgp}

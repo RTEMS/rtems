@@ -63,14 +63,14 @@ system.
 @subheading DESCRIPTION:
 
 
-If {_POSIX_ADMIN} is defined:
+If @code{_POSIX_ADMIN} is defined:
 
    The @code{admin_shutdown} function restarts the system.  The
    @code{args} argument specifies alternate or optional behavior
    for the @code{admin_shutdown} function.  The @code{admin_type}
    member of each element of the @code{args} array specifies the
    optional behavior to be performed.  There are som @code{admin_types} 
-   values that may provoke unspecified behavior.  The @code[nargs}
+   values that may provoke unspecified behavior.  The @code{nargs}
    argument specifies the length of the @code{args} array.
 
 Otherwise:

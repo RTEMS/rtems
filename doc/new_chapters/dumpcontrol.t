@@ -54,8 +54,8 @@ Search permission is denied for a component of the path prefix,
 or write permission is denied on the directory containing the 
 file.
 @item ENAMETOOLONG
-The length of the argument exceeds {PATH_MAX} or a pathname
-component is longer than {NAME_MAX} while {_POSIX_NO_TRUNC}
+The length of the argument exceeds @code{PATH_MAX} or a pathname
+component is longer than @code{NAME_MAX} while @code{_POSIX_NO_TRUNC}
 is in effect.
 @item ENOENT
 The path argument points to an empty string.
@@ -70,7 +70,7 @@ The directory entry specified resides on a read-only file system.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_DUMP} is defined:
+If @code{_POSIX_DUMP} is defined:
 
    The @code{dump_setpath} function defines the pathname where process
    dumps are written.  The pathname pointed to by @code{path} shall 

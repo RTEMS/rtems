@@ -67,9 +67,9 @@ int log_write(
 @item EINVAL
 The facility argument is not a valid log_facility.
 @item EINVAL
-The severity argument exceeds {LOG_SEVERITY_MAX}
+The severity argument exceeds @code{LOG_SEVERITY_MAX}
 @item EINVAL
-The len argument exceeds {LOG_ENTRY_MAXLEN}
+The len argument exceeds @code{LOG_ENTRY_MAXLEN}
 @item ENOSPC
 The log file has run out of space on the device.
 @item ENOSYS
@@ -84,7 +84,7 @@ An I/O error occurred in writing to the system event log.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The @code{log_write} function writes an event record, consisting 
    of event attributes, and the data identified by the @code{buf} 
@@ -92,7 +92,7 @@ If {_POSIX_LOGGING} is defined:
    the length in bytes of the buffer pointed to by @code{buf}.  The
    @code{len} argument shall specify the value of the event record
    length attribute.  The value of @code{len} shall be less than or 
-   equal to {LOG_ENTRY_MAXLEN} or the @code{log_write} shall fail.
+   equal to @code{LOG_ENTRY_MAXLEN} or the @code{log_write} shall fail.
 
    The @code{event_id} argument identifies the type of event record
    being written.  The @code{event_id} argument shall specify the value
@@ -108,7 +108,7 @@ If {_POSIX_LOGGING} is defined:
    event record.  The @code{severity} argument shall specify the value
    of the event record severity attribute.  The value of the 
    @code{severity} argument shall be less than or equal to 
-   {LOG_SEVERITY_MAX} or the @code{log_write} function shall fail.  
+   @code{LOG_SEVERITY_MAX} or the @code{log_write} function shall fail.  
 
    The effective_UID of the calling process shall specify the event
    record UID attribute.  The efective-GID of the calling process 
@@ -156,15 +156,15 @@ The log_facility field of the query argument is not a valid
 facility set.
 @item EINVAL
 The log_severity field of the query argument exceeds 
-{LOG_SEVERITY_MAX}.
+@code{LOG_SEVERITY_MAX}.
 @item EINVAL
 The path argument referred to a file that was not a log file.
 @item EMFILE
 Too many log file descriptors are currently in use by this
 process.
 @item ENAMETOOLONG
-The length of the path string exceeds {PATH_MAX}, or a pathname
-component is longer than {NAME_MAX} while {_POSIX_NO_TRUNC} is
+The length of the path string exceeds @code{PATH_MAX}, or a pathname
+component is longer than @code{NAME_MAX} while @code{_POSIX_NO_TRUNC} is
 in effect.
 @item ENFILE
 Too many files are currently open in the system.
@@ -179,7 +179,7 @@ The function log_open() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The @code{log_open} function establishes the connection between a 
    log file and a log file descriptor.  It creates an open log file 
@@ -251,7 +251,7 @@ An I/O error occurred in reading from the event log.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The @code{log_read} function shall attempt to read the @code{log_entry}
    structure and @code{log_len} bytes of data from the next event record 
@@ -316,7 +316,7 @@ The function log_notify() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
   
    If the argument @code{notification} is not NULL this function registers 
    the calling process to be notified of event records received by the system 
@@ -368,7 +368,7 @@ The function log_close() is not supported by t his implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The @code{log_close} function deallocates the open log file descriptor 
    indicated by @code{log_des}.
@@ -422,7 +422,7 @@ The function log_seek() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The @code{log_seek} function shall set the log file offset of the open 
    log descriptioin associated with the @code{logdes} log file descriptor 
@@ -463,7 +463,7 @@ int log_severity_before(
 
 @table @b
 @item EINVAL 
-The value of either s1 or s2 exceeds {LOG_SEVERITY_MAX}.
+The value of either s1 or s2 exceeds @code{LOG_SEVERITY_MAX}.
 @item ENOSYS
 The function log_severity_before() is not supported by this 
 implementation.
@@ -472,7 +472,7 @@ implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The @code{log_severity_before} function shall compare the severity order
    of the @code{s1} and @code{s2} arguments.  Severity values ordered 
@@ -517,7 +517,7 @@ The function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The facilitysetops primitives manipulate sets of facilities.  They 
    operate on data objects addressable by the application.
@@ -582,7 +582,7 @@ The function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The facilitysetops primitives manipulate sets of facilities.  They 
    operate on data objects addressable by the application.
@@ -648,7 +648,7 @@ The function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The facilitysetops primitives manipulate sets of facilities.  They 
    operate on data objects addressable by the application.
@@ -714,7 +714,7 @@ The function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The facilitysetops primitives manipulate sets of facilities.  They 
    operate on data objects addressable by the application.
@@ -781,7 +781,7 @@ The function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    The facilitysetops primitives manipulate sets of facilities.  They 
    operate on data objects addressable by the application.
@@ -845,7 +845,7 @@ The is ????????????
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    This function dynamically allocates memory for the @code{ld}, associates 
    a directory path to the @code{Ld}, andprovides access permissions to the
@@ -881,7 +881,7 @@ The directory path to the system log already exist.
 
 @subheading DESCRIPTION:
 
-If {_POSIX_LOGGING} is defined:
+If @code{_POSIX_LOGGING} is defined:
 
    This function will create a predefined system log directory path and system log
    file if they do not already exist.
