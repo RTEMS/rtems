@@ -1,3 +1,7 @@
+2001-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Remove unix from DIST_SUBDIRS.
+
 2001-03-29	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR150, unix directory and contents removed.
