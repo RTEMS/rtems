@@ -73,6 +73,8 @@ enum:
 avdas:
 	./$(PROG) -v -p "Magic Subsystem" \
 	    -u "Magic Subsystem" test_cases/avdas.d
+	./$(PROG) -w -v -p "Magic Subsystem" \
+	    -u "Magic Subsystem" test_cases/avdas.d
 	
 clean:
 	rm -f *.o $(PROG) *.txt core *.html $(PROJECT) Drive.texi

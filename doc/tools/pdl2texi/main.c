@@ -171,7 +171,10 @@ typedef enum {
   OUTPUTS,
   PDL,
   SYNCHRONIZATION,
-  TIMING
+  TIMING,
+
+  RAW_EXAMPLE,                       /* our own */
+  
 }  Keyword_indices_t;
 
 #define KEYWORD_FIRST OBJECT
@@ -197,6 +200,7 @@ typedef struct {
 } Line_Control;
 
 typedef enum {
+  RT_NO_CHECK,      /* don't do this at all */
   RT_FORBIDDEN,     /* no text to right allowed */
   RT_OPTIONAL,      /* text to right optional -- none below */
   RT_NONE,          /* text to right is "none" or nothing -- none below */
@@ -316,7 +320,9 @@ Keyword_info_t Keywords[] = {
   { "SYNCHRONIZATION:",
         HEADING,    RT_MAYBE_BELOW,   BL_RAW,    Validate_synchronization },
   { "TIMING:",
-        HEADING,    RT_REQUIRED,      BL_FORBIDDEN, NULL }
+        HEADING,    RT_REQUIRED,      BL_FORBIDDEN, NULL },
+  { "",
+        TEXT,       RT_NO_CHECK,   BL_RAW,       NULL }
 };
 
 #define NUMBER_OF_KEYWORDS \
@@ -811,6 +817,7 @@ Line_Control *FormatParagraph(
   boolean       do_loop;
   boolean       is_bullet;
   int           length;
+  int           i;
 
   length = 0;
 
@@ -826,6 +833,39 @@ Line_Control *FormatParagraph(
     src = to_add->Contents;
 
     for ( ; *src && isspace( *src ) ; src++ ); /* skip leading spaces */
+
+    if ( !strncmp( src, "@table", 6 ) ) {
+
+      to_add = DeleteLine( to_add );
+      src = to_add->Contents;
+      for ( i=4 ; *src && isspace( *src ) && i-- ; src++ );
+         /* skip leading spaces */
+
+      for ( ; ; ) {
+        if ( _Chain_Is_last( &to_add->Node ) ) {
+          fprintf(
+             stderr,
+             "Missing end table for table starting at line %d\n",
+             starting_line
+           );
+           exit_application( 1 );
+        }
+        if ( !strncmp( src, "@end table", 10 ) ) {
+          to_add = DeleteLine( to_add );  
+          return to_add;
+        } 
+        strcpy( Paragraph, src );
+        strcpy( to_add->Contents, Paragraph );
+        SetLineFormat( to_add, PARAGRAPH_OUTPUT );
+        to_add->keyword = RAW_EXAMPLE;
+        to_add = (Line_Control *) to_add->Node.next;
+
+        src = to_add->Contents;
+        for ( i=4 ; *src && isspace( *src ) && i-- ; src++ );
+           /* skip leading spaces */
+
+      }
+    }
 
     if ( *src == '+' ) {
       if ( is_bullet == TRUE )
@@ -1520,6 +1560,7 @@ void CrunchBelow(
 /* XXX expand this and address the error numbers */
 char *Format_Errors[] = {
   /* unused */             "no formatting error",
+  /* RT_NO_CHECK      */   "why am I here",
   /* RT_FORBIDDEN     */   "no text allowed to right or below",
   /* RT_OPTIONAL      */   "text to right optional -- none below",
   /* RT_NONE          */   "text to right is \"none\" or nothing -- none below",
@@ -1565,7 +1606,7 @@ int MergeText( void )
 
     key = &Keywords[ line->keyword ];
 
-    if ( !line->keyword ) {
+    if ( !line->keyword || key->text_mode == RT_NO_CHECK ) {
       line = (Line_Control *) line->Node.next;
       continue;
     }
@@ -1597,6 +1638,9 @@ int MergeText( void )
     }
 
     switch ( key->text_mode ) {
+      case RT_NO_CHECK:  /* no requirements */
+        break;
+
       case RT_FORBIDDEN: /* no text to right or below allowed */
         if ( is_text_to_right || is_text_below ) {
           error_code = 1;
@@ -2736,6 +2780,26 @@ void FormatToTexinfo( void )
         _Chain_Insert( line->Node.previous, &new_line->Node );
         /* at this point line points to the next keyword */
         break;
+
+      case RAW_EXAMPLE:
+
+        /* now take care of the raw text which is here */
+
+        new_line = AllocateLine();
+        strcpy( new_line->Contents, "@example" );
+        _Chain_Insert( line->Node.previous, &new_line->Node );
+
+        while ( line->keyword == RAW_EXAMPLE ) {
+          line = (Line_Control *) line->Node.next;
+        }
+
+        new_line = AllocateLine();
+        strcpy( new_line->Contents, "@end example" );
+        _Chain_Insert( line->Node.previous, &new_line->Node );
+
+        /* at this point line points to the next keyword */
+        break;
+
     }   
   }
 
@@ -2966,6 +3030,40 @@ void FormatToWord( void )
 
         /* at this point line points to the next keyword */
         break;
+
+      case RAW_EXAMPLE:
+
+        /* now take care of the raw text which is here */
+
+        new_line = AllocateLine();
+        _Chain_Insert( line->Node.previous, &new_line->Node );
+        strcpy( new_line->Contents, "@Example = " );
+
+
+        while ( line->keyword == RAW_EXAMPLE ) {
+          if ( strlen( line->Contents ) ) {
+            new_line->keyword = line->keyword;
+            new_line->format = line->format;
+            length = strlen(new_line->Contents);
+            if ( (length + strlen(line->Contents) + 12) > PARAGRAPH_SIZE ) {
+              fprintf( stderr, "Output line too long at %d\n", line->number );
+              exit_application( 1 );
+            }
+
+            strcat( new_line->Contents, line->Contents );
+            strcat( new_line->Contents, "<@ManualCR>" );
+            line = DeleteLine( line );
+          } else {
+            line = (Line_Control *) line->Node.next;
+            new_line = AllocateLine();
+            _Chain_Insert( line->Node.previous, &new_line->Node );
+            strcpy( new_line->Contents, "@Example = " );
+          }
+        }
+
+        /* at this point line points to the next keyword */
+        break;
+
     }   
   }
 
