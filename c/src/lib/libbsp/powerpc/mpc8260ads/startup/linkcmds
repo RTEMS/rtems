@@ -1,0 +1,285 @@
+/*
+ *  This file contains directives for the GNU linker which are specific
+ *  to the MPC8260ADS Board
+ *
+ *  $Id$
+ */
+
+OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
+              "elf32-powerpc")
+OUTPUT_ARCH(powerpc)
+ SEARCH_DIR(/usr/local/rtems/powerpc-rtems/lib);
+ 
+ENTRY(start)
+
+/*
+ * Declare some sizes.
+ * XXX: The assignment of ". += XyzSize;" fails in older gld's if the
+ *      number used there is not constant.  If this happens to you, edit
+ *      the lines marked XXX below to use a constant value.
+ */
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x400000; /* 4M Heap */
+StackSize = DEFINED(StackSize) ? StackSize : 0x8000;
+WorkSpaceSize = DEFINED(WorkSpaceSize) ? WorkSpaceSize : 0x80000; /* 512k */
+RamDiskSize = DEFINED(RamDiskSize) ? RamDiskSize : 0x0800000; /* 8M ram disk */
+ 
+MEMORY
+	{
+	ram : org = 0x0, l = 16M
+	dpram : org = 0x04700000, l = 128K
+	flash : org = 0xff800000, l = 8M
+	}
+
+
+SECTIONS
+{
+
+    /* 
+     * The stack will live in this area - between the vectors and
+     * the text section.
+     */
+	
+    .text 0x10000:
+    {
+    _textbase = .;
+
+
+    text.start = .;
+
+    /* Entry point is the .entry section */
+    *(.entry)
+    *(.entry2)
+
+    /* Actual Code */
+    *(.text)
+    *(.text.*)
+
+
+    *(.rodata)
+    *(.rodata1)
+
+    /* C++ constructors/destructors */
+    *(.gnu.linkonce.t*)
+
+    /*  Initialization and finalization code.
+     *
+     *  Various files can provide initialization and finalization functions.
+     *  The bodies of these functions are in .init and .fini sections. We
+     *  accumulate the bodies here, and prepend function prologues from
+     *  ecrti.o and function epilogues from ecrtn.o. ecrti.o must be linked
+     *  first; ecrtn.o must be linked last. Because these are wildcards, it
+     *  doesn't matter if the user does not actually link against ecrti.o and
+     *  ecrtn.o; the linker won't look for a file to match a wildcard.  The
+     *  wildcard also means that it doesn't matter which directory ecrti.o
+     *  and ecrtn.o are in. 
+     */
+    PROVIDE (_init = .);
+    *ecrti.o(.init)
+    *(.init)
+    *ecrtn.o(.init)
+    
+    PROVIDE (_fini = .);
+    *ecrti.o(.fini)
+    *(.fini)
+    *ecrtn.o(.init)
+
+    /* 
+     *  C++ constructors and destructors for static objects.
+     *  PowerPC EABI does not use crtstuff yet, so we build "old-style"
+     *  constructor and destructor lists that begin with the list lenght
+     *  end terminate with a NULL entry.
+     */
+     
+    PROVIDE (__CTOR_LIST__ = .);	     
+    /* LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2) */
+    *crtbegin.o(.ctors)
+    *(.ctors)
+    *crtend.o(.ctors)
+    LONG(0)
+    PROVIDE (__CTOR_END__ = .);
+	
+    PROVIDE (__DTOR_LIST__ = .);
+    /* LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2) */
+    *crtbegin.o(.dtors)
+    *(.dtors)
+    *crtend.o(.dtors)
+    LONG(0)
+    PROVIDE (__DTOR_END__ = .);
+	
+    /* Exception frame info */
+    *(.eh_frame)
+
+    /* Miscellaneous read-only data */
+    _rodata_start = . ;
+    *(.gnu.linkonce.r*)
+    *(.lit)
+    *(.shdata)
+    *(.rodata)
+    *(.rodata1)
+    *(.descriptors)
+    *(rom_ver)
+    _erodata = .;
+
+
+    /* Various possible names for the end of the .text section */
+    etext = ALIGN(0x10);
+    _etext = .;
+    _endtext = .;
+    text.end = .;
+    PROVIDE (etext = .);
+    PROVIDE (__etext = .);
+ 
+    } > ram
+
+	
+    PROVIDE (__EXCEPT_START__ = .);
+    .gcc_except_table   : { *(.gcc_except_table) } >RAM
+    PROVIDE (__EXCEPT_END__ = .);
+    __GOT_START__ = .;
+    .got :
+    {
+      s.got = .;
+      *(.got.plt) *(.got)
+    } > ram
+    __GOT_END__ = .;
+	
+    .got1		  : { *(.got1) 		} >ram
+    PROVIDE (__GOT2_START__ = .);
+    PROVIDE (_GOT2_START_ = .);
+    .got2		  :  { *(.got2) 	} >ram
+    PROVIDE (__GOT2_END__ = .);
+    PROVIDE (_GOT2_END_ = .);
+	
+    PROVIDE (__FIXUP_START__ = .);
+    PROVIDE (_FIXUP_START_ = .);
+    .fixup	  : { *(.fixup) 	} >ram
+    PROVIDE (_FIXUP_END_ = .);
+    PROVIDE (__FIXUP_END__ = .);
+	 
+    PROVIDE (__SDATA2_START__ = .);
+    .sdata2   	  : { *(.sdata2) 	} >ram
+    .sbss2   	  : { *(.sbss2) 	} >ram
+    PROVIDE (__SBSS2_END__ = .);
+	
+    .sbss2   	  : { *(.sbss2) 	} >ram
+    PROVIDE (__SBSS2_END__ = .);
+	
+    __SBSS_START__ = .;
+    .bss :
+    {
+      bss.start = .;
+      *(.bss) *(.sbss) *(COMMON)
+      . = ALIGN(4);
+      bss.end = .;
+    } > ram
+    __SBSS_END__ = .;
+
+
+
+
+
+    /* R/W Data */
+    .data ( . ) :
+    {
+      . = ALIGN (4);
+
+      data.start = .;
+
+      *(.data)
+      *(.data1)
+      *(.gnu.linkonce.d.*)
+      PROVIDE (__SDATA_START__ = .);
+      *(.sdata)
+
+      data.end = .;
+    } > ram
+
+    data.size = data.end - data.start;
+    bss.size = bss.end - bss.start;
+    text.size = text.end - text.start;
+
+    PROVIDE(_end = data.end);
+
+    .gzipmalloc : {
+	. = ALIGN (16);
+        _startmalloc = .;
+     } >ram
+          	
+
+    /*
+     * Interrupt stack setup
+     */
+    IntrStack_start = ALIGN(0x10);
+    . += 0x4000;
+    intrStack = .;
+    PROVIDE(intrStackPtr = intrStack);
+
+
+    _HeapStart = .;
+    __HeapStart = .;
+    . += HeapSize;
+    _HeapEnd = .;
+    __HeapEnd = .;
+
+    clear_end = .;
+
+
+    _WorkspaceBase = .;
+    __WorkspaceBase = .;
+    . += WorkSpaceSize;
+
+
+    _RamDiskBase = .;
+    __RamDiskBase = .;
+    . += RamDiskSize;
+    _RamDiskEnd  = .;
+    __RamDiskEnd = .;
+    PROVIDE( _RamDiskSize = _RamDiskEnd - _RamDiskBase );
+
+    /* Sections for compressed .text and .data         */
+    /* after the .datarom section is an int specifying */
+    /* the length of the following compressed image    */
+    /* Executes once then could get overwritten        */
+    .textrom 0x100000 :
+    {
+    	*(.textrom)
+    	_endloader = .;
+    } > ram
+
+    .datarom :
+    {
+    	_dr_start = .;
+    	*(.datarom)
+    	_dr_end = .;
+    } > ram
+    dr_len = _dr_end - _dr_start;
+
+    .dpram :
+    {
+      m8260 = .;
+      _m8260 = .;
+      . += (128 * 1024);
+     } > dpram
+
+
+     /* the reset vector is at 0xfff00000 which is */
+     /* located at offset 0x400000 from the base   */
+     /* of flash                                   */
+    .bootrom 0xFFF00000 :
+    {
+      *(.bootrom)
+      _endboot = .;
+    } > flash
+
+
+    .line 0 : { *(.line) }
+    .debug 0 : { *(.debug) }
+    .debug_sfnames 0 : { *(.debug_sfnames) }
+    .debug_srcinfo 0 : { *(.debug_srcinfo) }
+    .debug_pubnames 0 : { *(.debug_pubnames) }
+    .debug_aranges 0 : { *(.debug_aranges) }
+    .debug_aregion 0 : { *(.debug_aregion) }
+    .debug_macinfo 0 : { *(.debug_macinfo) }
+    .stab 0 : { *(.stab) }
+    .stabstr 0 : { *(.stabstr) }
+}

@@ -1,0 +1,17 @@
+01-10-22	Andy Dachs <a.dachs@sstl.co.uk>
+
+	* mpc8260ads added as new BSP.  tm27 reported not to run
+	at this time.
+	* ChangeLog, Makefile.am, README, aclocal.m4, bsp_specs,
+	clock/.cvsignore, clock/Makefile.am, clock/p_clock.c, configure.in,
+	console/Makefile.am, console/console.c, include/Makefile.am,
+	include/bsp.h, include/coverhd.h, irq/.cvsignore, irq/Makefile.am,
+	irq/irq.c, irq/irq.h, irq/irq_asm.S, irq/irq_init.c,
+	network/Makefile.am, network/README, network/if_hdlcsubr.c,
+	network/if_hdlcsubr.h, network/network.c, start/Makefile.am,
+	start/start.S, startup/Makefile.am, startup/bspstart.c,
+	startup/cpuinit.c, startup/linkcmds, startup/setvec.c, times,
+	vectors/.cvsignore, vectors/Makefile.am, vectors/vectors.S,
+	vectors/vectors.h, vectors/vectors_init.c, wrapup/Makefile.am:
+	New files.
+
