@@ -20,8 +20,8 @@ This is the GNU gdb for RTEMS targetting @target_alias@.
 %doc %{_prefix}/man/man1/@target_alias@-run.1*
 
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-gdb@exe_ext@
-%{_prefix}/bin/@target_alias@-run@exe_ext@
+%{_prefix}/bin/@target_alias@-gdb%{_exeext}
+%{_prefix}/bin/@target_alias@-run%{_exeext}
 %if "@target_alias@" == "sparc-rtems"
-%{_prefix}/bin/@target_alias@-sis@exe_ext@
+%{_prefix}/bin/@target_alias@-sis%{_exeext}
 %endif

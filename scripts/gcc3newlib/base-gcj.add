@@ -16,8 +16,8 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %files -n rtems-base-gcj
 %defattr(-,root,root)
 %dir %{_prefix}/bin
-%{_prefix}/bin/jar@exe_ext@
-%{_prefix}/bin/grepjar@exe_ext@
+%{_prefix}/bin/jar%{_exeext}
+%{_prefix}/bin/grepjar%{_exeext}
 
 %dir %{_prefix}/info
 %doc %{_prefix}/info/gcj.info*.gz

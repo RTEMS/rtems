@@ -6,7 +6,6 @@
 RTEMS_DIR=`dirname $0`/@top_srcdir@
 
 CFG=../setup.cache
-exe_ext=@EXEEXT@
 
 specsrc=${RTEMS_DIR}/gdb/gdb.spec.in
 
@@ -72,5 +71,4 @@ sed -e "s%@Release\@%${gdb_rpm_release}%g" \
     -e "s%@gdb_version\@%${gdb_version}%g" \
     -e "s%@gdb_patch_version\@%${gdb_patch_version}%g" \
     -e "s%@extra_configure_arguments\@%${extra_configure_arguments}%g" \
-    -e "s%@exe_ext\@%${exe_ext}%g" \
 < ${specsrc}

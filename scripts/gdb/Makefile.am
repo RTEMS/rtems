@@ -4,7 +4,11 @@
 
 MKSPEC = $(SHELL) ./mkspec
 
-SUBPACKAGES = gdb.add base-gdb.add target-gdb.add
+SUBPACKAGES = header.add
+SUBPACKAGES += $(top_builddir)/common/common.add
+SUBPACKAGES += gdb.add
+SUBPACKAGES += $(top_builddir)/common/clean.add
+SUBPACKAGES += base-gdb.add target-gdb.add
 
 noinst_DATA = gdb.spec.in
 

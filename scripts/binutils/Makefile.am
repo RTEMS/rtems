@@ -5,8 +5,10 @@
 
 MKBINUTILSSPEC = $(SHELL) ./mkspec
 
-SUBPACKAGES = binutils.add \
-  base-binutils.add target-binutils.add
+SUBPACKAGES = header.add
+SUBPACKAGES += $(top_builddir)/common/common.add binutils.add
+SUBPACKAGES += $(top_builddir)./common/clean.add
+SUBPACKAGES += base-binutils.add target-binutils.add
 
 binutils.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
