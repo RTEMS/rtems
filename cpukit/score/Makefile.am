@@ -3,7 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/amcompile.am
+include $(top_srcdir)/automake/compile.am
 
 SUBDIRS = . cpu
 
@@ -16,7 +16,6 @@ include_rtems_HEADERS = include/rtems/debug.h include/rtems/system.h \
 
 include_rtems_scoredir = $(includedir)/rtems/score
 
-# H_FILES that get installed in the rtems/score subdirectoy
 include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/apiext.h include/rtems/score/apimutex.h \
     include/rtems/score/bitfield.h include/rtems/score/chain.h \
