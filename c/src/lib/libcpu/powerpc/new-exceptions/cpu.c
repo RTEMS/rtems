@@ -110,6 +110,19 @@ void _CPU_Install_interrupt_stack( void )
 {
 }
 
+/*PAGE
+ *
+ *  This is the PowerPC specific implementation of the routine which
+ *  returns TRUE if an interrupt is in progress.
+ */
 
-
+boolean _ISR_Is_in_progress( void )
+{
+  register unsigned int isr_nesting_level;
+  /*
+   * Move from special purpose register 0 (mfspr SPRG0, r3)
+   */
+  asm volatile ("mfspr	%0, 272" : "=r" (isr_nesting_level));
+  return isr_nesting_level;
+}
 

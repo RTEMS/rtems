@@ -571,6 +571,13 @@ SCORE_EXTERN struct {
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (PPC_INTERRUPT_MAX - 1)
 
 /*
+ *  This is defined if the port has a special way to report the ISR nesting
+ *  level.  Most ports maintain the variable _ISR_Nest_level.
+ */
+
+#define CPU_PROVIDES_ISR_IS_IN_PROGRESS TRUE
+
+/*
  *  Should be large enough to run all RTEMS tests.  This insures
  *  that a "reasonable" small application should not have any problems.
  */

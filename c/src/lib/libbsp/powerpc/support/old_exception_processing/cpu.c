@@ -873,3 +873,19 @@ unsigned32  ppc_exception_vector_addr(
   return Top;
 }
 
+/*PAGE
+ *
+ *  This is the PowerPC specific implementation of the routine which
+ *  returns TRUE if an interrupt is in progress.
+ *
+ *  NOTE: This is the same as the generic version. But since the
+ *        PowerPC is still supporting old and new exception processing
+ *        models and the new exception processing model has a hardware
+ *        way of doing this, we have to provide this capability here
+ *        for symmetry.
+ */
+
+boolean _ISR_Is_in_progress( void )
+{
+  return (_ISR_Nest_level != 0);
+}

@@ -13,8 +13,7 @@ C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 include_rtems_scoredir = $(includedir)/rtems/score
-include_rtems_score_HEADERS = rtems/score/cpu.h \
-    rtems/score/c_isr.inl rtems/score/ppc_offs.h
+include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/ppc_offs.h
 
 # Assembly source names
 S_FILES = cpu_asm.S
@@ -28,8 +27,7 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 # FIXME: This should not be here.
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score/cpu.h \
-    $(PROJECT_INCLUDE)/rtems/score/c_isr.inl
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score/cpu.h
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 
