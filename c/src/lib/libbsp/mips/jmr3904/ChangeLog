@@ -1,3 +1,8 @@
+2001-01-09	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clockdrv.c: Clean up.
+	* include/bsp.h: Uncomment and fix set_vector() prototype.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* console/console-io.c: Removed unused variable initialized.

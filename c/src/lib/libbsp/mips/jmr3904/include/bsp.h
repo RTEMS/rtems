@@ -77,7 +77,7 @@ extern rtems_configuration_table BSP_Configuration;
 
 void bsp_cleanup( void );
 
-/* i960_isr_entry set_vector( rtems_isr_entry, unsigned int, unsigned int ); */
+rtems_isr_entry set_vector( rtems_isr_entry, unsigned int, unsigned int );
 
 #ifdef __cplusplus
 }
