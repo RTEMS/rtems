@@ -160,9 +160,7 @@ clean)
   files=`find . -name 'configure' -print` ;
   test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
   for i in $files; do if test -f $i; then
-    # The config.sub shipped with automake <= 1.7.5 does handle c4x/tic4x-* correctly.
-    # rm -f config.sub
-    rm -f $i config.guess depcomp install-sh mdate-sh missing \
+    rm -f $i config.sub config.guess depcomp install-sh mdate-sh missing \
 	mkinstalldirs texinfo.tex
     test "$verbose" = "-v" && echo "$i"    
   fi; done
