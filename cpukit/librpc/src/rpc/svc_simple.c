@@ -118,7 +118,7 @@ universal(
 	 * enforce "procnum 0 is echo" convention
 	 */
 	if (rqstp->rq_proc == NULLPROC) {
-		if (svc_sendreply(atransp, xdr_void, NULL) == FALSE) {
+		if (svc_sendreply(atransp, (xdrproc_t) xdr_void, NULL) == FALSE) {
 			(void) fprintf(stderr, "xxx\n");
 			exit(1);
 		}
@@ -135,7 +135,8 @@ universal(
 				return;
 			}
 			outdata = (*(lpl->p_progname))(xdrbuf);
-			if (outdata == NULL && lpl->p_outproc != xdr_void)
+			if (outdata == NULL &&
+			    lpl->p_outproc != (xdrproc_t) xdr_void)
 				/* there was an error */
 				return;
 			if (!svc_sendreply(atransp, lpl->p_outproc, outdata)) {

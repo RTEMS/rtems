@@ -159,7 +159,8 @@ static void reg_service(
 		/*
 		 * Null proc call
 		 */
-		if ((!svc_sendreply(xprt, xdr_void, NULL)) && debugging) {
+		if ((!svc_sendreply(xprt, (xdrproc_t) xdr_void, NULL)) &&
+		     debugging) {
 			abort();
 		}
 		break;
@@ -168,7 +169,7 @@ static void reg_service(
 		/*
 		 * Set a program,version to port mapping
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, (caddr_t)&reg))
+		if (!svc_getargs(xprt, (xdrproc_t) xdr_pmap, (caddr_t)&reg))
 			svcerr_decode(xprt);
 		else {
 			/*
@@ -204,7 +205,7 @@ static void reg_service(
 				ans = 1;
 			}
 		done:
-			if ((!svc_sendreply(xprt, xdr_long, (caddr_t)&ans)) &&
+			if ((!svc_sendreply(xprt, (xdrproc_t) xdr_long, (caddr_t)&ans)) &&
 			    debugging) {
 				fprintf(stderr, "svc_sendreply\n");
 				abort();
@@ -216,7 +217,7 @@ static void reg_service(
 		/*
 		 * Remove a program,version to port mapping.
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, (caddr_t)&reg))
+		if (!svc_getargs(xprt, (xdrproc_t) xdr_pmap, (caddr_t)&reg))
 			svcerr_decode(xprt);
 		else {
 			ans = 0;
@@ -238,7 +239,7 @@ static void reg_service(
 					prevpml->pml_next = pml;
 				free(t);
 			}
-			if ((!svc_sendreply(xprt, xdr_long, (caddr_t)&ans)) &&
+			if ((!svc_sendreply(xprt, (xdrproc_t) xdr_long, (caddr_t)&ans)) &&
 			    debugging) {
 				fprintf(stderr, "svc_sendreply\n");
 				abort();
@@ -250,7 +251,7 @@ static void reg_service(
 		/*
 		 * Lookup the mapping for a program,version and return its port
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, (caddr_t)&reg))
+		if (!svc_getargs(xprt, (xdrproc_t) xdr_pmap, (caddr_t)&reg))
 			svcerr_decode(xprt);
 		else {
 			fnd = find_service(reg.pm_prog, reg.pm_vers, reg.pm_prot);
@@ -258,7 +259,7 @@ static void reg_service(
 				port = fnd->pml_map.pm_port;
 			else
 				port = 0;
-			if ((!svc_sendreply(xprt, xdr_long, (caddr_t)&port)) &&
+			if ((!svc_sendreply(xprt, (xdrproc_t) xdr_long, (caddr_t)&port)) &&
 			    debugging) {
 				fprintf(stderr, "svc_sendreply\n");
 				abort();
@@ -270,10 +271,10 @@ static void reg_service(
 		/*
 		 * Return the current set of mapped program,version
 		 */
-		if (!svc_getargs(xprt, xdr_void, NULL))
+		if (!svc_getargs(xprt, (xdrproc_t) xdr_void, NULL))
 			svcerr_decode(xprt);
 		else {
-			if ((!svc_sendreply(xprt, xdr_pmaplist,
+			if ((!svc_sendreply(xprt, (xdrproc_t) xdr_pmaplist,
 			    (caddr_t)&pmaplist)) && debugging) {
 				fprintf(stderr, "svc_sendreply\n");
 				abort();
@@ -419,7 +420,7 @@ callit(
 	timeout.tv_sec = 5;
 	timeout.tv_usec = 0;
 	a.rmt_args.args = buf;
-	if (!svc_getargs(xprt, xdr_rmtcall_args, (caddr_t)&a))
+	if (!svc_getargs(xprt, (xdrproc_t) xdr_rmtcall_args, (caddr_t)&a))
 	    return;
 	if ((pml = find_service(a.rmt_prog, a.rmt_vers, IPPROTO_UDP)) == NULL)
 	    return;
@@ -445,7 +446,7 @@ callit(
 		a.rmt_port = (u_long)port;
 		if (clnt_call(client, a.rmt_proc, xdr_opaque_parms, &a,
 		    xdr_len_opaque_parms, &a, timeout) == RPC_SUCCESS) {
-			svc_sendreply(xprt, xdr_rmtcall_result, (caddr_t)&a);
+			svc_sendreply(xprt, (xdrproc_t) xdr_rmtcall_result, (caddr_t)&a);
 		}
 		AUTH_DESTROY(client->cl_auth);
 		clnt_destroy(client);

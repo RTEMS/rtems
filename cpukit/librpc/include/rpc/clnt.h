@@ -159,11 +159,11 @@ typedef struct __rpc_client {
  *	struct timeval timeout;
  */
 #define	CLNT_CALL(rh, proc, xargs, argsp, xres, resp, secs)	\
-	((*(rh)->cl_ops->cl_call)(rh, proc, xargs, (caddr_t)argsp, \
-		xres, (caddr_t)resp, secs))
+	((*(rh)->cl_ops->cl_call)(rh, proc, (xdrproc_t)xargs, (caddr_t)argsp, \
+		(xdrproc_t) xres, (caddr_t)resp, secs))
 #define	clnt_call(rh, proc, xargs, argsp, xres, resp, secs)	\
-	((*(rh)->cl_ops->cl_call)(rh, proc, xargs, (caddr_t)argsp, \
-		xres, (caddr_t)resp, secs))
+	((*(rh)->cl_ops->cl_call)(rh, proc, (xdrproc_t) xargs, (caddr_t)argsp, \
+		(xdrproc_t) xres, (caddr_t)resp, secs))
 
 /*
  * void
@@ -189,8 +189,8 @@ typedef struct __rpc_client {
  *	xdrproc_t xres;
  *	caddr_t resp;
  */
-#define	CLNT_FREERES(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,xres,resp))
-#define	clnt_freeres(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,xres,resp))
+#define	CLNT_FREERES(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,(xdrproc_t)xres,resp))
+#define	clnt_freeres(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,(xdrproc_t)xres,resp))
 
 /*
  * bool_t

@@ -149,7 +149,7 @@ xdr_rmtcallres(xdrs, crp)
 
 	port_ptr = (caddr_t)crp->port_ptr;
 	if (xdr_reference(xdrs, &port_ptr, sizeof (u_long),
-	    xdr_u_long) && xdr_u_long(xdrs, &crp->resultslen)) {
+	    (xdrproc_t) xdr_u_long) && xdr_u_long(xdrs, &crp->resultslen)) {
 		crp->port_ptr = (u_long *)port_ptr;
 		return ((*(crp->xdr_results))(xdrs, crp->results_ptr));
 	}
@@ -348,7 +348,7 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
 	recv_again:
 		msg.acpted_rply.ar_verf = _null_auth;
 		msg.acpted_rply.ar_results.where = (caddr_t)&r;
-		msg.acpted_rply.ar_results.proc = xdr_rmtcallres;
+		msg.acpted_rply.ar_results.proc = (xdrproc_t) xdr_rmtcallres;
 		/* XXX we know the other bits are still clear */
 		FD_SET(sock, fds);
 		tv = t;		/* for select() that copies back */
@@ -394,7 +394,7 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
 			/* otherwise, we just ignore the errors ... */
 		}
 		xdrs->x_op = XDR_FREE;
-		msg.acpted_rply.ar_results.proc = xdr_void;
+		msg.acpted_rply.ar_results.proc = (xdrproc_t) xdr_void;
 		(void)xdr_replymsg(xdrs, &msg);
 		(void)(*xresults)(xdrs, resultsp);
 		xdr_destroy(xdrs);

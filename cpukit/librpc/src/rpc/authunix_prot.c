@@ -60,7 +60,7 @@ xdr_authunix_parms(xdrs, p)
 	    && xdr_int(xdrs, &(p->aup_uid))
 	    && xdr_int(xdrs, &(p->aup_gid))
 	    && xdr_array(xdrs, (caddr_t *)&(p->aup_gids),
-		    &(p->aup_len), NGRPS, sizeof(int), xdr_int) ) {
+		    &(p->aup_len), NGRPS, sizeof(int), (xdrproc_t) xdr_int) ) {
 		return (TRUE);
 	}
 	return (FALSE);
