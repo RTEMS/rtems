@@ -13,6 +13,9 @@ typedef struct {
   pthread_attr_t          Attributes;
   int                     detachstate;
   Thread_queue_Control    Join_List;
+  int                     schedpolicy;
+  struct sched_param      Schedule;
+
 #if 0
   /*
    *  POSIX Interrupts 
