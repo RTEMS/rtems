@@ -13,7 +13,6 @@
  *  $Id$
  */
 
-#undef  __STRICT_ANSI__  /* fileno() */
 #include <stdio.h>
 
 #include <rtems.h>

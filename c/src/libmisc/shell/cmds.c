@@ -25,7 +25,6 @@
  *  $Id$
  */
 
-#undef  __STRICT_ANSI__ /* fileno() */
 #include <stdio.h>
 #include <termios.h>
 #include <string.h>
