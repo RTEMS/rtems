@@ -14,18 +14,18 @@ include_rtems_HEADERS = include/rtems/bdbuf.h include/rtems/blkdev.h \
 C_FILES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c \
     src/ide_part_table.c
 
-EXTRA_LIBRARIES = o-optimize/libblock.a
-o_optimize_libblock_a_SOURCES = $(C_FILES)
-o_optimize_libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+EXTRA_LIBRARIES = libblock.a
+libblock_a_SOURCES = $(C_FILES)
+libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += o-debug/libblock.a
-o_debug_libblock_a_SOURCES = $(C_FILES)
-o_debug_libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+EXTRA_LIBRARIES += libblock_g.a
+libblock_g_a_SOURCES = $(C_FILES)
+libblock_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += $(LIBC_DEFINES)
 
-all-local: $(PREINSTALL_FILES) $(ARCH)/libblock.a
+all-local: $(PREINSTALL_FILES) libblock$(LIB_VARIANT).a
 
 PREINSTALL_FILES =
 
