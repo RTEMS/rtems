@@ -329,6 +329,10 @@ If {_POSIX_LOGGING} is defined:
    for the @code{logdes} log file descriptor, the new notification shall 
    replace the existing notification registration.
 
+   If the @code{notification} argument is NULL and the calling process is 
+   currently registered to be notified for the @code{logdes} log file
+   descriptor, the existing registration shall be removed.
+
 Otherwise:
 
    The @code{log_notify} function shall fail.
@@ -364,8 +368,24 @@ The function log_close() is not supported by t his implementation.
 
 @subheading DESCRIPTION:
 
-The @code{log_close} function deallocates the open log file
-descriptor indicated by @code{log_des}.
+If {_POSIX_LOGGING} is defined:
+
+   The @code{log_close} function deallocates the open log file descriptor 
+   indicated by @code{log_des}.
+
+   When all log file descriptors associated with an open log file description
+   have been closed, the open log file description shall be freed.
+
+   If the link count of the log file is zero, when all log file descriptors
+   have been closed, the space occupied by the log file shall be freed and the
+   log file shall no longer be accessible.
+
+   If the process has successfully registered a notification request for the 
+   log file descriptor, the registration shall be removed. 
+
+Otherwise:
+
+   The @code{log_close} function shall fail.
 
 @subheading NOTES:
 
@@ -402,9 +422,23 @@ The function log_seek() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-The @code{log_seek} function shall set the log file offset of the open 
-log descriptioin associated with the @code{logdes} log file descriptor to the
-event record in the log file identified by @code{log_recid}.  
+If {_POSIX_LOGGING} is defined:
+
+   The @code{log_seek} function shall set the log file offset of the open 
+   log descriptioin associated with the @code{logdes} log file descriptor 
+   to the event record in the log file identified by @code{log_recid}.  
+   The @code{log_recid} argument is either the record id of a valid event
+   record or one of the following values, as defined in the header <evlog.h>:
+      LOG_SEEK_START - Set log file position to point at the first event
+                       record in the log file
+      LOG_SEEK_END   - Set log file position to point after the last event 
+                       record in the log file
+   If the @code{log_seek} function is interrupted, the state of the open log
+   file description associated with @code{logdes} is unspecified.
+
+Otherwise:
+
+   The @code{log_seek} function shall fail.
 
 @subheading NOTES:
 
@@ -438,8 +472,20 @@ implementation.
 
 @subheading DESCRIPTION:
 
-The @code{log_severity_before} function shall compare the severity order
-of the @code{s1} and @code{s2} arguments. 
+If {_POSIX_LOGGING} is defined:
+
+   The @code{log_severity_before} function shall compare the severity order
+   of the @code{s1} and @code{s2} arguments.  Severity values ordered 
+   according to this function shall be according to decreasing severity.
+
+   If @code{s1} is ordered before or is equal to @code{s2} then the ordering
+   predicate shall return 1, otherwise the predicate shall return 0.  If 
+   either @code{s1} or @code{s2} specify invlid severity values, the return
+   value of @code{log_severity_before} is unspecified.
+
+Otherwise:
+    
+   The @code{log_severity_before} function shall fail. 
 
 @subheading NOTES:
 
@@ -471,6 +517,41 @@ The function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
+If {_POSIX_LOGGING} is defined:
+
+   The facilitysetops primitives manipulate sets of facilities.  They 
+   operate on data objects addressable by the application.
+
+   The @code{log_facilityemptyset} function initializes the facility
+   set pointed to by the argument @code{set}, such that all facilties
+   are included.
+
+   Applications shall call either @code{log_facilityemptyset} or 
+   @code{log_cacilityfillset} at least once for each object of type
+   @code{log_facilityset_t} prior to any other use of that object.  If
+   such an object is not initialized in this way, but is nonetheless 
+   supplied as an argument  to any of the @code{log_facilityaddset}, 
+   @code{logfacilitydelset}, @code{log_facilityismember} or 
+   @code{log_open} functions, the results are undefined.
+
+   The @code{log_facilityaddset} and @code{log_facilitydelset} functions
+   respectively add or delete the individual facility specified by the
+   value of the argument @code{facilityno} to or from the facility set
+   pointed to by the argument @code{set}
+
+   The @code{log_facilityismember} function tests whether the facility
+   specified by the value of the argument @code{facilityno} is a member
+   of the set pointed to by the argument @code{set}.  Upon successful
+   completion, the @code{log_facilityismember} function either returns
+   a value of one to the location specified by @code{member} if the 
+   specified facility is a member of the specified set or returns a 
+   value of zero to the location specified by @code{member} if the
+   specified facility is not a member of the specified set.
+
+Otherwise:
+
+   The function fails
+
 @subheading NOTES:
 
 @page
@@ -500,6 +581,41 @@ The function is not supported by this implementation.
 @end table
 
 @subheading DESCRIPTION:
+
+If {_POSIX_LOGGING} is defined:
+
+   The facilitysetops primitives manipulate sets of facilities.  They 
+   operate on data objects addressable by the application.
+
+   The @code{log_facilityemptyset} function initializes the facility
+   set pointed to by the argument @code{set}, such that all facilties
+   are included.
+
+   Applications shall call either @code{log_facilityemptyset} or 
+   @code{log_cacilityfillset} at least once for each object of type
+   @code{log_facilityset_t} prior to any other use of that object.  If
+   such an object is not initialized in this way, but is nonetheless 
+   supplied as an argument  to any of the @code{log_facilityaddset}, 
+   @code{logfacilitydelset}, @code{log_facilityismember} or 
+   @code{log_open} functions, the results are undefined.
+
+   The @code{log_facilityaddset} and @code{log_facilitydelset} functions
+   respectively add or delete the individual facility specified by the
+   value of the argument @code{facilityno} to or from the facility set
+   pointed to by the argument @code{set}
+
+   The @code{log_facilityismember} function tests whether the facility
+   specified by the value of the argument @code{facilityno} is a member
+   of the set pointed to by the argument @code{set}.  Upon successful
+   completion, the @code{log_facilityismember} function either returns
+   a value of one to the location specified by @code{member} if the 
+   specified facility is a member of the specified set or returns a 
+   value of zero to the location specified by @code{member} if the
+   specified facility is not a member of the specified set.
+
+Otherwise:
+
+   The function fails
 
 @subheading NOTES:
 
@@ -532,6 +648,41 @@ The function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
+If {_POSIX_LOGGING} is defined:
+
+   The facilitysetops primitives manipulate sets of facilities.  They 
+   operate on data objects addressable by the application.
+
+   The @code{log_facilityemptyset} function initializes the facility
+   set pointed to by the argument @code{set}, such that all facilties
+   are included.
+
+   Applications shall call either @code{log_facilityemptyset} or 
+   @code{log_cacilityfillset} at least once for each object of type
+   @code{log_facilityset_t} prior to any other use of that object.  If
+   such an object is not initialized in this way, but is nonetheless 
+   supplied as an argument  to any of the @code{log_facilityaddset}, 
+   @code{logfacilitydelset}, @code{log_facilityismember} or 
+   @code{log_open} functions, the results are undefined.
+
+   The @code{log_facilityaddset} and @code{log_facilitydelset} functions
+   respectively add or delete the individual facility specified by the
+   value of the argument @code{facilityno} to or from the facility set
+   pointed to by the argument @code{set}
+
+   The @code{log_facilityismember} function tests whether the facility
+   specified by the value of the argument @code{facilityno} is a member
+   of the set pointed to by the argument @code{set}.  Upon successful
+   completion, the @code{log_facilityismember} function either returns
+   a value of one to the location specified by @code{member} if the 
+   specified facility is a member of the specified set or returns a 
+   value of zero to the location specified by @code{member} if the
+   specified facility is not a member of the specified set.
+
+Otherwise:
+
+   The function fails
+
 @subheading NOTES:
 
 @page
@@ -562,6 +713,41 @@ The function is not supported by this implementation.
 @end table
 
 @subheading DESCRIPTION:
+
+If {_POSIX_LOGGING} is defined:
+
+   The facilitysetops primitives manipulate sets of facilities.  They 
+   operate on data objects addressable by the application.
+
+   The @code{log_facilityemptyset} function initializes the facility
+   set pointed to by the argument @code{set}, such that all facilties
+   are included.
+
+   Applications shall call either @code{log_facilityemptyset} or 
+   @code{log_cacilityfillset} at least once for each object of type
+   @code{log_facilityset_t} prior to any other use of that object.  If
+   such an object is not initialized in this way, but is nonetheless 
+   supplied as an argument  to any of the @code{log_facilityaddset}, 
+   @code{logfacilitydelset}, @code{log_facilityismember} or 
+   @code{log_open} functions, the results are undefined.
+
+   The @code{log_facilityaddset} and @code{log_facilitydelset} functions
+   respectively add or delete the individual facility specified by the
+   value of the argument @code{facilityno} to or from the facility set
+   pointed to by the argument @code{set}
+
+   The @code{log_facilityismember} function tests whether the facility
+   specified by the value of the argument @code{facilityno} is a member
+   of the set pointed to by the argument @code{set}.  Upon successful
+   completion, the @code{log_facilityismember} function either returns
+   a value of one to the location specified by @code{member} if the 
+   specified facility is a member of the specified set or returns a 
+   value of zero to the location specified by @code{member} if the
+   specified facility is not a member of the specified set.
+
+Otherwise:
+
+   The function fails
 
 @subheading NOTES:
 
@@ -594,6 +780,41 @@ The function is not supported by this implementation.
 @end table
 
 @subheading DESCRIPTION:
+
+If {_POSIX_LOGGING} is defined:
+
+   The facilitysetops primitives manipulate sets of facilities.  They 
+   operate on data objects addressable by the application.
+
+   The @code{log_facilityemptyset} function initializes the facility
+   set pointed to by the argument @code{set}, such that all facilties
+   are included.
+
+   Applications shall call either @code{log_facilityemptyset} or 
+   @code{log_cacilityfillset} at least once for each object of type
+   @code{log_facilityset_t} prior to any other use of that object.  If
+   such an object is not initialized in this way, but is nonetheless 
+   supplied as an argument  to any of the @code{log_facilityaddset}, 
+   @code{logfacilitydelset}, @code{log_facilityismember} or 
+   @code{log_open} functions, the results are undefined.
+
+   The @code{log_facilityaddset} and @code{log_facilitydelset} functions
+   respectively add or delete the individual facility specified by the
+   value of the argument @code{facilityno} to or from the facility set
+   pointed to by the argument @code{set}
+
+   The @code{log_facilityismember} function tests whether the facility
+   specified by the value of the argument @code{facilityno} is a member
+   of the set pointed to by the argument @code{set}.  Upon successful
+   completion, the @code{log_facilityismember} function either returns
+   a value of one to the location specified by @code{member} if the 
+   specified facility is a member of the specified set or returns a 
+   value of zero to the location specified by @code{member} if the
+   specified facility is not a member of the specified set.
+
+Otherwise:
+
+   The function fails
 
 @subheading NOTES:
 
