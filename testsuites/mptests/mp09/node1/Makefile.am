@@ -27,7 +27,7 @@ PRINT_SRCS = $(DOCS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../automake/compile.am
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../automake/leaf.am
 include $(top_srcdir)/mptests.am
 
 AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I$(srcdir)/..
