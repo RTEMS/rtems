@@ -1,0 +1,92 @@
+#
+# spec file for building gcc for freebsd
+# 
+
+%define _prefix @PREFIX@
+
+%define gcc_version @GCC_VERS@
+%define gcc_rpmvers %{expand: %(echo  @GCC_VERS@ | tr - _)}
+
+%define __os_install_post       %{nil}
+
+Vendor:       	RTEMS.org
+Distribution: 	Linux
+Name:         	i386-freebsd5-gcc
+Summary:      	i386-freebsd5 gcc.
+Group:	      	FreeBSD
+Release:      	@GCC_RPMREL@
+License:      	gcc is GPL/LGPL
+Packager:     	Ralf Corsepius <ralf_corsepius@rtems.org>
+Version:        %gcc_rpmvers
+
+Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}-20040412.tar.bz2
+NoSource:	0
+
+BuildRoot:	@RPM_BUILD_ROOT@
+
+# Urgh, but RH's find-* is too stupid to cope with foreign objects
+Autoreqprov:  	off
+
+BuildRequires:	i386-freebsd5-binutils
+BuildRequires:	i386-freebsd5-libs
+Requires: 	i386-freebsd5-binutils
+Requires:	i386-freebsd5-libs
+Provides:	i386-freebsd5-gcc
+
+%description
+Cross gcc for target solaris
+
+%prep
+# untar the sources inside i386-freebsd5-gcc
+%setup -c -n %{name}-%{version} -a 0 
+
+#  touch gcc-%{gcc_version}/gcc/ada/treeprs.ads
+#  touch gcc-%{gcc_version}/gcc/ada/[es]info.h
+#  touch gcc-%{gcc_version}/gcc/ada/nmake.ad[bs]
+
+  pushd gcc-%{gcc_version}
+  contrib/gcc_update --touch
+  popd
+
+  test -d build || mkdir build
+
+%build
+  export PATH="%{_bindir}:${PATH}"
+  cd build
+
+  ../gcc-%{gcc_version}/configure --target=i386-freebsd5 \
+    --with-gnu-as --with-gnu-ld --without-newlib --verbose \
+    --disable-nls --enable-languages=c,c++ \
+    --enable-version-specific-runtime-libs \
+    --with-sysroot=%{_prefix}/i386-freebsd5/sys-root \
+    --prefix=%{_prefix} 
+
+  make all
+
+#  make -C gcc gnatlib
+#  make -C gcc cross-gnattools
+#  make -C gcc ada.all.cross
+
+# We don't want info files
+#  make info
+%install
+  rm -rf $RPM_BUILD_ROOT
+  export PATH="%{_bindir}:${PATH}"
+  cd build
+
+  make prefix=$RPM_BUILD_ROOT%{_prefix} install
+  # cd back to build/
+  cd ..
+
+  # libiberty comes from freebsd5-libs or binutils
+  rm -f $RPM_BUILD_ROOT%{_prefix}/i386-freebsd5/lib/libiberty.a
+  rm -f $RPM_BUILD_ROOT%{_prefix}/lib/libiberty.a
+
+  # GCC ships broken *.la's
+  find $RPM_BUILD_ROOT%{_prefix} -name '*.la' -exec rm -f {} \;
+
+%files
+%defattr(-,root,root)
+%{_prefix}
+# We don't want infos
+%exclude %{_prefix}/info

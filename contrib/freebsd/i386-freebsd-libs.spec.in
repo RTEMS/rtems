@@ -1,0 +1,103 @@
+#
+# spec file for package i386-freebsd5-libs
+# 
+
+%define _prefix @PREFIX@
+
+%define freebsd_version @FREEBSD_VERS@
+%define freebsd_rpmvers %{expand: %(echo @FREEBSD_VERS@ | tr - _)}
+
+%define __os_install_post       %{nil}
+
+Vendor:       RTEMS.org
+Distribution: Linux
+Name:         i386-freebsd5-libs
+Release:      @FREEBSD_RPMREL@
+Copyright:    FreeBSD
+Group:        freebsd
+
+Packager:     	Ralf Corsepius <ralf_corsepius@rtems.org>
+Prefix:		%{_prefix}
+BuildRoot:	@RPM_BUILD_ROOT@
+BuildArch:	noarch
+
+Version:      	%freebsd_rpmvers
+Summary:      	freebsd
+Prefix:		%{_prefix}
+
+# Urgh, but RH's find-* is too stupid to cope with foreign objects
+Autoreqprov:  	off
+Provides:     i386-freebsd5-libs
+
+Source0: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.aa
+Source1: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ab
+Source2: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ac
+Source3: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ad
+Source4: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ae
+Source5: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.af
+Source6: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ag
+Source7: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ah
+Source8: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ai
+Source9: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.aj
+Source10: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ak
+Source11: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.al
+Source12: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.am
+Source13: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.an
+Source14: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ao
+Source15: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ap
+Source16: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.aq
+Source17: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ar
+Source18: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.as
+Source19: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.at
+Source20: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.au
+Source21: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.av
+Source22: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.aw
+Source23: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ax
+Source24: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.ay
+Source25: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.2.1-RELEASE/base/base.az
+
+%description
+FreeBSD libs
+
+%prep
+%setup -c -T -n %{name}-%{version}
+
+  cat \
+ %SOURCE0 %SOURCE1 %SOURCE2 %SOURCE3 %SOURCE4 \
+ %SOURCE5 %SOURCE6 %SOURCE7 %SOURCE8 %SOURCE9 \
+ %SOURCE10 %SOURCE11 %SOURCE12 %SOURCE13 %SOURCE14 \
+ %SOURCE15 %SOURCE16 %SOURCE17 %SOURCE18 %SOURCE19 \
+ %SOURCE20 %SOURCE21 %SOURCE22 %SOURCE23 %SOURCE24 \
+ %SOURCE25 | tar xzvf -
+
+%build
+  mkdir -p i386-freebsd5/sys-root
+  tar cvf - usr/lib usr/include lib | ( cd i386-freebsd5/sys-root ; tar xvf -)
+
+  pushd i386-freebsd5/sys-root/usr/lib
+  # missing files
+  rm -f lib*_p.*
+  # not needed
+  rm -rf aout compat
+
+  # Fix up symlinks
+  find -type l -exec ls -l {} \; | \
+    while read a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aA ; do \
+    case $aA in
+    /lib* ) # link
+       rm $a8;
+       b=`basename $aA`
+       ln -s ../../lib/$b $a8
+       ;;
+    esac
+  done
+  popd
+
+%install
+  rm -rf $RPM_BUILD_ROOT
+  mkdir -p $RPM_BUILD_ROOT%{prefix}
+  cp -a i386-freebsd5 $RPM_BUILD_ROOT%{prefix}
+
+%files
+%defattr(-,root,root)
+%{prefix}/i386-freebsd5
