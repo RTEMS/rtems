@@ -524,25 +524,6 @@ SetAttributes (int minor, const struct termios *t)
 }
 
 /******************************************************
-  Name: console_atexit
-  Input parameters: -
-  Output parameters: -
-  Description: called at program termination.
-  TO DO: add a TERMIOS routine to wait for all the 
-         characters to be transmitted
- *****************************************************/
-void console_atexit(void)
-{
- if ((CHANNEL_ENABLED_A && USE_INTERRUPTS_A) || (CHANNEL_ENABLED_B && USE_INTERRUPTS_B))
-    {
-	/* should do a drain output but the function is static 
-	   and we do not have a table holding all the file descriptors */
-	/* just loop, I don't mind not to shutdown the executive */
-	while (1) continue;
-    }
-}
-
-/******************************************************
   Name: console_reserve_resources
   Input parameters: -
   Output parameters: -
@@ -572,11 +553,6 @@ rtems_device_driver console_initialize(
 {
 	rtems_status_code status;
 	int i;
-
-	/*
-	 * Set up console driver needs for program termination 
-	 */
-	atexit(console_atexit);
 
 	/*
 	 * Set up TERMIOS
