@@ -100,6 +100,6 @@ Makefile
 echo
 echo target architecture: $target_cpu.
 echo available BSPs: $rtems_bsp.
-echo \'make all\' will build the following BSPs: $RTEMS_BSP_LIST.
-echo other BSPs can be built with \'make RTEMS_BSP=\"bsp1 bsp2 ...\"\'
+echo \'${MAKE} all\' will build the following BSPs: $RTEMS_BSP_LIST.
+echo other BSPs can be built with \'${MAKE} RTEMS_BSP=\"bsp1 bsp2 ...\"\'
 echo

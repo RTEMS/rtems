@@ -1,3 +1,8 @@
+2001-03-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Use ${MAKE} in message at the end of the
+	configure.in.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Apply _RTEMS_ADJUST_SRCDIR.
