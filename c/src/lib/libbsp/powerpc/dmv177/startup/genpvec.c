@@ -218,12 +218,9 @@ rtems_isr_entry  set_EE_vector(
   Chain_Append( &ISR_Array[vec_idx], &ISR_Nodes[index].Node );
 
   /*
-   * Enable the interrupt.
+   * Enable the LIRQ interrupt.
    */
-  if (vector == DMV170_LIRQ5)
-    SCV64_Generate_DUART_Interrupts();
-  else
-    enable_card_interrupt( vector );
+  SCV64_Generate_DUART_Interrupts();
 
   /*
    * No interrupt service routine was removed so return 0
