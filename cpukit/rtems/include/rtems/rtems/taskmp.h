@@ -54,12 +54,12 @@ typedef enum {
  */
 
 typedef struct {
-  rtems_packet_prefix                 Prefix;
-  RTEMS_tasks_MP_Remote_operations operation;
-  Objects_Name                     name;
-  rtems_task_priority                 the_priority;
-  unsigned32                       notepad;
-  unsigned32                       note;
+  rtems_packet_prefix               Prefix;
+  RTEMS_tasks_MP_Remote_operations  operation;
+  rtems_name                        name;
+  rtems_task_priority               the_priority;
+  unsigned32                        notepad;
+  unsigned32                        note;
 }   RTEMS_tasks_MP_Packet;
 
 /*
@@ -74,7 +74,7 @@ typedef struct {
 void _RTEMS_tasks_MP_Send_process_packet (
   RTEMS_tasks_MP_Remote_operations operation,
   Objects_Id                       task_id,
-  Objects_Name                     name
+  rtems_name                       name
 );
 
 /*

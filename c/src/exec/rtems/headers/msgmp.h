@@ -57,7 +57,7 @@ typedef enum {
 typedef struct {
   rtems_packet_prefix                Prefix;
   Message_queue_MP_Remote_operations operation;
-  Objects_Name                       name;
+  rtems_name                         name;
   rtems_option                       option_set;
   Objects_Id                         proxy_id;
   unsigned32                         count;
@@ -78,7 +78,7 @@ typedef struct {
 void _Message_queue_MP_Send_process_packet (
   Message_queue_MP_Remote_operations operation,
   Objects_Id                         message_queue_id,
-  Objects_Name                       name,
+  rtems_name                         name,
   Objects_Id                         proxy_id
 );
 

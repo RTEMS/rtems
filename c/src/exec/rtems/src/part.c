@@ -14,6 +14,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/support.h>
 #include <rtems/address.h>
 #include <rtems/config.h>
 #include <rtems/object.h>
@@ -42,7 +43,9 @@ void _Partition_Manager_initialization(
     OBJECTS_RTEMS_PARTITIONS,
     TRUE,
     maximum_partitions,
-    sizeof( Partition_Control )
+    sizeof( Partition_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
   );
 
 }
@@ -69,7 +72,7 @@ void _Partition_Manager_initialization(
  */
 
 rtems_status_code rtems_partition_create(
-  Objects_Name        name,
+  rtems_name          name,
   void               *starting_address,
   unsigned32          length,
   unsigned32          buffer_size,
@@ -79,7 +82,7 @@ rtems_status_code rtems_partition_create(
 {
   register Partition_Control *the_partition;
 
-  if ( !_Objects_Is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) )
     return ( RTEMS_INVALID_NAME );
 
   if ( length == 0 || buffer_size == 0 || length < buffer_size ||
@@ -118,7 +121,7 @@ rtems_status_code rtems_partition_create(
   _Chain_Initialize( &the_partition->Memory, starting_address,
                         length / buffer_size, buffer_size );
 
-  _Objects_Open( &_Partition_Information, &the_partition->Object, name );
+  _Objects_Open( &_Partition_Information, &the_partition->Object, &name );
 
   *id = the_partition->Object.id;
   if ( _Attributes_Is_global( attribute_set ) )
@@ -152,12 +155,12 @@ rtems_status_code rtems_partition_create(
  */
 
 rtems_status_code rtems_partition_ident(
-  Objects_Name  name,
+  rtems_name    name,
   unsigned32    node,
   Objects_Id   *id
 )
 {
-  return( _Objects_Name_to_id( &_Partition_Information, name, node, id ) );
+  return _Objects_Name_to_id( &_Partition_Information, &name, node, id );
 }
 
 /*PAGE

@@ -1,5 +1,5 @@
 /*
- *  RTEMS RCS Id: paranoia.c,v 1.2 1995/05/31 17:06:09 joel Exp
+ *  $Id$
  *
  *      A C version of Kahan's Floating Point Test "Paranoia"
  *

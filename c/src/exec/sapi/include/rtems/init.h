@@ -30,6 +30,7 @@
 extern "C" {
 #endif
 
+#include <rtems/types.h>
 #include <rtems/config.h>
 #include <rtems/intr.h>
 

@@ -38,6 +38,7 @@
 extern "C" {
 #endif
 
+#include <rtems.h>
 #include <rtems/message.h>
 #include <rtems/object.h>
 #include <rtems/part.h>
@@ -74,7 +75,7 @@ extern "C" {
  */
 
 rtems_status_code rtems_task_create(
-  Objects_Name        name,
+  rtems_name          name,
   rtems_task_priority    initial_priority,
   unsigned32          stack_size,
   rtems_mode       initial_modes,
@@ -97,7 +98,7 @@ rtems_status_code rtems_task_create(
  */
 
 rtems_status_code rtems_task_ident(
-  Objects_Name  name,
+  rtems_name    name,
   unsigned32    node,
   Objects_Id   *id
 );

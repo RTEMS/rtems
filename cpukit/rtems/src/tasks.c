@@ -14,6 +14,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/support.h>
 #include <rtems/modes.h>
 #include <rtems/object.h>
 #include <rtems/stack.h>
@@ -48,7 +49,7 @@
  */
 
 rtems_status_code rtems_task_create(
-  Objects_Name         name,
+  rtems_name           name,
   rtems_task_priority  initial_priority,
   unsigned32           stack_size,
   rtems_mode           initial_modes,
@@ -62,7 +63,7 @@ rtems_status_code rtems_task_create(
   void                    *memory;
   rtems_attribute          the_attribute_set;
 
-  if ( !_Objects_Is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) )
     return ( RTEMS_INVALID_NAME );
 
 #if 0
@@ -156,7 +157,7 @@ rtems_status_code rtems_task_create(
 
   _ASR_Initialize( &the_thread->Signal );
 
-  _Objects_Open( &_Thread_Information, &the_thread->Object, name );
+  _Objects_Open( &_Thread_Information, &the_thread->Object, &name );
 
   *id = the_thread->Object.id;
 
@@ -192,13 +193,13 @@ rtems_status_code rtems_task_create(
  */
 
 rtems_status_code rtems_task_ident(
-  Objects_Name  name,
+  rtems_name    name,
   unsigned32    node,
   Objects_Id   *id
 )
 {
   if ( name != OBJECTS_ID_OF_SELF )
-    return( _Objects_Name_to_id( &_Thread_Information, name, node, id ) );
+    return( _Objects_Name_to_id( &_Thread_Information, &name, node, id ) );
 
   *id = _Thread_Executing->Object.id;
   return( RTEMS_SUCCESSFUL );

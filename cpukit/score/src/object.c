@@ -55,6 +55,7 @@ void _Objects_Handler_initialization(
  *    the_class       - object class
  *    supports_global - TRUE if this is a global object class
  *    maximum         - maximum objects of this class
+ *    is_string       - TRUE if names for this object are strings
  *    size            - size of this object's control block
  *
  *  Output parameters:  NONE
@@ -65,15 +66,24 @@ void _Objects_Initialize_information(
   Objects_Classes      the_class,
   boolean              supports_global,
   unsigned32           maximum,
-  unsigned32           size
+  unsigned32           size,
+  boolean              is_string,
+  unsigned32           maximum_name_length
 )
 {
   unsigned32       minimum_index;
   unsigned32       index;
   Objects_Control *the_object;
+  unsigned32       name_length;
+  void            *name_area;
 
   information->maximum   = maximum;
   information->the_class = the_class; 
+  information->is_string = is_string; 
+
+  /*
+   *  Calculate minimum and maximum Id's
+   */
 
   if ( maximum == 0 ) minimum_index = 0;
   else                minimum_index = 1;
@@ -84,23 +94,44 @@ void _Objects_Initialize_information(
   information->maximum_id =
     _Objects_Build_id( the_class, _Objects_Local_node, maximum );
 
+  /*
+   *  Allocate local pointer table
+   */
+
   information->local_table = _Workspace_Allocate_or_fatal_error(
     (maximum + 1) * sizeof(Objects_Control *)
   );
 
-  information->name_table = _Workspace_Allocate_or_fatal_error(
-    (maximum + 1) * sizeof(Objects_Name)
-  );
+  /*
+   *  Allocate name table
+   */
 
-  for ( index=0 ; index < maximum ; index++ ) {
+  name_length = maximum_name_length;
+
+  if (name_length & (OBJECTS_NAME_ALIGNMENT-1))
+    name_length = (name_length + OBJECTS_NAME_ALIGNMENT) & 
+                  ~(OBJECTS_NAME_ALIGNMENT-1);
+
+  information->name_length = name_length;
+
+  name_area = _Workspace_Allocate_or_fatal_error( (maximum + 1) * name_length );
+  information->name_table = name_area;
+
+  /*
+   *  Initialize local pointer table
+   */
+
+  for ( index=0 ; index <= maximum ; index++ ) {
      information->local_table[ index ] = NULL;
-     information->name_table[ index ]  = 0;
   }
+
+  /*
+   *  Initialize objects .. if there are any
+   */
 
   if ( maximum == 0 ) {
     _Chain_Initialize_empty( &information->Inactive );
   } else {
-
 
     _Chain_Initialize(
       &information->Inactive,
@@ -110,30 +141,150 @@ void _Objects_Initialize_information(
     );
 
     the_object = (Objects_Control *) information->Inactive.first;
-    for ( index=1;
-          index <= maximum ;
-          index++ ) {
+    for ( index=1; index <= maximum ; index++ ) {
       the_object->id = 
         _Objects_Build_id( the_class, _Objects_Local_node, index );
+      
+      the_object->name = (void *) name_area;
+
+      name_area = _Addresses_Add_offset( name_area, name_length );
+
       the_object = (Objects_Control *) the_object->Node.next;
     }
 
   }
 
- if ( supports_global == TRUE && _Configuration_Is_multiprocessing() ) {
+  /*
+   *  Take care of multiprocessing
+   */
 
-   information->global_table = _Workspace_Allocate_or_fatal_error(
-     (_Configuration_MP_table->maximum_nodes + 1) * sizeof(Chain_Control)
-   );
+  if ( supports_global == TRUE && _Configuration_Is_multiprocessing() ) {
 
-   for ( index=1;
-         index <= _Configuration_MP_table->maximum_nodes ;
-         index++ )
-     _Chain_Initialize_empty( &information->global_table[ index ] );
-  }
-  else
-    information->global_table = NULL;
+    information->global_table = _Workspace_Allocate_or_fatal_error(
+      (_Configuration_MP_table->maximum_nodes + 1) * sizeof(Chain_Control)
+    );
+
+    for ( index=1;
+          index <= _Configuration_MP_table->maximum_nodes ;
+          index++ )
+      _Chain_Initialize_empty( &information->global_table[ index ] );
+   }
+   else
+     information->global_table = NULL;
 }
+
+/*PAGE
+ *
+ *  _Objects_Clear_name
+ *
+ *  XXX
+ */
+
+void _Objects_Clear_name(
+  void       *name,
+  unsigned32  length
+)
+{
+  unsigned32  index;
+  unsigned32  maximum = length / OBJECTS_NAME_ALIGNMENT;
+  unsigned32 *name_ptr = name;
+
+  for ( index=0 ; index < maximum ; index++ ) 
+    *name_ptr++ = 0;
+}
+ 
+/*PAGE
+ *
+ *  _Objects_Copy_name_string
+ *
+ *  XXX
+ */
+ 
+void _Objects_Copy_name_string(
+  void       *source,
+  void       *destination
+)
+{
+  unsigned8 *source_p = source;
+  unsigned8 *destination_p = destination;
+ 
+  do {
+    *destination_p++ = *source_p;
+  } while ( *source_p++ );
+}
+
+/*PAGE
+ *
+ *  _Objects_Copy_name_raw
+ *
+ *  XXX
+ */
+ 
+void _Objects_Copy_name_raw(
+  void       *source,
+  void       *destination,
+  unsigned32  length
+)
+{
+  unsigned32 *source_p = source;
+  unsigned32 *destination_p = destination;
+  unsigned32  tmp_length = length / OBJECTS_NAME_ALIGNMENT;
+ 
+  while ( tmp_length-- )
+    *destination_p++ = *source_p++;
+}
+
+/*PAGE
+ *
+ *  _Objects_Compare_name_string
+ *
+ *  XXX
+ */
+ 
+boolean _Objects_Compare_name_string(
+  void       *name_1,
+  void       *name_2,
+  unsigned32  length
+)
+{
+  unsigned8 *name_1_p = name_1;
+  unsigned8 *name_2_p = name_2;
+  unsigned32 tmp_length = length;
+ 
+  do {
+    if ( *name_1_p++ != *name_2_p++ )
+      return FALSE;
+    if ( !tmp_length-- )
+      return FALSE;
+  } while ( *name_1_p );
+
+  return TRUE;
+}
+ 
+/*PAGE
+ *
+ *  _Objects_Compare_name_raw
+ *
+ *  XXX
+ */
+ 
+boolean _Objects_Compare_name_raw(
+  void       *name_1,
+  void       *name_2,
+  unsigned32  length
+)
+{
+  unsigned32 *name_1_p = name_1;
+  unsigned32 *name_2_p = name_2;
+  unsigned32  tmp_length = length / OBJECTS_NAME_ALIGNMENT;
+ 
+  while ( tmp_length-- )
+    if ( *name_1_p++ != *name_2_p++ )
+      return FALSE;
+
+  return TRUE;
+}
+
 
 /*PAGE
  *
@@ -156,15 +307,17 @@ void _Objects_Initialize_information(
 
 rtems_status_code _Objects_Name_to_id(
   Objects_Information *information,
-  Objects_Name                name,
-  unsigned32                  node,
-  Objects_Id                 *id
+  Objects_Name         name,
+  unsigned32           node,
+  Objects_Id          *id
 )
 {
-  boolean           search_local_node;
-  Objects_Control **objects;
-  Objects_Control  *the_object;
-  unsigned32        index;
+  boolean                    search_local_node;
+  Objects_Control          **objects;
+  Objects_Control           *the_object;
+  unsigned32                 index;
+  unsigned32                 name_length;
+  Objects_Name_comparators   compare_them;
 
   if ( name == 0 )
     return( RTEMS_INVALID_NAME );
@@ -179,6 +332,11 @@ rtems_status_code _Objects_Name_to_id(
   if ( search_local_node ) {
     objects = information->local_table;
 
+    name_length = information->name_length;
+
+    if ( information->is_string ) compare_them = _Objects_Compare_name_string;
+    else                          compare_them = _Objects_Compare_name_raw;
+
     for ( index = 1; index <= information->maximum; index++ ) {
 
       the_object = objects[ index ];
@@ -186,7 +344,7 @@ rtems_status_code _Objects_Name_to_id(
       if ( !the_object || !the_object->name )
         continue;
 
-      if ( name == *the_object->name ) {
+      if ( (*compare_them)( name, the_object->name, name_length ) ) {
         *id = the_object->id;
         return( RTEMS_SUCCESSFUL );
       }

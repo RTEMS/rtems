@@ -43,9 +43,9 @@ typedef enum {
  */
 
 typedef struct {
-  rtems_packet_prefix           Prefix;
-  Event_MP_Remote_operations operation;
-  rtems_event_set         event_in;
+  rtems_packet_prefix         Prefix;
+  Event_MP_Remote_operations  operation;
+  rtems_event_set             event_in;
 }   Event_MP_Packet;
 
 /*

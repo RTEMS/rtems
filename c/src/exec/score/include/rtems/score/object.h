@@ -29,7 +29,25 @@ extern "C" {
  *  object names.
  */
 
-typedef unsigned32 Objects_Name;
+typedef void * Objects_Name;
+
+/*
+ *  Space for object names is allocated in multiples of this.
+ *
+ *  NOTE:  Must be a power of 2.  Matches the name manipulation routines.
+ */
+
+#define OBJECTS_NAME_ALIGNMENT     4
+
+/*
+ *  Functions which compare names are prototyped like this.
+ */
+
+typedef boolean (*Objects_Name_comparators)(
+  void       * /* name_1 */,
+  void       * /* name_2 */,
+  unsigned32   /* length */
+);
 
 /*
  *  The following type defines the control block used to manage
@@ -91,7 +109,7 @@ typedef enum {
 typedef struct {
   Chain_Node    Node;
   Objects_Id    id;
-  Objects_Name *name;
+  Objects_Name  name;
 }   Objects_Control;
 
 /*
@@ -108,6 +126,8 @@ typedef struct {
   Objects_Name     *name_table;      /* table of local object names */
   Chain_Control    *global_table;    /* pointer to global table */
   Chain_Control     Inactive;        /* chain of inactive ctl blocks */
+  boolean           is_string;       /* TRUE if names are strings */
+  unsigned32        name_length;     /* maximum length of names */
 }   Objects_Information;
 
 /*
@@ -179,9 +199,78 @@ void _Objects_Initialize_information (
   Objects_Classes      the_class,
   boolean              supports_global,
   unsigned32           maximum,
-  unsigned32           size
+  unsigned32           size,
+  boolean              is_string,
+  unsigned32           maximum_name_length
 );
 
+/*
+ *  _Objects_Clear_name
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+void _Objects_Clear_name(
+  void       *name,
+  unsigned32  length
+);
+
+/*
+ *  _Objects_Copy_name_string
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+
+void _Objects_Copy_name_string(
+  void       *source,
+  void       *destination
+);
+
+/*
+ *  _Objects_Copy_name_raw
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+
+void _Objects_Copy_name_raw(
+  void       *source,
+  void       *destination,
+  unsigned32  length
+);
+
+/*
+ *  _Objects_Compare_name_string
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+
+boolean _Objects_Compare_name_string(
+  void       *name_1,
+  void       *name_2,
+  unsigned32  length
+);
+
+/*
+ *  _Objects_Compare_name_raw
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+
+boolean _Objects_Compare_name_raw(
+  void       *name_1,
+  void       *name_2,
+  unsigned32  length
+);
 /*
  *  _Objects_Name_to_id
  *
@@ -241,53 +330,6 @@ Objects_Control *_Objects_Get_next(
     Objects_Id           id,
     unsigned32          *location_p,
     Objects_Id          *next_id_p
-);
-
-/*
- *  _Objects_Is_name_valid
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the name is valid, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Objects_Is_name_valid (
-  Objects_Name name
-);
-
-/*
- *  rtems_build_name
- *
- *  DESCRIPTION:
- *
- *  This function returns an object name composed of the four characters
- *  C1, C2, C3, and C4.
- *
- *  NOTE:
- *
- *  This must be implemented as a macro for use in Configuration Tables.
- *
- */
-
-#define rtems_build_name( _C1, _C2, _C3, _C4 ) \
-  ( (_C1) << 24 | (_C2) << 16 | (_C3) << 8 | (_C4) )
-
-/*
- *  rtems_name_to_characters
- *
- *  DESCRIPTION:
- *
- *  This function breaks the object name into the four component
- *  characters C1, C2, C3, and C4.
- *
- */
-
-STATIC INLINE void rtems_name_to_characters(
-  Objects_Name  name,
-  char         *c1,
-  char         *c2,
-  char         *c3,
-  char         *c4
 );
 
 /*

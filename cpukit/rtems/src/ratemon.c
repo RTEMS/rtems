@@ -14,6 +14,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/support.h>
 #include <rtems/isr.h>
 #include <rtems/object.h>
 #include <rtems/ratemon.h>
@@ -40,11 +41,13 @@ void _Rate_monotonic_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-     &_Rate_monotonic_Information,
-     OBJECTS_RTEMS_PERIODS,
-     FALSE,
-     maximum_periods,
-     sizeof( Rate_monotonic_Control )
+    &_Rate_monotonic_Information,
+    OBJECTS_RTEMS_PERIODS,
+    FALSE,
+    maximum_periods,
+    sizeof( Rate_monotonic_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
   );
 }
 
@@ -66,13 +69,13 @@ void _Rate_monotonic_Manager_initialization(
  */
 
 rtems_status_code rtems_rate_monotonic_create(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 )
 {
   Rate_monotonic_Control *the_period;
 
-  if ( !_Objects_Is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) )
     return( RTEMS_INVALID_NAME );
 
   _Thread_Disable_dispatch();            /* to prevent deletion */
@@ -87,7 +90,7 @@ rtems_status_code rtems_rate_monotonic_create(
   the_period->owner = _Thread_Executing;
   the_period->state = RATE_MONOTONIC_INACTIVE;
 
-  _Objects_Open( &_Rate_monotonic_Information, &the_period->Object, name );
+  _Objects_Open( &_Rate_monotonic_Information, &the_period->Object, &name );
 
   *id = the_period->Object.id;
   _Thread_Enable_dispatch();
@@ -112,13 +115,13 @@ rtems_status_code rtems_rate_monotonic_create(
  */
 
 rtems_status_code rtems_rate_monotonic_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 )
 {
   return _Objects_Name_to_id(
     &_Rate_monotonic_Information,
-    name,
+    &name,
     RTEMS_SEARCH_LOCAL_NODE,
     id
   );

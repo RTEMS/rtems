@@ -31,7 +31,7 @@
 void _RTEMS_tasks_MP_Send_process_packet (
   RTEMS_tasks_MP_Remote_operations operation,
   Objects_Id                       task_id,
-  Objects_Name                     name
+  rtems_name                       name
 )
 {
   RTEMS_tasks_MP_Packet *the_packet;

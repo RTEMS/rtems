@@ -53,12 +53,12 @@ void _Objects_MP_Handler_initialization (
 
 boolean _Objects_MP_Open (
   Objects_Information *information,
-  Objects_Name         the_name,
+  unsigned32           the_name,      /* XXX -- wrong for variable */
   Objects_Id           the_id,
   boolean              is_fatal_error
 )
 {
-  Objects_MP_Control     *the_global_object;
+  Objects_MP_Control  *the_global_object;
 
   the_global_object = _Objects_MP_Allocate_global_object();
   if ( _Objects_MP_Is_null_global_object( the_global_object ) ) {
@@ -139,6 +139,7 @@ rtems_status_code _Objects_MP_Global_name_search (
   Chain_Control      *the_chain;
   Chain_Node         *the_node;
   Objects_MP_Control *the_object;
+  unsigned32          name_to_use = *(unsigned32 *)the_name;  /* XXX variable */
 
 
   if ( nodes_to_search > _Configuration_MP_table->maximum_nodes )
@@ -174,7 +175,7 @@ rtems_status_code _Objects_MP_Global_name_search (
 
         the_object = (Objects_MP_Control *) the_node;
 
-        if ( the_object->name == the_name ) {
+        if ( the_object->name == name_to_use ) {
           *the_id = the_object->Object.id;
           _Thread_Enable_dispatch();
           return ( RTEMS_SUCCESSFUL );

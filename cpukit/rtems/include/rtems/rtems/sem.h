@@ -31,6 +31,7 @@
 extern "C" {
 #endif
 
+#include <rtems.h>
 #include <rtems/attr.h>
 #include <rtems/object.h>
 #include <rtems/threadq.h>
@@ -81,7 +82,7 @@ void _Semaphore_Manager_initialization(
  */
 
 rtems_status_code rtems_semaphore_create(
-  Objects_Name        name,
+  rtems_name          name,
   unsigned32          count,
   rtems_attribute  attribute_set,
   Objects_Id         *id
@@ -102,7 +103,7 @@ rtems_status_code rtems_semaphore_create(
  */
 
 rtems_status_code rtems_semaphore_ident(
-  Objects_Name  name,
+  rtems_name    name,
   unsigned32    node,
   Objects_Id   *id
 );

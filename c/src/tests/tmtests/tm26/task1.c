@@ -8,7 +8,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  task1.c,v 1.3 1995/06/05 23:55:00 joel Exp
+ *  $Id$
  */
 
 #include <rtems.h>

@@ -14,6 +14,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/support.h>
 #include <rtems/config.h>
 #include <rtems/object.h>
 #include <rtems/options.h>
@@ -38,12 +39,14 @@ void _Region_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-     &_Region_Information,
-     OBJECTS_RTEMS_REGIONS,
-     FALSE,
-     maximum_regions,
-     sizeof( Region_Control )
-   );
+    &_Region_Information,
+    OBJECTS_RTEMS_REGIONS,
+    FALSE,
+    maximum_regions,
+    sizeof( Region_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
+  );
 }
 
 /*PAGE
@@ -68,7 +71,7 @@ void _Region_Manager_initialization(
  */
 
 rtems_status_code rtems_region_create(
-  Objects_Name        name,
+  rtems_name          name,
   void               *starting_address,
   unsigned32          length,
   unsigned32          page_size,
@@ -78,7 +81,7 @@ rtems_status_code rtems_region_create(
 {
   Region_Control *the_region;
 
-  if ( !_Objects_Is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) )
     return ( RTEMS_INVALID_NAME );
 
   if ( !_Addresses_Is_aligned( starting_address ) )
@@ -111,7 +114,7 @@ rtems_status_code rtems_region_create(
   _Thread_queue_Initialize(
      &the_region->Wait_queue, attribute_set, STATES_WAITING_FOR_SEGMENT );
 
-  _Objects_Open( &_Region_Information, &the_region->Object, name );
+  _Objects_Open( &_Region_Information, &the_region->Object, &name );
 
   *id = the_region->Object.id;
   _Thread_Enable_dispatch();
@@ -136,13 +139,13 @@ rtems_status_code rtems_region_create(
  */
 
 rtems_status_code rtems_region_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 )
 {
   return _Objects_Name_to_id(
       &_Region_Information,
-      name,
+      &name,
       RTEMS_SEARCH_LOCAL_NODE,
       id
     );

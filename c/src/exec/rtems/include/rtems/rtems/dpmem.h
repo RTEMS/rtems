@@ -32,6 +32,7 @@
 extern "C" {
 #endif
 
+#include <rtems.h>
 #include <rtems/object.h>
 
 /*
@@ -78,7 +79,7 @@ void _Dual_ported_memory_Manager_initialization(
  */
 
 rtems_status_code rtems_port_create(
-  Objects_Name  name,
+  rtems_name    name,
   void         *internal_start,
   void         *external_start,
   unsigned32    length,
@@ -96,7 +97,7 @@ rtems_status_code rtems_port_create(
  */
 
 rtems_status_code rtems_port_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 );
 

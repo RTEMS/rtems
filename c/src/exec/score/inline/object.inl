@@ -19,39 +19,6 @@
 
 /*PAGE
  *
- *  _Objects_Is_name_valid
- *
- */
-
-STATIC INLINE boolean _Objects_Is_name_valid (
-  Objects_Name name
-)
-{
-  return ( name != 0 );
-}
-
-/*PAGE
- *
- *  rtems_name_to_characters
- *
- */
-
-STATIC INLINE void rtems_name_to_characters(
-  Objects_Name  name,
-  char         *c1,
-  char         *c2,
-  char         *c3,
-  char         *c4
-)
-{
-  *c1 = (name >> 24) & 0xff;
-  *c2 = (name >> 16) & 0xff;
-  *c3 = (name >> 8) & 0xff;
-  *c4 =  name & 0xff;
-}
-
-/*PAGE
- *
  *  _Objects_Build_id
  *
  */
@@ -186,12 +153,15 @@ STATIC INLINE void _Objects_Open(
   Objects_Name         name
 )
 {
-  unsigned32 index;
+  unsigned32  index;
 
   index = rtems_get_index( the_object->id );
   information->local_table[ index ] = the_object;
-  information->name_table[ index ]  = name;
-  the_object->name = &information->name_table[ index ];
+
+  if ( information->is_string ) 
+    _Objects_Copy_name_string( name, the_object->name );
+  else
+    _Objects_Copy_name_raw( name, the_object->name, information->name_length );
 }
 
 /*PAGE
@@ -209,8 +179,7 @@ STATIC INLINE void _Objects_Close(
 
   index = rtems_get_index( the_object->id );
   information->local_table[ index ] = NULL;
-  information->name_table[ index ]  = 0;
-  the_object->name = 0;
+  _Objects_Clear_name( the_object->name, information->name_length );
 }
 
 #endif

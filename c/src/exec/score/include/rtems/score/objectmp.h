@@ -28,7 +28,8 @@ extern "C" {
 
 typedef struct {
   Objects_Control Object;
-  Objects_Name    name;
+  unsigned32      name;     /* XXX broken but works */
+  /* XXX If any API is MP with variable length names .. BOOM!!!! */
 }   Objects_MP_Control;
 
 /*
@@ -93,7 +94,7 @@ STATIC INLINE boolean _Objects_MP_Is_null_global_object (
 
 boolean _Objects_MP_Open (
   Objects_Information *information,
-  Objects_Name         the_name,
+  unsigned32           the_name,     /* XXX -- wrong for variable length */
   Objects_Id           the_id,
   boolean              is_fatal_error
 );

@@ -32,7 +32,7 @@
 void _Message_queue_MP_Send_process_packet (
   Message_queue_MP_Remote_operations  operation,
   Objects_Id                          message_queue_id,
-  Objects_Name                        name,
+  rtems_name                          name,
   Objects_Id                          proxy_id
 )
 {
@@ -434,7 +434,7 @@ void _Message_queue_MP_Send_extract_proxy (
   _Message_queue_MP_Send_process_packet(
     MESSAGE_QUEUE_MP_EXTRACT_PROXY,
     the_thread->Wait.id,
-    (Objects_Name) 0,
+    (rtems_name) 0,
     the_thread->Object.id
   );
 }

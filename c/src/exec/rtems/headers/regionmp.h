@@ -48,10 +48,10 @@ typedef enum {
  */
 
 typedef struct {
-  rtems_packet_prefix             Prefix;
+  rtems_packet_prefix          Prefix;
   Region_MP_Remote_operations  operation;
-  Objects_Name                 name;
-  rtems_option              option_set;
+  rtems_name                   name;
+  rtems_option                 option_set;
   unsigned32                   size;
   Objects_Id                   proxy_id;
   void                        *segment;
@@ -69,7 +69,7 @@ typedef struct {
 void _Region_MP_Send_process_packet (
   Region_MP_Remote_operations operation,
   Objects_Id                  region_id,
-  Objects_Name                name,
+  rtems_name                  name,
   Objects_Id                  proxy_id
 );
 

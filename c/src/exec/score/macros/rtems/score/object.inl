@@ -19,28 +19,6 @@
 
 /*PAGE
  *
- *  _Objects_Is_name_valid
- *
- */
-
-#define _Objects_Is_name_valid( _name ) \
-  ( (_name) != 0 )
-
-/*
- *  rtems_name_to_characters
- *
- */
-
-#define rtems_name_to_characters( _name, _c1, _c2, _c3, _c4 ) \
-  { \
-    (*(_c1) = ((_name) >> 24) & 0xff; \
-    (*(_c2) = ((_name) >> 16) & 0xff; \
-    (*(_c3) = ((_name) >> 8) & 0xff; \
-    (*(_c4) = ((_name)) & 0xff; \
-  }
-
-/*PAGE
- *
  *  _Objects_Build_id
  *
  */
@@ -134,8 +112,12 @@
     \
     _index = rtems_get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = (_the_object); \
-    (_information)->name_table[ _index ]  = (_name); \
-    (_the_object)->name = &(_information)->name_table[ _index ]; \
+    \
+    if ( (_information)->is_string ) \
+      _Objects_Copy_name_string( (_name), (_the_object)->name ); \
+    else \
+      _Objects_Copy_name_raw( \
+        (_name), (_the_object)->name, (_information)->name_length ); \
   }
 
 /*PAGE
@@ -150,8 +132,7 @@
     \
     _index = rtems_get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = NULL; \
-    (_information)->name_table[ _index ]  = 0; \
-    (_the_object)->name = 0; \
+    _Objects_Clear_name( (_the_object)->name, (_information)->name_length ); \
   }
 
 #endif

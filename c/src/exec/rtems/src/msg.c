@@ -22,6 +22,7 @@
 #include <rtems/object.h>
 #include <rtems/options.h>
 #include <rtems/states.h>
+#include <rtems/support.h>
 #include <rtems/thread.h>
 #include <rtems/wkspace.h>
 #include <rtems/mpci.h>
@@ -48,7 +49,9 @@ void _Message_queue_Manager_initialization(
     OBJECTS_RTEMS_MESSAGE_QUEUES,
     TRUE,
     maximum_message_queues,
-    sizeof( Message_queue_Control )
+    sizeof( Message_queue_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
   );
 }
 
@@ -130,7 +133,7 @@ failed:
  */
 
 rtems_status_code rtems_message_queue_create(
-  Objects_Name        name,
+  rtems_name          name,
   unsigned32          count,
   unsigned32          max_message_size,
   rtems_attribute     attribute_set,
@@ -139,7 +142,7 @@ rtems_status_code rtems_message_queue_create(
 {
   register Message_queue_Control *the_message_queue;
 
-  if ( !_Objects_Is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) )
     return ( RTEMS_INVALID_NAME );
 
   if ( _Attributes_Is_global( attribute_set ) &&
@@ -194,8 +197,11 @@ rtems_status_code rtems_message_queue_create(
   _Thread_queue_Initialize( &the_message_queue->Wait_queue, attribute_set,
                             STATES_WAITING_FOR_MESSAGE );
 
-  _Objects_Open( &_Message_queue_Information,
-                 &the_message_queue->Object, name );
+  _Objects_Open(
+    &_Message_queue_Information,
+    &the_message_queue->Object,
+    &name
+  );
 
   *id = the_message_queue->Object.id;
 
@@ -230,13 +236,17 @@ rtems_status_code rtems_message_queue_create(
  */
 
 rtems_status_code rtems_message_queue_ident(
-  Objects_Name  name,
+  rtems_name    name,
   unsigned32    node,
   Objects_Id   *id
 )
 {
-  return( _Objects_Name_to_id( &_Message_queue_Information, name,
-                               node, id ) );
+  return _Objects_Name_to_id( 
+    &_Message_queue_Information,
+    &name,
+    node,
+    id 
+  );
 }
 
 /*PAGE

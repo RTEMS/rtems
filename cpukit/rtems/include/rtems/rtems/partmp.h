@@ -48,9 +48,9 @@ typedef enum {
  */
 
 typedef struct {
-  rtems_packet_prefix                Prefix;
+  rtems_packet_prefix             Prefix;
   Partition_MP_Remote_operations  operation;
-  Objects_Name                    name;
+  rtems_name                      name;
   void                           *buffer;
   Objects_Id                      proxy_id;
 }   Partition_MP_Packet;
@@ -67,7 +67,7 @@ typedef struct {
 void _Partition_MP_Send_process_packet (
   Partition_MP_Remote_operations operation,
   Objects_Id                     partition_id,
-  Objects_Name                   name,
+  rtems_name                     name,
   Objects_Id                     proxy_id
 );
 

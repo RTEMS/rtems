@@ -43,9 +43,9 @@ typedef enum {
  */
 
 typedef struct {
-  rtems_packet_prefix            Prefix;
-  Signal_MP_Remote_operations operation;
-  rtems_signal_set      signal_in;
+  rtems_packet_prefix          Prefix;
+  Signal_MP_Remote_operations  operation;
+  rtems_signal_set             signal_in;
 }   Signal_MP_Packet;
 
 /*

@@ -35,7 +35,7 @@
  *
  *  NOTE:
  *
- *  newlibc.c,v 1.2 1995/05/09 20:24:37 joel Exp
+ *  $Id$
  *
  */
 

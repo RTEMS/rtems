@@ -127,6 +127,12 @@ extern const void * _Entry_points[ RTEMS_NUMBER_OF_ENTRY_POINTS ];
 
 EXTERN rtems_cpu_table _CPU_Table;               /* CPU dependent info */
 
+/*
+ *  XXX weird RTEMS stuff
+ */
+
+#define RTEMS_MAXIMUM_NAME_LENGTH 4
+
 #ifdef __cplusplus
 }
 #endif

@@ -34,6 +34,7 @@
 extern "C" {
 #endif
 
+#include <rtems/types.h>
 #include <rtems/chain.h>
 #include <rtems/object.h>
 #include <rtems/threadq.h>
@@ -129,7 +130,7 @@ void _Message_queue_Manager_initialization(
  */
 
 rtems_status_code rtems_message_queue_create(
-  Objects_Name     name,
+  rtems_name       name,
   unsigned32       count,
   unsigned32       max_message_size,
   rtems_attribute  attribute_set,
@@ -151,7 +152,7 @@ rtems_status_code rtems_message_queue_create(
  */
 
 rtems_status_code rtems_message_queue_ident(
-  Objects_Name  name,
+  rtems_name    name,
   unsigned32    node,
   Objects_Id   *id
 );

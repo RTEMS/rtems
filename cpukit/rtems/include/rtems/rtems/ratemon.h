@@ -29,6 +29,7 @@
 extern "C" {
 #endif
 
+#include <rtems.h>
 #include <rtems/object.h>
 #include <rtems/thread.h>
 #include <rtems/watchdog.h>
@@ -88,7 +89,7 @@ void _Rate_monotonic_Manager_initialization(
  */
 
 rtems_status_code rtems_rate_monotonic_create(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 );
 
@@ -104,7 +105,7 @@ rtems_status_code rtems_rate_monotonic_create(
  */
 
 rtems_status_code rtems_rate_monotonic_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 );
 

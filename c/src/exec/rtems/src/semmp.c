@@ -31,7 +31,7 @@
 void _Semaphore_MP_Send_process_packet (
   Semaphore_MP_Remote_operations  operation,
   Objects_Id                      semaphore_id,
-  Objects_Name                    name,
+  rtems_name                      name,
   Objects_Id                      proxy_id
 )
 {
@@ -286,7 +286,7 @@ void _Semaphore_MP_Send_extract_proxy (
   _Semaphore_MP_Send_process_packet(
     SEMAPHORE_MP_EXTRACT_PROXY,
     the_thread->Wait.id,
-    (Objects_Name) 0,
+    (rtems_name) 0,
     the_thread->Object.id
   );
 

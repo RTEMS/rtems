@@ -17,6 +17,11 @@
 #ifndef __RTEMS_TASKS_inl
 #define __RTEMS_TASKS_inl
 
+#include <rtems/msgmp.h>
+#include <rtems/partmp.h>
+#include <rtems/regionmp.h>
+#include <rtems/semmp.h>
+
 /*PAGE
  *
  *  _RTEMS_tasks_Allocate

@@ -21,6 +21,7 @@
 extern "C" {
 #endif
 
+#include <rtems/types.h>
 #include <rtems/object.h>
 #include <rtems/thread.h>
 
@@ -32,7 +33,7 @@ extern "C" {
  */
 
 typedef struct {
-  Objects_Name          name;              /* task name */
+  rtems_name            name;              /* task name */
   unsigned32            stack_size;        /* task stack size */
   rtems_task_priority   initial_priority;  /* task priority */
   rtems_attribute       attribute_set;     /* task attributes */

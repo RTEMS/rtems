@@ -30,6 +30,7 @@
 extern "C" {
 #endif
 
+#include <rtems.h>
 #include <rtems/object.h>
 #include <rtems/threadq.h>
 #include <rtems/heap.h>
@@ -86,7 +87,7 @@ void _Region_Manager_initialization(
  */
 
 rtems_status_code rtems_region_create(
-  Objects_Name        name,
+  rtems_name          name,
   void               *starting_address,
   unsigned32          length,
   unsigned32          page_size,
@@ -123,7 +124,7 @@ rtems_status_code rtems_region_extend(
  */
 
 rtems_status_code rtems_region_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 );
 

@@ -14,6 +14,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/support.h>
 #include <rtems/object.h>
 #include <rtems/thread.h>
 #include <rtems/timer.h>
@@ -37,11 +38,13 @@ void _Timer_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-     &_Timer_Information,
-     OBJECTS_RTEMS_TIMERS,
-     FALSE,
-     maximum_timers,
-     sizeof( Timer_Control )
+    &_Timer_Information,
+    OBJECTS_RTEMS_TIMERS,
+    FALSE,
+    maximum_timers,
+    sizeof( Timer_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
   );
 }
 
@@ -62,13 +65,13 @@ void _Timer_Manager_initialization(
  */
 
 rtems_status_code rtems_timer_create(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 )
 {
   Timer_Control *the_timer;
 
-  if ( !_Objects_Is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) )
     return ( RTEMS_INVALID_NAME );
 
   _Thread_Disable_dispatch();         /* to prevent deletion */
@@ -82,7 +85,7 @@ rtems_status_code rtems_timer_create(
 
   the_timer->the_class = TIMER_DORMANT;
 
-  _Objects_Open( &_Timer_Information, &the_timer->Object, name );
+  _Objects_Open( &_Timer_Information, &the_timer->Object, &name );
 
   *id = the_timer->Object.id;
   _Thread_Enable_dispatch();
@@ -107,13 +110,13 @@ rtems_status_code rtems_timer_create(
  */
 
 rtems_status_code rtems_timer_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 )
 {
   return _Objects_Name_to_id(
     &_Timer_Information,
-    name,
+    &name,
     RTEMS_SEARCH_LOCAL_NODE,
     id
   );

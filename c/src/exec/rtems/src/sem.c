@@ -27,6 +27,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/support.h>
 #include <rtems/attr.h>
 #include <rtems/config.h>
 #include <rtems/isr.h>
@@ -56,10 +57,12 @@ void _Semaphore_Manager_initialization(
 {
   _Objects_Initialize_information(
     &_Semaphore_Information,
-     OBJECTS_RTEMS_SEMAPHORES,
+    OBJECTS_RTEMS_SEMAPHORES,
     TRUE,
     maximum_semaphores,
-    sizeof( Semaphore_Control )
+    sizeof( Semaphore_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
   );
 }
 
@@ -83,7 +86,7 @@ void _Semaphore_Manager_initialization(
  */
 
 rtems_status_code rtems_semaphore_create(
-  Objects_Name        name,
+  rtems_name          name,
   unsigned32          count,
   rtems_attribute  attribute_set,
   Objects_Id         *id
@@ -91,7 +94,7 @@ rtems_status_code rtems_semaphore_create(
 {
   register Semaphore_Control *the_semaphore;
 
-  if ( !_Objects_Is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) )
     return ( RTEMS_INVALID_NAME );
 
   if ( _Attributes_Is_global( attribute_set ) ) {
@@ -147,7 +150,7 @@ rtems_status_code rtems_semaphore_create(
   _Thread_queue_Initialize( &the_semaphore->Wait_queue,
                             attribute_set, STATES_WAITING_FOR_SEMAPHORE );
 
-  _Objects_Open( &_Semaphore_Information, &the_semaphore->Object, name );
+  _Objects_Open( &_Semaphore_Information, &the_semaphore->Object, &name );
 
   *id = the_semaphore->Object.id;
 
@@ -181,12 +184,12 @@ rtems_status_code rtems_semaphore_create(
  */
 
 rtems_status_code rtems_semaphore_ident(
-  Objects_Name  name,
+  rtems_name    name,
   unsigned32    node,
   Objects_Id   *id
 )
 {
-  return( _Objects_Name_to_id( &_Semaphore_Information, name, node, id ) );
+  return( _Objects_Name_to_id( &_Semaphore_Information, &name, node, id ) );
 }
 
 /*PAGE

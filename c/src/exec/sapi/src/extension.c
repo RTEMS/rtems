@@ -14,6 +14,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/support.h>
 #include <rtems/object.h>
 #include <rtems/thread.h>
 #include <rtems/extension.h>
@@ -35,11 +36,13 @@ void _Extension_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-     &_Extension_Information,
-     OBJECTS_RTEMS_EXTENSIONS,
-     FALSE,
-     maximum_extensions,
-     sizeof( Extension_Control )
+    &_Extension_Information,
+    OBJECTS_RTEMS_EXTENSIONS,
+    FALSE,
+    maximum_extensions,
+    sizeof( Extension_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
   );
 }
 
@@ -61,14 +64,14 @@ void _Extension_Manager_initialization(
  */
 
 rtems_status_code rtems_extension_create(
-  Objects_Name                   name,
+  rtems_name                     name,
   rtems_extensions_table *extension_table,
   Objects_Id                    *id
 )
 {
   Extension_Control *the_extension;
 
-  if ( !_Objects_Is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) )
     return ( RTEMS_INVALID_NAME );
 
   _Thread_Disable_dispatch();         /* to prevent deletion */
@@ -82,7 +85,7 @@ rtems_status_code rtems_extension_create(
 
   _User_extensions_Add_set( &the_extension->Extension, extension_table );
 
-  _Objects_Open( &_Extension_Information, &the_extension->Object, name );
+  _Objects_Open( &_Extension_Information, &the_extension->Object, &name );
 
   *id = the_extension->Object.id;
   _Thread_Enable_dispatch();
@@ -107,13 +110,13 @@ rtems_status_code rtems_extension_create(
  */
 
 rtems_status_code rtems_extension_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 )
 {
   return _Objects_Name_to_id(
     &_Extension_Information,
-    name,
+    &name,
     RTEMS_SEARCH_LOCAL_NODE,
     id
   );

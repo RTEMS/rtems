@@ -250,7 +250,7 @@ void Stack_check_report_blown_task(void)
         "BLOWN STACK!!! Offending task(%p): id=0x%08x; name=0x%08x",
         running,
         running->Object.id,
-        *running->Object.name
+        *(unsigned32 *)running->Object.name
     );
     fflush(stderr);
 
@@ -387,7 +387,7 @@ void Stack_check_Dump_threads_usage(
 
   printf( "0x%08x  0x%08x  0x%08x  0x%08x   %8d   %8d\n",
           the_thread ? the_thread->Object.id : ~0,
-          the_thread ? *the_thread->Object.name :
+          the_thread ? *(unsigned32 *)the_thread->Object.name :
                        rtems_build_name('I', 'N', 'T', 'R'),
           (unsigned32) stack->area,
           (unsigned32) stack->area + (unsigned32) stack->size - 1,

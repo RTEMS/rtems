@@ -1,0 +1,21 @@
+The location of the vectors file object is critical.
+
+From the comments at the head of vectors.s:
+
+  The issue with this file is getting it loaded at the right place.
+  The first vector MUST be at address 0x????0100.
+  How this is achieved is dependant on the tool chain.
+
+  However the basic mechanism for ELF assemblers is to create a
+  section called ".vectors", which will be loaded to an address
+  between 0x????0000 and 0x????0100 (inclusive) via a link script.
+
+  The basic mechanism for XCOFF assemblers is to place it in the
+  normal text section, and arrange for this file to be located
+  at an appropriate position on the linker command line.
+
+  The variable 'PPC_VECTOR_FILE_BASE' must be defined to be the
+  offset from 0x????0000 to the first location in the file.  This
+  will usually be 0x0000 or 0x0100.
+
+Andrew Bray 18/8/1995

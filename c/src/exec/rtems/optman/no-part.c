@@ -27,7 +27,7 @@ void _Partition_Manager_initialization(
 }
 
 rtems_status_code rtems_partition_create(
-  Objects_Name        name,
+  rtems_name          name,
   void               *starting_address,
   unsigned32          length,
   unsigned32          buffer_size,
@@ -39,7 +39,7 @@ rtems_status_code rtems_partition_create(
 }
 
 rtems_status_code rtems_partition_ident(
-  Objects_Name  name,
+  rtems_name    name,
   unsigned32    node,
   Objects_Id   *id
 )

@@ -28,6 +28,7 @@
 extern "C" {
 #endif
 
+#include <rtems.h>
 #include <rtems/object.h>
 #include <rtems/userext.h>
 
@@ -72,7 +73,7 @@ void _Extension_Manager_initialization(
  */
 
 rtems_status_code rtems_extension_create(
-  Objects_Name                   name,
+  rtems_name                     name,
   rtems_extensions_table *extension_table,
   Objects_Id                    *id
 );
@@ -89,7 +90,7 @@ rtems_status_code rtems_extension_create(
  */
 
 rtems_status_code rtems_extension_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 );
 

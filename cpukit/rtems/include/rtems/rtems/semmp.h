@@ -49,11 +49,11 @@ typedef enum {
  */
 
 typedef struct {
-  rtems_packet_prefix               Prefix;
-  Semaphore_MP_Remote_operations operation;
-  Objects_Name                   name;
-  rtems_option                option_set;
-  Objects_Id                     proxy_id;
+  rtems_packet_prefix             Prefix;
+  Semaphore_MP_Remote_operations  operation;
+  rtems_name                      name;
+  rtems_option                    option_set;
+  Objects_Id                      proxy_id;
 }   Semaphore_MP_Packet;
 
 /*
@@ -68,7 +68,7 @@ typedef struct {
 void _Semaphore_MP_Send_process_packet (
   Semaphore_MP_Remote_operations operation,
   Objects_Id                     semaphore_id,
-  Objects_Name                   name,
+  rtems_name                     name,
   Objects_Id                     proxy_id
 );
 

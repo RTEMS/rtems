@@ -24,6 +24,8 @@ extern "C" {
 #endif
 
 #include <rtems/system.h>
+#include <rtems/types.h>
+
 #include <rtems/init.h>
 #include <rtems/tasks.h>
 #include <rtems/intr.h>
@@ -43,31 +45,7 @@ extern "C" {
 #include <rtems/ratemon.h>
 #include <rtems/mp.h>
 
-/*
- *  RTEMS basic type definitions
- */
-
-typedef unsigned8       rtems_unsigned8;  /* unsigned 8-bit value  */
-typedef unsigned16      rtems_unsigned16; /* unsigned 16-bit value */
-typedef unsigned32      rtems_unsigned32; /* unsigned 32-bit value */
-typedef unsigned64      rtems_unsigned64; /* unsigned 64-bit value */
-
-typedef signed8         rtems_signed8;    /* signed 8-bit value  */
-typedef signed16        rtems_signed16;   /* signed 16-bit value */
-typedef signed32        rtems_signed32;   /* signed 32-bit value */
-typedef signed64        rtems_signed64;   /* signed 64-bit value */
-
-typedef single_precision rtems_single;    /* single precision float */
-typedef double_precision rtems_double;    /* double precision float */
-
-typedef boolean                    rtems_boolean;
-
-typedef Objects_Name               rtems_name;
-typedef Objects_Id                 rtems_id;
-
-typedef Context_Control            rtems_context;
-typedef Context_Control_fp         rtems_context_fp;
-typedef CPU_Interrupt_frame        rtems_interrupt_frame;
+#include <rtems/support.h>
 
 #define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
 

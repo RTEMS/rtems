@@ -58,11 +58,13 @@ void _Thread_Handler_initialization(
   _Thread_Ticks_per_timeslice          = ticks_per_timeslice;
 
   _Objects_Initialize_information(
-     &_Thread_Information,
-     OBJECTS_RTEMS_TASKS,
-     TRUE,
-     maximum_tasks,
-     sizeof( Thread_Control )
+    &_Thread_Information,
+    OBJECTS_RTEMS_TASKS,
+    TRUE,
+    maximum_tasks,
+    sizeof( Thread_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
   );
 
   _Thread_Ready_chain = _Workspace_Allocate_or_fatal_error(

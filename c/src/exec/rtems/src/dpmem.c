@@ -13,6 +13,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/support.h>
 #include <rtems/address.h>
 #include <rtems/dpmem.h>
 #include <rtems/object.h>
@@ -36,11 +37,13 @@ void _Dual_ported_memory_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-     &_Dual_ported_memory_Information,
-     OBJECTS_RTEMS_PORTS,
-     FALSE,
-     maximum_ports,
-     sizeof( Dual_ported_memory_Control )
+    &_Dual_ported_memory_Information,
+    OBJECTS_RTEMS_PORTS,
+    FALSE,
+    maximum_ports,
+    sizeof( Dual_ported_memory_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH
   );
 }
 
@@ -64,7 +67,7 @@ void _Dual_ported_memory_Manager_initialization(
  */
 
 rtems_status_code rtems_port_create(
-  Objects_Name  name,
+  rtems_name    name,
   void         *internal_start,
   void         *external_start,
   unsigned32    length,
@@ -73,7 +76,7 @@ rtems_status_code rtems_port_create(
 {
   register Dual_ported_memory_Control *the_port;
 
-  if ( !_Objects_Is_name_valid( name) )
+  if ( !rtems_is_name_valid( name) )
     return ( RTEMS_INVALID_NAME );
 
   if ( !_Addresses_Is_aligned( internal_start ) ||
@@ -93,8 +96,12 @@ rtems_status_code rtems_port_create(
   the_port->external_base = external_start;
   the_port->length        = length - 1;
 
-  _Objects_Open( &_Dual_ported_memory_Information,
-                 &the_port->Object, name );
+  _Objects_Open( 
+    &_Dual_ported_memory_Information,
+    &the_port->Object,
+    &name
+  );
+
   *id = the_port->Object.id;
   _Thread_Enable_dispatch();
   return( RTEMS_SUCCESSFUL );
@@ -118,14 +125,14 @@ rtems_status_code rtems_port_create(
  */
 
 rtems_status_code rtems_port_ident(
-  Objects_Name  name,
+  rtems_name    name,
   Objects_Id   *id
 )
 {
   return(
     _Objects_Name_to_id(
       &_Dual_ported_memory_Information,
-      name,
+      &name,
       RTEMS_SEARCH_ALL_NODES,
       id
     )
