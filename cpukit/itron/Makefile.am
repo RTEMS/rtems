@@ -2,11 +2,11 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../aclocal
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
-include $(top_srcdir)/../automake/multilib.am
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+EXTRA_DIST =
 
 $(PROJECT_INCLUDE):
 	@$(mkinstalldirs) $@
@@ -20,7 +20,11 @@ $(PROJECT_INCLUDE)/%.h: include/%.h
 $(PROJECT_INCLUDE)/%.inl: $(INLINEdir)/%.inl
 	$(INSTALL_DATA) $< $@
 
+if HAS_ITRON
 ## include
+
+noinst_HEADERS =
+noinst_HEADERS += src/config.h
 
 include_HEADERS = include/itron.h
 
@@ -39,7 +43,7 @@ include_itronsys_HEADERS = include/itronsys/eventflags.h include/itronsys/fmempo
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/itronsys \
     $(include_itronsys_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
 
-EXTRA_DIST = include/itronsys/README
+EXTRA_DIST += include/itronsys/README
 
 ## rtems/itron
 include_rtems_itrondir = $(includedir)/rtems/itron
@@ -63,7 +67,7 @@ inline_H_FILES = inline/rtems/itron/eventflags.inl \
     inline/rtems/itron/msgbuffer.inl inline/rtems/itron/network.inl inline/rtems/itron/port.inl \
     inline/rtems/itron/semaphore.inl inline/rtems/itron/sysmgmt.inl inline/rtems/itron/task.inl \
     inline/rtems/itron/time.inl inline/rtems/itron/vmempool.inl
-noinst_HEADERS = $(inline_H_FILES)
+noinst_HEADERS += $(inline_H_FILES)
 
 if INLINE
 PREINSTALL_FILES += $(inline_H_FILES:inline/%=$(PROJECT_INCLUDE)/%)
@@ -127,10 +131,13 @@ C_FILES = $(TASK_C_FILES) $(TASKSYNC_C_FILES) $(SEMAPHORE_C_FILES) \
     $(TIME_C_FILES)
 OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 
-AM_CPPFLAGS += -Isrc  -D__RTEMS_INSIDE__
+AM_CPPFLAGS += -I$(srcdir)/src  -D__RTEMS_INSIDE__
+
+all-local: $(PREINSTALL_FILES) ${ARCH} ${LIB}
 
 $(LIB): ${OBJS}
 	$(make-library)
+endif
 
 ${ARCH}/%.$(OBJEXT): src/%.c
 	${COMPILE} -o $@ -c $<
@@ -140,7 +147,4 @@ UNUSED_C_FILES = src/cre_mbx.c src/del_mbx.c src/mboxtranslatereturncode.c src/n
 
 EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES) src/TODO
 
-## General
-all-local: $(PREINSTALL_FILES) ${ARCH} ${LIB}
-
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am

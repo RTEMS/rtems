@@ -2,11 +2,9 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../aclocal
-
-include $(top_srcdir)/../automake/multilib.am
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 EXTRA_DIST =
 
@@ -20,12 +18,15 @@ $(PROJECT_INCLUDE)/%.h: include/%.h
 $(PROJECT_INCLUDE)/%.inl: $(INLINEdir)/%.inl
 	$(INSTALL_DATA) $< $@
 
+if HAS_POSIX
+
 PREINSTALL_FILES = $(PROJECT_INCLUDE)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix
 
 # include
 
 noinst_HEADERS = include/devctl.h include/intr.h
+noinst_HEADERS += src/config.h
 
 include_HEADERS = include/sched.h include/aio.h include/mqueue.h include/semaphore.h
 
@@ -170,12 +171,13 @@ OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -Isrc -D__RTEMS_INSIDE__
+AM_CPPFLAGS += -I$(srcdir)/src -D__RTEMS_INSIDE__
 
 all-local: ${ARCH} $(PREINSTALL_FILES) $(LIB)
 
 $(LIB): ${OBJS}
 	$(make-library)
+endif
 
 ${ARCH}/%.$(OBJEXT): src/%.c
 	${COMPILE} -o $@ -c $<
@@ -191,4 +193,4 @@ not:
 
 EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES)
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am
