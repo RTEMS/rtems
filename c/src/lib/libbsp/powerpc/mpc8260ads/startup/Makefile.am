@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 PGM = $(ARCH)/startup.rel
 
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c \
-    main.c sbrk.c setvec.c gnatinstallhandler.c cpuinit.c
+    main.c sbrk.c gnatinstallhandler.c cpuinit.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 S_FILES = 
@@ -38,6 +38,6 @@ all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = bspstart.c linkcmds setvec.c
+EXTRA_DIST = bspstart.c linkcmds
 
 include $(top_srcdir)/../../../../../../automake/local.am
