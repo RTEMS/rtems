@@ -10,6 +10,7 @@ ARCH = o-optimize
 
 project_lib_DATA = librtemscpu.a
 CLEANFILES = librtemscpu.a
+DISTCLEANFILES =
 
 TMP_LIBS =
 if LIBSCORECPU
@@ -101,17 +102,6 @@ librtemscpu.a: $(TMP_LIBS)
 
 all-local: $(TMPINSTALL_FILES)
 
-TMPINSTALL_FILES =
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
-
-$(PROJECT_LIB)/librtemscpu.a: librtemscpu.a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemscpu.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/librtemscpu.a
-
-CLEANFILES += $(TMPINSTALL_FILES)
+include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/automake/local.am

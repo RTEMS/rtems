@@ -7,6 +7,7 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
 CLEANFILES =
+DISTCLEANFILES =
 
 if HAS_POSIX
 
@@ -152,8 +153,6 @@ AM_CPPFLAGS += -D__RTEMS_INSIDE__
 noinst_LIBRARIES = libposix.a
 libposix_a_SOURCES = $(C_FILES)
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
-
-all-local: $(PREINSTALL_FILES)
 endif
 
 # temporary so we can see how many things are left to implement
@@ -167,187 +166,8 @@ not:
 
 EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES)
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
+all-local: $(PREINSTALL_FILES)
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-if HAS_POSIX
-$(PROJECT_INCLUDE)/sched.h: include/sched.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sched.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sched.h
-
-$(PROJECT_INCLUDE)/aio.h: include/aio.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/aio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/aio.h
-
-$(PROJECT_INCLUDE)/mqueue.h: include/mqueue.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mqueue.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mqueue.h
-
-$(PROJECT_INCLUDE)/semaphore.h: include/semaphore.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/semaphore.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/semaphore.h
-
-$(PROJECT_INCLUDE)/rtems/posix/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/posix
-	@: > $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/posix/cancel.h: include/rtems/posix/cancel.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cancel.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cancel.h
-
-$(PROJECT_INCLUDE)/rtems/posix/cond.h: include/rtems/posix/cond.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cond.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.h
-
-$(PROJECT_INCLUDE)/rtems/posix/config.h: include/rtems/posix/config.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/config.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/config.h
-
-$(PROJECT_INCLUDE)/rtems/posix/key.h: include/rtems/posix/key.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.h
-
-$(PROJECT_INCLUDE)/rtems/posix/mqueue.h: include/rtems/posix/mqueue.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
-
-$(PROJECT_INCLUDE)/rtems/posix/mutex.h: include/rtems/posix/mutex.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mutex.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutex.h
-
-$(PROJECT_INCLUDE)/rtems/posix/posixapi.h: include/rtems/posix/posixapi.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
-
-$(PROJECT_INCLUDE)/rtems/posix/priority.h: include/rtems/posix/priority.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priority.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priority.h
-
-$(PROJECT_INCLUDE)/rtems/posix/psignal.h: include/rtems/posix/psignal.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/psignal.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/psignal.h
-
-$(PROJECT_INCLUDE)/rtems/posix/pthread.h: include/rtems/posix/pthread.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.h
-
-$(PROJECT_INCLUDE)/rtems/posix/ptimer.h: include/rtems/posix/ptimer.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/ptimer.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/ptimer.h
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphore.h: include/rtems/posix/semaphore.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
-
-$(PROJECT_INCLUDE)/rtems/posix/threadsup.h: include/rtems/posix/threadsup.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/threadsup.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/threadsup.h
-
-$(PROJECT_INCLUDE)/rtems/posix/time.h: include/rtems/posix/time.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/time.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/time.h
-
-$(PROJECT_INCLUDE)/rtems/posix/timer.h: include/rtems/posix/timer.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.h
-
-if HAS_MP
-$(PROJECT_INCLUDE)/rtems/posix/condmp.h: include/rtems/posix/condmp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/condmp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/condmp.h
-
-$(PROJECT_INCLUDE)/rtems/posix/mqueuemp.h: include/rtems/posix/mqueuemp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueuemp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueuemp.h
-
-$(PROJECT_INCLUDE)/rtems/posix/mutexmp.h: include/rtems/posix/mutexmp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mutexmp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutexmp.h
-
-$(PROJECT_INCLUDE)/rtems/posix/pthreadmp.h: include/rtems/posix/pthreadmp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthreadmp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthreadmp.h
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h: include/rtems/posix/semaphoremp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h
-endif
-
-if INLINE
-$(PROJECT_INCLUDE)/rtems/posix/cond.inl: inline/rtems/posix/cond.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cond.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/key.inl: inline/rtems/posix/key.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/mqueue.inl: inline/rtems/posix/mqueue.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueue.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/mutex.inl: inline/rtems/posix/mutex.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mutex.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutex.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/pthread.inl: inline/rtems/posix/pthread.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/priority.inl: inline/rtems/posix/priority.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priority.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priority.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphore.inl: inline/rtems/posix/semaphore.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/timer.inl: inline/rtems/posix/timer.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.inl
-
-else
-$(PROJECT_INCLUDE)/rtems/posix/cond.inl: macros/rtems/posix/cond.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cond.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/key.inl: macros/rtems/posix/key.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/mqueue.inl: macros/rtems/posix/mqueue.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueue.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/mutex.inl: macros/rtems/posix/mutex.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mutex.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutex.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/pthread.inl: macros/rtems/posix/pthread.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/priority.inl: macros/rtems/posix/priority.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priority.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priority.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphore.inl: macros/rtems/posix/semaphore.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/timer.inl: macros/rtems/posix/timer.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.inl
-endif
-endif
-
-CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/automake/local.am
