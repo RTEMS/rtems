@@ -104,7 +104,6 @@ SERVER     - Internet address of NFS server (192.168.0.1).
 NAMESERVER - Internet address of DNS server (SERVER).
 DOMAIN     - DNS domain name (precompiled value from CONFIG_SITE).
 NTPSERVER  - Internet address of NTP server (SERVER).
-LOGSERVER  - Internet address of syslog server (SERVER).
 BOOTFILE   - Path to executable (epics/iocNobody/bin/RTEMS-uC5282/myApp.boot).
 CMDLINE    - Path to startup script (epics/iocBoot/iocNobody/st.cmd).
 
