@@ -29,10 +29,10 @@ extern "C" {
 #ifdef CPU_STACK_CHECK_SIZE
 #define PATTERN_SIZE_WORDS      (((CPU_STACK_CHECK_SIZE / 4) + 3) & ~0x3)
 #else
-#define PATTERN_SIZE_WORDS      (PATTERN_SIZE_WORDS * sizeof(unsigned32))
+#define PATTERN_SIZE_WORDS      (4)
 #endif
 
-#define PATTERN_SIZE_BYTES      (PATTERN_SIZE_WORDS * 4)
+#define PATTERN_SIZE_BYTES      (PATTERN_SIZE_WORDS * sizeof(unsigned32))
 
 typedef struct {
    unsigned32  pattern[ PATTERN_SIZE_WORDS ];
