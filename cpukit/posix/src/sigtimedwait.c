@@ -80,15 +80,14 @@ int sigtimedwait(
 
   /* Process pending signals? */
 
-  if ( *set & _POSIX_signals_Pending) {
+  if ( *set & _POSIX_signals_Pending ) {
     signo = _POSIX_signals_Get_highest( _POSIX_signals_Pending );
     _POSIX_signals_Clear_signals( api, signo, the_info, TRUE, FALSE );
 
-    if ( !info ) {
-      the_info->si_signo = signo;
-      the_info->si_code = SI_USER;
-      the_info->si_value.sival_int = 0;
-    }
+    the_info->si_signo = signo;
+    the_info->si_code = SI_USER;
+    the_info->si_value.sival_int = 0;
+    return signo;
   }
 
   interval = 0;
