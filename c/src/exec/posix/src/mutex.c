@@ -551,7 +551,7 @@ int pthread_mutexattr_setprioceiling(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  if ( !_POSIX_Priority_Is_valid( prio_ceiling ) )
+  if ( !_POSIX_Priority_Is_valid( prioceiling ) )
     return EINVAL;
 
   attr->prio_ceiling = prioceiling;
