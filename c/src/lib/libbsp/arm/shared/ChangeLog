@@ -1,3 +1,8 @@
+2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* irq/irq_asm.S, irq/irq_init.c: Fixes a bug with handling the
+	situation where we are processing an IRQ, and we receive an FIQ.
+
 2002-10-04	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* irq/irq_asm.S: Add FIQ support.

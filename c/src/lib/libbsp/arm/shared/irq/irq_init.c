@@ -16,7 +16,6 @@
 #include <irq.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
-#include <registers.h>
 
 /*
  * default int vector
