@@ -26,8 +26,9 @@ HEAP_C_FILES = heap.c heapallocate.c heapextend.c heapfree.c \
 OBJECT_C_FILES = object.c objectallocate.c objectallocatebyindex.c \
     objectclearname.c objectcomparenameraw.c objectcomparenamestring.c \
     objectcopynameraw.c objectcopynamestring.c objectextendinformation.c \
-    objectfree.c objectget.c objectgetbyindex.c objectgetnext.c \
-    objectinitializeinformation.c objectnametoid.c objectshrinkinformation.c
+    objectfree.c objectget.c objectgetisr.c objectgetbyindex.c \
+    objectgetnext.c objectinitializeinformation.c objectnametoid.c \
+    objectshrinkinformation.c
 
 THREAD_C_FILES = thread.c threadchangepriority.c threadclearstate.c \
     threadclose.c threadcreateidle.c threaddelayended.c threaddispatch.c \
