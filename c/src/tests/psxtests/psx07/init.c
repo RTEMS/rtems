@@ -158,9 +158,9 @@ void *POSIX_Init(
   status = pthread_attr_setscope( NULL, PTHREAD_SCOPE_PROCESS );
   assert( status == EINVAL );
 
-  puts( "Init: pthread_attr_setscope - ENOSYS" );
+  puts( "Init: pthread_attr_setscope - ENOTSUP" );
   status = pthread_attr_setscope( &attr, PTHREAD_SCOPE_SYSTEM );
-  assert( status == ENOSYS );
+  assert( status == ENOTSUP );
 
   puts( "Init: pthread_attr_setscope - EINVAL (not initialized attr)" );
   status = pthread_attr_setscope( &destroyed_attr, PTHREAD_SCOPE_PROCESS );
