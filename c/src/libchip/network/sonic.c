@@ -887,6 +887,40 @@ SONIC_STATIC void sonic_rda_wait(
 
 }
 
+#ifdef CPU_U32_FIX
+
+/*
+ * Routine to align the received packet so that the ip header
+ * is on a 32-bit boundary. Necessary for cpu's that do not
+ * allow unaligned loads and stores and when the 32-bit DMA
+ * mode is used. 
+ * 
+ * Transfers are done on word basis to avoid possibly slow byte 
+ * and half-word writes.
+ */
+ 
+void ipalign(struct mbuf *m)
+{
+  unsigned int *first, *last, data;
+  unsigned int tmp = 0;
+
+  if ((((int) m->m_data) & 2) && (m->m_len)) {
+    last = (unsigned int *) ((((int) m->m_data) + m->m_len + 8) & ~3);
+    first = (unsigned int *) (((int) m->m_data) & ~3);
+    tmp = *first << 16;
+    first++;
+    do {
+      data = *first;
+      *first = tmp | (data >> 16);
+      tmp = data << 16;
+      first++;
+    } while (first <= last);
+
+    m->m_data = (caddr_t)(((int) m->m_data) + 2);
+  }
+}
+#endif
+
 /*
  * SONIC reader task
  */

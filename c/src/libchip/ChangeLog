@@ -1,3 +1,10 @@
+2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* network/sonic.c: Added ipalign() routine to align the
+	received packet so that the ip header is on a 32-bit boundary.
+	Necessary for cpu's that do not allow unaligned loads and stores
+	and when the 32-bit DMA mode is used.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
