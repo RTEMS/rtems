@@ -32,9 +32,9 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
   unsigned32       index
 )
 {
-  return ( (the_class << OBJECTS_CLASS_START_BIT) |
-           (node << OBJECTS_NODE_START_BIT)       |
-           (index << OBJECTS_INDEX_START_BIT) );
+  return (the_class << OBJECTS_CLASS_START_BIT) |
+         (node << OBJECTS_NODE_START_BIT)       |
+         (index << OBJECTS_INDEX_START_BIT);
 }
 
 /*PAGE
@@ -172,7 +172,7 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
 {
   if ( index > information->maximum )
     return NULL;
-  return ( information->local_table[ index ] );
+  return information->local_table[ index ];
 }
 
 /*PAGE
