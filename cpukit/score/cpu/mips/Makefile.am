@@ -10,7 +10,8 @@ include $(top_srcdir)/../../../automake/compile.am
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = asm.h
 
-include_HEADERS = idtcpu.h iregdef.h
+include_rtems_mipsdir = $(includedir)/rtems/mips
+include_rtems_mips_HEADERS = idtcpu.h iregdef.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/mips.h \
@@ -31,11 +32,6 @@ all-local: $(PREINSTALL_FILES) libscorecpu$(LIB_VARIANT).a
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
@@ -45,13 +41,18 @@ $(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
-$(PROJECT_INCLUDE)/idtcpu.h: idtcpu.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/idtcpu.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/idtcpu.h
+$(PROJECT_INCLUDE)/rtems/mips/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/mips
+	@: > $(PROJECT_INCLUDE)/rtems/mips/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/mips/$(dirstamp)
 
-$(PROJECT_INCLUDE)/iregdef.h: iregdef.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/iregdef.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/iregdef.h
+$(PROJECT_INCLUDE)/rtems/mips/idtcpu.h: idtcpu.h $(PROJECT_INCLUDE)/rtems/mips/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mips/idtcpu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mips/idtcpu.h
+
+$(PROJECT_INCLUDE)/rtems/mips/iregdef.h: iregdef.h $(PROJECT_INCLUDE)/rtems/mips/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mips/iregdef.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mips/iregdef.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score

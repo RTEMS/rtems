@@ -18,7 +18,7 @@ extern "C" {
 #endif
 
 #ifndef ASM
-#include <idtcpu.h>
+#include <rtems/mips/idtcpu.h>
 #endif
 
 /*

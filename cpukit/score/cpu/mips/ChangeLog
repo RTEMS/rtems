@@ -1,3 +1,11 @@
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am: Install iregdefs.h and idtcpu.h to 
+	$(includedir)/rtems/mips.
+	* cpu_asm.S: Include <rtems/mips/iregdef.h> instead of <iregdef.h>.
+	* rtems/score/mips.h, cpu_asm.S: Include <rtems/mips/idtcpu.h>
+	instead of <idtcpu.h>.
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* Makefile.am: Install asm.h to $(includedir)/rtems.

@@ -44,8 +44,8 @@
  */
 
 #include <rtems/asm.h>
-#include "iregdef.h"
-#include "idtcpu.h"
+#include <rtems/mips/iregdef.h>
+#include <rtems/mips/idtcpu.h>
 
 #define ASSEMBLY_ONLY
 #include <rtems/score/cpu.h>
