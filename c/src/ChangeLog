@@ -1,5 +1,9 @@
 2004-11-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* aclocal/enable-itron.m4: Remove (unused).
+
+2004-11-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* configure.ac: Misc. quoting cleanups.
 	Enable ada-tests iff --enable-ada and --enable-tests.
 
