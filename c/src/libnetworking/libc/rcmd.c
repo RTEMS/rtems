@@ -62,12 +62,12 @@ static char sccsid[] = "@(#)rcmd.c	8.3 (Berkeley) 3/26/94";
 
 #define max(a, b)	((a > b) ? a : b)
 
-#ifdef __rtems
+#ifdef __rtems__
 int rresvport();
 #define bzero(a,s)		memset((a),0,(s))
 #define bcmp			memcmp
 #define bcopy(s,d,i)	memcpy(d,s,i)
-#else /* __rtems */
+#else /* __rtems__ */
 
 extern int innetgr __P(( const char *, const char *, const char *, const char * ));
 
@@ -86,7 +86,7 @@ rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
 	struct hostent *hp;
 	struct sockaddr_in sin, from;
 	fd_set reads;
-#ifndef __rtems
+#ifndef __rtems__
 	long oldmask;
 #endif
 	pid_t pid;
@@ -100,7 +100,7 @@ rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
 		return (-1);
 	}
 	*ahost = hp->h_name;
-#ifndef __rtems
+#ifndef __rtems__
 	oldmask = sigblock(sigmask(SIGURG));
 #endif
 	for (timo = 1, lport = IPPORT_RESERVED - 1;;) {
@@ -112,7 +112,7 @@ rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
 			else
 				(void)fprintf(stderr, "rcmd: socket: %s\n",
 				    strerror(errno));
-#ifndef __rtems
+#ifndef __rtems__
 			sigsetmask(oldmask);
 #endif
 			return (-1);
@@ -149,7 +149,7 @@ rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
 			continue;
 		}
 		(void)fprintf(stderr, "%s: %s\n", hp->h_name, strerror(errno));
-#ifndef __rtems
+#ifndef __rtems__
 		sigsetmask(oldmask);
 #endif
 		return (-1);
@@ -239,7 +239,7 @@ again:
 		}
 		goto bad2;
 	}
-#ifndef __rtems
+#ifndef __rtems__
 	sigsetmask(oldmask);
 #endif
 	return (s);
@@ -248,7 +248,7 @@ bad2:
 		(void)close(*fd2p);
 bad:
 	(void)close(s);
-#ifndef __rtems
+#ifndef __rtems__
 	sigsetmask(oldmask);
 #endif
 	return (-1);
@@ -286,7 +286,7 @@ rresvport(alport)
 	return (s);
 }
 
-#ifndef __rtems
+#ifndef __rtems__
 int	__check_rhosts_file = 1;
 char	*__rcmd_errstr;
 

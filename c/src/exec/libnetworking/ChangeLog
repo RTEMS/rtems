@@ -1,3 +1,7 @@
+2002-03-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libc/rcmd.c: Replace __rtems w/ __rtems__.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
