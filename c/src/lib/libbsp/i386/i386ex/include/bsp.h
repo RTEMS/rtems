@@ -24,7 +24,7 @@ extern "C" {
 #include <iosupp.h>
 #include <console.h>
 #include <clockdrv.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <irq.h>
   
 /*

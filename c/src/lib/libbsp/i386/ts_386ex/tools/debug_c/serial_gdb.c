@@ -13,7 +13,7 @@
  */
 
 #include <uart.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 extern int BSPConsolePort;
 

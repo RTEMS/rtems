@@ -32,7 +32,7 @@ extern "C" {
 #include <clockdrv.h>
 #include <console.h>
 #include <iosupp.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 
 /*

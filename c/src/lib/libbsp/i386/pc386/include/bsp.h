@@ -53,7 +53,7 @@ extern "C" {
 #include <console.h>
 #include <clockdrv.h>
 #include <libcpu/cpu.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
   
 /*
  *  confdefs.h overrides for this BSP:
