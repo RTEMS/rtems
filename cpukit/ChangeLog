@@ -1,3 +1,8 @@
+2005-02-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4: Rework rtems_updir handling to work around
+	ash cd'ing to '/' for 'cd .//'.
+
 2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 764/networking
