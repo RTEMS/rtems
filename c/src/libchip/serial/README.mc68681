@@ -9,6 +9,10 @@ sDeviceName
 
    The name of this device.
 
+deviceType
+
+   This field must be SERIAL_MC68681.
+
 pDeviceFns
 
    The device interface control table.  This may be:
