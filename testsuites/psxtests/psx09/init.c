@@ -38,6 +38,7 @@ void *POSIX_Init(
 )
 {
   int                  status;
+  int                  passes;
   int                  schedpolicy;
   int                  priority;
   struct sched_param   schedparam;
@@ -55,7 +56,6 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
   
-#if 0
   /* try to use this thread as a sporadic server */
 
   puts( "Init: pthread_getschedparam - SUCCESSFUL" );
@@ -99,7 +99,6 @@ void *POSIX_Init(
     }
   }
 
-#endif
   /* now see if this works if we are holding a priority ceiling mutex */
 
   empty_line();
