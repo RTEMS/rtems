@@ -1,3 +1,9 @@
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 351/networking
+	* nfs/bootp_subr.c: Fix ridiculous leak in bootp and use
+	strdup_bootp_realloc() everywhere for sake of consistency.
+
 2003-02-11	Mike Siers <mikes@poliac.com>
 
 	* rtems/rtems_glue.c: A small patch to the network daemon task

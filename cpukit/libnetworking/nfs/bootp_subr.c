@@ -274,11 +274,13 @@ void *bootp_strdup_realloc(char *dst,const char *src)
 
   if (dst == NULL) {
     /* first allocation, simply use strdup */
-    dst = strdup(src);
+	if (src)
+    	dst = strdup(src);
   }
   else {
     /* already allocated, so use realloc/strcpy */
-    len = strlen(src) + 1;  
+    len = src ? strlen(src) + 1 : 0;  
+	/* src == NULL tells us to effectively free dst */
     dst = realloc(dst,len);
     if (dst != NULL) {
       strcpy(dst,src);
@@ -945,7 +947,10 @@ bootpc_init(int update_files)
       update_files = 0;
     }
 
-  dhcp_hostname = NULL;
+  if (dhcp_hostname != NULL) {
+	/* free it */
+    dhcp_hostname=bootp_strdup_realloc(dhcp_hostname,0);
+  }
 
   /*
    * Find a network interface.
