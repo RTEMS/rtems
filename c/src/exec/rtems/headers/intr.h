@@ -115,6 +115,20 @@ rtems_status_code rtems_interrupt_catch(
     _ISR_Flash(_isr_cookie)
 
 /*
+ *  rtems_interrupt_is_in_progress
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the processor is currently servicing
+ *  and interrupt and FALSE otherwise.   A return value of TRUE indicates
+ *  that the caller is an interrupt service routine, NOT a thread.  The
+ *  directives available to an interrupt service routine are restricted.
+ */
+ 
+#define rtems_interrupt_is_in_progress() \
+    _ISR_Is_in_progress()
+
+/*
  *  rtems_interrupt_cause
  *
  *  DESCRIPTION:
