@@ -1,5 +1,11 @@
 2001-09-13	Joel Sherrill <joel@OARcorp.com>
 
+	* setup.def, gccnewlib/gccnewlib.add, gccnewlib/target-gcc.add:
+	Revert changes because of gcc 2.5.x/3.0 transition and continue
+	to support gcc 2.95.x as primary version.
+
+2001-09-13	Joel Sherrill <joel@OARcorp.com>
+
 	* mkgccnewlibspec.in, 
 	Use Target_alias not target_alias to avoid conflicts with new autoconf.
 	* setup.def: Changed version numbers in attempt at building gcc 3.0.1.

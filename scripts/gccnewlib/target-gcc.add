@@ -20,9 +20,8 @@ This is gcc and newlib C Library for @target_alias@.
 /opt/rtems/bin/@target_alias@-c++@exe_ext@
 /opt/rtems/bin/@target_alias@-g++@exe_ext@
 /opt/rtems/bin/@target_alias@-gcc@exe_ext@
-# not in gcc 3.x 
-# /opt/rtems/bin/@target_alias@-protoize@exe_ext@
-# /opt/rtems/bin/@target_alias@-unprotoize@exe_ext@
+/opt/rtems/bin/@target_alias@-protoize@exe_ext@
+/opt/rtems/bin/@target_alias@-unprotoize@exe_ext@
 
 %dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
 
