@@ -4,26 +4,26 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
-C_FILES = cpu.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
-
-S_FILES = cpu_asm.S
-S_O_FILES = $(S_FILES:%.S=${ARCH}/%.$(OBJEXT))
-
 include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+EXTRA_PROGRAMS =
+CLEANFILES =
+noinst_DATA =
 
-REL = $(ARCH)/rtems-cpu.rel
+all-local: $(TMPINSTALL_FILES)
 
-$(REL): $(C_O_FILES) $(S_O_FILES)
-	$(make-rel)
+EXTRA_PROGRAMS += rtems-cpu.rel
+CLEANFILES += rtems-cpu.rel
+rtems_cpu_rel_SOURCES = cpu.c cpu_asm.S
+rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-all-local: $(TMPINSTALL_FILES) $(REL)
+EXTRA_PROGRAMS += rtems-cpu_g.rel
+CLEANFILES += rtems-cpu_g.rel
+rtems_cpu_g_rel_SOURCES = $(rtems_cpu_rel_SOURCES)
+rtems_cpu_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+rtems_cpu_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_DIST = $(C_FILES) $(S_FILES)
+noinst_DATA += rtems-cpu$(LIB_VARIANT).rel
 
 include $(top_srcdir)/../../../../../automake/local.am
