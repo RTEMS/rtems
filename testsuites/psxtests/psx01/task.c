@@ -44,6 +44,14 @@ void *Task_1_through_3(
     puts( "pthread_equal different case passed" );
   assert( !status );
 
+  puts( "pthread_equal first id bad" );
+  status = pthread_equal( -1, Task_id );
+  assert( status == 0);
+
+  puts( "pthread_equal second id bad" );
+  status = pthread_equal( Init_id, -1 );
+  assert( status == 0);
+
   puts( "*** END OF POSIX TEST 1 ***" );
   exit( 0 );
 
