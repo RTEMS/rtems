@@ -1,3 +1,9 @@
+2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 368/filesystems
+	* custom/mbx821_002.cfg, custom/mbx821_002b.cfg: New files included
+	with this PR for alias BSPs.
+
 2003-03-18  Till Straumann <strauman@slac.stanford.edu>
 
 	PR 356/bsps
