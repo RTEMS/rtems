@@ -30,6 +30,7 @@ void RTEMS_Malloc_Initialize(
 );
 
 extern void malloc_dump(void);
+extern void malloc_walk(size_t source, size_t printf_enabled);
 extern void libc_init(int reentrant);
 extern int  host_errno(void);
 extern void fix_syscall_errno(void);
