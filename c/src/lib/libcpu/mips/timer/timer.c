@@ -38,9 +38,13 @@
  *  $Id$
  */
 
-#ifndef lint
-static char _sccsid[] = "@(#)timer.c 08/20/96     1.5\n";
-#endif
+/*
+ *  Rather than deleting this, it is commented out to (hopefully) help
+ *  the submitter send updates.
+ *
+ *  static char _sccsid[] = "@(#)timer.c 08/20/96     1.5\n";
+ */
+
 
 #include <rtems.h>
 #include <bsp.h>

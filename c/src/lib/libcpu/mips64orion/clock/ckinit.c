@@ -31,9 +31,13 @@
  *  $Id$
  */
 
-#ifndef lint
-static char _sccsid[] = "@(#)ckinit.c 08/20/96     1.3\n";
-#endif
+/*
+ *  Rather than deleting this, it is commented out to (hopefully) help
+ *  the submitter send updates.
+ *
+ *  static char _sccsid[] = "@(#)ckinit.c 08/20/96     1.3\n";
+ */
+
 
 #include <stdlib.h>
 
