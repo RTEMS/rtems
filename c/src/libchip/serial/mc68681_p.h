@@ -190,6 +190,14 @@ extern "C" {
  *  MC68681_INTERRUPT_MASK_REG
  */
 
+/* These are passed to mc68681_build_imr */
+#define MC68681_IR_TX_READY                                 0x01
+#define MC68681_IR_RX_READY                                 0x02
+#define MC68681_IR_BREAK                                    0x04
+#define MC68681_IMR_ENABLE_ALL                              0x07
+#define MC68681_IMR_DISABLE_ALL                             0x00
+#define MC68681_IMR_ENABLE_ALL_EXCEPT_TX                    0x06
+
 #define MC68681_IR_TX_READY_A                               0x01
 #define MC68681_IR_RX_READY_A                               0x02
 #define MC68681_IR_BREAK_A                                  0x04
@@ -237,7 +245,8 @@ extern "C" {
 
 typedef struct _mc68681_context
 {
-  int        mate;
+  int            mate;
+  unsigned char  imr;
 } mc68681_context;
 
 /*
@@ -287,6 +296,20 @@ MC68681_STATIC int mc68681_write_support_polled(
 
 MC68681_STATIC int mc68681_inbyte_nonblocking_polled(
   int minor
+);
+
+MC68681_STATIC unsigned int mc68681_build_imr(
+  int  minor,
+  int  enable_flag
+);
+
+MC68681_STATIC void mc68681_process(
+  int  minor
+);
+
+MC68681_STATIC void mc68681_enable_interrupts(
+  int minor,
+  int imr_mask
 );
 
 #ifdef __cplusplus
