@@ -33,6 +33,10 @@ void _ISR_Handler_initialization( void )
 
   _ISR_Nest_level = 0;
 
+  _ISR_Vector_table = _Workspace_Allocate_or_fatal_error(
+     sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS
+  );
+
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
 
   if ( _CPU_Table.interrupt_stack_size < STACK_MINIMUM_SIZE )
@@ -41,10 +45,6 @@ void _ISR_Handler_initialization( void )
       TRUE,
       INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
     );
-
-  _ISR_Vector_table = _Workspace_Allocate_or_fatal_error(
-     sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS
-  );
 
   _CPU_Interrupt_stack_low =
     _Workspace_Allocate_or_fatal_error( _CPU_Table.interrupt_stack_size );

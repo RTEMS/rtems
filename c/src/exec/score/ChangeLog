@@ -1,4 +1,9 @@
 
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* src/isr.c: Allocate the _ISR_Vector_table all the time not just when
+	we are allocating an interrupt stack.
+
 2000-12-13	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/score/isr.h, src/isr.c: Allocate it from the
