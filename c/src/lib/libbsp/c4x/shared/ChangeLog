@@ -1,3 +1,7 @@
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove C_FILES (Unused).
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* bspspuriousinit.c, c3xspurious.c, c4xspurious.c: URL for license
