@@ -55,24 +55,6 @@ extern "C" {
 #define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVSCI_DRIVER_TABLE_ENTRY
 #endif
 
-/*
- *  Stuff for Time Test 27
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) \
-{ \
-  rtems_isr_entry ignored ; \
-  rtems_interrupt_catch( (handler), 0, &ignored ) ; \
-}
-
-#define Cause_tm27_intr()
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
 /* Constants */
 
 /*
