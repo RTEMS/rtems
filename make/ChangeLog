@@ -1,3 +1,7 @@
+2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+
 2004-02-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: dist_rtems_make_DATA = main.cfg leaf.cfg.
