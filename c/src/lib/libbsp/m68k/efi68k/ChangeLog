@@ -1,3 +1,11 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, console/console.c, include/16550.h,
+	include/DP8570A.h, include/bsp.h, spurious/spinit.c,
+	startup/bspclean.c, startup/bspstart.c, startup/efi68k_tcp.c,
+	startup/efi68k_wd.c, startup/setvec.c, timer/timer.c: URL for license
+	changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
