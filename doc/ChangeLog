@@ -1,3 +1,7 @@
+2002-04-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* VERSION, bootstrap: Removed as unneeded.
+
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootstrap: Remove.
