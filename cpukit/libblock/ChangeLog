@@ -1,3 +1,7 @@
+2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Reworked.
+
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: AM_CPPFLAGS += -I$(top_builddir).
