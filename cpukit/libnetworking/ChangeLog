@@ -1,5 +1,11 @@
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
 
+	* sys/param.h: Removed as a simpler version of this file is
+	now part of the RTEMS newlib support.
+	* sys/Makefile.am: Modified to reflect above.  
+
+2002-07-30	Joel Sherrill <joel@OARcorp.com>
+
 	* machine/types.h: Removed as a simpler version of this file is
 	now part of the RTEMS newlib support.
 	* machine/Makefile.am, machine/endian.h, nfs/bootp_subr.c,
