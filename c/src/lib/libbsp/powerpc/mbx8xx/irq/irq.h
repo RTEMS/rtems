@@ -26,6 +26,10 @@
 
 #ifndef ASM
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern volatile unsigned int ppc_cached_irq_mask;
 
 /*
@@ -326,6 +330,11 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config);
 int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
   
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
 
 #endif

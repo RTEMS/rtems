@@ -59,6 +59,10 @@
 
 #ifndef ASM
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /*
  * Symblolic IRQ names and related definitions.
@@ -328,6 +332,11 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
   
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 extern void BSP_i8259s_init(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
 
 #endif
