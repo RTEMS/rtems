@@ -291,7 +291,7 @@ boolean _POSIX_signals_Check_signal(
 
   switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
     case SA_SIGINFO:
-      assert( is_global );
+      /* assert( is_global ); -- not right after timers added */
 
       (*_POSIX_signals_Vectors[ signo ].sa_sigaction)(
         signo,
