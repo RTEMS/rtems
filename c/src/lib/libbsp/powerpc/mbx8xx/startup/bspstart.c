@@ -19,16 +19,11 @@
  *  $Id$
  */
 
+#include <string.h>
+
 #include <bsp.h>
 #include <rtems/libio.h>
- 
-#include <libcsupport.h>
- 
-#include <string.h>
- 
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
+#include <rtems/libcsupport.h>
 
 /*
  *  The original table from the application (in ROM) and our copy of it with
@@ -86,15 +81,6 @@ void bsp_pretasking_hook(void)
     extern unsigned char _HeapEnd;
 
     bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
-  
-#ifdef STACK_CHECKER_ON
-  /*
-   *  Initialize the stack bounds checker
-   *  We can either turn it on here or from the app.
-   */
-  
-  Stack_check_Initialize();
-#endif /* STACK_CHECKER_ON */
   
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
