@@ -1,3 +1,7 @@
+2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* mcf5206/console/mcfuart.c, mcf5206/include/mcf5206e.h: Cosmetics.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* m68040/fpsp/rtems_fpsp.c, mcf5206/clock/ckinit.c,

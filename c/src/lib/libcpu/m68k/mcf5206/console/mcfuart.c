@@ -110,8 +110,8 @@ mcfuart_set_baudrate(mcfuart *uart, speed_t baud)
         
     div = SYSTEM_CLOCK_FREQUENCY / (rate * 32);
     
-    *MCF5206E_UBG1(MBAR,uart->chn) = (uint8_t  )((div >> 8) & 0xff);
-    *MCF5206E_UBG2(MBAR,uart->chn) = (uint8_t  )(div & 0xff);
+    *MCF5206E_UBG1(MBAR,uart->chn) = (uint8_t)((div >> 8) & 0xff);
+    *MCF5206E_UBG2(MBAR,uart->chn) = (uint8_t)(div & 0xff);
 }
 
 /*
