@@ -1,4 +1,9 @@
 
+2001-05-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/score/.cvsignore: Add stamp-h, cpuopts.h,
+	cpuopts.h.in, cpuopts-tmp.h.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/Makefile.am, include/rtems/score/Makefile.am,
