@@ -48,7 +48,7 @@ ENTRY(_start)
 MEMORY
 {
   rom           : o = 0x00400000, l = 0x00040000
-  ram           : o = 0x00440000, l = 0x00040000
+  ram           : o = 0x00440000, l = 0x00080000
   onchip_peri   : o = 0xFFFF8000, l = 0x00000800
   onchip_ram    : o = 0xFFFFF000, l = 0x00001000
 }
@@ -120,10 +120,10 @@ SECTIONS
      * Special FreeBSD sysctl sections.
      */
     . = ALIGN (16);
-    __start_set_sysctl_set = .;
-    *(set_sysctl_*);
-    __stop_set_sysctl_set = ABSOLUTE(.);
-    *(set_domain_*);
+    ___start_set_sysctl_set = .;
+    *(set_sysc*);   /* set_sysctl_* but name is truncated by SH-coff */
+    ___stop_set_sysctl_set = ABSOLUTE(.);
+    *(set_doma*);   /* set_domain_* but name is truncated by SH-coff */
     *(set_pseudo_*);
 
     /* .gnu.warning sections are handled specially by elf32.em.  */
