@@ -15,16 +15,11 @@ OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
-
-$(PGM): $(OBJS)
-	$(make-rel)
+noinst_DATA = $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all-local: $(PREINSTALL_FILES) $(OBJS) $(PGM)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = irq.c irq_asm.S irq_init.c
 
