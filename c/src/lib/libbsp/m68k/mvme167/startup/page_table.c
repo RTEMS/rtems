@@ -120,14 +120,14 @@ void page_table_init(
 	}
 
   /* do it ! */
-  asm volatile("movec %0, %%tc    /* turn off paged address translation */
-                movec %0, %%cacr  /* disable both caches */
-                cinva %%bc        /* clear both caches */
-                movec %1,%%dtt0   /* block address translation on */
-                movec %1,%%itt0
-                movec %2,%%dtt1
-                movec %2,%%itt1
-                movec %3,%%cacr"  /* data cache on */
+  asm volatile("movec %0, %%tc\n\t"    /* turn off paged address translation */
+               "movec %0, %%cacr\n\t"  /* disable both caches */
+               "cinva %%bc\n\t"        /* clear both caches */
+               "movec %1,%%dtt0\n\t"   /* block address translation on */
+               "movec %1,%%itt0\n\t"
+               "movec %2,%%dtt1\n\t"
+               "movec %2,%%itt1\n\t"
+               "movec %3,%%cacr"       /* data cache on */
 	  :: "d" (0), "d" (dtt0), "d" (0xFF00C040), "d" (cacr));
 }
 
@@ -146,12 +146,12 @@ void page_table_init(
  */
 void page_table_teardown( void )
 {
-  asm volatile ("movec %0,%%tc
-                 movec %0,%%cacr
-                 cpusha %%bc
-                 movec %0,%%dtt0
-                 movec %0,%%itt0
-                 movec %0,%%dtt1
-                 movec %0,%%itt1"
+  asm volatile ("movec %0,%%tc\n\t"
+                "movec %0,%%cacr\n\t"
+                "cpusha %%bc\n\t"
+                "movec %0,%%dtt0\n\t"
+                "movec %0,%%itt0\n\t"
+                "movec %0,%%dtt1\n\t"
+                "movec %0,%%itt1"
     :: "d" (0) );
 }

@@ -42,8 +42,8 @@ static void bsp_return_to_monitor_trap( void )
 
   lcsr->intr_ena = 0;               /* disable interrupts */
   m68k_set_vbr(0xFFE00000);         /* restore 167Bug vectors */
-  asm volatile( "trap   #15         /* trap to 167Bug */
-                 .short 0x63" );    /* return to 167Bug (.RETURN) */
+  asm volatile( "trap   #15\n\t"    /* trap to 167Bug */
+                ".short 0x63" );    /* return to 167Bug (.RETURN) */
   
   /* restart program */
   start_addr = start;

@@ -1297,13 +1297,13 @@ int _167Bug_pollRead(
    */
   rtems_interrupt_disable( previous_level );
   
-  asm volatile( "movew  %1, -(%%sp)     /* Channel */
-                 trap   #15             /* Trap to 167Bug */
-                 .short 0x61            /* Code for .REDIR_I */
-                 trap   #15             /* Trap to 167Bug */
-			           .short 0x01            /* Code for .INSTAT */
-                 move   %%cc, %0        /* Get condition codes */
-                 andil  #4, %0"         /* Keep the Zero bit */
+  asm volatile( "movew  %1, -(%%sp)\n\t"/* Channel */
+                "trap   #15\n\t"        /* Trap to 167Bug */
+                ".short 0x61\n\t"       /* Code for .REDIR_I */
+                "trap   #15\n\t"        /* Trap to 167Bug */
+		".short 0x01\n\t"       /* Code for .INSTAT */
+                "move   %%cc, %0\n\t"   /* Get condition codes */
+                "andil  #4, %0"         /* Keep the Zero bit */
     : "=d" (char_not_available) : "d" (minor): "%%cc" );
 
   if (char_not_available) {
@@ -1312,10 +1312,10 @@ int _167Bug_pollRead(
   }
 
   /* Read the char and return it */
-  asm volatile( "subq.l #2,%%a7         /* Space for result */
-                 trap   #15             /* Trap to 167 Bug */
-                 .short 0x00            /* Code for .INCHR */
-                 moveb  (%%a7)+, %0"    /* Pop char into c */
+  asm volatile( "subq.l #2,%%a7\n\t"    /* Space for result */
+                "trap   #15\n\t"        /* Trap to 167 Bug */
+                ".short 0x00\n\t"       /* Code for .INCHR */
+                "moveb  (%%a7)+, %0"    /* Pop char into c */
     : "=d" (c) : );
 
   rtems_interrupt_enable( previous_level );
@@ -1349,12 +1349,12 @@ int _167Bug_pollWrite(
 {
   const char *endbuf = buf + len;
 
-  asm volatile( "pea    (%0)            /* endbuf */
-                 pea    (%1)            /* buf */
-                 movew  #0x21, -(%%sp)  /* Code for .OUTSTR */
-                 movew  %2, -(%%sp)     /* Channel */
-                 trap   #15             /* Trap to 167Bug */
-                 .short 0x60"           /* Code for .REDIR */
+  asm volatile( "pea    (%0)\n\t"            /* endbuf */
+                "pea    (%1)\n\t"            /* buf */
+                "movew  #0x21, -(%%sp)\n\t"  /* Code for .OUTSTR */
+                "movew  %2, -(%%sp)\n\t"     /* Channel */
+                "trap   #15\n\t"             /* Trap to 167Bug */
+                ".short 0x60"                /* Code for .REDIR */
     :: "a" (endbuf), "a" (buf), "d" (minor) );
 
   /* Return something */

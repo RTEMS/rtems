@@ -116,12 +116,12 @@ User_extensions_routine bsp_fatal_error_occurred(
   lcsr->intr_ena = 0;               /* disable interrupts */
   m68k_set_vbr(0xFFE00000);         /* restore 167Bug vectors */
   
-  asm volatile( "movel  %0, -(%%a7)
-                 pea    (%%a7)
-                 pea    (%1)
-                 trap   #15         /* trap to 167Bug (.WRITDLN) */
-                 .short 0x25
-                 trap   #15
-                 .short 0x63"       
+  asm volatile( "movel  %0, -(%%a7)\n\t"
+                "pea    (%%a7)\n\t"
+                "pea    (%1)\n\t"
+                "trap   #15\n\t"         /* trap to 167Bug (.WRITDLN) */
+                ".short 0x25\n\t"
+                "trap   #15\n\t"
+                ".short 0x63"       
     :: "d" (the_error), "a" (&my_p_str) );
 }
