@@ -1,3 +1,7 @@
+2000-11-20	Joel Sherrill <joel@OARcorp.com>
+
+	* TESTED: Added new sparc variations (erc32, leon, and Tharsys).
+
 2000-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: catch -enable-rtemsbsp (Allowed by autoconf).
