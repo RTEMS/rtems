@@ -1,3 +1,26 @@
 *** POSIX MESSAGE QUEUE TEST ***
-
+mq_open - Create with maxmsg (-1) (EINVAL)
+mq_open - Create with msgsize (-1) (EINVAL)
+mq_open - Open new mq without create flag (ENOENT)
+mq_open - Open with too long of a name (ENAMETOOLONG)
+mq_open - SUCCESSFUL
+mq_open - Create an Existing mq (EEXIST)
+mq_open - system is out of resources (ENFILE)
+mq_close and mq_unlink (mq3...mqn) - SUCCESSFUL
+mq_unlink - mq_unlink with too long of a name (ENAMETOOLONG)
+mq_unlink - UNSUCCESSFUL (ENOENT)
+mq_unlink (NULL) - EINVAL
+mq_unlink ("") - EINVAL
+mq_close - UNSUCCESSFUL (EBADF)
+mq_send - Closed message queue (EBADF)
+mq_open - Open a read only queue
+mq_send - Read only message queue (EBADF)
+mq_send - Priority out of range (EINVAL)
+mq_send - Message longer than msg_len (EMSGSIZE)
+mq_open - Open an existing mq ( same id )
+mq_unlink - mq1 SUCCESSFUL
+mq_open - Reopen mq1 SUCCESSFUL with a different id
+mq_unlink - mq1 SUCCESSFUL
+mq_close mq1 - SUCCESSFUL
+mq_unlink - UNSUCCESSFUL (ENOENT)
 *** END OF POSIX MESSAGE QUEUE TEST ***
