@@ -205,6 +205,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
   _IO_Manager_initialization(
     configuration_table->Device_driver_table,
     configuration_table->number_of_device_drivers,
+    configuration_table->maximum_drivers,
     configuration_table->maximum_devices
   );
 

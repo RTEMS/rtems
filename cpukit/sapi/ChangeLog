@@ -1,3 +1,11 @@
+2001-10-16	Chris Johns <ccj@acm.org>
+
+	* include/confdefs.h, include/rtems/config.h, include/rtems/io.h,
+	optman/no-io.c, src/exinit.c, src/io.c: Added a device driver
+	register/unregister interface to allow device drivers to be
+	installed and removed at runtime. This means you do not need devices
+	present in the device table when you build.
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/Makefile.am: Remove.

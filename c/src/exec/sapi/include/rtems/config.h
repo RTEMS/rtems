@@ -104,6 +104,7 @@ typedef struct {
   unsigned32                        microseconds_per_tick;
   unsigned32                        ticks_per_timeslice;
   unsigned32                        maximum_devices;
+  unsigned32                        maximum_drivers;
   unsigned32                        number_of_device_drivers;
   rtems_driver_address_table       *Device_driver_table;
   unsigned32                        number_of_initial_extensions;

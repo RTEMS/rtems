@@ -24,22 +24,44 @@
  *
  *  _IO_Manager_initialization
  *
+ *  The IO manager has been extended to support runtime driver
+ *  registration. The driver table is now allocated in the
+ *  workspace.
+ *
  */
- 
+  
 void _IO_Manager_initialization(
-  rtems_driver_address_table *driver_table,
-  unsigned32                  number_of_drivers,
-  unsigned32                  number_of_devices
+    rtems_driver_address_table *driver_table,
+    unsigned32                  drivers_in_table,
+    unsigned32                  number_of_drivers,
+    unsigned32                  number_of_devices
 )
 {
   void                *tmp;
   unsigned32           index;
   rtems_driver_name_t *np;
+
+  if ( number_of_drivers < drivers_in_table )
+      number_of_drivers = drivers_in_table;
+  
+  tmp = _Workspace_Allocate_or_fatal_error(
+    sizeof( rtems_driver_address_table ) * ( number_of_drivers )
+  );
  
-  _IO_Driver_address_table = driver_table;
-  _IO_Number_of_drivers    = number_of_drivers;
-  _IO_Number_of_devices    = number_of_devices;
- 
+  _IO_Driver_address_table = (rtems_driver_address_table *) tmp;
+
+  memset(
+    _IO_Driver_address_table, 0,
+    sizeof( rtems_driver_address_table ) * ( number_of_drivers )
+  );
+
+  if ( drivers_in_table )
+      for ( index = 0 ; index < drivers_in_table ; index++ )
+        _IO_Driver_address_table[index] = driver_table[index];
+  
+  _IO_Number_of_drivers = number_of_drivers;
+  _IO_Number_of_devices = number_of_devices;
+  
   tmp = _Workspace_Allocate_or_fatal_error(
     sizeof( rtems_driver_name_t ) * ( number_of_devices + 1 )
   );
@@ -73,6 +95,96 @@ void _IO_Initialize_all_drivers( void )
 
    for ( major=0 ; major < _IO_Number_of_drivers ; major ++ )
      (void) rtems_io_initialize( major, 0, NULL);
+}
+
+/*PAGE
+ *
+ *  rtems_io_register_driver
+ *
+ *  Register a driver into the device driver table.
+ *
+ *  Input Paramters:
+ *    major            - device major number (0 means allocate
+ *                       a number)
+ *    driver_table     - driver callout function table
+ *    registered_major - the major number which is registered
+ *
+ *  Output Parameters: 
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code       - if unsuccessful
+ */
+
+rtems_status_code rtems_io_register_driver(
+    rtems_device_major_number   major,
+    rtems_driver_address_table *driver_table,
+    rtems_device_major_number  *registered_major
+)
+{
+    *registered_major = 0;
+
+    /*
+     * Test for initialise/open being present to indicate the driver slot is
+     * in use.
+     */
+
+    if ( major >= _IO_Number_of_drivers )
+      return RTEMS_INVALID_NUMBER;
+
+    if ( major == 0 )
+    {
+        for ( major = _IO_Number_of_drivers - 1 ; major ; major-- )
+            if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
+                 _IO_Driver_address_table[major].open_entry == 0 )
+                break;
+
+        if (( major == 0 ) &&
+            ( _IO_Driver_address_table[major].initialization_entry == 0 &&
+              _IO_Driver_address_table[major].open_entry == 0 ))
+            return RTEMS_TOO_MANY;
+    }
+    
+    if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
+         _IO_Driver_address_table[major].open_entry == 0 )
+    {
+        _IO_Driver_address_table[major] = *driver_table;
+        *registered_major               = major;
+
+        rtems_io_initialize( major, 0, NULL);
+
+        return RTEMS_SUCCESSFUL;
+    }
+
+    return RTEMS_RESOURCE_IN_USE;
+}
+
+/*PAGE
+ *
+ *  rtems_io_unregister_driver
+ *
+ *  Unregister a driver from the device driver table.
+ *
+ *  Input Paramters:
+ *    major            - device major number
+ *
+ *  Output Parameters: 
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code       - if unsuccessful
+ */
+
+rtems_status_code rtems_io_unregister_driver(
+    rtems_device_major_number major
+)
+{
+    if ( major < _IO_Number_of_drivers )
+    {
+        memset(
+            &_IO_Driver_address_table[major],
+            0,
+            sizeof( rtems_driver_address_table )
+        );
+        return RTEMS_SUCCESSFUL;
+    }
+    return RTEMS_UNSATISFIED;
 }
 
 /*PAGE
@@ -184,7 +296,7 @@ rtems_status_code rtems_io_lookup_name(
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 )
 {
     rtems_device_driver_entry callout;

@@ -300,6 +300,15 @@ rtems_driver_address_table Device_drivers[] = {
 #endif  /* CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE */
 
 /*
+ *  Default the number of drivers per node.  This value may be
+ *  overridden by the user.
+ */
+
+#ifndef CONFIGURE_MAXIMUM_DRIVERS
+#define CONFIGURE_MAXIMUM_DRIVERS   10
+#endif
+
+/*
  *  Default the number of devices per device driver.  This value may be
  *  overridden by the user.
  */
@@ -993,6 +1002,7 @@ rtems_configuration_table Configuration = {
   CONFIGURE_MICROSECONDS_PER_TICK,
   CONFIGURE_TICKS_PER_TIMESLICE,
   CONFIGURE_MAXIMUM_DEVICES,
+  CONFIGURE_MAXIMUM_DRIVERS,
   sizeof (Device_drivers)/
     sizeof(rtems_driver_address_table),      /* number of device drivers */
   Device_drivers,                            /* pointer to driver table */

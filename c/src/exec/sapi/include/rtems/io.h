@@ -100,8 +100,37 @@ SAPI_EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
 
 void _IO_Manager_initialization(
   rtems_driver_address_table *driver_table,
+  unsigned32                  drivers_in_table,
   unsigned32                  number_of_drivers,
   unsigned32                  number_of_devices
+);
+
+/*
+ *  rtems_io_register_driver
+ *
+ *  DESCRIPTION:
+ *
+ *  Register a driver into the device driver table.
+ *
+ */
+
+rtems_status_code rtems_io_register_driver(
+    rtems_device_major_number   major,
+    rtems_driver_address_table *driver_table,
+    rtems_device_major_number  *registered_major
+);
+
+/*
+ *  rtems_io_unregister_driver
+ *
+ *  DESCRIPTION:
+ *
+ *  Unregister a driver from the device driver table.
+ *
+ */
+
+rtems_status_code rtems_io_unregister_driver(
+    rtems_device_major_number major
 );
 
 /*
