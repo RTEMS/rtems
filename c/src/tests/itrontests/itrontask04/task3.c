@@ -48,6 +48,6 @@ void Task_3()
   }
 
   puts( "*** ITRON TASK TEST 4 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 

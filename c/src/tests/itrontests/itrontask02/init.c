@@ -576,5 +576,5 @@ XXXXX - FIX ME
 #endif
 
   puts( "*** END OF ITRON TASK TEST 2 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

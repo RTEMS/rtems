@@ -62,7 +62,7 @@ void ITRON_Init( void )
     TestTrcv();
 
     printf("\n\n*** ITRONMBF01 --- ITRON MESSAGE BUFFER TEST ***\n");
-    exit(0);
+    rtems_test_exit(0);
 }
 
 void TestCre()

@@ -53,5 +53,5 @@ void Task_1()
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "*** ITRON TASK TEST 3 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

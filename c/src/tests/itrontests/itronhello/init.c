@@ -29,5 +29,5 @@ void ITRON_Init( void )
   printf( "\n\n*** ITRON HELLO WORLD TEST ***\n" );
   printf( "Hello World\n" );
   printf( "*** END OF ITRON HELLO WORLD TEST ***\n" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

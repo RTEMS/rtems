@@ -56,7 +56,7 @@ void ITRON_Init( void )
   printf( "\n\n*** ITRON TIME TEST 01 ***\n" );
   printf( "The Time Services are not completely implemented.\n" );
   printf( "*** END OF ITRON TIME TEST 01 ***\n" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 

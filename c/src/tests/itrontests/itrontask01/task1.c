@@ -41,7 +41,7 @@ void Task_2_through_4()
 
     if ( time.second >= 35 ) {
       puts( "*** END OF ITRON TASK TEST 1 ***" );
-      exit( 0 );
+      rtems_test_exit( 0 );
     }
 
     printf(name);

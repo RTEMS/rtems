@@ -328,5 +328,5 @@ void ITRON_Init( void )
   assert( status == E_OK );
 
   printf( "*** END OF ITRONSEM01 -- ITRON SEMAPHORE TEST ***\n" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

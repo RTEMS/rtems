@@ -30,7 +30,7 @@ void ITRON_Init( void )
   printf( "\n\n*** ITRON MBOX TEST 01 ***\n" );
   printf( "ITRON Mailboxes are implemented but there is currently no test.\n" );
   printf( "*** END OF ITRON MBOX TEST 01 ***\n" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 
