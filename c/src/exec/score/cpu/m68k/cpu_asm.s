@@ -142,6 +142,9 @@ SYM (_ISR_Handler):
  *
  *  After the interrupted codes registers have been saved, it is save
  *  to switch to the software maintained interrupt stack.
+ *
+ *  PLEASE, if you have a m68k without a dedicated interrupt stack,
+ *          implement the stack switching code.
  */
 
         movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
