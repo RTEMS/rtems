@@ -31,7 +31,7 @@ extern "C" {
 #ifdef i386
 #undef i386
 #endif
-#define i386
+#define i386 1
 
 #ifdef REPLACE_THIS_WITH_THE_CPU_MODEL
 #undef REPLACE_THIS_WITH_THE_CPU_MODEL

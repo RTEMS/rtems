@@ -40,7 +40,29 @@ void _CPU_Initialize(
 
 }
 
-/*  _CPU_ISR_install_vector
+/*PAGE
+ *
+ *  _CPU_ISR_install_raw_handler
+ */
+ 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+)
+{
+  proc_ptr *interrupt_table = NULL;
+
+  m68k_get_vbr( interrupt_table );
+
+  *old_handler = interrupt_table[ vector ];
+
+  interrupt_table[ vector ] = new_handler;
+}
+
+/*PAGE
+ *
+ *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
  *  specified vector.
@@ -51,15 +73,6 @@ void _CPU_Initialize(
  *    old_handler - former ISR for this vector number
  *
  *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  This material may be reproduced by or for the U.S. Government pursuant
- *  to the copyright license under the clause at DFARS 252.227-7013.  This
- *  notice must appear in all copies of this file and its derivatives.
- *
- *  $Id$
  */
 
 void _CPU_ISR_install_vector(
@@ -68,14 +81,13 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 )
 {
-  proc_ptr *interrupt_table = NULL;
-
-  m68k_get_vbr( interrupt_table );
+  proc_ptr ignored;
 
   *old_handler = _ISR_Vector_table[ vector ];
 
+  _CPU_ISR_install_raw_handler( vector, _ISR_Handler, &ignored );
+
   _ISR_Vector_table[ vector ] = new_handler;
-  interrupt_table[ vector ] = _ISR_Handler;
 }
 
 
@@ -100,21 +112,21 @@ void _CPU_Install_interrupt_stack( void )
  * Returns log2(x)  0<x<256
  */
 const unsigned char __log2table[256] = {
-    0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
-    4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+    0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    7, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 };
 #endif

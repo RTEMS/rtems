@@ -328,20 +328,18 @@ EXTERN void               *_CPU_Interrupt_stack_high;
   { \
     extern const unsigned char __log2table[256]; \
     \
-    (_output) = 0;  /* avoids warnings */ \
-    asm         (  "move.w     %1,%0\n"\
-     "\tandi.w     #0xff00,%0\n"\
-     "\tjbne       0f\n"\
-     "\tmoveq.l    #0,%0\n"\
-     "\tmove.b     (%2,%1.w),%0\n"\
-     "\tjbra       1f\n"\
-     "0:\tmoveq.l    #8,%0\n"\
-     "\tlsr.w      #8,%1\n"\
-     "\tadd.b      (%2,%1.w),%0\n"\
-     "1:"\
-     : "=&d" ((_output)) \
-     : "d" ((_value)), "ao" (__log2table) \
-     : "cc" ) ; \
+    asm     ( "   tst.b   %1\n"           /* check for bits in ls byte */ \
+              "   beq.s   0f\n"           /* branch if no bits set */ \
+              "   moveq.l #0,%0\n"        /* set up for bits 0..7 */ \
+              "   andi.w  #0x00ff,%1\n"   /* clear ms byte for add inst */ \
+              "   bra.s   1f\n"           /* go add */ \
+              "0: moveq.l #8,%0\n"        /* set up for bits 8..15 */ \
+              "   lsr.w   #8,%1\n"        /* shift ms byte to ls byte, */ \
+                                          /*   filling ms byte with 0s */ \
+              "1: add.b   (%2,%1.w),%0\n" /* add offset for bit pattern */ \
+               : "=&d" ((_output)) \
+               : "d" ((_value)), "ao" (__log2table) \
+               : "cc" ) ; \
   }
 
 #endif
@@ -382,6 +380,19 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
+);
+
+/*
+ *  _CPU_ISR_install_raw_handler
+ *
+ *  This routine installs a "raw" interrupt handler directly into the 
+ *  processor's vector table.
+ */
+ 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
 );
 
 /*

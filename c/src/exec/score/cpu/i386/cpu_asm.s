@@ -547,6 +547,11 @@ SYM (_ISR_Dispatch):
         popa                                # restore general registers
         iret                                # return to interrupted thread
 
+/*
+ *  GO32 does not require these segment related routines.
+ */
+
+#ifndef __GO32__
 /*PAGE
  *
  *  void i386_Install_idt(
@@ -648,6 +653,7 @@ SYM (i386_Physical_to_logical):
         subl    eax,ecx                # ecx = logical address equivalent
         movl    ecx,eax                # eax = ecx
         ret
+#endif /* __GO32__ */
 
 END_CODE
 

@@ -61,7 +61,26 @@ void _CPU_Initialize(
   _CPU_Table = *cpu_table;
 }
 
-/*  _CPU_ISR_install_vector
+/*PAGE
+ *
+ *  _CPU_ISR_install_raw_handler
+ */
+ 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+)
+{
+  /*
+   *  This is where we install the interrupt handler into the "raw" interrupt
+   *  table used by the CPU to dispatch interrupt handlers.
+   */
+}
+
+/*PAGE
+ *
+ *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
  *  specified vector.
@@ -74,7 +93,6 @@ void _CPU_Initialize(
  *  Output parameters:  NONE
  *
  */
-
 
 void _CPU_ISR_install_vector(
   unsigned32  vector,
@@ -89,6 +107,8 @@ void _CPU_ISR_install_vector(
     *  points, then we need to install the appropriate RTEMS interrupt
     *  handler for this vector number.
     */
+
+   _CPU_ISR_install_raw_handler( vector, new_handler, old_handler );
 
    /*
     *  We put the actual user ISR address in '_ISR_vector_table'.  This will

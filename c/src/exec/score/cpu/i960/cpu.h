@@ -358,6 +358,19 @@ void _CPU_Initialize(
 );
 
 /*
+ *  _CPU_ISR_install_raw_handler
+ *
+ *  This routine installs a "raw" interrupt handler directly into the 
+ *  processor's vector table.
+ */
+ 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+);
+
+/*
  *  _CPU_ISR_install_vector
  *
  *  This routine installs an interrupt vector.

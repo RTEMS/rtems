@@ -47,7 +47,41 @@ void _CPU_Initialize(
 
 }
 
-/*  _CPU__ISR_Install_vector
+/*PAGE
+ *
+ *  _CPU_ISR_install_raw_handler
+ */
+ 
+#define _Is_vector_caching_enabled( _prcb ) \
+   ((_prcb)->control_tbl->icon & 0x2000)
+
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+)
+{
+  i960ca_PRCB *prcb = _CPU_Table.Prcb;
+  proc_ptr    *cached_intr_tbl = NULL;
+
+  /*  The i80960CA does not support vectors 0-7.  The first 9 entries
+   *  in the Interrupt Table are used to manage pending interrupts.
+   *  Thus vector 8, the first valid vector number, is actually in
+   *  slot 9 in the table.
+   */
+
+  *old_handler = prcb->intr_tbl[ vector + 1 ];
+
+  prcb->intr_tbl[ vector + 1 ] = new_handler;
+
+  if ( _Is_vector_caching_enabled( prcb ) )
+    if ( (vector & 0xf) == 0x2 )       /* cacheable? */
+      cached_intr_tbl[ vector >> 4 ] = new_handler;
+}
+
+/*PAGE
+ *
+ *  _CPU__ISR_install_vector
  *
  *  Install the RTEMS vector wrapper in the CPU's interrupt table.
  *
@@ -60,32 +94,19 @@ void _CPU_Initialize(
  *
  */
 
-#define _Is_vector_caching_enabled( _prcb ) \
-   ((_prcb)->control_tbl->icon & 0x2000)
-
 void _CPU_ISR_install_vector(
   unsigned32  vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
 {
-  i960ca_PRCB *prcb = _CPU_Table.Prcb;
-  proc_ptr    *cached_intr_tbl = NULL;
-
-/*  The i80960CA does not support vectors 0-7.  The first 9 entries
- *  in the Interrupt Table are used to manage pending interrupts.
- *  Thus vector 8, the first valid vector number, is actually in
- *  slot 9 in the table.
- */
+  proc_ptr ignored;
 
   *old_handler = _ISR_Vector_table[ vector ];
 
-  _ISR_Vector_table[ vector ] = new_handler;
+  _CPU_ISR_install_raw_handler( vector, _ISR_Handler, &ignored );
 
-  prcb->intr_tbl[ vector + 1 ] = _ISR_Handler;
-  if ( _Is_vector_caching_enabled( prcb ) )
-    if ( (vector & 0xf) == 0x2 )       /* cacheable? */
-      cached_intr_tbl[ vector >> 4 ] = _ISR_Handler;
+  _ISR_Vector_table[ vector ] = new_handler;
 }
 
 /*PAGE

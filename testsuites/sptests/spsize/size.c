@@ -14,8 +14,6 @@
  *  $Id$
  */
 
-#include <stdlib.h>
-
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/copyrt.h>
@@ -46,6 +44,8 @@
 #include <rtems/userext.h>
 #include <rtems/wkspace.h>
 #include <rtems/mp.h>
+
+#include <stdlib.h>
 
 /* These are always defined by the executive.
  *

@@ -26,11 +26,36 @@
 extern "C" {
 #endif
 
-#include <setjmp.h>
 #include <rtems/unix.h>
 #ifndef ASM
 #include <rtems/unixtypes.h>
 #endif
+
+#if defined(solaris2)
+#undef  _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 3
+#undef  __STRICT_ANSI__
+#define __STRICT_ANSI__
+#endif
+
+#if 0
+
+/*
+ *  In order to get the types and prototypes used in this file under
+ *  Solaris 2.3, it is necessary to pull the following magic.
+ */ 
+
+#if defined(solaris2)
+#warning "Ignore the undefining __STDC__ warning"
+#undef __STDC__
+#define __STDC__ 0
+#undef  _POSIX_C_SOURCE
+#endif
+
+#endif
+
+#include <setjmp.h>
+#include <signal.h>
 
 /* conditional compilation parameters */
 
@@ -397,7 +422,9 @@ extern "C" {
  */
 
 typedef struct {
-    jmp_buf   regs;
+  jmp_buf   regs;
+  sigset_t  isr_level;
+  int       junk;
 } Context_Control;
 
 typedef struct {
@@ -567,9 +594,11 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  level is returned in _level.
  */
 
+extern unsigned32 _CPU_ISR_Disable_support(void);
+
 #define _CPU_ISR_Disable( _level ) \
     do { \
-      (_level) = _CPU_Disable_signal(); \
+      (_level) = _CPU_ISR_Disable_support(); \
     } while ( 0 )
 
 /*
@@ -578,10 +607,7 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  _level is not modified.
  */
 
-#define _CPU_ISR_Enable( _level )  \
-    do { \
-      _CPU_Enable_signal( (_level) ); \
-    } while ( 0 )
+void _CPU_ISR_Enable(unsigned32 level);
 
 /*
  *  This temporarily restores the interrupt to _level before immediately
@@ -610,10 +636,8 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 #define _CPU_ISR_Set_level( new_level ) \
   { \
-      if ( new_level ) \
-          (void) _CPU_Disable_signal(); \
-      else \
-          _CPU_Enable_signal( 0 ); \
+    if ( new_level == 0 ) _CPU_ISR_Enable( 0 ); \
+    else                  _CPU_ISR_Enable( 1 ); \
   }
 
 /* end of ISR handler macros */
@@ -793,6 +817,19 @@ void _CPU_Initialize(
 );
 
 /*
+ *  _CPU_ISR_install_raw_handler
+ *
+ *  This routine installs a "raw" interrupt handler directly into the 
+ *  processor's vector table.
+ */
+ 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+);
+
+/*
  *  _CPU_ISR_install_vector
  *
  *  This routine installs an interrupt vector.
@@ -872,12 +909,6 @@ void _CPU_Restore_float_context(
 
 
 void _CPU_ISR_Set_signal_level(
-  unsigned32 level
-);
-
-unsigned32 _CPU_Disable_signal( void );
-
-void _CPU_Enable_signal(
   unsigned32 level
 );
 

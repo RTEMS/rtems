@@ -33,7 +33,7 @@
 #include "conftbl.h"
 #include "gvar.h"
 
-rtems_unsigned8 Partition_area[ 1024 ];
+rtems_unsigned8 Partition_area[ 1024 ] CPU_STRUCTURE_ALIGNMENT;
 
 rtems_task Init(
   rtems_task_argument argument

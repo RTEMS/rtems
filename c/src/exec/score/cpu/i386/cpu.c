@@ -67,7 +67,60 @@ void _CPU_Initialize(
   }
 }
 
-/*  _CPU_ISR_install_vector
+/*PAGE
+ *
+ *  _CPU_ISR_install_raw_handler
+ */
+ 
+#if __GO32__
+#include <cpu.h>
+#include <go32.h>
+#include <dpmi.h>
+#endif /* __GO32__ */
+
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+)
+{
+#if __GO32__
+    _go32_dpmi_seginfo handler_info;
+ 
+    *old_handler =  0;    /* XXX not supported */
+
+    handler_info.pm_offset = new_handler;
+    handler_info.pm_selector = _go32_my_cs();
+
+    /* install the IDT entry */
+    _go32_dpmi_set_protected_mode_interrupt_vector( vector, &handler_info );
+#else
+  i386_IDT_slot idt;
+  unsigned32    handler;
+
+  *old_handler =  0;    /* XXX not supported */
+
+  handler = (unsigned32) new_handler;
+
+  /* build the IDT entry */
+  idt.offset_0_15      = handler & 0xffff;
+  idt.segment_selector = i386_get_cs();
+  idt.reserved         = 0x00;
+  idt.p_dpl            = 0x8e;         /* present, ISR */
+  idt.offset_16_31     = handler >> 16;
+
+  /* install the IDT entry */
+  i386_Install_idt(
+    (unsigned32) &idt,
+    _CPU_Table.interrupt_table_segment,
+    (unsigned32) _CPU_Table.interrupt_table_offset + (8 * vector)
+  );
+#endif
+}
+
+/*PAGE
+ *
+ *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
  *  specified vector.
@@ -95,27 +148,15 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 )
 {
-  i386_IDT_slot idt;
+  proc_ptr      ignored;
   unsigned32    unique_handler;
+
+  *old_handler = _ISR_Vector_table[ vector ];
 
   /* calculate the unique entry point for this vector */
   unique_handler = _Interrupt_Handler_entry( vector );
 
-  /* build the IDT entry */
-  idt.offset_0_15      = ((unsigned32) unique_handler) & 0xffff;
-  idt.segment_selector = i386_get_cs();
-  idt.reserved         = 0x00;
-  idt.p_dpl            = 0x8e;         /* present, ISR */
-  idt.offset_16_31     = ((unsigned32) unique_handler) >> 16;
+  _CPU_ISR_install_raw_handler( vector, (void *)unique_handler, &ignored );
 
-  /* install the IDT entry */
-  i386_Install_idt(
-    (unsigned32) &idt,
-    _CPU_Table.interrupt_table_segment,
-    (unsigned32) _CPU_Table.interrupt_table_offset + (8 * vector)
-  );
-
-  /* "portable" part */
-  *old_handler = _ISR_Vector_table[ vector ];
   _ISR_Vector_table[ vector ] = new_handler;
 }

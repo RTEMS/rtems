@@ -44,6 +44,9 @@ The following persons/organizations have made contributions:
   as well as the modifications to the m68k dependent executive code to 
   support m68k family members based on the mc68000 core.
 
++ Bryce Cogswell (cogswell@cs.uoregon.edu) submitted the support for MS-DOS 
+  as a development environment as well as djgpp/go32 as a target environment.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU

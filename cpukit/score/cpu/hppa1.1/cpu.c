@@ -108,7 +108,27 @@ void _CPU_Initialize(
     _CPU_Table = *cpu_table;
 }
 
-/*  _CPU_ISR_install_vector
+/*PAGE
+ *
+ *  _CPU_ISR_install_raw_handler
+ */
+ 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+)
+{
+  /*
+   *  This is unsupported.
+   */
+
+  _CPU_Fatal_halt( 0xdeaddead );
+}
+
+/*PAGE
+ *
+ *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
  *  specified vector.

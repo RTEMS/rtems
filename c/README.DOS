@@ -1,0 +1,75 @@
+#
+#   $Id$ 
+#
+
+tools
+-----
+The RTEMS build procedure was designed with the capabilitiies of a 
+typical UNIX computer in mind.  Making this procedure work under MS-DOS
+is not that difficult but requires that MS-DOS versions of a number
+of UNIX utilities be acquired and installed.  For time being, the 
+best advice which can be offered is:
+
+    "This is a nasty question, since when I first set up the DOS machine
+     (long before I acquired RTEMS) I ftp'd a bunch of different tool
+     sets (all from SimTel), and then picked individual tools from each 
+     set that worked best for me.  The djgpp tools are probably a good 
+     starting point, especially to get a working sed.  Next the gnu tools 
+     in SimTel/msdos/gnuish, and then others.  Sorry I can't give you more
+     specific names.  The only real requirement for the tools is that
+     they *must* accept redirection of command line arguments from a file
+     using the '@' notation (i.e., "mkdir @/tmp/args" reads the argument
+     list from file /tmp/args)."
+
+There is a special version (source and executable) of GNU make 3.71 for
+MS-DOS which minimizes the amount of memory used by recursive makes
+available on lancelot.gcs.redstone.army.mil in the directory: ... XXX
+
+go32
+----
+go32 dumps the stack when a program seg-faults, and if this happens while
+on an alternate stack an infinite loop can ensue.  Setting the environment
+variable GO32="core /tmp/core" will prevent more than 20 lines or
+so of stack information from being dumped after a crash, and the output
+will go to a file rather than the screen.
+
+The go32 debuggers get confused by the relocated stacks used by tasks,
+and tend to crash when variables are inspected.
+
+make directory
+--------------
+gcc-go32.cfg is used for cross compiling to the go32 environment under RTEMS,
+while djgcc.cfg is used for "native" compilation; i.e. under MSDOS rather
+than under RTEMS.  The difference is that "native" compilation uses the djgpp
+I/O libraries, while "cross" compilation uses the RTEMS I/O libraries.
+
+djgcc.cfg is identical to gcc.cfg, except for the omission of the -pipe
+option.
+
+djgcc include files
+-------------------
+In general, we use RTEMS include files because these contain the proper
+declarations for the libc, and in particular, the stdio functions.
+When calling go32-specific functions it is necessary to include some 
+djgpp include files, as well.  Unfortunately, there are some disagreements
+between RTEMS and djgpp as to how certain functions and types are 
+declared.  In these cases, I have modified to RTEMS source to special-
+case the differences.
+
+cpu-specific files
+------------------
+rtems/c/src/exec/cpu/i80386 is intended to contain 386-specific
+functions for RTEMS.  Since under djgpp we do not have *complete*
+control of the processor, we must cooperate with the djgpp runtime
+environment, this directory cannot be shared between the go32 port
+and other 386 BSPs.
+
+other
+-----
+* F12 will immediately abort the program.
+See libbsp/i80386/go32/iosupp/inch.c.
+
+* libbsp/i80386/go32/timer uses the on-board timer chip by default.
+However, if executing on a Pentium processor you can use the on-chip
+64-bit cycle counter, which counts at whatever clock rate your processor
+runs at.  To use this, compile with -DPENTIUM

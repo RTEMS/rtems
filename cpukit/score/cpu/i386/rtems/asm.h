@@ -40,6 +40,15 @@
  *  have to define these as appropriate.
  */
 
+/*
+ *  Go32 suffers the same bug as __REGISTER_PREFIX__ 
+ */
+ 
+#if __GO32__
+#undef  __USER_LABEL_PREFIX__
+#define __USER_LABEL_PREFIX__ _
+#endif
+
 #ifndef __USER_LABEL_PREFIX__
 #define __USER_LABEL_PREFIX__ _
 #endif

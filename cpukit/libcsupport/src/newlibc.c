@@ -282,7 +282,7 @@ exit(int status)
  *
  */
 
-#ifndef RTEMS_UNIX
+#if !defined(RTEMS_UNIX) && !defined(__GO32__)
 void _exit(int status)
 {
     rtems_shutdown_executive(status);
