@@ -154,7 +154,7 @@
  */
 
 #define _Chain_Insert_unprotected( _after_node, _the_node ) \
-{  \
+do {  \
   Chain_Node *_before_node; \
    \
   (_the_node)->previous  = (_after_node); \
@@ -162,7 +162,7 @@
   (_after_node)->next    = (_the_node);  \
   (_the_node)->next      = _before_node;  \
   _before_node->previous = (_the_node);  \
-}
+} while (0)
 
 /*PAGE
  *
