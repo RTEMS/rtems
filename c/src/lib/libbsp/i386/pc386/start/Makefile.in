@@ -7,6 +7,7 @@ srcdir = @srcdir@
 VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
+RTEMS_GAS_CODE16 = @RTEMS_GAS_CODE16@
 
 PGMS=${ARCH}/start.o ${ARCH}/start16.bin
 
@@ -32,7 +33,9 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  +=
+ifeq ($(RTEMS_GAS_CODE16),yes)
+DEFINES  += -DNEXT_GAS
+endif
 CPPFLAGS +=
 CFLAGS   +=
 

@@ -40,12 +40,9 @@ changes:
 #include "80386ex.inc"
 
 /*
- * Needed for binutils 2.9.1.0.7 and higher
- * #define NEXT_GAS
+ * NEXT_GAS Needed for binutils 2.9.1.0.7 and higher
  */			
 
-#define NEXT_GAS
-	
         EXTERN (boot_card)         /* exits to bspstart   */ 
 	EXTERN (stack_start)       /* defined in startup/linkcmds */
 	EXTERN (Clock_exit)

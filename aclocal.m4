@@ -1,6 +1,8 @@
 dnl aclocal.m4 generated automatically by aclocal 1.2
 
+dnl
 dnl $Id$
+dnl
 
 dnl macro to detect mkdir
 AC_DEFUN(RTEMS_PATH_MKDIR,
@@ -40,7 +42,9 @@ AC_MSG_RESULT($rtems_cv_prog_MKDIR_M)
 ])
 
 
+dnl
 dnl $Id$
+dnl
 
 dnl canonicalize target name
 dnl NOTE: Most rtems targets do not fullfil autoconf's
@@ -56,6 +60,9 @@ changequote([, ])dnl
 AC_MSG_RESULT($target_cpu)
 ])
 
+dnl
+dnl  $Id$
+dnl 
 dnl Set program_prefix
 dnl
 dnl 98/05/20 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
@@ -259,6 +266,7 @@ unset ac_cv_prog_cxx_works
 unset ac_cv_prog_cxx_cross
 ])
 
+dnl
 dnl $Id$
 dnl
 dnl Set target tools
@@ -355,6 +363,10 @@ dnl NOTE: These may not be available if not using gnutools
   RTEMS_PATH_TOOL(SIZE_FOR_TARGET,size,no)
 ])
 
+dnl
+dnl $Id$
+dnl
+
 AC_DEFUN(RTEMS_AR_FOR_TARGET_S,
 [
 AC_CACHE_CHECK(whether $AR_FOR_TARGET -s works,
@@ -377,6 +389,33 @@ fi
 ])
 
 
+dnl
+dnl  $Id$
+dnl 
+
+dnl check for i386 gas supporting 16 bit mode
+
+AC_DEFUN(RTEMS_I386_GAS_CODE16,
+  if test "${target_cpu}" = "i386"; then
+    AC_CACHE_CHECK([for 16 bit mode assembler support],
+      rtems_cv_prog_gas_code16,
+      [cat > conftest.s << EOF
+         .code16
+         data32 addr32 lgdt 0
+EOF
+      if AC_TRY_COMMAND($AS_FOR_TARGET -o conftest.o conftest.s); then
+        rtems_cv_prog_gas_code16=yes
+      else
+        rtems_cv_prog_gas_code16=no
+      fi])
+    RTEMS_GAS_CODE16="$rtems_cv_prog_gas_code16"
+  fi
+)
+
+
+dnl
+dnl  $Id$
+dnl 
 dnl Detect the Cygwin32 environment (unix under Win32)
 dnl
 dnl 98/06/16 David Fiddes   	(D.J.Fiddes@hw.ac.uk)
@@ -396,6 +435,9 @@ CYGWIN32=
 test "$rtems_cv_cygwin32" = yes && CYGWIN32=yes])
 
 
+dnl
+dnl  $Id$
+dnl 
 dnl Set the EXE extension
 dnl
 dnl 98/06/16 David Fiddes   	(D.J.Fiddes@hw.ac.uk)
@@ -529,7 +571,9 @@ rtems_cv_sysv_msg="yes", rtems_cv_sysv_msg="no", :)
 ])
 ])
 
+dnl
 dnl $Id$
+dnl
 
 dnl RTEMS_CHECK_MAKEFILE(path)
 dnl Search for Makefile.in's within the directory starting
@@ -540,12 +584,15 @@ AC_DEFUN(RTEMS_CHECK_MAKEFILE,
 [RTEMS_CHECK_FILES_IN($1,Makefile,makefiles)
 ])
 
+dnl
 dnl $Id$
+dnl
 
 dnl RTEMS_CHECK_FILES_IN(path,file,var)
 dnl path .. path relative to srcdir, where to start searching for files
 dnl file .. name of the files to search for
 dnl var  .. shell variable to append files found
+
 AC_DEFUN(RTEMS_CHECK_FILES_IN,
 [
 AC_MSG_CHECKING(for $2.in in $1)

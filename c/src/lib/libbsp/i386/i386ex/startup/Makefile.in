@@ -37,7 +37,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 #
 
 #DEFINES  += -DPRINTON
-DEFINES  += -I$(srcdir) 
+DEFINES  += -I$(srcdir)
 CPPFLAGS +=
 CFLAGS   += -g 
 

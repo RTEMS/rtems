@@ -3,6 +3,7 @@ dnl  $Id$
 dnl 
 
 dnl check for i386 gas supporting 16 bit mode
+dnl     - binutils 2.9.1.0.7 and higher
 
 AC_DEFUN(RTEMS_I386_GAS_CODE16,
   if test "${target_cpu}" = "i386"; then
@@ -17,9 +18,7 @@ EOF
       else
         rtems_cv_prog_gas_code16=no
       fi])
-    if test "$rtems_cv_prog_gas_code16" = "yes"; then
-      AC_DEFINE(RTEMS_PROG_GAS_CODE16)
-    fi
+    RTEMS_GAS_CODE16="$rtems_cv_prog_gas_code16"
   fi
 )
 
