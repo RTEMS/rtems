@@ -240,9 +240,27 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   executing = _Thread_Executing;
 
+  /*
+   *  The following code allows a thread (or ISR) other than the thread
+   *  which acquired the mutex to release that mutex.  This is only
+   *  allowed when the mutex in quetion is FIFO or simple Priority
+   *  discipline.  But Priority Ceiling or Priority Inheritance mutexes
+   *  must be released by the thread which acquired them.
+   */ 
+
   if ( !_Objects_Are_ids_equal(
-           _Thread_Executing->Object.id, the_mutex->holder_id ) )
-    return( CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE );
+           _Thread_Executing->Object.id, the_mutex->holder_id ) ) {
+
+    switch ( the_mutex->Attributes.discipline ) {
+      case CORE_MUTEX_DISCIPLINES_FIFO:
+      case CORE_MUTEX_DISCIPLINES_PRIORITY:
+        break;
+      case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
+      case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
+        return( CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE );
+        break;
+    }
+  }
 
   the_mutex->nest_count--;
 
