@@ -20,6 +20,7 @@
 #include <assert.h>
 #include <termios.h>
 
+#include <rtems/termiostypes.h>
 #include <libchip/serial.h>
 
 /*
@@ -50,6 +51,7 @@ rtems_device_driver console_open(
   struct termios                 Termios;
   rtems_termios_callbacks        Callbacks;
   console_tbl                   *cptr;
+  struct rtems_termios_tty      *current_tty;
 
   /*
    * Verify the port number is valid.
@@ -79,19 +81,27 @@ rtems_device_driver console_open(
 
   status = rtems_termios_open ( major, minor, arg, &Callbacks );
   Console_Port_Data[minor].termios_data = args->iop->data1;
-
-  if (minor!=Console_Port_Minor) {
-    /*
-     * If this is not the console we do not want ECHO and
-     * so forth
-     */
-    IoctlArgs.iop=args->iop;
-    IoctlArgs.command=RTEMS_IO_GET_ATTRIBUTES;
-    IoctlArgs.buffer=&Termios;
-    rtems_termios_ioctl(&IoctlArgs);
-    Termios.c_lflag=ICANON;
-    IoctlArgs.command=RTEMS_IO_SET_ATTRIBUTES;
-    rtems_termios_ioctl(&IoctlArgs);
+  
+  /* Get tty pointeur from the Console_Port_Data */
+  current_tty = Console_Port_Data[minor].termios_data;
+  
+  if ( (current_tty->refcount == 1) ) {
+  /*
+   * If it's the first open, modified, if need, the port parameters
+   */
+	if (minor!=Console_Port_Minor) {
+		/*
+		 * If this is not the console we do not want ECHO and
+		 * so forth
+		 */
+		IoctlArgs.iop=args->iop;
+		IoctlArgs.command=RTEMS_IO_GET_ATTRIBUTES;
+		IoctlArgs.buffer=&Termios;
+		rtems_termios_ioctl(&IoctlArgs);
+		Termios.c_lflag=ICANON;
+		IoctlArgs.command=RTEMS_IO_SET_ATTRIBUTES;
+		rtems_termios_ioctl(&IoctlArgs);
+	}
   }
 
   if ( (args->iop->flags&LIBIO_FLAGS_READ) &&
