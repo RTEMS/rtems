@@ -44,7 +44,10 @@ DIRECTORY_SCAN_PIECES=\
   opendir closedir readdir rewinddir scandir seekdir telldir getcwd
 
 MALLOC_PIECES=\
-  malloc __brk __sbrk \
+  malloc __brk __sbrk
+
+PASSWORD_GROUP_PIECES=\
+  getpwent getgwent
 
 LIBC_GLUE_PIECES=\
   __gettod __times \
@@ -78,6 +81,7 @@ C_PIECES=\
     $(LIBC_GLUE_PIECES) \
     $(BASE_FS_PIECES) \
     $(MALLOC_PIECES) \
+    $(PASSWORD_GROUP_PIECES) \
     $(TERMIOS_PIECES) \
     $(SYSTEM_CALL_PIECES) \
     $(DIRECTORY_SCAN_PIECES) \
