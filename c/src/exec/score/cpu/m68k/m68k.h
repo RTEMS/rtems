@@ -37,6 +37,8 @@ extern "C" {
  *     -m68040 -msoft-float
  *     -m68040
  *     -m68040 -msoft-float
+ *     -m68060
+ *     -m68060 -msoft-float
  *     -m68302        (no FP) (deprecated, use -m68000)
  *     -m68332        (no FP) (deprecated, use -mcpu32)
  *     -mcpu32        (no FP)
@@ -117,6 +119,23 @@ extern "C" {
 #define CPU_MODEL_NAME          "m68040"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 1
+#define M68K_HAS_BFFFO           1
+#define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+# if defined (__HAVE_68881__)
+# define M68K_HAS_FPU            1
+# define M68K_HAS_FPSP_PACKAGE   1
+# else
+# define M68K_HAS_FPU            0
+# define M68K_HAS_FPSP_PACKAGE   0
+# endif
+ 
+#elif defined(__mc68060__)
+
+#define CPU_MODEL_NAME          "m68060"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_SEPARATE_STACKS 0
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
