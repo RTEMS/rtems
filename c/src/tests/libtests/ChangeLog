@@ -1,3 +1,9 @@
+2003-12-16	Joel Sherrill <joel@OARcorp.com>
+
+	PR 544/tests
+	* malloctest/system.h, rtmonuse/system.h: Various modifications to make
+	tests account for resources and not print at inappropriate times.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* cpuuse/init.c, cpuuse/system.h, cpuuse/task1.c, cpuuse/task2.c,

@@ -46,7 +46,7 @@ void Get_all_counters( void );
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS           (15 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS           (20 * RTEMS_MINIMUM_STACK_SIZE)
 #include <confdefs.h>
 
 /* global variables */
