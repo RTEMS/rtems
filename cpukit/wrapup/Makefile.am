@@ -13,7 +13,7 @@ CPU_OBJS = ../score/cpu/$(RTEMS_CPU)/$(ARCH)/libscorecpu.a
 endif
 CORE_OBJS = ../score/src/$(ARCH)/libscore.a
 SAPI_OBJS = ../sapi/src/$(ARCH)/libsapi.a
-RTEMS_OBJS = ../rtems/src/$(ARCH)/librtems.a
+RTEMS_OBJS = ../rtems/$(ARCH)/librtems.a
 
 if HAS_POSIX
 POSIX_OBJS = ../posix/$(ARCH)/libposix.a

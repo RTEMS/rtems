@@ -1,5 +1,10 @@
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Reflect changes to rtems/.
+	* configure.ac: Reflect changes to rtems/.
+
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect changes to posix/.
 	Reflect changes to itron/.
 

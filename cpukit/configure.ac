@@ -147,10 +147,6 @@ AS_IF([test x"${enable_multilib}" = x"yes"],[
 AC_CONFIG_FILES([Makefile
 include/Makefile
 rtems/Makefile
-rtems/src/Makefile
-rtems/include/Makefile
-rtems/inline/Makefile
-rtems/macros/Makefile
 sapi/Makefile
 sapi/src/Makefile
 sapi/include/Makefile
