@@ -123,6 +123,7 @@ SECTIONS {
                 . += (256 * 4);
                 _clear_start = .;
                 *(.bss)
+		*(.gnu.linkonce.b*)
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);
