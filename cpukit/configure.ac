@@ -289,19 +289,6 @@ libnetworking/lib/Makefile
 libnetworking/libc/Makefile
 librpc/Makefile
 libmisc/Makefile
-libmisc/cpuuse/Makefile
-libmisc/shell/Makefile
-libmisc/devnull/Makefile
-libmisc/dummy/Makefile
-libmisc/dumpbuf/Makefile
-libmisc/monitor/Makefile
-libmisc/rtmonuse/Makefile
-libmisc/serdbg/Makefile
-libmisc/stackchk/Makefile
-libmisc/capture/Makefile
-libmisc/fsmount/Makefile
-libmisc/untar/Makefile
-libmisc/mw-fb/Makefile
 
 wrapup/Makefile
 ])
