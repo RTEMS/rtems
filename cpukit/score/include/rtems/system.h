@@ -143,12 +143,13 @@ typedef void * proc_ptr;
 #define FALSE     (0)
 #endif
 
+#include <stdint.h>
 #include <rtems/score/cpu.h>        /* processor specific information */
 
 #define stringify( _x ) # _x
 
 #define RTEMS_offsetof(type, field) \
-	((unsigned32) &(((type *) 0)->field))
+	((uint32_t  ) &(((type *) 0)->field))
 
 /*
  *  The following is the extern for the RTEMS version string.

@@ -1,5 +1,9 @@
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* score/include/rtems/system.h: include <stdint.h>.
+
+2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	PR/589 rtems
 	* include/rtems/pci.h: New (Moved from c/src/libchip/network/pci.h).
 
