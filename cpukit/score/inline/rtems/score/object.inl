@@ -269,5 +269,22 @@ RTEMS_INLINE_ROUTINE void _Objects_Close(
   _Objects_Clear_name( the_object->name, information->name_length );
 }
 
+/*PAGE
+ *
+ *  _Objects_Namespace_remove
+ *
+ *  DESCRIPTION:
+ *
+ *  This function removes the_object from the namespace.
+ */
+
+RTEMS_INLINE_ROUTINE void _Objects_Namespace_remove(
+  Objects_Information  *information,
+  Objects_Control      *the_object
+)
+{
+  _Objects_Clear_name( the_object->name, information->name_length );
+}
+
 #endif
 /* end of include file */
