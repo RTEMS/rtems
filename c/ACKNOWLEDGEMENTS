@@ -132,6 +132,10 @@ The following persons/organizations have made contributions:
 + Geoffroy Montel (g_montel@yahoo.com), for CNET/DSM (Rennes, France),
   submitted the BSP for Motorola 68340/68349 based boards.
 
++ Thomas Doerfler (td@imd.m.isar.de) of IMD in 
+  Puchheim,Germany submitted some improvements to the PPC403 
+  support and added the helas403 BSP.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
