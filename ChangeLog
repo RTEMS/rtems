@@ -1,3 +1,10 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove make/custom/Makefile.
+	* Makefile.am: Cosmetics.
+	* automake/compile.am: Remove compilation rules.
+	Remove $(ARCH) directory generation.
+
 2003-11-26	Joel Sherrill <joel@OARcorp.com>
 
 	* MAINTAINERS: New file.

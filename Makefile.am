@@ -11,7 +11,7 @@ ACLOCAL_AMFLAGS = -I aclocal
 SUBDIRS = make $(build_SUBDIRS) $(host_SUBDIRS) $(target_SUBDIRS)
 
 AUTOMAKE_FILES =
-AUTOMAKE_FILES += automake/compile.am 
+AUTOMAKE_FILES += automake/compile.am
 AUTOMAKE_FILES += automake/host.am
 AUTOMAKE_FILES += automake/local.am
 AUTOMAKE_FILES += automake/subdirs.am
@@ -43,8 +43,7 @@ ACLOCAL_FILES += aclocal/version.m4
 
 noinst_SCRIPTS = bootstrap
 
-EXTRA_DIST = README.configure SUPPORT \
-    VERSION LICENSE $(noinst_SCRIPTS)
+EXTRA_DIST = README.configure SUPPORT VERSION LICENSE $(noinst_SCRIPTS)
 EXTRA_DIST += $(AUTOMAKE_FILES)
 EXTRA_DIST += $(ACLOCAL_FILES)
 

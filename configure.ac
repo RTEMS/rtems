@@ -59,7 +59,6 @@ RTEMS_TARGET_CONFIG_SUBDIRS([c])
 
 AC_CONFIG_FILES([Makefile
 make/Makefile
-make/custom/Makefile
 ])
 
 AC_OUTPUT

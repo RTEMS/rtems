@@ -90,15 +90,6 @@ CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
 AS = $(CC)
 ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
 
-${ARCH}/%.o: %.c
-	${COMPILE} -o $@ -c $<
-
-${ARCH}/%.o: %.cc
-	${CXXCOMPILE} -o $@ -c $<
-
-${ARCH}/%.o: %.S
-	${CCASCOMPILE} -DASM -o $@ -c $<
-
 # Dependency files for use by gmake
 # NOTE: we don't put them into $(ARCH)
 #       so that 'make clean' doesn't blow it away
@@ -216,9 +207,6 @@ AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
 AM_CFLAGS =
 AM_CXXFLAGS =
 AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
-
-${ARCH}:
-	mkdir ${ARCH}
 
 clean-local:
 	$(RM) -r o-optimize o-debug $(CLEANDIRS)
