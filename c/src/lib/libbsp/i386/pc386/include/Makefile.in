@@ -18,7 +18,8 @@ VPATH = @srcdir@
 WD80X3_yes_V = $(srcdir)/wd80x3.h
 WD80X3 = $(WD80X3_$(HAS_NETWORKING)_V)
 
-H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h $(srcdir)/crt.h $(WD80X3)
+H_FILES = $(srcdir)/bsp.h $(srcdir)/../../../shared/coverhd.h \
+    $(srcdir)/crt.h $(WD80X3)
 
 #
 #  Equate files are for including from assembly preprocessed by

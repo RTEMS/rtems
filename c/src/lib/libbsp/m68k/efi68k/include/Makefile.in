@@ -13,8 +13,8 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(srcdir)/bsp.h $(srcdir)/efi68k.h $(srcdir)/16550.h \
-    $(srcdir)/DP8570A.h $(srcdir)/coverhd.h
+H_FILES = $(srcdir)/bsp.h $(srcdir)/../../../shared/coverhd.h \
+     $(srcdir)/efi68k.h $(srcdir)/16550.h $(srcdir)/DP8570A.h 
 
 #
 #  Equate files are for including from assembly preprocessed by

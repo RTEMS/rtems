@@ -14,7 +14,8 @@ PROJECT_ROOT = @PROJECT_ROOT@
 VPATH = @srcdir@
 
 H_FILES = $(srcdir)/../../shared/include/nvram.h \
-    $(srcdir)/../../shared/include/bsp.h
+	$(srcdir)/../../shared/include/bsp.h \
+	$(srcdir)/../../../shared/include/coverhd.h
 
 BSP_H_FILES = $(srcdir)/../../shared/console/consoleIo.h \
     $(srcdir)/../../shared/console/uart.h $(srcdir)/../../shared/irq/irq.h \

@@ -13,7 +13,8 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h $(srcdir)/leds.h
+H_FILES = $(srcdir)/bsp.h $(srcdir)/../../../shared/coverhd.h \
+    $(srcdir)/leds.h
 
 #
 #  Equate files are for including from assembly preprocessed by
