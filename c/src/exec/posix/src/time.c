@@ -239,12 +239,33 @@ int nanosleep(
 {
   Watchdog_Interval ticks;
 
-  if ( rqtp->tv_nsec < 0 || rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
+  /*
+   *  Return EAGAIN if the delay interval is negative.  
+   *
+   *  NOTE:  This behavior is beyond the POSIX specification.  
+   *         FSU pthreads shares this behavior.
+   */
+
+  if ( rqtp->tv_sec < 0 || rqtp->tv_nsec < 0 )
+    set_errno_and_return_minus_one( EAGAIN );
+
+  if ( rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
     set_errno_and_return_minus_one( EINVAL );
  
 /* XXX this is interruptible by a posix signal */
 
   ticks = _POSIX_Timespec_to_interval( rqtp );
+
+  /*
+   *  This behavior is also beyond the POSIX specification but is
+   *  consistent with the RTEMS api and yields desirable behavior.
+   */
+
+  if ( !ticks ) {
+    _Thread_Yield_processor();
+    _Thread_Dispatch();
+    return 0;
+  }
   
   _Thread_Disable_dispatch();
     _Thread_Set_state(
