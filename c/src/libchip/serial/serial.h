@@ -52,10 +52,22 @@ typedef struct _console_flow {
   int (*deviceStartRemoteTx)(int minor);
 } console_flow;
 
+typedef enum {
+  SERIAL_MC68681,              /* Motorola MC68681 or Exar 88681 */
+  SERIAL_NS16550,              /* National Semiconductor NS16550 */
+  SERIAL_Z85C30,               /* Zilog Z85C30 */
+  SERIAL_CUSTOM                /* BSP specific driver */
+
+} console_devs;
+
 /*
  * Each field is interpreted thus:
  * 
  * sDeviceName  This is the name of the device. 
+ *
+ * deviceType   This indicates the chip type.  It is especially important when
+ *              multiple devices share the same interrupt vector and must be
+ *              distinguished.
  *
  * pDeviceFns   This is a pointer to the set of driver routines to use.
  *
@@ -112,6 +124,7 @@ typedef struct _console_flow {
 
 typedef struct _console_tbl {
   char          *sDeviceName;
+  console_devs   deviceType;
   console_fns   *pDeviceFns;
   boolean      (*deviceProbe)(int minor);
   console_flow  *pDeviceFlow;
@@ -132,7 +145,7 @@ typedef struct _console_tbl {
 typedef struct _console_data {
   void                   *termios_data;
   volatile boolean        bActive;
-  volatile Ring_buffer_t  TxBuffer;
+  volatile Ring_buffer_t  TxBuffer;  /* XXX remove from other drivers */
   /*
    * This field may be used for any purpose required by the driver
    */
