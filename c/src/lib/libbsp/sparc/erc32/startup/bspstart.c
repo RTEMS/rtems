@@ -232,9 +232,6 @@ bsp_postdriver_hook(void)
  
   if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
- 
-  if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
-    rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
 /*
@@ -247,7 +244,7 @@ void bsp_start( void )
 {
   unsigned char *work_space_start;
 
-  /* Check if MEc is initialised */
+  /* Check if MEC is initialised */
 
   if (!(ERC32_MEC.Control & 0xfe080000)) {
 
