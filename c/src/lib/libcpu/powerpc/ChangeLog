@@ -1,3 +1,10 @@
+2002-04-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/include/cpuIdent.h: New.
+	* shared/include/cpuIdent.c: Reflect having added cpuIdent.h.
+	* shared/include/cpu.h: Ditto.
+	* shared/include/Makefile.am: Add cpuIndent.h. Fix EXTRA_DIST.
+
 2001-04-03	Joel Sherrill <joel@OARcorp.com>
 
 	* Closed PR57.  The hack is OK as it allows a BSP to override

@@ -14,6 +14,7 @@
  *
  */
 
+#include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 #include <rtems/bspIo.h>
 

@@ -8,7 +8,8 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include_libcpudir = $(includedir)/libcpu
 
-include_libcpu_HEADERS = cpu.h spr.h io.h mmu.h page.h byteorder.h pgtable.h
+include_libcpu_HEADERS = cpu.h spr.h io.h mmu.h page.h byteorder.h pgtable.h \
+    cpuIdent.h
 
 OBJS = $(C_O_FILES)
 
@@ -38,6 +39,6 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = byteorder.h cpu.h cpuIdent.c io.h mmu.h page.h pgtable.h spr.h
+EXTRA_DIST = cpuIdent.c
 
 include $(top_srcdir)/../../../../../automake/local.am
