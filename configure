@@ -774,7 +774,7 @@ case "${enableval}" in
   *)  { echo "configure: error: bad value ${enableval} for gcc-28 option" 1>&2; exit 1; } ;;
 esac
 else
-  RTEMS_USE_GCC272=yes
+  RTEMS_USE_GCC272=no
 fi
 
 
