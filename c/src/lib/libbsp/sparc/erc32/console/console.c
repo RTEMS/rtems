@@ -282,7 +282,7 @@ void console_initialize_interrupts( void )
 }
 
 /*
- *  console_outbyte_interrupts
+ *  console_outbyte_interrupt
  *
  *  This routine transmits a character out.
  *
@@ -295,7 +295,7 @@ void console_initialize_interrupts( void )
  *  Return values:      NONE
  */
  
-void console_outbyte_interrupts(
+void console_outbyte_interrupt(
   int  port,
   char ch
 )
