@@ -47,15 +47,11 @@ NoSource:	1
 # Use rpm -ba --define 'gnat [0|1]' xxx.spec to override building gnat for 
 # those targets wanting to support ada.
 
-%if "%{gcc_version}" > "3.4.0"
-# default to building gnat
-%define _gnat	%{?gnat:%gnat}%{!?gnat:1}
-%else
 # default to not building gnat
 # gcc-3.3: Doesn't support cross-building gnatlib
 # gcc-3.4.0: Doesn't support cross-build gnattools
+# gcc-4.0.0: Doesn't support newlib
 %define _gnat	%{?gnat:%gnat}%{!?gnat:0}
-%endif
 
 # Use rpm -ba --define 'gcj [0|1]' xxx.spec to override building gcj for 
 # those targets wanting to support gcj.
