@@ -1,0 +1,62 @@
+#
+#  $Id$
+#
+
+Setting the Ethernet Hardware Address
+=====================================
+
+The hardware Ethernet address is not set at the factory.  It is the
+responsibility of the end-user to insure that it is set properly.
+This file describes the standard procedure recommended by DY-4 
+technical support for setting this address.  This procedure is 
+compatible with that followed by VxWorks and is documented in
+DY-4 Document Number #807885.
+
+EEPROM non-volatile memory of the SVME/DMV-176/177. The FFW
+reserves 256 bytes of the SEEPROM for its own use and the remaining
+remaining 256 bytes is reserved for OS specific information.
+
+Three bytes in the Serial EEPROM are used for the lowest three bytes
+of the hardware Ethernet address These should be set to the serial
+number of your SVME/DMV-176/177 card to ensure a unique Ethernet
+address on your network. The three high bytes are hard coded in the
+BSP and represent the vendor-specific Ethernet codes (0x00, 0x80, 0x7F).
+Together these six bytes form the target's Ethernet address.
+
+NOTE: The serial number is found on the packaging (box) that the
+board came in OR it is also located on the solder side of the board  and
+looks something like SERNO:XXXXXX.  It can not be determined dynamically
+by software.
+
+Prior to using the Ethernet controller on the SVME/DMV-176/177 for the
+first time, the Ethernet address bytes must be programmed into the
+Serial EEPROM on the target card.   The 'emm' (EEPROM Memory Modification)
+command in the General Purpose Monitor (GPM) can be used to do this.
+
+In this example we will assume that the serial number of the target card
+is 123456.
+
+Start VxWorks by entering
+rts <CR>
+at the GPM prompt. Stop the auto-booting sequence by pressing any key.
+The VxWorks prompt appears as:
+[VxWorks Boot]:
+Use the N command to modify the SEEPROM as follows:
+[VxWorks Boot]:N
+Current Ethernet Address is : 00:80:7f:5a:5a:5a
+[VxWorks Boot]:N
+Current Ethernet Address is : 00:80:7f:5a:5a:5a
+Modify only the last 3 bytes (board unique portion) of the
+Ethernet Address.
+The first 3 bytes are fixed at the manufacturer's default
+address block.
+00 - 00
+80 - 80
+7f - 7f
+5a - 12
+5a - 34
+5a - 56
+New ethernet address is :00:80:7f:12:34:56
+[VxWorks Boot]:
+The SEEPROM is now programmed.
+
