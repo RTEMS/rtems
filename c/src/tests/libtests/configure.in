@@ -46,6 +46,7 @@ Makefile
 cpuuse/Makefile
 malloctest/Makefile
 monitor/Makefile
+putenvtest/Makefile
 rtems++/Makefile
 rtmonuse/Makefile
 stackchk/Makefile
