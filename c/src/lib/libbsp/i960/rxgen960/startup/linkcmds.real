@@ -1,0 +1,189 @@
+/*------------------------------------*/
+/* rom.ld                             */
+/* Last change : 19. 4.95             */
+/*------------------------------------*
+ * To build ROM based i960 image.
+ *------------------------------------*/
+
+/*
+ *  $Id$
+ */
+
+
+MEMORY
+{
+  config : org = 0xFEFFFF30, len = 0xd0 
+  eprom  : org = 0xFEC00000, len = 1024K
+}
+
+
+_bootAddr = 0xa0200000;
+/*_HEAP = 0xA0100000 ; */
+_rom_ibr_cksum = -(_romStart + _rom_prcb);
+
+SECTIONS 
+{
+  prcb :
+    {
+      *(.prcb);  /* INPUT(rom_ibr.o) */
+    } > config
+    
+    /* Only monitor start point and fault handler
+     * will live in ROM as far as text is concerned.
+     * Only fault table will live in ROM as far as data
+     * is concerned.  
+     */
+  romCode :
+    {
+        /* Make sure that the monitor start point
+         * is the first location in EPROM.
+         */
+      rxgen_romld.o(.text)
+        /* Procedures to copy code and
+         * initialize bss in RAM.
+         */
+      sctns.o(.text)   
+        /* Make Sure Fault Table (and its handler's data)
+         * live here so that they wouldn't get destroyed).
+         */
+      asmfault.o   
+      ihandler.o
+      . = ALIGN(16);
+      flttbl.o 
+        /* 16 byte aligned PRCB.
+         */
+      . = ALIGN(16);
+	rom_prcb.o(.data)
+      . = ALIGN(16);
+	rom_cntrltbl.o(.data)
+      . = ALIGN(16);
+	intrtbl.o(.data)
+      . = ALIGN(16);
+	nulsystbl.o(.data)
+      . = ALIGN(16);
+        /* I need this symbol to know where code which is
+         * to be copied reside in ROM. Align it on a 16
+         * boundary.
+         */        
+      . = ALIGN(16);  
+      _codeRomStart = .;   
+    } > eprom 
+    
+    /* All the rest of the code will live in RAM.
+     * Relocation are created as though code resides
+     * in RAM, while code is placed right after romCode.
+     * This is responsiblity of the ROM monitor to
+     * copy code into ROM.
+     */    
+  ramCode : AT(ADDR(romCode) + SIZEOF(romCode)) 
+    { 
+        /* RAM-based code section start.
+         * I need this symbol to know where to copy code
+         * at initialization time .
+         */
+      _codeRamStart = .;
+        /* RAM based fault recovery stuff.
+         */
+      _faultStart = .;
+      asmstub.o
+      fault.o
+      _faultEnd = .;
+        /* Check sum to gurantee that
+         * the above section wasn't broken.
+         */
+      . = ALIGN(16); 
+      _faultCheckSum = .;
+      . += 4;
+        /* Fault Buffer to keep the state of
+         * the fauled procedure.
+         */
+      _faultBuffer = .;
+      . += 256;   
+        /* All the rest of the text goes here.
+         */
+      . = ALIGN(16);   
+      *(.text)
+/* NEW TEST TEST TEST TEST */
+	        . = ALIGN (16);
+
+        *(.eh_fram)
+        . = ALIGN (16);
+
+        /*
+         * C++ constructors
+         */
+        __CTOR_LIST__ = .;
+        LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+        *(.ctors)
+        LONG(0)
+        __CTOR_END__ = .;
+        __DTOR_LIST__ = .;
+        LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+        *(.dtors)
+        LONG(0)
+        __DTOR_END__ = .;
+            etext = ALIGN( 0x10 ) ;
+/* END NEW TEST TEST TEST */
+        /* 16 byte aligned PRCB.
+         */
+      . = ALIGN(16);
+      prcb.o(.data)
+        /* 16 byte aligned Control Table.
+         */
+      . = ALIGN(16);
+      cntrltbl.o(.data)                 
+      . = ALIGN(16);
+	systbl.o(.data)
+        /* All the rest of program defined data goes here.
+         */
+      *(.data) 
+        /* RAM-based code section end.
+         * I need this symbol to know where to copy code
+         * at initialization time .
+         */   
+      _codeRamEnd = .;
+    } > eprom
+ 
+    /* RAM based uninitialized data.
+     */   
+  bss (NOLOAD) :
+    {
+        /* BSS section start. I need this symbol to
+         * zero BSS on initialization.
+         */
+        /* Heap.  Aligned on a 64 boundary */
+      /* . = ALIGN(64);
+      _heap_initial = .;
+      . += 64K;*/
+        /* Supervisor Stack. Aligned on a 16 boundary.
+         */
+      . = ALIGN(16);
+      _svrStackPtr = .;
+      . += 16K;
+        /* Interrupt Stack. Aligned on a 16 boundary.
+         */
+      . = ALIGN(16);
+      _intStackPtr = .;
+      . += 16K;
+        /* Program defined BSS.
+         */
+      _bssStart = .;
+      _bss_start = .;
+      *(.bss)
+        /* Program defined COMMON.
+         */
+      *(COMMON) 
+      _end = .;
+        /* BSS section end. I need this symbol to
+         * zero BSS on initialization.
+         */
+      _bssEnd = .;
+      _bssStart_1 = .;
+      _bssEnd_1 = .;
+    } > eprom
+
+}
+
+/*-------------*/
+/* End of file */
+/*-------------*/
