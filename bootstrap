@@ -12,7 +12,7 @@
 # to be run from the toplevel directory of RTEMS'
 # source tree
 
-AUTOCONF_VERS=2\.5[2345]
+AUTOCONF_VERS=2\.5[23456]
 AUTOMAKE_VERS=1\.[76]
 
 progname=`basename $0`
