@@ -721,10 +721,9 @@ static int rtems_tftp_open_worker(
             }
             if (tp->writing
              && (opcode == TFTP_OPCODE_ACK)
-             && ((ntohs (tp->pkbuf.tftpACK.blocknum) == 0)
-              || (ntohs (tp->pkbuf.tftpACK.blocknum) == 1))) {
+             && (ntohs (tp->pkbuf.tftpACK.blocknum) == 0)) {
                 tp->nused = 0;
-                tp->blocknum = ntohs (tp->pkbuf.tftpACK.blocknum);
+                tp->blocknum = 1;
                 break;
             }
             if (opcode == TFTP_OPCODE_ERROR) {
@@ -891,7 +890,7 @@ static int rtems_tftp_flush ( struct tftpStream *tp )
         if (rlen >= (int)sizeof tp->pkbuf.tftpACK) {
             int opcode = ntohs (tp->pkbuf.tftpACK.opcode);
             if ((opcode == TFTP_OPCODE_ACK)
-             && (ntohs (tp->pkbuf.tftpACK.blocknum) == (tp->blocknum + 1))) {
+             && (ntohs (tp->pkbuf.tftpACK.blocknum) == tp->blocknum)) {
                 tp->nused = 0;
                 tp->blocknum++;
                 return 0;

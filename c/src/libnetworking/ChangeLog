@@ -1,3 +1,7 @@
+2001-01-16	Eric Norum <eric.norum@usask.ca>
+
+	* lib/tftpDriver.clib/tftpDriver.c: Fix TFTP block number checking.
+
 2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* pppd/sys-rtems.c: Remove unused variable status from
