@@ -295,7 +295,7 @@ Entry:
  */
 uhoh:	nop				| Leave spot for breakpoint
 	stop	#0x2700			| Stop with interrupts disabled
-	bra.b	uhoh			| Stuck forever
+	bra.s	uhoh			| Stuck forever
 
 /*
  * Place the low-order 3 octets of the board's
@@ -317,17 +317,17 @@ start:
 	 * Step 3: Write the VBR
 	 */
 	lea	Entry,a0		| Get base of vector table
-	movec	a0,VBR			| Set up the VBR
+	movec	a0,vbr			| Set up the VBR
 
 	/*
 	 * Step 4: Write the MBAR
 	 */
-	movec	DFC,d1			| Save destination register
+	movec	dfc,d1			| Save destination register
 	moveq	#7,d0			| CPU-space funcction code
-	movec	d0,DFC			| Set destination function code register
+	movec	d0,dfc			| Set destination function code register
 	movel	#SYM(m360)+0x101,d0	| MBAR value (mask CPU space accesses)
 	movesl	d0,0x3FF00		| Set MBAR
-	movec	d1,DFC			| Restore destination register
+	movec	d1,dfc			| Restore destination register
 
 	/*
 	 * Step 5: Verify a dual-port RAM location
@@ -359,12 +359,12 @@ SYM(_ClearBSSAndStart):
 	movel	#clear_start,a0
 	movel	#clear_end,a1
 	clrl	d0
-	brab	ZEROLOOPTEST
+	bras ZEROLOOPTEST
 ZEROLOOP:
 	movel	d0,a0@+
 ZEROLOOPTEST:
 	cmpl	a1,a0
-	bcsb	ZEROLOOP
+	bcs	ZEROLOOP
 	movel	#stack_init,a7		| set master stack pointer
 	movel	d0,a7@-			| environp
 	movel	d0,a7@-			| argv
@@ -374,7 +374,7 @@ ZEROLOOPTEST:
 					| Should this just force a reset?
 mainDone:	nop			| Leave spot for breakpoint
 	stop	#0x2700			| Stop with interrupts disabled
-	bra.b	mainDone		| Stuck forever
+	bra.s	mainDone		| Stuck forever
 
         .align 2
 	PUBLIC (_HeapSize)
