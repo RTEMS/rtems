@@ -1,4 +1,21 @@
 
+2001-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+	custom/Cygwin-posix.cfg: Remove -U__STRICT_ANSI__, make-target-options.
+	custom/FreeBSD-posix.cfg: Remove make-target-options.
+	custom/HPUX9-posix.cfg: Dito.
+	custom/Linux-posix.cfg: Dito.
+	custom/Solaris-posix.cfg: Dito.
+	custom/arm_bare_bsp.cfg: Dito.
+	custom/armulator.cfg: Dito.
+	custom/erc32.cfg: Remove CONSOLE_USE_POLLED, CONSOLE_USE_INTERRUPTS.
+	custom/i386ex.cfg: Remove make-target-options.
+	custom/i960sim.cfg: Remove make-target-options.
+	custom/mvme2307.cfg: Remove CONSOLE_USE_POLLED, CONSOLE_USE_INTERRUPTS.
+	custom/rxgen960.cfg: Remove make-target-options, cleanup comments.
+	custom/score603e.cfg: Remove CONSOLE_USE_POLLED, CONSOLE_USE_INTERRUPTS.
+	custom/vegaplus.cfg: Remove make-target-options.
+	* custom/vegaplus.cfg: Remove make-target-options.
+
 2001-05-25	Joel Sherrill <joel@OARcorp.com>
 
  	* custom/mrm332.cfg: Switched $(SED) to sed.
