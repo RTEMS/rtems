@@ -28,3 +28,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
+DISTCLEANFILES = include/bspopts.h
