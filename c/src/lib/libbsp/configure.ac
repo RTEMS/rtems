@@ -42,6 +42,7 @@ RTEMS_PROJECT_ROOT
 AC_CONFIG_FILES([Makefile
 shmdr/Makefile
 shared/Makefile
+shared/gdbstub/Makefile
 shared/include/Makefile
 include/Makefile
 include/rtems/Makefile
