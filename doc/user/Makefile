@@ -65,7 +65,9 @@ index:
 clean:
 	rm -f *.o $(PROG) *.txt core *.html $(PROJECT).pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f c_user c_user-* _* $(GENERATED_FILES)
+	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
+	rm -f *.cps *.cpss *.fns *.kys *.pgs *.tps *.vrs
+
 
 #preface.texi: preface.t
 #	$(BMENU) -p "Top" \

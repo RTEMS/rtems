@@ -62,6 +62,7 @@ clean:
 	rm -f *.o $(PROG) *.txt core *.html $(PROJECT).pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
+	rm -f *.cps *.cpss *.fns *.jkys *.pgs *.tps *.vrs
 
 process.texi: process.t Makefile
 	 $(BMENU) -p "" \

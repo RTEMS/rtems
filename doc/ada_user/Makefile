@@ -69,4 +69,5 @@ clean:
 	rm -f *.o $(PROG) *.txt core *.html *.pdf *.eps
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* _*
+	rm -f *.cps *.cpss *.fns *.jkys *.pgs *.tps *.vrs
 
