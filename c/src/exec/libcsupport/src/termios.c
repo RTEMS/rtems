@@ -266,6 +266,7 @@ rtems_termios_close (void *arg)
 	struct rtems_termios_tty *tty = args->iop->data1;
 	rtems_status_code sc;
 
+	args->ioctl_return = 0;
 	sc = rtems_semaphore_obtain (ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_fatal_error_occurred (sc);
