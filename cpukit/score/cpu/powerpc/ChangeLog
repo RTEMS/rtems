@@ -1,5 +1,14 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/new-exceptions/cpu.h (_CPU_Bitfield_Find_first_bit,
+	_CPU_Priority_Mask, _CPU_Priority_bits_index): Remove.
+	* rtems/old-exceptions/cpu.h (_CPU_Bitfield_Find_first_bit,
+	_CPU_Priority_Mask, _CPU_Priority_bits_index): Remove.
+	* rtems/score/cpu.h (_CPU_Bitfield_Find_first_bit,
+	_CPU_Priority_Mask, _CPU_Priority_bits_index): New.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/new-exceptions/cpu.h (_CPU_msrs): Remove (Unused).
 	* rtems/old-exceptions/cpu.h (_CPU_msrs): Remove (Unused).
 
