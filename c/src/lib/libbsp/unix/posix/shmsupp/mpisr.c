@@ -25,5 +25,7 @@
 
 void Shm_setvec( void )
 {
+#ifdef INTERRUPT_EXTERNAL_MPCI
   set_vector( Shm_isr, INTERRUPT_EXTERNAL_MPCI, 1 );
+#endif
 }

@@ -11,17 +11,8 @@
  *  OUTPUT PARAMETERS:
  *    *shmcfg   - pointer to SHM Config Table
  *
- *  NOTES:  The MP interrupt used is the Runway bus' ability to directly
- *          address the control registers of up to four CPUs and cause
- *          interrupts on them.
- *
- *          The following table illustrates the configuration limitations:
- *
- *                                   BUS     MAX
- *                          MODE    ENDIAN  NODES
- *                        ========= ====== =======
- *                         POLLED    BIG    2+
- *                        INTERRUPT  BIG    2..4
+ *  NOTES:  This driver is capable of supporting a practically unlimited
+ *          number of nodes.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -43,12 +34,10 @@
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
-
-#define INTERRUPT 0        /* can be interrupt or polling */
-#define POLLING   1
 
 shm_config_table BSP_shm_cfgtbl;
 
@@ -58,58 +47,103 @@ void Shm_Cause_interrupt_unix(
   rtems_unsigned32 node
 );
 
-void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
-  shm_config_table **shmcfg
-)
+void fix_semaphores( void )
 {
     rtems_unsigned32 maximum_nodes;
     int          i;
+
     int          shmid;
     char        *shm_addr;
     key_t        shm_key;
     key_t        sem_key;
-    struct sembuf  sb;
     int          status;
+    int          shm_size;
 
-    shm_key = 0xa000;
+    if (getenv("RTEMS_SHM_KEY"))
+        shm_key = strtol(getenv("RTEMS_SHM_KEY"), 0, 0);
+    else
+#ifdef RTEMS_SHM_KEY
+        shm_key = RTEMS_SHM_KEY;
+#else
+        shm_key = 0xa000;
+#endif
+ 
+    if (getenv("RTEMS_SHM_SIZE"))
+        shm_size = strtol(getenv("RTEMS_SHM_SIZE"), 0, 0);
+    else
+#ifdef RTEMS_SHM_SIZE
+        shm_size = RTEMS_SHM_SIZE;
+#else
+        shm_size = 64 * KILOBYTE;
+#endif
+ 
+    if (getenv("RTEMS_SHM_SEMAPHORE_KEY"))
+        sem_key = strtol(getenv("RTEMS_SHM_SEMAPHORE_KEY"), 0, 0);
+    else
+#ifdef RTEMS_SHM_SEMAPHORE_KEY
+        sem_key = RTEMS_SHM_SEMAPHORE_KEY;
+#else
+        sem_key = 0xa001;
+#endif
 
-    shmid = shmget(shm_key, 16 * KILOBYTE, IPC_CREAT | 0660);
+    shmid = shmget(shm_key, shm_size, IPC_CREAT | 0660);
     if ( shmid == -1 ) {
+       fix_syscall_errno(); /* in case of newlib */
        perror( "shmget" );
-       exit( 0 );
+       rtems_fatal_error_occurred(RTEMS_UNSATISFIED);
     }
 
     shm_addr = shmat(shmid, (char *)0, SHM_RND);
     if ( shm_addr == (void *)-1 ) {
+       fix_syscall_errno(); /* in case of newlib */
        perror( "shmat" );
-       exit( 0 );
+       rtems_fatal_error_occurred(RTEMS_UNSATISFIED);
     }
-
-    sem_key = 0xa001;
 
     maximum_nodes = Shm_RTEMS_MP_Configuration->maximum_nodes;
     semid = semget(sem_key, maximum_nodes + 1, IPC_CREAT | 0660);
     if ( semid == -1 ) {
+       fix_syscall_errno(); /* in case of newlib */
        perror( "semget" );
-       exit( 0 );
+       rtems_fatal_error_occurred(RTEMS_UNSATISFIED);
     }
 
     if ( Shm_Is_master_node() ) {
       for ( i=0 ; i <= maximum_nodes ; i++ ) {
-        sb.sem_op  = 1;
-        sb.sem_num = i;
-        sb.sem_flg = 0;
-        status = semop( semid, &sb, 1 );
+
+#if defined(solaris2)
+        union semun {
+          int val;
+          struct semid_ds *buf;
+          ushort *array;
+        } help;
+ 
+        help.val = 1;
+        semctl( semid, i, SETVAL, help );
+#endif
+#if defined(hpux)
+        semctl( semid, i, SETVAL, 1 );
+#endif
+
+        fix_syscall_errno(); /* in case of newlib */
         if ( status == -1 ) {
           fprintf( stderr, "Sem init failed %d\n", errno ); fflush( stderr );
-          exit( 0 );
+          rtems_fatal_error_occurred(RTEMS_UNSATISFIED);
         }
       }
     }
 
     BSP_shm_cfgtbl.base         = (vol_u32 *)shm_addr;
-    BSP_shm_cfgtbl.length       = 16 * KILOBYTE;
+    BSP_shm_cfgtbl.length       = shm_size;
+}
+
+void Shm_Get_configuration(
+  rtems_unsigned32   localnode,
+  shm_config_table **shmcfg
+)
+{
+    fix_semaphores();
+
     BSP_shm_cfgtbl.format       = SHM_BIG;
 
     BSP_shm_cfgtbl.cause_intr   = Shm_Cause_interrupt_unix;
@@ -120,16 +154,16 @@ void Shm_Get_configuration(
     BSP_shm_cfgtbl.convert      = CPU_swap_u32;
 #endif
 
-#if ( POLLING == 1 )
+#ifdef INTERRUPT_EXTERNAL_MPCI
+    BSP_shm_cfgtbl.poll_intr    = INTR_MODE;
+    BSP_shm_cfgtbl.Intr.address = (vol_u32 *) getpid();    /* process id */
+    BSP_shm_cfgtbl.Intr.value   = INTERRUPT_EXTERNAL_MPCI; /* signal to send */
+    BSP_shm_cfgtbl.Intr.length  = LONG;
+#else
     BSP_shm_cfgtbl.poll_intr    = POLLED_MODE;
     BSP_shm_cfgtbl.Intr.address = NO_INTERRUPT;
     BSP_shm_cfgtbl.Intr.value   = NO_INTERRUPT;
     BSP_shm_cfgtbl.Intr.length  = NO_INTERRUPT;
-#else
-    BSP_shm_cfgtbl.poll_intr    = INTR_MODE;
-    BSP_shm_cfgtbl.Intr.address = 0;    /* process id? */
-    BSP_shm_cfgtbl.Intr.value   = 0;    /* signal to send? */
-    BSP_shm_cfgtbl.Intr.length  = LONG;
 #endif
 
     *shmcfg = &BSP_shm_cfgtbl;

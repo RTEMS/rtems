@@ -41,8 +41,7 @@ void Shm_Initialize_lock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-  lq_cb->lock = 
-    ( lq_cb - Shm_Locked_queues ) / sizeof( Shm_Locked_queue_Control );
+  lq_cb->lock = lq_cb - Shm_Locked_queues;
 }
 
 /*  Shm_Lock( &lq_cb )
@@ -60,24 +59,25 @@ void Shm_Lock(
     struct sembuf      sb;
     int                status;
 
-    isr_level = 0;
-
     sb.sem_num = lq_cb->lock;
     sb.sem_op  = -1;
     sb.sem_flg = 0;
+
     rtems_interrupt_disable( isr_level );
 
     Shm_isrstat = isr_level;
 
     while (1) {
       status = semop(semid, &sb, 1);
-      if ( status == 0 )
+      if ( status >= 0 )
         break;
-      if ( status == -1 && errno == EINTR )
-        continue;
-
-      fprintf( stderr, "shm lock(%d %d)\n", status, errno );
-      exit( 0 );
+      if ( status == -1 ) {
+         fix_syscall_errno();    /* in case of newlib */
+          if (errno == EINTR)
+              continue;
+          perror("shm lock");
+          rtems_fatal_error_occurred(RTEMS_UNSATISFIED);
+      }
     }
 }
 
@@ -95,21 +95,22 @@ void Shm_Unlock(
     struct sembuf      sb;
     int                status;
 
-    isr_level = 0;
-
     sb.sem_num = lq_cb->lock;
     sb.sem_op  = 1;
     sb.sem_flg = 0;
 
     while (1) {
       status = semop(semid, &sb, 1);
-      if ( status == 0 )
+      if ( status >= 0 )
         break;
-      if ( status == -1 && errno == EINTR )
-        continue;
 
-      fprintf( stderr, "shm unlock(%d %d)\n", status, errno );
-      exit( 0 );
+      if ( status == -1 ) {
+          fix_syscall_errno();    /* in case of newlib */
+          if (errno == EINTR)
+              continue;
+          perror("shm unlock");
+          rtems_fatal_error_occurred(RTEMS_UNSATISFIED);
+      }
     }
 
     isr_level = Shm_isrstat;
