@@ -44,14 +44,15 @@ and status codes.
 @c
 
 @page
-@subsection cre_mbf -  Create MessageBuffer
+@subsection cre_mbf - Create MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER cre_mbf (
- ID mbfid, T_CMBF *pk_cmbf
+ER cre_mbf(
+  ID mbfid,
+  T_CMBF *pk_cmbf
 );
 @end example
 @end ifset
@@ -73,14 +74,14 @@ ER cre_mbf (
 @c
 
 @page
-@subsection del_mbf -  Delete MessageBuffer
+@subsection del_mbf - Delete MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER del_mbf (
- ID mbfid
+ER del_mbf(
+  ID mbfid
 );
 @end example
 @end ifset
@@ -102,14 +103,16 @@ ER del_mbf (
 @c
 
 @page
-@subsection snd_mbf -  Poll and Send Message to MessageBuffer Send Message to MessageBuffer Send Message to MessageBuffer with Timeout
+@subsection snd_mbf - Send Message to MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER snd_mbf (
- ID mbfid, VP msg, INT msgsz ER ercd =psnd_mbf 
+ER snd_mbf(
+  ID mbfid,
+  VP msg,
+  INT msgsz
 );
 @end example
 @end ifset
@@ -131,14 +134,16 @@ ER snd_mbf (
 @c
 
 @page
-@subsection psnd_mbf -  Poll and Send Message to MessageBuffer
+@subsection psnd_mbf - Poll and Send Message to MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =psnd_mbf (
- ID mbfid, VP msg, INT msgsz
+ER ercd =psnd_mbf(
+  ID mbfid,
+  VP msg,
+  INT msgsz
 );
 @end example
 @end ifset
@@ -160,14 +165,17 @@ ER ercd =psnd_mbf (
 @c
 
 @page
-@subsection tsnd_mbf -  Send Message to MessageBuffer with Timeout
+@subsection tsnd_mbf - Send Message to MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =tsnd_mbf (
- ID mbfid, VP msg, INT msgsz, TMO tmout
+ER ercd =tsnd_mbf(
+  ID mbfid,
+  VP msg,
+  INT msgsz,
+  TMO tmout
 );
 @end example
 @end ifset
@@ -189,14 +197,16 @@ ER ercd =tsnd_mbf (
 @c
 
 @page
-@subsection rcv_mbf -  Poll and Receive Message from MessageBuffer Receive Message from MessageBuffer Receive Message from MessageBuffer with Timeout
+@subsection rcv_mbf - Receive Message from MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER rcv_mbf (
- VP msg, INT *p_msgsz, ID mbfid ER ercd =prcv_mbf 
+ER rcv_mbf(
+  VP msg,
+  INT *p_msgsz,
+  ID mbfid
 );
 @end example
 @end ifset
@@ -218,14 +228,16 @@ ER rcv_mbf (
 @c
 
 @page
-@subsection prcv_mbf -  Poll and Receive Message from MessageBuffer
+@subsection prcv_mbf - Poll and Receive Message from MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =prcv_mbf (
- VP msg, INT *p_msgsz, ID mbfid
+ER ercd =prcv_mbf(
+  VP msg,
+  INT *p_msgsz,
+  ID mbfid
 );
 @end example
 @end ifset
@@ -247,14 +259,17 @@ ER ercd =prcv_mbf (
 @c
 
 @page
-@subsection trcv_mbf -  Receive Message from MessageBuffer with Timeout
+@subsection trcv_mbf - Receive Message from MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =trcv_mbf (
- VP msg, INT *p_msgsz, ID mbfid, TMO tmout
+ER ercd =trcv_mbf(
+  VP msg,
+  INT *p_msgsz,
+  ID mbfid,
+  TMO tmout
 );
 @end example
 @end ifset
@@ -276,14 +291,15 @@ ER ercd =trcv_mbf (
 @c
 
 @page
-@subsection ref_mbf -  Reference MessageBuffer Status
+@subsection ref_mbf - Reference MessageBuffer Status
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_mbf (
- T_RMBF *pk_rmbf, ID mbfid
+ER ref_mbf(
+  T_RMBF *pk_rmbf,
+  ID mbfid
 );
 @end example
 @end ifset

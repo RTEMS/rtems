@@ -11,7 +11,7 @@ TEXI2DVI=../tools/texi2dvi
 MAKEINFO=makeinfo
 TEXI2WWW=../tools/texi2www
 BMENU=../tools/bmenu
-TEXI2WWW_ARGS=-dirfile index.html \
+TEXI2WWW_ARGS=-dirfile ../../../index.html \
           -header ../tools/rtems_header.html \
           -footer ../tools/rtems_footer.html \
           -icons  .
@@ -24,7 +24,8 @@ COMMON_FILES=
 GENERATED_FILES= \
     task.texi tasksync.texi semaphore.texi eventflags.texi mailbox.texi \
     msgbuffer.texi rendezvous.texi interrupt.texi memorypool.texi \
-    fixedblock.texi time.texi config.texi network.texi
+    fixedblock.texi time.texi config.texi network.texi \
+    psxmsg.texi psxsem.texi
 
 FILES= $(PROJECT).texi \
   $(COMMON_FILES) $(GENERATED_FILES)
@@ -117,6 +118,16 @@ config.texi: config.t Makefile
 	    -n "" ${*}.t
 
 network.texi: network.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+psxmsg.texi: psxmsg.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+psxsem.texi: psxsem.t Makefile
 	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t

@@ -21,7 +21,7 @@ The services provided by the eventflags manager are:
 @item @code{set_flg} - Set Eventflag
 @item @code{clr_flg} - Clear Eventflag
 @item @code{wai_flg} - Wait on Eventflag
-@item @code{pol_flg} - Wait for Eventflag (Polling)
+@item @code{pol_flg} - Wait for Eventflag(Polling)
 @item @code{twai_flg} - Wait on Eventflag with Timeout
 @item @code{ref_flg} - Reference Eventflag Status
 @end itemize
@@ -43,14 +43,15 @@ and status codes.
 @c
 
 @page
-@subsection cre_flg -  Create Eventflag
+@subsection cre_flg - Create Eventflag
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER cre_flg (
- ID flgid, T_CFLG *pk_cflg
+ER cre_flg(
+  ID flgid,
+  T_CFLG *pk_cflg
 );
 @end example
 @end ifset
@@ -72,14 +73,14 @@ ER cre_flg (
 @c
 
 @page
-@subsection del_flg -  Delete Eventflag
+@subsection del_flg - Delete Eventflag
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER del_flg (
- ID flgid
+ER del_flg(
+  ID flgid
 );
 @end example
 @end ifset
@@ -101,14 +102,15 @@ ER del_flg (
 @c
 
 @page
-@subsection set_flg -  Set Eventflag
+@subsection set_flg - Set Eventflag
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER set_flg (
- ID flgid, UINT setptn
+ER set_flg(
+  ID flgid,
+  UINT setptn
 );
 @end example
 @end ifset
@@ -130,14 +132,15 @@ ER set_flg (
 @c
 
 @page
-@subsection clr_flg -  Clear Eventflag
+@subsection clr_flg - Clear Eventflag
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER clr_flg (
- ID flgid, UINT clrptn
+ER clr_flg(
+  ID flgid,
+  UINT clrptn
 );
 @end example
 @end ifset
@@ -159,14 +162,17 @@ ER clr_flg (
 @c
 
 @page
-@subsection wai_flg -  Wait on Eventflag with Timeout Wait on Eventflag
+@subsection wai_flg - Wait on Eventflag
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER wai_flg (
- UINT *p_flgptn, ID flgid, UINT waiptn, UINT wfmode ER ercd =twai_flg 
+ER wai_flg(
+  UINT *p_flgptn,
+  ID flgid,
+  UINT waiptn,
+  UINT wfmode
 );
 @end example
 @end ifset
@@ -188,14 +194,17 @@ ER wai_flg (
 @c
 
 @page
-@subsection pol_flg -  Wait for Eventflag (Polling)
+@subsection pol_flg - Wait for Eventflag(Polling)
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER pol_flg (
- UINT *p_flgptn, ID flgid, UINT waiptn, UINT wfmode
+ER pol_flg(
+  UINT *p_flgptn,
+  ID flgid,
+  UINT waiptn,
+  UINT wfmode
 );
 @end example
 @end ifset
@@ -217,14 +226,17 @@ ER pol_flg (
 @c
 
 @page
-@subsection twai_flg -  Wait on Eventflag with Timeout
+@subsection twai_flg - Wait on Eventflag with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =twai_flg (
- UINT *p_flgptn, ID flgid, UINT waiptn, UINT wfmode,
+ER ercd =twai_flg(
+  UINT *p_flgptn,
+  ID flgid,
+  UINT waiptn,
+  UINT wfmode,
 );
 @end example
 @end ifset
@@ -246,14 +258,15 @@ ER ercd =twai_flg (
 @c
 
 @page
-@subsection ref_flg -  Reference Eventflag Status
+@subsection ref_flg - Reference Eventflag Status
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_flg (
- T_RFLG *pk_rflg, ID flgid
+ER ref_flg(
+  T_RFLG *pk_rflg,
+  ID flgid
 );
 @end example
 @end ifset

@@ -42,14 +42,14 @@ and status codes.
 @c
 
 @page
-@subsection sus_tsk -  Suspend Other Task
+@subsection sus_tsk - Suspend Other Task
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER sus_tsk (
- ID tskid
+ER sus_tsk(
+  ID tskid
 );
 @end example
 @end ifset
@@ -71,14 +71,14 @@ ER sus_tsk (
 @c
 
 @page
-@subsection rsm_tsk -  Forcibly Resume Suspended Task Resume Suspended Task
+@subsection rsm_tsk - Resume Suspended Task
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER rsm_tsk (
- ID tskid ER ercd =frsm_tsk 
+ER rsm_tsk(
+  ID tskid
 );
 @end example
 @end ifset
@@ -100,14 +100,14 @@ ER rsm_tsk (
 @c
 
 @page
-@subsection frsm_tsk -  Forcibly Resume Suspended Task
+@subsection frsm_tsk - Forcibly Resume Suspended Task
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =frsm_tsk (
- ID tskid
+ER ercd =frsm_tsk(
+  ID tskid
 );
 @end example
 @end ifset
@@ -129,15 +129,13 @@ ER ercd =frsm_tsk (
 @c
 
 @page
-@subsection slp_tsk -  Sleep Task Sleep Task with Timeout
+@subsection slp_tsk - Sleep Task Sleep Task with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER slp_tsk (
- ER ercd =tslp_tsk 
-);
+ER slp_tsk( void );
 @end example
 @end ifset
 
@@ -158,14 +156,14 @@ No polling function for slp_tsk is provided.  A similar function can be implemen
 @c  tslp_tsk
 @c
 
-@subsection tslp_tsk -  Sleep Task with Timeout
+@page
 @subsection tslp_tsk - Sleep Task with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-ER ercd =tslp_tsk (
- TMO tmout
+@example
+ER ercd =tslp_tsk(
   TMO tmout
 );
 @end example
@@ -187,14 +185,14 @@ If you simply wish to delay a task (make it wait for a while), use dly_tsk rathe
 @c  wup_tsk
 @c
 
-@subsection wup_tsk -  Wakeup Other Task
+@page
 @subsection wup_tsk - Wakeup Other Task
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-ER wup_tsk (
- ID tskid
+@example
+ER wup_tsk(
   ID tskid
 );
 @end example
@@ -216,14 +214,15 @@ An E_QOVR error will result if wup_tsk is issued more than the maximum value all
 @c  can_wup
 @c
 
-@subsection can_wup -  Cancel Wakeup Request
+@page
 @subsection can_wup - Cancel Wakeup Request
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-ER can_wup (
- INT *p_wupcnt, ID tskid
+@example
+ER can_wup(
+  INT *p_wupcnt,
   ID tskid
 );
 @end example

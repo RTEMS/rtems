@@ -42,14 +42,15 @@ and status codes.
 @c
 
 @page
-@subsection cre_mpl -  Create Variable-Size Memorypool
+@subsection cre_mpl - Create Variable-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER cre_mpl (
- ID mplid, T_CMPL *pk_cmpl
+ER cre_mpl(
+  ID mplid,
+  T_CMPL *pk_cmpl
 );
 @end example
 @end ifset
@@ -71,14 +72,14 @@ ER cre_mpl (
 @c
 
 @page
-@subsection del_mpl -  Delete Variable-Size Memorypool
+@subsection del_mpl - Delete Variable-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER del_mpl (
- ID mplid
+ER del_mpl(
+  ID mplid
 );
 @end example
 @end ifset
@@ -100,14 +101,16 @@ ER del_mpl (
 @c
 
 @page
-@subsection get_blk -  Get Variable-Size Memory Block Poll and Get Variable-Size Memory Block Get Variable-Size Memory Block with Timeout
+@subsection get_blk - Get Variable-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER get_blk (
- VP *p_blk, ID mplid, INT blksz ER ercd =pget_blk 
+ER get_blk(
+  VP *p_blk,
+  ID mplid,
+  INT blksz
 );
 @end example
 @end ifset
@@ -129,14 +132,16 @@ ER get_blk (
 @c
 
 @page
-@subsection pget_blk -  Poll and Get Variable-Size Memory Block
+@subsection pget_blk - Poll and Get Variable-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =pget_blk (
- VP *p_blk, ID mplid, INT blksz
+ER ercd =pget_blk(
+  VP *p_blk,
+  ID mplid,
+  INT blksz
 );
 @end example
 @end ifset
@@ -158,14 +163,17 @@ ER ercd =pget_blk (
 @c
 
 @page
-@subsection tget_blk -  Get Variable-Size Memory Block with Timeout
+@subsection tget_blk - Get Variable-Size Memory Block with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =tget_blk (
- VP *p_blk, ID mplid, INT blksz, TMO tmout
+ER ercd =tget_blk(
+  VP *p_blk,
+  ID mplid,
+  INT blksz,
+  TMO tmout
 );
 @end example
 @end ifset
@@ -187,14 +195,15 @@ ER ercd =tget_blk (
 @c
 
 @page
-@subsection rel_blk -  Release Variable-Size Memory Block
+@subsection rel_blk - Release Variable-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER rel_blk (
- ID mplid, VP blk
+ER rel_blk(
+  ID mplid,
+  VP blk
 );
 @end example
 @end ifset
@@ -216,14 +225,15 @@ ER rel_blk (
 @c
 
 @page
-@subsection ref_mpl -  Reference Variable-Size Memorypool Status
+@subsection ref_mpl - Reference Variable-Size Memorypool Status
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_mpl (
- T_RMPL *pk_rmpl, ID mplid
+ER ref_mpl(
+  T_RMPL *pk_rmpl,
+  ID mplid
 );
 @end example
 @end ifset

@@ -40,14 +40,14 @@ and status codes.
 @c
 
 @page
-@subsection get_ver -  Get Version Information Get Version Information of another Node
+@subsection get_ver - Get Version Information 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER get_ver (
- T_VER *pk_ver ER nget_ver 
+ER get_ver(
+ T_VER *pk_ver
 );
 @end example
 @end ifset
@@ -69,13 +69,13 @@ ER get_ver (
 @c
 
 @page
-@subsection ref_sys -  Reference Semaphore Status
+@subsection ref_sys - Reference Semaphore Status
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_sys (
+ER ref_sys(
  T_RSYS *pk_rsys
 );
 @end example
@@ -98,13 +98,13 @@ ER ref_sys (
 @c
 
 @page
-@subsection ref_cfg -  Reference Configuration Information
+@subsection ref_cfg - Reference Configuration Information
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_cfg (
+ER ref_cfg(
  T_RCFG *pk_rcfg
 );
 @end example
@@ -127,14 +127,15 @@ ER ref_cfg (
 @c
 
 @page
-@subsection def_svc -  Define Extended SVC Handler
+@subsection def_svc - Define Extended SVC Handler
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER def_svc (
- FN s_fncd, T_DSVC *pk_dsvc
+ER def_svc(
+  FN s_fncd,
+  T_DSVC *pk_dsvc
 );
 @end example
 @end ifset
@@ -156,14 +157,15 @@ ER def_svc (
 @c
 
 @page
-@subsection def_exc -  Define Exception Handler
+@subsection def_exc - Define Exception Handler
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER def_exc (
- UINT exckind, T_DEXC *pk_dexc
+ER def_exc(
+  UINT exckind,
+  T_DEXC *pk_dexc
 );
 @end example
 @end ifset

@@ -97,6 +97,8 @@ END-INFO-DIR-ENTRY
 @include time.texi
 @include config.texi
 @include network.texi
+@include psxmsg.texi
+@include psxsem.texi
 @ifinfo
 @node Top, , (dir), (dir)
 @top itron
@@ -117,6 +119,8 @@ This is the online version of the RTEMS ITRON API User's Guide
 * Time Manager::
 * System Manager::
 * Network Support Manager::
+* POSIX Message Passing Manager::
+* POSIX Semaphores Manager::
 * Command and Variable Index::
 * Concept Index::
 @end menu

@@ -39,14 +39,17 @@ and status codes.
 @c
 
 @page
-@subsection nrea_dat -  Read Data from another Node
+@subsection nrea_dat - Read Data from another Node
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER nrea_dat (
- INT *p_reasz, VP dstadr, NODE srcnode, VP srcadr,
+ER nrea_dat(
+  INT *p_reasz,
+  VP dstadr,
+  NODE srcnode,
+  VP srcadr,
 );
 @end example
 @end ifset
@@ -68,14 +71,17 @@ ER nrea_dat (
 @c
 
 @page
-@subsection nwri_dat -  Write Data to another Node
+@subsection nwri_dat - Write Data to another Node
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER nwri_dat (
- INT *p_wrisz, NODE dstnode, VP dstadr, VP srcadr,
+ER nwri_dat(
+  INT *p_wrisz,
+  NODE dstnode,
+  VP dstadr,
+  VP srcadr,
 );
 @end example
 @end ifset
@@ -97,14 +103,14 @@ ER nwri_dat (
 @c
 
 @page
-@subsection nget_nod -  Get Local Node Number
+@subsection nget_nod - Get Local Node Number
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER nget_nod (
- NODE *p_node
+ER nget_nod(
+  NODE *p_node
 );
 @end example
 @end ifset
@@ -126,14 +132,15 @@ ER nget_nod (
 @c
 
 @page
-@subsection nget_ver -  Get Version Information of another Node
+@subsection nget_ver - Get Version Information of another Node
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER nget_ver (
- T_VER *pk_ver, NODE node
+ER nget_ver(
+  T_VER *pk_ver,
+  NODE node
 );
 @end example
 @end ifset

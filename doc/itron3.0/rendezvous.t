@@ -46,14 +46,15 @@ and status codes.
 @c
 
 @page
-@subsection cre_por -  Create Port for Rendezvous
+@subsection cre_por - Create Port for Rendezvous
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER cre_por (
- ID porid, T_CPOR *pk_cpor
+ER cre_por(
+  ID porid,
+  T_CPOR *pk_cpor
 );
 @end example
 @end ifset
@@ -75,14 +76,14 @@ ER cre_por (
 @c
 
 @page
-@subsection del_por -  Delete Port for Rendezvous
+@subsection del_por - Delete Port for Rendezvous
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER del_por (
- ID porid
+ER del_por(
+  ID porid
 );
 @end example
 @end ifset
@@ -104,14 +105,17 @@ ER del_por (
 @c
 
 @page
-@subsection cal_por -  Call Port for Rendezvous Poll and Call Port for Rendezvous Call Port for Rendezvous with Timeout
+@subsection cal_por - Call Port for Rendezvous Poll 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER cal_por (
- VP msg, INT *p_rmsgsz, ID porid, UINT calptn, INT ER ercd =pcal_por 
+ER cal_por(
+  VP msg,
+  INT *p_rmsgsz,
+  ID porid,
+  UINT calptn
 );
 @end example
 @end ifset
@@ -133,14 +137,18 @@ ER cal_por (
 @c
 
 @page
-@subsection pcal_por -  Poll and Call Port for Rendezvous
+@subsection pcal_por - Poll and Call Port for Rendezvous
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =pcal_por (
- VP msg, INT *p_rmsgsz, ID porid, UINT calptn, INT
+ER ercd =pcal_por(
+  VP msg,
+  INT *p_rmsgsz,
+  ID porid,
+  UINT calptn,
+  INT
 );
 @end example
 @end ifset
@@ -162,14 +170,18 @@ ER ercd =pcal_por (
 @c
 
 @page
-@subsection tcal_por -  Call Port for Rendezvous with Timeout
+@subsection tcal_por - Call Port for Rendezvous with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =tcal_por (
- VP msg, INT *p_rmsgsz, ID porid, UINT calptn, INT
+ER ercd =tcal_por(
+  VP msg,
+  INT *p_rmsgsz,
+  ID porid,
+  UINT calptn,
+  INT
 );
 @end example
 @end ifset
@@ -191,14 +203,17 @@ ER ercd =tcal_por (
 @c
 
 @page
-@subsection acp_por -  Accept Port for Rendezvous Poll and Accept Port for Rendezvous Accept Port for Rendezvous with Timeout
+@subsection acp_por - Accept Port for Rendezvous Poll
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER acp_por (
- RNO *p_rdvno, VP msg, INT *p_cmsgsz, ID porid, UINT ER ercd =pacp_por 
+ER acp_por(
+  RNO *p_rdvno,
+  VP msg,
+  INT *p_cmsgsz,
+  ID porid
 );
 @end example
 @end ifset
@@ -220,14 +235,18 @@ ER acp_por (
 @c
 
 @page
-@subsection pacp_por -  Poll and Accept Port for Rendezvous
+@subsection pacp_por - Poll and Accept Port for Rendezvous
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =pacp_por (
- RNO *p_rdvno, VP msg, INT *p_cmsgsz, ID porid, UINT
+ER ercd =pacp_por(
+  RNO *p_rdvno,
+  VP msg,
+  INT *p_cmsgsz,
+  ID porid,
+  UINT
 );
 @end example
 @end ifset
@@ -249,14 +268,18 @@ ER ercd =pacp_por (
 @c
 
 @page
-@subsection tacp_por -  Accept Port for Rendezvous with Timeout
+@subsection tacp_por - Accept Port for Rendezvous with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =tacp_por (
- RNO *p_rdvno, VP msg, INT *p_cmsgsz, ID porid, UINT
+ER ercd =tacp_por(
+  RNO *p_rdvno,
+  VP msg,
+  INT *p_cmsgsz,
+  ID porid,
+  UINT
 );
 @end example
 @end ifset
@@ -278,14 +301,18 @@ ER ercd =tacp_por (
 @c
 
 @page
-@subsection fwd_por -  Forward Rendezvous to Other Port
+@subsection fwd_por - Forward Rendezvous to Other Port
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER fwd_por (
- ID porid, UINT calptn, RNO rdvno, VP msg, INT cmsgsz
+ER fwd_por(
+  ID porid,
+  UINT calptn,
+  RNO rdvno,
+  VP msg,
+  INT cmsgsz
 );
 @end example
 @end ifset
@@ -307,14 +334,16 @@ ER fwd_por (
 @c
 
 @page
-@subsection rpl_rdv -  Reply Rendezvous
+@subsection rpl_rdv - Reply Rendezvous
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER rpl_rdv (
- RNO rdvno, VP msg, INT rmsgsz
+ER rpl_rdv(
+  RNO rdvno,
+  VP msg,
+  INT rmsgsz
 );
 @end example
 @end ifset
@@ -336,14 +365,15 @@ ER rpl_rdv (
 @c
 
 @page
-@subsection ref_por -  Reference Port Status
+@subsection ref_por - Reference Port Status
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_por (
- T_RPOR *pk_rpor, ID porid
+ER ref_por(
+  T_RPOR *pk_rpor,
+  ID porid
 );
 @end example
 @end ifset

@@ -44,14 +44,14 @@ and status codes.
 @c
 
 @page
-@subsection get_tim -  Get System Clock
+@subsection get_tim - Get System Clock
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER get_tim (
- SYSTIME *pk_tim
+ER get_tim(
+  SYSTIME *pk_tim
 );
 @end example
 @end ifset
@@ -73,14 +73,14 @@ ER get_tim (
 @c
 
 @page
-@subsection set_tim -  Set System Clock
+@subsection set_tim - Set System Clock
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER set_tim (
- SYSTIME *pk_tim
+ER set_tim(
+  SYSTIME *pk_tim
 );
 @end example
 @end ifset
@@ -102,14 +102,14 @@ ER set_tim (
 @c
 
 @page
-@subsection dly_tsk -  Delay Task
+@subsection dly_tsk - Delay Task
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER dly_tsk (
- DLYTIME dlytim
+ER dly_tsk(
+  DLYTIME dlytim
 );
 @end example
 @end ifset
@@ -131,14 +131,15 @@ ER dly_tsk (
 @c
 
 @page
-@subsection def_cyc -  Define Cyclic Handler
+@subsection def_cyc - Define Cyclic Handler
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER def_cyc (
- HNO cycno, T_DCYC *pk_dcyc
+ER def_cyc(
+  HNO cycno,
+  T_DCYC *pk_dcyc
 );
 @end example
 @end ifset
@@ -160,14 +161,15 @@ ER def_cyc (
 @c
 
 @page
-@subsection act_cyc -  Activate Cyclic Handler
+@subsection act_cyc - Activate Cyclic Handler
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER act_cyc (
- HNO cycno, UINT cycact
+ER act_cyc(
+  HNO cycno,
+  UINT cycact
 );
 @end example
 @end ifset
@@ -189,14 +191,15 @@ ER act_cyc (
 @c
 
 @page
-@subsection ref_cyc -  Reference Cyclic Handler Status
+@subsection ref_cyc - Reference Cyclic Handler Status
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_cyc (
- T_RCYC *pk_rcyc, HNO cycno
+ER ref_cyc(
+  T_RCYC *pk_rcyc,
+  HNO cycno
 );
 @end example
 @end ifset
@@ -218,14 +221,15 @@ ER ref_cyc (
 @c
 
 @page
-@subsection def_alm -  Define Alarm Handler
+@subsection def_alm - Define Alarm Handler
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER def_alm (
- HNO almno, T_DALM *pk_dalm
+ER def_alm(
+  HNO almno,
+  T_DALM *pk_dalm
 );
 @end example
 @end ifset
@@ -247,14 +251,15 @@ ER def_alm (
 @c
 
 @page
-@subsection ref_alm -  Reference Alarm Handler Status
+@subsection ref_alm - Reference Alarm Handler Status
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_alm (
- T_RALM *pk_ralm, HNO almno
+ER ref_alm(
+  T_RALM *pk_ralm,
+  HNO almno
 );
 @end example
 @end ifset
@@ -276,13 +281,13 @@ ER ref_alm (
 @c
 
 @page
-@subsection ret_tmr -  Return from Timer Handler
+@subsection ret_tmr - Return from Timer Handler
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-void ret_tmr (
+void ret_tmr(
 
 );
 @end example

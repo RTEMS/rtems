@@ -23,8 +23,8 @@ The services provided by the interrupt manager are:
 @item @code{unl_cpu} - Unlock CPU
 @item @code{dis_int} - Disable Interrupt
 @item @code{ena_int} - Enable Interrupt
-@item @code{chg_iXX} - Change Interrupt Mask (Level or Priority)
-@item @code{ref_iXX} - Reference Interrupt Mask (Level or Priority)
+@item @code{chg_iXX} - Change Interrupt Mask(Level or Priority)
+@item @code{ref_iXX} - Reference Interrupt Mask(Level or Priority)
 @end itemize
 
 @section Background
@@ -44,14 +44,15 @@ and status codes.
 @c
 
 @page
-@subsection def_int -  Define Interrupt Handler
+@subsection def_int - Define Interrupt Handler
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER def_int (
- UINT dintno, T_DINT *pk_dint
+ER def_int(
+  UINT dintno,
+  T_DINT *pk_dint
 );
 @end example
 @end ifset
@@ -73,13 +74,13 @@ ER def_int (
 @c
 
 @page
-@subsection ret_int -  Return from Interrupt Handler
+@subsection ret_int - Return from Interrupt Handler
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-void ret_int (
+void ret_int(
 
 );
 @end example
@@ -102,14 +103,14 @@ void ret_int (
 @c
 
 @page
-@subsection ret_wup -  Return and Wakeup Task
+@subsection ret_wup - Return and Wakeup Task
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-void ret_wup (
- ID tskid
+void ret_wup(
+  ID tskid
 );
 @end example
 @end ifset
@@ -131,13 +132,13 @@ void ret_wup (
 @c
 
 @page
-@subsection loc_cpu -  Lock CPU
+@subsection loc_cpu - Lock CPU
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER loc_cpu (
+ER loc_cpu(
 
 );
 @end example
@@ -160,13 +161,13 @@ ER loc_cpu (
 @c
 
 @page
-@subsection unl_cpu -  Unlock CPU
+@subsection unl_cpu - Unlock CPU
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER unl_cpu (
+ER unl_cpu(
 
 );
 @end example
@@ -189,14 +190,14 @@ ER unl_cpu (
 @c
 
 @page
-@subsection dis_int -  Disable Interrupt
+@subsection dis_int - Disable Interrupt
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER dis_int (
- UINT eintno
+ER dis_int(
+  UINT eintno
 );
 @end example
 @end ifset
@@ -218,14 +219,14 @@ ER dis_int (
 @c
 
 @page
-@subsection ena_int -  Enable Interrupt
+@subsection ena_int - Enable Interrupt
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ena_int (
- UINT eintno
+ER ena_int(
+  UINT eintno
 );
 @end example
 @end ifset
@@ -247,14 +248,14 @@ ER ena_int (
 @c
 
 @page
-@subsection chg_iXX -  Change Interrupt Mask (Level or Priority)
+@subsection chg_iXX - Change Interrupt Mask(Level or Priority)
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER chg_iXX (
- UINT iXXXX
+ER chg_iXX(
+  UINT iXXXX
 );
 @end example
 @end ifset
@@ -276,14 +277,14 @@ ER chg_iXX (
 @c
 
 @page
-@subsection ref_iXX -  Reference Interrupt Mask (Level or Priority)
+@subsection ref_iXX - Reference Interrupt Mask(Level or Priority)
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_iXX (
- UINT *p_iXXXX
+ER ref_iXX(
+  UINT *p_iXXXX
 );
 @end example
 @end ifset

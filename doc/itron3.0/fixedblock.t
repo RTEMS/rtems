@@ -42,14 +42,15 @@ and status codes.
 @c
 
 @page
-@subsection cre_mpf -  Create Fixed-Size Memorypool
+@subsection cre_mpf - Create Fixed-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER cre_mpf (
- ID mpfid, T_CMPF *pk_cmpf
+ER cre_mpf(
+  ID mpfid,
+  T_CMPF *pk_cmpf
 );
 @end example
 @end ifset
@@ -71,14 +72,14 @@ ER cre_mpf (
 @c
 
 @page
-@subsection del_mpf -  Delete Fixed-Size Memorypool
+@subsection del_mpf - Delete Fixed-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER del_mpf (
- ID mpfid
+ER del_mpf(
+  ID mpfid
 );
 @end example
 @end ifset
@@ -100,14 +101,15 @@ ER del_mpf (
 @c
 
 @page
-@subsection get_blf -  Get Fixed-Size Memory Block Poll and Get Fixed-Size Memory Block Get Fixed-Size Memory Block with Timeout
+@subsection get_blf - Get Fixed-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER get_blf (
- VP *p_blf, ID mpfid ER ercd =pget_blf 
+ER get_blf(
+  VP *p_blf,
+  ID mpfid
 );
 @end example
 @end ifset
@@ -129,14 +131,15 @@ ER get_blf (
 @c
 
 @page
-@subsection pget_blf -  Poll and Get Fixed-Size Memory Block
+@subsection pget_blf - Poll and Get Fixed-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =pget_blf (
- VP *p_blf, ID mpfid
+ER ercd =pget_blf(
+  VP *p_blf,
+  ID mpfid
 );
 @end example
 @end ifset
@@ -158,14 +161,16 @@ ER ercd =pget_blf (
 @c
 
 @page
-@subsection tget_blf -  Get Fixed-Size Memory Block with Timeout
+@subsection tget_blf - Get Fixed-Size Memory Block with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =tget_blf (
- VP *p_blf, ID mpfid, TMO tmout
+ER ercd =tget_blf(
+  VP *p_blf,
+  ID mpfid,
+  TMO tmout
 );
 @end example
 @end ifset
@@ -187,14 +192,15 @@ ER ercd =tget_blf (
 @c
 
 @page
-@subsection rel_blf -  Release Fixed-Size Memory Block
+@subsection rel_blf - Release Fixed-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER rel_blf (
- ID mpfid, VP blf
+ER rel_blf(
+  ID mpfid,
+  VP blf
 );
 @end example
 @end ifset
@@ -216,14 +222,15 @@ ER rel_blf (
 @c
 
 @page
-@subsection ref_mpf -  Reference Fixed-Size Memorypool Status
+@subsection ref_mpf - Reference Fixed-Size Memorypool Status
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ref_mpf (
- T_RMPF *pk_rmpf, ID mpfid
+ER ref_mpf(
+  T_RMPF *pk_rmpf,
+  ID mpfid
 );
 @end example
 @end ifset
