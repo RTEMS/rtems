@@ -1,3 +1,8 @@
+2001-06-28	Joel Sherrill <joel@OARcorp.com>
+
+	* preface.texi, procenv.t, process.t, signal.t, stamp-vti,
+	version.texi: Updated as part of starting a sweep on the POSIX
+	User's Guide.
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.

@@ -23,12 +23,14 @@ on the following standards:
 
 @item POSIX 1003.1h/D3.
 
+@item Open Group Single UNIX Specification.
+
 @end itemize
 
 Much of the POSIX API standard is actually implemented in the
 Cygnus Newlib ANSI C Library.  Please refer to documentation on
-Newlib for more information on what it supplies.
+Newlib for more information on the functionality it supplies.
 
-At this point, this is just beginning to become what it 
-ultimately should be.
+This manual is still under construction and improvements
+are welcomed from users.
 

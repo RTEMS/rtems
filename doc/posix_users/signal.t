@@ -10,7 +10,9 @@
 
 @section Introduction
 
-The signal manager ...
+The signal manager provides the functionality associated with
+the generation, delivery, and management of process-oriented
+signals.
 
 The directives provided by the signal manager are:
 
@@ -37,12 +39,35 @@ The directives provided by the signal manager are:
 
 @section Background
 
+@subsection Signals
+
+POSIX signals are an asynchronous event mechanism.  Each process
+and thread has a set of signals associated with it.  Individual
+signals may be enabled (e.g. unmasked) or blocked (e.g. ignored)
+on both a per-thread and process level.  Signals which are
+enabled have a signal handler associated with them.  When the
+signal is generated and conditions are met, then the signal
+handler is invoked in the proper process or thread context
+asynchronous relative to the logical thread of execution.
+
+If a signal has been blocked when it is generated, then it
+is queued and kept pending until the thread or process unblocks
+the signal or explicitly checks for it.
+Traditional, non-real-time POSIX signals do not queue.  Thus
+if a process or thread has blocked a particular signal, then
+multiple occurrences of that signal are recorded as a 
+single occurrence of that signal.  
+
+One can check for the set of outstanding signals that have been
+blocked.   Services are provided to check for outstanding process
+or thread directed signals.
+
 @subsection Signal Delivery
 
-Signals directed at a thread are delivered to the specified thread.
+Signals which are directed at a thread are delivered to the specified thread.
 
-Signals directed at a process are delivered to a thread which is selected
-based on the following algorithm:
+Signals which are directed at a process are delivered to a thread which
+is selected based on the following algorithm:
 
 @enumerate
 @item If the action for this signal is currently @code{SIG_IGN},
@@ -71,7 +96,29 @@ pending. The first thread to unblock the signal (@code{sigprocmask()} or
 
 @section Operations
 
-There is currently no text in this section.
+@subsection Signal Set Management
+
+Each process and each thread within that process has a set of
+individual signals and handlers associated with it.   Services
+are provided to construct signal sets for the purposes of building
+signal sets -- type @code{sigset_t} -- that are used to 
+provide arguments to the services that mask, unmask, and 
+check on pending signals.
+
+@subsection Blocking Until Signal Generation
+
+A thread may block until receipt of a signal.  The "sigwait"
+and "pause" families of services block until the requested
+signal is received or if using @code{sigtimedwait()} until the specified 
+timeout period has elapsed.
+
+@subsection Sending a Signal
+
+This is accomplished
+via one of a number of services that sends a signal to either a 
+process or thread.  Signals may be directed at a process by 
+the service @code{kill()} or at a thread by the service
+@code{pthread_kill()}
 
 @section Directives
 
@@ -618,8 +665,8 @@ Signal interrupted this function.
 
 @subheading DESCRIPTION:
 
-This function causes the calling thread to be blocked until the signal
-is received.
+This function causes the calling thread to be blocked until an
+unblocked signal is received.
 
 @subheading NOTES:
 

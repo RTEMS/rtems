@@ -10,7 +10,10 @@
 
 @section Introduction
 
-The process creation and execution manager is ...
+The process creation and execution manager provides the 
+functionality associated with the creation and termination
+of processes.  
+
 
 The directives provided by the process creation and execution manager are:
 
@@ -30,11 +33,24 @@ The directives provided by the process creation and execution manager are:
 
 @section Background
 
-There is currently no text in this section.
+POSIX process functionality can not be completely 
+supported by RTEMS.  This is because RTEMS provides no memory
+protection and implements a @i{single process, multi-threaded 
+execution model}.  In this light, RTEMS provides none of the
+routines that are associated with the creation of new processes.
+However, since the entire RTEMS application (e.g. executable)
+is logically a single POSIX process, RTEMS is able to provide
+implementations of many operations on processes.  The rule of
+thumb is that those routines provide a meaningful result.
+For example, @code{getpid()} returns the node number. 
 
 @section Operations
 
-There is currently no text in this section.
+The only functionality method defined by this manager which is
+supported by RTEMS is the @code{_exit} service.  The 
+implementation of @code{_exit} shuts the application down and
+is equivalent to invoking either @code{exit} or
+@code{rtems_shutdown_executive}.
 
 @section Directives
 

@@ -1,4 +1,4 @@
 @set UPDATED 17 January 2002
 @set UPDATED-MONTH January 2002
-@set EDITION Snapshot
-@set VERSION Snapshot
+@set EDITION ss-20020528
+@set VERSION ss-20020528
