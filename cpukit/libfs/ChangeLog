@@ -1,3 +1,10 @@
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/dosfs/fat.c: include config-header "config.h".
+	* src/dosfs/fat_fat_operations.c: Ditto.
+	* src/dosfs/fat_file.c: Ditto.
+	* src/dosfs/msdos_conv.c: Ditto.
+
 2003-07-02	Chris Johns <cjohns@cybertec.com.au>
 
 	* src/dosfs/Makefile.am, src/dosfs/msdos.h,
