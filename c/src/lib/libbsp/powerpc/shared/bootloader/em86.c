@@ -29,7 +29,9 @@
 #ifdef __BOOT__
 #include "bootldr.h"
 #include <limits.h>
+#include <rtems/bspIo.h>
 #endif
+
 
 /* Code options,  put them on the compiler command line */	
 /* #define EIP_STATS */	/* EIP based profiling */

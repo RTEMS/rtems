@@ -13,8 +13,10 @@
  */
 
 
-#include  <bsp/motorola.h>
-#include  <libcpu/io.h>
+#include <bsp/motorola.h>
+#include <rtems/bspIo.h>
+#include <libcpu/io.h>
+#include <string.h>
 
 typedef struct {
   /*

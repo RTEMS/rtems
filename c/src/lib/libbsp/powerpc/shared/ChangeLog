@@ -1,3 +1,9 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* bootloader/em86.c, console/inch.c, console/polled_io.c, irq/irq.c,
+	motorola/motorola.c, pci/detect_raven_bridge.c,
+	vectors/vectors_init.c: Removed warnings.
+
 2002-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootloader/em86real.S: Fix syntax error in comment near line 1185.

@@ -10,6 +10,8 @@
 #include <bsp/residual.h>
 #include <bsp/openpic.h>
 
+#include <rtems/bspIo.h>
+
 #define RAVEN_MPIC_IOSPACE_ENABLE	0x1
 #define RAVEN_MPIC_MEMSPACE_ENABLE	0x2
 #define RAVEN_MASTER_ENABLE		0x4

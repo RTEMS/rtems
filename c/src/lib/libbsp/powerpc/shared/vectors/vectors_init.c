@@ -124,6 +124,8 @@ int except_always_enabled(const rtems_raw_except_connect_data* ptr)
   return 1;
 }
 
+int mpc60x_vector_is_valid(rtems_vector vector);
+
 void initialize_exceptions()
 {
   int i;

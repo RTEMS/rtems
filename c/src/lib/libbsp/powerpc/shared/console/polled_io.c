@@ -41,6 +41,9 @@
 
 #ifdef __BOOT__
 extern void boot_udelay();
+void * __palloc(u_long);
+void  pfree(void *);
+
 #endif
 
 typedef unsigned long long u64;

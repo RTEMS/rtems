@@ -83,7 +83,7 @@ _IBMPC_scankey(char *outChar)
   static int caps_pressed  = 0;
   static int extended      = 0;
 
-  *outChar = NULL; /* default value if we return FALSE */
+  *outChar = 0; /* default value if we return FALSE */
 
   /* Read keyboard controller, toggle enable */
   inChar=kbd_inb(KBD_CTL);

@@ -322,7 +322,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
   register unsigned isaIntr;                  /* boolean */
-  register unsigned oldMask;		      /* old isa pic masks */
+  register unsigned oldMask = 0;	      /* old isa pic masks */
   register unsigned newMask;                  /* new isa pic masks */
   register unsigned msr;
   register unsigned new_msr;
