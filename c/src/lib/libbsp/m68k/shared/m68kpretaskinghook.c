@@ -34,23 +34,27 @@
 extern void bsp_libc_init( void *, unsigned long, int );
 extern rtems_configuration_table  BSP_Configuration;
 
-extern void          *_RamBase;
-extern void          *_WorkspaceBase;
-extern void          *_HeapSize;
+extern char          _RamBase[];
+extern char          _WorkspaceBase[];
+extern char          _HeapSize[];
 
 unsigned long  _M68k_Ramsize;
 
 void bsp_pretasking_hook(void)
 {
     void         *heapStart;
-    unsigned long heapSize = (unsigned long)&_HeapSize;
+    unsigned long heapSize = (unsigned long)_HeapSize;
     unsigned long ramSpace;
 
     heapStart =  (void *)
-       ((unsigned long)&_WorkspaceBase + BSP_Configuration.work_space_size);
-    ramSpace = (unsigned long) &_RamBase + _M68k_Ramsize - (unsigned long) heapStart;
+       ((unsigned long)_WorkspaceBase + BSP_Configuration.work_space_size);
+    ramSpace = (unsigned long)_RamBase + _M68k_Ramsize - (unsigned long)heapStart;
 
-    if (heapSize == 0)
+    /*
+     * Can't use 'if(heapSize==0)' because the compiler "knows" that nothing
+     * can have an address of 0 and proceeds to optimize-away the test.
+     */
+    if (heapSize < 10)
         heapSize = ramSpace;
     else if (heapSize > ramSpace)
         rtems_fatal_error_occurred (('H'<<24) | ('E'<<16) | ('A'<<8) | 'P');

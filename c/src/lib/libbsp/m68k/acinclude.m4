@@ -32,6 +32,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([ods68302]);;
   sim68000 )
     AC_CONFIG_SUBDIRS([sim68000]);;
+  uC5282 )
+    AC_CONFIG_SUBDIRS([uC5282]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
