@@ -9,10 +9,9 @@ shift
 # classes of documents
 supplements="supplements/hppa1_1 supplements/i386 \
     supplements/i960 supplements/m68k supplements/sparc supplements/powerpc"
-# gnu_tools="gnu_tools/newlib-1.8.0 gnu_tools/egcs-1.0.2"
 
 # Division by access level
-public_docs="user develenv networking posix_users started started_ada"
+public_docs="user develenv networking posix_users started started_ada rtems_gdb"
 support_docs="${supplements} bsp_howto"
 partners_docs="posix1003.1 posix1003.1h"
 oar_manuals="ada_user hwapi tools/texi2www \
