@@ -33,7 +33,7 @@ contents, if any, for a particular processor type.
 @end ifinfo
 @section CPU Dependent Information Table
 
-The SPARC version of the RTEMS CPU Dependent
+The PowerPC version of the RTEMS CPU Dependent
 Information Table is given by the C structure definition is
 shown below:
 
@@ -51,6 +51,8 @@ typedef struct @{
   /* end of fields required on all CPUs */
 
   unsigned32   clicks_per_usec; /* Timer clicks per microsecond */
+  void       (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
+  boolean      exceptions_in_RAM;     /* TRUE if in RAM */
   unsigned32   serial_per_sec;  /* Serial clocks per second */
   boolean      serial_external_clock;
   boolean      serial_xon_xoff;
@@ -118,28 +120,43 @@ memory for task stacks.  If this hook is not NULL, then a stack_allocate_hook
 must be provided as well.
 
 @item clicks_per_usec
-is the XXX
+is the number of decrementer interupts that occur each microsecond.
+
+@item spurious_handler
+is the address of the
+routine which is invoked when a spurious interrupt occurs.
+
+@item exceptions_in_RAM
+indicates whether the exception vectors are located in RAM or ROM.  If 
+they are located in RAM dynamic vector installation occurs, otherwise
+it does not.
+
 
 @item serial_per_sec
 is the XXX
 
 @item serial_external_clock
-is the XXX
+is a flag used by the BSP to indicate whether or not to mask in a 0x2 into
+the Input/Output Configuration Register (IOCR) during initialization of the
+PPC403 console.  XXX This bit is defined as "reserved" 6-12?
 
 @item serial_xon_xoff
 is the XXX
 
 @item serial_cts_rts
-is the XXX
+is a flag used by the BSP to indicate whether or not to set the lsb of the 
+Input/Output Configuration Register (IOCR) during initialization of the
+PPC403 console.  XXX This bit is defined as "reserved" 6-12?
+
 
 @item serial_rate
 is the XXX
 
 @item timer_average_overhead
-is the XXX
+is the average number of overhead ticks that occur on the PPC403 timer.
 
 @item timer_least_valid
-@item spurious_handler
+is the maximum valid PPC403 timer value.
 
 @end table
 
