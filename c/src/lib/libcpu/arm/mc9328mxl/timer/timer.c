@@ -67,7 +67,7 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  rtems_unsigned32 t;
+  uint32_t t;
   unsigned long long total;
 
   t =  MC9328MXL_TMR2_TCN;

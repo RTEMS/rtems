@@ -1,3 +1,7 @@
+2004-10-20	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* timer/timer.c: Use POSIX fixed-size types.
+
 2004-07-15	Jay Monkman
 
 	* ChangeLog, Makefile.am, clock/.cvsignore, clock/clockdrv.c,

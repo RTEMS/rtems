@@ -27,9 +27,9 @@
 #include <at91rm9200.h>
 #include <at91rm9200_pmc.h>
 
-rtems_unsigned16 tstart;
+uint16_t tstart;
 rtems_boolean Timer_driver_Find_average_overhead;
-unsigned32 tick_time;
+uint32_t tick_time;
 /*
  * Set up TC0 - 
  *   timer_clock2 (MCK/8)
@@ -37,7 +37,7 @@ unsigned32 tick_time;
  */
 void Timer_initialize( void )
 {
-    unsigned32 tmr_freq;
+    uint32_t tmr_freq;
 
     /* since we are using timer_clock2, divide mck by 8 */
     tmr_freq = at91rm9200_get_mck() / 8;
@@ -68,8 +68,8 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  rtems_unsigned16 t;
-  rtems_unsigned32 total;
+  uint16_t t;
+  uint32_t total;
   t = TC_TC0_REG(TC_CV);
 
   /*
