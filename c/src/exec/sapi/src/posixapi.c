@@ -27,16 +27,19 @@
 #ifdef RTEMS_POSIX_API
 
 #include <sys/types.h>
+#include <mqueue.h>
 #include <rtems/config.h>
 #include <rtems/score/object.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
+#include <rtems/posix/mqueue.h>
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/ptimer.h>
+#include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
 
 /*PAGE
@@ -90,6 +93,14 @@ void _POSIX_API_Initialize(
 
   _POSIX_Mutex_Manager_initialization( 
     api_configuration->maximum_mutexes
+  );
+
+  _POSIX_Message_queue_Manager_initialization(
+    api_configuration->maximum_message_queues
+  );
+
+  _POSIX_Semaphore_Manager_initialization(
+    api_configuration->maximum_semaphores
   );
 
   _POSIX_Timer_Manager_initialization ( api_configuration->maximum_timers );
