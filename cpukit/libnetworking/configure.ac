@@ -28,11 +28,7 @@ RTEMS_CHECK_NETWORKING
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-arpa/Makefile
-machine/Makefile
 kern/Makefile
-sys/Makefile
-vm/Makefile
 lib/Makefile
 libc/Makefile
 net/Makefile
