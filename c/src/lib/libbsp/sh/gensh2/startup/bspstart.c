@@ -37,7 +37,7 @@
  *  some changes.
  */
 
-extern void hw_initialize(void);
+extern void bsp_hw_init(void);
 
 extern rtems_configuration_table Configuration;
 
@@ -94,7 +94,7 @@ void bsp_start(void)
 
 #ifndef START_HW_INIT
   /* board hardware setup here, or from 'start.S' */
-  hw_initialize();
+  bsp_hw_init();
 #endif
 
   /*

@@ -51,7 +51,7 @@
 #include <rtems/score/iosh7045.h>
 #include <sh/sh7_sci.h>
 #include <sh/sh7_pfc.h>
-/* #include <sh/io_types.h> */
+
 #include <sh/sci.h>
 
 #ifndef STANDALONE_EVB
@@ -330,18 +330,18 @@ rtems_device_driver sh_sci_open(
     return RTEMS_SUCCESSFUL ;
   }
     
-  /* enable I/O pins */
+  /* set PFC registers to enable I/O pins */
 
   if ((minor == 0) && (STANDALONE_EVB == 1)) {
-    temp16 = read16(PFC_PACRL2) &          /* disable SCK0, Tx0, Rx0 */
-      ~(PA2MD1 | PA2MD0 | PA1MD0 | PA0MD0);
-    temp16 |= (PA_TXD0 | PA_RXD0);       /* assign pins for Tx0, Rx0 */
+    temp16 = read16(PFC_PACRL2);         /* disable SCK0, DMA, IRQ */
+    temp16 &= ~(PA2MD1 | PA2MD0);
+    temp16 |= (PA_TXD0 | PA_RXD0);       /* enable pins for Tx0, Rx0 */
     write16(temp16, PFC_PACRL2);
     
   } else if (minor == 1) {  
-    temp16 = read16(PFC_PACRL2) &           /* disable SCK1, Tx1, Rx1 */
-      ~(PA5MD1 | PA5MD0 | PA4MD0 | PA3MD0);
-    temp16 |= (PA_TXD1 | PA_RXD1);        /* assign pins for Tx1, Rx1 */
+    temp16 = read16(PFC_PACRL2);          /* disable SCK1, DMA, IRQ */
+    temp16 &= ~(PA5MD1 | PA5MD0);
+    temp16 |= (PA_TXD1 | PA_RXD1);        /* enable pins for Tx1, Rx1 */
     write16(temp16, PFC_PACRL2);
 
   } /* add other devices and pins as req'd. */
@@ -349,16 +349,23 @@ rtems_device_driver sh_sci_open(
   /* set up SCI registers */
   if ((minor != 0) || (STANDALONE_EVB == 1)) {
     write8(0x00, sci_device[minor].addr + SCI_SCR);	 /* Clear SCR */
-                                                   /* set SCR and BRR */
+                                                   /* set SMR and BRR */
     _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
 
-    for(a=0; a < 10000L; a++) {                      /* One-bit delay */
+    for(a=0; a < 10000L; a++) {                      /* Delay */
       asm volatile ("nop");
     }
 
     write8((SCI_RE | SCI_TE),              /* enable async. Tx and Rx */
 	   sci_device[minor].addr + SCI_SCR);
     temp8 = read8(sci_device[minor].addr + SCI_RDR);   /* flush input */
+    /* Clear RDRF flag */
+    temp8= read8(sci_device[minor].addr + SCI_SSR) & ~SCI_RDRF;
+    write8(temp8, sci_device[minor].addr + SCI_SSR);
+    write8(0x00, sci_device[minor].addr + SCI_TDR);    /* force output */
+     /* Clear the TDRE bit */
+     temp8 = read8(sci_device[minor].addr + SCI_SSR) & ~SCI_TDRE;
+     write8(temp8, sci_device[minor].addr + SCI_SSR);
     
     /* add interrupt setup if required */
 

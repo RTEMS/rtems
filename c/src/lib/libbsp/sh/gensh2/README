@@ -49,9 +49,12 @@ NOTES
 (1) Only stub console driver available at the moment.
     Driver for the on-chip serial devices (sci) will be available soon.
 
-(2) The present 'hw_init.c' file is incomplete and does not set all
-    registers required for serial I/O. The effect is that the sci devices
-    are 'muted' and do not successfully transmit characters to the respective
-    I/O lines on the SH7045F.  If these ports have been properly initialized,
-    they are not disabled by the current code. A two-part initialization will
-    be available soon.
+(2) The present 'hw_init.c' file provides 'early_hw_init'(void) which
+    is normally called from 'start.S' to provide such minimal HW setup
+    as is conveniently written in 'C' and can make use of global
+    symbols for 7045F processor elements. It also provides
+    'void bsp_hw_init (void)' normally called from 'bspstart.c', shortly
+    before RTEMS itself is started.
+
+    These are both minimal functions intended to support the RTEMS test
+    suites.
