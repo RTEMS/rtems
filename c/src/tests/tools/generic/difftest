@@ -94,9 +94,9 @@ do
            node=`echo $t | sed 's/...._//'`
            scn_file=mptests/$mptest/node$node/$mptest.scn;;
        sp*)
-           scn_file=sptests/$t/$t.scn;;
+           scn_file=sptests/$t.scn;;
        psx*)
-           scn_file=psxtests/$t/$t.scn;;
+           scn_file=psxtests/$t.scn;;
        *)
            fatal "unknown test $t";;
    esac
