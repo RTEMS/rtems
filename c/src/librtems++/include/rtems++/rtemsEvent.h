@@ -120,8 +120,3 @@ const rtems_status_code rtemsEvent::receive(const rtems_event_set event_in,
 }
 
 #endif  // _rtemsEvent_h_
-
-
-
-
-

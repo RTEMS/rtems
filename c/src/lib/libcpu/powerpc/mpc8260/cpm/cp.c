@@ -32,4 +32,3 @@ void m8xx_cp_execute_cmd( uint32_t   command )
   m8260.cpcr = command | M8260_CR_FLG;
   rtems_interrupt_enable (lvl);
 }
-

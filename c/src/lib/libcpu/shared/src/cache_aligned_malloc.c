@@ -41,4 +41,3 @@ void *rtems_cache_aligned_malloc (
   return malloc( nbytes );
 #endif
 }
-

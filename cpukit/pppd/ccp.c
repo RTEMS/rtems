@@ -1224,4 +1224,3 @@ ccp_rack_timeout(arg)
     } else
 	ccp_localstate[f->unit] &= ~RACK_PENDING;
 }
-

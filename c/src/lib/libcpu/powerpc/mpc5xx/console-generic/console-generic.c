@@ -344,4 +344,3 @@ m5xx_uart_initialize (int minor)
       QSMCM_ILDSCI(CPU_irq_level_from_symbolic_name(CPU_IRQ_SCI));
   }
 }
-

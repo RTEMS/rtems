@@ -50,6 +50,3 @@ rtems_device_driver ata_initialize(
 
 
 #endif /* __ATA_H__ */
-
-
-

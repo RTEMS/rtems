@@ -170,4 +170,3 @@ void ipalign(struct mbuf *m);
 
 */
 #endif /* _OPEN_ETH_ */
-

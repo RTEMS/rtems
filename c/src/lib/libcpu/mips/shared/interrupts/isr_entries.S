@@ -76,4 +76,3 @@ ENDFRAME(exc_norm_code)
 #error "isr_entries.S: ISA support problem"
 
 #endif
-

@@ -204,7 +204,3 @@ const rtems_status_code rtemsTaskMode::set_interrupt_level(rtems_interrupt_level
 }
 
 #endif  // _rtemsTaskMode_h_
-
-
-
-

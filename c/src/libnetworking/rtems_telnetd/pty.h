@@ -60,4 +60,4 @@ rtems_device_driver pty_control(
 }
 #endif	
 
-#endif	
+#endif

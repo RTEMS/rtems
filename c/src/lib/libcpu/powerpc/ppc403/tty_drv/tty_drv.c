@@ -554,4 +554,3 @@ rtems_device_driver tty0_control(
 {
   return rtems_termios_ioctl (arg);
 }
-

@@ -54,4 +54,3 @@ struct rtems_ftpd_configuration
 int rtems_initialize_ftpd();
 
 #endif  /* __FTPD_H__ */
-

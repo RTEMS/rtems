@@ -170,7 +170,3 @@ const rtems_status_code rtemsMessageQueue::flush(rtems_unsigned32& count)
 }
 
 #endif  // _rtemsMessageQueue_h_
-
-
-
-

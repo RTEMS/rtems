@@ -168,4 +168,3 @@ private:
 };
 
 #endif  // _rtemsTask_h_
-

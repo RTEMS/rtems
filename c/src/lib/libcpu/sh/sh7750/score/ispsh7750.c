@@ -344,4 +344,3 @@ __dummy_isp:\n\
       mov.l @r15+,r14\n\
       rte\n\
       nop");
-

@@ -20,4 +20,3 @@
 #define _MC68681_TYPE uint8_t  
 
 #include "mc68681_reg.c"
-

@@ -36,4 +36,3 @@ int termios_baud_to_number(
 
   return baud;
 }
-

@@ -120,4 +120,3 @@ void mips_vector_exceptions( CPU_Interrupt_frame *frame )
 
   CALL_EXC( exc, frame );
 }
-

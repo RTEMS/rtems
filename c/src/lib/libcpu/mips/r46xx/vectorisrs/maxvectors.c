@@ -17,4 +17,3 @@
  */
 
 unsigned int mips_interrupt_number_of_vectors = 32 + 8;
-

@@ -20,4 +20,3 @@
 #define _ICM7170_TYPE uint8_t  
 
 #include "icm7170_reg.c"
-

@@ -180,4 +180,3 @@ extern int mpc8xx_get_exception_config (rtems_raw_except_global_settings** confi
 # endif /* ASM */
 
 #endif
-

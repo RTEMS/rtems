@@ -28,4 +28,3 @@ void _CPU_Install_interrupt_stack( void )
 
   _CPU_ISR_Enable( level );
 }
-

@@ -52,4 +52,3 @@ rtems_status_code rtems_event_receive(
   );
   return RTEMS_NOT_CONFIGURED;
 }
-

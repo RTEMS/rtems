@@ -51,4 +51,3 @@ void mips_default_isr( int vector )
     vector, cause, sr );
   rtems_fatal_error_occurred(1);
 }
-

@@ -855,4 +855,3 @@ register char *in_string;
     free(string);
     return (0);
 }
-

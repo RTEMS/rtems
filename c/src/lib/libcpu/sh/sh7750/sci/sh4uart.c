@@ -942,5 +942,3 @@ ipl_console_poll_write(int minor, const char *buf, int len)
     return 0;
 }
 #endif
-
-

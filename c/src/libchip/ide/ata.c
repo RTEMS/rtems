@@ -1316,4 +1316,3 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
             break;          
     }
 }
-

@@ -885,4 +885,3 @@ Z85C30_STATIC void z85c30_write_polled(
 
   (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR8, cChar );
 }
-

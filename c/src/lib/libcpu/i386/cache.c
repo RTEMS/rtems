@@ -85,4 +85,3 @@ void _CPU_cache_disable_instruction( void )
   _CPU_disable_cache();
 }
 #endif
-

@@ -290,4 +290,3 @@ ictrl_init(void)
   atexit(ictrl_exit);
   return RTEMS_SUCCESSFUL;
 }
-

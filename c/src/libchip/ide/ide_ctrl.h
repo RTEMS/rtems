@@ -35,6 +35,3 @@ rtems_device_driver ide_controller_initialize(
 
 
 #endif /* __IDE_CTRL_H__ */
-
-
-

@@ -161,4 +161,3 @@ rtc_fns m48t08_fns = {
   m48t08_get_time,
   m48t08_set_time
 };
-

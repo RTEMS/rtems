@@ -32,4 +32,3 @@ void m8xx_cp_execute_cmd( uint16_t   command )
   m8xx.cpcr = command | M8xx_CR_FLG;
   rtems_interrupt_enable (lvl);
 }
-

@@ -4,4 +4,3 @@
  */
 
 int rtems_initialize_webserver();
-

@@ -68,4 +68,3 @@ void setdbat(int bat_index, unsigned long virt, unsigned long phys,
   default: printk("bat.c : invalid BAT bat_index\n");
   }
 }
-

@@ -322,4 +322,3 @@ easy_exit:
 	addi 	r1,r1, EXCEPTION_FRAME_END
 	SYNC
 	rfi
-

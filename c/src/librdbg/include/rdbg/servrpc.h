@@ -277,4 +277,3 @@ ptrace_out*  RPCGENSRVNAME(ptrace_2_svc)         (ptrace_in *in,
 wait_out*    RPCGENSRVNAME(wait_info_2_svc)      (wait_in *in,
                                                  struct svc_req *rqstp);
 #endif /* !SERVRPC_H */
-

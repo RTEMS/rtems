@@ -45,4 +45,3 @@ void register_icmds(void) {
  shell_add_cmd("tcp"     ,"net","tcp  stats"                ,main_tcp );   
  shell_add_cmd("udp"     ,"net","udp  stats"                ,main_udp );   
 }
-

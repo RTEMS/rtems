@@ -36,4 +36,3 @@ int termios_baud_to_index(
 
   return baud_index;
 }
-

@@ -324,4 +324,3 @@ typedef struct ata_ide_ctrl_s {
 } ata_ide_ctrl_t;
 
 #endif /* __ATA_INTERNAL_H__ */
-

@@ -98,8 +98,3 @@ void rtemsInterrupt::chain() const
 }
 
 #endif  // _rtemsInterrupt_h_
-
-
-
-
-

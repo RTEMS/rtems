@@ -102,6 +102,3 @@ extern unsigned long                 IDE_Controller_Count;
 
 
 #endif /* __IDE_CTRL_CFG_H__ */
-
-
-

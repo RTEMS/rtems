@@ -176,4 +176,3 @@ sh4uart_start_remote_tx(sh4uart *uart);
 extern sh4uart sh4_uarts[2];
 
 #endif
-

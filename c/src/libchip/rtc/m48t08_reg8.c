@@ -20,4 +20,3 @@
 #define _M48T08_TYPE uint8_t  
 
 #include "m48t08_reg.c"
-

@@ -135,11 +135,3 @@ const rtems_status_code rtemsTimer::reset()
 }
 
 #endif  // _rtemsTimer_h_
-
-
-
-
-
-
-
-

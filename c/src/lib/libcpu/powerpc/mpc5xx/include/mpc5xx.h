@@ -618,4 +618,3 @@ extern volatile imb_t imb;		/* defined in linkcmds */
 #endif /* ASM */
 
 #endif /* _MPC5xx_h */
-

@@ -29,5 +29,3 @@
 #include <libcpu/mongoose-v.h>
 
 unsigned int mips_interrupt_number_of_vectors = MONGOOSEV_MAXIMUM_VECTORS;
-
-

@@ -84,4 +84,3 @@ typedef struct {
 } sci_bitrate_t;
 
 #endif /* _sh_io_types_h */
-

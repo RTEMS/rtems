@@ -15,6 +15,3 @@ boolean libchip_serial_default_probe(int minor)
 
   return TRUE;
 }
-
-
-

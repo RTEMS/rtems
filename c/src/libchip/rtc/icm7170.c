@@ -172,4 +172,3 @@ rtc_fns icm7170_fns = {
   icm7170_get_time,
   icm7170_set_time
 };
-

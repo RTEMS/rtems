@@ -27,4 +27,3 @@
 #include <libcpu/tx3904.h>
 
 unsigned int mips_interrupt_number_of_vectors = TX3904_MAXIMUM_VECTORS;
-

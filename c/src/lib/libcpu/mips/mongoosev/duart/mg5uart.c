@@ -870,5 +870,3 @@ console_fns mg5uart_fns_polled =
   mg5uart_set_attributes,              /* deviceSetAttributes */
   FALSE,                               /* deviceOutputUsesInterrupts */
 };
-
-

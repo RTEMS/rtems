@@ -28,4 +28,3 @@ rtems_mpci_entry Shm_Return_packet(
 {
   Shm_Free_envelope( Shm_Packet_prefix_to_envelope_control_pointer(packet) );
 }
-

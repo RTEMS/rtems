@@ -36,4 +36,3 @@ void _CPU_ISR_install_raw_handler(
     if ( (vector & 0xf) == 0x2 )       /* cacheable? */
       cached_intr_tbl[ vector >> 4 ] = new_handler;
 }
-

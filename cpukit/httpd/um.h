@@ -181,4 +181,3 @@ extern bool_t		umUserCanAccessURL(char_t *user, char_t *url);
 #endif /* _h_UM */
 
 /******************************************************************************/
-
