@@ -116,7 +116,7 @@ mode=""
 base_directory=.
 do_files="no"
 do_prompt="yes"
-replacement_file="${RTEMS_HOME}/update-tools/310_to_320_list"
+replacement_file=""
 
 while getopts sfp:b:v OPT
 do
@@ -173,6 +173,7 @@ fi
 #  Verify enough of the RTEMS environment variables are set
 #
 
+RTEMS_HOME=/usr1/rtems/rtemsdoc-work
 if [ ! -d "${RTEMS_HOME}" ]
 then
     fatal "RTEMS_HOME environment variable is not initialized"
@@ -198,7 +199,11 @@ generate_list()
 generate_list | ${xargs_prog} |
   while read line
   do
-    ${RTEMS_HOME}/update-tools/word-replace -p ${replacement_file} ${line}
+
+    if [ ${verbose} = yes ] ; then
+       echo ${RTEMS_HOME}/tools/word-replace -p ${replacement_file} ${line}
+    fi
+    ${RTEMS_HOME}/tools/word-replace -p ${replacement_file} ${line}
     if [ $? -ne 0 ]
     then
       exit 1
