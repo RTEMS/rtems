@@ -23,7 +23,7 @@
 
 #include "system.h"
 
-#include "cpuuse.h"
+#include <rtems/cpuuse.h>
 
 rtems_extension Task_switch( 
   rtems_tcb *unused,
