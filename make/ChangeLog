@@ -1,3 +1,9 @@
+2001-11-27	Joel Sherrill <joel@OARcorp.com>,
+
+	This was tracked as PR39.
+	* custom/ods68302.cfg: Eliminated required definition of macros in this
+	file for the BSP to compile.  The ROM and ROM address and size settings
+	are now linker script items.  
 
 2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
