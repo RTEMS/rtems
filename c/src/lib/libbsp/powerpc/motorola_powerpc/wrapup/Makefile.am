@@ -12,7 +12,7 @@ ___libbsp_a_LIBADD = ../startup$(LIB_VARIANT).rel \
     ../irq$(LIB_VARIANT).rel ../openpic$(LIB_VARIANT).rel \
     ../pci$(LIB_VARIANT).rel ../residual$(LIB_VARIANT).rel \
     ../vectors$(LIB_VARIANT).rel ../motorola$(LIB_VARIANT).rel \
-    ../vme$(LIB_VARIANT).rel
+    ../tod$(LIB_VARIANT).rel ../vme$(LIB_VARIANT).rel
 ___libbsp_a_LIBADD += \
     ../../../../libcpu/@RTEMS_CPU@/shared/cpuIdent$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/shared/stack$(LIB_VARIANT).rel \

@@ -26,25 +26,57 @@
  *   - Interrupt stack space is not minimum if defined.
  */
 
+#if !defined(mvme2100)
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
+#endif
+
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
-/* fundamental addresses for this BSP (PREPxxx are from libcpu/io.h) */
-#define	_IO_BASE			PREP_ISA_IO_BASE
+/* fundamental addresses for BSP (CHRPxxx and PREPxxx are from libcpu/io.h) */
+#if defined(mvme2100)
+#define	_IO_BASE		CHRP_ISA_IO_BASE
+#define	_ISA_MEM_BASE		CHRP_ISA_MEM_BASE
+/* address of our ram on the PCI bus   */
+#define	PCI_DRAM_OFFSET		CHRP_PCI_DRAM_OFFSET
+#define PCI_MEM_BASE		0x80000000 
+#define PCI_MEM_BASE_ADJUSTMENT	0
+
+#else
+#define	_IO_BASE		PREP_ISA_IO_BASE
 #define	_ISA_MEM_BASE		PREP_ISA_MEM_BASE
 /* address of our ram on the PCI bus   */
 #define	PCI_DRAM_OFFSET		PREP_PCI_DRAM_OFFSET
 /* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE		PREP_ISA_MEM_BASE
+#define PCI_MEM_BASE_ADJUSTMENT	PREP_ISA_MEM_BASE
+#endif
+
 
 /*
- *  base address definitions for several devices
+ *  Base address definitions for several devices
  *
+ *  MVME2100 is very similar but has fewer devices and uses on-CPU EPIC
+ *  implementation of OpenPIC controller.  It also cannot be probed to
+ *  find out what it is which is VERY different from other Motorola boards.
  */
+
+#if defined(mvme2100)
+#define BSP_UART_IOBASE_COM1 ((_IO_BASE)+0x01e10000)
+/* #define BSP_UART_IOBASE_COM1     (0xffe10000) */
+#define BSP_OPEN_PIC_BASE_OFFSET 0x40000
+
+#define MVME_HAS_DEC21140
+#else
 #define BSP_UART_IOBASE_COM1 ((_IO_BASE)+0x3f8)
 #define BSP_UART_IOBASE_COM2 ((_IO_BASE)+0x2f8)
+
 #define BSP_KBD_IOBASE       ((_IO_BASE)+0x60)
 #define BSP_VGA_IOBASE       ((_IO_BASE)+0x3c0)
+
+#if defined(mvme2300)
+#define MVME_HAS_DEC21140
+#endif
+#endif
 
 #define BSP_CONSOLE_PORT	BSP_UART_COM1
 #define BSP_UART_BAUD_BASE	115200
@@ -60,9 +92,11 @@
 #define inport_byte(port,value) (value = inb(port))
 #define inport_word(port,value) (value = inw(port))
 #define inport_long(port,value) (value = inl(port))
+
 /*
  * Vital Board data Start using DATA RESIDUAL
  */
+
 /*
  * Total memory using RESIDUAL DATA
  */

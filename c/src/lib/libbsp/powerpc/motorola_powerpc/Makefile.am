@@ -25,6 +25,7 @@ include_bspdir = $(includedir)/bsp
 
 include_HEADERS += ../../powerpc/shared/include/nvram.h
 include_HEADERS += ../../shared/include/coverhd.h
+include_HEADERS += ../../shared/tod.h
 
 EXTRA_DIST = ../../powerpc/shared/start/start.S
 start$(LIB_VARIANT).$(OBJEXT): ../../powerpc/shared/start/start.S
@@ -56,6 +57,20 @@ startup_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 startup_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += startup$(LIB_VARIANT).rel
+
+EXTRA_PROGRAMS += tod.rel
+CLEANFILES += tod.rel
+tod_rel_SOURCES = ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
+tod_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+EXTRA_PROGRAMS += tod_g.rel
+CLEANFILES += tod_g.rel
+tod_g_rel_SOURCES = $(tod_rel_SOURCES)
+tod_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+tod_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += tod$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += pclock.rel
 CLEANFILES += pclock.rel
@@ -229,7 +244,8 @@ noinst_DATA += vme$(LIB_VARIANT).rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-EXTRA_DIST += BOOTING README.MVME2300 README.OTHERBOARDS README.dec21140
+EXTRA_DIST += BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
+    README.OTHERBOARDS README.mcp750 README.MVME2307 README.dec21140
 EXTRA_DIST += times.mcp750 times.mvme2307
 
 PREINSTALL_DIRS =
@@ -274,6 +290,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/nvram.h
 $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+
+$(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
 $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT): start$(LIB_VARIANT).$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
