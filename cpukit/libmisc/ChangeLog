@@ -1,3 +1,7 @@
+2003-01-27	Dan Smisko <dan@balanced.com>
+
+	* monitor/mon-command.c: Correct two potential NULL references.
+
 2002-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Fix tests for GCC.

@@ -551,7 +551,7 @@ rtems_monitor_command_lookup(
    */
   if (found_it)
   {
-    if (table->command_function == 0)
+    if (found_it->command_function == 0)
       return 0;
 
     return found_it;
@@ -686,7 +686,7 @@ rtems_monitor_command_usage(
   
   while (command)
   {
-    int len = strlen (command->command);
+    int len = command->command ? strlen (command->command) : 0 ;
 
     if (len > max_cmd_len)
       max_cmd_len = len;
