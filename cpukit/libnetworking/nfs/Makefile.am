@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-include_nfsdir = $(includedir)/nfs
-
 LIB = $(ARCH)/lib.a
 
 C_FILES = bootp_subr.c
@@ -30,16 +28,5 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 .PRECIOUS: $(LIB)
 
 EXTRA_DIST = bootp_subr.c
-
-include_nfs_HEADERS = krpc.h nfs.h nfsdiskless.h nfsproto.h rpcv2.h xdr_subs.h
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/nfs \
-    $(include_nfs_HEADERS:%=$(PROJECT_INCLUDE)/nfs/%)
-
-$(PROJECT_INCLUDE)/nfs:
-	@$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/nfs/%.h: %.h
-	$(INSTALL_DATA) $< $@
 
 include $(top_srcdir)/../automake/local.am

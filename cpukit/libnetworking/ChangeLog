@@ -1,3 +1,11 @@
+2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in HEADER-handling from
+	net/Makefile.am, netinet/Makefile.am, nfs/Makefile.am.
+	* net/Makefile.am: Remove *_HEADERS.
+	* netinet/Makefile.am: Remove *_HEADERS.
+	* nfs/Makefile.am: Remove *_HEADERS.
+
 2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in arpa/Makefile.am, machine/Makefile.am,

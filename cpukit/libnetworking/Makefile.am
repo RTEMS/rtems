@@ -45,7 +45,52 @@ $(PROJECT_INCLUDE)/machine:
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine \
     $(include_machine_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
-# sys
+## net
+
+include_netdir = $(includedir)/net
+
+include_net_HEADERS = net/bpf.h net/ethernet.h net/if.h net/if_arp.h \
+    net/if_dl.h net/if_llc.h net/if_ppp.h net/if_types.h net/netisr.h \
+    net/ppp-comp.h net/ppp_defs.h net/radix.h net/raw_cb.h net/route.h \
+    net/if_pppvar.h net/pppcompress.h
+
+$(PROJECT_INCLUDE)/net:
+	@$(mkinstalldirs) $@
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net \
+    $(include_net_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+## netinet
+
+include_netinetdir = $(includedir)/netinet
+
+include_netinet_HEADERS = netinet/icmp_var.h netinet/if_ether.h netinet/igmp.h \
+    netinet/igmp_var.h netinet/in.h netinet/in_pcb.h netinet/in_systm.h \
+    netinet/in_var.h netinet/ip.h netinet/ip_fw.h netinet/ip_icmp.h \
+    netinet/ip_mroute.h netinet/ip_var.h netinet/tcp.h netinet/tcp_debug.h \
+    netinet/tcp_fsm.h netinet/tcp_seq.h netinet/tcp_timer.h netinet/tcp_var.h \
+    netinet/tcpip.h netinet/udp.h netinet/udp_var.h
+
+$(PROJECT_INCLUDE)/netinet:
+	@$(mkinstalldirs) $@
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet \
+    $(include_netinet_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+## nfs
+
+include_nfsdir = $(includedir)/nfs
+
+include_nfs_HEADERS = nfs/krpc.h nfs/nfs.h nfs/nfsdiskless.h nfs/nfsproto.h \
+    nfs/rpcv2.h nfs/xdr_subs.h
+
+$(PROJECT_INCLUDE)/nfs:
+	@$(mkinstalldirs) $@
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs \
+    $(include_nfs_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+## sys
 
 include_sysdir = $(includedir)/sys
 
