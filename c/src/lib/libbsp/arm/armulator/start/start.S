@@ -83,6 +83,8 @@ __change_mode:
 	/* Need to set up standard file handles */
 	bl	FUNCTION (initialize_monitor_handles)
 	
+/* XXX for now let's just get the code up :) */
+#if 0 
 #ifdef ARM_RDP_MONITOR
 	swi	SWI_GetEnv	/*  sets r0 to point to the command line */
 	mov	r1, r0
@@ -181,7 +183,8 @@ __change_mode:
 #endif
 
 #endif
-	bl	FUNCTION (main)
+#endif
+	bl	FUNCTION (boot_card)
 
 	bl	FUNCTION (exit)		/* Should not return */
 
