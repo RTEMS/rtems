@@ -62,6 +62,24 @@
 /* this should be _IORW, but stdio got there first */
 #define	_IOWR(g,n,t)	_IOC(IOC_INOUT,	(g), (n), sizeof(t))
 
+/*
+ *  IOCTL values
+ */
+
+#define       RTEMS_IO_GET_ATTRIBUTES 1
+#define       RTEMS_IO_SET_ATTRIBUTES 2
+#define       RTEMS_IO_TCDRAIN        3
+
+/* copied from libnetworking/sys/filio.h and commented out there */
+/* Generic file-descriptor ioctl's. */
+#define FIOCLEX          _IO('f', 1)            /* set close on exec on fd */
+#define FIONCLEX         _IO('f', 2)            /* remove close on exec */
+#define FIONREAD        _IOR('f', 127, int)     /* get # bytes to read */
+#define FIONBIO         _IOW('f', 126, int)     /* set/clear non-blocking i/o */
+#define FIOASYNC        _IOW('f', 125, int)     /* set/clear async i/o */
+#define FIOSETOWN       _IOW('f', 124, int)     /* set owner */
+#define FIOGETOWN       _IOR('f', 123, int)     /* get owner */
+
 #ifndef KERNEL
 
 #include <sys/cdefs.h>

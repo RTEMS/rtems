@@ -16,18 +16,26 @@
 
 #include "libio_.h"
 
+#include <unistd.h>
+
 int ioctl(
-  int         fd,
-  unsigned32  command,
-  void *      buffer
+  int  fd,
+  int  command,
+  ...
 ) 
 { 
+  va_list            ap;
   rtems_status_code  rc;
   rtems_libio_t     *iop;
+  void              *buffer;
 
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
+
+  va_start(ap, command);
+
+  buffer = va_arg(ap, void *);
 
   /*
    *  Now process the ioctl().

@@ -22,6 +22,7 @@
 #include <rtems.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 
 /*
  *  Define data types which must be constructed using forward references.
@@ -444,15 +445,6 @@ typedef int (*rtems_libio_lseek_t)(
   off_t  offset,
   int    whence
 );
-
-/*
- *  IOCTL values
- */
-
-#define       RTEMS_IO_GET_ATTRIBUTES 1
-#define       RTEMS_IO_SET_ATTRIBUTES 2
-#define       RTEMS_IO_TCDRAIN        3
-#define       FIONREAD                4
 
 /*
  *  The following macros are used to build up the permissions sets

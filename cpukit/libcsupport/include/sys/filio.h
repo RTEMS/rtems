@@ -44,6 +44,8 @@
 
 #include <sys/ioccom.h>
 
+/* RTEMS defines all of these in sys/ioccom.h */
+#if 0
 /* Generic file-descriptor ioctl's. */
 #define	FIOCLEX		 _IO('f', 1)		/* set close on exec on fd */
 #define	FIONCLEX	 _IO('f', 2)		/* remove close on exec */
@@ -52,5 +54,6 @@
 #define	FIOASYNC	_IOW('f', 125, int)	/* set/clear async i/o */
 #define	FIOSETOWN	_IOW('f', 124, int)	/* set owner */
 #define	FIOGETOWN	_IOR('f', 123, int)	/* get owner */
+#endif
 
 #endif /* !_SYS_FILIO_H_ */

@@ -20,8 +20,6 @@
 #include <termios.h>
 /* #include <sys/ioctl.h> */
 
-int ioctl();
-
 #include <rtems/libio.h>
 
 int tcsendbreak ( int fd, int duration )

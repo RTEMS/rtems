@@ -1,11 +1,6 @@
 /*-
  * Copyright (c) 1982, 1986, 1990, 1993, 1994
  *	The Regents of the University of California.  All rights reserved.
- * (c) UNIX System Laboratories, Inc.
- * All or some portions of this file are derived from material licensed
- * to the University of California by American Telephone and Telegraph
- * Co. or Unix System Laboratories, Inc. and are reproduced herein with
- * the permission of UNIX System Laboratories, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,25 +30,51 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	@(#)filio.h	8.1 (Berkeley) 3/28/94
+ *	@(#)ioccom.h	8.2 (Berkeley) 3/28/94
  * $Id$
  */
 
-#ifndef	_SYS_FILIO_H_
-#define	_SYS_FILIO_H_
+#ifndef	_SYS_IOCCOM_H_
+#define	_SYS_IOCCOM_H_
 
-#include <sys/ioccom.h>
+/* the definitions were moved to a common placed so they could be shared */
+#include <sys/rtems_ioccom.h>
 
-/* RTEMS defines all of these in sys/ioccom.h */
 #if 0
-/* Generic file-descriptor ioctl's. */
-#define	FIOCLEX		 _IO('f', 1)		/* set close on exec on fd */
-#define	FIONCLEX	 _IO('f', 2)		/* remove close on exec */
-#define	FIONREAD	_IOR('f', 127, int)	/* get # bytes to read */
-#define	FIONBIO		_IOW('f', 126, int)	/* set/clear non-blocking i/o */
-#define	FIOASYNC	_IOW('f', 125, int)	/* set/clear async i/o */
-#define	FIOSETOWN	_IOW('f', 124, int)	/* set owner */
-#define	FIOGETOWN	_IOR('f', 123, int)	/* get owner */
+/*
+ * Ioctl's have the command encoded in the lower word, and the size of
+ * any in or out parameters in the upper word.  The high 3 bits of the
+ * upper word are used to encode the in/out status of the parameter.
+ */
+#define	IOCPARM_MASK	0x1fff		/* parameter length, at most 13 bits */
+#define	IOCPARM_LEN(x)	(((x) >> 16) & IOCPARM_MASK)
+#define	IOCBASECMD(x)	((x) & ~(IOCPARM_MASK << 16))
+#define	IOCGROUP(x)	(((x) >> 8) & 0xff)
+
+#define	IOCPARM_MAX	PAGE_SIZE		/* max size of ioctl, mult. of PAGE_SIZE */
+#define	IOC_VOID	0x20000000	/* no parameters */
+#define	IOC_OUT		0x40000000	/* copy out parameters */
+#define	IOC_IN		0x80000000	/* copy in parameters */
+#define	IOC_INOUT	(IOC_IN|IOC_OUT)
+#define	IOC_DIRMASK	0xe0000000	/* mask for IN/OUT/VOID */
+
+#define	_IOC(inout,group,num,len) \
+	(inout | ((len & IOCPARM_MASK) << 16) | ((group) << 8) | (num))
+#define	_IO(g,n)	_IOC(IOC_VOID,	(g), (n), 0)
+#define	_IOR(g,n,t)	_IOC(IOC_OUT,	(g), (n), sizeof(t))
+#define	_IOW(g,n,t)	_IOC(IOC_IN,	(g), (n), sizeof(t))
+/* this should be _IORW, but stdio got there first */
+#define	_IOWR(g,n,t)	_IOC(IOC_INOUT,	(g), (n), sizeof(t))
 #endif
 
-#endif /* !_SYS_FILIO_H_ */
+#ifndef KERNEL
+
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+int	ioctl __P((int, int, ...));
+__END_DECLS
+
+#endif /* !KERNEL */
+
+#endif /* !_SYS_IOCCOM_H_ */
