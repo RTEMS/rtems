@@ -38,29 +38,29 @@
         .p2align  1
         PUBLIC (_CPU_Context_switch)
 
-.set RUNCONTEXT_ARG,   4                   # save context argument
-.set HEIRCONTEXT_ARG,  8                   # restore context argument
+.set RUNCONTEXT_ARG,   4                   /* save context argument */
+.set HEIRCONTEXT_ARG,  8                   /* restore context argument */
 
 SYM (_CPU_Context_switch):
-        movl      RUNCONTEXT_ARG(esp),eax  # eax = running threads context
-        pushf                              # push eflags
-        popl      REG_EFLAGS(eax)          # save eflags
-        movl      esp,REG_ESP(eax)         # save stack pointer
-        movl      ebp,REG_EBP(eax)         # save base pointer
-        movl      ebx,REG_EBX(eax)         # save ebx
-        movl      esi,REG_ESI(eax)         # save source register
-        movl      edi,REG_EDI(eax)         # save destination register
+        movl      RUNCONTEXT_ARG(esp),eax  /* eax = running threads context */
+        pushf                              /* push eflags */
+        popl      REG_EFLAGS(eax)          /* save eflags */
+        movl      esp,REG_ESP(eax)         /* save stack pointer */
+        movl      ebp,REG_EBP(eax)         /* save base pointer */
+        movl      ebx,REG_EBX(eax)         /* save ebx */
+        movl      esi,REG_ESI(eax)         /* save source register */
+        movl      edi,REG_EDI(eax)         /* save destination register */
 
-        movl      HEIRCONTEXT_ARG(esp),eax # eax = heir threads context
+        movl      HEIRCONTEXT_ARG(esp),eax /* eax = heir threads context */
 
 restore:
-        pushl     REG_EFLAGS(eax)          # push eflags
-        popf                               # restore eflags
-        movl      REG_ESP(eax),esp         # restore stack pointer
-        movl      REG_EBP(eax),ebp         # restore base pointer
-        movl      REG_EBX(eax),ebx         # restore ebx
-        movl      REG_ESI(eax),esi         # restore source register
-        movl      REG_EDI(eax),edi         # restore destination register
+        pushl     REG_EFLAGS(eax)          /* push eflags */
+        popf                               /* restore eflags */
+        movl      REG_ESP(eax),esp         /* restore stack pointer */
+        movl      REG_EBP(eax),ebp         /* restore base pointer */
+        movl      REG_EBX(eax),ebx         /* restore ebx */
+        movl      REG_ESI(eax),esi         /* restore source register */
+        movl      REG_EDI(eax),edi         /* restore destination register */
         ret
 
 /*
@@ -75,11 +75,11 @@ restore:
 
         PUBLIC (_CPU_Context_restore)
 
-.set NEWCONTEXT_ARG,   4                   # context to restore argument
+.set NEWCONTEXT_ARG,   4                   /* context to restore argument */
 
 SYM (_CPU_Context_restore):
 
-        movl      NEWCONTEXT_ARG(esp),eax  # eax = running threads context
+        movl      NEWCONTEXT_ARG(esp),eax  /* eax = running threads context */
         jmp       restore
 
 /*PAGE
@@ -90,33 +90,33 @@ SYM (_CPU_Context_restore):
  *  the built-in coprocessor or the i80486 or compatible.
  */
 
-.set FPCONTEXT_ARG,   4                    # FP context argument
+.set FPCONTEXT_ARG,   4                    /* FP context argument */
 
         .p2align  1
         PUBLIC (_CPU_Context_save_fp)
 SYM (_CPU_Context_save_fp):
-        movl      FPCONTEXT_ARG(esp),eax   # eax = &ptr to FP context area
-        movl      (eax),eax                # eax = FP context area
-        fsave     (eax)                    # save FP context
+        movl      FPCONTEXT_ARG(esp),eax   /* eax = &ptr to FP context area */
+        movl      (eax),eax                /* eax = FP context area */
+        fsave     (eax)                    /* save FP context */
         ret
 
         .p2align  1
         PUBLIC (_CPU_Context_restore_fp)
 SYM (_CPU_Context_restore_fp):
-        movl      FPCONTEXT_ARG(esp),eax   # eax = &ptr to FP context area
-        movl      (eax),eax                # eax = FP context area
-        frstor    (eax)                    # restore FP context
+        movl      FPCONTEXT_ARG(esp),eax   /* eax = &ptr to FP context area */
+        movl      (eax),eax                /* eax = FP context area */
+        frstor    (eax)                    /* restore FP context */
         ret
 
         PUBLIC (_Exception_Handler)
 SYM (_Exception_Handler):
-	pusha				   # Push general purpose registers
-	pushl	esp			   # Push exception frame address
-	movl	_currentExcHandler, eax	   # Call function storead in _currentExcHandler
+	pusha				   /* Push general purpose registers */
+	pushl	esp			   /* Push exception frame address */
+	movl	_currentExcHandler, eax	   /* Call function storead in _currentExcHandler */
 	call	* eax
 	addl	$4, esp
-	popa				   # restore general purpose registers
-	addl	$8, esp			   # skill vector number and faultCode
+	popa				   /* restore general purpose registers */
+	addl	$8, esp			   /* skill vector number and faultCode */
 	iret
 		
 #define DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY(_vector) \
@@ -224,18 +224,18 @@ DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (18)
 
 SYM (i386_Logical_to_physical):
 
-        xorl    eax,eax                # clear eax
-        movzwl  SEGMENT_ARG(esp),ecx   # ecx = segment value
+        xorl    eax,eax                /* clear eax */
+        movzwl  SEGMENT_ARG(esp),ecx   /* ecx = segment value */
         movl    $ SYM (_Global_descriptor_table),edx
-                                       # edx = address of our GDT
-        addl    ecx,edx                # edx = address of desired entry
-        movb    7(edx),ah              # ah = base 31:24
-        movb    4(edx),al              # al = base 23:16
-        shll    $16,eax                # move ax into correct bits
-        movw    2(edx),ax              # ax = base 0:15
-        movl    ADDRESS_ARG(esp),ecx   # ecx = address to convert
-        addl    eax,ecx                # ecx = physical address equivalent
-        movl    ecx,eax                # eax = ecx
+                                       /* edx = address of our GDT */
+        addl    ecx,edx                /* edx = address of desired entry */
+        movb    7(edx),ah              /* ah = base 31:24 */
+        movb    4(edx),al              /* al = base 23:16 */
+        shll    $16,eax                /* move ax into correct bits */
+        movw    2(edx),ax              /* ax = base 0:15 */
+        movl    ADDRESS_ARG(esp),ecx   /* ecx = address to convert */
+        addl    eax,ecx                /* ecx = physical address equivalent */
+        movl    ecx,eax                /* eax = ecx */
         ret
 
 /*
@@ -255,18 +255,18 @@ SYM (i386_Logical_to_physical):
        PUBLIC (i386_Physical_to_logical)
 
 SYM (i386_Physical_to_logical):
-        xorl    eax,eax                # clear eax
-        movzwl  SEGMENT_ARG(esp),ecx   # ecx = segment value
+        xorl    eax,eax                /* clear eax */
+        movzwl  SEGMENT_ARG(esp),ecx   /* ecx = segment value */
         movl    $ SYM (_Global_descriptor_table),edx
-                                       # edx = address of our GDT
-        addl    ecx,edx                # edx = address of desired entry
-        movb    7(edx),ah              # ah = base 31:24
-        movb    4(edx),al              # al = base 23:16
-        shll    $16,eax                # move ax into correct bits
-        movw    2(edx),ax              # ax = base 0:15
-        movl    ADDRESS_ARG(esp),ecx   # ecx = address to convert
-        subl    eax,ecx                # ecx = logical address equivalent
-        movl    ecx,eax                # eax = ecx
+                                       /* edx = address of our GDT */
+        addl    ecx,edx                /* edx = address of desired entry */
+        movb    7(edx),ah              /* ah = base 31:24 */
+        movb    4(edx),al              /* al = base 23:16 */
+        shll    $16,eax                /* move ax into correct bits */
+        movw    2(edx),ax              /* ax = base 0:15 */
+        movl    ADDRESS_ARG(esp),ecx   /* ecx = address to convert */
+        subl    eax,ecx                /* ecx = logical address equivalent */
+        movl    ecx,eax                /* eax = ecx */
         ret
 
 END_CODE

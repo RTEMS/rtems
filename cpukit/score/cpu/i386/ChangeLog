@@ -1,3 +1,8 @@
+2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* cpu_asm.S: Convert asm comments to C-comments to prevent gcc-3.4.0pre
+	from choking on them.
+
 2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Remove (Merged into $(top_srcdir)/configure.ac).
