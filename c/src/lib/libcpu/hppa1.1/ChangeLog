@@ -1,3 +1,7 @@
+2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AC_PREREQ(2.57).
+
 2002-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_CHECK_CUSTOM_BSP.

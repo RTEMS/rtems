@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.52)
+AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-lib-libbsp-m68k-mcf5206elite-tools],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([runtest])
 RTEMS_TOP(../../../../../../..)

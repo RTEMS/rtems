@@ -2,7 +2,7 @@
 # $Id$
 #
 
-AC_PREREQ(2.52)
+AC_PREREQ(2.57)
 AC_INIT([rtems-tools-build],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([install-if-change.in])
 RTEMS_TOP(../..)

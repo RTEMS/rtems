@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.52)
+AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-lib-libbsp-c4x],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([c4xsim])
 RTEMS_TOP(../../../../..)

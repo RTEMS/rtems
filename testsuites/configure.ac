@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.52)
+AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-tests],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([samples])
 RTEMS_TOP(../../..)

@@ -1,3 +1,7 @@
+2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AC_PREREQ(2.57).
+
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* tx39/vectorisrs/Makefile.am: Don't include @RTEMS_BSP@.cfg.
