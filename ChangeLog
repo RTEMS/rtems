@@ -1,5 +1,9 @@
 2002-11-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove c/make.
+
+2002-11-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/prog-ccas.m4: New.
 	* aclocal/check-custom-bsp.m4: New, split out from check-bsps.m4.
 	* aclocal/check-bsps.m4: Split out RTEMS_CHECK_CUSTOM_BSP.

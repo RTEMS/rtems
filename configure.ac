@@ -64,7 +64,6 @@ RTEMS_HOST_CONFIG_SUBDIRS([tools/cpu])
 AS_IF([test x"${enable_docs}" = x"yes"],
   [RTEMS_HOST_CONFIG_SUBDIRS([doc])])
 
-RTEMS_TARGET_CONFIG_SUBDIRS([c/make])
 AS_IF([test x"$enable_multilib" = x"yes"],[
   RTEMS_TARGET_CONFIG_SUBDIRS([cpukit])
 ])
