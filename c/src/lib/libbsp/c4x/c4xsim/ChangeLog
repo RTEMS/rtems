@@ -1,3 +1,9 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clock.c, console/console.c, console/consolereserveresources.c,
+	console/debugio.c, include/bsp.h, startup/bspstart.c,
+	startup/spurious.c, timer/timer.c: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
