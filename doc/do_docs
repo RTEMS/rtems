@@ -3,7 +3,8 @@
 basedir=$1
 shift
 manuals="develenv hppa1_1 i386 i960 m68k relnotes sparc user ka9q"
-# posix_test_plan manual left out in 4.1.0
+# posix_test_plan manual left out until finished
+# ada_user manual left out until bindings released
 
 for action in $*
 do
