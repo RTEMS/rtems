@@ -62,7 +62,7 @@ extern "C" {
 
 #define delay( microseconds ) \
   { register rtems_unsigned32 _delay=(microseconds); \
-    register rtems_unsigned32 _tmp; \
+    register rtems_unsigned32 _tmp = 0; /* initialized to avoid warning */ \
     asm volatile( "0: \
                      remo      3,31,%0 ; \
                      cmpo      0,%0 ; \
