@@ -27,6 +27,9 @@ extern "C" {
 #include <console.h>
 #include <clockdrv.h>
   
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __BSP_H_ */
 /* end of include file */

@@ -1,3 +1,7 @@
+2001-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h: Added closing brace for extern C.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Add include of bsp.am.  Add clock subdirectory.
