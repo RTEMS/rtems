@@ -1,3 +1,8 @@
+2001-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/iosh7045.h: Add SCI0_SMR, SCI1_SMR for sh7032
+	compatibility to make simsh happy.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, include/iosh7045.h, include/ispsh7045.h,

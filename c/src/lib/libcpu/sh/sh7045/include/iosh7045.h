@@ -66,6 +66,8 @@
 #define SCI_SSR0   (REG_BASE + 0x01a4) /*char: Serial status   ch 0 */
 #define SCI_RDR0   (REG_BASE + 0x01a5) /*char: Receive data    ch 0 */
 
+#define SCI0_SMR   SCI_SMR0
+
 /* SCI1 Registers */
 #define SCI_SMR1   (REG_BASE + 0x01b0) /* char: Serial mode     ch 1 */
 #define SCI_BRR1   (REG_BASE + 0x01b1) /* char: Bit rate        ch 1 */
@@ -73,6 +75,8 @@
 #define SCI_TDR1   (REG_BASE + 0x01b3) /* char: Transmit data   ch 1 */
 #define SCI_SSR1   (REG_BASE + 0x01b4) /* char: Serial status   ch 1 */
 #define SCI_RDR1   (REG_BASE + 0x01b5) /* char: Receive data    ch 1 */
+
+#define SCI1_SMR   SCI_SMR1
 
 /* ADI */
 /* High Speed A/D (Excluding A-Mask Part)*/
