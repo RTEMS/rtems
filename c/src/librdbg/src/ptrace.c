@@ -28,7 +28,7 @@ extern unsigned int NbSerializedCtx;
 
 
 /* --------------------------------------------------------------------
-   return a pointeur to the Tread Control structure of the specified
+   return a pointer to the Tread Control structure of the specified
    Id
    -------------------------------------------------------------------- */
 
