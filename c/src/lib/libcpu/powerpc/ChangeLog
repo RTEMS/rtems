@@ -1,3 +1,8 @@
+2001-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ppc403/vectors/vectors.S: Include <bsp.h>.
+	* shared/include/cpu.h: Remove stray empty lines.
+
 2001-11-27	Joel Sherrill <joel@OARcorp.com>,
 
 	* new_exception_processing/Makefile.in,

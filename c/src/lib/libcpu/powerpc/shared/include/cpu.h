@@ -330,10 +330,3 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
 #endif
 
 #endif /* __PPC_CPU_H */
-
-
-
-
-
-
-
