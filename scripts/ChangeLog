@@ -1,3 +1,8 @@
+2001-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Modified the binutils version to 2.11 and 
+	RPM revision 3 to reflect experimentation with new binutils release.
+
 2001-04-11	Joel Sherrill <joel@OARcorp.com>
 
 	* binutils/Makefile.am: Added a29k-rtems.

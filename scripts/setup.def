@@ -3,8 +3,8 @@
 #
 # $Id$
 #
-binutils_version=2.10
-binutils_patch_version=20001107
+binutils_version=2.11
+binutils_patch_version=20010409
 binutils_rpm_release=3
 newlib_version=1.9.0
 newlib_patch_version=20010221
