@@ -66,6 +66,7 @@ sp25/Makefile
 sp26/Makefile
 sp27/Makefile
 sp28/Makefile
+sp29/Makefile
 spsize/Makefile
 )
 

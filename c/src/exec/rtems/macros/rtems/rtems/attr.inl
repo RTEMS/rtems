@@ -90,6 +90,15 @@
 
 /*PAGE
  *
+ *  _Attributes_Is_nesting_allowed
+ *
+ */
+
+#define _Attributes_Is_nesting_allowed( _attribute_set ) \
+   ( !((_attribute_set) & RTEMS_NO_NESTING_ALLOWED) )
+
+/*PAGE
+ *
  *  _Attributes_Is_system_task
  *
  */

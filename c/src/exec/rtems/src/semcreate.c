@@ -129,14 +129,17 @@ rtems_status_code rtems_semaphore_create(
   if ( _Attributes_Is_binary_semaphore( attribute_set ) ) {
     if ( _Attributes_Is_inherit_priority( attribute_set ) )
       the_mutex_attributes.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
-    else if (_Attributes_Is_priority_ceiling( attribute_set ) )
+    else if ( _Attributes_Is_priority_ceiling( attribute_set ) )
       the_mutex_attributes.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
-    else if (_Attributes_Is_priority( attribute_set ) )
+    else if ( _Attributes_Is_priority( attribute_set ) )
       the_mutex_attributes.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY;
     else
       the_mutex_attributes.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
 
-    the_mutex_attributes.allow_nesting = TRUE;
+    if ( _Attributes_Is_nesting_allowed( attribute_set ) )
+      the_mutex_attributes.allow_nesting = TRUE;
+    else
+      the_mutex_attributes.allow_nesting = FALSE;
 
     /* Add priority ceiling code here ????? */
 

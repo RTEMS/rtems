@@ -61,24 +61,31 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  must be released by the thread which acquired them.
    */ 
 
-  if ( !_Objects_Are_ids_equal(
-           _Thread_Executing->Object.id, the_mutex->holder_id ) ) {
-
-    switch ( the_mutex->Attributes.discipline ) {
-      case CORE_MUTEX_DISCIPLINES_FIFO:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY:
-        break;
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-        return( CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE );
-        break;
+  if ( the_mutex->Attributes.allow_nesting ) {
+    if ( !_Objects_Are_ids_equal(
+             _Thread_Executing->Object.id, the_mutex->holder_id ) ) {
+  
+      switch ( the_mutex->Attributes.discipline ) {
+        case CORE_MUTEX_DISCIPLINES_FIFO:
+        case CORE_MUTEX_DISCIPLINES_PRIORITY:
+          break;
+        case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
+        case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
+          return( CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE );
+          break;
+      }
     }
   }
+
+  /* XXX already unlocked -- not right status */
+
+  if ( !the_mutex->nest_count ) 
+    return( CORE_MUTEX_STATUS_SUCCESSFUL );
 
   the_mutex->nest_count--;
 
   if ( the_mutex->nest_count != 0 )
-    return( CORE_MUTEX_STATUS_SUCCESSFUL );
+    return( CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED );
 
   _Thread_Executing->resource_count--;
   the_mutex->holder    = NULL;

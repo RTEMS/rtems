@@ -1,0 +1,36 @@
+## 
+## $Id$
+## 
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+TEST = sp29
+
+MANAGERS = all
+
+# C source names, if any, go here -- minus the .c
+C_FILES = init.c
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+
+DOCTYPES = scn
+DOCS = $(DOCTYPES:%=$(TEST).%)
+
+SRCS = $(C_FILES) $(H_FILES)
+OBJS = $(C_O_FILES)
+
+PRINT_SRCS = $(DOCS)
+
+PGM = ${ARCH}/$(TEST).exe
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/sptests.am
+
+${PGM}: $(OBJS) $(LINK_FILES)
+	$(make-exe)
+
+all-local: $(ARCH) $(TMPINSTALL_FILES)
+
+EXTRA_DIST = $(C_FILES) $(DOCS)
+
+include $(top_srcdir)/../../../../automake/local.am

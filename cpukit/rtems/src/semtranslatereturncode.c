@@ -67,7 +67,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
     case CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT:
       return RTEMS_UNSATISFIED;
     case CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED:
-      return RTEMS_INTERNAL_ERROR;
+      return RTEMS_UNSATISFIED;
     case CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE:
       return RTEMS_NOT_OWNER_OF_RESOURCE;
     case CORE_MUTEX_WAS_DELETED:

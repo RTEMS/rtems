@@ -90,6 +90,7 @@ void _CORE_mutex_Seize(
         );
       }
     }
+    executing->Wait.return_code = CORE_MUTEX_STATUS_SUCCESSFUL;
     return;
   }
 

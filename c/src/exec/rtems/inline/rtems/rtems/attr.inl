@@ -158,6 +158,23 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority_ceiling(
 
 /*PAGE
  *
+ *  _Attributes_Is_nesting_allowed
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the nesting allowed attribute
+ *  is enabled in the attribute_set and FALSE otherwise.
+ */
+ 
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_nesting_allowed(
+  rtems_attribute attribute_set
+)
+{
+   return ( !(attribute_set & RTEMS_NO_NESTING_ALLOWED) );
+}
+
+/*PAGE
+ *
  *  _Attributes_Is_system_task
  *
  *  DESCRIPTION:
