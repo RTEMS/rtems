@@ -1,6 +1,14 @@
+2003-10-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-cpu.m4: Remove.
+	* Makefile.am: Remove reference to aclocal/check-cpu.m4.
+	* acinclude.m4 (RTEMS_TARGET_CONFIG_SUBDIR): Check for presence of
+	$1 in $srcdir before adding dir to SUBDIRS.
+
 2003-09-26  Joel Sherrill <joel@OARcorp.com>
 
 	* README.configure, aclocal/rtems-cpu-subdirs.m4: Removing HPPA port.
+
 2003-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/enable-rtems-debug.m4: New (Missed in yesterday's

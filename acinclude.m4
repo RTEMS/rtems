@@ -373,6 +373,7 @@ AC_SUBST(host_subdir)
 ## PUBLIC: RTEMS_TARGET_CONFIG_SUBDIRS(target_subdir)
 # subdirs to be build for the target environment
 AC_DEFUN([RTEMS_TARGET_CONFIG_SUBDIRS],[
+AS_IF([test -d ${srcdir}/$1],[
 m4_append([_RTEMS_TARGET_CONFIGDIRS_LIST],[ $1])
 
 _RTEMS_SUBST_IFNOT([target_configdirs],[$1])
@@ -380,6 +381,7 @@ _RTEMS_SUBST_IFNOT([target_configdirs],[$1])
 m4_divert_text([DEFAULTS],
                [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
 m4_expand_once([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS])
+  ])
 ])
 
 AC_DEFUN(_RTEMS_TARGET_CONFIG_PREPARE,[
