@@ -95,15 +95,23 @@ extern "C" {
 /* tx/rx interrupt and data transfer mode definition */
 
 #define SCC_WR1_EXT_INT_EN  0x01
-#define SCC_WR1_TX_INT_EN 0x02
-#define SCC_WR1_PARITY    0x04
+#define SCC_WR1_TX_INT_EN   0x02
+#define SCC_WR1_PARITY      0x04
 #define SCC_WR1_RX_INT_DIS  0x00
 #define SCC_WR1_RX_INT_FIR  0x08
 #define SCC_WR1_INT_ALL_RX  0x10
 #define SCC_WR1_RX_INT_SPE  0x18
 #define SCC_WR1_RDMA_RECTR  0x20
-#define SCC_WR1_RDMA_FUNC 0x40
-#define SCC_WR1_RDMA_EN   0x80
+#define SCC_WR1_RDMA_FUNC   0x40
+#define SCC_WR1_RDMA_EN     0x80
+
+#define SCC_ENABLE_ALL_INTR \
+    (SCC_WR1_EXT_INT_EN | SCC_WR1_TX_INT_EN | SCC_WR1_INT_ALL_RX)
+
+#define SCC_DISABLE_ALL_INTR 0x00
+
+#define SCC_ENABLE_ALL_INTR_EXCEPT_TX \
+    (SCC_WR1_EXT_INT_EN | SCC_WR1_INT_ALL_RX)
 
 /* bit values for write register 3 */
 /* receive parameters and control */
@@ -374,8 +382,6 @@ Z85C30_STATIC int z85c30_negate_DTR(
 
 Z85C30_STATIC void z85c30_initialize_interrupts(int minor);
 
-Z85C30_STATIC int z85c30_flush(int major, int minor, void *arg);
-
 Z85C30_STATIC int z85c30_write_support_int(
   int   minor,
   const char *buf,
@@ -390,6 +396,11 @@ Z85C30_STATIC int z85c30_write_support_polled(
 
 Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
   int minor
+);
+
+Z85C30_STATIC void z85c30_enable_interrupts(
+  int minor,
+  int interrupt_mask
 );
 
 #ifdef __cplusplus
