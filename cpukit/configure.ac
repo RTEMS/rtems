@@ -143,6 +143,8 @@ AS_IF([test x"${enable_multilib}" = x"yes"],[
   AC_DEFINE_UNQUOTED([RTEMS_MULTILIBS],[1],[using multilib'ed RTEMS])
 ])
 
+AC_CONFIG_SUBDIRS([libmisc])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 include/Makefile
