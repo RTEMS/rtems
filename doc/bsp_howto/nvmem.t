@@ -65,7 +65,7 @@ configuration table is typically an array of structures with each
 structure containing the information for a particular area of
 non-volatile memory.
 The following is a list of the type of information normally required
-to configure each area of non-volatile memory
+to configure each area of non-volatile memory.
 
 @table @b
 @item memory_type
@@ -118,7 +118,7 @@ block.
 is the number of logical partitions within this area.
 
 @item Partitions
-is the address of table that contains an entry to describe each
+is the address of the table that contains an entry to describe each
 partition in this area.  Fields within each element of this
 table are defined as follows:
 
@@ -143,7 +143,7 @@ initialization entry point will be invoked.  As part of
 initialization, the driver will perform
 whatever initializatin is required on each non-volatile memory area.
 
-The discrete I/O driver may register devices name for memory 
+The discrete I/O driver may register device names for memory 
 partitions of particular interest to the system.  Normally this
 will be restricted to the device "/dev/nv_memory" to indicate
 the entire device driver.

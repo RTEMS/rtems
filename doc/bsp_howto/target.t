@@ -54,11 +54,11 @@ and the peripherals actually placed on the board.
 @section Peripheral Dependent
 
 This class of code provides a reusable library of peripheral device
-drivers which can be tailored easily to a particular board.  This
-reusable library provides software objects which correspond to standard
-controllers.  Just as the hardware engineer choose a standard controller
-when designing a board, the goal of this library is to let the software
-engineer do the same thing.
+drivers which can be tailored easily to a particular board.  The
+libchip library is a collection of reusable software objects that
+correspond to standard controllers.  Just as the hardware engineer
+chooses a standard controller when designing a board, the goal of
+this library is to let the software engineer do the same thing.
 
 The source code for the reusable peripheral driver library may be found
 in the directory @code{c/src/lib/libchip}.  The source code is further
@@ -90,10 +90,11 @@ the existing BSP may not support this.
 
 If the BSP does not exist and the board's CPU model is supported, then
 examine the reusable chip library and existing BSPs for a close match.  
-This will help reduce the development effort required.  It is often
-possible to copy existing components in the reusable chip library or
-device drivers from BSPs from different CPU families as the starting
-point for a new device driver. 
+Other BSPs and libchip provide starting points for the development 
+of a new BSP.  It is often possible to copy existing components in
+the reusable chip library or device drivers from BSPs from different
+CPU families as the starting point for a new device driver. 
+This will help reduce the development effort required.  
 
 If the board's CPU family is supported but the particular CPU model on
 that board is not, then the RTEMS port to that CPU family will have to

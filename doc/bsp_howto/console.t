@@ -31,7 +31,7 @@ line, tabulations, etc.) recognition and processing,
 
 @end itemize
 
-We may think that one need two serial drivers to deal with those two types
+One may think that two serial drivers are needed to handle these two types
 of data, but Termios permits having only one driver. 
 
 @section Termios
@@ -90,7 +90,7 @@ Asynchronous Receiver-Transmitter, i.e. the serial chip):
 In polled mode, the processor blocks on sending/receiving characters.
 This mode is not the most efficient way to utilize the UART. But 
 polled mode is usually necessary when one wants to print an
-error message in the event of a fatal error such as al fatal error
+error message in the event of a fatal error such as a fatal error
 in the BSP.  This is also the simplest mode to
 program.  Polled mode is generally preferred if the serial port is
 to be used primarily as a debug console.  In a simple polled driver,
@@ -124,7 +124,7 @@ before the first interrupt will occur.
 The following Figure shows how a Termios driven serial driver works: 
 
 @example
-This figure needs to be inserted in this document.
+Figure not included in this draft
 @end example
 
 The following list describes the basic flow.

@@ -17,12 +17,12 @@ procedure for writing RTEMS network device drivers.
 The example code is taken from the `Generic 68360' network device
 driver.  The source code for this driver is located in the
 @code{c/src/lib/libbsp/m68k/gen68360/network} directory in the RTEMS
-source code distribution.  You should have a copy of this driver at
-hand when reading the following notes.
+source code distribution.  Having a copy of this driver at
+hand when reading the following notes will help significantly.
 
 @section Learn about the network device 
 
-Before starting to write the network driver you need to be completely
+Before starting to write the network driver become completely
 familiar with the programmer's view of the device.
 The following points list some of the details of the
 device that must be understood before a driver can be written.
@@ -34,7 +34,7 @@ memory or does the processor have to
 copy packets to and from memory on the device?
 
 @item If the device uses DMA, is it capable of forming a single
-outtoing packet from multiple fragments scattered in separate
+outgoing packet from multiple fragments scattered in separate
 memory buffers?
 
 @item If the device uses DMA, is it capable of chaining multiple
@@ -74,43 +74,43 @@ type of information should be obtained from the board vendor.
 
 @section Understand the network scheduling conventions
 
-When writing code for your driver transmit and receive tasks you must
+When writing code for the driver transmit and receive tasks,
 take care to follow the network scheduling conventions.  All tasks
 which are associated with networking share various
 data structures and resources.  To ensure the consistency
 of these structures the tasks
 execute only when they hold the network semaphore (@code{rtems_bsdnet_semaphore}).
-Your transmit and receive tasks must abide by this protocol which means you must
-be careful to avoid `deadly embraces' with the other network tasks.
-A number of routines are provided to make it easier for your code
-to conform to the network task scheduling conventions.
+The transmit and receive tasks must abide by this protocol.  Be very
+careful to avoid `deadly embraces' with the other network tasks.
+A number of routines are provided to make it easier for the network
+driver code to conform to the network task scheduling conventions.
 
 @itemize @bullet
 
 @item @code{void rtems_bsdnet_semaphore_release(void)}
 
 This function releases the network semaphore.
-Your task must call this function immediately before
+The network driver tasks must call this function immediately before
 making any blocking RTEMS request.
 
 @item @code{void rtems_bsdnet_semaphore_obtain(void)}
 
 This function obtains the network semaphore.
-If your task has released the network semaphore to allow other
-network-related tasks to run while your task blocks you must call this
-function to reobtain the semaphore immediately after the return from the
+If a network driver task has released the network semaphore to allow other
+network-related tasks to run while the task blocks, then this function must 
+be called to reobtain the semaphore immediately after the return from the
 blocking RTEMS request.
 
 @item @code{rtems_bsdnet_event_receive(rtems_event_set, rtems_option, rtems_interval, rtems_event_set *)}
-Your task should call this function when it wishes to wait for an event.
-This function releases the network semaphore,
+The network driver task should call this function when it wishes to wait
+for an event.  This function releases the network semaphore,
 calls @code{rtems_event_receive} to wait for the specified event
 or events and reobtains the semaphore.
 The value returned is the value returned by the @code{rtems_event_receive}.
 
 @end itemize
 
-@section Write your driver attach function
+@section Write the Driver Attach Function
 The driver attach function is responsible for configuring the driver
 and making the connection between the network stack
 and the driver.
@@ -185,7 +185,7 @@ the driver has been successfully configured and attached.
 
 
 
-@section Write your driver start function.
+@section Write the Driver Start Function.
 This function is called each time the network stack wants to start the
 transmitter.  This occures whenever the network stack adds a packet
 to a device's send queue and the @code{IFF_OACTIVE} bit in the
@@ -196,7 +196,8 @@ For many devices this function need only set the @code{IFF_OACTIVE} bit in the
 indicating that a packet is in the driver transmit queue.
 
 
-@section Write your driver initialization function.
+@section Write the Driver Initialization Function.
+
 This function should initialize the device, attach to interrupt handler, 
 and start the driver transmit and receive tasks.  The function
 
@@ -212,11 +213,13 @@ should be used to start the driver tasks.
 
 Note that the network stack may call the driver initialization function more
 than once.
-Make sure you don't start multiple versions of the receive and transmit tasks.
+Make sure multiple versions of the receive and transmit tasks are not accidentally
+started.
 
 
 
-@section Write your driver transmit task.
+@section Write the Driver Transmit Task
+
 This task is reponsible for removing packets from the driver send queue and sending them to the device.  The task should block waiting for an event from the
 driver start function indicating that packets are waiting to be transmitted.
 When the transmit task has drained the driver send queue the task should clear
@@ -224,7 +227,7 @@ the @code{IFF_OACTIVE} bit in @code{if_flags} and block until another outgoing
 packet is queued.
 
 
-@section Write your driver receive task.
+@section Write the Driver Receive Task
 This task should block until a packet arrives from the device.  If the
 device is an Ethernet interface the function @code{ether_input} should be called
 to forward the packet to the network stack.   The arguments to @code{ether_input}
@@ -234,7 +237,7 @@ header and a pointer to an mbuf containing the packet itself.
 
 
 
-@section Write your driver interrupt handler.
+@section Write the Driver Interrupt Handler
 A typical interrupt handler will do nothing more than the hardware
 manipulation required to acknowledge the interrupt and send an RTEMS event
 to wake up the driver receive or transmit task waiting for the event.
@@ -243,7 +246,7 @@ network routines.
 
 
 
-@section Write your driver ioctl function.
+@section Write the Driver IOCTL Function
 This function handles ioctl requests directed at the device.  The ioctl
 commands which must be handled are:
 
@@ -275,9 +278,9 @@ Do nothing.
 
 
 
-@section Write Your Driver Statistic-Printing Function
+@section Write the Driver Statistic-Printing Function
 This function should print the values of any statistic/diagnostic
-counters your driver may use.  The driver ioctl function should call
+counters the network driver may use.  The driver ioctl function should call
 the statistic-printing function when the ioctl command is
 @code{SIO_RTEMS_SHOW_STATS}.
 

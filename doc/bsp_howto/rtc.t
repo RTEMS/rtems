@@ -89,7 +89,8 @@ generation had Vendor B's RTC chip, RTC_Table could contain
 information for both.  The @code{deviceProbe} configured
 for Vendor A's RTC chip would need to return TRUE if the
 board was a first generation one.  The @code{deviceProbe}
-routines are very board dependent.
+routines are very board dependent and must be provided by
+the BSP.
 
 @section setRealTimeToRTEMS
 

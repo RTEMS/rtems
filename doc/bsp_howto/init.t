@@ -95,6 +95,14 @@ to execute to complete the initialization sequence.
 The initial assembly language start code completes its execution by
 invoking the shared routine @code{boot_card()}.
 
+The label (symbolic name) associated with the starting address of the
+program is typically called @code{start}.  The start object file
+is the first object file linked into the program image so it is insured
+that the start code is at offset 0 in the @code{.text} section.  It is
+the responsibility of the linker script in conjunction with the 
+compiler specifications file to put the start code in the correct location
+in the application image.
+
 @subsection boot_card() - Boot the Card
 
 The @code{boot_card()} is the first C code invoked.  Most of the BSPs
@@ -163,12 +171,11 @@ initialization hooks:
 @end itemize
 
 One of the most important functions performed by this routine
-is determining where the RTEMS Executive Work Space is to be
+is determining where the RTEMS Workspace is to be
 located in memory.  All RTEMS objects and task stacks will be
 allocated from this Workspace.  The RTEMS Workspace is distinct
-from the application heap used for @code{malloc()}.
-
-Many BSPs place this area at the end of RAM although this is
+from the application heap used for @code{malloc()}.  Many BSPs
+place the RTEMS Workspace area at the end of RAM although this is
 certainly not a requirement.
 
 After completing execution, this routine returns to the

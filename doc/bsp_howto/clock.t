@@ -19,6 +19,9 @@ The clock driver is located in the @code{clock} directory of the BSP.
 
 @section Clock Driver Global Variables
 
+This section describes the global variables expected to be provided by
+this driver.
+
 @subsection Major and Minor Number
 
 The major and minor numbers of the clock driver are made available via 

@@ -80,7 +80,7 @@ in a known state.
 
 At system initialization, the analog driver's initialization entry point
 will be invoked.  As part of initialization, the driver will perform
-whatever board initializatin is required and then set all
+whatever board initialization is required and then set all
 outputs to their configured initial state.
 
 The analog driver may register a device name for each DAC and ADC in
@@ -158,6 +158,10 @@ for this device.
 
 This is one of the IOCTL functions supported by the I/O control
 device driver entry point.  When this IOCTL function is invoked,
-the last value written to the specified output word along with
-a timestamp of when the last write was performed.
+the following information is returned to the caller:
+
+@itemize @bullet 
+@item last value written to the specified DAC 
+@item timestamp of when the last write was performed
+@end itemize
 

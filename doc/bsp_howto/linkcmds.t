@@ -19,7 +19,7 @@ for the application will reside in memory.
 
 An embedded systems programmer must be much more aware of the
 placement of their executable image in memory than the average
-"normal" programmer.  A program destined to be embedded as well
+applications programmer.  A program destined to be embedded as well
 as the target system have some specific properties that must be
 taken into account. Embedded machines often mean average performances
 and small memory usage.  It is the memory usage that concerns us
@@ -43,9 +43,9 @@ or Flash. On the other hand, data processing occurs in RAM.
 This leads us to the structure of an embedded program.  In rough terms,
 an embedded program is made of sections.  It is the responsibility of
 the application programmer to place these sections in the appropriate
-place in target memory.  To make this clearer, if using COFF on the
-Motorola m68k family of microprocessors, the following sections will
-be present:
+place in target memory.  To make this clearer, if using the COFF 
+object file format on the Motorola m68k family of microprocessors,
+the following sections will be present:
 
 @itemize @bullet
 
@@ -417,6 +417,6 @@ this is done are not relevant.
 
 Step 3 shows the final executable image as it logically appears in
 the target's non-volatile program memory.  The board initialization
-code will copy the initialized data initial values (which are stored in
+code will copy the ""copy of @code{.data} section" (which are stored in
 ROM) to their reserved location in RAM. 
 

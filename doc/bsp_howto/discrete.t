@@ -178,6 +178,10 @@ output values.
 
 This is one of the IOCTL functions supported by the I/O control
 device driver entry point.  When this IOCTL function is invoked,
-the last value written to the specified output word along with
-a timestamp of when the last write was performed.
+the following information is returned to the caller:
+
+@itemize @bullet
+@item last value written to the specified output word
+@item timestamp of when the last write was performed
+@end itemize
 

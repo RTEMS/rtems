@@ -15,7 +15,7 @@ bus cycles.  This information can be very useful for determining
 precisely what pieces of code require optimization and to measure the
 impact of specific minor changes.
 
-The gen68340 BSP also uses the TImer Driver to support a high performance
+The gen68340 BSP also uses the Timer Driver to support a high performance
 mode of the on-CPU UART.
 
 @section Benchmark Timer
