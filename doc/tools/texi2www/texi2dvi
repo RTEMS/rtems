@@ -1,0 +1,213 @@
+#!/usr/local/bin/perl
+
+$version = <<END_VERSION;
+Jan 2 1996
+END_VERSION
+
+$copyright = <<END_COPYRIGHT;
+texi2dvi - converts texinfo to dvi
+Copyright (C) 1996 Tim Singletary
+
+This program is freely distributable under the terms of the GNU 
+GENERAL PUBLIC LICENSE.  In particular, modified versions of this 
+program must retain this copyright notice and must remain freely
+distributable.
+END_COPYRIGHT
+
+$usage = <<END_USAGE;
+Usage: texi2dvi [option ...] texinfo_file ...
+  -k (-nocleanup) -- don't ``rm -f'' the intermediate files.
+  -v (-verbose) -- print additional output.
+  -copyright -- print the copyright and die.
+  -version -- print the version and die.
+Generates a .dvi file from each texinfo (.texi or .texinfo) file.
+Understands texi2www extensions (\@gif, etc.).
+END_USAGE
+
+unless ($tex = $ENV{TEX}) {$tex = tex;}
+unless ($texindex = $ENV{TEXINDEX}) {$texindex = texindex;}
+$texinputs = $ENV{TEXINPUTS};
+
+$cleanup = 1;
+while ($ARGV[0] =~ /^-/) {
+    $_ = shift;
+    if (/-k$/ || /-nocleanup/) {$cleanup = 0; next;}
+    if (/-v$/ || /-verbose/) {$verbose = 1; next;}
+    if (/-d$/ || /-vv$/ || /-debug/)   {$verbose = 2; next;}
+    if (/-copyright/) {die $copyright;}
+    if (/-version/) {die $version;}
+    die $usage;
+}
+
+$font_prefix = "xx";
+while (&prefix_in_use($font_prefix)) {
+    ++$font_prefix;
+    if (length($font_prefix) > 2) {
+	$font_prefix = "aa";
+    }
+}
+
+$unique_base = "_" . $$ . "a-";
+while (&prefix_in_use($unique_base)) {++$unique_base;}
+
+print "Generated files will begin with \`$unique_base\'\n" if $verbose;
+
+$arg_index = 'a';
+foreach $raw_texi (@ARGV) {
+    $base = $unique_base . $arg_index;
+    ++$arg_index;
+
+    # $tawtexifile is a texinfo file; suffix must be either `.texi' or
+    # `.texinfo'.  If arg is in a different directory, adjust
+    # TEXINPUTS environment variable to include that (and the current)
+    # directory.
+    unless ($raw_texi =~ /(.*).texi(nfo)?$/) {
+	print "skipping $raw_texi -- has unknown extension!\n";
+	next;
+    }
+    $raw_texi_base = $1;
+    if ($raw_texi_base =~ m|^(.*)/([^/]*)$|) {
+	$raw_texi_base = $2;
+     	$ENV{TEXINPUTS} = ".:$1:$texinputs";
+    } else {
+	$ENV{TEXINPUTS} = ".:$texinputs";
+    }
+
+    unless (-r $raw_texi) {
+	print "skipping $raw_texi -- not readable or doesn't exist!\n";
+	next;
+    }
+
+    # Preprocesses the $rawtexifile (because of @gif{} and other extensions)
+    $processed_texi = "$base.texi";
+    print "Preprocessing $raw_texi into $processed_texi:\n" if $verbose;
+    &preprocess_texinfo($raw_texi,$processed_texi,$base);
+
+    print "$tex $processed_texi\n" if $verbose;
+    if (system("$tex $processed_texi") == 0) {
+
+	# @possible_index_file = <$base.??>; only works for the
+	# first value of $base ... so,
+	opendir(DIR,".") || die "Couldn't read current directory -- $!\n";
+	@possible_index_files = ();
+	while ($_ = readdir(DIR)) {
+	    push(@possible_index_files,$_) if (/^$base\...$/);
+	}
+	closedir(DIR);
+
+	@index_files = ();
+	foreach $possible_index_file (@possible_index_files) {
+	    print "DEBUG: possible_index_file $possible_index_file\n"
+		                                           if ($verbose > 1);
+	    next unless (-s $possible_index_file);
+	    push(@index_files,$possible_index_file);
+	}
+
+	if (@index_files > 0) {
+	    $texindex_cmd =  "$texindex " . join(' ',@index_files);
+	    print "$texindex_cmd\n" if $verbose;
+	    if (system($texindex_cmd) == 0) {
+		print "$tex $processed_texi\n" if $verbose;
+		system("$tex $processed_texi");
+	    }
+	}
+    }
+
+    # At this point, $base.dvi should exist -- rename it
+    # to $raw_texi_base.dvi
+    if (-e "$base.dvi") {
+	rename("$base.dvi","$raw_texi_base.dvi")
+	    || die "rename $base.dvi $raw_texi_base.dvi -- $!\n";
+    }
+}
+if ($cleanup) {unlink(<$base*>);}
+
+sub preprocess_texinfo 
+{
+    local ($infile,$outfile,$b) = @_;
+
+    open(IN,"<$infile") || die "Couldn't open $infile -- $!\n";
+    open(OUT,">$outfile") || die "Couldn't open $outfile -- $!\n";
+
+    $gif_index = 'a';
+    while (<IN>) {
+
+	# @gif{gif} or @gif{html_gif, tex_gif}
+	if (/(.*)\@gif\{([^{]*)\}(.*)/) {
+	    $prefix = $1;
+	    $arg = $2;
+	    $suffix = $3;
+	    print OUT "$prefix\n" if $prefix;
+
+	    while (1) {
+		$gif_base = $b . $gif_index;
+		last unless (-e $gif_base . ".gif");
+		++$gif_index;
+	    }
+
+	    $gif_file = '';
+	    if ($arg =~ /.*,(..*\.gif)/) {
+		$gif_file = $1;
+		$font_base = $gif_file;
+	    } else {
+		$font_base = $arg;
+		$gif_file = $gif_base . ".gif";
+		print "Scaling $arg into $gif_file:\n" if $verbose;
+		$scale_cmd = "giftopnm $arg | pnmscale 2 | pnmnlfilt 2 1 "
+		    . "| ppmquant 255 | ppmtogif > $gif_file";
+		print "$scale_cmd\n" if $verbose;
+		if (system($scale_cmd) != 0) {
+		    print "$scale_cmd failed\n";
+		    $gif_file = '';
+		}
+	    }
+	    
+	    if ($gif_file =~ /.*\.gif/) {
+
+
+		$font_base =~ s|.*/||;
+		$font_base =~ s|\..*||;
+
+		# $font_base, due to bm2font requirements, can't be more
+		# than six characters long and must consist entirely of
+		# lower case letters.
+		$font_base =~ s/[^a-z]//g;
+		$font_base = $font_prefix . substr($font_base,0,5);
+		while (&prefix_in_use($font_base)) {++$font_base;}
+
+		$bm2font_cmd = "bm2font -f$font_base $gif_file";
+		print "$bm2font_cmd\n" if $verbose;
+		if (system($bm2font_cmd) != 0) {
+		    print "$bm2font_cmd failed\n";
+		} else {
+		    print OUT "\@tex\n";
+		    print OUT "\\input $font_base.tex\n";
+		    print OUT "\\set$font_base\n";
+		    print OUT "\@end tex\n";
+		}
+	    }
+
+	    print OUT "$suffix \n" if $suffix;
+        } else {
+	    print OUT "$_";
+	}
+    }
+    close OUT;
+    close IN;
+}
+
+sub prefix_in_use
+{
+    local ($p) = @_;
+
+    # Returns true or false; returns true if any file in the current
+    # directory begins with $p.  This function is here because
+    # `<$p*>' only works for the first value of $p!
+
+    opendir(DIR,".") || die "Couldn't read current directory -- $!\n";
+    while ($_ = readdir(DIR)) {
+	last if /^$p/;
+    }
+    closedir(DIR);
+    $rc = /^$p/;
+}
