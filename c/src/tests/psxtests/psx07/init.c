@@ -394,7 +394,6 @@ void *POSIX_Init(
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
   assert( status == EINVAL );
 
-
   puts( "*** END OF POSIX TEST 7 ***" );
   exit( 0 );
 
