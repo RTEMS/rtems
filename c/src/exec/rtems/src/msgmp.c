@@ -476,4 +476,30 @@ Message_queue_MP_Packet *_Message_queue_MP_Get_packet ( void )
   return ( (Message_queue_MP_Packet *) _MPCI_Get_packet() );
 }
 
+
+/*PAGE
+ *
+ *  _Message_queue_Core_message_queue_mp_support
+ *
+ *  Input parameters:
+ *    the_thread - the remote thread the message was submitted to
+ *    id         - id of the message queue
+ *
+ *  Output parameters: NONE
+ */
+
+void  _Message_queue_Core_message_queue_mp_support (
+  Thread_Control *the_thread,
+  Objects_Id      id
+)
+{
+  the_thread->receive_packet->return_code = RTEMS_SUCCESSFUL;
+
+  _Message_queue_MP_Send_response_packet(
+    MESSAGE_QUEUE_MP_RECEIVE_RESPONSE,
+    id,
+    the_thread
+  );
+}
+
 /* end of file */
