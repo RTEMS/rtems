@@ -19,7 +19,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
-#include <zilog/z8036.h>
+#include <rtems/zilog/z8036.h>
 
 /*
  *  The original table from the application and our copy of it with
