@@ -43,18 +43,6 @@ AM_CONDITIONAL(UNIX,test "$RTEMS_CPU" = "unix")
 AC_CONFIG_SUBDIRS(libcpu)
 AC_CONFIG_SUBDIRS(libbsp)
 
-# If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
-if test "$HAS_NETWORKING" = "yes"; then
-  if test "$RTEMS_HAS_RDBG" = "yes"; then
-    RTEMS_CHECK_RDBG(RTEMS_BSP)
-  fi
-fi
-
-if test "$HAS_RDBG" = "yes"; then
-  cfg_subdirs="$cfg_subdirs librdbg"
-fi
-
-# If the HWAPI is enabled, the find the HWAPI Makefiles
 RTEMS_ENABLE_HWAPI
 if test "$RTEMS_HAS_HWAPI" = "yes"; then
   if test -d "${srcdir}/libhwapi"; then
@@ -77,7 +65,6 @@ fi
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AM_CONDITIONAL(HAS_LIBCHIP,test "$RTEMS_CPU" != "unix")
-AM_CONDITIONAL(HAS_RDBG,test "$HAS_RDBG" = "yes")
 
 AC_CONFIG_SUBDIRS(libmisc)
 
@@ -93,8 +80,5 @@ include/Makefile
 include/sys/Makefile
 include/motorola/Makefile
 include/zilog/Makefile
-include/rdbg/Makefile
-include/rdbg/i386/Makefile
-include/rdbg/powerpc/Makefile
 libc/Makefile
 start/Makefile)

@@ -22,7 +22,7 @@ all-am: $(TMPINSTALL_FILES)
 debug-am: $(TMPINSTALL_FILES)
 profile-am: $(TMPINSTALL_FILES)
 
-SUBDIRS = sys motorola zilog rdbg
+SUBDIRS = sys motorola zilog
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

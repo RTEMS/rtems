@@ -9,6 +9,7 @@ AC_CONFIG_AUX_DIR(../..)
 
 RTEMS_ENABLE_CXX
 RTEMS_ENABLE_NETWORKING
+RTEMS_ENABLE_RDBG
 
 RTEMS_CANONICAL_TARGET_CPU
 RTEMS_CANONICAL_HOST
@@ -26,12 +27,22 @@ RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 AC_CONFIG_SUBDIRS(make)
 AC_CONFIG_SUBDIRS(exec)
 AC_CONFIG_SUBDIRS(lib)
+
 if test "$HAS_NETWORKING" = "yes"; then
-cfg_subdirs="libnetworking librpc"
+  cfg_subdirs="libnetworking librpc"
+  if test "$RTEMS_HAS_RDBG" = "yes"; then
+    RTEMS_CHECK_RDBG(RTEMS_BSP)
+  fi
 fi
+
+if test "$HAS_RDBG" = "yes"; then
+  cfg_subdirs="$cfg_subdirs librdbg"
+fi
+
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-cfg_subdirs="$cfg_subdirs librtems++";
+  cfg_subdirs="$cfg_subdirs librtems++";
 fi 
+
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 AC_CONFIG_SUBDIRS(wrapup)
 AC_SUBST(cfg_subdirs)
