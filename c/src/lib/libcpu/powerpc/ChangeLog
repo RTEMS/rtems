@@ -1,3 +1,9 @@
+2003-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ppc403/Makefile.am: Fix typo in vectors' compilation rule.
+	* shared/Makefile.am: Use $(top_srcdir)/../shared instead of
+	relative subdirs.
+
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc6xx/wrapup/.cvsignore: Remove.

@@ -31,17 +31,17 @@ EXTRA_DIST = libcpuspec_C_FILES
 
 src_C_FILES = src/cache.c src/stack.c
 
-common_C_FILES = ../../shared/src/cache_aligned_malloc.c
-common_C_FILES += ../../shared/src/cache_manager.c
+common_C_FILES = $(top_srcdir)/../shared/src/cache_aligned_malloc.c
+common_C_FILES += $(top_srcdir)/../shared/src/cache_manager.c
 
 src_O_FILES = $(src_C_FILES:src/%.c=src/$(ARCH)/%.$(OBJEXT))
 common_O_FILES = \
-    $(common_C_FILES:../../shared/src/%.c=src/$(ARCH)/%.$(OBJEXT))
+    $(common_C_FILES:$(top_srcdir)/../shared/src/%.c=src/$(ARCH)/%.$(OBJEXT))
 
 src/$(ARCH)/$(dirstamp):
 	@$(mkdir_p) src/$(ARCH)
 	@: > src/$(ARCH)/$(dirstamp)
-src/$(ARCH)/%.$(OBJEXT): ../../shared/src/%.c src/$(ARCH)/$(dirstamp)
+src/$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../shared/src/%.c src/$(ARCH)/$(dirstamp)
 	${COMPILE} -I$(srcdir)/src -o $@ -c $<
 src/$(ARCH)/%.$(OBJEXT): src/%.c src/$(ARCH)/$(dirstamp)
 	${COMPILE} -I$(srcdir)/src -o $@ -c $<
@@ -49,7 +49,7 @@ CLEANDIRS += src/o-optimize src/o-debug
 
 noinst_HEADERS = src/cache_.h
 include_libcpu_HEADERS += src/stackTrace.h
-include_libcpu_HEADERS += ../../shared/include/cache.h
+include_libcpu_HEADERS += $(top_srcdir)/../shared/include/cache.h
 
 all-local: $(PREINSTALL_FILES) include/$(ARCH)/libcpuspec.a $(src_O_FILES) $(common_O_FILES)
 
@@ -91,7 +91,7 @@ $(PROJECT_INCLUDE)/libcpu/stackTrace.h: src/stackTrace.h $(PROJECT_INCLUDE)/libc
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/stackTrace.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/stackTrace.h
 
-$(PROJECT_INCLUDE)/libcpu/cache.h: ../../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+$(PROJECT_INCLUDE)/libcpu/cache.h: $(top_srcdir)/../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
 

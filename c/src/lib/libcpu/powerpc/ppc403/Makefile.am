@@ -108,8 +108,8 @@ vectors_rel_OBJECTS = \
 vectors/$(ARCH)/$(dirstamp):
 	@$(mkdir_p) vectors/$(ARCH)
 	@: > vectors/$(ARCH)/$(dirstamp)
-vectors/$(ARCH)/%.$(OBJEXT): vectors/%.c vectors/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
+vectors/$(ARCH)/%.$(OBJEXT): vectors/%.S vectors/$(ARCH)/$(dirstamp)
+	${CCASCOMPILE} -o $@ -c $<
 vectors/$(ARCH)/vectors.rel: $(vectors_rel_OBJECTS)
 	$(make-rel)
 CLEANDIRS += vectors/o-optimize vectors/o-debug
