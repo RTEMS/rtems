@@ -41,7 +41,12 @@ no_cpu_isr_entry set_vector(                    /* returns old vector */
     rtems_interrupt_catch( handler, vector, (rtems_isr_entry *) &previous_isr );
   else {
     /* XXX: install non-RTEMS ISR as "raw" interupt */
+/* JRS just to link 9/22/2000 */
+#if 0
     _settrap( vector, handler );
+#else
+     ;
+#endif
   }
   return previous_isr;
 }

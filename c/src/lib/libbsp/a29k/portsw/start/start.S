@@ -40,7 +40,9 @@
 ;	void = start( );
 ;	NOTE - not C callable (no lead underscore)
 ;
-	.include	"sysmac.h"
+#if 0
+#include <sysmac.h>
+#endif
 ;
 ;
 	.extern V_SPILL, V_FILL
@@ -53,14 +55,15 @@
 	.word	0			; Terminating tag word
 	.global start
 start:
+#if 0
 	sub	gr1, gr1, 6 * 4
 	asgeu	V_SPILL, gr1, rab	; better not ever happen
 	add	lr1, gr1, 6 * 4
 
 ;
-; Save the initial value of the Am29027's Mode register
+; Save the initial value of the Am29027 Mode register
 ;
-; If your system does not enter crt0 with value for Am29027's Mode 
+; If your system does not enter crt0 with value for Am29027 Mode 
 ; register in gr96 and gr97, and also the coprocessor is active 
 ; uncomment the next 4 instructions.
 ;
@@ -118,7 +121,7 @@ argcloop:				; scan for NULL terminator
 ;
 ; Now call LibInit, if there is one. To aid runtime libraries
 ; that need to do some startup initialization, we have created
-; a bss variable called LibInit. If the library doesn't need
+; a bss variable called LibInit. If the library does not need
 ; any run-time initialization, the variable is still 0. If the
 ; library does need run-time initialization, the library will
 ; contain a definition like
@@ -142,7 +145,7 @@ NoLibInit:
 ; 
 ; The following code segment was used to create the two flavors of the 
 ; run-time initialization routines (crt0_1.o, and crt0_2.o) as described
-; in the User's Manual.  If osboot is used to create a stand-alone
+; in the Users Manual.  If osboot is used to create a stand-alone
 ; application, or the call to RAMInit is made in the start-up routine, 
 ; then the following is not needed.
 ;
@@ -285,4 +288,5 @@ fill:
 ;        asgeu   V_SPILL,gr1,gr126
 ;        add     lr1,gr1,24
 ;
+#endif
 	.end

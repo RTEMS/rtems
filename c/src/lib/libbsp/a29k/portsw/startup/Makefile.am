@@ -25,6 +25,9 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
+$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
+	$(INSTALL_DATA) $< $@
+
 $(PROJECT_RELEASE)/lib/ramlink: ramlink
 	$(INSTALL_DATA) $< $@
 
@@ -33,6 +36,7 @@ $(PROJECT_RELEASE)/lib/romlink: romlink
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/ramlink \
+    $(PROJECT_RELEASE)/lib/linkcmds \
     $(PROJECT_RELEASE)/lib/romlink
 
 all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)

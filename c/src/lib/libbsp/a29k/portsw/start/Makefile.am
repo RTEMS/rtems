@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/start.o
 
-S_FILES = crt0.S register.S
+S_FILES = start.S register.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 OBJS = $(S_O_FILES)
@@ -28,6 +28,6 @@ all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = amd.ah crt0.S pswmacro.ah register.S register.ah
+EXTRA_DIST = amd.ah start.S pswmacro.ah register.S register.ah
 
 include $(top_srcdir)/../../../../../../automake/local.am

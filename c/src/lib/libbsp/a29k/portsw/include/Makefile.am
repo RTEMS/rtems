@@ -7,9 +7,9 @@ AUTOMAKE_OPTIONS = foreign 1.4
 H_FILES = bsp.h ../../../shared/include/coverhd.h
 
 $(PROJECT_INCLUDE):
-	@$(mkinstalldirs) $@
+	$(mkinstalldirs) $@
 
-$(PROJECT_INCLUDE)/bsp.h: bsp.h
+$(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE)/coverhd.h: ../../../shared/include/coverhd.h

@@ -76,7 +76,12 @@ void bsp_pretasking_hook(void)
     /* allocate all remaining memory to the heap */
     do {
        heap_size -= HEAP_BLOCK_SIZE;
+/* JRS just to link 9/22/2000 */
+#if 0
        heap_start = _sysalloc( heap_size );
+#else
+       heap_start = 0;
+#endif
     } while ( !heap_start );
 
     if (!heap_start)
@@ -128,7 +133,12 @@ int bsp_start(
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
+/* JRS just to link 9/22/2000 */
+#if 0
   BSP_Configuration.work_space_start = _sysalloc( BSP_Configuration.work_space_size + 512 );
+#else
+  BSP_Configuration.work_space_start = 0;
+#endif
   if (!BSP_Configuration.work_space_start)
     rtems_fatal_error_occurred( BSP_Configuration.work_space_size );
    
@@ -142,6 +152,8 @@ int bsp_start(
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
+/* JRS just to link 9/22/2000 */
+#if 0
   _settrap( 109,&a29k_enable_sup);
   _settrap( 110,&a29k_disable_sup);
   _settrap( 111,&a29k_enable_all_sup);
@@ -150,6 +162,7 @@ int bsp_start(
   _settrap( 107,&a29k_context_restore_sup);
   _settrap( 108,&a29k_context_save_sup);
   _settrap( 105,&a29k_sigdfl_sup);
+#endif
 
   /*
    *  Start RTEMS
