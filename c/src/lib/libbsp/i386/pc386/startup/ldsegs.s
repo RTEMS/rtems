@@ -43,31 +43,16 @@
 #include "asm.h"
 
 /*----------------------------------------------------------------------------+
-| Constants
-+----------------------------------------------------------------------------*/
-.set	PROT_DATA_SEG, 0x10	# offset in gdt
-.set	RESET_SS, PROT_DATA_SEG	# initial value of stack segment register
-.set	RESET_DS, PROT_DATA_SEG	# initial value of data segment register
-.set	RESET_ES, PROT_DATA_SEG	# initial value of extra segment register
-.set	RESET_FS, PROT_DATA_SEG	# initial value of "f" segment register
-.set	RESET_GS, PROT_DATA_SEG	# initial value of "g" segment register
-
-
-/*----------------------------------------------------------------------------+
-| Macros
-+----------------------------------------------------------------------------*/
-#define LOAD_SEGMENTS(_value, _segment) \
-	movw	$ ## _value, ax; \
-	movw	ax, _segment
-
-/*----------------------------------------------------------------------------+
 | CODE section
 +----------------------------------------------------------------------------*/
 
 BEGIN_CODE
 
-        EXTERN (establish_stack)
+        EXTERN (_establish_stack)
+	EXTERN (Timer_exit)
+	EXTERN (Clock_exit)
 
+	.p2align 4
 /*----------------------------------------------------------------------------+
 | delay
 +------------------------------------------------------------------------------
@@ -79,30 +64,65 @@ SYM(delay):
 
 /*-------------------------------------------------------------------------+
 |         Function: _load_segments
-|      Description: Load board segment registers with apropriate values +
-|	            reprogram PIC.
+|      Description: Current environment is standard PC booted by grub.
+|                   So, there is no value in saving current GDT and IDT
+|                   Settings we have to set it up ourseves. (Naturally
+|	            it will be not so in case we are booted by some
+|                   boot monitor, however, then it will be different
+|                   BSP), After that we have to load board segment registers
+|                   with apropriate values +  reprogram PIC.
 | Global Variables: None.
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
+	.p2align 4
+	
         PUBLIC (_load_segments)
 SYM (_load_segments):
-	
-	LOAD_SEGMENTS(RESET_SS, ss)
-	LOAD_SEGMENTS(RESET_DS, ds)
-	LOAD_SEGMENTS(RESET_ES, es)
-	LOAD_SEGMENTS(RESET_FS, fs)
-	LOAD_SEGMENTS(RESET_GS, gs)
 
-	/*---------------------------------------------------------------------+
-	| Now we have to reprogram the interrupts :-(. We put them right after
-	| the intel-reserved hardware interrupts, at int 0x20-0x2F. There they
-	| won't mess up anything. Sadly IBM really messed this up with the
-	| original PC, and they haven't been able to rectify it afterwards. Thus
-	| the bios puts interrupts at 0x08-0x0f, which is used for the internal
-	| hardware interrupts as well. We just have to reprogram the 8259's, and
-	| it isn't fun.
-	+---------------------------------------------------------------------*/
+	lgdt SYM(gdtdesc)
+	lidt SYM(idtdesc)
+
+	/* Load CS, flush prefetched queue */
+	ljmp $0x8, $next_step
+
+next_step:	
+        /* Load segment registers */
+	movw $0x10, ax
+	movw ax, ss
+	movw ax, ds
+	movw ax, es
+	movw ax, fs
+	movw ax, gs
+
+	/* Set default interrupt handler */
+	movl  $0, ecx
+	movl  $Interrupt_descriptor_table, eax
+	movl  $_default_int_handler, ebx
+	movl  ebx, edx
+	sarl  $16, edx
+loop:
+	movw  bx, (eax)
+	movw  $0x8, 2(eax)
+	movw  $0x8e00, 4(eax)
+	movw  dx, 8(eax)
+	addl  $8, eax
+	addl  $1, ecx
+	cmpl  $255, ecx
+	jle   loop
+	
+	
+	
+
+/*---------------------------------------------------------------------+
+| Now we have to reprogram the interrupts :-(. We put them right after
+| the intel-reserved hardware interrupts, at int 0x20-0x2F. There they
+| won't mess up anything. Sadly IBM really messed this up with the
+| original PC, and they haven't been able to rectify it afterwards. Thus
+| the bios puts interrupts at 0x08-0x0f, which is used for the internal
+| hardware interrupts as well. We just have to reprogram the 8259's, and
+| it isn't fun.
++---------------------------------------------------------------------*/
 
 	movb	$0x11, al		/* initialization sequence          */
 	outb	al, $0x20		/* send it to 8259A-1               */
@@ -146,6 +166,9 @@ SYM (_load_segments):
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
+
+	.p2align 4
+	
         PUBLIC (_return_to_monitor)
 SYM (_return_to_monitor):
 
@@ -153,22 +176,73 @@ SYM (_return_to_monitor):
 	call	SYM (Clock_exit)
 	jmp	SYM (start)
 
+/*-------------------------------------------------------------------------+
+|         Function: _default_int_handler
+|      Description: default interrupt handler
+| Global Variables: None.
+|        Arguments: None.
+|          Returns: Nothing. 
++--------------------------------------------------------------------------*/
+	.p2align 4
+	
+	PUBLIC (_default_int_handler)
+SYM (_default_int_handler):
+	iret
+
+/*---------------------------------------------------------------------------+
+| GDT itself
++--------------------------------------------------------------------------*/
+
+	.p2align 4
+		
+	PUBLIC (_Global_descriptor_table)
+SYM (_Global_descriptor_table):
+
+	/* NULL segment */
+	.word 0, 0     
+	.byte 0, 0, 0, 0
+
+	/* code segment */
+	.word 0xffff, 0
+	.byte 0, 0x9e, 0xcf, 0
+
+	/* data segment */
+	.word 0xffff, 0
+	.byte 0, 0x92, 0xcf, 0
+ 
+
+/*---------------------------------------------------------------------------+
+| Descriptor of GDT
++--------------------------------------------------------------------------*/
+SYM (gdtdesc):
+	.word (3*8 - 1)  
+	.long SYM (_Global_descriptor_table)
+
+
+/*---------------------------------------------------------------------------+
+| IDT itself
++---------------------------------------------------------------------------*/
+	.p2align 4
+	
+	PUBLIC(Interrupt_descriptor_table)
+SYM(Interrupt_descriptor_table):
+	.rept 256
+	.word 0,0,0,0
+	.endr
+	
+/*---------------------------------------------------------------------------+
+| Descriptor of IDT
++--------------------------------------------------------------------------*/
+SYM(idtdesc):	
+	.word  (256*8 - 1)
+	.long  SYM (Interrupt_descriptor_table)
+	
 END_CODE
 
-/*----------------------------------------------------------------------------+
-| DATA section
-+----------------------------------------------------------------------------*/
-
-BEGIN_DATA
-
-        PUBLIC (_Do_Load_IDT)
-SYM (_Do_Load_IDT):
-       .byte 1	# load RTEMS own Interrupt Descriptor Table
-
-        PUBLIC (_Do_Load_GDT)
-SYM (_Do_Load_GDT):
-       .byte 0	# use the Global Descriptor Table that is already defined
-
-END_DATA
-
 END
+
+
+
+
+
+

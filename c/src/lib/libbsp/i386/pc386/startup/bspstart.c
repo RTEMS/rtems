@@ -81,8 +81,8 @@ void bsp_pretasking_hook(void)
   if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
     rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-  bsp_libc_init((void *)rtemsFreeMemStart, HEAP_SIZE << 10, 0);
-  rtemsFreeMemStart += HEAP_SIZE << 10;           /* HEAP_SIZE is in KBytes */
+  bsp_libc_init((void *)rtemsFreeMemStart, _heap_size, 0);
+  rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
 
 
 #ifdef RTEMS_DEBUG
@@ -125,4 +125,28 @@ void bsp_start( void )
 
   BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;
   rtemsFreeMemStart += BSP_Configuration.work_space_size;
+
+  /*
+   *  The following information is very useful when debugging.
+   */
+
+#if 0
+  printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
+  printk( "maximum_extensions = 0x%x\n", BSP_Configuration.maximum_extensions );
+  printk( "microseconds_per_tick = 0x%x\n",
+     BSP_Configuration.microseconds_per_tick );
+  printk( "ticks_per_timeslice = 0x%x\n",
+     BSP_Configuration.ticks_per_timeslice );
+  printk( "maximum_devices = 0x%x\n", BSP_Configuration.maximum_devices );
+  printk( "number_of_device_drivers = 0x%x\n",
+     BSP_Configuration.number_of_device_drivers );
+  printk( "Device_driver_table = 0x%x\n",
+     BSP_Configuration.Device_driver_table );
+
+  printk( "_heap_size = 0x%x\n", _heap_size );
+  printk( "_stack_size = 0x%x\n", _stack_size );
+  printk( "rtemsFreeMemStart = 0x%x\n", rtemsFreeMemStart );
+  printk( "work_space_start = 0x%x\n", BSP_Configuration.work_space_start );
+  printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
+#endif
 } /* bsp_start */
