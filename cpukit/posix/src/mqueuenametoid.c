@@ -45,7 +45,7 @@ int _POSIX_Message_queue_Name_to_id(
   Objects_Id          *id
 )
 {
-  Objects_Name_to_id_errors  status;
+  Objects_Name_or_id_lookup_errors  status;
 
    if ( !name )
      return EINVAL;
@@ -59,7 +59,7 @@ int _POSIX_Message_queue_Name_to_id(
   status = _Objects_Name_to_id( 
     &_POSIX_Message_queue_Information, (char *)name, 0, id );
 
-  if ( status == OBJECTS_SUCCESSFUL )
+  if ( status == OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL )
     return 0;
 
   return ENOENT;

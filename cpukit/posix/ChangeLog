@@ -1,5 +1,12 @@
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
+	* src/mqueuenametoid.c, src/semaphorenametoid.c: Added ID to name
+	lookup service and changed name of id/name translation status code.
+	This propagated to multiple functions. The user API service added was
+	rtems_object_id_to_name()
+
+2003-08-14	Joel Sherrill <joel@OARcorp.com>
+
 	PR 92/rtems
 	* Makefile.am, src/alarm.c, src/psignal.c: Added ualarm() and usleep().
 	* src/ualarm.c, src/usleep.c: New files.

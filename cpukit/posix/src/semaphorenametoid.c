@@ -33,7 +33,7 @@ int _POSIX_Semaphore_Name_to_id(
   sem_t          *id
 )
 {
-  Objects_Name_to_id_errors  status;
+  Objects_Name_or_id_lookup_errors  status;
 
    if ( !name )
      return EINVAL;
@@ -44,7 +44,7 @@ int _POSIX_Semaphore_Name_to_id(
   status = _Objects_Name_to_id( 
     &_POSIX_Semaphore_Information, (char *)name, 0, (Objects_Id*)id );
 
-  if ( status == OBJECTS_SUCCESSFUL )
+  if ( status == OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL )
     return 0;
 
   return ENOENT;
