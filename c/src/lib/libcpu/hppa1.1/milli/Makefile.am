@@ -7,7 +7,7 @@ PGM = $(ARCH)/milli.rel
 
 S_FILES = milli.S
 
-milli_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.o)
+milli_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am
