@@ -243,11 +243,14 @@ rtems_device_minor_number  Console_Port_Minor;
 boolean dmv177_z85c30_probe(int minor)
 {
   volatile unsigned32 *dma_control_status_reg;
-  volatile unsigned32 *card_resource_reg;
+  volatile unsigned16 *card_resource_reg;
+  unsigned16 v;
 
-  card_resource_reg = (volatile unsigned32 *) DMV170_CARD_RESORCE_REG;
+  card_resource_reg = (volatile unsigned16 *) DMV170_CARD_RESORCE_REG;
 
-  if ( !(*card_resource_reg & DMV170_DUART_PRESENT_BIT) )
+  v = *card_resource_reg & DMV170_SCC_INST_MASK;
+
+  if ( v != DMV170_SCC_INSTALLED )
     return FALSE;
 
   /*
@@ -266,11 +269,14 @@ boolean dmv177_z85c30_probe(int minor)
 
 boolean dmv177_mc68681_probe(int minor)
 {
-  volatile unsigned32 *card_resource_reg;
+  volatile unsigned16 *card_resource_reg;
+  unsigned16 v;
 
-  card_resource_reg = (volatile unsigned32 *) DMV170_CARD_RESORCE_REG;
+  card_resource_reg = (volatile unsigned16 *) DMV170_CARD_RESORCE_REG;
 
-  if ( *card_resource_reg & DMV170_DUART_PRESENT_BIT )
+  v = *card_resource_reg & DMV170_DUART_INST_MASK;
+
+  if ( v == DMV170_DUART_INSTALLED )
     return TRUE;
 
   return FALSE;

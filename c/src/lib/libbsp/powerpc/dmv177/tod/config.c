@@ -64,11 +64,14 @@ rtems_device_minor_number  RTC_Minor;
 
 boolean dmv177_icm7170_probe(int minor)
 {
-  volatile unsigned32 *card_resource_reg;
+  volatile unsigned16 *card_resource_reg;
+  unsigned16 v;
 
-  card_resource_reg = (volatile unsigned32 *) DMV170_CARD_RESORCE_REG;
+  card_resource_reg = (volatile unsigned16 *) DMV170_CARD_RESORCE_REG;
 
-  if ( *card_resource_reg & DMV170_RTC_PRESENT_BIT )
+  v = *card_resource_reg & DMV170_RTC_INST_MASK;
+
+  if ( v == DMV170_RTC_INSTALLED )
     return TRUE;
 
   return FALSE;
