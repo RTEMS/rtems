@@ -296,14 +296,6 @@ extern "C" {
 #define PPC_CACHE_ALIGNMENT 32
 #endif
 
-#if (PPC_CACHE_ALIGNMENT == 16)
-#define PPC_CACHE_ALIGN_POWER 4
-#elif (PPC_CACHE_ALIGNMENT == 32)
-#define PPC_CACHE_ALIGN_POWER 5
-#else
-#error "Undefined power of 2 for PPC_CACHE_ALIGNMENT"
-#endif
-
 /*
  *  Unless otherwise specified, assume the model has an IP/EP bit to
  *  set the exception address prefix.
