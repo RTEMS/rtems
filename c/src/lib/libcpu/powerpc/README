@@ -13,7 +13,7 @@ At this time, support is included for the following PowerPC
 family members using the new exception processing model:
 
   + mpc505
-  + mpc5xx (mpc565)
+  + mpc5xx (5xx devices other than 505/509)
   + mpc6xx
   + mpc750
   + mpc821 

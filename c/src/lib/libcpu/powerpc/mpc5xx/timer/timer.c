@@ -1,70 +1,118 @@
 /*  timer.c
  *
- *  This file manages the benchmark timer used by the RTEMS Timing Test
- *  Suite.  Each measured time period is demarcated by calls to
- *  Timer_initialize() and Read_timer().  Read_timer() usually returns
- *  the number of microseconds since Timer_initialize() exitted.
+ *  This file manages the interval timer on the PowerPC MPC5xx.
+ *  NOTE: This is not the PIT, but rather the RTEMS interval
+ *        timer
+ *  We shall use the bottom 32 bits of the timebase register,
  *
+ *  The following was in the 403 version of this file. I don't
+ *  know what it means. JTM 5/19/98
  *  NOTE: It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
- *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+ *
+ *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
+ *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
+ *
+ *  Derived from c/src/lib/libcpu/powerpc/mpc8xx/timer/timer.c:
+ *
+ *  Author: Jay Monkman (jmonkman@frasca.com)
+ *  Copywright (C) 1998 by Frasca International, Inc.
+ *
+ *  Derived from c/src/lib/libcpu/ppc/ppc403/timer/timer.c:
+ *
+ *  Author:     Andrew Bray <andy@i-cubed.co.uk>
+ *
+ *  COPYRIGHT (c) 1995 by i-cubed ltd.
+ *
+ *  To anyone who acknowledges that this file is provided "AS IS"
+ *  without any express or implied warranty:
+ *      permission to use, copy, modify, and distribute this file
+ *      for any purpose is hereby granted without fee, provided that
+ *      the above copyright notice and this notice appears in all
+ *      copies, and that the name of i-cubed limited not be used in
+ *      advertising or publicity pertaining to distribution of the
+ *      software without specific, written prior permission.
+ *      i-cubed limited makes no representations about the suitability
+ *      of this software for any purpose.
+ *
+ *  Derived from c/src/lib/libcpu/hppa1_1/timer/timer.c:
+ *
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
- *  All rights assigned to U.S. Government, 1994.
  *
- *  This material may be reproduced by or for the U.S. Government pursuant
- *  to the copyright license under the clause at DFARS 252.227-7013.  This
- *  notice must appear in all copies of this file and its derivatives.
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
- *  timer.c,v 1.2 1995/05/31 16:56:39 joel Exp
+ *  $Id$
  */
 
 #include <rtems.h>
+#include <mpc5xx.h>
 
-rtems_boolean Timer_driver_Find_average_overhead;
-
-static unsigned int volatile lastInitValue;
-
-void Timer_initialize( void )
-{
-  asm volatile( " mftb %0": "=r" (lastInitValue) );
-}
+static volatile rtems_unsigned32 Timer_starting;
+static rtems_boolean Timer_driver_Find_average_overhead;
 
 /*
- *  The following controls the behavior of Read_timer().
- *
- *  AVG_OVEREHAD is the overhead for starting and stopping the timer.  It
- *  is usually deducted from the number returned.
- *
- *  LEAST_VALID is the lowest number this routine should trust.  Numbers
- *  below this are "noise" and zero is returned.
+ *  This is so small that this code will be reproduced where needed.
  */
-
-#define AVG_OVERHEAD      0  /* It typically takes X.X microseconds */
-                             /* (Y countdowns) to start/stop the timer. */
-                             /* This value is in microseconds. */
-#define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
-
-int Read_timer( void )
+static inline rtems_unsigned32 get_itimer(void)
 {
-  uint32_t   value;
-  asm volatile ( " mftb %0": "=r" (value) );
-  return value - lastInitValue;
+   rtems_unsigned32 ret;
+
+   asm volatile ("mftb %0" : "=r" ((ret))); /* TBLO */
+
+   return ret;
 }
 
-/*
- *  Empty function call used in loops to measure basic cost of looping
- *  in Timing Test Suite.
- */
+void Timer_initialize(void)
+{
+  /* set interrupt level and enable timebase. This should never */
+  /*  generate an interrupt however. */
+  usiu.tbscrk = USIU_UNLOCK_KEY;
+  usiu.tbscr |= USIU_TBSCR_TBIRQ(4) 	/* interrupt priority level */
+              | USIU_TBSCR_TBF 		/* freeze timebase during debug */
+              | USIU_TBSCR_TBE;		/* enable timebase */
+  usiu.tbscrk = 0;
+  
+  Timer_starting = get_itimer();
+}
 
-rtems_status_code Empty_function( void )
+#ifndef  rtems_cpu_configuration_get_timer_least_valid
+#define  rtems_cpu_configuration_get_timer_least_valid() 0
+#endif
+
+#ifndef  rtems_cpu_configuration_get_timer_average_overhead
+#define  rtems_cpu_configuration_get_timer_average_overhead() 0
+#endif
+
+int Read_timer(void)
+{
+  rtems_unsigned32 clicks;
+  rtems_unsigned32 total;
+
+  clicks = get_itimer();
+
+  total = clicks - Timer_starting;
+
+  if ( Timer_driver_Find_average_overhead == 1 )
+    return total;          /* in XXX microsecond units */
+
+  else {
+    if ( total < rtems_cpu_configuration_get_timer_least_valid() ) {
+      return 0;            /* below timer resolution */
+    }
+    return (total - rtems_cpu_configuration_get_timer_average_overhead());
+  }
+}
+
+rtems_status_code Empty_function(void)
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
-  rtems_boolean find_flag
-)
+void Set_find_average_overhead(rtems_boolean find_flag)
 {
   Timer_driver_Find_average_overhead = find_flag;
 }

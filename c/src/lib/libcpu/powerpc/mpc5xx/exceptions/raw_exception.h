@@ -2,88 +2,62 @@
  * raw_execption.h
  *
  *	    This file contains implementation of C function to
- *          Instanciate 8xx ppc primary exception entries.
- *	    More detailled information can be found on motorola
- *	    site and more precisely in the following book :
+ *          Instantiate mpc5xx primary exception entries.
+ *	    More detailled information can be found on the Motorola
+ *	    site and more precisely in the following book:
  *
- *		MPC860 
- *		Risc Microporcessor User's Manual
- *		Motorola REF : MPC860UM/AD 07/98 Rev .1
+ *		MPC555/MPC556 User's Manual
+ *		Motorola REF : MPC555UM/D Rev. 3, 2000 October 15
  *
- * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
+ *
+ *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
+ *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
+ *
+ *  Derived from libcpu/powerpc/mpc8xx/exceptions/raw_exception.h:
+ *
+ *  Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
- *
- * Changes for MPC5XX Wilfried Busalski (w.busalski@lancier-monitoring.de)
- * Copyright (C) 2003 Lancier Monitoring GmbH
- 
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  http://www.rtems.com/license/LICENSE.
  *
- * raw_exception.h,v 1.1 2001/04/06 15:54:18 joel Exp
+ *  $Id$
  */
 
 #ifndef _LIBCPU_MPC5XX_EXCEPTION_RAW_EXCEPTION_H
 #define _LIBCPU_MPC5XX_EXCEPTION_RAW_EXCEPTION_H
 
+#include <libcpu/vectors.h>
+
 /*
- * Exception Vectors as defined in the MCP750 manual
+ * Exception Vectors as defined in the MPC555 User's Manual
  */
 
-#define	ASM_RESET_VECTOR 		0x01
-#define	ASM_MACH_VECTOR			0x02
-#define	ASM_PROT_VECTOR			0x03
-#define	ASM_ISI_VECTOR 			0x04
-#define	ASM_EXT_VECTOR 			0x05
-#define	ASM_ALIGN_VECTOR 		0x06
-#define	ASM_PROG_VECTOR			0x07
-#define	ASM_FLOAT_VECTOR		0x08
-#define	ASM_DEC_VECTOR			0x09
+#define	ASM_RESET_VECTOR 	0x01
+#define	ASM_MACH_VECTOR		0x02
 
-#define	ASM_SYS_VECTOR			0x0C
-#define	ASM_TRACE_VECTOR		0x0D
+#define	ASM_EXT_VECTOR 		0x05
+#define	ASM_ALIGN_VECTOR 	0x06
+#define	ASM_PROG_VECTOR		0x07
+#define	ASM_FLOAT_VECTOR	0x08
+#define	ASM_DEC_VECTOR		0x09
+
+#define	ASM_SYS_VECTOR		0x0C
+#define	ASM_TRACE_VECTOR	0x0D
 #define	ASM_FLOATASSIST_VECTOR	0x0E
 
-#define	ASM_SOFTEMUL_VECTOR		0x10
+#define	ASM_SOFTEMUL_VECTOR	0x10
 
-#define	ASM_ITLBERROR_VECTOR	0x13
-#define	ASM_DTLBERROR_VECTOR	0x14
+#define	ASM_IPROT_VECTOR	0x13
+#define	ASM_DPROT_VECTOR	0x14
 
-#define ASM_DBREAK_VECTOR		0x1C
-#define ASM_IBREAK_VECTOR		0x1D
-#define ASM_PERIFBREAK_VECTOR	0x1E
-#define ASM_DEVPORT_VECTOR		0x1F
+#define ASM_DBREAK_VECTOR	0x1C
+#define ASM_IBREAK_VECTOR	0x1D
+#define ASM_MEBREAK_VECTOR	0x1E
+#define ASM_NMEBREAK_VECTOR	0x1F
 
-#define LAST_VALID_EXC		ASM_DEVPORT_VECTOR
-
-/*
- * Vector offsets as defined in the MPC860 manual
- */
-
-#define	ASM_RESET_VECTOR_OFFSET 		(ASM_RESET_VECTOR << 8)
-#define	ASM_MACH_VECTOR_OFFSET 			(ASM_MACH_VECTOR  << 8)
-#define	ASM_PROT_VECTOR_OFFSET 			(ASM_PROT_VECTOR  << 8)
-#define	ASM_ISI_VECTOR_OFFSET 			(ASM_ISI_VECTOR   << 8)
-#define	ASM_EXT_VECTOR_OFFSET 			(ASM_EXT_VECTOR   << 8)
-#define	ASM_ALIGN_VECTOR_OFFSET 		(ASM_ALIGN_VECTOR << 8)
-#define	ASM_PROG_VECTOR_OFFSET 			(ASM_PROG_VECTOR  << 8)
-#define	ASM_FLOAT_VECTOR_OFFSET			(ASM_FLOAT_VECTOR << 8)
-#define	ASM_DEC_VECTOR_OFFSET			(ASM_DEC_VECTOR   << 8)
-
-#define	ASM_SYS_VECTOR_OFFSET			(ASM_SYS_VECTOR   << 8)
-#define	ASM_TRACE_VECTOR_OFFSET			(ASM_TRACE_VECTOR << 8)
-#define	ASM_FLOATASSIST_VECTOR_OFFSET	(ASM_FLOATASSIST_VECTOR << 8)
-
-#define	ASM_SOFTEMUL_VECTOR_OFFSET		(ASM_SOFTEMUL_VECTOR << 8)
-
-#define	ASM_ITLBERROR_VECTOR_OFFSET		(ASM_ITLBERROR_VECTOR << 8)
-#define	ASM_DTLBERROR_VECTOR_OFFSET		(ASM_DTLBERROR_VECTOR << 8)
-
-#define ASM_DBREAK_VECTOR_OFFSET		(ASM_DBREAK_VECTOR << 8)
-#define ASM_IBREAK_VECTOR_OFFSET		(ASM_IBREAK_VECTOR << 8)
-#define ASM_PERIFBREAK_VECTOR_OFFSET	(ASM_PERIFBREAK_VECTOR << 8)
-#define ASM_DEVPORT_VECTOR_OFFSET		(ASM_DEVPORT_VECTOR_OFFSET << 8)
+#define LAST_VALID_EXC		ASM_NMEBREAK_VECTOR
 
 #ifndef ASM
 
@@ -93,13 +67,11 @@
 
 typedef unsigned char  rtems_vector;
 struct 	__rtems_raw_except_connect_data__;
-typedef void 		(*rtems_raw_except_func)		(void);
 typedef unsigned char 	rtems_raw_except_hdl_size;
 
 typedef struct {
   rtems_vector			vector;
-  rtems_raw_except_func		raw_hdl;
-  rtems_raw_except_hdl_size	raw_hdl_size;
+  rtems_exception_handler_t*	raw_hdl;
 }rtems_raw_except_hdl;
   
 typedef void (*rtems_raw_except_enable)		(const struct __rtems_raw_except_connect_data__*);
@@ -185,6 +157,8 @@ extern int mpc5xx_init_exceptions (rtems_raw_except_global_settings* config);
 extern int mpc5xx_get_exception_config (rtems_raw_except_global_settings** config);
 
 # endif /* ASM */
+
+#define SIZEOF_
 
 #endif
 

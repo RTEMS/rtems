@@ -1,3 +1,18 @@
+2004-04-12	David Querbach <querbach@realtime.bc.ca>
+
+	* README, configure.ac, mpc5xx/Makefile.am,
+	mpc5xx/exceptions/raw_exception.c, mpc5xx/exceptions/raw_exception.h,
+	mpc5xx/timer/timer.c, shared/include/cpuIdent.h: addition of a
+	significant amount of MPC5xx support as part of the addition of the
+	SS555 BSP.
+	* mpc5xx/README, mpc5xx/clock/clock.c,
+	mpc5xx/console-generic/console-generic.c, mpc5xx/include/console.h,
+	mpc5xx/include/mpc5xx.h, mpc5xx/irq/irq.c, mpc5xx/irq/irq.h,
+	mpc5xx/irq/irq_asm.S, mpc5xx/irq/irq_init.c,
+	mpc5xx/vectors/vectors.S, mpc5xx/vectors/vectors.h,
+	mpc5xx/vectors/vectors_init.c: New files.
+	* mpc5xx/exceptions/asm_utils.S: Removed.
+
 2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* ppc403/vectors/align_h.S: Include <rtems/asm.h> instead of <asm.h>.
