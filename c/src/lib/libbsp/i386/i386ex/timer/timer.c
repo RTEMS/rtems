@@ -110,8 +110,8 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  register rtems_unsigned32 clicks;
-  register rtems_unsigned32 total;
+  register uint32_t         clicks;
+  register uint32_t         total;
 
 /*  outport_byte( TBCR, 0x00 );  stop the timer -- not needed on intel */
 

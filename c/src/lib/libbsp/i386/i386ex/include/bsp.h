@@ -75,7 +75,7 @@ extern "C" {
 
 #define rtems_bsp_delay( _microseconds ) \
   { \
-    rtems_unsigned32 _counter; \
+    uint32_t         _counter; \
     \
     _counter = (_microseconds); \
     \
