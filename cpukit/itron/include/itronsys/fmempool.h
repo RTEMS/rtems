@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_FIXED_MEMORYPOOL_h_
-#define __ITRON_FIXED_MEMORYPOOL_h_
+#ifndef _ITRONSYS_FMEMPOOL_H
+#define _ITRONSYS_FMEMPOOL_H
 
 #ifdef __cplusplus
 extern "C" {

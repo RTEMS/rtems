@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_MESSAGEBUFFER_h_
-#define __ITRON_MESSAGEBUFFER_h_
+#ifndef _ITRONSYS_MSGBUFFER_H
+#define _ITRONSYS_MSGBUFFER_H
 
 #ifdef __cplusplus
 extern "C" {

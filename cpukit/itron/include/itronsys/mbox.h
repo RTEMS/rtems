@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_MBOX_h_
-#define __ITRON_MBOX_h_
+#ifndef _ITRONSYS_MBOX_H
+#define _ITRONSYS_MBOX_H
 
 #ifdef __cplusplus
 extern "C" {

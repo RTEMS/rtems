@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_INTERRUPT_h_
-#define __ITRON_INTERRUPT_h_
+#ifndef _ITRONSYS_INTR_H
+#define _ITRONSYS_INTR_H
 
 #ifdef __cplusplus
 extern "C" {

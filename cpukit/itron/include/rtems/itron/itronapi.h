@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_API_h
-#define __ITRON_API_h
+#ifndef _RTEMS_ITRON_ITRONAPI_H
+#define _RTEMS_ITRON_ITRONAPI_H
 
 #include <rtems/config.h>
 

@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_PORT_h_
-#define __ITRON_PORT_h_
+#ifndef _ITRONSYS_PORT_H
+#define _ITRONSYS_PORT_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_ITRON_CONFIGURATION_h
-#define __RTEMS_ITRON_CONFIGURATION_h
+#ifndef _RTEMS_ITRON_CONFIG_H
+#define _RTEMS_ITRON_CONFIG_H
 
 #ifdef __cplusplus
 extern "C" {

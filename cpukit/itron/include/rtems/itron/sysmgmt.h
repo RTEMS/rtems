@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_ITRON_TIME_h_
-#define __RTEMS_ITRON_TIME_h_
+#ifndef _RTEMS_ITRON_SYSMGMT_H
+#define _RTEMS_ITRON_SYSMGMT_H
 
 #ifdef __cplusplus
 extern "C" {

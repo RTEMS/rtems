@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_h_
-#define __ITRON_h_
+#ifndef _ITRON_H
+#define _ITRON_H
 
 #ifdef __cplusplus
 extern "C" {

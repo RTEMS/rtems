@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_VARIABLE_MEMORYPOOL_h_
-#define __ITRON_VARIABLE_MEMORYPOOL_h_
+#ifndef _ITRONSYS_VMEMPOOL_H
+#define _ITRONSYS_VMEMPOOL_H
 
 #ifdef __cplusplus
 extern "C" {
