@@ -206,6 +206,16 @@ src   binutils-2.9   gcc-2.8.1  newlib-1.8.0  build-${CPU}-tools
 @end html
 @end ifset
 
+@c
+@c  Reading the Documentation
+@c
+
+@section Reading the Tools Documentation
+
+Each of the tools in the GNU development suite comes with documentation.
+It is in the reader's and tool maintainers' interest that one read the
+documentation before posting a problem to a mailing list or news group.
+
 
 @c
 @c  GCC patches
