@@ -24,7 +24,7 @@ OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
 
 PGMS=$(C_FILES:%.c=$(ARCH)/%.rel)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 #

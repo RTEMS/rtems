@@ -32,7 +32,7 @@ S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 SRCS=linkcmds device-tree $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
 OBJS=$(C_O_FILES) $(S_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 #

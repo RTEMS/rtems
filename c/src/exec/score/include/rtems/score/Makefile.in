@@ -34,7 +34,7 @@ TARGOPTS=$(PROJECT_INCLUDE)/rtems/score/targopts.h
 
 SRCS=$(H_FILES) $(TARGOPTS)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 #
@@ -74,10 +74,10 @@ $(TARGOPTS):
 	@echo "#endif"                                         >>$@
 	@echo "#define $(RTEMS_CPU_MODEL) 1"                   >>$@
 	@echo                                                  >>$@
-	@echo "#ifdef $(RTEMS_BSP)"                            >>$@
-	@echo "#undef $(RTEMS_BSP)"                            >>$@
+	@echo "#ifdef ${RTEMS_BSP}"                            >>$@
+	@echo "#undef ${RTEMS_BSP}"                            >>$@
 	@echo "#endif"                                         >>$@
-	@echo "#define $(RTEMS_BSP) 1"                         >>$@
+	@echo "#define ${RTEMS_BSP} 1"                         >>$@
 	@echo                                                  >>$@
 	@$(make-target-options)
 ifeq (${RTEMS_USE_MACROS},yes)

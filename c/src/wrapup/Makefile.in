@@ -17,7 +17,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
  
 LIB=$(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a

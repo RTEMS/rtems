@@ -22,7 +22,7 @@ GENERIC_PIECES=
 OBJS=../$(ARCH)/libcpuspec.a
 LIB=$(ARCH)/libcpu.a
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
 #

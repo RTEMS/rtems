@@ -34,7 +34,7 @@ INSTALLED_H_FILES=$(srcdir)/monitor.h $(srcdir)/symbols.h
 SRCS=README $(C_FILES) $(H_FILES) $(INSTALLED_H_FILES)
 OBJS=$(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
 #

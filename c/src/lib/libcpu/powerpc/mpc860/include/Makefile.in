@@ -22,7 +22,7 @@ VPATH = @srcdir@
 H_FILES = $(wildcard $(srcdir)/*.h)
 SRCS=$(H_FILES)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 all:	install
@@ -32,7 +32,7 @@ install:
 	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/mpc860
 
 all: FORCEIT
-	cd ../../../../libbsp/$(RTEMS_CPU)/$(RTEMS_BSP)/include; $(MAKE) all
+	cd ../../../../libbsp/$(RTEMS_CPU)/${RTEMS_BSP}/include; $(MAKE) all
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

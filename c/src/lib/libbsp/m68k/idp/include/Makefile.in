@@ -29,7 +29,7 @@ EQ_FILES =
 
 SRCS=$(H_FILES) $(EQ_FILES)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 CLEAN_ADDITIONS += 

@@ -19,11 +19,11 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 all: FORCEIT
-	cd ../../../libbsp/$(RTEMS_CPU)/$(RTEMS_BSP)/include; $(MAKE) all
+	cd ../../../libbsp/$(RTEMS_CPU)/${RTEMS_BSP}/include; $(MAKE) all
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

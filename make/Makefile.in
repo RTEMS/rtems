@@ -18,7 +18,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 CLEAN_ADDITIONS +=
@@ -45,8 +45,8 @@ MAKEFILES := README \
 #      + Figure out what this BSP.cfg includes
 #      + Make those files have the correct relative path.
 #      + Now fix $(RTEMS_HOST) to the real host name
-CUSTOM_FILES := custom/default.cfg custom/$(RTEMS_BSP).cfg \
-   $(shell grep "^include.*make/custom" $(srcdir)/custom/$(RTEMS_BSP).cfg | \
+CUSTOM_FILES := custom/default.cfg custom/${RTEMS_BSP}.cfg \
+   $(shell grep "^include.*make/custom" $(srcdir)/custom/${RTEMS_BSP}.cfg | \
     sed -e 's/^.*make\///' | sed -e s/\\$$\(RTEMS_HOST\)/${RTEMS_HOST}/)
 
 # NOTE: Use the wildcard rule to install all compiler files

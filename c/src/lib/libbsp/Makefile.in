@@ -15,7 +15,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
 # shmdr is a portable shared memory MPCI layer
@@ -31,7 +31,7 @@ SUB_DIRS=$(MP_DRIVERS)
 # level as the CPUs.  If we are building the bare BSP, then descend
 # into that directory.
 
-ifeq ($(RTEMS_BSP),bare)
+ifeq (${RTEMS_BSP},bare)
 SUB_DIRS += bare
 else
 SUB_DIRS += $(wildcard $(RTEMS_CPU))

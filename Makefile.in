@@ -30,7 +30,7 @@ export bindir
 
 VPATH=@srcdir@
 
-ifeq ($(RTEMS_BSP),)
+ifeq (${RTEMS_BSP},)
   RTEMS_BSP = @RTEMS_BSP_LIST@
 endif
 
@@ -49,7 +49,7 @@ EXIT_CMD = exit 1
 
 $(MTARGETS): 
 	BASEDIR=`pwd`; \
-	for bsp in $(RTEMS_BSP) xxx; \
+	for bsp in ${RTEMS_BSP} xxx; \
 	do if [ $$bsp != xxx ] ; then  \
 	    cd $$BASEDIR; \
 	    cmd="cd c; $(MAKE) RTEMS_BSP=$$bsp $(FLAGS_TO_PASS) \

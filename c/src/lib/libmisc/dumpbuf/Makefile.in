@@ -28,7 +28,7 @@ INSTALLED_H_FILES=$(srcdir)/dumpbuf.h
 SRCS=$(C_FILES) $(H_FILES) $(INSTALLED_H_FILES)
 OBJS=$(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
 #

@@ -20,7 +20,7 @@ BSP_PIECES=startup clock console timer
 CPU_PIECES=
 GENERIC_PIECES=
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
 ifeq ($(HAS_MP),yes)

@@ -21,7 +21,7 @@ I_FILES=$(I_PIECES:%=$(srcdir)/%.inl)
 
 SRCS=$(I_FILES)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 #

@@ -67,6 +67,21 @@ while( <> )
     $nl_seen = $nl_seen+1;
   }
 
+  if ( /^(.*)\$\(RTEMS_BSP\)(.*)$/o )
+  {
+    $_ = "$1\$\{RTEMS_BSP\}$2\n" ;
+  }
+
+  if ( /^(.*)\$\(PROJECT_ROOT\)\/\$\{RTEMS_BSP\}\/lib\/include(.*)$/o )
+  {
+    $_ = "$1\$\(PROJECT_INCLUDE\)$2\n" ;
+  }
+
+  if ( /^(.*)\$\{PROJECT_RELEASE\}(.*)$/o )
+  {
+    $_ = "$1\$\{PROJECT_RELEASE\}$2\n" ;
+  }
+
   if ( /^[ 	]*srcdir[ 	]*=.*$/o ) 
   {
     print "\@SET_MAKE\@\n" ;

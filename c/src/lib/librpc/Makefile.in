@@ -26,7 +26,7 @@ C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 SRCS=$(C_FILES) 
 OBJS=$(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
 #
