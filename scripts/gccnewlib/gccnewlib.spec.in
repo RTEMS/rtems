@@ -8,7 +8,7 @@
 
 Vendor:       OAR Corporation
 Distribution: Linux
-Name:         @target_alias@-gcc-newlib
+Name:         @target_alias@-gcc
 Release:      @Release@
 Copyright:    1999 OARCorp
 Group:        unsorted
@@ -25,7 +25,7 @@ Source1:	newlib-@newlib_version@.tar.gz
 Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
 Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
 
-Buildroot:    /tmp
+Buildroot:    	@rpm_build_root@
 # Patch:
 %description
 RTEMS is an open source operating system for embedded systems.
