@@ -89,8 +89,8 @@ P2 RS-422 to the RS-422/RS-232 Converter
      Converter's       PC's DB-9     Color in
      RS-232 DB-25         COM1        Shell
     ===============  ==============  ========
-     TX on pin  2     TX on pin 2      Red
-     RX on pin  3     RX on pin 3      Blue
+     TX on pin  2     TX on pin 2      Blue
+     RX on pin  3     RX on pin 3      Red
     GND on pin  5    GND on pin 5      Black
     DTR on pin  4    DTR on pin 4      Brown
 
