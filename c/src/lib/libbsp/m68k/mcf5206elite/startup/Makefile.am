@@ -37,7 +37,7 @@ $(PROJECT_RELEASE)/lib/linkcmds.flash: linkcmds.flash
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
     $(PROJECT_RELEASE)/lib/linkcmds.flash $(PROJECT_RELEASE)/lib/gdbinit
 
-all: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

@@ -10,8 +10,8 @@ CPU_PIECES = clock console timer mbus
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
     ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/*.$(OBJEXT)) \
-    $(foreach piece, $(CPU_PIECES), $(wildcard \
-    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel)) \
+    $(foreach piece, $(CPU_PIECES), \
+    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel) \
     $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel)
 LIB = $(ARCH)/libbsp.a
@@ -26,6 +26,6 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-all: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
+all: $(OBJS) $(LIB) $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -21,7 +21,7 @@ $(PGM): $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all: $(ARCH) $(OBJS) $(PGM)
+all: $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

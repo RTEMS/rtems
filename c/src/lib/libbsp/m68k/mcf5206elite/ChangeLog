@@ -1,3 +1,13 @@
+2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* console/Makefile.am: Remove all: $(ARCH)..
+	* i2c/Makefile.am: Remove all: $(ARCH)..
+	* nvram/Makefile.am: Remove all: $(ARCH)..
+	* startup/Makefile.am: Remove all: $(ARCH)..
+	* tod/Makefile.am: Remove all: $(ARCH)..
+	* wrapup/Makefile.am: Remove all: $(ARCH).
+	Remove bogus wildcard from CPU_PIECES..
+
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.
