@@ -439,7 +439,7 @@ int _CPU_change_memory_mapping_attribute
  * CACHE_DISABLE of the whole memory
  */
 
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 int  _CPU_display_memory_attribute(){ 
   unsigned int dirCount, pageCount;

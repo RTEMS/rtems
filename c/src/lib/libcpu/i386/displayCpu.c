@@ -19,7 +19,7 @@
 #include <libcpu/cpu.h>
 #include <string.h>
 #include <libcpu/cpuModel.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <rtems.h>
 
 unsigned char Cx86_step = 0;
