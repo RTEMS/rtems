@@ -1,5 +1,12 @@
 2004-11-20	Ralf Corsepius <ralf.corsepiu@rtems.org>
 
+	PR 720/filesystem:
+	* libfs/src/dosfs/msdos_format.c: New 
+	(From Thomas Doerfler <Thomas.Doerfler@imd-systems.de>).
+	* libfs/Makefile.am: Reflect changes above:
+
+2004-11-20	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
 	* libcsupport/include/stdint.h: Move mal-placed comment.
 
 2004-11-10	Joel Sherrill <joel@oarcorp.com>
