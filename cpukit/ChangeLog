@@ -1,5 +1,11 @@
 2004-09-27	Joel Sherrill <joel@OARcorp.com>
 
+	PR 294/rtems
+	* posix/src/pthread.c: POSIX thread exit handler now confirms that it
+	created the executing thread before implicitly exitting it.
+
+2004-09-27	Joel Sherrill <joel@OARcorp.com>
+
 	* libmisc/stackchk/check.c: Spacing.
 
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
