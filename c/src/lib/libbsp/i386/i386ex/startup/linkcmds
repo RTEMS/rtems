@@ -1,0 +1,106 @@
+/*
+ *  This file contains directives for the GNU linker which are specific
+ *  to the Intel 386ex evaluation board.
+ *
+ *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+ *  On-Line Applications Research Corporation (OAR).
+ *  All rights assigned to U.S. Government, 1994.
+ *
+ *  This material may be reproduced by or for the U.S. Government pursuant
+ *  to the copyright license under the clause at DFARS 252.227-7013.  This
+ *  notice must appear in all copies of this file and its derivatives.
+ *
+ *  linkcmds,v 1.0 1995/11/30 16:52:02 Erik Ivanenko
+ */
+
+
+	ENTRY(reset) ;
+SECTIONS
+{
+	_rom_ints = 0x3fb0000;
+	.ints 0x0100 :
+	AT ( _rom_ints )          /* was 0x3fb3300 */
+	{
+	_sints = .;
+	*(.ints);
+	_eints = ALIGN (0x010);
+	}	
+	_cs4_ints_segment   = 0x0010 ;   
+	_cs4_ints_offset    = 0x0000 ;       
+	_cs6_t_ints_segment = 0xF000 ; /* was 0xF000 */ 
+	_cs6_t_ints_offset  = 0x0000 ; /* was 0x3300 */
+	_cs6_t_ints_size    = _eints - _sints ;
+
+        _rom_gdt = _rom_ints + _cs6_t_ints_size;
+	.gdt  0x1000  :
+        AT ( _rom_gdt )
+	{
+	_sgdt = .;
+	*(.gdt);
+	_egdt = ALIGN (0x10);
+	}
+	_cs4_gdt_segment   = 0x0100 ; /* evaluates to  0x1000 */
+	_cs4_gdt_offset    = 0x0000 ;
+	_cs6_t_gdt_segment = 0xF000;
+	_cs6_t_gdt_offset  = _cs6_t_ints_size;  /* was 0x0 */
+	_cs6_t_gdt_size    = _egdt - _sgdt;
+
+        _rom_idt = _rom_gdt + _cs6_t_gdt_size + _cs6_t_ints_size ;
+	.idt 0x1200 :
+	AT ( _rom_idt )
+	{
+	_sidt = .;
+	*(.idt);
+	_eidt = ALIGN (0x10);
+	}
+ 	_cs4_idt_segment	= 0x0120;
+	_cs4_idt_offset		= 0x0000 ;
+	_cs6_t_idt_segment	= 0xF000 ;
+	_cs6_t_idt_offset   	= _cs6_t_ints_size + _cs6_t_gdt_size ; /* was 0x1000 */
+	_cs6_t_idt_size		= _eidt - _sidt;
+
+	_rom_data_start = _rom_idt + _cs6_t_idt_size ;
+        .data : 
+        AT ( _rom_data_start )       /* was 0x3fd0000 */
+        {
+        _sdata = .;
+        *(.data);
+        _edata = ALIGN( 0x10 ) ;
+   	}
+        _data_start       = ADDR(.data) ;
+        _data_size        = _edata - _sdata ;
+	_edata            = _data_start + _data_size ;
+
+	.bss :
+	{
+	_bss_start = .;
+	*(.bss);
+	*(COMMON);
+	_ebss = ALIGN(0x10);
+	end = _ebss;
+	_end = end;
+	__end = end;
+	}
+        _bss_size = _ebss - _bss_start ;
+
+        
+        .text ( 0x3f80000 ):
+        {
+        _text_start = . ;
+        *(.text ) ;
+        _etext = ALIGN( 0x10 ); 
+        }
+
+	.initial  0x3ff1000:
+	{
+	*(.initial);
+	}
+
+	.reset    0x3fffff0:
+	{
+	*(.reset);
+        }
+}
+
+
+
