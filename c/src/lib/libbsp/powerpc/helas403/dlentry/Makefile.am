@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/dlentry.rel
 
 S_FILES = dlentry.S

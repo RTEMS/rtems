@@ -1,3 +1,12 @@
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add preinstallation dirstamp support.
+	Don't preinstall bsp_specs.dl.
+	* dlentry/Makefile.am: Cosmetics.
+	* flashentry/Makefile.am: Cosmetics.
+	* startup/Makefile.am: Cosmetics.
+	* wrapup/Makefile.am: Cosmetics.
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* dlentry/Makefile.am: Remove all-local: $(ARCH).

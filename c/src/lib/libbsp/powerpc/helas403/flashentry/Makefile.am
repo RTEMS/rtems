@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/flashentry.rel
 
 S_FILES = flashentry.S

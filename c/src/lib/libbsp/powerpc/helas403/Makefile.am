@@ -18,13 +18,9 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
-$(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs.dl: bsp_specs.dl
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs.dl
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
