@@ -25,15 +25,15 @@ rtems_isr Shm_isr_cvme961(
   rtems_vector_number vector
 )
 {
-  rtems_unsigned32 vic_vector;
+  uint32_t         vic_vector;
 
   /* enable_tracing(); */
-  vic_vector = (*(volatile rtems_unsigned8 *)0xb6000007);
+  vic_vector = (*(volatile uint8_t*)0xb6000007);
                                            /* reset intr by reading */
                                            /*   vector at IPL=3 */
   Shm_Interrupt_count += 1;
   rtems_multiprocessing_announce();
-  (*(volatile rtems_unsigned8 *)0xa000005f) = 0; /* clear ICMS0 */
+  (*(volatile uint8_t*)0xa000005f) = 0; /* clear ICMS0 */
   i960_clear_intr( 6 );
 
 }
@@ -52,18 +52,18 @@ rtems_isr Shm_isr_cvme961(
 
 void Shm_setvec()
 {
-  rtems_unsigned32 isrlevel;
+  uint32_t         isrlevel;
 
   rtems_interrupt_disable( isrlevel );
                                         /* set SQSIO4 CTL REG for */
                                         /*   VME slave address */
-    (*(rtems_unsigned8 *)0xc00000b0) =
+    (*(uint8_t*)0xc00000b0) =
       (Shm_RTEMS_MP_Configuration->node - 1) | 0x10;
     set_vector( Shm_isr_cvme961, 6, 1 );
                                         /* set ICMS Bector Base Register */
-    (*(rtems_unsigned8 *)0xa0000053) = 0x60;  /* XINT6 vector is 0x62 */
+    (*(uint8_t*)0xa0000053) = 0x60;  /* XINT6 vector is 0x62 */
                                         /* set  ICMS Intr Control Reg */
-    (*(rtems_unsigned8 *)0xa0000047) = 0xeb;  /* ICMS0 enabled, IPL=0 */
-    (*(rtems_unsigned8 *)0xa000005f) = 0;     /* clear ICMS0 */
+    (*(uint8_t*)0xa0000047) = 0xeb;  /* ICMS0 enabled, IPL=0 */
+    (*(uint8_t*)0xa000005f) = 0;     /* clear ICMS0 */
   rtems_interrupt_enable( isrlevel );
 }

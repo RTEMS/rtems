@@ -54,17 +54,17 @@
 shm_config_table BSP_shm_cfgtbl;
 
 void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
+  uint32_t           localnode,
   shm_config_table **shmcfg
 )
 {
 #if ( USE_ONBOARD_RAM == 1 )
    if ( Shm_RTEMS_MP_Configuration->node == MASTER )
-     BSP_shm_cfgtbl.base   = (rtems_unsigned32 *)0x00300000;
+     BSP_shm_cfgtbl.base   = (uint32_t*)0x00300000;
    else
-     BSP_shm_cfgtbl.base   = (rtems_unsigned32 *)0x10300000;
+     BSP_shm_cfgtbl.base   = (uint32_t*)0x10300000;
 #else
-   BSP_shm_cfgtbl.base     = (rtems_unsigned32 *)0x20000000;
+   BSP_shm_cfgtbl.base     = (uint32_t*)0x20000000;
 #endif
 
    BSP_shm_cfgtbl.length       = 1 * MEGABYTE;
@@ -86,7 +86,7 @@ void Shm_Get_configuration(
 #else
    BSP_shm_cfgtbl.poll_intr    = INTR_MODE;
    BSP_shm_cfgtbl.Intr.address =
-        (rtems_unsigned32 *) (0xffff0021|((localnode-1) << 12));
+        (uint32_t*) (0xffff0021|((localnode-1) << 12));
                                                           /* use ICMS0 */
    BSP_shm_cfgtbl.Intr.value   = 1;
    BSP_shm_cfgtbl.Intr.length  = BYTE;

@@ -74,8 +74,8 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned8  msb, lsb;
-  rtems_unsigned32 remaining, total;
+  uint8_t          msb, lsb;
+  uint32_t         remaining, total;
 
   Z8x36_WRITE( TIMER, CT1_CMD_STATUS,  0xce );  /* read the counter value */
   Z8x36_READ(  TIMER, CT1_CUR_CNT_MSB, msb );

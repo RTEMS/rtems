@@ -28,9 +28,9 @@ void *Shm_Convert_address(
   void *address
 )
 {
-  rtems_unsigned32 workaddr = (rtems_unsigned32) address;
+  uint32_t         workaddr = (uint32_t) address;
 
   if ( workaddr >= 0xffff0000 )
     workaddr = (workaddr & 0xffff) | 0xb4000000;
-  return ( (rtems_unsigned32 *)workaddr );
+  return ( (uint32_t*)workaddr );
 }
