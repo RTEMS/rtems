@@ -555,6 +555,7 @@ rtems_status_code rtems_task_delete(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
+  Objects_Information     *the_information;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
@@ -564,7 +565,15 @@ rtems_status_code rtems_task_delete(
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     case OBJECTS_LOCAL:
-      _Thread_Close( &_RTEMS_tasks_Information, the_thread );
+      the_information = _Objects_Get_information( the_thread->Object.id );
+
+      if ( !the_information ) {
+        _Thread_Enable_dispatch();
+        return RTEMS_INVALID_ID;
+        /* This should never happen if _Thread_Get() works right */
+      }
+  
+      _Thread_Close( the_information, the_thread );
 
       _RTEMS_tasks_Free( the_thread );
 

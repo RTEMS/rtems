@@ -1144,11 +1144,15 @@ void pthread_exit(
   void  *value_ptr
 )
 {
+  Objects_Information     *the_information;
+
+  the_information = _Objects_Get_information( _Thread_Executing->Object.id );
+  
   _Thread_Disable_dispatch();
 
   _Thread_Executing->Wait.return_argument = (unsigned32 *)value_ptr;
 
-  _Thread_Close( &_POSIX_Threads_Information, _Thread_Executing );
+  _Thread_Close( the_information, _Thread_Executing );
 
   _POSIX_Threads_Free( _Thread_Executing );
 
