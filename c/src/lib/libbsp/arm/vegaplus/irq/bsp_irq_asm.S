@@ -51,17 +51,18 @@ IRQ_return:
   orr	r0, r0, #0xc3
   msr	cpsr, r0
 
-  b	ReturnFromHandler	/* return to ISR handler */
+  mov pc, lr
 	
 /* 
  * Function to acknowledge the IT controller 
  */
 	.globl AckControler
-	
+
+#if 0	
 AckControler:	  
   ldr	r0, =INTEOI3
   mov   r1, #EOI
   str	r1, [r0]
 
   b	ReturnFromAck		/* return to ISR handler */
-
+#endif
