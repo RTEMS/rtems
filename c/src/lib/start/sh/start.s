@@ -55,11 +55,10 @@ start_l:
 	ldc     r8,vbr
 
 	! call the mainline	
-	mov #0,r4
-	mov #0,r5
+	mov #0,r4		! argc
 	mov.l main_k,r0
 	jsr @r0
-	mov #0,r6
+	mov #0,r5		! argv
 
 	! call exit
 	mov	r0,r4
