@@ -1,5 +1,20 @@
 2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/cpu.h (CPU_PROVIDES_IDLE_THREAD_BODY,
+	CPU_STACK_GROWS_UP, CPU_STRUCTURE_ALIGNMENT,
+	CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES, CPU_BIG_ENDIAN,
+	CPU_LITTLE_ENDIAN): Add.
+	* rtems/old-exceptions/cpu.h (CPU_PROVIDES_IDLE_THREAD_BODY,
+	CPU_STACK_GROWS_UP, CPU_STRUCTURE_ALIGNMENT,
+	CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES, CPU_BIG_ENDIAN,
+	CPU_LITTLE_ENDIAN): Remove.
+	* rtems/new-exceptions/cpu.h (CPU_PROVIDES_IDLE_THREAD_BODY,
+	CPU_STACK_GROWS_UP, CPU_STRUCTURE_ALIGNMENT,
+	CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES, CPU_BIG_ENDIAN,
+	CPU_LITTLE_ENDIAN): Remove.
+
+2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/cpu.h: 
 	(rtems_cpu_configuration_get_serial_per_sec,
 	rtems_cpu_configuration_get_serial_external_clock,
