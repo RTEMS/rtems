@@ -55,7 +55,7 @@ $(ARCH)/check:: $(SRCS)
 	  *.a) \
 	  ( list=`$(AR) t $$f`;\
 	    for i in $$list; do \
-	      if grep " $$i" $@; then \
+	      if fgrep " $$i" $@; then \
 	        echo "ERROR -- $$i in multiple files"; exit 1; \
 	      fi;\
 	      echo " $$i" >> $@;\
