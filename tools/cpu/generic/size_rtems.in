@@ -123,7 +123,7 @@ ${RTEMSOBJ}/timer.o \
 ${SAPIOBJ}/debug.o \
 ${SAPIOBJ}/extension.o \
 ${SAPIOBJ}/fatal.o \
-${SAPIOBJ}/init.o \
+${SAPIOBJ}/exinit.o \
 ${SAPIOBJ}/io.o \
 ${SAPIOBJ}/rtemsapi.o \
 "
@@ -147,7 +147,7 @@ ${OPTOBJ}/no-signal.rel \
 ${OPTOBJ}/no-timer.rel \
 "
 REQMANLIST="\
-${SAPIOBJ}/init.o \
+${SAPIOBJ}/exinit.o \
 ${RTEMSOBJ}/tasks.o \
 ${RTEMSOBJ}/intr.o \
 ${SAPIOBJ}/fatal.o \
