@@ -1,3 +1,7 @@
+2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: RTEMS_TOP(..).
+
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Install by using cpulibdir, cpulib_DATA.
