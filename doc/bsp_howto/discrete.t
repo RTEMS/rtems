@@ -28,9 +28,8 @@ on the notion of reading bitfields from the card.
 
 There are currently no discrete I/O device drivers included in the 
 RTEMS source tree.  The information provided in this chapter
-is based on drivers developed by OAR Corporation personnel
-for applications using RTEMS.   It is hoped that this
-driver model information can form the basis for a standard
+is based on drivers developed for applications using RTEMS.
+It is hoped that this driver model information can form the
 discrete I/O driver model that can be supported in future RTEMS
 distribution.
 
