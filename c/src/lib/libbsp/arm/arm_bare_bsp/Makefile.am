@@ -16,8 +16,6 @@ nodist_include_HEADERS += $(top_srcdir)/../../shared/include/coverhd.h
 
 all-local: $(PREINSTALL_FILES)
 
-noinst_HEADERS = include/bspio.h include/uart.h
-
 $(PROJECT_INCLUDE)/registers.h: include/registers.h
 	$(INSTALL_DATA) $< $@
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/registers.h
