@@ -1,3 +1,8 @@
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* alocal/rtems-top.a4: Add AC_CONFIG_AUX_DIR.
+
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootstrap: Add ACLOCAL, AUTOHEADER.
