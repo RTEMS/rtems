@@ -128,14 +128,14 @@ SYM(trap_table):
 
 */
 
-	.global __ERC32_MEC_Timer_Control_Mirror, _rdb_start, _CLOCK_SPEED
+	.global __ERC32_MEC_Timer_Control_Mirror, SYM(rdb_start), SYM(CLOCK_SPEED)
 
-_rdb_start:
+SYM(rdb_start):
 __ERC32_MEC_Timer_Control_Mirror:
 
   BAD_TRAP; BAD_TRAP;                           ! 7C - 7D undefined
 
-_CLOCK_SPEED:
+SYM(CLOCK_SPEED):
 
   .word	0x0a, 0, 0, 0				! 7E (10 MHz default)
   
@@ -196,7 +196,7 @@ _CLOCK_SPEED:
         PUBLIC(hard_reset)
 SYM(hard_reset):
 
-        set     _trap_table, %g1           ! Initialize TBR
+        set     SYM(trap_table), %g1           ! Initialize TBR
         mov     %g1, %tbr
 
 	set	(SYM(rdb_start)), %g6	   ! End of work-space area
@@ -220,7 +220,7 @@ SYM(hard_reset):
 	set	SYM(RAM_END), %sp	   ! End of work-space area
 	st	%sp, [%g6]
 
-	set	_CLOCK_SPEED, %g6	! Use 14 MHz in simulator
+	set	SYM(CLOCK_SPEED), %g6	! Use 14 MHz in simulator
 	set	14, %g1
 	st	%g1, [%g6]
 
