@@ -16,18 +16,34 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 
+#if defined(CLOCK_DRIVER_USE_FAST_IDLE) && defined(CLOCK_DRIVER_ISRS_PER_TICK)
+#error "clockdrv_shell.c: fast idle and N ISRs per tick is not supported"
+#endif
+
+/*
+ *  ISRs until next clock tick
+ */
+
+#ifdef CLOCK_DRIVER_ISRS_PER_TICK
+volatile rtems_unsigned32 Clock_driver_isrs;
+#endif
+
 /*
  *  Clock ticks since initialization
  */
 
 volatile rtems_unsigned32 Clock_driver_ticks;
 
+/*
+ *  ISR formerly installed.
+ */
+
 rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
  
 /*
- * These are set by clock driver during its init
+ *  Major and minor number.
  */
  
 rtems_device_major_number rtems_clock_major = ~0;
@@ -51,16 +67,23 @@ rtems_isr Clock_isr(
   rtems_vector_number vector
 )
 {
+  /*
+   *  Accurate count of ISRs
+   */
+
+  Clock_driver_ticks += 1;
+
 #ifdef CLOCK_DRIVER_USE_FAST_IDLE
   do { 
-    Clock_driver_ticks += 1;
     rtems_clock_tick();
   } while ( _Thread_Executing == _Thread_Idle &&
           _Thread_Heir == _Thread_Executing);
 
   Clock_driver_support_at_tick();
   return;
+
 #else
+
   /*
    *  Do the hardware specific per-tick action.
    *
@@ -69,21 +92,25 @@ rtems_isr Clock_isr(
 
   Clock_driver_support_at_tick();
 
+#ifdef CLOCK_DRIVER_ISRS_PER_TICK
   /*
-   *  The driver has seen another tick.
+   *  The driver is multiple ISRs per clock tick.
    */
 
-  Clock_driver_ticks += 1;
+  if ( !Clock_driver_isrs ) {
 
-  /*
-   */
+    rtems_clock_tick();
 
-#ifndef CLOCK_DRIVER_ISRS_ARE_ONE_MILLISECOND
-  rtems_clock_tick();
+    Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
+  }
+  Clock_driver_isrs--;
 #else
-#error "Clock driver shell: Does not currently support counting mseconds."
-#endif
 
+  /*
+   *  The driver is one ISR per clock tick.
+   */
+  rtems_clock_tick();
+#endif
 #endif
 }
 
@@ -100,8 +127,6 @@ rtems_isr Clock_isr(
  *  Return values:      NONE
  *
  */
-
-extern int CLOCK_SPEED;
 
 void Install_clock(
   rtems_isr_entry clock_isr
@@ -176,6 +201,14 @@ rtems_device_driver Clock_initialize(
   rtems_clock_major = major;
   rtems_clock_minor = minor;
  
+  /*
+   *  If we are counting ISRs per tick, then initialize the counter.
+   */
+
+#ifdef CLOCK_DRIVER_ISRS_PER_TICK
+  Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
+#endif
+
   return RTEMS_SUCCESSFUL;
 }
  
