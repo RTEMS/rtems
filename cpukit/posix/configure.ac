@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT([rtems-c-src-exec-posix],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-cpukit-posix],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([src/pthread.c])
 RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)

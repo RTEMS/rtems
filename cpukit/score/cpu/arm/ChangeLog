@@ -1,3 +1,7 @@
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Fix package name.
+
 2002-11-04	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c: Removed warning.

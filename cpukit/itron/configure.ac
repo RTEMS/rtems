@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT([rtems-c-src-exec-itron],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-cpukit-itron],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([include/itronsys])
 RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)

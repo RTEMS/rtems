@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT([rtems-c-src-exec-score-cpu-mips],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-cpukit-score-cpu-mips],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([cpu_asm.S])
 RTEMS_TOP(../../../..)
 AC_CONFIG_AUX_DIR(../../../..)

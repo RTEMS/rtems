@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT([rtems-c-src-lib],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-cpukit-lib],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([src])
 RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)
