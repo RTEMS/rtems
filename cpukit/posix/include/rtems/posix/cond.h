@@ -25,6 +25,13 @@ extern "C" {
 #include <rtems/score/threadq.h>
 
 /*
+ *  Constant to indicate condition variable does not currently have
+ *  a mutex assigned to it.
+ */
+
+#define POSIX_CONDITION_VARIABLES_NO_MUTEX 0
+
+/*
  *  Data Structure used to manage a POSIX condition variable
  */
  
