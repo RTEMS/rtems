@@ -172,10 +172,8 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
   POSIX_API_Control  *api;
   void              **value_ptr;
 
-  (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_POSIX ] );
+  api = deleted->API_Extensions[ THREAD_API_POSIX ];
  
-  deleted->API_Extensions[ THREAD_API_POSIX ] = NULL;
-
   /* XXX run cancellation handlers */
 
   _POSIX_Keys_Run_destructors( deleted );
@@ -184,8 +182,6 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
    *  Wakeup all the tasks which joined with this one
    */
  
-  api = deleted->API_Extensions[ THREAD_API_POSIX ];
- 
   value_ptr = (void **) deleted->Wait.return_argument;
 
   while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )
@@ -193,6 +189,10 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
  
   if ( api->schedpolicy == SCHED_SPORADIC )
     (void) _Watchdog_Remove( &api->Sporadic_timer );
+
+  deleted->API_Extensions[ THREAD_API_POSIX ] = NULL;
+
+  (void) _Workspace_Free( api );
 }
 
 /*PAGE
@@ -1017,6 +1017,7 @@ int pthread_join(
   register Thread_Control *the_thread;
   POSIX_API_Control       *api;
   Objects_Locations        location;
+  void                    *return_pointer;
 
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
@@ -1040,7 +1041,7 @@ int pthread_join(
        *  Put ourself on the threads join list
        */
 
-      _Thread_Executing->Wait.return_argument = (unsigned32 *) value_ptr;
+      _Thread_Executing->Wait.return_argument = (unsigned32 *) &return_pointer;
 
       _Thread_queue_Enter_critical_section( &api->Join_List );
 
@@ -1048,6 +1049,8 @@ int pthread_join(
 
       _Thread_Enable_dispatch();
 
+      if ( value_ptr )
+        *value_ptr = return_pointer;
       return 0;
   }
 
