@@ -11,7 +11,7 @@
  *  Suite should be rebuilt to account for these overhead times in the
  *  timing results.
  *
- *  NOTE:  If these are all zero, then the times reported include all
+ *  NOTE:  If these are all zero, then the times reported include
  *         all calling overhead including passing of arguments.
  *
  *  COPYRIGHT (c) 1989-1997.

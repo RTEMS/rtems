@@ -7,7 +7,7 @@
  *  is significant and makes it difficult to distinguish internal
  *  RTEMS execution time from that used to call the directive.
  *
- *  NOTE:  If these are all zero, then the times reported include all
+ *  NOTE:  If these are all zero, then the times reported include
  *         all calling overhead including passing of arguments.
  *
  *  COPYRIGHT (c) 1989-1997.
