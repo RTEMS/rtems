@@ -1,3 +1,8 @@
+2002-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* pppd/chap.c, pppd/fsm.c, pppd/fsm.h, pppd/upap.c: Per PR255
+	fix prototype mismatches.
+
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems_webserver/misc.c: Per PR236 eliminate definition of strnlen().

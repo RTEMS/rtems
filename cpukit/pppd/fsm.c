@@ -35,7 +35,7 @@
 static const char rcsid[] = RCSID;
 
 static void fsm_timeout __P((void *));
-static void fsm_rconfreq __P((fsm *, int, u_char *, int));
+static void fsm_rconfreq __P((fsm *, u_char, u_char *, int));
 static void fsm_rconfack __P((fsm *, int, u_char *, int));
 static void fsm_rconfnakrej __P((fsm *, int, int, u_char *, int));
 static void fsm_rtermreq __P((fsm *, int, u_char *, int));

@@ -135,7 +135,7 @@ void fsm_open __P((fsm *));
 void fsm_close __P((fsm *, char *));
 void fsm_input __P((fsm *, u_char *, int));
 void fsm_protreject __P((fsm *));
-void fsm_sdata __P((fsm *, int, int, u_char *, int));
+void fsm_sdata __P((fsm *, u_char, u_char, u_char *, int));
 
 
 /*
