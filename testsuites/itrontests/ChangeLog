@@ -1,3 +1,16 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+	itronhello/Makefile.am: Reflect having moved automake.
+	itronmbf01/Makefile.am: Reflect having moved automake.
+	itronmbox01/Makefile.am: Reflect having moved automake.
+	itronsem01/Makefile.am: Reflect having moved automake.
+	itrontask01/Makefile.am: Reflect having moved automake.
+	itrontask02/Makefile.am: Reflect having moved automake.
+	itrontask03/Makefile.am: Reflect having moved automake.
+	itrontask04/Makefile.am: Reflect having moved automake.
+	itrontime01/Makefile.am: Reflect having moved automake.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
