@@ -429,6 +429,21 @@ package body RTEMS is
       Result := Task_Resume_Base ( ID );
 
    end Task_Resume;
+
+   procedure Task_Is_Suspended (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Task_Is_Suspended (
+         ID : RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Task_Is_Suspended_Base, "rtems_task_is_suspended");
+   begin
+
+      Result := Task_Is_Suspended_Base ( ID );
+
+   end Task_Is_Suspended;
+
  
    procedure Task_Set_Priority (
       ID           : in     RTEMS.ID;

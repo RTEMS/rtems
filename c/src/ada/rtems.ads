@@ -864,6 +864,11 @@ package RTEMS is
       Result :    out RTEMS.Status_Codes
    );
 
+   procedure Task_Is_Suspended (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   );
+
    procedure Task_Set_Priority (
       ID           : in     RTEMS.ID;
       New_Priority : in     RTEMS.Task_Priority;
