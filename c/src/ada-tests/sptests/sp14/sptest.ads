@@ -46,7 +46,7 @@ package SPTEST is
 --  been sent from an ISR to the executing task.
 --
 
-   SIGNAL_SENT : RTEMS.BOOLEAN;
+   SIGNAL_SENT : BOOLEAN;
    pragma volatile( SIGNAL_SENT );
 
 --
@@ -64,7 +64,7 @@ package SPTEST is
 --  and was passed the correct signal set.
 --
 
-   ASR_FIRED   : RTEMS.BOOLEAN;
+   ASR_FIRED : BOOLEAN;
    pragma volatile( ASR_FIRED );
 
 --

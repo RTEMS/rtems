@@ -51,7 +51,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          1, 
-         2048, 
+         RTEMS.MINIMUM_STACK_SIZE * 2, 
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.TASK_ID( 1 ),
@@ -62,7 +62,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          1, 
-         2048, 
+         RTEMS.MINIMUM_STACK_SIZE * 2, 
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.TASK_ID( 2 ),
@@ -201,7 +201,8 @@ package body SPTEST is
       end loop;
 
       if SPTEST.TIMER_GOT_THIS_ID = SPTEST.TIMER_ID( 1 ) and then
-         SPTEST.TIMER_GOT_THIS_POINTER = SPTEST.TASK_1'ADDRESS then
+         RTEMS.ARE_EQUAL(SPTEST.TIMER_GOT_THIS_POINTER,
+             SPTEST.TASK_1'ADDRESS) then
  
          TEXT_IO.PUT_LINE( "TA1 - timer routine got the correct arguments" );
 
