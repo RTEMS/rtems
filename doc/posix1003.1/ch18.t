@@ -13,10 +13,10 @@
 @subsection Cancelability States
 
 @example
-PTHREAD_CANCEL_DISABLE, Constant, 
-PTHREAD_CANCEL_ENABLE, Constant, 
-PTHREAD_CANCEL_ASYNCHRONOUS, Constant, 
-PTHREAD_CANCEL_DEFERRED, Constant, 
+PTHREAD_CANCEL_DISABLE, Constant, Implemented
+PTHREAD_CANCEL_ENABLE, Constant, Implemented
+PTHREAD_CANCEL_ASYNCHRONOUS, Constant, Implemented
+PTHREAD_CANCEL_DEFERRED, Constant, Implemented
 @end example
 
 @subsection Cancellation Points
@@ -24,7 +24,7 @@ PTHREAD_CANCEL_DEFERRED, Constant,
 @subsection Thread Cancellation Cleanup Handlers
 
 @example
-PTHREAD_CANCELED, Constant, 
+PTHREAD_CANCELED, Constant, Unimplemented
 @end example
 
 @subsection Async-Cancel Safety

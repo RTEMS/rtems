@@ -29,8 +29,8 @@ timerid_t, Type, Implemented
 @subsection Timer Event Notification Manifest Constants
 
 @example
-CLOCK_REALTIME, Constant, 
-TIMER_ABSTIME, Constant, 
+CLOCK_REALTIME, Constant, Implemented
+TIMER_ABSTIME, Constant, Implemented
 @end example
 
 @section Clock and Timer Functions

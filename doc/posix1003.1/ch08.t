@@ -202,7 +202,7 @@ LC_ALL, Constant, Implemented
 fileno(), Function, Implemented
 STDIN_FILENO, Constant, Implemented
 STDOUT_FILENO, Constant, Implemented
-STDERR_FILENO, Constant, ImplementeD
+STDERR_FILENO, Constant, Implemented
 @end example
 
 @subsection Open a Stream on a File Descriptor
