@@ -171,6 +171,31 @@ struct SonicRegisters {
 #define DCR_TFT1        0x0002
 #define DCR_TFT0        0x0001
 
+/* data configuration register aliases */
+#define DCR_SYNC        DCR_SBUS  /* synchronous (memory cycle 2 clocks) */
+#define DCR_ASYNC       0         /* asynchronous (memory cycle 3 clocks) */
+
+#define DCR_WAIT0       0                 /* 0 wait states added */
+#define DCR_WAIT1       DCR_WC0           /* 1 wait state added */
+#define DCR_WAIT2       DCR_WC1           /* 2 wait states added */
+#define DCR_WAIT3       (DCR_WC1|DCR_WC0) /* 3 wait states added */
+
+#define DCR_DW16        0       /* use 16-bit DMA accesses */
+#define DCR_DW32        DCR_DW  /* use 32-bit DMA accesses */
+
+#define DCR_DMAEF       0       /* DMA until TX/RX FIFO has emptied/filled */
+#define DCR_DMABLOCK    DCR_BMS /* DMA until RX/TX threshold crossed */
+
+#define DCR_RFT4        0               /* receive threshold 4 bytes */
+#define DCR_RFT8        DCR_RFT0        /* receive threshold 8 bytes */
+#define DCR_RFT16       DCR_RFT1        /* receive threshold 16 bytes */
+#define DCR_RFT24       (DCR_RFT1|DCR_RFT0) /* receive threshold 24 bytes */
+
+#define DCR_TFT8        0               /* transmit threshold 8 bytes */
+#define DCR_TFT16       DCR_TFT0        /* transmit threshold 16 bytes */
+#define DCR_TFT24       DCR_TFT1        /* transmit threshold 24 bytes */
+#define DCR_TFT28       (DCR_TFT1|DCR_TFT0) /* transmit threshold 28 bytes */
+
 /*
  * Receive control register
  */
