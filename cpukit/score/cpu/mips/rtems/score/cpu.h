@@ -50,11 +50,9 @@ extern "C" {
 
 #ifndef TRUE
 #define TRUE 1
-#warning "TRUE was not defined, assuming default of 1"
 #endif
 #ifndef FALSE
 #define FALSE 0
-#warning "FALSE was not defined, assuming default of 0"
 #endif
 
 
