@@ -17,7 +17,7 @@ COMMON_FILES=../common/cpright.texi ../common/setup.texi
 GENERATED_FILES=ch01.texi ch02.texi ch03.texi ch04.texi ch05.texi \
                 ch06.texi ch07.texi ch08.texi ch09.texi ch10.texi \
                 ch11.texi ch12.texi ch13.texi ch14.texi ch15.texi \
-                ch16.texi ch17.texi ch18.texi 
+                ch16.texi ch17.texi ch18.texi ch19.t ch19.texi
 
 FILES= $(PROJECT).texi \
   preface.texi $(GENERATED_FILES)
@@ -140,8 +140,17 @@ ch17.texi: ch17.t
 ch18.texi: ch18.t
 	$(BMENU) -c -p "Thread-Specific Data Key Deletion" \
 	    -u "Top" \
-	    -n "Command and Variable Index" ${*}.t
+	    -n "Compliance Summary" ${*}.t
 
+ch19.t: ch01.t ch02.t ch03.t ch04.t ch05.t ch06.t ch07.t ch08.t ch09.t \
+        ch10.t ch11.t ch12.t ch13.t ch14.t ch15.t ch16.t ch17.t ch18.t
+	./summarize >ch19.t
+
+ch19.texi: ch19.t
+	$(BMENU) -c -p "List of Cancellation Points" \
+	    -u "Top" \
+	    -n "Command and Variable Index" ${*}.t
+	
 
 html: $(FILES)
 	-mkdir $(WWW_INSTALL)/$(PROJECT)
