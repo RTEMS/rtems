@@ -2,8 +2,8 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.8
-%define srcvers	1.8
+%define rpmvers 1.8.1
+%define srcvers	1.8.1
 %define amvers  1.8
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
@@ -23,6 +23,7 @@
 Vendor:       http://www.rtems.com
 Name:         %{name}
 Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+URL: 	      http://sources.redhat.com/automake
 
 Copyright:    GPL
 Group:        @rpmgroup@
@@ -37,6 +38,7 @@ Requires:     %{requirements}
 PreReq:	      /sbin/install-info
 
 Source: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
+Patch0: automake-1.8.1-rtems-20040112-1.diff
 
 %description
 Automake is a tool for automatically generating "Makefile.in"s from
@@ -47,6 +49,7 @@ standards.
 
 %prep
 %setup -q -n %{_name}-%{srcvers}
+%patch0 -p0
 
 %build
 PATH=%{_prefix}/bin:$PATH
@@ -81,6 +84,7 @@ if [ $1 = 0 ]; then
 fi
 
 %files
+%defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog NEWS README THANKS
 %{_bindir}/aclocal*
 %{_bindir}/automake*

@@ -1,3 +1,9 @@
+2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* scripts/automake.spec.in: 1.8.1.
+	Add Patch0 automake-1.8.1-rtems-20040112-1.diff.
+	Add defattr, URL:-tag.
+
 2004-01-08	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Update gcc/newlib for 4.7 series to 3.3.2 with 20031216
