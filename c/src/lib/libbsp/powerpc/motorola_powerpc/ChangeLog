@@ -1,3 +1,14 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add PREINSTALL_DIRS.
+	* irq/Makefile.am: Add PREINSTALL_DIRS.
+	* motorola/Makefile.am: Add PREINSTALL_DIRS.
+	* openpic/Makefile.am: Add PREINSTALL_DIRS.
+	* pci/Makefile.am: Add PREINSTALL_DIRS.
+	* vectors/Makefile.am: Add PREINSTALL_DIRS.
+	* vme/Makefile.am: Add PREINSTALL_DIRS.
+	* wrapup/Makefile.am: Reflect changes to libcpu.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
