@@ -1,6 +1,7 @@
 2005-02-03  Eric Norum <norume@aps.anl.gov>
 
-	* include/bsp.h, startup/bspstart.c: Add 'extended' BSP support (pseudo-VME)
+	* include/bsp.h, startup/bspstart.c: Add 'extended' BSP
+	support (pseudo-VME).
 
 2005-02-02  Eric Norum <norume@aps.anl.gov>
 
@@ -13,14 +14,13 @@
 
 2005-02-01  Eric Norum <norume@aps.anl.gov>
 
-	* start/start.S, network/network.c: Place FEC buffer descriptors in SRAM.
-	  No longer need to worry about buffer descriptor caching.
+	* start/start.S, network/network.c: Place FEC buffer descriptors
+	in SRAM.  No longer need to worry about buffer descriptor caching.
 
 2005-01-31  Eric Norum <norume@aps.anl.gov>
 
-	* network/network.c, startup/bspstart.c: Processor doesn't snoop FEC DMA
-	  so we must invalidate the cache appropriately.
-
+	* network/network.c, startup/bspstart.c: Processor doesn't snoop
+	FEC DMA so we must invalidate the cache appropriately.
 
 2005-01-31	Joel Sherrill <joel@OARcorp.com>
 
