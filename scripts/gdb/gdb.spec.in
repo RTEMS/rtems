@@ -58,7 +58,7 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 test -d build || mkdir build
   cd build
   ../gdb-@gdb_version@/configure --target=@target_alias@ \
-    --verbose --prefix=/opt/rtems 
+    --verbose --prefix=/opt/rtems @extra_configure_arguments@
 
   make all
   make info
