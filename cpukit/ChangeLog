@@ -1,5 +1,9 @@
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: AC_PREREQ(2.57).
+
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove sptables.h.in.
 
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

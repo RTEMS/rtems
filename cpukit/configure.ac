@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.54)
+AC_PREREQ(2.57)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([score])
 RTEMS_TOP(..)
