@@ -579,28 +579,6 @@ typedef struct {
 extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 
 /*
- *  This is the executive's trap table which is installed into the TBR
- *  register.
- *
- *  NOTE:  Unfortunately, this must be aligned on a 4096 byte boundary.
- *         The GNU tools as of binutils 2.5.2 and gcc 2.7.0 would not
- *         align an entity to anything greater than a 512 byte boundary.
- *
- *         Because of this, we pull a little bit of a trick.  We allocate
- *         enough memory so we can grab an address on a 4096 byte boundary
- *         from this area.
- */
- 
-#define SPARC_TRAP_TABLE_ALIGNMENT 4096
- 
-#ifndef NO_TABLE_MOVE
-
-SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
-           __attribute__ ((aligned (SPARC_TRAP_TABLE_ALIGNMENT)));
-#endif
- 
-
-/*
  *  The size of the floating point context area.  
  */
 

@@ -55,8 +55,6 @@ void _CPU_Initialize(
 {
   void                  *pointer;
 
-  sparc_init_tbr();
-  
 #if (SPARC_HAS_FPU == 1)
 
   /*
