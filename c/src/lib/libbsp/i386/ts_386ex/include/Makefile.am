@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 if HAS_NETWORKING
 NETWORK_H_FILES = wd80x3.h

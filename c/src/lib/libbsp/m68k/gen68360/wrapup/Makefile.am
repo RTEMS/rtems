@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 # We only build the networking device driver if HAS_NETWORKING was defined
 if HAS_NETWORKING

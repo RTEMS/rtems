@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 # We only build the Network library if HAS_NETWORKING was defined
 # dec21140 is supported via libchip
