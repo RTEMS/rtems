@@ -163,7 +163,7 @@ void _CPU_Install_interrupt_stack( void )
   i960_PRCB *prcb = _CPU_Table.Prcb;
   unsigned32   level;
 #if defined(__i960RP__) || defined(__i960_RP__)
-  int *isp = (int *) ISP_ADDR;
+  unsigned32 *isp = (int *) ISP_ADDR;
 #endif
 
   /*
@@ -178,7 +178,7 @@ void _CPU_Install_interrupt_stack( void )
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
     soft_reset( prcb );
 #elif defined(__i960RP__) || defined(__i960_RP__) || defined(__i960RP)
-    *isp = prcb->intr_stack;
+    *isp = (unsigned32) prcb->intr_stack;
 #endif
 
   _CPU_ISR_Enable( level );

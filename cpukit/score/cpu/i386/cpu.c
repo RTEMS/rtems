@@ -34,8 +34,10 @@ void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
+#if CPU_HARDWARE_FP
   register unsigned16  fp_status asm ("ax");
   register void       *fp_context;
+#endif
 
   _CPU_Table = *cpu_table;
 
