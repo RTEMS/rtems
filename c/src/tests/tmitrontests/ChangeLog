@@ -1,3 +1,13 @@
+2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove CC_CFLAGS_DEBUG_V.
+	CC_CFLAGS_DEFAULT (obsolete).
+
+2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove CC_CFLAGS_PROFILE_V.
+	Remove CC_LDFLAGS_PROFILE_V.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
