@@ -1,3 +1,8 @@
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/p4650.cfg: Remove obsolete variables and get closer to gcc 3.x
+	support.
+
 2004-02-26	Joel Sherrill <joel@OARcorp.com>
 
 	PR 570/bsps
