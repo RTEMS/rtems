@@ -41,22 +41,6 @@ extern "C" {
 /* #define CONFIGURE_INTERRUPT_STACK_MEMORY  (TBD * 1024) */
 
 /*
- *  Define the interrupt mechanism for Time Test 27
- */
-
-/* XXX - JRS - I want to compile the tmtests */
-
-#define MUST_WAIT_FOR_INTERRUPT 1
-
-#define Install_tm27_vector( handler )
-
-#define Cause_tm27_intr()
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */

@@ -161,21 +161,6 @@ extern char _SYS_CLOCK_FREQUENCY; /* Don't use this variable directly!!! */
 #define I2C_SELECT_BUS(bus)
 
 /*
- *  Stuff for Time Test 27
- *  Don't bother with hardware -- just use a software-interrupt
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) set_vector( (handler), 34, 1 )
-
-#define Cause_tm27_intr()	asm volatile ("trap #2");
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */
