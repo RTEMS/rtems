@@ -15,7 +15,7 @@ include_HEADERS = amd.ah asm.h pswmacro.ah register.ah
 S_FILES = cpu_asm.S sig.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/multilib.am
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
@@ -28,7 +28,7 @@ $(PROJECT_INCLUDE)/%.h: %.h
 $(PROJECT_INCLUDE)/%.ah: %.ah
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
+$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
 	$(INSTALL_DATA) $< $@
 
 REL = $(ARCH)/rtems-cpu.rel
@@ -40,7 +40,7 @@ $(REL): $(rtems_cpu_rel_OBJECTS)
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
     $(TMPINSTALL_FILES)

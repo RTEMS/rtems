@@ -13,7 +13,7 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/multilib.am
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
@@ -24,7 +24,7 @@ rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
 
 all-local: $(ARCH) $(rtems_cpu_rel_OBJECTS) $(REL) \
     $(TMPINSTALL_FILES)
