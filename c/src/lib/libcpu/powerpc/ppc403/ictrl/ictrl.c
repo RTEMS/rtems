@@ -45,7 +45,7 @@ rtems_isr_entry ictrl_vector_table[PPC_IRQ_EXT_MAX];
  */
 #if defined(ppc405)
 RTEMS_INLINE_ROUTINE void 
-clr_exisr(unsigned32 mask) 
+clr_exisr(uint32_t   mask) 
 {
     asm volatile ("mtdcr 0xC0,%0"::"r" (mask));/*EXISR*/
 } 
@@ -53,10 +53,10 @@ clr_exisr(unsigned32 mask)
 /* 
  *  get value of EXISR 
  */
-RTEMS_INLINE_ROUTINE unsigned32 
+RTEMS_INLINE_ROUTINE uint32_t   
 get_exisr(void) 
 {
-    unsigned32 val;
+    uint32_t   val;
 
     asm volatile ("mfdcr %0,0xC0":"=r" (val));/*EXISR*/
     return val; 
@@ -65,10 +65,10 @@ get_exisr(void)
 /* 
  *  get value of EXIER 
  */
-RTEMS_INLINE_ROUTINE unsigned32 
+RTEMS_INLINE_ROUTINE uint32_t   
 get_exier(void) 
 {
-    unsigned32 val;
+    uint32_t   val;
     asm volatile ("mfdcr %0,0xC2":"=r" (val));/*EXIER*/
     return val; 
 } 
@@ -77,7 +77,7 @@ get_exier(void)
  *  set value of EXIER 
  */
 RTEMS_INLINE_ROUTINE void 
-set_exier(unsigned32 val) 
+set_exier(uint32_t   val) 
 {
     asm volatile ("mtdcr 0xC2,%0"::"r" (val));/*EXIER*/
 } 
@@ -85,7 +85,7 @@ set_exier(unsigned32 val)
 #else /* not ppc405 */
 
 RTEMS_INLINE_ROUTINE void 
-clr_exisr(unsigned32 mask) 
+clr_exisr(uint32_t   mask) 
 {
     asm volatile ("mtdcr 0x40,%0"::"r" (mask));/*EXISR*/
 } 
@@ -93,10 +93,10 @@ clr_exisr(unsigned32 mask)
 /* 
  *  get value of EXISR 
  */
-RTEMS_INLINE_ROUTINE unsigned32 
+RTEMS_INLINE_ROUTINE uint32_t   
 get_exisr(void) 
 {
-    unsigned32 val;
+    uint32_t   val;
 
     asm volatile ("mfdcr %0,0x40":"=r" (val));/*EXISR*/
     return val; 
@@ -105,10 +105,10 @@ get_exisr(void)
 /* 
  *  get value of EXIER 
  */
-RTEMS_INLINE_ROUTINE unsigned32 
+RTEMS_INLINE_ROUTINE uint32_t   
 get_exier(void) 
 {
-    unsigned32 val;
+    uint32_t   val;
     asm volatile ("mfdcr %0,0x42":"=r" (val));/*EXIER*/
     return val; 
 } 
@@ -117,7 +117,7 @@ get_exier(void)
  *  set value of EXIER 
  */
 RTEMS_INLINE_ROUTINE void 
-set_exier(unsigned32 val) 
+set_exier(uint32_t   val) 
 {
     asm volatile ("mtdcr 0x42,%0"::"r" (val));/*EXIER*/
 } 
@@ -126,9 +126,9 @@ set_exier(unsigned32 val)
  *  enable an external interrupt, make this interrupt consistent
  */
 RTEMS_INLINE_ROUTINE void 
-enable_ext_irq( unsigned32 mask)
+enable_ext_irq( uint32_t   mask)
 {
-    unsigned32 isrlvl;
+    uint32_t   isrlvl;
     _CPU_ISR_Disable(isrlvl);
     set_exier(get_exier() | ((mask)&PPC_EXI_MASK));
     _CPU_ISR_Enable(isrlvl);
@@ -138,9 +138,9 @@ enable_ext_irq( unsigned32 mask)
  *  disable an external interrupt, make this interrupt consistent
  */
 RTEMS_INLINE_ROUTINE void 
-disable_ext_irq( unsigned32 mask)
+disable_ext_irq( uint32_t   mask)
 {
-    unsigned32 isrlvl;
+    uint32_t   isrlvl;
     _CPU_ISR_Disable(isrlvl);
     set_exier(get_exier() & ~(mask) & PPC_EXI_MASK);
     _CPU_ISR_Enable(isrlvl);
@@ -155,7 +155,7 @@ disable_ext_irq( unsigned32 mask)
  *
  */
 void 
-ictrl_spurious_handler(unsigned32 spurious_mask, 
+ictrl_spurious_handler(uint32_t   spurious_mask, 
 		       CPU_Interrupt_frame *cpu_frame)
 {
   int v;
@@ -183,7 +183,7 @@ ictrl_spurious_handler(unsigned32 spurious_mask,
 void
 ictrl_isr(rtems_vector_number vector,CPU_Interrupt_frame *cpu_frame)
 {
-  unsigned32        istat,
+  uint32_t          istat,
                     mask,
                     global_vec;
   int               exvec;
@@ -223,7 +223,7 @@ ictrl_isr(rtems_vector_number vector,CPU_Interrupt_frame *cpu_frame)
  */ 
 rtems_status_code
 ictrl_set_vector(rtems_isr_entry   new_handler,
-		 unsigned32        vector,
+		 uint32_t          vector,
 		 rtems_isr_entry   *old_handler
 )
 {

@@ -78,7 +78,7 @@ extern "C" {
  */ 
 rtems_status_code
 ictrl_set_vector(rtems_isr_entry   new_handler,
-		 unsigned32        vector,
+		 uint32_t          vector,
 		 rtems_isr_entry   *old_handler
 );
 /*

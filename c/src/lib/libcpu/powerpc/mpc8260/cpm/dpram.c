@@ -31,7 +31,7 @@ void rtems_panic(char *, int);
  *      - Dual-Port RAM section 3
  */
 static struct {
-  unsigned8     *base;
+  uint8_t       *base;
   unsigned int  size;
   unsigned int  used;
 } dpram_regions[] = {

@@ -20,9 +20,9 @@
  * Send a command to the CPM RISC processer
  */
 
-void m8xx_cp_execute_cmd( unsigned32 command )
+void m8xx_cp_execute_cmd( uint32_t   command )
 {
-  rtems_unsigned16 lvl;
+  uint16_t   lvl;
   
   rtems_interrupt_disable(lvl);
   while (m8260.cpcr & M8260_CR_FLG) {

@@ -66,8 +66,8 @@
  * Memory controller registers
  */
 typedef struct m8260MEMCRegisters_ {
-  rtems_unsigned32        br;
-  rtems_unsigned32        _or;  /* or is a C++ keyword :( */
+  uint32_t          br;
+  uint32_t          _or;  /* or is a C++ keyword :( */
 } m8260MEMCRegisters_t;
 
 
@@ -75,20 +75,20 @@ typedef struct m8260MEMCRegisters_ {
  * Fast Communication Controller Registers
 */
 typedef struct m8260FCCRegisters_ {
-  rtems_unsigned32    gfmr;
-  rtems_unsigned32	  fpsmr;
-  rtems_unsigned16	  ftodr;
-  rtems_unsigned8	  fcc_pad0[2];
-  rtems_unsigned16	  fdsr;
-  rtems_unsigned8	  fcc_pad1[2];
-  rtems_unsigned32	  fcce;
-  rtems_unsigned32	  fccm;
-  rtems_unsigned8	  fccs;
-  rtems_unsigned8	  fcc_pad2[3];
-  rtems_unsigned8	  ftirr_phy0;			/* n/a on FCC3 */
-  rtems_unsigned8	  ftirr_phy1;           /* n/a on FCC3 */
-  rtems_unsigned8	  ftirr_phy2;			/* n/a on FCC3 */
-  rtems_unsigned8	  ftirr_phy3;			/* n/a on FCC3 */
+  uint32_t      gfmr;
+  uint32_t  	  fpsmr;
+  uint16_t  	  ftodr;
+  uint8_t  	  fcc_pad0[2];
+  uint16_t  	  fdsr;
+  uint8_t  	  fcc_pad1[2];
+  uint32_t  	  fcce;
+  uint32_t  	  fccm;
+  uint8_t  	  fccs;
+  uint8_t  	  fcc_pad2[3];
+  uint8_t  	  ftirr_phy0;			/* n/a on FCC3 */
+  uint8_t  	  ftirr_phy1;           /* n/a on FCC3 */
+  uint8_t  	  ftirr_phy2;			/* n/a on FCC3 */
+  uint8_t  	  ftirr_phy3;			/* n/a on FCC3 */
 } m8260FCCRegisters_t;
 
 
@@ -96,31 +96,31 @@ typedef struct m8260FCCRegisters_ {
  * Serial Communications Controller registers
  */
 typedef struct m8260SCCRegisters_ {
-  rtems_unsigned32        gsmr_l;
-  rtems_unsigned32        gsmr_h;
-  rtems_unsigned16        psmr;
-  rtems_unsigned8         scc_pad0[2];
-  rtems_unsigned16        todr;
-  rtems_unsigned16        dsr;
-  rtems_unsigned16        scce;
-  rtems_unsigned8	  scc_pad2[2];
-  rtems_unsigned16        sccm;
-  rtems_unsigned8	  scc_pad3[1];
-  rtems_unsigned8         sccs;
-  rtems_unsigned8         scc_pad1[8];
+  uint32_t          gsmr_l;
+  uint32_t          gsmr_h;
+  uint16_t          psmr;
+  uint8_t           scc_pad0[2];
+  uint16_t          todr;
+  uint16_t          dsr;
+  uint16_t          scce;
+  uint8_t  	  scc_pad2[2];
+  uint16_t          sccm;
+  uint8_t  	  scc_pad3[1];
+  uint8_t           sccs;
+  uint8_t           scc_pad1[8];
 } m8260SCCRegisters_t;
 
 /*
  * Serial Management Controller registers
  */
 typedef struct m8260SMCRegisters_ {
-  rtems_unsigned8         smc_pad0[2];
-  rtems_unsigned16        smcmr;
-  rtems_unsigned8	  smc_pad2[2];
-  rtems_unsigned8         smce;
-  rtems_unsigned8	  smc_pad3[3];
-  rtems_unsigned8         smcm;
-  rtems_unsigned8         smc_pad1[5];
+  uint8_t           smc_pad0[2];
+  uint16_t          smcmr;
+  uint8_t  	  smc_pad2[2];
+  uint8_t           smce;
+  uint8_t  	  smc_pad3[3];
+  uint8_t           smcm;
+  uint8_t           smc_pad1[5];
 } m8260SMCRegisters_t;
 
 
@@ -128,17 +128,17 @@ typedef struct m8260SMCRegisters_ {
  * Serial Interface With Time Slot Assigner Registers
  */
 typedef struct m8260SIRegisters_ {
-  rtems_unsigned16	  siamr;
-  rtems_unsigned16	  sibmr;
-  rtems_unsigned16	  sicmr;
-  rtems_unsigned16	  sidmr;
-  rtems_unsigned8	  sigmr;
-  rtems_unsigned8	  si_pad0[1];
-  rtems_unsigned8	  sicmdr;
-  rtems_unsigned8	  si_pad1[1];
-  rtems_unsigned8	  sistr;
-  rtems_unsigned8	  si_pad2[1];
-  rtems_unsigned16	  sirsr;
+  uint16_t  	  siamr;
+  uint16_t  	  sibmr;
+  uint16_t  	  sicmr;
+  uint16_t  	  sidmr;
+  uint8_t  	  sigmr;
+  uint8_t  	  si_pad0[1];
+  uint8_t  	  sicmdr;
+  uint8_t  	  si_pad1[1];
+  uint8_t  	  sistr;
+  uint8_t  	  si_pad2[1];
+  uint16_t  	  sirsr;
 } m8260SIRegisters_t;
 
 
@@ -146,12 +146,12 @@ typedef struct m8260SIRegisters_ {
  * Multi Channel Controller registers
  */
 typedef struct m8260MCCRegisters_ {
-  rtems_unsigned16	  mcce;
-  rtems_unsigned8	  mcc_pad2[2];
-  rtems_unsigned16	  mccm;
-  rtems_unsigned16	  mcc_pad0;
-  rtems_unsigned8	  mccf;
-  rtems_unsigned8	  mcc_pad1[7];
+  uint16_t  	  mcce;
+  uint8_t  	  mcc_pad2[2];
+  uint16_t  	  mccm;
+  uint16_t  	  mcc_pad0;
+  uint8_t  	  mccf;
+  uint8_t  	  mcc_pad1[7];
 } m8260MCCRegisters_t;
 
 
@@ -162,12 +162,12 @@ typedef struct m8260MCCRegisters_ {
 */
 /*
 typedef struct m8260TimerParms_ {
-  rtems_unsigned16        tm_base;
-  rtems_unsigned16        _tm_ptr;
-  rtems_unsigned16        _r_tmr;
-  rtems_unsigned16        _r_tmv;
-  rtems_unsigned32        tm_cmd;
-  rtems_unsigned32        tm_cnt;
+  uint16_t          tm_base;
+  uint16_t          _tm_ptr;
+  uint16_t          _r_tmr;
+  uint16_t          _r_tmv;
+  uint32_t          tm_cmd;
+  uint32_t          tm_cnt;
 } m8260TimerParms_t;
 */
 
@@ -215,24 +215,24 @@ typedef struct m8260TimerParms_ {
 *************************************************************************
 */
 typedef struct m8260IDMAparms_ {
-  rtems_unsigned16        ibase;
-  rtems_unsigned16        dcm;
-  rtems_unsigned16		  ibdptr;
-  rtems_unsigned16		  dpr_buf;
-  rtems_unsigned16		  _buf_inv;
-  rtems_unsigned16		  ssmax;
-  rtems_unsigned16		  _dpr_in_ptr;
-  rtems_unsigned16		  sts;
-  rtems_unsigned16		  _dpr_out_ptr;
-  rtems_unsigned16		  seob;
-  rtems_unsigned16		  deob;
-  rtems_unsigned16		  dts;
-  rtems_unsigned16		  _ret_add;
-  rtems_unsigned16		  reserved;
-  rtems_unsigned32		  _bd_cnt;
-  rtems_unsigned32		  _s_ptr;
-  rtems_unsigned32		  _d_ptr;
-  rtems_unsigned32		  istate;
+  uint16_t          ibase;
+  uint16_t          dcm;
+  uint16_t  		  ibdptr;
+  uint16_t  		  dpr_buf;
+  uint16_t  		  _buf_inv;
+  uint16_t  		  ssmax;
+  uint16_t  		  _dpr_in_ptr;
+  uint16_t  		  sts;
+  uint16_t  		  _dpr_out_ptr;
+  uint16_t  		  seob;
+  uint16_t  		  deob;
+  uint16_t  		  dts;
+  uint16_t  		  _ret_add;
+  uint16_t  		  reserved;
+  uint32_t  		  _bd_cnt;
+  uint32_t  		  _s_ptr;
+  uint32_t  		  _d_ptr;
+  uint32_t  		  istate;
 } m8260IDMAparms_t;
 
 
@@ -244,125 +244,125 @@ typedef struct m8260IDMAparms_ {
 
 
 typedef struct m8260SCCparms_ {
-  rtems_unsigned16        rbase;
-  rtems_unsigned16        tbase;
-  rtems_unsigned8         rfcr;
-  rtems_unsigned8         tfcr;
-  rtems_unsigned16        mrblr;
-  rtems_unsigned32        _rstate;
-  rtems_unsigned32        _pad0;
-  rtems_unsigned16        _rbptr;
-  rtems_unsigned16        _pad1;
-  rtems_unsigned32        _pad2;
-  rtems_unsigned32        _tstate;
-  rtems_unsigned32        _pad3;
-  rtems_unsigned16        _tbptr;
-  rtems_unsigned16        _pad4;
-  rtems_unsigned32        _pad5;
-  rtems_unsigned32        _rcrc;
-  rtems_unsigned32        _tcrc;
+  uint16_t          rbase;
+  uint16_t          tbase;
+  uint8_t           rfcr;
+  uint8_t           tfcr;
+  uint16_t          mrblr;
+  uint32_t          _rstate;
+  uint32_t          _pad0;
+  uint16_t          _rbptr;
+  uint16_t          _pad1;
+  uint32_t          _pad2;
+  uint32_t          _tstate;
+  uint32_t          _pad3;
+  uint16_t          _tbptr;
+  uint16_t          _pad4;
+  uint32_t          _pad5;
+  uint32_t          _rcrc;
+  uint32_t          _tcrc;
   union {
     struct {
-      rtems_unsigned32        _res0;
-      rtems_unsigned32        _res1;
-      rtems_unsigned16        max_idl;
-      rtems_unsigned16        idlc;
-      rtems_unsigned16        brkcr;
-      rtems_unsigned16        parec;
-      rtems_unsigned16        frmec;
-      rtems_unsigned16        nosec;
-      rtems_unsigned16        brkec;
-      rtems_unsigned16        brklen;
-      rtems_unsigned16        uaddr[2];
-      rtems_unsigned16        rtemp;
-      rtems_unsigned16        toseq;
-      rtems_unsigned16        character[8];
-      rtems_unsigned16        rccm;
-      rtems_unsigned16        rccr;
-      rtems_unsigned16        rlbc;
+      uint32_t          _res0;
+      uint32_t          _res1;
+      uint16_t          max_idl;
+      uint16_t          idlc;
+      uint16_t          brkcr;
+      uint16_t          parec;
+      uint16_t          frmec;
+      uint16_t          nosec;
+      uint16_t          brkec;
+      uint16_t          brklen;
+      uint16_t          uaddr[2];
+      uint16_t          rtemp;
+      uint16_t          toseq;
+      uint16_t          character[8];
+      uint16_t          rccm;
+      uint16_t          rccr;
+      uint16_t          rlbc;
     } uart;
     struct {
-      rtems_unsigned32	      _pad0;
-      rtems_unsigned32	      c_mask;
-      rtems_unsigned32	      c_pres;
-      rtems_unsigned16	      disfc;
-      rtems_unsigned16	      crcec;
-      rtems_unsigned16	      abtsc;
-      rtems_unsigned16	      nmarc;
-      rtems_unsigned16	      retrc;
-      rtems_unsigned16	      mflr;
-      rtems_unsigned16	      _max_cnt;
-      rtems_unsigned16	      rfthr;
-      rtems_unsigned16	      _rfcnt;
-      rtems_unsigned16	      hmask;
-      rtems_unsigned16	      haddr1;
-      rtems_unsigned16	      haddr2;
-      rtems_unsigned16	      haddr3;
-      rtems_unsigned16	      haddr4;
-      rtems_unsigned16	      _tmp;
-      rtems_unsigned16	      _tmp_mb;
+      uint32_t  	      _pad0;
+      uint32_t  	      c_mask;
+      uint32_t  	      c_pres;
+      uint16_t  	      disfc;
+      uint16_t  	      crcec;
+      uint16_t  	      abtsc;
+      uint16_t  	      nmarc;
+      uint16_t  	      retrc;
+      uint16_t  	      mflr;
+      uint16_t  	      _max_cnt;
+      uint16_t  	      rfthr;
+      uint16_t  	      _rfcnt;
+      uint16_t  	      hmask;
+      uint16_t  	      haddr1;
+      uint16_t  	      haddr2;
+      uint16_t  	      haddr3;
+      uint16_t  	      haddr4;
+      uint16_t  	      _tmp;
+      uint16_t  	      _tmp_mb;
     } hdlc;
     struct {
-      rtems_unsigned32        _pad0;
-      rtems_unsigned32        crcc;
-      rtems_unsigned16        prcrc;
-      rtems_unsigned16        ptcrc;
-      rtems_unsigned16        parec;
-      rtems_unsigned16        bsync;
-      rtems_unsigned16        bdle;
-      rtems_unsigned16        character[8];
-      rtems_unsigned16        rccm;
+      uint32_t          _pad0;
+      uint32_t          crcc;
+      uint16_t          prcrc;
+      uint16_t          ptcrc;
+      uint16_t          parec;
+      uint16_t          bsync;
+      uint16_t          bdle;
+      uint16_t          character[8];
+      uint16_t          rccm;
     } bisync;
     struct {
-      rtems_unsigned32	      _crc_p;
-      rtems_unsigned32	      _crc_c;
+      uint32_t  	      _crc_p;
+      uint32_t  	      _crc_c;
     } transparent;
     struct {
-      rtems_unsigned32        c_pres;
-      rtems_unsigned32        c_mask;
-      rtems_unsigned32        crcec;
-      rtems_unsigned32        alec;
-      rtems_unsigned32        disfc;
-      rtems_unsigned16        pads;
-      rtems_unsigned16        ret_lim;
-      rtems_unsigned16        _ret_cnt;
-      rtems_unsigned16        mflr;
-      rtems_unsigned16        minflr;
-      rtems_unsigned16        maxd1;
-      rtems_unsigned16        maxd2;
-      rtems_unsigned16        _maxd;
-      rtems_unsigned16        _dma_cnt;
-      rtems_unsigned16        _max_b;
-      rtems_unsigned16        gaddr1;
-      rtems_unsigned16        gaddr2;
-      rtems_unsigned16        gaddr3;
-      rtems_unsigned16        gaddr4;
-      rtems_unsigned32        _tbuf0data0;
-      rtems_unsigned32        _tbuf0data1;
-      rtems_unsigned32        _tbuf0rba0;
-      rtems_unsigned32        _tbuf0crc;
-      rtems_unsigned16        _tbuf0bcnt;
-      rtems_unsigned16        paddr_h;
-      rtems_unsigned16        paddr_m;
-      rtems_unsigned16        paddr_l;
-      rtems_unsigned16        p_per;
-      rtems_unsigned16        _rfbd_ptr;
-      rtems_unsigned16        _tfbd_ptr;
-      rtems_unsigned16        _tlbd_ptr;
-      rtems_unsigned32        _tbuf1data0;
-      rtems_unsigned32        _tbuf1data1;
-      rtems_unsigned32        _tbuf1rba0;
-      rtems_unsigned32        _tbuf1crc;
-      rtems_unsigned16        _tbuf1bcnt;
-      rtems_unsigned16        _tx_len;
-      rtems_unsigned16        iaddr1;
-      rtems_unsigned16        iaddr2;
-      rtems_unsigned16        iaddr3;
-      rtems_unsigned16        iaddr4;
-      rtems_unsigned16        _boff_cnt;
-      rtems_unsigned16        taddr_l;
-      rtems_unsigned16        taddr_m;
-      rtems_unsigned16        taddr_h;
+      uint32_t          c_pres;
+      uint32_t          c_mask;
+      uint32_t          crcec;
+      uint32_t          alec;
+      uint32_t          disfc;
+      uint16_t          pads;
+      uint16_t          ret_lim;
+      uint16_t          _ret_cnt;
+      uint16_t          mflr;
+      uint16_t          minflr;
+      uint16_t          maxd1;
+      uint16_t          maxd2;
+      uint16_t          _maxd;
+      uint16_t          _dma_cnt;
+      uint16_t          _max_b;
+      uint16_t          gaddr1;
+      uint16_t          gaddr2;
+      uint16_t          gaddr3;
+      uint16_t          gaddr4;
+      uint32_t          _tbuf0data0;
+      uint32_t          _tbuf0data1;
+      uint32_t          _tbuf0rba0;
+      uint32_t          _tbuf0crc;
+      uint16_t          _tbuf0bcnt;
+      uint16_t          paddr_h;
+      uint16_t          paddr_m;
+      uint16_t          paddr_l;
+      uint16_t          p_per;
+      uint16_t          _rfbd_ptr;
+      uint16_t          _tfbd_ptr;
+      uint16_t          _tlbd_ptr;
+      uint32_t          _tbuf1data0;
+      uint32_t          _tbuf1data1;
+      uint32_t          _tbuf1rba0;
+      uint32_t          _tbuf1crc;
+      uint16_t          _tbuf1bcnt;
+      uint16_t          _tx_len;
+      uint16_t          iaddr1;
+      uint16_t          iaddr2;
+      uint16_t          iaddr3;
+      uint16_t          iaddr4;
+      uint16_t          _boff_cnt;
+      uint16_t          taddr_l;
+      uint16_t          taddr_m;
+      uint16_t          taddr_h;
     } ethernet;
   } un;
 } m8260SCCparms_t;
@@ -388,125 +388,125 @@ typedef struct m8260SCCparms_ {
 
 
 typedef struct m8260FCCparms_ {
-  rtems_unsigned16        riptr;
-  rtems_unsigned16        tiptr;
-  rtems_unsigned16        _pad0;
-  rtems_unsigned16        mrblr;
-  rtems_unsigned32        rstate;
-  rtems_unsigned32        rbase;
-  rtems_unsigned16        _rbdstat;
-  rtems_unsigned16        _rbdlen;
-  rtems_unsigned32        _rdptr;
-  rtems_unsigned32        tstate;
-  rtems_unsigned32        tbase;
-  rtems_unsigned16        _tbdstat;
-  rtems_unsigned16        _tbdlen;
-  rtems_unsigned32        _tdptr;
-  rtems_unsigned32        _rbptr;
-  rtems_unsigned32        _tbptr;
-  rtems_unsigned32        _rcrc;
-  rtems_unsigned32        _pad1;
-  rtems_unsigned32        _tcrc;
+  uint16_t          riptr;
+  uint16_t          tiptr;
+  uint16_t          _pad0;
+  uint16_t          mrblr;
+  uint32_t          rstate;
+  uint32_t          rbase;
+  uint16_t          _rbdstat;
+  uint16_t          _rbdlen;
+  uint32_t          _rdptr;
+  uint32_t          tstate;
+  uint32_t          tbase;
+  uint16_t          _tbdstat;
+  uint16_t          _tbdlen;
+  uint32_t          _tdptr;
+  uint32_t          _rbptr;
+  uint32_t          _tbptr;
+  uint32_t          _rcrc;
+  uint32_t          _pad1;
+  uint32_t          _tcrc;
 
   union {
     struct {
-      rtems_unsigned32	      _pad0;
-      rtems_unsigned32	      _pad1;
-      rtems_unsigned32	      c_mask;
-      rtems_unsigned32	      c_pres;
-      rtems_unsigned16	      disfc;
-      rtems_unsigned16	      crcec;
-      rtems_unsigned16	      abtsc;
-      rtems_unsigned16	      nmarc;
-      rtems_unsigned32	      _max_cnt;
-      rtems_unsigned16	      mflr;
-      rtems_unsigned16	      rfthr;
-      rtems_unsigned16	      rfcnt;
-      rtems_unsigned16	      hmask;
-      rtems_unsigned16	      haddr1;
-      rtems_unsigned16	      haddr2;
-      rtems_unsigned16	      haddr3;
-      rtems_unsigned16	      haddr4;
-      rtems_unsigned16	      _ts_tmp;
-      rtems_unsigned16	      _tmp_mb;
+      uint32_t  	      _pad0;
+      uint32_t  	      _pad1;
+      uint32_t  	      c_mask;
+      uint32_t  	      c_pres;
+      uint16_t  	      disfc;
+      uint16_t  	      crcec;
+      uint16_t  	      abtsc;
+      uint16_t  	      nmarc;
+      uint32_t  	      _max_cnt;
+      uint16_t  	      mflr;
+      uint16_t  	      rfthr;
+      uint16_t  	      rfcnt;
+      uint16_t  	      hmask;
+      uint16_t  	      haddr1;
+      uint16_t  	      haddr2;
+      uint16_t  	      haddr3;
+      uint16_t  	      haddr4;
+      uint16_t  	      _ts_tmp;
+      uint16_t  	      _tmp_mb;
     } hdlc;
     struct {
-      rtems_unsigned32	      _pad0;
-      rtems_unsigned32	      _pad1;
-      rtems_unsigned32	      c_mask;
-      rtems_unsigned32	      c_pres;
-      rtems_unsigned16	      disfc;
-      rtems_unsigned16	      crcec;
-      rtems_unsigned16	      abtsc;
-      rtems_unsigned16	      nmarc;
-      rtems_unsigned32	      _max_cnt;
-      rtems_unsigned16	      mflr;
-      rtems_unsigned16	      rfthr;
-      rtems_unsigned16	      rfcnt;
-      rtems_unsigned16	      hmask;
-      rtems_unsigned16	      haddr1;
-      rtems_unsigned16	      haddr2;
-      rtems_unsigned16	      haddr3;
-      rtems_unsigned16	      haddr4;
-      rtems_unsigned16	      _ts_tmp;
-      rtems_unsigned16	      _tmp_mb;
+      uint32_t  	      _pad0;
+      uint32_t  	      _pad1;
+      uint32_t  	      c_mask;
+      uint32_t  	      c_pres;
+      uint16_t  	      disfc;
+      uint16_t  	      crcec;
+      uint16_t  	      abtsc;
+      uint16_t  	      nmarc;
+      uint32_t  	      _max_cnt;
+      uint16_t  	      mflr;
+      uint16_t  	      rfthr;
+      uint16_t  	      rfcnt;
+      uint16_t  	      hmask;
+      uint16_t  	      haddr1;
+      uint16_t  	      haddr2;
+      uint16_t  	      haddr3;
+      uint16_t  	      haddr4;
+      uint16_t  	      _ts_tmp;
+      uint16_t  	      _tmp_mb;
     } transparent;
     struct {
-      rtems_unsigned32        _stat_buf;
-      rtems_unsigned32        cam_ptr;
-      rtems_unsigned32        c_mask;
-      rtems_unsigned32        c_pres;
-      rtems_unsigned32        crcec;
-      rtems_unsigned32        alec;
-      rtems_unsigned32        disfc;
-      rtems_unsigned16        ret_lim;
-      rtems_unsigned16        _ret_cnt;
-      rtems_unsigned16        p_per;
-      rtems_unsigned16        _boff_cnt;
-      rtems_unsigned32        gaddr_h;
-      rtems_unsigned32        gaddr_l;
-      rtems_unsigned16        tfcstat;
-      rtems_unsigned16        tfclen;
-      rtems_unsigned32        tfcptr;
-      rtems_unsigned16        mflr;
-      rtems_unsigned16        paddr1_h;
-      rtems_unsigned16        paddr1_m;
-      rtems_unsigned16        paddr1_l;
-      rtems_unsigned16        _ibd_cnt;
-      rtems_unsigned16        _ibd_start;
-      rtems_unsigned16        _ibd_end;
-      rtems_unsigned16        _tx_len;
-      rtems_unsigned16        _ibd_base;
-      rtems_unsigned32        iaddr_h;
-      rtems_unsigned32        iaddr_l;
-      rtems_unsigned16        minflr;
-      rtems_unsigned16        taddr_h;
-      rtems_unsigned16        taddr_m;
-      rtems_unsigned16        taddr_l;
-      rtems_unsigned16        pad_ptr;
-      rtems_unsigned16        _pad0;
-      rtems_unsigned16        _cf_range;
-      rtems_unsigned16        _max_b;
-      rtems_unsigned16        maxd1;
-      rtems_unsigned16        maxd2;
-      rtems_unsigned16        _maxd;
-      rtems_unsigned16        _dma_cnt;
-      rtems_unsigned32        octc;
-      rtems_unsigned32        colc;
-      rtems_unsigned32        broc;
-      rtems_unsigned32        mulc;
-      rtems_unsigned32        uspc;
-      rtems_unsigned32        frgc;
-      rtems_unsigned32        ospc;
-      rtems_unsigned32        jbrc;
-      rtems_unsigned32        p64c;
-      rtems_unsigned32        p65c;
-      rtems_unsigned32        p128c;
-      rtems_unsigned32        p256c;
-      rtems_unsigned32        p512c;
-      rtems_unsigned32        p1024c;
-      rtems_unsigned32        _cam_buf;
-      rtems_unsigned32        _pad1;
+      uint32_t          _stat_buf;
+      uint32_t          cam_ptr;
+      uint32_t          c_mask;
+      uint32_t          c_pres;
+      uint32_t          crcec;
+      uint32_t          alec;
+      uint32_t          disfc;
+      uint16_t          ret_lim;
+      uint16_t          _ret_cnt;
+      uint16_t          p_per;
+      uint16_t          _boff_cnt;
+      uint32_t          gaddr_h;
+      uint32_t          gaddr_l;
+      uint16_t          tfcstat;
+      uint16_t          tfclen;
+      uint32_t          tfcptr;
+      uint16_t          mflr;
+      uint16_t          paddr1_h;
+      uint16_t          paddr1_m;
+      uint16_t          paddr1_l;
+      uint16_t          _ibd_cnt;
+      uint16_t          _ibd_start;
+      uint16_t          _ibd_end;
+      uint16_t          _tx_len;
+      uint16_t          _ibd_base;
+      uint32_t          iaddr_h;
+      uint32_t          iaddr_l;
+      uint16_t          minflr;
+      uint16_t          taddr_h;
+      uint16_t          taddr_m;
+      uint16_t          taddr_l;
+      uint16_t          pad_ptr;
+      uint16_t          _pad0;
+      uint16_t          _cf_range;
+      uint16_t          _max_b;
+      uint16_t          maxd1;
+      uint16_t          maxd2;
+      uint16_t          _maxd;
+      uint16_t          _dma_cnt;
+      uint32_t          octc;
+      uint32_t          colc;
+      uint32_t          broc;
+      uint32_t          mulc;
+      uint32_t          uspc;
+      uint32_t          frgc;
+      uint32_t          ospc;
+      uint32_t          jbrc;
+      uint32_t          p64c;
+      uint32_t          p65c;
+      uint32_t          p128c;
+      uint32_t          p256c;
+      uint32_t          p512c;
+      uint32_t          p1024c;
+      uint32_t          _cam_buf;
+      uint32_t          _pad1;
     } ethernet;
   } un;
 } m8260FCCparms_t;
@@ -531,35 +531,35 @@ typedef struct m8260FCCparms_ {
 *************************************************************************
 */
 typedef struct m8260SMCparms_ {
-  rtems_unsigned16        rbase;
-  rtems_unsigned16        tbase;
-  rtems_unsigned8         rfcr;
-  rtems_unsigned8         tfcr;
-  rtems_unsigned16        mrblr;
-  rtems_unsigned32        _rstate;
-  rtems_unsigned32        _pad0;
-  rtems_unsigned16        _rbptr;
-  rtems_unsigned16        _pad1;
-  rtems_unsigned32        _pad2;
-  rtems_unsigned32        _tstate;
-  rtems_unsigned32        _pad3;
-  rtems_unsigned16        _tbptr;
-  rtems_unsigned16        _pad4;
-  rtems_unsigned32        _pad5;
+  uint16_t          rbase;
+  uint16_t          tbase;
+  uint8_t           rfcr;
+  uint8_t           tfcr;
+  uint16_t          mrblr;
+  uint32_t          _rstate;
+  uint32_t          _pad0;
+  uint16_t          _rbptr;
+  uint16_t          _pad1;
+  uint32_t          _pad2;
+  uint32_t          _tstate;
+  uint32_t          _pad3;
+  uint16_t          _tbptr;
+  uint16_t          _pad4;
+  uint32_t          _pad5;
   union {
     struct {
-      rtems_unsigned16	  max_idl;
-      rtems_unsigned16	  _idlc;
-      rtems_unsigned16	  _brkln;
-      rtems_unsigned16	  brkec;
-      rtems_unsigned16	  brkcr;
-      rtems_unsigned16	  _r_mask;
+      uint16_t  	  max_idl;
+      uint16_t  	  _idlc;
+      uint16_t  	  _brkln;
+      uint16_t  	  brkec;
+      uint16_t  	  brkcr;
+      uint16_t  	  _r_mask;
     } uart;
     struct {
-      rtems_unsigned16	  _pad0[6];
+      uint16_t  	  _pad0[6];
     } transparent;
   } un;
-  rtems_unsigned32	  _pad6;
+  uint32_t  	  _pad6;
 } m8260SMCparms_t;
 
 /*
@@ -591,21 +591,21 @@ typedef struct m8260SMCparms_ {
 *************************************************************************
 */
 typedef struct m8260SPIparms_ {
-  rtems_unsigned16        rbase;
-  rtems_unsigned16        tbase;
-  rtems_unsigned8         rfcr;
-  rtems_unsigned8         tfcr;
-  rtems_unsigned16        mrblr;
-  rtems_unsigned32        _rstate;
-  rtems_unsigned32        _pad0;
-  rtems_unsigned16        _rbptr;
-  rtems_unsigned16        _pad1;
-  rtems_unsigned32        _pad2;
-  rtems_unsigned32        _tstate;
-  rtems_unsigned32        _pad3;
-  rtems_unsigned16        _tbptr;
-  rtems_unsigned16        _pad4;
-  rtems_unsigned32        _pad5;
+  uint16_t          rbase;
+  uint16_t          tbase;
+  uint8_t           rfcr;
+  uint8_t           tfcr;
+  uint16_t          mrblr;
+  uint32_t          _rstate;
+  uint32_t          _pad0;
+  uint16_t          _rbptr;
+  uint16_t          _pad1;
+  uint32_t          _pad2;
+  uint32_t          _tstate;
+  uint32_t          _pad3;
+  uint16_t          _tbptr;
+  uint16_t          _pad4;
+  uint32_t          _pad5;
 } m8260SPIparms_t;
 
 /*
@@ -641,8 +641,8 @@ typedef struct m8260SPIparms_ {
 *************************************************************************
 */
 typedef struct m8260BufferDescriptor_ {
-  rtems_unsigned16        status;
-  rtems_unsigned16        length;
+  uint16_t          status;
+  uint16_t          length;
   volatile void           *buffer;
 } m8260BufferDescriptor_t;
 
@@ -737,10 +737,10 @@ typedef struct m8260BufferDescriptor_ {
 *************************************************************************
 */
 typedef struct m8260IDMABufferDescriptor_ {
-  rtems_unsigned16        status;
-  rtems_unsigned8         dfcr;       
-  rtems_unsigned8         sfcr;       
-  rtems_unsigned32        length;
+  uint16_t          status;
+  uint8_t           dfcr;       
+  uint8_t           sfcr;       
+  uint32_t          length;
   void                    *source;
   void                    *destination;
 } m8260IDMABufferDescriptor_t;
@@ -1130,244 +1130,244 @@ typedef struct m8260_ {
   /*
    * CPM Dual-Port RAM
    */
-  rtems_unsigned8   dpram1[16384];		/* 0x0000 - 0x3FFF BD/data/ucode */
-  rtems_unsigned8	cpm_pad0[16384];	/* 0x4000 - 0x7FFF Reserved      */
+  uint8_t     dpram1[16384];		/* 0x0000 - 0x3FFF BD/data/ucode */
+  uint8_t  	cpm_pad0[16384];	/* 0x4000 - 0x7FFF Reserved      */
 
   m8260SCCparms_t	scc1p;
-  rtems_unsigned8	pad_scc1[256-sizeof(m8260SCCparms_t)];
+  uint8_t  	pad_scc1[256-sizeof(m8260SCCparms_t)];
   m8260SCCparms_t	scc2p;
-  rtems_unsigned8	pad_scc2[256-sizeof(m8260SCCparms_t)];
+  uint8_t  	pad_scc2[256-sizeof(m8260SCCparms_t)];
   m8260SCCparms_t	scc3p;
-  rtems_unsigned8	pad_scc3[256-sizeof(m8260SCCparms_t)];
+  uint8_t  	pad_scc3[256-sizeof(m8260SCCparms_t)];
   m8260SCCparms_t	scc4p;
-  rtems_unsigned8	pad_scc4[256-sizeof(m8260SCCparms_t)];
+  uint8_t  	pad_scc4[256-sizeof(m8260SCCparms_t)];
 
   m8260FCCparms_t	fcc1p;
-  rtems_unsigned8	pad_fcc1[256-sizeof(m8260FCCparms_t)];
+  uint8_t  	pad_fcc1[256-sizeof(m8260FCCparms_t)];
   m8260FCCparms_t	fcc2p;
-  rtems_unsigned8	pad_fcc2[256-sizeof(m8260FCCparms_t)];
+  uint8_t  	pad_fcc2[256-sizeof(m8260FCCparms_t)];
   m8260FCCparms_t	fcc3p;
-  rtems_unsigned8	pad_fcc3[256-sizeof(m8260FCCparms_t)];
+  uint8_t  	pad_fcc3[256-sizeof(m8260FCCparms_t)];
 
-  rtems_unsigned8	mcc1p[128];
-  rtems_unsigned8	pad_mcc1[124];
-  rtems_unsigned16	smc1_base;
-  rtems_unsigned16	idma1_base;
-  rtems_unsigned8	mcc2p[128];
-  rtems_unsigned8	pad_mcc2[124];
-  rtems_unsigned16	smc2_base;
-  rtems_unsigned16	idma2_base;
-  rtems_unsigned8	pad_spi[252];
-  rtems_unsigned16	spi_base;
-  rtems_unsigned16	idma3_base;
-  rtems_unsigned8	pad_risc[224];
-  rtems_unsigned8	risc_timers[16];
-  rtems_unsigned16	rev_num;
-  rtems_unsigned16	cpm_pad7;
-  rtems_unsigned32	cpm_pad8;
-  rtems_unsigned16	rand;
-  rtems_unsigned16	i2c_base;
-  rtems_unsigned16	idma4_base;
-  rtems_unsigned8	cpm_pad9[1282];
+  uint8_t  	mcc1p[128];
+  uint8_t  	pad_mcc1[124];
+  uint16_t  	smc1_base;
+  uint16_t  	idma1_base;
+  uint8_t  	mcc2p[128];
+  uint8_t  	pad_mcc2[124];
+  uint16_t  	smc2_base;
+  uint16_t  	idma2_base;
+  uint8_t  	pad_spi[252];
+  uint16_t  	spi_base;
+  uint16_t  	idma3_base;
+  uint8_t  	pad_risc[224];
+  uint8_t  	risc_timers[16];
+  uint16_t  	rev_num;
+  uint16_t  	cpm_pad7;
+  uint32_t  	cpm_pad8;
+  uint16_t  	rand;
+  uint16_t  	i2c_base;
+  uint16_t  	idma4_base;
+  uint8_t  	cpm_pad9[1282];
 
-  rtems_unsigned8	cpm_pad1[8192];		/* 0x9000 - 0xAFFF Reserved      */
+  uint8_t  	cpm_pad1[8192];		/* 0x9000 - 0xAFFF Reserved      */
 
   m8260SMCparms_t	smc1p;
   m8260SMCparms_t	smc2p;
-  rtems_unsigned8	dpram3[4096-2*sizeof(m8260SMCparms_t)];
+  uint8_t  	dpram3[4096-2*sizeof(m8260SMCparms_t)];
 
-  rtems_unsigned8	cpm_pad2[16384];	/* 0xC000 - 0xFFFF Reserved      */
+  uint8_t  	cpm_pad2[16384];	/* 0xC000 - 0xFFFF Reserved      */
 
         
   /*
    * General SIU Block
    */
-  rtems_unsigned32      siumcr;
-  rtems_unsigned32      sypcr;
-  rtems_unsigned8       siu_pad0[6];
-  rtems_unsigned16      swsr;
-  rtems_unsigned8       siu_pad1[20];
-  rtems_unsigned32		bcr;
-  rtems_unsigned8		ppc_acr;
-  rtems_unsigned8		siu_pad4[3];
-  rtems_unsigned32		ppc_alrh;
-  rtems_unsigned32		ppc_alr1;
-  rtems_unsigned8		lcl_acr;
-  rtems_unsigned8		siu_pad5[3];
-  rtems_unsigned32		lcl_alrh;
-  rtems_unsigned32		lcl_alr1;
-  rtems_unsigned32		tescr1;
-  rtems_unsigned32		tescr2;
-  rtems_unsigned32		l_tescr1;
-  rtems_unsigned32		l_tescr2;
-  rtems_unsigned32		pdtea;
-  rtems_unsigned8		pdtem;
-  rtems_unsigned8		siu_pad2[3];
-  rtems_unsigned32		ldtea;
-  rtems_unsigned8		ldtem;
-  rtems_unsigned8		siu_pad3[163];
+  uint32_t        siumcr;
+  uint32_t        sypcr;
+  uint8_t         siu_pad0[6];
+  uint16_t        swsr;
+  uint8_t         siu_pad1[20];
+  uint32_t  		bcr;
+  uint8_t  		ppc_acr;
+  uint8_t  		siu_pad4[3];
+  uint32_t  		ppc_alrh;
+  uint32_t  		ppc_alr1;
+  uint8_t  		lcl_acr;
+  uint8_t  		siu_pad5[3];
+  uint32_t  		lcl_alrh;
+  uint32_t  		lcl_alr1;
+  uint32_t  		tescr1;
+  uint32_t  		tescr2;
+  uint32_t  		l_tescr1;
+  uint32_t  		l_tescr2;
+  uint32_t  		pdtea;
+  uint8_t  		pdtem;
+  uint8_t  		siu_pad2[3];
+  uint32_t  		ldtea;
+  uint8_t  		ldtem;
+  uint8_t  		siu_pad3[163];
 
 
   /*
    * Memory Controller Block
    */
   m8260MEMCRegisters_t  memc[12];
-  rtems_unsigned8       mem_pad0[8];
-  rtems_unsigned32      mar;
-  rtems_unsigned8       mem_pad1[4];
-  rtems_unsigned32      mamr;
-  rtems_unsigned32      mbmr;
-  rtems_unsigned32      mcmr;
-  rtems_unsigned32		mdmr;
-  rtems_unsigned8       mem_pad2[4];
-  rtems_unsigned16      mptpr;
-  rtems_unsigned8		mem_pad5[2];
-  rtems_unsigned32      mdr;
-  rtems_unsigned8       mem_pad3[4];
-  rtems_unsigned32      psdmr;
-  rtems_unsigned32      lsdmr;
-  rtems_unsigned8		purt;
-  rtems_unsigned8		mem_pad6[3];
-  rtems_unsigned8		psrt;
-  rtems_unsigned8		mem_pad7[3];
-  rtems_unsigned8		lurt;
-  rtems_unsigned8		mem_pad8[3];
-  rtems_unsigned8		lsrt;
-  rtems_unsigned8		mem_pad9[3];
-  rtems_unsigned32      immr;
-  rtems_unsigned8       mem_pad4[84];
+  uint8_t         mem_pad0[8];
+  uint32_t        mar;
+  uint8_t         mem_pad1[4];
+  uint32_t        mamr;
+  uint32_t        mbmr;
+  uint32_t        mcmr;
+  uint32_t  		mdmr;
+  uint8_t         mem_pad2[4];
+  uint16_t        mptpr;
+  uint8_t  		mem_pad5[2];
+  uint32_t        mdr;
+  uint8_t         mem_pad3[4];
+  uint32_t        psdmr;
+  uint32_t        lsdmr;
+  uint8_t  		purt;
+  uint8_t  		mem_pad6[3];
+  uint8_t  		psrt;
+  uint8_t  		mem_pad7[3];
+  uint8_t  		lurt;
+  uint8_t  		mem_pad8[3];
+  uint8_t  		lsrt;
+  uint8_t  		mem_pad9[3];
+  uint32_t        immr;
+  uint8_t         mem_pad4[84];
 
   
   /*
    * System integration timers
    */
-  rtems_unsigned8		sit_pad0[32];
-  rtems_unsigned16      tmcntsc;
-  rtems_unsigned8		sit_pad6[2];
-  rtems_unsigned32      tmcnt;
-  rtems_unsigned32		tmcntsec;
-  rtems_unsigned32      tmcntal;
-  rtems_unsigned8		sit_pad2[16];
-  rtems_unsigned16      piscr;
-  rtems_unsigned8		sit_pad5[2];
-  rtems_unsigned32      pitc;
-  rtems_unsigned32      pitr;
-  rtems_unsigned8		sit_pad3[94];
-  rtems_unsigned8		sit_pad4[2390];
+  uint8_t  		sit_pad0[32];
+  uint16_t        tmcntsc;
+  uint8_t  		sit_pad6[2];
+  uint32_t        tmcnt;
+  uint32_t  		tmcntsec;
+  uint32_t        tmcntal;
+  uint8_t  		sit_pad2[16];
+  uint16_t        piscr;
+  uint8_t  		sit_pad5[2];
+  uint32_t        pitc;
+  uint32_t        pitr;
+  uint8_t  		sit_pad3[94];
+  uint8_t  		sit_pad4[2390];
 
   
   /*
    * Interrupt Controller
    */
-  rtems_unsigned16		sicr;
-  rtems_unsigned8		ict_pad1[2];
-  rtems_unsigned32		sivec;
-  rtems_unsigned32		sipnr_h;
-  rtems_unsigned32		sipnr_l;
-  rtems_unsigned32		siprr;
-  rtems_unsigned32		scprr_h;
-  rtems_unsigned32		scprr_l;
-  rtems_unsigned32		simr_h;
-  rtems_unsigned32		simr_l;
-  rtems_unsigned32		siexr;
-  rtems_unsigned8		ict_pad0[88];
+  uint16_t  		sicr;
+  uint8_t  		ict_pad1[2];
+  uint32_t  		sivec;
+  uint32_t  		sipnr_h;
+  uint32_t  		sipnr_l;
+  uint32_t  		siprr;
+  uint32_t  		scprr_h;
+  uint32_t  		scprr_l;
+  uint32_t  		simr_h;
+  uint32_t  		simr_l;
+  uint32_t  		siexr;
+  uint8_t  		ict_pad0[88];
 
 
   /*
    * Clocks and Reset
    */
-  rtems_unsigned32      sccr;
-  rtems_unsigned8		clr_pad1[4];
-  rtems_unsigned32      scmr;
-  rtems_unsigned8		clr_pad2[4];
-  rtems_unsigned32      rsr;
-  rtems_unsigned32      rmr;
-  rtems_unsigned8       clr_pad0[104];
+  uint32_t        sccr;
+  uint8_t  		clr_pad1[4];
+  uint32_t        scmr;
+  uint8_t  		clr_pad2[4];
+  uint32_t        rsr;
+  uint32_t        rmr;
+  uint8_t         clr_pad0[104];
   
 
   /*
    * Input/ Output Port
    */
-  rtems_unsigned32      pdira;
-  rtems_unsigned32      ppara;
-  rtems_unsigned32      psora;
-  rtems_unsigned32      podra;
-  rtems_unsigned32      pdata;
-  rtems_unsigned8       iop_pad0[12];
-  rtems_unsigned32      pdirb;
-  rtems_unsigned32      pparb;
-  rtems_unsigned32      psorb;
-  rtems_unsigned32      podrb;
-  rtems_unsigned32      pdatb;
-  rtems_unsigned8       iop_pad1[12];
-  rtems_unsigned32      pdirc;
-  rtems_unsigned32      pparc;
-  rtems_unsigned32      psorc;
-  rtems_unsigned32      podrc;
-  rtems_unsigned32      pdatc;
-  rtems_unsigned8       iop_pad2[12];
-  rtems_unsigned32      pdird;
-  rtems_unsigned32      ppard;
-  rtems_unsigned32      psord;
-  rtems_unsigned32      podrd;
-  rtems_unsigned32      pdatd;
-  rtems_unsigned8       iop_pad3[12];
+  uint32_t        pdira;
+  uint32_t        ppara;
+  uint32_t        psora;
+  uint32_t        podra;
+  uint32_t        pdata;
+  uint8_t         iop_pad0[12];
+  uint32_t        pdirb;
+  uint32_t        pparb;
+  uint32_t        psorb;
+  uint32_t        podrb;
+  uint32_t        pdatb;
+  uint8_t         iop_pad1[12];
+  uint32_t        pdirc;
+  uint32_t        pparc;
+  uint32_t        psorc;
+  uint32_t        podrc;
+  uint32_t        pdatc;
+  uint8_t         iop_pad2[12];
+  uint32_t        pdird;
+  uint32_t        ppard;
+  uint32_t        psord;
+  uint32_t        podrd;
+  uint32_t        pdatd;
+  uint8_t         iop_pad3[12];
 
 
   /*
    * CPM Timers
    */
-  rtems_unsigned8       tgcr1;
-  rtems_unsigned8       cpt_pad0[3];
-  rtems_unsigned8       tgcr2;
-  rtems_unsigned8       cpt_pad1[11];
-  rtems_unsigned16      tmr1;
-  rtems_unsigned16      tmr2;
-  rtems_unsigned16      trr1;
-  rtems_unsigned16      trr2;
-  rtems_unsigned16      tcr1;
-  rtems_unsigned16      tcr2;
-  rtems_unsigned16      tcn1;
-  rtems_unsigned16      tcn2;
-  rtems_unsigned16      tmr3;
-  rtems_unsigned16      tmr4;
-  rtems_unsigned16      trr3;
-  rtems_unsigned16      trr4;
-  rtems_unsigned16      tcr3;
-  rtems_unsigned16      tcr4;
-  rtems_unsigned16      tcn3;
-  rtems_unsigned16      tcn4;
-  rtems_unsigned16      ter1;
-  rtems_unsigned16      ter2;
-  rtems_unsigned16      ter3;
-  rtems_unsigned16      ter4;
-  rtems_unsigned8       cpt_pad2[608];
+  uint8_t         tgcr1;
+  uint8_t         cpt_pad0[3];
+  uint8_t         tgcr2;
+  uint8_t         cpt_pad1[11];
+  uint16_t        tmr1;
+  uint16_t        tmr2;
+  uint16_t        trr1;
+  uint16_t        trr2;
+  uint16_t        tcr1;
+  uint16_t        tcr2;
+  uint16_t        tcn1;
+  uint16_t        tcn2;
+  uint16_t        tmr3;
+  uint16_t        tmr4;
+  uint16_t        trr3;
+  uint16_t        trr4;
+  uint16_t        tcr3;
+  uint16_t        tcr4;
+  uint16_t        tcn3;
+  uint16_t        tcn4;
+  uint16_t        ter1;
+  uint16_t        ter2;
+  uint16_t        ter3;
+  uint16_t        ter4;
+  uint8_t         cpt_pad2[608];
 
 
   /*
    * DMA Block
    */
-  rtems_unsigned8       sdsr;
-  rtems_unsigned8       dma_pad0[3];
-  rtems_unsigned8       sdmr;
-  rtems_unsigned8       dma_pad1[3];
+  uint8_t         sdsr;
+  uint8_t         dma_pad0[3];
+  uint8_t         sdmr;
+  uint8_t         dma_pad1[3];
 
-  rtems_unsigned8       idsr1;
-  rtems_unsigned8       dma_pad2[3];
-  rtems_unsigned8       idmr1;
-  rtems_unsigned8       dma_pad3[3];
-  rtems_unsigned8       idsr2;
-  rtems_unsigned8       dma_pad4[3];
-  rtems_unsigned8       idmr2;
-  rtems_unsigned8       dma_pad5[3];
-  rtems_unsigned8       idsr3;
-  rtems_unsigned8       dma_pad6[3];
-  rtems_unsigned8       idmr3;
-  rtems_unsigned8       dma_pad7[3];
-  rtems_unsigned8       idsr4;
-  rtems_unsigned8       dma_pad8[3];
-  rtems_unsigned8       idmr4;
-  rtems_unsigned8       dma_pad9[707];
+  uint8_t         idsr1;
+  uint8_t         dma_pad2[3];
+  uint8_t         idmr1;
+  uint8_t         dma_pad3[3];
+  uint8_t         idsr2;
+  uint8_t         dma_pad4[3];
+  uint8_t         idmr2;
+  uint8_t         dma_pad5[3];
+  uint8_t         idsr3;
+  uint8_t         dma_pad6[3];
+  uint8_t         idmr3;
+  uint8_t         dma_pad7[3];
+  uint8_t         idsr4;
+  uint8_t         dma_pad8[3];
+  uint8_t         idmr4;
+  uint8_t         dma_pad9[707];
 
   
   /*
@@ -1377,57 +1377,57 @@ typedef struct m8260_ {
   m8260FCCRegisters_t   fcc2;
   m8260FCCRegisters_t   fcc3;
 
-  rtems_unsigned8		fcc_pad0[656];
+  uint8_t  		fcc_pad0[656];
 
   /*
    * BRG 5-8 Block
    */
-  rtems_unsigned32      brgc5;
-  rtems_unsigned32      brgc6;
-  rtems_unsigned32      brgc7;
-  rtems_unsigned32      brgc8;
-  rtems_unsigned8		brg_pad0[608];
+  uint32_t        brgc5;
+  uint32_t        brgc6;
+  uint32_t        brgc7;
+  uint32_t        brgc8;
+  uint8_t  		brg_pad0[608];
 
 
   /*
    * I2C
    */
-  rtems_unsigned8       i2mod;
-  rtems_unsigned8       i2m_pad0[3];
-  rtems_unsigned8       i2add;
-  rtems_unsigned8       i2m_pad1[3];
-  rtems_unsigned8       i2brg;
-  rtems_unsigned8       i2m_pad2[3];
-  rtems_unsigned8       i2com;
-  rtems_unsigned8       i2m_pad3[3];
-  rtems_unsigned8       i2cer;
-  rtems_unsigned8       i2m_pad4[3];
-  rtems_unsigned8       i2cmr;
-  rtems_unsigned8       i2m_pad5[331];
+  uint8_t         i2mod;
+  uint8_t         i2m_pad0[3];
+  uint8_t         i2add;
+  uint8_t         i2m_pad1[3];
+  uint8_t         i2brg;
+  uint8_t         i2m_pad2[3];
+  uint8_t         i2com;
+  uint8_t         i2m_pad3[3];
+  uint8_t         i2cer;
+  uint8_t         i2m_pad4[3];
+  uint8_t         i2cmr;
+  uint8_t         i2m_pad5[331];
   
   
   /*
    * CPM Block
    */
-  rtems_unsigned32      cpcr;
-  rtems_unsigned32      rccr;
-  rtems_unsigned8       cpm_pad3[14];
-  rtems_unsigned16      rter;
-  rtems_unsigned8		cpm_pad[2];
-  rtems_unsigned16      rtmr;
-  rtems_unsigned16      rtscr;
-  rtems_unsigned8       cpm_pad4[2];
-  rtems_unsigned32      rtsr;
-  rtems_unsigned8       cpm_pad5[12];
+  uint32_t        cpcr;
+  uint32_t        rccr;
+  uint8_t         cpm_pad3[14];
+  uint16_t        rter;
+  uint8_t  		cpm_pad[2];
+  uint16_t        rtmr;
+  uint16_t        rtscr;
+  uint8_t         cpm_pad4[2];
+  uint32_t        rtsr;
+  uint8_t         cpm_pad5[12];
   
 
   /*
    * BRG 1-4 Block
    */
-  rtems_unsigned32      brgc1;
-  rtems_unsigned32      brgc2;
-  rtems_unsigned32      brgc3;
-  rtems_unsigned32      brgc4;
+  uint32_t        brgc1;
+  uint32_t        brgc2;
+  uint32_t        brgc3;
+  uint32_t        brgc4;
   
 
   /*
@@ -1449,29 +1449,29 @@ typedef struct m8260_ {
   /*
    * SPI Block
    */
-  rtems_unsigned16      spmode;
-  rtems_unsigned8       spi_pad0[4];
-  rtems_unsigned8       spie;
-  rtems_unsigned8       spi_pad1[3];
-  rtems_unsigned8       spim;
-  rtems_unsigned8       spi_pad2[2];
-  rtems_unsigned8       spcom;
-  rtems_unsigned8       spi_pad3[82];
+  uint16_t        spmode;
+  uint8_t         spi_pad0[4];
+  uint8_t         spie;
+  uint8_t         spi_pad1[3];
+  uint8_t         spim;
+  uint8_t         spi_pad2[2];
+  uint8_t         spcom;
+  uint8_t         spi_pad3[82];
 
   
   /*
    * CPM Mux Block
    */
-  rtems_unsigned8       cmxsi1cr;
-  rtems_unsigned8       cmx_pad0[1];
-  rtems_unsigned8       cmxsi2cr;
-  rtems_unsigned8       cmx_pad1[1];
-  rtems_unsigned32      cmxfcr;
-  rtems_unsigned32      cmxscr;
-  rtems_unsigned8       cmxsmr;
-  rtems_unsigned8       cmx_pad2[1];
-  rtems_unsigned16      cmxuar;
-  rtems_unsigned8       cmx_pad3[16];
+  uint8_t         cmxsi1cr;
+  uint8_t         cmx_pad0[1];
+  uint8_t         cmxsi2cr;
+  uint8_t         cmx_pad1[1];
+  uint32_t        cmxfcr;
+  uint32_t        cmxscr;
+  uint8_t         cmxsmr;
+  uint8_t         cmx_pad2[1];
+  uint16_t        cmxuar;
+  uint8_t         cmx_pad3[16];
 
 
   /*
@@ -1482,24 +1482,24 @@ typedef struct m8260_ {
   m8260SIRegisters_t	si2;
   m8260MCCRegisters_t	mcc2;
 
-  rtems_unsigned8	mcc_pad0[1152];
+  uint8_t  	mcc_pad0[1152];
 
   /*
    * SI1 RAM
    */
-  rtems_unsigned8		si1txram[512];
-  rtems_unsigned8		ram_pad0[512];
-  rtems_unsigned8		si1rxram[512];
-  rtems_unsigned8		ram_pad1[512];
+  uint8_t  		si1txram[512];
+  uint8_t  		ram_pad0[512];
+  uint8_t  		si1rxram[512];
+  uint8_t  		ram_pad1[512];
 
 
   /*
    * SI2 RAM
    */
-  rtems_unsigned8		si2txram[512];
-  rtems_unsigned8		ram_pad2[512];
-  rtems_unsigned8		si2rxram[512];
-  rtems_unsigned8		ram_pad3[512];
+  uint8_t  		si2txram[512];
+  uint8_t  		ram_pad2[512];
+  uint8_t  		si2rxram[512];
+  uint8_t  		ram_pad3[512];
 
 
 } m8260_t;

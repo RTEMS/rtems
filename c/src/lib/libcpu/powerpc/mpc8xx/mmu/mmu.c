@@ -34,7 +34,7 @@
  */
 void mmu_init( void )
 {
-  register unsigned32 reg1, i;
+  register uint32_t   reg1, i;
 
   /*
    * Initialize the TLBs

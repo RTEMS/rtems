@@ -42,7 +42,7 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  rtems_unsigned32 value;
+  uint32_t   value;
   asm volatile ( " mftb %0": "=r" (value) );
   return value - lastInitValue;
 }

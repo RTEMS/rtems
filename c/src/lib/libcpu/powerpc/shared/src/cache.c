@@ -47,7 +47,7 @@
 void _CPU_cache_enable_data (
 	void )
 {
-  unsigned32 value;
+  uint32_t   value;
   PPC_Get_HID0( value );
   value |= 0x00004000;        /* set DCE bit */
   PPC_Set_HID0( value );
@@ -56,7 +56,7 @@ void _CPU_cache_enable_data (
 void _CPU_cache_disable_data (
 	void )
 {
-  unsigned32 value;
+  uint32_t   value;
   PPC_Get_HID0( value );
   value &= 0xFFFFBFFF;        /* clear DCE bit */
   PPC_Set_HID0( value );
@@ -65,7 +65,7 @@ void _CPU_cache_disable_data (
 void _CPU_cache_enable_instruction (
 	void )
 {
-  unsigned32 value;
+  uint32_t   value;
   PPC_Get_HID0( value );
   value |= 0x00008000;       /* Set ICE bit */
   PPC_Set_HID0( value );
@@ -74,7 +74,7 @@ void _CPU_cache_enable_instruction (
 void _CPU_cache_disable_instruction (
 	void )
 {
-  unsigned32 value;
+  uint32_t   value;
   PPC_Get_HID0( value );
   value &= 0xFFFF7FFF;       /* Clear ICE bit */
   PPC_Set_HID0( value );
@@ -108,7 +108,7 @@ void _CPU_cache_unfreeze_data ( void ) {}
 
 void _CPU_cache_enable_data ( void )
 {
-  unsigned32 r1;
+  uint32_t   r1;
   r1 = (0x2<<24);
   mtspr( 568, r1 );
   isync;
@@ -116,7 +116,7 @@ void _CPU_cache_enable_data ( void )
 
 void _CPU_cache_disable_data ( void )
 {
-  unsigned32 r1;
+  uint32_t   r1;
   r1 = (0x4<<24);
   mtspr( 568, r1 );
   isync;
@@ -135,7 +135,7 @@ void _CPU_cache_unfreeze_instruction ( void ) {}
 
 void _CPU_cache_enable_instruction ( void )
 {
-  unsigned32 r1;
+  uint32_t   r1;
   r1 = (0x2<<24);
   mtspr( 560, r1 );
   isync;
@@ -143,7 +143,7 @@ void _CPU_cache_enable_instruction ( void )
 
 void _CPU_cache_disable_instruction ( void )
 {
-  unsigned32 r1;
+  uint32_t   r1;
   r1 = (0x4<<24);
   mtspr( 560, r1 );
   isync;

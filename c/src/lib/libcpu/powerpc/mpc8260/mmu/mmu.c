@@ -40,7 +40,7 @@ void mmu_init( void )
 #if 0
 /* so far we leave mmu uninitialised */
 
-  register unsigned32 reg1, i;
+  register uint32_t   reg1, i;
 
   /*
    * Initialize the TLBs

@@ -20,7 +20,7 @@ extern "C" {
 
 /* Functions */
 
-void m8xx_cp_execute_cmd( unsigned16 command );
+void m8xx_cp_execute_cmd( uint16_t   command );
 void *m8xx_dpram_allocate( unsigned int byte_count );
 
 #define m8xx_bd_allocate(count)		\

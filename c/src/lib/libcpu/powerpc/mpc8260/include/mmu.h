@@ -23,9 +23,9 @@ extern "C" {
  * Buffers in the MMU of an MPC8260.
  */
 typedef struct {
-  unsigned32	mmu_epn;	/* Effective Page Number */
-  unsigned32	mmu_twc;	/* Tablewalk Control Register */
-  unsigned32	mmu_rpn;	/* Real Page Number */
+  uint32_t  	mmu_epn;	/* Effective Page Number */
+  uint32_t  	mmu_twc;	/* Tablewalk Control Register */
+  uint32_t  	mmu_rpn;	/* Real Page Number */
 } MMU_TLB_table_t;
 
 /*

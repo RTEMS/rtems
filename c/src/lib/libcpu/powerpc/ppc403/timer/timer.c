@@ -38,15 +38,15 @@
 
 #include <rtems.h>
 
-static volatile rtems_unsigned32 Timer_starting;
+static volatile uint32_t   Timer_starting;
 static rtems_boolean Timer_driver_Find_average_overhead;
 
 /*
  *  This is so small that this code will be reproduced where needed.
  */
-static inline rtems_unsigned32 get_itimer(void)
+static inline uint32_t   get_itimer(void)
 {
-   rtems_unsigned32 ret;
+   uint32_t   ret;
 
 #ifndef ppc405
    asm volatile ("mfspr %0, 0x3dd" : "=r" ((ret))); /* TBLO */
@@ -61,7 +61,7 @@ static inline rtems_unsigned32 get_itimer(void)
 
 void Timer_initialize()
 {
-  rtems_unsigned32 iocr;
+  uint32_t   iocr;
 
 #ifndef ppc405
   asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
@@ -84,8 +84,8 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned32 clicks;
-  rtems_unsigned32 total;
+  uint32_t   clicks;
+  uint32_t   total;
 
   clicks = get_itimer();
 

@@ -19,7 +19,7 @@
 #include <rtems.h>
 #include <bsp.h>
 
-rtems_unsigned64 Timer_driver_Start_time;
+uint64_t   Timer_driver_Start_time;
 
 rtems_boolean Timer_driver_Find_average_overhead = 0;
 unsigned clicks_overhead = 0;
@@ -30,9 +30,9 @@ unsigned clicks_overhead = 0;
 
 int Timer_get_clicks_overhead()
 {
-  rtems_unsigned64  clicks;
+  uint64_t    clicks;
 
-  PPC_Set_timebase_register((unsigned64) 0);
+  PPC_Set_timebase_register((uint64_t  ) 0);
   clicks = PPC_Get_timebase_register();
   assert(clicks <= 0xffffffff);
   clicks_overhead = (unsigned) clicks;
@@ -50,7 +50,7 @@ void Timer_initialize()
    */
 
   if (clicks_overhead == 0) clicks_overhead = Timer_get_clicks_overhead();
-  PPC_Set_timebase_register((unsigned64) 0);
+  PPC_Set_timebase_register((uint64_t  ) 0);
 }
 
 
@@ -60,16 +60,16 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned64  total64;
-  rtems_unsigned32  total;
+  uint64_t    total64;
+  uint32_t    total;
 
   /* approximately CLOCK_SPEED clicks per microsecond */
 
   total64 = PPC_Get_timebase_register();
 
-  assert( total64 <= 0xffffffff );  /* fits into a unsigned32 */
+  assert( total64 <= 0xffffffff );  /* fits into a uint32_t   */
 
-  total = (rtems_unsigned32) total64;
+  total = (uint32_t  ) total64;
 
   if ( Timer_driver_Find_average_overhead == 1 )
     return total;          /* in "clicks" of the decrementer units */
@@ -79,7 +79,7 @@ int Read_timer()
 
 unsigned long long Read_long_timer()
 {
-  rtems_unsigned64  total64;
+  uint64_t    total64;
 
   total64 = PPC_Get_timebase_register();
   return BSP_Convert_decrementer(total64 - clicks_overhead);

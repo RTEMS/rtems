@@ -1,3 +1,19 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* mpc505/timer/timer.c, mpc5xx/timer/timer.c,
+	mpc6xx/clock/c_clock.c, mpc6xx/timer/timer.c, mpc8260/clock/clock.c,
+	mpc8260/console-generic/console-generic.c, mpc8260/cpm/cp.c,
+	mpc8260/cpm/dpram.c, mpc8260/include/cpm.h, mpc8260/include/mmu.h,
+	mpc8260/include/mpc8260.h, mpc8260/mmu/mmu.c, mpc8260/timer/timer.c,
+	mpc8xx/clock/clock.c, mpc8xx/console-generic/console-generic.c,
+	mpc8xx/cpm/cp.c, mpc8xx/cpm/dpram.c, mpc8xx/include/cpm.h,
+	mpc8xx/include/mmu.h, mpc8xx/include/mpc8xx.h, mpc8xx/mmu/mmu.c,
+	mpc8xx/timer/timer.c, ppc403/clock/clock.c,
+	ppc403/console/console.c, ppc403/console/console405.c,
+	ppc403/ictrl/ictrl.c, ppc403/ictrl/ictrl.h, ppc403/timer/timer.c,
+	ppc403/tty_drv/tty_drv.c, rtems/powerpc/cache.h, shared/src/cache.c:
+	Convert to using c99 fixed size types.
+
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Add 2nd argument (rtems_updir) to RTEMS_TOP.

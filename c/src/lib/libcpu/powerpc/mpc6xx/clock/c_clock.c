@@ -33,13 +33,13 @@ extern int BSP_connect_clock_handler (void);
  *  Clock ticks since initialization
  */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t   Clock_driver_ticks;
 
 /*
  *  This is the value programmed into the count down timer.
  */
 
-rtems_unsigned32 Clock_Decrementer_value;
+uint32_t   Clock_Decrementer_value;
 
 /*
  * These are set by clock driver during its init
@@ -92,7 +92,7 @@ void clockIsr()
 
 int clockIsOn(void* unused)
 {
-  unsigned32 msr_value;
+  uint32_t   msr_value;
 
   _CPU_MSR_GET( msr_value );
   if (msr_value & MSR_EE) return 1;

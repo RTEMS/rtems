@@ -43,14 +43,14 @@
 #include <mpc8260.h>
 #include <bsp/irq.h>
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t   Clock_driver_ticks;
 extern int BSP_get_clock_irq_level();
 extern int BSP_connect_clock_handler(rtems_isr_entry);
 extern int BSP_disconnect_clock_handler();
 
 void Clock_exit( void );
 
-rtems_unsigned32 decrementer_value;
+uint32_t   decrementer_value;
 
 volatile int ClockInitialised = 0;
 
@@ -102,7 +102,7 @@ void clockOn(void* unused)
 
 #if 0
   unsigned desiredLevel;
-  rtems_unsigned32 pit_value;
+  uint32_t   pit_value;
   
   pit_value = (rtems_configuration_get_microseconds_per_tick() *
                rtems_cpu_configuration_get_clicks_per_usec()) - 1 ;

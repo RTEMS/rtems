@@ -150,9 +150,9 @@ int tty0_round(double x)
 }
 
 void 
-tty0BaudSet(unsigned32 baudrate)
+tty0BaudSet(uint32_t   baudrate)
 {
-  unsigned32 tmp;
+  uint32_t   tmp;
 
   tmp = tty0_round( (double)rtems_cpu_configuration_get_serial_per_sec() / (baudrate * 16) );
 

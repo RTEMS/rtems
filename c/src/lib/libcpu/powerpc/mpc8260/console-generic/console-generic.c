@@ -118,7 +118,7 @@ static int
 m8xx_smc_set_attributes (int minor, const struct termios *t)
 {
   int baud, brg=0, csize=0, ssize, psize;
-  rtems_unsigned16 clen=0, cstopb, parenb, parodd, cread; 
+  uint16_t   clen=0, cstopb, parenb, parodd, cread; 
 
   /* Baud rate */
   switch (t->c_cflag & CBAUD) {
@@ -232,7 +232,7 @@ static int
 m8xx_scc_set_attributes (int minor, const struct termios *t)
 {
   int baud, brg=0;
-  rtems_unsigned16 csize=0, cstopb, parenb, parodd;
+  uint16_t   csize=0, cstopb, parenb, parodd;
 
   /* Baud rate */
   switch (t->c_cflag & CBAUD) {

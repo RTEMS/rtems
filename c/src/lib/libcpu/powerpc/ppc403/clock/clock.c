@@ -43,8 +43,8 @@
 
 #include <stdlib.h>                     /* for atexit() */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
-static rtems_unsigned32 pit_value, tick_time;
+volatile uint32_t   Clock_driver_ticks;
+static uint32_t   pit_value, tick_time;
 static rtems_boolean auto_restart;
 
 void Clock_exit( void );
@@ -62,9 +62,9 @@ rtems_isr_entry set_vector(                    /* returns old vector */
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
  
-static inline rtems_unsigned32 get_itimer(void)
+static inline uint32_t   get_itimer(void)
 {
-    register rtems_unsigned32 rc;
+    register uint32_t   rc;
 
 #ifndef ppc405 /* this is a ppc403 */
     asm volatile ("mfspr %0, 0x3dd" : "=r" ((rc))); /* TBLO */
@@ -82,10 +82,10 @@ static inline rtems_unsigned32 get_itimer(void)
 rtems_isr
 Clock_isr(rtems_vector_number vector)
 {
-      rtems_unsigned32 clicks_til_next_interrupt;
+      uint32_t   clicks_til_next_interrupt;
     if (!auto_restart)
     {
-      rtems_unsigned32 itimer_value;
+      uint32_t   itimer_value;
       /*
        * setup for next interrupt; making sure the new value is reasonably
        * in the future.... in case we lost out on an interrupt somehow
@@ -141,10 +141,10 @@ Clock_isr(rtems_vector_number vector)
 void Install_clock(rtems_isr_entry clock_isr)
 {
     rtems_isr_entry previous_isr;
-    rtems_unsigned32 iocr;
-    register rtems_unsigned32 tcr;
+    uint32_t   iocr;
+    register uint32_t   tcr;
 #ifdef ppc403
-    rtems_unsigned32 pvr;
+    uint32_t   pvr;
 #endif /* ppc403 */
  
     Clock_driver_ticks = 0;
@@ -225,7 +225,7 @@ void
 ReInstall_clock(rtems_isr_entry new_clock_isr)
 {
     rtems_isr_entry previous_isr;
-    rtems_unsigned32 isrlevel = 0;
+    uint32_t   isrlevel = 0;
 
     rtems_interrupt_disable(isrlevel);
     
@@ -246,7 +246,7 @@ ReInstall_clock(rtems_isr_entry new_clock_isr)
 void
 Clock_exit(void)
 {
-    register rtems_unsigned32 tcr;
+    register uint32_t   tcr;
  
     asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
  

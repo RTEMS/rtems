@@ -206,9 +206,9 @@ spiStopRemoteTx (int minor)
 }
 
 void 
-spiBaudSet(unsigned32 baudrate)
+spiBaudSet(uint32_t   baudrate)
 {
-  unsigned32 tmp;
+  uint32_t   tmp;
   tmp = rtems_cpu_configuration_get_serial_per_sec() / baudrate;
   tmp = ((tmp) >> 4) - 1;
   port->BRDL = tmp & 0xff;

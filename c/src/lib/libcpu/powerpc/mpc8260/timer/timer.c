@@ -50,7 +50,7 @@
 #include <rtems.h>
 #include <mpc8260.h>
 
-static volatile rtems_unsigned32 Timer_starting;
+static volatile uint32_t   Timer_starting;
 static rtems_boolean Timer_driver_Find_average_overhead;
 
 extern rtems_cpu_table Cpu_table;
@@ -63,9 +63,9 @@ extern rtems_cpu_table Cpu_table;
 /*
  *  This is so small that this code will be reproduced where needed.
  */
-static inline rtems_unsigned32 get_itimer(void)
+static inline uint32_t   get_itimer(void)
 {
-   rtems_unsigned32 ret;
+   uint32_t   ret;
 
    asm volatile ("mftb %0" : "=r" ((ret))); /* TBLO */
 
@@ -87,8 +87,8 @@ void Timer_initialize(void)
 
 int Read_timer(void)
 {
-  rtems_unsigned32 clicks;
-  rtems_unsigned32 total;
+  uint32_t   clicks;
+  uint32_t   total;
 
   clicks = get_itimer();
 

@@ -191,9 +191,9 @@ int round(double x)
 }
 
 void 
-spiBaudSet(unsigned32 baudrate)
+spiBaudSet(uint32_t   baudrate)
 {
-  unsigned32 tmp;
+  uint32_t   tmp;
 
   tmp = round( (double)rtems_cpu_configuration_get_serial_per_sec() / (baudrate * 16) );
 
