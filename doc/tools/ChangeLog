@@ -1,3 +1,32 @@
+2003-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, configure.ac: Removed references to deleted directories.
+	* src2html/.cvsignore, src2html/ChangeLog, src2html/Makefile.am,
+	src2html1.4a/.cvsignore, src2html1.4a/ChangeLog,
+	src2html1.4a/Makefile.am, src2html1.4a/Readme, src2html1.4a/ctags-wr,
+	src2html1.4a/src2html, src2html1.4a/src2html.1,
+	src2html1.4a/src2html.cgi, src2html1.4a/Ctags/.cvsignore,
+	src2html1.4a/Ctags/C.c, src2html1.4a/Ctags/Makefile.am,
+	src2html1.4a/Ctags/ctags.1, src2html1.4a/Ctags/ctags.c,
+	src2html1.4a/Ctags/ctags.h, src2html1.4a/Ctags/fortran.c,
+	src2html1.4a/Ctags/lisp.c, src2html1.4a/Ctags/print.c,
+	src2html1.4a/Ctags/strerror.c, src2html1.4a/Ctags/tree.c,
+	src2html1.4a/Ctags/yacc.c, src2html1.4a/Ctags/z.c,
+	src2html1.4a/FreeBSD/.cvsignore, src2html1.4a/FreeBSD/FreeBSD.hdr,
+	src2html1.4a/FreeBSD/FreeBSD.s2h, src2html1.4a/FreeBSD/Makefile.am,
+	src2html1.4a/FreeBSD/conf.hdr, src2html1.4a/FreeBSD/ddb.hdr,
+	src2html1.4a/FreeBSD/i386.i386.hdr,
+	src2html1.4a/FreeBSD/i386.include.hdr,
+	src2html1.4a/FreeBSD/i386.isa.hdr,
+	src2html1.4a/FreeBSD/i386.stand.hdr, src2html1.4a/FreeBSD/kern.hdr,
+	src2html1.4a/FreeBSD/net.hdr, src2html1.4a/FreeBSD/netinet.hdr,
+	src2html1.4a/FreeBSD/nfs.hdr, src2html1.4a/FreeBSD/stand.hdr,
+	src2html1.4a/FreeBSD/sys.hdr, src2html1.4a/FreeBSD/ufs.hdr,
+	src2html1.4a/FreeBSD/vm.hdr, src2html1.4a/ctags-emacs/.cvsignore,
+	src2html1.4a/ctags-emacs/Makefile.am,
+	src2html1.4a/ctags-emacs/README, src2html1.4a/ctags-emacs/ctags,
+	src2html1.4a/ctags-emacs/etags.c-ada-patch: Removed.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src2html: Remove.
