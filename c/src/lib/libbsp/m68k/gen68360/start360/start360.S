@@ -396,8 +396,8 @@ ZEROLOOPTEST:
 	bcs.s	ZEROLOOP		| No, skip
 
 	movel	#stack_init,a7		| set master stack pointer
-	movel	d0,a7@-			| environp
-	movel	d0,a7@-			| argv
+	pea	env			| envp
+	pea	arg			| argv
 	movel	d0,a7@-			| argc
 	jsr	SYM(boot_card)		| Call C main
 
@@ -422,11 +422,16 @@ BEGIN_DATA_DCL
         .align 2
 	PUBLIC (environ)
 SYM (environ):
-	.long	0
+	.long	env
 	PUBLIC (_M68kSpuriousInterruptCount)
 SYM (_M68kSpuriousInterruptCount):
 	.long	0
 END_DATA_DCL
+
+BEGIN_BSS
+env:	.long	0
+arg:	.long	0
+END_BSS
 
 END
 
