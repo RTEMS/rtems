@@ -17,4 +17,4 @@ $(PROJECT_INCLUDE)/rdbg/%.h: %.h
 
 all-local: $(PREINSTALL_FILES)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../automake/local.am
