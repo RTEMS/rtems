@@ -19,14 +19,14 @@ SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/lib.cfg
+include $(top_srcdir)/../../../automake/lib.am
 
 PREINSTALL_FILES = \
 $(PROJECT_INCLUDE)/libchip \
 $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
 
-TMPINSTALL_FILES = \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBSUFFIX_VA)
+TMPINSTALL_FILES += \
+$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
 $(PROJECT_INCLUDE)/libchip:
 	@$(mkinstalldirs) $@
@@ -39,10 +39,10 @@ $(PROJECT_INCLUDE)/libchip/%.h: %.h
 
 AM_CFLAGS += $(LIBC_DEFINES)
 
-$(LIB): $(SRCS) ${OBJS}
+$(LIB): ${OBJS}
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBSUFFIX_VA): $(LIB)
+$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
 all: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)

@@ -84,7 +84,14 @@ while( <> )
   }
   elsif ( /^[\s\t]*include[\s\t]*\$\(top_srcdir\)[\.\/]*automake\/(.*)\.am$/o )
   {
-    # remove the line 
+    if ( "$1" eq "lib" )
+    {
+      print "include \$(top_srcdir)/${rtems_top}automake/$1.am\n" ;
+    }
+  }
+  elsif ( /^[\s\t]*include[\s\t]*\$\(RTEMS_ROOT\)\/make\/lib.cfg$/o )
+  {
+    print "include \$(top_srcdir)/${rtems_top}automake/lib.am\n" ;
   }
   elsif ( /^[\s\t]*SUBDIRS.*$/o )
   {

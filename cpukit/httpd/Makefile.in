@@ -6,7 +6,7 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 top_builddir = ..
-subdir = rtems_servers
+subdir = rtems_webserver
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -17,9 +17,9 @@ LIBNAME = lib.a
 LIB = ${ARCH}/${LIBNAME}
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES=asp balloc wbase64 default ejlex ejparse form h handler mime \
-	 misc webpage ringq rom security socket sym uemf url value webcomp \
-	 webrom webs websuemf webmain
+C_PIECES = asp balloc wbase64 default ejlex ejparse form h handler mime misc \
+    webpage ringq rom security socket sym uemf url value webcomp webrom webs \
+    websuemf webmain
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

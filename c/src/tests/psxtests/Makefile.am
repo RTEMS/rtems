@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SHARED_DIRS = filesupp support
+SHARED_DIRS = support
 
 POSIX_DIRS = psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psx10 psx11 psx12 psxtime psxtimer psxcancel psxmsgq01 psxsem01

@@ -40,7 +40,6 @@ AC_SUBST(CC_LDFLAGS_PROFILE_V)
 # Try to explicitly list a Makefile here
 AC_OUTPUT( 
 Makefile
-filesupp/Makefile
 psx01/Makefile
 psx02/Makefile
 psx03/Makefile

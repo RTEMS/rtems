@@ -191,6 +191,10 @@ sub subst_line
      print STDERR "WARNING: Replacing RTEMS_HAS_$2 with HAS_$2\n" ;
      $_ = "$1HAS_$2$3\n" ;
   }
+  if ( /^[\s]*\$[({]PGM[)}]:[\s]*(.*)\$([({]SRCS[)}])(.*)$/o )
+  {                      
+      $_ = "\$(PGM):$1$3\n" ;
+  }
   if ( /^.*\$\(make\-exe\).*$/o )
   {
     $make_exe_seen = 1 ;

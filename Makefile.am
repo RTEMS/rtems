@@ -13,7 +13,8 @@ SUBDIRS = doc make tools @TARGET_SUBDIRS@
 
 AUTOMAKE_FILES = \
 automake/subdirs.am \
-automake/local.am
+automake/local.am \
+automake/lib.am
 
 ACLOCAL_FILES += \
 aclocal/ar-s.m4 \

@@ -2,7 +2,7 @@ dnl $Id$
 
 AC_DEFUN(RTEMS_ENABLE_ITRON,
 [
-AC_BEFORE([$0], [RTEMS_CHECK_ITRON_API])dnl
+## AC_BEFORE([$0], [RTEMS_CHECK_ITRON_API])dnl
 
 AC_ARG_ENABLE(itron,
 [  --enable-itron                       enable itron interface],
