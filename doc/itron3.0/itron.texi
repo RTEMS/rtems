@@ -1,4 +1,4 @@
-\input ../tools/texinfo   @c -*-texinfo-*-
+\input texinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename itron
 @syncodeindex vr fn
@@ -16,7 +16,7 @@
 @c
 
 @c
-@c   Master file for the ITRON C User's Guide
+@c   Master file for the RTEMS ITRON 3.0 API User's Guide
 @c
 
 @c Joel's Questions
@@ -25,13 +25,13 @@
 @c  2.  Why does paragraphindent show up in HTML?
 @c
 
-@include ../tools/setup.texi
+@include ../common/setup.texi
 
 @ignore
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS ITRON User's Guide: (itron).   ITRON Guide
+* RTEMS ITRON 3.0 API User's Guide: (itron).   ITRON Guide
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -66,14 +66,14 @@ END-INFO-DIR-ENTRY
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage ITRON User's Guide
+@c @shorttitlepage RTEMS ITRON 3.0 API User's Guide
 
 @setchapternewpage odd
-@settitle ITRON API User's Guide
+@settitle RTEMS ITRON 3.0 API User's Guide
 @titlepage
 @finalout
 
-@title RTEMS ITRON User's Guide
+@title RTEMS ITRON 3.0 User's Guide
 @subtitle Edition @value{edition}, for RTEMS @value{version}
 @sp 1
 @subtitle @value{update-month}
@@ -102,7 +102,7 @@ END-INFO-DIR-ENTRY
 @node Top, , (dir), (dir)
 @top itron
 
-This is the online version of the RTEMS ITRON API User's Guide
+This is the online version of the RTEMS ITRON 3.0 API User's Guide.
 
 @menu
 * ITRON Implementation Status::
