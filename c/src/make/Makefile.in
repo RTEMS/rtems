@@ -152,7 +152,7 @@ rtems_bsp_makedir = $(rtems_bspdir)/make
 rtems_bsp_make_DATA =  bsp.cfg
 
 
-SUBDIRS = compilers custom Templates
+SUBDIRS = compilers custom
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../../mkinstalldirs
 CONFIG_CLEAN_FILES =  Makefile.inc main.cfg host.cfg target.cfg bsp.cfg

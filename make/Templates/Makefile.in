@@ -87,10 +87,15 @@ target_subdirs = @target_subdirs@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-EXTRA_DIST =  Makefile.dir Makefile.leaf Makefile.lib
+rtems_makedir = $(prefix)/make
+rtems_make_Templatesdir = $(rtems_makedir)/Templates
+
+rtems_make_Templates_DATA =  Makefile.dir Makefile.leaf Makefile.lib
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
+DATA =  $(rtems_make_Templates_DATA)
+
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -107,6 +112,25 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+
+install-rtems_make_TemplatesDATA: $(rtems_make_Templates_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(rtems_make_Templatesdir)
+	@list='$(rtems_make_Templates_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(rtems_make_Templatesdir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(rtems_make_Templatesdir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(rtems_make_Templatesdir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(rtems_make_Templatesdir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-rtems_make_TemplatesDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(rtems_make_Templates_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(rtems_make_Templatesdir)/$$p; \
+	done
 tags: TAGS
 TAGS:
 
@@ -142,19 +166,20 @@ installcheck: installcheck-am
 install-exec-am:
 install-exec: install-exec-am
 
-install-data-am:
+install-data-am: install-rtems_make_TemplatesDATA
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am:
+uninstall-am: uninstall-rtems_make_TemplatesDATA
 uninstall: uninstall-am
-all-am: Makefile
+all-am: Makefile $(DATA)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(rtems_make_Templatesdir)
 
 
 mostlyclean-generic:
@@ -184,12 +209,13 @@ maintainer-clean-am:  maintainer-clean-generic distclean-am
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: tags distdir info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+.PHONY: uninstall-rtems_make_TemplatesDATA \
+install-rtems_make_TemplatesDATA tags distdir info-am info dvi-am dvi \
+check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 debug-am:

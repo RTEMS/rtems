@@ -125,7 +125,6 @@ main.cfg
 host.cfg
 target.cfg
 bsp.cfg
-Templates/Makefile
 custom/Makefile
 custom/default.cfg
 compilers/Makefile

@@ -41,7 +41,7 @@ $(srcdir)/target.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/target.cfg.in
 	cp $< $@
 endif
 
-SUBDIRS = compilers custom Templates
+SUBDIRS = compilers custom
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
