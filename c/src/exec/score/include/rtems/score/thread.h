@@ -14,83 +14,36 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_THREAD_h
-#define __RTEMS_THREAD_h
+#ifndef __THREAD_h
+#define __THREAD_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/asr.h>
-#include <rtems/attr.h>
-#include <rtems/context.h>
-#include <rtems/cpu.h>
-#include <rtems/eventset.h>
-#include <rtems/modes.h>
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/priority.h>
-#include <rtems/stack.h>
-#include <rtems/states.h>
-#include <rtems/tod.h>
-#include <rtems/tqdata.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/context.h>
+#include <rtems/core/cpu.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/core/priority.h>
+#include <rtems/core/stack.h>
+#include <rtems/core/states.h>
+#include <rtems/core/tod.h>
+#include <rtems/core/tqdata.h>
+#include <rtems/core/watchdog.h>
 
 /*
- *  Notepads constants (indices into notepad array)
+ *  The following defines the "return type" of a thread.
  */
 
-#define RTEMS_NOTEPAD_FIRST 0             /* lowest numbered notepad */
-#define RTEMS_NOTEPAD_0    0              /* notepad location 0  */
-#define RTEMS_NOTEPAD_1    1              /* notepad location 1  */
-#define RTEMS_NOTEPAD_2    2              /* notepad location 2  */
-#define RTEMS_NOTEPAD_3    3              /* notepad location 3  */
-#define RTEMS_NOTEPAD_4    4              /* notepad location 4  */
-#define RTEMS_NOTEPAD_5    5              /* notepad location 5  */
-#define RTEMS_NOTEPAD_6    6              /* notepad location 6  */
-#define RTEMS_NOTEPAD_7    7              /* notepad location 7  */
-#define RTEMS_NOTEPAD_8    8              /* notepad location 8  */
-#define RTEMS_NOTEPAD_9    9              /* notepad location 9  */
-#define RTEMS_NOTEPAD_10   10             /* notepad location 10 */
-#define RTEMS_NOTEPAD_11   11             /* notepad location 11 */
-#define RTEMS_NOTEPAD_12   12             /* notepad location 12 */
-#define RTEMS_NOTEPAD_13   13             /* notepad location 13 */
-#define RTEMS_NOTEPAD_14   14             /* notepad location 14 */
-#define RTEMS_NOTEPAD_15   15             /* notepad location 15 */
-#define RTEMS_NOTEPAD_LAST RTEMS_NOTEPAD_15     /* highest numbered notepad */
-
-#define RTEMS_NUMBER_NOTEPADS  (RTEMS_NOTEPAD_LAST+1)
-
-/*
- *  The following defines the "return type" of an RTEMS thread.
- *
- *  NOTE:  Keep both types for internal threads.
- */
-
-typedef void rtems_task;
 typedef void Thread;
 
 /*
- *  The following defines the argument to an RTEMS thread.
- */
-
-typedef unsigned32 rtems_task_argument;
-typedef unsigned32 Thread_Argument;
-
-/*
- *  The following defines the type for the entry point of an RTEMS thread.
- */
-
-typedef rtems_task ( *rtems_task_entry )(
-                      rtems_task_argument
-                   );
-
-typedef Thread ( *Thread_Entry )( );
-
-/*
- *  The following structure contains the information which defines
- *  the starting state of a thread.
+ *  The following defines the ways in which the entry point for a
+ *  thread can be invoked.  Basically, it can be passed any
+ *  combination/permutation of a pointer and an unsigned32 value.
+ *
+ *  NOTE: For now, we are ignoring the return type.
  */
 
 typedef enum {
@@ -100,12 +53,22 @@ typedef enum {
   THREAD_START_BOTH_NUMERIC_FIRST
 } Thread_Start_types;
 
+typedef Thread ( *Thread_Entry )( );
+
+/*
+ *  The following structure contains the information which defines
+ *  the starting state of a thread.
+ */
+
 typedef struct {
   Thread_Entry         entry_point;      /* starting thread address         */
   Thread_Start_types   prototype;        /* how task is invoked             */
   void                *pointer_argument; /* pointer argument                */
   unsigned32           numeric_argument; /* numeric argument                */
-  Modes_Control        initial_modes;    /* initial mode                    */
+                                         /* initial execution modes         */
+  boolean              is_preemptible;
+  boolean              is_timeslice;
+  unsigned32           isr_level;
   Priority_Control     initial_priority; /* initial priority                */
   Stack_Control        Initial_stack;    /* stack information               */
   void                *fp_context;       /* initial FP context area address */
@@ -117,16 +80,21 @@ typedef struct {
  *  a thread which it is  waiting for a resource.
  */
 
+#define THREAD_STATUS_PROXY_BLOCKING 0x1111111
+
 typedef struct {
   Objects_Id            id;              /* waiting on this object       */
-  rtems_option          option_set;      /* wait mode                    */
-  union {
-    unsigned32          segment_size;    /* size of segment requested    */
-    rtems_event_set     event_condition;
-    unsigned32         *message_size_p;  /* ptr for return size of message */
-  } Extra;
-  void                 *return_argument; /* address of user return param */
-  rtems_status_code     return_code;     /* status for thread awakened   */
+  unsigned32            count;           /* "generic" fields to be used */
+  void                 *return_argument; /*   when blocking */
+  void                 *return_argument_1;
+  unsigned32            option;
+
+  /*
+   *  NOTE: The following assumes that all API return codes can be
+   *        treated as an unsigned32.  
+   */
+  unsigned32            return_code;     /* status for thread awakened   */
+
   Chain_Control         Block2n;         /* 2 - n priority blocked chain */
   Thread_queue_Control *queue;           /* pointer to thread queue      */
 }   Thread_Wait_information;
@@ -147,7 +115,7 @@ typedef struct {
   unsigned32               resource_count;
   Thread_Wait_information  Wait;
   Watchdog_Control         Timer;
-  rtems_packet_prefix     *receive_packet;
+  MP_packet_Prefix        *receive_packet;
      /****************** end of common block ********************/
   Chain_Node               Active;
 }   Thread_Proxy_control;
@@ -161,15 +129,12 @@ typedef struct {
  *        memory images for the shared part.
  */
 
-/* XXX structure in wrong file .. API .. not core */
+typedef enum {
+  THREAD_API_RTEMS
+}  Thread_APIs;
 
-typedef struct {
-  boolean                   is_global;
-  unsigned32                Notepads[ RTEMS_NUMBER_NOTEPADS ];
-  rtems_event_set           pending_events;
-  rtems_event_set           events_out;
-  ASR_Information           Signal;
-}  RTEMS_API_Control;
+#define THREAD_API_FIRST THREAD_API_RTEMS
+#define THREAD_API_LAST  THREAD_API_RTEMS
 
 typedef struct {
   Objects_Control           Object;
@@ -179,24 +144,30 @@ typedef struct {
   unsigned32                resource_count;
   Thread_Wait_information   Wait;
   Watchdog_Control          Timer;
-  rtems_packet_prefix      *receive_packet;
+  MP_packet_Prefix         *receive_packet;
      /****************** end of common block ********************/
+  boolean                   is_global;
   Chain_Control            *ready;
   Priority_Information      Priority_map;
   Thread_Start_information  Start;
-  Modes_Control             current_modes;
+  boolean                   is_preemptible;
+  boolean                   is_timeslice;
   Context_Control           Registers;
   void                     *fp_context;
-  RTEMS_API_Control        *RTEMS_API;
-  void                     *extension;
+  void                     *API_Extensions[ THREAD_API_LAST + 1 ];
+  void                    **extensions;
 }   Thread_Control;
 
 /*
- *  External API name for Thread_Control
+ *  The following context area contains the context of the "thread"
+ *  which invoked the start multitasking routine.  This context is 
+ *  restored as the last action of the stop multitasking routine.  Thus
+ *  control of the processor can be returned to the environment
+ *  which initiated the system.
  */
-
-typedef Thread_Control rtems_tcb;
-
+ 
+EXTERN Context_Control _Thread_BSP_context;
+ 
 /*
  *  The following declares the dispatch critical section nesting
  *  counter which is used to prevent context switches at inopportune
@@ -204,6 +175,14 @@ typedef Thread_Control rtems_tcb;
  */
 
 EXTERN unsigned32 _Thread_Dispatch_disable_level;
+
+/*
+ *  The following holds how many user extensions are in the system.  This
+ *  is used to determine how many user extension data areas to allocate
+ *  per thread.
+ */
+
+EXTERN unsigned32 _Thread_Maximum_extensions;
 
 /*
  *  The following data items are used to manage timeslicing.
@@ -228,7 +207,7 @@ EXTERN Thread_Control *_Thread_Executing;
 
 /*
  *  The following points to the highest priority ready thread
- *  in the system.  Unless the current thread is RTEMS_NO_PREEMPT,
+ *  in the system.  Unless the current thread is not preemptibl,
  *  then this thread will be context switched to when the next
  *  dispatch occurs.
  */
@@ -243,16 +222,6 @@ EXTERN Thread_Control *_Thread_Heir;
 EXTERN Thread_Control *_Thread_Allocated_fp;
 
 /*
- *  The following context area contains the context of the "thread"
- *  which invoked rtems_initialize_executive.  This context is restored
- *  as the last action of the rtems_shutdown_executive directive.  Thus
- *  control of the processor can be returned to the environment
- *  which initiated RTEMS.
- */
-
-EXTERN Context_Control _Thread_BSP_context;
-
-/*
  *  _Thread_Handler_initialization
  *
  *  DESCRIPTION:
@@ -261,8 +230,9 @@ EXTERN Context_Control _Thread_BSP_context;
  */
 
 void _Thread_Handler_initialization (
-  unsigned32 ticks_per_timeslice,
-  unsigned32 maximum_proxies
+  unsigned32   ticks_per_timeslice,
+  unsigned32   maximum_extensions,
+  unsigned32   maximum_proxies
 );
 
 /*
@@ -272,7 +242,7 @@ void _Thread_Handler_initialization (
  *
  *  This routine initiates multitasking.  It is invoked only as
  *  part of initialization and its invocation is the last act of
- *  the rtems_initialize_executive directive.
+ *  the non-multitasking part of the system initialization.
  */
 
 void _Thread_Start_multitasking (
@@ -286,8 +256,8 @@ void _Thread_Start_multitasking (
  *  DESCRIPTION:
  *
  *  This routine halts multitasking and returns control to
- *  the "thread" which initially invoked the rtems_initialize_executive
- *  directive.
+ *  the "thread" (i.e. the BSP) which initially invoked the 
+ *  routine which initialized the system.
  */
 
 STATIC INLINE void _Thread_Stop_multitasking( void );
@@ -333,7 +303,9 @@ boolean _Thread_Initialize(
   unsigned32           stack_size,    /* insure it is >= min */
   boolean              is_fp,         /* TRUE if thread uses FP */
   Priority_Control     priority,
-  Modes_Control        mode,
+  boolean              is_preemptible,
+  boolean              is_timeslice,
+  unsigned32           isr_level,
   Objects_Name         name
  
 );
@@ -452,7 +424,7 @@ void _Thread_Set_transient(
  *  at the priority of the currently executing thread, then the
  *  executing thread's timeslice is reset.  Otherwise, the
  *  currently executing thread is placed at the rear of the
- *  RTEMS_FIFO for this priority and a new heir is selected.
+ *  FIFO for this priority and a new heir is selected.
  */
 
 void _Thread_Reset_timeslice( void );
@@ -551,8 +523,7 @@ void _Thread_Handler( void );
  *  DESCRIPTION:
  *
  *  This routine is invoked when a thread must be unblocked at the
- *  end of a delay such as the rtems_task_wake_after and rtems_task_wake_when
- *  directives.
+ *  end of a time based delay (i.e. wake after or wake when).
  */
 
 void _Thread_Delay_ended(
@@ -590,23 +561,14 @@ void _Thread_Set_priority(
 );
 
 /*
- *  _Thread_Change_mode
+ *  _Thread_Evaluate_mode
  *
  *  DESCRIPTION:
  *
- *  This routine changes the current values of the modes
- *  indicated by mask of the calling thread are changed to that
- *  indicated in mode_set.  The former mode of the thread is
- *  returned in mode_set.  If the changes in the current mode
- *  indicate that a thread dispatch operation may be necessary,
- *  then need_dispatch is TRUE, otherwise it is FALSE.
+ *  This routine XXX
  */
 
-boolean _Thread_Change_mode(
-  Modes_Control  new_mode_set,
-  Modes_Control  mask,
-  Modes_Control *old_mode_set
-);
+boolean _Thread_Evaluate_mode( void );
 
 /*
  *  _Thread_Resume
@@ -782,8 +744,21 @@ STATIC INLINE Thread_Control *_Thread_Get (
   Objects_Locations *location
 );
 
-#include <rtems/thread.inl>
-#include <rtems/threadmp.h>
+/*
+ *  _Thread_Is_proxy_blocking
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the status code is equal to the
+ *  status which indicates that a proxy is blocking, and FALSE otherwise.
+ */
+ 
+STATIC INLINE boolean _Thread_Is_proxy_blocking (
+  unsigned32 code
+);
+
+#include <rtems/core/thread.inl>
+#include <rtems/core/threadmp.h>
 
 #ifdef __cplusplus
 }

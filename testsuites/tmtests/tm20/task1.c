@@ -11,13 +11,10 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
-rtems_device_major_number _STUB_major = 0;
+rtems_device_major_number _STUB_major = 1;
 
 rtems_id         Region_id;
 rtems_name       Region_name;
@@ -49,6 +46,8 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 20 ***" );
 
@@ -425,6 +424,7 @@ rtems_task Task_1(
     CALLING_OVERHEAD_IO_CONTROL
   );
 
+  puts( "*** END OF TEST 20 ***" );
   exit( 0 );
 }
 

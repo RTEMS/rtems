@@ -14,9 +14,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/object.h>
-#include <rtems/wkspace.h>
-#include <rtems/config.h>
+#include <rtems/core/interr.h>
+#include <rtems/core/object.h>
+#include <rtems/core/wkspace.h>
+#include <rtems/rtems/support.h>
 
 /*PAGE
  *
@@ -25,9 +26,12 @@
  */
 
 void _Objects_MP_Handler_initialization (
-  unsigned32  maximum_global_objects
+  unsigned32 node,
+  unsigned32 maximum_nodes,
+  unsigned32 maximum_global_objects
 )
 {
+  _Objects_MP_Maximum_global_objects = maximum_global_objects;
 
   if ( maximum_global_objects == 0 ) {
     _Chain_Initialize_empty( &_Objects_MP_Inactive_global_objects );
@@ -62,7 +66,7 @@ void _Objects_MP_Open (
   the_global_object->name      = the_name;
  
   _Chain_Prepend(
-    &information->global_table[ rtems_get_node( the_id ) ],
+    &information->global_table[ _Objects_Get_node( the_id ) ],
     &the_global_object->Object.Node
   );
 
@@ -89,7 +93,11 @@ boolean _Objects_MP_Allocate_and_open (
     if ( is_fatal_error == FALSE )
       return FALSE;
 
-    rtems_fatal_error_occurred( RTEMS_TOO_MANY );
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_OUT_OF_GLOBAL_OBJECTS
+    );
 
   }
 
@@ -113,7 +121,7 @@ void _Objects_MP_Close (
   Chain_Node         *the_node;
   Objects_MP_Control *the_object;
 
-  the_chain = &information->global_table[ rtems_get_node( the_id ) ];
+  the_chain = &information->global_table[ _Objects_Get_node( the_id ) ];
 
   for ( the_node = the_chain->first ;
         !_Chain_Is_tail( the_chain, the_node ) ;
@@ -132,9 +140,11 @@ void _Objects_MP_Close (
 
   }
 
- rtems_fatal_error_occurred( RTEMS_INVALID_ID );
-
-
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_CORE,
+    TRUE,
+    INTERNAL_ERROR_INVALID_GLOBAL_ID
+  );
 }
 
 /*PAGE
@@ -143,7 +153,7 @@ void _Objects_MP_Close (
  *
  */
 
-rtems_status_code _Objects_MP_Global_name_search (
+Objects_Name_to_id_errors _Objects_MP_Global_name_search (
   Objects_Information *information,
   Objects_Name         the_name,
   unsigned32           nodes_to_search,
@@ -158,17 +168,16 @@ rtems_status_code _Objects_MP_Global_name_search (
   Objects_MP_Control *the_object;
   unsigned32          name_to_use = *(unsigned32 *)the_name;  /* XXX variable */
 
-
-  if ( nodes_to_search > _Configuration_MP_table->maximum_nodes )
-    return ( RTEMS_INVALID_NODE );
+  if ( nodes_to_search > _Objects_Maximum_nodes )
+    return OBJECTS_INVALID_NODE;
 
   if ( information->global_table == NULL )
-    return ( RTEMS_INVALID_NAME );
+    return OBJECTS_INVALID_NAME;
 
-  if ( nodes_to_search == RTEMS_SEARCH_ALL_NODES ||
-       nodes_to_search == RTEMS_SEARCH_OTHER_NODES ) {
+  if ( nodes_to_search == OBJECTS_SEARCH_ALL_NODES ||
+       nodes_to_search == OBJECTS_SEARCH_OTHER_NODES ) {
     low_node = 1;
-    high_node = _Configuration_MP_table->maximum_nodes;
+    high_node = _Objects_Maximum_nodes;
   } else {
     low_node  =
     high_node = nodes_to_search;
@@ -195,14 +204,14 @@ rtems_status_code _Objects_MP_Global_name_search (
         if ( the_object->name == name_to_use ) {
           *the_id = the_object->Object.id;
           _Thread_Enable_dispatch();
-          return ( RTEMS_SUCCESSFUL );
+          return OBJECTS_SUCCESSFUL;
         }
       }
     }
   }
 
   _Thread_Enable_dispatch();
-  return ( RTEMS_INVALID_NAME );
+  return OBJECTS_INVALID_NAME;
 }
 
 /*PAGE
@@ -223,7 +232,7 @@ void _Objects_MP_Is_remote (
   Chain_Node         *the_node;
   Objects_MP_Control *the_global_object;
 
-  node = rtems_get_node( the_id );
+  node = _Objects_Get_node( the_id );
 
   /*
    *  NOTE: The local node was search (if necessary) by
@@ -235,7 +244,7 @@ void _Objects_MP_Is_remote (
 
   if ( node == 0 ||
        _Objects_Is_local_node( node ) ||
-       node > _Configuration_MP_table->maximum_nodes ||
+       node > _Objects_Maximum_nodes ||
        information->global_table == NULL ) {
 
     *location   = OBJECTS_ERROR;

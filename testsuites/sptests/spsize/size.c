@@ -16,34 +16,34 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/copyrt.h>
-#include <rtems/clock.h>
-#include <rtems/tasks.h>
-#include <rtems/dpmem.h>
-#include <rtems/event.h>
+#include <rtems/directives.h>
+#include <rtems/core/copyrt.h>
+#include <rtems/rtems/clock.h>
+#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/dpmem.h>
+#include <rtems/rtems/event.h>
 #include <rtems/extension.h>
 #include <rtems/fatal.h>
 #include <rtems/init.h>
-#include <rtems/intthrd.h>
-#include <rtems/isr.h>
-#include <rtems/intr.h>
+#include <rtems/core/intthrd.h>
+#include <rtems/core/isr.h>
+#include <rtems/rtems/intr.h>
 #include <rtems/io.h>
-#include <rtems/message.h>
-#include <rtems/mp.h>
-#include <rtems/mpci.h>
-#include <rtems/part.h>
-#include <rtems/priority.h>
-#include <rtems/ratemon.h>
-#include <rtems/region.h>
-#include <rtems/sem.h>
-#include <rtems/signal.h>
+#include <rtems/rtems/message.h>
+#include <rtems/rtems/mp.h>
+#include <rtems/core/mpci.h>
+#include <rtems/rtems/part.h>
+#include <rtems/core/priority.h>
+#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/region.h>
+#include <rtems/rtems/sem.h>
+#include <rtems/rtems/signal.h>
 #include <rtems/sysstate.h>
-#include <rtems/thread.h>
-#include <rtems/timer.h>
-#include <rtems/tod.h>
-#include <rtems/userext.h>
-#include <rtems/wkspace.h>
-#include <rtems/mp.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/timer.h>
+#include <rtems/core/tod.h>
+#include <rtems/core/userext.h>
+#include <rtems/core/wkspace.h>
 
 #include <stdlib.h>
 
@@ -203,11 +203,12 @@ uninitialized =
 
 /*config.h*/    (sizeof _Configuration_Table)             +
                 (sizeof _Configuration_MP_table)          +
-                (sizeof _Configuration_MPCI_table)        +
 
 /*context.h*/   (sizeof _Context_Switch_necessary)        +
 
 /*copyrt.h*/    0                                         +
+
+/*debug.h*/     (sizeof _Debug_Level)                     +
 
 /*dpmem.h*/     (sizeof _Dual_ported_memory_Information)  +
 
@@ -225,16 +226,21 @@ uninitialized =
 
 /*init.h*/      0                                         +
 
+/*interr.h*/    (sizeof Internal_errors_What_happened)    +
+
 /*inthrdmp.h*/  0                                         +
 
 /*intr.h*/      0                                         +
 
-/*intthrd.h*/   (sizeof _Internal_threads_System_initialization_thread) +
+/*intthrd.h*/   (sizeof _Internal_threads_Information)    +
+                (sizeof _Internal_threads_System_initialization_thread) +
                 (sizeof _Internal_threads_Idle_thread)    +
-                (sizeof _Internal_threads_MP_Receive_server_entry)    +
+                (sizeof _Internal_threads_Extensions)     +
 
 /*io.h*/        (sizeof _IO_Number_of_drivers)            +
                 (sizeof _IO_Driver_address_table)         +
+                (sizeof _IO_Number_of_devices)            +
+                (sizeof _IO_Driver_name_table)            +
 
 /*isr.h*/       (sizeof _ISR_Nest_level)                  +
                 (sizeof _ISR_Vector_table)                +
@@ -247,6 +253,10 @@ uninitialized =
 /*mp.h*/        0                                         +
 
 /*mpci.h*/      (sizeof _MPCI_Remote_blocked_threads)     +
+                (sizeof _MPCI_Semaphore)                  +
+                (sizeof _MPCI_table)                      +
+                (sizeof _MPCI_Receive_server_tcb)         +
+                (sizeof _MPCI_Packet_processors)          +
 
 /*mppkt.h*/     0                                         +
 
@@ -255,8 +265,11 @@ uninitialized =
 /*msgmp.h*/     0                                         +
 
 /*object.h*/    (sizeof _Objects_Local_node)              +
+                (sizeof _Objects_Maximum_nodes)           +
+                (sizeof _Objects_Information_table)       +
 
-/*objectmp.h*/  (sizeof _Objects_MP_Inactive_global_objects) +
+/*objectmp.h*/  (sizeof _Objects_MP_Maximum_global_objects) +
+                (sizeof _Objects_MP_Inactive_global_objects) +
 
 /*options.h*/   0                                         +
 
@@ -289,28 +302,32 @@ uninitialized =
 
 /*status.h*/    0                                         +
 
-/*system.h*/    (sizeof _CPU_Table)                       +
+/*sysstate.h*/  (sizeof _System_state_Is_multiprocessing) +
+                (sizeof _System_state_Current)            +
 
-/*sysstate.h*/  (sizeof _System_state_Current)            +
+/*system.h*/    (sizeof _CPU_Table)                       +
 
 /*taskmp.h*/    0                                         +
 
 /*tasks.h*/     (sizeof _RTEMS_tasks_Information)         +
+                (sizeof _RTEMS_tasks_User_initialization_tasks) +
+                (sizeof _RTEMS_tasks_Number_of_initialization_tasks) +
 
-/*thread.h*/    (sizeof _Thread_Dispatch_disable_level)   +
+/*thread.h*/    (sizeof _Thread_BSP_context)              +
+                (sizeof _Thread_Dispatch_disable_level)   +
+                (sizeof _Thread_Maximum_extensions)       +
                 (sizeof _Thread_Ticks_remaining_in_timeslice)   +
                 (sizeof _Thread_Ticks_per_timeslice)      +
                 (sizeof _Thread_Ready_chain)              +
                 (sizeof _Thread_Executing)                +
                 (sizeof _Thread_Heir)                     +
                 (sizeof _Thread_Allocated_fp)             +
-                (sizeof _Thread_BSP_context)              +
 
 /*threadmp.h*/  (sizeof _Thread_MP_Receive)               +
                 (sizeof _Thread_MP_Active_proxies)        +
                 (sizeof _Thread_MP_Inactive_proxies)      +
 
-/*threadq.h*/   0                                         +
+/*threadq.h*/   (sizeof _Thread_queue_Extract_table)      +
 
 /*timer.h*/     (sizeof _Timer_Information)               +
 
@@ -328,10 +345,10 @@ uninitialized =
 /*userext.h*/   (sizeof _User_extensions_Initial)         +
                 (sizeof _User_extensions_List)            +
 
-/*watchdog.h*/  (sizeof _Watchdog_Ticks_chain)            +
-                (sizeof _Watchdog_Seconds_chain)          +
+/*watchdog.h*/  (sizeof _Watchdog_Sync_level)             +
                 (sizeof _Watchdog_Sync_count)             +
-                (sizeof _Watchdog_Sync_level)             +
+                (sizeof _Watchdog_Ticks_chain)            +
+                (sizeof _Watchdog_Seconds_chain)          +
 
 /*wkspace.h*/   (sizeof _Workspace_Area);
 
@@ -383,10 +400,19 @@ uninitialized += (sizeof _CPU_Null_fp_context) +
 
 #endif
 
+#ifdef ppc
+
+/* cpu.h */
+uninitialized += (sizeof _CPU_Interrupt_stack_low) +
+                 (sizeof _CPU_Interrupt_stack_high) +
+                 (sizeof _CPU_IRQ_info);
+
+#endif
+
 initialized +=
 /*copyrt.h*/    (strlen(_Copyright_Notice)+1)             +
 
-/*sptables.h*/  (sizeof _Configuration_Default_multiprocessing_table)  +
+/*sptables.h*/  (sizeof _Initialization_Default_multiprocessing_table)  +
                 (strlen(_RTEMS_version)+1)      +
                 (sizeof _Entry_points)          +
 

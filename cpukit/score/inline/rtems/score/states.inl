@@ -1,7 +1,7 @@
 /*  states.inl
  *
  *  This file contains the macro implementation of the inlined
- *  routines associated with RTEMS state information.
+ *  routines associated with thread state information.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -173,6 +173,19 @@ STATIC INLINE boolean _States_Is_waiting_for_event (
 )
 {
    return (the_states & STATES_WAITING_FOR_EVENT);
+}
+
+/*PAGE
+ *
+ *  _States_Is_waiting_for_mutex
+ *
+ */
+ 
+STATIC INLINE boolean _States_Is_waiting_for_mutex (
+  States_Control the_states
+)
+{
+   return (the_states & STATES_WAITING_FOR_MUTEX);
 }
 
 /*PAGE

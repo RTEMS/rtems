@@ -17,7 +17,7 @@
 #ifndef __PRIORITY_inl
 #define __PRIORITY_inl
 
-#include <rtems/bitfield.h>
+#include <rtems/core/bitfield.h>
 
 /*PAGE
  *
@@ -44,8 +44,12 @@ STATIC INLINE boolean _Priority_Is_valid (
   Priority_Control the_priority
 )
 {
-  return (  ( the_priority >= RTEMS_MINIMUM_PRIORITY ) &&
-            ( the_priority <= RTEMS_MAXIMUM_PRIORITY ) );
+  /* 
+   *  Since PRIORITY_MINIMUM is 0 and priorities are stored unsigned,
+   *  then checking for less than 0 is unnecessary.
+   */
+
+  return ( the_priority <= PRIORITY_MAXIMUM );
 }
 
 /*PAGE

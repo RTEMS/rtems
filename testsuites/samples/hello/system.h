@@ -14,19 +14,22 @@
  *  $Id$
  */
 
-#include <rtems.h>
-#include <bsp.h>
+#include <tmacros.h>
 
-#include <stdio.h>
+/* functions */
 
-/* Miscellaneous */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-#define EXTERN  extern             /* external definition */
+/* configuration information */
 
-/* macros */
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 
-/* structures */
+#include <confdefs.h>
 
-#include "gvar.h"
+/* global variables */
+
+TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
 
 /* end of include file */

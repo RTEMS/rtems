@@ -45,20 +45,6 @@ void _Multiprocessing_Manager_initialization ( void );
 
 void rtems_multiprocessing_announce ( void );
 
-/*
- *
- *  _Multiprocessing_Receive_server
- *
- *  DESCRIPTION:
- *
- *  This routine is a server thread which processes remote requests
- *  from other nodes.
- */
-
-Thread _Multiprocessing_Receive_server (
-  Thread_Argument ignored
-);
-
 #ifdef __cplusplus
 }
 #endif

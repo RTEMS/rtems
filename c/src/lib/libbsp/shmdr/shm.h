@@ -493,11 +493,7 @@ rtems_mpci_entry Shm_Get_packet(
   rtems_packet_prefix **
 );
 
-rtems_mpci_entry Shm_Initialization(
-  rtems_configuration_table   *configuration,
-  rtems_cpu_table             *cpu_configuration,
-  rtems_multiprocessing_table *mp_configuration
-);
+rtems_mpci_entry Shm_Initialization( void );
 
 rtems_mpci_entry Shm_Receive_packet(
   rtems_packet_prefix **

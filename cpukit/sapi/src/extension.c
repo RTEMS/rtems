@@ -14,9 +14,9 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/support.h>
-#include <rtems/object.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/support.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
 #include <rtems/extension.h>
 
 /*PAGE
@@ -65,15 +65,15 @@ void _Extension_Manager_initialization(
  */
 
 rtems_status_code rtems_extension_create(
-  rtems_name                     name,
+  rtems_name              name,
   rtems_extensions_table *extension_table,
-  Objects_Id                    *id
+  Objects_Id             *id
 )
 {
   Extension_Control *the_extension;
 
   if ( !rtems_is_name_valid( name ) )
-    return ( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
   _Thread_Disable_dispatch();         /* to prevent deletion */
 
@@ -81,7 +81,7 @@ rtems_status_code rtems_extension_create(
 
   if ( !the_extension ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   _User_extensions_Add_set( &the_extension->Extension, extension_table );
@@ -90,7 +90,7 @@ rtems_status_code rtems_extension_create(
 
   *id = the_extension->Object.id;
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -115,12 +115,16 @@ rtems_status_code rtems_extension_ident(
   Objects_Id   *id
 )
 {
-  return _Objects_Name_to_id(
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
     &_Extension_Information,
     &name,
-    RTEMS_SEARCH_LOCAL_NODE,
+    OBJECTS_SEARCH_LOCAL_NODE,
     id
   );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
 
 /*PAGE
@@ -148,14 +152,14 @@ rtems_status_code rtems_extension_delete(
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_LOCAL:
       _User_extensions_Remove_set( &the_extension->Extension );
       _Objects_Close( &_Extension_Information, &the_extension->Object );
       _Extension_Free( the_extension );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }

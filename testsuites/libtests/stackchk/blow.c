@@ -14,9 +14,7 @@
  *  $Id$
  */
 
-#include <rtems/system.h>
-#include <rtems/heap.h>
-#include <rtems/thread.h>
+#include <rtems.h>
 
 void b() {}
 

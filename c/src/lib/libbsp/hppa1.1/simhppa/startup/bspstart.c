@@ -131,7 +131,7 @@ bsp_libc_init(void)
     RTEMS_Malloc_Initialize((void *) heap_start, 64 * 1024, 0);
 
     /*
-     * Init the RTEMS libio facility to provide UNIX-like system
+     *  Init the RTEMS libio facility to provide UNIX-like system
      *  calls for use by newlib (ie: provide __open, __close, etc)
      *  Uses malloc() to get area for the iops, so must be after malloc init
      */

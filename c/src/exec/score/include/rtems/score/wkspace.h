@@ -1,8 +1,8 @@
 /*  wkspace.h
  *
- *  This include file contains information related to the RTEMS
+ *  This include file contains information related to the 
  *  RAM Workspace.  This Handler provides mechanisms which can be used to
- *  define, initialize and manipulate the RTEMS workspace.
+ *  define, initialize and manipulate the workspace.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,19 +15,18 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_WORKSPACE_h
-#define __RTEMS_WORKSPACE_h
+#ifndef __WORKSPACE_h
+#define __WORKSPACE_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/heap.h>
-#include <rtems/fatal.h>
-#include <rtems/status.h>
+#include <rtems/core/heap.h>
+#include <rtems/core/interr.h>
 
 /*
- *  The following is used to manage the RTEMS Workspace.
+ *  The following is used to manage the Workspace.
  *
  */
 
@@ -67,8 +66,7 @@ STATIC INLINE void *_Workspace_Allocate(
  *
  *  This routine returns the address of a block of memory of size
  *  bytes.  If a block of the appropriate size cannot be allocated
- *  from the workspace, then the rtems_fatal_error_occurred directive
- *  is invoked.
+ *  from the workspace, then the internal error handler is invoked.
  */
 
 void *_Workspace_Allocate_or_fatal_error(
@@ -89,7 +87,7 @@ STATIC INLINE boolean _Workspace_Free(
   void *block
 );
 
-#include <rtems/wkspace.inl>
+#include <rtems/core/wkspace.inl>
 
 #ifdef __cplusplus
 }

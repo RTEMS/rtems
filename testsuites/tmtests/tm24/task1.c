@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_unsigned32 Task_count;
 
@@ -34,6 +31,8 @@ rtems_task Init(
   rtems_id          id;
   rtems_unsigned32  index;
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 24 ***" );
 
@@ -118,6 +117,7 @@ rtems_task Tasks(
       CALLING_OVERHEAD_TASK_WAKE_AFTER
     );
 
+  puts( "*** END OF TEST 24 ***" );
     exit( 0 );
   }
   (void) rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );

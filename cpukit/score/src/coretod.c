@@ -14,10 +14,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/object.h>
-#include <rtems/thread.h>
-#include <rtems/tod.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/tod.h>
+#include <rtems/core/watchdog.h>
 
 /*PAGE
  *
@@ -72,11 +72,11 @@ void _TOD_Handler_initialization(
  */
 
 void _TOD_Set(
-  rtems_time_of_day *the_tod,
-  rtems_interval   seconds_since_epoch
+  TOD_Control *the_tod,
+  Watchdog_Interval  seconds_since_epoch
 )
 {
-  rtems_interval ticks_until_next_second;
+  Watchdog_Interval ticks_until_next_second;
 
   _Thread_Disable_dispatch();
   _TOD_Deactivate();
@@ -109,14 +109,14 @@ void _TOD_Set(
  *    the_tod - pointer to a time and date structure
  *
  *  Output parameters:
- *    RTEMS_SUCCESSFUL    - if the date, time, and tick are valid
- *    RTEMS_INVALID_CLOCK - if the the_tod is invalid
+ *    TRUE  - if the date, time, and tick are valid
+ *    FALSE - if the the_tod is invalid
  *
  *  NOTE: This routine only works for leap-years through 2099.
  */
 
-rtems_status_code _TOD_Validate(
-  rtems_time_of_day *the_tod
+boolean _TOD_Validate(
+  TOD_Control *the_tod
 )
 {
   unsigned32 days_in_month;
@@ -129,7 +129,7 @@ rtems_status_code _TOD_Validate(
       (the_tod->month  >  TOD_MONTHS_PER_YEAR)    ||
       (the_tod->year   <  TOD_BASE_YEAR)          ||
       (the_tod->day    == 0) )
-     return RTEMS_INVALID_CLOCK;
+     return FALSE;
 
   if ( (the_tod->year % 4) == 0 )
     days_in_month = _TOD_Days_per_month[ 1 ][ the_tod->month ];
@@ -137,9 +137,9 @@ rtems_status_code _TOD_Validate(
     days_in_month = _TOD_Days_per_month[ 0 ][ the_tod->month ];
 
   if ( the_tod->day > days_in_month )
-    return RTEMS_INVALID_CLOCK;
+    return FALSE;
 
-  return RTEMS_SUCCESSFUL;
+  return TRUE;
 }
 
 /*PAGE
@@ -157,7 +157,7 @@ rtems_status_code _TOD_Validate(
  */
 
 unsigned32 _TOD_To_seconds(
-  rtems_time_of_day *the_tod
+  TOD_Control *the_tod
 )
 {
   unsigned32 time;

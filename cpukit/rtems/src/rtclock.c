@@ -13,12 +13,12 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/clock.h>
-#include <rtems/config.h>
-#include <rtems/isr.h>
-#include <rtems/thread.h>
-#include <rtems/tod.h>
-#include <rtems/watchdog.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/clock.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/tod.h>
+#include <rtems/core/watchdog.h>
 
 /*PAGE
  *
@@ -49,29 +49,29 @@ rtems_status_code rtems_clock_get(
   switch ( option ) {
     case RTEMS_CLOCK_GET_TOD:
       if ( !_TOD_Is_set() )
-        return( RTEMS_NOT_DEFINED );
+        return RTEMS_NOT_DEFINED;
 
       *(rtems_time_of_day *)time_buffer = _TOD_Current;
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
 
     case RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH:
       if ( !_TOD_Is_set() )
-        return( RTEMS_NOT_DEFINED );
+        return RTEMS_NOT_DEFINED;
 
       *(rtems_interval *)time_buffer = _TOD_Seconds_since_epoch;
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
 
     case RTEMS_CLOCK_GET_TICKS_SINCE_BOOT:
       *(rtems_interval *)time_buffer = _TOD_Ticks_since_boot;
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
 
     case RTEMS_CLOCK_GET_TICKS_PER_SECOND:
       *(rtems_interval *)time_buffer = _TOD_Ticks_per_second;
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
 
     case RTEMS_CLOCK_GET_TIME_VALUE:
       if ( !_TOD_Is_set() )
-        return( RTEMS_NOT_DEFINED );
+        return RTEMS_NOT_DEFINED;
 
       _ISR_Disable( level );
         ((rtems_clock_time_value *)time_buffer)->seconds =
@@ -79,13 +79,13 @@ rtems_status_code rtems_clock_get(
         tmp = _TOD_Current.ticks;
       _ISR_Enable( level );
 
-      tmp *= _Configuration_Table->microseconds_per_tick;
+      tmp *= _TOD_Microseconds_per_tick;
       ((rtems_clock_time_value *)time_buffer)->microseconds = tmp;
 
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_SUCCESSFUL );   /* should never get here */
+  return RTEMS_INTERNAL_ERROR;   /* should never get here */
 
 }
 
@@ -107,18 +107,16 @@ rtems_status_code rtems_clock_set(
   rtems_time_of_day *time_buffer
 )
 {
-  rtems_status_code      local_result;
-  rtems_interval seconds;
+  rtems_interval     seconds;
 
-  local_result = _TOD_Validate( time_buffer );
-  if ( rtems_is_status_successful( local_result ) ) {
+  if ( _TOD_Validate( time_buffer ) ) {
     seconds = _TOD_To_seconds( time_buffer );
     _Thread_Disable_dispatch();
       _TOD_Set( time_buffer, seconds );
     _Thread_Enable_dispatch();
-
+    return RTEMS_SUCCESSFUL;
   }
-  return( local_result );
+  return RTEMS_INVALID_CLOCK;
 }
 
 /*PAGE
@@ -149,5 +147,5 @@ rtems_status_code rtems_clock_tick( void )
        _Thread_Is_dispatching_enabled() )
     _Thread_Dispatch();
 
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }

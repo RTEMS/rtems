@@ -22,11 +22,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_task Init(
   rtems_task_argument argument

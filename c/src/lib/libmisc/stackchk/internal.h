@@ -50,7 +50,7 @@ typedef struct {
  *  Stack_check_Create_extension
  */
 
-void Stack_check_Create_extension(
+boolean Stack_check_Create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 );

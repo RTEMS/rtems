@@ -22,7 +22,7 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/cpu.h>
+#include <rtems/core/cpu.h>
 /* #include "asm.h> */
 
 /*

@@ -33,6 +33,7 @@
 
 #include <bsp.h>
 #include <clockdrv.h>
+#include <rtems/libio.h>
 
 #include <stdlib.h>                     /* for atexit() */
 
@@ -42,32 +43,15 @@ volatile rtems_unsigned32 Clock_driver_ticks;
 static rtems_unsigned32 pit_value, tick_time;
 static rtems_boolean auto_restart;
 
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id tid,
-  rtems_unsigned32 *rval
-)
-{
-    Install_clock(Clock_isr);
-}
-
-
-void
-ReInstall_clock(rtems_isr_entry new_clock_isr)
-{
-    rtems_isr_entry previous_isr;
-    rtems_unsigned32 isrlevel = 0;
-
-    rtems_interrupt_disable(isrlevel);
-    
-    rtems_interrupt_catch(new_clock_isr, PPC_IRQ_PIT,
-			  &previous_isr);
-
-    rtems_interrupt_enable(isrlevel);
-}
-
+void Clock_exit( void );
+ 
+/*
+ * These are set by clock driver during its init
+ */
+ 
+rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_minor_number rtems_clock_minor;
+ 
 static INLINE rtems_unsigned32 get_itimer(void)
 {
     register rtems_unsigned32 rc;
@@ -77,61 +61,10 @@ static INLINE rtems_unsigned32 get_itimer(void)
     return rc;
 }
 
-void Install_clock(rtems_isr_entry clock_isr)
-{
-    rtems_isr_entry previous_isr;
-    rtems_unsigned32 pvr, iocr;
-
-    Clock_driver_ticks = 0;
-
-    asm volatile ("mfiocr %0" : "=r" (iocr));
-    iocr &= ~4;
-    iocr |= 4;  /* Select external timer clock */
-    asm volatile ("mtiocr %0" : "=r" (iocr) : "0" (iocr));
-
-    asm volatile ("mfpvr %0" : "=r" ((pvr)));
-
-    if (((pvr & 0xffff0000) >> 16) != 0x0020)
-	return; /* Not a ppc403 */
-
-    if ((pvr & 0xff00) == 0x0000) /* 403GA */
-	auto_restart = (pvr & 0x00f0) > 0x0000 ? 1 : 0;
-    else if ((pvr & 0xff00) == 0x0100) /* 403GB */
-	auto_restart = 1;
-
-    pit_value = BSP_Configuration.microseconds_per_tick *
-	Cpu_table.clicks_per_usec;
-
-    if (BSP_Configuration.ticks_per_timeslice)
-    {
-	register rtems_unsigned32 tcr;
-        /*
-         * initialize the interval here
-         * First tick is set to right amount of time in the future
-         * Future ticks will be incremented over last value set
-         * in order to provide consistent clicks in the face of
-         * interrupt overhead
-         */
-
-	rtems_interrupt_catch(clock_isr, PPC_IRQ_PIT,
-			      &previous_isr);
-
-	asm volatile ("mtpit %0" : : "r" (pit_value));
-
-	asm volatile ("mftcr %0" : "=r" ((tcr)));
-
-	tcr &= ~ 0x04400000;
-
-	tcr |= (auto_restart ? 0x04400000 : 0x04000000);
-
-	tick_time = get_itimer() + pit_value;
-
-	asm volatile ("mttcr %0" : "=r" ((tcr)) : "0" ((tcr)));
-    }
-    atexit(Clock_exit);
-}
-
-
+/*
+ *  ISR Handler
+ */
+ 
 rtems_isr
 Clock_isr(rtems_vector_number vector)
 {
@@ -191,6 +124,75 @@ Clock_isr(rtems_vector_number vector)
     rtems_clock_tick();
 }
 
+void Install_clock(rtems_isr_entry clock_isr)
+{
+    rtems_isr_entry previous_isr;
+    rtems_unsigned32 pvr, iocr;
+
+    Clock_driver_ticks = 0;
+
+    asm volatile ("mfiocr %0" : "=r" (iocr));
+    iocr &= ~4;
+    iocr |= 4;  /* Select external timer clock */
+    asm volatile ("mtiocr %0" : "=r" (iocr) : "0" (iocr));
+
+    asm volatile ("mfpvr %0" : "=r" ((pvr)));
+
+    if (((pvr & 0xffff0000) >> 16) != 0x0020)
+	return; /* Not a ppc403 */
+
+    if ((pvr & 0xff00) == 0x0000) /* 403GA */
+	auto_restart = (pvr & 0x00f0) > 0x0000 ? 1 : 0;
+    else if ((pvr & 0xff00) == 0x0100) /* 403GB */
+	auto_restart = 1;
+
+    pit_value = BSP_Configuration.microseconds_per_tick *
+	Cpu_table.clicks_per_usec;
+
+    if (BSP_Configuration.ticks_per_timeslice)
+    {
+	register rtems_unsigned32 tcr;
+        /*
+         * initialize the interval here
+         * First tick is set to right amount of time in the future
+         * Future ticks will be incremented over last value set
+         * in order to provide consistent clicks in the face of
+         * interrupt overhead
+         */
+
+	rtems_interrupt_catch(clock_isr, PPC_IRQ_PIT,
+			      &previous_isr);
+
+	asm volatile ("mtpit %0" : : "r" (pit_value));
+
+	asm volatile ("mftcr %0" : "=r" ((tcr)));
+
+	tcr &= ~ 0x04400000;
+
+	tcr |= (auto_restart ? 0x04400000 : 0x04000000);
+
+	tick_time = get_itimer() + pit_value;
+
+	asm volatile ("mttcr %0" : "=r" ((tcr)) : "0" ((tcr)));
+    }
+    atexit(Clock_exit);
+}
+
+void
+ReInstall_clock(rtems_isr_entry new_clock_isr)
+{
+    rtems_isr_entry previous_isr;
+    rtems_unsigned32 isrlevel = 0;
+
+    rtems_interrupt_disable(isrlevel);
+    
+    rtems_interrupt_catch(new_clock_isr, PPC_IRQ_PIT,
+			  &previous_isr);
+
+    rtems_interrupt_enable(isrlevel);
+}
+
+
 /*
  * Called via atexit()
  * Remove the clock interrupt handler by setting handler to NULL
@@ -211,5 +213,52 @@ Clock_exit(void)
 
         (void) set_vector(0, PPC_IRQ_PIT, 1);
     }
+}
+
+rtems_device_driver Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+  Install_clock( Clock_isr );
+ 
+  /*
+   * make major/minor avail to others such as shared memory driver
+   */
+ 
+  rtems_clock_major = major;
+  rtems_clock_minor = minor;
+ 
+  return RTEMS_SUCCESSFUL;
+}
+ 
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    rtems_libio_ioctl_args_t *args = pargp;
+ 
+    if (args == 0)
+        goto done;
+ 
+    /*
+     * This is hokey, but until we get a defined interface
+     * to do this, it will just be this simple...
+     */
+ 
+    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
+    {
+        Clock_isr(PPC_IRQ_PIT);
+    }
+    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
+    {
+        ReInstall_clock(args->buffer);
+    }
+ 
+done:
+    return RTEMS_SUCCESSFUL;
 }
 

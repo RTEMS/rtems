@@ -17,7 +17,7 @@
 #ifndef __WATCHDOG_inl
 #define __WATCHDOG_inl
 
-#include <rtems/object.h>
+#include <rtems/core/object.h>
 
 /*PAGE
  *

@@ -18,9 +18,9 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/address.h>
-#include <rtems/chain.h>
-#include <rtems/isr.h>
+#include <rtems/core/address.h>
+#include <rtems/core/chain.h>
+#include <rtems/core/isr.h>
 
 /*PAGE
  *

@@ -14,9 +14,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/priority.h>
-#include <rtems/thread.h>
-#include <rtems/wkspace.h>
+#include <rtems/core/priority.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/wkspace.h>
+#include <rtems/core/isr.h>
 
 /*PAGE
  *
@@ -67,7 +68,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 
     the_proxy = (Thread_Proxy_control *) the_thread;
 
-    _Thread_Executing->Wait.return_code = RTEMS_PROXY_BLOCKING;
+    _Thread_Executing->Wait.return_code = THREAD_STATUS_PROXY_BLOCKING;
 
     the_proxy->receive_packet = _Thread_MP_Receive->receive_packet;
 
@@ -85,7 +86,11 @@ Thread_Control *_Thread_MP_Allocate_proxy (
     return the_thread;
   }
 
-  rtems_fatal_error_occurred( RTEMS_TOO_MANY );
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_CORE,
+    TRUE,
+    INTERNAL_ERROR_OUT_OF_PROXIES
+  );
 
   /*
    *  NOTE: The following return insures that the compiler will

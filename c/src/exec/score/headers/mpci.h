@@ -14,20 +14,20 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_MPCI_h
-#define __RTEMS_MPCI_h
+#ifndef __MPCI_h
+#define __MPCI_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/mppkt.h>
-#include <rtems/states.h>
-#include <rtems/status.h>
-#include <rtems/thread.h>
-#include <rtems/threadq.h>
-#include <rtems/tqdata.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/threadq.h>
+#include <rtems/core/tqdata.h>
+#include <rtems/core/watchdog.h>
+#include <rtems/core/coresem.h>
 
 /*
  *  The following defines the node number used when a broadcast is desired.
@@ -45,6 +45,85 @@ extern "C" {
 #define MPCI_DEFAULT_TIMEOUT    0xFFFFFFFF
 
 /*
+ *  The following records define the Multiprocessor Communications
+ *  Interface (MPCI) Table.  This table defines the user-provided
+ *  MPCI which is a required part of a multiprocessor system.
+ *
+ *  For non-blocking local operations that become remote operations,
+ *  we need a timeout.  This is a per-driver timeout: default_timeout
+ */
+
+typedef void MPCI_Entry;
+
+typedef MPCI_Entry ( *MPCI_initialization_entry )( void );
+
+typedef MPCI_Entry ( *MPCI_get_packet_entry )(
+                 MP_packet_Prefix **
+             );
+
+typedef MPCI_Entry ( *MPCI_return_packet_entry )(
+                 MP_packet_Prefix *
+             );
+
+typedef MPCI_Entry ( *MPCI_send_entry )(
+                 unsigned32,
+                 MP_packet_Prefix *
+             );
+
+typedef MPCI_Entry ( *MPCI_receive_entry )(
+                 MP_packet_Prefix **
+             );
+
+typedef struct {
+  unsigned32                 default_timeout;        /* in ticks */
+  unsigned32                 maximum_packet_size;
+  MPCI_initialization_entry  initialization;
+  MPCI_get_packet_entry      get_packet;
+  MPCI_return_packet_entry   return_packet;
+  MPCI_send_entry            send_packet;
+  MPCI_receive_entry         receive_packet;
+} MPCI_Control;
+
+/*
+ *  The following defines the type for packet processing routines
+ *  invoked by the MPCI Receive server.
+ */
+
+typedef void (*MPCI_Packet_processor)( MP_packet_Prefix * );
+ 
+/*
+ *  This is the core semaphore which the MPCI Receive Server blocks on.
+ */
+
+EXTERN CORE_semaphore_Control _MPCI_Semaphore;
+/*
+ *  The following thread queue is used to maintain a list of tasks
+ *  which currently have outstanding remote requests.
+ */
+
+EXTERN Thread_queue_Control _MPCI_Remote_blocked_threads;
+
+/*
+ *  The following define the internal pointers to the user's
+ *  configuration information.
+ */
+ 
+EXTERN MPCI_Control *_MPCI_table;
+
+/*
+ *  The following points to the MPCI Receive Server.
+ */
+ 
+EXTERN Thread_Control *_MPCI_Receive_server_tcb;
+
+/*
+ *  The following table contains the process packet routines provided
+ *  by each object that supports MP operations.
+ */
+
+EXTERN MPCI_Packet_processor _MPCI_Packet_processors[MP_PACKET_CLASSES_LAST+1];
+
+/*
  *  _MPCI_Handler_initialization
  *
  *  DESCRIPTION:
@@ -52,7 +131,9 @@ extern "C" {
  *  This routine performs the initialization necessary for this handler.
  */
 
-void _MPCI_Handler_initialization ( void );
+void _MPCI_Handler_initialization( 
+  MPCI_Control            *users_mpci_table
+);
 
 /*
  *  _MPCI_Initialization
@@ -66,6 +147,21 @@ void _MPCI_Handler_initialization ( void );
 void _MPCI_Initialization ( void );
 
 /*
+ *  _MPCI_Register_packet_processor
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine registers the MPCI packet processor for the
+ *  designated object class.
+ */
+ 
+void _MPCI_Register_packet_processor( 
+  MP_packet_Classes      the_object,
+  MPCI_Packet_processor  the_packet_processor
+  
+);
+ 
+/*
  *  _MPCI_Get_packet
  *
  *  DESCRIPTION:
@@ -74,7 +170,7 @@ void _MPCI_Initialization ( void );
  *  MPCI get packet callout.
  */
 
-rtems_packet_prefix *_MPCI_Get_packet ( void );
+MP_packet_Prefix *_MPCI_Get_packet ( void );
 
 /*
  *  _MPCI_Return_packet
@@ -86,7 +182,7 @@ rtems_packet_prefix *_MPCI_Get_packet ( void );
  */
 
 void _MPCI_Return_packet (
-  rtems_packet_prefix *the_packet
+  MP_packet_Prefix *the_packet
 );
 
 /*
@@ -100,7 +196,7 @@ void _MPCI_Return_packet (
 
 void _MPCI_Send_process_packet (
   unsigned32        destination,
-  rtems_packet_prefix *the_packet
+  MP_packet_Prefix *the_packet
 );
 
 /*
@@ -112,9 +208,9 @@ void _MPCI_Send_process_packet (
  *  MPCI send callout.
  */
 
-rtems_status_code _MPCI_Send_request_packet (
+unsigned32 _MPCI_Send_request_packet (
   unsigned32         destination,
-  rtems_packet_prefix  *the_packet,
+  MP_packet_Prefix  *the_packet,
   States_Control     extra_state
 );
 
@@ -129,7 +225,7 @@ rtems_status_code _MPCI_Send_request_packet (
 
 void _MPCI_Send_response_packet (
   unsigned32        destination,
-  rtems_packet_prefix *the_packet
+  MP_packet_Prefix *the_packet
 );
 
 /*
@@ -141,7 +237,7 @@ void _MPCI_Send_response_packet (
  *  MPCI receive callout.
  */
 
-rtems_packet_prefix  *_MPCI_Receive_packet ( void );
+MP_packet_Prefix  *_MPCI_Receive_packet ( void );
 
 /*
  *  _MPCI_Process_response
@@ -153,15 +249,27 @@ rtems_packet_prefix  *_MPCI_Receive_packet ( void );
  */
 
 Thread_Control *_MPCI_Process_response (
-  rtems_packet_prefix *the_packet
+  MP_packet_Prefix *the_packet
 );
 
-/*
- *  The following thread queue is used to maintain a list of tasks
- *  which currently have outstanding remote requests.
+/*PAGE
+ *
+ *  _MPCI_Receive_server
+ *
  */
+ 
+void _MPCI_Receive_server( void );
 
-EXTERN Thread_queue_Control _MPCI_Remote_blocked_threads;
+/*PAGE
+ *
+ *  _MPCI_Announce
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+void _MPCI_Announce ( void );
 
 #ifdef __cplusplus
 }

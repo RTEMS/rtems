@@ -22,20 +22,20 @@ rtems_monitor_extension_canonical(
     rtems_extensions_table *e = &rtems_extension->Extension.Callouts;
 
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->create,
-                                            e->rtems_task_create);
+                                            e->thread_create);
 
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->start,
-                                            e->rtems_task_start);
+                                            e->thread_start);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->restart,
-                                            e->rtems_task_restart);
+                                            e->thread_restart);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->delete,
-                                            e->rtems_task_delete);
+                                            e->thread_delete);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->tswitch,
-                                            e->task_switch);
+                                            e->thread_switch);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->begin,
-                                            e->task_begin);
+                                            e->thread_begin);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->exitted,
-                                            e->task_exitted);
+                                            e->thread_exitted);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->fatal,
                                             e->fatal);
 }

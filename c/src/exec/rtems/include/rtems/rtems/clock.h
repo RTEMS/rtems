@@ -29,7 +29,8 @@
 extern "C" {
 #endif
 
-#include <rtems/tod.h>
+#include <rtems/core/tod.h>
+#include <rtems/rtems/types.h>
 
 /*
  *  List of things which can be returned by the rtems_clock_get directive.

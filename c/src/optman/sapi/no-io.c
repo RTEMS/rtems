@@ -14,10 +14,11 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/rtems/status.h>
 #include <rtems/config.h>
 #include <rtems/io.h>
-#include <rtems/isr.h>
-#include <rtems/thread.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/thread.h>
 
 void _IO_Initialize_all_drivers( void )
 {
@@ -46,7 +47,7 @@ rtems_status_code rtems_io_initialize(
   void             *argument
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_io_open(
@@ -55,7 +56,7 @@ rtems_status_code rtems_io_open(
   void             *argument
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_io_close(
@@ -64,7 +65,7 @@ rtems_status_code rtems_io_close(
   void             *argument
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_io_read(
@@ -73,7 +74,7 @@ rtems_status_code rtems_io_read(
   void             *argument
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_io_write(
@@ -82,7 +83,7 @@ rtems_status_code rtems_io_write(
   void             *argument
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_io_control(
@@ -91,5 +92,5 @@ rtems_status_code rtems_io_control(
   void             *argument
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }

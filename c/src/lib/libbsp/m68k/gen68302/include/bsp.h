@@ -23,7 +23,9 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <console.h>
 #include <iosupp.h>
+#include <clockdrv.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -80,6 +82,24 @@ extern "C" {
 #undef EXTERN
 #define EXTERN extern
 #endif
+
+/*
+ *  Device Driver Table Entries
+ */
+
+/*
+ * NOTE: Use the standard Console driver entry
+ */
+ 
+/*
+ * NOTE: Use the standard Clock driver entry
+ */
+
+/*
+ * How many libio files we want
+ */
+
+#define BSP_LIBIO_MAX_FDS       20
 
 /* miscellaneous stuff assumed to exist */
 

@@ -14,9 +14,8 @@
 
 #define GEN68302_INIT
 
-#include <rtems.h>
-#include "console.h"
 #include <bsp.h>
+#include <rtems/libio.h>
 
 #include "m68302.h"
 
@@ -34,11 +33,10 @@
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void                      *arg,
-  rtems_id                   self,
-  rtems_unsigned32          *status
+  void                      *arg
 )
 {
+  rtems_status_code status;
   volatile m302_dualPortRAM_t *p = &m302;
 
   p->reg.pacnt |= 0x0003;		/* enable RXD2 and TXD2 signals */
@@ -81,9 +79,18 @@ rtems_device_driver console_initialize(
   p->reg.scc[1].sccm = 0x03;		/* enable only Tx & Rx interrupts */
   p->reg.scc[1].scm  = 0x01BD;
 
-  *status = RTEMS_SUCCESSFUL;
-}
+  status = rtems_io_register_name(
+    "/dev/console",
+    major,
+    (rtems_device_minor_number) 0
+  );
+ 
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+ 
+  return RTEMS_SUCCESSFUL;
 
+}
 
 /*  is_character_ready
  *
@@ -194,48 +201,102 @@ void outbyte(
 }
 
 /*
- * __read  -- read bytes from the serial port. Ignore fd, since
- *            we only have stdin.
+ *  Open entry point
  */
 
-int __read(
-  int fd,
-  char *buf,
-  int nbytes
+rtems_device_driver console_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
 )
 {
-  int i = 0;
+  return RTEMS_SUCCESSFUL;
+}
+ 
+/*
+ *  Close entry point
+ */
 
-  for (i = 0; i < nbytes; i++) {
-    *(buf + i) = inbyte();
-    if ((*(buf + i) == '\n') || (*(buf + i) == '\r')) {
-      (*(buf + i++)) = '\n';
-      (*(buf + i)) = 0;
-      break;
-    }
-  }
-  return (i);
+rtems_device_driver console_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
- * __write -- write bytes to the serial port. Ignore fd, since
- *            stdout and stderr are the same. Since we have no filesystem,
- *            open will only return an error.
+ * read bytes from the serial port. We only have stdin.
  */
 
-int __write(
-  int fd,
-  char *buf,
-  int nbytes
+rtems_device_driver console_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
 )
 {
-  int i;
+  rtems_libio_rw_args_t *rw_args;
+  char *buffer;
+  int maximum;
+  int count = 0;
+ 
+  rw_args = (rtems_libio_rw_args_t *) arg;
 
-  for (i = 0; i < nbytes; i++) {
-    if (*(buf + i) == '\n') {
-      outbyte ('\r');
+  buffer = rw_args->buffer;
+  maximum = rw_args->count;
+
+  for (count = 0; count < maximum; count++) {
+    buffer[ count ] = inbyte();
+    if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
+      buffer[ count++ ]  = '\n';
+      buffer[ count ]  = 0;
+      break;
     }
-    outbyte (*(buf + i));
   }
-  return (nbytes);
+
+  rw_args->bytes_moved = count;
+  return (count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
+}
+
+/*
+ * write bytes to the serial port. Stdout and stderr are the same. 
+ */
+
+rtems_device_driver console_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  int count;
+  int maximum;
+  rtems_libio_rw_args_t *rw_args;
+  char *buffer;
+
+  rw_args = (rtems_libio_rw_args_t *) arg;
+
+  buffer = rw_args->buffer;
+  maximum = rw_args->count;
+
+  for (count = 0; count < maximum; count++) {
+    if ( buffer[ count ] == '\n') {
+      outbyte('\r');
+    }
+    outbyte( buffer[ count ] );
+  }
+  return maximum;
+}
+
+/*
+ *  IO Control entry point
+ */
+
+rtems_device_driver console_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
 }

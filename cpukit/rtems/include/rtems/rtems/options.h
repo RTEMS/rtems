@@ -69,7 +69,7 @@ STATIC INLINE boolean _Options_Is_any (
   rtems_option option_set
 );
 
-#include <rtems/options.inl>
+#include <rtems/rtems/options.inl>
 
 #ifdef __cplusplus
 }

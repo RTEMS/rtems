@@ -108,5 +108,18 @@ STATIC INLINE boolean _Attributes_Is_inherit_priority(
    return ( attribute_set & RTEMS_INHERIT_PRIORITY );
 }
 
+/*PAGE
+ *
+ *  _Attributes_Is_priority_ceiling
+ *
+ */
+ 
+STATIC INLINE boolean _Attributes_Is_priority_ceiling(
+  rtems_attribute attribute_set
+)
+{
+   return ( attribute_set & RTEMS_PRIORITY_CEILING );
+}
+
 #endif
 /* end of include file */

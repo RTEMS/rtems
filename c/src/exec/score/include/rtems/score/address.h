@@ -52,21 +52,6 @@ STATIC INLINE void *_Addresses_Subtract_offset(
 );
 
 /*
- *  _Addresses_Add
- *
- *  DESCRIPTION:
- *
- *  This function is used to add two addresses.  It returns the
- *  resulting address.  This address is typically converted to an
- *  access type before being used further.
- */
-
-STATIC INLINE void *_Addresses_Add (
-  void *left,
-  void *right
-);
-
-/*
  *  _Addresses_Subtract
  *
  *  DESCRIPTION:
@@ -112,7 +97,7 @@ STATIC INLINE boolean _Addresses_Is_in_range (
   void *limit
 );
 
-#include <rtems/address.inl>
+#include <rtems/core/address.inl>
 
 #ifdef __cplusplus
 }

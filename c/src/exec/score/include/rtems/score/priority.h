@@ -2,7 +2,7 @@
  *
  *  This include file contains all thread priority manipulation routines.
  *  This Handler provides mechanisms which can be used to
- *  initialize and manipulate RTEMS priorities.
+ *  initialize and manipulate thread priorities.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_PRIORITY_h
-#define __RTEMS_PRIORITY_h
+#ifndef __PRIORITY_h
+#define __PRIORITY_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,8 +31,8 @@ extern "C" {
 
 typedef unsigned32 Priority_Control;
 
-#define RTEMS_MINIMUM_PRIORITY      1         /* highest thread priority */
-#define RTEMS_MAXIMUM_PRIORITY      255       /* lowest thread priority */
+#define PRIORITY_MINIMUM      0         /* highest thread priority */
+#define PRIORITY_MAXIMUM      255       /* lowest thread priority */
 
 /*
  *  The following record defines the information associated with
@@ -60,12 +60,6 @@ typedef struct {
 
 EXTERN volatile Priority_Bit_map_control _Priority_Major_bit_map;
 EXTERN Priority_Bit_map_control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
-
-/*
- *  The following constants are useful when manipulating priority.
- */
-
-#define RTEMS_CURRENT_PRIORITY      0         /* obtain current priority */
 
 /*
  *  The definition of the Priority_Bit_map_control type is CPU dependent.
@@ -185,7 +179,7 @@ STATIC INLINE boolean _Priority_Is_group_empty (
   Priority_Control      the_priority
 );
 
-#include <rtems/priority.inl>
+#include <rtems/core/priority.inl>
 
 #ifdef __cplusplus
 }

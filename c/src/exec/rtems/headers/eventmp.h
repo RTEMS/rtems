@@ -21,11 +21,11 @@
 extern "C" {
 #endif
 
-#include <rtems/event.h>
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
+#include <rtems/rtems/event.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
 
 /*
  *  The following enumerated type defines the list of

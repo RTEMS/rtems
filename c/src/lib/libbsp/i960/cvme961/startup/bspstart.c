@@ -20,12 +20,17 @@
  *  $Id$
  */
 
-#include <rtems.h>
 #include <bsp.h>
-#include "libcsupport.h"
-
-
-#include "stackchk.h"
+#include <rtems/libio.h>
+ 
+#include <libcsupport.h>
+ 
+#include <string.h>
+#include <fcntl.h>
+ 
+#ifdef STACK_CHECKER_ON
+#include <stackchk.h>
+#endif
 
 /*
  *  The original table from the application and our copy of it with
@@ -37,6 +42,8 @@ extern rtems_configuration_table Configuration;
 rtems_configuration_table  BSP_Configuration;
 
 rtems_cpu_table Cpu_table;
+
+char *rtems_progname;
 
 /*      Initialize whatever libc we are using
  *      called from postdriver hook
@@ -52,6 +59,14 @@ void bsp_libc_init()
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
     RTEMS_Malloc_Initialize((void *) heap_start, 64 * 1024, 0);
+
+    /*
+     *  Init the RTEMS libio facility to provide UNIX-like system
+     *  calls for use by newlib (ie: provide __open, __close, etc)
+     *  Uses malloc() to get area for the iops, so must be after malloc init
+     */
+
+    rtems_libio_init();
 
     /*
      * Set up for the libc handling.
@@ -70,12 +85,43 @@ void bsp_libc_init()
 #endif
 }
 
-int bsp_start(
+/*
+ * After drivers are setup, register some "filenames"
+ * and open stdin, stdout, stderr files
+ *
+ * Newlib will automatically associate the files with these
+ * (it hardcodes the numbers)
+ */
+ 
+void
+bsp_postdriver_hook(void)
+{
+  int stdin_fd, stdout_fd, stderr_fd;
+ 
+  if ((stdin_fd = __open("/dev/console", O_RDONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD0');
+ 
+  if ((stdout_fd = __open("/dev/console", O_WRONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD1');
+ 
+  if ((stderr_fd = __open("/dev/console", O_WRONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD2');
+ 
+  if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
+    rtems_fatal_error_occurred('STIO');
+}
+
+int main(
   int argc,
   char **argv,
   char **environp
 )
 {
+  if ((argc > 0) && argv && argv[0])
+    rtems_progname = argv[0];
+  else
+    rtems_progname = "RTEMS";
+
   /* set node number in SQSIO4 CTL REG */
 
   *((rtems_unsigned32 *)0xc00000b0) =
@@ -110,7 +156,7 @@ int bsp_start(
 
   Cpu_table.predriver_hook = bsp_libc_init;  /* RTEMS resources available */
 
-  Cpu_table.postdriver_hook = NULL;   /* Call our main() for constructors */
+  Cpu_table.postdriver_hook = bsp_postdriver_hook;
 
   Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
 
@@ -149,6 +195,12 @@ int bsp_start(
 #ifdef STACK_CHECKER_ON
     BSP_Configuration.maximum_extensions++;
 #endif
+
+  /*
+   * Tell libio how many fd's we want and allow it to tweak config
+   */
+
+  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
   BSP_Configuration.work_space_start = (void *)
      (RAM_END - BSP_Configuration.work_space_size);

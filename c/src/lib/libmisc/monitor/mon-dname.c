@@ -57,7 +57,8 @@ rtems_monitor_dname_next(
     rtems_driver_name_t    *table = object_information;
     rtems_driver_name_t    *np = 0;
 
-    for (np = table + n ; n<RTEMS_MAX_DRIVER_NAMES; n++, np++)
+/* XXX should we be using _IO_Number_of_devices */
+    for (np = table + n ; n<_IO_Number_of_devices; n++, np++)
         if (np->device_name)
             goto done;
     

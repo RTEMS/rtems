@@ -14,12 +14,13 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/rtems/status.h>
 #include <rtems/config.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/region.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/region.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
 
 void _Region_Manager_initialization(
   unsigned32 maximum_regions
@@ -36,7 +37,7 @@ rtems_status_code rtems_region_create(
   Objects_Id         *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_region_ident(
@@ -44,14 +45,14 @@ rtems_status_code rtems_region_ident(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_region_delete(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_region_get_segment(
@@ -62,7 +63,7 @@ rtems_status_code rtems_region_get_segment(
   void              **segment
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_region_get_segment_size(
@@ -71,7 +72,7 @@ rtems_status_code rtems_region_get_segment_size(
   unsigned32        *size
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_region_return_segment(
@@ -79,5 +80,5 @@ rtems_status_code rtems_region_return_segment(
   void       *segment
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }

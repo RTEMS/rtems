@@ -16,16 +16,68 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_1(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_2(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_3(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_4(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task5(
+  rtems_task_argument argument
+);
+ 
+/* configuration information */
 
-#define BASE_PRIORITY 140                /* all tasks priority */
+#define CONFIGURE_SPTEST
 
-/* macros */
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
-/* structures */
+#define CONFIGURE_MAXIMUM_REGIONS             4
+#define CONFIGURE_TICKS_PER_TIMESLICE       100
 
-#include "gvar.h"
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 6 ];      /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 6 ];    /* array of task names */
+TEST_EXTERN rtems_id   Region_id[ 5 ];    /* array of region ids */
+TEST_EXTERN rtems_name Region_name[ 5 ];  /* array of region names */
+
+TEST_EXTERN rtems_unsigned8 Area_1[4096] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN rtems_unsigned8 Area_2[4096] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN rtems_unsigned8 Area_3[4096] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN rtems_unsigned8 Area_4[8192] CPU_STRUCTURE_ALIGNMENT;
+
+#define BASE_PRIORITY 140
+
+#define Put_address_from_area_1( _to_be_printed ) \
+   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_1 )
+
+#define Put_address_from_area_2( _to_be_printed ) \
+   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_2 )
+
+#define Put_address_from_area_3( _to_be_printed ) \
+   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_3 )
+
+#define Put_address_from_area_4( _to_be_printed ) \
+   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_4 )
 
 /* end of include file */

@@ -106,6 +106,12 @@ extern "C" {
 
 #define RTEMS_NUMBER_OF_ENTRY_POINTS                    82
 
+/*
+ *  The jump table of entry points into RTEMS directives.
+ */
+
+extern const void *_Entry_points[ RTEMS_NUMBER_OF_ENTRY_POINTS ];
+
 #ifdef __cplusplus
 }
 #endif

@@ -38,16 +38,13 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/message.h>
-#include <rtems/object.h>
-#include <rtems/part.h>
-#include <rtems/region.h>
-#include <rtems/sem.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
-#include <rtems/threadq.h>
-#include <rtems/types.h>
+#include <rtems/core/object.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/eventset.h>
+#include <rtems/rtems/asr.h>
+#include <rtems/rtems/attr.h>
 
 /*
  *  Constant to be used as the ID of current task
@@ -60,7 +57,106 @@ extern "C" {
  *  interval when a task wishes to yield the CPU.
  */
 
-#define RTEMS_YIELD_PROCESSOR RTEMS_NO_TIMEOUT
+#define RTEMS_YIELD_PROCESSOR WATCHDOG_NO_TIMEOUT
+
+/*
+ *  Define the type for an RTEMS API task priority.
+ */
+
+typedef Priority_Control rtems_task_priority;
+
+#define RTEMS_NO_PRIORITY           RTEMS_CURRENT_PRIORITY
+
+#define RTEMS_MINIMUM_PRIORITY      (PRIORITY_MINIMUM + 1)
+#define RTEMS_MAXIMUM_PRIORITY      PRIORITY_MAXIMUM
+
+/*
+ *  The following constant is passed to rtems_task_set_priority when the
+ *  caller wants to obtain the current priority.
+ */
+
+#define RTEMS_CURRENT_PRIORITY      PRIORITY_MINIMUM   
+
+/*
+ *  Notepads constants (indices into notepad array)
+ */
+ 
+#define RTEMS_NOTEPAD_FIRST 0             /* lowest numbered notepad */
+#define RTEMS_NOTEPAD_0    0              /* notepad location 0  */
+#define RTEMS_NOTEPAD_1    1              /* notepad location 1  */
+#define RTEMS_NOTEPAD_2    2              /* notepad location 2  */
+#define RTEMS_NOTEPAD_3    3              /* notepad location 3  */
+#define RTEMS_NOTEPAD_4    4              /* notepad location 4  */
+#define RTEMS_NOTEPAD_5    5              /* notepad location 5  */
+#define RTEMS_NOTEPAD_6    6              /* notepad location 6  */
+#define RTEMS_NOTEPAD_7    7              /* notepad location 7  */
+#define RTEMS_NOTEPAD_8    8              /* notepad location 8  */
+#define RTEMS_NOTEPAD_9    9              /* notepad location 9  */
+#define RTEMS_NOTEPAD_10   10             /* notepad location 10 */
+#define RTEMS_NOTEPAD_11   11             /* notepad location 11 */
+#define RTEMS_NOTEPAD_12   12             /* notepad location 12 */
+#define RTEMS_NOTEPAD_13   13             /* notepad location 13 */
+#define RTEMS_NOTEPAD_14   14             /* notepad location 14 */
+#define RTEMS_NOTEPAD_15   15             /* notepad location 15 */
+#define RTEMS_NOTEPAD_LAST RTEMS_NOTEPAD_15     /* highest numbered notepad */
+ 
+#define RTEMS_NUMBER_NOTEPADS  (RTEMS_NOTEPAD_LAST+1)
+
+/*
+ *  External API name for Thread_Control
+ */
+
+typedef Thread_Control rtems_tcb;
+
+/*
+ *  The following defines the "return type" of an RTEMS task.
+ */
+ 
+typedef void rtems_task;
+
+/*
+ *  The following defines the argument to an RTEMS task.
+ */
+ 
+typedef unsigned32 rtems_task_argument;
+
+/*
+ *  The following defines the type for the entry point of an RTEMS task.
+ */
+ 
+typedef rtems_task ( *rtems_task_entry )(
+                      rtems_task_argument
+                   );
+ 
+/*
+ *  The following records define the Initialization Tasks Table.
+ *  Each entry contains the information required by RTEMS to
+ *  create and start a user task automatically at executive
+ *  initialization time.
+ */
+ 
+typedef struct {
+  rtems_name            name;              /* task name */
+  unsigned32            stack_size;        /* task stack size */
+  rtems_task_priority   initial_priority;  /* task priority */
+  rtems_attribute       attribute_set;     /* task attributes */
+  rtems_task_entry      entry_point;       /* task entry point */
+  rtems_mode            mode_set;          /* task initial mode */
+  unsigned32            argument;          /* task argument */
+} rtems_initialization_tasks_table;
+
+/*
+ *  This is the API specific information required by each thread for
+ *  the RTEMS API to function correctly.
+ */
+
+ 
+typedef struct {
+  unsigned32                Notepads[ RTEMS_NUMBER_NOTEPADS ];
+  rtems_event_set           pending_events;
+  rtems_event_set           event_condition;
+  ASR_Information           Signal;
+}  RTEMS_API_Control;
 
 /*
  *  The following defines the information control block used to
@@ -68,6 +164,13 @@ extern "C" {
  */
 
 EXTERN Objects_Information _RTEMS_tasks_Information;
+
+/*
+ *  These are used to manage the user initialization tasks.
+ */
+
+EXTERN rtems_initialization_tasks_table *_RTEMS_tasks_User_initialization_tasks;
+EXTERN unsigned32   _RTEMS_tasks_Number_of_initialization_tasks;
 
 /*
  *  _RTEMS_tasks_Manager_initialization
@@ -78,7 +181,9 @@ EXTERN Objects_Information _RTEMS_tasks_Information;
  */
  
 void _RTEMS_tasks_Manager_initialization(
-  unsigned32   maximum_tasks
+  unsigned32                        maximum_tasks,
+  unsigned32                        number_of_initialization_tasks,
+  rtems_initialization_tasks_table *user_tasks
 );
 
 /*
@@ -284,7 +389,7 @@ rtems_status_code rtems_task_wake_when(
  */
 
 rtems_status_code rtems_task_wake_after(
-  rtems_interval ticks
+  rtems_interval  ticks
 );
 
 /*
@@ -313,32 +418,43 @@ STATIC INLINE void _RTEMS_tasks_Free (
 );
 
 /*
- *  _RTEMS_tasks_Cancel_wait
- *
- *  DESCRIPTION:
- *
- *  This routine unblocks the_thread and cancels any timers
- *  which the_thread has active.
- */
-
-STATIC INLINE void _RTEMS_tasks_Cancel_wait(
-  Thread_Control *the_thread
-);
-
-/*
- *  _RTEMS_Tasks_Priority_to_Core
+ *  _RTEMS_tasks_Priority_to_Core
  *
  *  DESCRIPTION:
  *
  *  This function converts an RTEMS API priority into a core priority.
  */
  
-STATIC INLINE Priority_Control _RTEMS_Tasks_Priority_to_Core(
+STATIC INLINE Priority_Control _RTEMS_tasks_Priority_to_Core(
   rtems_task_priority   priority
 );
 
-#include <rtems/tasks.inl>
-#include <rtems/taskmp.h>
+/*PAGE
+ *
+ *  _RTEMS_tasks_Initialize_user_tasks
+ *
+ *  This routine creates and starts all configured user
+ *  initialzation threads.
+ *
+ *  Input parameters: NONE
+ *
+ *  Output parameters:  NONE
+ */
+ 
+void _RTEMS_tasks_Initialize_user_tasks( void );
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Priority_is_valid
+ *
+ */
+ 
+STATIC INLINE boolean _RTEMS_tasks_Priority_is_valid (
+  rtems_task_priority the_priority
+);
+
+#include <rtems/rtems/tasks.inl>
+#include <rtems/rtems/taskmp.h>
 
 #ifdef __cplusplus
 }

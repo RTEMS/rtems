@@ -27,11 +27,11 @@
  *  $Id$
 #
 
-#include <rtems/hppa.h>
-#include <rtems/cpu_asm.h>
-#include <rtems/cpu.h>
+#include <rtems/core/hppa.h>
+#include <rtems/core/cpu_asm.h>
+#include <rtems/core/cpu.h>
 
-#include <offsets.h>
+#include <rtems/core/offsets.h>
 
 	.SPACE $PRIVATE$
 	.SUBSPA $DATA$,QUAD=1,ALIGN=8,ACCESS=31

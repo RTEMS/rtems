@@ -22,7 +22,19 @@
  */
 
 #define _Event_Manager_initialization() \
-  _Event_Sync = FALSE
+  do { \
+    \
+    _Event_Sync = FALSE; \
+    \
+    /* \
+     *  Register the MP Process Packet routine. \
+     */ \
+    \
+    _MPCI_Register_packet_processor( \
+      MP_PACKET_EVENT, \
+      _Event_MP_Process_packet \
+    ); \
+  } while ( 0 )
 
 #endif
 /* end of include file */

@@ -227,7 +227,10 @@ loop:   movel   d0,a1@+                | to zero out uninitialized
         movec   a0,isp                | set interrupt stack
 #endif
 
-        jsr     SYM (bsp_start)
+        move.l  #0,a7@-               | environp
+        move.l  #0,a7@-               | argv
+        move.l  #0,a7@-               | argc
+        jsr     SYM (main)
 
 	nop
 Bad:	bra	Bad

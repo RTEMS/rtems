@@ -196,6 +196,17 @@ extern "C" {
     ); \
   }
 
+#define m68k_get_interrupt_level( _level ) \
+  do { \
+    register unsigned32 _tmpsr = 0; \
+    \
+    asm volatile( "movw  %%sr,%0" \
+                   : "=d" (_tmpsr) : "0" (_tmpsr) \
+    ); \
+    \
+    _level = (_tmpsr & 0x0700) >> 8; \
+  } while (0)
+    
 #define m68k_set_interrupt_level( _newlevel ) \
   { \
     register unsigned32 _tmpsr = 0; \

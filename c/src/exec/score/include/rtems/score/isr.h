@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_ISR_h
-#define __RTEMS_ISR_h
+#ifndef __ISR_h
+#define __ISR_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,24 +31,23 @@ extern "C" {
 typedef unsigned32 ISR_Level;
 
 /*
- *  The following type defines the control block used to manage
- *  the vectors.
+ *  The following type defines the type used to manage the vectors.
  */
 
-typedef unsigned32 rtems_vector_number;
+typedef unsigned32 ISR_Vector_number;
 
 /*
  *  Return type for ISR Handler
  */
 
-typedef void rtems_isr;
+typedef void ISR_Handler;
 
 /*
  *  Pointer to an ISR Handler
  */
 
-typedef rtems_isr ( *rtems_isr_entry )(
-                 rtems_vector_number
+typedef ISR_Handler ( *ISR_Handler_entry )(
+                 ISR_Vector_number
              );
 /*
  *  The following is TRUE if signals have been sent to the currently
@@ -65,11 +64,11 @@ EXTERN boolean    _ISR_Signals_to_thread_executing;
 EXTERN unsigned32 _ISR_Nest_level;
 
 /*
- *  The following declares the RTEMS Vector Table.  Application
- *  interrupt service routines are vectored by RTEMS via this table.
+ *  The following declares the Vector Table.  Application
+ *  interrupt service routines are vectored by the ISR Handler via this table.
  */
 
-EXTERN rtems_isr_entry _ISR_Vector_table[CPU_INTERRUPT_NUMBER_OF_VECTORS];
+EXTERN ISR_Handler_entry _ISR_Vector_table[CPU_INTERRUPT_NUMBER_OF_VECTORS];
 
 /*
  *  _ISR_Handler_initialization
@@ -79,7 +78,7 @@ EXTERN rtems_isr_entry _ISR_Vector_table[CPU_INTERRUPT_NUMBER_OF_VECTORS];
  *  This routine performs the initialization necessary for this handler.
  */
 
-STATIC INLINE void _ISR_Handler_initialization ( void );
+void _ISR_Handler_initialization ( void );
 
 /*
  *  _ISR_Disable
@@ -154,6 +153,17 @@ STATIC INLINE boolean _ISR_Is_in_progress( void );
   _CPU_ISR_install_vector( _vector, _new_handler, _old_handler )
 
 /*
+ *  _ISR_Get_level
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine returns the current interrupt level.
+ */
+ 
+#define _ISR_Get_level() \
+        _CPU_ISR_Get_level()
+ 
+/*
  *  _ISR_Set_level
  *
  *  DESCRIPTION:
@@ -176,7 +186,7 @@ STATIC INLINE boolean _ISR_Is_in_progress( void );
  */
 
 STATIC INLINE boolean _ISR_Is_vector_number_valid (
-  rtems_vector_number   vector
+  ISR_Vector_number   vector
 );
 
 /*
@@ -197,7 +207,7 @@ STATIC INLINE boolean _ISR_Is_valid_user_handler (
  *
  *  DESCRIPTION:
  *
- *  This routine is the RTEMS interrupt dispatcher.  ALL interrupts
+ *  This routine is the interrupt dispatcher.  ALL interrupts
  *  are vectored to this routine so that minimal context can be saved
  *  and setup performed before the application's high-level language
  *  interrupt service routine is invoked.   After the application's
@@ -229,7 +239,7 @@ void _ISR_Handler( void );
 
 void _ISR_Dispatch( void );
 
-#include <rtems/isr.inl>
+#include <rtems/core/isr.inl>
 
 #ifdef __cplusplus
 }

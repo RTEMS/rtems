@@ -22,11 +22,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_extensions_table Extensions = {
   Task_create_extension,     /* task create user extension */
@@ -34,6 +31,7 @@ rtems_extensions_table Extensions = {
   Task_restart_extension,    /* task restart user extension */
   Task_delete_extension,     /* task delete user extension */
   NULL,                      /* task switch user extension */
+  NULL,                      /* task post switch user extension */
   NULL,                      /* begin user extension */
   Task_exit_extension,       /* task exitted user extension */
   NULL                       /* fatal error extension */

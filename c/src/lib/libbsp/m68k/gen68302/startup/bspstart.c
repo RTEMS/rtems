@@ -20,10 +20,17 @@
  *  $Id$
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <rtems/libio.h>
+ 
 #include <libcsupport.h>
-
+ 
+#include <string.h>
+#include <fcntl.h>
+ 
+#ifdef STACK_CHECKER_ON
+#include <stackchk.h>
+#endif
 
 /*
  *  The original table from the application and our copy of it with
@@ -34,6 +41,8 @@ extern rtems_configuration_table Configuration;
 rtems_configuration_table  BSP_Configuration;
 
 rtems_cpu_table Cpu_table;
+
+char *rtems_progname;
 
 /*      Initialize whatever libc we are using
  *      called from postdriver hook
@@ -58,6 +67,14 @@ void bsp_libc_init()
     RTEMS_Malloc_Initialize((void *) heap_start, 64 * 1024, 0);
 
     /*
+     *  Init the RTEMS libio facility to provide UNIX-like system
+     *  calls for use by newlib (ie: provide __open, __close, etc)
+     *  Uses malloc() to get area for the iops, so must be after malloc init
+     */
+
+    rtems_libio_init();
+
+    /*
      * Set up for the libc handling.
      */
 
@@ -75,13 +92,43 @@ void bsp_libc_init()
 #endif
 }
 
+/*
+ * After drivers are setup, register some "filenames"
+ * and open stdin, stdout, stderr files
+ *
+ * Newlib will automatically associate the files with these
+ * (it hardcodes the numbers)
+ */
+ 
+void
+bsp_postdriver_hook(void)
+{
+  int stdin_fd, stdout_fd, stderr_fd;
+ 
+  if ((stdin_fd = __open("/dev/console", O_RDONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD0');
+ 
+  if ((stdout_fd = __open("/dev/console", O_WRONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD1');
+ 
+  if ((stderr_fd = __open("/dev/console", O_WRONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD2');
+ 
+  if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
+    rtems_fatal_error_occurred('STIO');
+}
 
-int bsp_start(
+int main(
   int argc,
   char **argv,
   char **environp
 )
 {
+  if ((argc > 0) && argv && argv[0])
+    rtems_progname = argv[0];
+  else
+    rtems_progname = "RTEMS";
+
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside
@@ -90,7 +137,7 @@ int bsp_start(
    *  of work space from the last physical address on the CPU board.
    */
 #if 0
-a  Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
+  Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
 #endif
 
 
@@ -123,6 +170,12 @@ a  Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
 #endif
 
   /*
+   * Tell libio how many fd's we want and allow it to tweak config
+   */
+
+  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
+
+  /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
@@ -143,7 +196,7 @@ a  Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
 
   Cpu_table.predriver_hook = bsp_libc_init;    /* RTEMS resources available */
 
-  Cpu_table.postdriver_hook = NULL;
+  Cpu_table.postdriver_hook = bsp_postdriver_hook;
 
   Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
 

@@ -13,8 +13,7 @@
  *
  */
 
-#include <rtems/system.h>
-#include <rtems/thread.h>
+#include <rtems.h>
 
 void MY_task_set_note(
   Thread_Control *the_thread,
@@ -22,7 +21,11 @@ void MY_task_set_note(
   unsigned32      note
 )
 {
-  the_thread->RTEMS_API->Notepads[ notepad ] = note;
+  RTEMS_API_Control    *api;
+ 
+  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+
+  api->Notepads[ notepad ] = note;
 }
 
 
@@ -31,7 +34,11 @@ unsigned32 MY_task_get_note(
   unsigned32      notepad
 )
 {
-  return the_thread->RTEMS_API->Notepads[ notepad ];
+  RTEMS_API_Control    *api;
+ 
+  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+
+  return api->Notepads[ notepad ];
 }
 
 void *MY_CPU_Context_FP_start(

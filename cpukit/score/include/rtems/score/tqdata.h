@@ -14,16 +14,16 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_THREAD_QUEUE_DATA_h
-#define __RTEMS_THREAD_QUEUE_DATA_h
+#ifndef __THREAD_QUEUE_DATA_h
+#define __THREAD_QUEUE_DATA_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/chain.h>
-#include <rtems/priority.h>
-#include <rtems/states.h>
+#include <rtems/core/chain.h>
+#include <rtems/core/priority.h>
+#include <rtems/core/states.h>
 
 /*
  *  The following enumerated type details all of the disciplines
@@ -31,8 +31,8 @@ extern "C" {
  */
 
 typedef enum {
-  THREAD_QUEUE_DISCIPLINE_FIFO,     /* RTEMS_FIFO queue discipline */
-  THREAD_QUEUE_DISCIPLINE_PRIORITY  /* RTEMS_PRIORITY queue discipline */
+  THREAD_QUEUE_DISCIPLINE_FIFO,     /* FIFO queue discipline */
+  THREAD_QUEUE_DISCIPLINE_PRIORITY  /* PRIORITY queue discipline */
 }   Thread_queue_Disciplines;
 
 /*
@@ -51,6 +51,7 @@ typedef struct {
   boolean                  sync;       /* alloc/dealloc critical section */
   Thread_queue_Disciplines discipline; /* queue discipline               */
   States_Control           state;      /* state of threads on Thread_q   */
+  unsigned32               timeout_status;
 }   Thread_queue_Control;
 
 /*
@@ -80,7 +81,7 @@ STATIC INLINE boolean _Thread_queue_Is_reverse_search (
   Priority_Control the_priority
 );
 
-#include <rtems/tqdata.inl>
+#include <rtems/core/tqdata.inl>
 
 #ifdef __cplusplus
 }

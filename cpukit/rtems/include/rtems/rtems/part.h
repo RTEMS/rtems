@@ -31,10 +31,10 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/address.h>
-#include <rtems/attr.h>
-#include <rtems/object.h>
+#include <rtems/core/address.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/rtems/types.h>
 
 /*
  *  The following defines the control block used to manage each partition.
@@ -280,8 +280,8 @@ STATIC INLINE boolean _Partition_Is_null (
   Partition_Control *the_partition
 );
 
-#include <rtems/part.inl>
-#include <rtems/partmp.h>
+#include <rtems/rtems/part.inl>
+#include <rtems/rtems/partmp.h>
 
 #ifdef __cplusplus
 }

@@ -15,7 +15,7 @@
  */
 
 #include <rtems/hppa.h>
-#include <rtems/cpu_asm.h>
+#include <rtems/core/cpu_asm.h>
 
 	.SPACE $PRIVATE$
 	.SUBSPA $DATA$,QUAD=1,ALIGN=8,ACCESS=31

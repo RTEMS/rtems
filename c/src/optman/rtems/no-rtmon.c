@@ -14,10 +14,13 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/isr.h>
-#include <rtems/object.h>
-#include <rtems/ratemon.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/ratemon.h>
 
 void _Rate_monotonic_Manager_initialization(
   unsigned32 maximum_periods
@@ -30,7 +33,7 @@ rtems_status_code rtems_rate_monotonic_create(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_rate_monotonic_ident(
@@ -38,21 +41,21 @@ rtems_status_code rtems_rate_monotonic_ident(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_rate_monotonic_cancel(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_rate_monotonic_delete(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_rate_monotonic_period(
@@ -60,7 +63,7 @@ rtems_status_code rtems_rate_monotonic_period(
   rtems_interval length
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 void _Rate_monotonic_Timeout(

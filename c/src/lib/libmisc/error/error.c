@@ -91,8 +91,8 @@ rtems_assoc_t rtems_status_assoc[] = {
     { "not owner of resource",              RTEMS_NOT_OWNER_OF_RESOURCE , },
     { "directive not implemented",          RTEMS_NOT_IMPLEMENTED, },
     { "RTEMS inconsistency detected",       RTEMS_INTERNAL_ERROR, },
-    { "internal multiprocessing only",      RTEMS_PROXY_BLOCKING, },
     { "could not get enough memory",        RTEMS_NO_MEMORY, },
+    { "internal multiprocessing only",      THREAD_STATUS_PROXY_BLOCKING, },
     { 0, 0, 0 },
 };
 
@@ -134,7 +134,7 @@ static int rtems_verror(
     if (error_flag & RTEMS_ERROR_ERRNO)     /* include errno? */
         local_errno = errno;
 
-    if (_Configuration_Is_multiprocessing())
+    if (_System_state_Is_multiprocessing)
         fprintf(stderr, "[%d] ", _Configuration_MP_table->node);
     
     if (rtems_progname && *rtems_progname)

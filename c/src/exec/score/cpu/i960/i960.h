@@ -169,6 +169,13 @@ typedef struct {
                        : "0"  (_mask), "1"  ((oldlevel)) ); \
   }
 
+#define i960_get_interrupt_level( _level ) \
+  { \
+    i960_disable_interrupts( _level ); \
+    i960_enable_interrupts( _level ); \
+    (_level) = ((_level) & 0x1f0000) >> 16; \
+  } while ( 0 )
+
 #define i960_atomic_modify( mask, addr, prev ) \
  { register unsigned int  _mask = (mask); \
    register unsigned int *_addr = (unsigned int *)(addr); \
@@ -199,9 +206,8 @@ typedef struct {
 
 #define i960_clear_intr( xint ) \
  { register unsigned int _xint=(xint); \
-   asm volatile( "loop_til_cleared:
-                    clrbit %0,sf0,sf0 ; \
-                    bbs    %0,sf0,loop_til_cleared" \
+asm volatile( "loop_til_cleared: clrbit %0,sf0,sf0 ; \
+                  bbs    %0,sf0, loop_til_cleared" \
                   : "=d" (_xint) : "0" (_xint) ); \
  }
 

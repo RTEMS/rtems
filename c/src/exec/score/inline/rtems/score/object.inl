@@ -36,10 +36,10 @@ STATIC INLINE Objects_Id _Objects_Build_id(
 
 /*PAGE
  *
- *  rtems_get_class
+ *  _Objects_Get_class
  */
  
-STATIC INLINE Objects_Classes rtems_get_class(
+STATIC INLINE Objects_Classes _Objects_Get_class(
   Objects_Id id
 )
 {
@@ -50,11 +50,11 @@ STATIC INLINE Objects_Classes rtems_get_class(
 
 /*PAGE
  *
- *  rtems_get_node
+ *  _Objects_Get_node
  *
  */
 
-STATIC INLINE unsigned32 rtems_get_node(
+STATIC INLINE unsigned32 _Objects_Get_node(
   Objects_Id id
 )
 {
@@ -63,11 +63,11 @@ STATIC INLINE unsigned32 rtems_get_node(
 
 /*PAGE
  *
- *  rtems_get_index
+ *  _Objects_Get_index
  *
  */
 
-STATIC INLINE unsigned32 rtems_get_index(
+STATIC INLINE unsigned32 _Objects_Get_index(
   Objects_Id id
 )
 {
@@ -110,7 +110,7 @@ STATIC INLINE boolean _Objects_Is_local_id(
   Objects_Id id
 )
 {
-  return _Objects_Is_local_node( rtems_get_node(id) );
+  return _Objects_Is_local_node( _Objects_Get_node(id) );
 }
 
 /*PAGE
@@ -168,7 +168,7 @@ STATIC INLINE void _Objects_Open(
 {
   unsigned32  index;
 
-  index = rtems_get_index( the_object->id );
+  index = _Objects_Get_index( the_object->id );
   information->local_table[ index ] = the_object;
 
   if ( information->is_string ) 
@@ -190,7 +190,7 @@ STATIC INLINE void _Objects_Close(
 {
   unsigned32 index;
 
-  index = rtems_get_index( the_object->id );
+  index = _Objects_Get_index( the_object->id );
   information->local_table[ index ] = NULL;
   _Objects_Clear_name( the_object->name, information->name_length );
 }

@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_id          Timer_id[ OPERATION_COUNT+1 ];
 
@@ -49,6 +46,8 @@ rtems_task Init(
   rtems_id            id;
   rtems_task_entry    task_entry;
   rtems_status_code   status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 23 ***" );
 
@@ -298,5 +297,6 @@ rtems_task Low_task(
     CALLING_OVERHEAD_TASK_WAKE_WHEN
   );
 
+  puts( "*** END OF TEST 23 ***" );
   exit( 0 );
 }

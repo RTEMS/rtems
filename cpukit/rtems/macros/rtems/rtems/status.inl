@@ -35,13 +35,5 @@
 #define rtems_are_statuses_equal( _code1, _code2 ) \
    ((_code1) == (_code2))
 
-/*
- *  _Status_Is_proxy_blocking
- *
- */
-
-#define _Status_Is_proxy_blocking( _code ) \
-  ( (_code) == RTEMS_PROXY_BLOCKING )
-
 #endif
 /* end of include file */

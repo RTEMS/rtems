@@ -14,8 +14,11 @@
 #include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
 
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
+#include <sys/fcntl.h>                      /* O_RDONLY, et.al. */
 #if defined(solaris2)
 #define O_NDELAY O_NONBLOCK
+#elif  defined(RTEMS_NEWLIB)
+#define O_NDELAY _FNBIO
 #endif
 #include <errno.h>
 #include <string.h>                     /* strcmp */

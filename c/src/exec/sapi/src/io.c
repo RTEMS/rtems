@@ -14,11 +14,9 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/config.h>
 #include <rtems/io.h>
-#include <rtems/isr.h>
-#include <rtems/thread.h>
-#include <rtems/intr.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/thread.h>
 
 #include <string.h>
 
@@ -38,7 +36,7 @@ void _IO_Initialize_all_drivers( void )
    rtems_device_major_number major;
 
    for ( major=0 ; major < _IO_Number_of_drivers ; major ++ )
-     (void) rtems_io_initialize( major, 0, _Configuration_Table);
+     (void) rtems_io_initialize( major, 0, NULL);
 }
 
 /*PAGE
@@ -60,22 +58,26 @@ rtems_status_code rtems_io_register_name(
 {
     rtems_driver_name_t *np;
     unsigned32 level;
+    unsigned32 index;
 
     /* find an empty slot */
-    for (np = rtems_driver_name_table; np < &rtems_driver_name_table[RTEMS_MAX_DRIVER_NAMES]; np++)
+    for( index=0, np = _IO_Driver_name_table ;
+         index < _IO_Number_of_devices ; 
+         index++, np++ )
     {
-        rtems_interrupt_disable(level);
+
+        _ISR_Disable(level);
         if (np->device_name == 0)
         {
             np->device_name = device_name;
             np->device_name_length = strlen(device_name);
             np->major = major;
             np->minor = minor;
-            rtems_interrupt_enable(level);
+            _ISR_Enable(level);
 
             return RTEMS_SUCCESSFUL;
         }
-        rtems_interrupt_enable(level);
+        _ISR_Enable(level);
     }
 
     return RTEMS_TOO_MANY;
@@ -93,13 +95,16 @@ rtems_status_code rtems_io_register_name(
  */
 
 rtems_status_code rtems_io_lookup_name(
-    const char *pathname,
+    const char           *pathname,
     rtems_driver_name_t **rnp
-  )
+)
 {
     rtems_driver_name_t *np;
+    unsigned32 index;
 
-    for (np = rtems_driver_name_table; np < &rtems_driver_name_table[RTEMS_MAX_DRIVER_NAMES]; np++)
+    for( index=0, np = _IO_Driver_name_table ;
+         index < _IO_Number_of_devices ; 
+         index++, np++ )
         if (np->device_name)
             if (strncmp(np->device_name, pathname, np->device_name_length) == 0)
             {                

@@ -24,10 +24,10 @@
  */
 
 STATIC INLINE void _Watchdog_Initialize(
-  Watchdog_Control *the_watchdog,
-  rtems_timer_service_routine_entry  routine,
-  Objects_Id        id,
-  void             *user_data
+  Watchdog_Control               *the_watchdog,
+  Watchdog_Service_routine_entry  routine,
+  Objects_Id                      id,
+  void                           *user_data
 )
 {
   the_watchdog->state     = WATCHDOG_INACTIVE;
@@ -115,7 +115,7 @@ STATIC INLINE void _Watchdog_Tickle_seconds( void )
 
 STATIC INLINE void _Watchdog_Insert_ticks(
   Watchdog_Control      *the_watchdog,
-  rtems_interval      units,
+  Watchdog_Interval      units,
   Watchdog_Insert_modes  insert_mode
 )
 {
@@ -134,7 +134,7 @@ STATIC INLINE void _Watchdog_Insert_ticks(
 
 STATIC INLINE void _Watchdog_Insert_seconds(
   Watchdog_Control      *the_watchdog,
-  rtems_interval      units,
+  Watchdog_Interval      units,
   Watchdog_Insert_modes  insert_mode
 )
 {
@@ -153,7 +153,7 @@ STATIC INLINE void _Watchdog_Insert_seconds(
 
 STATIC INLINE void _Watchdog_Adjust_seconds(
   Watchdog_Adjust_directions direction,
-  rtems_interval          units
+  Watchdog_Interval          units
 )
 {
 
@@ -169,7 +169,7 @@ STATIC INLINE void _Watchdog_Adjust_seconds(
 
 STATIC INLINE void _Watchdog_Adjust_ticks(
   Watchdog_Adjust_directions direction,
-  rtems_interval          units
+  Watchdog_Interval          units
 )
 {
 

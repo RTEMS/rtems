@@ -97,7 +97,14 @@ loop:   movel   #0,a1@+                | to zero out uninitialized
         movec   a0,isp                | set interrupt stack
 #endif
 
-        jsr     SYM (bsp_start)
+
+        movel   #0,a7@-               | push environp
+        movel   #0,a7@-               | push argv
+        movel   #0,a7@-               | push argc
+
+        jsr     SYM (main)
+        addl    #12,a7
+
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         move.l  SYM (initial_isp),a0
         movec   a0,isp

@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_id         Task_id[OPERATION_COUNT+1];
 rtems_unsigned32 Task_index;
@@ -39,6 +36,8 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 5 ***" );
 
@@ -98,6 +97,7 @@ rtems_task High_task(
     CALLING_OVERHEAD_TASK_RESUME
   );
 
+  puts( "*** END OF TEST 5 ***" );
   exit( 0 );
 }
 

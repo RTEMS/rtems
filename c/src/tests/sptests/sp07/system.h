@@ -16,19 +16,70 @@
 
 #include <tmacros.h>
 
-/* constants */
+/* functions */
 
-#define SI_NAME       0x53595349     /* name - "SYSI" */
-#define I_NAME        0x49444c45     /* name - "IDLE" */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-/* Miscellaneous */
+rtems_task Task_1(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_2(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_3(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_4(
+  rtems_task_argument argument
+);
+ 
+rtems_boolean Task_create_extension(
+  rtems_tcb *unused,
+  rtems_tcb *created_task
+);
+ 
+rtems_extension Task_delete_extension(
+  rtems_tcb *running_task,
+  rtems_tcb *deleted_task
+);
+ 
+rtems_extension Task_restart_extension(
+  rtems_tcb *unused,
+  rtems_tcb *restarted_task
+);
+ 
+rtems_extension Task_start_extension(
+  rtems_tcb *unused,
+  rtems_tcb *started_task
+);
+ 
+rtems_extension Task_exit_extension(
+  rtems_tcb *running_task
+);
 
-#define EXTERN  extern             /* external definition */
+/* configuration information */
 
-/* macros */
+#define CONFIGURE_SPTEST
 
-/* structures */
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
-#include "gvar.h"
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS     1
+#define CONFIGURE_TICKS_PER_TIMESLICE       100
 
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+
+TEST_EXTERN rtems_id   Extension_id[ 4 ];
+TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
+ 
 /* end of include file */

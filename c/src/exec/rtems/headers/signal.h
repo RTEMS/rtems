@@ -27,11 +27,21 @@
 extern "C" {
 #endif
 
-#include <rtems/asr.h>
-#include <rtems/modes.h>
-#include <rtems/object.h>
-#include <rtems/status.h>
-#include <rtems/types.h>
+#include <rtems/rtems/asr.h>
+#include <rtems/rtems/modes.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
+
+/*
+ *  _Signal_Manager_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
+ 
+void _Signal_Manager_initialization( void );
 
 /*
  *  rtems_signal_catch
@@ -63,7 +73,7 @@ rtems_status_code rtems_signal_send(
   rtems_signal_set signal_set
 );
 
-#include <rtems/signalmp.h>
+#include <rtems/rtems/signalmp.h>
 
 #ifdef __cplusplus
 }

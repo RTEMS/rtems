@@ -14,18 +14,24 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/asr.h>
-#include <rtems/isr.h>
-#include <rtems/modes.h>
-#include <rtems/signal.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/thread.h>
 
+#include <rtems/rtems/asr.h>
+#include <rtems/rtems/modes.h>
+#include <rtems/rtems/signal.h>
+
+void _Signal_Manager_initialization( void )
+{
+}
+ 
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry   handler,
   rtems_mode        mode_set
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_signal_send(
@@ -33,5 +39,7 @@ rtems_status_code rtems_signal_send(
   rtems_signal_set signal_set
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
+
+/* end of file */

@@ -34,10 +34,11 @@
 extern "C" {
 #endif
 
-#include <rtems/types.h>
-#include <rtems/chain.h>
-#include <rtems/object.h>
-#include <rtems/threadq.h>
+#include <rtems/rtems/types.h>
+#include <rtems/core/chain.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/core/threadq.h>
 
 /*
  *  The following defines the data types needed to manipulate
@@ -468,8 +469,8 @@ STATIC INLINE Message_queue_Control *_Message_queue_Get (
   Objects_Locations *location
 );
 
-#include <rtems/message.inl>
-#include <rtems/msgmp.h>
+#include <rtems/rtems/message.inl>
+#include <rtems/rtems/msgmp.h>
 
 #ifdef __cplusplus
 }

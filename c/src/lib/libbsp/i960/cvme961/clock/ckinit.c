@@ -20,32 +20,28 @@
 
 #include <stdlib.h>
 
-#include <rtems.h>
 #include <bsp.h>
-#include <clockdrv.h>
+#include <rtems/libio.h>
+
+#define CLOCK_VECTOR 5
 
 rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
 i960_isr_entry   Old_ticker;
 volatile rtems_unsigned32 Clock_driver_ticks;
                                           /* ticks since initialization */
 
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id id,
-  rtems_unsigned32 *rval )
-{
-  Install_clock( Clock_isr );
-  atexit( Clock_exit );
-}
+void Clock_exit( void );
+ 
+/*
+ * These are set by clock driver during its init
+ */
+ 
+rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_minor_number rtems_clock_minor;
 
-void ReInstall_clock(
-  rtems_isr_entry clock_isr
-)
-{
-   (void) set_vector( clock_isr, 5, 1 );
-}
+
+/* this is later in the file to avoid it being inlined */
+rtems_isr Clock_isr( rtems_vector_number vector );
 
 void Install_clock(
   rtems_isr_entry clock_isr
@@ -57,11 +53,18 @@ void Install_clock(
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
   if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = set_vector( clock_isr, 5, 1 );
+    Old_ticker = set_vector( clock_isr, CLOCK_VECTOR, 1 );
     victimer = (volatile unsigned char *) 0xa00000c3;
     *victimer = 0x12;
     *victimer = 0x92;      /* 1000 HZ */
   }
+}
+
+void ReInstall_clock(
+  rtems_isr_entry clock_isr
+)
+{
+   (void) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 }
 
 void Clock_exit()
@@ -75,3 +78,68 @@ void Clock_exit()
     /* do not restore old vector */
   }
 }
+
+rtems_device_driver Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+  Install_clock( Clock_isr );
+ 
+  atexit( Clock_exit );
+
+  /*
+   * make major/minor avail to others such as shared memory driver
+   */
+ 
+  rtems_clock_major = major;
+  rtems_clock_minor = minor;
+ 
+  return RTEMS_SUCCESSFUL;
+}
+ 
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    rtems_libio_ioctl_args_t *args = pargp;
+ 
+    if (args == 0)
+        goto done;
+ 
+    /*
+     * This is hokey, but until we get a defined interface
+     * to do this, it will just be this simple...
+     */
+ 
+    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
+    {
+        Clock_isr(CLOCK_VECTOR);
+    }
+    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
+    {
+        ReInstall_clock(args->buffer);
+    }
+ 
+done:
+    return RTEMS_SUCCESSFUL;
+}
+
+rtems_isr Clock_isr(
+  rtems_vector_number vector
+)
+{
+  /* enable_tracing(); */
+  Clock_driver_ticks += 1;
+  if ( Clock_isrs == 1 ) {
+    rtems_clock_tick();
+    Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+  }
+  else
+    Clock_isrs -= 1;
+  i960_clear_intr( 5 );
+}
+

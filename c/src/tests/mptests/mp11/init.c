@@ -25,11 +25,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_unsigned8 my_partition[0x30000] CPU_STRUCTURE_ALIGNMENT;
 

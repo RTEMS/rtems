@@ -11,6 +11,7 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include <rtems.h>
 #include "system.h"
 #include "fptest.h"
@@ -18,12 +19,6 @@
 #include <tmacros.h>
 #include <timesys.h>
 
-#undef EXTERN
-#define EXTERN
-#include "gvar.h"
-#include "conftbl.h"
-#undef EXTERN
-#define EXTERN extern
 
 /* TEST DATA */
 rtems_id Semaphore_id;
@@ -69,6 +64,8 @@ rtems_task Init(
   rtems_unsigned32  index;
   rtems_id          task_id;
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 26 ***" );
 
@@ -545,6 +542,8 @@ void complete_test( void )
     0,
     0
   );
+
+  puts( "*** END OF TEST 26 ***" );
   exit( 0 );
 }
 

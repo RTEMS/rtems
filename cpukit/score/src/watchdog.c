@@ -14,8 +14,8 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/isr.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/watchdog.h>
 
 /*PAGE
  *
@@ -104,7 +104,7 @@ Watchdog_States _Watchdog_Remove(
 void _Watchdog_Adjust(
   Chain_Control               *header,
   Watchdog_Adjust_directions   direction,
-  rtems_interval               units
+  Watchdog_Interval            units
 )
 {
   if ( !_Chain_Is_empty( header ) ) {
@@ -144,10 +144,10 @@ void _Watchdog_Insert(
   Watchdog_Insert_modes  insert_mode
 )
 {
-  ISR_Level         level;
-  Watchdog_Control *after;
-  unsigned32        insert_isr_nest_level;
-  rtems_interval    delta_interval;
+  ISR_Level          level;
+  Watchdog_Control  *after;
+  unsigned32         insert_isr_nest_level;
+  Watchdog_Interval  delta_interval;
   
 
   insert_isr_nest_level   = _ISR_Nest_level;

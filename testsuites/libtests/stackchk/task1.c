@@ -14,7 +14,7 @@
  *  $Id$
  */
 
-#include "app.h"
+#include "system.h"
 
 rtems_task Task_1_through_3(
   rtems_task_argument argument

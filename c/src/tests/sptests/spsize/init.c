@@ -22,11 +22,8 @@
  *  $Id$
  */
 
-#include "apps.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
+#define TEST_INIT
+#include "system.h"
 
 rtems_task Test_task();
 void size_rtems( int mode );

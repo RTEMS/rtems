@@ -53,7 +53,7 @@ STATIC INLINE boolean _Modes_Is_asr_disabled (
   Modes_Control mode_set
 )
 {
-   return ( mode_set & RTEMS_ASR_MASK );
+   return (mode_set & RTEMS_ASR_MASK) == RTEMS_NO_ASR;
 }
 
 /*PAGE
@@ -66,7 +66,7 @@ STATIC INLINE boolean _Modes_Is_preempt (
   Modes_Control mode_set
 )
 {
-   return ( ( mode_set & RTEMS_PREEMPT_MASK ) == RTEMS_PREEMPT );
+   return (mode_set & RTEMS_PREEMPT_MASK) == RTEMS_PREEMPT;
 }
 
 /*PAGE
@@ -79,8 +79,7 @@ STATIC INLINE boolean _Modes_Is_timeslice (
   Modes_Control mode_set
 )
 {
-  return ((mode_set & (RTEMS_TIMESLICE_MASK|RTEMS_PREEMPT_MASK)) ==
-                  (RTEMS_TIMESLICE|RTEMS_PREEMPT) );
+  return (mode_set & RTEMS_TIMESLICE_MASK) == RTEMS_TIMESLICE;
 }
 
 /*PAGE

@@ -14,8 +14,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/object.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
 #include <rtems/extension.h>
 
 void _Extension_Manager_initialization(
@@ -25,12 +27,12 @@ void _Extension_Manager_initialization(
 }
 
 rtems_status_code rtems_extension_create(
-  rtems_name                     name,
+  rtems_name              name,
   rtems_extensions_table *extension_table,
-  Objects_Id                    *id
+  Objects_Id             *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_extension_ident(
@@ -38,12 +40,12 @@ rtems_status_code rtems_extension_ident(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_extension_delete(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }

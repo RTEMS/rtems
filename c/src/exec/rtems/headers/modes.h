@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include <rtems/isr.h>
+#include <rtems/core/isr.h>
 
 /*
  *  The following type defines the control block used to manage
@@ -173,7 +173,7 @@ STATIC INLINE void _Modes_Change (
   Modes_Control *changed
 );
 
-#include <rtems/modes.inl>
+#include <rtems/rtems/modes.inl>
 
 #ifdef __cplusplus
 }

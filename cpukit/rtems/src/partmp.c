@@ -14,12 +14,14 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/mpci.h>
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/part.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/core/mpci.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/part.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/support.h>
 
 /*PAGE
  *
@@ -44,7 +46,7 @@ void _Partition_MP_Send_process_packet (
     case PARTITION_MP_EXTRACT_PROXY:
 
       the_packet                    = _Partition_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_PARTITION;
+      the_packet->Prefix.the_class  = MP_PACKET_PARTITION;
       the_packet->Prefix.length     = sizeof ( Partition_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( Partition_MP_Packet );
       the_packet->operation         = operation;
@@ -88,7 +90,7 @@ rtems_status_code _Partition_MP_Send_request_packet (
     case PARTITION_MP_RETURN_BUFFER_REQUEST:
 
       the_packet                    = _Partition_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_PARTITION;
+      the_packet->Prefix.the_class  = MP_PACKET_PARTITION;
       the_packet->Prefix.length     = sizeof ( Partition_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( Partition_MP_Packet );
       the_packet->operation         = operation;

@@ -16,14 +16,38 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+#define PT_NAME       rtems_build_name( 'P', 'A', 'R', '\0' )
 
-#define EXTERN  extern             /* external definition */
+/* functions */
 
-/* macros */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-/* structures */
+/* configuration information */
+ 
+#define CONFIGURE_MPTEST
+ 
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
-#include "gvar.h"
+#define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     1
+#define CONFIGURE_MP_MAXIMUM_PROXIES            0
+ 
+#if ( NODE_NUMBER == 1 )
+#define CONFIGURE_MAXIMUM_PARTITIONS          1
+#elif ( NODE_NUMBER == 2 )
+#define CONFIGURE_MAXIMUM_PARTITIONS          2
+#endif
+
+#include <confdefs.h>
+
+/* variables */
+
+TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
+
+TEST_EXTERN rtems_id   Partition_id[ 2 ];   /* array of partition ids */
+TEST_EXTERN rtems_name Partition_name[ 2 ]; /* array of partition names */
 
 /* end of include file */

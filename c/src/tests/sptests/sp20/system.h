@@ -16,18 +16,44 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
-
-#define EXTERN  extern             /* external definition */
-
-/* macros */
-
-/* structures */
+/* types */
 
 struct counters {
   rtems_unsigned32 count[6];
 };
 
-#include "gvar.h"
+/* functions */
+
+rtems_task Init(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_1_through_5(
+  rtems_task_argument argument
+);
+ 
+void Get_all_counters( void );
+ 
+/* configuration information */
+
+#define CONFIGURE_SPTEST
+
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INIT_TASK_PRIORITY          10
+#define CONFIGURE_INIT_TASK_INITIAL_MODES     RTEMS_DEFAULT_MODES
+#define CONFIGURE_MAXIMUM_PERIODS             10
+
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 6 ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 6 ];   /* array of task names */
+
+TEST_EXTERN struct counters Count;       /* iteration counters */
+TEST_EXTERN struct counters Temporary_count;
+extern rtems_task_priority Priorities[ 6 ];
 
 /* end of include file */

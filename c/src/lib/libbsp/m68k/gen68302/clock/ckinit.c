@@ -20,11 +20,12 @@
 
 #include <stdlib.h>			/* for atexit() */
 
-#include <rtems.h>
 #include <bsp.h>
-#include <clockdrv.h>
+#include <rtems/libio.h>
+
 #include "m68302.h"
 
+#define CLOCK_VECTOR 137
 
 #define TMR1_VAL (  RBIT_TMR_RST	/* software reset the timer */\
 		  | RBIT_TMR_ICLK_MASTER16 /* master clock divided by 16 */\
@@ -49,18 +50,35 @@ volatile rtems_unsigned32 Clock_driver_ticks;
  */
 rtems_unsigned32 Clock_isrs;
 
+void Clock_exit( void );
+ 
+/*
+ * These are set by clock driver during its init
+ */
+ 
+rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_minor_number rtems_clock_minor;
 
-rtems_device_driver Clock_initialize( 
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id tid,
-  rtems_unsigned32 *rval
+/*
+ *  ISR Handler
+ */
+
+rtems_isr Clock_isr(
+  rtems_vector_number vector
 )
 {
-  Install_clock( Clock_isr );
-}
+  Clock_driver_ticks += 1;
 
+  m302.reg.isr  = RBIT_ISR_TIMER1;	/* clear in-service bit */
+  m302.reg.ter1 = (RBIT_TER_REF | RBIT_TER_CAP); /* clear timer intr request */
+
+  if ( Clock_isrs == 1 ) {
+    rtems_clock_tick();
+    Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+  }
+  else
+    Clock_isrs -= 1;
+}
 
 void Install_clock(
   rtems_isr_entry clock_isr
@@ -71,7 +89,7 @@ void Install_clock(
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
   if ( BSP_Configuration.ticks_per_timeslice ) {
-/*  set_vector( clock_isr, 137, 1 );*/
+/*  set_vector( clock_isr, CLOCK_VECTOR, 1 );*/
 
     m302.reg.trr1 = TRR1_VAL;		/* set timer reference register */
     m302.reg.tmr1 = TMR1_VAL;		/* set timer mode register & enable */
@@ -84,6 +102,16 @@ void Install_clock(
   }
 }
 
+void ReInstall_clock(
+  rtems_isr_entry clock_isr
+)
+{
+  rtems_unsigned32 isrlevel;
+ 
+  rtems_interrupt_disable( isrlevel );
+   /* (void) set_vector( clock_isr, CLOCK_VECTOR, 1 ); */
+  rtems_interrupt_enable( isrlevel );
+}
 
 void Clock_exit( void )
 {
@@ -92,3 +120,51 @@ void Clock_exit( void )
     /* do not restore old vector */
   }
 }
+
+rtems_device_driver Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+  Install_clock( Clock_isr );
+ 
+  /*
+   * make major/minor avail to others such as shared memory driver
+   */
+ 
+  rtems_clock_major = major;
+  rtems_clock_minor = minor;
+ 
+  return RTEMS_SUCCESSFUL;
+}
+ 
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    rtems_libio_ioctl_args_t *args = pargp;
+ 
+    if (args == 0)
+        goto done;
+ 
+    /*
+     * This is hokey, but until we get a defined interface
+     * to do this, it will just be this simple...
+     */
+ 
+    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
+    {
+        Clock_isr( CLOCK_VECTOR);
+    }
+    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
+    {
+        ReInstall_clock(args->buffer);
+    }
+ 
+done:
+    return RTEMS_SUCCESSFUL;
+}
+

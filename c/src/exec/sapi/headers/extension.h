@@ -28,9 +28,28 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/object.h>
-#include <rtems/userext.h>
+#include <rtems/core/object.h>
+#include <rtems/core/userext.h>
+#include <rtems/rtems/status.h>  /* XXX */
+#include <rtems/rtems/types.h>  /* XXX */
+
+/*
+ *  Extension related types
+ */
+
+typedef User_extensions_routine                   rtems_extension;
+typedef User_extensions_thread_create_extension   rtems_task_create_extension;
+typedef User_extensions_thread_delete_extension   rtems_task_delete_extension;
+typedef User_extensions_thread_start_extension    rtems_task_start_extension;
+typedef User_extensions_thread_restart_extension  rtems_task_restart_extension;
+typedef User_extensions_thread_switch_extension   rtems_task_switch_extension;
+typedef User_extensions_thread_post_switch_extension  
+  rtems_task_post_switch_extension;
+typedef User_extensions_thread_begin_extension    rtems_task_begin_extension;
+typedef User_extensions_thread_exitted_extension  rtems_task_exitted_extension;
+typedef User_extensions_fatal_extension           rtems_fatal_extension;
+
+typedef User_extensions_Table                     rtems_extensions_table;
 
 /*
  *  The following defines the information control block used to manage
@@ -73,9 +92,9 @@ void _Extension_Manager_initialization(
  */
 
 rtems_status_code rtems_extension_create(
-  rtems_name                     name,
+  rtems_name              name,
   rtems_extensions_table *extension_table,
-  Objects_Id                    *id
+  Objects_Id              *id
 );
 
 /*

@@ -14,16 +14,17 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/attr.h>
-#include <rtems/chain.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/core/chain.h>
 #include <rtems/config.h>
-#include <rtems/isr.h>
-#include <rtems/message.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
-#include <rtems/wkspace.h>
+#include <rtems/core/isr.h>
+#include <rtems/rtems/message.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/wkspace.h>
 
 void _Message_queue_Manager_initialization(
   unsigned32 maximum_message_queues
@@ -39,7 +40,7 @@ rtems_status_code rtems_message_queue_create(
   Objects_Id         *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_message_queue_ident(
@@ -48,14 +49,14 @@ rtems_status_code rtems_message_queue_ident(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_message_queue_delete(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_message_queue_send(
@@ -64,7 +65,7 @@ rtems_status_code rtems_message_queue_send(
   unsigned32            size
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_message_queue_urgent(
@@ -73,7 +74,7 @@ rtems_status_code rtems_message_queue_urgent(
   unsigned32            size
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_message_queue_broadcast(
@@ -83,7 +84,7 @@ rtems_status_code rtems_message_queue_broadcast(
   unsigned32           *count
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_message_queue_receive(
@@ -94,7 +95,7 @@ rtems_status_code rtems_message_queue_receive(
   rtems_interval        timeout
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_message_queue_flush(
@@ -102,7 +103,7 @@ rtems_status_code rtems_message_queue_flush(
   unsigned32 *count
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 unsigned32 _Message_queue_Flush_support(
@@ -130,5 +131,5 @@ rtems_status_code _Message_queue_Submit(
   Message_queue_Submit_types  submit_type
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }

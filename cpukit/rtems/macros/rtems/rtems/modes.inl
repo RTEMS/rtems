@@ -41,7 +41,7 @@
  */
 
 #define _Modes_Is_asr_disabled( _mode_set ) \
-   ( (_mode_set) & RTEMS_ASR_MASK )
+   (((_mode_set) & RTEMS_ASR_MASK) == RTEMS_NO_ASR)
 
 /*PAGE
  *
@@ -59,8 +59,7 @@
  */
 
 #define _Modes_Is_timeslice( _mode_set ) \
-  (((_mode_set) & (RTEMS_TIMESLICE_MASK|RTEMS_PREEMPT_MASK)) == \
-                  (RTEMS_TIMESLICE|RTEMS_PREEMPT) )
+  (((_mode_set) & RTEMS_TIMESLICE_MASK) == RTEMS_TIMESLICE)
 
 /*PAGE
  *

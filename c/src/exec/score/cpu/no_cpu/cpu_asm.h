@@ -21,7 +21,7 @@
 
 /* pull in the generated offsets */
 
-#include <offsets.h>
+#include <rtems/core/offsets.h>
 
 /*
  * Hardware General Registers

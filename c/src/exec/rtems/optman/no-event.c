@@ -13,19 +13,20 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/event.h>
-#include <rtems/isr.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/event.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
 
 rtems_status_code rtems_event_send(
   Objects_Id         id,
   rtems_event_set event_in
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_event_receive(
@@ -35,6 +36,6 @@ rtems_status_code rtems_event_receive(
   rtems_event_set *event_out
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 

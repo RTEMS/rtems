@@ -52,12 +52,21 @@ typedef enum {
   RTEMS_NOT_OWNER_OF_RESOURCE    = 23, /* not owner of resource */
   RTEMS_NOT_IMPLEMENTED          = 24, /* directive not implemented */
   RTEMS_INTERNAL_ERROR           = 25, /* RTEMS inconsistency detected */
-  RTEMS_PROXY_BLOCKING           = 26, /* internal multiprocessing only */
-  RTEMS_NO_MEMORY                = 27  /* could not get enough memory */
+  RTEMS_NO_MEMORY                = 26  /* could not get enough memory */
 } rtems_status_code;
 
 #define RTEMS_STATUS_CODES_FIRST RTEMS_SUCCESSFUL
 #define RTEMS_STATUS_CODES_LAST  RTEMS_NO_MEMORY
+
+extern rtems_status_code _Status_Object_name_errors_to_status[];
+
+#ifdef INIT
+rtems_status_code _Status_Object_name_errors_to_status[] = {
+  RTEMS_SUCCESSFUL,      /* OBJECTS_SUCCESSFUL */
+  RTEMS_INVALID_NAME,    /* OBJECTS_INVALID_NAME */
+  RTEMS_INVALID_NODE     /* OBJECTS_INVALID_NODE */
+};
+#endif
 
 /*
  *  rtems_is_status_successful
@@ -86,20 +95,7 @@ STATIC INLINE boolean rtems_are_statuses_equal (
   rtems_status_code code2
 );
 
-/*
- *  _Status_Is_proxy_blocking
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the status code is equal to the
- *  status which indicates that a proxy is blocking, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Status_Is_proxy_blocking (
-  rtems_status_code code
-);
-
-#include <rtems/status.inl>
+#include <rtems/rtems/status.inl>
 
 #ifdef __cplusplus
 }

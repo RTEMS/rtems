@@ -10,6 +10,7 @@
 
 #include <rtems.h>
 #include <console.h>
+#include <clockdrv.h>
 #include <mc68230.h>
 #include <mc68681.h>
 
@@ -51,6 +52,24 @@
 #undef EXTERN
 #define EXTERN extern
 #endif
+
+/*
+ *  Device Driver Table Entries
+ */
+
+/*
+ * NOTE: Use the standard Console driver entry
+ */
+ 
+/*
+ * NOTE: Use the standard Clock driver entry
+ */
+
+/*
+ * How many libio files we want
+ */
+
+#define BSP_LIBIO_MAX_FDS       20
 
 /* miscellaneous stuff assumed to exist */
 

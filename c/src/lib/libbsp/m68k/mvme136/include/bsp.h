@@ -21,6 +21,8 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <clockdrv.h>
+#include <console.h>
 #include <iosupp.h>
 
 /*
@@ -123,6 +125,24 @@ EXTERN volatile struct r_m681_info *_Read_m681;  /* M68681 read registers */
 EXTERN volatile struct w_m681_info *_Write_m681; /* M68681 write registers */
 
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
+
+/*
+ *  Device Driver Table Entries
+ */
+
+/*
+ * NOTE: Use the standard Console driver entry
+ */
+ 
+/*
+ * NOTE: Use the standard Clock driver entry
+ */
+
+/*
+ * How many libio files we want
+ */
+
+#define BSP_LIBIO_MAX_FDS       20
 
 /* functions */
 

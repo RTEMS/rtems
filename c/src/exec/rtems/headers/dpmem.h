@@ -32,8 +32,7 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/object.h>
+#include <rtems/core/object.h>
 
 /*
  *  The following structure defines the port control block.  Each port
@@ -201,7 +200,7 @@ STATIC INLINE boolean _Dual_ported_memory_Is_null(
   Dual_ported_memory_Control *the_port
 );
 
-#include <rtems/dpmem.inl>
+#include <rtems/rtems/dpmem.inl>
 
 #ifdef __cplusplus
 }

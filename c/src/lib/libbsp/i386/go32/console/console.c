@@ -8,9 +8,8 @@
 
 #include <stdlib.h>
 
-#include <rtems.h>
-#include "console.h"
-#include "bsp.h"
+#include <bsp.h>
+#include <rtems/libio.h>
 
 #include <dpmi.h>
 #include <go32.h>
@@ -42,40 +41,55 @@ void console_cleanup( void )
  *  Return values:
  */
 
-/* Set this if console I/O should use go32 (DOS) read/write calls.	*/
-/* Otherwise, direct hardware accesses will be used.			*/
-int			_IBMPC_Use_Go32_IO	= 0;
+/* Set this if console I/O should use go32 (DOS) read/write calls.   */
+/* Otherwise, direct hardware accesses will be used.                 */
 
-static rtems_isr_entry	old_keyboard_isr	= NULL;
-extern void		_IBMPC_keyboard_isr( rtems_unsigned32 interrupt );
+int      _IBMPC_Use_Go32_IO  = 0;
 
+static rtems_isr_entry  old_keyboard_isr  = NULL;
+
+extern void    _IBMPC_keyboard_isr( rtems_unsigned32 interrupt );
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void                      *arg,
-  rtems_id                   self,
-  rtems_unsigned32          *status
+  void                      *arg
 )
 {
-    if ( _IBMPC_Use_Go32_IO )  {
-	/* Nothing.  We let DOS and go32 do all the work. */
-    } else {
-	/* Grap the keyboard interrupt so DOS doesn't steal our */
-	/* keystrokes.						*/
-	rtems_status_code	status;
-	status = rtems_interrupt_catch( _IBMPC_keyboard_isr, 9,
-				        &old_keyboard_isr );
-	if ( status )  {
-	    int write( int, void *, int );
-	    void exit( int );
-	    char msg[] = "error initializing keyboard\n";
-	    write( 2, msg, sizeof msg - 1 );
-	    exit( 1 );
-	}
-    }
+  rtems_status_code status;
 
-    atexit( console_cleanup );
+  if ( _IBMPC_Use_Go32_IO )  {
+    /* Nothing.  We let DOS and go32 do all the work. */
+  } else {
+    /* Grap the keyboard interrupt so DOS doesn't steal our */
+    /* keystrokes.                                    */
+    rtems_status_code  status;
+
+    status = 
+      rtems_interrupt_catch( _IBMPC_keyboard_isr, 9, &old_keyboard_isr );
+
+    if ( status )  {
+      int write( int, void *, int );
+      void exit( int );
+
+      char msg[] = "error initializing keyboard\n";
+      write( 2, msg, sizeof msg - 1 );
+      exit( 1 );
+    }
+  }
+
+  status = rtems_io_register_name(
+    "/dev/console",
+    major,
+    (rtems_device_minor_number) 0
+  );
+ 
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+ 
+  atexit( console_cleanup );
+
+  return RTEMS_SUCCESSFUL;
 }
 
 
@@ -117,7 +131,7 @@ char inbyte( void )
     void outbyte( char ch );
     outbyte( ch );
     if ( ch == '\r' )
-	outbyte( '\n' );
+      outbyte( '\n' );
 #endif
     return ch;
 }
@@ -138,49 +152,104 @@ void outbyte( char ch )
 }
 
 /*
- * __read  -- read bytes from the console. Ignore fd, since
- *            we only have stdin.
+ *  Open entry point
  */
-
-int __read(
-  int fd,
-  char *buf,
-  int nbytes
+ 
+rtems_device_driver console_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
 )
 {
-  int i = 0;
-
-  for ( i = 0; i < nbytes; i++ ) {
-    buf[i] = inbyte();
-    if ( buf[i] == '\r' ) {
-	/* What if this goes past the end of the buffer?  We're hosed. [bhc] */
-	buf[i++] = '\n';
-	buf[i] = '\0';
-	break;
-    }
-  }
-  return i;
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
- * __write -- write bytes to the console. Ignore fd, since
- *            stdout and stderr are the same. Since we have no filesystem,
- *            open will only return an error.
+ *  Close entry point
  */
-
-int __write(
-  int fd,
-  char *buf,
-  int nbytes
+ 
+rtems_device_driver console_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
 )
 {
-  int i;
-
-  for (i = 0; i < nbytes; i++) {
-    if (*(buf + i) == '\n') {
-      outbyte ('\r');
-    }
-    outbyte (*(buf + i));
-  }
-  return (nbytes);
+  return RTEMS_SUCCESSFUL;
 }
+ 
+/*
+ * read bytes from the serial port. We only have stdin.
+ */
+ 
+rtems_device_driver console_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  rtems_libio_rw_args_t *rw_args;
+  char *buffer;
+  int maximum;
+  int count = 0;
+ 
+  rw_args = (rtems_libio_rw_args_t *) arg;
+ 
+  buffer = rw_args->buffer;
+  maximum = rw_args->count;
+ 
+  for (count = 0; count < maximum; count++) {
+    buffer[ count ] = inbyte();
+    if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
+      /* What if this goes past the end of the buffer?  We're hosed. [bhc] */
+      buffer[ count++ ]  = '\n';
+      buffer[ count ]  = 0;
+      break;
+    }
+  }
+ 
+  rw_args->bytes_moved = count;
+  return (count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
+}
+ 
+/*
+ * write bytes to the serial port. Stdout and stderr are the same.
+ */
+ 
+rtems_device_driver console_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  int count;
+  int maximum;
+  rtems_libio_rw_args_t *rw_args;
+  char *buffer;
+ 
+  rw_args = (rtems_libio_rw_args_t *) arg;
+ 
+  buffer = rw_args->buffer;
+  maximum = rw_args->count;
+ 
+  for (count = 0; count < maximum; count++) {
+    if ( buffer[ count ] == '\n') {
+      outbyte('\r');
+    }
+    outbyte( buffer[ count ] );
+  }
+  return maximum;
+}
+ 
+/*
+ *  IO Control entry point
+ */
+ 
+rtems_device_driver console_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+

@@ -31,7 +31,7 @@
  */
 
 #define ASM
-#include <rtems/no_cpu.h>
+#include <rtems/core/no_cpu.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the

@@ -22,9 +22,9 @@ extern "C" {
 #endif
 
 #ifndef ASM
-#include <rtems/i386types.h>
+#include <rtems/core/i386types.h>
 #endif
-#include <rtems/i386.h>
+#include <rtems/core/i386.h>
 
 /* conditional compilation parameters */
 
@@ -119,9 +119,9 @@ typedef struct {
 
 /* variables */
 
-EXTERN unsigned8  _CPU_Null_fp_context[ CPU_CONTEXT_FP_SIZE ];
-EXTERN void      *_CPU_Interrupt_stack_low;
-EXTERN void      *_CPU_Interrupt_stack_high;
+EXTERN Context_Control_fp  _CPU_Null_fp_context;
+EXTERN void               *_CPU_Interrupt_stack_low;
+EXTERN void               *_CPU_Interrupt_stack_high;
 
 /* constants */
 
@@ -191,6 +191,8 @@ EXTERN void      *_CPU_Interrupt_stack_high;
     if ( _new_level ) asm volatile ( "cli" ); \
     else              asm volatile ( "sti" ); \
   }
+
+unsigned32 _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 

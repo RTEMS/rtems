@@ -13,11 +13,13 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/support.h>
-#include <rtems/address.h>
-#include <rtems/dpmem.h>
-#include <rtems/object.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
+#include <rtems/core/address.h>
+#include <rtems/rtems/dpmem.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/dpmem.h>
 
 /*PAGE
  *
@@ -78,11 +80,11 @@ rtems_status_code rtems_port_create(
   register Dual_ported_memory_Control *the_port;
 
   if ( !rtems_is_name_valid( name) )
-    return ( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
   if ( !_Addresses_Is_aligned( internal_start ) ||
        !_Addresses_Is_aligned( external_start ) )
-    return( RTEMS_INVALID_ADDRESS );
+    return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();             /* to prevent deletion */
 
@@ -90,7 +92,7 @@ rtems_status_code rtems_port_create(
 
   if ( !the_port ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   the_port->internal_base = internal_start;
@@ -105,7 +107,7 @@ rtems_status_code rtems_port_create(
 
   *id = the_port->Object.id;
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -130,14 +132,16 @@ rtems_status_code rtems_port_ident(
   Objects_Id   *id
 )
 {
-  return(
-    _Objects_Name_to_id(
-      &_Dual_ported_memory_Information,
-      &name,
-      RTEMS_SEARCH_ALL_NODES,
-      id
-    )
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
+    &_Dual_ported_memory_Information,
+    &name,
+    OBJECTS_SEARCH_ALL_NODES,
+    id
   );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
 
 /*PAGE
@@ -165,17 +169,17 @@ rtems_status_code rtems_port_delete(
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       _Objects_Close( &_Dual_ported_memory_Information, &the_port->Object );
       _Dual_ported_memory_Free( the_port );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -210,9 +214,9 @@ rtems_status_code rtems_port_internal_to_external(
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       ending = _Addresses_Subtract( internal, the_port->internal_base );
       if ( ending > the_port->length )
@@ -221,10 +225,10 @@ rtems_status_code rtems_port_internal_to_external(
         *external = _Addresses_Add_offset( the_port->external_base,
                                            ending );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -259,9 +263,9 @@ rtems_status_code rtems_port_external_to_internal(
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       ending = _Addresses_Subtract( external, the_port->external_base );
       if ( ending > the_port->length )
@@ -270,8 +274,8 @@ rtems_status_code rtems_port_external_to_internal(
         *internal = _Addresses_Add_offset( the_port->internal_base,
                                            ending );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }

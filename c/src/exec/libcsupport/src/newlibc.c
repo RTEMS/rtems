@@ -80,11 +80,12 @@ libc_wrapup(void)
 }
 
 
-rtems_extension
+rtems_boolean
 libc_create_hook(rtems_tcb *current_task,
                  rtems_tcb *creating_task)
 {
     MY_task_set_note(creating_task, LIBC_NOTEPAD, 0);
+    return TRUE;
 }
 
 /*
@@ -231,10 +232,10 @@ libc_init(int reentrant)
     {
         memset(&libc_extension, 0, sizeof(libc_extension));
 
-        libc_extension.rtems_task_create  = libc_create_hook;
-        libc_extension.rtems_task_start   = libc_start_hook;
-        libc_extension.task_switch  = libc_switch_hook;
-        libc_extension.rtems_task_delete  = libc_delete_hook;
+        libc_extension.thread_create  = libc_create_hook;
+        libc_extension.thread_start   = libc_start_hook;
+        libc_extension.thread_switch  = libc_switch_hook;
+        libc_extension.thread_delete  = libc_delete_hook;
 
         rc = rtems_extension_create(rtems_build_name('L', 'I', 'B', 'C'),
                               &libc_extension, &extension_id);

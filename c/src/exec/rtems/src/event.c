@@ -13,12 +13,14 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/event.h>
-#include <rtems/isr.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/event.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/tasks.h>
 
 /*PAGE
  *
@@ -42,11 +44,12 @@ rtems_status_code rtems_event_send(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
+  RTEMS_API_Control       *api;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       return(
         _Event_MP_Send_request_packet(
@@ -56,13 +59,14 @@ rtems_status_code rtems_event_send(
         )
       );
     case OBJECTS_LOCAL:
-      _Event_sets_Post( event_in, &the_thread->RTEMS_API->pending_events );
+      api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+      _Event_sets_Post( event_in, &api->pending_events );
       _Event_Surrender( the_thread );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -90,14 +94,17 @@ rtems_status_code rtems_event_receive(
   rtems_event_set *event_out
 )
 {
+  RTEMS_API_Control       *api;
+
+  api = _Thread_Executing->API_Extensions[ THREAD_API_RTEMS ];
+
   if ( _Event_sets_Is_empty( event_in ) ) {
-    *event_out = _Thread_Executing->RTEMS_API->pending_events;
-    return( RTEMS_SUCCESSFUL );
+    *event_out = api->pending_events;
+    return RTEMS_SUCCESSFUL;
   }
 
   _Thread_Disable_dispatch();
-  _Event_Seize( event_in, option_set, ticks );
+  _Event_Seize( event_in, option_set, ticks, event_out );
   _Thread_Enable_dispatch();
-  *event_out = _Thread_Executing->RTEMS_API->events_out;
   return( _Thread_Executing->Wait.return_code );
 }

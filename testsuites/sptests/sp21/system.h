@@ -16,14 +16,29 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_1(
+  rtems_task_argument argument
+);
 
-/* macros */
+/* configuration information */
 
-/* structures */
+#define CONFIGURE_SPTEST
 
-#include "gvar.h"
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_TEST_NEEDS_STUB_DRIVER
+
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
 /* end of include file */

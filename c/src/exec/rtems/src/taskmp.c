@@ -14,13 +14,15 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/mpci.h>
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/tasks.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
+#include <rtems/rtems/status.h>
+#include <rtems/core/mpci.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/tasks.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
+#include <rtems/rtems/support.h>
 
 /*PAGE
  *
@@ -42,7 +44,7 @@ void _RTEMS_tasks_MP_Send_process_packet (
     case RTEMS_TASKS_MP_ANNOUNCE_DELETE:
 
       the_packet                    = _RTEMS_tasks_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_TASKS;
+      the_packet->Prefix.the_class  = MP_PACKET_TASKS;
       the_packet->Prefix.length     = sizeof ( RTEMS_tasks_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( RTEMS_tasks_MP_Packet );
       the_packet->operation         = operation;
@@ -91,7 +93,7 @@ rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
     case RTEMS_TASKS_MP_SET_NOTE_REQUEST:
 
       the_packet                    = _RTEMS_tasks_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_TASKS;
+      the_packet->Prefix.the_class  = MP_PACKET_TASKS;
       the_packet->Prefix.length     = sizeof ( RTEMS_tasks_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( RTEMS_tasks_MP_Packet );
       the_packet->operation         = operation;
@@ -332,7 +334,7 @@ void _RTEMS_tasks_MP_Process_packet (
 
 RTEMS_tasks_MP_Packet *_RTEMS_tasks_MP_Get_packet ( void )
 {
-  return ( (RTEMS_tasks_MP_Packet *) _MPCI_Get_packet() );
+  return (RTEMS_tasks_MP_Packet *) _MPCI_Get_packet();
 }
 
 /* end of file */

@@ -23,13 +23,33 @@ extern "C" {
 
 #include <rtems/config.h>
 
+#include <rtems/debug.h>
+#include <rtems/fatal.h>
+#include <rtems/init.h>
+#include <rtems/io.h>
+#include <rtems/sysstate.h>
+
+#include <rtems/rtems/intr.h>
+#include <rtems/rtems/clock.h>
+#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/dpmem.h>
+#include <rtems/rtems/event.h>
+#include <rtems/rtems/message.h>
+#include <rtems/rtems/mp.h>
+#include <rtems/rtems/part.h>
+#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/region.h>
+#include <rtems/rtems/sem.h>
+#include <rtems/rtems/signal.h>
+#include <rtems/rtems/timer.h>
+
 /*
  *  This is the default Multiprocessing Configuration Table.
  *  It is used in single processor configurations.
  */
 
 const rtems_multiprocessing_table
-       _Configuration_Default_multiprocessing_table = {
+       _Initialization_Default_multiprocessing_table = {
   1,                      /* local node number */
   1,                      /* maximum number nodes in system */
   0,                      /* maximum number global objects */

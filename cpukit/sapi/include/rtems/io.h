@@ -32,16 +32,40 @@
 extern "C" {
 #endif
 
-#include <rtems/config.h>
+#include <rtems/rtems/status.h>
 
 /*
- *  The following declare the data required to manage the Device Driver
- *  Address Table.
+ *
+ *  The following defines the types for:
+ *
+ *    + major and minor numbers
+ *    + the return type of a device driver entry
+ *    + a pointer to a device driver entry
+ *    + an entry in the the Device Driver Address Table.  Each entry in this
+ *      table corresponds to an application provided device driver and
+ *      defines the entry points for that device driver.
  */
+ 
+typedef unsigned32 rtems_device_major_number;
+typedef unsigned32 rtems_device_minor_number;
+ 
+typedef rtems_status_code rtems_device_driver;
+ 
+typedef rtems_device_driver ( *rtems_device_driver_entry )(
+                 rtems_device_major_number,
+                 rtems_device_minor_number,
+                 void *
+             );
 
-EXTERN unsigned32                  _IO_Number_of_drivers;
-EXTERN rtems_driver_address_table *_IO_Driver_address_table;
-
+typedef struct {
+  rtems_device_driver_entry initialization; /* initialization procedure */
+  rtems_device_driver_entry open;           /* open request procedure */
+  rtems_device_driver_entry close;          /* close request procedure */
+  rtems_device_driver_entry read;           /* read request procedure */
+  rtems_device_driver_entry write;          /* write request procedure */
+  rtems_device_driver_entry control;        /* special functions procedure */
+}   rtems_driver_address_table;
+ 
 /*
  * Table for the io device names
  */
@@ -53,12 +77,19 @@ typedef struct {
     rtems_device_minor_number minor;
 } rtems_driver_name_t;
 
-/*XXX this really should be allocated some better way... */
-/*XXX it should probably be a chain and use a 'maximum' drivers field
- * in config table */
-#define RTEMS_MAX_DRIVER_NAMES 20
-EXTERN rtems_driver_name_t rtems_driver_name_table[RTEMS_MAX_DRIVER_NAMES];
+/*
+ *  This is the table of device names.
+ */
 
+/*
+ *  The following declare the data required to manage the Driver
+ *  Address Table and Device Name Table.
+ */
+
+EXTERN unsigned32                  _IO_Number_of_drivers;
+EXTERN rtems_driver_address_table *_IO_Driver_address_table;
+EXTERN unsigned32                  _IO_Number_of_devices;
+EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
 
 /*
  *  _IO_Manager_initialization
@@ -70,7 +101,8 @@ EXTERN rtems_driver_name_t rtems_driver_name_table[RTEMS_MAX_DRIVER_NAMES];
 
 STATIC INLINE void _IO_Manager_initialization(
   rtems_driver_address_table *driver_table,
-  unsigned32                          number_of_drivers
+  unsigned32                  number_of_drivers,
+  unsigned32                  number_of_devices
 );
 
 /*

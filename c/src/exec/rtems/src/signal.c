@@ -14,12 +14,37 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/asr.h>
-#include <rtems/isr.h>
-#include <rtems/modes.h>
-#include <rtems/signal.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/asr.h>
+#include <rtems/core/isr.h>
+#include <rtems/rtems/modes.h>
+#include <rtems/rtems/signal.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/tasks.h>
 
+/*PAGE
+ *
+ *  _Signal_Manager_initialization
+ *
+ *  This routine initializes all signal manager related data structures.
+ *
+ *  Input parameters:   NONE
+ *
+ *  Output parameters:  NONE
+ */
+ 
+void _Signal_Manager_initialization( void )
+{
+  /*
+   *  Register the MP Process Packet routine.
+   */
+ 
+  _MPCI_Register_packet_processor(
+    MP_PACKET_SIGNAL,
+    _Signal_MP_Process_packet
+  );
+}
+ 
 /*PAGE
  *
  *  rtems_signal_catch
@@ -41,21 +66,26 @@ rtems_status_code rtems_signal_catch(
   rtems_mode        mode_set
 )
 {
-  Thread_Control *executing;
+  Thread_Control     *executing;
+  RTEMS_API_Control  *api;
+  ASR_Information    *asr;
 
 /* XXX normalize mode */
   executing = _Thread_Executing;
+  api = executing->API_Extensions[ THREAD_API_RTEMS ];
+  asr = &api->Signal;
+
   _Thread_Disable_dispatch(); /* cannot reschedule while */
                               /*   the thread is inconsistent */
 
   if ( !_ASR_Is_null_handler( asr_handler ) ) {
-    executing->RTEMS_API->Signal.mode_set = mode_set;
-    executing->RTEMS_API->Signal.handler  = asr_handler;
+    asr->mode_set = mode_set;
+    asr->handler = asr_handler;
   }
   else
-    _ASR_Initialize( &executing->RTEMS_API->Signal );
+    _ASR_Initialize( asr );
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -80,11 +110,13 @@ rtems_status_code rtems_signal_send(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
+  RTEMS_API_Control       *api;
+  ASR_Information         *asr;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       return _Signal_MP_Send_request_packet(
         SIGNAL_MP_SEND_REQUEST,
@@ -92,22 +124,23 @@ rtems_status_code rtems_signal_send(
         signal_set
       );
     case OBJECTS_LOCAL:
-      if ( ! _ASR_Is_null_handler( the_thread->RTEMS_API->Signal.handler ) ) {
-        if ( _Modes_Is_asr_disabled( the_thread->current_modes ) )
-          _ASR_Post_signals(
-            signal_set, &the_thread->RTEMS_API->Signal.signals_pending );
-        else {
-          _ASR_Post_signals(
-            signal_set, &the_thread->RTEMS_API->Signal.signals_posted );
+      api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+      asr = &api->Signal;
+
+      if ( ! _ASR_Is_null_handler( asr->handler ) ) {
+        if ( asr->is_enabled ) {
+          _ASR_Post_signals( signal_set, &asr->signals_posted );
           if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
             _ISR_Signals_to_thread_executing = TRUE;
+        } else {
+          _ASR_Post_signals( signal_set, &asr->signals_pending );
         }
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_NOT_DEFINED );
+      return RTEMS_NOT_DEFINED;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }

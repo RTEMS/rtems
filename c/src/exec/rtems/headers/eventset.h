@@ -132,7 +132,7 @@ STATIC INLINE rtems_event_set _Event_sets_Clear(
  rtems_event_set the_mask
 );
 
-#include <rtems/eventset.inl>
+#include <rtems/rtems/eventset.inl>
 
 #ifdef __cplusplus
 }

@@ -15,8 +15,8 @@
 
 #include <rtems/system.h>
 #include <rtems/fatal.h>
-#include <rtems/isr.h>
-#include <rtems/wkspace.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/wkspace.h>
 
 /*  _CPU_Initialize
  *
@@ -33,9 +33,6 @@ void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-  if ( cpu_table == NULL )
-    rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED );
-
   /*
    *  The thread_dispatch argument is the address of the entry point
    *  for the routine called at the end of an ISR once it has been
@@ -59,6 +56,18 @@ void _CPU_Initialize(
   /* FP context initialization support goes here */
 
   _CPU_Table = *cpu_table;
+}
+
+/*PAGE
+ *
+ *  _CPU_ISR_Get_level
+ */
+ 
+unsigned32 _CPU_ISR_Get_level( void )
+{
+  /*
+   *  This routine returns the current interrupt level.
+   */
 }
 
 /*PAGE

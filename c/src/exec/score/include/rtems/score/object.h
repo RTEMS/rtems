@@ -1,8 +1,9 @@
 /*  object.h
  *
  *  This include file contains all the constants and structures associated
- *  with the RTEMS Object Handler.  This Handler provides mechanisms which
- *  can be used to initialize and manipulate all RTEMS objects.
+ *  with the Object Handler.  This Handler provides mechanisms which
+ *  can be used to initialize and manipulate all objects which have 
+ *  ids.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,14 +16,14 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_OBJECTS_h
-#define __RTEMS_OBJECTS_h
+#ifndef __OBJECTS_h
+#define __OBJECTS_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/chain.h>
+#include <rtems/core/chain.h>
 
 /*
  *  The following type defines the control block used to manage
@@ -142,6 +143,7 @@ typedef struct {
  */
 
 EXTERN unsigned32  _Objects_Local_node;
+EXTERN unsigned32  _Objects_Maximum_nodes;
 
 /*
  *  The following is the list of information blocks for each object
@@ -164,23 +166,23 @@ EXTERN Objects_Information
  *  The following define the constants which may be used in name searches.
  */
 
-#define RTEMS_SEARCH_ALL_NODES   0
-#define RTEMS_SEARCH_OTHER_NODES 0x7FFFFFFE
-#define RTEMS_SEARCH_LOCAL_NODE  0x7FFFFFFF
-#define RTEMS_WHO_AM_I           0
+#define OBJECTS_SEARCH_ALL_NODES   0
+#define OBJECTS_SEARCH_OTHER_NODES 0x7FFFFFFE
+#define OBJECTS_SEARCH_LOCAL_NODE  0x7FFFFFFF
+#define OBJECTS_WHO_AM_I           0
 
 /*
  * Parameters and return id's for _Objects_Get_next
  */
 
-#define RTEMS_OBJECT_ID_INITIAL_INDEX   (0)
-#define RTEMS_OBJECT_ID_FINAL_INDEX     (0xffff)
+#define OBJECTS_ID_INITIAL_INDEX   (0)
+#define OBJECTS_ID_FINAL_INDEX     (0xffff)
 
-#define RTEMS_OBJECT_ID_INITIAL(node)   (_Objects_Build_id(      \
-                                            OBJECTS_NO_CLASS, \
-                                            node, \
-                                            RTEMS_OBJECT_ID_INITIAL_INDEX))
-#define RTEMS_OBJECT_ID_FINAL           ((Objects_Id)~0)
+#define OBJECTS_ID_INITIAL(node)   (_Objects_Build_id(      \
+                                      OBJECTS_NO_CLASS, \
+                                      node, \
+                                      OBJECTS_ID_INITIAL_INDEX))
+#define OBJECTS_ID_FINAL           ((Objects_Id)~0)
 
 /*
  *  _Objects_Handler_initialization
@@ -193,6 +195,7 @@ EXTERN Objects_Information
 
 void _Objects_Handler_initialization(
   unsigned32 node,
+  unsigned32 maximum_nodes,
   unsigned32 maximum_global_objects
 );
 
@@ -303,7 +306,16 @@ boolean _Objects_Compare_name_raw(
  *
  */
 
-rtems_status_code _Objects_Name_to_id(
+typedef enum {
+  OBJECTS_SUCCESSFUL,
+  OBJECTS_INVALID_NAME,
+  OBJECTS_INVALID_NODE
+} Objects_Name_to_id_errors;
+
+#define OBJECTS_NAME_ERRORS_FIRST OBJECTS_SUCCESSFUL
+#define OBJECTS_NAME_ERRORS_LAST  OBJECTS_INVALID_NODE
+
+Objects_Name_to_id_errors _Objects_Name_to_id(
   Objects_Information *information,
   Objects_Name         name,
   unsigned32           node,
@@ -378,7 +390,7 @@ STATIC INLINE Objects_Id _Objects_Build_id(
 );
 
 /*
- *  rtems_get_class
+ *  _Objects_Get_class
  *
  *  DESCRIPTION:
  *
@@ -386,12 +398,12 @@ STATIC INLINE Objects_Id _Objects_Build_id(
  *
  */
  
-STATIC INLINE Objects_Classes rtems_get_class(
+STATIC INLINE Objects_Classes _Objects_Get_class(
   Objects_Id id
 );
 
 /*
- *  rtems_get_node
+ *  _Objects_Get_node
  *
  *  DESCRIPTION:
  *
@@ -399,12 +411,12 @@ STATIC INLINE Objects_Classes rtems_get_class(
  *
  */
 
-STATIC INLINE unsigned32 rtems_get_node(
+STATIC INLINE unsigned32 _Objects_Get_node(
   Objects_Id id
 );
 
 /*
- *  rtems_get_index
+ *  _Objects_Get_index
  *
  *  DESCRIPTION:
  *
@@ -412,7 +424,7 @@ STATIC INLINE unsigned32 rtems_get_node(
  *
  */
 
-STATIC INLINE unsigned32 rtems_get_index(
+STATIC INLINE unsigned32 _Objects_Get_index(
   Objects_Id id
 );
 
@@ -532,7 +544,7 @@ STATIC INLINE void _Objects_Close(
   Objects_Control     *the_object
 );
 
-#include <rtems/object.inl>
+#include <rtems/core/object.inl>
 #include <rtems/objectmp.h>
 
 #ifdef __cplusplus

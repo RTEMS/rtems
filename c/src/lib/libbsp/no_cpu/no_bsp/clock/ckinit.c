@@ -60,28 +60,25 @@ rtems_device_minor_number rtems_clock_minor;
 
 rtems_isr_entry  Old_ticker;
 
+void Clock_exit( void );
+
+
 /*
- *  Reinstall_clock
- *
- *  Install a clock tick handler without reprogramming the chip.  This
- *  is used by the polling shared memory device driver.
+ *  Isr Handler
  */
 
-void ReInstall_clock(
-  rtems_isr_entry clock_isr
+rtems_isr Clock_isr(
+  rtems_vector_number vector
 )
 {
-  rtems_unsigned32 isrlevel = 0;
-
-  /*
-   *  Disable interrupts and install the clock ISR vector using the
-   *  BSP dependent set_vector routine.  In the below example, the clock
-   *  ISR is on vector 4 and is an RTEMS interrupt.
-   */
-
-  rtems_interrupt_disable( isrlevel );
-   (void) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-  rtems_interrupt_enable( isrlevel );
+/*
+ * bump the number of clock driver ticks since initialization
+ *
+ * determine if it is time to announce the passing of tick as configured
+ * to RTEMS through the rtems_clock_tick directive
+ *
+ * perform any timer dependent tasks
+ */
 }
 
 /*
@@ -124,6 +121,30 @@ void Install_clock(
 }
 
 /*
+ *  Reinstall_clock
+ *
+ *  Install a clock tick handler without reprogramming the chip.  This
+ *  is used by the polling shared memory device driver.
+ */
+
+void ReInstall_clock(
+  rtems_isr_entry clock_isr
+)
+{
+  rtems_unsigned32 isrlevel = 0;
+
+  /*
+   *  Disable interrupts and install the clock ISR vector using the
+   *  BSP dependent set_vector routine.  In the below example, the clock
+   *  ISR is on vector 4 and is an RTEMS interrupt.
+   */
+
+  rtems_interrupt_disable( isrlevel );
+   (void) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  rtems_interrupt_enable( isrlevel );
+}
+
+/*
  *  Clean up before the application exits
  */
 
@@ -149,14 +170,15 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
-  Install_clock((rtems_isr_entry) Clock_isr);
-
+  Install_clock( Clock_isr );
+ 
   /*
    * make major/minor avail to others such as shared memory driver
    */
+ 
   rtems_clock_major = major;
-    rtems_clock_minor = minor;
-
+  rtems_clock_minor = minor;
+ 
   return RTEMS_SUCCESSFUL;
 }
 

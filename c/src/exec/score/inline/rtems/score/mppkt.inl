@@ -26,7 +26,7 @@
  */
 
 STATIC INLINE boolean _Mp_packet_Is_valid_packet_class (
-  rtems_mp_packet_classes the_packet_class
+  MP_packet_Classes the_packet_class
 )
 {
   return ( the_packet_class <= MP_PACKET_CLASSES_LAST );
@@ -39,7 +39,7 @@ STATIC INLINE boolean _Mp_packet_Is_valid_packet_class (
  */
 
 STATIC INLINE boolean _Mp_packet_Is_null (
-  rtems_packet_prefix   *the_packet
+  MP_packet_Prefix   *the_packet
 )
 {
   return the_packet == NULL;

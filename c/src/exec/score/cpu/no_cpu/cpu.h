@@ -21,9 +21,9 @@
 extern "C" {
 #endif
 
-#include <rtems/no_cpu.h>               /* pick up machine definitions */
+#include <rtems/core/no_cpu.h>               /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/no_cputypes.h>
+#include <rtems/core/no_cputypes.h>
 #endif
 
 /* conditional compilation parameters */

@@ -14,13 +14,13 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/support.h>
-#include <rtems/config.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/region.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/region.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
 
 /*PAGE
  *
@@ -48,6 +48,16 @@ void _Region_Manager_initialization(
     RTEMS_MAXIMUM_NAME_LENGTH,
     FALSE
   );
+
+  /*
+   *  Register the MP Process Packet routine.
+   */
+
+  _MPCI_Register_packet_processor(
+    MP_PACKET_REGION,
+    0  /* XXX _Region_MP_Process_packet */
+  );
+
 }
 
 /*PAGE
@@ -83,10 +93,10 @@ rtems_status_code rtems_region_create(
   Region_Control *the_region;
 
   if ( !rtems_is_name_valid( name ) )
-    return ( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
   if ( !_Addresses_Is_aligned( starting_address ) )
-    return( RTEMS_INVALID_ADDRESS );
+    return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();             /* to prevent deletion */
 
@@ -94,7 +104,7 @@ rtems_status_code rtems_region_create(
 
   if ( !the_region ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   the_region->maximum_segment_size =
@@ -103,7 +113,7 @@ rtems_status_code rtems_region_create(
   if ( !the_region->maximum_segment_size ) {
     _Region_Free( the_region );
     _Thread_Enable_dispatch();
-    return( RTEMS_INVALID_SIZE );
+    return RTEMS_INVALID_SIZE;
   }
 
   the_region->starting_address      = starting_address;
@@ -118,14 +128,15 @@ rtems_status_code rtems_region_create(
     _Attributes_Is_priority( attribute_set ) ? 
        THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_SEGMENT,
-    _Region_MP_Send_extract_proxy
+    _Region_MP_Send_extract_proxy,
+    RTEMS_TIMEOUT
   );
 
   _Objects_Open( &_Region_Information, &the_region->Object, &name );
 
   *id = the_region->Object.id;
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -150,12 +161,16 @@ rtems_status_code rtems_region_ident(
   Objects_Id   *id
 )
 {
-  return _Objects_Name_to_id(
-      &_Region_Information,
-      &name,
-      RTEMS_SEARCH_LOCAL_NODE,
-      id
-    );
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
+    &_Region_Information,
+    &name,
+    OBJECTS_SEARCH_LOCAL_NODE,
+    id
+  );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
 
 /*PAGE
@@ -184,22 +199,22 @@ rtems_status_code rtems_region_delete(
   the_region = _Region_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       _Region_Debug_Walk( the_region, 5 );
       if ( the_region->number_of_used_blocks == 0 ) {
         _Objects_Close( &_Region_Information, &the_region->Object );
         _Region_Free( the_region );
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_RESOURCE_IN_USE );
+      return RTEMS_RESOURCE_IN_USE;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -236,9 +251,9 @@ rtems_status_code rtems_region_extend(
   the_region = _Region_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
 
       heap_status = _Heap_Extend(
@@ -264,7 +279,7 @@ rtems_status_code rtems_region_extend(
       return( status );
   }
 
-  return( RTEMS_INTERNAL_ERROR );
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -289,8 +304,8 @@ rtems_status_code rtems_region_extend(
 rtems_status_code rtems_region_get_segment(
   Objects_Id         id,
   unsigned32         size,
-  rtems_option    option_set,
-  rtems_interval  timeout,
+  rtems_option       option_set,
+  rtems_interval     timeout,
   void              **segment
 )
 {
@@ -300,19 +315,19 @@ rtems_status_code rtems_region_get_segment(
   void                    *the_segment;
 
   if ( size == 0 )
-    return( RTEMS_INVALID_SIZE );
+    return RTEMS_INVALID_SIZE;
 
   executing  = _Thread_Executing;
   the_region = _Region_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       if ( size > the_region->maximum_segment_size ) {
         _Thread_Enable_dispatch();
-        return( RTEMS_INVALID_SIZE );
+        return RTEMS_INVALID_SIZE;
       }
 
       _Region_Debug_Walk( the_region, 1 );
@@ -325,18 +340,18 @@ rtems_status_code rtems_region_get_segment(
         the_region->number_of_used_blocks += 1;
         _Thread_Enable_dispatch();
         *segment = the_segment;
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
 
       if ( _Options_Is_no_wait( option_set ) ) {
         _Thread_Enable_dispatch();
-        return( RTEMS_UNSATISFIED );
+        return RTEMS_UNSATISFIED;
       }
 
-      executing->Wait.queue              = &the_region->Wait_queue;
-      executing->Wait.id                 = id;
-      executing->Wait.Extra.segment_size = size;
-      executing->Wait.return_argument    = (unsigned32 *) segment;
+      executing->Wait.queue           = &the_region->Wait_queue;
+      executing->Wait.id              = id;
+      executing->Wait.count           = size;
+      executing->Wait.return_argument = (unsigned32 *) segment;
 
       the_region->Wait_queue.sync = TRUE;
 
@@ -346,7 +361,7 @@ rtems_status_code rtems_region_get_segment(
       return( executing->Wait.return_code );
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 /*PAGE
  *
@@ -379,20 +394,20 @@ rtems_status_code rtems_region_get_segment_size(
   the_region = _Region_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
 
       if ( _Heap_Size_of_user_area( &the_region->Memory, segment, size ) ) {
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_INVALID_ADDRESS );
+      return RTEMS_INVALID_ADDRESS;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -424,9 +439,9 @@ rtems_status_code rtems_region_return_segment(
   the_region = _Region_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
 
       _Region_Debug_Walk( the_region, 3 );
@@ -437,7 +452,7 @@ rtems_status_code rtems_region_return_segment(
 
       if ( !status ) {
         _Thread_Enable_dispatch();
-        return( RTEMS_INVALID_ADDRESS );
+        return RTEMS_INVALID_ADDRESS;
       }
 
       the_region->number_of_used_blocks -= 1;
@@ -448,7 +463,9 @@ rtems_status_code rtems_region_return_segment(
            break;
 
         the_segment = _Region_Allocate_segment(
-                        the_region, the_thread->Wait.Extra.segment_size );
+           the_region, 
+           the_thread->Wait.count
+        );
 
         if ( the_segment == NULL )
            break;
@@ -460,8 +477,8 @@ rtems_status_code rtems_region_return_segment(
       }
 
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }

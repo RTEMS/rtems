@@ -1,6 +1,6 @@
 /*  states.h
  *
- *  This include file contains all RTEMS state information.
+ *  This include file contains thread execution state information.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -43,13 +43,15 @@ typedef unsigned32 States_Control;
 #define STATES_WAITING_FOR_MESSAGE   0x0040  /* wait for message */
 #define STATES_WAITING_FOR_EVENT     0x0080  /* wait for event */
 #define STATES_WAITING_FOR_SEMAPHORE 0x0100  /* wait for semaphore */
-#define STATES_WAITING_FOR_TIME      0x0200  /* wait for specific TOD */
-#define STATES_WAITING_FOR_RPC_REPLY 0x0400  /* wait for rpc reply */
-#define STATES_WAITING_FOR_PERIOD    0x0800  /* rate monotonic delay */
+#define STATES_WAITING_FOR_MUTEX     0x0200  /* wait for mutex */
+#define STATES_WAITING_FOR_TIME      0x0400  /* wait for specific TOD */
+#define STATES_WAITING_FOR_RPC_REPLY 0x0800  /* wait for rpc reply */
+#define STATES_WAITING_FOR_PERIOD    0x1000  /* rate monotonic delay */
 
 #define STATES_LOCALLY_BLOCKED ( STATES_WAITING_FOR_BUFFER      | \
                                  STATES_WAITING_FOR_SEGMENT     | \
                                  STATES_WAITING_FOR_MESSAGE     | \
+                                 STATES_WAITING_FOR_MUTEX       | \
                                  STATES_WAITING_FOR_SEMAPHORE   )
 
 #define STATES_WAITING_ON_THREAD_QUEUE \
@@ -221,6 +223,19 @@ STATIC INLINE boolean _States_Is_waiting_for_event (
 );
 
 /*
+ *  _States_Is_waiting_for_mutex
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_MUTEX state
+ *  is set in the_states, and FALSE otherwise.
+ */
+ 
+STATIC INLINE boolean _States_Is_waiting_for_mutex (
+  States_Control the_states
+);
+
+/*
  *  _States_Is_waiting_for_semaphore
  *
  *  DESCRIPTION:
@@ -327,7 +342,7 @@ STATIC INLINE boolean _States_Are_set (
   States_Control mask
 );
 
-#include <rtems/states.inl>
+#include <rtems/core/states.inl>
 
 #ifdef __cplusplus
 }

@@ -14,14 +14,15 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/message.h>
-#include <rtems/mpci.h>
-#include <rtems/msgmp.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
-#include <rtems/config.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/message.h>
+#include <rtems/core/mpci.h>
+#include <rtems/rtems/msgmp.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
+#include <rtems/rtems/support.h>
 
 /*PAGE
  *
@@ -46,7 +47,7 @@ void _Message_queue_MP_Send_process_packet (
     case MESSAGE_QUEUE_MP_EXTRACT_PROXY:
 
       the_packet                    = _Message_queue_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_MESSAGE_QUEUE;
+      the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
       the_packet->Prefix.length     = sizeof ( Message_queue_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( Message_queue_MP_Packet );
       the_packet->operation         = operation;
@@ -102,10 +103,10 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
     case MESSAGE_QUEUE_MP_FLUSH_REQUEST:
 
       the_packet                    = _Message_queue_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_MESSAGE_QUEUE;
+      the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
       the_packet->Prefix.length     = sizeof(Message_queue_MP_Packet);
       if ( size_p )
-      the_packet->Prefix.length     += *size_p;
+        the_packet->Prefix.length     += *size_p;
       the_packet->Prefix.to_convert = sizeof(Message_queue_MP_Packet);
 
       /*
@@ -114,9 +115,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
        * we are about to slam in the payload
        */
 
-      if (the_packet->Prefix.length >
-          _Configuration_MPCI_table->maximum_packet_size)
-      {
+      if (the_packet->Prefix.length > _MPCI_table->maximum_packet_size) {
           _Thread_Enable_dispatch();
           return RTEMS_INVALID_SIZE;
       }
@@ -132,8 +131,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
        * Copy the data into place if needed
        */
       
-      if (buffer)
-      {
+      if (buffer) {
           the_packet->Buffer.size = *size_p;
           _Message_queue_Copy_buffer(buffer,
                                      the_packet->Buffer.buffer,
@@ -148,7 +146,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
     case MESSAGE_QUEUE_MP_RECEIVE_REQUEST:
 
       the_packet                    = _Message_queue_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_MESSAGE_QUEUE;
+      the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
       the_packet->Prefix.length     = sizeof(Message_queue_MP_Packet);
       the_packet->Prefix.to_convert = sizeof(Message_queue_MP_Packet);
 
@@ -160,8 +158,8 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       the_packet->option_set = option_set;
       the_packet->size       = 0;        /* just in case of an error */
 
-      _Thread_Executing->Wait.return_argument      = (unsigned32 *)buffer;
-      _Thread_Executing->Wait.Extra.message_size_p = size_p;
+      _Thread_Executing->Wait.return_argument   = (unsigned32 *)buffer;
+      _Thread_Executing->Wait.return_argument_1 = size_p;
       
       return _MPCI_Send_request_packet(rtems_get_node(message_queue_id),
                                        &the_packet->Prefix,
@@ -296,7 +294,7 @@ void _Message_queue_MP_Process_packet (
         the_packet->Prefix.timeout
       );
 
-      if ( ! _Status_Is_proxy_blocking( the_packet->Prefix.return_code ) )
+      if ( ! _Thread_Is_proxy_blocking( the_packet->Prefix.return_code ) )
         _Message_queue_MP_Send_response_packet(
           MESSAGE_QUEUE_MP_RECEIVE_RESPONSE,
           the_packet->Prefix.id,
@@ -309,7 +307,8 @@ void _Message_queue_MP_Process_packet (
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
       if (the_packet->Prefix.return_code == RTEMS_SUCCESSFUL) {
-        *the_thread->Wait.Extra.message_size_p = the_packet->size;
+        *(rtems_unsigned32 *)the_thread->Wait.return_argument_1 = 
+           the_packet->size;
 
         _Message_queue_Copy_buffer(
           the_packet->Buffer.buffer,

@@ -23,6 +23,7 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <console.h>
 #include <clockdrv.h>
 
 /*
@@ -69,18 +70,22 @@ extern "C" {
 extern rtems_configuration_table BSP_Configuration;
 
 /*
- * Console driver init
+ *  Device Driver Table Entries
  */
- 
-rtems_device_driver console_initialize(
-  rtems_device_major_number, rtems_device_minor_number minor, void *);
- 
-#define CONSOLE_DRIVER_TABLE_ENTRY \
-  { console_initialize, NULL, NULL, NULL, NULL, NULL }
+
+/*
+ * NOTE: Use the standard Console driver entry
+ */
  
 /*
  * NOTE: Use the standard Clock driver entry
  */
+
+/*
+ * How many libio files we want
+ */
+
+#define BSP_LIBIO_MAX_FDS       20
 
 /* functions */
 

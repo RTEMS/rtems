@@ -189,5 +189,13 @@ void _Thread_Enable_dispatch( void );
 #define _Thread_Is_null( _the_thread ) \
   ( (_the_thread) == NULL )
 
+/*
+ *  _Thread_Is_proxy_blocking
+ *
+ */
+ 
+#define _Thread_Is_proxy_blocking( _code ) \
+  ( (_code) == THREAD_STATUS_PROXY_BLOCKING )
+
 #endif
 /* end of include file */

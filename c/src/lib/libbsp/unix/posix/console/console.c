@@ -3,6 +3,8 @@
  *
  *  These provide UNIX-like read and write calls for the C library.
  *
+ *  NOTE:  For the most part, this is just a space holder.
+ *
  *  COPYRIGHT (c) 1994 by Division Incorporated
  *
  *  To anyone who acknowledges that this file is provided "AS IS"
@@ -31,6 +33,71 @@ console_initialize(rtems_device_major_number major,
                    void                    * arg
 )
 {
-    return RTEMS_SUCCESSFUL;
+  return 0;
 }
 
+
+/*
+ *  Open entry point
+ */
+
+rtems_device_driver console_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+ 
+/*
+ *  Close entry point
+ */
+
+rtems_device_driver console_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+
+/*
+ * read bytes from the serial port. We only have stdin.
+ */
+
+rtems_device_driver console_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_UNSATISFIED;
+}
+
+/*
+ * write bytes to the serial port. Stdout and stderr are the same. 
+ */
+
+rtems_device_driver console_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return -1;
+}
+
+/*
+ *  IO Control entry point
+ */
+
+rtems_device_driver console_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
+}

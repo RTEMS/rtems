@@ -21,7 +21,10 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <console.h>
+#include <clockdrv.h>
 #include <iosupp.h>
+#include <vmeintr.h>
 #include <z8530.h>
 #include <z8536.h>
 
@@ -150,6 +153,24 @@ extern "C" {
 extern rtems_configuration_table BSP_Configuration;
 
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
+
+/*
+ *  Device Driver Table Entries
+ */
+
+/*
+ * NOTE: Use the standard Console driver entry
+ */
+ 
+/*
+ * NOTE: Use the standard Clock driver entry
+ */
+
+/*
+ * How many libio files we want
+ */
+
+#define BSP_LIBIO_MAX_FDS       20
 
 /* functions */
 

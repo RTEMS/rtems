@@ -11,21 +11,32 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  system.h,v 1.2 1995/05/31 17:05:38 joel Exp
+ *  $Id$
  */
 
-#include <rtems.h>
-#include <bsp.h>
-#include <stdio.h>
+#include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-/* macros */
+rtems_task Application_task(
+  rtems_task_argument argument
+);
 
-/* structures */
+/* configuration information */
 
-#include "gvar.h"
+#define CONFIGURE_SPTEST
+
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id Global_variable;    /* example global variable     */
 
 /* end of include file */

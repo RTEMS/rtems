@@ -29,10 +29,9 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/object.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
 
 /*
  *  The following enumerated type defines the states in which a
@@ -50,7 +49,7 @@ typedef enum {
  *  directive to obtain status information.
  */
 
-#define RTEMS_PERIOD_STATUS       RTEMS_NO_TIMEOUT
+#define RTEMS_PERIOD_STATUS       WATCHDOG_NO_TIMEOUT
 
 /*
  *  The following structure defines the control block used to manage
@@ -148,8 +147,8 @@ rtems_status_code rtems_rate_monotonic_delete(
  */
 
 rtems_status_code rtems_rate_monotonic_period(
-  Objects_Id        id,
-  rtems_interval length
+  Objects_Id      id,
+  rtems_interval  length
 );
 
 /*
@@ -276,7 +275,7 @@ STATIC INLINE boolean _Rate_monotonic_Is_null (
   Rate_monotonic_Control *the_period
 );
 
-#include <rtems/ratemon.inl>
+#include <rtems/rtems/ratemon.inl>
 
 #ifdef __cplusplus
 }

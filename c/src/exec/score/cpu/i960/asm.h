@@ -31,7 +31,7 @@
  */
 
 #define ASM
-#include <rtems/i960.h>
+#include <rtems/core/i960.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the

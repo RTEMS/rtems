@@ -16,14 +16,39 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-/* macros */
+rtems_task Task_1(
+  rtems_task_argument argument
+);
 
-/* structures */
+/* configuration information */
 
-#include "gvar.h"
+#define CONFIGURE_SPTEST
+
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_PORTS               1
+
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 2 ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 2 ];   /* array of task names */
+ 
+TEST_EXTERN rtems_id   Port_id[ 2 ];     /* array of port ids */
+TEST_EXTERN rtems_name Port_name[ 2 ];   /* array of port names */
+ 
+#define Internal_port_area ((rtems_unsigned8 *) 0x00001000)
+#define External_port_area ((rtems_unsigned8 *) 0x00002000)
+ 
+#define Below_port_area    ((rtems_unsigned8 *) 0x00000500)
+#define Above_port_area    ((rtems_unsigned8 *) 0x00003000)
 
 /* end of include file */

@@ -19,18 +19,6 @@
 
 /*PAGE
  *
- *  _ISR_Handler_initialization
- *
- */
-
-#define _ISR_Handler_initialization() \
-  { \
-    _ISR_Signals_to_thread_executing = FALSE; \
-    _ISR_Nest_level = 0; \
-  }
-
-/*PAGE
- *
  *  _ISR_Is_in_progress
  *
  */

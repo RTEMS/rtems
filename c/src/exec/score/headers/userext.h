@@ -2,7 +2,7 @@
  *
  *  This include file contains all information about user extensions.  This
  *  Handler provides mechanisms which can be used to initialize and manipulate
- *  all RTEMS user extensions.
+ *  all user extensions.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,23 +15,89 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_USER_EXTENSIONS_h
-#define __RTEMS_USER_EXTENSIONS_h
+#ifndef __USER_EXTENSIONS_h
+#define __USER_EXTENSIONS_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/config.h>
-#include <rtems/thread.h>
+#include <rtems/core/interr.h>
+#include <rtems/core/chain.h>
+#include <rtems/core/thread.h>
+
+/*
+ *  The following records defines the User Extension Table.
+ *  This table defines the application dependent routines which
+ *  are invoked at critical points in the life of each thread and
+ *  the system as a whole.
+ */
+ 
+typedef void User_extensions_routine;
+ 
+typedef boolean ( *User_extensions_thread_create_extension )(
+                 Thread_Control *,
+                 Thread_Control *
+             );
+ 
+typedef User_extensions_routine ( *User_extensions_thread_delete_extension )(
+                 Thread_Control *,
+                 Thread_Control *
+             );
+ 
+typedef User_extensions_routine ( *User_extensions_thread_start_extension )(
+                 Thread_Control *,
+                 Thread_Control *
+             );
+ 
+typedef User_extensions_routine ( *User_extensions_thread_restart_extension )(
+                 Thread_Control *,
+                 Thread_Control *
+             );
+ 
+typedef User_extensions_routine ( *User_extensions_thread_switch_extension )(
+                 Thread_Control *,
+                 Thread_Control *
+             );
+ 
+typedef User_extensions_routine (*User_extensions_thread_post_switch_extension)(
+                 Thread_Control *
+             );
+ 
+typedef User_extensions_routine ( *User_extensions_thread_begin_extension )(
+                 Thread_Control *
+             );
+ 
+typedef User_extensions_routine ( *User_extensions_thread_exitted_extension )(
+                 Thread_Control *
+             );
+ 
+typedef User_extensions_routine ( *User_extensions_fatal_extension )(
+                 Internal_errors_Source  /* the_source  */,
+                 boolean                 /* is_internal */,
+                 unsigned32              /* the_error   */
+             );
+
+ 
+typedef struct {
+  User_extensions_thread_create_extension       thread_create;
+  User_extensions_thread_start_extension        thread_start;
+  User_extensions_thread_restart_extension      thread_restart;
+  User_extensions_thread_delete_extension       thread_delete;
+  User_extensions_thread_switch_extension       thread_switch;
+  User_extensions_thread_post_switch_extension  thread_post_switch;
+  User_extensions_thread_begin_extension        thread_begin;
+  User_extensions_thread_exitted_extension      thread_exitted;
+  User_extensions_fatal_extension               fatal;
+}   User_extensions_Table;
 
 /*
  *  The following is used to manage each user extension set.
  */
 
 typedef struct {
-  Chain_Node                     Node;
-  rtems_extensions_table  Callouts;
+  Chain_Node              Node;
+  User_extensions_Table   Callouts;
 }   User_extensions_Control;
 
 /*
@@ -57,7 +123,7 @@ EXTERN Chain_Control _User_extensions_List;
  */
 
 STATIC INLINE void _User_extensions_Handler_initialization (
-    rtems_extensions_table *initial_extensions
+    User_extensions_Table  *initial_extensions
 );
 
 /*
@@ -70,7 +136,19 @@ STATIC INLINE void _User_extensions_Handler_initialization (
 
 STATIC INLINE void _User_extensions_Add_set (
   User_extensions_Control  *the_extension,
-  rtems_extensions_table   *extension_table
+  User_extensions_Table    *extension_table
+);
+
+/*
+ *  _User_extensions_Add_API_set
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine is used to add an API extension set to the active list.
+ */
+ 
+STATIC INLINE void _User_extensions_Add_API_set (
+  User_extensions_Control  *the_extension
 );
 
 /*
@@ -86,59 +164,59 @@ STATIC INLINE void _User_extensions_Remove_set (
 );
 
 /*
- *  _User_extensions_Task_create
+ *  _User_extensions_Thread_create
  *
  *  DESCRIPTION:
  *
  *  This routine is used to invoke the user extension for
- *  the rtems_task_create directive.
+ *  the thread creation operate.
  */
 
-STATIC INLINE void _User_extensions_Task_create (
+boolean _User_extensions_Thread_create (
   Thread_Control *the_thread
 );
 
 /*
- *  _User_extensions_Task_delete
+ *  _User_extensions_Thread_delete
  *
  *  DESCRIPTION:
  *
  *  This routine is used to invoke the user extension for
- *  the rtems_task_delete directive.
+ *  the thread deletion operation.
  */
 
-STATIC INLINE void _User_extensions_Task_delete (
+void _User_extensions_Thread_delete (
   Thread_Control *the_thread
 );
 
 /*
- *  _User_extensions_Task_start
+ *  _User_extensions_Thread_start
  *
  *  DESCRIPTION:
  *
  *  This routine is used to invoke the user extension for
- *  the rtems_task_start directive.
+ *  the thread start operation.
  */
 
-STATIC INLINE void _User_extensions_Task_start (
+void _User_extensions_Thread_start (
   Thread_Control *the_thread
 );
 
 /*
- *  _User_extensions_Task_restart
+ *  _User_extensions_Thread_restart
  *
  *  DESCRIPTION:
  *
  *  This routine is used to invoke the user extension for
- *  the rtems_task_restart directive.
+ *  the thread restart operation.
  */
 
-STATIC INLINE void _User_extensions_Task_restart (
+void _User_extensions_Thread_restart (
   Thread_Control *the_thread
 );
 
 /*
- *  _User_extensions_Task_switch
+ *  _User_extensions_Thread_switch
  *
  *  DESCRIPTION:
  *
@@ -146,47 +224,49 @@ STATIC INLINE void _User_extensions_Task_restart (
  *  is invoked when a context switch occurs.
  */
 
-STATIC INLINE void _User_extensions_Task_switch (
+STATIC INLINE void _User_extensions_Thread_switch (
   Thread_Control *executing,
   Thread_Control *heir
 );
 
 /*
- *  _User_extensions_Task_begin
+ *  _User_extensions_Thread_post_switch
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine is used to invoke the user extension which is invoked 
+ *  after a context switch occurs (i.e. we are running in the context
+ *  of the new thread).
+ */
+ 
+STATIC INLINE void _User_extensions_Thread_post_switch (
+  Thread_Control *executing
+);
+ 
+
+/*
+ *  _User_extensions_Thread_begin
  *
  *  DESCRIPTION:
  *
  *  This routine is used to invoke the user extension which
- *  is invoked when a task begins.
+ *  is invoked when a thread begins.
  */
 
-STATIC INLINE void _User_extensions_Task_begin (
+void _User_extensions_Thread_begin (
   Thread_Control *executing
 );
 
 /*
- *  _User_extensions_Task_exitted
+ *  _User_extensions_Thread_exitted
  *
  *  DESCRIPTION:
  *
  *  This routine is used to invoke the user extension which
- *  is invoked when a task exits.
+ *  is invoked when a thread exits.
  */
 
-STATIC INLINE void _User_extensions_Task_exitted (
-  Thread_Control *executing
-);
-
-/*
- *  _User_extensions_Task_exitted
- *
- *  DESCRIPTION:
- *
- *  This routine is used to invoke the user extension which
- *  is invoked when a task exits.
- */
-
-STATIC INLINE void _User_extensions_Task_exitted (
+void _User_extensions_Thread_exitted (
   Thread_Control *executing
 );
 
@@ -195,15 +275,17 @@ STATIC INLINE void _User_extensions_Task_exitted (
  *
  *  DESCRIPTION:
  *
- *  This routine is used to invoke the user extension for
- *  the rtems_fatal_error_occurred directive.
+ *  This routine is used to invoke the user extension invoked
+ *  when a fatal error occurs.
  */
 
-STATIC INLINE void _User_extensions_Fatal (
-  unsigned32 the_error
+void _User_extensions_Fatal (
+  Internal_errors_Source  the_source,
+  boolean                 is_internal,
+  unsigned32              the_error
 );
 
-#include <rtems/userext.inl>
+#include <rtems/core/userext.inl>
 
 #ifdef __cplusplus
 }

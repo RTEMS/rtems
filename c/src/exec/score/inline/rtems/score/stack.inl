@@ -43,7 +43,7 @@ STATIC INLINE boolean _Stack_Is_enough (
   unsigned32 size
 )
 {
-  return ( size >= RTEMS_MINIMUM_STACK_SIZE );
+  return ( size >= STACK_MINIMUM_SIZE );
 }
 
 /*PAGE

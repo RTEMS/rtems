@@ -14,12 +14,14 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/mpci.h>
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/region.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/core/mpci.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/region.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/support.h>
 
 /*PAGE
  *
@@ -44,7 +46,7 @@ void _Region_MP_Send_process_packet (
     case REGION_MP_EXTRACT_PROXY:
 
       the_packet                    = _Region_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_REGION;
+      the_packet->Prefix.the_class  = MP_PACKET_REGION;
       the_packet->Prefix.length     = sizeof ( Region_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( Region_MP_Packet );
       the_packet->operation         = operation;
@@ -79,8 +81,8 @@ rtems_status_code _Region_MP_Send_request_packet (
   Objects_Id                   region_id,
   void                        *segment,
   unsigned32                   size,
-  rtems_option              option_set,
-  rtems_interval            timeout
+  rtems_option                 option_set,
+  rtems_interval               timeout
 )
 {
   Region_MP_Packet *the_packet;
@@ -91,7 +93,7 @@ rtems_status_code _Region_MP_Send_request_packet (
     case REGION_MP_RETURN_SEGMENT_REQUEST:
 
       the_packet                    = _Region_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_REGION;
+      the_packet->Prefix.the_class  = MP_PACKET_REGION;
       the_packet->Prefix.length     = sizeof ( Region_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( Region_MP_Packet );
       if ( ! _Options_Is_no_wait(option_set))

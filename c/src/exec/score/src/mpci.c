@@ -14,16 +14,20 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/cpu.h>
-#include <rtems/fatal.h>
-#include <rtems/mpci.h>
-#include <rtems/mppkt.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
-#include <rtems/threadq.h>
-#include <rtems/tqdata.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/cpu.h>
+#include <rtems/core/interr.h>
+#include <rtems/core/mpci.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/threadq.h>
+#include <rtems/core/tqdata.h>
+#include <rtems/core/watchdog.h>
+#include <rtems/sysstate.h>
+
+#include <rtems/core/coresem.h>
+
+#include <rtems/rtems/status.h> /* XXX for TIMEOUT */
 
 /*PAGE
  *
@@ -32,14 +36,38 @@
  *  This subprogram performs the initialization necessary for this handler.
  */
 
-void _MPCI_Handler_initialization ( void )
+void _MPCI_Handler_initialization( 
+  MPCI_Control            *users_mpci_table
+)
 {
+  CORE_semaphore_Attributes    attributes;
+
+  if ( _System_state_Is_multiprocessing && !users_mpci_table )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_NO_MPCI
+    );
+
+  _MPCI_table = users_mpci_table;
+
+  attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
+
+  _CORE_semaphore_Initialize(
+    &_MPCI_Semaphore,
+    OBJECTS_NO_CLASS,         /* free floating semaphore */
+    &attributes,              /* the_semaphore_attributes */
+    0,                        /* initial_value */
+    NULL                      /* proxy_extract_callout */
+  );
+
   _Thread_queue_Initialize(
     &_MPCI_Remote_blocked_threads,
     OBJECTS_NO_CLASS,
     THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_RPC_REPLY,
-    NULL
+    NULL,
+    RTEMS_TIMEOUT
   );
 }
 
@@ -53,11 +81,24 @@ void _MPCI_Handler_initialization ( void )
 
 void _MPCI_Initialization ( void )
 {
-  (*_Configuration_MPCI_table->initialization)(
-    _Configuration_Table,
-    &_CPU_Table,
-    _Configuration_MP_table
-  );
+  (*_MPCI_table->initialization)();
+}
+
+/*PAGE
+ *
+ *  _MPCI_Register_packet_processor
+ *
+ *  This routine registers the MPCI packet processor for the
+ *  designated object class.
+ */
+ 
+void _MPCI_Register_packet_processor(
+  Objects_Classes        the_class,
+  MPCI_Packet_processor  the_packet_processor
+ 
+)
+{
+  _MPCI_Packet_processors[ the_class ] = the_packet_processor;
 }
 
 /*PAGE
@@ -68,14 +109,18 @@ void _MPCI_Initialization ( void )
  *  MPCI get packet callout.
  */
 
-rtems_packet_prefix *_MPCI_Get_packet ( void )
+MP_packet_Prefix *_MPCI_Get_packet ( void )
 {
-  rtems_packet_prefix  *the_packet;
+  MP_packet_Prefix  *the_packet;
 
-  (*_Configuration_MPCI_table->get_packet)( &the_packet );
+  (*_MPCI_table->get_packet)( &the_packet );
 
   if ( the_packet == NULL )
-    rtems_fatal_error_occurred( RTEMS_UNSATISFIED );
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_OUT_OF_PACKETS
+    );
 
   /*
    *  Put in a default timeout that will be used for
@@ -96,10 +141,10 @@ rtems_packet_prefix *_MPCI_Get_packet ( void )
  */
 
 void _MPCI_Return_packet (
-  rtems_packet_prefix   *the_packet
+  MP_packet_Prefix   *the_packet
 )
 {
-  (*_Configuration_MPCI_table->return_packet)( the_packet );
+  (*_MPCI_table->return_packet)( the_packet );
 }
 
 /*PAGE
@@ -112,15 +157,15 @@ void _MPCI_Return_packet (
 
 void _MPCI_Send_process_packet (
   unsigned32          destination,
-  rtems_packet_prefix   *the_packet
+  MP_packet_Prefix   *the_packet
 )
 {
   the_packet->source_tid = _Thread_Executing->Object.id;
   the_packet->to_convert =
-     ( the_packet->to_convert - sizeof(rtems_packet_prefix) ) /
+     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) /
        sizeof(unsigned32);
 
-  (*_Configuration_MPCI_table->send_packet)( destination, the_packet );
+  (*_MPCI_table->send_packet)( destination, the_packet );
 }
 
 /*PAGE
@@ -131,16 +176,16 @@ void _MPCI_Send_process_packet (
  *  MPCI send callout.
  */
 
-rtems_status_code _MPCI_Send_request_packet (
+unsigned32 _MPCI_Send_request_packet (
   unsigned32          destination,
-  rtems_packet_prefix   *the_packet,
+  MP_packet_Prefix   *the_packet,
   States_Control      extra_state
 )
 {
   the_packet->source_tid      = _Thread_Executing->Object.id;
   the_packet->source_priority = _Thread_Executing->current_priority;
   the_packet->to_convert =
-     ( the_packet->to_convert - sizeof(rtems_packet_prefix) ) /
+     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) /
        sizeof(unsigned32);
 
   _Thread_Executing->Wait.id = the_packet->id;
@@ -149,7 +194,7 @@ rtems_status_code _MPCI_Send_request_packet (
 
   _Thread_Disable_dispatch();
 
-    (*_Configuration_MPCI_table->send_packet)( destination, the_packet );
+    (*_MPCI_table->send_packet)( destination, the_packet );
 
     _MPCI_Remote_blocked_threads.sync = TRUE;
 
@@ -158,7 +203,7 @@ rtems_status_code _MPCI_Send_request_packet (
      */
 
     if (the_packet->timeout == MPCI_DEFAULT_TIMEOUT)
-        the_packet->timeout = _Configuration_MPCI_table->default_timeout;
+        the_packet->timeout = _MPCI_table->default_timeout;
 
     _Thread_queue_Enqueue( &_MPCI_Remote_blocked_threads, the_packet->timeout );
 
@@ -180,12 +225,12 @@ rtems_status_code _MPCI_Send_request_packet (
 
 void _MPCI_Send_response_packet (
   unsigned32          destination,
-  rtems_packet_prefix   *the_packet
+  MP_packet_Prefix   *the_packet
 )
 {
   the_packet->source_tid = _Thread_Executing->Object.id;
 
-  (*_Configuration_MPCI_table->send_packet)( destination, the_packet );
+  (*_MPCI_table->send_packet)( destination, the_packet );
 }
 
 /*PAGE
@@ -196,11 +241,11 @@ void _MPCI_Send_response_packet (
  *  MPCI receive callout.
  */
 
-rtems_packet_prefix  *_MPCI_Receive_packet ( void )
+MP_packet_Prefix  *_MPCI_Receive_packet ( void )
 {
-  rtems_packet_prefix  *the_packet;
+  MP_packet_Prefix  *the_packet;
 
-  (*_Configuration_MPCI_table->receive_packet)( &the_packet );
+  (*_MPCI_table->receive_packet)( &the_packet );
 
   return the_packet;
 }
@@ -214,7 +259,7 @@ rtems_packet_prefix  *_MPCI_Receive_packet ( void )
  */
 
 Thread_Control *_MPCI_Process_response (
-  rtems_packet_prefix  *the_packet
+  MP_packet_Prefix  *the_packet
 )
 {
   Thread_Control    *the_thread;
@@ -234,6 +279,68 @@ Thread_Control *_MPCI_Process_response (
   }
 
   return the_thread;
+}
+
+/*PAGE
+ *
+ *  _MPCI_Receive_server
+ *
+ */
+
+void _MPCI_Receive_server( void )
+{
+ 
+  MP_packet_Prefix         *the_packet;
+  MPCI_Packet_processor     the_function;
+  Thread_Control           *executing;
+ 
+  executing = _Thread_Executing;
+  _MPCI_Receive_server_tcb = executing;
+
+  for ( ; ; ) {
+ 
+    executing->receive_packet = NULL;
+
+    _Thread_Disable_dispatch();
+    _CORE_semaphore_Seize( &_MPCI_Semaphore, 0, TRUE, WATCHDOG_NO_TIMEOUT );
+    _Thread_Enable_dispatch();
+ 
+    for ( ; ; ) {
+      the_packet = _MPCI_Receive_packet();
+ 
+      if ( !the_packet )
+        break;
+ 
+      executing->receive_packet = the_packet;
+ 
+      if ( !_Mp_packet_Is_valid_packet_class ( the_packet->the_class ) )
+        break;
+ 
+      the_function = _MPCI_Packet_processors[ the_packet->the_class ];
+ 
+      if ( !the_function )
+        _Internal_error_Occurred(
+          INTERNAL_ERROR_CORE,
+          TRUE,
+          INTERNAL_ERROR_BAD_PACKET
+        );
+ 
+        (*the_function)( the_packet );
+    }
+  }
+}
+
+/*PAGE
+ *
+ *  _MPCI_Announce
+ *
+ */
+ 
+void _MPCI_Announce ( void )
+{
+  _Thread_Disable_dispatch();
+  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, 0 );
+  _Thread_Enable_dispatch();
 }
 
 /* end of file */

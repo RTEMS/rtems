@@ -16,17 +16,33 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-/* macros */
-
+rtems_task Task_1(
+  rtems_task_argument argument
+);
+ 
 #define put_mode( _comment, _output_mode ) \
    printf( "%s %08x\n", _comment, _output_mode );
 
-/* structures */
+/* configuration information */
 
-#include "gvar.h"
+#define CONFIGURE_SPTEST
+
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_TICKS_PER_TIMESLICE       100
+
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
 /* end of include file */

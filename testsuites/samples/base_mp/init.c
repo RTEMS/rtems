@@ -21,12 +21,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "shm.h"
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_task Init(
   rtems_task_argument argument
@@ -41,6 +37,10 @@ rtems_task Init(
   task_name = rtems_build_name( 'T', 'A', '1', ' ' );
   status = rtems_task_create( task_name, 1, 1024,
              RTEMS_INTERRUPT_LEVEL(0), RTEMS_DEFAULT_ATTRIBUTES, &tid );
-  status = rtems_task_start( tid, Application_task, Mp_conf_addr.node );
+  status = rtems_task_start(
+    tid,
+    Application_task,
+    Multiprocessing_configuration.node
+  );
   status = rtems_task_delete( RTEMS_SELF );
 }

@@ -22,6 +22,8 @@ extern "C" {
 
 #include <rtems.h>
 #include <iosupp.h>
+#include <console.h>
+#include <clockdrv.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -124,6 +126,24 @@ extern "C" {
 #define BSP_EXTERN extern
 #endif
 
+/*
+ *  Device Driver Table Entries
+ */
+
+/*
+ * NOTE: Use the standard Console driver entry
+ */
+ 
+/*
+ * NOTE: Use the standard Clock driver entry
+ */
+
+/*
+ * How many libio files we want
+ */
+
+#define BSP_LIBIO_MAX_FDS       20
+
 /* functions */
 
 int _IBMPC_chrdy( char * ch );
@@ -133,15 +153,6 @@ void _IBMPC_outch( unsigned char );
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
-
-#if 0
-extern i386_IDT_slot Interrupt_descriptor_table[ 256 ];
-extern i386_GDT_slot Global_descriptor_table[ 8192 ];
-BSP_EXTERN unsigned short Idt[3];  /* Interrupt Descriptor Table Address */
-BSP_EXTERN unsigned short Gdt[3];  /* Global Descriptor Table Address */
-BSP_EXTERN unsigned int   Idt_base;
-BSP_EXTERN unsigned int   Gdt_base;
-#endif
 
 /* routines */
 

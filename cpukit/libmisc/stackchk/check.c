@@ -18,18 +18,9 @@
  *
  */
 
-#include <rtems/system.h>
-#include <rtems/extension.h>
-#include <rtems/fatal.h>
-#include <rtems/heap.h>
-#include <rtems/stack.h>
-#include <rtems/thread.h>
-#ifdef XXX_RTEMS_H_FIXED
-#include <bsp.h>
-#else
-#include <rtems/config.h>
+#include <rtems.h>
+
 extern rtems_configuration_table BSP_Configuration;
-#endif
 
 #include <assert.h>
 #include <stdio.h>
@@ -56,6 +47,7 @@ rtems_extensions_table Stack_check_Extension_table = {
   0,                                /* rtems_task_restart */
   0,                                /* rtems_task_delete  */
   Stack_check_Switch_extension,     /* task_switch  */
+  0,                                /* task_post_switch  */
   Stack_check_Begin_extension,      /* task_begin   */
   0,                                /* task_exitted */
   Stack_check_Fatal_extension,      /* fatal        */
@@ -133,9 +125,13 @@ unsigned32 stack_check_initialized = 0;
 
 void Stack_check_Initialize( void )
 {
-  rtems_status_code status;
-  Objects_Id   id_ignored;
-  unsigned32  *p;
+  rtems_status_code    status;
+  Objects_Id           id_ignored;
+  unsigned32          *p;
+  unsigned32           i;
+  unsigned32           class_index;
+  Thread_Control      *the_thread;
+  Objects_Information *information;
 
   if (stack_check_initialized)
       return;
@@ -171,10 +167,31 @@ void Stack_check_Initialize( void )
    * So pretend here that we actually ran create and begin extensions.
    */
 
+  /* XXX
+   *
+   *  Technically this has not been done for any task created before this
+   *  happened.  So just run through them and fix the situation.
+   */
+#if 0
   if (_Thread_Executing)
   {
       Stack_check_Create_extension(_Thread_Executing, _Thread_Executing);
   }
+#endif
+
+#if 0
+  for ( class_index = OBJECTS_CLASSES_FIRST ;
+        class_index <= OBJECTS_CLASSES_LAST ;
+        class_index++ ) {
+    information = _Objects_Information_table[ class_index ];
+    if ( information && information->is_thread ) {
+      for ( i=1 ; i <= information->maximum ; i++ ) {
+        the_thread = (Thread_Control *)information->local_table[ i ];
+        Stack_check_Create_extension( the_thread, the_thread );
+      }
+    }
+  }
+#endif
 
   /*
    * If appropriate, setup the interrupt stack for high water testing
@@ -197,13 +214,15 @@ void Stack_check_Initialize( void )
  *  Stack_check_Create_extension
  */
 
-void Stack_check_Create_extension(
+boolean Stack_check_Create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 )
 {
-    if (the_thread && (the_thread != _Thread_Executing))
+    if (the_thread /* XXX && (the_thread != _Thread_Executing) */ )
         stack_check_dope_stack(&the_thread->Start.Initial_stack);
+
+    return TRUE;
 }
 
 /*PAGE

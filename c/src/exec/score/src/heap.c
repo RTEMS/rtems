@@ -14,7 +14,7 @@
 
 
 #include <rtems/system.h>
-#include <rtems/heap.h>
+#include <rtems/core/heap.h>
 #include <rtems/sysstate.h>
 
 /*PAGE
@@ -30,7 +30,7 @@
  *    page_size        - allocatable unit of memory
  *
  *  Output parameters:
- *    returns - maximum memory available if RTEMS_SUCCESSFUL
+ *    returns - maximum memory available if successfully initialized
  *    0       - otherwise
  *
  *    This is what a heap looks like in memory immediately

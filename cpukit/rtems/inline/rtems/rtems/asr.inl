@@ -17,7 +17,7 @@
 #ifndef __INLINE_ASR_inl
 #define __INLINE_ASR_inl
 
-#include <rtems/isr.h>
+#include <rtems/core/isr.h>
 
 /*PAGE
  *
@@ -29,6 +29,7 @@ STATIC INLINE void _ASR_Initialize (
   ASR_Information *information
 )
 {
+  information->is_enabled      = TRUE;
   information->handler         = NULL;
   information->mode_set        = RTEMS_DEFAULT_MODES;
   information->signals_posted  = 0;
@@ -47,7 +48,7 @@ STATIC INLINE void _ASR_Swap_signals (
 )
 {
   rtems_signal_set _signals;
-  ISR_Level              _level;
+  ISR_Level        _level;
 
   _ISR_Disable( _level );
     _signals                     = information->signals_pending;

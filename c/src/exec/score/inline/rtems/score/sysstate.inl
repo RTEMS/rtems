@@ -19,6 +19,19 @@
 
 /*PAGE
  *
+ *  _System_state_Handler_initialization
+ */
+ 
+STATIC INLINE void _System_state_Handler_initialization (
+  boolean  is_multiprocessing
+)
+{
+  _System_state_Current = SYSTEM_STATE_BEFORE_INITIALIZATION;
+  _System_state_Is_multiprocessing = is_multiprocessing;
+}
+ 
+/*PAGE
+ *
  *  _System_state_Set
  */
 

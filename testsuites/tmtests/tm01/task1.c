@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_task Test_task(
   rtems_task_argument argument
@@ -26,6 +23,8 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 1 ***" );
 
@@ -185,5 +184,6 @@ rtems_task Test_task(
     CALLING_OVERHEAD_SEMAPHORE_RELEASE
   );
 
+  puts( "*** END OF TEST 1 ***" );
   exit( 0 );
 }

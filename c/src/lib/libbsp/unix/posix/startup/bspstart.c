@@ -37,6 +37,8 @@
 #include <bsp.h>
 #include <libcsupport.h>
 
+#include <rtems/libio.h>
+
 #ifdef STACK_CHECKER_ON
 #include <stackchk.h>
 #endif
@@ -112,6 +114,14 @@ bsp_libc_init(void)
 
     RTEMS_Malloc_Initialize((void *)heap_start, Heap_size, 1024 * 1024);
 
+    /*
+     *  Init the RTEMS libio facility to provide UNIX-like system
+     *  calls for use by newlib (ie: provide __open, __close, etc)
+     *  Uses malloc() to get area for the iops, so must be after malloc init
+     */
+
+    rtems_libio_init();
+
     libc_init(1);
 }
 
@@ -158,6 +168,34 @@ bsp_pretasking_hook(void)
 
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
+#endif
+}
+
+/*
+ * After drivers are setup, register some "filenames"
+ * and open stdin, stdout, stderr files
+ *
+ * Newlib will automatically associate the files with these
+ * (it hardcodes the numbers)
+ */
+ 
+void
+bsp_postdriver_hook(void)
+{
+#if 0
+  int stdin_fd, stdout_fd, stderr_fd;
+ 
+  if ((stdin_fd = __open("/dev/console", O_RDONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD0');
+ 
+  if ((stdout_fd = __open("/dev/console", O_WRONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD1');
+ 
+  if ((stderr_fd = __open("/dev/console", O_WRONLY, 0)) == -1)
+    rtems_fatal_error_occurred('STD2');
+ 
+  if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
+    rtems_fatal_error_occurred('STIO');
 #endif
 }
 
@@ -261,7 +299,7 @@ bsp_start(void)
 
     Cpu_table.predriver_hook = NULL;
 
-    Cpu_table.postdriver_hook = NULL;
+    Cpu_table.postdriver_hook = bsp_postdriver_hook;
 
     Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
 
@@ -301,22 +339,28 @@ bsp_start(void)
     BSP_Configuration.maximum_extensions++;
 #endif
 
-    /*
-     * Add 1 extension for MPCI_fatal
-     */
+  /*
+   * Tell libio how many fd's we want and allow it to tweak config
+   */
 
-    if (BSP_Configuration.User_multiprocessing_table)
-        BSP_Configuration.maximum_extensions++;
+  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
-    CPU_CLICKS_PER_TICK = 1;
+  /*
+   * Add 1 extension for MPCI_fatal
+   */
 
-    /*
-     *  Start most of RTEMS
-     *  main() will start the rest
-     */
+  if (BSP_Configuration.User_multiprocessing_table)
+      BSP_Configuration.maximum_extensions++;
 
-    bsp_isr_level = rtems_initialize_executive_early(
-      &BSP_Configuration,
-      &Cpu_table
-    );
+  CPU_CLICKS_PER_TICK = 1;
+
+  /*
+   *  Start most of RTEMS
+   *  main() will start the rest
+   */
+
+  bsp_isr_level = rtems_initialize_executive_early(
+    &BSP_Configuration,
+    &Cpu_table
+  );
 }

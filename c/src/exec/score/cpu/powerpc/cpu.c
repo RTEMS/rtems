@@ -30,15 +30,17 @@
 
 #include <rtems/system.h>
 #include <rtems/fatal.h>
-#include <rtems/isr.h>
-#include <rtems/context.h>
-#include <rtems/thread.h>
-#include <rtems/wkspace.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/context.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/wkspace.h>
 
 /*
  *  These are for testing purposes.
  */
+/*
 #define Testing
+*/
 
 #ifdef Testing
 static unsigned32 msr;
@@ -119,9 +121,6 @@ void _CPU_Initialize(
   }
 #endif
 
-  if ( cpu_table == NULL )
-    rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED );
-
   if ( cpu_table->spurious_handler )
     handler = (proc_ptr)cpu_table->spurious_handler;
 
@@ -164,9 +163,11 @@ void _CPU_ISR_install_vector(
     *  be used by the _ISR_Handler so the user gets control.
     */
 
-    _ISR_Vector_table[ vector ] = new_handler ? (rtems_isr_entry)new_handler :
-       _CPU_Table.spurious_handler ? (rtems_isr_entry)_CPU_Table.spurious_handler :
-       (rtems_isr_entry)ppc_spurious;
+    _ISR_Vector_table[ vector ] = 
+       (new_handler) ? (ISR_Handler_entry) new_handler :
+       ((_CPU_Table.spurious_handler) ? 
+          (ISR_Handler_entry) _CPU_Table.spurious_handler :
+          (ISR_Handler_entry) ppc_spurious);
 }
 
 /*PAGE

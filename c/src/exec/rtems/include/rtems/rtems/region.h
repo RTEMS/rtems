@@ -30,11 +30,12 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/object.h>
-#include <rtems/threadq.h>
-#include <rtems/heap.h>
+#include <rtems/core/object.h>
+#include <rtems/core/threadq.h>
+#include <rtems/core/heap.h>
 #include <rtems/debug.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/rtems/types.h>
 
 /*
  *  The following records define the control block used to manage
@@ -158,8 +159,8 @@ rtems_status_code rtems_region_delete(
 rtems_status_code rtems_region_get_segment(
   Objects_Id         id,
   unsigned32         size,
-  rtems_option    option_set,
-  rtems_interval  timeout,
+  rtems_option       option_set,
+  rtems_interval     timeout,
   void              **segment
 );
 
@@ -278,8 +279,8 @@ STATIC INLINE boolean _Region_Is_null (
   Region_Control *the_region
 );
 
-#include <rtems/region.inl>
-#include <rtems/regionmp.h>
+#include <rtems/rtems/region.inl>
+#include <rtems/rtems/regionmp.h>
 
 /*
  *  _Region_Debug_Walk

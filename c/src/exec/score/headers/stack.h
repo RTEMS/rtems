@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_STACK_h
-#define __RTEMS_STACK_h
+#ifndef __STACK_h
+#define __STACK_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,7 +27,7 @@ extern "C" {
  *  thread must exceed.
  */
 
-#define RTEMS_MINIMUM_STACK_SIZE  CPU_STACK_MINIMUM_SIZE
+#define STACK_MINIMUM_SIZE  CPU_STACK_MINIMUM_SIZE
 
 /*
  *  The following defines the control block used to manage each stack.
@@ -85,7 +85,7 @@ STATIC INLINE unsigned32 _Stack_Adjust_size (
   unsigned32 size
 );
 
-#include <rtems/stack.inl>
+#include <rtems/core/stack.inl>
 
 #ifdef __cplusplus
 }

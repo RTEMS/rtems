@@ -14,17 +14,148 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/support.h>
-#include <rtems/modes.h>
-#include <rtems/object.h>
-#include <rtems/stack.h>
-#include <rtems/states.h>
-#include <rtems/tasks.h>
-#include <rtems/thread.h>
-#include <rtems/threadq.h>
-#include <rtems/tod.h>
-#include <rtems/userext.h>
-#include <rtems/wkspace.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
+#include <rtems/rtems/modes.h>
+#include <rtems/core/object.h>
+#include <rtems/core/stack.h>
+#include <rtems/core/states.h>
+#include <rtems/rtems/tasks.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/threadq.h>
+#include <rtems/core/tod.h>
+#include <rtems/core/userext.h>
+#include <rtems/core/wkspace.h>
+#include <rtems/core/intthrd.h>
+#include <rtems/sysstate.h>
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Create_extension
+ *
+ *  XXX
+ */
+
+boolean _RTEMS_tasks_Create_extension(
+  Thread_Control *executing, 
+  Thread_Control *created
+)
+{
+  RTEMS_API_Control *api;
+
+  api = _Workspace_Allocate( sizeof( RTEMS_API_Control ) );
+
+  if ( !api )
+    return FALSE;
+
+  created->API_Extensions[ THREAD_API_RTEMS ] = api;
+ 
+  api->pending_events = EVENT_SETS_NONE_PENDING;
+  _ASR_Initialize( &api->Signal );
+  return TRUE;
+}
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Start_extension
+ *
+ *  XXX
+ */
+ 
+User_extensions_routine _RTEMS_tasks_Start_extension(
+  Thread_Control *executing,
+  Thread_Control *started
+)
+{
+  RTEMS_API_Control *api;
+
+  api = started->API_Extensions[ THREAD_API_RTEMS ];
+ 
+  api->pending_events = EVENT_SETS_NONE_PENDING;
+
+  _ASR_Initialize( &api->Signal );
+}
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Delete_extension
+ *
+ *  XXX
+ */
+ 
+User_extensions_routine _RTEMS_tasks_Delete_extension(
+  Thread_Control *executing, 
+  Thread_Control *deleted
+)
+{
+  (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_RTEMS ] );
+ 
+  deleted->API_Extensions[ THREAD_API_RTEMS ] = NULL;
+}
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Switch_extension
+ *
+ *  XXX
+ */
+ 
+User_extensions_routine _RTEMS_tasks_Switch_extension(
+  Thread_Control *executing
+)
+{
+  ISR_Level          level;
+  RTEMS_API_Control *api;
+  ASR_Information   *asr;
+  rtems_signal_set   signal_set;
+  Modes_Control      prev_mode;
+
+  api = executing->API_Extensions[ THREAD_API_RTEMS ];
+  asr = &api->Signal;
+ 
+  _ISR_Disable( level );
+
+  signal_set = asr->signals_posted;
+ 
+  if ( signal_set ) {
+  /* if ( _ASR_Are_signals_pending( asr ) ) {
+ 
+    signal_set          = asr->signals_posted; */
+    asr->signals_posted = 0;
+    _ISR_Enable( level );
+ 
+    asr->nest_level += 1;
+    rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
+ 
+    (*asr->handler)( signal_set );
+ 
+    asr->nest_level -= 1;
+    rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
+  }
+  else
+    _ISR_Enable( level );
+
+}
+
+Internal_threads_Extensions_control _RTEMS_tasks_Internal_thread_extensions = {
+  { NULL, NULL },
+  NULL,                                     /* predriver */
+  _RTEMS_tasks_Initialize_user_tasks        /* postdriver */
+};
+
+User_extensions_Control _RTEMS_tasks_API_extensions = {
+  { NULL, NULL },
+  { _RTEMS_tasks_Create_extension,            /* create */
+    _RTEMS_tasks_Start_extension,             /* start */
+    _RTEMS_tasks_Start_extension,             /* restart */
+    _RTEMS_tasks_Delete_extension,            /* delete */
+    NULL,                                     /* switch */
+    _RTEMS_tasks_Switch_extension,            /* post switch */
+    NULL,                                     /* begin */
+    NULL,                                     /* exitted */
+    NULL                                      /* fatal */
+  }
+};
 
 /*PAGE
  *
@@ -39,9 +170,18 @@
  */
 
 void _RTEMS_tasks_Manager_initialization(
-  unsigned32   maximum_tasks
+  unsigned32                        maximum_tasks,
+  unsigned32                        number_of_initialization_tasks,
+  rtems_initialization_tasks_table *user_tasks
 )
 {
+
+  _RTEMS_tasks_Number_of_initialization_tasks = number_of_initialization_tasks;
+  _RTEMS_tasks_User_initialization_tasks = user_tasks;
+
+  if ( user_tasks == NULL || number_of_initialization_tasks == 0 )
+    _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, TRUE, RTEMS_TOO_MANY );
+
   _Objects_Initialize_information(
     &_RTEMS_tasks_Information,
     OBJECTS_RTEMS_TASKS,
@@ -52,6 +192,24 @@ void _RTEMS_tasks_Manager_initialization(
     RTEMS_MAXIMUM_NAME_LENGTH,
     TRUE
   );
+
+  /*
+   *  Add all the extensions for this API
+   */
+
+  _User_extensions_Add_API_set( &_RTEMS_tasks_API_extensions );
+
+  _Internal_threads_Add_extension( &_RTEMS_tasks_Internal_thread_extensions );
+
+  /*
+   *  Register the MP Process Packet routine.
+   */
+
+  _MPCI_Register_packet_processor(
+    MP_PACKET_TASKS,
+    _RTEMS_tasks_MP_Process_packet
+  );
+
 }
 
 /*PAGE
@@ -89,12 +247,15 @@ rtems_status_code rtems_task_create(
   Objects_MP_Control      *the_global_object = NULL;
   boolean                  is_fp;
   boolean                  is_global;
+  boolean                  status;
   rtems_attribute          the_attribute_set;
   Priority_Control         core_priority;
+  RTEMS_API_Control       *api;
+  ASR_Information         *asr;
  
 
   if ( !rtems_is_name_valid( name ) )
-    return ( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
   /* 
    *  Core Thread Initialize insures we get the minimum amount of
@@ -103,17 +264,17 @@ rtems_status_code rtems_task_create(
 
 #if 0
   if ( !_Stack_Is_enough( stack_size ) )
-    return( RTEMS_INVALID_SIZE );
+    return RTEMS_INVALID_SIZE;
 #endif
 
   /*
    *  Validate the RTEMS API priority and convert it to the core priority range.
    */
 
-  if ( !_Priority_Is_valid( initial_priority ) )
-    return( RTEMS_INVALID_PRIORITY );
+  if ( !_RTEMS_tasks_Priority_is_valid( initial_priority ) )
+    return RTEMS_INVALID_PRIORITY;
 
-  core_priority = _RTEMS_Tasks_Priority_to_Core( initial_priority );
+  core_priority = _RTEMS_tasks_Priority_to_Core( initial_priority );
 
   /*
    *  Fix the attribute set to match the attributes which
@@ -137,8 +298,8 @@ rtems_status_code rtems_task_create(
 
     is_global = TRUE;
 
-    if ( !_Configuration_Is_multiprocessing() )
-      return( RTEMS_MP_NOT_CONFIGURED );
+    if ( !_System_state_Is_multiprocessing )
+      return RTEMS_MP_NOT_CONFIGURED;
 
   } else
     is_global = FALSE;
@@ -167,7 +328,7 @@ rtems_status_code rtems_task_create(
 
   if ( !the_thread ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   if ( is_global ) {
@@ -176,49 +337,45 @@ rtems_status_code rtems_task_create(
     if ( _Objects_MP_Is_null_global_object( the_global_object ) ) {
       _RTEMS_tasks_Free( the_thread );
       _Thread_Enable_dispatch();
-      return( RTEMS_TOO_MANY );
+      return RTEMS_TOO_MANY;
     }
   }
-
-#if 0
-  /*
-   *  Allocate and initialize the RTEMS API specific information
-   */
-
-  the_thread->RTEMS_API = _Workspace_Allocate( sizeof( RTEMS_API_Control ) );
-
-  if ( !the_thread->RTEMS_API ) {
-    _RTEMS_tasks_Free( the_thread );
-    if ( is_global )
-    _Objects_MP_Free_global_object( the_global_object );
-    _Thread_Enable_dispatch();
-    return( RTEMS_UNSATISFIED );
-  }
-
-  the_thread->RTEMS_API->pending_events         = EVENT_SETS_NONE_PENDING;
-  _ASR_Initialize( &the_thread->RTEMS_API->Signal );
-#endif
 
   /*
    *  Initialize the core thread for this task.
    */
 
-/* XXX normalize mode */
+  status = _Thread_Initialize(
+    &_RTEMS_tasks_Information,
+    the_thread, 
+    NULL,
+    stack_size,
+    is_fp,
+    core_priority,
+    _Modes_Is_preempt(initial_modes)   ? TRUE : FALSE,
+    _Modes_Is_timeslice(initial_modes) ? TRUE : FALSE,
+    _Modes_Get_interrupt_level(initial_modes),
+    &name
+  );
 
-  if ( !_Thread_Initialize( &_RTEMS_tasks_Information, the_thread, 
-         NULL, stack_size, is_fp, core_priority, initial_modes, &name ) ) {
+  if ( !status ) {
     if ( is_global )
       _Objects_MP_Free_global_object( the_global_object );
     _RTEMS_tasks_Free( the_thread );
     _Thread_Enable_dispatch();
-    return( RTEMS_UNSATISFIED );
+    return RTEMS_UNSATISFIED;
   }
+
+  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+  asr = &api->Signal;
+ 
+  asr->is_enabled = _Modes_Is_asr_disabled(initial_modes) ? FALSE : TRUE;
 
   *id = the_thread->Object.id;
 
   if ( is_global ) {
 
-    the_thread->RTEMS_API->is_global = TRUE;
+    the_thread->is_global = TRUE;
 
     _Objects_MP_Open(
       &_RTEMS_tasks_Information,
@@ -236,7 +393,7 @@ rtems_status_code rtems_task_create(
    }
 
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -263,11 +420,16 @@ rtems_status_code rtems_task_ident(
   Objects_Id   *id
 )
 {
-  if ( name != OBJECTS_ID_OF_SELF )
-    return( _Objects_Name_to_id( &_RTEMS_tasks_Information, &name, node, id ) );
+  Objects_Name_to_id_errors  status;
 
-  *id = _Thread_Executing->Object.id;
-  return( RTEMS_SUCCESSFUL );
+  if ( name == OBJECTS_ID_OF_SELF ) {
+    *id = _Thread_Executing->Object.id;
+    return RTEMS_SUCCESSFUL;
+   }
+
+  status = _Objects_Name_to_id( &_RTEMS_tasks_Information, &name, node, id );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
 
 /*PAGE
@@ -298,26 +460,26 @@ rtems_status_code rtems_task_start(
   Objects_Locations        location;
 
   if ( entry_point == NULL )
-    return( RTEMS_INVALID_ADDRESS );
+    return RTEMS_INVALID_ADDRESS;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     case OBJECTS_LOCAL:
       if ( _Thread_Start(
              the_thread, THREAD_START_NUMERIC, entry_point, NULL, argument ) ) {
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_INCORRECT_STATE );
+      return RTEMS_INCORRECT_STATE;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -349,25 +511,20 @@ rtems_status_code rtems_task_restart(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     case OBJECTS_LOCAL:
       if ( _Thread_Restart( the_thread, NULL, argument ) ) {
-
-        /*  XXX until these are in an API extension they are too late. */
-        _ASR_Initialize( &the_thread->RTEMS_API->Signal );
-        the_thread->RTEMS_API->pending_events = EVENT_SETS_NONE_PENDING;
-
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_INCORRECT_STATE );
+      return RTEMS_INCORRECT_STATE;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -398,19 +555,16 @@ rtems_status_code rtems_task_delete(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     case OBJECTS_LOCAL:
       _Thread_Close( &_RTEMS_tasks_Information, the_thread );
 
-      /* XXX */
-      (void) _Workspace_Free( the_thread->RTEMS_API );
-
       _RTEMS_tasks_Free( the_thread );
 
-      if ( _Attributes_Is_global( the_thread->RTEMS_API->is_global ) ) {
+      if ( the_thread->is_global ) {
 
         _Objects_MP_Close( &_RTEMS_tasks_Information, the_thread->Object.id );
 
@@ -422,10 +576,10 @@ rtems_status_code rtems_task_delete(
       }
 
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -454,28 +608,26 @@ rtems_status_code rtems_task_suspend(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
-      return(
-        _RTEMS_tasks_MP_Send_request_packet(
-          RTEMS_TASKS_MP_SUSPEND_REQUEST,
-          id,
-          0,          /* Not used */
-          0,          /* Not used */
-          0           /* Not used */
-        )
+      return _RTEMS_tasks_MP_Send_request_packet(
+        RTEMS_TASKS_MP_SUSPEND_REQUEST,
+        id,
+        0,          /* Not used */
+        0,          /* Not used */
+        0           /* Not used */
       );
     case OBJECTS_LOCAL:
       if ( !_States_Is_suspended( the_thread->current_state ) ) {
         _Thread_Set_state( the_thread, STATES_SUSPENDED );
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_ALREADY_SUSPENDED );
+      return RTEMS_ALREADY_SUSPENDED;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -503,7 +655,7 @@ rtems_status_code rtems_task_resume(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       return(
         _RTEMS_tasks_MP_Send_request_packet(
@@ -518,13 +670,13 @@ rtems_status_code rtems_task_resume(
       if ( _States_Is_suspended( the_thread->current_state ) ) {
         _Thread_Resume( the_thread );
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_INCORRECT_STATE );
+      return RTEMS_INCORRECT_STATE;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -556,13 +708,13 @@ rtems_status_code rtems_task_set_priority(
   Objects_Locations               location;
 
   if ( new_priority != RTEMS_CURRENT_PRIORITY &&
-       !_Priority_Is_valid( new_priority ) )
-    return( RTEMS_INVALID_PRIORITY );
+       !_RTEMS_tasks_Priority_is_valid( new_priority ) )
+    return RTEMS_INVALID_PRIORITY;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = old_priority;
       return(
@@ -583,10 +735,10 @@ rtems_status_code rtems_task_set_priority(
           _Thread_Change_priority( the_thread, new_priority );
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -603,7 +755,7 @@ rtems_status_code rtems_task_set_priority(
  *
  *  Output:
  *    *previous_mode_set - previous mode set
- *     always returns RTEMS_SUCCESSFUL
+ *     always return RTEMS_SUCCESSFUL;
  */
 
 rtems_status_code rtems_task_mode(
@@ -612,9 +764,62 @@ rtems_status_code rtems_task_mode(
   rtems_mode *previous_mode_set
 )
 {
-  if ( _Thread_Change_mode( mode_set, mask, previous_mode_set ) )
+  Thread_Control     *executing;
+  RTEMS_API_Control  *api;
+  ASR_Information    *asr;
+  boolean             is_asr_enabled = FALSE;
+  boolean             needs_asr_dispatching = FALSE;
+  rtems_mode          old_mode;
+
+  executing     = _Thread_Executing;
+  api = executing->API_Extensions[ THREAD_API_RTEMS ];
+  asr = &api->Signal;
+
+  old_mode  = (executing->is_preemptible) ? RTEMS_PREEMPT : RTEMS_NO_PREEMPT;
+  old_mode |= (executing->is_timeslice) ? RTEMS_TIMESLICE : RTEMS_NO_TIMESLICE;
+  old_mode |= (asr->is_enabled) ? RTEMS_ASR : RTEMS_NO_ASR;
+  old_mode |= _ISR_Get_level();
+
+  *previous_mode_set = old_mode;
+
+  /*
+   *  These are generic thread scheduling characteristics.
+   */
+
+  if ( mask & RTEMS_PREEMPT_MASK )
+    executing->is_preemptible = _Modes_Is_preempt(mode_set) ? TRUE : FALSE;
+
+  if ( mask & RTEMS_TIMESLICE_MASK )
+    executing->is_timeslice = _Modes_Is_timeslice(mode_set) ? TRUE : FALSE;
+
+  /*
+   *  Set the new interrupt level
+   */
+
+  if ( mask & RTEMS_INTERRUPT_MASK )
+    _Modes_Set_interrupt_level( mode_set );
+
+  /*
+   *  This is specific to the RTEMS API
+   */
+
+  is_asr_enabled = FALSE;
+  needs_asr_dispatching = FALSE;
+
+  if ( mask & RTEMS_ASR_MASK ) {
+    is_asr_enabled = _Modes_Is_asr_disabled( mode_set ) ? FALSE : TRUE;
+    if ( is_asr_enabled != asr->is_enabled ) {
+      asr->is_enabled = is_asr_enabled;
+      _ASR_Swap_signals( asr );
+      if ( _ASR_Are_signals_pending( asr ) )
+        needs_asr_dispatching = TRUE;
+    }
+  }
+
+  if ( _Thread_Evaluate_mode() || needs_asr_dispatching )
     _Thread_Dispatch();
-  return( RTEMS_SUCCESSFUL );
+
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -643,6 +848,7 @@ rtems_status_code rtems_task_get_note(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
+  RTEMS_API_Control       *api;
 
   /*
    *  NOTE:  There is no check for < RTEMS_NOTEPAD_FIRST because that would
@@ -650,7 +856,7 @@ rtems_status_code rtems_task_get_note(
    */
 
   if ( notepad > RTEMS_NOTEPAD_LAST )
-    return( RTEMS_INVALID_NUMBER );
+    return RTEMS_INVALID_NUMBER;
 
   /*
    *  Optimize the most likely case to avoid the Thread_Dispatch.
@@ -658,14 +864,15 @@ rtems_status_code rtems_task_get_note(
 
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ||
        _Objects_Are_ids_equal( id, _Thread_Executing->Object.id ) ) {
-      *note = _Thread_Executing->RTEMS_API->Notepads[ notepad ];
-      return( RTEMS_SUCCESSFUL );
+      api = _Thread_Executing->API_Extensions[ THREAD_API_RTEMS ];
+      *note = api->Notepads[ notepad ];
+      return RTEMS_SUCCESSFUL;
   }
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = note;
 
@@ -677,12 +884,13 @@ rtems_status_code rtems_task_get_note(
         0           /* Not used */
       );
     case OBJECTS_LOCAL:
-      *note= the_thread->RTEMS_API->Notepads[ notepad ];
+      api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+      *note = api->Notepads[ notepad ];
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -710,6 +918,7 @@ rtems_status_code rtems_task_set_note(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
+  RTEMS_API_Control       *api;
 
   /*
    *  NOTE:  There is no check for < RTEMS_NOTEPAD_FIRST because that would
@@ -717,7 +926,7 @@ rtems_status_code rtems_task_set_note(
    */
 
   if ( notepad > RTEMS_NOTEPAD_LAST )
-    return( RTEMS_INVALID_NUMBER );
+    return RTEMS_INVALID_NUMBER;
 
   /*
    *  Optimize the most likely case to avoid the Thread_Dispatch.
@@ -725,14 +934,15 @@ rtems_status_code rtems_task_set_note(
 
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ||
        _Objects_Are_ids_equal( id, _Thread_Executing->Object.id ) ) {
-      _Thread_Executing->RTEMS_API->Notepads[ notepad ] = note;
-      return( RTEMS_SUCCESSFUL );
+      api = _Thread_Executing->API_Extensions[ THREAD_API_RTEMS ];
+      api->Notepads[ notepad ] = note;
+      return RTEMS_SUCCESSFUL;
   }
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       return _RTEMS_tasks_MP_Send_request_packet(
         RTEMS_TASKS_MP_SET_NOTE_REQUEST,
@@ -743,12 +953,13 @@ rtems_status_code rtems_task_set_note(
       );
 
     case OBJECTS_LOCAL:
-      the_thread->RTEMS_API->Notepads[ notepad ] = note;
+      api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+      api->Notepads[ notepad ] = note;
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -785,7 +996,7 @@ rtems_status_code rtems_task_wake_after(
                               ticks, WATCHDOG_ACTIVATE_NOW );
     _Thread_Enable_dispatch();
   }
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -807,23 +1018,20 @@ rtems_status_code rtems_task_wake_when(
 rtems_time_of_day *time_buffer
 )
 {
-  rtems_interval seconds;
-  rtems_status_code      local_result;
+  Watchdog_Interval   seconds;
 
   if ( !_TOD_Is_set() )
-    return( RTEMS_NOT_DEFINED );
+    return RTEMS_NOT_DEFINED;
 
   time_buffer->ticks = 0;
 
-  local_result = _TOD_Validate( time_buffer );
-
-  if  ( !rtems_is_status_successful( local_result ) )
-    return( local_result );
+  if ( !_TOD_Validate( time_buffer ) )
+    return RTEMS_INVALID_CLOCK;
 
   seconds = _TOD_To_seconds( time_buffer );
 
   if ( seconds <= _TOD_Seconds_since_epoch )
-    return( RTEMS_INVALID_CLOCK );
+    return RTEMS_INVALID_CLOCK;
 
   _Thread_Disable_dispatch();
     _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_TIME );
@@ -836,5 +1044,57 @@ rtems_time_of_day *time_buffer
     _Watchdog_Insert_seconds( &_Thread_Executing->Timer,
             seconds - _TOD_Seconds_since_epoch, WATCHDOG_ACTIVATE_NOW );
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Initialize_user_tasks
+ *
+ *  This routine creates and starts all configured user
+ *  initialzation threads.
+ *
+ *  Input parameters: NONE
+ *
+ *  Output parameters:  NONE
+ */
+
+void _RTEMS_tasks_Initialize_user_tasks( void )
+{
+  unsigned32                        index;
+  unsigned32                        maximum;
+  rtems_id                          id;
+  rtems_status_code                 return_value;
+  rtems_initialization_tasks_table *user_tasks;
+
+  /*
+   *  NOTE:  This is slightly different from the Ada implementation.
+   */
+
+  user_tasks = _RTEMS_tasks_User_initialization_tasks;
+  maximum    = _RTEMS_tasks_Number_of_initialization_tasks;
+
+  for ( index=0 ; index < maximum ; index++ ) {
+    return_value = rtems_task_create(
+      user_tasks[ index ].name,
+      user_tasks[ index ].initial_priority,
+      user_tasks[ index ].stack_size,
+      user_tasks[ index ].mode_set,
+      user_tasks[ index ].attribute_set,
+      &id
+    );
+
+    if ( !rtems_is_status_successful( return_value ) )
+      _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, TRUE, return_value );
+
+    return_value = rtems_task_start(
+      id,
+      user_tasks[ index ].entry_point,
+      user_tasks[ index ].argument
+    );
+
+    if ( !rtems_is_status_successful( return_value ) )
+      _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, TRUE, return_value );
+  }
+}
+

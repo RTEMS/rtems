@@ -21,7 +21,7 @@
 
 #include "system.h"
 
-rtems_extension Task_create_extension(
+rtems_boolean Task_create_extension(
   rtems_tcb *unused,
   rtems_tcb *created_task
 )
@@ -31,4 +31,5 @@ rtems_extension Task_create_extension(
     put_name( Task_name[ task_number( created_task->Object.id ) ], FALSE );
     puts( " - created." );
   }
+  return TRUE;
 }

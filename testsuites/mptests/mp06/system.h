@@ -16,15 +16,35 @@
 
 #include <tmacros.h>
 
+/* functions */
 
-/* Miscellaneous */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-#define EXTERN  extern             /* external definition */
+rtems_task Test_task(
+  rtems_task_argument argument
+);
 
-/* macros */
+/* configuration information */
+ 
+#define CONFIGURE_MPTEST
+ 
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+ 
+#define CONFIGURE_MAXIMUM_TIMERS              1
 
-/* structures */
+#include <confdefs.h>
 
-#include "gvar.h"
+/* variables */
+
+TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
+
+TEST_EXTERN rtems_id   Timer_id[ 4 ];     /* array of timer ids */
+TEST_EXTERN rtems_name Timer_name[ 4 ];   /* array of timer names */
+ 
+TEST_EXTERN volatile rtems_boolean Stop_Test;
 
 /* end of include file */

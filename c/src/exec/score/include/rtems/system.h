@@ -76,9 +76,7 @@ extern "C" {
 
 typedef void * proc_ptr;
 
-#include <rtems/cpu.h>             /* processor specific information */
-#include <rtems/status.h>          /* RTEMS status codes */
-#include <rtems/directives.h>
+#include <rtems/core/cpu.h>        /* processor specific information */
 
 /*
  *  Define NULL
@@ -114,12 +112,6 @@ typedef void * proc_ptr;
 
 extern const char _RTEMS_version[];         /* RTEMS version string */
 extern const char _Copyright_Notice[];      /* RTEMS copyright string */
-
-/*
- *  The jump table of entry points into RTEMS directives.
- */
-
-extern const void * _Entry_points[ RTEMS_NUMBER_OF_ENTRY_POINTS ];
 
 /*
  *  The following defines the CPU dependent information table.

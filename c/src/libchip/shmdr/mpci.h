@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __MPCI_h
-#define __MPCI_h
+#ifndef __SHM_MPCI_h
+#define __SHM_MPCI_h
 
 #ifdef __cplusplus
 extern "C" {

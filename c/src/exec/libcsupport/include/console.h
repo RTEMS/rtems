@@ -22,14 +22,43 @@ extern "C" {
 #endif
 
 #define CONSOLE_DRIVER_TABLE_ENTRY \
-  { console_initialize, NULL, NULL, NULL, NULL, NULL }
+  { console_initialize, console_open, console_close, \
+    console_read, console_write, console_control }
 
 rtems_device_driver console_initialize(
   rtems_device_major_number,
   rtems_device_minor_number,
-  void *,
-  rtems_id,
-  rtems_unsigned32 *
+  void *
+);
+
+rtems_device_driver console_open(
+  rtems_device_major_number,
+  rtems_device_minor_number,
+  void *
+);
+
+rtems_device_driver console_close(
+  rtems_device_major_number,
+  rtems_device_minor_number,
+  void *
+);
+
+rtems_device_driver console_read(
+  rtems_device_major_number,
+  rtems_device_minor_number,
+  void *
+);
+
+rtems_device_driver console_write(
+  rtems_device_major_number,
+  rtems_device_minor_number,
+  void *
+);
+
+rtems_device_driver console_control(
+  rtems_device_major_number,
+  rtems_device_minor_number,
+  void *
 );
 
 #ifdef __cplusplus

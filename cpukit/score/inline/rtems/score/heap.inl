@@ -17,7 +17,7 @@
 #ifndef __HEAP_inl
 #define __HEAP_inl
 
-#include <rtems/address.h>
+#include <rtems/core/address.h>
 
 /*PAGE
  *

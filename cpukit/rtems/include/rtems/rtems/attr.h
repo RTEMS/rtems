@@ -44,6 +44,9 @@ typedef unsigned32 rtems_attribute;
 #define RTEMS_NO_INHERIT_PRIORITY 0x00000000
 #define RTEMS_INHERIT_PRIORITY    0x00000020
 
+#define RTEMS_NO_PRIORITY_CEILING 0x00000000
+#define RTEMS_PRIORITY_CEILING    0x00000040
+
 #if ( CPU_HARDWARE_FP == TRUE )
 #define ATTRIBUTES_NOT_SUPPORTED       0
 #else
@@ -177,7 +180,21 @@ STATIC INLINE boolean _Attributes_Is_inherit_priority(
   rtems_attribute attribute_set
 );
 
-#include <rtems/attr.inl>
+/*
+ *  _Attributes_Is_priority_ceiling
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the priority ceiling attribute
+ *  is enabled in the attribute_set and FALSE otherwise.
+ */
+ 
+STATIC INLINE boolean _Attributes_Is_priority_ceiling(
+  rtems_attribute attribute_set
+);
+ 
+
+#include <rtems/rtems/attr.inl>
 
 #ifdef __cplusplus
 }

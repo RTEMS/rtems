@@ -28,11 +28,12 @@
 extern "C" {
 #endif
 
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
-#include <rtems/eventset.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
+#include <rtems/rtems/eventset.h>
 
 /*
  *  This constant is passed as the event_in to the
@@ -104,9 +105,10 @@ rtems_status_code rtems_event_receive (
  */
 
 void _Event_Seize (
-  rtems_event_set event_in,
-  rtems_option    option_set,
-  rtems_interval  ticks
+  rtems_event_set  event_in,
+  rtems_option     option_set,
+  rtems_interval   ticks,
+  rtems_event_set *event_out
 );
 
 /*
@@ -147,8 +149,8 @@ void _Event_Timeout (
 
 EXTERN boolean _Event_Sync;    /* event manager sync flag */
 
-#include <rtems/event.inl>
-#include <rtems/eventmp.h>
+#include <rtems/rtems/eventmp.h>
+#include <rtems/rtems/event.inl>
 
 #ifdef __cplusplus
 }

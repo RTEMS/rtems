@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_unsigned32 time_set, eventout;
 
@@ -34,6 +31,8 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 15 ***" );
 
@@ -193,6 +192,7 @@ rtems_task Low_task(
     CALLING_OVERHEAD_EVENT_SEND
   );
 
+  puts( "*** END OF TEST 15 ***" );
   exit( 0 );
 }
 

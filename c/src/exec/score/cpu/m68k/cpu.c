@@ -14,7 +14,7 @@
 
 #include <rtems/system.h>
 #include <rtems/fatal.h>
-#include <rtems/isr.h>
+#include <rtems/core/isr.h>
 
 /*  _CPU_Initialize
  *
@@ -33,11 +33,22 @@ void _CPU_Initialize(
 )
 {
 
-  if ( cpu_table == NULL )
-    rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED );
-
   _CPU_Table = *cpu_table;
 
+}
+
+/*PAGE
+ *
+ *  _CPU_ISR_Get_level
+ */
+ 
+unsigned32 _CPU_ISR_Get_level( void )
+{
+  unsigned32 level;
+
+  m68k_get_interrupt_level( level );
+
+  return level;
 }
 
 /*PAGE

@@ -20,7 +20,7 @@
 extern "C" {
 #endif
 
-#include <rtems/cpu.h>
+#include <rtems/core/cpu.h>
 
 /*
  *  The following constant defines the number of bytes required

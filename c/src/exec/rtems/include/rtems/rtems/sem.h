@@ -31,23 +31,26 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/attr.h>
-#include <rtems/object.h>
-#include <rtems/threadq.h>
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/support.h>
+#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/core/coremutex.h>
+#include <rtems/core/object.h>
+#include <rtems/core/coresem.h>
+#include <rtems/core/threadq.h>
 
 /*
  *  The following defines the control block used to manage each semaphore.
  */
 
 typedef struct {
-  Objects_Control       Object;
-  Thread_queue_Control  Wait_queue;
-  rtems_attribute    attribute_set;
-  unsigned32            count;
-  unsigned32            nest_count;
-  Thread_Control       *holder;
-  Objects_Id            holder_id;
+  Objects_Control          Object;
+  rtems_attribute          attribute_set;
+  union {
+    CORE_mutex_Control     mutex;
+    CORE_semaphore_Control semaphore;
+  } Core_control;
 }   Semaphore_Control;
 
 /*
@@ -82,11 +85,11 @@ void _Semaphore_Manager_initialization(
  */
 
 rtems_status_code rtems_semaphore_create(
-  rtems_name            name,
-  unsigned32            count,
-  rtems_attribute       attribute_set,
-  rtems_task_priority   priority_ceiling,
-  Objects_Id           *id
+  rtems_name           name,
+  unsigned32           count,
+  rtems_attribute      attribute_set,
+  rtems_task_priority  priority_ceiling,
+  rtems_id            *id
 );
 
 /*
@@ -106,7 +109,7 @@ rtems_status_code rtems_semaphore_create(
 rtems_status_code rtems_semaphore_ident(
   rtems_name    name,
   unsigned32    node,
-  Objects_Id   *id
+  rtems_id     *id
 );
 
 /*
@@ -119,7 +122,7 @@ rtems_status_code rtems_semaphore_ident(
  */
 
 rtems_status_code rtems_semaphore_delete(
-  Objects_Id id
+  rtems_id   id
 );
 
 /*
@@ -137,8 +140,8 @@ rtems_status_code rtems_semaphore_delete(
  */
 
 rtems_status_code rtems_semaphore_obtain(
-  Objects_Id        id,
-  unsigned32        option_set,
+  rtems_id       id,
+  unsigned32     option_set,
   rtems_interval timeout
 );
 
@@ -155,7 +158,7 @@ rtems_status_code rtems_semaphore_obtain(
  */
 
 rtems_status_code rtems_semaphore_release(
-  Objects_Id id
+  rtems_id   id
 );
 
 /*
@@ -213,7 +216,7 @@ STATIC INLINE void _Semaphore_Free (
  */
 
 STATIC INLINE Semaphore_Control *_Semaphore_Get (
-  Objects_Id         id,
+  rtems_id           id,
   Objects_Locations *location
 );
 
@@ -229,8 +232,66 @@ STATIC INLINE boolean _Semaphore_Is_null (
   Semaphore_Control *the_semaphore
 );
 
-#include <rtems/sem.inl>
-#include <rtems/semmp.h>
+/*
+ *  _Semaphore_Translate_core_mutex_return_code
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns a RTEMS status code based on the mutex
+ *  status code specified.
+ */
+ 
+rtems_status_code _Semaphore_Translate_core_mutex_return_code (
+  unsigned32 the_mutex_status
+);
+
+/*
+ *  _Semaphore_Translate_core_semaphore_return_code
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns a RTEMS status code based on the semaphore
+ *  status code specified.
+ */
+ 
+rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
+  unsigned32 the_mutex_status
+);
+ 
+/*PAGE
+ *
+ *  _Semaphore_Core_mutex_mp_support
+ *
+ *  DESCRIPTION:
+ *
+ *  This function processes the global actions necessary for remote
+ *  accesses to a global semaphore based on a core mutex.  This function
+ *  is called by the core.
+ */
+
+void  _Semaphore_Core_mutex_mp_support (
+  Thread_Control *the_thread,
+  rtems_id        id
+);
+
+/*PAGE
+ *
+ *  _Semaphore_Core_mp_support
+ *
+ *  DESCRIPTION:
+ *
+ *  This function processes the global actions necessary for remote 
+ *  accesses to a global semaphore based on a core semaphore.  This function
+ *  is called by the core.
+ */
+ 
+void  _Semaphore_Core_semaphore_mp_support (
+  Thread_Control *the_thread,
+  rtems_id        id
+);
+
+#include <rtems/rtems/sem.inl>
+#include <rtems/rtems/semmp.h>
 
 #ifdef __cplusplus
 }

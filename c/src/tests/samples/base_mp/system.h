@@ -14,19 +14,33 @@
  *  $Id$
  */
 
-#include <rtems.h>
-#include <bsp.h>
-#include <stdio.h>
-#include <libcsupport.h>
+#include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-/* macros */
+rtems_task Application_task(
+  rtems_task_argument argument
+);
 
-/* structures */
+/* configuration information */
+ 
+#define CONFIGURE_MPTEST
+ 
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+ 
+/*
+ *  Put the overrides of default configuration parameters here.
+ */
 
-#include "gvar.h"
+#include <confdefs.h>
 
+/* variables */
+
+TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
+ 
 /* end of include file */

@@ -80,7 +80,8 @@ init_frames:
          */
         ldconst 0,g0
         ldconst 0,g1
-        call    _bsp_start
+        ldconst 0,g2
+        call    _main
         ret
 
 END_CODE

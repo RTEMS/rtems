@@ -14,18 +14,28 @@
  *  $Id$
  */
 
-#include <rtems.h>
-#include <bsp.h>
-#include <stdio.h>
+#include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task main_task(
+  rtems_task_argument argument
+);
 
-/* macros */
+/* configuration information */
 
-/* structures */
+#define CONFIGURE_SPTEST
 
-#include "gvar.h"
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_INIT_TASK_ENTRY_POINT   main_task
+#define CONFIGURE_INIT_TASK_NAME          rtems_build_name( 'C', 'T', 'O', 'R' )
+
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
+ 
 /* end of include file */

@@ -92,7 +92,10 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_fn)        rtems_monitor_driver_dump,
     },
     { RTEMS_OBJECT_DNAME,
-      (void *) &rtems_driver_name_table[0],
+      /* XXX now that the driver name table is allocated from the */
+      /* XXX Workspace, this does not work */
+      (void *) 0,
+      /* (void *) _IO_Driver_name_table, */
       sizeof(rtems_monitor_dname_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_dname_next,
       (rtems_monitor_object_canonical_fn)   rtems_monitor_dname_canonical,

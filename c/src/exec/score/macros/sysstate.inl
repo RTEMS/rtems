@@ -19,11 +19,24 @@
 
 /*PAGE
  *
+ *  _System_state_Handler_initialization
+ */
+ 
+#define _System_state_Handler_initialization( _is_multiprocessing ) \
+  do { \
+    _System_state_Current = SYSTEM_STATE_BEFORE_INITIALIZATION; \
+    _System_state_Is_multiprocessing = (_is_multiprocessing); \
+  } while ( 0 )
+
+/*PAGE
+ *
  *  _System_state_Set
  */
 
 #define _System_state_Set( _state ) \
-  _System_state_Current = (_state)
+  do { \
+    _System_state_Current = (_state); \
+  } while ( 0 )
 
 /*PAGE
  *

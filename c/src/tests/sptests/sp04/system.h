@@ -16,14 +16,50 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-/* macros */
+rtems_task Task_1(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_2(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_3(
+  rtems_task_argument argument
+);
+ 
+void Task_switch(
+  rtems_tcb *unused,
+  rtems_tcb *heir
+);
 
-/* structures */
+/* configuration information */
 
-#include "gvar.h"
+#define CONFIGURE_SPTEST
 
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS     1
+#define CONFIGURE_TICKS_PER_TIMESLICE       100
+
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+
+TEST_EXTERN rtems_id   Extension_id[ 4 ];
+TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
+ 
+/* array of task run counts */
+TEST_EXTERN volatile rtems_unsigned32 Run_count[ 4 ];  
+ 
 /* end of include file */

@@ -21,13 +21,34 @@
 extern "C" {
 #endif
 
-#include <rtems/isr.h>
+#include <rtems/core/isr.h>
 
 /*
  *  Interrupt level type
  */
 
 typedef ISR_Level rtems_interrupt_level;
+
+/*
+ *  The following type defines the control block used to manage
+ *  the vectors.
+ */
+ 
+typedef ISR_Vector_number rtems_vector_number;
+
+/*
+ *  Return type for ISR Handler
+ */
+ 
+typedef void rtems_isr;
+
+/*
+ *  Pointer to an ISR Handler
+ */
+ 
+typedef rtems_isr ( *rtems_isr_entry )(
+                 rtems_vector_number
+             );
 
 /*
  *  _Interrupt_Manager_initialization

@@ -3,8 +3,7 @@
  *  This routine is the shared memory communications initerface
  *  driver initialization routine.
  *
- *  Input parameters:
- *    configuration - address of configuration table
+ *  Input parameters:  NONE
  *
  *  Output parameters: NONE
  *
@@ -33,12 +32,8 @@
  
 rtems_extensions_table MPCI_Shm_extensions;
 
-rtems_mpci_entry Shm_Initialization(
-  rtems_configuration_table   *configuration,
-  rtems_cpu_table             *cpu_configuration,
-  rtems_multiprocessing_table *mp_configuration
+rtems_mpci_entry Shm_Initialization( void )
 
-)
 {
   rtems_unsigned32         i, all_initialized;
   rtems_unsigned32         interrupt_cause, interrupt_value;
@@ -46,6 +41,9 @@ rtems_mpci_entry Shm_Initialization(
   Shm_Node_status_control *nscb;
   rtems_unsigned32         extension_id;    /* for installation of MPCI_Fatal */
   rtems_unsigned32         remaining_memory;
+/* XXX these should use "public" methods to set their values.... */
+  rtems_configuration_table   *configuration = _Configuration_Table;
+  rtems_multiprocessing_table *mp_configuration = _Configuration_MP_table;
 
   Shm_RTEMS_Configuration    = configuration;
   Shm_RTEMS_MP_Configuration = mp_configuration;

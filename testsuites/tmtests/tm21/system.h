@@ -17,5 +17,32 @@
 #include <coverhd.h>
 #include <tmacros.h>
 
+/* functions */
+
+rtems_task Init(
+  rtems_task_argument argument
+);
+
 #include <timesys.h>
-#include <timegvar.h>
+
+/* configuration information */
+ 
+#define CONFIGURE_TMTEST
+ 
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_TIMER_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS              102
+#define CONFIGURE_MAXIMUM_TIMERS             100
+#define CONFIGURE_MAXIMUM_SEMAPHORES         100
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     100
+#define CONFIGURE_MAXIMUM_PARTITIONS         100
+#define CONFIGURE_MAXIMUM_REGIONS            100
+#define CONFIGURE_MAXIMUM_PORTS              100
+#define CONFIGURE_MAXIMUM_PERIODS            100
+
+#define CONFIGURE_TICKS_PER_TIMESLICE        0
+ 
+#include <confdefs.h>
+
+/* end of include file */

@@ -1,7 +1,7 @@
 /*  wkspace.inl
  *
  *  This include file contains the bodies of the routines which contains
- *  information related to the RTEMS RAM Workspace.
+ *  information related to the RAM Workspace.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -32,9 +32,12 @@ STATIC INLINE void _Workspace_Handler_initialization(
   unsigned32  index;
   unsigned32  memory_available;
 
-  if ( (starting_address == NULL) ||
-       !_Addresses_Is_aligned( starting_address ) )
-    rtems_fatal_error_occurred( RTEMS_INVALID_ADDRESS );
+  if ( !starting_address || !_Addresses_Is_aligned( starting_address ) )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS
+    );
 
   if ( _CPU_Table.do_zero_of_workspace ) {
     for( zero_out_array  = (unsigned32 *) starting_address, index = 0 ;
@@ -51,7 +54,11 @@ STATIC INLINE void _Workspace_Handler_initialization(
   );
 
   if ( memory_available == 0 )
-    rtems_fatal_error_occurred( RTEMS_UNSATISFIED );
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
+    );
 }
 
 /*PAGE

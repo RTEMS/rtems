@@ -21,12 +21,12 @@
 extern "C" {
 #endif
 
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/sem.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/sem.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
 
 /*
  *  The following enumerated type defines the list of
@@ -84,8 +84,8 @@ void _Semaphore_MP_Send_process_packet (
 rtems_status_code _Semaphore_MP_Send_request_packet (
   Semaphore_MP_Remote_operations operation,
   Objects_Id                     semaphore_id,
-  rtems_option                option_set,
-  rtems_interval              timeout
+  rtems_option                   option_set,
+  rtems_interval                 timeout
 );
 
 /*

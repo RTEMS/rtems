@@ -40,11 +40,20 @@
  */
 
 #define _User_extensions_Add_set( _the_extension, _extension_table ) \
-  { \
+  do { \
     (_the_extension)->Callouts = *(_extension_table); \
     \
     _Chain_Append( &_User_extensions_List, &(_the_extension)->Node ); \
-  }
+  } while ( 0 )
+
+/*PAGE
+ *
+ *  _User_extensions_Add_API_set
+ */
+ 
+#define _User_extensions_Add_API_set( _the_extension ) \
+  _Chain_Prepend( &_User_extensions_List, &(_the_extension)->Node )
+ 
 
 /*PAGE
  *
@@ -106,79 +115,21 @@
 
 /*PAGE
  *
- *  _User_extensions_Task_create
+ *  _User_extensions_Thread_switch
  *
  */
 
-#define _User_extensions_Task_create( _the_thread ) \
-  _User_extensions_Run_list_forward(rtems_task_create, \
-     (_Thread_Executing, _the_thread) )
+#define _User_extensions_Thread_switch( _executing, _heir ) \
+  _User_extensions_Run_list_forward(thread_switch, (_executing, _heir) )
 
 /*PAGE
  *
- *  _User_extensions_Task_delete
+ *  _User_extensions_Thread_post_switch
  *
  */
 
-#define _User_extensions_Task_delete( _the_thread ) \
-  _User_extensions_Run_list_backward(rtems_task_delete, \
-     (_Thread_Executing, _the_thread) )
-
-/*PAGE
- *
- *  _User_extensions_Task_start
- *
- */
-
-#define _User_extensions_Task_start( _the_thread ) \
-  _User_extensions_Run_list_forward(rtems_task_start, \
-     (_Thread_Executing, _the_thread) )
-
-/*PAGE
- *
- *  _User_extensions_Task_restart
- *
- */
-
-#define _User_extensions_Task_restart( _the_thread ) \
-  _User_extensions_Run_list_forward(rtems_task_restart,\
-      (_Thread_Executing, _the_thread) )
-
-/*PAGE
- *
- *  _User_extensions_Task_switch
- *
- */
-
-#define _User_extensions_Task_switch( _executing, _heir ) \
-  _User_extensions_Run_list_forward(task_switch, (_executing, _heir) )
-
-/*PAGE
- *
- *  _User_extensions_Task_begin
- *
- */
-
-#define _User_extensions_Task_begin( _executing ) \
-  _User_extensions_Run_list_forward(task_begin, (_executing) )
-
-/*PAGE
- *
- *  _User_extensions_Task_exitted
- *
- */
-
-#define _User_extensions_Task_exitted( _executing ) \
-  _User_extensions_Run_list_backward(task_exitted, (_executing) )
-
-/*PAGE
- *
- *  _User_extensions_Fatal
- *
- */
-
-#define _User_extensions_Fatal( _the_error ) \
-  _User_extensions_Run_list_backward(fatal, (_the_error) )
+#define _User_extensions_Thread_post_switch( _executing ) \
+  _User_extensions_Run_list_forward(thread_post_switch, (_executing) )
 
 #endif
 /* end of include file */

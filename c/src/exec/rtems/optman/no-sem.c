@@ -14,15 +14,16 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/attr.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/attr.h>
 #include <rtems/config.h>
-#include <rtems/isr.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/sem.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
-#include <rtems/threadq.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/sem.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/threadq.h>
 
 void _Semaphore_Manager_initialization(
   unsigned32 maximum_semaphores
@@ -38,7 +39,7 @@ rtems_status_code rtems_semaphore_create(
   Objects_Id           *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_semaphore_ident(
@@ -47,14 +48,14 @@ rtems_status_code rtems_semaphore_ident(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_semaphore_delete(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_semaphore_obtain(
@@ -63,14 +64,14 @@ rtems_status_code rtems_semaphore_obtain(
   rtems_interval timeout
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_semaphore_release(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 boolean _Semaphore_Seize(

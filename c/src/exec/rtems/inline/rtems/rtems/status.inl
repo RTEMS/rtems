@@ -44,17 +44,5 @@ STATIC INLINE boolean rtems_are_statuses_equal(
    return (code1 == code2);
 }
 
-/*
- *  _Status_Is_proxy_blocking
- *
- */
-
-STATIC INLINE boolean _Status_Is_proxy_blocking (
-  rtems_status_code code
-)
-{
-  return (code == RTEMS_PROXY_BLOCKING);
-}
-
 #endif
 /* end of include file */

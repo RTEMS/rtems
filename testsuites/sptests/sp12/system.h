@@ -16,14 +16,64 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
+ 
+void Priority_test_driver(
+  rtems_unsigned32 priority_base
+);
+ 
+rtems_task Priority_task(
+  rtems_task_argument its_index
+);
+ 
+rtems_task Task_1(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_2(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_3(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task_4(
+  rtems_task_argument argument
+);
+ 
+rtems_task Task5(
+  rtems_task_argument argument
+);
 
-/* macros */
+/* configuration information */
 
-/* structures */
+#define CONFIGURE_SPTEST
 
-#include "gvar.h"
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_SEMAPHORES         10
+#define CONFIGURE_TICKS_PER_TIMESLICE       100
+
+#include <confdefs.h>
+
+/* global variables */
+
+ 
+TEST_EXTERN rtems_id   Task_id[ 6 ];             /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 6 ];           /* array of task names */
+ 
+TEST_EXTERN rtems_id   Priority_task_id[ 6 ];    /* array of task ids */
+TEST_EXTERN rtems_name Priority_task_name[ 6 ];  /* array of task names */
+ 
+TEST_EXTERN rtems_task_priority Task_priority[ 6 ];
+ 
+TEST_EXTERN rtems_id   Semaphore_id[ 4 ];        /* array of semaphore ids */
+TEST_EXTERN rtems_name Semaphore_name[ 4 ];      /* array of semaphore names */
 
 /* end of include file */

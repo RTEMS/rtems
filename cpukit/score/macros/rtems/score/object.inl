@@ -30,29 +30,29 @@
 
 /*PAGE
  *
- *  rtems_get_class
+ *  _Objects_Get_class
  */
  
-#define rtems_get_class( _id ) \
+#define _Objects_Get_class( _id ) \
   (Objects_Classes) \
     (((_id) >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS)
 
 /*PAGE
  *
- *  rtems_get_node
+ *  _Objects_Get_node
  *
  */
 
-#define rtems_get_node( _id ) \
+#define _Objects_Get_node( _id ) \
   (((_id) >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS)
 
 /*PAGE
  *
- *  rtems_get_index
+ *  _Objects_Get_index
  *
  */
 
-#define rtems_get_index( _id ) \
+#define _Objects_Get_index( _id ) \
   (((_id) >> OBJECTS_INDEX_START_BIT) & OBJECTS_INDEX_VALID_BITS)
 
 /*PAGE
@@ -80,7 +80,7 @@
  */
 
 #define _Objects_Is_local_id( _id ) \
-  _Objects_Is_local_node( rtems_get_node(_id) )
+  _Objects_Is_local_node( _Objects_Get_node(_id) )
 
 /*PAGE
  *
@@ -119,7 +119,7 @@
   { \
     unsigned32 _index; \
     \
-    _index = rtems_get_index( (_the_object)->id ); \
+    _index = _Objects_Get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = (_the_object); \
     \
     if ( (_information)->is_string ) \
@@ -139,7 +139,7 @@
   { \
     unsigned32 _index; \
     \
-    _index = rtems_get_index( (_the_object)->id ); \
+    _index = _Objects_Get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = NULL; \
     _Objects_Clear_name( (_the_object)->name, (_information)->name_length ); \
   }

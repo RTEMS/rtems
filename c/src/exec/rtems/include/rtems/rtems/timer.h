@@ -33,10 +33,9 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/object.h>
-#include <rtems/tod.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/object.h>
+#include <rtems/core/tod.h>
+#include <rtems/core/watchdog.h>
 
 /*
  *  The following enumerated type details the classes to which a timer
@@ -50,10 +49,15 @@ typedef enum {
 } Timer_Classes;
 
 /*
- *  The following defines the type of a Timer Service Routine.
+ *  The following types define a pointer to a timer service routine.
  */
-
-typedef rtems_timer_service_routine_entry Timer_Service;
+ 
+typedef void rtems_timer_service_routine;
+ 
+typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
+                 rtems_id,
+                 void *
+             );
 
 /*
  *  The following defines the information control block used to manage
@@ -153,10 +157,10 @@ rtems_status_code rtems_timer_delete(
  */
 
 rtems_status_code rtems_timer_fire_after(
-  Objects_Id         id,
-  rtems_interval  ticks,
-  Timer_Service      routine,
-  void              *user_data
+  Objects_Id                         id,
+  rtems_interval                     ticks,
+  rtems_timer_service_routine_entry  routine,
+  void                              *user_data
 );
 
 /*
@@ -170,10 +174,10 @@ rtems_status_code rtems_timer_fire_after(
  */
 
 rtems_status_code rtems_timer_fire_when(
-  Objects_Id         id,
-  rtems_time_of_day       *wall_time,
-  Timer_Service      routine,
-  void              *user_data
+  Objects_Id                          id,
+  rtems_time_of_day                  *wall_time,
+  rtems_timer_service_routine_entry   routine,
+  void                               *user_data
 );
 
 /*
@@ -283,7 +287,7 @@ STATIC INLINE boolean _Timer_Is_null (
   Timer_Control *the_timer
 );
 
-#include <rtems/timer.inl>
+#include <rtems/rtems/timer.inl>
 
 #ifdef __cplusplus
 }

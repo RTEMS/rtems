@@ -42,6 +42,8 @@ typedef struct {
  */
 
 void _Objects_MP_Handler_initialization (
+  unsigned32 node,
+  unsigned32 maximum_nodes,
   unsigned32 maximum_global_objects
 );
 
@@ -140,7 +142,7 @@ void _Objects_MP_Close (
  *  object with that name if one is found.
  */
 
-rtems_status_code _Objects_MP_Global_name_search (
+Objects_Name_to_id_errors _Objects_MP_Global_name_search (
   Objects_Information *information,
   Objects_Name         the_name,
   unsigned32           nodes_to_search,
@@ -171,6 +173,7 @@ void _Objects_MP_Is_remote (
  *  inactive global object control blocks.
  */
 
+EXTERN unsigned32     _Objects_MP_Maximum_global_objects;
 EXTERN Chain_Control  _Objects_MP_Inactive_global_objects;
 
 #include <rtems/objectmp.inl>

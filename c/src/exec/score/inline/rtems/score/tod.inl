@@ -58,7 +58,7 @@ STATIC INLINE void _TOD_Deactivate( void )
  */
 
 STATIC INLINE void _TOD_Activate(
-  rtems_interval ticks
+  Watchdog_Interval ticks
 )
 {
   _Watchdog_Insert_ticks(

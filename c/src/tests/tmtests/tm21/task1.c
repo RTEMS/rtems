@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_unsigned8 Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
 rtems_unsigned8 Partition_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
@@ -30,6 +27,8 @@ rtems_task Init(
 {
   rtems_id          id;
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 21 ***" );
 
@@ -232,5 +231,6 @@ rtems_task Task_1(
     CALLING_OVERHEAD_RATE_MONOTONIC_IDENT
   );
 
+  puts( "*** END OF TEST 21 ***" );
   exit( 0 );
 }

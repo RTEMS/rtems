@@ -14,15 +14,15 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_TIME_OF_DAY_h
-#define __RTEMS_TIME_OF_DAY_h
+#ifndef __TIME_OF_DAY_h
+#define __TIME_OF_DAY_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/object.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/object.h>
+#include <rtems/core/watchdog.h>
 
 /*
  *  The following constants are related to the time of day.
@@ -42,7 +42,7 @@ extern "C" {
 
 /*
  *  The following constant define the earliest year to which an
- *  RTEMS time of day can be initialized.  This is considered the
+ *  time of day can be initialized.  This is considered the
  *  epoch.
  */
 
@@ -61,27 +61,27 @@ typedef struct {                   /* RTEID style time/date */
   unsigned32 minute;               /* minute, 0 -> 59 */
   unsigned32 second;               /* second, 0 -> 59 */
   unsigned32 ticks;                /* elapsed ticks between secs */
-}   rtems_time_of_day;
+}   TOD_Control;
 
 /*
  *  The following contains the current time of day.
  */
 
-EXTERN rtems_time_of_day _TOD_Current;
+EXTERN TOD_Control _TOD_Current;
 
 /*
  *  The following contains the number of seconds from 00:00:00
  *  January 1, TOD_BASE_YEAR until the current time of day.
  */
 
-EXTERN rtems_interval _TOD_Seconds_since_epoch;
+EXTERN Watchdog_Interval _TOD_Seconds_since_epoch;
 
 /*
  *  The following contains the number of ticks since the
  *  system was booted.
  */
 
-EXTERN rtems_interval _TOD_Ticks_since_boot;
+EXTERN Watchdog_Interval _TOD_Ticks_since_boot;
 
 /*
  *  The following contains the number of microseconds per tick.
@@ -173,8 +173,8 @@ void _TOD_Handler_initialization(
  */
 
 void _TOD_Set(
-  rtems_time_of_day       *the_tod,
-  rtems_interval  seconds_since_epoch
+  TOD_Control       *the_tod,
+  Watchdog_Interval  seconds_since_epoch
 );
 
 /*
@@ -182,12 +182,12 @@ void _TOD_Set(
  *
  *  DESCRIPTION:
  *
- *  This function returns STATUS.RTEMS_SUCCESSFUL if THE_TOD contains
+ *  This function returns TRUE if THE_TOD contains
  *  a valid time of day, and FALSE otherwise.
  */
 
-rtems_status_code _TOD_Validate(
-  rtems_time_of_day *the_tod
+boolean _TOD_Validate(
+  TOD_Control *the_tod
 );
 
 /*
@@ -198,8 +198,8 @@ rtems_status_code _TOD_Validate(
  *  This function returns the number seconds between the epoch and THE_TOD.
  */
 
-rtems_interval _TOD_To_seconds(
-  rtems_time_of_day *the_tod
+Watchdog_Interval _TOD_To_seconds(
+  TOD_Control *the_tod
 );
 
 /*
@@ -243,7 +243,7 @@ STATIC INLINE void _TOD_Deactivate( void );
  */
 
 STATIC INLINE void _TOD_Activate(
-  rtems_interval ticks
+  Watchdog_Interval ticks
 );
 
 /*
@@ -262,7 +262,7 @@ void _TOD_Tickle(
 );
 
 /*
- *  RTEMS_MILLISECONDS_TO_MICROSECONDS
+ *  TOD_MILLISECONDS_TO_MICROSECONDS
  *
  *  DESCRIPTION:
  *
@@ -273,10 +273,10 @@ void _TOD_Tickle(
  *  This must be a macro so it can be used in "static" tables.
  */
 
-#define RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) ((_ms) * 1000)
+#define TOD_MILLISECONDS_TO_MICROSECONDS(_ms) ((_ms) * 1000)
 
 /*
- *  RTEMS_MILLISECONDS_TO_TICKS
+ *  TOD_MILLISECONDS_TO_TICKS
  *
  *  DESCRIPTION:
  *
@@ -287,10 +287,10 @@ void _TOD_Tickle(
  *  This must be a macro so it can be used in "static" tables.
  */
 
-#define RTEMS_MILLISECONDS_TO_TICKS(_ms) \
-    (RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) / _TOD_Microseconds_per_tick)
+#define TOD_MILLISECONDS_TO_TICKS(_ms) \
+    (TOD_MILLISECONDS_TO_MICROSECONDS(_ms) / _TOD_Microseconds_per_tick)
 
-#include <rtems/tod.inl>
+#include <rtems/core/tod.inl>
 
 #ifdef __cplusplus
 }

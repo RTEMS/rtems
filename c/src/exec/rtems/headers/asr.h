@@ -22,7 +22,7 @@
 extern "C" {
 #endif
 
-#include <rtems/modes.h>
+#include <rtems/rtems/modes.h>
 
 /*
  *
@@ -54,6 +54,7 @@ typedef rtems_asr ( *rtems_asr_entry )(
  */
 
 typedef struct {
+  boolean           is_enabled;       /* are ASRs enabled currently? */
   rtems_asr_entry   handler;          /* address of RTEMS_ASR */
   Modes_Control     mode_set;         /* RTEMS_ASR mode */
   rtems_signal_set  signals_posted;   /* signal set */
@@ -167,7 +168,7 @@ STATIC INLINE void _ASR_Post_signals(
   rtems_signal_set *signal_set
 );
 
-#include <rtems/asr.inl>
+#include <rtems/rtems/asr.inl>
 
 #ifdef __cplusplus
 }

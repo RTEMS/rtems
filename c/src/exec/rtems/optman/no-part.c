@@ -14,11 +14,12 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/address.h>
+#include <rtems/rtems/status.h>
+#include <rtems/core/address.h>
 #include <rtems/config.h>
-#include <rtems/object.h>
-#include <rtems/part.h>
-#include <rtems/thread.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/part.h>
+#include <rtems/core/thread.h>
 
 void _Partition_Manager_initialization(
   unsigned32 maximum_partitions
@@ -35,7 +36,7 @@ rtems_status_code rtems_partition_create(
   Objects_Id         *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_partition_ident(
@@ -44,14 +45,14 @@ rtems_status_code rtems_partition_ident(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_partition_delete(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_partition_get_buffer(
@@ -59,7 +60,7 @@ rtems_status_code rtems_partition_get_buffer(
   void       **buffer
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_partition_return_buffer(
@@ -67,5 +68,5 @@ rtems_status_code rtems_partition_return_buffer(
   void       *buffer
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }

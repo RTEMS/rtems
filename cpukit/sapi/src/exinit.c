@@ -21,38 +21,30 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/copyrt.h>
-#include <rtems/clock.h>
-#include <rtems/tasks.h>
 #include <rtems/debug.h>
-#include <rtems/dpmem.h>
-#include <rtems/event.h>
 #include <rtems/extension.h>
 #include <rtems/fatal.h>
-#include <rtems/heap.h>
 #include <rtems/init.h>
-#include <rtems/intthrd.h>
-#include <rtems/isr.h>
-#include <rtems/intr.h>
 #include <rtems/io.h>
-#include <rtems/message.h>
-#include <rtems/mp.h>
-#include <rtems/mpci.h>
-#include <rtems/part.h>
-#include <rtems/priority.h>
-#include <rtems/ratemon.h>
-#include <rtems/region.h>
-#include <rtems/sem.h>
-#include <rtems/signal.h>
 #include <rtems/sysstate.h>
-#include <rtems/thread.h>
-#include <rtems/timer.h>
-#include <rtems/tod.h>
-#include <rtems/userext.h>
-#include <rtems/watchdog.h>
-#include <rtems/wkspace.h>
 
+#include <rtems/core/copyrt.h>
+#include <rtems/core/heap.h>
+#include <rtems/core/interr.h>
+#include <rtems/core/intthrd.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/mpci.h>
+#include <rtems/core/priority.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/tod.h>
+#include <rtems/core/userext.h>
+#include <rtems/core/watchdog.h>
+#include <rtems/core/wkspace.h>
+
+#include <rtems/directives.h>
 #include <rtems/sptables.h>
+
+#include <rtems/rtems/rtemsapi.h>
 
 /*PAGE
  *
@@ -103,7 +95,45 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _ISR_Disable( bsp_level );
 
-  _System_state_Set( SYSTEM_STATE_BEFORE_INITIALIZATION );
+  if ( cpu_table == NULL )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_NO_CONFIGURATION_TABLE
+    );
+
+  /*
+   *  Initialize the system state based on whether this is an MP system.
+   */
+
+  multiprocessing_table = configuration_table->User_multiprocessing_table;
+
+  _System_state_Handler_initialization(
+    (multiprocessing_table) ? TRUE : FALSE
+  );
+
+  /*
+   *  Provided just for user convenience.
+   */
+
+  _Configuration_Table    = configuration_table;
+  _Configuration_MP_table = multiprocessing_table;
+
+  /*
+   *  Internally we view single processor systems as a very restricted
+   *  multiprocessor system.
+   */
+
+  if ( multiprocessing_table == NULL )
+    multiprocessing_table = 
+      (void *)&_Initialization_Default_multiprocessing_table;
+
+  if ( cpu_table == NULL )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_NO_CPU_TABLE
+    );
 
   _CPU_Initialize( cpu_table, _Thread_Dispatch );
 
@@ -113,19 +143,6 @@ rtems_interrupt_level rtems_initialize_executive_early(
    */
 
   _Debug_Manager_initialization();
-
-  multiprocessing_table = configuration_table->User_multiprocessing_table;
-  if ( multiprocessing_table == NULL )
-    multiprocessing_table =
-      (void *) &_Configuration_Default_multiprocessing_table;
-
-  _Configuration_Handler_initialization(
-    configuration_table,
-    multiprocessing_table,
-    multiprocessing_table->User_mpci_table
-  );
-
-  _Attributes_Handler_initialization();
 
   _Thread_Dispatch_initialization();
 
@@ -142,6 +159,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _Objects_Handler_initialization(
     multiprocessing_table->node,
+    multiprocessing_table->maximum_nodes,
     multiprocessing_table->maximum_global_objects
   );
 
@@ -153,56 +171,32 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _Thread_Handler_initialization(
     configuration_table->ticks_per_timeslice,
+    configuration_table->maximum_extensions,
     multiprocessing_table->maximum_proxies
   );
 
-  _MPCI_Handler_initialization();
+  _MPCI_Handler_initialization(
+    multiprocessing_table->User_mpci_table
+  );
+
+  _Internal_threads_Initialization();
 
 /* MANAGERS */
-
-  _Interrupt_Manager_initialization();
-
-  _Multiprocessing_Manager_initialization();
-
-  _RTEMS_tasks_Manager_initialization( configuration_table->maximum_tasks );
-
-  _Timer_Manager_initialization( configuration_table->maximum_timers );
 
   _Extension_Manager_initialization( configuration_table->maximum_extensions );
 
   _IO_Manager_initialization(
     configuration_table->Device_driver_table,
-    configuration_table->number_of_device_drivers
+    configuration_table->number_of_device_drivers,
+    configuration_table->maximum_devices
   );
 
-  _Event_Manager_initialization();
-
-  _Message_queue_Manager_initialization(
-    configuration_table->maximum_message_queues
-  );
-
-  _Semaphore_Manager_initialization(
-    configuration_table->maximum_semaphores
-  );
-
-  _Partition_Manager_initialization(
-    configuration_table->maximum_partitions
-  );
-
-  _Region_Manager_initialization( configuration_table->maximum_regions );
-
-  _Dual_ported_memory_Manager_initialization(
-    configuration_table->maximum_ports
-  );
-
-  _Rate_monotonic_Manager_initialization(
-    configuration_table->maximum_periods
-  );
-
-  _Internal_threads_Initialization();
+  _RTEMS_API_Initialize( configuration_table );
 
   if ( cpu_table->pretasking_hook )
     (*cpu_table->pretasking_hook)();
+
+  _Internal_threads_Start();
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
 

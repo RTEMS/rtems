@@ -219,7 +219,7 @@ rtems_monitor_server_init(
 {
     rtems_status_code status;
     
-    if (_Configuration_Is_multiprocessing()    &&
+    if (_System_state_Is_multiprocessing    &&
         (_Configuration_MP_table->maximum_nodes > 1))
     {
         unsigned32 maximum_nodes = _Configuration_MP_table->maximum_nodes;

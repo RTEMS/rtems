@@ -40,11 +40,30 @@ typedef enum {
 #define SYSTEM_STATE_CODES_LAST  SYSTEM_STATE_FAILED
 
 /*
+ *  The following variable indicates whether or not this is 
+ *  an multiprocessing system.
+ */
+ 
+EXTERN boolean _System_state_Is_multiprocessing;
+
+/*
  *  The following variable contains the current system state.
  */
 
 EXTERN System_state_Codes _System_state_Current;
 
+/*
+ *  _System_state_Handler_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the system state handler.
+ */
+ 
+STATIC INLINE void _System_state_Handler_initialization (
+  boolean  is_multiprocessing
+);
+ 
 /*
  *  _System_state_Set
  *

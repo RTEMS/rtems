@@ -14,11 +14,12 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/support.h>
-#include <rtems/isr.h>
-#include <rtems/object.h>
-#include <rtems/ratemon.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/ratemon.h>
+#include <rtems/core/thread.h>
 
 /*PAGE
  *
@@ -77,7 +78,7 @@ rtems_status_code rtems_rate_monotonic_create(
   Rate_monotonic_Control *the_period;
 
   if ( !rtems_is_name_valid( name ) )
-    return( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
   _Thread_Disable_dispatch();            /* to prevent deletion */
 
@@ -85,7 +86,7 @@ rtems_status_code rtems_rate_monotonic_create(
 
   if ( !the_period ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   the_period->owner = _Thread_Executing;
@@ -95,7 +96,7 @@ rtems_status_code rtems_rate_monotonic_create(
 
   *id = the_period->Object.id;
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -120,12 +121,16 @@ rtems_status_code rtems_rate_monotonic_ident(
   Objects_Id   *id
 )
 {
-  return _Objects_Name_to_id(
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
     &_Rate_monotonic_Information,
     &name,
-    RTEMS_SEARCH_LOCAL_NODE,
+    OBJECTS_SEARCH_LOCAL_NODE,
     id
   );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
 
 /*PAGE
@@ -152,21 +157,21 @@ rtems_status_code rtems_rate_monotonic_cancel(
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
-    case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INVALID_ID;
+    case OBJECTS_REMOTE:            
+      return RTEMS_INTERNAL_ERROR;  /* should never return this */ 
     case OBJECTS_LOCAL:
       if ( !_Thread_Is_executing( the_period->owner ) ) {
         _Thread_Enable_dispatch();
-        return( RTEMS_NOT_OWNER_OF_RESOURCE );
+        return RTEMS_NOT_OWNER_OF_RESOURCE;
       }
       (void) _Watchdog_Remove( &the_period->Timer );
       the_period->state = RATE_MONOTONIC_INACTIVE;
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -193,19 +198,19 @@ rtems_status_code rtems_rate_monotonic_delete(
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       _Objects_Close( &_Rate_monotonic_Information, &the_period->Object );
       (void) _Watchdog_Remove( &the_period->Timer );
       the_period->state = RATE_MONOTONIC_INACTIVE;
       _Rate_monotonic_Free( the_period );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -225,23 +230,23 @@ rtems_status_code rtems_rate_monotonic_delete(
 
 rtems_status_code rtems_rate_monotonic_period(
   Objects_Id        id,
-  rtems_interval length
+  rtems_interval    length
 )
 {
   Rate_monotonic_Control *the_period;
   Objects_Locations       location;
-  rtems_status_code            return_value;
+  rtems_status_code       return_value;
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       if ( !_Thread_Is_executing( the_period->owner ) ) {
         _Thread_Enable_dispatch();
-        return( RTEMS_NOT_OWNER_OF_RESOURCE );
+        return RTEMS_NOT_OWNER_OF_RESOURCE;
       }
 
       if ( length == RTEMS_PERIOD_STATUS ) {
@@ -275,14 +280,14 @@ rtems_status_code rtems_rate_monotonic_period(
           _Watchdog_Insert_ticks(
                      &the_period->Timer, length, WATCHDOG_ACTIVATE_NOW );
           _Thread_Enable_dispatch();
-          return( RTEMS_SUCCESSFUL );
+          return RTEMS_SUCCESSFUL;
 
         case RATE_MONOTONIC_ACTIVE:
 /* following is and could be a critical section problem */
           _Thread_Executing->Wait.id  = the_period->Object.id;
           if ( _Rate_monotonic_Set_state( the_period ) ) {
             _Thread_Enable_dispatch();
-            return( RTEMS_SUCCESSFUL );
+            return RTEMS_SUCCESSFUL;
           }
          /* has expired -- fall into next case */
         case RATE_MONOTONIC_EXPIRED:
@@ -290,11 +295,11 @@ rtems_status_code rtems_rate_monotonic_period(
           _Watchdog_Insert_ticks(
                      &the_period->Timer, length, WATCHDOG_ACTIVATE_NOW );
           _Thread_Enable_dispatch();
-          return( RTEMS_TIMEOUT );
+          return RTEMS_TIMEOUT;
       }
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE

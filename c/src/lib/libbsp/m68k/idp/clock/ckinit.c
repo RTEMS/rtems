@@ -26,9 +26,8 @@
 
 #include <stdlib.h>
 
-#include <rtems.h>
-#include <clockdrv.h>
 #include <bsp.h>
+#include <rtems/libio.h>
 
 rtems_unsigned32 Clock_isrs;        /* ISRs until next tick */
 volatile rtems_unsigned32 Clock_driver_ticks;
@@ -39,30 +38,53 @@ extern rtems_configuration_table Configuration;
 extern void led_putnum();
 void Disable_clock();
 
-#define TIMER_VECTOR 0x4D
+#define CLOCK_VECTOR 0x4D
 
-rtems_device_driver Clock_initialize( 
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id tid,
-  rtems_unsigned32 *rval
+void Clock_exit( void );
+ 
+/*
+ * These are set by clock driver during its init
+ */
+ 
+rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_minor_number rtems_clock_minor;
+ 
+
+/*
+ *  ISR Handler
+ *
+ *
+ * ((1ms * 6.5 MHz) / 2^5) = 203.125) where 6.5 MHz is the clock rate of the
+ * MC68230, 2^5 is the prescaler factor, and 1ms is the common interrupt
+ * interval for the Clock_isr routine.
+ * Therefore, 203 (decimal) is the number to program into the CPRH-L registers
+ * of the MC68230 for countdown.  However, I have found that 193 instead of
+ * 203 provides greater accuracy -- why?  The crystal should be more accurate
+ * than that
+ */
+
+rtems_isr Clock_isr(
+  rtems_vector_number vector
 )
 {
-  Install_clock( Clock_isr );
+  Clock_driver_ticks += 1;
+  /* acknowledge interrupt
+  	TSR = 1; */
+  MC68230_WRITE (TSR, 1);
+
+  if ( Clock_isrs == 1 ) {
+    rtems_clock_tick();
+	/* Cast to an integer so that 68EC040 IDP which doesn't have an FPU doesn't
+	   have a heart attack -- if you use newlib1.6 or greater and get
+	   libgcc.a for gcc with software floating point support, this is not
+	   a problem */
+    Clock_isrs = 
+      (int)(BSP_Configuration.microseconds_per_tick / 1000);
+  }
+  else 
+    Clock_isrs -= 1;
 }
 
-void ReInstall_clock( clock_isr )
-rtems_isr_entry clock_isr;
-{
-  rtems_unsigned32 isrlevel = 0 ;
-
-  rtems_interrupt_disable( isrlevel );
-   (void) set_vector( clock_isr, TIMER_VECTOR, 1 );
-  rtems_interrupt_enable( isrlevel );
-}
-
-/* The following was added for debugging purposes */
 void Disable_clock()
 {
 	/* Disable timer */
@@ -77,7 +99,7 @@ rtems_isr_entry clock_isr;
 
   if ( Configuration.ticks_per_timeslice ) {
 /*    led_putnum('c'); * for debugging purposes */
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, TIMER_VECTOR, 1 );
+    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
 	/* Disable timer for initialization */
 	MC68230_WRITE (TCR, 0x00);
@@ -85,8 +107,8 @@ rtems_isr_entry clock_isr;
 	/* some PI/T initialization stuff here -- see comment in the ckisr.c
 	   file in this directory to understand why I use the values that I do */
 	/* Set up the interrupt vector on the MC68230 chip:
-		TIVR = TIMER_VECTOR; */
-	MC68230_WRITE (TIVR, TIMER_VECTOR);
+		TIVR = CLOCK_VECTOR; */
+	MC68230_WRITE (TIVR, CLOCK_VECTOR);
 
 	/* Set CPRH through CPRL to 193 (not 203) decimal for countdown--see ckisr.c
 		CPRH = 0x00;
@@ -108,6 +130,17 @@ rtems_isr_entry clock_isr;
   } 
 }
 
+void ReInstall_clock( clock_isr )
+rtems_isr_entry clock_isr;
+{
+  rtems_unsigned32 isrlevel = 0 ;
+
+  rtems_interrupt_disable( isrlevel );
+   (void) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  rtems_interrupt_enable( isrlevel );
+}
+
+/* The following was added for debugging purposes */
 void Clock_exit( void )
 {
   rtems_unsigned8 data;
@@ -123,3 +156,51 @@ void Clock_exit( void )
     /* do not restore old vector */
   }
 }
+
+rtems_device_driver Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+  Install_clock( Clock_isr );
+ 
+  /*
+   * make major/minor avail to others such as shared memory driver
+   */
+ 
+  rtems_clock_major = major;
+  rtems_clock_minor = minor;
+ 
+  return RTEMS_SUCCESSFUL;
+}
+ 
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    rtems_libio_ioctl_args_t *args = pargp;
+ 
+    if (args == 0)
+        goto done;
+ 
+    /*
+     * This is hokey, but until we get a defined interface
+     * to do this, it will just be this simple...
+     */
+ 
+    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
+    {
+        Clock_isr(CLOCK_VECTOR);
+    }
+    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
+    {
+        ReInstall_clock(args->buffer);
+    }
+ 
+done:
+    return RTEMS_SUCCESSFUL;
+}
+

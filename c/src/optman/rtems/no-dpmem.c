@@ -13,10 +13,13 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/address.h>
-#include <rtems/dpmem.h>
-#include <rtems/object.h>
-#include <rtems/thread.h>
+#include <rtems/core/address.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/dpmem.h>
 
 void _Dual_ported_memory_Manager_initialization(
   unsigned32 maximum_ports
@@ -32,7 +35,7 @@ rtems_status_code rtems_port_create(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_port_ident(
@@ -40,14 +43,14 @@ rtems_status_code rtems_port_ident(
   Objects_Id   *id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_port_delete(
   Objects_Id id
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_port_internal_to_external(
@@ -56,7 +59,7 @@ rtems_status_code rtems_port_internal_to_external(
   void       **external
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_port_external_to_internal(
@@ -65,5 +68,5 @@ rtems_status_code rtems_port_external_to_internal(
   void       **internal
 )
 {
-  return( RTEMS_NOT_CONFIGURED );
+  return RTEMS_NOT_CONFIGURED;
 }

@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_unsigned32 taskcount;
 rtems_task_priority taskpri;
@@ -40,6 +37,8 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 18 ***" );
 
@@ -108,5 +107,6 @@ rtems_task Last_task(
     CALLING_OVERHEAD_TASK_DELETE
   );
 
+  puts( "*** END OF TEST 18 ***" );
   exit( 0 );
 }

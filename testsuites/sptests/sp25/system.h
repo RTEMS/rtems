@@ -16,16 +16,39 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
 
-#define BASE_PRIORITY 140                /* all tasks priority */
+rtems_task Task_1(
+  rtems_task_argument argument
+);
 
-/* macros */
+/* configuration information */
 
-/* structures */
+#define CONFIGURE_SPTEST
 
-#include "gvar.h"
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_MAXIMUM_REGIONS             1
+
+#include <confdefs.h>
+
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 6 ];      /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 6 ];    /* array of task names */
+TEST_EXTERN rtems_id   Region_id[ 2 ];    /* array of region ids */
+TEST_EXTERN rtems_name Region_name[ 2 ];  /* array of region names */
+ 
+TEST_EXTERN rtems_unsigned8 Area_1[64000]  CPU_STRUCTURE_ALIGNMENT;
+ 
+#define BASE_PRIORITY 140
+ 
+#define Put_address_from_area_1( _to_be_printed ) \
+   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_1 )
+ 
 /* end of include file */

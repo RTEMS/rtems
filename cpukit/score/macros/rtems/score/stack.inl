@@ -36,7 +36,7 @@
  */
 
 #define _Stack_Is_enough( _size ) \
-  ( (_size) >= RTEMS_MINIMUM_STACK_SIZE )
+  ( (_size) >= STACK_MINIMUM_SIZE )
 
 /*PAGE
  *

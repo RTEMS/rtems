@@ -248,7 +248,7 @@ STATIC INLINE Thread_Control *_Thread_Get (
     return( _Thread_Executing );
   }
  
-  the_class = rtems_get_class( id );
+  the_class = _Objects_Get_class( id );
  
   if ( the_class > OBJECTS_CLASSES_LAST ) {
     *location = OBJECTS_ERROR;
@@ -263,6 +263,18 @@ STATIC INLINE Thread_Control *_Thread_Get (
   }
  
   return (Thread_Control *) _Objects_Get( information, id, location );
+}
+
+/*
+ *  _Thread_Is_proxy_blocking
+ *
+ */
+
+STATIC INLINE boolean _Thread_Is_proxy_blocking (
+  unsigned32 code
+)
+{
+  return (code == THREAD_STATUS_PROXY_BLOCKING);
 }
 
 #endif

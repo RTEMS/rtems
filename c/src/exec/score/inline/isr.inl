@@ -19,18 +19,6 @@
 
 /*PAGE
  *
- *  _ISR_Handler_initialization
- *
- */
-
-STATIC INLINE void _ISR_Handler_initialization ( void )
-{
-  _ISR_Signals_to_thread_executing = FALSE;
-  _ISR_Nest_level = 0;
-}
-
-/*PAGE
- *
  *  _ISR_Is_in_progress
  *
  */

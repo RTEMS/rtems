@@ -14,13 +14,15 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/chain.h>
-#include <rtems/isr.h>
-#include <rtems/object.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
-#include <rtems/threadq.h>
-#include <rtems/tqdata.h>
+#include <rtems/core/chain.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/object.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/threadq.h>
+#include <rtems/core/tqdata.h>
+
+#include <rtems/rtems/status.h>
 
 /*PAGE
  *
@@ -29,10 +31,12 @@
  *  This routine initializes the specified threadq.
  *
  *  Input parameters:
- *    the_thread_queue - pointer to a threadq header
- *    the_class        - class of the object to which this belongs
- *    discipline       - queueing discipline
- *    state            - state of waiting threads
+ *    the_thread_queue      - pointer to a threadq header
+ *    the_class             - class of the object to which this belongs
+ *    discipline            - queueing discipline
+ *    state                 - state of waiting threads
+ *    proxy_extract_callout - MP specific callout
+ *    timeout_status        - return on a timeout
  *
  *  Output parameters: NONE
  */
@@ -42,15 +46,17 @@ void _Thread_queue_Initialize(
   Objects_Classes               the_class,
   Thread_queue_Disciplines      the_discipline,
   States_Control                state,
-  Thread_queue_Extract_callout  proxy_extract_callout
+  Thread_queue_Extract_callout  proxy_extract_callout,
+  unsigned32                    timeout_status
 )
 {
   unsigned32 index;
 
   _Thread_queue_Extract_table[ the_class ] = proxy_extract_callout;
 
-  the_thread_queue->state      = state;
-  the_thread_queue->discipline = the_discipline;
+  the_thread_queue->state          = state;
+  the_thread_queue->discipline     = the_discipline;
+  the_thread_queue->timeout_status = timeout_status;
 
   switch ( the_discipline ) {
     case THREAD_QUEUE_DISCIPLINE_FIFO:
@@ -85,14 +91,14 @@ void _Thread_queue_Initialize(
 
 void _Thread_queue_Enqueue(
   Thread_queue_Control *the_thread_queue,
-  rtems_interval     timeout
+  Watchdog_Interval     timeout
 )
 {
   Thread_Control *the_thread;
 
   the_thread = _Thread_Executing;
 
-  if ( _Thread_MP_Is_receive( the_thread ) )
+  if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
     the_thread = _Thread_MP_Allocate_proxy( the_thread_queue->state );
   else
     _Thread_Set_state( the_thread, the_thread_queue->state );
@@ -128,7 +134,7 @@ void _Thread_queue_Enqueue(
  *  _Thread_queue_Dequeue
  *
  *  This routine removes a thread from the specified threadq.  If the
- *  threadq discipline is RTEMS_FIFO, it unblocks a thread, and cancels its
+ *  threadq discipline is FIFO, it unblocks a thread, and cancels its
  *  timeout timer.  Priority discipline is processed elsewhere.
  *
  *  Input parameters:
@@ -139,7 +145,6 @@ void _Thread_queue_Enqueue(
  *
  *  INTERRUPT LATENCY:
  *    check sync
- *    RTEMS_FIFO
  */
 
 Thread_Control *_Thread_queue_Dequeue(
@@ -200,7 +205,7 @@ boolean _Thread_queue_Extract_with_proxy(
     if ( _States_Is_waiting_for_rpc_reply( state ) &&
          _States_Is_locally_blocked( state ) ) {
 
-      the_class = rtems_get_class( the_thread->Wait.id );
+      the_class = _Objects_Get_class( the_thread->Wait.id );
 
       proxy_extract_callout = _Thread_queue_Extract_table[ the_class ];
 
@@ -252,21 +257,24 @@ void _Thread_queue_Extract(
  *  This kernel routine flushes the given thread queue.
  *
  *  Input parameters:
- *    the_thread_queue - pointer to threadq to be flushed
+ *    the_thread_queue       - pointer to threadq to be flushed
+ *    remote_extract_callout - pointer to routine which extracts a remote thread
+ *    status                 - status to return to the thread
  *
  *  Output parameters:  NONE
  */
 
 void _Thread_queue_Flush(
   Thread_queue_Control       *the_thread_queue,
-  Thread_queue_Flush_callout  remote_extract_callout
+  Thread_queue_Flush_callout  remote_extract_callout,
+  unsigned32                  status
 )
 {
   Thread_Control *the_thread;
 
   while ( (the_thread = _Thread_queue_Dequeue( the_thread_queue )) ) {
     if ( _Objects_Is_local_id( the_thread->Object.id ) )
-      the_thread->Wait.return_code = RTEMS_OBJECT_WAS_DELETED;
+      the_thread->Wait.return_code = status;
     else
       ( *remote_extract_callout )( the_thread );
   }
@@ -334,7 +342,7 @@ void _Thread_queue_Timeout(
     case OBJECTS_REMOTE:  /* impossible */
       break;
     case OBJECTS_LOCAL:
-      the_thread->Wait.return_code = RTEMS_TIMEOUT;
+      the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
       _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
       _Thread_Unnest_dispatch();
       break;
@@ -362,7 +370,7 @@ void _Thread_queue_Timeout(
 void _Thread_queue_Enqueue_fifo (
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
-  rtems_interval            timeout
+  Watchdog_Interval    timeout
 )
 {
   ISR_Level level;
@@ -376,7 +384,7 @@ void _Thread_queue_Enqueue_fifo (
       &the_thread->Object.Node
     );
 
-    if ( timeout != RTEMS_NO_TIMEOUT )
+    if ( timeout != WATCHDOG_NO_TIMEOUT )
       _Watchdog_Activate( &the_thread->Timer );
 
     _ISR_Enable( level );
@@ -412,7 +420,7 @@ void _Thread_queue_Enqueue_fifo (
  *
  *  INTERRUPT LATENCY:
  *    check sync
- *    RTEMS_FIFO
+ *    FIFO
  */
 
 Thread_Control *_Thread_queue_Dequeue_fifo(
@@ -541,7 +549,7 @@ Thread_Control *_Thread_queue_First_fifo(
 void _Thread_queue_Enqueue_priority(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
-  rtems_interval     timeout
+  Watchdog_Interval     timeout
 )
 {
   Priority_Control  search_priority;
@@ -567,7 +575,7 @@ void _Thread_queue_Enqueue_priority(
     goto restart_reverse_search;
 
 restart_forward_search:
-  search_priority = RTEMS_MINIMUM_PRIORITY - 1;
+  search_priority = PRIORITY_MINIMUM - 1;
   _ISR_Disable( level );
   search_thread = (Thread_Control *) header->first;
   while ( !_Chain_Is_tail( header, (Chain_Node *)search_thread ) ) {
@@ -595,7 +603,7 @@ restart_forward_search:
     goto syncronize;
 
   the_thread_queue->sync = FALSE;
-  if ( timeout != RTEMS_NO_TIMEOUT )
+  if ( timeout != WATCHDOG_NO_TIMEOUT )
     _Watchdog_Activate( &the_thread->Timer );
 
   if ( priority == search_priority )
@@ -613,7 +621,7 @@ restart_forward_search:
   return;
 
 restart_reverse_search:
-  search_priority     = RTEMS_MAXIMUM_PRIORITY + 1;
+  search_priority     = PRIORITY_MAXIMUM + 1;
 
   _ISR_Disable( level );
   search_thread = (Thread_Control *) header->last;
@@ -641,7 +649,7 @@ restart_reverse_search:
     goto syncronize;
 
   the_thread_queue->sync = FALSE;
-  if ( timeout != RTEMS_NO_TIMEOUT )
+  if ( timeout != WATCHDOG_NO_TIMEOUT )
     _Watchdog_Activate( &the_thread->Timer );
 
   if ( priority == search_priority )
@@ -688,7 +696,7 @@ syncronize:
  *
  *  _Thread_queue_Dequeue_priority
  *
- *  This routine removes a thread from the specified RTEMS_PRIORITY based
+ *  This routine removes a thread from the specified PRIORITY based
  *  threadq, unblocks it, and cancels its timeout timer.
  *
  *  Input parameters:

@@ -11,16 +11,14 @@
 
 #define MIDP_INIT
 
-#include "rtems.h"
-#include "console.h"
-#include "bsp.h"
+#include <bsp.h>
+#include <rtems/libio.h>
 
-#include "ringbuf.h"
+#include <ringbuf.h>
 
 Ring_buffer_t  Buffer[ 2 ];
 
 rtems_isr C_Receive_ISR(rtems_vector_number vector);
-
 
 /*  console_initialize
  *
@@ -36,18 +34,44 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector);
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void                      *arg,
-  rtems_id                   self,
-  rtems_unsigned32          *status
+  void                      *arg
 )
 {
+  rtems_status_code status;
 
   Ring_buffer_Initialize( &Buffer[ 0 ] );
   Ring_buffer_Initialize( &Buffer[ 1 ] );
 
   init_pit();
 
-  *status = RTEMS_SUCCESSFUL;
+  status = rtems_io_register_name(
+    "/dev/console",
+    major,
+    (rtems_device_minor_number) 0
+  );
+ 
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+ 
+  status = rtems_io_register_name(
+    "/dev/tty00",
+    major,
+    (rtems_device_minor_number) 0
+  );
+ 
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+ 
+  status = rtems_io_register_name(
+    "/dev/tty01",
+    major,
+    (rtems_device_minor_number) 1
+  );
+ 
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+ 
+  return RTEMS_SUCCESSFUL;
 }
 
 
@@ -151,66 +175,108 @@ void outbyte(
 }
 
 /*
- * __read  -- read bytes from the serial port. Ignore fd, since
- *            we only have stdin.
+ *  Open entry point
  */
 
-int __read(
-  int fd,
-  char *buf,
-  int nbytes
+rtems_device_driver console_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
 )
 {
-  int i = 0;
-  int port;
+  return RTEMS_SUCCESSFUL;
+}
+ 
+/*
+ *  Close entry point
+ */
 
-  /*
-   *  Map port A to stdin, stdout, and stderr.
-   *  Map everything else to port B.
-   */
-
-  if ( fd <= 2 ) port = 0;
-  else           port = 1;
-
-  for (i = 0; i < nbytes; i++) {
-    *(buf + i) = inbyte( port );
-    if ((*(buf + i) == '\n') || (*(buf + i) == '\r')) {
-      (*(buf + i++)) = '\n';
-      (*(buf + i)) = 0;
-      break;
-    }
-  }
-  return (i);
+rtems_device_driver console_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
- * __write -- write bytes to the serial port. Ignore fd, since
- *            stdout and stderr are the same. Since we have no filesystem,
- *            open will only return an error.
+ * read bytes from the serial port. We only have stdin.
  */
 
-int __write(
-  int fd,
-  char *buf,
-  int nbytes
+rtems_device_driver console_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
 )
 {
-  int i;
-  int port;
+  rtems_libio_rw_args_t *rw_args;
+  char *buffer;
+  int maximum;
+  int count = 0;
  
-  /*
-   *  Map port A to stdin, stdout, and stderr.
-   *  Map everything else to port B.
-   */
- 
-  if ( fd <= 2 ) port = 0;
-  else           port = 1;
- 
-  for (i = 0; i < nbytes; i++) {
-    if (*(buf + i) == '\n') {
-      outbyte ('\r', port );
+  rw_args = (rtems_libio_rw_args_t *) arg;
+
+  buffer = rw_args->buffer;
+  maximum = rw_args->count;
+
+  if ( minor > 1 )
+    return RTEMS_INVALID_NUMBER;
+
+  for (count = 0; count < maximum; count++) {
+    buffer[ count ] = inbyte( minor );
+    if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
+      buffer[ count++ ]  = '\n';
+      buffer[ count ]  = 0;
+      break;
     }
-    outbyte (*(buf + i), port );
   }
-  return (nbytes);
+
+  rw_args->bytes_moved = count;
+  return (count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
+}
+
+/*
+ * write bytes to the serial port. Stdout and stderr are the same. 
+ */
+
+rtems_device_driver console_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  int count;
+  int maximum;
+  rtems_libio_rw_args_t *rw_args;
+  char *buffer;
+
+  rw_args = (rtems_libio_rw_args_t *) arg;
+
+  buffer = rw_args->buffer;
+  maximum = rw_args->count;
+
+  if ( minor > 1 )
+    return RTEMS_INVALID_NUMBER;
+
+  for (count = 0; count < maximum; count++) {
+    if ( buffer[ count ] == '\n') {
+      outbyte('\r', minor );
+    }
+    outbyte( buffer[ count ], minor  );
+  }
+  return maximum;
+}
+
+/*
+ *  IO Control entry point
+ */
+
+rtems_device_driver console_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
 }

@@ -67,23 +67,15 @@ extern void Clock_delay(rtems_unsigned32 microseconds);
         Clock_delay(microseconds);
 
 /*
- * Todo: this should be put somewhere else
- */
-
-#undef CLOCK_DRIVER_TABLE_ENTRY
-#define CLOCK_DRIVER_TABLE_ENTRY { Clock_initialize, NULL, NULL, NULL, NULL, Clock_control }
-rtems_device_driver Clock_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-);
-
-/*
  * We printf() to a buffer if multiprocessing, *or* if this is set.
  * ref: src/lib/libbsp/hppa/simhppa/iosupp/consupp.c
  */
 
 extern int use_print_buffer;
+
+/*
+ *  Device Driver Table Entries
+ */
 
 /*
  * When not doing printf to a buffer, we do printf thru RTEMS libio
@@ -92,6 +84,10 @@ extern int use_print_buffer;
 
 #define CONSOLE_DRIVER_TABLE_ENTRY \
   { tty_initialize, tty_open, tty_close, tty_read, tty_write, tty_control }
+
+/*
+ * NOTE: Use the standard Clock driver entry
+ */
 
 /*
  * How many libio files we want

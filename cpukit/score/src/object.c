@@ -14,12 +14,12 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/chain.h>
-#include <rtems/config.h>
-#include <rtems/object.h>
+#include <rtems/core/chain.h>
+#include <rtems/core/object.h>
 #include <rtems/objectmp.h>
-#include <rtems/thread.h>
-#include <rtems/wkspace.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/wkspace.h>
+#include <rtems/sysstate.h>
 
 /*PAGE
  *
@@ -29,6 +29,7 @@
  *
  *  Input parameters:
  *    node                   - local node
+ *    maximum_nodes          - number of nodes in the system
  *    maximum_global_objects - number of configured global objects
  *
  *  Output parameters:  NONE
@@ -36,12 +37,25 @@
 
 void _Objects_Handler_initialization(
   unsigned32 node,
+  unsigned32 maximum_nodes,
   unsigned32 maximum_global_objects
 )
 {
-  _Objects_Local_node = node;
+  if ( node < 1 || node > maximum_nodes )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_INVALID_NODE
+    );
 
-  _Objects_MP_Handler_initialization( maximum_global_objects );
+  _Objects_Local_node    = node;
+  _Objects_Maximum_nodes = maximum_nodes;
+
+  _Objects_MP_Handler_initialization(
+    node,
+    maximum_nodes,
+    maximum_global_objects
+  );
 }
 
 /*PAGE
@@ -166,15 +180,13 @@ void _Objects_Initialize_information(
    *  Take care of multiprocessing
    */
 
-  if ( supports_global == TRUE && _Configuration_Is_multiprocessing() ) {
+  if ( supports_global == TRUE && _System_state_Is_multiprocessing ) {
 
     information->global_table = _Workspace_Allocate_or_fatal_error(
-      (_Configuration_MP_table->maximum_nodes + 1) * sizeof(Chain_Control)
+      (_Objects_Maximum_nodes + 1) * sizeof(Chain_Control)
     );
 
-    for ( index=1;
-          index <= _Configuration_MP_table->maximum_nodes ;
-          index++ )
+    for ( index=1; index <= _Objects_Maximum_nodes ; index++ )
       _Chain_Initialize_empty( &information->global_table[ index ] );
    }
    else
@@ -308,12 +320,12 @@ boolean _Objects_Compare_name_raw(
  *    id          - address of return ID
  *
  *  Output parameters:
- *    obj_id     - object id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
+ *    id                 - object id
+ *    OBJECTS_SUCCESSFUL - if successful
+ *    error code         - if unsuccessful
  */
 
-rtems_status_code _Objects_Name_to_id(
+Objects_Name_to_id_errors _Objects_Name_to_id(
   Objects_Information *information,
   Objects_Name         name,
   unsigned32           node,
@@ -328,12 +340,12 @@ rtems_status_code _Objects_Name_to_id(
   Objects_Name_comparators   compare_them;
 
   if ( name == 0 )
-    return( RTEMS_INVALID_NAME );
+    return OBJECTS_INVALID_NAME;
 
   search_local_node = FALSE;
 
   if ( information->maximum != 0 &&
-      (node == RTEMS_SEARCH_ALL_NODES || node == RTEMS_SEARCH_LOCAL_NODE ||
+      (node == OBJECTS_SEARCH_ALL_NODES || node == OBJECTS_SEARCH_LOCAL_NODE ||
       _Objects_Is_local_node( node ) ) )
    search_local_node = TRUE;
 
@@ -354,13 +366,13 @@ rtems_status_code _Objects_Name_to_id(
 
       if ( (*compare_them)( name, the_object->name, name_length ) ) {
         *id = the_object->id;
-        return( RTEMS_SUCCESSFUL );
+        return OBJECTS_SUCCESSFUL;
       }
     }
   }
 
-  if ( _Objects_Is_local_node( node ) || node == RTEMS_SEARCH_LOCAL_NODE )
-    return( RTEMS_INVALID_NAME );
+  if ( _Objects_Is_local_node( node ) || node == OBJECTS_SEARCH_LOCAL_NODE )
+    return OBJECTS_INVALID_NAME;
 
   return ( _Objects_MP_Global_name_search( information, name, node, id ) );
 }
@@ -449,14 +461,14 @@ _Objects_Get_next(
     Objects_Control *object;
     Objects_Id       next_id;
     
-    if (rtems_get_index(id) == RTEMS_OBJECT_ID_INITIAL_INDEX)
+    if (_Objects_Get_index(id) == OBJECTS_ID_INITIAL_INDEX)
         next_id = information->minimum_id;
     else
         next_id = id;
 
     do {
         /* walked off end of list? */
-        if (rtems_get_index(next_id) > information->maximum)
+        if (_Objects_Get_index(next_id) > information->maximum)
         {
             *location_p = OBJECTS_ERROR;
             goto final;
@@ -473,7 +485,7 @@ _Objects_Get_next(
     return object;
 
 final:
-    *next_id_p = RTEMS_OBJECT_ID_FINAL;
+    *next_id_p = OBJECTS_ID_FINAL;
     return 0;
 }
 
@@ -490,7 +502,7 @@ Objects_Information *_Objects_Get_information(
 {
   Objects_Classes  the_class;
 
-  the_class = rtems_get_class( id );
+  the_class = _Objects_Get_class( id );
 
   if ( !_Objects_Is_class_valid( the_class ) )
     return NULL;

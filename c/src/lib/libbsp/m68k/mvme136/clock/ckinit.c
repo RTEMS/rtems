@@ -20,9 +20,8 @@
 
 #include <stdlib.h>
 
-#include <rtems.h>
 #include <bsp.h>
-#include <clockdrv.h>
+#include <rtems/libio.h>
 #include <z8036.h>
 
 #define MICRVAL     0xe2            /* disable lower chain, no vec */
@@ -35,31 +34,43 @@
 #define T1CSRVAL    0xc6            /* enable interrupt, allow and */
                                     /*   and trigger countdown */
 
+#define TIMER        0xfffb0000
+#define RELOAD       0x24            /* clr IP & IUS,allow countdown */
+ 
+#define CLOCK_VECTOR 66
+
 rtems_unsigned32 Clock_isrs;        /* ISRs until next tick */
-volatile rtems_unsigned32 Clock_driver_ticks;
-                                    /* ticks since initialization */
+
+volatile rtems_unsigned32 Clock_driver_ticks; /* ticks since initialization */
+
 rtems_isr_entry  Old_ticker;
 
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id tid,
-  rtems_unsigned32 *rval
+void Clock_exit( void );
+
+/*
+ * These are set by clock driver during its init
+ */
+ 
+rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_minor_number rtems_clock_minor;
+ 
+/*
+ *  ISR Handler
+ */
+ 
+rtems_isr Clock_isr(
+  rtems_vector_number vector
 )
 {
-  Install_clock( Clock_isr );
-}
+  Clock_driver_ticks += 1;
+  ((volatile struct z8036_map *) TIMER)->CT1_CMD_STATUS = RELOAD;
 
-void ReInstall_clock(
-  rtems_isr_entry clock_isr
-)
-{
-  rtems_unsigned32 isrlevel;
-
-  rtems_interrupt_disable( isrlevel );
-   (void) set_vector( clock_isr, 66, 1 );
-  rtems_interrupt_enable( isrlevel );
+  if ( Clock_isrs == 1 ) {
+    rtems_clock_tick();
+    Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+  }
+  else
+    Clock_isrs -= 1;
 }
 
 void Install_clock(
@@ -72,28 +83,40 @@ void Install_clock(
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
   if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, 66, 1 );
+    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
     timer = (struct z8036_map *) 0xfffb0000;
     timer->MASTER_INTR        = MICRVAL;
     timer->CT1_MODE_SPEC      = T1MSRVAL;
 
-  *((rtems_unsigned16 *)0xfffb0016) = MS_COUNT;  /* write countdown value */
-/*
-    timer->CT1_TIME_CONST_MSB = (MS_COUNT >> 8);
-    timer->CT1_TIME_CONST_LSB = (MS_COUNT &  0xff);
-*/
+    *((rtems_unsigned16 *)0xfffb0016) = MS_COUNT;  /* write countdown value */
+
+    /*
+     *  timer->CT1_TIME_CONST_MSB = (MS_COUNT >> 8);
+     *  timer->CT1_TIME_CONST_LSB = (MS_COUNT &  0xff);
+     */
+
     timer->MASTER_CFG         = MCCRVAL;
     timer->CT1_CMD_STATUS     = T1CSRVAL;
 
-/*
- * Enable interrupt via VME interrupt mask register
- */
+    /*
+     * Enable interrupt via VME interrupt mask register
+     */
     (*(rtems_unsigned8 *)0xfffb0038) &= 0xfd;
-
 
     atexit( Clock_exit );
   }
 
+}
+
+void ReInstall_clock(
+  rtems_isr_entry clock_isr
+)
+{
+  rtems_unsigned32 isrlevel;
+
+  rtems_interrupt_disable( isrlevel );
+   (void) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  rtems_interrupt_enable( isrlevel );
 }
 
 void Clock_exit( void )
@@ -109,3 +132,51 @@ void Clock_exit( void )
     /* do not restore old vector */
   }
 }
+
+rtems_device_driver Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+  Install_clock( Clock_isr );
+
+  /*
+   * make major/minor avail to others such as shared memory driver
+   */
+
+  rtems_clock_major = major;
+  rtems_clock_minor = minor;
+ 
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    rtems_libio_ioctl_args_t *args = pargp;
+ 
+    if (args == 0)
+        goto done;
+ 
+    /*
+     * This is hokey, but until we get a defined interface
+     * to do this, it will just be this simple...
+     */
+ 
+    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
+    {
+        Clock_isr(CLOCK_VECTOR);
+    }
+    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
+    {
+        ReInstall_clock(args->buffer);
+    }
+ 
+done:
+    return RTEMS_SUCCESSFUL;
+}
+

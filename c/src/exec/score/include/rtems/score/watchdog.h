@@ -15,29 +15,29 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_WATCHDOG_h
-#define __RTEMS_WATCHDOG_h
+#ifndef __WATCHDOG_h
+#define __WATCHDOG_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/object.h>
+#include <rtems/core/object.h>
 
 /*
  *  The following type defines the control block used to manage
  *  intervals.
  */
 
-typedef unsigned32 rtems_interval;
+typedef unsigned32 Watchdog_Interval;
 
 /*
- *  The following types define a pointer to a watchdog/timer service routine.
+ *  The following types define a pointer to a watchdog service routine.
  */
 
-typedef void rtems_timer_service_routine;
+typedef void Watchdog_Service_routine;
 
-typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
+typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
                  Objects_Id,
                  void *
              );
@@ -46,7 +46,7 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
  *  Constant for indefinite wait.  (actually an illegal interval)
  */
 
-#define RTEMS_NO_TIMEOUT  0
+#define WATCHDOG_NO_TIMEOUT  0
 
 /*
  *  The following enumerated type details the modes in which the
@@ -92,9 +92,9 @@ typedef enum {
 typedef struct {
   Chain_Node        Node;
   Watchdog_States   state;
-  rtems_interval initial;
-  rtems_interval delta_interval;
-  rtems_timer_service_routine_entry  routine;
+  Watchdog_Interval initial;
+  Watchdog_Interval delta_interval;
+  Watchdog_Service_routine_entry  routine;
   Objects_Id        id;
   void             *user_data;
 }   Watchdog_Control;
@@ -140,7 +140,7 @@ void _Watchdog_Handler_initialization( void );
 
 STATIC INLINE void _Watchdog_Initialize(
    Watchdog_Control *the_watchdog,
-   rtems_timer_service_routine_entry  routine,
+   Watchdog_Service_routine_entry  routine,
    Objects_Id        id,
    void             *user_data
 );
@@ -238,7 +238,7 @@ STATIC INLINE void _Watchdog_Tickle_seconds( void );
 
 STATIC INLINE void _Watchdog_Insert_ticks(
   Watchdog_Control      *the_watchdog,
-  rtems_interval      units,
+  Watchdog_Interval      units,
   Watchdog_Insert_modes  insert_mode
 );
 
@@ -256,7 +256,7 @@ STATIC INLINE void _Watchdog_Insert_ticks(
 
 STATIC INLINE void _Watchdog_Insert_seconds(
   Watchdog_Control      *the_watchdog,
-  rtems_interval      units,
+  Watchdog_Interval      units,
   Watchdog_Insert_modes  insert_mode
 );
 
@@ -273,7 +273,7 @@ STATIC INLINE void _Watchdog_Insert_seconds(
 
 STATIC INLINE void _Watchdog_Adjust_seconds(
   Watchdog_Adjust_directions direction,
-  rtems_interval          units
+  Watchdog_Interval          units
 );
 
 /*
@@ -288,7 +288,7 @@ STATIC INLINE void _Watchdog_Adjust_seconds(
 
 STATIC INLINE void _Watchdog_Adjust_ticks(
   Watchdog_Adjust_directions direction,
-  rtems_interval          units
+  Watchdog_Interval          units
 );
 
 /*
@@ -374,7 +374,7 @@ STATIC INLINE Watchdog_Control *_Watchdog_Last(
 void _Watchdog_Adjust (
   Chain_Control              *header,
   Watchdog_Adjust_directions  direction,
-  rtems_interval              units
+  Watchdog_Interval           units
 );
 
 /*
@@ -408,7 +408,7 @@ void _Watchdog_Tickle (
   Chain_Control *header
 );
 
-#include <rtems/watchdog.inl>
+#include <rtems/core/watchdog.inl>
 
 #ifdef __cplusplus
 }

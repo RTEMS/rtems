@@ -17,7 +17,7 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/isr.h>
+#include <rtems/core/isr.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -186,6 +186,28 @@ void _CPU_Context_From_CPU_Init()
 
 }
 
+/*PAGE
+ *
+ *  _CPU_ISR_Get_level
+ */
+
+unsigned32 _CPU_ISR_Get_level( void )
+{
+  sigset_t sigset;
+ 
+  sigprocmask( 0, 0, &sigset ); 
+
+  /*
+   *  This is an educated guess based on ONLY ONE of the signals we
+   *  disable/enable to mask ISRs.
+   */
+
+  if ( sigismember( &sigset, SIGUSR1 ) )
+    return 1;
+  else
+    return 0;
+}
+
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -198,12 +220,9 @@ void _CPU_Context_From_CPU_Init()
 
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
-  void      (*thread_dispatch)      /* ignored on this CPU */
+  void            (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-  if ( cpu_table == NULL )
-    _CPU_Fatal_halt( RTEMS_NOT_CONFIGURED );
-
   /*
    *  The thread_dispatch argument is the address of the entry point
    *  for the routine called at the end of an ISR once it has been

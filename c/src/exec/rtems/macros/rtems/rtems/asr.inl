@@ -17,7 +17,7 @@
 #ifndef __INLINE_ASR_h
 #define __INLINE_ASR_h
 
-#include <rtems/isr.h>
+#include <rtems/core/isr.h>
 
 /*PAGE
  *
@@ -27,6 +27,7 @@
 
 #define _ASR_Initialize( _information ) \
 { \
+  (_information)->is_enabled      = TRUE; \
   (_information)->handler         = NULL; \
   (_information)->mode_set        = RTEMS_DEFAULT_MODES; \
   (_information)->signals_posted  = 0; \

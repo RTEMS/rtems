@@ -14,18 +14,18 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_THREAD_QUEUE_h
-#define __RTEMS_THREAD_QUEUE_h
+#ifndef __THREAD_QUEUE_h
+#define __THREAD_QUEUE_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/tqdata.h>
+#include <rtems/core/tqdata.h>
 
-#include <rtems/object.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
 
 /*
  *  The following type defines the callout used when a remote task
@@ -75,7 +75,7 @@ Thread_Control *_Thread_queue_Dequeue(
 
 void _Thread_queue_Enqueue(
   Thread_queue_Control *the_thread_queue,
-  rtems_interval        timeout
+  Watchdog_Interval     timeout
 );
 
 /*
@@ -131,7 +131,8 @@ Thread_Control *_Thread_queue_First(
 
 void _Thread_queue_Flush(
   Thread_queue_Control       *the_thread_queue,
-  Thread_queue_Flush_callout  remote_extract_callout
+  Thread_queue_Flush_callout  remote_extract_callout,
+  unsigned32                  status
 );
 
 /*
@@ -149,7 +150,8 @@ void _Thread_queue_Initialize(
   Objects_Classes               the_class,
   Thread_queue_Disciplines      the_discipline,
   States_Control                state,
-  Thread_queue_Extract_callout  proxy_extract_callout
+  Thread_queue_Extract_callout  proxy_extract_callout,
+  unsigned32                    timeout_status
 );
 
 /*
@@ -179,7 +181,7 @@ Thread_Control *_Thread_queue_Dequeue_priority(
 void _Thread_queue_Enqueue_priority(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
-  rtems_interval     timeout
+  Watchdog_Interval     timeout
 );
 
 /*
@@ -231,13 +233,13 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
  *
  *  This routine enqueues the currently executing thread on
  *  the_thread_queue with an optional timeout using the
- *  RTEMS_FIFO discipline.
+ *  FIFO discipline.
  */
 
 void _Thread_queue_Enqueue_fifo(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
-  rtems_interval     timeout
+  Watchdog_Interval     timeout
 );
 
 /*

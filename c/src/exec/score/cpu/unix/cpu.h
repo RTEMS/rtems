@@ -26,9 +26,9 @@
 extern "C" {
 #endif
 
-#include <rtems/unix.h>
+#include <rtems/core/unix.h>
 #ifndef ASM
-#include <rtems/unixtypes.h>
+#include <rtems/core/unixtypes.h>
 #endif
 
 #if defined(solaris2)
@@ -666,6 +666,8 @@ void _CPU_ISR_Enable(unsigned32 level);
     if ( new_level == 0 ) _CPU_ISR_Enable( 0 ); \
     else                  _CPU_ISR_Enable( 1 ); \
   }
+
+unsigned32 _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 

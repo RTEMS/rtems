@@ -13,13 +13,15 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/event.h>
-#include <rtems/mpci.h>
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/event.h>
+#include <rtems/core/mpci.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/support.h>
 
 /*PAGE
  *
@@ -49,7 +51,7 @@ rtems_status_code _Event_MP_Send_request_packet (
     case EVENT_MP_SEND_REQUEST:
 
       the_packet                    = _Event_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_EVENT;
+      the_packet->Prefix.the_class  = MP_PACKET_EVENT;
       the_packet->Prefix.length     = sizeof ( Event_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( Event_MP_Packet );
       the_packet->operation         = operation;

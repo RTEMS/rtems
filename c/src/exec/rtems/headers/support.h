@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include <rtems/types.h>
+#include <rtems/rtems/types.h>
 
 /*
  *  rtems_is_name_valid
@@ -70,7 +70,52 @@ STATIC INLINE void rtems_name_to_characters(
   char         *c4
 );
 
-#include <rtems/support.inl>
+/*
+ *  rtems_get_class
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the class portion of the ID.
+ *
+ */
+ 
+#define rtems_get_class( _id ) \
+  _Objects_Get_class( _id )
+ 
+/*
+ *  rtems_get_node
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the node portion of the ID.
+ *
+ */
+ 
+#define rtems_get_node( _id ) \
+  _Objects_Get_node( _id )
+ 
+/*
+ *  rtems_get_index
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the index portion of the ID.
+ *
+ */
+ 
+#define rtems_get_index( _id ) \
+  _Objects_Get_index( _id )
+
+/*
+ *  Time related
+ */
+
+#define RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) \
+        TOD_MILLISECONDS_TO_MICROSECONDS(_ms)
+#define RTEMS_MILLISECONDS_TO_TICKS(_ms) \
+        TOD_MILLISECONDS_TO_TICKS(_ms)
+
+#include <rtems/rtems/support.inl>
 
 #ifdef __cplusplus
 }

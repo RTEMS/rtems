@@ -11,16 +11,13 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_id Port_id;
 
-rtems_unsigned8 Internal_area[ 256 ];
-rtems_unsigned8 External_area[ 256 ];
+rtems_unsigned8 Internal_area[ 256 ] CPU_STRUCTURE_ALIGNMENT;
+rtems_unsigned8 External_area[ 256 ] CPU_STRUCTURE_ALIGNMENT;
 
 rtems_task Test_task(
   rtems_task_argument argument
@@ -31,6 +28,8 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 28 ***" );
 
@@ -130,5 +129,6 @@ rtems_task Test_task (
     CALLING_OVERHEAD_PORT_DELETE
   );
 
+  puts( "*** END OF TEST 28 ***" );
   exit( 0 );
 }

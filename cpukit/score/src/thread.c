@@ -14,19 +14,17 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/context.h>
-#include <rtems/fatal.h>
-#include <rtems/init.h>
-#include <rtems/intthrd.h>
-#include <rtems/isr.h>
-#include <rtems/modes.h>
-#include <rtems/object.h>
-#include <rtems/priority.h>
-#include <rtems/states.h>
-#include <rtems/thread.h>
-#include <rtems/userext.h>
-#include <rtems/wkspace.h>
+#include <rtems/core/context.h>
+#include <rtems/core/interr.h>
+#include <rtems/core/intthrd.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/object.h>
+#include <rtems/core/priority.h>
+#include <rtems/core/states.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/threadq.h>
+#include <rtems/core/userext.h>
+#include <rtems/core/wkspace.h>
 
 /*PAGE
  *
@@ -43,6 +41,7 @@
 
 void _Thread_Handler_initialization(
   unsigned32   ticks_per_timeslice,
+  unsigned32   maximum_extensions,
   unsigned32   maximum_proxies
 )
 {
@@ -53,14 +52,16 @@ void _Thread_Handler_initialization(
   _Thread_Heir              = NULL;
   _Thread_Allocated_fp      = NULL;
 
+  _Thread_Maximum_extensions = maximum_extensions;
+
   _Thread_Ticks_remaining_in_timeslice = ticks_per_timeslice;
   _Thread_Ticks_per_timeslice          = ticks_per_timeslice;
 
   _Thread_Ready_chain = _Workspace_Allocate_or_fatal_error(
-    (RTEMS_MAXIMUM_PRIORITY + 1) * sizeof(Chain_Control)
+    (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
   );
 
-  for ( index=0; index <= RTEMS_MAXIMUM_PRIORITY ; index++ )
+  for ( index=0; index <= PRIORITY_MAXIMUM ; index++ )
     _Chain_Initialize_empty( &_Thread_Ready_chain[ index ] );
 
   _Thread_MP_Handler_initialization( maximum_proxies );
@@ -145,8 +146,6 @@ void _Thread_Dispatch( void )
   Thread_Control   *executing;
   Thread_Control   *heir;
   ISR_Level         level;
-  rtems_signal_set  signal_set;
-  Modes_Control     previous_mode;
 
   executing   = _Thread_Executing;
   _ISR_Disable( level );
@@ -157,7 +156,7 @@ void _Thread_Dispatch( void )
     _Thread_Executing = heir;
     _ISR_Enable( level );
 
-    _User_extensions_Task_switch( executing, heir );
+    _User_extensions_Thread_switch( executing, heir );
 
     _Thread_Ticks_remaining_in_timeslice = _Thread_Ticks_per_timeslice;
 
@@ -194,30 +193,16 @@ void _Thread_Dispatch( void )
     _Context_Switch( &executing->Registers, &heir->Registers );
 
     executing = _Thread_Executing;
+
     _ISR_Disable( level );
   }
 
   _Thread_Dispatch_disable_level = 0;
 
-  if ( _ASR_Are_signals_pending( &executing->RTEMS_API->Signal ) ) {
-    signal_set = executing->RTEMS_API->Signal.signals_posted;
-    executing->RTEMS_API->Signal.signals_posted = 0;
-    _ISR_Enable( level );
+  _ISR_Enable( level );
 
-    executing->RTEMS_API->Signal.nest_level += 1;
-    if (_Thread_Change_mode( executing->RTEMS_API->Signal.mode_set,
-                                RTEMS_ALL_MODE_MASKS, &previous_mode ))
-        _Thread_Dispatch();
-
-    (*executing->RTEMS_API->Signal.handler)( signal_set );
-
-    executing->RTEMS_API->Signal.nest_level -= 1;
-    if (_Thread_Change_mode( previous_mode,
-                                RTEMS_ALL_MODE_MASKS, &previous_mode ))
-        _Thread_Dispatch();
-  }
-  else
-    _ISR_Enable( level );
+  _User_extensions_Thread_post_switch( executing );
+ 
 }
 
 /*PAGE
@@ -234,7 +219,9 @@ boolean _Thread_Initialize(
   unsigned32           stack_size,    /* insure it is >= min */
   boolean              is_fp,         /* TRUE if thread uses FP */
   Priority_Control     priority,
-  Modes_Control        mode,
+  boolean              is_preemptible,
+  boolean              is_timeslice,
+  unsigned32           isr_level,
   Objects_Name         name
   
 )
@@ -242,13 +229,14 @@ boolean _Thread_Initialize(
   unsigned32           actual_stack_size;
   void                *stack;
   void                *fp_area;
+  void                *extensions_area;
 
   /*
    *  Allocate and Initialize the stack for this thread.
    */
 
   if ( !_Stack_Is_enough( stack_size ) )
-    actual_stack_size = RTEMS_MINIMUM_STACK_SIZE;
+    actual_stack_size = STACK_MINIMUM_SIZE;
   else
     actual_stack_size = stack_size;
 
@@ -279,7 +267,8 @@ boolean _Thread_Initialize(
 
     fp_area = _Workspace_Allocate( CONTEXT_FP_SIZE );
     if ( !fp_area ) {
-      (void) _Workspace_Free( stack );
+      if ( the_thread->Start.stack )
+        (void) _Workspace_Free( the_thread->Start.stack );
       return FALSE;
     }
     fp_area = _Context_Fp_start( fp_area, 0 );
@@ -290,45 +279,42 @@ boolean _Thread_Initialize(
   the_thread->fp_context       = fp_area;
   the_thread->Start.fp_context = fp_area;
   
-/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+
   /*
-   *  Allocate and initialize the RTEMS API specific information
+   *  Allocate the floating point area for this thread
    */
- 
-  the_thread->RTEMS_API = _Workspace_Allocate( sizeof( RTEMS_API_Control ) );
- 
-  if ( !the_thread->RTEMS_API ) {
-/* XXX when in task_create 
-    _RTEMS_tasks_Free( the_thread );
-    _Objects_MP_Free_global_object( the_global_object );
 
-    _Thread_Enable_dispatch();
-    return( RTEMS_UNSATISFIED );
-*/
-      (void) _Workspace_Free( stack );
-      (void) _Workspace_Free( fp_area );
+  if ( _Thread_Maximum_extensions ) {
+    extensions_area = _Workspace_Allocate(
+      (_Thread_Maximum_extensions + 1) * sizeof( void * )
+    );
+
+    if ( !extensions_area ) {
+      if ( fp_area )
+        (void) _Workspace_Free( fp_area );
+
+      if ( the_thread->Start.stack )
+        (void) _Workspace_Free( the_thread->Start.stack );
+
       return FALSE;
- 
-  }
- 
-  the_thread->RTEMS_API->is_global              = FALSE;
-  the_thread->RTEMS_API->pending_events         = EVENT_SETS_NONE_PENDING;
-  _ASR_Initialize( &the_thread->RTEMS_API->Signal );
-
-  /* XXX should not be here .... */
- 
-/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+    }
+  } else 
+    extensions_area = NULL;
+  
+  the_thread->extensions = extensions_area;
 
   /*
    *  General initialization
    */
 
+  the_thread->Start.is_preemptible = is_preemptible;
+  the_thread->Start.is_timeslice   = is_timeslice;
+  the_thread->Start.isr_level      = isr_level;
+
   the_thread->current_state          = STATES_DORMANT;
-  the_thread->current_modes          = mode;
   the_thread->resource_count         = 0;
   the_thread->real_priority          = priority;
   the_thread->Start.initial_priority = priority;
-  the_thread->Start.initial_modes    = mode;
  
   _Thread_Set_priority( the_thread, priority );
 
@@ -342,10 +328,22 @@ boolean _Thread_Initialize(
    *  Invoke create extensions
    */
 
-  _User_extensions_Task_create( the_thread );
-  /* XXX if this fails ... */
+  if ( !_User_extensions_Thread_create( the_thread ) ) {
+
+    if ( extensions_area )
+      (void) _Workspace_Free( extensions_area );
+
+    if ( fp_area )
+      (void) _Workspace_Free( fp_area );
+
+    if ( the_thread->Start.stack )
+      (void) _Workspace_Free( the_thread->Start.stack );
+
+    return FALSE;
+  }
 
   return TRUE;
+   
 }
 
 /*
@@ -376,7 +374,7 @@ boolean _Thread_Start(
  
     _Thread_Ready( the_thread );
  
-    _User_extensions_Task_start( the_thread );
+    _User_extensions_Thread_start( the_thread );
  
     return TRUE;
   }
@@ -403,7 +401,8 @@ boolean _Thread_Restart(
  
     _Thread_Set_transient( the_thread );
     the_thread->resource_count = 0;
-    the_thread->current_modes  = the_thread->Start.initial_modes;
+    the_thread->is_preemptible = the_thread->Start.is_preemptible;
+    the_thread->is_timeslice   = the_thread->Start.is_timeslice;
 
     the_thread->Start.pointer_argument = pointer_argument;
     the_thread->Start.numeric_argument = numeric_argument;
@@ -423,7 +422,7 @@ boolean _Thread_Restart(
  
     _Thread_Ready( the_thread );
  
-    _User_extensions_Task_restart( the_thread );
+    _User_extensions_Thread_restart( the_thread );
  
     if ( _Thread_Is_executing ( the_thread ) )
       _Thread_Restart_self();
@@ -457,7 +456,7 @@ void _Thread_Close(
       (void) _Watchdog_Remove( &the_thread->Timer );
   }
 
-  _User_extensions_Task_delete( the_thread );
+  _User_extensions_Thread_delete( the_thread );
  
 #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
   if ( _Thread_Is_allocated_fp( the_thread ) )
@@ -469,6 +468,9 @@ void _Thread_Close(
 
   if ( the_thread->Start.stack )
     (void) _Workspace_Free( the_thread->Start.stack );
+
+  if ( the_thread->extensions )
+    (void) _Workspace_Free( the_thread->extensions );
 }
 
 /*PAGE
@@ -512,8 +514,7 @@ void _Thread_Ready(
 
   heir = _Thread_Heir;
 
-  if ( !_Thread_Is_executing( heir ) &&
-        _Modes_Is_preempt( _Thread_Executing->current_modes ) )
+  if ( !_Thread_Is_executing( heir ) && _Thread_Executing->is_preemptible ) 
     _Context_Switch_necessary = TRUE;
 
   _ISR_Enable( level );
@@ -559,7 +560,7 @@ void _Thread_Clear_state(
 
       if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
         _Thread_Heir = the_thread;
-        if ( _Modes_Is_preempt( _Thread_Executing->current_modes ) ||
+        if ( _Thread_Executing->is_preemptible ||
              the_thread->current_priority == 0 )
           _Context_Switch_necessary = TRUE;
       }
@@ -729,9 +730,12 @@ void _Thread_Reset_timeslice( void )
 
 void _Thread_Tickle_timeslice( void )
 {
-  if ( ( _Modes_Is_timeslice(_Thread_Executing->current_modes) )  &&
-       ( _States_Is_ready( _Thread_Executing->current_state ) ) &&
-       ( --_Thread_Ticks_remaining_in_timeslice == 0 ) ) {
+  if ( !_Thread_Executing->is_timeslice  ||
+       !_Thread_Executing->is_preemptible ||
+       !_States_Is_ready( _Thread_Executing->current_state ) ) 
+    return;
+
+  if ( --_Thread_Ticks_remaining_in_timeslice == 0 ) {
       _Thread_Reset_timeslice();
   }
 }
@@ -803,11 +807,14 @@ void _Thread_Load_environment(
     _Context_Initialize_fp( &the_thread->fp_context );
   }
 
+  the_thread->is_preemptible = the_thread->Start.is_preemptible;
+  the_thread->is_timeslice   = the_thread->Start.is_timeslice;
+
   _Context_Initialize(
     &the_thread->Registers,
     the_thread->Start.Initial_stack.area,
     the_thread->Start.Initial_stack.size,
-    _Modes_Get_interrupt_level( the_thread->Start.initial_modes ),
+    the_thread->Start.isr_level,
     _Thread_Handler
   );
 
@@ -838,7 +845,7 @@ void _Thread_Handler( void )
    * disabled until all 'begin' extensions complete.
    */
  
-  _User_extensions_Task_begin( executing );
+  _User_extensions_Thread_begin( executing );
  
   /*
    *  At this point, the dispatch disable level BETTER be 1.
@@ -846,7 +853,7 @@ void _Thread_Handler( void )
 
   _Thread_Enable_dispatch();
  
-  switch (  executing->Start.prototype ) {
+  switch ( executing->Start.prototype ) {
     case THREAD_START_NUMERIC:
       (*executing->Start.entry_point)( executing->Start.numeric_argument );
       break;
@@ -867,9 +874,13 @@ void _Thread_Handler( void )
       break;
   }
 
-  _User_extensions_Task_exitted( executing );
+  _User_extensions_Thread_exitted( executing );
 
-  rtems_fatal_error_occurred( RTEMS_TASK_EXITTED );
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_CORE,
+    TRUE,
+    INTERNAL_ERROR_THREAD_EXITTED
+  );
 }
 
 /*PAGE
@@ -953,7 +964,7 @@ void _Thread_Change_priority(
   _Thread_Calculate_heir();
 
   if ( !_Thread_Is_executing_also_the_heir() &&
-       _Modes_Is_preempt(_Thread_Executing->current_modes) )
+       _Thread_Executing->is_preemptible )
     _Context_Switch_necessary = TRUE;
 
   _ISR_Enable( level );
@@ -986,60 +997,24 @@ void _Thread_Set_priority(
 
 /*PAGE
  *
- *  _Thread_Change_mode
+ *  _Thread_Evaluate_mode
  *
- *  This routine enables and disables several modes of
- *  execution for the requesting thread.
- *
- *  Input parameters:
- *    mode         - new mode
- *    mask         - mask
- *    old_mode_set - address of previous mode
- *
- *  Output:
- *    *old_mode_set - previous mode
- *     returns TRUE if scheduling necessary
- *
- *  INTERRUPT LATENCY:
- *    only one case
+ *  XXX
  */
 
-boolean _Thread_Change_mode(
-  Modes_Control  new_mode_set,
-  Modes_Control  mask,
-  Modes_Control *old_mode_set
-)
+boolean _Thread_Evaluate_mode( void )
 {
-  Modes_Control   changed;
-  Modes_Control   threads_new_mode_set;
-  Thread_Control *executing;
-  boolean         need_dispatch;
+  Thread_Control     *executing;
 
-  executing     = _Thread_Executing;
-  *old_mode_set = executing->current_modes;
-
-  _Modes_Change( executing->current_modes,
-                   new_mode_set, mask, &threads_new_mode_set, &changed );
-
-  _Modes_Set_interrupt_level( threads_new_mode_set );
-
-  if ( _Modes_Mask_changed( changed, RTEMS_ASR_MASK ) )
-    _ASR_Swap_signals( &executing->RTEMS_API->Signal );
-
-  executing->current_modes = threads_new_mode_set;
-  need_dispatch = TRUE;
+  executing = _Thread_Executing;
 
   if ( !_States_Is_ready( executing->current_state ) ||
-       ( !_Thread_Is_heir( executing ) &&
-         _Modes_Is_preempt(threads_new_mode_set) ) )
+       ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) ) {
+    _Context_Switch_necessary = TRUE;
+    return TRUE;
+  }
 
-     _Context_Switch_necessary = TRUE;
-
-  else if ( !_ASR_Are_signals_pending( &executing->RTEMS_API->Signal ) )
-
-    need_dispatch = FALSE;
-
-  return need_dispatch;
+  return FALSE;
 }
 
 /*PAGE
@@ -1068,7 +1043,7 @@ STATIC INLINE Thread_Control *_Thread_Get (
     return( _Thread_Executing );
   }
  
-  the_class = rtems_get_class( id );
+  the_class = _Objects_Get_class( id );
  
   if ( the_class > OBJECTS_CLASSES_LAST ) {
     *location = OBJECTS_ERROR;

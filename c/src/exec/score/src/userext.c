@@ -15,14 +15,14 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/userext.h>
+#include <rtems/core/userext.h>
 
 /*PAGE
  *
- *  _User_extensions_Task_create
+ *  _User_extensions_Thread_create
  */
 
-boolean _User_extensions_Task_create (
+boolean _User_extensions_Thread_create (
   Thread_Control *the_thread
 )
 {
@@ -36,8 +36,8 @@ boolean _User_extensions_Task_create (
  
     the_extension = (User_extensions_Control *) the_node;
  
-    if ( the_extension->Callouts.rtems_task_create != NULL ) {
-      status = (*the_extension->Callouts.rtems_task_create)(
+    if ( the_extension->Callouts.thread_create != NULL ) {
+      status = (*the_extension->Callouts.thread_create)(
         _Thread_Executing,
         the_thread
       );
@@ -51,10 +51,10 @@ boolean _User_extensions_Task_create (
 
 /*PAGE
  *
- *  _User_extensions_Task_delete
+ *  _User_extensions_Thread_delete
  */
  
-void _User_extensions_Task_delete (
+void _User_extensions_Thread_delete (
   Thread_Control *the_thread
 )
 {
@@ -67,8 +67,8 @@ void _User_extensions_Task_delete (
  
     the_extension = (User_extensions_Control *) the_node;
  
-    if ( the_extension->Callouts.rtems_task_delete != NULL )
-      (*the_extension->Callouts.rtems_task_delete)(
+    if ( the_extension->Callouts.thread_delete != NULL )
+      (*the_extension->Callouts.thread_delete)(
         _Thread_Executing,
         the_thread
       );
@@ -77,11 +77,11 @@ void _User_extensions_Task_delete (
  
 /*PAGE
  *
- *  _User_extensions_Task_start
+ *  _User_extensions_Thread_start
  *
  */
  
-void _User_extensions_Task_start (
+void _User_extensions_Thread_start (
   Thread_Control *the_thread
 )
 {
@@ -94,8 +94,8 @@ void _User_extensions_Task_start (
  
     the_extension = (User_extensions_Control *) the_node;
  
-    if ( the_extension->Callouts.rtems_task_start != NULL )
-      (*the_extension->Callouts.rtems_task_start)(
+    if ( the_extension->Callouts.thread_start != NULL )
+      (*the_extension->Callouts.thread_start)(
         _Thread_Executing,
         the_thread
       );
@@ -104,11 +104,11 @@ void _User_extensions_Task_start (
  
 /*PAGE
  *
- *  _User_extensions_Task_restart
+ *  _User_extensions_Thread_restart
  *
  */
  
-void _User_extensions_Task_restart (
+void _User_extensions_Thread_restart (
   Thread_Control *the_thread
 )
 {
@@ -121,8 +121,8 @@ void _User_extensions_Task_restart (
  
     the_extension = (User_extensions_Control *) the_node;
  
-    if ( the_extension->Callouts.rtems_task_restart != NULL )
-      (*the_extension->Callouts.rtems_task_restart)(
+    if ( the_extension->Callouts.thread_restart != NULL )
+      (*the_extension->Callouts.thread_restart)(
         _Thread_Executing,
         the_thread
       );
@@ -131,11 +131,11 @@ void _User_extensions_Task_restart (
  
 /*PAGE
  *
- *  _User_extensions_Task_begin
+ *  _User_extensions_Thread_begin
  *
  */
  
-void _User_extensions_Task_begin (
+void _User_extensions_Thread_begin (
   Thread_Control *executing
 )
 {
@@ -148,17 +148,17 @@ void _User_extensions_Task_begin (
  
     the_extension = (User_extensions_Control *) the_node;
  
-    if ( the_extension->Callouts.task_begin != NULL )
-      (*the_extension->Callouts.task_begin)( executing );
+    if ( the_extension->Callouts.thread_begin != NULL )
+      (*the_extension->Callouts.thread_begin)( executing );
   }
 }
  
 /*PAGE
  *
- *  _User_extensions_Task_exitted
+ *  _User_extensions_Thread_exitted
  */
  
-void _User_extensions_Task_exitted (
+void _User_extensions_Thread_exitted (
   Thread_Control *executing
 )
 {
@@ -171,8 +171,8 @@ void _User_extensions_Task_exitted (
  
     the_extension = (User_extensions_Control *) the_node;
  
-    if ( the_extension->Callouts.task_exitted != NULL )
-      (*the_extension->Callouts.task_exitted)( executing );
+    if ( the_extension->Callouts.thread_exitted != NULL )
+      (*the_extension->Callouts.thread_exitted)( executing );
   }
 }
 
@@ -182,7 +182,9 @@ void _User_extensions_Task_exitted (
  */
  
 void _User_extensions_Fatal (
-  unsigned32 the_error
+  Internal_errors_Source  the_source,
+  boolean                 is_internal,
+  unsigned32              the_error
 )
 {
   Chain_Node              *the_node;
@@ -195,7 +197,7 @@ void _User_extensions_Fatal (
     the_extension = (User_extensions_Control *) the_node;
  
     if ( the_extension->Callouts.fatal != NULL )
-      (*the_extension->Callouts.fatal)( the_error );
+      (*the_extension->Callouts.fatal)( the_source, is_internal, the_error );
   }
 }
  

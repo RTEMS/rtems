@@ -21,11 +21,12 @@
 extern "C" {
 #endif
 
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/part.h>
-#include <rtems/thread.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/thread.h>
+
+#include <rtems/rtems/part.h>
 
 /*
  *  The following enumerated type defines the list of

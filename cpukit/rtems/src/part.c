@@ -14,12 +14,13 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/support.h>
-#include <rtems/address.h>
-#include <rtems/config.h>
-#include <rtems/object.h>
-#include <rtems/part.h>
-#include <rtems/thread.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
+#include <rtems/core/address.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/part.h>
+#include <rtems/core/thread.h>
+#include <rtems/sysstate.h>
 
 /*PAGE
  *
@@ -47,6 +48,15 @@ void _Partition_Manager_initialization(
     FALSE,
     RTEMS_MAXIMUM_NAME_LENGTH,
     FALSE
+  );
+
+  /*
+   *  Register the MP Process Packet routine.
+   */
+
+  _MPCI_Register_packet_processor(
+    MP_PACKET_PARTITION,
+    _Partition_MP_Process_packet
   );
 
 }
@@ -84,18 +94,18 @@ rtems_status_code rtems_partition_create(
   register Partition_Control *the_partition;
 
   if ( !rtems_is_name_valid( name ) )
-    return ( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
   if ( length == 0 || buffer_size == 0 || length < buffer_size ||
          !_Partition_Is_buffer_size_aligned( buffer_size ) )
-    return ( RTEMS_INVALID_SIZE );
+    return RTEMS_INVALID_SIZE;
 
   if ( !_Addresses_Is_aligned( starting_address ) )
-     return( RTEMS_INVALID_ADDRESS );
+     return RTEMS_INVALID_ADDRESS;
 
-  if ( _Attributes_Is_global( attribute_set ) &&
-       !_Configuration_Is_multiprocessing() )
-    return( RTEMS_MP_NOT_CONFIGURED );
+  if ( _Attributes_Is_global( attribute_set ) && 
+       !_System_state_Is_multiprocessing )
+    return RTEMS_MP_NOT_CONFIGURED;
 
   _Thread_Disable_dispatch();               /* prevents deletion */
 
@@ -103,7 +113,7 @@ rtems_status_code rtems_partition_create(
 
   if ( !the_partition ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   if ( _Attributes_Is_global( attribute_set ) &&
@@ -111,7 +121,7 @@ rtems_status_code rtems_partition_create(
                             the_partition->Object.id, FALSE ) ) ) {
     _Partition_Free( the_partition );
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
   the_partition->starting_address      = starting_address;
   the_partition->length                = length;
@@ -134,7 +144,7 @@ rtems_status_code rtems_partition_create(
     );
 
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -161,7 +171,11 @@ rtems_status_code rtems_partition_ident(
   Objects_Id   *id
 )
 {
-  return _Objects_Name_to_id( &_Partition_Information, &name, node, id );
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id( &_Partition_Information, &name, node, id );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
 
 /*PAGE
@@ -190,10 +204,10 @@ rtems_status_code rtems_partition_delete(
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     case OBJECTS_LOCAL:
       if ( the_partition->number_of_used_blocks == 0 ) {
         _Objects_Close( &_Partition_Information, &the_partition->Object );
@@ -214,13 +228,13 @@ rtems_status_code rtems_partition_delete(
         }
 
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_RESOURCE_IN_USE );
+      return RTEMS_RESOURCE_IN_USE;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -251,7 +265,7 @@ rtems_status_code rtems_partition_get_buffer(
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = buffer;
       return(
@@ -267,13 +281,13 @@ rtems_status_code rtems_partition_get_buffer(
         the_partition->number_of_used_blocks += 1;
         _Thread_Enable_dispatch();
         *buffer = the_buffer;
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_UNSATISFIED );
+      return RTEMS_UNSATISFIED;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -303,7 +317,7 @@ rtems_status_code rtems_partition_return_buffer(
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       return(
         _Partition_MP_Send_request_packet(
@@ -317,11 +331,11 @@ rtems_status_code rtems_partition_return_buffer(
         _Partition_Free_buffer( the_partition, buffer );
         the_partition->number_of_used_blocks -= 1;
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_INVALID_ADDRESS );
+      return RTEMS_INVALID_ADDRESS;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }

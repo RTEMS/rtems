@@ -273,12 +273,10 @@ pause();
       directive_failed( status, "rtems_message_queue_delete" );
   }
   
-pause();
-  
   puts( "TA1 - rtems_message_queue_create and send - variable sizes " );
   for (queue_size = 1; queue_size < 1030; queue_size++)
   {
-      printf("TA1 - message queue size: %d\n", queue_size);
+      /* printf("TA1 - message queue size: %d\n", queue_size); */
 
       status = rtems_message_queue_create(
           Queue_name[ 1 ],

@@ -17,8 +17,8 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/wkspace.h>
-#include <rtems/fatal.h>
+#include <rtems/core/wkspace.h>
+#include <rtems/core/interr.h>
 
 /*PAGE
  *
@@ -35,7 +35,11 @@ void *_Workspace_Allocate_or_fatal_error(
   memory = _Workspace_Allocate( size );
 
   if ( memory == NULL )
-    rtems_fatal_error_occurred( RTEMS_UNSATISFIED );
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_WORKSPACE_ALLOCATION
+    );
 
   return memory;
 }

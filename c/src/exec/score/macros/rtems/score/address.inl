@@ -24,7 +24,7 @@
  */
 
 #define _Addresses_Add_offset( _base, _offset ) \
-  ((void *)(_base) + (_offset))
+  ((void *)((char *)(_base) + (_offset)))
 
 /*PAGE
  *
@@ -33,18 +33,7 @@
  */
 
 #define _Addresses_Subtract_offset( _base, _offset ) \
-  ((void *)(_base) - (_offset))
-
-/*PAGE
- *
- *  _Addresses_Add
- *
- *  NOTE:  The cast of an address to an unsigned32 makes this code
- *         dependent on an addresses being thirty two bits.
- */
-
-#define _Addresses_Add( _left, _right ) \
-  ((void *)(_left) + (unsigned32)(_right))
+  ((void *)((char *)(_base) - (_offset)))
 
 /*PAGE
  *

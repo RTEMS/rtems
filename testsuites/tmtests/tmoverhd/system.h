@@ -17,5 +17,42 @@
 #include <coverhd.h>
 #include <tmacros.h>
 
+/* functions */
+
+rtems_task Init(
+  rtems_task_argument argument
+);
+
+rtems_timer_service_routine Timer_handler(
+  rtems_id argument
+);
+ 
+rtems_asr Isr_handler(
+  rtems_signal_set signals
+);
+ 
+rtems_asr Asr_handler(
+  rtems_signal_set signals
+);
+ 
+rtems_task task_func();
+ 
+void null_func();
+ 
+rtems_status_code Empty_directive();
+
 #include <timesys.h>
-#include <timegvar.h>
+
+/* configuration information */
+ 
+#define CONFIGURE_TMTEST
+ 
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_TIMER_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS              2
+#define CONFIGURE_TICKS_PER_TIMESLICE        0
+ 
+#include <confdefs.h>
+
+/* end of include file */

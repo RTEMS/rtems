@@ -12,11 +12,8 @@
  */
 
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 #define MAXIMUM_DISTRIBUTION 10000
 
@@ -43,6 +40,8 @@ rtems_task Init(
    */
 
   Set_find_average_overhead( 1 );
+
+  Print_Warning();
 
   puts( "\n\n*** TIME CHECKER ***" );
 
@@ -137,6 +136,7 @@ pause();
     0
   );
 
+  puts( "*** END OF TIME CHECKER ***" );
   exit( 0 );
 }
 

@@ -78,5 +78,14 @@
 #define _Attributes_Is_inherit_priority( _attribute_set ) \
   ( (_attribute_set) & RTEMS_INHERIT_PRIORITY )
 
+/*PAGE
+ *
+ *  _Attributes_Is_priority_ceiling
+ *
+ */
+ 
+#define _Attributes_Is_priority_ceiling( _attribute_set ) \
+  ( (_attribute_set) & RTEMS_PRIORITY_CEILING )
+
 #endif
 /* end of include file */

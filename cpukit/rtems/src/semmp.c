@@ -14,13 +14,15 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/mpci.h>
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/sem.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
+#include <rtems/rtems/status.h>
+#include <rtems/core/mpci.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/sem.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
+#include <rtems/rtems/support.h>
 
 /*PAGE
  *
@@ -45,7 +47,7 @@ void _Semaphore_MP_Send_process_packet (
     case SEMAPHORE_MP_EXTRACT_PROXY:
 
       the_packet                    = _Semaphore_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_SEMAPHORE;
+      the_packet->Prefix.the_class  = MP_PACKET_SEMAPHORE;
       the_packet->Prefix.length     = sizeof ( Semaphore_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( Semaphore_MP_Packet );
       the_packet->operation         = operation;
@@ -78,8 +80,8 @@ void _Semaphore_MP_Send_process_packet (
 rtems_status_code _Semaphore_MP_Send_request_packet (
   Semaphore_MP_Remote_operations operation,
   Objects_Id                     semaphore_id,
-  rtems_option                option_set,
-  rtems_interval              timeout
+  rtems_option                   option_set,
+  rtems_interval                 timeout
 )
 {
   Semaphore_MP_Packet *the_packet;
@@ -90,7 +92,7 @@ rtems_status_code _Semaphore_MP_Send_request_packet (
     case SEMAPHORE_MP_RELEASE_REQUEST:
 
       the_packet                    = _Semaphore_MP_Get_packet();
-      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_SEMAPHORE;
+      the_packet->Prefix.the_class  = MP_PACKET_SEMAPHORE;
       the_packet->Prefix.length     = sizeof ( Semaphore_MP_Packet );
       the_packet->Prefix.to_convert = sizeof ( Semaphore_MP_Packet );
       if ( ! _Options_Is_no_wait(option_set))
@@ -222,7 +224,7 @@ void _Semaphore_MP_Process_packet (
         the_packet->Prefix.timeout
       );
 
-      if ( ! _Status_Is_proxy_blocking( the_packet->Prefix.return_code ) )
+      if ( ! _Thread_Is_proxy_blocking( the_packet->Prefix.return_code ) )
         _Semaphore_MP_Send_response_packet(
            SEMAPHORE_MP_OBTAIN_RESPONSE,
            the_packet->Prefix.id,

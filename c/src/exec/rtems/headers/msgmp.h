@@ -21,12 +21,12 @@
 extern "C" {
 #endif
 
-#include <rtems/message.h>
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/thread.h>
-#include <rtems/watchdog.h>
+#include <rtems/rtems/message.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/watchdog.h>
 
 /*
  *  The following enumerated type defines the list of
@@ -97,7 +97,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
   void                               *buffer,
   unsigned32                         *size_p,
   rtems_option                        option_set,
-  rtems_interval                      timeout
+  Watchdog_Interval                   timeout
 );
 
 /*

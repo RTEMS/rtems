@@ -16,14 +16,47 @@
 
 #include <tmacros.h>
 
-/* Miscellaneous */
+/* functions */
 
-#define EXTERN  extern             /* external definition */
+rtems_task Init(
+  rtems_task_argument argument
+);
+ 
+rtems_task Test_task1(
+  rtems_task_argument argument
+);
+ 
+rtems_task Test_task2(
+  rtems_task_argument argument
+);
+ 
+rtems_task Test_task3(
+  rtems_task_argument restart
+);
 
-/* macros */
+/* configuration information */
+ 
+#define CONFIGURE_MPTEST
+ 
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+ 
+#if ( NODE_NUMBER == 1 )
+#define CONFIGURE_MAXIMUM_SEMAPHORES          1
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
+#endif
 
-/* structures */
+#include <confdefs.h>
 
-#include "gvar.h"
+/* variables */
+
+TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
+
+TEST_EXTERN rtems_id   Queue_id[ 2 ];       /* array of message queue ids */
+TEST_EXTERN rtems_name Queue_name[ 2 ];     /* array of message queue names */
+
+TEST_EXTERN rtems_id   Semaphore_id[ 2 ];   /* array of semaphore ids */
+TEST_EXTERN rtems_name Semaphore_name[ 2 ]; /* array of semaphore names */
 
 /* end of include file */

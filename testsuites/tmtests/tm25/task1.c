@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_id Semaphore_id;
 
@@ -34,6 +31,8 @@ rtems_task Init(
   rtems_id          task_id;
   rtems_unsigned32  index;
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 25 ***" );
 
@@ -105,5 +104,6 @@ rtems_task Low_task(
     CALLING_OVERHEAD_CLOCK_TICK
   );
 
+  puts( "*** END OF TEST 25 ***" );
   exit( 0 );
 }

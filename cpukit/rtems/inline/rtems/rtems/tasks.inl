@@ -17,11 +17,6 @@
 #ifndef __RTEMS_TASKS_inl
 #define __RTEMS_TASKS_inl
 
-#include <rtems/msgmp.h>
-#include <rtems/partmp.h>
-#include <rtems/regionmp.h>
-#include <rtems/semmp.h>
-
 /*PAGE
  *
  *  _RTEMS_tasks_Allocate
@@ -51,60 +46,28 @@ STATIC INLINE void _RTEMS_tasks_Free (
 
 /*PAGE
  *
- *  _RTEMS_tasks_Cancel_wait
- *
- */
-
-STATIC INLINE void _RTEMS_tasks_Cancel_wait(
-  Thread_Control *the_thread
-)
-{
-  States_Control state;
-  States_Control remote_state;
-
-  state = the_thread->current_state;
-
-/* XXX do this with the object class */
-  if ( _States_Is_waiting_on_thread_queue( state ) ) {
-    if ( _States_Is_waiting_for_rpc_reply( state ) &&
-          _States_Is_locally_blocked( state ) ) {
-      remote_state = _States_Clear(
-                       STATES_WAITING_FOR_RPC_REPLY | STATES_TRANSIENT,
-                       state
-                     );
-
-      switch ( remote_state ) {
-
-        case STATES_WAITING_FOR_BUFFER:
-          _Partition_MP_Send_extract_proxy( the_thread );
-          break;
-        case STATES_WAITING_FOR_SEGMENT:
-          _Region_MP_Send_extract_proxy( the_thread );
-          break;
-        case STATES_WAITING_FOR_SEMAPHORE:
-          _Semaphore_MP_Send_extract_proxy( the_thread );
-          break;
-        case STATES_WAITING_FOR_MESSAGE:
-          _Message_queue_MP_Send_extract_proxy( the_thread );
-          break;
-      }
-    }
-    _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
-  }
-  else if ( _Watchdog_Is_active( &the_thread->Timer ) )
-    (void) _Watchdog_Remove( &the_thread->Timer );
-}
-
-/*PAGE
- *
- *  _RTEMS_Tasks_Priority_to_Core
+ *  _RTEMS_tasks_Priority_to_Core
  */
  
-STATIC INLINE Priority_Control _RTEMS_Tasks_Priority_to_Core(
+STATIC INLINE Priority_Control _RTEMS_tasks_Priority_to_Core(
   rtems_task_priority   priority
 )
 {
   return (Priority_Control) priority;
+}
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Priority_is_valid
+ *
+ */
+ 
+STATIC INLINE boolean _RTEMS_tasks_Priority_is_valid (
+  rtems_task_priority the_priority
+)
+{
+  return (  ( the_priority >= RTEMS_MINIMUM_PRIORITY ) &&
+            ( the_priority <= RTEMS_MAXIMUM_PRIORITY ) );
 }
 
 #endif

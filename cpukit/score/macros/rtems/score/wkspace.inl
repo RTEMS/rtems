@@ -1,7 +1,7 @@
 /*  wkspace.inl
  *
  *  This file contains the macro implementation of the inlined routines
- *  from the RTEMS RAM Workspace Handler.
+ *  from the RAM Workspace Handler.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -17,10 +17,6 @@
 #ifndef __WORKSPACE_inl
 #define __WORKSPACE_inl
 
-#include <rtems/heap.h>
-#include <rtems/fatal.h>
-#include <rtems/status.h>
-
 /*PAGE
  *
  *  _Workspace_Handler_initialization
@@ -33,9 +29,12 @@
   unsigned32  index; \
   unsigned32  memory_available; \
   \
-  if ( ((_starting_address) == NULL) ||  \
-       !_Addresses_Is_aligned( (_starting_address) ) )  \
-    rtems_fatal_error_occurred( RTEMS_INVALID_ADDRESS ); \
+  if ( !(_starting_address) || !_Addresses_Is_aligned( (_starting_address) ) ) \
+    _Internal_error_Occurred( \
+      INTERNAL_ERROR_CORE, \
+      TRUE, \
+      INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS \
+    ); \
   \
   if ( _CPU_Table.do_zero_of_workspace ) { \
     for( zero_out_array  = (unsigned32 *) (_starting_address), index = 0 ; \
@@ -52,7 +51,11 @@
   ); \
   \
   if ( memory_available == 0 ) \
-    rtems_fatal_error_occurred( RTEMS_UNSATISFIED ); \
+    _Internal_error_Occurred( \
+      INTERNAL_ERROR_CORE, \
+      TRUE, \
+      INTERNAL_ERROR_TOO_LITTLE_WORKSPACE \
+    ); \
 }
 
 /*PAGE

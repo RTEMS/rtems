@@ -30,9 +30,9 @@ extern "C" {
 
 #define NO_UNINITIALIZED_WARNINGS
 
-#include <rtems/m68k.h>
+#include <rtems/core/m68k.h>
 #ifndef ASM
-#include <rtems/m68ktypes.h>
+#include <rtems/core/m68ktypes.h>
 #endif
 
 /* conditional compilation parameters */
@@ -221,6 +221,8 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 
 #define _CPU_ISR_Set_level( _newlevel ) \
    m68k_set_interrupt_level( _newlevel )
+
+unsigned32 _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 

@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_unsigned8 Memory_area[ 2048 ];
 rtems_unsigned8 Internal_port_area[ 256 ];
@@ -33,7 +30,9 @@ rtems_task Init(
 
   Set_find_average_overhead( TRUE );
 
-  puts( "\n\n*** TIME TEST overhead ***" );
+  Print_Warning();
+
+  puts( "\n\n*** TIME TEST OVERHEAD ***" );
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'A', '1', ' ' ),
@@ -1274,7 +1273,7 @@ pause();
          0
       );
 
-  puts( "*** END OF TIME OVERHEAD ***\n" );
+  puts( "*** END OF TIME OVERHEAD ***" );
 
   exit( 0 );
 }

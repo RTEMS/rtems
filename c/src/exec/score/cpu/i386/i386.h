@@ -166,6 +166,18 @@ typedef struct {
     ); \
   }
 
+#define i386_get_interrupt_level( _level ) \
+  do { \
+    register unsigned32 _eflags = 0; \
+    \
+    asm volatile ( "push %0 ; \
+                    popf " \
+                    : "=r" ((_eflags)) : "0" ((_eflags)) \
+    ); \
+    \
+    _level = (_eflags & 0x0200) ? 0 : 1; \
+  } while (0)
+
 /*
  *  The following routine swaps the endian format of an unsigned int.
  *  It must be static so it can be referenced indirectly.

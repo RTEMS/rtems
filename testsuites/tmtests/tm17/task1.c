@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_unsigned32 Task_count;
 rtems_task_priority Task_priority;
@@ -39,6 +36,8 @@ rtems_task Init(
   rtems_task_entry  task_entry;
   rtems_unsigned32  index;
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 17 ***" );
 
@@ -123,5 +122,6 @@ rtems_task Last_task(
     CALLING_OVERHEAD_TASK_SET_PRIORITY
   );
 
+  puts( "*** END OF TEST 17 ***" );
   exit( 0 );
 }

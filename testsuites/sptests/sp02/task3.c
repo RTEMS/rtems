@@ -16,7 +16,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task3.c,v 1.2 1995/05/31 17:07:00 joel Exp
  */
 
 #include "system.h"

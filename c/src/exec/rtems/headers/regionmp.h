@@ -21,11 +21,12 @@
 extern "C" {
 #endif
 
-#include <rtems/mppkt.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/region.h>
-#include <rtems/thread.h>
+#include <rtems/core/mppkt.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/region.h>
 
 /*
  *  The following enumerated type defines the list of
@@ -87,8 +88,8 @@ rtems_status_code _Region_MP_Send_request_packet (
   Objects_Id                   region_id,
   void                        *segment,
   unsigned32                   size,
-  rtems_option              option_set,
-  rtems_interval            timeout
+  rtems_option                 option_set,
+  rtems_interval               timeout
 );
 
 /*

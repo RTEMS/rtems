@@ -14,18 +14,19 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/attr.h>
-#include <rtems/chain.h>
-#include <rtems/config.h>
-#include <rtems/isr.h>
-#include <rtems/message.h>
-#include <rtems/object.h>
-#include <rtems/options.h>
-#include <rtems/states.h>
-#include <rtems/support.h>
-#include <rtems/thread.h>
-#include <rtems/wkspace.h>
-#include <rtems/mpci.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/core/chain.h>
+#include <rtems/core/isr.h>
+#include <rtems/rtems/message.h>
+#include <rtems/core/object.h>
+#include <rtems/rtems/options.h>
+#include <rtems/core/states.h>
+#include <rtems/rtems/support.h>
+#include <rtems/core/thread.h>
+#include <rtems/core/wkspace.h>
+#include <rtems/core/mpci.h>
+#include <rtems/sysstate.h>
 
 /*PAGE
  *
@@ -54,6 +55,16 @@ void _Message_queue_Manager_initialization(
     RTEMS_MAXIMUM_NAME_LENGTH,
     FALSE
   );
+
+  /*
+   *  Register the MP Process Packet routine.
+   */
+
+  _MPCI_Register_packet_processor(
+    MP_PACKET_MESSAGE_QUEUE,
+    _Message_queue_MP_Process_packet
+  );
+
 }
 
 /*PAGE
@@ -72,7 +83,7 @@ Message_queue_Control *_Message_queue_Allocate (
     unsigned32 message_buffering_required;
     unsigned32 allocated_message_size;
 
-    mq = \
+    mq =
       (Message_queue_Control *)_Objects_Allocate(&_Message_queue_Information);
 
     if (mq == 0)
@@ -144,11 +155,11 @@ rtems_status_code rtems_message_queue_create(
   register Message_queue_Control *the_message_queue;
 
   if ( !rtems_is_name_valid( name ) )
-    return ( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
-  if ( _Attributes_Is_global( attribute_set ) &&
-       !_Configuration_Is_multiprocessing() )
-    return( RTEMS_MP_NOT_CONFIGURED );
+  if ( _Attributes_Is_global( attribute_set ) && 
+       !_System_state_Is_multiprocessing )
+    return RTEMS_MP_NOT_CONFIGURED;
 
   if (count == 0)
       return RTEMS_INVALID_NUMBER;
@@ -164,8 +175,7 @@ rtems_status_code rtems_message_queue_create(
    */
   
   if ( _Attributes_Is_global( attribute_set ) &&
-       _Configuration_MPCI_table &&
-       (_Configuration_MPCI_table->maximum_packet_size < max_message_size))
+       (_MPCI_table->maximum_packet_size < max_message_size))
   {
       return RTEMS_INVALID_SIZE;
   }
@@ -177,7 +187,7 @@ rtems_status_code rtems_message_queue_create(
 
   if ( !the_message_queue ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   if ( _Attributes_Is_global( attribute_set ) &&
@@ -201,7 +211,8 @@ rtems_status_code rtems_message_queue_create(
     _Attributes_Is_priority( attribute_set ) ? 
        THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_MESSAGE,
-    _Message_queue_MP_Send_extract_proxy
+    _Message_queue_MP_Send_extract_proxy,
+    RTEMS_TIMEOUT
   );
 
   _Objects_Open(
@@ -221,7 +232,7 @@ rtems_status_code rtems_message_queue_create(
     );
 
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -248,12 +259,16 @@ rtems_status_code rtems_message_queue_ident(
   Objects_Id   *id
 )
 {
-  return _Objects_Name_to_id( 
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
     &_Message_queue_Information,
     &name,
     node,
     id 
   );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
 
 /*PAGE
@@ -281,10 +296,10 @@ rtems_status_code rtems_message_queue_delete(
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     case OBJECTS_LOCAL:
       _Objects_Close( &_Message_queue_Information,
                       &the_message_queue->Object );
@@ -294,7 +309,8 @@ rtems_status_code rtems_message_queue_delete(
       else
         _Thread_queue_Flush(
           &the_message_queue->Wait_queue,
-          _Message_queue_MP_Send_object_was_deleted
+          _Message_queue_MP_Send_object_was_deleted,
+          RTEMS_OBJECT_WAS_DELETED
         );
 
       _Message_queue_Free( the_message_queue );
@@ -314,10 +330,10 @@ rtems_status_code rtems_message_queue_delete(
       }
 
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -403,7 +419,7 @@ rtems_status_code rtems_message_queue_broadcast(
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = count;
 
@@ -436,7 +452,7 @@ rtems_status_code rtems_message_queue_broadcast(
                                    waitp->return_argument,
                                    constrained_size);
 
-        *waitp->Extra.message_size_p = constrained_size;
+        *(rtems_unsigned32 *)the_thread->Wait.return_argument_1 = size;
         
         if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
           the_thread->receive_packet->return_code = RTEMS_SUCCESSFUL;
@@ -450,7 +466,7 @@ rtems_status_code rtems_message_queue_broadcast(
       }
       _Thread_Enable_dispatch();
       *count = number_broadcasted;
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
     }
 
     default:
@@ -491,11 +507,9 @@ rtems_status_code rtems_message_queue_receive(
   switch ( location ) {
 
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
 
     case OBJECTS_REMOTE:
-      _Thread_Executing->Wait.return_argument = buffer;
-      
       return _Message_queue_MP_Send_request_packet(
           MESSAGE_QUEUE_MP_RECEIVE_REQUEST,
           id,
@@ -517,7 +531,7 @@ rtems_status_code rtems_message_queue_receive(
       return _Thread_Executing->Wait.return_code;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -549,7 +563,7 @@ rtems_status_code rtems_message_queue_flush(
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = count;
 
@@ -569,10 +583,10 @@ rtems_status_code rtems_message_queue_flush(
       else
         *count = 0;
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -633,9 +647,9 @@ boolean _Message_queue_Seize(
   the_message_queue->Wait_queue.sync = TRUE;
   executing->Wait.queue              = &the_message_queue->Wait_queue;
   executing->Wait.id                 = the_message_queue->Object.id;
-  executing->Wait.option_set         = option_set;
-  executing->Wait.return_argument    = (unsigned32 *)buffer;
-  executing->Wait.Extra.message_size_p = size_p;
+  executing->Wait.option             = option_set;
+  executing->Wait.return_argument    = (void *)buffer;
+  executing->Wait.return_argument_1  = (void *)size_p;
   _ISR_Enable( level );
   return FALSE;
 }
@@ -724,7 +738,7 @@ rtems_status_code _Message_queue_Submit(
   switch ( location )
   {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
 
     case OBJECTS_REMOTE:
       switch ( submit_type ) {
@@ -770,7 +784,7 @@ rtems_status_code _Message_queue_Submit(
           the_thread->Wait.return_argument,
           size
         );
-        *the_thread->Wait.Extra.message_size_p = size;
+        *(rtems_unsigned32 *)the_thread->Wait.return_argument_1 = size;
         
         if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
           the_thread->receive_packet->return_code = RTEMS_SUCCESSFUL;
@@ -783,7 +797,7 @@ rtems_status_code _Message_queue_Submit(
 
         }
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
 
       /*
@@ -794,13 +808,13 @@ rtems_status_code _Message_queue_Submit(
       if ( the_message_queue->number_of_pending_messages ==
            the_message_queue->maximum_pending_messages ) {
         _Thread_Enable_dispatch();
-        return( RTEMS_TOO_MANY );
+        return RTEMS_TOO_MANY;
       }
 
       the_message = _Message_queue_Allocate_message_buffer(the_message_queue);
       if ( the_message == 0) {
         _Thread_Enable_dispatch();
-        return( RTEMS_UNSATISFIED );
+        return RTEMS_UNSATISFIED;
       }
 
       _Message_queue_Copy_buffer( buffer, the_message->Contents.buffer, size );
@@ -818,7 +832,7 @@ rtems_status_code _Message_queue_Submit(
       }
 
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
           
     default:
       return RTEMS_INTERNAL_ERROR;       /* And they were such nice boys, too! */

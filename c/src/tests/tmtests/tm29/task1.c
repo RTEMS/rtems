@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_name Period_name;
 
@@ -36,6 +33,8 @@ rtems_task Init(
   rtems_id          id;
   rtems_unsigned32  index;
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 29 ***" );
 
@@ -203,5 +202,6 @@ rtems_task Low_task(
     CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD
   );
 
+  puts( "*** END OF TEST 29 ***" );
   exit( 0 );
 }

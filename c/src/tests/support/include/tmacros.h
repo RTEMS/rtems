@@ -30,6 +30,13 @@ extern "C" {
 
 #define FOREVER 1                  /* infinite loop */
 
+#ifdef TEST_INIT
+#define TEST_EXTERN 
+#define CONFIGURE_INIT
+#else
+#define TEST_EXTERN extern
+#endif
+
 #define directive_failed( dirstat, failmsg )  \
     fatal_directive_status( dirstat, RTEMS_SUCCESSFUL, failmsg )
 

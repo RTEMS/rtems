@@ -23,9 +23,9 @@ extern "C" {
 
 #pragma align 4            /* for GNU C structure alignment */
 
-#include <rtems/i960.h>
+#include <rtems/core/i960.h>
 #ifndef ASM
-#include <rtems/i960types.h>
+#include <rtems/core/i960types.h>
 #endif
 
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
@@ -236,6 +236,8 @@ EXTERN void               *_CPU_Interrupt_stack_high;
                                          : "0"  (_mask), "1" (_level) \
     ); \
   }
+
+unsigned32 _CPU_ISR_Get_level( void );
 
 /* ISR handler section macros */
 

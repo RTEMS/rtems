@@ -14,12 +14,13 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/support.h>
-#include <rtems/object.h>
-#include <rtems/thread.h>
-#include <rtems/timer.h>
-#include <rtems/tod.h>
-#include <rtems/watchdog.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
+#include <rtems/core/object.h>
+#include <rtems/core/thread.h>
+#include <rtems/rtems/timer.h>
+#include <rtems/core/tod.h>
+#include <rtems/core/watchdog.h>
 
 /*PAGE
  *
@@ -73,7 +74,7 @@ rtems_status_code rtems_timer_create(
   Timer_Control *the_timer;
 
   if ( !rtems_is_name_valid( name ) )
-    return ( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
   _Thread_Disable_dispatch();         /* to prevent deletion */
 
@@ -81,7 +82,7 @@ rtems_status_code rtems_timer_create(
 
   if ( !the_timer ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   the_timer->the_class = TIMER_DORMANT;
@@ -90,7 +91,7 @@ rtems_status_code rtems_timer_create(
 
   *id = the_timer->Object.id;
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -115,12 +116,16 @@ rtems_status_code rtems_timer_ident(
   Objects_Id   *id
 )
 {
-  return _Objects_Name_to_id(
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
     &_Timer_Information,
     &name,
-    RTEMS_SEARCH_LOCAL_NODE,
+    OBJECTS_SEARCH_LOCAL_NODE,
     id
   );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
 
 /*PAGE
@@ -147,17 +152,17 @@ rtems_status_code rtems_timer_cancel(
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       if ( !_Timer_Is_dormant_class( the_timer->the_class ) ) 
         (void) _Watchdog_Remove( &the_timer->Ticker );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -184,18 +189,18 @@ rtems_status_code rtems_timer_delete(
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       _Objects_Close( &_Timer_Information, &the_timer->Object );
       (void) _Watchdog_Remove( &the_timer->Ticker );
       _Timer_Free( the_timer );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -215,24 +220,24 @@ rtems_status_code rtems_timer_delete(
  */
 
 rtems_status_code rtems_timer_fire_after(
-  Objects_Id         id,
-  rtems_interval  ticks,
-  Timer_Service      routine,
-  void              *user_data
+  Objects_Id                         id,
+  rtems_interval                     ticks,
+  rtems_timer_service_routine_entry  routine,
+  void                              *user_data
 )
 {
   Timer_Control   *the_timer;
   Objects_Locations       location;
 
   if ( ticks == 0 )
-    return( RTEMS_INVALID_NUMBER );
+    return RTEMS_INVALID_NUMBER;
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       (void) _Watchdog_Remove( &the_timer->Ticker );
       the_timer->the_class = TIMER_INTERVAL;
@@ -240,10 +245,10 @@ rtems_status_code rtems_timer_fire_after(
       _Watchdog_Insert_ticks( &the_timer->Ticker,
                                  ticks, WATCHDOG_ACTIVATE_NOW );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -263,34 +268,32 @@ rtems_status_code rtems_timer_fire_after(
  */
 
 rtems_status_code rtems_timer_fire_when(
-  Objects_Id          id,
-  rtems_time_of_day        *wall_time,
-  Timer_Service       routine,
-  void               *user_data
+  Objects_Id                          id,
+  rtems_time_of_day                  *wall_time,
+  rtems_timer_service_routine_entry   routine,
+  void                               *user_data
 )
 {
-  Timer_Control   *the_timer;
-  Objects_Locations       location;
-  rtems_status_code            validate_status;
+  Timer_Control       *the_timer;
+  Objects_Locations    location;
   rtems_interval       seconds;
 
   if ( !_TOD_Is_set() )
-    return( RTEMS_NOT_DEFINED );
+    return RTEMS_NOT_DEFINED;
 
-  validate_status = _TOD_Validate( wall_time );
-  if ( !rtems_is_status_successful( validate_status ) )
-    return( validate_status );
+  if ( !_TOD_Validate( wall_time ) )
+    return RTEMS_INVALID_CLOCK;
 
   seconds = _TOD_To_seconds( wall_time );
   if ( seconds <= _TOD_Seconds_since_epoch )
-    return( RTEMS_INVALID_CLOCK );
+    return RTEMS_INVALID_CLOCK;
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       (void) _Watchdog_Remove( &the_timer->Ticker );
       the_timer->the_class = TIMER_TIME_OF_DAY;
@@ -298,10 +301,10 @@ rtems_status_code rtems_timer_fire_when(
       _Watchdog_Insert_seconds( &the_timer->Ticker,
                 seconds - _TOD_Seconds_since_epoch, WATCHDOG_ACTIVATE_NOW );
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -328,18 +331,18 @@ rtems_status_code rtems_timer_reset(
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case OBJECTS_LOCAL:
       if ( _Timer_Is_interval_class( the_timer->the_class ) ) {
         _Watchdog_Reset( &the_timer->Ticker );
         _Thread_Enable_dispatch();
-        return( RTEMS_SUCCESSFUL );
+        return RTEMS_SUCCESSFUL;
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_NOT_DEFINED );
+      return RTEMS_NOT_DEFINED;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }

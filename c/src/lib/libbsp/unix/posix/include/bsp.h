@@ -22,6 +22,7 @@ extern "C" {
 
 #include <rtems.h>
 #include <clockdrv.h>
+#include <console.h>
 #include <iosupp.h>
 #include <libcsupport.h>
 #include <signal.h>
@@ -80,19 +81,23 @@ extern rtems_configuration_table BSP_Configuration;
 /* #define INTERRUPT_EXTERNAL_MPCI        SIGUSR1 */
 
 /*
- * Console driver init
+ *  Device Driver Table Entries
  */
- 
-rtems_device_driver console_initialize(
-  rtems_device_major_number, rtems_device_minor_number minor, void *);
- 
-#define CONSOLE_DRIVER_TABLE_ENTRY \
-  { console_initialize, NULL, NULL, NULL, NULL, NULL }
+
+/*
+ * NOTE: Use the standard Console driver entry
+ */
  
 /*
  * NOTE: Use the standard Clock driver entry
  */
  
+/*
+ * How many libio files we want
+ */
+
+#define BSP_LIBIO_MAX_FDS       20
+
 /* functions */
 
 rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);

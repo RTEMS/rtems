@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_asr Process_asr_for_pass_1(
   rtems_signal_set signals
@@ -42,6 +39,8 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 19 ***" );
 
@@ -208,5 +207,6 @@ rtems_task Task_3(
     0
   );
 
+  puts( "*** END OF TEST 19 ***" );
   exit( 0 );
 }

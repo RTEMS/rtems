@@ -30,9 +30,17 @@
 extern "C" {
 #endif
 
-#include <rtems/types.h>
+#include <rtems/rtems/types.h>
 #include <rtems/config.h>
-#include <rtems/intr.h>
+#include <rtems/rtems/intr.h>
+
+/*
+ *  The following defines the default Multiprocessing Configuration
+ *  Table.  This table is used in a single processor system.
+ */
+
+extern const rtems_multiprocessing_table
+  _Initialization_Default_multiprocessing_table;
 
 /*
  *  rtems_initialize_executive

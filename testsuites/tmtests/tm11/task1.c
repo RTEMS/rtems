@@ -11,11 +11,8 @@
  *  $Id$
  */
 
+#define TEST_INIT
 #include "system.h"
-#undef EXTERN
-#define EXTERN
-#include "conftbl.h"
-#include "gvar.h"
 
 rtems_id Queue_id;
 
@@ -40,6 +37,8 @@ void Init(
 {
   rtems_status_code status;
   rtems_id id;
+
+  Print_Warning();
 
   puts( "\n\n*** TIME TEST 11 ***" );
 
@@ -151,5 +150,6 @@ rtems_task High_task(
     CALLING_OVERHEAD_MESSAGE_QUEUE_SEND
   );
 
+  puts( "*** END OF TEST 11 ***" );
   exit( 0 );
 }

@@ -19,11 +19,10 @@
 
 #include <rtems/system.h>
 #include <rtems/fatal.h>
-#include <rtems/isr.h>
-#include <rtems/intr.h>
-#include <rtems/wkspace.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/wkspace.h>
 
-rtems_status_code hppa_external_interrupt_initialize(void);
+void hppa_external_interrupt_initialize(void);
 void hppa_external_interrupt_enable(unsigned32);
 void hppa_external_interrupt_disable(unsigned32);
 void hppa_external_interrupt(unsigned32, CPU_Interrupt_frame *);
@@ -72,9 +71,6 @@ void _CPU_Initialize(
     int i;
 
     extern void IVA_Table(void);
-
-    if ( cpu_table == NULL )
-        rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED );
 
     /*
      * XXX; need to setup fpsr smarter perhaps
@@ -194,7 +190,7 @@ void _CPU_ISR_install_vector(
  * called by bsp_start()
  */
 
-rtems_status_code
+void
 hppa_external_interrupt_initialize(void)
 {
     rtems_isr_entry ignore;
@@ -207,8 +203,6 @@ hppa_external_interrupt_initialize(void)
     /* install the external interrupt handler */
     rtems_interrupt_catch((rtems_isr_entry) hppa_external_interrupt,
                           HPPA_INTERRUPT_EXTERNAL_INTERRUPT, &ignore) ;
-
-    return RTEMS_SUCCESSFUL;
 }
 
 /*

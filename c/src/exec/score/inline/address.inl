@@ -28,7 +28,7 @@ STATIC INLINE void *_Addresses_Add_offset (
   unsigned32  offset
 )
 {
-  return (base + offset);
+  return (void *)((char *)base + offset);
 }
 
 /*PAGE
@@ -42,23 +42,7 @@ STATIC INLINE void *_Addresses_Subtract_offset (
   unsigned32  offset
 )
 {
-  return (base - offset);
-}
-
-/*PAGE
- *
- *  _Addresses_Add
- *
- *  NOTE:  The cast of an address to an unsigned32 makes this code
- *         dependent on an addresses being thirty two bits.
- */
-
-STATIC INLINE void *_Addresses_Add (
-  void *left,
-  void *right
-)
-{
-  return (left + (unsigned32)right);
+  return (void *)((char *)base - offset);
 }
 
 /*PAGE
