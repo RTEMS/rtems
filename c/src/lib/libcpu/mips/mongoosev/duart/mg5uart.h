@@ -34,15 +34,15 @@ extern "C" {
  */
 
 /* shared registers from peripheral base (i.e. from ulCtrlPort1) */
-#define MG5UART_COMMAND_REGISTER          0
-#define MG5UART_STATUS_REGISTER           1
-#define MG5UART_INTERRUPT_CAUSE_REGISTER  2
-#define MG5UART_INTERRUPT_MASK_REGISTER   3
+#define MG5UART_COMMAND_REGISTER          0x00
+#define MG5UART_STATUS_REGISTER           0x04
+#define MG5UART_INTERRUPT_CAUSE_REGISTER  0x08
+#define MG5UART_INTERRUPT_MASK_REGISTER   0x0c
 
 /* port specific registers from uart base (i.e. from ulCtrlPort2) */
-#define MG5UART_RX_BUFFER 0
-#define MG5UART_TX_BUFFER 1
-#define MG5UART_BAUD_RATE 2
+#define MG5UART_RX_BUFFER 0x00
+#define MG5UART_TX_BUFFER 0x04
+#define MG5UART_BAUD_RATE 0x08
 
 /*
  *  Interrupt mask values

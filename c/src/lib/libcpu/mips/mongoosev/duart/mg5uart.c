@@ -262,7 +262,7 @@ MG5UART_STATIC int mg5uart_open(
 
   /* XXX default baud rate could be from configuration table */
 
-  (void) mg5uart_baud_rate( minor, B9600, &baudcmd );
+  (void) mg5uart_baud_rate( minor, B19200, &baudcmd );
 
   /*
    *  Set the DUART channel to a default useable state
@@ -686,7 +686,7 @@ MG5UART_STATIC int mg5uart_baud_rate(
   if (!baud_requested)
     baud_requested = B9600;              /* default to 9600 baud */
   
-  baud_requested = termios_baud_to_number( B9600 );
+  baud_requested = termios_baud_to_number( baud_requested );
 
   clock = (rtems_unsigned32) Console_Port_Tbl[minor].ulClock;
   if (!clock)
@@ -694,16 +694,9 @@ MG5UART_STATIC int mg5uart_baud_rate(
 
   /*
    *  Formula is Code = round(ClockFrequency / Baud - 1).
-   *
-   *  Since this is integer math, we will divide by twice the baud and
-   *  check the remaining odd bit.
    */
 
-  tmp_code = (clock / (baud_requested * 2));
-  if ( tmp_code & 0x01 )
-    tmp_code = (tmp_code >> 1) + 1;
-  else
-    tmp_code = (tmp_code >> 1);
+  tmp_code = (clock / baud_requested) - 1;
 
   /*
    *  From section 12.7, "Keep C>100 for best receiver operation."
