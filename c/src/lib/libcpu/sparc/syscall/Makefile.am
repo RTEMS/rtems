@@ -12,8 +12,8 @@ noinst_HEADERS = syscall.h
 
 syscall_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -31,4 +31,4 @@ all-local: $(ARCH) $(syscall_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = syscall.S syscall.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

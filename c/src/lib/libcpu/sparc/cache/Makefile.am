@@ -13,8 +13,8 @@ include_libcpudir = $(includedir)/libcpu
 include_libcpu_HEADERS = cache.h
 noinst_HEADERS = cache_.h
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 if has_instruction_cache
 CACHE_DEFINE = -DHAS_INSTRUCTION_CACHE
@@ -40,4 +40,4 @@ CLEANFILES = cache.h
 
 EXTRA_DIST = cache.c cache_.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

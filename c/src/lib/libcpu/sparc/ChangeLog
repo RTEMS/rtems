@@ -1,3 +1,10 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+	cache/Makefile.am: Reflect having moved automake.
+	reg_win/Makefile.am: Reflect having moved automake.
+	syscall/Makefile.am: Reflect having moved automake.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.

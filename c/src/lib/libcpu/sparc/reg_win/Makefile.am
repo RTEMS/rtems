@@ -8,8 +8,8 @@ PGM = $(ARCH)/reg_win.rel
 S_FILES = window.S
 reg_win_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -27,4 +27,4 @@ all-local: $(ARCH) $(reg_win_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = window.S
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am
