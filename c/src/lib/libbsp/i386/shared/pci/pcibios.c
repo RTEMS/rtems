@@ -11,6 +11,8 @@
 #include <bsp.h>
 #include <pcibios.h>
 
+#include <string.h>	/* memcpy */
+
 /*
  * This is simpliest possible PCI BIOS, it assumes that addressing
  * is flat and that stack is big enough 
