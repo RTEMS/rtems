@@ -71,33 +71,3 @@ void _Z85C30_NAME(z85c30_set_register)(
     *port = ucData;
   rtems_interrupt_disable(level);
 }
-
-
-/*
- *  Z85C30 Get Data Routine
- */
-
-unsigned8 _Z85C30_NAME(z85c30_get_data)(
-  unsigned32  ulDataPort
-)
-{
-  _Z85C30_TYPE *port;
-
-  port = (_Z85C30_TYPE *)ulDataPort;
-  return *port;
-}
-
-/*
- *  Z85C30 Set Data Routine
- */
-
-void _Z85C30_NAME(z85c30_set_data)(
-  unsigned32  ulDataPort,
-  unsigned8   ucData
-)
-{
-  _Z85C30_TYPE *port;
-
-  port = (_Z85C30_TYPE *)ulDataPort;
-  *port = ucData;
-}

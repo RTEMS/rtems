@@ -243,49 +243,6 @@ Z85C30_STATIC int z85c30_close(
   return(RTEMS_SUCCESSFUL);
 }
 
-/* 
- *  z85c30_write_polled
- *
- *  This routine transmits a character using polling.
- */
-
-Z85C30_STATIC void z85c30_write_polled(
-  int   minor,
-  char  cChar
-)
-{
-  volatile unsigned8 z85c30_status;
-  unsigned32         ulCtrlPort;
-  getRegister_f      getReg;
-  setData_f          setData;
-
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  getReg     = Console_Port_Tbl[minor].getRegister;
-  setData    = Console_Port_Tbl[minor].setData;
-
-  /*
-   * Wait for the Transmit buffer to indicate that it is empty.
-   */
-
-  z85c30_status = (*getReg)( ulCtrlPort, SCC_WR0_SEL_RD0 );
-
-  while (!Z85C30_Status_Is_TX_buffer_empty(z85c30_status)) {
-    /*
-     * Yield while we wait
-     */
-    if (_System_state_Is_up(_System_state_Get())) {
-      rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-    }
-    z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
-  }
-
-  /*
-   * Write the character.
-   */
-
-  (*setData)(Console_Port_Tbl[minor].ulDataPort, cChar);
-}
-
 /*
  *  Console Device Driver Entry Points
  */
@@ -303,12 +260,12 @@ Z85C30_STATIC void z85c30_init(int minor)
 
   pz85c30Context = (z85c30_context *)malloc(sizeof(z85c30_context));
 
-  Console_Port_Data[minor].pDeviceContext=(void *)pz85c30Context;
+  Console_Port_Data[minor].pDeviceContext = (void *)pz85c30Context;
 
   pz85c30Context->ucModemCtrl = SCC_WR5_TX_8_BITS | SCC_WR5_TX_EN;
 
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  if (ulCtrlPort == Console_Port_Tbl[minor].ulCtrlPort2) {
+  if ( ulCtrlPort == Console_Port_Tbl[minor].ulCtrlPort2 ) {
     /*
      * This is channel A
      */
@@ -580,27 +537,21 @@ Z85C30_STATIC void z85c30_process(
 )
 {
   unsigned32          ulCtrlPort;
-  unsigned32          ulDataPort;
   volatile unsigned8  z85c30_status;
   char                cChar;
   setRegister_f       setReg;
   getRegister_f       getReg;
-  getData_f           getData;
-  setData_f           setData;
 
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  ulDataPort = Console_Port_Tbl[minor].ulDataPort;
   setReg     = Console_Port_Tbl[minor].setRegister;
   getReg     = Console_Port_Tbl[minor].getRegister;
-  getData    = Console_Port_Tbl[minor].getData;
-  setData    = Console_Port_Tbl[minor].setData;
 
   /*
    * Deal with any received characters
    */
   while (ucIntPend&SCC_RR3_B_RX_IP)
   {
-    z85c30_status=(*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
+    z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
     if (!Z85C30_Status_Is_RX_character_available(z85c30_status)) {
       break;
     }
@@ -609,7 +560,7 @@ Z85C30_STATIC void z85c30_process(
      * Return the character read.
      */
 
-    cChar = (*getData)(ulDataPort);
+    cChar = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD8);
 
     rtems_termios_enqueue_raw_characters(
       Console_Port_Data[minor].termios_data,
@@ -658,7 +609,7 @@ Z85C30_STATIC void z85c30_process(
     /*
      * transmit character
      */
-    (*setData)(ulDataPort, cChar);
+    (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR8, cChar);
 
     /*
      * Interrupt once FIFO has room
@@ -672,7 +623,7 @@ Z85C30_STATIC void z85c30_process(
      * Clear the external status interrupt
      */
     (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT);
-    z85c30_status=(*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
+    z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
   }
 
   /*
@@ -697,7 +648,7 @@ Z85C30_STATIC rtems_isr z85c30_isr(
       ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort2;
       getReg     = Console_Port_Tbl[minor].getRegister;
       do {
-        ucIntPend=(*getReg)(ulCtrlPort, SCC_WR0_SEL_RD3);
+        ucIntPend = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD3);
 
           /*
            * If this is channel A select channel A status
@@ -883,16 +834,14 @@ Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
   volatile unsigned8  z85c30_status;
   unsigned32          ulCtrlPort;
   getRegister_f       getReg;
-  getData_f           getData;
 
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  getData    = Console_Port_Tbl[minor].getData;
   getReg     = Console_Port_Tbl[minor].getRegister;
 
   /*
    * return -1 if a character is not available.
    */
-  z85c30_status=(*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
+  z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
   if (!Z85C30_Status_Is_RX_character_available(z85c30_status)) {
     return -1;
   }
@@ -900,7 +849,8 @@ Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
   /*
    * Return the character read.
    */
-  return (*getData)(Console_Port_Tbl[minor].ulDataPort);
+
+  return (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD8);
 }
 
 /* 
@@ -930,3 +880,47 @@ Z85C30_STATIC int z85c30_write_support_polled(
    */
   return nwrite;
 }
+
+/* 
+ *  z85c30_write_polled
+ *
+ *  This routine transmits a character using polling.
+ */
+
+Z85C30_STATIC void z85c30_write_polled(
+  int   minor,
+  char  cChar
+)
+{
+  volatile unsigned8 z85c30_status;
+  unsigned32         ulCtrlPort;
+  getRegister_f      getReg;
+  setRegister_f      setReg;
+
+  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
+  getReg     = Console_Port_Tbl[minor].getRegister;
+  setReg     = Console_Port_Tbl[minor].setRegister;
+
+  /*
+   * Wait for the Transmit buffer to indicate that it is empty.
+   */
+
+  z85c30_status = (*getReg)( ulCtrlPort, SCC_WR0_SEL_RD0 );
+
+  while (!Z85C30_Status_Is_TX_buffer_empty(z85c30_status)) {
+    /*
+     * Yield while we wait
+     */
+    if (_System_state_Is_up(_System_state_Get())) {
+      rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
+    }
+    z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
+  }
+
+  /*
+   * Write the character.
+   */
+
+  (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR8, cChar );
+}
+
