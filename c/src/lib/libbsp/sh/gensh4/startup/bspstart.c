@@ -49,7 +49,7 @@ char *rtems_progname;
 /*
  * This variable is nesessary for console driver.
  */
-unsigned32 SH4_CPU_HZ_Frequency = HZ;
+unsigned32 SH4_CPU_HZ_Frequency = CPU_CLOCK_RATE_HZ;
 
 /*
  *  Use the shared implementations of the following routines
@@ -142,5 +142,5 @@ void bsp_start(void)
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 #endif
 
-  Cpu_table.clicks_per_second = HZ ;
+  Cpu_table.clicks_per_second = CPU_CLOCK_RATE_HZ ;
 }

@@ -47,7 +47,10 @@ extern "C" {
 #include <rtems.h>
 #include <clockdrv.h>
 #include <console.h>
+#include <bspopts.h>
+
 #include "rtems/score/sh7750_regs.h"
+
 
 /*
  *  confdefs.h overrides for this BSP:
