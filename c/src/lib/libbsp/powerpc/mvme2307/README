@@ -1,3 +1,7 @@
+#
+#  $Id$
+#
+
 BSP NAME:           mvme2307
 BOARD:              Motorola MVME2307
 BUS:                VME/PCI
