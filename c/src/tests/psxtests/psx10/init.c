@@ -47,6 +47,10 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( status == EINVAL );
 
+  puts( "Init: pthread_condattr_init" );
+  status = pthread_condattr_init( &attr );
+  assert( !status );
+
   puts( "Init: pthread_condattr_setpshared - PTHREAD_PROCESS_SHARED" );
   status = pthread_condattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
   assert( !status );
@@ -86,6 +90,10 @@ void *POSIX_Init(
 
   puts( "Init: pthread_cond_destroy" );
   status = pthread_cond_destroy( &cond );
+  assert( !status );
+
+  puts( "Init: pthread_cond_init - attr" );
+  status = pthread_cond_init( &cond, &attr );
   assert( !status );
 
   /* create a thread */
