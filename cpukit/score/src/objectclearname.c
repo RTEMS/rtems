@@ -34,7 +34,7 @@
 
 void _Objects_Clear_name(
   void       *name,
-  uint32_t    length
+  uint16_t    length
 )
 {
   uint32_t    index;

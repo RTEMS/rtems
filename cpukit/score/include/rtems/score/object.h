@@ -57,7 +57,7 @@ typedef void * Objects_Name;
 typedef boolean (*Objects_Name_comparators)(
   void       * /* name_1 */,
   void       * /* name_2 */,
-  uint32_t     /* length */
+  uint16_t     /* length */
 );
 
 #if defined(RTEMS_USE_16_BIT_OBJECT)
@@ -410,7 +410,7 @@ void _Objects_Free(
 
 void _Objects_Clear_name(
   void       *name,
-  uint32_t    length
+  uint16_t    length
 );
 
 /*
@@ -423,7 +423,8 @@ void _Objects_Clear_name(
 
 void _Objects_Copy_name_string(
   void       *source,
-  void       *destination
+  void       *destination,
+  uint16_t    length
 );
 
 /*

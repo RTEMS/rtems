@@ -1,5 +1,11 @@
 2004-11-22	Joel Sherrill <joel@OARcorp.com>
 
+	* score/include/rtems/score/object.h, score/src/objectclearname.c,
+	score/src/objectcopynamestring.c: Fixing warning led to making
+	changes to multiple prototypes for object support routines.
+
+2004-11-22	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/src/ttyname_r.c: Remove warning for using _fstat.
 
 2004-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
