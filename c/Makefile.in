@@ -92,7 +92,7 @@ pre_install_src: env make_src_makefiles
 	for i in `cat make_src_makefiles` ; do \
 		DIR=`dirname $$i`; \
 		cd $$DIR; \
-		$(MAKE) preinstall; \
+		$(MAKE) RTEMS_BSP=${RTEMS_BSP} preinstall; \
 		cd $$CURRDIR; \
 	done
 

@@ -107,7 +107,7 @@ enum ptracereq
   RPT_PGETTHREADREGS  = 85	/* portable version */
 };
 
-#include "remdeb_f.x"
+#include FRONTEND
 
 const MAXDEBUGGEE= 150;
 const NAMEMAX = 17;   
