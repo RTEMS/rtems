@@ -22,7 +22,7 @@ extern "C" {
 
 #include <rtems/score/or32.h>            /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/or32types.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
