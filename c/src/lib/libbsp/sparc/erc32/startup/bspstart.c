@@ -103,6 +103,7 @@ rtems_extension fast_idle_switch_hook(
  
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, unsigned32, int );
+extern void bsp_spurious_initialize();
 
 /*
  *  bsp_pretasking_hook
@@ -161,6 +162,7 @@ void bsp_pretasking_hook(void)
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 
+  bsp_spurious_initialize();
 }
 
 /*

@@ -472,7 +472,7 @@ typedef struct {
   unsigned32               i6_fp;
   unsigned32               i7;
   unsigned32               y;
-  unsigned32               pad0_offset;
+  unsigned32               tpc;
 } CPU_Interrupt_frame;
 
 #endif /* ASM */
@@ -501,7 +501,7 @@ typedef struct {
 #define ISF_I6_FP_OFFSET       CPU_MINIMUM_STACK_FRAME_SIZE + 0x40
 #define ISF_I7_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x44
 #define ISF_Y_OFFSET           CPU_MINIMUM_STACK_FRAME_SIZE + 0x48
-#define ISF_PAD0_OFFSET        CPU_MINIMUM_STACK_FRAME_SIZE + 0x4c
+#define ISF_TPC_OFFSET         CPU_MINIMUM_STACK_FRAME_SIZE + 0x4c
 
 #define CONTEXT_CONTROL_INTERRUPT_FRAME_SIZE CPU_MINIMUM_STACK_FRAME_SIZE + 0x50 
 #ifndef ASM

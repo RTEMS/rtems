@@ -21,6 +21,17 @@
 
 static const char digits[16] = "0123456789abcdef";
 
+/* Simple integer-to-string conversion */
+
+void itos(unsigned32 u, char *s)
+{
+  int i;
+
+  for (i=0; i<8; i++) {
+    s[i] =  digits[(u >> (28 - (i*4))) & 0x0f];
+  }
+}
+
 /*
  *  bsp_spurious_handler
  *
@@ -28,16 +39,20 @@ static const char digits[16] = "0123456789abcdef";
  */
 
 rtems_isr bsp_spurious_handler(
-   rtems_vector_number trap
+   rtems_vector_number trap,
+   CPU_Interrupt_frame *isf
 )
 {
   char line[ 80 ];
-  int length;
   rtems_unsigned32 real_trap;
 
-  DEBUG_puts( "Spurious Trap" );
-
   real_trap = SPARC_REAL_TRAP_NUMBER(trap);
+
+  strcpy(line, "Unexpected trap (0x  ) at address 0x        ");
+  line[ 19 ] = digits[ real_trap >> 4 ];
+  line[ 20 ] = digits[ real_trap & 0xf ];
+  itos(isf->tpc, &line[36]);
+  DEBUG_puts( line );
 
   switch (real_trap) {
 
@@ -67,7 +82,9 @@ rtems_isr bsp_spurious_handler(
       DEBUG_puts( "fp exception" );
       break;
     case 0x09: 
-      DEBUG_puts( "data access exception" );
+      strcpy(line, "data access exception at 0x        " );
+      itos(ERC32_MEC.First_Failing_Address, &line[27]);
+      DEBUG_puts( line );
       break;
     case 0x0A: 
       DEBUG_puts( "tag overflow" );
@@ -124,11 +141,6 @@ rtems_isr bsp_spurious_handler(
       break;
 
     default:
-      strcpy( line, "Number 0x  " );
-      length = strlen ( line );
-      line[ length - 2 ] = digits[ real_trap >> 4 ];
-      line[ length - 1 ] = digits[ real_trap & 0xf ];
-      DEBUG_puts( line ); 
       break;
   }
 
@@ -142,23 +154,37 @@ rtems_isr bsp_spurious_handler(
 /*
  *  bsp_spurious_initialize
  *
- *  Install the spurious handler for most traps.
+ *  Install the spurious handler for most traps. Note that set_vector()
+ *  will unmask the corresponding asynchronous interrupt, so the initial
+ *  interrupt mask is restored after the handlers are installed.
  */
 
 void bsp_spurious_initialize()
 {
   rtems_unsigned32 trap;
+  unsigned32 level = 15;
+  unsigned32 mask;
+
+  sparc_disable_interrupts(level);
+  mask = ERC32_MEC.Interrupt_Mask;
 
   for ( trap=0 ; trap<256 ; trap++ ) {
 
     /*
      *  Skip window overflow, underflow, and flush as well as software
-     *  trap 0 which we will use as a shutdown.
+     *  trap 0 which we will use as a shutdown. Also avoid trap 0x70 - 0x7f
+     *  which cannot happen and where some of the space is used to pass
+     *  paramaters to the program.
      */
 
-    if ( trap == 5 || trap == 6 || trap == 0x83 || trap == 0x80)
+    if (( trap == 5 || trap == 6 || trap == 0x83 ) ||
+    	(( trap >= 0x70 ) && ( trap <= 0x80 )))
       continue;
 
     set_vector( bsp_spurious_handler, SPARC_SYNCHRONOUS_TRAP( trap ), 1 );
   }
+
+  ERC32_MEC.Interrupt_Mask = mask;
+  sparc_enable_interrupts(level);
+
 }

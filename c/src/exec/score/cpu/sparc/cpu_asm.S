@@ -336,6 +336,7 @@ SYM(_ISR_Handler):
                                       ! Is this a synchronous trap?
         be,a    win_ovflow            ! No, then skip the adjustment
         nop                           ! DELAY
+        mov     %l1, %l6              ! save trapped pc for debug info
         mov     %l2, %l1              ! do not return to the instruction
         add     %l2, 4, %l2           ! indicated
 
@@ -441,6 +442,7 @@ save_isf:
 
         rd      %y, %g1
         st      %g1, [%sp + ISF_Y_OFFSET]      ! save y
+        st      %l6, [%sp + ISF_TPC_OFFSET]    ! save real trapped pc
 
         mov     %sp, %o1                       ! 2nd arg to ISR Handler
 

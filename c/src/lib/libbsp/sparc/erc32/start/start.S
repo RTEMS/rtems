@@ -136,7 +136,10 @@ __ERC32_MEC_Timer_Control_Mirror:
   BAD_TRAP; BAD_TRAP;                           ! 7C - 7D undefined
 
 _CLOCK_SPEED:
-  BAD_TRAP; BAD_TRAP; ! BAD_TRAP; BAD_TRAP;       ! 7E - 7F undefined
+
+  .word	0x0a, 0, 0, 0				! 7E (10 MHz default)
+  
+  BAD_TRAP; 					! 7F undefined
 
   /* 
    *  Software traps
