@@ -775,16 +775,8 @@ int sigtimedwait(
   Watchdog_Interval  interval;
   siginfo_t          signal_information;
   siginfo_t         *the_info;
+  int                signo;
   
-  interval = 0;
-  if ( timeout ) {
-
-    if (timeout->tv_nsec < 0 || timeout->tv_nsec >= TOD_NANOSECONDS_PER_SECOND)
-      set_errno_and_return_minus_one( EINVAL );
-
-    interval = _POSIX_Timespec_to_interval( timeout );
-  }
-
   the_info = ( info ) ? info : &signal_information;
 
   the_thread = _Thread_Executing;
@@ -795,11 +787,40 @@ int sigtimedwait(
    *  What if they are already pending?
    */
 
+  /* API signals pending? */
+
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
     the_info->si_signo = _POSIX_signals_Get_highest( api->signals_pending );
     the_info->si_code = SI_USER;
     the_info->si_value.sival_int = 0;
+    return the_info->si_signo;
+  }
+
+  /* Process pending signals? */
+
+#warning "Mark fix me"
+  if ( *set & _POSIX_signals_Pending) {
+    signo = _POSIX_signals_Get_highest( _POSIX_signals_Pending );
+    if ( !info || ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) ) {
+      the_info->si_signo = signo;
+      the_info->si_code = SI_USER;
+      the_info->si_value.sival_int = 0;
+    } else {
+#warning "_POSIX_signals_Siginfo is an array of chains.... "
+#if 0
+      *the_info = *_POSIX_signals_Siginfo[ signo ];
+#endif
+    }
+  }
+
+  interval = 0;
+  if ( timeout ) {
+
+    if (timeout->tv_nsec < 0 || timeout->tv_nsec >= TOD_NANOSECONDS_PER_SECOND)
+      set_errno_and_return_minus_one( EINVAL );
+
+    interval = _POSIX_Timespec_to_interval( timeout );
   }
 
   the_info->si_signo = -1;
