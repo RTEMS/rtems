@@ -15,7 +15,9 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-
+RTEMS_BSPOPTS_SET([ARM_RDI_MONITOR],[*],[])
+RTEMS_BSPOPTS_HELP([ARM_RDI_MONITOR],
+[If defined enable ARM_RDI_MONITOR support])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
