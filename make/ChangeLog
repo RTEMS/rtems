@@ -1,3 +1,10 @@
+2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/genmongoosev.cfg: Remove -g from CPU_CFLAGS.
+	* custom/h8sim.cfg: Remove -g from CPU_CFLAGS. Remove GCC272
+	support.
+	* custom/jmr3904.cfg: Remove -g from CPU_CFLAGS. Remove GCC272.
+
 2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/Cygwin-posix.cfg: Remove -DMALLOC_PROVIDED.
