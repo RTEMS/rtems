@@ -1,3 +1,8 @@
+2002-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/system.h: Add the sparc to the target supporting
+	multlibs.
+
 2002-04-16	Chris Johns <ccj@acm.org>
 
 	* src/threadinitialize.c: Per PR181, clear the array of user extension

@@ -38,7 +38,7 @@ extern "C" {
  */
 
 #if !defined(RTEMS_MULTILIBS)
-#if defined(__PPC__) || defined(__sparc__)
+#if defined(__PPC__)
 #include <rtems/score/targopts.h>
 #endif
 #endif
