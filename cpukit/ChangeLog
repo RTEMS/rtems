@@ -1,5 +1,7 @@
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in libnetworking/ChangeLog.
+	* libnetworking/ChangeLog: Remove.
 	* ChangeLog: Merge-in libcsupport/ChangeLog.
 	* libcsupport/ChangeLog: Remove.
 	* ChangeLog: Merge-in libblock/ChangeLog, libfs/ChangeLog.
@@ -30,6 +32,7 @@
 	* libblock/Makefile.am: Add PREINSTALL_DIRS.
 	* libfs/Makefile.am: Add PREINSTALL_DIRS.
 	* libcsupport/Makefile.am: Add PREINSTALL_DIRS.
+	* libnetworking/Makefile.am: Add PREINSTALL_DIRS.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -59,6 +62,23 @@
 	PREINSTALL_FILES to CLEANFILES.
 	* libcsupport/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
 	PREINSTALL_FILES to CLEANFILES.
+	* libnetworking/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
+	* libnetworking/netinet/in_cksum.c: #include netinet/in_cksum_<cpu>.h.
+
+2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR/549 networking
+	* libnetworking/netinet/in_cksum_powerpc.h: New (copy of
+	in_cksum_powerpc.c).
+	* libnetworking/netinet/in_cksum_powerpc.c: Remove.
+	* libnetworking/netinet/in_cksum_i386.h: New (copy of in_cksum_i386.c).
+	* libnetworking/netinet/in_cksum_i386.c: Remove.
+	* libnetworking/netinet/in_cksum_arm.h: New (copy of in_cksum_arm.c).
+	* libnetworking/netinet/in_cksum_arm.c: Remove.
+	* libnetworking/netinet/in_cksum_m68k.c: New (copy of in_cksum_m68k.c).
+	* libnetworking/netinet/in_cksum_m68k.c: Remove.
+	* libnetworking/netinet/Makefile.am: Reflect changes above.
 
 2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -107,6 +127,7 @@
 	* libcsupport/Makefile.am: Reformat, add UNUSED_FILES.
 	* libcsupport/Makefile.am: Include compile.am, again. Eliminate
 	DOC_FILES.
+	* libnetworking/Makefile.am: Include compile.am, again. Cleanup.
 
 2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -164,6 +185,11 @@
 	lib*_a_SOURCES.
 	* libcsupport/Makefile.am: Build libcsupport$(LIB_VARIANT).a instead of
 	$(ARCH)/libcsupport.a.
+	* libnetworking/Makefile.am: Remove *C_FILES.
+	* libnetworking/Makefile.am: Add libs to CLEANFILES Set lib*_g_a_SOURCES
+	= lib*_a_SOURCES.
+	* libnetworking/Makefile.am: Build lib*$(LIB_VARIANT).a instead of
+	$(ARCH)/lib*.a.
 
 2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -190,6 +216,8 @@
 	rules.
 	* libcsupport/Makefile.am: Build library using EXTRA_LIBRARIES and
 	automake rules.
+	* libnetworking/Makefile.am: Build library using EXTRA_LIBRARIES and
+	automake rules.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -207,6 +235,8 @@
 	score/cpu/mips64orion/rtems/score/cpu.h,
 	score/cpu/mips64orion/rtems/score/mips64orion.h,
 	score/cpu/mips64orion/rtems/score/types.h: Removed.
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Include rtems/cdefs.h so
+	things compile.
 
 2003-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -262,6 +292,8 @@
 	* libcsupport/Makefile.am: Use mkdir_p. Remove dirs from
 	PRE/TMPINSTALL_FILES.
 	* libcsupport/Makefile.am: Remove BUILT_SOURCES.
+	* libnetworking/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -316,6 +348,10 @@
 	* libfs/Makefile.am: Add $(dirstamp) to preinstallation rules.
 	* libcsupport/Makefile.am: Add $(dirstamp) to compilation rules.
 	* libcsupport/Makefile.am: Add $(dirstamp) to preinstallation rules.
+	* libnetworking/Makefile.am: Add $(dirstamp) to compilation rules.
+	* libnetworking/Makefile.am: Fix libc_OBJS.
+	* libnetworking/Makefile.am: Add $(dirstamp) to preinstallation rules.
+	Restore libc/$(ARCH)/lib.a.
 
 2003-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -337,6 +373,9 @@
 	* libmisc/stackchk/Makefile.am: Remove.
 	* libmisc/untar/Makefile.am: Remove.
 	* libmisc/Makefile.am: Merge-in the Makefile.ams above.
+	* libnetworking/libc/Makefile.am: Remove.
+	* libnetworking/lib/Makefile.am: Remove.
+	* libnetworking/Makefile.am: Merge-in the Makefile.ams above.
 
 2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -440,6 +479,10 @@
 	* libcsupport/include/rtems/cdefs.h: Use _RTEMS_CDEFS_H guards.
 	* libcsupport/include/rtems/cdefs.h: New.
 	* libcsupport/Makefile.am: Completely reworked.
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Include rtems/cdefs.h
+	instead of sys/cdefs.h (Nonportable).
+	* libnetworking/wrapup/Makefile.am: Removed.
+	* libnetworking/Makefile.am: Reworked.
 
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -670,6 +713,15 @@
 	* libcsupport/src/newlibc.c: Reflect struct
 	Thread_Control_struct.libc_reent  having changed from void * to struct
 	_reent*.
+
+2003-09-15	Jay Monkman <jtm@smoothsmoothie.com>
+
+	PR 482/networking
+	* libnetworking/rtems/rtems_glue.c: Network interfaces can't be taken
+	down.
+	PR 481/networking
+	* libnetworking/net/ethernet.h, libnetworking/net/if_arp.h,
+	libnetworking/netinet/if_ether.h: Network structs should be packed.
 
 2003-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1100,6 +1152,8 @@
 	* libcsupport/src/malloc.c: Per multiple standards realloc does not free
 	the original memory if the allocation of the requested larger block
 	fails.
+	* libnetworking/rtems/mkrootfs.c, libnetworking/rtems/mkrootfs.h: URL
+	for license changed.
 
 2003-09-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -1109,6 +1163,11 @@
 
 	* libcsupport/src/open.c: Fix typo.
 	* libcsupport/src/malloc.c: Remove test define left in.
+
+2003-09-02	Jiri Gaisler <jiri@gaisler.com>
+
+	PR 476/networking
+	* libnetworking/machine/in_cksum.h: Fix in_cksum calculation on SPARC.
 
 2003-09-02	Ilya Alexeev <ilya@continuum.ru>
 
@@ -1217,6 +1276,12 @@
 2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add libmisc/fsmount/Makefile.
+
+2003-08-06	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 435/networking
+	* libnetworking/rtems/rtems_showifstat.c: rtems_showifstat misses
+	printing  the netmask.
 
 2003-08-06	Thomas Doerfler<Thomas.Doerfler@imd-systems.de>
 
@@ -1421,6 +1486,11 @@
 	* libcsupport/Makefile.am: DOC_FILES = src/TODO src/CASES, Reflect
 	having merged configure.ac into ../configure.ac.
 	* libcsupport/src/config.h: New.
+	* libnetworking/configure.ac: Remove (Merged into ../configure.ac).
+	* libnetworking/Makefile.am, libnetworking/libc/Makefile.am,
+	libnetworking/lib/Makefile.am, libnetworking/wrapup/Makefile.am: 
+	Reflect having merged configure.ac into ../configure.ac.
+	* libnetworking/kern/kern_mib.c: Use RTEMS_VERSION to setup osrelease.
 
 2003-07-08	Joel Sherrill <joel@OARcorp.com>
 
@@ -1482,6 +1552,10 @@
 	* libcsupport/Makefile.am: Conditionally install stdint.h/inttypes.h.
 	* libcsupport/configure.ac: Check for system-stdint.h/inttypes.h.
 
+2003-05-29	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/rtems/rtems_syscall.c: Removed warnings.
+
 2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 409/core
@@ -1496,6 +1570,11 @@
 	c99-types to typedef rtems_[un]signed[8|16|32|64].
 	PR 409:
 	* libcsupport/include/stdint.h: Include rtems/stdint.h.
+
+2003-05-15	cjohns@cybertec.com.au  <cjohns@cybertec.com.au>
+
+	* libnetworking/netinet/in.h: PR406 - Added INET_ADDRSTRLEN per the
+	SUSv3 standard.
 
 2003-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1532,6 +1611,12 @@
 	* libcsupport/src/no_posix.c: Correct _kill_r() prototype and make it
 	conditional on newlib.
 
+2003-04-15	Joel Sherrill <joel@OARcorp.com>
+
+	PR 388/networking
+	* libnetworking/kern/kern_sysctl.c: Revert previous patch and use
+	strlcpy() now that it is available. Also fixed some warnings.
+
 2003-04-11	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-ss-20030411.
@@ -1551,6 +1636,8 @@
 	of any BSP. These files were moved to libchip/ide.
 	* libblock/include/rtems/ata.h, libblock/include/rtems/ata_internal.h,
 	libblock/src/ata.c: Removed.
+	* libnetworking/kern/kern_sysctl.c: Converted from BSP strlcpy() to
+	strncpy().
 
 2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
@@ -1569,6 +1656,11 @@
 	Some synchronization and error handling problems were present. - Some
 	legal codings for EOC were not recognized.
 
+2003-03-25	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/rtems/rtems_bsdnet_malloc_starvation.c: Fixed name of
+	include file.
+
 2003-03-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 356/bsps
@@ -1576,6 +1668,12 @@
 	compliant. Let Thread_Handler verify that _init/_main are non-NULL
 	before calling them (gives the linker script/user more freedom to handle
 	special cases).
+	PR 356/bsps
+	* libnetworking/sys/linker_set.h: This patch makes RTEMS/PowerPC eabi
+	compliant. Declare all linker-script defined addresses as variables of
+	unknown size and not as short objects like 'int', 'void*' etc.  Since
+	only addresses are used and never those variable's values, the type used
+	in a declaration is not important.
 
 2003-03-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1620,6 +1718,9 @@
 	* libblock/configure.ac: Remove AC_CONFIG_AUX_DIR.
 	* libfs/configure.ac: Remove AC_CONFIG_AUX_DIR.
 	* libcsupport/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* libnetworking/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* libnetworking/netinet/in_chksum.c: Remove duplicate case to include
+	in_chksum_arm.c.
 
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1637,6 +1738,12 @@
 	PR 357/rtems_misc
 	* libcsupport/src/termios.c (rtems_termios_open):  Fixed code the
 	incorrectly checked that the wrong pointer during allocation was NULL.
+
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 351/networking
+	* libnetworking/nfs/bootp_subr.c: Fix ridiculous leak in bootp and use
+	strdup_bootp_realloc() everywhere for sake of consistency.
 
 2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1690,6 +1797,27 @@
 	* libfs/configure.ac: AC_PREREQ(2.57).
 	* libcsupport/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* libcsupport/configure.ac: AC_PREREQ(2.57).
+	* libnetworking/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* libnetworking/configure.ac: AC_PREREQ(2.57).
+
+2003-02-11	Mike Siers <mikes@poliac.com>
+
+	* libnetworking/rtems/rtems_glue.c: A small patch to the network daemon
+	task code.  I just added code to check the return value of the
+	rtems_bsdnet_event_receive function.  Only when this function returns a
+	SUCCESSFUL status, will the event flags be checked.  This is more of a
+	code cleanup issue than a bug.  The patch will just ensure the ipintr()
+	and arpintr() functions are only called when a event is signaled.
+
+2003-02-06	Mike Siers <mikes@poliac.com>
+
+	PR 342/networking
+	* libnetworking/kern/uipc_mbuf.c: The RTEMS version of the m_copyback is
+	changing the m_len value of the mbuf.  I looked into the source from
+	another BSD system and the mbuf length is not changed inside this
+	function.  The m_copyback function is only being used in the
+	net/rtsock.c file.  So I think this problem is only visable under
+	certain routing table conditions.
 
 2003-02-06	Joel Sherrill <joel@OARcorp.com>
 
@@ -1701,6 +1829,12 @@
 	PR 340/filesystem
 	* libcsupport/src/fcntl.c: Add missing _fcntl_r assumed to exist by
 	newlib.
+
+2003-02-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 341/networking
+	* libnetworking/lib/ftpfs.c: Account for NULL at end of strings when
+	malloc()'ing memory.
 
 2003-02-05	Joel Sherrill <joel@OARcorp.com>
 
@@ -1731,6 +1865,15 @@
 2003-01-28	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-ss-20030128.
+	* libnetworking/Makefile.am: Add kern/kern_sysctl.c to Makefile.am so
+	networking tests build. This was subsequently reported as PR337 before I
+	committed the fix.
+
+2003-01-27	Till Straumann <strauman@SLAC.Stanford.edu>
+
+	* libnetworking/libc/getproto.c, libnetworking/libc/getprotoname.c:
+	modification to call getprotoent_static() if fopen() on /etc/protocols
+	fails.
 
 2003-01-27	Juan Zamorano <jzamora@fi.upm.es>
 
@@ -1758,6 +1901,13 @@
 	* automake/compile.am: Remove CLEAN_DEPEND (Unused).  Remove
 	CLOBBER_DEPEND (Unused).
 
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/netinet/tcp_subr.c: Add args to INP_INFO_RLOCK,
+	INP_INFO_RUNLOCK,  INP_LOCK, INP_UNLOCK macros.
+	* libnetworking/netinet/udp_usrreq.c: Add args to INP_INFO_RLOCK,
+	INP_INFO_RUNLOCK,  INP_LOCK, INP_UNLOCK macros.
+
 2003-01-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libcsupport/Makefile.am: Eliminate OBJS.
@@ -1781,6 +1931,10 @@
 	* posix/ChangeLog: Corrected entry for sysconf.c which did not include
 	PR.
 
+2003-01-03	Jitendra Vegiraju <jvegiraju@netscape.net>
+
+	* libnetworking/sys/queue.h: Fix alignment problem on ARM.
+
 2003-01-03	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* posix/src/mqueueopen.c: Actually open the message queue descriptor so
@@ -1794,6 +1948,56 @@
 	* libfs/src/dosfs/msdos_initsupp.c: Specify inherited priority as 0
 	since this is a FIFO queuing semaphore.
 
+2003-01-03	Chris Johns <cjohns@cybertec.com.au>
+
+	* libnetworking/Makefile.am: Added sys/linker_set.h.
+	* libnetworking/kern/Makefile.am: Added kern_mib.c and kern_sysctl.c.
+	* libnetworking/kern/uipc_socket.c: OID changed from KERN_SOMAXCONN to
+	KIPC_SOMAXCONN.
+	* libnetworking/kern/uipc_socket2.c: OID changed from KERN_MAXSOCKBUF to
+	KIPC_MAXSOCKBUF.
+	* libnetworking/net/if_ethersubr.c: FreeBSD 2.2.2 does not have a
+	_net_link node while 5.0 does.
+	* libnetworking/net/if_ppp.c: Removed the TEXT_SET define as these
+	macros are now implemented.
+	* libnetworking/net/rtsock.c: Enable sysctl support plus fix the bug
+	with the lastest FreeBSD sysctl header file.
+	* libnetworking/netinet/icmp_var.h: FreeBSD 2.2.2 does not have a
+	_net_inet_icmp node while 5.0 does.
+	* libnetworking/netinet/if_ether.c: FreeBSD 2.2.2 does not have a
+	_net_link_ether node while 5.0 does.
+	* libnetworking/netinet/igmp_var.h: FreeBSD 2.2.2 does not have a
+	_net_inet_igmp node while 5.0 does.
+	* libnetworking/netinet/in_pcb.c: Fixed the arguments to the sysctl
+	call. Add inp_gencnt and ipi_count. These are used when listing
+	connections.
+	* libnetworking/netinet/in_pcb.h: Added counters to aid the listing of
+	connections.
+	* libnetworking/netinet/in_var.h: Provide the _net_inet_ip and
+	_net_inet_raw nodes.
+	* libnetworking/netinet/ip_fw.c: Disable the firewall sysctl calls.
+	* libnetworking/netinet/tcp_subr.c: Merge tcp_pcblist from the lastest
+	FreeBSD source.
+	* libnetworking/netinet/tcp_var.h: Add structures needed by net-snmp to
+	list connections.
+	* libnetworking/netinet/udp_usrreq.c: Merged udp_pcblist from the
+	lastest FreeBSD source.
+	* libnetworking/netinet/udp_var.h: Added the sysctl id UDPCTL_PCBLIST.
+	Used by net-snmp.
+	* libnetworking/rtems_glue.c: Call sysctl_register_all when initialising
+	the network stack to register all the sysctl calls. These are in the
+	special sections and required an updated linker script.
+	* libnetworking/rtems/rtems_syscall.c: Add the sysctl call.
+	* libnetworking/sys/kernel.h: Use the lastest FreeBSD method of handling
+	sysctl structures.  This now held in the sys/linker_set.h file.
+	* libnetworking/sys/queue.h: This is from the lastest FreeBSD code with
+	the circular  code merged back in as it is not used in the lastest
+	FreeBSD kernel.
+	* libnetworking/sys/sysctl.h: The lastest sysctl. This was needed to use
+	with the new linker set method. The FreeBSD 2.2.2 version has asm hacks.
+	The lastest version of the FreeBSD does not have these hacks. It uses
+	gcc attribute directives.
+
 2002-12-26	Till Straumann  <strauman@slac.stanford.edu
 
 	* libcsupport/src/fchdir.c: PR302 fix violation of FS node object copy
@@ -1802,6 +2006,10 @@
 2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Remove $(RTEMS_BSP_CFLAGS).
+
+2002-12-18	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/Makefile.am: Include netinet sources.
 
 2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1858,11 +2066,30 @@
 	* libblock/Makefile.am: Eliminate C_O_FILES. Eliminate SRCS.
 	* libfs/src/imfs/Makefile.am: Eliminate C_O_FILES.
 	* libfs/src/dosfs/Makefile.am: Ditto.
+	* libnetworking/Makefile.am: Merge-in kern/Makefile.am, net/Makefile.am,
+	netinet/Makefile.am, netinet/Makefile.am, nfs/Makefile.am, 
+	rtems/Makefile.am.
+	* libnetworking/kern/Makefile.am, libnetworking/net/Makefile.am,
+	libnetworking/netinet/Makefile.am, libnetworking/nfs/Makefile.am,
+	libnetworking/rtems/Makefile.am: Remove.
+	* libnetworking/wrapup/Makefile.am: Reflect changes above.
+	* libnetworking/configure.ac: Ditto.
 
 2002-12-11	Vladimir Nesic <vnesic@dkts.co.yu>
 
 	* posix/src/cancelrun.c, posix/src/cleanuppop.c: Get the last real node
 	not the permanent null last node.
+
+2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/kern/Makefile.am: Remove C_O_FILES.  Don't let all-local
+	depend on $OBJS).
+	* libnetworking/lib/Makefile.am: Ditto.
+	* libnetworking/libc/Makefile.am: Ditto.
+	* libnetworking/net/Makefile.am: Ditto.
+	* libnetworking/netinet/Makefile.am: Ditto.
+	* libnetworking/nfs/Makefile.am: Ditto.
+	* libnetworking/rtems/Makefile.am: Ditto.
 
 2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1995,6 +2222,7 @@
 	* libfs/configure.ac: Fix package name.
 	* libcsupport/configure.ac: Cosmetical fixes.
 	* libcsupport/configure.ac: Fix package name.
+	* libnetworking/configure.ac: Fix package name.
 
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2006,6 +2234,11 @@
 	* libcsupport/configure.ac: Remove -ansi -fasm. Add checks to diagnose
 	potential system header conflicts.
 	* libcsupport/Makefile.am: Unconditionally install sys/cdefs.h.
+	* libnetworking/Makefile.am: Merge-in HEADER-handling from
+	net/Makefile.am, netinet/Makefile.am, nfs/Makefile.am.
+	* libnetworking/net/Makefile.am: Remove *_HEADERS.
+	* libnetworking/netinet/Makefile.am: Remove *_HEADERS.
+	* libnetworking/nfs/Makefile.am: Remove *_HEADERS.
 
 2002-11-18	Joel Sherrill <joel@OARcorp.com>
 
@@ -2020,6 +2253,13 @@
 	CFLAGS_DEFAULT.
 	* libmisc/monitor/mon-commands.c: Removed warnings for RTEMS_UNIX.
 	* libblock/src/diskdevs.c: Include <unistd.h> to remove warning.
+	* libnetworking/Makefile.am: Merge-in arpa/Makefile.am,
+	machine/Makefile.am, sys/Makefile.am, vm/Makefile.am. Add . to SUBDIRS.
+	* libnetworking/arpa/Makefile.am: Remove.
+	* libnetworking/machine/Makefile.am: Remove.
+	* libnetworking/sys/Makefile.am: Remove.
+	* libnetworking/vm/Makefile.am: Remove.
+	* libnetworking/configure.ac: Reflect changes above.
 
 2002-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2050,9 +2290,18 @@
 
 	* libcsupport/src/mount.c: Per PR297, correct fs_mountme failure paths.
 
+2002-11-06	Chris Johns <ccj@acm.org>
+
+	* libnetworking/sys/select.h: Add C++ to C external.
+
 2002-11-04	Joel Sherrill <joel@OARcorp.com>
 
 	* librpc/src/rpc/pmap_rmt.c: Removed warnings.
+
+2002-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/kern/uipc_mbuf.c: Comment out m0 in m_copydata to
+	suppress warning.
 
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -2060,6 +2309,14 @@
 	* posix/ChangeLog: Corrected.
 	* libmisc/stackchk/check.c: Removed warnings.
 	* libcsupport/ChangeLog: Corrected.
+	* libnetworking/ChangeLog: Corrected.
+
+2002-11-01	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/nfs/bootp_subr.c, libnetworking/rtems/rtems_bsdnet.h,
+	libnetworking/rtems/rtems_glue.c: Till Straumann's patch (PR295) to use
+	bootp option 129 to get command line string.  Till Straumann's patch to
+	change inet_ntoa->inet_ntop.
 
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
@@ -2071,6 +2328,8 @@
 	* libcsupport/src/mallocfreespace.c: Corrected sense of status check to 
 	match change inside RTEMS.
 	* libcsupport/src/newlibc.c: Removed warning.
+	* libnetworking/libc/rcmd.c, libnetworking/netinet/in_cksum_arm.c:
+	Removed warnings.
 
 2002-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2104,6 +2363,28 @@
 	* libcsupport/include/rtems/libio.h: Change
 	rtems_filesystem_node_types_t from enumeration to int to eliminate
 	warnings when values are overridden.
+	* Pass to eliminate warnings.
+	* libnetworking/kern/uipc_mbuf.c: Conditional SYSINIT() usage on
+	__rtems__. Fix return statement without a value.
+	* libnetworking/lib/ftpfs.c: read and write filesystem routines return
+	ssize_t.
+	* libnetworking/lib/syslog.c: Add include of <string.h> to eliminate
+	warning.
+	* libnetworking/lib/tftpDriver.c: read and write filesystem routines
+	return ssize_t.
+	* libnetworking/libc/gethostbydns.c: Prototype abort().
+	* libnetworking/libc/inet_ntoa.c: Prototype strcpy().
+	* libnetworking/libc/rcmd.c: Add include of <sys/select.h>.
+	* libnetworking/net/if_loop.c: Turn token at end of endif to comment.
+	* libnetworking/net/rtsock.c, libnetworking/nfs/bootp_subr.c: 
+	Conditional SYSINIT() usage on __rtems__.
+	* libnetworking/rtems/rtems_bootp.c: Add include of
+	<rtems/rtems_bsdnet_internal.h>.
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Added prototypes for
+	memcpy() and memset() since the BSD code tries to avoid using libc .h
+	files  since it is used to being in the kernel.
+	* libnetworking/rtems/rtems_syscall.c: read and write filesystem
+	routines return ssize_t.
 
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
@@ -2127,6 +2408,8 @@
 	* libblock/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 	* libfs/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 	* libcsupport/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+	* libnetworking/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+	* libnetworking/Makefile.am: Remove bogus reference to CHANGELOG.
 
 2002-10-24	Fabrizio Pirovano <pirovano.thysys@tiscalinet.it>
 
@@ -2157,19 +2440,45 @@
 	* libfs/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 	* libcsupport/.cvsignore: Reformat. Add autom4te*cache. Remove
 	autom4te.cache.
+	* libnetworking/.cvsignore: Reformat. Add autom4te*cache. Remove
+	autom4te.cache.
 
 2002-10-21	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-20021021-test.
 
+2002-10-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/net/if_ethersubr.c: Add comments to #endif NETATALK to
+	stop gcc from complaining.
+
 2002-10-07	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-ss-20021007.
+
+2002-10-07	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/netinet/tcp_var.h: Corrected typo in ARM alignment patch
+	which  broke all other ports.
 
 2002-10-04	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-JUNK.
 	* aclocal/version.m4: Updated to rtems-ss-20021004.
+
+2002-10-04	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* libnetworking/netinet/in_cksum.c, libnetworking/netinet/ip_icmp.h,
+	libnetworking/netinet/ip_input.c, libnetworking/netinet/tcp_input.c,
+	libnetworking/netinet/tcp_subr.c, libnetworking/netinet/tcp_var.h,
+	libnetworking/sys/queue.h: Address alignment requirements for the ARM.
+	* libnetworking/rtems/rtems_glue.c: Add IP aliasing ioctls SIOCAIFADDR
+	and SIOCDIFADDR.
+
+2002-10-02	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/kern/uipc_socket.c: Make sure that small non-zero delays
+	work. Suggested cleanup from Eric Norum.
 
 2002-10-02	Jennifer Averett <jennifer@OARcorp.com>
 
@@ -2184,6 +2493,22 @@
 	* libcsupport/src/getgrent.c: Removed as functionality is now just a
 	wrapper for  common routines in src/getpwent.c.
 	* libcsupport/Makefile.am: Reflect file removal.
+	* libnetworking/rtems/mkrootfs.c: As part of PR283, remove redundant
+	code that creates /etc/passwd and /etc/group.
+
+2002-09-16	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/netinet/Makefile.am, libnetworking/netinet/udp_usrreq.c:
+	Back off some of the IP_FORWARD patch as it appears to not compile in
+	the  current tree.
+
+2002-09-14	Vyacheslav V. Burdjanadze <wr@zelax.ru>
+
+	* libnetworking/kern/uipc_mbuf.c, libnetworking/sys/mbuf.h,
+	libnetworking/netinet/udp_usrreq.c: Add  optional UDP broadcast
+	forwarding support.
+	* libnetworking/netinet/Makefile.am: Defined FORWARD_PROTOCOL to enabled
+	UDP broadcast forwarding.
 
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -2204,6 +2529,10 @@
 	* libcsupport/include/rtems/libio.h: Change rtems_filesystem_read_t and
 	rtems_filesystem_write_t to return ssize_t to match read(2) and write(2)
 	respectively.
+	* libnetworking/kern/uipc_socket.c: Fix case on SO_RCVTIMEO and
+	SO_SNDTIMEO where conversion into ticks can result in a 0 ticks timeout
+	which is  the same as requesting no timeout.  Reported by Sergei Organov
+	<osv@javad.ru>.
 
 2002-09-14	Eric Norum <eric.norum@usask.ca>
 
@@ -2219,6 +2548,11 @@
 	* libblock/src/bdbuf.c: Per PR282, correct problem in function
 	rtems_bdbuf_read() where device ioctl() is called with the logical
 	device number used instead of corresponding physical device number.
+
+2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/netinet/in_cksum.c: #include <string.h> for puts in
+	generic routines.
 
 2002-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2252,6 +2586,14 @@
 
 	* librpc/src/xdr/xdr_stdio.c: Per PR268, add include of <netinet/in.h>
 	to avoid warning on ntohl().
+
+2002-08-20	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/rtems/rtems_glue.c: Per PR270, the BSD network code
+	expects that the value of the number of seconds since boot is non-zero. 
+	The RTEMS network initialization code assures this by waiting for a
+	second.  A more efficient technique is to simply wait until the number
+	of seconds since boot is non-zero.
 
 2002-08-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -2288,6 +2630,8 @@
 
 	* posix/src/cancelrun.c: Remove check for PTHREAD_CANCELED not being
 	defined to ensure that newlib patch includes it.
+	* libnetworking/libc/getservent.c: Per PR265, add  #include
+	<netinet/in.h> for ntohl() function.
 
 2002-08-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2300,6 +2644,9 @@
 2002-08-07	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-ss-20020807.
+	* libnetworking/netinet/in.h: Per PR263, added include of
+	<machine/endian.h> to <netinet/in.h> so it includes prototypes of
+	ntohl() family of routines.
 
 2002-08-07	Chris Johns <ccj@acm.org>
 
@@ -2324,11 +2671,17 @@
 	* wrapup/Makefile.am: Use libsapi.a.
 	* sapi/src/Makefile.am: Add libsapi.a.
 	* rtems/src/Makefile.am: Add librtems.a.
+	* libnetworking/wrapup/Makefile.am: Don't install.
 
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* libmisc/cpuuse/cpuuse.c (CPU_usage_Dump) : Corrected so it honors when
 	an object name is raw versus being a string.
+	* libnetworking/machine/param.h, libnetworking/sys/syslimits.h: In the
+	continued effort to eliminate .h conflicts between newlib and RTEMS,
+	these were moved to newlib.
+	* libnetworking/machine/Makefile.am, libnetworking/sys/Makefile.am:
+	Reflect above.
 
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2362,6 +2715,22 @@
 	RTEMS newlib support.
 	* libcsupport/Makefile.am: Reflect above.
 	* libcsupport/include/rtems/termiostypes.h: Avoid use of __P.
+	* libnetworking/sys/param.h: Removed as a simpler version of this file
+	is now part of the RTEMS newlib support.
+	* libnetworking/sys/Makefile.am: Modified to reflect above.
+	* libnetworking/machine/types.h: Removed as a simpler version of this
+	file is now part of the RTEMS newlib support.
+	* libnetworking/machine/Makefile.am, libnetworking/machine/endian.h,
+	libnetworking/nfs/bootp_subr.c,
+	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/sys/Makefile.am, libnetworking/sys/systm.h: Minor
+	modifications to use the simpler machine/types.h.  Mostly more complete
+	sets of #include's to account for machine/types.h no longer doing this.
+
+2002-07-30	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* libnetworking/netinet/in_cksum.c,
+	libnetworking/netinet/in_cksum_arm.c: Added ARM in_cksum support.
 
 2002-07-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2383,6 +2752,11 @@
 
 	* libmisc/wrapup/Makefile.am: Temporarily don't include serdbg since it
 	causes some BSPs to not link "main(){}" as required by autoconf.
+	* libnetworking/sys/select.h: Add a prototype of select() to avoid
+	warnings. In particular a C++ application using select() required a
+	prototype.
+	* libnetworking/Makefile.am, libnetworking/libc/res_send.c: Do not
+	install or use <poll.h> since RTEMS does not support it.
 
 2002-07-23	Joel Sherrill <joel@OARcorp.com>
 
@@ -2419,6 +2793,23 @@
 	* libcsupport/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* libcsupport/Makefile.am: Eliminate LIBNAME. Use AM_CPPFLAGS instead of
 	INCLUDES (Upcoming automake standard).
+	* libnetworking/kern/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libnetworking/lib/Makefile.am: Ditto.
+	* libnetworking/libc/Makefile.am: Ditto.
+	* libnetworking/net/Makefile.am: Ditto.
+	* libnetworking/netinet/Makefile.am: Ditto.
+	* libnetworking/nfs/Makefile.am: Ditto.
+	* libnetworking/rtems/Makefile.am: Ditto.
+	* libnetworking/wrapup/Makefile.am: Ditto.
+	* libnetworking/kern/Makefile.am: Eliminate LIBNAME.
+	* libnetworking/lib/Makefile.am: Ditto.
+	* libnetworking/libc/Makefile.am: Ditto.
+	* libnetworking/net/Makefile.am: Ditto.
+	* libnetworking/netinet/Makefile.am: Ditto.
+	* libnetworking/nfs/Makefile.am: Ditto.
+	* libnetworking/rtems/Makefile.am: Ditto.
+	* libnetworking/wrapup/Makefile.am: Use project_libdir instead of
+	$(PROJECT_RELEASE)/lib.
 
 2002-07-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -2436,6 +2827,12 @@
 	* aclocal/rtems-top.m4: Reflect relocation of c/src/exec to cpukit.
 	* aclocal/check-cpu.m4: Ditto.
 	* aclocal/check-bsps.m4: Ditto.
+
+2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* libnetworking/netinet/in.h, libnetworking/netinet/ip.h,
+	libnetworking/netinet/ip_var.h, libnetworking/netinet/tcp.h: Modified to
+	added packed attribute.o.
 
 2002-07-16	Joel Sherrill <joel@OARcorp.com>
 
@@ -2458,6 +2855,7 @@
 	* libblock/configure.ac: RTEMS_TOP(../..).
 	* libfs/configure.ac: RTEMS_TOP(../..).
 	* libcsupport/configure.ac: RTEMS_TOP(../..).
+	* libnetworking/configure.ac: RTEMS_TOP(../..).
 
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
@@ -2497,6 +2895,7 @@
 	* libblock/configure.ac: Remove RTEMS_PROJECT_ROOT.
 	* libfs/configure.ac: Remove RTEMS_PROJECT_ROOT.
 	* libcsupport/configure.ac: Remove RTEMS_PROJECT_ROOT.
+	* libnetworking/configure.ac: Remove RTEMS_PROJECT_ROOT.
 
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -2643,6 +3042,13 @@
 	information, and eliminated the fatal error on clock not set since it
 	cannot occur.
 
+2002-06-27	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* Addition of a ftp client filesystem, comparable to the tftp one.
+	* libnetworking/lib/ftpfs.c, libnetworking/rtems/ftpfs.h: New files.
+	* libnetworking/lib/Makefile.am, libnetworking/rtems/Makefile.am:
+	Modified to reflect above.
+
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/prog-ccas.m4: New.
@@ -2660,6 +3066,8 @@
 	* libfs/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 	* libcsupport/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
 	AC_PROG_RANLIB.
+	* libnetworking/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
+	AC_PROG_RANLIB.
 
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2675,6 +3083,7 @@
 	* libmisc/wrapup/Makefile.am: Don't preinstall libmisc.a.
 	* libblock/src/Makefile.am: Don't preinstall libblock.a.
 	* libfs/wrapup/Makefile.am: Don't preinstall libfs.a.
+	* libnetworking/wrapup/Makefile.am: Don't preinstall libnetworking.a.
 
 2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
@@ -2722,6 +3131,7 @@
 	* libblock/Makefile.am: Merge-in include/Makefile.am.
 	* libblock/include/Makefile.am: Remove.
 	* libblock/configure.ac: Reflect changes above.
+	* libnetworking/Makefile.am: Remove commented out net-apps.
 
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2807,6 +3217,24 @@
 	* libcsupport/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
 	../aclocal.
 	* libcsupport/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/arpa/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/kern/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
+	../aclocal.
+	* libnetworking/lib/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/libc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/machine/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
+	* libnetworking/net/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/netinet/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
+	* libnetworking/nfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/rtems/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
+	* libnetworking/sys/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/vm/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libnetworking/wrapup/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
 
 2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2817,10 +3245,37 @@
 	* automake/subdirs.am: Copied over from automake/.
 	* Makefile.am: Add automake/*.am.
 
+2002-06-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/rtems/Makefile.am: include multilib.am instead of
+	RTEMS_BSP.cfg.
+
+2002-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/configure.ac: Remove RTEMS_CHECK_POSIX_API. Remove
+	RTEMS_ENABLE_POSIX. Remove RTEMS_CHECK_CUSTOM_BSP. Remove
+	RTEMS_ENABLE_POSIX.
+
 2002-05-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add libnetworking.
 	* wrapup/Makefile.am: Ditto.
+	Relocate c/src/libnetworking.
+	* libnetworking/Makefile.am: Reflect moval.
+	* libnetworking/machine/Makefile.am: Ditto.
+	* libnetworking/net/Makefile.am: Ditto.
+	* libnetworking/lib/Makefile.am: Ditto.
+	* libnetworking/netinet/Makefile.am: Ditto.
+	* libnetworking/vm/Makefile.am: Ditto.
+	* libnetworking/libc/Makefile.am: Ditto.
+	* libnetworking/sys/Makefile.am: Ditto.
+	* libnetworking/arpa/Makefile.am: Ditto.
+	* libnetworking/nfs/Makefile.am: Ditto.
+	* libnetworking/kern/Makefile.am: Ditto.
+	* libnetworking/rtems/Makefile.am: Ditto.
+	* libnetworking/configure.ac: Dittp.
+	* libnetworking/wrapup/Makefile.am: Ditto. Remove references to
+	networking apps.
 
 2002-05-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2839,6 +3294,8 @@
 	* libfs/src/dosfs/Makefile.am: Ditto.
 	* libfs/src/imfs/Makefile.am: Ditto.
 	* libfs/wrapup/Makefile.am: Ditto.
+	* libnetworking/rtems_telnetd/pty.c: Remove bsp.h. Include
+	<rtems/bspIo.h>.
 
 2002-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2848,6 +3305,9 @@
 	* libmisc/rootfs/mkrootfs.c: Remove.
 	* libmisc/configure.ac: Remove rootfs and NETWORKING macros.
 	* libmisc/wrapup/Makefile.am: Remove rootfs and HAS_NETWORKING.
+	* libnetworking/rtems/mkrootfs.c: Add (relocated from libmisc/rootfs).
+	* libnetworking/rtems/mkrootfs.h: Ditto.
+	* libnetworking/rtems/Makefile.am: Reflect changes above.
 
 2002-05-16	Chris Johns <ccj@acm.org>
 
@@ -2874,6 +3334,13 @@
 	requiring libc to use a user extension with its overhead is not the best
 	solution. This patch lowers the overhead to 2 pointer moves.
 
+2002-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/sys/ioctl.h: Remove.
+	* libnetworking/sys/sockio.h: Remove.
+	* libnetworking/sys/filio.h: Remove.
+	* libnetworking/sys/Makefile.am: Reflect changes above.
+
 2002-05-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* score/include/Makefile.am: Work-around to autoconf-2.53 adding
@@ -2886,9 +3353,20 @@
 	* posix/src/utsname.c: Remove.
 	* posix/src/Makefile.am: Reflect changes above.
 
+2002-05-01	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/machine/in_cksum.h: Per PR200 fix multi-line inline
+	assembly  to satisfy gcc 3.1 and newer.
+
+2002-04-26	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/netinet/in_cksum_i386.c: Add volatile so the more
+	agressive optimization in gcc 3.1 does not reorder things.
+
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* score/include/rtems/system.h: Remove targopts.h.
+	* libnetworking/pppd/utils.c: Adapt to gcc-3.x.
 
 2002-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2910,6 +3388,13 @@
 2002-04-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* score/include/rtems/system.h: Add i386 to multilib-able targets.
+
+2002-04-11	Chris Johns <ccj@acm.org>
+
+	* libnetworking/c/src/libnetworking/rtems/rtems_bsdnet.h: To address
+	PR59, added the drv_ctrl driver control block field to the ifconfig
+	network driver structure. This field is needed by the i82586 driver
+	which was ported from NetBSD as it had better hardware abstraction.
 
 2002-04-10	Victor V. Vengerov <vvv@oktet.ru>
 
@@ -2953,6 +3438,7 @@
 	* libfs/src/imfs/ioman.c: Include <string.h>.
 	* libfs/src/imfs/linearfile.c: Include <string.h>.
 	* libfs/src/imfs/memfile.c: Include <string.h>.
+	* libnetworking/ChangeLog: Fix dates.
 
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2976,6 +3462,17 @@
 	* posix/src/getgid.c: Ditto.
 	* posix/src/getuid.c: Ditto.
 	* posix/src/getlogin.c: Move <errno.h>.
+
+2002-03-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/libc/rcmd.c: Replace __rtems w/ __rtems__.
+
+2002-03-27	Thomas.Doerfler@imd-systems.de
+
+	* PR144
+	* libnetworking/nfs/bootp_subr.c bootpc_init(): Performs a write to
+	memory address 0 when called for the first time. This is done when
+	trying to clear the variable "dhcp_hostname".
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3054,6 +3551,56 @@
 	* libfs/src/imfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* libfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* libfs/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS). AM_INIT_AUTOMAKE([no-define
+	foreign 1.6]).
+	* libnetworking/arpa/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/kern/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/lib/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/libc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/machine/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/net/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/netinet/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/nfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/pppd/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/rtems/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/rtems_servers/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/rtems_telnetd/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/rtems_webserver/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/sys/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/vm/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-03-27	Ilya Alexeev <ilya@continuum.ru>
+
+	* PR162
+	* libnetworking/net/if_ppp.c ppp_txdaemon(),
+	libnetworking/net/if_pppvar.h pppstart(): Local variables must not be
+	used in a device write routines.  Now ppp_softc structure have own
+	character for writing to device (sc_outchar).  I think that converting
+	local variables to static is not a right solution, because problems will
+	occur in the case of two or more ppp instances.
+	* libnetworking/net/ppp_tty.c pppstart(): Type of the ioffset variable
+	must be u_long, otherwise in the case of the big output packet endless
+	loop may occur.
+
+2002-03-25	Eric Norum <norume@aps.anl.gov>
+
+	PR 374/networking
+	* libnetworking/Makefile.am, libnetworking/rtems/rtems_bsdnet.h,
+	libnetworking/rtems/rtems_glue.c: The patch sent as part of PR270 got
+	applied to the wrong place.   The effect was that (1) startup was no
+	faster than before and (2) malloc starvation messages came way too
+	quickly.  The attached patch fixes both these problems and also provides
+	a mechanism for applications to handle malloc starvation conditions as
+	they see fit.
+	* libnetworking/rtems/rtems_bsdnet_malloc_starvation.c: New file.
+
+2002-03-21	Ilya Alexeev <ilya@continuum.ru>
+
+	* libnetworking/net/if_ppp.c, libnetworking/net/ppp_tty.c: Initial
+	preparations for multiple PPPD connections.
 
 2002-03-21	Alexander Kukuta <kam@oktet.ru>
 
@@ -3144,6 +3691,24 @@
 	libblock/src/diskdevs.c, libblock/src/ramdisk.c,
 	libblock/src/.cvsignore, libblock/.cvsignore: New files.
 
+2002-02-27	Ilya Alexeev <ilya@continuum.ru>
+
+	* libnetworking/net/if_ppp.c, libnetworking/pppd/auth.c,
+	libnetworking/pppd/chat.c, libnetworking/pppd/pppd.h,
+	libnetworking/pppd/sys-rtems.c: Add server with pap-authorization 
+	capabilities as well as eliminate some warnings.
+
+2002-02-27	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/net/radix.c: Properly handle fetching the default route
+	when there is no route.  This was a bug in the original FreeBSD code and
+	this fix is from an updated version of their code.
+
+2002-02-16	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/lib/tftpDriver.clib/tftpDriver.c: Fix TFTP block number
+	checking.
+
 2002-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* posix/src/getegid.c: Add #include <rtems/userenv.h>. Remove #include
@@ -3158,6 +3723,71 @@
 	* Makefile.am: Readded reference to wrapup.
 	* posix/configure.ac: AC_CONFIG_SRCDIR([src/pthreads.c]).
 	* posix/src/psignal.c: #include <string.h>.
+	* libnetworking/pppd/sys-rtems.c: Remove unused variable status from
+	dodefaultroute.
+
+2002-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/lib/tftpDriver.c: Remove set_errno_and_return_minus_one,
+	include <rtems/seterr.h>.
+
+2002-02-01	Mike Siers <mikes@poliac.com>
+
+	* libnetworking/pppd/rtemspppd.c (rtems_pppd_disconnect): Modified to
+	avoid bringing the link down too fast. NOTE: Mike reports successfully
+	running at 56K baud on a direct link.
+
+2002-01-31	Mike Siers <mikes@poliac.com>
+
+	* libnetworking/pppd/rtemsdialer.h: New file missed in previous commit.
+	* Nice Update of PPPD support which eliminates the requiremetn that
+	drivers be in the termios TASK_DRIVEN mode. Mike did significant testing
+	and reports that it seems to be more stable and handle larger packets
+	better.  This patch replaces the termios tasks with more general pppd
+	network driver tasks.  The functions pppinput() and pppstart() get 
+	called from the interrupt service routine.
+	* libnetworking/Makefile.am, libnetworking/configure.ac,
+	libnetworking/net/Makefile.am, libnetworking/net/bpf.h,
+	libnetworking/net/ethernet.h, libnetworking/net/if.c,
+	libnetworking/net/if.h, libnetworking/net/if_arp.h,
+	libnetworking/net/if_dl.h, libnetworking/net/if_ethersubr.c,
+	libnetworking/net/if_llc.h, libnetworking/net/if_loop.c,
+	libnetworking/net/if_ppp.h, libnetworking/net/if_pppvar.h,
+	libnetworking/net/if_types.h, libnetworking/net/netisr.h,
+	libnetworking/net/ppp-comp.h, libnetworking/net/ppp_defs.h,
+	libnetworking/net/pppcompress.h, libnetworking/net/radix.c,
+	libnetworking/net/radix.h, libnetworking/net/raw_cb.c,
+	libnetworking/net/raw_cb.h, libnetworking/net/raw_usrreq.c,
+	libnetworking/net/route.c, libnetworking/net/route.h,
+	libnetworking/net/rtsock.c, libnetworking/pppd/Makefile.am,
+	libnetworking/pppd/README, libnetworking/pppd/STATUS,
+	libnetworking/pppd/auth.c, libnetworking/pppd/cbcp.c,
+	libnetworking/pppd/ccp.c, libnetworking/pppd/ccp.h,
+	libnetworking/pppd/chap.c, libnetworking/pppd/chap.h,
+	libnetworking/pppd/chap_ms.c, libnetworking/pppd/chap_ms.h,
+	libnetworking/pppd/chat.c, libnetworking/pppd/demand.c,
+	libnetworking/pppd/fsm.c, libnetworking/pppd/fsm.h,
+	libnetworking/pppd/ipcp.c, libnetworking/pppd/ipcp.h,
+	libnetworking/pppd/ipxcp.c, libnetworking/pppd/ipxcp.h,
+	libnetworking/pppd/lcp.c, libnetworking/pppd/lcp.h,
+	libnetworking/pppd/magic.c, libnetworking/pppd/magic.h,
+	libnetworking/pppd/options.c, libnetworking/pppd/patchlevel.h,
+	libnetworking/pppd/pathnames.h, libnetworking/pppd/pppd.8,
+	libnetworking/pppd/pppd.h, libnetworking/pppd/rtemsmain.c,
+	libnetworking/pppd/rtemspppd.c, libnetworking/pppd/rtemspppd.h,
+	libnetworking/pppd/sys-rtems.c, libnetworking/pppd/upap.c,
+	libnetworking/pppd/upap.h, libnetworking/pppd/utils.c,
+	libnetworking/pppd/example/README,
+	libnetworking/pppd/example/netconfig.h,
+	libnetworking/wrapup/Makefile.am: Modified.
+	* libnetworking/net/bsd-comp.c, libnetworking/net/if_ppp.c,
+	libnetworking/net/ppp-deflate.c, libnetworking/net/ppp.h,
+	libnetworking/net/ppp_tty.c, libnetworking/net/pppcompress.c,
+	libnetworking/net/zlib.c, libnetworking/net/zlib.h: New file.
+	* libnetworking/modem/, libnetworking/modem/.cvsignore,
+	libnetworking/modem/Makefile.am, libnetworking/modem/ppp.c,
+	libnetworking/modem/ppp.h, libnetworking/modem/ppp_tty.c,
+	libnetworking/modem/pppcompress.c: Subdirectory removed.
 
 2002-01-29	Joel Sherrill <joel@OARcorp.com>
 
@@ -3191,6 +3821,11 @@
 	* libmisc/stackchk/Makefile.am:  Use *.a instead of *-tmp.a.
 	* libmisc/untar/Makefile.am:  Use *.a instead of *-tmp.a.
 	* libmisc/wrapup/Makefile.am: Reflect changes above.
+
+2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/rtems_telnetd/pty.c: Move config.h to were it belongs.
+	Remove printf (Reported by Till Straumann <strauman@SLAC.Stanford.EDU>).
 
 2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3314,6 +3949,16 @@
 	* rtems/src/Makefile.am: Add multilib support.
 	* rtems/optman/Makefile.am: Add multilib support.
 
+2001-12-18	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/lib/tftpDriver.c: Allow chdir() to work on TFTP
+	`directories' (path names with a / at the end) while disallowing open()
+	operations on TFTP `directories'.
+
+2001-12-07	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/lib/tftpDriver.c: Restore write capability.
+
 2001-11-29	Victor V. Vengerov <vvv@oktet.ru>
 
 	* AVL trees implementation added.
@@ -3334,6 +3979,7 @@
 2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libfs/src/imfs/Makefile.am: Cleanup.
+	* libnetworking/arpa/Makefile.am: Remove stray lines.
 
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
 
@@ -3394,6 +4040,11 @@
 
 	* score/src/threadhandler.c: Use __USE_INIT_FINI__ since USE_INIT_FINI
 	pollutes the application namespace.
+
+2001-10-18	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/lib/tftpDriver.c: Properly handles ../ components in
+	chdir() and open() operations within the TFTP file system.
 
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3465,6 +4116,21 @@
 	* libfs/imfs/imfs_load_tar.c: Changed the code around to remove an
 	internal compiler error on the Coldfire target.
 
+2001-10-12	Mike Siers <mikes@poliac.com>
+
+	* Update to stable working state.
+	* libnetworking/modem_example: Directory removed.
+	* libnetworking/modem_example/16550.h,
+	libnetworking/modem_example/README, libnetworking/modem_example/modem.c,
+	libnetworking/modem_example/modem.h, libnetworking/modem_example/ppp.c,
+	libnetworking/modem_example/ppp.h,
+	libnetworking/modem_example/pppcompress.c: Files removed.
+	* libnetworking/pppd/example/pppd.options: New file.
+	* libnetworking/pppd/README, libnetworking/pppd/STATUS,
+	libnetworking/pppd/cbcp.c, libnetworking/pppd/cbcp.h,
+	libnetworking/pppd/chat.c, libnetworking/pppd/pppd.h,
+	libnetworking/pppd/rtemsmain.c: Updated.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* sapi/include/rtems/directives.h: Fixed typo.
@@ -3494,6 +4160,10 @@
 	* libfs/.cvsignore: Add autom4te.cache for autoconf > 2.52.
 	* libfs/configure.in: Remove.
 	* libfs/configure.ac: New file, generated from configure.in by
+	autoupdate.
+	* libnetworking/.cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* libnetworking/configure.in: Remove.
+	* libnetworking/configure.ac: New file, generated from configure.in by
 	autoupdate.
 
 2001-10-10	Joel Sherrill <joel@OARcorp.com>
@@ -3545,6 +4215,8 @@
 	as part of the first task execution not in BSP space. This depends on
 	the toolset defining USE_INIT_FINI so you have to have the right toolset
 	version.
+	* libnetworking/lib/tftpDriver.c: Add limited chdir() support to the
+	TFTP  filesystem.
 
 2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3562,6 +4234,18 @@
 	* score/include/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* score/inline/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* score/macros/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/machine/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/net/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/netinet/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/vm/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/pppd/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/sys/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/rtems_servers/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/arpa/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/nfs/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/rtems_webserver/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libnetworking/rtems_telnetd/Makefile.am: Use 'PREINSTALL_FILES ='.
 
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3573,6 +4257,8 @@
 	* sapi/optman/Makefile.am: Adapt ASM4FLAGS to automake-1.5.
 	* libfs/src/imfs/Makefile.am: Revamp INCLUDES handling to make
 	automake-1.5 happy.
+	* libnetworking/Makefile.am: Use PREINSTALL_FILES = to make automake-1.5
+	happy.
 
 2001-09-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -3581,6 +4267,10 @@
 	added include of compile.am to rootfs/Makefile.am.
 	* libmisc/wrapup/Makefile.am: Added rootfs conditionally if networking
 	enabled.
+
+2001-09-19	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/lib/tftpDriver.c: Add some debugging capability.
 
 2001-09-19	Chris Johns <ccj@acm.org>
 
@@ -3591,6 +4281,9 @@
 	libmisc/rootfs/mkrootfs.c, libmisc/rootfs/mkrootfs.h: New files.
 	* libmisc/configure.in, libmisc/Makefile.am: Modified to reflect
 	addition.
+	* nfs/bootp_subr.c, rtems/rtems_bootp.c, rtems/rtems_bsdnet.h,
+	rtems/rtems_bsdnet_internal.h Added support for populating the initial
+	"root" filesystem with information obtained via the DHCP response.
 
 2001-09-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3643,6 +4336,48 @@
 	* rtems/inline/rtems/rtems/attr.inl: Correct typo and use correct
 	attribute RTEMS_SYSTEM_TASK. Reported by Chris Johns <ccj@acm.org>.
 
+2001-08-16	Mike Siers <mikes@poliac.com>
+
+	* libnetworking/pppd/STATUS: Updated by Joel based upon email from Mike.
+	* libnetworking/pppd/cbcp.c, libnetworking/pppd/cbcp.h: Readded files. 
+	These support callback functionality that has not even been compiled
+	under RTEMS yet.
+	* libnetworking/pppd/*: Update of PPPD to 2.3.11 from 2.3.5 and addition
+	of an example application. - renamed error() function because of
+	namespace problems. - removed calls to the exit() function. - removed
+	extra files from the pppd source directory. - defined pppd task constant
+	values in rtemspppd.h. - modifyied example code to get actual tick per
+	second value. - placed the pppd 2.3.11 man page file (pppd.8) into the
+	pppd directory.
+	* libnetworking/pppd/cbcp.c, libnetworking/pppd/cbcp.h,
+	libnetworking/pppd/main.c, libnetworking/pppd/ppp_tty.c,
+	libnetworking/pppd/pppmain.c, libnetworking/pppd/rtems-ppp.c,
+	libnetworking/pppd/rtems-ppp.c: Deleted.
+	* libnetworking/pppd/pppd.8, libnetworking/pppd/rtemsmain.c,
+	libnetworking/pppd/rtemspppd.c, libnetworking/pppd/rtemspppd.h,
+	libnetworking/pppd/sys-rtems.c, libnetworking/pppd/utils.c,
+	libnetworking/pppd/example/Makefile, libnetworking/pppd/example/README,
+	libnetworking/pppd/example/init.c,
+	libnetworking/pppd/example/netconfig.h,
+	libnetworking/pppd/example/ppp.conf,
+	libnetworking/pppd/example/pppdapp.c,
+	libnetworking/pppd/example/system.h: New files.
+	* libnetworking/modem/ppp_tty.c, libnetworking/net/if_ppp.h,
+	libnetworking/pppd/Makefile.am, libnetworking/pppd/README,
+	libnetworking/pppd/STATUS, libnetworking/pppd/auth.c,
+	libnetworking/pppd/ccp.c, libnetworking/pppd/ccp.h,
+	libnetworking/pppd/chap.c, libnetworking/pppd/chap.h,
+	libnetworking/pppd/chap_ms.c, libnetworking/pppd/chap_ms.h,
+	libnetworking/pppd/chat.c, libnetworking/pppd/demand.c,
+	libnetworking/pppd/fsm.c, libnetworking/pppd/fsm.h,
+	libnetworking/pppd/ipcp.c, libnetworking/pppd/ipcp.h,
+	libnetworking/pppd/ipxcp.c, libnetworking/pppd/ipxcp.h,
+	libnetworking/pppd/lcp.c, libnetworking/pppd/lcp.h,
+	libnetworking/pppd/magic.c, libnetworking/pppd/magic.h,
+	libnetworking/pppd/options.c, libnetworking/pppd/patchlevel.h,
+	libnetworking/pppd/pathnames.h, libnetworking/pppd/pppd.h,
+	libnetworking/pppd/upap.c, libnetworking/pppd/upap.h: Modified.
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/src/mqueuesendsupp.c: Account for possibly blocking during the
@@ -3658,6 +4393,10 @@
 	* rtems/src/msgqsubmit.c: Add a comment indicating that we do not have
 	to account for possibly blocking during the core send operation because
 	Classic API message queue send is always non-blocking.
+	* libnetworking/pppd/example/Makefile: Removed.
+	* libnetworking/pppd/example/Makefile-user: Added was Makefile.  Renamed
+	to avoid bootstrap -c clobbering it.
+	* libnetworking/rtems_telnetd/.cvsignore: New file.
 
 2001-08-09	Keith Outwater <vac4050@cae597.rsc.raytheon.com>
 
@@ -3692,6 +4431,26 @@
 	libmisc/shell/shell.c, libmisc/shell/shell.h: Updates.
 	* libfs/src/imfs/imfs_eval.c: The CD_UP problem in imfs_eval has been
 	touched. The order of the questions is the key.
+	* libnetworking/Makefile.am, libnetworking/configure.in,
+	libnetworking/rtems_servers/Makefile.am,
+	libnetworking/rtems_servers/telnetd.c,
+	libnetworking/rtems_servers/telnetd.h,
+	libnetworking/rtems_telnetd/Makefile.am,
+	libnetworking/rtems_telnetd/README, libnetworking/rtems_telnetd/icmds.c,
+	libnetworking/rtems_telnetd/pty.c, libnetworking/rtems_telnetd/pty.h,
+	libnetworking/rtems_telnetd/telnetd.c,
+	libnetworking/rtems_telnetd/telnetd.h, libnetworking/wrapup/Makefile.am:
+	- pty and telnetd have a new subdir rtems_telnetd to avoid the side
+	effect when ftpd change. - the tcp/ip stats have been implemented into
+	icmds.c and started when telnetd daemon is started.
+	* libnetworking/rtems_servers/telnetd.c,
+	libnetworking/rtems_servers/telnetd.h: Removed.
+	* libnetworking/rtems_telnetd: New directory.
+	* libnetworking/rtems_telnetd/Makefile.am,
+	libnetworking/rtems_telnetd/README, libnetworking/rtems_telnetd/icmds.c,
+	libnetworking/rtems_telnetd/pty.c, libnetworking/rtems_telnetd/pty.h,
+	libnetworking/rtems_telnetd/telnetd.c,
+	libnetworking/rtems_telnetd/telnetd.h: New files.
 
 2001-07-06	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
@@ -3704,6 +4463,14 @@
 	libnetworking/rtems_servers so the network stack to address network
 	depenendency.
 	* libmisc/shell/Makefile.am: Modified to reflect above.
+	* libnetworking/rtems_servers/telnetd.c, libnetworking/shell/telnetd.h:
+	Moved from libmisc/shell so the network stack to address network
+	depenendency.
+	* libnetworking/rtems_servers/Makefile.am: Modified to reflect above.
+
+2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/rtems_servers/Makefile.am: Deleted blank lines.
 
 2001-05-25	Sergei Organov <osv@javad.ru>
 
@@ -3773,11 +4540,14 @@
 
 	* libmisc/dummy/Makefile.am, libmisc/wrapup/Makefile.am: Fixed to
 	generate a library of the same name.
+	* libnetworking/ChangeLog: Corrected -- entry should have been in
+	libchip.
 
 2001-05-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* score/include/rtems/score/.cvsignore: Add stamp-h, cpuopts.h,
 	cpuopts.h.in, cpuopts-tmp.h.
+	* libnetworking/libc/Makefile.am: Remove -D__STRICT_ANSI__.
 
 2001-05-09	Joel Sherrill <joel@OARcorp.com>
 
@@ -3825,10 +4595,25 @@
 	resulted in the value from the last time that IOP was used being still
 	in place.  Discovered by  Andrew Bythell <abythell@nortelnetworks.com>.
 
+2001-04-24	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/lib/rtems_bsdnet_ntp.c: Modifications to make the RTEMS
+	NTP synchronization a little more robust -- no NTP daemon yet, but at
+	least it trys a little harder when the primary NTP server is down.
+
 2001-04-22	Joel Sherrill <joel@OARcorp.com>
 
 	* itron/src/task.c (_ITRON_Task_User_extensions): Add new fields to  be
 	correct in respect to newly added fields for separate switch list.
+
+2001-04-20	Radzislaw Galler  <rgaller@et.put.poznan.pl>
+
+	* libnetworking/modem/ppp.c, libnetworking/pppd/main.c,
+	libnetworking/pppd/pppmain.c, libnetworking/pppd/rtems-ppp.c,
+	libnetworking/pppd/modem_example/modem.c,
+	libnetworking/pppd/modem_example/ppp.c: Translated Polish comments and
+	other strings into English.
+	* libnetworking/pppd/STATUS: updated to reflect the changes.
 
 2001-04-20	Joel Sherrill <joel@OARcorp.com>
 
@@ -3841,6 +4626,11 @@
 	The old prints are still there in case they are needed in the future to
 	debug.  Printing target dependent addresses makes the test output vary
 	by target unnecessarily.
+
+2001-04-20	Jake Janovetz <janovetz@uiuc.edu>
+
+	* libnetworking/rtems_servers/ftpd.c: Correct argument so hooks work
+	again.
 
 2001-04-20	Fernando Ruiz Casas <correo@fernando-ruiz.com>
 
@@ -3912,9 +4702,22 @@
 	freeing a triply indirect file.   The fix was applied to the 4.5 release
 	branch and not the development branch.
 
+2001-03-20	Till Straumann <strauman@SLAC.Stanford.EDU>
+
+	* PR158
+	* libnetworking/libc/rcmd.c, libnetworking/libc/rcmd.c: Enable the
+	rcmd() library call by commenting out the parts that deal with signals. 
+	This enables RTEMS to 'rsh' command to a server connecting fd to remote
+	stdio. The 'server-side' parts of this file which deal with
+	authentication are disabled since they are not needed.
+
 2001-03-19	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/sys/utsname.h: Added C++ wrapper.
+
+2001-03-15	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+
+	* libnetworking/include/.cvsignore: Remove dangling file.
 
 2001-03-15	Joel Sherrill <joel@OARcorp.com>
 
@@ -3964,6 +4767,30 @@
 	* librpc/include/rpc/Makefile.am: Apply include_*HEADERS instead of
 	H_FILES.
 	* libfs/src/imfs/Makefile.am: Apply include_*HEADERS instead of H_FILES.
+	* libnetworking/Makefile.am, libnetworking/arpa/Makefile.am,
+	libnetworking/machine/Makefile.am, libnetworking/net/Makefile.am,
+	libnetworking/ netinet/Makefile.am, libnetworking/nfs/Makefile.am,
+	libnetworking/rtems/Makefile.am, libnetworking/
+	rtems_servers/Makefile.am, libnetworking/rtems_webserver/Makefile.am,
+	libnetworking/ sys/Makefile.am, libnetworking/vm/Makefile.am: Apply
+	include_*HEADERS instead of H_FILES.
+	* libnetworking/include/Makefile.am: Remove.
+	* libnetworking/Makefile.am: Add handling of *.h files.
+	* libnetworking/configure.in: Remove include/Makefile.
+
+2001-01-31	Sergei Organov <osv@javad.ru>
+
+	* libnetworking/rtems_servers/ftp.d: Following changes: - Hacks with
+	current dir and root dir removed in favor of new libio support for
+	task-local current and root directories. - Bug in `close_data_socket()'
+	introduced by previous change fixed. - `command_pasv()' changed to set
+	timeout on socket we are listening on and code fixed to don't close
+	socket twice on error. - `serr()' changed to clear `errno'. -
+	`data_socket()' changed to clear `errno' before `bind()'. - `session()'
+	changed to clear `errno' before processing session. -
+	`close_data_socket()' fixed to close both active and passive sockets. -
+	Initialize info->data_socket to -1 in `daemon()'. - Initialize `fname'
+	to empty string  in `exec_command()'.
 
 2001-01-31	Joel Sherrill <joel@OARcorp.com>
 
@@ -3990,6 +4817,37 @@
 2001-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* sapi/include/confdefs.h: include cpuopts.h, replace stubdr w/ devnull.
+
+2001-01-25	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/lib/tftpDriver.c: Reduce first timeout interval.  This
+	improves throughput on systems which are dropping packets.   Only the
+	first timeout is reduced.  This keeps the number of extra packets down
+	on networks that are very busy and dropping lots of packets.
+
+2001-01-24	Sergei Organov <osv@javad.ru>
+
+	* libnetworking/rtems_servers/ftpd.c,
+	libnetworking/rtems_servers/ftpd.h: - Timeouts on sockets implemented.
+	'idle' field added to configuration. No timeout by default to keep
+	backward compatibility. Note: SITE IDLE command not implemented yet. -
+	Basic global access control implemented. 'access' field added to
+	configuration. No access limitations by default to keep backward
+	compatibility. - Anchor data socket for active mode (using self IP and
+	port 20.) - Fixed default data port support (still not tested). - Don't
+	allow IP address different from originating host in PORT command to
+	improve security. - Fixed bug in MDTM command. - Check for correctness
+	of parsing of argument in command_port(). - Fixed squeeze_path() to
+	don't allow names like 'NAME/smth' where 'NAME' is not a directory. -
+	Command parsing a little bit improved: command names are now converted
+	to upper-case to be more compatible with RFC (command names are not
+	case-sensitive.). - Reformat comments so that they have RTEMS
+	look-and-feel. - Fixed DELE, SITE CHMOD, RMD, MKD broken by previous
+	changes. - True ASCII mode implemented (doesn't work for hooks and
+	/dev/null) - Passive mode implemented, PASV command added. - Default
+	port for data connection could be used (untested, can't find ftp client
+	that doesn't send PORT command). - SYST reply changed to UNIX, as former
+	RTEMS isn't registered name. - Reply codes reviewed and fixed.
 
 2001-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -4064,6 +4922,25 @@
 	* rtems/src/taskmode.c: Ensure the this service does not dispatch before
 	tasking is enabled at initialization time.
 
+2001-01-12	Sergei Organov <osv@javad.ru>
+
+	* libnetworking/rtems_servers/ftpd.c,
+	libnetworking/rtems_servers/ftpd.h: - use pool of pre-created threads to
+	handle sessions instead of creating/deleting threads on the fly. - LIST
+	output is now similar to what "/bin/ls -al" would output, thus FTP
+	clients such Netscape are happy with it. - LIST NAME now works (both for
+	files and directories) - added support for NLST, CDUP, and MDTM FTP
+	commands to make more FTP clients happy . - keep track of CWD for every
+	session separately. - ability to specify root directory name for FTPD in
+	configuration table. FTPD will then create illusion for FTP clients that
+	this is actually root directory. - ignore options sent in commands, thus
+	LIST -al FILE works and doesn't try to list "-al" directory. - buffers
+	are allocated on stack instead of heap where possible to eliminate
+	malloc/free calls (avoid possible heap fragmentation troubles). - drop
+	using of task notepad to pass parameters - use function arguments
+	instead. - use snprintf() instead of sprintf() as the latter is unsafe.
+	- use of PF_INET in socket() instead of AF_INET.
+
 2001-01-12	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/src/clockgetres.c: Fixed match problem.  We are not converting
@@ -4115,12 +4992,21 @@
 	* score/src/isr.c: Modify to properly dereference _ISR_Vector_table now
 	that it is dynamically allocated.
 
+2001-01-02	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/CHANGELOG: Removed.
+	* libnetworking/README: Merged CHANGELOG contents as initial changes.
+
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/src/pthreadgetschedparam.c: Do not set output parameters if the
 	pointers are NULL.
 	* score/src/isr.c: Allocate the _ISR_Vector_table all the time not just
 	when we are allocating an interrupt stack.
+
+2000-12-14	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/lib/tftpDriver.c: Added write capability.
 
 2000-12-13	Joel Sherrill <joel@OARcorp.com>
 
@@ -4141,6 +5027,16 @@
 	image into the IMFS but actually leave bulky file contents in the
 	original tar image.  It essentially adds the linear file type and
 	associated support and a loader routine.
+
+2000-12-08	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/libc/linkaddr.c: Initialized variable to remove warning.
+	* libnetworking/modem/ppp.c, libnetworking/modem/ppp_tty.c: Made
+	numerous variable declarations conditional on PPP_COMPRESS and
+	PPP_FILTER.  Commented out variables that were not used because the code
+	using them was commented out. Removed totally unused variables.
+	* libnetworking/modem/pppcompress.c: Added parentheses to avoid warnings.
+	* libnetworking/pppd/pppmain.c: Removed numerous warnings.
 
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
@@ -4214,6 +5110,10 @@
 	* rtems/macros/rtems/rtems/sem.inl: Added macro implementation of
 	_Semaphore_Get_interrupt_disable().
 	* libmisc/mw-fb/mw_uid.c: Removed unnecessary dependency on <bsp.h>.
+	* libnetworking/modem/ppp_tty.c: Changed to include
+	<rtems/termiostypes.h> since that is an RTEMS specific header file.
+	* libnetworking/sys/ttycom.h: Moved to lib/include/sys.
+	* libnetworking/Makefile.am: Modified to reflect above.
 
 2000-11-28	Joel Sherrill <joel@OARcorp.com>
 
@@ -4232,6 +5132,27 @@
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/src/sysconf.c: Add support for _SC_CLK_TCK and _SC_OPEN_MAX.
+	* libnetworking/libc/res_init.c: Fix typo - adding missing # on include.
+
+2000-11-25	Eric Norum <eric.norum@usask.ca>
+
+	* libnetworking/libc/res_init.c: Move include to avoid compiler dumping
+	core.
+
+2000-11-25	Antti P Miettinen  <antti.p.miettinen@nokia.com>
+
+	* libnetworking/wrapup/Makefile.am: Added modem subdir.
+	* libnetworking/configure.in, libnetworking/Makefile.am: Added modem
+	subdir.
+	* libnetworking/net/Makefile.am: Added if_pppvar.h, pppcompress.h.
+	* libnetworking/pppd/Makefile.am: Added pppmain.c (which needs work).
+	* libnetworking/pppd/chat.c, libnetworking/pppd/fsm.c,
+	libnetworking/pppd/fsm.h, libnetworking/pppd/ipxcp.c,
+	libnetworking/pppd/main.c, libnetworking/pppd/ppp_tty.c,
+	libnetworking/pppd/upap.c: Changes from Thomas Doerfler 
+	<Thomas.Doerfler@imd-systems.de> and cosmetic changes by me. Actually
+	main.c and ppp_tty.c should be scratched. The modem subdir has the real
+	ppp_tty.c and the real pppd main is in pppmain.c.
 
 2000-11-17	Jennifer Averret <jennifer@OARcorp.com>
 
@@ -4247,6 +5168,8 @@
 	ACLOCAL_AMFLAGS.
 	* librpc/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 	* libfs/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+	* libnetworking/Makefile.am: Use ... instead of RTEMS_TOPdir in
+	ACLOCAL_AMFLAGS.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -4260,6 +5183,8 @@
 	* librpc/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
 	$(RTEMS_TOPdir)/aclocal.
 	* libfs/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
+	* libnetworking/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
 	$(RTEMS_TOPdir)/aclocal.
 
 2000-11-02	Joel Sherrill <joel@OARcorp.com>
@@ -4330,6 +5255,13 @@
 	librpc/src/rpc/svc_unix.c: Use of _read, _write, and _close as macros
 	conflicted with newlib's use of these as routine names.  They were
 	renamed to include "_RPC_" prefix.
+	* POSIX include files merged into newlib.  This resulted in some
+	definitions moving to other files and thus some secondary effects in
+	RTEMS source code.
+	* libnetworking/machine/types.h: Added _CLOCKID_T_ and _TIMER_T_ to be
+	in sync with newlib's <machine/types.h>.
+	* libnetworking/rtems/rtems_bsdnet_internal.h: newlib now includes
+	definition of struct itimerval in <sys/time.h>.
 
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -4343,6 +5275,8 @@
 	Switch to GNU canonicalization.
 	* librpc/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
 	to GNU canonicalization.
+	* libnetworking/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+	Switch to GNU canonicalization.
 
 2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -4364,6 +5298,13 @@
 
 	* libfs/.cvsignore, libfs/src/.cvsignore, libfs/src/imfs/.cvsignore,
 	libfs/wrapup/.cvsignore: New files.
+
+2000-10-19	Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
+
+	* libnetworking/lib/tftpDriver.c: add comments to handlers struct
+	function pointers.
+	* libnetworking/rtems/rtems_glue.c: move pointer arithmetic to be
+	_after_ pointer has been checked against NULL.
 
 2000-10-18	Nick Simon <Nick.SIMON@syntegra.bt.co.uk>
 
@@ -4408,6 +5349,7 @@
 	libfs/src/imfs/imfs_free.c, libfs/src/imfs/imfs_mount.c,
 	libfs/src/imfs/imfs_fsunmount.c, libfs/src/imfs/imfs_ntype.c: New files.
 	Moved from libc.
+	* libnetworking/pppd/ipxcp.c: Fixed a typo.
 
 2000-10-12	Joel Sherrill <joel@OARcorp.com>
 
@@ -4428,6 +5370,10 @@
 	* sapi/src/io.c: Accounted for above.
 	* libmisc/monitor/mon-driver.c: Accounted for addition of "_entry" to
 	fields in rtems_driver_address_table.
+	* libnetworking/rtems_webserver/Makefile.am,
+	libnetworking/rtems_webserver/base64.c,
+	libnetworking/rtems_webserver/base64.c: Renamed base64.c to wbase64.c.
+	* libnetworking/rtems_webserver/sock.c: Added file missed in merger.
 
 2000-09-25	Joel Sherrill <joel@OARcorp.com>
 
@@ -4437,6 +5383,13 @@
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
 	* librpc/src/xdr/xdr_float.c: Added A29K support.
+	* libnetworking/machine/types.h, libnetworking/pppd/pppd.h,
+	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/rtems_webserver/webmain.c: machine/types.h  should not
+	have included rtems.h.  It is now including precisely the  least amount
+	of low level, yet portable .h files to get the basic RTEMS types
+	defined.  This rippled into other  files since rtems_bsdnet_internal.h
+	used machine/types.h to include rtems.h.
 
 2000-09-20	Joel Sherrill <joel@OARcorp.com>
 
@@ -4446,6 +5399,13 @@
 2000-09-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/rtems/Makefile.am: Use PROJECT_TOPdir in path to size_rtems.
+	* libnetworking/ChangeLog: Cleanup.
+
+2000-09-05	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/rtems/rtems_syscall.c: Changed from O_NONBLOCK to
+	internal RTEMS_LIBIO_FLAGS_NO_DELAY to avoid O_NONBLOCK/O_NDELAY
+	confusion and to work with the converted flags.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -4463,6 +5423,42 @@
 	libmisc/mw-fb/Makefile.am: Include compile.am.
 	* librpc/src/rpc/Makefile.am, librpc/src/xdr/Makefile.am: Include
 	compile.am.
+	* libnetworking/kern/Makefile.am, libnetworking/lib/Makefile.am,
+	libnetworking/libc/Makefile.am, libnetworking/net/Makefile.am,
+	libnetworking/netinet/Makefile.am, libnetworking/nfs/Makefile.am,
+	libnetworking/pppd/Makefile.am, libnetworking/rtems/Makefile.am,
+	libnetworking/rtems_servers/Makefile.am,
+	libnetworking/rtems_webserver/Makefile.am,
+	libnetworking/wrapup/Makefile.am: Include compile.am.
+
+2000-09-01	Rosimildo daSilva <rdasilva@connecttel.com>
+
+	* libnetworking/emfdb.c: Removed stray semi-colon.  Reported on GoAhead
+	mailing lists by Jim Rudnicki <jdrudnicki@yahoo.com>.
+
+2000-08-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/netinet/tcp_input.c: Spelling corrections.
+
+2000-08-31	Joel Sherrill <joel@OARcorp.com>
+
+	* Merged version 2.1 of GoAhead webserver.  This update was submitted by
+	Antti P Miettinen <antti.p.miettinen@nokia.com>.
+	* libnetworking/NOTES, libnetworking/base64.c, libnetworking/ejIntrn.h,
+	libnetworking/emfdb.c, libnetworking/emfdb.h, libnetworking/md5.h,
+	libnetworking/md5c.c, libnetworking/ um.c, libnetworking/um.h: New files.
+	* libnetworking/wbase64.c: Removed.
+	* libnetworking/Makefile.am, libnetworking/asp.c,
+	libnetworking/balloc.c, libnetworking/default.c, libnetworking/ej.h,
+	libnetworking/ejlex.c, libnetworking/ejparse.c, libnetworking/ form.c,
+	libnetworking/h.c, libnetworking/handler.c, libnetworking/mime.c,
+	libnetworking/misc.c, libnetworking/ringq.c, libnetworking/rom.c,
+	libnetworking/security.c, libnetworking/ socket.c, libnetworking/sym.c,
+	libnetworking/uemf.c, libnetworking/uemf.h, libnetworking/url.c,
+	libnetworking/value.c, libnetworking/webcomp.c, libnetworking/webmain.c,
+	libnetworking/ webpage.c, libnetworking/webrom.c, libnetworking/webs.c,
+	libnetworking/webs.h, libnetworking/websuemf.c, libnetworking/wsIntrn.h:
+	Modified.
 
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 
@@ -4473,6 +5469,7 @@
 	* libmisc/Many files: Moved posix/include/rtems/posix/seterr.h to 
 	score/include/rtems/seterr.h so it would be available within all APIs.
 	* libmisc/mw-fb/.cvsignore: New file.
+	* libnetworking/rtems_webserver/license.txt: New file.
 
 2000-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
@@ -4532,4 +5529,5 @@
 	* rtems/ChangeLog: New file.
 	* libmisc/ChangeLog: New file.
 	* librpc/ChangeLog: New file.
+	* libnetworking/ChangeLog: New file.
 
