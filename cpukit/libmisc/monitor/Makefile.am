@@ -20,9 +20,9 @@ if HAS_MP
 OBJS += $(MP_C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 endif
 
-include_rtems_HEADERS = monitor.h symbols.h
+include_rtems_HEADERS = monitor.h
 
-noinst_HEADERS = config.h
+noinst_HEADERS = config.h symbols.h
 
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am

@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 #include <rtems/monitor.h>
-#include <rtems/symbols.h>
+#include "symbols.h"
 
 
 rtems_symbol_table_t *

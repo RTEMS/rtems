@@ -12,12 +12,15 @@
 #ifndef __MONITOR_H
 #define __MONITOR_H
 
-#include <rtems/symbols.h>
 #include <rtems/error.h>		/* rtems_error() */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Forward decls from symbols.h */
+typedef struct _rtems_symbol_t rtems_symbol_t ;
+typedef struct _rtems_symbol_table_t rtems_symbol_table_t;
 
 /*
  * Monitor types are derived from rtems object classes

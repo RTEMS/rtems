@@ -14,14 +14,16 @@
 #ifndef _INCLUDE_SYMBOLS_H
 #define _INCLUDE_SYMBOLS_H
 
+#include <rtems/monitor.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct {
+struct _rtems_symbol_t {
     rtems_unsigned32 value;
     char            *name;
-} rtems_symbol_t;
+} ;
 
 #define SYMBOL_STRING_BLOCK_SIZE 4080
 typedef struct rtems_symbol_string_block_s {
@@ -29,7 +31,7 @@ typedef struct rtems_symbol_string_block_s {
     char   buffer[SYMBOL_STRING_BLOCK_SIZE];
 } rtems_symbol_string_block_t;
 
-typedef struct {
+struct _rtems_symbol_table_t {
 
     rtems_unsigned32 sorted;          /* are symbols sorted right now? */
     rtems_unsigned32 growth_factor;   /* % to grow by when needed */
@@ -50,7 +52,7 @@ typedef struct {
     rtems_symbol_string_block_t *string_buffer_current;
     rtems_unsigned32 strings_next;      /* next byte to use in this block */
 
-} rtems_symbol_table_t;
+} ;
 
 #define rtems_symbol_name(sp)   ((sp)->name)
 #define rtems_symbol_value(sp)  ((sp)->value)
