@@ -50,7 +50,7 @@ intro.texi: intro.t versions.texi
 	    -n "Requirements" ${*}.t
 
 require.texi: require.t versions.texi
-	$(BMENU) -c -p "Resources on the Internet" \
+	$(BMENU) -c -p "EGCS Mailing List" \
 	    -u "Top" \
 	    -n "Building the GNU C/C++ Cross Compiler Toolset" ${*}.t
 
@@ -81,6 +81,8 @@ nt.texi: nt.t versions.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
+	-cp pictures/sfile12c.jpg $(WWW_INSTALL)/$(PROJECT)
+	-cp pictures/bit_c.jpg $(WWW_INSTALL)/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 

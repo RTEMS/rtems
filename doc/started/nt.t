@@ -258,24 +258,24 @@ Apply the appropriate RTEMS specific patches as detailed in
 or Objective-C):
 
 @example
-· /build/@value{EGCS-UNTAR}/libf2c
-· /build/@value{EGCS-UNTAR}/gcc/objc
-· /build/@value{EGCS-UNTAR}/gcc/f
+· /build/@value{GCC-UNTAR}/libf2c
+· /build/@value{GCC-UNTAR}/gcc/objc
+· /build/@value{GCC-UNTAR}/gcc/f
 @end example
 
 @b{NOTE}: See @ref{Bug in Patch Utility}.
 
-@item Copy to /build/@value{EGCS-UNTAR}/ the following directories:
+@item Copy to /build/@value{GCC-UNTAR}/ the following directories:
 
 @itemize @bullet
-@item /build/newlib-1.0.8/newlib
-@item /build/newlib-1.0.8/libgloss
+@item /build/@value{NEWLIB-UNTAR}/newlib
+@item /build/@value{NEWLIB-UNTAR}/libgloss
 @end itemize
 
 @item Go under /build directory and run:
 
 @example
-../@value{EGCS-UNTAR}/configure --verbose --target=m68k-rtems \
+../@value{GCC-UNTAR}/configure --verbose --target=m68k-rtems \
     --prefix=/gcc-m68k --with-gnu-as --with-gnu-ld \
     --with-targets=all --with-newlib
 @end example
@@ -285,7 +285,7 @@ of your choice.  See @ref{Running the bit Script} for a
 list of the targets available.
 
 @item Then run your favourite Unix format compaatible file editor,
-and edit @code{/build/@value{EGCS-UNTAR}/gcc/Makefile}
+and edit /build/@value{GCC-UNTAR}/gcc/Makefile
 Search for the section:
 
 @example
