@@ -1,3 +1,11 @@
+2001-05-22	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* rtems/score/cpu.h: Add the interrupt stack structure and enhance
+	the context initialization to account for floating point tasks.  
+	* rtems/score/mips.h: Added the routines mips_set_cause(),
+	mips_get_fcr31(), and mips_set_fcr31().
+	* Assisted in design and debug by Joel Sherrill <joel@OARcorp.com>.
+
 2001-05-07	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu_asm.S: Merged patches from Gregory Menke

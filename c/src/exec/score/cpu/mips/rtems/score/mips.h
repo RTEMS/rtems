@@ -90,6 +90,42 @@ extern "C" {
     asm volatile( "mtc0 %0, $12; nop" : : "r" (__x) ); \
   } while (0)
 
+
+
+
+
+#define mips_get_cause( _x ) \
+  do { \
+    asm volatile( "mfc0 %0, $13; nop" : "=r" (_x) : ); \
+  } while (0)
+
+
+#define mips_set_cause( _x ) \
+  do { \
+    register unsigned int __x = (_x); \
+    asm volatile( "mtc0 %0, $13; nop" : : "r" (__x) ); \
+  } while (0)
+
+
+
+
+
+#define mips_get_fcr31( _x ) \
+  do { \
+    asm volatile( "cfc1 %0, $31; nop" : "=r" (_x) : ); \
+  } while(0)
+
+
+#define mips_set_fcr31( _x ) \
+  do { \
+    register unsigned int __x = (_x); \
+    asm volatile( "ctc1 %0, $31; nop" : : "r" (__x) ); \
+  } while(0)
+
+
+
+
+
 /*
  *  Manipulate interrupt mask 
  *

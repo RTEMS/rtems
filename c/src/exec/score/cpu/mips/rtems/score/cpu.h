@@ -1,9 +1,9 @@
-/*  
+/*
  *  Mips CPU Dependent Header File
- *  
+ *
  *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
  *           Joel Sherrill <joel@OARcorp.com>.
- *  
+ *
  *    These changes made the code conditional on standard cpp predefines,
  *    merged the mips1 and mips3 code sequences as much as possible,
  *    and moved some of the assembly code to C.  Alan did much of the
@@ -11,9 +11,9 @@
  *    wrote the JMR3904 BSP so this could be tested.  Joel also
  *    added the new interrupt vectoring support in libcpu and
  *    tried to better support the various interrupt controllers.
- *      
+ *
  *  Original MIP64ORION port by Craig Lebakken <craigl@transition.com>
- *           COPYRIGHT (c) 1996 by Transition Networks Inc. 
+ *           COPYRIGHT (c) 1996 by Transition Networks Inc.
  *
  *    To anyone who acknowledges that this file is provided "AS IS"
  *    without any express or implied warranty:
@@ -146,11 +146,14 @@ extern "C" {
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
+ *
  */
 
-#define CPU_ISR_PASSES_FRAME_POINTER 0
+#define CPU_ISR_PASSES_FRAME_POINTER 1
+
+
 
 /*
  *  Does the CPU have hardware floating point?
@@ -256,7 +259,7 @@ extern "C" {
  */
 
 /* we can use the low power wait instruction for the IDLE thread */
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE 
+#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 
 /*
  *  Does the stack grow up (toward higher addresses) or down
@@ -293,7 +296,7 @@ extern "C" {
 #if __GNUC__
 #define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned (16)))
 #else
-#define CPU_STRUCTURE_ALIGNMENT 
+#define CPU_STRUCTURE_ALIGNMENT
 #endif
 
 /*
@@ -380,7 +383,7 @@ typedef struct {
     __MIPS_REGISTER_TYPE fp;
     __MIPS_REGISTER_TYPE ra;
     __MIPS_REGISTER_TYPE c0_sr;
-    __MIPS_REGISTER_TYPE c0_epc;
+/*    __MIPS_REGISTER_TYPE c0_epc; */
 } Context_Control;
 
 /* WARNING: If this structure is modified, the constants in cpu.h
@@ -424,8 +427,25 @@ typedef struct {
 #endif
 } Context_Control_fp;
 
-typedef struct {
-    unsigned32 special_interrupt_register;
+
+
+
+
+/*
+ This struct reflects the stack frame employed in ISR_Handler.  Note
+ that the ISR routine doesn't save all registers to this frame, so
+ cpu_asm.S should be consulted to see if the registers you're
+ interested in are actually there.
+*/
+
+typedef struct
+{
+#if __mips == 1
+      unsigned int regs[80];
+#endif
+#if  __mips == 3
+      unsigned int regs[94];
+#endif
 } CPU_Interrupt_frame;
 
 
@@ -451,7 +471,7 @@ typedef struct {
 }   rtems_cpu_table;
 
 /*
- *  Macros to access required entires in the CPU Table are in 
+ *  Macros to access required entires in the CPU Table are in
  *  the file rtems/system.h.
  */
 
@@ -643,7 +663,7 @@ extern unsigned int mips_interrupt_number_of_vectors;
  *  This could be used to manage a programmable interrupt controller
  *  via the rtems_task_mode directive.
  *
- *  On the MIPS, 0 is all on.  Non-zero is all off.  This only 
+ *  On the MIPS, 0 is all on.  Non-zero is all off.  This only
  *  manipulates the IEC.
  */
 
@@ -685,8 +705,9 @@ void _CPU_ISR_Set_level( unsigned32 );  /* in cpu.c */
   	(_the_context)->sp = _stack_tmp; \
   	(_the_context)->fp = _stack_tmp; \
 	(_the_context)->ra = (unsigned64)_entry_point; \
-	if (_isr) (_the_context)->c0_sr = 0xff00; \
-	else      (_the_context)->c0_sr = 0xff01; \
+	(_the_context)->c0_sr = ((_the_context)->c0_sr & 0x0fff0000) | \
+				((_isr)?0xff00:0xff01) | \
+				((_is_fp)?0x20000000:0x10000000); \
   }
 
 /*
@@ -874,10 +895,10 @@ void _CPU_Initialize(
 /*
  *  _CPU_ISR_install_raw_handler
  *
- *  This routine installs a "raw" interrupt handler directly into the 
+ *  This routine installs a "raw" interrupt handler directly into the
  *  processor's vector table.
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   unsigned32  vector,
   proc_ptr    new_handler,
@@ -981,18 +1002,18 @@ void _CPU_Context_restore_fp(
  *  endianness for ALL fetches -- both code and data -- so the code
  *  will be fetched incorrectly.
  */
- 
+
 static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
   unsigned32 byte1, byte2, byte3, byte4, swapped;
- 
+
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
   byte2 = (value >> 8)  & 0xff;
   byte1 =  value        & 0xff;
- 
+
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }
