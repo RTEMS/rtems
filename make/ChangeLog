@@ -1,3 +1,8 @@
+2005-02-25	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/jmr3904.cfg: arm_bare_bsp obsoleted.
+	* custom/arm_bare_bsp.cfg: Removed.
+
 2005-02-24	Jay Monkman <jtm@lopingdog.com>
 
 	* custom/csb350.cfg: New BSP.
