@@ -71,5 +71,8 @@ $(PROJECT_LIB)/start16$(LIB_VARIANT).bin: $(ARCH)/start16$(LIB_VARIANT).bin $(PR
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start16$(LIB_VARIANT).bin
 TMPINSTALL_FILES += $(PROJECT_LIB)/start16$(LIB_VARIANT).bin
 
+CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(TMPINSTALL_FILES)
+
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
