@@ -1,16 +1,16 @@
 2003-08-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 439/filesystem
-	*src/dosfs/fat_file.c: flush temporary buffer when closing files
+	* src/dosfs/fat_file.c: flush temporary buffer when closing files
 
 2003-08-04      Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
         PR 441/filesystem
-        *src/dosfs/msdos.h: add rename support to DOSFS
-        *src/dosfs/msdos_create.c: add rename support to DOSFS
-        *src/dosfs/msdos_file.c: add rename support to DOSFS
-        *src/dosfs/msdos_init.c: add rename support to DOSFS
-        *src/dosfs/msdos_mknod.c: add rename support to DOSFS
+        * src/dosfs/msdos.h: add rename support to DOSFS
+        * src/dosfs/msdos_create.c: add rename support to DOSFS
+        * src/dosfs/msdos_file.c: add rename support to DOSFS
+        * src/dosfs/msdos_init.c: add rename support to DOSFS
+        * src/dosfs/msdos_mknod.c: add rename support to DOSFS
 
 2003-07-15	Chris Johns <cjohns@cybertec.com.au>
 	* src/dosfs/msdos.h: PR431. MSDOS Volume semaphore timeout is now
