@@ -1,6 +1,8 @@
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ChangeLog: Merge-in optman/ChangeLog.
+	* libchip/ChangeLog: Remove.
+	* ChangeLog: Merge-in optman/ChangeLog.
 	* optman/ChangeLog: Remove.
 
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -8,6 +10,7 @@
 	* configure.ac: Reflect changes to cpukit.
 	* wrapup/Makefile.am: Reflect changes to librdbg.
 	* aclocal/enable-bare.m4: Convert to autoconf-2.59.
+	* libchip/Makefile.am: Add PREINSTALL_DIRS.
 
 2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -26,6 +29,8 @@
 	* configure.ac: Add subdir-objects to AUTOMAKE_OPTIONS. Require
 	automake-1.8.2. Add RTEMS_PROG_CCAS. Add AM_PROG_CC_C_O.
 	* optman/Makefile.am: Use automake compilation rules.
+	* libchip/Makefile.am: Fix typo in previous patch.
+	* libchip/Makefile.am: Use automake compilation rules.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -33,6 +38,8 @@
 	PRE/TMPINSTALL_FILES to CLEANFILES.
 	* automake/lib.am: Remove TMPINSTALL_FILES.
 	* optman/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
+	* libchip/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
 	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
@@ -43,6 +50,17 @@
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Reflect changes to shmdr.
+	* libchip/Makefile.am: Add shmdr. Use noinst_DATA instead of TMP_LIBS.
+
+2003-12-18	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/shmdr/addlq.c, libchip/shmdr/cnvpkt.c, libchip/shmdr/dump.c,
+	libchip/shmdr/fatal.c, libchip/shmdr/getlq.c, libchip/shmdr/getpkt.c,
+	libchip/shmdr/init.c, libchip/shmdr/initlq.c, libchip/shmdr/intr.c,
+	libchip/shmdr/mpci.h, libchip/shmdr/mpisr.c, libchip/shmdr/poll.c,
+	libchip/shmdr/README, libchip/shmdr/receive.c, libchip/shmdr/retpkt.c,
+	libchip/shmdr/send.c, libchip/shmdr/setckvec.c,
+	libchip/shmdr/shm_driver.h: Copied from libbsp/shmdr.
 
 2003-12-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -71,6 +89,7 @@
 	* aclocal/env-rtemsbsp.m4: Add PROJECT_LIB.
 	* wrapup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
 	* optman/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+	* libchip/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -83,6 +102,8 @@
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 	* optman/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
 	* optman/Makefile.am: Remove project_libdir.
+	* libchip/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -94,6 +115,7 @@
 
 	* configure.ac: Reflect changes to librdbg.
 	* optman/Makefile.am: Add tmpinstall dirstamp support.
+	* libchip/Makefile.am: Fix variant-tmpinstall support.
 
 2003-12-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -119,12 +141,23 @@
 	* automake/compile.am: Add $(ARCH)/$(dirstamp) rules.
 	* optman/Makefile.am: Add dependencies to $(ARCH)/$(dirstamp). Reformat.
 	* optman/Makefile.am: Remove all-local: $(ARCH).
+	* libchip/ide/Makefile.am, libchip/network/Makefile.am,
+	libchip/rtc/Makefile.am, libchip/ serial/Makefile.am: Remove.
+	* libchip/Makefile.am: Merge-in Makefile.am above. Add preinstallation +
+	compilation dirstamp support.
+	* libchip/ide/Makefile.am: Remove all-local: $(ARCH).
+	* libchip/network/Makefile.am: Remove all-local: $(ARCH).
+	* libchip/rtc/Makefile.am: Remove all-local: $(ARCH).
+	* libchip/serial/Makefile.am: Remove all-local: $(ARCH).
 
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/lead-dot.m4: New (from automake-1.7f).
 	* aclocal/rtems-top.m4: Require AM_SET_LEADING_DOT. Add
 	AC_SUBST(dirstamp).
+	* libchip/ide/Makefile.am: Use dirstamps for preinstallation. Reformat.
+	* libchip/network/Makefile.am, libchip/rtc/Makefile.am,
+	libchip/serial/Makefile.am: Ditto.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -167,6 +200,7 @@
 	RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
 	* aclocal/check-rdbg.m4: Add m4-quotes. Require
 	RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* libchip/network/open_eth.c: Remove #define OPEN_ETH_SUPPORTED (Unused).
 
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -185,6 +219,16 @@
 
 	* automake/force-preinstall.am: Remove.
 
+2003-09-26	Cedric Aubert <cedric_aubert@yahoo.fr>
+
+	PR 499/rtems_misc
+	* libchip/serial/mc68681.c:  Miscellaneous corrections: - Correction of
+	ACR_BIT[7] (Baudrate table) Configuration - Correction of Parity Bit
+	Configuration (Odd was forced) - Correction of Stop Bit configuration
+	(inversed) - Correction of ISR Handler to call 
+	rtems_termios_dequeue_character() only if is a Tx Empty IRQ. - Add RTS
+	CTS Hardware flow control Configuration.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* lib/libcpu/shared/include/cache.h,
@@ -197,11 +241,45 @@
 	optman/rtems/no-sem.c, optman/rtems/no-signal.c,
 	optman/rtems/no-timer.c, optman/sapi/no-ext.c, optman/sapi/no-io.c: URL
 	for license changed.
+	* libchip/ide/ata.c, libchip/ide/ata.h, libchip/ide/ata_internal.h,
+	libchip/ide/ide_controller.c, libchip/ide/ide_ctrl.h,
+	libchip/ide/ide_ctrl_cfg.h, libchip/ide/ide_ctrl_io.h,
+	libchip/network/cs8900.c, libchip/network/cs8900.c.bsp,
+	libchip/network/cs8900.h, libchip/network/dec21140.c,
+	libchip/network/elnk.c, libchip/network/open_eth.c,
+	libchip/network/sonic.c, libchip/network/sonic.h, libchip/rtc/icm7170.c,
+	libchip/rtc/icm7170.h, libchip/rtc/icm7170_reg.c,
+	libchip/rtc/icm7170_reg2.c, libchip/rtc/icm7170_reg4.c,
+	libchip/rtc/icm7170_reg8.c, libchip/rtc/m48t08.c, libchip/rtc/m48t08.h,
+	libchip/rtc/m48t08_reg.c, libchip/rtc/m48t08_reg2.c,
+	libchip/rtc/m48t08_reg4.c, libchip/rtc/m48t08_reg8.c, libchip/rtc/rtc.h,
+	libchip/rtc/rtcprobe.c, libchip/serial/mc68681.c,
+	libchip/serial/mc68681.h, libchip/serial/mc68681_p.h,
+	libchip/serial/mc68681_reg.c, libchip/serial/mc68681_reg2.c,
+	libchip/serial/mc68681_reg4.c, libchip/serial/mc68681_reg8.c,
+	libchip/serial/serial.h, libchip/serial/z85c30.c,
+	libchip/serial/z85c30.h, libchip/serial/z85c30_p.h,
+	libchip/serial/z85c30_reg.c: URL for license changed.
+
+2003-09-03	Jiri Gaisler <jiri@gaisler.com>
+
+	PR 477/networking
+	* libchip/network/Makefile.am: Add driver for OpenCores NIC.
+	* libchip/network/README.open_eth, libchip/network/open_eth.c,
+	libchip/network/open_eth.h: New files.
 
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-top.m4: Add RTEMS_API.
 	AC_DEFAULT_PREFIX([/opt/rtems-][RTEMS_API]).
+
+2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/ide/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+
+2003-08-20	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/cs8900.c: Correct copyright statements.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -270,6 +348,11 @@
 	automake/lib.am, automake/local.am, automake/subdirs.am: New (copied
 	from ../../automake).
 	* optman/Makefile.am: Reflect having moved automake/.
+	* libchip/Makefile.am: Reflect having moved automake/.
+	* libchip/ide/Makefile.am: Reflect having moved automake/.
+	* libchip/network/Makefile.am: Reflect having moved automake/.
+	* libchip/rtc/Makefile.am: Reflect having moved automake/.
+	* libchip/serial/Makefile.am: Reflect having moved automake/.
 
 2003-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -295,6 +378,19 @@
 	* configure.ac: Merge-in librdbg/configure.ac.
 	* configure.ac: Merge-in libnetworking/configure.ac. Merge-in parts of
 	librdbg/configure.ac.
+	* libchip/ide/Makefile.am, libchip/network/Makefile.am,
+	libchip/rtc/Makefile.am, libchip/ serial/Makefile.am: Add conditional
+	LIBCHIP. Conditionally build include-dirs.
+	* libchip/network/if_fxp.c: Replace deprecated b* funcs by mem* funcs.
+
+2003-07-18	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 429/bsps
+	PR 432/bsps
+	* libchip/network/elnk.c: Due to a bug in the driver, if multiple
+	packets are queued onto an elnk board, the ISR will deadlock the device
+	with a tx complete interrupt.  Lighter tx loads are not affected as they
+	end up submitting single packets to the device.
 
 2003-07-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -303,10 +399,30 @@
 	* optman/configure.ac: Remove (Merged into ../configure.ac).
 	* optman/Makefile.am: Reflect having merged configure.ac into
 	../configure.ac.
+	* libchip/configure.ac: Remove (Merged into ../configure.ac).
+	* libchip/Makefile.am, libchip/ide/Makefile.am,
+	libchip/network/Makefile.am, libchip/rtc/Makefile.am,
+	libchip/serial/Makefile.am: Reflect having merged configure.ac into
+	../configure.ac.
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* support/version.c: Reflect having remove "rtems-" from RTEMS_VERSION.
+
+2003-06-30	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* libchip/network/dec21140.c, libchip/network/elnk.c: Update to compile
+	on i386.
+
+2003-06-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* libchip/network/README.3com: New file missed in previous commit.
+	PR 405/bsps
+	PR 393/networking
+	* libchip/network/dec21140.c: Fix leak also known as PR393.
+	* libchip/network/elnk.c, libchip/network/if_media.h,
+	libchip/network/mii.h: New files.
+	* libchip/network/Makefile.am: Reflect new files.
 
 2003-06-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -315,6 +431,28 @@
 2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Add libide.a.
+
+2003-04-15	Joel Sherrill <joel@OARcorp.com>
+
+	PR 387/rtems_misc
+	* libchip/ide/ata.c: Removed warning and moved to use of simpler libc
+	routines.
+	* libchip/ide/ata_internal.h: Added missing newline and end of file.
+
+2003-03-27	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/ide/Makefile.am: ATA code depends upon libchip/ide which is
+	not allowed in the cpukit source code since it must be buildable
+	independent of any BSP. These files were moved to libchip/ide.
+	* libchip/ide/ata.c, libchip/ide/ata.h, libchip/ide/ata_internal.h: New
+	files.
+
+2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 368/filesystems
+	* libchip/ide/Makefile.am, libchip/ide/ide_ctrl_cfg.h: General
+	improvements which now work on pc386 and mbx8xx.
+	* libchip/ide/ide_controller.c: New file.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -325,10 +463,18 @@
 	* support/version.c: New.
 	* wrapup/Makefile.am: Add support/libsupport.a.
 	* optman/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* libchip/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Use SRC += instead of make-vars.
+
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 354/networking
+	* libchip/network/if_fxp.c (Intel eepro network driver): re-enabled the
+	chip against a table of supported chips. The untested ones are still
+	commented out, however.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -336,6 +482,8 @@
 	* configure.ac: AC_PREREQ(2.57).
 	* optman/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* optman/configure.ac: AC_PREREQ(2.57).
+	* libchip/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* libchip/configure.ac: AC_PREREQ(2.57).
 
 2003-02-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -360,6 +508,18 @@
 	* optman/Makefile.am: Eliminate *_O_FILES. Don't create $ARCH in %.o:
 	%.c rules.
 	* optman/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libchip/network/Makefile.am: Eliminate C_O_FILES.
+	* libchip/rtc/Makefile.am: Ditto.
+	* libchip/serial/Makefile.am: Ditto.
+
+2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/serial/Makefile.am: Don't include @RTEMS_BSP@.cfg. Don't use
+	LIBC_DEFINES.
+	* libchip/rtc/Makefile.am: Don't include @RTEMS_BSP@.cfg. Don't use
+	LIBC_DEFINES.
+	* libchip/network/Makefile.am: Don't include @RTEMS_BSP@.cfg. Don't use
+	LIBC_DEFINES.
 
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -391,6 +551,11 @@
 	* configure.ac: Use test "$RTEMS_BSP_FAMILY" != "bare" to setup
 	HAS_LIBBSP conditional (Solaris/bash incompatibility fix).
 
+2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* libchip/network/cs8900.c: I don't know why we have to SelfST register
+	twice on the EDB7312, but it doesn't work on the EDB7312 if we don't.
+
 2002-11-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* optman/rtems/Makefile.am: Reworked.
@@ -403,11 +568,24 @@
 	* configure.ac: Use "'"-quotes for args to RTEMS_CONFIG_SUBDIRS. Fix
 	braino in comment on "exec". Extend --enable-ada handling.
 
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/dec21140.c: Removed warnings.
+
+2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* libchip/ide/Makefile.am, libchip/ide/ide_ctrl_cfg.h,
+	libchip/ide/ide_ctrl_io.h, libchip/ide/ide_ctrl.h: New files.
+	* libchip/configure.ac, libchip/Makefile.am: Modified to reflect changes
+	above.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 	* wrapup/.cvsignore: Remove autom4te.cache.
 	* optman/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+	* libchip/.cvsignore: Reformat. Add autom4te*cache. Remove
+	autom4te.cache.
 
 2002-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -416,6 +594,19 @@
 2002-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* optman/.cvsignore: Add autom4te.cache.
+
+2002-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/serial/z85c30.c: Eliminated warning by clarifying statement.
+
+2002-09-07	Chris Johns <ccj@acm.org>
+
+	* libchip/network/Makefile.am, libchip/network/README.cs8900,
+	libchip/network/cs8900.c, libchip/network/cs8900.h: Significant update
+	which corrects the problem  where the cs8900.c file was actually the BSP
+	glue.  Joel did some hacking so this file will compile.  Previously it
+	required providing a target.h file to compile.
+	* libchip/network/cs8900.c.bsp: New file.
 
 2002-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -439,12 +630,17 @@
 	* Makefile.am: Use BSP_SUBDIRS to setup SUBDIRS.
 	* optman/rtems/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* optman/sapi/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libchip/network/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libchip/rtc/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libchip/serial/Makefile.am: Use .$(OBJEXT) instead of .o.
 
 2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_SUBDIR(wrapup). Cosmetic cleanups.
 	* wrapup/Makefile.am: Pick up ../libchip/rtc/$(ARCH)/librtcio.a and
 	../libchip/serial/$(ARCH)/libserialio.a.
+	* libchip/serial/Makefile.am: Don't tmp-install lib.
+	* libchip/rtc/Makefile.am: Don't tmp-install lib.
 
 2002-08-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -481,6 +677,13 @@
 	RTEMS_ENABLE_POSIX, RTEMS_ENABLE_ITRON, RTEMS_ENABLE_INLINES,
 	RTEMS_ENABLE_RTEMS_DEBUG, RTEMS_CHECK_RTEMS_DEBUG, RTEMS_CHECK_NEWLIB.
 
+2002-07-16	Eric Norum <eric.norum@usask.ca>
+
+	* New driver for the Intel EtherExpressPro (82559ER) chip.
+	* libchip/network/if_fxp.c, libchip/network/if_fxpreg.h,
+	libchip/network/if_fxpvar.h, libchip/network/pci.h: New file.
+	* libchip/network/Makefile.am: Modified to reflect above.
+
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: New.
@@ -516,9 +719,36 @@
 
 	* config-ml.in: Take out arm and sh variants RTEMS does not support.
 
+2002-05-07	Chris Johns <ccj@acm.org>
+
+	* libchip/c/src/libchip/network/i82586.c: Per PR210, adjust the mbuf
+	lengths to remove the ethernet header as the FreeBSD (RTEMS) stack
+	requires it to be stripped.
+
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/network/dec21140.c: Reflect changes to powerpc's
+	rtems/score/cpu.h. Use __PPC__ for gcc-3.x compliance.
+
 2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* optman/configure.ac: Remove ENABLE_GCC28.
+
+2002-04-11	Chris Johns <ccj@acm.org>
+
+	* libchip/network/rtems_bsdnet.h: To address PR59, added the drv_ctrl
+	driver control block field to the ifconfig network driver structure.
+	This field is needed by the i82586 driver which was ported from NetBSD
+	as it had better hardware abstraction.
+
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/network/i82586.c: Include <string.h>.
+	* libchip/network/sonic.c: Ditto.
+
+2002-04-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/configure.ac: AC_DEFINE(CPU_U32_FIX) for sparc.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -530,6 +760,12 @@
 	* optman/rtems/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* optman/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* optman/sapi/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libchip/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* libchip/network/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libchip/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libchip/rtc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libchip/serial/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-02-28	Victor V. Vengerov <vvv@oktet.ru>
 
@@ -540,6 +776,10 @@
 
 	* optman/.cvsignore: Added aclocal.m4 and configure.
 	* optman/.cvsignore: New file.
+
+2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/network/cs8900.c: Include rtems/bspIo.h instead of bspIo.h.
 
 2002-01-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -554,29 +794,126 @@
 
 	* config-ml.in: New file. Imported from gcc and modified for RTEMS.
 
+2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/network/sonic.h: Fix typo.
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use SUBDIRS = @subdirs@, require automake-1.5.
 	* configure.ac: Replace hst_subdirs with AC_CONFIG_SUBDIRS to make
 	autoconf-2.52 happy.
 
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/serial/z85c30.c: Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
 	* configure.in: Remove.
 	* configure.ac: New file, generated from configure.in by autoupdate.
+	* libchip/.cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* libchip/configure.in: Remove.
+	* libchip/configure.ac: New file, generated from configure.in by
+	autoupdate.
+
+2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/rtc/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libchip/network/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libchip/serial/Makefile.am: Use 'PREINSTALL_FILES ='.
+
+2001-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/ChangeLog: Fixed typo in date.
+
+2001-09-21	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/Makefile.am: Fixed typo on file name.
+	* libchip/network/i82586.c: Commented out line 318 which is referencing 
+	a member of a structure that is not currently there.  This needs to be
+	worked out with Chris Johns <ccj@acm.org>. Switched C++ style comments
+	to C style.
+
+2001-09-19	Chris Johns <ccj@acm.org>
+
+	* libchip/network/README.i82586, libchip/network/i82586.c,
+	libchip/network/i82586reg.h, libchip/network/i82586var.h: New files. 
+	Network driver for Intel i82586.
+
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* libchip/bootloader/Makefile.am, libchip/console/Makefile.am,
+	libchip/pci/Makefile.am: Per PR215 address the following issues: -
+	_IO_BASE, _ISA_MEM_BASE and PCI_DRAM_OFFSET are no longer defined by
+	libcpu (powerpc/shared/include/io.h) but by the BSP (who is the only one
+	to know the values) - the affected BSP (shared/motorola) headers have
+	been fixed in a separate "libbsp/powerpc/shared" patch. - the DEC 21140
+	driver (libchip/network/dec21140.c) has been fixed to use
+	PCI_DRAM_OFFSET instead of PREP_PCI_DRAM_OFFSET. and PCI_MEM_BASE
+	instead of PREP_ISA_MEM_BASE. PCI_MEM_BASE is to be defined by the BSP
+	who is using this driver. - the DEC driver also has been fixed to use
+	the newer rtems_bsp_delay_in_bus_cycles() instead of the obsolete
+	delay_in_bus_cycles().
+
+2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
+
+2001-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/serial/Makefile.am, libchip/serial/mc68681.c,
+	libchip/serial/ns16550.c, libchip/serial/serprobe.c,
+	libchip/serial/z85c30.c: Now install sersupp.h to <libchip/sersupp.h> so
+	libchip style serial drivers can be written in libcpu or libbsp.
+
+2001-03-01	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/cs8900.c, libchip/network/cs8900.h,
+	libchip/network/sonic.c, libchip/network/sonic.h,
+	libchip/rtc/icm7170_reg.c, libchip/rtc/icm7170_reg2.c,
+	libchip/rtc/icm7170_reg4.c, libchip/rtc/icm7170_reg8.c,
+	libchip/rtc/m48t08_reg.c, libchip/rtc/m48t08_reg2.c,
+	libchip/rtc/m48t08_reg4.c, libchip/rtc/m48t08_reg8.c,
+	libchip/serial/mc68681_reg.c, libchip/serial/mc68681_reg2.c,
+	libchip/serial/mc68681_reg4.c, libchip/serial/mc68681_reg8.c,
+	libchip/serial/z85c30.c, libchip/serial/z85c30.h,
+	libchip/serial/z85c30_p.h, libchip/serial/z85c30_reg.c: Corrected header.
+
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/network/Makefile.am, libchip/rtc/Makefile.am,
+	libchip/serial/Makefile.am:  Apply include_*HEADERS instead of H_FILES,
+	replace ${..} with $(..).
 
 2001-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: install to $(exec_prefix)/@RTEMS_BSP@.
 
+2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* libchip/network/sonic.c: Added ipalign() routine to align the received
+	packet so that the ip header is on a 32-bit boundary. Necessary for
+	cpu's that do not allow unaligned loads and stores and when the 32-bit
+	DMA mode is used.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+	* libchip/Makefile.am: Use ... instead of RTEMS_TOPdir in
+	ACLOCAL_AMFLAGS.
+
+2000-11-03	Chris Johns <ccj@acm.org>
+
+	* libchip/network/README.cs8900, libchip/network/cs8900.c,
+	libchip/network/cs8900.h: New files.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+	* libchip/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
 
 2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -607,6 +944,8 @@
 	canonicalized subdirectories.
 	* configure.in: add libmisc and libchip to the GNU canonicalized
 	subdirectories.
+	* libchip/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+	Switch to GNU canonicalization.
 
 2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -615,6 +954,11 @@
 	GNU canonicalization does not support the per-BSP build some of the
 	other directories require.  As more of the tree is converted, this will
 	become less  of an issue.
+
+2000-10-20	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/dec21140.c: Corrected attach to include "int attach"
+	parameter.
 
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
@@ -629,9 +973,16 @@
 
 	* configure.in: Add RTEMS_PROG_CC_FOR_TARGET, RTEMS_CANONICALIZE_TOOLS.
 
+2000-09-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/network/Makefile.am: Use AM_*FLAGS += ...
+	* libchip/ChangeLog: Fix formating.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Include compile.am.
+	* libchip/network/Makefile.am, libchip/rtc/Makefile.am,
+	libchip/serial/Makefile.am: Include compile.am.
 
 2000-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -640,4 +991,5 @@
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+	* libchip/ChangeLog: New file.
 
