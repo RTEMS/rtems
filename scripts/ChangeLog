@@ -1,3 +1,9 @@
+2001-01-22	Joel Sherrill <joel@OARcorp.com>
+
+	* buildalltar.in: Modified to support Canadian cross builds.
+	It was testing using a RedHat 7.2 host to build *-rtems tools
+	that run on an i386-cygwin host.
+
 2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Fix typo to allow custom RPM_SPECSdirs.
