@@ -68,7 +68,7 @@ PSIGNAL_C_PIECES = psignal alarm kill killinfo pause \
     sigwait sigwaitinfo signal_2
 
 SEMAPHORE_C_PIECES= semaphore semaphorecreatesupp semaphoredeletesupp \
-    semaphoremp semaphorenametoid semaphorewaitsupp semdestroy \
+    semaphoremp semaphorenametoid semaphorewaitsupp semclose semdestroy \
     semgetvalue seminit semopen sempost semtimedwait semtrywait \
     semunlink semwait
 
