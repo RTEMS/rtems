@@ -24,7 +24,7 @@
 #define MC68681_PROBE        libchip_serial_default_probe
 #define MC68681_VECTOR       0
 #define MC68681_BASE_ADDRESS 0x71001
-#define MC68681_BASE_ADDRESS 0x71007
+#define MC68681_DATA_ADDRESS 0x71007
 
 /*
  *  Based on BSP configuration information decide whether to do polling IO

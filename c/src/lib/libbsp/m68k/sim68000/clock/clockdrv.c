@@ -12,8 +12,7 @@
   do { _old = (rtems_isr_entry) set_vector( _new, CLOCK_VECTOR, 1 ); } while(0)
 
 
-#define Clock_driver_support_initialize_hardware() \
-  } while (0);
+#define Clock_driver_support_initialize_hardware()
 
 #define Clock_driver_support_at_tick() \
   Clock_driver_support_initialize_hardware()
