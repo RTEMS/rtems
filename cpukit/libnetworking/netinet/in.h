@@ -149,6 +149,11 @@
 #define	IPPROTO_RAW		255		/* raw IP packet */
 #define	IPPROTO_MAX		256
 
+/*
+ * Merged from FreeBSD 1.78 of this file so Python compiles.
+ * This is a size value for functions such as inet_ntop().
+ */
+#define	INET_ADDRSTRLEN		16
 
 /*
  * Local port number conventions:
