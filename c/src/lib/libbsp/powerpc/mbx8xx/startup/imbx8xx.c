@@ -293,7 +293,7 @@ void _InitMBX8xx (void)
         defined(mbx821_002b) || \
         defined(mbx821_003b) || \
         defined(mbx821_004b) || \
-        defined(mbx821_005b) )
+        defined(mbx821_005b) || \
         defined(mbx821_006b) )
   m8xx.plprcr = 0x4C400000;
 #else
