@@ -1,3 +1,7 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c: Removed commented out include of bsp.h.
+
 2000-09-25	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c: Removed include of <bsp.h>.  Also switch to
