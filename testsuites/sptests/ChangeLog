@@ -1,3 +1,35 @@
+2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sp20/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp02/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp19/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp11/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp25/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp04/Makefile.am: include leaf.am instead of leaf.cfg.
+	* spsize/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp16/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp05/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp09/Makefile.am: include leaf.am instead of leaf.cfg.
+	* spfatal/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp06/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp23/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp28/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp03/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp29/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp13/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp27/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp14/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp07/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp15/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp17/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp22/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp12/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp26/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp21/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp24/Makefile.am: include leaf.am instead of leaf.cfg.
+	* sp08/Makefile.am: include leaf.am instead of leaf.cfg.
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* sp20/system.h: Account for extra task stacks properly.
