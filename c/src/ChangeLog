@@ -1,5 +1,9 @@
 2005-01-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* wrapup/Makefile.am: Remove rtems-ctor.o.
+
+2005-01-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libchip/rtc/rtc.h: size_t RTC_Count.
 
 2005-01-20	Joel Sherrill <joel@OARcorp.com>

@@ -43,8 +43,6 @@ SRCS += ../libchip/libnetchip.a
 endif
 endif
 
-SRCS += $(wildcard $(PROJECT_LIB)/lib/rtems-ctor.$(OBJEXT))
-
 if HAS_MP
 SRCS += ../libchip/shmdr.rel
 endif
