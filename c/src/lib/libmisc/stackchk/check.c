@@ -84,11 +84,11 @@ Stack_check_Control Stack_check_Pattern;
 #if ( CPU_STACK_GROWS_UP == TRUE )
 
 #define Stack_check_Get_pattern_area( _the_stack ) \
-  ((Stack_check_Control *) \
-    ((_the_stack)->area + (_the_stack)->size - sizeof( Stack_check_Control ) ))
+  ((Stack_check_Control *) ((char *)(_the_stack)->area + \
+       (_the_stack)->size - sizeof( Stack_check_Control ) ))
 
 #define Stack_check_Calculate_used( _low, _size, _high_water ) \
-    ((_high_water) - (_low))
+    ((char *)(_high_water) - (char *)(_low))
 
 #define Stack_check_usable_stack_start(_the_stack) \
     ((_the_stack)->area)
@@ -96,13 +96,13 @@ Stack_check_Control Stack_check_Pattern;
 #else
 
 #define Stack_check_Get_pattern_area( _the_stack ) \
-  ((Stack_check_Control *) ((_the_stack)->area + HEAP_OVERHEAD))
+  ((Stack_check_Control *) ((char *)(_the_stack)->area + HEAP_OVERHEAD))
 
 #define Stack_check_Calculate_used( _low, _size, _high_water) \
-    ( ((_low) + (_size)) - (_high_water) )
+    ( ((char *)(_low) + (_size)) - (char *)(_high_water) )
 
 #define Stack_check_usable_stack_start(_the_stack) \
-    ((_the_stack)->area + sizeof(Stack_check_Control))
+    ((char *)(_the_stack)->area + sizeof(Stack_check_Control))
 
 #endif
 
@@ -224,8 +224,8 @@ void Stack_check_Initialize( void )
   if (_CPU_Interrupt_stack_low && _CPU_Interrupt_stack_high)
   {
       stack_check_interrupt_stack.area = _CPU_Interrupt_stack_low;
-      stack_check_interrupt_stack.size = _CPU_Interrupt_stack_high -
-                                               _CPU_Interrupt_stack_low;
+      stack_check_interrupt_stack.size = (char *) _CPU_Interrupt_stack_high -
+                                              (char *) _CPU_Interrupt_stack_low;
 
       stack_check_dope_stack(&stack_check_interrupt_stack);
   }
