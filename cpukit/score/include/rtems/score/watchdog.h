@@ -103,7 +103,7 @@ SCORE_EXTERN volatile unsigned32  _Watchdog_Sync_count;
  *  system was booted.
  */
 
-SCORE_EXTERN Watchdog_Interval _Watchdog_Ticks_since_boot;
+SCORE_EXTERN volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
 
 /*
  *  The following defines the watchdog chains which are managed

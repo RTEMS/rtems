@@ -33,18 +33,32 @@ void _Watchdog_Tickle(
   Chain_Control *header
 )
 {
+  ISR_Level level;
   Watchdog_Control *the_watchdog;
+  Watchdog_States  watchdog_state;
+
+  /*
+   * See the comment in watchdoginsert.c and watchdogadjust.c
+   * about why it's safe not to declare header a pointer to 
+   * volatile data - till, 2003/7
+   */
+
+  _ISR_Disable( level );
 
   if ( _Chain_Is_empty( header ) )
-    return;
+    goto leave;
 
   the_watchdog = _Watchdog_First( header );
   the_watchdog->delta_interval--;
   if ( the_watchdog->delta_interval != 0 )
-    return;
+    goto leave;
 
   do {
-     switch( _Watchdog_Remove( the_watchdog ) ) {
+	 watchdog_state = _Watchdog_Remove( the_watchdog );
+
+	 _ISR_Enable( level );
+
+     switch( watchdog_state ) {
        case WATCHDOG_ACTIVE:
          (*the_watchdog->routine)(
            the_watchdog->id,
@@ -71,7 +85,13 @@ void _Watchdog_Tickle(
        case WATCHDOG_REMOVE_IT:
          break;
      }
+
+	 _ISR_Disable( level );
+
      the_watchdog = _Watchdog_First( header );
    } while ( !_Chain_Is_empty( header ) &&
              (the_watchdog->delta_interval == 0) );
+
+leave:
+   _ISR_Enable(level);
 }

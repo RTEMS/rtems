@@ -1,3 +1,19 @@
+2003-07-18	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 430/rtems
+	* include/rtems/score/watchdog.h: _Watchdog_Ticks_since_boot should
+	be a VOLATILE variable.
+	* src/watchdoginsert.c: 'restart' algorithm needs to enforce
+	reloading the list head in case a TICK interrupt during ISR_Flash()
+	modified the list.  This is achieved by a proper VOLATILE cast.
+	Also _Watchdog_Sync_count++ should be protected by _ISR_Disable
+	(prevent corruption in case ISR calls watchdoginsert)
+	* src/watchdogadjust.c: ISR protection added.
+	* src/watchdogtickle.c: ISR protection added.
+	NOTE: PowerPC BSPs using the new exception processing MUST BE UPDATED
+	to maintain _ISR_Nest_level. See also PR288 which provides fixes
+	for the affected BSPs distributed with RTEMS.
+
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* cpu/Makefile.am: Add DIST_SUBDIRS = $(RTEMS_CPU).
