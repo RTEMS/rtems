@@ -55,4 +55,5 @@ This is the list of outstanding problems in this release.
    + warn/refuse to configure when --enable-libcdir and
      --enable-gcc28 are given.
    + force --enable-libcdir when --disable-gcc28 is given
+   + Check for bare bsp getting CPU model set.
 

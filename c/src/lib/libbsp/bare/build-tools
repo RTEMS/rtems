@@ -1,0 +1,71 @@
+#
+# $Id$
+#
+# Tools to help doing build scripts. Adapted from Joel's bit
+# script.
+#
+
+#
+# USERCHANGE - uncomment this if you want to watch the commands.
+#
+# set -x
+
+start=`date`
+
+#
+# Common exit routine for this script so we can print the starting
+# and ending times.
+#
+
+my_exit()
+{
+  stop=`date`
+
+  echo
+  echo "Started:  " $start
+  echo "Finished: " $stop
+  exit $1
+}
+
+#
+# Handle a fatal error.
+#
+
+fatal_error()
+{
+  echo "ERROR: $*" >&2
+  my_exit 1
+}
+
+#
+# Checks the status returned by executables and exits if it is non-zero.
+#
+
+check_fatal()
+{
+  if [ $1 -ne 0 ] ; then
+    shift
+    fatal_error $*
+  fi
+}
+
+#
+# Test for a valid path, exit if not found
+#
+
+test_path()
+{
+  test -d $* || fatal_error "cannot find $*"
+  return 0
+}
+
+#
+# Create a directory and check it was made correctly.
+#
+
+checked_mkdir()
+{
+  mkdir -p $1
+  check_fatal $? "unable to make directory $1"
+  return 0
+}

@@ -13,6 +13,8 @@
 #
 
 #
+# Overview
+# ~~~~~~~~
 # This board support package is not a board support package at all, but
 # a means to build the RTEMS kernel without using a specific BSP.
 #
@@ -37,49 +39,79 @@
 #
 # I fit all the above.
 #
+# Issues
+# ~~~~~~
+# I do not consider the bare BSP as a starting point for RTEMS. The
+# BSP code integrated into the RTEMS build tree has the advantage of 
+# building all the test and sample code. The sample and test code is
+# important for validatation of your tools, and getting your BSP 
+# working correctly.
+#
+# Once you gain experience with RTEM and your application matures the
+# need to break the BSP code out from the kernel becomes important. It
+# is at this point in time that the bare BSP becomes useful.
+#
+# Once free you are able to upgrade without the worry of makefile or
+# build tree changes which can break your BSP.
+#
+# How To Configure
+# ~~~~~~~~~~~~~~~~
+# RTEMS requires you to select a BSP inorder to build the kernel.
+# If you take a close look at a BSP which is closest to your
+# needs you will find somewhere the CPU model and CPU compile 
+# flags are specified. This is the only piece of information 
+# required by the kernel inorder for it to build.
+#
+# This highlights the clean design of the kernel and its
+# independence from the particulars of target hardware.
+#
+# The CPU model is the RTEMS model and usually tries to match with
+# the GCC model. There are variations on some processors. If you are
+# unsure please ask on the RTEMS list. Someone will know (I hope).
+#
+# The CPU flags allow you to select specific operating modes for
+# GCC. For example the PowerPC has specific flags to control various
+# cache resouces. Another example is the 68000 family of embedded
+# processor do not have FPU hardware and require software emulation.
+#
+# An example configuration command line is:
+#
+#  ../rtems-4.0/configure  --target=m68k-rtems \
+#                          --prefix=/ods/egcs/test \
+#                          --enable-cxx \
+#                          --enable-gmake-print-directory \
+#                          --disable-tests \
+#                          --disable-posix \
+#                          --enable-ka9q \
+#                          --enable-bare-cpu-cflags=-mcpu32 \
+#                          --enable-bare-cpu-model=mcpu32 \
+#                          --enable-rtemsbsp=bare
+#
+# Building RTEMS
+# ~~~~~~~~~~~~~~
+# You are required to do nothing special here. Just follow the documented
+# steps. The samples are built but no linking occurs. The link command
+# is stubbed out to produce a Unix shell script.
+#
+# After installation you will find a directory called 'bare'. The nature
+# of the RTEMS build system means the bare BSP will only install into the
+# the bare directory under the specifed configuration prefix.
+#
+# I therefore suggest you move the directory to another name. This allows
+# you to make and install another bare BSP for a different variant of
+# CPU without over writing the last installed variant.
+#
+# I have provided a script file I use to configure and build RTEMS
+# from the arcihve. Take a copy and use it if you find it useful.
+#
+# Creating an Application.
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+# This is something which is usually specific to your local environment.
+# The bare BSP does not lock you into any specific makefile or build 
+# system. A couple of suggestions are:
+#
+#   o Get the sample bare BSP application, or
+#   o Watch RTEMS build a BSP which is closest to yours and copy
+#     the command lines used.
+#
 
-BSP NAME:	    bare
-BOARD:              not applicable
-BUS:                not applicable
-CPU FAMILY:         all
-COPROCESSORS:       not applicable
-MODE:               not applicable
-
-DEBUG MONITOR:      not applicable
-
-PERIPHERALS
-===========
-not applicable
-
-DRIVER INFORMATION
-==================
-not applicable
-
-STDIO
-=====
-not applicable
-
-NOTES
-=====
-
-Board description
------------------
-not applicable
-
-Host System
------------
-Linux (RedHat 4.0/5.0)
-egcs-1.0.2
-binutils-2.8.1, with rtems patches
-newlib-1.8.0, with rtems patches
-
-Verification
--------------------------------
-Single processor tests:  not applicable
-Multi-processort tests:  not applicable
-Timing tests:
-        not applicable
-
-Porting
--------
-        not applicable

@@ -1,0 +1,177 @@
+#!/bin/bash
+#
+# $Id$
+#
+# RTEMS Bare BSP Build Script.
+#
+# This is designed to allow recording of stdout to log. The log
+# forms part of a clean build trace for validation and verification
+# reasons.
+#
+
+. `echo $0 | sed -e 's/do-rtems-build/build-tools/'`
+
+#
+# The current versions we are building.
+#
+# Note: Please change to suite.
+#
+
+RTEMS=rtems-980618
+
+#
+# The list of processors we want the tools built for.
+#
+
+CPUS="m68k"
+
+#
+# RTEMS CPU target we want to build.
+#
+
+RTEMS_M68K_TARGETS="68000 68030 cpu32"
+
+#
+# The particular host settings we have.
+#
+# Map particulars for different hosts here.
+#
+
+HOST=`hostname`
+
+case "${HOST}" in
+  kiwi*)
+    ARCHIVE="/ods/archive"
+    TOOLS="/ods/egcs"
+    RTEMS_PATH=development/rtems/${RTEMS}
+    ;;
+  *)
+    fatal_error "host is not known."
+    ;;
+esac
+
+#
+# Where will RTEMS live when installed ?
+#
+
+RTEMS_PREFIX=${TOOLS}/test
+
+echo "Building on ${HOST}, archives in ${ARCHIVE}"
+
+#
+# Who is doing the build.
+#
+
+echo "User profile : "`id`
+
+#
+# Find out where we are
+#
+
+TOPDIR=`pwd`
+
+echo "Top directory is ${TOPDIR}"
+
+#
+# Test the paths to the archives exist.
+#
+
+test_path ${ARCHIVE}/${RTEMS_PATH}
+
+#
+# Get the RTEMS source and patch.
+#
+
+echo "Unpacking rtems source ${ARCHIVE}/${RTEMS_PATH}/${RTEMS}.tgz ... "
+tar zxf ${ARCHIVE}/${RTEMS_PATH}/${RTEMS}.tgz
+check_fatal $? "failed to unpack ${RTEMS}.tgz."
+
+#
+# Build all the processors we support.
+#
+
+for cpu in ${CPUS}; do
+{
+  #
+  # Create the target.
+  #
+
+  TARGET=${cpu}-rtems
+
+  #
+  # On to RTEMS.
+  #
+
+  case ${cpu} in
+    m68k)
+      RTEMS_TARGETS=${RTEMS_M68K_TARGETS}
+      ;;
+    *)
+      fatal_error "unknown cpu ${cpu}"
+      ;;
+  esac
+
+  for rtems_target in ${RTEMS_TARGETS}; do 
+  {
+    #
+    # Remove the target if found.
+    #
+
+    echo "Removing the RTEMS bare bsp directory rtems-bare-${rtems_target} ... "
+    rm -rf rtems-bare-${rtems_target}
+    check_fatal $? "failed to remove rtems-bare-${rtems_target}."
+
+    echo "Creating the RTEM build directory for target ${rtems_target} ... "
+    checked_mkdir rtems-bare-${rtems_target} 
+
+    cd rtems-bare-${rtems_target}
+
+    #
+    # Configure RTEMS.
+    #
+    # FIXME: the mapping from the rtems_target to the cpu flags
+    #        just happens to work for the m68k targets. This should
+    #        be mapped in a way which does not depends on the rtems_target,
+    #        or RTEMS should support multilibs.
+    #
+    
+    echo "Configuring RTEMS target bare-${rtems_target} ... "
+    ../${RTEMS}/configure --target=${TARGET} --prefix=${RTEMS_PREFIX} \
+      --enable-cxx --enable-gmake-print-directory \
+      --disable-tests --disable-posix --enable-ka9q \
+      --enable-bare-cpu-cflags=-m${rtems_target} \
+      --enable-bare-cpu-model=m${rtems_target} \
+      --enable-rtemsbsp=bare
+    check_fatal $? "failed to configure rtems target."
+
+    #
+    # Do the RTEMS build.
+    #
+
+    echo "Building RTEMS target bare-${rtems_target} ... "
+    make all install
+    check_fatal $? "failed to complete rtems build for target ${rtems_target}."
+
+    #
+    # Remove the target if found.
+    #
+
+    echo "Removing the RTEMS bare bsp directory ${RTEMS_PREFIX}/rtems/bare-${rtems_target} ... "
+    rm -rf ${RTEMS_PREFIX}/rtems/bare-${rtems_target}
+    check_fatal $? "failed to remove ${RTEMS_PREFIX}/rtems/bare-${rtems_target}."
+
+    #
+    # Fix up the fact that RTEMS always installsthe bare bsp to the bare directory
+    #
+
+    echo "Moving the RTEMS bare bsp directory to bare-${rtems_target} ... "
+    mv ${RTEMS_PREFIX}/rtems/bare ${RTEMS_PREFIX}/rtems/bare-${rtems_target}
+    check_fatal $? "failed to move the bare bsp directory to bare-${rtems_target}."
+
+    cd ../
+  }; done
+}; done
+ 
+cd ../
+
+my_exit 0

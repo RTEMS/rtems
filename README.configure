@@ -24,6 +24,8 @@ RTEMS-specific option are supported:
 	--disable-tests
 	--disable-ka9q
         --enable-cxx
+        --enable-bare-cpu-model=<MODEL>
+        --enable-bare-cpu-cflags=<FLAGS>
         --enable-gcc28               (also use enable-libcdir when disabled)
         --enable-gmake-print-directory
         --enable-libcdir=<DIRECTORY>      (do not use if gcc 2.8 is enabled)
@@ -57,8 +59,8 @@ the --enable-gcc28 option may be used to enable this feature.
 You should use the --enable-gcc28 option when using either the
 egcs source tree, testgcc snapshots, or gcc 2.8.0 or newer.
 
-By default, all bsps for a target are built. There are  two ways of
-changing this:
+By default, all bsps for a target are built. The bare BSP is not built
+unless directlty specified. There are  two ways of changing this:
 
   + use the --enable-rtemsbsp otion which will set the specified
     bsps as the default bsps, or 
@@ -80,6 +82,7 @@ architecture.  The following targets are supported:
         no_cpu-rtems
 	powerpc-rtems
 	sparc-rtems
+        bare                    see notes
 	
 The cross-compiler is set to $(target)-gcc by default. This can be
 overriden by:
@@ -142,6 +145,16 @@ i386-go32-rtems:
       cp libc.a INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/libcgo32.a
       cp libc_p.a INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/libcgo32_p.a
 
+bare:
+
+  1.  See the README in the bare bsp source directory. This should
+      contain all info you need.
+  2.  The bare bsp source contains a script to show how to build it.
+  3.  The configure flags must be used to get the bare bsp to work.
+      The --enable-bare-cpu-model and --enable-bare-cpu-cflags are the
+      only pieces of information. The module is usually a gcc module
+      such as m68302 or mcpu32. The flags are passed directly to gcc.
+      Use "" if more than one option is specified.
 
 3. To use the installed RTEMS library
 =====================================
@@ -177,6 +190,7 @@ no_cpu          : no_bsp
 mips64orion 	: p4600 p4650 (p4000 port with either R4600 or R4650)
 powerpc		: papyrus
 sparc 		: erc32
+any             : bare
 
 5. Makefile structure
 =====================
