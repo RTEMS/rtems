@@ -19,11 +19,11 @@
  *  $Id$
  */
 
+#include <rtems/system.h>
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <stdlib.h>                     /* for atexit() */
 #include <assert.h>
-#include <libcpu/cpu.h>
 #include <libcpu/c_clock.h>
 #include <rtems/bspIo.h>                     /* for printk() */
 

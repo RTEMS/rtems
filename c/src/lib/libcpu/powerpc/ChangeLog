@@ -1,3 +1,20 @@
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/include/cpu.h: Removed.
+	* shared/include/Makefile.am: Reflect changes above.
+	* shared/include/spr.h: Include rtems/powerpc/registers.h instead of
+	libcpu/cpu.h.
+	* mpc6xx/clock/c_clock.c: Reflect changes to <rtems/score/cpu.h>.
+	* mpc6xx/exceptions/asm_utils.S: Ditto.
+	* mpc6xx/exceptions/raw_exception.c: Ditto.
+	* mpc6xx/mmu/mmuAsm.S: Ditto.
+	* mpc6xx/timer/timer.c: Ditto.
+	* mpc8260/exceptions/asm_utils.S: Ditto.
+	* mpc8260/exceptions/raw_exception.c: Ditto.
+	* mpc8xx/exceptions/asm_utils.S: Ditto.
+	* mpc8xx/exceptions/raw_exception.c: Ditto.
+	* ppc403/vectors/vectors.S: Include <asm.h> instead of "asm.h".
+
 2001-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/include/cpu.h: Added ifndef ASM.

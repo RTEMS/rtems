@@ -20,7 +20,7 @@
 #ifndef _PPC_SPR_H
 #define _PPC_SPR_H
 
-#include <libcpu/cpu.h> 
+#include <rtems/powerpc/registers.h>
 
 #define __MFSPR(reg, val) \
 	__asm__ __volatile__("mfspr %0,"#reg : "=r" (val))

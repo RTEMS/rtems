@@ -8,7 +8,7 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include_libcpudir = $(includedir)/libcpu
 
-include_libcpu_HEADERS = cpu.h spr.h io.h mmu.h page.h byteorder.h pgtable.h \
+include_libcpu_HEADERS = spr.h io.h mmu.h page.h byteorder.h pgtable.h \
     cpuIdent.h
 
 OBJS = $(C_O_FILES)

@@ -41,7 +41,7 @@
  */
 
 #include <bsp.h> /* PPC_VECTOR_FILE_BASE */
-#include "asm.h"
+#include <asm.h>
 
 #ifndef PPC_VECTOR_FILE_BASE
 #error "PPC_VECTOR_FILE_BASE is not defined."
