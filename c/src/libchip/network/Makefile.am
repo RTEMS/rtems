@@ -9,11 +9,9 @@ LIBNAME = libnetchip
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = cs8900.c dec21140.c i82586.c sonic.c if_fxp.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_libchip_HEADERS = cs8900.h i82586var.h if_fxpvar.h sonic.h
-
-OBJS = $(C_O_FILES)
 
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
