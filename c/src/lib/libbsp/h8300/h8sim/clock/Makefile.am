@@ -6,7 +6,7 @@
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 C_FILES = clock_driver_stub.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
