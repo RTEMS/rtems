@@ -73,6 +73,8 @@ ssize_t IMFS_memfile_write(  /* cannot be static as used in imfs_fchmod.c */
    unsigned int           length
 );
 
+int  memfile_check_rmnod( IMFS_jnode_t *the_jnode );
+
 void *memfile_alloc_block(void);
 
 void memfile_free_block(
@@ -122,6 +124,7 @@ int memfile_close(
   if (iop->flags & LIBIO_FLAGS_APPEND)
     iop->offset = the_jnode->info.file.size;
 
+  memfile_check_rmnod( the_jnode );
   return 0;
 }
 
@@ -1108,6 +1111,12 @@ int memfile_rmnod(
   the_jnode->st_nlink--;
   IMFS_update_ctime( the_jnode );
 
+  return memfile_check_rmnod( the_jnode );
+}
+
+
+int  memfile_check_rmnod( IMFS_jnode_t *the_jnode ){
+
   /*
    * The file cannot be open and the link must be less than 1 to free.
    */
@@ -1118,7 +1127,7 @@ int memfile_rmnod(
      * Is the rtems_filesystem_current is this node?
      */
 
-    if ( rtems_filesystem_current.node_access == pathloc->node_access )
+    if ( rtems_filesystem_current.node_access == the_jnode )
        rtems_filesystem_current.node_access = NULL;
 
     /*
@@ -1131,7 +1140,6 @@ int memfile_rmnod(
   }
 
   return 0;
-
 }
 
 
