@@ -22,9 +22,5 @@ RTEMS_BSPOPTS_HELP([CPU_CLOCK_RATE_HZ],[cpu clock rate in HZ])
 AC_SUBST(CPU_CLOCK_RATE_HZ)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-console/Makefile
-scitab/Makefile
-startup/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
