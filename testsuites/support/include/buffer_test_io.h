@@ -120,7 +120,7 @@ void _test_output_flush(void)
 #endif /* TESTS_BUFFER_OUTPUT */
 
 #ifdef __cplusplus
-}
+};
 #endif
 
 #endif
