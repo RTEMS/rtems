@@ -1,3 +1,8 @@
+2002-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clock.c: Per PR257, remove reference to c3x_set_ie.
+	c4x variant should use c4x_set_iie().
+
 2002-08-21	Joel Sherrill <joel@OARcorp.com>
 
 	* bsp_specs: Added support for -nostdlibs.

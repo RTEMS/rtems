@@ -136,7 +136,11 @@ void Install_clock(
   c4x_timer_set_period( C4X_TIMER_0, Clock_counter_register_value );
   c4x_timer_start( C4X_TIMER_0 );
 
+#if defined(_C4x)
+  c4x_set_iee( c4x_get_iie() | 0x1 );  /* should be ETINT0 */
+#else
   c3x_set_ie( c3x_get_ie() | 0x100 );
+#endif
 
   /*
    *  If ticks_per_timeslice is configured as non-zero, then the user
