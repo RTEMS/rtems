@@ -1,3 +1,15 @@
+2004-11-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 693/misc
+	* libchip/rtc/mc146818a_ioreg.c: Disable unless on a target with
+	in/outport routines.
+
+2004-11-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 693/misc
+	* libchip/rtc/mc146818a_ioreg.c: Disable unless on a target with
+	in/outport routines.
+
 2004-11-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* aclocal/enable-itron.m4: Remove (unused).
