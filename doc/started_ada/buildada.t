@@ -143,6 +143,7 @@ tar xzf ../archive/@value{GCC-TAR}
 tar xzf ../archive/@value{GNAT-TAR}
 tar xzf ../archive/@value{BINUTILS-TAR}
 tar xzf ../archive/@value{NEWLIB-TAR}
+tar xzf ../archive/@value{BUILDTOOLS-TAR}
 @end example
 
 After the compressed tar files have been unpacked, the following
@@ -155,14 +156,18 @@ directories will have been created under tools.
 @item @value{NEWLIB-UNTAR}
 @end itemize
 
-Copy the @code{bit_ada} script from the @code{archive} directory
-to the @code{tools} directory as shown below:
+There will also be a set of scripts in the current directory
+which aid in building the tools and RTEMS.  They are:
 
-@example
-cp ../archive/bit_ada .
-@end example
+@itemize @bullet
+@item bit_ada
+@item bit_gdb
+@item bit_rtems
+@item common.sh
+@item user.cfg
+@end itemize
 
-When the @code{bit_ada} script is executed later in this process, 
+When the @code{bit_ada} script is executed later in this process,
 it will automatically create two other subdirectories:
 
 @itemize @bullet
@@ -170,18 +175,23 @@ it will automatically create two other subdirectories:
 @item build-$@{CPU@}-tools
 @end itemize
 
+Similarly, the @code{bit_gdb} script will create the
+subdirectory @code{build-$@{CPU@}-gdb} and
+the @code{bit_rtems} script will create the
+subdirectory @code{build-$@{CPU@}-rtems}.
+
 The directory tree should look something like the following figure:
 
 @example
 @group
 /whatever/prefix/you/choose/
-        bit_ada
         archive/
             @value{GCC-TAR}
             @value{GNAT-TAR}
             @value{BINUTILS-TAR}
             @value{NEWLIB-TAR}
             @value{RTEMS-TAR}
+            @value{BUILDTOOLS-TAR}
 @ifset GCC-RTEMSPATCH
             @value{GCC-RTEMSPATCH}
 @end ifset
@@ -203,7 +213,10 @@ The directory tree should look something like the following figure:
             @value{NEWLIB-UNTAR}/
             @value{RTEMS-UNTAR}/
             bit_ada
-
+            bit_gdb
+            bit_rtems
+            common.sh
+            user.cfg
 @end group
 @end example
 
@@ -212,6 +225,20 @@ The directory tree should look something like the following figure:
 @c <IMG SRC="bit_ada.jpg" WIDTH=816 HEIGHT=267 ALT="Directory Organization">
 @c @end html
 @c @end ifset
+
+@c
+@c  Host Specific Notes
+@c
+
+@section Host Specific Notes
+
+@subsection Solaris 2.x
+
+The build scripts are written in "shell".  The program @code{/bin/sh}
+on Solaris 2.x is not robust enough to execute these scripts.  If you 
+are on a Solaris 2.x host, then change the first line of the files
+@code{bit_ada}, @code{bit_gdb}, and @code{bit_rtems} to use the
+@code{/bin/ksh} shell instead.
 
 @c
 @c  Reading the Documentation
@@ -253,7 +280,7 @@ find . -name "*.rej" -print
 @end example
 
 If any files are found with the .rej extension, a patch has been rejected.
-This should not happen with a good patch file.
+This should not happen with a good patch file which is properly applied.
 
 @end ifset
 
@@ -285,7 +312,7 @@ find . -name "*.rej" -print
 @end example
 
 If any files are found with the .rej extension, a patch has been rejected.
-This should not happen with a good patch file. 
+This should not happen with a good patch file which is properly applied. 
 
 @end ifset
 
@@ -318,7 +345,7 @@ find . -name "*.rej" -print
 @end example
 
 If any files are found with the .rej extension, a patch has been rejected.
-This should not happen with a good patch file. 
+This should not happen with a good patch file which is properly applied. 
 
 @end ifset
 
@@ -351,7 +378,7 @@ find . -name "*.rej" -print
 @end example
 
 If any files are found with the .rej extension, a patch has been rejected.
-This should not happen with a good patch file.
+This should not happen with a good patch file which is properly applied.
 
 @end ifset
 
@@ -372,50 +399,15 @@ cp -r ada ../../@value{GCC-UNTAR}
 @end example
 
 @c
-@c  Modify the bit_ada script
+@c  Localizing the Configuration
 @c
 
-@section Modify the bit_ada Script
+@section Localizing the Configuration
 
-Copy the @code{bit_ada} script from @code{archive} to the @code{tools}
-directory.
-
-Edit the @code{bit_ada} file to alter the following environmental variables:
-
-@itemize @bullet
-@item INSTALL_POINT
-@item BINUTILS
-@item NEWLIB
-@item GCC
-@item BUILD_DOCS
-@end itemize
-
-These variables are located in the script section that resembles the
-extract below: 
-
-
-@example
-# USERCHANGE -- localize these.
-#
-#  INSTALL_POINT: Directory tools are installed into.
-#      Recommended installation point for various OS's:
-#         Linux:    /usr/local/rtems
-#         Solaris:  /opt/gnu/rtems
-#   BINUTILS:     Binutils source directory
-#   NEWLIB:       Newlib source directory
-#   GCC:          Newlib source directory
-#   BUILD_DOCS:   Set to "yes" if you want to install documentation.
-#
-BINUTILS=@value{BINUTILS-UNTAR}
-GCC=@value{GCC-UNTAR}
-NEWLIB=@value{NEWLIB-UNTAR}
-BUILD_DOCS=yes
-INSTALL_POINT=/home/joel/$@{GCC@}/$@{target@}
-
-# USERCHANGE - uncomment this if you want to watch the commands.
-@end example
-
-Where each of the variables which may be modified is described below:
+Edit the @code{user.cfg} file to alter the settings of various
+variables which are used to tailor the build process.
+Each of the variables set in @code{user.cfg} may be modified
+as described below:
 
 @table @code
 @item INSTALL_POINT
@@ -424,12 +416,12 @@ RTEMS to be built. It is recommended that the directory chosen to receive
 these tools be named so that it is clear from which egcs distribution it
 was generated and for which target system the tools are to produce code for.
 
-@b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory 
+@b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory
 under the build directory.  The build directory will be removed
 automatically upon successful completion of the build procedure.
 
 @item BINUTILS
-is the directory under tools that contains @value{BINUTILS-UNTAR}. 
+is the directory under tools that contains @value{BINUTILS-UNTAR}.
 For example:
 
 @example
@@ -438,11 +430,14 @@ BINUTILS=@value{BINUTILS-UNTAR}
 
 @item GCC
 is the directory under tools that contains @value{GCC-UNTAR}.
-For example:
+For example,
 
 @example
 GCC=@value{GCC-UNTAR}
 @end example
+
+Note that the gnat version is not needed because the gnat source 
+is built as part of building gcc.
 
 @item NEWLIB
 is the directory under tools that contains @value{NEWLIB-UNTAR}.
@@ -460,6 +455,41 @@ For example:
 BUILD_DOCS=yes
 @end example
 
+@item BUILD_OTHER_LANGUAGES
+is set to "yes" if you want to build languages other than C and C++.  At
+the current time, this enables Fortan and Objective-C.
+For example:
+
+@example
+BUILD_OTHER_LANGUAGES=yes
+@end example
+
+@item RTEMS
+is the directory under tools that contails @value{RTEMS-UNTAR}.
+
+@item ENABLE_RTEMS_POSIX
+is set to "yes" if you want to enable the RTEMS POSIX API support.
+At this time, this feature is not supported by the UNIX ports of RTEMS
+and is forced to "no" for those targets.  This corresponds to the
+@code{configure} option @code{--enable-posix}.
+
+This must be enabled to support the GNAT/RTEMS run-time.
+
+@item ENABLE_RTEMS_TESTS
+is set to "yes" if you want to build the RTEMS Test Suite.  If this
+is set to "no", then only the Sample Tests will be built.
+This corresponds to the @code{configure} option @code{--enable-tests}.
+
+@item ENABLE_RTEMS_TCPIP
+is set to "yes" if you want to build the RTEMS TCP/IP Stack.  If a
+particular BSP does not support TCP/IP, then this feature is automatically
+disabled.  This corresponds to the @code{configure} option
+@code{--enable-tcpip}.
+
+@item ENABLE_RTEMS_CXX
+is set to "yes" if you want to build the RTEMS C++ support including
+the C++ Wrapper for the Classic API.  This corresponds to the
+@code{configure} option @code{--enable-cxx}.
 @end table
 
 @section Running the bit_ada Script
