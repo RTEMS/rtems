@@ -20,7 +20,7 @@
  *  COPYRIGHT (c) 1994.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  asm.h,v 1.4 1995/09/26 19:25:36 joel Exp
+ *  $Id$
  */
 /* @(#)asm.h       03/15/96     1.1 */
 

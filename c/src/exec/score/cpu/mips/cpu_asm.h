@@ -25,7 +25,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  cpu_asm.h,v 1.4 1995/09/26 19:25:39 joel Exp
+ *  $Id$
  *
  */
 /* @(#)cpu_asm.h       08/20/96     1.2 */

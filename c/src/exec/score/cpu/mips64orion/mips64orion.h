@@ -24,8 +24,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  mips64orion.h,v 1.3 1995/09/26 19:25:40 joel Exp
- *
+ *  $Id$
  */
 /* @(#)mips64orion.h       08/29/96     1.3 */
 

@@ -28,7 +28,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  cpu.h,v 1.7 1995/12/05 21:41:21 joel Exp
+ *  $Id$
  */
 /* @(#)cpu.h       08/29/96     1.7 */
 
@@ -589,6 +589,8 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  via the rtems_task_mode directive.
  */
 extern void _CPU_ISR_Set_level( unsigned32 _new_level );
+
+unsigned32 _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 

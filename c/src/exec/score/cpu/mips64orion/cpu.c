@@ -26,7 +26,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  cpu.c,v 1.7 1995/09/26 19:25:37 joel Exp
+ *  $Id$
  */
 
 #ifndef lint
