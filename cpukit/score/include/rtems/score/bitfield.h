@@ -79,7 +79,7 @@ const unsigned char __log2table[256] = {
 
 #define _Bitfield_Find_first_bit( _value, _bit_number ) \
   { \
-    register __value = (_value); \
+    register unsigned32 __value = (unsigned32) (_value); \
     register const unsigned char *__p = __log2table; \
     \
     if ( __value < 0x100 ) \
