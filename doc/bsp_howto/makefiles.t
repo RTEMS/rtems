@@ -62,16 +62,17 @@ user configured networking.
 
 There is a @code{Makefile.in} in most of the directories in a BSP. This
 class of Makefile lists the files to be built as part of the driver.
-Do not forget to add the reference to a new file in the @code{Makefile.in}
-it is created! 
+When adding new files to an existing directory, Do not forget to add
+the new files to the list of files to be built in the @code{Makefile.in}.
 
 @b{NOTE:} The @code{Makefile.in} files are ONLY processed during the configure
-process of a RTEMS build. It means that, when you're working on the design
-of your BSP, and that you're adding a file to a folder and to the
-corresponding makefile.in, it will not be taken into account! You have to
-run configure again or modify the @code{Makefile} (the result of the 
-configure process) by hand.  This file will be in a directory such as 
-the following:
+process of a RTEMS build. Therefore, when developing 
+a BSP and adding a new file to a @code{Makefile.in}, the 
+already generated @code{Makefile} will not include the new references.
+This results in the new file not being be taken into account! 
+The @code{configure} script must be run again or the @code{Makefile}
+(the result of the configure process) modified by hand.  This file will
+be in a directory such as the following:
 
 @example
 MY_BUILD_DIR/c/src/lib/libbsp/CPU/BSP/DRIVER
@@ -125,8 +126,8 @@ It is strongly advised to use these template Makefiles since they
 encapsulate a number of build rules along with the compile and link
 time options necessary to execute on the target board.
 
-There are template Makefiles provided for each of the classes of RTEMS
-Makefiles.  This include Makefiles to:
+There is a template Makefile provided for each of class of RTEMS
+Makefiles.  The purpose of each class of RTEMS Makefile is to:
 
 @itemize @bullet
 @item call recursively the makefiles in the directories beneath
@@ -190,7 +191,7 @@ endif
 @subsection Creating a New BSP Make Customization File
 
 The basic steps for creating a @code{make/custom} file for a new BSP
-is as follows:
+are as follows:
 
 @itemize @bullet
 
@@ -201,7 +202,7 @@ RTEMS_BSP, CPU_CFLAGS, START_BASE, and make-exe rules.
 
 @end itemize
 
-It is generally easier to copy a @code{make/custom} file which is for a
-BSP close to your own.
+It is generally easier to copy a @code{make/custom} file from a
+BSP similar to the one being developed.
 
 

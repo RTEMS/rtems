@@ -24,7 +24,7 @@ into one of the following categories.
 @section CPU Dependent
 
 This class of code includes the foundation
-routines for the executive proper such as as the context switch and
+routines for the executive proper such as the context switch and
 the interrupt subroutine implementations.  Sources for the supported
 processor families can be found in @code{c/src/exec/score/cpu}.
 A good starting point for a new family of processors is the
@@ -40,12 +40,15 @@ differents between these CPU models which RTEMS must take into account.
 
 This class of code provides the most specific glue between RTEMS and
 a particular board.  This code is represented by the Board Support Packages
-and associated Device Drivers.
+and associated Device Drivers.  Sources for the BSPs included in the
+RTEMS distribution are located in the directory @code{c/src/lib/libbsp}.
+The BSP source directory is further subdivided based on the CPU family
+and BSP.
 
 Some BSPs may support multiple board models within a single board family.
-This is necessary when the board's vendor supports build variants on a 
-single base base.  For example, the Motorola MVME162 board family has a
-a fairly large number of variations based upon the particular CPU model
+This is necessary when the board supports multiple variants on a 
+single base board.  For example, the Motorola MVME162 board family has a
+fairly large number of variations based upon the particular CPU model
 and the peripherals actually placed on the board.
 
 @section Peripheral Dependent
@@ -57,9 +60,16 @@ controllers.  Just as the hardware engineer choose a standard controller
 when designing a board, the goal of this library is to let the software
 engineer do the same thing.
 
+The source code for the reusable peripheral driver library may be found
+in the directory @code{c/src/lib/libchip}.  The source code is further
+divided based upon the class of hardware.  Example classes include serial
+communications controllers, real-time clocks, non-volatile memory, and
+network controllers.
+
 @section Questions to Ask
 
-Porting RTEMS on a new board should raise some questions:
+When evaluating what is required to support RTEMS applications on
+a particular target board, the following questions should be asked:
 
 @itemize @bullet
 
@@ -71,33 +81,35 @@ Porting RTEMS on a new board should raise some questions:
 
 @end itemize
 
-If there is already a BSP for your board, then you may already be ready
-to start developing application software.  You should verify that the
-existing BSP provides device drivers for all the peripherals on the board
-that your application will be using.  For example, the board may have
-an Ethernet controller which is not supported by the existing BSP.
+If there is already a BSP for the board, then things may already be ready
+to start developing application software.  All that remains is to verify
+that the existing BSP provides device drivers for all the peripherals
+on the board that the application will be using.  For example, the application
+in question may require that the board's Ethernet controller be used and
+the existing BSP may not support this.
 
 If the BSP does not exist and the board's CPU model is supported, then
-you should look at existing BSPs for a close match.  This will help
-reduce the effort required.  It is often possible to reuse device drivers
-from BSPs from different CPU families.
+examine the reusable chip library and existing BSPs for a close match.  
+This will help reduce the development effort required.  It is often
+possible to copy existing components in the reusable chip library or
+device drivers from BSPs from different CPU families as the starting
+point for a new device driver. 
 
 If the board's CPU family is supported but the particular CPU model on
 that board is not, then the RTEMS port to that CPU family will have to
-be augmented.  After this is done, then you can proceed to developing
-the new BSP.
+be augmented.  After this is done, development of the new BSP can proceed.
 
-Otherwise you'll have to write both CPU dependent code and the BSP.
+Otherwise both CPU dependent code and the BSP will have to be written.
 
 Regardless of the amount of development required, OAR Corporation
-offers custom development services to help you use RTEMS.
+offers custom development services to assist RTEMS users.
+For more information on custom development, training courses, and
+support, contact OAR Corporation at
 @ifset use-html
-For more information, contact OAR Corporation
-at @href{http://www.oarcorp.com,,,http://www.oarcorp.com}.
+@href{http://www.oarcorp.com,,,http://www.oarcorp.com}.
 @end ifset
 @ifclear use-html
-For more information, contact OAR Corporation
-at http://www.oarcorp.com.
+http://www.oarcorp.com.
 @end ifclear
 
 
@@ -107,13 +119,13 @@ The CPU dependent files in the RTEMS executive source code are found
 in the following directory:
 
 @example
-c/src/exec/score/cpu/CPU
+c/src/exec/score/cpu/@i{CPU}
 @end example
 
-where CPU is replaced with the CPU family name.
+where @i{CPU} is replaced with the CPU family name.
 
 Within each CPU dependent directory inside the executive proper is a 
-file named @code{CPU.h} which contains information about each of the
+file named @code{@i{CPU}.h} which contains information about each of the
 supported CPU models within that family.
 
 @section CPU Dependent Support Files
@@ -125,13 +137,13 @@ or device drivers for peripheral controllers found on the CPU itself.
 This class of code may be found in the following directory:
 
 @example
-c/src/lib/libcpu/CPU
+c/src/lib/libcpu/@i{CPU}
 @end example
 
 CPU model dependent support code is found in the following directory:
 
 @example
-c/src/lib/libcpu/CPU/CPU_MODEL
+c/src/lib/libcpu/@i{CPU}/@i{CPU_MODEL}
 @end example
 
 @section Board Support Package Structure
@@ -146,11 +158,11 @@ results in a BSP using the following directories:
 
 @example
 c/src/lib/libbsp/shared
-c/src/lib/libbsp/CPU/shared
-c/src/lib/libbsp/CPU/BSP
+c/src/lib/libbsp/@i{CPU}/shared
+c/src/lib/libbsp/@i{CPU}/@i{BSP}
 @end example
 
-Under each BSP specific directory, you will find a collection of
+Under each BSP specific directory, there is a collection of
 subdirectories.  For commonly provided functionality, the BSPs
 follow a convention on subdirectory naming.  The following list
 describes the commonly found subdirectories under each BSP.

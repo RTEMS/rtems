@@ -43,8 +43,8 @@ $(PROJECT).ps: $(PROJECT).dvi
 
 # run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
-	$(TEXI2DVI) -v $(PROJECT).texi
-	texi2dvi -v $(PROJECT).texi
+	$(TEXI2DVI) $(PROJECT).texi
+	$(TEXI2DVI) $(PROJECT).texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)

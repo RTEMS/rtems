@@ -13,7 +13,7 @@
 The @code{linkcmds} file is a script which is passed to the linker at linking
 time.  This file describes the memory configuration of the board as needed
 to link the program.  Specifically it specifies where the code and data
-for your application will reside in memory.
+for the application will reside in memory.
 
 @section Program Sections
 
@@ -37,7 +37,8 @@ one generally doesn't care about them.  In a personal computer,
 a program is nearly always stored on disk and executed in RAM.  Things
 are a bit different for embedded targets: the target will execute the
 program each time it is rebooted or switched on.   The application
-program is stored in ROM. On the other hand, data processing occurs in RAM. 
+program is stored in non-volatile memory such as ROM, PROM, EEPROM,
+or Flash. On the other hand, data processing occurs in RAM. 
 
 This leads us to the structure of an embedded program.  In rough terms,
 an embedded program is made of sections.  It is the responsibility of
@@ -69,7 +70,7 @@ to zero at program start.  This is not required by the ISO/ANSI C Standard
 but is such a common requirement that most BSPs do this.
 
 That brings us up to the notion of the image of an executable: it consists
-in the set of the program sections. 
+of the set of the sections that together constitute the application. 
 
 @section Image of an Executable
 
@@ -83,8 +84,7 @@ some of his sections going into the ROM.
 
 The connection between a section and where that section is loaded into
 memory is made at link time.  One has to let the linker know where
-the different sections location are to be placed once they are in
-memory. 
+the different sections are to be placed once they are in memory. 
 
 The following example shows a simple layout of program sections.  With
 some object formats, there are many more sections but the basic 
@@ -131,7 +131,7 @@ RamSize = DEFINED(RamSize) ? RamSize : 4M;
  *  Set the amount of RAM to be used for the application heap.  Objects
  *  allocated using malloc() come from this area.  Having a tight heap size
  *  is somewhat difficult and multiple attempts to squeeze it may be needed
- *  if you want to save the memory usage.  If you allocate all objects from
+ *  reducing memory usage is important.  If all objects are allocated from
  *  the heap at system initialization time, this eases the sizing of the
  *  application heap.  
  *
@@ -357,7 +357,7 @@ SECTIONS @{
 @section Initialized Data
 
 Now there's a problem with the initialized data: the @code{.data} section
-has to be in RAM as these data may be modified during the program execution.
+has to be in RAM as this data may be modified during the program execution.
 But how will the values be initialized at boot time?
 
 One approach is to place the entire program image in RAM and reload 
@@ -369,8 +369,8 @@ environment, it is cumbersome.
 The solution is to place a copy of the initialized data in a separate 
 area of memory and copy it into the proper location each time the
 program is started.  It is common practice to place a copy of the initialized
-@code{.data} section the end of the code (@code{.text} section
-(i.e. in ROM) when building a PROM image. The GNU tool @code{objcopy}
+@code{.data} section at the end of the code (@code{.text}) section
+in ROM when building a PROM image. The GNU tool @code{objcopy}
 can be used for this purpose. 
 
 The following figure illustrates the steps a linked program goes through
@@ -410,9 +410,9 @@ $(basename $@@).exe \
 $(basename $@@).exe
 @end example
 
-NOTE: The address at which the copy of the @code{.data} section is
-specified by extracting the address of the end of the @code{.text}
-section (i.e. in ROM) with an @code{awk} script.  The details of how
+NOTE: The address of the "copy of @code{.data} section" is
+created by extracting the last address in the @code{.text}
+section with an @code{awk} script.  The details of how
 this is done are not relevant.
 
 Step 3 shows the final executable image as it logically appears in
