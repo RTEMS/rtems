@@ -33,6 +33,14 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
 
+RTEMS_BSPOPTS_SET([NO_TABLE_MOVE],[*],[1])
+RTEMS_BSPOPTS_HELP([NO_TABLE_MOVE],
+[do not have a second trap table -- use the BSP's.])
+
+RTEMS_BSPOPTS_SET([FPU_REVB],[*],[])
+RTEMS_BSPOPTS_HELP([FPU_REVB],
+[If defined, enables work-around for bug 3.14 in FPU rev.B or rev.C])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile

@@ -1,3 +1,9 @@
+2002-03-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add BSPOPTS_*(NO_TABLE_MOVE).
+	Add BSPOPTS_*(FPU_REVB).
+	* wrapup/Makefile.am: Add tbr.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
