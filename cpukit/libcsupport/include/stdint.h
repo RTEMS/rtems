@@ -9,7 +9,7 @@
  *  $Id$
  */
 
-/** @file  _stdint.h
+/** @file  stdint.h
  * Newlib specific stdint.h
  *
  * @todo - Add fast<N>_t types.
