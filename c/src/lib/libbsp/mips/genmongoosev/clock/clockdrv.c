@@ -23,14 +23,16 @@
 #define CLOCK_VECTOR MONGOOSEV_IRQ_TIMER1
 #endif
 
+
+
 /* reset Timeout (TO) bit */
+
 #define Clock_driver_support_at_tick() \
-  MONGOOSEV_WRITE_REGISTER( \
-    CLOCK_BASE, \
-    MONGOOSEV_TIMER_CONTROL_REGISTER, \
-    (MONGOOSEV_TIMER_CONTROL_COUNTER_ENABLE | \
-     MONGOOSEV_TIMER_CONTROL_INTERRUPT_ENABLE) \
-  );
+  do { \
+    MONGOOSEV_WRITE_REGISTER( CLOCK_BASE, MONGOOSEV_TIMER_CONTROL_REGISTER, \
+         (MONGOOSEV_TIMER_CONTROL_COUNTER_ENABLE | MONGOOSEV_TIMER_CONTROL_INTERRUPT_ENABLE)); \
+  } while(0)
+
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
@@ -38,20 +40,12 @@
   } while(0)
 
 
-extern int ClockRate;
-
-#define CLICKS (((unsigned32) &ClockRate) / 1000000 )
 #define Clock_driver_support_initialize_hardware() \
-  do { \
-    unsigned32 _clicks; \
-    _clicks = CLICKS * rtems_configuration_get_microseconds_per_tick(); \
-    MONGOOSEV_WRITE_REGISTER( \
-      CLOCK_BASE, \
-      MONGOOSEV_TIMER_INITIAL_COUNTER_REGISTER, \
-      _clicks \
-    ); \
+   do { \
+    unsigned32 _clicks = CPU_CLOCK_RATE_MHZ * rtems_configuration_get_microseconds_per_tick(); \
+    MONGOOSEV_WRITE_REGISTER( CLOCK_BASE, MONGOOSEV_TIMER_INITIAL_COUNTER_REGISTER, _clicks ); \
     Clock_driver_support_at_tick(); \
-  } while(0)
+   } while(0)
 
 #define Clock_driver_support_shutdown_hardware() \
   MONGOOSEV_WRITE_REGISTER( CLOCK_BASE, MONGOOSEV_TIMER_CONTROL_REGISTER, 0 )

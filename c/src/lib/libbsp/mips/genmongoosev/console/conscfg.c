@@ -18,14 +18,14 @@
 #include <libchip/serial.h>
 #include <libchip/mg5uart.h>
 
-#if (CONSOLE_USE_INTERRUPTS)
+/* #define CONSOLE_USE_INTERRUPTS */
+
+#ifdef CONSOLE_USE_INTERRUPTS
 #define MG5UART_FUNCTIONS &mg5uart_fns
 #else
 #define MG5UART_FUNCTIONS &mg5uart_fns_polled
 #endif
 
-extern int ClockRate;
-#define CLOCK_RATE (unsigned32) &ClockRate
 
 console_tbl     Console_Port_Tbl[] = {
 {
@@ -91,5 +91,3 @@ void GENMG5_output_char(char c) { write( 2, &c, 1 ); }
   
 BSP_output_char_function_type           BSP_output_char = GENMG5_output_char;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;
-   
-

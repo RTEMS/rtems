@@ -26,6 +26,34 @@ extern "C" {
 #include <clockdrv.h>
 #include <libcpu/mongoose-v.h>
 
+
+#ifndef CPU_CLOCK_RATE
+#define CLOCK_RATE	12000000
+#endif
+
+#define CPU_CLOCK_RATE_HZ	CLOCK_RATE
+#define CPU_CLOCK_RATE_MHZ	(CLOCK_RATE/1000000)
+
+
+/*
+ * Useful defines set here so we can avoid duplicating them all over
+ * creation.
+ *
+ */
+
+
+
+/* 
+ * assertSoftwareInt defined in vectorisrs.c the prototype is here so
+ * userspace code can get to it directly.
+ *  */
+
+extern void assertSoftwareInterrupt(unsigned32);
+
+
+
+
+
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
@@ -44,23 +72,28 @@ extern "C" {
  *
  */
 
+
+#define CLOCK_VECTOR	MONGOOSEV_IRQ_TIMER1
+
+
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-#if 0
+#if 1
+
 #define Install_tm27_vector( handler ) \
-    (void) set_vector( handler, MONGOOSEV_IRQ_SOFTWARE_1, 1 ); \
+    (void) set_vector( handler, MONGOOSEV_IRQ_SOFTWARE_1, 1 ); 
 
-#define Cause_tm27_intr() \
-    asm volatile ( "syscall 0x01" : : );
 
-#define CLOCK_VECTOR MONGOOSEV_IRQ_TMR0
+
+#define Cause_tm27_intr()   assertSoftwareInterrupt(0);
 
 #define Clear_tm27_intr()  
-
 #define Lower_tm27_intr()
+
 #else
+
 #define Install_tm27_vector( handler ) \
-    (void) set_vector( handler, MONGOOSEV_IRQ_TMR0, 1 ); \
+    (void) set_vector( handler, MONGOOSEV_IRQ_TIMER1, 1 ); 
 
 #define Cause_tm27_intr() \
   do { \
@@ -68,7 +101,6 @@ extern "C" {
   } while(0)
 
 #define Clear_tm27_intr() 
-
 #define Lower_tm27_intr()
 
 #endif
