@@ -77,7 +77,7 @@
 @include ch18.texi
 @include ch19.texi
 
-@ifinfo
+@ifnottex
 @node Top, Preface, (dir), (dir)
 @top posix1003_1
 
@@ -108,7 +108,7 @@ This is the online version of the RTEMS POSIX 1003.1 Compliance Guide.
 * Concept Index::
 @end menu
 
-@end ifinfo
+@end ifnottex
 @c 
 @c 
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here

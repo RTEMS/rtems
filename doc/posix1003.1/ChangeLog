@@ -1,4 +1,11 @@
-2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+2003-09-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ch07.t: Don't use raisesections/lowersections (texi2www can't deal
+	with them); Use @itemize instead of subsubsubsection (Too deep).
+	* posix1003_1.texi: Use ifnottex instead of ifinfo.
+	* preface.texi: Use ifnottex instead of ifinfo
+
+2003-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* posix1003_1.texi: include common/rtems.texi.
 	* Makefile.am: Reflect changes to $(top_srcdir)/project.am.

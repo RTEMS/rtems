@@ -6,9 +6,9 @@
 @c  $Id$
 @c
 
-@ifinfo
+@ifnottex
 @node Preface, General, Top, Top
-@end ifinfo
+@end ifnottex
 
 @unnumbered Preface
 

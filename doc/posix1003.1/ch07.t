@@ -26,17 +26,17 @@
 
 @subsubsection Noncanonical Mode Input Processing
 
-@lowersections
+@itemize
 
-@subsubsection Case A - MIN > 0 and TIME > 0
+@item Case A - MIN > 0 and TIME > 0
 
-@subsubsection Case B - MIN > 0 and TIME = 0
+@item Case B - MIN > 0 and TIME = 0
 
-@subsubsection Case C - MIN = 0 and TIME > 0
+@item Case C - MIN = 0 and TIME > 0
 
-@subsubsection Case D - MIN = 0 and TIME = 0
+@item Case D - MIN = 0 and TIME = 0
 
-@raisesections
+@end itemize
 
 @subsubsection Writing Data and Output Processing
 
