@@ -11,7 +11,10 @@
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
+#include <net/if_dl.h>
+#include <net/if_types.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 
 /*
  * Display an address
@@ -20,12 +23,13 @@ static int
 showaddress (char *name, struct sockaddr *a)
 {
 	struct sockaddr_in *sa;
+	char	buf[17];
 
-	if (!a || (a->sa_family != AF_INET))
+	if (!a)
 		return 0;
 	printf ("%s:", name);
 	sa = (struct sockaddr_in *)a;
-	printf ("%-16s", inet_ntoa (sa->sin_addr));
+	printf ("%-16s", inet_ntop (AF_INET, &sa->sin_addr, buf, sizeof(buf)));
 	return 1;
 }
 
@@ -38,20 +42,56 @@ rtems_bsdnet_show_if_stats (void)
 	struct ifnet *ifp;
 	struct ifaddr *ifa;
 	unsigned short bit, flags;
-	int printed;
 
 	printf ("************ INTERFACE STATISTICS ************\n");
 	for (ifp = ifnet; ifp; ifp = ifp->if_next) {
 		printf ("***** %s%d *****\n", ifp->if_name, ifp->if_unit);
 		for (ifa = ifp->if_addrlist ; ifa ; ifa = ifa->ifa_next) {
-			printed = showaddress ("Address", ifa->ifa_addr);
-			if (ifp->if_flags & IFF_BROADCAST)
-				printed |= showaddress ("Broadcast Address", ifa->ifa_broadaddr);
-			if (ifp->if_flags & IFF_POINTOPOINT)
-				printed |= showaddress ("Destination Address", ifa->ifa_dstaddr);
-			printed |= showaddress ("Net mask", ifa->ifa_netmask);
-			if (printed)
-				printf ("\n");
+
+			if ( !ifa->ifa_addr )
+				continue; 
+
+			switch ( ifa->ifa_addr->sa_family ) {
+				case AF_LINK:
+					{
+					struct sockaddr_dl *sdl = (struct sockaddr_dl *)ifa->ifa_addr;
+					char   *cp = LLADDR(sdl);
+					int		i;
+
+					switch ( sdl->sdl_type ) {
+						case IFT_ETHER:
+							if ( (i=sdl->sdl_alen) > 0 ) {
+								printf("Ethernet Address: ");
+								do {
+									i--;
+									printf("%02X%c", *cp++, i ? ':' : '\n');
+								} while ( i>0 );
+							}
+						break;
+
+						default:
+						break;
+					}
+					}
+				break;
+
+				case AF_INET:
+					{
+					int printed;
+					printed = showaddress ("Address", ifa->ifa_addr);
+					if (ifp->if_flags & IFF_BROADCAST)
+						printed |= showaddress ("Broadcast Address", ifa->ifa_broadaddr);
+					if (ifp->if_flags & IFF_POINTOPOINT)
+						printed |= showaddress ("Destination Address", ifa->ifa_dstaddr);
+					printed |= showaddress ("Net mask", ifa->ifa_netmask);
+					if (printed)
+						printf ("\n");
+					}
+				break;
+
+				default:
+				break;
+			}
 		}
 
 		printf ("Flags:");

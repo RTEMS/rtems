@@ -1,3 +1,9 @@
+2003-08-06	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 435/networking
+	* rtems/rtems_showifstat.c: rtems_showifstat misses printing 
+	the netmask 
+
 2003-05-29	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/rtems_syscall.c: Removed warnings.
