@@ -1,5 +1,15 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* PCI_bus/PCI.h, clock/clock.c, console/85c30.c, console/85c30.h,
+	console/console.c, console/consolebsp.h,
+	console/consolereserveresources.c, console/tbl85c30.c, include/bsp.h,
+	include/coverhd.h, include/gen2.h, include/tod.h, startup/FPGA.c,
+	startup/bspclean.c, startup/bspstart.c, startup/genpvec.c,
+	startup/setvec.c, startup/vmeintr.c, timer/timer.c, tod/tod.c: URL
+	for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* PCI_bus/PCI.c, PCI_bus/flash.c, PCI_bus/universe.c: Removed incorrect
 	statement about copyright assignment.
 
