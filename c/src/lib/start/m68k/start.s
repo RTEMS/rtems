@@ -18,6 +18,8 @@
 
 #include "asm.h"
 
+#if (M68K_COLDFIRE_ARCH == 0) /* All ColdFire BSPs must provide their own start vector */
+
 BEGIN_CODE
                                         | Default entry points for:
          PUBLIC (start)                 |   GNU
@@ -157,6 +159,7 @@ SYM (initial_sr):
 
 
 END_DATA
+#endif
 END
 
 
