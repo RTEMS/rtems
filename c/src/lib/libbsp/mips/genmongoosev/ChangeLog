@@ -1,3 +1,7 @@
+2003-09-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Remove *lib:.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/clockdrv.c, console/conscfg.c, include/bsp.h,
