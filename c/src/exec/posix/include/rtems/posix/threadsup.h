@@ -19,7 +19,6 @@ typedef struct {
 
   sigset_t                signals_blocked;
   sigset_t                signals_pending;
-  sigset_t                signals_global_pending;
 
 #if 0
   /*
