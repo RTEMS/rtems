@@ -79,6 +79,11 @@ The following persons/organizations have made contributions:
   Telecom Bretagne and T.N.I. (Brest, France) submitted the BSP for
   the Motorola MVME147 board (68030 CPU + 68881 FPU).
 
++ Craig Lebakken (lebakken@minn.net) and Derrick Ostertag
+  (ostertag@transition.com) of Transition Networks of Eden Prairie, MN
+  for porting RTEMS to the MIPS architecture.  This submission
+  includes support for the R4600 and R4650 MIPS models.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
