@@ -18,7 +18,8 @@ KA9Q_H_PIECES= arp asy ax25 ax25mail bootp cmdparse commands config \
   daemon dialer domain enet ftp ftpcli global hardware icmp iface \
   internet ip kiss lapb lzw mailbox mbuf netuser nospc nr4 nr4mail \
   nrs ping pktdrvr ppp proc rip rtems_ka9q sb session slhc slip smtp \
-  sockaddr socket tcp telnet tftp timer tipmail trace udp usock
+  sockaddr SyslogDaemon syslog socket tcp telnet tftp timer tipmail \
+  trace udp usock
 KA9Q_H_FILES=$(KA9Q_H_PIECES:%=$(srcdir)/ka9q/%.h)
 
 MOTOROLA_H_PIECES=mc68230 mc68681
