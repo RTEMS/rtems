@@ -15,13 +15,13 @@ include_mcf5272_HEADERS = include/mcf5272.h
 ## clock
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/ckinit.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## console
 #EXTRA_PROGRAMS += console.rel
 ##console_rel_SOURCES = console/console-io.c ../../../../libbsp/shared/console-polled.c
-#console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+#console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 #console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 #EXTRA_PROGRAMS += console_g.rel
@@ -32,7 +32,7 @@ clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 ## timer
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c timer/timerisr.S
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

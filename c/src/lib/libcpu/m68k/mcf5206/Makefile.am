@@ -16,25 +16,25 @@ include_mcf5206_HEADERS = include/mcf5206e.h include/mcfmbus.h \
 ## clock
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/ckinit.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## mcfuart
 noinst_PROGRAMS += mcfuart.rel
 mcfuart_rel_SOURCES = console/mcfuart.c
-mcfuart_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+mcfuart_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mcfuart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## mbus
 noinst_PROGRAMS += mbus.rel
 mbus_rel_SOURCES = mbus/mcfmbus.c
-mbus_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+mbus_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mbus_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## timer
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c timer/timerisr.S
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

@@ -16,7 +16,7 @@ noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = cache/cache.c cache/cache_.h \
     ../../shared/src/cache_aligned_malloc.c \
     ../../shared/src/cache_manager.c
-cache_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -I$(srcdir)/cache
+cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/cache
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## misc
@@ -31,7 +31,7 @@ endif
 
 noinst_PROGRAMS += misc.rel
 misc_rel_SOURCES = misc/memcpy.c misc/m68kidle.c
-misc_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(M68K_CPPFLAGS)
+misc_rel_CPPFLAGS = $(AM_CPPFLAGS) $(M68K_CPPFLAGS)
 misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

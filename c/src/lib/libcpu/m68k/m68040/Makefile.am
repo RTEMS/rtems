@@ -18,7 +18,7 @@ fpsp_rel_SOURCES = fpsp/rtems_fpsp.c fpsp/bindec.S fpsp/binstr.S \
     fpsp/tbldo.S fpsp/util.S fpsp/x_bsun.S fpsp/x_fline.S fpsp/x_operr.S \
     fpsp/x_ovfl.S fpsp/x_snan.S fpsp/x_store.S fpsp/x_unfl.S fpsp/x_unimp.S \
     fpsp/x_unsupp.S
-fpsp_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+fpsp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 fpsp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_HEADERS = fpsp/fpsp.defs
