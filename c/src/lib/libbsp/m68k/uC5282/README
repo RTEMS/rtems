@@ -4,12 +4,12 @@
 
 Description: Arcturus Networks uC DIMM ColdFire 5282 
 ============
-CPU: MCF5282 @64MHz
+CPU: MCF5282, 64MHz
 RAM: 16M
 ROM: 4M
 
-This is a credit-card sized board in a DIMM format. It is part of a family which
-includes Dragonball and Coldfire CPUs, with a standardized DIMM-based bus. 
+This is a credit-card sized board in a DIMM format. It is part of a family
+which includes Dragonball and Coldfire CPUs, with a standardized DIMM-based bus. 
 
 ACKNOWLEDGEMENTS:
 =================
@@ -22,8 +22,6 @@ TODO:
 =====
 Make a clean exit routine to return to Arcturus monitor
 
-Make a real kprintf which doesn't rely on interrupts being operational
-
 The bsp relies on the Arcturus monitor to set up DRAM and all chip selects. 
 This seems OK to me, but others may find it lame.....
 
@@ -34,7 +32,6 @@ BUS:                Arcturus DIMM bus, A24/D16, plus peripherals.
 CPU FAMILY:         ColdFire 5282
 CPU:                MCF5282
 COPROCESSORS:       N/A
-MODE:               16 bit mode
 
 DEBUG MONITOR:      Arcturus bootloader
 
