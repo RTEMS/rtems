@@ -29,7 +29,7 @@ rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
 rtems_unsigned32 Reload_Clock_isrs;
 
 i960_isr_entry   Old_ticker;
-rtems_unsigned32 Clock_driver_ticks;
+volatile rtems_unsigned32 Clock_driver_ticks;
                                           /* ticks since initialization */
 unsigned int clock_isr_global[16];  /* place to store global regs */
 

@@ -122,7 +122,11 @@ SECTIONS
         *(.dtors)
         LONG(0)
         __DTOR_END__ = .;
-            etext = ALIGN( 0x10 ) ;
+        _rodata_start = . ;
+        *(.rodata*)
+        *(.gnu.linkonce.r*)
+        _erodata = ALIGN( 0x10 ) ;
+        etext = ALIGN( 0x10 ) ;
 /* END NEW TEST TEST TEST */
         /* 16 byte aligned PRCB.
          */
