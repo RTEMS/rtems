@@ -1,5 +1,21 @@
 2001-05-14	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/include/io.h: Per PR215 address the following issues:
+	    - _IO_BASE, _ISA_MEM_BASE and PCI_DRAM_OFFSET
+	      are no longer defined by libcpu (powerpc/shared/include/io.h)
+	      but by the BSP (who is the only one to know the values)
+	    - the affected BSP (shared/motorola) headers have been fixed
+	      in a separate "libbsp/powerpc/shared" patch.
+	    - the DEC 21140 driver (libchip/network/dec21140.c) has been
+	      fixed to use PCI_DRAM_OFFSET instead of PREP_PCI_DRAM_OFFSET.
+	      and PCI_MEM_BASE instead of PREP_ISA_MEM_BASE. PCI_MEM_BASE
+	      is to be defined by the BSP who is using this driver.
+	    - the DEC driver also has been fixed to use the newer
+	      rtems_bsp_delay_in_bus_cycles() instead of the obsolete
+	      delay_in_bus_cycles().
+
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
 	* rtems/powerpc/registers.h, rtems/score/ppc.h: Per PR213, add 
 	the following:
 	    - support for the MPC74000 (AKA G4); there is no

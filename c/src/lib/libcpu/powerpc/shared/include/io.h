@@ -23,12 +23,22 @@
 #define PREP_ISA_MEM_BASE 	0xc0000000
 #define PREP_PCI_DRAM_OFFSET 	0x80000000
 
-#define _IO_BASE	PREP_ISA_IO_BASE
-#define _ISA_MEM_BASE	PREP_ISA_MEM_BASE
-#define PCI_DRAM_OFFSET	PREP_PCI_DRAM_OFFSET
+#define CHRP_ISA_IO_BASE	0xfe000000
+#define CHRP_ISA_MEM_BASE	0xfd000000
+#define CHRP_PCI_DRAM_OFFSET	0x00000000
+
+/* _IO_BASE, _ISA_MEM_BASE, PCI_DRAM_OFFSET are now defined by bsp.h */
 
 #ifndef ASM
 
+#include <bsp.h>		/* for _IO_BASE & friends */
+
+/* NOTE: The use of these macros is DISCOURAGED.
+ *       you should consider e.g. using in_xxx / out_xxx
+ *       with a device specific base address that is
+ *       defined by the BSP. This makes drivers easier
+ *       to port.
+ */
 #define inb(port)		in_8((unsigned char *)((port)+_IO_BASE))
 #define outb(val, port)		out_8((unsigned char *)((port)+_IO_BASE), (val))
 #define inw(port)		in_le16((unsigned short *)((port)+_IO_BASE))
