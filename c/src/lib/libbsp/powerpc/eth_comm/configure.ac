@@ -33,6 +33,9 @@ RTEMS_BSPOPTS_HELP([UARTS_IO_MODE],
  does not perform serial I/O on any port other than its default debug
  port, which must be SMC1.])
 
+RTEMS_BSPOPTS_SET([DISPATCH_HANDLER_STAT],[*],[])
+RTEMS_BSPOPTS_HELP([DISPATCH_HANDLER_STAT],
+[used by irq/irq.c])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

@@ -61,6 +61,10 @@ RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
  use the same type of I/O, otherwise the drivers will likely conflict with
  each other.])
 
+RTEMS_BSPOPTS_SET([DISPATCH_HANDLER_STAT],[*],[])
+RTEMS_BSPOPTS_HELP([DISPATCH_HANDLER_STAT],
+[used by irq/irq.c])
+
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
