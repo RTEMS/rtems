@@ -101,6 +101,13 @@ int mount(
     return -1;
   }
 
+  /* Do they support being mounted at all ? */
+  if ( !fs_ops->fsmount_me_h ) {
+    errno = ENOTSUP;
+    goto cleanup_and_bail;
+  }
+
+
   /*
    * Allocate a mount table entry 
    */
@@ -207,13 +214,13 @@ int mount(
     temp_mt_entry->mt_point_node.mt_entry = NULL;
   }
 
-  if ( !fs_ops->fsmount_me_h ) {
-    errno = ENOTSUP;
+  if ( fs_ops->fsmount_me_h( temp_mt_entry ) ) {
+	/* try to undo the mount operation */
+	if ( loc.ops->unmount_h ) {
+		loc.ops->unmount_h( temp_mt_entry );
+    }
     goto cleanup_and_bail;
   }
-
-  if ( fs_ops->fsmount_me_h( temp_mt_entry ) )
-    goto cleanup_and_bail;
 
   /*
    *  Add the mount table entry to the mount table chain 
