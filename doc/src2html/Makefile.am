@@ -6,9 +6,9 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=browseable_rtems
+PROJECT = browseable_rtems
 
 # FIXME: Yet unported
 #

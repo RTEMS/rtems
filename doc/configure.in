@@ -92,10 +92,6 @@ AM_CONDITIONAL(USE_PDF,
     && test x"$TEXI2DVI" != x"" \
     && test x"$TEXI2PDF" != x"" )
 
-AM_CONDITIONAL(USE_EXP, test x=y )
-
-BMENU='$(top_builddir)/tools/bmenu/bmenu'
-AC_SUBST(BMENU)
 BMENU2='$(top_builddir)/tools/bmenu/bmenu2'
 AC_SUBST(BMENU2)
 
@@ -111,8 +107,6 @@ AC_CONFIG_SUBDIRS(tools)
 
 AC_OUTPUT(
 Makefile
-rtems_header.html
-rtems_footer.html
 rtems_support.html
 index.html
 images/Makefile

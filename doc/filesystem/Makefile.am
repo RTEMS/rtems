@@ -17,7 +17,8 @@ BMENU2 += -c
 
 GENERATED_FILES = patheval.texi init.texi mounting.texi syscalls.texi \
     fsrequirements.texi imfs.texi miniimfs.texi tftp.texi
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES = preface.texi
 
@@ -64,4 +65,5 @@ $(srcdir)/tftp.texi: tftp.t
 	   -u "Top" \
 	   -n "" < $< > $@
 
-EXTRA_DIST = *.t
+EXTRA_DIST = fsrequirements.t imfs.t init.t miniimfs.t mounting.t patheval.t \
+    syscalls.t tftp.t

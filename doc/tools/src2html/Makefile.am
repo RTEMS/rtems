@@ -6,9 +6,9 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-SRC2HTMLDIR=$(top_srcdir)/src2html1.4a
+SRC2HTMLDIR = $(top_srcdir)/src2html1.4a
 
 ctags-wr: $(SRC2HTMLDIR)/ctags-wr
 	cp $< $@

@@ -16,7 +16,8 @@ include $(top_srcdir)/project.am
 GENERATED_FILES = intro.texi swarch.texi started.texi commands.texi \
     trouble.texi example.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES =
 
@@ -57,4 +58,4 @@ $(srcdir)/example.texi: example.t
 	    -u "Top" \
 	    -n "" < $< > $@
 
-EXTRA_DIST = *.t
+EXTRA_DIST = commands.t example.t intro.t started.t swarch.t trouble.t

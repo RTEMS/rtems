@@ -15,7 +15,8 @@ include $(top_srcdir)/project.am
 
 GENERATED_FILES = intro.texi revision.texi objectives.texi gdbinternals.texi \
     interfacing.texi comm.texi daemon.texi conclusion.texi
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES =
 
@@ -76,4 +77,5 @@ $(srcdir)/conclusion.texi: conclusion.t
 
 noinst_DATA = layers.eps process.eps seqdetach.eps seqbreak.eps seqinit.eps
 
-EXTRA_DIST = *.t $(noinst_DATA) $(JPEG_FILES)
+EXTRA_DIST = comm.t conclusion.t daemon.t gdbinternals.t interfacing.t \
+    intro.t objectives.t revision.t $(noinst_DATA) $(JPEG_FILES)

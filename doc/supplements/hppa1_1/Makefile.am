@@ -18,7 +18,8 @@ GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi wksheets.texi timing.texi \
     timeSIMHPPA.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES = preface.texi
 
@@ -99,4 +100,5 @@ $(srcdir)/timeSIMHPPA.texi: timeSIMHPPA.t
 	    -u "Top" \
 	    -n "Command and Variable Index" < $< > $@
 
-EXTRA_DIST = SIMHPPA_TIMES *.t
+EXTRA_DIST = SIMHPPA_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
+    intr_NOTIMES.t memmodel.t timeSIMHPPA.t

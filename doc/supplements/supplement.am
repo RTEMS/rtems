@@ -7,14 +7,11 @@
 REPLACE2 = $(PERL) $(top_srcdir)/tools/word-replace2
 
 MAINTAINERCLEANFILES += $(GENERATED_FILES)
-CLEANFILES += *.fixed
-
 html_projectdir = $(htmldir)/supplements/$(PROJECT)
 
 TEXI2WWW_ARGS=\
--I $(srcdir) \
+-I $(srcdir) -I $(top_srcdir) \
 -dirfile ../../index.html \
--header $(top_builddir)/rtems_header.html \
--footer $(top_builddir)/rtems_footer.html \
+-header rtems_header.html \
+-footer rtems_footer.html \
 -icons ../../images
-

@@ -4,6 +4,12 @@ SUFFIXES += .t
 
 ## Texinfo support
 TEXINFO_TEX = $(top_srcdir)/texinfo/texinfo.tex
+TEXINPUTS = $(srcdir):$(top_srcdir)
+
+.texi:
+	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
+	cd $(srcdir) \
+	  && $(MAKEINFO) -I $(top_srcdir) `echo $< | sed 's,.*/,,'`
 
 $(srcdir)/stamp-vti: $(PROJECT).texi $(top_srcdir)/configure.in
 	@echo "@set UPDATED `$(SHELL) $(srcdir)/mdate-sh \
@@ -37,13 +43,14 @@ SUFFIXES += .eps
 
 if EPSTOPDF
 .eps.pdf:
-	$(EPSTOPDF) $< > $@
+	$(EPSTOPDF) $< --outfile=$@
 endif
 
 if TEXI2PDF
 .texi.pdf:
 	TEXINPUTS=$(srcdir)/$(top_srcdir)/texinfo:$$TEXINPUTS \
-          MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2PDF) $<
+          MAKEINFO='$(MAKEINFO)' \
+	  $(TEXI2PDF) $<
 endif
 
 $(PROJECT).pdf: $(PROJECT).texi $($(PROJECT)_TEXINFOS) $(PDF_IMAGES)
@@ -58,16 +65,27 @@ html_projectdir = $(htmldir)/$(PROJECT)
 
 TEXI2WWW_ARGS=\
 -I $(srcdir) \
+-I $(top_srcdir) \
 -dirfile ../index.html \
--header $(top_builddir)/rtems_header.html \
--footer $(top_builddir)/rtems_footer.html \
--icons ../images
+-header rtems_header.html \
+-footer rtems_footer.html \
+-icons $(top_builddir)/images
+
+rtems_header.html: $(top_srcdir)/rtems_header.html.in version.texi
+	@sed -e s%\.\./images/%$(top_builddir)/images/%g \
+	-e s%\@VERSION\@%@VERSION@%g \
+	< $< > $@
+rtems_footer.html: $(top_srcdir)/rtems_footer.html.in version.texi
+	@sed -e s%\.\./images/%$(top_builddir)/%g \
+	-e s%\@VERSION\@%@VERSION@%g \
+	< $< > $@
 
 index.html $(PROJECT)*.html: $(PROJECT).texi \
-	$(top_builddir)/rtems_header.html $(top_builddir)/rtems_footer.html
+    rtems_header.html rtems_footer.html
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -base $(PROJECT) $<
 
-MOSTLYCLEANFILES += index.html $(PROJECT)*.html
+MOSTLYCLEANFILES += index.html $(PROJECT)*.html rtems_header.html \
+   rtems_footer.html
 
 ## Common installation points
 if USE_HTML

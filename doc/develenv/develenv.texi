@@ -26,7 +26,7 @@
 @c
 
 @include version.texi
-@include ../common/setup.texi
+@include common/setup.texi
 
 @ifset use-ascii
 @dircategory RTEMS On-Line Manual
@@ -63,7 +63,7 @@
 @subtitle @value{UPDATED}
 @author On-Line Applications Research Corporation
 @page
-@include ../common/cpright.texi
+@include common/cpright.texi
 @end titlepage
 
 @c  This prevents a black box from being printed on "overflow" lines.

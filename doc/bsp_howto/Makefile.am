@@ -17,7 +17,8 @@ GENERATED_FILES = intro.texi target.texi makefiles.texi linkcmds.texi \
     support.texi adaintr.texi init.texi console.texi clock.texi timer.texi \
     rtc.texi nvmem.texi network.texi shmsupp.texi analog.texi discrete.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES =
 
@@ -110,4 +111,6 @@ $(srcdir)/discrete.texi: discrete.t
 	    -u "Top" \
 	    -n "" < $< > $@
 
-EXTRA_DIST = *.t
+EXTRA_DIST = adaintr.t analog.t clock.t console.t discrete.t init.t intro.t \
+    linkcmds.t makefiles.t nvmem.t rtc.t shmsupp.t support.t target.t \
+    timer.t

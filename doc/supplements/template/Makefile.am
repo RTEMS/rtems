@@ -17,7 +17,8 @@ include $(top_srcdir)/supplements/supplement.am
 GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi wksheets.texi timing.texi \
     timeBSP.texi
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
 
 FILES = preface.texi
 
@@ -94,15 +95,16 @@ $(srcdir)/timing.texi: $(top_srcdir)/common/timing.t
 #  3.  Build Node Structure
 
 $(srcdir)/timeBSP.texi: $(top_srcdir)/common/timetbl.t timeBSP.t
-	cat timeBSP.t $(top_srcdir)/common/timetbl.t      >timeBSP_.t
+	cat $(srcdir)/timeBSP.t $(top_srcdir)/common/timetbl.t      >timeBSP_.t
 	@echo                                               >>timeBSP_.t
 	@echo "@tex"                                        >>timeBSP_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeBSP_.t
 	@echo "@end tex"                                    >>timeBSP_.t
-	${REPLACE2} -p BSP_TIMES timeBSP_.t | \
+	${REPLACE2} -p $(srcdir)/BSP_TIMES timeBSP_.t | \
 	$(BMENU2) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "Command and Variable Index" > $@
 CLEANFILES += timeBSP_.t
 
-EXTRA_DIST = BSP_TIMES *.t
+EXTRA_DIST = BSP_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
+    intr_NOTIMES.t memmodel.t timeBSP.t

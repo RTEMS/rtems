@@ -17,7 +17,8 @@ include $(top_srcdir)/supplements/supplement.am
 GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi timing.texi wksheets.texi \
     timePSIM.texi timeDMV177.texi
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
 
 FILES = preface.texi
 
@@ -93,16 +94,16 @@ $(srcdir)/timing.texi: $(top_srcdir)/common/timing.t
 #  3.  Build Node Structure
 
 $(srcdir)/timePSIM.texi: $(top_srcdir)/common/timetbl.t timePSIM.t
-	cat timePSIM.t $(top_srcdir)/common/timetbl.t   >timePSIM_.t
+	cat $(srcdir)/timePSIM.t $(top_srcdir)/common/timetbl.t   >timePSIM_.t
 	@echo                                               >>timePSIM_.t
 	@echo "@tex"                                        >>timePSIM_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timePSIM_.t
 	@echo "@end tex"                                    >>timePSIM_.t
-	${REPLACE2} -p PSIM_TIMES timePSIM_.t | \
+	${REPLACE2} -p $(srcdir)/PSIM_TIMES timePSIM_.t | \
 	$(BMENU2) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "DMV177 Timing Data" > $@
-CLEANFILES += timePSIM_.t
+CLEANFILES += timePSIM_.t timeDMV177_.t
 
 # Timing Data for DMV177 BSP Chapter:
 #  1.  Copy the Shared File
@@ -110,15 +111,15 @@ CLEANFILES += timePSIM_.t
 #  3.  Build Node Structure
 
 $(srcdir)/timeDMV177.texi: $(top_srcdir)/common/timetbl.t timeDMV177.t
-	cat timeDMV177.t $(top_srcdir)/common/timetbl.t   >timeDMV177_.t
+	cat $(srcdir)/timeDMV177.t $(top_srcdir)/common/timetbl.t   >timeDMV177_.t
 	@echo                                               >>timeDMV177_.t
 	@echo "@tex"                                        >>timeDMV177_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeDMV177_.t
 	@echo "@end tex"                                    >>timeDMV177_.t
-	${REPLACE2} -p DMV177_TIMES timeDMV177_.t | \
+	${REPLACE2} -p $(srcdir)/DMV177_TIMES timeDMV177_.t | \
 	$(BMENU2) -p "PSIM Timing Data Rate Monotonic Manager" \
 	    -u "Top" \
 	    -n "Command and Variable Index" > $@
-CLEANFILES += timeDMV177_.t
 
-EXTRA_DIST = DMV177_TIMES PSIM_TIMES *.t
+EXTRA_DIST = DMV177_TIMES PSIM_TIMES bsp.t callconv.t cpumodel.t cputable.t \
+    fatalerr.t intr_NOTIMES.t memmodel.t timeDMV177.t timePSIM.t

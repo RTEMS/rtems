@@ -34,7 +34,7 @@ rtemspie.eps: $(top_srcdir)/user/rtemspie.eps
 	$(LN_S) $<
 states.eps: $(top_srcdir)/user/states.eps
 	$(LN_S) $<
-CLEANFILES += rtemspie.eps states.eps
+CLEANFILES += rtemspie.eps states.eps rtemsarc.png rtemspie.png states.png
 
 rtemsarc.png: $(top_srcdir)/user/rtemsarc.png
 	$(LN_S) $<
@@ -42,7 +42,6 @@ rtemspie.png: $(top_srcdir)/user/rtemspie.png
 	$(LN_S) $<
 states.png: $(top_srcdir)/user/states.png
 	$(LN_S) $<
-CLEANFILES += rtemsarc.png rtemspie.png states.png
 
 info_TEXINFOS = ada_user.texi
 ada_user_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)

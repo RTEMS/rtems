@@ -176,8 +176,6 @@ No.
 
 @section RTEMS Mailing List
 
-Yes.  
-
 @example
 rtems-users@@OARcorp.com
 @end example

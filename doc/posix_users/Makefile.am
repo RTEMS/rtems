@@ -19,11 +19,12 @@ GENERATED_FILES = cancel.texi clock.texi cond.texi cspecific.texi \
     signal.texi status.texi systemdb.texi thread.texi timer.texi libc.texi \
     libm.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES = preface.texi
 info_TEXINFOS = posix_users.texi
-posix_users_TEXINFOS = $(FILES) $(GENERATED_FILES)
+posix_users_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
 $(srcdir)/process.texi: process.t
 	 $(BMENU2) -p "" \
@@ -136,5 +137,8 @@ $(srcdir)/libm.texi: libm.t
 	    -n "" < $< > $@
 
 noinst_SCRIPTS = gen_size_report
-EXTRA_DIST = *.t gen_size_report
+EXTRA_DIST = cancel.t clock.t cond.t cspecific.t device.t files.t io.t key.t \
+    libc.t libm.t memorymgmt.t message.t mutex.t procenv.t process.t sched.t \
+    semaphores.t signal.t status.t systemdb.t thread.t timer.t \
+    gen_size_report
 

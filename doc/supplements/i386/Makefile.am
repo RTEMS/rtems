@@ -18,7 +18,8 @@ GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi timing.texi wksheets.texi \
     timeFORCE386.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
 
 FILES = preface.texi
 
@@ -95,15 +96,16 @@ $(srcdir)/timing.texi: $(top_srcdir)/common/timing.t
 #  3.  Build Node Structure
 
 $(srcdir)/timeFORCE386.texi: $(top_srcdir)/common/timetbl.t timeFORCE386.t
-	cat timeFORCE386.t $(top_srcdir)/common/timetbl.t   >timeFORCE386_.t
+	cat $(srcdir)/timeFORCE386.t $(top_srcdir)/common/timetbl.t   >timeFORCE386_.t
 	@echo                                               >>timeFORCE386_.t
 	@echo "@tex"                                        >>timeFORCE386_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeFORCE386_.t
 	@echo "@end tex"                                    >>timeFORCE386_.t
-	${REPLACE2} -p FORCE386_TIMES timeFORCE386_.t | \
+	${REPLACE2} -p $(srcdir)/FORCE386_TIMES timeFORCE386_.t | \
 	$(BMENU2) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "Command and Variable Index" > $@
 CLEANFILES += timeFORCE386_.t
 
-EXTRA_DIST = FORCE386_TIMES *.t
+EXTRA_DIST = FORCE386_TIMES bsp.t callconv.t cpumodel.t cputable.t \
+    fatalerr.t intr_NOTIMES.t memmodel.t timeFORCE386.t

@@ -17,14 +17,15 @@ BMENU2 += -c
 GENERATED_FILES = networkapp.texi driver.texi networktasks.texi testing.texi \
     servers.texi decdriver.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES = networktasks.texi preface.texi
 
 info_TEXINFOS = networking.texi
 networking_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(PROJECT).dvi: networkflow.eps PCIreg.eps recvbd.eps
+$(PROJECT).dvi: ./networkflow.eps ./PCIreg.eps ./recvbd.eps
 
 PDF_IMAGES = networkflow.pdf PCIreg.pdf recvbd.pdf
 
@@ -65,4 +66,5 @@ $(srcdir)/decdriver.texi: decdriver.t
 PICTURE_FILES = PCIreg.eps PCIreg.jpg networkflow.eps networkflow.jpg \
     networkflow.png recvbd.eps recvbd.jpg
 
-EXTRA_DIST = *.t $(PICTURE_FILES)
+EXTRA_DIST = decdriver.t driver.t networkapp.t networktasks.t servers.t \
+    testing.t $(PICTURE_FILES)

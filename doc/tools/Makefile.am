@@ -1,13 +1,8 @@
 ## $Id$
 
 AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-EXTRA_DIST = \
-word-replace2
+EXTRA_DIST = word-replace2
 
-SUBDIRS = \
-bmenu \
-src2html1.4a \
-src2html \
-pdl2texi \
-texi2www
+SUBDIRS = bmenu src2html1.4a src2html pdl2texi texi2www

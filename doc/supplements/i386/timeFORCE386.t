@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@include ../../common/timemac.texi
+@include common/timemac.texi
 @tex
 \global\advance \smallskipamount by -4pt
 @end tex

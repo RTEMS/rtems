@@ -18,7 +18,8 @@ GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi timing.texi wksheets.texi \
     timeERC32.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES = preface.texi
 
@@ -93,15 +94,16 @@ $(srcdir)/timing.texi: $(top_srcdir)/common/timing.t
 #  3.  Build Node Structure
 
 $(srcdir)/timeERC32.texi: $(top_srcdir)/common/timetbl.t timeERC32.t
-	cat timeERC32.t $(top_srcdir)/common/timetbl.t   >timeERC32_.t
+	cat $(srcdir)/timeERC32.t $(top_srcdir)/common/timetbl.t   >timeERC32_.t
 	@echo                                               >>timeERC32_.t
 	@echo "@tex"                                        >>timeERC32_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeERC32_.t
 	@echo "@end tex"                                    >>timeERC32_.t
-	${REPLACE2} -p ERC32_TIMES timeERC32_.t | \
+	${REPLACE2} -p $(srcdir)/ERC32_TIMES timeERC32_.t | \
 	$(BMENU2) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "Command and Variable Index" > $@
 CLEANFILES += timeERC32_.t
 
-EXTRA_DIST = ERC32_TIMES *.t
+EXTRA_DIST = ERC32_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
+    intr_NOTIMES.t memmodel.t timeERC32.t

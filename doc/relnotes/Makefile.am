@@ -13,7 +13,8 @@ EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES = install.texi intro.texi probrep.texi relnotes.texi status.texi
 

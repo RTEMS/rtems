@@ -6,20 +6,18 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROG=pdl2texi
-noinst_PROGRAMS=$(PROG)
+PROG = pdl2texi
+noinst_PROGRAMS = $(PROG)
 
 #$(BASE).texi: $(BASE).d ./$(PROG)
 #	./$(PROG) $(BASE).d
 
-pdl2texi_SOURCES = \
-address.inl  chain.h      main.c       system.h \
-base.h       chain.inl    address.h    chain.c \
-isr.h
+pdl2texi_SOURCES = address.inl chain.h main.c system.h base.h chain.inl \
+    address.h chain.c isr.h
 
-BASE=sample
+BASE = sample
 
 #drive: Drive
 #Drive: $(BASE).txt
@@ -55,5 +53,5 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f test_cases/*.txt test_cases/*.texi
 
-EXTRA_DIST = test_cases/enum.d test_cases/enumbad.d test_cases/table.d \
-	s.d sample.d
+EXTRA_DIST = test_cases/enum.d test_cases/enumbad.d test_cases/table.d s.d \
+    sample.d

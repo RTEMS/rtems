@@ -17,7 +17,8 @@ GENERATED_FILES = adminiface.texi confspace.texi dumpcontrol.texi \
     eventlog.texi stackchk.texi rtmonuse.texi cpuuse.texi error.texi \
     monitor.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES =
 
@@ -71,4 +72,5 @@ $(srcdir)/monitor.texi: monitor.t
 
 noinst_SCRIPTS = gen_section
 
-EXTRA_DIST = *.t STATUS TODO $(noinst_SCRIPTS)
+EXTRA_DIST = adminiface.t base.t confspace.t cpuuse.t dumpcontrol.t error.t \
+    eventlog.t monitor.t rtmonuse.t stackchk.t STATUS TODO $(noinst_SCRIPTS)

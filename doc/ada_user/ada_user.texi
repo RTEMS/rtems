@@ -26,7 +26,7 @@
 @c
 
 @include version.texi
-@include ../common/setup.texi
+@include common/setup.texi
 
 @ifset use-ascii
 @dircategory RTEMS On-Line Manual
@@ -70,39 +70,39 @@
 @subtitle @value{UPDATED}
 @author On-Line Applications Research Corporation
 @page
-@include ../common/cpright.texi
+@include common/cpright.texi
 @end titlepage
 
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
-@include ../user/preface.texi
-@include ../user/overview.texi
-@include ../user/concepts.texi
-@include ../user/datatypes.texi
-@include ../user/init.texi
-@include ../user/task.texi
-@include ../user/intr.texi
-@include ../user/clock.texi
-@include ../user/timer.texi
-@include ../user/sem.texi
-@include ../user/msg.texi
-@include ../user/event.texi
-@include ../user/signal.texi
-@include ../user/part.texi
-@include ../user/region.texi
-@include ../user/dpmem.texi
-@include ../user/io.texi
-@include ../user/fatal.texi
-@include ../user/schedule.texi
-@include ../user/rtmon.texi
-@include ../user/bsp.texi
-@include ../user/userext.texi
-@include ../user/conf.texi
-@include ../user/mp.texi
-@include ../user/dirstat.texi
+@include user/preface.texi
+@include user/overview.texi
+@include user/concepts.texi
+@include user/datatypes.texi
+@include user/init.texi
+@include user/task.texi
+@include user/intr.texi
+@include user/clock.texi
+@include user/timer.texi
+@include user/sem.texi
+@include user/msg.texi
+@include user/event.texi
+@include user/signal.texi
+@include user/part.texi
+@include user/region.texi
+@include user/dpmem.texi
+@include user/io.texi
+@include user/fatal.texi
+@include user/schedule.texi
+@include user/rtmon.texi
+@include user/bsp.texi
+@include user/userext.texi
+@include user/conf.texi
+@include user/mp.texi
+@include user/dirstat.texi
 @include example.texi
-@include ../user/glossary.texi
+@include user/glossary.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top ada_user

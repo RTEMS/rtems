@@ -18,7 +18,8 @@ include $(top_srcdir)/project.am
 GENERATED_FILES = binaries.texi buildc.texi buildrt.texi gdb.texi intro.texi \
     nt.texi require.texi nextstep.texi sample.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 FILES = tversions.texi
 
@@ -55,7 +56,7 @@ $(srcdir)/sample.texi: sample.t tversions.texi
 	    -u "Top" \
 	    -n "Building the GNU Debugger" < $< > $@
 
-gdb.texi: gdb.t tversions.texi
+$(srcdir)/gdb.texi: gdb.t tversions.texi
 	$(BMENU2) -c -p "More Information on RTEMS Application Makefiles" \
 	    -u "Top" \
 	    -n "Where To Go From Here" < $< > $@
@@ -70,4 +71,5 @@ $(srcdir)/nt.texi: nt.t tversions.texi
 	    -u "Top" \
 	    -n "" < $< > $@
 
-EXTRA_DIST = *.t
+EXTRA_DIST = binaries.t buildc.t buildrt.t gdb.t intro.t nextstep.t nt.t \
+    require.t sample.t

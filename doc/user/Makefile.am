@@ -20,7 +20,8 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi bsp.texi userext.texi conf.texi mp.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi
 
 info_TEXINFOS = c_user.texi
 c_user_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
@@ -159,4 +160,7 @@ $(srcdir)/mp.texi: mp.t
 
 noinst_DATA = states.gif rtemspie.gif
 
-EXTRA_DIST = *.t $(PNG_FILES) $(EPS_IMAGES) $(noinst_DATA)
+EXTRA_DIST = bsp.t concepts.t clock.t datatypes.t conf.t dpmem.t event.t \
+    fatal.t init.t intr.t io.t mp.t msg.t overview.t part.t region.t rtmon.t \
+    sem.t schedule.t signal.t task.t timer.t userext.t $(PNG_FILES) \
+    $(EPS_IMAGES) $(noinst_DATA)

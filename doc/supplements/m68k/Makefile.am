@@ -18,7 +18,8 @@ GENERATED_FILES = cpumodel.texi callconv.texi memmodel.texi intr.texi \
     fatalerr.texi bsp.texi cputable.texi timing.texi wksheets.texi \
     timeMVME136.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi \
+    $(top_srcdir)/common/cpright.texi $(top_srcdir)/common/timemac.texi
 
 FILES = preface.texi
 
@@ -95,15 +96,16 @@ $(srcdir)/timing.texi: $(top_srcdir)/common/timing.t
 #  3.  Build Node Structure
 
 $(srcdir)/timeMVME136.texi: $(top_srcdir)/common/timetbl.t timeMVME136.t
-	cat timeMVME136.t $(top_srcdir)/common/timetbl.t   >timeMVME136_.t
+	cat $(srcdir)/timeMVME136.t $(top_srcdir)/common/timetbl.t   >timeMVME136_.t
 	@echo                                               >>timeMVME136_.t
 	@echo "@tex"                                        >>timeMVME136_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeMVME136_.t
 	@echo "@end tex"                                    >>timeMVME136_.t
-	${REPLACE2} -p MVME136_TIMES timeMVME136_.t | \
+	${REPLACE2} -p $(srcdir)/MVME136_TIMES timeMVME136_.t | \
 	$(BMENU2) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "Command and Variable Index" > $@
 CLEANFILES += timeMVME136_.t
 
-EXTRA_DIST = MVME136_TIMES *.t
+EXTRA_DIST = MVME136_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
+    intr_NOTIMES.t memmodel.t timeMVME136.t timedata.t

@@ -8,10 +8,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-noinst_PROGRAMS=bmenu2
+noinst_PROGRAMS = bmenu2
 
-bmenu2_SOURCES = \
-address.h     chain.c       isr.h \
-address.inl   chain.h       bmenu2.c \
-base.h        chain.inl     system.h
+bmenu2_SOURCES = address.h chain.c isr.h address.inl chain.h bmenu2.c base.h \
+    chain.inl system.h
 
