@@ -32,8 +32,9 @@ include $(top_srcdir)/libtests.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
+LD_LIBS += -lrtems++$(LIB_VARIANT)
+
 if HAS_CXX
-LD_LIBS += -lrtems++
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-cxx-exe)
