@@ -252,6 +252,9 @@ void *realloc(
   }
 
   new_area = malloc( size );
+ 
+  MSBUMP(malloc_calls, -1);   /* subtract off the malloc */
+
   if ( !new_area ) {
     free( ptr );
     return (void *) 0;

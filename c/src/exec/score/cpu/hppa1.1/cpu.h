@@ -267,13 +267,13 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /*
- * HPPA has 32 interrupts, then 32 external interrupts
+ * HPPA has 32 traps, then 32 external interrupts
  * Rtems (_ISR_Vector_Table) is aware ONLY of the first 32
  * The BSP is aware of the external interrupts and possibly more.
  *
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS      (HPPA_INTERNAL_INTERRUPTS)
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      (HPPA_INTERNAL_TRAPS)
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
@@ -318,25 +318,32 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  *     + set a particular level
  */
 
-/* Disable interrupts; returning previous level in _level */
-#define _CPU_ISR_Disable( _isr_cookie ) \
+/* Disable interrupts; returning previous psw bits in _isr_level */
+#define _CPU_ISR_Disable( _isr_level ) \
   do { \
-         HPPA_ASM_RSM(HPPA_PSW_I, _isr_cookie);   \
+         HPPA_ASM_RSM(HPPA_PSW_I, _isr_level);         \
+         if (_isr_level & HPPA_PSW_I) _isr_level = 0;  \
+         else                          _isr_level = 1; \
   } while(0)
 
 /* Enable interrupts to previous level from _CPU_ISR_Disable
  * does not change 'level' */
-#define _CPU_ISR_Enable( _isr_cookie )  \
+#define _CPU_ISR_Enable( _isr_level )  \
   { \
-        HPPA_ASM_MTSM( _isr_cookie ); \
+        register int _ignore; \
+        if (_isr_level == 0) HPPA_ASM_SSM(HPPA_PSW_I, _ignore); \
+        else                 HPPA_ASM_RSM(HPPA_PSW_I, _ignore); \
   }
 
 /* restore, then disable interrupts; does not change level */
-#define _CPU_ISR_Flash( _isr_cookie ) \
+#define _CPU_ISR_Flash( _isr_level ) \
   { \
-        register int _ignore;  \
-        _CPU_ISR_Enable( _isr_cookie ); \
-        _CPU_ISR_Disable( _ignore ); \
+        if (_isr_level == 0) \
+        { \
+              register int _ignore;  \
+              HPPA_ASM_SSM(HPPA_PSW_I, _ignore); \
+              HPPA_ASM_RSM(HPPA_PSW_I, _ignore); \
+        } \
   }
 
 /*
@@ -568,6 +575,15 @@ void _CPU_Restore_float_context(
 );
 
 
+/*
+ * The raw interrupt handler for external interrupts
+ */
+
+extern void _Generic_ISR_Handler(
+    void
+);
+
+
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static so it can be referenced indirectly.
  */
@@ -581,14 +597,6 @@ CPU_swap_u32(unsigned32 value)
 
   return( swapped );
 }
-
-/*
- * Unused; I think it should go away
- */
-
-#if 0
-#define enable_tracing()
-#endif
 
 #endif   /* ! ASM */
 

@@ -124,93 +124,90 @@ extern "C" {
  * basic layout.  Note numbers do not denote priority
  *
  *      0-31    basic traps and interrupts defined by HPPA architecture
- *     32-63    32 external interrupts
- *     64-...   bsp defined
+ *      0-31    32 external interrupts
+ *     32-...   bsp defined
  */
 
-#define HPPA_INTERRUPT_NON_EXISTENT                     0
+#define HPPA_TRAP_NON_EXISTENT                     0
 /* group 1 */
-#define HPPA_INTERRUPT_HIGH_PRIORITY_MACHINE_CHECK      1
+#define HPPA_TRAP_HIGH_PRIORITY_MACHINE_CHECK      1
 /* group 2 */
-#define HPPA_INTERRUPT_POWER_FAIL                       2
-#define HPPA_INTERRUPT_RECOVERY_COUNTER                 3
-#define HPPA_INTERRUPT_EXTERNAL_INTERRUPT               4
-#define HPPA_INTERRUPT_LOW_PRIORITY_MACHINE_CHECK       5
-#define HPPA_INTERRUPT_PERFORMANCE_MONITOR             29
+#define HPPA_TRAP_POWER_FAIL                       2
+#define HPPA_TRAP_RECOVERY_COUNTER                 3
+#define HPPA_TRAP_EXTERNAL_INTERRUPT               4
+#define HPPA_TRAP_LOW_PRIORITY_MACHINE_CHECK       5
+#define HPPA_TRAP_PERFORMANCE_MONITOR             29
 /* group 3 */
-#define HPPA_INTERRUPT_INSTRUCTION_TLB_MISS             6
-#define HPPA_INTERRUPT_INSTRUCTION_MEMORY_PROTECTION    7
-#define HPPA_INTERRUPT_INSTRUCTION_DEBUG               30
-#define HPPA_INTERRUPT_ILLEGAL_INSTRUCTION              8
-#define HPPA_INTERRUPT_BREAK_INSTRUCTION                9
-#define HPPA_INTERRUPT_PRIVILEGED_OPERATION            10
-#define HPPA_INTERRUPT_PRIVILEGED_REGISTER             11
-#define HPPA_INTERRUPT_OVERFLOW                        12
-#define HPPA_INTERRUPT_CONDITIONAL                     13
-#define HPPA_INTERRUPT_ASSIST_EXCEPTION                14
-#define HPPA_INTERRUPT_DATA_TLB_MISS                   15
-#define HPPA_INTERRUPT_NON_ACCESS_INSTRUCTION_TLB_MISS 16
-#define HPPA_INTERRUPT_NON_ACCESS_DATA_TLB_MISS        17
-#define HPPA_INTERRUPT_DATA_MEMORY_ACCESS_RIGHTS       26
-#define HPPA_INTERRUPT_DATA_MEMORY_PROTECTION_ID       27
-#define HPPA_INTERRUPT_UNALIGNED_DATA_REFERENCE        28
-#define HPPA_INTERRUPT_DATA_MEMORY_PROTECTION          18
-#define HPPA_INTERRUPT_DATA_MEMORY_BREAK               19
-#define HPPA_INTERRUPT_TLB_DIRTY_BIT                   20
-#define HPPA_INTERRUPT_PAGE_REFERENCE                  21
-#define HPPA_INTERRUPT_DATA_DEBUG                      31
-#define HPPA_INTERRUPT_ASSIST_EMULATION                22
+#define HPPA_TRAP_INSTRUCTION_TLB_MISS             6
+#define HPPA_TRAP_INSTRUCTION_MEMORY_PROTECTION    7
+#define HPPA_TRAP_INSTRUCTION_DEBUG               30
+#define HPPA_TRAP_ILLEGAL_INSTRUCTION              8
+#define HPPA_TRAP_BREAK_INSTRUCTION                9
+#define HPPA_TRAP_PRIVILEGED_OPERATION            10
+#define HPPA_TRAP_PRIVILEGED_REGISTER             11
+#define HPPA_TRAP_OVERFLOW                        12
+#define HPPA_TRAP_CONDITIONAL                     13
+#define HPPA_TRAP_ASSIST_EXCEPTION                14
+#define HPPA_TRAP_DATA_TLB_MISS                   15
+#define HPPA_TRAP_NON_ACCESS_INSTRUCTION_TLB_MISS 16
+#define HPPA_TRAP_NON_ACCESS_DATA_TLB_MISS        17
+#define HPPA_TRAP_DATA_MEMORY_ACCESS_RIGHTS       26
+#define HPPA_TRAP_DATA_MEMORY_PROTECTION_ID       27
+#define HPPA_TRAP_UNALIGNED_DATA_REFERENCE        28
+#define HPPA_TRAP_DATA_MEMORY_PROTECTION          18
+#define HPPA_TRAP_DATA_MEMORY_BREAK               19
+#define HPPA_TRAP_TLB_DIRTY_BIT                   20
+#define HPPA_TRAP_PAGE_REFERENCE                  21
+#define HPPA_TRAP_DATA_DEBUG                      31
+#define HPPA_TRAP_ASSIST_EMULATION                22
 /* group 4 */
-#define HPPA_INTERRUPT_HIGHER_PRIVILEGE_TRANSFER       23
-#define HPPA_INTERRUPT_LOWER_PRIVILEGE_TRANSFER        24
-#define HPPA_INTERRUPT_TAKEN_BRANCH                    25
+#define HPPA_TRAP_HIGHER_PRIVILEGE_TRANSFER       23
+#define HPPA_TRAP_LOWER_PRIVILEGE_TRANSFER        24
+#define HPPA_TRAP_TAKEN_BRANCH                    25
 
-#define HPPA_INTERRUPT_ON_CHIP_MAX                     31
+#define HPPA_INTERNAL_TRAPS                       32
 
 /* External Interrupts via interrupt 4 */
 
-#define HPPA_INTERRUPT_EXTERNAL_BASE                   32
+#define HPPA_INTERRUPT_EXTERNAL_0                  0
+#define HPPA_INTERRUPT_EXTERNAL_1                  1
+#define HPPA_INTERRUPT_EXTERNAL_2                  2
+#define HPPA_INTERRUPT_EXTERNAL_3                  3
+#define HPPA_INTERRUPT_EXTERNAL_4                  4
+#define HPPA_INTERRUPT_EXTERNAL_5                  5
+#define HPPA_INTERRUPT_EXTERNAL_6                  6
+#define HPPA_INTERRUPT_EXTERNAL_7                  7
+#define HPPA_INTERRUPT_EXTERNAL_8                  8
+#define HPPA_INTERRUPT_EXTERNAL_9                  9
+#define HPPA_INTERRUPT_EXTERNAL_10                10
+#define HPPA_INTERRUPT_EXTERNAL_11                11
+#define HPPA_INTERRUPT_EXTERNAL_12                12
+#define HPPA_INTERRUPT_EXTERNAL_13                13
+#define HPPA_INTERRUPT_EXTERNAL_14                14
+#define HPPA_INTERRUPT_EXTERNAL_15                15
+#define HPPA_INTERRUPT_EXTERNAL_16                16
+#define HPPA_INTERRUPT_EXTERNAL_17                17
+#define HPPA_INTERRUPT_EXTERNAL_18                18
+#define HPPA_INTERRUPT_EXTERNAL_19                19
+#define HPPA_INTERRUPT_EXTERNAL_20                20
+#define HPPA_INTERRUPT_EXTERNAL_21                21
+#define HPPA_INTERRUPT_EXTERNAL_22                22
+#define HPPA_INTERRUPT_EXTERNAL_23                23
+#define HPPA_INTERRUPT_EXTERNAL_24                24
+#define HPPA_INTERRUPT_EXTERNAL_25                25
+#define HPPA_INTERRUPT_EXTERNAL_26                26
+#define HPPA_INTERRUPT_EXTERNAL_27                27
+#define HPPA_INTERRUPT_EXTERNAL_28                28
+#define HPPA_INTERRUPT_EXTERNAL_29                29
+#define HPPA_INTERRUPT_EXTERNAL_30                30
+#define HPPA_INTERRUPT_EXTERNAL_31                31
 
-#define HPPA_INTERRUPT_EXTERNAL_0                      32
-#define HPPA_INTERRUPT_EXTERNAL_1                      33
-#define HPPA_INTERRUPT_EXTERNAL_2                      34
-#define HPPA_INTERRUPT_EXTERNAL_3                      35
-#define HPPA_INTERRUPT_EXTERNAL_4                      36
-#define HPPA_INTERRUPT_EXTERNAL_5                      37
-#define HPPA_INTERRUPT_EXTERNAL_6                      38
-#define HPPA_INTERRUPT_EXTERNAL_7                      39
-#define HPPA_INTERRUPT_EXTERNAL_8                      40
-#define HPPA_INTERRUPT_EXTERNAL_9                      41
-#define HPPA_INTERRUPT_EXTERNAL_10                     42
-#define HPPA_INTERRUPT_EXTERNAL_11                     43
-#define HPPA_INTERRUPT_EXTERNAL_12                     44
-#define HPPA_INTERRUPT_EXTERNAL_13                     45
-#define HPPA_INTERRUPT_EXTERNAL_14                     46
-#define HPPA_INTERRUPT_EXTERNAL_15                     47
-#define HPPA_INTERRUPT_EXTERNAL_16                     48
-#define HPPA_INTERRUPT_EXTERNAL_17                     49
-#define HPPA_INTERRUPT_EXTERNAL_18                     50
-#define HPPA_INTERRUPT_EXTERNAL_19                     51
-#define HPPA_INTERRUPT_EXTERNAL_20                     52
-#define HPPA_INTERRUPT_EXTERNAL_21                     53
-#define HPPA_INTERRUPT_EXTERNAL_22                     54
-#define HPPA_INTERRUPT_EXTERNAL_23                     55
-#define HPPA_INTERRUPT_EXTERNAL_24                     56
-#define HPPA_INTERRUPT_EXTERNAL_25                     57
-#define HPPA_INTERRUPT_EXTERNAL_26                     58
-#define HPPA_INTERRUPT_EXTERNAL_27                     59
-#define HPPA_INTERRUPT_EXTERNAL_28                     60
-#define HPPA_INTERRUPT_EXTERNAL_29                     61
-#define HPPA_INTERRUPT_EXTERNAL_30                     62
-#define HPPA_INTERRUPT_EXTERNAL_31                     63
-
-#define HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER         HPPA_INTERRUPT_EXTERNAL_0
-#define HPPA_EXTERNAL_INTERRUPTS                       32
-#define HPPA_INTERNAL_INTERRUPTS                       32
+#define HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER    HPPA_INTERRUPT_EXTERNAL_0
+#define HPPA_EXTERNAL_INTERRUPTS                  32
 
 /* BSP defined interrupts begin here */
 
-#define HPPA_INTERRUPT_MAX  64
+#define HPPA_INTERRUPT_MAX  32
 
 /*
  * Cache characteristics
@@ -218,6 +215,13 @@ extern "C" {
  
 #define HPPA_CACHELINE_SIZE     32
 #define HPPA_CACHELINE_MASK     (HPPA_CACHELINE_SIZE - 1)
+
+/*
+ * page size characteristics
+ */
+
+#define HPPA_PAGE_SIZE          4096
+#define HPPA_PAGE_MASK          (0xfffff000)
 
 
 /*

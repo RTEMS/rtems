@@ -131,7 +131,7 @@ libc_start_hook(rtems_tcb *current_task,
  *        real target.
  */
  
-#ifdef RTEMS_UNIX
+#ifdef NEED_SETVBUF
 rtems_extension
 libc_begin_hook(rtems_tcb *current_task)
 {
@@ -274,7 +274,7 @@ libc_init(int reentrant)
 
         libc_extension.thread_create  = libc_create_hook;
         libc_extension.thread_start   = libc_start_hook;
-#ifdef RTEMS_UNIX
+#ifdef NEED_SETVBUF
         libc_extension.thread_begin   = libc_begin_hook;
 #endif
         libc_extension.thread_switch  = libc_switch_hook;

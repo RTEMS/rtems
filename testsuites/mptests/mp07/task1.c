@@ -72,7 +72,7 @@ rtems_task Test_task(
   directive_failed( status, "rtems_timer_fire_after" );
 
   while ( Stop_Test == FALSE ) {
-    for ( count=DOT_COUNT ; count ; count-- ) {
+    for ( count=DOT_COUNT ; count && (Stop_Test == FALSE) ; count-- ) {
       status = rtems_event_receive(
         RTEMS_EVENT_16,
         RTEMS_DEFAULT_OPTIONS,
@@ -90,6 +90,14 @@ rtems_task Test_task(
     }
     put_dot('.');
   }
+
+  /*
+   * Wait a bit before shutting down so we don't screw up the other node
+   * when our MPCI shuts down
+   */
+
+  rtems_task_wake_after(10);
+
   puts( "\n*** END OF TEST 7 ***" );
   exit( 0 );
 }

@@ -24,6 +24,13 @@ void Exit_test( void )
   rtems_status_code status;
   rtems_mode        old_mode;
 
+  /*
+   * Wait a bit before shutting down so we don't screw up the other node
+   * when our MPCI shuts down
+   */
+ 
+  rtems_task_wake_after(20);
+ 
   status = rtems_task_mode( RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &old_mode );
   directive_failed( status, "rtems_task_mode" );
 

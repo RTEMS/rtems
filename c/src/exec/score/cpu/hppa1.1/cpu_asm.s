@@ -424,11 +424,14 @@ _CPU_Context_restore:
         ldw         R27_OFFSET(arg0),%r27
         ldw         R28_OFFSET(arg0),%r28
         ldw         R29_OFFSET(arg0),%r29
-        ldw         R30_OFFSET(arg0),%r30
+# skipping r30 (sp) until we turn off interrupts
         ldw         R31_OFFSET(arg0),%r31
 
-# Turn off Q & R & I so we can write interrupt control registers
+# Turn off Q & R & I so we can write r30 and interrupt control registers
         rsm        HPPA_PSW_Q + HPPA_PSW_R + HPPA_PSW_I, %r0
+
+# now safe to restore r30
+        ldw         R30_OFFSET(arg0),%r30
 
         ldw        IPSW_OFFSET(arg0), %r25
         mtctl      %r25, ipsw

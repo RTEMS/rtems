@@ -15,7 +15,7 @@
 
 #if defined(solaris2)
 #define O_NDELAY O_NONBLOCK
-#elif  defined(RTEMS_NEWLIB)
+#elif defined(RTEMS_NEWLIB)
 #define O_NDELAY _FNBIO
 #endif
 

@@ -24,6 +24,7 @@ rtems_boolean Timer_driver_Find_average_overhead;
 void Timer_initialize()
 {
   Timer_starting = get_itimer();
+  set_eiem(0x80000000);
 }
 
 #define AVG_OVERHEAD      0  /* It typically takes 3.0 microseconds */
