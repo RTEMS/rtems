@@ -20,18 +20,18 @@ fork(), Unimplementable
 @subsection Execute a File
 
 @example
-execl(), Unimplementable
-execv(), Unimplementable
-execle(), Unimplementable
-execve(), Unimplementable
-execlp(), Unimplementable
-execvp(), Unimplementable
+execl(), Unimplementable, Requires Processes
+execv(), Unimplementable, Requires Processes
+execle(), Unimplementable, Requires Processes
+execve(), Unimplementable, Requires Processes
+execlp(), Unimplementable, Requires Processes
+execvp(), Unimplementable, Requires Processes
 @end example
 
 @subsection Register Fork Handlers
 
 @example
-pthread_atfork(), Implemented
+pthread_atfork(), Unimplementable, Requires Processes
 @end example
 
 @section Process Termination
@@ -39,14 +39,14 @@ pthread_atfork(), Implemented
 @subsection Wait for Process Termination
 
 @example
-wait(), Implemented
-waitpid(), Implemented
+wait(), Unimplementable, Requires Processes
+waitpid(), Unimplementable, Requires Processes
 @end example
 
 @subsection Terminate a Process
 
 @example
-_exit(), Implemented
+_exit(), Unimplemented
 @end example
 
 @section Signals
