@@ -1,3 +1,10 @@
+2002-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CHECK_POSIX_API.
+	  Remove RTEMS_ENABLE_POSIX.
+	  Remove RTEMS_CHECK_CUSTOM_BSP.
+	  Remove RTEMS_ENABLE_POSIX.
+
 2002-05-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	Relocate c/src/libnetworking.
