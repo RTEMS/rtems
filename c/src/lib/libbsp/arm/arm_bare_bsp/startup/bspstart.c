@@ -29,17 +29,17 @@
  */
 volatile unsigned long *Regs = (unsigned long*)0xdeadbeef; /* Chip registers */
 
-extern rtems_unsigned32 _end;         /* End of BSS. Defined in 'linkcmds'. */
+extern uint32_t         _end;         /* End of BSS. Defined in 'linkcmds'. */
 /* 
  * Size of heap if it is 0 it will be dynamically defined by memory size, 
  * otherwise the value should be changed by binary patch 
  */
-rtems_unsigned32 _heap_size = 0; 
+uint32_t         _heap_size = 0; 
 
 /* Size of stack used during initialization. Defined in 'start.s'.  */
-extern rtems_unsigned32 _stack_size;
+extern uint32_t         _stack_size;
 
-rtems_unsigned32 rtemsFreeMemStart;
+uint32_t         rtemsFreeMemStart;
                          /* Address of start of free memory - should be updated
                             after creating new partitions or regions.         */
 
@@ -56,7 +56,7 @@ char            *rtems_progname;               /* Program name - from main(). */
 | External Prototypes
 +--------------------------------------------------------------------------*/
 extern void rtems_irq_mngt_init(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 void bsp_postdriver_hook(void);
 
 /*-------------------------------------------------------------------------+
@@ -100,7 +100,7 @@ void bsp_pretasking_hook(void)
 +--------------------------------------------------------------------------*/
 void bsp_start_default( void )
 {
-  rtemsFreeMemStart = (rtems_unsigned32)(&_end);  /* &_end+_stack_size;*/
+  rtemsFreeMemStart = (uint32_t)(&_end);  /* &_end+_stack_size;*/
                                     /* set the value of start of free memory. */
 
   /* If we don't have command line arguments set default program name. */
