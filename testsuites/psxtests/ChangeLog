@@ -1,3 +1,17 @@
+2000-11-17	Jennifer Averett <jennifer@OARcorp.com>
+
+	* psxstat/test.c, psxstat/psxstat.scn: Forced inode numbers
+	to remain consistant across platforms and bsps by forcing
+	a mount point in front of all paths.
+
+2000-11-17	Jennifer Averret <jennifer@OARcorp.com>
+
+	* psxmount/test.c, psxmount/psxmount.scn: Improve output to report
+	expected error condition in one case.
+	* psxreaddir/test.c, psxreaddir.scn: Added test cases to exercise
+	readdir() of root of mounted filesystem.  Also corrected the screen
+	file for some mistakes noticed in this effort.
+
 2000-11-13	Joel Sherrill <joel@OARcorp.com>
 
 	* psxmount/psxmount.scn, psxmount/test.c: Correct spelling.
