@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-EXTRA_DIST = excep_f.c rdbg_cpu_asm.S rdbg_f.c
-
 RPCCPUDIR = $(RTEMS_CPU)/any
 
 EXTRA_LIBRARIES = librdbg.a
@@ -38,7 +36,6 @@ X_FILES = ../remdeb.x any/remdeb_f.x
 MAINTAINERCLEANFILES = $(H_FILES) $(GEN_C_FILES)
 
 include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
 
 FRONTEND = \"$(RPCCPUDIR)/remdeb_f.x\"
 
@@ -75,7 +72,7 @@ include_rdbg_HEADERS = $(srcdir)/any/remdeb.h
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-EXTRA_DIST += remdeb_f.x $(GEN_C_FILES)
+EXTRA_DIST = remdeb_f.x $(GEN_C_FILES)
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
