@@ -347,22 +347,21 @@ void exit(int status)
  *  These are directly supported (and completely correct) in the posix api.
  */
 
-#if !defined(__RTEMS_POSIX_API__)
-
+#if !defined(RTEMS_POSIX_API)
 pid_t __getpid(void)
 {
   return 0;
 }
 #endif
 
-#if !defined(__RTEMS_POSIX_API__) && !defined(__GO32__)
+#if !defined(RTEMS_POSIX_API) || defined(__GO32__)
 pid_t getpid(void)
 {
   return __getpid();
 }
 #endif
 
-#if !defined(__RTEMS_POSIX_API__) && !defined(__GO32__)
+#if !defined(RTEMS_POSIX_API) || defined(__GO32__)
 int kill( pid_t pid, int sig )
 {
   return 0;
