@@ -14,17 +14,9 @@ A schematic diagram of the tasks and message @b{mbuf} queues in a
 simple RTEMS networking application is shown in the following
 figure:
 
-@ifset use-ascii
-@example
-@group
-NO ASCII VERSION OF THE TASKING FIGURE IS AVAILABLE
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@image{networkflow,5in,6in}
-@end ifset
+@ifclear use-html
+@image{networkflow,5in,6in,"Network Task Structure and Data Flow"}
+@end ifclear
 
 @ifset use-html
 @html

@@ -1,3 +1,10 @@
+2004-07-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* networking/networkflow.txt, networking/PCIreg.txt,
+	networking/recvbd.txt: New.
+	* networking/decdriver.t, networking/networktasks.t: Use @image for
+	ASCII figures (Reflect changes above).
+
 2004-07-24	Joel Sherrill <joel@OARcorp.com>
 
 	PR 652/rtems

@@ -1,0 +1,2 @@
+Figure: Buffer Descriptor
+       (Not available in ASCII version of this document.)

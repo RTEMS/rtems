@@ -72,24 +72,14 @@ on a PowerPC target.
 @c PCI Device's Configuration Header Space Format
 @c
 
-@ifset use-ascii
-@example
-@group
-There is no ASCII version of the PCI Device's Configuration Header Space Format
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@image{PCIreg}
-@end ifset
-
-@c @image{PCIreg}
+@ifclear use-html
+@image{PCIreg,,,PCI Device's Configuration Header Space Format}
+@end ifclear
 
 @ifset use-html
 @c <IMG SRC="PCIreg.jpg" WIDTH=500 HEIGHT=600 ALT="PCI Device's Configuration Header Space Format">
 @html
-<IMG SRC="PCIreg.jpg" ALT="PCI Device's Configuration Header Space Format">
+ <IMG SRC="PCIreg.jpg" ALT="PCI Device's Configuration Header Space Format">
 @end html
 @end ifset
 
@@ -160,20 +150,9 @@ please refer to the [DEC21140 Hardware Manual].
 @c Buffer Descriptor
 @c
 
-@ifset use-ascii
-@example
-@group
-XXXXX reference it in the previous paragraph
-XXXXX insert recvbd.eps
-XXXXX Caption Buffer Descriptor
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@image{recvbd}
-@end ifset
-
+@ifclear use-html
+@image{recvbd,,,"Buffer Descriptor"}
+@end ifclear
 
 @ifset use-html
 @c <IMG SRC="recvbd.jpg" WIDTH=500 HEIGHT=600 ALT="Buffer Descriptor">
