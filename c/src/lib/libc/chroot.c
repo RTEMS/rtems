@@ -33,10 +33,10 @@ int chroot(
   if (rtems_current_user_env == &rtems_global_user_env)
     set_errno_and_return_minus_one( ENOTSUP );
 
-  loc = rtems_filesystem_root;i    /* save the value */
+  loc = rtems_filesystem_root;     /* save the value */
 
   /* if has been already changed */
-  rtems_filesystem_root = rtems_global_user_env.filesystem_root;
+  rtems_filesystem_root = rtems_global_user_env.root_directory;
 
   result = chdir(pathname);
   if (result) {

@@ -1,4 +1,9 @@
 
+2001-01-26	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/chroot.c: Fixed naming problems.  Names were changed
+	when the code this depends on was merged.
+
 2001-01-25	Fernando Ruiz <fernando.ruiz@ctv.es>
 
 	* Alternate email is correo@fernando-ruiz.com
