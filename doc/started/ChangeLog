@@ -1,3 +1,15 @@
+2004-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	PR 682/misc
+	* buildc.t, buildrt.t, sample.t: Fix PATH and tar examples. Enable
+	binutils link again.
+
+2004-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	PR 682/misc
+	* buildc.t, buildrt.t, sample.t: Fix PATH and tar examples. Enable
+	binutils link again.
+
 2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* binaries.t, buildc.t: Use @value{RTEMSRPMPREFIX} in refs to rpms.
