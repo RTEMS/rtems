@@ -154,6 +154,7 @@ API_extensions_Control _ITRON_Task_API_extensions = {
 
 User_extensions_Control _ITRON_Task_User_extensions = {
   { NULL, NULL },
+  { { NULL, NULL }, NULL },
   { _ITRON_Task_Create_extension,             /* create */
     NULL,                                     /* start */
     NULL,                                     /* restart */
