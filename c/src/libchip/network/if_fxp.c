@@ -182,7 +182,10 @@ static u_char fxp_cb_config_template[] = {
 struct fxp_ident {
 	u_int16_t	devid;
 	char 		*name;
+	int			warn;
 };
+
+#define UNTESTED 1
 
 /*
  * Claim various Intel PCI device identifiers for this driver.  The
@@ -191,28 +194,19 @@ struct fxp_ident {
  * them.
  */
 static struct fxp_ident fxp_ident_table[] = {
-#ifdef NOTUSED
-	/* currently untested */
-    { 0x1229,		"Intel Pro 10/100B/100+ Ethernet" },
-    { 0x2449,		"Intel Pro/100 Ethernet" },
-#endif
-    { 0x1209,		"Intel Embedded 10/100 Ethernet" },
-#ifdef NOTUSED
-	/* currently untested */
-    { 0x1029,		"Intel Pro/100 Ethernet" },
-#endif
-    { 0x1030,		"Intel Pro/100 Ethernet" },
-#ifdef NOTUSED
-	/* currently untested */
-    { 0x1031,		"Intel Pro/100 Ethernet" },
-    { 0x1032,		"Intel Pro/100 Ethernet" },
-    { 0x1033,		"Intel Pro/100 Ethernet" },
-    { 0x1034,		"Intel Pro/100 Ethernet" },
-    { 0x1035,		"Intel Pro/100 Ethernet" },
-    { 0x1036,		"Intel Pro/100 Ethernet" },
-    { 0x1037,		"Intel Pro/100 Ethernet" },
-    { 0x1038,		"Intel Pro/100 Ethernet" },
-#endif
+    { 0x1229,		"Intel Pro 10/100B/100+ Ethernet", UNTESTED },
+    { 0x2449,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1209,		"Intel Embedded 10/100 Ethernet", 0 },
+    { 0x1029,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1030,		"Intel Pro/100 Ethernet", 0 },
+    { 0x1031,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1032,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1033,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1034,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1035,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1036,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1037,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x1038,		"Intel Pro/100 Ethernet", UNTESTED },
     { 0,		NULL },
 };
 
@@ -473,8 +467,13 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		DBGLVL_PRINTK(2,"fxp_attach: find_devid returned %d "
 		      "and pci signature 0x%x\n",
 		      i,sc->pci_signature);
-        if (PCIB_ERR_SUCCESS == i)
+        if (PCIB_ERR_SUCCESS == i) {
+			if ( UNTESTED == fxp_ident_table[j].warn ) {
+				device_printf(dev,"WARNING: this chip version has NOT been reported to work under RTEMS yet.\n");
+				device_printf(dev,"         If it works OK, report it as tested in 'c/src/libchip/network/if_fxp.c'\n");
+			}
 			break;
+		}
 	  }			
 	}
 

@@ -204,12 +204,12 @@ extern void Wait_X_ms( unsigned int timeToWait );
 #define rtems_bsp_delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE
 
-inline void st_le32(volatile unsigned32 *addr, unsigned32 value)
+static inline void st_le32(volatile unsigned32 *addr, unsigned32 value)
 {
   *(addr)=value ;
 }
 
-inline unsigned32 ld_le32(volatile unsigned32 *addr)
+static inline unsigned32 ld_le32(volatile unsigned32 *addr)
 {
   return(*addr);
 }
@@ -2669,7 +2669,9 @@ elnk_init (void *arg)
          xl_miibus_writereg(sc, 0x18, MII_ANAR, ANAR_10 | ANAR_TX | ANAR_10_FD | ANAR_TX_FD );  /*  ANAR_T4 */
          xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_STARTNEG | BMCR_AUTOEN );
 
-         while( ((sr = xl_miibus_readreg(sc, 0x18, MII_BMSR)) & BMSR_ACOMP) == 0 ); 
+
+         for (i=0; ((sr = xl_miibus_readreg(sc, 0x18, MII_BMSR)) & BMSR_ACOMP) == 0 && i < 20; i++) 
+            DELAY(10000);
       }
 
 
@@ -2997,7 +2999,7 @@ elnk_stats (struct elnk_softc *sc)
       printf("          interrupts:%-9d       txcmp_ints:%-5d  avg_chain_len:%-4d\n",
              sc->xl_stats.device_interrupts,
              sc->xl_stats.txcomplete_ints,
-             (totalLengths / numLengths) );
+             numLengths ? (totalLengths / numLengths) : -1 );
    }
 
    printf("        carrier_lost:%-5d             sqe_errs:%-5d\n",   
@@ -3119,8 +3121,6 @@ struct el_boards
 {
       int pbus,pdev,pfun, vid, did, tindex;
 };
-
-
 
 /*
  * Attach an ELNK driver to the system

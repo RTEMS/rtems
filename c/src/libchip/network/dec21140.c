@@ -243,12 +243,12 @@ extern void Wait_X_ms( unsigned int timeToWait );
 #define rtems_bsp_delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE
 
-inline void st_le32(volatile unsigned32 *addr, unsigned32 value)
+static inline void st_le32(volatile unsigned32 *addr, unsigned32 value)
 {
   *(addr)=value ;
 }
 
-inline unsigned32 ld_le32(volatile unsigned32 *addr)
+static inline unsigned32 ld_le32(volatile unsigned32 *addr)
 {
   return(*addr);
 }
@@ -1061,7 +1061,10 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       if ( diag == PCIB_ERR_SUCCESS)
          printk( "DEC/Intel 21143 PCI network card found\n" );
       else
-         rtems_panic("DEC PCI network card not found !!\n");
+      {
+         printk("No DEC/Intel 21140/3 PCI network card found !!\n");
+         return 0;
+      }
    }
 #endif	
 #if defined(__PPC)
