@@ -32,7 +32,7 @@ int Timer_get_clicks_overhead()
 {
   uint64_t    clicks;
 
-  PPC_Set_timebase_register((uint64_t  ) 0);
+  PPC_Set_timebase_register((uint64_t) 0);
   clicks = PPC_Get_timebase_register();
   assert(clicks <= 0xffffffff);
   clicks_overhead = (unsigned) clicks;
@@ -50,7 +50,7 @@ void Timer_initialize()
    */
 
   if (clicks_overhead == 0) clicks_overhead = Timer_get_clicks_overhead();
-  PPC_Set_timebase_register((uint64_t  ) 0);
+  PPC_Set_timebase_register((uint64_t) 0);
 }
 
 
@@ -69,7 +69,7 @@ int Read_timer()
 
   assert( total64 <= 0xffffffff );  /* fits into a uint32_t   */
 
-  total = (uint32_t  ) total64;
+  total = (uint32_t) total64;
 
   if ( Timer_driver_Find_average_overhead == 1 )
     return total;          /* in "clicks" of the decrementer units */
