@@ -18,9 +18,9 @@
  * Send a command to the CPM RISC processer
  */
 
-void M360ExecuteRISC(rtems_unsigned16 command)
+void M360ExecuteRISC(uint16_t         command)
 {
-	rtems_unsigned16 sr;
+	uint16_t         sr;
 
 	m68k_disable_interrupts (sr);
 	while (m360.cr & M360_CR_FLG)

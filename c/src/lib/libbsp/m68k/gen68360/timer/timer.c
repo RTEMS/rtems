@@ -75,7 +75,7 @@ Timer_initialize (void)
 int
 Read_timer (void)
 {
-	return *(rtems_unsigned32 *)&m360.tcn1;
+	return *(uint32_t*)&m360.tcn1;
 }
 
 /*

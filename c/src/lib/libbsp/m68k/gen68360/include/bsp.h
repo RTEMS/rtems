@@ -86,8 +86,8 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
  */
 
 #define rtems_bsp_delay( microseconds ) \
-  { register rtems_unsigned32 _delay=(microseconds); \
-    register rtems_unsigned32 _tmp=123; \
+  { register uint32_t         _delay=(microseconds); \
+    register uint32_t         _tmp=123; \
     asm volatile( "0: \
                      nbcd      %0 ; \
                      nbcd      %0 ; \
@@ -122,7 +122,7 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 
 void bsp_cleanup( void );
 
-void M360ExecuteRISC( rtems_unsigned16 command );
+void M360ExecuteRISC( uint16_t         command );
 void *M360AllocateBufferDescriptors( int count );
 void *M360AllocateRiscTimers( int count );
 extern char M360DefaultWatchdogFeeder;
