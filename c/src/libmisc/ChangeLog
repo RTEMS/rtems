@@ -1,3 +1,8 @@
+2000-09-28	Joel Sherrill <joel@OARcorp.com>
+
+	* monitor/mon-driver.c: Accounted for addition of "_entry" to
+	fields in rtems_driver_address_table.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 	
 	* cpuuse/Makefile.am, dummy/Makefile.am, dumpbuf/Makefile.am,
