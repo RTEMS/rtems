@@ -1,0 +1,37 @@
+##
+## $Id$
+##
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+PGM = $(ARCH)/network.rel
+
+C_FILES = network.c
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+
+OBJS = $(C_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
+include $(top_srcdir)/../../../../../../automake/lib.am
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+
+$(PGM): $(OBJS)
+	$(make-rel)
+
+# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+
+if HAS_NETWORKING
+all-local: $(ARCH) $(OBJS) $(PGM)
+endif
+
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = network.c
+
+include $(top_srcdir)/../../../../../../automake/local.am

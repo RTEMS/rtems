@@ -1,3 +1,11 @@
+2000-12-11	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, configure.in, include/Makefile.am,
+	wrapup/Makefile.am: Updated to reflect addition of network driver
+	by  Franck Julien <FranckJ@cxr.fr>.
+	* include/m302_int.h, network/.cvsignore, network/Makefile.am,
+	network/network.c: New file.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

@@ -4,7 +4,12 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-BSP_PIECES = startup clock console timer
+# We only build the networking device driver if HAS_NETWORKING was defined
+if HAS_NETWORKING
+NETWORKING_DRIVER = network
+endif
+
+BSP_PIECES = startup clock console timer $(NETWORKING_DRIVER)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o))
