@@ -9,12 +9,15 @@
  *  FEATURES:
  *    + rudimentary statistics
  *    + forgiveness features 
+ *    + output in Texinfo format
+ *    + output in a form that a sibling MS-Word VBA program can format
  * 
  *  CHECKS PERFORMED:
  *    + unable to open file
  *    + unexpected end of file
  *    + line should have a colon
- *    + basic text (to right or below) associated with keyword improperly placed
+ *    + basic text (to right or below) associated with keyword
+ *      improperly placed
  *    + an "incomplete marker" is still in place
  *    + missing keywords within a subsection
  *    + duplicated keywords withing a subsection
@@ -2940,7 +2943,7 @@ void FormatToWord( void )
         _Chain_Insert( line->Node.previous, &new_line->Node );
         strcpy( new_line->Contents, "@Example = " );
 
-        do {
+        while ( !line->keyword ) {
           if ( strlen( line->Contents ) ) {
             new_line->keyword = line->keyword;
             new_line->format = line->format;
@@ -2959,7 +2962,7 @@ void FormatToWord( void )
             _Chain_Insert( line->Node.previous, &new_line->Node );
             strcpy( new_line->Contents, "@Example = " );
           }
-        } while ( !line->keyword );
+        }
 
         /* at this point line points to the next keyword */
         break;
@@ -3252,6 +3255,7 @@ int Validate_abstract_type(
   boolean       range_found = FALSE;
   boolean       members_found = FALSE;
   boolean       enumerated_found = FALSE;
+  boolean       no_range_or_members = FALSE;
   boolean       true_found = FALSE;
   boolean       false_found = FALSE;
   Line_Control *line;
@@ -3264,21 +3268,70 @@ int Validate_abstract_type(
       range_found = TRUE;
     else if ( line->keyword == MEMBERS ) {
       members_found = TRUE;
-    } else if ( line->keyword == TYPE || line->keyword == DERIVATION ) {
+    } else if ( line->keyword == TYPE ) {
       if ( strstr( line->Contents, "enumerated" ) || 
            strstr( line->Contents, "structure" ) )
         enumerated_found = TRUE;
+    } else if ( line->keyword == DERIVATION ) {
+      if ( strstr( line->Contents, "enumerated" ) || 
+           strstr( line->Contents, "structure" ) ) {
+        enumerated_found = TRUE;
+      } else if ( strstr( line->Contents, "handle" ) || 
+                  strstr( line->Contents, "array" ) || 
+                  strstr( line->Contents, "string" ) ) {
+        no_range_or_members = TRUE;
+      }
     }
   }
 
-  if ( !range_found && !members_found ) {
-    fprintf(
-       stderr,
-       "Neither range nor members keyword present in "
-         "subsection starting at line %d\n",
-       start->number
-     );
-     errors++;
+  if ( no_range_or_members ) {
+/* This code does not like:
+
+ABSTRACT TYPE: Times
+  DESCRIPTION:
+    This type specifies mode elapsed times.
+  VISIBILITY: public
+  DERIVATION: array of Elapsed_Seconds of Timeutil
+  RANGE: COMM - ENGAGE of Current_mode_t
+
+    if ( range_found ) {
+       fprintf(
+         stderr,
+         "Range should not be specified in subsection starting at line %d\n",
+         start->number
+       );
+       errors++;
+    }
+*/
+    if ( members_found ) {
+       fprintf(
+         stderr,
+         "Members should not be specified in subsection starting at line %d\n",
+         start->number
+       );
+       errors++;
+    }
+  } else {
+    if ( !range_found && !members_found ) {
+      fprintf(
+         stderr,
+         "Neither range nor members keyword present in "
+           "subsection starting at line %d\n",
+         start->number
+       );
+       errors++;
+    }
+
+    if ( !enumerated_found  && !range_found ) {
+      fprintf(
+         stderr,
+         "Type does not have range specified in "
+           "subsection starting at line %d\n",
+         start->number
+       );
+       errors++;
+    }
+
   }
 
   if ( !InsertTBDs ) {
@@ -3297,16 +3350,6 @@ int Validate_abstract_type(
     fprintf(
        stderr,
        "Enumerated type without list of members in "
-         "subsection starting at line %d\n",
-       start->number
-     );
-     errors++;
-  }
-
-  if ( !enumerated_found  && !range_found ) {
-    fprintf(
-       stderr,
-       "Type does not have range specified in "
          "subsection starting at line %d\n",
        start->number
      );

@@ -64,7 +64,18 @@ wtest:
 	rm -f $(BASE).txt
 	./$(PROG) -w -v -p "Turret Subsystem" -u "Turret Subsystem" $(BASE).d
 
+enum:
+	./$(PROG) -w -v -p "Magic Subsystem" \
+	    -u "Magic Subsystem" test_cases/enum.d
+	./$(PROG) -w -v -p "Magic Subsystem" \
+	    -u "Magic Subsystem" test_cases/enumbad.d
+	
+avdas:
+	./$(PROG) -v -p "Magic Subsystem" \
+	    -u "Magic Subsystem" test_cases/avdas.d
+	
 clean:
 	rm -f *.o $(PROG) *.txt core *.html $(PROJECT) Drive.texi
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
+	rm -f test_cases/*.txt test_cases/*.texi
 
