@@ -1,3 +1,9 @@
+2003-08-11      Thomas Doerfler<Thomas.Doerfler@imd-systems.de>
+
+        PR 369/filesystem
+        * runtest: Add sample application to show the use of the
+        DOSFS functions
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
