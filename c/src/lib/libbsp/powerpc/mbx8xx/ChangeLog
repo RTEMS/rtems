@@ -1,3 +1,9 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/p_clock.c, include/bsp.h, include/coverhd.h,
+	startup/bspstart.c, startup/bspstart.c.nocache, startup/setvec.c,
+	startup/start.S: Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
