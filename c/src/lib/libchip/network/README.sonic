@@ -1,0 +1,21 @@
+#
+#  $Id$
+#
+
+This SONIC driver does not make any attempt to support the SONIC chip
+in any of the following modes:
+
+  + 16-bit
+  + little endian
+  
+It does not attempt to handle SONIC's older than Revision C.  There is
+a bug in chips before that revision that must be handled in the driver.
+
+The configuration table should be discussed here but if you look in the
+include file for the sonic, it is reasonably obvious. :)
+
+The performance impact of transforming this driver into libchip format
+was minimal.
+
+The powerpc/dmv177 BSP uses this driver and can serve as an example 
+configuration table.

@@ -1,62 +1,33 @@
 /*
- *******************************************************************
- *******************************************************************
- **                                                               **
- **       RTEMS NETWORK DRIVER FOR NATIONAL DP83932 `SONIC'       **
- **         SYSTEMS-ORIENTED NETWORK INTERFACE CONTROLLER         **
- **                                                               **
- *******************************************************************
- *******************************************************************
- */
-
-/*
- * $Revision$   $Date$   $Author$
- * $State$
- * $Id$
- */
-
-/*
+ *       RTEMS NETWORK DRIVER FOR NATIONAL DP83932 `SONIC'
+ *         SYSTEMS-ORIENTED NETWORK INTERFACE CONTROLLER
+ *
+ *                     REUSABLE CHIP DRIVER
+ *
  * References:
- * 1) DP83932C-20/25/33 MHz SONIC(TM) Systems-Oriented Network Interface
- *    Controller data sheet.  TL/F/10492, RRD-B30M105, National Semiconductor,
- *    1995.
  *
- * 2) Software Driver Programmer's Guide for the DP83932 SONIC(TM),
- *    Application Note 746, Wesley Lee and Mike Lui, TL/F/11140, 
- *    RRD-B30M75, National Semiconductor, March, 1991.
+ *  1) DP83932C-20/25/33 MHz SONIC(TM) Systems-Oriented Network Interface
+ *     Controller data sheet.  TL/F/10492, RRD-B30M105, National Semiconductor,
+ *     1995.
  *
- * 3) SVME/DMV-171 Single Board Computer Documentation Package, #805905,
- *    DY 4 Systems Inc., Kanata, Ontario, September, 1996.
+ *  2) Software Driver Programmer's Guide for the DP83932 SONIC(TM),
+ *     Application Note 746, Wesley Lee and Mike Lui, TL/F/11140,
+ *     RRD-B30M75, National Semiconductor, March, 1991.
+ *
+ *  COPYRIGHT (c) 1989-1997.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
  */
 
-#include <bsp.h>   /* XXX JRS changed order */
-#include "sonic.h"
+#include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
-
-/***** CONFIGURATION ****/
-typedef void (*sonic_write_register_t)(
-  void       *base,
-  unsigned32  regno,
-  unsigned32  value
-);
-
-typedef unsigned32 (*sonic_read_register_t)(
-  void       *base,
-  unsigned32  regno
-);
-
-typedef struct {
-  unsigned32              base_address;
-  unsigned32              vector;
-  unsigned32              dcr_value;
-  unsigned32              dc2_value;
-  unsigned32              tda_count;
-  unsigned32              rda_count;
-  sonic_write_register_t  write_register;
-  sonic_read_register_t   read_register;
-} sonic_configuration_t;
-
-/***** CONFIGURATION ****/
+#include <libchip/sonic.h>
 
 #include <stdio.h>
 
@@ -73,6 +44,12 @@ typedef struct {
 
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
+
+/*
+ *  XXX fix this 
+ */
+
+void *set_vector(void *, unsigned32, unsigned32);
 
 /*
  * Debug levels
@@ -106,12 +83,6 @@ typedef struct {
 #if (SONIC_DEBUG & SONIC_DEBUG_DUMP_MBUFS)
 #include <rtems/dumpbuf.h>
 #endif
-
-/*
- * XXX
- */
-
-#include <dmv170.h>
 
 /*
  *  Use the top line if you want more symbols.
@@ -1499,7 +1470,7 @@ sonic_ioctl (struct ifnet *ifp, int command, caddr_t data)
  */
 
 int
-rtems_sonic_driver_attach_chip (
+rtems_sonic_driver_attach (
   struct rtems_bsdnet_ifconfig *config,
   sonic_configuration_t *chip
 )
@@ -1656,106 +1627,3 @@ char SONIC_Reg_name[64][6]= {
     "DCR2"        /* 0x3F */
 };
 #endif
-
-void dmv177_sonic_write_register(
-  void       *base,
-  unsigned32  regno,
-  unsigned32  value
-)
-{
-  volatile unsigned32 *p = base;
-
-#if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
-  printf( "%p Write 0x%04x to %s (0x%02x)\n",
-      &p[regno], value, SONIC_Reg_name[regno], regno );
-  fflush( stdout );
-#endif
-  p[regno] = value;
-}
-
-unsigned32 dmv177_sonic_read_register(
-  void       *base,
-  unsigned32  regno
-)
-{
-  volatile unsigned32 *p = base;
-  unsigned32           value;
-
-  value = p[regno];
-#if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
-  printf( "%p Read 0x%04x from %s (0x%02x)\n",
-      &p[regno], value, SONIC_Reg_name[regno], regno );
-  fflush( stdout );
-#endif
-  return value;
-}
-/********  DMV177 SPECIFIC INFORMATION ***********/
-/*
- * Default sizes of transmit and receive descriptor areas
- */
-#define RDA_COUNT     20 /* 20 */
-#define TDA_COUNT     20 /* 10 */
-
-/*
- * Default device configuration register values
- * Conservative, generic values.
- * DCR:
- *      No extended bus mode
- *      Unlatched bus retry
- *      Programmable outputs unused
- *      Asynchronous bus mode
- *      User definable pins unused
- *      No wait states (access time controlled by DTACK*)
- *      32-bit DMA
- *      Empty/Fill DMA mode
- *      Maximum Transmit/Receive FIFO
- * DC2:
- *      Extended programmable outputs unused
- *      Normal HOLD request
- *      Packet compress output unused
- *      No reject on CAM match
- */
-#define SONIC_DCR \
-   (DCR_DW32 | DCR_WAIT0 | DCR_PO0 | DCR_PO1  | DCR_RFT24 | DCR_TFT28)
-#ifndef SONIC_DCR
-# define SONIC_DCR (DCR_DW32 | DCR_TFT28)
-#endif
-#ifndef SONIC_DC2
-# define SONIC_DC2 (0)
-#endif
-
-/*
- * Default location of device registers
- */
-#ifndef SONIC_BASE_ADDRESS
-# define SONIC_BASE_ADDRESS 0xF3000000
-# warning "Using default SONIC_BASE_ADDRESS."
-#endif
-
-/*
- * Default interrupt vector
- */
-#ifndef SONIC_VECTOR
-# define SONIC_VECTOR 1
-# warning "Using default SONIC_VECTOR."
-#endif
-
-sonic_configuration_t dmv177_sonic_configuration = {
-  SONIC_BASE_ADDRESS,        /* base address */ 
-  SONIC_VECTOR,              /* vector number */ 
-  SONIC_DCR,                 /* DCR register value */
-  SONIC_DC2,                 /* DC2 register value */
-  TDA_COUNT,                 /* number of transmit descriptors */
-  RDA_COUNT,                 /* number of receive descriptors */
-  dmv177_sonic_write_register,
-  dmv177_sonic_read_register
-};
-
-int rtems_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config)
-{
-  return rtems_sonic_driver_attach_chip ( config, &dmv177_sonic_configuration );
-  
-}
-
-/********  DMV177 SPECIFIC INFORMATION ***********/
-

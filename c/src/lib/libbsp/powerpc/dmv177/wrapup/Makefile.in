@@ -9,7 +9,7 @@ RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 # We only build the networking device driver if HAS_NETWORKING was defined
-NETWORKING_DRIVER_yes_V = sonic
+NETWORKING_DRIVER_yes_V = dmvsonic
 NETWORKING_DRIVER = $(NETWORKING_DRIVER_$(HAS_NETWORKING)_V)
 
 # pieces specific to this BSP

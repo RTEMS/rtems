@@ -1,24 +1,58 @@
 /*
- ******************************************************************.
- *******************************************************************
- **                                                               **
- **           DECLARATIONS FOR NATIONAL DP83932 `SONIC'           **
- **         SYSTEMS-ORIENTED NETWORK INTERFACE CONTROLLER         **
- **                                                               **
- *******************************************************************
- *******************************************************************
- */
-
-/*
- * $Revision$   $Date$   $Author$
- * $State$
- * $Id$
+ *       RTEMS NETWORK DRIVER FOR NATIONAL DP83932 `SONIC'
+ *         SYSTEMS-ORIENTED NETWORK INTERFACE CONTROLLER
+ *
+ *                REUSABLE CHIP DRIVER CONFIGURATION
+ *
+ * References:
+ *
+ *  1) DP83932C-20/25/33 MHz SONIC(TM) Systems-Oriented Network Interface
+ *     Controller data sheet.  TL/F/10492, RRD-B30M105, National Semiconductor,
+ *     1995.
+ *
+ *  2) Software Driver Programmer's Guide for the DP83932 SONIC(TM),
+ *     Application Note 746, Wesley Lee and Mike Lui, TL/F/11140,
+ *     RRD-B30M75, National Semiconductor, March, 1991.
+ *
+ *  COPYRIGHT (c) 1989-1997.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
  */
 
 #ifndef _SONIC_DP83932_
 #define _SONIC_DP83932_
 
-#include <bsp.h>
+/*
+ *  Configuration Information
+ */
+
+typedef void (*sonic_write_register_t)(
+  void       *base,
+  unsigned32  regno,
+  unsigned32  value
+);
+
+typedef unsigned32 (*sonic_read_register_t)(
+  void       *base,
+  unsigned32  regno
+);
+
+typedef struct {
+  unsigned32              base_address;
+  unsigned32              vector;
+  unsigned32              dcr_value;
+  unsigned32              dc2_value;
+  unsigned32              tda_count;
+  unsigned32              rda_count;
+  sonic_write_register_t  write_register;
+  sonic_read_register_t   read_register;
+} sonic_configuration_t;
 
 /*
  ******************************************************************
@@ -370,4 +404,13 @@ typedef volatile CamDescriptor_t *CamDescriptorPointer_t;
                                     /*   and the driver can process it */
 #define RDA_FREE            0xFFFF  /* SONIC can use it */
   
+/*
+ *  Attatch routine
+ */
+
+int rtems_sonic_driver_attach (
+  struct rtems_bsdnet_ifconfig *config,
+  sonic_configuration_t *chip
+);
+
 #endif /* _SONIC_DP83932_ */

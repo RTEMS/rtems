@@ -11,4 +11,8 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-SUB_DIRS=rtc serial
+# We only build the networking chip drivers if HAS_NETWORKING was defined
+LIBNETWORKING_yes_V = network
+LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
+
+SUB_DIRS=rtc serial $(LIBNETWORKING)

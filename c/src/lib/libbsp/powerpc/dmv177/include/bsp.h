@@ -48,9 +48,9 @@ extern "C" {
  * Network driver configuration
  */
 struct rtems_bsdnet_ifconfig;
-extern int rtems_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config);
+int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   "sonic1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_sonic_driver_attach
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_dmv177_sonic_driver_attach
 
 
 /*
