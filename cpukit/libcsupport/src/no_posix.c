@@ -53,10 +53,14 @@ int kill( pid_t pid, int sig )
   return 0;
 }
 
-int _kill_r( pid_t pid, int sig )
+#if defined(RTEMS_NEWLIB)
+#include <sys/reent.h>
+
+int _kill_r( struct _reent *ptr, pid_t pid, int sig )
 {
   return 0;
 }
+#endif
 #endif
 
 int __kill( pid_t pid, int sig )
