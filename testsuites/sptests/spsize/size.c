@@ -26,7 +26,6 @@
 #include <rtems/extension.h>
 #include <rtems/fatal.h>
 #include <rtems/init.h>
-#include <rtems/intthrd.h>
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 #include <rtems/io.h>
@@ -87,9 +86,9 @@
 #define PER_PROXY     (sizeof (Thread_Proxy_control))
 
 #if (CPU_ALL_TASKS_ARE_FP == TRUE)
-#define SYSTEM_INITIALIZATION_FP (sizeof( Context_Control_fp ))
+#define MPCI_RECEIVE_SERVER_FP (sizeof( Context_Control_fp ))
 #else
-#define SYSTEM_INITIALIZATION_FP 0
+#define MPCI_RECEIVE_SERVER_FP 0
 #endif
 
 #if (CPU_IDLE_TASK_IS_FP == TRUE)
@@ -99,10 +98,10 @@
 #endif
 
 #define SYSTEM_TASKS  \
-    (INTERNAL_THREADS_IDLE_THREAD_STACK_SIZE + \
-     INTERNAL_THREADS_SYSTEM_INITIALIZATION_THREAD_STACK_SIZE + \
+    (THREAD_IDLE_STACK_SIZE + \
+     MPCI_RECEIVE_SERVER_STACK_SIZE + \
      (2*sizeof(Thread_Control))) + \
-     SYSTEM_INITIALIZATION_FP + \
+     MPCI_RECEIVE_SERVER_FP + \
      SYSTEM_IDLE_FP
 
 #define rtems_unsigned32 unsigned32
@@ -163,10 +162,10 @@ int initialized = 0;
  *    + Rate Monotonic Manager
  *      - per Manager Object Data
  *    + Internal Threads Handler
- *      - SYSI Thread TCB
+ *      - MPCI Receive Server Thread TCB
  *      - IDLE Thread TCB
- *      - SYSI Thread stack
- *      - SYSI Thread FP area (if CPU requires this)
+ *      - MPCI Receive Server Thread stack
+ *      - MPCI Receive Server Thread FP area (if CPU requires this)
  *      - IDLE Thread stack
  *      - IDLE Thread FP area (if CPU requires this)
  *
@@ -175,7 +174,7 @@ int initialized = 0;
  *  The following calculates the overhead needed by RTEMS from the
  *  Workspace Area.
  */
-sys_req = SYSTEM_TASKS     +     /* SYSI and IDLE */
+sys_req = SYSTEM_TASKS     +     /* MPCI Receive Server and IDLE */
           NAME_PTR_SIZE    +     /* Task Overhead */
           READYCHAINS_SIZE +     /* Ready Chains */
           NAME_PTR_SIZE    +     /* Timer Overhead */
@@ -230,13 +229,7 @@ uninitialized =
 
 /*interr.h*/    (sizeof Internal_errors_What_happened)    +
 
-/*inthrdmp.h*/  0                                         +
-
 /*intr.h*/      0                                         +
-
-/*intthrd.h*/   (sizeof _Internal_threads_Information)    +
-                (sizeof _Internal_threads_System_initialization_thread) +
-                (sizeof _Internal_threads_Idle_thread)    +
 
 /*io.h*/        (sizeof _IO_Number_of_drivers)            +
                 (sizeof _IO_Driver_address_table)         +
@@ -323,6 +316,8 @@ uninitialized =
                 (sizeof _Thread_Executing)                +
                 (sizeof _Thread_Heir)                     +
                 (sizeof _Thread_Allocated_fp)             +
+                (sizeof _Thread_Internal_information)     +
+                (sizeof _Thread_Idle)                     +
 
 /*threadmp.h*/  (sizeof _Thread_MP_Receive)               +
                 (sizeof _Thread_MP_Active_proxies)        +
