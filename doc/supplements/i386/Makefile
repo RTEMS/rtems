@@ -23,7 +23,7 @@ FILES= $(PROJECT).texi \
 all:
 
 info: c_i386
-	cp c_$(PROJECT) c_$(PROJECT)-* $(INFO_INSTALL)
+	cp $(wildcard c_$(PROJECT) c_$(PROJECT)-*) $(INFO_INSTALL)
 
 c_i386: $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
