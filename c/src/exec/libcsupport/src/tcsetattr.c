@@ -32,9 +32,18 @@ int tcsetattr(
   struct termios *tp
 )
 {
-  if ( opt != TCSANOW )
+  switch (opt) {
+  default:
     set_errno_and_return_minus_one( ENOTSUP );
 
-  return ioctl( fd, RTEMS_IO_SET_ATTRIBUTES, tp );
+  case TCSADRAIN:
+    if (ioctl( fd, RTEMS_IO_TCDRAIN, NULL ) < 0)
+    	return -1;
+    /*
+     * Fall through to....
+     */
+  case TCSANOW:
+    return ioctl( fd, RTEMS_IO_SET_ATTRIBUTES, tp );
+  }
 }
 #endif

@@ -1,5 +1,5 @@
 /*
- *  tcsetattr() - POSIX 1003.1b 7.2.1 - Get and Set State
+ *  tcflush() - POSIX 1003.1b 7.2.2 - Line Control Functions
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -24,26 +24,10 @@
 int ioctl();
 
 #include <rtems/libio.h>
-#include "libio_.h"
 
-int tcsetattr(
-  int             fd,
-  int             opt,
-  struct termios *tp
-)
+int tcflush (int fd, int queue)
 {
-  switch (opt) {
-  default:
-    set_errno_and_return_minus_one( ENOTSUP );
-
-  case TCSADRAIN:
-    if (ioctl( fd, RTEMS_IO_TCDRAIN, NULL ) < 0)
-    	return -1;
-    /*
-     * Fall through to....
-     */
-  case TCSANOW:
-    return ioctl( fd, RTEMS_IO_SET_ATTRIBUTES, tp );
-  }
+  return 0;
 }
+
 #endif
