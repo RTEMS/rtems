@@ -44,7 +44,7 @@ noinst_DATA += startup$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += clock.rel
 CLEANFILES += clock.rel
-clock_rel_SOURCES = clock/chkinit.c
+clock_rel_SOURCES = clock/ckinit.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

@@ -1,5 +1,9 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Fix typo.
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
 	spurious/Makefile.am, startup/Makefile.am, timer/Makefile.am,
 	wrapup/Makefile.am.
