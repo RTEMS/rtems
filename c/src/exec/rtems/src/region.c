@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifdef RTEMS_REGION_FREE_SHRED_PATTERN
+#include <string.h>
+#endif
+
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
@@ -450,6 +454,9 @@ rtems_status_code rtems_region_return_segment(
   Thread_Control          *the_thread;
   Objects_Locations        location;
   void                   **the_segment;
+#ifdef RTEMS_SHRED_ON_FREE
+  unsigned32               size;
+#endif
   int                      status;
 
   the_region = _Region_Get( id, &location );
@@ -464,6 +471,15 @@ rtems_status_code rtems_region_return_segment(
     case OBJECTS_LOCAL:
 
       _Region_Debug_Walk( the_region, 3 );
+
+#ifdef RTEMS_REGION_FREE_SHRED_PATTERN
+      if ( _Heap_Size_of_user_area( &the_region->Memory, segment, size ) ) {
+        memset(segment, (RTEMS_REGION_FREE_SHRED_BYTE & 0xFF), size);
+      } else {
+        _Thread_Enable_dispatch();
+        return RTEMS_INVALID_ADDRESS;
+      }
+#endif
 
       status = _Region_Free_segment( the_region, segment );
 
