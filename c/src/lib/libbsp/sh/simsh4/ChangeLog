@@ -1,3 +1,10 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, console/console.c, include/bsp.h, include/coverhd.h,
+	include/ramdisk.h, start/start.S, startup/bspstart.c,
+	startup/hw_init.c, startup/linkcmds, startup/linkcmds-le.coff,
+	timer/timer.c, tools/runtest.in: URL for license changed.
+
 2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add tools to SUBDIRS.
