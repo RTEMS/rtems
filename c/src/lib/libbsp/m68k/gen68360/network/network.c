@@ -852,19 +852,26 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	struct scc_softc *sc;
 	struct ifnet *ifp;
 	int mtu;
-	int i;
+	int unitNumber;
+	char *unitName;
 
 	/*
-	 * Find a free driver
+ 	 * Parse driver name
 	 */
-	for (i = 0 ; i < NSCCDRIVER ; i++) {
-		sc = &scc_softc[i];
-		ifp = &sc->arpcom.ac_if;
-		if (ifp->if_softc == NULL)
-			break;
+	if ((unitNumber = rtems_bsdnet_parse_driver_name (config, &unitName)) < 0)
+		return 0;
+	
+	/*
+	 * Is driver free?
+	 */
+	if ((unitNumber <= 0) || (unitNumber > NSCCDRIVER)) {
+		printf ("Bad SCC unit number.\n");
+		return 0;
 	}
-	if (i >= NSCCDRIVER) {
-		printf ("Too many SCC drivers.\n");
+	sc = &scc_softc[unitNumber - 1];
+	ifp = &sc->arpcom.ac_if;
+	if (ifp->if_softc != NULL) {
+		printf ("Driver already in use.\n");
 		return 0;
 	}
 
@@ -930,8 +937,8 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	 * Set up network interface values
 	 */
 	ifp->if_softc = sc;
-	ifp->if_unit = i + 1;
-	ifp->if_name = "scc";
+	ifp->if_unit = unitNumber;
+	ifp->if_name = unitName;
 	ifp->if_mtu = mtu;
 	ifp->if_init = scc_init;
 	ifp->if_ioctl = scc_ioctl;

@@ -882,3 +882,46 @@ rtems_bsdnet_initialize_network (void)
 		(*rtems_bsdnet_config.bootp)();
 	return 0;
 }
+
+/*
+ * Parse a network driver name into a name and a unit number
+ */
+int
+rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char **namep)
+{
+	const char *cp = config->name;
+	char c;
+	int unitNumber = 0;
+
+	if (cp == NULL) {
+		printf ("No network driver name");
+		return -1;
+	}
+	while ((c = *cp++) != '\0') {
+		if ((c >= '0') && (c <= '9')) {
+			int len = cp - config->name - 1;
+			if ((len < 2) || (len > 50))
+				break;
+			for (;;) {
+				unitNumber = (unitNumber * 10) + (c - '0');
+				c = *cp++;
+				if (c == '\0') {
+					char *unitName = malloc (len);
+					if (unitName == NULL) {
+						printf ("No memory");
+						return -1;
+					}
+					strncpy (unitName, config->name, len - 1);
+					unitName[len-1] = '\0';
+					*namep = unitName;
+					return unitNumber;
+				}
+				if ((c < '0') || (c > '9'))
+					break;
+			}
+			break;
+		}
+	}
+	printf ("Bad network driver name `%s'", config->name);
+	return -1;
+}
