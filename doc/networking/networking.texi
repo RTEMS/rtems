@@ -89,7 +89,7 @@ This is the online version of the RTEMS Network Supplement.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, Testing the Driver Throughput, Top
+@node Command and Variable Index, Concept Index, Throughput, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.

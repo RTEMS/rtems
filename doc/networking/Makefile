@@ -13,6 +13,8 @@ include ../Make.config
 
 REPLACE=../tools/word-replace
 
+BMENU+= -c
+
 all: html info ps
 
 dirs:
@@ -55,12 +57,12 @@ driver.texi: driver.t Makefile
 	   -n "Using Networking in an RTEMS Application" ${*}.t
 
 networkapp.texi: networkapp.t Makefile
-	$(BMENU) -p " Writing RTEMS Network Device Drivers Write Your Driver Statistic-Printing Function" \
+	$(BMENU) -p " Write Your Driver Statistic-Printing Function" \
 	   -u "Top" \
 	   -n "Testing the Driver" ${*}.t
 
 testing.texi: testing.t Makefile
-	$(BMENU) -p "Using Networking in an RTEMS Application Network Statistics" \
+	$(BMENU) -p "Network Statistics" \
 	   -u "Top" \
 	   -n "Command and Variable Index" ${*}.t
 
