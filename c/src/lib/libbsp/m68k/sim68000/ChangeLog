@@ -1,3 +1,8 @@
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* start/start.S: Added space for vectors on CPU32 configuration.
+	* startup/bspstart.c: Fixed typo.
+
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Set _VBR to 0 to indicate that the vectors are
