@@ -18,6 +18,7 @@
 
 #define _MC68681_MULTIPLIER 2
 #define _MC68681_NAME(_X) _X##_2
+#define _MC68681_TYPE unsigned8
 
 #include "mc68681_reg.c"
 

@@ -36,7 +36,7 @@ unsigned8 _MC68681_NAME(mc68681_get_register)(
   unsigned8   ucRegNum
 )
 {
-  _Z85C30_TYPE *port;
+  _MC68681_TYPE *port;
 
   port = CALCULATE_REGISTER_ADDRESS( ulCtrlPort, ucRegNum );
 
@@ -53,7 +53,7 @@ void  _MC68681_NAME(mc68681_set_register)(
   unsigned8   ucData
 )
 {
-  _Z85C30_TYPE *port;
+  _MC68681_TYPE *port;
 
   port = CALCULATE_REGISTER_ADDRESS( ulCtrlPort, ucRegNum );
 
