@@ -39,9 +39,13 @@ extern "C" {
  */
 
 typedef enum {
-  RATE_MONOTONIC_INACTIVE,  /* off chain, never initialized */
-  RATE_MONOTONIC_ACTIVE,    /* on chain, running continuously */
-  RATE_MONOTONIC_EXPIRED    /* off chain, will be reset by next rm_period */
+  RATE_MONOTONIC_INACTIVE,               /* off chain, never initialized */
+  RATE_MONOTONIC_OWNER_IS_BLOCKING,      /* on chain, owner is blocking on it */
+  RATE_MONOTONIC_ACTIVE,                 /* on chain, running continuously */
+  RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING, /* on chain, expired while owner was */
+                                         /*   was blocking on it */
+  RATE_MONOTONIC_EXPIRED                 /* off chain, will be reset by next */
+                                         /*   rtems_rate_monotonic_period */
 }   Rate_Monotonic_Period_states;
 
 /*
@@ -190,20 +194,6 @@ STATIC INLINE void _Rate_monotonic_Free (
 STATIC INLINE Rate_monotonic_Control *_Rate_monotonic_Get (
   Objects_Id         id,
   Objects_Locations *location
-);
-
-/*
- *  _Rate_monotonic_Set_state
- *
- *  DESCRIPTION:
- *
- *  This function blocks the calling task so that it is waiting for
- *  a period to expire.  It returns TRUE if the task was successfully
- *  blocked, and FALSE otherwise.
- */
-
-boolean _Rate_monotonic_Set_state(
-  Rate_monotonic_Control *the_period
 );
 
 /*

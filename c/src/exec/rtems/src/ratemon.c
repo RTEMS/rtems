@@ -233,9 +233,11 @@ rtems_status_code rtems_rate_monotonic_period(
   rtems_interval    length
 )
 {
-  Rate_monotonic_Control *the_period;
-  Objects_Locations       location;
-  rtems_status_code       return_value;
+  Rate_monotonic_Control        *the_period;
+  Objects_Locations              location;
+  rtems_status_code              return_value;
+  Rate_Monotonic_Period_states   local_state;
+  ISR_Level                      level;
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
@@ -268,8 +270,10 @@ rtems_status_code rtems_rate_monotonic_period(
         return( return_value );
       }
 
+      _ISR_Disable( level );
       switch ( the_period->state ) {
         case RATE_MONOTONIC_INACTIVE:
+          _ISR_Enable( level );
           the_period->state = RATE_MONOTONIC_ACTIVE;
           _Watchdog_Initialize(
             &the_period->Timer,
@@ -282,86 +286,56 @@ rtems_status_code rtems_rate_monotonic_period(
           return RTEMS_SUCCESSFUL;
 
         case RATE_MONOTONIC_ACTIVE:
-/* following is and could be a critical section problem */
-          _Thread_Executing->Wait.id  = the_period->Object.id;
-          if ( _Rate_monotonic_Set_state( the_period ) ) {
-            _Thread_Enable_dispatch();
-            return RTEMS_SUCCESSFUL;
-          }
-         /* has expired -- fall into next case */
+          /*
+           *  This tells the _Rate_monotonic_Timeout that this task is
+           *  in the process of blocking on the period.
+           */
+
+          the_period->state = RATE_MONOTONIC_OWNER_IS_BLOCKING;
+          _ISR_Enable( level );
+
+          _Thread_Executing->Wait.id = the_period->Object.id;
+          _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_PERIOD );
+          
+          /*
+           *  Did the watchdog timer expire while we were actually blocking 
+           *  on it?
+           */
+
+          _ISR_Disable( level );
+            local_state = the_period->state;
+            the_period->state = RATE_MONOTONIC_ACTIVE;
+          _ISR_Enable( level );
+
+          /*
+           *  If it did, then we want to unblock ourself and continue as
+           *  if nothing happen.  The period was reset in the timeout routine.
+           */
+
+          if ( local_state == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING )
+            _Thread_Clear_state( _Thread_Executing, STATES_WAITING_FOR_PERIOD );
+
+          _Thread_Enable_dispatch();
+          return RTEMS_SUCCESSFUL;
+          break;
+
         case RATE_MONOTONIC_EXPIRED:
+          _ISR_Enable( level );
           the_period->state = RATE_MONOTONIC_ACTIVE;
           _Watchdog_Insert_ticks( &the_period->Timer, length );
           _Thread_Enable_dispatch();
           return RTEMS_TIMEOUT;
+
+        case RATE_MONOTONIC_OWNER_IS_BLOCKING:
+        case RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING:
+          /*
+           *  These should never happen.
+           */
+          break;
       }
   }
 
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
-}
-
-/*PAGE
- *
- * _Rate_monotonic_Set_state
- *
- * This kernel routine sets the STATES_WAITING_FOR_PERIOD state in
- * the running thread's tcb if the specified period has not expired.
- * The ready chain is adjusted if necessary.
- *
- * Input parameters:
- *   the_period - pointer to period control block
- *
- * Output parameters:
- *   TRUE  - if blocked successfully for period
- *   FALSE - if period has expired
- *
- *  INTERRUPT LATENCY:
- *    delete node
- *    priority map
- *    select heir
- */
-
-boolean _Rate_monotonic_Set_state(
-Rate_monotonic_Control *the_period
-)
-{
-  Thread_Control *executing;
-  Chain_Control  *ready;
-  ISR_Level              level;
-  States_Control         old_state;
-
-  executing = _Thread_Executing;
-  ready     = executing->ready;
-  _ISR_Disable( level );
-
-  old_state = executing->current_state;
-
-  if ( _Rate_monotonic_Is_expired( the_period ) ) {
-    _ISR_Enable( level );
-    return( FALSE );
-  }
-
-  executing->current_state =
-             _States_Set( STATES_WAITING_FOR_PERIOD, old_state );
-
-  if ( _States_Is_ready( old_state ) ) {
-    if ( _Chain_Has_only_one_node( ready ) ) {
-      _Chain_Initialize_empty( ready );
-      _Priority_Remove_from_bit_map( &executing->Priority_map );
-      _ISR_Flash( level );
-    } else {
-      _Chain_Extract_unprotected( &executing->Object.Node );
-      _ISR_Flash( level );
-    }
-
-    if ( _Thread_Is_heir( executing ) )
-      _Thread_Calculate_heir();
-
-    _Context_Switch_necessary = TRUE;
-  }
-
-  _ISR_Enable( level );
-  return( TRUE );
 }
 
 /*PAGE
@@ -385,7 +359,7 @@ void _Rate_monotonic_Timeout(
 )
 {
   Rate_monotonic_Control *the_period;
-  Objects_Locations              location;
+  Objects_Locations       location;
   Thread_Control         *the_thread;
 
   the_period = _Rate_monotonic_Get( id, &location );
@@ -399,8 +373,10 @@ void _Rate_monotonic_Timeout(
             the_thread->Wait.id == the_period->Object.id ) {
         _Thread_Unblock( the_thread );
         _Watchdog_Reset( &the_period->Timer );
-      }
-      else
+      } else if ( the_period->state == RATE_MONOTONIC_OWNER_IS_BLOCKING ) {
+        the_period->state = RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING;
+        _Watchdog_Reset( &the_period->Timer );
+      } else
         the_period->state = RATE_MONOTONIC_EXPIRED;
       _Thread_Unnest_dispatch();
       break;
