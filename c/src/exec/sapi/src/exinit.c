@@ -96,7 +96,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _ISR_Disable( bsp_level );
 
-  if ( cpu_table == NULL )
+  if ( configuration_table == NULL )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       TRUE,
