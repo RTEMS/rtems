@@ -42,6 +42,12 @@ int __rtems_fstat(int _fd, struct stat* _sbuf)
 
   /*
    * For now assume stdin/stdout/stderr are always a TTY line
+   *
+   *  From Eric Norum:
+   *
+   *  The `fix' is not complete.  It still doesn't properly handle
+   *  file descriptors for any files/devices other  than the console
+   *  serial lines.....
    */
   if (_fd <= 2) {
     _sbuf->st_mode = S_IFCHR;
