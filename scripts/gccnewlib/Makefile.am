@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 MKGCCNEWLIBSPEC = $(SHELL) $(top_builddir)/mkgccnewlibspec
 

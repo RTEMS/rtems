@@ -1,10 +1,10 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT
+AC_INIT([rtems-scripts],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([binutils])
 AC_PREFIX_DEFAULT([/opt/rtems])
-AM_INIT_AUTOMAKE(rtems-scripts,20010516,no)
+AM_INIT_AUTOMAKE([no-define foreign 1.6])
 
 AC_CANONICAL_HOST
 
