@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* console/conscfg.c, include/bsp.h, scv64/scv64.c, startup/bspstart.c,
+	tod/todcfg.c: Removed incorrect statement about copyright assignment.
+
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 445/bsps
