@@ -1,3 +1,7 @@
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* vectors/vectors.S: Include <asm.h>.
+
 2001-04-08	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Per PR170, PR171, and PR172 add .eh_frame 
