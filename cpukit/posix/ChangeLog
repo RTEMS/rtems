@@ -1,3 +1,8 @@
+2004-05-21  Joel Sherrill <joel@OARcorp.com>
+
+	PR 629/rtems
+	* src/mqueuecreatesupp.c: Return EINVAL is mq_maxmsg is <= 0, not <.
+
 2004-02-26	Joel Sherrill <joel@OARcorp.com>
 
 	PR 582/core
