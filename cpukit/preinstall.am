@@ -127,14 +127,16 @@ $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
+if RTEMS_PROVIDES_STDINT_H
 $(PROJECT_INCLUDE)/stdint.h: libcsupport/include/stdint.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/stdint.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
-
+endif
+if RTEMS_PROVIDES_INTTYPES_H
 $(PROJECT_INCLUDE)/inttypes.h: libcsupport/include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/inttypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
-
+endif
 $(PROJECT_INCLUDE)/tar.h: libcsupport/include/tar.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tar.h
