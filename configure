@@ -1103,8 +1103,8 @@ if test "${enable_gmake_print_directory+set}" = set; then
   enableval="$enable_gmake_print_directory"
   \
 case "${enableval}" in
-  yes) RTEMS_USE_OWN_PDIR=yes ;;
-  no) RTEMS_USE_OWN_PDIR=no ;;
+  yes) RTEMS_USE_OWN_PDIR=no ;;
+  no) RTEMS_USE_OWN_PDIR=yes ;;
   *)  { echo "configure: error: bad value ${enableval} for gmake-print-directory option" 1>&2; exit 1; } ;;
 esac
 else
