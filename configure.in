@@ -64,21 +64,23 @@ AC_ARG_ENABLE(libcdir, \
 [ RTEMS_LIBC_DIR="${enableval}" ; \
 test -d ${enableval} || AC_MSG_ERROR("$enableval is not a directory" ) ] )
 
-AC_ARG_ENABLE(cpu-cflags,
-[  --enable-cpu-cflags                  specify a particular cpu cflag],
+AC_ARG_ENABLE(bare-cpu-cflags,
+[  --enable-bare-cpu-cflags          \
+         specify a particular cpu cflag (bare bsp specific)],
 [case "${enableval}" in
-  no) CPU_CFLAGS="" ;;
-  *)    CPU_CFLAGS="${enableval}" ;;
+  no) BARE_CPU_CFLAGS="" ;;
+  *)    BARE_CPU_CFLAGS="${enableval}" ;;
 esac],
-[CPU_CFLAGS=""])
+[BARE_CPU_CFLAGS=""])
 
-AC_ARG_ENABLE(cpu-model,
-[  --enable-cpu-model                   specify a particular cpu model],
+AC_ARG_ENABLE(bare-cpu-model,
+[  --enable-bare-cpu-model              \
+         specify a particular cpu model (bare bsp specific)],
 [case "${enableval}" in
-  no) RTEMS_CPU_MODEL="" ;;
-  *)    RTEMS_CPU_MODEL="${enableval}" ;;
+  no)   BARE_CPU_MODEL="" ;;
+  *)    BARE_CPU_MODEL="${enableval}" ;;
 esac],
-[CPU_CFLAGS=""])
+[BARE_CPU_MODEL=""])
 
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
 
@@ -139,9 +141,6 @@ RTEMS_HOST=$host_os
 
 case "${target}" in
   # hpux unix port should go here
-  hppa1.1-*-rtems*)
-	target_cpu=hppa1_1
-	;;
   i[[3456]]86-go32-rtems*)
 	target_cpu=i386
 	rtems_bsp="go32 go32_p5"
@@ -261,7 +260,6 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
       esac;
     done
 
-    rtems_bsp="$rtems_bsp bare"
     makefiles="$makefiles c/src/lib/libbsp/bare/Makefile"
 
     AC_MSG_RESULT([$rtems_bsp done])
@@ -413,8 +411,8 @@ AC_SUBST(RTEMS_USE_MACROS)
 AC_SUBST(RTEMS_HAS_CPLUSPLUS)
 AC_SUBST(RTEMS_USE_GCC272)
 AC_SUBST(RTEMS_LIBC_DIR)
-AC_SUBST(CPU_CFLAGS)
-AC_SUBST(RTEMS_CPU_MODEL)
+AC_SUBST(BARE_CPU_CFLAGS)
+AC_SUBST(BARE_CPU_MODEL)
 AC_SUBST(PROJECT_ROOT)
 AC_SUBST(program_prefix)
 
