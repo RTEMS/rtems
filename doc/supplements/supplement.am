@@ -7,7 +7,7 @@
 REPLACE2 = $(PERL) $(top_srcdir)/tools/word-replace2
 
 TEXINFO_TEX = ../../texinfo/texinfo.tex
-TEXI_COMMON = -I ../..
+AM_MAKEINFOFLAGS = -I ../..
 
 MAINTAINERCLEANFILES += $(GENERATED_FILES)
 html_projectdir = $(htmldir)/supplements/$(PROJECT)
