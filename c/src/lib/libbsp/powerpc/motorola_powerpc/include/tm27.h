@@ -19,8 +19,6 @@
  *  Stuff for Time Test 27
  */
 
-#if defined(USE_ENHANCED_INTR_API)
-
 #include <bsp/irq.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
@@ -60,6 +58,5 @@ void Install_tm27_vector(void (*_handler)())
     _msr |=  0x8002; \
     asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
   } while (0)
-#endif
 
 #endif

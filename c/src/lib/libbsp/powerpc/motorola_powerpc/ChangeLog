@@ -1,3 +1,10 @@
+2004-05-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 615/bsps
+	* include/tm27.h: Removing USE_ENHANCE_INTR_API conditional check since
+	that is the only kind this BSP supports and tm27 does not care which
+	interrupt model is used as long as the macros are properly defined.
+
 2004-04-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	PR 610/bsps
