@@ -7,17 +7,16 @@ ACLOCAL_AMFLAGS = -I ../../aclocal
 
 SUBDIRS = make @hst_subdirs@ wrapup tests
 
-rtems_bspdir = $(prefix)/@RTEMS_BSP@
-
 # NOTE: The wildcard on the install should pick up everything except
 #       the tests directory.  This significantly minimizes the install size.
 install-data-local:
-	$(mkinstalldirs) $(rtems_bspdir)
-	cd $(PROJECT_ROOT); \
-          tar cf - @RTEMS_BSP@/[bilsuM]* | (cd $(DESTDIR)$(prefix); tar xpBf - );
+	$(mkinstalldirs) $(DESTDIR)$(exec_prefix)/@RTEMS_BSP@
+	cd $(PROJECT_ROOT)/@RTEMS_BSP@; \
+          tar cf - [bilsuM]* | \
+	  (cd $(DESTDIR)$(exec_prefix)/@RTEMS_BSP@; tar xpBf - );
 
 uninstall-local:
-	rm -rf $(rtems_bspdir)/[bsl]*;
+	rm -rf $(DESTDIR)$(exec_prefix)/@RTEMS_BSP@/[bsl]*;
 
 include $(top_srcdir)/../../automake/subdirs.am
 include $(top_srcdir)/../../automake/host.am
