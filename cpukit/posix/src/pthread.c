@@ -29,7 +29,7 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
   NULL,                    /* stackaddr */
   STACK_MINIMUM_SIZE,      /* stacksize */
   PTHREAD_SCOPE_PROCESS,   /* contentionscope */
-  PTHREAD_INHERIT_SCHED,   /* inheritsched */
+  PTHREAD_EXPLICIT_SCHED,  /* inheritsched */
   SCHED_FIFO,              /* schedpolicy */
   {                        /* schedparam */
     128,                   /* sched_priority */
@@ -123,6 +123,8 @@ boolean _POSIX_Threads_Create_extension(
   api->schedparam.sched_priority = 
      _POSIX_Priority_From_core( created->current_priority );
  
+/* XXX set signal parameters -- block all signals for non-posix threads */
+
   _Thread_queue_Initialize(
     &api->Join_List,
     OBJECTS_NO_CLASS,                 /* only used for proxy operations */
