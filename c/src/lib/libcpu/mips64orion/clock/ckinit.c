@@ -191,7 +191,7 @@ void Clock_exit( void )
 {
   if ( rtems_configuration_get_ticks_per_timeslice() ) {
     /* mips: turn off the timer interrupts */
-    disable_int(CLOCK_VECTOR_MASK);
+    disable_int(~CLOCK_VECTOR_MASK);
   }
 }
 
