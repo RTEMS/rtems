@@ -13,13 +13,13 @@
 
 
 typedef struct {
-  volatile unsigned8  cr;       /*  0 -  0 : Timer Control Register */
-  volatile unsigned8  pad0;     /*  1 -  1 : pad */
-  volatile unsigned8  ivr;      /*  2 -  2 : Timer Interrupt Vector Register */
-  volatile unsigned8  pad1;     /*  3 -  3 : pad */ 
-  volatile unsigned32 cpr;      /*  4 -  7 : Timer Counter Preload Register */
-  volatile unsigned8  pad2[12]; /*  8 - 19 : pad */ 
-  volatile unsigned32 sr;       /* 20 - 23 : Timer Status Register */
+  volatile uint8_t    cr;       /*  0 -  0 : Timer Control Register */
+  volatile uint8_t    pad0;     /*  1 -  1 : pad */
+  volatile uint8_t    ivr;      /*  2 -  2 : Timer Interrupt Vector Register */
+  volatile uint8_t    pad1;     /*  3 -  3 : pad */ 
+  volatile uint32_t   cpr;      /*  4 -  7 : Timer Counter Preload Register */
+  volatile uint8_t    pad2[12]; /*  8 - 19 : pad */ 
+  volatile uint32_t   sr;       /* 20 - 23 : Timer Status Register */
 } timer_hw_t;
 
 #define TIMER_BASE (timer_hw_t *)0x72001
