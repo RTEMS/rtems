@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h: Removed incorrect statement about copyright
+	assignment.
+
 2003-09-03	Jiri Gaisler <jiri@gaisler.com>
 
 	PR 477/networking
