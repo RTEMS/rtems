@@ -1,5 +1,20 @@
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
+	irq/Makefile.am, motorola/Makefile.am, openpic/Makefile.am,
+	pci/Makefile.am, residual/Makefile.am, start/Makefile.am,
+	startup/Makefile.am, vectors/Makefile.am, vme/Makefile.am.
+	Use automake compilation rules.
+	Rename clock.rel to pclock.rel (Conflict with libcpu).
+	* clock/Makefile.am, console/Makefile.am, irq/Makefile.am,
+	motorola/Makefile.am, openpic/Makefile.am, pci/Makefile.am,
+	residual/Makefile.am, start/Makefile.am, startup/Makefile.am,
+	vectors/Makefile.am, vme/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+	* wrapup/Makefile.am: Reflect changes above.
+
+2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect changes to
 	../support/*exception_processing/*.
 

@@ -2,12 +2,14 @@
 ## $Id$
 ##
 
-BSP_PIECES = clock console irq openpic pci residual startup vectors motorola \
-    vme
-
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
+OBJS = ../startup$(LIB_VARIANT).rel ../pclock$(LIB_VARIANT).rel \
+    ../console$(LIB_VARIANT).rel ../irq$(LIB_VARIANT).rel \
+    ../openpic$(LIB_VARIANT).rel ../pci$(LIB_VARIANT).rel \
+    ../residual$(LIB_VARIANT).rel ../vectors$(LIB_VARIANT).rel \
+    ../motorola$(LIB_VARIANT).rel ../vme$(LIB_VARIANT).rel
+OBJS += ../../../../libcpu/@RTEMS_CPU@/shared/cpuIdent$(LIB_VARIANT).rel \
+    ../../../../libcpu/@RTEMS_CPU@/shared/stack$(LIB_VARIANT).rel \
     ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
     ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/clock$(LIB_VARIANT).rel \
     ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/exceptions$(LIB_VARIANT).rel \

@@ -38,17 +38,6 @@ AC_DEFINE_UNQUOTED([USE_ENHANCED_INTR_API],[1],
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 bootloader/Makefile
-clock/Makefile
-console/Makefile
-irq/Makefile
-motorola/Makefile
-openpic/Makefile
-pci/Makefile
-residual/Makefile
-start/Makefile
-startup/Makefile
-vectors/Makefile
-vme/Makefile
 wrapup/Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])
