@@ -1,3 +1,9 @@
+2003-08-20 	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/mvme167.cfg: Remove PRINTK_MINOR, CONSOLE_MINOR (move to
+	the BSP's configure-script).
+	Remove BSP_CPPFLAGS (Obsolete).
+
 2003-05-27	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
 
 	* custom/mvme2307.cfg: Remove CFLAGS_PROFILE_V.
