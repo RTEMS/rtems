@@ -1,3 +1,8 @@
+2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* timer/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
