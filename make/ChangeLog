@@ -1,3 +1,7 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/p4650.cfg: Update arguments to gcc3.
+
 2002-06-14	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/jmr3904.cfg, custom/p4650.cfg, custom/p4600.cfg: Switch
