@@ -1,3 +1,7 @@
+2002-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/env-rtemsbsp.m4: Use ${RTEMS_BSP} to setup includedir.
+
 2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add --enable-docs support. Add

@@ -43,5 +43,5 @@ AC_SUBST(BARE_CPU_CFLAGS)
 AM_CONDITIONAL([RTEMS_CONFIG_PER_BSP],[true])
 AM_CONDITIONAL([MULTILIB],[false])
 
-includedir="\${exec_prefix}/\$(RTEMS_BSP)/lib/include"
+includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
 ])
