@@ -33,6 +33,7 @@ ER snd_msg(
   Objects_Locations                location;
   unsigned32                       message_priority;
   void                            *message_contents;
+  CORE_message_queue_Status        msg_status;
 
   if ( !pk_msg )
     return E_PAR;
@@ -50,7 +51,7 @@ ER snd_msg(
         message_priority = CORE_MESSAGE_QUEUE_SEND_REQUEST;
 
       message_contents = pk_msg;
-      _CORE_message_queue_Submit(
+      msg_status = _CORE_message_queue_Submit(
         &the_mailbox->message_queue,
         &message_contents,
         sizeof(T_MSG *),
@@ -64,8 +65,6 @@ ER snd_msg(
   }
 
   _ITRON_return_errorno( 
-     _ITRON_Mailbox_Translate_core_message_queue_return_code(
-          _Thread_Executing->Wait.return_code
-     )
+     _ITRON_Mailbox_Translate_core_message_queue_return_code( msg_status )
   );
 }

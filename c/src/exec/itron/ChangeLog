@@ -1,3 +1,10 @@
+2001-08-09	Joel Sherrill <joel@OARcorp.com>
+
+	* src/snd_mbx.c, src/tsnd_mbf.c: Unblocking message queue operations
+	should NOT use _Thread_Executing for return status since it is
+	permissible to invoke message send operations from an ISR.  This was
+	reported by Suvrat Gupta <suvrat@utstar.com>.
+
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
