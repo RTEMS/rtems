@@ -1,3 +1,8 @@
+2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
+
+	PR 581/bsps
+	* custom/psim.cfg: Convert PSIM to new exception model.
+
 2004-11-17	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/mvme2100.cfg: Add make-cxx-exe rule.
