@@ -34,7 +34,7 @@ extern "C" {
 
 /*
  *  For now, we are only allowing the user to specify the entry point
- *  for posix initialization threads.
+ *  and stack size for POSIX initialization threads.
  */
 
 typedef struct {
@@ -49,6 +49,8 @@ typedef struct {
   int                                 maximum_keys;
   int                                 maximum_timers;
   int                                 maximum_queued_signals;
+  int                                 maximum_message_queues;
+  int                                 maximum_semaphores;
   int                                 number_of_initialization_threads;
   posix_initialization_threads_table *User_initialization_threads_table;
 } posix_api_configuration_table;
