@@ -329,8 +329,9 @@ AC_ARG_ENABLE(tests, \
 AC_MSG_RESULT(yes)
 )
 
+RTEMS_CHECK_MAKEFILE(c/src/tests/tools/$target_cpu)
+
 if test "$tests_enabled" = "yes"; then
-   RTEMS_CHECK_MAKEFILE(c/src/tests/tools/$target_cpu)
    RTEMS_CHECK_MAKEFILE(c/src/tests/libtests)
    RTEMS_CHECK_MAKEFILE(c/src/tests/sptests)
    RTEMS_CHECK_MAKEFILE(c/src/tests/tmtests)
