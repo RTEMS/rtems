@@ -24,7 +24,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 /* #include <libcpu/cpu.h> */
 
 /*-------------------------------------------------------------------------+
