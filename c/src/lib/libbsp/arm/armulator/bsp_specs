@@ -19,4 +19,4 @@
 %{qrtems_debug: start_g.o%s}}
 
 *link:
-%(old_link) %{!qrtems: %(old_link)} %{qrtems: -dc -dp -T linkcmds%s -N -e _start}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}
