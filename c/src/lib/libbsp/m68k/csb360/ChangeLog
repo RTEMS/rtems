@@ -1,0 +1,9 @@
+2004-08-03	Jay Monkman <jtm@lopingdog.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
+	times, console/.cvsignore, console/console-io.c, include/.cvsignore,
+	include/bsp.h, include/coverhd.h, include/tm27.h, network/network.c,
+	start/.cvsignore, start/start.S, startup/.cvsignore,
+	startup/bspclean.c, startup/bspstart.c, startup/init5272.c,
+	startup/linkcmds: New files.
+

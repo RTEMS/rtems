@@ -1,3 +1,16 @@
+2004-08-03	Jay Monkman <jtm@lopingdog.com>
+
+	* acinclude.m4: Added CSB360 BSP
+	* csb360/.cvsignore, csb360/ChangeLog, csb360/Makefile.am,
+	csb360/README, csb360/bsp_specs, csb360/configure.ac, csb360/times,
+	csb360/console/.cvsignore, csb360/console/console-io.c,
+	csb360/include/.cvsignore, csb360/include/bsp.h,
+	csb360/include/coverhd.h, csb360/include/tm27.h,
+	csb360/network/network.c, csb360/start/.cvsignore,
+	csb360/start/start.S, csb360/startup/.cvsignore,
+	csb360/startup/bspclean.c, csb360/startup/bspstart.c,
+	csb360/startup/init5272.c, csb360/startup/linkcmds: New files.
+
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Regenerate.
