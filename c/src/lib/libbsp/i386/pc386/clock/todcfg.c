@@ -31,6 +31,6 @@ rtc_tbl RTC_Table[] = {
 
 #define NUM_RTCS (sizeof(RTC_Table)/sizeof(rtc_tbl))
 
-unsigned long RTC_Count = NUM_RTCS;
+size_t RTC_Count = NUM_RTCS;
 
 rtems_device_minor_number RTC_Minor;

@@ -1,3 +1,7 @@
+2005-01-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* clock/todcfg.c: size_t RTC_Count.
+
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* console/vgainit.c: static graphic_on|off.
