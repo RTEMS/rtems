@@ -1,3 +1,7 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tmitronsem01/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR47 add support for buffered test output.  This involved
