@@ -22,7 +22,7 @@ RTEMS_CANONICAL_HOST
 
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
-AC_CONFIG_SUBDIRS(tools)
+RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 RTEMS_PROJECT_ROOT
 
@@ -35,3 +35,5 @@ start/Makefile
 startup/Makefile
 tty/Makefile
 wrapup/Makefile)
+
+RTEMS_OUTPUT_BUILD_SUBDIRS(RTEMS_BUILD_SUBDIRS)

@@ -1,3 +1,8 @@
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in, Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+        Switch to GNU canonicalization.
+
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Use default object format to avoid name

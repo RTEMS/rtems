@@ -1,3 +1,8 @@
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in, Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+        Switch to GNU canonicalization.
+
 2000-10-23	Joel Sherrill <joel@OARcorp.com>
 
 	* console/serial_mouse.c: Fixed typos introduced by removal of CR/LF.
