@@ -32,8 +32,9 @@ int _POSIX_Mutex_Lock_support(
 {
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
+  ISR_Level                     level;
  
-  the_mutex = _POSIX_Mutex_Get( mutex, &location );
+  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &location, &level );
   switch ( location ) {
     case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
@@ -51,9 +52,9 @@ int _POSIX_Mutex_Lock_support(
         &the_mutex->Mutex,
         the_mutex->Object.id,
         blocking,
-        timeout
+        timeout,
+        level
       );
-      _Thread_Enable_dispatch();
       return _POSIX_Mutex_From_core_mutex_status(
         (CORE_mutex_Status) _Thread_Executing->Wait.return_code
       );
