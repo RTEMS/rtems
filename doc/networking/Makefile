@@ -62,7 +62,7 @@ networkapp.texi: networkapp.t Makefile
 	   -n "Testing the Driver" ${*}.t
 
 testing.texi: testing.t Makefile
-	$(BMENU) -p "Network Statistics" \
+	$(BMENU) -p "Socket Options" \
 	   -u "Top" \
 	   -n "Network Servers" ${*}.t
 

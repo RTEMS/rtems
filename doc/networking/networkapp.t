@@ -231,16 +231,20 @@ This function is declared in @code{rtems/rtems_bsdnet.h}.
 
 
 
-@section Application code
+@section Application Programming Interface
+
 The RTEMS network package provides almost a complete set of BSD network
 services.  The network functions work like their BSD counterparts
 with the following exceptions:
 
 @itemize @bullet
 @item A given socket can be read or written by only one task at a time.
+
 @item The @code{select} function only works for file descriptors associated
 with sockets.
+
 @item You must call @code{openlog} before calling any of the @code{syslog} functions.
+
 @item @b{Some of the network functions are not thread-safe.}
 For example the following functions return a pointer to a static
 buffer which remains valid only until the next call:
@@ -251,11 +255,25 @@ buffer which remains valid only until the next call:
 @item inet_ntoa
 (@code{inet_ntop} is thread-safe, though).
 @end table
+
+@item The RTEMS network package gathers statistics.
+
+@item Addition of a mechanism to "tap onto" an interface
+and monitor every packet received and transmitted.
+
+@item Addition of @code{SO_SNDWAKEUP} and @code{SO_RCVWAKEUP} socket options.
+
 @end itemize
 
+Some of the new features are discussed in more detail in the following
+sections.
+
 @subsection Network Statistics
-There are a number of functions to print statistics gathered by the network stack.
+
+There are a number of functions to print statistics gathered by
+the network stack.
 These function are declared in @code{rtems/rtems_bsdnet.h}.
+
 @table @code
 @item rtems_bsdnet_show_if_stats
 Display statistics gathered by network interfaces.
@@ -280,7 +298,9 @@ Display the routing table.
 
 @end table
 
-In addition, RTEMS add two new ioctls to the BSD networking code:
+@subsection Tapping Into an Interface
+
+RTEMS add two new ioctls to the BSD networking code:
 SIOCSIFTAP and SIOCGIFTAP.  These may be used to set and get a
 @i{tap function}.  The tap function will be called for every
 Ethernet packet received by the interface.
@@ -306,4 +326,48 @@ networking layers.
 The tap function is called with the network semaphore locked.  It must
 not make any calls on the application levels of the networking level
 itself.  It is safe to call other non-networking RTEMS functions.
+
+@subsection Socket Options
+
+RTEMS adds two new @code{SOL_SOCKET} level options for @code{setsockopt} and
+@code{getsockopt}: @code{SO_SNDWAKEUP} and @code{SO_RCVWAKEUP}.  For both, the
+option value should point to a sockwakeup structure.  The sockwakeup
+structure has the following fields:
+
+@example
+@group
+  void    (*sw_pfn) (struct socket *, caddr_t);
+  caddr_t sw_arg;
+@end group
+@end example
+
+These options are used to set a function to be called when there is
+data available from the socket (@code{SO_SNDWAKEUP}) and when there is space
+available to accept data written to the socket (@code{SO_RCVWAKEUP}).
+
+If @code{setsockopt} is called with the @code{SO_SNDWAKEUP} option, and the
+@code{sw_pfn} field is not zero, then when there is data
+available to be read from
+the socket, the function pointed to by the @code{sw_pfn} field will be
+called.  A pointer to the socket structure will be passed as the first
+argument to the function.  The @code{sw_arg} field
+set by the @code{SO_SNDWAKEUP}
+call will be passed as the second argument to the function.
+
+If @code{setsockopt} is called with the @code{SO_RCVWAKEUP}
+function, and the @code{sw_pfn}
+field is not zero, then when there is space available to accept data
+written to the socket, the function pointed to by the @code{sw_pfn} field
+will be called.  The arguments passed to the function will be as with
+@code{SO_SNDWAKEUP}.
+
+When the function is called, the network semaphore will be locked.
+The function must be careful not to call any networking functions.  It
+is OK to call an RTEMS function; for example, it is OK to send an
+RTEMS event.
+
+The purpose of these functions is to permit a more efficient
+alternative to the select call when dealing with a large number of
+sockets.
+
 
