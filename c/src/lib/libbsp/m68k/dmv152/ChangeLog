@@ -1,3 +1,11 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* include/bsp.h: Include <rtems/console.h> instead of <console.h>.
+	* include/bsp.h: Include <rtems/iosupp.h> instead of <iosupp.h>.
+	* include/bsp.h: Include <rtems/vmeintr.h> instead of <vmeintr.h>.
+	* startup/vmeintr.c: Include <rtems/vmeintr.h> instead of <vmeintr.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* clock/ckinit.c, console/console.c, include/bsp.h,

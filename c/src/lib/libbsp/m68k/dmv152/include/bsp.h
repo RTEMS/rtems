@@ -22,10 +22,10 @@ extern "C" {
 #include <bspopts.h>
 
 #include <rtems.h>
-#include <console.h>
-#include <clockdrv.h>
-#include <iosupp.h>
-#include <vmeintr.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
+#include <rtems/iosupp.h>
+#include <rtems/vmeintr.h>
 #include <zilog/z8530.h>
 #include <zilog/z8536.h>
 
