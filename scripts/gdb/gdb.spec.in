@@ -21,7 +21,7 @@ Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      @gdb_version@
 Summary:      gdb for target @target_alias@
-Source0:      ftp://ftp.gnu.org/pub/gnu/gdbgdb-@gdb_version@.tar.gz
+Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
 Patch0:	      gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
 #
 # The original sources are not included in the source RPM.
