@@ -50,7 +50,7 @@ AC_MSG_CHECKING(for $2 in $1)
 if test -d $srcdir/$1; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find $1 -name $2 -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find $1 -name $2 -print | sed 's%\.in%%' | sort`;
   $3="$$3 $rtems_av_tmp";
   cd $rtems_av_save_dir;
   AC_MSG_RESULT(done)
