@@ -1,14 +1,14 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@/../../shared/comm:@srcdir@/../../shared/io
+VPATH = @srcdir@:@srcdir@/../../shared/comm:@srcdir@/../../shared/io
 
 PGM = $(ARCH)/console.rel
 
-C_FILES = uart.c console.c 
+C_FILES = uart.c console.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
