@@ -12,7 +12,7 @@ Name:         @target_alias@-gnat-newlib
 Summary:      gnat, gcc, and newlib C Library for @target_alias@.
 Group:	      gnatrtems
 Release:      @Release@
-Copyright:    1999 OARCorp
+License:      gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
 Provides:     	rtems-base-gnat @target_alias@-gnat 
 Provides:       rtems-base-gnat-binutils @target_alias@-gnat-binutils

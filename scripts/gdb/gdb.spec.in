@@ -12,7 +12,7 @@ Vendor:       OAR Corporation
 Distribution: Linux
 Name:         @target_alias@-gdb-collection
 Release:      @Release@
-Copyright:    1999 OARCorp
+License:      GPL/LGPL
 Group:        rtems
 Provides:     rtems-base-gdb @target_alias@-gdb
 

@@ -12,7 +12,7 @@ Name:         @target_alias@-gcc-newlib
 Summary:      gcc and newlib C Library for @target_alias@.
 Group:	      rtems
 Release:      @Release@
-Copyright:    1999 OARCorp
+License:      gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
 Provides:     	rtems-base-gcc @target_alias@-gcc 
 Provides:	rtems-base-chill @target_alias@-chill

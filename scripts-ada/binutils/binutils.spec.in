@@ -12,7 +12,7 @@ Name:         @target_alias@-gnat-binutils-collection
 Summary:      binutils for target @target_alias@
 Group:        gnatrtems
 Release:      @Release@
-Copyright:    1999 OARCorp
+License:      GPL/LGPL
 
 Provides:     rtems-base-gnat-binutils @target_alias@-gnat-binutils
 

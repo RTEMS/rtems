@@ -10,7 +10,7 @@ Vendor:       OAR Corporation
 Distribution: Linux
 Name:         rtems-@target_alias@-@bsp@
 Release:      @Release@
-Copyright:    1999 OARCorp
+License:      GPL with special exception for linking with application program
 Group:        unsorted
 Provides:     rtems-@target_alias@-@bsp@
 

@@ -12,7 +12,7 @@ Name:         @target_alias@-binutils-collection
 Summary:      binutils for target @target_alias@
 Group:        rtems
 Release:      @Release@
-Copyright:    1999 OARCorp
+License:      GPL/LGPL
 
 Provides:     rtems-base-binutils @target_alias@-binutils
 
