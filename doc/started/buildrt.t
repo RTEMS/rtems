@@ -15,25 +15,25 @@ This section provides pointers to the RTEMS source code and
 Hello World example program.  These files should be
 placed in your @code{archive} directory.  
 
-@subheading @value{RTEMS-VERSION}
+@subheading @value{RTEMSVERSION}
 @example
-    FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}
-    File:        @value{RTEMS-TAR}
+    FTP Site:    @value{RTEMSFTPSITE}
+    Directory:   @value{RTEMSFTPDIR}
+    File:        @value{RTEMSTAR}
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}, Download RTEMS components}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}, Download RTEMS components}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}
 @end ifset
 @end example
 
 @subheading RTEMS Hello World
 @example
-    FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}
+    FTP Site:    @value{RTEMSFTPSITE}
+    Directory:   @value{RTEMSFTPDIR}
     File:        hello_world_c.tgz
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/hello_world_c.tgz, Download RTEMS Hello World}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/hello_world_c.tgz
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/hello_world_c.tgz, Download RTEMS Hello World}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/hello_world_c.tgz
 @end ifset
 @end example
 
@@ -48,10 +48,10 @@ tools directory:
 
 @example
 cd tools
-tar xzf ../archive/@value{RTEMS-TAR}
+tar xzf ../archive/@value{RTEMSTAR}
 @end example
 
-This creates the directory @value{RTEMS-UNTAR}.
+This creates the directory @value{RTEMSUNTAR}.
 
 
 @section Add <INSTALL_POINT>/bin to Executable PATH
@@ -134,13 +134,13 @@ This section describes how to build RTEMS.
 @subsection Using the RTEMS configure Script Directly
 
 Make a build directory under tools and build the RTEMS product in this
-directory. The ../@value{RTEMS-UNTAR}/configure
+directory. The ../@value{RTEMSUNTAR}/configure
 command has numerous command line
 arguments. These arguments are discussed in detail in documentation that
 comes with the RTEMS distribution. If you followed the procedure
 described in the section @ref{Unarchive the RTEMS Source}, these
 configuration options can be found in the file
-tools/@value{RTEMS-UNTAR}/README.configure.
+tools/@value{RTEMSUNTAR}/README.configure.
 
 @b{NOTE}: The GNAT/RTEMS run-time implementation is based on the POSIX
 API.  Thus the RTEMS configuration for a GNAT/RTEMS environment MUST
@@ -154,7 +154,7 @@ the @code{BOARD_SUPPORT_PACKAGE} board.
 @example
 mkdir build-rtems
 cd build-rtems
-../@value{RTEMS-UNTAR}/configure --target=<TARGET_CONFIGURATION> \
+../@value{RTEMSUNTAR}/configure --target=<TARGET_CONFIGURATION> \
     --disable-posix --disable-tcpip --disable-cxx \
     --enable-rtemsbsp=<BOARD_SUPPORT_PACKAGE>\
     --prefix=<INSTALL_POINT>
@@ -163,14 +163,14 @@ make all install
 
 Where the list of currently supported <TARGET_CONFIGURATION>'s and
 <BOARD_SUPPORT_PACKAGE>'s can be found in
-tools/@value{RTEMS-UNTAR}/README.configure.
+tools/@value{RTEMSUNTAR}/README.configure.
 
 <INSTALL_POINT> is typically the installation point for the 
 tools and is @code{/opt/rtems} when using prebuilt toolset executables.
 
 BSP is a supported BSP for the selected CPU family.  The list of
 supported BSPs may be found in the file
-tools/@value{RTEMS-UNTAR}/README.configure
+tools/@value{RTEMSUNTAR}/README.configure
 in the RTEMS source tree.  If the BSP parameter is not specified,
 then all supported BSPs for the selected CPU family will be built.
 

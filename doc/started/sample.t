@@ -64,7 +64,7 @@ How this executable is downloaded to the target board is very dependent
 on the BOARD_SUPPORT_PACKAGE selected.  The following is a list of
 commonly used BSPs classified by their RTEMS CPU family and pointers
 to instructions on how to use them.  [NOTE: All file names should be
-prepended with @value{RTEMS-UNTAR}/c/src/lib/libbsp.]
+prepended with @value{RTEMSUNTAR}/c/src/lib/libbsp.]
 
 @need 1000
 @table @b

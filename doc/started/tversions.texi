@@ -21,56 +21,56 @@
 @c  GCC Version
 @c
 
-@set GCC-VERSION     gcc 3.2.3
-@set GCC-TAR         gcc-3.2.3.tar.bz2
-@set GCC-UNTAR       gcc-3.2.3
-@set GCC-FTPSITE     gcc.gnu.org
-@set GCC-FTPDIR      /pub/gnu/gcc/
-@set GCC-HTTPDIR     /pub/gcc/releases/index.html
-@set GCC-RTEMSPATCH  gcc-3.2.3-rtems-20030507a.diff
+@set GCCVERSION     gcc 3.2.3
+@set GCCTAR         gcc-3.2.3.tar.bz2
+@set GCCUNTAR       gcc-3.2.3
+@set GCCFTPSITE     gcc.gnu.org
+@set GCCFTPDIR      /pub/gnu/gcc/
+@set GCCHTTPDIR     /pub/gcc/releases/index.html
+@set GCCRTEMSPATCH  gcc-3.2.3-rtems-20030507a.diff
 
 @c
 @c  BINUTILS Version
 @c
 
 @c The "official" binutils
-@set BINUTILS-VERSION     binutils 2.13.2.1
-@set BINUTILS-TAR         binutils-2.13.2.1.tar.gz
-@set BINUTILS-UNTAR       binutils-2.13.2.1
-@set BINUTILS-FTPSITE     ftp.gnu.org
-@set BINUTILS-FTPDIR      /pub/gnu/binutils
-@c @set BINUTILS-RTEMSPATCH  binutils-2.10-rtems-diff-20001107.gz
+@set BINUTILSVERSION     binutils 2.13.2.1
+@set BINUTILSTAR         binutils-2.13.2.1.tar.gz
+@set BINUTILSUNTAR       binutils-2.13.2.1
+@set BINUTILSFTPSITE     ftp.gnu.org
+@set BINUTILSFTPDIR      /pub/gnu/binutils
+@c @set BINUTILSRTEMSPATCH  binutils-2.10-rtems-diff-20001107.gz
 
 @c
 @c  NEWLIB Version
 @c
 
 
-@set NEWLIB-VERSION     newlib 1.11.0
-@set NEWLIB-TAR         newlib-1.11.0.tar.gz
-@set NEWLIB-UNTAR       newlib-1.11.0
-@set NEWLIB-FTPSITE     sources.redhat.com
-@set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.11.0-rtems-20030605.diff.gz
+@set NEWLIBVERSION     newlib 1.11.0
+@set NEWLIBTAR         newlib-1.11.0.tar.gz
+@set NEWLIBUNTAR       newlib-1.11.0
+@set NEWLIBFTPSITE     sources.redhat.com
+@set NEWLIBFTPDIR      /pub/newlib
+@set NEWLIBRTEMSPATCH  newlib-1.11.0-rtems-20030605.diff.gz
 
 @c
 @c  GDB Version
 @c
 
-@set GDB-VERSION     gdb 5.2
-@set GDB-TAR         gdb-5.2.tar.gz
-@set GDB-UNTAR       gdb-5.2
-@set GDB-FTPSITE     ftp.gnu.org
-@set GDB-FTPDIR      /pub/gnu/gdb
-@set GDB-RTEMSPATCH  gdb-5.2-rtems-20030211.diff.gz
+@set GDBVERSION     gdb 5.2
+@set GDBTAR         gdb-5.2.tar.gz
+@set GDBUNTAR       gdb-5.2
+@set GDBFTPSITE     ftp.gnu.org
+@set GDBFTPDIR      /pub/gnu/gdb
+@set GDBRTEMSPATCH  gdb-5.2-rtems-20030211.diff.gz
 
 @c
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS 4.6.0
-@set RTEMS-TAR       rtems-4.6.0.tar.bz2
-@set RTEMS-UNTAR     rtems-4.6.0
-@set RTEMS-FTPSITE   ftp.rtems.com
-@set RTEMS-FTPDIR    /pub/rtems/releases/4.6.0
+@set RTEMSVERSION   RTEMS 4.6.0
+@set RTEMSTAR       rtems-4.6.0.tar.bz2
+@set RTEMSUNTAR     rtems-4.6.0
+@set RTEMSFTPSITE   ftp.rtems.com
+@set RTEMSFTPDIR    /pub/rtems/releases/4.6.0
 

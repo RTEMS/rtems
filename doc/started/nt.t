@@ -264,16 +264,16 @@ are ready to proceed to building a cross-compiler.
 
 @enumerate
 
-@item Unarchive @value{BINUTILS-TAR} following the 
+@item Unarchive @value{BINUTILSTAR} following the 
 instructions in @ref{Unarchiving the Tools} into the /source directory.
 Apply the appropriate RTEMS specific patch as detailed in
 @ref{Applying RTEMS Patches}.
 
 @item In the @code{/build/binutils} directory, execute the following
-command to configure @value{BINUTILS-VERSION}:
+command to configure @value{BINUTILSVERSION}:
 
 @example
-/source/@value{BINUTILS-UNTAR}/configure \
+/source/@value{BINUTILSUNTAR}/configure \
     --verbose --target=m68k-rtems \
     --prefix=/gcc-m68k-rtems --with-gnu-as --with-gnu-ld 
 @end example
@@ -321,7 +321,7 @@ the Cygwin32 environment with the new path.
 @subsection Installing GCC AND NEWLIB
 
 @enumerate
-@item Unarchive and patch @value{GCC-TAR} and @value{NEWLIB-TAR}
+@item Unarchive and patch @value{GCCTAR} and @value{NEWLIBTAR}
 following the instructions in @ref{Unarchiving the Tools}. 
 Apply the appropriate RTEMS specific patches as detailed in
 @ref{Applying RTEMS Patches}.
@@ -332,25 +332,25 @@ Apply the appropriate RTEMS specific patches as detailed in
 or Objective-C as Cygwin32 cross-compilers):
 
 @example
-/source/@value{GCC-UNTAR}/libf2c
-/source/@value{GCC-UNTAR}/gcc/objc
-/source/@value{GCC-UNTAR}/gcc/f
+/source/@value{GCCUNTAR}/libf2c
+/source/@value{GCCUNTAR}/gcc/objc
+/source/@value{GCCUNTAR}/gcc/f
 @end example
 
 @b{NOTE}: See @ref{Bug in Patch Utility}.
 
 @item Link the following directories from Newlib to the main GCC directory, 
-/source/@value{GCC-UNTAR}/ :
+/source/@value{GCCUNTAR}/ :
 
 @itemize @bullet
-@item ln -s ../@value{NEWLIB-UNTAR}/newlib newlib
-@item ln -s ../@value{NEWLIB-UNTAR}/libgloss libgloss
+@item ln -s ../@value{NEWLIBUNTAR}/newlib newlib
+@item ln -s ../@value{NEWLIBUNTAR}/libgloss libgloss
 @end itemize
 
 @item Change to the /build/gcc directory to configure the compiler:
 
 @example
-/source/@value{GCC-UNTAR}/configure \
+/source/@value{GCCUNTAR}/configure \
     --verbose --target=m68k-rtems \
     --prefix=/gcc-m68k --with-gnu-as --with-gnu-ld \
     --with-newlib

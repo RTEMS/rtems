@@ -1,3 +1,9 @@
+2003-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* buildc.t, buildrt.t, started/nt.t, sample.t, tversions.texi:
+	Don't use VARIABLEs containing '-' in @set and @value (violates
+	texi-syntax).
+
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 469/doc

@@ -53,61 +53,61 @@ placed in your @code{archive} directory.  Included are the locations
 of each component as well as any required RTEMS specific patches.
 
 @need 1000
-@subheading @value{GCC-VERSION}
+@subheading @value{GCCVERSION}
 @example
-    FTP Site:    @value{GCC-FTPSITE}
-    Directory:   @value{GCC-FTPDIR}
-    File:        @value{GCC-TAR}
+    FTP Site:    @value{GCCFTPSITE}
+    Directory:   @value{GCCFTPDIR}
+    File:        @value{GCCTAR}
 @ifset use-html
-@c    URL:         @uref{Download @value{GCC-VERSION}, ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}}
-    URL:         ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}
+@c    URL:         @uref{Download @value{GCCVERSION}, ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}}
+    URL:         ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}
 @end ifset
 @end example
 
 @need 1000
-@subheading @value{BINUTILS-VERSION}
+@subheading @value{BINUTILSVERSION}
 @example
-    FTP Site:    @value{BINUTILS-FTPSITE}
-    Directory:   @value{BINUTILS-FTPDIR}
-    File:        @value{BINUTILS-TAR}
+    FTP Site:    @value{BINUTILSFTPSITE}
+    Directory:   @value{BINUTILSFTPDIR}
+    File:        @value{BINUTILSTAR}
 @ifset use-html
-@c    URL:         @uref{ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR},Download @value{BINUTILS-VERSION}}
-    URL:         ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}
+@c    URL:         @uref{ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR},Download @value{BINUTILSVERSION}}
+    URL:         ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}
 @end ifset
 @end example
 
 @need 1000
-@subheading @value{NEWLIB-VERSION}
+@subheading @value{NEWLIBVERSION}
 @example
-    FTP Site:    @value{NEWLIB-FTPSITE}
-    Directory:   @value{NEWLIB-FTPDIR}
-    File:        @value{NEWLIB-TAR}
+    FTP Site:    @value{NEWLIBFTPSITE}
+    Directory:   @value{NEWLIBFTPDIR}
+    File:        @value{NEWLIBTAR}
 @ifset use-html
-@c    URL:         @uref{ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}, Download @value{NEWLIB-VERSION}}
-    URL:         ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}
+@c    URL:         @uref{ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}, Download @value{NEWLIBVERSION}}
+    URL:         ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}
 @end ifset
 @end example
 
 @need 1000
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
-    FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}/c_tools/source
-@ifset BUILDTOOLS-TAR
-    File:        @value{BUILDTOOLS-TAR}
+    FTP Site:    @value{RTEMSFTPSITE}
+    Directory:   @value{RTEMSFTPDIR}/c_tools/source
+@ifset BUILDTOOLSTAR
+    File:        @value{BUILDTOOLSTAR}
 @end ifset
-@ifset BINUTILS-RTEMSPATCH
-    File:        @value{BINUTILS-RTEMSPATCH}
+@ifset BINUTILSRTEMSPATCH
+    File:        @value{BINUTILSRTEMSPATCH}
 @end ifset
-@ifset NEWLIB-RTEMSPATCH
-    File:        @value{NEWLIB-RTEMSPATCH}
+@ifset NEWLIBRTEMSPATCH
+    File:        @value{NEWLIBRTEMSPATCH}
 @end ifset
-@ifset GCC-RTEMSPATCH
-    File:        @value{GCC-RTEMSPATCH}
+@ifset GCCRTEMSPATCH
+    File:        @value{GCCRTEMSPATCH}
 @end ifset
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools/source,Download RTEMS Patches and Scripts}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools/source
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source,Download RTEMS Patches and Scripts}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source
 @end ifset
 @end example
 
@@ -141,9 +141,9 @@ the appropriate commands, the following
 directories will have been created under tools. 
 
 @itemize @bullet
-@item @value{BINUTILS-UNTAR}
-@item @value{GCC-UNTAR}
-@item @value{NEWLIB-UNTAR}
+@item @value{BINUTILSUNTAR}
+@item @value{GCCUNTAR}
+@item @value{NEWLIBUNTAR}
 @end itemize
 
 The tree should look something like the following figure:
@@ -152,22 +152,22 @@ The tree should look something like the following figure:
 @group
 /whatever/prefix/you/choose/
         archive/
-            @value{GCC-TAR}
-            @value{BINUTILS-TAR}
-            @value{NEWLIB-TAR}
-@ifset GCC-RTEMSPATCH
-            @value{GCC-RTEMSPATCH}
+            @value{GCCTAR}
+            @value{BINUTILSTAR}
+            @value{NEWLIBTAR}
+@ifset GCCRTEMSPATCH
+            @value{GCCRTEMSPATCH}
 @end ifset
-@ifset BINUTILS-RTEMSPATCH
-            @value{BINUTILS-RTEMSPATCH}
+@ifset BINUTILSRTEMSPATCH
+            @value{BINUTILSRTEMSPATCH}
 @end ifset
-@ifset NEWLIB-RTEMSPATCH
-            @value{NEWLIB-RTEMSPATCH}
+@ifset NEWLIBRTEMSPATCH
+            @value{NEWLIBRTEMSPATCH}
 @end ifset
         tools/
-            @value{BINUTILS-UNTAR}/
-            @value{GCC-UNTAR}/
-            @value{NEWLIB-UNTAR}/
+            @value{BINUTILSUNTAR}/
+            @value{GCCUNTAR}/
+            @value{NEWLIBUNTAR}/
 @end group
 @end example
 
@@ -191,18 +191,18 @@ to GCC, NEWLIB, and BINUTILS.
 
 @subheading Apply RTEMS Patch to GCC
 
-@ifclear GCC-RTEMSPATCH
-No RTEMS specific patches are required for @value{GCC-VERSION} to
-support @value{RTEMS-VERSION}.
+@ifclear GCCRTEMSPATCH
+No RTEMS specific patches are required for @value{GCCVERSION} to
+support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset GCC-RTEMSPATCH
+@ifset GCCRTEMSPATCH
 
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{GCC-UNTAR}
-cat ../../archive/@value{GCC-RTEMSPATCH} | \
+cd tools/@value{GCCUNTAR}
+cat ../../archive/@value{GCCRTEMSPATCH} | \
     patch -p1
 @end example
 
@@ -216,7 +216,7 @@ Check to see if any of these patches have been rejected using the following
 sequence:
 
 @example
-cd tools/@value{GCC-UNTAR}
+cd tools/@value{GCCUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -231,17 +231,17 @@ This should not happen with a good patch file which is properly applied.
 
 @subheading Apply RTEMS Patch to binutils
 
-@ifclear BINUTILS-RTEMSPATCH
-No RTEMS specific patches are required for @value{BINUTILS-VERSION} to
-support @value{RTEMS-VERSION}.
+@ifclear BINUTILSRTEMSPATCH
+No RTEMS specific patches are required for @value{BINUTILSVERSION} to
+support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset BINUTILS-RTEMSPATCH
+@ifset BINUTILSRTEMSPATCH
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{BINUTILS-UNTAR}
-cat ../../archive/@value{BINUTILS-RTEMSPATCH} | \
+cd tools/@value{BINUTILSUNTAR}
+cat ../../archive/@value{BINUTILSRTEMSPATCH} | \
     patch -p1
 @end example
 
@@ -255,7 +255,7 @@ Check to see if any of these patches have been rejected using the following
 sequence: 
 
 @example
-cd tools/@value{BINUTILS-UNTAR}
+cd tools/@value{BINUTILSUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -270,18 +270,18 @@ This should not happen with a good patch file which is properly applied.
 
 @subheading Apply RTEMS Patch to newlib
 
-@ifclear NEWLIB-RTEMSPATCH
-No RTEMS specific patches are required for @value{NEWLIB-VERSION} to
-support @value{RTEMS-VERSION}.
+@ifclear NEWLIBRTEMSPATCH
+No RTEMS specific patches are required for @value{NEWLIBVERSION} to
+support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset NEWLIB-RTEMSPATCH
+@ifset NEWLIBRTEMSPATCH
 
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{NEWLIB-UNTAR}
-cat ../../archive/@value{NEWLIB-RTEMSPATCH} | \
+cd tools/@value{NEWLIBUNTAR}
+cat ../../archive/@value{NEWLIBRTEMSPATCH} | \
     patch -p1
 @end example
 
@@ -295,7 +295,7 @@ Check to see if any of these patches have been rejected using the following
 sequence: 
 
 @example
-cd tools/@value{NEWLIB-UNTAR}
+cd tools/@value{NEWLIBUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -476,25 +476,25 @@ newlib manually using @code{configure} and @code{make} directly.
 
 The following example illustrates the invocation of
 @code{configure} and @code{make}
-to build and install @value{BINUTILS-UNTAR} for the
+to build and install @value{BINUTILSUNTAR} for the
 sparc-rtems target:
 
 @example
 mkdir b-binutils
 cd b-binutils
-../@value{BINUTILS-UNTAR}/configure --target=sparc-rtems \
+../@value{BINUTILSUNTAR}/configure --target=sparc-rtems \
   --prefix=/opt/rtems
 make all
 make info
 make install
 @end example
 
-After @value{BINUTILS-UNTAR} is built and installed the 
+After @value{BINUTILSUNTAR} is built and installed the 
 build directory @code{b-binutils} may be removed.
 
 For more information on the invocation of @code{configure}, please
-refer to the documentation for @value{BINUTILS-UNTAR} or 
-invoke the @value{BINUTILS-UNTAR} @code{configure} command with the
+refer to the documentation for @value{BINUTILSUNTAR} or 
+invoke the @value{BINUTILSUNTAR} @code{configure} command with the
 @code{--help} option.
 
 NOTE: The shell PATH variable needs to be updated to include the path
@@ -518,30 +518,30 @@ sparc-rtems-ar: command not found
 
 @subheading Configuring and Building GCC and NEWLIB
 
-Before building @value{GCC-UNTAR} and @value{NEWLIB-UNTAR}, 
-@value{BINUTILS-UNTAR} must be installed and the directory
+Before building @value{GCCUNTAR} and @value{NEWLIBUNTAR}, 
+@value{BINUTILSUNTAR} must be installed and the directory
 containing those executables must be in your PATH.
 
 The C Library is built as a subordinate component of 
-@value{GCC-UNTAR}.  Because of this, the @value{NEWLIB-UNTAR}
-directory source must be available inside the @value{GCC-UNTAR}
+@value{GCCUNTAR}.  Because of this, the @value{NEWLIBUNTAR}
+directory source must be available inside the @value{GCCUNTAR}
 source tree.  This is normally accomplished using a symbolic
 link as shown in this example:
 
 @example
-cd @value{GCC-UNTAR}
-ln -s ../@value{NEWLIB-UNTAR}/newlib .
+cd @value{GCCUNTAR}
+ln -s ../@value{NEWLIBUNTAR}/newlib .
 @end example
 
 The following example illustrates the invocation of
 @code{configure} and @code{make}
-to build and install @value{BINUTILS-UNTAR} for the
+to build and install @value{BINUTILSUNTAR} for the
 sparc-rtems target:
 
 @example
 mkdir b-gcc
 cd b-gcc
-../@value{GCC-UNTAR}/configure --target=sparc-rtems \
+../@value{GCCUNTAR}/configure --target=sparc-rtems \
    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
    --enable-threads --prefix=/opt/rtems
 make all
@@ -549,12 +549,12 @@ make info
 make install
 @end example
 
-After @value{GCC-UNTAR} is built and installed the 
+After @value{GCCUNTAR} is built and installed the 
 build directory @code{b-gcc} may be removed.
 
 For more information on the invocation of @code{configure}, please
-refer to the documentation for @value{GCC-UNTAR} or
-invoke the @value{GCC-UNTAR} @code{configure} command with the
+refer to the documentation for @value{GCCUNTAR} or
+invoke the @value{GCCUNTAR} @code{configure} command with the
 @code{--help} option.
 
 @c
@@ -606,31 +606,31 @@ placed in your @code{archive} directory.  Included are the locations
 of each component as well as any required RTEMS specific patches.
 
 @need 1000
-@subheading @value{GDB-VERSION}
+@subheading @value{GDBVERSION}
 @example
-    FTP Site:    @value{GDB-FTPSITE}
-    Directory:   @value{GDB-FTPDIR}
-    File:        @value{GDB-TAR}
+    FTP Site:    @value{GDBFTPSITE}
+    Directory:   @value{GDBFTPDIR}
+    File:        @value{GDBTAR}
 @ifset use-html
-@c    URL:         @uref{Download @value{GDB-VERSION}, ftp://@value{GDB-FTPSITE}@value{GDB-FTPDIR}}
-    URL:         ftp://@value{GDB-FTPSITE}@value{GDB-FTPDIR}
+@c    URL:         @uref{Download @value{GDBVERSION}, ftp://@value{GDBFTPSITE}@value{GDBFTPDIR}}
+    URL:         ftp://@value{GDBFTPSITE}@value{GDBFTPDIR}
 @end ifset
 @end example
 
 @need 1000
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
-    FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}/c_tools/source
-@ifset BUILDTOOLS-TAR
-    File:        @value{BUILDTOOLS-TAR}
+    FTP Site:    @value{RTEMSFTPSITE}
+    Directory:   @value{RTEMSFTPDIR}/c_tools/source
+@ifset BUILDTOOLSTAR
+    File:        @value{BUILDTOOLSTAR}
 @end ifset
-@ifset GDB-RTEMSPATCH
-    File:        @value{GDB-RTEMSPATCH}
+@ifset GDBRTEMSPATCH
+    File:        @value{GDBRTEMSPATCH}
 @end ifset
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools/source,Download RTEMS Patches and Scripts}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools/source
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source,Download RTEMS Patches and Scripts}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source
 @end ifset
 @end example
 
@@ -643,10 +643,10 @@ Use the following commands to unarchive the GDB distribution:
 
 @example
 cd tools
-tar xzf ../archive/@value{GDB-TAR}
+tar xzf ../archive/@value{GDBTAR}
 @end example
 
-The directory @value{GDB-UNTAR} is created under the tools directory.
+The directory @value{GDBUNTAR} is created under the tools directory.
 
 @c
 @c  Applying RTEMS Patch to GDB
@@ -654,18 +654,18 @@ The directory @value{GDB-UNTAR} is created under the tools directory.
 
 @subsection Applying RTEMS Patch to GDB
 
-@ifclear GDB-RTEMSPATCH
-No RTEMS specific patches are required for @value{GDB-VERSION} to
-support @value{RTEMS-VERSION}.
+@ifclear GDBRTEMSPATCH
+No RTEMS specific patches are required for @value{GDBVERSION} to
+support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset GDB-RTEMSPATCH
+@ifset GDBRTEMSPATCH
 
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{GDB-UNTAR}
-cat archive/@value{GDB-RTEMSPATCH} | \
+cd tools/@value{GDBUNTAR}
+cat archive/@value{GDBRTEMSPATCH} | \
     patch -p1
 @end example
 
@@ -679,7 +679,7 @@ Check to see if any of these patches have been rejected using the following
 sequence:
 
 @example
-cd tools/@value{GDB-UNTAR}
+cd tools/@value{GDBUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -785,13 +785,13 @@ NOTE: It may be necessary to remove the build tree in the
 This section describes how to configure the GNU debugger for
 RTEMS targets using @code{configure} and @code{make} directly.
 The following example illustrates the invocation of @code{configure}
-and @code{make} to build and install @value{GDB-UNTAR} for the
+and @code{make} to build and install @value{GDBUNTAR} for the
 m68k-rtems target:
 
 @example
 mkdir b-gdb
 cd b-gdb
-../@value{GDB-UNTAR}/configure --target=m68k-rtems \
+../@value{GDBUNTAR}/configure --target=m68k-rtems \
   --prefix=/opt/rtems
 make all
 make info
@@ -815,12 +815,12 @@ configurations for which there are extra options:
 
 @end table
 
-After @value{GDB-UNTAR} is built and installed the
+After @value{GDBUNTAR} is built and installed the
 build directory @code{b-gdb} may be removed.
 
 For more information on the invocation of @code{configure}, please
-refer to the documentation for @value{GDB-UNTAR} or
-invoke the @value{GDB-UNTAR} @code{configure} command with the
+refer to the documentation for @value{GDBUNTAR} or
+invoke the @value{GDBUNTAR} @code{configure} command with the
 @code{--help} option.
 
 @c
@@ -886,7 +886,7 @@ in the various tool source trees.  The following command
 does this for the binutils source:
 
 @example
-find @value{BINUTILS-UNTAR} -name config.status -print
+find @value{BINUTILSUNTAR} -name config.status -print
 @end example
 
 The solution for this is to execute the command 
@@ -903,7 +903,7 @@ configuration.  The include path used is something like
 this:
 
 @example
--I../../@value{BINUTILS-UNTAR}/gcc -I/@value{BINUTILS-UNTAR}/gcc/include -I.
+-I../../@value{BINUTILSUNTAR}/gcc -I/@value{BINUTILSUNTAR}/gcc/include -I.
 @end example
 
 Note that the tool source directory is searched before the 
