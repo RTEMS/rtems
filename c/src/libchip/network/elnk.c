@@ -27,7 +27,7 @@
  * the standard OAR licensing terms given in the comments at the top of
  * this file.
  *
- * Greg Menke
+ * Greg Menke, 6/11/2003
  */
 
  /*
@@ -70,9 +70,11 @@
  *  from being compiled on systems which can't support this driver.
  */
 
+/*
 #if defined(__i386__)
 #define ELNK_SUPPORTED
 #endif
+*/
 
 #if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(mpc603e))
 #define ELNK_SUPPORTED
@@ -187,6 +189,8 @@ static rtems_event_set unit_signals[NUM_UNITS]= { RTEMS_EVENT_1,
                                                   RTEMS_EVENT_8 };
 
 
+
+
 #if defined(__PPC)
 #define phys_to_bus(address) ((unsigned int)((address)) + PCI_DRAM_OFFSET)
 #define bus_to_phys(address) ((unsigned int)((address)) - PCI_DRAM_OFFSET)
@@ -210,10 +214,10 @@ inline unsigned32 ld_le32(volatile unsigned32 *addr)
 #endif
 
 /* the actual duration waited in DELAY is not especially predictable,
- * though it will be consistent.  It should not be relied upon for
- * specific timing given the vague per-bsp, per-architecture
- * implementation of the actual delay function.  It would probably be
- * helpful to make this more accurate at some point...
+ * though it will be consistent on a given host.  It should not be
+ * relied upon for specific timing given the vague per-bsp,
+ * per-architecture implementation of the actual delay function.  It
+ * would probably be helpful to make this more accurate at some point...
  */
 #define DELAY(n)        rtems_bsp_delay_in_bus_cycles( n*20  )
 
@@ -314,8 +318,8 @@ inline unsigned32 ld_le32(volatile unsigned32 *addr)
  * Interrupts we normally want enabled.
  */
 #define XL_INTRS	\
-	(XL_STAT_UP_COMPLETE|XL_STAT_STATSOFLOW|XL_STAT_ADFAIL|	\
-	 XL_STAT_DOWN_COMPLETE|XL_STAT_TX_COMPLETE|XL_STAT_INTLATCH)
+                  (XL_STAT_UP_COMPLETE | XL_STAT_STATSOFLOW | XL_STAT_ADFAIL|	\
+	           XL_STAT_DOWN_COMPLETE | XL_STAT_TX_COMPLETE | XL_STAT_INTLATCH)
 
 
 
@@ -753,22 +757,24 @@ struct xl_mii_frame {
 
 struct xl_stats 
 {
-      u_int8_t		xl_carrier_lost;
-      u_int8_t		xl_sqe_errs;
-      u_int8_t		xl_tx_multi_collision;
-      u_int8_t		xl_tx_single_collision;
-      u_int8_t		xl_tx_late_collision;
-      u_int8_t		xl_rx_overrun;
-      u_int8_t		xl_tx_frames_ok;
-      u_int8_t		xl_rx_frames_ok;
-      u_int8_t		xl_tx_deferred;
-      u_int8_t		xl_upper_frames_ok;
-      u_int16_t		xl_rx_bytes_ok;
-      u_int16_t		xl_tx_bytes_ok;
+      /* accumulated stats */
+      u_int16_t		xl_carrier_lost;
+      u_int16_t		xl_sqe_errs;
+      u_int16_t		xl_tx_multi_collision;
+      u_int16_t		xl_tx_single_collision;
+      u_int16_t		xl_tx_late_collision;
+      u_int16_t		xl_rx_overrun;
+      u_int16_t		xl_tx_deferred;
 
-      u_int8_t          xl_upper_bytes_ok;
-      u_int8_t		xl_badssd;
+      u_int32_t		xl_rx_bytes_ok;
+      u_int32_t		xl_tx_bytes_ok;
 
+      u_int32_t		xl_tx_frames_ok;
+      u_int32_t		xl_rx_frames_ok;
+
+      u_int16_t		xl_badssd;
+
+      /* non-accumulated stats */
       u_int16_t		intstatus;
       u_int16_t		rxstatus;
       u_int8_t		txstatus;
@@ -777,8 +783,12 @@ struct xl_stats
       u_int16_t         miianr, miipar, miistatus, miicmd;
 
       u_int32_t         device_interrupts;
+      u_int32_t         internalconfig;
+      u_int16_t         mac_control;
 
       u_int16_t         smbstatus;
+      u_int32_t         dmactl;
+      u_int16_t         txfree;
 };
 
 
@@ -862,11 +872,11 @@ static struct xl_type xl_devs[] = {
 #define CSR_WRITE_2(sc, reg, val)	outw( val, sc->ioaddr + reg)
 #define CSR_WRITE_1(sc, reg, val)	outb( val, sc->ioaddr + reg)
 
-#define CSR_READ_4(sc, reg)	inl(sc->ioaddr + reg)
-#define CSR_READ_2(sc, reg)	inw(sc->ioaddr + reg)
-#define CSR_READ_1(sc, reg)	inb(sc->ioaddr + reg)
+#define CSR_READ_4(sc, reg)	        inl(sc->ioaddr + reg)
+#define CSR_READ_2(sc, reg)	        inw(sc->ioaddr + reg)
+#define CSR_READ_1(sc, reg)	        inb(sc->ioaddr + reg)
 
-#define XL_SEL_WIN(x)           CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_WINSEL | x)
+#define XL_SEL_WIN(x)                   CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_WINSEL | x)
 
 #define XL_TIMEOUT		1000
 
@@ -874,8 +884,9 @@ static struct xl_type xl_devs[] = {
 
 
 
-/* message descriptor entry, ensure this struct is aligned to 8 bytes */
-struct MD 
+
+/* rx message descriptor entry, ensure the struct is aligned to 8 bytes */
+struct RXMD 
 {
       /* used by hardware */
       volatile unsigned32 next;
@@ -884,12 +895,41 @@ struct MD
       volatile unsigned32 length;
       /* used by software */
       struct mbuf       *mbuf;        /* scratch variable used in the tx ring */
-      struct MD         *next_md;
+      struct RXMD       *next_md;
+} __attribute__ ((aligned (8), packed));
+
+
+
+
+
+#define NUM_FRAGS       8
+
+/* 
+ * tx message descriptor entry, ensure the struct is aligned to 8 bytes
+ */
+
+struct tfrag
+{
+      volatile unsigned32 addr;
+      volatile unsigned32 length;
 } __attribute__ ((packed));
 
+struct TXMD 
+{
+      /* used by hardware */
+      volatile unsigned32 next;
+      volatile unsigned32 status;
+      struct tfrag        txfrags[NUM_FRAGS];
+      /* used by software */
+      struct mbuf       *mbuf;        /* scratch variable used in the tx ring */
+      struct TXMD       *next_md, *chainptr;
+} __attribute__ ((aligned (8), packed));
 
 
 
+
+
+#define NUM_CHAIN_LENGTHS       50
 
 
 
@@ -904,9 +944,10 @@ struct elnk_softc
       rtems_event_set           ioevent;
       unsigned int 		ioaddr;
 
-      volatile unsigned char    *bufferBase, *ringBase;
+      unsigned char             *bufferBase, *ringBase;
 
-      struct MD                 *curr_rx_md, *last_tx_md, *last_txchain_head;
+      struct RXMD      *rx_ring, *curr_rx_md;
+      struct TXMD      *tx_ring, *last_tx_md, *last_txchain_head;
 
       rtems_id                  stat_timer_id;
       unsigned32                stats_update_ticks;
@@ -924,6 +965,9 @@ struct elnk_softc
 
       int                       tx_idle;
 
+      short                     chain_lengths[NUM_CHAIN_LENGTHS];
+      int                       chlenIndex;
+
       unsigned short            vendorID, deviceID;
       int			acceptBroadcast;
       int                       numTxbuffers, numRxbuffers;
@@ -932,6 +976,7 @@ struct elnk_softc
 static struct elnk_softc elnk_softc[NUM_UNITS];
 static rtems_id	rxDaemonTid;
 static rtems_id	txDaemonTid;
+static rtems_id chainRecoveryQueue;
 
 
 
@@ -954,18 +999,18 @@ static rtems_id	txDaemonTid;
  */
 static void
 xl_wait(sc)
-   struct elnk_softc		*sc;
+   struct elnk_softc	*sc;
 {
    register int		i;
 
-   for (i = 0; i < XL_TIMEOUT; i++) {
+   for(i = 0; i < XL_TIMEOUT; i++) 
+   {
       if (!(CSR_READ_2(sc, XL_STATUS) & XL_STAT_CMDBUSY))
          break;
    }
 
    if (i == XL_TIMEOUT)
-      printk("ek%d: command never completed!\n", sc->xl_unit);
-
+      printk("etherlink : unit elnk%d command never completed\n", sc->xl_unit );
    return;
 }
 
@@ -1172,7 +1217,7 @@ xl_mii_writereg(sc, frame)
 
 static int
 xl_miibus_readreg(sc, phy, reg)
-   struct elnk_softc		*sc;
+   struct elnk_softc	*sc;
    int			phy, reg;
 {
    struct xl_mii_frame	frame;
@@ -1190,7 +1235,7 @@ xl_miibus_readreg(sc, phy, reg)
       return(0);
    }
 
-   bzero((char *)&frame, sizeof(frame));
+   memset((char *)&frame, 0, sizeof(frame));
 
    frame.mii_phyaddr = phy;
    frame.mii_regaddr = reg;
@@ -1212,7 +1257,7 @@ xl_miibus_writereg(sc, phy, reg, data)
       return(0);
    }
 
-   bzero((char *)&frame, sizeof(frame));
+   memset((char *)&frame, 0, sizeof(frame));
 
    frame.mii_phyaddr = phy;
    frame.mii_regaddr = reg;
@@ -1313,22 +1358,27 @@ xl_stats_update(timerid,xsc)
    rtems_id timerid;
    void *xsc;
 {
-   volatile struct elnk_softc	*sc = (struct elnk_softc *)xsc;
-   volatile struct ifnet        *ifp = &sc->arpcom.ac_if;
-
-   int	i;
+   struct elnk_softc	*sc = (struct elnk_softc *)xsc;
+   struct ifnet         *ifp = &sc->arpcom.ac_if;
+   u_int32_t            t1;
 
    sc->xl_stats.intstatus = CSR_READ_2(sc, XL_STATUS);
-
+   
    sc->xl_stats.miianr    = xl_miibus_readreg(sc, 0x18, MII_ANAR );
    sc->xl_stats.miipar    = xl_miibus_readreg(sc, 0x18, MII_ANLPAR );
    sc->xl_stats.miistatus = xl_miibus_readreg(sc, 0x18, MII_BMSR );
    sc->xl_stats.miicmd    = xl_miibus_readreg(sc, 0x18, MII_BMCR );
-      
+   
    XL_SEL_WIN(1);
-   sc->xl_stats.rxstatus = CSR_READ_2(sc, XL_W1_RX_STATUS );
-   sc->xl_stats.txstatus = CSR_READ_1(sc, XL_W1_TX_STATUS );
+   sc->xl_stats.rxstatus  = CSR_READ_2(sc, XL_W1_RX_STATUS );
+   sc->xl_stats.txstatus  = CSR_READ_1(sc, XL_W1_TX_STATUS );
    sc->xl_stats.smbstatus = CSR_READ_2(sc, 2 );
+
+   XL_SEL_WIN(3);
+   sc->xl_stats.internalconfig = CSR_READ_4(sc, XL_W3_INTERNAL_CFG);
+   sc->xl_stats.mac_control    = CSR_READ_2(sc, XL_W3_MAC_CTRL);
+   sc->xl_stats.txfree         = CSR_READ_2(sc, XL_W3_FREE_TX );
+      
 
    /* Read all the stats registers. */
    XL_SEL_WIN(6);
@@ -1339,18 +1389,18 @@ xl_stats_update(timerid,xsc)
    sc->xl_stats.xl_tx_single_collision       += CSR_READ_1(sc, XL_W6_COL_SINGLE);
    sc->xl_stats.xl_tx_late_collision         += CSR_READ_1(sc, XL_W6_COL_LATE);
    sc->xl_stats.xl_rx_overrun                += CSR_READ_1(sc, XL_W6_RX_OVERRUN);
+   sc->xl_stats.xl_tx_deferred               += CSR_READ_1(sc, XL_W6_DEFERRED);
+
    sc->xl_stats.xl_tx_frames_ok              += CSR_READ_1(sc, XL_W6_TX_OK);
    sc->xl_stats.xl_rx_frames_ok              += CSR_READ_1(sc, XL_W6_RX_OK);
-   sc->xl_stats.xl_tx_deferred               += CSR_READ_1(sc, XL_W6_DEFERRED);
-   sc->xl_stats.xl_upper_frames_ok           += CSR_READ_1(sc, XL_W6_UPPER_FRAMES_OK);
 
    sc->xl_stats.xl_rx_bytes_ok               += CSR_READ_2(sc, XL_W6_TX_BYTES_OK );
    sc->xl_stats.xl_tx_bytes_ok               += CSR_READ_2(sc, XL_W6_RX_BYTES_OK );
 
-/*
-   for (i = 0; i < 16; i++)
-   *p++ = CSR_READ_1(sc, XL_W6_CARRIER_LOST + i);
-*/
+   t1 = CSR_READ_1(sc, XL_W6_UPPER_FRAMES_OK);
+   sc->xl_stats.xl_rx_frames_ok +=  ((t1 & 0x3) << 8);
+   sc->xl_stats.xl_tx_frames_ok +=  (((t1 >> 4) & 0x3) << 8);
+
 
    ifp->if_ierrors += sc->xl_stats.xl_rx_overrun;
 
@@ -1365,9 +1415,16 @@ xl_stats_update(timerid,xsc)
     * interrupt.
     */
    XL_SEL_WIN(4);
-   sc->xl_stats.xl_upper_bytes_ok       += CSR_READ_1(sc, XL_W4_UPPERBYTESOK);
+
+   t1 = CSR_READ_1(sc, XL_W4_UPPERBYTESOK);
+   sc->xl_stats.xl_rx_bytes_ok += ((t1 & 0xf) << 16);
+   sc->xl_stats.xl_tx_bytes_ok += (((t1 >> 4) & 0xf) << 16);
+
    sc->xl_stats.xl_badssd               += CSR_READ_1(sc, XL_W4_BADSSD);
-   sc->xl_stats.mediastatus              = CSR_READ_2(sc, XL_W4_MEDIA_STATUS );
+
+   sc->xl_stats.mediastatus             = CSR_READ_2(sc, XL_W4_MEDIA_STATUS );
+   sc->xl_stats.dmactl                  = CSR_READ_4(sc, XL_DMACTL );
+
 
    XL_SEL_WIN(7);
 
@@ -1416,7 +1473,8 @@ xl_reset(sc)
    xl_wait(sc);
 
    if (sc->xl_flags & XL_FLAG_INVERT_LED_PWR || 
-       sc->xl_flags & XL_FLAG_INVERT_MII_PWR) {
+       sc->xl_flags & XL_FLAG_INVERT_MII_PWR) 
+   {
       XL_SEL_WIN(2);
       CSR_WRITE_2(sc, XL_W2_RESET_OPTIONS, CSR_READ_2(sc,
                                                       XL_W2_RESET_OPTIONS) 
@@ -1437,7 +1495,6 @@ static void
 xl_stop(sc)
    struct elnk_softc		*sc;
 {
-   register int		i;
    struct ifnet		*ifp;
 
    ifp = &sc->arpcom.ac_if;
@@ -1483,10 +1540,12 @@ xl_setcfg(sc)
 
    XL_SEL_WIN(3);
    icfg = CSR_READ_4(sc, XL_W3_INTERNAL_CFG);
+
    icfg &= ~XL_ICFG_CONNECTOR_MASK;
-   if (sc->xl_media & XL_MEDIAOPT_MII ||
-       sc->xl_media & XL_MEDIAOPT_BT4)
+
+   if (sc->xl_media & XL_MEDIAOPT_MII || sc->xl_media & XL_MEDIAOPT_BT4)
       icfg |= (XL_XCVR_MII << XL_ICFG_CONNECTOR_BITS);
+
    if (sc->xl_media & XL_MEDIAOPT_BTX)
       icfg |= (XL_XCVR_AUTO << XL_ICFG_CONNECTOR_BITS);
 
@@ -1497,9 +1556,11 @@ xl_setcfg(sc)
    return;
 }
 
+
+
 static void
 xl_setmode(sc, media)
-   struct elnk_softc		*sc;
+   struct elnk_softc	*sc;
    int			media;
 {
    u_int32_t		icfg;
@@ -1584,6 +1645,7 @@ xl_setmode(sc, media)
       CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_COAX_START);
    else
       CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_COAX_STOP);
+
    CSR_WRITE_4(sc, XL_W3_INTERNAL_CFG, icfg);
    XL_SEL_WIN(4);
    CSR_WRITE_2(sc, XL_W4_MEDIA_STATUS, mediastat);
@@ -1716,6 +1778,8 @@ xl_mediacheck(sc)
    struct elnk_softc		*sc;
 {
 
+   xl_choose_xcvr(sc, 1);
+
    /*
     * If some of the media options bits are set, assume they are
     * correct. If not, try to figure it out down below.
@@ -1747,7 +1811,6 @@ xl_mediacheck(sc)
              "should probably consult your vendor\n", sc->xl_unit);
    }
 
-   xl_choose_xcvr(sc, 1);
    return;
 }
 
@@ -1794,17 +1857,17 @@ static int elnkIsOn(const rtems_irq_connect_data* irq)
 
 
 static void 
-elnk_start_txchain( struct elnk_softc *sc, struct MD *chaintop )
+elnk_start_txchain( struct elnk_softc *sc, struct TXMD *chainhead )
 {
-   printk("unit elnk%d tx start\n", sc->xl_unit );
-
-   sc->tx_idle = 0;
+   xl_wait(sc);
+   CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_DOWN_STALL);
 
    /* save the address of the TX list */
-   sc->last_txchain_head = chaintop;
+   sc->last_txchain_head = chainhead;
+   sc->tx_idle = 0;
 
-   CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_DOWN_STALL);
    xl_wait(sc);
+
    CSR_WRITE_4(sc, XL_DOWNLIST_PTR, phys_to_bus( sc->last_txchain_head ));
    CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_DOWN_UNSTALL);
 }
@@ -1822,11 +1885,11 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
    struct ifnet		*ifp = &sc->arpcom.ac_if;
    u_int16_t		status;
 
-   while( (status = CSR_READ_2(sc, XL_STATUS)) & XL_INTRS && status != 0xFFFF)
+   while( ((status = CSR_READ_2(sc, XL_STATUS)) & XL_INTRS) && status != 0xFFFF)
    {
       sc->xl_stats.device_interrupts++;
 
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_INTR_ACK|(status & XL_INTRS));
+      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_INTR_ACK | (status & XL_INTRS));
 
 #if 0
       printk("etherlink : unit elnk%d intstatus %04x\n", sc->xl_unit, status  );
@@ -1843,27 +1906,41 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
 
       if (status & XL_STAT_DOWN_COMPLETE) 
       {
-         struct MD *chaintailmd = NULL;
-
          /* all packets uploaded to the device */
+         struct TXMD *chaintailmd = NULL;
 
-         if( sc->last_txchain_head->mbuf )
+         /* send the chain head to the tx task which will recover the
+            whole chain */
+         rtems_message_queue_send( chainRecoveryQueue, &sc->last_txchain_head, sizeof(struct TXMD *));
+
+         /* set up the next chain */
+         if( sc->last_txchain_head->chainptr )
          {
-            /* either this is a chain of 2 or more packets, or its a
-             * single packet chain and another chain is also ready to send 
+            /* check the head of the chain of packets we just finished,
+             * if != 0, either this is a chain of 2 or more packets or
+             * its a single packet chain and another chain is ready to
+             * send.
              */
-            if( (int)sc->last_txchain_head->mbuf == -1 )
+            if( (int)sc->last_txchain_head->chainptr == -1 )
             {
-               /* single packet was sent, no indirection to the last entry
-                  in the chain.  since mbuf is != 0, then another chain
-                  is ready */
+               /* 
+               ** single packet was sent so no indirection to the last
+               ** entry in the chain.  since chainptr is != 0, then
+               ** another chain is ready starting from the packet AFTER
+               ** the chain we just finished. - in this case the last
+               ** chain's head == its tail
+               */
                chaintailmd = sc->last_txchain_head;
             }
             else
             {
-               /* otherwise, this is a pointer to the last packet in the
-                  chain */
-               chaintailmd = (struct MD *)sc->last_txchain_head->mbuf;
+               /*
+               ** otherwise, this is a pointer to the last packet in the
+               ** chain of 2 or more packets.  If the chain's last
+               ** packet's mbuf is != 0, then another chain is ready to
+               ** send.
+               */
+               chaintailmd = sc->last_txchain_head->chainptr;
                if( !chaintailmd->mbuf ) chaintailmd = NULL;
             }
          }
@@ -1875,17 +1952,37 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
          }
          else
          {
-            /* otherwise, we have nothing else to send */
-            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_DOWN_STALL);
+            /* otherwise nothing to send, so go idle */
             sc->tx_idle = -1;
+
+            /* wake up the tx daemon once so we're sure this last chain
+               will be freed */
+            rtems_event_send( txDaemonTid, sc->ioevent );
+#if 0
             printk("unit elnk%d tx done\n", sc->xl_unit );
+#endif
          }
       }
+
 
       if (status & XL_STAT_TX_COMPLETE) 
       {
          ifp->if_oerrors++;
-         printk("etherlink : unit elnk%d transmission error\n", sc->xl_unit );
+         {
+            unsigned32 txstat;
+
+            XL_SEL_WIN(1);
+            txstat  = CSR_READ_1(sc, XL_W1_TX_STATUS );
+            XL_SEL_WIN(7);
+            
+            printk("etherlink : unit elnk%d transmit error, txstat = %02x \n", sc->xl_unit, txstat );
+
+            xl_wait(sc);
+            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_TX_DISABLE);
+            xl_wait(sc);
+            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_TX_ENABLE);
+            xl_wait(sc);
+         }
       }
       if (status & XL_STAT_ADFAIL) 
       {
@@ -1951,93 +2048,117 @@ elnk_interrupt_handler_entry()
 static void
 elnk_initialize_hardware (struct elnk_softc *sc)
 {
-   volatile unsigned char *cp;
-   int nb, i, rxsize, txsize, ringsize;
+   unsigned char *cp;
+   int i, j, rxsize, txsize, ringsize;
 
    /*
     * Init RX ring
     */
-   cp = (volatile unsigned char *)malloc( (nb = 
-                                           (ringsize = ((rxsize = (sc->numRxbuffers * sizeof(struct MD))) + 
-                                                        (txsize = (sc->numTxbuffers * sizeof(struct MD))))) +
-                                             (sc->numTxbuffers * XL_PACKET_SIZE)) +
-                                          + CPU_CACHE_ALIGNMENT_FOR_BUFFER);
+   cp = (unsigned char *)malloc( (ringsize = ((rxsize = (sc->numRxbuffers * sizeof(struct RXMD))) + 
+                                              (txsize = (sc->numTxbuffers * sizeof(struct TXMD)))) ) +
+                                 + CPU_CACHE_ALIGNMENT_FOR_BUFFER);
    sc->bufferBase = cp;
    cp += (CPU_CACHE_ALIGNMENT_FOR_BUFFER - (int)cp) & (CPU_CACHE_ALIGNMENT_FOR_BUFFER - 1);
 #if defined(__i386__)
 #ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA 
    if (_CPU_is_paging_enabled())
       _CPU_change_memory_mapping_attribute
-         (NULL, cp, nb, PTE_CACHE_DISABLE | PTE_WRITABLE);
+         (NULL, cp, ringsize, PTE_CACHE_DISABLE | PTE_WRITABLE);
 #endif
 #endif
    sc->ringBase = cp;
 
+   /* build tx and rx rings */
+
+   sc->rx_ring = (struct RXMD *)sc->ringBase;
+   sc->tx_ring = (struct TXMD *)&sc->ringBase[ rxsize ];
+
    {
-      volatile unsigned char *txpackets;
-      struct MD            *rx_ring, *tx_ring, *nxtmd, *thismd;
-      struct mbuf          *m;
-
-      /* rebuild tx and rx rings */
-
-      rx_ring = (struct MD *)sc->ringBase;
-      tx_ring = (struct MD *)&sc->ringBase[ rxsize ];
-      txpackets = &sc->ringBase[ringsize];
-
+      struct mbuf    *m;
+      struct RXMD    *nxtmd;
       /* 
-       * The rx ring is easy as its just an array of MD structs, the mbuf
-       * data is dynamically requested from the ip stack.
+       * The rx ring is easy as its just an array of RXMD structs.  New
+       * mbuf entries are allocated from the stack whenever the rx
+       * daemon forwards an incoming packet into it.  Here, we
+       * pre-allocate the rx mbufs for the rx ring entries.
        */
       for(i=0 ; i<sc->numRxbuffers; i++)
       {
+         if( ((unsigned32)&sc->rx_ring[i] & 0x7) )
+         {
+            rtems_panic ("etherlink : unit elnk%d rx ring entry %d not aligned to 8 bytes\n", sc->xl_unit, i );
+         }
+      
          /* allocate an mbuf for each receive descriptor */
          MGETHDR (m, M_WAIT, MT_DATA);
          MCLGET (m, M_WAIT);
          m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
-      
+
          if( i == sc->numRxbuffers-1 )
-            nxtmd = &rx_ring[0];
+            nxtmd = &sc->rx_ring[0];
          else
-            nxtmd = &rx_ring[i+1];
+            nxtmd = &sc->rx_ring[i+1];
 
-         rx_ring[i].next_md = nxtmd;
-         rx_ring[i].mbuf = m;
+         sc->rx_ring[i].next_md = nxtmd;
+         sc->rx_ring[i].mbuf = m;
 
-         rx_ring[i].status = 0;
-         st_le32( &rx_ring[i].addr, (unsigned32)phys_to_bus( mtod(m, void *) ));
-         st_le32( &rx_ring[i].length, XL_LAST_FRAG | XL_PACKET_SIZE );
-         st_le32( &rx_ring[i].next, (unsigned32)phys_to_bus( nxtmd ));
+         st_le32( &sc->rx_ring[i].status, 0);
+         st_le32( &sc->rx_ring[i].next, (unsigned32)phys_to_bus( nxtmd ));
+         st_le32( &sc->rx_ring[i].addr, (unsigned32)phys_to_bus( mtod(m, void *) ));
+         st_le32( &sc->rx_ring[i].length, XL_LAST_FRAG | XL_PACKET_SIZE );
       }
-      sc->curr_rx_md = &rx_ring[0];
+      sc->curr_rx_md = &sc->rx_ring[0];
+   }
 
 
+   {
+      struct TXMD *thismd, *nxtmd;
       /* 
-       * The tx ring is more complex. Each MD has a packet buffer
-       * permanently assigned to it.  Although the next_md fields form a
-       * ring, the DPD next is filled only when packets are added to the
-       * tx chain.  mbuf is a scratch register used to form chains of tx
-       * packets.
+       * The tx ring is more complex. Each MD has an array of fragment
+       * descriptors that are loaded from each packet as they arrive
+       * from the stack.  Each packet gets one ring entry, this allows
+       * the lanboard to efficiently assemble the piecemeal packets into
+       * a contiguous unit at transmit time, rather than spending
+       * cputime concatenating them first.  Although the next_md fields
+       * form a ring, the DPD next is filled only when packets are added
+       * to the tx chain, thus last entry of a series of packets has the
+       * requisite dpd->next value == 0 to terminate the dma.  mbuf
+       * holds the packet info so it can be freed once the packet has
+       * been sent.  chainptr is used to link the head & tail of a chain
+       * of 2 or more packets.  A chain is formed when the tx daemon
+       * gets 2 or more packets from the stack's queue in a service
+       * period, so higher outgoing loads are handled as efficiently as
+       * possible.
        */
 
       for(i=0 ; i<sc->numTxbuffers; i++)
       {
-         if( i == sc->numTxbuffers-1 )
-            nxtmd = &tx_ring[0];
-         else
-            nxtmd = &tx_ring[i+1];
+         if( ((unsigned32)&sc->tx_ring[i] & 0x7) )
+         {
+            rtems_panic ("etherlink : unit elnk%d tx ring entry %d not aligned to 8 bytes\n", sc->xl_unit, i );
+         }
 
-         thismd = &tx_ring[i];
+         if( i == sc->numTxbuffers-1 )
+            nxtmd = &sc->tx_ring[0];
+         else
+            nxtmd = &sc->tx_ring[i+1];
+
+         thismd = &sc->tx_ring[i];
 
          thismd->next_md = nxtmd;
+         thismd->chainptr = NULL;
          thismd->mbuf = NULL;
 
          st_le32( &thismd->status, XL_TXSTAT_DL_COMPLETE );
-         st_le32( &thismd->addr, (unsigned32)phys_to_bus( &txpackets[ i * XL_PACKET_SIZE ] ));
-         st_le32( &thismd->length, XL_LAST_FRAG );
-         thismd->next = 0;
-      }
-      sc->last_tx_md = &tx_ring[0];
+         st_le32( &thismd->next, 0);
 
+         for(j=0; j< NUM_FRAGS; j++)
+         {
+            st_le32( &thismd->txfrags[j].addr, 0 );
+            st_le32( &thismd->txfrags[j].length, 0 );
+         }
+      }
+      sc->last_tx_md = &sc->tx_ring[0];
    }
 
 
@@ -2090,10 +2211,9 @@ static void
 elnk_rxDaemon (void *arg)
 {
    struct elnk_softc     *sc;
-   volatile struct ifnet *ifp;
    struct ether_header   *eh;
    struct mbuf           *m;
-   volatile struct MD    *rmd;
+   struct RXMD           *rmd;
    unsigned int          i,len, rxstat;
    rtems_event_set       events;
 
@@ -2158,7 +2278,7 @@ elnk_rxDaemon (void *arg)
                         MCLGET (m, M_WAIT);
                         m->m_pkthdr.rcvif = ifp;
                         rmd->mbuf   = m;
-                        rmd->status = 0;
+                        st_le32( &rmd->status, 0 );
                         st_le32( &rmd->addr, (unsigned32)phys_to_bus(mtod(m, void *)) );
                      }
                      else
@@ -2209,17 +2329,14 @@ elnk_txDaemon (void *arg)
    struct elnk_softc     *sc;
    struct ifnet          *ifp;
    struct mbuf           *m;
-   struct mbuf           *hold;
-   volatile struct MD    *lastmd, *nextmd, *firstmd;
-   unsigned char        *pktbuff, *buffer;
-   unsigned int         len;
-   int                  chainCount,i;
+   struct TXMD           *lastmd, *nextmd, *firstmd;
+   int                   chainCount,i;
    rtems_event_set       events;
 
    for (;;) 
    {
       /*
-       * Wait for packets bound for any of the units
+       * Wait for any unit's signal to wake us up
        */
       rtems_bsdnet_event_receive( RTEMS_ALL_EVENTS,
                                   RTEMS_EVENT_ANY | RTEMS_WAIT, 
@@ -2244,66 +2361,111 @@ elnk_txDaemon (void *arg)
 
                for(;;) 
                {
+
+                  /*
+                  ** Check the chain recovery queue whenever the tx
+                  ** daemon wakes up.  Note this routine does not assume
+                  ** the context of one of the lanboard units because
+                  ** used tx mbufs no longer associated with any unit.
+                  */
+                  {
+                     struct TXMD *chainhead, *chaintail;
+                     unsigned32  esize;
+
+                     if( rtems_message_queue_receive( chainRecoveryQueue, &chainhead, &esize,
+                                                      RTEMS_NO_WAIT, 0) == RTEMS_SUCCESSFUL )
+                     {
+                        /* get a pointer to the tail */
+                        chaintail = chainhead->chainptr;
+
+                        /* if the tail points somewhere, free the entire
+                           chain */
+                        if( chaintail && (int)chaintail != -1 )
+                        {
+                           for(;;)
+                           {
+                              m_freem( chainhead->mbuf );
+                              chainhead->mbuf = NULL;
+
+                              if(  chainhead == chaintail ) break;
+                              chainhead = chainhead->next_md;
+                           }
+                        }
+                        else
+                        {
+                           /* a single packet chain */
+                           m_freem( chainhead->mbuf );
+                           chainhead->mbuf = NULL;
+                        }
+                     }
+                  }
+
+
+
                   nextmd = lastmd->next_md;
 
                   /* stop when ring is full */
-                  if( ! (ld_le32(&nextmd->status) & XL_TXSTAT_DL_COMPLETE) )
+                  if( nextmd->mbuf || ! (ld_le32(&nextmd->status) & XL_TXSTAT_DL_COMPLETE) )
                   {
                      printk("etherlink : unit elnk%d tx ring full!\n", sc->xl_unit);
                      break;
                   }
+                  
 
                   IF_DEQUEUE(&ifp->if_snd, m);
                   if( !m ) break;
 
-
-                 
-                  hold = m;
-                  len = 0;
-                  
-                  buffer = pktbuff = (char *)bus_to_phys( ld_le32(&nextmd->addr) );
-                  for(;;)
                   {
-                     len += m->m_len;
-                     memcpy((void*) buffer, (char *)m->m_data, m->m_len);
-                     buffer += m->m_len ;
-                     if ((m = m->m_next) == NULL)
-                        break;
+                     int i;
+
+                     nextmd->mbuf = m;
+
+                     for(i=0; i< NUM_FRAGS; i++)
+                     {
+                        st_le32( &nextmd->txfrags[i].length, ((m->m_next)?0:XL_LAST_FRAG) | ( m->m_len & XL_TXSTAT_LENMASK) );
+                        st_le32( &nextmd->txfrags[i].addr, (unsigned32)phys_to_bus(m->m_data) );
+                        if ((m = m->m_next) == NULL)
+                           break;
+                     }
+                     if( m )
+                     {
+                        printk("etherlink : unit elnk%d tx fragments exhausted, truncating packet!\n", sc->xl_unit);
+                        st_le32( &nextmd->txfrags[NUM_FRAGS-1].length, XL_LAST_FRAG | 
+                                 ld_le32( &nextmd->txfrags[NUM_FRAGS-1].length) );
+                     }
                   }
-                  m_freem( hold );
 
-
+#if 0
                   {
-                     char *pkt = pktbuff, *delim;
+                     char *pkt = bus_to_phys( ld_le32( &nextmd->txfrags[i].addr ), *delim;
                      int  i;
-                     printk("unit %i queued  pkt (%08x) ", sc->xl_unit, (unsigned32)pkt );
-                     for(delim="", i=0; i < sizeof(struct ether_header)+8; i++, delim=":")
+                     printk("unit %d queued  pkt (%08x) ", sc->xl_unit, (unsigned32)pkt );
+                     for(delim="", i=0; i < sizeof(struct ether_header); i++, delim=":")
                         printk("%s%02x", delim, (char) pkt[i] ); 
                      printk("\n");
                   }
+#endif
 
-      
-                  if (len < XL_MIN_FRAMELEN ) len = XL_MIN_FRAMELEN;
-                  st_le32( &nextmd->length, XL_LAST_FRAG | (len & XL_TXSTAT_LENMASK) );
 
                   /* this packet will be the new end of the list */
-                  nextmd->next = 0;
-                  nextmd->status = 0;
+                  st_le32( &nextmd->next, 0);
+                  st_le32( &nextmd->status, 0);
 
                   if( !firstmd )
                   {                     
                      /* keep track of the first packet we add to the chain */
                      firstmd = nextmd;
 
-                     /* use the mbuf pointer of the last packet of the
-                      * previous chain as a flag so when a dnComplete
-                      * interrupt indicates the card is finished, the
-                      * isr can immediately start the next chain.  Note
-                      * several chains of packets may be assembled this
-                      * way- but this assignment won't have any effect
-                      * if a chain isn't already being transmitted.
+                     /*
+                      ** use the chainbuf pointer of the last packet of
+                      ** the previous chain as a flag so when a
+                      ** dnComplete interrupt indicates the card is
+                      ** finished downloading the chain, the isr can
+                      ** immediately start the next which always begins
+                      ** with the next packet in the ring.  Note several
+                      ** chains of packets may be assembled this way.
                       */
-                     lastmd->mbuf = (struct mbuf *)-1;
+                     lastmd->chainptr = (struct TXMD *)-1;
                   }
                   else
                   {
@@ -2319,6 +2481,8 @@ elnk_txDaemon (void *arg)
 
                if( firstmd )
                {
+                  /* only entered if we've queued one or more packets */
+
                   /* save the last descriptor we set up in the chain */
                   sc->last_tx_md = lastmd;
 
@@ -2327,23 +2491,37 @@ elnk_txDaemon (void *arg)
                    * the last packet so we get an dnComplete interrupt
                    * when the card finishes accepting the chain
                    */
-                  st_le32(&lastmd->status, XL_TXSTAT_DL_INTR );
+                  st_le32( &lastmd->status, XL_TXSTAT_DL_INTR );
 
                   /* 
                    * point the chain head's mbuf to the tail so we can
                    * locate the next chain to send inside the isr.  If
                    * we're only sending one packet, then don't bother
-                   * with the link, as the mbuf value will either be 0
+                   * with the link, as the chainptr value will either be 0
                    * if theres no next chain or -1 if there is.
                    */
                   if( chainCount > 1 ) 
-                     firstmd->mbuf = (struct mbuf *)lastmd;
+                  {
+                     firstmd->chainptr = lastmd;
 
-                  /* clear our "next chain present" flag.  If another
-                   * chain is added later, this flag will be set to -1
-                   */
-                  lastmd->mbuf = NULL;
+                     sc->chain_lengths[sc->chlenIndex]= (short)chainCount;
+                     if( ++sc->chlenIndex == NUM_CHAIN_LENGTHS ) sc->chlenIndex = 0;
+                  }
 
+                  /* 
+                  ** clear the last packet's chainptr flag.  If another
+                  ** chain is added later, before this chain is finished
+                  ** being sent, the flag on this packet will be re-set
+                  ** to -1
+                  */
+                  lastmd->chainptr = NULL;
+
+#if 0
+                  printk("unit %d queued %d pkts, lastpkt status %08X\n", 
+                         sc->xl_unit, 
+                         chainCount, 
+                         (unsigned32)ld_le32( &lastmd->status) );
+#endif
 
                   if( sc->tx_idle == 0 && CSR_READ_4(sc, XL_DOWNLIST_PTR) == 0 ) 
                   {
@@ -2351,9 +2529,16 @@ elnk_txDaemon (void *arg)
                      sc->tx_idle = -1;
                   }
 
-                  /* start sending this chain of packets if tx isn't busy */
+                  /* 
+                  ** start sending this chain of packets if tx isn't
+                  ** busy, else the dnComplete interrupt will see there
+                  ** is another chain waiting and begin it immediately.
+                  */
                   if( sc->tx_idle )
                   {
+#if 0
+                     printk("etherlink : unit elnk%d tx started %d packets\n", sc->xl_unit, chainCount );
+#endif
                      elnk_start_txchain(sc, firstmd);
                   }
                }
@@ -2410,218 +2595,252 @@ elnk_init (void *arg)
    struct elnk_softc *sc = arg;
    struct ifnet *ifp = &sc->arpcom.ac_if;
 
-   xl_stop(sc);
-
-   XL_SEL_WIN(3);
-   CSR_WRITE_1(sc, XL_W3_MAC_CTRL, XL_MACCTRL_DUPLEX);
-
+   if( !(ifp->if_flags & IFF_RUNNING) )
    {
-      unsigned32 cr,sr;
+      xl_stop(sc);
+      xl_reset(sc);
+      sc->tx_idle = -1;
 
-      xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_RESET );
-   
-      while( (cr = xl_miibus_readreg(sc, 0x18, MII_BMCR )) & BMCR_RESET )
       {
-         DELAY(100000);
-      }
+         unsigned32 cr,sr;
 
-      xl_miibus_writereg(sc, 0x18, MII_ANAR, ANAR_10 | ANAR_10_FD | ANAR_TX | ANAR_TX_FD | ANAR_T4);
-      xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_AUTOEN );
-
-      /* while( ((sr = xl_miibus_readreg(sc, 0x18, MII_BMSR)) & BMSR_ACOMP) == 0 ); */
-   }
-
+         xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_RESET );
    
-   XL_SEL_WIN(7);
-   CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_RESET);
-   xl_wait(sc);
-   CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_TX_RESET);
-   xl_wait(sc);
-   DELAY(10000);
+         while( (cr = xl_miibus_readreg(sc, 0x18, MII_BMCR )) & BMCR_RESET )
+         {
+            DELAY(100000);
+         }
 
-   sc->tx_idle = -1;
+         xl_miibus_writereg(sc, 0x18, MII_ANAR, ANAR_10 | ANAR_TX | ANAR_10_FD | ANAR_TX_FD );  /*  ANAR_T4 */
+         xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_STARTNEG | BMCR_AUTOEN );
 
-   /*
-    * Set up hardware if its not already been done
-    */
-   if( !sc->irqInfo.hdl )
-   {
-      elnk_initialize_hardware(sc);
-   }
+         while( ((sr = xl_miibus_readreg(sc, 0x18, MII_BMSR)) & BMSR_ACOMP) == 0 ); 
+      }
 
-   /*
-    * Enable the card
-    */
-   {
-      u_int8_t		rxfilt;
 
       /*
-       * Cancel pending I/O
+       * Set up hardware if its not already been done
        */
-
-      /* Init our MAC address */
-      XL_SEL_WIN(2);
-      for (i = 0; i < ETHER_ADDR_LEN; i++) 
+      if( !sc->irqInfo.hdl )
       {
-         CSR_WRITE_1(sc, XL_W2_STATION_ADDR_LO + i, sc->arpcom.ac_enaddr[i]);
-      }
-
-      /* Clear the station mask. */
-      for (i = 0; i < 3; i++)
-         CSR_WRITE_2(sc, XL_W2_STATION_MASK_LO + (i * 2), 0);
-
-      /*
-       * Set the TX freethresh value.
-       * Note that this has no effect on 3c905B "cyclone"
-       * cards but is required for 3c900/3c905 "boomerang"
-       * cards in order to enable the download engine.
-       */
-      CSR_WRITE_1(sc, XL_TX_FREETHRESH, XL_PACKET_SIZE >> 8);
-
-      /* Set the TX start threshold for best performance. */
-      sc->xl_tx_thresh = XL_MIN_FRAMELEN;
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_TX_SET_START|sc->xl_tx_thresh);
-
-      /*
-       * If this is a 3c905B, also set the tx reclaim threshold.
-       * This helps cut down on the number of tx reclaim errors
-       * that could happen on a busy network. The chip multiplies
-       * the register value by 16 to obtain the actual threshold
-       * in bytes, so we divide by 16 when setting the value here.
-       * The existing threshold value can be examined by reading
-       * the register at offset 9 in window 5.
-       */
-      if (sc->xl_type == XL_TYPE_905B) {
-         CSR_WRITE_2(sc, XL_COMMAND,
-                     XL_CMD_SET_TX_RECLAIM|(XL_PACKET_SIZE >> 4));
-      }
-
-      /* Set RX filter bits. */
-      XL_SEL_WIN(5);
-      rxfilt = CSR_READ_1(sc, XL_W5_RX_FILTER);
-
-      /* Set the individual bit to receive frames for this host only. */
-      rxfilt |= XL_RXFILTER_INDIVIDUAL;
-
-      /* If we want promiscuous mode, set the allframes bit. */
-      if (ifp->if_flags & IFF_PROMISC) {
-         rxfilt |= XL_RXFILTER_ALLFRAMES;
-         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_FILT|rxfilt);
-      } else {
-         rxfilt &= ~XL_RXFILTER_ALLFRAMES;
-         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_FILT|rxfilt);
+         elnk_initialize_hardware(sc);
       }
 
       /*
-       * Set capture broadcast bit to capture broadcast frames.
+       * Enable the card
        */
-      if (ifp->if_flags & IFF_BROADCAST) {
-         rxfilt |= XL_RXFILTER_BROADCAST;
-         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_FILT|rxfilt);
-      } else {
-         rxfilt &= ~XL_RXFILTER_BROADCAST;
-         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_FILT|rxfilt);
-      }
+      {
+         u_int8_t		rxfilt;
+
+         /* Init our MAC address */
+         XL_SEL_WIN(2);
+         for (i = 0; i < ETHER_ADDR_LEN; i++) 
+         {
+            CSR_WRITE_1(sc, XL_W2_STATION_ADDR_LO + i, sc->arpcom.ac_enaddr[i]);
+         }
+
+         {
+            int  media = IFM_ETHER|IFM_100_TX|IFM_FDX;
+
+            xl_mediacheck(sc);
+
+            /* Choose a default media. */
+            switch(sc->xl_xcvr) {
+               case XL_XCVR_10BT:
+                  media = IFM_ETHER|IFM_10_T;
+                  xl_setmode(sc, media);
+                  break;
+               case XL_XCVR_AUI:
+                  if (sc->xl_type == XL_TYPE_905B &&
+                      sc->xl_media == XL_MEDIAOPT_10FL) {
+                     media = IFM_ETHER|IFM_10_FL;
+                     xl_setmode(sc, media);
+                  } else {
+                     media = IFM_ETHER|IFM_10_5;
+                     xl_setmode(sc, media);
+                  }
+                  break;
+               case XL_XCVR_COAX:
+                  media = IFM_ETHER|IFM_10_2;
+                  xl_setmode(sc, media);
+                  break;
+               case XL_XCVR_AUTO:
+               case XL_XCVR_100BTX:
+                  xl_setcfg(sc);
+                  break;
+               case XL_XCVR_MII:
+                  printk("etherlink : unit elnk%d MII media not supported!\n", sc->xl_unit);
+                  break;
+               case XL_XCVR_100BFX:
+                  media = IFM_ETHER|IFM_100_FX;
+                  break;
+               default:
+                  printk("etherlink : unit elnk%d unknown XCVR type: %d\n", sc->xl_unit, sc->xl_xcvr);
+                  /*
+                   * This will probably be wrong, but it prevents
+                   * the ifmedia code from panicking.
+                   */
+                  media = IFM_ETHER|IFM_10_T;
+                  break;
+            }
+
+
+            if (sc->xl_flags & XL_FLAG_NO_XCVR_PWR) {
+               XL_SEL_WIN(0);
+               CSR_WRITE_2(sc, XL_W0_MFG_ID, XL_NO_XCVR_PWR_MAGICBITS);
+            }
+         }
+
+
+
+         XL_SEL_WIN(2);
+         /* Clear the station mask. */
+         for (i = 0; i < 3; i++)
+            CSR_WRITE_2(sc, XL_W2_STATION_MASK_LO + (i * 2), 0);
+
+         /*
+          * Set the TX freethresh value.
+          * Note that this has no effect on 3c905B "cyclone"
+          * cards but is required for 3c900/3c905 "boomerang"
+          * cards in order to enable the download engine.
+          */
+         CSR_WRITE_1(sc, XL_TX_FREETHRESH, XL_PACKET_SIZE >> 8);
+
+         /* Set the TX start threshold for best performance. */
+         sc->xl_tx_thresh = XL_MIN_FRAMELEN;
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_TX_SET_START|sc->xl_tx_thresh);
+
+         /*
+          * If this is a 3c905B, also set the tx reclaim threshold.
+          * This helps cut down on the number of tx reclaim errors
+          * that could happen on a busy network. The chip multiplies
+          * the register value by 16 to obtain the actual threshold
+          * in bytes, so we divide by 16 when setting the value here.
+          * The existing threshold value can be examined by reading
+          * the register at offset 9 in window 5.
+          */
+         if (sc->xl_type == XL_TYPE_905B) {
+            CSR_WRITE_2(sc, XL_COMMAND,
+                        XL_CMD_SET_TX_RECLAIM|(XL_PACKET_SIZE >> 4));
+         }
+
+         /* Set RX filter bits. */
+         XL_SEL_WIN(5);
+         rxfilt = CSR_READ_1(sc, XL_W5_RX_FILTER);
+
+         /* Set the individual bit to receive frames for this host only. */
+         rxfilt |= XL_RXFILTER_INDIVIDUAL;
+
+         /* If we want promiscuous mode, set the allframes bit. */
+         if (ifp->if_flags & IFF_PROMISC) {
+            rxfilt |= XL_RXFILTER_ALLFRAMES;
+            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_FILT|rxfilt);
+         } else {
+            rxfilt &= ~XL_RXFILTER_ALLFRAMES;
+            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_FILT|rxfilt);
+         }
+
+         /*
+          * Set capture broadcast bit to capture broadcast frames.
+          */
+         if (ifp->if_flags & IFF_BROADCAST) {
+            rxfilt |= XL_RXFILTER_BROADCAST;
+            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_FILT|rxfilt);
+         } else {
+            rxfilt &= ~XL_RXFILTER_BROADCAST;
+            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_FILT|rxfilt);
+         }
 
 #if 0
-      /*
-       * Program the multicast filter, if necessary.
-       */
-      if (sc->xl_type == XL_TYPE_905B)
-         xl_setmulti_hash(sc);
-      else
-         xl_setmulti(sc);
+         /*
+          * Program the multicast filter, if necessary.
+          */
+         if (sc->xl_type == XL_TYPE_905B)
+            xl_setmulti_hash(sc);
+         else
+            xl_setmulti(sc);
 #endif
-      /*
-       * Load the address of the RX list. We have to
-       * stall the upload engine before we can manipulate
-       * the uplist pointer register, then unstall it when
-       * we're finished. We also have to wait for the
-       * stall command to complete before proceeding.
-       * Note that we have to do this after any RX resets
-       * have completed since the uplist register is cleared
-       * by a reset.
-       */
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_UP_STALL);
-      xl_wait(sc);
-      CSR_WRITE_4(sc, XL_UPLIST_PTR, phys_to_bus( sc->curr_rx_md ));
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_UP_UNSTALL);
-      xl_wait(sc);
-
-
-      if (sc->xl_type == XL_TYPE_905B) {
-         /* Set polling interval */
-         CSR_WRITE_1(sc, XL_DOWN_POLL, 64);
+         /*
+          * Load the address of the RX list. We have to
+          * stall the upload engine before we can manipulate
+          * the uplist pointer register, then unstall it when
+          * we're finished. We also have to wait for the
+          * stall command to complete before proceeding.
+          * Note that we have to do this after any RX resets
+          * have completed since the uplist register is cleared
+          * by a reset.
+          */
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_UP_STALL);
          xl_wait(sc);
-      }
+         CSR_WRITE_4(sc, XL_UPLIST_PTR, phys_to_bus( sc->curr_rx_md ));
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_UP_UNSTALL);
+         xl_wait(sc);
 
-      /*
-       * If the coax transceiver is on, make sure to enable
-       * the DC-DC converter.
-       */
-      XL_SEL_WIN(3);
-      if (sc->xl_xcvr == XL_XCVR_COAX)
-         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_COAX_START);
-      else
-         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_COAX_STOP);
-
-      /* increase packet size to allow reception of 802.1q or ISL packets */
-      if (sc->xl_type == XL_TYPE_905B) 
-         CSR_WRITE_2(sc, XL_W3_MAXPKTSIZE, XL_PACKET_SIZE);
-      /* Clear out the stats counters. */
-
-      memset( &sc->xl_stats, 0, sizeof(struct xl_stats));
-
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_STATS_DISABLE);
-      sc->xl_stats_no_timeout = 1;
-      xl_stats_update(sc->stat_timer_id,sc);
-      sc->xl_stats_no_timeout = 0;
-      XL_SEL_WIN(4);
-      CSR_WRITE_2(sc, XL_W4_NET_DIAG, XL_NETDIAG_UPPER_BYTES_ENABLE);
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_STATS_ENABLE);
-
-
-      /*
-       * Enable interrupts.
-       */
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_INTR_ACK|0xFF);
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_STAT_ENB|XL_INTRS);
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_INTR_ENB|XL_INTRS);
-
-      /* Set the RX early threshold */
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_THRESH|(XL_PACKET_SIZE >>2));
-      CSR_WRITE_2(sc, XL_DMACTL, XL_DMACTL_UP_RX_EARLY );
 
 #if 0
-      {
-         unsigned32 icfg;
-         unsigned16 mctl;
-
-         XL_SEL_WIN(3);
-         icfg = CSR_READ_4( sc, XL_W3_INTERNAL_CFG );
-         mctl = CSR_READ_2( sc, XL_W3_MAC_CTRL );
-
-         printk("etherlink : unit elnk%d intcfg %08x, macctl %04x\n", sc->xl_unit, icfg, mctl);
-      }
+         if (sc->xl_type == XL_TYPE_905B) {
+            /* Set polling interval */
+            CSR_WRITE_1(sc, XL_DOWN_POLL, 64);
+            xl_wait(sc);
+            printk("etherlink : unit elnk%d tx polling enabled\n", sc->xl_unit );
+         }
 #endif
 
-      /* Enable receiver and transmitter. */
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_TX_ENABLE);
-      xl_wait(sc);
-      CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_ENABLE);
-      xl_wait(sc);
+         /*
+          * If the coax transceiver is on, make sure to enable
+          * the DC-DC converter.
+          */
+         XL_SEL_WIN(3);
+         if (sc->xl_xcvr == XL_XCVR_COAX)
+            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_COAX_START);
+         else
+            CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_COAX_STOP);
 
-      /* Select window 7 for normal operations. */
-      XL_SEL_WIN(7);
+         /* increase packet size to allow reception of 802.1q or ISL packets */
+         if (sc->xl_type == XL_TYPE_905B) 
+            CSR_WRITE_2(sc, XL_W3_MAXPKTSIZE, XL_PACKET_SIZE);
+         /* Clear out the stats counters. */
 
-      /* schedule the stats update timer */
-      rtems_timer_fire_after( sc->stat_timer_id, sc->stats_update_ticks, xl_stats_update, (void *)sc );
+         memset( &sc->xl_stats, 0, sizeof(struct xl_stats));
+
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_STATS_DISABLE);
+         sc->xl_stats_no_timeout = 1;
+         xl_stats_update(sc->stat_timer_id,sc);
+         sc->xl_stats_no_timeout = 0;
+         XL_SEL_WIN(4);
+         CSR_WRITE_2(sc, XL_W4_NET_DIAG, XL_NETDIAG_UPPER_BYTES_ENABLE);
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_STATS_ENABLE);
+
+
+         /*
+          * Enable interrupts.
+          */
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_INTR_ACK|0xFF);
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_STAT_ENB|XL_INTRS);
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_INTR_ENB|XL_INTRS);
+
+         /* Set the RX early threshold */
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_SET_THRESH|(XL_PACKET_SIZE >>2));
+         CSR_WRITE_4(sc, XL_DMACTL, XL_DMACTL_UP_RX_EARLY );
+
+         /* Enable receiver and transmitter. */
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_TX_ENABLE);
+         xl_wait(sc);
+         CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RX_ENABLE);
+         xl_wait(sc);
+
+         /* Select window 7 for normal operations. */
+         XL_SEL_WIN(7);
+
+         /* schedule the stats update timer */
+         rtems_timer_fire_after( sc->stat_timer_id, sc->stats_update_ticks, xl_stats_update, (void *)sc );
+      }
+
+      /*
+       * Tell the world that we're running.
+       */
+      ifp->if_flags |= IFF_RUNNING;
    }
-
-   /*
-    * Tell the world that we're running.
-    */
-   ifp->if_flags |= IFF_RUNNING;
 }
 
 
@@ -2637,13 +2856,44 @@ static void
 elnk_stop (struct elnk_softc *sc)
 {
    struct ifnet *ifp = &sc->arpcom.ac_if;
+   int i;
 
    /*
     * Stop the transmitter
     */
    xl_stop(sc);
+   xl_reset(sc);
+   sc->tx_idle = -1;
 
    ifp->if_flags &= ~IFF_RUNNING;
+
+   /*
+   ** Clear out the rx & tx rings
+   */
+   {
+      struct TXMD *chainhead;
+      unsigned32  esize;
+
+      while( rtems_message_queue_receive( chainRecoveryQueue, &chainhead, &esize,
+                                          RTEMS_NO_WAIT, 0) == RTEMS_SUCCESSFUL );
+   }
+
+   for(i=0 ; i<sc->numRxbuffers; i++)
+   {
+      st_le32( &sc->rx_ring[i].status, 0);
+      st_le32( &sc->rx_ring[i].length, XL_LAST_FRAG | XL_PACKET_SIZE );
+   }
+
+   for(i=0 ; i<sc->numTxbuffers; i++)
+   {
+      st_le32( &sc->tx_ring[i].status, XL_TXSTAT_DL_COMPLETE );
+      st_le32( &sc->tx_ring[i].next, 0);
+      if( sc->tx_ring[i].mbuf )
+      {
+         m_free( sc->tx_ring[i].mbuf );
+         sc->tx_ring[i].mbuf = NULL;
+      }
+   }
 }
 
 
@@ -2656,21 +2906,43 @@ static void
 elnk_stats (struct elnk_softc *sc)
 {
    printf("    MII PHY data { anr:%04x  lpar:%04x  stat:%04x  ctl:%04x }\n", 
-          sc->xl_unit, 
           sc->xl_stats.miianr, 
           sc->xl_stats.miipar, 
           sc->xl_stats.miistatus,
           sc->xl_stats.miicmd);
 
-   printf("          interrupts:%-5d            intstatus:%04x   mediastat:%04x\n",
-          sc->xl_stats.device_interrupts,
-          sc->xl_stats.intstatus,
-          sc->xl_stats.mediastatus);
+   printf("         internalcfg:%08x            macctl:%04x      dmactl:%08x\n", 
+          sc->xl_stats.internalconfig,
+          sc->xl_stats.mac_control,
+          sc->xl_stats.dmactl);
 
    printf("            rxstatus:%04x              txstatus:%02x       smbstat:%04x\n",
           sc->xl_stats.rxstatus,
           sc->xl_stats.txstatus,
           sc->xl_stats.smbstatus);
+
+   printf("              txfree:%04X             intstatus:%04x   mediastat:%04x\n",
+          sc->xl_stats.txfree,
+          sc->xl_stats.intstatus,
+          sc->xl_stats.mediastatus);
+
+
+   {
+      int       i, totalLengths= 0, numLengths= 0;
+
+      for(i=0; i< NUM_CHAIN_LENGTHS; i++)
+      {
+         if( sc->chain_lengths[i] > -1 )
+         {
+            totalLengths += sc->chain_lengths[i];
+            ++numLengths;
+         }
+      }
+
+      printf("          interrupts:%-9d    avg_chain_len:%-5d\n",
+             sc->xl_stats.device_interrupts,
+             (totalLengths / numLengths) );
+   }
 
    printf("        carrier_lost:%-5d             sqe_errs:%-5d\n",   
           sc->xl_stats.xl_carrier_lost, 
@@ -2688,13 +2960,13 @@ elnk_stats (struct elnk_softc *sc)
           sc->xl_stats.xl_tx_deferred, 
           sc->xl_stats.xl_badssd);
 
-   printf("        rx_frames_ok:%-5d         tx_frames_ok:%-5d\n",   
-          sc->xl_stats.xl_rx_frames_ok + ((sc->xl_stats.xl_upper_frames_ok & 3) << 16),
-          sc->xl_stats.xl_tx_frames_ok + (((sc->xl_stats.xl_upper_frames_ok >> 4) & 3) << 16) );
+   printf("        rx_frames_ok:%-9d     tx_frames_ok:%-9d\n",   
+          sc->xl_stats.xl_rx_frames_ok,
+          sc->xl_stats.xl_tx_frames_ok);
 
-   printf("         rx_bytes_ok:%-5d          tx_bytes_ok:%-5d\n",   
-          sc->xl_stats.xl_rx_bytes_ok + ((sc->xl_stats.xl_upper_bytes_ok & 7) << 16), 
-          sc->xl_stats.xl_tx_bytes_ok + (((sc->xl_stats.xl_upper_bytes_ok >> 4) & 7) << 16) );
+   printf("         rx_bytes_ok:%-9d      tx_bytes_ok:%-9d\n",   
+          sc->xl_stats.xl_rx_bytes_ok,
+          sc->xl_stats.xl_tx_bytes_ok );
 }
 
 
@@ -2936,6 +3208,11 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    sc->numRxbuffers = (config->rbuf_count) ? config->rbuf_count : RX_RING_SIZE;
    sc->numTxbuffers = (config->xbuf_count) ? config->xbuf_count : TX_RING_SIZE;
 
+
+   for(i=0; i< NUM_CHAIN_LENGTHS; i++) sc->chain_lengths[i]= -1;
+   sc->chlenIndex = 0;
+
+
    if (config->mtu)
       mtu = config->mtu;
    else
@@ -2983,8 +3260,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                          (unsigned16)( PCI_COMMAND_IO | 
                                        PCI_COMMAND_MASTER | 
                                        PCI_COMMAND_INVALIDATE | 
-                                       PCI_COMMAND_WAIT |
-                                       PCI_COMMAND_FAST_BACK ) );
+                                       PCI_COMMAND_WAIT ) );
 
    /*
     * Get the devices base address
@@ -3013,7 +3289,6 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    ** board eeprom, do stuff with additional device properties
    */
 
-#if 0
    {
       unsigned8 pci_latency;
       unsigned8 new_latency = 248;
@@ -3029,8 +3304,6 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
          pci_write_config_byte(pbus,pdev,pfun, PCI_LATENCY_TIMER, new_latency);
       }
    }
-#endif
-
 
    /* Reset the adapter. */
    xl_reset(sc);
@@ -3039,7 +3312,6 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    {
       u_int16_t		xcvr[2];
       u_char            eaddr[ETHER_ADDR_LEN];
-      int		media = IFM_ETHER|IFM_100_TX|IFM_FDX;
 
       sc->xl_flags = 0;
       if (sc->deviceID == TC_DEVICEID_HURRICANE_555)
@@ -3149,67 +3421,6 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
          printk("etherlink : unit elnk%d available media : %s\n", sc->xl_unit, &msg[1]);
       }
                    
-      xl_mediacheck(sc);
-
-#if 0
-/* this has already been called by xl_mediacheck()- hopefully 
-   I've not messed something up here */
-      /*
-       * Sanity check. If the user has selected "auto" and this isn't
-       * a 10/100 card of some kind, we need to force the transceiver
-       * type to something sane.
-       */
-      if (sc->xl_xcvr == XL_XCVR_AUTO)
-         xl_choose_xcvr(sc, 1);
-#endif
-
-
-      /* Choose a default media. */
-      switch(sc->xl_xcvr) {
-         case XL_XCVR_10BT:
-            media = IFM_ETHER|IFM_10_T;
-            xl_setmode(sc, media);
-            break;
-         case XL_XCVR_AUI:
-            if (sc->xl_type == XL_TYPE_905B &&
-                sc->xl_media == XL_MEDIAOPT_10FL) {
-               media = IFM_ETHER|IFM_10_FL;
-               xl_setmode(sc, media);
-            } else {
-               media = IFM_ETHER|IFM_10_5;
-               xl_setmode(sc, media);
-            }
-            break;
-         case XL_XCVR_COAX:
-            media = IFM_ETHER|IFM_10_2;
-            xl_setmode(sc, media);
-            break;
-         case XL_XCVR_AUTO:
-         case XL_XCVR_100BTX:
-            xl_setcfg(sc);
-            break;
-         case XL_XCVR_MII:
-            printk("etherlink : unit elnk%d MII media not supported!\n", sc->xl_unit);
-            break;
-         case XL_XCVR_100BFX:
-            media = IFM_ETHER|IFM_100_FX;
-            break;
-         default:
-            printk("etherlink : unit elnk%d unknown XCVR type: %d\n", sc->xl_unit, sc->xl_xcvr);
-            /*
-             * This will probably be wrong, but it prevents
-             * the ifmedia code from panicking.
-             */
-            media = IFM_ETHER|IFM_10_T;
-            break;
-      }
-
-
-      if (sc->xl_flags & XL_FLAG_NO_XCVR_PWR) {
-         XL_SEL_WIN(0);
-         CSR_WRITE_2(sc, XL_W0_MFG_ID, XL_NO_XCVR_PWR_MAGICBITS);
-      }
-
       XL_SEL_WIN(7);
    }
 
@@ -3249,6 +3460,16 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
     */
    if (txDaemonTid == 0) 
    {
+      if( rtems_message_queue_create( rtems_build_name('X','L','c','r'),
+                                      sc->numTxbuffers+1,
+                                      sizeof(struct TXMD *),
+                                      RTEMS_FIFO | RTEMS_LOCAL,
+                                      &chainRecoveryQueue ) != RTEMS_SUCCESSFUL )
+      {
+         rtems_panic( "etherlink : Unable to create TX buffer recovery queue\n" );
+      }
+                                                       
+
       rxDaemonTid = rtems_bsdnet_newproc( "XLrx", 4096,
                                           elnk_rxDaemon, NULL);
       
