@@ -1,3 +1,10 @@
+2003-06-13  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 415/bsps
+	* include/bsp.h, pci/detect_raven_bridge.c, startup/bspstart.c:
+	Support enabling MCP exceptions on the host bridge. This can
+	be used for memory probing on the VME bus.
+
 2003-04-15	Joel Sherrill <joel@OARcorp.com>
 
 	PR 386/bsps

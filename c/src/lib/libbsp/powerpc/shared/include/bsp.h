@@ -91,6 +91,21 @@ extern void rtemsReboot(void);
 extern int BSP_disconnect_clock_handler (void);
 extern int BSP_connect_clock_handler (void);
 
+/* clear hostbridge errors
+ *
+ * enableMCP: whether to enable MCP checkstop / machine check interrupts
+ *            on the hostbridge and in HID0.
+ *
+ *            NOTE: HID0 and MEREN are left alone if this flag is 0
+ *
+ * quiet    : be silent
+ *
+ * RETURNS  : raven MERST register contents (lowermost 16 bits), 0 if
+ *            there were no errors
+ */
+extern unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet);
+
+
 /*
  *  TM27 stuff
  */

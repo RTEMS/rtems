@@ -323,6 +323,9 @@ void bsp_start( void )
   BSP_time_base_divisor			= (residualCopy.VitalProductData.TimeBaseDivisor?
 					   residualCopy.VitalProductData.TimeBaseDivisor : 4000);
 
+  /* clear hostbridge errors and enable MCP */
+  _BSP_clear_hostbridge_errors(1/*enableMCP*/, 0/*quiet*/);
+
   /* Allocate and set up the page table mappings
    * This is only available on >604 CPUs.
    *
