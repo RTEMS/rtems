@@ -6,33 +6,4 @@
 # to be able to use it for compilation of *.S even if automake 
 # doesn't generate this variable. (automake-1.8.2+ only generates 
 # this rule if *_SOURCES contain *.S.)
-CPPASCOMPILE = $(CCAS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) \
-	$(CCASFLAGS)
-
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS  = include/bsp.h
-nodist_include_HEADERS = include/bspopts.h
-
-PREINSTALL_FILES =
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
-
-$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
-
-$(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
-DISTCLEANFILES = include/bspopts.h
+CPPASCOMPILE = $(CCAS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)

@@ -1,3 +1,7 @@
+2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp.am: Remove everything but CPPASCOMPILE.
+
 2004-02-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp.am: Add CPPASCOMPILE.
