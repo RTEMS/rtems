@@ -1,4 +1,18 @@
 
+2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+
+	* custom/gen405.cfg: Remove PPC_VECTOR_FILE_BASE, PPC_USE_SPRG;
+	Remove make-target-options.
+	* custom/helas403.cfg:  Remove PPC_VECTOR_FILE_BASE, PPC_USE_SPRG;
+	Remove make-target-options.
+	* custom/mbx8xx.cfg: Remove INSTRUCTION_CACHE_ENABLE,
+	DATA_CACHE_ENABLE.
+	* custom/mbx860_005b.cfg: Remove INSTRUCTION_CACHE_ENABLE,
+	DATA_CACHE_ENABLE.
+	* custom/mpc8260ads.cfg: Remove INSTRUCTION_CACHE_ENABLE,
+	DATA_CACHE_ENABLE.
+
 2001-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/papyrus.cfg: Removed.
