@@ -5,6 +5,14 @@
 #
 
 %define	_prefix			@prefix@
+%if "%{_prefix}" != "/usr"
+%define _infodir		%{_prefix}/info
+%define _mandir			%{_prefix}/man
+%endif
+
+%define rpmprefix		@rpmprefix@
+%define rpmgroup		@rpmgroup@
+
 %define _defaultbuildroot 	%{_tmppath}/%{name}-%{version}-root
 %ifos cygwin cygwin32
 %define _exeext .exe

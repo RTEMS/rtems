@@ -1,15 +1,25 @@
 2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* base-g77.add, base-gcc.add, base-gcj.add, base-gnat.add,
-	target-c++.add, target-g77.add, target-gcc.add, target-gcj.add,
-	target-gnat.add, target-objc.add
+	* binutils/mkspec.in: Use ',' as sed-delimiter for %{rpmprefix}.
+	* common/common.add.in: Add _infodir, _mandir, rpmprefix, rpmgroup.
+	* configure.ac: Add --enable-pkgprefix, rpmgroup.
+
+2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/base-g77.add, gcc3newlib/base-gcc.add, 
+	gcc3newlib/base-gcj.add, gcc3newlib/base-gnat.add,
+	gcc3newlib/target-c++.add, gcc3newlib/target-g77.add,
+        gcc3newlib/target-gcc.add, gcc3newlib/target-gcj.add,
+	gcc3newlib/target-gnat.add, gcc3newlib/target-objc.add:
 	Add support for %{rpmprefix}, %{rpmgroup}.
 	Use %{gcc_target and %{gcc_version}.
 	Remove "Provides:".
-	* gccnewlib.add: Ditto.
+	* gcc3newlib/gccnewlib.add: Ditto.
 	Correct setting up _gcj.
 	Explicitly build c++filt for gcc >= 3.3.
-	* mkspec.in: Add support for %{rpmprefix}, %{rpmgroup}.
+	* gcc3newlib/mkspec.in: Add support for %{rpmprefix}, %{rpmgroup}.
+	* binutils/mkspec.in: Use ',' as sed-delimiter for %{rpmprefix}.
+	* common/common.add.in: Add _infodir, _mandir, rpmprefix, rpmgroup.
 
 2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
