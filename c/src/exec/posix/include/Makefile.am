@@ -7,7 +7,9 @@ AUTOMAKE_OPTIONS = foreign 1.4
 ## RTEMS unistd.h needs to be checked against newlib's and removed
 UNUSED_H_FILES = devctl.h intr.h unistd.h
 
-H_FILES = pthread.h sched.h aio.h mqueue.h semaphore.h
+H_FILES = sched.h aio.h mqueue.h semaphore.h
+
+# H_FILES = pthread.h sched.h aio.h mqueue.h semaphore.h
 
 noinst_HEADERS = $(H_FILES)
 
