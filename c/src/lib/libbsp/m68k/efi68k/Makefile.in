@@ -20,7 +20,7 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS = include start68k startup clock console spurious timer wrapup
+SUB_DIRS = include start startup clock console spurious timer wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

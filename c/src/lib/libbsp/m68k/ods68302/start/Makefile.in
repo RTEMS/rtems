@@ -13,7 +13,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-PGM = ${ARCH}/start302.o
+PGM = ${ARCH}/start.o
 
 RESET_S_PIECES_yes_V = debugreset
 RESET_S_PIECES_no_V = reset

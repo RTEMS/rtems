@@ -6,14 +6,14 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 top_builddir = ../../..
-subdir = powerpc/psim/startsim
+subdir = powerpc/psim/start
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-PGMS = ${ARCH}/startsim.o
+PGM = ${ARCH}/start.o
 
 # C source names, if any, go here -- minus the .c
 C_PIECES =
@@ -23,7 +23,7 @@ C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 H_FILES =
 
 # Assembly source names, if any, go here -- minus the .S
-S_PIECES = startsim
+S_PIECES = start
 S_FILES = $(S_PIECES:%=%.S)
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 

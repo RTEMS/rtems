@@ -28,7 +28,7 @@ all: $(SRCS)
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS = include start360 startup clock console timer $(NETWORKING_DRIVER) \
+SUB_DIRS = include start startup clock console timer $(NETWORKING_DRIVER) \
     wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status

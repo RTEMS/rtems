@@ -13,7 +13,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-PGMS = ${ARCH}/start360.o
+PGM = ${ARCH}/start.o
 
 # C source names, if any, go here -- minus the .c
 C_PIECES =
@@ -23,7 +23,7 @@ C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 H_FILES =
 
 # Assembly source names, if any, go here -- minus the .S
-S_PIECES = start360
+S_PIECES = start
 S_FILES = $(S_PIECES:%=%.S)
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 

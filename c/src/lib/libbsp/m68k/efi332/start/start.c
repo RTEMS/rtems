@@ -53,11 +53,11 @@ void  dumby_start() {
   /*    see section(s) 4.8 */
   /* end include in ram_init.S */
   *SYNCR = (unsigned short int)
-    ( SAM(EFI_W,15,W) | SAM(0x0,14,X) | SAM(EFI_Y,8,Y) | STSIM );
+    ( SAM(EFI_W,15,VCO) | SAM(0x0,14,PRESCALE) | SAM(EFI_Y,8,COUNTER) | STSIM );
   while (! (*SYNCR & SLOCK));	/* protect from clock overshoot */
   /* include in ram_init.S */
   *SYNCR = (unsigned short int)
-    ( SAM(EFI_W,15,W) | SAM(EFI_X,14,X) | SAM(EFI_Y,8,Y) | STSIM );
+    ( SAM(EFI_W,15,VCO) | SAM(EFI_X,14,PRESCALE) | SAM(EFI_Y,8,COUNTER) | STSIM );
 
   /* System Protection Control Register */
   /*    !!! can only write to once after reset !!! */

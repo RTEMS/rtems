@@ -6,17 +6,17 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 top_builddir = ../../..
-subdir = m68k/efi68k/start68k
+subdir = m68k/efi68k/start
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-PGM = ${ARCH}/start68k.o
+PGM = ${ARCH}/start.o
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = start68k
+C_PIECES = start
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
