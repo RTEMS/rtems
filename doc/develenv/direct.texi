@@ -405,11 +405,15 @@ posix       rtems       sapi       score     wrapup
 @end ifset
 
 @ifset use-html
+@example
+@group
                     C Executive
                          |
   +-----------+----------+-----------+----------+
   |           |          |           |          |
 posix       rtems       sapi       score     wrapup
+@end group
+@end example
 @html
 @end html
 @end ifset
@@ -532,11 +536,15 @@ clock      console    include     shmsupp    startup     timer
 @end ifset
 
 @ifset use-html
+@example
+@group
                            Each BSP
                                |
   +-----------+----------+-----+-----+----------+----------+
   |           |          |           |          |          |
 clock      console    include     shmsupp    startup     timer
+@end group
+@end example
 @html
 @end html
 @end ifset
@@ -602,11 +610,15 @@ libtests   sptests   support    tmtests   mptests    tools    samples
 @end ifset
 
 @ifset use-html
+@example
+@group
                                 C Tests
                                    |
    +----------+---------+----------+---------+---------+---------+
    |          |         |          |         |         |         |
 libtests   sptests   support    tmtests   mptests    tools    samples
+@end group
+@end example
 @html
 @end html
 @end ifset
@@ -687,11 +699,15 @@ base_mp     base_sp    cdtest       hello     paranoia    ticker
 @end ifset
 
 @ifset use-html
+@example
+@group
                             C Samples
                                 |
    +-----------+----------+-----+-----+----------+----------+
    |           |          |           |          |          |
 base_mp     base_sp    cdtest       hello     paranoia    ticker
+@end group
+@end example
 @html
 @end html
 @end ifset
