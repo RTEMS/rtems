@@ -4,6 +4,13 @@
 #  $Id$
 #
 
+RPM Version binutils-2.10-3
+===========================
++ Add reloc16.c fix for H8.
+
+binutils-2.10-rtems-20001102.diff
+  - adds reloc16.c patch from Nick Clifton <nickc@redhat.com>
+
 RPM Version binutils-2.10-1
 ===========================
 + Add initial support for the ARM.

@@ -4,6 +4,14 @@
 #  $Id$
 #
 
+RPM Version gcc2.95.2newlib1.9.0-1
+==================================
++ fixes i960 C++ problem
++ upgrades to newlib 1.9.0
+
+  newlib_patch_version=20001219
+  gcc_patch_version=20001226
+
 RPM Version gcc2.95.2newlib1.8.2-11
 ===================================
 + fixes i386 soft float problem

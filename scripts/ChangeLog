@@ -1,3 +1,9 @@
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, binutils/HISTORY, gccnewlib/HISTORY: Updated 
+	binutils HISTORY to reflect new revision.  Updated gcc to fix
+	i960 C++ problem.  Updated newlib to move to newlib 1.9.0.
+
 2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gccnewlib/gccnewlib.add: Fix typo in URL.

@@ -4,13 +4,13 @@
 # $Id$
 #
 binutils_version=2.10
-binutils_patch_version=20000726
-binutils_rpm_release=2
-newlib_version=1.8.2
-newlib_patch_version=20001027
+binutils_patch_version=20001102
+binutils_rpm_release=3
+newlib_version=1.9.0
+newlib_patch_version=20001219
 gcc_version=2.95.2
-gcc_patch_version=20001030
-gccnewlib_rpm_release=11
+gcc_patch_version=20001226
+gccnewlib_rpm_release=1
 gdb_version=5.0
 gdb_patch_version=20000718
 gdb_rpm_release=2
