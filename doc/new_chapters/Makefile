@@ -18,6 +18,8 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi
 
+GENERATED_FILES=clock.texi
+
 FILES= clock.texi cond.texi key.texi mutex.texi $(PROJECT).texi preface.texi \
   sched.texi signal.texi thread.texi $(COMMON_FILES)
 
@@ -50,5 +52,44 @@ html: dirs
 clean:
 	rm -f *.o $(PROG) *.txt core *.html 
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f $(PROJECT) $(PROJECT)-* _*
+	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
+
+preface.texi: preface.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+thread.texi: thread.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+signal.texi: signal.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+mutex.texi: mutex.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+cond.texi: cond.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+key.texi: key.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+clock.texi: clock.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+sched.texi: sched.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
 
