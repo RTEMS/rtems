@@ -107,7 +107,7 @@ one shown in the following figure:
 @end html
 @end ifset
 
-@section Unarchiving the Sources
+@section Unarchiving the Tools
 
 While in the @code{tools} directory, unpack the compressed
 tar files using the following command sequence: 
@@ -128,12 +128,25 @@ directories will have been created under tools.
 @item @value{NEWLIB-UNTAR}
 @end itemize
 
-Graphically, this will look something like the following figure:
+The @code{bit} script will automatically create two other
+subdirectories:
+
+@itemize @bullet
+@item src
+@item build-$@{CPU@}-tools
+@end itemize
+
+Ignoring version numbers, this will look something like the following figure:
 
 @ifset use-ascii
 @example
 @group
-Not currently available in ASCII.
+                       tools
+                         |    bit (script)
+                         +
+ +---------+-------------+------------+----------------+
+ |         |             |            |                |
+src   binutils-2.9   egcs-1.0.2  newlib-1.8.0  build-$@{CPU@}-tools
 @end group
 @end example
 @end ifset
@@ -143,7 +156,12 @@ Not currently available in ASCII.
 @c for now use the ascii version
 @example
 @group
-Not currently available in printed document.
+                       tools
+                         |    bit (script)
+                         +
+ +---------+-------------+------------+----------------+
+ |         |             |            |                |
+src   binutils-2.9   egcs-1.0.2  newlib-1.8.0  build-${CPU}-tools
 @end group
 @end example
 @tex
