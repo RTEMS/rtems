@@ -186,8 +186,7 @@ The following bsps are supported:
 host-based	: posix (on linux, solaris and hpux)
 
 a29k		: portsw
-i386		: force386 i386ex pc386
-i386-go32	: go32 go32_p5
+i386		: i386ex pc386
 i960		: cvme961
 hppa1.1		: simhppa
 m68k		: dmv152 efi332 efi68k gen68302 gen68340 gen68360 

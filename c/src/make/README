@@ -96,20 +96,20 @@
         All binary targets are placed in a sub-directory whose name is (for
         example):
 
-            o-force386/                -- binaries (no debug, no profile)
-            o-force386-debug/          -- debug binaries
-            o-force386-profile/        -- profiling binaries
+            o-pc386/                -- binaries (no debug, no profile)
+            o-pc386-debug/          -- debug binaries
+            o-pc386-profile/        -- profiling binaries
 
         Using the template Makefiles, this will all happen automatically.
 
-        Within a Makefile, the ${ARCH} variable is set to o-force386,
-        o-force386-debug, etc., as appropriate.
+        Within a Makefile, the ${ARCH} variable is set to o-pc386,
+        o-pc386-debug, etc., as appropriate.
 
-        Typing 'make' will place objects in o-force386.
-        'make debug' will place objects in o-force386-debug.
-        'make profile' will place objects in o-force386-profile.
+        Typing 'make' will place objects in o-pc386.
+        'make debug' will place objects in o-pc386-debug.
+        'make profile' will place objects in o-pc386-profile.
 
-        NOTE:  For RTEMS work, the word 'force386' is the specified
+        NOTE:  For RTEMS work, the word 'pc386' is the specified
                RTEMS_BSP (specified in the modules file)
 
         The debug and profile targets are equivalent to 'all' except that
@@ -188,7 +188,7 @@
         compiler and host operating system.  The environment variable
         RTEMS_CUSTOM must point to this file; eg:
 
-                /.../make/custom/force386.cfg
+                /.../make/custom/pc386.cfg
 
         All leaf Makefile's also include either 'make/leaf.cfg' (or
         'make/lib.cfg' for building libraries).  These config files provide
@@ -217,7 +217,7 @@
             Your own private configuration file.  Specifies which of the above
             files you want to include.
 
-            Example: custom/force386.cfg
+            Example: custom/pc386.cfg
 
                CONFIG.$(HOST_ARCH).OS = $(RTEMS_ROOT)/make/os/HPUX-9.0.cfg
 
@@ -228,7 +228,7 @@
 
                ## Target compiler config file, if any
                CC_$(TARGET_ARCH)_DIR=$(RTEMS_GNUTOOLS)
-               CONFIG.$(TARGET_ARCH).CC = $(RTEMS_ROOT)/make/compilers/gcc-force386.cfg
+               CONFIG.$(TARGET_ARCH).CC = $(RTEMS_ROOT)/make/compilers/gcc-pc386.cfg
 
         generic rules file
         ------------------
@@ -276,7 +276,7 @@
         Environment Variables
         ---------------------
 
-            RTEMS_BSP      -- name of your 'bsp' eg: force386
+            RTEMS_BSP      -- name of your 'bsp' eg: pc386
 
             RTEMS_ROOT     -- The root of your source tree.
                               All other file names are derived from this.
@@ -327,7 +327,7 @@
                            obsolete and should not be referenced
 
             ARCH        -- target sub-directory for object code
-                           [ eg: o-force386 or o-force386-debug ]
+                           [ eg: o-pc386 or o-pc386-debug ]
 
             HOST_ARCH
                         -- host machine architecture name
@@ -335,7 +335,7 @@
 
             VARIANTS    -- full list of all possible values for $(ARCH);
                            used mainly for 'make clean'
-                           [ eg: "o-force386 o-force386-debug o-force386-profile" ]
+                           [ eg: "o-pc386 o-pc386-debug o-pc386-profile" ]
 
             VARIANT_VA  -- Variant name.
                            Normally "", but for 'make debug' it is "debug",
@@ -455,7 +455,7 @@
                                Since 'make clobber' includes 'make clean',
                                you don't need to duplicate items in both.
 
-                TARGET_ARCH -- target architecture (eg: o-force386)
+                TARGET_ARCH -- target architecture (eg: o-pc386)
                                leaf makefiles only.
                                Should be specified before 'include leaf.cfg'.
                                Only needs to be specified if your target is
