@@ -10,4 +10,15 @@
 #  http://www.OARcorp.com/rtems/license.html.
 #
 
+This file describes the directives and concepts tested by this test set.
+
+test set name: itronhello
+
+directives:
+  cre_tsk, sta_tsk
+
+concepts:  
+
+  a. Verifies the initial itron task can be created and started.
+
 

@@ -20,9 +20,11 @@ directives:
 
 concepts: XXX - Verify 
 
-  a.  verifies rot_rdq can be used by a task to correctly yeild the processor
+  a.  verifies rot_rdq can be used by equal priority tasks to correctly yeild the processor
 
   b.  Verifies sus_tsk suspends another task.
+
+  c.  Verifies rot_rdq with a yeild process response.
 
   a.  Verifies that a task can delete another task and also delete itself.
 
