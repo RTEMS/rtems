@@ -73,4 +73,3 @@ struct xdr_regs
 %#define TARGET_PROC_TYPE  3
 
 #endif
-
