@@ -18,7 +18,7 @@ case "${target}" in
   i[34567]86-*linux*)		# unix "simulator" port
 	RTEMS_CPU=unix
 	;;
-  i[34567]86-*freebsd2*) 	# unix "simulator" port
+  i[34567]86-*freebsd*) 	# unix "simulator" port
 	RTEMS_CPU=unix
 	;;
   i[34567]86-pc-cygwin*) 	# Cygwin is just enough unix like :)

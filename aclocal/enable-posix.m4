@@ -18,7 +18,7 @@ case "${target}" in
   i[34567]86-pc-linux*)         # unix "simulator" port
 	RTEMS_HAS_POSIX_API=no
 	;;
-  i[34567]86-*freebsd2*) # unix "simulator" port
+  i[34567]86-*freebsd*) # unix "simulator" port
 	RTEMS_HAS_POSIX_API=no
 	;;
   no_cpu-*rtems*)
