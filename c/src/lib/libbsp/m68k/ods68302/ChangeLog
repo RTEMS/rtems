@@ -1,5 +1,9 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* start/reset.S: Remove cat(). Add EXPAND(). Make EXCEPTION_HANDLER
 	ANSI-C compliant.
 	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am

@@ -1,5 +1,9 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Distribute start/startfor340only.S.
 
 2004-01-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -1,5 +1,9 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Reflect having changed libcpu/m68k/mcf5206/console.rel
 	to libcpu/m68k/mcf5206/mcfuart.rel
 

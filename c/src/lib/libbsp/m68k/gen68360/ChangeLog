@@ -1,5 +1,9 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	PR 562/bsps
 	* Makefile.am: Remove references to m68k-gdbstub.c,
 	rtems-gdbstub-glue.c.

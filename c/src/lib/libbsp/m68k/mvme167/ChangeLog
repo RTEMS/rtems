@@ -1,5 +1,9 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am
 	fatal/Makefile.am, network/Makefile.am, startup/Makefile.am,
 	timer/Makefile.am, wrapup/Makefile.am.
