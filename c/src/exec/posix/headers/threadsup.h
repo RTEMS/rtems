@@ -17,6 +17,10 @@ typedef struct {
   struct sched_param      schedparam;
   Watchdog_Control        Sporadic_timer;
 
+  sigset_t                signals_blocked;
+  sigset_t                signals_pending;
+  sigset_t                signals_posted;
+
 #if 0
   /*
    *  POSIX Interrupts 
