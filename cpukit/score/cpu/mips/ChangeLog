@@ -1,3 +1,7 @@
+2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use RTEMS_ENV_RTEMSCPU.
+
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add multilib support.
