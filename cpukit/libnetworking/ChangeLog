@@ -4,8 +4,8 @@
 
 2003-05-15  cjohns@cybertec.com.au  <cjohns@cybertec.com.au>
 
-	* netinet/in.h:
-	PR406 - Added INET_ADDRSTRLEN per the SUSv3 standard.
+	PR 406/networking
+	* netinet/in.h: Added INET_ADDRSTRLEN per the SUSv3 standard.
 
 2003-04-15	Joel Sherrill <joel@OARcorp.com>
 
