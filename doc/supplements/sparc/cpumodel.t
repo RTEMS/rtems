@@ -50,7 +50,7 @@ present.
 This section presents the set of features which vary
 across SPARC implementations and are of importance to RTEMS.
 The set of CPU model feature macros are defined in the file
-c/src/exec/score/cpu/sparc/sparc.h based upon the particular CPU
+cpukit/score/cpu/sparc/sparc.h based upon the particular CPU
 model defined on the compilation command line.
 
 @subsection CPU Model Name
@@ -85,7 +85,7 @@ only include eight.
 The macro SPARC_HAS_LOW_POWER_MODE is set to one to
 indicate that this CPU model has a low power mode.  If low power
 is enabled, then there must be CPU model specific implementation
-of the IDLE task in c/src/exec/score/cpu/sparc/cpu.c.  The low
+of the IDLE task in cpukit/score/cpu/sparc/cpu.c.  The low
 power mode IDLE task should be of the form:
 
 @example

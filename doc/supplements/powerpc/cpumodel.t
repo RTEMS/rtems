@@ -50,7 +50,7 @@ present.
 This section presents the set of features which vary
 across PowerPC implementations and are of importance to RTEMS.
 The set of CPU model feature macros are defined in the file
-c/src/exec/score/cpu/ppc/ppc.h based upon the particular CPU
+cpukit/score/cpu/ppc/ppc.h based upon the particular CPU
 model defined on the compilation command line.
 
 @subsection CPU Model Name
