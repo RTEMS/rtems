@@ -1,3 +1,7 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use include_ada_HEADERS.
+
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Preinstall adainclude_HEADERS.

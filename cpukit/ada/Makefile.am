@@ -2,14 +2,14 @@
 # $Id$
 #
 
-adaincludedir = $(includedir)/adainclude
+include_adadir = $(includedir)/adainclude
 
 if RTEMS_ADA
-adainclude_HEADERS = rtems.adb rtems.ads 
-adainclude_HEADERS += rtems-multiprocessing.adb rtems-multiprocessing.ads
+include_ada_HEADERS = rtems.adb rtems.ads
+include_ada_HEADERS += rtems-multiprocessing.adb rtems-multiprocessing.ads
 endif
 
-all-local: $(TMPINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 
