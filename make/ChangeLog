@@ -1,3 +1,7 @@
+2002-08-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/vegaplus.cfg: Fix bogus and corrupted make-exe.
+
 2002-08-06	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/efi332.cfg, custom/gen68340.cfg, custom/gen68360.cfg,
