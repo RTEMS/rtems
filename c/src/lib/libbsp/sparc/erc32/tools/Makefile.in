@@ -86,10 +86,11 @@ ACLOCAL = @ACLOCAL@ -I $(RTEMS_TOPdir)/aclocal
 noinst_SCRIPTS = runtest
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../../../../../../mkinstalldirs
-CONFIG_CLEAN_FILES = 
+CONFIG_CLEAN_FILES =  runtest
 SCRIPTS =  $(noinst_SCRIPTS)
 
-DIST_COMMON =  Makefile.am Makefile.in aclocal.m4 configure configure.in
+DIST_COMMON =  Makefile.am Makefile.in aclocal.m4 configure configure.in \
+runtest.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -112,6 +113,8 @@ config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
 $(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
+runtest: $(top_builddir)/config.status runtest.in
+	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 tags: TAGS
 TAGS:
 
@@ -235,7 +238,7 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 #HACK: install to build-tree
 install-exec-local: $(SCRIPTS)
 	$(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/tests
-	$(INSTALL_SCRIPT) runtest $(PROJECT_ROOT)/${RTEMS_BSP}/tests
+	$(INSTALL_SCRIPT) runtest $(PROJECT_ROOT)/${RTEMS_BSP}/tests/runtest
 
 debug-am:
 

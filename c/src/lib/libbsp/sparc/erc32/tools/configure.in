@@ -13,4 +13,5 @@ AM_INIT_AUTOMAKE(rtems-lib-libbsp-sparc-erc32-tools,$RTEMS_VERSION,no)
 RTEMS_PATH_KSH
 
 AC_OUTPUT( 
-Makefile)
+Makefile
+runtest)
