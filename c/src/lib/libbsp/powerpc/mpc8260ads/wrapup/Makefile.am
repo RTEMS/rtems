@@ -13,10 +13,10 @@ BSP_PIECES = clock irq start startup console vectors $(NETWORKING)
 #              mpc8xx/mmu mpc8xx/timer mpc8xx/vectors
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.o) \
+OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
+    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
     ../@exceptions@/$(ARCH)/rtems-cpu.rel \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/mpc8260/*/$(ARCH)/*.o) 
+    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/mpc8260/*/$(ARCH)/*.$(OBJEXT)) 
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
