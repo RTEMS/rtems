@@ -1,3 +1,16 @@
+2003-03-18  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 356/bsps
+	* bsp_specs, start/Makefile.am, startup/linkcmds
+	This patch makes RTEMS/powerpc/shared EABI compliant.
+	Declare all linker-script defined addresses as
+	variables of unknown size and not as short objects
+	like 'int', 'void*' etc.
+	This prevents the compiler from generating a relocation
+	who assumes the existence of an __rtems_end object in
+	one of the short data areas (which would result in a 
+	linker error).
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

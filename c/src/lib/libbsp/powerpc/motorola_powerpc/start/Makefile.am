@@ -4,7 +4,7 @@
 
 VPATH = @srcdir@:@srcdir@/../../shared/start
 
-S_FILES = start.S
+S_FILES = start.S rtems_crti.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(S_O_FILES)
@@ -15,18 +15,22 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-install-data-local: $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
-	$(INSTALL_DATA) $< $(DESTDIR)$(bsplibdir)
+bsplib_DATA =  $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+bsplib_DATA += $(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT)
 
 $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
 	$(INSTALL_DATA) $< $@
 
+$(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT): $(ARCH)/rtems_crti.$(OBJEXT)
+	$(INSTALL_DATA) $< $@
+
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT)
 
-all-local: $(ARCH) $(OBJS) $(ARCH)/start.$(OBJEXT) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(ARCH)/start.$(OBJEXT) $(ARCH)/rtems_crti.$(OBJEXT) $(TMPINSTALL_FILES)
 
-.PRECIOUS: $(ARCH)/start.$(OBJEXT)
+$(OBJS): $(ARCH)
+
+.PRECIOUS: $(ARCH)/start.$(OBJEXT) $(ARCH)/rtems_crti.$(OBJEXT)
 
 include $(top_srcdir)/../../../../../../automake/local.am
