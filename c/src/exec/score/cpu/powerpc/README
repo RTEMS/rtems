@@ -11,21 +11,27 @@ There are various issues regarding this port:
 This port is written by Andrew Bray <andy@i-cubed.co.uk>, and
 is copyright 1995 i-cubed ltd.
 
-
+This port was later updated by Joel Sherrill <joel@OARcorp.com>
+to test the support for the PPC603, PPC603e, and PPC604.  This
+was tested on the PowerPC simulator PSIM and a VMEbus single board
+computer.
 
 2) CPU support.
 
-This release fully supports the IBM PPC403GA and PPC403GB processors.
+This release fully supports the PPC403GA, PPC403GB, PPC603, PPC603e,
+and PPC604 processors.  A good faith attempt has been made to include
+support other models based upon available documentation.
 
-It has only been tested on the PPC403GA (using software floating
-point).
+This port was originally written and tested on the PPC403GA (using
+software floating point).  Current ports are tested on 60x CPUs
+using the PowerPC simulator PSIM.
 
-With the gratefully acknowledged assistance of IBM and Blue Micro,
-this release contains code to support the following processors
-  PPC601, PPC603, PPC603e, PPC604, and PPC602.
+Andrew Bray received assistance during the initial porting effort 
+from IBM and Blue Micro and we would like to gratefully acknowledge
+that help.
 
-The support for these processors is incomplete, especially that for
-the PPC602 for which only sketchy data is currently available.
+The support for the PPC602 processor is incomplete as only sketchy
+data is currently available.  Perhaps this model has been dropped.
 
 
 
@@ -58,14 +64,15 @@ d)  GCC 2.7.0.  This compiler is partway along the road to supporting the EABI,
     but is currently halfway in between.
 
 This port was built and tested using the PowerOpen ABI, with the following
-caveat:  we used an ELF assembler and linker.  So some attention may be required
-on the assembler files to get them through a traditional (XCOFF) PowerOpen
-assembler.
+caveat:  we used an ELF assembler and linker.  So some attention may be
+required on the assembler files to get them through a traditional (XCOFF)
+PowerOpen assembler.
 
-This port contains support for the other ABIs, but this may prove to be incomplete
-as it is untested.
+This port contains support for the other ABIs, but this may prove to be
+incomplete as it is untested.
 
-In the long term, the RTEMS PowerPC port should move to the EABI as its primary
-or only port.  This should wait on a true EABI version of GCC.
+The RTEMS PowerPC port supports EABI as the primary ABI.  The powerpc-rtems
+GNU toolset configuration is EABI and .
 
-Andrew Bray 4/December/1995
+Andrew Bray,   4 December 1995
+Joel Sherrill, 16 July 1997

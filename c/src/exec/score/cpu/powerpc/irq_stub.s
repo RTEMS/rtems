@@ -1,5 +1,4 @@
-/*  irq_stub.s	1.1 - 95/12/04
- *
+/*
  *  This file contains the interrupt handler assembly code for the PowerPC
  *  implementation of RTEMS.  It is #included from cpu_asm.s.
  *
@@ -27,7 +26,9 @@
  *  The vector number is in r0. R0 has already been stacked.
  *
  */
-	/* Finish off the interrupt frame */
+	PUBLIC_VAR (_CPU_IRQ_info )
+
+        /* Finish off the interrupt frame */
 	stw	r2, IP_2(r1)
 	stw	r3, IP_3(r1)
 	stw	r4, IP_4(r1)
@@ -48,7 +49,12 @@
 	MFPC	(r9)
 	MFMSR	(r10)
 	/* Establish addressing */
-	mfspr	r11, sprg3
+#if (PPC_USE_SPRG)
+        mfspr	r11, sprg3
+#else
+	lis     r11,_CPU_IRQ_info@ha
+	addi	r11,r11,_CPU_IRQ_info@l
+#endif
 	dcbt	r0, r11
 	stw	r5, IP_CR(r1)
 	stw	r6, IP_CTR(r1)
@@ -72,8 +78,16 @@
    *  #endif
    */
 	/* Switch stacks, here we must prevent ALL interrupts */
-	mfmsr	r5
-	mfspr   r6, sprg2
+#if (PPC_USE_SPRG)
+	mfmsr	r5          
+	mfspr   r6, sprg2   
+#else	
+        lwz	r6,msr_initial(r11)
+	lis     r5,~PPC_MSR_DISABLE_MASK@ha
+        ori     r5,r5,~PPC_MSR_DISABLE_MASK@l
+	and	r6,r6,r5
+	mfmsr	r5          
+#endif
 	mtmsr	r6
 	cmpwi	r30, 0
 	lwz	r29, Disable_level(r11)
@@ -96,7 +110,14 @@ LABEL (nested):
    */
 	addi	r31,r31,1
 	stw	r31, 0(r29)
+/* SCE 980217
+ *
+ * We need address translation ON when we call our ISR routine
+
 	mtmsr	r5
+
+ */
+
   /*
    *  (*_ISR_Vector_table[ vector ])( vector );
    */
@@ -109,14 +130,14 @@ LABEL (nested):
 #if (PPC_ABI == PPC_ABI_GCC27)
 	lwz	r2, Default_r2(r11)
 	mtlr	r4
-	lwz	r2, 0(r2)
+	#lwz	r2, 0(r2)
 #endif
 #if (PPC_ABI == PPC_ABI_SVR4 || PPC_ABI == PPC_ABI_EABI)
 	mtlr	r4
 	lwz	r2, Default_r2(r11)
 	lwz	r13, Default_r13(r11)
-	lwz	r2, 0(r2)
-	lwz	r13, 0(r13)
+	#lwz	r2, 0(r2)
+	#lwz	r13, 0(r13)
 #endif
 	mr	r4,r1
 	blrl
@@ -124,8 +145,17 @@ LABEL (nested):
 	or	r6,r6,r6
 
 	/*	We must re-disable the interrupts */
+#if (PPC_USE_SPRG)
 	mfspr	r11, sprg3
-	mfspr	r0, sprg2
+	mfspr	r0, sprg2  
+#else
+	lis     r11,_CPU_IRQ_info@ha
+	addi	r11,r11,_CPU_IRQ_info@l	
+        lwz	r0,msr_initial(r11)
+	lis     r30,~PPC_MSR_DISABLE_MASK@ha
+        ori     r30,r30,~PPC_MSR_DISABLE_MASK@l
+	and	r0,r0,r30
+#endif
 	mtmsr   r0
 	lwz	r30, 0(r28)
 	lwz	r31, 0(r29)
@@ -191,8 +221,18 @@ LABEL (switch):
    *  prepare to get out of interrupt
    */
 	/* Re-disable IRQs */
+#if (PPC_USE_SPRG)
 	mfspr   r0, sprg2
+#else
+	lis     r11,_CPU_IRQ_info@ha
+	addi	r11,r11,_CPU_IRQ_info@l	
+        lwz	r0,msr_initial(r11)
+	lis     r5,~PPC_MSR_DISABLE_MASK@ha
+        ori     r5,r5,~PPC_MSR_DISABLE_MASK@l
+	and	r0,r0,r5
+#endif
 	mtmsr   r0
+	
   /*
    *  easy_exit:
    *  prepare to get out of interrupt

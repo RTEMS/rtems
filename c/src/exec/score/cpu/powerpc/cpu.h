@@ -20,12 +20,12 @@
  *
  *  Derived from c/src/exec/cpu/no_cpu/cpu.h:
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
+ *  The license and distribution terms for this file may in
+ *  the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
@@ -285,7 +285,7 @@ struct CPU_Interrupt_frame;
  */
 
 #define CPU_STRUCTURE_ALIGNMENT \
-   __attribute__ ((aligned (PPC_CACHE_ALIGNMENT)))
+  __attribute__ ((aligned (PPC_CACHE_ALIGNMENT)))
 
 /*
  *  Define what is required to specify how the network to host conversion
@@ -300,16 +300,27 @@ struct CPU_Interrupt_frame;
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
- */
-/*
- *  ACB Note: Levels are:
- *   0: All maskable interrupts enabled
- *   1: Other critical exceptions enabled
- *   2: Machine check enabled
- *   3: All maskable IRQs disabled
+ *
+ *  The interrupt level is bit mapped for the PowerPC family. The
+ *  bits are set to 0 to indicate that a particular exception source
+ *  enabled and 1 if it is disabled.  This keeps with RTEMS convention
+ *  that interrupt level 0 means all sources are enabled.
+ *
+ *  The bits are assigned to correspond to enable bits in the MSR.
  */
 
-#define CPU_MODES_INTERRUPT_MASK   0x00000003
+#define PPC_INTERRUPT_LEVEL_ME   0x01
+#define PPC_INTERRUPT_LEVEL_EE   0x02
+#define PPC_INTERRUPT_LEVEL_CE   0x04
+
+/* XXX should these be maskable? */
+#if 0
+#define PPC_INTERRUPT_LEVEL_DE   0x08
+#define PPC_INTERRUPT_LEVEL_BE   0x10
+#define PPC_INTERRUPT_LEVEL_SE   0x20
+#endif
+
+#define CPU_MODES_INTERRUPT_MASK   0x00000007
 
 /*
  *  Processor defined structures
@@ -450,16 +461,36 @@ typedef struct {
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-  unsigned32   clicks_per_usec;	/* Timer clicks per microsecond */
-  unsigned32   serial_per_sec;	/* Serial clocks per second */
+  unsigned32   clicks_per_usec;	       /* Timer clicks per microsecond */
+  void       (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
+  boolean      exceptions_in_RAM;     /* TRUE if in RAM */
+
+#if defined(ppc403)
+  unsigned32   serial_per_sec;	       /* Serial clocks per second */
   boolean      serial_external_clock;
   boolean      serial_xon_xoff;
   boolean      serial_cts_rts;
   unsigned32   serial_rate;
   unsigned32   timer_average_overhead; /* Average overhead of timer in ticks */
-  unsigned32   timer_least_valid; /* Least valid number from timer */
-  void (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
+  unsigned32   timer_least_valid;      /* Least valid number from timer */
+#endif
 }   rtems_cpu_table;
+
+/*
+ *  The following type defines an entry in the PPC's trap table.
+ *
+ *  NOTE: The instructions chosen are RTEMS dependent although one is
+ *        obligated to use two of the four instructions to perform a
+ *        long jump.  The other instructions load one register with the
+ *        trap type (a.k.a. vector) and another with the psr.
+ */
+ 
+typedef struct {
+  unsigned32   stwu_r1;                       /* stwu  %r1, -(??+IP_END)(%1)*/
+  unsigned32   stw_r0;                        /* stw   %r0, IP_0(%r1)       */
+  unsigned32   li_r0_IRQ;                     /* li    %r0, _IRQ            */
+  unsigned32   b_Handler;                     /* b     PROC (_ISR_Handler)  */
+} CPU_Trap_table_entry;
 
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
@@ -502,6 +533,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  Nothing prevents the porter from declaring more CPU specific variables.
  */
 
+
 SCORE_EXTERN struct {
   unsigned32 *Nest_level;
   unsigned32 *Disable_level;
@@ -517,6 +549,8 @@ SCORE_EXTERN struct {
 #endif
   volatile boolean *Switch_necessary;
   boolean *Signal;
+
+  unsigned32 msr_initial;
 } _CPU_IRQ_info CPU_STRUCTURE_ALIGNMENT;
 
 /*
@@ -549,8 +583,8 @@ SCORE_EXTERN struct {
  *  by RTEMS.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS  (PPC_INTERRUPT_MAX)
-#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS     (PPC_INTERRUPT_MAX)
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (PPC_INTERRUPT_MAX - 1)
 
 /*
  *  Should be large enough to run all RTEMS tests.  This insures
@@ -609,45 +643,94 @@ SCORE_EXTERN struct {
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
- *  level is returned in _level.
+ *  level is returned in _isr_cookie.
  */
 
 #define loc_string(a,b)	a " (" #b ")\n"
 
+#define _CPU_MSR_Value( _msr_value ) \
+  do { \
+    _msr_value = 0; \
+    asm volatile ("mfmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); \
+  } while (0)
+
+#define _CPU_MSR_SET( _msr_value ) \
+{ asm volatile ("mtmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); }
+
+#if 0
 #define _CPU_ISR_Disable( _isr_cookie ) \
-  { \
+  { register unsigned int _disable_mask = PPC_MSR_DISABLE_MASK; \
+    _isr_cookie = 0; \
+    asm volatile ( 
+	"mfmsr %0" : \
+	"=r" ((_isr_cookie)) : \
+	"0" ((_isr_cookie)) \
+    ); \
+    asm volatile ( 
+        "andc %1,%0,%1" : \
+	"=r" ((_isr_cookie)), "=&r" ((_disable_mask)) : \
+	"0" ((_isr_cookie)), "1" ((_disable_mask)) \
+    ); \
+    asm volatile ( 
+        "mtmsr %1" : \
+	"=r" ((_disable_mask)) : \
+	"0" ((_disable_mask)) \
+    ); \
+  }
+#endif
+
+#define _CPU_ISR_Disable( _isr_cookie ) \
+  { register unsigned int _disable_mask = PPC_MSR_DISABLE_MASK; \
+    _isr_cookie = 0; \
     asm volatile ( \
 	"mfmsr %0; andc %1,%0,%1; mtmsr %1" : \
-	"=&r" ((_isr_cookie)) : "r" ((PPC_MSR_DISABLE_MASK)) \
+	"=&r" ((_isr_cookie)), "=&r" ((_disable_mask)) : \
+	"0" ((_isr_cookie)), "1" ((_disable_mask)) \
 	); \
   }
+
+
+#define _CPU_Data_Cache_Block_Flush( _address ) \
+  do { register void *__address = (_address); \
+       register unsigned32 _zero = 0; \
+       asm volatile ( "dcbf %0,%1" : \
+		      "=r" (_zero), "=r" (__address) : \
+                      "0" (_zero), "1" (__address) \
+       ); \
+  } while (0)
+
 
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
  *  This indicates the end of an RTEMS critical section.  The parameter
- *  _level is not modified.
+ *  _isr_cookie is not modified.
  */
 
 #define _CPU_ISR_Enable( _isr_cookie )  \
   { \
      asm volatile ( "mtmsr %0" : \
-		   "=&r" ((_isr_cookie)) : "0" ((_isr_cookie))); \
+		   "=r" ((_isr_cookie)) : \
+                   "0" ((_isr_cookie))); \
   }
 
 /*
- *  This temporarily restores the interrupt to _level before immediately
+ *  This temporarily restores the interrupt to _isr_cookie before immediately
  *  disabling them again.  This is used to divide long RTEMS critical
- *  sections into two or more parts.  The parameter _level is not
- * modified.
+ *  sections into two or more parts.  The parameter _isr_cookie is not
+ *  modified.
+ *
+ *  NOTE:  The version being used is not very optimized but it does
+ *         not trip a problem in gcc where the disable mask does not
+ *         get loaded.  Check this for future (post 10/97 gcc versions.
  */
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
-  { \
+  { register unsigned int _disable_mask = PPC_MSR_DISABLE_MASK; \
     asm volatile ( \
-	"mtmsr %0; andc %1,%0,%1; mtmsr %1" : \
-	"=r" ((_isr_cookie)) : \
-	"r" ((PPC_MSR_DISABLE_MASK)), "0" ((_isr_cookie)) \
-	); \
+      "mtmsr %0; andc %1,%0,%1; mtmsr %1" : \
+      "=r" ((_isr_cookie)), "=r" ((_disable_mask)) : \
+      "0" ((_isr_cookie)), "1" ((_disable_mask)) \
+    ); \
   }
 
 /*
@@ -661,19 +744,52 @@ SCORE_EXTERN struct {
  *  via the rtems_task_mode directive.
  */
 
-#define _CPU_ISR_Set_level( new_level ) \
-  { \
-    register unsigned32 tmp = 0; \
-    asm volatile ( \
-	"mfmsr %0; andc %0,%0,%1; and %2, %2, %1; or %0, %0, %2; mtmsr %0" : \
-	"=r" ((tmp)) : \
-	"r" ((PPC_MSR_DISABLE_MASK)), "r" ((_CPU_msrs[new_level])), "0" ((tmp)) \
-	); \
-  }
+unsigned32 _CPU_ISR_Calculate_level(
+  unsigned32 new_level
+);
 
+void _CPU_ISR_Set_level(
+  unsigned32 new_level
+);
+  
 unsigned32 _CPU_ISR_Get_level( void );
 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+);
+
 /* end of ISR handler macros */
+
+/*
+ *  Simple spin delay in microsecond units for device drivers.
+ *  This is very dependent on the clock speed of the target.
+ */
+
+#define CPU_Get_timebase_low( _value ) \
+    asm volatile( "mftb  %0" : "=r" (_value) )
+
+#define delay( _microseconds ) \
+  do { \
+    unsigned32 start, ticks, now; \
+    CPU_Get_timebase_low( start ) ; \
+    ticks = (_microseconds) * Cpu_table.clicks_per_usec; \
+    do \
+      CPU_Get_timebase_low( now ) ; \
+    while (now - start < ticks); \
+  } while (0)
+
+#define delay_in_bus_cycles( _cycles ) \
+  do { \
+    unsigned32 start, now; \
+    CPU_Get_timebase_low( start ); \
+    do \
+      CPU_Get_timebase_low( now ); \
+    while (now - start < (_cycles)); \
+  } while (0)
+
+
 
 /* Context handler macros */
 
@@ -691,63 +807,18 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  This routine generally does not set any unnecessary register
  *  in the context.  The state of the "general data" registers is
  *  undefined at task start time.
+ *
+ *  NOTE:  Implemented as a subroutine for the SPARC port.
  */
 
-#if PPC_ABI == PPC_ABI_POWEROPEN
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point, _is_fp ) \
-  { \
-    unsigned32 sp, *desc; \
-    \
-    sp = ((unsigned32)_stack_base) + (_size) - 56; \
-    *((unsigned32 *)sp) = 0; \
-    \
-    desc = (unsigned32 *)_entry_point; \
-    \
-    (_the_context)->msr = PPC_MSR_INITIAL | \
-      _CPU_msrs[ _isr ]; \
-    (_the_context)->pc = desc[0]; \
-    (_the_context)->gpr1 = sp; \
-    (_the_context)->gpr2 = desc[1]; \
-  } 
-#endif
-#if PPC_ABI == PPC_ABI_SVR4
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point ) \
-  { \
-    unsigned32 sp, r13; \
-    \
-    sp = ((unsigned32)_stack_base) + (_size) - 8; \
-    *((unsigned32 *)sp) = 0; \
-    \
-    asm volatile ("mr %0, 13" : "=r" ((r13))); \
-    \
-    (_the_context->msr) = PPC_MSR_INITIAL | \
-      _CPU_msrs[ _isr ]; \
-    (_the_context->pc) = _entry_point; \
-    (_the_context->gpr1) = sp; \
-    (_the_context->gpr13) = r13; \
-  } 
-#endif
-#if PPC_ABI == PPC_ABI_EABI
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point ) \
-  { \
-    unsigned32 sp, r2, r13; \
-    \
-    sp = ((unsigned32)_stack_base) + (_size) - 8; \
-    *((unsigned32 *)sp) = 0; \
-    \
-    asm volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13))); \
-    \
-    (_the_context)->msr = PPC_MSR_INITIAL | \
-      _CPU_msrs[ _isr ]; \
-    (_the_context->pc) = _entry_point; \
-    (_the_context->gpr1) = sp; \
-    (_the_context->gpr2) = r2; \
-    (_the_context->gpr13) = r13; \
-  } 
-#endif
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  unsigned32       *stack_base,
+  unsigned32        size,
+  unsigned32        new_level,
+  void             *entry_point,
+  boolean           is_fp
+);
 
 /*
  *  This routine is responsible for somehow restarting the currently
@@ -911,7 +982,7 @@ extern const unsigned32 _CPU_msrs[4];
 
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
-  void      (*thread_dispatch)
+  void            (*thread_dispatch)
 );
 
 /*
@@ -951,7 +1022,7 @@ void _CPU_Context_switch(
 /*
  *  _CPU_Context_restore
  *
- *  This routine is generally used only to restart self in an
+ *  This routine is generallu used only to restart self in an
  *  efficient manner.  It may simply be a label in _CPU_Context_switch.
  *
  *  NOTE: May be unnecessary to reload some registers.

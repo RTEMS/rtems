@@ -21,12 +21,12 @@
  *
  *  Derived from c/src/exec/cpu/no_cpu/cpu_asm.c:
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
+ *  The license and distribution terms for this file may in
+ *  the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
@@ -174,6 +174,7 @@
 	.set	IP_END, (IP_MSR + 16)
 	
 	/* _CPU_IRQ_info offsets */
+
 	/* These must be in this order */
 	.set	Nest_level, 0
 	.set	Disable_level, 4
@@ -192,7 +193,8 @@
 #endif
 #endif
 	.set	Signal, Switch_necessary + 4
-
+        .set    msr_initial, Signal + 4
+	
 	BEGIN_CODE
 /*
  *  _CPU_Context_save_fp_context
@@ -453,45 +455,66 @@ PROC (_CPU_Context_switch):
 	/* This assumes that all the registers are in the given order */
 	li	r5, 16
 	addi	r3,r3,-4
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stw	r1, GP_1+4(r3)
 	stw	r2, GP_2+4(r3)
 #if (PPC_USE_MULTIPLE == 1)
 	addi	r3, r3, GP_14+4
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
+
 	addi	r3, r3, GP_18-GP_14
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	addi	r3, r3, GP_22-GP_18
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	addi	r3, r3, GP_26-GP_22
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stmw	r13, GP_13-GP_26(r3)
 #else
 	stw	r13, GP_13+4(r3)
 	stwu	r14, GP_14+4(r3)
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stw	r15, GP_15-GP_14(r3)
 	stw	r16, GP_16-GP_14(r3)
 	stw	r17, GP_17-GP_14(r3)
 	stwu	r18, GP_18-GP_14(r3)
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stw	r19, GP_19-GP_18(r3)
 	stw	r20, GP_20-GP_18(r3)
 	stw	r21, GP_21-GP_18(r3)
 	stwu	r22, GP_22-GP_18(r3)
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stw	r23, GP_23-GP_22(r3)
 	stw	r24, GP_24-GP_22(r3)
 	stw	r25, GP_25-GP_22(r3)
 	stwu	r26, GP_26-GP_22(r3)
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stw	r27, GP_27-GP_26(r3)
 	stw	r28, GP_28-GP_26(r3)
 	stw	r29, GP_29-GP_26(r3)
 	stw	r30, GP_30-GP_26(r3)
 	stw	r31, GP_31-GP_26(r3)
 #endif
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r0, r4
+#endif
 	mfcr	r6
 	stw	r6, GP_CR-GP_26(r3)
 	mflr	r7
@@ -499,39 +522,57 @@ PROC (_CPU_Context_switch):
 	mfmsr	r8
 	stw	r8, GP_MSR-GP_26(r3)
 	
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lwz	r1, GP_1(r4)
 	lwz	r2, GP_2(r4)
 #if (PPC_USE_MULTIPLE == 1)
 	addi	r4, r4, GP_15
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	addi	r4, r4, GP_19-GP_15
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	addi	r4, r4, GP_23-GP_19
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	addi	r4, r4, GP_27-GP_23
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lmw	r13, GP_13-GP_27(r4)
 #else
 	lwz	r13, GP_13(r4)
 	lwz	r14, GP_14(r4)
 	lwzu	r15, GP_15(r4)
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lwz	r16, GP_16-GP_15(r4)
 	lwz	r17, GP_17-GP_15(r4)
 	lwz	r18, GP_18-GP_15(r4)
 	lwzu	r19, GP_19-GP_15(r4)
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lwz	r20, GP_20-GP_19(r4)
 	lwz	r21, GP_21-GP_19(r4)
 	lwz	r22, GP_22-GP_19(r4)
 	lwzu	r23, GP_23-GP_19(r4)
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lwz	r24, GP_24-GP_23(r4)
 	lwz	r25, GP_25-GP_23(r4)
 	lwz	r26, GP_26-GP_23(r4)
 	lwzu	r27, GP_27-GP_23(r4)
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lwz	r28, GP_28-GP_27(r4)
 	lwz	r29, GP_29-GP_27(r4)
 	lwz	r30, GP_30-GP_27(r4)
@@ -548,12 +589,16 @@ PROC (_CPU_Context_switch):
 	/* This assumes that all the registers are in the given order */
 	li	r5, 32
 	addi	r3,r3,-4
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stw	r1, GP_1+4(r3)
 	stw	r2, GP_2+4(r3)
 #if (PPC_USE_MULTIPLE == 1)
 	addi	r3, r3, GP_18+4
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stmw	r13, GP_13-GP_18(r3)
 #else
 	stw	r13, GP_13+4(r3)
@@ -562,7 +607,9 @@ PROC (_CPU_Context_switch):
 	stw	r16, GP_16+4(r3)
 	stw	r17, GP_17+4(r3)
 	stwu	r18, GP_18+4(r3)
+#if ( PPC_USE_DATA_CACHE )
 	dcbz	r5, r3
+#endif
 	stw	r19, GP_19-GP_18(r3)
 	stw	r20, GP_20-GP_18(r3)
 	stw	r21, GP_21-GP_18(r3)
@@ -577,7 +624,9 @@ PROC (_CPU_Context_switch):
 	stw	r30, GP_30-GP_18(r3)
 	stw	r31, GP_31-GP_18(r3)
 #endif
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r0, r4
+#endif
 	mfcr	r6
 	stw	r6, GP_CR-GP_18(r3)
 	mflr	r7
@@ -585,12 +634,16 @@ PROC (_CPU_Context_switch):
 	mfmsr	r8
 	stw	r8, GP_MSR-GP_18(r3)
 
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lwz	r1, GP_1(r4)
 	lwz	r2, GP_2(r4)
 #if (PPC_USE_MULTIPLE == 1)
 	addi	r4, r4, GP_19
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lmw	r13, GP_13-GP_19(r4)
 #else
 	lwz	r13, GP_13(r4)
@@ -600,7 +653,9 @@ PROC (_CPU_Context_switch):
 	lwz	r17, GP_17(r4)
 	lwz	r18, GP_18(r4)
 	lwzu	r19, GP_19(r4)
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
+#endif
 	lwz	r20, GP_20-GP_19(r4)
 	lwz	r21, GP_21-GP_19(r4)
 	lwz	r22, GP_22-GP_19(r4)
@@ -626,7 +681,7 @@ PROC (_CPU_Context_switch):
 /*
  *  _CPU_Context_restore
  *
- *  This routine is generally used only to restart self in an
+ *  This routine is generallu used only to restart self in an
  *  efficient manner.  It may simply be a label in _CPU_Context_switch.
  *
  *  NOTE: May be unnecessary to reload some registers.
@@ -697,12 +752,15 @@ PROC (_CPU_Context_restore):
 	PUBLIC_PROC (_ISR_Handler)
 PROC (_ISR_Handler):
 #define LABEL(x)	x
+/*  XXX ??
 #define MTSAVE(x)	mtspr	sprg0, x
 #define MFSAVE(x)	mfspr	x, sprg0
+*/
 #define MTPC(x)		mtspr	srr0, x
 #define MFPC(x)		mfspr	x, srr0
 #define MTMSR(x)	mtspr	srr1, x
 #define MFMSR(x)	mfspr	x, srr1
+
 	#include	"irq_stub.s"
 	rfi
 
@@ -724,8 +782,10 @@ PROC (_ISR_HandlerC):
 #undef	MTMSR
 #undef	MFMSR
 #define LABEL(x)	x##_C
+/* XXX??
 #define MTSAVE(x)	mtspr	sprg1, x
 #define MFSAVE(x)	mfspr	x, sprg1
+*/
 #define MTPC(x)		mtspr	srr2, x
 #define MFPC(x)		mfspr	x, srr2
 #define MTMSR(x)	mtspr	srr3, x
