@@ -1,3 +1,8 @@
+2002-11-29	Eric Norum <eric.norum@usask.ca>
+
+	* src/sysconf.c: Add support for _SC_GETPW_R_SIZE_MAX.
+                     Return error rather than panic if argument is unsupported.
+
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Cosmetical fixes.

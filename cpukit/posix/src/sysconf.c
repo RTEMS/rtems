@@ -8,6 +8,7 @@
 
 #include <time.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include <rtems/system.h>
 #include <rtems/score/tod.h>
@@ -31,6 +32,9 @@ long sysconf(
         return rtems_libio_number_iops;
       }
 
+    case _SC_GETPW_R_SIZE_MAX:
+        return 1024;
+
 #if defined(__sparc__)
     case 515: /* Solaris _SC_STACK_PROT */
      return 0;
@@ -40,5 +44,6 @@ long sysconf(
       break;
   }
 
-  return POSIX_NOT_IMPLEMENTED();
+  errno = EINVAL;
+  return -1;
 }
