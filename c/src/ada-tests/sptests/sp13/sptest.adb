@@ -21,7 +21,6 @@
 --  $Id$
 --
 
-with BSP;
 with INTERFACES; use INTERFACES;
 with RTEMS;
 with TEST_SUPPORT;
@@ -111,7 +110,8 @@ package body SPTEST is
 
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 1 ),
-         0,
+         100,
+         16,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.QUEUE_ID( 1 ),
          STATUS
@@ -121,7 +121,8 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 2 ),
          10,
-         RTEMS.PRIORITY + RTEMS.LIMIT,
+         16,
+         RTEMS.PRIORITY,
          SPTEST.QUEUE_ID( 2 ),
          STATUS
       );
@@ -129,7 +130,8 @@ package body SPTEST is
 
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 3 ),
-         0,
+         100,
+         16,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.QUEUE_ID( 3 ),
          STATUS
@@ -152,20 +154,38 @@ package body SPTEST is
 
    procedure FILL_BUFFER (
       SOURCE : in     STRING;
-      BUFFER :    out RTEMS.BUFFER
+      BUFFER :    out SPTEST.BUFFER
    ) is
-      SOURCE_BUFFER : RTEMS.BUFFER_POINTER;
    begin
 
-      SOURCE_BUFFER := RTEMS.TO_BUFFER_POINTER( 
-                          SOURCE( SOURCE'FIRST )'ADDRESS 
-                       );
+      BUFFER.FIELD1 := RTEMS.BUILD_NAME(
+         SOURCE( SOURCE'FIRST ),
+         SOURCE( SOURCE'FIRST + 1 ),
+         SOURCE( SOURCE'FIRST + 2 ),
+         SOURCE( SOURCE'FIRST + 3 )
+      );
 
-      BUFFER.FIELD1 := SOURCE_BUFFER.FIELD1;
-      BUFFER.FIELD2 := SOURCE_BUFFER.FIELD2;
-      BUFFER.FIELD3 := SOURCE_BUFFER.FIELD3;
-      BUFFER.FIELD4 := SOURCE_BUFFER.FIELD4;
-      
+      BUFFER.FIELD2 := RTEMS.BUILD_NAME(
+         SOURCE( SOURCE'FIRST + 4 ),
+         SOURCE( SOURCE'FIRST + 5 ),
+         SOURCE( SOURCE'FIRST + 6 ),
+         SOURCE( SOURCE'FIRST + 7 )
+      );
+
+      BUFFER.FIELD3 := RTEMS.BUILD_NAME(
+         SOURCE( SOURCE'FIRST + 8 ),
+         SOURCE( SOURCE'FIRST + 9 ),
+         SOURCE( SOURCE'FIRST + 10 ),
+         SOURCE( SOURCE'FIRST + 11 )
+      );
+
+      BUFFER.FIELD4 := RTEMS.BUILD_NAME(
+         SOURCE( SOURCE'FIRST + 12 ),
+         SOURCE( SOURCE'FIRST + 13 ),
+         SOURCE( SOURCE'FIRST + 14 ),
+         SOURCE( SOURCE'FIRST + 15 )
+      );
+
    end FILL_BUFFER;
 
 --PAGE
@@ -178,7 +198,7 @@ package body SPTEST is
 --
 
    procedure PUT_BUFFER (
-      BUFFER : in     RTEMS.BUFFER
+      BUFFER : in     SPTEST.BUFFER
    ) is
    begin
 
@@ -198,14 +218,15 @@ package body SPTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       QID            : RTEMS.ID;
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : SPTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       TIMES          : RTEMS.UNSIGNED32;
       COUNT          : RTEMS.UNSIGNED32;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       RTEMS.MESSAGE_QUEUE_IDENT( 
          SPTEST.QUEUE_NAME( 1 ), 
@@ -223,6 +244,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 1 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -232,6 +254,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 1 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -245,6 +268,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 1 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -260,6 +284,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 2 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -273,6 +298,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          10 * TEST_SUPPORT.TICKS_PER_SECOND,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -289,6 +315,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -304,6 +331,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -313,6 +341,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -322,6 +351,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -331,6 +361,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_URGENT( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_URGENT" );
@@ -346,6 +377,7 @@ TEST_SUPPORT.PAUSE;
             BUFFER_POINTER,
             RTEMS.DEFAULT_OPTIONS,
             RTEMS.NO_TIMEOUT,
+            MESSAGE_SIZE,
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -359,6 +391,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_URGENT( 
          SPTEST.QUEUE_ID( 2 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_URGENT" );
@@ -372,6 +405,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -390,6 +424,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_URGENT( 
          SPTEST.QUEUE_ID( 2 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_URGENT" );
@@ -410,6 +445,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -419,6 +455,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -428,6 +465,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 3 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -447,17 +485,20 @@ TEST_SUPPORT.PAUSE;
          RTEMS.MESSAGE_QUEUE_SEND( 
             SPTEST.QUEUE_ID( 3 ), 
             BUFFER_POINTER, 
+            16,
             STATUS 
          );
          
-         exit when RTEMS.ARE_STATUSES_EQUAL( STATUS, RTEMS.UNSATISFIED );
+         exit when RTEMS.ARE_STATUSES_EQUAL( STATUS, RTEMS.TOO_MANY );
 
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
          
       end loop;
+
       TEXT_IO.PUT_LINE( 
          "TA1 - message_queue_send - all message buffers consumed"
       );
+
       TEXT_IO.PUT_LINE( "TA1 - message_queue_flush - Q 3" );
       RTEMS.MESSAGE_QUEUE_FLUSH( SPTEST.QUEUE_ID( 3 ), COUNT, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_FLUSH" );
@@ -465,11 +506,9 @@ TEST_SUPPORT.PAUSE;
       UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
       TEXT_IO.PUT_LINE( " messages were flushed from Q 3" );
      
-      if COUNT /= BSP.CONFIGURATION.MAXIMUM_MESSAGES then
-         TEXT_IO.PUT( "TA1 - ERROR - " );
-         UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
-         TEXT_IO.PUT_LINE( " messages flushed" );
-      end if;
+      TEXT_IO.PUT( "TA1 - ERROR - " );
+      UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
+      TEXT_IO.PUT_LINE( " messages flushed" );
 
       TEXT_IO.PUT_LINE( "*** END OF TEST 13 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
@@ -484,13 +523,14 @@ TEST_SUPPORT.PAUSE;
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER            : RTEMS.BUFFER;
-      BUFFER_POINTER    : RTEMS.BUFFER_POINTER;
+      BUFFER            : SPTEST.BUFFER;
+      BUFFER_POINTER    : RTEMS.ADDRESS;
       PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      MESSAGE_SIZE      : RTEMS.UNSIGNED32;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       TEXT_IO.PUT_LINE( 
          "TA2 - message_queue_receive - receive from queue 1 - NO_WAIT"
@@ -500,6 +540,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.NO_WAIT,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -515,6 +556,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -530,6 +572,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -556,6 +599,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -568,6 +612,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_SEND( 
          SPTEST.QUEUE_ID( 2 ), 
          BUFFER_POINTER, 
+         16,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -580,6 +625,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          10 * TEST_SUPPORT.TICKS_PER_SECOND,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -595,6 +641,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -612,13 +659,14 @@ TEST_SUPPORT.PAUSE;
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : SPTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       COUNT          : RTEMS.UNSIGNED32;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       TEXT_IO.PUT_LINE( 
          "TA3 - message_queue_receive - receive from queue 2 - WAIT FOREVER"
@@ -628,6 +676,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -640,6 +689,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_BROADCAST( 
          SPTEST.QUEUE_ID( 1 ), 
          BUFFER_POINTER, 
+         16,
          COUNT,
          STATUS 
       );
@@ -656,6 +706,7 @@ TEST_SUPPORT.PAUSE;
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );

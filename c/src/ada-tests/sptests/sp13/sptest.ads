@@ -26,6 +26,19 @@ with RTEMS;
 package SPTEST is
 
 --
+--  Buffer Record similar to that used by RTEMS 3.2.1.  Using this
+--  avoids changes to the test.
+--
+
+   type BUFFER is
+      record
+         FIELD1 : RTEMS.NAME;   -- TEMPORARY UNTIL VARIABLE LENGTH
+         FIELD2 : RTEMS.NAME;
+         FIELD3 : RTEMS.NAME;
+         FIELD4 : RTEMS.NAME;
+      end record;
+
+--
 --  These arrays contain the IDs and NAMEs of all RTEMS tasks created
 --  by this test.
 --
@@ -65,7 +78,7 @@ package SPTEST is
 
    procedure FILL_BUFFER (
       SOURCE : in     STRING;
-      BUFFER :    out RTEMS.BUFFER
+      BUFFER :    out SPTEST.BUFFER
    );
 
 --
@@ -77,7 +90,7 @@ package SPTEST is
 --
 
    procedure PUT_BUFFER (
-      BUFFER : in     RTEMS.BUFFER
+      BUFFER : in     SPTEST.BUFFER
    );
 
 --
