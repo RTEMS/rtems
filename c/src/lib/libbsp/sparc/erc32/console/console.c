@@ -36,15 +36,6 @@
 #define RDB_BREAK_IN
 
 /*
- *  This is a kludge so the tests run without stopping to ask for input.
- *  It makes it possible to run the RTEMS tests without human intervention.
- */
-
-/*
-#define CONSOLE_FAKE_INPUT
-*/
-
-/*
  *  Should we use a polled or interrupt drived console?
  *  
  *  NOTE: Define only one of these by default.
@@ -533,11 +524,6 @@ rtems_device_driver console_read(
   buffer = rw_args->buffer;
   maximum = rw_args->count;
  
-#ifdef CONSOLE_FAKE_INPUT
-    count = 0;
-    buffer[ count++ ]  = '\n';
-    buffer[ count ]  = 0;
-#else
   for (count = 0; count < maximum; count++) {
     buffer[ count ] = INBYTE( minor );
     if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
@@ -546,7 +532,6 @@ rtems_device_driver console_read(
       break;
     }
   }
-#endif
  
   rw_args->bytes_moved = count;
   return (count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
