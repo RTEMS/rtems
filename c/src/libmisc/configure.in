@@ -35,6 +35,7 @@ RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 AC_OUTPUT(
 Makefile
 cpuuse/Makefile
+dummy/Makefile
 dumpbuf/Makefile
 monitor/Makefile
 rtmonuse/Makefile
