@@ -30,14 +30,13 @@ LIB = ${ARCH}/librtems++.a
 
 CC_FILES = src/rtemsEvent.cc src/rtemsInterrupt.cc src/rtemsMessageQueue.cc \
     src/rtemsSemaphore.cc src/rtemsStatusCode.cc src/rtemsTask.cc src/rtemsTimer.cc
-CC_O_FILES = $(CC_FILES:src/%.cc=${ARCH}/%.$(OBJEXT))
-
-SRCS = $(CC_FILES)
-OBJS = $(CC_O_FILES)
+OBJS = $(CC_FILES:src/%.cc=${ARCH}/%.$(OBJEXT))
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/librtems++$(LIB_VARIANT).a
 
-bsplib_DATA = $(LIB)
+install-data-local: $(LIB)
+	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
+	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(bsplibdir)
 
 ${ARCH}/%.o: src/%.cc
 	test -d $(ARCH) || mkdir $(ARCH)
