@@ -18,7 +18,8 @@ libscorecpu_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = asm.h
 
-include_HEADERS = m68302.h m68360.h qsm.h sim.h
+include_rtems_m68kdir = $(includedir)/rtems/m68k
+include_rtems_m68k_HEADERS = m68302.h m68360.h qsm.h sim.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/m68k.h \
@@ -33,11 +34,6 @@ all-local: $(PREINSTALL_FILES) libscorecpu$(LIB_VARIANT).a
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
@@ -47,21 +43,26 @@ $(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
-$(PROJECT_INCLUDE)/m68302.h: m68302.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68302.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/m68302.h
+$(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/m68k
+	@: > $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
 
-$(PROJECT_INCLUDE)/m68360.h: m68360.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68360.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/m68360.h
+$(PROJECT_INCLUDE)/rtems/m68k/m68302.h: m68302.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/m68k/m68302.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/m68k/m68302.h
 
-$(PROJECT_INCLUDE)/qsm.h: qsm.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/qsm.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/qsm.h
+$(PROJECT_INCLUDE)/rtems/m68k/m68360.h: m68360.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/m68k/m68360.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/m68k/m68360.h
 
-$(PROJECT_INCLUDE)/sim.h: sim.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sim.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sim.h
+$(PROJECT_INCLUDE)/rtems/m68k/qsm.h: qsm.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/m68k/qsm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/m68k/qsm.h
+
+$(PROJECT_INCLUDE)/rtems/m68k/sim.h: sim.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/m68k/sim.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/m68k/sim.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
