@@ -20,7 +20,7 @@ rtems_make_customdir = $(rtems_makedir)/custom
 
 rtems_make_custom_DATA = custom/default.cfg
 
-EXTRA_DIST = custom/Cygwin-posix.cfg custom/FreeBSD-posix.cfg \
+EXTRA_DIST += custom/Cygwin-posix.cfg custom/FreeBSD-posix.cfg \
     custom/HPUX9-posix.cfg custom/Linux-posix.cfg custom/Solaris-posix.cfg \
     custom/bare.cfg custom/cvme961.cfg custom/dmv152.cfg custom/dmv177.cfg \
     custom/efi332.cfg custom/efi68k.cfg custom/erc32.cfg custom/erc32nfp.cfg \
