@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 # Src2html: Take a source tree and generate Html documents that have hyperlinks
 # to the definition of structures, variables, functions, and preprocessor
 # definitions. Read the manual page for details on how to use the program.
@@ -6,6 +6,8 @@
 # Version 1.4-alpha. Written by Warren Toomey wkt@cs.adfa.oz.au
 #
 # 19th January 1996
+#
+#  $Id$
 #
 
 if ($#ARGV <= 0 || $#ARGV > 4) {		# Check arg count
@@ -30,14 +32,19 @@ for ($i=0; $i<= $#ARGV; $i++) {
 	if ($ARGV[$i] eq "-d") { $i++; $Debug= $ARGV[$i]; next; }
 }
 
-$Title{"m"}= "Macros";
-$Title{"d"}= "Defines";
-$Title{"f"}= "Functions";
-$Title{"v"}= "Variables";
-$Title{"s"}= "Structs";
-$Title{"u"}= "Unions";
-$Title{"t"}= "Typedefs";
-$Title{"e"}= "Enums";
+$Title{"m"}= "C Macros";
+$Title{"d"}= "C Defines";
+$Title{"f"}= "C Functions";
+$Title{"v"}= "C Variables";
+$Title{"s"}= "C Structs";
+$Title{"u"}= "C Unions";
+$Title{"t"}= "C Typedefs";
+$Title{"e"}= "C Enums";
+$Title{"AdaType"}= "Ada Types";
+$Title{"AdaProcedure"}= "Ada Procedures";
+$Title{"AdaFunction"}= "Ada Functions";
+$Title{"AdaPackage"}= "Ada Packages";
+$Title{"AdaTask"}= "Ada Tasks";
 $Title{"g"}= "All symbols";
 
 &get_s2h;				# Read the description file
@@ -164,7 +171,7 @@ sub make_ctags {
     foreach $i (keys(%Dirinfo)) {
 	$Ctagsfile{$i}= "$Htmltree/ctags/$Dotdir{$i}.ctags";
 	if ($Debug > 0 ) { print "Generating ctags for $Ctagsfile{$i}\n"; }
-	system("(cd $Srctree; ctags-new -d -t -w -y $i/*) > $Ctagsfile{$i}")
+	system("(cd $Srctree; /usr1/rtems/rtemsdoc-work/tools/src2html/ctags-wr $i) > $Ctagsfile{$i}")
 	&& print "$0: ctags failed on $Srctree/$i\n";
     }
 }
@@ -186,42 +193,105 @@ sub make_ctags {
 sub parse_ctags {
     local($i);
     local($low);
+    local($count);
+
+    $count = 0;
 
     foreach $i (keys(%Dirinfo)) {
 	open(CTAGS,$Ctagsfile{$i}) || die "$0: Can't open $Ctagsfile{$i}, $!\n";
 	if ($Debug > 0) { print "Parsing $Ctagsfile{$i} to build ptr files\n"; }
 	while (<CTAGS>) {
+            $count ++;
 	    if ( /^(\w+)\s+(\d+)\s+(\S+)\s+Preprocessor macro/ ) {
-		($low=$1)=~tr/A-Z_/a-z/d; $Macro{$low}=$1;
-		$Nfile{$1}= $3; $Nline{$1}= $2; next;
+		($low=$1)=~tr/A-Z_/a-z/d;	$k="$low$count";
+		$Macro{$k}=$1;			$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
 	    }
 	    if ( /^(\w+)\s+(\d+)\s+(\S+)\s+Preprocessor define/ ) {
-		($low=$1)=~tr/A-Z_/a-z/d; $Def{$low}=$1;
-		$Nfile{$1}= $3; $Nline{$1}= $2; next; 
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$Def{$k}=$1;			$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next; 
 	    }
 	    if ( /^(\w+)\s+(\d+)\s+(\S+)\s+C struct/ ) {
-		($low=$1)=~tr/A-Z_/a-z/d; $Struct{$low}=$1;
-		$Nfile{$1}= $3; $Nline{$1}= $2; next;
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$Struct{$k}=$1;			$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
 	    }
 	    if ( /^(\w+)\s+(\d+)\s+(\S+)\s+C union/ ) {
-		($low=$1)=~tr/A-Z_/a-z/d; $Union{$low}=$1;
-		$Nfile{$1}= $3; $Nline{$1}= $2; next; 
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$Union{$k}=$1;			$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next; 
 	    }
 	    if ( /^(\w+)\s+(\d+)\s+(\S+)\s+C typedef/ ) {
-		($low=$1)=~tr/A-Z_/a-z/d; $Type{$low}=$1;
-		$Nfile{$1}= $3; $Nline{$1}= $2; next; 
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$Type{$k}=$1;			$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next; 
 	    }
 	    if ( /^(\w+)\s+(\d+)\s+(\S+)\s+C enum/ ) {
-		($low=$1)=~tr/A-Z_/a-z/d; $Enum{$low}=$1;
-		$Nfile{$1}= $3; $Nline{$1}= $2; next;
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$Enum{$k}=$1;			$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
 	    }
 	    if ( /^(\w+)\s+(\d+)\s+(\S+)\s+C function/ ) {
-		($low=$1)=~tr/A-Z_/a-z/d; $Func{$low}=$1;
-		$Nfile{$1}= $3; $Nline{$1}= $2; next;
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$Func{$k}=$1;			$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
 	    }
 	    if ( /^(\w+)\s+(\d+)\s+(\S+)\s+C variable/ ) {
-		($low=$1)=~tr/A-Z_/a-z/d; $Var{$low}=$1;
-		$Nfile{$1}= $3; $Nline{$1}= $2; next;
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$Var{$k}=$1;			$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
+	    }
+	    if ( /^(return)\/.\s+(\d+)\s+(\S+)\s+.*/ ) {
+                next;
+                # Code like the following line results in "return" as ctag
+                #    "type Action is access function return Boolean;
+            }
+	    if ( /^(\w+)\/.\s+(\d+)\s+(\S+)\s+use .*/ ) {
+                next;
+                # throw away lines like "use type System"
+            }
+
+	    if ( /^(\w+)\/.\s+(\d+)\s+(\S+)\s+type .*/ ) {
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$AdaType{$k}=$1;		$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
+	    }
+	    if ( /^(\w+)\/.+\s+(\d+)\s+(\S+)\s+procedure .*/ ) {
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+                $AdaProcedure{$k}=$1;		$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
+	    }
+	    if ( /^(\w+)\/.+\s+(\d+)\s+(\S+)\s+function .*/ ) {
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$AdaFunction{$k}=$1;		$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
+	    }
+	    if ( /^(\".+)\/.+\s+(\d+)\s+(\S+)\s+function .*/ ) {
+                next;
+                # throw away functions like "*"
+	    }
+	    if ( /^(\w+)\/.\s+(\d+)\s+(\S+)\s+package .*/ ) {
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$AdaPackage{$k}=$1;		$Nline{$k}= $2;
+		$Nfile{$k}= $3;			next;
+	    }
+	    if ( /^(\w+)\/.\s+(\d+)\s+(\S+)\s+task .*/ ) {
+		($low=$1)=~tr/A-Z_/a-z/d; 	$k="$low$count";
+		$AdaTask{$k}=$1;		$Nline{$k}= $2;
+		$Nfile{$k}= $3; next;
+	    }
+	    if ( /^([\w\/]+)\s+(\d+)\s+(\S+)\s+use type .*/ ) {
+		next;
+	    }
+	    if ( /^([\w\/\(]+)\s+(\d+)\s+(\S+)\s+type .*/ ) {
+		next;
+	    }
+	    if ( /^;([\w\/\(]+)\s+(\d+)\s+(\S+)\s+type .*/ ) {
+		next;
+	    }
+	    if ( /^\(([\w\/\(]+)\s+(\d+)\s+(\S+)\s+procedure .*/ ) {
+		next;
 	    }
 	    print "$0: In Ctagsfile{$i}, don't recognise $_";
 	}
@@ -229,6 +299,8 @@ sub parse_ctags {
 	&make_dir_html($i);
 	undef %Macro; undef %Def; undef %Func; undef %Var;
 	undef %Struct; undef %Union; undef %Type; undef %Enum;
+	undef %AdaType; undef %AdaProcedure; undef %AdaFunction;
+        undef %AdaPackage; undef %AdaTask;
     }
   &make_top_html;
 }
@@ -246,7 +318,10 @@ sub make_letters_html {
     local($htmlfile);
     local($let)="@";
   
-    foreach $i ( "a".."z" ) { $Exists{$i}=0; }
+    foreach $i ( "a".."z",
+       "AdaType", "AdaProcedure", "AdaFunction", "AdaPackage", "AdaTask" ) {
+        $Exists{$i}=0;
+    }
     foreach $name (sort keys( %type )) {
 	if (substr($name,0,1) ne $let) {
 	    if ($let ne "@") {
@@ -264,9 +339,13 @@ sub make_letters_html {
 	    print HTML "`$let' in $dir</h1><p>\n";
 	    print HTML "<ul>\n";
 	}
-        print HTML "<li><a href=\"$Newsrctree/$Nfile{$type{$name}}";
+        # print HTML "<li><a href=\"$Newsrctree/$Nfile{$type{$name}}";
+        # print HTML ".html#$type{$name}\">$type{$name}</a> ";
+        # print HTML "$Nfile{$type{$name}}:$Nline{$type{$name}}\n"; next;
+
+        print HTML "<li><a href=\"$Newsrctree/$Nfile{$name}";
         print HTML ".html#$type{$name}\">$type{$name}</a> ";
-        print HTML "$Nfile{$type{$name}}:$Nline{$type{$name}}\n"; next;
+        print HTML "$Nfile{$name}:$Nline{$name}\n"; next;
     }
     print HTML "</ul></body>\n";
     close(HTML);
@@ -303,9 +382,13 @@ sub make_type_html {
 	print HTML "</head><body><h1>$title in $dir</h1>\n";
 	print HTML "<ul>\n";
 	foreach $name (sort keys( %type )) {
-	    print HTML "<li><a href=\"$Newsrctree/$Nfile{$type{$name}}";
-	    print HTML ".html#$type{$name}\">$type{$name}</a> ";
-	    print HTML "$Nfile{$type{$name}}:$Nline{$type{$name}}\n"; next;
+	    # print HTML "<li><a href=\"$Newsrctree/$Nfile{$type{$name}}";
+	    # print HTML ".html#$type{$name}\">$type{$name}</a> ";
+	    # print HTML "$Nfile{$type{$name}}:$Nline{$type{$name}}\n"; next;
+
+            print HTML "<li><a href=\"$Newsrctree/$Nfile{$name}";
+            print HTML ".html#$type{$name}\">$type{$name}</a> ";
+            print HTML "$Nfile{$name}:$Nline{$name}\n"; next;
 	}
 	print HTML "</ul></body>\n";
 	close(HTML);
@@ -320,7 +403,8 @@ sub make_type_html {
 	print HTML "</head><body><h1>$title in $dir</h1><p>\n";
 	print HTML "<ul>\n";
     
-	foreach $i ( "a".."z" ) {
+	foreach $i ( "a".."z",
+           "AdaType", "AdaProcedure", "AdaFunction", "AdaPackage", "AdaTask" ) {
 	    if ($Exists{$i} > 0) {			# A file exists
 		print HTML "<li><a href=\"$Dotdir{$dir}.$pref$i.html\">";
 		print HTML "$i</a>\n"; $Exists{$title}++; $Exists{$i}=0;
@@ -361,6 +445,12 @@ sub make_dir_html {
     &make_type_html($dir, "u", $Title{"u"}, *Union);
     &make_type_html($dir, "t", $Title{"t"}, *Type);
     &make_type_html($dir, "e", $Title{"e"}, *Enum);
+    &make_type_html($dir, "AdaType", $Title{"AdaType"}, *AdaType);
+    &make_type_html($dir,
+         "AdaProcedure", $Title{"AdaProcedure"}, *AdaProcedure);
+    &make_type_html($dir, "AdaFunction", $Title{"AdaFunction"}, *AdaFunction);
+    &make_type_html($dir, "AdaPackage", $Title{"AdaPackage"}, *AdaPackage);
+    &make_type_html($dir, "AdaTask", $Title{"AdaTask"}, *AdaTask);
 
     if ($NoAll != 1) {
         &asappend(*GFunc, *Func);
@@ -371,6 +461,11 @@ sub make_dir_html {
         &asappend(*GUnion, *Union);
         &asappend(*GType, *Type);
         &asappend(*GEnum, *Enum);
+        &asappend(*GAdaType, *AdaType);
+        &asappend(*GAdaProcedure, *AdaProcedure);
+        &asappend(*GAdaFunction, *AdaFunction);
+        &asappend(*GAdaPackage, *AdaPackage);
+        &asappend(*GAdaTask, *AdaTask);
     }
 
     &asappend(*Alldir, *Func);
@@ -381,6 +476,12 @@ sub make_dir_html {
     &asappend(*Alldir, *Union);
     &asappend(*Alldir, *Type);
     &asappend(*Alldir, *Enum);
+    &asappend(*Alldir, *AdaType);
+    &asappend(*Alldir, *AdaProcedure);
+    &asappend(*Alldir, *AdaFunction);
+    &asappend(*Alldir, *AdaPackage);
+    &asappend(*Alldir, *AdaTask);
+
     if ($NoLetters != 1) {
         &make_letters_html($dir, "g", $Title{"g"}, *Alldir);
     }
@@ -407,7 +508,8 @@ sub make_dir_html {
     }
     print HTML "<h1>Cross-references for $dir by type</h1><p><ul>\n";
     
-    foreach $i ( "f","m","d","v","s","u","t","e" ) {
+    foreach $i ( "f","m","d","v","s","u","t","e",
+           "AdaType", "AdaProcedure", "AdaFunction", "AdaPackage", "AdaTask" ) {
 	if ($Exists{$Title{$i}} > 0) {		# A type exists
 	    print HTML "<li><a href=\"$Dotdir{$dir}.$i.html\">";
 	    print HTML "$Title{$i}</a>\n";
@@ -444,6 +546,11 @@ sub make_top_html {
     &make_type_html($Top, "u", $Title{"u"}, *GUnion);
     &make_type_html($Top, "t", $Title{"t"}, *GType);
     &make_type_html($Top, "e", $Title{"e"}, *GEnum);
+    &make_type_html($Top, "AdaType", $Title{"AdaType"}, *GAdaType);
+    &make_type_html($Top, "AdaProcedure", $Title{"AdaProcedure"}, *GAdaProcedure);
+    &make_type_html($Top, "AdaFunction", $Title{"AdaFunction"}, *GAdaFunction);
+    &make_type_html($Top, "AdaPackage", $Title{"AdaPackage"}, *GAdaPackage);
+    &make_type_html($Top, "AdaTask", $Title{"AdaTask"}, *GAdaTask);
 
     open(HTMLTOP, "> $Htmltree/$Top.html")
 	|| die "$0: Can't open $Htmltree/$Top.html, $!\n";
@@ -476,7 +583,8 @@ sub make_top_html {
     }
     if ($NoAll != 1) {
         print HTMLTOP "</ul><p><h2>Cross-references by type</h2><p><ul>\n";
-        foreach $i ( "f","m","d","v","s","u","t","e" ) {
+        foreach $i ( "f","m","d","v","s","u","t","e",
+           "AdaType", "AdaProcedure", "AdaFunction", "AdaPackage", "AdaTask" ) {
 	    if ($Exists{$Title{$i}} > 0) {		# A type exists
 	        print HTMLTOP "<li><a href=\"$Top.$i.html\">";
 	        print HTMLTOP "$Title{$i}</a>\n"; 
@@ -493,6 +601,11 @@ sub make_top_html {
             &asappend(*Alltop, *GUnion);
             &asappend(*Alltop, *GType);
             &asappend(*Alltop, *GEnum);
+            &asappend(*Alltop, *GAdaType);
+            &asappend(*Alltop, *GAdaProcedure);
+            &asappend(*Alltop, *GAdaFunction);
+            &asappend(*Alltop, *GAdaPackage);
+            &asappend(*Alltop, *GAdaTask);
     
             if ($Debug > 0) { print "Making top letters\n"; }
    	    &make_letters_html($Top, "g", $Title{"g"}, *Alltop);
@@ -533,11 +646,13 @@ sub rewrite_src {
     if ($Debug > 0) { print "Rewriting source in $dir\n"; }
     while (<CTAGS>) {
 					# Get the next file, line, symbol
-	if (/^(\w+)\s+(\d+)\s+([A-Za-z0-9_\+\-\.\/]+)/) {
+	if (/^([\w\/]+)\s+(\d+)\s+([A-Za-z0-9_\+\-\.\/]+)/) {
             if ($Debug > 2) { print "Symb $1 at $2 in $3\n"; }
-	    $nextcnt= $2; $symb=$1;
+	    $fname=$3; $nextcnt= $2; $symb=$1;
+            $symb=~ s/\/.//g;
+
 					# If it's in a new file
-	    if ("$file" ne "$3") {
+	    if ("$file" ne "$fname") {
 					# Print out the remainder of the
 					# current file, incl. the buffered line
 		if ($In_file == 1) {
@@ -548,7 +663,7 @@ sub rewrite_src {
 		    print OUT "\n\n\n\n\n\n\n\n\n\n</pre></body>\n";
 		    close(IN); close(OUT);
 		}
-		$file= "$3";
+		$file= "$fname";
 					# Open the new file & do the preamble
 		open(IN, "$Srctree/$file") ||
 		    print "Cannot open $Srctree/$file\n";
@@ -582,7 +697,7 @@ sub rewrite_src {
 	    $line=~ s/\>/&gt;/g;
 	}
 						# Now rewrite the line
-	$line=~ s/$symb/<a name="$symb"<\/a><b>$symb<\/b>/;
+	$line=~ s/\b$symb\b/<a name="$symb"<\/a><b>$symb<\/b>/;
 	next;
     }
     close(CTAGS); close(IN); close(OUT);
