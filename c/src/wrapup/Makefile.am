@@ -17,7 +17,12 @@ SRCS += \
 endif
 
 if HAS_NETWORKING
-SRCS += ../libnetworking/wrapup/$(ARCH)/libnetapps.a
+if HAS_POSIX
+SRCS += ../libnetworking/rtems_webserver/libhttpd$(LIB_VARIANT).a
+endif
+SRCS += ../libnetworking/pppd/libpppd$(LIB_VARIANT).a
+SRCS += ../libnetworking/rtems_servers/libftpd$(LIB_VARIANT).a
+SRCS += ../libnetworking/rtems_telnetd/libtelnetd$(LIB_VARIANT).a
 endif
 
 if HAS_RDBG

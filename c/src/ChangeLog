@@ -1,5 +1,11 @@
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove libnetworking/wrapup/Makefile.
+	* wrapup/Makefile.am: Reflect change to libnetworking/*.
+	Use libnetworking/*/lib*.a instead of libnetapps.a
+
+2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add subdir-objects to AUTOMAKE_OPTIONS.
 	Require automake-1.8.2.
 	Add RTEMS_PROG_CCAS.
