@@ -17,9 +17,12 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
+RTEMS_CHECK_NETWORKING 
 RTEMS_CANONICAL_HOST
 
 AC_CONFIG_SUBDIRS(tools)
+
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 RTEMS_PROJECT_ROOT
 
@@ -29,6 +32,7 @@ Makefile
 clock/Makefile
 console/Makefile
 include/Makefile
+network/Makefile
 start/Makefile
 startup/Makefile
 timer/Makefile
