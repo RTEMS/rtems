@@ -125,12 +125,17 @@ typedef struct {
    to support Multi SCC chips */
 
 #undef	scc
+#if defined(mvme162lx)
 static scc_regs	*scc[NPORTS] = {
     ((scc_regs * const) 0xFFF45004),
     ((scc_regs * const) 0xFFF45000),
     ((scc_regs * const) 0xFFF45804),
     ((scc_regs * const) 0xFFF45800)
 };
+#else
+/* XXX fix me */
+#warning "MVME162 BSP -- unknown address for SCC's"
+#endif
 
 #undef	ZWRITE0
 #define ZWRITE0(port, v)  (scc[port]->csr = (unsigned char)(v))
