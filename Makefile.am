@@ -74,4 +74,4 @@ $(noinst_SCRIPTS)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(ACLOCAL_FILES)
 
 include $(top_srcdir)/automake/subdirs.am
-include $(top_srcdir)/automake/local.am
+include $(top_srcdir)/automake/host.am
