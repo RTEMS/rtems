@@ -5,66 +5,6 @@
 This is a collection of things which need to be done to the various 
 manuals.
 
-KA9Q
-====
-
-Outstanding questions with Eric Norum:
-
-+ "Understand the KA9Q scheduling conventions" makes reference
-  to driver tasks.  Do you think a sentence or two explaining
-  the driver tasks before going into this would be be helpful?
-
-+ In "Write your driver transmit function", there is the comment
-  "as far as I can tell".  Can we make this a stronger statement.
-
-+ In the section "Write your driver receive task", there is a 
-  comment indicating that a copy can be avoided if space 
-  for a pointer is left at the beginning of the mbuf's.  Do
-  we avoid this?  Do we depend on the driver doing something
-  special?  How to make this happen all the time?
-
-+ What do I need to do so all the BSPs can set the HeapSize like
-  the gen68360?
-
-+ In "Starting and intitializing the network tasks", 
-  step 2 says "keep in mind...".  What impact does this have?
-
-+ In Step 5 (bootp), how long is each of the 10 
-  tries?  Is there a built in timeout?
-
-+ Syslogd questions: How often is the log written?  
-
-+ Do we need to document the interface to the syslogd?
-
-+ How many incompatibilities are left between RTEMS/KA9Q sockets
-  and BSD sockets?  How hard are these be to fix?  
-
-+ What other levels could there be besides SOL_SOCKET and
-  what do they mean?
-
-+ Is there a standard naming convention for the DNS
-  name lookup routines?
-
-+ Does testdriver.c have all of the code outlined
-  in the Driver Basic Operation section?  Is it easy
-  to go through each of the steps with this test?
-  What is the discard port?
-
-+ How can I package your network tests? 
-
-+ Simple server operation... after I telnet to the
-  specified ports, what should I see if it works?
-
-+ Could we include some sample output/benchmark
-  results in the Throughput section.  Ideally
-  there would be a little information on each
-  the system where these results were gathered.
-  And possibily we could get results on multiple
-  systems.
-
-+ Is there a README somewhere which could be included
-  to augment the instructions for executing the ttcp test.
-
 POSIX User Notes
 ================
 
