@@ -20,11 +20,5 @@ RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-shmsupp/Makefile
-startup/Makefile
-timer/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
