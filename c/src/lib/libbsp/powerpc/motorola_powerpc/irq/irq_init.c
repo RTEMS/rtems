@@ -101,7 +101,7 @@ static unsigned char mcp750_openpic_initsenses[] = {
 void isa_bridge_interrupts_setup(void)
 {
   pci_isa_bridge_device pci_dev;
-  unsigned long temp;
+  unsigned int temp;
   unsigned char tmp;
   unsigned char maxBus;
   unsigned found = 0;
@@ -218,7 +218,6 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
   rtems_raw_except_connect_data vectorDesc;
   int i;
-  register unsigned int msr;
   
   /*
    * First initialize the Interrupt management hardware
@@ -264,7 +263,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     vectorDesc.exceptIndex 	=	ASM_DEC_VECTOR;
     vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
     vectorDesc.hdl.raw_hdl	=	decrementer_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	&decrementer_exception_vector_prolog_code_size;
+    vectorDesc.hdl.raw_hdl_size	=	(unsigned) &decrementer_exception_vector_prolog_code_size;
     vectorDesc.on		=	nop_func;
     vectorDesc.off		=	nop_func;
     vectorDesc.isOn		=	connected;
@@ -274,15 +273,10 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     vectorDesc.exceptIndex	=	ASM_EXT_VECTOR;
     vectorDesc.hdl.vector	=	ASM_EXT_VECTOR;
     vectorDesc.hdl.raw_hdl	=	external_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	&external_exception_vector_prolog_code_size;
+    vectorDesc.hdl.raw_hdl_size	=	(unsigned) &external_exception_vector_prolog_code_size;
     if (!mpc60x_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }
     printk("RTEMS IRQ management is now operationnal\n");
-    printk("Going to enable interrupts at processor level\n");
-    _CPU_MSR_GET(msr);
-    msr = msr |= MSR_EE;
-    _CPU_MSR_SET(msr);
-    printk("Interrupts enabled\n");
 }
 

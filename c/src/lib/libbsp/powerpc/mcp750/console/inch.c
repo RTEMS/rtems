@@ -232,10 +232,6 @@ void _IBMPC_keyboard_isr()
 rtems_boolean
 _IBMPC_chrdy(char *c)
 {
-  /* FIX ME!!! It doesn't work without something like the following line.
-     Find out why! */
-  printk("");
-
   /* Check buffer our ISR builds */
   if (kbd_first != kbd_last)
   {

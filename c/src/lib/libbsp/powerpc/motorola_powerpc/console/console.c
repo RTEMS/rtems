@@ -21,8 +21,11 @@
   
 #include <stdlib.h>
 #include <assert.h>
+#include <stdlib.h>
+
 #undef __assert
 void __assert (const char *file, int line, const char *msg);
+extern int close(int fd);
 
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -192,8 +195,6 @@ console_initialize(rtems_device_major_number major,
 } /* console_initialize */
 
 
-static int console_open_count = 0;
-
 static int console_last_close(int major, int minor, void *arg)
 {
   BSP_remove_rtems_irq_handler (&console_isr_data);
@@ -272,9 +273,6 @@ console_read(rtems_device_major_number major,
              rtems_device_minor_number minor,
              void                      *arg)
 {
-  rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  char                  *buffer  = rw_args->buffer;
-  int            count, maximum  = rw_args->count;
 
   return rtems_termios_read (arg);
 } /* console_read */
@@ -290,9 +288,6 @@ console_write(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void                    * arg)
 {
-  rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  char                  *buffer  = rw_args->buffer;
-  int            count, maximum  = rw_args->count;
 
   return rtems_termios_write (arg);
  

@@ -346,7 +346,7 @@ static int eeget16(unsigned int *ioaddr, int location)
 		st_le32(ioaddr, EE_ENB | dataval); /* Finish EEPROM a clock tick. */
 		for (i3=0; i3<1000; i3++) ;
 	}
-	st_le32(*ioaddr, EE_ENB);
+	st_le32(ioaddr, EE_ENB);
 	
 	for (i = 16; i > 0; i--) {
 		st_le32(ioaddr, EE_ENB | EE_SHIFT_CLK);
@@ -357,7 +357,7 @@ static int eeget16(unsigned int *ioaddr, int location)
 	}
 
 	/* Terminate the EEPROM access. */
-	st_le32(*ioaddr, EE_ENB & ~EE_CS);
+	st_le32(ioaddr, EE_ENB & ~EE_CS);
 	return ( ((retval<<8)&0xff00) | ((retval>>8)&0xff) );
 }
 
@@ -410,7 +410,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 	 sc->arpcom.ac_enaddr[0], sc->arpcom.ac_enaddr[1],
 	 sc->arpcom.ac_enaddr[2], sc->arpcom.ac_enaddr[3],
 	 sc->arpcom.ac_enaddr[4], sc->arpcom.ac_enaddr[5],
-	 sc->irqInfo.name, sc->port, sc->base);
+	 sc->irqInfo.name, sc->port, (unsigned) sc->base);
 #endif
   
   /*
@@ -791,9 +791,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	unsigned char ucSlotNumber, ucFnNumber;
 	unsigned int  ulDeviceID, lvalue, tmp;	
 	unsigned char cvalue;
-	int value;
-	char interrupt;
-	int diag;
 	
 	/*
 	 * First, find a DEC board

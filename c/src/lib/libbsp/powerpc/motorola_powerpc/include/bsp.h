@@ -47,6 +47,7 @@ unsigned int BSP_time_base_divisor;
 
 extern rtems_configuration_table  BSP_Configuration;
 extern void BSP_panic(char *s);
+extern void rtemsReboot(void);
 extern int printk(const char *, ...) __attribute__((format(printf, 1, 2)));
 #endif
 

@@ -406,31 +406,6 @@ extern console_io* curIo;
 
 unsigned long ticks_per_ms = 1000000;	/* Decrementer ticks per ms (true for 601) */
 
-void * memset(void *p, int c, size_t n) {
-	char *q =p;
-	for(; n>0; --n) *q++=c;
-	return p;
-}
-
-void * memcpy(void *dst, const void * src, size_t n) {
-	u_char *d=dst;
-	const u_char *s=src;
-	while(n-- > 0) *d++=*s++;
-	return dst;
-}
-
-char * strcat(char * dest, const char * src)
-{
-	char *tmp = dest;
-
-	while (*dest)
-		dest++;
-	while ((*dest++ = *src++) != '\0')
-		;
-
-	return tmp;
-}
-
 /* The decrementer is present on all processors and the RTC on the 601
  * has the annoying characteristic of jumping from 1e9 to 0, so we
  * use the decrementer.
@@ -506,7 +481,7 @@ static int global_index = 0;
 static void *__palloc(int s)
 {
   if (global_index ==( STATIC_LOG_DATA_PAGE_NB - 1) ) return (void*) 0;
-  return  (void*) log_page_pool [PAGE_SIZE * global_index++];
+  return  (void*) &(log_page_pool [PAGE_SIZE * global_index++]);
 }
 
 static void pfree(void* p)
@@ -848,17 +823,17 @@ vga_console_functions = {
 	kbd_tstc
 };
 
-console_io* curIo = &vacuum_console_functions;
+console_io* curIo = (console_io*) &vacuum_console_functions;
 
 int select_console(ioType t) {
   static ioType curType = CONSOLE_VACUUM;
   
   switch (t) {
-  case CONSOLE_VACUUM 	: curIo = &vacuum_console_functions; break;
-  case CONSOLE_LOG 	: curIo = &log_console_functions; break;
-  case CONSOLE_SERIAL 	: curIo = &serial_console_functions; break;
-  case CONSOLE_VGA 	: curIo = &vga_console_functions; break;
-  default	        : curIo = &vacuum_console_functions;break;
+  case CONSOLE_VACUUM 	: curIo = (console_io*)&vacuum_console_functions; break;
+  case CONSOLE_LOG 	: curIo = (console_io*)&log_console_functions; break;
+  case CONSOLE_SERIAL 	: curIo = (console_io*)&serial_console_functions; break;
+  case CONSOLE_VGA 	: curIo = (console_io*)&vga_console_functions; break;
+  default	        : curIo = (console_io*)&vacuum_console_functions;break;
   }
   if (curType == CONSOLE_LOG) flush_log();
   curType = t;
@@ -882,6 +857,7 @@ static int skip_atoi(const char **s)
  * bloat has been limited since we basically only need %u, %x, %s and %c.
  * But we need 64 bit values !
  */
+int vsprintf(char *buf, const char *fmt, va_list args);
 
 int printk(const char *fmt, ...) {
 	va_list args;

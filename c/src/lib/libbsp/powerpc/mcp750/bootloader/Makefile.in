@@ -9,14 +9,14 @@ RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=misc pci zlib mm em86 polled_io
+C_PIECES=misc pci zlib mm em86 polled_io lib
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES=bootldr.h zlib.h pci.h
 
 # Assembly source names, if any, go here -- minus the .s
-S_PIECES=head exception em86real consoleLib
+S_PIECES=head exception em86real
 S_FILES=$(S_PIECES:%=%.S)
 S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 
@@ -57,13 +57,27 @@ IMAGES := rtems.gz
 #  'make clobber' already includes 'make clean'
 #
 
-CLEAN_ADDITIONS += bootloader
+CLEAN_ADDITIONS += bootloader reloc.O
 CLOBBER_ADDITIONS += $(IMAGES)
 
+#
+# CAUTION :
+#
+# As we use very specific compilation options in this directory
+# we shall not use any other code. This includes the newlib libc.a
+# as well as other code located in .o files in mcp750 directory.
+#
+# NEVER remove lib.c. You have been warned...
+#
 bootloader : ${OBJS} $(IMAGES) $(BINARY_LOADED) ppcboot.lds
 	$(LD) -o bootloader $(OBJS) --just-symbols=$(BINARY_LOADED) \
 	-b binary $(IMAGES) -T @srcdir@/ppcboot.lds \
 	 -Map bootloader.map
+
+check_unresolved : ${OBJS}
+	$(LD) -r -o reloc.O ${OBJS}
+	$(NM) reloc.O |grep ' U '
+	echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
 
 rtems.gz: $(BINARY_LOADED)
 	$(OBJCOPY)  $(BINARY_LOADED) rtems -O binary -R .comment -S 

@@ -39,6 +39,7 @@ extern unsigned long __bss_start;
 extern void L1_caches_enables();
 extern unsigned get_L2CR();
 extern void set_L2CR(unsigned);
+extern void bsp_cleanup(void);
 /*
  * Copy of residuals passed by firmware
  */
@@ -121,7 +122,6 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    extern int end;
     rtems_unsigned32        heap_start;    
     rtems_unsigned32        heap_size;
 

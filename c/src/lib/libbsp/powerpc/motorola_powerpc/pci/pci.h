@@ -1148,5 +1148,6 @@ pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char func
  * Return the number of PCI busses in the system
  */
 extern unsigned char BusCountPCI();
+extern void InitializePCI();
 
 #endif /* RTEMS_PCI_H */

@@ -28,6 +28,13 @@
 
 #define USE_PPCBUG
 #undef 	USE_PPCBUG
+
+#define MONITOR_ENTER			\
+	mfmsr	r10		;	\
+	ori	r10,r10,MSR_IP	;	\
+	mtmsr	r10		;	\
+	li	r10,0x63	;	\
+	sc
 	
 	START_GOT
 	GOT_ENTRY(_GOT2_TABLE_)
@@ -50,7 +57,11 @@
 /* Point the stack into the PreP partition header in the x86 reserved
  * code area, so that simple C routines can be called. 
  */
-start:	bl	1f
+start:	
+#ifdef 	USE_PPCBUG
+	MONITOR_ENTER	
+#endif
+	bl	1f
 1:	mflr	r1
 	li	r0,0
 	stwu	r0,start-1b-0x400+0x1b0-FRAME_SIZE(r1)
@@ -230,11 +241,7 @@ moved:	lwz	r1,stack(bd)
 	mtspr	HID0,r0
 /* Provisional return to FW, works for PPCBug */
 #if 0
-1:	mfmsr	r10
-	ori	r10,r10,MSR_IP
-	mtmsr	r10
-	li	r10,0x63
-	sc
+	MONITOR_ENTER
 #else
 1:	bctr
 #endif
@@ -313,21 +320,7 @@ flush_tlb:
  */
 	sync	
 	blr					
-/* A few utility functions, some copied from arch/ppc/lib/string.S */
 
-#if 0
-	.globl  strnlen
-	.type	strnlen,@function
-strnlen:
-	addi	r4,r4,1
-	mtctr	r4
-        addi    r4,r3,-1
-1:      lbzu    r0,1(r4)
-        cmpwi   0,r0,0
-        bdnzf   eq,1b
-        subf    r3,r3,r4
-        blr
-#endif
 	.globl  codemove
 codemove:
 	.type	codemove,@function

@@ -21,6 +21,7 @@
 #include <bsp/pci.h>
 #include <bsp/residual.h>
 #include <bsp/openpic.h>
+#include <bsp.h>
 
 #define PCI_CONFIG_ADDR			0xcf8
 #define PCI_CONFIG_DATA			0xcfc

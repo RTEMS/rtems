@@ -25,6 +25,7 @@
 #include <bsp/consoleIo.h>
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
+#include <bsp.h>
 
 #define NULL 0
 #define REGISTER_DEBUG

@@ -14,6 +14,7 @@
  */
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
+#include <bsp.h>
 
 static rtems_raw_except_global_settings exception_config;
 static rtems_raw_except_connect_data    exception_table[LAST_VALID_EXC + 1];
