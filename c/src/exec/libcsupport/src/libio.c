@@ -37,7 +37,7 @@ Objects_Id rtems_libio_semaphore;
 #define RTEMS_LIBIO_SEM         rtems_build_name('L', 'B', 'I', 'O')
 #define RTEMS_LIBIO_IOP_SEM(n)  rtems_build_name('L', 'B', 'I', n)
 
-unsigned32     rtems_libio_number_iops;
+extern unsigned32     rtems_libio_number_iops;
 rtems_libio_t *rtems_libio_iops;
 rtems_libio_t *rtems_libio_last_iop;
 
