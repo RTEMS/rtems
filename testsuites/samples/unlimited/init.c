@@ -90,6 +90,7 @@ void destory_all_tasks(
     if (task_id[task])
     {
       printf(" %s : signal task %08x to delete, ", who, task_id[task]);
+      fflush(stdout);
       rtems_event_send(task_id[task], 1);
       task_id[task] = 0;
     }

@@ -63,7 +63,7 @@ void test3()
 
     result = rtems_task_create(name,
                                10,
-                               4096,
+                               RTEMS_MINIMUM_STACK_SIZE,
                                RTEMS_DEFAULT_ATTRIBUTES,
                                RTEMS_LOCAL,
                                &task_id[task_count]);
@@ -72,6 +72,7 @@ void test3()
       break;
     
     printf("number = %3i, id = %08x, starting, ", task_count, task_id[task_count]);
+    fflush(stdout);
     
     result = rtems_task_start(task_id[task_count],
                               test_task,

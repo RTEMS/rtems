@@ -16,9 +16,6 @@
 
 #include <rtems.h>
 
-#define TASK_ALLOCATION_SIZE     (5)
-#define CONFIGURE_MAXIMUM_TASKS  rtems_resource_unlimited(TASK_ALLOCATION_SIZE)
-
 #include <tmacros.h>
 
 /* functions */
@@ -49,6 +46,11 @@ void test3();
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define TASK_ALLOCATION_SIZE     (5)
+#define CONFIGURE_MAXIMUM_TASKS  rtems_resource_unlimited(TASK_ALLOCATION_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS (62 * RTEMS_MINIMUM_STACK_SIZE)
+
 
 #include <confdefs.h>
 
