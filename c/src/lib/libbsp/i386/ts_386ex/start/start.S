@@ -50,7 +50,7 @@
 	PUBLIC( SYM(_init_i386ex) )
 
 	
-	.section .initial
+	.section .initial, "ax"
 
 /*
  * Enable access to peripheral register at expanded I/O addresses
