@@ -40,7 +40,7 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/score/shtypes.h>
+#include <rtems/score/types.h>
 
 /*
  * This is a exception vector table
