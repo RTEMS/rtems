@@ -4,10 +4,12 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_bspdir = $(includedir)/bsp
+
 C_FILES = irq.c irq_init.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = irq.h
+include_bsp_HEADERS = irq.h
 
 S_FILES = irq_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -18,6 +20,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
+## FIXME: WTF is this?
 SORDID_HACK:
 	rm -f $(PROJECT_INCLUDE)/bsp/irq.h
 
@@ -27,8 +30,8 @@ $(PROJECT_INCLUDE)/bsp:
 $(PROJECT_INCLUDE)/bsp/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp \
-    $(H_FILES:%.h=$(PROJECT_INCLUDE)/bsp/%.h)
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
+    $(include_bsp_HEADERS:%=$(PROJECT_INCLUDE)/bsp/%)
 
 #
 # (OPTIONAL) Add local stuff here using +=

@@ -773,21 +773,6 @@ fi
 
 dnl $Id$
 
-AC_DEFUN(RTEMS_ENABLE_NETWORKING,
-[
-
-AC_ARG_ENABLE(networking,
-AC_HELP_STRING([--enable-networking],[enable TCP/IP stack]),
-[case "${enableval}" in
-  yes) RTEMS_HAS_NETWORKING=yes ;;
-  no) RTEMS_HAS_NETWORKING=no ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
-esac],[RTEMS_HAS_NETWORKING=yes])
-AC_SUBST(RTEMS_HAS_NETWORKING)dnl
-])
-
-dnl $Id$
-
 dnl Pass a single BSP via an environment variable
 dnl used by per BSP configure scripts
 AC_DEFUN(RTEMS_ENV_RTEMSBSP,
@@ -984,36 +969,6 @@ AC_SUBST(RTEMS_BSP_FAMILY)
 ])dnl
 
 dnl $Id$
-dnl
-AC_DEFUN(RTEMS_CHECK_NETWORKING,
-[dnl
-AC_REQUIRE([RTEMS_CHECK_CPU])dnl
-AC_REQUIRE([RTEMS_ENABLE_NETWORKING])dnl
-
-AC_CACHE_CHECK([whether BSP supports networking],
-  rtems_cv_HAS_NETWORKING,
-  [dnl
-    case "$RTEMS_CPU" in
-    unix*)
-      rtems_cv_HAS_NETWORKING="no"
-      ;;
-    *)
-      if test "${RTEMS_HAS_NETWORKING}" = "yes"; then
-        rtems_cv_HAS_NETWORKING="yes";
-      else
-        rtems_cv_HAS_NETWORKING="disabled";
-      fi
-      ;;
-    esac])
-if test "$rtems_cv_HAS_NETWORKING" = "yes"; then
-  HAS_NETWORKING="yes";
-else
-  HAS_NETWORKING="no";
-fi
-AC_SUBST(HAS_NETWORKING)dnl
-])
-
-dnl $Id$
 
 AC_DEFUN(RTEMS_CANONICAL_HOST,
 [dnl
@@ -1038,4 +993,71 @@ case "${target}" in
 esac
 AC_SUBST(RTEMS_HOST)
 ])dnl
+
+# Like AC_CONFIG_HEADER, but automatically create stamp file.
+
+# serial 3
+
+# When config.status generates a header, we must update the stamp-h file.
+# This file resides in the same directory as the config header
+# that is generated.  We must strip everything past the first ":",
+# and everything past the last "/".
+
+AC_PREREQ([2.12])
+
+AC_DEFUN([AM_CONFIG_HEADER],
+[ifdef([AC_FOREACH],dnl
+	 [dnl init our file count if it isn't already
+	 m4_ifndef([_AM_Config_Header_Index], m4_define([_AM_Config_Header_Index], [0]))
+	 dnl prepare to store our destination file list for use in config.status
+	 AC_FOREACH([_AM_File], [$1],
+		    [m4_pushdef([_AM_Dest], m4_patsubst(_AM_File, [:.*]))
+		    m4_define([_AM_Config_Header_Index], m4_incr(_AM_Config_Header_Index))
+		    dnl and add it to the list of files AC keeps track of, along
+		    dnl with our hook
+		    AC_CONFIG_HEADERS(_AM_File,
+dnl COMMANDS, [, INIT-CMDS]
+[# update the timestamp
+echo timestamp >"AS_ESCAPE(_AM_DIRNAME(]_AM_Dest[))/stamp-h]_AM_Config_Header_Index["
+][$2]m4_ifval([$3], [, [$3]]))dnl AC_CONFIG_HEADERS
+		    m4_popdef([_AM_Dest])])],dnl
+[AC_CONFIG_HEADER([$1])
+  AC_OUTPUT_COMMANDS(
+   ifelse(patsubst([$1], [[^ ]], []),
+	  [],
+	  [test -z "$CONFIG_HEADERS" || echo timestamp >dnl
+	   patsubst([$1], [^\([^:]*/\)?.*], [\1])stamp-h]),dnl
+[am_indx=1
+for am_file in $1; do
+  case " \$CONFIG_HEADERS " in
+  *" \$am_file "*)
+    am_dir=\`echo \$am_file |sed 's%:.*%%;s%[^/]*\$%%'\`
+    if test -n "\$am_dir"; then
+      am_tmpdir=\`echo \$am_dir |sed 's%^\(/*\).*\$%\1%'\`
+      for am_subdir in \`echo \$am_dir |sed 's%/% %'\`; do
+        am_tmpdir=\$am_tmpdir\$am_subdir/
+        if test ! -d \$am_tmpdir; then
+          mkdir \$am_tmpdir
+        fi
+      done
+    fi
+    echo timestamp > "\$am_dir"stamp-h\$am_indx
+    ;;
+  esac
+  am_indx=\`expr \$am_indx + 1\`
+done])
+])]) # AM_CONFIG_HEADER
+
+# _AM_DIRNAME(PATH)
+# -----------------
+# Like AS_DIRNAME, only do it during macro expansion
+AC_DEFUN([_AM_DIRNAME],
+       [m4_if(m4_regexp([$1], [^.*[^/]//*[^/][^/]*/*$]), -1,
+	      m4_if(m4_regexp([$1], [^//\([^/]\|$\)]), -1,
+		    m4_if(m4_regexp([$1], [^/.*]), -1,
+			  [.],
+			  m4_patsubst([$1], [^\(/\).*], [\1])),
+		    m4_patsubst([$1], [^\(//\)\([^/].*\|$\)], [\1])),
+	      m4_patsubst([$1], [^\(.*[^/]\)//*[^/][^/]*/*$], [\1]))[]dnl
+]) # _AM_DIRNAME
 

@@ -4,12 +4,11 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@:
-
 C_FILES = vectors_init.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = vectors.h
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS = vectors.h   
 
 S_FILES = vectors.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -30,10 +29,11 @@ $(PGM): $(OBJS)
 $(PROJECT_INCLUDE)/bsp:
 	$(mkinstalldirs) $@
 
-$(PROJECT_INCLUDE)/bsp/vectors.h: vectors.h
+$(PROJECT_INCLUDE)/bsp/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
+   $(include_bsp_HEADERS:%=$(PROJECT_INCLUDE)/bsp/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 
