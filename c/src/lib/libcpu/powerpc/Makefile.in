@@ -18,7 +18,7 @@ VPATH = @srcdir@
 include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-ifeq ($(RTEMS_CPU_MODEL),mpc750)
+ifeq ($(wildcard $(RTEMS_CPU_MODEL)),$(RTEMS_CPU_MODEL))
 SHARED_LIB=shared
 endif
 
