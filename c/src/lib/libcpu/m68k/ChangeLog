@@ -1,3 +1,8 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/cache/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* shared/cache/Makefile.am: Use 'CLEANFILES ='.
+
 2001-03-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* m68040/fpsp/Makefile.am, shared/cache/Makefile.am:
