@@ -21,10 +21,12 @@
 extern "C" {
 #endif
 
-#include "bsp.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "libcsupport.h"
+#include <rtems.h>
+#include <bsp.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <libcsupport.h>
 
 #define FOREVER 1                  /* infinite loop */
 
@@ -59,7 +61,7 @@ extern "C" {
 #define pause() \
   do { \
     char buffer[ 80 ]; \
-    printf( "<pause> " ); fflush( stdout ); \
+    printf( "<pause>" ); fflush( stdout ); \
     gets( buffer ); \
     puts( "" ); \
   } while ( 0 )
@@ -67,7 +69,7 @@ extern "C" {
 #define pause_and_screen_number( _screen ) \
   do { \
     char buffer[ 80 ]; \
-    printf( "<pause - screen  %d> ", (_screen) ); fflush( stdout ); \
+    printf( "<pause - screen %d> ", (_screen) ); fflush( stdout ); \
     gets( buffer ); \
     puts( "" ); \
   } while ( 0 )
