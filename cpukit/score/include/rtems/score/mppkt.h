@@ -54,10 +54,9 @@ typedef enum {
  *  The following record contains the prefix for every packet
  *  passed between nodes in an MP system.
  *
- *  NOTE: This structure is padded to insure that anything
- *        following it is on a 16 byte boundary.  This is
- *        the most stringent structure alignment rule
- *        encountered yet (i960CA).
+ *  NOTE: This structure is padded to ensure that anything following it
+ *        is on a 16 byte boundary.  This is the most stringent structure
+ *        alignment rule encountered yet.
  */
 
 typedef struct {

@@ -285,7 +285,6 @@ score/cpu/avr/Makefile
 score/cpu/c4x/Makefile
 score/cpu/h8300/Makefile
 score/cpu/i386/Makefile
-score/cpu/i960/Makefile
 score/cpu/m68k/Makefile
 score/cpu/mips/Makefile
 score/cpu/or32/Makefile
