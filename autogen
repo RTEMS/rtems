@@ -69,8 +69,10 @@ generate)
     cd $dir;
     aclocal -I $aclocal_dir;
     autoconf;
-    test -n "`grep CONFIG_HEADER configure.in`" && autoheader ; 
     test -f Makefile.am && automake $verbose ;
+    test -n "`grep CONFIG_HEADER configure.in`" && autoheader ;
+    test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
+      && echo timestamp > stamp-h.in
   )
   done
   ;;
@@ -103,6 +105,9 @@ clean)
   find . -name '*.rej' -print | xargs rm -f
   find . -name 'config.status' -print | xargs rm -f
   find . -name 'config.log' -print | xargs rm -f
+  find . -name 'config.cache' -print | xargs rm -f
   find . -name '.deps' -print | xargs rm -rf
+  find . -name '.libs' -print | xargs rm -rf
+  find . -name 'stamp-h.in' | xargs rm -rf
   ;;
 esac
