@@ -6,24 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Calling Conventions, Calling Conventions Introduction, CPU Model Dependent Features Floating Point Unit, Top
-@end ifinfo
 @chapter Calling Conventions
-@ifinfo
-@menu
-* Calling Conventions Introduction::
-* Calling Conventions Processor Background::
-* Calling Conventions Calling Mechanism::
-* Calling Conventions Register Usage::
-* Calling Conventions Parameter Passing::
-* Calling Conventions User-Provided Routines::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Calling Conventions Introduction, Calling Conventions Processor Background, Calling Conventions, Calling Conventions
-@end ifinfo
 @section Introduction
 
 Each high-level language compiler generates
@@ -46,9 +30,6 @@ target processor are the same, different compilers may use
 different calling conventions.  As a result, calling conventions
 are both processor and compiler dependent.
 
-@ifinfo
-@node Calling Conventions Processor Background, Calling Conventions Calling Mechanism, Calling Conventions Introduction, Calling Conventions
-@end ifinfo
 @section Processor Background
 
 The i386 architecture supports a simple yet effective
@@ -62,18 +43,12 @@ any registers.  It is the responsibility of the high-level
 language compiler to define the register preservation and usage
 convention.
 
-@ifinfo
-@node Calling Conventions Calling Mechanism, Calling Conventions Register Usage, Calling Conventions Processor Background, Calling Conventions
-@end ifinfo
 @section Calling Mechanism
 
 All RTEMS directives are invoked using a call
 instruction and return to the user application via the ret
 instruction.
 
-@ifinfo
-@node Calling Conventions Register Usage, Calling Conventions Parameter Passing, Calling Conventions Calling Mechanism, Calling Conventions
-@end ifinfo
 @section Register Usage
 
 As discussed above, the call instruction does not
@@ -83,9 +58,6 @@ preserved by RTEMS directives therefore, the contents of these
 registers should not be assumed upon return from any RTEMS
 directive.
 
-@ifinfo
-@node Calling Conventions Parameter Passing, Calling Conventions User-Provided Routines, Calling Conventions Register Usage, Calling Conventions
-@end ifinfo
 @section Parameter Passing
 
 RTEMS assumes that arguments are placed on the
@@ -110,9 +82,6 @@ from the stack after control is returned to the caller.  This
 removal is typically accomplished by adding the size of the
 argument list in bytes to the stack pointer.
 
-@ifinfo
-@node Calling Conventions User-Provided Routines, Memory Model, Calling Conventions Parameter Passing, Calling Conventions
-@end ifinfo
 @section User-Provided Routines
 
 All user-provided routines invoked by RTEMS, such as

@@ -6,21 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Board Support Packages, Board Support Packages Introduction, Default Fatal Error Processing Default Fatal Error Handler Operations, Top
-@end ifinfo
 @chapter Board Support Packages
-@ifinfo
-@menu
-* Board Support Packages Introduction::
-* Board Support Packages System Reset::
-* Board Support Packages Processor Initialization::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Board Support Packages Introduction, Board Support Packages System Reset, Board Support Packages, Board Support Packages
-@end ifinfo
 @section Introduction
 
 An RTEMS Board Support Package (BSP) must be designed to support a
@@ -29,9 +16,6 @@ discussion of i386 specific BSP issues.  For more information on developing
 a BSP, refer to the chapter titled Board Support Packages in the RTEMS
 Applications User's Guide. 
 
-@ifinfo
-@node Board Support Packages System Reset, Board Support Packages Processor Initialization, Board Support Packages Introduction, Board Support Packages
-@end ifinfo
 @section System Reset
 
 An RTEMS based application is initiated when the i386
@@ -72,9 +56,6 @@ of memory.
 Typically, an intersegment JMP to the application's initialization code is
 placed at address 0xFFFFFFF0. 
 
-@ifinfo
-@node Board Support Packages Processor Initialization, Processor Dependent Information Table, Board Support Packages System Reset, Board Support Packages 
-@end ifinfo 
 @section Processor Initialization
 
 This initialization code is responsible for initializing all data

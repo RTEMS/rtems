@@ -6,24 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Interrupt Processing, Interrupt Processing Introduction, Memory Model Flat Memory Model, Top
-@end ifinfo
 @chapter Interrupt Processing
-@ifinfo
-@menu
-* Interrupt Processing Introduction::
-* Interrupt Processing Vectoring of Interrupt Handler::
-* Interrupt Processing Interrupt Stack Frame::
-* Interrupt Processing Interrupt Levels::
-* Interrupt Processing Disabling of Interrupts by RTEMS::
-* Interrupt Processing Interrupt Stack::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Interrupt Processing Introduction, Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing, Interrupt Processing
-@end ifinfo
 @section Introduction
 
 Different types of processors respond to the
@@ -41,9 +25,6 @@ processor's unique architecture. Discussed in this chapter are
 the the processor's response and control mechanisms as they
 pertain to RTEMS.
 
-@ifinfo
-@node Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing Interrupt Stack Frame, Interrupt Processing Introduction, Interrupt Processing
-@end ifinfo
 @section Vectoring of Interrupt Handler
 
 Although the i386 supports multiple privilege levels,
@@ -68,9 +49,6 @@ performs the following actions:
 A nested interrupt is processed similarly by the
 i386.
 
-@ifinfo
-@node Interrupt Processing Interrupt Stack Frame, Interrupt Processing Interrupt Levels, Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing
-@end ifinfo
 @section Interrupt Stack Frame
 
 The structure of the Interrupt Stack Frame for the
@@ -129,9 +107,6 @@ response to an interrupt is as follows:
 @end html
 @end ifset
 
-@ifinfo
-@node Interrupt Processing Interrupt Levels, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing Interrupt Stack Frame, Interrupt Processing
-@end ifinfo
 @section Interrupt Levels
 
 Although RTEMS supports 256 interrupt levels, the
@@ -147,9 +122,6 @@ RTEMS interrupt levels 0 and 1 such that level zero
 that interrupts are disabled.  All other RTEMS interrupt levels
 are undefined and their behavior is unpredictable.
 
-@ifinfo
-@node Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing Interrupt Stack, Interrupt Processing Interrupt Levels, Interrupt Processing
-@end ifinfo
 @section Disabling of Interrupts by RTEMS
 
 During the execution of directive calls, critical
@@ -171,9 +143,6 @@ occur due to the inability of RTEMS to protect its critical
 sections.  However, ISRs that make no system calls may safely
 execute as non-maskable interrupts.
 
-@ifinfo
-@node Interrupt Processing Interrupt Stack, Default Fatal Error Processing, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing
-@end ifinfo
 @section Interrupt Stack
 
 The i386 family does not support a dedicated hardware
