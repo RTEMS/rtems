@@ -1,3 +1,8 @@
+2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* configure.ac: Add TOD support in shared as part of adding MVME2100
+	BSP.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
