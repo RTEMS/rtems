@@ -74,29 +74,21 @@ on a PowerPC target.
 @ifset use-ascii
 @example
 @group
-XXXXX reference it in the previous paragraph
-XXXXX insert PCI_reg.eps
-XXXXX Caption PCI Device's Configuration Header Space Format
+There is no ASCII version of the PCI Device's Configuration Header Space Format
 @end group
 @end example
 @end ifset
 
 @ifset use-tex
-@example
-@group
-XXXXX reference it in the previous paragraph
-XXXXX insert PCI_reg.eps
-XXXXX Caption PCI Device's Configuration Header Space Format
-@end group
-@end example
+@image{PCIreg,,}
 @end ifset
 
 @c @image{PCI_reg}
 
 @ifset use-html
-@c <IMG SRC="PCI_reg.jpg" WIDTH=500 HEIGHT=600 ALT="PCI Device's Configuration Header Space Format">
+@c <IMG SRC="PCIreg.jpg" WIDTH=500 HEIGHT=600 ALT="PCI Device's Configuration Header Space Format">
 @html
-<IMG SRC="PCI_reg.jpg" ALT="PCI Device's Configuration Header Space Format">
+<IMG SRC="PCIreg.jpg" ALT="PCI Device's Configuration Header Space Format">
 @end html
 @end ifset
 
