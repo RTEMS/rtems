@@ -17,20 +17,14 @@
  *  $Id$
  */
 
+#include <string.h>
+
 #include <bsp.h>
 #include <rtems/libio.h>
- 
-#include <libcsupport.h>
- 
-#include <string.h>
+#include <rtems/libcsupport.h>
 #include <info.h>
  
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
-
 boardinfo_t M860_binfo;
-
 
 /*
  *  The original table from the application and our copy of it with
@@ -93,15 +87,6 @@ bsp_pretasking_hook(void)
   }
   /* set up a 256K heap */
   bsp_libc_init((void *) heap_start, 256 * 1024, 0);
-  
-#ifdef STACK_CHECKER_ON
-  /*
-   *  Initialize the stack bounds checker
-   *  We can either turn it on here or from the app.
-   */
-  
-  Stack_check_Initialize();
-#endif
   
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
