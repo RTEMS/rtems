@@ -42,10 +42,13 @@ int mq_getattr(
   Objects_Locations                     location;
   CORE_message_queue_Attributes        *the_mq_attr;
  
+  if ( !mqstat )
+    set_errno_and_return_minus_one( EINVAL );
+
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
+      set_errno_and_return_minus_one( EBADF );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
@@ -60,7 +63,7 @@ int mq_getattr(
  
       the_mq_attr = &the_mq->Message_queue.Attributes;
  
-      mqstat->mq_flags   = the_mq->flags;
+      mqstat->mq_flags   = the_mq->oflag;
       mqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
       mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
       mqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
