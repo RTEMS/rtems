@@ -22,7 +22,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
-#include <z8036.h>
+#include <zilog/z8036.h>
 
 #define MICRVAL     0xe2            /* disable lower chain, no vec */
                                     /*  set right justified addr */

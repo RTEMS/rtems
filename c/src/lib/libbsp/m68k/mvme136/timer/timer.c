@@ -26,7 +26,7 @@
 
 
 #include <bsp.h>
-#include <z8036.h>
+#include <zilog/z8036.h>
 
 #define TIMER 0xfffb0000   /* address of Z8036 on MVME136 */
 

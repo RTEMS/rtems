@@ -24,7 +24,7 @@
 #include <rtems/libio.h>
 
 #include <libcsupport.h>
-#include <z8036.h>
+#include <zilog/z8036.h>
 
 #include <string.h>
 #include <fcntl.h>
