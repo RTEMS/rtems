@@ -1,5 +1,8 @@
-/*  eventset.h
- *
+/**
+ * @file rtems/rtems/eventset.h
+ */
+
+/*
  *  This include file contains the information pertaining to the
  *  Event Sets Handler.  This handler provides methods for the manipulation
  *  of event sets which will be sent and received by tasks.

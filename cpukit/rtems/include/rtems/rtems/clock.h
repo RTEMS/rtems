@@ -1,5 +1,8 @@
-/*  clock.h
- *
+/**
+ * @file rtems/rtems/clock.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Clock Manager.  This manager provides facilities to set, obtain,
  *  and continually update the current date and time.

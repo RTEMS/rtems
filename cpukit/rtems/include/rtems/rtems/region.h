@@ -1,5 +1,8 @@
-/*  region.h
- *
+/**
+ * @file rtems/rtems/region.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Region Manager.  This manager provides facilities to dynamically
  *  allocate memory in variable sized units which are returned as segments.

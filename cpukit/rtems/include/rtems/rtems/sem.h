@@ -1,5 +1,8 @@
-/*  semaphore.h
- *
+/**
+ * @file rtems/rtems/sem.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Semaphore Manager.  This manager utilizes standard Dijkstra
  *  counting semaphores to provide synchronization and mutual exclusion
@@ -37,7 +40,6 @@ extern "C" {
 #include <rtems/score/coremutex.h>
 #include <rtems/score/object.h>
 #include <rtems/score/coresem.h>
-#include <rtems/score/threadq.h>
 
 /*
  *  The following defines the control block used to manage each semaphore.

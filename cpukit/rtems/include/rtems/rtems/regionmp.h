@@ -1,5 +1,8 @@
-/*  regionmp.h
- *
+/**
+ * @file rtems/rtems/regionmp.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Multiprocessing Support in the Region Manager.
  *

@@ -1,5 +1,8 @@
-/*  cache.h
- *
+/**
+ * @file rtems/rtems/cache.h
+ */
+
+/*
  *  Cache Manager
  *
  *  COPYRIGHT (c) 1989-1999.

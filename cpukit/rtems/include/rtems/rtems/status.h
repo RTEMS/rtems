@@ -1,5 +1,8 @@
-/*  status.h
- *
+/**
+ * @file rtems/rtems/status.h
+ */
+
+/*
  *  This include file contains the status codes returned from the
  *  executive directives.
  *

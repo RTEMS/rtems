@@ -1,7 +1,9 @@
+/**
+ * @file rtems/rtems/rtemsapi.h
+ */
+
 /*
  *  RTEMS API Support
- *
- *  NOTE:
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

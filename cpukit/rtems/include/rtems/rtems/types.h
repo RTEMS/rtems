@@ -1,5 +1,8 @@
-/*  types.h
- *
+/**
+ * @file rtems/rtems/types.h
+ */
+
+/*
  *  This include file defines the types used by the RTEMS API.
  *
  *  COPYRIGHT (c) 1989-1999.

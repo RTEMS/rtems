@@ -1,5 +1,8 @@
-/*  message.h
- *
+/**
+ * @file rtems/rtems/message.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Message Queue Manager.  This manager provides a mechanism for
  *  communication and synchronization between tasks using messages.
@@ -37,7 +40,6 @@ extern "C" {
 #include <rtems/score/chain.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/score/threadq.h>
 #include <rtems/score/coremsg.h>
 
 /*

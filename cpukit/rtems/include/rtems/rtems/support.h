@@ -1,5 +1,8 @@
-/*  support.h
- *
+/**
+ * @file rtems/rtems/support.h
+ */
+
+/*
  *  This include file contains information about support functions for
  *  the RTEMS API.
  *

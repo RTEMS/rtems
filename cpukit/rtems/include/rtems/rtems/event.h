@@ -1,5 +1,8 @@
-/*  event.h
- *
+/**
+ * @file rtems/rtems/event.h
+ */
+
+/*
  *  This include file contains the information pertaining to the Event
  *  Manager.  This manager provides a high performance method of communication
  *  and synchronization.

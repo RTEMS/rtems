@@ -1,5 +1,8 @@
-/*  ratemon.h
- *
+/**
+ * @file rtems/rtems/ratemon.h
+ */
+
+/*
  *  This include file contains all the constants, structures, and
  *  prototypes associated with the Rate Monotonic Manager.  This manager
  *  provides facilities to implement tasks which execute in a periodic fashion.

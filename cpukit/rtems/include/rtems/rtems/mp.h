@@ -1,5 +1,8 @@
-/*  mp.h
- *
+/**
+ * @file rtems/rtems/mp.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Multiprocessing Manager.
  *

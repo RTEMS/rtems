@@ -1,5 +1,8 @@
-/*  attr.h
- *
+/**
+ * @file rtems/rtems/attr.h
+ */
+
+/*
  *  This include file contains all information about the Object Attributes
  *  Handler.
  *

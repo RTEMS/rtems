@@ -1,5 +1,8 @@
-/*  signalmp.h
- *
+/**
+ * @file rtems/rtems/signalmp.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Multiprocessing Support in the Signal Manager.
  *

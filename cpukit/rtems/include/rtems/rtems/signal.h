@@ -1,5 +1,8 @@
-/*  signal.h
- *
+/**
+ * @file rtems/rtems/signal.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Signal Manager.   This manager provides capabilities required
  *  for asynchronous communication between tasks via signal sets.

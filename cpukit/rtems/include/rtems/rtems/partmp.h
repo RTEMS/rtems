@@ -1,5 +1,8 @@
-/*  partmp.h
- *
+/**
+ * @file rtems/rtems/partmp.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Multiprocessing Support in the Partition Manager.
  *

@@ -1,5 +1,8 @@
-/*  dpmem.h
- *
+/**
+ * @file rtems/rtems/dpmem.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the Dual Ported Memory Manager. This manager provides a mechanism
  *  for converting addresses between internal and external representations

@@ -1,5 +1,8 @@
-/*  taskmp.h
- *
+/**
+ * @file rtems/rtems/taskmp.h
+ */
+
+/*
  *  This include file contains all the constants and structures associated
  *  with the multiprocessing support in the task manager.
  *
