@@ -134,14 +134,6 @@ rtems_device_driver console_open(
 	return status;
 }
  
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources( configuration, 2 );
-}
-
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

@@ -101,19 +101,10 @@ void bsp_start( void )
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_table_segment = get_ds();
   Cpu_table.interrupt_table_offset = (void *)Interrupt_descriptor_table;
-  Cpu_table.interrupt_stack_size = 8192;
-  /*
-#if defined(RTEMS_POSIX_API)
-  BSP_Configuration.work_space_size *= 3;
-#endif
-  */
-    BSP_Configuration.work_space_start = (void *)
-     RAM_END - BSP_Configuration.work_space_size;
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
-  /*
-   *  Account for the console's resources
-   */
-  console_reserve_resources( &BSP_Configuration );
+  BSP_Configuration.work_space_start = (void *)
+     RAM_END - BSP_Configuration.work_space_size;
 
   /*
    * Init rtems_interrupt_management

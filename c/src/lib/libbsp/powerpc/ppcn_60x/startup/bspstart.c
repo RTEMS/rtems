@@ -277,18 +277,6 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = work_space_start;
 
   /*
-   * Add 1 region for RTEMS Malloc
-   */
-
-  BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
-
-  /*
-   *  Account for the console's resources
-   */
-
-  console_reserve_resources( &BSP_Configuration );
-
-  /*
    *  initialize the CPU table for this BSP
    */
 
@@ -297,7 +285,7 @@ void bsp_start( void )
   Cpu_table.predriver_hook = bsp_predriver_hook; 
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.do_zero_of_workspace = TRUE;
-  Cpu_table.interrupt_stack_size = (32 * 1024);
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   Cpu_table.clicks_per_usec = ulCpuBusClock/4000000;
 
 

@@ -84,16 +84,6 @@ isr_is_on(const rtems_irq_connect_data *irq)
   return BSP_irq_enabled_at_i8259s(irq->name);
 }
 
-void console_reserve_resources(rtems_configuration_table *conf)
-{
-    if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
-    {
-      rtems_termios_reserve_resources(conf, 1);
-    }
-   
-  return;
-}
-
 void __assert (const char *file, int line, const char *msg)
 {
     static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";

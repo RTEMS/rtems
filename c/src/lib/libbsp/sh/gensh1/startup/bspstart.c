@@ -117,7 +117,6 @@ void bsp_start(void)
   _CPU_Interrupt_stack_low = &CPU_Interrupt_stack_low ;
   _CPU_Interrupt_stack_high = &CPU_Interrupt_stack_high ;
 
-  /* This isn't used anywhere */
   Cpu_table.interrupt_stack_size = 
     (unsigned32) (&CPU_Interrupt_stack_high) -
     (unsigned32) (&CPU_Interrupt_stack_low) ;
@@ -128,7 +127,7 @@ void bsp_start(void)
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
-  Cpu_table.interrupt_stack_size = 4096;
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 #endif
   Cpu_table.clicks_per_second = HZ ;
 }

@@ -49,6 +49,7 @@ void Task_switch(
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_MAXIMUM_TASKS             4
 
 #include <confdefs.h>
 
@@ -66,12 +67,15 @@ TEST_EXTERN volatile rtems_unsigned32 Run_count[ 4 ];
 /*
  * Keep track of task switches
  */
+
 struct taskSwitchLog {
   int               taskIndex;
   rtems_time_of_day when;
 };
+
 extern struct taskSwitchLog taskSwitchLog[];
 extern int taskSwitchLogIndex;
 volatile extern int testsFinished;
+
 
 /* end of include file */

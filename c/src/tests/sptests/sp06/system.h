@@ -41,6 +41,7 @@ rtems_task Task_3(
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_MAXIMUM_TASKS             4
 
 #include <confdefs.h>
 

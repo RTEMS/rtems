@@ -27,10 +27,20 @@ extern "C" {
 #endif
 
 #include <rtems.h>
-#include <clockdrv.h>
-#include <console.h>
 #include <iosupp.h>
 #include <erc32.h>
+#include <clockdrv.h>
+
+#include <console.h>
+
+/*
+ *  confdefs.h overrides for this BSP:
+ *   - two termios serial ports
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

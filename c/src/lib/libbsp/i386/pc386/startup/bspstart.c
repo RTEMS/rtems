@@ -163,7 +163,7 @@ void bsp_start_default( void )
   Cpu_table.do_zero_of_workspace    = TRUE;
   Cpu_table.interrupt_table_segment = get_ds();
   Cpu_table.interrupt_table_offset  = (void *)Interrupt_descriptor_table;
-  Cpu_table.interrupt_stack_size    = 4096;
+  Cpu_table.interrupt_stack_size    = CONFIGURE_INTERRUPT_STACK_MEMORY;
   Cpu_table.extra_mpci_receive_server_stack = 0;
 
   /* Place RTEMS workspace at beginning of free memory. */
@@ -173,8 +173,6 @@ void bsp_start_default( void )
 
   BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;
   rtemsFreeMemStart += BSP_Configuration.work_space_size;
-
-  console_reserve_resources(&BSP_Configuration);
 
   /*
    * Init rtems interrupt management

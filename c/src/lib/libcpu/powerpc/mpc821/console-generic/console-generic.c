@@ -71,7 +71,6 @@ static volatile m821BufferDescriptor_t *RxBd[NIFACES], *TxBd[NIFACES];
  */
 static int m821_get_brg_cd(int);
 unsigned char m821_get_brg_clk(int);
-void m821_console_reserve_resources(rtems_configuration_table *);
 unsigned char m821_get_brg_clk(int);
 
 
@@ -675,14 +674,6 @@ m821_buf_poll_write (int minor, char *buf, int len)
   TxBd[minor]->length = len;
   TxBd[minor]->status = M821_BD_READY | M821_BD_WRAP;
   return 0;
-}
-
-/*
- * This is needed in case we use TERMIOS
- */
-void m821_console_reserve_resources(rtems_configuration_table *configuration)
-{
-  rtems_termios_reserve_resources (configuration, 1);
 }
 
 void m821_console_initialize(void)

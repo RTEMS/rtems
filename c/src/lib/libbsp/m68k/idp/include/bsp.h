@@ -14,6 +14,15 @@
 #include <motorola/mc68230.h>
 #include <motorola/mc68681.h>
 
+/*
+ *  confdefs.h overrides for this BSP:
+ *   - number of termios serial ports (defaults to 1)
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
+
 #define DUART_ADDR	0xb00003   /* base address of the MC68681 DUART */
 
 /*

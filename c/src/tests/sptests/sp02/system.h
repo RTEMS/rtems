@@ -43,6 +43,7 @@ rtems_task Task_3(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_MAXIMUM_TASKS             4
 
 #include <confdefs.h>
 

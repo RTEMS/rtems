@@ -1387,21 +1387,8 @@ void BSP_output_string( char * buf )
  * BOILERPLATE *
  ***************
  *
- *  All these functions are prototyped in rtems/c/src/lib/include/console.h,
- *  except console_reserve_resources(), which is prototyped in
- *  rtems/c/src/lib/libbsp/m68k/mvme167/include/bsp.h
+ *  All these functions are prototyped in rtems/c/src/lib/include/console.h.
  */
-
-/*
- * Reserve resources consumed by this driver. Allocate enough space in the
- * object table to hold semaphores for 4 minor devices.
- */
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources (configuration, 4);
-}
 
 /*
  * Initialize and register the device

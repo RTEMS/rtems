@@ -41,8 +41,11 @@ rtems_task Test_task3(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
  
 #if ( NODE_NUMBER == 1 )
+#define CONFIGURE_MAXIMUM_TASKS               1
 #define CONFIGURE_MAXIMUM_SEMAPHORES          1
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
+#else
+#define CONFIGURE_MAXIMUM_TASKS               4
 #endif
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

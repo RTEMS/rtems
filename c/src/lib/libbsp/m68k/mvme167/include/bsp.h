@@ -33,6 +33,15 @@ extern "C" {
 
 
 /*
+ *  confdefs.h overrides for this BSP:
+ *   - termios serial ports (defaults to 1)
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 4
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
+  
+/*
  * Network driver configuration
  */
  
@@ -402,8 +411,6 @@ typedef volatile struct cd2401_regs_ {
 
 /* CD2401 is clocked at 20 MHz */
 #define CD2401_CLK_RATE 20000000
-
-void console_reserve_resources( rtems_configuration_table *configuration );
 
 /* 
  *  Debug print functions: implemented in console.c

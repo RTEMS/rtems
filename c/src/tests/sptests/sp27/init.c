@@ -13,6 +13,8 @@ rtems_task Init (rtems_task_argument argument);
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_MAXIMUM_TASKS               6
+
 #define CONFIGURE_MICROSECONDS_PER_TICK       52429
 
 #define CONFIGURE_INIT

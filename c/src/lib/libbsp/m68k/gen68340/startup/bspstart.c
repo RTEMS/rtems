@@ -80,17 +80,11 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
 
   /*
-   *  Account for the console's resources
-   */
-
-  console_reserve_resources( &BSP_Configuration );
-
-  /*
    *  initialize the CPU table for this BSP
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.do_zero_of_workspace = TRUE;
-  Cpu_table.interrupt_stack_size = 4096;
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 }

@@ -40,6 +40,8 @@ rtems_task Init(
 
 #define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
 
+#define CONFIGURE_MAXIMUM_TASKS               1
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <confdefs.h>

@@ -106,21 +106,6 @@ rtems_device_driver console_open(
  
 /*PAGE
  *
- *  console_reserve_resources
- *
- *  This routine uses the termios driver to reserve resources.
- */
-
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources( configuration, 4 );
-}
-
-
-/*PAGE
- *
  *  console_close
  *
  *  This routine closes a port that has been opened as console.

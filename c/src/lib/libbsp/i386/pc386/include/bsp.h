@@ -54,6 +54,15 @@ extern "C" {
 #include <bspIo.h>
   
 /*
+ *  confdefs.h overrides for this BSP:
+ *   - number of termios serial ports
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
+
+/*
  * Network driver configuration
  */
 

@@ -31,6 +31,7 @@ rtems_task Init(
 #define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     0
 #define CONFIGURE_MP_MAXIMUM_PROXIES            0
  
+#define CONFIGURE_MAXIMUM_TASKS               1
 #if ( NODE_NUMBER == 1 )
 #define CONFIGURE_MAXIMUM_SEMAPHORES          1
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1

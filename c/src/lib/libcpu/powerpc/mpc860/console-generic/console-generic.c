@@ -74,7 +74,6 @@ static volatile m860BufferDescriptor_t *RxBd[NIFACES], *TxBd[NIFACES];
  */
 static int m860_get_brg_cd(int);
 unsigned char m860_get_brg_clk(int);
-void m860_console_reserve_resources(rtems_configuration_table *);
 unsigned char m860_get_brg_clk(int);
 
 
@@ -768,14 +767,6 @@ m860_buf_poll_write (int minor, char *buf, int len)
   TxBd[minor]->length = len;
   TxBd[minor]->status = M860_BD_READY | M860_BD_WRAP;
   return 0;
-}
-
-/*
- * This is needed in case we use TERMIOS
- */
-void m860_console_reserve_resources(rtems_configuration_table *configuration)
-{
-  rtems_termios_reserve_resources (configuration, 1);
 }
 
 void m860_console_initialize(void)

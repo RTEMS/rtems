@@ -27,12 +27,4 @@
 #include <rtems/libio.h>
 #include "m68360.h"
 
-/*
- * Reserve resources consumed by this driver
- */
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-	rtems_termios_reserve_resources (configuration, 1);
-}
+int _console_reserve_resources_removed;
