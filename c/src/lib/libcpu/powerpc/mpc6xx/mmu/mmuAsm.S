@@ -15,7 +15,7 @@
  *  T. Straumann - 11/2001: added support for 7400 (no AltiVec yet)
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/io.h>
 

@@ -36,7 +36,7 @@
  */
 
 #include <rtems.h>
-#include <clockdrv.h>
+#include <rtems/clockdrv.h>
 #include <rtems/libio.h>
 
 #include <stdlib.h>                     /* for atexit() */

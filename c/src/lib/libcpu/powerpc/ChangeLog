@@ -1,3 +1,16 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* mpc505/vectors/vectors.S: Include <rtems/asm.h> instead of <asm.h>.
+	* mpc6xx/exceptions/asm_utils.S: Include <rtems/asm.h> instead of <asm.h>.
+	* mpc6xx/mmu/mmuAsm.S: Include <rtems/asm.h> instead of <asm.h>.
+	* mpc8260/exceptions/asm_utils.S: Include <rtems/asm.h> instead of <asm.h>.
+	* mpc8xx/exceptions/asm_utils.S: Include <rtems/asm.h> instead of <asm.h>.
+	* ppc403/vectors/vectors.S: Include <rtems/asm.h> instead of <asm.h>.
+	* mpc5xx/exceptions/asm_utils.S: Include <rtems/asm.h> instead of <asm.h>.
+	* mpc8260/clock/clock.c: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* mpc8xx/clock/clock.c: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* ppc403/clock/clock.c: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* mpc6xx/timer/timer.c: Cosmetics.
