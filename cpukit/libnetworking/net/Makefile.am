@@ -35,7 +35,8 @@ EXTRA_DIST = if.c if_ethersubr.c if_loop.c radix.c raw_cb.c raw_usrreq.c \
     route.c rtsock.c
 
 H_FILES = bpf.h ethernet.h if.h if_arp.h if_dl.h if_llc.h if_ppp.h \
-    if_types.h netisr.h ppp-comp.h ppp_defs.h radix.h raw_cb.h route.h
+    if_types.h netisr.h ppp-comp.h ppp_defs.h radix.h raw_cb.h route.h \
+    if_pppvar.h pppcompress.h
 
 noinst_HEADERS = $(H_FILES)
 

@@ -36,7 +36,7 @@
 #include "fsm.h"
 
 static void fsm_timeout __P((void *));
-static void fsm_rconfreq __P((fsm *, u_char, u_char *, int));
+static void fsm_rconfreq __P((fsm *, int, u_char *, int));
 static void fsm_rconfack __P((fsm *, int, u_char *, int));
 static void fsm_rconfnakrej __P((fsm *, int, int, u_char *, int));
 static void fsm_rtermreq __P((fsm *, int, u_char *, int));
@@ -371,7 +371,7 @@ fsm_input(f, inpacket, l)
 static void
 fsm_rconfreq(f, id, inp, len)
     fsm *f;
-    u_char id;
+    int id;
     u_char *inp;
     int len;
 {
@@ -773,7 +773,7 @@ fsm_sconfreq(f, retransmit)
 void
 fsm_sdata(f, code, id, data, datalen)
     fsm *f;
-    u_char code, id;
+    int code, id;
     u_char *data;
     int datalen;
 {

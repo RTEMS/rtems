@@ -838,7 +838,11 @@ register char *s;
 	    break;
 
 	case 'p':
+#if 0 /* FIXME!!! */
 	    usleep(10000); 	/* 1/100th of a second (arg is microseconds) */
+#else
+	    sleep(1);
+#endif
 	    break;
 
 	default:

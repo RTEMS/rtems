@@ -8,7 +8,7 @@ if HAS_POSIX
 POSIX_PIECES = rtems_webserver
 endif
 
-NET_O_PIECES = kern lib libc net netinet nfs rtems rtems_servers pppd \
+NET_O_PIECES = kern lib libc net netinet nfs rtems rtems_servers pppd modem \
     $(POSIX_PIECES)
 OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.o)
 LIB = $(ARCH)/libnetworking.a

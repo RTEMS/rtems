@@ -72,7 +72,7 @@ static void upap_rauthreq __P((upap_state *, u_char *, int, int));
 static void upap_rauthack __P((upap_state *, u_char *, int, int));
 static void upap_rauthnak __P((upap_state *, u_char *, int, int));
 static void upap_sauthreq __P((upap_state *));
-static void upap_sresp __P((upap_state *, u_char, u_char, char *, int));
+static void upap_sresp __P((upap_state *, int, int, char *, int));
 
 
 /*
@@ -520,7 +520,7 @@ upap_sauthreq(u)
 static void
 upap_sresp(u, code, id, msg, msglen)
     upap_state *u;
-    u_char code, id;
+    int code, id;
     char *msg;
     int msglen;
 {

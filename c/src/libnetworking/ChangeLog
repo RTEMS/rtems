@@ -1,3 +1,15 @@
+2000-11-25  Antti P Miettinen  <antti.p.miettinen@nokia.com>
+
+	* wrapup/Makefile.am: Added modem subdir.
+	* configure.in, Makefile.am: Added modem subdir.
+	* net/Makefile.am: Added if_pppvar.h, pppcompress.h.
+	* pppd/Makefile.am: Added pppmain.c (which needs work).
+	* pppd/chat.c, pppd/fsm.c, pppd/fsm.h, pppd/ipxcp.c, pppd/main.c,
+	pppd/ppp_tty.c, pppd/upap.c: Changes from Thomas Doerfler 
+	<Thomas.Doerfler@imd-systems.de> and cosmetic changes by me.
+	Actually main.c and ppp_tty.c should be scratched. The modem
+	subdir has the real ppp_tty.c and the real pppd main is in pppmain.c.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

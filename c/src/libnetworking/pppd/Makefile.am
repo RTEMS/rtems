@@ -7,9 +7,10 @@ AUTOMAKE_OPTIONS = foreign 1.4
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
-# What to do about main.c?
+# renamed main.c to pppmain.c
 C_FILES = auth.c cbcp.c ccp.c chap.c chap_ms.c chat.c demand.c fsm.c ipcp.c \
-    ipxcp.c lcp.c magic.c options.c upap.c md4.c md5.c rtems-ppp.c
+    ipxcp.c lcp.c magic.c options.c upap.c md4.c md5.c rtems-ppp.c \
+    pppmain.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -40,6 +41,6 @@ EXTRA_DIST = README STATUS auth.c cbcp.c cbcp.h ccp.c ccp.h chap.c chap.h \
     chap_ms.c chap_ms.h chat.c demand.c fsm.c fsm.h ipcp.c ipcp.h ipxcp.c \
     ipxcp.h lcp.c lcp.h magic.c magic.h main.c md4.c md4.h md5.c md5.h \
     options.c patchlevel.h pathnames.h ppp_tty.c pppd.h rtems-ppp.c upap.c \
-    upap.h $(EXTRA_FILES)
+    upap.h pppmain.c $(EXTRA_FILES)
 
 include $(top_srcdir)/../../../automake/local.am
