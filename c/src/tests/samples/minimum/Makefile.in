@@ -63,8 +63,7 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_VARIANT) -m 555 ${PGM} ${PROJECT_RELEASE}/tests
-	$(INSTALL_VARIANT) -m 555 ${PGM} ${PROJECT_RELEASE}/samples
+	# This test shuld not be executed
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
