@@ -22,7 +22,7 @@
 
 Vendor:       http://www.rtems.com
 Name:         %{name}
-Packager:     Ralf Corsepius <ralf@links2linux.de>
+Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 Copyright:    GPL
 Group:        rtems
@@ -49,6 +49,7 @@ standards.
 %setup -q -n %{_name}-%{srcvers}
 
 %build
+PATH=%{_prefix}/bin:$PATH
 ./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir}
 make
 
