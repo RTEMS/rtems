@@ -36,8 +36,8 @@ noinst_DATA += clock$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += console.rel
 CLEANFILES += console.rel
-console_rel_SOURCES = console-io.c ../../shared/console-polled.c \
-    mon-syscalls.S
+console_rel_SOURCES = console/console-io.c ../../shared/console-polled.c \
+    console/mon-syscalls.S
 console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

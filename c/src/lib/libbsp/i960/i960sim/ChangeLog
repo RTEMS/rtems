@@ -1,5 +1,9 @@
 2004-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Fix minor bugs in previous patch.
+
+2004-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
 	start/Makefile.am, startup/Makefile.am, timer/Makefile.am,
 	wrapup/Makefile.am. Use automake compilation rules.
