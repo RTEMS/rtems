@@ -6,7 +6,7 @@
 #  $Id$
 #
 
-PROJECT=posix_users
+PROJECT=posix_users_new
 DISTRIBUTION_LEVEL=public
 
 include ../Make.config
@@ -18,11 +18,11 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi
 
-GENERATED_FILES= process.texi procenv.texi clock.texi \
+GENERATED_FILES= process.texi procenv.texi files.texi clock.texi \
   cond.texi key.texi mutex.texi \
   sched.texi signal.texi thread.texi
 
-FILES= $(PROJECT).texi preface.texi \
+FILES= posix_users.texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
@@ -31,8 +31,8 @@ info: dirs $(FILES) $(PROJECT)
 #	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
 	cp $(PROJECT) $(INFO_INSTALL)
 
-posix_users: $(FILES)
-	$(MAKEINFO) $(PROJECT).texi
+$(PROJECT): $(FILES)
+	$(MAKEINFO) posix_users.texi
 
 dvi: $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
@@ -42,13 +42,14 @@ $(PROJECT).ps: $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
 
 $(PROJECT).dvi: $(FILES)
-	$(TEXI2DVI) $(PROJECT).texi
+	$(TEXI2DVI) posix_users.texi
+	mv posix_users.dvi $(PROJECT).dvi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
 	-cd .. ; gmake headers
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
- 	    $(PROJECT).texi
+ 	    posix_users.texi
 
 
 clean:
@@ -62,6 +63,11 @@ process.texi: process.t Makefile
 	    -n "" ${*}.t
 
 procenv.texi: procenv.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+files.texi: files.t Makefile
 	 $(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
