@@ -4,7 +4,7 @@
 
 #include <rtems.h>
 #include <libchip/serial.h>
-#include "sersupp.h"
+#include <libchip/sersupp.h>
 
 boolean libchip_serial_default_probe(int minor)
 {

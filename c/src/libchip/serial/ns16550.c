@@ -26,8 +26,8 @@
 #include <ringbuf.h>
 
 #include <libchip/serial.h>
+#include <libchip/sersupp.h>
 #include "ns16550_p.h"
-#include "sersupp.h"
 
 /*
  * Flow control is only supported when using interrupts

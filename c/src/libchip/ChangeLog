@@ -1,3 +1,10 @@
+2001-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* serial/Makefile.am, serial/mc68681.c, serial/ns16550.c,
+	serial/serprobe.c, serial/z85c30.c: Now install sersupp.h
+	to <libchip/sersupp.h> so libchip style serial drivers can
+	be written in libcpu or libbsp.
+
 2001-03-01	Joel Sherrill <joel@OARcorp.com>
 
 	* network/cs8900.c, network/cs8900.h, network/sonic.c, network/sonic.h,

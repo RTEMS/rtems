@@ -14,8 +14,8 @@ C_FILES = mc68681.c mc68681_baud.c mc68681_reg.c mc68681_reg2.c \
     termios_baud2index.c termios_baud2num.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-noinst_HEADERS = mc68681_p.h ns16550_p.h sersupp.h z85c30_p.h
-include_libchip_HEADERS = mc68681.h ns16550.h z85c30.h serial.h
+noinst_HEADERS = mc68681_p.h ns16550_p.h z85c30_p.h
+include_libchip_HEADERS = mc68681.h ns16550.h z85c30.h serial.h sersupp.h
 
 OBJS = $(C_O_FILES)
 

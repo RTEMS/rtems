@@ -22,7 +22,7 @@
 
 #include <libchip/serial.h>
 #include <libchip/mc68681.h>
-#include "sersupp.h"
+#include <libchip/sersupp.h>
 #include "mc68681_p.h"
 
 /*
