@@ -620,8 +620,6 @@ static inline void _CPU_ISR_Set_level( uint32_t   level )
 }
   
 void BSP_panic(char *);
-#define _CPU_ISR_install_vector(irq, new, old) \
-   {BSP_panic("_CPU_ISR_install_vector called\n");}
 
 /* Fatal Error manager macros */
 
@@ -728,13 +726,7 @@ void _BSP_Fatal_error(unsigned int);
 
 extern const uint32_t   _CPU_msrs[4];
 
-/* functions */
-
 /*
- *  _CPU_Initialize
- *
- *  This routine performs CPU dependent initialization.
- *
  *  Until all new-exception processing BSPs have fixed
  *  PR288, we let the good BSPs pass
  *
@@ -744,71 +736,6 @@ extern const uint32_t   _CPU_msrs[4];
  */
 
 #define PPC_BSP_HAS_FIXED_PR288	0x600dbabe
-
-void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
-  void            (*thread_dispatch)
-);
-
-
-/*
- *  _CPU_Install_interrupt_stack
- *
- *  This routine installs the hardware interrupt stack pointer.
- *
- *  NOTE:  It need only be provided if CPU_HAS_HARDWARE_INTERRUPT_STACK
- *         is TRUE.
- */
-
-void _CPU_Install_interrupt_stack( void );
-
-/*
- *  _CPU_Context_switch
- *
- *  This routine switches from the run context to the heir context.
- */
-
-void _CPU_Context_switch(
-  Context_Control  *run,
-  Context_Control  *heir
-);
-
-/*
- *  _CPU_Context_restore
- *
- *  This routine is generallu used only to restart self in an
- *  efficient manner.  It may simply be a label in _CPU_Context_switch.
- *
- *  NOTE: May be unnecessary to reload some registers.
- */
-
-void _CPU_Context_restore(
-  Context_Control *new_context
-);
-
-/*
- *  _CPU_Context_save_fp
- *
- *  This routine saves the floating point context passed to it.
- */
-
-void _CPU_Context_save_fp(
-  void **fp_context_ptr
-);
-
-/*
- *  _CPU_Context_restore_fp
- *
- *  This routine restores the floating point context passed to it.
- */
-
-void _CPU_Context_restore_fp(
-  void **fp_context_ptr
-);
-
-void _CPU_Fatal_error(
-  uint32_t   _error
-);
 
 #endif /* ASM */
 
