@@ -94,7 +94,7 @@ extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
  * initialize a z85c30 Port
  */
 
-static void z85c30_initialize_port(
+Z85C30_STATIC void z85c30_initialize_port(
   int minor
 )
 {
@@ -208,7 +208,7 @@ static void z85c30_initialize_port(
   (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT );
 }
 
-static int z85c30_open(
+Z85C30_STATIC int z85c30_open(
   int   major,
   int   minor,
   void *arg
@@ -225,7 +225,7 @@ static int z85c30_open(
   return(RTEMS_SUCCESSFUL);
 }
 
-static int z85c30_close(
+Z85C30_STATIC int z85c30_close(
   int   major,
   int   minor,
   void *arg
@@ -248,7 +248,7 @@ static int z85c30_close(
  *  This routine transmits a character using polling.
  */
 
-static void z85c30_write_polled(
+Z85C30_STATIC void z85c30_write_polled(
   int   minor,
   char  cChar
 )
@@ -289,7 +289,7 @@ static void z85c30_write_polled(
  *  Console Device Driver Entry Points
  */
 
-static boolean z85c30_probe(int minor)
+Z85C30_STATIC boolean z85c30_probe(int minor)
 {
   /*
    * If the configuration dependent probe has located the device then
@@ -299,7 +299,7 @@ static boolean z85c30_probe(int minor)
   return(TRUE);
 }
 
-static void z85c30_init(int minor)
+Z85C30_STATIC void z85c30_init(int minor)
 {
   unsigned32       ulCtrlPort;
   unsigned8        dummy;
@@ -351,7 +351,7 @@ static void z85c30_init(int minor)
  *  z85c30_assert_RTS
  */
 
-static int z85c30_assert_RTS(int minor)
+Z85C30_STATIC int z85c30_assert_RTS(int minor)
 {
   rtems_interrupt_level  Irql;
   z85c30_context        *pz85c30Context;
@@ -380,7 +380,7 @@ static int z85c30_assert_RTS(int minor)
  *  z85c30_negate_RTS
  */
 
-static int z85c30_negate_RTS(int minor)
+Z85C30_STATIC int z85c30_negate_RTS(int minor)
 {
   rtems_interrupt_level  Irql;
   z85c30_context        *pz85c30Context;
@@ -414,7 +414,7 @@ static int z85c30_negate_RTS(int minor)
  *  z85c30_assert_DTR
  */
 
-static int z85c30_assert_DTR(int minor)
+Z85C30_STATIC int z85c30_assert_DTR(int minor)
 {
   rtems_interrupt_level  Irql;
   z85c30_context        *pz85c30Context;
@@ -443,7 +443,7 @@ static int z85c30_assert_DTR(int minor)
  *  z85c30_negate_DTR
  */
 
-static int z85c30_negate_DTR(int minor)
+Z85C30_STATIC int z85c30_negate_DTR(int minor)
 {
   rtems_interrupt_level  Irql;
   z85c30_context        *pz85c30Context;
@@ -481,7 +481,7 @@ static int z85c30_negate_DTR(int minor)
  *  Return values:     NONE
  */
 
-static void z85c30_process(
+Z85C30_STATIC void z85c30_process(
   int        minor,
   unsigned8  ucIntPend
 )
@@ -588,7 +588,7 @@ static void z85c30_process(
   (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_HI_IUS);
 }
 
-static rtems_isr z85c30_isr(
+Z85C30_STATIC rtems_isr z85c30_isr(
   rtems_vector_number vector
 )
 {
@@ -628,7 +628,7 @@ static rtems_isr z85c30_isr(
  *  z85c30_flush
  */
 
-static int z85c30_flush(
+Z85C30_STATIC int z85c30_flush(
   int major,
   int minor,
   void *arg
@@ -661,7 +661,7 @@ static int z85c30_flush(
  *  Return values:     NONE
  */
 
-static void z85c30_enable_interrupts(
+Z85C30_STATIC void z85c30_enable_interrupts(
   int minor
 )
 {
@@ -688,7 +688,7 @@ static void z85c30_enable_interrupts(
   (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT);
 }
 
-static void z85c30_initialize_interrupts(
+Z85C30_STATIC void z85c30_initialize_interrupts(
   int minor
 )
 {
@@ -719,7 +719,7 @@ static void z85c30_initialize_interrupts(
  *
  */
 
-static int z85c30_write_support_int(
+Z85C30_STATIC int z85c30_write_support_int(
   int   minor, 
   const char *buf, 
   int   len)
@@ -782,7 +782,7 @@ static int z85c30_write_support_int(
  *  This routine polls for a character.
  */
 
-static int z85c30_inbyte_nonblocking_polled(
+Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
   int  minor
 )
 {
@@ -816,7 +816,7 @@ static int z85c30_inbyte_nonblocking_polled(
  *
  */
 
-static int z85c30_write_support_polled(
+Z85C30_STATIC int z85c30_write_support_polled(
   int   minor,
   const char *buf,
   int   len)

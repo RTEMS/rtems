@@ -33,6 +33,15 @@
 extern "C" {
 #endif
 
+/*
+ *  Define Z85C30_STATIC to nothing while debugging so the entry points
+ *  will show up in the symbol table.
+ */
+
+#define Z85C30_STATIC
+
+/* #define Z85C30_STATIC static */
+
 /* bit values for write register 0 */
 /* command register */
 
@@ -322,60 +331,60 @@ typedef struct _z85c30_context
 /*
  * Private routines
  */
-static boolean z85c30_probe(int minor);
+Z85C30_STATIC boolean z85c30_probe(int minor);
 
-static void z85c30_init(int minor);
+Z85C30_STATIC void z85c30_init(int minor);
 
-static int z85c30_open(
+Z85C30_STATIC int z85c30_open(
   int major,
   int minor,
   void  * arg
 );
 
-static int z85c30_close(
+Z85C30_STATIC int z85c30_close(
   int major,
   int minor,
   void  * arg
 );
 
-static void z85c30_write_polled(
+Z85C30_STATIC void z85c30_write_polled(
   int   minor, 
   char  cChar
 );
 
-static int z85c30_assert_RTS(
+Z85C30_STATIC int z85c30_assert_RTS(
   int minor
 );
 
-static int z85c30_negate_RTS(
+Z85C30_STATIC int z85c30_negate_RTS(
   int minor
 );
 
-static int z85c30_assert_DTR(
+Z85C30_STATIC int z85c30_assert_DTR(
   int minor
 );
 
-static int z85c30_negate_DTR(
+Z85C30_STATIC int z85c30_negate_DTR(
   int minor
 );
 
-static void z85c30_initialize_interrupts(int minor);
+Z85C30_STATIC void z85c30_initialize_interrupts(int minor);
 
-static int z85c30_flush(int major, int minor, void *arg);
+Z85C30_STATIC int z85c30_flush(int major, int minor, void *arg);
 
-static int z85c30_write_support_int(
+Z85C30_STATIC int z85c30_write_support_int(
   int   minor,
   const char *buf,
   int   len
 );
 
-static int z85c30_write_support_polled(
+Z85C30_STATIC int z85c30_write_support_polled(
   int   minor,
   const char *buf,
   int   len
 );
 
-static int z85c30_inbyte_nonblocking_polled(
+Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
   int minor
 );
 
