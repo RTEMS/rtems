@@ -1,16 +1,3 @@
-#
-# spec file for binutils package targetting rtems
-# 
-# Copyright  (c)  1999,2000,2002 OARCorp, Huntsville, AL
-#
-# please send bugfixes or comments to joel@OARcorp.com
-#
-
-%define _prefix	@prefix@
-%define _defaultbuildroot %{_tmppath}/%{name}-%{version}
-
-Vendor:       OAR Corporation
-Distribution: Linux
 Name:         @target_alias@-binutils-collection
 Summary:      binutils for target @target_alias@
 Group:        rtems
@@ -54,12 +41,9 @@ This is binutils sources with patches for RTEMS.
   test -d build || mkdir build
 
 %build
-#%if "%{_target_os}" != "%{_build_os}"
-#  CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
-#%endif
-
   cd build
-  ../binutils-@binutils_version@/configure ${CONFIGURE_ARGS} --target=@target_alias@ \
+  ../binutils-@binutils_version@/configure \
+    --target=@target_alias@ \
     --verbose --prefix=%{_prefix} --disable-nls
 
   make all
@@ -75,7 +59,7 @@ This is binutils sources with patches for RTEMS.
   ../binutils-@binutils_version@/mkinstalldirs \
     $RPM_BUILD_ROOT%{_prefix}/share/locale
 
-  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-c++filt@exe_ext@
+  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-c++filt%{_exeext}
 # gzip info files
   gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
   gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info-* 2>/dev/null
@@ -95,9 +79,4 @@ This is binutils sources with patches for RTEMS.
   test x"$f" != x"" && for i in $f; do
     /sbin/install-info $i $RPM_BUILD_ROOT%{_prefix}/info/dir
   done
-
-%clean
-# let rpm --clean remove BuildRoot iif using the default BuildRoot
-  test "$RPM_BUILD_ROOT" = "%{_defaultbuildroot}" && \
-    rm -rf $RPM_BUILD_ROOT
 

@@ -19,31 +19,31 @@ This is the GNU binutils for RTEMS targetting @target_alias@.
 %doc %{_prefix}/man/man1/@target_alias@-*.1*
 
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-addr2line@exe_ext@
-%{_prefix}/bin/@target_alias@-ar@exe_ext@
-%{_prefix}/bin/@target_alias@-as@exe_ext@
+%{_prefix}/bin/@target_alias@-addr2line%{_exeext}
+%{_prefix}/bin/@target_alias@-ar%{_exeext}
+%{_prefix}/bin/@target_alias@-as%{_exeext}
 # c++filt now comes from gcc
-# %{_prefix}/bin/@target_alias@-c++filt@exe_ext@
+# %{_prefix}/bin/@target_alias@-c++filt%{_exeext}
 # deleted as of 2.13
-# %{_prefix}/bin/@target_alias@-gasp@exe_ext@
-%{_prefix}/bin/@target_alias@-ld@exe_ext@
-%{_prefix}/bin/@target_alias@-nm@exe_ext@
-%{_prefix}/bin/@target_alias@-objcopy@exe_ext@
-%{_prefix}/bin/@target_alias@-objdump@exe_ext@
-%{_prefix}/bin/@target_alias@-ranlib@exe_ext@
-%{_prefix}/bin/@target_alias@-readelf@exe_ext@
-%{_prefix}/bin/@target_alias@-size@exe_ext@
-%{_prefix}/bin/@target_alias@-strings@exe_ext@
-%{_prefix}/bin/@target_alias@-strip@exe_ext@
+# %{_prefix}/bin/@target_alias@-gasp%{_exeext}
+%{_prefix}/bin/@target_alias@-ld%{_exeext}
+%{_prefix}/bin/@target_alias@-nm%{_exeext}
+%{_prefix}/bin/@target_alias@-objcopy%{_exeext}
+%{_prefix}/bin/@target_alias@-objdump%{_exeext}
+%{_prefix}/bin/@target_alias@-ranlib%{_exeext}
+%{_prefix}/bin/@target_alias@-readelf%{_exeext}
+%{_prefix}/bin/@target_alias@-size%{_exeext}
+%{_prefix}/bin/@target_alias@-strings%{_exeext}
+%{_prefix}/bin/@target_alias@-strip%{_exeext}
 
 %dir %{_prefix}/@target_alias@
 %dir %{_prefix}/@target_alias@/bin
-%{_prefix}/@target_alias@/bin/ar@exe_ext@
-%{_prefix}/@target_alias@/bin/as@exe_ext@
-%{_prefix}/@target_alias@/bin/ld@exe_ext@
-%{_prefix}/@target_alias@/bin/nm@exe_ext@
-%{_prefix}/@target_alias@/bin/ranlib@exe_ext@
-%{_prefix}/@target_alias@/bin/strip@exe_ext@
+%{_prefix}/@target_alias@/bin/ar%{_exeext}
+%{_prefix}/@target_alias@/bin/as%{_exeext}
+%{_prefix}/@target_alias@/bin/ld%{_exeext}
+%{_prefix}/@target_alias@/bin/nm%{_exeext}
+%{_prefix}/@target_alias@/bin/ranlib%{_exeext}
+%{_prefix}/@target_alias@/bin/strip%{_exeext}
 
 %dir %{_prefix}/@target_alias@/lib
 %{_prefix}/@target_alias@/lib/ldscripts
