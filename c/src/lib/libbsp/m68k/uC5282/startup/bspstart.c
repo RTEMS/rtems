@@ -253,31 +253,31 @@ unsigned32 get_CPU_clock_speed(void)
 }
 
 /*
- * Arcturus routines for getting value from bootloader
+ * Arcturus bootloader system calls
  */
-#define __bsc_return(type, res) \
-do { \
-   if ((unsigned long)(res) >= (unsigned long)(-64)) { \
-      errno = -(res); \
-      res = -1; \
-   } \
-   return (type)(res); \
+#define syscall_return(type, ret)                      \
+do {                                                   \
+   if ((unsigned long)(ret) >= (unsigned long)(-64)) { \
+      errno = -(ret);                                  \
+      ret = -1;                                        \
+   }                                                   \
+   return (type)(ret);                                 \
 } while (0)
-#define _bsc1(type,name,atype,a) \
-type uC5282_##name(atype a) \
-{ \
-   long __res; \
-   register long __a __asm__ ("%d1") = (long)a; \
-   __asm__ __volatile__ ("move.l %0,%%d0\n\t"   \
-                         "trap #2\n\t"          \
-                         "move.l %%d0,%0"       \
-                         : "=d" (__res)         \
-                         : "0" (__BN_##name), "d" (__a) \
-                         : "d0" ); \
-   __bsc_return(type,__res); \
+#define syscall_1(type,name,d1type,d1)                      \
+type uC5282_##name(d1type d1)                               \
+{                                                           \
+   long ret;                                                \
+   register long __d1 __asm__ ("%d1") = (long)d1;           \
+   __asm__ __volatile__ ("move.l %0,%%d0\n\t"               \
+                         "trap #2\n\t"                      \
+                         "move.l %%d0,%0"                   \
+                         : "=g" (ret)                       \
+                         : "d" (SysCode_##name), "d" (__d1) \
+                         : "d0" );                          \
+   syscall_return(type,ret);                                \
 }
-#define __BN_gethwaddr    12 /* get the hardware address of my interfaces */
-#define __BN_getbenv      14 /* get a bootloader envvar */
-#define __BN_setbenv      15 /* get a bootloader envvar */
-_bsc1(unsigned const char *, gethwaddr, int, a)
-_bsc1(char *, getbenv, const char *, a)
+#define SysCode_gethwaddr    12 /* get hardware address */
+#define SysCode_getbenv      14 /* get bootloader environment variable */
+#define SysCode_setbenv      15 /* get bootloader environment variable */
+syscall_1(unsigned const char *, gethwaddr, int, a)
+syscall_1(const char *, getbenv, const char *, a)
