@@ -44,6 +44,9 @@ This is the GNU binutils for RTEMS targetting %{binutils_target}.
 %{_prefix}/%{binutils_target}/bin/nm%{_exeext}
 %{_prefix}/%{binutils_target}/bin/ranlib%{_exeext}
 %{_prefix}/%{binutils_target}/bin/strip%{_exeext}
+%if "%{binutils_version}" >= "2.16"
+%{_prefix}/%{binutils_target}/bin/objdump%{_exeext}
+%endif
 
 %dir %{_prefix}/%{binutils_target}/lib
 %{_prefix}/%{binutils_target}/lib/ldscripts
