@@ -30,7 +30,7 @@ Please be careful when following these instructions.
 
 This installation process works well under Windows NT. 
 Using Windows 95 or 98 is not recommended although it 
-should be possible with version 3.77 of gmake and an updated
+should be possible with version 3.77 of GNU make and an updated
 cygwinb19.dll.
 
 This procedure should also work with newer version of 

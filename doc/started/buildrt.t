@@ -124,7 +124,7 @@ cd build-rtems
     --disable-posix --disable-tcpip --disable-cxx \
     --enable-rtemsbsp=<BOARD_SUPPORT_PACKAGE>\
     --prefix=<INSTALL_POINT>
-gmake all install
+make all install
 @end example
 
 Where the list of currently supported of <TARGET_CONFIGURATION>'s and
@@ -134,4 +134,4 @@ tools/@value{RTEMS-UNTAR}/README.configure.
 <INSTALL_POINT> is the installation point from the previous step
 "Modify the bit script" in the build of the tools. 
 
-
+NOTE: The @code{make} utility used should be GNU make.

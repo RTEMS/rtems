@@ -135,9 +135,10 @@ with SIS will be created.
 From tools/build-sis execute the following command sequence:
 
 @example
-gmake all install
+make all install
 @end example
 
+NOTE: The @code{make} utility used should be GNU make.
 
 @subsection GDB with PowerPC Instruction Simulator
 
@@ -177,9 +178,10 @@ with PSIM will be created.
 From tools/build-ppc execute the following command sequence:
 
 @example
-gmake all install
+make all install
 @end example
 
+NOTE: The @code{make} utility used should be GNU make.
 
 @subsection GDB for DINK32
 
@@ -213,6 +215,7 @@ gdb Dink32 will be created.
 From tools/build-dink32 execute the following command sequence:
 
 @example
-gmake all install
+make all install
 @end example
 
+NOTE: The @code{make} utility used should be GNU make.
