@@ -38,7 +38,7 @@
 #endif
 
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include "regs.S"
 #include "mg5.h"
 

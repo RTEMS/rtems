@@ -23,9 +23,9 @@ extern "C" {
 #include <bspopts.h>
 
 #include <rtems.h>
-#include <iosupp.h>
-#include <console.h>
-#include <clockdrv.h>
+#include <rtems/iosupp.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
 #include <libcpu/tx3904.h>
 
 /*

@@ -17,7 +17,7 @@
  * they apply.
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include "regs.S"
 
 #ifdef __mips16
