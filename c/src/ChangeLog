@@ -1,3 +1,8 @@
+2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4:  Add 2nd arg to RTEMS_TOP.
+	Rework with_project_root/PROJECT_ROOT and with_project_top/PROJECT_TOPdir.
+
 2004-03-25	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Reflect changes to testsuites's configuration.

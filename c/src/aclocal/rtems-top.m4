@@ -19,21 +19,13 @@ AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
 AC_SUBST([RTEMS_TOPdir],["$1"])
 
-## with_target_subdirs is handled implicitly by autoconf
-dots=`echo $with_target_subdir|\
-sed -e 's,^\.$,,' -e 's%^\./%%' -e 's%[[^/]]$%&/%' -e 's%[[^/]]*/%../%g'`
+# HACK: The sed pattern in rtems_updir matches c/src/
+rtems_updir=m4_if([$2],[],[`echo "$1/" | sed s,^\.\.\/\.\.\/,,`],[$2/])
 
-PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
-AC_SUBST([PROJECT_TOPdir])
+AC_SUBST([RTEMS_ROOT],[${rtems_updir}'$(top_builddir)'])
 
-RTEMS_ROOT=`echo "$1/" | sed -e 's,^../../,,'`'$(top_builddir)'
-AC_SUBST([RTEMS_ROOT])
-
-PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
-AC_SUBST(PROJECT_ROOT)
-
-AC_MSG_CHECKING([for RTEMS Version])
-AC_MSG_RESULT([_RTEMS_VERSION])
+AC_SUBST([PROJECT_TOPdir],[${with_project_top}${rtems_updir}'$(top_builddir)'])
+AC_SUBST([PROJECT_ROOT],[${with_project_root}${rtems_updir}'$(top_builddir)'])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
 ])dnl
