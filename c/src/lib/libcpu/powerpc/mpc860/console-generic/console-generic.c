@@ -385,8 +385,8 @@ m860_smc_initialize (int port)  /* port is the SMC number (i.e. 1 or 2) */
   /*
    * Put SMC in NMSI mode, connect SMC to BRG
    */
-  m860.simode &= ~0x7000 << ((port-1) * 8);
-  m860.simode |= brg << (12 + ((port-1) * 8));
+  m860.simode &= ~(0x7000 << ((port-1) * 16));
+  m860.simode |= brg << (12 + ((port-1) * 16));
 
   /*
    * Set up SMC1 parameter RAM common to all protocols
