@@ -25,7 +25,6 @@ AC_DEFUN(_RTEMS_BSP_ALIAS,
     erc32nfp)     $2=erc32            ;; # erc32 without fpu
     leon1)     	  $2=leon             ;; # leon without fpu
     leon2)     	  $2=leon             ;; # leon with fpu
-    score603e_g1) $2=score603e        ;; # score603e generation 1
     simsh7032)    $2=shsim            ;; # SH7032 simulator
     simsh7045)    $2=shsim            ;; # SH7045 simulator
     *)            $2=$1;;

@@ -40,7 +40,7 @@ test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 
 if test "$GCC" = yes; then
 ]
-ifelse([$1],,[],[CPPFLAGS="$CPPFLAGS $1"])
+m4_if([$1],,[],[CPPFLAGS="$CPPFLAGS $1"])
 [
 CFLAGS="-g -Wall"
 fi

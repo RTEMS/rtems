@@ -1,3 +1,10 @@
+2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/bsp-alias.m4: Remove score603e_g1.
+	* aclocal/check-bsps.m4: Remove score603e_g1.
+	* aclocal/prog-cc.m4: Apply m4_if.
+
+
 2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/force-preinstall.am: New file.
