@@ -7,7 +7,6 @@ CLEANFILES =
 noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
 
 if m68040
 EXTRA_PROGRAMS += fpsp.rel

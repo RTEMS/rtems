@@ -1,3 +1,8 @@
+2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Index: m68040/Makefile.am, mcf5206/Makefile.am, shared/Makefile.am:
+	Don't include lib.am.
+
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mcf5206/Makefile.am: Rename console.rel to mcfuart.rel.
