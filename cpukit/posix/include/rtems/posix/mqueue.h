@@ -36,6 +36,7 @@ typedef struct {
    boolean                     named;
    boolean                     linked;
    boolean                     blocking;
+   int                         oflag;
    unsigned32                  open_count;
    CORE_message_queue_Control  Message_queue;
    struct sigevent             notification;
@@ -119,7 +120,7 @@ int _POSIX_Message_queue_Send_support(
   mqd_t               mqdes,
   const char         *msg_ptr,
   unsigned32          msg_len,
-  Priority_Control    msg_prio,
+  unsigned32          msg_prio,
   Watchdog_Interval   timeout
 );
 
@@ -199,9 +200,35 @@ int _POSIX_Message_queue_Name_to_id(
  *  XXX
  */
  
-RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Message_queue_Priority_to_core(
+RTEMS_INLINE_ROUTINE CORE_message_queue_Submit_types _POSIX_Message_queue_Priority_to_core(
   unsigned int priority
 );
+
+/*
+ *  _POSIX_Message_queue_Priority_from_core
+ * 
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
+  CORE_message_queue_Submit_types priority
+);
+
+/*PAGE
+ *
+ *  _POSIX_Message_queue_Translate_core_message_queue_return_code
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+
+int _POSIX_Message_queue_Translate_core_message_queue_return_code(
+  unsigned32 the_message_queue_status
+);
+
 
 #include <rtems/posix/mqueue.inl>
 #if defined(RTEMS_MULTIPROCESSING)
