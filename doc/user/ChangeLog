@@ -1,3 +1,7 @@
+2003-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* preface.texi: Eliminate references to HPPA.
+
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merger from rtems-4-6-branch.

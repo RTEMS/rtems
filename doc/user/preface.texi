@@ -160,7 +160,6 @@ It has been ported to the following processor families:
 @item MIPS
 @item PowerPC
 @item SPARC
-@item Hewlett Packard PA-RISC
 @item Hitachi SH
 @item Hitachi H8/300
 @item Texas Instruments C3x/C4x
