@@ -19,6 +19,7 @@ extern unsigned long              RTC_Count;
 extern rtems_device_minor_number  RTC_Minor;
 
 int RTC_Present;
+void setRealTimeToRTEMS(void);
 
 /*
  *  rtc_initialize
@@ -98,6 +99,7 @@ rtems_device_driver rtc_initialize(
     }
   }
 
+  setRealTimeToRTEMS();
   return RTEMS_SUCCESSFUL;
 }
 
