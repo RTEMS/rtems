@@ -196,18 +196,26 @@ void _Event_Seize(
   _Thread_Set_state( executing, STATES_WAITING_FOR_EVENT );
 
   _ISR_Disable( level );
-  if ( _Event_Sync == TRUE ) {
-    _Event_Sync = FALSE;
-    _ISR_Enable( level );
-    return;
+  switch ( _Event_Sync_state ) {
+    case EVENT_SYNC_NOTHING_HAPPENED:
+      _Event_Sync = FALSE;
+      _ISR_Enable( level );
+      return;
+    case EVENT_SYNC_TIMEOUT:
+      executing->Wait.return_code = RTEMS_TIMEOUT;
+      _ISR_Enable( level );
+      _Thread_Unblock( executing );
+      return;
+    case EVENT_SYNC_SATISFIED:
+      if ( _Watchdog_Is_active( &executing->Timer ) ) {
+        _Watchdog_Deactivate( &executing->Timer );
+        _ISR_Enable( level );
+        (void) _Watchdog_Remove( &executing->Timer );
+      } else
+        _ISR_Enable( level );
+      _Thread_Unblock( executing );
+      return;
   }
-  if ( _Event_Sync_state == EVENT_SYNC_TIMEOUT )
-    executing->Wait.return_code = RTEMS_TIMEOUT;
-  _ISR_Enable( level );
-  if ( ticks )
-    (void) _Watchdog_Remove( &executing->Timer );
-  _Thread_Unblock( executing );
-  return;
 }
 
 /*PAGE
