@@ -1,3 +1,7 @@
+2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: RTEMS_TOP(../../../..).
+
 2002-07-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems.c: Remove.
