@@ -38,7 +38,8 @@ int pthread_key_delete(
       for ( the_class = OBJECTS_CLASSES_FIRST_THREAD_CLASS;
             the_class <= OBJECTS_CLASSES_LAST_THREAD_CLASS;
             the_class++ )
-        _Workspace_Free( the_key->Values[ the_class ] );
+        if ( the_key->Values[ the_class ] )
+          _Workspace_Free( the_key->Values[ the_class ] );
 
       /*
        *  NOTE:  The destructor is not called and it is the responsibility
