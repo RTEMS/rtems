@@ -8,11 +8,12 @@ AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE([no-define foreign 1.8])
+AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.8])
 RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
+RTEMS_PROG_CCAS
 
 # From newlib
 # Select which debug protocol is being used.
@@ -30,11 +31,5 @@ RTEMS_BSPOPTS_HELP([ARM_RDP_MONITOR],
 [If defined enable Demon monitor support])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-start/Makefile
-startup/Makefile
-timer/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
