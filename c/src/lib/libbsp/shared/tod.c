@@ -150,6 +150,62 @@ void setRealTimeFromRTEMS()
 
 /*PAGE
  *
+ *  getRealTime
+ *
+ *  This routine reads the current time from the RTC.
+ * 
+ *  Input parameters:  NONE
+ * 
+ *  Output parameters:  NONE
+ *
+ *  Return values: NONE
+ */
+
+void getRealTime(
+  rtems_time_of_day *tod
+)
+{
+
+  if (!RTC_Present)
+    return;
+
+  RTC_Table[RTC_Minor].pDeviceFns->deviceGetTime(RTC_Minor, tod);
+}
+
+/*PAGE
+ * 
+ *  setRealTime
+ *  
+ *  This routine sets the RTC.
+ *  
+ *  Input parameters:  NONE
+ * 
+ *  Output parameters:  NONE
+ *
+ *  Return values: NONE
+ */
+
+/* XXX this routine should be part of the public RTEMS interface */ 
+rtems_boolean _TOD_Validate( rtems_time_of_day *tod );
+
+int setRealTime(
+  rtems_time_of_day *tod
+)
+{
+  
+  if (!RTC_Present)
+    return -1;
+  
+  if ( !_TOD_Validate(tod) )
+    return -1;
+
+  RTC_Table[RTC_Minor].pDeviceFns->deviceSetTime(RTC_Minor, tod);
+  return 0;
+}
+
+
+/*PAGE
+ *
  *  checkRealTime
  *
  *  This routine reads the returns the variance betweent the real time and
@@ -160,28 +216,28 @@ void setRealTimeFromRTEMS()
  *  Output parameters:  NONE
  *
  *  Return values: 
- *    int   The differance between the real time clock and rtems time or
- *          9999 in the event of an error.
+ *    int   The differance between the real time clock and rtems time.
  */
+
+/* XXX this routine should be part of the public RTEMS interface */ 
+unsigned32 _TOD_To_seconds( rtems_time_of_day *tod );
 
 int checkRealTime()
 {
   rtems_time_of_day rtems_tod;
   rtems_time_of_day rtc_tod;
+  unsigned32 rtems_time;
+  unsigned32 rtc_time;
 
   if (!RTC_Present)
-    return 0;
+    return -1;
 
   rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
   RTC_Table[RTC_Minor].pDeviceFns->deviceGetTime(RTC_Minor, &rtc_tod);
 
-  if( rtems_tod.year == rtc_tod.year &&
-      rtems_tod.month == rtc_tod.month &&
-      rtems_tod.day == rtc_tod.day ) {
-     return ((rtems_tod.hour   - rtc_tod.hour) * 3600) +
-            ((rtems_tod.minute - rtc_tod.minute) * 60) +
-             (rtems_tod.second - rtc_tod.second);
-  }
-  return 9999;
+  rtems_time = _TOD_To_seconds( &rtems_tod ); 
+  rtc_time = _TOD_To_seconds( &rtc_tod ); 
+
+  return rtems_time - rtc_time;
 }
 

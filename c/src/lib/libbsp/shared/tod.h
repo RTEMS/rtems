@@ -21,15 +21,40 @@
 extern "C" {
 #endif
 
-extern void setRealTimeToRTEMS();
-/* Read real time from RTC and set it to RTEMS' clock manager */
+/*
+ *  Set the RTC.
+ */
 
-extern void setRealTimeFromRTEMS();
-/* Read time from RTEMS' clock manager and set it to RTC */
+int setRealTime(
+  rtems_time_of_day *tod
+);
 
-extern int checkRealTime();
-/* Return the difference between RTC and RTEMS' clock manager time in minutes.
-   If the difference is greater than 1 day, this returns 9999. */
+/*
+ *  Get the time from the RTC.
+ */
+
+void getRealTime(
+  rtems_time_of_day *tod
+);
+
+/*
+ *  Read real time from RTC and set it to RTEMS' clock manager
+ */
+
+void setRealTimeToRTEMS();
+
+/*
+ *  Read time from RTEMS' clock manager and set it to RTC
+ */
+
+void setRealTimeFromRTEMS();
+
+/*
+ *  Return the difference between RTC and RTEMS' clock manager time in minutes.
+ *  If the difference is greater than 1 day, this returns 9999.
+ */
+
+int checkRealTime();
 
 #ifdef __cplusplus
 }
