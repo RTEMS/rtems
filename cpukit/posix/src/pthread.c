@@ -998,7 +998,7 @@ int pthread_create(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   api->Attributes  = *the_attr;
-  api->detachstate = attr->detachstate;
+  api->detachstate = the_attr->detachstate;
   api->schedpolicy = schedpolicy;
   api->schedparam  = schedparam;
 
