@@ -146,6 +146,7 @@ mc68681_baud_t
 console_tbl	Console_Port_Tbl[] = {
 	{
 		"/dev/com0",			/* sDeviceName */
+                SERIAL_MC68681,                 /* deviceType */
 		MC68681_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
@@ -164,6 +165,7 @@ console_tbl	Console_Port_Tbl[] = {
 	},
 	{
 		"/dev/com1",			/* sDeviceName */
+                SERIAL_MC68681,                 /* deviceType */
 		MC68681_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
@@ -182,6 +184,7 @@ console_tbl	Console_Port_Tbl[] = {
 	},
 	{
 		"/dev/com3",			/* sDeviceName */
+                SERIAL_Z85C30,                  /* deviceType */
 		Z85C30_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
@@ -200,6 +203,7 @@ console_tbl	Console_Port_Tbl[] = {
 	},
 	{
 		"/dev/com4",			/* sDeviceName */
+                SERIAL_Z85C30,                  /* deviceType */
 		Z85C30_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
