@@ -10,7 +10,7 @@ C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 include_rtems_scoredir = $(includedir)/rtems/score
 
-include_rtems_score_HEADERS = rtems/score/cpu.h
+include_rtems_score_HEADERS =
 
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
@@ -25,9 +25,6 @@ include $(top_srcdir)/../../../../../../../automake/lib.am
 
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/%)
-
-# FIXME: This should not be here.
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score/cpu.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@

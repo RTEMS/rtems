@@ -1,3 +1,8 @@
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/cpu.h: Removed.
+	* Makefile.am: Reflect changes above.
+
 2001-04-03	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
