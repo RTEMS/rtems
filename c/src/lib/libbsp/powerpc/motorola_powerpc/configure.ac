@@ -39,7 +39,6 @@ AC_CONFIG_FILES([Makefile
 bootloader/Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 irq/Makefile
 motorola/Makefile
 openpic/Makefile

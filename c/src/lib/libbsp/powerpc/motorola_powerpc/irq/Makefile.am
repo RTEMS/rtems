@@ -2,14 +2,13 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../shared/irq
 
 C_FILES = irq_init.c i8259.c irq.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-# FIXME: this does give any sense here
-H_FILES = ../../shared/irq/irq.h
+include_bspdir = $(includedir)/bsp
+nodist_include_bsp_HEADERS = $(top_srcdir)/../shared/irq/irq.h
 
 S_FILES = irq_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
@@ -23,6 +22,16 @@ include $(top_srcdir)/../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all-local: $(ARCH) $(OBJS)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/bsp:
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp
+
+$(PROJECT_INCLUDE)/bsp/irq.h: $(top_srcdir)/../shared/irq/irq.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -1,3 +1,16 @@
+2003-09-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in include/Makefile.am.
+	Reflect changes to bsp.am.
+	* include/Makefile.am: Remove.
+	* include/bsp.h: Add copy of ../shared/include/bsp.h (Violates BSP
+	coding standards).
+	* configure.ac: Reflect changes above.
+	* irq/Makefile.am: Fix header installation.
+	* motorola/Makefile.am: Fix header installation.
+	* openpic/Makefile.am: Fix header installation.
+	* pci/Makefile.am: Fix header installation.
+
 2003-09-26	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 496/bsps
