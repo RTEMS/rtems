@@ -163,7 +163,7 @@ static reg_service(rqstp, xprt)
 		/*
 		 * Set a program,version to port mapping
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, &reg))
+		if (!svc_getargs(xprt, xdr_pmap, (caddr_t) &reg))
 			svcerr_decode(xprt);
 		else {
 			/*
@@ -211,7 +211,7 @@ static reg_service(rqstp, xprt)
 		/*
 		 * Remove a program,version to port mapping.
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, &reg))
+		if (!svc_getargs(xprt, xdr_pmap, (caddr_t) &reg))
 			svcerr_decode(xprt);
 		else {
 			ans = 0;
@@ -245,7 +245,7 @@ static reg_service(rqstp, xprt)
 		/*
 		 * Lookup the mapping for a program,version and return its port
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, &reg))
+		if (!svc_getargs(xprt, xdr_pmap, (caddr_t) &reg))
 			svcerr_decode(xprt);
 		else {
 			fnd = find_service(reg.pm_prog, reg.pm_vers, reg.pm_prot);
@@ -299,7 +299,7 @@ static reg_service(rqstp, xprt)
  */
 #define ARGSIZE 9000
 
-typedef struct encap_parms {
+/* typedef */ struct encap_parms {
 	u_long arglen;
 	char *args;
 };
@@ -414,7 +414,7 @@ callit(rqstp, xprt)
 	timeout.tv_sec = 5;
 	timeout.tv_usec = 0;
 	a.rmt_args.args = buf;
-	if (!svc_getargs(xprt, xdr_rmtcall_args, &a))
+	if (!svc_getargs(xprt, xdr_rmtcall_args, (caddr_t) &a))
 	    return;
 	if ((pml = find_service(a.rmt_prog, a.rmt_vers, IPPROTO_UDP)) == NULL)
 	    return;
