@@ -1,0 +1,41 @@
+/*
+ * $Id$
+ *
+ * RTEMS CS8900 Driver Setup for the DIMM-PC/i386 made by Kontron.
+ *
+ * Port to the DIMM PC copyright (c) 2004 Angelo Fraietta
+ *   This project has been assisted by the Commonwealth Government
+ *   through the Australia Council, its arts funding and advisory body.
+ *
+ * Port performed by Chris Johns, Cybertec Pty Ltd, Jan 2004.
+ *  Based on the Cybertec CS8900 driver setup for the SFP-101.
+ *
+ */
+
+#if !defined (__BSP_CS8900_H__)
+#define __BSP_CS8900_H__
+
+/**
+ * BSP CS8900 Device initialisation and interface attach.
+ *
+ * @param io_base The I/O base address of the device.
+ *
+ * @param mem_base The memory base address. Currently not used.
+ *
+ * @param intrp The ISA bus IRQ. These are currently limited to
+ *              5, 10, 11, and 12 as documented in the CS8900
+ *              manual.
+ *
+ * @param ip IP address in ASCII. For example 10.10.10.10. If the
+ *           pointer is a NULL (0) the interface will BOOTP.
+ *
+ * @param nm Network Mask in ASCII. For example 10.10.10.255.
+ *
+ * @param gw Address of the gateway machine. For example
+ *           10.10.10.1.
+ */
+
+void BSP_cs8900_attach (unsigned long io_base, unsigned long mem_base, int intrp,
+                        const char* ip, const char* nm, const char* gw);
+
+#endif
