@@ -1,3 +1,7 @@
+2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rootfs/Makefile.am: Use include_rtems_HEADERS instead of H_FILES.
+
 2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mw-fb/mw_uid.c: Apply rtems_set_errno_and_return_minus_one.

@@ -10,7 +10,8 @@ LIB = $(ARCH)/$(LIBNAME).a
 C_FILES = mkrootfs.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = mkrootfs.h
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = mkrootfs.h
 
 OBJS = $(C_O_FILES)
 
@@ -31,7 +32,7 @@ $(LIB): $(OBJS)
 	$(make-library)
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 if HAS_NETWORKING
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
@@ -39,6 +40,6 @@ endif
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = README mkrootfs.c mkrootfs.h
+EXTRA_DIST = README mkrootfs.c
 
 include $(top_srcdir)/../../../automake/local.am
