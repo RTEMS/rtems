@@ -1,3 +1,7 @@
+2003-03-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add AC_CHECK_HEADERS.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
