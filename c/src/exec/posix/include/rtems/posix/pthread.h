@@ -41,6 +41,7 @@ POSIX_EXTERN posix_initialization_threads_table
                    *_POSIX_Threads_User_initialization_threads;
 POSIX_EXTERN unsigned32   _POSIX_Threads_Number_of_initialization_threads;
 
+extern const pthread_attr_t _POSIX_Threads_Default_attributes;
  
 /*
  *  _POSIX_Threads_Manager_initialization
@@ -109,6 +110,31 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get(
  
 RTEMS_INLINE_ROUTINE boolean _POSIX_Threads_Is_null(
   Thread_Control *the_pthread
+);
+
+/*
+ *  _POSIX_Threads_Sporadic_budget_callout
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine handles the sporadic scheduling algorithm.
+ */
+
+void _POSIX_Threads_Sporadic_budget_callout(
+  Thread_Control *the_thread
+);
+
+/*
+ *  _POSIX_Threads_Sporadic_budget_TSR
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine supports the sporadic scheduling algorithm.
+ */
+
+void _POSIX_Threads_Sporadic_budget_TSR(
+  Objects_Id      id,
+  void           *argument
 );
 
 #include <rtems/posix/pthread.inl>
