@@ -66,26 +66,25 @@ package body RTEMS is
 
    end Milliseconds_To_Microseconds;
 
-   function Milliseconds_To_Ticks (
-      Milliseconds : RTEMS.Unsigned32
-   ) return RTEMS.Interval is
-      Ticks_Per_Second : RTEMS.Interval;
-      pragma Import (C, Ticks_Per_Second, "_TOD_Ticks_per_second");
-
-   begin
-
-      return Milliseconds / Ticks_Per_Second;
-
-   end Milliseconds_To_Ticks;
-
    function Microseconds_To_Ticks (
       Microseconds : RTEMS.Unsigned32
    ) return RTEMS.Interval is
+      Microseconds_Per_Tick : RTEMS.Interval;
+      pragma Import (C, Microseconds_Per_Tick, "_TOD_Microseconds_per_tick");
    begin
 
-      return Milliseconds_To_Ticks( Microseconds / 1000 );
+      return Microseconds / Microseconds_Per_Tick; 
 
    end Microseconds_To_Ticks;
+
+   function Milliseconds_To_Ticks (
+      Milliseconds : RTEMS.Unsigned32
+   ) return RTEMS.Interval is
+   begin
+
+      return Microseconds_To_Ticks(Milliseconds_To_Microseconds(Milliseconds));
+
+   end Milliseconds_To_Ticks;
 
    function Build_Name (
       C1 : in     Character;
