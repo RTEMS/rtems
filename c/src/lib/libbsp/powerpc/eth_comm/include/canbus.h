@@ -20,52 +20,52 @@
 #include <rtems.h>
 
 typedef struct i82527_msg_t_ {
-  rtems_unsigned8  ctrl0 __attribute__ ((packed));    /* Control 0 register */
-  rtems_unsigned8  ctrl1 __attribute__ ((packed));    /* Control 1 register */
-  rtems_unsigned32 arb __attribute__ ((packed));      /* Arbitration reg */
-  rtems_unsigned8  cfg __attribute__ ((packed));      /* Message config reg */
-  rtems_unsigned8  data[8] __attribute__ ((packed));  /* Actual message */
+  uint8_t    ctrl0 __attribute__ ((packed));    /* Control 0 register */
+  uint8_t    ctrl1 __attribute__ ((packed));    /* Control 1 register */
+  uint32_t   arb __attribute__ ((packed));      /* Arbitration reg */
+  uint8_t    cfg __attribute__ ((packed));      /* Message config reg */
+  uint8_t    data[8] __attribute__ ((packed));  /* Actual message */
 } i82527_msg_t;
 
 typedef struct i82527_t_ {
-  rtems_unsigned8  ctrl __attribute__ ((packed));    /* Control register */
-  rtems_unsigned8  status __attribute__ ((packed));  /* Status register */
-  rtems_unsigned8  cir __attribute__ ((packed));     /* CPU interface reg */
-  rtems_unsigned8  _res0 __attribute__ ((packed));
-  rtems_unsigned16 hsr __attribute__ ((packed));     /* High speed read */
-  rtems_unsigned16 gms __attribute__ ((packed));     /* Global Mask - std */
-  rtems_unsigned32 gml __attribute__ ((packed));     /* Global Mask - long */
-  rtems_unsigned32 mlm __attribute__ ((packed));     /* Mask last message  */
+  uint8_t    ctrl __attribute__ ((packed));    /* Control register */
+  uint8_t    status __attribute__ ((packed));  /* Status register */
+  uint8_t    cir __attribute__ ((packed));     /* CPU interface reg */
+  uint8_t    _res0 __attribute__ ((packed));
+  uint16_t   hsr __attribute__ ((packed));     /* High speed read */
+  uint16_t   gms __attribute__ ((packed));     /* Global Mask - std */
+  uint32_t   gml __attribute__ ((packed));     /* Global Mask - long */
+  uint32_t   mlm __attribute__ ((packed));     /* Mask last message  */
   i82527_msg_t     msg1 __attribute__ ((packed));    /* Message 1 */
-  rtems_unsigned8  clkout __attribute__ ((packed));  /* CLKOUT register */
+  uint8_t    clkout __attribute__ ((packed));  /* CLKOUT register */
   i82527_msg_t     msg2 __attribute__ ((packed));    /* Message 2 */
-  rtems_unsigned8  bcr __attribute__ ((packed));     /* Bus config register */
+  uint8_t    bcr __attribute__ ((packed));     /* Bus config register */
   i82527_msg_t     msg3 __attribute__ ((packed));    /* Message 3 */
-  rtems_unsigned8  btr0 __attribute__ ((packed));    /* Bit timing reg 0 */
+  uint8_t    btr0 __attribute__ ((packed));    /* Bit timing reg 0 */
   i82527_msg_t     msg4 __attribute__ ((packed));    /* Message 4 */
-  rtems_unsigned8  btr1 __attribute__ ((packed));    /* Bit timing reg 1 */
+  uint8_t    btr1 __attribute__ ((packed));    /* Bit timing reg 1 */
   i82527_msg_t     msg5 __attribute__ ((packed));    /* Message 5 */
-  rtems_unsigned8  intr __attribute__ ((packed));    /* Interrupt register */
+  uint8_t    intr __attribute__ ((packed));    /* Interrupt register */
   i82527_msg_t     msg6 __attribute__ ((packed));    /* Message 6 */
-  rtems_unsigned8  _res1 __attribute__ ((packed));
+  uint8_t    _res1 __attribute__ ((packed));
   i82527_msg_t     msg7 __attribute__ ((packed));    /* Message 7 */
-  rtems_unsigned8  _res2 __attribute__ ((packed));
+  uint8_t    _res2 __attribute__ ((packed));
   i82527_msg_t     msg8 __attribute__ ((packed));    /* Message 8 */
-  rtems_unsigned8  _res3 __attribute__ ((packed));
+  uint8_t    _res3 __attribute__ ((packed));
   i82527_msg_t     msg9 __attribute__ ((packed));    /* Message 9 */
-  rtems_unsigned8  p1conf __attribute__ ((packed));  /* Port 1 config */
+  uint8_t    p1conf __attribute__ ((packed));  /* Port 1 config */
   i82527_msg_t     msg10 __attribute__ ((packed));   /* Message 10 */
-  rtems_unsigned8  p2conf __attribute__ ((packed));  /* Port 2 config */
+  uint8_t    p2conf __attribute__ ((packed));  /* Port 2 config */
   i82527_msg_t     msg11 __attribute__ ((packed));   /* Message 11 */
-  rtems_unsigned8  p1in __attribute__ ((packed));    /* Port 1 in */
+  uint8_t    p1in __attribute__ ((packed));    /* Port 1 in */
   i82527_msg_t     msg12 __attribute__ ((packed));   /* Message 12 */
-  rtems_unsigned8  p2in __attribute__ ((packed));    /* Port 2 in */
+  uint8_t    p2in __attribute__ ((packed));    /* Port 2 in */
   i82527_msg_t     msg13 __attribute__ ((packed));   /* Message 13 */
-  rtems_unsigned8  p1out __attribute__ ((packed));   /* Port 1 out */
+  uint8_t    p1out __attribute__ ((packed));   /* Port 1 out */
   i82527_msg_t     msg14 __attribute__ ((packed));   /* Message 14 */
-  rtems_unsigned8  p2out __attribute__ ((packed));   /* Port 2 out */
+  uint8_t    p2out __attribute__ ((packed));   /* Port 2 out */
   i82527_msg_t     msg15 __attribute__ ((packed));   /* Message 15 */
-  rtems_unsigned8  sra __attribute__ ((packed));     /* Serial reset address */
+  uint8_t    sra __attribute__ ((packed));     /* Serial reset address */
 } i82527_t;
 
 #define I82527_CTRL_CCE         (1<<6)

@@ -11,20 +11,20 @@
 #define __info_h__
 
 typedef struct BoardInfoBlock_ {
-  rtems_unsigned16       size;         /* size of info block in bytes */
-  rtems_unsigned8        eth_id[6];    /* ethernet id of ethernet interface */
-  rtems_unsigned32       cpu_spd;      /* cpu speed in Hz */
-  rtems_unsigned32       flash_size;   /* size of flash memory in bytes */
-  rtems_unsigned32       ram_size;     /* size of ram in bytes */
-  rtems_unsigned32       version;      /* version of firmare (x.y format) */
-  rtems_unsigned32       if429;        /* mask for arinc429 interface */
-  rtems_unsigned32       ifcsdb;       /* mask for csdb interface */
-  rtems_unsigned16       if232;        /* mask for rs232 interface */
-  rtems_unsigned8        ifcan;        /* mask for canbus interface */
-  rtems_unsigned8        if568;        /* mask for arinc568 interface */
-  rtems_unsigned8        fpn[16];      /* Frasca part number in ASCII */
-  rtems_unsigned16       rev;          /* Board revision */
-  rtems_unsigned32       ip_num;       /* Board IP number */
+  uint16_t         size;         /* size of info block in bytes */
+  uint8_t          eth_id[6];    /* ethernet id of ethernet interface */
+  uint32_t         cpu_spd;      /* cpu speed in Hz */
+  uint32_t         flash_size;   /* size of flash memory in bytes */
+  uint32_t         ram_size;     /* size of ram in bytes */
+  uint32_t         version;      /* version of firmare (x.y format) */
+  uint32_t         if429;        /* mask for arinc429 interface */
+  uint32_t         ifcsdb;       /* mask for csdb interface */
+  uint16_t         if232;        /* mask for rs232 interface */
+  uint8_t          ifcan;        /* mask for canbus interface */
+  uint8_t          if568;        /* mask for arinc568 interface */
+  uint8_t          fpn[16];      /* Frasca part number in ASCII */
+  uint16_t         rev;          /* Board revision */
+  uint32_t         ip_num;       /* Board IP number */
   
 } boardinfo_t;
 

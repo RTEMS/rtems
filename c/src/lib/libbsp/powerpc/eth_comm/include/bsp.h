@@ -113,7 +113,7 @@ extern rtems_configuration_table BSP_Configuration;
 
 void bsp_cleanup( void );
 
-void M860ExecuteRISC( rtems_unsigned16 command );
+void M860ExecuteRISC( uint16_t   command );
 void *M860AllocateBufferDescriptors( int count );
 void *M860AllocateRiscTimers( int count );
 extern char M860DefaultWatchdogFeeder;

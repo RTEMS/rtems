@@ -46,7 +46,7 @@ char *rtems_progname;
  *  Use the shared implementations of the following routines
  */
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 void BSP_panic(char *s)
 {
@@ -78,7 +78,7 @@ void
 bsp_pretasking_hook(void)
 {
   extern int       _end;
-  rtems_unsigned32  heap_start;
+  uint32_t    heap_start;
 
   /* 
    * Let's check to see if the size of M860_binfo is what
@@ -95,7 +95,7 @@ bsp_pretasking_hook(void)
       printf(" bootloader differ in their definition of boardinfo_t\n");
   }
   */
-  heap_start = (rtems_unsigned32) &_end;
+  heap_start = (uint32_t) &_end;
 
   /* Align the heap on a natural boundary (4 bytes?) */
   if (heap_start & (CPU_ALIGNMENT-1)) {
@@ -115,8 +115,8 @@ SPR_RW(SPRG1)
 void bsp_start(void)
 {
   extern int _end;
-  rtems_unsigned32  heap_start;
-  rtems_unsigned32  ws_start;
+  uint32_t    heap_start;
+  uint32_t    ws_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
@@ -161,7 +161,7 @@ void bsp_start(void)
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  heap_start = (rtems_unsigned32) &_end;
+  heap_start = (uint32_t) &_end;
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
