@@ -32,17 +32,11 @@ ER cre_tsk(
   Priority_Control             core_priority;  
 
   /*
-   * Disable dispatching.
-   */
-  
-  _Thread_Disable_dispatch();
-
-  /*
    * Validate Parameters.
    */
   
  if ( pk_ctsk == NULL )
-    _ITRON_return_errorno( E_PAR );
+    return E_PAR;
 
   if ((pk_ctsk->tskatr != TA_ASM ) &&
       (pk_ctsk->tskatr != TA_HLNG) &&
@@ -54,15 +48,21 @@ ER cre_tsk(
       (pk_ctsk->tskatr != TA_COP5) &&
       (pk_ctsk->tskatr != TA_COP6) &&
       (pk_ctsk->tskatr != TA_COP7))
-    _ITRON_return_errorno( E_RSATR );
+    return E_RSATR;
 
   if (( pk_ctsk->itskpri <= 0 ) || ( pk_ctsk->itskpri >= 256 ))
-    _ITRON_return_errorno( E_PAR );
+    return E_PAR;
   if ( pk_ctsk->task == NULL )
-    _ITRON_return_errorno( E_PAR );
+    return E_PAR;
   if ( pk_ctsk->stksz < 0 )
-    _ITRON_return_errorno( E_PAR );
+    return E_PAR;
   
+  /*
+   * Disable dispatching.
+   */
+  
+  _Thread_Disable_dispatch();
+
   /*
    * allocate the thread.
    */
@@ -106,8 +106,7 @@ ER cre_tsk(
 
   the_thread->Start.entry_point = (Thread_Entry) pk_ctsk->task;
 
-  _Thread_Enable_dispatch();
-  return E_OK;
+  _ITRON_return_errorno( E_OK );
 }
 
 
