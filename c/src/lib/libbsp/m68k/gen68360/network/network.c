@@ -19,6 +19,7 @@
 #include <ka9q/netuser.h>
 #include <ka9q/trace.h>
 #include <ka9q/commands.h>
+#include <ka9q/domain.h>
 
 /*
  * Number of SCCs supported by this driver
