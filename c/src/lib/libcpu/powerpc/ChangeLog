@@ -1,5 +1,9 @@
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mpc6xx/wrapup/.cvsignore: Remove.
+
+2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* ppc403/clock/Makefile.am: Remove.
 	* ppc403/console/Makefile.am: Remove.
 	* ppc403/ictrl/Makefile.am: Remove.
