@@ -12,11 +12,11 @@ PGM=${ARCH}/startup.rel
 NO_CTOR_LIB=${ARCH}/libno-ctor.a
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bspclean bsplibc bspstart setvec
+C_PIECES=bspclean bsplibc bspstart setvec $(C_MAIN)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-CC_PIECES=rtems-ctor
+CC_PIECES=$(CXX_MAIN)
 CC_FILES=$(CC_PIECES:%=%.cc)
 CC_O_FILES=$(CC_PIECES:%=${ARCH}/%.o)
 
@@ -31,6 +31,16 @@ INSTALLED_O_FILES=$(ARCH)/rtems-ctor.o
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+
+ifeq ($(RTEMS_HAS_CPLUSPLUS),yes)
+NO_CTOR_LIB=${ARCH}/libno-ctor.a
+INSTALLED_O_FILES=$(ARCH)/rtems-ctor.o
+CXX_MAIN=rtems-ctor
+C_MAIN=
+else
+CXX_MAIN=
+C_MAIN=main
+endif
 
 #
 # (OPTIONAL) Add local stuff here using +=
