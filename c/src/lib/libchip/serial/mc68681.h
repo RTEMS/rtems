@@ -19,14 +19,23 @@ extern "C" {
 #endif
 
 /*
+ *  These are just used in the interface between this driver and
+ *  the read/write register routines.
+ */
+
+#define MC68681_STATUS_REG      0xFF
+
+/*
  * Driver function table
  */
+
 extern console_fns mc68681_fns;
 extern console_fns mc68681_fns_polled;
 
 /*
  * Flow control function tables
  */
+
 extern console_flow mc68681_flow_RTSCTS;
 extern console_flow mc68681_flow_DTRCTS;
 
