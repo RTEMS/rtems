@@ -7,7 +7,10 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 include $(top_srcdir)/../../../automake/multilib.am
 include $(top_srcdir)/../../../automake/compile.am
 
-include_HEADERS = asm.h idtcpu.h iregdef.h
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = asm.h
+
+include_HEADERS = idtcpu.h iregdef.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/mips.h \
@@ -33,9 +36,14 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-$(PROJECT_INCLUDE)/asm.h: asm.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm.h
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
 $(PROJECT_INCLUDE)/idtcpu.h: idtcpu.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/idtcpu.h

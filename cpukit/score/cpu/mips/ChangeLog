@@ -1,5 +1,9 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* Makefile.am: Install asm.h to $(includedir)/rtems.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.
 
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>

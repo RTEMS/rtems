@@ -15,7 +15,10 @@ EXTRA_LIBRARIES += libscorecpu_g.a
 CLEANFILES += libscorecpu_g.a
 libscorecpu_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-include_HEADERS = asm.h m68302.h m68360.h qsm.h sim.h
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = asm.h
+
+include_HEADERS = m68302.h m68360.h qsm.h sim.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/m68k.h \
@@ -35,9 +38,14 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-$(PROJECT_INCLUDE)/asm.h: asm.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm.h
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
 $(PROJECT_INCLUDE)/m68302.h: m68302.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68302.h
