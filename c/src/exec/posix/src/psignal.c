@@ -230,6 +230,7 @@ boolean _POSIX_signals_Clear_signals(
 )
 {
   sigset_t                    mask;
+  sigset_t                    signals_blocked;
   ISR_Level                   level;
   boolean                     do_callout;
   POSIX_signals_Siginfo_node *psiginfo;
@@ -238,13 +239,21 @@ boolean _POSIX_signals_Clear_signals(
  
   do_callout = FALSE;
  
+  /* set blocked signals based on if checking for them, SIGNAL_ALL_MASK
+   * insures that no signals are blocked and all are checked.
+   */
+
+  if ( check_blocked )
+    signals_blocked = ~api->signals_blocked;
+  else
+    signals_blocked = SIGNAL_ALL_MASK;
+
   /* XXX this is not right for siginfo type signals yet */
   /* XXX since they can't be cleared the same way */
  
   _ISR_Disable( level );
     if ( is_global ) {
-       if ( mask & (_POSIX_signals_Pending & 
-                       (~api->signals_blocked & check_blocked) ) ) {
+       if ( mask & (_POSIX_signals_Pending & signals_blocked) ) {
          if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
            psiginfo = (POSIX_signals_Siginfo_node *)
              _Chain_Get_unprotected( &_POSIX_signals_Siginfo[ signo ] );
@@ -263,8 +272,7 @@ boolean _POSIX_signals_Clear_signals(
          do_callout = TRUE;
        }
     } else {
-      if ( mask & (api->signals_pending & 
-                      (~api->signals_blocked & check_blocked) ) ) {
+      if ( mask & (api->signals_pending & signals_blocked) ) {
         api->signals_pending &= ~mask;
         do_callout = TRUE;
       }
@@ -376,7 +384,9 @@ restart:
 
   }
 
-  for ( signo = SIGABRT ; signo <= __SIGLASTNOTRT ; signo++ ) {
+/* XXX - add __SIGFIRSTNOTRT or something like that to newlib siginfo.h */
+
+  for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
 
     if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
       goto restart;
@@ -521,6 +531,9 @@ int sigaddset(
   if ( !set )
     set_errno_and_return_minus_one( EFAULT );
 
+  if ( !signo )
+    return 0;
+
   if ( !is_valid_signo(signo) )
     set_errno_and_return_minus_one( EINVAL );
 
@@ -540,6 +553,9 @@ int sigdelset(
   if ( !set )
     set_errno_and_return_minus_one( EFAULT );
  
+  if ( !signo )
+    return 0;
+
   if ( !is_valid_signo(signo) )
     set_errno_and_return_minus_one( EINVAL );
  
@@ -559,6 +575,9 @@ int sigismember(
   if ( !set ) 
     set_errno_and_return_minus_one( EFAULT );
  
+  if ( !signo )
+    return 0;
+
   if ( !is_valid_signo(signo) )
     set_errno_and_return_minus_one( EINVAL );
  
@@ -580,12 +599,15 @@ int sigaction(
 {
   ISR_Level     level;
 
-  if ( !is_valid_signo(sig) )
-    set_errno_and_return_minus_one( EINVAL );
-  
   if ( oact )
     *oact = _POSIX_signals_Vectors[ sig ];
 
+  if ( !sig )
+    return 0;
+
+  if ( !is_valid_signo(sig) )
+    set_errno_and_return_minus_one( EINVAL );
+  
   /* 
    *  Some signals cannot be ignored (P1003.1b-1993, pp. 70-72 and references.
    *
@@ -673,7 +695,7 @@ int pthread_sigmask(
     *oset = api->signals_blocked;
  
   if ( !set )
-    set_errno_and_return_minus_one( EFAULT );
+    return 0;
 
   switch ( how ) {
     case SIG_BLOCK:
@@ -737,13 +759,13 @@ int sigsuspend(
 
   api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
 
-  saved_signals_blocked = api->signals_blocked;
+  status = sigprocmask( SIG_BLOCK, sigmask, &saved_signals_blocked );
  
   (void) sigfillset( &all_signals );
 
   status = sigtimedwait( &all_signals, NULL, NULL );
 
-  api->signals_blocked = saved_signals_blocked;
+  (void) sigprocmask( SIG_SETMASK, &saved_signals_blocked, NULL );
 
   return status;
 }
@@ -779,7 +801,9 @@ int _POSIX_signals_Get_highest(
       return signo;
   }
  
-  for ( signo = SIGABRT ; signo <= __SIGLASTNOTRT ; signo++ ) {
+/* XXX - add __SIGFIRSTNOTRT or something like that to newlib siginfo.h */
+
+  for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
     if ( set & signo_to_mask( signo ) )
       return signo;
   }
