@@ -177,7 +177,6 @@ $(LIB): ${OBJS}
 	$(make-library)
 
 ${ARCH}/%.$(OBJEXT): src/%.c
-	test -d $(ARCH) || mkdir $(ARCH)
 	${COMPILE} -o $@ -c $<
 
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
