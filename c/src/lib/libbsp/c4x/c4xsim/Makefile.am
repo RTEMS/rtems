@@ -30,8 +30,8 @@ CLEANFILES += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/main.c \
     ../../shared/bootcard.c ../../shared/sbrk.c ../../shared/setvec.c \
-    ../shared/c3xspurious.c ../shared/c4xspurious.c \
-    ../shared/bspspuriousinit.c startup/spurious.c \
+    ../../c4x/shared/c3xspurious.c ../../c4x/shared/c4xspurious.c \
+    ../../c4x/shared/bspspuriousinit.c startup/spurious.c \
     ../../shared/gnatinstallhandler.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
