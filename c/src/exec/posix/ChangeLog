@@ -1,3 +1,7 @@
+2001-03-19	Joel Sherrill <joel@OARcorp.com>
+
+	* sys/utsname.h: Added C++ wrapper.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am, include/rtems/posix/Makefile.am,

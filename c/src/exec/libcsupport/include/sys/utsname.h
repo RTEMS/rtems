@@ -6,6 +6,10 @@
 #ifndef __POSIX_SYS_UTSNAME_h
 #define __POSIX_SYS_UTSNAME_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <sys/times.h>
 #include <sys/types.h>
 
@@ -44,6 +48,9 @@ clock_t times(
   struct tms   *buffer
 );
 
+#ifdef __cplusplus
+}
+#endif
 #endif
 /* end of include file */
 
