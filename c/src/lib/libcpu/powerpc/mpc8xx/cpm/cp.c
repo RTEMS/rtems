@@ -12,13 +12,14 @@
  * Copyright (c) 1999, National Research Council of Canada
  */
 
-#include <bsp.h>
-#include <rtems/rtems/intr.h>
-#include <rtems/error.h>
+#include <rtems.h>
+#include <mpc8xx.h>
+#include <mpc8xx/cpm.h>
 
 /*
  * Send a command to the CPM RISC processer
  */
+
 void m8xx_cp_execute_cmd( unsigned16 command )
 {
   rtems_unsigned16 lvl;

@@ -36,14 +36,12 @@
  *  $Id$
  */
 
-#include <bsp.h>
+#include <rtems.h>
 #include <clockdrv.h>
 #include <rtems/libio.h>
 
 #include <stdlib.h>                     /* for atexit() */
 #include <mpc8xx.h>
-
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
 volatile rtems_unsigned32 Clock_driver_ticks;
 extern volatile m8xx_t m8xx;
@@ -78,37 +76,35 @@ void Install_clock(rtems_isr_entry clock_isr)
   
   Clock_driver_ticks = 0;
   
-  pit_value = (BSP_Configuration.microseconds_per_tick *
-               Cpu_table.clicks_per_usec) - 1 ;
+  pit_value = (rtems_configuration_get_microseconds_per_tick() *
+               rtems_cpu_configuration_get_clicks_per_usec()) - 1 ;
   
   if (pit_value > 0xffff) {           /* pit is only 16 bits long */
     rtems_fatal_error_occurred(-1);
   }  
-  if (BSP_Configuration.ticks_per_timeslice) {
-    
-    /*
-     * initialize the interval here
-     * First tick is set to right amount of time in the future
-     * Future ticks will be incremented over last value set
-     * in order to provide consistent clicks in the face of
-     * interrupt overhead
-     */
-    
-    rtems_interrupt_catch(clock_isr, PPC_IRQ_LVL0, &previous_isr);
-    
-    m8xx.sccr &= ~(1<<24);
-    m8xx.pitc = pit_value;
-    
-    /* set PIT irq level, enable PIT, PIT interrupts */
-    /*  and clear int. status */
-    m8xx.piscr = M8xx_PISCR_PIRQ(0) |
-      M8xx_PISCR_PTE | M8xx_PISCR_PS | M8xx_PISCR_PIE; 
+
+  /*
+   * initialize the interval here
+   * First tick is set to right amount of time in the future
+   * Future ticks will be incremented over last value set
+   * in order to provide consistent clicks in the face of
+   * interrupt overhead
+   */
+  
+  rtems_interrupt_catch(clock_isr, PPC_IRQ_LVL0, &previous_isr);
+  
+  m8xx.sccr &= ~(1<<24);
+  m8xx.pitc = pit_value;
+  
+  /* set PIT irq level, enable PIT, PIT interrupts */
+  /*  and clear int. status */
+  m8xx.piscr = M8xx_PISCR_PIRQ(0) |
+    M8xx_PISCR_PTE | M8xx_PISCR_PS | M8xx_PISCR_PIE; 
     
 #ifdef EPPCBUG_SMC1
-    simask_copy = m8xx.simask | M8xx_SIMASK_LVM0;
+  simask_copy = m8xx.simask | M8xx_SIMASK_LVM0;
 #endif /* EPPCBUG_SMC1 */
-    m8xx.simask |= M8xx_SIMASK_LVM0;
-  }
+  m8xx.simask |= M8xx_SIMASK_LVM0;
   atexit(Clock_exit);
 }
 
@@ -133,12 +129,10 @@ ReInstall_clock(rtems_isr_entry new_clock_isr)
 void
 Clock_exit(void)
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    /* disable PIT and PIT interrupts */
-    m8xx.piscr &= ~(M8xx_PISCR_PTE | M8xx_PISCR_PIE); 
-    
-    (void) set_vector(0, PPC_IRQ_LVL0, 1);
-  }
+  /* disable PIT and PIT interrupts */
+  m8xx.piscr &= ~(M8xx_PISCR_PTE | M8xx_PISCR_PIE); 
+  
+  (void) set_vector(0, PPC_IRQ_LVL0, 1);
 }
 
 rtems_device_driver Clock_initialize(

@@ -13,9 +13,9 @@
  * Copyright (c) 1999, National Research Council of Canada
  */
 
-#include <bsp.h>
-#include <rtems/rtems/intr.h>
-#include <rtems/error.h>
+#include <rtems.h>
+#include <mpc8xx.h>
+#include <mpc8xx/cpm.h>
 
 /*
  * Allocation order:

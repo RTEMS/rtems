@@ -11,7 +11,8 @@
  * http://www.OARcorp.com/rtems/license.html.
  */
 
-#include <bsp.h>
+#include <rtems.h>
+#include <mpc8xx.h>
 #include <mpc8xx/mmu.h>
 
 /*

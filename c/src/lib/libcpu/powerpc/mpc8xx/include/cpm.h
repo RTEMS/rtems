@@ -18,8 +18,6 @@
 extern "C" {
 #endif
 
-#include <bsp.h>
-
 /* Functions */
 
 void m8xx_cp_execute_cmd( unsigned16 command );

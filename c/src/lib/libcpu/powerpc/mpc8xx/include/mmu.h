@@ -18,8 +18,6 @@
 extern "C" {
 #endif
 
-#include <bsp.h>
-
 /*
  * The MMU_TLB_table is used to statically initialize the Table Lookaside
  * Buffers in the MMU of an MPC8xx.

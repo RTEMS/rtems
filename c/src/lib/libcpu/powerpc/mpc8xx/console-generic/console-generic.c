@@ -46,10 +46,11 @@
  *  $Id$
  */
 
-#include <bsp.h>
+#include <rtems.h>
 #include <rtems/libio.h>
 #include <mpc8xx.h>
 #include <mpc8xx/console.h>
+#include <mpc8xx/cpm.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
@@ -399,7 +400,7 @@ m8xx_scc2_interrupt_handler (rtems_vector_number v)
     /* Check that the buffer is ours */
     if ((RxBd[SCC2_MINOR]->status & M8xx_BD_EMPTY) == 0) {
       rtems_invalidate_multiple_data_cache_lines( 
-        RxBd[SCC2_MINOR]->buffer, 
+        (const void *) RxBd[SCC2_MINOR]->buffer, 
         RxBd[SCC2_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC2_MINOR],
@@ -442,7 +443,7 @@ m8xx_scc3_interrupt_handler (rtems_vector_number v)
     /* Check that the buffer is ours */
     if ((RxBd[SCC3_MINOR]->status & M8xx_BD_EMPTY) == 0) {
       rtems_invalidate_multiple_data_cache_lines( 
-        RxBd[SCC3_MINOR]->buffer, 
+        (const void *) RxBd[SCC3_MINOR]->buffer, 
         RxBd[SCC3_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC3_MINOR],
@@ -484,7 +485,7 @@ m8xx_scc4_interrupt_handler (rtems_vector_number v)
     /* Check that the buffer is ours */
     if ((RxBd[SCC4_MINOR]->status & M8xx_BD_EMPTY) == 0) {
       rtems_invalidate_multiple_data_cache_lines( 
-        RxBd[SCC4_MINOR]->buffer, 
+        (const void *) RxBd[SCC4_MINOR]->buffer, 
         RxBd[SCC4_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC4_MINOR],
@@ -526,7 +527,7 @@ m8xx_smc1_interrupt_handler (rtems_vector_number v)
     /* Check that the buffer is ours */
     if ((RxBd[SMC1_MINOR]->status & M8xx_BD_EMPTY) == 0) {
       rtems_invalidate_multiple_data_cache_lines( 
-        RxBd[SMC1_MINOR]->buffer, 
+        (const void *) RxBd[SMC1_MINOR]->buffer, 
         RxBd[SMC1_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SMC1_MINOR],
@@ -568,7 +569,7 @@ m8xx_smc2_interrupt_handler (rtems_vector_number v)
     /* Check that the buffer is ours */
     if ((RxBd[SMC2_MINOR]->status & M8xx_BD_EMPTY) == 0) {
       rtems_invalidate_multiple_data_cache_lines( 
-        RxBd[SMC2_MINOR]->buffer, 
+        (const void *) RxBd[SMC2_MINOR]->buffer, 
         RxBd[SMC2_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SMC2_MINOR],
@@ -983,7 +984,10 @@ m8xx_uart_pollRead(
   if (RxBd[minor]->status & M8xx_BD_EMPTY) {
     return -1;
   }
-  _CPU_Data_Cache_Block_Invalidate( RxBd[minor]->buffer );
+  rtems_invalidate_multiple_data_cache_lines( 
+    (const void *) RxBd[minor]->buffer,
+    RxBd[minor]->length
+  );
   c = ((char *)RxBd[minor]->buffer)[0];
   RxBd[minor]->status = M8xx_BD_EMPTY | M8xx_BD_WRAP;
   return c;
@@ -1019,7 +1023,10 @@ m8xx_uart_pollWrite(
     while (TxBd[minor]->status & M8xx_BD_READY)
       continue;
     txBuf[minor] = *buf++;
-    _CPU_Data_Cache_Block_Flush( &txBuf[minor] );
+    rtems_flush_multiple_data_cache_lines(
+       (const void *) TxBd[minor]->buffer,
+       TxBd[minor]->length
+    );
     TxBd[minor]->buffer = &txBuf[minor];
     TxBd[minor]->length = 1;
     TxBd[minor]->status = M8xx_BD_READY | M8xx_BD_WRAP;
