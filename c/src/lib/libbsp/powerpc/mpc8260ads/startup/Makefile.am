@@ -2,13 +2,12 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
 
-C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c \
-    main.c sbrk.c setvec.c gnatinstallhandler.c cpuinit.c
+C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c main.c sbrk.c \
+    setvec.c gnatinstallhandler.c cpuinit.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 S_FILES = 

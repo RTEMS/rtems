@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 include_bspdir = $(includedir)/bsp
 
 C_FILES = irq.c irq_init.c
@@ -16,15 +15,6 @@ OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-$(PROJECT_INCLUDE)/bsp:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/bsp/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
-    $(include_bsp_HEADERS:%=$(PROJECT_INCLUDE)/bsp/%)
-
 #
 # (OPTIONAL) Add local stuff here using +=
 #
@@ -37,5 +27,16 @@ $(PGM): $(OBJS)
 all-local: $(PREINSTALL_FILES) $(OBJS) $(PGM)
 
 EXTRA_DIST = irq.c irq.h irq_asm.S irq_init.c
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
+$(PROJECT_INCLUDE)/bsp/irq.h: irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
 include $(top_srcdir)/../../../../automake/local.am
