@@ -49,7 +49,6 @@ int mknod(
   rtems_filesystem_get_start_loc( pathname, &i, &temp_loc );
 
   if ( !temp_loc.ops->evalformake_h ) {
-    rtems_filesystem_freenode( &temp_loc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 

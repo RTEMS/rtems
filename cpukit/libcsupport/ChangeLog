@@ -1,3 +1,7 @@
+2002-10-23	<strauman@slac.stanford.edu>
+	* src/mount.c per PR290, add check for ops->node_type_h
+        * src/mknod.c per PR291, remove erroneous call to freenod
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

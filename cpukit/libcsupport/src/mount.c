@@ -135,13 +135,22 @@ int mount(
             mount_point, RTEMS_LIBIO_PERMS_RWX, &loc, TRUE ) == -1 )
       goto cleanup_and_bail;
 
+    /*
+     * Test for node_type_h
+     */
+
+    if (!loc.ops->node_type_h) {
+      errno =  ENOTSUP;
+      goto cleanup_and_bail;
+    }
+
     /* 
      *  Test to see if it is a directory
      */
 
     loc_to_free = &loc;
     if ( loc.ops->node_type_h( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
-      errno = ENOTDIR;
+      errno = ENOTDIR; 
       goto cleanup_and_bail;
     }
 
