@@ -441,7 +441,7 @@ typedef struct {
 
 /*
  *  The following table contains the information required to configure
- *  the XXX processor specific parameters.
+ *  the a29K processor specific parameters.
  *
  *  NOTE: The interrupt_stack_size field is required if
  *        CPU_ALLOCATE_INTERRUPT_STACK is defined as TRUE.

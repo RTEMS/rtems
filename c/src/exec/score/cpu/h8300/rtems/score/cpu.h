@@ -1,6 +1,6 @@
 /*  cpu.h
  *
- *  This include file contains information pertaining to the XXX
+ *  This include file contains information pertaining to the H8300
  *  processor.
  *
  *  COPYRIGHT (c) 1989-1999.

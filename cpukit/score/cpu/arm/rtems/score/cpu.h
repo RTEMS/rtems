@@ -367,7 +367,7 @@ typedef CPU_Exception_frame CPU_Interrupt_frame;
 
 /*
  *  The following table contains the information required to configure
- *  the XXX processor specific parameters.
+ *  the ARM processor specific parameters.
  */
 
 typedef struct {
