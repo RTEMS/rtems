@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = null.h sci.h sh7_pfc.h sh7_sci.h
+H_FILES = sci.h sh7_pfc.h sh7_sci.h
 SCORE_H_FILES = ispsh7032.h iosh7032.h
 
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
@@ -25,6 +25,6 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE)/sh \
 
 all-local: $(TMPINSTALL_FILES)
 
-EXTRA_DIST = null.h sci.h sh7_pfc.h sh7_sci.h
+EXTRA_DIST = sci.h sh7_pfc.h sh7_sci.h
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -29,7 +29,6 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
-null/Makefile
 clock/Makefile
 delay/Makefile
 include/Makefile

@@ -1,3 +1,12 @@
+2001-01-05	Joel Sherrill <joel@OARcorp.com>
+
+	* /dev/null moved to libmisc.
+	* Makefile.am, configure.in: Removed null directory.
+	* include/Makefile.am: Removed null.h.
+	* include/null.h, null/.cvsignore, null/Makefile.am, null/close.c,
+	null/cntrl.c, null/init.c, null/open.c, null/read.c, null/write.c:
+	Removed.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
