@@ -50,9 +50,9 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-$(ARCH)/unixsize.h: $(ARCH) cpu.h $(PROJECT_RELEASE)/bin/gensize
+$(ARCH)/unixsize.h: $(ARCH) cpu.h $(GENSIZE)
 	$(RM) $@
-	$(PROJECT_RELEASE)/bin/gensize > $@
+	$(GENSIZE) > $@
 	$(CHMOD) -w $@
 
 $(ARCH)/rtems-cpu.rel: $(OBJS)
