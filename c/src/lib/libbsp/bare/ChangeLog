@@ -1,3 +1,9 @@
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Use 'CLEANFILES ='.
+	* include/Makefile.am: Use 'TMPINSTALL_FILES ='.
+	* include/Makefile.am: fix path to shared/include/coverhd.h.
+
 2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/bsp.h: Include bspopts.h.
