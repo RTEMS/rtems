@@ -1,6 +1,7 @@
-2003-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add support/.
+	* support/.cvsignore: New.
 	* support/Makefile.am: New.
 	* support/version.c: New.
 	* wrapup/Makefile.am: Add support/libsupport.a.
