@@ -241,10 +241,6 @@ libnetworking/rtems_webserver/Makefile
 
 librdbg/Makefile
 librdbg/include/Makefile
-librdbg/include/rdbg/Makefile
-librdbg/include/rdbg/i386/Makefile
-librdbg/include/rdbg/powerpc/Makefile
-librdbg/include/rdbg/m68k/Makefile
 librdbg/src/Makefile
 librdbg/src/i386/Makefile
 librdbg/src/powerpc/Makefile

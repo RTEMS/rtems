@@ -1,3 +1,14 @@
+2004-02-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* librdbg/include/Makefile.am: Merge-in
+	librdbg/include/rdbg/i386/Makefile.am,
+	librdbg/include/rdbg/m68k/Makefile.am, librdbg/include/rdbg/Makefile.am,
+	librdbg/include/rdbg/powerpc/Makefile.am.
+	* librdbg/include/rdbg/i386/Makefile.am,
+	librdbg/include/rdbg/m68k/Makefile.am, librdbg/include/rdbg/Makefile.am,
+	librdbg/include/rdbg/powerpc/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use AS_HELP_STRING(ada).
