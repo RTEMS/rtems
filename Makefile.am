@@ -12,9 +12,10 @@ ACLOCAL_AMFLAGS = -I aclocal
 SUBDIRS = doc make tools $(BUILD_SUBDIRS) $(TARGET_SUBDIRS)
 
 AUTOMAKE_FILES = automake/compile.am automake/host.am automake/lib.am \
-    automake/local.am automake/multilib.am automake/subdirs.am
+    automake/local.am automake/multilib.am automake/subdirs.am \
+    automake/leaf.am
 
-ACLOCAL_FILES += aclocal/bsp-alias.m4 aclocal/canonical-host.m4 \
+ACLOCAL_FILES = aclocal/bsp-alias.m4 aclocal/canonical-host.m4 \
     aclocal/canonical-target-name.m4 aclocal/canonicalize-tools.m4 \
     aclocal/check-bsp-cache.m4 aclocal/check-bsps.m4 aclocal/check-cpu.m4 \
     aclocal/check-cxx.m4 aclocal/check-itron.m4 \

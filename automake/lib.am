@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-LD = @LD@
+## LD = @LD@
 AR = @AR@
 RANLIB = @RANLIB@
 
