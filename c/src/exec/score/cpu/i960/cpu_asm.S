@@ -195,6 +195,7 @@ exit1:    mov       r7,g14                   # restore g14
  *  The current stack is the supervisor mode stack.
  */
 
+          .globl    __ISR_Dispatch
 __ISR_Dispatch:
         mov       g14,r7
         mov       0,g14
