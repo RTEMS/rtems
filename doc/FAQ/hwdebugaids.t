@@ -14,13 +14,13 @@ debugging assistants that are available.
 @section MC683xx BDM Support for GDB
 
 Eric Norum (eric@@skatter.usask.ca) wrote a driver for a parallel
-port interface to a BDM module.  He and Chris John (ccj@@acm.org)
+port interface to a BDM module.  He and Chris Johns (ccj@@acm.org)
 have put together a package containing everything you need to
 use this.  From the README: "This
 package contains everything you need to be able to run GDB on
-Linux and control a Motorola CPU32+ (68360) or Coldfire (5206) target
-through a standard PC parallel port." Information on this is
-available at the following URL:
+Linux and control a Motorola CPU32+ (68360) or Coldfire (5206, 5206e, or
+5207) target through a standard PC parallel port." Information on
+this is available at the following URL:
 http://www.calm.hw.ac.uk/davidf/coldfire/gdb-bdm-linux.htm.
 
 The efi332 project has a home-built BDM module and gdb driver for 
