@@ -1,3 +1,7 @@
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* pppd/utils.c: Adapt to gcc-3.x.
+
 2002-04-11	Chris Johns <ccj@acm.org>
 
 	* c/src/libnetworking/rtems/rtems_bsdnet.h: To address PR59, added

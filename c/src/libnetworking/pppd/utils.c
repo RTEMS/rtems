@@ -248,10 +248,10 @@ vslprintf(buf, buflen, fmt, args)
 	    break;
 	case 'r':
 	    f = va_arg(args, char *);
-#ifndef __powerpc__
+#ifndef __PPC__
 	    n = vslprintf(buf, buflen + 1, f, va_arg(args, va_list));
 #else
-	    /* On the powerpc, a va_list is an array of 1 structure */
+	    /* HACK: On the powerpc, a va_list is an array of 1 structure */
 	    n = vslprintf(buf, buflen + 1, f, va_arg(args, void *));
 #endif
 	    buf += n;
