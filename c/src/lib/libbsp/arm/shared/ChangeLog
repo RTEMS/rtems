@@ -1,3 +1,8 @@
+2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* irq/irq_asm.S: Significant rework in attempt to make interrupts
+	work.  They appear to be very close to correct but not 100%.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* comm/Makefile.am: Remove AUTOMAKE_OPTIONS.
