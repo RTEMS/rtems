@@ -103,11 +103,13 @@ int bsp_start(
   m68k_set_vbr( &M68Kvec );
 
   /*
-   *  You may wish to make VME access round-robin here, currently
+   *  You may wish to make the VME arbitration round-robin here, currently
    *  we leave it as it is.
    */
 
-  lcsr->vector_base = VECTOR_BASE;        /* set the vector base register */
+  /* set the Interrupt Base Vectors */
+
+  lcsr->vector_base = (VBR0 << 28) | (VBR1 << 24);
 
   m68k_enable_caching();
 

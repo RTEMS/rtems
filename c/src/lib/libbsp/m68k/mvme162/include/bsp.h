@@ -29,23 +29,30 @@ extern "C" {
 
 #include <rtems.h>
 #include <iosupp.h>
-#include <z8530.h>
 
 /*
-// Following defines must reflect the setup of the particular MVME162
-//-----------------------------------
-*/
+ * Following defines must reflect the setup of the particular MVME162
+ */
+
 #define GROUP_BASE_ADDRESS    0x0000F200
-#define BOARD_BASE_ADDRESS    0x00000000
+#define BOARD_BASE_ADDRESS    0xFFFF0000
+
 /* Base for local interrupters' vectors (with enable bit set) */
-#define VECTOR_BASE           0x67800000
+
+#define MASK_INT              0x00800000
+#define VBR0                  0x6
+#define VBR1                  0x7
+
 /* RAM limits */
+
 #define RAM_START             0x00100000
 #define RAM_END               0x00200000
+
 /*
-//-----------------------------------
-*/
-static volatile struct lcsr {
+ * ----------------------------------
+ */
+
+typedef volatile struct lcsr_regs {
   unsigned long     slave_adr[2];
   unsigned long     slave_trn[2];
   unsigned long     slave_ctl;
@@ -73,80 +80,135 @@ static volatile struct lcsr {
   unsigned long     intr_clear;
   unsigned long     intr_level[4];
   unsigned long     vector_base;
-} *lcsr = (void *) 0xFFF40000;
+} lcsr_regs;
 
-#define USE_CHANNEL_A   1                /* 1 = use channel A for console */
-#define USE_CHANNEL_B   0                /* 1 = use channel B for console */
+#define lcsr      ((lcsr_regs * const) 0xFFF40000)
 
-/* Constants */
+typedef volatile struct mcchip_regs {
 
-#if   (USE_CHANNEL_A == 1)
-  #define CONSOLE_CONTROL  0xFFF45005
-  #define CONSOLE_DATA     0xFFF45007
-#elif (USE_CHANNEL_B == 1)
-  #define CONSOLE_CONTROL  0xFFF45001
-  #define CONSOLE_DATA     0xFFF45003
-#endif
+  unsigned char     chipID;
+  unsigned char     chipREV;
+  unsigned char     gen_control;
+  unsigned char     vector_base;
+  
+  unsigned long     timer_cmp_1;
+  unsigned long     timer_cnt_1;
+  unsigned long     timer_cmp_2;
+  unsigned long     timer_cnt_2;
+  
+  unsigned char     LSB_prescaler_count;
+  unsigned char     prescaler_clock_adjust;
+  unsigned char     time_ctl_2;
+  unsigned char     time_ctl_1;
+  
+  unsigned char     time_int_ctl_4;
+  unsigned char     time_int_ctl_3;
+  unsigned char     time_int_ctl_2;
+  unsigned char     time_int_ctl_1;
+  
+  unsigned char     dram_err_int_ctl;
+  unsigned char     SCC_int_ctl;
+  unsigned char     time_ctl_4;
+  unsigned char     time_ctl_3;
+  
+  unsigned short    DRAM_space_base;
+  unsigned short    SRAM_space_base;
+  
+  unsigned char     DRAM_size;
+  unsigned char     DRAM_SRAM_opt;
+  unsigned char     SRAM_size;
+  unsigned char     reserved;
+
+  unsigned char     LANC_error;
+  unsigned char     reserved1;
+  unsigned char     LANC_int_ctl;
+  unsigned char     LANC_berr_ctl;
+
+  unsigned char     SCSI_error;
+  unsigned char     general_inputs;
+  unsigned char     MVME_162_version;
+  unsigned char     SCSI_int_ctl;
+
+  unsigned long     timer_cmp_3;
+  unsigned long     timer_cnt_3;
+  unsigned long     timer_cmp_4;
+  unsigned long     timer_cnt_4;
+  
+  unsigned char     bus_clk;
+  unsigned char     PROM_acc_time_ctl;
+  unsigned char     FLASH_acc_time_ctl;
+  unsigned char     ABORT_int_ctl;
+  
+  unsigned char     RESET_ctl;
+  unsigned char     watchdog_timer_ctl;
+  unsigned char     acc_watchdog_time_base_sel;
+  unsigned char     reserved2;
+  
+  unsigned char     DRAM_ctl;
+  unsigned char     reserved4;
+  unsigned char     MPU_status;
+  unsigned char     reserved3;
+  
+  unsigned long     prescaler_count;
+  
+} mcchip_regs;
+
+#define mcchip      ((mcchip_regs * const) 0xFFF42000)
+
+/*----------------------------------------------------------------*/
+
+/* 
+ * SCC Z8523(0) defines and macros 
+ * ------------------------------- 
+ * Prototypes for the low-level serial io are also included here,
+ * because such stuff is bsp-specific (yet). The function bodies
+ * are in console.c
+ */
+
+enum {portB, portA};
+
+rtems_boolean char_ready(int port, char *ch);
+char char_wait(int port);
+void char_put(int port, char ch);
+
+#define TX_BUFFER_EMPTY   0x04
+#define RX_DATA_AVAILABLE 0x01
+#define SCC_VECTOR        0x40
+
+typedef volatile struct scc_regs {
+  unsigned char pad1;
+  volatile unsigned char          csr;
+  unsigned char pad2;
+  volatile unsigned char          buf;
+} scc_regs;
+
+#define scc       ((scc_regs * const) 0xFFF45000)
+
+#define ZWRITE0(port, v)  (scc[port].csr = (unsigned char)(v))
+#define ZREAD0(port)  (scc[port].csr)
+
+#define ZREAD(port, n)  (ZWRITE0(port, n), (scc[port].csr))
+#define ZREADD(port)  (scc[port].buf)
+
+#define ZWRITE(port, n, v) (ZWRITE0(port, n), ZWRITE0(port, v))
+#define ZWRITED(port, v)  (scc[port].buf = (unsigned char)(v))
+/*----------------------------------------------------------------*/
 
 /*
-// The following registers are located in the VMEbus short
-// IO space and respond to address modifier codes $29 and $2D.
-// On FORCE SPARC CPU use address gcsr_vme and device /dev/vme16d32.
+ * The following registers are located in the VMEbus short
+ * IO space and respond to address modifier codes $29 and $2D.
+ * On FORCE CPU use address gcsr_vme and device /dev/vme16d32.
 */
-static volatile struct gcsr {
+typedef volatile struct gcsr_regs {
   unsigned char       chip_revision;
   unsigned char       chip_id;
   unsigned char       lmsig;
   unsigned char       board_scr;
   unsigned short      gpr[6];
-} *gcsr_vme = (void *) (GROUP_BASE_ADDRESS + BOARD_BASE_ADDRESS),
-  *gcsr = (void *) 0xFFF40100;
+} gcsr_regs;
 
-static volatile unsigned short  *ipio[6] = {  (unsigned short *) 0xFFF58000,
-                                              (unsigned short *) 0xFFF58100,
-                                              (unsigned short *) 0xFFF58200,
-                                              (unsigned short *) 0xFFF58300,
-                                              (unsigned short *) 0xFFF58400,
-                                              (unsigned short *) 0xFFF58500
-                                           };
-
-static volatile unsigned short  *ipid[6] = {  (unsigned short *) 0xFFF58080,
-                                              (unsigned short *) 0xFFF58180,
-                                              (unsigned short *) 0xFFF58280,
-                                              (unsigned short *) 0xFFF58380,
-                                              (unsigned short *) 0xFFF58080,
-                                              (unsigned short *) 0xFFF58280
-                                           };
-
-static volatile struct ipic_space {
-  struct sing {
-    unsigned short    io_space[64];
-    unsigned short    id_space[32];
-    unsigned short    id_reptd[32];
-  } single[4];
-  struct twin {
-    unsigned short    io_space[128];
-    unsigned short    io_reptd[128];
-  } twin[2];
-} *ipic_space = (void *) 0xFFF58000;
-
-static volatile struct ipic_csr {
-  unsigned char     chip_id;
-  unsigned char     chip_rev;
-  unsigned char     res[2];
-  unsigned short    a_31_16_base;
-  unsigned short    b_31_16_base;
-  unsigned short    c_31_16_base;
-  unsigned short    d_31_16_base;
-  unsigned char     a_23_16_size;
-  unsigned char     b_23_16_size;
-  unsigned char     c_23_16_size;
-  unsigned char     d_23_16_size;
-  unsigned short    a_intr_cnt;
-  unsigned short    b_intr_cnt;
-  unsigned short    c_intr_cnt;
-  unsigned short    d_intr_cnt;
-} *ipic_csr = (void *) 0xFFFBC000;
+#define gcsr_vme ((gcsr_regs * const) (GROUP_BASE_ADDRESS + BOARD_BASE_ADDRESS))
+#define gcsr     ((gcsr_regs * const) 0xFFF40100)
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -160,40 +222,25 @@ static volatile struct ipic_csr {
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
- *  Define the interrupt mechanism for Time Test 27
+ *  Define the interrupt mechanism for Time Test 27 
  *
- *  NOTE: Not implemented
+ *  NOTE: We use software interrupt 0
  */
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler )
+#define Install_tm27_vector( handler ) \
+            set_vector( (handler), VBR1 * 0x10 + 0x8, 1 ); \
+            lcsr->intr_level[2] |= 3; \
+            lcsr->intr_ena |= 0x100;
 
-#define Cause_tm27_intr()
+#define Cause_tm27_intr()  lcsr->intr_soft_set |= 0x100
 
-#define Clear_tm27_intr()
+#define Clear_tm27_intr()  lcsr->intr_clear |= 0x100
 
 #define Lower_tm27_intr()
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define delay( microseconds ) \
-  { register rtems_unsigned32 _delay=(microseconds); \
-    register rtems_unsigned32 _tmp=123; \
-    asm volatile( "0: \
-                     nbcd      %0 ; \
-                     nbcd      %0 ; \
-                     dbf       %1,0b" \
-                  : "=d" (_tmp), "=d" (_delay) \
-                  : "0"  (_tmp), "1"  (_delay) ); \
-  }
-
-/* Constants */
-
-#ifdef 1626_INIT
+#ifdef M162_INIT
 #undef EXTERN
 #define EXTERN
 #else

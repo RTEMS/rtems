@@ -32,14 +32,13 @@
 #include <clockdrv.h>
 
 #define MS_COUNT          1000            /* T2's countdown constant (1 ms) */
-#define CLOCK_INT_LEVEL   6                         /* T2's interrupt level */
+#define CLOCK_INT_LEVEL   6               /* T2's interrupt level */
 
-rtems_unsigned32 Clock_isrs;        /* ISRs until next tick */
-volatile rtems_unsigned32 Clock_driver_ticks;
-                                    /* ticks since initialization */
+rtems_unsigned32 Clock_isrs;                  /* ISRs until next tick */
+volatile rtems_unsigned32 Clock_driver_ticks; /* ticks since initialization */
 rtems_isr_entry  Old_ticker;
 
-rtems_device_driver Clock_initialize(
+rtems_device_driver Clock_initialize( 
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void *pargp,
@@ -50,38 +49,36 @@ rtems_device_driver Clock_initialize(
   Install_clock( Clock_isr );
 }
 
-void ReInstall_clock( clock_isr )
-rtems_isr_entry clock_isr;
+void ReInstall_clock(rtems_isr_entry clock_isr)
 {
   rtems_unsigned32 isrlevel;
 
   rtems_interrupt_disable( isrlevel );
-  (void) set_vector( clock_isr, (VECTOR_BASE >> 28) * 0x10 + 0x9, 1 );
+  (void) set_vector( clock_isr, VBR0 * 0x10 + 0x9, 1 );
   rtems_interrupt_enable( isrlevel );
 }
 
-void Install_clock( clock_isr )
-rtems_isr_entry clock_isr;
+void Install_clock(rtems_isr_entry clock_isr )
 {
 
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
   if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry)
-      set_vector( clock_isr, (VECTOR_BASE >> 28) * 0x10 + 0x9, 1 );
-
-    lcsr->vector_base = 0x67800000;              /* set vb, enable interrupts */
-    lcsr->to_ctl = 0xE7;              /* prescaler to 1 MHz (see Appendix A1) */
+    Old_ticker = 
+      (rtems_isr_entry) set_vector( clock_isr, VBR0 * 0x10 + 0x9, 1 );
+    lcsr->vector_base |= MASK_INT;   /* unmask VMEchip2 interrupts */
+    lcsr->to_ctl = 0xE7;             /* prescaler to 1 MHz (see Appendix A1) */
     lcsr->timer_cmp_2 = MS_COUNT;
-    lcsr->timer_cnt_2 = 0;                                   /* clear counter */
-    lcsr->board_ctl |= 0x700;  /* increment, reset-on-compare, clear-ovfl-cnt */
+    lcsr->timer_cnt_2 = 0;           /* clear counter */
+    lcsr->board_ctl |= 0x700;        /* increment, reset-on-compare, and */
+                                     /*   clear-overflow-cnt */
 
-    lcsr->intr_level[0] |= CLOCK_INT_LEVEL * 0x10;           /* set int level */
-    lcsr->intr_ena |= 0x02000000;            /* enable tick timer 2 interrupt */
+    lcsr->intr_level[0] |= CLOCK_INT_LEVEL * 0x10;      /* set int level */
+    lcsr->intr_ena |= 0x02000000;       /* enable tick timer 2 interrupt */
 
     atexit( Clock_exit );
-  }
+  } 
 
 }
 

@@ -31,41 +31,42 @@
  *  $Id$
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
 
 /* Periodic tick interval */
-#define TICK_INTERVAL                                   0x10000
-#define TIMER_INT_LEVEL                         6
+#define TICK_INTERVAL         0x10000U
+#define TIMER_INT_LEVEL       6
 
-int Ttimer_val;
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_unsigned32    Ttimer_val;
+rtems_boolean       Timer_driver_Find_average_overhead;
 
 rtems_isr timerisr();
 
 void Timer_initialize()
 {
-  (void) set_vector( timerisr, (VECTOR_BASE >> 28) * 0x10 + 0x8, 0 );
-
-  Ttimer_val = 0;                                    /* clear timer ISR count */
-  lcsr->vector_base = 0x67800000;                /* set vb, enable interrupts */
+  (void) set_vector( timerisr, VBR0 * 0x10 + 0x8, 0 );
+  
+  Ttimer_val = 0;                     /* clear timer ISR count */
+  lcsr->vector_base |= MASK_INT;      /* unmask VMEchip2 interrupts */
+  lcsr->intr_clear |= 0x01000000;     /* clear pending interrupt */
   lcsr->to_ctl = 0xE7;                /* prescaler to 1 MHz (see Appendix A1) */
   lcsr->timer_cmp_1 = TICK_INTERVAL;
-  lcsr->timer_cnt_1 = 0;                                     /* clear counter */
-  lcsr->board_ctl |= 7;        /* increment, reset-on-compare, clear-ovfl-cnt */
+  lcsr->timer_cnt_1 = 0;              /* clear counter */
+  lcsr->board_ctl |= 7;               /* increment, reset-on-compare, */
+                                      /*   and clear-overflow-cnt */
 
-  lcsr->intr_level[0] |= TIMER_INT_LEVEL;                    /* set int level */
-  lcsr->intr_ena |= 0x01000000;              /* enable tick timer 1 interrupt */
+  lcsr->intr_level[0] |= TIMER_INT_LEVEL; /* set int level */
+  lcsr->intr_ena |= 0x01000000;           /* enable tick timer 1 interrupt */
 }
 
-#define AVG_OVERHEAD      6  /* It typically takes 3.0 microseconds */
-                             /* (6 countdowns) to start/stop the timer. */
-#define LEAST_VALID       10 /* Don't trust a value lower than this */
+#define AVG_OVERHEAD      3U    /* It typically takes 3.0 microseconds */
+                                /* (3 countdowns) to start/stop the timer. */
+#define LEAST_VALID       10U   /* Don't trust a value lower than this */
 
-int Read_timer()
+int Read_timer() 
 {
-  unsigned long                 total;
+  rtems_unsigned32    total;
 
   total = (Ttimer_val * TICK_INTERVAL) + lcsr->timer_cnt_1;
 
@@ -75,8 +76,9 @@ int Read_timer()
   if ( total < LEAST_VALID )
     return 0;            /* below timer resolution */
 
-  return (total-AVG_OVERHEAD);                  /* in musec units */
+  return (total-AVG_OVERHEAD) >> 1;
 }
+
 
 rtems_status_code Empty_function( void )
 {

@@ -36,7 +36,7 @@ standard release.
 Port Description
 ----------------
 The port was done using already existing ports to the M68020 boards,
-DMV152 and MVME136.
+DMV152 and MVME136. 
 
 The host system was SUN/Solaris 2.3, and the cross-development
 environment consisted of Free Software Foundation (FSF)'s GNU C
@@ -74,8 +74,8 @@ configured for the board in use
          monitors_vector_table = (m68k_isr *)0xFFE00000;
 
 was made to point to the power-up location of MVME162 interrupt vector
-table.
-
+table.  
+     
 - The shutdown is a temporary solution. To exit cleanly, it has to disable
 all enabled interrupts and restore the board to its power-up status.
 Presently this is not done satisfactorily, as a result, the board needs
@@ -112,7 +112,15 @@ parser;
 crossgcc mailing list
 - to FSF and Cygnus Support for great free software;
 
-
+What's new
+----------
+  - 28.07.95 BSP adjusted to rtems-3.2.0. 
+  - Now console driver uses interrupts on receive (ring buffer
+    code lifted with thanks from the IDP BSP next door (../idp))
+  - both front-panel serial interfaces are supported
+  - serious bug in timer interrupts fixed
+  - interrupt test tm27 now supported
+  
 +----------------------------------+-------------------------------+
 |  Dr. Mikhail (Misha) Savitski    |  Voice : +46-980-79162        |
 |  Software Systems Engineer       |  Fax   : +46-980-79161        |

@@ -24,17 +24,32 @@
 #include <rtems.h>
 #include "console.h"
 #include "bsp.h"
+#include "ringbuf.h"
 
-/*  console_initialize
- *
- *  This routine initializes the console IO driver.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
+Ring_buffer_t  Buffer[2];
+
+/*
+ *  Interrupt handler for receiver interrupts
  */
+
+rtems_isr C_Receive_ISR(rtems_vector_number vector)
+{
+  register int    ipend, port;
+
+  ZWRITE0(1, 0x38);     /* reset highest IUS */
+
+  ipend = ZREAD(1, 3);  /* read int pending from A side */
+
+  if      (ipend == 0x04) port = 0;   /* channel B intr pending */
+  else if (ipend == 0x20) port = 1;   /* channel A intr pending */
+  else return;
+    
+  Ring_buffer_Add_character(&Buffer[port], ZREADD(port));
+  
+  if (ZREAD(port, 1) & 0x70) {    /* check error stat */
+    ZWRITE0(port, 0x30);          /* reset error */
+  }
+}
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
@@ -44,122 +59,82 @@ rtems_device_driver console_initialize(
   rtems_unsigned32          *status
 )
 {
+  int     i;
+  
+  /*
+   * Initialise receiver interrupts on both ports
+   */
+
+  for (i = 0; i <= 1; i++) {
+    Ring_buffer_Initialize( &Buffer[i] );
+    ZWRITE(i, 2, SCC_VECTOR);
+    ZWRITE(i, 10, 0);
+    ZWRITE(i, 1, 0x10);     /* int on all Rx chars or special condition */
+    ZWRITE(i, 9, 8);        /* master interrupt enable */
+  }
+    
+  set_vector(C_Receive_ISR, SCC_VECTOR, 1); /* install ISR for ports A and B */
+
+  mcchip->vector_base = 0;
+  mcchip->gen_control = 2;        /* MIEN */
+  mcchip->SCC_int_ctl = 0x13;     /* SCC IEN, IPL3 */
+
   *status = RTEMS_SUCCESSFUL;
 }
 
-
-/*  is_character_ready
- *
- *  This routine returns TRUE if a character is available.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
+/*
+ *   Non-blocking char input
  */
 
-rtems_boolean is_character_ready(
-  char *ch
-)
+rtems_boolean char_ready(int port, char *ch)
 {
-  rtems_unsigned8 rr_0;
+  if ( Ring_buffer_Is_empty( &Buffer[port] ) )
+    return FALSE;
 
-  Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-  if ( !(rr_0 & RR_0_RX_DATA_AVAILABLE) )
-    return( FALSE );
-
-  Z8x30_READ_DATA( CONSOLE_DATA, *ch );
-
-  return(TRUE);
-}
-
-/*  inbyte
- *
- *  This routine reads a character from the SCC.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    character read from SCC
- */
-
-char inbyte( void )
-{
-  rtems_unsigned8 rr_0;
-  char ch;
-
-  while ( 1 ) {
-    Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-    if ( (rr_0 & RR_0_RX_DATA_AVAILABLE) != 0 )
-      break;
-  }
-
-  Z8x30_READ_DATA( CONSOLE_DATA, ch );
-  return ch;
-}
-
-
-/*  outbyte
- *
- *  This routine transmits a character out the SCC.  It supports
- *  XON/XOFF flow control.
- *
- *  Input parameters:
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
- */
-
-void outbyte(
-  char ch
-)
-{
-  rtems_unsigned8 rr_0;
-  char            flow_control;
-
-  while ( 1 ) {
-    Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-    if ( (rr_0 & RR_0_TX_BUFFER_EMPTY) != 0 )
-      break;
-  }
-
-  while ( 1 ) {
-    Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-    if ( (rr_0 & RR_0_RX_DATA_AVAILABLE) == 0 )
-      break;
-
-    Z8x30_READ_DATA( CONSOLE_DATA, flow_control );
-
-    if ( flow_control == XOFF )
-      do {
-        do {
-          Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-        } while ( (rr_0 & RR_0_RX_DATA_AVAILABLE) == 0 );
-        Z8x30_READ_DATA( CONSOLE_DATA, flow_control );
-      } while ( flow_control != XON );
-  }
-
-  Z8x30_WRITE_DATA( CONSOLE_DATA, ch );
+  Ring_buffer_Remove_character( &Buffer[port], *ch );
+  
+  return TRUE;
 }
 
 /*
- * __read  -- read bytes from the serial port. Ignore fd, since
- *            we only have stdin.
+ *   Block on char input
  */
 
-int __read(
-  int fd,
-  char *buf,
-  int nbytes
-)
+char char_wait(int port)
 {
-  int i = 0;
+  unsigned char tmp_char;
+ 
+  while ( !char_ready(port, &tmp_char) );
+  return tmp_char;
+}
+
+/*  
+ *   This routine transmits a character out the SCC.  It no longer supports
+ *   XON/XOFF flow control.
+ */
+
+void char_put(int port, char ch)
+{
+  while (1) {
+    if (ZREAD0(port) & TX_BUFFER_EMPTY) break;
+  }
+  ZWRITED(port, ch);
+}
+
+/*
+ *    Map port A (1) to stdin, stdout, and stderr.
+ *    Map everything else to port B (0).
+ */
+
+int __read(int fd, char *buf, int nbytes)
+{
+  int i, port;
+
+  if ( fd <= 2 ) port = 1;
+  else           port = 0;
 
   for (i = 0; i < nbytes; i++) {
-    *(buf + i) = inbyte();
+    *(buf + i) = char_wait(port);
     if ((*(buf + i) == '\n') || (*(buf + i) == '\r')) {
       (*(buf + i++)) = '\n';
       (*(buf + i)) = 0;
@@ -170,24 +145,22 @@ int __read(
 }
 
 /*
- * __write -- write bytes to the serial port. Ignore fd, since
- *            stdout and stderr are the same. Since we have no filesystem,
- *            open will only return an error.
+ *  Map port A (1) to stdin, stdout, and stderr.
+ *  Map everything else to port B (0).
  */
 
-int __write(
-  int fd,
-  char *buf,
-  int nbytes
-)
+int __write(int fd, char *buf, int nbytes)
 {
-  int i;
-
+  int i, port;
+ 
+  if ( fd <= 2 ) port = 1;
+  else           port = 0;
+ 
   for (i = 0; i < nbytes; i++) {
     if (*(buf + i) == '\n') {
-      outbyte ('\r');
+      char_put (port, '\r');
     }
-    outbyte (*(buf + i));
+    char_put (port, *(buf + i));
   }
   return (nbytes);
 }

@@ -33,6 +33,7 @@ BEGIN_CODE
 .set INTR_CLEAR_REG,      0xfff40074      | interrupt clear register
 .set RELOAD,              0x01000000      | clear tick 1 interrupt
 
+        PUBLIC (Ttimer_val)
         PUBLIC (timerisr)
 SYM (timerisr):
         move.l  a0, -(a7)                 | save a0
