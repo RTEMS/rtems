@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* bspspuriousinit.c, m68000spurious.c, m68kpretaskinghook.c, setvec.c,
+	start.S, mvme/mvme16x_hw.h: URL for license changed.
+
 2002-06-25	Joel Sherrill <joel@OARcorp.com>
 
 	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k
