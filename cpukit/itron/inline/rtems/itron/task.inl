@@ -157,7 +157,7 @@ RTEMS_INLINE_ROUTINE boolean _ITRON_Task_Is_null (
  *  _ITRON_tasks_Priority_to_Core
  */
  
-RTEMS_INLINE_ROUTINE _ITRON_Task_Priority_to_Core( 
+RTEMS_INLINE_ROUTINE Priority_Control _ITRON_Task_Priority_to_Core( 
   PRI   ITRON_priority 
 ) 
 {  
@@ -169,7 +169,7 @@ RTEMS_INLINE_ROUTINE _ITRON_Task_Priority_to_Core(
  *  _ITRON_tasks_Core_to_Priority
  */
  
-RTEMS_INLINE_ROUTINE _ITRON_Task_Core_to_Priority( 
+RTEMS_INLINE_ROUTINE PRI _ITRON_Task_Core_to_Priority( 
   Priority_Control  core_priority 
 ) 
 {  

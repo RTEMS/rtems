@@ -1,5 +1,10 @@
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* itron/inline/rtems/itron/task.inl (_ITRON_Task_Priority_to_Core, 
+	_ITRON_tasks_Core_to_Priority): Correct return types.
+
+2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/src/attr.c, rtems/src/clockget.c, rtems/src/clockset.c,
 	rtems/src/clocktick.c, rtems/src/dpmem.c, rtems/src/dpmemcreate.c,
 	rtems/src/dpmemdelete.c, rtems/src/dpmemexternal2internal.c,
