@@ -65,6 +65,8 @@ void _CPU_Initialize(
 )
 {
   void                  *pointer;
+
+#ifndef NO_TABLE_MOVE
   unsigned32             trap_table_start;
   unsigned32             tbr_value;
   CPU_Trap_table_entry  *old_tbr;
@@ -77,6 +79,7 @@ void _CPU_Initialize(
    *  and overflow handlers.  It is the responsibility of the BSP to provide
    *  install these in the initial trap table.
    */
+
  
   trap_table_start = (unsigned32) &_CPU_Trap_Table_area;
   if (trap_table_start & (SPARC_TRAP_TABLE_ALIGNMENT-1))
@@ -92,6 +95,8 @@ void _CPU_Initialize(
   memcpy( trap_table, (void *) old_tbr, 256 * sizeof( CPU_Trap_table_entry ) );
 
   sparc_set_tbr( trap_table_start );
+
+#endif
 
   /*
    *  This seems to be the most appropriate way to obtain an initial

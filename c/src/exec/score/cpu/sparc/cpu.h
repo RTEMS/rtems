@@ -585,8 +585,11 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
  
 #define SPARC_TRAP_TABLE_ALIGNMENT 4096
  
+#ifndef NO_TABLE_MOVE
+
 SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
            __attribute__ ((aligned (SPARC_TRAP_TABLE_ALIGNMENT)));
+#endif
  
 
 /*

@@ -242,14 +242,14 @@ typedef struct {
 #define ERC32_MEMORY_CONFIGURATION_RAM_SIZE_32MB  ( 7 << 10 )
 
 #define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_MASK  0x001C0000
-#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_4K    ( 0 << 18 )
-#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_8K    ( 1 << 18 )
-#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_16K   ( 2 << 18 )
-#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_32K   ( 3 << 18 )
-#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_64K   ( 4 << 18 )
-#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_128K  ( 5 << 18 )
-#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_256K  ( 6 << 18 )
-#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_512K  ( 7 << 18 )
+#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_128K    ( 0 << 18 )
+#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_256K    ( 1 << 18 )
+#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_512K   ( 2 << 18 )
+#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_1M   ( 3 << 18 )
+#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_2M   ( 4 << 18 )
+#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_4M  ( 5 << 18 )
+#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_8M  ( 6 << 18 )
+#define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_16M  ( 7 << 18 )
  
 /*
  *  The following defines the bits in the Timer Control Register.
@@ -276,15 +276,9 @@ typedef struct {
 /*
  *  The following defines the bits in the UART Control Registers.
  *
- *  NOTE: Same bits in UART channels A and B.
  */
 
 #define ERC32_MEC_UART_CONTROL_RTD  0x000000FF /* RX/TX data */ 
-#define ERC32_MEC_UART_CONTROL_DR   0x00000100 /* RX Data Ready */
-#define ERC32_MEC_UART_CONTROL_TSE  0x00000200 /* TX Send Empty */
-                                               /*   (i.e. no data to send) */
-#define ERC32_MEC_UART_CONTROL_THE  0x00000400 /* TX Hold Empty */
-                                               /*   (i.e. ready to load) */
  
 /*
  *  The following defines the bits in the MEC UART Control Registers.
@@ -298,6 +292,10 @@ typedef struct {
 #define ERC32_MEC_UART_STATUS_OE   0x00000040 /* RX Overrun Error */
 #define ERC32_MEC_UART_STATUS_CU   0x00000080 /* Clear Errors */
 #define ERC32_MEC_UART_STATUS_TXE  0x00000006 /* TX Empty */
+#define ERC32_MEC_UART_STATUS_CLRA 0x00000080 /* Clear UART A */
+#define ERC32_MEC_UART_STATUS_CLRB 0x00800000 /* Clear UART B */
+#define ERC32_MEC_UART_STATUS_ERRA 0x00000070 /* Error in UART A */
+#define ERC32_MEC_UART_STATUS_ERRB 0x00700000 /* Error in UART B */
 
 #define ERC32_MEC_UART_STATUS_DRA   (ERC32_MEC_UART_STATUS_DR  << 0)
 #define ERC32_MEC_UART_STATUS_TSEA  (ERC32_MEC_UART_STATUS_TSE << 0)
@@ -349,8 +347,8 @@ extern ERC32_Register_Map ERC32_MEC;
     \
     sparc_disable_interrupts( _level ); \
     ERC32_MEC.Test_Control = ERC32_MEC.Test_Control | 0x80000; \
-    sparc_enable_interrupts( _level ); \
     ERC32_MEC.Interrupt_Force = (1 << (_source)); \
+    sparc_enable_interrupts( _level ); \
   } while (0)
  
 #define ERC32_Is_interrupt_pending( _source ) \
@@ -469,7 +467,7 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
     sparc_disable_interrupts( _level ); \
       _control = _ERC32_MEC_Timer_Control_Mirror; \
       _control &= ERC32_MEC_TIMER_COUNTER_DEFINED_MASK << 8; \
-      _ERC32_MEC_Timer_Control_Mirror = _control | __value; \
+      _ERC32_MEC_Timer_Control_Mirror = _control | _value; \
       _control &= (ERC32_MEC_TIMER_COUNTER_CURRENT_MODE_MASK << 8); \
       _control |= __value; \
       /* printf( "GPT 0x%x 0x%x 0x%x\n", _value, __value, _control );  */ \
@@ -479,7 +477,7 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
 
 #define ERC32_MEC_Get_General_Purpose_Timer_Control( _value ) \
   do { \
-    (_value) = (_ERC32_MEC_Timer_Control_Mirror >> 8) & 0xf; \
+    (_value) = _ERC32_MEC_Timer_Control_Mirror & 0xf; \
   } while ( 0 )
 
 /*
@@ -498,7 +496,7 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
     sparc_disable_interrupts( _level ); \
       _control = _ERC32_MEC_Timer_Control_Mirror; \
       _control &= ERC32_MEC_TIMER_COUNTER_DEFINED_MASK; \
-      _ERC32_MEC_Timer_Control_Mirror = _control | _value; \
+      _ERC32_MEC_Timer_Control_Mirror = _control | __value; \
       _control &= ERC32_MEC_TIMER_COUNTER_CURRENT_MODE_MASK; \
       _control |= __value; \
       /* printf( "RTC 0x%x 0x%x 0x%x\n", _value, __value, _control ); */ \
@@ -508,7 +506,7 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
  
 #define ERC32_MEC_Get_Real_Time_Clock_Timer_Control( _value ) \
   do { \
-    (_value) = _ERC32_MEC_Timer_Control_Mirror & 0xf; \
+    (_value) = (_ERC32_MEC_Timer_Control_Mirror >> 8) & 0xf; \
   } while ( 0 )
 
 
