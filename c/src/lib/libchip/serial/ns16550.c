@@ -74,7 +74,7 @@ extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
 /*
  *  Console Device Driver Entry Points
  */
-static boolean ns16550_probe(int minor)
+NS16550_STATIC boolean ns16550_probe(int minor)
 {
   /*
    * If the configuration dependent probe has located the device then
@@ -83,7 +83,7 @@ static boolean ns16550_probe(int minor)
   return(TRUE);
 }
 
-static void ns16550_init(int minor)
+NS16550_STATIC void ns16550_init(int minor)
 {
   unsigned32              pNS16550;
   unsigned8               ucTrash;
@@ -144,7 +144,7 @@ static void ns16550_init(int minor)
   ucTrash = (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER );
 }
 
-static int ns16550_open(
+NS16550_STATIC int ns16550_open(
   int      major,
   int      minor,
   void    * arg
@@ -161,7 +161,7 @@ static int ns16550_open(
   return(RTEMS_SUCCESSFUL);
 }
 
-static int ns16550_close(
+NS16550_STATIC int ns16550_close(
   int      major,
   int      minor,
   void    * arg
@@ -180,7 +180,7 @@ static int ns16550_close(
 /* 
  *  ns16550_write_polled
  */
-static void ns16550_write_polled(
+NS16550_STATIC void ns16550_write_polled(
   int   minor, 
   char  cChar
 )
@@ -225,7 +225,7 @@ static void ns16550_write_polled(
 /*
  *  ns16550_assert_RTS
  */
-static int ns16550_assert_RTS(int minor)
+NS16550_STATIC int ns16550_assert_RTS(int minor)
 {
   unsigned32              pNS16550;
   unsigned32              Irql;
@@ -250,7 +250,7 @@ static int ns16550_assert_RTS(int minor)
 /*
  *  ns16550_negate_RTS
  */
-static int ns16550_negate_RTS(int minor)
+NS16550_STATIC int ns16550_negate_RTS(int minor)
 {
   unsigned32              pNS16550;
   unsigned32              Irql;
@@ -279,7 +279,7 @@ static int ns16550_negate_RTS(int minor)
 /*
  *  ns16550_assert_DTR
  */
-static int ns16550_assert_DTR(int minor)
+NS16550_STATIC int ns16550_assert_DTR(int minor)
 {
   unsigned32              pNS16550;
   unsigned32              Irql;
@@ -304,7 +304,7 @@ static int ns16550_assert_DTR(int minor)
 /*
  *  ns16550_negate_DTR
  */
-static int ns16550_negate_DTR(int minor)
+NS16550_STATIC int ns16550_negate_DTR(int minor)
 {
   unsigned32              pNS16550;
   unsigned32              Irql;
@@ -339,7 +339,7 @@ static int ns16550_negate_DTR(int minor)
  *  Return values:     NONE
  */
 
-static void ns16550_process(
+NS16550_STATIC void ns16550_process(
         int             minor
 )
 {
@@ -406,7 +406,7 @@ static void ns16550_process(
   while((ucInterruptId&0xf)!=0x1);
 }
 
-static rtems_isr ns16550_isr(
+NS16550_STATIC rtems_isr ns16550_isr(
   rtems_vector_number vector
 )
 {
@@ -422,7 +422,7 @@ static rtems_isr ns16550_isr(
 /*
  *  ns16550_flush
  */
-static int ns16550_flush(int major, int minor, void *arg)
+NS16550_STATIC int ns16550_flush(int major, int minor, void *arg)
 {
   while(!Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
     /*
@@ -451,7 +451,7 @@ static int ns16550_flush(int major, int minor, void *arg)
  *  Return values:     NONE
  */
 
-static void ns16550_enable_interrupts(
+NS16550_STATIC void ns16550_enable_interrupts(
   int minor
 )
 {
@@ -470,7 +470,7 @@ static void ns16550_enable_interrupts(
 
 }
 
-static void ns16550_initialize_interrupts(int minor)
+NS16550_STATIC void ns16550_initialize_interrupts(int minor)
 {
   ns16550_init(minor);
 
@@ -489,7 +489,7 @@ static void ns16550_initialize_interrupts(int minor)
  *  Console Termios output entry point.
  *
  */
-static int ns16550_write_support_int(
+NS16550_STATIC int ns16550_write_support_int(
   int   minor, 
   const char *buf, 
   int   len
@@ -554,7 +554,7 @@ static int ns16550_write_support_int(
  *  Console Termios output entry point.
  *
  */
-static int ns16550_write_support_polled(
+NS16550_STATIC int ns16550_write_support_polled(
   int         minor, 
   const char *buf, 
   int         len
@@ -585,7 +585,7 @@ static int ns16550_write_support_polled(
  *  Console Termios polling input entry point.
  */
 
-static int ns16550_inbyte_nonblocking_polled( 
+NS16550_STATIC int ns16550_inbyte_nonblocking_polled( 
   int minor 
 )
 {

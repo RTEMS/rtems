@@ -23,6 +23,15 @@ extern "C" {
 #endif
 
 /*
+ *  Define NS16550_STATIC to nothing while debugging so the entry points
+ *  will show up in the symbol table.
+ */
+
+#define NS16550_STATIC
+
+/* #define NS16550_STATIC static */
+
+/*
  * Define serial port read registers structure.
  */
 
@@ -153,60 +162,60 @@ typedef struct _ns16550_context
  * Driver functions
  */
 
-static boolean ns16550_probe(int minor);
+NS16550_STATIC boolean ns16550_probe(int minor);
 
-static void ns16550_init(int minor);
+NS16550_STATIC void ns16550_init(int minor);
 
-static int ns16550_open(
+NS16550_STATIC int ns16550_open(
   int major,
   int minor,
   void  * arg
 );
 
-static int ns16550_close(
+NS16550_STATIC int ns16550_close(
   int major,
   int minor,
   void  * arg
 );
 
-static void ns16550_write_polled(
+NS16550_STATIC void ns16550_write_polled(
   int   minor, 
   char  cChar
 );
 
-static int ns16550_assert_RTS(
+NS16550_STATIC int ns16550_assert_RTS(
   int minor
 );
 
-static int ns16550_negate_RTS(
+NS16550_STATIC int ns16550_negate_RTS(
   int minor
 );
 
-static int ns16550_assert_DTR(
+NS16550_STATIC int ns16550_assert_DTR(
   int minor
 );
 
-static int ns16550_negate_DTR(
+NS16550_STATIC int ns16550_negate_DTR(
   int minor
 );
 
-static void ns16550_initialize_interrupts(int minor);
+NS16550_STATIC void ns16550_initialize_interrupts(int minor);
 
-static int ns16550_flush(int major, int minor, void *arg);
+NS16550_STATIC int ns16550_flush(int major, int minor, void *arg);
 
-static int ns16550_write_support_int(
+NS16550_STATIC int ns16550_write_support_int(
   int   minor,
   const char *buf,
   int   len
 );
 
-static int ns16550_write_support_polled(
+NS16550_STATIC int ns16550_write_support_polled(
   int   minor,
   const char *buf,
   int   len
   );
 
-static int ns16550_inbyte_nonblocking_polled(
+NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
   int minor
 );
 
