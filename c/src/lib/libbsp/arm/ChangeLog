@@ -1,3 +1,8 @@
+2003-09-15	Jay Monkman <jtm@smoothsmoothie.com>
+
+	PR 480/bsps
+	* shared/irq/irq_asm.S: Remove duplicate code.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.

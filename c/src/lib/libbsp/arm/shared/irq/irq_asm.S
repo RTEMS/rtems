@@ -56,12 +56,6 @@ _ISR_Handler:
         sub     r1, r1,#1
         str     r1, [r0]
 
-/* check to see if we interrupted and INT (with FIQ?) */
-        mrs   r0, spsr
-        and   r0, r0, #0x1f
-        cmp   r0, #0x12        /* is it INT mode? */  
-        beq   exitit
-
 /* check to see if we interrupted nd INT (with FIQ?) */
         mrs   r0, spsr
         and   r0, r0, #0x1f
