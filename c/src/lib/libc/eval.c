@@ -51,7 +51,7 @@ int rtems_filesystem_evaluate_path(
    * not.
    */
 
-  if ( follow_link ) {
+  if ( (result == 0) && follow_link ) {
 
     if ( !pathloc->ops->node_type )
       set_errno_and_return_minus_one( ENOTSUP );
