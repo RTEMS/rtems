@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 LIBNAME = libnetchip
 LIB = ${ARCH}/${LIBNAME}.a
 
-C_FILES = sonic.c
+C_FILES = dec21140.c sonic.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 H_FILES = sonic.h
