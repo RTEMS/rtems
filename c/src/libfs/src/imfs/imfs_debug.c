@@ -121,7 +121,7 @@ void IMFS_dump_directory(
     the_jnode = (IMFS_jnode_t *) the_node;
 
     for ( i=0 ; i<=level ; i++ )
-      printf( "    " );
+      printf( "...." );
     IMFS_print_jnode( the_jnode );
     if ( the_jnode->type == IMFS_DIRECTORY )
       IMFS_dump_directory( the_jnode, level + 1 );
