@@ -116,7 +116,7 @@ failed for c/make
 This kind of error message typically indicates a broken toolchain, broken
 toolchain installation or broken user environment.
 
-Examinating the @code{config.long} corresponding to the the failing
+Examinating the @code{config.log} corresponding to the the failing
 configure script should provide further information of what
 actually goes wrong (In the example above: @code{<target>/c/<BSP>/make/config.log})
 
