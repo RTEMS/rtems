@@ -1,38 +1,38 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	include/Makefile.am: Reflect having moved automake.
-	tm01/Makefile.am: Reflect having moved automake.
-	tm02/Makefile.am: Reflect having moved automake.
-	tm03/Makefile.am: Reflect having moved automake.
-	tm04/Makefile.am: Reflect having moved automake.
-	tm05/Makefile.am: Reflect having moved automake.
-	tm06/Makefile.am: Reflect having moved automake.
-	tm07/Makefile.am: Reflect having moved automake.
-	tm08/Makefile.am: Reflect having moved automake.
-	tm09/Makefile.am: Reflect having moved automake.
-	tm10/Makefile.am: Reflect having moved automake.
-	tm11/Makefile.am: Reflect having moved automake.
-	tm12/Makefile.am: Reflect having moved automake.
-	tm13/Makefile.am: Reflect having moved automake.
-	tm14/Makefile.am: Reflect having moved automake.
-	tm15/Makefile.am: Reflect having moved automake.
-	tm16/Makefile.am: Reflect having moved automake.
-	tm17/Makefile.am: Reflect having moved automake.
-	tm18/Makefile.am: Reflect having moved automake.
-	tm19/Makefile.am: Reflect having moved automake.
-	tm20/Makefile.am: Reflect having moved automake.
-	tm21/Makefile.am: Reflect having moved automake.
-	tm22/Makefile.am: Reflect having moved automake.
-	tm23/Makefile.am: Reflect having moved automake.
-	tm24/Makefile.am: Reflect having moved automake.
-	tm25/Makefile.am: Reflect having moved automake.
-	tm26/Makefile.am: Reflect having moved automake.
-	tm27/Makefile.am: Reflect having moved automake.
-	tm28/Makefile.am: Reflect having moved automake.
-	tm29/Makefile.am: Reflect having moved automake.
-	tmck/Makefile.am: Reflect having moved automake.
-	tmoverhd/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* include/Makefile.am: Reflect having moved automake/.
+	* tm01/Makefile.am: Reflect having moved automake/.
+	* tm02/Makefile.am: Reflect having moved automake/.
+	* tm03/Makefile.am: Reflect having moved automake/.
+	* tm04/Makefile.am: Reflect having moved automake/.
+	* tm05/Makefile.am: Reflect having moved automake/.
+	* tm06/Makefile.am: Reflect having moved automake/.
+	* tm07/Makefile.am: Reflect having moved automake/.
+	* tm08/Makefile.am: Reflect having moved automake/.
+	* tm09/Makefile.am: Reflect having moved automake/.
+	* tm10/Makefile.am: Reflect having moved automake/.
+	* tm11/Makefile.am: Reflect having moved automake/.
+	* tm12/Makefile.am: Reflect having moved automake/.
+	* tm13/Makefile.am: Reflect having moved automake/.
+	* tm14/Makefile.am: Reflect having moved automake/.
+	* tm15/Makefile.am: Reflect having moved automake/.
+	* tm16/Makefile.am: Reflect having moved automake/.
+	* tm17/Makefile.am: Reflect having moved automake/.
+	* tm18/Makefile.am: Reflect having moved automake/.
+	* tm19/Makefile.am: Reflect having moved automake/.
+	* tm20/Makefile.am: Reflect having moved automake/.
+	* tm21/Makefile.am: Reflect having moved automake/.
+	* tm22/Makefile.am: Reflect having moved automake/.
+	* tm23/Makefile.am: Reflect having moved automake/.
+	* tm24/Makefile.am: Reflect having moved automake/.
+	* tm25/Makefile.am: Reflect having moved automake/.
+	* tm26/Makefile.am: Reflect having moved automake/.
+	* tm27/Makefile.am: Reflect having moved automake/.
+	* tm28/Makefile.am: Reflect having moved automake/.
+	* tm29/Makefile.am: Reflect having moved automake/.
+	* tmck/Makefile.am: Reflect having moved automake/.
+	* tmoverhd/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

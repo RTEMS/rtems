@@ -1,14 +1,14 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	cpuuse/Makefile.am: Reflect having moved automake.
-	malloctest/Makefile.am: Reflect having moved automake.
-	monitor/Makefile.am: Reflect having moved automake.
-	putenvtest/Makefile.am: Reflect having moved automake.
-	rtems++/Makefile.am: Reflect having moved automake.
-	rtmonuse/Makefile.am: Reflect having moved automake.
-	stackchk/Makefile.am: Reflect having moved automake.
-	termios/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* cpuuse/Makefile.am: Reflect having moved automake/.
+	* malloctest/Makefile.am: Reflect having moved automake/.
+	* monitor/Makefile.am: Reflect having moved automake/.
+	* putenvtest/Makefile.am: Reflect having moved automake/.
+	* rtems++/Makefile.am: Reflect having moved automake/.
+	* rtmonuse/Makefile.am: Reflect having moved automake/.
+	* stackchk/Makefile.am: Reflect having moved automake/.
+	* termios/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

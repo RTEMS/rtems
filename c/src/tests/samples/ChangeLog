@@ -1,19 +1,19 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	base_mp/Makefile.am: Reflect having moved automake.
-	base_mp/node1/Makefile.am: Reflect having moved automake.
-	base_mp/node2/Makefile.am: Reflect having moved automake.
-	base_sp/Makefile.am: Reflect having moved automake.
-	cdtest/Makefile.am: Reflect having moved automake.
-	fileio/Makefile.am: Reflect having moved automake.
-	hello/Makefile.am: Reflect having moved automake.
-	loopback/Makefile.am: Reflect having moved automake.
-	minimum/Makefile.am: Reflect having moved automake.
-	paranoia/Makefile.am: Reflect having moved automake.
-	pppd/Makefile.am: Reflect having moved automake.
-	ticker/Makefile.am: Reflect having moved automake.
-	unlimited/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* base_mp/Makefile.am: Reflect having moved automake/.
+	* base_mp/node1/Makefile.am: Reflect having moved automake/.
+	* base_mp/node2/Makefile.am: Reflect having moved automake/.
+	* base_sp/Makefile.am: Reflect having moved automake/.
+	* cdtest/Makefile.am: Reflect having moved automake/.
+	* fileio/Makefile.am: Reflect having moved automake/.
+	* hello/Makefile.am: Reflect having moved automake/.
+	* loopback/Makefile.am: Reflect having moved automake/.
+	* minimum/Makefile.am: Reflect having moved automake/.
+	* paranoia/Makefile.am: Reflect having moved automake/.
+	* pppd/Makefile.am: Reflect having moved automake/.
+	* ticker/Makefile.am: Reflect having moved automake/.
+	* unlimited/Makefile.am: Reflect having moved automake/.
 
 2003-08-13	Joel Sherrill <joel@OARcorp.com>
 
