@@ -188,8 +188,6 @@ console_initialize(rtems_device_major_number major,
 } /* console_initialize */
 
 
-static int console_open_count = 0;
-
 static int console_last_close(int major, int minor, void *arg)
 {
   BSP_remove_rtems_irq_handler (&console_isr_data);
