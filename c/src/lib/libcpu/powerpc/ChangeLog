@@ -1,3 +1,9 @@
+2002-05-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/powerpc/debugmod.h: New file (extracted from
+	score/ppc.h).
+	* Makefile.am: Relect changes above.
+
 2001-05-14	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/include/io.h: Per PR215 address the following issues:
