@@ -30,7 +30,7 @@ dirs:
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
 info: dirs ada_user
-	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
+	cp $(shell ls -1 $(PROJECT) $(PROJECT)-* 2>/dev/null) $(INFO_INSTALL)
 
 ada_user: $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
@@ -46,6 +46,7 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
 html: dirs $(FILES)
+	-mkdir -p $(WWW_INSTALL)/ada_user
 	cp ../user/rtemsarc.gif ../user/rtemspie.gif ../user/states.gif \
            $(WWW_INSTALL)/ada_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
