@@ -1,0 +1,102 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl  $Id$
+
+AC_PREREQ(2.13)
+AC_INIT(score)
+RTEMS_TOP(../../..)
+AC_CONFIG_AUX_DIR(../../..)
+
+AC_PROG_MAKE_SET
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_MAINTAINER_MODE
+RTEMS_ENABLE_MULTIPROCESSING
+RTEMS_ENABLE_POSIX
+RTEMS_ENABLE_NETWORKING
+RTEMS_ENABLE_INLINES
+RTEMS_ENABLE_CXX
+RTEMS_ENABLE_GCC28
+RTEMS_ENABLE_LIBCDIR
+
+RTEMS_ENV_RTEMSBSP
+
+AC_PROG_LN_S
+AC_PROG_INSTALL
+RTEMS_PATH_KSH
+
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
+
+RTEMS_PROJECT_ROOT
+
+dnl check target cc
+RTEMS_PROG_CC_FOR_TARGET
+
+dnl check for g++
+if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+  RTEMS_PROG_CXX_FOR_TARGET
+fi
+
+RTEMS_CANONICALIZE_TOOLS
+
+dnl if this is an i386, does gas have good code16 support?
+RTEMS_I386_GAS_CODE16
+
+RTEMS_CHECK_SYSV_UNIX
+
+RTEMS_CHECK_NEWLIB
+
+# find all the Executive Makefiles
+RTEMS_CHECK_MAKEFILE(rtems)
+RTEMS_CHECK_MAKEFILE(sapi)
+RTEMS_CHECK_MAKEFILE(score/cpu/$RTEMS_CPU)
+
+if test "$RTEMS_HAS_POSIX_API" = "yes"; then
+  RTEMS_CHECK_MAKEFILE(posix)
+  makefiles="$makefiles wrapup/posix/Makefile"
+fi
+
+# Check if there is custom/*.cfg for this BSP
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+
+# If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
+if test "$RTEMS_USE_MACROS" = "yes"; then
+  inline_dir=macros
+  if test "$RTEMS_HAS_POSIX_API" = "yes"; then
+    # The problem is that there is currently no code in posix/macros :)
+    AC_MSG_ERROR(Macros are not implemented for the POSIX API)
+  fi
+else
+  inline_dir=inline
+fi
+
+AC_SUBST(RTEMS_VERSION)
+
+AC_SUBST(rtems_cv_prog_cc_cross)
+AC_SUBST(RTEMS_HAS_CPLUSPLUS)
+AC_SUBST(RTEMS_USE_GCC272)
+AC_SUBST(program_prefix)
+AC_SUBST(CC_CFLAGS_DEFAULT)
+AC_SUBST(CC_CFLAGS_DEBUG_V)
+AC_SUBST(CC_CFLAGS_PROFILE_V)
+AC_SUBST(CC_LDFLAGS_PROFILE_V)
+
+# Try to explicitly list a Makefile here 
+AC_OUTPUT( 
+Makefile
+score/Makefile
+score/cpu/Makefile
+score/include/Makefile
+score/include/rtems/Makefile
+score/include/rtems/wrap/Makefile
+score/include/rtems/score/Makefile
+score/${inline_dir}/Makefile
+score/${inline_dir}/rtems/Makefile
+score/${inline_dir}/rtems/score/Makefile
+score/src/Makefile
+wrapup/Makefile
+wrapup/rtems/Makefile
+$makefiles
+sapi/include/rtems/sptables.h
+)

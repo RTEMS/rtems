@@ -1,0 +1,73 @@
+#
+#  $Id$
+#
+# make/main.cfg
+#
+#   Make(1) configuration file include'd by all Makefile's
+#
+
+#
+# where things are relative to PROJECT_ROOT; shouldn't need to change,
+# but could be overridden in custom files.
+#
+
+PROJECT_RELEASE=$(PROJECT_ROOT)/@RTEMS_BSP@
+PROJECT_BIN=$(PROJECT_RELEASE)/bin
+PROJECT_INCLUDE=$(PROJECT_RELEASE)/lib/include
+PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
+
+#
+# Target architecture; may be changed as per 'make "ARCH=${TARGET_ARCH}-debug"'
+# This is where the object files get put.
+#
+
+ARCH=${TARGET_ARCH}
+
+VARIANT=
+
+#
+# Initial target for make(1)
+#  Once this is established we can safely include other targets
+#  within this make-include file.
+#
+
+default_target: all
+
+#
+# Default makefile name
+# May be overridden by command line macro assignment
+#
+
+MAKEFILE=Makefile
+
+#
+# Target variant names
+# and rule to expand them into (for example): sun4 sun4-debug sun4-profile
+# Note compiler config may add to TARGET_VARIANTS
+#
+
+TARGET_VARIANTS = debug profile
+
+#
+# Generate list of object directories: sun4, sun4-debug, sun4-profile
+#
+VARIANTS=${TARGET_ARCH} ${TARGET_VARIANTS:%=${TARGET_ARCH}-%}
+
+#
+# List of "recursion-able" targets for directory Makefiles
+#
+
+RECURSE_TARGETS=all clean protos get clobber depend install \
+preinstall-recursive \
+$(TARGET_VARIANTS) $(TARGET_VARIANTS:%=%_install)
+
+${ARCH}:
+	test -d ${ARCH} || mkdir ${ARCH}
+
+
+# general purpose forcing dependency; try to use .PHONY instead
+FORCEIT:
+
+FORCE:
+
+.PHONY:	$(RECURSE_TARGETS)

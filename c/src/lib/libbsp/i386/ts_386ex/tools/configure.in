@@ -1,0 +1,21 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl  $Id$
+
+AC_INIT(coff2bin)
+AC_CONFIG_AUX_DIR(../../../../../../..)
+
+RTEMS_TOP(../../../../../../..)
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_INIT_AUTOMAKE(rtems-lib-libbsp-i386-ts_386ex-tools,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_PROJECT_ROOT
+RTEMS_TOOLPATHS
+
+AC_OUTPUT( 
+Makefile
+dos_sup/Makefile
+ts_1325_ada/Makefile
+)

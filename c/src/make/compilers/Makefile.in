@@ -1,0 +1,293 @@
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
+
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+#
+#  $Id$
+#
+
+
+
+SHELL = @SHELL@
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DESTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+build_alias = @build_alias@
+build_triplet = @build@
+host_alias = @host_alias@
+host_triplet = @host@
+target_alias = @target_alias@
+target_triplet = @target@
+BARE_CPU_CFLAGS = @BARE_CPU_CFLAGS@
+BARE_CPU_MODEL = @BARE_CPU_MODEL@
+CAT = @CAT@
+CC = @CC@
+CC_CFLAGS_DEBUG_V = @CC_CFLAGS_DEBUG_V@
+CC_CFLAGS_DEFAULT = @CC_CFLAGS_DEFAULT@
+CC_CFLAGS_PROFILE_V = @CC_CFLAGS_PROFILE_V@
+CC_FOR_TARGET = @CC_FOR_TARGET@
+CC_LDFLAGS_PROFILE_V = @CC_LDFLAGS_PROFILE_V@
+CHMOD = @CHMOD@
+CMP = @CMP@
+CP = @CP@
+CPP = @CPP@
+CUSTOM_CFG_FILES = @CUSTOM_CFG_FILES@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXX_FOR_TARGET = @CXX_FOR_TARGET@
+GCCSED = @GCCSED@
+INSTALL_CHANGE = @INSTALL_CHANGE@
+KSH = @KSH@
+LN = @LN@
+LN_S = @LN_S@
+M4 = @M4@
+MAINT = @MAINT@
+MAKEINFO = @MAKEINFO@
+MV = @MV@
+PACKAGE = @PACKAGE@
+PACKHEX = @PACKHEX@
+PERL = @PERL@
+PROJECT_ROOT = @PROJECT_ROOT@
+RM = @RM@
+RTEMS_BSP = @RTEMS_BSP@
+RTEMS_CPU = @RTEMS_CPU@
+RTEMS_GAS_CODE16 = @RTEMS_GAS_CODE16@
+RTEMS_HAS_CPLUSPLUS = @RTEMS_HAS_CPLUSPLUS@
+RTEMS_HAS_MULTIPROCESSING = @RTEMS_HAS_MULTIPROCESSING@
+RTEMS_HAS_NETWORKING = @RTEMS_HAS_NETWORKING@
+RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
+RTEMS_HAS_RDBG = @RTEMS_HAS_RDBG@
+RTEMS_HOST = @RTEMS_HOST@
+RTEMS_LIBC_DIR = @RTEMS_LIBC_DIR@
+RTEMS_ROOT = @RTEMS_ROOT@
+RTEMS_TOPdir = @RTEMS_TOPdir@
+RTEMS_USE_GCC272 = @RTEMS_USE_GCC272@
+RTEMS_USE_MACROS = @RTEMS_USE_MACROS@
+SED = @SED@
+SORT = @SORT@
+TOUCH = @TOUCH@
+VERSION = @VERSION@
+program_prefix = @program_prefix@
+rtems_cv_prog_cc_cross = @rtems_cv_prog_cc_cross@
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+rtems_makedir = $(prefix)/make
+rtems_make_compilersdir = $(rtems_makedir)/compilers
+
+# At the moment all actively supported configurations
+# use gcc-target-default.cfg only.
+rtems_make_compilers_DATA =  gcc.cfg gcc-target-default.cfg
+
+mkinstalldirs = $(SHELL) $(top_srcdir)/../../../mkinstalldirs
+CONFIG_CLEAN_FILES =  gcc.cfg
+DATA =  $(rtems_make_compilers_DATA)
+
+DIST_COMMON =  Makefile.am Makefile.in gcc.cfg.in
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = tar
+GZIP_ENV = --best
+all: all-redirect
+.SUFFIXES:
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../../automake/local.am
+	cd $(top_srcdir) && $(AUTOMAKE) --foreign compilers/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+gcc.cfg: $(top_builddir)/config.status gcc.cfg.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+install-rtems_make_compilersDATA: $(rtems_make_compilers_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(rtems_make_compilersdir)
+	@list='$(rtems_make_compilers_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(rtems_make_compilersdir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(rtems_make_compilersdir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(rtems_make_compilersdir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(rtems_make_compilersdir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-rtems_make_compilersDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(rtems_make_compilers_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(rtems_make_compilersdir)/$$p; \
+	done
+tags: TAGS
+TAGS:
+
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = compilers
+
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --foreign compilers/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am:
+install-exec: install-exec-am
+
+install-data-am: install-rtems_make_compilersDATA
+install-data: install-data-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-rtems_make_compilersDATA
+uninstall: uninstall-am
+all-am: Makefile $(DATA)
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(rtems_make_compilersdir)
+
+
+mostlyclean-generic:
+
+clean-generic:
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-generic
+
+mostlyclean: mostlyclean-am
+
+clean-am:  clean-generic mostlyclean-am
+
+clean: clean-am
+
+distclean-am:  distclean-generic clean-am
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-generic distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: uninstall-rtems_make_compilersDATA \
+install-rtems_make_compilersDATA tags distdir info-am info dvi-am dvi \
+check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+
+
+@MAINTAINER_MODE_TRUE@$(srcdir)/gcc.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/compilers/gcc.cfg.in
+@MAINTAINER_MODE_TRUE@	cp $< $@
+
+debug-am:
+debug: debug-am
+.PHONY: debug debug-am
+
+debug_install-am:
+debug_install: debug_install-am
+.PHONY: debug_install debug_install-am
+
+profile-am:
+profile: profile-am
+.PHONY: profile profile-am
+
+profile_install-am:
+profile_install: profile_install-am
+.PHONY: profile_install profile_install-am
+
+preinstall-am:
+preinstall: preinstall-am
+.PHONY: preinstall preinstall-am
+
+clobber-am:
+clobber: clobber-am
+.PHONY: clobber clobber-am
+
+depend-am:
+depend: depend-am
+.PHONY: depend depend-am
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

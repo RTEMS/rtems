@@ -1,0 +1,203 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl  $Id$
+
+AC_PREREQ(2.13)
+AC_INIT(libbsp)
+RTEMS_TOP(../../..)
+AC_CONFIG_AUX_DIR(../../..)
+
+AC_PROG_MAKE_SET
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_MAINTAINER_MODE
+
+RTEMS_ENABLE_MULTIPROCESSING
+RTEMS_ENABLE_POSIX
+RTEMS_ENABLE_NETWORKING
+RTEMS_ENABLE_RDBG
+RTEMS_ENABLE_INLINES
+RTEMS_ENABLE_CXX
+RTEMS_ENABLE_GCC28
+RTEMS_ENABLE_LIBCDIR
+RTEMS_ENABLE_BARE
+RTEMS_ENABLE_HWAPI
+
+RTEMS_ENV_RTEMSBSP
+
+AC_PROG_INSTALL
+
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
+
+RTEMS_PROJECT_ROOT
+
+dnl check target cc
+RTEMS_PROG_CC_FOR_TARGET
+
+dnl check for g++
+if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+  RTEMS_PROG_CXX_FOR_TARGET
+fi
+
+RTEMS_CANONICALIZE_TOOLS
+
+dnl if this is an i386, does gas have good code16 support?
+RTEMS_I386_GAS_CODE16
+AM_CONDITIONAL(RTEMS_GAS_CODE16,test "$RTEMS_GAS_CODE16" = "yes");
+
+RTEMS_CHECK_SYSV_UNIX
+
+# find all the Makefiles for the BSPs
+makefiles="$makefiles libbsp/$RTEMS_CPU/Makefile"
+
+if test "${RTEMS_BSP}" = "bare"; then
+makefiles="$makefiles libbsp/bare/Makefile"
+fi
+
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+
+RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
+
+# Is there code where there should be for this BSP?
+# The bare bsp is a special case as it is not under the RTEMS_CPU path
+case ${RTEMS_BSP} in
+  bare)
+    bspcpudir=
+    if test "X${BARE_CPU_CFLAGS}" = "X" ; then
+      AC_MSG_ERROR([--enable-bare-cpu-cflags not specified for bare bsp])
+    fi
+    if test "X${BARE_CPU_MODEL}" = "X" ; then
+      AC_MSG_ERROR([--enable-bare-cpu-model not specified for bare bsp])
+    fi
+    ;;
+  *)
+    bspcpudir=$RTEMS_CPU/
+    ;;
+esac
+
+if test "$RTEMS_BSP" = "bare" ; then
+  RTEMS_LIBBSP_CPU_SUBDIR="bare"
+else
+  RTEMS_LIBBSP_CPU_SUBDIR='$(RTEMS_CPU)'
+fi
+AC_SUBST(RTEMS_LIBBSP_CPU_SUBDIR)
+     
+if test -d "$srcdir/libbsp/$bspcpudir$bspdir"; then
+  RTEMS_CHECK_MAKEFILE(libbsp/${bspcpudir}$bspdir)
+  RTEMS_CHECK_MAKEFILE(libbsp/${bspcpudir}shared)
+
+  # HACK: sed out bsp-tools from makefiles
+  t="libbsp/$bspcpudir$bspdir/tools"
+  if test -d "$srcdir/$t"; then
+    bsptools_cfgdirs="$bsptools_cfgdirs $t"
+    makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
+  fi
+else
+  AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  ${RTEMS_BSP}])
+fi
+
+AM_CONDITIONAL(UNIX,test "$RTEMS_CPU" = "unix")
+# find all the CPU dependent library Makefiles
+RTEMS_CHECK_MAKEFILE(libcpu/$RTEMS_CPU)
+
+dnl Workaround for go32
+case "${target}" in
+changequote(,)dnl
+  i[3456]86-go32-rtems*)
+changequote([,])dnl
+    ;;
+  *)
+    RTEMS_CHECK_MAKEFILE(start/$RTEMS_CPU)
+    ;;
+esac
+
+# If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
+if test "$RTEMS_USE_MACROS" = "yes"; then
+  inline_dir=macros
+  if test "$RTEMS_HAS_POSIX_API" = "yes"; then
+    # The problem is that there is currently no code in posix/macros :)
+    AC_MSG_ERROR(Macros are not implemented for the POSIX API)
+  fi
+else
+  inline_dir=inline
+fi
+
+# If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
+AC_MSG_CHECKING([if networking is enabled? ])
+AC_MSG_RESULT($RTEMS_HAS_NETWORKING)
+if test "$RTEMS_HAS_NETWORKING" = "yes"; then
+  RTEMS_CHECK_MAKEFILE(libnetworking)
+  RTEMS_CHECK_MAKEFILE(librpc)
+
+  if test "$RTEMS_HAS_RDBG" = "yes"; then
+    RTEMS_CHECK_RDBG
+    RTEMS_HAS_RDBG="$rtems_cv_has_rdbg";
+
+    if test "$rtems_cv_has_rdbg" = "yes"; then
+      AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen)
+      AC_PROG_AWK
+      if test -z "$RPCGEN"; then
+        AC_MSG_ERROR([missing rpcgen, required to build librdbg])
+      fi
+      if test -z "$AWK"; then
+        AC_MSG_ERROR([missing awk, required to build librdbg])
+      fi
+    fi
+    if test "$rtems_cv_has_rdbg" = "yes"; then
+      RTEMS_CHECK_MAKEFILE(librdbg)
+    fi
+  fi
+fi
+
+# If the C++ support is enabled, then include the Makefiles
+if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+  RTEMS_CHECK_MAKEFILE(librtems++)
+fi
+
+# If the HWAPI is enabled, the find the HWAPI Makefiles
+RTEMS_ENABLE_HWAPI
+if test "$RTEMS_HAS_HWAPI" = "yes"; then
+  AC_MSG_CHECKING(whether libwapi is present)
+  if test -f ${srcdir}/libhwapi/Makefile.in ; then
+    AC_MSG_RESULT(yes)
+    makefiles="$makefiles libhwapi/Makefile"
+    RTEMS_CHECK_MAKEFILE(libhwapi/analog)
+    RTEMS_CHECK_MAKEFILE(libhwapi/discrete)
+    RTEMS_CHECK_MAKEFILE(libhwapi/drivers)
+    RTEMS_CHECK_MAKEFILE(libhwapi/non_volatile_memory)
+    RTEMS_CHECK_MAKEFILE(libhwapi/serial)
+    RTEMS_CHECK_MAKEFILE(libhwapi/support)
+    RTEMS_CHECK_MAKEFILE(libhwapi/wrapup)
+  else
+    AC_MSG_ERROR(No source code found for the HWAPI)
+  fi
+fi
+
+AC_SUBST(RTEMS_HAS_CPLUSPLUS)
+AC_SUBST(RTEMS_USE_GCC272)
+AC_SUBST(CC_CFLAGS_DEFAULT)
+AC_SUBST(CC_CFLAGS_DEBUG_V)
+AC_SUBST(CC_CFLAGS_PROFILE_V)
+AC_SUBST(CC_LDFLAGS_PROFILE_V)
+
+# pick up all the Makefiles in required parts of the tree
+RTEMS_CHECK_MAKEFILE(libchip)
+RTEMS_CHECK_MAKEFILE(libmisc)
+
+AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
+
+# FIXME: libhwapi needs a separate configure.in in future ;-
+# AC_CONFIG_SUBDIRS(libhwapi)
+
+# try to explicitly list a Makefile here 
+AC_OUTPUT( 
+Makefile
+include/Makefile
+libbsp/Makefile
+libbsp/shmdr/Makefile
+libc/Makefile
+libcpu/Makefile
+start/Makefile
+wrapup/Makefile
+$makefiles)

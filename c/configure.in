@@ -1,0 +1,110 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl  $Id$
+
+AC_PREREQ(2.13)
+AC_INIT(README)
+RTEMS_TOP(..)
+AC_CONFIG_AUX_DIR(..)
+
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_INIT_AUTOMAKE(rtems-c,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+dnl These options are used within this file.
+RTEMS_ENABLE_BARE
+RTEMS_ENABLE_RTEMSBSP(rtems_bsp)
+
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
+
+if test -z "$rtems_bsp"; then
+  RTEMS_CHECK_BSPS(rtems_bsp)
+fi
+
+for i in $rtems_bsp; do
+
+    # make sure there is a make/custom file for the bsp
+    RTEMS_CHECK_CUSTOM_BSP(i)
+ 
+    RTEMS_BSP_ALIAS($i,bspdir)
+
+    # Is there code where there should be for this BSP?
+    # The bare bsp is a special case as it is not under the RTEMS_CPU path
+    case $i in
+      bare)
+        bspcpudir=
+        if test "X${BARE_CPU_CFLAGS}" = "X" ; then
+          AC_MSG_ERROR([--enable-bare-cpu-cflags not specified for bare bsp])
+        fi
+        if test "X${BARE_CPU_MODEL}" = "X" ; then
+          AC_MSG_ERROR([--enable-bare-cpu-model not specified for bare bsp])
+        fi
+        ;;
+      *)
+        bspcpudir=$RTEMS_CPU/
+        ;;
+    esac
+     
+    if test -d "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$bspcpudir$bspdir"; then
+      RTEMS_BSP_LIST="$RTEMS_BSP_LIST $i"
+    else
+      AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  $i])
+    fi
+done
+
+#
+# Compose the configuration arguments to be passed to c/src/configure
+#
+##
+## Partially borrowed from autoconf-2.13
+##
+
+## Adjust paths
+case $srcdir in
+/*) rtems_bsp_configure="$srcdir/src/configure";;
+*)  rtems_bsp_configure="../$srcdir/src/configure";;
+esac
+
+## Remove --cache-file, --srcdir and --enable-rtemsbsp arguments
+## so they do not pile up
+  rtems_bsp_configure_args=
+  for ac_arg in $ac_configure_args; do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      continue
+    fi
+    case "$ac_arg" in
+    -cache-file | --cache-file | --cache-fil | --cache-fi \
+    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+      ac_prev=cache_file ;;
+    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+      ;;
+    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+      ac_prev=srcdir ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+    --enable-rtemsbsp*) ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+    *) rtems_bsp_configure_args="$rtems_bsp_configure_args $ac_arg" ;;
+    esac
+  done
+
+rtems_bsp_configure="$rtems_bsp_configure $rtems_bsp_configure_args"
+AC_SUBST(rtems_bsp_configure)
+
+AC_SUBST(RTEMS_BSP_LIST)
+
+AC_OUTPUT( 
+Makefile
+)
+
+echo
+echo target architecture: $target_cpu.
+echo available BSPs: $rtems_bsp.
+echo \'make all\' will build the following BSPs: $RTEMS_BSP_LIST.
+echo other BSPs can be built with \'make RTEMS_BSP=\"bsp1 bsp2 ...\"\'
+echo

@@ -1,0 +1,86 @@
+# Default target settings
+#
+# Some of these values are redefined in the target specific .cfg files.
+#
+# Created by Jiri Gaisler, 16-03-97  (who is owed a debt of gratitude
+#   for converting RTEMS to autoconf.  Thanks. --joel)
+#
+#  $Id$
+#
+
+include $(RTEMS_ROOT)/make/target.cfg
+include $(RTEMS_ROOT)/make/host.cfg
+
+# Specify here the host and target "architectures"
+HOST_ARCH=o-$(RTEMS_HOST)
+ifndef TARGET_ARCH
+TARGET_ARCH=o-@RTEMS_BSP@
+endif
+
+include $(RTEMS_ROOT)/make/main.cfg
+
+# use the inline functions instead of the macros
+# ref: src/exec/generic/Makefile
+ifeq ($(RTEMS_USE_MACROS),yes)
+INLINE=macros
+INLINE_UPCASE=
+else
+INLINE=inline
+INLINE_UPCASE=INLINE
+endif
+
+# HOST Compiler config file
+# You may also want to specify where the compiler resides here.
+CONFIG.$(HOST_ARCH).CC	 = $(PROJECT_ROOT)/make/compilers/gcc.cfg
+
+## Target compiler config file, if any
+CONFIG.$(TARGET_ARCH).CC = $(RTEMS_ROOT)/make/compilers/gcc-target-default.cfg
+
+## GCC specs extension file location
+RTEMS_BSP_SPECS = $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs
+
+## LIBC support
+## Specify the one you want here and fill in the blanks.
+## Currently CYGNUS newlib is supported.
+## NOTE: RTEMS libcsupport.a includes RTEMS versions of stuff like
+##       malloc, gettimeofday, etc.
+
+# Define this to yes if C++ is included in the development environment.
+# This requires that at least the GNU C++ compiler and libg++ be installed.
+ifeq ($(RTEMS_HAS_CPLUSPLUS),yes)
+HAS_CPLUSPLUS=yes
+else
+HAS_CPLUSPLUS=no
+endif
+
+# Define this to yes if this target supports multiprocessor environments.
+ifeq ($(RTEMS_HAS_MULTIPROCESSING),yes)
+HAS_MP=yes
+else
+HAS_MP=no
+endif
+
+# Define this to yes if this target wants the TCP/IP stack
+ifeq ($(RTEMS_HAS_NETWORKING),yes)
+HAS_NETWORKING=yes
+else
+HAS_NETWORKING=no
+endif
+
+# Define this to yes if this target wants the remote debugger
+ifeq ($(RTEMS_HAS_RDBG),yes)
+HAS_RDBG=yes
+else
+HAS_RDBG=no
+endif
+
+# Define this to yes if this target wants the posix api
+ifeq ($(RTEMS_HAS_POSIX_API),yes)
+HAS_POSIX_API=yes
+else
+HAS_POSIX_API=no
+endif
+
+# Base name of start file
+START_BASE=start
+

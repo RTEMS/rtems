@@ -1,0 +1,51 @@
+#
+# $Id$
+#
+
+AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+
+RTEMS_BSP = $(RTEMS_BSP_LIST)
+## The '.' in SUBDIRS ensures that local make-targets (xxx-am) will be 
+## triggered before $(RTEMS_BSP_LIST) subdirectories are made.
+SUBDIRS= \
+. \
+$(RTEMS_BSP)
+
+## Use @RTEMS_BSP_LIST@ here, using $(RTEMS_BSP_LIST) would trigger
+## this rule for invalid BSPs
+@RTEMS_BSP_LIST@: src/configure
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	# Adjust paths
+	test -n "${RTEMS_BSP}" && for i in ${RTEMS_BSP}; do \
+	  echo "Configuring RTEMS_BSP=$$i"; \
+	  test -d $$i || mkdir $$i; \
+	  ( cd $$i && \
+	    RTEMS_BSP=$$i $(rtems_bsp_configure) \
+	    && $(MAKE) $(AM_MAKEFLAGS) preinstall ) \
+	  || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done
+
+## Let all RTEMS' make targets depend on ${RTEMS_BSP}
+all-am: ${RTEMS_BSP}
+debug-am: ${RTEMS_BSP}
+debug_install-am: ${RTEMS_BSP}
+profile-am: ${RTEMS_BSP}
+profile_install-am: ${RTEMS_BSP}
+preinstall-am: ${RTEMS_BSP}
+depend-am: ${RTEMS_BSP}
+
+## Pull in extra files intro the distribution
+EXTRA_DIST = \
+ACKNOWLEDGEMENTS \
+README.DOS \
+REQUIRES \
+PROBLEMS \
+TESTED \
+README \
+UPDATE_HELP
+
+DIST_SUBDIRS = ${RTEMS_BSP}
+# -------------------------------------------------------
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
