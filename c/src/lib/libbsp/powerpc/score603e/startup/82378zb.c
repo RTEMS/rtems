@@ -13,13 +13,14 @@
 
 #include <bsp.h>
 #if (SCORE603E_GENERATION == 1)
-#include <rtems/libio.h>
-
-#include <libcsupport.h>
-
 #include <string.h>
 #include <fcntl.h>
 #include <assert.h>
+
+#include <rtems/libio.h>
+#include <rtems/libcsupport.h>
+
+
 /*
  * initialize 82378zb
  */
