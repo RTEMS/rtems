@@ -65,6 +65,8 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 @PATCH2@
 @PATCH4@
 
+  # Fix timestamps
+  gcc-@gcc_version@/contrib/gcc_update --touch
   # Copy the C library into gcc's source tree
   ln -s ../newlib-@newlib_version@/newlib gcc-@gcc_version@
   test -d build || mkdir build

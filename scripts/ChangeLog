@@ -1,3 +1,8 @@
+2002-04-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/gccnewlib.add: Add gcc_update --touch to fix
+	timestamps.
+
 2001-04-16	Joel Sherrill <joel@OARcorp.com>
 
 	* .cvsignore: Added files added by automake 1.6.1.
