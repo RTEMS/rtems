@@ -161,8 +161,13 @@ do
   echo ""
   echo "@ifset is-C"
   echo "@example"
-  echo "int ${routine}("
+  proto=`grep "${routine} (" ../../itron_spec/itron3-6.txt | sed -e 's/ercd = //'`   # | sed -e 's/ \\(/(/'`
+  
+  echo `echo ${proto} | cut -d'(' -f1`"("
+  echo ${proto} | cut -d'(' -f2 | sed -e 's/ .;//'
   echo ");"
+  # echo "int ${routine}("
+  # echo ");"
   echo "@end example"
   echo "@end ifset"
   echo ""
