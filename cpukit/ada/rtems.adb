@@ -10,7 +10,7 @@
 --
 --
 --
---  COPYRIGHT (c) 1997.
+--  COPYRIGHT (c) 1997-2003.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -1650,7 +1650,7 @@ package body RTEMS is
 
    procedure IO_Lookup_Name (
       Name         : in     String;
-      Device_Info  :    out RTEMS.Driver_Name_t;
+      Device_Info  : in     RTEMS.Driver_Name_t_Pointer;
       Result       :    out RTEMS.Status_Codes
    ) is
       function IO_Lookup_Name_Base (

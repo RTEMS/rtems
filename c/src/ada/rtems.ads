@@ -174,8 +174,9 @@ pragma Elaborate_Body (RTEMS);
          Device_Name_Length : RTEMS.Unsigned32;
          Major              : RTEMS.Device_Major_Number;
          Minor              : RTEMS.Device_Minor_Number;
-
       end record;
+
+   type Driver_Name_t_Pointer is access all Driver_Name_t;
 
    --
    --  Ident Options
@@ -1339,7 +1340,7 @@ pragma Elaborate_Body (RTEMS);
 
    procedure IO_Lookup_Name (
       Name         : in     String;
-      Device_Info  :    out RTEMS.Driver_Name_t;
+      Device_Info  : In     RTEMS.Driver_Name_t_Pointer;
       Result       :    out RTEMS.Status_Codes
    );
 
