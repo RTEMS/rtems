@@ -1,3 +1,41 @@
+2002-03-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/cvme961.cfg: Remove GCC272 support.
+	* custom/dmv152.cfg: Remove GCC272 support.
+	* custom/efi332.cfg: Remove GCC272 support.
+	* custom/efi68k.cfg: Remove GCC272 support.
+	* custom/eth_comm.cfg: Remove GCC272 support.
+	* custom/gen405.cfg: Remove GCC272 support.
+	* custom/gen68302.cfg: Remove GCC272 support.
+	* custom/gen68340.cfg: Remove GCC272 support.
+	* custom/gen68360.cfg: Remove GCC272 support.
+	* custom/genmongoosev.cfg: Remove GCC272 support.
+	* custom/helas403.cfg: Remove GCC272 support.
+	* custom/i386ex.cfg: Remove GCC272 support.
+	* custom/i960sim.cfg: Remove GCC272 support.
+	* custom/idp.cfg: Remove GCC272 support.
+	* custom/leon2.cfg: Remove GCC272 support.
+	* custom/mbx8xx.cfg: Remove GCC272 support.
+	* custom/mcf5206elite.cfg: Remove GCC272 support.
+	* custom/mpc8260ads.cfg: Remove GCC272 support.
+	* custom/mrm332.cfg: Remove GCC272 support.
+	* custom/mvme136.cfg: Remove GCC272 support.
+	* custom/mvme147.cfg: Remove GCC272 support.
+	* custom/mvme167.cfg: Remove GCC272 support.
+	* custom/ods68302.cfg: Remove GCC272 support.
+	* custom/p4000.cfg: Remove GCC272 support.
+	* custom/p4600.cfg: Remove GCC272 support.
+	* custom/p4650.cfg: Remove GCC272 support.
+	* custom/pc386.cfg: Remove GCC272 support.
+	* custom/portsw.cfg: Remove GCC272 support.
+	* custom/psim.cfg: Remove GCC272 support.
+	* custom/rxgen960.cfg: Remove GCC272 support.
+	* custom/score603e.cfg: Remove GCC272 support.
+	* custom/sim68000.cfg: Remove GCC272 support.
+	* custom/simhppa.cfg: Remove GCC272 support.
+	* custom/simsh4.cfg: Remove GCC272 support.
+	* custom/ts_386ex.cfg: Remove GCC272 support.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Templates/Makefile.am: Remove AUTOMAKE_OPTIONS.
