@@ -53,10 +53,11 @@ void *POSIX_Init(
   time_t          seconds;
   struct tm       tm;
   struct timespec tv;
+  struct timespec tr;
 
   puts( "\n\n*** POSIX TEST 1 ***" );
 
-  /* set the time of day */
+  /* set the time of day, and print our buffer in multiple ways */
 
   build_time( &tm, TM_FRIDAY, TM_MAY, 24, 96, 11, 5, 0 );
 
@@ -71,7 +72,12 @@ void *POSIX_Init(
   printf( asctime( &tm ) );
   printf( ctime( &tv.tv_sec ) );
 
-  sleep( 3 );
+  /* use sleep to delay */
+
+  seconds = sleep( 3 );
+  assert( !seconds );
+
+  /* print new times to make sure it has changed and we can get the realtime */
 
   status = clock_gettime( CLOCK_REALTIME, &tv );
   assert( !status );
@@ -80,6 +86,25 @@ void *POSIX_Init(
 
   seconds = time( NULL );
   printf( ctime( &seconds ) );
+
+  /* use nanosleep to delay */
+
+  tv.tv_sec = 3; 
+  tv.tv_nsec = 500000; 
+
+  status = nanosleep ( &tv, &tr );
+  assert( !status );
+
+  /* print the current real time again */
+
+  status = clock_gettime( CLOCK_REALTIME, &tv );
+  assert( !status );
+ 
+  printf( ctime( &tv.tv_sec ) );
+
+  /* check the time remaining */
+
+  assert( !tr.tv_sec && !tr.tv_nsec );
 
   /* create a thread */
 
