@@ -1,5 +1,9 @@
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add RTEMS_PROG_CCAS
+
+2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Use AC_CONFIG_AUX_DIR(../../../..).
 	Add AC_PROG_RANLIB.
 
