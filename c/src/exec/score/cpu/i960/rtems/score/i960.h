@@ -49,6 +49,9 @@ extern "C" {
 #define CPU_MODEL_NAME  "i960ca"
 #define __RTEMS_I960CA__
 
+#elif defined(__i960KA__)
+#define CPU_MODEL_NAME  "i960ka"
+
 #elif defined(__i960HA__) || defined(__i960_HA__) || defined(__i960HA)
 
 #define CPU_MODEL_NAME  "i960ha"
@@ -304,6 +307,26 @@ typedef struct {
 typedef i960rp_control_table i960_control_table;
 typedef i960rp_PRCB i960_PRCB;
 
+#elif defined(__i960KA__)
+
+/* i960KA control structures */
+
+/* Intel i960KA Control Table */
+
+typedef struct {
+int pad0;
+}   i960ka_control_table;
+
+/* Intel i960KA Processor Control Block */
+
+typedef struct {
+  void           **intr_tbl;      /* interrupt table base address */
+  unsigned int    *intr_stack;    /* interrupt stack pointer */
+}   i960ka_PRCB;
+
+typedef i960ka_control_table i960_control_table;
+typedef i960ka_PRCB i960_PRCB;
+
 #else
 #error "invalid processor selection!"
 #endif
@@ -312,10 +335,12 @@ typedef i960rp_PRCB i960_PRCB;
  *  Miscellaneous Support Routines
  */
 
+#if !defined(__i960KA__)
 #define i960_reload_ctl_group( group ) \
  { register int _cmd = ((group)|0x400) ; \
    asm volatile( "sysctl %0,%0,%0" : "=d" (_cmd) : "0" (_cmd) ); \
  }
+#endif
 
 #define i960_atomic_modify( mask, addr, prev ) \
  { register unsigned int  _mask = (mask); \
@@ -368,10 +393,12 @@ typedef i960rp_PRCB i960_PRCB;
     (_level) = ((_level) & 0x1f0000) >> 16; \
   } while ( 0 )
 
+#if !defined(__i960KA__)
 #define i960_cause_intr( intr ) \
  { register int _intr = (intr); \
    asm volatile( "sysctl %0,%0,%0" : "=d" (_intr) : "0" (_intr) ); \
  }
+#endif
 
 /*
  *  Interrupt Masking Routines
@@ -468,7 +495,6 @@ static inline unsigned int i960_get_fp()
  */
 
 #if defined(I960_SOFT_RESET_COMMAND)
-
 #define i960_soft_reset( prcb ) \
  { register i960_PRCB    *_prcb = (prcb); \
    register unsigned int *_next=0; \
@@ -480,7 +506,7 @@ static inline unsigned int i960_get_fp()
                   : "0"  (_cmd), "1"  (_next), "2"  (_prcb) ); \
  }
 
-#else
+#elif !defined(__i960KA__)
 #warning "I960_SOFT_RESET_COMMAND is not defined"
 #endif
 

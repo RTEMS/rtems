@@ -218,6 +218,7 @@ __ISR_Dispatch:
         ret
 
 
+#if !defined(__i960KA__)
 /*PAGE
  *
  *  void __i960_soft_reset_asm
@@ -242,3 +243,4 @@ __i960_reset_done:
 		mov			r5, pfp
 		mov			r6, sp
 		ret
+#endif
