@@ -26,6 +26,13 @@
 #include <net/route.h>
 
 /*
+ * Hooks to RTEMS I/O system
+ */
+static const rtems_filesystem_file_handlers_r socket_handlers;
+int rtems_bsdnet_makeFdForSocket(void *so, const rtems_filesystem_file_handlers_r *h);
+struct socket *rtems_bsdnet_fdToSocket(int fd);
+
+/*
  * Package system call argument into mbuf.
  */
 static int
@@ -64,7 +71,7 @@ socket (int domain, int type, int protocol)
 	rtems_bsdnet_semaphore_obtain ();
 	error = socreate(domain, &so, type, protocol, NULL);
 	if (error == 0) {
-		fd = rtems_bsdnet_makeFdForSocket (so);
+		fd = rtems_bsdnet_makeFdForSocket (so, &socket_handlers);
 		if (fd < 0)
 			soclose (so);
 	}
@@ -213,7 +220,7 @@ accept (int s, struct sockaddr *name, int *namelen)
 	TAILQ_REMOVE(&head->so_comp, so, so_list);
 	head->so_qlen--;
 
-	fd = rtems_bsdnet_makeFdForSocket (so);
+	fd = rtems_bsdnet_makeFdForSocket (so, &socket_handlers);
 	if (fd < 0) {
 		TAILQ_INSERT_HEAD(&head->so_comp, so, so_list);
 		head->so_qlen++;
@@ -600,17 +607,18 @@ getsockname (int s, struct sockaddr *name, int *namelen)
 
 /*
  ************************************************************************
- *                 RTEMS EXTERNAL I/O HANDLER ROUTINES                  *
+ *                      RTEMS I/O HANDLER ROUTINES                      *
  ************************************************************************
  */
 static int
-rtems_bsdnet_close (int fd)
+rtems_bsdnet_close (rtems_libio_t *iop)
 {
 	struct socket *so;
 	int error;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = rtems_bsdnet_fdToSocket (fd)) == NULL) {
+	if ((so = iop->data1) == NULL) {
+		errno = EBADF;
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -624,15 +632,15 @@ rtems_bsdnet_close (int fd)
 }
 
 static int
-rtems_bsdnet_read (int fd, void *buffer, unsigned32 count)
+rtems_bsdnet_read (rtems_libio_t *iop, void *buffer, unsigned32 count)
 {
-	return recv (fd, buffer, count, 0);
+	return recv (iop->data0, buffer, count, 0);
 }
 
 static int
-rtems_bsdnet_write (int fd, const void *buffer, unsigned32 count)
+rtems_bsdnet_write (rtems_libio_t *iop, const void *buffer, unsigned32 count)
 {
-	return send (fd, buffer, count, 0);
+	return send (iop->data0, buffer, count, 0);
 }
 
 static int
@@ -659,13 +667,14 @@ so_ioctl (struct socket *so, unsigned32 command, void *buffer)
 }
 
 static int
-rtems_bsdnet_ioctl (int fd, unsigned32 command, void *buffer)
+rtems_bsdnet_ioctl (rtems_libio_t *iop, unsigned32 command, void *buffer)
 {
 	struct socket *so;
 	int error;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = rtems_bsdnet_fdToSocket (fd)) == NULL) {
+	if ((so = iop->data1) == NULL) {
+		errno = EBADF;
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -678,12 +687,24 @@ rtems_bsdnet_ioctl (int fd, unsigned32 command, void *buffer)
 	return 0;
 }
 
-rtems_libio_handler_t rtems_bsdnet_io_handler = {
+static int
+rtems_bsdnet_fstat (rtems_filesystem_location_info_t *loc, struct stat *sp)
+{
+	sp->st_mode = S_IFSOCK;
+	return 0;
+}
+
+static const rtems_filesystem_file_handlers_r socket_handlers = {
 	NULL,			/* open */
 	rtems_bsdnet_close,	/* close */
 	rtems_bsdnet_read,	/* read */
 	rtems_bsdnet_write,	/* write */
 	rtems_bsdnet_ioctl,	/* ioctl */
 	NULL,			/* lseek */
+	rtems_bsdnet_fstat,	/* fstat */
+	NULL,			/* fchmod */
+	NULL,			/* ftruncate */
+	NULL,			/* fpathconf */
+	NULL,			/* fsync */
+	NULL,			/* fdatasync */
 };
-

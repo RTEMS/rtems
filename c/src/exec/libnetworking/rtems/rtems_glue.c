@@ -78,8 +78,6 @@ struct in_addr rtems_bsdnet_nameserver[sizeof rtems_bsdnet_config.name_server /
 			sizeof rtems_bsdnet_config.name_server[0]];
 int rtems_bsdnet_nameserver_count;
 
-extern rtems_libio_handler_t rtems_bsdnet_io_handler;
-
 /*
  * Perform FreeBSD memory allocation.
  * FIXME: This should be modified to keep memory allocation statistics.
@@ -229,12 +227,6 @@ rtems_bsdnet_initialize (void)
 	 * Start network daemon
 	 */
 	networkDaemonTid = rtems_bsdnet_newproc ("ntwk", 4096, networkDaemon, NULL);
-
-	/*
-	 * Register as an external I/O handler
-	 */
-	rtems_register_libio_handler (LIBIO_FLAGS_HANDLER_SOCK,
-						&rtems_bsdnet_io_handler);
 
 	/*
 	 * Let other network tasks begin

@@ -33,34 +33,6 @@ int fstat(
     set_errno_and_return_minus_one( EFAULT );
 
   /*
-   *  Zero out the stat structure so the various support
-   *  versions of stat don't have to.
-   */
-
-  memset( sbuf, 0, sizeof(struct stat) );
-
-  /*
-   *  If this file descriptor is mapped to an external set of handlers,
-   *  then pass the request on to them.
-   */
-
-  if (rtems_file_descriptor_type(fd)) {
-    switch (rtems_file_descriptor_type (fd)) {
-      case RTEMS_FILE_DESCRIPTOR_TYPE_FILE:
-        break;
-
-      case RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET:
-#if !defined(__GO32__)
-        sbuf->st_mode = S_IFSOCK;
-        break;
-#endif
-
-      default:
-        set_errno_and_return_minus_one( EBADF );
-    }
-  }
-
-  /*
    *  Now process the stat() request.
    */
 
@@ -68,8 +40,17 @@ int fstat(
   rtems_libio_check_fd( fd );
   rtems_libio_check_is_open(iop);
 
+  if ( !iop->handlers )
+    set_errno_and_return_minus_one( EBADF );
+
   if ( !iop->handlers->fstat )
     set_errno_and_return_minus_one( ENOTSUP );
+
+  /*
+   *  Zero out the stat structure so the various support
+   *  versions of stat don't have to.
+   */
+  memset( sbuf, 0, sizeof(struct stat) );
 
   return (*iop->handlers->fstat)( &iop->pathinfo, sbuf );
 }

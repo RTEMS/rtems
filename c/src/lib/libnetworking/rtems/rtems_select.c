@@ -46,6 +46,7 @@
  */
 
 static __inline int imin(int a, int b) { return (a < b ? a : b); }
+struct socket *rtems_bsdnet_fdToSocket(int fd);
 
 static int
 socket_select (struct socket *so, int which, rtems_id tid)

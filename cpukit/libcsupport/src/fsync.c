@@ -28,14 +28,6 @@ int fsync(
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
   /*
-   *  If this file descriptor is mapped to an external set of handlers,
-   *  then pass the request on to them.
-   */
-
-  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK )
-    set_errno_and_return_minus_one( EBADF );
-
-  /*
    *  Now process the fsync().
    */
 

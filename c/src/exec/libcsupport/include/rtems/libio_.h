@@ -68,15 +68,6 @@ extern rtems_libio_t  *rtems_libio_last_iop;
 extern rtems_libio_t *rtems_libio_iop_freelist;
 
 /*
- *  External I/O Handlers Table
- * 
- *  Space for all possible handlers is preallocated
- *  to speed up dispatch to external handlers.
- */
-
-extern rtems_libio_handler_t   rtems_libio_handlers[15];
-
-/*
  *  Default mode for all files.
  */
 

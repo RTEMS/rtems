@@ -31,22 +31,6 @@ ssize_t read(
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
 
   /*
-   *  If this file descriptor is mapped to an external set of handlers,
-   *  then pass the request on to them.
-   */ 
-
-  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK ) {
-    rtems_libio_read_t fp;
-
-    fp = rtems_libio_handlers[
-           (iop->flags >> LIBIO_FLAGS_HANDLER_SHIFT) - 1].read;
-    if ( fp == NULL )
-      set_errno_and_return_minus_one( EBADF );
-
-    return (*fp)( fd, buffer, count );
-  }
-
-  /*
    *  Now process the read().
    */
 

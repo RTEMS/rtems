@@ -18,7 +18,6 @@
 
 #include <errno.h>
 
-
 /*
  * Convert an RTEMS file descriptor to a BSD socket pointer.
  */
@@ -29,11 +28,13 @@ struct socket *rtems_bsdnet_fdToSocket(
 {
   rtems_libio_t *iop;
 
-  if ((unsigned32)fd >= rtems_libio_number_iops)
-      return NULL;
+  if ((unsigned32)fd >= rtems_libio_number_iops) {
+    errno = EBADF;
+    return NULL;
+  }
   iop = &rtems_libio_iops[fd];
-  if ((iop->flags & LIBIO_FLAGS_HANDLER_MASK) != LIBIO_FLAGS_HANDLER_SOCK)
-      return NULL;
+  if (iop->data1 == NULL)
+    errno = EBADF;
   return iop->data1;
 }
 
@@ -42,17 +43,22 @@ struct socket *rtems_bsdnet_fdToSocket(
  */
 
 int rtems_bsdnet_makeFdForSocket(
-  void *so
+  void *so,
+  const rtems_filesystem_file_handlers_r *h
 )
 {
   rtems_libio_t *iop;
+  int fd;
 
   iop = rtems_libio_allocate();
   if (iop == 0) {
       errno = ENFILE;
       return -1;
   }
-  iop->flags |= LIBIO_FLAGS_HANDLER_SOCK | LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
+  fd = iop - rtems_libio_iops;
+  iop->flags |= LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
+  iop->data0 = fd;
   iop->data1 = so;
-  return iop - rtems_libio_iops;
+  iop->handlers = h;
+  return fd;
 }

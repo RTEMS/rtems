@@ -37,13 +37,6 @@ int fcntl(
   rtems_libio_check_is_open(iop);
 
   /*
-   *  If this is not a file system based entity, it is an error.
-   */
-
-  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK )
-    set_errno_and_return_minus_one( EBADF );
-
-  /*
    *  Now process the fcntl().
    */
 

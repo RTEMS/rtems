@@ -20,34 +20,16 @@ int close(
 {
   rtems_libio_t      *iop;
   rtems_status_code   rc;
-  int                 status;
 
   rtems_libio_check_fd(fd);
   iop = rtems_libio_iop(fd);
   rtems_libio_check_is_open(iop);
-  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK ) {
-    int (*fp)(int  fd);
 
-    fp = rtems_libio_handlers[
-            (iop->flags >> LIBIO_FLAGS_HANDLER_SHIFT) - 1].close;
-    if ( fp == NULL )
-      set_errno_and_return_minus_one( EBADF );
-    status = (*fp)( fd );
-    return status;
-  }
-
-  if ( !iop->handlers )
-    set_errno_and_return_minus_one( EBADF );
-
-  if ( !iop->handlers->close )
-    set_errno_and_return_minus_one( ENOTSUP );
-
-  rc = (*iop->handlers->close)( iop );
+  rc = RTEMS_SUCCESSFUL;
+  if ( iop->handlers->close )
+    rc = (*iop->handlers->close)( iop );
 
   rtems_libio_free( iop );
-
-  if (rc != RTEMS_SUCCESSFUL)
-    set_errno_and_return_minus_one( rc );
 
   return rc;
 }

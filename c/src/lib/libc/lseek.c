@@ -29,22 +29,6 @@ off_t lseek(
   rtems_libio_check_is_open(iop);
 
   /*
-   *  If this file descriptor is mapped to an external set of handlers,
-   *  then pass the request on to them.
-   */
-
-  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK ) {
-    rtems_libio_lseek_t fp;
-
-    fp = rtems_libio_handlers[
-           (iop->flags >> LIBIO_FLAGS_HANDLER_SHIFT) - 1].lseek;
-    if ( fp == NULL )
-      set_errno_and_return_minus_one( EBADF );
-
-    return (*fp)( fd, offset, whence );
-  }
-
-  /*
    *  Now process the lseek().
    */
 

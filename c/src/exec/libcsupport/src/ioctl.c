@@ -31,22 +31,6 @@ int ioctl(
   rtems_libio_check_is_open(iop);
 
   /*
-   *  If this file descriptor is mapped to an external set of handlers,
-   *  then pass the request on to them.
-   */ 
-
-  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK ) {
-    rtems_libio_ioctl_t fp;
-
-    fp = rtems_libio_handlers[
-           (iop->flags >> LIBIO_FLAGS_HANDLER_SHIFT) - 1].ioctl;
-    if ( fp == NULL )
-      set_errno_and_return_minus_one( EBADF );
-
-    return (*fp)( fd, command, buffer );
-  }
-
-  /*
    *  Now process the ioctl().
    */
 

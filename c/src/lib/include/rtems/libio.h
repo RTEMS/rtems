@@ -397,14 +397,7 @@ typedef struct {
 #define LIBIO_FLAGS_APPEND        0x0200  /* all writes append */
 #define LIBIO_FLAGS_CREATE        0x0400  /* create file */
 #define LIBIO_FLAGS_CLOSE_ON_EXEC 0x0800  /* close on process exec() */
-
-#define LIBIO_FLAGS_HANDLER_SHIFT 12
-#define LIBIO_FLAGS_HANDLER_MASK  0xF000  /* mask for external handler type */
-#define LIBIO_FLAGS_HANDLER_RTEMS 0x0000  /* `traditional' RTEMS I/O */
-#define LIBIO_FLAGS_HANDLER_SOCK  0x1000  /* BSD socket */
-
 #define LIBIO_FLAGS_READ_WRITE    (LIBIO_FLAGS_READ | LIBIO_FLAGS_WRITE)
-
 
 void rtems_libio_init(void);
 
@@ -445,35 +438,6 @@ typedef int (*rtems_libio_lseek_t)(
   off_t  offset,
   int    whence
 );
-
-typedef struct {
-    rtems_libio_open_t   open;
-    rtems_libio_close_t  close;
-    rtems_libio_read_t   read;
-    rtems_libio_write_t  write;
-    rtems_libio_ioctl_t  ioctl;
-    rtems_libio_lseek_t  lseek;
-} rtems_libio_handler_t;
-
-/*
- *  Register a set of external handlers
- */
-
-void rtems_register_libio_handler(
-  int                          handler_flag,
-  const rtems_libio_handler_t *handler
-);
-
-/*
- *  Macros to assist in management of external IO handlers.
- */
-
-#define RTEMS_FILE_DESCRIPTOR_TYPE_FILE         0x0000
-#define RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET       0x1000
-#define rtems_make_file_descriptor(fd,flags)    ((fd)|(flags))
-#define rtems_file_descriptor_base(fd)          ((fd) & 0x0FFF)
-#define rtems_file_descriptor_type(fd)          ((fd) & 0xF000)
-#define rtems_file_descriptor_type_index(fd)    ((((fd) & 0xF000) >> 12) - 1)
 
 /*
  *  IOCTL values

@@ -50,42 +50,10 @@ rtems_libio_t     *rtems_libio_last_iop;
 rtems_libio_t     *rtems_libio_iop_freelist;
 
 /*
- *  External I/O Handlers Table
- *
- *  Space for all possible handlers is preallocated
- *  to speed up dispatch to external handlers.
- */
-
-rtems_libio_handler_t   rtems_libio_handlers[15];
-
-/*
  *  Default mode for all files.
  */
 
 mode_t    rtems_filesystem_umask;
-
-/*
- *  rtems_register_libio_handler
- *
- *  This function registers an external IO handler set.  This lets
- *  other subsystems have their own versions of many of the system
- *  calls.  For example, the networking code registers handlers which
- *  map the system calls for read() and write() to socket calls.
- *
- */
-
-void rtems_register_libio_handler(
-  int                          handler_flag,
-  const rtems_libio_handler_t *handler
-)
-{
-  int handler_index = (handler_flag >> LIBIO_FLAGS_HANDLER_SHIFT) - 1;
-
-  if ((handler_index < 0) || (handler_index >= 15))
-    rtems_fatal_error_occurred( RTEMS_INVALID_NUMBER );
-
-  rtems_libio_handlers[handler_index] = *handler;
-}
 
 /*
  *  rtems_libio_init
