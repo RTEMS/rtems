@@ -1,5 +1,9 @@
 2003-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* intro.t, nextstep.t: Fix mailing list addresses.
+
+2003-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* buildc.t, buildrt.t, nt.t, sample.t, tversions.texi:
 	Don't use VARIABLEs containing '-' in @set and @value (violates
 	texi-syntax).
