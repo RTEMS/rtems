@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* comm/gdb_glue.c, irq/idt.c, irq/irq.c, irq/irq.h, irq/irq_asm.S,
+	irq/irq_asm.h, irq/irq_init.c: URL for license changed.
+
 2003-08-21	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 456/bsps
