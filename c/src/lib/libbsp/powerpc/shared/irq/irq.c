@@ -20,6 +20,7 @@
 #include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
 
+#include <rtems/bspIo.h> /* for printk */
 #define RAVEN_INTR_ACK_REG 0xfeff0030
 
 /*
@@ -124,6 +125,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     unsigned int level;
   
     if (!isValidInterrupt(irq->name)) {
+      printk("Invalid interrupt vector %i\n",irq->name);
       return 0;
     }
     /*
@@ -134,6 +136,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * to get the previous handler before accepting to disconnect.
      */
     if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
+      printk("IRQ vector %i already connected\n",irq->name);
       return 0;
     }
     _CPU_ISR_Disable(level);
@@ -372,7 +375,14 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
   else {
-    openpic_eoi(0);
+#ifdef BSP_PCI_VME_BRIDGE_DOES_EOI
+	/* leave it to the VME bridge to do EOI, so
+         * it can re-enable the openpic while handling
+         * VME interrupts (-> VME priorities in software)
+	 */
+	if (BSP_PCI_VME_BRIDGE_IRQ!=irq)
+#endif
+    		openpic_eoi(0);
   }
 }
     

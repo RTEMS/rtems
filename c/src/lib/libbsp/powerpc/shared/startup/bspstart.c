@@ -200,6 +200,10 @@ void bsp_start( void )
    * so that It can be printed without accessing R1.
    */
   stack = ((unsigned char*) &__rtems_end) + INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+
+ /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
+  *((unsigned32 *)stack) = 0;
+
   /*
    * Initialize the interrupt related settings
    * SPRG0 = interrupt nesting level count
@@ -209,6 +213,10 @@ void bsp_start( void )
    * some settings below...
    */
   intrStack = ((unsigned char*) &__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+
+ /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
+  *((unsigned32 *)intrStack) = 0;
+
   asm volatile ("mtspr	273, %0" : "=r" (intrStack) : "0" (intrStack));
   asm volatile ("mtspr	272, %0" : "=r" (intrNestingLevel) : "0" (intrNestingLevel));
   /*
@@ -228,7 +236,8 @@ void bsp_start( void )
    * PCI devices memory area. Needed to access OPENPIC features
    * provided by the RAVEN
    */
-  setdbat(2, 0xc0000000, 0xc0000000, 0x08000000, IO_PAGE);
+  /* T. Straumann: give more PCI address space */
+  setdbat(2, 0xc0000000, 0xc0000000, 0x10000000, IO_PAGE);
   /*
    * Must have acces to open pic PCI ACK registers 
    * provided by the RAVEN

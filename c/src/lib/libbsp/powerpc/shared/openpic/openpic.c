@@ -26,15 +26,16 @@
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
 #include <bsp.h>
+#include <rtems/bspIo.h>
 
+#ifndef NULL
 #define NULL 0
+#endif
 #define REGISTER_DEBUG
 #undef REGISTER_DEBUG
 
 
 volatile struct OpenPIC *OpenPIC = NULL;
-unsigned int OpenPIC_NumInitSenses  = 0;
-unsigned char *OpenPIC_InitSenses  = NULL;
 
 static unsigned int NumProcessors;
 static unsigned int NumSources;
@@ -157,9 +158,13 @@ static void openpic_safe_writefield(volatile unsigned int *addr, unsigned int ma
      * Add some kludge to use the Motorola Raven OpenPIC which does not
      * report vendor and device id, and gets the wrong number of interrupts.
      * (Motorola did a great job on that one!)
+     *
+     * T. Straumann, 12/20/2001: polarities and senses are now passed as
+     *                           parameters, eliminated global vars.
+     *                           IRQ0 is no longer treated specially.
      */
 
-void openpic_init(int main_pic)
+void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses)
 {
     unsigned int t, i;
     unsigned int vendorid, devid, stepping, timerfreq;
@@ -250,10 +255,11 @@ void openpic_init(int main_pic)
 	    openpic_initirq(0, 8, OPENPIC_VEC_SOURCE, 1, 1);
 	    /* Processor 0 */
 	    openpic_mapirq(0, 1<<0);
-	    for (i = 1; i < NumSources; i++) {
+	    for (i = 0; i < NumSources; i++) {
 		    /* Enabled, Priority 8 */
-		    openpic_initirq(i, 8, OPENPIC_VEC_SOURCE+i, 0,
-				    i < OpenPIC_NumInitSenses ? OpenPIC_InitSenses[i] : 1);
+		    openpic_initirq(i, 8, OPENPIC_VEC_SOURCE+i,
+					polarities ? polarities[i] : 0,
+					senses     ? senses[i]     : 1);
 		    /* Processor 0 */
 		    openpic_mapirq(i, 1<<0);
 	    }

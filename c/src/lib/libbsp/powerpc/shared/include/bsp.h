@@ -26,9 +26,33 @@
  *   - Interrupt stack space is not minimum if defined.
  */
 
-/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
+#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
+
+/* fundamental addresses for this BSP (PREPxxx are from libcpu/io.h) */
+#define	_IO_BASE			PREP_ISA_IO_BASE
+#define	_ISA_MEM_BASE		PREP_ISA_MEM_BASE
+/* address of our ram on the PCI bus   */
+#define	PCI_DRAM_OFFSET		PREP_PCI_DRAM_OFFSET
+/* offset of pci memory as seen from the CPU */
+#define PCI_MEM_BASE		PREP_ISA_MEM_BASE
+
+/*
+ *  base address definitions for several devices
+ *
+ */
+#define BSP_UART_IOBASE_COM1 ((_IO_BASE)+0x3f8)
+#define BSP_UART_IOBASE_COM2 ((_IO_BASE)+0x2f8)
+#define BSP_KBD_IOBASE       ((_IO_BASE)+0x60)
+#define BSP_VGA_IOBASE       ((_IO_BASE)+0x3c0)
+
+#define BSP_CONSOLE_PORT	BSP_UART_COM1
+#define BSP_UART_BAUD_BASE	115200
   
+#include <bsp/openpic.h>
+#define BSP_PIC_DO_EOI openpic_eoi(0)
+
+
 #ifndef ASM
 #define outport_byte(port,value) outb(value,port)
 #define outport_word(port,value) outw(value,port)

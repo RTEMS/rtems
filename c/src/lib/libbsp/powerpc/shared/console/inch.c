@@ -22,12 +22,14 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 
+#include "console.inl"
+
 /*-------------------------------------------------------------------------+
 | Constants
 +--------------------------------------------------------------------------*/
-#define KBD_CTL      0x61  /* -------------------------------- */
-#define KBD_DATA     0x60  /* Ports for PC keyboard controller */
-#define KBD_STATUS   0x64  /* -------------------------------- */
+#define KBD_CTL      0x1  /* -------------------------------- */
+#define KBD_DATA     0x0  /* Port offsets for PC keyboard controller */
+#define KBD_STATUS   0x4  /* -------------------------------- */
 
 #define KBD_BUF_SIZE 256
 
@@ -62,19 +64,6 @@ static rtems_unsigned16 kbd_last  = 0;
 static rtems_unsigned16 kbd_end   = KBD_BUF_SIZE - 1;
 
 /*-------------------------------------------------------------------------+
-|         Function: rtemsReboot
-|      Description: Reboot the PC.
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Nothing.
-+--------------------------------------------------------------------------*/
-void rtemsReboot(void)
-{
-  /* shutdown and reboot */
-  outport_byte(0x64, 0xFE);      /* use keyboard controler to do the job... */
-} /* rtemsReboot */
-
-/*-------------------------------------------------------------------------+
 |         Function: _IBMPC_scankey
 |      Description: This function can be called during a poll for input, or by
 |                   an ISR. Basically any time you want to process a keypress.
@@ -97,18 +86,18 @@ _IBMPC_scankey(char *outChar)
   *outChar = NULL; /* default value if we return FALSE */
 
   /* Read keyboard controller, toggle enable */
-  inport_byte(KBD_CTL, inChar);
-  outport_byte(KBD_CTL, inChar & ~0x80);
-  outport_byte(KBD_CTL, inChar | 0x80);
-  outport_byte(KBD_CTL, inChar & ~0x80);
+  inChar=kbd_inb(KBD_CTL);
+  kbd_outb(KBD_CTL, inChar & ~0x80);
+  kbd_outb(KBD_CTL, inChar | 0x80);
+  kbd_outb(KBD_CTL, inChar & ~0x80);
 
   /* See if it has data */
-  inport_byte(KBD_STATUS, inChar);
+  inChar=kbd_inb(KBD_STATUS);
   if ((inChar & 0x01) == 0)
     return FALSE;
 
   /* Read the data.  Handle nonsense with shift, control, etc. */
-  inport_byte(KBD_DATA, inChar);
+  inChar=kbd_inb(KBD_DATA);
 
   if (extended)
     extended--;

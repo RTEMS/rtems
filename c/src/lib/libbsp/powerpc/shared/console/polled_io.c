@@ -20,17 +20,34 @@
 #include <libcpu/byteorder.h>
 #include <libcpu/page.h>
 #include <libcpu/mmu.h>
-#include "keyboard.h"
 #include <libcpu/io.h>
 #include <string.h>
 #include <stdarg.h>
 #include <bsp/consoleIo.h>
+#include <bsp.h>
 #include <libcpu/spr.h>
+
+#ifdef BSP_KBD_IOBASE
+#define USE_KBD_SUPPORT
+#endif
+#ifdef BSP_VGA_IOBASE
+#define USE_VGA_SUPPORT
+#endif
+
+#ifdef USE_KBD_SUPPORT
+#include "keyboard.h"
+#endif
+#include "console.inl"
+
+#ifdef __BOOT__
+extern void boot_udelay();
+#endif
 
 typedef unsigned long long u64;
 typedef long long s64;
 typedef unsigned int u32;
 
+#ifdef USE_KBD_SUPPORT
 unsigned short plain_map[NR_KEYS] = {
 	0xf200,	0xf01b,	0xf031,	0xf032,	0xf033,	0xf034,	0xf035,	0xf036,
 	0xf037,	0xf038,	0xf039,	0xf030,	0xf02d,	0xf03d,	0xf07f,	0xf009,
@@ -296,10 +313,11 @@ unsigned int accent_table_size = 68;
 
 /* These #defines have been copied from drivers/char/pc_keyb.h, by
  * Martin Mares (mj@ucw.cz).  
+ * converted to offsets by Till Straumann <strauman@slac.stanford.edu>
  */
-#define KBD_STATUS_REG		0x64	/* Status register (R) */
-#define KBD_CNTL_REG		0x64	/* Controller command register (W) */
-#define KBD_DATA_REG		0x60	/* Keyboard data register (R/W) */
+#define KBD_STATUS_REG		0x4	/* Status register (R) */
+#define KBD_CNTL_REG		0x4	/* Controller command register (W) */
+#define KBD_DATA_REG		0x0	/* Keyboard data register (R/W) */
 
 /*
  *	Keyboard Controller Commands
@@ -356,6 +374,8 @@ unsigned int accent_table_size = 68;
 SPR_RW(DEC)
 SPR_RO(PVR)
 
+#endif /* USE_KBD_SUPPORT */
+
 
 /* Early messages after mm init but before console init are kept in log 
  * buffers.
@@ -377,10 +397,8 @@ static  u_char 	log_page_pool	[STATIC_LOG_DATA_PAGE_NB * PAGE_SIZE];
 #endif
 
 static board_memory_map mem_map = {
-  (__io_ptr) 0x80000000, 
-  (__io_ptr) 0xc0000000, 
-  (__io_ptr) 0xc0000000, 
-  (__io_ptr) 0x80000000
+  (__io_ptr) _IO_BASE,		/* from libcpu/io.h */
+  (__io_ptr) _ISA_MEM_BASE,
 };
 
 board_memory_map *ptr_mem_map = &mem_map;
@@ -403,18 +421,6 @@ typedef struct console_io {
 }console_io;
 
 extern console_io* curIo;
-
-unsigned long ticks_per_ms = 1000000;	/* Decrementer ticks per ms (true for 601) */
-
-/* The decrementer is present on all processors and the RTC on the 601
- * has the annoying characteristic of jumping from 1e9 to 0, so we
- * use the decrementer.
- */
-void udelay(int us) {
-	us = us*ticks_per_ms/1000;
-	_write_DEC(us);
-	while((int)_read_DEC() >= 0);
-}
 
 void debug_putc(const u_char c)
 {
@@ -473,7 +479,6 @@ int vacuum_tstc(void) {
 #define LSR_TEMT 0x40  /* Xmitter empty */
 #define LSR_ERR  0x80  /* Error */
 
-#define COM1	0x3F8
 
 #ifdef STATIC_LOG_ALLOC
 static int global_index = 0;
@@ -543,23 +548,28 @@ void flush_log(void) {
 	}
 }
 
+#ifndef INL_CONSOLE_INB
+#error "BSP probably didn't define a console port"
+#endif
+
 void serial_putc(const u_char c)
 {
-	while ((inb(COM1+lsr) & LSR_THRE) == 0) ;
-	outb(c, COM1+thr);
+	while ((INL_CONSOLE_INB(lsr) & LSR_THRE) == 0) ;
+	INL_CONSOLE_OUTB(thr, c);
 }
  
 int serial_getc(void)
 {
-	while ((inb(COM1+lsr) & LSR_DR) == 0) ;
-	return (inb(COM1+rbr));
+	while ((INL_CONSOLE_INB(lsr) & LSR_DR) == 0) ;
+	return (INL_CONSOLE_INB(rbr));
 }
 
 int serial_tstc(void)
 {
-	return ((inb(COM1+lsr) & LSR_DR) != 0);
+	return ((INL_CONSOLE_INB(lsr) & LSR_DR) != 0);
 }
 
+#ifdef USE_VGA_SUPPORT
 static void scroll(void)
 {
 	int i;
@@ -579,10 +589,10 @@ static void
 cursor(int x, int y)
 {
 	int pos = console_global_data.cols*y + x;
-	outb(14, 0x3D4);
-	outb(pos>>8, 0x3D5);
-	outb(15, 0x3D4);
-	outb(pos, 0x3D5);
+	vga_outb(14, 0x14);
+	vga_outb(0x15, pos>>8);
+	vga_outb(0x14, 15);
+	vga_outb(0x15, pos);
 }
 
 void 
@@ -620,16 +630,18 @@ vga_putc(const u_char c)
 	console_global_data.orig_x = x;
 	console_global_data.orig_y = y;
 }
+#endif /* USE_VGA_SUPPORT */
 
+#ifdef USE_KBD_SUPPORT
 /* Keyboard support */
 static int kbd_getc(void)
 {
 	unsigned char dt, brk, val;
 	unsigned code;
 loop:
-	while((inb(KBD_STATUS_REG) & KBD_STAT_OBF) == 0) ;
+	while((kbd_inb(KBD_STATUS_REG) & KBD_STAT_OBF) == 0) ;
 
-	dt = inb(KBD_DATA_REG);
+	dt = kbd_inb(KBD_DATA_REG);
 
 	brk = dt & 0x80;	/* brk == 1 on key release */
 	dt = dt & 0x7f;		/* keycode */
@@ -667,8 +679,8 @@ loop:
 		else if (val == KVAL(K_ENTER)) {
 enter:		    /* Wait for key up */
 		    while (1) {
-			while((inb(KBD_STATUS_REG) & KBD_STAT_OBF) == 0) ;
-			dt = inb(KBD_DATA_REG);
+			while((kbd_inb(KBD_STATUS_REG) & KBD_STAT_OBF) == 0) ;
+			dt = kbd_inb(KBD_DATA_REG);
 			if (dt & 0x80) /* key up */ break;
 		    }
 		    return 10;
@@ -732,25 +744,33 @@ enter:		    /* Wait for key up */
 static int kbd_get(int ms) {
 	int status, data;
 	while(1) {
-		status = inb(KBD_STATUS_REG);
+		status = kbd_inb(KBD_STATUS_REG);
 		if (status & KBD_STAT_OBF) {
-			data = inb(KBD_DATA_REG);
+			data = kbd_inb(KBD_DATA_REG);
 			if (status & (KBD_STAT_GTO | KBD_STAT_PERR))
 				return -1;
 			else
 				return data;
 		}
 		if (--ms < 0) return -1; 
-		udelay(1000);
+#ifdef __BOOT__
+		boot_udelay(1000);
+#else
+		rtems_bsp_delay(1000);
+#endif
 	}
 }
 
 static void kbd_put(u_char c, int ms, int port) {
-  	while (inb(KBD_STATUS_REG) & KBD_STAT_IBF) {
+  	while (kbd_inb(KBD_STATUS_REG) & KBD_STAT_IBF) {
 		if (--ms < 0) return; 
-		udelay(1000);
+#ifdef __BOOT__
+		boot_udelay(1000);
+#else
+		rtems_bsp_delay(1000);
+#endif
 	}
-	outb(c, port);
+	kbd_outb(port, c);
 }
 
 int kbdreset(void)
@@ -796,8 +816,9 @@ int kbdreset(void)
 
 int kbd_tstc(void)
 {
-	return ((inb(KBD_STATUS_REG) & KBD_STAT_OBF) != 0);
+	return ((kbd_inb(KBD_STATUS_REG) & KBD_STAT_OBF) != 0);
 }
+#endif /* USE_KBD_SUPPORT */
 
 const struct console_io 
 vacuum_console_functions = {
@@ -811,19 +832,22 @@ log_console_functions = {
   	log_putc, 
 	vacuum_getc, 
 	vacuum_tstc
-},
-
+}
+,
 serial_console_functions = {
 	serial_putc, 
 	serial_getc, 
 	serial_tstc
-},
-
+}
+#if defined(USE_KBD_SUPPORT) && defined(USE_VGA_SUPPORT)
+,
 vga_console_functions = {
 	vga_putc, 
 	kbd_getc, 
 	kbd_tstc
-};
+}
+#endif
+;
 
 console_io* curIo = (console_io*) &vacuum_console_functions;
 
@@ -834,7 +858,9 @@ int select_console(ioType t) {
   case CONSOLE_VACUUM 	: curIo = (console_io*)&vacuum_console_functions; break;
   case CONSOLE_LOG 	: curIo = (console_io*)&log_console_functions; break;
   case CONSOLE_SERIAL 	: curIo = (console_io*)&serial_console_functions; break;
+#if defined(USE_KBD_SUPPORT) && defined(USE_VGA_SUPPORT)
   case CONSOLE_VGA 	: curIo = (console_io*)&vga_console_functions; break;
+#endif
   default	        : curIo = (console_io*)&vacuum_console_functions;break;
   }
   if (curType == CONSOLE_LOG) flush_log();

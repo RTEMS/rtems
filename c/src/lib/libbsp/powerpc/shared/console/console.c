@@ -9,6 +9,9 @@
  * (C) Copyright 1997 -
  * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
  *
+ * Till Straumann, <strauman@slac.stanford.edu>, 12/20/2001
+ * separate BSP specific stuff from generics...
+ *
  * http://pandora.ist.utl.pt
  *
  * Instituto Superior Tecnico * Lisboa * PORTUGAL
@@ -34,56 +37,24 @@ extern int close(int fd);
 #include <termios.h>
 #include <bsp/uart.h>
 #include <bsp/consoleIo.h>
+#include <rtems/bspIo.h>	/* printk */
 
 /* Definitions for BSPConsolePort */
-#define BSP_CONSOLE_PORT_CONSOLE (-1)
-#define BSP_CONSOLE_PORT_COM1    (BSP_UART_COM1)
-#define BSP_CONSOLE_PORT_COM2    (BSP_UART_COM2)
 /*
  * Possible value for console input/output :
  *	BSP_CONSOLE_PORT_CONSOLE
  *	BSP_UART_COM1
  *	BSP_UART_COM2
  */
+int BSPConsolePort = BSP_CONSOLE_PORT;
 
-int BSPConsolePort = BSP_UART_COM1;
-
-/* int BSPConsolePort = BSP_UART_COM2;  */
-int BSPBaseBaud    = 115200;
+int BSPBaseBaud    = BSP_UART_BAUD_BASE;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
 
 static int  conSetAttr(int minor, const struct termios *);
-static void isr_on(const rtems_irq_connect_data *);
-static void isr_off(const rtems_irq_connect_data *);
-static int  isr_is_on(const rtems_irq_connect_data *);
-
-
-static rtems_irq_connect_data console_isr_data = {BSP_ISA_UART_COM1_IRQ,
-						   BSP_uart_termios_isr_com1,
-						   isr_on,
-						   isr_off,
-						   isr_is_on};
-
-static void
-isr_on(const rtems_irq_connect_data *unused)
-{
-  return;
-}
-						   
-static void
-isr_off(const rtems_irq_connect_data *unused)
-{
-  return;
-}
-
-static int
-isr_is_on(const rtems_irq_connect_data *irq)
-{
-  return BSP_irq_enabled_at_i8259s(irq->name);
-}
 
 void __assert (const char *file, int line, const char *msg)
 {
@@ -112,6 +83,28 @@ void __assert (const char *file, int line, const char *msg)
 
 }
 
+typedef struct TtySTblRec_ {
+		char	*name;
+		void	(*isr)(void); /* STUPID API doesn't pass a parameter :-( */
+} TtySTblRec, *TtySTbl;
+
+static TtySTblRec ttyS[]={
+		{ "/dev/ttyS0",
+#ifdef BSP_UART_IOBASE_COM1
+		  BSP_uart_termios_isr_com1
+#else
+		  0
+#endif
+		},
+		{ "/dev/ttyS1",
+#ifdef BSP_UART_IOBASE_COM2
+		  BSP_uart_termios_isr_com2
+#else
+		  0
+#endif
+		},
+};
+
 
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.
@@ -130,7 +123,6 @@ console_initialize(rtems_device_major_number major,
    *  to be reinitialized.
    */
 
-
   /*
    * Set up TERMIOS
    */
@@ -139,57 +131,66 @@ console_initialize(rtems_device_major_number major,
   /*
    * Do device-specific initialization
    */
-      
-  /* 9600-8-N-1 */
-  BSP_uart_init(BSPConsolePort, 9600, 0);
-      
-      
-  /* Set interrupt handler */
-  if(BSPConsolePort == BSP_UART_COM1)
-    {
-      console_isr_data.name = BSP_ISA_UART_COM1_IRQ;
-      console_isr_data.hdl  = BSP_uart_termios_isr_com1;
-	  
-    }
-  else
-    {
-      assert(BSPConsolePort == BSP_UART_COM2);
-      console_isr_data.name = BSP_ISA_UART_COM2_IRQ;
-      console_isr_data.hdl  = BSP_uart_termios_isr_com2;
-    }
 
-  status = BSP_install_rtems_irq_handler(&console_isr_data);
-
-  if (!status){
-    printk("Error installing serial console interrupt handler!\n");
-    rtems_fatal_error_occurred(status);
-  }
-  /*
-   * Register the device
+  /* RTEMS calls this routine once with 'minor'==0; loop through
+   * all known instances...
    */
-  status = rtems_io_register_name ("/dev/console", major, 0);
-  if (status != RTEMS_SUCCESSFUL)
-    {
-      printk("Error registering console device!\n");
-      rtems_fatal_error_occurred (status);
-    }
+     
+  for (minor=0; minor < sizeof(ttyS)/sizeof(ttyS[0]); minor++) {
+	char *nm;
+	  /*
+	   * Skip ports (possibly not supported by BSP...) we have no ISR for
+	   */
+	  if ( ! ttyS[minor].isr )
+		continue;
+	  /*
+	   * Register the device
+	   */
+	  status = rtems_io_register_name ((nm=ttyS[minor].name), major, minor);
+	  if ( RTEMS_SUCCESSFUL==status && BSPConsolePort == minor)
+		{
+		  printk("Registering /dev/console as minor %i (==%s)\n",
+							minor,
+							ttyS[minor].name);
+		  /* also register an alias */
+		  status = rtems_io_register_name (
+							(nm="/dev/console"),
+							major,
+							minor);
+		}
+	  if (status != RTEMS_SUCCESSFUL)
+		{
+		  printk("Error registering %s!\n",nm);
+		  rtems_fatal_error_occurred (status);
+		}
 
-  if(BSPConsolePort == BSP_UART_COM1)
-    {
-      printk("Initialized console on port COM1 9600-8-N-1\n\n");
-    }
-  else
-    {
-      printk("Initialized console on port COM2 9600-8-N-1\n\n");
-    }
+  }
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
+
+static int console_first_open(int major, int minor, void *arg)
+{
+  rtems_status_code status;
+
+	  /* must not open a minor device we have no ISR for */
+	  assert( minor>=0 && minor < sizeof(ttyS)/sizeof(ttyS[0]) && ttyS[minor].isr );
+
+	  /* 9600-8-N-1 */
+	  BSP_uart_init(minor, 9600, 0);
+	  status = BSP_uart_install_isr(minor, ttyS[minor].isr);
+	  if (!status)
+	  	{
+		  printk("Error installing serial console interrupt handler for '%s'!\n",
+				ttyS[minor].name);
+		  rtems_fatal_error_occurred(status);
+		}
+	  return 0;
+}
 
 
 static int console_last_close(int major, int minor, void *arg)
 {
-  BSP_remove_rtems_irq_handler (&console_isr_data);
-
+  BSP_uart_remove_isr(minor, ttyS[minor].isr);
   return 0;
 }
 
@@ -204,20 +205,15 @@ console_open(rtems_device_major_number major,
   rtems_status_code              status;
   static rtems_termios_callbacks cb = 
   {
-    NULL,	              /* firstOpen */
-    console_last_close,       /* lastClose */
-    NULL,	              /* pollRead */
-    BSP_uart_termios_write_com1, /* write */
-    conSetAttr,	              /* setAttributes */
-    NULL,	              /* stopRemoteTx */
-    NULL,	              /* startRemoteTx */
-    1		              /* outputUsesInterrupts */
+    console_first_open,			/* firstOpen */
+    console_last_close,			/* lastClose */
+    NULL,						/* pollRead */
+    BSP_uart_termios_write_com,	/* write */
+    conSetAttr,					/* setAttributes */
+    NULL,						/* stopRemoteTx */
+    NULL,						/* startRemoteTx */
+    1							/* outputUsesInterrupts */
   };
-
-  if(BSPConsolePort == BSP_UART_COM2)
-    {
-      cb.write = BSP_uart_termios_write_com2;
-    }
 
   status = rtems_termios_open (major, minor, arg, &cb);
 
@@ -230,10 +226,10 @@ console_open(rtems_device_major_number major,
   /*
    * Pass data area info down to driver
    */
-  BSP_uart_termios_set(BSPConsolePort, 
+  BSP_uart_termios_set(minor, 
 			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
   /* Enable interrupts  on channel */
-  BSP_uart_intr_ctrl(BSPConsolePort, BSP_UART_INTR_CTRL_TERMIOS);
+  BSP_uart_intr_ctrl(minor, BSP_UART_INTR_CTRL_TERMIOS);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -362,10 +358,7 @@ conSetAttr(int minor, const struct termios *t)
       return 0;
     }
 
-  BSP_uart_set_baud(BSPConsolePort, baud);
+  BSP_uart_set_baud(minor, baud);
 
   return 0;
 }
-
-
-

@@ -10,6 +10,8 @@
 #ifndef _BSPUART_H
 #define _BSPUART_H
 
+#include <bsp/irq.h>
+
 void BSP_uart_init(int uart, int baud, int hwFlow);
 void BSP_uart_set_baud(int aurt, int baud);
 void BSP_uart_intr_ctrl(int uart, int cmd);
@@ -19,12 +21,14 @@ int  BSP_uart_polled_status(int uart);
 void BSP_uart_polled_write(int uart, int val);
 int  BSP_uart_polled_read(int uart);
 void BSP_uart_termios_set(int uart, void *ttyp);
-int  BSP_uart_termios_write_com1(int minor, const char *buf, int len);
-int  BSP_uart_termios_write_com2(int minor, const char *buf, int len);
+int  BSP_uart_termios_write_com(int minor, const char *buf, int len);
 void BSP_uart_termios_isr_com1();
 void BSP_uart_termios_isr_com2();
 void BSP_uart_dbgisr_com1(void);
 void BSP_uart_dbgisr_com2(void);
+int  BSP_uart_install_isr(int uart, rtems_irq_hdl handler);
+int  BSP_uart_remove_isr(int uart, rtems_irq_hdl handler);
+
 extern unsigned BSP_poll_char_via_serial(void);
 extern void BSP_output_char_via_serial(int val);
 extern int BSPConsolePort;
@@ -48,13 +52,6 @@ extern int BSPBaseBaud;
 /* PC UART definitions */
 #define BSP_UART_COM1            (0)
 #define BSP_UART_COM2            (1)
-
-/*
- * Base IO for UART
- */
-
-#define COM1_BASE_IO	0x3F8
-#define COM2_BASE_IO	0x2F8
 
 /*
  * Offsets from base

@@ -8,6 +8,9 @@
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  * to make it valid for MVME2300 Motorola boards.
  *
+ * Till Straumann <strauman@slac.stanford.edu>, 12/20/2001:
+ * Use the new interface to openpic_init
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
@@ -87,6 +90,11 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
    * Processor exceptions handled as interrupts
    */
   0
+};
+
+static unsigned char mcp750_openpic_initpolarities[16] = {
+    1,  /* 8259 cascade */
+    0,	/* all the rest of them */
 };
 
 static unsigned char mcp750_openpic_initsenses[] = {
@@ -226,12 +234,10 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   /*
    * First initialize the Interrupt management hardware
    */
-  OpenPIC_InitSenses = mcp750_openpic_initsenses;
-  OpenPIC_NumInitSenses = sizeof(mcp750_openpic_initsenses) / sizeof(char);
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
 #endif       
-  openpic_init(1);
+  openpic_init(1, mcp750_openpic_initsenses, mcp750_openpic_initpolarities);
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif

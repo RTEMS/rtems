@@ -3,7 +3,7 @@
 ##
 
 
-C_FILES = pci.c
+C_FILES = pci.c detect_raven_bridge.c pcifinddevice.c
 
 H_FILES = pci.h
 
@@ -18,6 +18,6 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
 
 all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = pci.c pci.h
+EXTRA_DIST = pci.c pci.h detect_raven_bridge.c pcifinddevice.c
 
 include $(top_srcdir)/../../../../../automake/local.am

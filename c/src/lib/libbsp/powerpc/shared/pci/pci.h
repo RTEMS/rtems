@@ -1082,7 +1082,10 @@
 #define PCIBIOS_SET_FAILED		0x88
 #define PCIBIOS_BUFFER_TOO_SMALL	0x89
 
-#define PCI_MAX_DEVICES			16
+/* T. Straumann, 7/31/2001: increased to 32 - PMC slots are not
+ * scanned on mvme2306 otherwise
+ */
+#define PCI_MAX_DEVICES			32
 #define PCI_MAX_FUNCTIONS		8
 
 typedef struct  {
@@ -1103,45 +1106,45 @@ typedef struct  {
 typedef struct {
   volatile unsigned char*	pci_config_addr;
   volatile unsigned char*	pci_config_data;
-  pci_config_access_functions*	pci_functions;
+  const pci_config_access_functions*	pci_functions;
 } pci_config;
 
-extern pci_config pci;
+extern pci_config BSP_pci_configuration;
 
 extern inline int
 pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned char * val) {
-	return pci.pci_functions->read_config_byte(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->read_config_byte(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned short * val) {
-	return pci.pci_functions->read_config_word(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->read_config_word(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_read_config_dword(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned int * val) {
-	return pci.pci_functions->read_config_dword(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->read_config_dword(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_write_config_byte(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned char val) {
-	return pci.pci_functions->write_config_byte(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->write_config_byte(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned short val) {
-	return pci.pci_functions->write_config_word(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->write_config_word(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned int val) {
-	return pci.pci_functions->write_config_dword(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->write_config_dword(bus, slot, function, where, val);
 }
 
 /*
@@ -1149,5 +1152,15 @@ pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char func
  */
 extern unsigned char BusCountPCI();
 extern void InitializePCI();
+
+/* scan for a specific device */
+/* find a particular PCI device
+ * (currently, only bus0 is scanned for device/fun0)
+ *
+ * RETURNS: zero on success, bus/dev/fun in *pbus / *pdev / *pfun
+ */
+int
+BSP_pciFindDevice(unsigned short vendorid, unsigned short deviceid,
+                int instance, int *pbus, int *pdev, int *pfun);
 
 #endif /* RTEMS_PCI_H */

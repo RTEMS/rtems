@@ -233,6 +233,21 @@ void decompress_kernel(int kernel_size, void * zimage_start, int len,
 	codemove(bd->load_address, initrd_start, initrd_len, bd->cache_lsize);
 }
 
+static int ticks_per_ms=0;
+
+/* this is from rtems_bsp_delay from libcpu */
+void
+boot_udelay(unsigned32 _microseconds)
+{
+   unsigned32 start, ticks, now;
+
+   ticks = _microseconds * ticks_per_ms / 1000;
+   CPU_Get_timebase_low( start );
+   do {
+     CPU_Get_timebase_low( now );
+   } while (now - start < ticks);
+}
+
 void 
 setup_hw(void)
 {
@@ -402,7 +417,7 @@ setup_hw(void)
 			}
 			break;  /* Exit 'timer' loop */
 		}
-		udelay(1000);  /* 1 msec */
+		boot_udelay(1000);  /* 1 msec */
 	}
 	*cp = 0;
 }

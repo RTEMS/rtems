@@ -85,6 +85,10 @@ SYM (push_normalized_frame):
 	stw	r30,  EXC_CTR_OFFSET(r1)
 	mfxer	r28
 	stw	r28,  EXC_XER_OFFSET(r1)
+	mfmsr	r28
+	stw	r28,  EXC_MSR_OFFSET(r1)
+	mfdar	r28
+	stw	r28,  EXC_DAR_OFFSET(r1)
         /*
          * compute SP at exception entry
          */

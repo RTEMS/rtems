@@ -18,6 +18,6 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
 
 all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = pnp.h residual.c residual.h
+EXTRA_DIST = residual.c
 
 include $(top_srcdir)/../../../../../automake/local.am

@@ -3,7 +3,7 @@
 ##
 
 
-C_FILES = console.c inch.c polled_io.c uart.c
+C_FILES = console.c inch.c polled_io.c uart.c reboot.c
 
 H_FILES = consoleIo.h keyboard.h uart.h
 
@@ -18,7 +18,7 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
 
 all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = console.c consoleIo.h inch.c keyboard.h polled_io.c uart.c \
-    uart.h
+EXTRA_DIST = console.c inch.c polled_io.c uart.c \
+    reboot.c console.inl
 
 include $(top_srcdir)/../../../../../automake/local.am

@@ -191,8 +191,6 @@ struct OpenPIC {
 };
 
 extern volatile struct OpenPIC *OpenPIC;
-extern unsigned int OpenPIC_NumInitSenses;
-extern unsigned char *OpenPIC_InitSenses;
 
 
     /*
@@ -309,7 +307,7 @@ extern unsigned char *OpenPIC_InitSenses;
      */
 
 /* Global Operations */
-extern void openpic_init(int);
+extern void openpic_init(int,unsigned char *, unsigned char *);
 extern void openpic_reset(void);
 extern void openpic_enable_8259_pass_through(void);
 extern void openpic_disable_8259_pass_through(void);

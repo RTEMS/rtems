@@ -23,6 +23,38 @@ static rtems_raw_except_connect_data    exception_table[LAST_VALID_EXC + 1];
 
 exception_handler_t globalExceptHdl;
 
+/* T. Straumann: provide a stack trace
+ * <strauman@slac.stanford.edu>, 6/26/2001
+ */
+typedef struct LRFrameRec_ {
+	struct LRFrameRec_ *frameLink;
+	unsigned long *lr;
+} LRFrameRec, *LRFrame;
+
+#define STACK_CLAMP 50	/* in case we have a corrupted bottom */
+
+void
+BSP_printStackTrace(BSP_Exception_frame* excPtr)
+{
+LRFrame f;
+int	i;
+
+	printk("Stack Trace: ");
+	printk("  IP: 0x%08x, LR: 0x%08x\n",
+			excPtr->EXC_SRR0, excPtr->EXC_LR);
+	for (f=(LRFrame)excPtr->GPR1, i=0; f->frameLink && i<STACK_CLAMP; f=f->frameLink) {
+		printk("--^ 0x%08x", (long)(f->frameLink->lr));
+		if (!(++i%5))
+			printk("\n");
+	}
+	if (i>=STACK_CLAMP) {
+		printk("Too many stack frames (stack possibly corrupted), giving up...\n");
+	} else {
+		if (i%5)
+			printk("\n");
+	}
+}
+
 void C_exception_handler(BSP_Exception_frame* excPtr)
 {
   int recoverable = 0;
@@ -66,7 +98,10 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
   printk("\t CTR = %x\n", excPtr->EXC_CTR);
   printk("\t XER = %x\n", excPtr->EXC_XER);
   printk("\t LR = %x\n", excPtr->EXC_LR);
-  printk("\t MSR = %x\n", excPtr->EXC_MSR);
+  printk("\t DAR = %x\n", excPtr->EXC_DAR);
+
+  BSP_printStackTrace(excPtr);
+
   if (excPtr->_EXC_number == ASM_DEC_VECTOR)
        recoverable = 1;
   if (excPtr->_EXC_number == ASM_SYS_VECTOR)
