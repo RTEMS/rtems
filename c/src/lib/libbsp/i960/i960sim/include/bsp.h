@@ -47,11 +47,11 @@ extern "C" {
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler ) set_vector( (handler), 6, 1 )
+#define Install_tm27_vector( handler ) /* set_vector( (handler), 6, 1 ) */
 
-#define Cause_tm27_intr()  i960_cause_intr( 0x62 )
+#define Cause_tm27_intr()  /* i960_cause_intr( 0x62 ) */
 
-#define Clear_tm27_intr()  i960_clear_intr( 6 )
+#define Clear_tm27_intr()  /* i960_clear_intr( 6 ) */
 
 #define Lower_tm27_intr()
 
