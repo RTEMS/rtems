@@ -228,12 +228,19 @@ extern "C" {
  *  until a context switch is made to another, different FP task.
  *  Thus in a system with only one FP task, the FP context will never
  *  be saved or restored.
+ *
+ *  Note, however that compilers may use floating point registers/
+ *  instructions for optimization or they may save/restore FP registers
+ *  on the stack. You must not use deferred switching in these cases
+ *  and on the PowerPC attempting to do so will raise a "FP unavailable"
+ *  exception.
  */
 /*
  *  ACB Note:  This could make debugging tricky..
  */
 
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+/* conservative setting (FALSE); probably doesn't affect performance too much */
+#define CPU_USE_DEFERRED_FP_SWITCH       FALSE
 
 /*
  *  Does this port provide a CPU dependent IDLE task implementation?
