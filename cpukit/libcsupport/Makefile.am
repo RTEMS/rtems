@@ -2,11 +2,9 @@
 ##  $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../aclocal
-
-include $(top_srcdir)/../automake/multilib.am
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h \
@@ -98,7 +96,7 @@ all-local: $(PREINSTALL_FILES)
 
 LIB = ${ARCH}/libcsupport.a
 
-AM_CPPFLAGS += -Isrc
+AM_CPPFLAGS += -I$(srcdir)/src
 
 ERROR_C_FILES = src/error.c
 
@@ -174,9 +172,9 @@ ${ARCH}/%.$(OBJEXT): src/%.c
 $(LIB): ${OBJS}
 	$(make-library)
 
-DOC_FILES = TODO CASES
+DOC_FILES = src/TODO src/CASES
 
 EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
     $(UNIX_C_FILES)
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am

@@ -1,3 +1,10 @@
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove (Merged-in into ../configure.ac)
+	* Makefile.am: DOC_FILES = src/TODO src/CASES,
+	Reflect having merged configure.ac into ../configure.ac.
+	* src/config.h: New.
+
 2003-07-02	Chris Johns <cjohns@cybertec.com.au>
 
 	* include/rtems/libio.h, src/termios.c: Patch by Chris Johns
