@@ -189,13 +189,15 @@ package RTEMS is
    Preempt_Mask       : constant RTEMS.Mode := 16#0000_0100#;
    Timeslice_Mask     : constant RTEMS.Mode := 16#0000_0200#;
    ASR_Mask           : constant RTEMS.Mode := 16#0000_0400#;
-   -- Interrupt_Mask  : constant RTEMS.Mode := CPU_Modes_Interrupt_Mask;
+   Interrupt_Mask     : RTEMS.Mode;
    Preempt            : constant RTEMS.Mode := 16#0000_0000#;
    No_Preempt         : constant RTEMS.Mode := 16#0000_0100#;
    No_Timeslice       : constant RTEMS.Mode := 16#0000_0000#;
    Timeslice          : constant RTEMS.Mode := 16#0000_0200#;
    ASR                : constant RTEMS.Mode := 16#0000_0000#;
    No_ASR             : constant RTEMS.Mode := 16#0000_0400#;
+
+   pragma Import (C, Interrupt_Mask, "rtems_interrupt_mask");
 
    --
    --  Attribute constants
@@ -209,6 +211,8 @@ package RTEMS is
    function Interrupt_Level (
       Level : in     RTEMS.Unsigned32
    ) return RTEMS.Attribute;
+   pragma Import (C, Interrupt_Level, "rtems_interrupt_level_attribute");
+   
 
    Minimum_Stack_Size : RTEMS.Unsigned32;
    pragma Import (C, Minimum_Stack_Size, "rtems_minimum_stack_size");
@@ -291,7 +295,7 @@ package RTEMS is
       Error : in     RTEMS.Unsigned32
    );
 
-   type Extensions_Table_Entry is
+   type Extensions_Table is
       record
          Thread_Create      : RTEMS.Thread_Create_Extension;
          Thread_Start       : RTEMS.Thread_Start_Extension;
@@ -303,9 +307,6 @@ package RTEMS is
          Thread_Exitted     : RTEMS.Thread_Exitted_Extension;
          Fatal              : RTEMS.Fatal_Error_Extension;
       end record;
-
-   type Extensions_Table is array ( RTEMS.Unsigned32
-     range 1 .. RTEMS.Unsigned32'Last ) of RTEMS.Extensions_Table_Entry;
 
    type Extensions_Table_Pointer is access all Extensions_Table;
 

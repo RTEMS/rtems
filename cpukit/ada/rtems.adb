@@ -21,17 +21,6 @@ with Interfaces.C;
 package body RTEMS is
 
    --
-   --  Mode Building Functions
-   --
-
-   function Interrupt_Level (
-      Level : in     RTEMS.Unsigned32
-   ) return RTEMS.Attribute is
-   begin
-      return 0;
-   end Interrupt_Level;
-
-   --
    --  Utility Functions
    --
  
