@@ -7,6 +7,8 @@
  * @(#) $Id$
  */
 
+#include <string.h>
+
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <sys/ioctl.h>

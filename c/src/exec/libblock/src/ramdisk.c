@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "rtems/blkdev.h"
 #include "rtems/diskdevs.h"
