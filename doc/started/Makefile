@@ -60,7 +60,7 @@ buildc.texi: buildc.t
 	    -n "Building RTEMS" ${*}.t
 
 buildrt.texi: buildrt.t
-	$(BMENU) -c -p "Running the bit script" \
+	$(BMENU) -c -p "GNU C/C++ cross compiler toolset complete" \
 	    -u "Top" \
 	    -n "Building the Sample Application" ${*}.t
 

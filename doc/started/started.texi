@@ -62,15 +62,15 @@ END-INFO-DIR-ENTRY
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
-@include intro.t
-@include require.t
-@include buildc.t
-@include buildrt.t
-@include sample.t
-@include gdb.t
+@include intro.texi
+@include require.texi
+@include buildc.texi
+@include buildrt.texi
+@include sample.texi
+@include gdb.texi
 
 @ifinfo
-@node Top, Preface, (dir), (dir)
+@node Top, Introduction, (dir), (dir)
 @top started
 
 This is the online version of the Getting Started with RTEMS for C/C++
@@ -93,7 +93,7 @@ Developers.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, Overall Summary, Top
+@node Command and Variable Index, Concept Index, Make the debugger (DINK32), Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.

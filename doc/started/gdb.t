@@ -6,14 +6,14 @@
 @c  $Id$
 @c
 
-@chapter Building the GDB Debugger
+@chapter Building the GNU Debugger
 
 GDB is not currently RTEMS aware. The following configurations have been
 successfully used with RTEMS applications. 
 
 @section GDB with Sparc Instruction Simulation (SIS)
 
-@subsection Unarchive the gdb distribution
+@subsection Unarchive the gdb distribution (SIS)
 
 Use the following commands to unarchive the gdb distribution:
 
@@ -24,7 +24,7 @@ tar xzf ../arc/gdb-980122.tar.gz
 
 The directory gdb-980122 is created under the tools directory.
 
-@subsection Make the build directory
+@subsection Make the build directory (SIS)
 
 Create a build directory for the SIS Debugger
 
@@ -33,7 +33,7 @@ cd tools
 mkdir build-sis
 @end example
 
-@subsection Configure for the build
+@subsection Configure for the build (SIS)
 
 Configure the general gdb distribution for Sparc Instruction Simulation
 
@@ -51,7 +51,7 @@ Where:
 <INSTALL_POINT_FOR_SIS> is a unique location where the gdb with SIS will be
 created. 
 
-@subsection Make the debugger
+@subsection Make the debugger (SIS)
 
 From tools/build-sis run:
 
@@ -60,9 +60,9 @@ gmake
 @end example
 
 
-@section GDB with PowerPC instruction Simulation(PSIM)
+@section GDB with PowerPC Instruction Simulator (PSIM)
 
-@subsection Unarchive the gdb distribution
+@subsection Unarchive the gdb distribution (PSIM)
 
 Use the following commands to unarchive the gdb distribution:
 
@@ -74,7 +74,7 @@ tar xzf ../arc/gdb-980122.tar.gz
 The directory gdb-980122 is created under the tools directory.
 
 
-@subsection Make the build directory
+@subsection Make the build directory (PSIM)
 
 Create a build directory for the SIS Debugger
 
@@ -105,7 +105,7 @@ Where:
 be created. 
 
 
-@subsection Make the debugger
+@subsection Make the debugger (PSIM)
 
 From tools/build-ppc run:
 
@@ -116,7 +116,7 @@ gmake
 
 @section GDB with Dink32
 
-@subsection Unarchive the gdb distribution
+@subsection Unarchive the gdb distribution (DINK32)
 
 Use the following commands to unarchive the gdb distribution:
 
@@ -128,9 +128,9 @@ tar xzf ../arc/gdb-980122.tar.gz
 The directory gdb-980122 is created under the tools directory.
 
 
-@subsection Make the build directory
+@subsection Make the build directory (DINK32)
 
-Create a build directory for the SIS Debugger
+Create a build directory for the DINK32 Debugger
 
 @example
 cd tools
@@ -149,7 +149,7 @@ tools/gdb-980122/gdb/dink32-rom.c
 @end example
 
 
-@subsection Configure for the build
+@subsection Configure for the build (DINK32)
 
 Configure the general gdb distribution for Sparc Instruction Simulation
 
@@ -166,7 +166,7 @@ Where:
 <INSTALL_POINT_FOR_DINK32> is a unique location where the gdb Dink32 will
 be created. 
 
-@subsection Make the debugger
+@subsection Make the debugger (DINK32)
 
 From tools/build-dink32 run:
 

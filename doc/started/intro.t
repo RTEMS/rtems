@@ -12,8 +12,10 @@ If you are already familiar with the concepts behind a cross compiler and
 have a background in Unix these instructions should provide the bare
 essentials for performing a setup of the following items: 
 
-· GNU C/C++ Cross Compilation Tools for RTEMS on your host system
-· RTEMS OS for the target host
-· GDB Debugger
+@itemize @bullet
+@item GNU C/C++ Cross Compilation Tools for RTEMS on your host system
+@item RTEMS OS for the target host
+@item GDB Debugger
+@end itemize
 
 
