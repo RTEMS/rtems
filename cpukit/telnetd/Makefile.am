@@ -4,24 +4,15 @@
 
 include $(top_srcdir)/automake/compile.am
 
-EXTRA_LIBRARIES =
-CLEANFILES =
+noinst_LIBRARIES =
 
 if HAS_NETWORKING
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = pty.h telnetd.h
 
-EXTRA_LIBRARIES += libtelnetd.a
-CLEANFILES += libtelnetd.a
+noinst_LIBRARIES += libtelnetd.a
 libtelnetd_a_SOURCES = pty.c pty.h telnetd.c telnetd.h icmds.c
 libtelnetd_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libtelnetd_g.a
-CLEANFILES += libtelnetd_g.a
-libtelnetd_g_a_SOURCES = $(libtelnetd_a_SOURCES)
-libtelnetd_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
-noinst_DATA = libtelnetd$(LIB_VARIANT).a
 endif
 
 EXTRA_DIST = README
@@ -46,7 +37,7 @@ $(PROJECT_INCLUDE)/rtems/telnetd.h: telnetd.h $(PROJECT_INCLUDE)/rtems/$(dirstam
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/telnetd.h
 endif
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am
