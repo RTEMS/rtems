@@ -1,3 +1,8 @@
+2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* scripts/automake.spec.in: Add defattr, URL:-tag.
+	Release 2.
+
 2003-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* binutils/base-binutils.add: Add osversion support.

@@ -23,12 +23,13 @@
 Vendor:       http://www.rtems.com
 Name:         %{name}
 Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+URL:          http://sources.redhat.com/automake
 
 Copyright:    GPL
 Group:        @rpmgroup@
 Autoreqprov:  on
 Version:      %{rpmvers}
-Release:      1
+Release:      2
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
@@ -81,6 +82,7 @@ if [ $1 = 0 ]; then
 fi
 
 %files
+%defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog NEWS README THANKS
 %{_bindir}/aclocal*
 %{_bindir}/automake*
@@ -88,4 +90,3 @@ fi
 %doc %{_mandir}/man?/*
 %{_datadir}/aclocal-%{amvers}
 %{_datadir}/automake-%{amvers}
-
