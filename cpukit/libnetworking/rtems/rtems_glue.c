@@ -1023,6 +1023,10 @@ int rtems_bsdnet_ifconfig (const char *ifname, unsigned32 cmd, void *param)
 				break;
 			}
 			ifreq.ifr_flags |= *((short*) param);
+			if ( (*((short*) param) & IFF_UP ) == 0 ) {
+			    /* set the interface down */
+			    ifreq.ifr_flags &= ~(IFF_UP);
+			}
 			r = ioctl (s, SIOCSIFFLAGS, &ifreq);
 			break;
 
