@@ -1,3 +1,8 @@
+2003-01-10	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/libio.h: Rename __dev_t to __rtems_dev_t to avoid
+	conflict with GNU/Linux header files.
+
 2003-01-03     Till Straumann  <strauman@slac.stanford.edu>
 
 	* ChangeLog, base_fs.c, getpwent.c, privateenv.c 

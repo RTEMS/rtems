@@ -468,7 +468,7 @@ typedef int (*rtems_libio_lseek_t)(
 
 #include <unistd.h>
 
-union __dev_t {
+union __rtems_dev_t {
   dev_t device;
   struct {
      rtems_device_major_number major;
@@ -481,7 +481,7 @@ static inline dev_t rtems_filesystem_make_dev_t(
   rtems_device_minor_number _minor
 )
 {
-  union __dev_t temp;
+  union __rtems_dev_t temp;
 
   temp.__overlay.major = _major;
   temp.__overlay.minor = _minor;
@@ -492,7 +492,7 @@ static inline rtems_device_major_number rtems_filesystem_dev_major_t(
   dev_t device
 )
 {
-  union __dev_t temp;
+  union __rtems_dev_t temp;
 
   temp.device = device;
   return temp.__overlay.major;
@@ -503,7 +503,7 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
   dev_t device
 )
 {
-  union __dev_t temp;
+  union __rtems_dev_t temp;
 
   temp.device = device;
   return temp.__overlay.minor;
