@@ -37,8 +37,8 @@
  * $Id$
  */
 
-#ifndef	_SYS_CDEFS_H_
-#define	_SYS_CDEFS_H_
+#ifndef	_RTEMS_CDEFS_H_
+#define	_RTEMS_CDEFS_H_
 
 #if defined(__cplusplus)
 #define	__BEGIN_DECLS	extern "C" {
@@ -174,4 +174,4 @@
 #define	__COPYRIGHT(s)	__IDSTRING(copyright,s)
 #endif
 
-#endif /* !_SYS_CDEFS_H_ */
+#endif /* !_RTEMS_CDEFS_H_ */

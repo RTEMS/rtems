@@ -1,5 +1,9 @@
 2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* include/rtems/cdefs.h: Use _RTEMS_CDEFS_H guards.
+
+2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* include/rtems/cdefs.h: New.
 	* Makefile.am: Completely reworked.
 
