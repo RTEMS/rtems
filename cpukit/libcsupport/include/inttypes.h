@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2004.
+ *  COPYRIGHT (c) 2004, 2005.
  *  Ralf Corsepius, Ulm/Germany.
  *
  *  The license and distribution terms for this file may be
@@ -10,11 +10,11 @@
  */
 
 /**
- *  @file  sys/_inttypes.h
+ *  @file  inttypes.h
  */
 
-#ifndef __INTTYPES_H
-#define __INTTYPES_H
+#ifndef _INTTYPES_H
+#define _INTTYPES_H
 
 #include <stdint.h>
 

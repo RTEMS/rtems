@@ -1,5 +1,10 @@
 2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/inttypes.h: New header guard.
+	Fix doxygen preamble.
+
+2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/motorola/mc68230.h,
 	libcsupport/include/motorola/mc68681.h,
 	libcsupport/include/chain.h,
