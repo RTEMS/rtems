@@ -36,23 +36,28 @@ AM_CFLAGS += $(LIBC_DEFINES)
 $(PGM): $(startup_rel_OBJECTS)
 	$(make-rel)
 
-${ARCH}/libno-ctor.a: $(ARCH)/no-ctor.$(OBJEXT)
+if HAS_CXX
+project_lib_DATA = ${ARCH}/libno-ctor$(LIB_VARIANT).a
+
+${ARCH}/libno-ctor$(LIB_VARIANT).a: $(ARCH)/no-ctor.$(OBJEXT)
 	$(AR) -cvr $@ $<
 
-$(PROJECT_RELEASE)/lib/libno-ctor$(LIB_VARIANT).a: ${ARCH}/libno-ctor.a
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT): $(ARCH)/rtems-ctor.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
-
-if HAS_CXX
-all-local: $(PGM) $(PROJECT_RELEASE)/lib/libno-ctor$(LIB_VARIANT).a \
-    $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT)
-else
-all-local: $(PGM)
+project_lib_DATA += ${ARCH}/rtems-ctor$(LIB_VARIANT).$(OBJEXT)
 endif
+
+all-local: $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bspclean.c bspstart.c exit.c main.c no-ctor.c rtems-ctor.cc \
     setvec.c
+
+if HAS_CXX
+${PROJECT_RELEASE}/lib/libno-ctor$(LIB_VARIANT).a: ${ARCH}/libno-ctor$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/libno-ctor$(LIB_VARIANT).a
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/libno-ctor$(LIB_VARIANT).a
+
+${PROJECT_RELEASE}/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT): ${ARCH}/rtems-ctor$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT)
+endif
 
 include $(top_srcdir)/../../../../automake/local.am
