@@ -13,6 +13,16 @@ include $(top_srcdir)/../../../automake/lib.am
 
 LIB = $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
 
+# HACK: We need to evaluate CFLAGS at make-time, because these
+#	fscking <bsp>.cfgs change CFLAGS and can change 
+#	MULTISUBDIR on-the-fly - A true PITA :(
+if MULTILIB
+MULTISUBDIR = /$(shell $(CC) --print-multi-directory $(CFLAGS))
+PROJECT_CPUdir = $(PROJECT_ROOT)/lib$(MULTISUBDIR)
+else
+PROJECT_CPUdir = $(PROJECT_RELEASE)/lib
+endif
+
 if HAS_NETWORKING
 LIBNETWORKING = $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a \
     $(wildcard $(PROJECT_RELEASE)/lib/librpc$(LIB_VARIANT).a) \
@@ -23,11 +33,17 @@ if HAS_RDBG
 LIBRDBG = $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a
 endif
 
-SRCS = $(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
-    $(PROJECT_RELEASE)/lib/librtems$(LIB_VARIANT).a \
-    $(wildcard $(PROJECT_RELEASE)/lib/libposix$(LIB_VARIANT).a) \
-    $(wildcard $(PROJECT_RELEASE)/lib/libitron$(LIB_VARIANT).a) \
-    $(LIBNETWORKING) $(LIBRDBG) \
+if HAS_POSIX
+LIBPOSIX = $(PROJECT_CPUdir)/libposix$(LIB_VARIANT).a
+endif
+
+if HAS_ITRON
+LIBITRON = $(PROJECT_CPUdir)/libitron$(LIB_VARIANT).a
+endif
+
+SRCS =  $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
+SRCS += $(PROJECT_CPUdir)/librtems$(LIB_VARIANT).a
+SRCS += $(LIBNETWORKING) $(LIBRDBG) $(LIBPOSIX) $(LIBITRON) \
     $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/librtcio$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libserialio$(LIB_VARIANT).a) \

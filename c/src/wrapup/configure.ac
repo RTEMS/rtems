@@ -36,6 +36,10 @@ RTEMS_PROJECT_ROOT
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
+AM_CONDITIONAL([MULTILIB],[test x"$enable_multilib" = x"yes"])
+AM_CONDITIONAL([HAS_POSIX],[test x"$enable_posix" = x"yes"])
+AM_CONDITIONAL([HAS_ITRON],[test x"$enable_itron" = x"yes"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 ])

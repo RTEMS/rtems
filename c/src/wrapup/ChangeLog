@@ -1,3 +1,11 @@
+2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add AM_CONDITIONAL for enable_multilib,
+	enable_posix, enable_itron.
+	* Makefile.am: Compute MULTISUBDIR on-the-fly. Conditionally add
+	libposix and libitron to SRCS. Apply MULTISUBDIR for picking up
+	librtems, libposix and libitron.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
