@@ -1,3 +1,9 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am, automake/host.am, automake/leaf.am
+	automake/local.am, automake/subdirs.am: New (copied from
+	../../../automake).
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.

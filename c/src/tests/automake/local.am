@@ -1,0 +1,19 @@
+## $Id$
+
+debug:
+	@echo
+	@echo "\"make debug\" is obsolete, instead use:"
+	@echo "	make VARIANT=DEBUG"
+	@echo
+
+.PHONY: debug
+
+preinstall-am: $(PREINSTALL_FILES)
+preinstall: preinstall-am
+.PHONY: preinstall preinstall-am
+
+depend-am:
+depend: depend-am
+.PHONY: depend depend-am
+
+PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools

@@ -1,0 +1,225 @@
+##
+## $Id$
+##
+
+## -------------------------------------------------------------------------
+## NOTE: This file is rather immature and has to be considered to be 
+## almost experimental.
+##
+## Expect frequent changes -- It deserves to be cleaned up :(
+## -------------------------------------------------------------------------
+
+## The section below is based on make/compilers/gcc-target-default.cfg
+## used in former versions of RTEMS.
+
+## 
+## Set up the flags for the toolchains:
+##
+## We are considering 3 different building schemes here:
+## * Using gcc's being able to accept -specs (aka gcc-2.8 building scheme)
+## * Using gcc's not being able to accept -specs (aka gcc-2.7.2 building
+##   scheme)
+## * Using third party toolchains (aka non-gcc building scheme)
+##
+## Automake conditionals in use:
+## RTEMS_USE_GCC     .. if we are using GCC
+
+## NOTES: 
+## * The gcc-2.8 building scheme is the nominal building scheme and
+##   is actively supported.
+## * The non-gcc building scheme requires manually setting up environment 
+##   variables and is hardly tested at all
+
+## CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V are the values we
+## would want the corresponding macros to be set to.
+##
+## CFLAGS_OPTIMIZE, CFLAGS_DEBUG are set by the 
+## 'VARIANT=<OPTIMIZE|DEBUG>' targets to their _V values.
+
+## XCPPFLAGS, XCFLAGS, XCXXFLAGS, XASFLAGS 
+## are used to add flags from the shell
+## cf. make.info ("Implicit rules/variables" for details)
+
+if RTEMS_USE_GCC
+## All the stuff below is specific to gcc
+
+## gcc >= 2.8.x
+GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
+else
+## fall back to the old style compilers/*.cfg
+## CONFIG.CC is supposed to be provided by <BSP>.cfg
+include $(CONFIG.CC)
+endif # RTEMS_USE_GCC
+
+DEFS = @DEFS@
+
+CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES) $(XCPPFLAGS)
+CFLAGS   = @RTEMS_CFLAGS@ $(XCFLAGS)
+## FIXME: This should be correct, but is not supported, yet
+# CXXFLAGS = @RTEMS_CXXFLAGS@ $(XCXXFLAGS)
+## Fall back to using RTEMS_CFLAGS for C++
+CXXFLAGS = @RTEMS_CFLAGS@ $(XCXXFLAGS)
+ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
+
+LINK_LIBS = $(LD_LIBS)
+
+#
+# Client compiler and support tools
+#
+
+#
+# How to compile stuff into ${ARCH} subdirectory
+#
+
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+        $(AM_LDFLAGS) $(LDFLAGS) -o $@
+
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+
+CCAS = $(CC)
+CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
+
+# OBSOLETE: Don't use
+AS = $(CC)
+ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
+
+${ARCH}/%.o: %.c
+	${COMPILE} -o $@ -c $<
+
+${ARCH}/%.o: %.cc
+	${CXXCOMPILE} -o $@ -c $<
+
+${ARCH}/%.o: %.S
+	${CCASCOMPILE} -DASM -o $@ -c $<
+
+# Dependency files for use by gmake
+# NOTE: we don't put them into $(ARCH)
+#       so that 'make clean' doesn't blow it away
+
+DEPEND=Depends-${ARCH}
+
+# We deliberately don't have anything depend on the
+# $(DEPEND) file; otherwise it will get rebuilt even
+# on 'make clean'
+#
+
+if RTEMS_USE_GCC
+## HACK: Specific to gcc
+## FIXME: The approach below is known to be conceptionally broken.
+depend-gcc: $(C_FILES) $(CC_FILES) $(S_FILES)
+##       Use gcc -M to generate dependencies
+##       Replace foo.o with $(ARCH)/foo.o
+##       Replace $(ARCH) value with string $(ARCH)
+##           so that it will for debug cases
+	$(COMPILE) -M   $^    |  \
+	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
+	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
+	mv $(DEPEND).tmp $(DEPEND)
+
+# pull in dependencies if they exist  
+ifeq (${DEPEND},$(wildcard ${DEPEND}))
+include ${DEPEND}
+@ENDIF@
+endif
+depend: depend-am
+
+# spell out all the LINK_FILE's, rather than using -lbsp, so
+#  that $(LINK_FILES) can be a dependency
+
+LINK_OBJS = \
+    $(OBJS) \
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_RELEASE)/lib/no-%$(LIB_VARIANT).rel)
+
+LINK_FILES =\
+    $(START_FILE) \
+    $(OBJS) \
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_RELEASE)/lib/no-%$(LIB_VARIANT).rel)
+
+if RTEMS_USE_GCC
+## gcc >= 2.8
+define make-rel
+	$(LINK) -qnolinkcmds -nostdlib -Wl,-r $(XLDFLAGS) $^
+endef
+else
+## non-gcc
+define make-rel
+	$(LINK) $(XLDFLAGS) $^
+endef
+endif
+
+## -------------------------------------------------------------------------
+
+## translate VARIANT into VARIANT_V
+VARIANT = OPTIMIZE
+
+VARIANT_OPTIMIZE_V = OPTIMIZE
+VARIANT_DEBUG_V = DEBUG
+VARIANT_optimize_V = OPTIMIZE
+VARIANT_debug_V = DEBUG
+
+VARIANT_V = $(VARIANT_$(VARIANT)_V)
+
+## Setup the variant build subdirectory
+ARCH_OPTIMIZE_V = o-optimize
+ARCH_DEBUG_V = o-debug
+
+ARCH__V = $(ARCH_OPTIMIZE_V)
+ARCH = $(ARCH_$(VARIANT_V)_V)
+
+## Setup the library suffix
+LIBSUFFIX_OPTIMIZE_V =
+LIBSUFFIX_DEBUG_V = _g
+LIBSUFFIX__V = $(LIBSUFFIX_OPTIMIZE_V)
+
+LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
+
+## These are supposed to be set in make/custom/<bsp>.cfg
+CPU_CFLAGS = @CPU_CFLAGS@
+CFLAGS_OPTIMIZE_V = @CFLAGS_OPTIMIZE_V@
+CFLAGS_DEBUG_V = @CFLAGS_DEBUG_V@
+CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
+
+## ------------------------------------------------------------------------
+## Setup hard-coded flags
+if RTEMS_USE_GCC
+## gcc >= gcc-2.8
+RTEMS_CFLAGS_OPTIMIZE_V =
+RTEMS_CFLAGS_DEBUG_V = -qrtems_debug -Wno-unused
+
+## non-gcc
+## We can't guess what flags might be required here.
+## Pass the values from the environment if you want to apply them.
+endif
+RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
+
+## -------------------------------------------------------------------------
+
+CC = @CC@ $(GCCSPECS)
+CXX = @CXX@ $(GCCSPECS)
+CPP = @CPP@ $(GCCSPECS)
+
+LD = @LD@
+OBJCOPY = @OBJCOPY@
+NM = @NM@
+SIZE = @SIZE@
+STRIP = @STRIP@
+
+##
+AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
+AM_CFLAGS =
+AM_CXXFLAGS =
+AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
+
+${ARCH}:
+	mkdir ${ARCH}
+
+clean-local:
+	$(RM) -r o-optimize o-debug $(CLEANDIRS)
+	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp

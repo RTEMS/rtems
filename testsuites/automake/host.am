@@ -1,0 +1,22 @@
+## $Id$
+
+## NOTE: This is a temporary work-around to keep 
+## RTEMS's non automake standard make targets working.
+## Once automake is fully integrated these make targets 
+## and this file will probably be removed
+
+debug:
+	@echo
+	@echo "\"make debug\" is obsolete, instead use:"
+	@echo "	make VARIANT=DEBUG"
+	@echo
+
+.PHONY: debug
+
+preinstall-am: $(PREINSTALL_FILES)
+preinstall: preinstall-am
+.PHONY: preinstall preinstall-am
+
+depend-am:
+depend: depend-am
+.PHONY: depend depend-am
