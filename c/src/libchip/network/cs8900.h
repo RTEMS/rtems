@@ -1,23 +1,148 @@
 /*
   ------------------------------------------------------------------------
-  $Id$
+  cs8900.h,v 1.3 2002/09/07 23:09:47 joel Exp
   ------------------------------------------------------------------------
   
-  My Right Boot, a boot ROM for embedded hardware.
- 
   Copyright Cybertec Pty Ltd, 2000
   All rights reserved Cybertec Pty Ltd, 2000
   
+  Port to the DIMM PC copyright (c) 2004 Angelo Fraietta
+    This project has been assisted by the Commonwealth Government
+    through the Australia Council, its arts funding and advisory body.
+
   COPYRIGHT (c) 1989-1998.
   On-Line Applications Research Corporation (OAR).
 
   The license and distribution terms for this file may be
   found in the file LICENSE in this distribution or at
-  http://www.rtems.com/license/LICENSE.
+  http://www.OARcorp.com/rtems/license.html.
   
   ------------------------------------------------------------------------
 
-  CS8900 net boot driver.
+  CS8900 RTEMS driver.
+
+  This is a generic driver that requires a BSP backend. The BSP backend
+  provides the glue to the specific bus for the target hardware. It has
+  been tested with Coldfire processors, and the PC. These targets have
+  completely different bus, byte order and interrupt structures.
+
+  An example BSP backend is provided in the pci386 BSP.
+  
+  The BSP provides the following functions:
+
+    cs8900_io_set_reg
+    cs8900_io_get_reg
+    cs8900_mem_set_reg
+    cs8900_mem_get_reg
+    cs8900_put_data_block
+    cs8900_get_data_block
+    cs8900_tx_load
+    cs8900_attach_interrupt
+    cs8900_detach_interrupt
+
+  The header file provides documentation for these functions. There
+  are four types of functions.
+
+  The I/O set/get functions access the CS8900 I/O registers via the
+  I/O Mode. For example on a PC with an ISA bus you would use the
+  IA32 in/out port instructions. The cs8900_device structure passed
+  to these functions provide these functions with the I/O base
+  address. The BSP must provide these functions.
+
+  The Memory set/get functions access the CS8900 internal registers
+  and frame buffers directly from a 4K byte block of host memory.
+  Memory mode provides a faster access to the CS8900. The cs8900_device
+  structure passed to these functions provides the memory base
+  address. The BSP needs to provide these functions but they do not
+  need to be implemented if the mem_base field is set to 0. The
+  driver will use I/O mode only.
+
+  The Block transfer functions are used to read or write a block
+  of memory from the CS8900. This saves the driver making a number
+  of small calls. The BSP driver must know if I/O or Memory mode
+  can be used.
+
+  The final group of functions is to handle interrupts. The BSP
+  must take care of save and restoring any interrupt state
+  information.
+
+  The BSP declares a 'cs8900_device' structure for each device being
+  attached to the networking stack. It also creates a
+  'struct rtems_bsdnet_ifconfig' which is used to attach the interface
+  to the networking stack. The following code declares the BSD config:
+  
+    static cs8900_device cs8900;
+
+    static struct rtems_bsdnet_ifconfig cs8900_ifconfig =
+     {
+       "cs0",
+       cs8900_driver_attach,
+       NULL,
+       NULL,
+       NULL,
+       NULL,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+     };
+
+   The device linked to the BSD config structure with:
+
+     cs8900_ifconfig.drv_ctrl = &cs8900;
+
+   If you have a specific hardware address you should point the BSD
+   config structure to that address. If you do not the driver will read
+   the MAC address from the CS8900. This assumes the CS8900 has read
+   the address from an external EEPROM or has been setup by a BIOS or
+   boot monitor. For EEPROM less you need to supply the MAC address.
+
+   Set the I/O and Memory base addresses. If the Memory base address
+   is 0 the driver will use I/O mode only. A typical initialisation
+   looks like:
+
+     printf ("RTEMS BSD Network initialisation.\n");
+     rtems_bsdnet_initialize_network ();
+
+     #define ETHERNET_IO_BASE   0x300
+     #define ETHERNET_MEM_BASE  0
+     #define ETHERNET_IRQ_LEVEL 0
+
+     cs8900_device *cs = &cs8900;
+     
+     memset (cs, 0, sizeof (cs8900_device));
+  
+     cs->dev = 0;
+     cs->io_base = ETHERNET_IO_BASE;
+     cs->mem_base = ETHERNET_MEM_BASE;
+     cs->irq_level = ETHERNET_IRQ_LEVEL;
+     cs->rx_queue_size = 30;
+
+     cs8900_ifconfig.drv_ctrl = &cs8900;
+     
+     printf ("CS8900 initialisation\n");
+    
+     rtems_bsdnet_attach (&cs8900_ifconfig);
+     
+     flags = IFF_UP;
+     if (rtems_bsdnet_ifconfig (cs8900_ifconfig.name,
+                                SIOCSIFFLAGS,
+                                &flags) < 0)
+     {
+       printf ("error: can't bring up %s: %s\n",
+               cs8900_ifconfig.name, strerror (errno));
+       return;
+     }
+
+     rtems_bsdnet_do_bootp_and_rootfs ();
+
+   The IRQ level is the one documented in the CS8900 datasheet and below
+   in the CS8900 device structure. You need to map your target IRQ to the
+   CS8900 in the BSP driver.
 
  */
 
@@ -328,6 +453,12 @@
 #define CS8900_TRACE_SIZE (400)
 
 /*
+ * The default receive queue size. If the BSP sets this field to 
+ * 0 this default is used.
+ */
+#define CS8900_RX_QUEUE_SIZE (30)
+
+/*
  * Stats, more for debugging than anything else.
  */
 
@@ -381,6 +512,32 @@ typedef struct
   int dev;
 
   /*
+   * Memory base addresses. Making mem_base 0 forces the
+   * driver to perform only I/O space accesses.
+   */
+
+  unsigned long  io_base;
+  unsigned long  mem_base;
+
+  /*
+   * The IRQ level as defined in the datasheet for the CS8900.
+   *
+   *      ISA BUS   Pin    Value
+   *       IRQ10   INTRQ0    0
+   *       IRQ11   INTRQ1    1
+   *       IRQ12   INTRQ2    2
+   *       IRQ5    INTRQ3    3
+   */
+
+  int            irq_level;
+
+  /*
+   * The MAC address.
+   */
+
+  unsigned char mac_address[6];
+
+  /*
    * The bsdnet information structure.  
    */
 
@@ -399,6 +556,7 @@ typedef struct
   /* 
    * The queues. FIXME : these should be changed to be mbuf lists.
    */
+
   struct mbuf    *rx_ready_head;
   struct mbuf    *rx_ready_tail;
   int            rx_ready_len;
@@ -407,6 +565,13 @@ typedef struct
   struct mbuf    *rx_loaded_tail;
   int            rx_loaded_len;
 
+  /*
+   * Number of mbufs queued for the interrupt handler to 
+   * loop reading.
+   */
+
+  int            rx_queue_size;
+  
 #if CS8900_TRACE
   unsigned short trace_key[CS8900_TRACE_SIZE];
   unsigned long  trace_var[CS8900_TRACE_SIZE];
@@ -414,7 +579,7 @@ typedef struct
   int            trace_in;
 #endif
 
-  /*
+  /**
    * Standard(!) ethernet statistics 
    */
 
@@ -423,27 +588,176 @@ typedef struct
 } cs8900_device;
 
 /*
- * Link is active, and RX count.
+ * Link active returns the state of the PHY.
+ *
+ * @param cs Pointer to the device structure.
  */
 
-int           cs8900_link_active (int dev);
-int           cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
-                                    int                          attaching);
-rtems_isr     cs8900_interrupt (rtems_vector_number v, void *cs);
+int cs8900_link_active (cs8900_device *cs);
 
-/*
- * Functions Users Provide to implement the driver.
+/**
+ * The RTEMS network stack driver attach function that is loaded into the
+ * the rtems_bsdnet_ifconfig struct. The network stack will call this
+ * function when attaching the driver. The BSP must load the 'drv_ctrl'
+ * field of the structure before calling the 'rtems_bsdnet_attach'
+ * function.
+ *
+ * @param config The RTEMS BSD config structure.
+ *
+ * @param attaching True is the stack is attaching the interface.
+ *
+ * @retval int Set to 1 if the device has attached.
  */
 
-void           cs8900_attach_interrupt (int dev, cs8900_device *cs);
-void           cs8900_detach_interrupt (int dev);
-void           cs8900_get_mac_addr (int dev, unsigned char *mac_address);
-void           cs8900_io_set_reg (int dev, unsigned short reg, unsigned short data);
-unsigned short cs8900_io_get_reg (int dev, unsigned short reg);
-void           cs8900_mem_set_reg (int dev, unsigned long reg, unsigned short data);
-unsigned short cs8900_mem_get_reg (int dev, unsigned long reg);
-void           cs8900_put_data_block (int dev, int len, unsigned char *data);
-unsigned short cs8900_get_data_block (int dev, unsigned char *data);
-void           cs8900_tx_load (int dev, struct mbuf *m);
+int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
+                          int                          attaching);
+          
+/**
+ * The BSP specific interrupt wrapper calls this function when a device
+ * interrupt occurs.
+ *
+ * @param v The RTEMS vector number that generated the interrupt.
+ *
+ * @param cs Pointer to the device structure passed to the interrupt
+ *           catch function provided by the BSP.
+ *
+ * @retval rtems_isr The standard ISR return type.
+ */
+
+rtems_isr cs8900_interrupt (rtems_vector_number v, void *cs);
+
+/**
+ * Get the MAC address for the interface.
+ *
+ * @param cs Pointer to the device structure.
+ *
+ * @param mac_address Pointer to the memory to load the MAC address. This
+ *                    is a 6 byte buffer so do not exceeed the bounds.
+ */
+
+void cs8900_get_mac_addr (cs8900_device *cs, unsigned char *mac_address);
+
+/**
+ * Catch the device interrupt. When the interrupt is called call the
+ * function 'cs8900_interrupt'.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ */
+
+void cs8900_attach_interrupt (cs8900_device *cs);
+
+/**
+ * Detach the device interrupt.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ */
+
+void cs8900_detach_interrupt (cs8900_device *cs);
+
+/**
+ * Write to an IO space register.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ *
+ * @param reg Register offset from the IO base.
+ *
+ * @param data The data to be written to the register.
+ */
+
+void cs8900_io_set_reg (cs8900_device *cs,
+                        unsigned short reg, unsigned short data);
+
+/**
+ * Read an IO space register.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ *
+ * @param reg Register offset from the IO base.
+ *
+ * @retval unsigned short The register data.
+ */
+
+unsigned short cs8900_io_get_reg (cs8900_device *cs, unsigned short reg);
+
+/**
+ * Write to a memory space register. Will only be called is the mem_base
+ * field of the 'cs' struct is not 0.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ *
+ * @param reg Register offset from the memory base.
+ *
+ * @param data The data to be written to the register.
+ */
+
+void cs8900_mem_set_reg (cs8900_device *cs, 
+                         unsigned long reg, unsigned short data);
+
+/**
+ * Read a memory space register. Will only be called is the mem_base
+ * field of the 'cs' struct is not 0.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ *
+ * @param reg Register offset from the IO base.
+ *
+ * @retval unsigned short The register data.
+ */
+
+unsigned short cs8900_mem_get_reg (cs8900_device *cs, unsigned long reg);
+
+/**
+ * Write a block of data to the interface. The BSP codes if this is an IO or
+ * memory space write.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ *
+ * @param len The length of data to write.
+ *
+ * @param data Pointer to the data to be written.
+ */
+
+void cs8900_put_data_block (cs8900_device *cs, int len, unsigned char *data);
+
+/**
+ * Read a block of data from the interface. The BSP codes if this is an IO or
+ * memory space write. The read must not be longer than the MTU size.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ *
+ * @param data Pointer to the buffer where the data is to be written.
+ *
+ * @retval unsigned short The number of bytes read from the device.
+ */
+
+unsigned short cs8900_get_data_block (cs8900_device *cs, unsigned char *data);
+
+/**
+ * Load a mbuf chain to the device ready for tranmission.
+ *
+ * BSP to provide this function.
+ *
+ * @param cs Pointer to the device structure.
+ *
+ * @param m Pointer to the head of an mbuf chain.
+ */
+
+void cs8900_tx_load (cs8900_device *cs, struct mbuf *m);
 
 #endif
