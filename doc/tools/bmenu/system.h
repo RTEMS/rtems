@@ -13,7 +13,6 @@ typedef unsigned int   unsigned32;
 typedef unsigned short unsigned16;
 typedef unsigned char  unsigned8;
 
-#define USE_INLINES 
 #define STATIC static
 #define INLINE inline
 

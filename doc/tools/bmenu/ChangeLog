@@ -1,3 +1,8 @@
+2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* system.h: Remove USE_INLINES.
+	* chain.c: Remove USE_INLINES.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.

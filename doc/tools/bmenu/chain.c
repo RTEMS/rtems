@@ -56,28 +56,6 @@ void _Chain_Initialize(
 
 /*PAGE
  *
- *  _Chain_Get_first_unprotected
- */
-
-#ifndef USE_INLINES
-STATIC INLINE Chain_Node *_Chain_Get_first_unprotected(
-  Chain_Control *the_chain
-)
-{ 
-  Chain_Node  *return_node;
-  Chain_Node  *new_first;
-
-  return_node         = the_chain->first;
-  new_first           = return_node->next;
-  the_chain->first    = new_first;
-  new_first->previous = _Chain_Head( the_chain );
-
-  return return_node;
-}
-#endif   /* USE_INLINES */
-
-/*PAGE
- *
  *  _Chain_Get
  *
  *  This kernel routine returns a pointer to a node taken from the
