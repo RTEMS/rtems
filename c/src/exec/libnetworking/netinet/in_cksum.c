@@ -49,6 +49,10 @@
 
 #include "in_cksum_i386.c"
 
+#elif (defined(__GNUC__) && defined(__PPC__))
+
+#include "in_cksum_powerpc.c"
+
 #else
 
 /*
