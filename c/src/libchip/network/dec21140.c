@@ -364,13 +364,6 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    */
   st_le32( (tbase+memCSR0), CSR0_MODE);  
 
-  /*  csr12_val = ld_le32( (tbase+memCSR8) );*/
-
-  for (i=0; i<32; i++){
-    rombuf.s[i] = eeget16(tbase+memCSR9, i);
-  }
-  memcpy (sc->arpcom.ac_enaddr, rombuf.c+20, ETHER_ADDR_LEN);
-
 #ifdef DEC_DEBUG
   printk("DC21140 %x:%x:%x:%x:%x:%x IRQ %d IO %x M %x .........\n",
 	 sc->arpcom.ac_enaddr[0], sc->arpcom.ac_enaddr[1],
@@ -493,7 +486,6 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
   st_le32( (tbase+memCSR5), IT_SETUP);
   st_le32( (tbase+memCSR7), IT_SETUP); 
   st_le32( (unsigned int*)(tbase+memCSR6), CSR6_INIT | CSR6_TXRX);
-  
 }
 
 static void
@@ -886,8 +878,23 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 		  ETHER_ADDR_LEN);
 	}
 	else {
-	  memset (sc->arpcom.ac_enaddr, 0x08,ETHER_ADDR_LEN);
+	  union {char c[64]; unsigned short s[32];} rombuf;
+	  int i;
+
+	  for (i=0; i<32; i++){
+	    rombuf.s[i] = eeget16(sc->base+memCSR9, i);
+	  }
+#if defined(__i386)
+	  for (i=0 ; i<(ETHER_ADDR_LEN/2); i++){
+	    sc->arpcom.ac_enaddr[2*i]   = rombuf.c[20+2*i+1];
+	    sc->arpcom.ac_enaddr[2*i+1] = rombuf.c[20+2*i];
+	  }  
+#endif
+#if defined(__PPC)
+	  memcpy (sc->arpcom.ac_enaddr, rombuf.c+20, ETHER_ADDR_LEN);
+#endif
 	}
+
 	if (config->mtu)
 		mtu = config->mtu;
 	else
