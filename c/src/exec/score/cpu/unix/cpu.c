@@ -983,7 +983,12 @@ void _CPU_SHM_Init(
 
         help.val = 1;
         status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
-#elif defined(hpux) || defined(__linux__)
+#elif defined(__linux__)
+        union semun help;
+
+        help.val = 1;
+        status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
+#elif defined(hpux)
         status = semctl( _CPU_SHM_Semid, i, SETVAL, 1 );
 #else
 #error "Not a supported unix variant"
