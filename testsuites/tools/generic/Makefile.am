@@ -4,22 +4,26 @@
 
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-noinst_SCRIPTS = difftest sorttimes
+transform =
 
-project_bspdir = $(PROJECT_ROOT)/@RTEMS_BSP@
+bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests
+bsptools_bin_SCRIPTS = difftest sorttimes
 
-PREINSTALL_FILES = $(project_bspdir)/tests $(project_bspdir)/tests/difftest \
-    $(project_bspdir)/tests/sorttimes
+all-local: $(TMPINSTALL_FILES)
 
-$(project_bspdir)/tests:
-	@$(mkinstalldirs) $@
+TMPINSTALL_FILES =
 
-$(project_bspdir)/tests/difftest: difftest
-	$(INSTALL_SCRIPT) $< $@
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_ROOT)/@RTEMS_BSP@/tests
+	@: > $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
 
-$(project_bspdir)/tests/sorttimes: sorttimes
-	$(INSTALL_SCRIPT) $< $@
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/difftest: difftest $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
+	$(INSTALL_SCRIPT) $< $(PROJECT_ROOT)/@RTEMS_BSP@/tests/difftest
+TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/difftest
 
-all-local: $(PREINSTALL_FILES)
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/sorttimes: sorttimes $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
+	$(INSTALL_SCRIPT) $< $(PROJECT_ROOT)/@RTEMS_BSP@/tests/sorttimes
+TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/sorttimes
 
 include $(top_srcdir)/../../automake/local.am
