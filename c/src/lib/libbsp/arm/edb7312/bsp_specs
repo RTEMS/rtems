@@ -5,7 +5,7 @@
 %rename link old_link
 
 *cpp:
-%(old_cpp) %{qrtems: -D__embedded__ -DUSE_ENHANCED_INTR_API} -Asystem(embedded)
+%(old_cpp) %{qrtems: -D__embedded__ -Asystem(embedded)
 
 *lib:
 %{!qrtems: %(old_lib)} %{qrtems: --start-group \
