@@ -15,7 +15,12 @@
 
 
 /* macro/function definitions */
+#if 0
 static void reboot(void) __attribute__ ((noreturn));
-__inline__ static void reboot(void) {asm("trap #15");}
+__inline__ static void reboot() {asm("trap #15");}
+#else
+#define reboot() do {asm("trap #15");} while(0)
+#endif
+
      
 #endif /* _EFI68k_H_ */
