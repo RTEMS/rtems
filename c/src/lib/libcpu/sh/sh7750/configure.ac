@@ -27,9 +27,5 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-score/Makefile
-sci/Makefile
-timer/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
