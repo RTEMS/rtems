@@ -8,15 +8,15 @@
 %(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
 *lib:
-%{!qrtems: %(old_lib)} %{qrtems: --start-group \
+%{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: --start-group \
 %{!qrtems_debug: -lrtemsbsp -lrtemscpu} %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
 %{qjava: -lffi -lgcjgc -lzgcj -lgcj} %{qc++: -lstdc++} -lc -lgcc --end-group \
-%{!qnolinkcmds: -T linkcmds%s}}
+%{!qnolinkcmds: -T linkcmds%s}}}
 
 *startfile:
-%{!qrtems: %(old_startfile)} %{qrtems: \
+%{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems: \
 %{!qrtems_debug: } \
-%{qrtems_debug: } ecrti%O%s}
+%{qrtems_debug: } ecrti%O%s}}
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: ecrtn%O%s}

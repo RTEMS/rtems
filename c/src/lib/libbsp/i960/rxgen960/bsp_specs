@@ -9,14 +9,14 @@
 
 *lib:
 %{!qrtems: %(old_lib)} \
-%{qrtems: --start-group -lc \
+%{!nostdlib: %{qrtems: --start-group -lc \
 %{!qrtems_debug: -lrtemsbsp -lrtemscpu } %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
 -lgcc --end-group \
- %{!qnolinkcmds: -T linkcmds%s}}
+ %{!qnolinkcmds: -T linkcmds%s}}}
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
-%{qrtems: %{qrtems_debug: rxgen_romld_g.o%s} %{!qrtems_debug: rxgen_romld.o%s}}
+%{qrtems: %{qrtems_debug: rxgen_romld_g.o%s} %{!qrtems_debug: rxgen_romld.o%s}}}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}

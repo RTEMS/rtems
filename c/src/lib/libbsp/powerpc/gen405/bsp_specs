@@ -8,15 +8,15 @@
 %(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
 *lib:
-%{!qrtems: %(old_lib)} %{qrtems: ecrti%O%s --start-group \
+%{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: ecrti%O%s --start-group \
 %{!qrtems_debug: -lrtemsbsp -lrtemscpu} %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
 -lc -lgcc --end-group \
-%{!qnolinkcmds: -T linkcmds%s}}
+%{!qnolinkcmds: -T linkcmds%s}}}
 
 *startfile:
-%{!qrtems: %(old_startfile)} %{qrtems: \
+%{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems: \
 %{!qrtems_debug: } \
-%{qrtems_debug: }}
+%{qrtems_debug: }}}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -u download_entry -N }
