@@ -48,7 +48,7 @@ char *rtems_progname;
  */
 #define SDRAM_BASE      0
 #define SDRAM_SIZE      (16*1024*1024)
-#define FLASH_BASE      0x10C10000
+#define FLASH_BASE      0x10000000
 #define FLASH_SIZE      (4*1024*1024)
 
 /*

@@ -27,6 +27,8 @@ Make a clean exit routine to return to Arcturus monitor
 The bsp relies on the Arcturus monitor to set up DRAM and all chip selects. 
 This seems OK to me, but others may find it lame.....
 
+I/O pin restrictions make simultatenous operation
+of I2C, CAN and UART2 impossible.
  
 BSP NAME:           uC5282
 BOARD:              Arcturus Netrworks uCdimm 5282
@@ -58,7 +60,7 @@ TTY DRIVER:         UART1, 2 and 3
 
 STDIO
 =====
-PORT:               UART1 Terminal
+PORT:               UART0 Terminal
 ELECTRICAL:         RS-232
 BAUD:               9600
 BITS PER CHARACTER: 8

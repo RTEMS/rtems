@@ -43,10 +43,10 @@ _BSP_null_char( char c )
 BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
 /*
- * The MCF5282 has three UARTs but we enable only two here since it's likely
- * that the I/O pins available to the third will be used for CAN/I2C
+ * The MCF5282 has three UARTs.  Enable all them here.  I/O pin selection
+ * is assumed to have been done elsewher.
  */
-#define MAX_UART_INFO     2
+#define MAX_UART_INFO     3
 #define RX_BUFFER_SIZE    512
 
 struct IntUartInfoStruct
@@ -616,7 +616,7 @@ void console_reserve_resources( rtems_configuration_table *configuration )
 /***************************************************************************
    Function : console_initialize
 
-   Description : This initialises termios, both sets of uart hardware before
+   Description : This initialises termios, all uart hardware before
    registering /dev/tty devices for each channel and the system /dev/console.
  ***************************************************************************/
 rtems_device_driver console_initialize(
@@ -641,7 +641,7 @@ rtems_device_driver console_initialize(
 		rtems_fatal_error_occurred (status);
 	}
 
-	/* Register the other port */
+	/* Register the other ports */
 	if ( CONSOLE_PORT != 0 )
 	{
 		status = rtems_io_register_name ("/dev/tty00", major, 0);
@@ -658,6 +658,11 @@ rtems_device_driver console_initialize(
 			rtems_fatal_error_occurred (status);
 		}
 	}
+    status = rtems_io_register_name ("/dev/tty02", major, 2);
+    if ( status != RTEMS_SUCCESSFUL )
+    {
+        rtems_fatal_error_occurred (status);
+    }
 
 	return(RTEMS_SUCCESSFUL);
 }
