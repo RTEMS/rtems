@@ -158,7 +158,7 @@ do
 
    case "$tname" in
        # size is no longer interactive.
-       monitor* | termios*)
+       monitor* | termios* | fileio*)
             warn "Skipping $tname; it is interactive"
             continue
             ;;
