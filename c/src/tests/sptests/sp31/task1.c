@@ -20,6 +20,16 @@
 
 #include "system.h"
 
+volatile int TSR_fired;
+
+rtems_timer_service_routine Should_not_fire_TSR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+)
+{
+  TSR_fired = 1;
+}
+
 rtems_task Task_1(
   rtems_task_argument argument
 )
@@ -42,6 +52,39 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_ident" );
   printf( "TA1 - timer 2 has id (0x%x)\n", tmid2 );
 
+/* make sure insertion does not unintentionally fire a timer per PR147 */
+
+  TSR_fired = 0;
+
+  puts( "TA1 - rtems_timer_server_fire_after - 1 second" );
+  status = rtems_timer_server_fire_after(
+    tmid, TICKS_PER_SECOND, Should_not_fire_TSR, NULL );
+  directive_failed( status, "rtems_timer_server_fire_after" );
+
+  puts( "TA1 - rtems_task_wake_after - 1/2 second" );
+  status = rtems_task_wake_after( TICKS_PER_SECOND / 2 );
+  directive_failed( status, "rtems_timer_server_fire_after" );
+
+  directive_failed( status, "rtems_timer_server_fire_after" );
+  puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 1/2 second" );
+  status = rtems_timer_server_fire_after(
+    tmid2, TICKS_PER_SECOND / 2, Should_not_fire_TSR, NULL );
+  directive_failed( status, "rtems_timer_server_fire_after" );
+
+  if ( TSR_fired ) {
+    puts( "TA1 - TSR fired and should not have!" );
+    exit(1); 
+  }
+
+  puts( "TA1 - rtems_timer_cancel - timer 1" );
+  status = rtems_timer_cancel( tmid );
+  directive_failed( status, "rtems_timer_cancel" );
+
+  puts( "TA1 - rtems_timer_cancel - timer 2" );
+  status = rtems_timer_cancel( tmid2 );
+  directive_failed( status, "rtems_timer_cancel" );
+
+  
 /* now check that rescheduling an active timer works OK. */
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 30 seconds" );
   status = rtems_timer_server_fire_after(

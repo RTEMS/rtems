@@ -1,3 +1,10 @@
+2001-03-29	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR147 addressed problems when reseting and inserting a timer
+	into a timer chain that did not honor time passage since the last
+	time the timer server was scheduled and the new insertion.
+	* sp31/sp31.scn, sp31/task1.c: Added test code to detect this case.
+
 2001-03-28	Joel Sherrill <joel@OARcorp.com>
 
 	* Side-effect of PR132.
