@@ -1,4 +1,3 @@
-@c
 @c  COPYRIGHT (c) 1988-1998.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
@@ -6,7 +5,60 @@
 @c  $Id$
 @c
 
+@c The following macros from confdefs.h have not been discussed in this
+@c chapter:
+@c 
+@c CONFIGURE_NEWLIB_EXTENSION
+@c CONFIGURE_MALLOC_REGION
+@c CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
+@c CONFIGURE_LIBIO_SEMAPHORES
+@c CONFIGURE_INIT
+@c CONFIGURE_INTERRUPT_STACK_MEMORY
+@c CONFIGURE_GNAT_RTEMS
+@c     CONFIGURE_GNAT_MUTEXES
+@c     CONFIGURE_GNAT_KEYS
+@c     CONFIGURE_MAXIMUM_ADA_TASKS
+@c     CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
+@c     CONFIGURE_ADA_TASKS_STACK
+@c 
+@c In addition, there should be examples of defining your own
+@c Device Driver Table, Init task table, etc.
+@c
+@c Regardless, this is a big step up. :)
+@c 
+
 @chapter Configuring a System
+
+@section Automatic Generation of System Configuration
+
+RTEMS provides the @code{confdefs.h} C language header file that
+based on the setting of a variety of macros can automatically
+produce nearly all of the configuration tables required
+by an RTEMS application.  Rather than building the individual
+tables by hand. the application simply specifies the values
+for the configuration parameters it wishes to set.  In the following
+example, the configuration information for a simple system with
+a message queue and a time slice of 50 milliseconds is configured:
+
+@example
+@group
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MICROSECONDS_PER_TICK   1000 /* 1 millisecond */
+#define CONFIGURE_TICKS_PER_TIMESLICE       50 /* 50 milliseconds */
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+@end group
+@end example
+
+This system will begin execution with the single initialization task
+named @code{Init}.  It will be configured to have both a console
+device driver (for standard I/O) and a clock tick device driver.
+
+For each configuration parameter in the configuration tables, the
+macro corresponding to that field is discussed.  Most systems
+can be easily configured using the @code{confdefs.h} mechanism.
 
 @section Configuration Table
 
@@ -73,36 +125,87 @@ various object control blocks (TCBs, QCBs, ...) and task stacks.
 If the address is not aligned on a four-word boundary, then
 RTEMS will invoke the fatal error handler during
 @code{@value{DIRPREFIX}initialize_executive}.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}.
 
 @item work_space_size
 is the calculated size of the
 RTEMS RAM Workspace.  The section Sizing the RTEMS RAM Workspace
 details how to arrive at this number.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_SIZE}
+and is calculated based on the other system configuration settings.
 
 @item microseconds_per_tick
 is number of microseconds per clock tick.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MICROSECONDS_PER_TICK}.
+If not defined by the application, then the @code{CONFIGURE_MAXIMUM_TASKS}
+macro defaults to 10.
+XXX
 
 @item ticks_per_timeslice
 is the number of clock ticks for a timeslice.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_TICKS_PER_TIMESLICE}.
 
 @item maximum_devices
 is the maximum number of devices that can be registered.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_DEVICES}.
 
 @item number_of_device_drivers
 is the number of device drivers for the system.  There should be
 the same number of entries in the Device Driver Table.  If this field
-is zero, then the User_driver_address_table entry should be NULL.
+is zero, then the @code{User_driver_address_table} entry should be NULL.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field is calculated
+automatically based on the number of entries in the 
+Device Driver Table.  This calculation is based on the assumption
+that the Device Driver Table is named @code{Device_drivers}
+and defined in C.  This table may be generated automatically
+for simple applications using only the device drivers that correspond
+to the following macros:
+
+@itemize @bullet
+
+@item @code{CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER}
+@item @code{CONFIGURE_TEST_NEEDS_CLOCK_DRIVER}
+@item @code{CONFIGURE_TEST_NEEDS_TIMER_DRIVER}
+@item @code{CONFIGURE_TEST_NEEDS_RTC_DRIVER}
+@item @code{CONFIGURE_TEST_NEEDS_STUB_DRIVER}
+
+@end itemize
+
+Note that network device drivers are not configured in the
+Device Driver Table.
 
 @item Device_driver_table
 is the address of the Device Driver Table.  This table contains the entry
 points for each device driver.  If the number_of_device_drivers field is zero,
 then this entry should be NULL. The format of this table will be
 discussed below.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the Device Driver Table is assumed to be
+named @code{Device_drivers} and defined in C.  If the application is providing
+its own Device Driver Table, then the macro
+@code{CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE} must be defined to indicate
+this and prevent @code{confdefs.h} from generating the table.
 
 @item number_of_initial_extensions
 is the number of initial user extensions.  There should be
 the same number of entries as in the User_extension_table.  If this field
 is zero, then the User_driver_address_table entry should be NULL.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS}
+which is set automatically by @code{confdefs.h} based on the size
+of the User Extensions Table.
 
 @item User_extension_table
 is the address of the User
@@ -110,24 +213,56 @@ Extension Table.  This table contains the entry points for the
 static set of optional user extensions.  If no user extensions
 are configured, then this entry should be NULL.  The format of
 this table will be discussed below.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the User Extensions Table is named
+@code{Configuration_Initial_Extensions} and defined in
+confdefs.h.  It is initialized based on the following
+macros:
+
+@itemize @bullet
+
+@item @code{CONFIGURE_INITIAL_EXTENSIONS}
+@item @code{STACK_CHECKER_EXTENSION}
+
+@end itemize
+
+The application may configure one or more initial user extension
+sets by setting the @code{CONFIGURE_INITIAL_EXTENSIONS} macro.  By
+defining the @code{STACK_CHECKER_EXTENSION} macro, the task stack bounds
+checking user extension set is automatically included in the
+application.
 
 @item User_multiprocessing_table
 is the address of the Multiprocessor Configuration Table.  This
 table contains information needed by RTEMS only when used in a multiprocessor
 configuration.  This field must be NULL when RTEMS is used in a
 single processor configuration.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the Multiprocessor Configuration Table
+is automatically generated when the @code{CONFIGURE_MPTEST}
+is defined.  If @code{CONFIGURE_MPTEST} is not defined, the this
+entry is set to NULL.  The generated table has the name
+@code{Multiprocessing_configuration}.
 
 @item RTEMS_api_configuration
 is the address of the RTEMS API Configuration Table.  This table
 contains information needed by the RTEMS API.  This field should be
 NULL if the RTEMS API is not used.  [NOTE: Currently the RTEMS API
 is required to support support components such as BSPs and libraries 
-which use this API.]
+which use this API.]  This table is built automatically and this
+entry filled in, if using the @code{confdefs.h} application
+configuration mechanism.  The generated table has the name
+@code{Configuration_RTEMS_API}.
 
 @item POSIX_api_configuration
 is the address of the POSIX API Configuration Table.  This table
 contains information needed by the POSIX API.  This field should be
-NULL if the POSIX API is not used.
+NULL if the POSIX API is not used.  This table is built automatically
+and this entry filled in, if using the @code{confdefs.h} application
+configuration mechanism.  The @code{confdefs.h} application 
+mechanism will fill this field in with the address of the
+@code{Configuration_POSIX_API} table of POSIX API is configured
+and NULL if the POSIX API is not configured.
 
 @end table
 
@@ -184,40 +319,125 @@ type API_Configuration_Table_Pointer is access all API_Configuration_Table;
 is the maximum number of tasks that
 can be concurrently active (created) in the system including
 initialization tasks.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_TASKS}.
+If not defined by the application, then the @code{CONFIGURE_MAXIMUM_TASKS}
+macro defaults to 10.
 
 @item maximum_timers
 is the maximum number of timers
 that can be concurrently active in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_TIMERS}.
+If not defined by the application, then the @code{CONFIGURE_MAXIMUM_TIMERS}
+macro defaults to 0.
 
 @item maximum_semaphores
 is the maximum number of
 semaphores that can be concurrently active in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_SEMAPHORES}.
+If not defined by the application, then the @code{CONFIGURE_MAXIMUM_SEMAPHORES}
+macro defaults to 0.
 
 @item maximum_message_queues
 is the maximum number of
 message queues that can be concurrently active in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_MESSAGE_QUEUES}.
+If not defined by the application, then the
+@code{CONFIGURE_MAXIMUM_MESSAGE_QUEUES} macro defaults to 0.
 
 @item maximum_partitions
 is the maximum number of
 partitions that can be concurrently active in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_PARTITIONS}.
+If not defined by the application, then the @code{CONFIGURE_MAXIMUM_PARTITIONS}
+macro defaults to 0.
 
 @item maximum_regions
 is the maximum number of regions
 that can be concurrently active in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_REGIONS}.
+If not defined by the application, then the @code{CONFIGURE_MAXIMUM_REGIONS}
+macro defaults to 0.
 
 @item maximum_ports
 is the maximum number of ports into
 dual-port memory areas that can be concurrently active in the
 system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_PORTS}.
+If not defined by the application, then the @code{CONFIGURE_MAXIMUM_PORTS}
+macro defaults to 0.
 
 @item number_of_initialization_tasks
 is the number of initialization tasks configured.  At least one
-initialization task must be configured.
+RTEMS initialization task or POSIX initializatin must be configured
+in order for the user's application to begin executing.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the user must define the
+@code{CONFIGURE_RTEMS_INIT_TASKS_TABLE} to indicate that there
+is one or more RTEMS initialization task.  If the application
+only has one RTEMS initialization task, then the automatically
+generated Initialization Task Table will be sufficient.  The following
+macros correspond to the single initialization task:
+  
+@itemize @bullet
+
+@item @code{CONFIGURE_INIT_TASK_NAME} - is the name of the task.  
+If this macro is not defined by the application, then this defaults
+to the task name of @code{"UI1 "} for User Initialization Task 1.
+
+@item @code{CONFIGURE_INIT_TASK_STACK_SIZE} - is the stack size
+of the single initialization task.  If this macro is not defined
+by the application, then this defaults to @code{RTEMS_MINIMUM_STACK_SIZE}.
+
+@item @code{CONFIGURE_INIT_TASK_PRIORITY} - is the initial priority
+of the single initialization task.  If this macro is not defined
+by the application, then this defaults to 1.
+
+@item @code{CONFIGURE_INIT_TASK_ATTRIBUTES} - is the attributes
+of the single initialization task.  If this macro is not defined
+by the application, then this defaults to @code{RTEMS_DEFAULT_ATTRIBUTES}.
+
+@item @code{CONFIGURE_INIT_TASK_ENTRY_POINT} - is the entry point
+of the single initialization task.  If this macro is not defined
+by the application, then this defaults to the C language routine
+@code{Init}.
+
+@item @code{CONFIGURE_INIT_TASK_INITIAL_MODES} - is the initial execution
+modes of the single initialization task.  If this macro is not defined
+by the application, then this defaults to @code{RTEMS_NO_PREEMPT}.
+
+@item @code{CONFIGURE_INIT_TASK_ARGUMENTS} - is the argument passed to the 
+of the single initialization task.  If this macro is not defined
+by the application, then this defaults to 0.
+
+
+@end itemize
+
+
+has the option to have 
+ value for this field corresponds
+to the setting of the macro @code{}.
 
 @item User_initialization_tasks_table
 is the address of the Initialization Task Table. This table contains the
 information needed to create and start each of the
 initialization tasks.  The format of this table will be discussed below.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}.
 
 @end table
 
@@ -294,35 +514,88 @@ typedef struct @{
 is the maximum number of threads that
 can be concurrently active (created) in the system including
 initialization threads.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_THREADS}.
+If not defined by the application, then the
+@code{CONFIGURE_MAXIMUM_POSIX_THREADS} macro defaults to 10.
 
 @item maximum_mutexes
 is the maximum number of mutexes that can be concurrently 
 active in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_MUTEXES}.
+If not defined by the application, then the
+@code{CONFIGURE_MAXIMUM_POSIX_MUTEXES} macro defaults to 0.
 
 @item maximum_condition_variables
 is the maximum number of condition variables that can be 
 concurrently active in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES}.
+If not defined by the application, then the
+@code{CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES} macro defaults to 0.
 
 @item maximum_keys
 is the maximum number of keys that can be concurrently active in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_KEYS}.
+If not defined by the application, then the
+@code{CONFIGURE_MAXIMUM_POSIX_KEYS} macro defaults to 0.
 
 @item maximum_timers
 is the maximum number of POSIX timers that can be concurrently active
 in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_TIMERS}.
+If not defined by the application, then the
+@code{CONFIGURE_MAXIMUM_POSIX_TIMERS} macro defaults to 0.
 
 @item maximum_queued_signals
 is the maximum number of queued signals that can be concurrently 
 pending in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS}.
+If not defined by the application, then the
+@code{CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS} macro defaults to 0.
 
 @item number_of_initialization_threads
 is the number of initialization threads configured.  At least one
 initialization threads must be configured.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the user must define the
+@code{CONFIGURE_POSIX_INIT_THREAD_TABLE} to indicate that there
+is one or more POSIX initialization thread.  If the application
+only has one POSIX initialization thread, then the automatically
+generated POSIX Initialization Thread Table will be sufficient.  The following
+macros correspond to the single initialization task:
+
+@itemize @bullet
+
+@item @code{CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT} - is the entry
+point of the thread.  If this macro is not defined by the application,
+then this defaults to the C routine @code{POSIX_Init}.
+
+@item @code{CONFIGURE_POSIX_INIT_TASK_STACK_SIZE} - is the stack size
+of the single initialization thread.  If this macro is not defined
+by the application, then this defaults to
+@code{(RTEMS_MINIMUM_STACK_SIZE * 2)}.
+
+@end itemize
  
 @item User_initialization_threads_table
 is the address of the Initialization Threads Table. This table contains the
 information needed to create and start each of the initialization threads.  
 The format of each entry in this table is defined in the 
-posix_initialization_threads_table @value{STRUCTURE}.
+@code{posix_initialization_threads_table} @value{STRUCTURE}.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the address of the @code{POSIX_Initialization_threads} structure.
 
 @end table
 
@@ -336,6 +609,9 @@ table are discussed in the CPU Dependent Information Table
 chapter of the Applications Supplement document for a specific
 target processor.
 
+The @code{confdefs.h} mechanism does not support generating this
+table.  It is normally filled in by the Board Support Package.
+
 @section Initialization Task Table
 
 The Initialization Task Table is used to describe
@@ -343,9 +619,12 @@ each of the user initialization tasks to the Initialization
 Manager.  The table contains one entry for each initialization
 task the user wishes to create and start.  The fields of this
 data structure directly correspond to arguments to the
-task_create and task_start directives.  The number of entries is
-found in the number_of_initialization_tasks entry in the
-Configuration Table.  The format of each entry in the
+@code{@value{DIRPREFIX}task_create} and
+@code{@value{DIRPREFIX}task_start} directives.  The number of entries is
+found in the @code{number_of_initialization_tasks} entry in the
+Configuration Table.  
+
+The format of each entry in the
 Initialization Task Table is defined in the following @value{LANGUAGE}
 @value{STRUCTURE}:
 
@@ -718,11 +997,19 @@ configuration.  Many of the details associated with configuring
 a multiprocessor system are dependent on the multiprocessor
 communications layer provided by the user.  The address of the
 Multiprocessor Configuration Table should be placed in the
-User_multiprocessing_table entry in the primary Configuration
+@code{User_multiprocessing_table} entry in the primary Configuration
 Table.  Further details regarding many of the entries in the
 Multiprocessor Configuration Table will be provided in the
-Multiprocessing chapter.  The format of the Multiprocessor
-Configuration Table is defined in 
+Multiprocessing chapter.  
+
+
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the macro @code{CONFIGURE_MPTEST} must
+be defined to automatically generate the Multiprocessor Configuration Table.
+If @code{CONFIGURE_MPTEST}, is not defined, then a NULL pointer
+is configured as the address of this table.
+
+The format of the Multiprocessor Configuration Table is defined in 
 the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
@@ -765,15 +1052,33 @@ inter-processor communication links.  Zero should be avoided as
 a node number because some MPCI layers use node zero to
 represent broadcasted packets.  Thus, it is recommended that
 node numbers start at one and increase sequentially.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MP_NODE_NUMBER}.
+If not defined by the application, then the @code{CONFIGURE_MP_NODE_NUMBER}
+macro defaults to the value of the @code{NODE_NUMBER} macro which is
+set on the compiler command line by the RTEMS Multiprocessing Test Suites.
+
 
 @item maximum_nodes
 is the number of processor nodes in the system.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MP_MAXIMUM_NODES}.
+If not defined by the application, then the @code{CONFIGURE_MP_MAXIMUM_NODES}
+macro defaults to the value 2.
 
 @item maximum_global_objects
 is the maximum number of global objects which can exist at any
 given moment in the entire system.  If this parameter is not the
 same on all nodes in the system, then a fatal error is generated
 to inform the user that the system is inconsistent.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS}.
+If not defined by the application, then the
+@code{CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS} macro defaults to the value 32.
+
 
 @item maximum_proxies
 is the maximum number of proxies which can exist at any given moment
@@ -781,6 +1086,12 @@ on this particular node.  A proxy is a substitute task control block
 which represent a task residing on a remote node when that task blocks
 on a remote object.  Proxies are used in situations in which delayed
 interaction is required with a remote node.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MP_MAXIMUM_PROXIES}.
+If not defined by the application, then the @code{CONFIGURE_MP_MAXIMUM_PROXIES}
+macro defaults to the value 32.
+
 
 @item User_mpci_table
 is the address of the Multiprocessor Communications Interface
@@ -789,10 +1100,26 @@ which constitute the multiprocessor communications layer.  This table
 must be provided in multiprocessor configurations with all
 entries configured.  The format of this table and details
 regarding its entries can be found in the next section.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MP_MPCI_TABLE_POINTER}.
+If not defined by the application, then the
+@code{CONFIGURE_MP_MPCI_TABLE_POINTER} macro defaults to the 
+address of the table named @code{MPCI_table}.
+
 
 @end table
 
 @section Multiprocessor Communications Interface Table
+
+This table defines the set of callouts that must be provided by 
+an Multiprocessor Communications Interface implementation.  
+
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the name of this table is assumed
+to be @code{MPCI_table} unless the application sets
+the @code{CONFIGURE_MP_MPCI_TABLE_POINTER} when configuring a
+multiprocessing system. 
 
 The format of this table is defined in 
 the following @value{LANGUAGE} @value{STRUCTURE}:
@@ -873,8 +1200,8 @@ entry points is provided in the Multiprocessor chapter.
 @section Determining Memory Requirements
 
 Since memory is a critical resource in many real-time
-embedded systems, RTEMS was specifically designed to allow
-unused managers to be excluded from the run-time environment.
+embedded systems, the RTEMS Classic API was specifically designed to allow
+unused managers to be forcibly excluded from the run-time environment.
 This allows the application designer the flexibility to tailor
 RTEMS to most efficiently meet system requirements while still
 satisfying even the most stringent memory constraints.  As
@@ -885,7 +1212,7 @@ processor.  This worksheet can be used to calculate the memory
 requirements of a custom RTEMS run-time environment.  To insure
 that enough memory is allocated for future versions of RTEMS,
 the application designer should round these memory requirements
-up.  The following managers may be optionally excluded:
+up.  The following Classic API managers may be optionally excluded:
 
 @itemize @bullet
 @item signal
@@ -900,6 +1227,14 @@ up.  The following managers may be optionally excluded:
 @item rate monotonic
 @end itemize
 
+RTEMS is designed to be built and installed as a library
+that is linked into the application.  As such, much of
+RTEMS is implemented in such a way that there is a single
+entry point per source file.  This avoids having the 
+linker being forced to pull large object files in their
+entirety into an application when the application references
+a single symbol.
+
 RTEMS based applications must somehow provide memory
 for RTEMS' code and data space.  Although RTEMS' data space must
 be in RAM, its code space can be located in either ROM or RAM.
@@ -909,7 +1244,7 @@ can be calculated using the formula provided in the Memory
 Requirements chapter of the Applications Supplement document
 for a specific target processor.
 
-All RTEMS data variables and routine names used by
+All private RTEMS data variables and routine names used by
 RTEMS begin with the underscore ( _ ) character followed by an
 upper-case letter.  If RTEMS is linked with an application, then
 the application code should NOT contain any symbols which begin
@@ -926,6 +1261,22 @@ data structures whose exact size depends upon the values
 specified in the Configuration Table.  In addition, task stacks
 and floating point context areas are dynamically allocated from
 the RTEMS RAM Workspace.
+
+The @code{confdefs.h} mechanism calcalutes the size
+of the RTEMS RAM Workspace automatically.  It assumes that
+all tasks are floating point and that all will be allocated
+the miminum stack space.  This calculation also automatically
+includes the memory that will be allocated for internal use
+by RTEMS.  The following macros may be set
+by the application to make the calculation
+of memory required more accurate:
+
+@itemize @bullet
+
+CONFIGURE_MEMORY_OVERHEAD
+CONFIGURE_EXTRA_TASK_STACKS
+
+@end itemize
 
 The starting address of the RTEMS RAM Workspace must
 be aligned on a four-byte boundary.  Failure to properly align
