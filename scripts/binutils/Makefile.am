@@ -15,9 +15,6 @@ CLEANFILES = binutils.spec.in
 MKBINUTILSSPEC_DEPS = $(top_builddir)/mkbinutilspec binutils.spec.in \
     $(top_builddir)/setup.cache
 
-a29k-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . a29k-rtems
-
 arm-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . arm-rtems
 
@@ -60,7 +57,7 @@ sparc-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
 RPM_SPECS_DATA = \
-    a29k-rtems-$(BINUTILSVERS).spec arm-rtems-$(BINUTILSVERS).spec \
+    arm-rtems-$(BINUTILSVERS).spec \
     c4x-rtems-$(BINUTILSVERS).spec h8300-rtems-$(BINUTILSVERS).spec \
     hppa1.1-rtems-$(BINUTILSVERS).spec \
     i386-rtems-$(BINUTILSVERS).spec i960-rtems-$(BINUTILSVERS).spec \

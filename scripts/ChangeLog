@@ -1,3 +1,8 @@
+2002-11-13	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Switched to binutils 2.13.1
+	* binutils/Makefile.am: Remove a29k-rtems.
+
 2002-11-11	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, gcc3newlib/gccnewlib.add: Patch includes updates
