@@ -39,5 +39,6 @@ monitor/Makefile
 rtmonuse/Makefile
 stackchk/Makefile
 untar/Makefile
+mw-fb/Makefile
 wrapup/Makefile
 )
