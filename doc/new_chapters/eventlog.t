@@ -35,6 +35,7 @@ The directives provided by the event logging manager are:
 @item @code{log_facilityaddset} - Manipulate log facility sets
 @item @code{log_facilitydelset} - Manipulate log facility sets
 @item @code{log_facilityismember} - Manipulate log facility sets
+@item @code{log_facilityisvalid} - Manipulate log facility sets
 @end itemize
 
 @section Background
@@ -70,11 +71,21 @@ XXX Events
 
 @subsection Creating and Writing a non-System Log
 
-Discuss creating and writing to a non-system log.
+The following snips of code create a non-System log file at /temp/.
+A previously read entry and buffer (log_buf) of size readsize are written
+into the log.  See the dicussion on opening and reading a log for
+how the entry is created.
 
 @example
-  log_create
-  log_write loop
+#include <evlog.h>
+   :
+  logd_t           *outlog = NULL;
+  char             *path   = "/temp/";
+
+  log_create( outlog, path );
+   :  
+  log_write_entry( outlog, &entry, log_buf, readsize );
+
 @end example
 
 @subsection Reading a Log
@@ -699,6 +710,8 @@ int log_seek(
 @table @b
 @item EBADF
 The @code{logdes} argument is not a valid log file descriptor.
+@item EINVAL
+The @code{log_recid} argument is not a valid record id.
 
 @end table
 
@@ -1012,6 +1025,57 @@ a value of one to the location specified by @code{member} if the
 specified facility is a member of the specified set or value of
 zero to the location specified by @code{member} if the specified
 facility is not a member of the specified set.
+
+@subheading NOTES:
+
+The @code{_POSIX_LOGGING} feature flag is defined to indicate
+this service is available.
+
+Applications shall call either @code{log_facilityemptyset} or 
+@code{log_facilityfillset} at least once for each object of type
+@code{log_facilityset_t} prior to any other use of that object.  If
+such an object is not initialized in this way, but is nonetheless 
+supplied as an argument to any of the @code{log_facilityaddset}, 
+@code{logfacilitydelset}, @code{log_facilityismember} or 
+@code{log_open} functions, the results are undefined.
+
+@page
+@subsection log_facilityismember - Manipulate log facility sets
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <evlog.h>
+
+int log_facilityisvalid(
+  log_facility_t        facilityno
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EFAULT
+The @code{set} or @code{member} argument is an invalid pointer.
+
+@item EINVAL
+The @code{facilityno} argument is not a valid facility.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{log_facilityisvalid} function tests whether the facility
+specified by the value of the argument @code{facilityno} is a valid
+facility number which is less than 32.  Upon successful completion, 
+the @code{log_facilityisvalid} function either returns a value of
+0 if the specified facility is a valid facility or value of EINVAL 
+if the specified facility is not a valid facility.
 
 @subheading NOTES:
 
