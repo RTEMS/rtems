@@ -2,28 +2,27 @@
 ## $Id$
 ##
 
-## NOTE: This Makefile.am applies automake compilation rules and does not
-## apply RTEMS's compilation rules.
+## NOTE: This Makefile.am does not apply RTEMS's compilation rules.
 
 AUTOMAKE_OPTIONS = no-exeext
 
 noinst_PROGRAMS = bootloader
 
 ## IMPORTANT: head.S must be first, T. Straumann 12/17/2001
-bootloader_SOURCES = ../../powerpc/shared/bootloader/head.S \
-    ../../powerpc/shared/bootloader/exception.S \
-    ../../powerpc/shared/bootloader/em86real.S \
-    ../../powerpc/shared/bootloader/misc.c \
-    ../../powerpc/shared/bootloader/pci.c \
-    ../../powerpc/shared/bootloader/zlib.c \
-    ../../powerpc/shared/bootloader/mm.c \
-    ../../powerpc/shared/bootloader/em86.c \
-    ../../powerpc/shared/console/polled_io.c \
-    ../../powerpc/shared/bootloader/lib.c \
-    ../../powerpc/shared/bootloader/bootldr.h \
-    ../../powerpc/shared/bootloader/zlib.h \
-    ../../powerpc/shared/bootloader/pci.h \
-    ../../powerpc/shared/console/keyboard.h
+bootloader_SOURCES = ../../../powerpc/shared/bootloader/head.S \
+    ../../../powerpc/shared/bootloader/exception.S \
+    ../../../powerpc/shared/bootloader/em86real.S \
+    ../../../powerpc/shared/bootloader/misc.c \
+    ../../../powerpc/shared/bootloader/pci.c \
+    ../../../powerpc/shared/bootloader/zlib.c \
+    ../../../powerpc/shared/bootloader/mm.c \
+    ../../../powerpc/shared/bootloader/em86.c \
+    ../../../powerpc/shared/console/polled_io.c \
+    ../../../powerpc/shared/bootloader/lib.c \
+    ../../../powerpc/shared/bootloader/bootldr.h \
+    ../../../powerpc/shared/bootloader/zlib.h \
+    ../../../powerpc/shared/bootloader/pci.h \
+    ../../../powerpc/shared/console/keyboard.h
 
 # ----
 DEFAULT_INCLUDES =
