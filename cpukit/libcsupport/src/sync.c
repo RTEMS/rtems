@@ -21,10 +21,6 @@
 #include "config.h"
 #endif
 
-/* this is needed to get the fileno() prototype */
-#if defined(__STRICT_ANSI__)
-#undef __STRICT_ANSI__
-#endif
 #include <unistd.h>
 #include <stdio.h>
 
@@ -50,7 +46,7 @@ static void sync_wrapper(FILE *f)
 /* iterate over all FILE *'s for this thread */
 static void sync_per_thread(Thread_Control *t)
 {
-   struct reent *current_reent;
+   struct _reent *current_reent;
 
    /*
     *  The sync_wrapper() function will operate on the current thread's

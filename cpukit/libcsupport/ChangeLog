@@ -1,5 +1,10 @@
 2003-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/sync.c: Don't undef __STRICT_ANSI__.
+	Use struct _reent (struct reent doesn't exist)
+
+2003-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	PR 486/rtems
 	* src/newlib.c: Unconditionally include <stdio.h>
 
