@@ -3,14 +3,11 @@
 ##
 
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../automake/lib.am
 
 C_FILES = cpu_install_intr_stack.c cpu_install_raw_isr.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 #
 # (OPTIONAL) Add local stuff here using +=

@@ -1,3 +1,12 @@
+2002-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove CPU_MODEL_SUBDIR.
+	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP).
+	* i960ca/Makefile.am: Eliminate *_O_FILES.
+	Don't include @RTEMS_BSP@.cfg.
+	* i960ka/Makefile.am: Ditto.
+	* i960rp/Makefile.am: Ditto.
+
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
