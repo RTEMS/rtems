@@ -44,22 +44,50 @@ int _POSIX_Message_queue_Translate_core_message_queue_return_code(
   switch ( the_message_queue_status ) {
     case  CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL:
       return 0;
+
+      /*
+       *  Bad message size
+       */
     case  CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE:
       return EMSGSIZE;
+
+      /*
+       *  Queue is full of pending messages.
+       */
     case  CORE_MESSAGE_QUEUE_STATUS_TOO_MANY:
       return EAGAIN;
+
+      /*
+       *  Out of message buffers to queue pending message
+       */
     case CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED:
-      return ENOSYS;                  /* XXX */
+      return ENOMEM;
+
+      /*
+       *  No message available on receive poll
+       */
     case CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT:
-      return ENOSYS;                  /* XXX */
+      return EAGAIN;
+
+      /*
+       *  Queue was deleted while thread blocked on it.
+       */
     case CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED:
       return EBADF;
+
+      /*
+       *  POSIX Real-Time Extensions add timeouts to send and receive. 
+       */
     case CORE_MESSAGE_QUEUE_STATUS_TIMEOUT:
-      return ENOSYS;                  /* XXX */
+      return ETIMEDOUT;
+
+      /*
+       *  RTEMS POSIX API implementation does not support multiprocessing.
+       */
     case THREAD_STATUS_PROXY_BLOCKING:
-      return ENOSYS;                  /* XXX */
+      return ENOSYS;
   }
-  _Internal_error_Occurred(         /* XXX */
+  _Internal_error_Occurred(
     INTERNAL_ERROR_POSIX_API,
     TRUE,
     the_message_queue_status

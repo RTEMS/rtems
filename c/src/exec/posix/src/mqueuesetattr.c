@@ -40,18 +40,25 @@ int mq_setattr(
 )
 {
   register POSIX_Message_queue_Control *the_mq;
+  CORE_message_queue_Control           *the_core_mq;
   Objects_Locations                     location;
   CORE_message_queue_Attributes        *the_mq_attr;
  
+  if ( !mqstat )
+    set_errno_and_return_minus_one( EINVAL );
+
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
+      set_errno_and_return_minus_one( EBADF );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
       set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
+
+      the_core_mq = &the_mq->Message_queue;
+
       /*
        *  Return the old values.
        */
@@ -59,23 +66,28 @@ int mq_setattr(
       /* XXX this is the same stuff as is in mq_getattr... and probably */
       /* XXX should be in an inlined private routine */
 
-      the_mq_attr = &the_mq->Message_queue.Attributes;
-
-      omqstat->mq_flags   = the_mq->flags;
-      omqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
-      omqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
-      omqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
+      if ( omqstat ) {
+        omqstat->mq_flags   = the_mq->oflag;
+        omqstat->mq_msgsize = the_core_mq->maximum_message_size;
+        omqstat->mq_maxmsg  = the_core_mq->maximum_pending_messages;
+        omqstat->mq_curmsgs = the_core_mq->number_of_pending_messages;
+      }
   
       /*
-       *  Ignore everything except the O_NONBLOCK bit. 
+       *  If blocking was in effect and is not now, then there
+       *  may be threads blocked on this message queue which need
+       *  to be unblocked to make the state of the message queue
+       *  consistent for future use.
        */
-
-      if (  mqstat->mq_flags & O_NONBLOCK ) 
-        the_mq->blocking = FALSE;
-      else
-        the_mq->blocking = TRUE;
  
-      the_mq->flags = mqstat->mq_flags;
+      the_mq_attr = &the_core_mq->Attributes;
+
+      if ( !(the_mq->oflag & O_NONBLOCK) &&         /* were blocking */
+           (mqstat->mq_flags & O_NONBLOCK) ) {      /* and now are not */ 
+        _CORE_message_queue_Flush_waiting_threads( the_core_mq );
+      }
+      
+      the_mq->oflag = mqstat->mq_flags;
 
       _Thread_Enable_dispatch();
       return 0;

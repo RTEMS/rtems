@@ -71,7 +71,7 @@ int _POSIX_Message_queue_Send_support(
         set_errno_and_return_minus_one( EBADF );
       }
 
-      status = _CORE_message_queue_Submit(
+      _CORE_message_queue_Submit(
         &the_mq->Message_queue,
         (void *) msg_ptr,
         msg_len,
@@ -81,30 +81,20 @@ int _POSIX_Message_queue_Send_support(
 #else
         NULL,
 #endif
-        _POSIX_Message_queue_Priority_to_core( msg_prio )
+        _POSIX_Message_queue_Priority_to_core( msg_prio ),
+         (the_mq->oflag & O_NONBLOCK) ? FALSE : TRUE, 
+        timeout    /* no timeout */
       );
 
-      if ( status != CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL ) {
-        _Thread_Enable_dispatch();
-        set_errno_and_return_minus_one(
-          _POSIX_Message_queue_Translate_core_message_queue_return_code(status)
-        );
-      }
-
-      /*
-       *  For now, we can't do a blocking send.  So if we get here, it was
-       *  a successful send.  The return code in the TCB won't be set by
-       *  the SuperCore since it does not support blocking mqueue sends.
-       */
-
-#if 1
       _Thread_Enable_dispatch();
-      return 0;
-#else
-      _Thread_Enable_dispatch();
-      return _Thread_Executing->Wait.return_code;
-#endif
+      if ( !_Thread_Executing->Wait.return_code )
+        return 0;
+
+      set_errno_and_return_minus_one(
+        _POSIX_Message_queue_Translate_core_message_queue_return_code(
+          _Thread_Executing->Wait.return_code
+        )
+      );
   }
-
   return POSIX_BOTTOM_REACHED();
 }
