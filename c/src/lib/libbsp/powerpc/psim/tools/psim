@@ -21,7 +21,8 @@ GDB_FILE=gdb_tree.${LOGNAME}
 
 #  Build this user's device tree file
 echo "/#address-cells 2"                              >  ${TREE_FILE}
-echo "/openprom/options/oea-memory-size 4194304"      >> ${TREE_FILE}
+#echo "/openprom/options/oea-memory-size 4194304"      >> ${TREE_FILE}
+echo "/openprom/options/oea-memory-size 8388608"      >> ${TREE_FILE}
 # These require the semaphore and shared memory device models.
 # echo "/shm@0xc0000000/reg 0xc0000000 0x10000"         >> ${TREE_FILE}
 # echo "/shm@0xc0000000/key ${RTEMS_SHM_KEY}"           >> ${TREE_FILE}
