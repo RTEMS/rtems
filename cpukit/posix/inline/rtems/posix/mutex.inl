@@ -51,6 +51,11 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
 {
   int status;
 
+  if ( !id ) {
+    *location = OBJECTS_ERROR;
+    return (POSIX_Mutex_Control *) 0;
+  }
+
   if ( *id == PTHREAD_MUTEX_INITIALIZER ) {
     /*
      *  Do an "auto-create" here.
