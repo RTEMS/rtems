@@ -2,21 +2,14 @@
 ## $Id$
 ##
 
-
-
-
-
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
 C_FILES = auth.c ccp.c chap.c chap_ms.c chat.c demand.c fsm.c ipcp.c lcp.c \
     magic.c options.c upap.c md4.c md5.c utils.c sys-rtems.c rtemsmain.c \
     rtemspppd.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-OBJS = $(C_O_FILES)
-
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 

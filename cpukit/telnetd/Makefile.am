@@ -2,20 +2,16 @@
 ## $Id$
 ##
 
-
 include_rtemsdir = $(includedir)/rtems
 
 LIBNAME = libtelnetd-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = pty.c telnetd.c icmds.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = pty.h telnetd.h
 
-OBJS = $(C_O_FILES)
-
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
