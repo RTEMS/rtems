@@ -1,3 +1,9 @@
+2004-02-26	Sébastien Barré <sbarre@sdelcc.com>
+
+	PR 582/core
+	* psxmsgq01/init.c, psxmsgq01/psxmsgq01.scn: Fix the POSIX message
+	queue test so more of it runs now.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* psx01/init.c, psx01/system.h, psx01/task.c, psx02/init.c,

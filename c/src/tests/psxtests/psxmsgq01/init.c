@@ -1008,6 +1008,7 @@ void verify_with_threads()
   char              message[100];
 
 
+#if 0
   /*
    * Create a task then block until the task sends the message.
    * Task tests set attributes so one queue will have a thread
@@ -1022,7 +1023,7 @@ void verify_with_threads()
   fatal_int_service_status( status, -1, "mq_receive error return status");
   fatal_posix_service_status( errno, EAGAIN, "mq_receive errno EAGAIN");
   print_current_time( "Init: ", "" );
-
+#endif
   /*
    * Create a task then block until the task sends the message.
    * Task tests set attributes so one queue will have a thread
@@ -1035,8 +1036,11 @@ void verify_with_threads()
   Read_msg_from_que(  BLOCKING, 0 ); /* Block until init writes */
   print_current_time( "Init: ", "" );
 
+#if 0 
   /*
-   * Create a task then block until the task reads a message.
+   * Fill the queue then create a task then block until the task receives a message.
+   * Task tests set attributes so one queue will have a thread
+   * blocked while attributes are changed.
    */
 
   Start_Test( "multi-thread Task 4 Send Test"  );
@@ -1049,7 +1053,7 @@ void verify_with_threads()
   fatal_posix_service_status( errno, EAGAIN, "mq_send errno EAGAIN");
   verify_queues_full( "Init:" );
   empty_message_queues( "Init:" );
-
+#endif
   /*
    * Create a task then block until the task reads a message.
    */
