@@ -26,9 +26,12 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
 $(PROJECT_INCLUDE)/bsp/motorola.h: $(top_srcdir)/../../powerpc/shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

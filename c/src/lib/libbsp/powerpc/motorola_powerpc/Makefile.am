@@ -28,6 +28,7 @@ EXTRA_DIST += times.mcp750 times.mvme2307
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
 $(PROJECT_INCLUDE)/nvram.h: ../shared/include/nvram.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nvram.h
@@ -52,6 +53,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 $(PROJECT_INCLUDE)/bsp/motorola.h: ../shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

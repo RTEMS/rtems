@@ -1,3 +1,17 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* bootloader/Makefile.am: Ditto.
+	* irq/Makefile.am: Ditto.
+	* motorola/Makefile.am: Ditto.
+	* openpic/Makefile.am: Ditto.
+	* pci/Makefile.am: Ditto.
+	* start/Makefile.am: Ditto.
+	* startup/Makefile.am: Ditto.
+	* vectors/Makefile.am: Ditto.
+	* vme/Makefile.am: Ditto.
+
 2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Eliminate $(LIB). 
