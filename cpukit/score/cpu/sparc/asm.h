@@ -44,7 +44,6 @@
 /* XXX __USER_LABEL_PREFIX__ and __REGISTER_PREFIX__ do not work on gcc 2.7.0 */
 /* XXX The following ifdef magic fixes the problem but results in a warning   */
 /* XXX when compiling assembly code.                                          */
-#undef  __USER_LABEL_PREFIX__
 #ifndef __USER_LABEL_PREFIX__
 #define __USER_LABEL_PREFIX__ _
 #endif
