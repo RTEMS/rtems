@@ -233,7 +233,7 @@ struct rmxp_tao {
         m = (struct mbuf *)((((unsigned int) (ti)->ti_sport) << 16) | ( (unsigned int)(ti)->ti_dport));
 
 #else
-#define REASS_MBUF(ti) (*(mbuf_packed **)&((ti)->ti_t))
+#define REASS_MBUF(ti) (*(struct mbuf **)&((ti)->ti_t))
 #endif
 
 /*

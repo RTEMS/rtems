@@ -1,3 +1,8 @@
+2002-10-07	Eric Norum <eric.norum@usask.ca>
+
+	* netinet/tcp_var.h: Corrected typo in ARM alignment patch which 
+	broke all other ports.
+
 2002-10-04	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* netinet/in_cksum.c, netinet/ip_icmp.h, netinet/ip_input.c,
