@@ -1,3 +1,7 @@
+2003-06-13	Joel Sherrill <joel@OARcorp.com>
+
+	* pppd/chat.c: Removed warnings.
+
 2003-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* pppd/fsm.c: Make peer_mru global again.

@@ -184,7 +184,7 @@ static int  write_char __P((int c));
 static int  put_char __P((int c));
 static int  get_char __P((void));
 void chat_send __P((register char *s));
-static char *character __P((int c));
+/* static char *character __P((int c)); */
 void chat_expect __P((register char *s));
 static char *clean __P((register char *s, int sending));
 char *expect_strtok __P((char *, char *));
@@ -563,6 +563,7 @@ char *s;
     }
 }
 
+#if 0
 /*
  * Translate the input character to the appropriate string for printing
  * the data.
@@ -586,6 +587,7 @@ int c;
 
     return (string);
 }
+#endif
 
 /*
  *  process the reply string
