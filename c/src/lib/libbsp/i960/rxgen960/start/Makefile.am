@@ -21,7 +21,7 @@ $(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).$(OBJEXT): $(ARCH)/rxgen_romld.
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).$(OBJEXT)
 
-all-local: $(ARCH) $(OBJS) $(ARCH)/rxgen_romld.$(OBJEXT) $(TMPINSTALL_FILES)
+all-local: $(OBJS) $(ARCH)/rxgen_romld.$(OBJEXT) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(ARCH)/rxgen_romld.$(OBJEXT)
 
