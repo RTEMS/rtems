@@ -1,3 +1,61 @@
+2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* score/src/apiext.c, score/src/chain.c, score/src/coremsg.c,
+	score/src/coremsgbroadcast.c, score/src/coremsgclose.c,
+	score/src/coremsgflush.c, score/src/coremsgflushsupp.c,
+	score/src/coremsgflushwait.c, score/src/coremsginsert.c,
+	score/src/coremsgseize.c, score/src/coremsgsubmit.c,
+	score/src/coremutex.c, score/src/coremutexflush.c,
+	score/src/coremutexseize.c, score/src/coremutexsurrender.c,
+	score/src/coresem.c, score/src/coresemflush.c,
+	score/src/coresemseize.c, score/src/coresemsurrender.c,
+	score/src/coretod.c, score/src/coretodset.c,
+	score/src/coretodtickle.c, score/src/coretodtoseconds.c,
+	score/src/coretodvalidate.c, score/src/heap.c,
+	score/src/heapallocate.c, score/src/heapallocatealigned.c,
+	score/src/heapextend.c, score/src/heapfree.c,
+	score/src/heapgetfreeinfo.c, score/src/heapgetinfo.c,
+	score/src/heapsizeofuserarea.c, score/src/heapwalk.c,
+	score/src/interr.c, score/src/isr.c, score/src/iterateoverthreads.c,
+	score/src/mpci.c, score/src/object.c, score/src/objectallocate.c,
+	score/src/objectallocatebyindex.c, score/src/objectclearname.c,
+	score/src/objectcomparenameraw.c,
+	score/src/objectcomparenamestring.c, score/src/objectcopynameraw.c,
+	score/src/objectcopynamestring.c,
+	score/src/objectextendinformation.c, score/src/objectfree.c,
+	score/src/objectget.c, score/src/objectgetbyindex.c,
+	score/src/objectgetisr.c, score/src/objectgetnext.c,
+	score/src/objectgetnoprotection.c, score/src/objectidtoname.c,
+	score/src/objectinitializeinformation.c, score/src/objectmp.c,
+	score/src/objectnametoid.c, score/src/objectshrinkinformation.c,
+	score/src/thread.c, score/src/threadchangepriority.c,
+	score/src/threadclearstate.c, score/src/threadclose.c,
+	score/src/threadcreateidle.c, score/src/threaddelayended.c,
+	score/src/threaddispatch.c, score/src/threadevaluatemode.c,
+	score/src/threadget.c, score/src/threadhandler.c,
+	score/src/threadidlebody.c, score/src/threadinitialize.c,
+	score/src/threadloadenv.c, score/src/threadmp.c,
+	score/src/threadq.c, score/src/threadqdequeue.c,
+	score/src/threadqdequeuefifo.c, score/src/threadqdequeuepriority.c,
+	score/src/threadqenqueue.c, score/src/threadqenqueuefifo.c,
+	score/src/threadqenqueuepriority.c, score/src/threadqextract.c,
+	score/src/threadqextractfifo.c, score/src/threadqextractpriority.c,
+	score/src/threadqextractwithproxy.c, score/src/threadqfirst.c,
+	score/src/threadqfirstfifo.c, score/src/threadqfirstpriority.c,
+	score/src/threadqflush.c, score/src/threadqtimeout.c,
+	score/src/threadready.c, score/src/threadreset.c,
+	score/src/threadresettimeslice.c, score/src/threadrestart.c,
+	score/src/threadresume.c, score/src/threadrotatequeue.c,
+	score/src/threadsetpriority.c, score/src/threadsetstate.c,
+	score/src/threadsettransient.c, score/src/threadstackallocate.c,
+	score/src/threadstackfree.c, score/src/threadstart.c,
+	score/src/threadstartmultitasking.c, score/src/threadsuspend.c,
+	score/src/threadtickletimeslice.c, score/src/threadyieldprocessor.c,
+	score/src/userext.c, score/src/watchdog.c,
+	score/src/watchdogadjust.c, score/src/watchdoginsert.c,
+	score/src/watchdogremove.c, score/src/watchdogtickle.c,
+	score/src/wkspace.c: Include config.h.
+
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/rtems/stdint.h: Add signed8, signed16, signed32,
@@ -8,11 +66,11 @@
 	* score/include/rtems/score/heap.h: Use uintptr_t for _H_uptr_t.
 	* score/inline/rtems/score/address.inl: Remove 
 	RTEMS_CPU_HAS_16_BIT_ADDRESSES.
-	Use uintptr_t for void* to address cast.
+	Use uintptr_t for void* to address casts.
 
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* libcsupport/include/stdint.h: Use __PTRDIFF_TYPE for intptr_t.
+	* libcsupport/include/stdint.h: Use __PTRDIFF_TYPE__ for intptr_t.
 
 2005-01-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
