@@ -6,6 +6,24 @@ This file documents the on board monitor (PPCBUG) configuration used
 to be able to boot the archives located in powerpc-rtems/c/mcp750/bin.
 This information was provided by Eric Valette <valette@crf.canon.fr>
 
+NOTE (by Till Straumann <strauman@slac.stanford.edu>, 2003):
+Apparently, PPCBug fails to shut down the network interface after
+loading an image. This means that the ethernet chip is still able
+to write into its descriptors and network buffer memory which
+can result in the loaded system to be corrupted if that system
+relocates itself!. The proper place to shut down the interface
+would be PPCBug itself or a 'PPCBug startup script' - unfortunately,
+PPCBug doesn't offer such a feature. Therefore, the bootloader
+is by default compiled with the
+#ifdef USE_PPCBUG
+compile-time option ENABLED. It will then use a PPCBug system
+call to shut down the ethernet chip during an early stage of
+the boot process.
+NOTE: THIS (i.e. the system call) WILL FAIL IF YOU USE SOFTWARE
+OTHER THAN PPCBUG TO BOOT THE BSP. In such a case, you must
+recompile with #undef USE_PPCBUG and make sure the ethernet
+interface is quiet by other means.
+
 ----------------------- ENV command--------------
 PPC1-Bug>env
 Bug or System environment [B/S] = B? 
