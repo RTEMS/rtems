@@ -1,5 +1,0 @@
-The <tt>i386/i386</tt> directory holds the routines that deal with the Intel
-386/486 CPU in the PC architecture.
-The 4.3BSD Internals book by Leffler, McKusick, Karels and Quarterman
-doesn't describe this anywhere at all, because this is machine-specific.
-<p>

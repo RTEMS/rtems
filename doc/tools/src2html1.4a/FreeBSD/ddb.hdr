@@ -1,6 +1,0 @@
-The <tt>ddb</tt> directory holds routines used to debug the kernel.
-The 4.3BSD Internals book by Leffler, McKusick, Karels and Quarterman
-doesn't really cover this directory. However, some information has been
-presented by Kirk KcKusick and Keith Bostic in their "UNIX Kernel Internals"
-notes, which they have presented in many places in the past few years.
-<p>

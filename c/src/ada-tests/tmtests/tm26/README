@@ -1,6 +1,0 @@
-#
-#  $Id$
-#
-
-This test requires interfacing to internal RTEMS routines and
-is probably not worth the effort to convert.

@@ -1,7 +1,0 @@
-#
-#  $Id$
-#
-
-The MIPS bsp are now called p4600 and p4650, referring to which cpu they use.
-The same bsp sub-directory can be used, the cpu is selected by the bsp
-specific makefiles (p4600.cfg and p4650.cfg).

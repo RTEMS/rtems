@@ -1,9 +1,0 @@
-The <tt>conf</tt> directory holds miscellaneous files, such as the list of
-files which are needed/optional in the OS. The main file of concern is
-<tt>param.c</tt>, which describes the system-dependent configuration
-parameters of FreeBSD.
-
-The 4.3BSD Internals book by Leffler, McKusick, Karels and Quarterman
-doesn't really cover this directory. It is vaguely covered in Chapter 8 of
-the "System Performance Tuning" Nutshell book by Mike Loukides.
-<p>
