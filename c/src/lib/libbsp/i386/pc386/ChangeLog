@@ -1,3 +1,9 @@
+2002-07-16	Eric Norum <eric.norum@usask.ca>
+
+	* console/console.c: Others on the rtems-users list have expressed
+	concern about this run-time selection, so I've enclosed the changes
+	in a #ifdef RTEMS_RUNTIME_CONSOLE_SELECT conditional.
+
 2002-07-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Eliminate TMPINSTALL_FILES.

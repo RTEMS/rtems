@@ -196,6 +196,19 @@ console_initialize(rtems_device_major_number major,
    */
   rtems_termios_initialize ();
 
+#ifdef RTEMS_RUNTIME_CONSOLE_SELECT
+  /*
+   * If no video card, fall back to serial port console
+   */
+#include <crt.h>
+  if((BSPConsolePort == BSP_CONSOLE_PORT_CONSOLE)
+   && (*(unsigned char*) NB_MAX_ROW_ADDR == 0)
+   && (*(unsigned short*)NB_MAX_COL_ADDR == 0)) {
+    BSPConsolePort = BSP_UART_COM2;
+    BSPPrintkPort  = BSP_UART_COM1;
+  }
+#endif
+
   /*
    *  The video was initialized in the start.s code and does not need
    *  to be reinitialized.
