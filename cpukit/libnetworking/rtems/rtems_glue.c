@@ -73,7 +73,8 @@ int			rtems_bsdnet_microseconds_per_tick;
  * Callout processing
  */
 static rtems_interval	ticksWhenCalloutsLastChecked;
-static struct callout *callfree, calltodo;
+struct callout *callfree = NULL;
+struct callout calltodo;
 
 /*
  * FreeBSD variables

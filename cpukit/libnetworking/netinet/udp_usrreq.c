@@ -73,8 +73,8 @@ static int log_in_vain = 0;
 SYSCTL_INT(_net_inet_udp, OID_AUTO, log_in_vain, CTLFLAG_RW, 
 	&log_in_vain, 0, "");
 
-static struct	inpcbhead udb;		/* from udp_var.h */
-static struct	inpcbinfo udbinfo;
+struct	inpcbhead udb;		/* from udp_var.h */
+struct	inpcbinfo udbinfo;
 
 #ifndef UDBHASHSIZE
 #define UDBHASHSIZE 64

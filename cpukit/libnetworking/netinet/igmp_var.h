@@ -59,8 +59,6 @@ struct igmpstat {
 };
 
 #ifdef _KERNEL
-extern struct igmpstat igmpstat;
-
 #define IGMP_RANDOM_DELAY(X) (random() % (X) + 1)
 
 /*

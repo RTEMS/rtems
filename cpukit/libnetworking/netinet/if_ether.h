@@ -40,22 +40,6 @@
 #include <net/ethernet.h>
 #include <net/if_arp.h>
 
-#define	ETHERTYPE_PUP		0x0200	/* PUP protocol */
-#define	ETHERTYPE_IP		0x0800	/* IP protocol */
-#define ETHERTYPE_ARP		0x0806	/* Addr. resolution protocol */
-#define ETHERTYPE_REVARP	0x8035	/* reverse Addr. resolution protocol */
-
-/*
- * The ETHERTYPE_NTRAILER packet types starting at ETHERTYPE_TRAIL have
- * (type-ETHERTYPE_TRAIL)*512 bytes of data followed
- * by an ETHER type (as given above) and then the (variable-length) header.
- */
-#define	ETHERTYPE_TRAIL		0x1000		/* Trailer packet */
-#define	ETHERTYPE_NTRAILER	16
-
-#define	ETHERMTU	(ETHER_MAX_LEN-ETHER_HDR_LEN-ETHER_CRC_LEN)
-#define	ETHERMIN	(ETHER_MIN_LEN-ETHER_HDR_LEN-ETHER_CRC_LEN)
-
 #ifdef _KERNEL
 /*
  * Macro to map an IP multicast address to an Ethernet multicast address.

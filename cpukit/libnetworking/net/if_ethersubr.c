@@ -554,10 +554,18 @@ ether_ifattach(struct ifnet *ifp)
 		}
 }
 
+#if defined(__rtems__)
+u_char ether_ipmulticast_min[6] = 
+	{ 0x01, 0x00, 0x5e, 0x00, 0x00, 0x00 };
+u_char ether_ipmulticast_max[6] =
+	{ 0x01, 0x00, 0x5e, 0x7f, 0xff, 0xff };
+#else
 static u_char ether_ipmulticast_min[6] = 
 	{ 0x01, 0x00, 0x5e, 0x00, 0x00, 0x00 };
 static u_char ether_ipmulticast_max[6] =
 	{ 0x01, 0x00, 0x5e, 0x7f, 0xff, 0xff };
+#endif
+
 /*
  * Add an Ethernet multicast address or range of addresses to the list for a
  * given interface.

@@ -1,3 +1,4 @@
+/* $Id */
 /*
  * Copyright (c) 1985, 1986, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -86,9 +87,6 @@ extern	struct	in_ifaddr *in_ifaddr;
 extern	struct	ifqueue	ipintrq;		/* ip packet input queue */
 extern	struct	in_addr zeroin_addr;
 extern	u_char	inetctlerrmap[];
-extern	int rtq_reallyold;	/* XXX */
-extern	int rtq_minreallyold;	/* XXX */
-extern	int rtq_toomany;	/* XXX */
 
 /*
  * Macro for finding the interface (ifnet structure) corresponding to one

@@ -1,3 +1,15 @@
+2004-12-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/if_ethersubr.c,
+	libnetworking/net/radix.h,
+	libnetworking/netinet/if_ether.h,
+	libnetworking/netinet/igmp_var.h,
+	libnetworking/netinet/in_var.h,
+	libnetworking/netinet/tcp_timer.h,
+	libnetworking/netinet/udp_usrreq.c,
+	libnetworking/rtems/rtems_glue.c:
+	Misc. updates from FreeBSD and bugfixes tripped by GCC-4.0.0.
+
 2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/kern/kern_sysctl.c,
