@@ -30,7 +30,7 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 $(LIB): $(OBJS)
 	$(make-library)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
 
 if HAS_NETWORKING

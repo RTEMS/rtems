@@ -32,7 +32,7 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 $(LIB): $(OBJS)
 	$(make-library)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)

@@ -1,3 +1,16 @@
+2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* untar/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* monitor/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* shell/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* devnull/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* dumpbuf/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* mw-fb/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* stackchk/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* rtmonuse/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* cpuuse/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* rootfs/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-27	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Fixed typo in date.
