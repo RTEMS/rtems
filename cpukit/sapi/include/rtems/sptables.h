@@ -63,13 +63,7 @@ extern const rtems_multiprocessing_table
        _Initialization_Default_multiprocessing_table;
 #endif
 
-#if defined(SAPI_INIT) 
-const char _RTEMS_version[] =
-  "RTEMS RELEASE " RTEMS_VERSION
-     "(" CPU_NAME "/" CPU_MODEL_NAME "/@RTEMS_BSP@)";
-#else
 extern const char _RTEMS_version[];
-#endif
 
 #ifdef __cplusplus
 }

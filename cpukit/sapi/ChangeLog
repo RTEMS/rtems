@@ -1,7 +1,14 @@
-2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* include/rtems/sptables.h.in: Remove RTEMS_VERSION (Moved to
-	cpuopts.h).
+	* include/rtems/sptables.h.in: Remove.
+	* include/rtems/sptables.h: New.
+	* include/.cvsignore: Remove.
+	* include/rtems/.cvsignore: Remove.
+	* inline/.cvsignore: Remove.
+	* inline/rtems/.cvsignore: Remove.
+	* macros/.cvsignore: Remove.
+	* macros/rtems/.cvsignore: Remove.
+	* src/.cvsignore: Remove.
 
 2003-02-03	Joel Sherrill <joel@OARcorp.com>
 
