@@ -1,5 +1,5 @@
 /*
- *	@(#)hppa.h	1.7 - 95/05/16
+ *	@(#)hppa.h	1.9 - 95/06/28
  *	
  *
  *  Description:
@@ -24,7 +24,7 @@
  * Note:
  *      This file is included by both C and assembler code ( -DASM )
  *
- *  hppa.h,v 1.2 1995/05/09 20:11:40 joel Exp
+ *  $Id$
  */
 
 #ifndef _INCLUDE_HPPA_H
@@ -64,6 +64,8 @@ extern "C" {
  *  present in a particular member of the family.
  */
 
+#if !defined(RTEMS_MODEL_NAME)
+
 #if defined(hppa7100)
 
 #define RTEMS_MODEL_NAME  "hppa 7100"
@@ -77,13 +79,16 @@ extern "C" {
 #error "Unsupported CPU Model"
 
 #endif
- 
+
+#endif /* !defined(RTEMS_MODEL_NAME) */
+          
 /*
  *  Define the name of the CPU family.
  */
 
+#if !defined(CPU_NAME)
 #define CPU_NAME "HP PA-RISC 1.1"
-
+#endif
 
 /*
  * Processor Status Word (PSW) Masks
