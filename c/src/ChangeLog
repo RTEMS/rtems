@@ -1,5 +1,10 @@
 2004-03-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* libchip/network/dec21140.c: Use __PPC__ instead of __PPC.
+	Cosmetics.
+
+2004-03-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/canonicalize-tools.m4: Revert Joel's 2004-03-04's patch.
 	There are no application level Makefiles in here.
 

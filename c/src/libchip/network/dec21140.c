@@ -86,7 +86,7 @@
 #if defined(__i386__)
 #include <irq.h>
 #endif
-#if defined(__PPC)
+#if defined(__PPC__)
 #include <bsp/irq.h>
 #endif
 
@@ -152,7 +152,7 @@
 
 
 #define RESET_CHIP   0x00000001
-#if defined(__PPC)
+#if defined(__PPC__)
 #define CSR0_MODE    0x0030e002   /* 01b08000 */
 #else
 #define CSR0_MODE    0x0020e002   /* 01b08000 */
@@ -232,7 +232,7 @@ static rtems_event_set unit_signals[NDECDRIVER]= { RTEMS_EVENT_1,
                                                    RTEMS_EVENT_8 };
 
 
-#if defined(__PPC)
+#if defined(__PPC__)
 #define phys_to_bus(address) ((unsigned int)((address)) + PCI_DRAM_OFFSET)
 #define bus_to_phys(address) ((unsigned int)((address)) - PCI_DRAM_OFFSET)
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PPC_CACHE_ALIGNMENT
@@ -1015,7 +1015,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    int          diag;
    unsigned int deviceId;
 #endif
-#if defined(__PPC)
+#if defined(__PPC__)
    int          pbus, pdev, pfun;
    int          tmp;
    unsigned int lvalue;
@@ -1064,7 +1064,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
          rtems_panic("DEC PCI network card not found !!\n");
    }
 #endif	
-#if defined(__PPC)
+#if defined(__PPC__)
    /*
     * Find the board
     */
@@ -1155,7 +1155,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    pcib_conf_read8(signature, 60, &interrupt);
    cvalue = interrupt;
 #endif
-#if defined(__PPC)
+#if defined(__PPC__)
    (void)pci_read_config_dword(pbus,
                                pdev,
                                pfun,
@@ -1187,7 +1187,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    ** Prep the board
    */
 
-#if defined(__PPC)
+#if defined(__PPC__)
    pci_write_config_word(pbus, pdev, pfun,
                          PCI_COMMAND,
                          (unsigned16) ( PCI_COMMAND_MEMORY |
@@ -1232,7 +1232,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
          sc->arpcom.ac_enaddr[2*i+1] = rombuf.c[20+2*i];
       }  
 #endif
-#if defined(__PPC)
+#if defined(__PPC__)
       memcpy (sc->arpcom.ac_enaddr, rombuf.c+20, ETHER_ADDR_LEN);
 #endif
    }
@@ -1292,6 +1292,3 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 };
 
 #endif /* DEC21140_SUPPORTED */
-
-
-/* eof */
