@@ -17,8 +17,8 @@ EXTRA_DIST = Cygwin-posix.cfg FreeBSD-posix.cfg HPUX9-posix.cfg \
     mcp750.cfg mvme136.cfg mvme147.cfg mvme147s.cfg \
     mvme162.cfg mvme162lx.cfg mvme167.cfg mvme2307.cfg no_bsp.cfg \
     ods68302.cfg p4000.cfg p4600.cfg p4650.cfg papyrus.cfg pc386.cfg \
-    portsw.cfg posix.cfg ppcn_60x.cfg psim.cfg score603e.cfg simhppa.cfg \
-    ts_386ex.cfg
+    portsw.cfg posix.cfg ppcn_60x.cfg psim.cfg score603e.cfg shsim.cfg \
+    simhppa.cfg ts_386ex.cfg
 
 ## -------------------------------------------------------
 include $(top_srcdir)/automake/host.am

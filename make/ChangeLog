@@ -1,4 +1,12 @@
 
+2000-11-27	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/shsim.cfg: New file.
+	* custom/Makefile.am: Modified to reflect addition of shsim.cfg.
+	The shsim is for the SH simulator in gdb. It should be able
+	to be used with multiple SH CPU models.  This will require
+	adding BSP variants.
+
 2000-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/pc386.cfg: make-exe rule would write into
