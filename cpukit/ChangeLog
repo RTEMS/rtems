@@ -1,3 +1,8 @@
+2005-01-20	Joel Sherrill <joel@OARcorp.com>
+
+	PR 740/rtems
+	* score/src/heapgetfreeinfo.c: Return size of largest not of last block.
+
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libfs/src/dosfs/fat.c (fat_init_volume_info): Reflect

@@ -49,7 +49,6 @@ void _Heap_Get_free_information(
       return;
     
     info->number++;
-    info->largest = 0;
     info->total += the_block->front_flag;
 
     if ( the_block->front_flag >= info->largest )
