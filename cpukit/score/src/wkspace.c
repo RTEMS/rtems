@@ -43,7 +43,7 @@ void _Workspace_Handler_initialization(
  
   if ( _CPU_Table.do_zero_of_workspace ) {
     for( zero_out_array  = (unsigned32 *) starting_address, index = 0 ;
-         index < size / 4 ;
+         index < size / sizeof( unsigned32 ) ;
          index++ )
       zero_out_array[ index ] = 0;
   }
