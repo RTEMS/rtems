@@ -22,26 +22,12 @@ extern "C" {
 #endif
 
 /*
- *  The target options include file defines all target dependent 
+ *  The cpu options include file defines all cpu dependent 
  *  parameters for this build of RTEMS.  It must be included
  *  first so the basic macro definitions are in place.
  */
 
 #include <rtems/score/cpuopts.h>
-
-/*
- * FIXME: No port should have to include targopts.h
- *
- *  Most cpus are ready to apply only cpuopts.h but these ports
- *  unfortunately still need targopts.h.  This means these ports
- *  are not ready to be built multilib yet. 
- */
-
-#if !defined(RTEMS_MULTILIBS)
-#if defined(__PPC__)
-#include <rtems/score/targopts.h>
-#endif
-#endif
 
 /*
  *  The following ensures that all data is declared in the space
