@@ -166,7 +166,7 @@ extern "C" {
  * Volume descriptor
  * Description of the volume the FAT filesystem is located on - generally 
  * the fields of the structure corresponde to Boot Sector and BPB Srtucture
- * (see M$ White Paper) fields
+ * fields
  */
 typedef struct fat_vol_s 
 {
