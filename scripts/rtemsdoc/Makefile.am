@@ -1,12 +1,10 @@
 ##
-## $Id$
-##
 
 include ${top_srcdir}/common/common.am
 
 CLEANFILES =
 
-SUPPLEMENTS = arm c4x i386 i960 m68k mips powerpc sh sparc
+SUPPLEMENTS = arm c4x i386 m68k mips powerpc sh sparc
 
 DOCS = ada_user posix1003_1 bsp_howto
 DOCS += c_user posix_users

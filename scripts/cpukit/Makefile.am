@@ -26,10 +26,6 @@ i386-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems@osversion@ > $@
 RPM_SPECS_DATA += i386-rtems@osversion@-cpukit.spec
 
-i960-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . i960-rtems@osversion@ > $@
-RPM_SPECS_DATA += i960-rtems@osversion@-cpukit.spec
-
 m68k-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems@osversion@ > $@
 RPM_SPECS_DATA += m68k-rtems@osversion@-cpukit.spec

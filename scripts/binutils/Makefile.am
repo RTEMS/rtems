@@ -30,10 +30,6 @@ i386-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
 RPM_SPECS_DATA += i386-rtems@osversion@-$(BINUTILSVERS).spec
 
-i960-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache i960-rtems@osversion@ > $@
-RPM_SPECS_DATA += i960-rtems@osversion@-$(BINUTILSVERS).spec
-
 m68k-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems@osversion@ > $@
 RPM_SPECS_DATA += m68k-rtems@osversion@-$(BINUTILSVERS).spec

@@ -63,15 +63,15 @@ fi
 
 
 # This is the full list .. some may not build at any given time.
-#ALL_TARGETS="i386-rtems i960-rtems m68k-rtems \
+#ALL_TARGETS="i386-rtems m68k-rtems \
 #  m68k-rtemself mips-rtems \
 #  powerpc-rtems sh-rtems sh-rtemself sparc-rtems"
 
 # This is the full buildable set.
 if [ "X${TARGETS}" = "X" ] ; then
   # do not include tic4x as primary targets
-  # do not include sh-elf or i960-elf secondary targets
-  TARGETS="arm-rtems h8300-rtems i386-rtems i960-rtems m68k-rtems \
+  # do not include sh-elf or secondary targets
+  TARGETS="arm-rtems h8300-rtems i386-rtems m68k-rtems \
     mips-rtems powerpc-rtems sh-rtems sparc-rtems"
 fi
 

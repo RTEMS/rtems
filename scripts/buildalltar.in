@@ -95,14 +95,14 @@ fi
 
 
 # This is the full list .. some may not build at any given time.
-#ALL_TARGETS="i386-rtems i960-rtems m68k-rtems \
+#ALL_TARGETS="i386-rtems m68k-rtems \
 #  m68k-rtemself mips-rtems \
 #  powerpc-rtems sh-rtems sh-rtemself sparc-rtems"
 
 # This is the full buildable set.
 if [ "X${TARGETS}" = "X" ] ; then
   # do not include tic4x as primary targets
-  # do not include sh-elf or i960-elf secondary targets
+  # do not include sh-elf or secondary targets
   TARGETS="arm-rtems h8300-rtems i386-rtems \
      m68k-rtems mips-rtems powerpc-rtems  \
      sh-rtems sh-rtemself sparc-rtems"
@@ -295,7 +295,7 @@ do
     mkdir b-${target}-gdb
     cd b-${target}-gdb
     case ${target} in
-      arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | i960* | \
+      arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | \
       m32r* | mcore* | mips* | mn10200* | mn10300* | sh* | sparc*| v850* | \
       w65* | z8k*)
         extra_configure_arguments="--enable-sim"

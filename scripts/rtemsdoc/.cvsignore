@@ -7,7 +7,6 @@ develenv-docs.add
 FAQ-docs.add
 filesystem-docs.add
 i386-supplement.add
-i960-supplement.add
 itron-docs.add
 m68k-supplement.add
 Makefile

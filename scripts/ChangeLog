@@ -1,3 +1,10 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* buildall.in, buildalltar.in, binutils/Makefile.am,
+	cpukit/Makefile.am, gcc3newlib/Makefile.am, gcc3newlib/gccnewlib.add,
+	gdb/Makefile.am, rtems/Makefile.am, rtemsdoc/.cvsignore,
+	rtemsdoc/Makefile.am: i960 obsoleted.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

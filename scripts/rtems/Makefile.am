@@ -12,9 +12,6 @@ MKBSPSPEC_DEPS = $(top_builddir)/mkbspspec rtems.spec.in \
 i386-rtems-pc386-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems pc386
 
-i960-rtems-cvme961-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
-	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . i960-rtems cvme961
-
 m68k-rtems-gen68360-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems gen68360
 
@@ -33,9 +30,9 @@ sparc-rtems-erc32-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 TEMPLATES = rtems.spec.in
 
 RPM_SPECS_DATA = i386-rtems-pc386-$(BSPVERS).spec \
-    i960-rtems-cvme961-$(BSPVERS).spec m68k-rtems-gen68360-$(BSPVERS).spec \
-    powerpc-rtems-mcp750-$(BSPVERS).spec sh-rtems-gensh1-$(BSPVERS).spec \
-    sh-rtemself-gensh1-$(BSPVERS).spec sparc-rtems-erc32-$(BSPVERS).spec
+    m68k-rtems-gen68360-$(BSPVERS).spec powerpc-rtems-mcp750-$(BSPVERS).spec \
+    sh-rtems-gensh1-$(BSPVERS).spec sh-rtemself-gensh1-$(BSPVERS).spec \
+    sparc-rtems-erc32-$(BSPVERS).spec
 
 noinst_DATA = $(TEMPLATES)
 

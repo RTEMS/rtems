@@ -92,10 +92,6 @@ NoSource:	1
 %define build_gcj	%_gcj
 %endif
 
-%if "%{gcc_target}" == "i960-rtems@osversion@"
-%define build_cxx	0
-%endif
-
 %if "%{gcc_target}" == "m68k-rtems@osversion@"
 %define build_gcj	%_gcj
 %endif

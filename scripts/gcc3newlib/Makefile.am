@@ -40,10 +40,6 @@ i386-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
 RPM_SPECS_DATA += i386-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-i960-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache i960-rtems@osversion@ > $@
-RPM_SPECS_DATA += i960-rtems@osversion@-$(GCC3NEWLIBVERS).spec
-
 m68k-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems@osversion@ > $@
 RPM_SPECS_DATA += m68k-rtems@osversion@-$(GCC3NEWLIBVERS).spec
