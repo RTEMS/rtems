@@ -13,7 +13,6 @@
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *      Modified to reflect registers of sh7045 processor:
  *      John M. Mills (jmills@tga.com)
