@@ -1,5 +1,14 @@
 2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/enable-networking.m4: Don't AC_SUBST(RTEMS_HAS_NETWORKING).
+	* aclocal/check-networking.m4: Don't AC_SUBST(HAS_NETWORKING).
+	* automake/amcompile.am: Remove $(ARCH).
+	* wrapup/Makefile.am: Add $(ARCH).
+	Remove compile.am, lib.am.
+	Include amcompile.am.
+
+2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Use ../*/*$(LIB_VARIANT).a instead of
 	$(ARCH)/lib*.a.
 

@@ -25,5 +25,4 @@ if test "$rtems_cv_HAS_NETWORKING" = "yes"; then
 else
   HAS_NETWORKING="no";
 fi
-AC_SUBST(HAS_NETWORKING)dnl
 ])

@@ -3,8 +3,18 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
+
+## Setup the variant build subdirectory
+ARCH_OPTIMIZE_V = o-optimize
+ARCH_DEBUG_V = o-debug
+
+ARCH__V = $(ARCH_OPTIMIZE_V)
+ARCH = $(ARCH_$(VARIANT_V)_V)
+
+${ARCH}/$(dirstamp):
+	@$(mkdir_p) $(ARCH)
+	@: > $(ARCH)/$(dirstamp)
 
 project_lib_DATA = $(ARCH)/librtemscpu$(LIB_VARIANT).a
 
@@ -97,6 +107,8 @@ $(ARCH)/librtemscpu$(LIB_VARIANT).a: ${LIBS}
 	$(AR) rc $@ $(ARCH)/*
 	rm -f $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	$(RANLIB) $@
+
+TMPINSTALL_FILES =
 
 all-local: $(TMPINSTALL_FILES)
 

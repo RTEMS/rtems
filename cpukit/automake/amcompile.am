@@ -48,13 +48,6 @@ VARIANT_debug_V = DEBUG
 
 VARIANT_V = $(VARIANT_$(VARIANT)_V)
 
-## Setup the variant build subdirectory
-ARCH_OPTIMIZE_V = o-optimize
-ARCH_DEBUG_V = o-debug
-
-ARCH__V = $(ARCH_OPTIMIZE_V)
-ARCH = $(ARCH_$(VARIANT_V)_V)
-
 ## Setup the library suffix
 LIBSUFFIX_OPTIMIZE_V =
 LIBSUFFIX_DEBUG_V = _g

@@ -11,5 +11,4 @@ AC_HELP_STRING([--enable-networking],[enable TCP/IP stack]),
   no) RTEMS_HAS_NETWORKING=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
 esac],[RTEMS_HAS_NETWORKING=yes])
-AC_SUBST(RTEMS_HAS_NETWORKING)dnl
 ])
