@@ -1,5 +1,11 @@
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-itron.m4: New.
+	* aclocal/enable-inlines.m4: New.
+	* Makefile.am: Add -I aclocal to ACLOCAL_AMFLAGS.
+
+2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Reflect having moved aclocal/.
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../aclocal
+ACLOCAL_AMFLAGS = -I aclocal -I ../aclocal
 
 rtems_makedir = $(prefix)/make
 
