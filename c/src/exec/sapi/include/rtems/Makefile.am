@@ -9,7 +9,7 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = config.h directives.h extension.h fatal.h init.h io.h mptables.h \
     sptables.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:

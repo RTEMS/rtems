@@ -11,7 +11,7 @@ I_FILES = extension.inl
 if MACROS
 include_rtems_HEADERS = $(I_FILES)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:

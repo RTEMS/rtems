@@ -8,7 +8,7 @@ include_rtemsdir = $(includedir)/rtems
 if INLINE
 include_rtems_HEADERS = extension.inl
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:
