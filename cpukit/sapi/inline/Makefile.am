@@ -2,9 +2,22 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
-SUBDIRS = rtems
+include_rtemsdir = $(includedir)/rtems
 
-include $(top_srcdir)/../../../automake/subdirs.am
+$(PROJECT_INCLUDE)/rtems:
+	@$(mkinstalldirs) $@
+$(PROJECT_INCLUDE)/%: %
+	$(INSTALL_DATA) $< $@
+
+if INLINE
+include_rtems_HEADERS = rtems/extension.inl
+
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/%)
+endif
+
+all-local: $(PREINSTALL_FILES)
+
 include $(top_srcdir)/../../../automake/local.am
