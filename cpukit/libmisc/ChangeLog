@@ -1,3 +1,7 @@
+2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mw-fb/mw_uid.c: Apply rtems_set_errno_and_return_minus_one.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* rootfs/mkrootfs.c, rootfs/mkrootfs.h: Fixed typo.

@@ -13,6 +13,11 @@
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.3  2000/11/30 14:36:46  joel
+// 2000-11-30	Joel Sherrill <joel@OARcorp.com>
+//
+// 	* mw-fb/mw_uid.c: Removed unnecessary dependency on <bsp.h>.
+//
 // Revision 1.2  2000/08/30 17:12:55  joel
 // 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 //
@@ -127,7 +132,7 @@ int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
   else if( ( status == RTEMS_UNSATISFIED ) || ( status == RTEMS_TIMEOUT ) )
   {
      /* this macro returns -1 */
-     set_errno_and_return_minus_one( ETIMEDOUT );
+     rtems_set_errno_and_return_minus_one( ETIMEDOUT );
   }
   /* Here we have one error condition */
 #ifdef MW_DEBUG_ON
