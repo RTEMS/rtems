@@ -1,6 +1,11 @@
 
 2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* custom/dmv152: Remove USE_CONSOLE_A, Remove USE_CONSOLE_B, 
+	remove make-target-options, remove BSP_CPPFLAGS.
+
+2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* custom/simhppa.cfg: Remove SIMHPPA_FAST_IDLE, make-target-options.
 
 2001-11-14	Joel Sherrill <joel@OARcorp.com>
