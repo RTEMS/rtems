@@ -10,7 +10,9 @@
  *
  *  $Id: 
  */
+
 #include <bsp.h>
+#if (SCORE603E_GENERATION == 1)
 #include <rtems/libio.h>
 
 #include <libcsupport.h>
@@ -156,3 +158,4 @@ void set_irq_mask(
 {
   assert (0);
 }
+#endif /* end of generation 1 */

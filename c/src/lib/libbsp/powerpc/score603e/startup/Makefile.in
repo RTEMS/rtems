@@ -16,6 +16,12 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 PGM = ${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
+#
+# First and second generation use different Bridge chips :(
+#       Generation 1 --> 82378zb
+#       Generation 2 --> FPGA
+STARTUP_C_PIECES = 82378zb FPGA
+
 C_PIECES = bspclean bsplibc bsppost bspstart bootcard main sbrk setvec \
     Hwr_init spurious genpvec $(STARTUP_C_PIECES) gnatinstallhandler
 C_FILES = $(C_PIECES:%=%.c)
@@ -41,14 +47,6 @@ INSTALLDIRS = $(PROJECT_RELEASE)/lib
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)
-
-# First and second generation use different Bridge chips :(
-# C source names, if any, go here -- minus the .c
-# generation 1
-STARTUP_C_PIECES_1_V = 82378zb
-# generation 2
-STARTUP_C_PIECES_2_V = FPGA
-STARTUP_C_PIECES_ = $(STARTUP_C_PIECES_$(SCORE603E_GENERATION)_V)
 
 #
 # (OPTIONAL) Add local stuff here using +=

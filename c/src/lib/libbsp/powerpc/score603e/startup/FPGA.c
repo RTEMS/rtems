@@ -10,7 +10,9 @@
  *
  *  $Id: 
  */
+
 #include <bsp.h>
+#if (SCORE603E_GENERATION == 2)
 #include <rtems/libio.h>
 
 #include <libcsupport.h>
@@ -165,14 +167,5 @@ rtems_unsigned16 read_and_clear_irq()
   return irq;
 }
 
-
-
-
-
-
-
-
-
-
-
+#endif /* end of generation 2 */
 
