@@ -25,7 +25,7 @@ CPU_PIECES=mpc860/clock mpc860/timer mpc860/console-generic mpc860/vectors
 GENERIC_PIECES=
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
+OBJS=$(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
      $(foreach piece, $(CPU_PIECES), \
          ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(notdir $(piece)).rel) \
      $(foreach piece, $(GENERIC_PIECES), \
