@@ -1,3 +1,8 @@
+2002-05-01	Eric Norum <eric.norum@usask.ca>
+
+	* machine/in_cksum.h: Per PR200 fix multi-line inline assembly 
+	to satisfy gcc 3.1 and newer.
+
 2002-04-26	Eric Norum <eric.norum@usask.ca>
 
 	* netinet/in_cksum_i386.c: Add volatile so the more agressive

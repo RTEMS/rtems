@@ -170,7 +170,7 @@ in_cksum_hdr(const struct ip *ip)
    register u_int tmp_o2;
    register u_int tmp_o3;
 
-   __asm__ volatile ("
+   __asm__ volatile (" \
      ld [%0], %1 ; \
      ld [%0+4], %2 ; \
      addcc %1, %2, %1 ; \
