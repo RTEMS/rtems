@@ -24,7 +24,7 @@ extern "C" {
 #include <libcpu/cpu.h>
 
 #ifndef ASM
-#include <rtems/score/i386types.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
