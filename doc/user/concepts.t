@@ -60,18 +60,12 @@ approach would be to name them the binary values one through
 one-hundred, respectively.
 
 @cindex object ID
+@cindex object ID composition
 
 @need 3000
 
 An object ID is a unique unsigned thirty-two bit
 entity composed of three parts: object class, node, and index.
-The most significant six bits are the object class.  The next
-ten bits are the number of the node on which this object was
-created.  The node number is always one (1) in a single
-processor system.  The least significant sixteen bits form an
-identifier within a particular object type.  This identifier,
-called the object index, ranges in value from 1 to the maximum
-number of objects configured for this object type.
 
 @ifset use-ascii
 @example
@@ -151,6 +145,14 @@ number of objects configured for this object type.
 @end html
 @end ifset
 
+The most significant six bits are the object class.  The next
+ten bits are the number of the node on which this object was
+created.  The node number is always one (1) in a single
+processor system.  The least significant sixteen bits form an
+identifier within a particular object type.  This identifier,
+called the object index, ranges in value from 1 to the maximum
+number of objects configured for this object type.
+
 
 The three components of an object ID make it possible
 to quickly locate any object in even the most complicated
@@ -170,6 +172,26 @@ will be returned to the application.  Since object IDs are
 returned when the object is created, the object identification
 directives are not necessary in a properly designed single
 processor application.
+
+In addition, services are provided to portably examine the
+three subcomponents of an RTEMS ID.  These services are
+prototyped as follows:
+
+@cindex obtaining class from object ID
+@cindex obtaining node from object ID
+@cindex obtaining index from object ID
+@cindex get class from object ID
+@cindex get node from object ID
+@cindex get index from object ID
+@findex rtems_get_class
+@findex rtems_get_node
+@findex rtems_get_index
+
+@example
+rtems_unsigned32 rtems_get_class( rtems_id );
+rtems_unsigned32 rtems_get_node( rtems_id );
+rtems_unsigned32 rtems_get_index( rtems_id );
+@end example
 
 An object control block is a data structure defined
 by RTEMS which contains the information necessary to manage a
