@@ -123,6 +123,7 @@ int pthread_setspecific(
       index = _Objects_Get_index( _Thread_Executing->Object.id );
       class = _Objects_Get_class( _Thread_Executing->Object.id );
       the_key->Values[ class ][ index ] = (void *) value;
+      _Thread_Enable_dispatch();
       return 0;
   }
   return POSIX_BOTTOM_REACHED();
@@ -141,6 +142,7 @@ void *pthread_getspecific(
   unsigned32                   index;
   unsigned32                   class;
   Objects_Locations            location;
+  void                        *key_data;
  
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
@@ -151,7 +153,9 @@ void *pthread_getspecific(
     case OBJECTS_LOCAL:
       index = _Objects_Get_index( _Thread_Executing->Object.id );
       class = _Objects_Get_class( _Thread_Executing->Object.id );
-      return (void *) the_key->Values[ class ][ index ];
+      key_data = (void *) the_key->Values[ class ][ index ];
+      _Thread_Enable_dispatch();
+      return key_data;
   }
   return (void *) POSIX_BOTTOM_REACHED();
 }
@@ -191,6 +195,7 @@ int pthread_key_delete(
        */
 
       _POSIX_Keys_Free( the_key );
+      _Thread_Enable_dispatch();
       return 0;
   }
   return POSIX_BOTTOM_REACHED();
