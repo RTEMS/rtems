@@ -1,3 +1,8 @@
+2004-09-06	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* autotools/autoconf-rtems.spec.in: Backport from rtems-4.7.
+	Update to autoconf-2.59.
+
 2004-04-08	Joel Sherrill <joel@OARcorp.com>
 
 	PR 594/tools
