@@ -331,7 +331,7 @@ struct rtems_filesystem_mount_table_entry_tt{
 typedef enum
 {
   RTEMS_FILESYSTEM_READ_ONLY,
-  RTEMS_FILESYSTEM_READ_WRITE_ONLY,
+  RTEMS_FILESYSTEM_READ_WRITE,
   RTEMS_FILESYSTEM_BAD_OPTIONS
 } rtems_filesystem_options_t;
 

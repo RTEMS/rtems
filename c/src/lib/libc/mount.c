@@ -273,7 +273,7 @@ rtems_filesystem_options_t get_file_system_options(
   if ( strcasecmp( "RO", fsoptions ) == 0 )
     return RTEMS_FILESYSTEM_READ_ONLY;
   if ( strcasecmp( "RW", fsoptions ) == 0 )
-    return RTEMS_FILESYSTEM_READ_WRITE_ONLY;
+    return RTEMS_FILESYSTEM_READ_WRITE;
   else
     return RTEMS_FILESYSTEM_BAD_OPTIONS;
 }
