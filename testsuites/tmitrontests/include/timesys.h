@@ -49,7 +49,7 @@
 
 /* variables */
 
-TEST_EXTERN volatile unsigned32 end_time;   /* ending time variable */
-TEST_EXTERN volatile unsigned32 overhead;   /* loop overhead variable */
+TEST_EXTERN volatile uint32_t   end_time;   /* ending time variable */
+TEST_EXTERN volatile uint32_t   overhead;   /* loop overhead variable */
 
 /* end of include file */
