@@ -1,3 +1,12 @@
+2003-09-03	Jiri Gaisler <jiri@gaisler.com>
+
+	PR 477/networking
+	* Makefile.am, configure.ac, console/console.c, include/bsp.h,
+	startup/setvec.c, wrapup/Makefile.am: Add network support and enable
+	custom power down.
+	* leon_open_eth/.cvsignore, leon_open_eth/Makefile.am,
+	leon_open_eth/leon_open_eth.c: New files.
+
 2003-08-20	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h: Correct copyright statements.

@@ -2,6 +2,11 @@
 ## $Id$
 ##
 
+# We only build the networking device driver if HAS_NETWORKING was defined
+if HAS_NETWORKING
+NETWORKING_DRIVER = leon_open_eth
+endif
+
 BSP_PIECES = startup console clock timer gnatsupp $(NETWORK)
 # pieces to pick up out of libcpu/sparc
 CPU_PIECES = cache reg_win syscall
