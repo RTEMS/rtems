@@ -13,7 +13,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 H_PIECES= pthread sched
 # limits.h may have been moved into newlib -- check before removing it
 # from the cvs tree
-H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
+H_FILES=$(H_PIECES:%=$(srcdir)/../%.h)
 
 SRCS=$(H_FILES)
 
