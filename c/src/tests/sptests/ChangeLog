@@ -1,5 +1,9 @@
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
+	* sp29/init.c: Corrected definitions for task stack usage.
+
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
 	* spsize/size.c: _Thread_queue_Extract_table removed.
 
 2001-05-17	Joel Sherrill <joel@OARcorp.com>

@@ -8,6 +8,8 @@
 
 rtems_task Init (rtems_task_argument argument);
 
+#define CONFIGURE_EXTRA_TASK_STACKS RTEMS_MINIMUM_STACK_SIZE
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
@@ -47,7 +49,7 @@ startTask (rtems_id arg)
 
 	sc = rtems_task_create (rtems_build_name ('S', 'R', 'V', 'A'),
 		100,
-		10000,
+		RTEMS_MINIMUM_STACK_SIZE * 2,
 		RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
 		RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
 		&tid);
