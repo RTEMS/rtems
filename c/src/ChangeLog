@@ -1,5 +1,10 @@
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-cpu.m4: Remove.
+	* configure.ac: Merge-in former aclocal/check-cpu.m4.
+
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/canonical-target-name.m4: Add m4-quotes.
 	* aclocal/check-cxx.m4: Add m4-quotes.
 	Don't require RTEMS_CHECK_CPU.
