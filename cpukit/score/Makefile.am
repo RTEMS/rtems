@@ -48,8 +48,8 @@ STD_H_FILES = include/rtems/score/address.h include/rtems/score/apiext.h \
     include/rtems/score/stack.h include/rtems/score/states.h include/rtems/score/sysstate.h \
     include/rtems/score/thread.h include/rtems/score/threadq.h include/rtems/score/tod.h \
     include/rtems/score/tqdata.h include/rtems/score/userext.h include/rtems/score/watchdog.h \
-    include/rtems/score/wkspace.h
-include_rtems_score_HEADERS = $(STD_H_FILES) include/rtems/score/cpuopts.h
+    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h
+include_rtems_score_HEADERS = $(STD_H_FILES)
 PREINSTALL_FILES += $(STD_H_FILES:include/%.h=$(PROJECT_INCLUDE)/%.h)
 
 if HAS_MP
