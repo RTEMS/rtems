@@ -36,6 +36,9 @@ void blow_stack( void );
 
 #define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
 
+#define CONFIGURE_EXTRA_TASK_STACKS  ((RTEMS_MINIMUM_STACK_SIZE*2)*5)
+#define CONFIGURE_MAXIMUM_TASKS               6
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <confdefs.h>
