@@ -1,3 +1,9 @@
+2003-10-02	Phil Torre <ptorre@zetron.com>
+
+	PR 504/rtems
+	* src/newlibc.c: Fix memory allocation of libc extension so it is
+	dispatch disabled safe See PR for detailed explanation.
+
 2003-09-26	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 498/rtems
