@@ -355,6 +355,7 @@ int get_errno()
 #if !defined(pc386)
 void _exit(int status)
 {
+    libc_wrapup(); /* Why? XXX */
     rtems_shutdown_executive(status);
 }
 #endif
