@@ -16,6 +16,7 @@ RTEMS_CHECK_TOOL(CC,gcc)
 test -z "$CC" && \
   AC_MSG_ERROR([no acceptable cc found in \$PATH])
 AC_PROG_CC
+AC_PROG_CPP
 
 AM_CONDITIONAL(RTEMS_USE_GCC,test x"$GCC" = x"yes")
 ])
@@ -43,7 +44,7 @@ AM_CONDITIONAL(RTEMS_USE_GCC272, test x"$RTEMS_USE_GCC272" = x"yes")
 AC_SUBST(RTEMS_USE_GCC272)
 
 dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*
-case $host_os in
+case $build_os in
 *cygwin*)     GCCSED="| sed 's%\\\\%/%g'" ;;
 *) ;;
 esac

@@ -54,21 +54,18 @@ if RTEMS_USE_GCC272
 RTEMS_CPPFLAGS = -isystem $(PROJECT_INCLUDE)
 
 # default location of Standard C Library
-LIBC_LIBC = $(shell $(CC) $(CPU_CFLAGS) -print-file-name=libc.a $(GCCSED))
-LIBC_LIBM = $(shell $(CC) $(CPU_CFLAGS) -print-file-name=libm.a $(GCCSED))
-LIBC_LIBGCC = $(shell $(CC) $(CPU_CFLAGS) -print-libgcc-file-name $(GCCSED))
+LIBC_LIBC = `$(CC) $(CPU_CFLAGS) -print-file-name=libc.a $(GCCSED)`
+LIBC_LIBM = `$(CC) $(CPU_CFLAGS) -print-file-name=libm.a $(GCCSED)`
+LIBC_LIBGCC = `$(CC) $(CPU_CFLAGS) -print-libgcc-file-name $(GCCSED)`
 
 ### FIXME: False if using multilibbed RTEMS
 LINK_LIBS_RTEMS = $(PROJECT_RELEASE)/lib/librtemsall$(LIBSUFFIX_VA)
 
 LINK_LIBS_GCC272 = $(LINK_LIBS_RTEMS) $(LIBC_LIBC) $(LIBC_LIBGCC)
+GCCSPECS =
 else
 ## gcc >= 2.8.x
-if RTEMS_CONFIG_PER_BSP
-BSP_SPECS = -specs bsp_specs -qrtems
-endif
-
-GCCSPECS = -B$(PROJECT_RELEASE)/lib/ $(BSP_SPECS)
+GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
 endif
 else
 ## fall back to the old style compilers/*.cfg
@@ -110,12 +107,6 @@ LDFLAGS=$(LDFLAGS_PROFILE) $(LDFLAGS_DEBUG) $(LD_PATHS:%=-L %)
 #
 # Client compiler and support tools
 #
-
-## HACK: specific to gcc
-## FIXME: Do we call the correct CPP, why aren't
-## CPPFLAGS and CFLAGS part of this call?
-# CPP command to write file to standard output
-CPP=$(CC) -E -ansi -w -Wp,-$$
 
 ARFLAGS=ruv
 
@@ -278,6 +269,8 @@ RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
 
 CC = @CC@ $(GCCSPECS)
 CXX = @CXX@ $(GCCSPECS)
+CPP = @CPP@ $(GCCSPECS)
+
 LD = @LD@
 OBJCOPY = @OBJCOPY@
 NM = @NM@

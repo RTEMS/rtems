@@ -1,3 +1,16 @@
+2001-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/enable-rtemsbsp.m4: Split out RTEMS_ENV_RTEMSBSP,
+	RTEMS_ENV_RTEMSCPU.
+	* aclocal/env-rtemsbsp.m4: New file for RTEMS_ENV_RTEMSBSP, add
+	special treatment for GCC_SPECS.
+	* aclocal/env-rtemscpu.m4: New file for RTEMS_ENV_RTEMSCPU, add
+	special treatment for GCC_SPECS.
+	* aclocal/bsp-enable-arg.m4: New file, introduce RTEMS_BSP_ARG_ENABLE.
+	* aclocal/prog-cc.m4: Add AC_PROG_CPP, use build_os in GCCSED hack.
+	* automake/compile.am: New treatment of CPP, GCCSPECS, use `..` 
+	instead of $(shell ..) for LIBC_LIB*.
+
 2001-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Add simsh7032 and

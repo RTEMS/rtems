@@ -1,0 +1,24 @@
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENV_RTEMSCPU,
+[AC_REQUIRE([RTEMS_ENABLE_MULTILIB])
+
+if test x"$multilib" = x"no"; then
+  RTEMS_ENV_RTEMSBSP
+  RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+else
+## FIXME: There is no multilib BSP
+  rtems_cv_RTEMS_BSP="multilib"
+  RTEMS_BSP="$rtems_cv_RTEMS_BSP"
+  AC_SUBST(RTEMS_BSP)
+
+  RTEMS_BSP_SPECS=""
+  AC_SUBST(RTEMS_BSP_SPECS)
+
+  GCC_SPECS="-B\$(PROJECT_ROOT)/lib/"
+  AC_SUBST(GCC_SPECS)
+
+  RTEMS_ROOT=$PROJECT_ROOT/c
+  AC_SUBST(RTEMS_ROOT)
+fi
+])
