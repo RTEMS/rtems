@@ -34,6 +34,8 @@ RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
+#FIXME: We should use a feature based check
+AM_CONDITIONAL(LIBCHIP,[test "$RTEMS_BSP_FAMILY" != "posix"])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
