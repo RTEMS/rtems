@@ -66,6 +66,6 @@ MANAGERS_REQUIRED=region ext sem
 # Create a RTEMS executable based on MANAGERS which was set in
 #  app's Makefile
 
-MANAGERS_NOT_WANTED=$(filter-out $(MANAGERS), $(MANAGER_LIST))
-MANAGERS_NOT_WANTED:=$(filter-out $(MANAGERS_REQUIRED), $(MANAGERS_NOT_WANTED))
+MANAGERS_NOT_WANTED=$(filter-out $(MANAGERS) \
+	$(MANAGERS_REQUIRED), $(MANAGER_LIST))
 
