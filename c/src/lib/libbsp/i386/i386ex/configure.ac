@@ -33,6 +33,5 @@ start/Makefile
 startup/Makefile
 timer/Makefile
 network/Makefile
-timer/Makefile
 wrapup/Makefile])
 AC_OUTPUT

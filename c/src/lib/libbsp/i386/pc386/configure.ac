@@ -27,7 +27,6 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 AC_SUBST(RTEMS_BSP)
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
@@ -38,7 +37,6 @@ startup/Makefile
 timer/Makefile
 3c509/Makefile
 ne2000/Makefile
-timer/Makefile
 wd8003/Makefile
 wrapup/Makefile])
 AC_OUTPUT
