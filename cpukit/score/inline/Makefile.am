@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 $(PROJECT_INCLUDE)/%: %
 	$(INSTALL_DATA) $< $@

@@ -1,3 +1,12 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpu/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-01-29	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/score/watchdog.h: Added WATCHDOG_MAXIMUM_INTERVAL.
