@@ -1,3 +1,7 @@
+2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Remove trailing '/'s from setting up RPM_SPECdir.
+
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Updating version numbers for gcc/newlib RPM release 10.
