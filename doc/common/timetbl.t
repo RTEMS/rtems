@@ -65,7 +65,7 @@
 @end ifset
 
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Directive Times, RTEMS_CPU_MODEL Timing Data Task Manager, RTEMS_CPU_MODEL Timing Data Context Switch, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Directive Times, RTEMS_BSP Timing Data Task Manager, RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data
 @end ifinfo
 @section Directive Times
 
@@ -75,7 +75,7 @@ execution times of that manager's directives.
 
 @page
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Task Manager, RTEMS_CPU_MODEL Timing Data Interrupt Manager, RTEMS_CPU_MODEL Timing Data Directive Times, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Task Manager, RTEMS_BSP Timing Data Interrupt Manager, RTEMS_BSP Timing Data Directive Times, RTEMS_BSP Timing Data
 @end ifinfo
 @section Task Manager
 
@@ -306,7 +306,7 @@ execution times of that manager's directives.
 
 @page
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Interrupt Manager, RTEMS_CPU_MODEL Timing Data Clock Manager, RTEMS_CPU_MODEL Timing Data Task Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Interrupt Manager, RTEMS_BSP Timing Data Clock Manager, RTEMS_BSP Timing Data Task Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Interrupt Manager
 
@@ -382,7 +382,7 @@ include vectoring the interrupt handler.
 
 
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Clock Manager, RTEMS_CPU_MODEL Timing Data Timer Manager, RTEMS_CPU_MODEL Timing Data Interrupt Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Clock Manager, RTEMS_BSP Timing Data Timer Manager, RTEMS_BSP Timing Data Interrupt Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Clock Manager
 
@@ -437,7 +437,7 @@ include vectoring the interrupt handler.
 @end ifset
 
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Timer Manager, RTEMS_CPU_MODEL Timing Data Semaphore Manager, RTEMS_CPU_MODEL Timing Data Clock Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Timer Manager, RTEMS_BSP Timing Data Semaphore Manager, RTEMS_BSP Timing Data Clock Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Timer Manager
 
@@ -555,7 +555,7 @@ include vectoring the interrupt handler.
 
 @page
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Semaphore Manager, RTEMS_CPU_MODEL Timing Data Message Manager, RTEMS_CPU_MODEL Timing Data Timer Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Semaphore Manager, RTEMS_BSP Timing Data Message Manager, RTEMS_BSP Timing Data Timer Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Semaphore Manager
 
@@ -650,7 +650,7 @@ include vectoring the interrupt handler.
 @end ifset
 
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Message Manager, RTEMS_CPU_MODEL Timing Data Event Manager, RTEMS_CPU_MODEL Timing Data Semaphore Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Message Manager, RTEMS_BSP Timing Data Event Manager, RTEMS_BSP Timing Data Semaphore Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Message Manager
 
@@ -802,7 +802,7 @@ include vectoring the interrupt handler.
 
 @page
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Event Manager, RTEMS_CPU_MODEL Timing Data Signal Manager, RTEMS_CPU_MODEL Timing Data Message Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Event Manager, RTEMS_BSP Timing Data Signal Manager, RTEMS_BSP Timing Data Message Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Event Manager
 
@@ -876,7 +876,7 @@ include vectoring the interrupt handler.
 @end html
 @end ifset
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Signal Manager, RTEMS_CPU_MODEL Timing Data Partition Manager, RTEMS_CPU_MODEL Timing Data Event Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Signal Manager, RTEMS_BSP Timing Data Partition Manager, RTEMS_BSP Timing Data Event Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Signal Manager
 
@@ -946,7 +946,7 @@ include vectoring the interrupt handler.
 @end ifset
 
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Partition Manager, RTEMS_CPU_MODEL Timing Data Region Manager, RTEMS_CPU_MODEL Timing Data Signal Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Partition Manager, RTEMS_BSP Timing Data Region Manager, RTEMS_BSP Timing Data Signal Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Partition Manager
 
@@ -1025,7 +1025,7 @@ include vectoring the interrupt handler.
 
 @page
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Region Manager, RTEMS_CPU_MODEL Timing Data Dual-Ported Memory Manager, RTEMS_CPU_MODEL Timing Data Partition Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Region Manager, RTEMS_BSP Timing Data Dual-Ported Memory Manager, RTEMS_BSP Timing Data Partition Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Region Manager
 
@@ -1124,7 +1124,7 @@ include vectoring the interrupt handler.
 @end ifset
 
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Dual-Ported Memory Manager, RTEMS_CPU_MODEL Timing Data I/O Manager, RTEMS_CPU_MODEL Timing Data Region Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Dual-Ported Memory Manager, RTEMS_BSP Timing Data I/O Manager, RTEMS_BSP Timing Data Region Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Dual-Ported Memory Manager
 
@@ -1198,7 +1198,7 @@ include vectoring the interrupt handler.
 @end ifset
 
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data I/O Manager, RTEMS_CPU_MODEL Timing Data Rate Monotonic Manager, RTEMS_CPU_MODEL Timing Data Dual-Ported Memory Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data I/O Manager, RTEMS_BSP Timing Data Rate Monotonic Manager, RTEMS_BSP Timing Data Dual-Ported Memory Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section I/O Manager
 
@@ -1277,7 +1277,7 @@ include vectoring the interrupt handler.
 @end ifset
 
 @ifinfo
-@node RTEMS_CPU_MODEL Timing Data Rate Monotonic Manager, TIMETABLE_NEXT_LINK, RTEMS_CPU_MODEL Timing Data I/O Manager, RTEMS_CPU_MODEL Timing Data
+@node RTEMS_BSP Timing Data Rate Monotonic Manager, TIMETABLE_NEXT_LINK, RTEMS_BSP Timing Data I/O Manager, RTEMS_BSP Timing Data
 @end ifinfo
 @section Rate Monotonic Manager
 
