@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -8,8 +8,8 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
 
-C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c imbx8xx.c main.c \
-    mmutlbtab.c sbrk.c setvec.c gnatinstallhandler.c
+C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c imbx8xx.c \
+    main.c mmutlbtab.c sbrk.c setvec.c gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 S_FILES = start.s
@@ -18,6 +18,7 @@ S_O_FILES = $(S_FILES:%.s=$(ARCH)/%.o)
 OBJS = $(C_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 #
