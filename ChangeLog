@@ -1,5 +1,10 @@
 2003-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* config.sub (rtems-4-6-branch only): New from subversion.
+	* bootstrap (rtems-4-6-branch only): Do not delete config.sub.
+
+2003-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/canonical-target-name.m4: Transform tic4x -> RTEMS_CPU=c4x.
 
 2003-02-11	Joel Sherrill <joel@OARcorp.com>
