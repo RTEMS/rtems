@@ -32,7 +32,6 @@ endif
 SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
     $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
     $(LIBCHIP) \
-    ../libmisc/wrapup/$(ARCH)/libmisc.a \
     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
 TMPINSTALL_FILES += $(LIB)
