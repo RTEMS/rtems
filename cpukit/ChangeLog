@@ -1,5 +1,26 @@
 2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* posix/inline/rtems/posix/cond.inl,
+	posix/inline/rtems/posix/intr.inl,
+	posix/inline/rtems/posix/key.inl,
+	posix/inline/rtems/posix/mqueue.inl,
+	posix/inline/rtems/posix/mutex.inl,
+	posix/inline/rtems/posix/priority.inl,
+	posix/inline/rtems/posix/pthread.inl,
+	posix/inline/rtems/posix/semaphore.inl,
+	posix/inline/rtems/posix/timer.inl,
+	posix/macros/rtems/posix/cond.inl,
+	posix/macros/rtems/posix/intr.inl,
+	posix/macros/rtems/posix/key.inl,
+	posix/macros/rtems/posix/mqueue.inl,
+	posix/macros/rtems/posix/mutex.inl,
+	posix/macros/rtems/posix/priority.inl,
+	posix/macros/rtems/posix/pthread.inl,
+	posix/macros/rtems/posix/semaphore.inl,
+	posix/macros/rtems/posix/timer.inl: New header guards.
+
+2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* posix/include/aio.h, posix/include/devctl.h,
 	posix/include/intr.h, posix/include/mqueue.h,
 	posix/include/sched.h, posix/include/semaphore.h,
