@@ -1,0 +1,62 @@
+#
+#  Quirks in the DY-4 DMV177
+#
+#  $Id$
+#
+
+Exar 88681 Clock
+================
+This board uses a different clock for the Exar 88681 DUART than is
+documented in the Exar manual or the original MC68681 manual.  This
+resulted in the need for the the mc68681 libchip driver to support
+BSP specific baud rate tables and the development of a DMV177
+specific baud rate table.
+
+In the end, this all works but you have a very limited range of
+useful baud rates on the 88681 ports compared to what would have
+been supported had DY-4 just followed the Exar or Motorola manual.
+
+
+SCC Addresses
+=============
+The full set of SCC addresses is not documented in the DY-4 manual
+and they are not ordered as one would expect.  Normally the four
+SCC registers are ordered Control A, Data A, Control B, and Data B.
+DY-4 orders them with B first.
+
+This required extra time to debug.
+
+
+SCV64 and the Foundation Firmware
+=================================
+DY-4 technical support did not offer code to determine which interrupt
+sources were pending at the SCV64.  They recommended calling into the
+Foundation Firmware ROM monitor to figure this out.  The Foundation
+Firmware did not recognize enough interrupts on this board to be useful.
+
+In the end, we gave up on their technical support's recommendation
+and directly manipulated the SVC64.  This is what we wanted to do in
+the first place but we got no information from them to aid in this.
+Luckily, the manual does document enough of DY-4's mapping of the specific
+interrupt sources to make this work.
+
+
+Z85C30 SCC Clock Speed
+======================
+
+The Z85C30 SCC can be factory configured for 10 Mhz or 2.4616 Mhz.  Code
+had to be added to dynamically determine which clock was installed.
+
+The board we had used a 10 Mhz clock.  No testing was done with a 2.4616 Mhz
+clock.
+
+
+P2 Octopus Cable
+================
+
+
+DY-4's P2 breakout is large and a bit unwieldy.  It was difficult to 
+fight into the VME cage we used.  The SCSI connector comes off the 
+side and is very stiff thus making it difficult to route around
+anything in the back of the cage.  We gave up on trying to use
+it in the first few slots of OAR's cage.
