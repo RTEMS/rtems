@@ -3,7 +3,7 @@
  *  This file contains all assembly code for the MC68020 implementation
  *  of RTEMS.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -68,7 +68,7 @@ SYM (_CPU_Context_save_fp):
         moval    a1@,a0                   | a0 = Save context area
         fsave    a0@-                     | save 68881/68882 state frame
         tstb     a0@                      | check for a null frame
-        beq      nosv                     | Yes, skip save of user model
+        beq.b    nosv                     | Yes, skip save of user model
         fmovem   fp0-fp7,a0@-             | save data registers (fp0-fp7)
         fmovem   fpc/fps/fpi,a0@-         | and save control registers
         movl     #-1,a0@-                 | place not-null flag on stack
@@ -83,7 +83,7 @@ SYM (_CPU_Context_restore_fp):
         moval    a7@(FPCONTEXT_ARG),a1    | a1 = &ptr to context area
         moval    a1@,a0                   | a0 = address of saved context
         tstb     a0@                      | Null context frame?
-        beq      norst                    | Yes, skip fp restore
+        beq.b    norst                    | Yes, skip fp restore
         addql    #4,a0                    | throwaway non-null flag
         fmovem   a0@+,fpc/fps/fpi         | restore control registers
         fmovem   a0@+,fp0-fp7             | restore data regs (fp0-fp7)
@@ -101,24 +101,12 @@ norst:  frestore a0@+                     | restore the fp state frame
  *  NOTE:
  *    Upon entry, the master stack will contain an interrupt stack frame
  *    back to the interrupted thread and the interrupt stack will contain
- *    a throwaway interrupt stack frame.  If dispatching is enabled, this
- *    is the outer most interrupt, and (a context switch is necessary or
- *    the current thread has signals), then set up the master stack to
+ *    a throwaway interrupt stack frame.  If dispatching is enabled, and this
+ *    is the outer most interrupt, and a context switch is necessary or
+ *    the current thread has pending signals, then set up the master stack to
  *    transfer control to the interrupt dispatcher.
  */
 
-/*
- *  With this approach, lower priority interrupts may
- *  execute twice if a higher priority interrupt is
- *  acknowledged before _Thread_Dispatch_disable is
- *  incremented and the higher priority interrupt
- *  performs a context switch after executing. The lower
- *  priority interrupt will execute (1) at the end of the
- *  higher priority interrupt in the new context if
- *  permitted by the new interrupt level mask, and (2) when
- *  the original context regains the cpu.
- */
- 
 #if ( M68K_COLDFIRE_ARCH == 1 )
 .set SR_OFFSET,    2                     | Status register offset
 .set PC_OFFSET,    4                     | Program Counter offset
@@ -142,45 +130,31 @@ SYM (_ISR_Handler):
         addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking
 #if ( M68K_COLDFIRE_ARCH == 0 )
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
-        movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
-        andl    #0x0fff,d0               | d0 = vector offset in vbr
 #else
 	lea	a7@(-SAVED),a7
 	movm.l  d0-d1/a0-a1,a7@		 | save d0-d1,a0-a1
+#endif
 	movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
 	andl    #0x0ffc,d0               | d0 = vector offset in vbr
-#endif
 
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
-  #if ( M68K_COLDFIRE_ARCH == 0 )
-	movew	sr,d1			| Save status register
-	oriw	#0x700,sr		| Disable interrupts
-  #else
-	move.l  d0,a7@-			| Save d0 value
-	move.l  #0x700,d0		| Load in disable ints value
-	move.w  sr,d1			| Grab SR
-	or.l    d1,d0			| Create new SR
-	move.w  d0,sr			| Disable interrupts
-	move.l  a7@+,d0			| Restore d0 value
-  #endif
-  
-	tstl	SYM (_ISR_Nest_level)	| Interrupting an interrupt handler?
-	bne	1f			| Yes, just skip over stack switch code
-	movel	SYM(_CPU_Interrupt_stack_high),a0	| End of interrupt stack
-	movel	a7,a0@-			| Save task stack pointer
-	movel	a0,a7			| Switch to interrupt stack
+	movel	_CPU_Interrupt_stack_high,a0	| a0 now point just above interrupt stack
+	cmpl	_CPU_Interrupt_stack_low,a7	| stack below interrupt stack?
+	bcs.b	1f			| yes, switch to interrupt stack
+	cmpl	a0,a7			| stack above interrupt stack?
+	bcs.b	2f			| no, do not switch stacks
 1:
-	addql   #1,SYM(_ISR_Nest_level)	| one nest level deeper
-	movew	d1,sr			| Restore status register
-#else
-	addql   #1,SYM (_ISR_Nest_level) | one nest level deeper
+	movel	a7,a1			| copy task stack pointer
+	movel	a0,a7			| switch to interrupt stack
+	movel	a1,a7@-			| store task stack pointer on interrupt stack
+2:
 #endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
 
 #if ( M68K_HAS_PREINDEXING == 1 )
         movel   @( SYM (_ISR_Vector_table),d0:w:1),a0| fetch the ISR
 #else
-        movel   # SYM (_ISR_Vector_table),a0   | a0 = base of RTEMS table
+	movel   # SYM (_ISR_Vector_table),a0   | a0 = base of RTEMS table
         addal   d0,a0                    | a0 = address of vector
         movel   (a0),a0                  | a0 = address of user routine
 #endif
@@ -191,45 +165,44 @@ SYM (_ISR_Handler):
         addql   #4,a7                    | remove vector number
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
-  #if ( M68K_COLDFIRE_ARCH == 0 )
-	movew	sr,d0			| Save status register
-	oriw	#0x700,sr		| Disable interrupts
-  #else
-	move.l  #0x700,d1		| Load in disable int value
-	move.w  sr,d0			| Grab SR
-	or.l    d0,d1			| Create new SR
-	move.w  d1,sr			| Load to disable interrupts
-  #endif
-
-	subql	#1,SYM(_ISR_Nest_level)	| Reduce interrupt-nesting count
-	bne	1f			| Skip if return to interrupt
+	movel	_CPU_Interrupt_stack_high,a0
+	subql	#4,a0
+	cmpl	a0,a7			| At top of interrupt stack?
+	bne.b	1f			| No, do not restore task stack pointer
 	movel	(a7),a7			| Restore task stack pointer
 1:
-	movew	d0,sr			| Restore status register
-#else
-	subql   #1,SYM (_ISR_Nest_level) | one less nest level
 #endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
 
         subql   #1,SYM (_Thread_Dispatch_disable_level)
                                          | unnest multitasking
-        bne     exit                     | If dispatch disabled, exit
+        bne.b    exit                    | If dispatch disabled, exit
 
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movew   #0xf000,d0               | isolate format nibble
         andw    a7@(SAVED+FVO_OFFSET),d0 | get F/VO
         cmpiw   #0x1000,d0               | is it a throwaway isf?
-        bne     exit                     | NOT outer level, so branch
+        bne.b   exit                     | NOT outer level, so branch
+#else
+/*
+ * If we have a CPU which allows a higher-priority interrupt to preempt a
+ * lower priority handler before the lower-priority handler can increment
+ * _Thread_Dispatch_disable_level then we must check the PC on the stack to
+ * see if it is _ISR_Handler.  If it is we have the case of nesting interrupts
+ * without the dispatch level being incremented.
+ */
+  #if ( M68K_COLDFIRE_ARCH == 0 && M68K_MC68060_ARCH == 0 )
+        cmpl    #_ISR_Handler,a7@(SAVED+PC_OFFSET)
+        beq.b   exit        
+  #endif
 #endif
-
         tstl    SYM (_Context_Switch_necessary)
                                          | Is thread switch necessary?
-        bne     bframe                   | Yes, invoke dispatcher
+        bne.b   bframe                   | Yes, invoke dispatcher
 
         tstl    SYM (_ISR_Signals_to_thread_executing)
                                          | signals sent to Run_thread
                                          |   while in interrupt handler?
-        beq     exit                     | No, then exit
-
+        beq.b   exit                     | No, then exit
 
 bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
                                          | If sent, will be processed
