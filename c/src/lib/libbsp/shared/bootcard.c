@@ -26,6 +26,12 @@ extern rtems_configuration_table  Configuration;
 extern rtems_configuration_table  BSP_Configuration;
 extern rtems_cpu_table            Cpu_table;
 
+rtems_api_configuration_table BSP_RTEMS_Configuration;
+
+#ifdef RTEMS_POSIX_API
+posix_api_configuration_table BSP_POSIX_Configuration;
+#endif
+
 /* Initialize C++ global Ctor/Dtor and initializes exception handling. */
 #if defined(USE_INIT_FINI)
 extern void _fini( void );
@@ -65,7 +71,15 @@ int boot_card(int argc, char **argv)
    *  Copy the configuration table so we and the BSP wants to change it.
    */
 
-  BSP_Configuration = Configuration;
+  BSP_Configuration       = Configuration;
+
+  BSP_RTEMS_Configuration = *Configuration->rtems_api_configuration;
+  BSP_Configuration.RTEMS_api_configuration = &BSP_RTEMS_Configuration;
+
+#ifdef RTEMS_POSIX_API
+  BSP_POSIX_Configuration = *Configuration->posix_api_configuration;
+  BSP_Configuration.POSIX_api_configuration = &BSP_POSIX_Configuration;
+#endif
 
   /*
    *  The atexit hook will be before the static destructor list's entry
