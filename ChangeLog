@@ -1,3 +1,7 @@
+2000-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/enable-hwapi.m4: Now longer used and removed.
+
 2000-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/lib.am: Remove leaf.cfg.
