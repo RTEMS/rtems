@@ -1,3 +1,9 @@
+2000-09-05	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/rtems_syscall.c: Changed from O_NONBLOCK to internal
+	RTEMS_LIBIO_FLAGS_NO_DELAY to avoid O_NONBLOCK/O_NDELAY confusion
+	and to work with the converted flags.
+
 2000-09-01	Rosimildo daSilva <rdasilva@connecttel.com>
 
 	* emfdb.c: Removed stray semi-colon.  Reported on GoAhead

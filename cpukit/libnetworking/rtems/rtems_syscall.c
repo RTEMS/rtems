@@ -730,7 +730,7 @@ rtems_bsdnet_fcntl (int cmd, rtems_libio_t *iop)
 			rtems_bsdnet_semaphore_release ();
 			return EBADF;
 		}
-		if (iop->flags & O_NONBLOCK)
+		if (iop->flags & LIBIO_FLAGS_NO_DELAY)
 			so->so_state |= SS_NBIO;
 		else
 			so->so_state &= ~SS_NBIO;
