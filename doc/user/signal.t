@@ -359,6 +359,7 @@ procedure Signal_Send (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - signal sent successfully@*
 @code{@value{RPREFIX}INVALID_ID} - task id invalid@*
+@code{@value{RPREFIX}INVALID_NUMBER} - empty signal set@*
 @code{@value{RPREFIX}NOT_DEFINED} - ASR invalid
 
 @subheading DESCRIPTION:
