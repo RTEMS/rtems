@@ -354,8 +354,8 @@ static inline unsigned int m68k_swap_u32(
   return( swapped );
 }
  
-static inline unsigned int m68k_swap_u16(
-  unsigned int value
+static inline uint16_t m68k_swap_u16(
+  uint16_t value
 )
 {
   return (((value & 0xff) << 8) | ((value >> 8) & 0xff));
@@ -376,11 +376,11 @@ static inline unsigned int m68k_swap_u32(
   return( swapped );
 }
 
-static inline unsigned int m68k_swap_u16(
-  unsigned int value
+static inline uint16_t m68k_swap_u16(
+  uint16_t value
 )
 {
-  unsigned short swapped = value;
+  uint16_t swapped = value;
 
   asm volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
 
