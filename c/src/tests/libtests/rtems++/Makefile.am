@@ -25,18 +25,18 @@ PRINT_SRCS = $(DOCS)
 PGM = ${ARCH}/$(TEST).exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../automake/leaf.am
 include $(top_srcdir)/libtests.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-LD_LIBS += $(CPLUS_LD_LIBS)
-
 if HAS_CXX
+LD_LIBS += -lrtems++
+
 ${PGM}: $(OBJS) $(LINK_FILES)
-	$(make-exe)
+	$(make-cxx-exe)
 
 all-local: $(ARCH) $(TMPINSTALL_FILES)
 else

@@ -27,7 +27,7 @@ OBJS = $(C_O_FILES) $(CC_O_FILES)
 PRINT_SRCS = $(DOCS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../automake/leaf.am
 include $(top_srcdir)/sample.am
 
 #
@@ -35,10 +35,8 @@ include $(top_srcdir)/sample.am
 #
 
 if HAS_CXX
-LD_LIBS += $(CPLUS_LD_LIBS)
-
 ${PGM}: $(OBJS) $(LINK_FILES)
-	$(make-exe)
+	$(make-cxx-exe)
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 else

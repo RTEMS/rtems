@@ -24,7 +24,7 @@ OBJS = $(C_O_FILES)
 PRINT_SRCS = $(DOCS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../automake/leaf.am
 include $(top_srcdir)/itrontests.am
 
 #
