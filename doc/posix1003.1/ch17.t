@@ -7,8 +7,25 @@
 @c
 
 @chapter Thread-Specific Data
+
 @section Thread-Specific Data Functions
+
 @subsection Thread-Specific Data Key Creation
+
+@example
+pthread_key_create()
+@end example
+
 @subsection Thread-Specific Data Management
+
+@example
+pthread_key_setspecific()
+pthread_key_getspecific()
+@end example
+
 @subsection Thread-Specific Data Key Deletion
+
+@example
+pthread_key_delete()
+@end example
 
