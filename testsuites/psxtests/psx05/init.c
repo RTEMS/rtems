@@ -224,6 +224,10 @@ void *POSIX_Init(
 
   empty_line();
 
+  puts( "Init: pthread_mutex_init - EINVAL (NULL mutex_id)" );
+  status = pthread_mutex_init( NULL, &attr );
+  assert( status == EINVAL );
+
   puts( "Init: pthread_mutex_init - EINVAL (not initialized attr)" );
   status = pthread_mutex_init( &Mutex_id, &destroyed_attr );
   assert( status == EINVAL );
@@ -270,6 +274,12 @@ void *POSIX_Init(
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
+
+  puts( "Init: pthread_mutex_init - EBUSY (attempt to initialize an existing mutex)" );
+  status = pthread_mutex_init( &Mutex_id, &attr );
+  if ( !status )
+    printf( "status = %d\n", status );
+  assert( status == EBUSY );
 
   puts( "Init: pthread_mutex_trylock - EINVAL (illegal ID)" );
   status = pthread_mutex_trylock( &Mutex_bad_id );
