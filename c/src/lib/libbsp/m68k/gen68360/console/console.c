@@ -138,8 +138,8 @@ smc1InterruptHandler (rtems_vector_number v)
 	m360.cisr = 1UL << 4;	/* Clear SMC1 interrupt-in-service bit */
 }
 
-static void
-smc1Initialize (void)
+static int
+smc1Initialize (int major, int minor, void *arg)
 {
 	/*
 	 * Allocate buffer descriptors
@@ -224,6 +224,8 @@ smc1Initialize (void)
 	m360.smc1.smcm = 3;	/* Enable SMC1 TX and RX interrupts */
 	m360.cimr |= 1UL << 4;	/* Enable SMC1 interrupts */
 	}
+
+	return 0;
 }
 
 static int
@@ -302,11 +304,6 @@ rtems_device_driver console_initialize(
 	rtems_termios_initialize ();
 
 	/*
-	 * Do device-specific initialization
-	 */
-	smc1Initialize ();
-
-	/*
 	 * Register the device
 	 */
 	status = rtems_io_register_name ("/dev/console", major, 0);
@@ -326,7 +323,7 @@ rtems_device_driver console_open(
 {
 	rtems_status_code sc;
 	static const rtems_termios_callbacks intrCallbacks = {
-		NULL,			/* firstOpen */
+		smc1Initialize,		/* firstOpen */
 		NULL,			/* lastClose */
 		NULL,			/* pollRead */
 		smc1InterruptWrite,	/* write */
@@ -336,7 +333,7 @@ rtems_device_driver console_open(
 		1			/* outputUsesInterrupts */
 	};
 	static const rtems_termios_callbacks pollCallbacks = {
-		NULL,			/* firstOpen */
+		smc1Initialize,		/* firstOpen */
 		NULL,			/* lastClose */
 		smc1PollRead,		/* pollRead */
 		smc1PollWrite,		/* write */
@@ -346,6 +343,9 @@ rtems_device_driver console_open(
 		0			/* outputUsesInterrupts */
 	};
 
+	/*
+	 * Do generic termios initialization
+	 */
 	if (m360_smc1_interrupt) {
 		rtems_libio_open_close_args_t *args = arg;
 
