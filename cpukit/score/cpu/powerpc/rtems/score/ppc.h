@@ -116,7 +116,24 @@ extern "C" {
 #define PPC_HAS_EXCEPTION_PREFIX 0
 #define PPC_HAS_EVPR             1
 
+
+#elif defined(mpc505) || defined(mpc509)
+/*
+ *  Submitted by Sergei Organov <osv@Javad.RU> as a patch against
+ *  3.6.0 long after 4.0 was released.   This is just an attempt
+ *  to get the setting correct.
+ */
+
+#define CPU_MODEL_NAME  "PowerPC 505/509"
+
+#define PPC_ALIGNMENT           4
+#define PPC_CACHE_ALIGNMENT     16
+#define PPC_I_CACHE             4096
+#define PPC_I_CACHE             0
+
+
 #elif defined(ppc601)
+
 /*
  *  Submitted with original port -- book checked only.
  */
