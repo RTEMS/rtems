@@ -1,18 +1,19 @@
 ## $Id$
 
-SUFFIXES += .t
+SUFFIXES = .t
+
+MAINTAINERCLEANFILES =
+MOSTLYCLEANFILES =
+CLEANFILES =
 
 ## Texinfo support
-TEXINFO_TEX = ../texinfo/texinfo.tex
-## TEXINPUTS = $(srcdir):$(top_srcdir)
-TEXI_COMMON = -I ..
 
 .texi:
 	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
 	cd $(srcdir) && \
 	  $(MAKEINFO) $(TEXI_COMMON) `echo $< | sed 's,.*/,,'`
 
-$(srcdir)/stamp-vti: $(PROJECT).texi $(top_srcdir)/configure.in
+$(srcdir)/stamp-vti: $(PROJECT).texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `$(SHELL) $(srcdir)/mdate-sh \
 	  $(srcdir)/$(PROJECT).texi`" > vti.tmp
 	@echo "@set EDITION $(EDITION)" >> vti.tmp
@@ -55,16 +56,6 @@ MOSTLYCLEANFILES += $(PDF_IMAGES)
 ## HTML 
 SUFFIXES += .html
 
-html_projectdir = $(htmldir)/$(PROJECT)
-
-TEXI2WWW_ARGS=\
--I $(srcdir) \
--I $(top_srcdir) \
--dirfile ../index.html \
--header rtems_header.html \
--footer rtems_footer.html \
--icons $(top_builddir)/images
-
 rtems_header.html: $(top_srcdir)/rtems_header.html.in version.texi
 	@sed -e s%\.\./images/%$(top_builddir)/images/%g \
 	-e s%\@VERSION\@%@VERSION@%g \
@@ -83,17 +74,17 @@ MOSTLYCLEANFILES += index.html $(PROJECT)*.html rtems_header.html \
 
 ## Common installation points
 if USE_HTML
-html_project_DATA += index.html $(PROJECT)*.html
+html_project_DATA = index.html $(PROJECT)*.html
 endif
 
 if USE_DVI
-dvi_DATA += $(PROJECT).dvi
+dvi_DATA = $(PROJECT).dvi
 
 .texi.dvi:
 	$(TEXI2DVI) -q -I $(srcdir) -I $(top_srcdir) $<
 
 if USE_PS
-ps_DATA += $(PROJECT).ps
+ps_DATA = $(PROJECT).ps
 .dvi.ps:
 	TEXINPUTS=$(srcdir):$$TEXINPUTS \
 	$(DVIPS) $< -o $@
@@ -102,7 +93,7 @@ endif # USE_PS
 endif # USE_DVI
 
 if USE_PDF
-pdf_DATA += $(PROJECT).pdf
+pdf_DATA = $(PROJECT).pdf
 
 if TEXI2PDF
 .texi.pdf:

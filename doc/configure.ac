@@ -1,10 +1,11 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.13)
+AC_PREREQ(2.52)
 
-AC_INIT(project.am)
+AC_INIT
+AC_CONFIG_SRCDIR([project.am])
 
-RTEMS_VERSION=eng-20010816b
+RTEMS_VERSION=4.5.0-beta3
 
 AM_INIT_AUTOMAKE(rtemsdoc,${RTEMS_VERSION},no)
 AM_MAINTAINER_MODE
@@ -131,8 +132,7 @@ dnl Checks for library functions.
 
 AC_CONFIG_SUBDIRS(tools)
 
-AC_OUTPUT(
-Makefile
+AC_CONFIG_FILES([Makefile
 rtems_support.html
 index.html
 images/Makefile
@@ -167,4 +167,5 @@ supplements/sparc/Makefile
 supplements/template/Makefile
 gnu_docs/Makefile
 src2html/Makefile
-)
+])
+AC_OUTPUT

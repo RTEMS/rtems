@@ -1,0 +1,11 @@
+TEXINFO_TEX = ../texinfo/texinfo.tex
+TEXI_COMMON = -I ..
+
+html_projectdir = $(htmldir)/$(PROJECT)
+
+TEXI2WWW_ARGS=\
+-I $(srcdir) -I $(top_srcdir) \
+-dirfile ../index.html \
+-header rtems_header.html \
+-footer rtems_footer.html \
+-icons ../images

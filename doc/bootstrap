@@ -5,6 +5,13 @@
 #
 # $Id$
 
+# this is not meant to be exported outside the source tree
+
+# NOTE: Inspired by libtool's autogen script
+
+# to be run from the toplevel directory of RTEMS'
+# source tree
+
 progname=`basename $0`
 top_srcdir=`dirname $0`
 
@@ -26,22 +33,11 @@ usage()
   exit 1;
 }
 
-generate()
-{
-  dir=$1
-  amopts=$2
-  aclocal_amflags=$3
-
-  ( test "$quiet" = "true" || echo "$dir";
-    cd $dir;
-    aclocal $aclocal_amflags
-    autoconf
-    test -n "`grep CONFIG_HEADER configure.in`" && autoheader ;
-    test -f Makefile.am && automake $amopts ;
-    test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
-      && echo timestamp > stamp-h.in
-  )
-}
+if test ! -f $top_srcdir/VERSION; then
+  echo "${progname}:"
+  echo "	Installation problem: Can't find file VERSION"
+  exit 1;
+fi
 
 while test $# -gt 0; do
 case $1 in
@@ -65,33 +61,38 @@ done
 
 case $mode in
 generate)
- 
+
   case $top_srcdir in
-  /* ) aclocal_dir=$top_srcdir/aclocal
+  /* ) aclocal_dir=$top_srcdir
     ;;
-  *) aclocal_dir=`pwd`/$top_srcdir/aclocal
+  *) aclocal_dir=`pwd`/$top_srcdir
     ;;
   esac
-  if test -d $aclocal_dir; then
-    aclocal_amflags="-I $aclocal_dir"
-  fi
 
-  confs=`find . -name 'configure.in' -print | sort`
+  confs=`find . \( -name 'configure.in' -o -name 'configure.ac' \) -print`
   for i in $confs; do
-    dir=`dirname $i`;
-    generate $dir "-a $verbose" "$aclocal_amflags";
+  dir=`dirname $i`;
+  configure=`basename $i`;
+  ( test "$quiet" = "true" || echo "$dir";
+    cd $dir;
+    pat="s,\$(RTEMS_TOPdir),${aclocal_dir},g"
+    aclocal_args=`grep '^[ ]*ACLOCAL_AMFLAGS' Makefile.am | \
+      sed -e 's%.*ACLOCAL_AMFLAGS.*\=[ ]*%%g' -e $pat ` ;
+    test "$verbose" = "-v" && echo "aclocal $aclocal_args"
+    aclocal $aclocal_args;
+    test -n "`grep CONFIG_HEADER ${configure}`" && autoheader \
+      && test "$verbose" = "-v" && echo "autoheader";
+    test -n "`grep RTEMS_BSP_CONFIGURE ${configure}`" && autoheader \
+      && test "$verbose" = "-v" && echo "autoheader";
+    test -f Makefile.am && automake -a -c $verbose ;
+    autoconf;
+    test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
+      && echo timestamp > stamp-h.in
+  )
   done
   ;;
 
 clean)
-  test "$quiet" = "$true" || echo "removing automake support files"
-  find . -name 'config.guess' -print | xargs rm -f
-  find . -name 'config.sub' -print | xargs rm -f
-  find . -name 'install-sh' -print | xargs rm -f
-  find . -name 'missing' -print | xargs rm -f
-  find . -name 'mkinstalldirs' -print | xargs rm -f
-  find . -name 'mdate-sh' -print | xargs rm -f
-
   test "$quiet" = "true" || echo "removing automake generated Makefile.in files"
   files=`find . -name 'Makefile.am' -print | sed -e 's%\.am%\.in%g'` ;
   for i in $files; do if test -f $i; then
@@ -103,8 +104,8 @@ clean)
   files=`find . -name 'configure' -print` ;
   test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
   for i in $files; do if test -f $i; then
-    rm -f $i
-    test "$verbose" = "-v" && echo "$i"
+    rm -f $i config.guess config.sub depcomp install-sh missing mkinstalldirs
+    test "$verbose" = "-v" && echo "$i"    
   fi; done
   
   test "$quiet" = "true" || echo "removing aclocal.m4 files"
@@ -116,6 +117,7 @@ clean)
   fi; done
 
   find . -name '*~' -print | xargs rm -f
+  find . -name 'bspopts.h*' -print | xargs rm -f
   find . -name '*.orig' -print | xargs rm -f
   find . -name '*.rej' -print | xargs rm -f
   find . -name 'config.status' -print | xargs rm -f
