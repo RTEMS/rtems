@@ -10,7 +10,7 @@ VPATH=@srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-BSP_PIECES=startup
+BSP_PIECES=startup scitab
 GENERIC_PIECES=
 
 # pieces to pick up out of libcpu/sh

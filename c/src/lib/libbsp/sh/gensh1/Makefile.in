@@ -15,5 +15,6 @@ include $(RTEMS_ROOT)/make/directory.cfg
 #  from the individual .rel files built in other directories
 SUB_DIRS=include \
 	startup \
+	scitab \
 	wrapup
 
