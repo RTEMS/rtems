@@ -1,3 +1,8 @@
+2002-10-28	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/libio.h: Change rtems_filesystem_node_types_t from
+	enumeration to int to eliminate warnings when values are overridden.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.

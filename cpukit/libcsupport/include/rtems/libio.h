@@ -33,13 +33,13 @@
 /*
  * Valid RTEMS file types.
  */
-typedef enum {
-  RTEMS_FILESYSTEM_DIRECTORY,
-  RTEMS_FILESYSTEM_DEVICE,
-  RTEMS_FILESYSTEM_HARD_LINK,
-  RTEMS_FILESYSTEM_SYM_LINK,
-  RTEMS_FILESYSTEM_MEMORY_FILE
-} rtems_filesystem_node_types_t;
+
+#define RTEMS_FILESYSTEM_DIRECTORY   1
+#define RTEMS_FILESYSTEM_DEVICE      2
+#define RTEMS_FILESYSTEM_HARD_LINK   3
+#define RTEMS_FILESYSTEM_SYM_LINK    4
+#define RTEMS_FILESYSTEM_MEMORY_FILE 5
+typedef int rtems_filesystem_node_types_t;
 
 /*
  *  File Handler Operations Table
