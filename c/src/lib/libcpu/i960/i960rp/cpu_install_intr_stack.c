@@ -24,7 +24,7 @@ void _CPU_Install_interrupt_stack( void )
 
     prcb->intr_stack = _CPU_Interrupt_stack_low;
 
-    *isp = (uint32_t  ) prcb->intr_stack;
+    *isp = (uint32_t) prcb->intr_stack;
 
   _CPU_ISR_Enable( level );
 }

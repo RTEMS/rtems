@@ -1,3 +1,7 @@
+2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* i960rp/cpu_install_intr_stack.c: Cosmetics.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* i960ca/cpu_install_intr_stack.c, i960ca/cpu_install_raw_isr.c,
