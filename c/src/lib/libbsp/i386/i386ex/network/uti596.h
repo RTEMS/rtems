@@ -4,6 +4,8 @@
 /*
  * EII: March 11: Created v. 0.0
  *      Jan 12/98 Added STAT bits, s11-=s5 and max_colls.
+ *
+ *  $Id$
  */
 
 #ifndef UTI596_H
@@ -48,6 +50,9 @@ struct enet_statistics{
   int	tx_fifo_errors;
   int	tx_heartbeat_errors;
   int	tx_window_errors;
+
+  /* NIC reset errors */
+  int   nic_reset_count;      /* The number of times uti596reset() has been called. */
 };
 
 
@@ -78,6 +83,10 @@ enum commands {
 #define SCB_STAT_CNA    0x2000  /* Cmd unit Not Active            */
 #define SCB_STAT_RNR    0x1000  /* Receiver Not Ready             */
 
+#define SCB_CUS_SUSPENDED 0x0100
+#define SCB_CUS_ACTIVE    0x0200
+
+
 #define STAT_C		0x8000	/* Set to 1 after execution              */
 #define STAT_B		0x4000	/* 1 : Cmd being executed, 0 : Cmd done. */
 #define STAT_OK		0x2000	/* 1: Command executed ok 0 : Error      */
@@ -105,11 +114,10 @@ enum commands {
 #define	 RX_SUSPEND	0x0030
 #define	 RX_ABORT	0x0040
 
-#define  RU_SUSPENDED    0x001
+#define  RU_SUSPENDED    0x0010
 #define  RU_NO_RESOURCES 0x0020
 #define  RU_READY        0x0040
 
-        
 
 #define IO_ADDR         0x360
 #define PORT_ADDR       IO_ADDR
@@ -190,7 +198,14 @@ struct i596_configure {
   char   data[16];
 };
 
+struct i596_nop {
+  struct i596_cmd cmd;
+};
 
+struct i596_tdr {
+  struct i596_cmd cmd;
+  unsigned int data;
+};
 
 #define RX_RING_SIZE 8
 
@@ -237,7 +252,8 @@ struct uti596_softc {
   struct i596_scb               scb;
   struct i596_set_add           set_add;
   struct i596_configure         set_conf;
-  struct i596_cmd               tdr;
+  struct i596_tdr               tdr;
+  struct i596_nop               nop;               
   unsigned long                 stat;
   struct tx_cmd                *pTxCmd;
   struct i596_tbd              *pTbd;
@@ -254,6 +270,7 @@ struct uti596_softc {
 
   rtems_id		rxDaemonTid;
   rtems_id		txDaemonTid;
+  rtems_id		resetDaemonTid;
 
   struct enet_statistics stats;
   int                  started;
@@ -272,5 +289,6 @@ struct uti596_softc {
   rtems_id             semaphore_id;
   char                 zeroes[64];
   unsigned long        rawsndcnt;
+  int                  nic_reset; /* flag is for requesting that ISR issue a reset quest */
 } ;
 #endif

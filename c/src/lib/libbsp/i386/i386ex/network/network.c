@@ -1,4 +1,8 @@
-/* uti596.c: An 82596 ethernet driver for rtems-bsd. */
+/* uti596.c: An 82596 ethernet driver for rtems-bsd.
+ *
+ *  $Id$
+ */
+
 void dump_scb(void);
 
 #ifdef DBG_VERSION
@@ -10,14 +14,9 @@ void dump_scb(void);
 #define KERNEL
 
 
-int forceResetRX = 0;
-int forceResetTX = 0;
-
-
 /*
     
   EII: Oct 16 : Version 0.0
-
 
 */
 
@@ -28,9 +27,6 @@ int forceResetTX = 0;
 #define DMA_DISABLE      0x4   
 
 struct i596_rfd *pISR_Rfd;  
-
-
-#define MY_PRINT_1( msg, p1 ) {  char buffer[80];  int i,j; sprintf(buffer, msg, p1 );j=strlen(buffer); for ( i=0;i<j;i++) outbyte(buffer[i]); }
 
 void show_buffers (void);
 void show_queues(void);
@@ -67,13 +63,11 @@ int count_rx = 0;
 
 #include <asm.h>
 
-int reset_bit_test = 0;
 
 /* #include "../misc/utils.h" */
 
 static struct uti596_softc uti596_softc;
 
-void uti596rxStart(int);
 int uti596packetNumber = 0;
 
 static    int scbStatus;
@@ -108,6 +102,7 @@ char uti596initSetup[] = {
 
 #define INTERRUPT_EVENT         RTEMS_EVENT_1
 #define START_TRANSMIT_EVENT	RTEMS_EVENT_2
+#define NIC_RESET_EVENT	        RTEMS_EVENT_3
 
 #define RBUF_SIZE	1520
 
@@ -130,6 +125,7 @@ rtems_isr   uti596DynamicInterruptHandler (rtems_vector_number);
 
 void        uti596_txDaemon               (void *);
 void        uti596_rxDaemon               (void *);
+void        uti596_resetDaemon            (void *);
 
 void        uti596_stop                   (struct uti596_softc *);
 static void uti596_start                  (struct ifnet *);
@@ -139,6 +135,7 @@ void        uti596reset            (void);
 void         uti596_stats      (struct uti596_softc *);
 
 void uti596_initialize_hardware(struct uti596_softc *);
+void uti596_reset_hardware(struct uti596_softc *);
 
 void uti596clearListStatus(struct i596_rfd *);
 void uti596addPolledCmd(struct i596_cmd *);
@@ -172,15 +169,34 @@ void send_packet(struct ifnet *, struct mbuf *);
 	  break; \
     	} \
 }
+/*************************************************************************/
+
+void 
+uti596_request_reset(void){
+   uti596_softc.nic_reset = 0;
+   sc = rtems_event_send(uti596_softc.resetDaemonTid, NIC_RESET_EVENT);
+   if ( sc != RTEMS_SUCCESSFUL )
+     rtems_panic ("Can't notify resetDaemon: %s\n", rtems_status_text (sc));
+}
 
 
 
-static void nopOn(const rtems_irq_connect_data* notUsed)
+static void uti596_maskOn(const rtems_irq_connect_data* irq)
 {
   /*
    * code should be moved from initialize_hardware
    * to this location ?
    */
+  (void) BSP_irq_enable_at_i8259s (irq->name);
+}
+
+static void uti596_maskOff(const rtems_irq_connect_data* irq)
+{
+  /*
+   * code should be moved from initialize_hardware
+   * to this location ?
+   */
+  (void) BSP_irq_disable_at_i8259s (irq->name);
 }
 
 static int uti596_isOn(const rtems_irq_connect_data* irq)
@@ -277,6 +293,8 @@ int uti596_initRFA(int num)
     
     uti596_softc.savedCount = 0;
 
+    uti596_softc.nop.cmd.command = CmdNOp; /* initialize the nop command */
+
     return (i); /* the number of allocated buffers */
     
 }
@@ -326,12 +344,7 @@ void uti596supplyFD(struct i596_rfd * pRfd )
    pLastRfd -> next = pRfd;
    pLastRfd -> cmd &= ~CMD_EOL;  /* RESET_EL : reset EL bit to 0  */
    uti596_softc.countRFD++;  /* Lets assume we add it successfully 
-				    If not, the RFD may be used, and may decrement countRFD < 0 !!*/
-   /*    if (uti596_softc.countRFD > UTI_596_RFD_NUMBER) {
-     printf( "Supply: Count too high, count == %d, when adding %p\n",uti596_softc.countRFD, pRfd);
-     dumpQ();
-   }
-   */
+			        If not, the RFD may be used, and may decrement countRFD < 0 !!*/
    /*
     * Check if the last RFD was used while appending.
     */
@@ -353,14 +366,12 @@ void uti596supplyFD(struct i596_rfd * pRfd )
       * The RFD being added was not touched by the 82596
       */
      if (uti596_softc.pLastUnkRFD != I596_NULL ) {
-       /*       printf("Before appending\n");
-       dumpQ(); */
+   
        uti596append(&uti596_softc.pSavedRfdQueue, pRfd); /* Only here! saved Q */
        uti596_softc.pEndSavedQueue = pRfd;
        uti596_softc.savedCount++;
        uti596_softc.countRFD--;
-       /*       printf("Last UNK must be NULL: %p\n",uti596_softc.pLastUnkRFD);
-       dumpQ(); */
+       
      }
      else {
        uti596_softc.pEndRFA = pRfd;           /* the RFA has been extended */
@@ -369,17 +380,21 @@ void uti596supplyFD(struct i596_rfd * pRfd )
 	    uti596_softc.countRFD > 1 ) {   /* was == 2 */
 	 uti596_softc.pBeginRFA -> cmd &= ~CMD_EOL;  /* Ensure that beginRFA is not EOL */
 	 
-	 UTI_596_ASSERT(uti596_softc.pEndRFA -> next == I596_NULL, "supply: List is buggered\n");
+	 UTI_596_ASSERT(uti596_softc.pEndRFA -> next == I596_NULL, "supply: List buggered\n");
 	 UTI_596_ASSERT(uti596_softc.pEndRFA -> cmd & CMD_EOL, "supply: No EOL at end.\n");
 	 UTI_596_ASSERT(uti596_softc.scb.command == 0, "Supply: scb command must be zero\n");
 #ifdef DBG_START
-	 printf("B");
+	 printf("Supply FD: starting receiver");
 #endif
-	 uti596rxStart(SCB_STAT_RNR);                     /*Ack the RNR interrupt */
-	 
+	 /* start the receiver */
+	 UTI_596_ASSERT(uti596_softc.pBeginRFA != I596_NULL, "rx start w/ NULL begin! \n");
+	 uti596_softc.scb.pRfd = uti596_softc.pBeginRFA;
+	 uti596_softc.scb.command = RX_START | SCB_STAT_RNR;  /* Don't ack RNR! The receiver should be stopped in this case */
+	 UTI_596_ASSERT( !(uti596_softc.scb.status & SCB_STAT_FR),"FRAME RECEIVED INT COMING!\n");
+	 outport_byte(CHAN_ATTN, 0); 
        }
      }
-       return;
+     return;
      
    }
  } 
@@ -398,14 +413,6 @@ void uti596supplyFD(struct i596_rfd * pRfd )
  }
 }
 
-void uti596rxStart(int cmd) 
-{
-  UTI_596_ASSERT(uti596_softc.pBeginRFA != I596_NULL, "rx start w/ NULL begin! \n");
-  uti596_softc.scb.pRfd = uti596_softc.pBeginRFA;
-  uti596_softc.scb.command = RX_START | cmd;  /* Don't ack RNR! The receiver should be stopped in this case */
-  UTI_596_ASSERT( !(uti596_softc.scb.status & SCB_STAT_FR),"FRAME RECEIVED INT COMING!\n");
-  outport_byte(CHAN_ATTN, 0); 
-}
 
 static void
 uti596_start (struct ifnet *ifp)
@@ -441,8 +448,9 @@ uti596_initialize_hardware(struct uti596_softc *sc)
 
   
   /* change the scp address */
-
+#ifdef DBG_INIT
   printf("Change the SCP address\n");
+#endif
   
   /*
    * Set the DMA mode to enable the 82596 to become a bus-master
@@ -490,8 +498,8 @@ uti596_initialize_hardware(struct uti596_softc *sc)
    */
   sc->irqInfo.name = UTI_596_IRQ;
   sc->irqInfo.hdl  = ( void * ) uti596DynamicInterruptHandler;
-  sc->irqInfo.on   = nopOn;
-  sc->irqInfo.off  = nopOn;
+  sc->irqInfo.on   = uti596_maskOn;
+  sc->irqInfo.off  = uti596_maskOff;
   sc->irqInfo.isOn = uti596_isOn;
   
   status_code = BSP_install_rtems_irq_handler (&sc->irqInfo);
@@ -502,20 +510,83 @@ uti596_initialize_hardware(struct uti596_softc *sc)
   /* Initialize the 82596 memory ( Transmit buffers ) */
   uti596_initMem(sc);
   
-  /* 
-   * Create a semaphore to guard the critical sections within 596raw
-   * IS THIS NEEDED W/ FreeBSD?
-   */
-  /*  sc->semaphore_name = rtems_build_name('I','5','9','6');
-  status_code = rtems_semaphore_create(sc->semaphore_name,
-				       UTI596_MUTEX,
-				       RTEMS_DEFAULT_ATTRIBUTES, 
-				       RTEMS_NO_PRIORITY,
-				       &sc->semaphore_id);
-				       */  
 #ifdef DBG_INIT
   printf("After attach, status of board = 0x%x\n", sc->scb.status );
 #endif
+  outport_word(0x380, 0xf); /* reset the LED's */
+}
+
+
+void
+uti596_reset_hardware(struct uti596_softc *sc)
+{
+  int boguscnt = 1000;
+  
+  /* reset the board  */
+  outport_word( PORT_ADDR, 0 );
+  outport_word( PORT_ADDR, 0 );
+
+#ifdef DBG_RESET
+  printf("reset_hardware:Scp address %p\n", sc->pScp);
+#endif
+  sc->pScp = (struct i596_scp *)
+    ((((int)uti596_softc.pScp) + 0xf) & 0xfffffff0);
+  
+#ifdef DBG_RESET
+  printf("reset_hardware:change scp address to : %p\n",sc->pScp);
+#endif
+
+  
+  /* change the scp address */
+#ifdef DBG_RESET
+  printf("Change the SCP address\n");
+#endif
+  
+  /*
+   * Set the DMA mode to enable the 82596 to become a bus-master
+   */
+  outport_byte(DMA_MASK_REG,DMA_DISABLE);      /* disable_dma */
+  outport_byte(DMA_MODE_REG,DMA_MODE_CASCADE); /* set dma mode */
+  outport_byte(DMA_MASK_REG,DMA_ENABLE);       /* enable dma */
+
+  /* reset the board  */
+  outport_word( PORT_ADDR, 0 );
+  outport_word( PORT_ADDR, 0 );
+  
+  outport_word(PORT_ADDR, ((((int)uti596_softc.pScp) &  0xffff) | 2 ));
+  outport_word(PORT_ADDR, (( (int)uti596_softc.pScp) >> 16 ) & 0xffff );
+  
+  /* This is linear mode, LOCK function is disabled  */
+  
+  sc->pScp->sysbus = 0x00540000;
+  sc->pScp->iscp   = &sc->iscp;
+  sc->iscp.scb     = &sc->scb;
+  sc->iscp.stat    = 0x0001;
+  
+  sc->pCmdHead     = sc->scb.pCmd = I596_NULL;
+  
+#ifdef DBG_596
+  printf("reset_hardware: starting i82596.\n");
+#endif
+  
+  /* Pass the scb address to the 596 */
+  outport_word(CHAN_ATTN,0);
+  
+  while (sc->iscp.stat)
+    if (--boguscnt == 0)
+      {
+	printf("reset_hardware: timed out with status %4.4lx\n", 
+	       sc->iscp.stat );
+	break;
+      }
+  
+  /* clear the command word */
+  sc->scb.command = 0;
+        
+#ifdef DBG_RESET
+  printf("After reset_hardware, status of board = 0x%x\n", sc->scb.status );
+#endif
+
   outport_word(0x380, 0xf); /* reset the LED's */
 }
 
@@ -702,7 +773,7 @@ uti596_rxDaemon(void *arg)
 
   struct i596_rfd *pRfd;
   ISR_Level level;
-  int tid,i;
+  int tid;
   rtems_event_set events;
   struct ether_header *eh;
   
@@ -872,65 +943,128 @@ uti596clearListStatus(struct i596_rfd *pRfd)
   }
 }
 
-
- /* static inline */ void uti596reset_bit_test()
- {
-   reset_bit_test = 1;
- }
-
 void uti596reset(void)
  {
-   int i;
+   int i,count;
+   struct uti596_softc *sc = &uti596_softc;
+   /*   struct i596_rfd * pRfd; */
 
-#ifdef DBG_596_RESET
-     printf ("i596reset\n");
+#ifdef DBG_RESET
+     printf ("reset: begins\n");
 #endif
 
-  uti596_initialize_hardware(&uti596_softc); /* resets the ethernet hardware, now must re-config */
-  uti596Diagnose(1); /* verbose diagnosis */
+  sc->resetDone = 0;
+  sc->irqInfo.off(&sc->irqInfo);
 
-  uti596_softc.set_conf.cmd.command = CmdConfigure;
-  memcpy (uti596_softc.set_conf.data, uti596initSetup, 14);
-  uti596addPolledCmd( (struct i596_cmd *) &uti596_softc.set_conf);
+  UTI_WAIT_COMMAND_ACCEPTED(10000, "reset: wait for previous command complete");  
+
+  /* abort ALL of the current work */
+  sc->scb.command = CUC_ABORT | RX_ABORT;
+
+  outport_word(CHAN_ATTN,0);
+  UTI_WAIT_COMMAND_ACCEPTED(4000, "reset: abort requested");
+
+  uti596_reset_hardware(&uti596_softc); /* reset the ethernet hardware. must re-config */
+
+#ifdef DBG_RESET
+  uti596Diagnose(1);
+#endif
+
+  sc->set_conf.cmd.command = CmdConfigure;
+  memcpy (sc->set_conf.data, uti596initSetup, 14);
+  uti596addPolledCmd( (struct i596_cmd *) &sc->set_conf);
   
-  while( !uti596_softc.set_conf.cmd.status & STAT_C )
+  /****
+   * POLL
+   ****/
+  
+  count = 2000;
+  while( !( sc->set_conf.cmd.status & STAT_C ) && --count )
     printf(".");
-
-  printf("Configure completed\n");
-#ifdef DBG_596
-  printf("Setting Address\n");
+  
+  if ( count )
+    printf("Configure OK, count = %d\n",count);
+  else
+    printf("***reset: Configure failed\n");
+  
+  /* 
+   * Create the IA setup command
+   */
+  
+#ifdef DBG_RESET
+  printf("reset: Setting Address\n");
 #endif
-  uti596_softc.set_add.cmd.command = CmdSASetup;
+  sc->set_add.cmd.command = CmdSASetup;
   for ( i=0; i<6; i++)
-    uti596_softc.set_add.data[i]= uti596_softc.arpcom.ac_enaddr[i];
+    sc->set_add.data[i]=sc->arpcom.ac_enaddr[i];
   
-  uti596_softc.cmdOk = 0;
-  uti596addCmd((struct i596_cmd *)&uti596_softc.set_add);
-  /*******/
-  while( !uti596_softc.set_add.cmd.status & STAT_C )
+  sc->cmdOk = 0;
+  uti596addPolledCmd((struct i596_cmd *)&sc->set_add);
+  
+  count = 2000;
+  while( !(sc->set_add.cmd.status & STAT_C ) && --count)
     printf(".");
+  
+  if ( count )
+    printf ("Reset Set Address OK, count= %d\n",count);
+  else
+    printf("Reset Set Address Failed\n");
   /*******/
   
-#ifdef DBG_596
-  printf( "After initialization, status and command: 0x%x, 0x%x\n", 
-	  uti596_softc.scb.status, uti596_softc.scb.status);
+#ifdef DBG_RESET
+  printf( "After reset, status and command: 0x%x, 0x%x\n", 
+	  sc->scb.status, sc->scb.status);
   
 #endif
-  if ( uti596_softc.pLastUnkRFD != I596_NULL ) {
-    uti596_softc. pEndRFA =  uti596_softc. pLastUnkRFD; /* The end position can be updated */
-    uti596_softc. pLastUnkRFD = I596_NULL;           
+  
+
+  /* restore the RFA */
+
+  dumpQ();
+
+  if ( sc->pLastUnkRFD != I596_NULL ) {
+    sc-> pEndRFA =  sc->pLastUnkRFD; /* The end position can be updated */
+    sc-> pLastUnkRFD = I596_NULL;           
   }
   
-  /* clear status in RFA */
-  uti596clearListStatus(uti596_softc.pBeginRFA );
-  uti596clearListStatus(uti596_softc.pSavedRfdQueue );
-  uti596_softc.scb.pRfd =  uti596_softc.pBeginRFA; 
+  sc->pEndRFA->next = sc->pSavedRfdQueue;
+  if ( sc->pSavedRfdQueue != I596_NULL ) {
+    sc->pEndRFA = sc->pEndSavedQueue;
+    sc->pSavedRfdQueue = sc->pEndSavedQueue = I596_NULL;
+    sc -> countRFD = sc->rxBdCount ;
+  }
 
-  uti596_softc.scb.command = RX_START;
+  /*   if ( sc->pInboundFrameQueue != I596_NULL ){
+    do {
+      pRfd = sc->pInboundFrameQueue->next;
+      sc->pEndRFA -> next = sc->pInboundFrameQueue;
+      sc->pInboundFrameQueue = pRfd;
+     } while( pRfd != I596_NULL ) ;
+    
+  }
+  */
+
+  sc->scb.pRfd =  sc->pBeginRFA; /* readdress the head of the RFA in the SCB */
+
+  uti596clearListStatus(sc->pBeginRFA );
+
+  dumpQ(); /* purely for testing */
+
+  sc->irqInfo.on(&sc->irqInfo);  /* moved here. Was originally after command issued. */
+  sc->scb.command = RX_START;
+
   outport_word(CHAN_ATTN,0 ); 
-  UTI_WAIT_COMMAND_ACCEPTED(4000, "init");
+  UTI_WAIT_COMMAND_ACCEPTED(4000, "reset");
+    
+  sc->resetDone = 1;
   
-  uti596_softc.started = 1;
+  sc->started = 1;
+
+  /* uti596addCmd(&uti506_softc.nop); */ /* just for fun */
+  
+#ifdef DBG_RESET
+  printf("reset: complete\n");
+#endif
  }
  
  /***********************************************************************
@@ -992,11 +1126,6 @@ void uti596reset(void)
 
      pCmd->status = 0;
      pCmd->command |= (CMD_EOL | CMD_INTR ); /* all commands last in list & return an interrupt */
-     if ( reset_bit_test ){
-       pCmd->command |= 0x0080;
-       printf("Issuing cmd: %#x\n",  pCmd->command);
-       reset_bit_test = 0;
-     }
 
      pCmd->next = I596_NULL;
 
@@ -1150,6 +1279,37 @@ uti596_txDaemon (void *arg)
 }
 
  
+/*
+ * NIC reset daemon.
+ */
+void
+uti596_resetDaemon (void *arg)
+{
+        struct uti596_softc *sc = (struct uti596_softc *)arg;
+	rtems_event_set events;
+	/* struct ifnet *ifp = &sc->arpcom.ac_if; */
+
+	for (;;) {
+	  /*
+	   * Wait for reset event from ISR
+	   */
+	  rtems_bsdnet_event_receive (NIC_RESET_EVENT, 
+				      RTEMS_EVENT_ANY | RTEMS_WAIT, 
+				      RTEMS_NO_TIMEOUT, &events);
+
+	  printf("reset daemon: Resetting NIC\n");
+
+	  sc->stats.nic_reset_count++;
+	  /*
+	   * Reinitialize the network card
+	   */
+	  rtems_bsdnet_semaphore_obtain ();
+	  uti596reset();
+	  rtems_bsdnet_semaphore_release ();
+	}
+}
+
+ 
  /***********************************************************************
   *  Function:   send_packet
   *
@@ -1178,34 +1338,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
   int bd_count = 0;
   rtems_event_set events;
 
-  /*
-   * Block all competing threads. IS THIS NOW NEEDED? I THINK NOT
-   */
-  
-  /*   while(1) {
-#ifdef DBG_RAW
-    rtems_task_ident (0, 0, &tid);
-    printf("0x%x Waiting for semaphore\n", tid);
-#endif
-      status = rtems_semaphore_obtain(sc->semaphore_id,
-				    RTEMS_WAIT, 
-				    RTEMS_NO_TIMEOUT);
-    
-    if ( status == RTEMS_SUCCESSFUL ){
-#ifdef DBG_RAW
-      printf("0x%x Got semaphore\n", tid);
-#endif
-      break;
-    }
-    else 
-      {
-#ifdef DBG_RAW
-	printf("0x%x Waits on semaphore\n", tid);
-#endif
-	sc->txRawWait++;
-      }
-  }
-  */
   /* 
    * For all mbufs in the chain, 
    *  fill a transmit buffer descriptor
@@ -1340,8 +1472,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
     m = n;
   }
 
-  /* We have finished with this critical section */
-  /* rtems_semaphore_release(sc->semaphore_id); */
   
 }
 
@@ -1751,6 +1881,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 
  }
  
+
  /***********************************************************************
   *  Function:   uti596DynamicInterruptHandler
   *
@@ -1782,23 +1913,42 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
      UTI_WAIT_COMMAND_ACCEPTED(20000, "****ERROR:ACK");
    }
    else {
-     printk("\n***INFO:ISR won't wait\n");
+     printk("\n***INFO:ISR won't process now\n");
      return;
    }
  }
  else {
-   printk("\n***WARNING: Nothing to ACK\n");
-   return;
+   printk("\n***ERROR: Spurious interrupt. Resetting...\n");
+   uti596_softc.nic_reset = 1;
  }
   
- if ( (scbStatus & SCB_STAT_CX) && !(scbStatus & SCB_STAT_CNA) )
-   printk("\n*****ERROR:Command Complete, CNA available: %#x\n", scbStatus);
+ if ( (scbStatus & SCB_STAT_CX) && !(scbStatus & SCB_STAT_CNA) ){
+   printk("\n*****ERROR: Command Complete, and CNA available: 0x%x\nResetting...", scbStatus);
+   uti596_softc.nic_reset = 1;
+   return;
+ }
+
+ if ( !(scbStatus & SCB_STAT_CX) && (scbStatus & SCB_STAT_CNA) ) {
+   printk("\n*****ERROR: CNA, NO CX:0x%x\nResetting...",scbStatus);
+   uti596_softc.nic_reset = 1;
+   return;
+ }
+
+ if ( scbStatus & SCB_CUS_SUSPENDED ) {
+   printk("\n*****ERROR: Command unit suspended!:0x%x\nResetting...",scbStatus);
+   uti596_softc.nic_reset = 1;
+   return;
+ }
+
+ if ( scbStatus & RU_SUSPENDED  ) {
+   printk("\n*****ERROR: Receive unit suspended!:0x%x\nResetting...",scbStatus);
+   uti596_softc.nic_reset = 1;
+   return;
+ }
  
- if ( !(scbStatus & SCB_STAT_CX) && (scbStatus & SCB_STAT_CNA) )
-   printk("\n*****ERROR: CNA went unavailable, NO CX:%#x\n",scbStatus);
- 
- if ( scbStatus & SCB_STAT_RNR )
+ if ( scbStatus & SCB_STAT_RNR ) {
    printk("\n*****WARNING: RNR %x\n",scbStatus);
+ }
  
  /* 
   * Receive Unit Control
@@ -1809,18 +1959,9 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 #ifdef DBG_FR
    printk("\nISR:FR\n");
 #endif
-   if ( uti596_softc.pBeginRFA == I596_NULL ||  !( uti596_softc.pBeginRFA -> stat & STAT_C ) ||
-	forceResetRX ) {
-
-     /*      if ( !forceResetRX )
-       printk("****ERROR: FR interrupt and NO complete FR!\n");
-     else
-       printk("****INFO: RX reset requested\n");
-       */
-     forceResetRX = 0;
-     printk("****INFO: Resetting board ( rx ) commented out\n");
+   if ( uti596_softc.pBeginRFA == I596_NULL ||  !( uti596_softc.pBeginRFA -> stat & STAT_C)){
      dump_scb();
-     /* uti596reset(); */
+     uti596_softc.nic_reset = 1;
    }
    else
      while ( uti596_softc.pBeginRFA != I596_NULL && 
@@ -1896,7 +2037,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
    /* 
     * For ALL completed commands
     */
-   if ( pIsrCmd !=  I596_NULL && pIsrCmd->status & STAT_C && !forceResetTX  ){
+   if ( pIsrCmd !=  I596_NULL && pIsrCmd->status & STAT_C  ){
      
 #ifdef DBG_RAW_ISR
        printk("ISR:pIsrCmd != NULL\n");
@@ -2012,19 +2153,13 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
      pIsrCmd = uti596_softc.pCmdHead; /* next command */ 
      if ( pIsrCmd != I596_NULL )
        printk("****WARNING: more commands in list, but no start to NIC\n");
-   } /* end if completed */
+   } /* end if pIsrCmd != NULL && pIsrCmd->stat & STAT_C  */
    else {
 
-     /*     if ( !forceResetTX )
-       printk("*****ERROR:CX but no command is completed\n");
-     else
-       printk("*****INFO:forcing an ethernet card reset\n");
-     */
      /* Reset the ethernet card, and wake the transmitter (if necessary) */
 
      printk("****INFO: Resetting board ( tx )\n");
-     forceResetTX = 0;
-     uti596reset();
+     uti596_softc.nic_reset = 1;
      if ( uti596_softc.txDaemonTid){  /* Ensure that a transmitter is waiting */
        /*  printk("*****INFO:Wake Transmitter\n"); */
        sc = rtems_event_send (uti596_softc.txDaemonTid, 
@@ -2197,6 +2332,17 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
    printk("X\n");
 #endif
  count_rx=0;
+
+ /*
+  * Do this last, to ensure that the reset is called at the right time.
+  */
+ if ( uti596_softc.nic_reset ){
+   uti596_softc.nic_reset = 0;
+   sc = rtems_event_send(uti596_softc.resetDaemonTid, NIC_RESET_EVENT);
+   if ( sc != RTEMS_SUCCESSFUL )
+     rtems_panic ("Can't notify resetDaemon: %s\n", rtems_status_text (sc));
+ }
+
  return;
  }
 
@@ -2402,9 +2548,13 @@ uti596_stats(struct uti596_softc *sc)
 	printf ("Rx Fifo Errors:%-8u\n",       sc->stats.rx_fifo_errors);
 	printf ("Rx Framing Errors:%-8u",    sc->stats.rx_frame_errors);
 	printf ("Rx crc errors:%-8u\n",        sc->stats.rx_crc_errors);
+
 	printf ("TX WAITS: %-8lu\n", sc->txRawWait);
 
+	printf ("NIC resets: %-8u\n", sc->stats.nic_reset_count);
+
 	printf("NIC reports\n");
+
 	dump_scb();
       }
 
@@ -2522,9 +2672,10 @@ void uti596_init(void * arg){
      * Start driver tasks
      */
 
-    sc->txDaemonTid = rtems_bsdnet_newproc ("UTtx", 4096, uti596_txDaemon, sc);
-    sc->rxDaemonTid = rtems_bsdnet_newproc ("UTrx", 4096, uti596_rxDaemon, sc);
- 
+    sc->txDaemonTid = rtems_bsdnet_newproc ("UTtx", 2*4096, uti596_txDaemon, sc);
+    sc->rxDaemonTid = rtems_bsdnet_newproc ("UTrx", 2*4096, uti596_rxDaemon, sc);
+    sc->resetDaemonTid = rtems_bsdnet_newproc ("UTrt", 2*4096, 
+					       uti596_resetDaemon, sc);
   }
   /* 
    * Enable receiver

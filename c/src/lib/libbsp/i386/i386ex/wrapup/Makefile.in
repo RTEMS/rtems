@@ -11,9 +11,9 @@ PROJECT_ROOT = @PROJECT_ROOT@
 BSP_PIECES=startup clock console timer $(NETWORK)
 GENERIC_PIECES=
 
-# # We only build the Network library if HAS_NETWORKING was defined
-# NETWORK_yes_V = network
-# NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
+# We only build the Network library if HAS_NETWORKING was defined
+NETWORK_yes_V = network
+NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
