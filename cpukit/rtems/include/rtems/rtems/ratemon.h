@@ -46,7 +46,7 @@ typedef enum {
                                          /*   was blocking on it */
   RATE_MONOTONIC_EXPIRED                 /* off chain, will be reset by next */
                                          /*   rtems_rate_monotonic_period */
-}   Rate_Monotonic_Period_states;
+}   rtems_rate_monotonic_period_states;
 
 /*
  *  The following constant is the interval passed to the rate_monontonic_period
@@ -55,16 +55,28 @@ typedef enum {
 
 #define RTEMS_PERIOD_STATUS       WATCHDOG_NO_TIMEOUT
 
+/* 
+ *  The following defines the period status structure.
+ */ 
+
+typedef struct {
+  rtems_rate_monotonic_period_states  state;
+  unsigned32                          ticks_since_last_period;
+  unsigned32                          ticks_executed_since_last_period;
+}  rtems_rate_monotonic_period_status;
+
 /*
  *  The following structure defines the control block used to manage
  *  each period.
  */
 
 typedef struct {
-  Objects_Control               Object;
-  Watchdog_Control              Timer;
-  Rate_Monotonic_Period_states  state;
-  Thread_Control               *owner;
+  Objects_Control                     Object;
+  Watchdog_Control                    Timer;
+  rtems_rate_monotonic_period_states  state;
+  unsigned32                          owner_ticks_executed_at_period;
+  unsigned32                          time_at_period;
+  Thread_Control                     *owner;
 }   Rate_monotonic_Control;
 
 RTEMS_EXTERN Objects_Information _Rate_monotonic_Information;
@@ -137,6 +149,21 @@ rtems_status_code rtems_rate_monotonic_cancel(
 
 rtems_status_code rtems_rate_monotonic_delete(
   Objects_Id id
+);
+
+/*
+ *  rtems_rate_monotonic_get_status
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_rate_monotonic_get_status directive.
+ *  Information about the period indicated by ID is returned.
+ *
+ */
+
+rtems_status_code rtems_rate_monotonic_get_status(
+  Objects_Id                           id,
+  rtems_rate_monotonic_period_status  *status
 );
 
 /*
