@@ -1,3 +1,8 @@
+2002-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* kern/uipc_mbuf.c: Comment out m0 in m_copydata to suppress
+	warning.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Corrected.

@@ -367,7 +367,7 @@ m_copydata(m, off, len, cp)
 	caddr_t cp;
 {
 	register unsigned count;
-	struct mbuf *m0 = m;
+/*	struct mbuf *m0 = m; */
 
 	if (off < 0 || len < 0)
 		panic("m_copydata");
