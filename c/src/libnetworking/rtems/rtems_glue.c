@@ -900,7 +900,7 @@ rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char
 	}
 	while ((c = *cp++) != '\0') {
 		if ((c >= '0') && (c <= '9')) {
-			int len = cp - config->name - 1;
+			int len = cp - config->name;
 			if ((len < 2) || (len > 50))
 				break;
 			for (;;) {
