@@ -212,8 +212,8 @@ void *malloc(
 
     the_size = ((size + sbrk_amount) / sbrk_amount * sbrk_amount);
 
-    if (((uint32_t  )starting_address = (void *)sbrk(the_size)) 
-            == (uint32_t  ) -1)
+    if ((starting_address = (void *)sbrk(the_size)) 
+            == (void*) -1)
       return (void *) 0;
 
     status = rtems_region_extend(
@@ -289,7 +289,7 @@ void *realloc(
   size_t size
 )
 {
-  uint32_t    old_size;
+  size_t old_size;
   rtems_status_code status;
   char *new_area;
 

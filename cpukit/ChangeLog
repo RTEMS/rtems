@@ -1,5 +1,9 @@
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libcsupport/src/malloc.c: Remove lvalue casts.
+
+2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libcsupport/include/chain.h, libcsupport/include/clockdrv.h, 
 	libcsupport/include/ringbuf.h, libcsupport/include/spurious.h, 
 	libcsupport/include/timerdrv.h, libcsupport/include/vmeintr.h, 
