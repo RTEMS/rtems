@@ -13,9 +13,8 @@ all-local: $(TMPINSTALL_FILES)
 TMPINSTALL_FILES =
 
 $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_ROOT)/@RTEMS_BSP@/tests
+	@$(mkdir_p) $(PROJECT_ROOT)/@RTEMS_BSP@/tests
 	@: > $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
-TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
 
 $(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest: runtest $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
 	$(INSTALL_SCRIPT) $< $(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest

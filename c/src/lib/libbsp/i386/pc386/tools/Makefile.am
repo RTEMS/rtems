@@ -21,9 +21,8 @@ all-local: $(TMPINSTALL_FILES)
 TMPINSTALL_FILES =
 
 $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools
+	@$(mkdir_p) $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools
 	@: > $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp)
-TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp)
 
 $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/bin2boot$(EXEEXT): bin2boot$(EXEEXT) $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/bin2boot$(EXEEXT)

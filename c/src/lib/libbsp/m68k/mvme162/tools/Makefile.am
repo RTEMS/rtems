@@ -11,7 +11,7 @@ noinst_PROGRAMS = sload
 
 ## HACK: install to build-tree
 install-exec-local: $(PROGRAMS)
-	$(mkinstalldirs) $(PROJECT_ROOT)/@RTEMS_BSP@/bin
+	$(mkdir_p) $(PROJECT_ROOT)/@RTEMS_BSP@/bin
 	$(INSTALL_PROGRAM) $(PROGRAMS) $(PROJECT_ROOT)/@RTEMS_BSP@/bin
 endif
 

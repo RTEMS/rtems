@@ -4,11 +4,20 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
-noinst_SCRIPTS = runtest
+transform =
+bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests
+bsptools_bin_SCRIPTS = runtest
 
-#HACK: install to build-tree
-all-local: $(SCRIPTS)
-	$(mkinstalldirs) $(PROJECT_ROOT)/$(RTEMS_BSP)/tests
-	$(INSTALL_SCRIPT) runtest $(PROJECT_ROOT)/$(RTEMS_BSP)/tests/runtest
+all-local: $(TMPINSTALL_FILES)
+
+TMPINSTALL_FILES =
+
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_ROOT)/@RTEMS_BSP@/tests
+	@: > $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
+
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest: runtest $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
+	$(INSTALL_SCRIPT) $< $(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest
+TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest
 
 include $(top_srcdir)/../../../../../automake/local.am
