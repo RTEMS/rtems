@@ -197,22 +197,18 @@ cpy_Bad1:	move.l	d1,(a0)+
         | zero out uninitialized data area
         |
 zerobss:
-        moveal  # SYM (_end),a0                | find end of .bss
-        moveal  # SYM (_bss_start),a1          | find beginning of .bss
+        moveal  # SYM (_clear_end),a0            | find end of .bss
+        moveal  # SYM (_clear_start),a1          | find beginning of .bss
         moveq   #0,d0
 
 loop:   movel   d0,a1@+                | to zero out uninitialized
         cmpal   a0,a1
-        jlt     loop                    | loop until _end reached
+        jlt     loop                    | loop until _clear_end reached
 
-        movel   # SYM (_end),d0               | d0 = end of bss/start of heap
-        addl    # SYM (heap_size),d0          | d0 = end of heap
-        movel   d0, SYM (stack_start)  | Save for brk() routine
-        addl    # SYM (stack_size),d0         | make room for stack
-        andl    #0xffffffc0,d0         | align it on 16 byte boundary
+        movel   d0, SYM (_stack_init)  | Set Stack pointer
         movw    #0x3700,sr             | SUPV MODE,INTERRUPTS OFF!!!
-        movel   d0,a7                 | set master stack pointer
-        movel   d0,a6                 | set base pointer
+        movel   d0,a7                  | set master stack pointer
+        movel   d0,a6                  | set base pointer
 
       /*
        *  RTEMS should maintain a separate interrupt stack on CPUs

@@ -90,6 +90,7 @@ void bsp_pretasking_hook(void)
 void bsp_start( void )
 {
   void           *vbr;
+  extern 	unsigned int _WorkspaceBase;
 
 /*   set_debug_traps();    */
 /*   breakpoint(); */
@@ -105,7 +106,11 @@ void bsp_start( void )
   Cpu_table.interrupt_vector_table = vbr;
 
   BSP_Configuration.work_space_start = (void *)
+    (((unsigned int)_WorkspaceBase + STACK_SIZE + 0x100) & 0xffffff00);
+
+#if 0
     (((unsigned int)_end + STACK_SIZE + 0x100) & 0xffffff00);
+#endif
 
   /* Clock_exit is done as an atexit() function */
 }

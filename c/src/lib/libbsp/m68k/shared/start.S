@@ -68,8 +68,8 @@ SYM (start_around):
         | zero out uninitialized data area
         |
 zerobss:
-        moveal  # SYM (end),a0         | find end of .bss
-        moveal  # SYM (_bss_start),a1   | find beginning of .bss
+        moveal  # SYM (_clear_end),a0     | find end of .bss
+        moveal  # SYM (_clear_start),a1   | find beginning of .bss
         movel   #0,d0
 
 loop:   movel   #0,a1@+                 | to zero out uninitialized

@@ -114,7 +114,6 @@ SECTIONS
                 PROVIDE (_copy_end = .);
         } >ram
         .bss : {
-                PROVIDE (_bss_start = .);
                 PROVIDE (_clear_start = .);
                 *(.bss)
                 *(COMMON)
@@ -129,7 +128,7 @@ SECTIONS
                 . += HeapSize;
                 PROVIDE (_HeapEnd = .);
 
-                clear_end = .;
+                PROVIDE (_clear_end = .);
 
                 PROVIDE (_WorkspaceBase = .);
         } >ram

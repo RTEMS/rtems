@@ -111,9 +111,7 @@ SECTIONS
                 copy_end = .;
         } >ram
         .bss : {
-                bss_start = .;
-                . += (256 * 4);
-                clear_start = .;
+                _clear_start = .;
                 *(.bss)
                 *(COMMON)
                 . = ALIGN (16);
@@ -127,7 +125,7 @@ SECTIONS
                 . += HeapSize;
                 PROVIDE (_HeapEnd = .);
 
-                clear_end = .;
+                PROVIDE (_clear_end = .);
 
                 _WorkspaceBase = .;
         } >ram

@@ -20,7 +20,7 @@ __DYNAMIC  =  0;
  * |        _edata      |
  * +--------------------+
  * | .bss               |
- * |        __bss_start | start of bss, cleared by crt0
+ * |        _clear_start| start of bss, cleared by crt0
  * |        _end        | start of heap, used by sbrk()
  * +--------------------+
  * |    heap space      |
@@ -135,7 +135,6 @@ SECTIONS
                 PROVIDE (_copy_end = .);
         } >ram
         .bss : {
-                PROVIDE (_bss_start = .);
                 PROVIDE (_clear_start = .);
                 *(.bss)
                 *(COMMON)
@@ -150,7 +149,7 @@ SECTIONS
                 . += HeapSize;
                 PROVIDE (_HeapEnd = .);
 
-                clear_end = .;
+                PROVIDE (_clear_end = .);
 
                 PROVIDE (_WorkspaceBase = .);
         } >ram

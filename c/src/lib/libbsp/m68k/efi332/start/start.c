@@ -207,7 +207,7 @@ void  dumby_start() {
 	*dst++ = *src++;
     
     /* Zero bss */
-    for (dst = _bss_start; dst< end; dst++)
+    for (dst = _clear_start; dst< end; dst++)
       *dst = 0;
   }
 

@@ -172,7 +172,7 @@ SECTIONS {
                 . += HeapSize;
                 PROVIDE (_HeapEnd = .);
 
-                clear_end = .;
+                PROVIDE (_clear_end = .);
 
                 PROVIDE (_WorkspaceBase = .);
         } >ram
