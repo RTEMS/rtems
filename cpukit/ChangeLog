@@ -1,5 +1,12 @@
 2004-10-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libfs/src/dosfs/msdos_conv.c:
+	Replace BSD fixed-size types with POSIX fixed-size types.
+	Replace SECONDSTO1980 with DAYSTO1980.
+	Make macros 16bit clean.
+
+2004-10-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libcsupport/include/sys/ioccom.h: Cosmetical update from FreeBSD.
 
 2004-10-25	Eric Norum <norume@aps.anl.gov>

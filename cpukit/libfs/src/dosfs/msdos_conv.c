@@ -24,10 +24,14 @@
 
 #include <rtems.h>
 #include "msdos.h"
+
+/* #define SECONDSPERDAY (24 * 60 * 60) */
+#define SECONDSPERDAY ((uint32_t) 86400)
+
 /*
  * Days in each month in a regular year.
  */
-static u_short regyear[] = {
+static uint16_t regyear[] = {
 	31, 28, 31, 30, 31, 30,
 	31, 31, 30, 31, 30, 31
 };
@@ -35,7 +39,7 @@ static u_short regyear[] = {
 /*
  * Days in each month in a leap year.
  */
-static u_short leapyear[] = {
+static uint16_t leapyear[] = {
 	31, 29, 31, 30, 31, 30,
 	31, 31, 30, 31, 30, 31
 };
@@ -44,10 +48,10 @@ static u_short leapyear[] = {
  * Variables used to remember parts of the last time conversion.  Maybe we
  * can avoid a full conversion.
  */
-static u_long lasttime;
-static u_long lastday;
-static u_short lastddate;
-static u_short lastdtime;
+static uint32_t lasttime;
+static uint32_t lastday;
+static uint16_t lastddate;
+static uint16_t lastdtime;
 
 /*
  * Convert the unix version of time to dos's idea of time to be used in
@@ -57,11 +61,11 @@ void
 msdos_date_unix2dos(unsigned int t, unsigned short *ddp,
                     unsigned short *dtp)
 {
-	u_long days;
-	u_long inc;
-	u_long year;
-	u_long month;
-	u_short *months;
+	uint32_t days;
+	uint32_t inc;
+	uint32_t year;
+	uint32_t month;
+	uint16_t *months;
 
 	/*
 	 * If the time from the last conversion is the same as now, then
@@ -78,7 +82,7 @@ msdos_date_unix2dos(unsigned int t, unsigned short *ddp,
 		 * time we did the computation then skip all this leap year
 		 * and month stuff.
 		 */
-		days = t / (24 * 60 * 60);
+		days = t / (SECONDSPERDAY);
 		if (days != lastday) {
 			lastday = days;
 			for (year = 1970;; year++) {
@@ -111,13 +115,14 @@ msdos_date_unix2dos(unsigned int t, unsigned short *ddp,
 }
 
 /*
- * The number of seconds between Jan 1, 1970 and Jan 1, 1980. In that
+ * The number of days between Jan 1, 1970 and Jan 1, 1980. In that
  * interval there were 8 regular years and 2 leap years.
  */
-#define	SECONDSTO1980	(((8 * 365) + (2 * 366)) * (24 * 60 * 60))
+/* #define	DAYSTO1980	((8 * 365) + (2 * 366)) */
+#define DAYSTO1980   ((uint32_t) 3652)
 
-static u_short lastdosdate;
-static u_long lastseconds;
+static uint16_t lastdosdate;
+static uint32_t lastseconds;
 
 /*
  * Convert from dos' idea of time to unix'. This will probably only be
@@ -127,11 +132,11 @@ static u_long lastseconds;
 unsigned int
 msdos_date_dos2unix(unsigned int dd, unsigned int dt)
 {
-	u_long seconds;
-	u_long m, month;
-	u_long y, year;
-	u_long days;
-	u_short *months;
+	uint32_t seconds;
+	uint32_t m, month;
+	uint32_t y, year;
+	uint32_t days;
+	uint16_t *months;
 
 	seconds = ((dt & MSDOS_DT_2SECONDS_MASK) >> MSDOS_DT_2SECONDS_SHIFT)
 	    + ((dt & MSDOS_DT_MINUTES_MASK) >> MSDOS_DT_MINUTES_SHIFT) * 60
@@ -158,12 +163,12 @@ msdos_date_dos2unix(unsigned int dd, unsigned int dt)
 		for (m = 0; m < month - 1; m++)
 			days += months[m];
 		days += ((dd & MSDOS_DD_DAY_MASK) >> MSDOS_DD_DAY_SHIFT) - 1;
-		lastseconds = (days * 24 * 60 * 60) + SECONDSTO1980;
+		lastseconds = (days + DAYSTO1980) * SECONDSPERDAY;
 	}
 	return seconds + lastseconds;
 }
 
-static const u_char msdos_map[] = {
+static const uint8_t msdos_map[] = {
 /* 00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 /* 08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 /* 10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -205,7 +210,7 @@ int
 msdos_filename_unix2dos(char *un, int unlen, char *dn)
 {
 	int i;
-	u_char c;
+	uint8_t c;
 
 	/*
 	 * Fill the dos filename string with blanks. These are DOS's pad
