@@ -269,8 +269,8 @@ if [[ "${program_prefix}" = "NONE" ]] ; then
   fi
 fi
 
-RTEMS_ROOT=$srcdir
-PROJECT_ROOT=`pwd`
+RTEMS_ROOT=`cd $srcdir; pwd`
+PROJECT_ROOT=`pwd;`
 
 # If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
 if test "$RTEMS_USE_MACROS" = "yes"; then
