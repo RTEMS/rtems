@@ -1,5 +1,10 @@
 2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/old-exceptions/cpu.h, rtems/score/powerpc.h:
+	Remove PPC_ABI_GCC27.
+
+2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/asm.h, rtems/score/powerpc.h: Remove XCOFF support.
 
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>

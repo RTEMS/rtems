@@ -315,12 +315,6 @@ extern "C" {
  */
 #define PPC_ABI_POWEROPEN	0
 /*
- *  GCC 2.7.0 munched version of EABI, with
- *  PowerOpen calling convention and stack frames,
- *  but EABI style indirect function calls.
- */
-#define PPC_ABI_GCC27		1
-/*
  *  SVR4 ABI
  */
 #define PPC_ABI_SVR4		2
@@ -338,8 +332,6 @@ extern "C" {
 #endif
 
 #if (PPC_ABI == PPC_ABI_POWEROPEN)
-#define PPC_STACK_ALIGNMENT	8
-#elif (PPC_ABI == PPC_ABI_GCC27)
 #define PPC_STACK_ALIGNMENT	8
 #elif (PPC_ABI == PPC_ABI_SVR4)
 #define PPC_STACK_ALIGNMENT	16

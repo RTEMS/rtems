@@ -372,7 +372,7 @@ typedef struct {
 
 typedef struct CPU_Interrupt_frame {
     uint32_t   stacklink;	/* Ensure this is a real frame (also reg1 save) */
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
     uint32_t   dummy[13];	/* Used by callees: PowerOpen ABI */
 #else
     uint32_t   dummy[1];	/* Used by callees: SVR4/EABI */
@@ -574,9 +574,7 @@ SCORE_EXTERN struct {
   uint32_t   Dispatch_r2;
 #else
   uint32_t   Default_r2;
-#if (PPC_ABI != PPC_ABI_GCC27)
   uint32_t   Default_r13;
-#endif
 #endif
   volatile boolean *Switch_necessary;
   boolean *Signal;
