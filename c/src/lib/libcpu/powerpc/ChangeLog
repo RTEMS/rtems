@@ -1,3 +1,10 @@
+2004-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* powerpc/shared/include/cpuIdent.c,
+	powerpc/shared/include/cpuIdent.h: Add 603le.
+	(Submitted by Thomas.Doerfler <Thomas.Doerfler@imd-systems.de>
+	as part of the patch attached to PR 703).
+
 2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
 
 	* configure.ac, mpc6xx/exceptions/raw_exception.c,

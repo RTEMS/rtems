@@ -37,6 +37,7 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_750:		return "MPC750";
     case PPC_7400:		return "MPC7400";
     case PPC_7455:              return "MPC7455";
+    case PPC_603le:		return "MPC603le";
     case PPC_604e:		return "MPC604e";
     case PPC_604r:		return "MPC604r";
     case PPC_620:		return "MPC620";
@@ -59,11 +60,12 @@ ppc_cpu_id_t get_ppc_cpu_type()
     case PPC_5XX:
     case PPC_603:
     case PPC_603ev:
+    case PPC_603le:
     case PPC_604:
     case PPC_604r:
     case PPC_750:
     case PPC_7400:
-  case PPC_7455:
+    case PPC_7455:
     case PPC_604e:
     case PPC_620:
     case PPC_860:
