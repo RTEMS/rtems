@@ -19,6 +19,15 @@ extern "C" {
 #endif
 
 /*
+ *  Define MC68681_STATIC to nothing while debugging so the entry points
+ *  will show up in the symbol table.
+ */
+
+#define MC68681_STATIC
+
+/* #define MC68681_STATIC static */
+
+/*
  * mc68681 register offsets Read/Write Addresses
  */
 
@@ -234,49 +243,49 @@ typedef struct _mc68681_context
 /*
  * Driver functions
  */
-static boolean mc68681_probe(int minor);
+MC68681_STATIC boolean mc68681_probe(int minor);
 
-static int mc68681_set_attributes( 
+MC68681_STATIC int mc68681_set_attributes( 
   int minor,
   const struct termios *t
 );
 
-static void mc68681_init(int minor);
+MC68681_STATIC void mc68681_init(int minor);
 
-static int mc68681_open(
+MC68681_STATIC int mc68681_open(
   int major,
   int minor,
   void  * arg
 );
 
-static int mc68681_close(
+MC68681_STATIC int mc68681_close(
   int major,
   int minor,
   void  * arg
 );
 
-static void mc68681_write_polled(
+MC68681_STATIC void mc68681_write_polled(
   int   minor, 
   char  cChar
 );
 
-static void mc68681_initialize_interrupts(int minor);
+MC68681_STATIC void mc68681_initialize_interrupts(int minor);
 
-static int mc68681_flush(int major, int minor, void *arg);
+MC68681_STATIC int mc68681_flush(int major, int minor, void *arg);
 
-static int mc68681_write_support_int(
+MC68681_STATIC int mc68681_write_support_int(
   int   minor,
   const char *buf,
   int   len
 );
 
-static int mc68681_write_support_polled(
+MC68681_STATIC int mc68681_write_support_polled(
   int   minor,
   const char *buf,
   int   len
   );
 
-static int mc68681_inbyte_nonblocking_polled(
+MC68681_STATIC int mc68681_inbyte_nonblocking_polled(
   int minor
 );
 
