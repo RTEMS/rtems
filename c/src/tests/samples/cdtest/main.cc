@@ -21,7 +21,9 @@
 
 #include <rtems.h>
 #include <stdio.h>
+#ifdef RTEMS_TEST_IO_STREAM
 #include <iostream.h>
+#endif
 
 extern "C" {
 extern rtems_task main_task(rtems_task_argument);
@@ -108,7 +110,11 @@ cdtest(void)
     A bar, blech, blah;
     B bleak;
 
+#ifdef RTEMS_TEST_IO_STREAM
     cout << "Testing a C++ I/O stream" << endl;
+#else
+    printf("IO Stream not tested\n");
+#endif
 
     bar = blech;
 }

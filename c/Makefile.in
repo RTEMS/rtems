@@ -31,11 +31,16 @@ SUB_DIRS=build-tools src
 LIBKA9Q_yes_V = include/ka9q
 LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
 
+# We only make the rtems++ install point if it is enabled.
+LIBRTEMSCPLUSPLUS_yes_V = include/rtems++
+LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
+
 # directories to be created in install point
 CREATE_DIRS = 	include include/sys \
     include/rtems include/rtems/score include/rtems/rtems include/rtems/posix \
                 include/netinet include/libc include/libc/sys \
                 $(LIBKA9Q) \
+                $(LIBRTEMSCPLUSPLUS) \
 		lib bin samples \
                 tests tests/screens tests/screens/sptests \
                 tests/screens/psxtests tests/screens/mptests \
@@ -93,4 +98,3 @@ tests:
 	cd src/tests; $(MAKE) all
 
 env:    $(SRCS) dirs
-

@@ -10,4 +10,8 @@ VPATH=@srcdir@
 include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/directory.cfg
 
-SUB_DIRS=cpuuse rtmonuse malloctest stackchk
+# We only build the tests for the rtems++ library if HAS_CPLUSPLUS was defined
+LIBRTEMSCPLUSPLUS_yes_V = rtems++
+LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
+
+SUB_DIRS=cpuuse rtmonuse malloctest stackchk $(LIBRTEMSCPLUSPLUS)

@@ -18,6 +18,10 @@ KA9Q_H_PIECES= arp asy ax25 ax25mail bootp cmdparse commands config \
   sockaddr socket tcp telnet tftp timer tipmail trace udp usock
 KA9Q_H_FILES=$(KA9Q_H_PIECES:%=$(srcdir)/ka9q/%.h)
 
+RTEMSCPLUSPLUS_H_PIECES= rtemsEvent rtemsInterrupt rtemsMessageQueue \
+  rtemsSemaphore rtemsStatusCode rtemsTask rtemsTaskMode rtemsTimer
+RTEMSCPLUSPLUS_H_FILES=$(RTEMSCPLUSPLUS_H_PIECES:%=$(srcdir)/rtems++/%.h)
+
 SYS_H_FILES=
 
 SRCS=$(H_FILES) $(SYS_H_FILES)
@@ -33,4 +37,7 @@ all:	$(SRCS)
 	$(INSTALL) -m 444 $(SYS_H_FILES) ${PROJECT_RELEASE}/include/sys
 ifeq ($(HAS_KA9Q),yes)
 	$(INSTALL) -m 444 $(KA9Q_H_FILES) ${PROJECT_RELEASE}/include/ka9q
+endif
+ifeq ($(HAS_CPLUSPLUS),yes)
+	$(INSTALL) -m 444 $(RTEMSCPLUSPLUS_H_FILES) ${PROJECT_RELEASE}/include/rtems++
 endif

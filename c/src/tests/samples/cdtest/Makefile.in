@@ -41,7 +41,7 @@ include $(PROJECT_ROOT)/make/leaf.cfg
 #
 
 DEFINES  +=
-CPPFLAGS +=
+CPPFLAGS += -I$(LIBCC_INCLUDE)
 CFLAGS   +=
 
 LD_PATHS  +=

@@ -10,8 +10,12 @@ VPATH=@srcdir@
 include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/directory.cfg
 
+# We only build the rtems++ library if HAS_CPLUSPLUS was defined
+LIBRTEMSCPLUSPLUS_yes_V = librtems++
+LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
+
 # General Hardware API library 
 LIBHWAPI=$(wildcard libhwapi)
 
 SUB_DIRS=start include libmisc libc libcpu libbsp \
-         $(LIBHWAPI) wrapup
+         $(LIBKA9Q) $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup

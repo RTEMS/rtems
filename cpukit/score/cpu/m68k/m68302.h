@@ -68,8 +68,8 @@
 #define RBIT_SCR_SAM		0x00001000
 #define RBIT_SCR_HWDEN		0x00000800
 #define RBIT_SCR_HWDCN2		0x00000400
-#define RBIT_SCR_HWDCN1		0x00000200
-#define RBIT_SCR_HWDCN0		0x00000100
+#define RBIT_SCR_HWDCN1		0x00000200  /* 512 clocks */
+#define RBIT_SCR_HWDCN0		0x00000100  /* 128 clocks */
 
 #define RBIT_SCR_LPREC		0x00000080
 #define RBIT_SCR_LPP16		0x00000040
@@ -539,6 +539,7 @@ typedef struct {
     /* offset +82c */
     rtems_unsigned16	res6;
     rtems_unsigned16	res7;
+
     rtems_unsigned16	br0;		/* Base Register   (CS0) */
     rtems_unsigned16	or0;		/* Option Register (CS0) */
     rtems_unsigned16	br1;		/* Base Register   (CS1) */
@@ -597,6 +598,58 @@ typedef struct {
     m302_internalReg_t	reg;		/* +800 68302 Internal Registers */
 } m302_dualPortRAM_t;
 
+/* some useful defines the some of the registers above */
+  
+
+/* ----
+   MC68302 Chip Select Registers
+      p3-46 2nd Edition
+
+ */
+#define BR_ENABLED     1
+#define BR_DISABLED    0
+#define BR_FC_NULL     0
+#define BR_READ_ONLY   0
+#define BR_READ_WRITE  2
+#define OR_DTACK_0     0x0000
+#define OR_DTACK_1     0x2000
+#define OR_DTACK_2     0x4000
+#define OR_DTACK_3     0x6000
+#define OR_DTACK_4     0x8000
+#define OR_DTACK_5     0xA000
+#define OR_DTACK_6     0xC000
+#define OR_DTACK_EXT   0xE000
+#define OR_SIZE_64K    0x1FE0
+#define OR_SIZE_128K   0x1FC0
+#define OR_SIZE_256K   0x1F80
+#define OR_SIZE_512K   0x1F00
+#define OR_SIZE_1M     0x1E00
+#define OR_SIZE_2M     0x1C00
+#define OR_MASK_RW     0x0000
+#define OR_NO_MASK_RW  0x0002
+#define OR_MASK_FC     0x0000
+#define OR_NO_MASK_FC  0x0001
+
+#define MAKE_BR(base_address, enable, rw, fc) \
+    ((base_address >> 11) | fc | rw | enable)
+
+#define MAKE_OR(bsize, DtAck, RW_Mask, FC_Mask) \
+    (DtAck | ((~(bsize - 1) & 0x00FFFFFF) >> 11) | FC_Mask | RW_Mask)
+
+#define __REG_CAT(r, n) r ## n
+#define WRITE_BR(csel, base_address, enable, rw, fc) \
+          __REG_CAT(m302.reg.br, csel) = MAKE_BR(base_address, enable, rw, fc)
+#define WRITE_OR(csel, bsize, DtAck, RW_Mask, FC_Mask) \
+          __REG_CAT(m302.reg.or, csel) = MAKE_OR(bsize, DtAck, RW_Mask, FC_Mask)
+
+/* ----
+   MC68302 Watchdog Timer Enable Bit
+
+ */
+#define WATCHDOG_ENABLE    (1)
+#define WATCHDOG_TRIGGER() (m302.reg.wrr = 0x10 | WATCHDOG_ENABLE, m302.reg.wcn = 0)
+#define WATCHDOG_TOGGLE()  (m302.reg.wcn = WATCHDOG_TIMEOUT_PERIOD)
+#define DISABLE_WATCHDOG() (m302.reg.wrr = 0)
 
 /*
  * Declare the variable that's used to reference the variables in

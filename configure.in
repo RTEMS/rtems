@@ -124,6 +124,14 @@ c/src/lib/libbsp/m68k/mvme162/startup/Makefile \
 c/src/lib/libbsp/m68k/mvme162/timer/Makefile \
 c/src/lib/libbsp/m68k/mvme162/tools/Makefile \
 c/src/lib/libbsp/m68k/mvme162/wrapup/Makefile \
+c/src/lib/libbsp/m68k/ods68302/Makefile \
+c/src/lib/libbsp/m68k/ods68302/clock/Makefile \
+c/src/lib/libbsp/m68k/ods68302/console/Makefile \
+c/src/lib/libbsp/m68k/ods68302/include/Makefile \
+c/src/lib/libbsp/m68k/ods68302/start302/Makefile \
+c/src/lib/libbsp/m68k/ods68302/startup/Makefile \
+c/src/lib/libbsp/m68k/ods68302/timer/Makefile \
+c/src/lib/libbsp/m68k/ods68302/wrapup/Makefile \
 c/src/lib/libcpu/m68k/Makefile \
 c/src/lib/libcpu/m68k/m68040/Makefile \
 c/src/lib/libcpu/m68k/m68040/fpsp/Makefile \
@@ -229,6 +237,8 @@ c/src/lib/libbsp/unix/posix/wrapup/Makefile"
 
 ka9q_mk="c/src/lib/libka9q/Makefile"
 
+rtemscpp_mk="c/src/lib/librtems++/Makefile"
+
 hwapi_mk="\
 c/src/lib/libhwapi/Makefile \
 c/src/lib/libhwapi/eeprom/Makefile \
@@ -276,6 +286,7 @@ c/src/tests/libtests/cpuuse/Makefile \
 c/src/tests/libtests/malloctest/Makefile \
 c/src/tests/libtests/rtmonuse/Makefile \
 c/src/tests/libtests/stackchk/Makefile \
+c/src/tests/libtests/rtems++/Makefile \
 c/src/tests/mptests/Makefile \
 c/src/tests/mptests/mp01/Makefile \
 c/src/tests/mptests/mp01/node1/Makefile \
@@ -422,6 +433,14 @@ AC_CANONICAL_SYSTEM
 AC_ARG_WITH(cross-host,[  --with-cross-host=HOST      host (cygnus)], \
 host=$withval)
 
+AC_ARG_ENABLE(gmake-print-directory, \
+[  --enable-gmake-print-directory    enable GNU Make's print directory], \
+[case "${enableval}" in
+  yes) RTEMS_USE_OWN_PDIR=yes ;;
+  no) RTEMS_USE_OWN_PDIR=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for gmake-print-directory option) ;;
+esac],[RTEMS_USE_OWN_PDIR=yes])
+
 AC_ARG_ENABLE(posix, \
 [  --disable-posix 	     	    disable posix interface], \
 [case "${enableval}" in 
@@ -445,6 +464,13 @@ AC_ARG_ENABLE(rtems-inlines, \
   no) RTEMS_USE_MACROS=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
 esac],[RTEMS_USE_MACROS=no])
+
++ AC_ARG_ENABLE(cpp, \
++ [  --enable-cpp                           enable C++ support, and build the rtems++ library], \
+  yes) RTEMS_HAS_CPLUSPLUS=yes ;;
+  no) RTEMS_HAS_CPLUSPLUS=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-cpp option) ;;
+esac],[RTEMS_HAS_CPLUSPLUS=no])
 
 AC_ARG_ENABLE(gcc28, \
 [  --enable-gcc28		    enable use of gcc 2.8.x features], \
@@ -496,7 +522,7 @@ case "${target}" in
 	;;
   m68k-rtems*)
 	rtems_bsp="dmv152 efi332 efi68k gen68302 gen68360 gen68360_040 idp \
-                   mvme136 mvme147 mvme147s mvme162 mvme162lx"
+                   mvme136 mvme147 mvme147s mvme162 mvme162lx ods68302"
        	makefiles=$m68k_mk
 	;;
   mips64orion-rtems*)
@@ -561,7 +587,7 @@ RTEMS_ROOT=`cd $srcdir/c; pwd`
 PROJECT_ROOT=`pwd;`
 
 # For now always generate the KA9Q TCP/IP Makefiles
-makefiles="$makefiles $ka9q_mk"
+makefiles="$makefiles $ka9q_mk $rtemscpp_mk"
 
 AC_ARG_ENABLE(tests, \
 [  --disable-tests 	     	    disable tests], \
@@ -579,9 +605,11 @@ AC_SUBST(RTEMS_BSP)
 AC_SUBST(RTEMS_HOST)
 AC_SUBST(RTEMS_LIBC_DIR)
 AC_SUBST(RTEMS_ROOT)
+AC_SUBST(RTEMS_USE_OWN_PDIR)
 AC_SUBST(RTEMS_HAS_POSIX_API)
 AC_SUBST(RTEMS_HAS_KA9Q)
 AC_SUBST(RTEMS_USE_MACROS)
+AC_SUBST(RTEMS_HAS_CPLUSPLUS)
 AC_SUBST(RTEMS_USE_GCC272)
 AC_SUBST(RTEMS_LIBC_DIR)
 AC_SUBST(PROJECT_ROOT)

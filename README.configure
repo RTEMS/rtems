@@ -20,6 +20,7 @@ RTEMS-specific option are supported:
 	--disable-posix
 	--disable-tests
 	--disable-ka9q
+        --enable-cpp
         --enable-gcc28
         --enable-libcdir=<DIRECTORY>
 	--enable-rtemsbsp="bsp1 bsp2 ..."
@@ -29,6 +30,10 @@ it. It can be disabled with the --disable-posix option.
 
 By default, the RTEMS port of the KA9Q TCP/IP stack is build for targets
 that support it.  It can be disabled with the --disable-ka9q option.
+
+By default, the RTEMS support of C++ is disabled.  It can be enabled
+with the --enable-cpp option. If the rtems++ C++ library is installed
+it will also be build.
 
 By default, the RTEMS test suites are configured.  The --disable-tests
 will not configure the RTEMS test suite. This is used only to speed-up
