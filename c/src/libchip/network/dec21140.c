@@ -428,7 +428,7 @@ dec21140Enet_interrupt_handler ( struct dec21140_softc *sc )
    volatile uint32_t      *tbase;
    uint32_t               status;
 
-   tbase = (uint32_t   *)(sc->base);
+   tbase = (uint32_t*)(sc->base);
 
    /*
     * Read status
@@ -1190,7 +1190,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 #if defined(__PPC__)
    pci_write_config_word(pbus, pdev, pfun,
                          PCI_COMMAND,
-                         (uint16_t  ) ( PCI_COMMAND_MEMORY |
+                         (uint16_t) ( PCI_COMMAND_MEMORY |
                                         PCI_COMMAND_MASTER | 
                                         PCI_COMMAND_INVALIDATE | 
                                         PCI_COMMAND_WAIT |

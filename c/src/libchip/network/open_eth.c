@@ -300,7 +300,7 @@ open_eth_initialize_hardware (struct open_eth_softc *sc)
           MCLGET (m, M_WAIT);
 	  m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
 	  sc->rxdesc[i].m = m;
-	  sc->regs->xd[i + sc->txbufs].addr = mtod (m, uint32_t   *);
+	  sc->regs->xd[i + sc->txbufs].addr = mtod (m, uint32_t*);
 	  sc->regs->xd[i + sc->txbufs].len_status =
 	      OETH_RX_BD_EMPTY | OETH_RX_BD_IRQ;
 #ifdef OPEN_ETH_DEBUG
@@ -418,7 +418,7 @@ open_eth_rxDaemon (void *arg)
 		      m->m_pkthdr.rcvif = ifp;
 		      dp->rxdesc[dp->rx_ptr].m = m;
 		      dp->regs->xd[dp->rx_ptr + dp->txbufs].addr =
-			  (uint32_t   *) mtod (m, void *);
+			  (uint32_t*) mtod (m, void *);
 		      dp->rxPackets++;
 		  }
 
@@ -458,7 +458,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 
     len = 0;
     temp = (unsigned char *) dp->txdesc[dp->tx_ptr].buf;
-    dp->regs->xd[dp->tx_ptr].addr = (uint32_t   *) temp;
+    dp->regs->xd[dp->tx_ptr].addr = (uint32_t*) temp;
 
 #ifdef OPEN_ETH_DEBUG
     printf("TXD: 0x%08x\n", (int) m->m_data);

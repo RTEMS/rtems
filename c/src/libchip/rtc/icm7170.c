@@ -52,7 +52,7 @@ void icm7170_initialize(
    *  Initialize the RTC with the proper clock frequency
    */
 
-  clock = (uint32_t  ) RTC_Table[ minor ].pDeviceParams;
+  clock = (uint32_t) RTC_Table[ minor ].pDeviceParams;
   (*setReg)( icm7170, ICM7170_CONTROL, 0x0c | clock );
 }
 
@@ -127,7 +127,7 @@ int icm7170_set_time(
   icm7170 = RTC_Table[ minor ].ulCtrlPort1;
   getReg = RTC_Table[ minor ].getRegister;
   setReg = RTC_Table[ minor ].setRegister;
-  clock = (uint32_t  ) RTC_Table[ minor ].pDeviceParams;
+  clock = (uint32_t) RTC_Table[ minor ].pDeviceParams;
 
   year = time->year;
 

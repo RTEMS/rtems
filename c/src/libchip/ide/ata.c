@@ -217,10 +217,10 @@ ata_io_data_request(dev_t device, blkdev_request *req)
      */
     if (ATA_DEV_INFO(ctrl_minor, dev).lba_avaible)
     {
-        areq->regs.regs[IDE_REGISTER_LBA0] = (uint8_t  )req->start;
-        areq->regs.regs[IDE_REGISTER_LBA1] = (uint8_t  )(req->start >> 8);
-        areq->regs.regs[IDE_REGISTER_LBA2] = (uint8_t  )(req->start >> 16);
-        areq->regs.regs[IDE_REGISTER_LBA3] |= (uint8_t  ) (req->start >> 24);
+        areq->regs.regs[IDE_REGISTER_LBA0] = (uint8_t)req->start;
+        areq->regs.regs[IDE_REGISTER_LBA1] = (uint8_t)(req->start >> 8);
+        areq->regs.regs[IDE_REGISTER_LBA2] = (uint8_t)(req->start >> 16);
+        areq->regs.regs[IDE_REGISTER_LBA3] |= (uint8_t) (req->start >> 24);
         areq->regs.regs[IDE_REGISTER_LBA3] |= IDE_REGISTER_LBA3_L;
     }
     else
@@ -237,8 +237,8 @@ ata_io_data_request(dev_t device, blkdev_request *req)
 
         /* now count = number of cylinders */
         count %= ATA_DEV_INFO(ctrl_minor, dev).cylinders;
-        areq->regs.regs[IDE_REGISTER_CYLINDER_LOW] = (uint8_t  )count;
-        areq->regs.regs[IDE_REGISTER_CYLINDER_HIGH] = (uint8_t  )(count >> 8);
+        areq->regs.regs[IDE_REGISTER_CYLINDER_LOW] = (uint8_t)count;
+        areq->regs.regs[IDE_REGISTER_CYLINDER_HIGH] = (uint8_t)(count >> 8);
         areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &= 
                                                 ~IDE_REGISTER_DEVICE_HEAD_L;
     }
@@ -312,7 +312,7 @@ ata_non_data_request(dev_t device, int cmd, void *argp)
                                                 ATA_COMMAND_SET_MULTIPLE_MODE;
             areq->regs.to_write |= 
                                ATA_REGISTERS_VALUE(IDE_REGISTER_SECTOR_COUNT);
-            areq->regs.regs[IDE_REGISTER_SECTOR_COUNT] = *(uint8_t   *)argp;
+            areq->regs.regs[IDE_REGISTER_SECTOR_COUNT] = *(uint8_t*)argp;
             break;
         
         default:
@@ -356,7 +356,7 @@ ata_non_data_request(dev_t device, int cmd, void *argp)
         { 
             case ATAIO_SET_MULTIPLE_MODE:
                 ATA_DEV_INFO(ctrl_minor, dev).current_multiple = 
-                                                           *(uint8_t   *)argp;
+                                                           *(uint8_t*)argp;
                 break;
         
             default:
@@ -962,7 +962,7 @@ ata_initialize(rtems_device_major_number major,
         return status;
     }    
     
-    buffer = (uint16_t   *)malloc(ATA_SECTOR_SIZE);
+    buffer = (uint16_t*)malloc(ATA_SECTOR_SIZE);
     if (buffer == NULL)
     {
         rtems_task_delete(ata_task_id);
@@ -1147,10 +1147,10 @@ ata_initialize(rtems_device_major_number major,
             ATA_DEV_INFO(ctrl_minor, dev).lba_avaible = 
                 (CF_LE_W(buffer[ATA_IDENT_WORD_CAPABILITIES]) >> 9) & 0x1;
             ATA_DEV_INFO(ctrl_minor, dev).max_multiple = 
-                (uint8_t  ) (CF_LE_W(buffer[ATA_IDENT_WORD_RW_MULT]));
+                (uint8_t) (CF_LE_W(buffer[ATA_IDENT_WORD_RW_MULT]));
             ATA_DEV_INFO(ctrl_minor, dev).current_multiple = 
                 (CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS]) & 0x100) ? 
-                (uint8_t  )(CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS])) :
+                (uint8_t)(CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS])) :
                  0;
 
             if ((CF_LE_W(buffer[ATA_IDENT_WORD_FIELD_VALIDITY]) & 

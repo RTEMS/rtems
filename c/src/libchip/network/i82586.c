@@ -197,8 +197,8 @@ static void i82586_start_tx(struct ie_softc *sc);
 
 static int ie_readframe (struct ie_softc *, int);
 static struct mbuf *ieget (struct ie_softc *, int, int);
-static int i82586_get_rbd_list (struct ie_softc *, u_int16_t *,
-                                          u_int16_t *, int *);
+static int i82586_get_rbd_list (struct ie_softc *, u_int16_t*,
+                                          u_int16_t*, int *);
 static void i82586_release_rbd_list (struct ie_softc *,
                                      u_int16_t, u_int16_t);
 static int i82586_drop_frames (struct ie_softc *);

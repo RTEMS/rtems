@@ -175,7 +175,7 @@ struct fxp_softc {
      if ((sc)->pci_regs_are_io)                                         \
        outport_byte((sc)->pci_regs_base+(reg),val);                     \
      else                                                               \
-       *((u_int8_t *)((sc)->pci_regs_base)+(reg)) = val;                \
+       *((u_int8_t*)((sc)->pci_regs_base)+(reg)) = val;                \
   }while (0)
 
 #define	CSR_WRITE_2(sc, reg, val)					\
@@ -183,7 +183,7 @@ struct fxp_softc {
      if ((sc)->pci_regs_are_io)                                         \
        outport_word((sc)->pci_regs_base+(reg),val);                     \
      else                                                               \
-       *((u_int16_t *)((u_int8_t *)((sc)->pci_regs_base)+(reg))) = val; \
+       *((u_int16_t*)((u_int8_t*)((sc)->pci_regs_base)+(reg))) = val; \
   }while (0)
 
 #define	CSR_WRITE_4(sc, reg, val)					\
@@ -191,7 +191,7 @@ struct fxp_softc {
      if ((sc)->pci_regs_are_io)                                         \
        outport_long((sc)->pci_regs_base+(reg),val);                     \
      else                                                               \
-       *((u_int32_t *)((u_int8_t *)((sc)->pci_regs_base)+(reg))) = val; \
+       *((u_int32_t*)((u_int8_t*)((sc)->pci_regs_base)+(reg))) = val; \
   }while (0)
 
 #endif 

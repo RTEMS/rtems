@@ -1,5 +1,16 @@
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libchip/ide/ata.c, libchip/network/dec21140.c,
+	libchip/network/elnk.c, libchip/network/i82586.c,
+	libchip/network/if_fxp.c, libchip/network/if_fxpvar.h,
+	libchip/network/open_eth.c, libchip/network/sonic.c,
+	libchip/rtc/icm7170.c, libchip/serial/ns16550.c,
+	libchip/serial/z85c30.c, libchip/shmdr/cnvpkt.c,
+	libchip/shmdr/init.c, libchip/shmdr/intr.c,
+	libchip/shmdr/shm_driver.h: Cosmetics.
+
+2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* optman/rtems/no-dpmem.c, optman/rtems/no-mp.c,
 	optman/rtems/no-msg.c, optman/rtems/no-part.c,
 	optman/rtems/no-region.c, optman/rtems/no-rtmon.c,

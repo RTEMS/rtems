@@ -273,8 +273,8 @@ fxp_lwcopy(volatile u_int32_t *src, volatile u_int32_t *dst)
 #ifdef __i386__
 	*dst = *src;
 #else
-	volatile u_int16_t *a = (volatile u_int16_t *)src;
-	volatile u_int16_t *b = (volatile u_int16_t *)dst;
+	volatile u_int16_t *a = (volatile u_int16_t*)src;
+	volatile u_int16_t *b = (volatile u_int16_t*)dst;
 
 	b[0] = a[0];
 	b[1] = a[1];
@@ -290,7 +290,7 @@ static __inline u_int8_t fxp_csr_read_1(struct fxp_softc *sc,int  reg) {
     inport_byte(sc->pci_regs_base + reg,val);
   }
   else {
-    val = *(u_int8_t *)(sc->pci_regs_base+reg);
+    val = *(u_int8_t*)(sc->pci_regs_base+reg);
   }
   return val;
 }
@@ -300,7 +300,7 @@ static __inline u_int32_t fxp_csr_read_2(struct fxp_softc *sc,int  reg) {
     inport_word(sc->pci_regs_base + reg,val);
   }
   else {
-    val = *(u_int16_t *)(sc->pci_regs_base+reg);
+    val = *(u_int16_t*)(sc->pci_regs_base+reg);
   }
   return val;
 }
@@ -310,7 +310,7 @@ static __inline u_int32_t fxp_csr_read_4(struct fxp_softc *sc,int  reg) {
     inport_long(sc->pci_regs_base + reg,val);
   }
   else {
-    val = *(u_int32_t *)(sc->pci_regs_base+reg);
+    val = *(u_int32_t*)(sc->pci_regs_base+reg);
   }
   return val;
 }
@@ -753,15 +753,15 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * Read MAC address.
 	 */
-	fxp_read_eeprom(sc, (u_int16_t *)sc->arpcom.ac_enaddr, 0, 3);
+	fxp_read_eeprom(sc, (u_int16_t*)sc->arpcom.ac_enaddr, 0, 3);
 	if (fxp_is_verbose) {
 	    device_printf(dev, "Ethernet address %x:%x:%x:%x:%x:%x %s \n",
-	        ((u_int8_t *)sc->arpcom.ac_enaddr)[0],
-	        ((u_int8_t *)sc->arpcom.ac_enaddr)[1],
-    	    ((u_int8_t *)sc->arpcom.ac_enaddr)[2],
-    	    ((u_int8_t *)sc->arpcom.ac_enaddr)[3],
-    	    ((u_int8_t *)sc->arpcom.ac_enaddr)[4],
-    	    ((u_int8_t *)sc->arpcom.ac_enaddr)[5],
+	        ((u_int8_t*)sc->arpcom.ac_enaddr)[0],
+	        ((u_int8_t*)sc->arpcom.ac_enaddr)[1],
+    	    ((u_int8_t*)sc->arpcom.ac_enaddr)[2],
+    	    ((u_int8_t*)sc->arpcom.ac_enaddr)[3],
+    	    ((u_int8_t*)sc->arpcom.ac_enaddr)[4],
+    	    ((u_int8_t*)sc->arpcom.ac_enaddr)[5],
     	    sc->flags & FXP_FLAG_SERIAL_MEDIA ? ", 10Mbps" : "");
 		device_printf(dev, "PCI IDs: 0x%x 0x%x 0x%x 0x%x 0x%x\n",
 		    pci_get_vendor(sc), pci_get_device(sc),
@@ -1724,7 +1724,7 @@ rtems_task_wake_after(100);
 	 * zero and must be one bits in this structure and this is the easiest
 	 * way to initialize them all to proper values.
 	 */
-	memcpy(	(void *)(u_int32_t *)(volatile void *)&cbp->cb_status,
+	memcpy(	(void *)(u_int32_t*)(volatile void *)&cbp->cb_status,
 		fxp_cb_config_template,
 		sizeof(fxp_cb_config_template));
 
@@ -1830,7 +1830,7 @@ rtems_task_wake_after(100);
 	cb_ias->cb_status = 0;
 	cb_ias->cb_command = FXP_CB_COMMAND_IAS | FXP_CB_COMMAND_EL;
 	cb_ias->link_addr = -1;
-	memcpy((void *)(u_int32_t *)(volatile void *)cb_ias->macaddr,
+	memcpy((void *)(u_int32_t*)(volatile void *)cb_ias->macaddr,
 	    sc->arpcom.ac_enaddr,
 	    sizeof(sc->arpcom.ac_enaddr));
 
@@ -2024,8 +2024,8 @@ fxp_add_rfabuf(struct fxp_softc *sc, struct mbuf *oldm)
 	rfa->actual_size = 0;
 
 	v = -1;
-	fxp_lwcopy(&v, (volatile u_int32_t *) rfa->link_addr);
-	fxp_lwcopy(&v, (volatile u_int32_t *) rfa->rbd_addr);
+	fxp_lwcopy(&v, (volatile u_int32_t*) rfa->link_addr);
+	fxp_lwcopy(&v, (volatile u_int32_t*) rfa->rbd_addr);
 
 	/*
 	 * If there are other buffers already on the list, attach this
@@ -2036,7 +2036,7 @@ fxp_add_rfabuf(struct fxp_softc *sc, struct mbuf *oldm)
 		    RFA_ALIGNMENT_FUDGE);
 		sc->rfa_tailm->m_next = m;
 		v = vtophys(rfa);
-		fxp_lwcopy(&v, (volatile u_int32_t *) p_rfa->link_addr);
+		fxp_lwcopy(&v, (volatile u_int32_t*) p_rfa->link_addr);
 		p_rfa->rfa_control = 0;
 	} else {
 		sc->rfa_headm = m;

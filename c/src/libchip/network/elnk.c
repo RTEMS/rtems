@@ -1380,7 +1380,7 @@ xl_read_eeprom(sc, dest, off, cnt, swap)
       if (err)
          break;
       word = CSR_READ_2(sc, XL_W0_EE_DATA);
-      ptr = (u_int16_t *)(dest + (i * 2));
+      ptr = (u_int16_t*)(dest + (i * 2));
       if (swap)
          *ptr = ntohs(word);
       else
@@ -2132,7 +2132,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
        */
       for(i=0 ; i<sc->numRxbuffers; i++)
       {
-         if( ((uint32_t  )&sc->rx_ring[i] & 0x7) )
+         if( ((uint32_t)&sc->rx_ring[i] & 0x7) )
          {
             rtems_panic ("etherlink : unit elnk%d rx ring entry %d not aligned to 8 bytes\n", sc->xl_unit, i );
          }
@@ -2151,8 +2151,8 @@ elnk_initialize_hardware (struct elnk_softc *sc)
          sc->rx_ring[i].mbuf = m;
 
          st_le32( &sc->rx_ring[i].status, 0);
-         st_le32( &sc->rx_ring[i].next, (uint32_t  )phys_to_bus( nxtmd ));
-         st_le32( &sc->rx_ring[i].addr, (uint32_t  )phys_to_bus( mtod(m, void *) ));
+         st_le32( &sc->rx_ring[i].next, (uint32_t)phys_to_bus( nxtmd ));
+         st_le32( &sc->rx_ring[i].addr, (uint32_t)phys_to_bus( mtod(m, void *) ));
          st_le32( &sc->rx_ring[i].length, XL_LAST_FRAG | XL_PACKET_SIZE );
       }
       sc->curr_rx_md = &sc->rx_ring[0];
@@ -2181,7 +2181,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
 
       for(i=0 ; i<sc->numTxbuffers; i++)
       {
-         if( ((uint32_t  )&sc->tx_ring[i] & 0x7) )
+         if( ((uint32_t)&sc->tx_ring[i] & 0x7) )
          {
             rtems_panic ("etherlink : unit elnk%d tx ring entry %d not aligned to 8 bytes\n", sc->xl_unit, i );
          }
@@ -2327,7 +2327,7 @@ elnk_rxDaemon (void *arg)
                         m->m_pkthdr.rcvif = ifp;
                         rmd->mbuf   = m;
                         st_le32( &rmd->status, 0 );
-                        st_le32( &rmd->addr, (uint32_t  )phys_to_bus(mtod(m, void *)) );
+                        st_le32( &rmd->addr, (uint32_t)phys_to_bus(mtod(m, void *)) );
                      }
                      else
                      {
@@ -2475,7 +2475,7 @@ elnk_txDaemon (void *arg)
                      for(i=0; i< NUM_FRAGS; i++)
                      {
                         st_le32( &nextmd->txfrags[i].length, ((m->m_next)?0:XL_LAST_FRAG) | ( m->m_len & XL_TXSTAT_LENMASK) );
-                        st_le32( &nextmd->txfrags[i].addr, (uint32_t  )phys_to_bus( m->m_data ) );
+                        st_le32( &nextmd->txfrags[i].addr, (uint32_t)phys_to_bus( m->m_data ) );
                         if ((m = m->m_next) == NULL)
                            break;
                      }
@@ -2491,7 +2491,7 @@ elnk_txDaemon (void *arg)
                   {
                      char *pkt = bus_to_phys( ld_le32( &nextmd->txfrags[i].addr )), *delim;
                      int  i;
-                     printk("unit %d queued  pkt (%08x) ", sc->xl_unit, (uint32_t  )pkt );
+                     printk("unit %d queued  pkt (%08x) ", sc->xl_unit, (uint32_t)pkt );
                      for(delim="", i=0; i < sizeof(struct ether_header); i++, delim=":")
                         printk("%s%02x", delim, (char) pkt[i] ); 
                      printk("\n");
@@ -2522,7 +2522,7 @@ elnk_txDaemon (void *arg)
                   else
                   {
                      /* hook this packet to the previous one */
-                     st_le32( &lastmd->next, (uint32_t  )phys_to_bus( nextmd ));
+                     st_le32( &lastmd->next, (uint32_t)phys_to_bus( nextmd ));
                   }
 
                   ++chainCount;
@@ -2574,7 +2574,7 @@ elnk_txDaemon (void *arg)
                   printk("unit %d queued %d pkts, lastpkt status %08X\n", 
                          sc->xl_unit, 
                          chainCount, 
-                         (uint32_t  )ld_le32( &lastmd->status) );
+                         (uint32_t)ld_le32( &lastmd->status) );
 #endif
 
                   if( sc->tx_idle == 0 && CSR_READ_4(sc, XL_DOWNLIST_PTR) == 0 ) 
@@ -3329,7 +3329,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    */
    pci_write_config_word(pbus, pdev, pfun,
                          PCI_COMMAND,
-                         (uint16_t  )( PCI_COMMAND_IO | 
+                         (uint16_t)( PCI_COMMAND_IO | 
                                        PCI_COMMAND_MASTER | 
                                        PCI_COMMAND_INVALIDATE | 
                                        PCI_COMMAND_WAIT ) );
@@ -3340,7 +3340,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                          PCI_BASE_ADDRESS_0,
                          &lvalue);
 
-   sc->ioaddr = (uint32_t  )lvalue & PCI_BASE_ADDRESS_IO_MASK;
+   sc->ioaddr = (uint32_t)lvalue & PCI_BASE_ADDRESS_IO_MASK;
    /*
    ** Store the interrupt name, we'll use it later when we initialize
    ** the board.

@@ -32,7 +32,7 @@ void Shm_Convert_packet(
 {
   uint32_t   *pkt, i;
 
-  pkt = (uint32_t   *) packet;
+  pkt = (uint32_t*) packet;
   for ( i=RTEMS_MINIMUN_HETERO_CONVERSION ; i ; i--, pkt++ )
     *pkt = CPU_swap_u32( *pkt );
 

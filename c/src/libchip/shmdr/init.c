@@ -122,7 +122,7 @@ rtems_mpci_entry Shm_Initialization( void )
    */
 
   interrupt_address =
-    (void *) Shm_Convert( (uint32_t  )Shm_Configuration->Intr.address );
+    (void *) Shm_Convert( (uint32_t)Shm_Configuration->Intr.address );
   interrupt_value   = Shm_Convert( Shm_Configuration->Intr.value );
   interrupt_cause   = Shm_Convert( Shm_Configuration->Intr.length );
 
@@ -172,7 +172,7 @@ rtems_mpci_entry Shm_Initialization( void )
      *  shared area so other nodes can interrupt us.
      */
 
-    Shm_Local_node_status->int_address = (uint32_t  ) interrupt_address;
+    Shm_Local_node_status->int_address = (uint32_t) interrupt_address;
     Shm_Local_node_status->int_value   = interrupt_value;
     Shm_Local_node_status->int_length  = interrupt_cause;
 
@@ -220,7 +220,7 @@ rtems_mpci_entry Shm_Initialization( void )
          */
 
         Shm_Local_node_status->int_address =
-          (uint32_t  ) interrupt_address;
+          (uint32_t) interrupt_address;
         Shm_Local_node_status->int_value   = interrupt_value;
         Shm_Local_node_status->int_length  = interrupt_cause;
 

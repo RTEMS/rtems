@@ -42,16 +42,16 @@ void Shm_Cause_interrupt(
     case NO_INTERRUPT:
        break;
     case BYTE:
-      u8   = (uint8_t   *)intr->address;
-      *u8  = (uint8_t  ) value;
+      u8   = (uint8_t*)intr->address;
+      *u8  = (uint8_t) value;
       break;
     case WORD:
-      u16   = (uint16_t   *)intr->address;
-      *u16  = (uint16_t  ) value;
+      u16   = (uint16_t*)intr->address;
+      *u16  = (uint16_t) value;
       break;
     case LONG:
-      u32   = (uint32_t   *)intr->address;
-      *u32  = (uint32_t  ) value;
+      u32   = (uint32_t*)intr->address;
+      *u32  = (uint32_t) value;
       break;
   }
 }

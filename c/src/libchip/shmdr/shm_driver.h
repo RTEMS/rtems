@@ -254,7 +254,7 @@ extern "C" {
    ((void *)(ecb)->packet)
 
 #define Shm_Packet_prefix_to_envelope_control_pointer( pkt )   \
-   ((Shm_Envelope_control *)((uint8_t   *)(pkt) - \
+   ((Shm_Envelope_control *)((uint8_t*)(pkt) - \
    (sizeof(Shm_Envelope_preamble) + SHM_ENVELOPE_PREFIX_OVERHEAD)))
 
 #define Shm_Build_preamble(ecb, node) \
@@ -425,7 +425,7 @@ struct shm_config_info {
   vol_u32            format;   /* SHM is big or little endian */
   vol_u32          (*convert)();/* neutral conversion routine */
   vol_u32            poll_intr;/* POLLED or INTR driven mode  */
-  void             (*cause_intr)( uint32_t   );
+  void             (*cause_intr)( uint32_t);
   Shm_Interrupt_information   Intr;     /* cause intr information      */
 };
 
@@ -472,7 +472,7 @@ void           Shm_Locked_queue_Add(
                   Shm_Locked_queue_Control *, Shm_Envelope_control * );
 Shm_Envelope_control *Shm_Locked_queue_Get( Shm_Locked_queue_Control * );
 void           Shm_Locked_queue_Initialize(
-                  Shm_Locked_queue_Control *, uint32_t   );
+                  Shm_Locked_queue_Control *, uint32_t);
             /* Shm_Initialize_lock is CPU dependent */
             /* Shm_Lock is CPU dependent */
             /* Shm_Unlock is CPU dependent */
@@ -480,8 +480,8 @@ void           Shm_Locked_queue_Initialize(
 /* portable routines */
 void           Init_env_pool();
 void           Shm_Print_statistics( void );
-void           MPCI_Fatal( Internal_errors_Source, boolean, uint32_t   );
-rtems_task     Shm_Cause_interrupt( uint32_t   );
+void           MPCI_Fatal( Internal_errors_Source, boolean, uint32_t);
+rtems_task     Shm_Cause_interrupt( uint32_t);
 void           Shm_Poll();
 void           Shm_setclockvec();
 void           Shm_Convert_packet( rtems_packet_prefix * );
@@ -490,7 +490,7 @@ void           Shm_Convert_packet( rtems_packet_prefix * );
 
 /* target specific routines */
 void          *Shm_Convert_address( void * );
-void           Shm_Get_configuration( uint32_t  , shm_config_table ** );
+void           Shm_Get_configuration( uint32_t, shm_config_table ** );
 void           Shm_isr();
 void           Shm_setvec( void );
 
@@ -514,7 +514,7 @@ rtems_mpci_entry Shm_Return_packet(
 );
 
 rtems_mpci_entry Shm_Send_packet(
-  uint32_t  ,
+  uint32_t,
   rtems_packet_prefix *
 );
 

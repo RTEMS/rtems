@@ -58,7 +58,7 @@
  *  XXX fix this 
  */
 
-void *set_vector(void *, uint32_t  , uint32_t  );
+void *set_vector(void *, uint32_t, uint32_t);
 
 #if (SONIC_DEBUG & SONIC_DEBUG_DUMP_MBUFS)
 #include <rtems/dumpbuf.h>
@@ -116,9 +116,9 @@ void *set_vector(void *, uint32_t  , uint32_t  );
 /*
  * Macros for manipulating 32-bit pointers as 16-bit fragments
  */
-#define LSW(p)   ((uint16_t  )((uint32_t  )(p)))
-#define MSW(p)   ((uint16_t  )((uint32_t  )(p) >> 16))
-#define PTR(m,l) ((void*)(((uint16_t  )(m)<<16)|(uint16_t  )(l)))
+#define LSW(p)   ((uint16_t)((uint32_t)(p)))
+#define MSW(p)   ((uint16_t)((uint32_t)(p) >> 16))
+#define PTR(m,l) ((void*)(((uint16_t)(m)<<16)|(uint16_t)(l)))
 
 /*
  * Hardware-specific storage
@@ -985,7 +985,7 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
       rdp->byte_count &= 0x0ffff;    /* ERC32 pollutes msb of byte_count */
       m = rdp->mbufp;
       m->m_len = m->m_pkthdr.len = rdp->byte_count -
-                          sizeof(uint32_t  ) -
+                          sizeof(uint32_t) -
                           sizeof(struct ether_header);
       eh = mtod (m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
