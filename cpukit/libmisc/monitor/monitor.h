@@ -284,18 +284,21 @@ extern unsigned32 rtems_monitor_default_node;  /* current default for commands *
  */
 
 typedef struct rtems_monitor_command_entry_s rtems_monitor_command_entry_t;
-
-/* FIXME: This should not be here */
-extern rtems_monitor_command_entry_t rtems_monitor_commands[];
+typedef union _rtems_monitor_command_arg_t   rtems_monitor_command_arg_t;
 
 typedef void ( *rtems_monitor_command_function_t )(
                  int         argc,
                  char      **argv,
-                 unsigned32  command_arg,
+                 rtems_monitor_command_arg_t *command_arg,
                  boolean     verbose
              );
 
-typedef unsigned32   rtems_monitor_command_arg_t;
+union _rtems_monitor_command_arg_t {
+  rtems_monitor_object_type_t 	monitor_object ;
+  rtems_status_code		status_code ;
+  rtems_symbol_table_t 		**symbol_table ;
+  rtems_monitor_command_entry_t *monitor_command_entry ;
+};
 
 struct rtems_monitor_command_entry_s {
     char        *command;      /* command name */
@@ -306,6 +309,7 @@ struct rtems_monitor_command_entry_s {
     rtems_monitor_command_arg_t   command_arg;
     rtems_monitor_command_entry_t *next;
 };
+
 
 typedef void *(*rtems_monitor_object_next_fn)(void *, void *, rtems_id *);
 typedef void (*rtems_monitor_object_canonical_fn)(void *, void *);
@@ -327,11 +331,11 @@ typedef struct {
 void    rtems_monitor_kill(void);
 void    rtems_monitor_init(unsigned32);
 void    rtems_monitor_wakeup(void);
-void    rtems_monitor_pause_cmd(int, char **, unsigned32, boolean);
-void    rtems_monitor_fatal_cmd(int, char **, unsigned32, boolean);
-void    rtems_monitor_continue_cmd(int, char **, unsigned32, boolean);
-void    rtems_monitor_debugger_cmd(int, char **, unsigned32, boolean);
-void    rtems_monitor_node_cmd(int, char **, unsigned32, boolean);
+void    rtems_monitor_pause_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
+void    rtems_monitor_fatal_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
+void    rtems_monitor_continue_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
+void    rtems_monitor_debugger_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
+void    rtems_monitor_node_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
 void    rtems_monitor_symbols_loadup(void);
 int     rtems_monitor_insert_cmd(rtems_monitor_command_entry_t *);
 int     rtems_monitor_erase_cmd(rtems_monitor_command_entry_t *);
@@ -350,7 +354,7 @@ int     rtems_monitor_command_read(char *, int *, char **);
 rtems_monitor_command_entry_t *rtems_monitor_command_lookup(
     rtems_monitor_command_entry_t * table, int argc, char **argv);
 void    rtems_monitor_command_usage(rtems_monitor_command_entry_t *, char *);
-void    rtems_monitor_help_cmd(int, char **, unsigned32, boolean);
+void    rtems_monitor_help_cmd(int, char **, rtems_monitor_command_arg_t *, boolean);
 
 /* prmisc.c */
 void       rtems_monitor_separator(void);
@@ -373,7 +377,7 @@ rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems
 rtems_id   rtems_monitor_object_canonical_next(rtems_monitor_object_info_t *, rtems_id, void *);
 void      *rtems_monitor_object_next(void *, void *, rtems_id, rtems_id *);
 rtems_id   rtems_monitor_object_canonical(rtems_id, void *);
-void       rtems_monitor_object_cmd(int, char **, unsigned32, boolean);
+void       rtems_monitor_object_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
 
 /* manager.c */
 void      *rtems_monitor_manager_next(void *, void *, rtems_id *);
@@ -438,10 +442,13 @@ void    rtems_monitor_symbol_canonical(rtems_monitor_symbol_t *, rtems_symbol_t 
 void    rtems_monitor_symbol_canonical_by_name(rtems_monitor_symbol_t *, char *);
 void    rtems_monitor_symbol_canonical_by_value(rtems_monitor_symbol_t *, void *);
 unsigned32 rtems_monitor_symbol_dump(rtems_monitor_symbol_t *, boolean);
-void    rtems_monitor_symbol_cmd(int, char **, unsigned32, boolean);
+void    rtems_monitor_symbol_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
 
 
 extern rtems_symbol_table_t *rtems_monitor_symbols;
+
+/* FIXME: This should not be here */
+extern rtems_monitor_command_entry_t rtems_monitor_commands[];
 
 #define MONITOR_WAKEUP_EVENT   RTEMS_EVENT_0
 

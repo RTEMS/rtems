@@ -103,8 +103,8 @@ rtems_monitor_config_dump(
     length = 0;
     length += printf("WORKSPACE");
     length += rtems_monitor_pad(DATACOL, length);
-    length += printf("start: 0x%x;  size: 0x%x\n",
-                     (unsigned32) monitor_config->work_space_start,
+    length += printf("start: %p;  size: 0x%x\n",
+                     monitor_config->work_space_start,
                      monitor_config->work_space_size);
 
     length = 0;

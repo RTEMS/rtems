@@ -572,7 +572,7 @@ rtems_monitor_command_lookup(
   return 0;
 }
 
-void
+static void
 rtems_monitor_show_help (
   rtems_monitor_command_entry_t *help_cmd,
   int                           max_cmd_len
@@ -726,14 +726,14 @@ void
 rtems_monitor_help_cmd(
     int          argc,
     char       **argv,
-    unsigned32   command_arg,
+    rtems_monitor_command_arg_t *command_arg,
     boolean verbose
 )
 {
   int arg;
   rtems_monitor_command_entry_t *command;
 
-  command = (rtems_monitor_command_entry_t *) command_arg;
+  command = command_arg->monitor_command_entry;
     
   if (argc == 1)
     rtems_monitor_command_usage(command, 0);

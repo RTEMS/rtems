@@ -452,14 +452,14 @@ void
 rtems_monitor_symbol_cmd(
     int        argc,
     char     **argv,
-    unsigned32 command_arg,
+    rtems_monitor_command_arg_t* command_arg,
     boolean    verbose
 )
 {
     int arg;
     rtems_symbol_table_t *table;
 
-    table = *(rtems_symbol_table_t **) command_arg;
+    table = *command_arg->symbol_table;
     if (table == 0)
     {
         table = rtems_monitor_symbols;

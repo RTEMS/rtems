@@ -75,21 +75,21 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "Show the system configuration.",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_CONFIG,
+      { RTEMS_MONITOR_OBJECT_CONFIG },
       &rtems_monitor_commands[1],
     },
     { "itask",
       "List init tasks for the system",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_INIT_TASK,
+      { RTEMS_MONITOR_OBJECT_INIT_TASK },
       &rtems_monitor_commands[2],
     }, 
    { "mpci",
       "Show the MPCI system configuration, if configured.",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_MPCI,
+      { RTEMS_MONITOR_OBJECT_MPCI },
       &rtems_monitor_commands[3],
     },
     { "pause",
@@ -98,7 +98,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  pause [ticks]",
       0,
       rtems_monitor_pause_cmd,
-      0,
+      { 0 },
       &rtems_monitor_commands[4],
     },
     { "continue",
@@ -106,14 +106,14 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "program running.\n",
       0,
       rtems_monitor_continue_cmd,
-      0,
+      { 0 },
       &rtems_monitor_commands[5],
     },
     { "go",
       "Alias for 'continue'",
       0,
       rtems_monitor_continue_cmd,
-      0,
+      { 0 },
       &rtems_monitor_commands[6],
     },
     { "node",
@@ -121,7 +121,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  node [ node number ]",
       0,
       rtems_monitor_node_cmd,
-      0,
+      { 0 },
       &rtems_monitor_commands[7],
     },
     { "symbol",
@@ -130,7 +130,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  symbol [ symbolname [symbolname ... ] ]",
       0,
       rtems_monitor_symbol_cmd,
-      (rtems_monitor_command_arg_t) &rtems_monitor_symbols,
+      { .symbol_table = &rtems_monitor_symbols },
       &rtems_monitor_commands[8],
     },
     { "extension",
@@ -139,7 +139,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  extension [id [id ...] ]",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_EXTENSION,
+      { RTEMS_MONITOR_OBJECT_EXTENSION },
       &rtems_monitor_commands[9],
     },
     { "task",
@@ -148,7 +148,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  task [id [id ...] ]",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_TASK,
+      { RTEMS_MONITOR_OBJECT_TASK },
       &rtems_monitor_commands[10],
     },
     { "queue",
@@ -157,7 +157,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  queue [id [id ... ] ]",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_QUEUE,
+      { RTEMS_MONITOR_OBJECT_QUEUE },
       &rtems_monitor_commands[11],
     },
     { "object",
@@ -167,7 +167,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  object [id [id ...] ]",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_INVALID,
+      { RTEMS_MONITOR_OBJECT_INVALID },
       &rtems_monitor_commands[12],
     },
     { "driver",
@@ -175,14 +175,14 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  driver [ major [ major ... ] ]",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_DRIVER,
+      { RTEMS_MONITOR_OBJECT_DRIVER },
       &rtems_monitor_commands[13],
     },
     { "dname",
       "Displays information about named drivers.\n",
       0,
       rtems_monitor_object_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_MONITOR_OBJECT_DNAME,
+      { RTEMS_MONITOR_OBJECT_DNAME },
       &rtems_monitor_commands[14],
     },
     { "exit",
@@ -191,7 +191,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  exit [status]",
       0,
       rtems_monitor_fatal_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_SUCCESSFUL,
+      { .status_code = RTEMS_SUCCESSFUL },
       &rtems_monitor_commands[15],
     },
     { "fatal",
@@ -199,14 +199,14 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  fatal [status]",
       0,
       rtems_monitor_fatal_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_TASK_EXITTED,		/* exit value */
+      { .status_code = RTEMS_TASK_EXITTED },		/* exit value */
       &rtems_monitor_commands[16],
     },
     { "quit",
       "Alias for 'exit'\n",
       0,
       rtems_monitor_fatal_cmd,
-      (rtems_monitor_command_arg_t) RTEMS_SUCCESSFUL,				/* exit value */
+      { .status_code = RTEMS_SUCCESSFUL },		/* exit value */
       &rtems_monitor_commands[17],
     },
     { "help",
@@ -215,7 +215,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "help [ command [ command ] ]",
       0,
       rtems_monitor_help_cmd,
-      (rtems_monitor_command_arg_t) rtems_monitor_commands,
+      { .monitor_command_entry = rtems_monitor_commands },
       &rtems_monitor_commands[18],
     },
 #ifdef CPU_INVOKE_DEBUGGER
@@ -224,11 +224,11 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "A continue from the debugger will return to the monitor.\n",
       0,
       rtems_monitor_debugger_cmd,
-      0,
+      { 0 },
       &rtems_monitor_commands[19],
     },
 #endif            
-    { 0, 0, 0, 0, 0, &rtems_registered_commands },
+    { 0, 0, 0, 0, { 0 }, &rtems_registered_commands },
 };
 
 
@@ -257,7 +257,7 @@ void
 rtems_monitor_debugger_cmd(
     int        argc,
     char     **argv,
-    unsigned32 command_arg,
+    rtems_monitor_command_arg_t* command_arg,
     boolean    verbose
 )
 {
@@ -270,7 +270,7 @@ void
 rtems_monitor_pause_cmd(
     int        argc,
     char     **argv,
-    unsigned32 command_arg,
+    rtems_monitor_command_arg_t* command_arg,
     boolean    verbose
 )
 {
@@ -284,12 +284,12 @@ void
 rtems_monitor_fatal_cmd(
     int     argc,
     char  **argv,
-    unsigned32 command_arg,
+    rtems_monitor_command_arg_t* command_arg,
     boolean verbose
 )
 {
     if (argc == 1)
-        rtems_fatal_error_occurred(command_arg);
+        rtems_fatal_error_occurred(command_arg->status_code);
     else
         rtems_fatal_error_occurred(strtoul(argv[1], 0, 0));
 }
@@ -298,7 +298,7 @@ void
 rtems_monitor_continue_cmd(
     int     argc,
     char  **argv,
-    unsigned32 command_arg,
+    rtems_monitor_command_arg_t* command_arg,
     boolean verbose
 )
 {
@@ -309,7 +309,7 @@ void
 rtems_monitor_node_cmd(
     int     argc,
     char  **argv,
-    unsigned32 command_arg,
+    rtems_monitor_command_arg_t* command_arg,
     boolean verbose
 )
 {
@@ -530,7 +530,7 @@ rtems_monitor_task(
             continue;
         }
 
-        command->command_function(argc, argv, command->command_arg, verbose);
+        command->command_function(argc, argv, &command->command_arg, verbose);
 
         fflush(stdout);
     }

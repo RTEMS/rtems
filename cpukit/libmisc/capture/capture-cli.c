@@ -65,7 +65,7 @@ static void
 rtems_capture_cli_open (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_unsigned32  size = 0;
@@ -137,7 +137,7 @@ static void
 rtems_capture_cli_close (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code sc;
@@ -166,7 +166,7 @@ static void
 rtems_capture_cli_enable (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code sc;
@@ -195,7 +195,7 @@ static void
 rtems_capture_cli_disable (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code sc;
@@ -224,7 +224,7 @@ static void
 rtems_capture_cli_task_list (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
@@ -460,7 +460,7 @@ static void
 rtems_capture_cli_task_load (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code   sc;
@@ -531,7 +531,7 @@ static void
 rtems_capture_cli_watch_list (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
@@ -657,7 +657,7 @@ static void
 rtems_capture_cli_watch_add (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code sc;
@@ -719,7 +719,7 @@ static void
 rtems_capture_cli_watch_del (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code sc;
@@ -780,7 +780,7 @@ static void
 rtems_capture_cli_watch_control (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code sc;
@@ -846,7 +846,7 @@ static void
 rtems_capture_cli_watch_global (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code sc;
@@ -900,7 +900,7 @@ static void
 rtems_capture_cli_watch_ceiling (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code   sc;
@@ -951,7 +951,7 @@ static void
 rtems_capture_cli_watch_floor (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code   sc;
@@ -1002,7 +1002,7 @@ static void
 rtems_capture_cli_trigger_set (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code       sc;
@@ -1158,7 +1158,7 @@ static void
 rtems_capture_cli_trace_records (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code       sc;
@@ -1283,7 +1283,7 @@ static void
 rtems_capture_cli_flush (
   int argc, 
   char **argv,
-  unsigned32 command_arg, 
+  rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
   rtems_status_code sc;

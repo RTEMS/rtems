@@ -1,3 +1,11 @@
+2003-09-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 495/rtems_misc
+	* capture/capture-cli.c, monitor/mon-command.c, monitor/mon-config.c,
+	monitor/mon-monitor.c, monitor/mon-object.c, monitor/mon-symbols.c,
+	monitor/monitor.h, shell/cmds.c: Move to making libmisc 16/32 bit
+	clean.
+
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* monitor/monitor.h: 

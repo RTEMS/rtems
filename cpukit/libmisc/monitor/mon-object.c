@@ -315,16 +315,16 @@ void
 rtems_monitor_object_cmd(
     int        argc,
     char     **argv,
-    unsigned32 command_arg,
+    rtems_monitor_command_arg_t	*command_arg,
     boolean    verbose
 )
 {
     int arg;
     rtems_monitor_object_info_t *info = 0;
-    rtems_monitor_object_type_t  type = (rtems_monitor_object_type_t) command_arg;
+    rtems_monitor_object_type_t  type ;
     
     /* what is the default type? */
-    type = (rtems_monitor_object_type_t) command_arg;
+    type = command_arg->monitor_object;
 
     if (argc == 1)
     {
