@@ -192,18 +192,18 @@ extern "C" {
 
 #define PPC_ALIGNMENT		8
 
-#elif defined(mpc7400)
+#elif defined(__ALTIVEC__)
 
+/* ppc altivec family */
+#if defined(mpc7400)
 #define CPU_MODEL_NAME  "PowerPC 7400"
-
-#define PPC_ALIGNMENT		8
-
+#elif defined(mpc7450)
+#define CPU_MODEL_NAME  "PowerPC 7400"
 #elif defined(mpc7455)
-/*
- *  Added by S.K. Feng <feng1@bnl.gov> 10/03
- */
-
-#define CPU_MODEL_NAME  "PowerPC 7455"
+#define CPU_MODEL_NAME	"PowerPC 7455"
+#else
+#define CPU_MODEL_NAME	"PowerPC Altivec"
+#endif
 
 #define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT     32

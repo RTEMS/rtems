@@ -1,5 +1,9 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/powerpc.h: Add __ALTIVEC__ support.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/powerpc.h: Merge ppc603 and ppc603e
 	PPC_IRQ_*/PPC_TLB_* defines.
 
