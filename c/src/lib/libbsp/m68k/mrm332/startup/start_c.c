@@ -3,7 +3,7 @@
  */
 
 #include <mrm332.h>
-#include <sim.h>
+#include <rtems/m68k/sim.h>
 #define __START_C__
 #include "bsp.h"
 

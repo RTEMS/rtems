@@ -27,8 +27,8 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <mrm332.h>
-#include <sim.h>
-#include <qsm.h>
+#include <rtems/m68k/sim.h>
+#include <rtems/m68k/qsm.h>
 
 /*
  *  confdefs.h overrides for this BSP:

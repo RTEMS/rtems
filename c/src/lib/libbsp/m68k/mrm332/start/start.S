@@ -4,7 +4,7 @@
 
 #include "mrm332.h"
 #include <rtems/asm.h>
-#include <sim.h>
+#include <rtems/m68k/sim.h>
 
 BEGIN_CODE
 
