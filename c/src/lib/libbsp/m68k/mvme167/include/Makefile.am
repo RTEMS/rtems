@@ -19,7 +19,8 @@ $(PROJECT_INCLUDE)/coverhd.h: coverhd.h
 $(PROJECT_INCLUDE)/fatal.h: fatal.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/mvme16x_hw.h: $(srcdir)/../../mvme162/include/mvme16x_hw.h
+$(PROJECT_INCLUDE)/mvme16x_hw.h: \
+    $(srcdir)/../../mvme162/include/mvme16x_hw.h
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE)/page_table.h: page_table.h
