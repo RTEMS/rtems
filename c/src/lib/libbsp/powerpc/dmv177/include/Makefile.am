@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 include_HEADERS = bsp.h coverhd.h dmv170.h tod.h bspopts.h
 
