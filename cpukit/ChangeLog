@@ -1,5 +1,10 @@
 2004-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/Makefile.am: Don't install bpfilter.h (Private
+	header).
+
+2004-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libblock/include/rtems/bdbuf.h,
 	libblock/include/rtems/blkdev.h,
 	libblock/include/rtems/diskdevs.h,
