@@ -1,3 +1,9 @@
+2004-05-21	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 626/networking
+	* libnetworking/rtems/rtems_showifstat.c: Use unsigned char to avoid
+	printing leading FFFFFF for byte values > 127.
+
 2004-05-06	Joel Sherrill <joel@OARcorp.com>
 
 	PR 618/rtems
