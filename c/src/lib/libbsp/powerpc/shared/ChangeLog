@@ -1,3 +1,16 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* bootloader/bootldr.h, bootloader/em86.c, bootloader/em86real.S,
+	bootloader/exception.S, bootloader/head.S, bootloader/lib.c,
+	bootloader/misc.c, bootloader/mm.c, bootloader/pci.c,
+	clock/p_clock.c, console/console.c, console/consoleIo.h,
+	console/inch.c, console/keyboard.h, console/polled_io.c,
+	include/bsp.h, irq/i8259.c, irq/irq.c, irq/irq.h, irq/irq_asm.S,
+	irq/irq_init.c, motorola/motorola.c, motorola/motorola.h,
+	openpic/openpic.c, openpic/openpic.h, pci/pci.c, residual/residual.c,
+	start/start.S, startup/bspstart.c, vectors/vectors.h,
+	vectors/vectors_init.c: URL for license changed.
+
 2003-08-21	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 456/bsps
