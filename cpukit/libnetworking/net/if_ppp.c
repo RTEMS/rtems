@@ -250,6 +250,8 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
   struct mbuf                *mf;
   struct mbuf                *m;
   struct rtems_termios_tty   *tp;
+  
+  int frag;
 
   /* enter processing loop */
   while ( 1 ) {
@@ -258,7 +260,9 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
     if ( events & TX_TRANSMIT ) {
       /* received event from interrupt handler - free current mbuf */
       rtems_bsdnet_semaphore_obtain();
+
       m_freem(sc->sc_outm);
+      
       rtems_bsdnet_semaphore_release();
 
       /* chain is done - clear the values */
@@ -294,6 +298,7 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
     if ( iprocess ) {
       /* clear process flag */
       iprocess = (int)0;
+      frag=0;
 
       /* initialize output values */
       sc->sc_outfcs    = PPP_INITFCS;
@@ -302,22 +307,36 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
       sc->sc_outoff    = (short   )0;
       sc->sc_outfcslen = (short   )0;
 
+/*	  printf("Start Transmit Packet..\n"); */
+
       /* loop over all mbufs in chain */
       mf     = NULL;
       mp     = NULL;
       m      = sc->sc_outm;
+
+      sc->sc_outmc  = m;
+      sc->sc_outlen = m->m_len;
+      sc->sc_outbuf = mtod(m, u_char *);
+
       while (( m != (struct mbuf *)0 ) && ( m->m_len > 0 )) {
-        /* check to see if first mbuf value has been set */
-        if ( sc->sc_outmc == (struct mbuf *)0 ) {
-          /* set values to start with this mbuf */
-          sc->sc_outmc  = m;
-          sc->sc_outlen = m->m_len;
-          sc->sc_outbuf = mtod(m, u_char *);
-        }
+      	frag++;
 
         /* update the FCS value and then check next packet length */
-        sc->sc_outfcs = pppfcs(sc->sc_outfcs, mtod(m, u_char *), m->m_len);
+        if(m->m_len){
+       	 sc->sc_outfcs = pppfcs(sc->sc_outfcs, mtod(m, u_char *), m->m_len);
+       	}
 
+        if(( m->m_next != NULL ) && ( m->m_next->m_len == 0 )) {
+			if(mf){
+				printf(" if_ppp.c : MBUF Error !!!!\n");
+			}
+			else{
+            	mf = m->m_next;
+	        	m->m_next = NULL;
+			}
+		}
+
+#ifdef LALL_X
         /* check next packet to see if it is empty */
         while (( m->m_next != NULL ) && ( m->m_next->m_len == 0 )) {
           /* next mbuf is zero length */
@@ -337,7 +356,7 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
           m->m_next  = m->m_next->m_next;
           mp->m_next = NULL;
         }
-
+#endif
         /* move to next packet */
         m = m->m_next;
       }
@@ -351,7 +370,7 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
         microtime(&sc->sc_if.if_lastchange);
   
         /* write out frame byte to start the transmission */
-	sc->sc_outchar = (u_char)PPP_FLAG;
+		sc->sc_outchar = (u_char)PPP_FLAG;
         (*tp->device.write)(tp->minor, &sc->sc_outchar, 1);
       }
 

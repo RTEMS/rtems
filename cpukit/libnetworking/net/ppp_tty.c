@@ -570,6 +570,14 @@ pppstart(struct rtems_termios_tty *tp)
   /* ensure input is valid and we are busy */
   if (( sc != NULL ) && ( sc->sc_outflag & SC_TX_BUSY )) {
     /* check to see if we need to get the next buffer */
+
+    /* Ready with PPP_FLAG Character ? */
+    if(sc->sc_outflag & SC_TX_LASTCHAR){
+        sc->sc_outflag &= ~(SC_TX_BUSY | SC_TX_FCS | SC_TX_LASTCHAR);
+        rtems_event_send(sc->sc_txtask, TX_TRANSMIT);	/* Ready for the next Packet */
+        return(0);
+    }
+
     if ( sc->sc_outoff >= sc->sc_outlen ) {
       /* loop to get next non-zero length buffer */
       if ( sc->sc_outmc != NULL ) {
@@ -593,10 +601,11 @@ pppstart(struct rtems_termios_tty *tp)
       }
       else {
         /* done with this packet */
-        sc->sc_outflag &= ~SC_TX_BUSY;
-	sc->sc_outchar = (u_char)PPP_FLAG;
+        sc->sc_outflag |= SC_TX_LASTCHAR;
+        sc->sc_outflag &=~(SC_TX_FCS);
+		sc->sc_outchar = (u_char)PPP_FLAG;
         (*tp->device.write)(tp->minor, &sc->sc_outchar, 1);
-        rtems_event_send(sc->sc_txtask, TX_TRANSMIT);
+        return(0);
       }
     }
 

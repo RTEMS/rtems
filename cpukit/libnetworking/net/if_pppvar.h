@@ -1,4 +1,4 @@
-/*	$Id$	*/
+/*  $Id$ */
 /*
  * if_pppvar.h - private structures and declarations for PPP.
  *
@@ -137,4 +137,5 @@ void    pppallocmbuf __P((struct ppp_softc *sc, struct mbuf **mp));
 #define SC_TX_BUSY      0x0001
 #define SC_TX_FCS       0x0002
 #define SC_TX_ESCAPE    0x0004
+#define SC_TX_LASTCHAR	0x0008
 #define SC_TX_PENDING   0x0010
