@@ -50,8 +50,7 @@ int __isatty(int _fd)
 int stat( const char *path, struct stat *buf )
 {
   if ( strncmp( "/dev/", path, 5 ) ) {
-    puts( "stat -- non-devices not supported" );
-    assert( 0 );
+    return -1;
   }
   return __fstat( 0, buf );
 }
