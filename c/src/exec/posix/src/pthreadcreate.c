@@ -34,7 +34,6 @@ int pthread_create(
   boolean                             is_fp;
   boolean                             status;
   Thread_Control                     *the_thread;
-  char                               *default_name = "psx";
   POSIX_API_Control                  *api;
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
@@ -177,7 +176,7 @@ int pthread_create(
     budget_algorithm,
     budget_callout,
     0,                    /* isr level */
-    &default_name         /* posix threads don't have a name */
+    NULL                  /* posix threads don't have a name */
   );
  
   if ( !status ) {
