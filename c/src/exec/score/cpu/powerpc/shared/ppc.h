@@ -281,6 +281,14 @@ extern "C" {
  */
 #define PPC_ABI_EABI		3
 
+/*
+ *  Default to the EABI used by current GNU tools
+ */
+
+#ifndef PPC_ABI
+#define PPC_ABI PPC_ABI_EABI
+#endif
+
 #if (PPC_ABI == PPC_ABI_POWEROPEN)
 #define PPC_STACK_ALIGNMENT	8
 #elif (PPC_ABI == PPC_ABI_GCC27)
@@ -308,6 +316,14 @@ extern "C" {
 
 #define PPC_ASM_ELF   0
 #define PPC_ASM_XCOFF 1
+
+/*
+ *  Default to the assembler format used by the current GNU tools.
+ */
+
+#ifndef PPC_ASM
+#define PPC_ASM PPC_ASM_ELF
+#endif
 
 /*
  *  Use the default debug scheme defined in the architectural specification
