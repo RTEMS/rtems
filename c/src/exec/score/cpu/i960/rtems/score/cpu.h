@@ -20,8 +20,6 @@
 extern "C" {
 #endif
 
-#pragma align 4            /* for GNU C structure alignment */
-
 #include <rtems/score/i960.h>              /* pick up machine definitions */
 #ifndef ASM
 #include <rtems/score/i960types.h>
