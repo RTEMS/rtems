@@ -15,7 +15,21 @@ ENOSYS_C_PIECES=\
     execl execle execlp execv execve execvp fork \
     pthreadatfork wait waitpid
 
-C_PIECES= adasupp cond getpid key mutex pthread psignal sched time \
+PTHREAD_PIECES=\
+  pthread pthreadsetcputime pthreadgetcputime pthreadgetcpuclockid \
+  pthreadonce pthreadequal pthreadself pthreadexit pthreaddetach \
+  pthreadjoin pthreadcreate \
+  pthreadattrsetdetachstate pthreadattrgetdetachstate \
+  pthreadattrgetstackaddr pthreadattrsetstackaddr \
+  pthreadattrgetstacksize pthreadattrsetstacksize \
+  pthreadattrinit pthreadattrdestroy \
+  pthreadsetschedparam pthreadgetschedparam \
+  pthreadattrsetschedparam pthreadattrgetschedparam \
+  pthreadattrgetschedpolicy pthreadattrsetschedpolicy \
+  pthreadattrgetinheritsched pthreadattrsetinheritsched \
+  pthreadattrgetscope pthreadattrsetscope
+
+C_PIECES= adasupp cond getpid key mutex $(PTHREAD_PIECES) psignal sched time \
   types unistd $(ENOSYS_C_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
