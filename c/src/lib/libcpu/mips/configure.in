@@ -38,6 +38,9 @@ clock/Makefile
 shared/Makefile
 shared/cache/Makefile
 shared/interrupts/Makefile
+r46xx/Makefile
+r46xx/vectorisrs/Makefile
+timer/Makefile
 tx39/Makefile
 tx39/include/Makefile
 tx39/vectorisrs/Makefile

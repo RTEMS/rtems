@@ -12,7 +12,7 @@ CPU_SUBDIR = tx39
 endif
 
 if r46xx
-CPU_SUBDIR = clock timer
+CPU_SUBDIR = clock timer r46xx
 endif
 
 SUBDIRS = $(SHARED_LIB) $(CPU_SUBDIR)

@@ -16,7 +16,7 @@ void mips_install_isr_entries( void )
   memcpy( (void *)E_VEC, exc_norm_code, 40 );   /* exception vevtor */
 #elif __mips == 3
   void exc_tlb_code(void);
-  void exc_utlb_code(void);
+  void exc_xtlb_code(void);
   void exc_cache_code(void);
   void exc_norm_code(void);
 
