@@ -10,9 +10,11 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/tqdata.h>
 #include <rtems/posix/seterr.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/pthread.h>
+#include <rtems/posix/time.h>
 
 /*
  *  Currently 32 signals numbered 1-32 are defined
@@ -88,6 +90,8 @@ struct sigaction _POSIX_signals_Vectors[ SIG_ARRAY_MAX ];
 
 Watchdog_Control _POSIX_signals_Alarm_timer;
 
+Thread_queue_Control _POSIX_signals_Wait_queue;
+
 typedef struct {
   Chain_Node  Node;
   siginfo_t   Info;
@@ -98,7 +102,78 @@ Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
 
 /*PAGE
  *
- *  XXX
+ *  XXX - move these
+ */
+
+#define _States_Is_interruptible_signal( _states ) \
+  ( ((_states) & \
+    (STATES_WAITING_FOR_SIGNAL|STATES_INTERRUPTIBLE_BY_SIGNAL)) == \
+      (STATES_WAITING_FOR_SIGNAL|STATES_INTERRUPTIBLE_BY_SIGNAL))
+
+/*PAGE
+ *
+ *  _POSIX_signals_Unblock_thread
+ */
+
+/* XXX this routine could probably be cleaned up */
+void _POSIX_signals_Unblock_thread( 
+  Thread_Control  *the_thread,
+  int              signo,
+  siginfo_t       *info
+)
+{
+  POSIX_API_Control  *api;
+  sigset_t            mask;
+  siginfo_t          *the_info = NULL;
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  mask = signo_to_mask( signo );
+
+  /*
+   *  Is the thread is specifically waiting for a signal?
+   */
+
+  if ( _States_Is_interruptible_signal( the_thread->current_state ) ) {
+
+    if ( (the_thread->Wait.option & mask) || (~api->signals_blocked & mask) ) {
+      the_thread->Wait.return_code = EINTR;
+
+      the_info = (siginfo_t *) _Thread_Executing->Wait.return_argument;
+
+      if ( !info ) {
+        the_info->si_signo = signo;
+        the_info->si_code = SI_USER;
+        the_info->si_value.sival_int = 0;
+      } else {
+        *the_info = *info;
+      }
+      
+      _Thread_queue_Extract_with_proxy( the_thread );
+    }
+    return;
+  }
+
+  if ( ~api->signals_blocked & mask ) {
+    the_thread->do_post_task_switch_extension = TRUE;
+
+    if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
+      the_thread->Wait.return_code = EINTR;
+      if ( _States_Is_waiting_on_thread_queue(the_thread->current_state) )
+        _Thread_queue_Extract_with_proxy( the_thread );
+      else if ( _States_Is_delaying(the_thread->current_state)){
+        if ( _Watchdog_Is_active( &the_thread->Timer ) )
+          (void) _Watchdog_Remove( &the_thread->Timer );
+        _Thread_Unblock( the_thread );
+      }
+    }
+  }
+
+}
+
+/*PAGE
+ *
+ *  _POSIX_signals_Check_signal
  */
 
 boolean _POSIX_signals_Check_signal(
@@ -120,6 +195,7 @@ boolean _POSIX_signals_Check_signal(
 
   /* XXX this is not right for siginfo type signals yet */
   /* XXX since they can't be cleared the same way */
+
   _ISR_Disable( level );
     if ( is_global ) {
        if ( mask & (_POSIX_signals_Pending & ~api->signals_blocked ) ) {
@@ -289,6 +365,20 @@ void _POSIX_signals_Manager_Initialization( void )
     NULL
   );
  
+  /*
+   *  Initialize the queue we use to block for signals
+   */
+ 
+  _Thread_queue_Initialize(
+    &_POSIX_signals_Wait_queue,
+    OBJECTS_NO_CLASS,
+    THREAD_QUEUE_DISCIPLINE_PRIORITY,
+    STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
+    NULL,
+    EAGAIN
+  );
+
+  /* XXX status codes */
   /* 
    *  XXX Allocate the siginfo pools.
    */
@@ -547,7 +637,22 @@ int sigsuspend(
   const sigset_t  *sigmask
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  sigset_t            saved_signals_blocked;
+  sigset_t            all_signals;
+  int                 status;
+  POSIX_API_Control  *api;
+
+  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+
+  saved_signals_blocked = api->signals_blocked;
+ 
+  (void) sigfillset( &all_signals );
+
+  status = sigtimedwait( &all_signals, NULL, NULL );
+
+  api->signals_blocked = saved_signals_blocked;
+
+  return status;
 }
 
 /*
@@ -561,7 +666,7 @@ int sigwaitinfo(
   siginfo_t       *info
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  return sigtimedwait( set, info, NULL );
 }
 
 /*
@@ -570,13 +675,74 @@ int sigwaitinfo(
  *  NOTE: P1003.1c/D10, p. 39 adds sigwait().
  */
 
+int _POSIX_signals_Get_highest( 
+  sigset_t   set
+)
+{
+  int signo;
+ 
+  for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
+    if ( set & signo_to_mask( signo ) )
+      return signo;
+  }
+ 
+  for ( signo = SIGABRT ; signo <= __SIGLASTNOTRT ; signo++ ) {
+    if ( set & signo_to_mask( signo ) )
+      return signo;
+  }
+
+  return 0;
+}
+  
+
 int sigtimedwait(
   const sigset_t         *set,
   siginfo_t              *info,
   const struct timespec  *timeout
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  Thread_Control    *the_thread;
+  POSIX_API_Control *api;
+  Watchdog_Interval  interval;
+  siginfo_t          signal_information;
+  siginfo_t         *the_info;
+  
+  interval = 0;
+  if ( timeout ) {
+
+    if (timeout->tv_nsec < 0 || timeout->tv_nsec >= TOD_NANOSECONDS_PER_SECOND)
+      set_errno_and_return_minus_one( EINVAL );
+
+    interval = _POSIX_Timespec_to_interval( timeout );
+  }
+
+  the_info = ( info ) ? info : &signal_information;
+
+  the_thread = _Thread_Executing;
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  /*
+   *  What if they are already pending?
+   */
+
+  if ( *set & api->signals_pending ) {
+    /* XXX real info later */
+    the_info->si_signo = _POSIX_signals_Get_highest( api->signals_pending );
+    the_info->si_code = SI_USER;
+    the_info->si_value.sival_int = 0;
+  }
+
+  _Thread_Disable_dispatch();
+    the_thread->Wait.return_code     = EINTR;
+    the_thread->Wait.option          = *set;
+    the_thread->Wait.return_argument = (void *) the_info;
+    _Thread_queue_Enter_critical_section( &_POSIX_signals_Wait_queue ); 
+    _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, interval ); 
+  _Thread_Enable_dispatch();
+
+  errno = _Thread_Executing->Wait.return_code;
+  return the_info->si_signo;
 }
 
 /*
@@ -590,7 +756,17 @@ int sigwait(
   int             *sig
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  int status;
+
+  status = sigtimedwait( set, NULL, NULL );
+
+  if ( status != -1 ) {
+    if ( sig )
+      *sig = status;
+    return 0;
+  }
+
+  return errno;
 }
 
 /*
@@ -630,8 +806,9 @@ int kill(
   Thread_Control       *the_thread;
   Thread_Control       *interested_thread;
   Priority_Control      interested_priority;
-
-
+  Chain_Control        *the_chain;
+  Chain_Node           *the_node;
+ 
   /*
    *  Only supported for the "calling process" (i.e. this node).
    */
@@ -681,7 +858,27 @@ int kill(
    *  Is an interested thread waiting for this signal (sigwait())?
    */
 
-  /* XXX wait for signal functions need to be done */
+  /* XXX violation of visibility -- need to define thread queue support */
+
+  for( index=0 ;
+       index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
+       index++ ) {
+
+    the_chain = &_POSIX_signals_Wait_queue.Queues.Priority[ index ];
+ 
+    for ( the_node = the_chain->first ;
+          !_Chain_Is_tail( the_chain, the_node ) ;
+          the_node = the_node->next ) {
+
+      the_thread = (Thread_Control *)the_node;
+      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+      if ((the_thread->Wait.option & mask) || (~api->signals_blocked & mask)) {
+        goto process_it;
+      }
+
+    }
+  }
 
   /*
    *  Is any other thread interested?  The highest priority interested
@@ -711,13 +908,13 @@ int kill(
 
     the_info = _Objects_Information_table[ the_class ];
 
-    if ( !the_info )
+    if ( !the_info )                        /* manager not installed */
       continue;
 
     maximum = the_info->maximum;
     object_table = the_info->local_table;
 
-    assert( object_table );
+    assert( object_table );                 /* always at least 1 entry */
 
     object_table++;                         /* skip entry 0 */
 
@@ -742,7 +939,8 @@ int kill(
         continue;
 
       /*
-       *  If this thread is of higher priority logically and interested, then
+       *  Now we know the thread under connsideration is interested.
+       *  If the thread under consideration is of higher priority, then
        *  it becomes the interested thread.
        */
 
@@ -762,8 +960,9 @@ int kill(
         continue;
 
       /*
-       *  The interested thread is blocked and the thread we are considering
-       *  is not, so it becomes the interested thread.
+       *  Now the interested thread is blocked.
+       *  If the thread we are considering is not, the it becomes the 
+       *  interested thread.
        */
 
       if ( _States_Is_ready( the_thread->current_state ) ) {
@@ -773,6 +972,7 @@ int kill(
       }
 
       /*
+       *  Now we know both threads are blocked.
        *  If the interested thread is interruptible, then just use it.
        */
 
@@ -781,8 +981,8 @@ int kill(
         continue;
 
       /*
-       *  Both the thread under consideration and the interested thread are
-       *  blocked and the interested thread is not interruptible by a signal.
+       *  Now both threads are blocked and the interested thread is not 
+       *  interruptible.
        *  If the thread under consideration is interruptible by a signal,
        *  then it becomes the interested thread.
        */
@@ -821,11 +1021,12 @@ int kill(
    */
 
 process_it:
-  /* XXX what if the thread is blocked? -- need code from pthread_kill */
-  /* XXX and it needs to be in a subroutine */
+  
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   the_thread->do_post_task_switch_extension = TRUE;
+
+  _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
 
   _Thread_Enable_dispatch();
 
@@ -874,22 +1075,7 @@ int pthread_kill(
 
         api->signals_pending |= signo_to_mask( sig );
 
-        if ( api->signals_pending & ~api->signals_blocked ) {
-          the_thread->do_post_task_switch_extension = TRUE;
- 
-          /* XXX unblock the task -- this is a kludge -- fix it */
-
-          if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
-            the_thread->Wait.return_code = EINTR;
-            if ( _States_Is_waiting_on_thread_queue(the_thread->current_state) )
-              _Thread_queue_Extract_with_proxy( the_thread );
-            else if ( _States_Is_delaying(the_thread->current_state)){
-              if ( _Watchdog_Is_active( &the_thread->Timer ) )
-                (void) _Watchdog_Remove( &the_thread->Timer );
-              _Thread_Unblock( the_thread );
-            }
-        }
-      }
+        _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
     }
     _Thread_Enable_dispatch();
     return 0;
@@ -936,5 +1122,12 @@ unsigned int alarm(
 
 int pause( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  sigset_t  all_signals;
+  int       status;
+ 
+  (void) sigfillset( &all_signals );
+ 
+  status = sigtimedwait( &all_signals, NULL, NULL );
+ 
+  return status;
 }
