@@ -80,7 +80,7 @@ This is the online version of the RTEMS Filesystem Design Guide.
 * Pathname Evaluation::
 * System Initialization::
 * Mounting and Unmounting Filesystems::
-* Filesystem Requirements::
+* Filesystem Implementation Requirements::
 * In-Memory Filesystem::
 * System Call Development Notes::
 * Command and Variable Index::

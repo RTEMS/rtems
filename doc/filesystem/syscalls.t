@@ -45,7 +45,7 @@ been included as part of the application's interface.
 The sections that follow provide developmental information concerning each of these functions.
 
  
-@page
+@c @page
 @section access
 
 @subheading File:
@@ -65,7 +65,7 @@ This routine is layered on top of the stat() function. As long as the st_mode
 element in the returned structure follow the standard UNIX conventions, this 
 function should support other filesystems without alteration.
 
-@page
+@c @page
 @section chdir
 
 @subheading File:
@@ -107,7 +107,7 @@ determine if the structure is valid, you must first test the node_access element
 this structure. If the pointer is NULL, then the structure does not contain a valid 
 indication of what the current directory is.
 
-@page
+@c @page
 @section chmod
 
 @subheading File:
@@ -116,7 +116,7 @@ chmod.c
 
 @subheading Processing: 
 
-This routine is layered on the open(), fchmod () and close () functions. As long as 
+This routine is layered on the open(), fchmod() and close() functions. As long as 
 the standard interpretation of the mode_t value is maintained, this routine should 
 not need modification to support other filesystems.
 
@@ -131,7 +131,7 @@ integer file descriptor returned by the open() function.
 
 After mode modification, the open file descriptor is closed.
 
-@page
+@c @page
 @section chown
 
 @subheading File:
@@ -159,7 +159,7 @@ If the chown() function is defined in the indicated OPS table, the function is
 called with the rtems_filesystem_location_info_t structure returned from the path 
 evaluation routine, the desired owner, and group information.
 
-@page
+@c @page
 @section close
 
 @subheading File:
@@ -217,7 +217,7 @@ program.
 
 @end enumerate
 
-@page
+@c @page
 @section closedir
 
 @subheading File:
@@ -228,7 +228,7 @@ closedir.c
 
 The code was obtained from the BSD group. This routine must clean up the 
 memory resources that are required to track an open directory. The code is layered 
-on the close() function and standard memory free () functions. It should not 
+on the close() function and standard memory free() functions. It should not 
 require alterations to support other filesystems.
 
 @subheading Development Comments:
@@ -245,7 +245,7 @@ DIR control memory is reallocated.
 The close() function is used to free the file descriptor index.
 
 
-@page
+@c @page
 @section dup()      Unimplemented
 
 @subheading File:
@@ -261,7 +261,7 @@ dup.c
 
 
 
-@page
+@c @page
 @section dup2()      Unimplemented
 
 @subheading File:
@@ -278,7 +278,7 @@ dup2.c
 
 
 
-@page
+@c @page
 @section fchmod
 
 @subheading File:
@@ -322,7 +322,7 @@ an error is returned to the calling routine.
 If the fchmod() handler function exists, it is called with the file control block and 
 the desired mode as parameters.
 
-@page
+@c @page
 @section fcntl()
 
 @subheading File:
@@ -340,7 +340,7 @@ implementations.
 
 The only commands that have been implemented are the F_GETFD and 
 F_SETFD. The commands manipulate the LIBIO_FLAGS_CLOSE_ON_EXEC 
-bit in the -flags- element of the file control block associated with the file 
+bit in the @code{flags} element of the file control block associated with the file 
 descriptor index.
 
 The current implementation of the function performs the sequence of operations 
@@ -359,7 +359,7 @@ network connection
 
 
 
-@page
+@c @page
 @section fdatasync
 
 @subheading File:
@@ -407,7 +407,7 @@ an error is returned to the calling routine.
 If the fdatasync() handler function exists, it is called with the file control block as 
 its parameter.
 
-@page
+@c @page
 @section fpathconf
 
 @subheading File:
@@ -490,7 +490,7 @@ The name argument is used to reference the desired constant from the
 pathconf_limits_and_options table.
 
 
-@page
+@c @page
 @section fstat
 
 @subheading File:
@@ -537,7 +537,7 @@ control block and the pointer to the stat structure.
 
 @end enumerate
 
-@page
+@c @page
 @section ioctl
 
 @subheading File:
@@ -580,7 +580,7 @@ the command and buffer as its parameters.
 @end enumerate
 
 
-@page
+@c @page
 @section link
 
 @subheading File:
@@ -621,13 +621,13 @@ to create will cross a filesystem boundary. This is not permitted for hard-links
 If the hard-link does not cross a filesystem boundary, a check is performed to 
 determine if the OPS table contains an entry for the link() function.
 
-If a link() function is defined, the OPS table link () function will be called to 
+If a link() function is defined, the OPS table link() function will be called to 
 establish the actual link within the filesystem.
 
 The return code from the OPS table link() function is returned to the calling 
 program.
 
-@page
+@c @page
 @section lseek
 
 @subheading File:
@@ -672,7 +672,7 @@ calling program
 @end enumerate
 
 
-@page
+@c @page
 @section mkdir
 
 @subheading File:
@@ -688,7 +688,7 @@ is layered the mknod() function.
 
 See mknod() for developmental comments.
 
-@page
+@c @page
 @section mkfifo
 
 @subheading File:
@@ -704,7 +704,7 @@ layered the mknod() function.
 
 See mknod() for developmental comments
 
-@page
+@c @page
 @section mknod
 
 @subheading File:
@@ -770,11 +770,11 @@ creation of a node.
 If the pathname is a valid location to create a node, verify that a filesystem 
 specific mknod() function exists.
 
-If the mknod() function exists, call the filesystem specific mknod () function. 
+If the mknod() function exists, call the filesystem specific mknod() function. 
 Pass the name, mode, device type and the location information associated with the 
 directory under which the node will be created. 
 
-@page
+@c @page
 @section mount
 
 @subheading File:
@@ -822,7 +822,7 @@ This routine will handle the mounting of a filesystem on a mount point. If the
 operation is successful, a pointer to the mount table chain entry associated with 
 the mounted filesystem will be returned to the calling function. The specifics 
 about the processing required at the mount point and within the filesystem being 
-mounted is isolated in the filesystem specific mount() and fsmount_me () 
+mounted is isolated in the filesystem specific mount() and fsmount_me() 
 functions. This allows the generic mount() function to remain unaltered even if 
 new filesystem types are introduced.
 
@@ -859,7 +859,7 @@ mounted, that function is called to initialize for the new filesystem.
 On successful completion, the temporary mount table entry will be placed on the 
 mount table chain to record the presence of the mounted filesystem.
 
-@page
+@c @page
 @section open
 
 @subheading File:
@@ -905,7 +905,7 @@ open() routine.
 On a successful open(), the index into the file descriptor table will be calculated 
 and returned to the calling routine.
 
-@page
+@c @page
 @section opendir
 
 @subheading File:
@@ -923,7 +923,7 @@ processing routines.
 
 The BSD group provided this routine.
 
-@page
+@c @page
 @section pathconf
 
 @subheading File:
@@ -933,7 +933,7 @@ pathconf.c
 @subheading Processing: 
 
 This routine will obtain the value of one of the path configuration parameters and 
-return it to the calling routine. It is layered on the generic open() and fpathconf () 
+return it to the calling routine. It is layered on the generic open() and fpathconf() 
 functions. These interfaces should not change with the addition of new filesystem 
 types.
 
@@ -942,11 +942,11 @@ types.
 This routine will try to open the file indicated by path. 
 
 If successful, the file descriptor will be used to access the pathconf value specified 
-by -name- using the fpathconf() function.
+by @code{name} using the fpathconf() function.
 
 The file that was accessed is then closed.
 
-@page
+@c @page
 @section read
 
 @subheading File:
@@ -992,7 +992,7 @@ bytes read) to increment the offset element of the file control block
 
 @end enumerate
 
-@page
+@c @page
 @section readdir
 
 @subheading File:
@@ -1012,7 +1012,7 @@ This routine provides the filesystem specific aspects of reading a directory.
 It is layered on the read() function in the directory handler table. This function 
 has been mapped to the Imfs_dir_read() function.
 
-@page
+@c @page
 @section unmount
 
 @subheading File:
@@ -1061,7 +1061,7 @@ from the mount table chain.
 
 @end enumerate
 
-@page
+@c @page
 @section eval
 
 @subheading File:
@@ -1076,7 +1076,7 @@ XXX
 
 XXX
 
-@page
+@c @page
 @section getdentsc
 
 @subheading File:

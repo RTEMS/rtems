@@ -205,7 +205,7 @@ rtems_filesystem_operations_table  IMFS_ops = @{
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_evalpath()
 
@@ -229,7 +229,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_evalformake()
 
@@ -253,7 +253,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_link()
 
@@ -313,7 +313,7 @@ hard-link.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_unlink()
 
@@ -337,7 +337,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_node_type()
 
@@ -379,7 +379,7 @@ The IMFS_jnode_t type element indicates one of the node types listed below:
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_mknod()
 
@@ -417,7 +417,7 @@ attempt to allocate space for the @code{jnode} (ENOMEN).
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_rmnod()
 
@@ -441,7 +441,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_chown()
 
@@ -477,7 +477,7 @@ ownership of the IMFS_jnode_t structure.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_freenod()
 
@@ -501,7 +501,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_mount()
 
@@ -539,7 +539,7 @@ describes the filesystem mounted at this point.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_fsmount_me()
 
@@ -675,7 +675,7 @@ otherwise a 1 will be returned.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_unmount()
 
@@ -699,7 +699,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_fsunmount_me()
 
@@ -725,7 +725,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_utime()
 
@@ -749,7 +749,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_eval_link()
 
@@ -772,7 +772,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 @subsection Regular File Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
@@ -804,7 +804,7 @@ rtems_filesystem_file_handlers_r IMFS_memfile_handlers = @{
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection memfile_open() for Regular Files
 
@@ -833,7 +833,7 @@ a success code is always returned.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection memfile_close() for Regular Files
 
@@ -861,7 +861,7 @@ and then immediately returns a success status.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection memfile_read() for Regular Files
 
@@ -907,7 +907,7 @@ IMFS_memfile_read() will do the following:
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection memfile_write() for Regular Files
 
@@ -929,7 +929,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection memfile_ioctl() for Regular Files
 
@@ -957,7 +957,7 @@ a successful completion status.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection memfile_lseek() for Regular Files
 
@@ -989,7 +989,7 @@ file position index. A success code is always returned from this routine.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_stat() for Regular Files
 
@@ -1050,7 +1050,7 @@ structure:
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_fchmod() for Regular Files
 
@@ -1090,7 +1090,7 @@ based on the mode calling parameter.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection memfile_ftruncate() for Regular Files
 
@@ -1132,7 +1132,7 @@ Not Implemented
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No fsync() for Regular Files
 
@@ -1155,7 +1155,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_fdatasync() for Regular Files
 
@@ -1177,7 +1177,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 @subsection Directory Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
@@ -1209,7 +1209,7 @@ rtems_filesystem_file_handlers_r IMFS_directory_handlers = @{
 @c
 @c
 @c
-@page
+@c @page
 @subsubsection IMFS_dir_open() for Directories
 
 @subheading Corresponding Structure Element:
@@ -1243,7 +1243,7 @@ This allows us to start reading at the beginning of the directory.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_dir_close() for Directories
 
@@ -1269,7 +1269,7 @@ immediately returns a success status.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_dir_read() for Directories
 
@@ -1299,7 +1299,7 @@ this routine.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No write() for Directories
 
@@ -1322,7 +1322,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No ioctl() for Directories
 
@@ -1344,7 +1344,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_dir_lseek() for Directories
 
@@ -1377,7 +1377,7 @@ the open directory.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_dir_fstat() for Directories
 
@@ -1422,7 +1422,7 @@ of the children of the directory.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_fchmod() for Directories
 
@@ -1462,7 +1462,7 @@ based on the mode calling parameter.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No ftruncate() for Directories
 
@@ -1485,7 +1485,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No fpathconf() for Directories
 
@@ -1509,7 +1509,7 @@ Not Implemented
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No fsync() for Directories
 
@@ -1532,7 +1532,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_fdatasync() for Directories
 
@@ -1555,7 +1555,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 @subsection Device Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
@@ -1585,7 +1585,7 @@ typedef struct @{
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection device_open() for Devices
 
@@ -1620,7 +1620,7 @@ driver that contains the file control block, flags and mode information.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection device_close() for Devices
 
@@ -1652,7 +1652,7 @@ major and minor device numbers.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection device_read() for Devices
 
@@ -1702,7 +1702,7 @@ read will be returned to the calling program.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection device_write() for Devices
 
@@ -1724,7 +1724,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection device_ioctl() for Devices
 
@@ -1769,7 +1769,7 @@ the calling program, otherwise the ioctl_return value is returned.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection device_lseek() for Devices
 
@@ -1797,7 +1797,7 @@ successful status.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_stat() for Devices
 
@@ -1858,7 +1858,7 @@ structure:
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection IMFS_fchmod() for Devices
 
@@ -1899,7 +1899,7 @@ based on the mode calling parameter.
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No ftruncate() for Devices
 
@@ -1921,7 +1921,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No fpathconf() for Devices
 
@@ -1945,7 +1945,7 @@ Not Implemented
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No fsync() for Devices
 
@@ -1969,7 +1969,7 @@ XXX
 @c
 @c
 @c
-@page
+@c @page
 
 @subsubsection No fdatasync() for Devices
 
