@@ -1,3 +1,9 @@
+2003-04-03	Eri Valette <eric.valette@free.fr>
+
+	PR 381/core
+	* src/newlibc.c: Switch from using _REENT_INIT to _REEINT_INIT_PTR
+	to fix strange run-time problem where EIP was corrupted on pc386 BSP.
+
 2003-03-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AC_CHECK_FUNCS(strlcpy strlcat).

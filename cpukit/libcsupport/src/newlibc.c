@@ -128,7 +128,7 @@ rtems_extension libc_start_hook(
  
 #ifdef __GNUC__
   /* GCC extension: structure constants */
-  *ptr = (struct _reent) _REENT_INIT((*ptr));
+  _REENT_INIT_PTR((ptr));
 #else
   /* 
    *  WARNING: THIS IS VERY DEPENDENT ON NEWLIB!!! 
