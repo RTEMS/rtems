@@ -23,7 +23,7 @@
 
         .globl _ISR_Handler
 _ISR_Handler:
-        stmdb   sp!, {r0, r1, r2, r3}   /* save regs on INT stack */
+        stmdb   sp!, {r0, r1, r2, r3, r12}   /* save regs on INT stack */
         stmdb   sp!, {lr}               /*    now safe to call C funcs */
         
 
@@ -42,10 +42,8 @@ _ISR_Handler:
 /* BSP specific function to INT handler */
         /* FIXME: I'm not sure why I can't save just r12. I'm also  */
         /*     not sure which of r1-r3 are important.               */
-        stmdb   sp!, {r0-r12}                
         bl      ExecuteITHandler 
-        ldmia   sp!, {r0-r12}
-        
+
 /* one less nest level  */      
         ldr     r0, =_ISR_Nest_level
         ldr     r1, [r0]
@@ -101,21 +99,19 @@ bframe:
         /* now in INT mode */
 
         /* replace lr with address of _ISR_Dispatch */
-        ldr     lr, =_ISR_Dispatch
-        add     lr, lr, #0x4              /* On entry to an ISR, the lr is */
+        ldr     lr, =_ISR_Dispatch_p_4    /* On entry to an ISR, the lr is */
                                           /*    the return address + 4, so */
                                           /*    we have to emulate that    */
-        ldmia   sp!, {r0}                 /* out with the old          */
+        ldmia   sp!, {r1}                 /* out with the old          */
         stmdb   sp!, {lr}                 /*    in with the new (lr) */
 
         
-        mrs     r0, spsr
         orr     r0, r0, #0xc0
         msr     spsr, r0
                                         
 exitit:
-        ldmia   sp!, {lr}                 /* restore regs from INT stack */
-        ldmia   sp!, {r0, r1, r2, r3}     /* restore regs from INT stack */
+        ldmia   sp!, {lr}                     /* restore regs from INT stack */
+        ldmia   sp!, {r0, r1, r2, r3, r12}    /* restore regs from INT stack */
         subs    pc, lr, #4                /* return */
 
 
@@ -123,14 +119,14 @@ exitit:
         /* on entry to _ISR_Dispatch, we're in SVC mode */      
         .globl _ISR_Dispatch
 _ISR_Dispatch:
-        stmdb   sp!, {r0-r12,lr}      /* save regs on SVC stack */
-                                        /*    (now safe to call C funcs) */
-                                        /*    we don't save lr, since  */
-                                        /*    it's just going to get   */
-                                        /*    overwritten              */
-
+        stmdb   sp!, {r0-r3, r12,lr}      /* save regs on SVC stack */
+                                          /*    (now safe to call C funcs) */
+                                          /*    we don't save lr, since  */
+                                          /*    it's just going to get   */
+                                          /*    overwritten              */
+_ISR_Dispatch_p_4:	
         bl      _Thread_Dispatch
-	ldmia	sp!, {r0-r12, lr}
+	ldmia	sp!, {r0-r3, r12, lr}
 
 	stmdb   sp!, {r0-r2}
         /* Now we have to screw with the stack */

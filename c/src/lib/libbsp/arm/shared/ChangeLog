@@ -1,3 +1,10 @@
+2002-07-30	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* irq/irq_asm.S: ARM port works well enough to run all sptests,
+	tmtests, and ttcp.  In addition to general cleanup, there
+	has been considerable optimization to interrupt disable/enable,
+	endian swapping, and context switching.
+
 2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* irq/irq_asm.S: Significant rework in attempt to make interrupts
