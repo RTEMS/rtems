@@ -1,3 +1,7 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/rtems/Makefile.am: Fix comments to make automake-1.5 happy.
+
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.

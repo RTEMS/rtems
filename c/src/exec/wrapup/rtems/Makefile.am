@@ -22,9 +22,9 @@ SIZE_RTEMS = $(SHELL) $(PROJECT_TOPdir)/tools/cpu/generic/size_rtems
 
 $(LIB): ${OBJS}
 	$(make-library)
-	# cd $(PROJECT_ROOT) ; \
-	 $(SIZE_RTEMS) @RTEMS_BSP@ $(ARCH) \
-	 >$(PROJECT_RELEASE)/lib/sizeinfo$(LIB_VARIANT).txt
+#	cd $(PROJECT_ROOT) ; \
+#	 $(SIZE_RTEMS) @RTEMS_BSP@ $(ARCH) \
+#	 >$(PROJECT_RELEASE)/lib/sizeinfo$(LIB_VARIANT).txt
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
