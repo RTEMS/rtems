@@ -175,19 +175,11 @@ int imfs_dir_lseek(
   int             whence
 )
 {
-  off_t normal_offset;
-
-  normal_offset = (offset/sizeof(struct dirent)) * sizeof(struct dirent);
-
-
   switch( whence )
   {
      case SEEK_SET:	/* absolute move from the start of the file */
-        iop->offset = normal_offset;
-        break;
-
      case SEEK_CUR:	/* relative move */
-        iop->offset = iop->offset + normal_offset;
+        iop->offset = (offset/sizeof(struct dirent)) * sizeof(struct dirent);
         break;
 
      case SEEK_END:	/* Movement past the end of the directory via lseek */
