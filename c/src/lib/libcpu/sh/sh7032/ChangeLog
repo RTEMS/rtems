@@ -1,5 +1,12 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/ckinit.c, delay/delay.c, include/iosh7032.h,
+	include/ispsh7032.h, include/sci.h, include/sh7_pfc.h,
+	include/sh7_sci.h, sci/sci.c, score/cpu_asm.c, score/ispsh7032.c,
+	timer/timer.c: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* score/cpu_asm.c: Removed incorrect statement about copyright
 	assignment.
 
