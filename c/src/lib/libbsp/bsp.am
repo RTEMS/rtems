@@ -10,3 +10,5 @@ $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs: bsp_specs
 
 PREINSTALL_FILES = $(PROJECT_ROOT)/@RTEMS_BSP@/lib \
   $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs
+
+bsplib_DATA = bsp_specs

@@ -1,3 +1,7 @@
+2002-07-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp.am: Add bsplib_DATA = bsp_specs.
+
 2002-06-25	Joel Sherrill <joel@OARcorp.com>
 
 	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k
