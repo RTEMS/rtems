@@ -1,3 +1,9 @@
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am, include/rtems/Makefile.am,
+	inline/rtems/Makefile.am, macros/rtems/Makefile.am:
+	Apply include_*HEADERS instead of H_FILES.
+
 2001-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.d>
 
 	* include/confdefs.h: define CONFIGURE_NEWLIB_EXTENSION 0 if not

@@ -4,12 +4,10 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = confdefs.h
-
-noinst_HEADERS = $(H_FILES)
+include_HEADERS = confdefs.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) \
-    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/%)
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 $(PROJECT_INCLUDE):
 	@$(mkinstalldirs) $@

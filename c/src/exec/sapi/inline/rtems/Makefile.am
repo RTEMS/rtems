@@ -3,14 +3,13 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+include_rtemsdir = $(includedir)/rtems
 
 if INLINE
-I_FILES = extension.inl
-
-noinst_HEADERS = $(I_FILES)
+include_rtems_HEADERS = extension.inl
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
