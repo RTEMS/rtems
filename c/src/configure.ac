@@ -133,7 +133,7 @@ RTEMS_BSP_CONFIG_SUBDIR(
   ['--with-project-root=${with_project_root}../$RTEMS_BSP/' \
    '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
    '--libdir=${exec_prefix}/${RTEMS_BSP}/lib'],
-  [test x"$multilib" = x"no"])
+  [test x"$multilib" = xno])
 
 ## Note: the order of the directories below is essential
 AC_CONFIG_SUBDIRS([make])
@@ -150,7 +150,7 @@ AC_SUBST(libcpu_cpu_subdir)
 
 # Is there code where there should be for this BSP?
 # The bare bsp is a special case as it is not under the RTEMS_CPU path
-if test "$RTEMS_BSP_FAMILY" = "bare" ; then
+if test "$RTEMS_BSP_FAMILY" = bare ; then
   AC_CONFIG_SUBDIRS([lib/libbsp/bare])
   AC_SUBST(libbsp_cpu_subdir,bare)
 else
@@ -179,16 +179,14 @@ AC_ARG_ENABLE([ada],
   *)  AC_MSG_ERROR(bad value ${enable_ada} for --enable-ada) ;;
 esac],[enable_ada=no])
 
-AS_IF([test x"$enable_ada" = x"yes"],[
-    RTEMS_BSP_CONFIG_SUBDIR(
-      [ada-tests],[ada-tests],
-      ['--enable-rtems-root=../' \
-       '--with-project-root=${with_project_root}../' \
-       '--with-project-top=${with_project_top}../' \
-       '--enable-rtemsbsp=$RTEMS_BSP' \
-      ],
-      [test x"$enable_tests" = x"yes"])
-])
+RTEMS_BSP_CONFIG_SUBDIR(
+  [ada-tests],[ada-tests],
+  ['--enable-rtems-root=../' \
+   '--with-project-root=${with_project_root}../' \
+   '--with-project-top=${with_project_top}../' \
+   '--enable-rtemsbsp=$RTEMS_BSP' \
+  ],
+  [test x"$enable_tests" = xyes && test x"$enable_ada" = xyes])
 
 RTEMS_BSP_CONFIG_SUBDIR(
   [testsuites],[../../testsuites],
@@ -201,7 +199,7 @@ RTEMS_BSP_CONFIG_SUBDIR(
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
 
-AS_IF([test "$host_cpu" = "sparc"],[
+AS_IF([test "$host_cpu" = sparc],[
   AC_DEFINE_UNQUOTED([CPU_U32_FIX],[1],
     [whether to enable ipalignment work-around])
 ])
