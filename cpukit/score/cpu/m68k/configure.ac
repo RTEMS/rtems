@@ -26,7 +26,5 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_NEWLIB
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-rtems/Makefile
-rtems/score/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
