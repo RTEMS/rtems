@@ -217,6 +217,11 @@ void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
 #define BSP_CONSOLE_PORT_COM1    (BSP_UART_COM1)
 #define BSP_CONSOLE_PORT_COM2    (BSP_UART_COM2)
 
+/*
+ * indicate, that BSP has IDE driver
+ */
+#define RTEMS_BSP_HAS_IDE_DRIVER
+
 /* GDB stub stuff */
 void i386_stub_glue_init(int uart);
 void i386_stub_glue_init_breakin(void);
