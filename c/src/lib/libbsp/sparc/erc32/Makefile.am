@@ -22,9 +22,9 @@ $(PROJECT_INCLUDE)/erc32.h: include/erc32.h
 	$(INSTALL_DATA) $< $@
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/erc32.h
 
-$(PROJECT_INCLUDE)/coverhd.h.h: include/coverhd.h.h
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
 	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
