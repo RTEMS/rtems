@@ -34,11 +34,12 @@ extern "C" {
   || defined(__i960__) \
   || defined(__mc68000__) \
   || defined(__sh__) \
-  || defined(__sparc__)
+  || defined(__sparc__) \
+  || defined(__i386__)
   /* these cpus are ready to apply cpuopts.h */
 #include <rtems/score/cpuopts.h>
 #else
-  /* fallback to targopts.h for hppa1.1, i386, mips, and powerpc */
+  /* fallback to targopts.h for hppa1.1, mips, and powerpc */
 #include <rtems/score/targopts.h>
 #endif
 
