@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-## NOTE: This Makefile.am applies automake compilation rules and does not 
+## NOTE: This Makefile.am applies automake compilation rules and does not
 ## apply RTEMS's compilation rules.
 
 AUTOMAKE_OPTIONS = no-exeext
@@ -52,8 +52,8 @@ ppcboot_DATA = bootloader.$(OBJEXT)
 ppcboot_DATA += ../../shared/bootloader/ppcboot.lds
 
 # FIXME: Tmp-install stuff to make mcp750.cfg's make-exe happy.
-# As mcp750.cfg's make-exe doesn't work outside of the source-tree. 
-# We might consider to use this directory directly for in-source-tree 
+# As mcp750.cfg's make-exe doesn't work outside of the source-tree.
+# We might consider to use this directory directly for in-source-tree
 # building, instead.
 $(PROJECT_RELEASE)/lib/%: %
 	$(INSTALL_DATA) $< $@

@@ -1,5 +1,11 @@
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Cosmetics.
+	* bootloader/Makefile.am: Cosmetics.
+	* startup/Makefile.am: Cosmetics.
+
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Add preinstallation dirstamp support.
 	* bootloader/Makefile.am: Cosmetics.
 	* clock/Makefile.am: Cosmetics.

@@ -17,7 +17,7 @@ nodist_include_HEADERS += ../shared/include/nvram.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 nodist_include_bsp_HEADERS = ../shared/console/consoleIo.h
 nodist_include_bsp_HEADERS += ../shared/console/uart.h
-nodist_include_bsp_HEADERS += ../shared/irq/irq.h 
+nodist_include_bsp_HEADERS += ../shared/irq/irq.h
 nodist_include_bsp_HEADERS += ../shared/motorola/motorola.h
 
 all-local: $(PREINSTALL_FILES)
