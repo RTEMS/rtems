@@ -34,7 +34,7 @@
 boolean _Objects_Compare_name_raw(
   void       *name_1,
   void       *name_2,
-  uint32_t    length
+  uint16_t    length
 )
 {
 #if 0

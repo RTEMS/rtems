@@ -51,10 +51,10 @@ void _Objects_Handler_initialization(
       INTERNAL_ERROR_INVALID_NODE
     );
 
+#if defined(RTEMS_MULTIPROCESSING)
   _Objects_Local_node    = node;
   _Objects_Maximum_nodes = maximum_nodes;
 
-#if defined(RTEMS_MULTIPROCESSING)
   _Objects_MP_Handler_initialization(
     node,
     maximum_nodes,

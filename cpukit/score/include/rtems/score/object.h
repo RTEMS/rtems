@@ -240,8 +240,8 @@ typedef struct {
  */
 
 #if defined(RTEMS_MULTIPROCESSING)
-SCORE_EXTERN uint32_t    _Objects_Local_node;
-SCORE_EXTERN uint32_t    _Objects_Maximum_nodes;
+SCORE_EXTERN uint16_t    _Objects_Local_node;
+SCORE_EXTERN uint16_t    _Objects_Maximum_nodes;
 #else
 #define _Objects_Local_node    1
 #define _Objects_Maximum_nodes 1

@@ -34,7 +34,7 @@
 void _Objects_Copy_name_raw(
   void       *source,
   void       *destination,
-  uint32_t    length
+  uint16_t    length
 )
 {
   uint32_t   *source_p = (uint32_t   *) source;

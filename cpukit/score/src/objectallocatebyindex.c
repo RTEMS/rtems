@@ -37,8 +37,8 @@
 
 Objects_Control *_Objects_Allocate_by_index(
   Objects_Information *information,
-  uint32_t             index,
-  uint32_t             sizeof_control
+  uint16_t             index,
+  uint16_t             sizeof_control
 )
 {
   Objects_Control *the_object;
