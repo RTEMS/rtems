@@ -1,3 +1,8 @@
+2003-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Remove -D__embedded__ -Asystem(embedded) from cpp.
+	Remove cpp, old_cpp (now unused).
+
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 288/rtems
