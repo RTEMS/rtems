@@ -11,7 +11,9 @@ PROJECT_ROOT = @PROJECT_ROOT@
 LIBNAME=libserialio.a
 LIB=${ARCH}/${LIBNAME}
 
-C_PIECES=sersupp mc68681 ns16550 z85c30 
+C_PIECES=mc68681 ns16550 z85c30 \
+    serprobe termios_baud2index termios_baud2num
+
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
