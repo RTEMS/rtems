@@ -98,7 +98,7 @@ rtems_status_code rtems_region_get_segment(
       executing->Wait.queue           = &the_region->Wait_queue;
       executing->Wait.id              = id;
       executing->Wait.count           = size;
-      executing->Wait.return_argument = (unsigned32 *) segment;
+      executing->Wait.return_argument = segment;
 
       _Thread_queue_Enter_critical_section( &the_region->Wait_queue );
 
