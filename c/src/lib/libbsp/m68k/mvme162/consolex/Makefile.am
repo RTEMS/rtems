@@ -9,7 +9,7 @@ PGM = $(ARCH)/consolex.rel
 C_FILES = consolex.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = consolex.h
+include_HEADERS = consolex.h
 
 OBJS = $(C_O_FILES)
 
@@ -27,10 +27,11 @@ $(PGM): $(OBJS)
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
 
-$(PROJECT_INCLUDE)/consolex.h: consolex.h
+$(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/consolex.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
