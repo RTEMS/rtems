@@ -17,7 +17,7 @@ void bsp_libc_init(
   int         use_sbrk
 )
 {
-    RTEMS_Malloc_Initialize( heap_start, heap_size, use_sbrk);
+    RTEMS_Malloc_Initialize( heap_start, heap_size, use_sbrk );
 
     /*
      *  Init the RTEMS libio facility to provide UNIX-like system
@@ -31,7 +31,7 @@ void bsp_libc_init(
      * Set up for the libc handling.
      */
 
-    if (BSP_Configuration.ticks_per_timeslice > 0)
+    if ( BSP_Configuration.ticks_per_timeslice > 0 )
         libc_init(1);                /* reentrant if possible */
     else
         libc_init(0);                /* non-reentrant */
