@@ -17,13 +17,6 @@ include $(RTEMS_ROOT)/make/directory.cfg
 CPLUSPLUS_TESTS_yes_V = cdtest
 CPLUSPLUS_TESTS = $(CPLUSPLUS_TESTS_$(HAS_CPLUSPLUS)_V)
 
-# We only build the sockets tests if HAS_KA9Q was defined
-SOCKET_yes_V = socket
-SOCKET = $(SOCKET_$(HAS_KA9Q)_V)
-
-HOSTSOCKET_yes_V = socket/pgmHost
-HOSTSOCKET = $(HOSTSOCKET_$(HAS_KA9Q)_V)
-
 # base_mp is a sample multiprocessing test
 # We only build it if HAS_MP was defined
 
@@ -32,7 +25,7 @@ MP_TESTS = $(MP_TESTS_$(HAS_MP)_V)
 
 FP_TESTS = paranoia
 
-SUB_DIRS=hello ticker base_sp $(HOSTSOCKET) $(SOCKET) \
+SUB_DIRS=hello ticker base_sp \
 	 $(MP_TESTS) $(CPLUSPLUS_TESTS) $(FP_TESTS)
 
 
