@@ -20,13 +20,14 @@ ERROR_C_PIECES=error
 
 ASSOCIATION_C_PIECES=assoc assocnamebad
 
-BASE_FS_C_PIECES = base_fs mount unmount ioman libio libio_sockets eval
+BASE_FS_C_PIECES = base_fs mount unmount ioman libio libio_sockets eval \
+    fs_null_handlers
 
 IMFS_C_PIECES = imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
     imfs_gtkn imfs_init imfs_link imfs_mknod imfs_mount imfs_fchmod \
     imfs_rmnod imfs_unlink imfs_unmount imfs_utime imfs_ntype imfs_stat \
     imfs_getchild memfile deviceio imfs_handlers imfs_debug imfs_symlink \
-    imfs_readlink imfs_fdatasync
+    imfs_readlink imfs_fdatasync imfs_fcntl
 
 TERMIOS_C_PIECES = cfgetispeed cfgetospeed cfsetispeed cfsetospeed tcgetattr \
     tcsetattr tcdrain tcflow tcflush termios \

@@ -447,6 +447,11 @@ int IMFS_fdatasync(
   rtems_libio_t *iop
 );
 
+int IMFS_fcntl(
+  int            cmd,
+  rtems_libio_t *iop
+);
+
 #ifdef __cplusplus
 }
 #endif

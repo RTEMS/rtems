@@ -75,3 +75,23 @@ rtems_filesystem_file_handlers_r device_handlers = {
   NULL,   /* fdatasync */
   NULL    /* fcntl */
 };
+
+/*
+ *  Set of null operations handlers.
+ */
+
+rtems_filesystem_file_handlers_r null_handlers = {
+  NULL,       /* open */
+  NULL,       /* close */
+  NULL,       /* read */
+  NULL,       /* write */
+  NULL,       /* ioctl */
+  NULL,       /* lseek */
+  NULL,       /* fstat */
+  NULL,       /* fchmod */
+  NULL,       /* ftruncate */
+  NULL,       /* fpathconf */
+  NULL,       /* fsync */
+  NULL,       /* fdatasync */
+  NULL        /* fcntl */
+};
