@@ -89,6 +89,8 @@ only be made available for acquisition by other tasks when the
 outermost @code{@value{DIRPREFIX}semaphore_obtain} is matched with
 a @code{@value{DIRPREFIX}semaphore_release}.
 
+Simple binary semaphores do not allow nested access and so can be used for task synchronization.
+
 
 @subsection Priority Inversion
 
@@ -189,6 +191,9 @@ the set of valid semaphore attributes:
 0 and 1 (default)
 
 @item @code{@value{RPREFIX}COUNTING_SEMAPHORE} - no restriction on values
+
+@item @code{@value{RPREFIX}SIMPLE_BINARY_SEMAPHORE} - restrict values to
+0 and 1 and do not allow nested access.
 
 @item @code{@value{RPREFIX}NO_INHERIT_PRIORITY} - do not use priority
 inheritance (default)
@@ -445,6 +450,9 @@ defined by RTEMS:
 0 and 1 (default)
 
 @item @code{@value{RPREFIX}COUNTING_SEMAPHORE} - no restriction on values
+
+@item @code{@value{RPREFIX}SIMPLE_BINARY_SEMAPHORE} - restrict values to
+0 and 1 and do not allow nested access.
 
 @item @code{@value{RPREFIX}NO_INHERIT_PRIORITY} - do not use priority
 inheritance (default)
