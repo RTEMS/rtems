@@ -183,15 +183,15 @@ int say_next = 0, hup_next = 0;
 void *dup_mem __P((void *b, size_t c));
 void *copy_of __P((char *s));
 void break_sequence __P((void));
-int  get_string __P((register char *string));
-int  put_string __P((register char *s));
-int  write_char __P((int c));
-int  put_char __P((int c));
-int  get_char __P((void));
+static int  get_string __P((register char *string));
+static int  put_string __P((register char *s));
+static int  write_char __P((int c));
+static int  put_char __P((int c));
+static int  get_char __P((void));
 void chat_send __P((register char *s));
-char *character __P((int c));
+static char *character __P((int c));
 void chat_expect __P((register char *s));
-char *clean __P((register char *s, int sending));
+static char *clean __P((register char *s, int sending));
 char *expect_strtok __P((char *, char *));
 int chatmain __P((int, int, char *));
 
@@ -267,7 +267,7 @@ void break_sequence()
 /*
  *	'Clean up' this string.
  */
-char *clean(s, sending)
+static char *clean(s, sending)
 register char *s;
 int sending;  /* set to 1 when sending (putting) this string. */
 {
@@ -573,7 +573,7 @@ char *s;
  * the data.
  */
 
-char *character(c)
+static char *character(c)
 int c;
 {
     static char string[10];
@@ -669,7 +669,7 @@ register char *s;
     }
 }
 
-int get_char()
+static int get_char()
 {
     int status;
     char c;
@@ -688,7 +688,7 @@ int get_char()
 	return -1;						
 }
 
-int put_char(c)
+static int put_char(c)
 int c;
 {
   char ch = c;
@@ -698,7 +698,7 @@ int c;
   return 0;
 }
 
-int write_char (c)
+static int write_char (c)
 int c;
 {
     if (put_char(c) < 0) {
@@ -707,7 +707,7 @@ int c;
     return (1);
 }
 
-int put_string (s)
+static int put_string (s)
 register char *s;
 {
     quiet = 0;
@@ -752,7 +752,7 @@ register char *s;
 /*
  *	'Wait for' this string to appear on this file descriptor.
  */
-int get_string(string)
+static int get_string(string)
 register char *string;
 {
     int c, len, minlen;

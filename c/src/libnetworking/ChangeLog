@@ -1,3 +1,8 @@
+2003-02-06	Joel Sherrill <joel@OARcorp.com>
+
+	* pppd/chat.c: Convert routines with common names to static. This
+	included get_char(), put_char(), and character() among others.
+
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
