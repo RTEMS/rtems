@@ -40,5 +40,6 @@ case "${rtems_target}" in
 	;;
 esac
 changequote([,])dnl
+AC_SUBST(RTEMS_CPU)
 AC_MSG_RESULT($RTEMS_CPU)
 ])
