@@ -1,3 +1,7 @@
+2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/linkcmds: Remove SEARCH_DIR.
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
