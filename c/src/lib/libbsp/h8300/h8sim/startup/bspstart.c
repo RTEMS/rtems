@@ -96,4 +96,9 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
 }
 
-H8BD_Install_IRQ() {}
+void H8BD_Install_IRQ(
+  unsigned32	vector,
+  proc_ptr	new_handler,
+  proc_ptr	*old_handler )
+{ /* empty */
+}
