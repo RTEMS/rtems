@@ -50,6 +50,14 @@ void _CPU_Initialize(
 )
 {
   _CPU_Table = *cpu_table;
+
+  { unsigned hasFixed = 0;
+  /* assert that our BSP has fixed PR288 */
+  __asm__ __volatile__ ("mfspr %0, %2":"=r"(hasFixed):"0"(hasFixed),"i"(SPRG0));
+  if ( PPC_BSP_HAS_FIXED_PR288 != hasFixed ) {
+    BSP_panic("This BSP needs to fix PR#288");
+  }
+  }
 }
 
 /*PAGE
@@ -141,29 +149,5 @@ void _CPU_Context_Initialize(
 
 void _CPU_Install_interrupt_stack( void )
 {
-}
-
-/*PAGE
- *
- *  This is the PowerPC specific implementation of the routine which
- *  returns TRUE if an interrupt is in progress.
- */
-
-boolean _ISR_Is_in_progress( void )
-{
-  /* 
-   *  Until the patch on PR288 is in all new exception BSPs, this is
-   *  the safest thing to do.
-   */
-#ifdef mpc8260
-  return (_ISR_Nest_level != 0);
-#else
-  register unsigned int isr_nesting_level;
-  /*
-   * Move from special purpose register 0 (mfspr SPRG0, r3)
-   */
-  asm volatile ("mfspr	%0, 272" : "=r" (isr_nesting_level));
-  return isr_nesting_level;
-#endif
 }
 
