@@ -1,3 +1,9 @@
+2001-03-20	Joel Sherrill <joel@OARcorp.com>
+
+	* PR143
+	* lib/include/rtems/termiostypes.h: Removed unneeded volatile on
+	"theBuf" since no byte is read more than once anyway.
+
 2002-03-01	Eric Norum <eric.norum@usask.ca>
 
 	* libc/gxx_wrappers.c: Task is not preemptable while running a 

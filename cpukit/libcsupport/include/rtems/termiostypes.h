@@ -33,7 +33,7 @@ struct ttywakeup {
  * Variables associated with the character buffer
  */
 struct rtems_termios_rawbuf {
-  volatile char		*theBuf;
+  char *theBuf;
   volatile unsigned int	Head;
   volatile unsigned int	Tail;
   volatile unsigned int	Size;
