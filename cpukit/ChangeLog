@@ -1,5 +1,12 @@
 2005-01-20	Joel Sherrill <joel@OARcorp.com>
 
+	PR 745/rtems
+	* rtems/src/ratemoncreate.c, rtems/src/timercreate.c: Make sure
+	internal timer structures are initialized so object control reuse is
+	safe.
+
+2005-01-20	Joel Sherrill <joel@OARcorp.com>
+
 	PR 740/rtems
 	* score/src/heapgetfreeinfo.c: Return size of largest not of last block.
 
