@@ -363,6 +363,10 @@ RTEMS to be built. It is recommended that the directory chosen to receive
 these tools be named so that it is clear from which egcs distribution it
 was generated and for which target system the tools are to produce code for.
 
+@b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory 
+under the build directory.  The build directory will be removed
+automatically upon successful completion of the build procedure.
+
 @item BINUTILS
 is the directory under tools that contains @value{BINUTILS-UNTAR}. 
 For example:
