@@ -102,7 +102,7 @@ motorolaBoard	getMotorolaBoard()
     }
   }
   if (mot_entry == -1) {
-    printk("Unkwon motorola board Please update libbsp/powerpc/shared/motorola/motorola.c\n");
+    printk("Unknown motorola board Please update libbsp/powerpc/shared/motorola/motorola.c\n");
     printk("cpu_type = %x\n", (unsigned) cpu_type);
     printk("base_mod = %x\n", (unsigned) base_mod);
     currentBoard = MOTOROLA_UNKNOWN;
