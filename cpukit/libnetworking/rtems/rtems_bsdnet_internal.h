@@ -9,8 +9,8 @@
  *  $Id$
  */
 
-#ifndef _RTEMS_BSDNET_INTERNAL_H_
-#define _RTEMS_BSDNET_INTERNAL_H_
+#ifndef _RTEMS_RTEMS_BSDNET_INTERNAL_H
+#define _RTEMS_RTEMS_BSDNET_INTERNAL_H
 
 #include <rtems.h>
 
@@ -197,4 +197,4 @@ int ioctl (int, int, ...);
 # error "Network event conflict"
 #endif
 
-#endif /* _RTEMS_BSDNET_INTERNAL_H_ */
+#endif /* _RTEMS_RTEMS_BSDNET_INTERNAL_H */

@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef _RTEMS_BSDNET_
-#define _RTEMS_BSDNET_
+#ifndef _RTEMS_BSDNET_H
+#define _RTEMS_BSDNET_H
 
 #include <rtems.h>
 
@@ -260,4 +260,4 @@ int rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority);
  */
 void rtems_bsdnet_malloc_starvation(void);
 
-#endif /* _RTEMS_BSDNET_ */
+#endif /* _RTEMS_BSDNET_H */

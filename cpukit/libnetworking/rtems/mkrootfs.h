@@ -21,8 +21,8 @@
   $Id$
 */
 
-#ifndef __RTEMS_MKROOTFS_h
-#define __RTEMS_MKROOTFS_h
+#ifndef _RTEMS_MKROOTFS_H
+#define _RTEMS_MKROOTFS_H
 
 #include <rtems.h>
 

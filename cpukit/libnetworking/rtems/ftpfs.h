@@ -20,8 +20,8 @@
  *  $Id$
  */
 
-#ifndef _FTP_DRIVER_H
-#define _FTP_DRIVER_H
+#ifndef _RTEMS_FTPFS_H
+#define _RTEMS_FTPFS_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -23,8 +23,8 @@
  * The `hostname' must be four dot-separated decimal values.
  */
 
-#ifndef _TFTP_FILESYSTEM_h
-#define _TFTP_FILESYSTEM_h
+#ifndef _RTEMS_TFTP_H
+#define _RTEMS_TFTP_H
 
 #ifdef __cplusplus
 extern "C" {
