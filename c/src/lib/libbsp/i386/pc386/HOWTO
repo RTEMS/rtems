@@ -431,6 +431,8 @@ tests.
     The other sample ('*.bt') files should also work with the
 exception of 'spfatal.bt' and 'stackchk.bt' (see 9.).
 
+8.1  Using Diskboot or NetBoot
+------------------------------
     To load the '*.bt' files you can either run the 'diskboot.exe'
 (which can be found in 'c/pc386_i386/build-tools') under DOS with a
 command line like (this is just a quick and dirty loader - you'll have
@@ -456,6 +458,16 @@ addresses 0x20200, 0x40200 and 0x80200 are known to work under DOS
 5.00, DOS 6.xx and DOS 7.00. You can set the relocation address in
 'c/make/compilers/gcc-pc386.cfg' by setting the value of the
 'RELOCADDR' variable.
+
+8.2  Using GRUB
+---------------
+
+GRUB is another boot loader which may be used with pc386.  It is
+available from:
+
+  ftp://ftp.uruk.org/public/grub/
+  http://www.uruk.org/grub/
+
  
 9. Important Notes
 ------------------
