@@ -55,9 +55,11 @@ start_l:
 	ldc     r8,vbr
 
 	! call the mainline	
-	mov.l	main_k,r0
-	jsr	@r0
-	or	r0,r0
+	mov #0,r4
+	mov #0,r5
+	mov.l main_k,r0
+	jsr @r0
+	mov #0,r6
 
 	! call exit
 	mov	r0,r4
@@ -75,7 +77,7 @@ edata_k:
 end_k:
 	.long	_end
 main_k:
-	.long	_main
+	.long	_boot_card
 exit_k:
 	.long	_exit
 
