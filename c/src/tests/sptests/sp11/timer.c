@@ -27,7 +27,7 @@ rtems_timer_service_routine TA1_send_18_to_self_5_seconds(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_18 );
-  directive_failed( status, "rtems_event_send of 18" );
+  directive_failed_with_level( status, "rtems_event_send of 18", 1 );
 }
 
 rtems_timer_service_routine TA1_send_8_to_self_60_seconds(
@@ -38,7 +38,7 @@ rtems_timer_service_routine TA1_send_8_to_self_60_seconds(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_8 );
-  directive_failed( status, "rtems_event_send of 8" );
+  directive_failed_with_level( status, "rtems_event_send of 8", 1 );
 }
 
 rtems_timer_service_routine TA1_send_9_to_self_60_seconds(
@@ -49,7 +49,7 @@ rtems_timer_service_routine TA1_send_9_to_self_60_seconds(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_9 );
-  directive_failed( status, "rtems_event_send of 9" );
+  directive_failed_with_level( status, "rtems_event_send of 9", 1 );
 }
 
 rtems_timer_service_routine TA1_send_10_to_self(
@@ -60,7 +60,7 @@ rtems_timer_service_routine TA1_send_10_to_self(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_10 );
-  directive_failed( status, "rtems_event_send of 10" );
+  directive_failed_with_level( status, "rtems_event_send of 10", -1 );
 }
 
 rtems_timer_service_routine TA1_send_1_to_self_every_second(
@@ -71,7 +71,7 @@ rtems_timer_service_routine TA1_send_1_to_self_every_second(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_1 );
-  directive_failed( status, "rtems_event_send of 1" );
+  directive_failed_with_level( status, "rtems_event_send of 1", 1 );
 }
 
 rtems_timer_service_routine TA1_send_11_to_self(
@@ -82,7 +82,7 @@ rtems_timer_service_routine TA1_send_11_to_self(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_11 );
-  directive_failed( status, "rtems_event_send of 11" );
+  directive_failed_with_level( status, "rtems_event_send of 11", -1 );
 }
 
 rtems_timer_service_routine TA2_send_10_to_self(
@@ -93,5 +93,5 @@ rtems_timer_service_routine TA2_send_10_to_self(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 2 ], RTEMS_EVENT_10 );
-  directive_failed( status, "rtems_event_send of 10" );
+  directive_failed_with_level( status, "rtems_event_send of 10", 1 );
 }
