@@ -88,15 +88,6 @@ timer/$(ARCH)/timer.rel: $(timer_rel_OBJECTS)
 CLEANDIRS += timer/o-optimize timer/o-debug
 noinst_DATA +=  timer/$(ARCH)/timer.rel
 
-## wrapup
-OBJS = $(exception_OBJECTS)
-OBJS += $(mmu_OBJECTS)
-
-$(ARCH)/libcpuspec.a: ${OBJS}
-	$(make-library)
-
-noinst_DATA += $(ARCH)/libcpuspec.a
-
 ## ----
 all-local: $(PREINSTALL_FILES)
 

@@ -1,5 +1,9 @@
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mpc6xx/Makefile.am: Remove libcpuspec.a (Unused).
+
+2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mpc505/Makefile.am: Fix typo vectors/vectors.S.
 	* shared/Makefile.am: Fix typo 
 	EXTRA_DIST = $(libcpuspec_C_FILES)
