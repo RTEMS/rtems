@@ -268,6 +268,14 @@ extern "C" {
 #define PPC_I_CACHE		16384
 #define PPC_D_CACHE		16384
 
+#elif defined(mpc7400)
+
+#define CPU_MODEL_NAME  "PowerPC 7400"
+
+#define PPC_ALIGNMENT		8
+#define PPC_I_CACHE		32768
+#define PPC_D_CACHE		32768
+
 #elif defined(mpc8260)
 /*
  *  Added by Andy Dachs <a.dachs@sstl.co.uk> 23/11/2000

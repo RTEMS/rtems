@@ -64,6 +64,7 @@ extern "C" {
 #define HID0_ICFI	(1<<11)		/* Instruction Cache Flash Invalidate */
 #define HID0_DCI	(1<<10)		/* Data Cache Invalidate */
 #define HID0_SIED	(1<<7)		/* Serial Instruction Execution [Disable] */
+#define HID0_BTIC	(1<<5)          /* Branch Target Instruction Cache [Enable] */
 #define HID0_BHTE	(1<<2)		/* Branch History Table Enable */
 #define HID0_BTCD	(1<<1)		/* Branch target cache disable */
 

@@ -1,3 +1,8 @@
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/powerpc/registers.h, rtems/score/ppc.h: Per PR213, add 
+	support for the MPC74000 (AKA G4); there is no AltiVec support yet,
+	however.
 2002-04-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/score/ppc.h: Remove rtems_multilib.
