@@ -1,5 +1,9 @@
 2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am: Remove build-variant support.
+
+2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/pppd/Makefile.am,
 	libnetworking/rtems_servers/Makefile.am,
 	libnetworking/rtems_telnetd/Makefile.am:

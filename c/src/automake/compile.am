@@ -57,29 +57,9 @@ RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
 endif
 
 ## -------------------------------------------------------------------------
-
-## translate VARIANT into VARIANT_V
-VARIANT = OPTIMIZE
-
-VARIANT_OPTIMIZE_V = OPTIMIZE
-VARIANT_DEBUG_V = DEBUG
-VARIANT_optimize_V = OPTIMIZE
-VARIANT_debug_V = DEBUG
-
-VARIANT_V = $(VARIANT_$(VARIANT)_V)
-
-## Setup the library suffix
-LIBSUFFIX_OPTIMIZE_V =
-LIBSUFFIX_DEBUG_V = _g
-LIBSUFFIX__V = $(LIBSUFFIX_OPTIMIZE_V)
-
-LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
-
 ## These are supposed to be set in make/custom/<bsp>.cfg
 CPU_CFLAGS = @CPU_CFLAGS@
 CFLAGS_OPTIMIZE_V = @CFLAGS_OPTIMIZE_V@
-CFLAGS_DEBUG_V = @CFLAGS_DEBUG_V@
-CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
 
 ## ------------------------------------------------------------------------
 ## Setup hard-coded flags
