@@ -168,6 +168,20 @@ The following persons/organizations have made contributions:
 + Mark Bronson <mark@ramix.com> of RAMIX for submitting i960RP
   support and the rxgen960 board support package.
 
++ Joel Sherrill <joel@OARcorp.com> for the i960sim BSP that works
+  with the i960 instruction set simulator in gdb.
+
++ Darlene Stewart <Darlene.Stewart@nrc.ca> and Charles Gauthier
+  <Charles.Gauthier@nrc.ca> of the Institute for Information Technology
+  for the National Research Council of Canada submitted the Motorola
+  MBX8XX BSP and consolidated libcpu support for the MPC860 and MPC821
+  into MPC8XX.
+
++ John Cotton <John.Cotton@nrc.ca> and Charles Gauthier
+  <Charles.Gauthier@nrc.ca> of the Institute for Information
+  Technology for the National Research Council of Canada
+  submitted the RTEMS Cache Manager.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
