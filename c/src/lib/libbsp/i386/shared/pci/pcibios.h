@@ -30,6 +30,10 @@
 #define PCIB_DEVSIG_DEV(x) (((x)>>3) & 0x1f)
 #define PCIB_DEVSIG_FUNC(x) ((x) & 0x7)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int pcib_init(void);
 int pcib_find_by_devid(int vendorId, int devId, int idx, int *sig);
 int pcib_find_by_class(int classCode, int idx, int *sig);
@@ -45,6 +49,9 @@ int
 BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun );
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _PCIB_H */
 

@@ -10,6 +10,10 @@
 #ifndef _BSPUART_H
 #define _BSPUART_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void BSP_uart_init(int uart, unsigned long baud, unsigned long databits, unsigned long parity, unsigned long stopbits, int hwFlow);
 void BSP_uart_set_attributes(int uart, unsigned long baud, unsigned long databits, unsigned long parity, unsigned long stopbits);
 void BSP_uart_set_baud(int uart, unsigned long baud);
@@ -165,6 +169,11 @@ extern int BSPBaseBaud;
 #define RECEIVE_FIFO_TRIGGER8	0x80 /* trigger recieve interrupt after 8 byte  */
 #define RECEIVE_FIFO_TRIGGER12	0xc0 /* trigger recieve interrupt after 12 byte */
 #define TRIG_LEVEL  		0xc0 /* Mask for the trigger level 		*/
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif /* _BSPUART_H */
 
