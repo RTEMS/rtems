@@ -1,4 +1,10 @@
 
+2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* custom/Makefile.am: Modified to reflect addition of files.
+	* custom/erc32.cfg: Modified to support addition of no-FP ERC32 variant.
+	* custom/erc32nfp.cfg, custom/leon1.cfg, custom/leon2.cfg: New file.
+
 2000-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/Cygwin-posix.cfg: Add -U__STRICT_ANSI__ to LIBC_DEFINES.
