@@ -2,6 +2,7 @@
 
 	* configure.ac: Add BSPOPTS PRINTK_MINOR and CONSOLE_MINOR.
 	* console/Makefile.am: Don't include @RTEMS_BSP@.cfg
+	Remove BSP_CPPFLAGS.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
