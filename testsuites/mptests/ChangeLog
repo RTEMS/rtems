@@ -1,3 +1,48 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mp01/Makefile.am: Reformat.
+	* mp01/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp01/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp02/Makefile.am: Reformat.
+	* mp02/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp02/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp03/Makefile.am: Reformat.
+	* mp03/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp03/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp04/Makefile.am: Reformat.
+	* mp04/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp04/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp05/Makefile.am: Reformat.
+	* mp05/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp05/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp06/Makefile.am: Reformat.
+	* mp06/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp06/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp07/Makefile.am: Reformat.
+	* mp07/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp07/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp08/Makefile.am: Reformat.
+	* mp08/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp08/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp09/Makefile.am: Reformat.
+	* mp09/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp09/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp10/Makefile.am: Reformat.
+	* mp10/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp10/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp11/Makefile.am: Reformat.
+	* mp11/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp11/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp12/Makefile.am: Reformat.
+	* mp12/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp12/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp13/Makefile.am: Reformat.
+	* mp13/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp13/node2/Makefile.am: Remove all-local: $(ARCH).
+	* mp14/Makefile.am: Reformat.
+	* mp14/node1/Makefile.am: Remove all-local: $(ARCH).
+	* mp14/node2/Makefile.am: Remove all-local: $(ARCH).
+
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having moved to testsuites/.
