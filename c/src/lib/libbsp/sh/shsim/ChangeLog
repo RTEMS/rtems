@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h, start/start.S, startup/bspstart.c,
+	trap34/console-io.c: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
