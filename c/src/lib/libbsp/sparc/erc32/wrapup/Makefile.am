@@ -10,7 +10,7 @@ endif
 
 BSP_PIECES = startup console clock timer gnatsupp $(NETWORKING_DRIVER)
 # pieces to pick up out of libcpu/sparc
-CPU_PIECES = cache reg_win syscall tbr
+CPU_PIECES = cache reg_win syscall
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
