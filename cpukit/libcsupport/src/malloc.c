@@ -170,11 +170,13 @@ void *malloc(
    *  Do not attempt to allocate memory if in a critical section or ISR.
    */
 
-  if (_Thread_Dispatch_disable_level > 0)
-    return (void *) 0;
+  if (_System_state_Is_up(_System_state_Get())) {
+    if (_Thread_Dispatch_disable_level > 0)
+      return (void *) 0;
  
-  if (_ISR_Nest_level > 0)
-    return (void *) 0;
+    if (_ISR_Nest_level > 0)
+      return (void *) 0;
+  }
  
   /*
    *  If some free's have been deferred, then do them now.
@@ -297,11 +299,13 @@ void *realloc(
    *  Do not attempt to allocate memory if in a critical section or ISR.
    */
 
-  if (_Thread_Dispatch_disable_level > 0)
-    return (void *) 0;
+  if (_System_state_Is_up(_System_state_Get())) {
+    if (_Thread_Dispatch_disable_level > 0)
+      return (void *) 0;
  
-  if (_ISR_Nest_level > 0)
-    return (void *) 0;
+    if (_ISR_Nest_level > 0)
+      return (void *) 0;
+  }
  
   /*
    * Continue with calloc().
@@ -356,9 +360,11 @@ void free(
    *  Do not attempt to free memory if in a critical section or ISR.
    */
 
-  if ((_Thread_Dispatch_disable_level > 0) || (_ISR_Nest_level > 0)) {
-    Chain_Append(&RTEMS_Malloc_GC_list, (Chain_Node *)ptr);
-    return;
+  if (_System_state_Is_up(_System_state_Get())) {
+    if ((_Thread_Dispatch_disable_level > 0) || (_ISR_Nest_level > 0)) {
+      Chain_Append(&RTEMS_Malloc_GC_list, (Chain_Node *)ptr);
+      return;
+    }
   }
  
 #ifdef MALLOC_STATS
