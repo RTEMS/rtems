@@ -1,3 +1,12 @@
+2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, acinclude.m4, configure.in: Introduce GNU
+	canonicalization to libfs/.
+	The approach is currently a bit of a hack as GNU canonicalization
+	does not support the per-BSP build some of the other directories
+	require.  As more of the tree is converted, this will become less 
+	of an issue.
+
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* wrapup/Makefile.am: Added libfs.
