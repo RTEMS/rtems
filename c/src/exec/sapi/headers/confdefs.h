@@ -26,6 +26,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 extern rtems_driver_address_table       Device_drivers[];
 extern rtems_configuration_table        Configuration;
 extern rtems_multiprocessing_table      Multiprocessing_configuration;
+#ifdef RTEMS_POSIX_API
+extern posix_api_configuration_table Configuration_POSIX_API;
+#endif
 
 /*
  *  Default User Initialization Task Table.  This table guarantees that
@@ -235,6 +238,26 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_INITIAL_EXTENSIONS         NULL
 #endif
 
+/*
+ *  POSIX API Configuration Parameters
+ */
+
+#ifdef RTEMS_POSIX_API
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
+#define CONFIGURE_MAXIMUM_POSIX_THREADS      10
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
+#define CONFIGURE_MAXIMUM_POSIX_MUTEXES     0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
+#define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  0
+#endif
+
+#endif
+
 /* 
  *  Calculate the RAM size based on the maximum number of objects configured.
  *  The model is to estimate the memory required for each configured item,
@@ -355,6 +378,16 @@ rtems_api_configuration_table Configuration_RTEMS_API = {
   Initialization_tasks                       /* init task(s) table */
 };
 
+#ifdef RTEMS_POSIX_API
+posix_api_configuration_table Configuration_POSIX_API = {
+  CONFIGURE_MAXIMUM_POSIX_THREADS,
+  CONFIGURE_MAXIMUM_POSIX_MUTEXES,
+  CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES,
+  0,
+  NULL
+};
+#endif
+
 rtems_configuration_table Configuration = {
   CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
   CONFIGURE_EXECUTIVE_RAM_SIZE,
@@ -368,7 +401,11 @@ rtems_configuration_table Configuration = {
   CONFIGURE_INITIAL_EXTENSIONS,              /* pointer to initial extensions */
   CONFIGURE_MULTIPROCESSING_TABLE,           /* pointer to MP config table */
   &Configuration_RTEMS_API,                  /* pointer to RTEMS API config */
-  NULL                                       /* pointer to RTEMS API config */
+#ifdef RTEMS_POSIX_API
+  &Configuration_POSIX_API                   /* pointer to POSIX API config */
+#else
+  NULL                                       /* pointer to POSIX API config */
+#endif
 };
 #endif
 

@@ -21,7 +21,18 @@
 extern "C" {
 #endif
 
+/*
+ *  This is kind of kludgy but it allows targets to totally ignore the
+ *  POSIX API safely.
+ */
+
+#ifdef RTEMS_POSIX_API
 #include <rtems/posix/config.h>
+#else
+
+typedef void *posix_api_configuration_table;
+#endif
+
 #include <rtems/rtems/config.h>
 
 /*  XXX <rtems/rtems/config.h> should cover these
