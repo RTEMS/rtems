@@ -1,3 +1,7 @@
+2000-10-20	Rosimildo da Silva <rdasilva@connecttel.com>
+
+	* console/serial_mouse.c: Added support for changing serial parameters.
+
 2000-10-20	Joel Sherrill <joel@OARcorp.com>
 
 	* include/wd80x3.h: Added file header and logic to prevent multiple
