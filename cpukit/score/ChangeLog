@@ -1,3 +1,7 @@
+2004-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/system.h: Bump revision number.
+
 2004-07-25	Thomas Rauscher <trauscher@loytec.com>
 
 	PR 609/rtems

@@ -27,7 +27,7 @@ extern "C" {
  */
 #define __RTEMS_MAJOR__	4
 #define __RTEMS_MINOR__	6
-#define __RTEMS_REVISION__ 0
+#define __RTEMS_REVISION__ 2
 
 /*
  *  The cpu options include file defines all cpu dependent 
