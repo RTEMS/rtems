@@ -20,7 +20,6 @@ AC_CONFIG_SUBDIRS(tools)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-start/Makefile
 startup/Makefile
 console/Makefile
 i2c/Makefile
