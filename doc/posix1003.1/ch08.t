@@ -183,7 +183,7 @@ EXIT_FAILURE, Constant, Implemented
 
 @subsection Extensions to Time Functions
 
-@subsection Extensions to @code{setlocale} Function
+@subsection Extensions to setlocale Function
 
 @example
 LC_CTYPE, Constant, Implemented
@@ -213,9 +213,9 @@ fdopen(), Function, Implemented
 
 @subsection Interactions of Other FILE-Type C Functions
 
-@subsection Operations on Files -- the @code{remove} Function
+@subsection Operations on Files - the remove Function
 
-@subsection Temporary File Name -- the @code{tmpnam} Function
+@subsection Temporary File Name - the tmpnam Function
 
 @subsection Stdio Locking Functions
 

@@ -28,13 +28,13 @@
 
 @lowersections
 
-@subsubsection Case A --- MIN > 0 and TIME > 0
+@subsubsection Case A - MIN > 0 and TIME > 0
 
-@subsubsection Case B --- MIN > 0 and TIME = 0
+@subsubsection Case B - MIN > 0 and TIME = 0
 
-@subsubsection Case C --- MIN = 0 and TIME > 0
+@subsubsection Case C - MIN = 0 and TIME > 0
 
-@subsubsection Case D --- MIN = 0 and TIME = 0
+@subsubsection Case D - MIN = 0 and TIME = 0
 
 @raisesections
 
@@ -62,7 +62,7 @@ CR, Constant, Unimplemented
 
 @subsection Parameters That Can Be Set
 
-@subsubsection @code{termios} Structure
+@subsubsection termios Structure
 
 @example
 tcflag_t, Type, Implemented

@@ -220,7 +220,7 @@ _POSIX_CLOCKRES_MIN, Constant, Implemented
 
 @section Symbolic Constants
 
-@subsection Symbolic Constants for the @code{access} Function
+@subsection Symbolic Constants for the access Function
 
 @example
 R_OK, Constant, Implemented
@@ -229,7 +229,7 @@ X_OK, Constant, Implemented
 F_OK, Constant, Implemented
 @end example
 
-@subsection Symbolic Constants for the @code{lseek} Function
+@subsection Symbolic Constants for the lseek Function
 
 @example
 SEEK_SET, Constant, Implemented
