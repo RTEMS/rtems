@@ -21,6 +21,11 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | 02.07.03  creation                                         doe  |
 \*===============================================================*/
+
+#ifndef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems.h>
 #include <rtems/fsmount.h>
 #include <stdio.h>

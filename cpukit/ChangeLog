@@ -1,5 +1,9 @@
 2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/fsmount/fsmount.c: Include config.h.
+
+2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* score/src/apiext.c, score/src/chain.c, score/src/coremsg.c,
 	score/src/coremsgbroadcast.c, score/src/coremsgclose.c,
 	score/src/coremsgflush.c, score/src/coremsgflushsupp.c,
