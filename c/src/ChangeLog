@@ -1,5 +1,10 @@
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove libchip/ide/Makefile, libchip/network/Makefile,
+	libchip/serial/Makefile, libchip/rtc/Makefile.
+
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* support/Makefile.am: Remove all-local: $(ARCH).
 	* wrapup/Makefile.am: Remove all-local: $(ARCH).
 

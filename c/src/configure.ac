@@ -237,10 +237,6 @@ librdbg/src/m68k/Makefile
 librdbg/src/m68k/any/Makefile
 
 libchip/Makefile
-libchip/network/Makefile
-libchip/rtc/Makefile
-libchip/serial/Makefile
-libchip/ide/Makefile
 
 optman/Makefile
 
