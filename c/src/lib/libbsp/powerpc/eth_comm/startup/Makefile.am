@@ -8,13 +8,14 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
 
-C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c cpuinit.c main.c \
-     mmutlbtab.c sbrk.c setvec.c gnatinstallhandler.c
+C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c cpuinit.c \
+    main.c mmutlbtab.c sbrk.c setvec.c gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 #
