@@ -1,10 +1,6 @@
 2001-11-27	Joel Sherrill <joel@OARcorp.com>,
 
-	This was tracked as PR39.
-	* include/bsp.h, start/cpuboot.c, start/reset.S, startup/debugger,
-	startup/linkcmds, startup/rom: Eliminated required definition of
-	macros in the custom file for the BSP to compile.  The ROM and ROM
-	address and size settings are now linker script items.  
+	* ChangeLog: Deleted bogus entry.
 
 2001-11-27	Joel Sherrill <joel@OARcorp.com>,
 
