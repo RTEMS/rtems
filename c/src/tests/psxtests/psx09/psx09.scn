@@ -8,7 +8,6 @@ Init: Fri May 24 11:05:00 1996 - new priority = 100
 Init: Fri May 24 11:05:00 1996 - new priority = 200
 Init: Fri May 24 11:05:00 1996 - new priority = 100
 Init: Fri May 24 11:05:01 1996 - new priority = 200
- 
 Init: pthread_setschedparam - SUCCESSFUL (sporadic server)
 Init: Initializing mutex attributes for priority ceiling
 Init: Creating a mutex

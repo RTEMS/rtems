@@ -12,7 +12,6 @@ Init: pthread_create - EINVAL (invalid inherit scheduler)
 Init: pthread_create - ENOTSUP (unsupported system contention scope)
 Init: pthread_create - SUCCESSFUL (inherit scheduler)
 Task_1: exitting
- 
 Init: pthread_attr_setscope - EINVAL (NULL attr)
 Init: pthread_attr_setscope - ENOTSUP
 Init: pthread_attr_setscope - EINVAL (not initialized attr)
@@ -23,7 +22,6 @@ Init: pthread_attr_getscope - EINVAL (NULL scope)
 Init: pthread_attr_getscope - EINVAL (not initialized attr)
 Init: pthread_attr_getscope - SUCCESSFUL
 Init: current scope attribute = 0
- 
 Init: pthread_attr_setinheritsched - EINVAL (NULL attr)
 Init: pthread_attr_setinheritsched - EINVAL (not initialized attr)
 Init: pthread_attr_setinheritsched - ENOTSUP (invalid inheritsched)
@@ -33,7 +31,6 @@ Init: pthread_attr_getinheritsched - EINVAL (NULL inheritsched)
 Init: pthread_attr_getinheritsched - EINVAL (not initialized attr)
 Init: pthread_attr_getinheritsched - SUCCESSFUL
 Init: current inherit scheduler attribute = 1
- 
 Init: pthread_attr_setschedpolicy - EINVAL (NULL attr)
 Init: pthread_attr_setschedpolicy - EINVAL (not initialized attr)
 Init: pthread_attr_setschedpolicy - ENOTSUP (invalid schedpolicy)
@@ -43,7 +40,6 @@ Init: pthread_attr_getschedpolicy - EINVAL (NULL schedpolicy)
 Init: pthread_attr_getschedpolicy - EINVAL (not initialized attr)
 Init: pthread_attr_getschedpolicy - SUCCESSFUL
 Init: current scheduler policy attribute = 2
- 
 Init: pthread_attr_setstacksize - EINVAL (NULL attr)
 Init: pthread_attr_setstacksize - EINVAL (not initialized attr)
 Init: pthread_attr_setstacksize - SUCCESSFUL (low stacksize)
@@ -53,7 +49,6 @@ Init: pthread_attr_getstacksize - EINVAL (NULL stacksize)
 Init: pthread_attr_getstacksize - EINVAL (not initialized attr)
 Init: pthread_attr_getstacksize - SUCCESSFUL
 Init: current stack size attribute = 5120
- 
 Init: pthread_attr_setstackaddr - EINVAL (NULL attr)
 Init: pthread_attr_setstackaddr - EINVAL (not initialized attr)
 Init: pthread_attr_setstackaddr - SUCCESSFUL
@@ -62,7 +57,6 @@ Init: pthread_attr_getstackaddr - EINVAL (NULL stackaddr)
 Init: pthread_attr_getstackaddr - EINVAL (not initialized attr)
 Init: pthread_attr_getstackaddr - SUCCESSFUL
 Init: current stack address attribute = 0x0
- 
 Init: pthread_attr_setdetachstate - EINVAL (NULL attr)
 Init: pthread_attr_setdetachstate - EINVAL (not initialized attr)
 Init: pthread_attr_setdetachstate - EINVAL (invalid detachstate)
@@ -72,7 +66,6 @@ Init: pthread_attr_getdetachstate - EINVAL (NULL detatchstate)
 Init: pthread_attr_getdetachstate - EINVAL (not initialized attr)
 Init: pthread_attr_getdetachstate - SUCCESSFUL
 Init: current detach state attribute = 1
- 
 Init: pthread_attr_getschedparam - SUCCESSFUL
 Init: sched priority      = 2
 Init: ss_low_priority     = 0
@@ -85,7 +78,6 @@ Init: pthread_attr_setschedparam - SUCCESSFUL
 Init: pthread_attr_getschedparam - EINVAL (NULL attr)
 Init: pthread_attr_getschedparam - EINVAL (not initialized attr)
 Init: pthread_attr_getschedparam - EINVAL (NULL schedparam)
- 
 Init: pthread_getschedparam - EINVAL (NULL policy)
 Init: pthread_getschedparam - EINVAL (NULL schedparam)
 Init: pthread_getschedparam - ESRCH (bad thread)
@@ -95,7 +87,6 @@ Init: sched priority      = 2
 Init: ss_low_priority     = 0
 Init: ss_replenish_period = (0, 0)
 Init: ss_initial_budget = (0, 0)
- 
 Init: pthread_setschedparam - EINVAL (NULL schedparam)
 Init: pthread_setschedparam - EINVAL (invalid priority)
 Init: pthread_setschedparam - EINVAL (invalid policy)
