@@ -26,13 +26,13 @@
 
 typedef struct _console_fns {
   boolean (*deviceProbe)(int minor);
-  int (*deviceFirstOpen)(int major, int minor, void *arg);
-  int (*deviceLastClose)(int major, int minor, void *arg);
-  int (*deviceRead)(int minor);
-  int (*deviceWrite)(int minor, const char *buf, int len);
-  void  (*deviceInitialize)(int minor);
-  void  (*deviceWritePolled)(int minor, char cChar);
-  int deviceOutputUsesInterrupts;
+  int     (*deviceFirstOpen)(int major, int minor, void *arg);
+  int     (*deviceLastClose)(int major, int minor, void *arg);
+  int     (*deviceRead)(int minor);
+  int     (*deviceWrite)(int minor, const char *buf, int len);
+  void    (*deviceInitialize)(int minor);
+  void    (*deviceWritePolled)(int minor, char cChar);
+  int       deviceOutputUsesInterrupts;
 } console_fns;
 
 typedef struct _console_flow {
@@ -41,33 +41,32 @@ typedef struct _console_flow {
 } console_flow;
 
 typedef struct _console_tbl {
-  char    *sDeviceName;
-  console_fns *pDeviceFns;
-  boolean   (*deviceProbe)(int minor);
+  char          *sDeviceName;
+  console_fns   *pDeviceFns;
+  boolean      (*deviceProbe)(int minor);
   console_flow  *pDeviceFlow;
-  unsigned32  ulMargin;
-  unsigned32  ulHysteresis;
-  void    *pDeviceParams;
-  unsigned32  ulCtrlPort1;
-  unsigned32  ulCtrlPort2;
-  unsigned32  ulDataPort;
-        unsigned8       (*getRegister)(unsigned32 port, unsigned8 register);
-        void            (*setRegister)(
-                            unsigned32 port, unsigned8 reg, unsigned8 value);
-        unsigned8       (*getData)(unsigned32 port);
-        void            (*setData)(unsigned32 port, unsigned8 value);
-        unsigned32      ulClock;
-  unsigned int  ulIntVector;
+  unsigned32     ulMargin;
+  unsigned32     ulHysteresis;
+  void          *pDeviceParams;
+  unsigned32     ulCtrlPort1;
+  unsigned32     ulCtrlPort2;
+  unsigned32     ulDataPort;
+  unsigned8    (*getRegister)(unsigned32 port, unsigned8 register);
+  void         (*setRegister)(unsigned32 port, unsigned8 reg, unsigned8 value);
+  unsigned8    (*getData)(unsigned32 port);
+  void         (*setData)(unsigned32 port, unsigned8 value);
+  unsigned32     ulClock;
+  unsigned int   ulIntVector;
 } console_tbl;
 
 typedef struct _console_data {
-  void  *termios_data;
-  volatile boolean  bActive;
+  void                   *termios_data;
+  volatile boolean        bActive;
   volatile Ring_buffer_t  TxBuffer;
   /*
    * This field may be used for any purpose required by the driver
    */
-  void  *pDeviceContext;
+  void                   *pDeviceContext;
 } console_data;
 
 extern console_tbl  Console_Port_Tbl[];
