@@ -65,6 +65,8 @@ and status codes.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_mount(
   const char     *file,
   const char     *cfgpath,
@@ -137,6 +139,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_unmount(
   const char     *cfgpath
 );
@@ -201,6 +205,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_mknod(
   const char   *cfgpath,
   mode_t        mode,
@@ -276,6 +282,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_get(
   const char  *cfgpath
   cfg_value_t *value
@@ -331,6 +339,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_set(
   const char  *cfgpath
   cfg_value_t *value
@@ -386,6 +396,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_link(
   const char *src
   const char *dest
@@ -477,6 +489,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_unlink(
   const char    *cfgpath
 );
@@ -555,6 +569,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_open(
   const char     *pathnames[],
   int             options,
@@ -690,6 +706,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_read(  
   CFG           *cfgp,
   CFGENT       **node
@@ -907,6 +925,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_children(
   CFG           *cfgp,
   int            options,
@@ -977,6 +997,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_mark(
   CFG           *cfgp,
   CFGENT        *f,
@@ -1067,6 +1089,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <cfg.h>
+
 int cfg_close(
   CFG           *cfgp
 );
