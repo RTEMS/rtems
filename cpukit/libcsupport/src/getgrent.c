@@ -1,6 +1,13 @@
 /*
+ *  POSIX 1003.1b - 9.2.1 - Group Database Access Routines
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
  *  $Id$
  */
+
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -14,10 +21,19 @@
 static struct group gr_group;    /* password structure */
 static FILE *group_fp;
 
+/*
+ *  The size of these buffers is arbitrary and there is no provision
+ *  to protect any of them from overflowing.  The scanf patterns
+ *  need to be changed to prevent overflowing.  In addition,
+ *  the limits on these needs to be examined.
+ */
+
 static char groupname[8];
 static char password[1024];
 static char groups[1024];
 static char *gr_mem[16] = { } ;
+
+extern void init_etc_passwd_group(void);
 
 int getgrnam_r(
   const char     *name,
@@ -28,6 +44,8 @@ int getgrnam_r(
 )
 {
   FILE *fp;
+
+  init_etc_passwd_group();
 
   if ((fp = fopen ("/etc/group", "r")) == NULL) {
     errno = EINVAL;
@@ -75,6 +93,8 @@ int getgrgid_r(
 )
 {
   FILE *fp;
+
+  init_etc_passwd_group();
 
   if ((fp = fopen ("/etc/group", "r")) == NULL) {
     errno = EINVAL;
@@ -137,6 +157,8 @@ struct group *getgrent( void )
 void
 setgrent ()
 {
+  init_etc_passwd_group();
+
   if (group_fp != NULL)
     fclose (group_fp);
 
