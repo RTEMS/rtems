@@ -46,12 +46,10 @@
  *    error code        - if unsuccessful
  */
 
-rtems_status_code rtems_task_start_support(
-  rtems_id            id,
-  rtems_task_entry    entry_point,
-  Thread_Start_types  arg_style,
-  unsigned32          u32_arg,
-  void               *void_arg
+rtems_status_code rtems_task_start(
+  rtems_id         id,
+  rtems_task_entry entry_point,
+  unsigned32       argument
 )
 {
   register Thread_Control *the_thread;
@@ -74,7 +72,7 @@ rtems_status_code rtems_task_start_support(
 
     case OBJECTS_LOCAL:
       if ( _Thread_Start(
-             the_thread, arg_style, entry_point, void_arg, u32_arg ) ) {
+             the_thread, THREAD_START_NUMERIC, entry_point, NULL, argument ) ) {
         _Thread_Enable_dispatch();
         return RTEMS_SUCCESSFUL;
       }
@@ -83,35 +81,4 @@ rtems_status_code rtems_task_start_support(
   }
 
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
-}
-
-rtems_status_code rtems_task_start(
-  rtems_id         id,
-  rtems_task_entry entry_point,
-  unsigned32       argument
-)
-{
-  return rtems_task_start_support(
-    id,
-    entry_point,
-    THREAD_START_NUMERIC,
-    argument,
-    NULL
-  );
-}
-
-rtems_status_code rtems_task_start_main_style(
-  rtems_id          id,
-  rtems_task      (*entry_point)(int, char **),
-  int               argc,
-  char            **argv
-)
-{
-  return rtems_task_start_support(
-    id,
-    (rtems_task_entry) entry_point,
-    THREAD_START_BOTH_NUMERIC_FIRST,
-    argc,
-    argv
-  );
 }

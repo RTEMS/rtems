@@ -1,5 +1,11 @@
 2000-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* taskstart.c: Removed 1st cut at rtems_task_start_main_style.
+	Only committed this so it could be easily revisited as we
+	discussing moving main() to user space from BSP space.
+
+2000-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* taskstart.c: Added 1st cut at rtems_task_start_main_style.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
