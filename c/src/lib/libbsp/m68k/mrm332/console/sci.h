@@ -214,7 +214,7 @@ extern "C" {
 
 // look at console_open to see how this is called
 
-const rtems_termios_callbacks * SciGetTermiosHandlers( signed32 polled );
+const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled );
 
 
 /* SCI interrupt */
@@ -222,17 +222,17 @@ const rtems_termios_callbacks * SciGetTermiosHandlers( signed32 polled );
 //rtems_isr SciIsr( rtems_vector_number vector );
 
 
-//signed32 SciOpenPolled    ( signed32 major, signed32 minor, void *arg );
-//signed32 SciOpenInterrupt ( signed32 major, signed32 minor, void *arg );
+//int32_t   SciOpenPolled    ( int32_t   major, int32_t   minor, void *arg );
+//int32_t   SciOpenInterrupt ( int32_t   major, int32_t   minor, void *arg );
 
-//signed32 SciClose         ( signed32 major, signed32 minor, void *arg );
+//int32_t   SciClose         ( int32_t   major, int32_t   minor, void *arg );
 
-//signed32 SciWritePolled   ( signed32 minor, const char *buf, signed32 len );
-//signed32 SciWriteInterrupt( signed32 minor, const char *buf, signed32 len );
+//int32_t   SciWritePolled   ( int32_t   minor, const char *buf, int32_t   len );
+//int32_t   SciWriteInterrupt( int32_t   minor, const char *buf, int32_t   len );
 
-//signed32 SciReadPolled    ( signed32 minor );
+//int32_t   SciReadPolled    ( int32_t   minor );
 
-//signed32 SciSetAttributes ( signed32 minor, const struct termios *t );
+//int32_t   SciSetAttributes ( int32_t   minor, const struct termios *t );
 
 
 #ifdef __cplusplus

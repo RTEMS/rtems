@@ -36,6 +36,12 @@
 * $Id$
 *
 * $Log$
+* Revision 1.4  2004/01/07 21:13:50  joel
+* 2004-01-07	Joel Sherrill <joel@OARcorp.com>
+*
+* 	* times, console/sci.c: Remove efi68k and efi332 references as they are
+* 	no longer in the tree.
+*
 * Revision 1.3  2003/01/20 20:33:17  joel
 * 2003-01-20	Duane Gustavus <duane@unt.edu>
 *
@@ -189,7 +195,7 @@ void SCI_output_char(char c);
 
 rtems_isr SciIsr( rtems_vector_number vector );         // interrupt handler
 
-const rtems_termios_callbacks * SciGetTermiosHandlers( signed32 polled );
+const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled );
 
 rtems_device_driver SciInitialize ();                   // device driver api
 rtems_device_driver SciOpen ();                         // device driver api
@@ -198,20 +204,20 @@ rtems_device_driver SciRead ();                         // device driver api
 rtems_device_driver SciWrite ();                        // device driver api
 rtems_device_driver SciControl ();                      // device driver api
 
-signed32 SciInterruptOpen();                            // termios api
-signed32 SciInterruptClose();                           // termios api
-signed32 SciInterruptWrite();                           // termios api
+int32_t   SciInterruptOpen();                            // termios api
+int32_t   SciInterruptClose();                           // termios api
+int32_t   SciInterruptWrite();                           // termios api
 
-signed32 SciSetAttributes();                            // termios api
+int32_t   SciSetAttributes();                            // termios api
 
-signed32 SciPolledOpen();                               // termios api
-signed32 SciPolledClose();                              // termios api
-signed32 SciPolledRead();                               // termios api
-signed32 SciPolledWrite();                              // termios api
+int32_t   SciPolledOpen();                               // termios api
+int32_t   SciPolledClose();                              // termios api
+int32_t   SciPolledRead();                               // termios api
+int32_t   SciPolledWrite();                              // termios api
 
-static void SciSetBaud(unsigned32 rate);                // hardware routine
-static void SciSetDataBits(unsigned16 bits);            // hardware routine
-static void SciSetParity(unsigned16 parity);            // hardware routine
+static void SciSetBaud(uint32_t   rate);                // hardware routine
+static void SciSetDataBits(uint16_t   bits);            // hardware routine
+static void SciSetParity(uint16_t   parity);            // hardware routine
 
 static void inline SciDisableAllInterrupts( void );     // hardware routine
 static void inline SciDisableTransmitInterrupts( void );// hardware routine
@@ -226,18 +232,18 @@ static void inline SciDisableTransmitter( void );       // hardware routine
 static void inline SciEnableReceiver( void );           // hardware routine
 static void inline SciEnableTransmitter( void );        // hardware routine
 
-void SciWriteCharWait  ( unsigned8 );                   // hardware routine
-void SciWriteCharNoWait( unsigned8 );                   // hardware routine
+void SciWriteCharWait  ( uint8_t);                   // hardware routine
+void SciWriteCharNoWait( uint8_t);                   // hardware routine
 
-unsigned8 inline SciCharAvailable( void );              // hardware routine
+uint8_t   inline SciCharAvailable( void );              // hardware routine
 
-unsigned8 inline SciReadCharWait( void );               // hardware routine
-unsigned8 inline SciReadCharNoWait( void );             // hardware routine
+uint8_t   inline SciReadCharWait( void );               // hardware routine
+uint8_t   inline SciReadCharNoWait( void );             // hardware routine
 
 void SciSendBreak( void );                              // test routine
 
-static signed8 SciRcvBufGetChar();                      // circular rcv buf
-static void    SciRcvBufPutChar( unsigned8 );           // circular rcv buf
+static int8_t   SciRcvBufGetChar();                      // circular rcv buf
+static void    SciRcvBufPutChar( uint8_t);           // circular rcv buf
 //atic void    SciRcvBufFlush( void );                  // circular rcv buf
 
 void SciUnitTest();                                     // test routine
@@ -251,21 +257,21 @@ void SciPrintStats();                                   // test routine
 static struct rtems_termios_tty *SciTermioTty;
 
 
-static unsigned8 SciInited = 0;             // has the driver been inited
+static uint8_t   SciInited = 0;             // has the driver been inited
 
-static unsigned8 SciOpened;                 // has the driver been opened
+static uint8_t   SciOpened;                 // has the driver been opened
 
-static unsigned8 SciMajor;                  // major device number
+static uint8_t   SciMajor;                  // major device number
 
-static unsigned16 SciBaud;                  // current value in baud register
+static uint16_t   SciBaud;                  // current value in baud register
 
-static unsigned32 SciBytesIn  = 0;          // bytes received
-static unsigned32 SciBytesOut = 0;          // bytes transmitted
+static uint32_t   SciBytesIn  = 0;          // bytes received
+static uint32_t   SciBytesOut = 0;          // bytes transmitted
 
-static unsigned32 SciErrorsParity  = 0;     // error counter
-static unsigned32 SciErrorsNoise   = 0;     // error counter
-static unsigned32 SciErrorsFraming = 0;     // error counter
-static unsigned32 SciErrorsOverrun = 0;     // error counter
+static uint32_t   SciErrorsParity  = 0;     // error counter
+static uint32_t   SciErrorsNoise   = 0;     // error counter
+static uint32_t   SciErrorsFraming = 0;     // error counter
+static uint32_t   SciErrorsOverrun = 0;     // error counter
 
 #if defined(CONSOLE_SCI)
 
@@ -296,13 +302,13 @@ static const char SciIdent[]="$Id$";
 // then the receive data interrupt handler will put characters in this buffer
 // instead of sending them up to the termios module for the console
 
-static unsigned8 SciRcvBuffer[SCI_RCV_BUF_SIZE];
+static uint8_t   SciRcvBuffer[SCI_RCV_BUF_SIZE];
 
-static unsigned8 SciRcvBufPutIndex = 0;     // array index to put in next char
+static uint8_t   SciRcvBufPutIndex = 0;     // array index to put in next char
 
-static unsigned8 SciRcvBufGetIndex = 0;     // array index to take out next char
+static uint8_t   SciRcvBufGetIndex = 0;     // array index to take out next char
 
-static unsigned8 SciRcvBufCount = 0;        // how many bytes are in the buffer
+static uint8_t   SciRcvBufCount = 0;        // how many bytes are in the buffer
 
 
 
@@ -377,7 +383,7 @@ void SCI_output_char(char c)
 * Scope:    public
 ****************************************************************************/
 
-const rtems_termios_callbacks * SciGetTermiosHandlers( signed32 polled )
+const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled )
 {
     if ( polled )
     {
@@ -401,7 +407,7 @@ const rtems_termios_callbacks * SciGetTermiosHandlers( signed32 polled )
 
 rtems_isr SciIsr( rtems_vector_number vector )
 {
-    unsigned8 ch;
+    uint8_t   ch;
 
 
     if ( (*SCSR) & SCI_ERROR_PARITY  )   SciErrorsParity  ++;
@@ -469,10 +475,10 @@ rtems_isr SciIsr( rtems_vector_number vector )
 * Scope:    private
 ****************************************************************************/
 
-static signed8 SciRcvBufGetChar()
+static int8_t   SciRcvBufGetChar()
 {
     rtems_interrupt_level level;
-    unsigned8 ch;
+    uint8_t   ch;
     
     if ( SciRcvBufCount == 0 )
     {
@@ -505,7 +511,7 @@ static signed8 SciRcvBufGetChar()
 * Scope:    private
 ****************************************************************************/
 
-static void SciRcvBufPutChar( unsigned8 ch )
+static void SciRcvBufPutChar( uint8_t   ch )
 {
     rtems_interrupt_level level;
     
@@ -583,9 +589,9 @@ static void SciRcvBufFlush( void )
 * Scope:    public API
 ****************************************************************************/
 
-signed32 SciInterruptOpen(
-    signed32  major,
-    signed32  minor,
+int32_t   SciInterruptOpen(
+    int32_t    major,
+    int32_t    minor,
     void     *arg
 )
 {
@@ -649,9 +655,9 @@ SciSetBaud( 19200);                         // set the baud rate
 * Scope:    public - termio entry point
 ****************************************************************************/
 
-signed32 SciInterruptClose(
-    signed32  major,
-    signed32  minor,
+int32_t   SciInterruptClose(
+    int32_t    major,
+    int32_t    minor,
     void     *arg
 )
 {
@@ -672,10 +678,10 @@ signed32 SciInterruptClose(
 * Scope:    public API
 ****************************************************************************/
 
-signed32 SciInterruptWrite(
-    signed32    minor,
+int32_t   SciInterruptWrite(
+    int32_t      minor,
     const char *buf,
-    signed32    len
+    int32_t      len
 )
 {
     // We are using interrupt driven output so termios only sends us
@@ -716,15 +722,15 @@ signed32 SciInterruptWrite(
 * Scope:    public API
 ****************************************************************************/
 
-signed32 SciSetAttributes(
-    signed32 minor,
+int32_t   SciSetAttributes(
+    int32_t   minor,
     const struct termios *t
 )
 {
-    unsigned32  baud_requested;
-    unsigned32  sci_rate = 0;
-    unsigned16  sci_parity = 0;
-    unsigned16  sci_databits = 0;
+    uint32_t    baud_requested;
+    uint32_t    sci_rate = 0;
+    uint16_t    sci_parity = 0;
+    uint16_t    sci_databits = 0;
 
     if ( minor != SCI_MINOR )                   // check the minor dev num
     {      
@@ -819,9 +825,9 @@ signed32 SciSetAttributes(
 * Scope:    public - termios entry point
 ****************************************************************************/
 
-signed32 SciPolledOpen(
-    signed32 major,
-    signed32 minor,
+int32_t   SciPolledOpen(
+    int32_t   major,
+    int32_t   minor,
     void    *arg
 )
 {
@@ -873,9 +879,9 @@ signed32 SciPolledOpen(
 * Scope:    public termios API
 ****************************************************************************/
 
-signed32 SciPolledClose(
-    signed32  major,
-    signed32  minor,
+int32_t   SciPolledClose(
+    int32_t    major,
+    int32_t    minor,
     void     *arg
 )
 {
@@ -894,8 +900,8 @@ signed32 SciPolledClose(
 * Scope:    public API
 ****************************************************************************/
 
-signed32 SciPolledRead(
-    signed32 minor
+int32_t   SciPolledRead(
+    int32_t   minor
 )
 {
     if ( minor != SCI_MINOR )               // check the minor dev num
@@ -924,13 +930,13 @@ signed32 SciPolledRead(
 * Scope:    public termios API
 ****************************************************************************/
 
-signed32 SciPolledWrite(
-    signed32      minor,
+int32_t   SciPolledWrite(
+    int32_t        minor,
     const char   *buf,
-    signed32      len
+    int32_t        len
 )
 {
-    signed32 written = 0;
+    int32_t   written = 0;
 
     if ( minor != SCI_MINOR )                   // check minor device num
     {
@@ -1108,8 +1114,8 @@ rtems_device_driver SciRead (
 )
 {
     rtems_libio_rw_args_t *rw_args;             // ptr to argument struct
-    unsigned8 *buffer;
-    unsigned16 length;
+    uint8_t   *buffer;
+    uint16_t   length;
  
     rw_args = (rtems_libio_rw_args_t *) arg;    // arguments to read()
 
@@ -1169,8 +1175,8 @@ rtems_device_driver SciWrite (
 )
 {
     rtems_libio_rw_args_t *rw_args;             // ptr to argument struct
-    unsigned8 *buffer;
-    unsigned16 length;
+    uint8_t   *buffer;
+    uint16_t   length;
  
     rw_args = (rtems_libio_rw_args_t *) arg;
 
@@ -1184,7 +1190,7 @@ rtems_device_driver SciWrite (
         return RTEMS_INCORRECT_STATE;           // must be opened first
     }
 
-    buffer = (unsigned8*)rw_args->buffer;       // points to data
+    buffer = (uint8_t*)rw_args->buffer;       // points to data
 
     length = rw_args->count;                    // how many bytes
 
@@ -1218,9 +1224,9 @@ rtems_device_driver SciControl (
 )
 {
     rtems_libio_ioctl_args_t *args = arg;       // rtems arg struct
-    unsigned16 command;                         // the cmd to execute
-    unsigned16 unused;                          // maybe later
-    unsigned16 *ptr;                            // ptr to user data
+    uint16_t   command;                         // the cmd to execute
+    uint16_t   unused;                          // maybe later
+    uint16_t   *ptr;                            // ptr to user data
  
 //printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor);
 
@@ -1275,10 +1281,10 @@ rtems_device_driver SciControl (
 * Scope:    private
 ****************************************************************************/
 
-static void SciSetBaud(unsigned32 rate)
+static void SciSetBaud(uint32_t   rate)
 {
-    unsigned16 value;
-    unsigned16 save_sccr1;
+    uint16_t   value;
+    uint16_t   save_sccr1;
 
 // when you open the console you need to set the termio struct baud rate
 // it has a default value of 9600, when someone calls tcsetattr it reverts!
@@ -1290,7 +1296,7 @@ static void SciSetBaud(unsigned32 rate)
     // set baud rate - you must define the system clock constant
     // see mrm332.h for an example
 
-    value = ( (unsigned16) ( SYS_CLOCK / rate / 32.0 + 0.5 ) & 0x1fff );
+    value = ( (uint16_t) ( SYS_CLOCK / rate / 32.0 + 0.5 ) & 0x1fff );
 
     save_sccr1 = *SCCR1;                        // save register
 
@@ -1315,9 +1321,9 @@ static void SciSetBaud(unsigned32 rate)
 * Scope:    private
 ****************************************************************************/
 
-static void SciSetParity(unsigned16 parity)
+static void SciSetParity(uint16_t   parity)
 {
-    unsigned16 value;
+    uint16_t   value;
 
     value = *SCCR1;                             // get the register
 
@@ -1355,9 +1361,9 @@ static void SciSetParity(unsigned16 parity)
 * Scope:    private
 ****************************************************************************/
 
-static void SciSetDataBits(unsigned16 bits)
+static void SciSetDataBits(uint16_t   bits)
 {
-    unsigned16 value;
+    uint16_t   value;
 
     value = *SCCR1;                             // get the register
 
@@ -1460,7 +1466,7 @@ static void inline SciDisableReceiver( void )
 * Scope:    public
 ****************************************************************************/
 
-void SciWriteCharWait(unsigned8 c)
+void SciWriteCharWait(uint8_t   c)
 {
     // poll the fifo, waiting for room for another character
 
@@ -1493,7 +1499,7 @@ void SciWriteCharWait(unsigned8 c)
 * Scope:    public
 ****************************************************************************/
 
-void SciWriteCharNoWait(unsigned8 c)
+void SciWriteCharNoWait(uint8_t   c)
 {
     if ( ( *SCSR & SCI_XMTR_AVAILABLE ) == 0 )
     {
@@ -1517,9 +1523,9 @@ void SciWriteCharNoWait(unsigned8 c)
 * Scope:    public
 ****************************************************************************/
 
-unsigned8 inline SciReadCharWait( void )
+uint8_t   inline SciReadCharWait( void )
 {
-    unsigned8 ch;
+    uint8_t   ch;
 
     while ( SciCharAvailable() == 0 )           // anything there?
     {
@@ -1548,9 +1554,9 @@ unsigned8 inline SciReadCharWait( void )
 * Scope:    public
 ****************************************************************************/
 
-unsigned8 inline SciReadCharNoWait( void )
+uint8_t   inline SciReadCharNoWait( void )
 {
-    unsigned8 ch;
+    uint8_t   ch;
 
     if ( SciCharAvailable() == 0 )              // anything there?
         return -1;
@@ -1573,7 +1579,7 @@ unsigned8 inline SciReadCharNoWait( void )
 * Scope:    public
 ****************************************************************************/
 
-unsigned8 inline SciCharAvailable( void )
+uint8_t   inline SciCharAvailable( void )
 {
     return ( *SCSR & SCI_RCVR_READY );          // char in data register?
 }
@@ -1626,9 +1632,9 @@ void SciSendBreak( void )
 
 void SciUnitTest()
 {
-    unsigned8 byte;                             // a character
-    unsigned16 fd;                              // file descriptor for device
-    unsigned16 result;                          // result of ioctl
+    uint8_t   byte;                             // a character
+    uint16_t   fd;                              // file descriptor for device
+    uint16_t   result;                          // result of ioctl
 
 
     fd = open("/dev/sci",O_RDWR);               // open the device

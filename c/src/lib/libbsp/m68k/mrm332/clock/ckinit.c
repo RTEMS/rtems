@@ -24,8 +24,8 @@
 
 #define CLOCK_VECTOR   MRM_PIV
 
-rtems_unsigned32 Clock_isrs;        /* ISRs until next tick */
-volatile rtems_unsigned32 Clock_driver_ticks;
+uint32_t         Clock_isrs;        /* ISRs until next tick */
+volatile uint32_t         Clock_driver_ticks;
                                     /* ticks since initialization */
 rtems_isr_entry  Old_ticker;
 
@@ -101,7 +101,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)

@@ -52,7 +52,7 @@ void Timer_initialize( void )
  */
 int Read_timer( void )
 {
-  rtems_unsigned32 total;
+  uint32_t         total;
   total = 0;
 
   if ( Timer_driver_Find_average_overhead == 1 )
