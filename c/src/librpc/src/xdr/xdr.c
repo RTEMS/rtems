@@ -533,7 +533,7 @@ xdr_opaque(xdrs, cp, cnt)
 	register u_int cnt;
 {
 	register u_int rndup;
-	static crud[BYTES_PER_XDR_UNIT];
+	static int crud[BYTES_PER_XDR_UNIT];
 
 	/*
 	 * if no data we are done

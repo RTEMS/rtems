@@ -48,17 +48,6 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/bindresvport.c,v 1.12 2000/01/2
 #include <string.h>
 
 /*
- * Bind a socket to a privileged IP port
- */
-int
-bindresvport(sd, sin)
-	int sd;
-	struct sockaddr_in *sin;
-{
-	return bindresvport_sa(sd, (struct sockaddr *)sin);
-}
-
-/*
  * Bind a socket to a privileged port for whatever protocol.
  */
 int
@@ -142,4 +131,15 @@ bindresvport_sa(sd, sa)
 		}
 	}
 	return (error);
+}
+
+/*
+ * Bind a socket to a privileged IP port
+ */
+int
+bindresvport(sd, sin)
+	int sd;
+	struct sockaddr_in *sin;
+{
+	return bindresvport_sa(sd, (struct sockaddr *)sin);
 }

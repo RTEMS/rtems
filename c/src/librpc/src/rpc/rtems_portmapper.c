@@ -30,13 +30,16 @@
 #include <rpc/rpc.h>
 #include <rpc/pmap_prot.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <malloc.h>
 #include <netdb.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <sys/wait.h>
 #include <sys/signal.h>
 
-int reg_service();
+static void reg_service();
+static void callit();
 static struct pmaplist *pmaplist;
 static int debugging = 0;
 
@@ -47,7 +50,7 @@ static int debugging = 0;
 static rtems_task rtems_portmapper (rtems_task_argument unused)
 {
 	SVCXPRT *xprt;
-	int sock, pid, t;
+	int sock;
 	struct sockaddr_in addr;
 	int len = sizeof(struct sockaddr_in);
 	register struct pmaplist *pml;
@@ -136,7 +139,7 @@ for (pml = pmaplist; pml != NULL; pml = pml->pml_next) {
 /* 
  * 1 OK, 0 not
  */
-static reg_service(rqstp, xprt)
+static void reg_service(rqstp, xprt)
 	struct svc_req *rqstp;
 	SVCXPRT *xprt;
 {
@@ -163,7 +166,7 @@ static reg_service(rqstp, xprt)
 		/*
 		 * Set a program,version to port mapping
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, (caddr_t) &reg))
+		if (!svc_getargs(xprt, xdr_pmap, (caddr_t)&reg))
 			svcerr_decode(xprt);
 		else {
 			/*
@@ -211,7 +214,7 @@ static reg_service(rqstp, xprt)
 		/*
 		 * Remove a program,version to port mapping.
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, (caddr_t) &reg))
+		if (!svc_getargs(xprt, xdr_pmap, (caddr_t)&reg))
 			svcerr_decode(xprt);
 		else {
 			ans = 0;
@@ -245,7 +248,7 @@ static reg_service(rqstp, xprt)
 		/*
 		 * Lookup the mapping for a program,version and return its port
 		 */
-		if (!svc_getargs(xprt, xdr_pmap, (caddr_t) &reg))
+		if (!svc_getargs(xprt, xdr_pmap, (caddr_t)&reg))
 			svcerr_decode(xprt);
 		else {
 			fnd = find_service(reg.pm_prog, reg.pm_vers, reg.pm_prot);
@@ -299,7 +302,7 @@ static reg_service(rqstp, xprt)
  */
 #define ARGSIZE 9000
 
-/* typedef */ struct encap_parms {
+struct encap_parms {
 	u_long arglen;
 	char *args;
 };
@@ -310,10 +313,10 @@ xdr_encap_parms(xdrs, epp)
 	struct encap_parms *epp;
 {
 
-	return (xdr_bytes(xdrs, &(epp->args), &(epp->arglen), ARGSIZE));
+	return (xdr_bytes(xdrs, &(epp->args), (u_int*)&(epp->arglen), ARGSIZE));
 }
 
-typedef struct rmtcallargs {
+struct rmtcallargs {
 	u_long	rmt_prog;
 	u_long	rmt_vers;
 	u_long	rmt_port;
@@ -396,7 +399,7 @@ xdr_len_opaque_parms(xdrs, cap)
  * This now forks so that the program & process that it calls can call 
  * back to the portmapper.
  */
-static
+static void
 callit(rqstp, xprt)
 	struct svc_req *rqstp;
 	SVCXPRT *xprt;
@@ -414,7 +417,7 @@ callit(rqstp, xprt)
 	timeout.tv_sec = 5;
 	timeout.tv_usec = 0;
 	a.rmt_args.args = buf;
-	if (!svc_getargs(xprt, xdr_rmtcall_args, (caddr_t) &a))
+	if (!svc_getargs(xprt, xdr_rmtcall_args, (caddr_t)&a))
 	    return;
 	if ((pml = find_service(a.rmt_prog, a.rmt_vers, IPPROTO_UDP)) == NULL)
 	    return;
@@ -440,7 +443,7 @@ callit(rqstp, xprt)
 		a.rmt_port = (u_long)port;
 		if (clnt_call(client, a.rmt_proc, xdr_opaque_parms, &a,
 		    xdr_len_opaque_parms, &a, timeout) == RPC_SUCCESS) {
-			svc_sendreply(xprt, xdr_rmtcall_result, &a);
+			svc_sendreply(xprt, xdr_rmtcall_result, (caddr_t)&a);
 		}
 		AUTH_DESTROY(client->cl_auth);
 		clnt_destroy(client);

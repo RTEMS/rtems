@@ -135,7 +135,7 @@ universal(rqstp, atransp)
 			if (outdata == NULL && lpl->p_outproc != xdr_void)
 				/* there was an error */
 				return;
-			if (!svc_sendrelply(atransp, lpl->p_outproc, outdata)) {
+			if (!svc_sendreply(atransp, lpl->p_outproc, outdata)) {
 				(void) fprintf(stderr,
 				    "trouble replying to prog %d\n",
 				    lpl->p_prognum);
