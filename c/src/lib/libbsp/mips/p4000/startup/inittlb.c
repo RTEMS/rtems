@@ -2,7 +2,7 @@
  *  $Id$
  */
 
-#include <idtcpu.h>
+#include <rtems/mips/idtcpu.h>
 
 extern void resettlb( int i );
 

@@ -30,8 +30,8 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 **
 */
 /* 950308: Ketan patched a few tlb functions that would not have worked.*/
-#include <iregdef.h>
-#include <idtcpu.h>
+#include <rtems/mips/iregdef.h>
+#include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
 
 

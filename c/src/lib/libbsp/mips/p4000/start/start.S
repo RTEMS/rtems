@@ -31,8 +31,8 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 ** idt_csu.S -- IDT stand alone startup code
 **
 **************************************************************************/
-#include <iregdef.h>
-#include <idtcpu.h>
+#include <rtems/mips/iregdef.h>
+#include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
 
 
