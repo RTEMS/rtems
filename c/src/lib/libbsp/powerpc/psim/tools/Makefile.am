@@ -4,7 +4,9 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
 
-noinst_SCRIPTS = psim runtest
+transform =
+bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests
+bsptools_bin_SCRIPTS = psim runtest
 
 TMPINSTALL_FILES = $(PROJECT_ROOT)/psim/tests \
     $(PROJECT_ROOT)/psim/tests/runtest $(PROJECT_ROOT)/psim/tests/psim \
