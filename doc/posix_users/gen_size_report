@@ -1,0 +1,154 @@
+#
+#  Hack of a script to generate a very long list which contains
+#  the size information for every service listed in this manual
+#
+#  This script must be modified by the user to tailor it for their
+#  environment.  This is VERY ugly and could be replaced by something
+#  nicer in the future if this report style is useful.
+#
+#  $Id$
+# 
+
+#cpu=sparc
+#bsp=erc32
+
+cpu=powerpc
+bsp=mcp750
+
+objdir=/usr1/rtems/build/build-${cpu}-rtems/${cpu}-rtems/c/${bsp}/
+libc=/opt/rtems/${cpu}-rtems/lib/libc.a
+srcdir=$r/src
+docdir=$d
+nm=${cpu}-rtems-nm
+size=${cpu}-rtems-size
+ar=${cpu}-rtems-ar
+
+check_objs()
+{
+  for i in *.o
+  do
+    ${nm} $i | grep "T ${1}$" >/dev/null
+    if [ $? -eq  0 ] ; then
+      echo $i
+      return 0
+    fi
+  done
+  return 1
+}
+per_manager()
+{
+  docfile=$1
+  shift
+  subdirs=$*
+  grep ^@item ${docfile} | grep "@code.* - " | \
+    grep -v "@item E" | \
+    grep -v "@code{CONFIGURE" | \
+    grep -v "@value{RPREFIX" | \
+    sed -e 's/@value{DIRPREFIX}/rtems_/' | \
+    cut -d'{' -f2 | sed -e 's/}//' | cut -d'-' -f1 >/tmp/XXX.size
+
+  if [ `wc -c </tmp/XXX.size` -eq 1 ]  ; then
+    return
+  fi
+  echo "====> `grep ^@chapter ${docfile} | sed -e 's/@chapter //'`"
+  cat /tmp/XXX.size | while read line
+  do
+    # echo $line
+    found=no
+    for subd in ${subdirs}
+    do
+      if [ ${found} = "no" ] ; then
+        cd ${objdir}/${subd}/o-optimize/
+        objfile=`check_objs $line`
+        if [ $? -eq 0 ] ; then
+           found=yes
+           #echo ${objfile}
+           objcode=`${size} ${objfile} | tail -1 | cut -f1`
+           objdata=`${size} ${objfile} | tail -1 | cut -f2`
+           objbss=`${size} ${objfile} | tail -1 | cut -f3`
+           objcode=`echo ${objcode}`
+           objdata=`echo ${objdata}`
+           objbss=`echo ${objbss}`
+           echo "${line} - ${objcode}, ${objdata}, ${objbss}"
+        fi
+      fi
+    done
+    if [ ${found} = "no" ] ; then
+      echo "$line - macro or not implemented"
+    fi
+   
+  done
+}
+
+
+# extract libc
+if [ ! -d ${objdir}/newlib_extract/o-optimize ] ; then
+  mkdir -p ${objdir}/newlib_extract/o-optimize
+  cd ${objdir}/newlib_extract/o-optimize
+  list=`${ar} t ${libc}`
+  for i in $list
+  do
+    ${ar} x ${libc} ${i}
+  done
+fi
+
+# grab the size of the Classic API
+#
+#  NOTE: This API is always configured.
+#
+cd ${docdir}/user
+echo
+echo "=============================================================="
+echo "=============================================================="
+echo "====                                                      ===="
+echo "====            CLASSIC API SIZE INFORMATION              ===="
+echo "====                                                      ===="
+echo "=============================================================="
+echo "=============================================================="
+echo
+for i in *.t
+do
+  per_manager $i exec/rtems/src exec/sapi/src lib/libc
+done
+
+# Grab the size of the Classic API
+cd ${docdir}/posix_users
+echo
+echo "=============================================================="
+echo "=============================================================="
+echo "====                                                      ===="
+echo "====         POSIX 1003.1b API SIZE INFORMATION           ===="
+echo "====                                                      ===="
+echo "=============================================================="
+echo "=============================================================="
+echo
+if [ -r ${objdir}/../../../${bsp}/lib/libposix.a ] ; then
+  for i in *.t
+  do
+    per_manager $i exec/posix/src lib/libc newlib_extract
+  done
+else
+  echo "POSIX API not configured."
+fi
+
+# Grab the size of the ITRON API
+cd ${docdir}/itron3.0
+echo
+echo "=============================================================="
+echo "=============================================================="
+echo "====                                                      ===="
+echo "====           ITRON 3.0 API SIZE INFORMATION             ===="
+echo "====                                                      ===="
+echo "=============================================================="
+echo "=============================================================="
+echo
+if [ -r ${objdir}/../../../${bsp}/lib/libitron.a ] ; then
+  for i in *.t
+  do
+    per_manager $i exec/itron/src
+  done
+else
+  echo "ITRON API not configured."
+fi
+
+
