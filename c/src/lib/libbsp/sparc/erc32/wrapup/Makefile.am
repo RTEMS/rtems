@@ -8,13 +8,12 @@ NETWORKING_DRIVER = erc32sonic
 endif
 
 BSP_PIECES = startup console clock timer gnatsupp $(NETWORKING_DRIVER)
-# pieces to pick up out of libcpu/sparc
-CPU_PIECES = cache reg_win syscall
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    $(foreach piece, $(CPU_PIECES), \
-    ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/*.$(OBJEXT))
+    ../../../../libcpu/sparc/cache$(LIB_VARIANT).rel \
+    ../../../../libcpu/sparc/reg_win$(LIB_VARIANT).rel \
+    ../../../../libcpu/sparc/syscall$(LIB_VARIANT).rel
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
