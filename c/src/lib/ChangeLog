@@ -1,4 +1,11 @@
 
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/zilog/Makefile.am, include/Makefile.am, 
+	include/motorola/Makefile.am, include/sys/Makefile.am
+	include/rtems/Makefile.am: Apply include_*HEADERS instead of
+	H_FILES.
+
 2001-01-26	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/chroot.c: Fixed naming problems.  Names were changed

@@ -4,12 +4,12 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = mc68230.h mc68681.h
+include_motoroladir = $(includedir)/motorola
 
-noinst_HEADERS = $(H_FILES)
+include_motorola_HEADERS = mc68230.h mc68681.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola \
-    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/motorola/%)
+    $(include_motorola_HEADERS:%=$(PROJECT_INCLUDE)/motorola/%)
 
 $(PROJECT_INCLUDE)/motorola:
 	@$(mkinstalldirs) $@

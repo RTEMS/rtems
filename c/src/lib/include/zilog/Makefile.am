@@ -4,12 +4,12 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = z8036.h z8530.h z8536.h
+include_zilogdir = ${includedir}/zilog
 
-noinst_HEADERS = $(H_FILES)
+include_zilog_HEADERS = z8036.h z8530.h z8536.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog \
-    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/zilog/%)
+    $(include_zilog_HEADERS:%=$(PROJECT_INCLUDE)/zilog/%)
 
 $(PROJECT_INCLUDE)/zilog:
 	@$(mkinstalldirs) $@
