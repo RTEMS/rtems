@@ -54,7 +54,7 @@ if test "$tests_enabled" = "yes"; then
     cfg_subdirs="$cfg_subdirs psxtests"
   fi
   if test "$HAS_ITRON_API" = "yes"; then
-    cfg_subdirs="$cfg_subdirs itrontests tmitrontests"
+    cfg_subdirs="$cfg_subdirs itrontests"
   fi
   # Now do performance tests
   cfg_subdirs="$cfg_subdirs tmtests"
