@@ -19,29 +19,37 @@ preinstall-stamp:
 	touch preinstall-stamp
 CLEANFILES = preinstall-stamp
 
-$(PROJECT_INCLUDE)/%.h: include/%.h
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_INCLUDE):
-	@$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/rtems:
-	@$(mkinstalldirs) $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)
-
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/rtems/bspIo.h include/rtems/userenv.h \
-  include/rtems/fs.h include/rtems/stdint.h
+    include/rtems/fs.h include/rtems/stdint.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(include_rtems_HEADERS:include/%.h=$(PROJECT_INCLUDE)/%.h)
-
-all-local: $(PREINSTALL_FILES)
+BUILT_SOURCES = $(PREINSTALL_FILES)
 
 AUTOMAKE_FILES = automake/compile.am automake/lib.am automake/local.am \
     automake/multilib.am automake/subdirs.am
 EXTRA_DIST = $(AUTOMAKE_FILES)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/rtems:
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems
+
+$(PROJECT_INCLUDE)/rtems/bspIo.h: include/rtems/bspIo.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bspIo.h
+
+$(PROJECT_INCLUDE)/rtems/userenv.h: include/rtems/userenv.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/userenv.h
+
+$(PROJECT_INCLUDE)/rtems/fs.h: include/rtems/fs.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fs.h
+
+$(PROJECT_INCLUDE)/rtems/stdint.h: include/rtems/stdint.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stdint.h
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
