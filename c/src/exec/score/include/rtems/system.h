@@ -113,7 +113,7 @@ extern "C" {
  *  The following are used by the POSIX implementation to catch bad paths.
  */
 
-#ifdef POSIX_API_INIT
+#ifdef RTEMS_POSIX_API
 int POSIX_MP_NOT_IMPLEMENTED( void );
 int POSIX_NOT_IMPLEMENTED( void );
 int POSIX_BOTTOM_REACHED( void );

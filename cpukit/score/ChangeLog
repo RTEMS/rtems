@@ -1,6 +1,12 @@
 
 2000-11-02	Joel Sherrill <joel@OARcorp.com>
 
+	* include/rtems/system.h: Use proper conditional (RTEMS_POSIX_API)
+	so prototypes for POSIX_MP_NOT_IMPLEMENTED(), POSIX_NOT_IMPLEMENTED(),
+	POSIX_BOTTOM_REACHED() are actually included.
+
+2000-11-02	Joel Sherrill <joel@OARcorp.com>
+
 	* include/rtems/system.h: Add prototypes for POSIX_MP_NOT_IMPLEMENTED(),
 	POSIX_NOT_IMPLEMENTED(), POSIX_BOTTOM_REACHED() removed from newlib.
 
