@@ -81,6 +81,7 @@ typedef enum {
   CORE_SEMAPHORE_TIMEOUT,
   /** This status indicates that an attempt was made to unlock the semaphore
    *  and this would have made its count greater than that allowed.
+   */
   CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED
 }   CORE_semaphore_Status;
 
