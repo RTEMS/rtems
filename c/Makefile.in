@@ -74,8 +74,8 @@ pre_install_src: env make_src_makefiles
 		cd $$CURRDIR; \
 	done
 all: pre_install_src env 
-debug: env
-profile: env
+debug: pre_install_src env
+profile: pre_install_src env
 
 install: all install_files
 debug_install: env debug install_files
