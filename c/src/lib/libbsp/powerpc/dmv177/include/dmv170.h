@@ -51,6 +51,15 @@ extern "C" {
 #define MC68681_PORT1_ADDR   0xf2800000
 #define MC68681_PORT2_ADDR   0xf2800040
 
+/*
+ *  SONIC Information
+ */
+
+#define DMV170_SONIC_ADDR 0xf3000000
+
+#define SONIC_BASE_ADDRESS DMV170_SONIC_ADDR
+#define SONIC_VECTOR       DMV170_ETHERNET_IRQ
+
 /* base address for the SCC (85C30) */ 
 #define Z85C30_ADDR       0xfb000010
 #define Z85C30_CTRL_A     0xfb000010
