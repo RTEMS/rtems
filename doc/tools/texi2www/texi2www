@@ -116,7 +116,7 @@ sub canonical # (node_name)
       return "$p$n.html" if ($n);
     } else {
       if ($n eq 'Top') {
-        $lookup{"$p$n"}= "Top.html"; 
+        $lookup{"$p$n"}= "index.html"; 
         return $lookup{"$p$n"};
       } elsif ($n) {
         if (! $lookup{"$p$n"})  {
