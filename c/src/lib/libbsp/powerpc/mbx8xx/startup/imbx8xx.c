@@ -274,12 +274,33 @@ void _InitMBX8xx (void)
   m8xx.plprck = M8xx_UNLOCK_KEY;	/* unlock PLPRCR */
 #if ( defined(mbx821_001) || defined(mbx821_001b) || defined(mbx860_001b) )
   m8xx.plprcr = 0x5F500000;
-#else
+#elif ( defined(mbx860_005b) )
+  /* Set the multiplication factor to 0 and clear the timer interrupt status*/
+  m8xx.plprcr = 0x00005000;
+#elif ( defined(mbx860_001) || \
+        defined(mbx860_002) || \
+        defined(mbx860_003) || \
+        defined(mbx860_004) || \
+        defined(mbx860_005) || \
+        defined(mbx860_002b) || \
+        defined(mbx860_003b) || \
+        defined(mbx860_004b) || \
+        defined(mbx860_006b) || \
+        defined(mbx821_002) || \
+        defined(mbx821_003) || \
+        defined(mbx821_004) || \
+        defined(mbx821_005) || \
+        defined(mbx821_002b) || \
+        defined(mbx821_003b) || \
+        defined(mbx821_004b) || \
+        defined(mbx821_005b) )
+        defined(mbx821_006b) )
   m8xx.plprcr = 0x4C400000;
+#else
+#error "MBX board not defined"  
 #endif
   /* Unlock the timebase and decrementer registers. */
   m8xx.tbk = M8xx_UNLOCK_KEY;
-	
   /* 
    * Initialize decrementer register to a large value to
    * guarantee that a decrementer interrupt will not be
@@ -458,8 +479,37 @@ void _InitMBX8xx (void)
    * m8xx.memc[1]._or = 0xFFC00400;
    * m8xx.memc[1]._br = 0x00000081;
    */
-  m8xx.memc[1]._or = M8xx_MEMC_OR_4M | M8xx_MEMC_OR_ATM(0) | 
-		M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
+#if ( defined(mbx860_001b) )
+    m8xx.memc[1]._or = M8xx_MEMC_OR_2M | M8xx_MEMC_OR_ATM(0) | 
+    M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
+#elif ( defined(mbx860_002b) || \
+         defined(mbx860_003b) || \
+         defined(mbx821_001b) || \
+         defined(mbx821_002b) || \
+         defined(mbx821_003b) || \
+         defined(mbx860_001)  || \
+         defined(mbx860_002)  || \
+         defined(mbx860_003)  || \
+         defined(mbx821_001)  || \
+         defined(mbx821_002)  || \
+         defined(mbx821_003) )
+    m8xx.memc[1]._or = M8xx_MEMC_OR_4M | M8xx_MEMC_OR_ATM(0) | 
+    M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
+#elif ( defined(mbx860_004) || \
+        defined(mbx860_005) || \
+        defined(mbx860_004b) || \
+        defined(mbx860_005b) || \
+        defined(mbx860_006b) || \
+        defined(mbx821_004) || \
+        defined(mbx821_005) || \
+        defined(mbx821_004b) || \
+        defined(mbx821_005b) || \
+        defined(mbx821_006b) )
+    m8xx.memc[1]._or = M8xx_MEMC_OR_16M | M8xx_MEMC_OR_ATM(0) | 
+      M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
+#else
+#error "MBX board not defined"
+#endif
   m8xx.memc[1]._br = M8xx_BR_BA(0x00000000) | M8xx_BR_AT(0) | M8xx_BR_PS32 |
 		M8xx_BR_MS_UPMA | M8xx_MEMC_BR_V;
 

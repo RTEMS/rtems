@@ -31,21 +31,65 @@
  * location is equal to its real address.
  */
 MMU_TLB_table_t MMU_TLB_table[] = {
-	/*
+#if ( defined(mbx860_001b) )
+  /*
+	 * DRAM: CS1, Start address 0x00000000, 2M, 
+	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy, 
+	 *	R/W,X for all, no ASID comparison, not cache-inhibited.
+	 *	Last 512K block is cache-inhibited, but not guarded for use by EPPCBug.
+	 * EPN		TWC	RPN
+	 */
+  { 0x00000200,	0x05,	0x000009FD },	/* DRAM - PS=512K */
+  { 0x00080200,	0x05,	0x000809FD },	/* DRAM - PS=512K */
+  { 0x00100200,	0x05,	0x001009FD },	/* DRAM - PS=512K */
+  { 0x00180200,	0x05,	0x001809FF },	/* DRAM - PS=512K, cache-inhibited */
+#elif ( defined(mbx860_002b) || \
+         defined(mbx860_003b) || \
+         defined(mbx821_001b) || \
+         defined(mbx821_002b) || \
+         defined(mbx821_003b) || \
+         defined(mbx860_001)  || \
+         defined(mbx860_002)  || \
+         defined(mbx860_003)  || \
+         defined(mbx821_001)  || \
+         defined(mbx821_002)  || \
+         defined(mbx821_003) )
+  /*
 	 * DRAM: CS1, Start address 0x00000000, 4M, 
 	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy, 
 	 *	R/W,X for all, no ASID comparison, not cache-inhibited.
 	 *	Last 512K block is cache-inhibited, but not guarded for use by EPPCBug.
 	 * EPN		TWC	RPN
 	 */
-	{ 0x00000200,	0x05,	0x000009FD },	/* DRAM - PS=512K */
-	{ 0x00080200,	0x05,	0x000809FD },	/* DRAM - PS=512K */
-	{ 0x00100200,	0x05,	0x001009FD },	/* DRAM - PS=512K */
-	{ 0x00180200,	0x05,	0x001809FD },	/* DRAM - PS=512K */
-	{ 0x00200200,	0x05,	0x002009FD },	/* DRAM - PS=512K */
-	{ 0x00280200,	0x05,	0x002809FD },	/* DRAM - PS=512K */
-	{ 0x00300200,	0x05,	0x003009FD },	/* DRAM - PS=512K */
-	{ 0x00380200,	0x05,	0x003809FF },	/* DRAM - PS=512K, cache-inhibited */
+  { 0x00000200,	0x05,	0x000009FD },	/* DRAM - PS=512K */
+  { 0x00080200,	0x05,	0x000809FD },	/* DRAM - PS=512K */
+  { 0x00100200,	0x05,	0x001009FD },	/* DRAM - PS=512K */
+  { 0x00180200,	0x05,	0x001809FD },	/* DRAM - PS=512K */
+  { 0x00200200,	0x05,	0x002009FD },	/* DRAM - PS=512K */
+  { 0x00280200,	0x05,	0x002809FD },	/* DRAM - PS=512K */
+  { 0x00300200,	0x05,	0x003009FD },	/* DRAM - PS=512K */
+  { 0x00380200,	0x05,	0x003809FF },	/* DRAM - PS=512K, cache-inhibited */
+#elif ( defined(mbx860_004) || \
+        defined(mbx860_005) || \
+        defined(mbx860_004b) || \
+        defined(mbx860_005b) || \
+        defined(mbx860_006b) || \
+        defined(mbx821_004) || \
+        defined(mbx821_005) || \
+        defined(mbx821_004b) || \
+        defined(mbx821_005b) || \
+        defined(mbx821_006b) ) 
+  /*
+	 * DRAM: CS1, Start address 0x00000000, 16M, 
+	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy, 
+	 *	R/W,X for all, no ASID comparison, not cache-inhibited.
+	 * EPN		TWC	RPN
+	 */
+	{ 0x00000200,	0x0D,	0x000009FD },	/* DRAM - PS=8M */
+	{ 0x00800200,	0x0D,	0x008009FD },	/* DRAM - PS=8M */
+#else
+#error "MBX board not defined"
+#endif
 	/*
 	 *
 	 * NVRAM: CS4, Start address 0xFA000000, 32K,

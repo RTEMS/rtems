@@ -991,7 +991,7 @@ rtems_configuration_table Configuration = {
     (CONFIGURE_MAXIMUM_POSIX_THREADS == 0) && \
     (CONFIGURE_MAXIMUM_ADA_TASKS == 0) &&  \
     (CONFIGURE_MAXIMUM_ITRON_TASKS == 0)
-#error "CONFIGURATION ERROR: No tasks or threads configured!!
+#error "CONFIGURATION ERROR: No tasks or threads configured!!"
 #endif
 
 /*
@@ -1002,7 +1002,7 @@ rtems_configuration_table Configuration = {
 #if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) && \
     !defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) && \
     !defined(CONFIGURE_ITRON_INIT_TASK_TABLE)
-#error "CONFIGURATION ERROR: No initialization tasks or threads configured!!
+#error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
 #endif
 
 #endif
