@@ -16,13 +16,13 @@ This is the gcc/java compiler for @target_alias@
 %files -n @target_alias@-gcj -f build/files.gcj
 %defattr(-,root,root)
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-gcj@exe_ext@
-%{_prefix}/bin/@target_alias@-jcf-dump@exe_ext@
-%{_prefix}/bin/@target_alias@-jv-scan@exe_ext@
-%{_prefix}/bin/@target_alias@-gcjh@exe_ext@
+%{_prefix}/bin/@target_alias@-gcj%{_exeext}
+%{_prefix}/bin/@target_alias@-jcf-dump%{_exeext}
+%{_prefix}/bin/@target_alias@-jv-scan%{_exeext}
+%{_prefix}/bin/@target_alias@-gcjh%{_exeext}
 %{_prefix}/man/man1/@target_alias@-gcj.1
 
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/jc1@exe_ext@
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain@exe_ext@
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/jc1%{_exeext}
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain%{_exeext}
 
 %endif

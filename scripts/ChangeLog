@@ -1,5 +1,19 @@
 2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* gcc3newlib/gccnewlib.add: Remove header, broken cdn-X configuration,
+	%clean, Replace @exe_ext@ with %{_exeext}.
+	* gcc3newlib/mkspec.in: Remove exe_ext.
+	* gcc3newlib/target-c++.add: Replace @exe_ext@ with %{_exeext}.
+	* gcc3newlib/target-g77.add: Replace @exe_ext@ with %{_exeext}.
+	* gcc3newlib/target-gcc.add: Replace @exe_ext@ with %{_exeext}.
+	* gcc3newlib/target-gcj.add: Replace @exe_ext@ with %{_exeext}.
+	* gcc3newlib/target-gnat.add: Replace @exe_ext@ with %{_exeext}.
+	* gcc3newlib/target-objc.add: Replace @exe_ext@ with %{_exeext}.
+	+ gcc3newlib/Makefile.am: Use $(top_builddir)/common/common.add,
+	$(top_builddir)/common/clean.add, header.add.
+
+2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Remove reference to mkbinutilsspec.
 	* configure.ac: Remove EXEEXT check.
 	Add common/clean.add, common/common.add.

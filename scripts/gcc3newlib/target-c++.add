@@ -18,11 +18,11 @@ This is the gcc/g++ compiler for @target_alias@
 %doc %{_prefix}/man/man1/@target_alias@-g++.1*
 
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-c++@exe_ext@
-%{_prefix}/bin/@target_alias@-g++@exe_ext@
-%{_prefix}/bin/@target_alias@-c++filt@exe_ext@
+%{_prefix}/bin/@target_alias@-c++%{_exeext}
+%{_prefix}/bin/@target_alias@-g++%{_exeext}
+%{_prefix}/bin/@target_alias@-c++filt%{_exeext}
 
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/cc1plus@exe_ext@
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/cc1plus%{_exeext}
 %dir %{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include
 %if "@gcc_version@" >= "3.2"
 %{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include/c++

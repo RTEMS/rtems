@@ -16,10 +16,10 @@ This is gcc and newlib C Library for @target_alias@.
 %defattr(-,root,root)
 %doc %{_prefix}/man/man1/@target_alias@-gcc.1*
 
-%{_prefix}/bin/@target_alias@-cpp@exe_ext@
-%{_prefix}/bin/@target_alias@-gcc@exe_ext@
-%{_prefix}/bin/@target_alias@-gcov@exe_ext@
-%{_prefix}/bin/@target_alias@-gccbug@exe_ext@
+%{_prefix}/bin/@target_alias@-cpp%{_exeext}
+%{_prefix}/bin/@target_alias@-gcc%{_exeext}
+%{_prefix}/bin/@target_alias@-gcov%{_exeext}
+%{_prefix}/bin/@target_alias@-gccbug%{_exeext}
 %{_prefix}/@target_alias@/include
 
 %dir %{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include

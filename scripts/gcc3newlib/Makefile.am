@@ -4,8 +4,11 @@
 
 MKSPEC = $(SHELL) ./mkspec
 
-SUBPACKAGES = gccnewlib.add \
-    base-gcc.add target-gcc.add \
+SUBPACKAGES = header.add
+SUBPACKAGES += $(top_builddir)/common/common.add
+SUBPACKAGES += gccnewlib.add
+SUBPACKAGES += $(top_builddir)/common/clean.add
+SUBPACKAGES += base-gcc.add target-gcc.add \
     base-g77.add target-g77.add \
     base-gcj.add target-gcj.add \
     target-objc.add \
