@@ -26,8 +26,8 @@ NO ASCII VERSION OF THE TASKING FIGURE IS AVAILABLE
 @c for now use the ascii version
 @example
 @group
-@c why does this not work?
-@c @image{networkflow}
+@c why does this not work for pdf?
+@c @image{networkflow,5in,6in}
 NO TEX VERSION OF THE TASKING FIGURE IS AVAILABLE
 @end group
 @end example
