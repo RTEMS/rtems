@@ -1,3 +1,7 @@
+2001-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/Makefile.am, rtems/score/Makefile.am: Removed again.
+
 2001-02-04	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: IDLE task should not be FP.  This was a mistake

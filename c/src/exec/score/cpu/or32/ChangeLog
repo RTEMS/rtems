@@ -1,3 +1,7 @@
+2001-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/Makefile.am, rtems/score/Makefile.am: Removed again.
+
 2002-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/Makefile.am: Removed.
