@@ -1,3 +1,7 @@
+2001-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac: New mips supplement.
+
 2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reworked.

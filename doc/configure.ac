@@ -164,6 +164,7 @@ supplements/hppa1_1/Makefile
 supplements/i386/Makefile
 supplements/i960/Makefile
 supplements/m68k/Makefile
+supplements/mips/Makefile
 supplements/mips64orion/Makefile
 supplements/powerpc/Makefile
 supplements/sh/Makefile
