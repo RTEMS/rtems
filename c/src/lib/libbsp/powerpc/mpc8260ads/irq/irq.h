@@ -348,7 +348,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 
 #ifdef __cplusplus
-extern "C" {
+}
 #endif
 
 #endif
