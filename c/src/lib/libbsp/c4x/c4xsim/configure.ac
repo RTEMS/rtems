@@ -18,11 +18,5 @@ RTEMS_PROG_CCAS
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-start/Makefile
-startup/Makefile
-timer/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
