@@ -13,8 +13,8 @@
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
-#include <motorola/mc68230.h>
-#include <motorola/mc68681.h>
+#include <rtems/motorola/mc68230.h>
+#include <rtems/motorola/mc68681.h>
 
 /*
  *  confdefs.h overrides for this BSP:
