@@ -109,7 +109,6 @@ AS_IF([test x"$multilib" = x"no"],[
 ## Note: the order of the directories below is essential
 AC_CONFIG_SUBDIRS([make])
 BSP_SUBDIRS="$BSP_SUBDIRS make"
-AC_CONFIG_SUBDIRS([optman])
 BSP_SUBDIRS="$BSP_SUBDIRS optman"
 AC_CONFIG_SUBDIRS([lib/libcpu])
 BSP_SUBDIRS="$BSP_SUBDIRS lib/libcpu"
@@ -118,7 +117,6 @@ BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
 
 AS_IF([test "$RTEMS_CPU" != "unix"],[
 ## HACK: Suppress libchip for unix
-  AC_CONFIG_SUBDIRS([libchip])
   BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 ])
 
@@ -163,6 +161,11 @@ BSP_SUBDIRS="$BSP_SUBDIRS tests"
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
 
+AS_IF([test "$host_cpu" = "sparc"],[
+  AC_DEFINE_UNQUOTED([CPU_U32_FIX],[1],
+    [whether to enable ipalignment work-around])
+])
+
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 AM_CONDITIONAL([HAS_RDBG],[test "$HAS_RDBG" = "yes"])
 
@@ -183,6 +186,15 @@ AC_CONFIG_FILES([Makefile],
 [RTEMS_BSP=${RTEMS_BSP}
  MAKE=${MAKE}])
 
-AC_CONFIG_FILES([support/Makefile wrapup/Makefile])
+AC_CONFIG_FILES([
+support/Makefile 
+libchip/Makefile
+libchip/network/Makefile
+libchip/rtc/Makefile
+libchip/serial/Makefile
+libchip/ide/Makefile
+optman/Makefile
+wrapup/Makefile
+])
 
 AC_OUTPUT
