@@ -8,7 +8,7 @@ AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE([no-define foreign 1.9)
+AM_INIT_AUTOMAKE([no-define foreign 1.9])
 AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSBSP

@@ -11,7 +11,7 @@ RTEMS_TOP(../../../../../../..)
 AC_ARG_VAR([RTEMS_BSP],[])
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9)
+AM_INIT_AUTOMAKE([no-define foreign 1.9])
 AM_MAINTAINER_MODE
 
 RTEMS_PROJECT_ROOT

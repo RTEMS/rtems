@@ -9,7 +9,7 @@ RTEMS_TOP(../..)
 
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9)
+AM_INIT_AUTOMAKE([no-define foreign 1.9])
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
