@@ -1,3 +1,8 @@
+2002-02-28	Victor V. Vengerov <vvv@oktet.ru>
+
+	* DOS filesystem including FAT12, FAT16, and FAT32 support submitted.
+	* configure.ac: Modified to reflect addition.
+
 2002-01-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add AC_CONFIG_SUBDIRS(optman). Remove
