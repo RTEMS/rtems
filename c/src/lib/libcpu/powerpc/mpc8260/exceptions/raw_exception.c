@@ -21,8 +21,10 @@
  * $Id$
  */
 
+#include <string.h>	/* memcmp */
 #include <rtems/system.h>
 #include <rtems/score/ppc.h>
+#include <rtems/bspIo.h>
 #include <libcpu/raw_exception.h>
 #include <libcpu/cpuIdent.h>
 
