@@ -127,6 +127,9 @@ typedef struct {
 ])
 
 cat >>cpuopts.tmp <<\_ACEOF
+/**
+ * @file rtems/score/cpuopts.h
+ */
 /* target cpu dependent options file */
 /* automatically generated -- DO NOT EDIT!! */
 #ifndef __CPU_OPTIONS_h

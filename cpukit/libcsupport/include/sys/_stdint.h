@@ -1,3 +1,7 @@
+/**
+ *  @file  sys/_stdint.h
+ */
+
 /*
  *  COPYRIGHT (c) 2004.
  *  Ralf Corsepius, Ulm/Germany.
@@ -27,60 +31,117 @@ extern "C" {
 #if __EXP(SCHAR_MAX) == 0x7f
 typedef signed char int8_t ;
 typedef unsigned char uint8_t ;
-#define int8_t_defined 1
-
-typedef signed char int_least8_t;
-typedef unsigned char uint_least8_t;
-#define int_least8_t_defined 1
+#define __int8_t_defined 1
 #endif
 
-#if __EXP(INT_MAX) == 0x7fff
-typedef signed int int16_t;
-typedef unsigned int uint16_t;
-#define int16_t_defined 1
-#elif __EXP(SHRT_MAX) == 0x7fff
+#if __int8_t_defined
+typedef signed char int_least8_t;
+typedef unsigned char uint_least8_t;
+#define __int_least8_t_defined 1
+#endif
+
+#if __EXP(SHRT_MAX) == 0x7fff
 typedef signed short int16_t;
 typedef unsigned short uint16_t;
-#define int16_t_defined 1
+#define __int16_t_defined 1
+#elif __EXP(INT_MAX) == 0x7fff
+typedef signed int int16_t;
+typedef unsigned int uint16_t;
+#define __int16_t_defined 1
 #elif __EXP(SCHAR_MAX) == 0x7fff
-typedef signed char int32_t;
-typedef unsigned char uint32_t;
-#define int16_t_defined 1
+typedef signed char int16_t;
+typedef unsigned char uint16_t;
+#define __int16_t_defined 1
+#endif
+
+#if __int16_t_defined
+typedef int16_t   	int_least16_t;
+typedef uint16_t 	uint_least16_t;
+#define __int_least16_t_defined 1
+
+#ifndef __int_least8_t_defined
+typedef int16_t	   	int_least8_t;
+typedef uint16_t  	uint_least8_t;
+#define __int_least8_t_defined 1
+#endif
 #endif
 
 #if __EXP(INT_MAX) == 0x7fffffffL
 typedef signed int int32_t;
 typedef unsigned int uint32_t;
-#define int32_t_defined 1
+#define __int32_t_defined 1
 #elif __EXP(LONG_MAX) == 0x7fffffffL
 typedef signed long int32_t;
 typedef unsigned long uint32_t;
-#define int32_t_defined 1
+#define __int32_t_defined 1
 #define __rtems_long32 1
 #elif __EXP(SHRT_MAX) == 0x7fffffffL
 typedef signed short int32_t;
 typedef unsigned short uint32_t;
-#define int32_t_defined 1
+#define __int32_t_defined 1
 #elif __EXP(SCHAR_MAX) == 0x7fffffffL
 typedef signed char int32_t;
 typedef unsigned char uint32_t;
-#define int32_t_defined 1
+#define INT32_C(x) x
+#define __int32_t_defined 1
+#endif
+
+#if __int32_t_defined
+typedef int32_t   	int_least32_t;
+typedef uint32_t 	uint_least32_t;
+#define __int_least32_t_defined 1
+
+#ifndef __int_least8_t_defined
+typedef int32_t	   	int_least8_t;
+typedef uint32_t  	uint_least8_t;
+#define __int_least8_t_defined 1
+#endif
+
+#ifndef __int_least16_t_defined
+typedef int32_t	   	int_least16_t;
+typedef uint32_t  	uint_least16_t;
+#define __int_least16_t_defined 1
+#endif
 #endif
 
 #if __EXP(LONG_MAX) > 0x7fffffff
 typedef signed long int64_t;
 typedef unsigned long uint64_t;
-#define int64_t_defined 1
+#define __int64_t_defined 1
 #define __rtems_long64 1
 #elif  __EXP(LONG_LONG_MAX) > 0x7fffffff
 typedef signed long long int64_t;
 typedef unsigned long long uint64_t;
-#define int64_t_defined 1
+#define __int64_t_defined 1
 #define __rtems_longlong64 1
 #elif  __EXP(INT_MAX) > 0x7fffffff
 typedef signed int int64_t;
 typedef unsigned int uint64_t;
-#define int64_t_defined 1
+#define __int64_t_defined 1
+#endif
+
+#if __int64_t_defined
+typedef int64_t   	int_least64_t;
+typedef uint64_t 	uint_least64_t;
+#define __int_least64_t_defined 1
+
+#ifndef __int_least8_t_defined
+typedef int64_t	   	int_least8_t;
+typedef uint64_t  	uint_least8_t;
+#define __int_least8_t_defined 1
+#endif
+
+#ifndef __int_least16_t_defined
+typedef int64_t	   	int_least16_t;
+typedef uint64_t  	uint_least16_t;
+#define __int_least16_t_defined 1
+#endif
+
+#ifndef __int_least32_t_defined
+typedef int64_t	   	int_least32_t;
+typedef uint64_t  	uint_least32_t;
+#define __int_least32_t_defined 1
+#endif
 #endif
 
 #if __rtems_longlong64
@@ -93,6 +154,62 @@ typedef unsigned long uintmax_t;
 
 typedef signed long intptr_t;
 typedef unsigned long uintptr_t;
+
+/* Limits of Specified-Width Integer Types */
+
+#if __int8_t_defined
+#define INT8_MIN 	-128
+#define INT8_MAX 	 127
+#define UINT8_MAX 	 255
+#endif
+
+#if __int_least8_t_defined
+#define INTLEAST8_MIN 	-128
+#define INTLEAST8_MAX 	 127
+#define UINTLEAST8_MAX 	 255
+#else
+#error required type int_least8_t missing
+#endif
+
+#if __int16_t_defined
+#define INT16_MIN 	-32768
+#define INT16_MAX 	 32767
+#define UINT16_MAX 	 65535
+#endif
+
+#if __int_least16_t_defined
+#define INTLEAST16_MIN 	-32768
+#define INTLEAST16_MAX 	 32767
+#define UINTLEAST16_MAX  65535
+#else
+#error required type int_least16_t missing
+#endif
+
+#if __int32_t_defined
+#define INT32_MIN 	-2147483648
+#define INT32_MAX 	 2147483647
+#define UINT32_MAX       4294967295
+#endif
+
+#if __int_least32_t_defined
+#define INTLEAST32_MIN 	-2147483648
+#define INTLEAST32_MAX 	 2147483647
+#define UINTLEAST32_MAX  4294967295
+#else
+#error required type int_least32_t missing
+#endif
+
+#if __int64_t_defined
+#define INT64_MIN 	-9223372036854775808
+#define INT64_MAX 	 9223372036854775807
+#define UINT64_MAX 	18446744073709551615
+#endif
+
+#if __int_least64_t_defined
+#define INTLEAST64_MIN 	-9223372036854775808
+#define INTLEAST64_MAX 	 9223372036854775807
+#define UINTLEAST64_MAX 18446744073709551615
+#endif
 
 #undef __EXP
 

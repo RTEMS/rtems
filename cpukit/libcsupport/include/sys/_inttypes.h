@@ -1,3 +1,7 @@
+/**
+ *  @file  sys/_inttypes.h
+ */
+
 /*
  *  COPYRIGHT (c) 2004.
  *  Ralf Corsepius, Ulm/Germany.
@@ -184,7 +188,7 @@
 #define SCNu64		__SCN64(u)
 #define SCNx64		__SCN64(x)
 
-
+#if __int64_t_defined
 #define PRIdLEAST64	__PRI64(d)
 #define PRIiLEAST64	__PRI64(i)
 #define PRIoLEAST64	__PRI64(o)
@@ -211,7 +215,7 @@
 #define SCNoFAST64	__SCN64(o)
 #define SCNuFAST64	__SCN64(u)
 #define SCNxFAST64	__SCN64(x)
-
+#endif
 
 /* max-bit types */
 #if defined(__rtems_longlong64)

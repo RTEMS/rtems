@@ -1,3 +1,14 @@
+2004-11-04	Ralf Corsepius <ralf_corsepiu@rtems.org>
+
+	* include/sys/_stdint.h: Various changes.
+	Add *leastN_t types. Add INTN_{MIN|MAX} macros.
+	Add doxygen preamble.
+	* include/sys/_inttypes.h: Add doxygen preamble.
+	Reflect changes above.
+	* libcsupport/include/stdint.h: Add doxygen preamble.
+	* libcsupport/include/inttypes.h: Add doxygen preamble.
+	* configure.ac: Add doxygen preamble to cpuopts.h.
+
 2004-11-02	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/src/mqueueunlink.c, posix/src/semunlink.c,

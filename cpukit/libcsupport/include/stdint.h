@@ -1,6 +1,8 @@
+/**
+ * @file stdint.h
+ */
+
 /*
- * stdint.h
- *
  * ISO C99 integer types
  *
  * $Id$

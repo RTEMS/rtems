@@ -1,6 +1,8 @@
+/**
+ * @file inttypes.h
+ */
+
 /*
- * inttypes.h
- *
  * ISO C99 Format conversion of integer types.
  *
  *  $Id$
