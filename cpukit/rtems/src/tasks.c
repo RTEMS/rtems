@@ -1055,11 +1055,10 @@ rtems_status_code rtems_task_wake_after(
   rtems_interval ticks
 )
 {
-  if ( ticks == 0 ) {
-    _Thread_Yield_processor();
-    _Thread_Dispatch();
-  } else {
-    _Thread_Disable_dispatch();
+  _Thread_Disable_dispatch();
+    if ( ticks == 0 ) {
+      _Thread_Yield_processor();
+    } else {
       _Thread_Set_state( _Thread_Executing, STATES_DELAYING );
       _Watchdog_Initialize(
         &_Thread_Executing->Timer,
@@ -1068,8 +1067,8 @@ rtems_status_code rtems_task_wake_after(
         NULL
       );
       _Watchdog_Insert_ticks( &_Thread_Executing->Timer, ticks );
-    _Thread_Enable_dispatch();
-  }
+    }
+  _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
 }
 

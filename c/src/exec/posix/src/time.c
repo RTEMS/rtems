@@ -314,8 +314,9 @@ int nanosleep(
    */
 
   if ( !ticks ) {
-    _Thread_Yield_processor();
-    _Thread_Dispatch();
+    _Thread_Disable_dispatch();
+      _Thread_Yield_processor();
+    _Thread_Enable_dispatch();
     if ( rmtp ) {
        rmtp->tv_sec = 0; 
        rmtp->tv_nsec = 0; 
