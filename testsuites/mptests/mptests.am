@@ -3,19 +3,19 @@
 project_bspdir=$(PROJECT_ROOT)/@RTEMS_BSP@
 
 $(project_bspdir)/tests:
-	@$(mkinstalldirs) $@
+	@$(mkdir_p) $@
 
 $(project_bspdir)/tests/$(TEST)-node$(NODE)$(LIB_VARIANT).exe: $(PGM)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens:
-	@$(mkinstalldirs) $@
+	@$(mkdir_p) $@
 
 $(project_bspdir)/tests/screens/mptests:
-	@$(mkinstalldirs) $@
+	@$(mkdir_p) $@
 
 $(project_bspdir)/tests/screens/mptests/node$(NODE):
-	@$(mkinstalldirs) $@
+	@$(mkdir_p) $@
 
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn: $(TEST).scn
 	$(INSTALL_DATA) $< $@
