@@ -1,3 +1,4 @@
+void break_when_you_get_here();
 /*
  *******************************************************************
  *******************************************************************
@@ -50,8 +51,12 @@
 #define SONIC_DEBUG_PRINT_REGISTERS  0x0001
 #define SONIC_DEBUG_MEMORY           0x0002
 #define SONIC_DEBUG_MEMORY_ALLOCATE  0x0004
+#define SONIC_DEBUG_FRAGMENTS        0x0008
+#define SONIC_DEBUG_CAM              0x0008
 
-#define SONIC_DEBUG      (SONIC_DEBUG_PRINT_REGISTERS|SONIC_DEBUG_MEMORY)
+#define SONIC_DEBUG      (SONIC_DEBUG_MEMORY|SONIC_DEBUG_CAM) 
+/* SONIC_DEBUG_ALL */
+
 
 /*
  * XXX
@@ -186,6 +191,7 @@ struct sonic {
    */
   int                             rdaCount;
   ReceiveResourcePointer_t        rsa;
+  CamDescriptorPointer_t          cdp;
   ReceiveDescriptorPointer_t      rda;
   ReceiveDescriptorPointer_t      rdp_last;
 
@@ -244,7 +250,7 @@ unsigned32 sonic_read_register(
  * Allocate non-cacheable memory on a single 64k page.
  * Very simple minded -- just keeps trying till the memory is on a single page.
  */
-SONIC_STATIC void * sonic_allocate (unsigned int nbytes)
+SONIC_STATIC void * sonic_allocate(unsigned int nbytes)
 {
   void *p;
   unsigned long a1, a2;
@@ -385,7 +391,6 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
        sonic_read_register( rp, SONIC_REG_IMR) &
                   ~(IMR_PINTEN | IMR_PTXEN | IMR_TXEREN)
     );
-    dp->rxInterrupts++;
     dp->txInterrupts++;
     rtems_event_send (dp->txWaitTid, INTERRUPT_EVENT);
   }
@@ -413,6 +418,8 @@ SONIC_STATIC void sonic_retire_tda (struct sonic *dp)
    */
   while ((dp->tdaActiveCount != 0)
       && ((status = dp->tdaTail->status) != 0)) {
+
+/* printf( "retire TDA %p (0x%04x)\n", dp->tdaTail, status ); */
     /*
      * Check for errors which stop the transmitter.
      */
@@ -588,6 +595,10 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
     fp->frag_size = bp->cnt;
     packetSize += bp->cnt;
 
+#if (SONIC_DEBUG & SONIC_DEBUG_FRAGMENTS)
+    printf( "fp %p 0x%04x%04x %d\n",
+      fp, fp->frag_msw, fp->frag_lsw, fp->frag_size );
+#endif
     /*
      * Break out of the loop if this mbuf is the last in the frame.
      */
@@ -600,27 +611,37 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
    */
   if  ((packetSize < 64) && (i < MAXIMUM_FRAGS_PER_DESCRIPTOR)) {
     int padSize = 64 - packetSize;
+    fp++;
     fp->frag_lsw = LSW(padBuf);
     fp->frag_msw = MSW(padBuf);
     fp->frag_size = padSize;
+#if (SONIC_DEBUG & SONIC_DEBUG_FRAGMENTS)
+    printf( "PAD fp %p 0x%04x%04x %d\n",
+         fp, fp->frag_msw, fp->frag_lsw, fp->frag_size );
+#endif
     packetSize += padSize;
     i++;
-    fp++;
   }
 
   /*
    * Fill Transmit Descriptor
    */
   tdp->pkt_size = packetSize;
-  tdp->frag_count = i;
+  tdp->frag_count = i + 1;
   tdp->status = 0;
 
   /*
    * Chain onto list and start transmission.
    */
-  tdp->linkp = &fp->frag_link;
+  tdp->linkp = &(fp+1)->frag_link;
   *tdp->linkp = LSW(tdp->next) | TDA_LINK_EOL;
   *dp->tdaHead->linkp &= ~TDA_LINK_EOL;
+  sonic_write_register(
+     rp,
+     SONIC_REG_IMR,
+     sonic_read_register( rp, SONIC_REG_IMR) |
+            (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN)
+  );
   sonic_write_register( rp, SONIC_REG_CR, CR_TXP );
   dp->tdaActiveCount++;
   dp->tdaHead = tdp;
@@ -802,7 +823,7 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
       sonic_rda_wait (dp, rdp);
     }
 
-printf( "Incoming packet %p\n", rdp );
+/* printf( "Incoming packet %p\n", rdp ); */
 
     /*
      * Check that packet is valid
@@ -812,6 +833,7 @@ printf( "Incoming packet %p\n", rdp );
       struct mbuf **mbp;
       void *p;
 
+/* printf( "Valid packet\n" ); */
       /*
        * Get the mbuf pointer
        */
@@ -828,6 +850,7 @@ printf( "Incoming packet %p\n", rdp );
        * Invalidate cache entries for this memory.
        */
       bp->cnt = rdp->byte_count - sizeof (uint32);
+/* printf( "Routing the packet\n" ); */
       net_route (iface, &bp);
 
       /*
@@ -929,16 +952,7 @@ SONIC_STATIC void sonic_initialize_hardware(
   ReceiveDescriptorPointer_t ordp, rdp;
   ReceiveResourcePointer_t rwp, rea;
   struct mbuf *bp;
-  struct CamDescriptor{
-    struct {
-      rtems_unsigned32  cep;  /* CAM Entry Pointer */
-      rtems_unsigned32  cap0; /* CAM Address Port 0 xx-xx-xx-xx-YY-YY */
-      rtems_unsigned32  cap1; /* CAM Address Port 1 xx-xx-YY-YY-xxxx */
-      rtems_unsigned32  cap2; /* CAM Address Port 2 YY-YY-xx-xx-xx-xx */
-    } desc[16];
-    rtems_unsigned32  ce;
-  };
-  volatile struct CamDescriptor *cdp;
+  CamDescriptorPointer_t cdp;
 
   /*
    *  The Revision B SONIC has a horrible bug known as the "Zero
@@ -961,36 +975,51 @@ SONIC_STATIC void sonic_initialize_hardware(
    */
 
   dp->tdaActiveCount = 0;
-  dp->tdaTail = sonic_allocate (dp->tdaCount * sizeof *tdp);
+  dp->tdaTail = sonic_allocate(dp->tdaCount * sizeof *tdp);
 #if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
   printf( "tdaTail = %p\n", dp->tdaTail );
 #endif
   otdp = tdp = dp->tdaTail;
   for (i = 0 ; i < dp->tdaCount ; i++) {
+    /*
+     *  status, pkt_config, pkt_size, and all fragment fields 
+     *  are set to zero by sonic_allocate.
+     */
+
+/* XXX not used by other drivers 
     if (i & 1)
       tdp->pkt_config = TDA_CONFIG_PINT;
-    else
-      tdp->pkt_config = 0;
-    tdp->frag_count = 1;
-    if (i == (dp->tdaCount - 1))
-      tdp->next = (TransmitDescriptor_t *)dp->tdaTail;
-    else
-      tdp->next = (TransmitDescriptor_t *)(tdp + 1);
+*/
+
+    tdp->frag_count        = 1;
+    tdp->frag[0].frag_link = LSW(tdp + 1);
+    tdp->link_pad          = LSW(tdp + 1) | TDA_LINK_EOL;
+    otdp->linkp            = &((tdp + 1)->frag[0].frag_link);
+    tdp->next              = (TransmitDescriptor_t *)(tdp + 1);
     otdp = tdp;
-    tdp = tdp->next;
+    tdp++;
   }
-  dp->tdaHead = otdp;
-  dp->tdaHead->linkp = &dp->tdaHead->frag[0].frag_link;
+  dp->tdaHead = otdp;  /* XXX why? */
+  otdp->link_pad = LSW(dp->tdaTail) | TDA_LINK_EOL;
+  otdp->next = (TransmitDescriptor_t *)dp->tdaTail;
+  otdp->linkp = &dp->tdaHead->frag[0].frag_link;
 
   /*
    *  Set up circular linked list in Receive Descriptor Area.
    *  Leaves ordp pointing at the `end' of the list and
    *  dp->rda pointing at the `beginning' of the list.
+   *
+   *  NOTE: The RDA and CDP must have the same MSW for their addresses.
    */
 
-  dp->rda = sonic_allocate (dp->rdaCount * sizeof(ReceiveDescriptor_t));
+  dp->rda = sonic_allocate(
+              (dp->rdaCount * sizeof(ReceiveDescriptor_t)) + 
+                sizeof(CamDescriptor_t) );
+  dp->cdp = (CamDescriptorPointer_t) ((unsigned char *)dp->rda +
+        (dp->rdaCount * sizeof(ReceiveDescriptor_t)));
 #if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
   printf( "rda area = %p\n", dp->rda );
+  printf( "cdp area = %p\n", dp->cdp );
 #endif
 
   ordp = rdp = dp->rda;
@@ -1021,7 +1050,7 @@ SONIC_STATIC void sonic_initialize_hardware(
    * area big enough to hold the CAM descriptor area.
    */
 
-  dp->rsa = sonic_allocate ((dp->rdaCount + RRA_EXTRA_COUNT) * sizeof *dp->rsa);
+  dp->rsa = sonic_allocate((dp->rdaCount + RRA_EXTRA_COUNT) * sizeof *dp->rsa);
 #if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
   printf( "rsa area = %p\n", dp->rsa );
 #endif
@@ -1049,6 +1078,7 @@ SONIC_STATIC void sonic_initialize_hardware(
     /*
      * Set up RRA entry
      */
+
     rwp->buff_ptr_lsw = LSW(bp->data);
     rwp->buff_ptr_msw = MSW(bp->data);
     rwp->buff_wc_lsw = RBUF_WC;
@@ -1086,6 +1116,7 @@ SONIC_STATIC void sonic_initialize_hardware(
   sonic_write_register( rp, SONIC_REG_CRCT, 0xFFFF );
   sonic_write_register( rp, SONIC_REG_FAET, 0xFFFF );
   sonic_write_register( rp, SONIC_REG_MPT, 0xFFFF );
+  sonic_write_register( rp, SONIC_REG_RSC, 0 );
 
   /*
    *  Set the Receiver mode
@@ -1101,6 +1132,7 @@ SONIC_STATIC void sonic_initialize_hardware(
   /*
    * Set up Resource Area pointers
    */
+
   sonic_write_register( rp, SONIC_REG_URRA, MSW(dp->rsa) );
   sonic_write_register( rp, SONIC_REG_RSA, LSW(dp->rsa) );
 
@@ -1108,7 +1140,6 @@ SONIC_STATIC void sonic_initialize_hardware(
 
   sonic_write_register( rp, SONIC_REG_RRP, LSW(dp->rsa) );
   sonic_write_register( rp, SONIC_REG_RWP, LSW(dp->rsa) ); /* XXX was rea */
-  sonic_write_register( rp, SONIC_REG_RSC, 0 );
 
   sonic_write_register( rp, SONIC_REG_URDA, MSW(dp->rda) );
   sonic_write_register( rp, SONIC_REG_CRDA, LSW(dp->rda) );
@@ -1144,12 +1175,20 @@ SONIC_STATIC void sonic_initialize_hardware(
    * Use the Receive Resource Area to hold the CAM Descriptor Area.
    */
   hwaddr = dp->iface->hwaddr;
-  cdp = (struct CamDescriptor *)dp->rsa;
+  cdp = dp->cdp;
+
   for (i=0 ; i<16 ; i++ ) {
+    /*
+     *  cap0, cap1, and cap2 are zeroed by sonic_allocate.
+     */
     cdp->desc[i].cep = i;
   }
 
   cdp->desc[0].cep = 0;      /* Fill first entry in CAM */
+#if (SONIC_DEBUG & SONIC_DEBUG_CAM)
+  printf( "hwaddr: %2x:%2x:%2x:%2x:%2x:%2x\n",
+     hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5] );
+#endif
   cdp->desc[0].cap2 = hwaddr[0] << 8 | hwaddr[1];
   cdp->desc[0].cap1 = hwaddr[2] << 8 | hwaddr[3];
   cdp->desc[0].cap0 = hwaddr[4] << 8 | hwaddr[5];
@@ -1167,6 +1206,18 @@ SONIC_STATIC void sonic_initialize_hardware(
 
   sonic_write_register( rp, SONIC_REG_CR, CR_RST | CR_STP | CR_RXDIS | CR_HTX );
 
+#if (SONIC_DEBUG & SONIC_DEBUG_CAM)
+  sonic_write_register( rp, SONIC_REG_CEP, 0 );  /* Select first entry in CAM */
+    printf ("Loaded Ethernet address into SONIC CAM.\n"
+      "  Wrote %04x%04x%04x - %#x\n"
+      "   Read %04x%04x%04x - %#x\n", 
+        cdp->desc[0].cap2, cdp->desc[0].cap1, cdp->desc[0].cap0, cdp->ce,
+        sonic_read_register( rp, SONIC_REG_CAP2 ),
+        sonic_read_register( rp, SONIC_REG_CAP1 ),
+        sonic_read_register( rp, SONIC_REG_CAP0 ),
+        sonic_read_register( rp, SONIC_REG_CE ));
+#endif
+
   sonic_write_register( rp, SONIC_REG_CEP, 0 );  /* Select first entry in CAM */
   if ((sonic_read_register( rp, SONIC_REG_CAP2 ) != cdp->desc[0].cap2)
    || (sonic_read_register( rp, SONIC_REG_CAP1 ) != cdp->desc[0].cap1)
@@ -1180,12 +1231,10 @@ SONIC_STATIC void sonic_initialize_hardware(
         sonic_read_register( rp, SONIC_REG_CAP1 ),
         sonic_read_register( rp, SONIC_REG_CAP0 ),
         sonic_read_register( rp, SONIC_REG_CE ));
-#if 0
     rtems_panic ("SONIC LCAM");
-#endif
   }
 
-  sonic_write_register( rp, SONIC_REG_CR, CR_STP | CR_RXDIS | CR_HTX );
+  sonic_write_register(rp, SONIC_REG_CR, CR_TXP | CR_RXEN | CR_STP);
 
   /*
    * Attach SONIC interrupt handler
@@ -1443,4 +1492,3 @@ unsigned32 sonic_read_register(
 #endif
   return value;
 }
-
