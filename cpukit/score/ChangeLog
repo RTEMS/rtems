@@ -1,4 +1,17 @@
 
+2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/Makefile.am: Remove.
+	* include/rtems/Makefile.am: Remove.
+	* include/Makefile.am: Handle subdirs, require automake-1.5.
+	* macros/rtems/Makefile.am: Remove.
+	* macros/rtems/score/Makefile.am: Remove.
+	* macros/Makefile.am: Handle subdirs, require automake-1.5.
+	* inline/rtems/Makefile.am: Remove.
+	* inline/rtems/score/Makefile.am: Remove.
+	* inline/Makefile.am: Handle subdirs, require automake-1.5.
+	* Makefile.am: require automake-1.5
+
 2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
