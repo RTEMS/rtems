@@ -112,6 +112,9 @@ int memfile_close(
 
   the_jnode = iop->file_info;
 
+  if (iop->flags & LIBIO_FLAGS_APPEND)
+    iop->offset = the_jnode->info.file.size;
+
   return 0;
 }
 
@@ -340,7 +343,6 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
 #endif
 
   memory = memfile_alloc_block();
-  assert( memory );
   if ( !memory )
     return 1;
   *block_entry_ptr = memory;

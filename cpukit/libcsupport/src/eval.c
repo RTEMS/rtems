@@ -43,6 +43,9 @@ int rtems_filesystem_evaluate_path(
 
   rtems_filesystem_get_start_loc( pathname, &i, pathloc );
 
+  if ( !pathloc->ops->evalpath )
+    set_errno_and_return_minus_one( ENOTSUP );
+
   result = (*pathloc->ops->evalpath)( &pathname[i], flags, pathloc );
 
   /*

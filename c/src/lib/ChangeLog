@@ -1,4 +1,19 @@
 
+2000-08-11  Chris Johns <ccj@acm.org>
+
+	* libc/chmod.c: Return ENOTSUP if filesystem does not have handler.
+	* libc/eval.c: Ditto.
+	* libc/fcntl.c: Ditto.
+	* libc/fsync.c: Ditto.
+	* libc/ioctl.c: Ditto.
+	* libc/ioman.c: Ditto.
+	* libc/memfile.c: Ditto.
+	* libc/link.c: Ditto.
+	* libc/mknod.c: Ditto.
+	* libc/symlink.c: Ditto.
+	* libc/libio.h(rtems_filesystem_dev_major_t): New macro.
+	appending to a file.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.

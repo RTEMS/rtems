@@ -33,6 +33,11 @@ int chmod(
   if ( status != 0 )
     return -1;
   
+  if ( !loc.handlers ){
+    rtems_filesystem_freenode( &loc );
+    set_errno_and_return_minus_one( EBADF );
+  }
+
   if ( !loc.handlers->fchmod ){
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );

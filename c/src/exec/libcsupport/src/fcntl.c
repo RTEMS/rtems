@@ -131,10 +131,16 @@ int fcntl(
       ret = -1;
       break;
   }
-  if ((ret >= 0) && iop->handlers->fcntl) {
-    int err = (*iop->handlers->fcntl)( cmd, iop );
-    if (err) {
-      errno = err;
+  if (ret >= 0) {    
+    if (iop->handlers->fcntl) {
+      int err = (*iop->handlers->fcntl)( cmd, iop );
+      if (err) {
+        errno = err;
+        ret = -1;
+      }
+    }
+    else {
+      errno = ENOTSUP;
       ret = -1;
     }
   }

@@ -28,6 +28,11 @@ int symlink(
   if ( result != 0 )
     return -1;
 
+  if ( !loc.ops->symlink ) {
+    rtems_filesystem_freenode( &loc );
+    set_errno_and_return_minus_one( ENOTSUP );
+  }
+
   result = (*loc.ops->symlink)( &loc, actualpath, name_start);
 
   rtems_filesystem_freenode( &loc );
