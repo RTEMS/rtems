@@ -503,6 +503,7 @@ rtems_bsdnet_schednetisr (int n)
 static void
 networkDaemon (void *task_argument)
 {
+	rtems_status_code sc;
 	rtems_event_set events;
 	rtems_interval now;
 	int ticksPassed;
@@ -515,14 +516,18 @@ networkDaemon (void *task_argument)
 			timeout = c->c_time;
 		else
 			timeout = RTEMS_NO_TIMEOUT;
-		rtems_bsdnet_event_receive (NETISR_EVENTS,
+
+		sc = rtems_bsdnet_event_receive (NETISR_EVENTS,
 						RTEMS_EVENT_ANY | RTEMS_WAIT,
 						timeout,
 						&events);
-		if (events & NETISR_IP_EVENT)
-			ipintr ();
-		if (events & NETISR_ARP_EVENT)
-			arpintr ();
+		if ( sc == RTEMS_SUCCESSFUL ) {
+			if (events & NETISR_IP_EVENT)
+				ipintr ();
+			if (events & NETISR_ARP_EVENT)
+				arpintr ();
+		}
+
 		rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
 		ticksPassed = now - ticksWhenCalloutsLastChecked;
 		if (ticksPassed != 0) {

@@ -1,3 +1,13 @@
+2003-02-11	Mike Siers <mikes@poliac.com>
+
+	* rtems/rtems_glue.c: A small patch to the network daemon task
+	code.  I just added code to check the return value of
+	the rtems_bsdnet_event_receive function.  Only when
+	this function returns a SUCCESSFUL status, will the
+	event flags be checked.  This is more of a code cleanup issue
+	than a bug.  The patch will just ensure the ipintr() and
+	arpintr() functions are only called when a event is signaled.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
