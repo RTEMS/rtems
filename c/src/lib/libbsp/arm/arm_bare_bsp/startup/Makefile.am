@@ -1,12 +1,13 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
 VPATH = @srcdir@:@srcdir@/../../../shared
 
-C_FILES = bsplibc.c bsppost.c bspstart.c exit.c bootcard.c main.c sbrk.c gnatinstallhandler.c
+C_FILES = bsplibc.c bsppost.c bspstart.c exit.c bootcard.c main.c sbrk.c \
+    gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 S_FILES =
@@ -15,6 +16,7 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 startup_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 #
@@ -38,4 +40,3 @@ all: $(ARCH) $(startup_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = linkcmds
 
 include $(top_srcdir)/../../../../../../automake/local.am
-

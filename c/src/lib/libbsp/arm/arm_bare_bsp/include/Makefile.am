@@ -1,10 +1,10 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES =  bsp.h registers.h
+H_FILES = bsp.h registers.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
