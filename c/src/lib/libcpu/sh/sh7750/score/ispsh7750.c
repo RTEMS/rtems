@@ -41,10 +41,6 @@
 #include <rtems/score/shtypes.h>
 #include <rtems/score/isr.h>
 
-#if !defined (sh7750)
-#error Wrong CPU MODEL
-#endif
-
 /*
  * This is a exception vector table
  *
@@ -53,6 +49,7 @@
 
 
 #include <rtems/score/ispsh7750.h>
+#include <rtems/score/sh4_regs.h>
 #include <rtems/score/sh7750_regs.h>
 
 /* VBR register contents saved on startup -- used to hook exception by debug

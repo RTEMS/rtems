@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/sci.rel
 
-C_FILES = console.c sh4uart.c
+C_FILES = sh4uart.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -25,5 +25,9 @@ $(PGM): $(OBJS)
 all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
+
+## FIXME: Moved to libbsp/sh/<BSP>/console/
+## Needs to be reworked to be usable here.
+EXTRA_DIST = console.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

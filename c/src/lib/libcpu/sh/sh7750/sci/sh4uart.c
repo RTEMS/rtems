@@ -1,9 +1,6 @@
 /*
  * Generic UART Serial driver for SH-4 processors
  *
- * This driver uses variable SH4_CPU_HZ_Frequency, 
- * which should be defined in bsp to HZ macro.
- *
  * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russian Fed.
  * Author: Alexandra Kossovsky <sasha@oktet.ru>
  *
@@ -22,11 +19,16 @@
 #include <rtems.h>
 #include <termios.h>
 #include <rtems/libio.h>
-#include "sh/sh4uart.h"
+#include <sh/sh4uart.h>
 
 #ifndef SH4_UART_INTERRUPT_LEVEL
 #define SH4_UART_INTERRUPT_LEVEL 4
 #endif
+
+/* FIXME: ???
+#define SH7750_SCSMR_CKS_S SH7750_SCSMR_CKS_DIV1
+ */
+#define SH7750_SCSMR_CKS_S     0
 
 /* Forward function declarations */
 static rtems_isr
@@ -86,7 +88,7 @@ rtems_unsigned32
 sh4uart_get_Pph(void)
 {
     rtems_unsigned16 frqcr = *(volatile rtems_unsigned16 *)SH7750_FRQCR;
-    rtems_unsigned32 Pph = SH4_CPU_HZ_Frequency;
+    rtems_unsigned32 Pph = rtems_cpu_configuration_get_clicks_per_second() ;
 
     switch (frqcr & SH7750_FRQCR_IFC)
     {

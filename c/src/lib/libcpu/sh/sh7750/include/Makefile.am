@@ -2,36 +2,36 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts
 include_shdir = $(includedir)/sh
 include_rtems_scoredir = $(includedir)/rtems/score
 
-include_sh_HEADERS = sh4uart.h
-include_rtems_score_HEADERS = ispsh7750.h iosh7750.h
+include_sh_HEADERS = sh/sh4uart.h
+include_rtems_score_HEADERS = \
+rtems/score/sh7750_regs.h \
+rtems/score/ipl.h \
+rtems/score/iosh7750.h \
+rtems/score/ispsh7750.h \
+rtems/score/sh4_regs.h
 
 $(PROJECT_INCLUDE)/sh:
 	$(mkinstalldirs) $@
 
-$(PROJECT_INCLUDE)/sh/%.h: %.h
+$(PROJECT_INCLUDE)/rtems/score:
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/rtems/score/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES = $(PROJECT_INCLUDE)/sh \
-    $(include_sh_HEADERS:%=$(PROJECT_INCLUDE)/sh/%) \
-    $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/rtems/score/%)
+TMPINSTALL_FILES = \
+    $(PROJECT_INCLUDE)/sh \
+    $(include_sh_HEADERS:%=$(PROJECT_INCLUDE)/%) \
+    $(PROJECT_INCLUDE)/rtems/score \
+    $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(TMPINSTALL_FILES)
-
-# FIXME: What are these files here?
-# They should either be installed or removed
-EXTRA_DIST = \
-ipl.h \
-sh4uart.h \
-sh7750_regs.h
 
 include $(top_srcdir)/../../../../../../automake/local.am

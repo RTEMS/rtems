@@ -1,3 +1,19 @@
+2001-10-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/sh4uart.h: move to include/sh/sh4uart.h.
+	* include/ispsh7750.h: move to include/rtems/score/ispsh7750.h.
+	* include/iosh7750.h: move include/rtems/score/iosh7750.h.
+	* include/sh7750_regs.h: move to include/rtems/score/sh7750_regs.h.
+	* include/rtems/score/ipl.h: move to include/rtems/score/ipl.h.
+	* include/rtems/score/sh4_regs.h: Reintroduce from Alexandra
+	Kossovsky's original sources.
+	* include/Makefile.am: reflect changes above, remove EXTRA_DIST,
+	require automake 1.5.
+	* sci/Makefile.am: Disable compilation of console.c.
+	* sci/sh4uart.c: include <sh/sh4uart.h>, add SH7750_SCSMR_CHK_S,
+	remove SH4_CPU_HZ_Frequency;
+	* score/isph7750.c: Remove #if !defined(sh7750), include sh4_regs.h.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* include/sh4_regs.h: Deleted and contents merged in score/cpu

@@ -44,6 +44,6 @@
 #ifndef __IOSH7750_H
 #define __IOSH7750_H
 
-#include "sh7750_regs.h"
+#include <rtems/score/sh7750_regs.h>
 
 #endif
