@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 # (Works with both perl 4 and perl 5)
 $version = 'Jan 2 1996';
 $copyright = <<EOT;
