@@ -21,7 +21,7 @@
 
  */
 
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <rtems.h>
 
 #include <libchip/cs8900.h>
