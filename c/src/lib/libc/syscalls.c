@@ -22,6 +22,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 /*
  *  fstat, stat, and isatty must lie consistently and report that everything
@@ -30,6 +31,10 @@
 
 int __fstat(int _fd, struct stat* _sbuf)
 {
+  if ( _fd > 2 ) {
+    puts( "__fstat -- only stdio supported" );
+    assert( 0 );
+  }
   _sbuf->st_mode = S_IFCHR;
 #ifdef HAVE_BLKSIZE
   _sbuf->st_blksize = 0;
@@ -44,6 +49,10 @@ int __isatty(int _fd)
 
 int stat( const char *path, struct stat *buf )
 {
+  if ( strncmp( "/dev/", path, 5 ) ) {
+    puts( "stat -- non-devices not supported" );
+    assert( 0 );
+  }
   return __fstat( 0, buf );
 }
 

@@ -10,6 +10,7 @@
 
 #include <stdio.h>                      /* O_RDONLY, et.al. */
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
+#include <assert.h>
 
 #if ! defined(O_NDELAY)
 # if defined(solaris2)
@@ -252,8 +253,13 @@ __open(
     rtems_driver_name_t *np;
     rtems_libio_open_close_args_t args;
 
-    if ((rc = rtems_io_lookup_name(pathname, &np)) != RTEMS_SUCCESSFUL)
+    if ((rc = rtems_io_lookup_name(pathname, &np)) != RTEMS_SUCCESSFUL) {
+      if ( rc == RTEMS_UNSATISFIED ) {
+        puts( "open -- ENOSYS case" );
+        assert( 0 );
+      }
         goto done;
+    }
 
     iop = rtems_libio_allocate();
     if (iop == 0)
@@ -273,6 +279,7 @@ __open(
     rc = rtems_io_open(np->major, np->minor, (void *) &args);
     
 done:
+  
     if (rc != RTEMS_SUCCESSFUL)
     {
         if (iop)
