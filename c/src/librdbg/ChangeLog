@@ -1,5 +1,10 @@
 2001-01-18	Joel Sherrill <joel@OARcorp.com>
 
+	* src/powerpc/new_exception_processing/remdeb_svc.c: Corrected 
+	macro using variable arguments.
+	
+2001-01-18	Joel Sherrill <joel@OARcorp.com>
+
 	* src/powerpc/new_exception_processing/remdeb.h,
 	src/powerpc/new_exception_processing/remdeb_xdr.c: Regenerated since
 	I updated the main RTEMS development machine to RedHat 7.2 and

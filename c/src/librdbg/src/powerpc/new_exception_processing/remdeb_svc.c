@@ -6,7 +6,7 @@
 #include <bsp.h>
 #include <rdbg/servrpc.h>
 #include <rdbg/remdeb.h>
-#define fprintf(a,b) printf(b)
+#define fprintf(fp, ...) printf(__VA_ARGS__)
 /*HEADER_START*/
 #define RTEMS_PORT 2071
 #define RTEMS_BACK_PORT 2073
@@ -14,7 +14,7 @@
  * Sun request values for the remote ptrace system call
  */
 
-  /*
+ /*
    * Memory data for read/write text or data. The size is in data. The target
    * addr is in the addr field.
    * Be careful before modifying because this value goes into internal
@@ -22,22 +22,22 @@
    * become too small if this value gets incremented.
    */
 #ifndef XRY_MAX_CMD_STR
-#endif	/* REMDEB_H */
-  /* now open_connex() routine which establishes a connection to server */
-#define DEBUGGER_IS_GDB 0x2    /* */
-  /* now close_connex() routine which detaches from server */
-  /* now send_signal() routine which sends signals to processes like kill(2) */
-  /* now wait_info() routine which returns results of polling the wait status
+#endif /* REMDEB_H */
+ /* now open_connex() routine which establishes a connection to server */
+#define DEBUGGER_IS_GDB 0x2 /* */
+ /* now close_connex() routine which detaches from server */
+ /* now send_signal() routine which sends signals to processes like kill(2) */
+ /* now wait_info() routine which returns results of polling the wait status
 	of a process/actor. It may return 0 if running, else pid or -1 */
-  /* now ptrace() routine. This matches the Sun UNIX ptrace as well as
-	some additions */ 
-  /* now define the actual calls we support */
+ /* now ptrace() routine. This matches the Sun UNIX ptrace as well as
+	some additions */
+ /* now define the actual calls we support */
 const char* names [] = {
-    "NULLPROC", "OPEN_CONNEX", "SEND_SIGNAL", "name3",
-    "name4", "name5", "name6", "name7",
-    "name8", "name9", "CLOSE_CONNEX", "PTRACE",
-    "name12", "WAIT_INFO", "name14", "name15",
-    "name16", "GET_SIGNAL_NAMES", "name18"
+ "NULLPROC", "OPEN_CONNEX", "SEND_SIGNAL", "name3",
+ "name4", "name5", "name6", "name7",
+ "name8", "name9", "CLOSE_CONNEX", "PTRACE",
+ "name12", "WAIT_INFO", "name14", "name15",
+ "name16", "GET_SIGNAL_NAMES", "name18"
 };
 
 void
@@ -115,7 +115,7 @@ remotedeb_2(struct svc_req *rqstp, register SVCXPRT *transp)
 		svcerr_systemerr (transp);
 	}
 	if (!svc_freeargs (transp, _xdr_argument, (caddr_t) &argument)) {
-		fprintf (stderr, "unable to free arguments");
+		fprintf (stderr, "%s", "unable to free arguments");
 		exit (1);
 	}
 	return;
