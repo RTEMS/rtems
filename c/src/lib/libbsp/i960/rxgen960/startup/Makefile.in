@@ -24,7 +24,7 @@ C_PIECES = bspstart cntrltbl exit fault flttbl frmstr intrtbl kkprintf \
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-S_PIECES = asmfault asmstub ihandler rxgen_romld sctns systbl
+S_PIECES = asmfault asmstub ihandler rxgen_romld systbl
 S_FILES = $(S_PIECES:%=%.S)
 S_O_FILES = $(S_PIECES:%=${ARCH}/%.o)
 
