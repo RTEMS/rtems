@@ -11,8 +11,8 @@ C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c imbx8xx.c \
     main.c mmutlbtab.c sbrk.c gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-S_FILES = start.s
-S_O_FILES = $(S_FILES:%.s=$(ARCH)/%.$(OBJEXT))
+S_FILES = start.S
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
 

@@ -1,3 +1,7 @@
+2003-12-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/Makefile.am: start.S instead of start.s.
+
 2003-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 545/bsps
