@@ -1,3 +1,9 @@
+2003-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* buildada.t, gdb.t, tversions.texi:
+	Don't use VARIABLEs containing '-' in @set and @value (violates
+	texi-syntax).
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* started_ada.texi: Set @setfilename started_ada.info.

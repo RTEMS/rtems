@@ -26,10 +26,10 @@ Use the following commands to unarchive the gdb distribution:
 
 @example
 cd tools
-tar xzf ../archive/@value{GDB-TAR}
+tar xzf ../archive/@value{GDBTAR}
 @end example
 
-The directory @value{GDB-UNTAR} is created under the tools directory.
+The directory @value{GDBUNTAR} is created under the tools directory.
 
 @c 
 @c  GDB GNAT Patch
@@ -38,8 +38,8 @@ The directory @value{GDB-UNTAR} is created under the tools directory.
 @section Apply GNAT Patch to GDB
 
 @ifclear GDB-GNATPATCH 
-No GNAT specific patches are required for @value{GDB-VERSION} to
-support @value{RTEMS-VERSION} and @value{GNAT-VERSION}.
+No GNAT specific patches are required for @value{GDBVERSION} to
+support @value{RTEMSVERSION} and @value{GNAT-VERSION}.
 @end ifclear
 
 @ifset GDB-GNATPATCH
@@ -47,7 +47,7 @@ support @value{RTEMS-VERSION} and @value{GNAT-VERSION}.
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{GDB-UNTAR}
+cd tools/@value{GDBUNTAR}
 zcat archive/@value{GDB-GNATPATCH} | patch -p1
 @end example
 
@@ -55,7 +55,7 @@ Check to see if any of these patches have been rejected using the following
 sequence:
 
 @example
-cd tools/@value{GDB-UNTAR}
+cd tools/@value{GDBUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -65,7 +65,7 @@ This should not happen with a good patch file.
 To see the files that have been modified use the sequence:
 
 @example
-cd tools/@value{GDB-UNTAR}
+cd tools/@value{GDBUNTAR}
 find . -name "*.orig" -print
 @end example
 
@@ -79,25 +79,25 @@ The files that are found, have been modified by the patch file.
 
 @section Apply RTEMS Patch to GDB
 
-@ifclear GDB-RTEMSPATCH
-No RTEMS specific patches are required for @value{GDB-VERSION} to
-support @value{RTEMS-VERSION}.
+@ifclear GDBRTEMSPATCH
+No RTEMS specific patches are required for @value{GDBVERSION} to
+support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset GDB-RTEMSPATCH
+@ifset GDBRTEMSPATCH
 
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{GDB-UNTAR}
-zcat archive/@value{GDB-RTEMSPATCH} | patch -p1
+cd tools/@value{GDBUNTAR}
+zcat archive/@value{GDBRTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
 sequence:
 
 @example
-cd tools/@value{GDB-UNTAR}
+cd tools/@value{GDBUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -107,7 +107,7 @@ This should not happen with a good patch file.
 To see the files that have been modified use the sequence:
 
 @example
-cd tools/@value{GDB-UNTAR}
+cd tools/@value{GDBUNTAR}
 find . -name "*.orig" -print
 @end example
 
@@ -134,7 +134,7 @@ Sparc Instruction Simulator (SIS):
 
 @example
 cd tools/build-sis
-../@value{GDB-UNTAR}/configure --target-sparc-erc32-aout \
+../@value{GDBUNTAR}/configure --target-sparc-erc32-aout \
     --program-prefix=sparc-rtems- \
     --disable-gdbtk \
     --enable-targets=all \
@@ -172,7 +172,7 @@ Instruction Simulator (PSIM):
 
 @example
 cd tools/build-ppc
-../@value{GDB-UNTAR}/configure \
+../@value{GDBUNTAR}/configure \
       --target=powerpc-unknown-eabi \
       --program-prefix=powerpc-rtems- \
       --enable-sim-powerpc \
@@ -215,7 +215,7 @@ the DINK32 ROM monitor:
 
 @example
 cd tools/build-dink32
-../@value{GDB-UNTAR}/configure --target-powerpc-elf \
+../@value{GDBUNTAR}/configure --target-powerpc-elf \
     --program-prefix=powerpc-rtems- \
     --enable-targets=all \
     --prefix=<INSTALL_POINT_FOR_DINK32>
