@@ -474,7 +474,7 @@ typedef struct {
   void       (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
 
-#if (defined(ppc403) || defined(mpc860) || defined(mpc821))
+#if (defined(ppc403) || defined(ppc405) || defined(mpc860) || defined(mpc821))
   unsigned32   serial_per_sec;	       /* Serial clocks per second */
   boolean      serial_external_clock;
   boolean      serial_xon_xoff;
@@ -508,7 +508,7 @@ typedef struct {
 #define rtems_cpu_configuration_get_exceptions_in_ram() \
    (_CPU_Table.exceptions_in_RAM)
 
-#if (defined(ppc403) || defined(mpc860) || defined(mpc821))
+#if (defined(ppc403) || defined(ppc405) || defined(mpc860) || defined(mpc821))
 
 #define rtems_cpu_configuration_get_serial_per_sec() \
    (_CPU_Table.serial_per_sec)

@@ -1,3 +1,19 @@
+2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
+
+	This modification is part of the submitted modifications necessary to
+	support the IBM PPC405 family.  This submission was reviewed by
+	Thomas Doerfler <Thomas.Doerfler@imd-systems.de> who ensured it did
+	not negatively impact the ppc403 BSPs.  The submission and tracking
+	process was captured as PR50.
+	* ppc403/console/console405.c ppc403/tty_drv/.cvsignore,
+	ppc403/tty_drv/Makefile.am, ppc403/tty_drv/tty_drv.c,
+	ppc403/tty_drv/tty_drv.h: New files.
+	* Makefile.am, README, configure.ac, old_exception_processing/cpu.c,
+	old_exception_processing/cpu.h, ppc403/Makefile.am,
+	ppc403/clock/clock.c, ppc403/console/Makefile.am,
+	ppc403/console/console.c, ppc403/ictrl/ictrl.c, ppc403/ictrl/ictrl.h,
+	ppc403/timer/timer.c: Modified.
+
 2001-11-07	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: Delete the commented out line that said that

@@ -18,6 +18,8 @@
  *      IMD makes no representations about the suitability
  *      of this software for any purpose.
  *
+ *  Modifications for PPC405GP by Dennis Ehlin 
+ *
  */
 
 #include "ictrl.h"
@@ -41,6 +43,47 @@ rtems_isr_entry ictrl_vector_table[PPC_IRQ_EXT_MAX];
 /* 
  *  clear bits in EXISR that have a bit set in mask 
  */
+#if defined(ppc405)
+RTEMS_INLINE_ROUTINE void 
+clr_exisr(unsigned32 mask) 
+{
+    asm volatile ("mtdcr 0xC0,%0"::"r" (mask));/*EXISR*/
+} 
+
+/* 
+ *  get value of EXISR 
+ */
+RTEMS_INLINE_ROUTINE unsigned32 
+get_exisr(void) 
+{
+    unsigned32 val;
+
+    asm volatile ("mfdcr %0,0xC0":"=r" (val));/*EXISR*/
+    return val; 
+} 
+
+/* 
+ *  get value of EXIER 
+ */
+RTEMS_INLINE_ROUTINE unsigned32 
+get_exier(void) 
+{
+    unsigned32 val;
+    asm volatile ("mfdcr %0,0xC2":"=r" (val));/*EXIER*/
+    return val; 
+} 
+
+/* 
+ *  set value of EXIER 
+ */
+RTEMS_INLINE_ROUTINE void 
+set_exier(unsigned32 val) 
+{
+    asm volatile ("mtdcr 0xC2,%0"::"r" (val));/*EXIER*/
+} 
+
+#else /* not ppc405 */
+
 RTEMS_INLINE_ROUTINE void 
 clr_exisr(unsigned32 mask) 
 {
@@ -78,7 +121,7 @@ set_exier(unsigned32 val)
 {
     asm volatile ("mtdcr 0x42,%0"::"r" (val));/*EXIER*/
 } 
-
+#endif /* ppc405 */
 /* 
  *  enable an external interrupt, make this interrupt consistent
  */
@@ -191,7 +234,6 @@ ictrl_set_vector(rtems_isr_entry   new_handler,
   /* check for valid vector range */
   if ((vector >= PPC_IRQ_EXT_BASE) &&
       (vector <  PPC_IRQ_EXT_BASE + PPC_IRQ_EXT_MAX)) {
-
     /* return old handler entry */
     *old_handler = ictrl_vector_table[vector - PPC_IRQ_EXT_BASE];
 

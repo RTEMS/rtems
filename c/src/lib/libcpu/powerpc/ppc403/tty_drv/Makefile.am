@@ -4,16 +4,13 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = $(ARCH)/console.rel
+PGM = $(ARCH)/tty_drv.rel
 
-if ppc403
-C_FILES = console.c
-endif
-if ppc405
-C_FILES = console405.c
-endif
+include_HEADERS = tty_drv.h
 
-console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
+C_FILES = tty_drv.c
+
+tty_drv_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am
@@ -23,13 +20,13 @@ include $(top_srcdir)/../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): $(console_rel_OBJECTS)
+$(PGM): $(tty_drv_rel_OBJECTS)
 	$(make-rel)
 
-all-local: $(ARCH) $(console_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(tty_drv_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = console.c console.c.polled console405.c
+EXTRA_DIST = tty_drv.c tty_drv.h
 
 include $(top_srcdir)/../../../../../automake/local.am

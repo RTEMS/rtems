@@ -1,5 +1,5 @@
 /*
- *  This file contains the PowerPC 403GA console IO package.
+ *  This file contains the PowerPC 405GP console IO package.
  *
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
@@ -33,6 +33,7 @@
  *  for these modifications:
  *  COPYRIGHT (c) 1997 by IMD, Puchheim, Germany.
  *
+ *
  *  To anyone who acknowledges that this file is provided "AS IS"
  *  without any express or implied warranty:
  *      permission to use, copy, modify, and distribute this file
@@ -51,7 +52,9 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  console.c,v 1.4 1995/12/05 19:23:02 joel Exp
+ *  Modifications for PPC405GP by Dennis Ehlin
+ *
+ *  console405.c,v 1.4 1995/12/05 19:23:02 joel Exp
  */
 
 #define NO_BSP_INIT
@@ -61,164 +64,150 @@
 #include "../ictrl/ictrl.h"
 #include <stdlib.h>                                     /* for atexit() */
 
+
+
 struct async {
 /*---------------------------------------------------------------------------+
-| Line Status Register.
+| Data Register.
 +---------------------------------------------------------------------------*/
-  unsigned char SPLS;
-  unsigned char SPLSset;
-#define LSRDataReady             0x80
-#define LSRFramingError          0x40
-#define LSROverrunError          0x20
-#define LSRParityError           0x10
-#define LSRBreakInterrupt        0x08
-#define LSRTxHoldEmpty           0x04
-#define LSRTxShiftEmpty          0x02
+  unsigned char RBR;	/* 0x00 */
+  #define THR   RBR
+/*---------------------------------------------------------------------------+
+| Interrupt registers
++---------------------------------------------------------------------------*/
+  unsigned char IER;    /* 0x01 */
+  #define IER_RCV		 0x01
+  #define IER_XMT		 0x02
+  #define IER_LS		 0x04
+  #define IER_MS		 0x08
+
+  unsigned char ISR;    /* 0x02 */
+  #define ISR_MS		 0x00
+  #define ISR_nIP		 0x01
+  #define ISR_Tx		 0x02
+  #define ISR_Rx		 0x04
+  #define ISR_LS		 0x06
+  #define ISR_RxTO		 0x0C
+  #define ISR_64BFIFO		 0x20
+  #define ISR_FIFOworks		 0x40
+  #define ISR_FIFOen		 0x80
 
 /*---------------------------------------------------------------------------+
-| Handshake Status Register.
+| FIFO Control registers
 +---------------------------------------------------------------------------*/
-  unsigned char SPHS;
-  unsigned char SPHSset;
-#define HSRDsr                   0x80
-#define HSRCts                   0x40
+  #define FCR   ISR
+  #define FCR_FE		0x01    /* FIFO enable */
+  #define FCR_CRF		0x02    /* Clear receive FIFO */
+  #define FCR_CTF		0x04    /* Clear transmit FIFO */
+  #define FCR_DMA		0x08    /* DMA mode select */
+  #define FCR_F64		0x20    /* Enable 64 byte fifo (16750+) */
+  #define FCR_RT14		0xC0    /* Set Rx trigger at 14 */
+  #define FCR_RT8		0x80    /* Set Rx trigger at 8 */
+  #define FCR_RT4		0x40    /* Set Rx trigger at 4 */
+  #define FCR_RT1		0x00    /* Set Rx trigger at 1 */
 
 /*---------------------------------------------------------------------------+
 | Baud rate divisor registers
 +---------------------------------------------------------------------------*/
-  unsigned char BRDH;
-  unsigned char BRDL;
+  #define DLL   RBR
+  #define DLM   IER
 
 /*---------------------------------------------------------------------------+
-| Control Register.
+| Alternate function registers
 +---------------------------------------------------------------------------*/
-  unsigned char SPCTL;
-#define CRNormal		 0x00
-#define CRLoopback		 0x40
-#define CRAutoEcho		 0x80
-#define CRDtr                    0x20
-#define CRRts                    0x10
-#define CRWordLength7            0x00
-#define CRWordLength8            0x08
-#define CRParityDisable          0x00
-#define CRParityEnable           0x04
-#define CREvenParity             0x00
-#define CROddParity	         0x02
-#define CRStopBitsOne            0x00
-#define CRStopBitsTwo            0x01
-#define CRDisableDtrRts	         0x00
+  #define AFR   ISR	
 
-/*--------------------------------------------------------------------------+
-| Receiver Command Register.
-+--------------------------------------------------------------------------*/
-  unsigned char SPRC;
-#define RCRDisable	         0x00
-#define RCREnable		 0x80
-#define RCRIntDisable	         0x00
-#define RCRIntEnabled	         0x20
-#define RCRDMACh2		 0x40
-#define RCRDMACh3	         0x60
-#define RCRErrorInt	         0x10
-#define RCRPauseEnable	         0x08
+/*---------------------------------------------------------------------------+
+| Line control Register.
++---------------------------------------------------------------------------*/
+  unsigned char LCR;	/* 0x03 */
+  #define LCR_WL5		 0x00   /* Word length 5 */
+  #define LCR_WL6		 0x01   /* Word length 6 */
+  #define LCR_WL7		 0x02   /* Word length 7 */
+  #define LCR_WL8		 0x03   /* Word length 8 */
 
-/*--------------------------------------------------------------------------+
-| Transmitter Command Register.
-+--------------------------------------------------------------------------*/
-    unsigned char SPTC;
-#define TCRDisable	         0x00
-#define TCREnable		 0x80
-#define TCRIntDisable	         0x00
-#define TCRIntEnabled 	         0x20
-#define TCRDMACh2		 0x40
-#define TCRDMACh3	         0x60
-#define TCRTxEmpty		 0x10
-#define TCRErrorInt	         0x08
-#define TCRStopPause	         0x04
-#define TCRBreakGen	         0x02
+  #define LCR_SB1		 0x00	/* 1 stop bits */
+  #define LCR_SB1_5		 0x04	/* 1.5 stop bits , only valid with 5 bit words*/
+  #define LCR_SB1_5		 0x04	/* 2 stop bits */
 
-/*--------------------------------------------------------------------------+
-| Miscellanies defines.
-+--------------------------------------------------------------------------*/
-  unsigned char SPTB;
-#define SPRB	SPTB
+  #define LCR_PN		 0x00	/* Parity NONE */
+  #define LCR_PE		 0x0C	/* Parity EVEN */
+  #define LCR_PO		 0x08	/* Parity ODD */
+  #define LCR_PM		 0x28	/* Forced "mark" parity */
+  #define LCR_PS		 0x38	/* Forced "space" parity */
+
+  #define LCR_DL		 0x80	/* Enable baudrate latch */
+
+/*---------------------------------------------------------------------------+
+| Modem control Register.
++---------------------------------------------------------------------------*/
+  unsigned char MCR;	/* 0x04 */
+  #define MCR_DTR		 0x01
+  #define MCR_RTS		 0x02
+  #define MCR_INT		 0x08	/* Enable interrupts */
+  #define MCR_LOOP		 0x10	/* Loopback mode */
+
+/*---------------------------------------------------------------------------+
+| Line status Register.
++---------------------------------------------------------------------------*/
+  unsigned char LSR;	/* 0x05 */
+  #define LSR_RSR		 0x01
+  #define LSR_OE		 0x02
+  #define LSR_PE		 0x04
+  #define LSR_FE		 0x08
+  #define LSR_BI		 0x10
+  #define LSR_THE		 0x20
+  #define LSR_TEMT		 0x40
+  #define LSR_FIE		 0x80
+
+/*---------------------------------------------------------------------------+
+| Modem status Register.
++---------------------------------------------------------------------------*/
+  unsigned char MSR;	/* 0x06 */
+  #define MSR_DCTS		 0x01
+  #define MSR_DDSR		 0x02
+  #define MSR_TERI		 0x04
+  #define MSR_DDCD		 0x08
+  #define MSR_CTS		 0x10
+  #define MSR_DSR		 0x20
+  #define MSR_RI		 0x40
+  #define MSR_CD		 0x80
+
+/*---------------------------------------------------------------------------+
+| Scratch pad Register.
++---------------------------------------------------------------------------*/
+  unsigned char SCR;	/* 0x07 */
 };
 
+
+#define USE_UART 0 /* 0=UART0 1=UART1 */
+#define UART_INTERNAL_CLOCK_DIVISOR 16
+
 typedef volatile struct async *pasync;
-static const pasync port = (pasync)0x40000000;
+static const pasync port = (pasync)(0xEF600300   + (USE_UART*0x100));	/* 0xEF600300 - port A,  0xEF600400 - port B */
 
 static void *spittyp;         /* handle for termios */
-int ppc403_spi_interrupt = 1; /* use interrupts... */
+int ppc403_spi_interrupt = 0; /* do not use interrupts... */
 
-/*
- * Rx Interrupt handler
- */
-static rtems_isr
-spiRxInterruptHandler (rtems_vector_number v)
+
+int round(double x)
 {
-  char ch;
-
-  /* clear any receive errors (errors are ignored now) */
-  port->SPLS = (LSRFramingError | LSROverrunError |
-                LSRParityError  | LSRBreakInterrupt);
-  /*
-   * Buffer received?
-   */
-  if (port->SPLS & LSRDataReady) {
-    ch = port->SPRB; /* read receive buffer */
-    rtems_termios_enqueue_raw_characters (spittyp,&ch,1);
-  }
-}
-
-/*
- * Tx Interrupt handler
- */
-static rtems_isr
-spiTxInterruptHandler (rtems_vector_number v)
-{
-  /*
-   * char transmitted?
-   */
-  if (0 != (port->SPLS & LSRTxHoldEmpty)) { /* must always be true!! */
-    port->SPTC &= ~TCRIntEnabled;           /* stop irqs for now...  */
-                                            /* and call termios...   */
-    rtems_termios_dequeue_characters (spittyp,1);
-  }
-}
-
-/*
- * enable/disable RTS line to start/stop remote transmitter
- */
-static int
-spiStartRemoteTx (int minor)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable (level);
-  port->SPCTL |= CRRts;           /* activate RTS  */
-  rtems_interrupt_enable (level);
-  return 0;
-}
-
-static int
-spiStopRemoteTx (int minor)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable (level);
-  port->SPCTL &= ~CRRts;           /* deactivate RTS  */
-  rtems_interrupt_enable (level);
-  return 0;
+  return (int)((int)((x-(int)x)*1000)>500 ? x+1 : x);
 }
 
 void 
 spiBaudSet(unsigned32 baudrate)
 {
   unsigned32 tmp;
-  tmp = rtems_cpu_configuration_get_serial_per_sec() / baudrate;
-  tmp = ((tmp) >> 4) - 1;
-  port->BRDL = tmp & 0xff;
-  port->BRDH = tmp >> 8;
 
+  tmp = round( (double)rtems_cpu_configuration_get_serial_per_sec() / (baudrate * 16) );
+
+  port->LCR = port->LCR | LCR_DL;
+
+  port->DLL = tmp & 0xff;
+  port->DLM = tmp >> 8;
+
+  port->LCR = port->LCR & ~LCR_DL;
 }
 /*
  * Hardware-dependent portion of tcsetattr().
@@ -261,43 +250,83 @@ spiSetAttributes (int minor, const struct termios *t)
 static int
 spiPollRead (int minor)
 {
-  unsigned char status;
 
-  while (0 == ((status = port->SPLS) & LSRDataReady)) {
-    /* Clean any dodgy status */
-    if ((status & (LSRFramingError | LSROverrunError | LSRParityError |
-		   LSRBreakInterrupt)) != 0) {
-      port->SPLS = (LSRFramingError | LSROverrunError | LSRParityError |
-		    LSRBreakInterrupt);
-    }
-  } 
-  return port->SPRB;  
+  /* Wait for character */
+  while ((port->LSR & LSR_RSR)==0);;
+
+  return port->RBR;  
 }
 
-static int
-spiInterruptWrite (int minor, const char *buf, int len)
-{
-  port->SPTB = *buf;           /* write char to send         */
-  port->SPTC |= TCRIntEnabled; /* always enable tx interrupt */
-  return 0;
-}
 
 static int 
 spiPollWrite(int minor,const char *buf,int len)
 {  
-  unsigned char status;
 
   while (len-- > 0) {
-    do {
-      if (port->SPHS) {
-	port->SPHS = (HSRDsr | HSRCts);
-      }
-      status = port->SPLS;
-    } while (0 == (status & LSRTxHoldEmpty));
-    port->SPTB = *buf++;
+    while (!(port->LSR & LSR_THE));;
+    port->THR = *buf++;
   }
   return 0;
 }
+
+/*
+ * enable/disable RTS line to start/stop remote transmitter
+ */
+static int
+spiStartRemoteTx (int minor)
+{
+/* Not implemented !
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable (level);
+  port->SPCTL |= CRRts;            activate RTS  
+  rtems_interrupt_enable (level);
+*/
+  return 0;
+}
+
+static int
+spiStopRemoteTx (int minor)
+{
+/* Not implemented !
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable (level);
+  port->SPCTL &= ~CRRts;            deactivate RTS  
+  rtems_interrupt_enable (level);
+*/
+  return 0;
+}
+
+static int InterruptWrite (int minor, const char *buf, int len)
+{
+  port->IER |= IER_XMT;     /* always enable tx interrupt */
+  port->THR = *buf; 	    /* write char to send         */
+  return 0;
+}
+
+static rtems_isr serial_ISR(rtems_vector_number v)
+{
+  unsigned char _isr;
+  char ch;
+  int res;
+
+  _isr=port->ISR & 0x0E;
+   
+   if ((_isr == ISR_Rx) || (_isr==ISR_RxTO)) {
+    	ch = port->RBR;
+    	rtems_termios_enqueue_raw_characters (spittyp,&ch,1);
+   }
+   
+   if (_isr == ISR_Tx) {
+	res = rtems_termios_dequeue_characters (spittyp,1);
+	if (res==0) {
+		port->IER &= ~IER_XMT;
+		}
+
+   }
+}
+
 
 /* 
  *
@@ -312,24 +341,11 @@ spiDeInit(void)
    * set it to state to work with polling boot monitor, if any... 
    */
 
+
   /* set up baud rate to original state */
   spiBaudSet(rtems_cpu_configuration_get_serial_rate());
 
-  /* clear any receive (error) status */
-  port->SPLS = (LSRDataReady   | LSRFramingError | LSROverrunError |
-		LSRParityError | LSRBreakInterrupt);
-
-  /* set up port control: DTR/RTS active,8 bit,1 stop,no parity */
-  port->SPCTL = (CRNormal | 
-		 CRDtr | CRRts | 
-		 CRWordLength8 | CRParityDisable | CRStopBitsOne);
-
-  /* clear handshake status bits */
-  port->SPHS = (HSRDsr | HSRCts);
-
-  /* enable receiver/transmitter, no interrupts */
-  port->SPRC = (RCREnable | RCRIntDisable);
-  port->SPTC = (TCREnable | TCRIntDisable);
+  port->IER = 0;
 
 }
 
@@ -343,54 +359,51 @@ spiInitialize(void)
 {
   register unsigned tmp;
   rtems_isr_entry previous_isr; /* this is a dummy */
+  unsigned char _ier;
 
   /*
    * Initialise the serial port 
    */
 
   /* 
-   * select RTS/CTS hardware handshake lines, 
-   * select clock source 
+   * Select clock source and set uart internal clock divisor
    */
-  asm volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
 
-  tmp &= ~3;
-  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ? 2 : 0) | 1;
+  asm volatile ("mfdcr %0, 0x0b1" : "=r" (tmp)); /* CPC_CR0 0x0b1 */
 
-  asm volatile ("mtdcr 0xa0, %0" : "=r" (tmp) : "0" (tmp)); /* IOCR */
+  /* UART0 bit 24 0x80, UART1 bit 25 0x40 */
+  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ?  (USE_UART ? 0x40 : 0x80) : 0);
 
-  /* clear any receive (error) status */
-  port->SPLS = (LSRDataReady   | LSRFramingError | LSROverrunError |
-		LSRParityError | LSRBreakInterrupt);
+  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ?  0: ((UART_INTERNAL_CLOCK_DIVISOR -1) << 1));
+
+  asm volatile ("mtdcr 0x0b1, %0" : "=r" (tmp) : "0" (tmp)); /* CPC_CR0 0x0b1*/
+
+  /* Disable port interrupts while changing hardware */
+  _ier = port->IER;
+  port->IER = 0;
+
+  /* set up port control: 8 bit,1 stop,no parity */
+  port->LCR = LCR_WL8 | LCR_SB1 | LCR_PN;
 
   /* set up baud rate */
   spiBaudSet(rtems_cpu_configuration_get_serial_rate());
-
-  /* set up port control: DTR/RTS active,8 bit,1 stop,no parity */
-  port->SPCTL = (CRNormal | 
-		 CRDtr | CRRts | 
-		 CRWordLength8 | CRParityDisable | CRStopBitsOne);
-
-  /* clear handshake status bits */
-  port->SPHS = (HSRDsr | HSRCts);
-
+ 
   if (ppc403_spi_interrupt) {
+
     /* add rx/tx isr to vector table */
-    ictrl_set_vector(spiRxInterruptHandler,
-		     PPC_IRQ_EXT_SPIR,
-		     &previous_isr);
+    if (USE_UART==0) 
+	ictrl_set_vector(serial_ISR,PPC_IRQ_EXT_UART0,&previous_isr);
+    else
+	ictrl_set_vector(serial_ISR,PPC_IRQ_EXT_UART1,&previous_isr);
 
-    ictrl_set_vector(spiTxInterruptHandler,
-		     PPC_IRQ_EXT_SPIT,
-		     &previous_isr);
+    /* Enable and clear FIFO */
+    port->FCR = FCR_FE | FCR_CRF | FCR_CTF | FCR_RT8;
 
-    port->SPRC = (RCREnable | RCRIntEnabled | RCRErrorInt);
-    port->SPTC = (TCREnable | TCRIntDisable); /* don't enable TxInt yet */
+    /* Enable recive interrupts, don't enable TxInt yet */
+    port->IER=IER_RCV;
   }
   else {
-    /* enable receiver/transmitter, no interrupts */
-    port->SPRC = (RCREnable | RCRIntDisable);
-    port->SPTC = (TCREnable | TCRIntDisable);
+    port->IER=_ier;
   }
 
   atexit(spiDeInit);
@@ -458,7 +471,7 @@ rtems_device_driver console_open(
     NULL,		/* firstOpen */
     NULL,		/* lastClose */
     NULL,	        /* pollRead */
-    spiInterruptWrite,	/* write */
+    InterruptWrite,	/* write */
     spiSetAttributes,   /* setAttributes */
     spiStopRemoteTx,	/* stopRemoteTx */
     spiStartRemoteTx,	/* startRemoteTx */
@@ -478,7 +491,6 @@ rtems_device_driver console_open(
 
   if (ppc403_spi_interrupt) {
     rtems_libio_open_close_args_t *args = arg;
-    
     sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
     spittyp = args->iop->data1;
   }

@@ -19,6 +19,8 @@
  *      IMD makes no representations about the suitability
  *      of this software for any purpose.
  *
+ *  Modifications for PPC405GP by Dennis Ehlin
+ *
  */
 
 
@@ -40,10 +42,19 @@ extern "C" {
 
 /* mask for external interrupt status in EXIER/EXISR register */
 /* note: critical interrupt is in these registers aswell */
+#ifndef ppc405
 #define PPC_EXI_MASK           0x0FFFFFFF
+#else /* ppc405 */
+#define PPC_EXI_MASK           0xFFFFFFFF
+#endif /* ppc405 */
 
+#ifndef ppc405
 #define PPC_IRQ_EXT_SPIR        (PPC_IRQ_EXT_BASE+4)
 #define PPC_IRQ_EXT_SPIT        (PPC_IRQ_EXT_BASE+5)
+#else /* ppc405 */
+#define PPC_IRQ_EXT_UART0       (PPC_IRQ_EXT_BASE+0)
+#define PPC_IRQ_EXT_UART1       (PPC_IRQ_EXT_BASE+1)
+#endif /* ppc405 */
 #define PPC_IRQ_EXT_JTAGR       (PPC_IRQ_EXT_BASE+6)
 #define PPC_IRQ_EXT_JTAGT       (PPC_IRQ_EXT_BASE+7)
 #define PPC_IRQ_EXT_DMA0        (PPC_IRQ_EXT_BASE+8)

@@ -34,6 +34,10 @@ endif
 if ppc403
 CPU_SUBDIR = ppc403
 endif
+if ppc405
+## 403 and 405 chips use the same CPU sources...
+CPU_SUBDIR = ppc403
+endif
 
 SUBDIRS = $(SHARED_LIB) $(EXCEPTION_SUBDIR) $(CPU_SUBDIR) wrapup
 

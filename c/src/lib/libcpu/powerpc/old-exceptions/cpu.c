@@ -366,7 +366,7 @@ static void ppc_spurious(int v, CPU_Interrupt_frame *i)
     printf("Spurious interrupt on vector %d from %08.8x\n",
 	   v, i->pc);
 #endif
-#ifdef ppc403
+#if defined(ppc403) || defined(ppc405)
     if (v == PPC_IRQ_EXTERNAL)
 	{
 	    register int r = 0;
@@ -627,7 +627,7 @@ unsigned32  ppc_exception_vector_addr(
       Offset = 0x00e00;
       break;
 
-#if defined(ppc403)
+#if defined(ppc403) || defined(ppc405)
                                   
 /*  PPC_IRQ_CRIT is the same vector as PPC_IRQ_RESET
     case PPC_IRQ_CRIT:

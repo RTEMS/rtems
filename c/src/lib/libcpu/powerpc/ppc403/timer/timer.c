@@ -30,7 +30,10 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *  Modifications for PPC405GP by Dennis Ehlin
+ *
  *  $Id$
+ *
  */
 
 #include <rtems.h>
@@ -45,7 +48,13 @@ static inline rtems_unsigned32 get_itimer(void)
 {
    rtems_unsigned32 ret;
 
+#ifndef ppc405
    asm volatile ("mfspr %0, 0x3dd" : "=r" ((ret))); /* TBLO */
+#else /* ppc405 */
+/*   asm volatile ("mfspr %0, 0x3dd" : "=r" ((ret)));  TBLO */
+
+   asm volatile ("mfspr %0, 0x10c" : "=r" ((ret))); /* 405GP TBL */
+#endif /* ppc405 */
 
    return ret;
 }
@@ -54,10 +63,21 @@ void Timer_initialize()
 {
   rtems_unsigned32 iocr;
 
+#ifndef ppc405
   asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
   iocr &= ~4;
   iocr |= 4;  /* Select external timer clock */
   asm volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr)); /* IOCR */
+#else /* ppc405 */
+  asm volatile ("mfdcr %0, 0x0b2" : "=r" (iocr));  /*405GP CPC0_CR1 */
+/*  asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); IOCR */
+
+  /* iocr |= 0x800000;  select external timer clock CETE*/
+  iocr &= ~0x800000; /* timer clocked from system clock CETE*/
+
+  asm volatile ("mtdcr 0x0b2, %0" : "=r" (iocr) : "0" (iocr)); /* 405GP CPC0_CR1 */
+/*  asm volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr));  IOCR */
+#endif /* ppc405 */
 
   Timer_starting = get_itimer();
 }

@@ -50,6 +50,7 @@ test "$RTEMS_CPU_MODEL" = "mpc860" \
 ## first.
 AM_CONDITIONAL(old_exception_processing, \
 test "$RTEMS_CPU_MODEL" = "ppc403" || \
+test "$RTEMS_CPU_MODEL" = "ppc405" || \
 test "$RTEMS_CPU_MODEL" = "mpc505" || \
 test "$RTEMS_CPU_MODEL" = "ppc603e" \
 )
@@ -64,6 +65,7 @@ AM_CONDITIONAL(mpc8xx, test "$RTEMS_CPU_MODEL" = "mpc8xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc860" )
 AM_CONDITIONAL(mpc8260, test "$RTEMS_CPU_MODEL" = "mpc8260")
 AM_CONDITIONAL(ppc403, test "$RTEMS_CPU_MODEL" = "ppc403")
+AM_CONDITIONAL(ppc405, test "$RTEMS_CPU_MODEL" = "ppc405")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
@@ -82,6 +84,7 @@ mpc8xx/timer/Makefile
 ppc403/Makefile
 ppc403/clock/Makefile
 ppc403/console/Makefile
+ppc403/tty_drv/Makefile
 ppc403/ictrl/Makefile
 ppc403/timer/Makefile
 ppc403/vectors/Makefile
