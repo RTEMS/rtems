@@ -50,7 +50,7 @@ void _CPU_Initialize(
  
 unsigned32 _CPU_ISR_Get_level( void )
 {
-    unsigned32 reg;
+    unsigned32 reg = 0; /* to avoid warning */
     
     asm volatile ("mrs  %0, cpsr \n"           \
                   "and  %0,  %0, #0xc0 \n"     \
