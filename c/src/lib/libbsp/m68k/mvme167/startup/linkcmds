@@ -1,0 +1,103 @@
+/*
+ *  This file contains directives for the GNU linker which are specific
+ *  to the Motorola MVME167 board.
+ *
+ *  COPYRIGHT (c) 1989-1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  Modifications of respective RTEMS file:
+ *  Copyright (c) 1998, National Research Council of Canada
+ *
+ *  $Id$
+ */
+
+/* Base address and size of RAM on the MVME167 */
+
+RAM_SIZE = 4M;
+RAM_START = 0x00800000;
+RAM_END = RAM_START + RAM_SIZE;
+
+/*
+ * Declare some sizes.
+ * XXX: The assignment of ". += XyzSize;" fails in older gld's if the
+ *      number used there is not constant.  If this happens to you, edit
+ *      the lines marked XXX below to use a constant value.
+ */
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
+StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+
+MEMORY
+{
+    ram : org = 0x00800000, l = 4M
+}
+
+SECTIONS
+{
+    .text 0x00800000 :
+    {
+  		text_start = . ;
+  		*(.text)
+  		. = ALIGN (16);
+  
+  		*(.eh_fram)
+  		. = ALIGN (16);
+  		
+  		*(.gcc_exc)
+  		. = ALIGN (16);
+  
+  		/*
+  		 * C++ constructors
+  		 */
+  		__CTOR_LIST__ = .;
+  		LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+  		*(.ctors)
+  		LONG(0)
+  		__CTOR_END__ = .;
+  		__DTOR_LIST__ = .;
+  		LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+  		*(.dtors)
+  		LONG(0)
+  		__DTOR_END__ = .;
+  		etext = ALIGN( 0x10 ) ;
+    } >ram
+
+    .data ADDR( .text ) + SIZEOF( .text ):
+    {
+        data_start = . ;
+        *(.data)
+        edata = ALIGN( 0x10 ) ;
+    } >ram
+
+    .bss ADDR( .data ) + SIZEOF( .data ):
+    {
+        bss_start = . ;
+        *(.bss)
+        *(COMMON)
+        end = . ;
+        _end = . ;
+
+		_HeapStart = .;
+		__HeapStart	= .;
+		. += HeapSize;	/* XXX -- Old gld can't	handle this	*/
+		_HeapEnd = .;
+		__HeapEnd = .;
+		_StackStart = .;
+		__StackStart = .;
+		. += StackSize;	/* XXX -- Old gld can't	handle this	*/
+		/* . +=	0x10000; */	/* HeapSize	for	old	gld	*/
+		/* . +=	0x1000;	 */	/* StackSize for old gld */
+		. =	ALIGN (16);
+		_StackEnd = .;
+		__StackEnd = .;
+		stack_init = .;
+		clear_end =	.;
+
+		_WorkspaceBase = .;
+		__WorkspaceBase	= .;
+    } >ram
+}
