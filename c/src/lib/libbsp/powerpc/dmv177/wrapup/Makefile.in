@@ -13,7 +13,7 @@ KA9Q_DRIVER_yes_V = network
 KA9Q_DRIVER = $(KA9Q_DRIVER_$(HAS_KA9Q)_V)
 
 # pieces specific to this BSP
-BSP_PIECES=startup clock console css_iface scv64 timer tod $(KA9Q_DRIVER)
+BSP_PIECES=startup clock console scv64 timer tod $(KA9Q_DRIVER)
 
 # pieces to pick up out of libcpu/$(RTEMS_CPU)
 CPU_PIECES=

@@ -21,5 +21,5 @@ all: $(SRCS)
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS=include clock console css_iface startup start timer \
+SUB_DIRS=include clock console startup start timer \
    scv64 tod $(KA9Q_DRIVER) wrapup 
