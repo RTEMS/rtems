@@ -38,7 +38,7 @@ Information Table is given by the C structure definition is
 shown below:
 
 @example
-struct cpu_configuration_table @{
+typedef struct @{
   void       (*pretasking_hook)( void );
   void       (*predriver_hook)( void );
   void       (*postdriver_hook)( void );
@@ -49,6 +49,16 @@ struct cpu_configuration_table @{
   void *     (*stack_allocate_hook)( unsigned32 );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
+
+  unsigned32   clicks_per_usec; /* Timer clicks per microsecond */
+  unsigned32   serial_per_sec;  /* Serial clocks per second */
+  boolean      serial_external_clock;
+  boolean      serial_xon_xoff;
+  boolean      serial_cts_rts;
+  unsigned32   serial_rate;
+  unsigned32   timer_average_overhead; /* Average overhead of timer in ticks */
+  unsigned32   timer_least_valid; /* Least valid number from timer */
+  void (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
 
 @};
 @end example
@@ -106,6 +116,30 @@ must be provided as well.
 is the address of the optional user provided routine which frees 
 memory for task stacks.  If this hook is not NULL, then a stack_allocate_hook
 must be provided as well.
+
+@item clicks_per_usec
+is the XXX
+
+@item serial_per_sec
+is the XXX
+
+@item serial_external_clock
+is the XXX
+
+@item serial_xon_xoff
+is the XXX
+
+@item serial_cts_rts
+is the XXX
+
+@item serial_rate
+is the XXX
+
+@item timer_average_overhead
+is the XXX
+
+@item timer_least_valid
+@item spurious_handler
 
 @end table
 
