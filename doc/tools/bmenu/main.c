@@ -27,9 +27,12 @@
 #include <string.h>
 
 /* XXX -- just for testing -- these should be set by options */
-char DocsNextNode[]     = "";
-char DocsPreviousNode[] = "Top";
-char DocsUpNode[]       = "Top";
+char TopString[]   = "Top";
+char EmptyString[] = "";
+
+char *DocsNextNode;
+char *DocsPreviousNode;
+char *DocsUpNode;
 
 extern int   optind;     /* Why is this not in <stdlib.h>? */
 extern char *optarg;     /* Why is this not in <stdlib.h>? */
@@ -55,7 +58,7 @@ FILE           *OutFile = stdout;
 
 char *Usage_Strings[] = {
   "\n",
-  "usage: cmd [-bv] files ...\n", 
+  "usage: cmd [-bv] [-p prev] [-n next] [-u up] files ...\n", 
   "\n",
   "EOF"
 };
@@ -417,12 +420,25 @@ int main(
   boolean  single_file_mode;
 
   Verbose = FALSE;
+  DocsNextNode     = EmptyString;
+  DocsPreviousNode = TopString;
+  DocsUpNode       = TopString;
 
-  while ((c = getopt(argc, argv, "bv")) != EOF) {
+  while ((c = getopt(argc, argv, "vp:n:u:")) != EOF) {
     switch (c) {
       case 'v':
         Verbose = TRUE;
         break;
+      case 'p':
+        DocsPreviousNode = strdup(optarg); 
+        break;
+      case 'n':
+        DocsNextNode = strdup(optarg); 
+        break;
+      case 'u':
+        DocsUpNode = strdup(optarg); 
+        break;
+
       case '?':
         usage();
         return 0;
@@ -465,12 +481,17 @@ void ProcessFile(
        out[ index ] = inname[ index ];
      }
 
+     if ( !strcmp( &inname[index], ".texi" ) ) {
+        fprintf( stderr, "Input file already has .texi extension\n" );
+        exit_application( 1 );
+     }
+
      out[ index++ ] = '.';
      out[ index++ ] = 't';
+     out[ index++ ] = 'e';
      out[ index++ ] = 'x';
-     out[ index++ ] = 't';
+     out[ index++ ] = 'i';
      out[ index ] = '\0';
-
    }
 
    /*
