@@ -69,7 +69,7 @@ console_fns z85c30_fns =
   z85c30_initialize_interrupts,  /* deviceInitialize */
   z85c30_write_polled,           /* deviceWritePolled */
   NULL,                          /* deviceSetAttributes */
-  FALSE,                         /* deviceOutputUsesInterrupts */
+  TRUE                           /* deviceOutputUsesInterrupts */
 };
 
 console_fns z85c30_fns_polled =
