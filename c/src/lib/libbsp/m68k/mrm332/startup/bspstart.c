@@ -16,7 +16,6 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
-#include <libcsupport.h>
  
 #include <string.h>
  
