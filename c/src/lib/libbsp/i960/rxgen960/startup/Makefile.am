@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
@@ -20,7 +19,8 @@ noinst_HEADERS = asmfault.h asmstub.h cntrltbl.h fault.h faultret.h flttbl.h \
 
 S_FILES = asmfault.S asmstub.S ihandler.S
 
-OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) \
+    $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
@@ -50,6 +50,7 @@ EXTRA_DIST = asmfault.S asmfault.h asmstub.S asmstub.h bspstart.c cntrltbl.c \
     frmstr.c frmstr.h i960.h ihandler.S ihandler.h intrtbl.c intrtbl.h \
     kkprintf.c linkcmds main.h memchnl.h nmi.c nulsystbl.c pmc901_memmap.h \
     prcb.c prcb.h rom.ld rom_cntrltbl.c rom_ibr.c rom_ibr.h rom_prcb.c \
-    rommon.h rxgen_romld.S sctns.c sctns.h setvec.c systbl.c systbl.h time.h
+    rommon.h rxgen_romld.S sctns.c sctns.h setvec.c systbl.c systbl.h \
+    time.h
 
 include $(top_srcdir)/../../../../automake/local.am

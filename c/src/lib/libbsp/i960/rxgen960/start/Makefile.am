@@ -19,7 +19,8 @@ bsplib_DATA = $(PROJECT_RELEASE)/lib/rxgen_romld.$(OBJEXT)
 $(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).$(OBJEXT): $(ARCH)/rxgen_romld.$(OBJEXT)
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += \
+    $(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).$(OBJEXT)
 
 all-local: $(OBJS) $(ARCH)/rxgen_romld.$(OBJEXT) $(TMPINSTALL_FILES)
 
