@@ -32,6 +32,9 @@ SECTIONS
 	*(.eh_fram)
 	. = ALIGN (16);
 
+	. = ALIGN (16);
+	*(.gcc_exc)
+
 	/*
 	 * C++ constructors
 	 */
@@ -49,34 +52,23 @@ SECTIONS
         _etext = .;
         }
 
-	.eh_fram : {
-		. = ALIGN (16);
-		*(.eh_fram)
-	}
 
-	.gcc_exc : {
-		. = ALIGN (16);
-		*(.gcc_exc)
-	} >ram
-
-        .data ADDR( .text ) + SIZEOF( .text ):
-        {
-        data_start = . ;
-        _data_start = . ;
-        *(.data)
-        edata = ALIGN( 0x10 ) ;
-        _edata = .;
+        .data : {
+        	data_start = . ;
+        	_data_start = . ;
+        	*(.data)
+        	edata = ALIGN( 0x10 ) ;
+        	_edata = .;
         }
-        .bss ADDR( .data ) + SIZEOF( .data ):
-        {
-        bss_start = . ;
-        _bss_start = . ;
-        *(.bss)
-        *(COMMON)
-	. += StackSize; /* XXX -- Old gld can't handle this */
-	. = ALIGN (16);
-	stack_init = .;
-        end = . ;
-        _end = . ;
+        .bss : {
+        	bss_start = . ;
+        	_bss_start = . ;
+        	*(.bss)
+        	*(COMMON)
+		. += StackSize; /* XXX -- Old gld can't handle this */
+		. = ALIGN (16);
+		stack_init = .;
+        	end = . ;
+        	_end = . ;
         }
 }
