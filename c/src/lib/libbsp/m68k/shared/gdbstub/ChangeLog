@@ -1,0 +1,5 @@
+2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* Added m68k serial stub that is thread aware.
+	* ChangeLog, gdb_if.h, m68k-stub.c, Makefile.am: New files.
+
