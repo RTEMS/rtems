@@ -70,11 +70,9 @@ clean_wrapup: clean_tools clean_dirs clean_modules
 
 dirs:
 	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
-	-test -d $(PROJECT_ROOT)/c/src/lib/libhwapi && \
-	    (cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs)
-#	@echo Making directories in build tree ...
-#	-$(foreach dir,$(CREATE_DIRS), \
-#	    $(shell $(MKDIR) $(PROJECT_ROOT)/$(RTEMS_BSP)/$(dir)))
+	if test -d $(PROJECT_ROOT)/c/src/lib/libhwapi; then \
+		(cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs) \
+	fi
 
 distclean: clobber
 
