@@ -31,7 +31,7 @@ AM_CPPFLAGS += $(EXTRA_FLAGS)
 $(PGM): $(interrupts_rel_OBJECTS)
 	$(make-rel)
 
-all-local: $(ARCH) $(interrupts_rel_OBJECTS) $(PGM)
+all-local: $(interrupts_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

@@ -21,7 +21,7 @@ $(PGM): $(mg5uart_rel_OBJECTS)
 include_libchipdir = $(includedir)/libchip
 include_libchip_HEADERS = mg5uart.h
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(mg5uart_rel_OBJECTS) $(PGM)
+all-local: $(PREINSTALL_FILES) $(mg5uart_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

@@ -1,3 +1,14 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am: Remove all-local: $(ARCH).
+	* mongoosev/duart/Makefile.am: Remove all-local: $(ARCH).
+	* mongoosev/vectorisrs/Makefile.am: Remove all-local: $(ARCH).
+	* r46xx/vectorisrs/Makefile.am: Remove all-local: $(ARCH).
+	* shared/cache/Makefile.am: Remove all-local: $(ARCH).
+	* shared/interrupts/Makefile.am: Remove all-local: $(ARCH).
+	* timer/Makefile.am: Remove all-local: $(ARCH).
+	* tx39/vectorisrs/Makefile.am: Remove all-local: $(ARCH).
+
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reformat.

@@ -18,7 +18,7 @@ include $(top_srcdir)/../../../automake/lib.am
 $(PGM): $(vectorisrs_rel_OBJECTS)
 	$(make-rel)
 
-all-local: $(ARCH) $(vectorisrs_rel_OBJECTS) $(PGM)
+all-local: $(vectorisrs_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
