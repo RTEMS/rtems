@@ -44,13 +44,14 @@ SECTIONS
   .text      :
   {
     *(.text)
+    *(.gnu.linkonce.t.*)
     *(.descriptors)
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
   } =0
   .init		  : { *(.init)		} =0
   .fini		  : { *(.fini)		} =0
-  .rodata	  : { *(.rodata)  }
+  .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) }
   .rodata1	  : { *(.rodata1) }
   _etext = .;
   PROVIDE (etext = .);
@@ -78,6 +79,7 @@ SECTIONS
   .data    :
   {
     *(.data)
+    *(.gnu.linkonce.d.*)
     CONSTRUCTORS
   }
   PROVIDE (__EXCEPT_START__ = .);

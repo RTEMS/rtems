@@ -48,13 +48,14 @@ SECTIONS
   .text      :
   {
     *(.text)
+    *(.gnu.linkonce.t.*)
     *(.descriptors)
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
   } >RAM
   .init		  : { *(.init)		} >RAM
   .fini		  : { *(.fini)		} >RAM
-  .rodata	  : { *(.rodata)  	} >RAM
+  .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) } >RAM
   .rodata1	  : { *(.rodata1) 	} >RAM
   _etext = .;
   PROVIDE (etext = .);
@@ -81,6 +82,7 @@ SECTIONS
   .data    :
   {
     *(.data)
+    *(.gnu.linkonce.d.*)
     CONSTRUCTORS
   } >RAM
   PROVIDE (__EXCEPT_START__ = .);

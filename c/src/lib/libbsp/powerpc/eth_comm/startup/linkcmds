@@ -40,8 +40,12 @@ SECTIONS
 	     *(.entry2)
 	     *(.text)
 	     *(.rodata)
+             *(.gnu.linkonce.r*)
 	     *(.rodata1)
+             *(.gnu.linkonce.t.*)
 	     *(.descriptors)
+             /* .gnu.warning sections are handled specially by elf32.em.  */
+             *(.gnu.warning)
 	     *(rom_ver)
 	     etext = ALIGN(0x10);
 	     _etext = .;
@@ -71,6 +75,7 @@ SECTIONS
 	{
 	  *(.data)
 	  *(.data1)
+          *(.gnu.linkonce.d.*)
 	  PROVIDE (__SDATA_START__ = .);
 	  *(.sdata)
 	} > ram
