@@ -5,7 +5,7 @@ AC_INIT([rtems-scripts],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils])
 RTEMS_TOP([..])
 
-AM_INIT_AUTOMAKE([no-define foreign 1.8])
+AM_INIT_AUTOMAKE([no-define foreign 1.9)
 
 AC_CANONICAL_HOST
 

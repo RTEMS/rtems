@@ -1,5 +1,9 @@
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* configure.ac: Require automake > 1.9.
+
+2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* aclocal/rtems-cpu-subdirs.m4: Remove (unused).
 
 2004-07-28  Joel Sherrill <joel@OARcorp.com>

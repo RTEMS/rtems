@@ -1,3 +1,7 @@
+2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Require automake > 1.9.
+
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in debug_ada/Makefile.am, debug_c/Makefile.am,

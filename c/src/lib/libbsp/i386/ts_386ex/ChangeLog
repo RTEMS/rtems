@@ -1,3 +1,7 @@
+2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Require automake > 1.9.
+
 2004-07-25	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Add -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ for network.

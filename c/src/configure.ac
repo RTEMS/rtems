@@ -13,7 +13,7 @@ RTEMS_ENABLE_RDBG
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define subdir-objects no-exeext foreign 1.8.2])
+AM_INIT_AUTOMAKE([no-define subdir-objects no-exeext foreign 1.9])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTILIB

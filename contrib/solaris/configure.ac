@@ -4,7 +4,7 @@ AC_PREREQ(2.59)
 AC_INIT([rtems-contrib-solaris],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([setup])
 
-AM_INIT_AUTOMAKE([no-define foreign 1.8])
+AM_INIT_AUTOMAKE([no-define foreign 1.9)
 
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache

@@ -1,3 +1,7 @@
+2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Require automake > 1.9.
+
 2004-05-22	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 619/bsps

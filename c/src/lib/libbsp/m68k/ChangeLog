@@ -1,3 +1,7 @@
+2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Require automake > 1.9.
+
 2004-08-03	Jay Monkman <jtm@lopingdog.com>
 
 	* acinclude.m4: Added CSB360 BSP
