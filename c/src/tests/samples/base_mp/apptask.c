@@ -20,6 +20,7 @@
  */
 
 #include "system.h"
+#include <stdio.h>
 
 rtems_task Application_task(
   rtems_task_argument node

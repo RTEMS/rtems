@@ -13,7 +13,7 @@
  *  $Id$
  */
 
-#include <tmacros.h>
+#include <rtems.h>
 
 /* functions */
 
@@ -23,6 +23,8 @@ rtems_task Init(
 
 /* configuration information */
 
+#include <bsp.h> /* for device driver prototypes */
+
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -30,9 +32,5 @@ rtems_task Init(
 #define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 
 #include <confdefs.h>
-
-/* global variables */
-
-TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
 
 /* end of include file */
