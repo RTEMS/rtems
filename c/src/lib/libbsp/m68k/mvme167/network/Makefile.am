@@ -9,8 +9,6 @@ PGM = $(ARCH)/network.rel
 C_FILES = network.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = netexterns.h uti596.h
-
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -33,6 +31,6 @@ endif
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = network.c netexterns.h uti596.h
+EXTRA_DIST = network.c
 
 include $(top_srcdir)/../../../../../../automake/local.am
