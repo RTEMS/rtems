@@ -1,3 +1,8 @@
+2004-07-25	Joel Sherrill <joel@OARcorp.com>
+
+	* 3c509/3c509.c: Add <sys/errno.h>.
+	* startup/linkcmds: Add .jcr section.
+
 2004-05-21  Till Strauman <strauman@slac.stanford.edu>
 
 	* PR 624/bsps

@@ -58,6 +58,9 @@
  *
  * MODIFICATION/HISTORY:
  * $Log$
+ * Revision 1.4  2004/04/21 16:01:33  ralf
+ * Remove duplicate white lines.
+ *
  * Revision 1.3  2004/04/21 10:42:43  ralf
  * Remove stray white spaces.
  *
@@ -74,6 +77,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <sys/errno.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
