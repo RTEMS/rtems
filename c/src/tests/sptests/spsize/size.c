@@ -439,10 +439,6 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
                  (sizeof _CPU_Interrupt_stack_high) +
                  (sizeof _CPU_Null_fp_context);
 
-#ifndef NO_TABLE_MOVE
-uninitialized += (sizeof _CPU_Trap_Table_area);
-#endif
-
 #endif
 
 
