@@ -1,3 +1,7 @@
+2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gccnewlib/gccnewlib.add: Fix typo in URL.
+
 2000-11-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Adapt m4-quoting to autoconf-2.49b, use $host
