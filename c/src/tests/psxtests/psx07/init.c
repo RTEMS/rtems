@@ -178,6 +178,10 @@ void *POSIX_Init(
   status = pthread_attr_getscope( NULL, &scope );
   assert( status == EINVAL );
  
+  puts( "Init: pthread_attr_getscope - EINVAL (NULL scope)" );
+  status = pthread_attr_getscope( &attr, NULL );
+  assert( status == EINVAL );
+ 
   puts( "Init: pthread_attr_getscope - EINVAL (not initialized attr)" );
   status = pthread_attr_getscope( &destroyed_attr, &scope );
   assert( status == EINVAL );
