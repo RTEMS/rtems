@@ -1,3 +1,7 @@
+2003-11-26	Joel Sherrill <joel@OARcorp.com>
+
+	* MAINTAINERS: New file.
+
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/bsp-alias.m4, aclocal/canonical-target-name.m4,

@@ -1,0 +1,52 @@
+Note
+====
+
+This file contains information about people who are permitted to make
+changes to various parts of RTEMS and its associated components and
+add-ons.
+
+Please do not contact the people in this file directly to report
+problems with RTEMS.
+
+For general information about RTEMS, please visit:
+
+  http://www.rtems.com
+
+To report problems in RTEMS, please visit:
+
+  http://www.rtems.com/bugs.html
+
+Maintainers
+===========
+
+			Blanket Write Privileges (alphabetical order)
+
+Jennifer Averett				jennifer@oarcorp.com
+Ralf Corsepius					ralf.corsepius@rtems.com
+Chris Johns					chris.johns@rtems.com
+Eric Norum					eric.norum@rtems.com
+Joel Sherrill					joel.sherrill@oarcorp.com
+
+		Various Component Maintainers
+
+Networking		NAME-TBD		EMAIL-TBD
+
+			CPU Port Maintainers	(CPU alphabetical order)
+
+arm			NAME-TBD		EMAIL-TBD
+c4x			Joel Sherrill		joel.sherrill@OARcorp.com
+h8300			NAME-TBD		EMAIL-TBD
+i386			NAME-TBD		EMAIL-TBD
+i960			NAME-TBD		EMAIL-TBD
+m68k			NAME-TBD		EMAIL-TBD
+mips			NAME-TBD		EMAIL-TBD
+no_cpu			NAME-TBD		EMAIL-TBD
+or32			NAME-TBD		EMAIL-TBD
+powerpc			NAME-TBD		EMAIL-TBD
+sh			NAME-TBD		EMAIL-TBD
+sparc			NAME-TBD		EMAIL-TBD
+unix			NAME-TBD		EMAIL-TBD
+
+		    BSP Maintainers		(CPU/BSP alphabetical order)
+
+CPU/BSP			NAME-TBD		EMAIL-TBD
