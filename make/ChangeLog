@@ -1,3 +1,7 @@
+2004-11-17	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/mvme2100.cfg: Add make-cxx-exe rule.
+
 2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
 
 	* Makefile.am: Add MVME2100 BSP.
