@@ -205,4 +205,5 @@ void printCpuInfo()
       printk(" %s", x86_cap_flags[i]);
     }
   }
+  printk("\n");
 }
