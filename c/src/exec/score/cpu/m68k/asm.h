@@ -80,6 +80,7 @@
 #define a5 REG (a5)
 #define a6 REG (a6)
 #define a7 REG (a7)
+#define sp REG (sp)
 
 #define msp REG (msp)
 #define usp REG (usp)
@@ -87,6 +88,7 @@
 #define sr  REG (sr)
 #define vbr REG (vbr)
 #define dfc REG (dfc)
+#define sfc REG(sfc)
 
 #define fp0 REG (fp0)
 #define fp1 REG (fp1)
@@ -100,6 +102,8 @@
 #define fpc REG (fpc)
 #define fpi REG (fpi)
 #define fps REG (fps)
+#define fpsr REG (fpsr)
+
 
 /*
  *  Define macros to handle section beginning and ends.
