@@ -283,11 +283,18 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( !status );
 
-  puts( "Init: pthread_mutex_init - EBUSY (attempt to initialize an existing mutex)" );
+  /*
+   *  This is not required to be an error and when it is, there are
+   *  behavioral conflicts with other implementations.
+   */
+  puts( "Init: pthread_mutex_init - EBUSY (reinitialize an existing mutex) - skipped" );
+
+#if 0
   status = pthread_mutex_init( &Mutex_id, &attr );
   if ( !status )
     printf( "status = %d\n", status );
   assert( status == EBUSY );
+#endif
 
   puts( "Init: pthread_mutex_trylock - EINVAL (illegal ID)" );
   status = pthread_mutex_trylock( &Mutex_bad_id );
