@@ -1,3 +1,9 @@
+2000-11-27	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Fix typo and add extra 0 to base address.
+	Now runs until printf() tries to put a character and then
+	it locks up checking a status bit that does not change.
+
 2000-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	* The JMR BSP is for a Toshiba TX39 evaluation board but
