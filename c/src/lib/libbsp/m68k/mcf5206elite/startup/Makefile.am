@@ -30,6 +30,8 @@ $(PGM): $(OBJS)
 $(PROJECT_RELEASE)/lib/gdbinit: gdbinit
 	$(INSTALL_DATA) $< $@
 
+bsplib_DATA = linkcmds gdbinit linkcmds.flash
+
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
