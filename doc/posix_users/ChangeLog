@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	PR 466/doc
+	* io.t: Added sync().
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* posix_users.texi: Set @setfilename posix_users.info.

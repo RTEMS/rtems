@@ -25,6 +25,7 @@ The directives provided by the input and output primitives manager are:
 @item @code{lseek} - Reposition read/write file offset
 @item @code{fsync} - Synchronize file complete in-core state with that on disk
 @item @code{fdatasync} - Synchronize file in-core data with that on disk
+@item @code{sync} - Schedule file system updates
 @item @code{mount} - Mount a file system
 @item @code{unmount} - Unmount file systems
 @item @code{aio_read} - Asynchronous Read
@@ -727,6 +728,42 @@ used to avoid unnecessary inode disk write operations.
 @subheading NOTES:
 
 NONE
+
+@c
+@c
+@c
+@page
+@subsection sync - Schedule file system updates
+
+@findex sync
+@cindex  synchronize file systems
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+void sync(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+The @code{sync} service causes all information in memory that updates
+file systems to be scheduled for writing out to all file systems.
+
+
+@subheading NOTES:
+
+The writing of data to the file systems is only guaranteed to be 
+scheduled upon return.  It is not necessarily complete upon return
+from @code{sync}.
 
 @c
 @c
