@@ -1,3 +1,8 @@
+2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+
+	* i960.texi: include common/rtems.texi.
+	* Makefile.am: Reflect changes to $(top_srcdir)/project.am.
+
 2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* cpumodel.t: Reflect c/src/exec having moved to cpukit.
