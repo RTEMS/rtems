@@ -476,6 +476,11 @@ printf( "retire TDA %p (0x%04x)\n", dp->tdaTail, status );
     dp->tdaActiveCount--;
     free_p ((struct mbuf **)&dp->tdaTail->mbufp);
 
+/*  XXX this does not help when you wrap
+    dp->tdaTail->frag_count        = 1;
+    dp->tdaTail->frag[0].frag_link = LSW(dp->tdaTail->link_pad);
+*/
+
     /*
      * Move to the next transmit descriptor
      */
@@ -639,6 +644,7 @@ puts( "Wait for more TDAs" );
   /*
    * Chain onto list and start transmission.
    */
+
   tdp->linkp = &(fp+1)->frag_link;
   *tdp->linkp = LSW(tdp->next) | TDA_LINK_EOL;
   *dp->tdaHead->linkp &= ~TDA_LINK_EOL;
@@ -956,7 +962,7 @@ SONIC_STATIC void sonic_initialize_hardware(
   int i;
   unsigned char *hwaddr;
   rtems_isr_entry old_handler;
-  TransmitDescriptorPointer_t otdp, tdp;
+  TransmitDescriptorPointer_t tdp;
   ReceiveDescriptorPointer_t ordp, rdp;
   ReceiveResourcePointer_t rwp, rea;
   struct mbuf *bp;
@@ -987,14 +993,14 @@ SONIC_STATIC void sonic_initialize_hardware(
 #if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
   printf( "tdaTail = %p\n", dp->tdaTail );
 #endif
-  otdp = tdp = dp->tdaTail;
+  tdp = dp->tdaTail;
   for (i = 0 ; i < dp->tdaCount ; i++) {
     /*
      *  status, pkt_config, pkt_size, and all fragment fields 
      *  are set to zero by sonic_allocate.
      */
 
-/* XXX not used by other drivers 
+/* XXX not used by other drivers we looked at
     if (i & 1)
       tdp->pkt_config = TDA_CONFIG_PINT;
 */
@@ -1002,20 +1008,19 @@ SONIC_STATIC void sonic_initialize_hardware(
     tdp->frag_count        = 1;
     tdp->frag[0].frag_link = LSW(tdp + 1);
     tdp->link_pad          = LSW(tdp + 1) | TDA_LINK_EOL;
-    otdp->linkp            = &((tdp + 1)->frag[0].frag_link);
+    tdp->linkp             = &((tdp + 1)->frag[0].frag_link);
     tdp->next              = (TransmitDescriptor_t *)(tdp + 1);
-    otdp = tdp;
     tdp++;
   }
-  dp->tdaHead = otdp;  /* XXX why? */
-  otdp->link_pad = LSW(dp->tdaTail) | TDA_LINK_EOL;
-  otdp->next = (TransmitDescriptor_t *)dp->tdaTail;
-  otdp->linkp = &dp->tdaHead->frag[0].frag_link;
+  tdp--;
+  dp->tdaHead = tdp;
+  tdp->link_pad = LSW(dp->tdaTail) | TDA_LINK_EOL;
+  tdp->next = (TransmitDescriptor_t *)dp->tdaTail;
+  tdp->linkp = &dp->tdaTail->frag[0].frag_link;
 
   /*
    *  Set up circular linked list in Receive Descriptor Area.
-   *  Leaves ordp pointing at the `end' of the list and
-   *  dp->rda pointing at the `beginning' of the list.
+   *  Leaves dp->rda pointing at the `beginning' of the list.
    *
    *  NOTE: The RDA and CDP must have the same MSW for their addresses.
    */
