@@ -123,19 +123,19 @@ mcf5282_fec_tx_interrupt_handler( rtems_vector_number v )
 }
 
 /*
- * Allocate buffer descriptors
+ * Allocate buffer descriptors from (non-cached) on-chip static RAM
  * Ensure 128-bit (16-byte) alignment
  */
 static mcf5282BufferDescriptor_t *
 mcf5282_bd_allocate(unsigned int count)
 {
-    mcf5282BufferDescriptor_t *p;
+    extern char __SRAMBASE[];
+    static mcf5282BufferDescriptor_t *bdp = (mcf5282BufferDescriptor_t *)__SRAMBASE;
+    mcf5282BufferDescriptor_t *p = bdp;
 
-    p = malloc((count * sizeof(mcf5282BufferDescriptor_t)) + 15, 0, M_NOWAIT);
-    if (!p)
-        rtems_panic("FEC BD");
-    if ((int)p & 0xF)
-        p = (mcf5282BufferDescriptor_t *)((char *)p + (16 - ((int)p & 0xF)));
+    bdp += count;
+    if ((int)bdp & 0xF)
+        bdp = (mcf5282BufferDescriptor_t *)((char *)bdp + (16 - ((int)bdp & 0xF)));
     return p;
 }
 
@@ -302,15 +302,9 @@ static void
 fec_retire_tx_bd(volatile struct mcf5282_enet_struct *sc )
 {
     struct mbuf *m, *n;
-    volatile mcf5282BufferDescriptor_t *txBd;
 
-    for (;;) {
-        if (sc->txBdActiveCount == 0)
-            return;
-        txBd = sc->txBdBase + sc->txBdTail;
-        rtems_cache_invalidate_multiple_data_lines(txBd, sizeof *txBd);
-        if ((txBd->status & MCF5282_FEC_TxBD_R) != 0)
-            return;
+    while ((sc->txBdActiveCount != 0)
+        && ((sc->txBdBase[sc->txBdTail].status & MCF5282_FEC_TxBD_R) == 0)) {
         m = sc->txMbuf[sc->txBdTail];
         MFREE(m, n);
         if (++sc->txBdTail == sc->txBdCount)
@@ -359,9 +353,7 @@ fec_rxDaemon (void *arg)
         /*
          * Wait for packet if there's not one ready
          */
-        rtems_cache_invalidate_multiple_data_lines(rxBd, sizeof *rxBd);
         if ((status = rxBd->status) & MCF5282_FEC_RxBD_E) {
-int chkCount=0 ;
             /*
              * Clear old events.
              */
@@ -373,13 +365,9 @@ int chkCount=0 ;
              * This catches the case when a packet arrives between the
              * `if' above, and the clearing of the RXF bit in the EIR.
              */
-            for (;;) {
+            while ((status = rxBd->status) & MCF5282_FEC_RxBD_E) {
                 rtems_event_set events;
                 int level;
-
-                rtems_cache_invalidate_multiple_data_lines(rxBd, sizeof *rxBd);
-                if (((status = rxBd->status) & MCF5282_FEC_RxBD_E) == 0)
-                    break;
 
                 rtems_interrupt_disable(level);
                 MCF5282_FEC_EIMR |= MCF5282_FEC_EIMR_RXF;
@@ -403,7 +391,7 @@ int chkCount=0 ;
             int len = rxBd->length - sizeof(rtems_unsigned32);;
 
             /*
-             * Invalidate the cache and push the packet up
+             * Invalidate the cache and push the packet up.
              * The cache is so small that it's more efficient to just
              * invalidate the whole thing unless the packet is very small.
              */

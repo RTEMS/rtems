@@ -313,19 +313,19 @@ SYM(_spuriousInterrupt):
 .align 4
     PUBLIC (start)
 SYM(start):
-    move.w  #0x2700,sr                  | Disable interrupts
-
-    move.l  #__SRAMBASE+1,d0     | Enable the MCF5282 internal SRAM
-    movec   d0,%rambar          | ...so we have a stack
-    move.l  #__SRAMBASE+SRAM_SIZE-4,sp   | Overwrite the fake stack pointer
+    move.w  #0x2700,sr                 | Disable interrupts
 
     /*
      * If we're being started by the debugger, and the debugger has
      * moved the IPSBAR, we're doomed........
      */
-    move.l  #__IPSBAR+1,d0      | Enable the MCF5282 internal peripherals
+    move.l  #__IPSBAR+1,d0             | Enable the MCF5282 internal peripherals
     move.l  d0,DEFAULT_IPSBAR
-    
+    move.l  #__SRAMBASE+0x201,d0       | Enable the MCF5282 internal SRAM
+    movec   d0,%rambar                 | CPU-space copy of RAMBAR
+    move.l  d0,DEFAULT_IPSBAR+8        | Memory-space copy of RAMBAR
+    move.l  #__SRAMBASE+SRAM_SIZE-4,sp | Overwrite the fake stack pointer
+
     /*
      * Copy the vector table to address 0 (VBR must be 0 mod 2^20)
      * Leave the dBUG vectors (0-63) alone
