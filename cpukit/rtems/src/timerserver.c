@@ -147,8 +147,9 @@ Thread _Timer_Server_body(
  *  It must be invoked before any task-based timers can be initiated.
  *
  *  Input parameters:
+ *    priority         - timer server priority 
  *    stack_size       - stack size in bytes
- *    attribute_set    - thread attributes
+ *    attribute_set    - timer server attributes
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
@@ -157,12 +158,24 @@ Thread _Timer_Server_body(
 
 
 rtems_status_code rtems_timer_initiate_server(
+  unsigned32           priority,
   unsigned32           stack_size,
   rtems_attribute      attribute_set
 )
 {
-  rtems_id          id;
-  rtems_status_code status;
+  rtems_id            id;
+  rtems_status_code   status;
+  rtems_task_priority _priority;
+
+  /*
+   *  Make sure the requested priority is valid.
+   */
+
+  _priority = priority;
+  if ( priority == RTEMS_TIMER_SERVER_DEFAULT_PRIORITY ) 
+    _priority = 0;
+  else if ( !_RTEMS_tasks_Priority_is_valid( priority ) )
+    return RTEMS_INVALID_PRIORITY;
 
   /*
    *  Just to make sure the test versus create/start operation are atomic.
@@ -176,17 +189,28 @@ rtems_status_code rtems_timer_initiate_server(
   }
 
   /*
-   *  Create the Timer Server with the name the name of "TIME".  The priority
-   *  is always "0" which makes it higher than any other task in the system.
-   *  It is also always NO_PREEMPT so it looks like an interrupt to other tasks.
+   *  Create the Timer Server with the name the name of "TIME".  The attribute
+   *  RTEMS_SYSTEM_TASK allows us to set a priority to 0 which will makes it
+   *  higher than any other task in the system.  It can be viewed as a low
+   *  priority interrupt.  It is also always NO_PREEMPT so it looks like
+   *  an interrupt to other tasks.
+   *
+   *  We allow the user to override the default priority because the Timer
+   *  Server can invoke TSRs which must adhere to language run-time or 
+   *  other library rules.  For example, if using a TSR written in Ada the
+   *  Server should run at the same priority as the priority Ada task.
+   *  Otherwise, the priority ceiling for the mutex used to protect the
+   *  GNAT run-time is violated.
    */
 
   status = rtems_task_create(
-    rtems_build_name( 'T', 'I', 'M', 'E' ),
-    1,                    /* create with priority 1 since 0 is illegal */
+    0x4954454d,           /* "TIME" */
+    _priority,            /* create with priority 1 since 0 is illegal */
     stack_size,           /* let user specify stack size */
     RTEMS_NO_PREEMPT,     /* no preempt is like an interrupt */
-    attribute_set,        /* user may want floating point */
+                          /* user may want floating point but we need */
+                          /*   system task specified for 0 priority */
+    attribute_set | RTEMS_SYSTEM_TASK,
     &id                   /* get the id back */
   );
   if (status) {
@@ -223,16 +247,6 @@ rtems_status_code rtems_timer_initiate_server(
     &_RTEMS_tasks_Information,
     _Objects_Get_index(id)
   );
-
-  /*
-   *  A priority of 0, higher than any user task, combined with no preemption
-   *  makes this task the highest priority in any application.  It can be
-   *  viewed as a low priority interrupt.  The FALSE argument indicates
-   *  that the task is to be appended (not prepended) to its priority
-   *  chain at the end of this operation.
-   */
-
-  _Thread_Change_priority( _Timer_Server, 0, FALSE );
 
   /*
    *  Initialize the timer lists that the server will manage.

@@ -310,7 +310,10 @@ rtems_status_code rtems_timer_reset(
  *  It must be invoked before any task-based timers can be initiated.
  */
 
+#define RTEMS_TIMER_SERVER_DEFAULT_PRIORITY -1
+
 rtems_status_code rtems_timer_initiate_server(
+  unsigned32           priority,
   unsigned32           stack_size,
   rtems_attribute      attribute_set
 );

@@ -1,3 +1,8 @@
+2001-01-22	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/rtems/timer.h, src/timerserver.c: Add priority
+	argument to rtems_timer_initiate_server().
+
 2001-01-18	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/system.h: Only include cpuopts.h when building a
