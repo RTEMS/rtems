@@ -17,7 +17,6 @@ RTEMS_ENABLE_BARE
 RTEMS_ENABLE_RTEMSBSP(rtems_bsp)
 
 RTEMS_CHECK_CPU
-RTEMS_CANONICAL_HOST
 
 AS_IF([test -z "$rtems_bsp"],
   [RTEMS_CHECK_BSPS(rtems_bsp)])
