@@ -36,6 +36,11 @@ int m360_clock_rate	= 25000000;
 
 /*
  * Interrupt-driven input buffer
+ * Declare console baud rate -- may also be overwritten
+ */
+int console_baud_rate = 9600;
+
+/*
  */
 #define RXBUFSIZE	16
 
@@ -157,7 +162,7 @@ smc1Initialize (int major, int minor, void *arg)
 	 * Set up BRG1 (9,600 baud)
 	 */
 	m360.brgc1 = M360_BRG_RST;
-	m360.brgc1 = smc1BRGC (9600);
+	m360.brgc1 = smc1BRGC (console_baud_rate);
 
 	/*
 	 * Put SMC1 in NMSI mode, connect SMC1 to BRG1
