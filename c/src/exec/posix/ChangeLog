@@ -1,3 +1,11 @@
+2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/getegid.c: Remove <errno.h>.
+	* src/geteuid.c: Ditto.
+	* src/getgid.c: Ditto.
+	* src/getuid.c: Ditto.
+	* src/getlogin.c: Move <errno.h>.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

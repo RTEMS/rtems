@@ -7,9 +7,9 @@
 #endif
 
 #include <limits.h>
-#include <errno.h>
 #include <string.h>
 #include <sys/types.h>
+#include <errno.h>
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>

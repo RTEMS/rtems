@@ -7,7 +7,6 @@
 #endif
 
 #include <limits.h>
-#include <errno.h>
 #include <string.h>
 #include <sys/types.h>
 
