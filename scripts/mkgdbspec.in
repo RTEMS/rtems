@@ -51,8 +51,9 @@ target_alias=$1
 specfile=${dst}/$target_alias-gdb-${gdb_version}.spec
 
 case ${target_alias} in
-  arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | i960* | m32r* | \
-  mcore* | mips* | mn10200* | mn10300* | sh* | sparc*| v850* | w65* | z8k*)
+  arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | hppa1.1* | \
+  i960* | m32r* | mcore* | mips* | mn10200* | mn10300* | sh* | sparc*| \
+  v850* | w65* | z8k*)
     extra_configure_arguments="--enable-sim"
     ;;
   powerpc*)

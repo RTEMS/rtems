@@ -21,7 +21,9 @@ Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Version:      @gdb_version@
 Summary:      gdb for target @target_alias@
 Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
-Patch0:	      gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
+Patch0:	      gdb-@gdb_version@-rtems-base-@gdb_patch_version@.diff
+Patch1:	      gdb-@gdb_version@-rtems-cg-@gdb_patch_version@.diff
+Patch2:	      gdb-@gdb_version@-rtems-rdbg-@gdb_patch_version@.diff
 Buildroot:      /tmp/@target_alias@-gdb
 
 #
@@ -48,7 +50,10 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 # untar the sources inside @target_alias@-gdb
 %setup -c -n @target_alias@-gdb -a 0
 
-%patch0 -p0
+cd gdb-@gdb_version@
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 test -d build || mkdir build
