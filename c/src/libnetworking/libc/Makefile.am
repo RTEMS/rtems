@@ -32,7 +32,7 @@ man_MANS = addr2ascii.3 byteorder.3 ethers.3 gethostbyname.3 getnetent.3 \
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -DNOPOLL -DNOSELECT -U__STRICT_ANSI__
+AM_CPPFLAGS += -DNOPOLL -DNOSELECT
 
 $(LIB): $(OBJS)
 	$(make-library)

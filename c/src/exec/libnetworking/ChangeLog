@@ -1,4 +1,8 @@
-2000-04-24	Eric Norum <eric.norum@usask.ca>
+2001-05-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libc/Makefile.am: Remove -D__STRICT_ANSI__.
+
+2001-04-24	Eric Norum <eric.norum@usask.ca>
 
 	* lib/rtems_bsdnet_ntp.c: Modifications to make the RTEMS NTP
 	synchronization a little more robust -- no NTP daemon yet, but
@@ -17,7 +21,7 @@
 
 2001-03-15      Ralf Corsepius <corsepius@faw.uni-ulm.de>
 
-	* include/.cvsignore: Remove danlgling file.
+	* include/.cvsignore: Remove dangling file.
 
 2001-01-31        Sergei Organov <osv@javad.ru>
 
