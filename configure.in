@@ -431,7 +431,7 @@ fi
 AC_MSG_CHECKING([if the test suites are enabled? ])
 tests_enabled=yes
 AC_ARG_ENABLE(tests, \
-[  --enable-tests 	     	    enable tests], \
+[  --disble-tests 	     	    disble tests], \
   [case "${enableval}" in
     yes) AC_MSG_RESULT(yes) ;;
     no)  AC_MSG_RESULT(no) ; tests_enabled=no ;;

@@ -85,7 +85,7 @@ ac_help="$ac_help
     --enable-rtemsbsp=bsp1 bsp2 ..   BSPs to include in build"
 ac_help="$ac_help
 \
-  --enable-tests 	     	    enable tests"
+  --disble-tests 	     	    disble tests"
 ac_help="$ac_help
 \
   --enable-hwapi                 enable hardware API library"
