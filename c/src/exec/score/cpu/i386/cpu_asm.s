@@ -36,7 +36,7 @@
  *  This routine performs a normal non-FP context.
  */
 
-        .align  2
+        .p2align  1
         PUBLIC (_CPU_Context_switch)
 
 .set RUNCONTEXT_ARG,   4                   # save context argument
@@ -93,7 +93,7 @@ SYM (_CPU_Context_restore):
 
 .set FPCONTEXT_ARG,   4                    # FP context argument
 
-        .align    2
+        .p2align  1
         PUBLIC (_CPU_Context_save_fp)
 SYM (_CPU_Context_save_fp):
         movl      FPCONTEXT_ARG(esp),eax   # eax = &ptr to FP context area
@@ -101,7 +101,7 @@ SYM (_CPU_Context_save_fp):
         fsave     (eax)                    # save FP context
         ret
 
-        .align    2
+        .p2align  1
         PUBLIC (_CPU_Context_restore_fp)
 SYM (_CPU_Context_restore_fp):
         movl      FPCONTEXT_ARG(esp),eax   # eax = &ptr to FP context area
@@ -129,7 +129,7 @@ SYM (_CPU_Context_restore_fp):
 .set CS_OFFSET      , EIP_OFFSET+4         # offset of tasks code segment
 .set EFLAGS_OFFSET  , CS_OFFSET+4          # offset of tasks eflags
 
-        .align  2
+        .p2align  1
         PUBLIC (_ISR_Handler)
 
 SYM (_ISR_Handler):
@@ -253,7 +253,7 @@ exit:
  */
 
 #define DISTINCT_INTERRUPT_ENTRY(_vector) \
-        .align 16                          ; \
+        .p2align 4                         ; \
         PUBLIC (_ISR_Handler_ ## _vector ) ; \
 SYM (_ISR_Handler_ ## _vector ):             \
         pusha                              ; \
@@ -561,7 +561,7 @@ SYM (_ISR_Dispatch):
  *  );
  */
 
-        .align  2
+        .p2align  2
         PUBLIC (i386_Install_idt)
 
 .set INSTALL_IDT_SAVED_REGS,   8
