@@ -48,6 +48,7 @@ extern "C" {
 /* i82596 is in mvme16x_hw.h */
 /* NVRAM is in mvme16x_hw.h */
 
+#if 0
 /*
  *  Representation of the PCCchip2
  */
@@ -107,6 +108,7 @@ typedef volatile struct pccchip2_regs_ {
  */
 #define pccchip2    ((pccchip2_regs * const) 0xFFF42000)
 
+#endif
 /*
  * The MVME167 is equiped with one or two MEMC040 memory controllers at
  * 0xFFF43000 and 0xFFF43100. This port assumes that the controllers
