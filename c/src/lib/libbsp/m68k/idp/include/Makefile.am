@@ -23,4 +23,4 @@ all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = README
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

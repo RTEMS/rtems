@@ -22,4 +22,4 @@ all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bsp.h
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

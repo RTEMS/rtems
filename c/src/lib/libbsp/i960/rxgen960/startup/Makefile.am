@@ -22,8 +22,8 @@ S_FILES = asmfault.S asmstub.S ihandler.S
 
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -52,4 +52,4 @@ EXTRA_DIST = asmfault.S asmfault.h asmstub.S asmstub.h bspstart.c cntrltbl.c \
     prcb.c prcb.h rom.ld rom_cntrltbl.c rom_ibr.c rom_ibr.h rom_prcb.c \
     rommon.h rxgen_romld.S sctns.c sctns.h setvec.c systbl.c systbl.h time.h
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
