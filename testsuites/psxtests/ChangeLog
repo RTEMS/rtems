@@ -1,3 +1,7 @@
+2000-11-13	Joel Sherrill <joel@OARcorp.com>
+
+	* psxmount/psxmount.scn, psxmount/test.c: Correct spelling.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

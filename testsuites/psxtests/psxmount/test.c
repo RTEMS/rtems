@@ -273,7 +273,7 @@ int main(
    * Attempt to mount a second file system at a used mount point.
    */
 
-  printf("Verify a mount point retruns EBUSY for another mount\n");
+  printf("Verify a mount point returns EBUSY for another mount\n");
   status = mount(
      &mt_entry,
      &IMFS_ops,

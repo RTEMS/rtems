@@ -59,7 +59,7 @@ mount with option of -62 should fail with EINVAL
 Mount a Read Only filesystem at /c/y/my_mount_point 
 Read only file system successfully mounted at /c/y/my_mount_point 
 create c/y/my_mount_point/../../y/my_mount_point/new_dir
-Verify a mount point retruns EBUSY for another mount
+Verify a mount point returns EBUSY for another mount
 Mount on a file should fail with ENOTDIR
 Create and chdir to /c/y/my_mount_point/mydir
 unmount of /c/y/my_mount_point should fail with EBUSY
