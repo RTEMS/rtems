@@ -143,7 +143,7 @@ case "${target}" in
         target_cpu=no_cpu
 	RTEMS_HAS_POSIX_API=no
 	;;
-  powerpc-rtems*|ppc-rtems*)
+  powerpc-*tems*)
 	target_cpu=ppc
 	;;
   sparc-sun-solaris*)             # unix "simulator" port
@@ -194,10 +194,16 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
         Makefile*);;
         READ*);;
         CVS*);;
-        go32*);;   # so the i386 port can pick up the other Makefiles
+        pxfl*);;
+        go32*);;       # so the i386 port can pick up the other Makefiles
+        # Now account for BSPs with build variants
+        gen68360)      rtems_bsp="$rtems_bsp gen68360 gen68360_040";;
+        p4000)         rtems_bsp="$rtems_bsp p4600 p4650";;
+        mvme162)       rtems_bsp="$rtems_bsp mvme162 mvme162lx";;
         *) rtems_bsp="$rtems_bsp $file";;
       esac;
     done
+
     AC_MSG_RESULT([$rtems_bsp])
   fi
 
@@ -207,7 +213,7 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
     if test ! -r "$srcdir/c/make/custom/${i}.cfg"; then
       AC_MSG_ERROR([no make/custom/${i}.cfg file for BSP $i])
     fi
-
+ 
     # account for "aliased" bsps which share source code
     case $i in 
       mvme162lx)    bspdir=mvme162  ;;  # mvme162 board variant
@@ -378,6 +384,7 @@ c/src/tests/tools/Makefile
 c/src/tests/tools/generic/Makefile
 $makefiles
 c/make/host.cfg
+c/make/target.cfg
 c/make/Templates/Makefile.inc
 c/update-tools/Makefile)
 

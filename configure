@@ -1301,7 +1301,7 @@ case "${target}" in
         target_cpu=no_cpu
 	RTEMS_HAS_POSIX_API=no
 	;;
-  powerpc-rtems*|ppc-rtems*)
+  powerpc-*tems*)
 	target_cpu=ppc
 	;;
   sparc-sun-solaris*)             # unix "simulator" port
@@ -1418,10 +1418,16 @@ echo "configure:1414: checking for bsps" >&5
         Makefile*);;
         READ*);;
         CVS*);;
-        go32*);;   # so the i386 port can pick up the other Makefiles
+        pxfl*);;
+        go32*);;       # so the i386 port can pick up the other Makefiles
+        # Now account for BSPs with build variants
+        gen68360)      rtems_bsp="$rtems_bsp gen68360 gen68360_040";;
+        p4000)         rtems_bsp="$rtems_bsp p4600 p4650";;
+        mvme162)       rtems_bsp="$rtems_bsp mvme162 mvme162lx";;
         *) rtems_bsp="$rtems_bsp $file";;
       esac;
     done
+
     echo "$ac_t""$rtems_bsp" 1>&6
   fi
 
@@ -1431,7 +1437,7 @@ echo "configure:1414: checking for bsps" >&5
     if test ! -r "$srcdir/c/make/custom/${i}.cfg"; then
       { echo "configure: error: no make/custom/${i}.cfg file for BSP $i" 1>&2; exit 1; }
     fi
-
+ 
     # account for "aliased" bsps which share source code
     case $i in 
       mvme162lx)    bspdir=mvme162  ;;  # mvme162 board variant
@@ -1451,7 +1457,7 @@ echo "configure:1414: checking for bsps" >&5
         bspdirs="$bspdirs $bspdir"
         
 echo $ac_n "checking for Makefile.in in c/src/lib/libbsp/$target_cpu/$bspdir""... $ac_c" 1>&6
-echo "configure:1455: checking for Makefile.in in c/src/lib/libbsp/$target_cpu/$bspdir" >&5
+echo "configure:1461: checking for Makefile.in in c/src/lib/libbsp/$target_cpu/$bspdir" >&5
 if test -d $srcdir/c/src/lib/libbsp/$target_cpu/$bspdir; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1474,7 +1480,7 @@ fi
 # find all the CPU dependent library Makefiles
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libcpu/$target_cpu""... $ac_c" 1>&6
-echo "configure:1478: checking for Makefile.in in c/src/lib/libcpu/$target_cpu" >&5
+echo "configure:1484: checking for Makefile.in in c/src/lib/libcpu/$target_cpu" >&5
 if test -d $srcdir/c/src/lib/libcpu/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1491,7 +1497,7 @@ fi
 if test "$skip_startfiles" != "yes"; then
   
 echo $ac_n "checking for Makefile.in in c/src/lib/start/$target_cpu""... $ac_c" 1>&6
-echo "configure:1495: checking for Makefile.in in c/src/lib/start/$target_cpu" >&5
+echo "configure:1501: checking for Makefile.in in c/src/lib/start/$target_cpu" >&5
 if test -d $srcdir/c/src/lib/start/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1538,7 +1544,7 @@ fi
 
 # If the tests are enabled, then find all the test suite Makefiles
 echo $ac_n "checking Are the test suites enabled? ""... $ac_c" 1>&6
-echo "configure:1542: checking Are the test suites enabled? " >&5
+echo "configure:1548: checking Are the test suites enabled? " >&5
 tests_enabled=yes
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
@@ -1558,7 +1564,7 @@ fi
 if test "$tests_enabled" = "yes"; then
    
 echo $ac_n "checking for Makefile.in in c/src/tests/tools/$target_cpu""... $ac_c" 1>&6
-echo "configure:1562: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
+echo "configure:1568: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
 if test -d $srcdir/c/src/tests/tools/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1573,7 +1579,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/libtests""... $ac_c" 1>&6
-echo "configure:1577: checking for Makefile.in in c/src/tests/libtests" >&5
+echo "configure:1583: checking for Makefile.in in c/src/tests/libtests" >&5
 if test -d $srcdir/c/src/tests/libtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1588,7 +1594,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/sptests""... $ac_c" 1>&6
-echo "configure:1592: checking for Makefile.in in c/src/tests/sptests" >&5
+echo "configure:1598: checking for Makefile.in in c/src/tests/sptests" >&5
 if test -d $srcdir/c/src/tests/sptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1603,7 +1609,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/tmtests""... $ac_c" 1>&6
-echo "configure:1607: checking for Makefile.in in c/src/tests/tmtests" >&5
+echo "configure:1613: checking for Makefile.in in c/src/tests/tmtests" >&5
 if test -d $srcdir/c/src/tests/tmtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1618,7 +1624,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/mptests""... $ac_c" 1>&6
-echo "configure:1622: checking for Makefile.in in c/src/tests/mptests" >&5
+echo "configure:1628: checking for Makefile.in in c/src/tests/mptests" >&5
 if test -d $srcdir/c/src/tests/mptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1634,7 +1640,7 @@ fi
    if test "$RTEMS_HAS_POSIX" = "yes"; then
      
 echo $ac_n "checking for Makefile.in in c/src/tests/psxtests""... $ac_c" 1>&6
-echo "configure:1638: checking for Makefile.in in c/src/tests/psxtests" >&5
+echo "configure:1644: checking for Makefile.in in c/src/tests/psxtests" >&5
 if test -d $srcdir/c/src/tests/psxtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1652,7 +1658,7 @@ fi
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
 echo $ac_n "checking Is the HWAPI enabled? ""... $ac_c" 1>&6
-echo "configure:1656: checking Is the HWAPI enabled? " >&5
+echo "configure:1662: checking Is the HWAPI enabled? " >&5
 # Check whether --enable-hwapi or --disable-hwapi was given.
 if test "${enable_hwapi+set}" = set; then
   enableval="$enable_hwapi"
@@ -1663,7 +1669,7 @@ if test "${enable_hwapi+set}" = set; then
             makefiles="$makefiles c/src/lib/libhwapi/Makefile"
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/analog""... $ac_c" 1>&6
-echo "configure:1667: checking for Makefile.in in c/src/lib/libhwapi/analog" >&5
+echo "configure:1673: checking for Makefile.in in c/src/lib/libhwapi/analog" >&5
 if test -d $srcdir/c/src/lib/libhwapi/analog; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1678,7 +1684,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/discrete""... $ac_c" 1>&6
-echo "configure:1682: checking for Makefile.in in c/src/lib/libhwapi/discrete" >&5
+echo "configure:1688: checking for Makefile.in in c/src/lib/libhwapi/discrete" >&5
 if test -d $srcdir/c/src/lib/libhwapi/discrete; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1693,7 +1699,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/drivers""... $ac_c" 1>&6
-echo "configure:1697: checking for Makefile.in in c/src/lib/libhwapi/drivers" >&5
+echo "configure:1703: checking for Makefile.in in c/src/lib/libhwapi/drivers" >&5
 if test -d $srcdir/c/src/lib/libhwapi/drivers; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1708,7 +1714,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/eeprom""... $ac_c" 1>&6
-echo "configure:1712: checking for Makefile.in in c/src/lib/libhwapi/eeprom" >&5
+echo "configure:1718: checking for Makefile.in in c/src/lib/libhwapi/eeprom" >&5
 if test -d $srcdir/c/src/lib/libhwapi/eeprom; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1723,7 +1729,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/serial""... $ac_c" 1>&6
-echo "configure:1727: checking for Makefile.in in c/src/lib/libhwapi/serial" >&5
+echo "configure:1733: checking for Makefile.in in c/src/lib/libhwapi/serial" >&5
 if test -d $srcdir/c/src/lib/libhwapi/serial; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1738,7 +1744,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/support""... $ac_c" 1>&6
-echo "configure:1742: checking for Makefile.in in c/src/lib/libhwapi/support" >&5
+echo "configure:1748: checking for Makefile.in in c/src/lib/libhwapi/support" >&5
 if test -d $srcdir/c/src/lib/libhwapi/support; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1753,7 +1759,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/wrapup""... $ac_c" 1>&6
-echo "configure:1757: checking for Makefile.in in c/src/lib/libhwapi/wrapup" >&5
+echo "configure:1763: checking for Makefile.in in c/src/lib/libhwapi/wrapup" >&5
 if test -d $srcdir/c/src/lib/libhwapi/wrapup; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1796,7 +1802,7 @@ fi
 # pick up all the Makefiles in required parts of the tree
 
 echo $ac_n "checking for Makefile.in in c/build-tools""... $ac_c" 1>&6
-echo "configure:1800: checking for Makefile.in in c/build-tools" >&5
+echo "configure:1806: checking for Makefile.in in c/build-tools" >&5
 if test -d $srcdir/c/build-tools; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1811,7 +1817,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/make""... $ac_c" 1>&6
-echo "configure:1815: checking for Makefile.in in c/make" >&5
+echo "configure:1821: checking for Makefile.in in c/make" >&5
 if test -d $srcdir/c/make; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1826,7 +1832,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libmisc""... $ac_c" 1>&6
-echo "configure:1830: checking for Makefile.in in c/src/lib/libmisc" >&5
+echo "configure:1836: checking for Makefile.in in c/src/lib/libmisc" >&5
 if test -d $srcdir/c/src/lib/libmisc; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1841,7 +1847,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/tests/samples""... $ac_c" 1>&6
-echo "configure:1845: checking for Makefile.in in c/src/tests/samples" >&5
+echo "configure:1851: checking for Makefile.in in c/src/tests/samples" >&5
 if test -d $srcdir/c/src/tests/samples; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1998,6 +2004,7 @@ c/src/tests/tools/Makefile
 c/src/tests/tools/generic/Makefile
 $makefiles
 c/make/host.cfg
+c/make/target.cfg
 c/make/Templates/Makefile.inc
 c/update-tools/Makefile" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
@@ -2142,6 +2149,7 @@ c/src/tests/tools/Makefile
 c/src/tests/tools/generic/Makefile
 $makefiles
 c/make/host.cfg
+c/make/target.cfg
 c/make/Templates/Makefile.inc
 c/update-tools/Makefile"}
 EOF

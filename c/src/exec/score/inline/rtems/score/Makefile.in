@@ -5,7 +5,10 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-VPATH=@srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @RTEMS_ROOT@
+PROJECT_ROOT = @PROJECT_ROOT@
+RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 
 I_PIECES= address chain coremsg coremutex coresem heap \
     isr mppkt object objectmp priority stack states sysstate thread \
