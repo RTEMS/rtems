@@ -61,8 +61,8 @@
 /* there is no public Workspace_Free() variant :-( */
 #include <rtems/score/wkspace.h>
 
-rtems_unsigned32
-_bsp_sbrk_init(rtems_unsigned32 heap_start, rtems_unsigned32 *heap_size_p);
+uint32_t
+_bsp_sbrk_init(uint32_t heap_start, uint32_t *heap_size_p);
 
 /* provide access to the command line parameters */
 char *BSP_commandline_string = 0;
@@ -134,7 +134,7 @@ static unsigned long
 heapStart(void)
 {
 unsigned long rval;
-    rval = ((rtems_unsigned32) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
+    rval = ((uint32_t) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
     if (rval & (CPU_ALIGNMENT-1))
         rval = (rval + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 	return rval;
@@ -189,10 +189,10 @@ extern void bsp_libc_init( void *, unsigned32, int );
 
 void bsp_pretasking_hook(void)
 {
-    rtems_unsigned32        heap_start=heapStart();    
-    rtems_unsigned32        heap_size,heap_sbrk_spared;
+    uint32_t        heap_start=heapStart();    
+    uint32_t        heap_size,heap_sbrk_spared;
     char		    *buf;
-    extern rtems_unsigned32 _bsp_sbrk_init(rtems_unsigned32, rtems_unsigned32*);
+    extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
 
     heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
 

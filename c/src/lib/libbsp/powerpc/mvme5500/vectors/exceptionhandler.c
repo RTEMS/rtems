@@ -42,7 +42,7 @@ volatile BSP_ExceptionExtension	test;
 void
 BSP_exceptionHandler(BSP_Exception_frame* excPtr)
 {
-rtems_unsigned32	note;
+uint32_t	note;
 BSP_ExceptionExtension	ext=0;
 rtems_id		id=0;
 int			recoverable = 0;
@@ -147,8 +147,6 @@ int			quiet=0;
 		 printk(" TEA");
 	   }
 	   if (excPtr->EXC_SRR1 & (SRR1_MCP_EXC)) {
-	      unsigned char c1,c2;
-	      unsigned int  l;
 	      unsigned long gerr;
 
 	      if (!quiet) printk(" MCP\n");
@@ -180,8 +178,8 @@ int			quiet=0;
 		if (id) {
 			/* if there's a highlevel hook, install it */
 			if (ext && ext->highlevelHook) {
-				excPtr->EXC_SRR0 = (rtems_unsigned32)ext->highlevelHook;
-				excPtr->GPR3     = (rtems_unsigned32)ext;
+				excPtr->EXC_SRR0 = (uint32_t)ext->highlevelHook;
+				excPtr->GPR3     = (uint32_t)ext;
 				return;
 			}
 			if (excPtr->EXC_SRR1 & MSR_FP) {
