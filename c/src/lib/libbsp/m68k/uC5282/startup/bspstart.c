@@ -354,9 +354,13 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
         rtems_interrupt_level level;
         static unsigned char installed[8];
 
-        if (installed[source/8] & (1 << (source % 8)))
+        rtems_interrupt_disable(level);
+        if (installed[source/8] & (1 << (source % 8))) {
+            rtems_interrupt_enable(level);
             return 0;
+        }
         installed[source/8] |= (1 << (source % 8));
+        rtems_interrupt_enable(level);
         for (l = 1 ; l < 7 ; l++) {
             for (p = 0 ; p < 7 ; p++) {
                 if ((source < 8)
