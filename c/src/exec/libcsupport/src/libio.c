@@ -154,10 +154,12 @@ rtems_libio_init(void)
  */
 
 rtems_assoc_t errno_assoc[] = {
-    { "OK",        RTEMS_SUCCESSFUL,       0 },
-    { "TIMEOUT",   RTEMS_TIMEOUT,          ETIME },
-    { "NO MEMORY", RTEMS_NO_MEMORY,        ENOMEM },
-    { "NO DEVICE", RTEMS_UNSATISFIED,      ENOSYS },
+    { "OK",                 RTEMS_SUCCESSFUL,                0 },
+    { "TIMEOUT",            RTEMS_TIMEOUT,                   ETIME },
+    { "NO MEMORY",          RTEMS_NO_MEMORY,                 ENOMEM },
+    { "NO DEVICE",          RTEMS_UNSATISFIED,               ENOSYS },
+    { "INVALID NUMBER",     RTEMS_INVALID_NUMBER,            EBADF},
+    { "NOT RESOURCE OWNER", RTEMS_NOT_OWNER_OF_RESOURCE,     EPERM},
     { 0, 0, 0 },
 };
 
@@ -171,7 +173,7 @@ rtems_libio_errno(rtems_status_code code)
         errno = rc;
         return -1;
     }
-    return 0;
+    return -1;
 }
 
 /*
@@ -179,8 +181,8 @@ rtems_libio_errno(rtems_status_code code)
  */
 
 rtems_assoc_t access_modes_assoc[] = {
-    { "READ",     LIBIO_FLAGS_READ,  O_RDONLY },
-    { "WRITE",    LIBIO_FLAGS_WRITE, O_WRONLY },
+    { "READ",       LIBIO_FLAGS_READ,  O_RDONLY },
+    { "WRITE",      LIBIO_FLAGS_WRITE, O_WRONLY },
     { "READ/WRITE", LIBIO_FLAGS_READ_WRITE, O_RDWR },
     { 0, 0, 0 },
 };
