@@ -1,5 +1,14 @@
 2000-10-20	Joel Sherrill <joel@OARcorp.com>
 
+	* mpc8xx/console-generic/console-generic.c: Avoid use of
+	BSP definitions and rely on the new routine
+	mbx8xx_console_get_configuration() to get information.  This
+	routine was formerly incorrectly called
+	mbx8xx_console_use_maximum_buffer_size().
+	binding to the exception code.
+
+2000-10-20	Joel Sherrill <joel@OARcorp.com>
+
 	* configure.in, Makefile.am: Explicitly specify whether an
 	RTEMS_CPU_MODEL is using old or new exception processing.  This
 	is important because when building multilib, you do not know 
