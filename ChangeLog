@@ -1,3 +1,8 @@
+2002-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/subdirs.m4: Propagate the current $prefix to the
+	sub-configures.
+
 2002-02-05	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-ss-20020205.

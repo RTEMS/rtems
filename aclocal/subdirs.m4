@@ -194,10 +194,14 @@ if test "$no_recursion" != yes; then
     esac
   done
 
+  # Always prepend --prefix to ensure using the same prefix
+  # in subdir configurations.
+  ac_sub_configure_args="--prefix=$prefix $ac_sub_configure_args"
+
   case "$$1_subdir" in
   "." ) ;;
   * )
-    ac_sub_configure_args="$ac_sub_configure_args --with-target-subdir=$$1_subdir --exec-prefix=\${prefix}/$$1_subdir"
+    ac_sub_configure_args="$ac_sub_configure_args --with-target-subdir=$$1_subdir --exec-prefix=${prefix}/$$1_subdir"
     ;;
   esac
 
