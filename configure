@@ -3664,19 +3664,19 @@ fi
 # If the tests are enabled, then find all the test suite Makefiles
 echo $ac_n "checking if the test suites are enabled? ""... $ac_c" 1>&6
 echo "configure:3667: checking if the test suites are enabled? " >&5
-tests_enabled=no
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
   enableval="$enable_tests"
   case "${enableval}" in
-    yes) echo "$ac_t""yes" 1>&6 ;;
-    no)  echo "$ac_t""no" 1>&6 ; tests_enabled=no ;;
+    yes) tests_enabled=yes ;;
+    no)  tests_enabled=no ;;
     *)   { echo "configure: error: bad value ${enableval} for tests option" 1>&2; exit 1; } ;;
   esac
 else
-  echo "$ac_t""no" 1>&6
+  tests_enabled=no
 fi
 
+echo "$ac_t""$tests_enabled" 1>&6
 
 
 # always build the test tools

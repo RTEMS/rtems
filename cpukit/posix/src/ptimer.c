@@ -189,6 +189,8 @@ void _POSIX_Timer_Manager_initialization ( int max_timers )
     *  Initialize all the timers
     */
 
+   timer_max = max_timers;
+
    for (index=0; index<max_timers; index++)
      TIMER_INITIALIZE_S( index );
 
