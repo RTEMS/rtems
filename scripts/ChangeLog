@@ -1,3 +1,7 @@
+2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* autotools/automake-rtems.spec.in: automake-1.9.5.
+
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gcc3newlib/Makefile.am: Remove sh-rtemself. Add sh-rtemscoff.
