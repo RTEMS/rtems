@@ -363,12 +363,14 @@ int pthread_cond_broadcast(
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
-  Watchdog_Interval          timeout
+  Watchdog_Interval          timeout,
+  boolean                    already_timedout
 )
 {
   register POSIX_Condition_variables_Control *the_cond;
   Objects_Locations                           location;
   int                                         status;
+  int                                         mutex_status;
  
   if ( !_POSIX_Mutex_Get( mutex, &location ) ) {
      return EINVAL;
@@ -391,38 +393,44 @@ int _POSIX_Condition_variables_Wait_support(
         return EINVAL;
       }
  
-      the_cond->Mutex = *mutex;
- 
-      status = pthread_mutex_unlock( mutex );
-/* XXX ignore this for now 
-      if ( status ) {
+      (void) pthread_mutex_unlock( mutex );
+/* XXX ignore this for now  since behavior is undefined
+      if ( mutex_status ) {
         _Thread_Enable_dispatch();
         return EINVAL;
       }
 */
+
+      if ( !already_timedout ) {
+        the_cond->Mutex = *mutex;
  
-      _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
-      _Thread_Executing->Wait.return_code = 0;
-      _Thread_Executing->Wait.queue       = &the_cond->Wait_queue;
-      _Thread_Executing->Wait.id          = *cond;
+        _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
+        _Thread_Executing->Wait.return_code = 0;
+        _Thread_Executing->Wait.queue       = &the_cond->Wait_queue;
+        _Thread_Executing->Wait.id          = *cond;
 
-      _Thread_queue_Enqueue( &the_cond->Wait_queue, timeout );
+        _Thread_queue_Enqueue( &the_cond->Wait_queue, timeout );
 
-      _Thread_Enable_dispatch();
+        _Thread_Enable_dispatch();
 
-      /*
-       *  Switch ourself out because we blocked as a result of the 
-       *  _Thread_queue_Enqueue.
-       */
+        /*
+         *  Switch ourself out because we blocked as a result of the 
+         *  _Thread_queue_Enqueue.
+         */
 
-      if ( _Thread_Executing->Wait.return_code )
-        return _Thread_Executing->Wait.return_code;
+        status = _Thread_Executing->Wait.return_code;
+        if ( status && status != ETIMEDOUT )
+          return status;
 
-      status = pthread_mutex_lock( mutex );
-      if ( status )
+      }
+      else
+        status = ETIMEDOUT;
+
+      mutex_status = pthread_mutex_lock( mutex );
+      if ( mutex_status )
         return EINVAL;
     
-      return _Thread_Executing->Wait.return_code;
+      return status;
   }
   return POSIX_BOTTOM_REACHED();
 }
@@ -440,7 +448,8 @@ int pthread_cond_wait(
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,
-    THREAD_QUEUE_WAIT_FOREVER
+    THREAD_QUEUE_WAIT_FOREVER,
+    FALSE
   );
 }
  
@@ -455,20 +464,34 @@ int pthread_cond_timedwait(
   const struct timespec *abstime
 )
 {
+  Watchdog_Interval timeout;
+  struct timespec   current_time;
+  struct timespec   difference;
+  boolean           already_timedout = FALSE;
+
   if ( !abstime )
     return EINVAL;
 
-/* XXX need to fully address an error occuring in the total timespec */
+  /*
+   *  The abstime is a walltime.  We turn it into an interval.
+   */
 
-  if ( abstime->tv_sec < 0 || abstime->tv_nsec < 0 )
-    return EINVAL;
+  (void) clock_gettime( CLOCK_REALTIME, &current_time );
 
-  if ( abstime->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
-    return EINVAL;
- 
+  /* XXX probably some error checking should go here */
+
+  _POSIX_Timespec_subtract( &current_time, abstime, &difference );
+
+  if ( ( difference.tv_sec < 0 ) || ( ( difference.tv_sec == 0 ) &&
+       ( difference.tv_nsec < 0 ) ) )
+    already_timedout = TRUE;   
+
+  timeout = _POSIX_Timespec_to_interval( &difference );
+
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,
-    _POSIX_Timespec_to_interval( abstime )
+    timeout,
+    already_timedout
   );
 }
