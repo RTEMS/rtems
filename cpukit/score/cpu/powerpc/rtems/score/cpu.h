@@ -115,7 +115,7 @@ static inline uint32_t CPU_swap_u32(
 
 #endif /* ASM */
 
-#ifndef /* ASM */
+#ifndef ASM
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
@@ -142,6 +142,21 @@ static inline uint32_t CPU_swap_u32(
       CPU_Get_timebase_low( now ); \
     while (now - start < (_cycles)); \
   } while (0)
+
+#endif /* ASM */
+
+#ifndef ASM
+/*
+ *  Routines to access the decrementer register
+ */
+
+#define PPC_Set_decrementer( _clicks ) \
+  do { \
+    asm volatile( "mtdec %0" : : "r" ((_clicks)) ); \
+  } while (0)
+
+#define PPC_Get_decrementer( _clicks ) \
+    asm volatile( "mfdec  %0" : "=r" (_clicks) )
 
 #endif /* ASM */
 
