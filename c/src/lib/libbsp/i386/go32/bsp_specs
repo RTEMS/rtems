@@ -4,12 +4,12 @@ predefines:
 
 startfile: replace
 mrtems:
-pg: start.o%s
+pg: crt0.o%s
 {!pg:
-g: start.o%s
+g: crt0.o%s
 {!g:
-p: start.o%s
-!p: start.o%s
+p: crt0.o%s
+!p: crt0.o%s
 }}
 {!mrtems:
 pg: pgcrt0%O
@@ -22,10 +22,10 @@ p: pcrt0%O
 
 
 link: replace
-mrtems: -dc -dp -N -T linkcmds%s -e start
+
 
 lib: replace
-mrtems: -( -lc -lrtemsall -lgcc -)
+mrtems: -( -lc -lrtemsall -lgcc -) -lcgo32 -lpc
 
 
 libgcc: replace
