@@ -70,6 +70,7 @@ NoSource:	1
 %endif
 
 %if "@target_alias@" == "i386-rtems"
+%define build_gnat      %_gnat
 %define build_gcj 	1
 %endif
 

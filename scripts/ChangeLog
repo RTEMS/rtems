@@ -1,3 +1,8 @@
+2002-11-28	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Updated to gcc-3.2 and newlib1.1.0 RPM version 6.
+	* gcc3newlib/gccnewlib.add: Reenabled i386-rtems gnat.
+
 2002-11-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/gccnewlib.add: 
