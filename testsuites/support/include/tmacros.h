@@ -69,6 +69,17 @@ extern "C" {
 
 #define puts_nocr printf
 
+#ifdef RTEMS_TEST_NO_PAUSE
+#define rtems_test_pause() \
+    do { \
+      printf( "<pause>\n" ); fflush( stdout ); \
+  } while ( 0 )
+
+#define rtems_test_pause_and_screen_number( _screen ) \
+  do { \
+    printf( "<pause - screen %d>\n", (_screen) ); fflush( stdout ); \
+  } while ( 0 )
+#else
 #define rtems_test_pause() \
   do { \
     char buffer[ 80 ]; \
@@ -84,6 +95,7 @@ extern "C" {
     gets( buffer ); \
     puts( "" ); \
   } while ( 0 )
+#endif
 
 #define put_name( name, crlf ) \
 { rtems_unsigned32 c0, c1, c2, c3; \
