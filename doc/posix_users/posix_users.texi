@@ -119,7 +119,7 @@ This is the online version of the RTEMS POSIX API User's Guide
 * Device- and Class- Specific Functions Manager::
 * Language-Specific Services for the C Programming Language Manager::
 * System Databases Manager::
-* Semaphores Manager::
+* Semaphore Manager::
 * Mutex Manager::
 * Condition Variable Manager::
 * Memory Management Manager::
