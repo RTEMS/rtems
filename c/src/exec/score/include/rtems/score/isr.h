@@ -88,7 +88,7 @@ SCORE_EXTERN volatile unsigned32 _ISR_Nest_level;
  *  interrupt service routines are vectored by the ISR Handler via this table.
  */
 
-SCORE_EXTERN ISR_Handler_entry _ISR_Vector_table[ ISR_NUMBER_OF_VECTORS ];
+SCORE_EXTERN ISR_Handler_entry *_ISR_Vector_table;
 
 /*
  *  _ISR_Handler_initialization

@@ -1,4 +1,10 @@
 
+2000-12-13	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/score/isr.h, src/isr.c: Allocate it from the
+	workspace rather than explicitly declaring it.  This allows
+	the size to be a non-constant from the perspective of score/cpu.
+
 2000-12-01	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/score/coresem.inl: Removed comments since convention
