@@ -1,5 +1,11 @@
 2003-11-26	Joel Sherrill <joel@OARcorp.com>
 
+	PR 524/filesystem
+	* src/newlibc.c: Address 1K buffer leak from incomplete cleanup of
+	newlib reentrancy handler.
+
+2003-11-26	Joel Sherrill <joel@OARcorp.com>
+
 	PR 523/filesystem
 	* src/malloc.c: Make malloc family safer for use from ISRs and
 	dispatching critical sections. If in a critical section while doing
