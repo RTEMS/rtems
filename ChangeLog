@@ -1,3 +1,9 @@
+2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* macros/enable-hwapi.m4: Removed.
+	* aclocal/rtems-top.m4, automake/compile.am, automake/lib.am:
+	A small cleanup step towards gnu-canonicalization.
+
 2000-09-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* macros: New directory.

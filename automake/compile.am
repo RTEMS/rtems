@@ -275,6 +275,7 @@ RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
 
 ## FIXME: This will probably vanish, when GNU canonicalization will be
 ## introduced
+if RTEMS_CANONICALIZATION
 
 CC = $(CC_FOR_TARGET) $(GCCSPECS)
 CXX = $(CXX_FOR_TARGET) $(GCCSPECS)
@@ -294,6 +295,10 @@ SIZE_FOR_TARGET = @SIZE_FOR_TARGET@
 SIZE = $(SIZE_FOR_TARGET)
 STRIP_FOR_TARGET = @STRIP_FOR_TARGET@
 STRIP = $(STRIP_FOR_TARGET)
+else
+CC = @CC@ $(GCCSPECS)
+CXX = @CXX@ $(GCCSPECS)
+endif
 
 ##
 ## FIXME: DEFS and INCLUDES should not be passed as AM_CPPFLAGS

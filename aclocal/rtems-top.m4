@@ -15,6 +15,9 @@ AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 ENDIF=endif
 AC_SUBST(ENDIF)
 
+## HACK to destinguish between using GNU and RTEMS canonicalization
+AM_CONDITIONAL(RTEMS_CANONICALIZATION,test x=x)
+
 AC_ARG_WITH(target-subdir,
 [  --with-target-subdir=DIR],
 TARGET_SUBDIR="$withval",
