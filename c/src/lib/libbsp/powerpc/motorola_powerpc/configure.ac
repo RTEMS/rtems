@@ -23,10 +23,17 @@ RTEMS_CHECK_NETWORKING
 RTEMS_CANONICAL_HOST
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
-AM_CONDITIONAL(need_motorola_powerpc, test "$RTEMS_BSP_FAMILY" = "motorola_powerpc")
-
 AS=$CC
 AM_PROG_AS
+
+RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[1])
+RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
+[If defined, then the PowerPC specific code in RTEMS will use
+ data cache instructions to optimize the context switch code.
+ This code can conflict with debuggers or emulators.  It is known
+ to break the Corelis PowerPC emulator with at least some combinations
+ of PowerPC 603e revisions and emulator versions.
+ The BSP actually contains the call that enables this.])
 
 AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
@@ -46,4 +53,7 @@ start/Makefile
 startup/Makefile
 vectors/Makefile
 wrapup/Makefile])
+
+RTEMS_PPC_EXCEPTIONS([new])
+
 AC_OUTPUT

@@ -1,3 +1,15 @@
+	* wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2001-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_ENABLE_NETWORKING.
+
+2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.
+
+2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Add @exceptions@ to SUBDIRS; 
 	Remove need_motorola_powerpc.
 	* configure.ac: Apply RTEMS_BSPOPTS_*(*) to merge-in settings from

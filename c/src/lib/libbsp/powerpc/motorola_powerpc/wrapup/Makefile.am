@@ -10,7 +10,7 @@ BSP_PIECES = clock console irq openpic pci residual startup vectors motorola
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.o) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.o) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/*/$(ARCH)/*.o) \
-    $(wildcard ../../../../libcpu/powerpc/new_exception_processing/$(ARCH)/*.rel) \
+    ../@exceptions@/$(ARCH)/rtems-cpu.rel \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.o)
 LIB = $(ARCH)/libbsp.a
 

@@ -42,13 +42,14 @@ $(PROJECT_INCLUDE)/bsp/irq.h: ../../shared/irq/irq.h
 $(PROJECT_INCLUDE)/bsp/motorola.h: ../../shared/motorola/motorola.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp \
+TMPINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp \
     $(PROJECT_INCLUDE)/nvram.h $(PROJECT_INCLUDE)/bsp.h \
     $(PROJECT_INCLUDE)/coverhd.h $(PROJECT_INCLUDE)/bsp/consoleIo.h \
     $(PROJECT_INCLUDE)/bsp/uart.h $(PROJECT_INCLUDE)/bsp/irq.h \
     $(PROJECT_INCLUDE)/bsp/motorola.h \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
-all-local: $(PREINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
+include $(top_srcdir)/../../../../../../automake/force-preinstall.am
 include $(top_srcdir)/../../../../../../automake/local.am
