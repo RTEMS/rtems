@@ -1,8 +1,8 @@
 #
-#  Makefile for TS-1325 Utilities example
+#  Makefile for debug example
 #
 
-MAIN=ts1325_test
+MAIN=debug
 
 # Tool paths
 tooldir=/usr/local/rtems
@@ -15,20 +15,22 @@ SIZE=${tooldir}/bin/i386-rtemself-size
 SIS=${tooldir}/bin/sis
 GDB=${tooldir}/bin/sis-gdb
 
-CARGS=-B${rtemsdir}/lib/ -specs bsp_specs -qrtems \
--msoft-float -mno-fp-ret-in-387
+CINCLUDES=
 
-all: init.o 
-	$(GNATMAKE)  -O -gnata -gnatE -gnato $(MAIN) -g \
+AINCLUDES=-i -I../ts_1325_ada
+
+CARGS=-B${rtemsdir}/lib/ -specs bsp_specs -qrtems \
+	-msoft-float -mno-fp-ret-in-387
+
+all: init.o
+	$(GNATMAKE) -O2 -g -gnata -gnatE -gnato -gnatn $(AINCLUDES) $(MAIN) \
 	    -bargs -r \
 	    -cargs $(CARGS) \
 	    -largs $(CARGS) init.o
 	$(SIZE) $(MAIN)
 
-
-
 init.o: init.c
-	$(GCC) -O4 -g  -Wall -ansi -fasm $(CARGS) -c init.c
+	$(GCC) -O2 -g  -Wall -ansi -fasm $(CARGS) $(CINCLUDES) -c init.c
 
 run:
 	$(SIS) $(MAIN)	

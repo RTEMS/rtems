@@ -21,24 +21,20 @@
  */
 
 	ENTRY(_init_i386ex) ;
+
 SECTIONS
 {
 
 /***************************************************************************
  * initial section:
  *
- * This section is the first in memory, preceding the text and data sections.
- * It initializes the i386ex, sets up the gdt in RAM, loads the gdt,
+ * This subsection of ".text" is the first in memory, and executed by the DOS
+ * loader. It initializes the i386ex, sets up the gdt in RAM, loads the gdt,
  * jumps to protected mode, loads the idt, zeros the bss section, sets up
  * the stack and calls the rest of the RTEMS initialization.
  ***************************************************************************/
 
 	_DOS_ld_addr	=	0x0008000 ;
-
-	.initial _DOS_ld_addr :
-	{
-	*(.initial);
-	}
 
 /***************************************************************************
  * text section:
@@ -46,20 +42,28 @@ SECTIONS
  * Nobody here but us opcodes.
  ***************************************************************************/
 
-        .text BLOCK(0x10) :
+        .text _DOS_ld_addr :
         {
-         CREATE_OBJECT_SYMBOLS
+	CREATE_OBJECT_SYMBOLS
 	text_start = . ;
         _text_start = . ;
-        *(.text ) ;
-	. = ALIGN (16);
 
-	*(.eh_fram)
-	. = ALIGN (16);
+	*(.initial);
+	. = ALIGN(0x20);
+
+        *(.text );
+	. = ALIGN (0x20);
+
+	*(.eh_frame)
+	. = ALIGN (0x20);
+
+	*(.gnu.linkonce.t*)
+	. = ALIGN(0x20);
 
 	/*
 	 * C++ constructors
 	 */
+
 	__CTOR_LIST__ = .;
 	LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
 	*(.ctors)
@@ -71,13 +75,32 @@ SECTIONS
 	*(.dtors)
 	LONG(0)
 	__DTOR_END__ = .;
+
 	_rodata_start = . ;
 	*(.rodata)
+	. = ALIGN(0x20);
+	_erodata = .;
+
 	*(.gnu.linkonce.r*)
-	_erodata = ALIGN( 0x10 ) ;
-        _etext = ALIGN( 0x10 );
+        . = ALIGN(0x20);
 	_endtext = . ; 
         }
+
+/***************************************************************************
+ * ctor/dtor sections:
+ *
+ * These sections house the  global constructors and destructors.  
+ ***************************************************************************/
+
+	.init BLOCK(0x20) :
+	{
+	*(.init)
+	} = 0x9090
+
+	.fini BLOCK(0x20) :
+	{
+	*(.fini)
+	} = 0x9090
 
 /***************************************************************************
  * data section:
@@ -85,10 +108,15 @@ SECTIONS
  * This section defines the location of the data section in RAM.  
  ***************************************************************************/
 
-        .data  BLOCK(0x10) : 
+        .data  BLOCK(0x20) : 
         {
         _sdata = .;
         *(.data);
+	. = ALIGN(0x20);
+	*(.gnu.linkonce.d*)
+	. = ALIGN(0x20);
+	*(.gcc_except_table)
+	. = ALIGN(0x20);
         _edata = .;
    	}
         _data_size        = _edata - _sdata ;
@@ -104,9 +132,21 @@ SECTIONS
 	_bss_start = .;
 	*(.bss);
 	*(COMMON);
-	_ebss = ALIGN(0x10);
+	_ebss = ALIGN(0x20);
 	}
         _bss_size   = _ebss - _bss_start ;
+
+/***************************************************************************
+ * discard section:
+ *
+ * This section is used to throw away stuff we don't want.  
+ ***************************************************************************/
+
+	/DISCARD/ :
+	{
+	*(.comment);
+	*(.note);
+	}
 
 /***************************************************************************
  * General variables:

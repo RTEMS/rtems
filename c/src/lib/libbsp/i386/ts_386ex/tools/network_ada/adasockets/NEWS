@@ -1,0 +1,44 @@
+-*- outline -*-
+
+* New in AdaSockets 0.1.3
+
+** Support for IP multicast
+
+The package Sockets.Multicast can be used to create Multicast
+interfaces on machine that support it.
+
+** Interface changes
+
+Some functions have been transformed into procedures to ease the
+addition of multicast sockets.
+
+** New example
+
+The multi example can be used as both a multicast sender and receiver.
+
+* New in AdaSockets 0.1.2
+
+** Warning suppressed
+
+Some versions of GNAT were detecting incorrectly a missing raise in
+some cases. Signaled by Nicolas Ollinger <Nicolas.Ollinger@ens-lyon.fr>.
+
+** New example
+
+A listener example which is only a server has been added to avoid any
+confusion between clients and servers. Suggestion by Scott Moody
+<scott@plato.ds.boeing.com>.
+
+* New in AdaSockets 0.1.1
+
+** `aux' -> `support'
+
+The subdirectory `aux' in the distribution has been renamed into
+`support' to avoid a name clash on Windows NT with the standard
+peripherical `aux'. Suggestion from Juanma Barranquero
+<barranquero@laley-actualidad.es>.
+
+** Better error messages
+
+Exception raised during the connection now have messages in many cases 
+explaining why the connexion could not be made.

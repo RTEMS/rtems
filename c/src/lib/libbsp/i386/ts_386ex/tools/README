@@ -9,7 +9,7 @@ The dos_sup directory contains a DOS-based loader (loader.com) for
 RTEMS executables on the TS-1325. Fully commented source code is
 included.
 
-Once an application has been compiled and the resulting COFF
+Once an application has been compiled and the resulting ELF format
 executable converted to raw binary format and transferred to the
 TS-1325, the DOS loader program must be used to load and execute
 it. The loader is simply invoked as "loader filename", where the
@@ -20,21 +20,22 @@ the A: flash disk. Since Zmodem transfers to the C: ram disk are much
 faster than to the A: disk, most development work will be done using
 the C: disk. Once completed, an application may copied to the
 (non-volatile) A: disk. Additionally, one may add the line "loader
-filename" to the AUTOEXEC.BAT file, allow ing the application to be
+filename" to the AUTOEXEC.BAT file, allowing the application to be
 run automatically at boot time.
 
 Note that the DOS loader will abort and exit if it detects that the
 push-button switch is pressed, thus allowing one to break out of a
-patho logical "boot loop" situation.
+pathological "boot loop" situation i.e. abort an automatic load from
+the AUTOEXEC.BAT file.
 
 
-coff2bin
+elf2exe
 ========
 
-The coff2bin script is just a convenient wrapper for the objcopy
-command. It can convert a list of RTEMS-generated COFF files to raw
+The elf2exe script is just a convenient wrapper for the objcopy
+command. It can convert a list of RTEMS-generated ELF files to raw
 binary images that can be loaded on the TS-1325. The converted files
-are saved in the current directory with a ".bin" extension.
+are saved in the current directory with a ".exe" extension.
 
 
 TS-1325 Ada95 Support
@@ -42,7 +43,7 @@ TS-1325 Ada95 Support
 
 The TS-1325 includes a few peripherals which are very useful for
 embedded development: a push-button switch, an LED, and a parallel
-port which may be used for digital I/O. Note that the pinout for the
+port which may be used for digital I/O. Note that the pin-out for the
 parallel port is given in the TS-1325 manual.
 
 These devices are all supported by Ada packages allowing easy access;
@@ -64,5 +65,49 @@ Brief descriptions of the main packages are as follows:
   inline assembly.
 
 
-Tony Ambardar, 4/21/99
+Serial Debugging Support
+========================
 
+RTEMS supports an Ada95 and RTEMS aware version of the GNU gdb
+debugger, which can be configured to debug targets over a serial
+line. 
+
+The port COM2 on the TS-1325 is normally used for console I/O, leaving
+COM1 for use by gdb; an appropriate cable should be connected from the
+development host to the TS-1325's COM1. The serial port used on the host
+should match the line "target remote /dev/tty??" in the "cmds" file.
+
+Sample C and Ada95 applications showing how to add debugging support
+are given in the debug_c and debug_ada sub-directories. Once the
+debugging-enabled executable is running on the TS-1325, gdb must be
+started on the Linux host, taking as argument the RTEMS ELF executable.
+
+Using a graphical front end to gdb such as the program ddd is highly
+recommended. The script ddd-rtems shows how to invoke gdb using ddd as
+a front end.
+
+
+Ada95 Networking Support
+========================
+
+The sub-directory network_ada contains code and examples for an Ada95
+binding to BSD network sockets. The code is based on Samuel Tardieu's
+adasockets-0.1.3 package, but has been modified to work under RTEMS.
+
+The binding itself is in the adasockets sub-directory. Edit the
+Makefile to reflect your choice of installation directory, then type
+the command  "make install" to compile and install the binding. The
+file networkconfig.h should also be edited according to the RTEMS
+networking document.
+
+The directories listener and tcprelay contain networking examples that
+use the binding. The listener application simply accepts connections
+on a certain port and echoes back any received data. The tcprelay
+program accepts connections on a port and then relays all subsequent
+data to and from another remote host. The makefiles in both
+directories should be edited to reflect the installation point of the
+adasockets binding.
+
+
+
+Tony Ambardar, 8/8/99

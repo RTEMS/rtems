@@ -1,8 +1,8 @@
 #
-#  Makefile for TS-1325 Utilities example
+#  Makefile for network listener example
 #
 
-MAIN=ts1325_test
+MAIN=listener
 
 # Tool paths
 tooldir=/usr/local/rtems
@@ -15,11 +15,14 @@ SIZE=${tooldir}/bin/i386-rtemself-size
 SIS=${tooldir}/bin/sis
 GDB=${tooldir}/bin/sis-gdb
 
-CARGS=-B${rtemsdir}/lib/ -specs bsp_specs -qrtems \
--msoft-float -mno-fp-ret-in-387
+CINCLUDES=-I/usr/local/rtems/ts_386ex/lib/include/networking
+
+AINCLUDES=-i -I/usr/local/rtems/lib/adasockets
+
+CARGS=-B${rtemsdir}/lib/ -specs bsp_specs -qrtems
 
 all: init.o 
-	$(GNATMAKE)  -O -gnata -gnatE -gnato $(MAIN) -g \
+	$(GNATMAKE) -v -O -gnata -gnatE -gnato $(AINCLUDES) $(MAIN) -g \
 	    -bargs -r \
 	    -cargs $(CARGS) \
 	    -largs $(CARGS) init.o
@@ -28,7 +31,7 @@ all: init.o
 
 
 init.o: init.c
-	$(GCC) -O4 -g  -Wall -ansi -fasm $(CARGS) -c init.c
+	$(GCC) -O4 -g  -Wall -ansi -fasm $(CARGS) $(CINCLUDES) -c init.c
 
 run:
 	$(SIS) $(MAIN)	

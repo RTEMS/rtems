@@ -218,7 +218,7 @@ console_open(rtems_device_major_number major,
     NULL,	              /* firstOpen */
     console_last_close,       /* lastClose */
     NULL,                     /* poll read  */
-    BSP_uart_termios_write_com2, /* write */
+    BSP_uart_termios_write_com1, /* write */
     conSetAttr,	              /* setAttributes */
     NULL,	              /* stopRemoteTx */
     NULL,	              /* startRemoteTx */

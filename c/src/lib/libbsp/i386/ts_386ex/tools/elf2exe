@@ -1,0 +1,23 @@
+#!/bin/sh
+# Just a Q&D prog to convert a bunch of RTEMS generated ELF files to raw
+# binary images that can be loaded on the TS-1325. The converted files are
+# saved in the current directory.
+#
+# Tony Ambardar
+
+OBJCOPY=/usr/local/rtems/bin/i386-rtemself-objcopy
+
+if [ $# = 0 ]
+then
+  echo "Description: Convert RTEMS elf files to raw binary files."
+  echo "Usage: elf2exe <list-of-elf-files>"
+  echo
+  exit 1
+fi
+
+for i in $*
+do
+  OUTFILE=$(basename `echo $i | sed 's/\.[a-zA-Z0-9]*$//g'`.exe)
+  $OBJCOPY -O binary $i $OUTFILE
+done
+

@@ -78,7 +78,6 @@ void bsp_pretasking_hook(void)
     heap_size = BSP_Configuration.work_space_start -(void *) heap_start ;
     heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
 
-    heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
     bsp_libc_init((void *) heap_start, heap_size, 0);
 
 

@@ -1,0 +1,8 @@
+The code and examples in this sub-directory have been adapted from
+Samuel Tardieu's adasockets-0.1.3 library to work with RTEMS and
+FreeBSD sockets.
+
+The Ada source files which were modified are sockets-multicast.adb,
+sockets-thin.ads, sockets-constants.ads, and  sockets-naming.adb
+
+Tony Ambardar, 8/8/99

@@ -11,8 +11,8 @@ http://www.t-systems.com.
 The BSP uses software floating-point emulation, so one must build the
 cross-compilation tools with this support. The BSP also supports the
 on-board RTC, and an NE2000 compatible network card. It has been used
-successfully with C (gcc-2.8.1) and Ada95 (gnat-3.11p), including
-networking applications in both languages.
+successfully with C/C++ (egcs-1.1.2) and Ada95 (gnat-3.11p), including
+networking applications.
 
 The TS-1325 runs a version of DOS, and should be configured with a RAM
 disk and Zmodem software (see WWW site). RTEMS executables are loaded
@@ -25,19 +25,20 @@ to 115200 baud (see WWW site).
 
 A typical development cycle involves these steps:
 
-1. Cross-compile the application, yielding a COFF executable. Convert this
-   to raw binary format, using objcopy or the coff2bin script (see the
-   tools subdirectory in the BSP).
+1. Cross-compile the application, yielding an ELF executable. Convert
+   this to raw binary format, using objcopy or the elf2exe script (see
+   the tools subdirectory in the BSP).
 
-2. Use Zmodem to download the raw exec to the TS-1325's ram-disk
+2. Use Zmodem to download the raw executable to the TS-1325's ram-disk
    (faster than  the A: flash disk). A terminal program supporting
    Zmodem is needed on the host e.g. minicom under Linux.
 
 3. Use the DOS-based RTEMS loader "loader.com" (see tools
-   subdirectory) to load and run the executable.
+   subdirectory) to load and run the executable on the TS-1325.
 
-Additional documentation and support software is in the tools BSP subdirectory.
+Additional documentation and support software is in the tools subdirectory
+of the BSP.
 
 Happy Coding!
 
-Tony Ambardar, 4/21/99
+Tony Ambardar, 8/8/99

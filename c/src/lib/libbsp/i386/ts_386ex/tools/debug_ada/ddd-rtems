@@ -1,0 +1,1 @@
+ddd --debugger "i386-rtemself-gdb --nx --command=./cmds" $*
