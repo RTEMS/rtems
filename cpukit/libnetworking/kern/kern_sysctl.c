@@ -36,10 +36,8 @@
  * $FreeBSD: src/sys/kern/kern_sysctl.c,v 1.135 2002/10/27 07:12:34 rwatson Exp $
  */
 
-#ifndef __rtems__
 #include "opt_compat.h"
 #include "opt_mac.h"
-#endif
 
 #include <sys/param.h>
 #include <sys/systm.h>
@@ -73,8 +71,6 @@ static MALLOC_DEFINE(M_SYSCTLTMP, "sysctltmp", "sysctl temp output buffer");
 #define M_SYSCTLOID 1
 #define M_SYSCTLTMP 2
 #define M_ZERO      0
-
-typedef unsigned long *uintptr_t;
 
 #define mtx_lock(l)
 #define mtx_unlock(l)
