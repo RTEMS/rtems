@@ -45,7 +45,7 @@ tools directory:
 
 @example
 cd tools
-tar xzf ../archive/@value{RTEMSTAR}
+tar xjf ../archive/@value{RTEMSTAR}
 @end example
 
 This creates the directory @value{RTEMSUNTAR}.

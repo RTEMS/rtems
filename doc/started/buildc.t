@@ -130,7 +130,7 @@ command based upon the compression program used.
 @example
 cd tools
 tar xzf ../archive/TOOLNAME.tar.gz  # for gzip'ed tools
-tar xIf ../archive/TOOLNAME.tar.bz2 # for bzip'ed tools
+tar xjf ../archive/TOOLNAME.tar.bz2 # for bzip'ed tools
 @end example
 
 After the compressed tar files have been unpacked using
