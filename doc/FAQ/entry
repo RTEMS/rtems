@@ -1,3 +1,9 @@
+#
+#  $Id$
+#
+
+This is the RTEMS entry in the Crossgcc FAQ at http://www.objsw.com.
+As of 8/19/99, it has been submitted twice and the FAQ not updated.
 
 RTEMS is a freely available, royalty free real-time executive with
 multiprocessor capabilities.  RTEMS' design provides performance and
