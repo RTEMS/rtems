@@ -33,7 +33,15 @@ AC_ARG_ENABLE(ka9q, \
   yes) RTEMS_HAS_KA9Q=yes ;;
   no) RTEMS_HAS_KA9Q=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-ka9q option) ;;
-esac],[RTEMS_HAS_KA9Q=yes])
+esac],[RTEMS_HAS_KA9Q=no])
+
+AC_ARG_ENABLE(networking, \
+[  --enable-networking                enable TCP/IP stack], \
+[case "${enableval}" in
+  yes) RTEMS_HAS_NETWORKING=yes ;;
+  no) RTEMS_HAS_NETWORKING=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
+esac],[RTEMS_HAS_NETWORKING=yes])
 
 AC_ARG_ENABLE(rtems-inlines, \
 [  --enable-rtems-inlines 	    enable RTEMS inline functions (use macros)], \
@@ -372,8 +380,17 @@ else
 fi
 
 # If the KA9Q TCP/IP stack is enabled, then find all KA9Q Makefiles
+AC_MSG_CHECKING([if KA9Q networking is enabled? ])
+AC_MSG_RESULT($RTEMS_HAS_KA9Q)
 if test "$RTEMS_HAS_KA9Q" = "yes"; then
   makefiles="$makefiles c/src/lib/libka9q/Makefile"
+fi
+
+# If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
+AC_MSG_CHECKING([if networking is enabled? ])
+AC_MSG_RESULT($RTEMS_HAS_NETWORKING)
+if test "$RTEMS_HAS_NETWORKING" = "yes"; then
+  RTEMS_CHECK_MAKEFILE(c/src/lib/libnetworking)
 fi
 
 # If the C++ support is enabled, then include the Makefiles
@@ -438,6 +455,7 @@ AC_SUBST(RTEMS_LIBC_DIR)
 AC_SUBST(RTEMS_USE_OWN_PDIR)
 AC_SUBST(RTEMS_HAS_POSIX_API)
 AC_SUBST(RTEMS_HAS_KA9Q)
+AC_SUBST(RTEMS_HAS_NETWORKING)
 AC_SUBST(RTEMS_USE_MACROS)
 AC_SUBST(RTEMS_HAS_CPLUSPLUS)
 AC_SUBST(RTEMS_USE_GCC272)

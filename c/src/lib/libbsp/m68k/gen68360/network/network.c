@@ -1,5 +1,5 @@
 /*
- * RTEMS/KA9Q driver for M68360 SCC1 Ethernet
+ * RTEMS driver for M68360 SCC1 Ethernet
  *
  * W. Eric Norum
  * Saskatchewan Accelerator Laboratory
@@ -11,15 +11,20 @@
  */
 #include <bsp.h>
 #include <m68360.h>
+#include <m68360.h>
+#include <stdarg.h>
 #include <rtems/error.h>
-#include <ka9q/rtems_ka9q.h>
-#include <ka9q/global.h>
-#include <ka9q/enet.h>
-#include <ka9q/iface.h>
-#include <ka9q/netuser.h>
-#include <ka9q/trace.h>
-#include <ka9q/commands.h>
-#include <ka9q/domain.h>
+#include <rtems/rtems_bsdnet.h>
+
+#include <sys/param.h>
+#include <sys/mbuf.h>
+#include <sys/socket.h>
+#include <sys/sockio.h>
+
+#include <net/if.h>
+
+#include <netinet/in.h>
+#include <netinet/if_ether.h>
 
 /*
  * Number of SCCs supported by this driver
@@ -36,22 +41,34 @@
 #define TX_BD_PER_BUF    4
 
 /*
- * RTEMS event used by interrupt handler to signal daemons.
- * This must *not* be the same event used by the KA9Q task synchronization.
+ * RTEMS event used by interrupt handler to signal driver tasks.
+ * This must not be any of the events used by the network task synchronization.
  */
 #define INTERRUPT_EVENT	RTEMS_EVENT_1
 
 /*
- * Receive buffer size -- Allow for a full ethernet packet plus a pointer
+ * RTEMS event used to start transmit daemon.
+ * This must not be the same as INTERRUPT_EVENT.
  */
-#define RBUF_SIZE	(1520 + sizeof (struct iface *))
+#define START_TRANSMIT_EVENT	RTEMS_EVENT_2
 
 /*
- * Hardware-specific storage
+ * Receive buffer size -- Allow for a full ethernet packet including CRC
  */
-struct m360EnetDriver {
+#define RBUF_SIZE	1520
+
+#if (MCLBYTES < RBUF_SIZE)
+# error "Driver must have MCLBYTES > RBUF_SIZE"
+#endif
+
+/*
+ * Per-device data
+ */
+struct scc_softc {
+	struct arpcom		arpcom;
 	struct mbuf		**rxMbuf;
 	struct mbuf		**txMbuf;
+	int			acceptBroadcast;
 	int			rxBdCount;
 	int			txBdCount;
 	int			txBdHead;
@@ -59,8 +76,8 @@ struct m360EnetDriver {
 	int			txBdActiveCount;
 	m360BufferDescriptor_t	*rxBdBase;
 	m360BufferDescriptor_t	*txBdBase;
-	struct iface		*iface;
-	rtems_id		txWaitTid;
+	rtems_id		rxDaemonTid;
+	rtems_id		txDaemonTid;
 
 	/*
 	 * Statistics
@@ -84,7 +101,7 @@ struct m360EnetDriver {
 	unsigned long	txLostCarrier;
 	unsigned long	txRawWait;
 };
-static struct m360EnetDriver m360EnetDriver[NSCCDRIVER];
+static struct scc_softc scc_softc[NSCCDRIVER];
 
 /*
  * SCC1 interrupt handler
@@ -98,8 +115,8 @@ m360Enet_interrupt_handler (rtems_vector_number v)
 	if ((m360.scc1.sccm & 0x8) && (m360.scc1.scce & 0x8)) {
 		m360.scc1.scce = 0x8;
 		m360.scc1.sccm &= ~0x8;
-		m360EnetDriver[0].rxInterrupts++;
-		rtems_event_send (m360EnetDriver[0].iface->rxproc, INTERRUPT_EVENT);
+		scc_softc[0].rxInterrupts++;
+		rtems_event_send (scc_softc[0].rxDaemonTid, INTERRUPT_EVENT);
 	}
 
 	/*
@@ -108,8 +125,8 @@ m360Enet_interrupt_handler (rtems_vector_number v)
 	if ((m360.scc1.sccm & 0x12) && (m360.scc1.scce & 0x12)) {
 		m360.scc1.scce = 0x12;
 		m360.scc1.sccm &= ~0x12;
-		m360EnetDriver[0].txInterrupts++;
-		rtems_event_send (m360EnetDriver[0].txWaitTid, INTERRUPT_EVENT);
+		scc_softc[0].txInterrupts++;
+		rtems_event_send (scc_softc[0].txDaemonTid, INTERRUPT_EVENT);
 	}
 	m360.cisr = 1UL << 30;	/* Clear SCC1 interrupt-in-service bit */
 }
@@ -118,11 +135,11 @@ m360Enet_interrupt_handler (rtems_vector_number v)
  * Initialize the ethernet hardware
  */
 static void
-m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
+m360Enet_initialize_hardware (struct scc_softc *sc)
 {
 	int i;
 	unsigned char *hwaddr;
-	rtems_status_code sc;
+	rtems_status_code status;
 	rtems_isr_entry old_handler;
 
 	/*
@@ -148,16 +165,18 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
 	/*
 	 * Allocate mbuf pointers
 	 */
-	dp->rxMbuf = mallocw (dp->rxBdCount * sizeof *dp->rxMbuf);
-	dp->txMbuf = mallocw (dp->txBdCount * sizeof *dp->txMbuf);
+	sc->rxMbuf = malloc (sc->rxBdCount * sizeof *sc->rxMbuf, M_MBUF, M_NOWAIT);
+	sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf, M_MBUF, M_NOWAIT);
+	if (!sc->rxMbuf || !sc->txMbuf)
+		rtems_panic ("No memory for mbuf pointers");
 
 	/*
 	 * Set receiver and transmitter buffer descriptor bases
 	 */
-	dp->rxBdBase = M360AllocateBufferDescriptors(dp->rxBdCount);
-	dp->txBdBase = M360AllocateBufferDescriptors(dp->txBdCount);
-	m360.scc1p.rbase = (char *)dp->rxBdBase - (char *)&m360;
-	m360.scc1p.tbase = (char *)dp->txBdBase - (char *)&m360;
+	sc->rxBdBase = M360AllocateBufferDescriptors(sc->rxBdCount);
+	sc->txBdBase = M360AllocateBufferDescriptors(sc->txBdCount);
+	m360.scc1p.rbase = (char *)sc->rxBdBase - (char *)&m360;
+	m360.scc1p.tbase = (char *)sc->txBdBase - (char *)&m360;
 
 	/*
 	 * Send "Init parameters" command
@@ -173,7 +192,7 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
 	/*
 	 * Set maximum receive buffer length
 	 */
-	m360.scc1p.mrblr = 1520;
+	m360.scc1p.mrblr = RBUF_SIZE;
 
 	/*
 	 * Set CRC parameters
@@ -203,8 +222,8 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
 	 */
 	m360.scc1p.un.ethernet.mflr = 1518;
 	m360.scc1p.un.ethernet.minflr = 64;
-	m360.scc1p.un.ethernet.maxd1 = 1520;
-	m360.scc1p.un.ethernet.maxd2 = 1520;
+	m360.scc1p.un.ethernet.maxd1 = RBUF_SIZE;
+	m360.scc1p.un.ethernet.maxd2 = RBUF_SIZE;
 
 	/*
 	 * Clear group address hash table
@@ -217,7 +236,7 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
 	/*
 	 * Set our physical address
 	 */
-	hwaddr = dp->iface->hwaddr;
+	hwaddr = sc->arpcom.ac_enaddr;
 	m360.scc1p.un.ethernet.paddr_h = (hwaddr[5] << 8) | hwaddr[4];
 	m360.scc1p.un.ethernet.paddr_m = (hwaddr[3] << 8) | hwaddr[2];
 	m360.scc1p.un.ethernet.paddr_l = (hwaddr[1] << 8) | hwaddr[0];
@@ -238,18 +257,18 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
 	/*
 	 * Set up receive buffer descriptors
 	 */
-	for (i = 0 ; i < dp->rxBdCount ; i++)
-		(dp->rxBdBase + i)->status = 0;
+	for (i = 0 ; i < sc->rxBdCount ; i++)
+		(sc->rxBdBase + i)->status = 0;
 
 	/*
 	 * Set up transmit buffer descriptors
 	 */
-	for (i = 0 ; i < dp->txBdCount ; i++) {
-		(dp->txBdBase + i)->status = 0;
-		dp->txMbuf[i] = NULL;
+	for (i = 0 ; i < sc->txBdCount ; i++) {
+		(sc->txBdBase + i)->status = 0;
+		sc->txMbuf[i] = NULL;
 	}
-	dp->txBdHead = dp->txBdTail = 0;
-	dp->txBdActiveCount = 0;
+	sc->txBdHead = sc->txBdTail = 0;
+	sc->txBdActiveCount = 0;
 
 	/*
 	 * Clear any outstanding events
@@ -259,12 +278,12 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
 	/*
 	 * Set up interrupts
 	 */
-	sc = rtems_interrupt_catch (m360Enet_interrupt_handler,
+	status = rtems_interrupt_catch (m360Enet_interrupt_handler,
 						(m360.cicr & 0xE0) | 0x1E,
 						&old_handler);
-	if (sc != RTEMS_SUCCESSFUL)
+	if (status != RTEMS_SUCCESSFUL)
 		rtems_panic ("Can't attach M360 SCC1 interrupt handler: %s\n",
-							rtems_status_text (sc));
+						rtems_status_text (status));
 	m360.scc1.sccm = 0;	/* No interrupts unmasked till necessary */
 	m360.cimr |= (1UL << 30);	/* Enable SCC1 interrupt */
 
@@ -297,7 +316,7 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
 	 *	Wait 22 bits before looking for start of frame delimiter
 	 *	Disable full-duplex operation
 	 */
-	m360.scc1.psmr = 0x880A | (broadcastFlag ? 0 : 0x100);
+	m360.scc1.psmr = 0x880A | (sc->acceptBroadcast ? 0 : 0x100);
 
 	/*
 	 * Enable the TENA (RTS1*) pin
@@ -309,11 +328,6 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
 	m360.pcpar |=  0x1;
 	m360.pcdir &= ~0x1;
 #endif
-
-	/*
-	 * Enable receiver and transmitter
-	 */
-	m360.scc1.gsmr_l = 0x1088003c;
 }
 
 /*
@@ -325,16 +339,17 @@ m360Enet_initialize_hardware (struct m360EnetDriver *dp, int broadcastFlag)
  * ready bit cleared by the CPM".
  */
 static void
-m360Enet_retire_tx_bd (struct m360EnetDriver *dp)
+m360Enet_retire_tx_bd (struct scc_softc *sc)
 {
 	rtems_unsigned16 status;
 	int i;
 	int nRetired;
+	struct mbuf *m, *n;
 
-	i = dp->txBdTail;
+	i = sc->txBdTail;
 	nRetired = 0;
-	while ((dp->txBdActiveCount != 0)
-	   &&  (((status = (dp->txBdBase + i)->status) & M360_BD_READY) == 0)) {
+	while ((sc->txBdActiveCount != 0)
+	   &&  (((status = (sc->txBdBase + i)->status) & M360_BD_READY) == 0)) {
 		/*
 		 * See if anything went wrong
 		 */
@@ -351,11 +366,11 @@ m360Enet_retire_tx_bd (struct m360EnetDriver *dp)
 					M360_BD_RETRY_LIMIT |
 					M360_BD_UNDERRUN)) {
 				if (status & M360_BD_LATE_COLLISION)
-					m360EnetDriver[0].txLateCollision++;
+					scc_softc[0].txLateCollision++;
 				if (status & M360_BD_RETRY_LIMIT)
-					m360EnetDriver[0].txRetryLimit++;
+					scc_softc[0].txRetryLimit++;
 				if (status & M360_BD_UNDERRUN)
-					m360EnetDriver[0].txUnderrun++;
+					scc_softc[0].txUnderrun++;
 
 				/*
 				 * Restart the transmitter
@@ -363,11 +378,11 @@ m360Enet_retire_tx_bd (struct m360EnetDriver *dp)
 				M360ExecuteRISC (M360_CR_OP_RESTART_TX | M360_CR_CHAN_SCC1);
 			}
 			if (status & M360_BD_DEFER)
-				m360EnetDriver[0].txDeferred++;
+				scc_softc[0].txDeferred++;
 			if (status & M360_BD_HEARTBEAT)
-				m360EnetDriver[0].txHeartbeat++;
+				scc_softc[0].txHeartbeat++;
 			if (status & M360_BD_CARRIER_LOST)
-				m360EnetDriver[0].txLostCarrier++;
+				scc_softc[0].txLostCarrier++;
 		}
 		nRetired++;
 		if (status & M360_BD_LAST) {
@@ -375,181 +390,45 @@ m360Enet_retire_tx_bd (struct m360EnetDriver *dp)
 			 * A full frame has been transmitted.
 			 * Free all the associated buffer descriptors.
 			 */
-			dp->txBdActiveCount -= nRetired;
+			sc->txBdActiveCount -= nRetired;
 			while (nRetired) {
 				nRetired--;
-				free_mbuf (&dp->txMbuf[dp->txBdTail]);
-				if (++dp->txBdTail == dp->txBdCount)
-					dp->txBdTail = 0;
+				m = sc->txMbuf[sc->txBdTail];
+				MFREE (m, n);
+				if (++sc->txBdTail == sc->txBdCount)
+					sc->txBdTail = 0;
 			}
 		}
-		if (++i == dp->txBdCount)
+		if (++i == sc->txBdCount)
 			i = 0;
 	}
-}
-
-/*
- * Send raw packet (caller provides header).
- * This code runs in the context of the interface transmit
- * task or in the context of the network task.
- */
-static int
-m360Enet_raw (struct iface *iface, struct mbuf **bpp)
-{
-	struct m360EnetDriver *dp = &m360EnetDriver[iface->dev];
-	struct mbuf *bp;
-	volatile m360BufferDescriptor_t *firstTxBd, *txBd;
-	rtems_unsigned16 status;
-	int nAdded;
-
-	/*
-	 * Fill in some logging data
-	 */
-	iface->rawsndcnt++;
-	iface->lastsent = secclock ();
-	dump (iface, IF_TRACE_OUT, *bpp);
-
-	/*
-	 * It would not do to have two tasks active in the transmit
-	 * loop at the same time.
-	 * The blocking is simple-minded since the odds of two tasks
-	 * simultaneously attempting to use this code are low.  The only
-	 * way that two tasks can try to run here is:
-	 *	1) Task A enters this code and ends up having to
-	 *	   wait for a transmit buffer descriptor.
-	 *	2) Task B  gains control and tries to transmit a packet.
-	 * The RTEMS/KA9Q scheduling semaphore ensures that there
-	 * are no race conditions associated with manipulating the
-	 * txWaitTid variable.
-	 */
-	if (dp->txWaitTid) {
-		dp->txRawWait++;
-		while (dp->txWaitTid)
-			rtems_ka9q_ppause (10);
-	}
-
-	/*
-	 * Free up buffer descriptors
-	 */
-	m360Enet_retire_tx_bd (dp);
-
-	/*
-	 * Set up the transmit buffer descriptors.
-	 * No need to pad out short packets since the
-	 * hardware takes care of that automatically.
-	 * No need to copy the packet to a contiguous buffer
-	 * since the hardware is capable of scatter/gather DMA.
-	 */
-	bp = *bpp;
-	nAdded = 0;
-	txBd = firstTxBd = dp->txBdBase + dp->txBdHead;
-	for (;;) {
-		/*
-		 * Wait for buffer descriptor to become available.
-		 */
-		if ((dp->txBdActiveCount + nAdded) == dp->txBdCount) {
-			/*
-			 * Find out who we are
-			 */
-			if (dp->txWaitTid == 0)
-				rtems_task_ident (0, 0, &dp->txWaitTid);
-
-			/*
-			 * Clear old events
-			 */
-			m360.scc1.scce = 0x12;
-
-			/*
-			 * Wait for buffer descriptor to become available.
-			 * Note that the buffer descriptors are checked
-			 * *before* * entering the wait loop -- this catches
-			 * the possibility that a buffer descriptor became
-			 * available between the `if' above, and the clearing
-			 * of the event register.
-			 * This is to catch the case where the transmitter
-			 * stops in the middle of a frame -- and only the
-			 * last buffer descriptor in a frame can generate
-			 * an interrupt.
-			 */
-			m360Enet_retire_tx_bd (dp);
-			while ((dp->txBdActiveCount + nAdded) == dp->txBdCount) {
-				/*
-				 * Unmask TXB (buffer transmitted) and
-				 * TXE (transmitter error) events.
-				 */
-				m360.scc1.sccm |= 0x12;
-
-				rtems_ka9q_event_receive (INTERRUPT_EVENT,
-						RTEMS_WAIT|RTEMS_EVENT_ANY,
-						RTEMS_NO_TIMEOUT);
-				m360Enet_retire_tx_bd (dp);
-			}
-		}
-
-		/*
-		 * Fill in the buffer descriptor
-		 */
-		txBd->buffer = bp->data;
-		txBd->length = bp->cnt;
-		dp->txMbuf[dp->txBdHead] = bp;
-
-		/*
-		 * Don't set the READY flag till the whole packet has been readied.
-		 */
-		status = nAdded ? M360_BD_READY : 0;
-		nAdded++;
-		if (++dp->txBdHead == dp->txBdCount) {
-			status |= M360_BD_WRAP;
-			dp->txBdHead = 0;
-		}
-
-		/*
-		 * Set the transmit buffer status.
-		 * Break out of the loop if this mbuf is the last in the frame.
-		 */
-		if ((bp = bp->next) == NULL) {
-			status |= M360_BD_PAD | M360_BD_LAST | M360_BD_TX_CRC | M360_BD_INTERRUPT;
-			txBd->status = status;
-			firstTxBd->status |= M360_BD_READY;
-			dp->txBdActiveCount += nAdded;
-			break;
-		}
-		txBd->status = status;
-		txBd = dp->txBdBase + dp->txBdHead;
-	}
-
-	/*
-	 * Show that we've finished with the packet
-	 */
-	dp->txWaitTid = 0;
-	*bpp = NULL;
-	return 0;
 }
 
 /*
  * SCC reader task
  */
 static void
-m360Enet_rx (int dev, void *p1, void *p2)
+scc_rxDaemon (void *arg)
 {
-	struct iface *iface = (struct iface *)p1;
-	struct m360EnetDriver *dp = (struct m360EnetDriver *)p2;
-	struct mbuf *bp;
+	struct scc_softc *sc = (struct scc_softc *)arg;
+	struct ifnet *ifp = &sc->arpcom.ac_if;
+	struct mbuf *m;
 	rtems_unsigned16 status;
 	m360BufferDescriptor_t *rxBd;
 	int rxBdIndex;
-	int continuousCount;
 
 	/*
 	 * Allocate space for incoming packets and start reception
 	 */
 	for (rxBdIndex = 0 ; ;) {
-		rxBd = dp->rxBdBase + rxBdIndex;
-		dp->rxMbuf[rxBdIndex] = bp = ambufw (RBUF_SIZE);
-		bp->data += sizeof (struct iface *);
-		rxBd->buffer = bp->data;
+		rxBd = sc->rxBdBase + rxBdIndex;
+		MGETHDR (m, M_WAIT, MT_DATA);
+		MCLGET (m, M_WAIT);
+		m->m_pkthdr.rcvif = ifp;
+		sc->rxMbuf[rxBdIndex] = m;
+		rxBd->buffer = mtod (m, void *);
 		rxBd->status = M360_BD_EMPTY | M360_BD_INTERRUPT;
-		if (++rxBdIndex == dp->rxBdCount) {
+		if (++rxBdIndex == sc->rxBdCount) {
 			rxBd->status |= M360_BD_WRAP;
 			break;
 		}
@@ -558,20 +437,14 @@ m360Enet_rx (int dev, void *p1, void *p2)
 	/*
 	 * Input packet handling loop
 	 */
-	continuousCount = 0;
 	rxBdIndex = 0;
 	for (;;) {
-		rxBd = dp->rxBdBase + rxBdIndex;
+		rxBd = sc->rxBdBase + rxBdIndex;
 
 		/*
 		 * Wait for packet if there's not one ready
 		 */
 		if ((status = rxBd->status) & M360_BD_EMPTY) {
-			/*
-			 * Reset `continuous-packet' count
-			 */
-			continuousCount = 0;
-
 			/*
 			 * Clear old events
 			 */
@@ -585,14 +458,17 @@ m360Enet_rx (int dev, void *p1, void *p2)
 			 * `if' above, and the clearing of the event register.
 			 */
 			while ((status = rxBd->status) & M360_BD_EMPTY) {
+				rtems_event_set events;
+
 				/*
 				 * Unmask RXF (Full frame received) event
 				 */
 				m360.scc1.sccm |= 0x8;
 
-				rtems_ka9q_event_receive (INTERRUPT_EVENT,
+				rtems_bsdnet_event_receive (INTERRUPT_EVENT,
 						RTEMS_WAIT|RTEMS_EVENT_ANY,
-						RTEMS_NO_TIMEOUT);
+						RTEMS_NO_TIMEOUT,
+						&events);
 			}
 		}
 
@@ -610,56 +486,49 @@ m360Enet_rx (int dev, void *p1, void *p2)
 						(M360_BD_LAST |
 						M360_BD_FIRST_IN_FRAME)) {
 			/*
-			 * Pass the packet up the chain
-			 * The mbuf count is reduced to remove
-			 * the frame check sequence at the end
-			 * of the packet.
+			 * Pass the packet up the chain.
+			 * FIXME: Packet filtering hook could be done here.
 			 */
-			bp = dp->rxMbuf[rxBdIndex];
-			bp->cnt = rxBd->length - sizeof (uint32);
-			net_route (iface, &bp);
+			struct ether_header *eh;
+			int s;
 
-			/*
-			 * Give the network code a chance to digest the
-			 * packet.  This guards against a flurry of 
-			 * incoming packets (usually an ARP storm) from
-			 * using up all the available memory.
-			 */
-			if (++continuousCount >= dp->rxBdCount)
-				kwait_null ();
+			m = sc->rxMbuf[rxBdIndex];
+			m->m_len = m->m_pkthdr.len = rxBd->length -
+						sizeof(rtems_unsigned32) -
+						sizeof(struct ether_header);
+			eh = mtod (m, struct ether_header *);
+			m->m_data += sizeof(struct ether_header);
+			ether_input (ifp, eh, m);
 
 			/*
 			 * Allocate a new mbuf
-			 * FIXME: It seems to me that it would be better
-			 * if there were some way to limit number of mbufs
-			 * in use by this interface, but I don't see any
-			 * way of determining when the mbuf we pass up
-			 * is freed.
 			 */
-			dp->rxMbuf[rxBdIndex] = bp = ambufw (RBUF_SIZE);
-			bp->data += sizeof (struct iface *);
-			rxBd->buffer = bp->data;
+			MGETHDR (m, M_WAIT, MT_DATA);
+			MCLGET (m, M_WAIT);
+			m->m_pkthdr.rcvif = ifp;
+			sc->rxMbuf[rxBdIndex] = m;
+			rxBd->buffer = mtod (m, void *);
 		}
 		else {
 			/*
 			 * Something went wrong with the reception
 			 */
 			if (!(status & M360_BD_LAST))
-				dp->rxNotLast++;
+				sc->rxNotLast++;
 			if (!(status & M360_BD_FIRST_IN_FRAME))
-				dp->rxNotFirst++;
+				sc->rxNotFirst++;
 			if (status & M360_BD_LONG)
-				dp->rxGiant++;
+				sc->rxGiant++;
 			if (status & M360_BD_NONALIGNED)
-				dp->rxNonOctet++;
+				sc->rxNonOctet++;
 			if (status & M360_BD_SHORT)
-				dp->rxRunt++;
+				sc->rxRunt++;
 			if (status & M360_BD_CRC_ERROR)
-				dp->rxBadCRC++;
+				sc->rxBadCRC++;
 			if (status & M360_BD_OVERRUN)
-				dp->rxOverrun++;
+				sc->rxOverrun++;
 			if (status & M360_BD_COLLISION)
-				dp->rxCollision++;
+				sc->rxCollision++;
 		}
 
 		/*
@@ -670,230 +539,416 @@ m360Enet_rx (int dev, void *p1, void *p2)
 		/*
 		 * Move to next buffer descriptor
 		 */
-		if (++rxBdIndex == dp->rxBdCount)
+		if (++rxBdIndex == sc->rxBdCount)
 			rxBdIndex = 0;
 	}
 }
 
-/*
- * Shut down the interface
- * FIXME: This is a pretty simple-minded routine.  It doesn't worry
- * about cleaning up mbufs, shutting down daemons, etc.
- */
-static int
-m360Enet_stop (struct iface *iface)
+static void
+sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
-	/*
-	 * Stop the transmitter
-	 */
-	M360ExecuteRISC (M360_CR_OP_GR_STOP_TX | M360_CR_CHAN_SCC1);
+	struct scc_softc *sc = ifp->if_softc;
+	volatile m360BufferDescriptor_t *firstTxBd, *txBd;
+	struct mbuf *l = NULL;
+	rtems_unsigned16 status;
+	int nAdded;
 
 	/*
-	 * Wait for graceful stop
-	 * FIXME: Maybe there should be a watchdog loop around this....
+	 * Free up buffer descriptors
 	 */
-	while ((m360.scc1.scce & 0x80) == 0)
-		continue;
+	m360Enet_retire_tx_bd (sc);
+
+	/*
+	 * Set up the transmit buffer descriptors.
+	 * No need to pad out short packets since the
+	 * hardware takes care of that automatically.
+	 * No need to copy the packet to a contiguous buffer
+	 * since the hardware is capable of scatter/gather DMA.
+	 */
+	nAdded = 0;
+	txBd = firstTxBd = sc->txBdBase + sc->txBdHead;
+	for (;;) {
+		/*
+		 * Wait for buffer descriptor to become available.
+		 */
+		if ((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
+			/*
+			 * Clear old events
+			 */
+			m360.scc1.scce = 0x12;
+
+			/*
+			 * Wait for buffer descriptor to become available.
+			 * Note that the buffer descriptors are checked
+			 * *before* * entering the wait loop -- this catches
+			 * the possibility that a buffer descriptor became
+			 * available between the `if' above, and the clearing
+			 * of the event register.
+			 * This is to catch the case where the transmitter
+			 * stops in the middle of a frame -- and only the
+			 * last buffer descriptor in a frame can generate
+			 * an interrupt.
+			 */
+			m360Enet_retire_tx_bd (sc);
+			while ((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
+				rtems_event_set events;
+
+				/*
+				 * Unmask TXB (buffer transmitted) and
+				 * TXE (transmitter error) events.
+				 */
+				m360.scc1.sccm |= 0x12;
+				rtems_bsdnet_event_receive (INTERRUPT_EVENT,
+						RTEMS_WAIT|RTEMS_EVENT_ANY,
+						RTEMS_NO_TIMEOUT,
+						&events);
+				m360Enet_retire_tx_bd (sc);
+			}
+		}
+
+		/*
+		 * Don't set the READY flag till the
+		 * whole packet has been readied.
+		 */
+		status = nAdded ? M360_BD_READY : 0;
+
+		/*
+		 *  FIXME: Why not deal with empty mbufs at at higher level?
+		 * The IP fragmentation routine in ip_output
+		 * can produce packet fragments with zero length.
+		 * I think that ip_output should be changed to get
+		 * rid of these zero-length mbufs, but for now,
+		 * I'll deal with them here.
+		 */
+		if (m->m_len) {
+			/*
+			 * Fill in the buffer descriptor
+			 */
+			txBd->buffer = mtod (m, void *);
+			txBd->length = m->m_len;
+			sc->txMbuf[sc->txBdHead] = m;
+			nAdded++;
+			if (++sc->txBdHead == sc->txBdCount) {
+				status |= M360_BD_WRAP;
+				sc->txBdHead = 0;
+			}
+			l = m;
+			m = m->m_next;
+		}
+		else {
+			/*
+			 * Just toss empty mbufs
+			 */
+			struct mbuf *n;
+			MFREE (m, n);
+			m = n;
+			if (l != NULL)
+				l->m_next = m;
+		}
+
+		/*
+		 * Set the transmit buffer status.
+		 * Break out of the loop if this mbuf is the last in the frame.
+		 */
+		if (m == NULL) {
+			if (nAdded) {
+				status |= M360_BD_PAD | M360_BD_LAST | M360_BD_TX_CRC | M360_BD_INTERRUPT;
+				txBd->status = status;
+				firstTxBd->status |= M360_BD_READY;
+				sc->txBdActiveCount += nAdded;
+			}
+			break;
+		}
+		txBd->status = status;
+		txBd = sc->txBdBase + sc->txBdHead;
+	}
+}
+
+/*
+ * Driver transmit daemon
+ */
+void
+scc_txDaemon (void *arg)
+{
+	struct scc_softc *sc = (struct scc_softc *)arg;
+	struct ifnet *ifp = &sc->arpcom.ac_if;
+	struct mbuf *m;
+	rtems_event_set events;
+
+	for (;;) {
+		/*
+		 * Wait for packet
+		 */
+		rtems_bsdnet_event_receive (START_TRANSMIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, RTEMS_NO_TIMEOUT, &events);
+
+		/*
+		 * Send packets till queue is empty
+		 */
+		for (;;) {
+			/*
+			 * Get the next mbuf chain to transmit.
+			 */
+			IF_DEQUEUE(&ifp->if_snd, m);
+			if (!m)
+				break;
+			sendpacket (ifp, m);
+		}
+		ifp->if_flags &= ~IFF_OACTIVE;
+	}
+}
+
+/*
+ * Send packet (caller provides header).
+ */
+static void
+scc_start (struct ifnet *ifp)
+{
+	struct scc_softc *sc = ifp->if_softc;
+
+	rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+	ifp->if_flags |= IFF_OACTIVE;
+}
+
+/*
+ * Initialize and start the device
+ */
+static void
+scc_init (void *arg)
+{
+	struct scc_softc *sc = arg;
+	struct ifnet *ifp = &sc->arpcom.ac_if;
+
+	if (sc->txDaemonTid == 0) {
+
+		/*
+		 * Set up SCC hardware
+		 */
+		m360Enet_initialize_hardware (sc);
+
+		/*
+		 * Start driver tasks
+		 */
+		sc->txDaemonTid = rtems_bsdnet_newproc ("SCtx", 4096, scc_txDaemon, sc);
+		sc->rxDaemonTid = rtems_bsdnet_newproc ("SCrx", 4096, scc_rxDaemon, sc);
+
+	}
+
+	/*
+	 * Set flags appropriately
+	 */
+	if (ifp->if_flags & IFF_PROMISC)
+		m360.scc1.psmr |= 0x200;
+	else
+		m360.scc1.psmr &= ~0x200;
+
+	/*
+	 * Tell the world that we're running.
+	 */
+	ifp->if_flags |= IFF_RUNNING;
+
+	/*
+	 * Enable receiver and transmitter
+	 */
+	m360.scc1.gsmr_l |= 0x30;
+}
+
+/*
+ * Stop the device
+ */
+static void
+scc_stop (struct scc_softc *sc)
+{
+	struct ifnet *ifp = &sc->arpcom.ac_if;
+
+	ifp->if_flags &= ~IFF_RUNNING;
 
 	/*
 	 * Shut down receiver and transmitter
 	 */
 	m360.scc1.gsmr_l &= ~0x30;
-	return 0;
 }
+
 
 /*
  * Show interface statistics
  */
 static void
-m360Enet_show (struct iface *iface)
+scc_stats (struct scc_softc *sc)
 {
-	printf ("      Rx Interrupts:%-8lu", m360EnetDriver[0].rxInterrupts);
-	printf ("       Not First:%-8lu", m360EnetDriver[0].rxNotFirst);
-	printf ("        Not Last:%-8lu\n", m360EnetDriver[0].rxNotLast);
-	printf ("              Giant:%-8lu", m360EnetDriver[0].rxGiant);
-	printf ("            Runt:%-8lu", m360EnetDriver[0].rxRunt);
-	printf ("       Non-octet:%-8lu\n", m360EnetDriver[0].rxNonOctet);
-	printf ("            Bad CRC:%-8lu", m360EnetDriver[0].rxBadCRC);
-	printf ("         Overrun:%-8lu", m360EnetDriver[0].rxOverrun);
-	printf ("       Collision:%-8lu\n", m360EnetDriver[0].rxCollision);
+	printf ("      Rx Interrupts:%-8lu", sc->rxInterrupts);
+	printf ("       Not First:%-8lu", sc->rxNotFirst);
+	printf ("        Not Last:%-8lu\n", sc->rxNotLast);
+	printf ("              Giant:%-8lu", sc->rxGiant);
+	printf ("            Runt:%-8lu", sc->rxRunt);
+	printf ("       Non-octet:%-8lu\n", sc->rxNonOctet);
+	printf ("            Bad CRC:%-8lu", sc->rxBadCRC);
+	printf ("         Overrun:%-8lu", sc->rxOverrun);
+	printf ("       Collision:%-8lu\n", sc->rxCollision);
 	printf ("          Discarded:%-8lu\n", (unsigned long)m360.scc1p.un.ethernet.disfc);
 
-	printf ("      Tx Interrupts:%-8lu", m360EnetDriver[0].txInterrupts);
-	printf ("        Deferred:%-8lu", m360EnetDriver[0].txDeferred);
-	printf (" Missed Hearbeat:%-8lu\n", m360EnetDriver[0].txHeartbeat);
-	printf ("         No Carrier:%-8lu", m360EnetDriver[0].txLostCarrier);
-	printf ("Retransmit Limit:%-8lu", m360EnetDriver[0].txRetryLimit);
-	printf ("  Late Collision:%-8lu\n", m360EnetDriver[0].txLateCollision);
-	printf ("           Underrun:%-8lu", m360EnetDriver[0].txUnderrun);
-	printf (" Raw output wait:%-8lu\n", m360EnetDriver[0].txRawWait);
+	printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
+	printf ("        Deferred:%-8lu", sc->txDeferred);
+	printf (" Missed Hearbeat:%-8lu\n", sc->txHeartbeat);
+	printf ("         No Carrier:%-8lu", sc->txLostCarrier);
+	printf ("Retransmit Limit:%-8lu", sc->txRetryLimit);
+	printf ("  Late Collision:%-8lu\n", sc->txLateCollision);
+	printf ("           Underrun:%-8lu", sc->txUnderrun);
+	printf (" Raw output wait:%-8lu\n", sc->txRawWait);
+}
+
+/*
+ * Driver ioctl handler
+ */
+static int
+scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
+{
+	struct ifaddr *ifa = (struct ifaddr *)data;
+	struct scc_softc *sc = ifp->if_softc;
+	struct ifreq *ifr = (struct ifreq *) data;
+	int error = 0;
+
+	switch (command) {
+	case SIOCGIFADDR:
+	case SIOCSIFADDR:
+		ether_ioctl (ifp, command, data);
+		break;
+
+	case SIOCSIFFLAGS:
+		switch (ifp->if_flags & (IFF_UP | IFF_RUNNING)) {
+		case IFF_RUNNING:
+			scc_stop (sc);
+			break;
+
+		case IFF_UP:
+			scc_init (sc);
+			break;
+
+		case IFF_UP | IFF_RUNNING:
+			scc_stop (sc);
+			scc_init (sc);
+			break;
+
+		default:
+			break;
+		}
+		break;
+
+	case SIO_RTEMS_SHOW_STATS:
+		scc_stats (sc);
+		break;
+		
+	/*
+	 * FIXME: All sorts of multicast commands need to be added here!
+	 */
+	default:
+		error = EINVAL;
+		break;
+	}
+	return error;
 }
 
 /*
  * Attach an SCC driver to the system
- * This is the only `extern' function in the driver.
- *
- * argv[0]: interface label, e.g., "rtems"
- * The remainder of the arguemnts are key/value pairs:
- * mtu ##                  --  maximum transmission unit, default 1500
- * broadcast y/n           -- accept or ignore broadcast packets, default yes
- * rbuf ##                 -- Set number of receive buffer descriptors
- * rbuf ##                 -- Set number of transmit buffer descriptors
- * ip ###.###.###.###      -- IP address
- * ether ##:##:##:##:##:## -- Ethernet address
- * ether prom              -- Get Ethernet address from bootstrap PROM
  */
 int
-rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
+rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
 {
-	struct iface *iface;
-	struct m360EnetDriver *dp;
-	char *cp;
+	struct scc_softc *sc;
+	struct ifnet *ifp;
+	int mtu;
 	int i;
-	int argIndex;
-	int broadcastFlag;
-	char cbuf[30];
 
 	/*
 	 * Find a free driver
 	 */
 	for (i = 0 ; i < NSCCDRIVER ; i++) {
-		if (m360EnetDriver[i].iface == NULL)
+		sc = &scc_softc[i];
+		ifp = &sc->arpcom.ac_if;
+		if (ifp->if_softc == NULL)
 			break;
 	}
 	if (i >= NSCCDRIVER) {
 		printf ("Too many SCC drivers.\n");
-		return -1;
+		return 0;
 	}
-	if (if_lookup (argv[0]) != NULL) {
-		printf ("Interface %s already exists\n", argv[0]);
-		return -1;
+
+	/*
+	 * Process options
+	 */
+	if (config->hardware_address) {
+		memcpy (sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
 	}
-	dp = &m360EnetDriver[i];
+	else {
+		/*
+		 * The first 4 bytes of the bootstrap prom
+		 * contain the value loaded into the stack
+		 * pointer as part of the CPU32's hardware
+		 * reset exception handler.  The following
+		 * 4 bytes contain the value loaded into the
+		 * program counter.  The boards' Ethernet
+		 * address is stored in the six bytes
+		 * immediately preceding this initial
+		 * program counter value.
+		 *
+		 * See start360/start360.s.
+		 */
+		extern void *_RomBase;	/* From linkcmds */
+		const unsigned long *ExceptionVectors;
+		const unsigned char *entryPoint;
 
-	/*
-	 * Create an inteface descriptor
-	 */
-	iface = callocw (1, sizeof *iface);
-	iface->name = strdup (argv[0]);
-
-	/*
-	 * Set default values
-	 */
-	broadcastFlag = 1;
-	dp->txWaitTid = 0;
-	dp->rxBdCount = RX_BUF_COUNT;
-	dp->txBdCount = TX_BUF_COUNT * TX_BD_PER_BUF;
-	iface->mtu = 1500;
-	iface->addr = Ip_addr;
-	iface->hwaddr = mallocw (EADDR_LEN);
-	memset (iface->hwaddr, 0x08, EADDR_LEN);
-
-	/*
-	 * Parse arguments
-	 */
-	for (argIndex = 1 ; argIndex < (argc - 1) ; argIndex++) {
-		if (strcmp ("mtu", argv[argIndex]) == 0) {
-			iface->mtu = atoi (argv[++argIndex]);
-		}
-		else if (strcmp ("broadcast", argv[argIndex]) == 0) {
-			if (*argv[++argIndex] == 'n')
-				broadcastFlag = 0;
-		}
-		else if (strcmp ("rbuf", argv[argIndex]) == 0) {
-			dp->rxBdCount = atoi (argv[++argIndex]);
-		}
-		else if (strcmp ("tbuf", argv[argIndex]) == 0) {
-			dp->txBdCount = atoi (argv[++argIndex]) * TX_BD_PER_BUF;
-		}
-		else if (strcmp ("ip", argv[argIndex]) == 0) {
-			iface->addr = resolve (argv[++argIndex]);
-		}
-		else if (strcmp ("ether", argv[argIndex]) == 0) {
-			argIndex++;
-			if (strcmp (argv[argIndex], "prom") == 0) {
-				/*
-				 * The first 4 bytes of the bootstrap prom
-				 * contain the value loaded into the stack
-				 * pointer as part of the CPU32's hardware
-				 * reset exception handler.  The following
-				 * 4 bytes contain the value loaded into the
-				 * program counter.  The boards' Ethernet
-				 * address is stored in the six bytes
-				 * immediately preceding this initial
-				 * program counter value.
-				 *
-				 * See start360/start360.s.
-				 */
-				extern void *_RomBase;	/* From linkcmds */
-				const unsigned long *ExceptionVectors;
-				const unsigned char *entryPoint;
-
-				/*
-				 * Sanity check -- assume entry point must be
-				 * within 1 MByte of beginning of boot ROM.
-				 */
-				ExceptionVectors = (const unsigned long *)&_RomBase;
-				entryPoint = (const unsigned char *)ExceptionVectors[1];
-				if (((unsigned long)entryPoint - (unsigned long)ExceptionVectors)
-							>= (1 * 1024 * 1024)) {
-					printf ("Warning -- Ethernet address can not be found in bootstrap PROM.\n");
-					iface->hwaddr[0] = 0x08;
-					iface->hwaddr[1] = 0xF3;
-					iface->hwaddr[2] = 0x3E;
-					iface->hwaddr[3] = 0xC2;
-					iface->hwaddr[4] = 0xE7;
-					iface->hwaddr[5] = 0x08;
-				}
-				else {
-					memcpy (iface->hwaddr, entryPoint - 6, 6);
-				}
-			}
-			else {
-				gether (iface->hwaddr, argv[argIndex]);
-			}
+		/*
+		 * Sanity check -- assume entry point must be
+		 * within 1 MByte of beginning of boot ROM.
+		 */
+		ExceptionVectors = (const unsigned long *)&_RomBase;
+		entryPoint = (const unsigned char *)ExceptionVectors[1];
+		if (((unsigned long)entryPoint - (unsigned long)ExceptionVectors)
+					>= (1 * 1024 * 1024)) {
+			printf ("Warning -- Ethernet address can not be found in bootstrap PROM.\n");
+			sc->arpcom.ac_enaddr[0] = 0x08;
+			sc->arpcom.ac_enaddr[1] = 0xF3;
+			sc->arpcom.ac_enaddr[2] = 0x3E;
+			sc->arpcom.ac_enaddr[3] = 0xC2;
+			sc->arpcom.ac_enaddr[4] = 0x7E;
+			sc->arpcom.ac_enaddr[5] = 0x38;
 		}
 		else {
-			printf ("Argument %d (%s) is invalid.\n", argIndex, argv[argIndex]);
-			return -1;
+			memcpy (sc->arpcom.ac_enaddr, entryPoint - ETHER_ADDR_LEN, ETHER_ADDR_LEN);
 		}
 	}
-	printf ("Ethernet address: %s\n", pether (cbuf, iface->hwaddr));
+	if (config->mtu)
+		mtu = config->mtu;
+	else
+		mtu = ETHERMTU;
+	if (config->rbuf_count)
+		sc->rxBdCount = config->rbuf_count;
+	else
+		sc->rxBdCount = RX_BUF_COUNT;
+	if (config->xbuf_count)
+		sc->txBdCount = config->xbuf_count;
+	else
+		sc->txBdCount = TX_BUF_COUNT * TX_BD_PER_BUF;
+	sc->acceptBroadcast = !config->ignore_broadcast;
 
 	/*
-	 * Fill in remainder of interface configuration
+	 * Set up network interface values
 	 */
-	iface->dev = i;
-	iface->raw = m360Enet_raw;
-	iface->stop = m360Enet_stop;
-	iface->show = m360Enet_show;
-	dp->iface = iface;
-	setencap (iface, "Ethernet");
+	ifp->if_softc = sc;
+	ifp->if_unit = i + 1;
+	ifp->if_name = "scc";
+	ifp->if_mtu = mtu;
+	ifp->if_init = scc_init;
+	ifp->if_ioctl = scc_ioctl;
+	ifp->if_start = scc_start;
+	ifp->if_output = ether_output;
+	ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
+	if (ifp->if_snd.ifq_maxlen == 0)
+		ifp->if_snd.ifq_maxlen = ifqmaxlen;
 
 	/*
-	 * Set up SCC hardware
+	 * Attach the interface
 	 */
-	m360Enet_initialize_hardware (dp, broadcastFlag);
-
-	/*
-	 * Chain onto list of interfaces
-	 */
-	iface->next = Ifaces;
-	Ifaces = iface;
-
-	/*
-	 * Start I/O daemons
-	 */
-	cp = if_name (iface, " tx");
-	iface->txproc = newproc (cp, 1024, if_tx, iface->dev, iface, NULL, 0);
-	free (cp);
-	cp = if_name (iface, " rx");
-	iface->rxproc = newproc (cp, 1024, m360Enet_rx, iface->dev, iface, dp, 0);
-	free (cp);
-	return 0;
-}
-
-/*
- * FIXME: There should be an ioctl routine to allow things like
- * enabling/disabling reception of broadcast packets.
- */
+	if_attach (ifp);
+	ether_ifattach (ifp);
+	return 1;
+};

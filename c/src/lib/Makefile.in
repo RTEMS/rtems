@@ -15,6 +15,12 @@ include $(RTEMS_ROOT)/make/directory.cfg
 LIBKA9Q_yes_V = libka9q
 LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
 
+# We only build the networking library if HAS_NETWORKING was defined
+LIBNETWORKING_yes_V = libnetworking
+LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
+NETWORKING_INCLUDE_yes_V = libnetworking/include
+NETWORKING_INCLUDE = $(NETWORKING_INCLUDE_$(HAS_NETWORKING)_V)
+
 # We only build the rtems++ library if HAS_CPLUSPLUS was defined
 LIBRTEMSCPLUSPLUS_yes_V = librtems++
 LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
@@ -22,5 +28,5 @@ LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 # General Hardware API library 
 LIBHWAPI=$(wildcard libhwapi)
 
-SUB_DIRS=start include libmisc libc libcpu libbsp \
-         $(LIBKA9Q) $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup
+SUB_DIRS=start include $(NETWORKING_INCLUDE) libmisc libc libcpu libbsp \
+         $(LIBKA9Q) $(LIBNETWORKING) $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup

@@ -14,11 +14,16 @@ include $(RTEMS_ROOT)/make/directory.cfg
 SRCS=README
 
 # We only build the ka9q device driver if HAS_KA9Q was defined
-KA9Q_DRIVER_yes_V = network
+KA9Q_DRIVER_yes_V = ka9q_network
 KA9Q_DRIVER = $(KA9Q_DRIVER_$(HAS_KA9Q)_V)
+
+# We only build the networking device driver if HAS_NETWORKING was defined
+NETWORKING_DRIVER_yes_V = network
+NETWORKING_DRIVER = $(NETWORKING_DRIVER_$(HAS_NETWORKING)_V)
 
 all: $(SRCS)
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS=include start360 startup clock console timer $(KA9Q_DRIVER) wrapup
+SUB_DIRS=include start360 startup clock console timer \
+	$(KA9Q_DRIVER) $(NETWORKING_DRIVER) wrapup

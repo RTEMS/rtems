@@ -29,6 +29,14 @@ SUB_DIRS=build-tools src
 LIBKA9Q_yes_V = lib/include/ka9q
 LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
 
+# We only make the install point for the KA9Q header files if it is enabled.
+LIBNETWORKING_yes_V = lib/include/networking lib/include/networking/sys \
+	lib/include/networking/machine lib/include/networking/rtems \
+	lib/include/networking/vm lib/include/networking/net \
+	lib/include/networking/netinet lib/include/networking/arpa \
+	lib/include/networking/nfs
+LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
+
 # We only make the rtems++ install point if it is enabled.
 LIBRTEMSCPLUSPLUS_yes_V = lib/include/rtems++
 LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
@@ -40,6 +48,7 @@ CREATE_DIRS = \
     lib/include/netinet lib/include/libc lib/include/libc/sys \
     lib/include/motorola lib/include/zilog \
     $(LIBKA9Q) \
+    $(LIBNETWORKING) \
     $(LIBRTEMSCPLUSPLUS) \
     bin samples \
     tests tests/screens tests/screens/sptests \
