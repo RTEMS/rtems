@@ -362,12 +362,13 @@ void malloc_walk(size_t source, size_t printf_enabled)
    register Region_Control *the_region;
    Objects_Locations        location;
  
+  _RTEMS_Lock_allocator();                      /* to prevent deletion */
    the_region = _Region_Get( RTEMS_Malloc_Heap, &location );
    if ( location == OBJECTS_LOCAL )
    {
       _Heap_Walk( &the_region->Memory, source, printf_enabled );
-      _Thread_Enable_dispatch();
    }
+  _RTEMS_Unlock_allocator();
 }
 
 #else
