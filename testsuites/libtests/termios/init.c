@@ -46,6 +46,8 @@ rtems_task Init (rtems_task_argument argument);
 #include <errno.h>
 #include <string.h>
 
+#include <tmacros.h>
+
 #if !defined(fileno)
 int fileno( FILE *stream); /* beyond ANSI */
 #endif
@@ -589,7 +591,7 @@ void change_line_settings( struct termios *tp )
   tp->c_cflag = CLOCAL | CREAD | parity | stop_bits | data_bits | baud_rate;
   if( tcsetattr( fileno( stdin ), TCSADRAIN, tp ) < 0 ) {
     perror( "change_line_settings(): tcsetattr() failed" );
-    exit( 1 );
+    rtems_test_exit( 1 );
   }
   printf( "Line settings set.\n" );
 }
@@ -606,7 +608,7 @@ void canonical_input( struct termios *tp )
   tp->c_iflag = BRKINT | ICRNL | IXON | IMAXBEL;
   if( tcsetattr( fileno( stdin ), TCSADRAIN, tp ) < 0 ) {
     perror( "canonical_input(): tcsetattr() failed" );
-    exit( 1 );
+    rtems_test_exit( 1 );
   }
   
   while ( ( c = getchar () ) != '\n');
@@ -725,7 +727,7 @@ Init (rtems_task_argument ignored)
 
   if( tcgetattr( fileno( stdin ), &orig_termios ) < 0 ) {
     perror( "tcgetattr() failed" );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   test_termios = orig_termios;
@@ -738,7 +740,7 @@ Init (rtems_task_argument ignored)
         test_termios = orig_termios;
         if( tcsetattr( fileno( stdin ), TCSADRAIN, &test_termios ) < 0 ) {
           perror( "tcsetattr() failed" );
-          exit( 1 );
+          rtems_test_exit( 1 );
         }
         usage();
         break;
@@ -764,7 +766,7 @@ Init (rtems_task_argument ignored)
         break;
 
       case '9':
-        exit( 1 );
+        rtems_test_exit( 1 );
 
       case '\n':
         break;

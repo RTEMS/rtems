@@ -57,5 +57,5 @@ rtems_task Init(
   printf ("getenv(\"FOO\") ==> \"%s\"\n", getenv ("FOO"));
 
   puts( "*** END OF PUTENV/GETENV TEST ***" );
-  exit(0);
+  rtems_test_exit(0);
 }

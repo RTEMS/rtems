@@ -50,7 +50,7 @@ rtems_task Task_1_through_5(
 
   if ( rmid != test_rmid ) {
      printf( "RMID's DO NOT MATCH (0x%x and 0x%x)\n", rmid, test_rmid );
-     exit( 0 );
+     rtems_test_exit( 0 );
   }
 
   put_name( Task_name[ argument ], FALSE );
@@ -102,7 +102,7 @@ rtems_task Task_1_through_5(
         }
 
         if ( failed == 5 )
-          exit( 0 );
+          rtems_test_exit( 0 );
 
         pass += 1;
 
@@ -114,7 +114,7 @@ rtems_task Task_1_through_5(
           puts( "*** END OF RATE MONOTONIC PERIOD STATISTICS TEST ***" );
           CPU_usage_Dump();
           Period_usage_Dump();
-          exit( 0 );
+          rtems_test_exit( 0 );
         }
 
       }

@@ -39,7 +39,7 @@ rtems_task Task_1_through_5(
   {
     if ( passes++ > NUM_PASSES ) {
 	puts("*** END OF MALLOC TEST ***");
-        exit(0);
+        rtems_test_exit(0);
     }
 
     status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
@@ -63,7 +63,7 @@ rtems_task Task_1_through_5(
        if ( mem_ptr[i] != (mem_amt & 0xff))
        {
           printf("failed %d, %d, 0x%x, 0x%x\n",i,mem_amt,mem_ptr[i],mem_amt&0xff);
-          exit(1);
+          rtems_test_exit(1);
        }
     }
     directive_failed( status, "rtems_task_wake_after" );
