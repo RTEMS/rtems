@@ -18,6 +18,6 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-all: $(OBJS) $(LIB) $(TMPINSTALL_FILES)
+all-local: $(LIB)
 
 include $(top_srcdir)/../../../../automake/local.am

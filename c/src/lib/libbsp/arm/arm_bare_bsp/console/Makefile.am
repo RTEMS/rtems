@@ -23,7 +23,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(console_rel_OBJECTS)
 	$(make-rel)
 
-all: $(console_rel_OBJECTS) $(PGM)
+all-local: $(console_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
