@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 include_HEADERS = uart.h tty_drv.h i386_io.h
 

@@ -1,3 +1,11 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* comm/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* io/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* irq/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* pci/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* irq/irq_init.c: Include rtems/bspIo.h instead of bspIo.h.
