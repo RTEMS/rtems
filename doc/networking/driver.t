@@ -272,7 +272,7 @@ Do nothing.
 
 
 
-@section Write your driver statistic-printing function
+@section Write Your Driver Statistic-Printing Function
 This function should print the values of any statistic/diagnostic
 counters your driver may use.  The driver ioctl function should call
 the statistic-printing function when the ioctl command is

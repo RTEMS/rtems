@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename ka9q
+@setfilename networking
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -62,14 +62,14 @@ END-INFO-DIR-ENTRY
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
-@include preface.t
-@include networktasks.t
-@include driver.t
-@include networkapp.t
-@c@include testing.texi
+@include preface.texi
+@include networktasks.texi
+@include driver.texi
+@include networkapp.texi
+@include testing.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top ka9q
+@top networking
 
 This is the online version of the RTEMS Network Supplement.
 

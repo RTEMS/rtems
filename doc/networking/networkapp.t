@@ -8,7 +8,7 @@
 @c  $Id$
 @c
 
-@chapter Using networking in an RTEMS application
+@chapter Using Networking in an RTEMS Application
 
 @section Makefile changes
 @subsection Including the required managers
@@ -207,7 +207,7 @@ The RTEMS network package provides almost a complete set of BSD network
 services.  The network functions work like their BSD counterparts
 with the following exceptions:
 
-@itemize
+@itemize @bullet
 @item A given socket can be read or written by only one task at a time.
 @item There is no @code{select} function.
 @item You must call @code{openlog} before calling any of the @code{syslog} functions.
@@ -223,7 +223,7 @@ buffer which remains valid only until the next call:
 @end table
 @end itemize
 
-@subsection Network statistics
+@subsection Network Statistics
 There are a number of functions to print statistics gathered by the network stack:
 @table @code
 @item rtems_bsdnet_show_if_stats

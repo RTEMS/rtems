@@ -44,28 +44,28 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-networktasks.texi: networktasks.t
+networktasks.texi: networktasks.t Makefile
 	$(BMENU) -p "Preface" \
 	   -u "Top" \
-	   -n "Writing RTEMS/KA9Q Network Device Drivers" ${*}.t
+	   -n "Writing RTEMS Network Device Drivers" ${*}.t
 
-driver.texi: driver.t
-	$(BMENU) -p "KA9Q Task Structure and Data Flow" \
+driver.texi: driver.t Makefile
+	$(BMENU) -p "Network Task Structure and Data Flow" \
 	   -u "Top" \
-	   -n "Using KA9Q networking in an RTEMS Application" ${*}.t
+	   -n "Using Networking in an RTEMS Application" ${*}.t
 
-networkapp.texi: networkapp.t
-	$(BMENU) -p "Writing RTEMS/KA9Q Network Device Drivers Write your driver show function" \
+networkapp.texi: networkapp.t Makefile
+	$(BMENU) -p " Writing RTEMS Network Device Drivers Write Your Driver Statistic-Printing Function" \
 	   -u "Top" \
 	   -n "Testing the Driver" ${*}.t
 
-testing.texi: testing.t
-	$(BMENU) -p "Using KA9Q networking in an RTEMS Application Domain Name Service" \
+testing.texi: testing.t Makefile
+	$(BMENU) -p "Using Networking in an RTEMS Application Network Statistics" \
 	   -u "Top" \
 	   -n "Command and Variable Index" ${*}.t
 
 html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/networking
+	-mkdir -p $(WWW_INSTALL)/network
 	rm -f $(WWW_INSTALL)/$(PROJECT)/networking.gif
 	cp networking.gif $(WWW_INSTALL)/$(PROJECT)/networking.gif
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
