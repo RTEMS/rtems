@@ -1,5 +1,9 @@
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
+	* libnetworking/lib/ftpfs.c: Switch bcopy to memcpy.
+
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/src/newlibc.c, libcsupport/src/sync.c: Eliminate
 	warnings.  Explicitly defeat __STRICT_ANSI__ since both 
 	legitimately use routines beyond ANSI.
