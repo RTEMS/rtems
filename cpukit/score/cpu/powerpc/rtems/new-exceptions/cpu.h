@@ -44,7 +44,7 @@ extern "C" {
 #include <libcpu/cpu.h>
   
 #ifndef ASM
-#include <rtems/score/ppctypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */

@@ -42,7 +42,7 @@ extern "C" {
 struct CPU_Interrupt_frame;
 typedef void ( *ppc_isr_entry )( int, struct CPU_Interrupt_frame * );
 
-#include <rtems/score/ppctypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
