@@ -259,7 +259,7 @@ void _Message_queue_MP_Process_packet (
 
     case MESSAGE_QUEUE_MP_ANNOUNCE_CREATE:
 
-      ignored = _Objects_MP_Open(
+      ignored = _Objects_MP_Allocate_and_open(
                   &_Message_queue_Information,
                   the_packet->name,
                   the_packet->Prefix.id,

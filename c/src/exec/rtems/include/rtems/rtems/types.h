@@ -21,6 +21,8 @@ extern "C" {
 #endif
 
 #include <rtems/object.h>
+#include <rtems/priority.h>
+#include <rtems/modes.h>
 
 /*
  *  RTEMS basic type definitions
@@ -47,6 +49,19 @@ typedef Objects_Id       rtems_id;
 typedef Context_Control            rtems_context;
 typedef Context_Control_fp         rtems_context_fp;
 typedef CPU_Interrupt_frame        rtems_interrupt_frame;
+
+/*
+ *  Define the type for an RTEMS API task priority.
+ */
+
+typedef Priority_Control rtems_task_priority;
+
+#define RTEMS_NO_PRIORITY  RTEMS_CURRENT_PRIORITY
+/*
+ *  Define the type for an RTEMS API task mode.
+ */
+ 
+typedef Modes_Control rtems_mode;
 
 #ifdef __cplusplus
 }

@@ -24,7 +24,7 @@
  */
 
 STATIC INLINE unsigned32 _Thread_queue_Header_number (
-  rtems_task_priority the_priority
+  Priority_Control the_priority
 )
 {
   return ( the_priority >> 6 );
@@ -37,7 +37,7 @@ STATIC INLINE unsigned32 _Thread_queue_Header_number (
  */
 
 STATIC INLINE boolean _Thread_queue_Is_reverse_search (
-  rtems_task_priority the_priority
+  Priority_Control the_priority
 )
 {
   return ( the_priority & 0x20 );

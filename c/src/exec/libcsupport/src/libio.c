@@ -111,10 +111,13 @@ rtems_libio_init(void)
         rtems_libio_last_iop = rtems_libio_iops + (rtems_libio_number_iops - 1);
     }
 
-    rc = rtems_semaphore_create(RTEMS_LIBIO_SEM,
-                                1,
-                                RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-                                &rtems_libio_semaphore);
+    rc = rtems_semaphore_create(
+      RTEMS_LIBIO_SEM,
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+      RTEMS_NO_PRIORITY,
+      &rtems_libio_semaphore
+    );
     if (rc != RTEMS_SUCCESSFUL)
         rtems_fatal_error_occurred(rc);
 }
@@ -199,9 +202,13 @@ rtems_libio_allocate(void)
              * Got one; create a semaphore for it
              */
 
-            rc = rtems_semaphore_create(RTEMS_LIBIO_IOP_SEM(iop - rtems_libio_iops),
-                                        1, RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-                                        &iop->sem);
+            rc = rtems_semaphore_create(
+              RTEMS_LIBIO_IOP_SEM(iop - rtems_libio_iops),
+              1, 
+              RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+              RTEMS_NO_PRIORITY,
+              &iop->sem
+            );
             if (rc != RTEMS_SUCCESSFUL)
                 goto failed;
             

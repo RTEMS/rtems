@@ -31,6 +31,7 @@ extern "C" {
 #include <rtems/modes.h>
 #include <rtems/object.h>
 #include <rtems/status.h>
+#include <rtems/types.h>
 
 /*
  *  rtems_signal_catch
@@ -45,7 +46,7 @@ extern "C" {
 
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry   asr_handler,
-  rtems_mode mode_set
+  rtems_mode        mode_set
 );
 
 /*

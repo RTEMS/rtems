@@ -141,6 +141,7 @@ rtems_task Init(
     rtems_build_name( 'S', 'E', 'M', '1' ),
     OPERATION_COUNT,
     RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_NO_PRIORITY,
     &Semaphore_id
   );
   directive_failed( status, "rtems_semaphore_create" );

@@ -16,8 +16,12 @@
 #include <stdlib.h>
 
 #include <rtems.h>
+#include <rtems/libio.h>
 #include <bsp.h>
-#include <clockdrv.h>
+
+void Clock_exit( void );
+rtems_isr Clock_isr( rtems_vector_number vector );
+
 
 /*
  *  The interrupt vector number associated with the clock tick device
@@ -30,6 +34,7 @@
  *  Clock_driver_ticks is a monotonically increasing counter of the
  *  number of clock ticks since the driver was initialized.
  */
+
 volatile rtems_unsigned32 Clock_driver_ticks;
 
 /*
@@ -43,27 +48,17 @@ volatile rtems_unsigned32 Clock_driver_ticks;
 rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
 
 /*
+ * These are set by clock driver during its init
+ */
+ 
+rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_minor_number rtems_clock_minor;
+
+/*
  *  The previous ISR on this clock tick interrupt vector.
  */
 
 rtems_isr_entry  Old_ticker;
-
-/*
- *  Clock_initialize
- *
- *  Device driver entry point for clock tick driver initialization.
- */
-
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id tid,
-  rtems_unsigned32 *rval
-)
-{
-  Install_clock( Clock_isr );
-}
 
 /*
  *  Reinstall_clock
@@ -140,4 +135,56 @@ void Clock_exit( void )
 
     /* XXX: If necessary, restore the old vector */
   }
+}
+
+/*
+ *  Clock_initialize
+ *
+ *  Device driver entry point for clock tick driver initialization.
+ */
+
+rtems_device_driver Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+  Install_clock((rtems_isr_entry) Clock_isr);
+
+  /*
+   * make major/minor avail to others such as shared memory driver
+   */
+  rtems_clock_major = major;
+    rtems_clock_minor = minor;
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    rtems_libio_ioctl_args_t *args = pargp;
+ 
+    if (args == 0)
+        goto done;
+ 
+    /*
+     * This is hokey, but until we get a defined interface
+     * to do this, it will just be this simple...
+     */
+ 
+    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
+    {
+        Clock_isr(CLOCK_VECTOR);
+    }
+    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
+    {
+        ReInstall_clock(args->buffer);
+    }
+ 
+done:
+    return RTEMS_SUCCESSFUL;
 }

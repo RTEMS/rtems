@@ -85,6 +85,7 @@ rtems_task Init(
       Semaphore_name[ 1 ],
       1,
       RTEMS_GLOBAL,
+      RTEMS_NO_PRIORITY,
       &junk_id
     );
     fatal_directive_status( status, RTEMS_TOO_MANY, "rtems_semaphore_create" );

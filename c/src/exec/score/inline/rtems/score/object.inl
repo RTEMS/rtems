@@ -76,6 +76,19 @@ STATIC INLINE unsigned32 rtems_get_index(
 
 /*PAGE
  *
+ *  _Objects_Is_class_valid
+ *
+ */
+ 
+STATIC INLINE boolean _Objects_Is_class_valid(
+  Objects_Classes the_class
+)
+{
+  return the_class <= OBJECTS_CLASSES_LAST;
+}
+
+/*PAGE
+ *
  *  _Objects_Is_local_node
  *
  */

@@ -23,7 +23,7 @@
  */
 
 STATIC INLINE unsigned32 RTEMS_INTERRUPT_LEVEL (
-  rtems_mode mode_set
+  Modes_Control mode_set
 )
 {
   return mode_set & RTEMS_INTERRUPT_MASK;
@@ -36,8 +36,8 @@ STATIC INLINE unsigned32 RTEMS_INTERRUPT_LEVEL (
  */
 
 STATIC INLINE boolean _Modes_Mask_changed (
-  rtems_mode mode_set,
-  rtems_mode masks
+  Modes_Control mode_set,
+  Modes_Control masks
 )
 {
    return ( mode_set & masks );
@@ -50,7 +50,7 @@ STATIC INLINE boolean _Modes_Mask_changed (
  */
 
 STATIC INLINE boolean _Modes_Is_asr_disabled (
-  rtems_mode mode_set
+  Modes_Control mode_set
 )
 {
    return ( mode_set & RTEMS_ASR_MASK );
@@ -63,7 +63,7 @@ STATIC INLINE boolean _Modes_Is_asr_disabled (
  */
 
 STATIC INLINE boolean _Modes_Is_preempt (
-  rtems_mode mode_set
+  Modes_Control mode_set
 )
 {
    return ( ( mode_set & RTEMS_PREEMPT_MASK ) == RTEMS_PREEMPT );
@@ -76,7 +76,7 @@ STATIC INLINE boolean _Modes_Is_preempt (
  */
 
 STATIC INLINE boolean _Modes_Is_timeslice (
-  rtems_mode mode_set
+  Modes_Control mode_set
 )
 {
   return ((mode_set & (RTEMS_TIMESLICE_MASK|RTEMS_PREEMPT_MASK)) ==
@@ -90,7 +90,7 @@ STATIC INLINE boolean _Modes_Is_timeslice (
  */
 
 STATIC INLINE ISR_Level _Modes_Get_interrupt_level (
-  rtems_mode mode_set
+  Modes_Control mode_set
 )
 {
   return ( mode_set & RTEMS_INTERRUPT_MASK );
@@ -103,7 +103,7 @@ STATIC INLINE ISR_Level _Modes_Get_interrupt_level (
  */
 
 STATIC INLINE void _Modes_Set_interrupt_level (
-  rtems_mode mode_set
+  Modes_Control mode_set
 )
 {
   _ISR_Set_level( _Modes_Get_interrupt_level( mode_set ) );
@@ -116,14 +116,14 @@ STATIC INLINE void _Modes_Set_interrupt_level (
  */
 
 STATIC INLINE void _Modes_Change (
-  rtems_mode  old_mode_set,
-  rtems_mode  new_mode_set,
-  rtems_mode  mask,
-  rtems_mode *out_mode_set,
-  rtems_mode *changed
+  Modes_Control  old_mode_set,
+  Modes_Control  new_mode_set,
+  Modes_Control  mask,
+  Modes_Control *out_mode_set,
+  Modes_Control *changed
 )
 {
-  rtems_mode _out_mode;
+  Modes_Control _out_mode;
 
   _out_mode      =  old_mode_set;
   _out_mode     &= ~mask;

@@ -113,7 +113,13 @@ rtems_status_code rtems_region_create(
   the_region->number_of_used_blocks = 0;
 
   _Thread_queue_Initialize(
-     &the_region->Wait_queue, attribute_set, STATES_WAITING_FOR_SEGMENT );
+    &the_region->Wait_queue,
+    OBJECTS_RTEMS_REGIONS,
+    _Attributes_Is_priority( attribute_set ) ? 
+       THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
+    STATES_WAITING_FOR_SEGMENT,
+    _Region_MP_Send_extract_proxy
+  );
 
   _Objects_Open( &_Region_Information, &the_region->Object, &name );
 

@@ -81,8 +81,25 @@ STATIC INLINE boolean _Objects_MP_Is_null_global_object (
   Objects_MP_Control *the_object
 );
 
-/*
+/*PAGE
+ *
  *  _Objects_MP_Open
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine place the specified global object in the 
+ *  specified information table.  
+ */
+ 
+void _Objects_MP_Open (
+  Objects_Information *information,
+  Objects_MP_Control  *the_global_object,
+  unsigned32           the_name,      /* XXX -- wrong for variable */
+  Objects_Id           the_id
+);
+
+/*
+ *  _Objects_MP_Allocate_and_open
  *
  *  DESCRIPTION:
  *
@@ -92,7 +109,7 @@ STATIC INLINE boolean _Objects_MP_Is_null_global_object (
  *  error processing actions taken.
  */
 
-boolean _Objects_MP_Open (
+boolean _Objects_MP_Allocate_and_open (
   Objects_Information *information,
   unsigned32           the_name,     /* XXX -- wrong for variable length */
   Objects_Id           the_id,

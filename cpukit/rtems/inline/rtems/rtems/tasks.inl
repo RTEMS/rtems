@@ -43,7 +43,10 @@ STATIC INLINE void _RTEMS_tasks_Free (
   Thread_Control *the_task
 )
 {
-  _Objects_Free( &_RTEMS_tasks_Information, &the_task->Object );
+  _Objects_Free( 
+    _Objects_Get_information( the_task->Object.id ),
+    &the_task->Object
+  );
 }
 
 /*PAGE
@@ -61,6 +64,7 @@ STATIC INLINE void _RTEMS_tasks_Cancel_wait(
 
   state = the_thread->current_state;
 
+/* XXX do this with the object class */
   if ( _States_Is_waiting_on_thread_queue( state ) ) {
     if ( _States_Is_waiting_for_rpc_reply( state ) &&
           _States_Is_locally_blocked( state ) ) {
@@ -89,6 +93,18 @@ STATIC INLINE void _RTEMS_tasks_Cancel_wait(
   }
   else if ( _Watchdog_Is_active( &the_thread->Timer ) )
     (void) _Watchdog_Remove( &the_thread->Timer );
+}
+
+/*PAGE
+ *
+ *  _RTEMS_Tasks_Priority_to_Core
+ */
+ 
+STATIC INLINE Priority_Control _RTEMS_Tasks_Priority_to_Core(
+  rtems_task_priority   priority
+)
+{
+  return (Priority_Control) priority;
 }
 
 #endif

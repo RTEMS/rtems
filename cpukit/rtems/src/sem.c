@@ -87,10 +87,11 @@ void _Semaphore_Manager_initialization(
  */
 
 rtems_status_code rtems_semaphore_create(
-  rtems_name          name,
-  unsigned32          count,
-  rtems_attribute  attribute_set,
-  Objects_Id         *id
+  rtems_name            name,
+  unsigned32            count,
+  rtems_attribute       attribute_set,
+  rtems_task_priority   priority_ceiling,
+  Objects_Id           *id
 )
 {
   register Semaphore_Control *the_semaphore;
@@ -127,7 +128,7 @@ rtems_status_code rtems_semaphore_create(
   }
 
   if ( _Attributes_Is_global( attribute_set ) &&
-       !( _Objects_MP_Open( &_Semaphore_Information, name,
+       !( _Objects_MP_Allocate_and_open( &_Semaphore_Information, name,
                             the_semaphore->Object.id, FALSE ) ) ) {
     _Semaphore_Free( the_semaphore );
     _Thread_Enable_dispatch();
@@ -148,8 +149,14 @@ rtems_status_code rtems_semaphore_create(
     the_semaphore->holder_id  = 0;
   }
 
-  _Thread_queue_Initialize( &the_semaphore->Wait_queue,
-                            attribute_set, STATES_WAITING_FOR_SEMAPHORE );
+  _Thread_queue_Initialize(
+    &the_semaphore->Wait_queue,
+    OBJECTS_RTEMS_SEMAPHORES,
+    _Attributes_Is_priority( attribute_set ) ? 
+       THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
+    STATES_WAITING_FOR_SEMAPHORE,
+    _Semaphore_MP_Send_extract_proxy
+  );
 
   _Objects_Open( &_Semaphore_Information, &the_semaphore->Object, &name );
 

@@ -22,7 +22,7 @@ void MY_task_set_note(
   unsigned32      note
 )
 {
-  the_thread->Notepads[ notepad ] = note;
+  the_thread->RTEMS_API->Notepads[ notepad ] = note;
 }
 
 
@@ -31,7 +31,7 @@ unsigned32 MY_task_get_note(
   unsigned32      notepad
 )
 {
-  return the_thread->Notepads[ notepad ];
+  return the_thread->RTEMS_API->Notepads[ notepad ];
 }
 
 void *MY_CPU_Context_FP_start(

@@ -41,7 +41,7 @@ STATIC INLINE void _Priority_Handler_initialization( void )
  */
 
 STATIC INLINE boolean _Priority_Is_valid (
-  rtems_task_priority the_priority
+  Priority_Control the_priority
 )
 {
   return (  ( the_priority >= RTEMS_MINIMUM_PRIORITY ) &&
@@ -55,7 +55,7 @@ STATIC INLINE boolean _Priority_Is_valid (
  */
 
 STATIC INLINE unsigned32 _Priority_Major (
-  rtems_task_priority the_priority
+  Priority_Control the_priority
 )
 {
   return ( the_priority / 16 );
@@ -68,7 +68,7 @@ STATIC INLINE unsigned32 _Priority_Major (
  */
 
 STATIC INLINE unsigned32 _Priority_Minor (
-  rtems_task_priority the_priority
+  Priority_Control the_priority
 )
 {
   return ( the_priority % 16 );
@@ -109,7 +109,7 @@ STATIC INLINE void _Priority_Remove_from_bit_map (
  *
  */
 
-STATIC INLINE rtems_task_priority _Priority_Get_highest( void )
+STATIC INLINE Priority_Control _Priority_Get_highest( void )
 {
   Priority_Bit_map_control minor;
   Priority_Bit_map_control major;
@@ -129,7 +129,7 @@ STATIC INLINE rtems_task_priority _Priority_Get_highest( void )
 
 STATIC INLINE void _Priority_Initialize_information(
   Priority_Information *the_priority_map,
-  rtems_task_priority      new_priority
+  Priority_Control      new_priority
 )
 {
   Priority_Bit_map_control major;
@@ -158,7 +158,7 @@ STATIC INLINE void _Priority_Initialize_information(
  */
 
 STATIC INLINE boolean _Priority_Is_group_empty (
-  rtems_task_priority      the_priority
+  Priority_Control      the_priority
 )
 {
   return the_priority == 0;

@@ -64,7 +64,7 @@ typedef struct {
   rtems_mp_packet_classes the_class;
   Objects_Id              id;
   Objects_Id              source_tid;
-  rtems_task_priority     source_priority;
+  Priority_Control        source_priority;
   rtems_status_code       return_code;
   unsigned32              length;
   unsigned32              to_convert;

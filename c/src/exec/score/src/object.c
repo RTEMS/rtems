@@ -476,3 +476,25 @@ final:
     *next_id_p = RTEMS_OBJECT_ID_FINAL;
     return 0;
 }
+
+/*PAGE
+ *
+ *  _Objects_Get_information
+ *
+ *  XXX
+ */
+ 
+Objects_Information *_Objects_Get_information(
+  Objects_Id  id
+)
+{
+  Objects_Classes  the_class;
+
+  the_class = rtems_get_class( id );
+
+  if ( !_Objects_Is_class_valid( the_class ) )
+    return NULL;
+
+  return _Objects_Information_table[ the_class ];
+}
+

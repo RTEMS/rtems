@@ -27,7 +27,7 @@ typedef unsigned32 rtems_attribute;
 
 /* constants */
 
-#define RTEMS_DEFAULT_ATTRIBUTES            0x00000000
+#define RTEMS_DEFAULT_ATTRIBUTES  0x00000000
 
 #define RTEMS_NO_FLOATING_POINT   0x00000000 /* don't use FP HW */
 #define RTEMS_FLOATING_POINT      0x00000001 /* utilize coprocessor */

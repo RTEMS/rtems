@@ -86,26 +86,34 @@ rtems_status_code rtems_task_create(
 )
 {
   register Thread_Control *the_thread;
-  unsigned32               actual_stack_size;
-  unsigned32               memory_needed;
-  void                    *memory;
+  Objects_MP_Control      *the_global_object = NULL;
+  boolean                  is_fp;
+  boolean                  is_global;
   rtems_attribute          the_attribute_set;
+  Priority_Control         core_priority;
+ 
 
   if ( !rtems_is_name_valid( name ) )
     return ( RTEMS_INVALID_NAME );
+
+  /* 
+   *  Core Thread Initialize insures we get the minimum amount of
+   *  stack space.
+   */
 
 #if 0
   if ( !_Stack_Is_enough( stack_size ) )
     return( RTEMS_INVALID_SIZE );
 #endif
 
-  if ( !_Stack_Is_enough( stack_size ) )
-    actual_stack_size = RTEMS_MINIMUM_STACK_SIZE;
-  else
-    actual_stack_size = stack_size;
+  /*
+   *  Validate the RTEMS API priority and convert it to the core priority range.
+   */
 
   if ( !_Priority_Is_valid( initial_priority ) )
     return( RTEMS_INVALID_PRIORITY );
+
+  core_priority = _RTEMS_Tasks_Priority_to_Core( initial_priority );
 
   /*
    *  Fix the attribute set to match the attributes which
@@ -120,11 +128,40 @@ rtems_status_code rtems_task_create(
   the_attribute_set =
     _Attributes_Clear( the_attribute_set, ATTRIBUTES_NOT_SUPPORTED );
 
-  if ( _Attributes_Is_global( the_attribute_set ) &&
-       !_Configuration_Is_multiprocessing() )
-    return( RTEMS_MP_NOT_CONFIGURED );
+  if ( _Attributes_Is_floating_point( the_attribute_set ) )
+    is_fp = TRUE;
+  else
+    is_fp = FALSE;
 
-  _Thread_Disable_dispatch();          /* to prevent deletion */
+  if ( _Attributes_Is_global( the_attribute_set ) ) {
+
+    is_global = TRUE;
+
+    if ( !_Configuration_Is_multiprocessing() )
+      return( RTEMS_MP_NOT_CONFIGURED );
+
+  } else
+    is_global = FALSE;
+
+  /*
+   *  Make sure system is MP if this task is global
+   */
+
+  /*
+   *  Disable dispatch for protection
+   */ 
+
+  _Thread_Disable_dispatch();
+
+  /*
+   *  Allocate the thread control block and -- if the task is global --
+   *  allocate a global object control block.
+   *
+   *  NOTE:  This routine does not use the combined allocate and open
+   *         global object routine because this results in a lack of
+   *         control over when memory is allocated and can be freed in
+   *         the event of an error.
+   */
 
   the_thread = _RTEMS_tasks_Allocate();
 
@@ -133,70 +170,70 @@ rtems_status_code rtems_task_create(
     return( RTEMS_TOO_MANY );
   }
 
-  actual_stack_size = _Stack_Adjust_size( actual_stack_size );
-  memory_needed = actual_stack_size;
+  if ( is_global ) {
+    the_global_object = _Objects_MP_Allocate_global_object();
 
-  if ( _Attributes_Is_floating_point( the_attribute_set ) )
-    memory_needed += CONTEXT_FP_SIZE;
+    if ( _Objects_MP_Is_null_global_object( the_global_object ) ) {
+      _RTEMS_tasks_Free( the_thread );
+      _Thread_Enable_dispatch();
+      return( RTEMS_TOO_MANY );
+    }
+  }
 
-  memory = _Workspace_Allocate( memory_needed );
+#if 0
+  /*
+   *  Allocate and initialize the RTEMS API specific information
+   */
 
-  if ( !memory ) {
+  the_thread->RTEMS_API = _Workspace_Allocate( sizeof( RTEMS_API_Control ) );
+
+  if ( !the_thread->RTEMS_API ) {
+    _RTEMS_tasks_Free( the_thread );
+    if ( is_global )
+    _Objects_MP_Free_global_object( the_global_object );
+    _Thread_Enable_dispatch();
+    return( RTEMS_UNSATISFIED );
+  }
+
+  the_thread->RTEMS_API->pending_events         = EVENT_SETS_NONE_PENDING;
+  _ASR_Initialize( &the_thread->RTEMS_API->Signal );
+#endif
+
+  /*
+   *  Initialize the core thread for this task.
+   */
+
+/* XXX normalize mode */
+
+  if ( !_Thread_Initialize( &_RTEMS_tasks_Information, the_thread, 
+         NULL, stack_size, is_fp, core_priority, initial_modes, &name ) ) {
+    if ( is_global )
+      _Objects_MP_Free_global_object( the_global_object );
     _RTEMS_tasks_Free( the_thread );
     _Thread_Enable_dispatch();
     return( RTEMS_UNSATISFIED );
   }
 
-  /*
-   *  Stack is put in the lower address regions of the allocated memory.
-   *  The optional floating point context area goes into the higher part
-   *  of the allocated memory.
-   */
-
-  _Stack_Initialize(
-     &the_thread->Start.Initial_stack, memory, actual_stack_size );
-
-  if ( _Attributes_Is_floating_point( the_attribute_set ) )
-    the_thread->fp_context = _Context_Fp_start( memory, actual_stack_size );
-  else
-    the_thread->fp_context = NULL;
-
-  the_thread->Start.fp_context = the_thread->fp_context;
-
-  if ( _Attributes_Is_global( the_attribute_set ) &&
-       !( _Objects_MP_Open( &_RTEMS_tasks_Information, name,
-                            the_thread->Object.id, FALSE ) ) ) {
-    _RTEMS_tasks_Free( the_thread );
-    (void) _Workspace_Free( memory );
-    _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
-  }
-
-  the_thread->attribute_set          = the_attribute_set;
-  the_thread->current_state          = STATES_DORMANT;
-  the_thread->current_modes          = initial_modes;
-  the_thread->pending_events         = EVENT_SETS_NONE_PENDING;
-  the_thread->resource_count         = 0;
-  the_thread->real_priority          = initial_priority;
-  the_thread->Start.initial_priority = initial_priority;
-  the_thread->Start.initial_modes    = initial_modes;
-
-  _Thread_Set_priority( the_thread, initial_priority );
-
-  _ASR_Initialize( &the_thread->Signal );
-
-  _Objects_Open( &_RTEMS_tasks_Information, &the_thread->Object, &name );
-
   *id = the_thread->Object.id;
 
-  _User_extensions_Task_create( the_thread );
+  if ( is_global ) {
 
-  if ( _Attributes_Is_global( the_attribute_set ) )
+    the_thread->RTEMS_API->is_global = TRUE;
+
+    _Objects_MP_Open(
+      &_RTEMS_tasks_Information,
+      the_global_object,
+      name,
+      the_thread->Object.id
+    );
+
     _RTEMS_tasks_MP_Send_process_packet(
       RTEMS_TASKS_MP_ANNOUNCE_CREATE,
       the_thread->Object.id,
       name
     );
+
+   }
 
   _Thread_Enable_dispatch();
   return( RTEMS_SUCCESSFUL );
@@ -252,9 +289,9 @@ rtems_status_code rtems_task_ident(
  */
 
 rtems_status_code rtems_task_start(
-  Objects_Id   id,
+  rtems_id         id,
   rtems_task_entry entry_point,
-  unsigned32   argument
+  unsigned32       argument
 )
 {
   register Thread_Control *the_thread;
@@ -271,17 +308,8 @@ rtems_status_code rtems_task_start(
       _Thread_Dispatch();
       return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
     case OBJECTS_LOCAL:
-      if ( _States_Is_dormant( the_thread->current_state ) ) {
-
-        the_thread->Start.entry_point      = entry_point;
-        the_thread->Start.initial_argument = argument;
-
-        _Thread_Load_environment( the_thread );
-
-        _Thread_Ready( the_thread );
-
-        _User_extensions_Task_start( the_thread );
-
+      if ( _Thread_Start(
+             the_thread, THREAD_START_NUMERIC, entry_point, NULL, argument ) ) {
         _Thread_Enable_dispatch();
         return( RTEMS_SUCCESSFUL );
       }
@@ -316,7 +344,7 @@ rtems_status_code rtems_task_restart(
 )
 {
   register Thread_Control *the_thread;
-  Objects_Locations               location;
+  Objects_Locations        location;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
@@ -326,32 +354,11 @@ rtems_status_code rtems_task_restart(
       _Thread_Dispatch();
       return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
     case OBJECTS_LOCAL:
-      if ( !_States_Is_dormant( the_thread->current_state ) ) {
+      if ( _Thread_Restart( the_thread, NULL, argument ) ) {
 
-        _Thread_Set_transient( the_thread );
-        _ASR_Initialize( &the_thread->Signal );
-        the_thread->pending_events = EVENT_SETS_NONE_PENDING;
-        the_thread->resource_count = 0;
-        the_thread->current_modes  = the_thread->Start.initial_modes;
-        the_thread->Start.initial_argument = argument;
-
-        _RTEMS_tasks_Cancel_wait( the_thread );
-
-        if ( the_thread->current_priority !=
-                         the_thread->Start.initial_priority ) {
-          the_thread->real_priority = the_thread->Start.initial_priority;
-          _Thread_Set_priority( the_thread,
-             the_thread->Start.initial_priority );
-        }
-
-        _Thread_Load_environment( the_thread );
-
-        _Thread_Ready( the_thread );
-
-        _User_extensions_Task_restart( the_thread );
-
-        if ( _Thread_Is_executing ( the_thread ) )
-          _Thread_Restart_self();
+        /*  XXX until these are in an API extension they are too late. */
+        _ASR_Initialize( &the_thread->RTEMS_API->Signal );
+        the_thread->RTEMS_API->pending_events = EVENT_SETS_NONE_PENDING;
 
         _Thread_Enable_dispatch();
         return( RTEMS_SUCCESSFUL );
@@ -396,25 +403,14 @@ rtems_status_code rtems_task_delete(
       _Thread_Dispatch();
       return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
     case OBJECTS_LOCAL:
-      _Objects_Close( &_RTEMS_tasks_Information, &the_thread->Object );
+      _Thread_Close( &_RTEMS_tasks_Information, the_thread );
 
-      _Thread_Set_state( the_thread, STATES_TRANSIENT );
-
-      _User_extensions_Task_delete( the_thread );
-
-#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-      if ( _Thread_Is_allocated_fp( the_thread ) )
-        _Thread_Deallocate_fp();
-#endif
-      the_thread->fp_context = NULL;
-
-      _RTEMS_tasks_Cancel_wait( the_thread );
-
-      (void) _Workspace_Free( the_thread->Start.Initial_stack.area );
+      /* XXX */
+      (void) _Workspace_Free( the_thread->RTEMS_API );
 
       _RTEMS_tasks_Free( the_thread );
 
-      if ( _Attributes_Is_global( the_thread->attribute_set ) ) {
+      if ( _Attributes_Is_global( the_thread->RTEMS_API->is_global ) ) {
 
         _Objects_MP_Close( &_RTEMS_tasks_Information, the_thread->Object.id );
 
@@ -551,7 +547,7 @@ rtems_status_code rtems_task_resume(
  */
 
 rtems_status_code rtems_task_set_priority(
-  Objects_Id        id,
+  Objects_Id           id,
   rtems_task_priority  new_priority,
   rtems_task_priority *old_priority
 )
@@ -662,7 +658,7 @@ rtems_status_code rtems_task_get_note(
 
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ||
        _Objects_Are_ids_equal( id, _Thread_Executing->Object.id ) ) {
-      *note = _Thread_Executing->Notepads[ notepad ];
+      *note = _Thread_Executing->RTEMS_API->Notepads[ notepad ];
       return( RTEMS_SUCCESSFUL );
   }
 
@@ -681,7 +677,7 @@ rtems_status_code rtems_task_get_note(
         0           /* Not used */
       );
     case OBJECTS_LOCAL:
-      *note= the_thread->Notepads[ notepad ];
+      *note= the_thread->RTEMS_API->Notepads[ notepad ];
       _Thread_Enable_dispatch();
       return( RTEMS_SUCCESSFUL );
   }
@@ -729,7 +725,7 @@ rtems_status_code rtems_task_set_note(
 
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ||
        _Objects_Are_ids_equal( id, _Thread_Executing->Object.id ) ) {
-      _Thread_Executing->Notepads[ notepad ] = note;
+      _Thread_Executing->RTEMS_API->Notepads[ notepad ] = note;
       return( RTEMS_SUCCESSFUL );
   }
 
@@ -747,7 +743,7 @@ rtems_status_code rtems_task_set_note(
       );
 
     case OBJECTS_LOCAL:
-      the_thread->Notepads[ notepad ] = note;
+      the_thread->RTEMS_API->Notepads[ notepad ] = note;
       _Thread_Enable_dispatch();
       return( RTEMS_SUCCESSFUL );
   }

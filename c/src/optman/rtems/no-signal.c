@@ -22,14 +22,14 @@
 
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry   handler,
-  rtems_mode mode_set
+  rtems_mode        mode_set
 )
 {
   return( RTEMS_NOT_CONFIGURED );
 }
 
 rtems_status_code rtems_signal_send(
-  Objects_Id             id,
+  rtems_id         id,
   rtems_signal_set signal_set
 )
 {

@@ -349,6 +349,19 @@ Objects_Control *_Objects_Get_next(
 );
 
 /*
+ *  _Objects_Get_information
+ *
+ *  DESCRIPTION:
+ *
+ *  Returns the information control block for the class of objects
+ *  corresponding to this id.
+ */
+
+Objects_Information *_Objects_Get_information(
+  Objects_Id  id
+);
+  
+/*
  *  _Objects_Build_id
  *
  *  DESCRIPTION:
@@ -401,6 +414,19 @@ STATIC INLINE unsigned32 rtems_get_node(
 
 STATIC INLINE unsigned32 rtems_get_index(
   Objects_Id id
+);
+
+/*
+ *  _Objects_Is_class_valid
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the class is valid.
+ *
+ */
+ 
+STATIC INLINE boolean _Objects_Is_class_valid(
+  Objects_Classes the_class
 );
 
 /*

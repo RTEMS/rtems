@@ -82,6 +82,7 @@ rtems_task Test_task(
       name,
       OPERATION_COUNT,
       RTEMS_DEFAULT_MODES,
+      RTEMS_NO_PRIORITY,
       &smid
     );
   end_time = Read_timer();
@@ -110,6 +111,7 @@ rtems_task Test_task(
     name,
     OPERATION_COUNT,
     RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_NO_PRIORITY,
     &smid
   );
 

@@ -93,7 +93,7 @@
 
 #define _Thread_Calculate_heir() \
  { \
-   rtems_task_priority  highest; \
+   Priority_Control  highest; \
    \
    _Priority_Get_highest( highest ); \
    \

@@ -88,7 +88,7 @@
 
 #define _Modes_Change( _old_mode_set, _new_mode_set, \
                        _mask, _out_mode_set, _changed ) \
-  { rtems_mode _out_mode; \
+  { Modes_Control _out_mode; \
     \
     _out_mode         =  (_old_mode_set); \
     _out_mode        &= ~(_mask); \

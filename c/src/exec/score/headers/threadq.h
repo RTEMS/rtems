@@ -37,6 +37,19 @@ typedef void ( *Thread_queue_Flush_callout )(
              );
 
 /*
+ *  The following type defines the callout used when a local task
+ *  is extracted from a remote thread queue (i.e. it's proxy must
+ *  extracted from the remote queue).
+ */
+ 
+typedef void ( *Thread_queue_Extract_callout )(
+                 Thread_Control *
+             );
+
+EXTERN Thread_queue_Extract_callout  
+  _Thread_queue_Extract_table[ OBJECTS_CLASSES_LAST + 1 ];
+
+/*
  *  _Thread_queue_Dequeue
  *
  *  DESCRIPTION:
@@ -62,7 +75,7 @@ Thread_Control *_Thread_queue_Dequeue(
 
 void _Thread_queue_Enqueue(
   Thread_queue_Control *the_thread_queue,
-  rtems_interval     timeout
+  rtems_interval        timeout
 );
 
 /*
@@ -76,6 +89,20 @@ void _Thread_queue_Enqueue(
 
 void _Thread_queue_Extract(
   Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+);
+
+/*
+ *  _Thread_queue_Extract_with_proxy
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine extracts the_thread from the_thread_queue
+ *  and insures that if there is a proxy for this task on 
+ *  another node, it is also dealt with.
+ */
+ 
+boolean _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 );
 
@@ -118,9 +145,11 @@ void _Thread_queue_Flush(
  */
 
 void _Thread_queue_Initialize(
-  Thread_queue_Control *the_thread_queue,
-  rtems_attribute    attribute_set,
-  States_Control        state
+  Thread_queue_Control         *the_thread_queue,
+  Objects_Classes               the_class,
+  Thread_queue_Disciplines      the_discipline,
+  States_Control                state,
+  Thread_queue_Extract_callout  proxy_extract_callout
 );
 
 /*

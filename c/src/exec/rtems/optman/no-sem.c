@@ -31,10 +31,11 @@ void _Semaphore_Manager_initialization(
 }
 
 rtems_status_code rtems_semaphore_create(
-  rtems_name          name,
-  unsigned32          count,
-  rtems_attribute  attribute_set,
-  Objects_Id         *id
+  rtems_name            name,
+  unsigned32            count,
+  rtems_attribute       attribute_set,
+  rtems_task_priority   priority_ceiling,
+  Objects_Id           *id
 )
 {
   return( RTEMS_NOT_CONFIGURED );

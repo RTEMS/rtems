@@ -86,22 +86,30 @@ typedef rtems_task ( *rtems_task_entry )(
                       rtems_task_argument
                    );
 
-typedef Thread ( *Thread_Entry )(
-                      Thread_Argument
-                   );
+typedef Thread ( *Thread_Entry )( );
 
 /*
  *  The following structure contains the information which defines
  *  the starting state of a thread.
  */
 
+typedef enum {
+  THREAD_START_NUMERIC,
+  THREAD_START_POINTER,
+  THREAD_START_BOTH_POINTER_FIRST,
+  THREAD_START_BOTH_NUMERIC_FIRST
+} Thread_Start_types;
+
 typedef struct {
   Thread_Entry         entry_point;      /* starting thread address         */
-  unsigned32           initial_argument; /* initial argument                */
-  rtems_mode           initial_modes;    /* initial mode                    */
-  rtems_task_priority  initial_priority; /* initial priority                */
-  void                *fp_context;       /* initial FP context area address */
+  Thread_Start_types   prototype;        /* how task is invoked             */
+  void                *pointer_argument; /* pointer argument                */
+  unsigned32           numeric_argument; /* numeric argument                */
+  Modes_Control        initial_modes;    /* initial mode                    */
+  Priority_Control     initial_priority; /* initial priority                */
   Stack_Control        Initial_stack;    /* stack information               */
+  void                *fp_context;       /* initial FP context area address */
+  void                *stack;            /* initial FP context area address */
 }   Thread_Start_information;
 
 /*
@@ -134,8 +142,8 @@ typedef struct {
 typedef struct {
   Objects_Control          Object;
   States_Control           current_state;
-  rtems_task_priority      current_priority;
-  rtems_task_priority      real_priority;
+  Priority_Control         current_priority;
+  Priority_Control         real_priority;
   unsigned32               resource_count;
   Thread_Wait_information  Wait;
   Watchdog_Control         Timer;
@@ -153,11 +161,21 @@ typedef struct {
  *        memory images for the shared part.
  */
 
+/* XXX structure in wrong file .. API .. not core */
+
+typedef struct {
+  boolean                   is_global;
+  unsigned32                Notepads[ RTEMS_NUMBER_NOTEPADS ];
+  rtems_event_set           pending_events;
+  rtems_event_set           events_out;
+  ASR_Information           Signal;
+}  RTEMS_API_Control;
+
 typedef struct {
   Objects_Control           Object;
   States_Control            current_state;
-  rtems_task_priority       current_priority;
-  rtems_task_priority       real_priority;
+  Priority_Control          current_priority;
+  Priority_Control          real_priority;
   unsigned32                resource_count;
   Thread_Wait_information   Wait;
   Watchdog_Control          Timer;
@@ -165,15 +183,11 @@ typedef struct {
      /****************** end of common block ********************/
   Chain_Control            *ready;
   Priority_Information      Priority_map;
-  rtems_event_set           pending_events;
-  rtems_event_set           events_out;
   Thread_Start_information  Start;
-  ASR_Information           Signal;
-  rtems_mode                current_modes;
-  rtems_attribute           attribute_set;
+  Modes_Control             current_modes;
   Context_Control           Registers;
   void                     *fp_context;
-  unsigned32                Notepads[ RTEMS_NUMBER_NOTEPADS ];
+  RTEMS_API_Control        *RTEMS_API;
   void                     *extension;
 }   Thread_Control;
 
@@ -303,6 +317,71 @@ STATIC INLINE void _Thread_Dispatch_initialization( void );
  */
 
 void _Thread_Dispatch( void );
+
+/*
+ *  _Thread_Initialize
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+
+boolean _Thread_Initialize(
+  Objects_Information *information,
+  Thread_Control      *the_thread,
+  void                *stack_area,    /* NULL if to be allocated */
+  unsigned32           stack_size,    /* insure it is >= min */
+  boolean              is_fp,         /* TRUE if thread uses FP */
+  Priority_Control     priority,
+  Modes_Control        mode,
+  Objects_Name         name
+ 
+);
+
+/*
+ *  _Thread_Start
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+boolean _Thread_Start(
+  Thread_Control           *the_thread,
+  Thread_Start_types        the_prototype,
+  void                     *entry_point,
+  void                     *pointer_argument,
+  unsigned32                numeric_argument
+);
+
+/*
+ *  _Thread_Restart
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+/* XXX multiple task arg profiles */
+ 
+boolean _Thread_Restart(
+  Thread_Control           *the_thread,
+  void                     *pointer_argument,
+  unsigned32                numeric_argument
+);
+
+/*
+ *  _Thread_Close
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+void _Thread_Close(
+  Objects_Information  *information,
+  Thread_Control       *the_thread
+);
 
 /*
  *  _Thread_Ready
@@ -493,7 +572,7 @@ void _Thread_Delay_ended(
 
 void _Thread_Change_priority (
   Thread_Control   *the_thread,
-  rtems_task_priority  new_priority
+  Priority_Control  new_priority
 );
 
 /*
@@ -507,7 +586,7 @@ void _Thread_Change_priority (
 
 void _Thread_Set_priority(
   Thread_Control   *the_thread,
-  rtems_task_priority  new_priority
+  Priority_Control  new_priority
 );
 
 /*
@@ -524,9 +603,9 @@ void _Thread_Set_priority(
  */
 
 boolean _Thread_Change_mode(
-  rtems_mode  new_mode_set,
-  rtems_mode  mask,
-  rtems_mode *old_mode_set
+  Modes_Control  new_mode_set,
+  Modes_Control  mask,
+  Modes_Control *old_mode_set
 );
 
 /*

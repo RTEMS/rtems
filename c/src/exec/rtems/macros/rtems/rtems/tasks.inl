@@ -83,5 +83,13 @@
       (void) _Watchdog_Remove( &(_the_thread)->Timer ); \
   }
 
+/*PAGE
+ *
+ *  _RTEMS_Tasks_Priority_to_Core
+ */
+ 
+#define _RTEMS_Tasks_Priority_to_Core( _priority ) \
+  ((Priority_Control) (_priority))
+
 #endif
 /* end of include file */

@@ -172,8 +172,8 @@
 #define     rtems_region_return_segment( rnid, segaddr ) \
            Empty_directive( rnid, segaddr )
 
-#define     rtems_semaphore_create( name, count, attr, smid ) \
-           Empty_directive( name, count, attr, smid )
+#define     rtems_semaphore_create( name, count, attr, priceil, smid ) \
+           Empty_directive( name, count, attr, priceil, smid )
 #define     rtems_semaphore_delete( smid ) \
            Empty_directive( smid )
 #define     rtems_semaphore_ident( name, node, smid ) \

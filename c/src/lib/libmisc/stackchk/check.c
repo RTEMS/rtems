@@ -433,7 +433,7 @@ void Stack_check_Dump_usage( void )
         class_index++ ) {
     information = _Objects_Information_table[ class_index ];
     if ( information && information->is_thread ) {
-      for ( i=1 ; i < information->maximum ; i++ ) {
+      for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
         Stack_check_Dump_threads_usage( the_thread );
         if ( the_thread == _Thread_Executing )

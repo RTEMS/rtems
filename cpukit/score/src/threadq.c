@@ -30,33 +30,39 @@
  *
  *  Input parameters:
  *    the_thread_queue - pointer to a threadq header
- *    attribute_set    - used to determine queueing discipline
+ *    the_class        - class of the object to which this belongs
+ *    discipline       - queueing discipline
  *    state            - state of waiting threads
  *
  *  Output parameters: NONE
  */
 
 void _Thread_queue_Initialize(
-  Thread_queue_Control *the_thread_queue,
-  rtems_attribute           attribute_set,
-  States_Control               state
+  Thread_queue_Control         *the_thread_queue,
+  Objects_Classes               the_class,
+  Thread_queue_Disciplines      the_discipline,
+  States_Control                state,
+  Thread_queue_Extract_callout  proxy_extract_callout
 )
 {
   unsigned32 index;
 
-  if ( _Attributes_Is_priority( attribute_set ) ) {
-    the_thread_queue->discipline = THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE;
-    for( index=0 ;
-         index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
-         index++)
-      _Chain_Initialize_empty( &the_thread_queue->Queues.Priority[index] );
-  }
-  else {
-    the_thread_queue->discipline = THREAD_QUEUE_DATA_FIFO_DISCIPLINE;
-    _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
-  }
+  _Thread_queue_Extract_table[ the_class ] = proxy_extract_callout;
 
-  the_thread_queue->state = state;
+  the_thread_queue->state      = state;
+  the_thread_queue->discipline = the_discipline;
+
+  switch ( the_discipline ) {
+    case THREAD_QUEUE_DISCIPLINE_FIFO:
+      _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
+      break;
+    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
+      for( index=0 ;
+           index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
+           index++)
+        _Chain_Initialize_empty( &the_thread_queue->Queues.Priority[index] );
+      break;
+  }
 
 }
 
@@ -107,10 +113,10 @@ void _Thread_queue_Enqueue(
   }
 
   switch( the_thread_queue->discipline ) {
-    case THREAD_QUEUE_DATA_FIFO_DISCIPLINE:
+    case THREAD_QUEUE_DISCIPLINE_FIFO:
       _Thread_queue_Enqueue_fifo( the_thread_queue, the_thread, timeout );
       break;
-    case THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE:
+    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
       _Thread_queue_Enqueue_priority(
          the_thread_queue, the_thread, timeout );
       break;
@@ -144,10 +150,10 @@ Thread_Control *_Thread_queue_Dequeue(
   ISR_Level       level;
 
   switch ( the_thread_queue->discipline ) {
-    case THREAD_QUEUE_DATA_FIFO_DISCIPLINE:
+    case THREAD_QUEUE_DISCIPLINE_FIFO:
       the_thread = _Thread_queue_Dequeue_fifo( the_thread_queue );
       break;
-    case THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE:
+    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
       the_thread = _Thread_queue_Dequeue_priority( the_thread_queue );
       break;
     default:              /* this is only to prevent warnings */
@@ -167,6 +173,45 @@ Thread_Control *_Thread_queue_Dequeue(
   the_thread_queue->sync = FALSE;
   _ISR_Enable( level );
   return( _Thread_Executing );
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Extract_with_proxy
+ *
+ *  This routine extracts the_thread from the_thread_queue
+ *  and insures that if there is a proxy for this task on 
+ *  another node, it is also dealt with.
+ *
+ *  XXX
+ */
+ 
+boolean _Thread_queue_Extract_with_proxy(
+  Thread_Control       *the_thread
+)
+{
+  States_Control                state;
+  Objects_Classes               the_class;
+  Thread_queue_Extract_callout  proxy_extract_callout;
+
+  state = the_thread->current_state;
+
+  if ( _States_Is_waiting_on_thread_queue( state ) ) {
+    if ( _States_Is_waiting_for_rpc_reply( state ) &&
+         _States_Is_locally_blocked( state ) ) {
+
+      the_class = rtems_get_class( the_thread->Wait.id );
+
+      proxy_extract_callout = _Thread_queue_Extract_table[ the_class ];
+
+      if ( proxy_extract_callout )
+        (*proxy_extract_callout)( the_thread );
+    }
+    _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
+
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /*PAGE
@@ -191,10 +236,10 @@ void _Thread_queue_Extract(
 )
 {
   switch ( the_thread_queue->discipline ) {
-    case THREAD_QUEUE_DATA_FIFO_DISCIPLINE:
+    case THREAD_QUEUE_DISCIPLINE_FIFO:
       _Thread_queue_Extract_fifo( the_thread_queue, the_thread );
       break;
-    case THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE:
+    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
       _Thread_queue_Extract_priority( the_thread_queue, the_thread );
       break;
    }
@@ -248,10 +293,10 @@ Thread_Control *_Thread_queue_First(
   Thread_Control *the_thread;
 
   switch ( the_thread_queue->discipline ) {
-    case THREAD_QUEUE_DATA_FIFO_DISCIPLINE:
+    case THREAD_QUEUE_DISCIPLINE_FIFO:
       the_thread = _Thread_queue_First_fifo( the_thread_queue );
       break;
-    case THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE:
+    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
       the_thread = _Thread_queue_First_priority( the_thread_queue );
       break;
     default:              /* this is only to prevent warnings */
@@ -437,16 +482,17 @@ void _Thread_queue_Extract_fifo(
 
   if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
     _ISR_Enable( level );
-    _Thread_Unblock( the_thread );
   } else {
     _Watchdog_Deactivate( &the_thread->Timer );
     _ISR_Enable( level );
     (void) _Watchdog_Remove( &the_thread->Timer );
-    _Thread_Unblock( the_thread );
   }
+
+  _Thread_Unblock( the_thread );
 
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
+ 
 }
 
 /*PAGE
@@ -498,17 +544,17 @@ void _Thread_queue_Enqueue_priority(
   rtems_interval     timeout
 )
 {
-  rtems_task_priority       search_priority;
-  Thread_Control *search_thread;
-  ISR_Level              level;
-  Chain_Control  *header;
-  unsigned32             header_index;
-  Chain_Node     *the_node;
-  Chain_Node     *next_node;
-  Chain_Node     *previous_node;
-  Chain_Node     *search_node;
-  rtems_task_priority       priority;
-  States_Control         block_state;
+  Priority_Control  search_priority;
+  Thread_Control   *search_thread;
+  ISR_Level         level;
+  Chain_Control    *header;
+  unsigned32        header_index;
+  Chain_Node       *the_node;
+  Chain_Node       *next_node;
+  Chain_Node       *previous_node;
+  Chain_Node       *search_node;
+  Priority_Control  priority;
+  States_Control    block_state;
 
   _Chain_Initialize_empty( &the_thread->Wait.Block2n );
 

@@ -47,6 +47,7 @@ extern "C" {
 #include <rtems/states.h>
 #include <rtems/thread.h>
 #include <rtems/threadq.h>
+#include <rtems/types.h>
 
 /*
  *  Constant to be used as the ID of current task
@@ -94,12 +95,12 @@ void _RTEMS_tasks_Manager_initialization(
  */
 
 rtems_status_code rtems_task_create(
-  rtems_name          name,
-  rtems_task_priority    initial_priority,
-  unsigned32          stack_size,
-  rtems_mode       initial_modes,
-  rtems_attribute  attribute_set,
-  Objects_Id         *id
+  rtems_name           name,
+  rtems_task_priority  initial_priority,
+  unsigned32           stack_size,
+  rtems_mode           initial_modes,
+  rtems_attribute      attribute_set,
+  Objects_Id          *id
 );
 
 /*
@@ -237,7 +238,7 @@ rtems_status_code rtems_task_resume(
  */
 
 rtems_status_code rtems_task_set_priority(
-  Objects_Id        id,
+  Objects_Id           id,
   rtems_task_priority  new_priority,
   rtems_task_priority *old_priority
 );
@@ -322,6 +323,18 @@ STATIC INLINE void _RTEMS_tasks_Free (
 
 STATIC INLINE void _RTEMS_tasks_Cancel_wait(
   Thread_Control *the_thread
+);
+
+/*
+ *  _RTEMS_Tasks_Priority_to_Core
+ *
+ *  DESCRIPTION:
+ *
+ *  This function converts an RTEMS API priority into a core priority.
+ */
+ 
+STATIC INLINE Priority_Control _RTEMS_Tasks_Priority_to_Core(
+  rtems_task_priority   priority
 );
 
 #include <rtems/tasks.inl>

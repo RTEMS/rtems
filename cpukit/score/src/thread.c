@@ -142,11 +142,11 @@ void _Thread_Enable_dispatch( void )
 
 void _Thread_Dispatch( void )
 {
-  Thread_Control  *executing;
-  Thread_Control  *heir;
-  ISR_Level               level;
+  Thread_Control   *executing;
+  Thread_Control   *heir;
+  ISR_Level         level;
   rtems_signal_set  signal_set;
-  rtems_mode           previous_mode;
+  Modes_Control     previous_mode;
 
   executing   = _Thread_Executing;
   _ISR_Disable( level );
@@ -199,25 +199,276 @@ void _Thread_Dispatch( void )
 
   _Thread_Dispatch_disable_level = 0;
 
-  if ( _ASR_Are_signals_pending( &executing->Signal ) ) {
-    signal_set                       = executing->Signal.signals_posted;
-    executing->Signal.signals_posted = 0;
+  if ( _ASR_Are_signals_pending( &executing->RTEMS_API->Signal ) ) {
+    signal_set = executing->RTEMS_API->Signal.signals_posted;
+    executing->RTEMS_API->Signal.signals_posted = 0;
     _ISR_Enable( level );
 
-    executing->Signal.nest_level += 1;
-    if (_Thread_Change_mode( executing->Signal.mode_set,
+    executing->RTEMS_API->Signal.nest_level += 1;
+    if (_Thread_Change_mode( executing->RTEMS_API->Signal.mode_set,
                                 RTEMS_ALL_MODE_MASKS, &previous_mode ))
         _Thread_Dispatch();
 
-    (*executing->Signal.handler)( signal_set );
+    (*executing->RTEMS_API->Signal.handler)( signal_set );
 
-    executing->Signal.nest_level -= 1;
+    executing->RTEMS_API->Signal.nest_level -= 1;
     if (_Thread_Change_mode( previous_mode,
                                 RTEMS_ALL_MODE_MASKS, &previous_mode ))
         _Thread_Dispatch();
   }
   else
     _ISR_Enable( level );
+}
+
+/*PAGE
+ *
+ *  _Thread_Initialize
+ *
+ *  XXX
+ */
+
+boolean _Thread_Initialize(
+  Objects_Information *information,
+  Thread_Control      *the_thread,
+  void                *stack_area,    /* NULL if to be allocated */
+  unsigned32           stack_size,    /* insure it is >= min */
+  boolean              is_fp,         /* TRUE if thread uses FP */
+  Priority_Control     priority,
+  Modes_Control        mode,
+  Objects_Name         name
+  
+)
+{
+  unsigned32           actual_stack_size;
+  void                *stack;
+  void                *fp_area;
+
+  /*
+   *  Allocate and Initialize the stack for this thread.
+   */
+
+  if ( !_Stack_Is_enough( stack_size ) )
+    actual_stack_size = RTEMS_MINIMUM_STACK_SIZE;
+  else
+    actual_stack_size = stack_size;
+
+  actual_stack_size = _Stack_Adjust_size( actual_stack_size );
+  stack             = stack_area;
+
+  if ( !stack ) {
+    stack = _Workspace_Allocate( actual_stack_size );
+ 
+    if ( !stack ) 
+      return FALSE;
+
+    the_thread->Start.stack = stack;
+  } else
+    the_thread->Start.stack = NULL;
+
+  _Stack_Initialize(
+     &the_thread->Start.Initial_stack,
+     stack,
+     actual_stack_size
+  );
+
+  /*
+   *  Allocate the floating point area for this thread
+   */
+  
+  if ( is_fp ) {
+
+    fp_area = _Workspace_Allocate( CONTEXT_FP_SIZE );
+    if ( !fp_area ) {
+      (void) _Workspace_Free( stack );
+      return FALSE;
+    }
+    fp_area = _Context_Fp_start( fp_area, 0 );
+
+  } else
+    fp_area = NULL;
+
+  the_thread->fp_context       = fp_area;
+  the_thread->Start.fp_context = fp_area;
+  
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+  /*
+   *  Allocate and initialize the RTEMS API specific information
+   */
+ 
+  the_thread->RTEMS_API = _Workspace_Allocate( sizeof( RTEMS_API_Control ) );
+ 
+  if ( !the_thread->RTEMS_API ) {
+/* XXX when in task_create 
+    _RTEMS_tasks_Free( the_thread );
+    _Objects_MP_Free_global_object( the_global_object );
+
+    _Thread_Enable_dispatch();
+    return( RTEMS_UNSATISFIED );
+*/
+      (void) _Workspace_Free( stack );
+      (void) _Workspace_Free( fp_area );
+      return FALSE;
+ 
+  }
+ 
+  the_thread->RTEMS_API->is_global              = FALSE;
+  the_thread->RTEMS_API->pending_events         = EVENT_SETS_NONE_PENDING;
+  _ASR_Initialize( &the_thread->RTEMS_API->Signal );
+
+  /* XXX should not be here .... */
+ 
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+
+  /*
+   *  General initialization
+   */
+
+  the_thread->current_state          = STATES_DORMANT;
+  the_thread->current_modes          = mode;
+  the_thread->resource_count         = 0;
+  the_thread->real_priority          = priority;
+  the_thread->Start.initial_priority = priority;
+  the_thread->Start.initial_modes    = mode;
+ 
+  _Thread_Set_priority( the_thread, priority );
+
+  /*
+   *  Open the object
+   */
+
+  _Objects_Open( information, &the_thread->Object, name );
+
+  /*
+   *  Invoke create extensions
+   */
+
+  _User_extensions_Task_create( the_thread );
+  /* XXX if this fails ... */
+
+  return TRUE;
+}
+
+/*
+ *  _Thread_Start
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+boolean _Thread_Start(
+  Thread_Control       *the_thread,
+  Thread_Start_types    the_prototype,
+  void                 *entry_point,
+  void                 *pointer_argument,
+  unsigned32            numeric_argument
+)
+{
+  if ( _States_Is_dormant( the_thread->current_state ) ) {
+ 
+    the_thread->Start.entry_point      = entry_point;
+   
+    the_thread->Start.prototype        = the_prototype;
+    the_thread->Start.pointer_argument = pointer_argument;
+    the_thread->Start.numeric_argument = numeric_argument;
+ 
+    _Thread_Load_environment( the_thread );
+ 
+    _Thread_Ready( the_thread );
+ 
+    _User_extensions_Task_start( the_thread );
+ 
+    return TRUE;
+  }
+ 
+  return FALSE;
+ 
+}
+
+/*
+ *  _Thread_Restart
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+boolean _Thread_Restart(
+  Thread_Control      *the_thread,
+  void                *pointer_argument,
+  unsigned32           numeric_argument
+)
+{
+  if ( !_States_Is_dormant( the_thread->current_state ) ) {
+ 
+    _Thread_Set_transient( the_thread );
+    the_thread->resource_count = 0;
+    the_thread->current_modes  = the_thread->Start.initial_modes;
+
+    the_thread->Start.pointer_argument = pointer_argument;
+    the_thread->Start.numeric_argument = numeric_argument;
+ 
+    if ( !_Thread_queue_Extract_with_proxy( the_thread ) ) {
+ 
+      if ( _Watchdog_Is_active( &the_thread->Timer ) )
+        (void) _Watchdog_Remove( &the_thread->Timer );
+    }
+
+    if ( the_thread->current_priority != the_thread->Start.initial_priority ) {
+      the_thread->real_priority = the_thread->Start.initial_priority;
+      _Thread_Set_priority( the_thread, the_thread->Start.initial_priority );
+    }
+ 
+    _Thread_Load_environment( the_thread );
+ 
+    _Thread_Ready( the_thread );
+ 
+    _User_extensions_Task_restart( the_thread );
+ 
+    if ( _Thread_Is_executing ( the_thread ) )
+      _Thread_Restart_self();
+ 
+    return TRUE;
+  }
+ 
+  return FALSE;
+}
+
+/*
+ *  _Thread_Close
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+ 
+void _Thread_Close(
+  Objects_Information  *information,
+  Thread_Control       *the_thread
+)
+{
+  _Objects_Close( information, &the_thread->Object );
+ 
+  _Thread_Set_state( the_thread, STATES_TRANSIENT );
+ 
+  if ( !_Thread_queue_Extract_with_proxy( the_thread ) ) {
+ 
+    if ( _Watchdog_Is_active( &the_thread->Timer ) )
+      (void) _Watchdog_Remove( &the_thread->Timer );
+  }
+
+  _User_extensions_Task_delete( the_thread );
+ 
+#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
+  if ( _Thread_Is_allocated_fp( the_thread ) )
+    _Thread_Deallocate_fp();
+#endif
+  the_thread->fp_context = NULL;
+
+  (void) _Workspace_Free( the_thread->Start.fp_context );
+
+  if ( the_thread->Start.stack )
+    (void) _Workspace_Free( the_thread->Start.stack );
 }
 
 /*PAGE
@@ -595,7 +846,26 @@ void _Thread_Handler( void )
 
   _Thread_Enable_dispatch();
  
-  (*executing->Start.entry_point)( executing->Start.initial_argument );
+  switch (  executing->Start.prototype ) {
+    case THREAD_START_NUMERIC:
+      (*executing->Start.entry_point)( executing->Start.numeric_argument );
+      break;
+    case THREAD_START_POINTER:
+      (*executing->Start.entry_point)( executing->Start.pointer_argument );
+      break;
+    case THREAD_START_BOTH_POINTER_FIRST:
+      (*executing->Start.entry_point)( 
+        executing->Start.pointer_argument,
+        executing->Start.numeric_argument
+      );
+      break;
+    case THREAD_START_BOTH_NUMERIC_FIRST:
+      (*executing->Start.entry_point)( 
+        executing->Start.numeric_argument,
+        executing->Start.pointer_argument
+      );
+      break;
+  }
 
   _User_extensions_Task_exitted( executing );
 
@@ -654,8 +924,8 @@ void _Thread_Delay_ended(
  */
 
 void _Thread_Change_priority(
-  Thread_Control *the_thread,
-  rtems_task_priority       new_priority
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority
 )
 {
   ISR_Level level;
@@ -704,8 +974,8 @@ void _Thread_Change_priority(
  */
 
 void _Thread_Set_priority(
-  Thread_Control *the_thread,
-  rtems_task_priority       new_priority
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority
 )
 {
   the_thread->current_priority = new_priority;
@@ -735,13 +1005,13 @@ void _Thread_Set_priority(
  */
 
 boolean _Thread_Change_mode(
-  unsigned32  new_mode_set,
-  unsigned32  mask,
-  unsigned32 *old_mode_set
+  Modes_Control  new_mode_set,
+  Modes_Control  mask,
+  Modes_Control *old_mode_set
 )
 {
-  rtems_mode   changed;
-  rtems_mode   threads_new_mode_set;
+  Modes_Control   changed;
+  Modes_Control   threads_new_mode_set;
   Thread_Control *executing;
   boolean         need_dispatch;
 
@@ -754,7 +1024,7 @@ boolean _Thread_Change_mode(
   _Modes_Set_interrupt_level( threads_new_mode_set );
 
   if ( _Modes_Mask_changed( changed, RTEMS_ASR_MASK ) )
-    _ASR_Swap_signals( &executing->Signal );
+    _ASR_Swap_signals( &executing->RTEMS_API->Signal );
 
   executing->current_modes = threads_new_mode_set;
   need_dispatch = TRUE;
@@ -765,7 +1035,7 @@ boolean _Thread_Change_mode(
 
      _Context_Switch_necessary = TRUE;
 
-  else if ( !_ASR_Are_signals_pending( &executing->Signal ) )
+  else if ( !_ASR_Are_signals_pending( &executing->RTEMS_API->Signal ) )
 
     need_dispatch = FALSE;
 

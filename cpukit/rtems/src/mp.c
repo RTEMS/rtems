@@ -58,7 +58,7 @@ void rtems_multiprocessing_announce ( void )
   _Thread_Disable_dispatch();
   _Event_sets_Post(
     RTEMS_EVENT_0,
-    &_Internal_threads_System_initialization_thread->pending_events
+    &_Internal_threads_System_initialization_thread->RTEMS_API->pending_events
   );
   _Event_Surrender( _Internal_threads_System_initialization_thread );
   _Thread_Enable_dispatch();

@@ -23,6 +23,7 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <clockdrv.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -66,6 +67,20 @@ extern "C" {
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
+
+/*
+ * Console driver init
+ */
+ 
+rtems_device_driver console_initialize(
+  rtems_device_major_number, rtems_device_minor_number minor, void *);
+ 
+#define CONSOLE_DRIVER_TABLE_ENTRY \
+  { console_initialize, NULL, NULL, NULL, NULL, NULL }
+ 
+/*
+ * NOTE: Use the standard Clock driver entry
+ */
 
 /* functions */
 

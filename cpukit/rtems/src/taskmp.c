@@ -193,7 +193,7 @@ void _RTEMS_tasks_MP_Process_packet (
 
     case RTEMS_TASKS_MP_ANNOUNCE_CREATE:
 
-      ignored = _Objects_MP_Open(
+      ignored = _Objects_MP_Allocate_and_open(
                   &_RTEMS_tasks_Information,
                   the_packet->name,
                   the_packet->Prefix.id,

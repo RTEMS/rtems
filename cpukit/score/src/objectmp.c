@@ -50,8 +50,31 @@ void _Objects_MP_Handler_initialization (
  *  _Objects_MP_Open
  *
  */
+ 
+void _Objects_MP_Open (
+  Objects_Information *information,
+  Objects_MP_Control  *the_global_object,
+  unsigned32           the_name,      /* XXX -- wrong for variable */
+  Objects_Id           the_id
+)
+{
+  the_global_object->Object.id = the_id;
+  the_global_object->name      = the_name;
+ 
+  _Chain_Prepend(
+    &information->global_table[ rtems_get_node( the_id ) ],
+    &the_global_object->Object.Node
+  );
 
-boolean _Objects_MP_Open (
+}
+
+/*PAGE
+ *
+ *  _Objects_MP_Allocate_and_open
+ *
+ */
+
+boolean _Objects_MP_Allocate_and_open (
   Objects_Information *information,
   unsigned32           the_name,      /* XXX -- wrong for variable */
   Objects_Id           the_id,
@@ -70,13 +93,7 @@ boolean _Objects_MP_Open (
 
   }
 
-  the_global_object->Object.id = the_id;
-  the_global_object->name      = the_name;
-
-  _Chain_Prepend(
-    &information->global_table[ rtems_get_node( the_id ) ],
-    &the_global_object->Object.Node
-  );
+  _Objects_MP_Open( information, the_global_object, the_name, the_id );
 
   return TRUE;
 }

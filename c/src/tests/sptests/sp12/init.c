@@ -53,10 +53,11 @@ rtems_task Init(
   Semaphore_name[ 3 ]     = rtems_build_name( 'S', 'M', '3', ' ' );
 
   status = rtems_semaphore_create(
-     Semaphore_name[ 1 ],
-     1,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &Semaphore_id[ 1 ]
+    Semaphore_name[ 1 ],
+    1,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_NO_PRIORITY,
+    &Semaphore_id[ 1 ]
   );
   directive_failed( status, "rtems_semaphore_create of SM1" );
 
@@ -64,6 +65,7 @@ rtems_task Init(
     Semaphore_name[ 2 ],
     0,
     RTEMS_PRIORITY,
+    RTEMS_NO_PRIORITY,
     &Semaphore_id[ 2 ]
   );
   directive_failed( status, "rtems_semaphore_create of SM2" );
@@ -72,6 +74,7 @@ rtems_task Init(
     Semaphore_name[ 3 ],
     1,
     RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_NO_PRIORITY,
     &Semaphore_id[ 3 ]
   );
   directive_failed( status, "rtems_semaphore_create of SM3" );
@@ -94,6 +97,7 @@ pause();
     Semaphore_name[ 2 ],
     0,
     RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
+    RTEMS_NO_PRIORITY,
     &Semaphore_id[ 2 ]
   );
   directive_failed( status, "rtems_semaphore_create of priority inherit SM2" );
@@ -110,6 +114,7 @@ pause();
     Semaphore_name[ 2 ],
     1,
     RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
+    RTEMS_NO_PRIORITY,
     &Semaphore_id[ 2 ]
   );
   directive_failed( status, "rtems_semaphore_create of priority inherit SM2" );
@@ -125,6 +130,7 @@ pause();
     Semaphore_name[ 2 ],
     0,
     RTEMS_PRIORITY,
+    RTEMS_NO_PRIORITY,
     &Semaphore_id[ 2 ]
   );
   directive_failed( status, "rtems_semaphore_create of priority SM2" );

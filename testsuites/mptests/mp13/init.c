@@ -62,6 +62,7 @@ rtems_task Init(
       Semaphore_name[ 1 ],
       1,
       RTEMS_GLOBAL | RTEMS_PRIORITY,
+      RTEMS_NO_PRIORITY,
       &Semaphore_id[ 1 ]
     );
     directive_failed( status, "rtems_semaphore_create" );

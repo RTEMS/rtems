@@ -57,6 +57,15 @@
 
 /*PAGE
  *
+ *  _Objects_Is_class_valid
+ *
+ */
+ 
+#define _Objects_Is_class_valid( _the_class ) \
+  ( (_the_class) <= OBJECTS_CLASSES_LAST )
+
+/*PAGE
+ *
  *  _Objects_Is_local_node
  *
  */

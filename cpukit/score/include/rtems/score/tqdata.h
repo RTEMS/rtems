@@ -31,8 +31,8 @@ extern "C" {
  */
 
 typedef enum {
-  THREAD_QUEUE_DATA_FIFO_DISCIPLINE,     /* RTEMS_FIFO queue discipline */
-  THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE  /* RTEMS_PRIORITY queue discipline */
+  THREAD_QUEUE_DISCIPLINE_FIFO,     /* RTEMS_FIFO queue discipline */
+  THREAD_QUEUE_DISCIPLINE_PRIORITY  /* RTEMS_PRIORITY queue discipline */
 }   Thread_queue_Disciplines;
 
 /*
@@ -63,7 +63,7 @@ typedef struct {
  */
 
 STATIC INLINE unsigned32 _Thread_queue_Header_number (
-  rtems_task_priority the_priority
+  Priority_Control the_priority
 );
 
 /*
@@ -77,7 +77,7 @@ STATIC INLINE unsigned32 _Thread_queue_Header_number (
  */
 
 STATIC INLINE boolean _Thread_queue_Is_reverse_search (
-  rtems_task_priority the_priority
+  Priority_Control the_priority
 );
 
 #include <rtems/tqdata.inl>

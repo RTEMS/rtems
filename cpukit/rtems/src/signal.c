@@ -37,22 +37,23 @@
  */
 
 rtems_status_code rtems_signal_catch(
-  rtems_asr_entry   handler,
-  rtems_mode mode_set
+  rtems_asr_entry   asr_handler,
+  rtems_mode        mode_set
 )
 {
   Thread_Control *executing;
 
+/* XXX normalize mode */
   executing = _Thread_Executing;
   _Thread_Disable_dispatch(); /* cannot reschedule while */
                               /*   the thread is inconsistent */
 
-  if ( ! _ASR_Is_null_handler( handler ) ) {
-    executing->Signal.mode_set = mode_set;
-    executing->Signal.handler  = handler;
+  if ( !_ASR_Is_null_handler( asr_handler ) ) {
+    executing->RTEMS_API->Signal.mode_set = mode_set;
+    executing->RTEMS_API->Signal.handler  = asr_handler;
   }
   else
-    _ASR_Initialize( &executing->Signal );
+    _ASR_Initialize( &executing->RTEMS_API->Signal );
   _Thread_Enable_dispatch();
   return( RTEMS_SUCCESSFUL );
 }
@@ -91,11 +92,13 @@ rtems_status_code rtems_signal_send(
         signal_set
       );
     case OBJECTS_LOCAL:
-      if ( ! _ASR_Is_null_handler( the_thread->Signal.handler ) ) {
+      if ( ! _ASR_Is_null_handler( the_thread->RTEMS_API->Signal.handler ) ) {
         if ( _Modes_Is_asr_disabled( the_thread->current_modes ) )
-          _ASR_Post_signals( signal_set, &the_thread->Signal.signals_pending );
+          _ASR_Post_signals(
+            signal_set, &the_thread->RTEMS_API->Signal.signals_pending );
         else {
-          _ASR_Post_signals( signal_set, &the_thread->Signal.signals_posted );
+          _ASR_Post_signals(
+            signal_set, &the_thread->RTEMS_API->Signal.signals_posted );
           if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
             _ISR_Signals_to_thread_executing = TRUE;
         }

@@ -510,6 +510,7 @@ pause();
                name,
                128,
                RTEMS_DEFAULT_ATTRIBUTES,
+               RTEMS_NO_PRIORITY,
                &id
             );
       end_time = Read_timer();

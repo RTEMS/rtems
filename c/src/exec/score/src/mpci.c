@@ -36,8 +36,10 @@ void _MPCI_Handler_initialization ( void )
 {
   _Thread_queue_Initialize(
     &_MPCI_Remote_blocked_threads,
-    RTEMS_FIFO,
-    STATES_WAITING_FOR_RPC_REPLY
+    OBJECTS_NO_CLASS,
+    THREAD_QUEUE_DISCIPLINE_FIFO,
+    STATES_WAITING_FOR_RPC_REPLY,
+    NULL
   );
 }
 

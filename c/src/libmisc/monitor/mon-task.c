@@ -21,16 +21,16 @@ rtems_monitor_task_canonical(
     Thread_Control       *rtems_thread = (Thread_Control *) thread_void;
     
     canonical_task->entry = rtems_thread->Start.entry_point;
-    canonical_task->argument = rtems_thread->Start.initial_argument;
+    canonical_task->argument = rtems_thread->Start.numeric_argument;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
     canonical_task->priority = rtems_thread->current_priority;
     canonical_task->state = rtems_thread->current_state;
     canonical_task->wait_id = rtems_thread->Wait.id;
-    canonical_task->events = rtems_thread->pending_events;
+    canonical_task->events = rtems_thread->RTEMS_API->pending_events;
     canonical_task->modes = rtems_thread->current_modes;
-    canonical_task->attributes = rtems_thread->attribute_set;
-    (void) memcpy(canonical_task->notepad, rtems_thread->Notepads, sizeof(canonical_task->notepad));
+    canonical_task->attributes = 0 /* XXX FIX ME rtems_thread->RTEMS_API->attribute_set */;
+    (void) memcpy(canonical_task->notepad, rtems_thread->RTEMS_API->Notepads, sizeof(canonical_task->notepad));
     (void) memcpy(&canonical_task->wait_args, &rtems_thread->Wait.Extra, sizeof(canonical_task->wait_args));
 }
 

@@ -82,6 +82,7 @@ rtems_task Task_1(
       index,
       OPERATION_COUNT,
       RTEMS_DEFAULT_ATTRIBUTES,
+      RTEMS_NO_PRIORITY,
       &id
     );
     directive_failed( status, "rtems_semaphore_create" );

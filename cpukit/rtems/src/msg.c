@@ -181,7 +181,7 @@ rtems_status_code rtems_message_queue_create(
   }
 
   if ( _Attributes_Is_global( attribute_set ) &&
-       !( _Objects_MP_Open( &_Message_queue_Information, name,
+       !( _Objects_MP_Allocate_and_open( &_Message_queue_Information, name,
                             the_message_queue->Object.id, FALSE ) ) ) {
     _Message_queue_Free( the_message_queue );
     _Thread_Enable_dispatch();
@@ -195,8 +195,14 @@ rtems_status_code rtems_message_queue_create(
 
   _Chain_Initialize_empty( &the_message_queue->Pending_messages );
 
-  _Thread_queue_Initialize( &the_message_queue->Wait_queue, attribute_set,
-                            STATES_WAITING_FOR_MESSAGE );
+  _Thread_queue_Initialize(
+    &the_message_queue->Wait_queue,
+    OBJECTS_RTEMS_MESSAGE_QUEUES,
+    _Attributes_Is_priority( attribute_set ) ? 
+       THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
+    STATES_WAITING_FOR_MESSAGE,
+    _Message_queue_MP_Send_extract_proxy
+  );
 
   _Objects_Open(
     &_Message_queue_Information,

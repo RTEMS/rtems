@@ -23,7 +23,13 @@ void Screen5()
 {
   rtems_status_code status;
 
-  status = rtems_semaphore_create( 0, 1, RTEMS_DEFAULT_ATTRIBUTES, &Junk_id );
+  status = rtems_semaphore_create(
+    0,
+    1,
+    RTEMS_DEFAULT_ATTRIBUTES, 
+    RTEMS_NO_PRIORITY,
+    &Junk_id
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NAME,
@@ -35,6 +41,7 @@ void Screen5()
     Semaphore_name[ 1 ],
     1,
     RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_NO_PRIORITY,
     &Semaphore_id[ 1 ]
   );
   directive_failed( status, "rtems_semaphore_create" );
@@ -44,6 +51,7 @@ void Screen5()
     Semaphore_name[ 2 ],
     1,
     RTEMS_BINARY_SEMAPHORE,
+    RTEMS_NO_PRIORITY,
     &Semaphore_id[ 2 ]
   );
   directive_failed( status, "rtems_semaphore_create" );
@@ -54,7 +62,9 @@ void Screen5()
           Semaphore_name[ 3 ],
           1,
           RTEMS_DEFAULT_ATTRIBUTES,
-          &Junk_id);
+          RTEMS_NO_PRIORITY,
+          &Junk_id
+      );
   } while (status == RTEMS_SUCCESSFUL);
 
   fatal_directive_status(
@@ -68,6 +78,7 @@ void Screen5()
     Semaphore_name[ 1 ],
     1,
     RTEMS_INHERIT_PRIORITY | RTEMS_BINARY_SEMAPHORE | RTEMS_FIFO,
+    RTEMS_NO_PRIORITY,
     &Junk_id
   );
   fatal_directive_status(
@@ -81,6 +92,7 @@ void Screen5()
     Semaphore_name[ 1 ],
     1,
     RTEMS_INHERIT_PRIORITY | RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY,
+    RTEMS_NO_PRIORITY,
     &Junk_id
   );
   fatal_directive_status(
@@ -94,6 +106,7 @@ void Screen5()
     Semaphore_name[ 1 ],
     2,
     RTEMS_BINARY_SEMAPHORE,
+    RTEMS_NO_PRIORITY,
     &Junk_id
   );
   fatal_directive_status(
@@ -107,6 +120,7 @@ void Screen5()
     Semaphore_name[ 3 ],
     1,
     RTEMS_GLOBAL,
+    RTEMS_NO_PRIORITY,
     &Junk_id
   );
   fatal_directive_status(

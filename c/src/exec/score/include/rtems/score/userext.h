@@ -69,8 +69,8 @@ STATIC INLINE void _User_extensions_Handler_initialization (
  */
 
 STATIC INLINE void _User_extensions_Add_set (
-  User_extensions_Control       *the_extension,
-  rtems_extensions_table *extension_table
+  User_extensions_Control  *the_extension,
+  rtems_extensions_table   *extension_table
 );
 
 /*

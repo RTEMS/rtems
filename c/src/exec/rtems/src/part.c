@@ -107,7 +107,7 @@ rtems_status_code rtems_partition_create(
   }
 
   if ( _Attributes_Is_global( attribute_set ) &&
-       !( _Objects_MP_Open( &_Partition_Information, name,
+       !( _Objects_MP_Allocate_and_open( &_Partition_Information, name,
                             the_partition->Object.id, FALSE ) ) ) {
     _Partition_Free( the_partition );
     _Thread_Enable_dispatch();

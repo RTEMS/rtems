@@ -54,11 +54,11 @@ typedef rtems_asr ( *rtems_asr_entry )(
  */
 
 typedef struct {
-  rtems_asr_entry            handler;          /* address of RTEMS_ASR */
-  rtems_mode          mode_set;         /* RTEMS_ASR mode */
-  rtems_signal_set signals_posted;   /* signal set */
-  rtems_signal_set signals_pending;  /* pending signal set */
-  unsigned32             nest_level;       /* nest level of RTEMS_ASR */
+  rtems_asr_entry   handler;          /* address of RTEMS_ASR */
+  Modes_Control     mode_set;         /* RTEMS_ASR mode */
+  rtems_signal_set  signals_posted;   /* signal set */
+  rtems_signal_set  signals_pending;  /* pending signal set */
+  unsigned32        nest_level;       /* nest level of RTEMS_ASR */
 }   ASR_Information;
 
 /*

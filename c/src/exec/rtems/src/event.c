@@ -56,7 +56,7 @@ rtems_status_code rtems_event_send(
         )
       );
     case OBJECTS_LOCAL:
-      _Event_sets_Post( event_in, &the_thread->pending_events );
+      _Event_sets_Post( event_in, &the_thread->RTEMS_API->pending_events );
       _Event_Surrender( the_thread );
       _Thread_Enable_dispatch();
       return( RTEMS_SUCCESSFUL );
@@ -91,13 +91,13 @@ rtems_status_code rtems_event_receive(
 )
 {
   if ( _Event_sets_Is_empty( event_in ) ) {
-    *event_out = _Thread_Executing->pending_events;
+    *event_out = _Thread_Executing->RTEMS_API->pending_events;
     return( RTEMS_SUCCESSFUL );
   }
 
   _Thread_Disable_dispatch();
   _Event_Seize( event_in, option_set, ticks );
   _Thread_Enable_dispatch();
-  *event_out = _Thread_Executing->events_out;
+  *event_out = _Thread_Executing->RTEMS_API->events_out;
   return( _Thread_Executing->Wait.return_code );
 }
