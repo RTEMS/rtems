@@ -37,7 +37,7 @@
 #error Missing BSP_CONSOLE_DEVNAME
 #endif
 
-static rtems_driver_name_t *low_level_device_info = NULL ;
+static rtems_driver_name_t low_level_device_info;
 
 /*  console_initialize
  *
@@ -56,7 +56,7 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
-  rtems_device_driver status ;
+  rtems_device_driver status;
   
   status = rtems_io_register_name(
     "/dev/console",
@@ -67,8 +67,7 @@ rtems_device_driver console_initialize(
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
 
-  status = rtems_io_lookup_name( BSP_CONSOLE_DEVNAME, 
-    &low_level_device_info );
+  status = rtems_io_lookup_name( BSP_CONSOLE_DEVNAME, &low_level_device_info );
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
 
@@ -86,8 +85,8 @@ rtems_device_driver console_open(
   void                    * arg
 )
 {
-  return rtems_io_open( low_level_device_info->major,
-    low_level_device_info->minor,
+  return rtems_io_open( low_level_device_info.major,
+    low_level_device_info.minor,
     arg );
 }
  
@@ -101,8 +100,8 @@ rtems_device_driver console_close(
   void                    * arg
 )
 {
-  return rtems_io_close( low_level_device_info->major,
-    low_level_device_info->minor,
+  return rtems_io_close( low_level_device_info.major,
+    low_level_device_info.minor,
     arg );
 }
 
@@ -116,8 +115,8 @@ rtems_device_driver console_read(
   void                    * arg
 )
 {
-  return rtems_io_read( low_level_device_info->major,
-    low_level_device_info->minor,
+  return rtems_io_read( low_level_device_info.major,
+    low_level_device_info.minor,
     arg );
 }
 
@@ -131,8 +130,8 @@ rtems_device_driver console_write(
   void                    * arg
 )
 {
-  return rtems_io_write( low_level_device_info->major,
-    low_level_device_info->minor,
+  return rtems_io_write( low_level_device_info.major,
+    low_level_device_info.minor,
     arg );
 }
 
@@ -146,7 +145,7 @@ rtems_device_driver console_control(
   void                    * arg
 )
 {
-  return rtems_io_control( low_level_device_info->major,
-    low_level_device_info->minor,
+  return rtems_io_control( low_level_device_info.major,
+    low_level_device_info.minor,
     arg );
 }
