@@ -3,8 +3,8 @@
 ##
 
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 C_FILES = cpu_install_intr_stack.c cpu_install_raw_isr.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
@@ -19,4 +19,4 @@ endif
 
 EXTRA_DIST = cpu_install_intr_stack.c cpu_install_raw_isr.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am
