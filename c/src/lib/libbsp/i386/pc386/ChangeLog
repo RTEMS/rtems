@@ -1,3 +1,9 @@
+2004-11-20	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+        PR 703/filesystem
+	* ide/ide.c: Extend the "modes_available" and "mode_active" parameters
+	to uint16_t for UDMA support.
+
 2004-10-13	Eric Norum <norume@aps.anl.gov>
 
 	PR 688/bsps

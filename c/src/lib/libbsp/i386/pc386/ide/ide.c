@@ -288,8 +288,8 @@ rtems_status_code pc386_ide_config_io_speed
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- int       minor,                   /* controller minor number       */
- uint8_t   modes_avail              /* optional argument             */
+ int        minor,                   /* controller minor number       */
+ uint16_t   modes_avail              /* optional argument             */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
