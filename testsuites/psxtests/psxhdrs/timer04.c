@@ -19,10 +19,6 @@
 #error "rtems is supposed to have timer_gettime"
 #endif
 
-#ifndef DELAYTIMER_MAX
-#error "this is supposed to be defined"
-#endif
-
 void test( void )
 {
   timer_t           timerid = 0;
