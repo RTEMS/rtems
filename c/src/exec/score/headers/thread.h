@@ -176,6 +176,7 @@ struct Thread_Control_struct {
   Thread_CPU_budget_algorithms          budget_algorithm;
   Thread_CPU_budget_algorithm_callout   budget_callout;
 
+  unsigned32                            ticks_executed;
   Chain_Control                        *ready;
   Priority_Information                  Priority_map;
   Thread_Start_information              Start;
