@@ -1,3 +1,9 @@
+2004-08-19	Jay Monkman <jtm@lopingdog.com>
+
+	PR 671/bsps
+	* rtems/score/cpu.h: Fixed bug in _CPU_ISR_Set_level, where input param
+	was always ignored.
+
 2004-04-09	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Fix typo.
