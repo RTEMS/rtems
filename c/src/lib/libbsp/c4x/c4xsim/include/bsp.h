@@ -47,7 +47,7 @@ extern "C" {
  *  Stuff for Time Test 27
  */
 
-#include <c4xio.h>
+#include <rtems/c4x/c4xio.h>
 #define MUST_WAIT_FOR_INTERRUPT 0
 
 /* XXX */

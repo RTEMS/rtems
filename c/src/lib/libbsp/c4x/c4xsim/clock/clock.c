@@ -17,7 +17,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <bsp.h>
-#include <c4xio.h>
+#include <rtems/c4x/c4xio.h>
 
 void Clock_exit( void );
 rtems_isr Clock_isr( rtems_vector_number vector );
