@@ -17,7 +17,7 @@
 @end tex
 
 @vskip 0pt plus 1filll
-COPYRIGHT @copyright{} 1988 - 1998.@*
+COPYRIGHT @copyright{} 1988 - 1999.@*
 On-Line Applications Research Corporation (OAR).@*
 
 The authors have used their best efforts in preparing
