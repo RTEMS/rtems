@@ -100,7 +100,9 @@ Thread_Control *_MPCI_Process_response (
   return NULL;
 }
 
-void _MPCI_Receive_server( void )
+Thread _MPCI_Receive_server(
+  unsigned32 ignore
+)
 {
 }
 
