@@ -1,5 +1,15 @@
 2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/env-rtemsbsp.m4:
+	Remove CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V.
+	* aclocal/prog-cc.m4:
+	Don't invoke _RTEMS_FLAGS to set up RTEMS_CFLAGS.
+	* aclocal/prog-cxx.m4: Let CXXFLAGS default to CFLAGS.
+	Don't invoke _RTEMS_FLAGS to set up RTEMS_CXXFLAGS.
+	Remove am__fastdepCXX conditional.
+
+2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* automake/compile.am: Remove CLEANDIRS (Unused).
 	Remove DEFS (Implicitly handled by automake).
 
