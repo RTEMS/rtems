@@ -24,6 +24,7 @@ dnl AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
+AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here

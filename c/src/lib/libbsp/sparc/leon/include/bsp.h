@@ -27,6 +27,8 @@
 extern "C" {
 #endif
 
+#include <bspopts.h>
+
 #include <rtems.h>
 #include <iosupp.h>
 #include <leon.h>
