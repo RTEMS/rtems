@@ -19,7 +19,9 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <termios.h>
-#include <sys/ioctl.h>
+/* #include <sys/ioctl.h> */
+
+int ioctl();
 
 #include <rtems/libio.h>
 
