@@ -1,3 +1,8 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Corrected condition CPU model selection so
+	multilib'ing and bare BSP works.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* i960ca/Makefile.am, i960ka/Makefile.am, i960rp/Makefile.am:
