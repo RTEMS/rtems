@@ -1,3 +1,7 @@
+2005-01-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* console/leds.c: Fix prototype of led_putnum().
+
 2004-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Add new bss sections .bss.* and .gnu.linkonce.b*.

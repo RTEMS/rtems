@@ -7,7 +7,6 @@
 #include "leds.h"
 
 void zylons();
-void led_putnum();
 void clear_leds();
 
 /*
@@ -33,8 +32,7 @@ void clear_leds();
  *                       d                . d.p (decimal point)
  */
 void
-led_putnum ( num )
-char num;
+led_putnum ( char num )
 {
     static unsigned char *leds = (unsigned char *)LED_ADDR;
     static unsigned char num_bits [18] = {
