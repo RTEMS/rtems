@@ -33,7 +33,7 @@ int getpwnam_r(
   }
 
   while (fgets (buffer, bufsize, fp)) {
-    sscanf (buffer, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%s\n",
+    sscanf (buffer, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%[^:]:%s\n",
         logname, password, &pwd->pw_uid,
         &pwd->pw_gid, comment, gecos,
         dir, shell);
@@ -84,7 +84,7 @@ int getpwuid_r(
   }
 
   while (fgets (buffer, bufsize, fp)) {
-    sscanf (buffer, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%s\n",
+    sscanf (buffer, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%[^:]:%s\n",
      logname, password, &pw_passwd.pw_uid,
      &pw_passwd.pw_gid, comment, gecos,
      dir, shell);
@@ -129,10 +129,10 @@ struct passwd *getpwent()
   if (fgets (buf, sizeof (buf), passwd_fp) == NULL)
     return NULL;
 
-  sscanf (buf, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%s\n",
-	  logname, password, &pw_passwd.pw_uid,
-	  &pw_passwd.pw_gid, comment, gecos,
-	  dir, shell);
+  sscanf (buf, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%[^:]:%s\n",
+    logname, password, &pw_passwd.pw_uid,
+    &pw_passwd.pw_gid, comment, gecos,
+    dir, shell);
   pw_passwd.pw_name = logname;
   pw_passwd.pw_passwd = password;
   pw_passwd.pw_comment = comment;

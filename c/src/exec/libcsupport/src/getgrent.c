@@ -36,7 +36,7 @@ int getgrnam_r(
 
   while (fgets (buffer, bufsize, fp)) {
     sscanf (buffer, "%[^:]:%[^:]:%d:%s\n",
-      groupname, password, &grp->gr_gid,
+      groupname, password, (int *) &grp->gr_gid,
       groups);
     grp->gr_name = groupname;
     grp->gr_passwd = password;
@@ -83,7 +83,7 @@ int getgrgid_r(
 
   while (fgets (buffer, bufsize, fp)) {
     sscanf (buffer, "%[^:]:%[^:]:%d:%s\n",
-      groupname, password, &gr_group.gr_gid,
+      groupname, password, (int *) &gr_group.gr_gid,
       groups);
     gr_group.gr_name = groupname;
     gr_group.gr_passwd = password;
@@ -125,7 +125,7 @@ struct group *getgrent( void )
     return NULL;
 
   sscanf (buf, "%[^:]:%[^:]:%d:%s\n",
-    groupname, password, &gr_group.gr_gid,
+    groupname, password, (int *) &gr_group.gr_gid,
     groups);
   gr_group.gr_name = groupname;
   gr_group.gr_passwd = password;
