@@ -53,8 +53,8 @@ console_fns ns16550_fns =
   ns16550_write_support_int,      /* deviceWrite */
   ns16550_initialize_interrupts,  /* deviceInitialize */
   ns16550_write_polled,           /* deviceWritePolled */
-  NULL,                           /* deviceSetAttributes */
-  FALSE,                          /* deviceOutputUsesInterrupts */
+  ns16550_set_attributes,         /* deviceSetAttributes */
+  TRUE                            /* deviceOutputUsesInterrupts */
 };
 
 console_fns ns16550_fns_polled =
@@ -66,8 +66,8 @@ console_fns ns16550_fns_polled =
   ns16550_write_support_polled,        /* deviceWrite */
   ns16550_init,                        /* deviceInitialize */
   ns16550_write_polled,                /* deviceWritePolled */
-  NULL,                                /* deviceSetAttributes */
-  FALSE,                               /* deviceOutputUsesInterrupts */
+  ns16550_set_attributes,              /* deviceSetAttributes */
+  FALSE                                /* deviceOutputUsesInterrupts */
 };
 
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
@@ -292,6 +292,7 @@ NS16550_STATIC int ns16550_assert_DTR(int minor)
 /*
  *  ns16550_negate_DTR
  */
+
 NS16550_STATIC int ns16550_negate_DTR(int minor)
 {
   unsigned32              pNS16550;
@@ -312,6 +313,101 @@ NS16550_STATIC int ns16550_negate_DTR(int minor)
   (*setReg)(pNS16550, NS16550_MODEM_CONTROL,pns16550Context->ucModemCtrl);
   rtems_interrupt_enable(Irql);
   return 0;
+}
+
+/*
+ *  ns16550_set_attributes
+ *
+ *  This function sets the channel to reflect the requested termios
+ *  port settings.
+ */
+
+NS16550_STATIC int ns16550_set_attributes(
+  int                   minor,
+  const struct termios *t
+)
+{
+  unsigned32              pNS16550;
+  unsigned32              ulBaudDivisor;
+  unsigned8               ucLineControl;
+  unsigned32              baud_requested;
+  setRegister_f           setReg;
+  getRegister_f           getReg;
+  unsigned32              Irql;
+
+  pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
+  setReg   = Console_Port_Tbl[minor].setRegister;
+  getReg   = Console_Port_Tbl[minor].getRegister;
+
+  /*
+   *  Calculate the baud rate divisor
+   */
+
+  baud_requested = t->c_cflag & CBAUD;
+  if (!baud_requested)
+    baud_requested = B9600;              /* default to 9600 baud */
+
+  ulBaudDivisor = termios_baud_to_number(baud_requested);
+
+  ucLineControl = 0;
+
+  /*
+   *  Parity
+   */
+
+  if (t->c_cflag & PARENB) {
+    ucLineControl |= SP_LINE_PAR;
+    if (!(t->c_cflag & PARODD))
+      ucLineControl |= SP_LINE_ODD;
+  }
+
+  /*
+   *  Character Size
+   */
+
+  if (t->c_cflag & CSIZE) {
+    switch (t->c_cflag & CSIZE) {
+      case CS5:  ucLineControl |= FIVE_BITS;  break;
+      case CS6:  ucLineControl |= SIX_BITS;   break;
+      case CS7:  ucLineControl |= SEVEN_BITS; break;
+      case CS8:  ucLineControl |= EIGHT_BITS; break;
+    }
+  } else {
+    ucLineControl |= EIGHT_BITS;               /* default to 9600,8,N,1 */
+  }
+
+  /*
+   *  Stop Bits
+   */
+
+  if (t->c_cflag & CSTOPB) {
+    ucLineControl |= SP_LINE_STOP;              /* 2 stop bits */
+  } else {
+    ;                                           /* 1 stop bit */
+  }
+
+  /*
+   *  Now actually set the chip
+   */
+
+  rtems_interrupt_disable(Irql);
+
+    /*
+     *  Set the baud rate 
+     */
+
+    (*setReg)(pNS16550, NS16550_LINE_CONTROL, SP_LINE_DLAB);
+    /* XXX are these registers right? */
+    (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, ulBaudDivisor&0xff);
+    (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (ulBaudDivisor>>8)&0xff);
+
+    /*
+     *  Now write the line control
+     */
+    (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucLineControl );
+
+  rtems_interrupt_enable(Irql);
+
 }
 
 /*

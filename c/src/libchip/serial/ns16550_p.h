@@ -226,6 +226,11 @@ NS16550_STATIC void ns16550_enable_interrupts(
   int mask
 );
 
+NS16550_STATIC int ns16550_set_attributes(
+  int                   minor,
+  const struct termios *t
+);
+
 #ifdef __cplusplus
 }
 #endif
