@@ -36,7 +36,7 @@ SRCS += $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
 TMPINSTALL_FILES += $(LIB)
 
-all-local: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
+all-local: $(LIB) $(TMPINSTALL_FILES)
 
 $(LIB): $(SRCS)
 	rm -f $@
