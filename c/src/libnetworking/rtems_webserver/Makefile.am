@@ -48,12 +48,14 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_NETWORKING
 if HAS_POSIX
 $(PROJECT_INCLUDE)/goahead/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/goahead
 	@: > $(PROJECT_INCLUDE)/goahead/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems_webserver.h: rtems_webserver.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems_webserver.h
@@ -92,5 +94,7 @@ $(PROJECT_INCLUDE)/goahead/wsIntrn.h: wsIntrn.h $(PROJECT_INCLUDE)/goahead/$(dir
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/wsIntrn.h
 endif
 endif
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
