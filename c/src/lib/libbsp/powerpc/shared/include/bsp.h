@@ -9,8 +9,8 @@
  *
  * $Id$
  */
-#ifndef LIBBSP_POWERPC_MCP750_BSP_H
-#define LIBBSP_POWERPC_MCP750_BSP_H
+#ifndef LIBBSP_POWERPC_MOTOROLA_SHARED_BSP_H
+#define LIBBSP_POWERPC_MOTOROLA_SHARED_BSP_H
 
 #include <rtems.h>
 #include <console.h>
@@ -60,7 +60,7 @@ extern int BSP_connect_clock_handler (void);
  *  TM27 stuff
  */
 
-#if defined(MCP750) && defined(RTEMS_TM27)
+#if defined(USE_ENHANCED_INTR_API) && defined(RTEMS_TM27)
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
