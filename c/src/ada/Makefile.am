@@ -10,13 +10,14 @@ endif
 
 all-local: $(PREINSTALL_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 if RTEMS_ADA
 $(PROJECT_INCLUDE)/adainclude/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/adainclude
 	@: > $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
 
 $(PROJECT_INCLUDE)/adainclude/rtems.adb: rtems.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems.adb
@@ -36,5 +37,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.ads
 endif
 
 CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

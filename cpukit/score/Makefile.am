@@ -161,12 +161,13 @@ all-local: $(PREINSTALL_FILES) libscore$(LIB_VARIANT).a
 
 DISTCLEANFILES = include/rtems/score/cpuopts.h
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/debug.h: include/rtems/debug.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/debug.h
@@ -183,7 +184,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/seterr.h
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/address.h: include/rtems/score/address.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/address.h
@@ -483,6 +484,7 @@ endif
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

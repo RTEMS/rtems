@@ -131,12 +131,13 @@ librtems_g_a_SOURCES = $(librtems_a_SOURCES)
 
 all-local: $(PREINSTALL_FILES) librtems$(LIB_VARIANT).a
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems.h: include/rtems.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems.h
@@ -145,7 +146,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems.h
 $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/rtems/asr.h: include/rtems/rtems/asr.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/asr.h
@@ -405,5 +406,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timer.inl
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

@@ -124,12 +124,13 @@ UNUSED_C_FILES = src/cre_mbx.c src/del_mbx.c src/mboxtranslatereturncode.c \
 
 EXTRA_DIST += $(UNUSED_C_FILES) src/TODO
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_ITRON
 $(PROJECT_INCLUDE)/itron.h: include/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -139,7 +140,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/itron.h
 $(PROJECT_INCLUDE)/itronsys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/itronsys
 	@: > $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
 
 $(PROJECT_INCLUDE)/itronsys/eventflags.h: include/itronsys/eventflags.h $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/itronsys/eventflags.h
@@ -200,7 +201,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/itronsys/vmempool.h
 $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/itron
 	@: > $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/itron/config.h: include/rtems/itron/config.h $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/config.h
@@ -363,5 +364,6 @@ endif
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

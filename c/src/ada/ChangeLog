@@ -1,3 +1,7 @@
+2004-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add PREINSTALL_DIRS.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Move include_adadir into RTEMS_ADA condional block.

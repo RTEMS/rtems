@@ -107,13 +107,14 @@ EXTRA_DIST += include/rpcsvc/bootparam_prot.x include/rpcsvc/crypt.x \
     include/rpcsvc/ypupdate_prot.x include/rpcsvc/yp.x \
     include/rpcsvc/ypxfrd.x
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 if LIBRPC
 $(PROJECT_INCLUDE)/rpc/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rpc
 	@: > $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rpc/auth.h: include/rpc/auth.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth.h
@@ -181,5 +182,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/xdr.h
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

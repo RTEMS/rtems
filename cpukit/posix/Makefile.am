@@ -174,12 +174,13 @@ not:
 
 EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_POSIX
 $(PROJECT_INCLUDE)/sched.h: include/sched.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -201,7 +202,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/semaphore.h
 $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/posix
 	@: > $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/posix/cancel.h: include/rtems/posix/cancel.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cancel.h
@@ -354,5 +355,6 @@ endif
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am
