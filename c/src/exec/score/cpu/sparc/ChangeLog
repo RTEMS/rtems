@@ -1,7 +1,14 @@
+2001-09-27	Jiri Gaisler <jiri@gaisler.com>
+
+	* cpu_asm.S: Small patch to fix a bug in the rtems sparc port. The
+	bug has been there all the time, but only hits the leon bsp since the
+	leon cpu has a 5-stage pipeline (erc32 has 4 stages).
+
 2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* Makefile.am: Use 'PREINSTALL_FILES ='.
+
 
 2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
