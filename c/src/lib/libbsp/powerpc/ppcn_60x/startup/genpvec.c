@@ -26,11 +26,11 @@
  *  the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  $Id: 
+ *  $Id$
  */
 
 #include <bsp.h>
-#include "chain.h"
+#include <chain.h>
 #include <assert.h>
 
 /* 
