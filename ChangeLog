@@ -1,5 +1,9 @@
 2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Remove automake/compile.am
+
+2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/compile.am: Remove (Unused).
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
