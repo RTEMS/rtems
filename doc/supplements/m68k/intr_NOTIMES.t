@@ -143,6 +143,76 @@ MC68xxx CPU models with separate interrupt stacks:
 @end html
 @end ifset
 
+@section CPU Models Without VBR and RAM at 0
+
+This is from a post by Zoltan Kocsi <zoltan@bendor.com.au> and is
+a nice trick in certain situations.  In his words:
+
+I think somebody on this list asked about the interupt vector 
+handling w/o VBR and RAM at 0.  The usual trick is 
+to initialise the vector table (except the first 2 two entries, of 
+course) to point to the same location BUT you also add the vector 
+number times 0x1000000 to them. That is, bits 31-24 contain the vector 
+number and 23-0 the address of the common handler.
+Since the PC is 32 bit wide but the actual address bus is only 24,
+the top byte will be in the PC but will be ignored when jumping
+onto your routine.
+
+Then your common interrupt routine gets this info by loading the PC 
+into some register and based on that info, you can jump to a vector
+in a vector table pointed by a virtual VBR:
+
+@example
+//
+//  Real vector table at 0
+//
+ 
+    .long   initial_sp
+    .long   initial_pc
+    .long   myhandler+0x02000000
+    .long   myhandler+0x03000000
+    .long   myhandler+0x04000000
+    ...
+    .long   myhandler+0xff000000
+   
+   
+//
+// This handler will jump to the interrupt routine   of which
+// the address is stored at VBR[ vector_no ]
+// The registers and stackframe will be intact, the interrupt
+// routine will see exactly what it would see if it was called
+// directly from the HW vector table at 0.
+//
+
+    .comm    VBR,4,2        // This defines the 'virtual' VBR
+                            // From C: extern void *VBR;
+
+myhandler:                  // At entry, PC contains the full vector
+    move.l  %d0,-(%sp)      // Save d0
+    move.l  %a0,-(%sp)      // Save a0
+    lea     0(%pc),%a0      // Get the value of the PC
+    move.l  %a0,%d0         // Copy it to a data reg, d0 is VV??????
+    swap    %d0             // Now d0 is ????VV??
+    and.w   #0xff00,%d0     // Now d0 is ????VV00 (1)
+    lsr.w   #6,%d0          // Now d0.w contains the VBR table offset
+    move.l  VBR,%a0         // Get the address from VBR to a0
+    move.l  (%a0,%d0.w),%a0 // Fetch the vector
+    move.l  4(%sp),%d0      // Restore d0
+    move.l  %a0,4(%sp)      // Place target address to the stack
+    move.l  (%sp)+,%a0      // Restore a0, target address is on TOS 
+    ret                     // This will jump to the handler and
+                            // restore the stack
+
+(1) If 'myhandler' is guaranteed to be in the first 64K, e.g. just
+    after the vector table then that insn is not needed.
+
+@end example
+
+There are probably shorter ways to do this, but it I believe is enough 
+to illustrate the trick. Optimisation is left as an exercise to the 
+reader :-) 
+
+
 @section Interrupt Levels
 
 Eight levels (0-7) of interrupt priorities are

@@ -1,3 +1,8 @@
+2002-06-28	Joel Sherrill <joel@OARcorp.com>
+
+	* intr_NOTIMES.t: Per PR70 incorporate the posting by 
+	Zoltan Kocsi <zoltan@bendor.com.au> explaining a m68k vectoring trick.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
