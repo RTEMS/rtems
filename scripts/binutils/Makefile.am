@@ -3,7 +3,7 @@
 ##
 
 
-MKBINUTILSSPEC = $(SHELL) $(top_builddir)/mkbinutilspec
+MKBINUTILSSPEC = $(SHELL) ./mkspec
 
 SUBPACKAGES = binutils.add \
   base-binutils.add target-binutils.add
@@ -12,49 +12,49 @@ binutils.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
 CLEANFILES = binutils.spec.in
 
-MKBINUTILSSPEC_DEPS = $(top_builddir)/mkbinutilspec binutils.spec.in \
+MKBINUTILSSPEC_DEPS = mkspec binutils.spec.in \
     $(top_builddir)/setup.cache
 
 arm-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . arm-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache arm-rtems > $@
 
 c4x-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . c4x-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache c4x-rtems > $@
 
 h8300-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . h8300-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems > $@
 
 hppa1.1-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache hppa1.1-rtems > $@
 
 i386-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache i386-rtems > $@
 
 i960-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . i960-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache i960-rtems > $@
 
 m68k-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems > $@
 
 mips64orion-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips64orion-rtems > $@
 mips-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . mips-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips-rtems > $@
 
 or32-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . or32-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache or32-rtems > $@
 
 powerpc-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache powerpc-rtems > $@
 
 sh-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sh-rtems > $@
 
 sh-rtemself-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtemself
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sh-rtemself > $@
 
 sparc-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems > $@
 
 RPM_SPECS_DATA = \
     arm-rtems-$(BINUTILSVERS).spec \

@@ -7,6 +7,7 @@
 	* binutils/binutils.add: Add @exe_ext@ to c++filt.
 	Add %_defaultbuildroot.
 	* configure.ac: Reflect changes above.
+	* binutils/Makefile.am: Reflect changes above.
 
 2003-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
