@@ -32,6 +32,9 @@
  *    
  */
 
+unsigned32 g_data_abort_cnt = 0;
+unsigned32 g_data_abort_insn_list[1024];
+
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
@@ -51,7 +54,8 @@ unsigned32 _CPU_ISR_Get_level( void )
     
     asm volatile ("mrs  %0, cpsr \n"           \
                   "and  %0,  %0, #0xc0 \n"     \
-                  : "=r" (reg));
+                  : "=r" (reg)                 \
+                  : "0" (reg) );
     
     return reg;
 }
@@ -101,80 +105,34 @@ void _CPU_Context_Initialize(
   boolean           is_fp
 )
 {
-    the_context->register_sp = ((unsigned32)(stack_base)) + (size) ;
-    the_context->register_pc = (entry_point);
-    the_context->register_cpsr = (new_level | 0x13);
+    the_context->register_sp = (unsigned32)stack_base + size ;
+    the_context->register_lr = (unsigned32)entry_point;
+    the_context->register_cpsr = new_level | 0x13;
 }
 
-/*PAGE
- *
- *  _CPU_Install_interrupt_stack
+
+/*
+ *  _CPU_Install_interrupt_stack - this function is empty since the
+ *  BSP must set up the interrupt stacks.
  */
 
 void _CPU_Install_interrupt_stack( void )
 {
-/* FIXME: do something here */
-#if 0
-    extern unsigned long _fiq_stack;
-    extern unsigned long _fiq_stack_size;
-    extern unsigned long _irq_stack;
-    extern unsigned long _irq_stack_size;
-    extern unsigned long _abt_stack;
-    extern unsigned long _abt_stack_size;
-    unsigned long *ptr;
-    int i;
-
-    ptr = &_fiq_stack;
-    for (i = 0; i < ((int)&_fiq_stack_size/4); i++) {
-        ptr[i] = 0x13131313;
-    }
-
-    ptr = &_irq_stack;
-    for (i = 0; i < ((int)&_irq_stack_size/4); i++) {
-        ptr[i] = 0xf0f0f0f0;
-    }
-
-    ptr = &_abt_stack;
-    for (i = 0; i < ((int)&_abt_stack_size/4); i++) {
-        ptr[i] = 0x55555555;
-    }
-#endif
-}
-
-/*PAGE
- *
- *  _CPU_Thread_Idle_body
- *
- *  NOTES:
- *
- *  1. This is the same as the regular CPU independent algorithm.
- *
- *  2. If you implement this using a "halt", "idle", or "shutdown"
- *     instruction, then don't forget to put it in an infinite loop.
- *
- *  3. Be warned. Some processors with onboard DMA have been known
- *     to stop the DMA if the CPU were put in IDLE mode.  This might
- *     also be a problem with other on-chip peripherals.  So use this
- *     hook with caution.
- */
-
-void _CPU_Thread_Idle_body( void )
-{
-
-    while(1); /* FIXME: finish this */
-    /* insert your "halt" instruction here */ ;
 }
 
 void _defaultExcHandler (CPU_Exception_frame *ctx)
 {
     printk("\n\r");
     printk("----------------------------------------------------------\n\r");
+#if 0
     printk("Exception 0x%x caught at PC 0x%x by thread %d\n",
            ctx->register_pc, ctx->register_lr - 4,
            _Thread_Executing->Object.id);
+#endif
     printk("----------------------------------------------------------\n\r");
     printk("Processor execution context at time of the fault was  :\n\r");
     printk("----------------------------------------------------------\n\r");
+#if 0
     printk(" r0  = %8x  r1  = %8x  r2  = %8x  r3  = %8x\n\r",
            ctx->register_r0, ctx->register_r1, 
            ctx->register_r2, ctx->register_r3);
@@ -187,7 +145,7 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
            ctx->register_fp, ctx->register_ip, 
            ctx->register_sp, ctx->register_lr - 4);
     printk("----------------------------------------------------------\n\r");
-    
+#endif    
     if (_ISR_Nest_level > 0) {
         /*
          * In this case we shall not delete the task interrupted as
@@ -207,6 +165,7 @@ cpuExcHandlerType _currentExcHandler = _defaultExcHandler;
 
 extern void _Exception_Handler_Undef_Swi(); 
 extern void _Exception_Handler_Abort(); 
+extern void _exc_data_abort(); 
 /* FIXME: put comments here */
 void rtems_exception_init_mngt()
 {
@@ -226,7 +185,7 @@ void rtems_exception_init_mngt()
                               NULL);
       
       _CPU_ISR_install_vector(ARM_EXCEPTION_DATA_ABORT,
-                              _Exception_Handler_Abort,
+                              _exc_data_abort,
                               NULL);
       
       _CPU_ISR_install_vector(ARM_EXCEPTION_FIQ,        
@@ -240,4 +199,126 @@ void rtems_exception_init_mngt()
       _CPU_ISR_Enable(level);
 }
   
+#define INSN_MASK         0xc5
 
+#define INSN_STM1         0x80
+#define INSN_STM2         0x84
+#define INSN_STR          0x40
+#define INSN_STRB         0x44
+
+#define INSN_LDM1         0x81
+#define INSN_LDM23        0x85
+#define INSN_LDR          0x41
+#define INSN_LDRB         0x45
+
+#define GET_RD(x)         ((x & 0x0000f000) >> 12)
+#define GET_RN(x)         ((x & 0x000f0000) >> 16)
+
+#define GET_U(x)              ((x & 0x00800000) >> 23)
+#define GET_I(x)              ((x & 0x02000000) >> 25)
+
+#define GET_REG(r, ctx)      (((unsigned32 *)ctx)[r])
+#define SET_REG(r, ctx, v)   (((unsigned32 *)ctx)[r] = v)
+#define GET_OFFSET(insn)     (insn & 0xfff)
+
+
+/* This function is supposed to figure out what caused the 
+ * data abort, do that, then return.
+ *
+ * All unhandled instructions cause the system to hang.
+ */
+
+void do_data_abort(unsigned32 insn, unsigned32 spsr, 
+                   CPU_Exception_frame *ctx)
+{
+    unsigned8  decode;
+    unsigned8  insn_type;
+
+    unsigned32 rn;
+    unsigned32 rd;
+
+    unsigned8  *src_addr;
+    unsigned8  *dest_addr;
+    unsigned32  tmp;
+
+    g_data_abort_insn_list[g_data_abort_cnt & 0x3ff] = ctx->register_lr - 8;
+    g_data_abort_cnt++;
+    
+    decode = ((insn >> 20) & 0xff);
+
+    insn_type = decode & INSN_MASK;
+    switch(insn_type) {
+    case INSN_STM1:
+        printk("\n\nINSN_STM1\n");
+        break;
+    case INSN_STM2:
+        printk("\n\nINSN_STM2\n");
+        break;
+    case INSN_STR:
+        printk("\n\nINSN_STR\n");
+        break;
+    case INSN_STRB:
+        printk("\n\nINSN_STRB\n");
+        break;
+    case INSN_LDM1:
+        printk("\n\nINSN_LDM1\n");
+        break;
+    case INSN_LDM23:
+        printk("\n\nINSN_LDM23\n");
+        break;
+    case INSN_LDR:
+        printk("\n\nINSN_LDR\n");
+
+        rn = GET_RN(insn);
+        rd = GET_RD(insn);
+
+        /* immediate offset/index */
+        if (GET_I(insn) == 0) {
+            switch(decode & 0x12) {  /* P and W bits */
+            case 0x00:  /* P=0, W=0 -> base is updated, post-indexed */
+                printk("\tPost-indexed\n");
+                break;
+            case 0x02:  /* P=0, W=1 -> user mode access */
+                printk("\tUser mode\n");
+                break;
+            case 0x10:  /* P=1, W=0 -> base not updated */
+                src_addr = GET_REG(rn, ctx);
+                if (GET_U(insn) == 0) {
+                    src_addr -= GET_OFFSET(insn);
+                } else {
+                    src_addr += GET_OFFSET(insn);
+                }
+                tmp = (src_addr[0] | 
+                       (src_addr[1] << 8) | 
+                       (src_addr[2] << 16) | 
+                       (src_addr[3] << 24));
+                SET_REG(rd, ctx, tmp);
+                return;
+                break;
+            case 0x12:  /* P=1, W=1 -> base is updated, pre-indexed */
+                printk("\tPre-indexed\n");
+                break;
+            }
+        }
+        break;
+    case INSN_LDRB:
+        printk("\n\nINSN_LDRB\n");
+        break;
+    default:
+        printk("\n\nUnrecognized instruction\n");
+        break;
+    }
+    
+    printk("data_abort at address 0x%x, instruction: 0x%x,   spsr = 0x%x\n",
+           ctx->register_lr - 8, insn, spsr);
+
+    /* disable interrupts, wait forever */
+    _CPU_ISR_Disable(tmp);
+    while(1) {
+        continue;
+    }
+    return;
+}
+
+
+    

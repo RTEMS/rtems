@@ -29,24 +29,43 @@ extern "C" {
  *  dependent features are present in a particular member
  *  of the family.
  */
-#if defined(__arm9__)
-#  define CPU_MODEL_NAME  "arm9"
-#  define ARM_HAS_FPU     0
-#elif defined(__arm9tdmi__)
-#  define CPU_MODEL_NAME  "arm9tdmi"
-#  define ARM_HAS_FPU     0
-#elif defined(__arm7__)
-#  define CPU_MODEL_NAME  "arm7"
-#  define ARM_HAS_FPU     0
-#elif defined(__arm7tdmi__)
-#  define CPU_MODEL_NAME  "arm7tdmi"
-#  define ARM_HAS_FPU     0
-#elif defined(__arm__)
-#  define CPU_MODEL_NAME  "unknown ARM"
-#  define ARM_HAS_FPU     0
+#if defined(__ARM_ARCH_4__)
+#  define CPU_MODEL_NAME  "ARMv4"
+#  define ARM_HAS_CLZ     0
+#  define ARM_HAS_THUMB   0
+
+#elif defined(__ARM_ARCH_4T__)
+#  define CPU_MODEL_NAME  "ARMv4T"
+#  define ARM_HAS_CLZ     0
+#  define ARM_HAS_THUMB   1
+
+#elif defined(__ARM_ARCH_5__)
+#  define CPU_MODEL_NAME  "ARMv5"
+#  define ARM_HAS_CLZ     1
+#  define ARM_HAS_THUMB   0
+
+#elif defined(__ARM_ARCH_5T__)
+#  define CPU_MODEL_NAME  "ARMv5T"
+#  define ARM_HAS_CLZ     1
+#  define ARM_HAS_THUMB   1
+
+#elif defined(__ARM_ARCH_5E__)
+#  define CPU_MODEL_NAME  "ARMv5E"
+#  define ARM_HAS_CLZ     1
+#  define ARM_HAS_THUMB   0
+
+#elif defined(__ARM_ARCH_5TE__)
+#  define CPU_MODEL_NAME  "ARMv5TE"
+#  define ARM_HAS_CLZ     1
+#  define ARM_HAS_THUMB   1
+
 #else
 #  error "Unsupported CPU Model"
+
 #endif
+
+/* All ARM CPUs are assumed to not have floating point units */
+#define ARM_HAS_FPU     0
 
 /*
  *  Define the name of the CPU family.

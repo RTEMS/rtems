@@ -1,3 +1,12 @@
+2002-07-30	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* cpu.c, cpu_asm.S, rtems/score/arm.h, rtems/score/cpu.h,
+	rtems/score/cpu_asm.h, rtems/score/types.h: ARM port works
+	well enough to run all sptests, tmtests, and ttcp.  
+	In addition to general cleanup, there has been considerable
+	optimization to interrupt disable/enable, endian swapping,
+	and context switching.
+
 2002-07-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Build libscorecpu.a instead of rtems-cpu.rel.

@@ -31,57 +31,21 @@
  *  This function copies the current registers to where r0 points, then
  *  restores the ones from where r1 points.
  *
- *
- *  NOTE:  The function should be able to only save/restore the registers
- *         that would be saved by a C function since the others have already
- *         been saved.
- *        
- *         It should also be able to use the stm/ldm instructions.
+ *  Using the ldm/stm opcodes save 2-3 us on 100 MHz ARM9TDMI with
+ *  a 16 bit data bus.
  *        
  */
-
         .globl _CPU_Context_switch
 _CPU_Context_switch:
-/* FIXME: This should use load and store multiple instructions */
 /* Start saving context */
-	str     r2,  [r0, #REG_R2]
-	str     r3,  [r0, #REG_R3]
-	str     r4,  [r0, #REG_R4]
-	str     r5,  [r0, #REG_R5]
-	str     r6,  [r0, #REG_R6]
-	str     r7,  [r0, #REG_R7]
-	str     r8,  [r0, #REG_R8]
-	str     r9,  [r0, #REG_R9]
-	str     r10, [r0, #REG_R10]
-	
-	str     r11, [r0, #REG_R11]
-	str     r12, [r0, #REG_R12]	
-	
-	str     sp,  [r0, #REG_SP]
-	str     lr,  [r0, #REG_PC]     /* save LR at PC's location */
-	
 	mrs	r2, cpsr
-	str	r2,  [r0, #REG_CPSR]
+	stmia	r0,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
+
 
 /* Start restoring context */
-        
-       	ldr	r2,  [r1, #REG_CPSR]
+_restore:       
+	ldmia	r1,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
 	msr	cpsr, r2
-
-	ldr     r2,  [r1, #REG_R2]
-	ldr     r3,  [r1, #REG_R3]
-	ldr     r4,  [r1, #REG_R4]
-	ldr     r5,  [r1, #REG_R5]
-	ldr     r6,  [r1, #REG_R6]
-	ldr     r7,  [r1, #REG_R7]
-	ldr     r8,  [r1, #REG_R8]
-	ldr     r9,  [r1, #REG_R9]
-	ldr     r10, [r1, #REG_R10]	
-	ldr     r11, [r1, #REG_R11]
-	ldr     r12, [r1, #REG_R12]	
-	
-	ldr     sp,  [r1, #REG_SP]
-	ldr     lr,  [r1, #REG_PC]	
 	mov	pc, lr
 
 /*
@@ -90,34 +54,12 @@ _CPU_Context_switch:
  *  This function copies the restores the registers from where r0 points.
  *  It must match _CPU_Context_switch()
  *
- *  NOTE:  The function should be able to only save/restore the registers
- *         that would be saved by a C function since the others have already
- *         been saved.
- *        
- *         It should also be able to use the stm/ldm instructions.
- *        
  */
         .globl _CPU_Context_restore
 _CPU_Context_restore:
-/* FIXME: This should use load and store multiple instructions */
-	ldr	r2,  [r0, #REG_CPSR]
-	msr	cpsr, r2
+        mov     r1, r0
+        b       _restore
 
-	ldr     r2,  [r0, #REG_R2]	
-	ldr     r3,  [r0, #REG_R3]
-	ldr     r4,  [r0, #REG_R4]
-	ldr     r5,  [r0, #REG_R5]
-	ldr     r6,  [r0, #REG_R6]
-	ldr     r7,  [r0, #REG_R7]
-	ldr     r8,  [r0, #REG_R8]
-	ldr     r9,  [r0, #REG_R9]
-	ldr     r10, [r0, #REG_R10]	
-	ldr     r11, [r1, #REG_R11]
-	ldr     r12, [r1, #REG_R12]	
-			
-	ldr     sp,  [r0, #REG_SP]
-	ldr     lr,  [r0, #REG_PC]
-	mov     pc,  lr	
 
 
 /* FIXME:       _Exception_Handler_Undef_Swi is untested */
@@ -125,10 +67,6 @@ _CPU_Context_restore:
 _Exception_Handler_Undef_Swi:
 /* FIXME: This should use load and store multiple instructions */
 	sub     r13,r13,#SIZE_REGS
-	str     r0,  [r13, #REG_R0]
-	str     r1,  [r13, #REG_R1]
-	str     r2,  [r13, #REG_R2]
-	str     r3,  [r13, #REG_R3]
 	str     r4,  [r13, #REG_R4]
 	str     r5,  [r13, #REG_R5]
 	str     r6,  [r13, #REG_R6]
@@ -137,7 +75,6 @@ _Exception_Handler_Undef_Swi:
 	str     r9,  [r13, #REG_R9]
 	str     r10, [r13, #REG_R10]
 	str     r11, [r13, #REG_R11]
-	str     r12, [r13, #REG_R12]
 	str     sp,  [r13, #REG_SP]
 	str     lr,  [r13, #REG_LR]
 	mrs	r0,  cpsr		/* read the status */
@@ -149,10 +86,6 @@ _Exception_Handler_Undef_Swi:
 	ldr     lr, =_go_back_1
 	ldr	pc,[r1]				/* call handler  */
 _go_back_1:
-	ldr     r0,  [r13, #REG_R0]
-	ldr     r1,  [r13, #REG_R1]
-	ldr     r2,  [r13, #REG_R2]
-	ldr     r3,  [r13, #REG_R3]
 	ldr     r4,  [r13, #REG_R4]
 	ldr     r5,  [r13, #REG_R5]
 	ldr     r6,  [r13, #REG_R6]
@@ -161,7 +94,6 @@ _go_back_1:
 	ldr     r9,  [r13, #REG_R9]
 	ldr     r10, [r13, #REG_R10]
 	ldr     r11, [r13, #REG_R11]
-	ldr     r12, [r13, #REG_R12]
 	ldr     sp,  [r13, #REG_SP]
 	ldr     lr,  [r13, #REG_LR]
 	add     r13,r13,#SIZE_REGS
@@ -172,19 +104,13 @@ _go_back_1:
 _Exception_Handler_Abort:
 /* FIXME: This should use load and store multiple instructions */
 	sub     r13,r13,#SIZE_REGS
-	str     r0,  [r13, #REG_R0]
-	str     r1,  [r13, #REG_R1]
-	str     r2,  [r13, #REG_R2]
-	str     r3,  [r13, #REG_R3]
 	str     r4,  [r13, #REG_R4]
 	str     r5,  [r13, #REG_R5]
 	str     r6,  [r13, #REG_R6]
 	str     r7,  [r13, #REG_R7]
 	str     r8,  [r13, #REG_R8]
 	str     r9,  [r13, #REG_R9]
-	str     r10, [r13, #REG_R10]
 	str     sp,  [r13, #REG_R11]
-	str     lr,  [r13, #REG_R12]
 	str     lr,  [r13, #REG_SP]
 	str     lr,  [r13, #REG_LR]
 	mrs	r0,  cpsr		/* read the status */
@@ -196,10 +122,6 @@ _Exception_Handler_Abort:
 	ldr     lr, =_go_back_2
 	ldr	pc,[r1]				/* call handler  */
 _go_back_2:
-	ldr     r0,  [r13, #REG_R0]
-	ldr     r1,  [r13, #REG_R1]
-	ldr     r2,  [r13, #REG_R2]
-	ldr     r3,  [r13, #REG_R3]
 	ldr     r4,  [r13, #REG_R4]
 	ldr     r5,  [r13, #REG_R5]
 	ldr     r6,  [r13, #REG_R6]
@@ -208,9 +130,25 @@ _go_back_2:
 	ldr     r9,  [r13, #REG_R9]
 	ldr     r10, [r13, #REG_R10]
 	ldr     sp,  [r13, #REG_R11]
-	ldr     lr,  [r13, #REG_R12]
 	ldr     lr,  [r13, #REG_SP]
 	ldr     lr,  [r13, #REG_LR]
 	add     r13,r13,#SIZE_REGS
 	subs	pc,r14,#4			/* return */
 	
+	.globl _exc_data_abort
+_exc_data_abort:
+	sub	sp, sp, #SIZE_REGS		/* reserve register frame */
+	stmia	sp, {r0-r12}
+	str	lr, [sp, #REG_LR]
+	mov	r1, lr
+	ldr	r0, [r1, #-8]			/* r0 = bad instruction */
+	mrs	r1, spsr			/* r1 = spsr */
+	mov	r2, r13				/* r2 = exception frame */
+	bl	do_data_abort
+	
+	ldr	lr, [sp, #REG_LR]
+	ldmia	sp, {r0-r12}
+	add	sp, sp, #SIZE_REGS
+
+	subs	pc, r14, #4			/* return to the instruction */
+						/* _AFTER_ the aborted one */

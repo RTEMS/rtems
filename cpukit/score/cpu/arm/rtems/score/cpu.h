@@ -1,8 +1,10 @@
 /*
+ * $RCSfile$
+ *
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  COPYRIGHT (c) 2002 Advent Networks, Inc.
+ *  Copyright (c) 2002 Advent Networks, Inc.
  *        Jay Monkman <jmonkman@adventnetworks.com>
  *
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.
@@ -12,7 +14,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  $Id$
  */
 
 /* FIXME: finish commenting/cleaning up this file */
@@ -25,7 +26,7 @@ extern "C" {
 
 #include <rtems/score/arm.h>            /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/types.h>
+#include <rtems/score/armtypes.h>
 #endif
 
 /* conditional compilation parameters */
@@ -103,7 +104,7 @@ extern "C" {
  *
  *  If this is TRUE, CPU_ALLOCATE_INTERRUPT_STACK should also be TRUE.
  *
- *  Only one of CPU_HAS_SOFTWARE_INTERRU
+ *  Only one of CPU_HAS_SOFTWARE_INTERRUPT_STACK and
  *  CPU_HAS_HARDWARE_INTERRUPT_STACK should be set to TRUE.  It is
  *  possible that both are FALSE for a particular CPU.  Although it
  *  is unclear what that would imply about the interrupt processing
@@ -122,7 +123,7 @@ extern "C" {
  *  or CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
  */
 
-#define CPU_ALLOCATE_INTERRUPT_STACK TRUE
+#define CPU_ALLOCATE_INTERRUPT_STACK FALSE
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
@@ -141,7 +142,7 @@ extern "C" {
  *  If there is a FP coprocessor such as the i387 or mc68881, then
  *  the answer is TRUE.
  *
- *  The macro name "NO_CPU_HAS_FPU" should be made CPU specific.
+ *  The macro name "ARM_HAS_FPU" should be made CPU specific.
  *  It indicates whether or not this CPU model has FP support.  For
  *  example, it would be possible to have an i386_nofp CPU model
  *  which set this to false to indicate that you have an i386 without
@@ -331,12 +332,8 @@ extern "C" {
  *  this is enough information for RTEMS, it is probably not enough for
  *  a debugger such as gdb.  But that is another problem.
  */
-
 typedef struct {
-    unsigned32 register_r0;
-    unsigned32 register_r1;
-    unsigned32 register_r2;
-    unsigned32 register_r3;
+    unsigned32 register_cpsr;
     unsigned32 register_r4;
     unsigned32 register_r5;
     unsigned32 register_r6;
@@ -345,18 +342,23 @@ typedef struct {
     unsigned32 register_r9;
     unsigned32 register_r10;
     unsigned32 register_fp;
-    unsigned32 register_ip;
     unsigned32 register_sp;
     unsigned32 register_lr;
     unsigned32 register_pc;
-    unsigned32 register_cpsr;
 } Context_Control;
 
 typedef struct {
     double      some_float_register;
 } Context_Control_fp;
 
-typedef Context_Control CPU_Exception_frame;
+typedef struct {
+    unsigned32 register_r0;
+    unsigned32 register_r1;
+    unsigned32 register_r2;
+    unsigned32 register_r3;
+    unsigned32 register_ip;
+    unsigned32 register_lr;
+} CPU_Exception_frame;
 
 typedef void (*cpuExcHandlerType) (CPU_Exception_frame*);
 extern cpuExcHandlerType _currentExcHandler;
@@ -372,7 +374,7 @@ typedef CPU_Exception_frame CPU_Interrupt_frame;
 
 /*
  *  The following table contains the information required to configure
- *  the ARM processor specific parameters.
+ *  the XXX processor specific parameters.
  */
 
 typedef struct {
@@ -396,7 +398,9 @@ typedef struct {
  */
 
 /*
- *  Macros to access NO_CPU specific additions to the CPU Table
+ *  Macros to access ARM specific additions to the CPU Table
+ *
+ *  none required
  */
 
 /* There are no CPU specific additions to the CPU Table for this port. */
@@ -409,40 +413,6 @@ typedef struct {
  */
 
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
-
-/*
- *  On some CPUs, RTEMS supports a software managed interrupt stack.
- *  This stack is allocated by the Interrupt Manager and the switch
- *  is performed in _ISR_Handler.  These variables contain pointers
- *  to the lowest and highest addresses in the chunk of memory allocated
- *  for the interrupt stack.  Since it is unknown whether the stack
- *  grows up or down (in general), this give the CPU dependent
- *  code the option of picking the version it wants to use.
- *
- *  NOTE: These two variables are required if the macro
- *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
- */
-
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
-
-/*
- *  With some compilation systems, it is difficult if not impossible to
- *  call a high-level language routine from assembly language.  This
- *  is especially true of commercial Ada compilers and name mangling
- *  C++ ones.  This variable can be optionally defined by the CPU porter
- *  and contains the address of the routine _Thread_Dispatch.  This
- *  can make it easier to invoke that routine at the end of the interrupt
- *  sequence (if a dispatch is necessary).
- */
-
-SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
-
-/*
- *  Nothing prevents the porter from declaring more CPU specific variables.
- */
-
-/* XXX: if needed, put more variables here */
 
 /*
  *  The size of the floating point context area.  On some CPUs this
@@ -481,7 +451,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  that a "reasonable" small application should not have any problems.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (1024*16)
+#define CPU_STACK_MINIMUM_SIZE          (1024*4)
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
@@ -535,7 +505,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  Support routine to initialize the RTEMS vector table after it is allocated.
  */
 
-#define _CPU_Initialize_vectors()
+#define _CPU_Initialize_vectors() 
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
@@ -543,15 +513,13 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 #define _CPU_ISR_Disable( _level )                \
-  do {                                            \
-    int reg;                                      \
-    asm volatile ("MRS        %0, cpsr \n"        \
-                  "ORR  %1, %0, #0xc0 \n"         \
-                  "MSR  cpsr, %1 \n"              \
-                  "AND  %0, %0, #0xc0 \n"         \
-                   : "=r" (_level), "=r" (reg)    \
-                   : "0" (_level), "1" (reg));    \
-  } while (0)
+  {                                               \
+    int reg;                                       \
+    asm volatile ("MRS	%0, cpsr \n"               \
+                  "ORR  %1, %0, #0xc0 \n"          \
+                  "MSR  cpsr, %1 \n"               \
+                   : "=&r" (_level), "=&r" (reg)); \
+  }
 
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -560,15 +528,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 #define _CPU_ISR_Enable( _level )               \
-  do {                                          \
-    int reg;                                    \
-    asm volatile ("MRS        %0, cpsr \n"      \
-                  "BIC  %0, %0, #0xc0 \n"       \
-                  "ORR  %0, %0, %2 \n"          \
-                  "MSR  cpsr, %0 \n"            \
-                  : "=r" (reg)                  \
-                  : "0" (reg), "r" (_level));   \
-  } while (0)
+  {                                             \
+    asm volatile ("MSR  cpsr, %0 \n"            \
+                  : : "r" (_level));            \
+  }
 
 /*
  *  This temporarily restores the interrupt to _level before immediately
@@ -579,15 +542,12 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 #define _CPU_ISR_Flash( _level ) \
   { \
-    int reg1;                                   \
-    int reg2;                                   \
+    int reg;                                    \
     asm volatile ("MRS	%0, cpsr \n"            \
-                  "BIC  %1, %0, #0xc0 \n"       \
-                  "ORR  %1, %1, %4 \n"          \
                   "MSR  cpsr, %1 \n"            \
                   "MSR  cpsr, %0 \n"            \
-                  : "=r" (reg1), "=r" (reg2)    \
-                  : "0" (reg1), "1" (reg2),  "r" (_level));       \
+                  : "=&r" (reg)                 \
+                  : "r" (_level));              \
   }
 
 /*
@@ -603,15 +563,15 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  The get routine usually must be implemented as a subroutine.
  */
 
-#define _CPU_ISR_Set_level( new_level ) \
-  { \
+#define _CPU_ISR_Set_level( new_level )         \
+  {                                             \
     int reg;                                    \
     asm volatile ("MRS	%0, cpsr \n"            \
-                  "BIC  %0, %0, #0xc0 \n"            \
+                  "BIC  %0, %0, #0xc0 \n"       \
                   "ORR  %0, %0, %2 \n"          \
-                  "MSR  cpsr_c, %0 \n"            \
-                  : "=r" (reg)                 \
-                  : "0" (reg), "r" (new_level)); \
+                  "MSR  cpsr_c, %0 \n"          \
+                  : "=r" (reg)                  \
+                  : "r" (reg), "0" (reg));      \
   }
 
 
@@ -708,9 +668,17 @@ void _CPU_Context_Initialize(
  *  halts/stops the CPU.
  */
 
-#define _CPU_Fatal_halt( _error ) \
-  { \
-  }
+#define _CPU_Fatal_halt( _error )           \
+   do {                                     \
+     int _level;                            \
+     _CPU_ISR_Disable( _level );            \
+     asm volatile ("mov r0, %0\n"           \
+                   : "=r" (_error)          \
+                   : "0" (_error)           \
+                   : "r0" );                \
+     while(1) ;                             \
+   } while(0);
+ 
 
 /* end of Fatal Error manager macros */
 
@@ -770,18 +738,17 @@ void _CPU_Context_Initialize(
  *    where bit_set_table[ 16 ] has values which indicate the first
  *      bit set
  */
+#if (ARM_HAS_CLZ == 0)
+#  define CPU_USE_GENERIC_BITFIELD_CODE TRUE
+#  define CPU_USE_GENERIC_BITFIELD_DATA TRUE
+#else 
+#  define CPU_USE_GENERIC_BITFIELD_CODE FALSE
+#  define CPU_USE_GENERIC_BITFIELD_DATA FALSE
 
-#define CPU_USE_GENERIC_BITFIELD_CODE TRUE
-#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
-
-#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
-
-#define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  { \
-    (_output) = 0;   /* do something to prevent warnings */ \
-  }
-
-#endif
+#  define _CPU_Bitfield_Find_first_bit( _value, _output ) \
+   { \
+     (_output) = 0;   /* do something to prevent warnings */ \
+   }
 
 /* end of Bitfield handler macros */
 
@@ -791,12 +758,10 @@ void _CPU_Context_Initialize(
  *  for that routine.
  */
 
-#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
-#define _CPU_Priority_Mask( _bit_number ) \
-  ( 1 << (_bit_number) )
+#  define _CPU_Priority_Mask( _bit_number ) \
+   ( 1 << (_bit_number) )
 
-#endif
 
 /*
  *  This routine translates the bit numbers returned by
@@ -805,11 +770,11 @@ void _CPU_Context_Initialize(
  *  for that routine.
  */
 
-#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
-#define _CPU_Priority_bits_index( _priority ) \
-  (_priority)
+#  define _CPU_Priority_bits_index( _priority ) \
+   (_priority)
 
+#  error "Implement CLZ verson of priority bit functions for ARMv5"
 #endif
 
 /* end of Priority handler macros */
@@ -863,17 +828,6 @@ void _CPU_ISR_install_vector(
 void _CPU_Install_interrupt_stack( void );
 
 /*
- *  _CPU_Thread_Idle_body
- *
- *  This routine is the CPU dependent IDLE thread body.
- *
- *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
- *         is TRUE.
- */
-
-void _CPU_Thread_Idle_body( void );
-
-/*
  *  _CPU_Context_switch
  *
  *  This routine switches from the run context to the heir context.
@@ -897,6 +851,7 @@ void _CPU_Context_restore(
   Context_Control *new_context
 );
 
+#if (ARM_HAS_FPU == 1)
 /*
  *  _CPU_Context_save_fp
  *
@@ -916,6 +871,7 @@ void _CPU_Context_save_fp(
 void _CPU_Context_restore_fp(
   void **fp_context_ptr
 );
+#endif /* (ARM_HAS_FPU == 1) */
 
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
@@ -941,19 +897,28 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-  unsigned32 byte1, byte2, byte3, byte4, swapped;
- 
-  byte4 = (value >> 24) & 0xff;
-  byte3 = (value >> 16) & 0xff;
-  byte2 = (value >> 8)  & 0xff;
-  byte1 =  value        & 0xff;
- 
-  swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
-  return( swapped );
+    unsigned32 tmp;
+    asm volatile ("EOR   %1, %0, %0, ROR #16\n"  \
+                  "BIC   %1, %1, #0xff0000\n"    \
+                  "MOV   %0, %0, ROR #8\n"       \
+                  "EOR   %0, %0, %1, LSR #8\n"   \
+                  : "=&r" (value), "=&r" (tmp)     \
+                  : "0" (value));
+
+    return value;
 }
 
-#define CPU_swap_u16( value ) \
-  (((value&0xff) << 8) | ((value >> 8)&0xff))
+static inline unsigned16 CPU_swap_u16(unsigned16 value)
+{
+    unsigned32 tmp = value;   /* make compiler warnings go away */
+    asm volatile ("MOV   %1, %0, LSR #8\n"       \
+                  "BIC   %0, %0, #0xff00\n"      \
+                  "MOV   %0, %0, LSL #8\n"       \
+                  "ORR   %0, %0, %1\n"           \
+                  : "=&r" (value), "=&r" (tmp)     \
+                  : "0" (value));
+    return value;
+}
 
 #ifdef __cplusplus
 }
