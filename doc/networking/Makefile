@@ -68,7 +68,7 @@ testing.texi: testing.t Makefile
 	   -n "Network Servers" ${*}.t
 
 servers.texi: servers.t Makefile
-	$(BMENU) -p "Network Servers" \
+	$(BMENU) -p "Throughput" \
 	   -u "Top" \
 	   -n "Command and Variable Index" ${*}.t
 

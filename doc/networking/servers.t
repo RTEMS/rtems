@@ -21,6 +21,9 @@ in situations where a destination file is not necessarily
 appropriate or in cases when a formal device driver has not yet
 been implemented.
 
+This server was implemented and documented by Jake Janovetz
+(janovetz@@tempest.ece.uiuc.edu).
+
 @subsection Configuration Parameters
 
 The configuration structure for FTPD is as follows:
