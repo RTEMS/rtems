@@ -53,7 +53,8 @@ typedef enum {
   RTEMS_NOT_IMPLEMENTED          = 24, /* directive not implemented */
   RTEMS_INTERNAL_ERROR           = 25, /* RTEMS inconsistency detected */
   RTEMS_NO_MEMORY                = 26, /* could not get enough memory */
-  RTEMS_PROXY_BLOCKING           = 27  /* internal error only */
+  RTEMS_IO_ERROR                 = 27, /* driver IO error */
+  RTEMS_PROXY_BLOCKING           = 28  /* internal error only */
 } rtems_status_code;
 
 #define RTEMS_STATUS_CODES_FIRST RTEMS_SUCCESSFUL

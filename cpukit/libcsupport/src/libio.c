@@ -160,6 +160,7 @@ rtems_assoc_t errno_assoc[] = {
     { "NO DEVICE",          RTEMS_UNSATISFIED,               ENOSYS },
     { "INVALID NUMBER",     RTEMS_INVALID_NUMBER,            EBADF},
     { "NOT RESOURCE OWNER", RTEMS_NOT_OWNER_OF_RESOURCE,     EPERM},
+    { "IO ERROR",           RTEMS_IO_ERROR,                  EIO},
     { 0, 0, 0 },
 };
 
