@@ -1,5 +1,32 @@
 2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* posix/include/aio.h, posix/include/devctl.h,
+	posix/include/intr.h, posix/include/mqueue.h,
+	posix/include/sched.h, posix/include/semaphore.h,
+	posix/include/rtems/posix/cancel.h,
+	posix/include/rtems/posix/cond.h,
+	posix/include/rtems/posix/condmp.h,
+	posix/include/rtems/posix/config.h,
+	posix/include/rtems/posix/intr.h,
+	posix/include/rtems/posix/key.h,
+	posix/include/rtems/posix/mqueue.h,
+	posix/include/rtems/posix/mqueuemp.h,
+	posix/include/rtems/posix/mutex.h,
+	posix/include/rtems/posix/mutexmp.h,
+	posix/include/rtems/posix/posixapi.h,
+	posix/include/rtems/posix/priority.h,
+	posix/include/rtems/posix/psignal.h,
+	posix/include/rtems/posix/pthread.h,
+	posix/include/rtems/posix/pthreadmp.h,
+	posix/include/rtems/posix/ptimer.h,
+	posix/include/rtems/posix/semaphore.h,
+	posix/include/rtems/posix/semaphoremp.h,
+	posix/include/rtems/posix/threadsup.h,
+	posix/include/rtems/posix/time.h,
+	posix/include/rtems/posix/timer.h: New header guards.
+
+2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* backward/asm.h, backward/chain.h, backward/clockdrv.h,
 	backward/confdefs.h, backward/console.h, backward/dosfs.h,
 	backward/ftpd.h, backward/imfs.h, backward/iosupp.h,
