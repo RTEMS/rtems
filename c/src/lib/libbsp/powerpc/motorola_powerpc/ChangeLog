@@ -1,3 +1,7 @@
+2003-12-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am: Add BUILD-VARIANTS.
+
 2003-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* vectors/Makefile.am: Fix typos.

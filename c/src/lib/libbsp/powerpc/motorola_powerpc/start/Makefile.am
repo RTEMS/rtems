@@ -11,9 +11,9 @@ powerpc_shared_start_S_FILES = \
     $(top_srcdir)/../../powerpc/shared/start/rtems_crti.S
 
 OBJS = \
-    $(powerpc_shared_start_S_FILES:$(top_srcdir)/../../powerpc/shared/start/%.S=$(ARCH)/%.$(OBJEXT))
+    $(powerpc_shared_start_S_FILES:$(top_srcdir)/../../powerpc/shared/start/%.S=$(ARCH)/%$(LIB_VARIANT).$(OBJEXT))
 
-$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../powerpc/shared/start/%.S $(ARCH)/$(dirstamp)
+$(ARCH)/%$(LIB_VARIANT).$(OBJEXT): $(top_srcdir)/../../powerpc/shared/start/%.S $(ARCH)/$(dirstamp)
 	${CCASCOMPILE} -o $@ -c $<
 
 project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
