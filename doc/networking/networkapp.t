@@ -153,7 +153,7 @@ will be sent.
 The Internet host numbers of up to three machines to be used as
 Internet Domain Name Servers.
 
-@item char *name_server[3]
+@item char *ntp_server[3]
 The Internet host numbers of up to three machines to be used as
 Network Time Protocol (NTP) Servers.
 
@@ -179,7 +179,7 @@ The address of the shared memory on the external Ethernet controller.
 
 @subsection Network device configuration
 Network devices are specified and configured by declaring and initializing a
-@code{struct rtems_bsdnet_ifcontig} structure for each network device.
+@code{struct rtems_bsdnet_ifconfig} structure for each network device.
 
 The structure entries are described in the following table.  An application
 which uses a single network interface, gets network configuration information
