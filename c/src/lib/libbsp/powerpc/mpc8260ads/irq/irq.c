@@ -6,7 +6,9 @@
  *
  *  Modified for mpc8260 Andy Dachs <a.dachs@sstl.co.uk>
  *  Surrey Satellite Technology Limited, 2000
- *  Nested exception handlers not working yet.
++  *  	21/4/2002 Added support for nested interrupts and improved
++  *  	masking operations.  Now we compute priority mask based
++  * 		on table in irq_init.c
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
@@ -15,16 +17,14 @@
  *  $Id$
  */
   
-#include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apiext.h>
 #include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
-/*#include <bsp/8xx_immap.h>*/
+#include <libcpu/cpu.h>
 #include <mpc8260.h>
-/*#include <bsp/commproc.h>*/
 
 /*
  * default handler connected on each irq after bsp initialization
@@ -44,9 +44,9 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
  */
 static inline int is_cpm_irq(const rtems_irq_symbolic_name irqLine)
 {
-  return (((int) irqLine <= BSP_CPM_IRQ_MAX_OFFSET) &
-	  ((int) irqLine >= BSP_CPM_IRQ_LOWEST_OFFSET)
-	 );
+	return (((int) irqLine <= BSP_CPM_IRQ_MAX_OFFSET) &
+			((int) irqLine >= BSP_CPM_IRQ_LOWEST_OFFSET)
+	);
 }
 
 /*
@@ -54,36 +54,107 @@ static inline int is_cpm_irq(const rtems_irq_symbolic_name irqLine)
  */
 static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
 {
-  return (((int) irqLine <= BSP_PROCESSOR_IRQ_MAX_OFFSET) &
-	  ((int) irqLine >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
-	 );
+	return (((int) irqLine <= BSP_PROCESSOR_IRQ_MAX_OFFSET) &
+			((int) irqLine >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
+	);
 }
 
+typedef struct {
+	rtems_unsigned32 mask_h;	/* mask for sipnr_h and simr_h */
+	rtems_unsigned32 mask_l;	/* mask for sipnr_l and simr_l */
+	rtems_unsigned32 priority_h;  /* mask this and lower priority ints */
+	rtems_unsigned32 priority_l;
+} m82xxIrqMasks_t;
 
 /*
- * bit in the SIU mask registers (PPC bit numbering) that should
- * be set to enable the relevant interrupt
- *
+ *  Mask fields should have a '1' in the bit position for that
+ *  interrupt.
+ *	Priority masks calculated later based on priority table
  */
-const static unsigned int SIU_MaskBit[BSP_CPM_IRQ_NUMBER] =
+
+static m82xxIrqMasks_t SIU_MaskBit[BSP_CPM_IRQ_NUMBER] =
 {
-     63, 48, 49, 50,  /* err,   i2c,   spi,   rtt   */
-     51, 52, 53, 54,  /* smc1,  smc2,  idma1, idma2 */
-     55, 56, 57, 63,  /* idma3, idma4, sdma,  -     */
-     59, 60, 61, 62,  /* tmr1,  tmr2,  tmr3,  tmr4  */
-     29, 30, 63, 17,  /* pit,   tmcnt, -,     irq1  */
-     18, 19, 20, 21,  /* irq2,  irq3,  irq4,  irq5  */
-     22, 23, 63, 63,  /* irq6,  irq7,  -,     -     */
-     63, 63, 63, 63,  /* -,     -,     -,     -     */
-     32, 33, 34, 35,  /* fcc1,  fcc2,  fcc3,  -     */
-     36, 37, 38, 39,  /* mcc1,  mcc2,  -,     -     */
-     40, 41, 42, 43,  /* scc1,  scc2,  scc3,  scc4  */
-     44, 45, 46, 47,  /* -,     -,     -,     -     */
-     0,  1,   2,  3,  /* pc0,   pc1,   pc2,   pc3   */
-     4,  5,   6,  7,  /* pc4,   pc5,   pc6,   pc7   */
-     8,  9,  10, 11,  /* pc8,   pc9,   pc10,  pc11  */
-     12, 13, 14, 15   /* pc12,  pc13,  pc14,  pc15  */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* err */
+	{ 0x00000000, 0x00008000, 0x00000000, 0x00000000 }, /* i2c */
+	{ 0x00000000, 0x00004000, 0x00000000, 0x00000000 }, /* spi */
+	{ 0x00000000, 0x00002000, 0x00000000, 0x00000000 }, /* rtt */
+	{ 0x00000000, 0x00001000, 0x00000000, 0x00000000 }, /* smc1 */
+	{ 0x00000000, 0x00000800, 0x00000000, 0x00000000 }, /* smc2 */
+	{ 0x00000000, 0x00000400, 0x00000000, 0x00000000 }, /* idma1 */
+	{ 0x00000000, 0x00000200, 0x00000000, 0x00000000 }, /* idma2 */
+	{ 0x00000000, 0x00000100, 0x00000000, 0x00000000 }, /* idma3 */
+	{ 0x00000000, 0x00000080, 0x00000000, 0x00000000 }, /* idma4 */
+	{ 0x00000000, 0x00000040, 0x00000000, 0x00000000 }, /* sdma */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000010, 0x00000000, 0x00000000 }, /* tmr1 */
+	{ 0x00000000, 0x00000008, 0x00000000, 0x00000000 }, /* tmr2 */
+	{ 0x00000000, 0x00000004, 0x00000000, 0x00000000 }, /* tmr3 */
+	{ 0x00000000, 0x00000002, 0x00000000, 0x00000000 }, /* tmr4 */
+	{ 0x00000004, 0x00000000, 0x00000000, 0x00000000 }, /* tmcnt */
+	{ 0x00000002, 0x00000000, 0x00000000, 0x00000000 }, /* pit */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00004000, 0x00000000, 0x00000000, 0x00000000 }, /* irq1 */
+	{ 0x00002000, 0x00000000, 0x00000000, 0x00000000 }, /* irq2 */
+	{ 0x00001000, 0x00000000, 0x00000000, 0x00000000 }, /* irq3 */
+	{ 0x00000800, 0x00000000, 0x00000000, 0x00000000 }, /* irq4 */
+	{ 0x00000400, 0x00000000, 0x00000000, 0x00000000 }, /* irq5 */
+	{ 0x00000200, 0x00000000, 0x00000000, 0x00000000 }, /* irq6 */
+	{ 0x00000100, 0x00000000, 0x00000000, 0x00000000 }, /* irq7 */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x80000000, 0x00000000, 0x00000000 }, /* fcc1 */
+	{ 0x00000000, 0x40000000, 0x00000000, 0x00000000 }, /* fcc2 */
+	{ 0x00000000, 0x20000000, 0x00000000, 0x00000000 }, /* fcc3 */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x08000000, 0x00000000, 0x00000000 }, /* mcc1 */
+	{ 0x00000000, 0x04000000, 0x00000000, 0x00000000 }, /* mcc2 */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00800000, 0x00000000, 0x00000000 }, /* scc1 */
+	{ 0x00000000, 0x00400000, 0x00000000, 0x00000000 }, /* scc2 */
+	{ 0x00000000, 0x00200000, 0x00000000, 0x00000000 }, /* scc3 */
+	{ 0x00000000, 0x00100000, 0x00000000, 0x00000000 }, /* scc4 */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 }, /* reserved */
+	{ 0x00010000, 0x00000000, 0x00000000, 0x00000000 }, /* pc15 */
+	{ 0x00020000, 0x00000000, 0x00000000, 0x00000000 }, /* pc14 */
+	{ 0x00040000, 0x00000000, 0x00000000, 0x00000000 }, /* pc13 */
+	{ 0x00080000, 0x00000000, 0x00000000, 0x00000000 }, /* pc12 */
+	{ 0x00100000, 0x00000000, 0x00000000, 0x00000000 }, /* pc11 */
+	{ 0x00200000, 0x00000000, 0x00000000, 0x00000000 }, /* pc10 */
+	{ 0x00400000, 0x00000000, 0x00000000, 0x00000000 }, /* pc9 */
+	{ 0x00800000, 0x00000000, 0x00000000, 0x00000000 }, /* pc8 */
+	{ 0x01000000, 0x00000000, 0x00000000, 0x00000000 }, /* pc7 */
+	{ 0x02000000, 0x00000000, 0x00000000, 0x00000000 }, /* pc6 */
+	{ 0x04000000, 0x00000000, 0x00000000, 0x00000000 }, /* pc5 */
+	{ 0x08000000, 0x00000000, 0x00000000, 0x00000000 }, /* pc4 */
+	{ 0x10000000, 0x00000000, 0x00000000, 0x00000000 }, /* pc3 */
+	{ 0x20000000, 0x00000000, 0x00000000, 0x00000000 }, /* pc2 */
+	{ 0x40000000, 0x00000000, 0x00000000, 0x00000000 }, /* pc1 */
+	{ 0x80000000, 0x00000000, 0x00000000, 0x00000000 }, /* pc0 */
+
 };
+
+
+
+void dump_irq_masks(void )
+{
+	int i;
+	for( i=0; i<BSP_CPM_IRQ_NUMBER;i++ )	
+	{
+		printk( "%04d: %08X %08X\n",
+	 		i,
+	 		SIU_MaskBit[i].priority_h,
+		 	SIU_MaskBit[i].priority_l
+		);
+	}
+}
 
 /*
  * ------------------------ RTEMS Irq helper functions ----------------
@@ -96,11 +167,24 @@ const static unsigned int SIU_MaskBit[BSP_CPM_IRQ_NUMBER] =
  */
 static void compute_SIU_IvectMask_from_prio ()
 {
-  /*
-   * In theory this is feasible. No time to code it yet. See i386/shared/irq.c
-   * for an example based on 8259 controller mask. The actual masks defined
-   * correspond to the priorities defined for the SIU in irq_init.c.
-   */
+	/*
+	 * The actual masks defined
+	 * correspond to the priorities defined
+	 * for the SIU in irq_init.c.
+	 */
+	
+	 int i,j;
+	
+	 for( i=0; i<BSP_CPM_IRQ_NUMBER; i++ )
+	 {
+	 	for( j=0;j<BSP_CPM_IRQ_NUMBER; j++ )
+		 	if( internal_config->irqPrioTbl[j] < internal_config->irqPrioTbl[i] )
+		 	{
+				SIU_MaskBit[i].priority_h |= SIU_MaskBit[j].mask_h;
+				SIU_MaskBit[i].priority_l |= SIU_MaskBit[j].mask_l;
+			}		 		
+	 }
+	
 }
 
 /*
@@ -110,60 +194,53 @@ static void compute_SIU_IvectMask_from_prio ()
 
 static int isValidInterrupt(int irq)
 {
-  if ( (irq < BSP_LOWEST_OFFSET) || (irq > BSP_MAX_OFFSET) )
-    return 0;
-  return 1;
+	if ( (irq < BSP_LOWEST_OFFSET) || (irq > BSP_MAX_OFFSET) )
+		return 0;
+	return 1;
 }
 
 int BSP_irq_enable_at_cpm(const rtems_irq_symbolic_name irqLine)
 {
-  int cpm_irq_index;
+	int cpm_irq_index;
 
-  if (!is_cpm_irq(irqLine))
-    return 1;
+	if (!is_cpm_irq(irqLine))
+		return 1;
 
-  cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
+	cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
 
+	m8260.simr_h |= SIU_MaskBit[cpm_irq_index].mask_h;
+	m8260.simr_l |= SIU_MaskBit[cpm_irq_index].mask_l;
 
-  if( SIU_MaskBit[cpm_irq_index] < 32 )
-     m8260.simr_h |= (0x80000000 >> SIU_MaskBit[cpm_irq_index]);
-  else
-     m8260.simr_l |= (0x80000000 >> (SIU_MaskBit[cpm_irq_index]-32));
-
-  return 0;
+	return 0;
 }
 
 int BSP_irq_disable_at_cpm(const rtems_irq_symbolic_name irqLine)
 {
-  int cpm_irq_index;
+	int cpm_irq_index;
   
-  if (!is_cpm_irq(irqLine))
-    return 1;
+	if (!is_cpm_irq(irqLine))
+		return 1;
   
-  cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
+	cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
 
-  if( SIU_MaskBit[cpm_irq_index] < 32 )
-     m8260.simr_h &= ~(0x80000000 >> SIU_MaskBit[cpm_irq_index]);
-  else
-     m8260.simr_l &= ~(0x80000000 >> (SIU_MaskBit[cpm_irq_index]-32));
+	m8260.simr_h &= ~(SIU_MaskBit[cpm_irq_index].mask_h);
+	m8260.simr_l &= ~(SIU_MaskBit[cpm_irq_index].mask_l);
 
 
-  return 0;
+	return 0;
 }
 
 int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name irqLine)
 {
-  int cpm_irq_index;
+	int cpm_irq_index;
   
-  if (!is_cpm_irq(irqLine))
-    return 0;
+	if (!is_cpm_irq(irqLine))
+		return 0;
   
-  cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
+	cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
 
-  if( SIU_MaskBit[cpm_irq_index] < 32 )
-     return m8260.simr_h & (0x80000000 >> SIU_MaskBit[cpm_irq_index]);
-  else
-     return m8260.simr_l & (0x80000000 >> (SIU_MaskBit[cpm_irq_index]-32));
+	return ((m8260.simr_h & SIU_MaskBit[cpm_irq_index].mask_h) ||
+		    (m8260.simr_l & SIU_MaskBit[cpm_irq_index].mask_l));
 }
 
 
@@ -173,113 +250,115 @@ int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name irqLine)
 
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-    unsigned int level;
-  
-    if (!isValidInterrupt(irq->name)) {
-      printk( "not a valid intr\n" ) ;
-      return 0;
-    }
-    /*
-     * Check if default handler is actually connected. If not issue an error.
-     * You must first get the current handler via i386_get_current_idt_entry
-     * and then disconnect it using i386_delete_idt_entry.
-     * RATIONALE : to always have the same transition by forcing the user
-     * to get the previous handler before accepting to disconnect.
-     */
-    if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
-      printk( "Default handler not there\n" );
-      return 0;
-    }
+	unsigned int level;
 
-    _CPU_ISR_Disable(level);
+	if (!isValidInterrupt(irq->name)) {
+		printk( "not a valid intr\n" ) ;
+		return 0;
+	}
+	/*
+	 * Check if default handler is actually connected. If not issue an error.
+	 * You must first get the current handler via i386_get_current_idt_entry
+	 * and then disconnect it using i386_delete_idt_entry.
+	 * RATIONALE : to always have the same transition by forcing the user
+	 * to get the previous handler before accepting to disconnect.
+	 */
+	if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
+		printk( "Default handler not there\n" );
+		return 0;
+	}
 
-    /*
-     * store the data provided by user
-     */
-    rtems_hdl_tbl[irq->name] = *irq;
-    
-    if (is_cpm_irq(irq->name)) {
-      /*
-       * Enable interrupt at PIC level
-       */
-      BSP_irq_enable_at_cpm (irq->name);
-    }
-    
+	_CPU_ISR_Disable(level);
 
-    if (is_processor_irq(irq->name)) {
-      /*
-       * Should Enable exception at processor level but not needed.  Will restore
-       * EE flags at the end of the routine anyway.
-       */
-    }
-    /*
-     * Enable interrupt on device
-     */
-    irq->on(irq);
-    
-    _CPU_ISR_Enable(level);
+	/*
+	 * store the data provided by user
+	 */
+	rtems_hdl_tbl[irq->name] = *irq;
+	
+	if (is_cpm_irq(irq->name)) {
+	    /*
+	     * Enable interrupt at PIC level
+	     */
+	    BSP_irq_enable_at_cpm (irq->name);
+	}
 
-/*
-    printk( "Enabled\n" );
-*/
-    return 1;
+#if 0
+	if (is_processor_irq(irq->name)) {
+		/*
+		 * Should Enable exception at processor level but not needed.  Will restore
+		 * EE flags at the end of the routine anyway.
+		 */
+	}
+#endif
+
+	/*
+	 * Enable interrupt on device
+	 */
+	irq->on(irq);
+
+	_CPU_ISR_Enable(level);
+
+	/*
+	    printk( "Enabled\n" );
+	*/
+	return 1;
 }
 
 
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
-     if (!isValidInterrupt(irq->name)) {
-      return 0;
-     }
-     *irq = rtems_hdl_tbl[irq->name];
-     return 1;
+	if (!isValidInterrupt(irq->name)) {
+		return 0;
+	}
+	*irq = rtems_hdl_tbl[irq->name];
+	return 1;
 }
 
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-    unsigned int level;
+	unsigned int level;
   
-    if (!isValidInterrupt(irq->name)) {
-      return 0;
-    }
-    /*
-     * Check if default handler is actually connected. If not issue an error.
-     * You must first get the current handler via i386_get_current_idt_entry
-     * and then disconnect it using i386_delete_idt_entry.
-     * RATIONALE : to always have the same transition by forcing the user
-     * to get the previous handler before accepting to disconnect.
-     */
-    if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
-      return 0;
-    }
-    _CPU_ISR_Disable(level);
-
-    if (is_cpm_irq(irq->name)) {
-      /*
-       * disable interrupt at PIC level
-       */
-      BSP_irq_disable_at_cpm (irq->name);
-    }
-
-    if (is_processor_irq(irq->name)) {
-      /*
-       * disable exception at processor level
-       */
-    }    
-
-    /*
-     * Disable interrupt on device
-     */
-    irq->off(irq);
-
-    /*
-     * restore the default irq value
-     */
-    rtems_hdl_tbl[irq->name] = default_rtems_entry;
-
-    _CPU_ISR_Enable(level);
-
-    return 1;
+	if (!isValidInterrupt(irq->name)) {
+		return 0;
+	}
+	/*
+	 * Check if default handler is actually connected. If not issue an error.
+	 * You must first get the current handler via i386_get_current_idt_entry
+	 * and then disconnect it using i386_delete_idt_entry.
+	 * RATIONALE : to always have the same transition by forcing the user
+	 * to get the previous handler before accepting to disconnect.
+	 */
+	if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
+	  return 0;
+	}
+	_CPU_ISR_Disable(level);
+	
+	if (is_cpm_irq(irq->name)) {
+	  /*
+	   * disable interrupt at PIC level
+	   */
+	  BSP_irq_disable_at_cpm (irq->name);
+	}
+	
+	if (is_processor_irq(irq->name)) {
+	  /*
+	   * disable exception at processor level
+	   */
+	}    
+	
+	/*
+	 * Disable interrupt on device
+	 */
+	irq->off(irq);
+	
+	/*
+	 * restore the default irq value
+	 */
+	rtems_hdl_tbl[irq->name] = default_rtems_entry;
+	
+	_CPU_ISR_Enable(level);
+	
+	return 1;
 }
 
 /*
@@ -288,166 +367,164 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 {
-    int i;
-    unsigned int level;
-   /*
-    * Store various code accelerators
-    */
-    internal_config 		= config;
-    default_rtems_entry 	= config->defaultEntry;
-    rtems_hdl_tbl 		= config->irqHdlTbl;
+	int i;
+	unsigned int level;
+	/*
+	 * Store various code accelerators
+	 */
+	internal_config			= config;
+	default_rtems_entry		= config->defaultEntry;
+	rtems_hdl_tbl       	= config->irqHdlTbl;
 
-    _CPU_ISR_Disable(level);
-    /*
-     * start with CPM IRQ
-     */
-    for (i=BSP_CPM_IRQ_LOWEST_OFFSET; i < BSP_CPM_IRQ_LOWEST_OFFSET + BSP_CPM_IRQ_NUMBER ; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	BSP_irq_enable_at_cpm (i);
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	BSP_irq_disable_at_cpm (i);
-      }
-    }
+	/* Fill in priority masks */
+	compute_SIU_IvectMask_from_prio();
+	
+	_CPU_ISR_Disable(level);
+	/*
+	 * start with CPM IRQ
+	 */
+	for (i=BSP_CPM_IRQ_LOWEST_OFFSET; i < BSP_CPM_IRQ_LOWEST_OFFSET + BSP_CPM_IRQ_NUMBER ; i++) {
+		if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
+			BSP_irq_enable_at_cpm (i);
+			rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+		} else {
+			rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+			BSP_irq_disable_at_cpm (i);
+		}
+	}
 
-    /*
-     * finish with Processor exceptions handled like IRQ
-     */
-    for (i=BSP_PROCESSOR_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-      }
-    }
-    _CPU_ISR_Enable(level);
-    return 1;
+	/*
+	 * finish with Processor exceptions handled like IRQ
+	 */
+	for (i=BSP_PROCESSOR_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER; i++) {
+		if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
+			rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+		} else {
+			rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+		}
+	}
+
+	_CPU_ISR_Enable(level);
+	return 1;
 }
 
 int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 {
-    *config = internal_config;
-    return 0;
+	*config = internal_config;
+	return 0;
 }
 
 #ifdef DISPATCH_HANDLER_STAT
 volatile unsigned int maxLoop = 0;
 #endif
 
+
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
 void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
-  register unsigned int irq;
+	register unsigned int irq;
 #if 0
-  register unsigned oldMask;		      /* old siu pic masks */
+	register unsigned oldMask;		      /* old siu pic masks */
 #endif
-  register unsigned msr;
-  register unsigned new_msr;
+	register unsigned msr;
+	register unsigned new_msr;
+	register unsigned old_simr_h;
+	register unsigned old_simr_l;
 #ifdef DISPATCH_HANDLER_STAT
-  unsigned loopCounter;
+	unsigned loopCounter;
 #endif
 
 
 
-  /*
-   * Handle decrementer interrupt
-   */
-  if (excNum == ASM_DEC_VECTOR) {
+	/*
+	 * Handle decrementer interrupt
+	 */
+	if (excNum == ASM_DEC_VECTOR) {
+		_CPU_MSR_GET(msr);
+		new_msr = msr | MSR_EE;
+		_CPU_MSR_SET(new_msr);
 
-/*
-    _BSP_GPLED1_on();
-*/
-    _CPU_MSR_GET(msr);
-    new_msr = msr | MSR_EE;
-    _CPU_MSR_SET(new_msr);
+		rtems_hdl_tbl[BSP_DECREMENTER].hdl();
 
-    rtems_hdl_tbl[BSP_DECREMENTER].hdl();
+		_CPU_MSR_SET(msr);
 
-    _CPU_MSR_SET(msr);
+		return;
+	}
 
-/*
-    _BSP_GPLED1_off();
-*/
-    return;
-  }
-
-  /*
-   * Handle external interrupt generated by SIU on PPC core
-   */
+	/*
+	 * Handle external interrupt generated by SIU on PPC core
+	 */
 #ifdef DISPATCH_HANDLER_STAT
-  loopCounter = 0;
+	loopCounter = 0;
 #endif  
-  while (1) {
 
-    if( ((m8260.sipnr_h & m8260.simr_h) | (m8260.sipnr_l & m8260.simr_l)) == 0 ) {
+	while (1) {
+
+		if( ((m8260.sipnr_h & m8260.simr_h) | (m8260.sipnr_l & m8260.simr_l)) == 0 ) {
 #ifdef DISPATCH_HANDLER_STAT
-      if (loopCounter >  maxLoop) maxLoop = loopCounter;
+			if (loopCounter >  maxLoop) maxLoop = loopCounter;
 #endif      
-      break;
-    }
+			break;
+		}
 
-    irq = (m8260.sivec >> 26) + BSP_CPM_IRQ_LOWEST_OFFSET;
+		irq = (m8260.sivec >> 26) + BSP_CPM_IRQ_LOWEST_OFFSET;
 
-/*
-    printk( "dispatching %d\n", irq );
-*/
+		/* Clear mask and pending register */
+		if( irq <= BSP_CPM_IRQ_MAX_OFFSET ) {
+			/* save interrupt masks */
+			old_simr_h = m8260.simr_h;
+			old_simr_l = m8260.simr_l;
 
-    /* Clear pending register */
-    if( irq <= BSP_CPM_IRQ_MAX_OFFSET ) {
-      if( SIU_MaskBit[irq] < 32 )
-        m8260.sipnr_h = (0x80000000 >> SIU_MaskBit[irq]);
-      else
-        m8260.sipnr_l = (0x80000000 >> (SIU_MaskBit[irq]-32));
-    }
+			/* mask off current interrupt and lower priority ones */
+			m8260.simr_h &= SIU_MaskBit[irq].priority_h;
+			m8260.simr_l &= SIU_MaskBit[irq].priority_l;
 
-/*
-    _CPU_MSR_GET(msr);
-    new_msr = msr | MSR_EE;
-    _CPU_MSR_SET(new_msr);
-*/
-    rtems_hdl_tbl[irq].hdl();
-/*
-    _CPU_MSR_SET(msr);
-*/
+			/* clear pending bit */
+			m8260.sipnr_h |= SIU_MaskBit[irq].mask_h;
+			m8260.sipnr_l |= SIU_MaskBit[irq].mask_l;
 
+			/* re-enable external exceptions */
+			_CPU_MSR_GET(msr);
+			new_msr = msr | MSR_EE;
+			_CPU_MSR_SET(new_msr);
 
+			/* call handler */
+			rtems_hdl_tbl[irq].hdl();
 
-#if 0
-    ppc_cached_irq_mask |= (oldMask & ~(SIU_IvectMask[irq]));
-    ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_simask = ppc_cached_irq_mask;
-#endif
+			/* disable exceptions again */
+			_CPU_MSR_SET(msr);
+			
+			/* restore interrupt masks */
+			m8260.simr_h = old_simr_h;
+			m8260.simr_l = old_simr_l;
+			
+		}
 #ifdef DISPATCH_HANDLER_STAT
-    ++ loopCounter;
-#endif    
-  }
-
-
-
-
+		++ loopCounter;
+#endif
+	}
 }
 
     
   
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {
-  /*
-   * Process pending signals that have not already been
-   * processed by _Thread_Displatch. This happens quite
-   * unfrequently : the ISR must have posted an action
-   * to the current running thread.
-   */
-  if ( _Thread_Do_post_task_switch_extension ||
-       _Thread_Executing->do_post_task_switch_extension ) {
-    _Thread_Executing->do_post_task_switch_extension = FALSE;
-    _API_extensions_Run_postswitch();
-  }
-  /*
-   * I plan to process other thread related events here.
-   * This will include DEBUG session requested from keyboard...
-   */
+	/*
+	 * Process pending signals that have not already been
+	 * processed by _Thread_Displatch. This happens quite
+	 * unfrequently : the ISR must have posted an action
+	 * to the current running thread.
+	 */
+	if ( _Thread_Do_post_task_switch_extension ||
+		_Thread_Executing->do_post_task_switch_extension ) {
+		_Thread_Executing->do_post_task_switch_extension = FALSE;
+		_API_extensions_Run_postswitch();
+	}
+
+	/*
+	 * I plan to process other thread related events here.
+	 * This will include DEBUG session requested from keyboard...
+	 */
 }

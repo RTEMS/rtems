@@ -1,3 +1,8 @@
+2002-11-01	Andy Dachs <a.dachs@sstl.co.uk>
+
+	* irq/irq.c, irq/irq_asm.S, irq/irq_init.c: Per PR288, add support
+	for _ISR_Nest_level.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

@@ -46,12 +46,20 @@ static int not_connected() {return 0;}
 static int connected() {return 1;}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
-static rtems_irq_global_settings     	initial_config;
+static rtems_irq_global_settings   	initial_config;
 static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,	 hdl		, on		, off		, isOn */
-  0, 			 nop_func	, nop_func	, nop_func	, not_connected
+  /* vectorIdex,	hdl			, on		, off		, isOn */
+  0, 			 	nop_func	, nop_func	, nop_func	, not_connected
 };
-static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
+
+/*
+	List the interrupts is their order of priority (highest first).
+	This does not have to be the same order as the siprr settings but
+	without knowing more about the application they are kept the same.
+*/
+
+
+static rtems_irq_prio irqPrioTable[BSP_CPM_IRQ_NUMBER]={
   /*
    * actual priorities for interrupt :
    */
@@ -60,12 +68,9 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
    */
   0,  45, 63, 44, 66, 68, 35, 39, 50, 62, 34,  0,  30, 40, 52, 58,
   2,  3,  0,  5,  15, 16, 17, 18, 49, 51,  0,  0,  0,  0,  0,  0,
-  6,  7,  8,  0,  11, 12, 0,  0,  20, 21, 22, 23,  0,  0,  0,  0,
-  29, 31, 33, 37, 38, 41, 47, 48, 55, 56, 57, 60, 64, 65, 69, 70,
-  /*
-   * Processor exceptions handled as interrupts
-   */
-  0
+  6,  7,  8,  0,  11, 12, 0,  0,  20, 21, 22,  23, 0,  0,  0,  0,
+  29, 31, 33, 37, 38, 41, 47, 48, 55, 56, 57,  60, 64, 65, 69, 70,
+
 };
 
 
@@ -109,10 +114,10 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     /*
      * Init initial Interrupt management config
      */
-    initial_config.irqNb 	= BSP_IRQ_NUMBER;
+    initial_config.irqNb 		= BSP_IRQ_NUMBER;
     initial_config.defaultEntry = defaultIrq;
     initial_config.irqHdlTbl	= rtemsIrq;
-    initial_config.irqBase	= BSP_ASM_IRQ_VECTOR_BASE;
+    initial_config.irqBase		= BSP_ASM_IRQ_VECTOR_BASE;
     initial_config.irqPrioTbl	= irqPrioTable;
 
     if (!BSP_rtems_irq_mngt_set(&initial_config)) {
@@ -130,9 +135,9 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
     vectorDesc.hdl.raw_hdl	=	decrementer_exception_vector_prolog_code;
     vectorDesc.hdl.raw_hdl_size	=	(unsigned) &decrementer_exception_vector_prolog_code_size;
-    vectorDesc.on		=	nop_func;
-    vectorDesc.off		=	nop_func;
-    vectorDesc.isOn		=	connected;
+    vectorDesc.on			=	nop_func;
+    vectorDesc.off			=	nop_func;
+    vectorDesc.isOn			=	connected;
     if (!mpc8xx_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
     }
