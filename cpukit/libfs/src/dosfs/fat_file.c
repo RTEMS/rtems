@@ -363,7 +363,7 @@ fat_file_write(
     fat_file_fd_t                        *fat_fd,
     uint32_t                              start,
     uint32_t                              count,
-    const char                            *buf
+    const char                           *buf
     )
 {
     int            rc = 0;
