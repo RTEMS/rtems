@@ -113,7 +113,7 @@ rtems_monitor_mpci_dump(
     boolean               verbose
 )
 {
-    unsigned32   length = 0;
+    uint32_t     length = 0;
 
     length += rtems_monitor_pad(2, length);
     length += printf("  %d", monitor_mpci->node);

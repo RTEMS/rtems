@@ -26,11 +26,11 @@
 #include <termios.h>
 
 typedef struct {
-  unsigned32 baudrate;      /* debug baud rate, e.g. 57600            */
+  uint32_t   baudrate;      /* debug baud rate, e.g. 57600            */
   void (*callout)(void);    /* callout pointer during polling         */
-  int  (*open_io)(const char *dev_name,unsigned32 baudrate); /* I/O open fnc */
+  int  (*open_io)(const char *dev_name,uint32_t   baudrate); /* I/O open fnc */
   const char *devname;      /* debug device, e.g. "/dev/tty01"        */
-  unsigned8 skip_init_bkpt; /* if TRUE, do not stop when initializing */
+  uint8_t   skip_init_bkpt; /* if TRUE, do not stop when initializing */
 } serdbg_conf_t;
 
 /*
@@ -128,7 +128,7 @@ int serdbg_open
 \*-------------------------------------------------------------------------*/
 (
  const char *dev_name, /* name of device to open */
- unsigned32 baudrate   /* baud rate to use       */
+ uint32_t   baudrate   /* baud rate to use       */
  );
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |

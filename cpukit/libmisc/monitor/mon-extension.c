@@ -65,7 +65,7 @@ rtems_monitor_extension_dump(
     boolean  verbose
 )
 {
-    unsigned32           length = 0;
+    uint32_t             length = 0;
 
     length += rtems_monitor_dump_id(monitor_extension->id);
     length += rtems_monitor_pad(11, length);

@@ -38,7 +38,7 @@
 /* ----------------------------------------------- *
  * This is a stupidity but is cute.
  * ----------------------------------------------- */
-rtems_unsigned32 new_rtems_name(char * rtems_name) {
+uint32_t   new_rtems_name(char * rtems_name) {
 	static char b[5];
 	sprintf(b,"%-4.4s",rtems_name);
 	return rtems_build_name(b[0],b[1],b[2],b[3]);
@@ -639,7 +639,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
 }
 /* ----------------------------------------------- */
 rtems_status_code   shell_init (char * task_name,
-				rtems_unsigned32    task_stacksize,
+				uint32_t      task_stacksize,
 				rtems_task_priority task_priority,
 				char * devname,
 				tcflag_t tcflag,

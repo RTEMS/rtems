@@ -16,14 +16,14 @@
 
 typedef struct {
   rtems_id     id;
-  unsigned32   count;
-  unsigned32   missed_count;
-  unsigned32   min_cpu_time;
-  unsigned32   max_cpu_time;
-  unsigned32   total_cpu_time;
-  unsigned32   min_wall_time;
-  unsigned32   max_wall_time;
-  unsigned32   total_wall_time;
+  uint32_t     count;
+  uint32_t     missed_count;
+  uint32_t     min_cpu_time;
+  uint32_t     max_cpu_time;
+  uint32_t     total_cpu_time;
+  uint32_t     min_wall_time;
+  uint32_t     max_wall_time;
+  uint32_t     total_wall_time;
 }  Period_usage_t;
 
 Period_usage_t *Period_usage_Information;
@@ -51,7 +51,7 @@ void Period_usage_Initialize( void )
 
 void Period_usage_Reset( void )
 {
-  unsigned32      i;
+  uint32_t        i;
   Period_usage_t *the_usage;
 
   for ( i=0 ;
@@ -127,13 +127,13 @@ void Period_usage_Update(
 
 void Period_usage_Dump( void )
 {
-  unsigned32              i;
+  uint32_t                i;
   Period_usage_t         *the_usage;
   Rate_monotonic_Control *the_period;
-  unsigned32              u32_name;
+  uint32_t                u32_name;
   char                   *cname;
   char                    name[5];
-  unsigned32              api_index;
+  uint32_t                api_index;
   Objects_Information    *information;
  
   if ( !Period_usage_Information ) {
@@ -176,7 +176,7 @@ void Period_usage_Dump( void )
         name[ 3 ] = cname[3];
         name[ 4 ] = '\0';
       } else {
-        u32_name = (unsigned32)the_period->owner->Object.name;
+        u32_name = (uint32_t  )the_period->owner->Object.name;
         name[ 0 ] = (u32_name >> 24) & 0xff;
         name[ 1 ] = (u32_name >> 16) & 0xff;
         name[ 2 ] = (u32_name >>  8) & 0xff;

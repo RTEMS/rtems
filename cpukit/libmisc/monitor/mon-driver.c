@@ -67,7 +67,7 @@ rtems_monitor_driver_next(
 )
 {
     rtems_configuration_table *c = _Configuration_Table;
-    rtems_unsigned32 n = rtems_get_index(*next_id);
+    uint32_t   n = rtems_get_index(*next_id);
 
     if (n >= c->number_of_device_drivers)
         goto failed;
@@ -108,7 +108,7 @@ rtems_monitor_driver_dump(
     boolean                 verbose
 )
 {
-    unsigned32          length = 0;
+    uint32_t            length = 0;
 
     length += printf("  %d", monitor_driver->id);
 

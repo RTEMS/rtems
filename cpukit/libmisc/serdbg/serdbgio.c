@@ -60,7 +60,7 @@ int serdbg_open
 \*-------------------------------------------------------------------------*/
 (
  const char *dev_name, /* name of device to open */
- unsigned32 baudrate   /* baud rate to use       */
+ uint32_t   baudrate   /* baud rate to use       */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |

@@ -75,8 +75,8 @@ typedef enum {
 #define MONITOR_SYMBOL_LEN 20
 typedef struct {
     char       name[MONITOR_SYMBOL_LEN];
-    unsigned32 value;
-    unsigned32 offset;
+    uint32_t   value;
+    uint32_t   offset;
 } rtems_monitor_symbol_t;    
 
 typedef struct {
@@ -93,17 +93,17 @@ typedef struct {
     rtems_name          name;
   /* end of common portion */
     Thread_Entry        entry;
-    unsigned32          argument;
+    uint32_t            argument;
     void               *stack;
-    unsigned32          stack_size;
+    uint32_t            stack_size;
     rtems_task_priority priority;
     States_Control      state;
     rtems_event_set     events;
     rtems_mode          modes;
     rtems_attribute     attributes;
-    unsigned32          notepad[RTEMS_NUMBER_NOTEPADS];
+    uint32_t            notepad[RTEMS_NUMBER_NOTEPADS];
     rtems_id            wait_id;
-    unsigned32          wait_args;
+    uint32_t            wait_args;
 } rtems_monitor_task_t;
 
 /*
@@ -115,8 +115,8 @@ typedef struct {
     rtems_name          name;
   /* end of common portion */
     rtems_monitor_symbol_t entry;
-    unsigned32             argument;
-    unsigned32             stack_size;
+    uint32_t               argument;
+    uint32_t               stack_size;
     rtems_task_priority    priority;
     rtems_mode             modes;
     rtems_attribute        attributes;
@@ -131,9 +131,9 @@ typedef struct {
     rtems_name          name;
   /* end of common portion */
     rtems_attribute     attributes;
-    unsigned32          number_of_pending_messages;
-    unsigned32          maximum_pending_messages;
-    unsigned32          maximum_message_size;
+    uint32_t            number_of_pending_messages;
+    uint32_t            maximum_pending_messages;
+    uint32_t            maximum_message_size;
 } rtems_monitor_queue_t;
 
 /*
@@ -173,8 +173,8 @@ typedef struct {
     rtems_id            id;		    /* not used for drivers (yet) */
     rtems_name          name;               /* not used for drivers (yet) */
   /* end of common portion */
-    unsigned32          major;
-    unsigned32          minor;
+    uint32_t            major;
+    uint32_t            minor;
     char                name_string[64];
 } rtems_monitor_dname_t;
 
@@ -184,19 +184,19 @@ typedef struct {
 
 typedef struct {
     void               *work_space_start;
-    unsigned32          work_space_size;
-    unsigned32          maximum_tasks;
-    unsigned32          maximum_timers;
-    unsigned32          maximum_semaphores;
-    unsigned32          maximum_message_queues;
-    unsigned32          maximum_partitions;
-    unsigned32          maximum_regions;
-    unsigned32          maximum_ports;
-    unsigned32          maximum_periods;
-    unsigned32          maximum_extensions;
-    unsigned32          microseconds_per_tick;
-    unsigned32          ticks_per_timeslice;
-    unsigned32          number_of_initialization_tasks;
+    uint32_t            work_space_size;
+    uint32_t            maximum_tasks;
+    uint32_t            maximum_timers;
+    uint32_t            maximum_semaphores;
+    uint32_t            maximum_message_queues;
+    uint32_t            maximum_partitions;
+    uint32_t            maximum_regions;
+    uint32_t            maximum_ports;
+    uint32_t            maximum_periods;
+    uint32_t            maximum_extensions;
+    uint32_t            microseconds_per_tick;
+    uint32_t            ticks_per_timeslice;
+    uint32_t            number_of_initialization_tasks;
 } rtems_monitor_config_t;
 
 /*
@@ -205,13 +205,13 @@ typedef struct {
 
 #if defined(RTEMS_MULTIPROCESSING)
 typedef struct {
-    unsigned32  node;                   /* local node number */
-    unsigned32  maximum_nodes;          /* maximum # nodes in system */
-    unsigned32  maximum_global_objects; /* maximum # global objects */
-    unsigned32  maximum_proxies;        /* maximum # proxies */
+    uint32_t    node;                   /* local node number */
+    uint32_t    maximum_nodes;          /* maximum # nodes in system */
+    uint32_t    maximum_global_objects; /* maximum # global objects */
+    uint32_t    maximum_proxies;        /* maximum # proxies */
 
-    unsigned32               default_timeout;        /* in ticks */
-    unsigned32               maximum_packet_size;
+    uint32_t                 default_timeout;        /* in ticks */
+    uint32_t                 maximum_packet_size;
     rtems_monitor_symbol_t   initialization;
     rtems_monitor_symbol_t   get_packet;
     rtems_monitor_symbol_t   return_packet;
@@ -256,28 +256,28 @@ typedef union {
 
 typedef struct
 {
-    unsigned32  command;
+    uint32_t    command;
     rtems_id    return_id;
-    unsigned32  argument0;
-    unsigned32  argument1;
-    unsigned32  argument2;
-    unsigned32  argument3;
-    unsigned32  argument4;
-    unsigned32  argument5;
+    uint32_t    argument0;
+    uint32_t    argument1;
+    uint32_t    argument2;
+    uint32_t    argument3;
+    uint32_t    argument4;
+    uint32_t    argument5;
 } rtems_monitor_server_request_t;
 
 typedef struct
 {
-    unsigned32  command;
-    unsigned32  result0;
-    unsigned32  result1;
+    uint32_t    command;
+    uint32_t    result0;
+    uint32_t    result1;
     rtems_monitor_union_t payload;
 } rtems_monitor_server_response_t;
 
 extern rtems_id  rtems_monitor_task_id;
 
-extern unsigned32 rtems_monitor_node;	       /* our node number */
-extern unsigned32 rtems_monitor_default_node;  /* current default for commands */
+extern uint32_t   rtems_monitor_node;	       /* our node number */
+extern uint32_t   rtems_monitor_default_node;  /* current default for commands */
 
 /*
  * Monitor command function and table entry
@@ -303,7 +303,7 @@ union _rtems_monitor_command_arg_t {
 struct rtems_monitor_command_entry_s {
     char        *command;      /* command name */
     char        *usage;        /* usage string for the command */
-    unsigned32   arguments_required;    /* # of required args */
+    uint32_t     arguments_required;    /* # of required args */
     rtems_monitor_command_function_t command_function;
                                /* Some argument for the command */
     rtems_monitor_command_arg_t   command_arg;
@@ -329,7 +329,7 @@ typedef struct {
 
 /* monitor.c */
 void    rtems_monitor_kill(void);
-void    rtems_monitor_init(unsigned32);
+void    rtems_monitor_init(uint32_t  );
 void    rtems_monitor_wakeup(void);
 void    rtems_monitor_pause_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
 void    rtems_monitor_fatal_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
@@ -344,9 +344,9 @@ void    rtems_monitor_task(rtems_task_argument);
 
 /* server.c */
 void    rtems_monitor_server_kill(void);
-rtems_status_code rtems_monitor_server_request(unsigned32, rtems_monitor_server_request_t *, rtems_monitor_server_response_t *);
+rtems_status_code rtems_monitor_server_request(uint32_t  , rtems_monitor_server_request_t *, rtems_monitor_server_response_t *);
 void    rtems_monitor_server_task(rtems_task_argument);
-void    rtems_monitor_server_init(unsigned32);
+void    rtems_monitor_server_init(uint32_t  );
   
 /* command.c */
 int     rtems_monitor_make_argv(char *, int *, char **);
@@ -358,22 +358,22 @@ void    rtems_monitor_help_cmd(int, char **, rtems_monitor_command_arg_t *, bool
 
 /* prmisc.c */
 void       rtems_monitor_separator(void);
-unsigned32 rtems_monitor_pad(unsigned32 dest_col, unsigned32 curr_col);
-unsigned32 rtems_monitor_dump_char(unsigned8 ch);
-unsigned32 rtems_monitor_dump_decimal(unsigned32 num);
-unsigned32 rtems_monitor_dump_hex(unsigned32 num);
-unsigned32 rtems_monitor_dump_id(rtems_id id);
-unsigned32 rtems_monitor_dump_name(rtems_name name);
-unsigned32 rtems_monitor_dump_priority(rtems_task_priority priority);
-unsigned32 rtems_monitor_dump_state(States_Control state);
-unsigned32 rtems_monitor_dump_modes(rtems_mode modes);
-unsigned32 rtems_monitor_dump_attributes(rtems_attribute attributes);
-unsigned32 rtems_monitor_dump_events(rtems_event_set events);
-unsigned32 rtems_monitor_dump_notepad(unsigned32 *notepad);
+uint32_t   rtems_monitor_pad(uint32_t   dest_col, uint32_t   curr_col);
+uint32_t   rtems_monitor_dump_char(uint8_t   ch);
+uint32_t   rtems_monitor_dump_decimal(uint32_t   num);
+uint32_t   rtems_monitor_dump_hex(uint32_t   num);
+uint32_t   rtems_monitor_dump_id(rtems_id id);
+uint32_t   rtems_monitor_dump_name(rtems_name name);
+uint32_t   rtems_monitor_dump_priority(rtems_task_priority priority);
+uint32_t   rtems_monitor_dump_state(States_Control state);
+uint32_t   rtems_monitor_dump_modes(rtems_mode modes);
+uint32_t   rtems_monitor_dump_attributes(rtems_attribute attributes);
+uint32_t   rtems_monitor_dump_events(rtems_event_set events);
+uint32_t   rtems_monitor_dump_notepad(uint32_t   *notepad);
 
 /* object.c */
-rtems_id   rtems_monitor_id_fixup(rtems_id, unsigned32, rtems_monitor_object_type_t);
-rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems_id, void *, unsigned32 *size_p);
+rtems_id   rtems_monitor_id_fixup(rtems_id, uint32_t  , rtems_monitor_object_type_t);
+rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems_id, void *, uint32_t   *size_p);
 rtems_id   rtems_monitor_object_canonical_next(rtems_monitor_object_info_t *, rtems_id, void *);
 void      *rtems_monitor_object_next(void *, void *, rtems_id, rtems_id *);
 rtems_id   rtems_monitor_object_canonical(rtems_id, void *);
@@ -433,15 +433,15 @@ void     rtems_monitor_dname_dump(rtems_monitor_dname_t *, boolean);
 rtems_symbol_table_t *rtems_symbol_table_create();
 void                  rtems_symbol_table_destroy(rtems_symbol_table_t *table);
 
-rtems_symbol_t *rtems_symbol_create(rtems_symbol_table_t *, char *, unsigned32);
-rtems_symbol_t *rtems_symbol_value_lookup(rtems_symbol_table_t *, unsigned32);
-const rtems_symbol_t *rtems_symbol_value_lookup_exact(rtems_symbol_table_t *, unsigned32);
+rtems_symbol_t *rtems_symbol_create(rtems_symbol_table_t *, char *, uint32_t  );
+rtems_symbol_t *rtems_symbol_value_lookup(rtems_symbol_table_t *, uint32_t  );
+const rtems_symbol_t *rtems_symbol_value_lookup_exact(rtems_symbol_table_t *, uint32_t  );
 rtems_symbol_t *rtems_symbol_name_lookup(rtems_symbol_table_t *, char *);
 void   *rtems_monitor_symbol_next(void *object_info, rtems_monitor_symbol_t *, rtems_id *);
 void    rtems_monitor_symbol_canonical(rtems_monitor_symbol_t *, rtems_symbol_t *);
 void    rtems_monitor_symbol_canonical_by_name(rtems_monitor_symbol_t *, char *);
 void    rtems_monitor_symbol_canonical_by_value(rtems_monitor_symbol_t *, void *);
-unsigned32 rtems_monitor_symbol_dump(rtems_monitor_symbol_t *, boolean);
+uint32_t   rtems_monitor_symbol_dump(rtems_monitor_symbol_t *, boolean);
 void    rtems_monitor_symbol_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
 
 

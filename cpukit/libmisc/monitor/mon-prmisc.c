@@ -25,10 +25,10 @@ rtems_monitor_separator(void)
     printf("------------------------------------------------------------------------------\n");
 }
 
-unsigned32
+uint32_t  
 rtems_monitor_pad(
-    unsigned32  destination_column,
-    unsigned32  current_column
+    uint32_t    destination_column,
+    uint32_t    current_column
 )
 {
     int pad_length;
@@ -41,8 +41,8 @@ rtems_monitor_pad(
     return printf("%*s", pad_length, "");
 }
 
-unsigned32
-rtems_monitor_dump_char(rtems_unsigned8 ch)
+uint32_t  
+rtems_monitor_dump_char(uint8_t   ch)
 {
     if (isprint(ch))
         return printf("%c", ch);
@@ -50,27 +50,27 @@ rtems_monitor_dump_char(rtems_unsigned8 ch)
         return printf("%02x", ch);
 }
 
-unsigned32
-rtems_monitor_dump_decimal(unsigned32 num)
+uint32_t  
+rtems_monitor_dump_decimal(uint32_t   num)
 {
     return printf("%4d", num);
 }
 
-unsigned32
-rtems_monitor_dump_hex(unsigned32 num)
+uint32_t  
+rtems_monitor_dump_hex(uint32_t   num)
 {
     return printf("0x%x", num);
 }
 
-unsigned32
+uint32_t  
 rtems_monitor_dump_assoc_bitfield(
     rtems_assoc_t *ap,
     char          *separator,
-    unsigned32     value
+    uint32_t       value
   )
 {  
-    unsigned32 b;
-    unsigned32 length = 0;
+    uint32_t   b;
+    uint32_t   length = 0;
     const char *name;
 
     for (b = 1; b; b <<= 1)
@@ -90,23 +90,23 @@ rtems_monitor_dump_assoc_bitfield(
     return length;
 }
 
-unsigned32
+uint32_t  
 rtems_monitor_dump_id(rtems_id id)
 {
     return printf("%08x", id);
 }
 
-unsigned32
+uint32_t  
 rtems_monitor_dump_name(rtems_name name)
 {
-    unsigned32 i;
-    unsigned32 length = 0;
+    uint32_t   i;
+    uint32_t   length = 0;
     union {
-        unsigned32 ui;
+        uint32_t   ui;
         char       c[4];
     } u;
     
-    u.ui = (rtems_unsigned32) name;
+    u.ui = (uint32_t  ) name;
     
 #if (CPU_BIG_ENDIAN == TRUE)
     for (i=0; i<sizeof(u.c); i++)
@@ -118,7 +118,7 @@ rtems_monitor_dump_name(rtems_name name)
     return length;
 }
 
-unsigned32
+uint32_t  
 rtems_monitor_dump_priority(rtems_task_priority priority)
 {
     return printf("%3d", priority);
@@ -146,10 +146,10 @@ rtems_assoc_t rtems_monitor_state_assoc[] = {
     { 0, 0, 0 },
 };
 
-unsigned32
+uint32_t  
 rtems_monitor_dump_state(States_Control state)
 {
-    unsigned32 length = 0;
+    uint32_t   length = 0;
 
     if (state == STATES_READY)  /* assoc doesn't deal with this as it is 0 */
         length += printf("READY");
@@ -169,10 +169,10 @@ rtems_assoc_t rtems_monitor_attribute_assoc[] = {
     { 0, 0, 0 },
 };
 
-unsigned32
+uint32_t  
 rtems_monitor_dump_attributes(rtems_attribute attributes)
 {
-    unsigned32 length = 0;
+    uint32_t   length = 0;
 
     if (attributes == RTEMS_DEFAULT_ATTRIBUTES)  /* value is 0 */
         length += printf("DEFAULT");
@@ -190,10 +190,10 @@ rtems_assoc_t rtems_monitor_modes_assoc[] = {
     { 0, 0, 0 },
 };
 
-unsigned32
+uint32_t  
 rtems_monitor_dump_modes(rtems_mode modes)
 {
-    unsigned32 length = 0;
+    uint32_t   length = 0;
 
     if (modes == RTEMS_DEFAULT_MODES)  /* value is 0 */
         length += printf("P:T:nA");
@@ -240,10 +240,10 @@ rtems_assoc_t rtems_monitor_events_assoc[] = {
     { 0, 0, 0 },
 };
 
-unsigned32
+uint32_t  
 rtems_monitor_dump_events(rtems_event_set events)
 {
-    unsigned32 length = 0;
+    uint32_t   length = 0;
 
     if (events == EVENT_SETS_NONE_PENDING)  /* value is 0 */
         length += printf("NONE");
@@ -254,10 +254,10 @@ rtems_monitor_dump_events(rtems_event_set events)
     return length;
 }
 
-unsigned32
-rtems_monitor_dump_notepad(unsigned32 *notepad)
+uint32_t  
+rtems_monitor_dump_notepad(uint32_t   *notepad)
 {
-    unsigned32 length = 0;
+    uint32_t   length = 0;
     int i;
 
     for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)

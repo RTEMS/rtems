@@ -1,3 +1,21 @@
+2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
+	libmisc/capture/capture.h, libmisc/cpuuse/cpuuse.c,
+	libmisc/devnull/devnull.c, libmisc/fsmount/fsmount.h,
+	libmisc/monitor/mon-config.c, libmisc/monitor/mon-dname.c,
+	libmisc/monitor/mon-driver.c, libmisc/monitor/mon-extension.c,
+	libmisc/monitor/mon-itask.c, libmisc/monitor/mon-monitor.c,
+	libmisc/monitor/mon-mpci.c, libmisc/monitor/mon-object.c,
+	libmisc/monitor/mon-prmisc.c, libmisc/monitor/mon-queue.c,
+	libmisc/monitor/mon-server.c, libmisc/monitor/mon-symbols.c,
+	libmisc/monitor/monitor.h, libmisc/monitor/symbols.h,
+	libmisc/mw-fb/mw_uid.c, libmisc/rtmonuse/rtmonuse.c,
+	libmisc/serdbg/serdbg.h, libmisc/serdbg/serdbgio.c,
+	libmisc/serdbg/termios_printk.c, libmisc/serdbg/termios_printk.h,
+	libmisc/shell/shell.c, libmisc/shell/shell.h, libmisc/stackchk/check.c,
+	libmisc/stackchk/internal.h: Convert to using c99 fixed size types.
+
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* itron/include/itronsys/mbox.h, itron/include/itronsys/types.h,

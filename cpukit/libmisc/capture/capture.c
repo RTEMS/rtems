@@ -65,11 +65,11 @@
  * RTEMS Capture Data.
  */
 static rtems_capture_record_t*  capture_records;
-static rtems_unsigned32         capture_size;
-static rtems_unsigned32         capture_count;
+static uint32_t           capture_size;
+static uint32_t           capture_count;
 static rtems_capture_record_t*  capture_in;
-static rtems_unsigned32         capture_out;
-static rtems_unsigned32         capture_flags;
+static uint32_t           capture_out;
+static uint32_t           capture_flags;
 static rtems_capture_task_t*    capture_tasks;
 static rtems_capture_control_t* capture_controls;
 static int                      capture_extension_index;
@@ -77,7 +77,7 @@ static rtems_id                 capture_id;
 static rtems_capture_timestamp  capture_timestamp;
 static rtems_task_priority      capture_ceiling;
 static rtems_task_priority      capture_floor;
-static rtems_unsigned32         capture_tick_period;
+static uint32_t           capture_tick_period;
 static rtems_id                 capture_reader;
 
 /*
@@ -108,8 +108,8 @@ static const char* capture_event_text[] =
  * This function returns the current time. If a handler is provided
  * by the user get the time from that.
  */
-static inline void rtems_capture_get_time (rtems_unsigned32* ticks,
-                                           rtems_unsigned32* tick_offset)
+static inline void rtems_capture_get_time (uint32_t  * ticks,
+                                           uint32_t  * tick_offset)
 {
   if (capture_timestamp)
     capture_timestamp (ticks, tick_offset);
@@ -211,8 +211,8 @@ rtems_capture_init_stack_usage (rtems_capture_task_t* task)
 {
   if (task->tcb)
   {
-    rtems_unsigned32* s;
-    rtems_unsigned32  i;
+    uint32_t  * s;
+    uint32_t    i;
 
     task->stack_size  = task->tcb->Start.Initial_stack.size;
     task->stack_clean = task->stack_size;
@@ -373,7 +373,7 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
  */
 static inline void
 rtems_capture_record (rtems_capture_task_t* task,
-                      rtems_unsigned32      events)
+                      uint32_t        events)
 {
   /*
    * Check the watch state if we have a task control, and
@@ -669,8 +669,8 @@ rtems_capture_switch_task (rtems_tcb* current_task,
    */
   if (capture_flags & RTEMS_CAPTURE_ON)
   {
-    rtems_unsigned32 ticks;
-    rtems_unsigned32 tick_offset;
+    uint32_t   ticks;
+    uint32_t   tick_offset;
       
     /*
      * Get the cpature task control block so we can update the
@@ -810,7 +810,7 @@ triggered:
  *
  */
 rtems_status_code
-rtems_capture_open (rtems_unsigned32 size, rtems_capture_timestamp timestamp)
+rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp)
 {
   rtems_extensions_table capture_extensions;
   rtems_name             name;
@@ -1349,14 +1349,14 @@ rtems_capture_set_trigger (rtems_name              from,
  *
  */
 rtems_status_code
-rtems_capture_read (rtems_unsigned32         threshold,
-                    rtems_unsigned32         timeout,
-                    rtems_unsigned32*        read,
+rtems_capture_read (uint32_t           threshold,
+                    uint32_t           timeout,
+                    uint32_t  *        read,
                     rtems_capture_record_t** recs)
 {
   rtems_interrupt_level level;
   rtems_status_code     sc = RTEMS_SUCCESSFUL;
-  rtems_unsigned32      count;
+  uint32_t        count;
 
   *read = 0;
   *recs = NULL;
@@ -1456,7 +1456,7 @@ rtems_capture_read (rtems_unsigned32         threshold,
  * to the capture engine. The count must match the number read.
  */
 rtems_status_code
-rtems_capture_release (rtems_unsigned32 count)
+rtems_capture_release (uint32_t   count)
 {
   rtems_interrupt_level level;
 
@@ -1481,7 +1481,7 @@ rtems_capture_release (rtems_unsigned32 count)
  *
  * This function returns the tick period in nano-seconds.
  */
-rtems_unsigned32
+uint32_t  
 rtems_capture_tick_time ()
 {
   return capture_tick_period;
@@ -1526,13 +1526,13 @@ rtems_capture_get_task_list ()
  * This function updates the stack usage. The task control block
  * is updated.
  */
-rtems_unsigned32
+uint32_t  
 rtems_capture_task_stack_usage (rtems_capture_task_t* task)
 {
   if (task->tcb)
   {
-    rtems_unsigned32* st;
-    rtems_unsigned32* s;
+    uint32_t  * st;
+    uint32_t  * s;
 
     /*
      * @todo: Assumes all stacks move the same way.
@@ -1548,7 +1548,7 @@ rtems_capture_task_stack_usage (rtems_capture_task_t* task)
     }
 
     task->stack_clean =
-      s - (rtems_unsigned32*) task->tcb->Start.Initial_stack.area;
+      s - (uint32_t  *) task->tcb->Start.Initial_stack.area;
   }
 
   return task->stack_clean;

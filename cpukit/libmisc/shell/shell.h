@@ -38,7 +38,7 @@ struct shell_cmd_tt {
  shell_cmd_t * next;
 };
 
-rtems_unsigned32 new_rtems_name(char * rtems_name);
+uint32_t   new_rtems_name(char * rtems_name);
 shell_cmd_t * shell_lookup_cmd(char * cmd);
 shell_cmd_t * shell_add_cmd(char * cmd,
                             char * topic,
@@ -67,7 +67,7 @@ void cat_file(FILE * out,char *name);
 void write_file(char *name,char * content);
 	
 rtems_status_code shell_init(char * task_name      ,
-                              rtems_unsigned32    task_stacksize,/*0 default*/
+                              uint32_t      task_stacksize,/*0 default*/
 		              rtems_task_priority task_priority ,
                               char * devname      ,
 			      tcflag_t tcflag     ,

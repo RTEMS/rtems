@@ -21,7 +21,7 @@ extern "C" {
 #endif
 
 struct _rtems_symbol_t {
-    rtems_unsigned32 value;
+    uint32_t   value;
     char            *name;
 } ;
 
@@ -33,10 +33,10 @@ typedef struct rtems_symbol_string_block_s {
 
 struct _rtems_symbol_table_t {
 
-    rtems_unsigned32 sorted;          /* are symbols sorted right now? */
-    rtems_unsigned32 growth_factor;   /* % to grow by when needed */
-    rtems_unsigned32 next;            /* next symbol slot to use when adding */
-    rtems_unsigned32 size;            /* max # of symbols */
+    uint32_t   sorted;          /* are symbols sorted right now? */
+    uint32_t   growth_factor;   /* % to grow by when needed */
+    uint32_t   next;            /* next symbol slot to use when adding */
+    uint32_t   size;            /* max # of symbols */
 
     /*
      * Symbol list -- sorted by address (when we do a lookup)
@@ -50,7 +50,7 @@ struct _rtems_symbol_table_t {
 
     rtems_symbol_string_block_t *string_buffer_head;
     rtems_symbol_string_block_t *string_buffer_current;
-    rtems_unsigned32 strings_next;      /* next byte to use in this block */
+    uint32_t   strings_next;      /* next byte to use in this block */
 
 } ;
 

@@ -26,7 +26,7 @@
 #include <termios.h>
 
 typedef struct {
-  unsigned32 baudrate;      /* debug baud rate, e.g. 57600            */
+  uint32_t   baudrate;      /* debug baud rate, e.g. 57600            */
   void (*callout)(void);    /* callout pointer during polling         */
   const char *devname;      /* debug device, e.g. "/dev/tty01"        */
 } termios_printk_conf_t;
@@ -86,7 +86,7 @@ int termios_printk_open
 \*-------------------------------------------------------------------------*/
 (
  const char *dev_name, /* name of device to open */
- unsigned32 baudrate   /* baud rate to use       */
+ uint32_t   baudrate   /* baud rate to use       */
  );
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |

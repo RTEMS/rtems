@@ -34,14 +34,14 @@ rtems_id  rtems_monitor_server_response_queue_id;       /* our server */
 
 rtems_status_code
 rtems_monitor_server_request(
-    unsigned32                       server_node,
+    uint32_t                         server_node,
     rtems_monitor_server_request_t  *request,
     rtems_monitor_server_response_t *response
 )
 {
     rtems_id          server_id;
     rtems_status_code status;
-    unsigned32        size;
+    uint32_t          size;
 
     /*
      * What is id of monitor on target node?
@@ -118,7 +118,7 @@ rtems_monitor_server_task(
     rtems_monitor_server_request_t  request;
     rtems_monitor_server_response_t response;
     rtems_status_code               status;
-    unsigned32                      size;
+    uint32_t                        size;
 
     for (;;)
     {
@@ -215,7 +215,7 @@ rtems_monitor_server_kill(void)
 
 void
 rtems_monitor_server_init(
-    unsigned32 monitor_flags
+    uint32_t   monitor_flags
 )
 {
     rtems_status_code status;
@@ -223,7 +223,7 @@ rtems_monitor_server_init(
     if (_System_state_Is_multiprocessing    &&
         (_Configuration_MP_table->maximum_nodes > 1))
     {
-        unsigned32 maximum_nodes = _Configuration_MP_table->maximum_nodes;
+        uint32_t   maximum_nodes = _Configuration_MP_table->maximum_nodes;
         
         /*
          * create the msg que our server will listen

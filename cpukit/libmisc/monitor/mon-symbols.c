@@ -67,7 +67,7 @@ rtems_symbol_t *
 rtems_symbol_create(
     rtems_symbol_table_t *table,
     char                 *name,
-    rtems_unsigned32     value
+    uint32_t       value
     )
 {
     int symbol_length;
@@ -171,15 +171,15 @@ rtems_symbol_sort(rtems_symbol_table_t *table)
 rtems_symbol_t *
 rtems_symbol_value_lookup(
     rtems_symbol_table_t *table,
-    rtems_unsigned32      value
+    uint32_t        value
   )
 {
     rtems_symbol_t *sp;
     rtems_symbol_t *base;
     rtems_symbol_t *best = 0;
-    rtems_unsigned32 distance;
-    rtems_unsigned32 best_distance = ~0;
-    rtems_unsigned32 elements;
+    uint32_t   distance;
+    uint32_t   best_distance = ~0;
+    uint32_t   elements;
 
     if (table == 0)
         table = rtems_monitor_symbols;
@@ -233,10 +233,10 @@ rtems_symbol_value_lookup(
 const rtems_symbol_t *
 rtems_symbol_value_lookup_exact(
     rtems_symbol_table_t *table,
-    rtems_unsigned32      value
+    uint32_t        value
   )
 {
-    rtems_unsigned32 s;
+    uint32_t   s;
     rtems_symbol_t *sp;
 
     if (table == 0)
@@ -276,7 +276,7 @@ rtems_symbol_name_lookup(
     char                 *name
   )
 {
-    rtems_unsigned32 s;
+    uint32_t   s;
     rtems_symbol_t *sp;
 
     if (table == 0)
@@ -303,7 +303,7 @@ rtems_monitor_symbol_next(
 )
 {
     rtems_symbol_table_t *table;
-    rtems_unsigned32 n = rtems_get_index(*next_id);
+    uint32_t   n = rtems_get_index(*next_id);
 
     table = *(rtems_symbol_table_t **) object_info;
     if (table == 0)
@@ -361,7 +361,7 @@ rtems_monitor_symbol_canonical_by_value(
     void                   *value_void_p
 )
 {
-    unsigned32 value = (unsigned32) value_void_p;
+    uint32_t   value = (uint32_t  ) value_void_p;
     rtems_symbol_t *sp;
 
     sp = rtems_symbol_value_lookup(0, value);
@@ -380,13 +380,13 @@ rtems_monitor_symbol_canonical_by_value(
 }
 
 
-unsigned32
+uint32_t  
 rtems_monitor_symbol_dump(
     rtems_monitor_symbol_t *canonical_symbol,
     boolean                 verbose
 )
 {
-    unsigned32 length = 0;
+    uint32_t   length = 0;
 
     /*
      * print the name if it exists AND if value is non-zero
@@ -420,7 +420,7 @@ rtems_monitor_symbol_dump_all(
     boolean               verbose
 )
 {
-    rtems_unsigned32 s;
+    uint32_t   s;
     rtems_symbol_t *sp;
 
     if (table == 0)

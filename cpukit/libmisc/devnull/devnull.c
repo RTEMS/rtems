@@ -35,7 +35,7 @@
  *    rval       - NULL_SUCCESSFUL
  */
 
-rtems_unsigned32 NULL_major;
+uint32_t   NULL_major;
 static char initialized;
 
 rtems_device_driver null_initialize(

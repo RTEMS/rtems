@@ -68,7 +68,7 @@ rtems_capture_cli_open (
   rtems_monitor_command_arg_t *command_arg, 
   boolean verbose )
 {
-  rtems_unsigned32  size = 0;
+  uint32_t    size = 0;
   rtems_boolean     enable = 0;
   rtems_status_code sc;
   int               arg;
@@ -230,8 +230,8 @@ rtems_capture_cli_task_list (
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority   floor = rtems_capture_watch_get_floor ();
   rtems_capture_task_t* task = rtems_capture_get_task_list ();
-  rtems_unsigned32      ticks;
-  rtems_unsigned32      tick_offset;
+  uint32_t        ticks;
+  uint32_t        tick_offset;
   unsigned long long    total_time;
   int                   count = rtems_capture_task_count ();
 
@@ -606,7 +606,7 @@ rtems_capture_cli_get_name_id (char*          arg,
                                rtems_name*    name,
                                rtems_id*      id)
 {
-  unsigned32 objclass;
+  uint32_t   objclass;
   int             l;
   int             i;
 
@@ -1166,7 +1166,7 @@ rtems_capture_cli_trace_records (
   static int              dump_total = 32;
   int                     total;
   int                     count;
-  rtems_unsigned32        read;
+  uint32_t          read;
   rtems_capture_record_t* rec;
   int                     arg;
   
@@ -1224,7 +1224,7 @@ rtems_capture_cli_trace_records (
     {
       if (csv)
         printf ("%08x,%03d,%03d,%04x,%d,%d\n",
-                (rtems_unsigned32) rec->task,
+                (uint32_t  ) rec->task,
                 (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
                 (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
                 (rec->events >> RTEMS_CAPTURE_EVENT_START),
@@ -1232,7 +1232,7 @@ rtems_capture_cli_trace_records (
       else
       {
         unsigned long long t;
-        rtems_unsigned32   event;
+        uint32_t     event;
         int                e;
 
         event = rec->events >> RTEMS_CAPTURE_EVENT_START;

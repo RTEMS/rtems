@@ -41,7 +41,7 @@
 /* set by trap handler */
 extern rtems_tcb       *debugger_interrupted_task;
 extern rtems_context   *debugger_interrupted_task_context;
-extern rtems_unsigned32 debugger_trap;
+extern uint32_t   debugger_trap;
 
 /*
  * Various id's for the monitor
@@ -51,8 +51,8 @@ extern rtems_unsigned32 debugger_trap;
 
 rtems_id  rtems_monitor_task_id;
 
-unsigned32 rtems_monitor_node;		/* our node number */
-unsigned32 rtems_monitor_default_node;  /* current default for commands */
+uint32_t   rtems_monitor_node;		/* our node number */
+uint32_t   rtems_monitor_default_node;  /* current default for commands */
 
 /*
  * The rtems symbol table
@@ -313,7 +313,7 @@ rtems_monitor_node_cmd(
     boolean verbose
 )
 {
-    unsigned32 new_node = rtems_monitor_default_node;
+    uint32_t   new_node = rtems_monitor_default_node;
     
     switch (argc)
     {
@@ -395,7 +395,7 @@ rtems_monitor_symbols_loadup(void)
             rtems_symbol_t *sp;
             sp = rtems_symbol_create(rtems_monitor_symbols,
                                      symbol,
-                                     (rtems_unsigned32) strtoul(value, 0, 16));
+                                     (uint32_t  ) strtoul(value, 0, 16));
             if (sp == 0)
             {
                 printf("could not define symbol '%s'\n", symbol);
@@ -549,7 +549,7 @@ rtems_monitor_kill(void)
 
 void
 rtems_monitor_init(
-    unsigned32 monitor_flags
+    uint32_t   monitor_flags
 )
 {
     rtems_status_code status;

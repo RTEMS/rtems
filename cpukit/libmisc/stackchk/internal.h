@@ -32,10 +32,10 @@ extern "C" {
 #define PATTERN_SIZE_WORDS      (4)
 #endif
 
-#define PATTERN_SIZE_BYTES      (PATTERN_SIZE_WORDS * sizeof(unsigned32))
+#define PATTERN_SIZE_BYTES      (PATTERN_SIZE_WORDS * sizeof(uint32_t  ))
 
 typedef struct {
-   unsigned32  pattern[ PATTERN_SIZE_WORDS ];
+   uint32_t    pattern[ PATTERN_SIZE_WORDS ];
 } Stack_check_Control;
 
 /*
@@ -78,7 +78,7 @@ void Stack_check_Switch_extension(
 void Stack_check_Fatal_extension(
     Internal_errors_Source  source,
     boolean                 is_internal,
-    unsigned32              status
+    uint32_t                status
 );
 
 /*

@@ -143,7 +143,7 @@ stack_check_dope_stack(Stack_Control *stack)
  *  Stack_check_Initialize
  */
 
-unsigned32 stack_check_initialized = 0;
+uint32_t   stack_check_initialized = 0;
 
 void Stack_check_Initialize( void )
 {
@@ -151,10 +151,10 @@ void Stack_check_Initialize( void )
   rtems_status_code    status;
   Objects_Id           id_ignored;
 #endif
-  unsigned32          *p;
+  uint32_t            *p;
 #if 0
-  unsigned32           i;
-  unsigned32           api_index;
+  uint32_t             i;
+  uint32_t             api_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
 #endif
@@ -318,7 +318,7 @@ void Stack_check_report_blown_task(void)
         "BLOWN STACK!!! Offending task(%p): id=0x%08x; name=0x%08x",
         running,
         running->Object.id,
-        (unsigned32)running->Object.name
+        (uint32_t  )running->Object.name
     );
     fflush(stderr);
 
@@ -335,9 +335,9 @@ void Stack_check_report_blown_task(void)
     fprintf(
         stderr,
         "  stack covers range 0x%08x - 0x%08x (%d bytes)\n",
-        (unsigned32) stack->area,
-        (unsigned32) stack->area + stack->size - 1,
-        (unsigned32) stack->size);
+        (uint32_t  ) stack->area,
+        (uint32_t  ) stack->area + stack->size - 1,
+        (uint32_t  ) stack->size);
     fflush(stderr);
 
     fprintf(
@@ -347,7 +347,7 @@ void Stack_check_report_blown_task(void)
         (long) PATTERN_SIZE_BYTES);
     fflush(stderr);
 
-    rtems_fatal_error_occurred( (unsigned32) "STACK BLOWN" );
+    rtems_fatal_error_occurred( (uint32_t  ) "STACK BLOWN" );
 }
 
 /*PAGE
@@ -377,8 +377,8 @@ void *Stack_check_find_high_water_mark(
   size_t n
 )
 {
-  const unsigned32 *base, *ebase;
-  unsigned32 length;
+  const uint32_t   *base, *ebase;
+  uint32_t   length;
 
   base = s;
   length = n/4;
@@ -419,11 +419,11 @@ void Stack_check_Dump_threads_usage(
   Thread_Control *the_thread
 )
 {
-  unsigned32      size, used;
+  uint32_t        size, used;
   void           *low;
   void           *high_water_mark;
   Stack_Control  *stack;
-  unsigned32      u32_name;
+  uint32_t        u32_name;
   char            name_str[5];
   char            *name;
   Objects_Information *info;
@@ -464,7 +464,7 @@ void Stack_check_Dump_threads_usage(
     if ( info->is_string ) {
       name = (char *) the_thread->Object.name;
     } else {
-      u32_name = (unsigned32)the_thread->Object.name;
+      u32_name = (uint32_t  )the_thread->Object.name;
       name[ 0 ] = (u32_name >> 24) & 0xff;
       name[ 1 ] = (u32_name >> 16) & 0xff;
       name[ 2 ] = (u32_name >>  8) & 0xff;
@@ -483,8 +483,8 @@ void Stack_check_Dump_threads_usage(
   printf( "0x%08x  %4s  0x%08x  0x%08x   %8d   %8d\n",
           the_thread ? the_thread->Object.id : ~0,
           name,
-          (unsigned32) stack->area,
-          (unsigned32) stack->area + (unsigned32) stack->size - 1,
+          (uint32_t  ) stack->area,
+          (uint32_t  ) stack->area + (uint32_t  ) stack->size - 1,
           size,
           used
   );
@@ -498,7 +498,7 @@ void Stack_check_Dump_threads_usage(
 void Stack_check_Fatal_extension(
     Internal_errors_Source  source,
     boolean                 is_internal,
-    unsigned32              status
+    uint32_t                status
 )
 {
 #ifndef DONT_USE_FATAL_EXTENSION
@@ -515,10 +515,10 @@ void Stack_check_Fatal_extension(
 
 void Stack_check_Dump_usage( void )
 {
-  unsigned32           i;
-  unsigned32           api_index;
+  uint32_t             i;
+  uint32_t             api_index;
   Thread_Control      *the_thread;
-  unsigned32           hit_running = 0;
+  uint32_t             hit_running = 0;
   Objects_Information *information;
 
   if (stack_check_initialized == 0)

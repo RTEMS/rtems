@@ -42,8 +42,8 @@ typedef struct {
   char *mount_point;
   rtems_filesystem_operations_table *fs_ops;
   rtems_filesystem_options_t mount_options;
-  unsigned16 report_reasons;
-  unsigned16 abort_reasons;
+  uint16_t   report_reasons;
+  uint16_t   abort_reasons;
 } fstab_t;
 
 

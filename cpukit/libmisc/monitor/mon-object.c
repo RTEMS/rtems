@@ -121,11 +121,11 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
 rtems_id
 rtems_monitor_id_fixup(
     rtems_id            id,
-    unsigned32          default_node,
+    uint32_t            default_node,
     rtems_monitor_object_type_t type
 )
 {
-    unsigned32  node;
+    uint32_t    node;
     
     node = rtems_get_node(id);
     if (node == 0)
@@ -173,8 +173,8 @@ rtems_monitor_object_canonical_next_remote(
      */
     
     request.command = RTEMS_MONITOR_SERVER_CANONICAL;
-    request.argument0 = (unsigned32) type;
-    request.argument1 = (unsigned32) id;
+    request.argument0 = (uint32_t  ) type;
+    request.argument1 = (uint32_t  ) id;
 
     status = rtems_monitor_server_request(rtems_get_node(id), &request, &response);
     if (status != RTEMS_SUCCESSFUL)
@@ -237,7 +237,7 @@ rtems_monitor_object_canonical_get(
     rtems_monitor_object_type_t  type,
     rtems_id             id,
     void                *canonical,
-    unsigned32          *size_p
+    uint32_t            *size_p
 )
 {
     rtems_monitor_object_info_t *info;
@@ -344,7 +344,7 @@ rtems_monitor_object_cmd(
     }
     else
     {
-        unsigned32          default_node = rtems_monitor_default_node;
+        uint32_t            default_node = rtems_monitor_default_node;
         rtems_monitor_object_type_t last_type = RTEMS_MONITOR_OBJECT_INVALID;
         rtems_id            id;
 

@@ -55,7 +55,7 @@ rtems_monitor_dname_next(
     rtems_id               *next_id
 )
 {
-    rtems_unsigned32      n = rtems_get_index(*next_id);
+    uint32_t        n = rtems_get_index(*next_id);
     rtems_driver_name_t  *table = _IO_Driver_name_table;
     rtems_driver_name_t  *np = 0;
 
@@ -99,7 +99,7 @@ rtems_monitor_dname_dump(
     boolean                 verbose
 )
 {
-    unsigned32             length = 0;
+    uint32_t               length = 0;
 
     length += rtems_monitor_pad(6, length);
     length += rtems_monitor_dump_hex(monitor_dname->major);

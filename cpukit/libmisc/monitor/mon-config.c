@@ -98,7 +98,7 @@ rtems_monitor_config_dump(
     boolean                 verbose
 )
 {
-    unsigned32   length = 0;
+    uint32_t     length = 0;
 
     length = 0;
     length += printf("WORKSPACE");

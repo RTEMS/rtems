@@ -26,7 +26,7 @@
 
 #include <rtems/cpuuse.h>
 
-unsigned32 CPU_usage_Ticks_at_last_reset;
+uint32_t   CPU_usage_Ticks_at_last_reset;
 
 /*PAGE
  *
@@ -35,14 +35,14 @@ unsigned32 CPU_usage_Ticks_at_last_reset;
 
 void CPU_usage_Dump( void )
 {
-  unsigned32           i;
-  unsigned32           api_index;
+  uint32_t             i;
+  uint32_t             api_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
-  unsigned32           u32_name;
+  uint32_t             u32_name;
   char                *cname;
   char                 name[5];
-  unsigned32           total_units = 0;
+  uint32_t             total_units = 0;
 
   for ( api_index = 1 ;
         api_index <= OBJECTS_APIS_LAST ;
@@ -88,7 +88,7 @@ void CPU_usage_Dump( void )
           name[ 3 ] = cname[3];
           name[ 4 ] = '\0';
         } else {
-          u32_name = (unsigned32)the_thread->Object.name;
+          u32_name = (uint32_t  )the_thread->Object.name;
           name[ 0 ] = (u32_name >> 24) & 0xff;
           name[ 1 ] = (u32_name >> 16) & 0xff;
           name[ 2 ] = (u32_name >>  8) & 0xff;

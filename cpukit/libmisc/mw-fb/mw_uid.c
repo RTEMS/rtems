@@ -13,6 +13,40 @@
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.5  2003/07/08 08:38:48  ralf
+// 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+//
+// 	* capture/capture-cli.c: Add config-header support.
+// 	* capture/capture.c: Add config-header support.
+// 	* cpuuse/cpuuse.c: Add config-header support.
+// 	* devnull/devnull.c: Add config-header support.
+// 	* dummy/dummy.c: Add config-header support.
+// 	* dumpbuf/dumpbuf.c: Add config-header support.
+// 	* monitor/mon-command.c: Add config-header support.
+// 	* monitor/mon-config.c: Add config-header support.
+// 	* monitor/mon-dname.c: Add config-header support.
+// 	* monitor/mon-driver.c: Add config-header support.
+// 	* monitor/mon-extension.c: Add config-header support.
+// 	* monitor/mon-itask.c: Add config-header support.
+// 	* monitor/mon-manager.c: Add config-header support.
+// 	* monitor/mon-monitor.c: Add config-header support.
+// 	* monitor/mon-mpci.c: Add config-header support.
+// 	* monitor/mon-object.c: Add config-header support.
+// 	* monitor/mon-prmisc.c: Add config-header support.
+// 	* monitor/mon-queue.c: Add config-header support.
+// 	* monitor/mon-server.c: Add config-header support.
+// 	* monitor/mon-symbols.c: Add config-header support.
+// 	* monitor/mon-task.c: Add config-header support.
+// 	* mw-fb/mw_fb.c: Add config-header support.
+// 	* mw-fb/mw_uid.c: Add config-header support.
+// 	* rtmonuse/rtmonuse.c: Add config-header support.
+// 	* serdbg/serdbg.c: Add config-header support.
+// 	* serdbg/serdbgio.c: Add config-header support.
+// 	* serdbg/termios_printk.c: Add config-header support.
+// 	* shell/cmds.c: Add config-header support.
+// 	* stackchk/check.c: Add config-header support.
+// 	* untar/untar.c: Add config-header support.
+//
 // Revision 1.4  2002/01/04 18:32:48  joel
 // 2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 //
@@ -125,7 +159,7 @@ int uid_close_queue( void )
 int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
 {
   rtems_status_code status;
-  rtems_unsigned32 size = 0;
+  uint32_t   size = 0;
   unsigned long micro_secs = timeout*1000;
   int wait = ( timeout != 0 );
 
