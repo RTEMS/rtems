@@ -67,10 +67,10 @@ SEMAPHORE_C_FILES = semaphore.c semaphorecreatesupp.c semaphoredeletesupp.c \
     semdestroy.c semgetvalue.c seminit.c semopen.c sempost.c semtimedwait.c \
     semtrywait.c semunlink.c semwait.c
 
-TIME_C_FILES = time.c posixtimespecsubtract.c posixtimespectointerval.c \
-    posixintervaltotimespec.c clockgetcpuclockid.c clockgetenableattr.c \
-    clockgetres.c clockgettime.c clocksetenableattr.c clocksettime.c \
-    nanosleep.c sleep.c
+TIME_C_FILES = adjtime.c time.c posixtimespecsubtract.c \
+    posixtimespectointerval.c posixintervaltotimespec.c clockgetcpuclockid.c \
+    clockgetenableattr.c clockgetres.c clockgettime.c clocksetenableattr.c \
+    clocksettime.c nanosleep.c sleep.c
 
 # the timer manager needs to be split further but only after its
 # dependence on the Classic API Timer Manager is removed.
