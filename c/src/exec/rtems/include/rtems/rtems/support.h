@@ -85,7 +85,9 @@ extern "C" {
 #define RTEMS_MILLISECONDS_TO_TICKS(_ms) \
         TOD_MILLISECONDS_TO_TICKS(_ms)
 
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/support.inl>
+#endif
 
 #ifdef __cplusplus
 }

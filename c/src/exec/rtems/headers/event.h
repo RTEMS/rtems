@@ -55,6 +55,16 @@ typedef enum {
 }  Event_Sync_states;
 
 /*
+ *  Event_Manager_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
+ 
+void _Event_Manager_initialization( void );
+
+/*
  *  rtems_event_send
  *
  *  DESCRIPTION:
