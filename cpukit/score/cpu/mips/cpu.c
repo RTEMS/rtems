@@ -99,8 +99,6 @@ uint32_t   _CPU_ISR_Get_level( void )
 
   mips_get_sr(sr);
 
-  /* printf("current sr=%08X, ",sr); */
-
 #if __mips == 3
 /* EXL bit and shift down hardware ints into bits 1 thru 6 */
   sr = ((sr & SR_EXL) >> 1) | ((sr & 0xfc00) >> 9);
@@ -112,7 +110,6 @@ uint32_t   _CPU_ISR_Get_level( void )
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
-  /* printf("intlevel=%02X\n",sr); */
   return sr;
 }
 
@@ -159,10 +156,8 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
 #elif __mips == 1
   mips_set_sr( (sr & ~SR_IEC) );
   srbits = sr & ~(0xfc00 | SR_IEC);
-  //printf("current sr=%08X, newlevel=%02X, srbits=%08X, ",sr,new_level,srbits);
   sr = srbits | ((new_level==0)?0xfc01:( ((new_level<<9) & 0xfc00) | \
                                          (new_level & SR_IEC)));
-  //printf("new sr=%08X\n",sr);
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
