@@ -5,8 +5,6 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
 
-SUBDIRS = rtems
-
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
@@ -29,13 +27,28 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
+$(PROJECT_INCLUDE)/rtems:
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/rtems/score:
+	$(mkinstalldirs) $@
+
 $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
 	$(INSTALL_DATA) $< $@
 
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
+include_rtems_scoredir = $(includedir)/rtems/score
+include_rtems_score_HEADERS = \
+    rtems/score/cpu.h \
+    rtems/score/sparc.h \
+    rtems/score/sparctypes.h
+
+PREINSTALL_FILES = $(PROJECT_INCLUDE) \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%) \
+    $(PROJECT_INCLUDE)/rtems/score \
+    $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
 
