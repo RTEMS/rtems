@@ -293,7 +293,6 @@ extern "C" {
 #define PPC_HAS_FPU		1	/* the rest do have one */
 #define PPC_HAS_DOUBLE		1
 #define PPC_USE_MULTIPLE	1
-#define PPC_USE_SPRG            1
 #else
  
 #error "Unsupported CPU Model"

@@ -1,3 +1,8 @@
+2001-11-14	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/ppc.h: The mpc8260 uses the new exception processing model 
+	and thus does not need to define PPC_USE_SPRG.
+
 2001-11-14	Andrew Dachs <A.Dachs@SSTL.co.uk>
 
 	* shared/ppc.h: mpc8260 has double FPU not single FPU.
