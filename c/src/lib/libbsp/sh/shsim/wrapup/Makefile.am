@@ -12,7 +12,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     $(foreach piece, $(CPU_PIECES), \
-    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/$(piece).rel)
+    ../../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/$(piece)$(LIB_VARIANT).rel)
 
 $(ARCH)/libbsp.a: ${OBJS}
 	$(make-library)

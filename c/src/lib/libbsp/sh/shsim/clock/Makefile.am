@@ -25,6 +25,4 @@ all-local: $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = ckinit.c
-
 include $(top_srcdir)/../../../../automake/local.am
