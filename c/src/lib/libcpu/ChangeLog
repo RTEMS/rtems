@@ -1,3 +1,16 @@
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* hppa1.1/.cvsignore, hppa1.1/ChangeLog, hppa1.1/Makefile.am,
+	hppa1.1/configure.ac, hppa1.1/clock/.cvsignore,
+	hppa1.1/clock/Makefile.am, hppa1.1/clock/clock.c,
+	hppa1.1/include/.cvsignore, hppa1.1/include/Makefile.am,
+	hppa1.1/include/runway.h, hppa1.1/include/semaphore.h,
+	hppa1.1/milli/.cvsignore, hppa1.1/milli/Makefile.am,
+	hppa1.1/milli/milli.S, hppa1.1/semaphore/.cvsignore,
+	hppa1.1/semaphore/Makefile.am, hppa1.1/semaphore/semaphore.c,
+	hppa1.1/timer/.cvsignore, hppa1.1/timer/Makefile.am,
+	hppa1.1/timer/timer.c: Removed.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/include/cache.h, shared/src/cache_aligned_malloc.c,
