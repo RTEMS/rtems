@@ -15,10 +15,10 @@ The scheduler manager ...
 The directives provided by the scheduler manager are:
 
 @itemize @bullet
-@item @code{sched_get_priority_min} - 
-@item @code{sched_get_priority_max} - 
-@item @code{sched_rr_get_interval} - 
-@item @code{sched_yield} - 
+@item @code{sched_get_priority_min} - Get Minimum Priority Value
+@item @code{sched_get_priority_max} - Get Maximum Priority Value
+@item @code{sched_rr_get_interval} - Get Timeslicing Quantum
+@item @code{sched_yield} - Yield the Processor
 @end itemize
 
 @section Background
@@ -26,8 +26,8 @@ The directives provided by the scheduler manager are:
 @subsection Priority
 
 In the RTEMS implementation of the POSIX API, the priorities range from
-the low priority of sched_get_priority_min() to the highest priority of
-sched_get_priority_max().  Numerically higher values represent higher
+the low priority of @code{sched_get_priority_min()} to the highest priority of
+@code{sched_get_priority_max()}.  Numerically higher values represent higher
 priorities.
 
 @subsection Scheduling Policies
@@ -70,7 +70,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection sched_get_priority_min
+@subsection sched_get_priority_min - Get Minimum Priority Value
 
 @subheading CALLING SEQUENCE:
 
@@ -94,10 +94,15 @@ The indicated policy is invalid.
 
 @subheading DESCRIPTION:
 
+This routine return the minimum (numerically and logically lowest) priority
+for the specified @code{policy}.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sched_get_priority_max
+@subsection sched_get_priority_max - Get Maximum Priority Value
 
 @subheading CALLING SEQUENCE:
 
@@ -121,10 +126,15 @@ The indicated policy is invalid.
 
 @subheading DESCRIPTION:
 
+This routine return the maximum (numerically and logically highest) priority
+for the specified @code{policy}.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sched_rr_get_interval
+@subsection sched_rr_get_interval - Get Timeslicing Quantum
 
 @subheading CALLING SEQUENCE:
 
@@ -152,10 +162,15 @@ The specified interval pointer parameter is invalid.
 
 @subheading DESCRIPTION:
 
+This routine returns the length of the timeslice quantum in the 
+@code{interval} parameter for the specified @code{pid}.
+
 @subheading NOTES:
 
+The @code{pid} argument should be 0 to indicate the calling process.
+
 @page
-@subsection sched_yield
+@subsection sched_yield - Yield the Processor
 
 @subheading CALLING SEQUENCE:
 
@@ -171,5 +186,10 @@ This routine always returns zero to indicate success.
 
 @subheading DESCRIPTION:
 
+This call forces the calling thread to yield the processor to another
+thread.  Normally this is used to implement voluntary round-robin
+task scheduling.
+
 @subheading NOTES:
 
+NONE
