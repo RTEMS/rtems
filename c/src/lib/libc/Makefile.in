@@ -16,6 +16,10 @@ VPATH = @srcdir@
 LIBNAME = libcsupport.a
 LIB = ${ARCH}/${LIBNAME}
 
+ERROR_C_PIECES=error
+
+ASSOCIATION_C_PIECES=assoc assocnamebad
+
 BASE_FS_C_PIECES = base_fs mount unmount ioman libio libio_sockets eval
 
 IMFS_C_PIECES = imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
@@ -47,11 +51,13 @@ UNIX_LIBC_C_PIECES = unixlibc hosterr
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
 UNIX_C_PIECES = $(UNIX_LIBC_C_PIECES) $(BASE_FS_C_PIECES) $(MALLOC_C_PIECES) \
-    $(TERMIOS_C_PIECES)
+    $(TERMIOS_C_PIECES) $(ERROR_C_PIECES) $(ASSOCIATION_C_PIECES)
 
 EMBEDDED_C_PIECES = $(LIBC_GLUE_C_PIECES) $(BASE_FS_C_PIECES) \
     $(MALLOC_C_PIECES) $(PASSWORD_GROUP_C_PIECES) $(TERMIOS_C_PIECES) \
-    $(SYSTEM_CALL_C_PIECES) $(DIRECTORY_SCAN_C_PIECES) $(IMFS_C_PIECES)
+    $(SYSTEM_CALL_C_PIECES) $(DIRECTORY_SCAN_C_PIECES) $(IMFS_C_PIECES) \
+    $(ERROR_C_PIECES) $(ASSOCIATION_C_PIECES)
+
 
 @UNIX_TRUE@C_PIECES = $(UNIX_C_PIECES)
 @UNIX_FALSE@C_PIECES = $(EMBEDDED_C_PIECES)
@@ -60,7 +66,7 @@ C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES = $(srcdir)/libcsupport.h
 SYS_H_FILES =
-RTEMS_H_FILES = $(srcdir)/libio.h
+RTEMS_H_FILES = $(srcdir)/assoc.h $(srcdir)/error.h $(srcdir)/libio.h
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg

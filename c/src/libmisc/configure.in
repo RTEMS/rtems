@@ -3,7 +3,7 @@ dnl
 dnl $Id$
 
 AC_PREREQ(2.13)
-AC_INIT(assoc)
+AC_INIT(dumpbuf)
 RTEMS_TOP(../../../..)
 AC_CONFIG_AUX_DIR(../../../..)
 
@@ -34,10 +34,8 @@ RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 # Try to explicitly list a Makefile here 
 AC_OUTPUT(
 Makefile
-assoc/Makefile
 cpuuse/Makefile
 dumpbuf/Makefile
-error/Makefile
 monitor/Makefile
 rtmonuse/Makefile
 stackchk/Makefile
