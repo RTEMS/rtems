@@ -60,10 +60,10 @@ $(LIB): $(SRCS)
 	    fi; \
 	    ;; \
 	  *.a) \
-	    (cd $(ARCH); \
-	     $(AR) x ../$$f; \
-	     test $$? -eq 0 || exit 1; \
-	     chmod a-w *; ) \
+	    cd $(ARCH); \
+	      $(AR) xv ../$$f || exit 1; \
+	      chmod a-w * ; \
+            cd ..; \
 	    ;; \
 	  esac; \
 	done
