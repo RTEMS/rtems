@@ -10,10 +10,9 @@
 	
 
 
+#include <asm.h>
+#include <rtems/score/cpu.h>
 #include <bsp/vectors.h>
-#include <libcpu/cpu.h>
-#include <rtems/score/targopts.h>
-#include "asm.h"
 	
 
 #define SYNC \
