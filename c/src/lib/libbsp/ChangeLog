@@ -1,3 +1,7 @@
+2004-02-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp.am: Add CPPASCOMPILE.
+
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp.am: DISTCLEANFILES = include/bspopts.h.
