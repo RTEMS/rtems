@@ -13,7 +13,7 @@ include $(top_srcdir)/../../../automake/lib.am
 
 cache_C_FILES = cache/cache.c
 EXTRA_DIST += $(cache_C_FILES)
-cache_OBJECTS = $(cache_C_FILES:cache/%.c:cache/$(ARCH)/%.$(OBJEXT))
+cache_OBJECTS = $(cache_C_FILES:cache/%.c=cache/$(ARCH)/%.$(OBJEXT))
 
 common_C_FILES = ../../shared/src/cache_aligned_malloc.c
 common_C_FILES += ../../shared/src/cache_manager.c
