@@ -19,4 +19,6 @@ This is the gcc/gnat compiler for @target_alias@
 %{_prefix}/bin/@target_alias@-gnat*
 
 %{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/gnat1@exe_ext@
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/adalib
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/adainclude
 %endif

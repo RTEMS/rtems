@@ -50,16 +50,22 @@ NoSource:	1
 %define build_gnat	0
 
 %if "@target_alias@"     == "c4x-rtems"
-%define build_gnat 	0
 %define build_cxx	0
-%elseif "@target_alias@" == "i386-rtems"
+%endif
+
+%if "@target_alias@" == "i386-rtems"
 %define build_gnat 	1
-%elseif "@target_alias@" == "i960-rtems"
-%define build_gnat      0
+%endif
+
+%if "@target_alias@" == "i960-rtems"
 %define build_cxx	0
-%elseif "@target_alias@" == "powerpc-rtems"
+%endif
+
+%if "@target_alias@" == "powerpc-rtems"
 %define build_gnat      1
-%elseif "@target_alias@" == "sparc-rtems"
+%endif
+
+%if "@target_alias@" == "sparc-rtems"
 %define build_gnat      1
 %endif
 
@@ -102,7 +108,10 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 #    CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
 # %endif
 
-  languages="c,c++"
+  languages="c"
+%if %build_cxx
+  languages="$languages,c++"
+%endif
 %if %build_g77
   languages="$languages,g77"
 %endif
@@ -128,11 +137,11 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %endif
   make all
 %if %build_gnat
-  cd gcc
 # This is what is documented, but it doesn't work for me (RC)
 #  make gnatlib_and_tools
-  make cross-gnattools
-  cd ..
+  make -C gcc cross-gnattools
+  make -C gcc ada.all.cross
+  make -C gcc gnatlib
 %endif
   make info
 
@@ -144,7 +153,8 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 #    $RPM_BUILD_ROOT%{_prefix}/@target_alias@/bin
 #
 
-  make prefix=$RPM_BUILD_ROOT%{_prefix} install
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} install
   cd @target_alias@/newlib
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} install-info
@@ -215,6 +225,9 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     *libobjc*) echo "$i" >> files.objc ;;
     *include/objc*) ;;
     *include/g++*);;
+    *adainclude*);;
+    *adalib*);;
+    *gnat1);;
     *jc1) ;;
     *jvgenmain) ;;
     *cc1plus) ;; # ignore: explicitly put into rpm elsewhere

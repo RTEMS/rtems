@@ -37,8 +37,8 @@ arm-rtems-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems > $@
 RPM_SPECS_DATA += arm-rtems-$(GCC3NEWLIBVERS).spec
 
-c4x-rtems-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIB_C_ONLY_SPEC_DEPS)
-	$(MKSPEC) $(C_ONLY_ARG) -cfg $(top_builddir)/setup.cache c4x-rtems > $@
+c4x-rtems-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIB_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache c4x-rtems > $@
 RPM_SPECS_DATA += c4x-rtems-$(GCC3NEWLIBVERS).spec
 
 h8300-rtems-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
