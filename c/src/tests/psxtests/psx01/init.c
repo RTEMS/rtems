@@ -12,6 +12,7 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
+#include <sched.h>
 
 #define TM_SUNDAY    0
 #define TM_MONDAY    1
@@ -136,8 +137,8 @@ void *POSIX_Init(
   status = sched_rr_get_interval( getpid(), &tr );
   printf(
     "Round Robin quantum is %d seconds, %d nanoseconds\n",
-    tr.tv_sec,
-    tr.tv_nsec
+    (int) tr.tv_sec,
+    (int) tr.tv_nsec
   );
   assert( !status );
   
