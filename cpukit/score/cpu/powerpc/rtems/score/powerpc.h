@@ -95,7 +95,6 @@ extern "C" {
 #endif
 #define PPC_ALIGNMENT		4  
 #define PPC_CACHE_ALIGNMENT	16
-#define PPC_HAS_RFCI    	1
 
 #elif defined(mpc555)
 
@@ -321,15 +320,6 @@ extern "C" {
 #else
 #define PPC_HAS_DOUBLE 0
 #endif
-#endif
-
-/*
- *  Unless specified above, then assume the model does NOT have critical
- *  interrupt support.
- */
-
-#ifndef PPC_HAS_RFCI
-#define PPC_HAS_RFCI 0
 #endif
 
 /*
