@@ -207,6 +207,7 @@ static struct fxp_ident fxp_ident_table[] = {
     { 0x1036,		"Intel Pro/100 Ethernet", UNTESTED },
     { 0x1037,		"Intel Pro/100 Ethernet", UNTESTED },
     { 0x1038,		"Intel Pro/100 Ethernet", UNTESTED },
+    { 0x103B,		"Intel Pro/100 Ethernet (82801BD PRO/100 VM (LOM))", 0 },
     { 0,		NULL },
 };
 
@@ -1687,6 +1688,11 @@ rtems_task_wake_after(100);
 	/*
 	 * Cancel any pending I/O
 	 */
+    /*
+     * Add line suggested by "Eugene Denisov" <dea@sendmail.ru>
+     * on Tue, 16 Mar 2004 13:10:15 +0300
+     */
+    sc->stat_ch = fxp_timeout_stopped;
 	fxp_stop(sc);
 
 	prm = (ifp->if_flags & IFF_PROMISC) ? 1 : 0;
