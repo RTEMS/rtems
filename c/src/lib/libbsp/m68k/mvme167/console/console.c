@@ -198,7 +198,7 @@ rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
 
 /* Define the following symbol to trace the calls to this driver */
 /* #define CD2401_RECORD_DEBUG_INFO */
-#include "console-recording.c"
+#include "console-recording.h"
 
 
 /*

@@ -1,5 +1,15 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am
+	fatal/Makefile.am, network/Makefile.am, startup/Makefile.am,
+	timer/Makefile.am, wrapup/Makefile.am.
+	* clock/Makefile.am, console/Makefile.am, fatal/Makefile.am,
+	network/Makefile.am, startup/Makefile.am, timer/Makefile.am,
+	wrapup/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* console/console-recording.c: Remove (rename to console-recording.h).
 	* console/console-recording.h: New.
 
