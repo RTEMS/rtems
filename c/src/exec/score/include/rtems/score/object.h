@@ -23,11 +23,10 @@ extern "C" {
 #endif
 
 #include <rtems/score/chain.h>
+#include <rtems/score/isr.h>
 
 /*
  *  Mask to enable unlimited objects
- *
- *  XXX - needs to be moved to the API some-where
  */
 
 #define OBJECTS_UNLIMITED_OBJECTS 0x80000000
@@ -327,7 +326,7 @@ void _Objects_Free(
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This method zeroes out the name.
  */
  
 void _Objects_Clear_name(
@@ -340,7 +339,7 @@ void _Objects_Clear_name(
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This method copies a string style object name from source to destination.
  */
 
 void _Objects_Copy_name_string(
@@ -353,7 +352,7 @@ void _Objects_Copy_name_string(
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This method copies a raw style object name from source to destination.
  */
 
 void _Objects_Copy_name_raw(
@@ -367,7 +366,7 @@ void _Objects_Copy_name_raw(
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This method compares two string style object names.
  */
 
 boolean _Objects_Compare_name_string(
@@ -381,7 +380,7 @@ boolean _Objects_Compare_name_string(
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This method compares two raw style object names.
  */
 
 boolean _Objects_Compare_name_raw(
@@ -435,12 +434,24 @@ Objects_Name_to_id_errors _Objects_Name_to_id(
  *  is undefined.  Otherwise, location is set to OBJECTS_ERROR
  *  and the_object is undefined.
  *
+ *  NOTE: _Objects_Get returns with dispatching disabled for 
+ *        local and remote objects.
+ *        _Objects_Get_isr_disable returns with dispatching
+ *        disabled for remote objects and interrupts for local
+ *        objects.
  */
 
 Objects_Control *_Objects_Get (
   Objects_Information *information,
   Objects_Id           id,
   Objects_Locations   *location
+);
+
+Objects_Control *_Objects_Get_isr_disable(
+  Objects_Information *information,
+  Objects_Id           id,
+  Objects_Locations   *location,
+  ISR_Level           *level
 );
 
 /*
