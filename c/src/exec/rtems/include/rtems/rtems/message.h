@@ -242,6 +242,23 @@ rtems_status_code rtems_message_queue_flush(
 );
 
 /*
+ *  rtems_message_queue_get_number_pending
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_message_queue_get_number_pending
+ *  directive.  This directive returns the number of pending 
+ *  messages for the message queue indicated by ID 
+ *  chain.  The number of messages pending is returned in COUNT.
+ */
+
+rtems_status_code rtems_message_queue_get_number_pending(
+  Objects_Id  id,
+  unsigned32 *count
+);
+
+
+/*
  *  _Message_queue_Submit
  *
  *  DESCRIPTION:
