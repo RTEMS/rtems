@@ -124,9 +124,6 @@ extern "C" {
 #define RAM_START 0
 #define RAM_END   0x100000
 
-#define USE_CHANNEL_A   0                /* 1 = use channel A for console */
-#define USE_CHANNEL_B   1                /* 1 = use channel B for console */
-
 #define TIMER 0x0c000000
 #define TIMER_VECTOR 0x4D
 
