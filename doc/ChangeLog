@@ -1,9 +1,9 @@
 2004-09-27	Joel Sherrill <joel@OARcorp.com>
 
-	PR 681/doc
 	PR 682/doc
-	* buildc.t, buildrt.t, sample.t: Fix PATH and tar examples. Enable
-	binutils link again.
+	PR 683/doc
+	* started/buildc.t, started/buildrt.t, started/sample.t: Fix PATH and
+	tar examples. Enable binutils link again.
 	* user/overview.t: Chapter numbering in preface was wrong.
 
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
