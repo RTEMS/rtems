@@ -43,8 +43,7 @@ int mq_unlink(
   Objects_Locations                 location;
  
   status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id );
- 
-  if ( !status )
+   if ( status != 0 )
     set_errno_and_return_minus_one( status );
  
   the_mq = _POSIX_Message_queue_Get( the_mq_id, &location );

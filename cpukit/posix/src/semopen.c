@@ -43,9 +43,7 @@ sem_t *sem_open(
 
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
-    /*mode = (mode_t) va_arg( arg, mode_t * );*/
     mode = va_arg( arg, mode_t );
-    /*value = (unsigned int) va_arg( arg, unsigned int * );*/
     value = va_arg( arg, unsigned int );
     va_end(arg);
   }
@@ -61,35 +59,34 @@ sem_t *sem_open(
 
   if ( status ) {
 
-    if ( status == EINVAL ) {      /* name -> ID translation failed */
-      if ( !(oflag & O_CREAT) ) {  /* willing to create it? */
+    /*
+     * Unless we are willing to create name -> ID translation failure is
+     * an error.
+     */
+
+    if ( status == EINVAL ) { 
+      if ( !(oflag & O_CREAT) ) {
         set_errno_and_return_minus_one_cast( ENOENT, sem_t * );
       }
-      /* we are willing to create it */
     }
-    /* some type of error */
-    /*set_errno_and_return_minus_one_cast( status, sem_t * );*/
 
-  } else {                /* name -> ID translation succeeded */
+  } else { 
+
+    /*
+     * Check for existence with creation.
+     */
 
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
       set_errno_and_return_minus_one_cast( EEXIST, sem_t * );
     }
 
-    /* 
-     * XXX In this case we need to do an ID->pointer conversion to
-     *     check the mode.   This is probably a good place for a subroutine.
-     */
-
     the_semaphore = _POSIX_Semaphore_Get( &the_semaphore_id, &location );
     the_semaphore->open_count += 1;
-
     return (sem_t *)&the_semaphore->Object.id;
 
   } 
   
-  /* XXX verify this comment...
-   *
+  /* 
    *  At this point, the semaphore does not exist and everything has been
    *  checked. We should go ahead and create a semaphore.
    */
@@ -101,9 +98,12 @@ sem_t *sem_open(
     &the_semaphore
   );
  
+  /*
+   * errno was set by Create_support, so don't set it again.
+   */
+
   if ( status == -1 )
-    return (sem_t *) -1;
+    return SEM_FAILED;
 
   return (sem_t *) &the_semaphore->Object.id;
- 
 }

@@ -20,7 +20,8 @@
  *
  *  _POSIX_Semaphore_Name_to_id
  *
- *  XXX
+ *  Look up the specified name and attempt to locate the id
+ *  for the associated semaphore.
  */
 
 int _POSIX_Semaphore_Name_to_id(
@@ -30,12 +31,12 @@ int _POSIX_Semaphore_Name_to_id(
 {
   Objects_Name_to_id_errors  status;
 
-  status = _Objects_Name_to_id( &_POSIX_Semaphore_Information, (char *)name, 0, id );
+  status = _Objects_Name_to_id( 
+    &_POSIX_Semaphore_Information, (char *)name, 0, id );
 
-  if ( status == OBJECTS_SUCCESSFUL ) {
-	  return 0;
-  } else {
-	  return EINVAL;
-  }
+  if ( status == OBJECTS_SUCCESSFUL )
+    return 0;
+
+  return EINVAL;
 }
 

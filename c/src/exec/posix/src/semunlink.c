@@ -31,8 +31,7 @@ int sem_unlink(
   Objects_Locations                 location;
  
   status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id );
-   
-  if ( !status )
+  if ( status != 0 )
     set_errno_and_return_minus_one( status );
 
   the_semaphore = _POSIX_Semaphore_Get( &the_semaphore_id, &location );
@@ -55,7 +54,7 @@ int sem_unlink(
 #endif
 
       the_semaphore->linked = FALSE;
-
+      _POSIX_Semaphore_Namespace_remove( the_semaphore );
       _POSIX_Semaphore_Delete( the_semaphore );
 
       _Thread_Enable_dispatch();
