@@ -1,3 +1,8 @@
+2002-07-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: explicitly create $(ARCH) when building $(LIB).
+	Add bsplib_DATA = $(LIB).
+
 2002-06-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Pickup libbsp.a from build directory.

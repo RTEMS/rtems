@@ -39,6 +39,7 @@ all-local: $(ARCH) $(TMPINSTALL_FILES)
 $(LIB): $(SRCS)
 	rm -f $@
 	rm -rf $(ARCH)/*
+	test -d $(ARCH) || mkdir $(ARCH)
 	for f in $(SRCS); do \
 	  case $$f in \
 	  *.o | *.rel) \
@@ -65,5 +66,8 @@ $(LIB): $(SRCS)
 	$(AR) rc $@ $(ARCH)/*
 	rm -f $(ARCH)/*
 	$(RANLIB) $@
+
+bsplibdir = $(libdir)/@RTEMS_BSP@/lib
+bsplib_DATA = $(LIB)
 
 include $(top_srcdir)/../../../automake/local.am
