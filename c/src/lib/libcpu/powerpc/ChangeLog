@@ -1,3 +1,8 @@
+2004-03-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* README: Add "mpc5xx (mpc565)", because Wilfried B. mentioned the 
+	mpc5xx being used on mpc565.
+
 2004-03-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 587/bsps
