@@ -1,3 +1,9 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* include/confdefs.h: Modified code that accounts for initialization
+	task/threads with greater than minimum stack sizes so it would
+	compile even if optional APIs are disabled.
+
 2000-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* include/confdefs.h: Account for initialization tasks and
