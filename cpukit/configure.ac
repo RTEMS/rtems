@@ -88,6 +88,17 @@ AC_CHECK_FUNCS([strsep strcasecmp snprintf])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
+## Check if the installed toolchain has these headers
+AC_CHECK_HEADER(stdint.h)
+AC_CHECK_HEADER(inttypes.h)
+
+AS_IF([test x"${RTEMS_USE_NEWLIB}" = x"yes"],[
+  RTEMS_USES_STDINT_H=yes
+  RTEMS_USES_INTTYPES_H=yes],[
+  RTEMS_USES_STDINT_H=$ac_cv_header_stdint_h
+  RTEMS_USES_INTTYPES_H=$ac_cv_header_inttypes_h
+])
+
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 ## FIXME: This check is doubtful
 AS_IF([test "$HAS_MP" = "yes"],
@@ -160,6 +171,16 @@ RTEMS_CPUOPT([RTEMS_UNIXLIB],
   [1],
   [to indicate RTEMS using RTEMS's unixlib])
 
+RTEMS_CPUOPT([RTEMS_USES_STDINT_H],
+  [test x"${RTEMS_USES_STDINT_H}" = x"yes"],
+  [1],
+  [if RTEMS uses stdint.h])
+
+RTEMS_CPUOPT([RTEMS_USES_INTTYPES_H],
+  [test x"${RTEMS_USES_INTTYPES_H}" = x"yes"],
+  [1],
+  [if RTEMS uses inttypes.h])
+
 RTEMS_CPUOPT([RTEMS_VERSION],
   [true],
   ["]_RTEMS_VERSION["],
@@ -227,46 +248,10 @@ AC_CACHE_CHECK([whether $CC supports function __attribute__((weak))],
 AC_CHECK_HEADERS([sys/cdefs.h],[NEED_SYS_CDEFS_H=no],[NEED_SYS_CDEFS_H=yes])
 AC_CHECK_HEADERS([sys/queue.h],[NEED_SYS_QUEUE_H=no],[NEED_SYS_QUEUE_H=yes])
 
-AS_IF([test x"$RTEMS_USE_NEWLIB" != x"yes"],[
-## Provide headers only if the host doesn't.
-  AC_CHECK_HEADERS([stdint.h],[NEED_STDINT_H=no],[NEED_STDINT_H=yes])
-  AC_CHECK_HEADERS([inttypes.h],[NEED_INTTYPES_H=no],[NEED_INTTYPES=yes])
-],[
-## Using newlib, we provide sys/cdefs.h
-  NEED_STDINT_H=yes
-  NEED_INTTYPES_H=yes
-])
-
 # FIXME: These checks are only in here to provide
 # configuration-time diagnostics and are not really used.
 AC_CHECK_DECLS([_POSIX_LOGIN_NAME_MAX],,,[#include <limits.h>])
 AC_CHECK_DECLS([CHAR_BIT],,,[#include <limits.h>])
-
-AS_IF([test x"${RTEMS_USE_NEWLIB}" = x"yes"],[
-ac_cv_have_decl_XTABS=yes
-ac_cv_have_decl_OLCUC=yes
-## SUSV3, but seemingly not available on some platforms (reportedly FreeBSD)
-ac_cv_have_decl_ONLRET=yes
-ac_cv_have_decl_ONOCR=yes
-ac_cv_have_decl_TABDLY=yes
-ac_cv_have_decl_OCRNL=yes
-ac_cv_have_decl_IUCLC=yes
-## SUSV3-XSI extension
-ac_cv_have_decl_ECHOPRT=yes
-])
-
-# FIXME: Some cruft to work around portability issues with termios.c
-## Seemingly not covered by any standard.
-AC_CHECK_DECLS([XTABS],,,[#include <termios.h>])
-AC_CHECK_DECLS([OLCUC],,,[#include <termios.h>])
-## SUSV3, but seemingly not available on some platforms (reportedly FreeBSD)
-AC_CHECK_DECLS([ONLRET],,,[#include <termios.h>])
-AC_CHECK_DECLS([ONOCR],,,[#include <termios.h>])
-AC_CHECK_DECLS([TABDLY],,,[#include <termios.h>])
-AC_CHECK_DECLS([OCRNL],,,[#include <termios.h>])
-AC_CHECK_DECLS([IUCLC],,,[#include <termios.h>])
-## SUSV3-XSI extension
-AC_CHECK_DECLS([ECHOPRT],,,[#include <termios.h>])
 
 ## BSD-ism, excluded from POSIX, but available on most platforms
 AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
@@ -297,8 +282,6 @@ AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
 AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
-AM_CONDITIONAL([NEED_STDINT_H],[test x"$NEED_STDINT_H" = x"yes"])
-AM_CONDITIONAL([NEED_INTTYPES_H],[test x"$NEED_INTTYPES_H" = x"yes"])
 
 AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])

@@ -21,10 +21,9 @@ include_rtems_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/timerdrv.h include/vmeintr.h
 
 include_HEADERS =
-if NEED_STDINT_H
+
+if NEWLIB
 include_HEADERS += include/stdint.h
-endif
-if NEED_INTTYPES_H
 include_HEADERS += include/inttypes.h
 endif
 
@@ -177,13 +176,11 @@ $(PROJECT_INCLUDE)/rtems/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vmeintr.h
 
-if NEED_STDINT_H
+if NEWLIB
 $(PROJECT_INCLUDE)/stdint.h: include/stdint.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/stdint.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
-endif
 
-if NEED_INTTYPES_H
 $(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/inttypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h

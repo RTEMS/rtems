@@ -1,3 +1,15 @@
+2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Rework stdint.h/inttypes.h support.
+	Add RTEMS_USES_STDINT_H. Add RTEMS_USES_INTTYPES_H.
+	Remove NEED_STDINT_H. Remove NEED_INTTYPES_H.
+	Remove termios-flag detection.
+	* libcsupport/Makefile.am: Install include/stdint.h and
+	include/inttypes.h for NEWLIB only.
+	* libcsupport/include/stdint.h: Rework; Now newlib specific.
+	* libcsupport/src/termios.c: Make newlib specific.
+	* include/rtems/stdint.h: Rework; Now wrapper to <stdint.h>.
+
 2004-04-12	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* acinclude.m4 (RTEMS_CPUOPT): Use AC_DEFINE_UNQUOTED.
