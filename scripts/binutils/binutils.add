@@ -1,0 +1,93 @@
+#
+# spec file for binutils package targetting rtems
+# 
+# Copyright  (c)  1999,2000 OARCorp, Huntsville, AL
+#
+# please send bugfixes or comments to joel@OARcorp.com
+#
+
+Vendor:       OAR Corporation
+Distribution: Linux
+Name:         @target_alias@-binutils-collection
+Summary:      binutils for target @target_alias@
+Group:        rtems
+Release:      @Release@
+License:      GPL/LGPL
+
+Autoreqprov:  	off
+Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+Prefix:		/opt
+BuildRoot:	/tmp/@target_alias@-binutils
+
+Version:      	@binutils_version@
+Source0:      	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.gz
+Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
+#
+# The original sources are not included in the source RPM.
+# If we included them, then the source RPMs for each target
+# would duplicate MBs of source unnecessarily.  This is 
+# a duplication of over 30 MBs of source for each of
+# the more than 10 targets it is possible to build.
+#
+# You can get them yourself from the Internet and copy them to
+# your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+# Or you can try the ftp options of rpm :-)
+#
+NoSource:      0
+
+%description
+
+RTEMS is an open source operating system for embedded systems.
+
+This is binutils sources with patches for RTEMS.
+
+%prep
+# untar the sources inside @target_alias@-binutils
+%setup -c -n @target_alias@-binutils -a 0
+
+%patch0 -p0
+  test -d build || mkdir build
+
+%build
+  cd build
+  ../binutils-@binutils_version@/configure --target=@target_alias@ \
+    --verbose --prefix=/opt/rtems 
+
+  make all
+  make info
+
+
+%install
+  cd build
+  make prefix=$RPM_BUILD_ROOT/opt/rtems install
+  make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
+# A bug in binutils: binutils does not install share/locale
+# however it uses it
+  ../binutils-@binutils_version@/mkinstalldirs \
+    $RPM_BUILD_ROOT/opt/rtems/share/locale
+
+# gzip info files
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
+
+  if test -f $RPM_BUILD_ROOT/opt/rtems/info/configure.info.gz;
+  then
+# These are only present in binutils >= 2.9.5
+    find $RPM_BUILD_ROOT/opt/rtems/info -name 'configure.*' | \
+      sed -e "s,^$RPM_BUILD_ROOT,,g" > ../files
+  else
+    touch ../files
+  fi
+
+# We assume that info/dir exists when building the RPMs
+  rm -f $RPM_BUILD_ROOT/opt/rtems/info/dir
+  f=`find $RPM_BUILD_ROOT/opt/rtems/info -name '*.info.gz'`
+  test x"$f" != x"" && for i in $f; do
+    install-info $i $RPM_BUILD_ROOT/opt/rtems/info/dir
+  done
+
+%clean
+# let rpm --clean remove BuildRoot iif using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "/tmp/@target_alias@-binutils" && \
+    rm -rf $RPM_BUILD_ROOT
+

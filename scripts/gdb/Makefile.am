@@ -6,6 +6,12 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 MKGDBSPEC = $(SHELL) $(top_builddir)/mkgdbspec
 
+SUBPACKAGES = gdb.add base-gdb.add target-gdb.add
+
+gdb.spec.in: $(SUBPACKAGES)
+	cat $^ > $@
+CLEANFILES += gdb.spec.in
+
 MKGDBSPEC_DEPS = $(top_builddir)/mkgdbspec gdb.spec.in \
     $(top_builddir)/setup.cache
 
@@ -39,17 +45,13 @@ sh-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 sparc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
-TEMPLATES = gdb.spec.in
-
 RPM_SPECS_DATA = hppa1.1-rtems-$(GDBVERS).spec i386-rtems-$(GDBVERS).spec \
     i960-rtems-$(GDBVERS).spec m68k-rtems-$(GDBVERS).spec \
     m68k-rtemself-$(GDBVERS).spec mips64orion-rtems-$(GDBVERS).spec \
     powerpc-rtems-$(GDBVERS).spec sh-rtems-$(GDBVERS).spec \
     sh-rtemself-$(GDBVERS).spec sparc-rtems-$(GDBVERS).spec
+CLEANFILES += $(RPM_SPECS_DATA)
 
-noinst_DATA = $(TEMPLATES)
+EXTRA_DIST = $(SUBPACKAGES)
 
-EXTRA_DIST = $(TEMPLATES)
-
-CLEANFILES = $(RPM_SPECS_DATA)
 include $(top_srcdir)/../automake/local.am

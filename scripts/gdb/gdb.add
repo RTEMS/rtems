@@ -1,0 +1,75 @@
+#
+# spec file for package rtems
+# 
+# Copyright  (c)  1999  OARCorp, Huntsville, AL
+#
+# please send bugfixes or comments to joel@OARcorp.com
+#
+
+# neededforbuild -- nothing
+
+Vendor:       OAR Corporation
+Distribution: Linux
+Name:         @target_alias@-gdb-collection
+Release:      @Release@
+License:      GPL/LGPL
+Group:        rtems
+
+Autoreqprov:  on
+Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+
+Version:      @gdb_version@
+Summary:      gdb for target @target_alias@
+Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
+Patch0:	      gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
+Buildroot:      /tmp/@target_alias@-gdb
+
+#
+# The original sources are not included in the source RPM.
+# If we included them, then the source RPMs for each target
+# would duplicate MBs of source unnecessarily.  This is 
+# a duplication of over 30 MBs of source for each of
+# the more than 10 targets it is possible to build.
+#
+# You can get them yourself from the Internet and copy them to
+# your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+# Or you can try the ftp options of rpm :-)
+#
+NoSource:      0
+
+
+%description
+RTEMS is an open source operating system for embedded systems.
+
+This is the GNU gdb for RTEMS targetting @target_alias@.
+
+%prep
+echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
+# untar the sources inside @target_alias@-gdb
+%setup -c -n @target_alias@-gdb -a 0
+
+%patch0 -p0
+
+%build
+test -d build || mkdir build
+  cd build
+  ../gdb-@gdb_version@/configure --target=@target_alias@ \
+    --verbose --prefix=/opt/rtems @extra_configure_arguments@
+
+  make all
+  make info
+
+%install
+  cd build
+  make prefix=$RPM_BUILD_ROOT/opt/rtems install
+  make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
+
+  # gzip info files
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
+
+%clean
+# let rpm --clean remove BuildRoot iif using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "/tmp/@target_alias@-gdb" && \
+    rm -rf $RPM_BUILD_ROOT

@@ -1,0 +1,64 @@
+# ==============================================================
+# rtems-base-binutils
+# ==============================================================
+%package -n rtems-base-binutils
+Provides:	rtems-base-binutils
+Summary:      base package for rtems binutils
+Group: rtems
+
+%description -n rtems-base-binutils
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the base for binutils regardless of target CPU.
+
+%post -n rtems-base-binutils
+  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    test x"$f" != x"" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+    done
+  fi
+
+%postun -n rtems-base-binutils
+  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    test x"$f" != x"" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+    done
+  fi
+
+%files -n rtems-base-binutils -f files
+%dir /opt/rtems/info
+%doc /opt/rtems/info/dir
+%doc /opt/rtems/info/as.info.gz
+%doc /opt/rtems/info/as.info-?.gz
+%doc /opt/rtems/info/bfd.info.gz
+%doc /opt/rtems/info/bfd.info-?.gz
+%doc /opt/rtems/info/binutils.info.gz
+%doc /opt/rtems/info/binutils.info-?.gz
+%doc /opt/rtems/info/ld.info.gz
+%doc /opt/rtems/info/ld.info-?.gz
+%doc /opt/rtems/info/gasp.info.gz
+%doc /opt/rtems/info/standards.info.gz
+
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
+
+%dir /opt/rtems/include
+/opt/rtems/include/bfd.h
+/opt/rtems/include/ansidecl.h
+/opt/rtems/include/bfdlink.h
+
+%dir /opt/rtems/lib
+/opt/rtems/lib/libbfd*
+/opt/rtems/lib/libiberty*
+/opt/rtems/lib/libopcodes*
+
+%dir /opt/rtems/share
+%dir /opt/rtems/share/locale
+

@@ -6,6 +6,23 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 MKGCCNEWLIBSPEC = $(SHELL) $(top_builddir)/mkgccnewlibspec
 
+SUBPACKAGES = gccnewlib.add \
+    base-gcc.add target-gcc.add \
+    base-chill.add target-chill.add \
+    base-g77.add target-g77.add \
+    base-gcj.add target-gcj.add \
+    target-objc.add
+
+gccnewlib.spec.in: $(SUBPACKAGES)
+	cat $^ \
+	| sed -e 's%@GCCLANGS@%%g' > $@
+CLEANFILES += gccnewlib.spec.in
+
+gccnewlib_c_only.spec.in: gccnewlib.add base-gcc.add target-gcc.add
+	cat $^ \
+	| sed -e "s%@GCCLANGS@%\'--enable-languages=c,c++\'%g" > $@
+CLEANFILES += gccnewlib_c_only.spec.in
+
 C_ONLY_ARG = -a $(top_builddir)/gccnewlib/gccnewlib_c_only.spec.in
 
 MKGCCNEWLIBSPEC_DEPS = $(top_builddir)/mkgccnewlibspec gccnewlib.spec.in \
@@ -43,18 +60,14 @@ sh-rtemself-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 sparc-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
-TEMPLATES = gccnewlib.spec.in gccnewlib_c_only.spec.in
-
 RPM_SPECS_DATA = hppa1.1-rtems-$(GCCNEWLIBVERS).spec \
     i386-rtems-$(GCCNEWLIBVERS).spec i960-rtems-$(GCCNEWLIBVERS).spec \
     m68k-rtems-$(GCCNEWLIBVERS).spec m68k-rtemself-$(GCCNEWLIBVERS).spec \
     mips64orion-rtems-$(GCCNEWLIBVERS).spec \
     powerpc-rtems-$(GCCNEWLIBVERS).spec sh-rtems-$(GCCNEWLIBVERS).spec \
     sh-rtemself-$(GCCNEWLIBVERS).spec sparc-rtems-$(GCCNEWLIBVERS).spec
+CLEANFILES += $(RPM_SPECS_DATA)
 
-noinst_DATA = $(TEMPLATES)
+EXTRA_DIST = $(SUBPACKAGES)
 
-EXTRA_DIST = $(TEMPLATES)
-
-CLEANFILES = $(RPM_SPECS_DATA)
 include $(top_srcdir)/../automake/local.am
