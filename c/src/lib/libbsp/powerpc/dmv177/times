@@ -13,7 +13,7 @@ Wait States:          XXX
 Times Reported in:    cycles
 Timer Source:         on-CPU General Purpose Count Down Timer
 
-Column A:             4.0-lmco
+Column A:             4.0.0-lmco
 Column B:             unused
 
 #                          DESCRIPTION                                 A    B
