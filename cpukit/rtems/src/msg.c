@@ -68,7 +68,9 @@ Message_queue_Control *_Message_queue_Allocate (
     unsigned32 message_buffering_required;
     unsigned32 allocated_message_size;
 
-    mq = (Message_queue_Control *)_Objects_Allocate(&_Message_queue_Information);
+    mq = \
+      (Message_queue_Control *)_Objects_Allocate(&_Message_queue_Information);
+
     if (mq == 0)
         goto failed;
 
@@ -79,22 +81,26 @@ Message_queue_Control *_Message_queue_Allocate (
      */
     
     allocated_message_size = max_message_size;
-    if (allocated_message_size & (sizeof(unsigned32) - 1))
-    {
+    if (allocated_message_size & (sizeof(unsigned32) - 1)) {
         allocated_message_size += sizeof(unsigned32);
         allocated_message_size &= ~(sizeof(unsigned32) - 1);
     }
     
-    message_buffering_required = count * (allocated_message_size + sizeof(Message_queue_Buffer_control));
+    message_buffering_required = 
+      count * (allocated_message_size + sizeof(Message_queue_Buffer_control));
   
-    mq->message_buffers = (Message_queue_Buffer *) _Workspace_Allocate(message_buffering_required);
+    mq->message_buffers = 
+      (Message_queue_Buffer *) _Workspace_Allocate(message_buffering_required);
+
     if (mq->message_buffers == 0)
         goto failed;
   
-    _Chain_Initialize(&mq->Inactive_messages,
-                      mq->message_buffers,
-                      count,
-                      allocated_message_size + sizeof(Message_queue_Buffer_control));
+    _Chain_Initialize
+      (&mq->Inactive_messages,
+      mq->message_buffers,
+      count,
+      allocated_message_size + sizeof(Message_queue_Buffer_control)
+    );
     return mq;
 
 failed:

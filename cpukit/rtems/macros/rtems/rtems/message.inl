@@ -22,7 +22,7 @@
  *  _Message_queue_Copy_buffer
  */
 
-#define _Message_queue_Copy_buffer( _source, _destination ) \
+#define _Message_queue_Copy_buffer( _source, _destination, _size ) \
   memcpy( _destination, _source, _size)
 
 /*PAGE
@@ -31,9 +31,9 @@
  *
  */
 
-#define _Message_queue_Allocate_message_buffer() \
-   (Message_queue_Buffer_control *) \
-     _Chain_Get( &_Message_queue_Inactive_messages )
+#define _Message_queue_Allocate_message_buffer( _the_message_queue ) \
+  (Message_queue_Buffer_control *) \
+    _Chain_Get( &(_the_message_queue)->Inactive_messages )
 
 /*PAGE
  *
@@ -41,8 +41,11 @@
  *
  */
 
-#define _Message_queue_Free_message_buffer( _the_message ) \
-   _Chain_Append( &_Message_queue_Inactive_messages, &(_the_message)->Node )
+#define _Message_queue_Free_message_buffer( _the_message_queue, _the_message ) \
+  _Chain_Append( \
+    &(_the_message_queue)->Inactive_messages, \
+    &(_the_message)->Node \
+  )
 
 /*PAGE
  *
@@ -92,10 +95,10 @@
 #define _Message_queue_Free( _the_message_queue ) \
   do { \
     \
-    if ( (_the_messsage_queue)->message_buffers ) { \
+    if ( (_the_message_queue)->message_buffers ) { \
       _Workspace_Free((void *) (_the_message_queue)->message_buffers); \
       (_the_message_queue)->message_buffers = 0; \
-    }
+    } \
     \
     _Objects_Free( \
       &_Message_queue_Information, \
