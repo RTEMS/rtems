@@ -15,7 +15,6 @@
 
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
-#include <rtems/config.h>
 #include <rtems/io.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
