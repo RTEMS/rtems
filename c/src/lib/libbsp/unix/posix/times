@@ -1,0 +1,10 @@
+#
+#  Timing Test Suite Results for the UNIX Simulator BSP
+#
+#  $Id$
+#
+
+The times when running on the UNIX simulator are irrelevant.  They vary based
+on a variety of factors including host OS, host configuration, and system load.
+The intent of the UNIX simulator is to provide a testing and prototyping 
+environment not to compete with the "normal" embedded role of RTEMS.
