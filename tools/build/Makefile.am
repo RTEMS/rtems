@@ -17,5 +17,6 @@ binpatch_SOURCES = binpatch.c
 bin_SCRIPTS = install-if-change
 
 noinst_SCRIPTS = search-id.sh multigen cvsignore-add.sh
+EXTRA_DIST = search-id.sh multigen cvsignore-add.sh
 
 include $(top_srcdir)/../../automake/host.am
