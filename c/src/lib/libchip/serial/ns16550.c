@@ -201,9 +201,11 @@ NS16550_STATIC void ns16550_write_polled(
     /*
      * Yield while we wait
      */
+#if 0
      if(_System_state_Is_up(_System_state_Get())) {
        rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
      }
+#endif
      ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
      if(!--iTimeout) {
        break;

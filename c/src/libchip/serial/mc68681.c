@@ -371,9 +371,11 @@ MC68681_STATIC void mc68681_write_polled(
      * Yield while we wait
      */
 
+#if 0
      if(_System_state_Is_up(_System_state_Get())) {
        rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
      }
+#endif
      ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
      if(!--iTimeout) {
        break;

@@ -871,9 +871,11 @@ Z85C30_STATIC void z85c30_write_polled(
     /*
      * Yield while we wait
      */
+#if 0
     if (_System_state_Is_up(_System_state_Get())) {
       rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
     }
+#endif
     z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
   }
 
