@@ -1,3 +1,19 @@
+2002-04-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mkbinutilspec.in: Add support for empty patch-version (no patch).
+	* mkgcc3newlibspec.in: Ditto.
+	* setup: Fix gcc3*_versions handling.
+	* setup.def: binutils_patch_version=.
+	* binutils/binutils.add: Reflect changes to mkbinutilspec.in,
+	Use "%{_target_os}" != "%{_build_os}" to detect cross-building.
+	* binutils/target-binutils.add: Comment out c++filt.
+	* gcc3newlib/base-gcc.add: Remove duplicate libm.info.
+	* gcc3newlib/gccnewlib.add: Reflect changes to mkgcc3newlibspec.in.
+	Use "%{_target_os}" != "%{_build_os}" to detect cross-building.
+	Comment out gcc-2.95.x hacks.
+	Remove *.la from installed files.
+	* gcc3newlib/gccnewlib_c_only.spec.in: Remove.
+
 2001-04-02	Joel Sherrill <joel@OARcorp.com>
 
 	* buildall.in: Correct logic for detecting 0 RTEMS RPMS installed.

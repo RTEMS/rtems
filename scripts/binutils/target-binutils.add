@@ -21,7 +21,8 @@ This is the GNU binutils for RTEMS targetting @target_alias@.
 %{_prefix}/bin/@target_alias@-addr2line@exe_ext@
 %{_prefix}/bin/@target_alias@-ar@exe_ext@
 %{_prefix}/bin/@target_alias@-as@exe_ext@
-%{_prefix}/bin/@target_alias@-c++filt@exe_ext@
+# c++filt now comes from gcc
+# %{_prefix}/bin/@target_alias@-c++filt@exe_ext@
 %{_prefix}/bin/@target_alias@-gasp@exe_ext@
 %{_prefix}/bin/@target_alias@-ld@exe_ext@
 %{_prefix}/bin/@target_alias@-nm@exe_ext@

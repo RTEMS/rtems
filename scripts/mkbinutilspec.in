@@ -50,6 +50,11 @@ target_alias=$1
 
 specfile=${dst}/$target_alias-binutils-${binutils_version}.spec
 
+if test -n "${binutils_patch_version}"; then
+PATCH1="Patch0: binutils-${binutils_version}-rtems-${binutils_patch_version}.diff"
+PATCH2="%patch -p0 -P0"
+fi
+
 sed -e "s%@Release\@%${binutils_rpm_release}%g" \
     -e "s%@rpm_build_root\@%${rpm_build_root}%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
@@ -57,6 +62,8 @@ sed -e "s%@Release\@%${binutils_rpm_release}%g" \
     -e "s%@binutils_version\@%${binutils_version}%g" \
     -e "s%@binutils_patch_version\@%${binutils_patch_version}%g" \
     -e "s%@exe_ext\@%${exe_ext}%g" \
+    -e "s,@PATCH1\@,${PATCH1}," \
+    -e "s,@PATCH2\@,${PATCH2}," \
 < ${RTEMS_DIR}/binutils/binutils.spec.in \
 > ${specfile}
 

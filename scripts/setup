@@ -80,9 +80,9 @@ do
   f) echo -n "GCC3 patch version>"
      read gcc3_patch_version ;;
   g) echo -n "NEWLIB source >"
-     read newlib_version ;;
+     read gcc3newlib_version ;;
   h) echo -n "NEWLIB patch version>"
-     read newlib_patch_version ;;
+     read gcc3newlib_patch_version ;;
   i) echo -n "GCC3/NEWLIB RPM release >"
      read gcc3newlib_rpm_release ;;
   *) 

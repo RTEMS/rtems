@@ -22,8 +22,9 @@ Prefix:		%{_prefix}
 BuildRoot:	%{_tmppath}/@target_alias@-binutils
 
 Version:      	@binutils_version@
-Source0:      	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.bz2
-# Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
+Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.bz2
+@PATCH1@
+
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
@@ -46,13 +47,12 @@ This is binutils sources with patches for RTEMS.
 %prep
 # untar the sources inside @target_alias@-binutils
 %setup -c -n @target_alias@-binutils
-
-# %patch0 -p0
+@PATCH2@
   test -d build || mkdir build
 
 %build
 # HACK: This should be %{target} != %{build}, but SuSE's rpm screws it.
-%if "%{target_os}" != "%{build_os}"
+%if "%{_target_os}" != "%{_build_os}"
   CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
 %endif
 
