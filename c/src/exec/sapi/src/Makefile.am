@@ -5,7 +5,7 @@
 
 EXTENSION_FILES = extension.c extensioncreate.c extensiondelete.c \
     extensionident.c
-C_FILES = debug.c entrytable.c $(EXTENSION_FILES)  fatal.c exinit.c io.c \
+C_FILES = debug.c $(EXTENSION_FILES)  fatal.c exinit.c io.c \
     itronapi.c posixapi.c rtemsapi.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 

@@ -1,3 +1,10 @@
+2002-07-04	Joel Sherrill <joel@OARcorp.com>
+
+	* Jump table for single entry point removed.
+	* include/rtems/directives.h, src/entrytable.c: Removed.
+	* include/Makefile.am, src/Makefile.am, src/exinit.c:  Modified to
+	reflect above.
+
 2002-07-01    Joel Sherrill <joel@OARcorp.com>
 
 	* Mega patch merge to change the format of the object IDs to

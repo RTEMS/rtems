@@ -18,8 +18,8 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE) \
 
 include_rtemsdir = $(includedir)/rtems
 
-include_rtems_HEADERS = rtems/config.h rtems/directives.h rtems/extension.h \
-    rtems/fatal.h rtems/init.h rtems/io.h rtems/mptables.h rtems/sptables.h
+include_rtems_HEADERS = rtems/config.h rtems/extension.h rtems/fatal.h \
+    rtems/init.h rtems/io.h rtems/mptables.h rtems/sptables.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/%)

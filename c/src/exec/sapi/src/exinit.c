@@ -44,7 +44,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/score/wkspace.h>
 
-#include <rtems/directives.h>
 #include <rtems/sptables.h>
 
 
