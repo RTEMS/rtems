@@ -49,3 +49,9 @@ NOTES
 (1) Only stub console driver available at the moment.
     Driver for the on-chip serial devices (sci) will be available soon.
 
+(2) The present 'hw_init.c' file is incomplete and does not set all
+    registers required for serial I/O. The effect is that the sci devices
+    are 'muted' and do not successfully transmit characters to the respective
+    I/O lines on the SH7045F.  If these ports have been properly initialized,
+    they are not disabled by the current code. A two-part initialization will
+    be available soon.
