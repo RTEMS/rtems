@@ -24,6 +24,10 @@
 /*PAGE
  *
  *  The default pthreads attributes structure.
+ *
+ *  NOTE: Be careful .. if the default attribute set changes, 
+ *        _POSIX_Threads_Initialize_user_threads will need to be examined.
+ *
  */
  
 const pthread_attr_t _POSIX_Threads_Default_attributes = {
@@ -31,7 +35,7 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
   NULL,                       /* stackaddr */
   PTHREAD_MINIMUM_STACK_SIZE, /* stacksize */
   PTHREAD_SCOPE_PROCESS,      /* contentionscope */
-  PTHREAD_EXPLICIT_SCHED,     /* inheritsched */
+  PTHREAD_INHERIT_SCHED,      /* inheritsched */
   SCHED_FIFO,                 /* schedpolicy */
   {                           /* schedparam */
     2,                        /* sched_priority */
@@ -127,6 +131,7 @@ boolean _POSIX_Threads_Create_extension(
 )
 {
   POSIX_API_Control *api;
+  POSIX_API_Control *executing_api;
  
   api = _Workspace_Allocate( sizeof( POSIX_API_Control ) );
  
@@ -150,9 +155,10 @@ boolean _POSIX_Threads_Create_extension(
 
   /* XXX use signal constants */
   api->signals_pending = 0;
-  if ( _Objects_Get_class( created->Object.id ) == OBJECTS_POSIX_THREADS )
-    api->signals_blocked = 0;
-  else
+  if ( _Objects_Get_class( created->Object.id ) == OBJECTS_POSIX_THREADS ) {
+    executing_api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+    api->signals_blocked = api->signals_blocked;
+  } else
     api->signals_blocked = 0xffffffff;
 
 /* XXX set signal parameters -- block all signals for non-posix threads */
@@ -232,6 +238,7 @@ void _POSIX_Threads_Initialize_user_threads( void )
   unsigned32                          maximum;
   posix_initialization_threads_table *user_threads;
   pthread_t                           thread_id;
+  pthread_attr_t                      attr;
  
   user_threads = _POSIX_Threads_User_initialization_threads;
   maximum      = _POSIX_Threads_Number_of_initialization_threads;
@@ -239,10 +246,23 @@ void _POSIX_Threads_Initialize_user_threads( void )
   if ( !user_threads || maximum == 0 )
     return;
  
+  /*
+   *  Be careful .. if the default attribute set changes, this may need to.
+   *
+   *  Setting the attributes explicitly is critical, since we don't want
+   *  to inherit the idle tasks attributes. 
+   */
+
   for ( index=0 ; index < maximum ; index++ ) {
+    status = pthread_attr_init( &attr );
+    assert( !status );
+      
+    status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
+    assert( !status );
+
     status = pthread_create(
       &thread_id,
-      NULL,
+      &attr,
       user_threads[ index ].entry,
       NULL
     );
