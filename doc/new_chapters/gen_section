@@ -1,65 +1,97 @@
-format=man
-#format=list
+#
+#  This shell script generates the starting template for a manager chapter.
+#
 
-case ${format} in
-  man)  
+
+# Set this based on which chapter you want to generate a template for.
+chapter="process"
+
+case ${chapter} in 
+  process)
+    CHAPTER_CAPS="Process Creation and Execution"
+    CHAPTER_LOWER="process creation and execution"
+    ROUTINES="execl execv execle execve execlp execvp pthread_atfork \
+      wait waitpid _exit"
     ;;
-  list)
-    echo "@itemize @bullet"
+  procenv)
+    CHAPTER_CAPS="Process Environment"
+    CHAPTER_LOWER="process environment"
+    ROUTINES="getpid getppid getgid getegid setuid setgid getgroups \
+      getlogin getlogin_r getpgrp setsid setpgid uname times \
+      getenv ctermid ttyname ttyname_r isatty sysconf "
     ;;
   *)
-    echo "unknown format -- ${format}"
+    echo "Unknown chapter name"
     exit 1
     ;;
 esac
 
+if [ "x${CHAPTER_CAPS}" = "x" -o "x${CHAPTER_LOWER}" = "x" \
+     -o "x${ROUTINES}" = "x" ] ; then
+  echo "initialization problem"
+  exit 1
+fi
 
-while read routine
+echo "@c"
+echo "@c  COPYRIGHT (c) 1988-1998."
+echo "@c  On-Line Applications Research Corporation (OAR)."
+echo "@c  All rights reserved. "
+echo "@c"
+echo "@c  \$Id\$"
+echo "@c"
+echo ""
+echo "@chapter ${CHAPTER_CAPS}" Manager
+echo ""
+echo "@section Introduction"
+echo ""
+echo "The "
+echo "${CHAPTER_LOWER} manager is ..."
+echo ""
+echo "The directives provided by the ${CHAPTER_LOWER} manager are:"
+echo ""
+echo "@itemize @bullet"
+
+for routine in ${ROUTINES}
 do
-  case ${format} in
-    man)
-      echo "@page"
-      echo "@subsection sigaddset"
-      echo ""
-      echo "@subheading CALLING SEQUENCE:"
-      echo ""
-      echo "@example"
-      echo "int ${routine}("
-      echo "@end example"
-      echo ""
-      echo "@subheading STATUS CODES:"
-      echo ""
-      echo "@subheading DESCRIPTION:"
-      echo ""
-      echo "@subheading NOTES:"
-      echo ""
-      ;;
-    list)
-      ;;
-    *)
-      echo "unknown format -- ${format}"
-      exit 1
-      ;;
-  esac
-      
-done <<EOF
-execl
-execv
-execle
-execve
-execlp
-execvp
-EOF
+  echo "@item @code{${routine}} - "
+done
+echo "@end itemize"
 
-case ${format} in
-  man)
-    ;;
-  list)
-    echo "@end itemize"
-    ;;
-  *)
-    echo "unknown format -- ${format}"
-    exit 1
-    ;;
-esac
+echo ""
+echo "@section Background"
+echo ""
+echo "@section Operations"
+echo ""
+echo "@section Directives"
+echo ""
+echo "This section details the ${CHAPTER_LOWER} manager's directives."
+echo "A subsection is dedicated to each of this manager's directives"
+echo "and describes the calling sequence, related constants, usage,"
+echo "and status codes."
+echo ""
+
+for routine in ${ROUTINES}
+do
+  echo "@page"
+  echo "@subsection ${routine} - XXX"
+  echo ""
+  echo "@subheading CALLING SEQUENCE:"
+  echo ""
+  echo "@ifset is-C"
+  echo "@example"
+  echo "int ${routine}("
+  echo ");"
+  echo "@end example"
+  echo "@end ifset"
+  echo ""
+  echo "@ifset is-Ada"
+  echo "@end ifset"
+  echo ""
+  echo "@subheading STATUS CODES:"
+  echo ""
+  echo "@subheading DESCRIPTION:"
+  echo ""
+  echo "@subheading NOTES:"
+  echo ""
+done
 
