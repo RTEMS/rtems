@@ -11,8 +11,8 @@ endif
 BSP_FILES = startup clock console timer $(NETWORK) ide
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_FILES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(wildcard \
+OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    $(wildcard \
     ../../../../libcpu/i386/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 

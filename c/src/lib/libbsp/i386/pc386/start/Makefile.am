@@ -10,6 +10,7 @@ OBJS = $(S_O_FILES)
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../../bspstart.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -17,14 +18,8 @@ include $(top_srcdir)/../../../../automake/lib.am
 
 LINKCMDS = $(top_srcdir)/startup/linkcmds
 
-START_O_FILES = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-START_O_FILES += $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin
-
-install-data-local: $(START_O_FILES)
-	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
-	list='$(START_O_FILES)'; for i in $$list; do \
-	$(INSTALL_DATA) $$i $(DESTDIR)$(bsplibdir); \
-	done
+project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
+project_lib_DATA += ${PROJECT_RELEASE}/lib/start16$(LIB_VARIANT).bin
 
 $(ARCH)/start16.$(OBJEXT): start16.S $(ARCH)/$(dirstamp)
 	$(COMPILE.S) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ $<
@@ -35,17 +30,16 @@ $(ARCH)/start16.bin: $(ARCH)/start16.$(OBJEXT) $(ARCH)/$(dirstamp)
 	-o $(basename $@)-elf32.$(OBJEXT) $(basename $@).$(OBJEXT)
 	$(OBJCOPY) -O binary $(basename $@)-elf32.$(OBJEXT) $@
 
-$(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin: $(ARCH)/start16.bin
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin \
-    $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-
-all-local: $(OBJS) $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.S start16.S
+
+${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+
+${PROJECT_RELEASE}/lib/start16$(LIB_VARIANT).bin: ${PROJECT_RELEASE}/lib/start16$(LIB_VARIANT).bin ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/start16$(LIB_VARIANT).bin
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/start16$(LIB_VARIANT).bin
 
 include $(top_srcdir)/../../../../automake/local.am

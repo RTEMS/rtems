@@ -27,17 +27,14 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(startup_rel_OBJECTS)
 	$(make-rel)
 
-bsplib_DATA = linkcmds
-
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
+project_lib_DATA = linkcmds
 
 all-local: $(startup_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 
-.PRECIOUS: $(PGM)
-
 EXTRA_DIST = bspstart.c exit.c ldsegs.S linkcmds sbrk.c
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
 
 include $(top_srcdir)/../../../../automake/local.am

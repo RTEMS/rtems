@@ -11,11 +11,6 @@ SUBDIRS = . tools start startup clock console timer ne2000 wd8003 3c509 ide \
 
 include $(top_srcdir)/../../bsp.am
 
-$(PROJECT_RELEASE)/BootImgs:
-	$(mkinstalldirs) $@
-
-TMPINSTALL_FILES = $(PROJECT_RELEASE)/BootImgs
-
 # This driver needs to be reworked for the BSD stack.
 # We only install wd80x3.h if HAS_NETWORKING was defined
 if HAS_NETWORKING
