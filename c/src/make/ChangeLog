@@ -1,3 +1,12 @@
+2002-04-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/Makefile.am: Remove.
+	* compilers/Makefile.am: Remove.
+	* compilers/.cvsignore: Remove.
+	* Makefile.am: Merge-in former */Makefile.ams.
+	Add more vars  to <BSP>.cache.
+	* configure.ac: Reflect changes above. Cosmetic fixes.
+
 2002-04-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove ENABLE_GCC28.

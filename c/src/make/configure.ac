@@ -92,7 +92,7 @@ f="${RTEMS_BSP}.cfg"
 while test -n "$f"; do
   if test -r "${srcdir}/${cfg_dir}/custom/$f"; then
     AC_CONFIG_LINKS([custom/$f:${cfg_dir}/custom/$f])
-    CUSTOM_CFG_FILES="$CUSTOM_CFG_FILES $f"
+    CUSTOM_CFG_FILES="$CUSTOM_CFG_FILES custom/$f"
     f=`grep "^include.*make/custom" ${srcdir}/${cfg_dir}/custom/$f \
     | sed \
       -e 's%^.*custom\/%%' \
@@ -118,7 +118,6 @@ AC_CONFIG_LINKS([
 ],,[
   RTEMS_TOPdir=${RTEMS_TOPdir}
   cfg_dir=${cfg_dir}
-  test -d Templates || mkdir Templates
 ])
 
 # Explicitly list all Makefiles here
@@ -126,10 +125,14 @@ AC_CONFIG_FILES([Makefile
 Makefile.inc
 host.cfg
 bsp.cfg
-custom/Makefile
 custom/default.cfg
-compilers/Makefile])
-AC_CONFIG_COMMANDS([default],[[${MAKE} $RTEMS_BSP.cache]],[[MAKE=${MAKE-make}
-RTEMS_BSP=${RTEMS_BSP}
+])
+
+AC_CONFIG_COMMANDS([default],
+[[${MAKE} $RTEMS_BSP.cache
+]],
+[[MAKE=${MAKE-make}
+  RTEMS_BSP=${RTEMS_BSP}
 ]])
+
 AC_OUTPUT
