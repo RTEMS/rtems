@@ -376,9 +376,9 @@ extern "C" {
  */
 
 #ifdef OR1K_64BIT_ARCH
-#define or1kreg unsigned64
+#define or1kreg uint64_t  
 #else
-#define or1kreg unsigned32
+#define or1kreg uint32_t  
 #endif
 
 /* SR_MASK is the mask of values that will be copied to/from the status
@@ -433,10 +433,10 @@ typedef enum {
 } StatusRegisterBits;
 
 typedef struct {
-  unsigned32  sr;     /* Current status register non persistent values */
-  unsigned32  esr;    /* Saved exception status register */
-  unsigned32  ear;    /* Saved exception effective address register */
-  unsigned32  epc;    /* Saved exception PC register    */
+  uint32_t    sr;     /* Current status register non persistent values */
+  uint32_t    esr;    /* Saved exception status register */
+  uint32_t    ear;    /* Saved exception effective address register */
+  uint32_t    epc;    /* Saved exception PC register    */
   or1kreg     r[31];  /* Registers */
   or1kreg     pc;     /* Context PC 4 or 8 bytes for 64 bit alignment */
 } Context_Control;
@@ -459,10 +459,10 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 }   rtems_cpu_table;
@@ -691,7 +691,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
   { \
   }
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -723,10 +723,10 @@ unsigned32 _CPU_ISR_Get_level( void );
                                  _isr, _entry_point, _is_fp ) \
   { \
   memset(_the_context,'\0',sizeof(Context_Control)); \
-  (_the_context)->r[1] = (unsigned32*) ((unsigned32) (_stack_base) + (_size) ); \
-  (_the_context)->r[2] = (unsigned32*) ((unsigned32) (_stack_base)); \
+  (_the_context)->r[1] = (uint32_t  *) ((uint32_t  ) (_stack_base) + (_size) ); \
+  (_the_context)->r[2] = (uint32_t  *) ((uint32_t  ) (_stack_base)); \
   (_the_context)->sr  = (_isr) ? 0x0000001B : 0x0000001F; \
-  (_the_context)->pc  = (unsigned32*) _entry_point ; \
+  (_the_context)->pc  = (uint32_t  *) _entry_point ; \
   }
 
 /*
@@ -928,7 +928,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -944,7 +944,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -1050,7 +1050,7 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-  unsigned32 byte1, byte2, byte3, byte4, swapped;
+  uint32_t   byte1, byte2, byte3, byte4, swapped;
  
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;

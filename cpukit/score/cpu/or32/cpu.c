@@ -72,9 +72,9 @@ void _CPU_Initialize(
  *  met, interrupts are disabled, and a level of 1 is returned.
  */
 
-inline unsigned32 _CPU_ISR_Get_level( void )
+inline uint32_t   _CPU_ISR_Get_level( void )
 {
-  register unsigned32 sr;
+  register uint32_t   sr;
   asm("l.mfspr %0,r0,0x17" : "=r" (sr));
   return !((sr & SR_EXR) && (sr & SR_EIR));
 }
@@ -93,14 +93,14 @@ inline unsigned32 _CPU_ISR_Get_level( void )
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
 {
-  register unsigned32 sr;
-  register unsigned32 tmp;
-  extern unsigned32 Or1k_Interrupt_Vectors[];
+  register uint32_t   sr;
+  register uint32_t   tmp;
+  extern uint32_t   Or1k_Interrupt_Vectors[];
 
   asm volatile ("l.mfspr %0,r0,0x11\n\t"
 	       "l.addi  %1,r0,-5\n\t"
@@ -131,7 +131,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )

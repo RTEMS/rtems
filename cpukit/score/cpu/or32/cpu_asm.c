@@ -76,10 +76,10 @@ void _CPU_Context_save_fp(
   void **fp_context_ptr
 )
 {
-  register unsigned32 temp;
-  register unsigned32 address = (unsigned32)(*fp_context_ptr);
-  register unsigned32 xfer;
-  register unsigned32 loop;
+  register uint32_t   temp;
+  register uint32_t   address = (uint32_t  )(*fp_context_ptr);
+  register uint32_t   xfer;
+  register uint32_t   loop;
 
   /* %0 is a temporary register which is used for several
      values throughout the code. %3 contains the address
@@ -134,10 +134,10 @@ void _CPU_Context_restore_fp(
   void **fp_context_ptr
 )
 {
-  register unsigned32 temp;
-  register unsigned32 address = (unsigned32)(*fp_context_ptr);
-  register unsigned32 xfer;
-  register unsigned32 loop;
+  register uint32_t   temp;
+  register uint32_t   address = (uint32_t  )(*fp_context_ptr);
+  register uint32_t   xfer;
+  register uint32_t   loop;
 
   /* The reverse of Context_save_fp */
   /* %0 is a temporary register which is used for several
@@ -193,8 +193,8 @@ void _CPU_Context_switch(
   Context_Control  *heir
 )
 {
-  register unsigned32 temp1 = 0;
-  register unsigned32 temp2 = 0;
+  register uint32_t   temp1 = 0;
+  register uint32_t   temp2 = 0;
 
   /* This function is really tricky. When this function is called,
      we should save our state as we need it, and then grab the
@@ -498,8 +498,8 @@ void _CPU_Context_restore(
  *  and the exception architecture described in chapter 9
  */
 
-void _ISR_Handler(unsigned32 vector,unsigned32 ProgramCounter,
-		  unsigned32 EffectiveAddress,unsigned32 StatusRegister)
+void _ISR_Handler(uint32_t   vector,uint32_t   ProgramCounter,
+		  uint32_t   EffectiveAddress,uint32_t   StatusRegister)
 {
    /*
     *  This discussion ignores a lot of the ugly details in a real
