@@ -22,7 +22,7 @@ extern "C" {
 
 #include <rtems/score/i960.h>              /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/i960types.h>
+#include <rtems/score/types.h>
 #endif
 
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
