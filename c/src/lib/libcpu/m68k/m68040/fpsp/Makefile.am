@@ -5,8 +5,8 @@
 
 PGM = $(ARCH)/fpsp.rel
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 C_FILES = rtems_fpsp.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
@@ -41,4 +41,4 @@ EXTRA_DIST = README bindec.S binstr.S bugfix.S decbin.S do_func.S fpsp.defs \
     stan.S stanh.S sto_res.S stwotox.S tbldo.S util.S x_bsun.S x_fline.S \
     x_operr.S x_ovfl.S x_snan.S x_store.S x_unfl.S x_unimp.S x_unsupp.S
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

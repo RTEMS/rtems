@@ -10,8 +10,8 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 S_FILES = timerisr.S
 OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -28,4 +28,4 @@ all: $(ARCH) $(OBJS) $(PGM)
 
 EXTRA_DIST = $(C_FILES)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

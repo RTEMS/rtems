@@ -20,4 +20,4 @@ all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(include_mcf5206_HEADERS)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

@@ -18,5 +18,5 @@ endif
 
 SUBDIRS = $(SHARED_LIB) $(CPU_SUBDIR)
 
-include $(top_srcdir)/../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/subdirs.am
+include $(top_srcdir)/../../../automake/local.am
