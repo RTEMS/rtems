@@ -30,6 +30,7 @@ RTEMS-specific option are supported:
         --enable-libcdir=<DIRECTORY>      (do not use if gcc 2.8 is enabled)
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 	--enable-tests
+	--enable-rdbg            (only valid for pc386 BSP)
 
 In addition, the following standard autoconf options are frequently
 used when configuring RTEMS installations:
@@ -43,6 +44,11 @@ it. It can be disabled with the --disable-posix option.
 By default, the RTEMS networking support is built for targets which
 support it.  It can be specifically disabled for those targets
 with the --disable-networking option.
+
+By default, the RTEMS remote debugger server support is not built.
+It can be specifically enabled for the targets that support it.
+with the --enable-rdbg option. NB : the RTEMS networking support
+must be enabled to support the remote debugger server.
 
 By default, the RTEMS support of C++ is disabled.  It can be enabled
 with the --enable-cxx option. If the rtems++ C++ library is installed
