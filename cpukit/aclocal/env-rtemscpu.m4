@@ -15,7 +15,7 @@ if test x"$multilib" = x"yes"; then
   PROJECT_INCLUDE="\$(PROJECT_ROOT)/lib/include"
   AC_SUBST(PROJECT_INCLUDE)
 
-  project_libdir="\$(PROJECT_ROOT)/lib/\$(MULTISUBDIR)"
+  project_libdir="\$(PROJECT_ROOT)/lib\$(MULTISUBDIR)"
   AC_SUBST(project_libdir)
 
   includedir="\${exec_prefix}/lib/include"

@@ -1,6 +1,7 @@
-2003-04-23	Joel Sherrill <joel@OARcorp.com>
+2003-05-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* aclocal/version.m4: Updated to rtems-4.6.0pre3.
+	* aclocal/env-rtemscpu.m4: Remove stray '/' in setting up 
+	project_libdir.
 
 2003-04-23	Joel Sherrill <joel@OARcorp.com>
 
