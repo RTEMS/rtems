@@ -10,7 +10,7 @@
 %define _name			autoconf
 
 %if "%{_prefix}" != "/usr"
-%define name			%{_name}-rtems
+%define name			@rpmprefix@%{_name}-rtems
 %define _infodir		%{_prefix}/info
 %define _mandir			%{_prefix}/man
 %else
@@ -24,7 +24,7 @@ Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 Copyright:    GPL
 URL:          http://www.gnu.org/software/autoconf
-Group:        rtems
+Group:        @rpmgroup@
 Autoreqprov:  on
 Version:      %{rpmvers}
 Release:      1
