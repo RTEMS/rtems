@@ -9,7 +9,7 @@ C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 ROOT_H_FILES =
-RTEMS_SCORE_H_FILES = cpu.h c_isr.inl
+RTEMS_SCORE_H_FILES = cpu.h c_isr.inl ppc_offs.h
 noinst_HEADERS = $(ROOT_H_FILES) $(RTEMS_SCORE_H_FILES)
 
 # Assembly source names
@@ -54,6 +54,6 @@ CLEANDIRS = ../o-optimize ../o-debug ../o-profile
 
 UNUSED_FILES = irq_stub.S
 
-EXTRA_DIST = TODO rtems.S $(C_FILES) $(S_FILES) $(UNUSED_FILES)
+EXTRA_DIST = TODO rtems.S $(C_FILES) $(S_FILES) $(UNUSED_FILES) ppc_offs.h
 
 include $(top_srcdir)/../../../../../automake/local.am

@@ -4,14 +4,10 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@:@srcdir@/../../ppc403/vectors
-
-## FIXME
-
 PGM = ${ARCH}/vectors.rel
 
 ## Assembly sources
-S_FILES = vectors.S align_h.S
+S_FILES = vectors.S
 
 vectors_rel_OBJECTS = $(S_FILES:%.S=${ARCH}/%.o)
 

@@ -1,3 +1,18 @@
+2000-10-18	  Sergei Organov <osv@javad.ru>
+
+	* Added full support for MPC505.
+	* mpc505/ictrl: New directory.
+	* configure.in, mpc505/Makefile.am: Modified to reflect ictrl addition.
+	* mpc505/ictrl/.cvsignore, mpc505/ictrl/Makefile.am,
+	mpc505/ictrl/ictrl.c, mpc505/ictrl/ictrl.h: New files.
+	* mpc505/timer/timer.c: Use <rtems.h>, not "rtems.h".
+	* mpc505/vectors/Makefile.am: alignment exception handler now included.
+	* mpc505/vectors/vectors.S: Now use constants for exception numbers.
+	* old_exception_processing/ppc_offs.h: New file.
+	* old_exception_processing/Makefile.am: Account for ppc_offs.h.
+	* old_exception_processing/cpu.h: Make Nest and Disable levels volatile.
+	* old_exception_processing/cpu_asm.S: Offsets moved to ppc_offs.h.
+
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc8xx/console-generic/console-generic.c: Removed include of

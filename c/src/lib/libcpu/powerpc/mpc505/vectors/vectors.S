@@ -20,22 +20,23 @@
  *
  */
 
-#include "asm.h"
-#include "ppc_offs.h"
+#include <asm.h>
+#include <rtems/score/ppc.h>
+#include <rtems/score/ppc_offs.h>
 
 	/* Vector offsets */
-        .set    reset,                  0x0100 # PPC_IRQ_RESET
+        .set    reset,                  0x0100 # PPC_IRQ_SYSTEM_RESET
         .set    machine_check,          0x0200 # PPC_IRQ_MCHECK
         .set    dsi,                    0x0300 # PPC_IRQ_PROTECT
         .set    isi,                    0x0400 # PPC_IRQ_ISI
 	.set    external_interrupt,	0x0500 # PPC_IRQ_EXTERNAL
-	.set    alignment,		0x0600 # PPC_IRQ_ALIGN
+        .set    alignment,              0x0600 # PPC_IRQ_ALIGNMENT
 	.set    program,		0x0700 # PPC_IRQ_PROGRAM
 	.set    fp_unavailable,		0x0800 # PPC_IRQ_NOFP
-	.set	decrementer,		0x0900 # PPC_IRQ_DEC
+        .set    decrementer,            0x0900 # PPC_IRQ_DECREMENTER
 	.set    system_call,		0x0C00 # PPC_IRQ_SCALL
 	.set    trace,                  0x0D00 # PPC_IRQ_TRACE
-	.set    fp_assist,		0x0E00 # PPC_IRQ_FPASSIST
+        .set    fp_assist,              0x0E00 # PPC_IRQ_FP_ASST
 	.set    software_emulation,	0x1000 # PPC_IRQ_SOFTEMU
 	.set	data_bp,        	0x1C00 # PPC_IRQ_DATA_BP
 	.set	istruction_bp,  	0x1D00 # PPC_IRQ_INST_BP
@@ -47,7 +48,7 @@
 #else
 #define ABI_ADD 0
 #endif
-
+        .extern led_green
 #define ISR_HANDLER(vector, irq) \
         .org	vector; \
 	stwu	r1, -(ABI_ADD + IP_END)(r1); \
@@ -59,18 +60,18 @@
 	.section .vect,"ax",@progbits
         .globl  __vect
 __vect:
-        ISR_HANDLER(reset,              PPC_IRQ_RESET)
+        ISR_HANDLER(reset,              PPC_IRQ_SYSTEM_RESET)
         ISR_HANDLER(machine_check,      PPC_IRQ_MCHECK)
         ISR_HANDLER(dsi,                PPC_IRQ_PROTECT)
         ISR_HANDLER(isi,                PPC_IRQ_ISI)
         ISR_HANDLER(external_interrupt, PPC_IRQ_EXTERNAL)
-        ISR_HANDLER(alignment,          PPC_IRQ_ALIGN)
+        ISR_HANDLER(alignment,          PPC_IRQ_ALIGNMENT)
         ISR_HANDLER(program,            PPC_IRQ_PROGRAM)
         ISR_HANDLER(fp_unavailable,     PPC_IRQ_NOFP)
-        ISR_HANDLER(decrementer,        PPC_IRQ_DEC)
+        ISR_HANDLER(decrementer,        PPC_IRQ_DECREMENTER)
         ISR_HANDLER(system_call,        PPC_IRQ_SCALL)
         ISR_HANDLER(trace,              PPC_IRQ_TRACE)
-        ISR_HANDLER(fp_assist,          PPC_IRQ_FPASSIST)
+        ISR_HANDLER(fp_assist,          PPC_IRQ_FP_ASST)
         ISR_HANDLER(software_emulation, PPC_IRQ_SOFTEMU)
 	ISR_HANDLER(data_bp,		PPC_IRQ_DATA_BP)
 	ISR_HANDLER(istruction_bp,  	PPC_IRQ_INST_BP)

@@ -602,8 +602,8 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 
 SCORE_EXTERN struct {
-  unsigned32 *Nest_level;
-  unsigned32 *Disable_level;
+  unsigned32 volatile* Nest_level;
+  unsigned32 volatile* Disable_level;
   void *Vector_table;
   void *Stack;
 #if (PPC_ABI == PPC_ABI_POWEROPEN)

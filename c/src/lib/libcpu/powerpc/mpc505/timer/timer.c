@@ -19,7 +19,7 @@
  *  timer.c,v 1.2 1995/05/31 16:56:39 joel Exp
  */
 
-#include "rtems.h"
+#include <rtems.h>
 
 rtems_boolean Timer_driver_Find_average_overhead;
 

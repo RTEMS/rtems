@@ -53,6 +53,7 @@ Makefile
 mpc505/Makefile
 mpc505/timer/Makefile
 mpc505/vectors/Makefile
+mpc505/ictrl/Makefile
 mpc8xx/Makefile
 mpc8xx/clock/Makefile
 mpc8xx/console-generic/Makefile
