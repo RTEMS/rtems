@@ -131,8 +131,11 @@ case "${target}" in
 	;;
   i[[3456]]86-pc-linux*)         # unix "simulator" port
 	target_cpu=unix
-	RTEMS_HAS_POSIX_API=no
         RTEMS_HOST=Linux
+        # override these settings
+	RTEMS_HAS_POSIX_API=no
+        RTEMS_USE_GCC272=yes
+        RTEMS_LIBC_DIR=/usr
 	;;
   no_cpu-*rtems*)
         target_cpu=no_cpu
@@ -140,8 +143,11 @@ case "${target}" in
 	;;
   sparc-sun-solaris*)             # unix "simulator" port
 	target_cpu=unix
-	RTEMS_HAS_POSIX_API=no
         RTEMS_HOST=Solaris
+        # override these settings
+	RTEMS_HAS_POSIX_API=no
+        RTEMS_USE_GCC272=yes
+        RTEMS_LIBC_DIR=/usr
 	;;
   *) 
 	RTEMS_CANONICAL_TARGET_CPU
