@@ -1,3 +1,7 @@
+2002-07-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/Makefile.am: Add bsplib_DATA = linkcmds.
+
 2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* irq_bsp_irq_asm.S: Update to reflect irq_asm modifications.

@@ -27,6 +27,8 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(startup_rel_OBJECTS)
 	$(make-rel)
 
+bsplib_DATA = linkcmds
+
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
