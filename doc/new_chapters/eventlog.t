@@ -179,8 +179,35 @@ The function log_open() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-The @code{log_open} function establishes the connection between a 
-log file and a log file descriptor. 
+If {_POSIX_LOGGING} is defined:
+
+   The @code{log_open} function establishes the connection between a 
+   log file and a log file descriptor.  It creates an open log file 
+   description that refers to a log file and a log file descriptor that
+   refers to that open log file description.  The log file descriptor is
+   used by other log functions to refer to that log file.  The @code{path}
+   argument points to a pathname naming a log file.  A @code{path}
+   argument of NULL specifies the current system log file.  
+
+   The @code{query} argument points to a log query specification that
+   restricts log operations using the returned log file descriptor to 
+   to event records from the log file which match the query.  The 
+   predicate which determines the success of the match operation is the
+   logical AND of the individual comparison predicates for each member
+   of the log query specification.  The query attribute of the open file
+   description is set to filter as specified by the @code{query} argument.
+   If the value of the query argument is not NULL, the value of the 
+   @code{log_facility} member of the @code{query} specification shall be
+   a set of valid log facilities or the @code{log_open} shall fail.  If
+   the value of the @code{query} argument is not NULL, the value of the
+   @code{log_severity} member of the @code{query} specification shall be
+   less than or equal to @code{LOG_SEVERITY_MAX} or the @code{log_open}
+   shall fail.  If the value of the @code{query} argument is NULL, no
+   query filter shall be applied. 
+
+Otherwise:
+
+   The @code{log_open} shall fail.
 
 @subheading NOTES:
 
@@ -224,6 +251,34 @@ An I/O error occurred in reading from the event log.
 
 @subheading DESCRIPTION:
 
+If {_POSIX_LOGGING} is defined:
+
+   The @code{log_read} function shall attempt to read the @code{log_entry}
+   structure and @code{log_len} bytes of data from the next event record 
+   of the log file associated with the open log file descriptor @code{logdes},
+   placing the @code{log_entry} structure into the buffer pointed to by
+   @code{entry}, and the data into the buffer pointed to by @code{log_buf}.
+   The log record ID of the returned event record shall be stored in the 
+   @code{log_recied} member of the @code{log_entry} structure for the event
+   record.
+
+   If the query attribute of the open log file description associated with
+   the @code{logdes} is set, the event record read shall match that query.
+   If the @code{entry} argument is not NULL it will point to a @code{log_entry}
+   structure which sall be filled with the creation information for this log
+   entry.  If the argument @code{log_buf} is not NULL the data written with the
+   log entry will be placed in the buffer.  The size of the buffer is specified
+   by the argument @code{log_len}.
+
+   If the @code{log_read} is successful the call shall store the actual length
+   of the data associated with the event record into the location specified by
+   @code{log_sizeread}.  This number may be smaller or greater than 
+   @code{log_len}.
+
+Otherwise:
+
+   The @code{log_read} function shall fail.
+
 
 @subheading NOTES:
 
@@ -260,6 +315,24 @@ The function log_notify() is not supported by this implementation.
 @end table
 
 @subheading DESCRIPTION:
+
+If {_POSIX_LOGGING} is defined:
+  
+   If the argument @code{notification} is not NULL this function registers 
+   the calling process to be notified of event records received by the system 
+   log, which match the query parameters associated with the open log descriptor
+   specified by @code{logdes}.  The notification specified by the 
+   @code{notification} argument shall be sent to the process when an event 
+   record received by the system log is matched by the query attribute of the 
+   open log file description associated with the @code{logdes} log file 
+   descriptor.  If the calling process has already registered a notification
+   for the @code{logdes} log file descriptor, the new notification shall 
+   replace the existing notification registration.
+
+Otherwise:
+
+   The @code{log_notify} function shall fail.
+   
 
 @subheading NOTES:
 
