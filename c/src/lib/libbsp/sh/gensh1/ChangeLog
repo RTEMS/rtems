@@ -1,3 +1,7 @@
+2001-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/linkcmds: Remove OUTPUT_FORMAT.
+
 2001-01-05	Joel Sherrill <joel@OARcorp.com>
 
 	* scitab/Makefile.am, startup/bspstart.c, configure.in: Removed

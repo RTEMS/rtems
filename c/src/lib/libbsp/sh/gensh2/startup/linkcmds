@@ -40,7 +40,6 @@
  *  $Id$
  */
 
-OUTPUT_FORMAT("coff-sh")
 OUTPUT_ARCH(sh)
 ENTRY(_start)
 
