@@ -171,10 +171,6 @@ int clock_gettime(
   switch ( clock_id ) {
 
     case CLOCK_REALTIME:
-#if 0
-      if ( !_TOD_Is_set() )    /* XXX does posix allow it to not be set? */
-        set_errno_and_return_minus_one( EINVAL );
-#endif
  
       _ISR_Disable( level );
         seconds = _TOD_Seconds_since_epoch;
@@ -266,8 +262,6 @@ int nanosleep(
   if ( rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
     set_errno_and_return_minus_one( EINVAL );
  
-/* XXX this is interruptible by a posix signal */
-
   ticks = _POSIX_Timespec_to_interval( rqtp );
 
   /*
@@ -292,7 +286,7 @@ int nanosleep(
     );
     _Watchdog_Initialize(
       &_Thread_Executing->Timer,
-      _Thread_Delay_ended,          /* XXX may need to be POSIX specific */
+      _Thread_Delay_ended,
       _Thread_Executing->Object.id,
       NULL
     );
@@ -306,10 +300,16 @@ int nanosleep(
       _Thread_Executing->Timer.stop_time - _Thread_Executing->Timer.start_time;
 
     _POSIX_Interval_to_timespec( ticks, rmtp );
+
+    /*
+     *  If there is time remaining, then we were interrupted by a signal.
+     */
+
+    if ( ticks )
+      set_errno_and_return_minus_one( EINTR );
   }
 
-  return 0;                    /* XXX should account for signal */
-
+  return 0;
 }
 
 /*PAGE
