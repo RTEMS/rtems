@@ -1,5 +1,13 @@
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* GT64260/Makefile.am, clock/Makefile.am, console/Makefile.am,
+	include/Makefile.am, irq/Makefile.am, network/Makefile.am,
+	pci/Makefile.am, start/Makefile.am, startup/Makefile.am,
+	tod/Makefile.am, vectors/Makefile.am, vme/Makefile.am:
+	Remove (obsolete).
+
+2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* configure.ac: Adaptations to rtems-4.7.
 	* Makefile.am, wrapup/Makefile.am: Reworked.
 
