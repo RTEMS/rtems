@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 H_FILES = null.h sci.h sh7_pfc.h sh7_sci.h
-SCORE_H_FILES= ispsh7032.h iosh7032.h
+SCORE_H_FILES = ispsh7032.h iosh7032.h
 
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts

@@ -1,3 +1,9 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am, delay/Makefile.am, null/Makefile.am,
+	sci/Makefile.am, timer/Makefile.am, score/Makefile.am: Include
+	compile.am
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
