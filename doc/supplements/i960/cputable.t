@@ -39,18 +39,17 @@ typedef struct @{
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
  
-#if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
-  i960ca_PRCB *Prcb;
-#endif
+  i960_PRCB    *Prcb;
 
 @} rtems_cpu_table;
 @end group
 @end example
 
-The contents of the i960CA Processor Control Block
-are discussed in  Intel's i960CA User's Manual.  Structure
-definitions for the i960CA PRCB and Control Table are provided
-by including the file rtems.h.
+The contents of the i960 Processor Control Block
+are discussed in the User's Manual for the particular
+i960 model being used.  Structure definitions for the
+i960CA and i960HA PRCB and Control Table are provided
+by including the file @code{rtems.h}.
 
 @table @code
 @item pretasking_hook
@@ -111,9 +110,8 @@ memory for task stacks.  If this hook is not NULL, then a stack_allocate_hook
 must be provided as well.
 
 @item Prcb
-is the base address of the i960CA's Processor
-Control Block.  It is primarily used by RTEMS to install
-interrupt handlers.
+is the base address of the Processor Control Block.  It
+is primarily used by RTEMS to install interrupt handlers.
 @end table
 
 
