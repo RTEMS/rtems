@@ -2,10 +2,8 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../aclocal
-
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../automake/compile.am
+include $(top_srcdir)/../../automake/lib.am
 
 sapi_C_FILES = sapi/no-ext.c sapi/no-io.c
 OBJS = $(sapi_C_FILES:sapi/%.c=$(ARCH)/%.$(OBJEXT))
@@ -47,4 +45,4 @@ install-data-local: $(PGMS)
 
 EXTRA_DIST = $(rtems_C_FILES) $(sapi_C_FILES)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../automake/local.am
