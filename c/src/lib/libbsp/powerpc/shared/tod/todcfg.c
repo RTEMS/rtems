@@ -65,5 +65,6 @@ unsigned32 mvmertc_get_register(
 )
 {
   printk( "RTC SUPPORT NOT IMPLEMENTED ON THIS BOARD\n");
+  return 0;
 }
 #endif
