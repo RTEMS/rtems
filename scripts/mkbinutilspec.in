@@ -52,7 +52,7 @@ specfile=${dst}/$target_alias-binutils-${binutils_version}.spec
 
 if test -n "${binutils_patch_version}"; then
 PATCH1="Patch0: binutils-${binutils_version}-rtems-${binutils_patch_version}.diff"
-PATCH2="%patch -p0 -P0"
+PATCH2="%patch0 -p0"
 fi
 
 sed -e "s%@Release\@%${binutils_rpm_release}%g" \
