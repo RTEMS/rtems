@@ -1,3 +1,10 @@
+2003-09-26	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 496/bsps
+	* startup/Makefile.am: Use PowerPC shared sbrk() implementation which
+	is used when initial heap size is limited to first 32 MB of RAM to
+	satisfy boot loader requirements.
+
 2003-09-26  Till Straumann <strauman@slac.stanford.edu>
 
 	PR 497/bsps
