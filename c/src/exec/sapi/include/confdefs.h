@@ -429,7 +429,7 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #ifdef RTEMS_POSIX_API
 
 #include <sys/types.h>
-#include <sys/siginfo.h>
+#include <signal.h>
 #include <mqueue.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/mqueue.h>

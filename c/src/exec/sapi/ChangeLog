@@ -1,3 +1,11 @@
+2000-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	* POSIX include files merged into newlib.  This resulted in
+	some definitions moving to other files and thus some secondary
+	effects in RTEMS source code.
+	* include/confdefs.h: Replaced include of <sys/siginfo.h> with
+	<signal.h> since that file no longer exists.
+
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* include/confdefs.h: Set CONFIGURE_INIT_TASK_STACK_SIZE to 0
