@@ -22,8 +22,8 @@
  *  the program increase significantly.
  */
 
-#define BUFFER_SIZE    (2 * 1024)
-#define PARAGRAPH_SIZE (2 * 1024)
+#define BUFFER_SIZE    (10 * 1024)
+#define PARAGRAPH_SIZE (8 * 1024)
 
 #define NUMBER_ELEMENTS( _x ) (sizeof(_x) / sizeof _x[0])
 

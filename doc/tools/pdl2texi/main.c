@@ -564,7 +564,7 @@ void exit_application(
   fprintf( stderr, "*** Error encountered on line %d ***\n", CurrentLine );
 */
   fclose( OutFile ); 
-  exit( status );
+  exit( 1 );
 }
 
 /*************************************************************************
@@ -2778,6 +2778,7 @@ void FormatToWord( void )
   Line_Control *new_line;
   char          Buffer[ PARAGRAPH_SIZE ];
   int           i;
+  int           length;
   char          ChapterTitle[ PARAGRAPH_SIZE ];
   char          InfoFile[ PARAGRAPH_SIZE ];
   char         *p;
@@ -2919,15 +2920,46 @@ void FormatToWord( void )
       case SYNCHRONIZATION:
         sprintf( Buffer, "@Subheading = %s\n", line->Contents );
         strcpy( line->Contents, Buffer );
+        line = (Line_Control *) line->Node.next;
 
         /* now take care of the raw text which is here */
 
-         line = (Line_Control *) line->Node.next;
+#if 0
         while ( !line->keyword ) {
           sprintf( Buffer, "@Example = %s\n", line->Contents );
           strcpy( line->Contents, Buffer );
           line = (Line_Control *) line->Node.next;
         }
+
+        /* at this point line points to the next keyword */
+#endif
+
+        /* now take care of the raw text which is here */
+
+        new_line = AllocateLine();
+        _Chain_Insert( line->Node.previous, &new_line->Node );
+        strcpy( new_line->Contents, "@Example = " );
+
+        do {
+          if ( strlen( line->Contents ) ) {
+            new_line->keyword = line->keyword;
+            new_line->format = line->format;
+            length = strlen(new_line->Contents); 
+            if ( (length + strlen(line->Contents) + 12) > PARAGRAPH_SIZE ) {
+              fprintf( stderr, "Output line too long at %d\n", line->number );
+              exit_application( 1 );
+            }
+
+            strcat( new_line->Contents, line->Contents );
+            strcat( new_line->Contents, "<@ManualCR>" );
+            line = DeleteLine( line );
+          } else {
+            line = (Line_Control *) line->Node.next;
+            new_line = AllocateLine();
+            _Chain_Insert( line->Node.previous, &new_line->Node );
+            strcpy( new_line->Contents, "@Example = " );
+          }
+        } while ( !line->keyword );
 
         /* at this point line points to the next keyword */
         break;
