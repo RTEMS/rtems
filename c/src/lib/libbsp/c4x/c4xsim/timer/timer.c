@@ -20,7 +20,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <rtems/c4x/c4xio.h>
+#include <rtems/tic4x/c4xio.h>
 
 uint32_t         Timer_interrupts;
 rtems_boolean Timer_driver_Find_average_overhead;
