@@ -14,4 +14,4 @@ include $(RTEMS_ROOT)/make/directory.cfg
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
 # NOTE: we pick up HPPA clock and timer from libcpu/hppa
-SUB_DIRS=startsis include startup console clock timer wrapup
+SUB_DIRS=startsis include startup console clock timer wrapup tools
