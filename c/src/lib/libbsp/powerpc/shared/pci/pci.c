@@ -21,7 +21,6 @@
 
 #include <libcpu/io.h>
 #include <bsp/pci.h>
-#include <rtems/bspIo.h>
 
 /* allow for overriding these definitions */
 #ifndef PCI_CONFIG_ADDR
@@ -339,6 +338,27 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 
 /* printk("pci : device %d:%02x devid %04x, intpin %d, intline  %d\n", pbus, pslot, devid, int_pin, int_name ); */
 
+#if 0
+         {
+            unsigned short cmd,stat;
+            unsigned char  lat, seclat, csize;
+
+            pci_read_config_word(pbus,pslot,0,PCI_COMMAND, &cmd );
+            pci_read_config_word(pbus,pslot,0,PCI_STATUS, &stat );
+            pci_read_config_byte(pbus,pslot,0,PCI_LATENCY_TIMER, &lat );
+            pci_read_config_byte(pbus,pslot,0,PCI_SEC_LATENCY_TIMER, &seclat );
+            pci_read_config_byte(pbus,pslot,0,PCI_CACHE_LINE_SIZE, &csize );
+            
+
+            printk("pci : device %d:%02x  cmd %04X, stat %04X, latency %d, sec_latency %d, clsize %d\n", pbus, pslot, 
+                   cmd, 
+                   stat,
+                   lat, 
+                   seclat,
+                   csize);
+         }
+#endif
+
          if( int_pin > 0 )
          {
             ismatch = 0;
@@ -366,7 +386,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                      }
                      if( int_name == -1 )
                      {
-                        printk("pci : Unable to resolve device %d:%d w/ swizzled int pin %d to an interrupt_line.\n", pbus, pslot, int_pin );
+                        printk("pci : Unable to resolve device %d:%d w/ swizzled int pin %i to an interrupt_line.\n", pbus, pslot, int_pin );
                      }
                      else
                      {
@@ -434,7 +454,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                            }
                            if( int_name == -1 )
                            {
-                              printk("pci : Unable to resolve device %d:%d w/ swizzled int pin %d to an interrupt_line.\n", pbus, pslot, int_pin );
+                              printk("pci : Unable to resolve device %d:%d w/ swizzled int pin %i to an interrupt_line.\n", pbus, pslot, int_pin );
                            }
                            else
                            {
@@ -474,7 +494,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                      }
                      else
                      {
-                        printk("pci : No bridge from bus %d towards root found\n", tbus );
+                        printk("pci : No bridge from bus %i towards root found\n", tbus );
                         goto donesearch;
                      }
 

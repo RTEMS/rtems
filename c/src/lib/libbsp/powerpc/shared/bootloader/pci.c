@@ -28,6 +28,8 @@
 
 typedef unsigned int u32;
 
+
+
 /*
 #define DEBUG
 #define PCI_DEBUG
@@ -223,8 +225,12 @@ static void insert_resource(pci_resource *r) {
    ** hardware, its just the builtin stuff we're tiptoeing around.
    **
    ** Gregm, 7/16/2003
+   **
+   ** Gregm, changed 11/2003 so IO devices only on bus 0 zero are not
+   ** remapped.  This covers the builtin pc-like io devices- but
+   ** properly maps IO devices on higher busses.
    */
-   if( r->dev->bus->number <= 1 )
+   if( r->dev->bus->number == 0 )
    {
    if ((r->type==PCI_BASE_ADDRESS_SPACE_IO)
        ? (r->base && r->base <0x10000)
@@ -460,11 +466,11 @@ static void reconfigure_bus_space(u_char bus, u_char type, pci_area_head *h)
 #define BUS0_IO_START           0x10000
 #define BUS0_IO_END             0x1ffff
 #define BUS0_MEM_START          0x1000000
-#define BUS0_MEM_END            0xaffffff
+#define BUS0_MEM_END            0x3f00000
 
 #define BUSREST_IO_START        0x20000
 #define BUSREST_IO_END          0x7ffff
-#define BUSREST_MEM_START       0xb000000
+#define BUSREST_MEM_START       0x4000000
 #define BUSREST_MEM_END        0x10000000
 
 static void reconfigure_pci(void) {
@@ -517,8 +523,7 @@ static void reconfigure_pci(void) {
           (PCI_BASE_ADDRESS_SPACE_MEMORY|
            PCI_BASE_ADDRESS_MEM_TYPE_64)) {
          pci_write_config_dword(r->dev,
-                                PCI_BASE_ADDRESS_1+
-                                (r->reg<<2),
+                                PCI_BASE_ADDRESS_1+(r->reg<<2),
                                 0);
       }
    }
@@ -745,12 +750,31 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
       if ((l&PCI_BASE_ADDRESS_SPACE) == PCI_BASE_ADDRESS_SPACE_IO) {
          r->type = l&~PCI_BASE_ADDRESS_IO_MASK;
          r->base = l&PCI_BASE_ADDRESS_IO_MASK;
-         r->size = ~(ml&PCI_BASE_ADDRESS_IO_MASK)+1;
+         /* r->size = ~(ml&PCI_BASE_ADDRESS_IO_MASK)+1; */
       } else {
          r->type = l&~PCI_BASE_ADDRESS_MEM_MASK;
          r->base = l&PCI_BASE_ADDRESS_MEM_MASK;
-         r->size = ~(ml&PCI_BASE_ADDRESS_MEM_MASK)+1;
+         /* r->size = ~(ml&PCI_BASE_ADDRESS_MEM_MASK)+1; */
       }
+
+      /* find the first bit set to one after the base
+         address type bits to find length of region */
+      {
+         unsigned int c= 16 , val= 0;
+         while( !(val= ml & c) ) c <<= 1;
+         r->size = val;
+      }
+
+#ifdef PCI_DEBUG
+      printk("   readbase bus %d, (%04x:%04x), base %08x, size %08x, type %d\n",
+             r->dev->bus->number, 
+             r->dev->vendor,
+             r->dev->device,
+             r->base,
+             r->size,
+             r->type );
+#endif
+
       /* Check for the blacklisted entries */
       insert_resource(r);
    }
@@ -1066,6 +1090,9 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
    {
       pdev= childbus->self;
 
+      pcibios_write_config_byte(pdev->bus->number, pdev->devfn, PCI_LATENCY_TIMER,     0x80 );
+      pcibios_write_config_byte(pdev->bus->number, pdev->devfn, PCI_SEC_LATENCY_TIMER, 0x80 );
+
       {
          struct _addr_start   addrhold;
          uint8_t              base8, limit8;
@@ -1087,9 +1114,9 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 #endif
 
          /*
-         **use the current values & the saved ones to figure out
-         ** the address spaces for the bridge
-         */
+          * use the current values & the saved ones to figure out
+          * the address spaces for the bridge
+          */
 
          if( addrhold.start_pciio == astart.start_pciio )
          {
@@ -1135,6 +1162,7 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_MEMORY_LIMIT, limit16 );
 #endif
 
+
          if( astart.start_prefetch == addrhold.start_prefetch )
          {
             limit16 = 0;
@@ -1154,18 +1182,20 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_PREF_MEMORY_BASE, base16 );
          pcibios_write_config_dword(pdev->bus->number, pdev->devfn, PCI_PREF_LIMIT_UPPER32, 0);
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_PREF_MEMORY_LIMIT, limit16 );
-
 #endif
 
 #ifdef WRITE_BRIDGE_ENABLE
-         pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_BRIDGE_CONTROL, (uint16_t)( PCI_BRIDGE_CTL_PARITY |
-                                                                                                     PCI_BRIDGE_CTL_SERR ));
+         pcibios_write_config_word(pdev->bus->number, 
+                                   pdev->devfn, 
+                                   PCI_BRIDGE_CONTROL, 
+                                   (unsigned16)( 0 ));
 
-         pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_COMMAND, (uint16_t)( PCI_COMMAND_IO |
-                                                                                              PCI_COMMAND_MEMORY |
-                                                                                              PCI_COMMAND_MASTER |
-                                                                                              PCI_COMMAND_PARITY |
-                                                                                              PCI_COMMAND_SERR ));
+         pcibios_write_config_word(pdev->bus->number, 
+                                   pdev->devfn, 
+                                   PCI_COMMAND, 
+                                   (unsigned16)( PCI_COMMAND_IO | 
+                                                 PCI_COMMAND_MEMORY |
+                                                 PCI_COMMAND_MASTER ));
 #endif
       }
    }
@@ -1196,7 +1226,18 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 
             while( (r= enum_device_resources( pdev, i++ )) )
             {
-               if( r->type & PCI_BASE_ADDRESS_MEM_PREFETCH )
+               /*
+               ** Force all memory spaces to be non-prefetchable because
+               ** on the pci bus, byte-wise reads against prefetchable
+               ** memory are applied as 32 bit reads, which is a pain
+               ** when you're trying to talk to hardware.  This is a
+               ** little sub-optimal because the algorithm doesn't sort
+               ** the address regions to pack them in, OTOH, perhaps its
+               ** not so bad because the inefficient packing will help
+               ** avoid buffer overflow/underflow problems.
+               */
+#if 0
+               if( (r->type & PCI_BASE_ADDRESS_MEM_PREFETCH) )
                {
                   /* prefetchable space */
 
@@ -1210,7 +1251,8 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
                   printk("pci:       pf %08X, size %08X, alloc %08X\n", r->base, r->size, alloc );
 #endif
                }
-               else if( r->type & PCI_BASE_ADDRESS_SPACE_IO )
+#endif
+               if( r->type & PCI_BASE_ADDRESS_SPACE_IO )
                {
                   /* io space */
 
@@ -1304,6 +1346,10 @@ void pci_init(void)
    reconfigure_pci();
 
    print_pci_resources("Allocated PCI resources:\n");
+
+#if 0
+   print_pci_info();
+#endif
 }
 
 /* eof */
