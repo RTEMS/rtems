@@ -1,5 +1,13 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* irq/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* start/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* startup/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* vectors/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
