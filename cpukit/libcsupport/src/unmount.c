@@ -41,7 +41,7 @@ int search_mt_for_mount_point(
 
 
 int file_systems_below_this_mountpoint( 
-  const char                            *mount_path,
+  const char                            *path,
   rtems_filesystem_location_info_t      *temp_loc,
   rtems_filesystem_mount_table_entry_t  *temp_mt_entry
 );
@@ -50,25 +50,25 @@ int file_systems_below_this_mountpoint(
  *  unmount
  * 
  *  This routine will attempt to unmount the file system that has been
- *  is mounted a mount_path.  If the operation is successful, 0 will
+ *  is mounted a path.  If the operation is successful, 0 will
  *  be returned to the calling routine.  Otherwise, 1 will be returned.
  */
 
 int unmount(
-  const char *mount_path
+  const char *path
 )
 {
   int                                   status;
-  rtems_filesystem_location_info_t      temp_loc;
+  rtems_filesystem_location_info_t      fs_root_loc;
   rtems_filesystem_mount_table_entry_t  temp_mt_entry;
 
   /*
-   *  Are there any file systems below the mount_path specified
+   *  Are there any file systems below the path specified
    */
 
   status = file_systems_below_this_mountpoint( 
-    mount_path, 
-    &temp_loc,
+    path, 
+    &fs_root_loc,
     &temp_mt_entry
   );
 
@@ -80,8 +80,8 @@ int unmount(
    *  we are attempting to unmount ?
    */
 
-  if ( rtems_filesystem_current.mt_entry == temp_loc.mt_entry ) {
-    rtems_filesystem_freenode( &temp_loc );
+  if ( rtems_filesystem_current.mt_entry == fs_root_loc.mt_entry ) {
+    rtems_filesystem_freenode( &fs_root_loc );
     set_errno_and_return_minus_one( EBUSY );
   }
 
@@ -91,17 +91,17 @@ int unmount(
    *  file system that we are trying to unmount 
    */
 
-  if ( rtems_libio_is_open_files_in_fs( temp_loc.mt_entry ) == 1 ) {
-    rtems_filesystem_freenode( &temp_loc );
+  if ( rtems_libio_is_open_files_in_fs( fs_root_loc.mt_entry ) == 1 ) {
+    rtems_filesystem_freenode( &fs_root_loc );
     set_errno_and_return_minus_one( EBUSY );
   }
   
   /*
-   * Allow the file system being mounted on to do its cleanup.
+   * Allow the file system being unmounted on to do its cleanup.
    */
 
-  if ((temp_mt_entry.mt_point_node.ops->unmount_h )( temp_loc.mt_entry ) != 0 ) {
-    rtems_filesystem_freenode( &temp_loc );
+  if ((temp_mt_entry.mt_point_node.ops->unmount_h )( fs_root_loc.mt_entry ) != 0 ) {
+    rtems_filesystem_freenode( &fs_root_loc );
     return -1;
   }
 
@@ -109,8 +109,8 @@ int unmount(
    * Run the unmount function for the subordinate file system.
    */
 
-  if ((temp_mt_entry.mt_fs_root.ops->fsunmount_me_h )( temp_loc.mt_entry ) != 0){
-    rtems_filesystem_freenode( &temp_loc );
+  if ((temp_mt_entry.mt_fs_root.ops->fsunmount_me_h )( fs_root_loc.mt_entry ) != 0){
+    rtems_filesystem_freenode( &fs_root_loc );
     return -1;
   }
 
@@ -118,15 +118,15 @@ int unmount(
    *  Extract the mount table entry from the chain
    */
 
-  Chain_Extract( ( Chain_Node * ) temp_loc.mt_entry );
+  Chain_Extract( ( Chain_Node * ) fs_root_loc.mt_entry );
 
   /*
    *  Free the memory associated with the extracted mount table entry.
    */
 
-  rtems_filesystem_freenode( &temp_loc.mt_entry->mt_point_node );
-  free( temp_loc.mt_entry );
-  rtems_filesystem_freenode( &temp_loc );
+  rtems_filesystem_freenode( &fs_root_loc.mt_entry->mt_point_node );
+  free( fs_root_loc.mt_entry );
+  rtems_filesystem_freenode( &fs_root_loc );
 
   return 0;
 }
@@ -145,9 +145,9 @@ int unmount(
  */
 
 int file_systems_below_this_mountpoint( 
-  const char                            *mount_path,
-  rtems_filesystem_location_info_t      *temp_loc,
-  rtems_filesystem_mount_table_entry_t  *temp_mt_entry
+  const char                            *path,
+  rtems_filesystem_location_info_t      *fs_root_loc,
+  rtems_filesystem_mount_table_entry_t  *fs_to_unmount
 )
 {
   Chain_Node                           *the_node;
@@ -155,56 +155,33 @@ int file_systems_below_this_mountpoint(
   rtems_filesystem_mount_table_entry_t *current_fs_mt_entry;
 
   /*
-   *  Is the mount_path even a valid node name in the existing tree?
+   *  Is the path even a valid node name in the existing tree?
    */
 
-  if ( rtems_filesystem_evaluate_path( mount_path, 0x0, temp_loc, TRUE ) )
+  if ( rtems_filesystem_evaluate_path( path, 0x0, fs_root_loc, TRUE ) )
     return -1;
   
   /*
-   *  Look for the node defined in temp_loc as a mount point in the
-   *  mount table chain.
+   * Verify this is the root node for the file system to be unmounted.
+   */
+
+  *fs_to_unmount = *fs_root_loc->mt_entry;
+  if ( fs_to_unmount->mt_fs_root.node_access != fs_root_loc->node_access )
+    set_errno_and_return_minus_one( EACCES );
+
+  /*
+   * Search the mount table for any mount entries referencing this
+   * mount entry.
    */
 
   for ( the_node = rtems_filesystem_mount_table_control.first;
         !Chain_Is_tail( &rtems_filesystem_mount_table_control, the_node );
         the_node = the_node->next ) {
-
      the_mount_entry = ( rtems_filesystem_mount_table_entry_t * )the_node;
-     if  (the_mount_entry->mt_point_node.node_access  ==
-          temp_loc->node_access ) {
-        current_fs_mt_entry = the_mount_entry;
-        *temp_loc = current_fs_mt_entry->mt_fs_root;
-        goto after_real_mount_point_found;
-     }
-  }
-  set_errno_and_return_minus_one( EACCES );
-
-
-after_real_mount_point_found:
-
-  for ( the_node = rtems_filesystem_mount_table_control.first;
-        !Chain_Is_tail( &rtems_filesystem_mount_table_control, the_node );
-        the_node = the_node->next ) {
-
-     the_mount_entry = (  rtems_filesystem_mount_table_entry_t * )the_node;
-
-     /*
-      *  Exclude the current file systems mount table entry from the test
-      */
-
-     if ( current_fs_mt_entry != the_mount_entry ) {
-       if ( the_mount_entry->mt_point_node.mt_entry  == current_fs_mt_entry ) {
-
-          /*
-           *  There is at least one fs below the fs on the mount_path.
-           */
+     if (the_mount_entry->mt_point_node.mt_entry  == fs_root_loc->mt_entry ) {
           set_errno_and_return_minus_one( EBUSY );
-       }
      }
   }
-
-  *temp_mt_entry = *current_fs_mt_entry;
 
   return 0;
 }

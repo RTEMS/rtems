@@ -35,11 +35,10 @@ Chain_Control rtems_filesystem_mount_table_control;
  *  Prototypes that probably should be somewhere else.
  */
 
-int search_mt_for_mount_point(
-  rtems_filesystem_location_info_t *location_of_mount_point
-);
-
 int init_fs_mount_table( void );
+static int Is_node_fs_root(
+  rtems_filesystem_location_info_t  *loc
+);
 
 
 /*
@@ -140,7 +139,7 @@ int mount(
      *  You can only mount one file system onto a single mount point.
      */
 
-    if ( search_mt_for_mount_point( &loc ) == FOUND ) {
+    if ( Is_node_fs_root(  &loc ) ){
       errno = EBUSY;
       goto cleanup_and_bail;
     }
@@ -232,35 +231,34 @@ int init_fs_mount_table()
   return 0;
 }
 
-
 /*
- *  search_mt_for_mount_point
+ *  Is_node_fs_root
  *
  *  This routine will run through the entries that currently exist in the
  *  mount table chain. For each entry in the mount table chain it will
- *  compare the mount tables mt_point_node to the node describing the selected
- *  mount point.. If any of the mount table file system mount point nodes
- *  match the new file system selected mount point node, we are attempting
- *  to mount the new file system onto a node that already has a file system
- *  mounted to it. This is not a permitted operation.
+ *  compare the mount tables root node to the node describing the selected
+ *  mount point. If any match is found true is returned else false is 
+ *  returned.
+ *
  */
 
-int search_mt_for_mount_point(
-  rtems_filesystem_location_info_t *location_of_mount_point
+static int Is_node_fs_root(
+  rtems_filesystem_location_info_t  *loc
 )
 {
   Chain_Node                           *the_node;
   rtems_filesystem_mount_table_entry_t *the_mount_entry;
 
+  /* 
+   * For each mount table entry 
+   */
+
   for ( the_node = rtems_filesystem_mount_table_control.first;
         !Chain_Is_tail( &rtems_filesystem_mount_table_control, the_node );
         the_node = the_node->next ) {
-
      the_mount_entry = (rtems_filesystem_mount_table_entry_t *) the_node;
-     if ( the_mount_entry->mt_point_node.node_access  == 
-             location_of_mount_point->node_access )
-        return FOUND;
+     if ( the_mount_entry->mt_fs_root.node_access  == loc->node_access )
+        return TRUE;
   }
-  return NOT_FOUND;
+  return FALSE;
 }
-
