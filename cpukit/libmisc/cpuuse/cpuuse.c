@@ -127,32 +127,17 @@ void CPU_usage_Dump( void )
  *  CPU_usage_Reset
  */
 
+static void CPU_usage_Per_thread_handler(
+  Thread_Control *the_thread
+)
+{
+  the_thread->ticks_executed = 0;
+}
+
 void CPU_usage_Reset( void )
 {
-  unsigned32           i;
-  unsigned32           api_index;
-  Thread_Control      *the_thread;
-  Objects_Information *information;
- 
   CPU_usage_Ticks_at_last_reset = _Watchdog_Ticks_since_boot;
 
-  for ( api_index = 1 ;
-        api_index <= OBJECTS_APIS_LAST ;
-        api_index++ ) {
-    if ( !_Objects_Information_table[ api_index ] )
-      continue;
-    information = _Objects_Information_table[ api_index ][ 1 ];
-    if ( information ) {
-      for ( i=1 ; i <= information->maximum ; i++ ) {
-        the_thread = (Thread_Control *)information->local_table[ i ];
- 
-        if ( !the_thread )
-          continue;
- 
-        the_thread->ticks_executed = 0;
-      }
-    }
-  }
- 
+  rtems_iterate_over_all_threads(CPU_usage_Per_thread_handler);
 }
 
