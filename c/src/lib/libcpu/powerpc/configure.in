@@ -66,6 +66,7 @@ ppc403/timer/Makefile
 ppc403/vectors/Makefile
 mpc6xx/Makefile
 mpc6xx/clock/Makefile
+mpc6xx/timer/Makefile
 mpc6xx/exceptions/Makefile
 mpc6xx/mmu/Makefile
 mpc6xx/timer/Makefile
