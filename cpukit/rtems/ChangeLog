@@ -1,5 +1,10 @@
 2001-03-29	Joel Sherrill <joel@OARcorp.com>
 
+	* Per PR126, configuration structures now match docs.
+	* include/rtems/rtems/config.h: Use public data types.
+
+2001-03-29	Joel Sherrill <joel@OARcorp.com>
+
 	* Per PR147 addressed problems when reseting and inserting a timer
 	into a timer chain that did not honor time passage since the last
 	time the timer server was scheduled and the new insertion.
