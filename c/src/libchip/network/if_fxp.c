@@ -1690,6 +1690,12 @@ rtems_task_wake_after(100);
 	/*
 	 * Cancel any pending I/O
 	 */
+	/*
+	 * E. Norum 2004-10-11
+	 * Add line suggested by "Eugene Denisov" <dea@sendmail.ru>.
+	 * Prevents lockup at initialization.
+	 */
+	sc->stat_ch = fxp_timeout_stopped;
 	fxp_stop(sc);
 
 	prm = (ifp->if_flags & IFF_PROMISC) ? 1 : 0;
