@@ -17,7 +17,7 @@ coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 CLEANFILES += coverhd.h
 
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
-    $(include_HEADERS:%=PROJECT_INCLUDE)/%)
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(TMPINSTALL_FILES)
 
