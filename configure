@@ -3059,7 +3059,7 @@ echo "configure:3017: checking for bsps" >&5
       bare)
         bspcpudir=
         if test "X${BARE_CPU_CFLAGS}" = "X" ; then
-          { echo "configure: error: --enable-bare-cpu-flags not specified for bare bsp" 1>&2; exit 1; }
+          { echo "configure: error: --enable-bare-cpu-cflags not specified for bare bsp" 1>&2; exit 1; }
         fi
         if test "X${BARE_CPU_MODEL}" = "X" ; then
           { echo "configure: error: --enable-bare-cpu-model not specified for bare bsp" 1>&2; exit 1; }
