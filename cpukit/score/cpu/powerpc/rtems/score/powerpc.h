@@ -295,17 +295,8 @@ extern "C" {
  *  Application binary interfaces.
  *
  *  PPC_ABI MUST be defined as one of these.
- *  Only PPC_ABI_POWEROPEN is currently fully supported.
- *  Only EABI will be supported in the end when
- *  the tools are there.
  *  Only big endian is currently supported.
  */
-/*
- *  PowerOpen ABI.  This is Andy's hack of the
- *  PowerOpen ABI to ELF.  ELF rather than a
- *  XCOFF assembler is used.
- */
-#define PPC_ABI_POWEROPEN	0
 /*
  *  SVR4 ABI
  */
@@ -323,16 +314,11 @@ extern "C" {
 #define PPC_ABI PPC_ABI_EABI
 #endif
 
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#define PPC_STACK_ALIGNMENT	8
-#elif (PPC_ABI == PPC_ABI_SVR4)
+#if (PPC_ABI == PPC_ABI_SVR4)
 #define PPC_STACK_ALIGNMENT	16
 #elif (PPC_ABI == PPC_ABI_EABI)
 #define PPC_STACK_ALIGNMENT	8
 #else
-#error  "PPC_ABI is not properly defined"
-#endif
-#ifndef PPC_ABI
 #error  "PPC_ABI is not properly defined"
 #endif
 

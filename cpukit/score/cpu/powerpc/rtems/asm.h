@@ -60,12 +60,6 @@
 #define __FLOAT_REGISTER_PREFIX__  __REGISTER_PREFIX__
 #endif
 
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#ifndef __PROC_LABEL_PREFIX__
-#define __PROC_LABEL_PREFIX__ .
-#endif
-#endif
-
 #ifndef __PROC_LABEL_PREFIX__
 #define __PROC_LABEL_PREFIX__  __USER_LABEL_PREFIX__
 #endif
