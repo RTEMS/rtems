@@ -15,7 +15,7 @@ extern "C" {
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <chain.h>
+#include <rtems/chain.h>
 
 #include "rtems/blkdev.h"
 #include "rtems/diskdevs.h"

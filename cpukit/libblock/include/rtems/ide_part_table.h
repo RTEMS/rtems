@@ -22,7 +22,7 @@
 #define __RTEMS_IDE_PART_TABLE_H__
 
 #include <assert.h>
-#include <chain.h>
+#include <rtems/chain.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

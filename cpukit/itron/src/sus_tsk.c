@@ -14,7 +14,7 @@
 #endif
 
 #include <limits.h>
-#include <itron.h>
+#include <rtems/itron.h>
 
 #include <rtems/score/thread.h>
 #include <rtems/score/userext.h>

@@ -25,7 +25,7 @@
 #include <rtems/system.h>    /* include this before checking RTEMS_ITRON_API */
 #ifdef RTEMS_ITRON_API
 
-#include <itron.h>
+#include <rtems/itron.h>
 
 #include <sys/types.h>
 #include <rtems/config.h>

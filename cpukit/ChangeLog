@@ -1,5 +1,84 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libblock/include/rtems/bdbuf.h: Include <rtems/chain.h> instead of <chain.h>.
+	* libblock/include/rtems/ide_part_table.h: Include <rtems/chain.h> instead of <chain.h>.
+	* libcsupport/src/malloc.c: Include <rtems/chain.h> instead of <chain.h>.
+	* libcsupport/src/mount.c: Include <rtems/chain.h> instead of <chain.h>.
+	* libcsupport/src/unmount.c: Include <rtems/chain.h> instead of <chain.h>.
+	* libfs/src/imfs/imfs.h: Include <rtems/chain.h> instead of <chain.h>.
+	* libfs/src/imfs/imfs_directory.c: Include <rtems/chain.h> instead of <chain.h>.
+	* libfs/src/imfs/imfs_load_tar.c: Include <rtems/chain.h> instead of <chain.h>.
+	* sapi/include/confdefs.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* sapi/include/confdefs.h: Include <rtems/console.h> instead of <console.h>.
+	* libfs/src/imfs/imfs_load_tar.c: Include <rtems/imfs.h> instead of <imfs.h>.
+	* libmisc/shell/cmds.c: Include <rtems/imfs.h> instead of <imfs.h>.
+	* libmisc/fsmount/fsmount.c: Include <rtems/imfs.h> instead of <imfs.h>.
+	* sapi/include/confdefs.h: Include <rtems/imfs.h> instead of <imfs.h>.
+	* itron/src/can_wup.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/chg_pri.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/cre_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/cre_mbx.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/cre_sem.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/cre_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/del_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/del_mbx.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/del_sem.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/del_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/dis_dsp.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/ena_dsp.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/eventflags.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/exd_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/ext_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/fmempool.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/frsm_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/get_tid.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/itronintr.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/itronsem.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/itrontime.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/mbox.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/mboxtranslatereturncode.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/msgbuffer.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/msgbuffertranslatereturncode.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/network.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/port.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/prcv_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/prcv_mbx.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/preq_sem.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/psnd_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/rcv_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/rcv_mbx.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/ref_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/ref_mbx.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/ref_sem.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/ref_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/rel_wai.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/rot_rdq.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/rsm_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/sig_sem.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/slp_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/snd_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/snd_mbx.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/sta_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/sus_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/sysmgmt.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/task.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/ter_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/trcv_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/trcv_mbx.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/tslp_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/tsnd_mbf.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/twai_sem.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/vmempool.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/wai_sem.c: Include <rtems/itron.h> instead of <itron.h>.
+	* itron/src/wup_tsk.c: Include <rtems/itron.h> instead of <itron.h>.
+	* sapi/include/rtems/config.h: Include <rtems/itron.h> instead of <itron.h>.
+	* sapi/include/confdefs.h: Include <rtems/itron.h> instead of <itron.h>.
+	* sapi/src/itronapi.c: Include <rtems/itron.h> instead of <itron.h>.
+	* sapi/include/confdefs.h: Include <rtems/rtc.h> instead of <rtc.h>.
+	* sapi/include/confdefs.h: Include <rtems/timerdrv.h> instead of <timerdrv.h>.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* backward/asm.h, backward/chain.h, backward/clockdrv.h,
 	backward/console.h, backward/dosfs.h, backward/imfs.h,
 	backward/iosupp.h, backward/itron.h, backward/ringbuf.h,

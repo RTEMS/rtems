@@ -23,7 +23,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <chain.h>
+#include <rtems/chain.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>

@@ -46,7 +46,7 @@ typedef void *posix_api_configuration_table;
 #endif
 
 #ifdef RTEMS_ITRON_API
-#include <itron.h>
+#include <rtems/itron.h>
 #include <rtems/itron/config.h>
 #else
 typedef void *itron_api_configuration_table;

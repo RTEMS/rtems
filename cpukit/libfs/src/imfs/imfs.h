@@ -19,7 +19,7 @@ extern "C" {
 #endif
 
 #include <rtems.h>
-#include <chain.h>
+#include <rtems/chain.h>
 
 #include <sys/types.h>
 #include <limits.h>

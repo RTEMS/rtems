@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <imfs.h>
+#include <rtems/imfs.h>
 #include <sys/stat.h>
 
 /*=========================================================================*\

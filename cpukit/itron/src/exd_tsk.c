@@ -13,7 +13,7 @@
 #include "config.h"
 #endif
 
-#include <itron.h>
+#include <rtems/itron.h>
 #include <assert.h>
 
 #include <rtems/score/thread.h>

@@ -22,8 +22,8 @@
 
 #include <rtems.h>
 #include <rtems/libio_.h>
-#include <chain.h>
-#include <imfs.h>
+#include <rtems/chain.h>
+#include <rtems/imfs.h>
 
 
 /**************************************************************************

@@ -33,7 +33,7 @@
 
 #include <unistd.h>    /* sbrk(2) */
 
-#include <chain.h>
+#include <rtems/chain.h>
 
 Chain_Control RTEMS_Malloc_GC_list;
 

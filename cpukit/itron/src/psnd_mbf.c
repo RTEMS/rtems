@@ -15,7 +15,7 @@
 #include "config.h"
 #endif
 
-#include <itron.h>
+#include <rtems/itron.h>
 
 #include <rtems/itron/msgbuffer.h>
 #include <rtems/itron/task.h>

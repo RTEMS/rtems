@@ -104,7 +104,7 @@ uint32_t   rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
  *  Mount Table Configuration
  */
 
-#include <imfs.h>
+#include <rtems/imfs.h>
 
 #ifdef CONFIGURE_INIT
 
@@ -260,19 +260,19 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
  { NULL, NULL, NULL, NULL, NULL, NULL }
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#include <console.h>
+#include <rtems/console.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#include <clockdrv.h>
+#include <rtems/clockdrv.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
-#include <timerdrv.h>
+#include <rtems/timerdrv.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
-#include <rtc.h>
+#include <rtems/rtc.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
@@ -630,7 +630,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 #ifdef RTEMS_ITRON_API
 
-#include <itron.h>
+#include <rtems/itron.h>
 #include <rtems/itron/config.h>
 #include <rtems/itron/eventflags.h>
 #include <rtems/itron/fmempool.h>

@@ -46,7 +46,7 @@
 #include <rtems/monitor.h>
 #include <rtems/score/tod.h>
 
-#include <imfs.h>
+#include <rtems/imfs.h>
 #include <rtems/shell.h>
 
 /* ----------------------------------------------- *

@@ -15,7 +15,7 @@
 #include "config.h"
 #endif
 
-#include <itron.h>
+#include <rtems/itron.h>
 
 #include <rtems/itron/mbox.h>
 #include <rtems/itron/task.h>
