@@ -57,10 +57,14 @@ AS_IF([test "$enable_multilib" = "yes"],[
   PROJECT_ROOT='$(top_builddir)'${rtems_updir}'../$(MULTIBUILDTOP)'],[
   PROJECT_ROOT='$(top_builddir)'${rtems_updir}])
 ])
-AC_SUBST([PROJECT_ROOT])
 
 AC_SUBST([PROJECT_INCLUDE],["${PROJECT_ROOT}lib/include"])
 AC_SUBST([PROJECT_LIB],["${PROJECT_ROOT}lib\$(MULTISUBDIR)"])
+
+libdir="${libdir}\$(MULTISUBDIR)"
+
+AC_SUBST([project_libdir],["\$(libdir)"])
+AC_SUBST([project_includedir],["\$(includedir)"])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
 ])dnl

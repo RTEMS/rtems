@@ -1,3 +1,11 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4: Don't AC_SUBST(PROJECT_ROOT).
+	Add project_libdir, project_include and libdir.
+	* aclocal/env-rtemscpu.m4: Remove all references to RTEMS_BSP.
+	Remove project_libdir, project_include and libdir.
+	Unconditionally use CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V.
+
 2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libnetworking/lib/ftpfs.c, libnetworking/lib/rtems_bsdnet_ntp.c,
