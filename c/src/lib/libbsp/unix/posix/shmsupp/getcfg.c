@@ -39,10 +39,10 @@
 #include <shm.h>
 #include <bsp.h>
 
+#include <sys/types.h>
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
