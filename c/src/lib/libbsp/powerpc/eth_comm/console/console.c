@@ -32,6 +32,8 @@
 #include <termios.h>
 #include <rtems/bspIo.h>
 
+extern void rtems_panic(char *,int);
+
 static void _BSP_null_char( char c ) {return;}
 BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
@@ -124,7 +126,7 @@ rtems_device_driver console_open(rtems_device_major_number major,
     sccregs = &m8xx.scc4;
     break;
   default:
-    rtems_panic ("CONSOLE: bad minor number");
+    rtems_panic ("CONSOLE: bad minor number", 0);
   }
 
   if (sccregs)

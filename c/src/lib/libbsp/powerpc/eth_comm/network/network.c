@@ -32,6 +32,8 @@
 #include <netinet/if_ether.h>
 #include <bsp/irq.h>
 
+extern void rtems_panic(char *,int);
+
 /*
  * Number of interfaces supported by this driver
  */
@@ -127,7 +129,7 @@ static void  m8xx_scc1_ethernet_off(const rtems_irq_connect_data* ptr)
 
 static void  m8xx_scc1_ethernet_isOn(const rtems_irq_connect_data* ptr)
 {
-  return BSP_irq_enabled_at_cpm (ptr->name);
+  BSP_irq_enabled_at_cpm (ptr->name);
 }
 
 /*
@@ -201,8 +203,6 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
 {
   int i;
   unsigned char *hwaddr;
-  rtems_status_code status;
-  rtems_isr_entry old_handler;
   
   /*
    * Configure port A CLK1, CLK2, TXD1 and RXD1 pins
@@ -241,7 +241,7 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
   sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf, 
 		       M_MBUF, M_NOWAIT);
   if (!sc->rxMbuf || !sc->txMbuf)
-    rtems_panic ("No memory for mbuf pointers");
+    rtems_panic ("No memory for mbuf pointers",0);
   
   /*
    * Set receiver and transmitter buffer descriptor bases
@@ -361,7 +361,7 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
    * Set up interrupts
    */
   if (!BSP_install_rtems_irq_handler (&ethernetSCC1IrqData)) {
-    rtems_panic ("Can't attach M8xx SCC1 interrupt handler\n");
+    rtems_panic ("Can't attach M8xx SCC1 interrupt handler\n",0);
   }
   m8xx.scc1.sccm = 0;     /* No interrupts unmasked till necessary */
   
@@ -428,7 +428,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   int i;
   unsigned char *hwaddr;
   rtems_status_code status;
-  rtems_isr_entry old_handler;
 
   /*
    * Issue reset to FEC
@@ -494,7 +493,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf, 
                        M_MBUF, M_NOWAIT);
   if (!sc->rxMbuf || !sc->txMbuf)
-    rtems_panic ("No memory for mbuf pointers");
+    rtems_panic ("No memory for mbuf pointers",0);
   
   /*
    * Set receiver and transmitter buffer descriptor bases
@@ -571,7 +570,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
    * Set up interrupts
    */
   if (!BSP_install_rtems_irq_handler (&ethernetFECIrqData))
-    rtems_panic ("Can't attach M860 FEC interrupt handler\n");
+    rtems_panic ("Can't attach M860 FEC interrupt handler\n", 0);
 
 }
 
@@ -1620,8 +1619,6 @@ rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
 int
 rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config)
 {
-  int i;
-
   if ((m8xx.fec.mii_data & 0xffff) == 0x2000) {
 /*    rtems_scc1_driver_attach(config);*/
     return rtems_fec_driver_attach(config);

@@ -1,3 +1,8 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* canbus/canbus.c, clock/p_clock.c, console/console.c,
+	network/network.c, startup/bspstart.c: Removed warnings.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

@@ -109,10 +109,12 @@ rtems_device_driver canbus_initialize(
 )
 {
   int i,j;
+#if 0
   char dev_str[16]; /* This allows us to have a device name up to */
                     /* 15 chars long. If we only use names like   */
                     /* /dev/can0 (9 chars) we will be fine up to  */
                     /* /dev/can9999999 */
+#endif
   rtems_status_code status;
   rtems_isr_entry old_handler;
   
@@ -311,7 +313,7 @@ rtems_device_driver canbus_open(
   case 0: m8xx.simask |= M8xx_SIMASK_IRM3; break;
   case 1: m8xx.simask |= M8xx_SIMASK_IRM4; break;
   case 2: m8xx.simask |= M8xx_SIMASK_IRM2; break;
-  default: return;
+  default: return 0xffffffff;
   }
 
   return RTEMS_SUCCESSFUL;

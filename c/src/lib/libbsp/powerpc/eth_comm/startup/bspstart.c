@@ -118,6 +118,7 @@ void bsp_start(void)
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
   register unsigned int intrNestingLevel = 0;
+  extern void cpu_init(void);
    
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
