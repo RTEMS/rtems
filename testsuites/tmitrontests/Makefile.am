@@ -4,9 +4,9 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-ITRON_DIRS = include tmitronsem01
+noinst_HEADERS = include/timesys.h
 
-SUBDIRS = $(ITRON_DIRS)
+SUBDIRS = tmitronsem01
 
 EXTRA_DIST = tmitrontests.am
 

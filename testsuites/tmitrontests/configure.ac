@@ -32,7 +32,6 @@ AC_SUBST(OPERATION_COUNT)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-include/Makefile
 tmitronsem01/Makefile
 ])
 AC_OUTPUT
