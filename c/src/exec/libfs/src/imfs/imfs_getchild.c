@@ -19,6 +19,7 @@
 
 #include <errno.h>
 #include <assert.h>
+#include <string.h>
 #include "imfs.h"
 
 static char dotname[2] = ".";

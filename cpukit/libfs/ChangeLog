@@ -1,3 +1,11 @@
+2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/imfs/imfs_getchild.c: include <string.h>.
+	* src/imfs/imfs_gtkn.c: Include <string.h>.
+	* src/imfs/ioman.c: Include <string.h>.
+	* src/imfs/linearfile.c: Include <string.h>.
+	* src/imfs/memfile.c: Include <string.h>.
+
 2001-04-04	Joel Sherrill <joel@OARcorp.com>
 
 	* src/dosfs/Makefile.am: Per PR129 do not install as many files

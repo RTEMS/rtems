@@ -19,6 +19,8 @@
 #endif
 
 #include <stdlib.h>
+#include <string.h>
+
 #include "imfs.h"
 #include <rtems/libio_.h>
 

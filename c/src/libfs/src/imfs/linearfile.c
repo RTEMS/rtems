@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include <errno.h>
 
 #include <rtems.h>
