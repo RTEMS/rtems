@@ -131,18 +131,6 @@ libcsupport/include/sys/$(dirstamp):
 	@$(mkdir_p) libcsupport/include/sys
 	@: > libcsupport/include/sys/$(dirstamp)
 
-if RTEMS_PROVIDES_STDINT_H
-
-libcsupport/include/sys/_stdint.h: include/sys/_stdint.h libcsupport/include/sys/$(dirstamp)
-	$(INSTALL_DATA) $< libcsupport/include/sys/_stdint.h
-endif
-
-if RTEMS_PROVIDES_INTTYPES_H
-
-libcsupport/include/sys/_inttypes.h: include/sys/_inttypes.h libcsupport/include/sys/$(dirstamp)
-	$(INSTALL_DATA) $< libcsupport/include/sys/_inttypes.h
-endif
-
 if NEWLIB
 libcsupport/include/sys/ioccom.h: include/sys/ioccom.h libcsupport/include/sys/$(dirstamp)
 	$(INSTALL_DATA) $< libcsupport/include/sys/ioccom.h
