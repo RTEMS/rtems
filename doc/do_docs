@@ -10,16 +10,12 @@ shift
 supplements="supplements/hppa1_1 supplements/i386 \
     supplements/i960 supplements/m68k supplements/sparc supplements/powerpc"
 
-# Division by access level
-public_docs="user develenv networking posix_users started started_ada rtems_gdb"
-support_docs="${supplements} bsp_howto"
-partners_docs="posix1003.1 posix1003.1h"
-oar_manuals="ada_user hwapi tools/texi2www \
-  browseable_rtems new_chapters"
-
 # relnotes  is obsolete
-# posix_users manual left out until finished
-# ada_user manual left out until bindings released
+
+# Division by access level
+public_docs="FAQ user develenv networking posix_users started started_ada \
+    rtems_gdb rgdb_specs"
+support_docs="${supplements} bsp_howto ada_user posix1003.1"
 
 if [ x${MANUAL_SET} = x ] ; then
   MANUAL_SET=public
@@ -34,9 +30,6 @@ case ${MANUAL_SET} in
     ;;
   partners)
     manuals="$public_docs $support_docs $partners_docs"
-    ;;
-  internal)
-    manuals="$public_docs $support_docs $partners_docs $oar_manuals"
     ;;
   *)
     echo "ERROR: Unknown manual set ${MANUAL_SET}"
