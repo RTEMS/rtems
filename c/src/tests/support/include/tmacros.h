@@ -62,15 +62,20 @@ extern "C" {
 #define fatal_directive_status( _stat, _desired, _msg ) \
   fatal_directive_status_with_level( _stat, _desired, _msg, 0 )
 
-#define fatal_directive_status_with_level( _stat, _desired, _msg, _level ) \
+#define fatal_directive_check_status_only( _stat, _desired, _msg ) \
   do { \
-    check_dispatch_disable_level( _level ); \
     if ( (_stat) != (_desired) ) { \
       printf( "\n%s FAILED -- expected (%s) got (%s)\n", \
               (_msg), rtems_status_text(_desired), rtems_status_text(_stat) ); \
       fflush(stdout); \
       exit( _stat ); \
     } \
+  } while ( 0 )
+
+#define fatal_directive_status_with_level( _stat, _desired, _msg, _level ) \
+  do { \
+    check_dispatch_disable_level( _level ); \
+    fatal_directive_check_status_only( _stat, _desired, _msg ); \
   } while ( 0 ) 
 
 /*
