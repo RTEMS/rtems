@@ -102,9 +102,6 @@ CONDITION_VARIABLE_C_FILES = src/cond.c src/condattrdestroy.c src/condattrgetpsh
     src/conddefaultattributes.c src/conddestroy.c src/condinit.c src/condmp.c src/condsignal.c \
     src/condsignalsupp.c src/condtimedwait.c src/condwait.c src/condwaitsupp.c
 
-ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c src/getlogin.c src/getpgrp.c \
-    src/getpid.c src/getppid.c src/getuid.c src/setpgid.c src/setsid.c
-
 KEY_C_FILES = src/key.c src/keycreate.c src/keydelete.c src/keygetspecific.c \
     src/keyrundestructors.c src/keysetspecific.c
 
@@ -160,7 +157,7 @@ TIMER_C_FILES = src/ptimer.c src/ptimer1.c
 EXTRA_DIST += src/README.mqueue
 
 C_FILES = src/adasupp.c $(CANCEL_C_FILES) $(CONDITION_VARIABLE_C_FILES) \
-    $(ID_C_FILES) $(KEY_C_FILES) $(MEMORY_C_FILES) $(MESSAGE_QUEUE_C_FILES) \
+    $(KEY_C_FILES) $(MEMORY_C_FILES) $(MESSAGE_QUEUE_C_FILES) \
     $(MUTEX_C_FILES) $(PTHREAD_C_FILES) $(PSIGNAL_C_FILES) src/sched.c \
     $(SEMAPHORE_C_FILES) src/sysconf.c $(TIME_C_FILES) $(TIMER_C_FILES) src/types.c \
     $(ENOSYS_C_FILES) $(BUILD_FOR_NOW_C_FILES)
