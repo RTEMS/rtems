@@ -123,6 +123,21 @@ by passing a NULL to mq_notify, this removes any notification request
 attached to the queue. Whenever the message queue is closed, all
 notification attachments are removed.
 
+@subsection POSIX Interpretation Issues
+
+There is one significant point of interpretation related to 
+the RTEMS implementation of POSIX message queues:
+
+@cite{What happens to threads already blocked on a message queue when the
+mode of that same message queue is changed from blocking to non-blocking?}
+
+
+The RTEMS POSIX implementation decided to unblock all waiting tasks
+with an @code{EAGAIN} status just as if a non-blocking version of
+the same operation had returned unsatisfied.  This case is not
+discussed in the POSIX standard and other implementations may have
+chosen alternative behaviors.
+
 @section Operations
 
 @subsection Opening or Creating a Message Queue

@@ -26,7 +26,6 @@ when porting existing code from UNIX to RTEMS.
 @item The current implementation of @code{dup()} is insufficient.
 @item FIFOs @code{mkfifo()} are not currently implemented.
 @item Asynchronous IO is not implemented.
-@item Blocking Send for Message Queues is not implemented
 @item The @code{flockfile()} family is not implemented
 @item getc/putc unlocked family is not implemented
 @item Shared Memory is not implemented
@@ -41,8 +40,6 @@ level of support is appropriate and possible for RTEMS.
 
 @item Functional Testing
 @itemize @bullet
-@item Named Semaphores are untested.
-@item There is currently no Message Queue test.
 @item Tests for unimplemented services
 @end itemize
 
@@ -53,7 +50,7 @@ level of support is appropriate and possible for RTEMS.
 
 @item Documentation
 @itemize @bullet
-@item Many of the service description pages are completed in this
+@item Many of the service description pages are not complete in this
 manual.  These need to be completed and information added to the
 background and operations sections.
 @item Example programs (not just tests) would be very nice.
