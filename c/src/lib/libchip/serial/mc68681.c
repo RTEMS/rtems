@@ -486,9 +486,11 @@ MC68681_STATIC int mc68681_write_support_int(
    * Wake up the device
    */
   rtems_interrupt_disable(Irql);
-    Console_Port_Data[minor].bActive = TRUE;
+    if ( Console_Port_Data[minor].bActive == FALSE ) {
+      Console_Port_Data[minor].bActive = TRUE;
+      mc68681_enable_interrupts(minor, MC68681_IMR_ENABLE_ALL);
+    }
     (*setReg)(pMC68681_port, MC68681_TX_BUFFER, *buf);
-    mc68681_enable_interrupts(minor, MC68681_IMR_ENABLE_ALL);
   rtems_interrupt_enable(Irql);
   return 1;
 }
@@ -673,8 +675,11 @@ MC68681_STATIC void mc68681_process(
     ucLineStatus >>= 4;
 
   if(ucLineStatus & MC68681_IR_TX_READY) {
-    mc68681_enable_interrupts(minor, MC68681_IMR_ENABLE_ALL_EXCEPT_TX);
-    rtems_termios_dequeue_characters(Console_Port_Data[minor].termios_data, 1);
+    if (!rtems_termios_dequeue_characters(
+                Console_Port_Data[minor].termios_data, 1)) {
+      Console_Port_Data[minor].bActive = FALSE;
+      mc68681_enable_interrupts(minor, MC68681_IMR_ENABLE_ALL_EXCEPT_TX);
+    }
   }
 
 }
