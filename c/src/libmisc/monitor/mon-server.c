@@ -193,15 +193,15 @@ rtems_monitor_server_kill(void)
 {
     if (rtems_monitor_server_task_id)
         rtems_task_delete(rtems_monitor_server_task_id);
-    rtems_monitor_task_id = 0;
+    rtems_monitor_server_task_id = 0;
 
     if (rtems_monitor_server_request_queue_id)
         rtems_message_queue_delete(rtems_monitor_server_request_queue_id);
-    rtems_monitor_server_response_queue_id = 0;
+    rtems_monitor_server_request_queue_ids = 0;
 
     if (rtems_monitor_server_response_queue_id)
         rtems_message_queue_delete(rtems_monitor_server_response_queue_id);
-    rtems_monitor_server_request_queue_ids = 0;
+    rtems_monitor_server_response_queue_id = 0;
 
     if (rtems_monitor_server_request_queue_ids)
         free(rtems_monitor_server_request_queue_ids);
