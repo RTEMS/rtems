@@ -21,6 +21,18 @@
 
 #include "system.h"
 
+static void
+showTaskSwitches (void)
+{
+  int i;
+  int switches = taskSwitchLogIndex;
+
+  for (i = 0 ; i < switches ; i++) {
+      put_name( Task_name[taskSwitchLog[i].taskIndex], FALSE );
+      print_time( "- ", &taskSwitchLog[i].when, "\n" );
+  }
+}
+
 rtems_task Task_1(
   rtems_task_argument argument
 )
@@ -97,7 +109,10 @@ rtems_task Task_1(
       );
       directive_failed( status, "rtems_task_mode" );
 
-      while ( FOREVER );
+      while ( !testsFinished );
+      showTaskSwitches ();
+      puts( "*** END OF TEST 4 ***" );
+      exit (0);
     }
   }
 }

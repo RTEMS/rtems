@@ -66,4 +66,15 @@ TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
 /* array of task run counts */
 TEST_EXTERN volatile rtems_unsigned32 Run_count[ 4 ];  
  
+/*
+ * Keep track of task switches
+ */
+struct taskSwitchLog {
+  int               taskIndex;
+  rtems_time_of_day when;
+};
+extern struct taskSwitchLog taskSwitchLog[];
+extern int taskSwitchLogIndex;
+volatile extern int testsFinished;
+
 /* end of include file */

@@ -23,6 +23,10 @@
 
 #include "system.h"
 
+struct taskSwitchLog taskSwitchLog[1000];
+int taskSwitchLogIndex;
+volatile int testsFinished;;
+
 rtems_extension Task_switch( 
   rtems_tcb *unused,
   rtems_tcb *heir
@@ -43,13 +47,13 @@ rtems_extension Task_switch(
       status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
       directive_failed( status, "rtems_clock_get" );
 
-      put_name( Task_name[ index ], FALSE );
-      print_time( "- ", &time, "\n" );
-
-      if ( time.second >= 16 ) {
-        puts( "*** END OF TEST 4 ***" );
-        exit( 0 );
+      if (taskSwitchLogIndex < (sizeof taskSwitchLog / sizeof taskSwitchLog[0])) {
+        taskSwitchLog[taskSwitchLogIndex].taskIndex = index;
+        taskSwitchLog[taskSwitchLogIndex].when = time;
+        taskSwitchLogIndex++;
       }
+      if ( time.second >= 16 )
+	testsFinished = 1;
       break;
 
     case 0:
