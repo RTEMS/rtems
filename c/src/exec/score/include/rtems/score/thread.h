@@ -119,7 +119,7 @@ typedef struct {
   Priority_Control     initial_priority; /* initial priority                */
   boolean              core_allocated_stack;
   Stack_Control        Initial_stack;    /* stack information               */
-#if ( CPU_HARDWARE_FP == TRUE )
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   void                *fp_context;       /* initial FP context area address */
 #endif
   void                *stack;            /* initial stack area address      */
