@@ -1,3 +1,10 @@
+2003-10-02	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, binaries.t, buildc.t, intro.t, nextstep.t, require.t,
+	sample.t, started.texi: General improvements and merge enough Ada
+	information to justify dropping the Ada specific manual. There is
+	likely still Ada specific information to merge though.
+
 2003-10-02	Chris Caudle <chris@chriscaudle.org>
 
 	* nextstep.t: RTEMS applications can now use main() so correct the

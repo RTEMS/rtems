@@ -9,7 +9,7 @@
 @chapter Requirements
 
 This chapter describes the build-host system requirements and initial steps 
-in installing the GNU C/C++ Cross Compiler Tools and RTEMS on a build-host.
+in installing the GNU Cross Compiler Tools and RTEMS on a build-host.
 
 @section Disk Space
 

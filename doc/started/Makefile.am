@@ -36,7 +36,7 @@ require.texi: require.t tversions.texi
 binaries.texi: binaries.t tversions.texi
 	$(BMENU2) -c -p "Archive and Build Directory Format" \
 	    -u "Top" \
-	    -n "Building the GNU C/C++ Cross Compiler Toolset" < $< > $@
+	    -n "Building the GNU Cross Compiler Toolset" < $< > $@
 
 buildc.texi: buildc.t tversions.texi
 	$(BMENU2) -c -p "Removing Zipped Tar Files" \
@@ -46,7 +46,7 @@ buildc.texi: buildc.t tversions.texi
 buildrt.texi: buildrt.t tversions.texi
 	$(BMENU2) -c -p "Error Messages Indicating Configuration Problems" \
 	    -u "Top" \
-	    -n "Building the Sample Application" < $< > $@
+	    -n "Building the Sample Applications" < $< > $@
 
 sample.texi: sample.t tversions.texi
 	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \

@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@chapter Building the GNU C/C++ Cross Compiler Toolset
+@chapter Building the GNU Cross Compiler Toolset
 
 NOTE:  This chapter does @b{NOT} apply if you installed
 prebuilt toolset executables for BINUTILS, GCC, NEWLIB,
@@ -537,15 +537,16 @@ ln -s ../@value{NEWLIBUNTAR}/newlib .
 
 The following example illustrates the invocation of
 @code{configure} and @code{make}
-to build and install @value{BINUTILSUNTAR} for the
-sparc-rtems target:
+to build and install @value{GCCUNTAR} with only
+C and C++ support for the sparc-rtems target:
 
 @example
 mkdir b-gcc
 cd b-gcc
 ../@value{GCCUNTAR}/configure --target=sparc-rtems \
    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
-   --enable-threads --prefix=@value{RTEMSPREFIX}
+   --enable-threads --enable-languages="c,c++" \
+   --prefix=@value{RTEMSPREFIX}
 make all
 make info
 make install
@@ -558,6 +559,47 @@ For more information on the invocation of @code{configure}, please
 refer to the documentation for @value{GCCUNTAR} or
 invoke the @value{GCCUNTAR} @code{configure} command with the
 @code{--help} option.
+
+@c
+@c Building GCC with Ada Support
+@c
+@subheading Building GCC with Ada Support
+
+If you want a GCC toolset that includes support for Ada
+(e.g. GNAT), there are some additional requirements on
+the host environment and additional build steps to perform.
+It is critical that you use the same version of GCC/GNAT as
+the native compiler.  GNAT must be compiled with an Ada compiler
+and when building a GNAT cross-compiler, it should be 
+the same version of GNAT itself. 
+
+The build procedure is the same until the configure step. 
+A GCC toolset with GNAT enabled requires that @code{ada}
+be included in the set of enabled languages.
+The following example illustrates the invocation of
+@code{configure} and @code{make}
+to build and install @value{GCCUNTAR} with only
+C, C++, and Ada support for the sparc-rtems target:
+
+@example
+mkdir b-gcc
+cd @value{GCCUNTAR}/gcc/ada
+touch treeprs.ads [es]info.h nmake.ad[bs]
+cd ../../../b-gcc
+../@value{GCCUNTAR}/configure --target=sparc-rtems \
+   --with-gnu-as --with-gnu-ld --with-newlib --verbose \
+   --enable-threads --enable-languages="c,c++,ada" \
+   --prefix=@value{RTEMSPREFIX}
+make all
+make info
+make -C gcc cross-gnattools
+make -C gcc ada.all.cross
+make -C gcc GNATLIBCFLAGS="USER_SELECTED_CPU_CFLAGS" gnatlib
+make install
+@end example
+
+After @value{GCCUNTAR} is built and installed the 
+build directory @code{b-gcc} may be removed.
 
 @c
 @c Building the GNU Debugger GDB
@@ -577,12 +619,17 @@ specific.  The following configurations have been
 successfully used with RTEMS applications:
 
 @itemize @bullet
-@item Sparc Instruction Simulator (SIS)
-@item PowerPC Instruction Simulator (PSIM)
-@item DINK32
-@item BDM with 68360 and MPC860 CPUs
+@item BDM with ColdFire, 683xx, MPC860 CPUs
 @item Motorola Mxxxbug found on M68xxx VME boards
-@item Motorola PPCbug found on PowerPC VME and CompactPCI boards
+@item Motorola PPCbug found on PowerPC VME, CompactPCI, and MTX boards
+@item ARM based Cogent EDP7312
+@item PC's using various Intel and AMD CPUs including i386,
+i486, Pentium and above, and Athlon
+@item PowerPC Instruction Simulator in GDB (PSIM)
+@item MIPS Instruction Simulator in GDB (JMR3904)
+@item Sparc Instruction Simulator in GDB (SIS)
+@item Sparc Instruction Simulator (TSIM)
+@item DINK32 on various PowerPC boards
 @end itemize
 
 GDB is currently RTEMS thread/task aware only if you are using the

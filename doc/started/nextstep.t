@@ -10,7 +10,7 @@
 @chapter Where To Go From Here
 
 At this point, you should have successfully installed a
-GNU C/C++ Cross Compilation Tools for RTEMS on your host system
+GNU Cross Compilation Tools for RTEMS on your host system
 as well as the RTEMS OS for the target host.  You should
 have successfully linked the "hello world" program. You
 may even have downloaded the executable to that target
@@ -52,7 +52,7 @@ on the network services provided by RTEMS.
 
 @end itemize
 
-In addition, the following manuals from the GNU C/C++ Cross
+In addition, the following manuals from the GNU Cross
 Compilation Toolset include information on run-time services
 available.
 

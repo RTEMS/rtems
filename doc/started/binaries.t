@@ -44,8 +44,8 @@ These binaries are strictly optional.
 
 @end enumerate
 
-NOTE: Installing toolset binaries does not install RTEMS itself, only the tools
-required to build RTEMS.  See @ref{Building RTEMS} for the next
+NOTE: Installing toolset binaries does not install RTEMS itself, only
+the tools required to build RTEMS.  See @ref{Building RTEMS} for the next
 step in the process.
 
 @section RPMs
@@ -61,6 +61,7 @@ of a C/C++ toolset targeting the SPARC architecture.
 rpm -i rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 rpm -i sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 rpm -i rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -i sparc-rtems-c++-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 rpm -i sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 rpm -i rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 rpm -i sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
@@ -93,6 +94,7 @@ of a C/C++ toolset targeting the SPARC architecture.
 rpm -e sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 rpm -e rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 rpm -e sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -e sparc-rtems-c++-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 rpm -e rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 rpm -e sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 rpm -e rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
