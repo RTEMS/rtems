@@ -7,7 +7,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <libcsupport.h>
+#include <rtems/libcsupport.h>
 
 extern rtems_configuration_table  BSP_Configuration;
 
