@@ -43,6 +43,18 @@ extern "C" {
 #define EVENT_CURRENT  0
 
 /*
+ *  The following enumerated types indicate what happened while the event
+ *  manager was in the synchronization window.
+ */
+
+typedef enum {
+  EVENT_SYNC_NOTHING_HAPPENED,
+  EVENT_SYNC_TIMEOUT,
+  EVENT_SYNC_SATISFIED
+}  Event_Sync_states;
+ 
+
+/*
  *  _Event_Manager_initialization
  *
  *  DESCRIPTION:
@@ -142,12 +154,13 @@ void _Event_Timeout (
 );
 
 /*
- *  The following defines the synchronization flag used by the
+ *  The following defines the synchronization flags used by the
  *  Event Manager to insure that signals sent to the currently
  *  executing thread are received properly.
  */
 
-EXTERN boolean _Event_Sync;    /* event manager sync flag */
+EXTERN volatile boolean _Event_Sync;
+EXTERN volatile Event_Sync_states _Event_Sync_state;
 
 #include <rtems/rtems/eventmp.h>
 #include <rtems/rtems/event.inl>
