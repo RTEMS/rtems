@@ -421,6 +421,40 @@ The purpose of these functions is to permit a more efficient
 alternative to the select call when dealing with a large number of
 sockets.
 
+@subsection Adding an IP Alias
+
+The following code snippet adds an IP alias:
+
+@example
+void addAlias(const char *pName, const char *pAddr, const char *pMask)
+@{
+  struct ifaliasreq      aliasreq;
+  struct sockaddr_in    *in;
+
+  /* initialize alias request */
+  memset(&aliasreq, 0, sizeof(aliasreq));
+  sprintf(aliasreq.ifra_name, pName);
+
+  /* initialize alias address */
+  in = (struct sockaddr_in *)&aliasreq.ifra_addr;
+  in->sin_family = AF_INET;
+  in->sin_len    = sizeof(aliasreq.ifra_addr);
+  in->sin_addr.s_addr = inet_addr(pAddr);
+
+  /* initialize alias mask */
+  in = (struct sockaddr_in *)&aliasreq.ifra_mask;
+  in->sin_family = AF_INET;
+  in->sin_len    = sizeof(aliasreq.ifra_mask);
+  in->sin_addr.s_addr = inet_addr(pMask);
+
+  /* call to setup the alias */
+  rtems_bsdnet_ifconfig(pName, SIOCAIFADDR, &aliasreq);
+@}
+@end example
+
+Thanks to @uref{mailto:imikes@@poliac.com,Mike Seirs} for this example
+code.
+
 @subsection Time Synchronization Using NTP
 
 @example

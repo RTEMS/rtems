@@ -1,3 +1,7 @@
+2003-02-11	Mike Siers <mikes@poliac.com>
+
+	* networkapp.t: Add an example code snippet for adding an IP alias.
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* networking.texi: Set @setfilename networking.info.
