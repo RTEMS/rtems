@@ -387,12 +387,10 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
     fat_file_fd_t   *fat_fd = NULL;
     unsigned char    dot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     unsigned char    dotdot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
-    unsigned char    cur_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     uint32_t         cl4find = 0;
 
     memset(dot_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
     memset(dotdot_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
-    memset(cur_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
 
     /*
      * open fat-file corresponded to ".."
