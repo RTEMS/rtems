@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 ## NOTE: It doesn't make much sense to install these files
 

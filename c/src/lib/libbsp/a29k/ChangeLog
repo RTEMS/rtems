@@ -1,3 +1,7 @@
+2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+
 2000-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Removed incorrectly placed entry.

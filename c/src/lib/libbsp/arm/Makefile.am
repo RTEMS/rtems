@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 ## Descend into the $(RTEMS_BSP_FAMILY) directory
 ## Currently, the shared directory is not explicitly

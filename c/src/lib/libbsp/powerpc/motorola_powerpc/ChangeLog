@@ -1,3 +1,7 @@
+2001-01-03	Emmanuel Raguet <raguet@crf.canon.fr>
+
+	* bootloader/Makefile.am: Modified to install bootloader so
+	make-exe rule can avoid writing to install point or assuming
 	BSP build tree is available.
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

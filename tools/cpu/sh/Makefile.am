@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4 no-installman
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 noinst_PROGRAMS = shgen
 

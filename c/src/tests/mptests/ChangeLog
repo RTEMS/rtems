@@ -1,3 +1,7 @@
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
         Switch to GNU canonicalization.
 	* mptests.am: Remove DEFS.

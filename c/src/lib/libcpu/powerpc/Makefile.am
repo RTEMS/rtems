@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 ## Check configure.in for conditions to set the conditionals below
 if shared
