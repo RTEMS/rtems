@@ -438,7 +438,7 @@ ne_init_hardware (struct ne_softc *sc)
   /* Set up interrupts.  */
 
   irq.name = sc->irno;
-  irq.hdl = ne_interrupt_handler;
+  irq.hdl = (rtems_irq_hdl)ne_interrupt_handler;
   irq.on = ne_interrupt_on;
   irq.off = ne_interrupt_off;
   irq.isOn = ne_interrupt_is_on;

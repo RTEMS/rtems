@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <rtems/error.h>
 
 /* workaround for gcc development tools */
 #undef __assert
