@@ -15,7 +15,8 @@ include $(top_srcdir)/../../../../automake/lib.am
 #
 
 START_O_FILES = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-START_O_FILES += $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
+START_O_FILES += \
+    $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
 START_O_FILES += $(PROJECT_RELEASE)/lib/ram_init$(LIB_VARIANT)
 START_O_FILES += $(PROJECT_RELEASE)/lib/ram_init_FW$(LIB_VARIANT)
 
