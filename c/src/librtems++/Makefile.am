@@ -6,9 +6,6 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 
 include $(top_srcdir)/../automake/compile.am
 
-EXTRA_LIBRARIES =
-CLEANFILES =
-
 if HAS_CXX
 include_rtems__dir = $(includedir)/rtems++
 
@@ -18,19 +15,12 @@ include_rtems___HEADERS = include/rtems++/rtemsEvent.h \
     include/rtems++/rtemsTask.h include/rtems++/rtemsTaskMode.h \
     include/rtems++/rtemsTimer.h
 
-EXTRA_LIBRARIES += librtems++.a
-CLEANFILES += librtems++.a
+project_lib_LIBRARIES = librtems++.a
+
 librtems___a_SOURCES = src/rtemsEvent.cc src/rtemsInterrupt.cc \
     src/rtemsMessageQueue.cc src/rtemsSemaphore.cc src/rtemsStatusCode.cc \
     src/rtemsTask.cc src/rtemsTimer.cc
 librtems___a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += librtems++_g.a
-CLEANFILES += librtems++_g.a
-librtems___g_a_SOURCES = $(librtems___a_SOURCES)
-librtems___g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
-project_lib_DATA = librtems++$(LIB_VARIANT).a
 endif
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
@@ -82,12 +72,12 @@ $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h: include/rtems++/rtemsTimer.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h
 
-$(PROJECT_LIB)/librtems++$(LIB_VARIANT).a: librtems++$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtems++$(LIB_VARIANT).a
-TMPINSTALL_FILES += $(PROJECT_LIB)/librtems++$(LIB_VARIANT).a
+$(PROJECT_LIB)/librtems++.a: librtems++.a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtems++.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/librtems++.a
 endif
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
