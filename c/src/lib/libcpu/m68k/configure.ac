@@ -38,6 +38,13 @@ AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "m68020" \
 
 AM_CONDITIONAL(m68040, test "$RTEMS_CPU_MODEL" = "m68040")
 
+AM_CONDITIONAL(mcf5206, test "$RTEMS_CPU_MODEL" = "mcf5206")
+
+case "$RTEMS_CPU_MODEL" in
+mcf5206 ) AC_CONFIG_SUBDIRS([mcf5206]);;
+*) ;;
+esac
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 shared/Makefile

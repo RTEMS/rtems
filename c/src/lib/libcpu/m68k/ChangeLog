@@ -1,3 +1,7 @@
+2001-10-26	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, configure.ac: New libcpu support for mcf5206e.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
