@@ -2,8 +2,8 @@
  * $Id$
  */
 
-#ifndef _rtems_powerpc_cache_h
-#define _rtems_powerpc_cache_h
+#ifndef _RTEMS_POWERPC_CACHE_H
+#define _RTEMS_POWERPC_CACHE_H
 
 #include <rtems/score/powerpc.h>
 

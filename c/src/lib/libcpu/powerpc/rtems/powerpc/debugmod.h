@@ -44,8 +44,8 @@
  * future versions of RTEMS
  */
 
-#ifndef _rtems_powerpc_debugmod_h
-#define _rtems_powerpc_debugmod_h
+#ifndef _RTEMS_POWERPC_DEBUGMOD_H
+#define _RTEMS_POWERPC_DEBUGMOD_H
 
 #warning "please read the FIXME inside of this file"
 
@@ -122,5 +122,5 @@ extern "C" {
 }
 #endif
 
-#endif /* ! _rtems_score_debugmod_h */
+#endif /* _RTEMS_POWERPC_DEBUGMOD_H */
 /* end of include file */
