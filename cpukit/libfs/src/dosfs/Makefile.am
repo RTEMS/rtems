@@ -8,6 +8,7 @@ include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
 noinst_HEADERS = config.h
+noinst_HEADERS += fat.h
 
 AM_CPPFLAGS += $(LIBC_DEFINES) 
 

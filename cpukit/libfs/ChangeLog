@@ -1,5 +1,9 @@
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/dosfs/Makefile.am: noinst_HEADERS += fat.h
+
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* src/dosfs/msdos_file.c (msdos_file_read, msdos_file_write):
 	Use '0' as initial value for ret instead of RC_OK.
 
