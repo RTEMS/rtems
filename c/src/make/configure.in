@@ -127,6 +127,7 @@ bsp.cfg
 custom/Makefile
 custom/default.cfg
 compilers/Makefile,
-make $RTEMS_BSP.cache,
+${MAKE} $RTEMS_BSP.cache,
+MAKE=${MAKE-make}
 RTEMS_BSP=${RTEMS_BSP}
 )
