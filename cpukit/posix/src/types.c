@@ -22,16 +22,6 @@ gid_t _POSIX_types_Egid = 0;
  *  4.1.1 Get Process and Parent Process IDs, P1003.1b-1993, p. 83
  */
 
-pid_t getpid( void )
-{
-  return _Objects_Local_node;
-}
-
-/*PAGE
- *
- *  4.1.1 Get Process and Parent Process IDs, P1003.1b-1993, p. 83
- */
-
 pid_t getppid( void )
 {
   return _POSIX_types_Ppid;
