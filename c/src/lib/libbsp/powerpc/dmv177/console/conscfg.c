@@ -141,7 +141,10 @@ mc68681_baud_t
 #define Z85C30_FUNCTIONS  &z85c30_fns_polled
 #endif
 
+boolean dmv177_z85c30_probe(int minor);
+
 console_tbl	Console_Port_Tbl[] = {
+#if (0)
 	{
 		"/dev/com0",			/* sDeviceName */
                 SERIAL_MC68681,                 /* deviceType */
@@ -180,11 +183,12 @@ console_tbl	Console_Port_Tbl[] = {
                 (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
 		DMV170_DUART_IRQ		/* ulIntVector */
 	},
+#endif
 	{
 		"/dev/com3",			/* sDeviceName */
                 SERIAL_Z85C30,                  /* deviceType */
 		Z85C30_FUNCTIONS,		/* pDeviceFns */
-		NULL,				/* deviceProbe */
+		dmv177_z85c30_probe,		/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
 		8,				/* ulHysteresis */
@@ -196,14 +200,14 @@ console_tbl	Console_Port_Tbl[] = {
 		z85c30_set_register,		/* setRegister */
 		z85c30_get_data,		/* getData */
 		z85c30_set_data,		/* setData */
-                Z85C30_CLOCK,                   /* ulClock */
+                0, /* filled in by probe */     /* ulClock */
 		DMV170_SCC_IRQ			/* ulIntVector */
 	},
 	{
 		"/dev/com4",			/* sDeviceName */
                 SERIAL_Z85C30,                  /* deviceType */
 		Z85C30_FUNCTIONS,		/* pDeviceFns */
-		NULL,				/* deviceProbe */
+		dmv177_z85c30_probe,		/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
 		8,				/* ulHysteresis */
@@ -215,7 +219,7 @@ console_tbl	Console_Port_Tbl[] = {
 		z85c30_set_register,		/* setRegister */
 		z85c30_get_data,		/* getData */
 		z85c30_set_data,		/* setData */
-                Z85C30_CLOCK,                   /* ulClock */
+                0, /* filled in by probe */     /* ulClock */
 		DMV170_SCC_IRQ			/* ulIntVector */
 	}
 };
@@ -231,3 +235,21 @@ unsigned long  Console_Port_Count = NUM_CONSOLE_PORTS;
 console_data  Console_Port_Data[NUM_CONSOLE_PORTS];
 
 rtems_device_minor_number  Console_Port_Minor;
+
+boolean dmv177_z85c30_probe(int minor)
+{
+  volatile unsigned32 *dma_control_status_reg;
+
+  /*
+   *  Figure out the clock speed of the Z85C30 SCC
+   */
+
+  dma_control_status_reg = DMV170_DMA_CONTROL_STATUS_REG;
+
+  if ( *dma_control_status_reg & DMV170_SCC_10MHZ )
+    Console_Port_Tbl[minor].ulClock = Z85C30_CLOCK_10;
+  else
+    Console_Port_Tbl[minor].ulClock = Z85C30_CLOCK_2;
+
+  return TRUE;
+}
