@@ -80,6 +80,7 @@ void *POSIX_Init(
   pthread_mutexattr_t  destroyed_attr;
   struct timespec      times;
   struct sched_param   param;
+  int                  pshared;
   int                  policy;
   int                  ceiling;
   int                  old_ceiling;
@@ -122,6 +123,20 @@ void *POSIX_Init(
 
   puts( "Init: pthread_mutexattr_destroy - EINVAL (not initialized)" );
   status = pthread_mutexattr_destroy( &destroyed_attr );
+  assert( status == EINVAL );
+
+  /* error cases for set and get attributes routines */
+
+  puts( "Init: pthread_mutexattr_getpshared - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_getpshared( NULL, &pshared );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_getpshared - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_getpshared( &attr, NULL );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_getpshared - EINVAL (not initialized)" );
+  status = pthread_mutexattr_getpshared( &destroyed_attr, &pshared );
   assert( status == EINVAL );
 
   /* change the attributes structure */
@@ -392,7 +407,7 @@ void *POSIX_Init(
  
   puts( "Init: pthread_mutex_lock - EINVAL (priority ceiling violation)" );
   status = pthread_mutex_lock( &Mutex2_id );
-  if ( status != EDEADLK )
+  if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
 
