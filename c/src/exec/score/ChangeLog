@@ -1,4 +1,9 @@
 
+2001-01-29	Joel Sherrill <joel@OARcorp.com>
+
+	* src/objectextendinformation.c: Added include of string.h to
+	eliminate warning.
+
 2001-01-08	Joel Sherrill <joel@OARcorp.com>
 
 	* src/threadinitialize.c: Fix my bad hack of Ralf's fp_area

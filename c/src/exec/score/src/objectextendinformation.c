@@ -24,6 +24,8 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
+#include <string.h>  /* for memcpy() */
+
 /*PAGE
  *
  *  _Objects_Extend_information
