@@ -1,3 +1,35 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mp01/node1/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* mp01/node2/Makefile.am: Ditto.
+	* mp02/node1/Makefile.am: Ditto.
+	* mp02/node2/Makefile.am: Ditto.
+	* mp03/node1/Makefile.am: Ditto.
+	* mp03/node2/Makefile.am: Ditto.
+	* mp04/node1/Makefile.am: Ditto.
+	* mp04/node2/Makefile.am: Ditto.
+	* mp05/node1/Makefile.am: Ditto.
+	* mp05/node2/Makefile.am: Ditto.
+	* mp06/node1/Makefile.am: Ditto.
+	* mp06/node2/Makefile.am: Ditto.
+	* mp07/node1/Makefile.am: Ditto.
+	* mp07/node2/Makefile.am: Ditto.
+	* mp08/node1/Makefile.am: Ditto.
+	* mp08/node2/Makefile.am: Ditto.
+	* mp09/node1/Makefile.am: Ditto.
+	* mp09/node2/Makefile.am: Ditto.
+	* mp10/node1/Makefile.am: Ditto.
+	* mp10/node2/Makefile.am: Ditto.
+	* mp11/node1/Makefile.am: Ditto.
+	* mp11/node2/Makefile.am: Ditto.
+	* mp12/node1/Makefile.am: Ditto.
+	* mp12/node2/Makefile.am: Ditto.
+	* mp13/node1/Makefile.am: Ditto.
+	* mp13/node2/Makefile.am: Ditto.
+	* mp14/node1/Makefile.am: Ditto.
+	* mp14/node2/Makefile.am: Ditto.
+
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mptests.am: Fix typos in previous patch.
