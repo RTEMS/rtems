@@ -1,16 +1,13 @@
 AUTOMAKE_OPTIONS = foreign
 
-# add gnatnewlib once that one works. :)
 SUBDIRS = . binutils gccnewlib gdb rtems
 
 noinst_SCRIPTS = \
 setup \
 buildall \
-mkbinutils_subpackage_version \
 mkbinutilspec \
 mkbspspec \
 mkgccnewlibspec \
-mkgnatnewlibspec \
 mkgdbspec \
 mkrpms \
 mkspec

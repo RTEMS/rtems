@@ -105,6 +105,13 @@ Authors:
     touch ../files
   fi
 
+# We assume that info/dir exists when building the RPMs
+  rm -f $RPM_BUILD_ROOT/opt/rtems/info/dir
+  f=`find $RPM_BUILD_ROOT/opt/rtems/info -name '*.info.gz'`
+  test x"$f" != x"" && for i in $f; do
+    install-info $i $RPM_BUILD_ROOT/opt/rtems/info/dir
+  done
+
 %post
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
   then

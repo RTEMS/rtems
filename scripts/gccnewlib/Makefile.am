@@ -8,6 +8,9 @@ C_ONLY_ARG = -a $(top_builddir)/gccnewlib/gccnewlib_c_only.spec.in
 
 MKGCCNEWLIBSPEC_DEPS = \
   $(top_builddir)/mkgccnewlibspec gccnewlib.spec.in $(top_builddir)/setup.cache
+MKGCCNEWLIB_C_ONLY_SPEC_DEPS = \
+  $(top_builddir)/mkgccnewlibspec gccnewlib_c_only.spec.in \
+  $(top_builddir)/setup.cache
 
 hppa1.1-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
@@ -15,7 +18,7 @@ hppa1.1-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 i386-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems
 
-i960-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+i960-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIB_C_ONLY_SPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) $(C_ONLY_ARG) -cfg $(top_builddir)/setup.cache -o . i960-rtems
 
 m68k-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
