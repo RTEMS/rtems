@@ -1,3 +1,9 @@
+2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sci/Makefile.am: Apply 2002-12-14 patch (Apparently dropped by CVS).
+	* score/Makefile.am: Likewise.
+	* timer/Makefile.am: Likewise.
+
 2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Eliminate *_O_FILES.
