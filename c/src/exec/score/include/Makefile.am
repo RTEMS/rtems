@@ -56,7 +56,7 @@ rtems/score/cpuopts.h: rtems/score/cpuopts-tmp.h
 	@echo "#ifndef __CPU_OPTIONS_h"                        >>$@
 	@echo "#define __CPU_OPTIONS_h"                        >>$@
 	@echo                                                  >>$@
-	@cat cpuopts-tmp.h                                     >>$@
+	@cat rtems/score/cpuopts-tmp.h                         >>$@
 	@echo                                                  >>$@
 	@echo "#endif"                                         >>$@
 
