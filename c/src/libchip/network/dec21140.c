@@ -1173,8 +1173,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                                PCI_BASE_ADDRESS_1,
                                &lvalue);
 
-   tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK)) 
-      + (unsigned int)PCI_MEM_BASE;
+   tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK)) + (unsigned int)PCI_MEM_BASE;
 
    sc->base = (unsigned int *)(tmp);
 
@@ -1193,11 +1192,9 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 #if defined(__PPC)
    pci_write_config_word(pbus, pdev, pfun,
                          PCI_COMMAND,
-                         (unsigned16) ( PCI_COMMAND_MEMORY |
-                                        PCI_COMMAND_MASTER | 
-                                        PCI_COMMAND_INVALIDATE | 
-                                        PCI_COMMAND_WAIT |
-                                        PCI_COMMAND_FAST_BACK ) );
+                         (unsigned16) ( PCI_COMMAND_IO |
+                                        PCI_COMMAND_MEMORY |
+                                        PCI_COMMAND_MASTER ) );
 #endif
 #if defined(__i386__)
    pcib_conf_write16(signature, 0x04, ( 0x2 | 0x4 | 0x10 | 0x80 | 0x200) );

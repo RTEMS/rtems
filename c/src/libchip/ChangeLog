@@ -1,3 +1,9 @@
+2004-04-09	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 607/networking
+	* network/dec21140.c: Made PCI configuration minimum sane instead
+	of fully specifying unused PCI features.
+
 2004-05-21  Till Strauman <strauman@slac.stanford.edu>
 
 	PR 625/networking
