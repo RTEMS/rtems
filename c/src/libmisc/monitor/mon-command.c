@@ -473,7 +473,7 @@ rtems_monitor_command_read(char *command,
   else
     sprintf (monitor_prompt, "%d-%s", rtems_monitor_node, MONITOR_PROMPT);
 
-#ifdef RTEMS_UNIX
+#if defined(RTEMS_UNIX)
   /* RTEMS on unix gets so many interrupt system calls this is hosed */
   printf ("%s> ", monitor_prompt);
   fflush (stdout);
