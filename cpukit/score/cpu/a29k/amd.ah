@@ -1,3 +1,5 @@
+#if 0
+
 ; /* @(#)amd.ah	1.1 96/05/23 08:56:58, TEI */
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;		 Initialization values for registers after RESET
@@ -6,6 +8,7 @@
 :  /* $Id$ */
 ;* File information and includes.
 
+#endif
         .file   "amd.ah"
         .ident  "@(#)amd.ah	1.1 96/05/23 08:56:58, TEI"
 

@@ -3,8 +3,8 @@
 ; */
 
 ;	.include "register.ah"
-	.include "amd.ah"
-	.include "pswmacro.ah"
+#include <amd.ah>
+#include <pswmacro.ah>
 	.comm	WindowSize,4
 	.text
 	.reg	it0,gr64
@@ -23,26 +23,33 @@
 
 	.global _intr14
 _intr14:
+#if 0
 	const	it3,14
 	sup_sv
 	jmp	interrupt
 	nop
+#endif
 
 	.global _intr18
 _intr18:
+#if 0
 	const	it3,18
 	sup_sv
 	jmp	interrupt
 	nop
+#endif
 
 	.global	_intr19
 _intr19:
+#if 0
 	const	it3,19
 	sup_sv
 	jmp	interrupt
 	nop
+#endif
 
 interrupt:
+#if 0
 	push	msp,it3
 	push	msp,gr1
 	push	msp,rab
@@ -72,10 +79,12 @@ interrupt:
 	or	it0,it1,it0
 	mtsr	cps, it0
 ; fall through to _sigcode
+#endif
 
 	.extern	_a29k_ISR_Handler
 	.global	_sigcode
 _sigcode:
+#if 0
 
 	push	msp, lr1				; R stack support
 	push	msp, rfb				; support
@@ -156,18 +165,22 @@ lower:
 raise:
 	jmp	sendsig					;
 	add	gr1, rab, 0				;
+#endif
 
 	
 	.global	_a29k_sigdfl_sup
 _a29k_sigdfl_sup:
+#if 0
 	repair_R_stack					;
 	repair_regs					;
 	sig_return					; return
 	halt						; never executes
+#endif
 
 
 	.global _sigret
 _sigret:
+#if 0
 ;assume msp points to tav
 	mfsr	it0,cps
 	const	it1,FZ
@@ -190,8 +203,11 @@ _sigret1:
 	add	gr1,it0,0
 	add	msp,msp,4	;discount signal
 	iret
+#endif
 
 _a29k_sigdfl:
+#if 0
 	asneq	SIGDFL,gr1,gr1
 	jmpi	lr0
 	nop
+#endif

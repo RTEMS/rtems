@@ -11,6 +11,8 @@
 
 ;* Register Stack pointer and frame pointer registers.
 
+/* The assembly language is supposed to be Sierra High-C */
+#if 0
 	.extern	Rrsp, Rfp
 
 	.reg	regsp, 		%%Rrsp
@@ -212,3 +214,4 @@
 ;	.reg	LTemp1, 	OStmp8		; local temp 1
 
 ; ****************************************************************************
+#endif

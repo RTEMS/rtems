@@ -1,5 +1,11 @@
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
+	* amd.ah, cpu.c, cpu_asm.S, register.ah, sig.S, rtems/score/cpu.h:
+	Updated and fixed minor things. Commented out offensive assembly
+	and made applications link.
+
+2000-09-22	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am, cpu_asm.S, psmacro.ah, rtems/score/cpu.h:
 	First attempt to compile with GNU tools.  Minor modifications
 	to compile enough to get to assembler errors.

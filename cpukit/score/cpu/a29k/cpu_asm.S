@@ -139,6 +139,7 @@ __CPU_Context_switch:
 
 	.global	_a29k_context_switch_sup
 _a29k_context_switch_sup:
+#if 0
 	add     pcb,lr2,0
 	add     kt1,lr3,0	;move heir pointer to safe location
 	constn  it0,SIG_SYNC
@@ -222,6 +223,7 @@ context_restore:
 	spopsr	ops,it1,pcb
         nop
         iret
+#endif
 
 
 ;/*
@@ -242,6 +244,7 @@ context_restore:
 
         .global __CPU_Context_restore
 __CPU_Context_restore:
+#if 0
         asneq   107, gr1, gr1                   ; syscall
         jmpi    lr0                                     ;
         nop                                             ;
@@ -306,12 +309,15 @@ RestoreFZState	it1,it2
 ;
 	iret
 ;
+#endif
 
         .global __CPU_Context_save
 __CPU_Context_save:
+#if 0
         asneq   108, gr1, gr1                   ; syscall
         jmpi    lr0                                     ;
         nop                                             ;
+#endif
 
 
 ;/*  void __ISR_Handler()
@@ -392,24 +398,31 @@ __CPU_Context_save:
 
 	.global	_a29k_getops
 _a29k_getops:
+#if 0
 	asneq 113, gr96, gr96
 	jmpi lr0
 	nop
+#endif
 
 	.global	_a29k_getops_sup
 _a29k_getops_sup:
+#if 0
 	mfsr	gr96, ops	; caller wants ops
 	iret
 	nop
+#endif
 
 	.global	_a29k_disable
 _a29k_disable:
+#if 0
 	asneq 110, gr96, gr96
 	jmpi lr0
 	nop
+#endif
 
 	.global	_a29k_disable_sup
 _a29k_disable_sup:
+#if 0
 	mfsr	kt0, ops
 	add	gr96, kt0, 0	; return ops to caller
 	const	kt1, (DI | TD)
@@ -418,15 +431,19 @@ _a29k_disable_sup:
 	mtsr	ops, kt1
 	iret
 	nop
+#endif
 
         .global _a29k_disable_all
 _a29k_disable_all:
+#if 0
         asneq 112, gr96, gr96
         jmpi lr0
         nop
+#endif
 
         .global _a29k_disable_all_sup
 _a29k_disable_all_sup:
+#if 0
         mfsr    kt0, ops
 	const	kt1, (DI | TD)
 	consth	kt1, (DI | TD)
@@ -434,15 +451,19 @@ _a29k_disable_all_sup:
         mtsr    ops, kt1
         iret
         nop
+#endif
 
         .global _a29k_enable_all
 _a29k_enable_all:
+#if 0
         asneq 111, gr96, gr96
         jmpi lr0
         nop
+#endif
 
         .global _a29k_enable_all_sup
 _a29k_enable_all_sup:
+#if 0
         mfsr    kt0, ops
 	const	kt1, (DI | TD)
 	consth	kt1, (DI | TD)
@@ -450,15 +471,19 @@ _a29k_enable_all_sup:
         mtsr    ops, kt1
         iret
         nop
+#endif
 
 	.global	_a29k_enable
 _a29k_enable:
+#if 0
 	asneq 109, gr96, gr96
 	jmpi lr0
 	nop
+#endif
 
 	.global	_a29k_enable_sup
 _a29k_enable_sup:
+#if 0
 	mfsr	kt0, ops
 	const	kt1, (DI | TD)
 	consth	kt1, (DI | TD)
@@ -468,23 +493,30 @@ _a29k_enable_sup:
 	mtsr	ops, kt1
 	iret
 	nop
+#endif
 
 	.global _a29k_halt
 _a29k_halt:
+#if 0
 	halt
 	jmp _a29k_halt
 	nop
+#endif
 
 	.global _a29k_super_mode
 _a29k_super_mode:
+#if 0
 	mfsr gr96, ops
 	or gr96, gr96, 0x10
 	mtsr ops, gr96
 	iret
 	nop
+#endif
 
 	.global _a29k_as70
 _a29k_as70:
+#if 0
 	asneq 70,gr96,gr96
 	jmpi lr0
 	nop
+#endif

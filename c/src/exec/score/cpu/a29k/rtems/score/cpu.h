@@ -310,7 +310,7 @@ extern void a29k_sigdfl_sup(void);
  *
  */
 
-#warning "Check these definitions!!!"
+/* #warning "Check these definitions!!!" */
 
 #define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
 #define CPU_BIG_ENDIAN                           TRUE
@@ -458,7 +458,11 @@ typedef struct {
   boolean      do_zero_of_workspace;
   unsigned32   idle_task_stack_size;
   unsigned32   interrupt_stack_size;
-  unsigned32   extra_system_initialization_stack;
+  unsigned32   extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( unsigned32 );
+  void       (*stack_free_hook)( void* );
+  /* end of fields required on all CPUs */
+
 }   rtems_cpu_table;
 
 /*
@@ -905,7 +909,7 @@ void _CPU_ISR_install_vector(
 void _CPU_Install_interrupt_stack( void );
 
 /*
- *  _CPU_Internal_threads_Idle_thread_body
+ *  _CPU_Thread_Idle_body
  *
  *  This routine is the CPU dependent IDLE thread body.
  *
@@ -913,7 +917,7 @@ void _CPU_Install_interrupt_stack( void );
  *         is TRUE.
  */
 
-void _CPU_Internal_threads_Idle_thread_body( void );
+void _CPU_Thread_Idle_body( void );
 
 /*
  *  _CPU_Context_switch

@@ -114,6 +114,18 @@ extern void intr14( void );
 extern void intr18( void );
 extern void intr19( void );
 
+/* just to link with GNU tools JRS 09/22/2000 */
+asm (".global V_SPILL, V_FILL" );
+asm (".global V_EPI_OS, V_BSD_OS" );
+
+asm (".equ    V_SPILL, 64" );
+asm (".equ    V_FILL, 65" );
+
+asm (".equ    V_BSD_OS, 66" );
+asm (".equ    V_EPI_OS, 69" );
+
+/* end of just to link with GNU tools */
+
 void _CPU_ISR_install_raw_handler(
   unsigned32  vector,
   proc_ptr    new_handler,
@@ -126,6 +138,8 @@ void _CPU_ISR_install_raw_handler(
    */
    switch( vector )
    {
+/* where is this code? JRS */
+#if 0
       case 14:
          _settrap( vector, intr14 );
          break;
@@ -135,6 +149,7 @@ void _CPU_ISR_install_raw_handler(
       case 19:
          _settrap( vector, intr19 );
          break;
+#endif
 
       default:
          break;
@@ -193,7 +208,7 @@ void _CPU_Install_interrupt_stack( void )
 
 /*PAGE
  *
- *  _CPU_Internal_threads_Idle_thread_body
+ *  _CPU_Thread_Idle_body
  *
  *  NOTES:
  *
@@ -208,7 +223,7 @@ void _CPU_Install_interrupt_stack( void )
  *     hook with caution.
  */
 
-void _CPU_Internal_threads_Idle_thread_body( void )
+void _CPU_Thread_Idle_body( void )
 {
 
   for( ; ; )
