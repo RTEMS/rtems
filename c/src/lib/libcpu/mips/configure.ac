@@ -15,7 +15,6 @@ AM_MAINTAINER_MODE
 RTEMS_ENABLE_BARE
 RTEMS_ENV_RTEMSBSP
 
-
 RTEMS_PROJECT_ROOT
 
 RTEMS_PROG_CC_FOR_TARGET
@@ -44,7 +43,6 @@ r46xx/Makefile
 r46xx/vectorisrs/Makefile
 timer/Makefile
 tx39/Makefile
-tx39/include/Makefile
 tx39/vectorisrs/Makefile
 ])
 AC_OUTPUT

@@ -1,3 +1,11 @@
+2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mongoosev/Makefile.am: Rework preinstall rules.
+	* mongoosev/duart/Makefile.am: Rework preinstall rules.
+	* tx39/include/Makefile.am: Remove.
+	* tx39/Makefile.am: Merge-in tx39/include/Makefile.am.
+	* configure.ac: Remove tx39/include/Makefile.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.
