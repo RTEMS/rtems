@@ -1,0 +1,73 @@
+#!@KSH@ -p
+#
+#  $Id$
+#
+# Delete all files from the current directory that can be recreated
+#  via RCS 'co' commonds
+# Used by 'make clobber'
+#
+
+progname=${0##*/}        # fast basename hack for ksh, bash
+
+USAGE=\
+"usage: $progname [ -v ]"
+
+fatal() {
+    if [ "$1" ]
+    then
+        echo $* >&2
+    fi
+    echo "$USAGE" 1>&2
+    exit 1
+}
+
+#
+# process the options
+#
+
+verbose=""
+
+while getopts v OPT
+do
+    case "$OPT" in
+	v)
+	    verbose="yes";;
+        *)
+            fatal
+    esac
+done
+
+let $((shiftcount = $OPTIND - 1))
+shift $shiftcount
+
+args=$*
+[ "$args" ] && fatal
+
+[ -d RCS/. ] || exit 0
+
+# there is probably a better way to do this
+
+rcs_files=`echo RCS/*,v | sed -e 's?RCS/??g' -e's/,v//g'`
+
+kills=""
+for f in $rcs_files
+do
+   # build list of all files in RCS/*,v that are *not* locked
+   if [ -f $f ] && [ ! -w $f ] && [ -f RCS/$f,v ]
+   then
+        locked=`rlog -L -R $f`
+        [ "$locked" = "" ] && kills="$kills $f"
+   fi
+done
+
+if [ "$kills" ]
+then
+     [ "$verbose" ] && echo rm -f $kills
+     rm -f $kills
+fi
+
+exit 0
+
+# Local Variables: ***
+# mode:ksh ***
+# End: ***

@@ -10,22 +10,28 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/rtems.cfg
 
 DESTDIR=$(PROJECT_RELEASE)/tests
 
 # We use the generic difftest
-PGMS=runtest looptest semdump shmdump
+BUILD_PGMS=runtest looptest
+ifneq (@PERL@,)
+BUILD_PGMS+=semdump shmdump
+endif
 
-INSTALLED=$(PGMS:%=$(DESTDIR)/%)
+PGMS = $(BUILD_PGMS)
+
+CLEAN_ADDITIONS += $(BUILD_PGMS)
+
+INSTALLED_PGMS=$(PGMS:%=$(DESTDIR)/%)
 
 all:	$(DESTDIR) $(PGMS) install
 
-install:  $(INSTALLED)
+$(DESTDIR):
+	@INSTALL@ $(INSTDIRFLAGS) $@
 
-# Install the program, replacing #!KSHELL with $(KSH)
-# and first line #!SHELL with $(SHELL)
-$(DESTDIR)/%: %
-	-$(RM) $@.old
-	-$(MV) $@ $@.old >/dev/null 2>&1
-	$(SED) -e '1,1s?^#!KSHELL?#!$(KSH)?' -e '1,1s?^#!SHELL?#!$(SHELL)?' < $< > $@
-	$(CHMOD) 0555 $@
+$(INSTALLED_PGMS): $(PGMS)
+	@INSTALL@ $(INSTBINFLAGS) $^ $(DESTDIR)
+
+install:  $(DESTDIR) $(INSTALLED_PGMS)

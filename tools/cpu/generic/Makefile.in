@@ -14,20 +14,23 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/rtems.cfg
 
 DESTDIR=$(PROJECT_RELEASE)/bin
 
-PGMS=size_rtems
+BUILD_PGMS=size_rtems
+PGMS=$(BUILD_PGMS)
 
-INSTALLED=$(PGMS:%=$(DESTDIR)/%)
+CLEAN_ADDITIONS += $(BUILD_PGMS)
+
+INSTALLED_PGMS=$(PGMS:%=$(DESTDIR)/%)
 
 all:	$(DESTDIR) $(PGMS) install
 
 $(DESTDIR):
 	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install:  $(INSTALLED)
-
-# Install the program
-$(DESTDIR)/%: %
+$(INSTALLED_PGMS): $(PGMS)
 	@INSTALL@ $(INSTBINFLAGS) $^ $@
+
+install:  $(DESTDIR) $(INSTALLED_PGMS)

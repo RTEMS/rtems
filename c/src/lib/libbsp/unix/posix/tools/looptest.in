@@ -1,0 +1,93 @@
+#!@KSH@ -p
+#
+# $Id$
+#
+
+# progname=`basename $0`
+progname=${0##*/}        # fast basename hack for ksh, bash
+
+# must be uppercase hex; dc is feeble minded
+clicks_per_tick="1"
+# default is 0x3
+hexbump=1
+iterations=10
+
+USAGE=\
+"usage: $progname [ -opts ] file [ file ... ]
+       -o options  -- specify options to be passed to runtest
+       -c clicks   -- specify (hex) value for clicks / tick (default $clicks_per_tick)
+        -n iterations -- num times to loop thru specified tests (default $iterations)
+       -b hexbump  -- increment clicks-per-ticks this much each loop (default $hexbump)
+       -v          -- verbose"
+
+#   log an error to stderr
+prerr()
+{
+    echo "$*" >&2
+}
+
+fatal() {
+    [ "$1" ] && prerr $*
+    prerr "$USAGE"
+    exit 1
+}
+
+warn() {
+    [ "$1" ] && prerr $*
+}
+
+#
+# process the options
+#
+# defaults for getopt vars
+#
+
+verbose=""
+extra_options=""
+
+while getopts vo:c:n:b: OPT
+do
+    case "$OPT" in
+	v)
+	    verbose="yes";;
+        o)
+            extra_options="$OPTARG";;
+        c)
+            clicks_per_ticks="$OPTARG";;
+        n)
+            iterations="$OPTARG";;
+        b)
+            hexbump="$OPTARG";;
+        *)
+            fatal;;
+    esac
+done
+((shiftcount = $OPTIND - 1))
+shift $shiftcount
+
+args=$*
+
+#
+# Run the tests
+# After each run, rename 'log' to log.$clicks_per_tick
+#
+
+tests="$args"
+
+while [ $iterations -gt 0 ]
+do
+   ./runtest $extra_options -c $clicks_per_tick $tests
+   rm -rf log.$clicks_per_tick.OLD
+   [ -d log.$clicks_per_tick ] && mv log.$clicks_per_tick log.$clicks_per_tick.OLD
+   mv log log.$clicks_per_tick
+
+   ((iterations = $iterations - 1))
+   clicks_per_tick=`echo 16 o 16 i $clicks_per_tick $hexbump + p q | dc`
+done
+
+exit 0
+
+# Local Variables: ***
+# mode:ksh ***
+# End: ***
+

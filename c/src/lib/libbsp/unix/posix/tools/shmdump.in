@@ -1,0 +1,134 @@
+#!@PERL@
+#
+#  $Id$
+#
+eval "exec @PERL@ -S $0 $*"
+    if $running_under_some_shell;
+
+# dump shared memory segment   tony@divnc.com
+
+require 'sys/shm.ph';
+require 'getopts.pl';
+&Getopts("vhi:k:f:l:b:w");	# verbose, help, id, key, first, length, word, base
+
+if ($opt_h || ($opt_i && $opt_k))
+{
+    print STDERR <<NO_MORE_HELP;
+shmdump
+
+    Dump contents of specifed shared memory segment.
+
+Usage: $0  [options]
+
+    -h          -- help
+    -v          -- possibly more verbose
+    -i shmid    -- shm id
+    -k shmkey   -- shm key
+    -f first    -- start of partial dump
+    -l length   -- length of partial dump
+    -w          -- dump as 4byte words instead of bytes
+    -b base     -- use 'base' as base address for output
+
+    anything else == this help message
+NO_MORE_HELP
+    exit 1;
+}
+
+$verbose = $opt_v;
+$id = $opt_i;
+$key = $opt_k;
+$offset = $opt_f;
+$print_length = $opt_l;
+$base = $opt_b;
+$word_dump = $opt_w;
+
+if ($key)
+{
+    # ensure key is an integer
+    $key = oct($key) if $key =~ /^0/;
+    die "Could not convert key to id; $!" unless $id = shmget($key, 1, 0);
+}
+
+# ensure integerhood in case of leading '0x'
+$base = oct($base) if $base =~ /^0/;
+$offset = oct($offset) if $offset =~ /^0/;
+$print_length = oct($print_length) if $print_length =~ /^0/;
+
+if ( ! shmctl($id, &IPC_STAT, $shmid_ds))
+{
+    die "shmctl(2) for id $id failed -- (I was trying to get size): $!";
+}
+
+# Pick the length out.
+# It is at byte offset 0x30 on hpux9 and probably hpux10
+# Also get the key if we don't have it already.  Don't need it tho...
+$length = unpack("I", substr($shmid_ds, 0x30, 4));
+$key = unpack("I", substr($shmid_ds, 0x14, 4)) if ! $key;
+
+# poke around looking for length and key
+# print "I guess: length: $length,  key: $key\n";
+# print "****$shmid_ds****\n"; die "";
+
+# make sure offset and print length make sense
+$print_length = $length if ! $print_length;
+if (($offset + $print_length) > $length)
+{
+    die "offset ($offset) and length ($print_length) go beyond end of segment ($length bytes)";
+}
+
+printf("KEY: 0x%X (%d)  ", $key, $key) if ($key);
+printf "ID: $id\n";
+printf "   %d bytes (0x%X), %d words, logical base is 0x%X\n",
+       $length, $length, $length / 4, $base;
+if ($offset || ($print_length != $length))
+{
+    printf "   printing %X (%d) bytes starting at offset 0x%X (%d)\n",
+           $print_length, $print_length, $offset, $offset;
+}
+printf "\n";
+
+if ( ! shmread($id, $shm_data, $offset, $print_length))
+{
+    die "could not attach and read from shmid $id: $!";
+}
+
+# the dump code below derived from "Real Perl Programs" example "xdump"
+# from Camel book
+
+$base += $offset;
+$offset = 0;
+for ($len = $print_length; $len >= 16; )
+{
+    $data = substr($shm_data, $offset, 16);
+
+    @array = unpack('N4', $data);
+    $data =~ tr/\0-\37\177-\377/./;
+    printf "%8.8lX   %8.8lX %8.8lX %8.8lX %8.8lX   |%s|\n",
+            $base, @array, $data;
+
+    $offset += 16;
+    $base += 16;
+    $len -= 16;
+}
+
+# Now finish up the end a byte at a time
+
+if ($len)
+{
+    $data = substr($shm_data, $offset, $len);
+    @array = unpack('C*', $data);
+    for (@array) 
+    {
+        $_ = sprintf('%2.2X', $_);
+    }
+
+    push(@array, '  ') while $len++ < 16;
+
+    $data =~ tr/\0-\37\177-\377/./;
+    $data =~ s/[^ -~]/./g;
+
+    printf "%8.8lX   ", $base;
+    printf "%s%s%s%s %s%s%s%s %s%s%s%s %s%s%s%s   |%-16s|\n",
+           @array, $data;
+}
+

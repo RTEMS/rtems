@@ -95,6 +95,13 @@ AC_PROG_LN_S
 AC_PATH_PROG(CHMOD,chmod)
 AC_PATH_PROG(SORT,sort)
 AC_PROG_INSTALL
+AC_PATH_PROG(PERL,perl)
+if test -z "$PERL" ; then
+AC_MSG_WARN(
+[***]
+[   perl was not found]
+[   Note: Some tools will not be built.])
+fi
 
 dnl check mkdir behaviour, try to get mkdir -p -m 0755
 RTEMS_PATH_MKDIR
@@ -496,7 +503,6 @@ c/src/exec/score/${inline_dir}/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile
-c/src/exec/score/tools/generic/size_rtems
 c/src/exec/wrapup/Makefile
 c/src/exec/wrapup/rtems/Makefile
 c/src/lib/Makefile

@@ -1,0 +1,255 @@
+#!@KSH@ -p
+#
+# Run rtems tests on a POSIX-ish UNIX
+#
+#  $Id$
+#
+
+trap "test_exit 1" 1 2 3 13 14 15
+
+trap "test_exit 1" 1 2 3 13 14 15
+
+# progname=`basename $0`
+progname=${0##*/}        # fast basename hack for ksh, bash
+
+USAGE=\
+"usage: $progname [ -opts ] test [ test ... ]
+        -c clicks   -- specify (hex) value for clicks / tick
+	-v	    -- verbose
+        -l logdir   -- specify log directory (default is 'logdir')
+
+  Specify test as 'test' or 'test.exe'.
+  All multiprocessing tests *must* be specified simply as 'mp01', etc.
+"
+
+# export everything
+set -a
+
+#   log an error to stderr
+prerr()
+{
+    echo "$*" >&2
+}
+
+fatal() {
+    [ "$1" ] && prerr $*
+    prerr "$USAGE"
+    exit 1
+}
+
+warn() {
+    [ "$1" ] && prerr $*
+}
+
+# print args, 1 per line
+ml_echo()
+{
+    for l
+    do
+       echo "$l"
+    done
+}
+
+killem()
+{
+    kill -9 $pid $pid1 $pid2 2> /dev/null
+}
+
+
+killem()
+{
+    kill -9 $pid $pid1 $pid2 2> /dev/null
+}
+
+
+test_exit()
+{
+    exit_code=$1
+
+    killem
+    
+    killem
+    
+    rm -f ${logfile}.tmp*
+
+    exit $exit_code
+}
+
+#
+# process the options
+#
+# defaults for getopt vars
+#
+
+verbose=""
+extra_options=""
+clicks_per_tick=""
+logdir=log
+# how long can we run; rtems tests might run 300 seconds
+max_run_time=400
+run_to_completion="yes"
+
+while getopts vo:c:l: OPT
+do
+    case "$OPT" in
+	v)
+	    verbose="yes";;
+        l)
+            logdir="$OPTARG";;
+        o)
+            extra_options="$OPTARG";;
+        c)
+            clicks_per_tick="$OPTARG";;
+        *)
+            fatal;;
+    esac
+done
+
+let $((shiftcount = $OPTIND - 1))
+shift $shiftcount
+
+args=$*
+
+#
+# Run the tests
+#
+
+tests="$args"
+if [ ! "$tests" ]
+then
+     set -- `echo *.exe`
+     tests="$*"
+fi
+
+[ -d $logdir ] || mkdir $logdir || fatal "could not create log directory ($logdir)"
+
+for tfile in $tests
+do
+
+   tname=`echo $tfile | sed -e 's/\.exe$//'`
+   tname=`basename $tname`
+
+   TEST_TYPE="single"
+
+   case $tname in
+       monitor)
+           if [ $run_to_completion = "yes" ]
+           then
+                warn "Skipping $tname; it is interactive"
+                continue
+           fi
+           ;;
+       *-node2*)
+           warn "Skipping $tname; 'runtest' runs both nodes when for *-node1"
+           continue;;
+       *-node1*)
+           tname=`echo $tname | sed 's/-node.*//'`
+           warn "Running both nodes associated with $tname"
+           TEST_TYPE="mp"
+           ;;
+       stackchk*|spfatal*|malloctest*|termio*)
+           warn "Skipping $tname; it locks up or takes a VERY long time to run"
+           continue
+	   ;;
+   esac
+
+   if [ $TEST_TYPE = "mp" ]
+   then
+       logfile1=$logdir/${tname}_1
+       infofile1=$logfile1.info
+       logfile2=$logdir/${tname}_2
+       infofile2=$logfile2.info
+
+       rm -f ${logfile1}
+       rm -f ${logfile2}
+
+       date=`date`
+       echo "Starting $tname at $date"
+
+       ./${tname}-node1.exe > $logfile1 2>&1 &
+       pid1=$!
+       ./${tname}-node2.exe > $logfile2 2>&1 &
+       pid2=$!
+
+       # Wait for both cpu's to complete, ensuring they don't run forever...
+       time_run=0
+       while [ $time_run -lt $max_run_time ]
+       do
+           # sleep 5s at a time waiting for jobs to finish or timer to expire
+           # if job has exited, then we exit, too.
+           sleep 5
+           kill -0 $pid1 2> /dev/null
+           running1=$?
+           kill -0 $pid2 2> /dev/null
+           running2=$?
+           if [ $running1 -eq 0 ] && [ $running2 -eq 0 ]  # both still running
+           then
+               time_run=$((time_run + 5))
+               if [ $time_run -ge $max_run_time ]
+               then
+                   echo "$tname ran too long; killing it"
+                   ran_too_long="yes"
+	       fi
+           else
+               ran_too_long="no"
+               # if one is still running, have to kill them
+               if [ $running1 -ne $running2 ]
+               then
+                   sleep 10	# give other node a chance to gracefully die
+               fi
+	       break
+           fi
+       done
+
+       # make sure they are gone
+       kill -9 $pid1 2> /dev/null
+       kill -9 $pid2 2> /dev/null
+   fi
+
+   if [ $TEST_TYPE = "single" ]
+   then
+       logfile=$logdir/$tname
+       infofile=$logfile.info
+
+       rm -f ${logfile}
+
+       date=`date`
+       echo "Starting $tname.exe at $date"
+
+       ./$tname.exe > $logfile 2>&1 &
+       pid=$!
+
+       # Make sure it won't run forever...
+       time_run=0
+       while [ $time_run -lt $max_run_time ]
+       do
+           # sleep 5s at a time waiting for job to finish or timer to expire
+           # if job has exited, then we exit, too.
+           sleep 5
+           kill -0 $pid 2> /dev/null
+           running=$?
+           if [ $running -eq 0 ]
+           then
+               time_run=$((time_run + 5))
+               if [ $time_run -ge $max_run_time ]
+               then
+                   kill -9 $pid 2> /dev/null
+                   ran_too_long="yes"
+	       fi
+           else
+               ran_too_long="no"
+	       break
+           fi
+       done
+   fi
+
+   pid=""
+
+done
+
+test_exit 0
+
+# Local Variables: ***
+# mode:ksh ***
+# End: ***
+

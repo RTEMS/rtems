@@ -22,11 +22,3 @@ unlock-directory
     Useful to keep people from accidentally overwriting
     "released" trees if they get confused about which
     module they have loaded.
-
-rtems-glom
-    glom together all the rtems libraries in order to simplify
-    the link line used by applications.
-    Produces rtems.rel.
-    Not used by the RTEMS src tree at all.
-    Strictly optional.
-

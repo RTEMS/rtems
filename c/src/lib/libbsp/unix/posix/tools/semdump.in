@@ -1,0 +1,59 @@
+#!@PERL@
+#
+#  $Id$
+#
+eval "exec @PERL@ -S $0 $*"
+    if $running_under_some_shell;
+
+# dump semaphore array values   tony@divnc.com
+
+require 'sys/sem.ph';
+require 'getopts.pl';
+&Getopts("vhi:k:");		# verbose, help, id, key
+
+if ($opt_h || ($opt_i && $opt_k))
+{
+    print STDERR <<NO_MORE_HELP;
+semdump
+
+    Dump info about specified semaphore.
+
+Usage: $0       [-v] { -i semid | -k semkey }
+
+    -v          -- possibly more verbose
+    -i semid    -- semaphore id
+    -k semkey   -- semaphore key
+    -h          -- help
+
+    anything else == this help message
+NO_MORE_HELP
+    exit 1;
+}
+
+$verbose = $opt_v;
+$id = $opt_i;
+$key = $opt_k;
+
+if ($key)
+{
+    $key = oct($key) if $key =~ /^0/;
+    die "Could not convert key to id; $!" unless $id = semget($key, 1, 0);
+}
+
+# I don't know to find out how many sem's are attached to the id
+#  so just keep reading them until we get an error.
+
+printf("KEY: 0x%X (%d)  ", $key, $key) if $key;
+print "ID: $id\n";
+
+semlist: 
+for ($semnum=0; $semnum < 10; $semnum++)
+{
+    $val = semctl($id, $semnum, &GETVAL, 0);
+    $val || ($val = -1);
+
+    last semlist if ($val == -1);
+
+    printf " %d: %d\n", $semnum, $val;
+}
+

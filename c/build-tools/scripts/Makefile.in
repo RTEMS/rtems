@@ -14,21 +14,23 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/rtems.cfg
 
 DESTDIR=$(PROJECT_RELEASE)/build-tools
 
-PGMS=install-if-change rcs-clean lock-directory unlock-directory \
-  search-id.sh
+BUILD_PGMS=install-if-change rcs-clean lock-directory unlock-directory
+PGMS = $(BUILD_PGMS) search-id.sh
 
-INSTALLED=$(PGMS:%=$(DESTDIR)/%)
+CLEAN_ADDITIONS += $(BUILD_PGMS)
+
+INSTALLED_PGMS=$(PGMS:%=$(DESTDIR)/%)
 
 all:	$(DESTDIR) $(PGMS) install
 
 $(DESTDIR):
 	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install:  $(INSTALLED)
+$(INSTALLED_PGMS): $(PGMS)
+	@INSTALL@ $(INSTBINFLAGS) $^ $(DESTDIR)
 
-# Install the program
-$(DESTDIR)/%: %
-	$(make-script)
+install:  $(DESTDIR) $(INSTALLED_PGMS)
