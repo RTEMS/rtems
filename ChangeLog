@@ -1,3 +1,9 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/env-rtemscpu.m4: Remove.
+	* aclocal/multi.m4: Remove.
+	* aclocal/multilib: Remove RTEMS_ENABLE_MULTILIB_MASTER.
+
 2002-05-28	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-ss-20020528.
