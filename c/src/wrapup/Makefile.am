@@ -32,18 +32,18 @@ endif
 SRCS += $(wildcard $(PROJECT_LIB)/libcpu$(LIB_VARIANT).a)
 
 if LIBCHIP
-SRCS += ../libchip/rtc/$(ARCH)/librtcio.a
-SRCS += ../libchip/serial/$(ARCH)/libserialio.a
-SRCS += ../libchip/ide/$(ARCH)/libide.a
+SRCS += ../libchip/librtcio$(LIB_VARIANT).a
+SRCS += ../libchip/libserialio$(LIB_VARIANT).a
+SRCS += ../libchip/libide$(LIB_VARIANT).a
 if HAS_NETWORKING
-SRCS += ../libchip/network/$(ARCH)/libnetchip$(LIB_VARIANT).a
+SRCS += ../libchip/libnetchip$(LIB_VARIANT).a
 endif
 endif
 
 SRCS += $(wildcard $(PROJECT_LIB)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
 if HAS_MP
-SRCS += ../libchip/shmdr/$(ARCH)/shmdr.rel
+SRCS += ../libchip/shmdr/shmdr$(LIB_VARIANT).rel
 endif
 
 all-local: $(TMPINSTALL_FILES)

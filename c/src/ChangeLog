@@ -1,5 +1,9 @@
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Reflect changes to libchip/*.
+
+2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* support/Makefile.am: Use automake compilation rules.
 	* wrapup/Makefile.am: Reflect changes to support/*.
 
