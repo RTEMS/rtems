@@ -67,45 +67,45 @@ extern console_fns mc68681_fns_polled;
  * Default register access routines
  */
 
-unsigned8 mc68681_default_read_register(
-  unsigned32  ulCtrlPort,
+unsigned8 mc68681_get_register(     /* registers are at 1 byte boundaries */
+  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
   unsigned8   ucRegNum
 );
 
-void  mc68681_default_write_register(
+void  mc68681_set_register(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum,
   unsigned8   ucData
 );
 
-unsigned8 mc68681_default_read_register_with_multiplier_2(
-  unsigned32  ulCtrlPort,
+unsigned8 mc68681_get_register_2(   /* registers are at 2 byte boundaries */
+  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
   unsigned8   ucRegNum
 );
 
-void  mc68681_default_write_register_with_multiplier_2(
+void  mc68681_set_register_2(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum,
   unsigned8   ucData
 );
 
-unsigned8 mc68681_default_read_register_with_multiplier_4(
-  unsigned32  ulCtrlPort,
+unsigned8 mc68681_get_register_4(   /* registers are at 4 byte boundaries */
+  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
   unsigned8   ucRegNum
 );
 
-void  mc68681_default_write_register_with_multiplier_4(
+void  mc68681_set_register_4(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum,
   unsigned8   ucData
 );
 
-unsigned8 mc68681_default_read_register_with_multiplier_8(
-  unsigned32  ulCtrlPort,
+unsigned8 mc68681_get_register_8(   /* registers are at 8 byte boundaries */
+  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
   unsigned8   ucRegNum
 );
 
-void  mc68681_default_write_register_with_multiplier_8(
+void  mc68681_set_register_8(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum,
   unsigned8   ucData
