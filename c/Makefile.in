@@ -99,7 +99,7 @@ install_files: $(PROJECT_ROOT)/$(RTEMS_BSP)/Makefile.inc
 	-$(RM) -rf $(prefix)/rtems/$(RTEMS_BSP)
 	cd ../; tar cf - $(RTEMS_BSP)/[bilsuM]* | \
 		(cd $(prefix)/rtems; tar xpBf - )
-	cd ../make; make RTEMS_BSP=$(RTEMS_BSP) install
+	cd ../make; $(MAKE) RTEMS_BSP=$(RTEMS_BSP) install
 
 tests:
 	cd src/tests; $(MAKE) all
