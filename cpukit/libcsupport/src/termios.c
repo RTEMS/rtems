@@ -34,23 +34,33 @@
 /*
  *  FreeBSD does not support a full POSIX termios so we have to help it out
  */
-
-#if defined(__FreeBSD__)
+#if !HAVE_DECL_XTABS
 #define XTABS   0
+#endif
+
+#if !HAVE_DECL_ONLRET
 #define ONLRET  0
-#define ONOCR   0
+#endif
+#if !HAVE_DECL_ONOCR
+#define ONOCR  0
+#endif
+#if !HAVE_DECL_TABDLY
 #define TABDLY  0
-#define OLCUC   0
-#define ILCUC   0
-#define OCRNL   0
+#endif
+#if !HAVE_DECL_OLCUC
+#define OLCUC 0
+#endif
+#if !HAVE_DECL_ILCUC
+#define ILCUC 0
+#endif
+#if !HAVE_DECL_OCRNL
+#define OCRNL 0
+#endif
+#if !HAVE_DECL_IUCLC
 #define IUCLC   0
 #endif
 
-/*
- *  Cygwin does not define these
- */
-
-#if defined(__CYGWIN__)
+#if !HAVE_DECL_ECHOPRT
 #define ECHOPRT 0
 #endif
 

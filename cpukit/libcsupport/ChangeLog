@@ -1,3 +1,8 @@
+2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add various checks to enhance portability.
+	* src/termios.c: Reflect changes to configure.ac.
+
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/libio.h: Internally use a union of an unsigned64
