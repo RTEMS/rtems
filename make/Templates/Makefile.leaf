@@ -33,8 +33,9 @@ PGMS=${ARCH}/xxx-your-program-here ${ARCH}/xxx-another-one
 # to include all RTEMS managers in the application.
 MANAGERS=io event message rate_monotonic semaphore timer, etc.
 
+include $(RTEMS_MAKEFILE_PATH)/Makefile.inc
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_CUSTOM)
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 #
