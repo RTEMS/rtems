@@ -163,15 +163,6 @@ msdos_date_dos2unix(unsigned int dd, unsigned int dt)
 	return seconds + lastseconds;
 }
 
-/*
- * Cheezy macros to do case detection and conversion for the ascii
- * character set.  DOESN'T work for ebcdic.
- */
-#define	isupper(c)	(c >= 'A'  &&  c <= 'Z')
-#define	islower(c)	(c >= 'a'  &&  c <= 'z')
-#define	toupper(c)	(c & ~' ')
-#define	tolower(c)	(c | ' ')
-
 static const u_char msdos_map[] = {
 /* 00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 /* 08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

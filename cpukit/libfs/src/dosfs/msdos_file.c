@@ -146,7 +146,7 @@ msdos_file_close(rtems_libio_t *iop)
 ssize_t 
 msdos_file_read(rtems_libio_t *iop, void *buffer, unsigned32 count)
 {
-    ssize_t            ret = RC_OK;
+    ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
     fat_file_fd_t     *fat_fd = iop->file_info;
@@ -179,7 +179,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, unsigned32 count)
 ssize_t 
 msdos_file_write(rtems_libio_t *iop,const void *buffer, unsigned32 count)
 {
-    ssize_t            ret = RC_OK; 
+    ssize_t            ret = 0; 
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
     fat_file_fd_t     *fat_fd = iop->file_info;
