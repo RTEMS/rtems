@@ -30,17 +30,11 @@ C_FILES = src/debug.c $(EXTENSION_FILES) src/fatal.c src/exinit.c src/io.c \
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-EXTRA_LIBRARIES = libsapi.a
-CLEANFILES = libsapi.a
+noinst_LIBRARIES = libsapi.a
 libsapi_a_SOURCES = $(C_FILES)
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += libsapi_g.a
-CLEANFILES += libsapi_g.a
-libsapi_g_a_SOURCES = $(libsapi_a_SOURCES)
-libsapi_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
-all-local: $(PREINSTALL_FILES) libsapi$(LIB_VARIANT).a
+all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
@@ -93,7 +87,7 @@ $(PROJECT_INCLUDE)/rtems/extension.inl: macros/rtems/extension.inl $(PROJECT_INC
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
 endif
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

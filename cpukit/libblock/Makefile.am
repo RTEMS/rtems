@@ -12,13 +12,8 @@ CLEANFILES =
 if !UNIX
 include_rtemsdir = $(includedir)/rtems
 
-EXTRA_LIBRARIES = libblock.a
-CLEANFILES += libblock.a
+noinst_LIBRARIES = libblock.a
 libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libblock_g.a
-CLEANFILES += libblock_g.a
-libblock_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 include_rtems_HEADERS = include/rtems/bdbuf.h include/rtems/blkdev.h \
     include/rtems/diskdevs.h include/rtems/ramdisk.h \
@@ -27,9 +22,7 @@ include_rtems_HEADERS = include/rtems/bdbuf.h include/rtems/blkdev.h \
 libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c \
     src/ide_part_table.c
 
-libblock_g_a_SOURCES = $(libblock_a_SOURCES)
-
-all-local: $(PREINSTALL_FILES) libblock$(LIB_VARIANT).a
+all-local: $(PREINSTALL_FILES)
 endif
 
 PREINSTALL_DIRS =

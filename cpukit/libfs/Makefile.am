@@ -12,13 +12,8 @@ EXTRA_DIST = README
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS =
 
-EXTRA_LIBRARIES = libimfs.a
-CLEANFILES = libimfs.a
+noinst_LIBRARIES = libimfs.a
 libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libimfs_g.a
-CLEANFILES += libimfs_g.a
-libimfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 UNUSED_FILES = src/imfs/imfs_load_tar.c
 
@@ -42,22 +37,13 @@ libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/ioman.c src/imfs/miniimfs_init.c
 endif
 
-libimfs_g_a_SOURCES = $(libimfs_a_SOURCES)
-
 include_rtems_HEADERS += src/imfs/imfs.h
-
-IMFSLIB = libimfs$(LIB_VARIANT).a
 
 # dosfs
 
 if !UNIX
-EXTRA_LIBRARIES += libdosfs.a
-CLEANFILES += libdosfs.a
+noinst_LIBRARIES += libdosfs.a
 libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libdosfs_g.a
-CLEANFILES += libdosfs_g.a
-libdosfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 # libdosfs_FATFS_C_FILES
 libdosfs_a_SOURCES = src/dosfs/fat.c src/dosfs/fat.h \
@@ -73,16 +59,12 @@ libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/msdos_mknod.c src/dosfs/msdos_node_type.c \
     src/dosfs/msdos_conv.c src/dosfs/msdos.h src/dosfs/msdos_format.c
 
-libdosfs_g_a_SOURCES = $(libdosfs_a_SOURCES)
-
 include_rtems_HEADERS += src/dosfs/dosfs.h
-
-DOSFSLIB = libdosfs$(LIB_VARIANT).a
 endif
 
 EXTRA_DIST += $(UNUSED_FILES)
 
-all-local: $(PREINSTALL_FILES) $(IMFSLIB) $(DOSFSLIB)
+all-local: $(PREINSTALL_FILES)
 
 # ---
 
@@ -104,7 +86,7 @@ $(PROJECT_INCLUDE)/rtems/dosfs.h: src/dosfs/dosfs.h $(PROJECT_INCLUDE)/rtems/$(d
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dosfs.h
 endif
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

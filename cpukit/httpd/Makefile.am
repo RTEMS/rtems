@@ -4,7 +4,7 @@
 
 include $(top_srcdir)/automake/compile.am
 
-EXTRA_LIBRARIES =
+noinst_LIBRARIES =
 CLEANFILES =
 
 AM_CPPFLAGS += -DWEBS -DUEMF
@@ -17,20 +17,12 @@ include_HEADERS = rtems_webserver.h
 include_goahead_HEADERS = ej.h ejIntrn.h emfdb.h md5.h uemf.h um.h webs.h \
     wsIntrn.h
 
-EXTRA_LIBRARIES += libhttpd.a
-CLEANFILES += libhttpd.a
+project_lib_LIBRARIES = libhttpd.a
 libhttpd_a_SOURCES = asp.c balloc.c default.c ejlex.c ejparse.c emfdb.c \
     form.c h.c handler.c md5c.c mime.c misc.c webpage.c ringq.c rom.c \
     security.c sock.c socket.c sym.c uemf.c um.c url.c value.c wbase64.c \
     webrom.c webs.c websuemf.c webmain.c
 libhttpd_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libhttpd_g.a
-CLEANFILES += libhttpd_g.a
-libhttpd_g_a_SOURCES = $(libhttpd_a_SOURCES)
-libhttpd_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
-project_lib_DATA = libhttpd$(LIB_VARIANT).a
 endif
 endif
 
@@ -95,9 +87,9 @@ $(PROJECT_INCLUDE)/goahead/wsIntrn.h: wsIntrn.h $(PROJECT_INCLUDE)/goahead/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/wsIntrn.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/wsIntrn.h
 
-$(PROJECT_LIB)/libhttpd$(LIB_VARIANT).a: libhttpd$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libhttpd$(LIB_VARIANT).a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libhttpd$(LIB_VARIANT).a
+$(PROJECT_LIB)/libhttpd.a: libhttpd.a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libhttpd.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libhttpd.a
 endif
 endif
 

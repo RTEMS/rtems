@@ -146,19 +146,13 @@ endif
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-EXTRA_LIBRARIES = libscore.a
-CLEANFILES = libscore.a
+noinst_LIBRARIES = libscore.a
 libscore_a_SOURCES = $(C_FILES)
 libscore_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += libscore_g.a
-CLEANFILES += libscore_g.a
-libscore_g_a_SOURCES = $(libscore_a_SOURCES)
-libscore_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
 
-all-local: $(PREINSTALL_FILES) libscore$(LIB_VARIANT).a
+all-local: $(PREINSTALL_FILES)
 
 DISTCLEANFILES = include/rtems/score/cpuopts.h
 
@@ -484,7 +478,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadmp.inl
 endif
 endif
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/subdirs.am

@@ -150,17 +150,11 @@ C_FILES = src/adasupp.c $(CANCEL_C_FILES) $(CONDITION_VARIABLE_C_FILES) \
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-EXTRA_LIBRARIES = libposix.a
-CLEANFILES += libposix.a
+noinst_LIBRARIES = libposix.a
 libposix_a_SOURCES = $(C_FILES)
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += libposix_g.a
-CLEANFILES += libposix_g.a
-libposix_g_a_SOURCES = $(libposix_a_SOURCES)
-libposix_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
-all-local: $(PREINSTALL_FILES) libposix$(LIB_VARIANT).a
+all-local: $(PREINSTALL_FILES)
 endif
 
 # temporary so we can see how many things are left to implement

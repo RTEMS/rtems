@@ -8,13 +8,8 @@ include $(top_srcdir)/automake/compile.am
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-EXTRA_LIBRARIES = librtems.a
-CLEANFILES = librtems.a
+noinst_LIBRARIES = librtems.a
 librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += librtems_g.a
-CLEANFILES += librtems_g.a
-librtems_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 # include
 
@@ -128,9 +123,8 @@ if HAS_MP
 librtems_a_SOURCES += src/eventmp.c src/mp.c src/msgmp.c src/partmp.c \
     src/regionmp.c src/semmp.c src/signalmp.c src/taskmp.c
 endif
-librtems_g_a_SOURCES = $(librtems_a_SOURCES)
 
-all-local: $(PREINSTALL_FILES) librtems$(LIB_VARIANT).a
+all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
@@ -406,7 +400,7 @@ $(PROJECT_INCLUDE)/rtems/rtems/timer.inl: macros/rtems/rtems/timer.inl $(PROJECT
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timer.inl
 endif
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

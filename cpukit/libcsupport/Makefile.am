@@ -7,13 +7,8 @@ include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -I$(top_builddir)
 
-EXTRA_LIBRARIES = libcsupport.a
-CLEANFILES = libcsupport.a
+noinst_LIBRARIES = libcsupport.a
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libcsupport_g.a
-CLEANFILES += libcsupport_g.a
-libcsupport_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/chain.h include/console.h include/clockdrv.h \
@@ -63,7 +58,7 @@ include_rtems_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
     include/zilog/z8536.h
 
 ##  General stuff
-all-local: $(PREINSTALL_FILES) libcsupport$(LIB_VARIANT).a
+all-local: $(PREINSTALL_FILES)
 
 ERROR_C_FILES = src/error.c
 
@@ -120,8 +115,6 @@ libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) src/envlock.c \
     $(TERMIOS_C_FILES)
 endif
-
-libcsupport_g_a_SOURCES = $(libcsupport_a_SOURCES)
 
 EXTRA_DIST = src/TODO src/CASES src/README
 
@@ -315,7 +308,7 @@ $(PROJECT_INCLUDE)/rtems/zilog/z8536.h: include/zilog/z8536.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8536.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8536.h
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

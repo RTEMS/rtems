@@ -19,18 +19,12 @@ include_rpc_HEADERS = include/rpc/auth.h include/rpc/auth_des.h \
 
 man_MANS =
 
-EXTRA_LIBRARIES = libxdr.a
-CLEANFILES += libxdr.a
+noinst_LIBRARIES = libxdr.a
 libxdr_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libxdr_g.a
-CLEANFILES += libxdr_g.a
-libxdr_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 libxdr_a_SOURCES = src/xdr/xdr.c src/xdr/xdr_array.c src/xdr/xdr_float.c \
     src/xdr/xdr_mem.c src/xdr/xdr_rec.c src/xdr/xdr_reference.c \
     src/xdr/xdr_sizeof.c src/xdr/xdr_stdio.c
-libxdr_g_a_SOURCES = $(libxdr_a_SOURCES)
 endif
 
 libxdr_mans = src/xdr/xdr.3
@@ -39,15 +33,8 @@ EXTRA_DIST += $(libxdr_mans)
 if LIBRPC
 man_MANS += $(libxdr_mans)
 
-all-local: libxdr$(LIB_VARIANT).a
-
-EXTRA_LIBRARIES += librpc.a
-CLEANFILES += librpc.a
+noinst_LIBRARIES += librpc.a
 librpc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(librpc_CPPFLAGS)
-
-EXTRA_LIBRARIES += librpc_g.a
-CLEANFILES += librpc_g.a
-librpc_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(librpc_CPPFLAGS)
 
 librpc_a_SOURCES = src/rpc/auth_none.c src/rpc/auth_unix.c \
     src/rpc/authunix_prot.c src/rpc/bindresvport.c src/rpc/clnt_generic.c \
@@ -67,7 +54,6 @@ EXTRA_DIST += src/rpc/auth_des.c src/rpc/auth_time.c src/rpc/authdes_prot.c \
     src/rpc/clnt_unix.c src/rpc/crypt_client.c src/rpc/des_crypt.c \
     src/rpc/des_soft.c src/rpc/getpublickey.c src/rpc/key_call.c \
     src/rpc/key_prot_xdr.c src/rpc/svc_auth_des.c src/rpc/svc_unix.c
-librpc_g_a_SOURCES = $(librpc_a_SOURCES)
 
 librpc_CPPFLAGS = -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close \
     -D_RTEMS_RPC_INTERNAL_
@@ -81,8 +67,6 @@ EXTRA_DIST += $(librpc_mans)
 
 if LIBRPC
 man_MANS += $(librpc_mans)
-
-all-local: librpc$(LIB_VARIANT).a
 endif
 
 EXTRA_DIST += src/rpc/DISCLAIMER src/rpc/README

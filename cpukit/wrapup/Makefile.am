@@ -6,74 +6,69 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 ## Setup the variant build subdirectory
-ARCH_OPTIMIZE_V = o-optimize
-ARCH_DEBUG_V = o-debug
+ARCH = o-optimize
 
-ARCH__V = $(ARCH_OPTIMIZE_V)
-ARCH = $(ARCH_$(VARIANT_V)_V)
-
-project_lib_DATA = $(ARCH)/librtemscpu$(LIB_VARIANT).a
-CLEANFILES = o-optimize/librtemscpu.a
-CLEANFILES += o-debug/librtemscpu_g.a
+project_lib_DATA = librtemscpu.a
+CLEANFILES = librtemscpu.a
 
 TMP_LIBS =
 if LIBSCORECPU
-TMP_LIBS += ../score/cpu/@RTEMS_CPU@/libscorecpu$(LIB_VARIANT).a
+TMP_LIBS += ../score/cpu/@RTEMS_CPU@/libscorecpu.a
 endif
-TMP_LIBS += ../score/libscore$(LIB_VARIANT).a
-TMP_LIBS += ../sapi/libsapi$(LIB_VARIANT).a
-TMP_LIBS += ../rtems/librtems$(LIB_VARIANT).a
+TMP_LIBS += ../score/libscore.a
+TMP_LIBS += ../sapi/libsapi.a
+TMP_LIBS += ../rtems/librtems.a
 
 if HAS_POSIX
-TMP_LIBS += ../posix/libposix$(LIB_VARIANT).a
+TMP_LIBS += ../posix/libposix.a
 endif
 
 if HAS_ITRON
-TMP_LIBS += ../itron/libitron$(LIB_VARIANT).a
+TMP_LIBS += ../itron/libitron.a
 endif
 
-TMP_LIBS += ../libcsupport/libcsupport$(LIB_VARIANT).a
+TMP_LIBS += ../libcsupport/libcsupport.a
 if !UNIX
-TMP_LIBS += ../libblock/libblock$(LIB_VARIANT).a
-TMP_LIBS += ../libfs/libdosfs$(LIB_VARIANT).a
+TMP_LIBS += ../libblock/libblock.a
+TMP_LIBS += ../libfs/libdosfs.a
 endif
-TMP_LIBS += ../libfs/libimfs$(LIB_VARIANT).a
+TMP_LIBS += ../libfs/libimfs.a
 
-TMP_LIBS += ../libmisc/libmonitor$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/libuntar$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/libstackchk$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/libcpuuse$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/librtmonuse$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libmonitor.a
+TMP_LIBS += ../libmisc/libuntar.a
+TMP_LIBS += ../libmisc/libstackchk.a
+TMP_LIBS += ../libmisc/libcpuuse.a
+TMP_LIBS += ../libmisc/librtmonuse.a
 
 ## XXX temporarily removed because it causes a
 ## XXX number of BSPs to not link "main(){}" used by autoconf
 # if LIBSERDBG
-# TMP_LIBS += ../libmisc/libserdbg$(LIB_VARIANT).a
+# TMP_LIBS += ../libmisc/libserdbg.a
 # endif
 
 if LIBSHELL
-TMP_LIBS += ../libmisc/libshell$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libshell.a
 endif
 
-TMP_LIBS += ../libmisc/libdumpbuf$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/libdevnull$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/libdummy$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/libmw-fb$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/libcapture$(LIB_VARIANT).a
-TMP_LIBS += ../libmisc/libfsmount$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libdumpbuf.a
+TMP_LIBS += ../libmisc/libdevnull.a
+TMP_LIBS += ../libmisc/libdummy.a
+TMP_LIBS += ../libmisc/libmw-fb.a
+TMP_LIBS += ../libmisc/libcapture.a
+TMP_LIBS += ../libmisc/libfsmount.a
 
 if HAS_NETWORKING
-TMP_LIBS += ../libnetworking/libnetworking$(LIB_VARIANT).a
-TMP_LIBS += ../libnetworking/libc$(LIB_VARIANT).a
-TMP_LIBS += ../libnetworking/lib$(LIB_VARIANT).a
+TMP_LIBS += ../libnetworking/libnetworking.a
+TMP_LIBS += ../libnetworking/libc.a
+TMP_LIBS += ../libnetworking/lib.a
 endif
 
 if LIBRPC
-TMP_LIBS += ../librpc/librpc$(LIB_VARIANT).a
-TMP_LIBS += ../librpc/libxdr$(LIB_VARIANT).a
+TMP_LIBS += ../librpc/librpc.a
+TMP_LIBS += ../librpc/libxdr.a
 endif
 
-$(ARCH)/librtemscpu$(LIB_VARIANT).a: $(TMP_LIBS)
+librtemscpu.a: $(TMP_LIBS)
 	rm -f $@
 	$(mkdir_p) $(ARCH)
 	rm -rf $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
@@ -113,9 +108,9 @@ $(PROJECT_LIB)/$(dirstamp):
 	@: > $(PROJECT_LIB)/$(dirstamp)
 TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
-$(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a: $(ARCH)/librtemscpu$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a
-TMPINSTALL_FILES += $(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a
+$(PROJECT_LIB)/librtemscpu.a: librtemscpu.a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemscpu.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/librtemscpu.a
 
 CLEANFILES += $(TMPINSTALL_FILES)
 

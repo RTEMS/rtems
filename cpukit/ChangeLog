@@ -1,3 +1,12 @@
+2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* automake/compile.am, httpd/Makefile.am, itron/Makefile.am,
+	libblock/Makefile.am, libcsupport/Makefile.am, libfs/Makefile.am,
+	libmisc/Makefile.am, libnetworking/Makefile.am, librpc/Makefile.am,
+	posix/Makefile.am, rtems/Makefile.am, sapi/Makefile.am,
+	score/Makefile.am, wrapup/Makefile.am:
+	Remove build-variant support.
+
 2004-12-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* httpd/Makefile.am: Remove -DOS="RTEMS".
