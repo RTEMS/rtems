@@ -1,3 +1,14 @@
+2002-10-25	Joel Sherrill <joel@OARcorp.com>
+
+	* autotools/autoconf-rtems.spec.in: New.
+	Remove Provides: autoconf (Conflicts with RH-8.0).
+	* autotools/autoconf-rtems.spec: Remove.
+	* autotools/automake-rtems.spec.in: 
+	Remove Provides: automake (Conflicts with RH-8.0).
+	* gcc3newlib/Makefile.am: Remove references to mkgcc3newlibspec.
+	* Makefile.am: Ditto.
+	* configure.ac: Add autotools/autoconf-rtems.spec.in.
+
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Update gcc 3.2 pathc to includ epatch for gcc PR8314.

@@ -26,10 +26,9 @@ Packager:     Ralf Corsepius <ralf@links2linux.de>
 
 Copyright:    GPL
 Group:        rtems
-Provides:     automake
 Autoreqprov:  on
 Version:      %{rpmvers}
-Release:      0
+Release:      1
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}

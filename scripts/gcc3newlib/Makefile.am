@@ -18,7 +18,7 @@ gccnewlib.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
 CLEANFILES = gccnewlib.spec.in
 
-MKGCCNEWLIBSPEC_DEPS = $(top_builddir)/mkgcc3newlibspec gccnewlib.spec.in \
+MKGCCNEWLIBSPEC_DEPS = mkspec gccnewlib.spec.in \
     $(top_builddir)/setup.cache
 
 RPM_SPECS_DATA =
@@ -27,7 +27,7 @@ arm-rtems-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems > $@
 RPM_SPECS_DATA += arm-rtems-$(GCC3NEWLIBVERS).spec
 
-c4x-rtems-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIB_DEPS)
+c4x-rtems-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache c4x-rtems > $@
 RPM_SPECS_DATA += c4x-rtems-$(GCC3NEWLIBVERS).spec
 

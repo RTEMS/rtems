@@ -5,8 +5,8 @@
 %define rpmvers 2.52
 %define srcvers	2.52
 
-%define _defaultbuildroot	/var/tmp/%{name}-%{srcvers}-root
-%define _prefix			/opt/rtems
+%define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
+%define _prefix			@prefix @
 %define _name			autoconf
 
 %if "%{_prefix}" != "/usr"
@@ -25,10 +25,9 @@ Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 Copyright:    GPL
 URL:          http://www.gnu.org/software/autoconf
 Group:        rtems
-Provides:     autoconf
 Autoreqprov:  on
 Version:      %{rpmvers}
-Release:      0
+Release:      1
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
