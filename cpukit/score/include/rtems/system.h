@@ -143,7 +143,7 @@ typedef void * proc_ptr;
 #define FALSE     (0)
 #endif
 
-#include <stdint.h>
+#include <rtems/stdint.h>
 #include <rtems/score/cpu.h>        /* processor specific information */
 
 #define stringify( _x ) # _x
