@@ -1,3 +1,8 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, console/console.c, include/bsp.h, include/leon.h,
+	startup/setvec.c, timer/timer.c: Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
