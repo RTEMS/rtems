@@ -249,7 +249,13 @@ struct z0break
   struct z0break *prev;
 
   /* Location, preserved data */
-  unsigned char *address;
+
+  /* the address pointer, really, really must be a pointer to
+  ** a 32 bit quantity (likely 64 on the R4k), so the full instruction is read &
+  ** written.  Making it a char * as on the i386 will cause 
+  ** the zbreaks to mess up the breakpoint instructions
+  */
+  unsigned *address;
   unsigned instr;
 };
 

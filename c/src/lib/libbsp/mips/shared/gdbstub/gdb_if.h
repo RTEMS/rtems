@@ -171,7 +171,9 @@ void mips_gdb_stub_install(int enableThreads) ;
 #define MEMOPT_READABLE   1
 #define MEMOPT_WRITEABLE  2
 
+#ifndef NUM_MEMSEGS
 #define NUM_MEMSEGS     10
+#endif
 
 int gdbstub_add_memsegment(unsigned,unsigned,int);
 

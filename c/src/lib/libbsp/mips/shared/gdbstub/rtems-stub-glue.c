@@ -1392,6 +1392,13 @@ int rtems_gdb_stub_get_offsets(
 )
 { 
 /*
+** These are the right symbols for the desired addresses,
+** but giving them causes gdb to have fits, so we leave 
+** the reported values as 0.  Doesn't hurt the stub's 
+** operation as far as I've observed.
+*/
+
+/*
   extern unsigned32 _ftext;
   extern unsigned32 _fdata;
   extern unsigned32 _bss_start;

@@ -1,8 +1,15 @@
-2001-03-08	Joel Sherrill <joel@OARcorp.com>
+2002-08-14	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* mips-stub.c: Re-debugged a breakpoint problem, zbreak target
+	address was a char * which caused the target instruction to not
+	be fully copied, so the zbreak logic corrupted the original 
+	instruction and didn't insert a valid break instruction.
+	
+2002-03-08	Joel Sherrill <joel@OARcorp.com>
 
 	* mips-stub.c: Removed warnings.
 
-2001-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
+2002-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* mips-stub.c: Debugged & tweaked the gdb command processing,
 	zbreak stuff, breakpoint and step code.  Implemented 'T' command
@@ -15,7 +22,7 @@
 	rtems_gdb_stub_get_offsets(): Implemented MIPS version.
 	* README: Updated.
 
-2001-03-01	Joel Sherrill <joel@OARcorp.com>
+2002-03-01	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Corrected previous entry. 
 
