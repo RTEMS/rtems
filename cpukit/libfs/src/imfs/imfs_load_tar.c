@@ -24,7 +24,7 @@
 #include <rtems/libio_.h>
 #include <rtems/chain.h>
 #include <rtems/imfs.h>
-
+#include <rtems/untar.h>
 
 /**************************************************************************
  * TAR file format:
@@ -56,22 +56,9 @@
  *       sum += 0xFF & header[i];
  *************************************************************************/
 
-#define LF_OLDNORMAL  '\0'     /* Normal disk file, Unix compatible */
-#define LF_NORMAL     '0'      /* Normal disk file                  */
-#define LF_LINK       '1'      /* Link to previously dumped file    */
-#define LF_SYMLINK    '2'      /* Symbolic link                     */
-#define LF_CHR        '3'      /* Character special file            */
-#define LF_BLK        '4'      /* Block special file                */
-#define LF_DIR        '5'      /* Directory                         */
-#define LF_FIFO       '6'      /* FIFO special file                 */
-#define LF_CONFIG     '7'      /* Contiguous file                   */
-
 #define MAX_NAME_FIELD_SIZE      99
 
 #define MIN(a,b)   ((a)>(b)?(b):(a))
-
-static unsigned long octal2ulong(char *octascii, int len);
-static int compute_tar_header_checksum(char *bufr);
 
 /**************************************************************************
  * rtems_tarfs_load
@@ -86,12 +73,12 @@ static int compute_tar_header_checksum(char *bufr);
  *************************************************************************/
 int
 rtems_tarfs_load(char *mountpoint,
-                 unsigned char *tar_image,
-                 unsigned long tar_size)
+                 char *tar_image,
+                 size_t tar_size)
 {
    rtems_filesystem_location_info_t root_loc;
    rtems_filesystem_location_info_t loc;
-   char            *hdr_ptr;
+   const char     *hdr_ptr;
    char            filename[100];
    char            full_filename[256];
    int             hdr_chksum;
@@ -132,11 +119,11 @@ rtems_tarfs_load(char *mountpoint,
       filename[MAX_NAME_FIELD_SIZE] = '\0';
 
       linkflag   = hdr_ptr[156];
-      file_mode  = octal2ulong(&hdr_ptr[100], 8);
-      file_size  = octal2ulong(&hdr_ptr[124], 12);
-      hdr_chksum = (int)octal2ulong(&hdr_ptr[148], 8);
+      file_mode  = _rtems_octal2ulong(&hdr_ptr[100], 8);
+      file_size  = _rtems_octal2ulong(&hdr_ptr[124], 12);
+      hdr_chksum = _rtems_octal2ulong(&hdr_ptr[148], 8);
 
-      if (compute_tar_header_checksum(hdr_ptr) != hdr_chksum)
+      if (_rtems_tar_header_checksum(hdr_ptr) != hdr_chksum)
          break;
 
       /******************************************************************
@@ -145,7 +132,7 @@ rtems_tarfs_load(char *mountpoint,
        *   will take care of the rest.
        * - For files, create a file node with special tarfs properties.
        *****************************************************************/
-      if (linkflag == LF_DIR)
+      if (linkflag == DIRTYPE)
       {
          strcpy(full_filename, mountpoint);
          if (full_filename[strlen(full_filename)-1] != '/')
@@ -156,7 +143,7 @@ rtems_tarfs_load(char *mountpoint,
       /******************************************************************
        * Create a LINEAR_FILE node if no user write permission.
        *****************************************************************/
-      else if ((linkflag == LF_NORMAL) &&
+      else if ((linkflag == REGTYPE) &&
                ((file_mode & 0200) == 0000))
       {
          const char  *name;
@@ -178,7 +165,7 @@ rtems_tarfs_load(char *mountpoint,
       /******************************************************************
        * Create a regular MEMORY_FILE if write permission exists.
        *****************************************************************/
-      else if ((linkflag == LF_NORMAL) &&
+      else if ((linkflag == REGTYPE) &&
                ((file_mode & 0200) == 0200))
       {
          int fd;
@@ -210,51 +197,3 @@ rtems_tarfs_load(char *mountpoint,
    return(status);
 }
 
-/**************************************************************************
- * This converts octal ASCII number representations into an
- * unsigned long.  Only support 32-bit numbers for now.
- *************************************************************************/
-static unsigned long
-octal2ulong(char *octascii, int len)
-{
-   int           i;
-   unsigned long num;
-   unsigned long mult;
-
-   num = 0;
-   mult = 1;
-   for (i=len-1; i>=0; i--)
-   {
-      if (octascii[i] < '0')
-         continue;
-      if (octascii[i] > '9')
-         continue;
-
-      num  += mult*((unsigned long)(octascii[i] - '0'));
-      mult *= 8;
-   }
-   return(num);
-}
-
-
-/************************************************************************
- * Compute the TAR checksum and check with the value in
- * the archive.  The checksum is computed over the entire
- * header, but the checksum field is substituted with blanks.
- ************************************************************************/
-static int
-compute_tar_header_checksum(char *bufr)
-{
-   int  i, sum;
-
-
-   sum = 0;
-   for (i=0; i<512; i++)
-   {
-      if ((i >= 148) && (i < 156))
-         sum += 0xff & ' ';
-      else
-         sum += 0xff & bufr[i];
-   }
-   return(sum);
-}

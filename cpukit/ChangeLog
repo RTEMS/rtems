@@ -1,5 +1,11 @@
 2005-02-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_load_tar.c,
+	libmisc/untar/untar.c, libmisc/untar/untar.h:
+	Various generalizations and fixes.
+
+2005-02-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Add include/rtems/tar.h.
 	Merge-in header rules from libmisc/Makefile.am
 	* libmisc/Makefile.am: Remove header rules.

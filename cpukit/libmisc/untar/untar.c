@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include "untar.h"
+#include <rtems/untar.h>
 
 
 /**************************************************************************
@@ -56,16 +56,6 @@
  *       sum += 0xFF & header[i];
  *************************************************************************/
 
-#define LF_OLDNORMAL  '\0'     /* Normal disk file, Unix compatible */
-#define LF_NORMAL     '0'      /* Normal disk file                  */
-#define LF_LINK       '1'      /* Link to previously dumped file    */
-#define LF_SYMLINK    '2'      /* Symbolic link                     */
-#define LF_CHR        '3'      /* Character special file            */
-#define LF_BLK        '4'      /* Block special file                */
-#define LF_DIR        '5'      /* Directory                         */
-#define LF_FIFO       '6'      /* FIFO special file                 */
-#define LF_CONFIG     '7'      /* Contiguous file                   */
-
 #define MAX_NAME_FIELD_SIZE      99
 
 #define MIN(a,b)   ((a)>(b)?(b):(a))
@@ -75,10 +65,10 @@
  * This converts octal ASCII number representations into an
  * unsigned long.  Only support 32-bit numbers for now.
  *************************************************************************/
-static unsigned long
-octal2ulong(char *octascii, int len)
+unsigned long
+_rtems_octal2ulong(const char *octascii, size_t len)
 {
-   int           i;
+   size_t        i;
    unsigned long num;
    unsigned long mult;
 
@@ -162,26 +152,16 @@ Untar_FromMemory(char *tar_buf, size_t size)
       fname[MAX_NAME_FIELD_SIZE] = '\0';
 
       linkflag   = bufr[156];
-      file_size  = octal2ulong(&bufr[124], 12);
+      file_size  = _rtems_octal2ulong(&bufr[124], 12);
 
       /******************************************************************
        * Compute the TAR checksum and check with the value in
        * the archive.  The checksum is computed over the entire
        * header, but the checksum field is substituted with blanks.
        ******************************************************************/
-      hdr_chksum = octal2ulong(&bufr[148], 8);
-      sum = 0;
-      for (i=0; i<512; i++)
-      {
-         if ((i >= 148) && (i < 156))
-         {
-            sum += 0xff & ' ';
-         }
-         else
-         {
-            sum += 0xff & bufr[i];
-         }
-      }
+      hdr_chksum = _rtems_octal2ulong(&bufr[148], 8);
+      sum = _rtems_tar_header_checksum(bufr);
+
       if (sum != hdr_chksum)
       {
          retval = UNTAR_INVALID_CHECKSUM;
@@ -193,13 +173,13 @@ Untar_FromMemory(char *tar_buf, size_t size)
        * We've decoded the header, now figure out what it contains and
        * do something with it.
        *****************************************************************/
-      if (linkflag == LF_SYMLINK)
+      if (linkflag == SYMTYPE)
       {
          strncpy(linkname, &bufr[157], MAX_NAME_FIELD_SIZE);
          linkname[MAX_NAME_FIELD_SIZE] = '\0';
          symlink(linkname, fname);
       }
-      else if (linkflag == LF_NORMAL)
+      else if (linkflag == REGTYPE)
       {
          nblocks = (((file_size) + 511) & ~511) / 512;
          if ((fp = fopen(fname, "w")) == NULL)
@@ -231,7 +211,7 @@ Untar_FromMemory(char *tar_buf, size_t size)
             fclose(fp);
          }
       }
-      else if (linkflag == LF_DIR)
+      else if (linkflag == DIRTYPE)
       {
          mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO);
       }
@@ -309,26 +289,16 @@ Untar_FromFile(char *tar_name)
       fname[MAX_NAME_FIELD_SIZE] = '\0';
 
       linkflag   = bufr[156];
-      size       = octal2ulong(&bufr[124], 12);
+      size       = _rtems_octal2ulong(&bufr[124], 12);
 
       /******************************************************************
        * Compute the TAR checksum and check with the value in
        * the archive.  The checksum is computed over the entire
        * header, but the checksum field is substituted with blanks.
        ******************************************************************/
-      hdr_chksum = (int)octal2ulong(&bufr[148], 8);
-      sum = 0;
-      for (i=0; i<512; i++)
-      {
-         if ((i >= 148) && (i < 156))
-         {
-            sum += 0xff & ' ';
-         }
-         else
-         {
-            sum += 0xff & bufr[i];
-         }
-      }
+      hdr_chksum = _rtems_octal2ulong(&bufr[148], 8);
+      sum = _rtems_tar_header_checksum(bufr);
+
       if (sum != hdr_chksum)
       {
          retval = UNTAR_INVALID_CHECKSUM;
@@ -339,13 +309,13 @@ Untar_FromFile(char *tar_name)
        * We've decoded the header, now figure out what it contains and
        * do something with it.
        *****************************************************************/
-      if (linkflag == LF_SYMLINK)
+      if (linkflag == SYMTYPE)
       {
          strncpy(linkname, &bufr[157], MAX_NAME_FIELD_SIZE);
          linkname[MAX_NAME_FIELD_SIZE] = '\0';
          symlink(linkname,fname);
       }
-      else if (linkflag == LF_NORMAL)
+      else if (linkflag == REGTYPE)
       {
          int out_fd;
 
@@ -373,7 +343,7 @@ Untar_FromFile(char *tar_name)
             close(out_fd);
          }
       }
-      else if (linkflag == LF_DIR)
+      else if (linkflag == DIRTYPE)
       {
          mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO);
       }
@@ -382,4 +352,25 @@ Untar_FromFile(char *tar_name)
    close(fd);
 
    return(retval);
+}
+
+/************************************************************************
+ * Compute the TAR checksum and check with the value in
+ * the archive.  The checksum is computed over the entire
+ * header, but the checksum field is substituted with blanks.
+ ************************************************************************/
+int
+_rtems_tar_header_checksum(const char *bufr)
+{
+   int  i, sum;
+
+   sum = 0;
+   for (i=0; i<512; i++)
+   {
+      if ((i >= 148) && (i < 156))
+         sum += 0xff & ' ';
+      else
+         sum += 0xff & bufr[i];
+   }
+   return(sum);
 }

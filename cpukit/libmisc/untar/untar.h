@@ -12,6 +12,7 @@
 #define __UNTAR_H__
 
 #include <stddef.h>
+#include <rtems/tar.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,6 +26,21 @@ extern "C" {
 
 int Untar_FromMemory(char *tar_buf, size_t size);
 int Untar_FromFile(char *tar_name);
+
+/**************************************************************************
+ * This converts octal ASCII number representations into an
+ * unsigned long.  Only support 32-bit numbers for now.
+ *************************************************************************/
+extern unsigned long
+_rtems_octal2ulong(const char *octascii, size_t len);
+
+/************************************************************************
+ * Compute the TAR checksum and check with the value in
+ * the archive.  The checksum is computed over the entire
+ * header, but the checksum field is substituted with blanks.
+ ************************************************************************/
+extern int
+_rtems_tar_header_checksum(const char *bufr);
 
 #ifdef __cplusplus
 }
