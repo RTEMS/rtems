@@ -124,8 +124,10 @@ boolean _Thread_Initialize(
     );
 
     if ( !extensions_area ) {
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
       if ( fp_area )
         (void) _Workspace_Free( fp_area );
+#endif
 
       _Thread_Stack_Free( the_thread );
 
@@ -181,8 +183,10 @@ boolean _Thread_Initialize(
     if ( extensions_area )
       (void) _Workspace_Free( extensions_area );
 
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
     if ( fp_area )
       (void) _Workspace_Free( fp_area );
+#endif
 
     _Thread_Stack_Free( the_thread );
 

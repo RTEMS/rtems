@@ -1,4 +1,9 @@
 
+2001-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* src/threadinitialize.c: Fix my bad hack of Ralf's fp_area
+	warning removal patch. :(
+
 2001-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/threadinitialize.c: Removed warning.
