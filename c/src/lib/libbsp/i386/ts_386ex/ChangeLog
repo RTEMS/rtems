@@ -1,3 +1,8 @@
+2003-08-13	Joel Sherrill <joel@OARcorp.com>
+
+	PR 451/bsps
+	* startup/Makefile.am: Include shared i386 TTY driver in these BSPs.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/Makefile.am: Remove USE_INIT_FINI.

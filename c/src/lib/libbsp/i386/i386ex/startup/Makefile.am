@@ -9,7 +9,7 @@ PGM = $(ARCH)/startup.rel
 
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c main.c sbrk.c \
     idt.c irq.c irq_init.c i386-stub.c i386-stub-glue.c uart.c \
-    gnatinstallhandler.c
+    gnatinstallhandler.c gdb_glue.c tty_drv.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 S_FILES = irq_asm.S
