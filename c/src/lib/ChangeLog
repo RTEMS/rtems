@@ -1,4 +1,20 @@
 
+2000-11-20	 Dmitry Kargapolov <dk@gentex.ru>
+
+	* libc/mount.c: Make sure there is space allocated for a device name
+	in the mount table entry.
+
+2000-11-17	Jennifer Averret <jennifer@OARcorp.com>
+
+	* libc/mount.c (search_mt_for_mount_point): Deleted routine.
+	* libc/mount.c (Is_node_fs_root): Replacement for above that
+	accounts for the imaginary root node being returned by the
+	filesystem evaluation routine.
+	* libc/unmount.c (unmount): Account for imaginary root node
+	being returned and improved variable names to clarify code.
+	* libc/unmount.c (file_systems_below_this_mountpoint):  Body of
+	routine replaced to account for imaginary root node being returned.
+
 2000-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libc/libio.c: Special treatment of O_NDELAY for Cygwin.
