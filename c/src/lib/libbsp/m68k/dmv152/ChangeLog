@@ -1,3 +1,10 @@
+2003-09-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in include/Makefile.am.
+	Reflect changes to bsp.am.
+	* include/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
 2003-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp_specs: Remove *lib:.

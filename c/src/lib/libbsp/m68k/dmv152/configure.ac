@@ -28,7 +28,6 @@ RTEMS_BSPOPTS_HELP([USE_CHANNEL_B],
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 spurious/Makefile
 start/Makefile
 startup/Makefile
