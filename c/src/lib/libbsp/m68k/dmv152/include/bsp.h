@@ -26,8 +26,8 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/iosupp.h>
 #include <rtems/vmeintr.h>
-#include <zilog/z8530.h>
-#include <zilog/z8536.h>
+#include <rtems/zilog/z8530.h>
+#include <rtems/zilog/z8536.h>
 
 /*
  *  confdefs.h overrides for this BSP:
