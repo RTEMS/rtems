@@ -39,14 +39,14 @@ typedef unsigned long LERegister; /* emphasize contents are little endian */
 
 /* NOTE: DMA packet descriptors MUST be 32 byte aligned */
 typedef struct VmeUniverseDMAPacketRec_ {
-	LERegister	dctl __attribute__((aligned(32)));
-	LERegister	dtbc;
-	LERegister	dla;
-	LERegister	dummy1;
-	LERegister	dva;
-	LERegister	dummy2;
-	LERegister	dccp;
-	LERegister	dummy3;
+	LERegister	dctl	__attribute__((aligned(32)));
+	LERegister	dtbc	__attribute__((packed));
+	LERegister	dla		__attribute__((packed));
+	LERegister	dummy1	__attribute__((packed));
+	LERegister	dva		__attribute__((packed));
+	LERegister	dummy2	__attribute__((packed));
+	LERegister	dcpp	__attribute__((packed));
+	LERegister	dummy3	__attribute__((packed));
 } VmeUniverseDMAPacketRec, *VmeUniverseDMAPacket;
 
 /* PCI CSR register */
@@ -149,8 +149,8 @@ typedef struct VmeUniverseDMAPacketRec_ {
  */
 #define		UNIV_REGOFF_DCPP	0x218
 /* these bits are only used in linked lists */
-# define	UNIV_DCCP_IMG_NULL	(1<<0)	/* last packet in list */
-# define	UNIV_DCCP_IMG_PROCESSED (1<<1)	/* packet processed */
+# define	UNIV_DCPP_IMG_NULL	(1<<0)	/* last packet in list */
+# define	UNIV_DCPP_IMG_PROCESSED (1<<1)	/* packet processed */
 
 /* DMA Xfer General Control/Status register */
 #define		UNIV_REGOFF_DGCS	0x220

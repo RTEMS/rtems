@@ -1,3 +1,10 @@
+2003-04-10	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 380/bsps
+	* vmeUniverse/vmeUniverse.c, vmeUniverse/vmeUniverse.h:
+	make printk format strings compliant with libcpu/printk.
+	minor fixes and lazy init bugfix.
+
 2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* vmeUniverse/vmeUniverse.c: Remove CVS-Log (skrews up on

@@ -179,7 +179,7 @@ return READ_LE0((volatile LERegister *)(((unsigned long)adrs)+off));
 
 #define UNIV_REV(base) (READ_LE(base,2*sizeof(LERegister)) & 0xff)
 	
-#ifdef __rtems__
+#if defined(__rtems__) && 0
 static int
 uprintk(char *fmt, va_list ap)
 {
@@ -200,11 +200,10 @@ char	buf[200];
 
 
 /* private printing wrapper */
-static int
+static void
 uprintf(FILE *f, char *fmt, ...)
 {
 va_list	ap;
-int	rval;
 	va_start(ap, fmt);
 #ifdef __rtems__
 	if (!f || !_impure_ptr->__sdidinit) {
@@ -213,14 +212,13 @@ int	rval;
 		 * There is no vprintk, hence we must assemble
 		 * to a buffer.
 		 */
-		rval=uprintk(fmt,ap);
+		vprintk(fmt,ap);
 	} else 
 #endif
 	{
-		rval=vfprintf(f,fmt,ap);
+		vfprintf(f,fmt,ap);
 	}
 	va_end(ap);
-	return rval;
 }
 
 int
@@ -336,7 +334,7 @@ cfgUniversePort(
 	unsigned long	length)
 {
 #define base vmeUniverse0BaseAddr
-volatile LERegister *preg=base;
+volatile LERegister *preg;
 unsigned long	p=port;
 unsigned long	mode=0;
 
@@ -371,6 +369,8 @@ unsigned long	mode=0;
 	if (!base && vmeUniverseInit()) {
 		return -1;
 	}
+
+	preg=base;
 
 	/* find out if we have a rev. II chip */
 	if ( UNIV_REV(base) < 2 ) {
@@ -502,10 +502,10 @@ showUniversePort(
 	offst+=start; /* calc start on the other bus */
 
 	if (ismaster) {
-		uprintf(f,"%i:    0x%08lx 0x%08lx 0x%08lx ",
+		uprintf(f,"%d:    0x%08lx 0x%08lx 0x%08lx ",
 			portno,offst,bound-start,start);
 	} else {
-		uprintf(f,"%i:    0x%08lx 0x%08lx 0x%08lx ",
+		uprintf(f,"%d:    0x%08lx 0x%08lx 0x%08lx ",
 			portno,start,bound-start,offst);
 	}
 
@@ -754,7 +754,7 @@ int rval;
 	if ((rval=vmeUniverseFindPciBase(0,&vmeUniverse0BaseAddr))) {
 		uprintf(stderr,"unable to find the universe in pci config space\n");
 	} else {
-		uprintf(stderr,"Universe II PCI-VME bridge detected at 0x%08x, IRQ %i\n",
+		uprintf(stderr,"Universe II PCI-VME bridge detected at 0x%08x, IRQ %d\n",
 				(unsigned int)vmeUniverse0BaseAddr, vmeUniverse0PciIrqLine);
 	}
 	return rval;
@@ -1073,7 +1073,7 @@ rtems_irq_connect_data aarrggh;
 	if (specialOut >=0 && specialIrqPicLine < 0) return -3;
 	/* give them a chance to override buggy PCI info */
 	if (vmeIrqPicLine >= 0) {
-		uprintf(stderr,"Overriding main IRQ line PCI info with %i\n",
+		uprintf(stderr,"Overriding main IRQ line PCI info with %d\n",
 				vmeIrqPicLine);
 		vmeUniverse0PciIrqLine=vmeIrqPicLine;
 	}
