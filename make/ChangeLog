@@ -1,4 +1,10 @@
 
+2000-09-13	Emmanuel Raguet <raguet@crf.canon.fr>
+
+	* vegaplus BSP submitted by Emmanuel Raguet <raguet@crf.canon.fr> and
+	Eric Valette <valette@crf.canon.fr>.
+	* custom/vegaplus.cfg: New file.
+
 2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/erc32.cfg: Add comment on -mno-v8, -mcypress.
