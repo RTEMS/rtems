@@ -1,14 +1,22 @@
+2001-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Corrected paths on past few commits.
+ 
 2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shared/include/cpu.h: Don't include cpuIdent.h.
 
 2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* exceptions/raw_exception.c: Include <libcpu/cpuIdent.h>.
+	* mpc8260/exceptions/raw_exception.c: Include <libcpu/cpuIdent.h>.
 
 2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* exceptions/raw_exception.c: Include <libcpu/cpuIdent.h>.
+	* mpc8xx/exceptions/raw_exception.c: Include <libcpu/cpuIdent.h>.
+
+2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc6xx/exceptions/raw_exception.c: Include <libcpu/cpuIdent.h>.
 
 2002-04-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
