@@ -9,17 +9,17 @@
 @chapter Thread Cancellation
 @section Thread Cancellation Overview
 @subsection Cancelability States
-@subsubsection Cancellation Points
-@subsubsection Thread Cancellation Cleanup Handlers
-@subsubsection Async-Cancel Safety
+@subsection Cancellation Points
+@subsection Thread Cancellation Cleanup Handlers
+@subsection Async-Cancel Safety
 @section Thread Cancellation Functions
-@subsubsection Canceling Execution of a Thread
-@subsubsection Setting Cancelability State
-@subsubsection Establishing Cancellation Handlers
+@subsection Canceling Execution of a Thread
+@subsection Setting Cancelability State
+@subsection Establishing Cancellation Handlers
 @section Language-Independent Cancellation Functionality
-@subsubsection Requesting Cancellation
-@subsubsection Associating Cleanup Code With Scopes
-@subsubsection Controlling Cancellation Within Scopes
-@subsubsection Defined Cancellation Sequence
-@subsubsection List of Cancellation Points
+@subsection Requesting Cancellation
+@subsection Associating Cleanup Code With Scopes
+@subsection Controlling Cancellation Within Scopes
+@subsection Defined Cancellation Sequence
+@subsection List of Cancellation Points
 

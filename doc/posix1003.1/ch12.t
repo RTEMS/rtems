@@ -8,14 +8,14 @@
 
 @chapter Memory Management
 @section Memory Locking Functions
-@subsubsection Lock/Unlock the Address Space of a Process
-@subsubsection Lock/Unlock a Rand of Process Address Space
+@subsection Lock/Unlock the Address Space of a Process
+@subsection Lock/Unlock a Rand of Process Address Space
 @section Memory Mapping Functions
-@subsubsection Map Process Addresses to a Memory Object
-@subsubsection Unmap Previously Mapped Addresses
-@subsubsection Change Memory Protection
-@subsubsection Memory Object Synchronization
+@subsection Map Process Addresses to a Memory Object
+@subsection Unmap Previously Mapped Addresses
+@subsection Change Memory Protection
+@subsection Memory Object Synchronization
 @section Shared Memory Functions
-@subsubsection Open a Shared Memory Object
-@subsubsection Remove a Shared Memory Object
+@subsection Open a Shared Memory Object
+@subsection Remove a Shared Memory Object
 

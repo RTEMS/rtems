@@ -10,7 +10,7 @@
 @section Process Identification
 @subsection Get Process and Parent Process IDs
 @section User Identification
-@subsection Get Real User Effective User, Real Group, and Effective Group IDs
+@subsection Get Real User Effective User Real Group and Effective Group IDs
 @subsection Set User and Group IDs
 @subsection Get Supplementary Group IDs
 @subsection Get User Name

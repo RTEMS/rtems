@@ -8,14 +8,14 @@
 
 @chapter Clocks and Timers
 @section Data Definitions for Clocks and Timers
-@subsubsection Time Value Specification Structures
-@subsubsection Timer Event Notification Control Block
-@subsubsection Type Definitions
-@subsubsection Manifest Constants
+@subsection Time Value Specification Structures
+@subsection Timer Event Notification Control Block
+@subsection Type Definitions
+@subsection Manifest Constants
 @section Clock and Timer Functions
-@subsubsection Clocks
-@subsubsection Create a Per-Process Timer
-@subsubsection Delete a Per-Process Timer
-@subsubsection Per-Process Timers
-@subsubsection High Resolution Sleep
+@subsection Clocks
+@subsection Create a Per-Process Timer
+@subsection Delete a Per-Process Timer
+@subsection Per-Process Timers
+@subsection High Resolution Sleep
 

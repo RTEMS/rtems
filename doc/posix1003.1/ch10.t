@@ -8,7 +8,7 @@
 
 @chapter Data Interchange Format
 @section Archive/Interchange File Format
-@subsubsection Extended tar Format
-@subsubsection Extended cpio Format
-@subsubsection Multiple Volumes
+@subsection Extended tar Format
+@subsection Extended cpio Format
+@subsection Multiple Volumes
 

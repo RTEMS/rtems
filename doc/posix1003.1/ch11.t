@@ -9,21 +9,21 @@
 @chapter Synchronization
 @section Semaphore Characteristics
 @section Semaphore Functions
-@subsubsection Initialize an Unnamed Semaphore
-@subsubsection Destroy an Unnamed Semaphore
-@subsubsection Initialize/Open a Named Semaphore
-@subsubsection Close a Named Semaphore
-@subsubsection Remove a Named Semaphore
-@subsubsection Lock a Semaphore
-@subsubsection Unlock a Semaphore
-@subsubsection Get the Value of a Semaphore
+@subsection Initialize an Unnamed Semaphore
+@subsection Destroy an Unnamed Semaphore
+@subsection Initialize/Open a Named Semaphore
+@subsection Close a Named Semaphore
+@subsection Remove a Named Semaphore
+@subsection Lock a Semaphore
+@subsection Unlock a Semaphore
+@subsection Get the Value of a Semaphore
 @section Mutexes
-@subsubsection Mutex Initialization Attributes
-@subsubsection Initializing and Destroying a Mutex
-@subsubsection Locking and Unlocking a Mutex
+@subsection Mutex Initialization Attributes
+@subsection Initializing and Destroying a Mutex
+@subsection Locking and Unlocking a Mutex
 @section Condition Variables
-@subsubsection Condition Variable Initialization Attributes
-@subsubsection Initialization and Destroying Condition Variables
-@subsubsection Broadcasting and Signaling a Condition
-@subsubsection Waiting on a Condition
+@subsection Condition Variable Initialization Attributes
+@subsection Initialization and Destroying Condition Variables
+@subsection Broadcasting and Signaling a Condition
+@subsection Waiting on a Condition
 

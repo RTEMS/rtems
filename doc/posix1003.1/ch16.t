@@ -9,12 +9,12 @@
 @chapter Thread Management
 @section Threads
 @section Thread Functions
-@subsubsection Thread Creation Attributes
-@subsubsection Thread Creation
-@subsubsection Wait for Thread Termination
-@subsubsection Detaching a Thread
-@subsubsection Thread Termination
-@subsubsection Get Thread ID
-@subsubsection Compare Thread IDs
-@subsubsection Dynamic Package Initialization
+@subsection Thread Creation Attributes
+@subsection Thread Creation
+@subsection Wait for Thread Termination
+@subsection Detaching a Thread
+@subsection Thread Termination
+@subsection Get Thread ID
+@subsection Compare Thread IDs
+@subsection Dynamic Package Initialization
 

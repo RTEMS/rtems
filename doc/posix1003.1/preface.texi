@@ -6,6 +6,10 @@
 @c  $Id$
 @c
 
+@ifinfo
+@node Preface, General, Top, Top
+@end ifinfo
+
 @unnumbered Preface
 
 This lists each section number in POSIX 1003.1 and which functions

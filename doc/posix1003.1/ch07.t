@@ -10,7 +10,7 @@
 @section General Terminal Interface
 @subsection Interface Characteristics
 @subsubsection Opening a Terminal Device File
-@subsubsection Process Groups
+@subsubsection Process Groups (TTY)
 @subsubsection The Controlling Terminal
 @subsubsection Terminal Access Control
 @subsubsection Input Processing and Reading Data
@@ -27,8 +27,8 @@
 @subsubsection Control Modes
 @subsubsection Local Modes
 @subsubsection Special Control Characters
-@subsubsection Baud Rate Values
-@subsubsection @subsection Baud Rate Functions
+@subsection Baud Rate Values
+@subsubsection Baud Rate Functions
 @subsubsection Synopsis
 @subsubsection Description
 @subsubsection Returns

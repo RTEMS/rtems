@@ -15,7 +15,7 @@ all:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES=ch01.texi ch02.texi ch03.texi ch04.texi ch05.texi \
-                ch06.texi ch07.texi ch08.texi ch08.texi ch10.texi \
+                ch06.texi ch07.texi ch08.texi ch09.texi ch10.texi \
                 ch11.texi ch12.texi ch13.texi ch14.texi ch15.texi \
                 ch16.texi ch17.texi ch18.texi 
 
@@ -30,7 +30,7 @@ info: $(PROJECT)
 	#cp $(wildcard $(PROJECT) $(PROJECT)-*) $(INFO_INSTALL)
 	cp $(PROJECT) $(INFO_INSTALL)
 
-$(P{ROJECT): $(FILES)
+$(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
 vinfo: info
@@ -52,95 +52,95 @@ view: ps
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-ch01.t.texi: ch01.t
-	$(BMENU) -p "Preface" \
+ch01.texi: ch01.t
+	$(BMENU) -c -p "Preface" \
 	    -u "Top" \
-	    -n "Terminology and General Requirements" $*
+	    -n "Terminology and General Requirements" ${*}.t
 
-ch02.t.texi: ch02.t
-	$(BMENU) -p "Conformance" \
+ch02.texi: ch02.t
+	$(BMENU) -c -p "Conformance" \
 	    -u "Top" \
-	    -n "Process Primitives" $*
+	    -n "Process Primitives" ${*}.t
 
-ch03.t.texi: ch03.t
-	$(BMENU) -p "Symbolic Constants" \
+ch03.texi: ch03.t
+	$(BMENU) -c -p "Symbolic Constants" \
 	    -u "Top" \
-	    -n "Process Environment" $*
+	    -n "Process Environment" ${*}.t
 
-ch04.t.texi: ch04.t
-	$(BMENU) -p "Delay Process Execution" \
+ch04.texi: ch04.t
+	$(BMENU) -c -p "Delay Process Execution" \
 	    -u "Top" \
-	    -n "Files and Directories" $*
+	    -n "Files and Directories" ${*}.t
 
-ch05.t.texi: ch05.t
-	$(BMENU) -p "Get Configurable System Variables" \
+ch05.texi: ch05.t
+	$(BMENU) -c -p "Get Configurable System Variables" \
 	    -u "Top" \
-	    -n "Input and Output Primitives" $*
+	    -n "Input and Output Primitives" ${*}.t
 
-ch06.t.texi: ch06.t
-	$(BMENU) -p "Get Configurable Pathname Variables" \
+ch06.texi: ch06.t
+	$(BMENU) -c -p "Get Configurable Pathname Variables" \
 	    -u "Top" \
-	    -n "Device- and Class-Specific Functions" $*
+	    -n "Device- and Class-Specific Functions" ${*}.t
 
-ch07.t.texi: ch07.t
-	$(BMENU) -p " Asynchronous File Synchronization" \
+ch07.texi: ch07.t
+	$(BMENU) -c -p " Asynchronous File Synchronization" \
 	    -u "Top" \
-	    -n "Language-Specific Services for the C Programming Language" $*
+	    -n "Language-Specific Services for the C Programming Language" ${*}.t
 
-ch08.t.texi: ch08.t
-	$(BMENU) -p "Set Foreground Process Group ID" \
+ch08.texi: ch08.t
+	$(BMENU) -c -p "Set Foreground Process Group ID" \
 	    -u "Top" \
-	    -n "System Databases" $*
+	    -n "System Databases" ${*}.t
 
-ch09.t.texi: ch09.t
-	$(BMENU) -p "Pseudo-Random Sequence Generation Functions" \
+ch09.texi: ch09.t
+	$(BMENU) -c -p "Pseudo-Random Sequence Generation Functions" \
 	    -u "Top" \
-	    -n "Data Interchange Format" $*
+	    -n "Data Interchange Format" ${*}.t
 
-ch10.t.texi: ch10.t
-	$(BMENU) -p "User Database Access" \
+ch10.texi: ch10.t
+	$(BMENU) -c -p "User Database Access" \
 	    -u "Top" \
-	    -n "Synchronization" $*
+	    -n "Synchronization" ${*}.t
 
-ch11.t.texi: ch11.t
-	$(BMENU) -p "Multiple Volumes" \
+ch11.texi: ch11.t
+	$(BMENU) -c -p "Multiple Volumes" \
 	    -u "Top" \
-	    -n "Memory Management" $*
+	    -n "Memory Management" ${*}.t
 
-ch12.t.texi: ch12.t
-	$(BMENU) -p "Waiting on a Condition" \
+ch12.texi: ch12.t
+	$(BMENU) -c -p "Waiting on a Condition" \
 	    -u "Top" \
-	    -n "Execution Scheduling" $*
+	    -n "Execution Scheduling" ${*}.t
 
-ch13.t.texi: ch13.t
-	$(BMENU) -p "Remove a Shared Memory Object" \
+ch13.texi: ch13.t
+	$(BMENU) -c -p "Remove a Shared Memory Object" \
 	    -u "Top" \
-	    -n "Clocks and Timers" $*
+	    -n "Clocks and Timers" ${*}.t
 
-ch14.t.texi: ch14.t
-	$(BMENU) -p "Change the Priority Ceiling of a Mutex" \
+ch14.texi: ch14.t
+	$(BMENU) -c -p "Change the Priority Ceiling of a Mutex" \
 	    -u "Top" \
-	    -n "Message Passing" $*
+	    -n "Message Passing" ${*}.t
 
-ch15.t.texi: ch15.t
-	$(BMENU) -p "High Resolution Sleep" \
+ch15.texi: ch15.t
+	$(BMENU) -c -p "High Resolution Sleep" \
 	    -u "Top" \
-	    -n "Thread Management" $*
+	    -n "Thread Management" ${*}.t
 
-ch16.t.texi: ch16.t
-	$(BMENU) -p "Get Message Queue Attributes" \
+ch16.texi: ch16.t
+	$(BMENU) -c -p "Get Message Queue Attributes" \
 	    -u "Top" \
-	    -n "Thread-Specific Data" $*
+	    -n "Thread-Specific Data" ${*}.t
 
-ch17.t.texi: ch17.t
-	$(BMENU) -p "Dynamic Package Initialization" \
+ch17.texi: ch17.t
+	$(BMENU) -c -p "Dynamic Package Initialization" \
 	    -u "Top" \
-	    -n "Thread Cancellation" $*
+	    -n "Thread Cancellation" ${*}.t
 
-ch18.t.texi: ch18.t
-	$(BMENU) -p "Thread-Specific Data Key Deletion" \
+ch18.texi: ch18.t
+	$(BMENU) -c -p "Thread-Specific Data Key Deletion" \
 	    -u "Top" \
-	    -n "Command and Variable Index" $*
+	    -n "Command and Variable Index" ${*}.t
 
 
 html: $(FILES)

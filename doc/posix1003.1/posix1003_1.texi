@@ -16,7 +16,7 @@
 @c
 
 @c
-@c   Master file for the KA9Q TCP/IP Supplement
+@c   Master file for the POSIX 1003.1 Compliance Guide
 @c
 
 @include ../common/setup.texi
@@ -25,7 +25,7 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS KA9Q TCP/IP Supplement (posix1003_1):
+* RTEMS POSIX 1003.1 Compliance Guide (posix1003_1):
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -43,14 +43,14 @@ END-INFO-DIR-ENTRY
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage RTEMS KA9Q TCP/IP Supplement
+@c @shorttitlepage RTEMS POSIX 1003.1 Compliance Guide
 
 @setchapternewpage odd
-@settitle RTEMS KA9Q TCP/IP Supplement
+@settitle RTEMS POSIX 1003.1 Compliance Guide
 @titlepage
 @finalout
 
-@title RTEMS KA9Q TCP/IP Supplement
+@title RTEMS POSIX 1003.1 Compliance Guide
 @subtitle Edition @value{edition}, for RTEMS @value{version}
 @sp 1
 @subtitle @value{update-month}
@@ -86,7 +86,7 @@ END-INFO-DIR-ENTRY
 @node Top, Preface, (dir), (dir)
 @top posix1003_1
 
-This is the online version of the RTEMS KA9Q TCP/IP Supplement.
+This is the online version of the RTEMS POSIX 1003.1 Compliance Guide.
 
 @menu
 * Preface::
@@ -131,6 +131,6 @@ There are currently no Command and Variable Index entries.
 There are currently no Concept Index entries.
 @c @printindex cp
 
-@c @contents
+@contents
 @bye
 

@@ -26,7 +26,7 @@
 @subsection Remove a Directory
 @subsection Rename a File
 @section File Characteristics
-@subsection File Characteristics: Header and Data Structure
+@subsection File Characteristics Header and Data Structure
 @subsection Get File Status
 @subsection Check File Accessibility
 @subsection Change File Modes

@@ -8,7 +8,7 @@
 
 @chapter Thread-Specific Data
 @section Thread-Specific Data Functions
-@subsubsection Thread-Specific Data Key Creation
-@subsubsection Thread-Specific Data Management
-@subsubsection Thread-Specific Data Key Deletion
+@subsection Thread-Specific Data Key Creation
+@subsection Thread-Specific Data Management
+@subsection Thread-Specific Data Key Deletion
 
