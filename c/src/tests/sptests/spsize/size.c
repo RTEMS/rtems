@@ -393,8 +393,11 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 /* cpu.h */
 uninitialized += (sizeof _CPU_Interrupt_stack_low) +
                  (sizeof _CPU_Interrupt_stack_high) +
-                 (sizeof _CPU_Null_fp_context) +
-                 (sizeof _CPU_Trap_Table_area);
+                 (sizeof _CPU_Null_fp_context);
+
+#ifndef NO_TABLE_MOVE
+uninitialized += (sizeof _CPU_Trap_Table_area);
+#endif
 
 #ifdef erc32
 uninitialized += (sizeof _ERC32_MEC_Timer_Control_Mirror);
