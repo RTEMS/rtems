@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  *  RTEMS_API_INIT is defined so all of the RTEMS API
  *  data will be included in this object file.

@@ -11,6 +11,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  *  SCORE_INIT and SAPI_INIT are defined so all of the super core and
  *  super API data will be included in this object file.

@@ -1,3 +1,11 @@
+2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* sapi/src/debug.c, sapi/src/exinit.c, sapi/src/extension.c,
+	sapi/src/extensioncreate.c, sapi/src/extensiondelete.c,
+	sapi/src/extensionident.c, sapi/src/fatal.c, sapi/src/io.c,
+	sapi/src/itronapi.c, sapi/src/posixapi.c, sapi/src/rtemsapi.c:
+	Include config.h.
+
 2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/lstat.c, libcsupport/src/readdir_r.c:
