@@ -15,8 +15,11 @@ $(AR) $(ARFLAGS) $@ $^
 $(RANLIB) $@
 endef
 
-$(PROJECT_RELEASE)/lib:
+project_libdir = $(libdir)
+
+$(PROJECT_RELEASE)/lib/$(dirstamp):
 	@$(mkinstalldirs) $@
+	@: > $(PROJECT_RELEASE)/lib/$(dirstamp)
 
 TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib
 

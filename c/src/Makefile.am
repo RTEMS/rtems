@@ -36,7 +36,7 @@ noinst_DATA += preinstall-stamp
 preinstall-stamp:
 	$(MAKE) $(AM_MAKEFLAGS) preinstall
 	touch preinstall-stamp
-CLEANFILES = preinstall-stamp 
+CLEANFILES = preinstall-stamp
 
 @host_alias@-@RTEMS_BSP@.pc: config.status bsp.pc.in
 	./config.status --file=$@:$(srcdir)/bsp.pc.in
