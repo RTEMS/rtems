@@ -27,9 +27,20 @@ extern "C" {
 #define MC68681_STATUS          1
 #define MC68681_RX_BUFFER       2
 
+#define MC68681_MODE            0
 #define MC68681_CLOCK_SELECT    1
 #define MC68681_COMMAND         2
 #define MC68681_TX_BUFFER       3
+
+/*
+ *  Data Port bit map configuration
+ */
+
+#define MC68681_DATA_PORT_A               0
+#define MC68681_DATA_PORT_B               1
+  
+#define MC68681_DATA_BAUD_RATE_SET_1      0
+#define MC68681_DATA_BAUD_RATE_SET_2      2
 
 /*
  * Driver function table
