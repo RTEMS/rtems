@@ -1,3 +1,9 @@
+2002-06-25	Joel Sherrill <joel@OARcorp.com>
+
+	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k
+	support to the shared gdb stub glue necessitating a move up.
+	* Makefile.am: Reflect new gdbstub directory.
+
 2001-05-14	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/README.universe, vmeUniverse/vmeUniverse.c,
