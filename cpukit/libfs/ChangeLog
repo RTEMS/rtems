@@ -1,3 +1,31 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* src/dosfs/dosfs.h, src/dosfs/fat.h, src/dosfs/fat_fat_operations.h,
+	src/dosfs/fat_file.h, src/dosfs/msdos.h, src/dosfs/msdos_create.c,
+	src/dosfs/msdos_dir.c, src/dosfs/msdos_eval.c,
+	src/dosfs/msdos_file.c, src/dosfs/msdos_free.c,
+	src/dosfs/msdos_fsunmount.c, src/dosfs/msdos_handlers_dir.c,
+	src/dosfs/msdos_handlers_file.c, src/dosfs/msdos_init.c,
+	src/dosfs/msdos_initsupp.c, src/dosfs/msdos_misc.c,
+	src/dosfs/msdos_mknod.c, src/dosfs/msdos_node_type.c,
+	src/imfs/deviceio.c, src/imfs/imfs.h, src/imfs/imfs_chown.c,
+	src/imfs/imfs_config.c, src/imfs/imfs_creat.c, src/imfs/imfs_debug.c,
+	src/imfs/imfs_directory.c, src/imfs/imfs_eval.c,
+	src/imfs/imfs_fchmod.c, src/imfs/imfs_fcntl.c,
+	src/imfs/imfs_fdatasync.c, src/imfs/imfs_free.c,
+	src/imfs/imfs_fsunmount.c, src/imfs/imfs_getchild.c,
+	src/imfs/imfs_gtkn.c, src/imfs/imfs_handlers_device.c,
+	src/imfs/imfs_handlers_directory.c, src/imfs/imfs_handlers_link.c,
+	src/imfs/imfs_handlers_memfile.c, src/imfs/imfs_init.c,
+	src/imfs/imfs_initsupp.c, src/imfs/imfs_link.c,
+	src/imfs/imfs_mknod.c, src/imfs/imfs_mount.c, src/imfs/imfs_ntype.c,
+	src/imfs/imfs_readlink.c, src/imfs/imfs_rmnod.c,
+	src/imfs/imfs_stat.c, src/imfs/imfs_symlink.c,
+	src/imfs/imfs_unixstub.c, src/imfs/imfs_unlink.c,
+	src/imfs/imfs_unmount.c, src/imfs/imfs_utime.c, src/imfs/ioman.c,
+	src/imfs/linearfile.c, src/imfs/memfile.c, src/imfs/miniimfs_init.c:
+	URL for license changed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
