@@ -132,6 +132,7 @@ int mpc60x_vector_is_valid(rtems_vector vector)
             break;
         case PPC_603:
         case PPC_603e:
+        case PPC_603ev:
             if (!mpc603_vector_is_valid(vector)) {
                 return 0;
             }
