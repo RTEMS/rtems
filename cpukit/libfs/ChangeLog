@@ -1,5 +1,10 @@
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/dosfs/msdos_file.c (msdos_file_read, msdos_file_write):
+	Use '0' as initial value for ret instead of RC_OK.
+
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* src/dosfs/msdos_conv.c: Remove isupper, islower, toupper, tolower
 	(Unused).
 
