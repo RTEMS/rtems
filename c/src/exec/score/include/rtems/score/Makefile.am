@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_rtems_scoredir = $(includedir)/rtems/score
+
 # We only build multiprocessing related files if HAS_MP was defined
 MP_H_FILES = mpci.h mppkt.h objectmp.h threadmp.h
 
@@ -14,13 +16,13 @@ STD_H_FILES = address.h apiext.h bitfield.h chain.h context.h copyrt.h \
     userext.h watchdog.h wkspace.h
 
 if HAS_MP
-H_FILES = $(STD_H_FILES) $(MP_H_FILES) cpuopts.h
+include_rtems_score_HEADERS = $(STD_H_FILES) $(MP_H_FILES) cpuopts.h
 else
-H_FILES = $(STD_H_FILES) cpuopts.h
+include_rtems_score_HEADERS = $(STD_H_FILES) cpuopts.h
 endif
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
+    $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
 $(PROJECT_INCLUDE)/rtems/score:
 	@$(mkinstalldirs) $@
@@ -43,7 +45,5 @@ cpuopts.h: cpuopts-tmp.h
 	@echo "#endif"                                         >>$@
 
 all-local: $(PREINSTALL_FILES)
-
-EXTRA_DIST = $(STD_H_FILES) $(MP_H_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

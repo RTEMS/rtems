@@ -1,4 +1,10 @@
 
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/Makefile.am, include/rtems/score/Makefile.am,
+	inline/rtems/score/Makefile.am, macros/rtems/score/Makefile.am
+	Apply include_*HEADERS instead of H_FILES.
+
 2001-01-29	Joel Sherrill <joel@OARcorp.com>
 
 	* src/objectextendinformation.c: Added include of string.h to
