@@ -1,6 +1,6 @@
 dnl some macros for rtems host configuration checks
 dnl
-dnl Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de), 97/11/09
+dnl Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de), 97/11/29
 dnl
 
 dnl macro to detect mkdir
@@ -40,62 +40,44 @@ rm -rf conftestdata
 AC_MSG_RESULT($rtems_cv_prog_MKDIR_M)
 ])
 
-dnl RTEMS_CHECK_MAKEFILE_T(path)
-dnl Private macro of RTEMS_CHECK_MAKEFILE
-AC_DEFUN(RTEMS_CHECK_MAKEFILE_T,
-[ test -f $srcdir/$1/Makefile.in && \
-    makefiles="$makefiles $1/Makefile"
-])
-
-dnl RTEMS_CHECK_MAKEFILE_R(path,temp,callback)
-dnl Private macro of RTEMS_CHECK_MAKEFILE
-dnl $1 path prefix
-dnl $2 temporary variable
-dnl $3 callback
-AC_DEFUN(RTEMS_CHECK_MAKEFILE_R,
-[ RTEMS_CHECK_MAKEFILE_T($1)
-  $2list=`ls $srcdir/$1`
-  for $2 in $$2list; do
-    if test -d "$srcdir/$1/$$2"; then
-      $3
-    fi
-  done
+dnl RTEMS_CHECK_FILES_IN(path,file,var)
+dnl path .. path relative to srcdir, where to start searching for files
+dnl file .. name of the files to search for
+dnl var  .. shell variable to append found files
+AC_DEFUN(RTEMS_CHECK_FILES_IN,
+[
+AC_MSG_CHECKING(for $2 in $1)
+if test -d $srcdir/$1; then
+  rtems_av_save_dir=`pwd`;
+  cd $srcdir;
+  rtems_av_tmp=`find $1 -name $2 -follow -print | sed 's%\.in%%' | sort`;
+  $3="$$3 $rtems_av_tmp";
+  cd $rtems_av_save_dir;
+  AC_MSG_RESULT(done)
+else
+  AC_MSG_RESULT(no)
+fi
 ])
 
 dnl RTEMS_CHECK_MAKEFILE(path)
-dnl Check for Makefile.in's within the directory starting
+dnl Search for Makefile.in's within the directory starting
 dnl at path and append an entry for Makefile to global variable 
 dnl "makefiles" (from configure.in) for each Makefile.in found
 dnl 
-dnl NOTE: This function should be called recursivly, but m4-macro
-dnl expansion doesn't allow recursive macros. Therefore this
-dnl macro is expanded into a nonrecursive macro, limited to
-dnl a descrete directory depth, that should be sufficent.
-dnl 
 AC_DEFUN(RTEMS_CHECK_MAKEFILE,
-[ AC_MSG_CHECKING(for Makefiles in $1)
-  if test -d $srcdir/$1; then
-    RTEMS_CHECK_MAKEFILE_R($1,item,
-      RTEMS_CHECK_MAKEFILE_R($1/$item,item0,
-        RTEMS_CHECK_MAKEFILE_T($1/$item/$item0)
-      )
-    )
-    AC_MSG_RESULT(done)
-  else
-    AC_MSG_RESULT(no)
-  fi
+[RTEMS_CHECK_FILES_IN($1,Makefile.in,makefiles)
 ])
 
 dnl canonicalize target name
-dnl NOTE: Most rtems targets do not fullfil autoconf 
-dnl targets naming conventions "processor-vendor-os"
+dnl NOTE: Most rtems targets do not fullfil autoconf's
+dnl target naming conventions "processor-vendor-os"
 dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
 dnl and we have to fix it for rtems ourselves 
 
 AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
 [AC_MSG_CHECKING(rtems target cpu)
 changequote(<<, >>)dnl
-target_cpu=`echo $target | /usr/bin/sed 's%^\([^-]*\)-\(.*\)$%\1%'`
+target_cpu=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
 changequote([, ])dnl
 AC_MSG_RESULT($target_cpu)
 ])

@@ -2,207 +2,6 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.12)
 AC_INIT(README)
 
-i386_mk="c/src/exec/score/cpu/i386/Makefile \
-c/src/lib/libbsp/i386/Makefile \
-c/src/lib/libbsp/i386/force386/Makefile \
-c/src/lib/libbsp/i386/force386/clock/Makefile \
-c/src/lib/libbsp/i386/force386/console/Makefile \
-c/src/lib/libbsp/i386/force386/include/Makefile \
-c/src/lib/libbsp/i386/force386/shmsupp/Makefile \
-c/src/lib/libbsp/i386/force386/startup/Makefile \
-c/src/lib/libbsp/i386/force386/timer/Makefile \
-c/src/lib/libbsp/i386/force386/wrapup/Makefile \
-c/src/lib/libbsp/i386/i386ex/Makefile \
-c/src/lib/libbsp/i386/i386ex/clock/Makefile \
-c/src/lib/libbsp/i386/i386ex/console/Makefile \
-c/src/lib/libbsp/i386/i386ex/include/Makefile \
-c/src/lib/libbsp/i386/i386ex/startup/Makefile \
-c/src/lib/libbsp/i386/i386ex/timer/Makefile \
-c/src/lib/libbsp/i386/i386ex/wrapup/Makefile \
-c/src/lib/start/i386/Makefile"
-
-i386_go32_mk="c/src/exec/score/cpu/i386/Makefile \
-c/src/lib/libbsp/i386/Makefile \
-c/src/lib/libbsp/i386/go32/Makefile \
-c/src/lib/libbsp/i386/go32/clock/Makefile \
-c/src/lib/libbsp/i386/go32/console/Makefile \
-c/src/lib/libbsp/i386/go32/include/Makefile \
-c/src/lib/libbsp/i386/go32/startup/Makefile \
-c/src/lib/libbsp/i386/go32/timer/Makefile \
-c/src/lib/libbsp/i386/go32/wrapup/Makefile"
-
-ka9q_mk="c/src/lib/libka9q/Makefile"
-
-rtemscpp_mk="c/src/lib/librtems++/Makefile"
-
-hwapi_mk="\
-c/src/lib/libhwapi/Makefile \
-c/src/lib/libhwapi/eeprom/Makefile \
-c/src/lib/libhwapi/eeprom/wrapup/Makefile \
-c/src/lib/libhwapi/eeprom/eeprom/Makefile \
-c/src/lib/libhwapi/drivers/Makefile \
-c/src/lib/libhwapi/drivers/vmebus/Makefile \
-c/src/lib/libhwapi/drivers/vmebus/dmv202/Makefile \
-c/src/lib/libhwapi/drivers/vmebus/dmv536/Makefile \
-c/src/lib/libhwapi/drivers/vmebus/dmv666/Makefile \
-c/src/lib/libhwapi/drivers/vmebus/wrapup/Makefile \
-c/src/lib/libhwapi/serial/Makefile \
-c/src/lib/libhwapi/serial/default/Makefile \
-c/src/lib/libhwapi/serial/stream/Makefile \
-c/src/lib/libhwapi/serial/template/Makefile \
-c/src/lib/libhwapi/serial/wrapup/Makefile \
-c/src/lib/libhwapi/serial/channel/Makefile \
-c/src/lib/libhwapi/discrete/Makefile \
-c/src/lib/libhwapi/discrete/tools/Makefile \
-c/src/lib/libhwapi/discrete/relay/Makefile \
-c/src/lib/libhwapi/discrete/wrapup/Makefile \
-c/src/lib/libhwapi/discrete/greycode/Makefile \
-c/src/lib/libhwapi/discrete/discrete_in/Makefile \
-c/src/lib/libhwapi/discrete/discrete_out/Makefile \
-c/src/lib/libhwapi/discrete/discrete_input/Makefile \
-c/src/lib/libhwapi/discrete/discrete_output/Makefile \
-c/src/lib/libhwapi/discrete/discrete_flag/Makefile \
-c/src/lib/libhwapi/discrete/discrete_bitfield/Makefile \
-c/src/lib/libhwapi/analog/Makefile \
-c/src/lib/libhwapi/analog/dac/Makefile \
-c/src/lib/libhwapi/analog/wrapup/Makefile \
-c/src/lib/libhwapi/analog/linear_dac/Makefile \
-c/src/lib/libhwapi/analog/linear_adc/Makefile \
-c/src/lib/libhwapi/analog/adc/Makefile \
-c/src/lib/libhwapi/wrapup/Makefile \
-c/src/lib/libhwapi/support/Makefile \
-c/src/lib/libhwapi/support/chain/Makefile \
-c/src/lib/libhwapi/support/checksum/Makefile \
-c/src/lib/libhwapi/support/wrapup/Makefile \
-c/src/lib/libhwapi/support/dumpbuf/Makefile"
-
-tests_mk="c/src/tests/libtests/Makefile \
-c/src/tests/libtests/cpuuse/Makefile \
-c/src/tests/libtests/malloctest/Makefile \
-c/src/tests/libtests/monitor/Makefile \
-c/src/tests/libtests/rtmonuse/Makefile \
-c/src/tests/libtests/stackchk/Makefile \
-c/src/tests/libtests/termios/Makefile \
-c/src/tests/libtests/rtems++/Makefile \
-c/src/tests/mptests/Makefile \
-c/src/tests/mptests/mp01/Makefile \
-c/src/tests/mptests/mp01/node1/Makefile \
-c/src/tests/mptests/mp01/node2/Makefile \
-c/src/tests/mptests/mp02/Makefile \
-c/src/tests/mptests/mp02/node1/Makefile \
-c/src/tests/mptests/mp02/node2/Makefile \
-c/src/tests/mptests/mp03/Makefile \
-c/src/tests/mptests/mp03/node1/Makefile \
-c/src/tests/mptests/mp03/node2/Makefile \
-c/src/tests/mptests/mp04/Makefile \
-c/src/tests/mptests/mp04/node1/Makefile \
-c/src/tests/mptests/mp04/node2/Makefile \
-c/src/tests/mptests/mp05/Makefile \
-c/src/tests/mptests/mp05/node1/Makefile \
-c/src/tests/mptests/mp05/node2/Makefile \
-c/src/tests/mptests/mp06/Makefile \
-c/src/tests/mptests/mp06/node1/Makefile \
-c/src/tests/mptests/mp06/node2/Makefile \
-c/src/tests/mptests/mp07/Makefile \
-c/src/tests/mptests/mp07/node1/Makefile \
-c/src/tests/mptests/mp07/node2/Makefile \
-c/src/tests/mptests/mp08/Makefile \
-c/src/tests/mptests/mp08/node1/Makefile \
-c/src/tests/mptests/mp08/node2/Makefile \
-c/src/tests/mptests/mp09/Makefile \
-c/src/tests/mptests/mp09/node1/Makefile \
-c/src/tests/mptests/mp09/node2/Makefile \
-c/src/tests/mptests/mp10/Makefile \
-c/src/tests/mptests/mp10/node1/Makefile \
-c/src/tests/mptests/mp10/node2/Makefile \
-c/src/tests/mptests/mp11/Makefile \
-c/src/tests/mptests/mp11/node1/Makefile \
-c/src/tests/mptests/mp11/node2/Makefile \
-c/src/tests/mptests/mp12/Makefile \
-c/src/tests/mptests/mp12/node1/Makefile \
-c/src/tests/mptests/mp12/node2/Makefile \
-c/src/tests/mptests/mp13/Makefile \
-c/src/tests/mptests/mp13/node1/Makefile \
-c/src/tests/mptests/mp13/node2/Makefile \
-c/src/tests/mptests/mp14/Makefile \
-c/src/tests/mptests/mp14/node1/Makefile \
-c/src/tests/mptests/mp14/node2/Makefile \
-c/src/tests/psxtests/Makefile \
-c/src/tests/psxtests/psx01/Makefile \
-c/src/tests/psxtests/psx02/Makefile \
-c/src/tests/psxtests/psx03/Makefile \
-c/src/tests/psxtests/psx04/Makefile \
-c/src/tests/psxtests/psx05/Makefile \
-c/src/tests/psxtests/psx06/Makefile \
-c/src/tests/psxtests/psx07/Makefile \
-c/src/tests/psxtests/psx08/Makefile \
-c/src/tests/psxtests/psx09/Makefile \
-c/src/tests/psxtests/psx10/Makefile \
-c/src/tests/psxtests/psx11/Makefile \
-c/src/tests/psxtests/psx12/Makefile \
-c/src/tests/psxtests/psxhdrs/Makefile \
-c/src/tests/psxtests/support/Makefile \
-c/src/tests/psxtests/support/include/Makefile \
-c/src/tests/sptests/Makefile \
-c/src/tests/sptests/sp01/Makefile \
-c/src/tests/sptests/sp02/Makefile \
-c/src/tests/sptests/sp03/Makefile \
-c/src/tests/sptests/sp04/Makefile \
-c/src/tests/sptests/sp05/Makefile \
-c/src/tests/sptests/sp06/Makefile \
-c/src/tests/sptests/sp07/Makefile \
-c/src/tests/sptests/sp08/Makefile \
-c/src/tests/sptests/sp09/Makefile \
-c/src/tests/sptests/sp11/Makefile \
-c/src/tests/sptests/sp12/Makefile \
-c/src/tests/sptests/sp13/Makefile \
-c/src/tests/sptests/sp14/Makefile \
-c/src/tests/sptests/sp15/Makefile \
-c/src/tests/sptests/sp16/Makefile \
-c/src/tests/sptests/sp17/Makefile \
-c/src/tests/sptests/sp19/Makefile \
-c/src/tests/sptests/sp20/Makefile \
-c/src/tests/sptests/sp21/Makefile \
-c/src/tests/sptests/sp22/Makefile \
-c/src/tests/sptests/sp23/Makefile \
-c/src/tests/sptests/sp24/Makefile \
-c/src/tests/sptests/sp25/Makefile \
-c/src/tests/sptests/spfatal/Makefile \
-c/src/tests/sptests/spsize/Makefile \
-c/src/tests/tmtests/Makefile \
-c/src/tests/tmtests/include/Makefile \
-c/src/tests/tmtests/tm01/Makefile \
-c/src/tests/tmtests/tm02/Makefile \
-c/src/tests/tmtests/tm03/Makefile \
-c/src/tests/tmtests/tm04/Makefile \
-c/src/tests/tmtests/tm05/Makefile \
-c/src/tests/tmtests/tm06/Makefile \
-c/src/tests/tmtests/tm07/Makefile \
-c/src/tests/tmtests/tm08/Makefile \
-c/src/tests/tmtests/tm09/Makefile \
-c/src/tests/tmtests/tm10/Makefile \
-c/src/tests/tmtests/tm11/Makefile \
-c/src/tests/tmtests/tm12/Makefile \
-c/src/tests/tmtests/tm13/Makefile \
-c/src/tests/tmtests/tm14/Makefile \
-c/src/tests/tmtests/tm15/Makefile \
-c/src/tests/tmtests/tm16/Makefile \
-c/src/tests/tmtests/tm17/Makefile \
-c/src/tests/tmtests/tm18/Makefile \
-c/src/tests/tmtests/tm19/Makefile \
-c/src/tests/tmtests/tm20/Makefile \
-c/src/tests/tmtests/tm21/Makefile \
-c/src/tests/tmtests/tm22/Makefile \
-c/src/tests/tmtests/tm23/Makefile \
-c/src/tests/tmtests/tm24/Makefile \
-c/src/tests/tmtests/tm25/Makefile \
-c/src/tests/tmtests/tm26/Makefile \
-c/src/tests/tmtests/tm27/Makefile \
-c/src/tests/tmtests/tm28/Makefile \
-c/src/tests/tmtests/tm29/Makefile \
-c/src/tests/tmtests/tmck/Makefile \
-c/src/tests/tmtests/tmoverhd/Makefile"
-
 dnl Checks for programs.
 AC_PROG_MAKE_SET
 AC_CANONICAL_SYSTEM
@@ -242,12 +41,12 @@ AC_ARG_ENABLE(rtems-inlines, \
 esac],[RTEMS_USE_MACROS=no])
 
 AC_ARG_ENABLE(cpp, \
-[  --enable-cpp                           enable C++ support, and build the rtems++ library], \
+[  --enable-cpp            enable C++ support, and build the rtems++ library], \
 [case "${enableval}" in 
   yes) RTEMS_HAS_CPLUSPLUS=yes ;;
-  no) RTEMS_HAS_CPLUSPLUS=no ;;
+  no) RTEMS_HAS_CPLUSPLUS=no   ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-cpp option) ;;
-esac],[RTEMS_HAS_CPLUSPLUS=no])
+esac], [RTEMS_HAS_CPLUSPLUS=no])
 
 AC_ARG_ENABLE(gcc28, \
 [  --enable-gcc28		    enable use of gcc 2.8.x features], \
@@ -267,13 +66,11 @@ RTEMS_PREFIX=${target_cpu}-${target_vendor}
 dnl BEGIN configure.host.in
 
 AC_PATH_PROG(CAT,cat)
-dnl FIXME: check if rm accepts -f
-dnl NOTE : Check for rm -f seems not to be necessary since autoconf
-dnl        itself depends on it
 AC_PATH_PROG(RM,rm)
 AC_PATH_PROG(CP,cp)
 AC_PATH_PROG(MV,mv)
 AC_PATH_PROG(LN,ln)
+AC_PROG_LN_S
 AC_PATH_PROG(CHMOD,chmod)
 AC_PATH_PROG(SORT,sort)
 
@@ -284,56 +81,11 @@ RTEMS_PROG_MKDIR_P
 test "$rtems_cv_prog_MKDIR_P" = "yes" && MKDIR="$MKDIR -p"
 test "$rtems_cv_prog_MKDIR_M" = "yes" && MKDIR="$MKDIR -m 0755"
 
-dnl determine which program to use to format ps-docs to 2 pages per sheet
-dnl try enscript
-AC_PATH_PROG(PR,enscript)
-test -n "$PR" && PR="$PR -G2r"
-
-if test -z "$PR"; then
-dnl try /usr/openwin/mp
-dnl NOTE: Cannot test for mp in $PATH
-dnl because there exists a program named mp for TeX
-dnl which isn't what we want
-AC_PATH_PROG(PR,mp,,/usr/openwin)
-test -n "$PR" && PR="$PR -l"
-fi
-
-if test -z "$PR"; then
-dnl fallback to pr
-AC_PATH_PROG(PR,pr)
-fi
-
-if test -z "$PR"; then
-AC_MSG_WARN(
-[***]
-[    Cannot determine a suitable program for]
-[    printing asci files on ps-printers]
-[    Expect errors when printing files] )
-fi
-
-dnl Prefer lp over lpr for SYSV systems
-dnl NOTE: Dangerous for SYSV systems using BSD printing
-AC_PATH_PROGS(PRINT,lp lpr)
-
 AC_PATH_PROG(TOUCH,touch)
 AC_PATH_PROG(CMP,cmp)
-AC_PATH_PROG(DIRNAME,dirname)
-AC_PATH_PROG(BASENAME,basename)
 
-dnl NOTE: Does anybody but SUN have unifdef?
-dnl should probably be avoided at all
-AC_PATH_PROG(UNIFDEF,unifdef)
-AC_PATH_PROG(ED,ed)
 AC_PATH_PROG(SED,sed)
-AC_PATH_PROGS(AWK,mawk gawk nawk awk)
 AC_PATH_PROGS(M4,gm4 m4)
-
-AC_PATH_PROG(FGREP,fgrep)
-AC_PATH_PROG(GREP,grep)
-AC_PATH_PROG(EGREP,egrep)
-
-dnl catman might not be in $PATH
-AC_PATH_PROG(CATMAN,catman,,$PATH:/usr/etc:/etc)
 
 dnl NOTE: prefer bash over ksh over sh
 AC_PATH_PROGS(KSH,bash ksh sh)
@@ -346,32 +98,25 @@ AC_MSG_ERROR(
 [    Please contact your system administrator] );
 fi
 
-dnl check for RCS
-AC_PATH_PROG(RCS_IDENT,ident)
-AC_PATH_PROG(RCS_CO,co)
-
-dnl check for libraries
-dnl this does't work, uses host-linker instead of target-linker
-dnl Skip for now, since I (RC) don't believe it is used at all
-dnl libm
-dnl AC_CHECK_LIB(m,cos,
-dnl LIB_MATH="-lm")
-dnl AC_SUBST(LIB_MATH)
-
 dnl END configure.host.in
 
 dnl BEGIN configure.target.in
 
-echo "TARGET"
-echo "cpu    $target_cpu"
-echo "os     $target_os"
-echo "vendor $target_vendor"
+dnl echo "TARGET"
+dnl echo "    cpu    --> $target_cpu"
+dnl echo "    os     --> $target_os"
+dnl echo "    vendor --> $target_vendor"
 
 dnl canonicalize target name
 dnl NOTE: Most rtems targets do not fullfil autoconf 
 dnl targets naming conventions "processor-vendor-os"
 dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
 dnl and we have to fix it for rtems ourselves 
+dnl 
+dnl The original plan was to do CPU-BSP-rtems or CPU-rtems to
+dnl imply all BSPs.  Eventually we would like to build a collection
+dnl of CPU model specific RTEMS libraries which in conjunction with
+dnl a BSP library would be used to link an application.
 
 case "${target}" in
   # hpux unix port should go here
@@ -381,13 +126,11 @@ case "${target}" in
   i[[3456]]86-go32-rtems*)
 	target_cpu=i386
 	rtems_bsp="go32 go32_p5"
-       	aux_makefiles=$i386_go32_mk
+       	skip_startfiles="yes"
 	RTEMS_HAS_POSIX_API=no
 	;;
   i[[3456]]86-rtems*)
 	target_cpu=i386
-	rtems_bsp="force386 i386ex"
-       	aux_makefiles=$i386_mk
 	;;
   i[[3456]]86-pc-linux*)         # unix "simulator" port
 	target_cpu=unix
@@ -409,43 +152,54 @@ case "${target}" in
 	;;
 esac
 
+# Is this a supported CPU?
 AC_MSG_CHECKING([if cpu $target_cpu is supported])
 if test -d "$srcdir/c/src/exec/score/cpu/$target_cpu"; then
   AC_MSG_RESULT(yes)
-  makefiles="c/src/exec/score/cpu/$target_cpu/Makefile"
+  makefiles="$makefiles c/src/exec/score/cpu/$target_cpu/Makefile"
 else
   AC_MSG_ERROR(no)
 fi
 
-RTEMS_CHECK_MAKEFILE(c/src/exec/score/tools/$target_cpu)
+# find all the Executive Makefiles
+RTEMS_CHECK_MAKEFILE(c/src/exec/rtems)
+RTEMS_CHECK_MAKEFILE(c/src/exec/posix)
+RTEMS_CHECK_MAKEFILE(c/src/exec/sapi)
+RTEMS_CHECK_MAKEFILE(c/src/exec/wrapup)
 
-if test -n "$aux_makefiles";then
-  makefiles="$makefiles $aux_makefiles"
-  echo "MAKEFILES PRESET TO $makefiles"
-else
-AC_MSG_CHECKING([for c/src/lib/libbsp/$target_cpu])
+# find all the Makefiles for the BSPs
 if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
-  AC_MSG_RESULT(yes)
-  files=`ls $srcdir/c/src/lib/libbsp/$target_cpu`
-  for file in $files; do
-    case $file in
-      shared*);;
-      Makefile*);;
-      READ*);;
-      *) rtems_bsp="$rtems_bsp $file";;
-    esac;
+  makefiles="$makefiles c/src/lib/libbsp/$target_cpu/Makefile"
+
+  if test -z "$rtems_bsp"; then
+    AC_MSG_CHECKING([for bsps])
+    files=`ls $srcdir/c/src/lib/libbsp/$target_cpu`
+    for file in $files; do
+      case $file in
+        shared*);;
+        Makefile*);;
+        READ*);;
+        CVS*);;
+        go32*);;   # so the i386 port can pick up the other Makefiles
+        *) rtems_bsp="$rtems_bsp $file";;
+      esac;
+    done
+    AC_MSG_RESULT([$rtems_bsp])
+  fi
+
+  # collect makefiles for each bsp
+  for i in $rtems_bsp; do
+    RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/$target_cpu/$i)
   done
-  RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/$target_cpu)
-else
-  AC_MSG_RESULT(no)
 fi
 
+# find all the CPU dependent library Makefiles
 RTEMS_CHECK_MAKEFILE(c/src/lib/libcpu/$target_cpu)
-RTEMS_CHECK_MAKEFILE(c/src/lib/start/$target_cpu)
 
-fi	# aux_makefiles
-
-echo "MAKEFILES $makefiles"
+dnl Workaround for go32
+if test "$skip_startfiles" != "yes"; then
+  RTEMS_CHECK_MAKEFILE(c/src/lib/start/$target_cpu)
+fi
 
 dnl END configure.target.in
 
@@ -465,7 +219,6 @@ if [[ "${program_prefix}" = "NONE" ]] ; then
   fi
 fi
 
-AC_PROG_LN_S
 dnl AC_PROG_CC
 dnl AC_PROG_CXX
 
@@ -475,19 +228,38 @@ RTEMS_ROOT=`cd $srcdir/c; pwd`
 PROJECT_ROOT=`pwd;`
 
 # For now always generate the KA9Q TCP/IP Makefiles
-makefiles="$makefiles $ka9q_mk $rtemscpp_mk"
+makefiles="$makefiles c/src/lib/libka9q/Makefile"
 
+# For now always generate the C++ Makefiles
+makefiles="$makefiles c/src/lib/librtems++/Makefile"
+
+# If the tests are enabled, then find all the test suite Makefiles
+AC_MSG_CHECKING([Are the test suites enabled? ])
 AC_ARG_ENABLE(tests, \
 [  --disable-tests 	     	    disable tests], \
-tests_mk=,makefiles="${makefiles} ${tests_mk}")
+   AC_MSG_ERROR(no), \
+   AC_MSG_RESULT(yes) \
+     RTEMS_CHECK_MAKEFILE(c/src/tests/tools/$target_cpu) \
+     RTEMS_CHECK_MAKEFILE(c/src/tests/libtests) \
+     RTEMS_CHECK_MAKEFILE(c/src/tests/sptests) \
+     RTEMS_CHECK_MAKEFILE(c/src/tests/tmtests) \
+     RTEMS_CHECK_MAKEFILE(c/src/tests/mptests) \
+     RTEMS_CHECK_MAKEFILE(c/src/tests/psxtests) \
+)
 
+# If the HWAPI is enabled, the find the HWAPI Makefiles
+AC_MSG_CHECKING([Is the HWAPI enabled? ])
 AC_ARG_ENABLE(hwapi, \
-[  --enable-hwapi		    enable hardware API library], \
-makefiles="${makefiles} ${hwapi_mk}",hwapi_mk=)
+  [  --enable-hwapi		    enable hardware API library], \
+      AC_MSG_RESULT(yes) \
+        RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi), \
+      AC_MSG_ERROR(no) \
+)
 
 AC_ARG_ENABLE(rtemsbsp, \
-[  --enable-rtemsbsp=bsp1 bsp2 ..   prefix for cross-tools], \
-RTEMS_BSP=$enableval)
+  [  --enable-rtemsbsp=bsp1 bsp2 ..   BSPs to include in build], \
+      RTEMS_BSP=$enableval \
+)
 
 AC_SUBST(RTEMS_BSP)
 AC_SUBST(RTEMS_HOST)
@@ -503,90 +275,43 @@ AC_SUBST(RTEMS_LIBC_DIR)
 AC_SUBST(PROJECT_ROOT)
 AC_SUBST(program_prefix)
 
+# pick up all the Makefiles in required parts of the tree
+RTEMS_CHECK_MAKEFILE(c/build-tools)
+RTEMS_CHECK_MAKEFILE(c/make)
+RTEMS_CHECK_MAKEFILE(c/src/lib/libmisc)
+RTEMS_CHECK_MAKEFILE(c/src/tests/samples)
 
+# try not to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile
 c/Makefile
-c/build-tools/Makefile
-c/build-tools/os/Makefile
-c/build-tools/os/msdos/Makefile
-c/build-tools/scripts/Makefile
-c/build-tools/src/Makefile
-c/make/Makefile
-c/make/host.cfg
-c/make/Templates/Makefile.inc
 c/src/Makefile
 c/src/exec/Makefile
-c/src/exec/posix/Makefile
-c/src/exec/posix/base/Makefile
-c/src/exec/posix/headers/Makefile
-c/src/exec/posix/inline/Makefile
-c/src/exec/posix/macros/Makefile
-c/src/exec/posix/optman/Makefile
-c/src/exec/posix/src/Makefile
-c/src/exec/posix/sys/Makefile
-c/src/exec/rtems/Makefile
-c/src/exec/rtems/headers/Makefile
-c/src/exec/rtems/inline/Makefile
-c/src/exec/rtems/macros/Makefile
-c/src/exec/rtems/optman/Makefile
-c/src/exec/rtems/src/Makefile
-c/src/exec/sapi/Makefile
-c/src/exec/sapi/headers/Makefile
-c/src/exec/sapi/inline/Makefile
-c/src/exec/sapi/macros/Makefile
-c/src/exec/sapi/optman/Makefile
-c/src/exec/sapi/src/Makefile
 c/src/exec/score/Makefile
 c/src/exec/score/cpu/Makefile
 c/src/exec/score/headers/Makefile
 c/src/exec/score/inline/Makefile
-c/src/exec/score/macros/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile
-c/src/exec/wrapup/Makefile
-c/src/exec/wrapup/posix/Makefile
-c/src/exec/wrapup/rtems/Makefile
 c/src/lib/Makefile
 c/src/lib/include/Makefile
 c/src/lib/libbsp/Makefile
 c/src/lib/libbsp/shmdr/Makefile
 c/src/lib/libc/Makefile
 c/src/lib/libcpu/Makefile
-c/src/lib/libmisc/Makefile
-c/src/lib/libmisc/assoc/Makefile
-c/src/lib/libmisc/cpuuse/Makefile
-c/src/lib/libmisc/error/Makefile
-c/src/lib/libmisc/monitor/Makefile
-c/src/lib/libmisc/rtmonuse/Makefile
-c/src/lib/libmisc/stackchk/Makefile
-c/src/lib/libmisc/wrapup/Makefile
 c/src/lib/start/Makefile
 c/src/lib/wrapup/Makefile
 c/src/tests/Makefile
-c/src/tests/samples/Makefile
-c/src/tests/samples/base_mp/Makefile
-c/src/tests/samples/base_mp/node1/Makefile
-c/src/tests/samples/base_mp/node2/Makefile
-c/src/tests/samples/base_sp/Makefile
-c/src/tests/samples/cdtest/Makefile
-c/src/tests/samples/hello/Makefile
-c/src/tests/samples/paranoia/Makefile
-c/src/tests/samples/ticker/Makefile
 c/src/tests/support/Makefile
 c/src/tests/support/include/Makefile
 c/src/tests/support/stubdr/Makefile
 c/src/tests/support/wrapup/Makefile
 c/src/tests/tools/Makefile
 c/src/tests/tools/generic/Makefile
-c/src/tests/tools/hppa1_1/Makefile
-c/src/tests/tools/hppa1_1/simhppa/Makefile
-c/src/tests/tools/sparc/Makefile
-c/src/tests/tools/sparc/erc32/Makefile
-c/src/tests/tools/unix/Makefile
-c/src/tests/tools/unix/posix/Makefile
 $makefiles
+c/make/host.cfg
+c/make/Templates/Makefile.inc
 c/update-tools/Makefile)
 
 echo
