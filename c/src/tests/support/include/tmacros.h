@@ -25,6 +25,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <rtems/error.h>
 
 #define FOREVER 1                  /* infinite loop */
 
@@ -60,8 +61,8 @@ extern "C" {
   do { \
     check_dispatch_disable_level( _level ); \
     if ( (_stat) != (_desired) ) { \
-      printf( "\n%s FAILED -- expected (%d) got (%d)\n", \
-              (_msg), (_desired), (_stat) ); \
+      printf( "\n%s FAILED -- expected (%s) got (%s)\n", \
+              (_msg), rtems_status_text(_desired), rtems_status_text(_stat) ); \
       fflush(stdout); \
       exit( _stat ); \
     } \
