@@ -1,3 +1,14 @@
+2001-01-31	Mike Siers <mikes@poliac.com>
+
+	* Nice Update of PPPD support which eliminates the
+	requiremetn that drivers be in the termios TASK_DRIVEN mode.
+	Mike did significant testing and reports that it seems to be
+	more stable and handle larger packets better.  This patch
+	replaces the termios tasks with more general pppd network
+	driver tasks.  The functions pppinput() and pppstart() get 
+	called from the interrupt service routine.
+	* libc/termios.c: Added PPCDISC.
+
 2002-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/libio.h: Add #include <rtems/fs.h>.

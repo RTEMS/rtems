@@ -1412,6 +1412,15 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 			rtems_fatal_error_occurred (sc);
 		return 0; /* nothing to output in IRQ... */
 	}
+	else if (tty->t_line == PPPDISC ) {
+		/*
+		 * call any line discipline start function
+		 */
+		if (linesw[tty->t_line].l_start != NULL) {
+			linesw[tty->t_line].l_start(tty);
+		}
+		return 0; /* nothing to output in IRQ... */
+	}
 	else {
 		return rtems_termios_refill_transmitter(tty);
 	}
