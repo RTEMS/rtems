@@ -26,10 +26,10 @@ typedef unsigned long long unsigned64; /* 64-bit unsigned integer */
 
 typedef unsigned16 Priority_Bit_map_control;
 
-typedef char      signed8;      /* 8-bit  signed integer */
-typedef short     signed16;     /* 16-bit signed integer */
-typedef int       signed32;     /* 32-bit signed integer */
-typedef long long signed64;     /* 64 bit signed integer */
+typedef signed char      signed8;      /* 8-bit  signed integer */
+typedef signed short     signed16;     /* 16-bit signed integer */
+typedef signed int       signed32;     /* 32-bit signed integer */
+typedef signed long long signed64;     /* 64 bit signed integer */
 
 typedef unsigned32 boolean;     /* Boolean value   */
 
