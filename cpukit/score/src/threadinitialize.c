@@ -52,7 +52,9 @@ boolean _Thread_Initialize(
 {
   unsigned32           actual_stack_size = 0;
   void                *stack = NULL;
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   void                *fp_area;
+#endif
   void                *extensions_area;
 
   /*
