@@ -52,8 +52,8 @@ SYM(_CPU_Context_save_fp):
         or      %l1, %lo(SPARC_PSR_EF_MASK), %l1
         or      %l0, %l1, %l0
         mov     %l0, %psr                  ! **** ENABLE FLOAT ACCESS ****
-
-        ld      [%i0], %l0
+	nop; nop; nop;			   ! Need three nops before EF is 
+        ld      [%i0], %l0		   ! active due to pipeline delay!!!
         std     %f0, [%l0 + FO_F1_OFFSET]
         std     %f2, [%l0 + F2_F3_OFFSET]
         std     %f4, [%l0 + F4_F5_OFFSET]
@@ -101,8 +101,8 @@ SYM(_CPU_Context_restore_fp):
         or      %l1, %lo(SPARC_PSR_EF_MASK), %l1
         or      %l0, %l1, %l0
         mov     %l0, %psr                  ! **** ENABLE FLOAT ACCESS ****
-
-        ld      [%i0], %l0
+	nop; nop; nop;			   ! Need three nops before EF is 
+        ld      [%i0], %l0		   ! active due to pipeline delay!!!
         ldd     [%l0 + FO_F1_OFFSET], %f0
         ldd     [%l0 + F2_F3_OFFSET], %f2
         ldd     [%l0 + F4_F5_OFFSET], %f4
