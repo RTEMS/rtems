@@ -68,7 +68,7 @@ networkapp.texi: networkapp.t Makefile
 	   -n "Testing the Driver" ${*}.t
 
 testing.texi: testing.t Makefile
-	$(BMENU) -p "Socket Options" \
+	$(BMENU) -p "Time Synchronization Using NTP" \
 	   -u "Top" \
 	   -n "Network Servers" ${*}.t
 

@@ -62,10 +62,42 @@ structures and calls the network initialization function must include
 #include <rtems/rtems_bsdnet.h>
 @end example
 
-@subsection Network configuration
+@subsection Network Configuration
 The network configuration is specified by declaring
-and initializing the @code{rtems_bsdnet_configuration}
+and initializing the @code{rtems_bsdnet_config}
 structure.
+
+@example
+@group
+struct rtems_bsdnet_config @{
+  /*
+   * This entry points to the head of the ifconfig chain.
+   */
+  struct rtems_bsdnet_ifconfig *ifconfig;
+
+  /*
+   * This entry should be rtems_bsdnet_do_bootp if BOOTP
+   * is being used to configure the network, and NULL
+   * if BOOTP is not being used.
+   */
+  void                    (*bootp)(void);
+
+  /*
+   * The remaining items can be initialized to 0, in
+   * which case the default value will be used.
+   */
+  rtems_task_priority  network_task_priority;  /* 100        */
+  unsigned long        mbuf_bytecount;         /* 64 kbytes  */
+  unsigned long        mbuf_cluster_bytecount; /* 128 kbytes */
+  char                *hostname;               /* BOOTP      */
+  char                *domainname;             /* BOOTP      */
+  char                *gateway;                /* BOOTP      */
+  char                *log_host;               /* BOOTP      */
+  char                *name_server[3];         /* BOOTP      */
+  char                *ntp_server[3];          /* BOOTP      */
+@};
+@end group
+@end example
 
 The structure entries are described in the following table.
 If your application uses BOOTP/DHCP to obtain network configuration
@@ -120,6 +152,17 @@ will be sent.
 @item char *name_server[3]
 The Internet host numbers of up to three machines to be used as
 Internet Domain Name Servers.
+
+@item char *name_server[3]
+The Internet host numbers of up to three machines to be used as
+Network Time Protocol (NTP) Servers.
+
+@end table
+
+In addition, the following fields in the @code{rtems_bsdnet_ifconfig}
+are of interest.
+
+@table @b
 
 @item int port
 The I/O port number (ex: 0x240) on which the external Ethernet
@@ -368,5 +411,28 @@ RTEMS event.
 The purpose of these functions is to permit a more efficient
 alternative to the select call when dealing with a large number of
 sockets.
+
+@subsection Time Synchronization Using NTP
+
+@example
+int rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority);
+@end example
+
+If the interval argument is 0 the routine synchronizes the RTEMS time-of-day
+clock with the first NTP server in the rtems_bsdnet_ntpserve array and
+returns.  The priority argument is ignored.
+
+If the interval argument is greater than 0, the routine also starts an
+RTEMS task at the specified priority and polls the NTP server every 
+`interval' seconds.  NOTE: This mode of operation has not yet been
+implemented.
+
+On successful synchronization of the RTEMS time-of-day clock the routine
+returns 0.  If an error occurs a message is printed and the routine returns -1
+with an error code in errno.
+There is no timeout -- if there is no response from an NTP server the
+routine will wait forever.
+
+
 
 
