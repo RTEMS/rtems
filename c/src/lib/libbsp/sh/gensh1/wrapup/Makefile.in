@@ -62,3 +62,8 @@ all:	${ARCH} $(SRCS) $(LIB)
 	$(INSTALL_VARIANT) -m 644 $(LIB) ${PROJECT_RELEASE}/lib
 
 install:  all
+
+$(PROJECT_ROOT)/${RTEMS_BSP}/lib/bsp_specs: ../bsp_specs
+	$(INSTALL_DATA) $< $@
+
+preinstall: $(PROJECT_ROOT)/${RTEMS_BSP}/lib/bsp_specs
