@@ -1,0 +1,100 @@
+#
+#  $Id$
+#
+
+BSP NAME:           eth_comm
+BOARD:              Frasca International, Inc Ethernet Comm board
+BUS:                N/A
+CPU FAMILY:         ppc
+CPU:                PowerPC MPC860/MPC860T
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+
+DEBUG MONITOR:      None
+
+PERIPHERALS
+===========
+TIMERS:             PIT 
+  RESOLUTION:         1 microsecond
+SERIAL PORTS:       4 SCCs (one is used for ethernet on MPC860, and unused
+			on MPC860T), 2 SMC, 4 on external FPGA, 3 CANBUS
+REAL-TIME CLOCK:    
+DMA:                Each serial port
+VIDEO:              none
+SCSI:               none
+NETWORKING:         Ethernet (10 Mbps) on SCC1 (MPC860)
+		    Fast ethernet (100/10 Mbps) on FEC (MPC860T)
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       
+IOSUPP DRIVER:      
+SHMSUPP:            none
+TIMER DRIVER:       
+
+STDIO
+=====
+PORT:               SCC2
+ELECTRICAL:         RS-232
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             None
+STOP BITS:          1
+
+NOTES
+=====
+On-chip resources:
+	SCC1		network or console
+	SCC2		console
+	SCC3		console
+	SCC4		console
+	CLK1		network
+	CLK2		network
+	CLK3
+	CLK4
+	CLK5
+	CLK6
+	CLK7
+	CLK8
+	BRG1		console
+	BRG2		console
+	BRG3		console
+	BRG4		console
+	RTC
+	PIT		clock
+	TB
+	DEC
+	SWT	
+	*CS0		FLASH
+	*CS1		DRAM bank 1
+	*CS2		CAN0
+	*CS3		CAN1
+	*CS4		CAN2
+	*CS5		MB1
+	*CS6		ARINC
+	*CS7		DRAM bank 0
+	UPMA
+	UPMB
+	IRQ0
+	IRQ1
+	IRQ2		CAN2
+	IRQ3		CAN0
+	IRQ4		CAN1
+	IRQ5	
+	IRQ6
+	IRQ7
+	IRQ_LVL0	clock - PIT
+	IRQ_LVL1
+	IRQ_LVL2
+	IRQ_LVL3
+	IRQ_LVL4
+	IRQ_LVL5
+	IRQ_LVL6
+	IRQ_LVL7
+Board description
+-----------------
+Clock rate:	40 - 66 MHz, depending on CPU
+Bus width:	16 bit Flash, 32 bit DRAM
+FLASH:		128K - 1024K, 120ns
+RAM:		2 - 32M DRAM SIMM, autodetects size and speed
+

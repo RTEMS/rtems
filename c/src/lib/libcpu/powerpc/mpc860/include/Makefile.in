@@ -1,0 +1,29 @@
+#
+#  $Id$
+#
+# Install any include files needed by libcpu.
+# Mainly this just means bsp.h which would normally be installed
+# after libcpu is built.
+# This is a bit of a hack.
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+H_FILES = $(wildcard $(srcdir)/*.h)
+SRCS=$(H_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+all:	install
+
+install:
+	test -d $(PROJECT_INCLUDE)/mpc860 || $(MKDIR) $(PROJECT_INCLUDE)/mpc860
+	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/mpc860
+
+all: FORCEIT
+	cd ../../../../libbsp/$(RTEMS_CPU)/$(RTEMS_BSP)/include; $(MAKE) all
+

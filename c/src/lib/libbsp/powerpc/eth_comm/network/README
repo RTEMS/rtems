@@ -1,0 +1,294 @@
+#
+#  $Id$
+#
+
+#
+# This package requires a version of GCC that supports the `-mcpu32' option.
+#
+
+#
+# Please send any comments, improvements, or bug reports to:
+#	W. Eric Norum
+#	Saskatchewan Accelerator Laboratory
+#	107 North Road
+#	University of Saskatchewan
+#	Saskatoon, Saskatchewan, CANADA
+#	S7N 5C6
+# eric@skatter.usask.ca
+#
+
+#
+# This board support package works with several different versions of
+# MC68360 systems.  The choice of hardware is made at the final link-edit
+# phase by setting the Makefile CLAGS_LD definition appropriately.
+#
+# Decisions made at compile time include:
+#	- If the CPU is a member of the 68040 family, the BSP is
+#	  compiled for a generic 68040/68360 system as described
+#	  in Chapter 9 of the MC68360 User's Manual.
+#	- If the preprocessor symbol M68360_ATLAS_HSB is defined,
+#	  the BSP is compiled for an Atlas HSB card.
+#	- Otherwise, the BSP is compiled for a generic 68360 system
+#	  as described in Chapter 9 of the MC68360 User's Manual.
+#
+# Decisions to be made a link-edit time are:
+#     - The size of the memory allocator heap.  The default value is
+#       64 kbytes.  If the network package is used the heap
+#       should be at least 256 kbytes.  If your network is large, or
+#       busy, the heap should be even larger.
+#       To choose a heap size of 256 kbytes,
+#	CFLAGS_LD += -Wl,--defsym -Wl,HeapSize=0x40000
+
+BSP NAME:	    gen68360 or gen68360_040
+BOARD:              Generic 68360 as described in Motorola MC68360 User's Manual
+BOARD:              Atlas Computer Equipment Inc. High Speed Bridge (HSB)
+BOARD:              Atlas Computer Equipment Inc. Advanced Communication Engine (ACE)
+BOARD:              Arnewsh SBC360 68040/68360 card
+BUS:                none
+CPU FAMILY:         Motorola CPU32+, Motorola 68040
+COPROCESSORS:       none
+MODE:               not applicable
+
+DEBUG MONITOR:      none (Hardware provides BDM)
+
+PERIPHERALS
+===========
+TIMERS:             PIT, Watchdog, 4 general purpose, 16 RISC
+  RESOLUTION:       one microsecond
+SERIAL PORTS:       4 SCC, 2 SMC, 1 SPI
+REAL-TIME CLOCK:
+DMA:                Each serial port, 2 general purpose
+VIDEO:              none
+SCSI:               none
+NETWORKING:         Ethernet on SCC1.
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       Programmable Interval Timer
+IOSUPP DRIVER:      Serial Management Controller 1
+SHMSUPP:            none
+TIMER DRIVER:       Timer 1
+
+STDIO
+=====
+PORT:               SMC1
+ELECTRICAL:         EIA-232 (if board supplies level shifter)
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             None
+STOP BITS:          1
+
+NOTES
+=====
+
+Board description
+-----------------
+clock rate:	25 MHz
+bus width:	8-bit PROM, 32-bit DRAM
+ROM:		To 1 MByte, 180 nsec (3 wait states), chip select 0
+RAM:		1 to 16 MByte DRAM SIMM, 60 nsec (0 wait states), parity or nonparity
+
+Host System
+-----------
+OPENSTEP 4.2 (Intel and Motorola), Solaris 2.5, Linux 2.0.29
+
+Verification (Standalone 68360)
+-------------------------------
+Single processor tests:  Passed
+Multi-processort tests:  not applicable
+Timing tests:
+	Context Switch
+
+	context switch: self 10
+	context switch: to another task 11
+	context switch: no floating point contexts 40
+	fp context switch: restore 1st FP task 41
+	fp context switch: save initialized, restore initialized 14
+	fp context switch: save idle, restore initialized 14
+	fp context switch: save idle, restore idle 43
+
+	Task Manager
+
+	rtems_task_create 133
+	rtems_task_ident 351
+	rtems_task_start 77
+	rtems_task_restart: calling task 93
+	rtems_task_restart: suspended task -- returns to caller 90
+	rtems_task_restart: blocked task -- returns to caller 120
+	rtems_task_restart: ready task -- returns to caller 92
+	rtems_task_restart: suspended task -- preempts caller 121
+	rtems_task_restart: blocked task -- preempts caller 143
+	rtems_task_restart: ready task -- preempts caller 138
+	rtems_task_delete: calling task 158
+	rtems_task_delete: suspended task 129
+	rtems_task_delete: blocked task 134
+	rtems_task_delete: ready task 136
+	rtems_task_suspend: calling task 71
+	rtems_task_suspend: returns to caller 47
+	rtems_task_resume: task readied -- returns to caller 48
+	rtems_task_resume: task readied -- preempts caller 67
+	rtems_task_set_priority: obtain current priority 36
+	rtems_task_set_priority: returns to caller 65
+	rtems_task_set_priority: preempts caller 102
+	rtems_task_mode: obtain current mode 13
+	rtems_task_mode: no reschedule 15
+	rtems_task_mode: reschedule -- returns to caller 22
+	rtems_task_mode: reschedule -- preempts caller 61
+	rtems_task_get_note 38
+	rtems_task_set_note 37
+	rtems_task_wake_after: yield -- returns to caller 22
+	rtems_task_wake_after: yields -- preempts caller 56
+	rtems_task_wake_when 110
+
+	Interrupt Manager
+
+	interrupt entry overhead: returns to nested interrupt 8
+	interrupt entry overhead: returns to interrupted task 8
+	interrupt entry overhead: returns to preempting task 8
+	interrupt exit overhead: returns to nested interrupt 7
+	interrupt exit overhead: returns to interrupted task 8
+	interrupt exit overhead: returns to preempting task 52
+
+	Clock Manager
+
+	rtems_clock_set 82
+	rtems_clock_get 2
+	rtems_clock_tick 15
+
+	Timer Manager
+
+	rtems_timer_create 33
+	rtems_timer_ident 343
+	rtems_timer_delete: inactive 47
+	rtems_timer_delete: active 50
+	rtems_timer_fire_after: inactive 59
+	rtems_timer_fire_after: active 63
+	rtems_timer_fire_when: inactive 83
+	rtems_timer_fire_when: active 83
+	rtems_timer_reset: inactive 55
+	rtems_timer_reset: active 58
+	rtems_timer_cancel: inactive 35
+	rtems_timer_cancel: active 38
+
+	Semaphore Manager
+
+	rtems_semaphore_create 62
+	rtems_semaphore_ident 368
+	rtems_semaphore_delete 61
+	rtems_semaphore_obtain: available 42
+	rtems_semaphore_obtain: not available -- NO_WAIT 42
+	rtems_semaphore_obtain: not available -- caller blocks 105
+	rtems_semaphore_release: no waiting tasks 46
+	rtems_semaphore_release: task readied -- returns to caller 64
+	rtems_semaphore_release: task readied -- preempts caller 84
+
+	Message Queue Manager
+
+	rtems_message_queue_create 240
+	rtems_message_queue_ident 342
+	rtems_message_queue_delete 79
+	rtems_message_queue_send: no waiting tasks 93
+	rtems_message_queue_send: task readied -- returns to caller 96
+	rtems_message_queue_send: task readied -- preempts caller 116
+	rtems_message_queue_urgent: no waiting tasks 93
+	rtems_message_queue_urgent: task readied -- returns to caller 97
+	rtems_message_queue_urgent: task readied -- preempts caller 117
+	rtems_message_queue_broadcast: no waiting tasks 54
+	rtems_message_queue_broadcast: task readied -- returns to caller 106
+	rtems_message_queue_broadcast: task readied -- preempts caller 126
+	rtems_message_queue_receive: available 79
+	rtems_message_queue_receive: not available -- NO_WAIT 48
+	rtems_message_queue_receive: not available -- caller blocks 111
+	rtems_message_queue_flush: no messages flushed 35
+	rtems_message_queue_flush: messages flushed 44
+
+	Event Manager
+
+	rtems_event_send: no task readied 30
+	rtems_event_send: task readied -- returns to caller 59
+	rtems_event_send: task readied -- preempts caller 81
+	rtems_event_receive: obtain current events 1
+	rtems_event_receive: available 34
+	rtems_event_receive: not available -- NO_WAIT 31
+	rtems_event_receive: not available -- caller blocks 84
+
+	Signal Manager
+
+	rtems_signal_catch 24
+	rtems_signal_send: returns to caller 42
+	rtems_signal_send: signal to self 47
+	exit ASR overhead: returns to calling task 33
+	exit ASR overhead: returns to preempting task 58
+
+	Partition Manager
+
+	rtems_partition_create 78
+	rtems_partition_ident 342
+	rtems_partition_delete 46
+	rtems_partition_get_buffer: available 40
+	rtems_partition_get_buffer: not available 39
+	rtems_partition_return_buffer 47
+
+	Region Manager
+
+	rtems_region_create 65
+	rtems_region_ident 349
+	rtems_region_delete 45
+	rtems_region_get_segment: available 55
+	rtems_region_get_segment: not available -- NO_WAIT 52
+	rtems_region_get_segment: not available -- caller blocks 119
+	rtems_region_return_segment: no waiting tasks 57
+	rtems_region_return_segment: task readied -- returns to caller 106
+	rtems_region_return_segment: task readied -- preempts caller 127
+
+	Dual-Ported Memory Manager
+
+	rtems_port_create 40
+	rtems_port_ident 342
+	rtems_port_delete 44
+	rtems_port_internal_to_external 32
+	rtems_port_external_to_internal 32
+
+	IO Manager
+
+	rtems_io_initialize 4
+	rtems_io_open 1
+	rtems_io_close 1
+	rtems_io_read 1
+	rtems_io_write 1
+	rtems_io_control 1
+
+	Rate Monotonic Manager
+
+	rtems_rate_monotonic_create 39
+	rtems_rate_monotonic_ident 343
+	rtems_rate_monotonic_cancel 43
+	rtems_rate_monotonic_delete: active 54
+	rtems_rate_monotonic_delete: inactive 52
+	rtems_rate_monotonic_period: obtain status 37
+	rtems_rate_monotonic_period: initiate period -- returns to caller 58
+	rtems_rate_monotonic_period: conclude periods -- caller blocks 75
+
+Porting
+-------
+This board support package is written for a 68360 system similar to that
+described in chapter 9 of the Motorola MC68360 Quad Integrated Communication
+Processor Users' Manual.  The salient features of this hardware are:
+
+	25 MHz external clock
+	DRAM address multiplexing provided by 68360
+	8-bit 180nsec PROM to CS0*
+	4 MBytes of 60 nsec parity DRAM (1Mx36) to RAS1*/CAS1*
+	Console serial port on SMC1
+	Ethernet interface on SCC1
+
+The board support package has been tested with:
+	A home-built 68360 board
+	An ACE360A and an HSB board produced by:
+		Atlas Computer Equipment
+		703 Colina Lane
+		Santa Barbara, CA 93103
+	A 68040/68360 board (SBC360) produced by:
+		Arnewsh Inc.
+		P.O. Box 270352
+		Fort Collins, CO 80527-0352
