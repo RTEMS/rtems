@@ -1,5 +1,9 @@
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
+	* sp20/system.h: Account for extra task stacks properly.
+
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
 	* sp13/sp13.scn: Id in screen had wrong class field value.
 	* sp13/system.h: Account for message buffer memory.
 	* sp13/task2.c: Remove unnecessary check for failure.
