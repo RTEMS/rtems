@@ -7,7 +7,7 @@ ENTRY(_start)
 PROVIDE (__stack = 0);
 MEMORY {
 	VECTORS	: ORIGIN = 0x0 ,  LENGTH = 0x3000
-	CODE : ORIGIN = 0x3000 , LENGTH = 0x200000 
+	CODE : ORIGIN = 0x3000 , LENGTH = 0x400000 
 }
 SECTIONS
 {
@@ -76,9 +76,6 @@ SECTIONS
 
   .fini		  : { _fini = .; KEEP(*(.fini))	} > CODE
 
-  _etext = .;
-  PROVIDE (etext = .);
-
   .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
   .rodata1        : { *(.rodata1) }	> CODE
 
@@ -104,6 +101,13 @@ SECTIONS
   .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >CODE
   .eh_frame	  : { *.(eh_frame)		} >CODE
 
+  /* NOTE: if the BSP uses page tables, the correctness of
+   *       '_etext' (and __DATA_START__) is CRUCIAL - otherwise,
+   *       an invalid mapping may result!!!
+   */
+  _etext = .;
+  PROVIDE (etext = .);
+
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  It would
      be more correct to do this:
@@ -119,8 +123,13 @@ SECTIONS
      that no actual memory is lost; the page which is skipped can not
      be referenced).  */
   . = ALIGN(0x1000);
- .data    :
+ .data ALIGN(0x1000) :
   {
+   /* NOTE: if the BSP uses page tables, the correctness of
+    *       '__DATA_START__' (and _etext) is CRUCIAL - otherwise,
+    *       an invalid mapping may result!!!
+    */
+	PROVIDE(__DATA_START__ = ABSOLUTE(.) );
     *(.data)
     *(.gnu.linkonce.d*)	
     SORT(CONSTRUCTORS)

@@ -1,6 +1,14 @@
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 349/bsps
+	* startup/Makefile.am, startup/linkcmds startup/Makefile.am,
+	startup/bspstart.c, startup/pgtbl_activate.c, startup/pgtbl_setup.c:
+	Let the powerpc/shared (+derived) BSPs use pagetable support
+	from libcpu.
+
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
 	* Makefile.am, configure.ac: Add glue to the powerpc/shared BSP
 	to use the vmeUniverse VME-PCI bridge driver.
 	* vme/.cvsignore, vme/Makefile.am, wrapup/Makefile.am: New files.
