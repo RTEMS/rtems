@@ -10,16 +10,17 @@ void zylons();
 void clear_leds();
 
 /*
- * led_putnum -- print a hex number on the LED. the value of num must be a char with
- *              the ascii value. ie... number 0 is '0', a is 'a', ' ' (null) clears
- *		the led display.
- *		Setting the bit to 0 turns it on, 1 turns it off.
- * 		the LED's are controlled by setting the right bit mask in the base
- * 		address.
- *		The bits are:
- *			[d.p | g | f | e | d | c | b | a ] is the byte.
+ * led_putnum --
+ *      print a hex number on the LED. the value of num must be a char with
+ *      the ascii value. ie... number 0 is '0', a is 'a', ' ' (null) clears
+ *	the led display.
+ *	Setting the bit to 0 turns it on, 1 turns it off.
+ * 	the LED's are controlled by setting the right bit mask in the base
+ * 	address.
+ *	The bits are:
+ *	[d.p | g | f | e | d | c | b | a ] is the byte.
  *
- *		The locations are:
+ *	The locations are:
  *
  *			 a
  *		       -----
