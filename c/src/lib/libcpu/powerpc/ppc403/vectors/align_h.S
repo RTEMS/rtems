@@ -43,7 +43,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #define ALIGN_REGS 0x0140
 
 
