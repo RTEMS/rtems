@@ -18,7 +18,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  init.c,v 1.2 1995/05/31 17:05:58 joel Exp
  */
 
 #include "system.h"
@@ -27,8 +27,6 @@
 #include "conftbl.h"
 #include "gvar.h"
 #include <stdio.h>
-#include "libcsupport.h"
-
 
 rtems_task Init(
   rtems_task_argument ignored

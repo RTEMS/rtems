@@ -14,7 +14,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  screen07.c,v 1.2 1995/05/31 17:09:03 joel Exp
  */
 
 #include "system.h"
@@ -22,10 +22,11 @@
 void Screen7()
 {
   long              buffer[ 4 ];
+  rtems_unsigned32  size;
   rtems_unsigned32  count;
   rtems_status_code status;
 
-  status = rtems_message_queue_broadcast( 100, (long (*)[4]) buffer, &count );
+  status = rtems_message_queue_broadcast( 100, (long (*)[4]) buffer, 16, &count );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -36,6 +37,7 @@ void Screen7()
   status = rtems_message_queue_create(
     0,
     3,
+    16,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
   );
@@ -49,6 +51,7 @@ void Screen7()
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     1,
+    16,
     RTEMS_GLOBAL,
     &Junk_id
   );
@@ -62,17 +65,19 @@ void Screen7()
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     2,
-    RTEMS_LIMIT,
+    16,
+    RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create successful" );
   puts(
-    "TA1 - rtems_message_queue_create - Q 1 - RTEMS_LIMIT - RTEMS_SUCCESSFUL"
+    "TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL"
   );
 
   status = rtems_message_queue_create(
     Queue_name[ 2 ],
     1,
+    16,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
   );
@@ -118,6 +123,7 @@ void Screen7()
   status = rtems_message_queue_receive(
     100,
     (long (*)[4]) buffer,
+    &size,
     RTEMS_DEFAULT_OPTIONS,
     0
   );
@@ -131,6 +137,7 @@ void Screen7()
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
     (long (*)[4]) buffer,
+    &size,
     RTEMS_NO_WAIT,
     RTEMS_NO_TIMEOUT
   );
@@ -145,6 +152,7 @@ void Screen7()
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
     (long (*)[4]) buffer,
+    &size,
     RTEMS_DEFAULT_OPTIONS,
     3 * TICKS_PER_SECOND
   );
@@ -158,7 +166,7 @@ void Screen7()
     "TA1 - rtems_message_queue_receive - Q 1 - woke up with RTEMS_TIMEOUT"
   );
 
-  status = rtems_message_queue_send( 100, (long (*)[4]) buffer );
+  status = rtems_message_queue_send( 100, (long (*)[4]) buffer, 16 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -166,15 +174,15 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_send - RTEMS_INVALID_ID" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer, 16 );
   directive_failed( status, "rtems_message_queue_send" );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer, 16 );
   directive_failed( status, "rtems_message_queue_send" );
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer, 16 );
   fatal_directive_status(
     status,
     RTEMS_TOO_MANY,

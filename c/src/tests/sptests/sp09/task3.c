@@ -17,7 +17,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task3.c,v 1.2 1995/05/31 17:09:22 joel Exp
  */
 
 #include "system.h"
@@ -28,11 +28,13 @@ rtems_task Task_3(
 {
   rtems_status_code status;
   long              buffer[ 4 ];
+  rtems_unsigned32  size;
 
   puts( "TA3 - rtems_message_queue_receive - Q 1 - RTEMS_WAIT FOREVER" );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
     (long (*)[4])buffer,
+    &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
   );

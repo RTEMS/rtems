@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  size.c,v 1.4 1995/07/12 19:47:25 joel Exp
  */
 
 #include <rtems/system.h>
@@ -66,7 +66,7 @@
      (sizeof (Timer_Control) + NAME_PTR_SIZE)
 #define PER_MSGQ      \
      (sizeof (Message_queue_Control) + NAME_PTR_SIZE)
-#define PER_MSG       \
+#define PER_MSG_OVERHEAD       \
      (sizeof (Message_queue_Buffer_control))
 #define PER_REGN      \
      (sizeof (Region_Control) + NAME_PTR_SIZE)
@@ -240,8 +240,7 @@ uninitialized =
                 (sizeof _ISR_Vector_table)                +
                 (sizeof _ISR_Signals_to_thread_executing) +
 
-/*message.h*/   (sizeof _Message_queue_Inactive_messages) +
-                (sizeof _Message_queue_Information)       +
+/*message.h*/   (sizeof _Message_queue_Information)       +
 
 /*modes.h*/     0                                         +
 
@@ -422,7 +421,7 @@ int maximum_tasks, size_tasks;
 int maximum_sems, size_sems;
 int maximum_timers, size_timers;
 int maximum_msgqs, size_msgqs;
-int maximum_msgs, size_msgs;
+int maximum_msgs, size_msgs_overhead;
 int maximum_regns, size_regns;
 int maximum_parts, size_parts;
 int maximum_ports, size_ports;
@@ -457,8 +456,8 @@ total_size += size_msgqs;
 
 printf( "What is maximum_messages? " );
 maximum_msgs = getint();
-size_msgs = PER_MSG * maximum_msgs;
-total_size += size_msgs;
+size_msgs_overhead = PER_MSG_OVERHEAD * maximum_msgs;
+total_size += size_msgs_overhead;
 
 printf( "What is maximum_regions? " );
 maximum_regns = getint();
@@ -545,8 +544,8 @@ printf( " Timers               - %03d * %03d            =  %d\n",
           maximum_timers, PER_TIMER, size_timers );
 printf( " Msg Queues           - %03d * %03d            =  %d\n",
           maximum_msgqs, PER_MSGQ, size_msgqs );
-printf( " Messages             - %03d * %03d            =  %d\n",
-          maximum_msgs, PER_MSG, size_msgs );
+printf( " Messages Overhead    - %03d * %03d            =  %d\n",
+          maximum_msgs, PER_MSG_OVERHEAD, size_msgs_overhead );
 printf( " Regions              - %03d * %03d            =  %d\n",
           maximum_regns, PER_REGN, size_regns);
 printf( " Partitions           - %03d * %03d            =  %d\n",
@@ -586,7 +585,7 @@ printf( " Tasks                - maximum_tasks * %d\n",      PER_TASK );
 printf( " Timers               - maximum_timers * %d\n",     PER_TIMER );
 printf( " Semaphores           - maximum_semaphores * %d\n", PER_SEMAPHORE);
 printf( " Message Queues       - maximum_message_queues * %d\n", PER_MSGQ );
-printf( " Messages             - maximum_messages * %d\n",   PER_MSG );
+printf( " Messages             -\n");
 printf( " Regions              - maximum_regions * %d\n",    PER_REGN );
 printf( " Partitions           - maximum_partitions * %d\n", PER_PART );
 printf( " Ports                - maximum_ports * %d\n",      PER_PORT );

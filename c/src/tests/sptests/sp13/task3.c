@@ -16,7 +16,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task3.c,v 1.2 1995/05/31 17:10:24 joel Exp
  */
 
 #include "system.h"
@@ -26,6 +26,7 @@ rtems_task Task_3(
 )
 {
   long              buffer[ 4 ];
+  rtems_unsigned32  size;
   rtems_unsigned32  count;
   rtems_status_code status;
 
@@ -36,6 +37,7 @@ rtems_task Task_3(
   status = rtems_message_queue_receive(
     Queue_id[ 2 ],
     (long (*)[4])buffer,
+    &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
   );
@@ -49,6 +51,7 @@ rtems_task Task_3(
   status = rtems_message_queue_broadcast(
     Queue_id[ 1 ],
     (long (*)[4])buffer,
+    16,
     &count
   );
   printf( "TA3 - number of tasks awakened = %02d\n", count );
@@ -60,6 +63,7 @@ rtems_task Task_3(
   status = rtems_message_queue_receive(
     Queue_id[ 3 ],
     (long (*)[4])buffer,
+    &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
   );

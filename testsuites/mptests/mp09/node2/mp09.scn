@@ -16,12 +16,12 @@ Receiving message ...
 Received : abcdefghijklmno
 Receiving message ...
 Received : ABCDEFGHIJKLMNO
+Receiver delaying for a second
 Flushing remote empty queue
-00 messages were flushed on the remote queue
+0 messages were flushed on the remote queue
 Send messages to be flushed from remote queue
 Flushing remote queue
-01 messages were flushed on the remote queue
+1 messages were flushed on the remote queue
 Waiting for message queue to be deleted
-
 Global message queue deleted
 *** END OF TEST 9 ***

@@ -18,7 +18,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  msgtask1.c,v 1.2 1995/05/31 17:04:58 joel Exp
  */
 
 #include "system.h"
@@ -32,6 +32,7 @@ rtems_task Message_queue_task(
   rtems_unsigned32   yield_count;
   rtems_unsigned32  *buffer_count;
   rtems_unsigned32  *overflow_count;
+  rtems_unsigned32   size;
 
   Msg_buffer[ index ][0] = 0;
   Msg_buffer[ index ][1] = 0;
@@ -53,7 +54,8 @@ rtems_task Message_queue_task(
   if ( Multiprocessing_configuration.node == 1 ) {
       status = rtems_message_queue_send(
         Queue_id[ 1 ],
-        (long (*)[4])Msg_buffer[ index ]
+        (long (*)[4])Msg_buffer[ index ],
+        16
       );
       directive_failed( status, "rtems_message_queue_send" );
       overflow_count = &Msg_buffer[ index ][0];
@@ -70,6 +72,7 @@ rtems_task Message_queue_task(
       status = rtems_message_queue_receive(
         Queue_id[ 1 ],
         (long (*)[4])Msg_buffer[ index ],
+        &size,
         RTEMS_DEFAULT_OPTIONS,
         RTEMS_NO_TIMEOUT
       );
@@ -83,7 +86,8 @@ rtems_task Message_queue_task(
 
       status = rtems_message_queue_send(
         Queue_id[ 1 ],
-        (long (*)[4])Msg_buffer[ index ]
+        (long (*)[4])Msg_buffer[ index ],
+        16
       );
       directive_failed( status, "rtems_message_queue_send" );
 

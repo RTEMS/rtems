@@ -15,7 +15,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.3 1995/05/31 17:37:05 joel Exp
  */
 
 #include "system.h"
@@ -29,63 +29,62 @@ rtems_task Task_1(
 )
 {
   rtems_status_code status;
-  rtems_status_code return_value;
 
   puts( "-----  TESTING THE NULL DRIVER CHECKS  -----" );
 
-  status = rtems_io_initialize( NO_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_initialize( NO_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_initialize" );
   puts( "TA1 - rtems_io_initialize  - NULL DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_open( NO_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_open( NO_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_open" );
   puts( "TA1 - rtems_io_open        - NULL DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_close( NO_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_close( NO_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_close" );
   puts( "TA1 - rtems_io_close       - NULL DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_read( NO_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_read( NO_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_read" );
   puts( "TA1 - rtems_io_read        - NULL DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_write( NO_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_write( NO_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_write" );
   puts( "TA1 - rtems_io_write       - NULL DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_control( NO_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_control( NO_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_control" );
   puts( "TA1 - rtems_io_control     - NULL DRIVER RTEMS_SUCCESSFUL" );
 
   puts( "-----  TESTING THE I/O MANAGER DIRECTIVES  -----" );
 
-  status = rtems_io_initialize( STUB_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_initialize( STUB_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_initialize" );
   puts( "TA1 - rtems_io_initialize  - STUB DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_open( STUB_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_open( STUB_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_open" );
   puts( "TA1 - rtems_io_open        - STUB DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_close( STUB_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_close( STUB_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_close" );
   puts( "TA1 - rtems_io_close       - STUB DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_read( STUB_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_read( STUB_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_read" );
   puts( "TA1 - rtems_io_read        - STUB DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_write( STUB_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_write( STUB_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_write" );
   puts( "TA1 - rtems_io_write       - STUB DRIVER RTEMS_SUCCESSFUL" );
 
-  status = rtems_io_control( STUB_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_control( STUB_DRIVER_MAJOR, 0, NULL );
   directive_failed( status, "rtems_io_control" );
   puts( "TA1 - rtems_io_control     - STUB DRIVER RTEMS_SUCCESSFUL" );
 
   puts( "-----  RETURNING INVALID MAJOR NUMBER -----" );
 
-  status = rtems_io_initialize( INVALID_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_initialize( INVALID_DRIVER_MAJOR, 0, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
@@ -93,7 +92,7 @@ rtems_task Task_1(
   );
   puts( "TA1 - rtems_io_initialize  - RTEMS_INVALID_NUMBER" );
 
-  status = rtems_io_open( INVALID_DRIVER_MAJOR, 0, NULL, &return_value );
+  status = rtems_io_open( INVALID_DRIVER_MAJOR, 0, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,

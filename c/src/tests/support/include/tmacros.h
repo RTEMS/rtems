@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  tmacros.h,v 1.2 1995/05/31 17:00:10 joel Exp
  */
 
 #ifndef __TMACROS_h
@@ -69,7 +69,7 @@ extern "C" {
 #define pause_and_screen_number( _screen ) \
   do { \
     char buffer[ 80 ]; \
-    printf( "<pause - screen %d> ", (_screen) ); fflush( stdout ); \
+    printf( "<pause - screen %d>", (_screen) ); fflush( stdout ); \
     gets( buffer ); \
     puts( "" ); \
   } while ( 0 )

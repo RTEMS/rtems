@@ -8,7 +8,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.2 1995/05/31 17:18:00 joel Exp
  */
 
 #include "system.h"
@@ -89,7 +89,6 @@ rtems_task Task_1(
   rtems_unsigned32    index;
   rtems_mode          previous_mode;
   rtems_task_priority previous_priority;
-  rtems_unsigned32    return_value;
   rtems_status_code   status;
 
   Partition_name = rtems_build_name( 'P', 'A', 'R', 'T' );
@@ -350,7 +349,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_initialize( 0, 0, NULL, &return_value );
+      (void) rtems_io_initialize( 0, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -363,7 +362,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_open( 0, 0, NULL, &return_value );
+      (void) rtems_io_open( 0, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -376,7 +375,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_close( 0, 0, NULL, &return_value );
+      (void) rtems_io_close( 0, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -389,7 +388,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_read( 0, 0, NULL, &return_value );
+      (void) rtems_io_read( 0, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -402,7 +401,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_write( 0, 0, NULL, &return_value );
+      (void) rtems_io_write( 0, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -415,7 +414,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_control( 0, 0, NULL, &return_value );
+      (void) rtems_io_control( 0, 0, NULL );
   end_time = Read_timer();
 
   put_time(

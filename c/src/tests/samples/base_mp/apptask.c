@@ -17,11 +17,10 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  apptask.c,v 1.2 1995/05/31 17:05:14 joel Exp
  */
 
 #include "system.h"
-#include "libcsupport.h"
 
 rtems_task Application_task(
   rtems_task_argument node

@@ -16,7 +16,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.2 1995/05/31 17:03:19 joel Exp
  */
 
 #include "system.h"
@@ -32,6 +32,7 @@ rtems_task Test_task(
 {
   rtems_status_code status;
   rtems_unsigned32  count;
+  rtems_unsigned32  size;
   char              receive_buffer[16];
 
   status = rtems_task_wake_after( TICKS_PER_SECOND );
@@ -64,21 +65,22 @@ rtems_task Test_task(
     puts( "Flushing remote empty queue" );
     status = rtems_message_queue_flush( Queue_id[ 1 ], &count );
     directive_failed( status, "rtems_message_queue_flush" );
-    printf( "%02d messages were flushed on the remote queue\n", count );
+    printf( "%d messages were flushed on the remote queue\n", count );
 
     puts( "Send messages to be flushed from remote queue" );
-    status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer1 );
+    status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer1, 16 );
     directive_failed( status, "rtems_message_queue_send" );
 
     puts( "Flushing remote queue" );
     status = rtems_message_queue_flush( Queue_id[ 1 ], &count );
     directive_failed( status, "rtems_message_queue_flush" );
-    printf( "%02d messages were flushed on the remote queue\n", count );
+    printf( "%d messages were flushed on the remote queue\n", count );
 
     puts( "Waiting for message queue to be deleted" );
     status = rtems_message_queue_receive(
       Queue_id[ 1 ],
       (long (*)[4])receive_buffer,
+      &size,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT
     );

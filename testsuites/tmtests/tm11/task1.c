@@ -8,7 +8,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.2 1995/05/31 17:15:50 joel Exp
  */
 
 #include "system.h"
@@ -78,6 +78,7 @@ rtems_task test_init(
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' '  ),
     OPERATION_COUNT,
+    16,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id
   );
@@ -106,30 +107,36 @@ rtems_task test_init(
   }
 
   Timer_initialize();
-    (void) rtems_message_queue_send( Queue_id, (long (*)[4]) Buffer );
+    (void) rtems_message_queue_send( Queue_id, (long (*)[4]) Buffer, 16 );
 }
 
 rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
+  rtems_unsigned32 size;
+
   (void) rtems_message_queue_receive(
            Queue_id,
            (long (*)[4]) Buffer,
+           &size,
            RTEMS_DEFAULT_OPTIONS,
            RTEMS_NO_TIMEOUT
          );
 
-  (void) rtems_message_queue_send( Queue_id, (long (*)[4]) Buffer );
+  (void) rtems_message_queue_send( Queue_id, (long (*)[4]) Buffer, size );
 }
 
 rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  rtems_unsigned32 size;
+  
   (void) rtems_message_queue_receive(
            Queue_id,
            (long (*)[4]) Buffer,
+           &size,
            RTEMS_DEFAULT_OPTIONS,
            RTEMS_NO_TIMEOUT
          );

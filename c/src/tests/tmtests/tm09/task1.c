@@ -8,7 +8,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.2 1995/05/31 17:15:28 joel Exp
  */
 
 #include "system.h"
@@ -57,6 +57,7 @@ rtems_task Test_task (
     rtems_message_queue_create(
       1,
       OPERATION_COUNT,
+      16,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Queue_id
     );
@@ -103,6 +104,7 @@ void queue_test()
   rtems_unsigned32  iterations;
   long              buffer[4];
   rtems_status_code status;
+  rtems_unsigned32  size;
 
   send_loop_time    = 0;
   urgent_loop_time  = 0;
@@ -134,7 +136,7 @@ void queue_test()
 
     Timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) rtems_message_queue_send( Queue_id, (long (*)[4])buffer );
+        (void) rtems_message_queue_send( Queue_id, (long (*)[4])buffer, 16 );
     send_time += Read_timer();
 
     Timer_initialize();
@@ -142,6 +144,7 @@ void queue_test()
         (void) rtems_message_queue_receive(
                  Queue_id,
                  (long (*)[4])buffer,
+                 &size,
                  RTEMS_DEFAULT_OPTIONS,
                  RTEMS_NO_TIMEOUT
                );
@@ -149,7 +152,7 @@ void queue_test()
 
     Timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) rtems_message_queue_urgent( Queue_id, (long (*)[4])buffer );
+        (void) rtems_message_queue_urgent( Queue_id, (long (*)[4])buffer, 16 );
     urgent_time += Read_timer();
 
     Timer_initialize();
@@ -157,6 +160,7 @@ void queue_test()
         (void) rtems_message_queue_receive(
                  Queue_id,
                  (long (*)[4])buffer,
+                 &size,
                  RTEMS_DEFAULT_OPTIONS,
                  RTEMS_NO_TIMEOUT
                );
@@ -169,7 +173,8 @@ void queue_test()
     /* send one message to flush */
     status = rtems_message_queue_send(
        Queue_id,
-       (long (*)[4])buffer
+       (long (*)[4])buffer,
+       16
     );
     directive_failed( status, "rtems_message_queue_send" );
 

@@ -15,7 +15,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  sendmsg.c,v 1.2 1995/05/31 17:03:16 joel Exp
  */
 
 #include "system.h"
@@ -28,7 +28,7 @@ void Send_messages()
   puts_nocr( "rtems_message_queue_send: " );
   puts( buffer1 );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer1 );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer1, 16 );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "Delaying for a second" );
@@ -37,7 +37,7 @@ void Send_messages()
 
   puts_nocr( "rtems_message_queue_urgent: " );
   puts( buffer2 );
-  status = rtems_message_queue_urgent( Queue_id[ 1 ], (long (*)[4])buffer2 );
+  status = rtems_message_queue_urgent( Queue_id[ 1 ], (long (*)[4])buffer2, 16 );
   directive_failed( status, "rtems_message_queue_urgent" );
 
   puts( "Delaying for a second" );
@@ -49,6 +49,7 @@ void Send_messages()
   status = rtems_message_queue_broadcast(
     Queue_id[ 1 ],
     (long (*)[4])buffer3,
+    16,
     &broadcast_count
   );
   directive_failed( status, "rtems_message_queue_broadcast" );

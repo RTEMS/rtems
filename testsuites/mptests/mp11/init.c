@@ -22,7 +22,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  init.c,v 1.2 1995/05/31 17:03:55 joel Exp
  */
 
 #include "system.h"
@@ -69,7 +69,8 @@ rtems_task Init(
     status = rtems_message_queue_create(
       Queue_name[ 1 ],
       3,
-      RTEMS_GLOBAL|RTEMS_LIMIT,
+      16,
+      RTEMS_GLOBAL,
       &junk_id
     );
     fatal_directive_status(

@@ -8,7 +8,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.2 1995/05/31 17:18:40 joel Exp
  */
 
 #include "system.h"
@@ -44,7 +44,8 @@ rtems_task Init(
 
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' '),
-    0,
+    100,
+    16,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id
   );
@@ -91,6 +92,7 @@ rtems_task High_task(
     (void) rtems_message_queue_broadcast(
              Queue_id,
              (long (*)[4]) Buffer,
+             16,
              &count
            );
   end_time = Read_timer();
@@ -114,6 +116,7 @@ rtems_task Low_task(
   rtems_id          id;
   rtems_unsigned32  index;
   rtems_unsigned32  count;
+  rtems_unsigned32  size;
   rtems_status_code status;
 
   status = rtems_task_create(
@@ -132,6 +135,7 @@ rtems_task Low_task(
   status = rtems_message_queue_receive(
     Queue_id,
     (long (*)[4]) Buffer,
+    &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
   );
@@ -142,6 +146,7 @@ rtems_task Low_task(
       (void) rtems_message_queue_broadcast(
                Queue_id,
                (long (*)[4]) Buffer,
+               16,
                &count
              );
   end_time = Read_timer();
@@ -157,6 +162,7 @@ rtems_task Low_task(
   (void) rtems_message_queue_receive(
            Queue_id,
            (long (*)[4]) Buffer,
+           &size,
            RTEMS_DEFAULT_OPTIONS,
            RTEMS_NO_TIMEOUT
          );
@@ -186,6 +192,7 @@ rtems_task Preempt_task(
     (void) rtems_message_queue_broadcast(
              Queue_id,
              (long (*)[4]) Buffer,
+             16,
              &count
            );
 

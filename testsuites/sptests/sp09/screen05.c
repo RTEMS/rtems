@@ -14,7 +14,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  screen05.c,v 1.2 1995/05/31 17:08:59 joel Exp
  */
 
 #include "system.h"
@@ -49,12 +49,14 @@ void Screen5()
   directive_failed( status, "rtems_semaphore_create" );
   puts( "TA1 - rtems_semaphore_create - 2 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_semaphore_create(
-     Semaphore_name[ 3 ],
-     1,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &Junk_id
-  );
+  do {
+      status = rtems_semaphore_create(
+          Semaphore_name[ 3 ],
+          1,
+          RTEMS_DEFAULT_ATTRIBUTES,
+          &Junk_id);
+  } while (status == RTEMS_SUCCESSFUL);
+
   fatal_directive_status(
     status,
     RTEMS_TOO_MANY,

@@ -11,12 +11,11 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  system.h,v 1.2 1995/05/31 17:05:03 joel Exp
  */
 
-#include <rtems.h>
-#include "tmacros.h"
-#include "mpci.h"
+#include <tmacros.h>
+#include <mpci.h>
 
 /* Miscellaneous */
 

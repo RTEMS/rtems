@@ -16,12 +16,10 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  putbuff.c,v 1.2 1995/05/31 17:10:15 joel Exp
  */
 
 #include "system.h"
-
-#define BUFFER_LENGTH 16
 
 void Put_buffer(
   long *buffer

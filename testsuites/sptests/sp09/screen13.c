@@ -14,53 +14,52 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  screen13.c,v 1.2 1995/05/31 17:09:14 joel Exp
  */
 
 #include "system.h"
 
 void Screen13()
 {
-  rtems_unsigned32  result;
   rtems_time_of_day time;
   rtems_status_code status;
 
-  status = rtems_io_close( 0xffff, 0x0000, NULL, &result );
+  status = rtems_io_close( 0xffff, 0x0000, NULL);
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_close with bad major number"
   );
   puts( "TA1 - rtems_io_close - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_control( 0xffff, 0x00000, NULL, &result );
+  status = rtems_io_control( 0xffff, 0x00000, NULL);
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_close with bad major number"
   );
   puts( "TA1 - rtems_io_control - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_initialize( 0xffff, 0x00000, NULL, &result );
+  status = rtems_io_initialize( 0xffff, 0x00000, NULL);
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_initialize with bad major number"
   );
   puts( "TA1 - rtems_io_initialize - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_open( 0xffff, 0x00000, NULL, &result );
+  status = rtems_io_open( 0xffff, 0x00000, NULL);
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_open with bad major number"
   );
   puts( "TA1 - rtems_io_open - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_read( 0xffff, 0x00000, NULL, &result );
+  status = rtems_io_read( 0xffff, 0x00000, NULL);
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_read with bad major number"
   );
   puts( "TA1 - rtems_io_read - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_write( 0xffff, 0x0ffff, NULL, &result );
+  status = rtems_io_write( 0xffff, 0x0ffff, NULL);
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,

@@ -14,7 +14,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  screen08.c,v 1.2 1995/05/31 17:09:05 joel Exp
  */
 
 #include "system.h"
@@ -31,23 +31,24 @@ void Screen8()
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     2,
-    RTEMS_LIMIT,
+    16,
+    RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create successful" );
   puts(
-    "TA1 - rtems_message_queue_create - Q 1 - RTEMS_LIMIT - RTEMS_SUCCESSFUL"
+    "TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL"
   );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer, 16 );
   directive_failed( status, "rtems_message_queue_send successful" );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer, 16 );
   directive_failed( status, "rtems_message_queue_send successful" );
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer, 16 );
   fatal_directive_status(
     status,
     RTEMS_TOO_MANY,
@@ -62,30 +63,35 @@ void Screen8()
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     3,
-    RTEMS_LIMIT,
+    16,
+    RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create successful" );
   puts(
-    "TA1 - rtems_message_queue_create - Q 1 - RTEMS_LIMIT - RTEMS_SUCCESSFUL"
+    "TA1 - rtems_message_queue_create - Q 1 - 3 DEEP - RTEMS_SUCCESSFUL"
   );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer, 16 );
   directive_failed( status, "rtems_message_queue_send successful" );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer, 16 );
   directive_failed( status, "rtems_message_queue_send successful" );
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer );
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer, 16 );
+  directive_failed( status, "rtems_message_queue_send successful" );
+  puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_SUCCESSFUL" );
+
+  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer, 16 );
   fatal_directive_status(
     status,
-    RTEMS_UNSATISFIED,
+    RTEMS_TOO_MANY,
     "rtems_message_queue_send too many to limited queue"
   );
   puts(
-    "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_UNSATISFIED"
+    "TA1 - rtems_message_queue_send - BUFFER 4 TO Q 1 - RTEMS_TOO_MANY"
   );
 
   status = rtems_message_queue_delete( Queue_id[ 1 ] );
@@ -95,12 +101,13 @@ void Screen8()
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     3,
-    RTEMS_LIMIT,
+    16,
+    RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create successful" );
   puts(
-    "TA1 - rtems_message_queue_create - Q 1 - RTEMS_LIMIT - RTEMS_SUCCESSFUL"
+    "TA1 - rtems_message_queue_create - Q 1 - 3 DEEP - RTEMS_SUCCESSFUL"
   );
 
   puts( "TA1 - rtems_task_start - start TA3 - RTEMS_SUCCESSFUL" );

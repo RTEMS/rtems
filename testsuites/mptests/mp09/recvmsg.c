@@ -15,7 +15,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  recvmsg.c,v 1.2 1995/05/31 17:03:14 joel Exp
  */
 
 #include "system.h"
@@ -24,6 +24,7 @@ void Receive_messages()
 {
  rtems_status_code status;
  rtems_unsigned32  index;
+ rtems_unsigned32  size;
  char              receive_buffer[16];
 
  for ( index=1 ; index <=3 ; index++ ) {
@@ -31,6 +32,7 @@ void Receive_messages()
    status = rtems_message_queue_receive(
      Queue_id[ 1 ],
      (long (*)[4])receive_buffer,
+     &size,
      RTEMS_DEFAULT_OPTIONS,
      RTEMS_NO_TIMEOUT
    );

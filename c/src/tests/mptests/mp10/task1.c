@@ -16,7 +16,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.2 1995/05/31 17:03:37 joel Exp
  */
 
 #include "system.h"
@@ -26,6 +26,7 @@ rtems_task Test_task1(
 )
 {
   char              receive_buffer[16];
+  rtems_unsigned32  size;
   rtems_status_code status;
 
   puts( "Getting QID of message queue" );
@@ -42,6 +43,7 @@ rtems_task Test_task1(
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
     (long (*)[4])receive_buffer,
+    &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
   );

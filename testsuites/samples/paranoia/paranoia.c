@@ -1,5 +1,5 @@
 /*
- *  RTEMS RCS Id: $Id$
+ *  RTEMS RCS Id: paranoia.c,v 1.2 1995/05/31 17:06:09 joel Exp
  *
  *      A C version of Kahan's Floating Point Test "Paranoia"
  *
@@ -161,7 +161,7 @@
  */
 
 #ifdef NEED_REENT
-#include "reent.h"
+#include <reent.h>
 struct _reent libm_reent = _REENT_INIT(libm_reent);
 struct _reent *_impure_ptr = &libm_reent;
 #endif

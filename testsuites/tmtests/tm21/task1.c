@@ -8,7 +8,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.2 1995/05/31 17:18:19 joel Exp
  */
 
 #include "system.h"
@@ -72,6 +72,7 @@ rtems_task Task_1(
     status = rtems_message_queue_create(
       index,
       OPERATION_COUNT,
+      16,
       RTEMS_DEFAULT_ATTRIBUTES,
       &id
     );
