@@ -80,17 +80,17 @@ clean_tools:
 # NOTE: The wildcard on the install should pick up everything except
 #       the tests directory.  This significantly minimizes the install size.
 install: all
-	 -$(MKDIR) $(prefix)/$(target)
-	 -$(MKDIR) $(prefix)/$(target)/rtems
-	 -$(MKDIR) $(prefix)/$(target)/rtems/make
-	 -$(MKDIR) $(prefix)/$(target)/rtems/make/compilers
-	 -$(MKDIR) $(prefix)/$(target)/rtems/make/custom
-	 -$(MKDIR) $(prefix)/$(target)/rtems/make/os
-	-rm -rf $(prefix)/$(target)/rtems/$(RTEMS_BSP)
+	 -$(MKDIR) $(prefix)/
+	 -$(MKDIR) $(prefix)/rtems
+	 -$(MKDIR) $(prefix)/rtems/make
+	 -$(MKDIR) $(prefix)/rtems/make/compilers
+	 -$(MKDIR) $(prefix)/rtems/make/custom
+	 -$(MKDIR) $(prefix)/rtems/make/os
+	-rm -rf $(prefix)/rtems/$(RTEMS_BSP)
 	cd ../; tar cf - make $(RTEMS_BSP)/[bilsu]* | \
-		(cd $(prefix)/$(target)/rtems; tar xpBf - )
+		(cd $(prefix)/rtems; tar xpBf - )
 	(echo RTEMS_BSP = $(RTEMS_BSP) ; cat make/Templates/Makefile.inc ) \
-		> $(prefix)/$(target)/rtems/$(RTEMS_BSP)/Makefile.inc
+		> $(prefix)/rtems/$(RTEMS_BSP)/Makefile.inc
 
 tests:
 	cd src/tests; $(MAKE) all
