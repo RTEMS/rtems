@@ -296,6 +296,11 @@ sbwait(sb)
 	sb->sb_sel.si_pid = tid;
 
 	/*
+	 * Show that socket is waiting
+	 */
+	sb->sb_flags |= SB_WAIT;
+
+	/*
 	 * Release the network semaphore.
 	 */
 	rtems_bsdnet_semaphore_release ();
@@ -329,11 +334,9 @@ sowakeup(so, sb)
 	register struct socket *so;
 	register struct sockbuf *sb;
 {
-	rtems_id tid;
-
-	if ((tid = sb->sb_sel.si_pid) != 0) {
-		sb->sb_sel.si_pid = 0;
-		rtems_event_send (tid, SBWAIT_EVENT);
+	if (sb->sb_flags & SB_WAIT) {
+		sb->sb_flags &= ~SB_WAIT;
+		rtems_event_send (sb->sb_sel.si_pid, SBWAIT_EVENT);
 	}
 }
 

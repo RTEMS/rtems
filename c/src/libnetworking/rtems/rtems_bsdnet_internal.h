@@ -188,5 +188,8 @@ int rtems_bsdnet_makeFdForSocket (void *);
 #define NETISR_IP_EVENT                (1 << NETISR_IP)
 #define NETISR_ARP_EVENT       (1 << NETISR_ARP)
 #define NETISR_EVENTS  (NETISR_IP_EVENT|NETISR_ARP_EVENT)
+#if (SBWAIT_EVENT & SOSLEEP_EVENT & NETISR_EVENTS)
+# error "Network event conflict"
+#endif
 
 #endif /* _RTEMS_BSDNET_INTERNAL_H_ */
