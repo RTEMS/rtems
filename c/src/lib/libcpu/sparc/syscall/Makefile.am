@@ -9,7 +9,7 @@ PGM = $(ARCH)/syscall.rel
 ## Assembly sources
 S_FILES = syscall.S
 
-H_FILES = syscall.h
+noinst_HEADERS = syscall.h
 
 syscall_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.o)
 
