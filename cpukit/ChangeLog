@@ -1,3 +1,8 @@
+2002-08-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Use librtems.a.
+	* wrapup/Makefile.am: Use libsapi.a.
+
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Use libscore.a.

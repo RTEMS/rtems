@@ -12,8 +12,8 @@ if LIBSCORECPU
 CPU_OBJS = ../score/cpu/$(RTEMS_CPU)/$(ARCH)/libscorecpu.a
 endif
 CORE_OBJS = ../score/src/$(ARCH)/libscore.a
-SAPI_OBJS = $(wildcard ../sapi/src/$(ARCH)/*.$(OBJEXT))
-RTEMS_OBJS = $(wildcard ../rtems/src/$(ARCH)/*.$(OBJEXT))
+SAPI_OBJS = ../sapi/src/$(ARCH)/libsapi.a
+RTEMS_OBJS = ../rtems/src/$(ARCH)/librtems.a
 
 if HAS_POSIX
 POSIX_OBJS = ../posix/src/$(ARCH)/libposix.a
