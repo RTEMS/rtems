@@ -1,3 +1,16 @@
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in bootloader/Makefile.am, clock/Makefile.am,
+	console/Makefile.am, include/Makefile.am, irq/Makefile.am,
+	motorola/Makefile.am, openpic/Makefile.am, pci/Makefile.am,
+	residual/Makefile.am, start/Makefile.am, startup/Makefile.am,
+	vectors/Makefile.am, vme/Makefile.am. Use automake compilation rules.
+	* bootloader/Makefile.am, clock/Makefile.am, console/Makefile.am,
+	include/Makefile.am, irq/Makefile.am, motorola/Makefile.am,
+	openpic/Makefile.am, pci/Makefile.am, residual/Makefile.am,
+	start/Makefile.am, startup/Makefile.am, vectors/Makefile.am,
+	vme/Makefile.am: Remove.
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/Makefile.am: Add PREINSTALL_DIRS.
