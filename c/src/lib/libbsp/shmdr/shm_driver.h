@@ -130,6 +130,9 @@ extern "C" {
 #elif defined(i386)
 #define SHM_LOCK_VALUE    0x80000000
 #define SHM_UNLOCK_VALUE  0
+#elif defined(mips64orion)
+#define SHM_LOCK_VALUE    0x80000000
+#define SHM_UNLOCK_VALUE  0
 #elif defined(hppa1_1)
 #define SHM_LOCK_VALUE    0
 #define SHM_UNLOCK_VALUE  1
@@ -139,6 +142,8 @@ extern "C" {
 #elif defined(no_cpu)               /* for this values are irrelevant */
 #define SHM_LOCK_VALUE    1
 #define SHM_UNLOCK_VALUE  0
+#else
+#error "shm.h - no SHM_LOCK_VALUE defined for this CPU architecture"
 #endif
 
 #define Shm_Convert( value ) \
