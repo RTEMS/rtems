@@ -80,7 +80,7 @@ int ttyname_r(
     rtems_set_errno_and_return_minus_one(EBADF);
 
   /* Must be a character device. */
-  if (_fstat (fd, &sb) || !S_ISCHR (sb.st_mode))
+  if (fstat (fd, &sb) || !S_ISCHR (sb.st_mode))
     rtems_set_errno_and_return_minus_one(EBADF);
 
   if ((dp = opendir (_PATH_DEV)) == NULL)
