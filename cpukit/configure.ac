@@ -47,8 +47,6 @@ RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_ITRON_API
 RTEMS_CHECK_NETWORKING
 
-RTEMS_CPU_SUBDIRS([score/cpu])
-
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
 ## FIXME: Should better use a feature-based test
 AC_MSG_CHECKING([whether CPU supports librpc])
@@ -91,6 +89,10 @@ AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
+## FIXME: This check is doubtful
+AS_IF([test "$HAS_MP" = "yes"],
+  [RTEMS_CHECK_SYSV_UNIX])
+
 ## The code fragment below had been used in tools/cpu/unix/gensize.c.
 ## FIXME: 
 ## * The pad very likely is not necessary.
@@ -311,6 +313,18 @@ rtems/Makefile
 sapi/Makefile
 score/Makefile
 score/cpu/Makefile
+score/cpu/arm/Makefile
+score/cpu/c4x/Makefile
+score/cpu/h8300/Makefile
+score/cpu/i386/Makefile
+score/cpu/i960/Makefile
+score/cpu/m68k/Makefile
+score/cpu/mips/Makefile
+score/cpu/or32/Makefile
+score/cpu/powerpc/Makefile
+score/cpu/sh/Makefile
+score/cpu/sparc/Makefile
+score/cpu/unix/Makefile
 posix/Makefile
 itron/Makefile
 libblock/Makefile
