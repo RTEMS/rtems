@@ -116,9 +116,9 @@ int (*idle_time_hook) __P((struct ppp_idle *)) = NULL;
 int (*pap_check_hook) __P((void)) = NULL;
 
 /* Hook for a plugin to check the PAP user and password */
-int (*pap_auth_hook) __P((char *user, char *passwd, char **msgp,
+int (*pap_auth_hook) __P((char *user, char *passwd/*, char **msgp,
 			  struct wordlist **paddrs,
-			  struct wordlist **popts)) = NULL;
+			  struct wordlist **popts*/)) = NULL;
 
 /* Hook for a plugin to know about the PAP user logout */
 void (*pap_logout_hook) __P((void)) = NULL;
@@ -739,6 +739,20 @@ check_passwd(unit, auser, userlen, apasswd, passwdlen, msg)
     int passwdlen;
     char **msg;
 {
+    char passwd[64], user[64];
+
+    if (pap_auth_hook)
+    {
+	slprintf(passwd, sizeof(passwd), "%.*v", passwdlen, apasswd);
+	slprintf(user, sizeof(user), "%.*v", userlen, auser);
+
+	return (*pap_auth_hook)(user, passwd/*, NULL, NULL, NULL*/) ?
+	    UPAP_AUTHACK : UPAP_AUTHNAK;
+    }
+
+    return UPAP_AUTHACK;
+
+#if 0
     int    ret = (int)UPAP_AUTHNAK;
 
     if (( userlen == 0 ) && ( passwdlen == 0 )) {
@@ -747,6 +761,7 @@ check_passwd(unit, auser, userlen, apasswd, passwdlen, msg)
     printf("check_passwd: %d\n", ret);
 
     return ret;
+#endif
 }
 
 /*
@@ -793,6 +808,9 @@ static int
 have_pap_secret(lacks_ipp)
     int *lacks_ipp;
 {
+    return 1;
+
+#if 0
     int ret = (int)0;
 
     /* let the plugin decide, if there is one */
@@ -802,6 +820,7 @@ have_pap_secret(lacks_ipp)
     }
 
     return ( ret );
+#endif
 }
 
 
@@ -1011,12 +1030,17 @@ auth_ip_addr(unit, addr)
     int unit;
     u_int32_t addr;
 {
+#if 0
     int ok;
+#endif
 
     /* don't allow loopback or multicast address */
     if (bad_ip_adrs(addr))
 	return 0;
+	
+    return 1;
 
+#if 0
     if (addresses[unit] != NULL) {
 	ok = ip_addr_check(addr, addresses[unit]);
 	if (ok >= 0)
@@ -1025,6 +1049,7 @@ auth_ip_addr(unit, addr)
     if (auth_required)
 	return 0;		/* no addresses authorized */
     return allow_any_ip || !have_route_to(addr);
+#endif
 }
 
 static int

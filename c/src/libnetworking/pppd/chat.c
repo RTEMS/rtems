@@ -598,7 +598,7 @@ int c;
 void chat_send (s)
 register char *s;
 {
-    char file_data[STR_LEN];
+/*  char file_data[STR_LEN];  */
 
     if (say_next) {
 	say_next = 0;

@@ -624,7 +624,7 @@ pppioctl(sc, cmd, data, flag, p)
 	if (sc->sc_flags & SC_CCP_OPEN && !(flags & SC_CCP_OPEN))
 	    ppp_ccp_closed(sc);
 #endif
-	splimp();
+	s = splimp();
 	sc->sc_flags = (sc->sc_flags & ~SC_MASK) | flags;
 	splx(s);
 	break;
@@ -1136,7 +1136,10 @@ struct mbuf *
 ppp_dequeue(sc)
     struct ppp_softc *sc;
 {
-    struct mbuf *m, *mp;
+    struct mbuf *m;
+#ifdef VJC
+    struct mbuf *mp;
+#endif
     u_char *cp;
     int address, control, protocol;
 
@@ -1400,14 +1403,17 @@ ppp_inproc(sc, m)
     struct mbuf  *mf = (struct mbuf *)0;
     struct ifnet *ifp = &sc->sc_if;
     struct ifqueue *inq;
-    int s, ilen, xlen, proto, rv; 
+    int s, ilen, proto, rv; 
     u_char *cp, adrs, ctrl;
     struct mbuf *mp;
 #ifdef PPP_COMPRESS
     struct mbuf *dmp = NULL;
 #endif
+#ifdef VJC
     u_char *iphdr;
-    u_int hlen;
+    u_int hlen; 
+    int xlen;
+#endif
 
     sc->sc_stats.ppp_ipackets++;
 

@@ -1,3 +1,9 @@
+2002-02-27	Ilya Alexeev <ilya@continuum.ru>
+
+	* net/if_ppp.c, pppd/auth.c, pppd/chat.c, pppd/pppd.h,
+	pppd/sys-rtems.c: Add server with pap-authorization 
+	capabilities as well as eliminate some warnings.
+
 2002-02-27	Eric Norum <eric.norum@usask.ca>
 
 	* net/radix.c: Properly handle fetching the default route when there

@@ -480,9 +480,9 @@ extern int (*new_phase_hook) __P((int));
 extern int (*idle_time_hook) __P((struct ppp_idle *));
 extern int (*holdoff_hook) __P((void));
 extern int (*pap_check_hook) __P((void));
-extern int (*pap_auth_hook) __P((char *user, char *passwd, char **msgp,
+extern int (*pap_auth_hook) __P((char *user, char *passwd/*, char **msgp,
 				 struct wordlist **paddrs,
-				 struct wordlist **popts));
+				 struct wordlist **popts*/));
 extern void (*pap_logout_hook) __P((void));
 extern int (*pap_passwd_hook) __P((char *user, char *passwd));
 extern void (*ip_up_hook) __P((void));
