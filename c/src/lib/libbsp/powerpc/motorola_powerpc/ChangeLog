@@ -13,21 +13,6 @@
  	* vectors/Makefile.am: Use .$(OBJEXT) instead of .o.
  	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
 
-2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* bootloader/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* clock/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* console/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* irq/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* motorola/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* openpic/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* pci/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* residual/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* start/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* startup/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* vectors/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
-
 2002-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootloader/Makefile.am: Install bootloader.o.
