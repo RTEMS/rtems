@@ -1781,7 +1781,7 @@ package body RTEMS is
       function IO_Read_Base (
          Major        : RTEMS.Device_Major_Number;
          Minor        : RTEMS.Device_Minor_Number;
-         Argument     : RTEMS.Address;
+         Argument     : RTEMS.Address
       )  return RTEMS.Status_Codes;
       pragma Import (C, IO_Read_Base, "rtems_io_read");
    begin
