@@ -1,3 +1,9 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* clock/clock.S: Include <rtems/asm.h> instead of <asm.h>.
+	* shared/interrupts/isr_entries.S: Include <rtems/asm.h> instead of <asm.h>.
+	* timer/gettime.S: Include <rtems/asm.h> instead of <asm.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* mongoosev/duart/mg5uart.c, mongoosev/include/mongoose-v.h,

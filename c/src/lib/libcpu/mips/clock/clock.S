@@ -23,7 +23,7 @@
 
 #include <iregdef.h>
 #include <idtcpu.h>
-#include <asm.h>
+#include <rtems/asm.h>
 
 FRAME(mips_set_timer,sp,0,ra)
 	.set noreorder

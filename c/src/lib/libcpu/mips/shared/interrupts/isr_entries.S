@@ -11,7 +11,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include "iregdef.h"
 #include "idtcpu.h"
 
