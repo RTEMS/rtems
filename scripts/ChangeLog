@@ -1,3 +1,9 @@
+2002-11-11	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, gcc3newlib/gccnewlib.add: Patch includes updates
+	which were patch changes for -3 and -4 RPM revisions.   Disabled
+	build of gnat for i386-rtems as it failed to build.
+
 2002-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/gccnewlib.add: Remove %{target} != %{build} comment 
