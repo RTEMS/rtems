@@ -1,4 +1,7 @@
 2002-10-30	Eric Norum <eric.norum@usask.ca>
+    * cpukit/posix/src/psignal.c: Reflect changes to signal names in newlib
+
+2002-10-30	Eric Norum <eric.norum@usask.ca>
 
     * cpukit/include/rtems/bspIo.h cpukit/libcsupport/src/printk.c:
         Add vprintk function for kernel printing from routines
