@@ -1,5 +1,10 @@
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/svc.h, librpc/include/rpc/xdr.h:
+	Remove __P(xx).
+
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* httpd/Makefile.am, itron/Makefile.am, libblock/Makefile.am,
 	libcsupport/Makefile.am, libfs/Makefile.am, libmisc/Makefile.am,
 	libnetworking/Makefile.am, librpc/Makefile.am, posix/Makefile.am,
