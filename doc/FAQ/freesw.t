@@ -37,13 +37,13 @@ compiler (GNAT) is available and has excellent support for RTEMS.
 
 @subsection DDD - Data Display Debugger
 
-By far the easiest way to use DDD if you are on a Redhat Linux system is
-to retrieve the RPM package for your OS version.  In general, it is 
+By far the easiest way to use DDD if you are on a Redhat or SuSE Linux system 
+is to retrieve the RPM package for your OS version.  In general, it is 
 easier to install a static binary since doing so avoids all problems
 with dynamic library versions.
 
 Some versions of DDD have had trouble with Lesstif.  If you
-are using Lesstiff, you will need version 0.88 or newer.  It
+are using Lesstif, you will need version 0.88 or newer.  It
 is also available as an RPM at the popular sites.  Another Motif
 clone is Motive and versions 1.2 and newer known to work with DDD
 on popular distributions of Linux including RedHat and Slackware.
@@ -52,8 +52,8 @@ Installed as RPMs, DDD in conjunction with either Lesstif or Motive
 should work out-of-the-box.
 
 User comments indicate that both Lesstif and DDD can be built
-from scratch without any problems.  Instructions on installing
-Lesstif are at @uref{http://www.cs.tu-bs.de/softech/ddd/}.  They
+from scratch without any problems.  Instructions on installing DDD
+are at @uref{http://www.cs.tu-bs.de/softech/ddd/}.  They
 indicate that
 
 @itemize @bullet
@@ -121,8 +121,15 @@ send test output to another serial port.  Using two serial ports is
 usually the easiest way to get test output while retaining a reliable debug
 connection regardless of the debugger/target combination.
 
+NOTE: Enabling gdb's remote cache might prevent this (Observed with SH1
+boards, but may also be valid for targets):
+@example
+gdb > set remotecache
+@end example
+
 Information provided by Charles-Antoine Gauthier (charles.gauthier@@iit.nrc.ca)
-and Jiri Gaisler (jgais@@ws.estec.esa.nl).
+Jiri Gaisler (jgais@@ws.estec.esa.nl) and Ralf Cors@'epius
+(corsepiu@@faw.uni-ulm.de)
 
 
 @section omniORB
