@@ -1,3 +1,9 @@
+2001-05-24	Tom Armistead <tom_armistead@phx.mcd.mot.com>
+
+ 	* mpc6xx/timer/timer.c: Added include of bsp.h and removed
+	external declaration of BSP_Convert_decrementer() to 
+	correct unresolved reference to this routine.
+
 2001-05-24	Eric Valette <valette@crf.canon.fr>
 
 	* mpc8xx/console-generic/console-generic.c: Bug found by Yacine
