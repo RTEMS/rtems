@@ -1,3 +1,7 @@
+2005-01-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* src/gxx_wrappers.c: Backport from trunk. Add support for GCC-4.0.
+
 2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 548/rtems

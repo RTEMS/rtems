@@ -13,8 +13,13 @@
  * Eric sent some e-mail in the rtems-list as a start point for this
  * module implementation.
  *
- * 
+ * $Id$
  */
+
+/*
+ * This file is only used if using gcc
+ */
+#if defined(__GNUC__)
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -32,14 +37,14 @@
 #include <rtems/error.h> 	/* rtems_panic */
 #include <rtems/rtems/tasks.h>
 
-/* 
+/*
  * These typedefs should match with the ones defined in the file
  * gcc/gthr-rtems.h in the gcc distribution.
  */
 typedef void *__gthread_key_t;
 typedef int   __gthread_once_t;
 typedef void *__gthread_mutex_t;
-
+typedef void *__gthread_recursive_mutex_t;
 
 /* uncomment this if you need to debug this interface */
 
@@ -51,7 +56,7 @@ typedef void *__gthread_mutex_t;
 /* local function to return the ID of the calling thread */
 static rtems_id get_tid( void )
 {
-   rtems_id id = 0; 
+   rtems_id id = 0;
    rtems_task_ident( RTEMS_SELF, 0, &id );
    return id;
 }
@@ -82,7 +87,7 @@ int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))
 {
   /* Ok, this can be a bit tricky. We are going to return a "key" as a
    * pointer to the buffer that will hold the value of the key itself.
-   * We have to to this, becuase the others functions on this interface 
+   * We have to to this, because the others functions on this interface
    * deal with the value of the key, as used with the POSIX API.
    */
    /* Do not pull your hair, trust me this works. :-) */
@@ -195,7 +200,7 @@ int rtems_gxx_mutex_lock (__gthread_mutex_t *mutex)
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: lock mutex=%X\n", *mutex );
 #endif
-  return ( rtems_semaphore_obtain( (rtems_id)*mutex, 
+  return ( rtems_semaphore_obtain( (rtems_id)*mutex,
             RTEMS_WAIT, RTEMS_NO_TIMEOUT ) ==  RTEMS_SUCCESSFUL) ? 0 : -1;
 }
 
@@ -204,7 +209,7 @@ int rtems_gxx_mutex_trylock (__gthread_mutex_t *mutex)
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: trylock mutex=%X\n", *mutex );
 #endif
-  return (rtems_semaphore_obtain ((rtems_id)*mutex, 
+  return (rtems_semaphore_obtain ((rtems_id)*mutex,
                RTEMS_NO_WAIT, 0) == RTEMS_SUCCESSFUL) ? 0 : -1;
 }
 
@@ -216,3 +221,24 @@ int rtems_gxx_mutex_unlock (__gthread_mutex_t *mutex)
   return (rtems_semaphore_release( (rtems_id)*mutex ) ==  RTEMS_SUCCESSFUL) ? 0 :-1;
 }
 
+void rtems_gxx_recursive_mutex_init_function(__gthread_recursive_mutex_t *mutex)
+{
+  rtems_gxx_mutex_init(mutex);
+}
+
+int rtems_gxx_recursive_mutex_lock(__gthread_recursive_mutex_t *mutex)
+{
+  return rtems_gxx_mutex_lock(mutex);
+}
+
+int rtems_gxx_recursive_mutex_trylock(__gthread_recursive_mutex_t *mutex)
+{
+  return rtems_gxx_mutex_trylock(mutex);
+}
+
+int rtems_gxx_recursive_mutex_unlock(__gthread_recursive_mutex_t *mutex)
+{
+  return rtems_gxx_mutex_unlock(mutex);
+}
+
+#endif /* __GNUC__ */
