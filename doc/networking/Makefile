@@ -57,7 +57,7 @@ driver.texi: driver.t Makefile
 	   -n "Using Networking in an RTEMS Application" ${*}.t
 
 networkapp.texi: networkapp.t Makefile
-	$(BMENU) -p " Write Your Driver Statistic-Printing Function" \
+	$(BMENU) -p "Write the Driver Statistic-Printing Function" \
 	   -u "Top" \
 	   -n "Testing the Driver" ${*}.t
 
