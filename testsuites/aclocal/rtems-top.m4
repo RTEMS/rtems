@@ -25,20 +25,15 @@ RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
 
 ## with_target_subdirs is handled implicitly by autoconf
-test -n "$with_target_subdir" || with_target_subdir="."
-
-if test "$with_target_subdir" = "." ; then
-# Native
-PROJECT_TOPdir="${with_project_root}${RTEMS_TOPdir}/\$(top_builddir)"
-else
-# Cross
 dots=`echo $with_target_subdir|\
-sed -e 's%^\./%%' -e 's%[[^/]]$%&/%' -e 's%[[^/]]*/%../%g'`
-PROJECT_TOPdir="${dots}${with_project_root}${RTEMS_TOPdir}/\$(top_builddir)"
-fi
-AC_SUBST(PROJECT_TOPdir)
+sed -e 's,^\.$,,' -e 's%^\./%%' -e 's%[[^/]]$%&/%' -e 's%[[^/]]*/%../%g'`
+PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
+AC_SUBST([PROJECT_TOPdir])
 
-PROJECT_ROOT="${with_project_root}${RTEMS_TOPdir}/\$(top_builddir)"
+RTEMS_ROOT=$with_rtems_root`echo "$1/" | sed 's,^../,,'`'$(top_builddir)'
+AC_SUBST(RTEMS_ROOT)
+
+PROJECT_ROOT=$with_project_root`echo "$1/" | sed 's,^../,,'`'$(top_builddir)'
 AC_SUBST(PROJECT_ROOT)
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])

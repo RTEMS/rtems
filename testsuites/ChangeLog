@@ -1,3 +1,11 @@
+2004-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AC_CONFIG_SRCDIR([PROBLEMS]).
+	* aclocal/check-custom-bsp.m4: Sync with c/src/aclocal.
+	* aclocal/project-root.m4: Remove obsolete comments.
+	* aclocal/env-rtemsbsp.m4: Remove RTEMS_ROOT.
+	* aclocal/rtems-top.m4: Rework.
+
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove subdir tools.
