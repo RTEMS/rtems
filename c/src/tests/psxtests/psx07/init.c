@@ -216,6 +216,10 @@ void *POSIX_Init(
   status = pthread_attr_getinheritsched( NULL, &inheritsched );
   assert( status == EINVAL );
  
+  puts( "Init: pthread_attr_getinheritsched - EINVAL (NULL inheritsched)" );
+  status = pthread_attr_getinheritsched( &attr, NULL );
+  assert( status == EINVAL );
+ 
   puts( "Init: pthread_attr_getinheritsched - EINVAL (not initialized attr)" );
   status = pthread_attr_getinheritsched( &destroyed_attr, &inheritsched );
   assert( status == EINVAL );
@@ -248,6 +252,10 @@ void *POSIX_Init(
  
   puts( "Init: pthread_attr_getschedpolicy - EINVAL (NULL attr)" );
   status = pthread_attr_getschedpolicy( NULL, &schedpolicy );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_attr_getschedpolicy - EINVAL (NULL schedpolicy)" );
+  status = pthread_attr_getschedpolicy( &attr, NULL );
   assert( status == EINVAL );
  
   puts( "Init: pthread_attr_getschedpolicy - EINVAL (not initialized attr)" );
@@ -284,6 +292,10 @@ void *POSIX_Init(
   status = pthread_attr_getstacksize( NULL, &stacksize );
   assert( status == EINVAL );
  
+  puts( "Init: pthread_attr_getstacksize - EINVAL (NULL stacksize)" );
+  status = pthread_attr_getstacksize( &attr, NULL );
+  assert( status == EINVAL );
+ 
   puts( "Init: pthread_attr_getstacksize - EINVAL (not initialized attr)" );
   status = pthread_attr_getstacksize( &destroyed_attr, &stacksize );
   assert( status == EINVAL );
@@ -312,6 +324,10 @@ void *POSIX_Init(
  
   puts( "Init: pthread_attr_getstackaddr - EINVAL (NULL attr)" );
   status = pthread_attr_getstackaddr( NULL, &stackaddr );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_attr_getstackaddr - EINVAL (NULL stackaddr)" );
+  status = pthread_attr_getstackaddr( &attr, NULL );
   assert( status == EINVAL );
  
   puts( "Init: pthread_attr_getstackaddr - EINVAL (not initialized attr)" );
@@ -346,6 +362,10 @@ void *POSIX_Init(
  
   puts( "Init: pthread_attr_getdetachstate - EINVAL (NULL attr)" );
   status = pthread_attr_getdetachstate( NULL, &detachstate );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_attr_getdetachstate - EINVAL (NULL detatchstate)" );
+  status = pthread_attr_getdetachstate( &attr, NULL );
   assert( status == EINVAL );
  
   puts( "Init: pthread_attr_getdetachstate - EINVAL (not initialized attr)" );
