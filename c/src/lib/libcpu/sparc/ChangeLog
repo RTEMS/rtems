@@ -1,5 +1,14 @@
 2002-03-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* tbr/Makefile.am: Remove.
+	* tbr/.cvsignore: Remove.
+	* tbr/tbr.c: Remove.
+	* tbr/tbr.h: Remove.
+	* configure.ac: Remove tbr subdir.
+	* Makefile.am: Remove tbr subdir.
+
+2002-03-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* tbr/Makefile.am: New file.
 	* tbr/.cvsignore: New file.
 	* tbr/tbr.c: New file.
