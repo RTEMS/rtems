@@ -598,6 +598,12 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /* ISR handler macros */
 
 /*
+ *  Support routine to initialize the RTEMS vector table after it is allocated.
+ */
+
+#define _CPU_Initialize_vectors()
+
+/*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
  */
