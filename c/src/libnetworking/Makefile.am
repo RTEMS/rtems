@@ -4,8 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
-SUBDIRS = arpa kern machine sys vm lib libc net netinet nfs rtems \
-    rtems_servers pppd rtems_telnetd rtems_webserver wrapup
+SUBDIRS = rtems_servers pppd rtems_telnetd rtems_webserver wrapup
 
 include_HEADERS = \
     bpfilter.h loop.h netdb.h opt_ipfw.h opt_mrouting.h \

@@ -7,7 +7,7 @@ if HAS_POSIX
 POSIX_PIECES = rtems_webserver
 endif
 
-NET_O_PIECES = kern lib libc net netinet nfs rtems rtems_servers \
+NET_O_PIECES = rtems_servers \
     rtems_telnetd pppd $(POSIX_PIECES)
 OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.o)
 LIB = $(ARCH)/libnetworking.a
@@ -23,10 +23,10 @@ include $(top_srcdir)/../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a: $(LIB)
+$(PROJECT_RELEASE)/lib/libnetapps$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libnetapps$(LIB_VARIANT).a
 
 all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
 

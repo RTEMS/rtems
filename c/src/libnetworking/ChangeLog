@@ -1,3 +1,10 @@
+2002-05-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Move networking libraries to c/src/exec/libnetworking
+	* configure.ac: Reflect Moval.
+	* Makefile.am: Reflect Moval.
+	* wrapup/Makefile.am: Reflect Moval.
+
 2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems_telnetd/pty.c: Remove bsp.h. Include <rtems/bspIo.h>.

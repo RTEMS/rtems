@@ -35,18 +35,7 @@ AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-arpa/Makefile
-machine/Makefile
-kern/Makefile
-sys/Makefile
-vm/Makefile
-lib/Makefile
-libc/Makefile
-net/Makefile
-netinet/Makefile
-nfs/Makefile
 pppd/Makefile
-rtems/Makefile
 rtems_servers/Makefile
 rtems_telnetd/Makefile
 rtems_webserver/Makefile
