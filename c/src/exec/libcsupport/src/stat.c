@@ -59,8 +59,7 @@ int _STAT_NAME(
     return -1;
   
   if ( !loc.handlers->fstat ){
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
@@ -73,8 +72,7 @@ int _STAT_NAME(
 
   status =  (*loc.handlers->fstat)( &loc, buf );
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
   
   return status;
 }

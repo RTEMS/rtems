@@ -33,15 +33,13 @@ int chown(
     return -1;
   
   if ( !loc.ops->chown ) {
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*loc.ops->chown)( &loc, owner, group );
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
   
   return result;
 }

@@ -39,19 +39,16 @@ int chdir(
    */
 
   if ( !loc.ops->node_type ) {
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTDIR );
   }
   
-  if ( rtems_filesystem_current.ops->freenod )
-    (*rtems_filesystem_current.ops->freenod)( &rtems_filesystem_current );
+  rtems_filesystem_freenode( &rtems_filesystem_current );
    
   rtems_filesystem_current = loc;
   

@@ -53,14 +53,13 @@ int mknod(
     return -1;
 
   if ( !temp_loc.ops->mknod ) {
-    if ( temp_loc.ops->freenod )
-      (*temp_loc.ops->freenod)( &temp_loc );
+    rtems_filesystem_freenode( &temp_loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result =  (*temp_loc.ops->mknod)( name_start, mode, dev, &temp_loc );
-  if ( temp_loc.ops->freenod )
-    (*temp_loc.ops->freenod)( &temp_loc );
+
+  rtems_filesystem_freenode( &temp_loc );
 
   return result;
 }

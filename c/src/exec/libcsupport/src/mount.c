@@ -224,8 +224,7 @@ int mount(
 
   *mt_entry = temp_mt_entry;
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
   
   return 0;
 
@@ -233,8 +232,7 @@ cleanup_and_bail:
 
   free( temp_mt_entry );
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
   
   return -1;
 }

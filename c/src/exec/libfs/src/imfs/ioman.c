@@ -85,8 +85,7 @@ rtems_status_code rtems_io_lookup_name(
 
   if ( (result != 0) || node_type != RTEMS_FILESYSTEM_DEVICE ) {
     *device_info = 0;
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     return RTEMS_UNSATISFIED;
   }
 
@@ -96,8 +95,7 @@ rtems_status_code rtems_io_lookup_name(
   device.minor              = the_jnode->info.device.minor;
   *device_info              = &device;
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
    
 #endif
   return RTEMS_SUCCESSFUL;

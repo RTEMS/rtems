@@ -40,14 +40,12 @@ int rmdir(
    */
 
   if ( !loc.ops->node_type ){
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ){
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTDIR );
   }
 
@@ -56,15 +54,13 @@ int rmdir(
    */
 
   if ( !loc.ops->rmnod ){
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result =  (*loc.ops->rmnod)( &loc );  
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
   
   return result;
 }

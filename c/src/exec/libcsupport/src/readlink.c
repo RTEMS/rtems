@@ -31,27 +31,23 @@ int readlink(
      return -1;
   
   if ( !loc.ops->node_type ){
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_SYM_LINK ){
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( EINVAL );
   }
 
   if ( !loc.ops->readlink ){
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result =  (*loc.ops->readlink)( &loc, buf, bufsize );
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
   
   return result;
 }

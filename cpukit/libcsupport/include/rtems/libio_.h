@@ -161,6 +161,18 @@ extern mode_t    rtems_filesystem_umask;
   } while (0)
 
 /*
+ *  rtems_filesystem_freenode
+ *
+ *  Macro to free a node.
+ */
+
+#define rtems_filesystem_freenode( _node ) \
+  do { \
+    if ( (_node)->ops->freenod ) \
+      (*(_node)->ops->freenod)( (_node) ); \
+  } while (0)
+
+/*
  *  rtems_filesystem_is_separator
  *
  *  Macro to determine if a character is a path name separator.

@@ -35,15 +35,13 @@ int chmod(
     return -1;
   
   if ( !loc.handlers->fchmod ){
-    if ( loc.ops->freenod )
-      (*loc.ops->freenod)( &loc );
+    rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*loc.handlers->fchmod)( &loc, mode );
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
   
   return result;
 }

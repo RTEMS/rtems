@@ -31,8 +31,7 @@ int symlink(
 
   result = (*loc.ops->symlink)( &loc, actualpath, name_start);
 
-  if ( loc.ops->freenod )
-    (*loc.ops->freenod)( &loc );
+  rtems_filesystem_freenode( &loc );
 
   return result;
 }

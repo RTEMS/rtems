@@ -34,8 +34,7 @@ int utime(
 
   result = (*temp_loc.ops->utime)( &temp_loc, times->actime, times->modtime );
 
-  if ( temp_loc.ops->freenod )
-    (*temp_loc.ops->freenod)( &temp_loc );
+  rtems_filesystem_freenode( &temp_loc );
 
   return result;
 }
