@@ -15,8 +15,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-#H_PIECES=utsname
-H_PIECES=
+H_PIECES=utsname
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
 SRCS=$(H_FILES)
