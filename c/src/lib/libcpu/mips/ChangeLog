@@ -1,3 +1,11 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tx39/include/Makefile.am: Use 'TMPINSTALL_FILES ='.
+	* mongoosev/include/Makefile.am: Use 'TMPINSTALL_FILES ='.
+	* mongoosev/duart/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* shared/cache/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* shared/cache/Makefile.am: Use 'CLEANFILES ='.
+
 2000-05-24	Joel Sherrill <joel@OARcorp.com>
 
 	* mongoosev/include/mongoose-v.h, mongoosev/vectorisrs/vectorisrs.c,

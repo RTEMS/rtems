@@ -28,7 +28,7 @@ $(PGM): $(mg5uart_rel_OBJECTS)
 
 ## include_libchip_HEADERS = mg5uart.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
        $(PROJECT_INCLUDE)/libchip/mg5uart.h
 
 ##    $(include_libchip_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)

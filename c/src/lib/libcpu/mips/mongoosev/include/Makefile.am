@@ -12,7 +12,7 @@ $(PROJECT_INCLUDE)/libcpu:
 $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
+TMPINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
     $(H_FILES:%.h=$(PROJECT_INCLUDE)/libcpu/%.h)
 
 all-local: $(TMPINSTALL_FILES)
