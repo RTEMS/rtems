@@ -1,3 +1,7 @@
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gcc3newlib/Makefile.am: Remove sh-rtemself. Add sh-rtemscoff.
+
 2005-01-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gcc3newlib/gccnewlib.add: Disable Ada (Stil broken with GCC-4.0.0).
