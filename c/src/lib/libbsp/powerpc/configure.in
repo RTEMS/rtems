@@ -20,6 +20,8 @@ RTEMS_PROJECT_ROOT
 RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
 AC_CONFIG_SUBDIRS($bspdir)
 
+AM_CONDITIONAL(need_shared, test "$RTEMS_BSP_FAMILY" = "motorola_powerpc")
+
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile

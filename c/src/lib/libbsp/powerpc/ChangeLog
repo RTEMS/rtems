@@ -1,3 +1,10 @@
+2001-03-30	Eric Valette <valette@crf.canon.fr>
+
+	* configure.in, motorola_powerpc/Makefile.am,
+	motorola_powerpc/configure.in: These modifications are in
+	support of switching the mpc8xx to the use the "new exception
+	processing model."
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

@@ -7,8 +7,10 @@ ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUBDIRS = clock console include pci residual openpic irq vectors start \
+if need_motorola_powerpc
+SUBDIRS = include clock console pci residual openpic irq vectors start \
     startup bootloader motorola wrapup
+endif
 
 include $(top_srcdir)/../../bsp.am
 
