@@ -1,5 +1,8 @@
-/*  h8300.h
- *
+/**
+ * @file rtems/score/h8300.h
+ */
+
+/*
  *  This file contains information pertaining to the Hitachi H8/300
  *  processor family.
  *
