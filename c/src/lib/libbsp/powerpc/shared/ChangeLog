@@ -1,3 +1,9 @@
+2003-09-29	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 497/bsps
+	* bootloader/head.S: Disable code that returned to the firmware when
+	the loader starts.
+
 2003-09-26	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 496/bsps
