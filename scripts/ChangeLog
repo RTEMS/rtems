@@ -1,3 +1,7 @@
+2001-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* buildall.in: Correct logic for detecting 0 RTEMS RPMS installed.
+
 2001-03-29	Joel Sherrill <joel@OARcorp.com>
 
 	* .cvsignore: Added mkgcc3newlib.
