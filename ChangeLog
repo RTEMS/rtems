@@ -1,5 +1,9 @@
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* config-ml.in: Don't build sh-rtems ml and ml/m2 multilib variants.
+
+2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/compile.am: Introduce depend-gcc.
 	* automake/lib.am: Remove stray comment.
 	* automake/local.am: Introduce depend-gcc.

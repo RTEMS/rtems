@@ -229,6 +229,8 @@ sh-*-rtems*)
 	  multidirs=""
 	  for x in ${old_multidirs}; do
 	    case "${x}" in
+	      *ml ) : ;;
+	      *ml/m2 ) : ;;
 	      *m3e*) : ;;
 	      *m4-single*) : ;;
 	      m4*) : ;;
