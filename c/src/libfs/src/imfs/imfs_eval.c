@@ -36,17 +36,17 @@ int IMFS_Set_handlers(
 
   switch( node->type ) {
     case IMFS_DIRECTORY:
-      loc->handlers = &dir_handlers;
+      loc->handlers = &IMFS_directory_handlers;
       break;
     case IMFS_DEVICE:
-      loc->handlers = &device_handlers;
+      loc->handlers = &IMFS_device_handlers;
       break;
     case IMFS_SYM_LINK:
     case IMFS_HARD_LINK:
-      loc->handlers = &null_handlers;
+      loc->handlers = &rtems_filesystem_null_handlers;
       break;
     case IMFS_MEMORY_FILE:
-      loc->handlers = &memfile_handlers;
+      loc->handlers = &IMFS_memfile_handlers;
       break;
   }
 

@@ -210,10 +210,9 @@ typedef enum {
  *  Shared Data
  */
 
-extern rtems_filesystem_file_handlers_r       device_handlers;
-extern rtems_filesystem_file_handlers_r       memfile_handlers;
-extern rtems_filesystem_file_handlers_r       dir_handlers;
-extern rtems_filesystem_file_handlers_r       null_handlers;
+extern rtems_filesystem_file_handlers_r       IMFS_device_handlers;
+extern rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
+extern rtems_filesystem_file_handlers_r       IMFS_directory_handlers;
 extern rtems_filesystem_operations_table      IMFS_ops;
 extern rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS; 
 

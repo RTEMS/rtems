@@ -53,7 +53,8 @@ extern "C" {
 #define RTEMS_LIBIO_SEM         rtems_build_name('L', 'B', 'I', 'O')
 #define RTEMS_LIBIO_IOP_SEM(n)  rtems_build_name('L', 'B', 'I', n)
 
-extern rtems_id        rtems_libio_semaphore;
+extern rtems_id                          rtems_libio_semaphore;
+extern rtems_filesystem_file_handlers_r  rtems_filesystem_null_handlers;
 
 /*
  *  File descriptor Table Information

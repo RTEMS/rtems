@@ -20,7 +20,7 @@
  *  Set of operations handlers for operations on memfile entities.
  */
 
-rtems_filesystem_file_handlers_r memfile_handlers = {
+rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_open,
   memfile_close,
   memfile_read,
@@ -40,7 +40,7 @@ rtems_filesystem_file_handlers_r memfile_handlers = {
  *  Set of operations handlers for operations on directories.
  */
 
-rtems_filesystem_file_handlers_r dir_handlers = {
+rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   imfs_dir_open,
   imfs_dir_close,
   imfs_dir_read,
@@ -60,7 +60,7 @@ rtems_filesystem_file_handlers_r dir_handlers = {
  *  Handler table for IMFS device nodes
  */
 
-rtems_filesystem_file_handlers_r device_handlers = {
+rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   device_open,
   device_close,
   device_read,

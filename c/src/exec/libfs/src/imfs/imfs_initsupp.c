@@ -73,7 +73,7 @@ int IMFS_initialize(
     NULL
   );
 
-  temp_mt_entry->mt_fs_root.handlers    = &dir_handlers;
+  temp_mt_entry->mt_fs_root.handlers    = &IMFS_directory_handlers;
   temp_mt_entry->mt_fs_root.ops         = &IMFS_ops;
   temp_mt_entry->pathconf_limits_and_options = IMFS_LIMITS_AND_OPTIONS;
 
