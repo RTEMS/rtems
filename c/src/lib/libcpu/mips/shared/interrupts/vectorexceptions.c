@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include "iregdef.h"
 #include "idtcpu.h"
-#include <rtems/bspIo.h>
+#include <bspIo.h>
 
 char *cause_strings[32] =
 {
@@ -89,6 +89,9 @@ void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
   rtems_fatal_error_occurred(1);
 }
 
+
+
+
 #define CALL_EXC(_vector,_frame) \
    do { \
         if ( _ISR_Vector_table[_vector] ) \
@@ -96,6 +99,9 @@ void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
           else \
              mips_default_exception_code_handler( _vector, _frame ); \
    } while(0)
+
+
+
 
 /*
  *  There are constants defined for these but they should basically

@@ -1,3 +1,19 @@
+2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* Lots of tinkering and tuning as part of improving interrupt latency
+	and improving the per-task interrupt level control and FP mask handling.
+	With these modifications interrupt latency was measured at a worst-case
+	of 100us, average below 60 us on a 12 Mhz R3000 class CPU with 50
+	RTEMS tasks in the application.
+	* mongoosev/README: Updated.  
+	* mongoosev/include/mongoose-v.h: Masks modified.
+	* mongoosev/vectorisrs/vectorisrs.c: Significant overhaul to address
+	software prioritization of interrupts.  If a higher priority interrupt
+	occurs while we are looking for new interrupts, we will reinitiate the
+	scan of all interrupts.
+	* shared/interrupts/vectorexceptions.c: Removed warning and deleted
+	blank lines.
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mongoosev/vectorisrs/vectorisrs.c: Include rtems/bspIo.h instead of bspIo.h.
