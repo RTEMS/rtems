@@ -1,3 +1,8 @@
+2002-11-17	Joel Sherrill <joel@OARcorp.com>
+
+	* leaf.cfg, main.cfg, compilers/gcc-target-default.cfg: Make
+	build variants work for user applications post install.
+
 2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/Cygwin-posix.cfg: Remove -DRTEMS_UNIXLIB -DRTEMS_UNIX.
