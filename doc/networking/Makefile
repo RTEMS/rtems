@@ -22,7 +22,8 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
-GENERATED_FILES=networkapp.texi driver.texi networktasks.texi testing.texi
+GENERATED_FILES=networkapp.texi driver.texi networktasks.texi testing.texi \
+  servers.texi
 
 FILES= $(PROJECT).texi \
   networktasks.texi preface.texi $(GENERATED_FILES)
@@ -63,6 +64,11 @@ networkapp.texi: networkapp.t Makefile
 
 testing.texi: testing.t Makefile
 	$(BMENU) -p "Network Statistics" \
+	   -u "Top" \
+	   -n "Network Servers" ${*}.t
+
+servers.texi: servers.t Makefile
+	$(BMENU) -p "Network Servers" \
 	   -u "Top" \
 	   -n "Command and Variable Index" ${*}.t
 
