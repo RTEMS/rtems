@@ -1,3 +1,9 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clockdrv.c, console/conscfg.c, include/bsp.h,
+	startup/bspstart.c, startup/gdb-support.c, timer/timer.c: URL for
+	license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
