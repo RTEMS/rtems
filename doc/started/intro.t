@@ -157,14 +157,14 @@ the GNU manuals:
 
 @subsection RTEMS Mailing List
 
-@uref{mailto:rtems-users@@OARcorp.com,rtems-users@@OARcorp.com}
+@uref{mailto:rtems-users@@rtems.com,rtems-users@@rtems.com}
 
 This mailing list is dedicated to the discussion of issues related
 to RTEMS, including GNAT/RTEMS.  If you have questions about RTEMS,
 wish to make suggestions, or just want to pick up hints, this is a 
 good list to monitor.  Subscribe by sending an empty mail message to 
-@uref{mailto:rtems-users-subscribe@@OARcorp.com,rtems-users-subscribe@@OARcorp.com}.  Messages sent 
-to @uref{mailto:rtems-users@@OARcorp.com,rtems-users@@OARcorp.com}
+@uref{mailto:rtems-users-subscribe@@rtems.com,rtems-users-subscribe@@rtems.com}.  Messages sent 
+to @uref{mailto:rtems-users@@rtems.com,rtems-users@@rtems.com}
 are posted to the list.
 
 @subsection CrossGCC Mailing List

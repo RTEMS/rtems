@@ -75,7 +75,7 @@ that is not clear or missing, bring it to our attention.
 Also, some of the RTEMS documentation is still under
 construction.  If you would like to contribute to this
 effort, please contact the RTEMS Team at
-@uref{mailto:rtems-users@@OARcorp.com, rtems-users@@OARcorp.com}.
+@uref{mailto:rtems-users@@rtems.com, rtems-users@@rtems.com}.
 If you are interested in sponsoring the development of a new
 feature, BSP, device driver, port of an existing library, etc.,
 please contact @uref{mailto:sales@@OARcorp.com, sales@@OARcorp.com}.
