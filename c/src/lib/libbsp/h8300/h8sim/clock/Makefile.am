@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 C_FILES = clock_driver_stub.c
