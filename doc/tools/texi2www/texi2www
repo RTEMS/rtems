@@ -842,12 +842,12 @@ sub process_node
 
     &deduce_node_links() unless ($next || $prev || $up);
 
+    &terminate_node();
+
     $cthis = &canonical($this);
     $cnext = &canonical($next);
     $cprev = &canonical($prev);
     $cup = &canonical($up);
-
-    &terminate_node();
 
     print "... opening $dir$cthis ...\n" if $debug{nodes};
     open(HTML,">$dir/$cthis") || die "Couldn't open $dir$cthis -- $!\n";
