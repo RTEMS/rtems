@@ -6,21 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Timing Specification, Timing Specification Introduction, , Top
-@end ifinfo
 @chapter Timing Specification
-@ifinfo
-@menu
-* Timing Specification Introduction::
-* Timing Specification Philosophy::
-* Timing Specification Methodology::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Timing Specification Introduction, Timing Specification Philosophy, Timing Specification, Timing Specification
-@end ifinfo
 @section Introduction
 
 This chapter provides information pertaining to the
@@ -30,18 +17,7 @@ discussed are other time critical aspects of RTEMS that affect
 an applications design and ultimate throughput.  These aspects
 include determinancy, interrupt latency and context switch times.
 
-@ifinfo
-@node Timing Specification Philosophy, Determinancy, Timing Specification Introduction, Timing Specification
-@end ifinfo
 @section Philosophy
-@ifinfo
-@menu
-* Determinancy::
-* Interrupt Latency::
-* Context Switch Time::
-* Directive Times::
-@end menu
-@end ifinfo
 
 Benchmarks are commonly used to evaluate the
 performance of software and hardware.  Benchmarks can be an
@@ -71,9 +47,6 @@ timing information for RTEMS.  To insure the usefulness of our
 data, the methodology and definitions used to obtain and
 describe the data are also documented.
 
-@ifinfo
-@node Determinancy, Interrupt Latency, Timing Specification Philosophy, Timing Specification Philosophy
-@end ifinfo
 @subsection Determinancy
 
 The correctness of data in a real-time system must
@@ -119,9 +92,6 @@ tick.  However, most applications have a very small number of
 timeouts which expire at exactly the same millisecond (usually
 none, but occasionally two or three).
 
-@ifinfo
-@node Interrupt Latency, Context Switch Time, Determinancy, Timing Specification Philosophy
-@end ifinfo
 @subsection Interrupt Latency
 
 Interrupt latency is the delay between the CPU's
@@ -186,9 +156,6 @@ in an interrupt service routine.
 The actual interrupt latency times are reported in
 the Timing Data chapter of this supplement.
 
-@ifinfo
-@node Context Switch Time, Directive Times, Interrupt Latency, Timing Specification Philosophy
-@end ifinfo
 @subsection Context Switch Time
 
 An RTEMS context switch is defined as the act of
@@ -231,9 +198,6 @@ meaningless for an application with floating point tasks.
 The actual context switch times are reported in the
 Timing Data chapter of this supplement.
 
-@ifinfo
-@node Directive Times, Timing Specification Methodology, Context Switch Time, Timing Specification Philosophy
-@end ifinfo
 @subsection Directive Times
 
 Directives are the application's interface to the
@@ -249,23 +213,8 @@ mechanisms.
 The actual directive execution times are reported in
 the Timing Data chapter of this supplement.
 
-@ifinfo
-@node Timing Specification Methodology, Software Platform, Directive Times, Timing Specification
-@end ifinfo
 @section Methodology
-@ifinfo
-@menu
-* Software Platform::
-* Hardware Platform::
-* What is measured?::
-* What is not measured?::
-* Terminology::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Software Platform, Hardware Platform, Timing Specification Methodology, Timing Specification Methodology
-@end ifinfo
 @subsection Software Platform
 
 The RTEMS timing suite is written in C.  The overhead
@@ -285,9 +234,6 @@ the times reported for semaphore obtain and semaphore release
 are averages of multiple invocations.  At least 100 invocations
 are used to obtain the average.
 
-@ifinfo
-@node Hardware Platform, What is measured?, Software Platform, Timing Specification Methodology
-@end ifinfo
 @subsection Hardware Platform
 
 Since RTEMS supports a variety of processors, the
@@ -299,9 +245,6 @@ speed, memory wait states encountered, and any other pertinent
 information.  This definition may be found in the processor
 dependent timing data chapter within this supplement.
 
-@ifinfo
-@node What is measured?, What is not measured?, Hardware Platform, Timing Specification Methodology
-@end ifinfo
 @subsection What is measured?
 
 An effort was made to provide execution times for a
@@ -333,9 +276,6 @@ the timing suite:
 
 In addition, no user extensions are configured.
 
-@ifinfo
-@node What is not measured?, Terminology, What is measured?, Timing Specification Methodology
-@end ifinfo
 @subsection What is not measured?
 
 The times presented in this document are not intended
@@ -352,9 +292,6 @@ allowable, will execute in slightly less time than when invoked
 from a task because rescheduling is delayed until the interrupt
 exits.
 
-@ifinfo
-@node Terminology, , What is not measured?, Timing Specification Methodology
-@end ifinfo
 @subsection Terminology
 
 The following is a list of phrases which are used to
