@@ -29,7 +29,7 @@ across all target architectures.   These are referred to as
 "base" packages.
 
 @item If buildable for a particular CPU, RPMs are provided for 
-Chill, Java (gjc), Fortran (g77), and Objective-C (objc).  These
+Chill, Java (gcj), Fortran (g77), and Objective-C (objc).  These
 RPMs are strictly optional.
 
 @end enumerate
