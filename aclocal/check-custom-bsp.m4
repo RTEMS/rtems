@@ -5,7 +5,7 @@ AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])dnl sets RTEMS_CPU, target
 AC_REQUIRE([RTEMS_TOP])dnl sets RTEMS_TOPdir
   $2=
   AC_MSG_CHECKING([for $1])
-  for i in "${srcdir}/${RTEMS_TOPdir}/bspkit/${RTEMS_CPU}"/*/"$1" \
+  for i in "${srcdir}/${RTEMS_TOPdir}/bspkit/${RTEMS_CPU}"/*/cfg/"$1" \
     "${srcdir}/${RTEMS_TOPdir}/make/custom/$1";
   do
     AS_IF([test -r $i],[
