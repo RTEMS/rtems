@@ -39,6 +39,7 @@ extern "C" {
 
 typedef struct {
   void       *(*thread_entry)(void *);
+  int       stack_size;
 } posix_initialization_threads_table;
 
 typedef struct {

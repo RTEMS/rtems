@@ -361,6 +361,10 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
 #endif
 
+#ifndef CONFIGURE_POSIX_INIT_TASK_STACK_SIZE
+#define CONFIGURE_POSIX_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
+#endif
+
 #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #ifdef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
@@ -378,7 +382,8 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 
 #ifdef CONFIGURE_INIT
 posix_initialization_threads_table POSIX_Initialization_threads[] = {
-  { CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT }
+  { CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT, \
+      CONFIGURE_POSIX_INIT_TASK_STACK_SIZE }
 };
 #endif
 
@@ -433,7 +438,8 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
         CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES ) + \
     CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ) + \
     CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
-        CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) \
+        CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) + \
+    (CONFIGURE_POSIX_INIT_TASK_STACK_SIZE) \
    )
 
 
