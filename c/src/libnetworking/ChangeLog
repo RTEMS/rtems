@@ -1,3 +1,8 @@
+2002-09-07	Joel Sherrill <joel@OARcorp.com>
+
+	* pppd/ipcp.c, rtems_servers/ftpd.c: Add include files to resolve
+	warnings.
+
 2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems_webserver/md5.h: Add missing newline.

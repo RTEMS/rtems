@@ -190,6 +190,7 @@
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/error.h>
 #include <rtems/libio.h>
+#include <rtems/userenv.h>
 #include <syslog.h>
 
 #include <sys/types.h>
