@@ -536,7 +536,7 @@ scc_rxDaemon (void *arg)
  * Invalidate the buffer for this descriptor
  */
 
-      rtems_cache_invalidate_multiple_data_lines(rxBd->buffer, rxBd->length);
+      rtems_cache_invalidate_multiple_data_lines((void *)rxBd->buffer, rxBd->length);
 
       m = sc->rxMbuf[rxBdIndex];
 
@@ -687,7 +687,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
        * Flush the buffer for this descriptor
        */
 
-      rtems_cache_flush_multiple_data_lines(txBd->buffer, txBd->length);
+      rtems_cache_flush_multiple_data_lines((void *)txBd->buffer, txBd->length);
 
 
 /* throw off the header for Ethernet Emulation mode */

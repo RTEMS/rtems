@@ -323,12 +323,10 @@ rtems_device_driver console_open(
   void *arg
 )
 {
+#if UARTS_IO_MODE == 1  /* RTEMS interrupt-driven I/O with termios */
   /* Used to track termios private data for callbacks */
   extern struct rtems_termios_tty *ttyp[];
-  
   rtems_libio_open_close_args_t *args = arg;
-  rtems_status_code sc;
-  
 
   static const rtems_termios_callbacks intrCallbacks = {
     NULL,                       	/* firstOpen */
@@ -340,7 +338,8 @@ rtems_device_driver console_open(
     NULL,                       	/* startRemoteTx */
     1                           	/* outputUsesInterrupts */
   };
-  
+#else
+#if (UARTS_USE_TERMIOS == 1) && (UARTS_IO_MODE != 1)
   static const rtems_termios_callbacks pollCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
@@ -351,7 +350,12 @@ rtems_device_driver console_open(
     NULL,                       	/* startRemoteTx */
     0                           	/* outputUsesInterrupts */
   };
+#endif
    
+#endif
+  
+  rtems_status_code sc;
+  
   if ( minor > NUM_PORTS-1 ) 
     return RTEMS_INVALID_NUMBER;
 

@@ -73,6 +73,8 @@
 #include <netinet/in_var.h>
 #include <netinet/if_ether.h>
 
+#include <stdio.h>
+
 #include "if_hdlcsubr.h"
 
 
@@ -94,7 +96,9 @@ hdlc_output(ifp, m0, dst, rt0)
 {
 	short type;
 	int s, error = 0;
+#if 0
 	u_char  edst[6];
+#endif
 	register struct mbuf *m = m0;
 	register struct rtentry *rt;
 	struct mbuf *mcopy = (struct mbuf *)0;

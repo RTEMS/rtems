@@ -20,6 +20,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems.h>
+#include <rtems/apiext.h>
 #include <rtems/bspIo.h>
 #include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
