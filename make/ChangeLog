@@ -1,3 +1,12 @@
+2003-06-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 321:
+	* leaf.cfg: Remove support for profile-variant.
+	* main.cfg: Ditto.
+	* compilers/gcc-no_bsp.cfg: Ditto.
+	* compilers/gcc-portsw.cfg: Ditto.
+	* compilers/gcc-target-default.cfg: Ditto.
+
 2003-05-27	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
 
 	* custom/mvme2307.cfg: Remove CFLAGS_PROFILE_V.
