@@ -28,29 +28,7 @@ void *Task_1(
 {
   int   status;
 
-  puts( "Task_1: sleep 1 second" );
-
-  sleep( 1 );
-
-     /* switch to task 2 */
-
-  puts( "Task_1: join to detached task (Init) -- EINVAL" );
-  status = pthread_join( Init_id, NULL );
-  if ( status != EINVAL )
-    printf( "status = %d\n", status );
-  assert( status == EINVAL );
-  
-  puts( "Task_1: join to self task (Init) -- EDEADLK" );
-  status = pthread_join( pthread_self(), NULL );
-  if ( status != EDEADLK )
-    printf( "status = %d\n", status );
-  assert( status == EDEADLK );
-
   puts( "Task_1: exitting" );
 
-  pthread_exit( &Task_id );
-
-     /* switch to init task */
-
-  return NULL; /* just so the compiler thinks we returned something */
+  return( &Task1_id );
 }

@@ -27,26 +27,30 @@ void *Task_2(
 )
 {
   int   status;
-  void  *return_pointer;
 
-  puts( "Task_2: join to Task_1" );
-  status = pthread_join( Task_id, &return_pointer );
-  puts( "Task_2: returned from pthread_join" );
-  if ( status )
+  puts( "Task_2: sleep 1 second" );
+
+  sleep( 1 );
+
+  /* switch to task 3 */
+
+  puts( "Task_2: join to detached task (Init) -- EINVAL" );
+  status = pthread_join( Init_id, NULL );
+  if ( status != EINVAL )
     printf( "status = %d\n", status );
-  assert( !status );
- 
-  if ( return_pointer == &Task_id )
-    puts( "Task_2: pthread_join returned correct pointer" );
-  else
-    printf(
-      "Task_2: pthread_join returned incorrect pointer (%p != %p)\n",
-      return_pointer,
-      &Task_id
-    );
+  assert( status == EINVAL );
+  
+  puts( "Task_2: join to self task (Init) -- EDEADLK" );
+  status = pthread_join( pthread_self(), NULL );
+  if ( status != EDEADLK )
+    printf( "status = %d\n", status );
+  assert( status == EDEADLK );
 
-  puts( "*** END OF POSIX TEST 8 ***" );
-  exit( 0 );
+  puts( "Task_2: exitting" );
+
+  pthread_exit( &Task2_id );
+
+     /* switch to init task */
 
   return NULL; /* just so the compiler thinks we returned something */
 }

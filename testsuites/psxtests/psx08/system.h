@@ -30,6 +30,10 @@ void *Task_2(
   void *argument
 );
 
+void *Task_3(
+  void *argument
+);
+
 /* configuration information */
 
 #define CONFIGURE_SPTEST
@@ -50,7 +54,8 @@ void *Task_2(
 #endif
 
 TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t        Task1_id;
 TEST_EXTERN pthread_t        Task2_id;
+TEST_EXTERN pthread_t        Task3_id;
 
 /* end of include file */

@@ -18,7 +18,7 @@ TEST = psx08
 MANAGERS = all
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = init task task2
+C_PIECES=init task1 task2 task3
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

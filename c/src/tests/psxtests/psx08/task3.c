@@ -1,4 +1,4 @@
-/*  Task_2
+/*  Task_3
  *
  *  This routine serves as a test task.  It verifies the basic task
  *  switching capabilities of the executive.
@@ -22,35 +22,31 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_2(
+void *Task_3(
   void *argument
 )
 {
   int   status;
+  void  *return_pointer;
 
-  puts( "Task_2: sleep 1 second" );
-
-  sleep( 1 );
-
-  /* switch to task 3 */
-
-  puts( "Task_2: join to detached task (Init) -- EINVAL" );
-  status = pthread_join( Init_id, NULL );
-  if ( status != EINVAL )
+  puts( "Task_3: join to Task_2" );
+  status = pthread_join( Task2_id, &return_pointer );
+  puts( "Task_3: returned from pthread_join" );
+  if ( status )
     printf( "status = %d\n", status );
-  assert( status == EINVAL );
-  
-  puts( "Task_2: join to self task (Init) -- EDEADLK" );
-  status = pthread_join( pthread_self(), NULL );
-  if ( status != EDEADLK )
-    printf( "status = %d\n", status );
-  assert( status == EDEADLK );
+  assert( !status );
+ 
+  if ( return_pointer == &Task2_id )
+    puts( "Task_3: pthread_join returned correct pointer" );
+  else
+    printf(
+      "Task_3: pthread_join returned incorrect pointer (%p != %p)\n",
+      return_pointer,
+      &Task2_id
+    );
 
-  puts( "Task_2: exitting" );
-
-  pthread_exit( &Task2_id );
-
-     /* switch to init task */
+  puts( "*** END OF POSIX TEST 8 ***" );
+  exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

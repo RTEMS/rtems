@@ -2,17 +2,21 @@
 Init's ID is 0x0c010001
 Init: pthread_detach - ESRCH (invalid id)
 Init: pthread_detach self
-Init: creating two tasks
 Init: pthread_join - ESRCH (invalid id)
 Init: pthread_join - SUCCESSFUL
-Task_1: sleep 1 second
-Task_2: join to Task_1
-Task_1: join to detached task (Init) -- EINVAL
-Task_1: join to self task (Init) -- EDEADLK
 Task_1: exitting
-Init: returned from pthread_join
+Init: returned from pthread_join through return
+Init: pthread_join returned correct pointer
+Init: creating two pthreads
+Init: pthread_join - SUCCESSFUL
+Task_2: sleep 1 second
+Task_3: join to Task_2
+Task_2: join to detached task (Init) -- EINVAL
+Task_2: join to self task (Init) -- EDEADLK
+Task_2: exitting
+Init: returned from pthread_join through pthread_exit
 Init: pthread_join returned correct pointer
 Init: exitting
-Task_2: returned from pthread_join
-Task_2: pthread_join returned correct pointer
+Task_3: returned from pthread_join
+Task_3: pthread_join returned correct pointer
 *** END OF POSIX TEST 8 ***

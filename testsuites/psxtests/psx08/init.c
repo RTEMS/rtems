@@ -44,11 +44,7 @@ void *POSIX_Init(
 
   /* create thread */
  
-  puts( "Init: creating two tasks" );
-  status = pthread_create( &Task_id, NULL, Task_1, NULL );
-  assert( !status );
-  
-  status = pthread_create( &Task2_id, NULL, Task_2, NULL );
+  status = pthread_create( &Task1_id, NULL, Task_1, NULL );
   assert( !status );
   
   puts( "Init: pthread_join - ESRCH (invalid id)" );
@@ -56,27 +52,47 @@ void *POSIX_Init(
   assert( status == ESRCH );
 
   puts( "Init: pthread_join - SUCCESSFUL" );
-  status = pthread_join( Task_id, &return_pointer );
-  /* assert is below comment */
+  status = pthread_join( Task1_id, &return_pointer );
 
-     /* switch to Task 1 */
-
-  puts( "Init: returned from pthread_join" );
+  puts( "Init: returned from pthread_join through return" );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
 
-  if ( return_pointer == &Task_id )
+  if ( return_pointer == &Task1_id )
     puts( "Init: pthread_join returned correct pointer" );
   else
     printf(
       "Init: pthread_join returned incorrect pointer (%p != %p)\n",
       return_pointer,
-      &Task_id
+      &Task1_id
+    );
+  
+  puts( "Init: creating two pthreads" );
+  status = pthread_create( &Task2_id, NULL, Task_2, NULL );
+  assert( !status );
+  
+  status = pthread_create( &Task3_id, NULL, Task_3, NULL );
+  assert( !status );
+  
+  puts( "Init: pthread_join - SUCCESSFUL" );
+  status = pthread_join( Task2_id, &return_pointer );
+  /* assert is below comment */
+
+  puts( "Init: returned from pthread_join through pthread_exit" );
+  if ( status )
+    printf( "status = %d\n", status );
+  assert( !status );
+
+  if ( return_pointer == &Task2_id )
+    puts( "Init: pthread_join returned correct pointer" );
+  else
+    printf(
+      "Init: pthread_join returned incorrect pointer (%p != %p)\n",
+      return_pointer,
+      &Task2_id
     );
   
   puts( "Init: exitting" );
-  pthread_exit( NULL );
-
-  return NULL; /* just so the compiler thinks we returned something */
+  return NULL;
 }
