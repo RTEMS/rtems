@@ -8,7 +8,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-INCLUDES = -I.
+INCLUDES = -I../..
+
 AM_CFLAGS += $(LIBC_DEFINES) 
 
 FATFS_C_FILES = fat.c fat_fat_operations.c fat_file.c

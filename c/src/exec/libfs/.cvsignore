@@ -12,3 +12,5 @@ depcomp
 install-sh
 missing
 mkinstalldirs
+config.h*
+stamp-h*

@@ -1,3 +1,16 @@
+2002-03-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Addressing PR 140.
+	* src/dosfs/config.h.in: Removed.
+	* src/dosfs/stamp-h2.in: Removed.
+	* .cvsignore: Add config.h*, stamp-h*.
+	* configure.ac: Remove AC_SRC_DIR(.../dosfs.h).
+	Remove AM_CONFIG_HEADER(src/dosfs/config.h).
+	Remove AM_CONFIG_HEADER(src/imfs/config.h).
+	Add AM_CONFIG_HEADER(config.h).
+	* src/dosfs/Makefile.am: INCLUDES = -I../.. .
+	* src/imfs/Makefile.am: INCLUDES = -I../.. .
+
 2002-03-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	Reported and tracked as PR130.
