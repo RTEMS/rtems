@@ -1,6 +1,6 @@
 /*  unix.h
  *
- *  This include file contains the basic type definitions required by RTEMS
+ *  This include file contains the definitions required by RTEMS
  *  which are typical for a modern UNIX computer using GCC.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  unix.h,v 1.2 1995/05/09 20:12:28 joel Exp
  */
 
 #ifndef __UNIX_h
@@ -28,12 +28,31 @@ extern "C" {
  *        with the name of the appropriate macro for this target CPU.
  */
  
+#ifdef unix
+#undef unix
+#endif
 #define unix
+
+#ifdef REPLACE_THIS_WITH_THE_CPU_FAMILY
+#undef REPLACE_THIS_WITH_THE_CPU_FAMILY
+#endif
 #define REPLACE_THIS_WITH_THE_CPU_FAMILY
+
+#ifdef REPLACE_THIS_WITH_THE_BSP
+#undef REPLACE_THIS_WITH_THE_BSP
+#endif
 #define REPLACE_THIS_WITH_THE_BSP
+
+#ifdef REPLACE_THIS_WITH_THE_CPU_MODEL
+#undef REPLACE_THIS_WITH_THE_CPU_MODEL
+#endif
 #define REPLACE_THIS_WITH_THE_CPU_MODEL
+
+#ifdef REPLACE_THIS_WITH_THE_UNIX_FLAVOR
+#undef REPLACE_THIS_WITH_THE_UNIX_FLAVOR
+#endif
 #define REPLACE_THIS_WITH_THE_UNIX_FLAVOR
- 
+
 /*
  *  This file contains the information required to build
  *  RTEMS for a particular member of the "unix"
@@ -57,34 +76,10 @@ extern "C" {
  
 #endif
  
-#ifndef ASM
-
-/* type definitions */
-
-typedef unsigned char  unsigned8;       /* 8-bit  unsigned integer */
-typedef unsigned short unsigned16;      /* 16-bit unsigned integer */
-typedef unsigned int   unsigned32;      /* 32-bit unsigned integer */
-typedef unsigned long long unsigned64;  /* 64-bit unsigned integer */
-
-typedef unsigned16     Priority_Bit_map_control;
-
-typedef char           signed8;    /* 8-bit signed integer  */
-typedef short          signed16;   /* 16-bit signed integer */
-typedef int            signed32;   /* 32-bit signed integer */
-typedef long long      signed64;   /* 64-bit signed integer */
-
-typedef unsigned32 boolean;     /* Boolean value   */
-
-typedef float          single_precision;     /* single precision float */
-typedef double         double_precision;     /* double precision float */
-
-typedef void ( *unix_isr_entry )( void );
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* !ASM */
 #endif
 /* end of include file */
 

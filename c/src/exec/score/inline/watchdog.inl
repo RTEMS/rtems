@@ -257,40 +257,5 @@ STATIC INLINE Watchdog_Control *_Watchdog_Last(
 
 }
 
-/*PAGE
- *
- *  _Watchdog_Get_sync
- *
- */
-
-STATIC INLINE Watchdog_Control *_Watchdog_Get_sync( void )
-{
-  return (Watchdog_Control *) _Watchdog_Sync;
-}
-
-/*PAGE
- *
- *  _Watchdog_Set_sync
- *
- */
-
-STATIC INLINE void _Watchdog_Set_sync(
-  Watchdog_Control *the_watchdog
-)
-{
-  _Watchdog_Sync = (Watchdog_Synchronization_pointer) the_watchdog;
-}
-
-/*PAGE
- *
- *  _Watchdog_Clear_sync
- *
- */
-
-STATIC INLINE void _Watchdog_Clear_sync( void )
-{
-  _Watchdog_Sync = NULL;
-}
-
 #endif
 /* end of include file */

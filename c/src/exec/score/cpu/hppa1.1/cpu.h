@@ -20,7 +20,7 @@
  * Note:
  *      This file is included by both C and assembler code ( -DASM )
  *
- *  $Id$
+ *  cpu.h,v 1.2 1995/05/09 20:11:36 joel Exp
  */
 
 #ifndef __CPU_h
@@ -30,7 +30,10 @@
 extern "C" {
 #endif
 
-#include <hppa.h>                   /* pick up machine definitions */
+#include <rtems/hppa.h>              /* pick up machine definitions */
+#ifndef ASM
+#include <rtems/hppatypes.h>
+#endif
 
 /* conditional compilation parameters */
 

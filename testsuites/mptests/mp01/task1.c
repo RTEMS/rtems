@@ -21,7 +21,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.2 1995/05/09 20:26:24 joel Exp
  */
 
 #include "system.h"
@@ -43,7 +43,7 @@ rtems_task Test_task(
   put_name( Task_name[ task_number( tid ) ], FALSE );
   print_time( " - rtems_clock_get - ", &time, "\n" );
 
-  status = rtems_task_wake_after( task_number( tid ) * 5 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( task_number( tid ) * 1 * TICKS_PER_SECOND );
   directive_failed( status, "rtems_task_wake_after" );
 
   status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );

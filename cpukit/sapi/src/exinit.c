@@ -107,6 +107,13 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _CPU_Initialize( cpu_table, _Thread_Dispatch );
 
+  /*
+   *  Do this as early as possible to insure no debugging output
+   *  is even attempted to be printed.
+   */
+
+  _Debug_Manager_initialization();
+
   multiprocessing_table = configuration_table->User_multiprocessing_table;
   if ( multiprocessing_table == NULL )
     multiprocessing_table =

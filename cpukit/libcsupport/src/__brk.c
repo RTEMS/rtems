@@ -1,3 +1,5 @@
+#if !defined(RTEMS_UNIX)
+
 /*
  *  RTEMS "Broken" __brk/__sbrk Implementation
  *
@@ -12,7 +14,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  __brk.c,v 1.2 1995/05/09 20:24:28 joel Exp
  */
 
 #include <rtems.h>
@@ -38,3 +40,5 @@ int __brk( const void *endds )
   errno = EINVAL;
   return -1;
 }
+
+#endif

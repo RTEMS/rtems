@@ -27,10 +27,9 @@
  */
 
 
-#include "rtems.h"
-#include "cpu.h"
-#include "bsp.h"
-#include "mc68230.h"
+#include <rtems.h>
+#include <bsp.h>
+#include <mc68230.h>
 
 #define TIMER_VECTOR 0x4D
 

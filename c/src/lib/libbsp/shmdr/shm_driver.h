@@ -14,7 +14,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  shm.h,v 1.2 1995/05/09 20:23:03 joel Exp
  */
 
 #ifndef __SHM_h
@@ -23,8 +23,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <cpu.h>
 
 /*  The information contained in the Node Status, Locked Queue, and
  *  Envelope Control Blocks must be maintained in a NEUTRAL format.

@@ -171,32 +171,5 @@
 #define _Watchdog_Last( _header ) \
   ((Watchdog_Control *) (_header)->last)
 
-/*PAGE
- *
- *  _Watchdog_Get_sync
- *
- */
-
-#define _Watchdog_Get_sync() \
-   ((Watchdog_Control *) _Watchdog_Sync)
-
-/*PAGE
- *
- *  _Watchdog_Set_sync
- *
- */
-
-#define _Watchdog_Set_sync( _the_watchdog ) \
-  _Watchdog_Sync = (Watchdog_Synchronization_pointer) (_the_watchdog)
-
-/*PAGE
- *
- *  _Watchdog_Clear_sync
- *
- */
-
-#define _Watchdog_Clear_sync() \
-  _Watchdog_Sync = NULL;
-
 #endif
 /* end of include file */

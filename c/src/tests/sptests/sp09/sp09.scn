@@ -237,7 +237,6 @@ TA1 - rtems_timer_delete - local RTEMS_INVALID_ID
 TA1 - rtems_timer_delete - global RTEMS_INVALID_ID
 TA1 - rtems_timer_ident - RTEMS_INVALID_NAME
 TA1 - rtems_timer_cancel - RTEMS_INVALID_ID
-TA1 - rtems_timer_cancel - RTEMS_INCORRECT_STATE
 TA1 - rtems_timer_reset - RTEMS_INVALID_ID
 TA1 - rtems_timer_reset - RTEMS_NOT_DEFINED
 TA1 - rtems_timer_fire_after - RTEMS_INVALID_ID

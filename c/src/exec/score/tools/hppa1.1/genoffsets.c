@@ -1,12 +1,12 @@
 /*
- *      @(#)genoffsets.c        1.3 - 95/03/15
- *
+ *	@(#)genoffsets.c	1.5 - 95/05/16
+ *	
  *
  *  genoffsets.c
  *
  *  This file generates the offsets.h for the HP PA-RISC port of RTEMS.
  *
- *  NOTE:  It only prints the offset for structures actually used
+ *  NOTE:  It only prints the offset for structures actually used 
  *         by the assembly code.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
@@ -16,7 +16,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  genoffsets.c,v 1.2 1995/05/09 20:16:48 joel Exp
  *
  */
 

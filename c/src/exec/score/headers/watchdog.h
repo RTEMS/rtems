@@ -100,17 +100,12 @@ typedef struct {
 }   Watchdog_Control;
 
 /*
- *  The following type is used for synchronization purposes
+ *  The following are used for synchronization purposes
  *  during an insert on a watchdog delta chain.
- *
- *  NOTE:  Watchdog_Pointer is only used to insure that
- *         Watchdog_Synchronization_pointer is a pointer
- *         which is volatile rather than a pointer to a
- *         volatile block of memory.
  */
 
-typedef Watchdog_Control          *Watchdog_Pointer;
-typedef volatile Watchdog_Pointer  Watchdog_Synchronization_pointer;
+volatile unsigned32  _Watchdog_Sync_level;
+volatile unsigned32  _Watchdog_Sync_count;
 
 /*
  *  The following defines the watchdog chains which are managed
@@ -119,14 +114,6 @@ typedef volatile Watchdog_Pointer  Watchdog_Synchronization_pointer;
 
 EXTERN Chain_Control _Watchdog_Ticks_chain;
 EXTERN Chain_Control _Watchdog_Seconds_chain;
-
-/*
- *  The following defines the synchronization variable used to
- *  allow interrupts to be enabled while inserting a watchdog
- *  on a watchdog chain.
- */
-
-EXTERN Watchdog_Synchronization_pointer _Watchdog_Sync;
 
 /*
  *  _Watchdog_Handler_initialization
@@ -376,46 +363,6 @@ STATIC INLINE Watchdog_Control *_Watchdog_Last(
 );
 
 /*
- *
- *  _Watchdog_Get_sync
- *
- *  DESCRIPTION:
- *
- *  This routine returns the current synchronization timer.  This
- *  routine is used so that interrupts can be enabled while a
- *  watchdog timer is being inserted into a watchdog chain.
- */
-
-STATIC INLINE Watchdog_Control *_Watchdog_Get_sync( void );
-
-/*
- *
- *  _Watchdog_Set_sync
- *
- *  DESCRIPTION:
- *
- *  This routine sets the current synchronization timer.  This
- *  routine is used so that interrupts can be enabled while a
- *  watchdog timer is being inserted into a watchdog chain.
- */
-
-STATIC INLINE void _Watchdog_Set_sync(
-  Watchdog_Control *the_watchdog
-);
-
-/*
- *
- *  _Watchdog_Clear_sync
- *
- *  DESCRIPTION:
- *
- *  This routine will set the watchdog synchronization flag to a
- *  NULL address indicating synchronization is unnecessary.
- */
-
-STATIC INLINE void _Watchdog_Clear_sync( void );
-
-/*
  *  _Watchdog_Adjust
  *
  *  DESCRIPTION:
@@ -427,7 +374,7 @@ STATIC INLINE void _Watchdog_Clear_sync( void );
 void _Watchdog_Adjust (
   Chain_Control              *header,
   Watchdog_Adjust_directions  direction,
-  rtems_interval           units
+  rtems_interval              units
 );
 
 /*

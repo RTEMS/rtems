@@ -23,7 +23,10 @@ extern "C" {
 
 #pragma align 4            /* for GNU C structure alignment */
 
-#include <i960.h>
+#include <rtems/i960.h>
+#ifndef ASM
+#include <rtems/i960types.h>
+#endif
 
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
 #define CPU_UNROLL_ENQUEUE_PRIORITY      FALSE

@@ -27,8 +27,10 @@ extern "C" {
 #endif
 
 #include <setjmp.h>
-#include <string.h>
-#include <unix.h>
+#include <rtems/unix.h>
+#ifndef ASM
+#include <rtems/unixtypes.h>
+#endif
 
 /* conditional compilation parameters */
 
@@ -676,7 +678,7 @@ extern void _CPU_Context_Initialize(
   unsigned32       *_stack_base,
   unsigned32        _size,
   unsigned32        _new_level,
-  proc_ptr         *_entry_point
+  void             *_entry_point
 );
 
 /* end of Context handler macros */

@@ -31,7 +31,7 @@
  */
 
 #define ASM
-#include <m68k.h>
+#include <rtems/m68k.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the

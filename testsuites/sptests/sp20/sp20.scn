@@ -13,7 +13,7 @@ TA4 - rtems_rate_monotonic_ident id = 0x00010004
 TA4 - (0x00010004) period 2
 TA5 - rtems_rate_monotonic_create id = 0x00010005
 TA5 - rtems_rate_monotonic_ident id = 0x00010005
-TA5 - (0x00010005) period 50
+TA5 - (0x00010005) period 100
 TA5 - PERIODS CHECK OK (1)
 TA5 - PERIODS CHECK OK (2)
 TA5 - PERIODS CHECK OK (3)

@@ -187,11 +187,11 @@ void _IO_Initialize_all_drivers( void );
  */
 
 rtems_status_code _IO_Handler_routine(
-  IO_operations     operation,
+  IO_operations              operation,
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void                      *argument,
+  unsigned32                *return_value
 );
 
 #include <rtems/io.inl>

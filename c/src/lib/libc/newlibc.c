@@ -1,16 +1,16 @@
 /*
- *	@(#)newlibc.c	1.8 - 95/04/25
+ *	@(#)newlibc.c	1.9 - 95/05/16
  *	
  */
 
 #if defined(RTEMS_NEWLIB)
 
 /*
- *  File:	$RCSfile$
+ *  File:	newlibc.c,v
  *  Project:	PixelFlow
  *  Created:	94/12/7
- *  Revision:	$Revision$
- *  Last Mod:	$Date$
+ *  Revision:	1.2
+ *  Last Mod:	1995/05/09 20:24:37
  *
  *  COPYRIGHT (c) 1994 by Division Incorporated
  *
@@ -35,7 +35,7 @@
  *
  *  NOTE:
  *
- *  $Id$
+ *  newlibc.c,v 1.2 1995/05/09 20:24:37 joel Exp
  *
  */
 

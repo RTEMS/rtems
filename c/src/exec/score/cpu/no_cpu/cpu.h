@@ -21,7 +21,10 @@
 extern "C" {
 #endif
 
-#include <no_cpu.h>               /* pick up machine definitions */
+#include <rtems/no_cpu.h>               /* pick up machine definitions */
+#ifndef ASM
+#include <rtems/no_cputypes.h>
+#endif
 
 /* conditional compilation parameters */
 

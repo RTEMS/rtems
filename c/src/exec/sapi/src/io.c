@@ -256,11 +256,11 @@ rtems_status_code rtems_io_control(
  */
 
 rtems_status_code _IO_Handler_routine(
-  IO_operations     operation,
+  IO_operations              operation,
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void                      *argument,
+  unsigned32                *return_value
 )
 {
   rtems_device_driver_entry io_callout;

@@ -21,7 +21,10 @@
 extern "C" {
 #endif
 
-#include <i386.h>
+#ifndef ASM
+#include <rtems/i386types.h>
+#endif
+#include <rtems/i386.h>
 
 /* conditional compilation parameters */
 

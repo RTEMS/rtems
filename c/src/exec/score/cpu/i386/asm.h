@@ -31,7 +31,7 @@
  */
 
 #define ASM
-#include <i386.h>
+#include <rtems/i386.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the

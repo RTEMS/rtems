@@ -1,13 +1,6 @@
 /*
- *	@(#)hppa.h	1.5 - 95/04/25
+ *	@(#)hppa.h	1.7 - 95/05/16
  *	
- *
- *  File:	$RCSfile$
- *  Project:	PixelFlow
- *  Created:	94/10/4
- *  RespEngr:	tony bennett
- *  Revision:	$Revision$
- *  Last Mod:	$Date$
  *
  *  Description:
  *		
@@ -31,7 +24,7 @@
  * Note:
  *      This file is included by both C and assembler code ( -DASM )
  *
- *  $Id$
+ *  hppa.h,v 1.2 1995/05/09 20:11:40 joel Exp
  */
 
 #ifndef _INCLUDE_HPPA_H
@@ -48,8 +41,19 @@ extern "C" {
  *        with the name of the appropriate macro for this target CPU.
  */
  
+#ifdef hppa1_1
+#undef hppa1_1
+#endif
 #define hppa1_1
+
+#ifdef REPLACE_THIS_WITH_THE_CPU_MODEL
+#undef REPLACE_THIS_WITH_THE_CPU_MODEL
+#endif
 #define REPLACE_THIS_WITH_THE_CPU_MODEL
+
+#ifdef REPLACE_THIS_WITH_THE_BSP
+#undef REPLACE_THIS_WITH_THE_BSP
+#endif
 #define REPLACE_THIS_WITH_THE_BSP
 
 /*
@@ -79,30 +83,6 @@ extern "C" {
  */
 
 #define CPU_NAME "HP PA-RISC 1.1"
-
-#ifndef ASM
-/*
- *  This section defines the basic types for this processor.
- */
-
-typedef unsigned char      unsigned8;  /* 8-bit  unsigned integer */
-typedef unsigned short     unsigned16; /* 16-bit unsigned integer */
-typedef unsigned int       unsigned32; /* 32-bit unsigned integer */
-typedef unsigned long long unsigned64; /* 64-bit unsigned integer */
-
-typedef unsigned16 Priority_Bit_map_control;
-
-typedef char      signed8;      /* 8-bit  signed integer */
-typedef short     signed16;     /* 16-bit signed integer */
-typedef int       signed32;     /* 32-bit signed integer */
-typedef long long signed64;     /* 64 bit signed integer */
-
-typedef unsigned32 boolean;     /* Boolean value   */
-
-typedef float     single_precision;     /* single precision float */
-typedef double    double_precision;     /* double precision float */
-
-#endif  /* !ASM */
 
 
 /*
@@ -228,6 +208,14 @@ typedef double    double_precision;     /* double precision float */
 /* BSP defined interrupts begin here */
 
 #define HPPA_INTERRUPT_MAX  64
+
+/*
+ * Cache characteristics
+ */
+ 
+#define HPPA_CACHELINE_SIZE     32
+#define HPPA_CACHELINE_MASK     (HPPA_CACHELINE_SIZE - 1)
+
 
 /*
  * Inline macros for misc. interesting opcodes
@@ -520,102 +508,102 @@ typedef double    double_precision;     /* double precision float */
  */
 
 /* Hardware Space Registers */
-#define SR0     0
-#define SR1     1
-#define SR2     2
-#define SR3     3
-#define SR4     4
-#define SR5     5
-#define SR6     6
-#define SR7     7
+#define HPPA_SR0     0
+#define HPPA_SR1     1
+#define HPPA_SR2     2
+#define HPPA_SR3     3
+#define HPPA_SR4     4
+#define HPPA_SR5     5
+#define HPPA_SR6     6
+#define HPPA_SR7     7
 
 /* Hardware Control Registers */
-#define CR0     0
-#define RCTR    0               /* Recovery Counter Register */
+#define HPPA_CR0     0
+#define HPPA_RCTR    0               /* Recovery Counter Register */
 
-#define CR8     8               /* Protection ID 1 */
-#define PIDR1   8
+#define HPPA_CR8     8               /* Protection ID 1 */
+#define HPPA_PIDR1   8
 
-#define CR9     9               /* Protection ID 2 */
-#define PIDR2   9
+#define HPPA_CR9     9               /* Protection ID 2 */
+#define HPPA_PIDR2   9
 
-#define CR10    10
-#define CCR     10              /* Coprocessor Confiquration Register */
+#define HPPA_CR10    10
+#define HPPA_CCR     10              /* Coprocessor Confiquration Register */
 
-#define CR11    11
-#define SAR     11              /* Shift Amount Register */
+#define HPPA_CR11    11
+#define HPPA_SAR     11              /* Shift Amount Register */
 
-#define CR12    12
-#define PIDR3   12              /* Protection ID 3 */
+#define HPPA_CR12    12
+#define HPPA_PIDR3   12              /* Protection ID 3 */
 
-#define CR13    13
-#define PIDR4   13              /* Protection ID 4 */
+#define HPPA_CR13    13
+#define HPPA_PIDR4   13              /* Protection ID 4 */
 
-#define CR14    14
-#define IVA     14              /* Interrupt Vector Address */
+#define HPPA_CR14    14
+#define HPPA_IVA     14              /* Interrupt Vector Address */
 
-#define CR15    15
-#define EIEM    15              /* External Interrupt Enable Mask */
+#define HPPA_CR15    15
+#define HPPA_EIEM    15              /* External Interrupt Enable Mask */
 
-#define CR16    16
-#define ITMR    16              /* Interval Timer */
+#define HPPA_CR16    16
+#define HPPA_ITMR    16              /* Interval Timer */
 
-#define CR17    17
-#define PCSQ    17              /* Program Counter Space queue */
+#define HPPA_CR17    17
+#define HPPA_PCSQ    17              /* Program Counter Space queue */
 
-#define CR18    18
-#define PCOQ    18              /* Program Counter Offset queue */
+#define HPPA_CR18    18
+#define HPPA_PCOQ    18              /* Program Counter Offset queue */
 
-#define CR19    19
-#define IIR     19              /* Interruption Instruction Register */
+#define HPPA_CR19    19
+#define HPPA_IIR     19              /* Interruption Instruction Register */
 
-#define CR20    20
-#define ISR     20              /* Interruption Space Register */
+#define HPPA_CR20    20
+#define HPPA_ISR     20              /* Interruption Space Register */
 
-#define CR21    21
-#define IOR     21              /* Interruption Offset Register */
+#define HPPA_CR21    21
+#define HPPA_IOR     21              /* Interruption Offset Register */
 
-#define CR22    22
-#define IPSW    22              /* Interrpution Processor Status Word */
+#define HPPA_CR22    22
+#define HPPA_IPSW    22              /* Interrpution Processor Status Word */
 
-#define CR23    23
-#define EIRR    23              /* External Interrupt Request */
+#define HPPA_CR23    23
+#define HPPA_EIRR    23              /* External Interrupt Request */
 
-#define CR24    24
-#define PPDA    24              /* Physcial Page Directory Address */
-#define TR0     24              /* Temporary register 0 */
+#define HPPA_CR24    24
+#define HPPA_PPDA    24              /* Physcial Page Directory Address */
+#define HPPA_TR0     24              /* Temporary register 0 */
 
-#define CR25    25
-#define HTA     25              /* Hash Table Address */
-#define TR1     25              /* Temporary register 1 */
+#define HPPA_CR25    25
+#define HPPA_HTA     25              /* Hash Table Address */
+#define HPPA_TR1     25              /* Temporary register 1 */
 
-#define CR26    26
-#define TR2     26              /* Temporary register 2 */
+#define HPPA_CR26    26
+#define HPPA_TR2     26              /* Temporary register 2 */
 
-#define CR27    27
-#define TR3     27              /* Temporary register 3 */
+#define HPPA_CR27    27
+#define HPPA_TR3     27              /* Temporary register 3 */
 
-#define CR28    28
-#define TR4     28              /* Temporary register 4 */
+#define HPPA_CR28    28
+#define HPPA_TR4     28              /* Temporary register 4 */
 
-#define CR29    29
-#define TR5     29              /* Temporary register 5 */
+#define HPPA_CR29    29
+#define HPPA_TR5     29              /* Temporary register 5 */
 
-#define CR30    30
-#define TR6     30              /* Temporary register 6 */
+#define HPPA_CR30    30
+#define HPPA_TR6     30              /* Temporary register 6 */
 
-#define CR31    31
-#define CPUID   31              /* MP identifier */
+#define HPPA_CR31    31
+#define HPPA_CPUID   31              /* MP identifier */
 
 /*
  * Diagnose registers
  */
 
-#define DR0      0
-#define DR1      1
-#define DR8      8
-#define DR24    24
-#define DR25    25
+#define HPPA_DR0      0
+#define HPPA_DR1      1
+#define HPPA_DR8      8
+#define HPPA_DR24    24
+#define HPPA_DR25    25
 
 /*
  * Tear apart a break instruction to find its type.
@@ -653,32 +641,32 @@ set_ ## name (unsigned int new_value)          \
     EMIT_GET_CONTROL(name, reg)                \
     EMIT_SET_CONTROL(name, reg)
 
-EMIT_CONTROLS(recovery, RCTR);          /* CR0  */
-EMIT_CONTROLS(pid1, PIDR1);             /* CR8  */
-EMIT_CONTROLS(pid2, PIDR2);             /* CR9  */
-EMIT_CONTROLS(ccr, CCR);                /* CR10; CCR and SCR share CR10 */
-EMIT_CONTROLS(scr, CCR);                /* CR10; CCR and SCR share CR10 */
-EMIT_CONTROLS(sar, SAR);                /* CR11 */
-EMIT_CONTROLS(pid3, PIDR3);             /* CR12 */
-EMIT_CONTROLS(pid4, PIDR4);             /* CR13 */
-EMIT_CONTROLS(iva, IVA);                /* CR14 */
-EMIT_CONTROLS(eiem, EIEM);              /* CR15 */
-EMIT_CONTROLS(itimer, ITMR);            /* CR16 */
-EMIT_CONTROLS(pcsq, PCSQ);              /* CR17 */
-EMIT_CONTROLS(pcoq, PCOQ);              /* CR18 */
-EMIT_CONTROLS(iir, IIR);                /* CR19 */
-EMIT_CONTROLS(isr, ISR);                /* CR20 */
-EMIT_CONTROLS(ior, IOR);                /* CR21 */
-EMIT_CONTROLS(ipsw, IPSW);              /* CR22 */
-EMIT_CONTROLS(eirr, EIRR);              /* CR23 */
-EMIT_CONTROLS(tr0, TR0);                /* CR24 */
-EMIT_CONTROLS(tr1, TR1);                /* CR25 */
-EMIT_CONTROLS(tr2, TR2);                /* CR26 */
-EMIT_CONTROLS(tr3, TR3);                /* CR27 */
-EMIT_CONTROLS(tr4, TR4);                /* CR28 */
-EMIT_CONTROLS(tr5, TR5);                /* CR29 */
-EMIT_CONTROLS(tr6, TR6);                /* CR30 */
-EMIT_CONTROLS(tr7, CR31);               /* CR31 */
+EMIT_CONTROLS(recovery, HPPA_RCTR);          /* CR0  */
+EMIT_CONTROLS(pid1, HPPA_PIDR1);             /* CR8  */
+EMIT_CONTROLS(pid2, HPPA_PIDR2);             /* CR9  */
+EMIT_CONTROLS(ccr, HPPA_CCR);                /* CR10; CCR and SCR share CR10 */
+EMIT_CONTROLS(scr, HPPA_CCR);                /* CR10; CCR and SCR share CR10 */
+EMIT_CONTROLS(sar, HPPA_SAR);                /* CR11 */
+EMIT_CONTROLS(pid3, HPPA_PIDR3);             /* CR12 */
+EMIT_CONTROLS(pid4, HPPA_PIDR4);             /* CR13 */
+EMIT_CONTROLS(iva, HPPA_IVA);                /* CR14 */
+EMIT_CONTROLS(eiem, HPPA_EIEM);              /* CR15 */
+EMIT_CONTROLS(itimer, HPPA_ITMR);            /* CR16 */
+EMIT_CONTROLS(pcsq, HPPA_PCSQ);              /* CR17 */
+EMIT_CONTROLS(pcoq, HPPA_PCOQ);              /* CR18 */
+EMIT_CONTROLS(iir, HPPA_IIR);                /* CR19 */
+EMIT_CONTROLS(isr, HPPA_ISR);                /* CR20 */
+EMIT_CONTROLS(ior, HPPA_IOR);                /* CR21 */
+EMIT_CONTROLS(ipsw, HPPA_IPSW);              /* CR22 */
+EMIT_CONTROLS(eirr, HPPA_EIRR);              /* CR23 */
+EMIT_CONTROLS(tr0, HPPA_TR0);                /* CR24 */
+EMIT_CONTROLS(tr1, HPPA_TR1);                /* CR25 */
+EMIT_CONTROLS(tr2, HPPA_TR2);                /* CR26 */
+EMIT_CONTROLS(tr3, HPPA_TR3);                /* CR27 */
+EMIT_CONTROLS(tr4, HPPA_TR4);                /* CR28 */
+EMIT_CONTROLS(tr5, HPPA_TR5);                /* CR29 */
+EMIT_CONTROLS(tr6, HPPA_TR6);                /* CR30 */
+EMIT_CONTROLS(tr7, HPPA_CR31);               /* CR31 */
 
 /*
  * If and How to invoke the debugger (a ROM debugger generally)

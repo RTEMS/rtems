@@ -332,7 +332,8 @@ uninitialized =
 
 /*watchdog.h*/  (sizeof _Watchdog_Ticks_chain)            +
                 (sizeof _Watchdog_Seconds_chain)          +
-                (sizeof _Watchdog_Sync)                   +
+                (sizeof _Watchdog_Sync_count)             +
+                (sizeof _Watchdog_Sync_level)             +
 
 /*wkspace.h*/   (sizeof _Workspace_Area);
 

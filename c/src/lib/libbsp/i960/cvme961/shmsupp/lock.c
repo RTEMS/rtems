@@ -18,9 +18,8 @@
  */
 
 #include <rtems.h>
-#include "cpu.h"
-#include "bsp.h"
-#include "shm.h"
+#include <bsp.h>
+#include <shm.h>
 
 /*
  *  Shm_Initialize_lock

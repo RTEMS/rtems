@@ -28,8 +28,19 @@ extern "C" {
  *        with the name of the appropriate macro for this target CPU.
  */
  
+#ifdef i960
+#undef i960
+#endif
 #define i960
+
+#ifdef REPLACE_THIS_WITH_THE_CPU_MODEL
+#undef REPLACE_THIS_WITH_THE_CPU_MODEL
+#endif
 #define REPLACE_THIS_WITH_THE_CPU_MODEL
+
+#ifdef REPLACE_THIS_WITH_THE_BSP
+#undef REPLACE_THIS_WITH_THE_BSP
+#endif
 #define REPLACE_THIS_WITH_THE_BSP
 
 /*
@@ -63,37 +74,16 @@ extern "C" {
 #ifndef ASM
 
 /*
- *  This section defines the basic types for this processor.
- */
-
-typedef unsigned char      unsigned8;  /* 8-bit  unsigned integer */
-typedef unsigned short     unsigned16; /* 16-bit unsigned integer */
-typedef unsigned int       unsigned32; /* 32-bit unsigned integer */
-typedef unsigned long long unsigned64; /* 64-bit unsigned integer */
-
-typedef unsigned32         Priority_Bit_map_control;
-
-typedef char               signed8;      /* 8-bit signed integer  */
-typedef short              signed16;     /* 16-bit signed integer */
-typedef int                signed32;     /* 32-bit signed integer */
-typedef long long          signed64;     /* 64-bit signed integer */
-
-typedef unsigned32 boolean;     /* Boolean value   */
-
-typedef float              single_precision; /* single precision float */
-typedef double             double_precision; /* double precision float */
-
-/*
  * XXX    should have an ifdef here and have stuff for the other
  * XXX    family members...
  */
-
+ 
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
-
+ 
 /* i960CA control structures */
-
+ 
 /* Intel i960CA Control Table */
-
+ 
 typedef struct {
                             /* Control Group 0 */
   unsigned int ipb0;              /* IP breakpoint 0 */
@@ -131,9 +121,9 @@ typedef struct {
   unsigned int bcon;              /* bus configuration control */
   unsigned int reserved;          /* reserved */
 }   i960ca_control_table;
-
+ 
 /* Intel i960CA Processor Control Block */
-
+ 
 typedef struct {
   unsigned int    *fault_tbl;     /* fault table base address */
   i960ca_control_table
@@ -149,10 +139,12 @@ typedef struct {
                                      configuration word */
   unsigned int     reg_cache_cfg; /* register cache configuration word */
 }   i960ca_PRCB;
-
+ 
 #endif
 
-typedef void ( *i960_isr )( void );
+/*
+ *  Interrupt Level Routines
+ */
 
 #define i960_disable_interrupts( oldlevel ) \
   { (oldlevel) = 0x1f0000; \
@@ -191,22 +183,22 @@ typedef void ( *i960_isr )( void );
   i960_atomic_modify( _mask, _address, _previous )
 
 #define i960_enable_tracing() \
- { register unsigned32 _pc = 0x1; \
+ { register unsigned int _pc = 0x1; \
    asm volatile( "modpc 0,%0,%0" : "=d" (_pc) : "0" (_pc) ); \
  }
 
 #define i960_unmask_intr( xint ) \
- { register unsigned32 _mask= (1<<(xint)); \
+ { register unsigned int _mask= (1<<(xint)); \
    asm volatile( "or sf1,%0,sf1" : "=d" (_mask) : "0" (_mask) ); \
  }
 
 #define i960_mask_intr( xint ) \
- { register unsigned32 _mask= (1<<(xint)); \
+ { register unsigned int _mask= (1<<(xint)); \
    asm volatile( "andnot %0,sf1,sf1" : "=d" (_mask) : "0" (_mask) ); \
  }
 
 #define i960_clear_intr( xint ) \
- { register unsigned32 _xint=(xint); \
+ { register unsigned int _xint=(xint); \
    asm volatile( "loop_til_cleared:
                     clrbit %0,sf0,sf0 ; \
                     bbs    %0,sf0,loop_til_cleared" \
@@ -225,8 +217,8 @@ typedef void ( *i960_isr )( void );
 
 #define i960_soft_reset( prcb ) \
  { register i960ca_PRCB *_prcb = (prcb); \
-   register unsigned32         *_next=0; \
-   register unsigned32          _cmd  = 0x30000; \
+   register unsigned int         *_next=0; \
+   register unsigned int          _cmd  = 0x30000; \
    asm volatile( "lda    next,%1; \
                   sysctl %0,%1,%2; \
             next: mov    g0,g0" \
@@ -234,20 +226,20 @@ typedef void ( *i960_isr )( void );
                   : "0"  (_cmd), "1"  (_next), "2"  (_prcb) ); \
  }
 
-static inline unsigned32 i960_pend_intrs()
-{ register unsigned32 _intr=0;
+static inline unsigned int i960_pend_intrs()
+{ register unsigned int _intr=0;
   asm volatile( "mov sf0,%0" : "=d" (_intr) : "0" (_intr) );
   return ( _intr );
 }
 
-static inline unsigned32 i960_mask_intrs()
-{ register unsigned32 _intr=0;
+static inline unsigned int i960_mask_intrs()
+{ register unsigned int _intr=0;
   asm volatile( "mov sf1,%0" : "=d" (_intr) : "0" (_intr) );
   return( _intr );
 }
 
-static inline unsigned32 i960_get_fp()
-{ register unsigned32 _fp=0;
+static inline unsigned int i960_get_fp()
+{ register unsigned int _fp=0;
   asm volatile( "mov fp,%0" : "=d" (_fp) : "0" (_fp) );
   return ( _fp );
 }

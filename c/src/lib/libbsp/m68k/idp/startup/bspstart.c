@@ -20,10 +20,9 @@
  *  $Id$
  */
 
-#include "rtems.h"
-#include "bsp.h"
-#include "cpu.h"
-#include "libcsupport.h"
+#include <rtems.h>
+#include <bsp.h>
+#include <libcsupport.h>
 
 unsigned char *duart_base;
 extern struct duart_regs duart_info;

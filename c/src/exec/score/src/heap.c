@@ -116,8 +116,13 @@ Heap_Extend_status _Heap_Extend(
 )
 {
   Heap_Block        *the_block;
-  Heap_Block        *next_block;
-  Heap_Block        *previous_block;
+  
+  /*
+   *  The overhead was taken from the original heap memory.
+   */
+
+  Heap_Block  *old_final;
+  Heap_Block  *new_final;
 
   /*
    *  There are five possibilities for the location of starting
@@ -150,24 +155,27 @@ Heap_Extend_status _Heap_Extend(
 
   /*
    *  Currently only case 4 should make it to this point.
+   *  The basic trick is to make the extend area look like a used
+   *  block and free it.
    */
 
-  *amount_extended = size - HEAP_BLOCK_USED_OVERHEAD;
+  *amount_extended = size;
 
-  previous_block = the_heap->last;
+  old_final = the_heap->final;
+  new_final = _Addresses_Add_offset( old_final, size );
+  /* SAME AS: _Addresses_Add_offset( starting_address, size-HEAP_OVERHEAD ); */
 
-  the_block              = (Heap_Block *) starting_address;
-  the_block->front_flag  = size;
-  the_block->next        = previous_block->next;
-  the_block->previous    = previous_block;
+  the_heap->final = new_final;
 
-  previous_block->next   = the_block;
-  the_heap->last         = the_block;
+  old_final->front_flag = 
+  new_final->back_flag  = _Heap_Build_flag( size, HEAP_BLOCK_USED );
+  new_final->front_flag = HEAP_DUMMY_FLAG;
 
-  next_block             = _Heap_Next_block( the_block );
-  next_block->back_flag  = size;
-  next_block->front_flag = HEAP_DUMMY_FLAG;
-  the_heap->final        = next_block;
+  /*
+   *  Must pass in address of "user" area
+   */
+
+  _Heap_Free( the_heap, &old_final->next );
 
   return HEAP_EXTEND_SUCCESSFUL;
 }
@@ -392,8 +400,8 @@ void _Heap_Walk(
   boolean        do_dump
 )
 {
-  Heap_Block *the_block;
-  Heap_Block *next_block;
+  Heap_Block *the_block  = 0;  /* avoid warnings */
+  Heap_Block *next_block = 0;  /* avoid warnings */
   int         notdone = 1;
 
   /*

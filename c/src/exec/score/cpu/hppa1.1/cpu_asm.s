@@ -1,4 +1,4 @@
-# 	@(#)cpu_asm.S	1.5 - 95/04/24
+# 	@(#)cpu_asm.S	1.6 - 95/05/16
 # 	
 # 
 # TODO: 
@@ -24,7 +24,7 @@
 #      Division Incorporated makes no representations about the
 #      suitability of this software for any purpose.
 #
-#  $Id$
+#  cpu_asm.S,v 1.2 1995/05/09 20:11:37 joel Exp
 #
 
 #include <rtems/hppa.h>

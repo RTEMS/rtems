@@ -1,5 +1,5 @@
 /*
- *	@(#)bspstart.c	1.13 - 95/04/25
+ *	@(#)bspstart.c	1.14 - 95/05/16
  *	
  */
 
@@ -24,7 +24,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  bspstart.c,v 1.2 1995/05/09 20:17:33 joel Exp
  */
 
 #include <bsp.h>
@@ -255,11 +255,11 @@ bsp_start(void)
 
 #ifdef hppa7200
     /*
-     * Use DR0 if supported
+     * Use HPPA_DR0 if supported
      */
     {
         int dr0;
-        HPPA_ASM_MFCPU(DR0, dr0);
+        HPPA_ASM_MFCPU(HPPA_DR0, dr0);
         cpu_number = (dr0 >> 4) & 0x7;
     }
 #else

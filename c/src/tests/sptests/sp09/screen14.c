@@ -76,14 +76,6 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_cancel - RTEMS_INVALID_ID" );
 
-  status = rtems_timer_cancel( Timer_id[ 1 ] );
-  fatal_directive_status(
-    status,
-    RTEMS_INCORRECT_STATE,
-    "rtems_timer_cancel before initiated"
-  );
-  puts( "TA1 - rtems_timer_cancel - RTEMS_INCORRECT_STATE" );
-
   status = rtems_timer_reset( 0x010100 );
   fatal_directive_status(
     status,

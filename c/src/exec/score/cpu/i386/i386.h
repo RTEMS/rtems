@@ -28,8 +28,19 @@ extern "C" {
  *        with the name of the appropriate macro for this target CPU.
  */
 
+#ifdef i386
+#undef i386
+#endif
 #define i386
+
+#ifdef REPLACE_THIS_WITH_THE_CPU_MODEL
+#undef REPLACE_THIS_WITH_THE_CPU_MODEL
+#endif
 #define REPLACE_THIS_WITH_THE_CPU_MODEL
+
+#ifdef REPLACE_THIS_WITH_THE_BSP
+#undef REPLACE_THIS_WITH_THE_BSP
+#endif
 #define REPLACE_THIS_WITH_THE_BSP
 
 /*
@@ -92,37 +103,16 @@ extern "C" {
 #ifndef ASM
 
 /*
- *  This section defines the basic types for this processor.
- */
-
-typedef unsigned char      unsigned8;     /* 8-bit  unsigned integer */
-typedef unsigned short     unsigned16;    /* 16-bit unsigned integer */
-typedef unsigned int       unsigned32;    /* 32-bit unsigned integer */
-typedef unsigned long long unsigned64;    /* 64-bit unsigned integer */
-
-typedef unsigned16         Priority_Bit_map_control;
-
-typedef unsigned char      signed8;     /* 8-bit  signed integer */
-typedef unsigned short     signed16;    /* 16-bit signed integer */
-typedef unsigned int       signed32;    /* 32-bit signed integer */
-typedef long long          signed64;    /* 64-bit signed integer */
-
-typedef unsigned32 boolean;     /* Boolean value   */
-
-typedef float              single_precision;     /* single precision float */
-typedef double             double_precision;     /* double precision float */
-
-/*
  *  Structure which makes it easier to deal with LxDT and SxDT instructions.
  */
-
+ 
 typedef struct {
   unsigned short limit;
   unsigned short physical_address[ 2 ];
 } i386_DTR_load_save_format;
-
+ 
 /* See Chapter 5 - Memory Management in i386 manual */
-
+ 
 typedef struct {
   unsigned short limit_0_15;
   unsigned short base_0_15;
@@ -131,12 +121,12 @@ typedef struct {
   unsigned char  limit_16_19_granularity;
   unsigned char  base_24_31;
 }   i386_GDT_slot;
-
+ 
 /* See Chapter 9 - Exceptions and Interrupts in i386 manual
  *
  *  NOTE: This is the IDT entry for interrupt gates ONLY.
  */
-
+ 
 typedef struct {
   unsigned short offset_0_15;
   unsigned short segment_selector;
@@ -145,7 +135,9 @@ typedef struct {
   unsigned short offset_16_31;
 }   i386_IDT_slot;
 
-typedef void ( *i386_isr )( void );
+/*
+ *  Interrupt Level Macros
+ */
 
 #define i386_disable_interrupts( _level ) \
   { \
@@ -186,7 +178,6 @@ static inline unsigned int i386_swap_U32(
   asm volatile( "rorw  $8,%%ax;"
                 "rorl  $16,%0;"
                 "rorw  $8,%%ax" : "=a" (value) : "0" (value) );
-
   return( value );
 }
 

@@ -11,10 +11,10 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  rtems.S,v 1.2 1995/05/09 20:11:41 joel Exp
  */
 
-#include <hppa.h>
+#include <rtems/hppa.h>
 #include <rtems/cpu_asm.h>
 
 	.SPACE $PRIVATE$

@@ -28,8 +28,19 @@ extern "C" {
  *        with the name of the appropriate macro for this target CPU.
  */
  
+#ifdef m68k
+#undef m68k
+#endif
 #define m68k
+
+#ifdef REPLACE_THIS_WITH_THE_CPU_MODEL
+#undef REPLACE_THIS_WITH_THE_CPU_MODEL
+#endif
 #define REPLACE_THIS_WITH_THE_CPU_MODEL
+
+#ifdef REPLACE_THIS_WITH_THE_BSP
+#undef REPLACE_THIS_WITH_THE_BSP
+#endif
 #define REPLACE_THIS_WITH_THE_BSP
 
 /*
@@ -150,33 +161,6 @@ extern "C" {
 #define CPU_NAME "Motorola MC68xxx"
 
 #ifndef ASM
-
-/*
- *  This section defines the basic types for this processor.
- */
-
-typedef unsigned char  unsigned8;      /* unsigned 8-bit  integer */
-typedef unsigned short unsigned16;     /* unsigned 16-bit integer */
-typedef unsigned int   unsigned32;     /* unsigned 32-bit integer */
-typedef unsigned long long unsigned64; /* unsigned 64-bit integer */
-
-typedef unsigned16     Priority_Bit_map_control;
-
-typedef char           signed8;       /* signed 8-bit integer  */
-typedef short          signed16;      /* signed 16-bit integer */
-typedef int            signed32;      /* signed 32-bit integer */
-typedef long long      signed64;      /* signed 64-bit integer */
-
-typedef unsigned32 boolean;     /* Boolean value   */
-
-typedef float          single_precision;     /* single precision float */
-typedef double         double_precision;     /* double precision float */
-
-/*
- *
- */
-
-typedef void ( *m68k_isr )( void );
 
 #ifdef NO_UNINITIALIZED_WARNINGS
 #define m68k_disable_interrupts( _level ) \

@@ -8,11 +8,10 @@
 #ifndef __IDP_BSP_H
 #define __IDP_BSP_H
 
-#include "rtems.h"
-#include "cpu.h"
-#include "console.h"
-#include "mc68230.h"
-#include "mc68681.h"
+#include <rtems.h>
+#include <console.h>
+#include <mc68230.h>
+#include <mc68681.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

@@ -18,7 +18,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  tswitch.c,v 1.2 1995/05/09 20:32:43 joel Exp
  */
 
 #include "system.h"
@@ -44,7 +44,7 @@ rtems_extension Task_switch(
       directive_failed( status, "rtems_clock_get" );
 
       put_name( Task_name[ index ], FALSE );
-      print_time( " - ", &time, "\n" );
+      print_time( "- ", &time, "\n" );
 
       if ( time.second >= 16 ) {
         puts( "*** END OF TEST 4 ***" );

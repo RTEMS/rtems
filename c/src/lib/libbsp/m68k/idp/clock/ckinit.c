@@ -26,10 +26,9 @@
 
 #include <stdlib.h>
 
-#include "rtems.h"
-#include "clockdrv.h"
-#include "bsp.h"
-#include "cpu.h"
+#include <rtems.h>
+#include <clockdrv.h>
+#include <bsp.h>
 
 rtems_unsigned32 Clock_isrs;        /* ISRs until next tick */
 volatile rtems_unsigned32 Clock_driver_ticks;

@@ -30,7 +30,8 @@
 
 void _Watchdog_Handler_initialization( void )
 {
-  _Watchdog_Clear_sync();
+  _Watchdog_Sync_count = 0;
+  _Watchdog_Sync_level = 0;
   _Chain_Initialize_empty( &_Watchdog_Ticks_chain );
   _Chain_Initialize_empty( &_Watchdog_Seconds_chain );
 }
@@ -56,8 +57,17 @@ Watchdog_States _Watchdog_Remove(
   switch ( previous_state ) {
     case WATCHDOG_INACTIVE:
       break;
+
+    case WATCHDOG_REINSERT:  
+   
+      /*
+       *  It is not actually on the chain so just change the state and
+       *  the Insert operation we interrupted will be aborted.
+       */
+      the_watchdog->state = WATCHDOG_INACTIVE;
+      break;
+
     case WATCHDOG_ACTIVE:
-    case WATCHDOG_REINSERT:
     case WATCHDOG_REMOVE_IT:
 
       the_watchdog->state = WATCHDOG_INACTIVE;
@@ -66,8 +76,8 @@ Watchdog_States _Watchdog_Remove(
       if ( _Watchdog_Next(next_watchdog) )
         next_watchdog->delta_interval += the_watchdog->delta_interval;
 
-      if ( the_watchdog == _Watchdog_Sync )
-        _Watchdog_Sync = _Watchdog_Previous( the_watchdog );
+      if ( _Watchdog_Sync_count )
+        _Watchdog_Sync_level = _ISR_Nest_level;
 
       _Chain_Extract_unprotected( &the_watchdog->Node );
       break;
@@ -94,7 +104,7 @@ Watchdog_States _Watchdog_Remove(
 void _Watchdog_Adjust(
   Chain_Control               *header,
   Watchdog_Adjust_directions   direction,
-  rtems_interval            units
+  rtems_interval               units
 )
 {
   if ( !_Chain_Is_empty( header ) ) {
@@ -136,45 +146,66 @@ void _Watchdog_Insert(
 {
   ISR_Level         level;
   Watchdog_Control *after;
+  unsigned32        insert_isr_nest_level;
+  rtems_interval    delta_interval;
+  
 
-  the_watchdog->state          = WATCHDOG_REINSERT;
-  the_watchdog->delta_interval = the_watchdog->initial;
+  insert_isr_nest_level   = _ISR_Nest_level;
+  the_watchdog->state = WATCHDOG_REINSERT;
+
+  _Watchdog_Sync_count++;
+restart:
+  delta_interval = the_watchdog->initial;
 
   _ISR_Disable( level );
 
   for ( after = _Watchdog_First( header ) ;
         ;
-        after = _Watchdog_Next( _Watchdog_Get_sync() ) ) {
+        after = _Watchdog_Next( after ) ) {
 
-     if ( the_watchdog->delta_interval == 0 || !_Watchdog_Next( after ) )
+     if ( delta_interval == 0 || !_Watchdog_Next( after ) )
        break;
 
-     if ( the_watchdog->delta_interval < after->delta_interval ) {
-       after->delta_interval -= the_watchdog->delta_interval;
+     if ( delta_interval < after->delta_interval ) {
+       after->delta_interval -= delta_interval;
        break;
      }
 
-     the_watchdog->delta_interval -= after->delta_interval;
-     _Watchdog_Set_sync( after );
+     delta_interval -= after->delta_interval;
 
      /*
-      *  If you experience problems comment out the _ISR_Flash line.  Under
-      *  certain circumstances, this flash allows interrupts to execute
-      *  which violate the design assumptions.  The critical section 
-      *  mechanism used here must be redesigned to address this.
+      *  If you experience problems comment out the _ISR_Flash line.  This
+      *  (3.2.0) is the first release with this critical section redesigned.
+      *  Under certain circumstances, the PREVIOUS critical section algorithm
+      *  used around this flash point allows interrupts to execute
+      *  which violated the design assumptions.  The critical section 
+      *  mechanism used here WAS redesigned to address this.
       */
 
      _ISR_Flash( level );
+
+     if ( the_watchdog->state != WATCHDOG_REINSERT ) {
+       goto exit_insert;
+     }
+
+     if ( _Watchdog_Sync_level > insert_isr_nest_level ) {
+       _Watchdog_Sync_level = insert_isr_nest_level;
+       _ISR_Enable( level );
+       goto restart;
+     }
   }
 
   if ( insert_mode == WATCHDOG_ACTIVATE_NOW )
     _Watchdog_Activate( the_watchdog );
 
+  the_watchdog->delta_interval = delta_interval;
+
   _Chain_Insert_unprotected( after->Node.previous, &the_watchdog->Node );
 
-  _Watchdog_Clear_sync();
-
-  _ISR_Enable(  level );
+exit_insert:
+  _Watchdog_Sync_level = insert_isr_nest_level;
+  _Watchdog_Sync_count--;
+  _ISR_Enable( level );
 }
 
 /*PAGE

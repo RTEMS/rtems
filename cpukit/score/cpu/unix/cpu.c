@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 #include <signal.h>
 #include <time.h>
 
@@ -225,18 +224,28 @@ void _CPU_Context_Initialize(
   unsigned32       *_stack_base,
   unsigned32        _size,
   unsigned32        _new_level,
-  proc_ptr         *_entry_point
+  void             *_entry_point
 )
 {
     unsigned32  *addr;
     unsigned32   jmp_addr;
-    unsigned32   _stack;
+    unsigned32   _stack_low;   /* lowest "stack aligned" address */
+    unsigned32   _stack_high;  /* highest "stack aligned" address */
     unsigned32   _the_size;
 
     jmp_addr = (unsigned32) _entry_point;
 
-    _stack = ((unsigned32)(_stack_base) + CPU_STACK_ALIGNMENT);
-    _stack &= ~(CPU_STACK_ALIGNMENT - 1);
+    /*
+     *  On CPUs with stacks which grow down, we build the stack
+     *  based on the _stack_high address.  On CPUs with stacks which 
+     *  grow up, we build the stack based on the _stack_low address.  
+     */
+
+    _stack_low = ((unsigned32)(_stack_base) + CPU_STACK_ALIGNMENT);
+    _stack_low &= ~(CPU_STACK_ALIGNMENT - 1);
+
+    _stack_high = ((unsigned32)(_stack_base) + _size);
+    _stack_high &= ~(CPU_STACK_ALIGNMENT - 1);
 
     _the_size = _size & ~(CPU_STACK_ALIGNMENT - 1);
 
@@ -250,7 +259,7 @@ void _CPU_Context_Initialize(
 
 #if defined(hppa1_1)
     *(addr + RP_OFF) = jmp_addr;
-    *(addr + SP_OFF) = (unsigned32)(_stack + CPU_FRAME_SIZE);
+    *(addr + SP_OFF) = (unsigned32)(_stack_low + CPU_FRAME_SIZE);
 
     /*
      * See if we are using shared libraries by checking
@@ -274,8 +283,8 @@ void _CPU_Context_Initialize(
     asm ("ta  0x03");            /* flush registers */
 
     *(addr + RP_OFF) = jmp_addr + ADDR_ADJ_OFFSET;
-    *(addr + SP_OFF) = (unsigned32)(_stack +_the_size - CPU_FRAME_SIZE);
-    *(addr + FP_OFF) = (unsigned32)(_stack +_the_size);
+    *(addr + SP_OFF) = (unsigned32)(_stack_high - CPU_FRAME_SIZE);
+    *(addr + FP_OFF) = (unsigned32)(_stack_high);
 #else
 #error "UNKNOWN CPU!!!"
 #endif

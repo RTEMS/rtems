@@ -329,6 +329,7 @@ void *Stack_check_find_high_water_mark(
    * match pattern
    */
 
+  base += 4;
   for (ebase = base + length; base < ebase; base++)
       if (*base != U32_PATTERN)
           return (void *) base;
