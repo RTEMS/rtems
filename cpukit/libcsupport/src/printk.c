@@ -73,16 +73,14 @@ printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
 void
-printk(char *fmt, ...)
+vprintk(char *fmt, va_list ap)
 {
-  va_list  ap;      /* points to each unnamed argument in turn */
   char     c, *str;
   int      lflag, base, sign, width, lead;
   /* unsigned int level; */
 
   /* _CPU_ISR_Disable(level); */
  
-  va_start(ap, fmt); /* make ap point to 1st unnamed arg */
   for (; *fmt != '\0'; fmt++)
   {
     lflag = 0;
@@ -143,8 +141,17 @@ printk(char *fmt, ...)
       BSP_output_char(*fmt);
     }
   }
-  va_end(ap); /* clean up when done */
   /* _CPU_ISR_Enable(level); */
 
+} /* vprintk */
+
+void
+printk(char *fmt, ...)
+{
+  va_list  ap;      /* points to each unnamed argument in turn */
+ 
+  va_start(ap, fmt); /* make ap point to 1st unnamed arg */
+  vprintk(fmt, ap);
+  va_end(ap); /* clean up when done */
 } /* printk */
 

@@ -32,6 +32,8 @@ extern 	BSP_polling_getchar_function_type 	BSP_poll_char;
  * the files contained in this directory PROVIDED definition
  * and initialisation of the previous variable are done.
  */
+#include <stdarg.h>
+extern void vprintk(char *fmt, va_list ap);
 extern void printk(char *fmt, ...);
 
 #endif
