@@ -1,3 +1,10 @@
+2001-11-08	Jiri Gaisler <jiri@gaisler.com>
+
+	This fix is response to test results reported by Jerry Needell
+	<jerry.needell@unh.edu> for the SPARC/ERC32 and tracked as PR80.
+	* tm27/task1.c: Account for overhead in starting and stopping
+	the timer.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
