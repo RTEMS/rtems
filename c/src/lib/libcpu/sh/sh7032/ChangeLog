@@ -1,3 +1,7 @@
+2001-02-18	Ralf Corsepiu <corsepius@faw.uni-ulm.de>
+
+	* include/Makefile.am: Apply include_*HEADERS instead of H_FILES.
+
 2001-01-05	Joel Sherrill <joel@OARcorp.com>
 
 	* /dev/null moved to libmisc.
