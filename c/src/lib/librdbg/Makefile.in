@@ -47,8 +47,8 @@ X_FILES=$(X_FILE1) $(X_FILE2)
 SRCS=$(C_FILES) $(ASM_FILES) $(C_GEN_FILES) $(H_FILES)
 OBJS=$(C_GEN_O_FILES) $(C_O_FILES) $(ASM_O_FILES)
 
-RPCGEN=rpcgen
-AWK=awk
+RPCGEN=@RPCGEN@
+AWK=@AWK@
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/lib.cfg

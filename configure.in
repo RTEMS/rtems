@@ -1,3 +1,4 @@
+
 dnl Process this file with autoconf to produce a configure script.
 dnl
 dnl  $Id$
@@ -310,7 +311,22 @@ if test "$RTEMS_HAS_NETWORKING" = "yes"; then
   RTEMS_CHECK_MAKEFILE(c/src/lib/libnetworking)
   RTEMS_CHECK_MAKEFILE(c/src/lib/librpc)
   if test "$RTEMS_HAS_RDBG" = "yes"; then
-    RTEMS_CHECK_MAKEFILE(c/src/lib/librdbg)
+    AC_MSG_CHECKING([whether cpu supports rdbg? ])
+    test ! -d "$srcdir/c/src/lib/librdbg/$target_cpu" && RTEMS_HAS_RDBG="no" ;
+    AC_MSG_RESULT($RTEMS_HAS_RDBG)
+    if test "$RTEMS_HAS_RDBG" = "yes"; then
+      AC_PATH_PROG(RPCGEN,rpcgen)
+      test -z "$RPCGEN" && RTEMS_HAS_RDBG="no"
+    fi
+    if test "$RTEMS_HAS_RDBG" = "yes"; then
+      AC_PROG_AWK
+      test -z "$AWK" && RTEMS_HAS_RDBG="no"
+    fi
+    if test "$RTEMS_HAS_RDBG" = "yes"; then
+      RTEMS_CHECK_MAKEFILE(c/src/lib/librdbg)
+    else
+      AC_MSG_WARN([*** warning disabling --enable-rdbg])
+    fi
   fi
 fi
 
