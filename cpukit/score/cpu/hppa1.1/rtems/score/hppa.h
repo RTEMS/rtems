@@ -19,10 +19,6 @@
 #ifndef _INCLUDE_HPPA_H
 #define _INCLUDE_HPPA_H
 
-#ifdef ASM
-#include <rtems/score/targopts.h>
-#endif
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
