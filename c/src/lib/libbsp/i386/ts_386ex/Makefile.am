@@ -101,8 +101,7 @@ include_HEADERS += include/wd80x3.h
 
 # dec21140 is supported via libchip
 # FIXME: Do we really need these flags?
-network_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
-    -DDIAGNOSTIC -DBOOTP_COMPAT
+network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 EXTRA_PROGRAMS += network.rel
 CLEANFILES += network.rel
 network_rel_SOURCES = network/ne2000.c network/wd80x3.h
