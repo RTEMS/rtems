@@ -84,8 +84,8 @@
 #endif
 
 typedef struct {
-    unsigned16 status;
-    unsigned16 length;
+    uint16_t status;
+    uint16_t length;
     void *buffer;
 } bd_t;
 #define MCF5272_BD_READY       (bit(15))
@@ -231,7 +231,7 @@ mcf5272_enet_initialize_hardware (struct mcf5272_enet_struct *sc)
 {
     int i;
     unsigned char *hwaddr;
-    unsigned32 icr;
+    uint32_t icr;
     /*
      * Issue reset to FEC
      */
@@ -362,7 +362,7 @@ mcf5272_enet_initialize_hardware (struct mcf5272_enet_struct *sc)
 static void
 mcf5272_enet_retire_tx_bd (struct mcf5272_enet_struct *sc)
 {
-    rtems_unsigned16 status;
+    uint16_t status;
     int i;
     int nRetired;
     struct mbuf *m, *n;
@@ -433,7 +433,7 @@ mcf5272_enet_rxDaemon (void *arg)
     struct mcf5272_enet_struct *sc = (struct mcf5272_enet_struct *)arg;
     struct ifnet *ifp = &sc->arpcom.ac_if;
     struct mbuf *m;
-    rtems_unsigned16 status;
+    uint16_t status;
     bd_t *rxBd;
     int rxBdIndex;
     
@@ -507,7 +507,7 @@ mcf5272_enet_rxDaemon (void *arg)
             
             m = sc->rxMbuf[rxBdIndex];
             m->m_len = m->m_pkthdr.len = (rxBd->length -
-                                          sizeof(rtems_unsigned32) -
+                                          sizeof(uint32_t) -
                                           sizeof(struct ether_header));
             eh = mtod (m, struct ether_header *);
             m->m_data += sizeof(struct ether_header);
@@ -568,7 +568,7 @@ mcf5272_enet_sendpacket (struct ifnet *ifp, struct mbuf *m)
     struct mcf5272_enet_struct *sc = ifp->if_softc;
     volatile bd_t *firstTxBd, *txBd;
     /*  struct mbuf *l = NULL; */
-    rtems_unsigned16 status;
+    uint16_t status;
     int nAdded;
     cp;
     

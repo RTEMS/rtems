@@ -129,8 +129,8 @@ init5272(void)
     /* Copy the interrupt vector table to SRAM */
     {
         extern void INTERRUPT_VECTOR();
-        rtems_unsigned32 *inttab = (rtems_unsigned32 *)&INTERRUPT_VECTOR;
-        rtems_unsigned32 *intvec = (rtems_unsigned32 *)BSP_RAMBAR;
+        uint32_t *inttab = (uint32_t *)&INTERRUPT_VECTOR;
+        uint32_t *intvec = (uint32_t *)BSP_RAMBAR;
         register int i;
         for (i = 0; i < 256; i++)
         {
