@@ -132,6 +132,8 @@ void bsp_pretasking_hook(void)
 {
     rtems_unsigned32        heap_start;    
     rtems_unsigned32        heap_size;
+    rtems_unsigned32        heap_sbrk_spared;
+	extern rtems_unsigned32 _bsp_sbrk_init(rtems_unsigned32, rtems_unsigned32*);
 
     heap_start = ((rtems_unsigned32) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
     if (heap_start & (CPU_ALIGNMENT-1))
@@ -139,10 +141,14 @@ void bsp_pretasking_hook(void)
 
     heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
 
+	heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
+
 #ifdef SHOW_MORE_INIT_SETTINGS
-    printk(" HEAP start %x  size %x\n", heap_start, heap_size);
+   	printk(" HEAP start %x  size %x (%x bytes spared for sbrk)\n", heap_start, heap_size, heap_sbrk_spared);
 #endif    
-    bsp_libc_init((void *) heap_start, heap_size, 0);
+
+    bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
+
 
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
