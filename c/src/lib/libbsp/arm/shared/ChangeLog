@@ -1,5 +1,9 @@
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Add preinstallation dirstamp support.
+
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Merge-in comm/Makefile.am, irq/Makefile.am
 	* comm/Makefile.am: Remove.
 	* irq/Makefile.am: Remove.
