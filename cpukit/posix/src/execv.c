@@ -8,8 +8,7 @@
 
 int execv(
   const char *file,
-  char *const argv[],
-  ...
+  char *const argv[]
 )
 {
   errno = ENOSYS;

@@ -140,7 +140,7 @@ restart:
 
   }
 
-/* XXX - add __SIGFIRSTNOTRT or something like that to newlib siginfo.h */
+/* XXX - add __SIGFIRSTNOTRT or something like that to newlib signal .h */
 
   for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
 

@@ -6,6 +6,7 @@
 #ifndef __RTEMS_POSIX_THREAD_SUPPORT_h
 #define __RTEMS_POSIX_THREAD_SUPPORT_h
 
+#include <sys/signal.h>
 #include <rtems/score/coresem.h>
 #include <rtems/score/tqdata.h>
 

@@ -9,8 +9,7 @@
 int execve(
   const char *path,
   char *const argv[],
-  char *const envp[],
-  ...
+  char *const envp[]
 )
 {
   errno = ENOSYS;

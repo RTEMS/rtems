@@ -20,7 +20,7 @@
 extern "C" {
 #endif
 
-#include <sys/siginfo.h>
+#include <signal.h>
 
 #include <rtems/score/coremsg.h>
 #include <rtems/score/object.h>

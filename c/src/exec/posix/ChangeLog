@@ -1,3 +1,21 @@
+2000-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	* include/Makefile.am: Updated to reflect files merged into newlib.
+	This resulted in some definitions moving to other files and thus
+	some secondary effects in RTEMS source code.
+	* include/unistd.h: Removed.  Now use newlib's.
+	* include/rtems/posix/mqueue.h: Add include of <signal.h>.
+	* include/rtems/posix/threadsup.h: Add include of <sys/signal.h>
+	* src/execv.c: Corrected prototype to agree with newlib.
+	* src/execve.c: Corrected prototype to agree with newlib.
+	* src/execvp.c: Corrected prototype to agree with newlib.
+	* src/psignal.c: Rewrote reference to <siginfo.h> in comment since
+	that file no longer exists.
+	* src/pthreadkill.c: Added include of <signal.h>.
+	* src/sigaction.c: Added include of <signal.h>.
+	* src/sigtimedwait.c: Rewrote reference to <siginfo.h> in comment since
+	that file no longer exists.
+
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.

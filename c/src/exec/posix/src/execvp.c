@@ -8,7 +8,7 @@
 
 int execvp(
   const char *path,
-  char const *argv[]
+  char *const argv[]
 )
 {
   errno = ENOSYS;
