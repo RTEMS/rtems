@@ -9,8 +9,6 @@ C_FILES = addlq.c cnvpkt.c getlq.c dump.c fatal.c getpkt.c init.c initlq.c \
     intr.c mpisr.c poll.c receive.c retpkt.c send.c setckvec.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-H_FILES = shm_driver.h mpci.h
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
@@ -30,25 +28,26 @@ $(PROJECT_RELEASE)/lib/shmdr$(LIB_VARIANT).rel: $(ARCH)/shmdr.rel
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
 
-$(PROJECT_INCLUDE)/shm_driver.h: shm_driver.h
+if HAS_MP
+include_HEADERS = shm_driver.h mpci.h
+endif
+
+$(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/mpci.h: mpci.h
-	$(INSTALL_DATA) $< $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/shm_driver.h \
-    $(PROJECT_INCLUDE)/mpci.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE) 
+TMPINSTALL_FILES += $(include_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/shmdr$(LIB_VARIANT).rel
 
 if HAS_MP
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(PGM) $(TMPINSTALL_FILES)
 endif
 
 .PRECIOUS: $(PGM)
 
 EXTRA_DIST = README addlq.c cnvpkt.c dump.c fatal.c getlq.c getpkt.c init.c \
-    initlq.c intr.c mpci.h mpisr.c poll.c receive.c retpkt.c send.c \
-    setckvec.c shm_driver.h
+    initlq.c intr.c mpisr.c poll.c receive.c retpkt.c send.c \
+    setckvec.c
 
 include $(top_srcdir)/../../../../automake/local.am

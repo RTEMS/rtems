@@ -1,3 +1,8 @@
+2003-01-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shmdr/Makefile.am: install mpci.h and shm_driver.h.
+	Eliminate OBJS.
+
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shmdr/Makefile.am: Don't include @RTEMS_BSP@.cfg.
