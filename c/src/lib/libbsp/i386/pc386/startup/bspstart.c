@@ -34,8 +34,6 @@
 +--------------------------------------------------------------------------*/
 
 
-#include <fcntl.h>
-
 #include <bsp.h>
 #include <libcsupport.h>
 #include <rtems/libio.h>
@@ -136,38 +134,11 @@ bsp_pretasking_hook(void)
 } /* bsp_pretasking_hook */
  
 
-/*-------------------------------------------------------------------------+
-|         Function: bsp_postdriver_hook
-|      Description: After drivers are setup, register some "filenames" and open
-|                   stdin, stdout, stderr files. Newlib will automatically
-|                   associate the files with these (it hardcodes the numbers).
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-void
-bsp_postdriver_hook(void)
-{
-  int stdin_fd, stdout_fd, stderr_fd;
-
-  rtems_status_code error_code;
+/*
+ *  Use the shared bsp_postdriver_hook() implementation 
+ */
  
-  error_code = 'S' << 24 | 'T' << 16;
-
-  /* open standard devices: stdout, stderr and stdin */
- 
-  if ((stdin_fd =  __rtems_open("/dev/console", O_RDONLY, 0)) < 0)
-    rtems_fatal_error_occurred( error_code | 'D' << 8 | '0' );
- 
-  if ((stdout_fd = __rtems_open("/dev/console", O_WRONLY, 0)) < 0)
-    rtems_fatal_error_occurred( error_code | 'D' << 8 | '1' );
- 
-  if ((stderr_fd = __rtems_open("/dev/console", O_WRONLY, 0)) < 1)
-    rtems_fatal_error_occurred( error_code | 'D' << 8 | '2' );
- 
-  if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
-    rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
-} /* bsp_postdriver_hook */ 
+void bsp_postdriver_hook(void);
 
 
 /*-------------------------------------------------------------------------+
