@@ -1,3 +1,14 @@
+2004-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* syscall/Makefile.am: Remove.
+	* reg_win/Makefile.am: Remove.
+	* cache/Makefile.am: Remove.
+	* Makefile.am: Merge-in Makefile.ams above. Use automake compilation
+	rules.
+	* configure.ac: Reflect changes above.
+	Add subdir-objects to AUTOMAKE_OPTIONS.
+	Require automake >= 1.8.2.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* cache/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
