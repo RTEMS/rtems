@@ -683,6 +683,9 @@ simple_return:
          */
 
         wr      %l4, 0, %wim               ! WIM = new WIM
+        nop                                ! must delay after writing WIM
+        nop
+        nop
         restore                            ! now into the tasks window
 
         ldd     [%g1 + CPU_STACK_FRAME_L0_OFFSET], %l0
