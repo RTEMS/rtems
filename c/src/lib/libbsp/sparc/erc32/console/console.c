@@ -296,8 +296,8 @@ void console_initialize_interrupts( void )
  */
  
 void console_outbyte_interrupt(
-  int  port,
-  char ch
+  int   port,
+  char  ch
 )
 {
   /*
@@ -311,7 +311,7 @@ void console_outbyte_interrupt(
   }
 
   while ( Ring_buffer_Is_full( &TX_Buffer[ port ] ) );
- 
+
   Ring_buffer_Add_character( &TX_Buffer[ port ], ch );
 }
 
