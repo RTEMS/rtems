@@ -50,19 +50,19 @@
 	.ent	_start
 _start:
 	.set	noreorder
-	# Get the address of start into $5 in a position independent fashion.
-	# This lets us know whether we have been relocated or not.
-	
+	/* Get the address of start into $5 in a position independent fashion.
+	** This lets us know whether we have been relocated or not.
+	*/
 	$LF1 = . + 8
 	bal     $LF1
 	nop
 _branch:
 	move	$5, $31				# $5 == where are we
 	li	$6, 0x8800000c			# $6 == where we want to be
-	#la      $6,_branch
+/*	#la      $6,_branch */
 	beq	$5, $6, _start_in_ram
 	nop
-	# relocate the code from EEPROM to RAM
+	/* relocate the code from EEPROM to RAM */
         la	$7, _edata
 relocate:
 	lw	$8, ($5)			# $8 = *EEPROM
@@ -164,10 +164,10 @@ init:
 	jal	boot_card			# call the program start function
 	nop
 
-	# fall through to the "exit" routine
-	jal	_sys_exit			# call libc exit to run the G++
-						# destructors
-	move	a0,v0				# pass through the exit code
+	/* fall through to the "exit" routine */
+	jal	_sys_exit			/* call libc exit to run the G++ */
+						/* destructors */
+	move	a0,v0				/* pass through the exit code */
 	.end	init
 	
 /*
@@ -186,7 +186,7 @@ _sys_exit:
 	jal	_mcleanup
 	nop
 #endif
-	# break instruction can cope with 0xfffff, but GAS limits the range:
+	/* break instruction can cope with 0xfffff, but GAS limits the range: */
 	break	1023
 	nop
 	b	7b				# but loop back just in-case
