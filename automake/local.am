@@ -1,48 +1,5 @@
 ## $Id$
 
-## NOTE: This is a temporary work-around to keep 
-## RTEMS's non automake standard make targets working.
-## Once automake is fully integrated these make targets 
-## and this file will probably be removed
-
-## translate VARIANT into VARIANT_V
-VARIANT = OPTIMIZE
-
-VARIANT_OPTIMIZE_V = OPTIMIZE
-VARIANT_DEBUG_V = DEBUG
-VARIANT_PROFILE_V = PROFILE
-VARIANT_optimize_V = OPTIMIZE
-VARIANT_debug_V = DEBUG
-VARIANT_profile_V = PROFILE
-
-VARIANT_V = $(VARIANT_$(VARIANT)_V)
-
-## Setup the variant build subdirectory
-ARCH_OPTIMIZE_V = o-optimize
-ARCH_DEBUG_V = o-debug
-ARCH_PROFILE_V = o-profile
-
-ARCH__V = $(ARCH_OPTIMIZE_V)
-ARCH = $(ARCH_$(VARIANT_V)_V)
-
-## Setup the library suffix
-LIBSUFFIX_OPTIMIZE_V =
-LIBSUFFIX_DEBUG_V = _g
-LIBSUFFIX_PROFILE_V = _p
-
-LIBSUFFIX__V = $(LIBSUFFIX_OPTIMIZE_V)
-LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
-
-LIBSUFFIX_VA = $(LIB_VARIANT).a
-
-## These are supposed to be set in make/custom/<bsp>.cfg
-## CFLAGS_OPTIMIZE_V = 
-## CFLAGS_DEBUG_V =
-## CFLAGS_PROFILE_V =
-
-CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
-AM_CFLAGS += $(CFLAGS_$(VARIANT_V)_V)
-
 debug:
 	@echo
 	@echo "\"make debug\" is obsolete, instead use:"
@@ -78,3 +35,4 @@ distclean-local:
 	$(RM) Depends-o-optimize Depends-o-debug Depends-o-profile
 
 PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
+

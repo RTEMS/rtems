@@ -1,3 +1,11 @@
+2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-cxx.m4: Add AC_SUBST(CPLUS_LD_LIBS)
+	* aclocal/prog-cc.m4: Cleanup comments, require RTEMS_ENABLE_GCC28,
+	add automake conditionals RTEMS_USE_GCC, RTEMS_USE_GCC272.
+	* automake/compile.am: Replaced.
+	* automake/local.am: Remove building variant handling.
+
 2000-09-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/enable-rtemsbsp.m4: Add RTEMS_ENABLE_BARE,
