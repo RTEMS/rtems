@@ -30,9 +30,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/hppa.h>              /* pick up machine definitions */
+#include <rtems/score/hppa.h>              /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/core/hppatypes.h>
+#include <rtems/score/hppatypes.h>
 #endif
 
 /* conditional compilation parameters */

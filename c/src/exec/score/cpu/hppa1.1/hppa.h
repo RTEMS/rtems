@@ -64,23 +64,23 @@ extern "C" {
  *  present in a particular member of the family.
  */
 
-#if !defined(RTEMS_MODEL_NAME)
+#if !defined(CPU_MODEL_NAME)
 
 #if defined(hppa7100)
 
-#define RTEMS_MODEL_NAME  "hppa 7100"
+#define CPU_MODEL_NAME  "hppa 7100"
 
 #elif defined(hppa7200)
 
-#define RTEMS_MODEL_NAME  "hppa 7200"
+#define CPU_MODEL_NAME  "hppa 7200"
 
 #else
 
-#define RTEMS_MODEL_NAME  Unsupported CPU Model	     /* cause an error on usage */
+#define CPU_MODEL_NAME  Unsupported CPU Model	     /* cause an error on usage */
 
 #endif
 
-#endif /* !defined(RTEMS_MODEL_NAME) */
+#endif /* !defined(CPU_MODEL_NAME) */
           
 /*
  *  Define the name of the CPU family.
