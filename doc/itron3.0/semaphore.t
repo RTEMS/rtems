@@ -49,21 +49,25 @@ is defined as follows:
 
 @example
 @group
+/*
+ *  Create Semaphore (cre_sem) Structure
+ */
+
 typedef struct t_csem @{
-        VP    exinf;    /* extended information */
-        ATR   sematr;   /* semaphore attributes */
-    /* Following is the extended function for [level X]. */
-        INT   isemcnt;   /* initial semaphore count */
-        INT   maxsem;    /* maximum semaphore count */
-                ...
-    /* additional information may be included depending on the
-       implementation */
-                ...
+  VP    exinf;    /* extended information */
+  ATR   sematr;   /* semaphore attributes */
+  /* Following is the extended function for [level X]. */
+  INT   isemcnt;   /* initial semaphore count */
+  INT   maxsem;    /* maximum semaphore count */
+  /* additional information may be included depending on the implementation */
 @} T_CSEM;
 
-sematr:
-    TA_TFIFO   H'0...00   /* waiting tasks are handled by FIFO */
-    TA_TPRI    H'0...01   /* waiting tasks are handled by priority */
+/*
+ *  sematr - Semaphore Attribute Values
+ */
+
+#define TA_TFIFO   0x00   /* waiting tasks are handled by FIFO */
+#define TA_TPRI    0x01   /* waiting tasks are handled by priority */
 
 @end group
 @end example
@@ -72,7 +76,8 @@ where the meaning of each field is:
 
 @table @b
 @item exinf
-is the extended information XXX
+is for any extended information that the implementation may define.
+This implementation does not use this field.
 
 @item sematr
 is the attributes for this semaphore.  The only attributed
@@ -88,6 +93,24 @@ limit on the value taken by the semaphore.
 
 @end table
 
+@subsection Building a Semaphore's Attribute Set
+
+In general, an attribute set is built by a bitwise OR
+of the desired attribute components.  The following table lists
+the set of valid semaphore attributes:
+
+@itemize @bullet
+@item @code{TA_TFIFO} - tasks wait by FIFO
+
+@item @code{TA_TPRI} - tasks wait by priority
+
+@end itemize
+
+Attribute values are specifically designed to be
+mutually exclusive, therefore bitwise OR and addition operations
+are equivalent as long as each attribute appears exactly once in
+the component list.
+
 @subsection T_RSEM Structure
 
 The T_RSEM structure is filled in by the @code{ref_sem} service with
@@ -96,15 +119,15 @@ is defined as follows:
 
 @example
 @group
+/*
+ *  Reference Semaphore (ref_sem) Structure
+ */
+
 typedef struct t_rsem @{
-        VP      exinf;    /* extended information */
-        BOOL_ID wtsk;     /* indicates whether or not there is a
-                             waiting task */
-        INT     semcnt;   /* current semaphore count */
-                ...
-    /* additional information may be included depending on the
-       implementation */
-                ...
+  VP      exinf;    /* extended information */
+  BOOL_ID wtsk;     /* indicates whether or not there is a waiting task */
+  INT     semcnt;   /* current semaphore count */
+  /* additional information may be included depending on the implementation */
 @} T_RSEM;
 @end group
 @end example
@@ -112,16 +135,23 @@ typedef struct t_rsem @{
 @table @b
 
 @item exinf
-is extended information.
+is for any extended information that the implementation may define.
+This implementation does not use this field.
 
 @item wtsk
 is TRUE when there is one or more task waiting on the semaphore.
-It is FALSE if no tasks are currently waiting.
+It is FALSE if no tasks are currently waiting.  The meaning of this
+field is allowed to vary between ITRON implementations.  It may have
+the ID of a waiting task, the number of tasks waiting, or a boolean
+indication that one or more tasks are waiting.
 
 @item semcnt
 is the current semaphore count.
 
 @end table
+
+The information in this table is very volatile and should be used
+with caution in an application.
 
 @section Operations
 
@@ -130,7 +160,11 @@ is the current semaphore count.
 Creating a semaphore with a limit on the count of 1 effectively
 restricts the semaphore to being a binary semaphore.  When the
 binary semaphore is available, the count is 1.  When the binary
-semaphore is unavailable, the count is 0.;
+semaphore is unavailable, the count is 0.
+
+Since this does not result in a true binary semaphore, advanced
+binary features like the Priority Inheritance and Priority
+Ceiling Protocols are not available.
 
 @section System Calls
 
@@ -165,19 +199,19 @@ ER cre_sem(
 
 @code{E_OK} - Normal Completion
 
+@code{E_ID} - Invalid ID number (semid was invalid or could not be used)
+
 @code{E_NOMEM} - Insufficient memory (Memory for control block cannot be
 allocated)
 
-@code{E_ID} - Invalid ID number (semid was invalid or could not be used)
+@code{E_OACV} - Object access violation (A semid less than -4 was
+specified from a user task.  This is implementation dependent.)
 
 @code{E_RSATR} - Reserved attribute (sematr was invalid or could not be
 used)
 
 @code{E_OBJ} - Invalid object state (a semaphore of the same ID already
 exists)
-
-@code{E_OACV} - Object access violation (A semid less than -4 was
-specified from a user task.  This is implementation dependent.)
 
 @code{E_PAR} - Parameter error (pk_csem is invalid and/or isemcnt or
 maxsem is negative or invalid)
@@ -196,12 +230,43 @@ maxsem)
 
 @subheading DESCRIPTION:
 
+This routine creates a semaphore that resides on the local node.  The 
+semaphore is initialized based on the attributes specified in the 
+@code{pk_csem} structure.  The initial and maximum counts of the
+semaphore are set based on the @code{isemcnt} and @code{maxsem} fields
+in this structure.
 
+Specifying @code{TA_TPRI} in the @code{sematr} field of the
+semaphore attributes structure causes tasks
+waiting for a semaphore to be serviced according to task
+priority.  When @code{TA_TFIFO} is selected, tasks are serviced in First
+In-First Out order.
 
 @subheading NOTES:
 
-NONE
+Multiprocessing is not supported.  Thus none of the "EN_" status codes
+will be returned.
 
+All memory is preallocated for RTEMS ITRON objects.  Thus, no dynamic
+memory allocation is performed by @code{cre_sem} and the @code{E_NOMEM}
+error can not be returned.
+
+The ITRON specification calls for @code{E_OACV} to be returned for
+some invalid semaphore IDs.  This implementation returns @code{E_ID}
+for all invalid IDs as there are no system reserved ITRON objects.
+
+This directive will not cause the running task to be
+preempted.
+
+The following semaphore attribute constants are
+defined by RTEMS:
+
+@itemize @bullet
+@item @code{TA_TFIFO} - tasks wait by FIFO
+
+@item @code{TA_TPRI} - tasks wait by priority
+
+@end itemize
 
 @c
 @c  del_sem
@@ -225,8 +290,6 @@ ER del_sem(
 
 @subheading STATUS CODES:
 
-@subheading DESCRIPTION:
-
 @code{E_OK} - Normal Completion
 
 @code{E_ID} - Invalid ID number (semid was invalid or could not be used)
@@ -244,10 +307,35 @@ target node is specified.
 was issued from a task in dispatch disabled state or from a
 task-independent portion
 
+@subheading DESCRIPTION:
+
+This routine deletes the semaphore specified by @code{semid}.
+All tasks blocked waiting to acquire the semaphore will be
+readied and returned a status code which indicates that the
+semaphore was deleted.  The control block for this semaphore
+is reclaimed by RTEMS.
+
 
 @subheading NOTES:
 
-NONE
+Multiprocessing is not supported.  Thus none of the "EN_" status codes
+will be returned.
+
+This implementation does not distinguish between an invalid ID (@code{E_ID})
+and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
+there are no system reserved ITRON objects so the @code{E_OACV} error
+is not returned.  All IDs which do not correspond to an active user 
+created semaphore return @code{E_ID}.
+
+The calling task will be preempted if it is enabled
+by the task's execution mode and a higher priority local task is
+waiting on the deleted semaphore.  The calling task will NOT be
+preempted if all of the tasks that are waiting on the semaphore
+are remote tasks.
+
+The calling task does not have to be the task that
+created the semaphore.  Any local task that knows the semaphore
+id can delete the semaphore.
 
 
 @c
@@ -296,8 +384,14 @@ task-independent portion
 
 @subheading NOTES:
 
-NONE
+Multiprocessing is not supported.  Thus none of the "EN_" status codes
+will be returned.
 
+This implementation does not distinguish between an invalid ID (@code{E_ID})
+and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
+there are no system reserved ITRON objects so the @code{E_OACV} error
+is not returned.  All IDs which do not correspond to an active user 
+created semaphore return @code{E_ID}.
 
 @c
 @c  wai_sem
@@ -331,15 +425,11 @@ does not exist)
 @code{E_OACV} - Object access violation (A semid less than -4 was
 specified from a user task.  This is implementation dependent.)
 
-@code{E_PAR} - Parameter error (tmout is -2 or less)
-
 @code{E_DLT} - The object being waited for was deleted (the specified
 semaphore was deleted while waiting)
 
 @code{E_RLWAI} - Wait state was forcibly released (rel_wai was received
 while waiting)
-
-@code{E_TMOUT} - Polling failure or timeout exceeded
 
 @code{E_CTX} - Context error (issued from task-independent portions or a
 task in dispatch disabled state)
@@ -351,13 +441,26 @@ target node is specified.
 and/or transmission packet format was specified as a parameter (a value
 outside supported range was specified for tmout)
 
-
 @subheading DESCRIPTION:
+
+This routine attempts to acquire the semaphore specified by @code{semid}.
+If the semaphore is available (i.e. positive semaphore count), then the
+semaphore count is decremented and the calling task returns immediately.  
+Otherwise the calling tasking is blocked until the semaphore is released
+by a subsequent invocation of @code{sig_sem}.
 
 @subheading NOTES:
 
-NONE
+Multiprocessing is not supported.  Thus none of the "EN_" status codes
+will be returned.
 
+This implementation does not distinguish between an invalid ID (@code{E_ID})
+and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
+there are no system reserved ITRON objects so the @code{E_OACV} error
+is not returned.  All IDs which do not correspond to an active user 
+created semaphore return @code{E_ID}.
+
+If the semaphore is not available, then the calling task will be blocked.
 
 @c
 @c  preq_sem
@@ -391,14 +494,6 @@ does not exist)
 @code{E_OACV} - Object access violation (A semid less than -4 was
 specified from a user task.  This is implementation dependent.)
 
-@code{E_PAR} - Parameter error (tmout is -2 or less)
-
-@code{E_DLT} - The object being waited for was deleted (the specified
-semaphore was deleted while waiting)
-
-@code{E_RLWAI} - Wait state was forcibly released (rel_wai was received
-while waiting)
-
 @code{E_TMOUT} - Polling failure or timeout exceeded
 
 @code{E_CTX} - Context error (issued from task-independent portions or a
@@ -411,13 +506,26 @@ target node is specified.
 and/or transmission packet format was specified as a parameter (a value
 outside supported range was specified for tmout)
 
-
 @subheading DESCRIPTION:
+
+This routine attempts to acquire the semaphore specified by @code{semid}.
+If the semaphore is available (i.e. positive semaphore count), then the
+semaphore count is decremented and the calling task returns immediately.
+Otherwise, the @code{E_TMOUT} error is returned to the calling task to
+indicate the semaphore is unavailable.
 
 @subheading NOTES:
 
-NONE
+Multiprocessing is not supported.  Thus none of the "EN_" status codes
+will be returned.
 
+This implementation does not distinguish between an invalid ID (@code{E_ID})
+and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
+there are no system reserved ITRON objects so the @code{E_OACV} error
+is not returned.  All IDs which do not correspond to an active user 
+created semaphore return @code{E_ID}.
+
+This routine will not cause the running task to be preempted.
 
 @c
 @c  twai_sem
@@ -472,13 +580,35 @@ target node is specified.
 and/or transmission packet format was specified as a parameter (a value
 outside supported range was specified for tmout)
 
-
 @subheading DESCRIPTION:
+
+This routine attempts to acquire the semaphore specified by @code{semid}.
+If the semaphore is available (i.e. positive semaphore count), then the
+semaphore count is decremented and the calling task returns immediately.
+Otherwise the calling tasking is blocked until the semaphore is released
+by a subsequent invocation of @code{sig_sem} or the timeout period specified
+by @code{tmout} milliseconds is exceeded.  If the timeout period is exceeded,
+then the @code{E_TMOUT} error is returned.
+
+By specifiying @code{tmout} as @code{TMO_FEVR}, this routine has the same
+behavior as @code{wai_sem}.  Similarly, by specifiying @code{tmout} as
+@code{TMO_POL}, this routine has the same behavior as @code{preq_sem}.
 
 @subheading NOTES:
 
-NONE
+Multiprocessing is not supported.  Thus none of the "EN_" status codes
+will be returned.
 
+This implementation does not distinguish between an invalid ID (@code{E_ID})
+and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
+there are no system reserved ITRON objects so the @code{E_OACV} error
+is not returned.  All IDs which do not correspond to an active user 
+created semaphore return @code{E_ID}.
+
+This routine may cause the calling task to block.
+
+A clock tick is required to support the timeout functionality of
+this routine.
 
 @c
 @c  ref_sem
@@ -529,7 +659,20 @@ value outside supported range was specified for exinf, wtsk or semcnt)
 
 @subheading DESCRIPTION:
 
+This routine returns status information on the semaphore specified
+by @code{semid}.  The @code{pk_rsem} structure is filled in by 
+this service call.
+
 @subheading NOTES:
 
-NONE
+Multiprocessing is not supported.  Thus none of the "EN_" status codes
+will be returned.
+
+This implementation does not distinguish between an invalid ID (@code{E_ID})
+and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
+there are no system reserved ITRON objects so the @code{E_OACV} error
+is not returned.  All IDs which do not correspond to an active user 
+created semaphore return @code{E_ID}.
+
+This routine will not cause the running task to be preempted.
 
