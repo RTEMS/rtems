@@ -1,3 +1,9 @@
+2002-05-14	Eric Norum <eric.norum@usask.ca>
+
+	* startup/linkcmds.bootp, startup/linkcmds.prom: Per PR192 add
+	sections needed by gcc 3.1.  linkcmds had already been fixed on
+	a gcc 3.1 clean up sweep.
+
 2001-05-09	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: In support of gcc 3.1, added one of more

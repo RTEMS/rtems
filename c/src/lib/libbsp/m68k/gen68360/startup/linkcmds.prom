@@ -96,7 +96,7 @@ SECTIONS {
 		 */
 		. = ALIGN (16);
 		_rodata_start = . ;
-		*(.rodata)
+		*(.rodata*)
 		*(.gnu.linkonce.r*)
 
                  . = ALIGN (16);
@@ -106,6 +106,7 @@ SECTIONS {
                 _copy_start = .;
                 *(.data)
 		*(.gnu.linkonce.d*)
+		*(.jcr)
 		*(.gcc_except_table)
                 . = ALIGN (16);
                 PROVIDE (edata = .);
