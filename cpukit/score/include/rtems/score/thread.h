@@ -386,7 +386,10 @@ void _Thread_Stack_Free(
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This routine initializes the specified the thread.  It allocates
+ *  all memory associated with this thread.  It completes by adding
+ *  the thread to the local object table so operations on this
+ *  thread id are allowed.
  *
  *  NOTES:
  *
@@ -415,7 +418,9 @@ boolean _Thread_Initialize(
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This routine initializes the executable information for a thread
+ *  and makes it ready to execute.  After this routine executes, the
+ *  thread competes with all other threads for CPU time.
  */
  
 boolean _Thread_Start(
@@ -431,7 +436,9 @@ boolean _Thread_Start(
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This support routine restarts the specified task in a way that the
+ *  next time this thread executes, it will begin execution at its
+ *  original starting point.
  */
  
 /* XXX multiple task arg profiles */
@@ -443,11 +450,28 @@ boolean _Thread_Restart(
 );
 
 /*
+ *  _Thread_Reset
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine resets a thread to its initial state but does
+ *  not restart it.
+ */
+ 
+void _Thread_Reset(
+  Thread_Control      *the_thread,
+  void                *pointer_argument,
+  unsigned32           numeric_argument
+);
+
+/*
  *  _Thread_Close
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This routine frees all memory associated with the specified
+ *  thread and removes it from the local object table so no further
+ *  operations on this thread are allowed.
  */
  
 void _Thread_Close(
