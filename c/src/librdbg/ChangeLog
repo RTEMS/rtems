@@ -1,3 +1,13 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rdbg/Makefile.am: Add PREINSTALL_DIRS.
+	* include/rdbg/i386/Makefile.am: Add PREINSTALL_DIRS.
+	* include/rdbg/m68k/Makefile.am: Add PREINSTALL_DIRS.
+	* include/rdbg/powerpc/Makefile.am: Add PREINSTALL_DIRS.
+	* src/i386/Makefile.am: Add PREINSTALL_DIRS.
+	* src/m68k/Makefile.am: Add PREINSTALL_DIRS.
+	* src/powerpc/Makefile.am: Add PREINSTALL_DIRS.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rdbg/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
