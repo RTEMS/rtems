@@ -2,7 +2,7 @@
 #
 #  $Id$
 #
-# Run rtems tests on the hppa simulator
+# Run rtems tests on the powerpc simulator
 # This program generates a simulator script to run each test
 # Typically the test is then run, although it can be generated
 # and left as a file using -s
