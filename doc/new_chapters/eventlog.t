@@ -41,11 +41,28 @@ The directives provided by the event logging manager are:
 
 @subsection Log Files and Events
 
-System log
+The operating system uses a special log file named @code{XXX}.  
+This log file is called the system log and is automatically created and
+tracked by the operating system.  The system log is written to with 
+the @code{log_write} function.  An alternative log file may be written 
+using the @code{log_write_any} function.  It is possible to use @code{log_read}
+to query the system and @code{log_write_entry} to a non-system log file
+to produce a filtered version of the system log.  For example you could
+produce a log of all disk controller faults that have occurred.  
 
-Non-system logs
+A non-system log may be a special log file created by an application to 
+describe application faults, or a subset of the system log created 
+by the application.  
 
-Events, facility, severity
+A facility is an identification code for a subsystem, device, or
+other object about which information is being written to 
+a log file.  Severity is a rating of the error that is being logged.   
+The facility identifier and the event severity are the basis for
+subsequent log query.  A log query is used as a filter to
+obtain a subset of a given log file.  The log file may be configured 
+to send out an event ... ??? 
+
+XXX Events
 
 @subsection Queries
 
