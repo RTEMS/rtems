@@ -1,3 +1,8 @@
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-07-25  Radzislaw Galler  <rgaller@et.put.poznan.pl>
 
 	* cpu.c (_CPU_ISR_install_vector): Corrected interrupt range

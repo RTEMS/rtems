@@ -20,9 +20,9 @@ offsets.h: $(GENOFFSETS) cpu.h
 	$(RM) $@
 	$(GENOFFSETS) > $@
 
-CLEANFILES += offsets.h
+CLEANFILES = offsets.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h) \
     $(GENERIC_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 

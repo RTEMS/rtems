@@ -12,7 +12,7 @@ include_rtems_score_HEADERS = cpu.h shtypes.h sh.h sh_io.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
 $(PROJECT_INCLUDE)/rtems/score:

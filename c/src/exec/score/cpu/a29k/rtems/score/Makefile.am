@@ -12,7 +12,7 @@ include_rtems_score_HEADERS = a29k.h a29ktypes.h cpu.h cpu_asm.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
 $(PROJECT_INCLUDE)/rtems/score:
