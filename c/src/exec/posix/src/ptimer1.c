@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <signal.h>
 
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 #include <rtems/posix/timer.h>
 
 /*****************************/

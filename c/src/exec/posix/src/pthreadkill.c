@@ -19,7 +19,7 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/psignal.h>
 #include <rtems/score/isr.h>
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 
 int pthread_kill(
   pthread_t   thread,

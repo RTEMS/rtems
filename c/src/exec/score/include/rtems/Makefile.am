@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = debug.h system.h
+H_FILES = debug.h system.h seterr.h
 
 noinst_HEADERS = $(H_FILES)
 

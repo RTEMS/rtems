@@ -9,7 +9,7 @@
 #include <rtems/system.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/thread.h>
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 

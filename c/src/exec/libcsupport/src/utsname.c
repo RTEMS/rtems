@@ -13,7 +13,7 @@
 #include <rtems/score/object.h>
 #include <rtems/sptables.h>
 
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 
 /*PAGE
  *

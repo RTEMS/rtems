@@ -19,7 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/psignal.h>
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 #include <rtems/posix/time.h>
 #include <rtems/score/isr.h>
 

@@ -20,7 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 #include <rtems/score/interr.h>

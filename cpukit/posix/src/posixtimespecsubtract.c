@@ -11,7 +11,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 #include <rtems/posix/time.h>
 
 /*PAGE

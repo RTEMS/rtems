@@ -9,8 +9,8 @@
  *  $Id$
  */
  
-#ifndef __POSIX_SET_ERRNO_h
-#define __POSIX_SET_ERRNO_h
+#ifndef __RTEMS_SET_ERRNO_h
+#define __RTEMS_SET_ERRNO_h
  
 #define set_errno_and_return_minus_one( _error ) \
   { errno = (_error); return -1; }

@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 MP_H_FILES = condmp.h mqueuemp.h mutexmp.h pthreadmp.h semaphoremp.h
 
 STD_H_FILES = cancel.h cond.h config.h key.h mqueue.h mutex.h posixapi.h \
-    priority.h psignal.h pthread.h ptimer.h semaphore.h seterr.h threadsup.h \
+    priority.h psignal.h pthread.h ptimer.h semaphore.h threadsup.h \
     time.h timer.h $(MP_H_FILES)
 
 UNUSED_H_FILES = intr.h threadsup.h

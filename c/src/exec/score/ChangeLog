@@ -1,4 +1,10 @@
 
+2000-08-30	Joel Sherrill <joel@OARcorp.com>
+
+	* Many files: Moved posix/include/rtems/posix/seterr.h to 
+	score/include/rtems/seterr.h so it would be available within
+	all APIs.
+
 2000-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/system.h: Include cpuopts.h for __i386__.

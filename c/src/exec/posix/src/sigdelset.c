@@ -18,7 +18,7 @@
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/psignal.h>
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 
 /*
  *  3.3.3 Manipulate Signal Sets, P1003.1b-1993, p. 69

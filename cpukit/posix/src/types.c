@@ -11,7 +11,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 
 /*
  * TEMPORARY

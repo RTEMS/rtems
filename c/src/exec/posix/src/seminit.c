@@ -14,7 +14,7 @@
 #include <rtems/score/object.h>
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
-#include <rtems/posix/seterr.h>
+#include <rtems/seterr.h>
 
 /*PAGE
  *
