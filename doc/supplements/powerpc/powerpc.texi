@@ -1,0 +1,118 @@
+\input ../texinfo/texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename c_powerpc
+@syncodeindex vr fn
+@synindex ky cp
+@paragraphindent 0
+@c @smallbook
+@c %**end of header
+
+@c
+@c  COPYRIGHT (c) 1988-1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@c
+@c   Master file for the PowerPC Applications Supplement
+@c
+
+@include ../common/setup.texi
+
+@ignore
+@ifinfo
+@format
+START-INFO-DIR-ENTRY
+* RTEMS PowerPC Applications Supplement (powerpc):
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+@end ignore
+
+@c
+@c  Title Page Stuff
+@c
+
+@set edition 4.2.0-beta1
+@set update-date 1 June 1997
+@set update-month June 1997
+
+@c
+@c  I don't really like having a short title page.  --joel
+@c
+@c @shorttitlepage RTEMS PowerPC Applications Supplement 
+
+@setchapternewpage odd
+@settitle RTEMS PowerPC Applications Supplement 
+@titlepage
+@finalout
+
+@title RTEMS PowerPC Applications Supplement 
+@subtitle Edition @value{edition}, for RTEMS 4.2.0-prerelease
+@sp 1
+@subtitle @value{update-month}
+@author On-Line Applications Research Corporation
+@page
+@include ../common/cpright.texi
+@end titlepage
+
+@c  This prevents a black box from being printed on "overflow" lines.
+@c  The alternative is to rework a sentence to avoid this problem.
+
+@include preface.texi
+@include cpumodel.texi
+@include callconv.texi
+@include memmodel.texi
+@include intr.texi
+@include fatalerr.texi
+@include bsp.texi
+@include cputable.texi
+@include wksheets.texi
+@include ../common/timing.texi
+@include timedata.texi
+@ifinfo
+@node Top, Preface, (dir), (dir)
+@top c_powerpc
+
+This is the online version of the RTEMS PowerPC Applications Supplement.
+
+@menu
+* Preface::
+* CPU Model Dependent Features::
+* Calling Conventions::
+* Memory Model::
+* Interrupt Processing::
+* Default Fatal Error Processing::
+* Board Support Packages::
+* Processor Dependent Information Table::
+* Memory Requirements::
+* Timing Specification::
+* PPC603e Timing Data::
+* Command and Variable Index::
+* Concept Index::
+@end menu
+
+@end ifinfo
+@c 
+@c 
+@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
+@c
+
+@node Command and Variable Index, Concept Index, PPC603e Timing Data Rate Monotonic Manager, Top
+@unnumbered Command and Variable Index
+
+There are currently no Command and Variable Index entries.
+
+@c @printindex fn
+
+@node Concept Index, , Command and Variable Index, Top
+@unnumbered Concept Index
+
+There are currently no Concept Index entries.
+@c @printindex cp
+
+@c @contents
+@bye
+
