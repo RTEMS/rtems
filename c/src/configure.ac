@@ -64,11 +64,11 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 AC_SUBST(CUSTOM_CFG_FILES)
 AC_SUBST(cfg_dir)
 
-## Configure ${srcdir}/../../cpukit as exec/ if multilibs are enabled
+## Configure ${srcdir}/../../cpukit as exec/ if multilibs are disabled
 AS_IF([test x"$multilib" = x"no"],[
   RTEMS_CHECK_MULTIPROCESSING
   RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],
-  [--with-project-root="../../" --enable-rtemsbsp=$RTEMS_BSP
+  ['--with-project-root=../../' '--enable-rtemsbsp=$RTEMS_BSP'
   ])
   BSP_SUBDIRS="exec"
 ])
@@ -111,7 +111,14 @@ AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
 
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
-AC_ARG_ENABLE([ada],[enable building ada bindings])
+AC_ARG_ENABLE([ada],
+[AC_HELP_STRING([--enable-ada],[enable ada support])],
+[case "${enable_ada}" in
+  yes) ;;
+  no) ;;
+  *)  AC_MSG_ERROR(bad value ${enable_ada} for --enable-ada) ;;
+esac],[enable_ada=no])
+
 AS_IF([test x"$enable_ada" = x"yes"],[
   AS_IF([test -d ${srcdir}/ada-tests],[
     AC_CONFIG_SUBDIRS([ada-tests])

@@ -1,3 +1,10 @@
+2002-11-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use "'"-quotes to pass args to bsp.mak.
+	* configure.ac: Use "'"-quotes for args to RTEMS_CONFIG_SUBDIRS.
+	Fix braino in comment on "exec".
+	Extend --enable-ada handling.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
