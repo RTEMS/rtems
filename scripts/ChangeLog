@@ -1,3 +1,7 @@
+2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, gdb/Makefile.am: Cosmetics.
+
 2004-02-19	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, gdb/gdb.add: gdb 6.0 RPMs built.

@@ -81,7 +81,6 @@ RPM_SPECS_DATA += sparc-rtems@osversion@-$(GDBVERS).spec
 # 	$(MKSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
 # RPM_SPECS_DATA += tic4x-rtems@osversion@-$(GDBVERS).spec
 
-
 CLEANFILES += $(RPM_SPECS_DATA)
 
 EXTRA_DIST = $(SUBPACKAGES)
