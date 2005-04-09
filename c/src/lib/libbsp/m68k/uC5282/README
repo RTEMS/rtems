@@ -145,7 +145,7 @@ NFSMOUNT   - NFS information: www.xxx.yyy.zzz:/remote/path /localpath
           .                                                  .
           .                                                  .
           .                                                  .
-          |                                                  | 3FFF FFFF
+          |                                                 x| 3FFF FFFF
           +--------------------------------------------------+
 4000 0000 | Internal peripheral system (IPSBAR)              |
           .                                                  .
@@ -165,6 +165,8 @@ f000 0000 | 512 kByte on-chip flash (FLASHBAR)               |
           .                                                  .
           |                                                  | fFFF FFFF
           +--------------------------------------------------+
+
+x - Final 16-bit location of CS2* space is reserved for FPGA interrupt status.
 
 ============================================================================
 

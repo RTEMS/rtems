@@ -362,9 +362,22 @@ int BSP_enableVME_int_lvl(unsigned int level) { return 0; }
 int BSP_disableVME_int_lvl(unsigned int level) { return 0; }
 
 /*
- * VME interrupt support
+ * 'VME' interrupt support
+ * Interrupt vectors 192-255 are set aside for use by external logic
+ * which drives IRQ1*.  The actual interrupt source is read from the
+ * external logic at FPGA_IRQ_INFO.  The most-significant bit of the
+ * value read from this location is set as long as the external logic
+ * has interrupts to be serviced.  The least-significant six bits
+ * indicate the interrupt source within the external logic and are used
+ * to select the specified interupt handler.
  */
 #define NVECTOR 256
+#define FPGA_VECTOR (64+1)  /* IRQ1* pin connected to external FPGA */
+#define FPGA_EPPAR  MCF5282_EPORT_EPPAR_EPPA1_BOTHEDGE
+#define FPGA_EPDDR  MCF5282_EPORT_EPDDR_EPDD1
+#define FPGA_EPIER  MCF5282_EPORT_EPIER_EPIE1
+#define FPGA_EPPDR  MCF5282_EPORT_EPPDR_EPPD1
+#define FPGA_IRQ_INFO    *((vuint16 *)(0x31000000 + 0xfffffe))
 
 static struct handlerTab {
     BSP_VME_ISR_t func;
@@ -384,7 +397,20 @@ BSP_getVME_isr(unsigned long vector, void **pusrArg)
 static rtems_isr
 trampoline (rtems_vector_number v)
 {
-    if (handlerTab[v].func) 
+    /*
+     * Handle FPGA interrupts until all have been consumed
+     */
+    if (v == FPGA_VECTOR) {
+        while (((MCF5282_EPORT_EPPDR & FPGA_EPPDR) == 0)
+            && ((v = FPGA_IRQ_INFO) & 0x80)) {
+            v = 192 + (v & 0x3f);
+            if (handlerTab[v].func) 
+                (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
+            else
+                rtems_fatal_error_occurred(v);
+        }
+    }
+    else if (handlerTab[v].func) 
         (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
 }
 
@@ -392,11 +418,39 @@ int
 BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
 {
     rtems_isr_entry old_handler;
+    rtems_interrupt_level level;
 
+    /*
+     * Register the handler information
+     */
     if (vector >= NVECTOR)
         return -1;
     handlerTab[vector].func = handler;
     handlerTab[vector].arg = usrArg;
+
+    /*
+     * If this is an external FPGA ('VME') vector set up the real IRQ.
+     */
+    if ((vector >= 192) && (vector <= 255)) {
+        int i;
+        static volatile int setupDone;
+        rtems_interrupt_disable(level);
+        if (setupDone) {
+            rtems_interrupt_enable(level);
+            return 0;
+        }
+        MCF5282_EPORT_EPPAR &= ~FPGA_EPPAR;
+        MCF5282_EPORT_EPDDR &= ~FPGA_EPDDR;
+        MCF5282_EPORT_EPIER |=  FPGA_EPIER;
+        setupDone = 1;
+        i = BSP_installVME_isr(FPGA_VECTOR, NULL, NULL);
+        rtems_interrupt_enable(level);
+        return i;
+    }
+
+    /*
+     * Make the connection between the interrupt and the local handler
+     */
     rtems_interrupt_catch(trampoline, vector, &old_handler);
 
     /*
@@ -407,7 +461,6 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
     if ((vector >= 65) && (vector <= 127)) {
         int l, p;
         int source = vector - 64;
-        rtems_interrupt_level level;
         static unsigned char installed[8];
 
         rtems_interrupt_disable(level);
