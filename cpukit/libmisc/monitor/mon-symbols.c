@@ -70,7 +70,7 @@ rtems_symbol_create(
     uint32_t       value
     )
 {
-    int symbol_length;
+    size_t symbol_length;
     size_t newsize;
     rtems_symbol_t *sp;
 
