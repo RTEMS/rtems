@@ -363,17 +363,17 @@ int BSP_disableVME_int_lvl(unsigned int level) { return 0; }
 
 /*
  * 'VME' interrupt support
- * Interrupt vectors 192-255 are set aside for use by external logic
- * which drives IRQ1*.  The actual interrupt source is read from the
- * external logic at FPGA_IRQ_INFO.  The most-significant bit of the
- * value read from this location is set as long as the external logic
- * has interrupts to be serviced.  The least-significant six bits
- * indicate the interrupt source within the external logic and are used
- * to select the specified interupt handler.
+ * Interrupt vectors 192-255 are set aside for use by external logic which
+ * drives IRQ1*.  The actual interrupt source is read from the external
+ * logic at FPGA_IRQ_INFO.  The most-significant bit of the least-significant
+ * byte read from this location is set as long as the external logic has
+ * interrupts to be serviced.  The least-significant six bits indicate the
+ * interrupt source within the external logic and are used to select the
+ * specified interupt handler.
  */
 #define NVECTOR 256
 #define FPGA_VECTOR (64+1)  /* IRQ1* pin connected to external FPGA */
-#define FPGA_EPPAR  MCF5282_EPORT_EPPAR_EPPA1_BOTHEDGE
+#define FPGA_EPPAR  MCF5282_EPORT_EPPAR_EPPA1_LEVEL
 #define FPGA_EPDDR  MCF5282_EPORT_EPDDR_EPDD1
 #define FPGA_EPIER  MCF5282_EPORT_EPIER_EPIE1
 #define FPGA_EPPDR  MCF5282_EPORT_EPPDR_EPPD1
@@ -401,8 +401,7 @@ trampoline (rtems_vector_number v)
      * Handle FPGA interrupts until all have been consumed
      */
     if (v == FPGA_VECTOR) {
-        while (((MCF5282_EPORT_EPPDR & FPGA_EPPDR) == 0)
-            && ((v = FPGA_IRQ_INFO) & 0x80)) {
+        while (((v = FPGA_IRQ_INFO) & 0x80) != 0) {
             v = 192 + (v & 0x3f);
             if (handlerTab[v].func) 
                 (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
@@ -442,6 +441,8 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
         MCF5282_EPORT_EPPAR &= ~FPGA_EPPAR;
         MCF5282_EPORT_EPDDR &= ~FPGA_EPDDR;
         MCF5282_EPORT_EPIER |=  FPGA_EPIER;
+        MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT1 |
+                                MCF5282_INTC_IMRL_MASKALL);
         setupDone = 1;
         i = BSP_installVME_isr(FPGA_VECTOR, NULL, NULL);
         rtems_interrupt_enable(level);

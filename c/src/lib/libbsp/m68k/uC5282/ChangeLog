@@ -1,3 +1,7 @@
+2005-04-10  Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Set up IRQ1* handling properly.
+
 2005-04-08  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: FPGA interrupt status register is now 16-bit.
