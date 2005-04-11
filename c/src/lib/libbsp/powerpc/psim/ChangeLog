@@ -1,3 +1,8 @@
+2005-04-11      Jennifer Averett <jennifer@OARcorp.com>
+
+        PR 777/bsps
+        * include/bsp.h: Add a Processor_Synchronize command in bsp.h
+
 2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c: include <rtems/powerpc/powerpc.h>.
