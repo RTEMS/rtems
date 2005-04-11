@@ -1,3 +1,10 @@
+2005-04-11	Jennifer Averett<jennifer.averett@oarcorp.com>
+
+	PR 778/bsps
+	* include/bsp.h, include/gen2.h, startup/FPGA.c, startup/Hwr_init.c,
+	startup/bspstart.c, tod/tod.c:
+        modify SCORE_.. to BSP_.. for externally used define's.
+
 2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove argument from RTEMS_PPC_EXCEPTIONS.

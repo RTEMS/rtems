@@ -73,7 +73,7 @@ void init_RTC()
 {
   volatile Harris_RTC *the_RTC;
 
-  the_RTC = (volatile Harris_RTC *)SCORE603E_RTC_ADDRESS;
+  the_RTC = (volatile Harris_RTC *)BSP_RTC_ADDRESS;
 
   the_RTC->command_register = 0x0;
 }

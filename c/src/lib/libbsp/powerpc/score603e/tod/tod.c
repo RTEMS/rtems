@@ -43,7 +43,7 @@ void setRealTimeToRTEMS()
 {
   rtems_time_of_day rtc_tod;
 
-  ICM7170_GetTOD( SCORE603E_RTC_ADDRESS, SCORE_RTC_FREQUENCY, &rtc_tod );
+  ICM7170_GetTOD( BSP_RTC_ADDRESS, BSP_RTC_FREQUENCY, &rtc_tod );
   rtems_clock_set( &rtc_tod );
 }
 
@@ -52,7 +52,7 @@ void setRealTimeFromRTEMS()
   rtems_time_of_day rtems_tod;
 
   rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
-  ICM7170_SetTOD( SCORE603E_RTC_ADDRESS, SCORE_RTC_FREQUENCY, &rtems_tod );
+  ICM7170_SetTOD( BSP_RTC_ADDRESS, BSP_RTC_FREQUENCY, &rtems_tod );
 }
 
 int checkRealTime()
@@ -60,7 +60,7 @@ int checkRealTime()
   rtems_time_of_day rtems_tod;
   rtems_time_of_day rtc_tod;
 
-  ICM7170_GetTOD( SCORE603E_RTC_ADDRESS, SCORE_RTC_FREQUENCY, &rtc_tod );
+  ICM7170_GetTOD( BSP_RTC_ADDRESS, BSP_RTC_FREQUENCY, &rtc_tod );
   rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
 
   if( rtems_tod.year == rtc_tod.year &&

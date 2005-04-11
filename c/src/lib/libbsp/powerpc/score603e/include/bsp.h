@@ -69,7 +69,11 @@ extern "C" {
 
 #define Initialize_Board_ctrl_register()                         \
   *SCORE603E_BOARD_CTRL_REG = (*SCORE603E_BOARD_CTRL_REG |       \
-                               SCORE603E_BRD_FLASH_DISABLE_MASK) \
+                               SCORE603E_BRD_FLASH_DISABLE_MASK) 
+
+#define Processor_Synchronize() \
+  asm(" eieio ")
+
 
 /* Constants */
 
@@ -203,6 +207,9 @@ unsigned int SCORE603e_FLASH_verify_enable();
 unsigned int SCORE603e_FLASH_Enable_writes(
   uint32_t                       area        /* Unused  */
 );
+
+#define BSP_FLASH_ENABLE_WRITES( _area) SCORE603e_FLASH_Enable_writes( _area )
+#define BSP_FLASH_DISABLE_WRITES(_area) SCORE603e_FLASH_Disable( _area )
 
 #define Convert_Endian_32( _data ) \
   ( ((_data&0x000000ff)<<24) | ((_data&0x0000ff00)<<8) |  \
