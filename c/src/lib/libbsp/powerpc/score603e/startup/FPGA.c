@@ -115,7 +115,7 @@ rtems_unsigned16 read_and_clear_PMC_irq(
 {
   rtems_unsigned16    status_word = irq;
 
-  status_word = (*SCORE603E_PMC_STATUS_ADDRESS);
+  status_word = (*BSP_PMC_STATUS_ADDRESS);
 
   return status_word;
 }

@@ -1,3 +1,10 @@
+2005-04-11	Jennifer Averett<jennifer.averett@oarcorp.com>
+
+	PR 778/bsps
+	* include/bsp.h, include/gen2.h, startup/FPGA.c, startup/Hwr_init.c,
+	startup/bspstart.c, tod/tod.c:
+        modify SCORE_.. to BSP_.. for externally used define's.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* PCI_bus/PCI.h, clock/clock.c, console/85c30.c, console/85c30.h,

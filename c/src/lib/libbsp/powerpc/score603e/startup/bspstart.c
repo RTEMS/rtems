@@ -116,20 +116,20 @@ void initialize_PMC() {
   /*
    * set PMC base address.
    */
-  PMC_addr  = SCORE603E_PCI_DEVICE_ADDRESS( 0x14 );
-  *PMC_addr = (SCORE603E_PCI_REGISTER_BASE >> 24) & 0x3f;
+  PMC_addr  = BSP_PCI_DEVICE_ADDRESS( 0x14 );
+  *PMC_addr = (BSP_PCI_REGISTER_BASE >> 24) & 0x3f;
 
   /*
    * Clear status, enable SERR and memory space only.
    */
-  PMC_addr = SCORE603E_PCI_DEVICE_ADDRESS( 0x4 );
+  PMC_addr = BSP_PCI_DEVICE_ADDRESS( 0x4 );
   *PMC_addr = 0x0201ff37;
 
   /*
    * Bit 0 and 1 HI cause Medium Loopback to occur.
    */
   PMC_addr = (volatile rtems_unsigned32 *)
-        SCORE603E_PMC_SERIAL_ADDRESS( 0x100000 );
+        BSP_PMC_SERIAL_ADDRESS( 0x100000 );
   data = *PMC_addr;
   /*   *PMC_addr = data | 0x3;  */
   *PMC_addr = data & 0xfc;
@@ -142,17 +142,17 @@ void initialize_PMC() {
   /*
    * Clear status, enable SERR and memory space only.
    */
-  PMC_addr = SCORE603E_PCI_DEVICE_ADDRESS( 0x4 );
+  PMC_addr = BSP_PCI_DEVICE_ADDRESS( 0x4 );
   *PMC_addr = 0x020080cc;
 
   /*
    * set PMC base address.
    */
-  PMC_addr  = SCORE603E_PCI_DEVICE_ADDRESS( 0x14 );
-  *PMC_addr = (SCORE603E_PCI_REGISTER_BASE >> 24) & 0x3f;
+  PMC_addr  = BSP_PCI_DEVICE_ADDRESS( 0x14 );
+  *PMC_addr = (BSP_PCI_REGISTER_BASE >> 24) & 0x3f;
 
   PMC_addr = (volatile rtems_unsigned32 *)
-      SCORE603E_PMC_SERIAL_ADDRESS( 0x100000 );
+      BSP_PMC_SERIAL_ADDRESS( 0x100000 );
   data = *PMC_addr;
   *PMC_addr = data & 0xfc;
 
