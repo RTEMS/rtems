@@ -136,6 +136,10 @@ extern int   end;        /* last address in the program */
 
 #define BSP_Convert_decrementer( _value ) ( (unsigned long long) _value ) 
 
+/* macros */
+#define Processor_Synchronize() \
+  asm(" eieio ")
+
 /* functions */
 
 rtems_isr_entry set_vector(                    /* returns old vector */
