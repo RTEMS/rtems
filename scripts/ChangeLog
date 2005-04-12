@@ -1,6 +1,11 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac, setup, setup.def, gcc3newlib/mkspec.in:
+	Use newlib_* instead of gcc3newlib_* for setup.* values.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac, setup, setup.def, gcc3newlib/mkspec.in:
 	Use gcc_* instead of gcc3_* for setup.* values.
 
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
