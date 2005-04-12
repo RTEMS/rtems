@@ -1,5 +1,10 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am, configure.ac: Use gccnewlib/ instead of gcc3newlib/.
+	* README.cdn-X: Minor updates.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/.cvsignore, gccnewlib/Makefile.am,
 	gccnewlib/README, gccnewlib/base-g77.add,
 	gccnewlib/base-gcc.add, gccnewlib/base-gcj.add,
