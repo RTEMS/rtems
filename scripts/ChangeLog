@@ -1,5 +1,10 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* setup, setup.def, gcc3newlib/mkspec.in:
+	s/gcc3newlib_rpm_release/gccnewlib_rpm_release/g.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* setup: Fixup messages.
 
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>

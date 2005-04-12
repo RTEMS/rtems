@@ -62,7 +62,7 @@ fi
 # note that the variables in the gcc3newlib directory are actually the same
 sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s,@PATCH3\@,${PATCH3}," \
-    -e "s%@Release\@%${gcc3newlib_rpm_release}%g" \
+    -e "s%@Release\@%${gccnewlib_rpm_release}%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
     -e "s%@prefix\@%@prefix@%g" \
     -e "s,@rpmprefix\@,@rpmprefix@,g" \

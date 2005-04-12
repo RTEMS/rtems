@@ -19,4 +19,4 @@ newlib_patch_version=
 gcc_version=3.3.5
 gcc_suffix=.tar.gz
 gcc_patch_version=20041030
-gcc3newlib_rpm_release=2
+gccnewlib_rpm_release=2
