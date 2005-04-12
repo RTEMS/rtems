@@ -1,5 +1,16 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gcc3newlib/HISTORY, gcc3newlib/Makefile.am, gcc3newlib/README,
+	gcc3newlib/base-g77.add, gcc3newlib/base-gcc.add, 
+	gcc3newlib/base-gcj.add, gcc3newlib/base-gnat.add, 
+	gcc3newlib/gccnewlib.add, gcc3newlib/header.add,
+	gcc3newlib/mkspec.in, gcc3newlib/target-c++.add,
+	gcc3newlib/target-g77.add, gcc3newlib/target-gcc.add,
+	gcc3newlib/target-gcj.add, gcc3newlib/target-gnat.add,
+	gcc3newlib/target-objc.add: Remove.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/mkspec.in: Use gccnewlib/ instead of gcc3newlib/.
 
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
