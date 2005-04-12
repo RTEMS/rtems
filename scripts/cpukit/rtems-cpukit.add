@@ -7,7 +7,6 @@ Release:      @Release@
 License:      Various, Open Source.
 Group:        %{rpmgroup}
 
-Autoreqprov:  on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 BuildPreReq:    %{rpmprefix}%{rtems_target}-binutils
 BuildPreReq:    %{rpmprefix}%{rtems_target}-gcc 

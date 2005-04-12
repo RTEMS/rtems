@@ -10,7 +10,6 @@ Epoch:	      0
 License:      Distributable
 Group:        %{rpmgroup}/Documentation
 
-Autoreqprov:  on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 BuildPreReq:    texinfo >= 4.2
 BuildPreReq:    tetex

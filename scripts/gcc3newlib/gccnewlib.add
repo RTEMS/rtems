@@ -11,7 +11,6 @@ Release:        @Release@
 Epoch:          0
 License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
-Autoreqprov:  	on
 Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
 
 Version:      	gcc%{gcc_version}newlib%{newlib_version}

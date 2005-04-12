@@ -1,5 +1,11 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/target-binutils.add, cpukit/rtems-cpukit.add,
+	gcc3newlib/gccnewlib.add, gdb/gdb.add, rtemsdoc/rtemsdoc.add:
+	Remove Autoreqprov-tag.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gcc3newlib/gccnewlib.add: Default to not building gcj for all gcc
 	versions. Cleanup comments.
 

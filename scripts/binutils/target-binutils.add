@@ -5,7 +5,6 @@
 # Summary:      rtems binutils for %{binutils_target}
 # Group: %{rpmgroup}
 # Requires: %{rpmprefix}rtems@osversion@-base-binutils
-# Autoreqprov:  	off
 
 %description -n %{rpmprefix}%{binutils_target}-binutils
 
