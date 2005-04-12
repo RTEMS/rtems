@@ -1,5 +1,9 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* setup: Fixup messages.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* binutils/target-binutils.add, cpukit/rtems-cpukit.add,
 	gcc3newlib/gccnewlib.add, gdb/gdb.add, rtemsdoc/rtemsdoc.add:
 	Remove Autoreqprov-tag.

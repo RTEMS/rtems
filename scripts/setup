@@ -6,7 +6,7 @@ CFG=setup.cache
 
 if test ! -f ./$CFG;
 then
- echo -n "restoring default setup.cache .." 
+ echo -n "restoring default setup.cache .."
  cp ./setup.def ./$CFG
  echo " done"
 fi
@@ -32,11 +32,11 @@ do
   echo "b rtems version           : $rtems_version"
   echo "c rtems rpm release       : $rtems_rpm_release"
   echo "d rpm build root          : $rpm_build_root"
-  echo "e gcc3 version             : $gcc_version"
-  echo "f gcc3 patch version       : $gcc_patch_version"
-  echo "g gcc3 newlib version      : $newlib_version"
-  echo "h gcc3 newlib patch version: $newlib_patch_version"
-  echo "i gcc3/newlib rpm release  : $gcc3newlib_rpm_release"
+  echo "e gcc version             : $gcc_version"
+  echo "f gcc patch version       : $gcc_patch_version"
+  echo "g newlib version          : $newlib_version"
+  echo "h newlib patch version    : $newlib_patch_version"
+  echo "i gcc3/newlib rpm release : $gcc3newlib_rpm_release"
   echo
 
   echo -n "[0-9a-d] or any other key to quit >"
@@ -60,9 +60,9 @@ do
      read rtems_rpm_release ;;
   d) echo -n "RPM build root >"
      read rpm_build_root ;;
-  e) echo -n "GCC3 source >"
+  e) echo -n "GCC source >"
      read gcc_version ;;
-  f) echo -n "GCC3 patch version>"
+  f) echo -n "GCC patch version>"
      read gcc_patch_version ;;
   g) echo -n "NEWLIB source >"
      read newlib_version ;;
