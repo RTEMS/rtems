@@ -4,7 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = . binutils gcc3newlib gdb rtems autotools cpukit
+SUBDIRS = . binutils gccnewlib gdb rtems autotools cpukit
 SUBDIRS += rtemsdoc
 
 noinst_SCRIPTS = setup buildall buildalltar mkbspspec mkrpms mkspec
