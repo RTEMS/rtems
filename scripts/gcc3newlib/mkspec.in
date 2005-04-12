@@ -49,9 +49,9 @@ target_alias=$1
 . ./$CFG
 
 patchn=-1
-if test -n "${gcc3_patch_version}"; then
+if test -n "${gcc_patch_version}"; then
 patchn=`expr $patchn + 1`
-PATCH1="Patch${patchn}: gcc-${gcc3_version}-rtems-${gcc3_patch_version}.diff"
+PATCH1="Patch${patchn}: gcc-${gcc_version}-rtems-${gcc_patch_version}.diff"
 fi
 
 if test -n "${gcc3newlib_patch_version}"; then
@@ -69,9 +69,9 @@ sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s%@rpmgroup\@%@rpmgroup@%g" \
     -e "s%@osversion\@%@osversion@%g" \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
-    -e "s%@gcc_version\@%${gcc3_version}%g" \
-    -e "s%@gcc_patch_version\@%${gcc3_patch_version}%g" \
-    -e "s%@gcc_suffix\@%${gcc3_suffix}%g" \
+    -e "s%@gcc_version\@%${gcc_version}%g" \
+    -e "s%@gcc_patch_version\@%${gcc_patch_version}%g" \
+    -e "s%@gcc_suffix\@%${gcc_suffix}%g" \
     -e "s%@newlib_version\@%${gcc3newlib_version}%g" \
     -e "s%@newlib_patch_version\@%${gcc3newlib_patch_version}%g" \
     -e "s%@newlib_suffix\@%${gcc3newlib_suffix}%g" \
