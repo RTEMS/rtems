@@ -1,3 +1,8 @@
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* binutils/binutils.add, gcc3newlib/gccnewlib.add,
+	gdb/gdb.add: Add support for rpmbuild --with sources.
+
 2005-03-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gdb/Makefile.am: Add avr, mips64.
