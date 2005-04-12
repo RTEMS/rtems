@@ -9,8 +9,8 @@ The command to invoke rpm for building RTEMS's gnu toolchain cdn. cross
 under Linux is:
 rpmbuild -ba xxx-rtems-yyy.spec \
 --define='_build i686-pc-linux-gnu'
---define='_host i386-cygwin' \
---target=i386-cygwin
+--define='_host i686-pc-cygwin' \
+--target=i686-pc-cygwin
 
 [If using rpm < 4.1, use "rpm" instead of "rpmbuild".]
 
@@ -30,14 +30,14 @@ Prebuild binaries should be available from
 	ftp://ftp.OARCorp.com 
 	http://packman.links2linux.de
 
-We further on assume this toolchain to be installed in /opt/i386-cygwin,
-i.e. /opt/i386-cygwin/bin/i386-cygwin-gcc is assumed to be the linux->cygwin
+We further on assume this toolchain to be installed in /opt/i686-pc-cygwin,
+i.e. /opt/i686-pc-cygwin/bin/i686-pc-cygwin-gcc is assumed to be the linux->cygwin
 cross compiler.
 
 2. Preparations
 ---------------
 
-* Make sure to have /usr/bin and /opt/i386-cygwin/bin in $PATH.
+* Make sure to have /usr/bin and /opt/i686-pc-cygwin/bin in $PATH.
 
 * Download the source-tarballs and patches. Put them into a directory where
 rpm can pick them up (/usr/src/redhat/SOURCES under RH)
@@ -51,7 +51,7 @@ corresponding subdirectory.
 
 The spec-files you are looking for are: 
 binutils/xxx-rtems-binutils.spec
-gcc3newlib/xxx-rtems-gccnewlib.spec
+gccnewlib/xxx-rtems-gccnewlib.spec
 gdb/xxx-rtems-gdb.spec
 
 [You must have appropriate versions of autoconf and 
@@ -62,19 +62,19 @@ automake installed.]
 
 rpmbuild -ba binutils/xxx-rtems-binutils-<binutilsvers>.spec \
 --define='_build=i686-pc-linux-gnu' \
---define='_host=i386-cygwin' \
---target=i386-cygwin
+--define='_host=i686-pc-cygwin' \
+--target=i686-pc-cygwin
 
-rpmbuild -ba gcc3newlib/xxx-rtems-gcc-<gccvers>-newlib-<newlibvers>.spec \
+rpmbuild -ba gccnewlib/xxx-rtems-gcc-<gccvers>-newlib-<newlibvers>.spec \
 --define='_build=i686-pc-linux-gnu' \
---define='_host=i386-cygwin' \
---target=i386-cygwin
+--define='_host=i686-pc-cygwin' \
+--target=i686-pc-cygwin
 
 rpmbuild -ba
 gdb/xxx-rtems-gdb-<gdbvers>.spec \
 --define='_build=i686-pc-linux-gnu' \
---define='_host=i386-cygwin' \
---target=i386-cygwin
+--define='_host=i686-pc-cygwin' \
+--target=i686-pc-cygwin
 
 Each of these commands builds several corresponding rpms.
 [Beware: This can take several hours.]
@@ -111,7 +111,7 @@ loosing file permissions.
 5. Other platforms
 ------------------
 The procedure to build for other platforms (Solaris, ...) is analogous. Just
-replace i386-cygwin with your target, eg sun-sparc-solaris2.8
+replace i686-pc-cygwin with your target, eg sun-sparc-solaris2.8
 
 Ralf Corsepius		2003-01-31
 
