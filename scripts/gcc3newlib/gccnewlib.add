@@ -48,22 +48,13 @@ BuildPreReq:	%{rpmprefix}%{gcc_target}-binutils
 # those targets wanting to support ada.
 
 # default to not building gnat
-# gcc-3.3: Doesn't support cross-building gnatlib
-# gcc-3.4.0: Doesn't support cross-build gnattools
-# gcc-4.0.0: Doesn't support newlib
 %define _gnat	%{?gnat:%gnat}%{!?gnat:0}
 
 # Use rpm -ba --define 'gcj [0|1]' xxx.spec to override building gcj for 
 # those targets wanting to support gcj.
 
-%if "%{gcc_version}" >= "3.4"
-# default to building gcj
-%define _gcj	%{?gcj:%gcj}%{!?gcj:1}
-%else
 # default to not building gcj
 %define _gcj	%{?gcj:%gcj}%{!?gcj:0}
-%endif
-
 
 %define build_cxx 	%{?cxx:%cxx}%{!?cxx:1}
 %define build_g77 	%{?g77:%g77}%{!?g77:0}
