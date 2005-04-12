@@ -38,7 +38,7 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutil
 # This is binutils sources with patches for RTEMS.
 
 %prep
-%setup -c -n %{name}-%{version}
+%setup -c -T -n %{name}-%{version} -a0
 
 cd binutils-%{version}
 %{?PATCH0:%patch0 -p1}

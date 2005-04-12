@@ -58,7 +58,7 @@ RTEMS is an open source operating system for embedded systems.
 This is the GNU gdb for RTEMS targetting %{gdb_version}.
 
 %prep
-%setup -c -n %{name}-%{version} -a 0
+%setup -c -T -n %{name}-%{version} -a0
 
 cd gdb-%{gdb_version}
 %{?PATCH0:%patch0 -p1}
