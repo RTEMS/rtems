@@ -1,5 +1,9 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/mkspec.in: Use gccnewlib/ instead of gcc3newlib/.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am, configure.ac: Use gccnewlib/ instead of gcc3newlib/.
 	* README.cdn-X: Minor updates.
 
