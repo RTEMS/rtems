@@ -20,7 +20,7 @@ Patch1:	      gdb-%{gdb_version}-rtems-cg-@gdb_patch_version@.diff
 Patch2:	      gdb-%{gdb_version}-rtems-rdbg-@gdb_patch_version@.diff
 %else
 Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}.tar.bz2
-Patch0:	      gdb-%{gdb_version}-rtems-@gdb_patch_version@.diff
+@PATCH1@
 %endif
 
 %if "%{_vendor}" == "redhat"
@@ -61,9 +61,9 @@ This is the GNU gdb for RTEMS targetting %{gdb_version}.
 %setup -c -n %{name}-%{version} -a 0
 
 cd gdb-%{gdb_version}
-%patch0 -p1
-# %patch1 -p1
-# %patch2 -p1
+%{?PATCH0:%patch0 -p1}
+%{?PATCH1:%patch1 -p1}
+%{?PATCH2:%patch2 -p1}
 
 %build
 %if "%_sim" == "1"

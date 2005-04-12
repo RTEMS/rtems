@@ -52,11 +52,9 @@ patchn=-1
 if test -n "${gdb_patch_version}"; then
 patchn=`expr $patchn + 1`
 PATCH1="Patch${patchn}: gdb-${gdb_version}-rtems-${gdb_patch_version}.diff"
-PATCH2="%patch${patchn} -p0"
 fi
 
 sed -e "s,@PATCH1\@,${PATCH1}," \
-    -e "s,@PATCH2\@,${PATCH2}," \
     -e "s%@Release\@%${gdb_rpm_release}%g" \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@prefix\@%@prefix@%g" \
