@@ -41,8 +41,8 @@ BuildPreReq:	%{rpmprefix}%{gcc_target}-binutils
 # your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
 # Or you can try the ftp options of rpm :-)
 #
-NoSource:	0
-NoSource:	1
+%{?!_with_sources:NoSource:	0}
+%{?!_with_sources:NoSource:	1}
 
 # Use rpm -ba --define 'gnat [0|1]' xxx.spec to override building gnat for 
 # those targets wanting to support ada.

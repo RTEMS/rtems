@@ -29,7 +29,7 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutil
 # your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
 # Or you can try the ftp options of rpm :-)
 #
-NoSource:      0
+%{?!_with_sources:NoSource:      0}
 
 # %description
 #
