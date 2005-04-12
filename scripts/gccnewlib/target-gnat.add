@@ -1,0 +1,23 @@
+%if %build_gnat
+# ==============================================================
+# %{gcc_target}-gnat
+# ==============================================================
+%package -n %{rpmprefix}%{gcc_target}-gnat
+Summary:	gcc/gnat compiler for %{gcc_target}
+Group: %{rpmgroup}
+Requires: %{rpmprefix}rtems@osversion@-base-gnat %{rpmprefix}%{gcc_target}-gcc
+
+%description -n %{rpmprefix}%{gcc_target}-gnat
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/gnat compiler for %{gcc_target}
+
+%files -n %{rpmprefix}%{gcc_target}-gnat
+%defattr(-,root,root)
+%dir %{_prefix}/bin
+%{_prefix}/bin/%{gcc_target}-gnat*
+
+%{gccexec}/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
+%{gcclib}/%{gcc_target}/%{gcc_version}/adalib
+%{gcclib}/%{gcc_target}/%{gcc_version}/adainclude
+%endif
