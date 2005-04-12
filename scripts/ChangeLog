@@ -1,5 +1,10 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac, setup, setup.def, gcc3newlib/mkspec.in:
+	Use gcc_* instead of gcc3_* for setup.* values.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* binutils/binutils.add, gdb/gdb.add: Sync %setup with gcc/gcc.add
 	for consistency.
 
