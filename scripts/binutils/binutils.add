@@ -39,7 +39,11 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutil
 
 %prep
 %setup -c -n %{name}-%{version}
-%{?PATCH0:%patch0 -p0}
+
+cd binutils-%{version}
+%{?PATCH0:%patch0 -p1}
+cd ..
+
   test -d build || mkdir build
 
 %build
