@@ -1,5 +1,14 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/binutils.add, binutils/mkspec.in:
+	Eliminate @PATCH2@.
+	* gcc3newlib/gccnewlib.add, gcc3newlib/mkspec.in:
+	Eliminate @PATCH2@, @PATCH4@.
+	* gdb/gdb.add, gdb/mkspec.in:
+	Eliminate @PATCH2@.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* binutils/binutils.add, gcc3newlib/gccnewlib.add,
 	gdb/gdb.add: Add support for rpmbuild --with sources.
 
