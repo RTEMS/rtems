@@ -1,5 +1,10 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/binutils.add, gdb/gdb.add: Sync %setup with gcc/gcc.add
+	for consistency.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* binutils/binutils.add, gcc3newlib/gccnewlib.add, gdb/gdb.add:
 	Apply patches in tool subdirs.
 
