@@ -1,8 +1,0 @@
-#
-#  $Id$
-#
-
-This directory contains RPM-spec file fragments (*.add) which are used to
-compose the toolchain specs.
-
-Cf. Makefile.am for details on how the toolchain specs get composed.
