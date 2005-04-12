@@ -1,5 +1,9 @@
 2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* setup.def, gdb/gdb.add: Add gdb_suffix.
+
+2005-04-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gcc3newlib/HISTORY, gcc3newlib/Makefile.am, gcc3newlib/README,
 	gcc3newlib/base-g77.add, gcc3newlib/base-gcc.add, 
 	gcc3newlib/base-gcj.add, gcc3newlib/base-gnat.add, 

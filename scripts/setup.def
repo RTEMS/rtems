@@ -8,6 +8,7 @@ binutils_patch_version=20040519
 binutils_suffix=.tar.bz2
 binutils_rpm_release=1
 gdb_version=6.0
+gdb_suffix=.tar.gz
 gdb_patch_version=20040217
 gdb_rpm_release=1
 rtems_version=ss-20000726
