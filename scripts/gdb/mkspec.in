@@ -56,7 +56,6 @@ fi
 
 sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s%@Release\@%${gdb_rpm_release}%g" \
-    -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@prefix\@%@prefix@%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
     -e "s,@rpmprefix\@,@rpmprefix@,g" \

@@ -68,7 +68,6 @@ sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s,@rpmprefix\@,@rpmprefix@,g" \
     -e "s%@rpmgroup\@%@rpmgroup@%g" \
     -e "s%@osversion\@%@osversion@%g" \
-    -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@gcc_version\@%${gcc_version}%g" \
     -e "s%@gcc_patch_version\@%${gcc_patch_version}%g" \
     -e "s%@gcc_suffix\@%${gcc_suffix}%g" \
