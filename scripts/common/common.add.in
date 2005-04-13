@@ -13,7 +13,6 @@
 %define rpmprefix		@rpmprefix@
 %define rpmgroup		@rpmgroup@
 
-%define _defaultbuildroot 	%{_tmppath}/%{name}-%{version}-root
 %ifos cygwin cygwin32
 %define _exeext .exe
 %else
@@ -26,4 +25,4 @@
 Vendor: 	www.rtems.com
 Distribution: 	Linux
 
-BuildRoot:	%{_defaultbuildroot}
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
