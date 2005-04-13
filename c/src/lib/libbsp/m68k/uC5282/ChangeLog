@@ -1,3 +1,8 @@
+2005-04-13  Eric Norum <norume@aps.anl.gov>
+
+	* network/network.c: Add some more diagnostics.
+                         Poke TDAR/RDAR only when necessary.
+
 2005-04-10  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Set up IRQ1* handling properly.

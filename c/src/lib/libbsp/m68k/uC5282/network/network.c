@@ -1,7 +1,10 @@
 /*
  * RTEMS/TCPIP driver for MCF5282 Fast Ethernet Controller
  *
- * TO DO: Check network stack code -- force longword alignment of all tx mbufs?
+ * TO DO: Check network stack code -- Is it possible force longword alignment
+ *                                    of all tx mbufs?  If so, the stupid 
+ *                                    realignment code in the output routine
+ *                                    could be removed.
  */
 
 #include <bsp.h>
@@ -358,8 +361,7 @@ fec_rxDaemon (void *arg)
     /*
      * Input packet handling loop
      */
-    /* Indicate we have some ready buffers available */
-    MCF5282_FEC_RDAR = MCF5282_FEC_RDAR_R_DES_ACTIVE;
+    MCF5282_FEC_RDAR = 0;
 
     rxBdIndex = 0;
     for (;;) {
@@ -434,7 +436,8 @@ fec_rxDaemon (void *arg)
          * Reenable the buffer descriptor
          */
         rxBd->status = (status & MCF5282_FEC_RxBD_W) | MCF5282_FEC_RxBD_E;
-        MCF5282_FEC_RDAR = MCF5282_FEC_RDAR_R_DES_ACTIVE;
+        if ((MCF5282_FEC_RDAR & MCF5282_FEC_RDAR_R_DES_ACTIVE) == 0)
+            MCF5282_FEC_RDAR = 0;
 
         /*
          * Move to next buffer descriptor
@@ -556,7 +559,8 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
                                   | MCF5282_FEC_TxBD_TC;
             if (nAdded > 1)
                 firstTxBd->status |= MCF5282_FEC_TxBD_R;
-            MCF5282_FEC_TDAR = MCF5282_FEC_TDAR_X_DES_ACTIVE;
+            if ((MCF5282_FEC_TDAR & MCF5282_FEC_TDAR_X_DES_ACTIVE) == 0)
+                MCF5282_FEC_TDAR = 0;
             sc->txBdActiveCount += nAdded;
           }
           break;
@@ -727,6 +731,15 @@ enet_stats(struct mcf5282_enet_struct *sc)
     printf("   Tx SQE Error:%-10lu", MCF5282_FEC_IEEE_T_SQE);
     printf("Tx Pause Frames:%-10lu\n",   MCF5282_FEC_IEEE_T_FDXFC);
     printf("   Tx Octets OK:%-10lu\n", MCF5282_FEC_IEEE_T_OCTETS_OK);
+    printf(" EIR:%8.8lx  ",  MCF5282_FEC_EIR);
+    printf("EIMR:%8.8lx  ",  MCF5282_FEC_EIMR);
+    printf("RDAR:%8.8lx  ",  MCF5282_FEC_RDAR);
+    printf("TDAR:%8.8lx\n",  MCF5282_FEC_TDAR);
+    printf(" ECR:%8.8lx  ",  MCF5282_FEC_ECR);
+    printf(" RCR:%8.8lx  ",  MCF5282_FEC_RCR);
+    printf(" TCR:%8.8lx\n",  MCF5282_FEC_TCR);
+    printf("FRBR:%8.8lx  ",  MCF5282_FEC_FRBR);
+    printf("FRSR:%8.8lx\n",  MCF5282_FEC_FRSR);
 }
 
 static int
