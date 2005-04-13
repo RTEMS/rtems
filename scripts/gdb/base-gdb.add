@@ -15,24 +15,24 @@ This is the base for gdb regardless of target CPU.
 %files -n %{rpmprefix}rtems@osversion@-base-gdb
 %defattr(-,root,root)
 
-%dir %{_prefix}/info
-%doc %{_prefix}/info/gdb.info*
+%dir %{_infodir}
+%doc %{_infodir}/gdb.info*
 # FIXME: When had mmalloc.info been removed?
 %if "%{gdb_version}" < "6.3"
-%doc %{_prefix}/info/mmalloc.info*
+%doc %{_infodir}/mmalloc.info*
 %endif
 # FIXME: When had gdbint and stabs been introduced?
 %if "%{gdb_version}" >= "5.0"
-%doc %{_prefix}/info/gdbint.info*
-%doc %{_prefix}/info/stabs.info*
+%doc %{_infodir}/gdbint.info*
+%doc %{_infodir}/stabs.info*
 %endif
 # gdb 4.18 installed this, gdb 5.0 does not
 %if "%{gdb_version}" < "5.0"
-%doc %{_prefix}/info/readline.info*
+%doc %{_infodir}/readline.info*
 %endif
 
 %if "{gdb_version}" >= "6.0"
-%doc %{_prefix}/info/annotate.info*
+%doc %{_infodir}/annotate.info*
 %endif
 
 %dir %{_prefix}/man

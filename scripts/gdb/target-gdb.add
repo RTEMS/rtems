@@ -27,8 +27,10 @@ This is the GNU gdb for RTEMS targetting %{gdb_target}.
 %if "%_sim" == "1"
 %{_bindir}/%{gdb_target}-run%{_exeext}
 %endif
+%if "%_sim" == "1"
 %if "%{gdb_target}" == "sparc-rtems@osversion@"
 %{_bindir}/%{gdb_target}-sis%{_exeext}
+%endif
 %endif
 %if "%{gdb_version}" >= "6.3"
 %{_bindir}/%{gdb_target}-gdbtui

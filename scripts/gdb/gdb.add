@@ -52,6 +52,12 @@ BuildPreReq:	ncurses-devel
 %if "%{gdb_target}" == "i386-rtems@osversion@"
 %define _sim	0
 %endif
+%if "%{gdb_target}" == "powerpc-rtems@osversion@"
+%define _sim	0
+%endif
+%if "%{gdb_target}" == "sparc-rtems@osversion@"
+%define _sim	0
+%endif
 
 
 %description
@@ -95,9 +101,19 @@ test -d build || mkdir build
   make info
 
 %install
+  rm -rf $RPM_BUILD_ROOT
+
   cd build
-  make prefix=$RPM_BUILD_ROOT%{_prefix} install
-  make prefix=$RPM_BUILD_ROOT%{_prefix} install-info
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    install
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    install-info
 
   # host files
   rm -rf $RPM_BUILD_ROOT%{_prefix}/include/*.h
