@@ -1,5 +1,9 @@
 2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* setup.def: Update rtems_version. Remove rpm_build_root.
+
+2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/mkspec.in: New.
 	* mkbspspec.in: Remove.
 	* Makefile.am: Reflect changes above.
