@@ -1,5 +1,10 @@
 2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gdb/base-gdb.add, gdb/gdb.add, gdb/target-gdb.add: Various
+	changes and hacks.
+
+2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* binutils/mkspec.in: Remove rpm_build_root.
 	* common/common.add.in: Remove _defaultbuildroot.
 	* cpukit/mkspec.in: Remove rpm_build_root.
