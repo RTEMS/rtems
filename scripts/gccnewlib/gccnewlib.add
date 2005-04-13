@@ -255,8 +255,7 @@ cd ..
 
 %install
   export PATH="%{_bindir}:${PATH}"
-  test $RPM_BUILD_ROOT = "%{_defaultbuildroot}" && \
-    rm -rf $RPM_BUILD_ROOT
+  rm -rf $RPM_BUILD_ROOT
 
   cd build
 # Bug in gcc-2.95.1: It doesn't build this installation directory

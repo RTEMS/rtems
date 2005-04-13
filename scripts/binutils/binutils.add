@@ -59,6 +59,8 @@ cd ..
 
 
 %install
+  rm -rf $RPM_BUILD_ROOT
+
   cd build
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
