@@ -10,7 +10,8 @@ SUBPACKAGES = header.add
 SUBPACKAGES += $(top_builddir)/common/common.add
 SUBPACKAGES += gdb.add
 SUBPACKAGES += $(top_builddir)/common/clean.add
-SUBPACKAGES += base-gdb.add target-gdb.add
+SUBPACKAGES += target-gdb.add
+SUBPACKAGES += base-gdb.add
 
 noinst_DATA = gdb.spec.in
 
