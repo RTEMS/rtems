@@ -28,7 +28,7 @@ RPM_SPECS_DATA += i386-rtems-pc386-$(BSPVERS).spec
 
 m68k-rtems-gen68360-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems gen68360
-RPM_SPECS_DATA += i386-rtems-gen68360-$(BSPVERS).spec
+RPM_SPECS_DATA += m68k-rtems-gen68360-$(BSPVERS).spec
 
 powerpc-rtems-mcp750-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-rtems mcp750

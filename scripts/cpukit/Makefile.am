@@ -42,10 +42,6 @@ sh-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtems@osversion@ > $@
 RPM_SPECS_DATA += sh-rtems@osversion@-cpukit.spec
 
-sh-rtemself@osversion@-cpukit.spec: $(MKSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtemself@osversion@ > $@
-RPM_SPECS_DATA += sh-rtemself@osversion@-cpukit.spec
-
 sparc-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems@osversion@ > $@
 RPM_SPECS_DATA += sparc-rtems@osversion@-cpukit.spec
