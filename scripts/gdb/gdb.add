@@ -2,7 +2,7 @@
 %define gdb_version	@gdb_version@
 %define gdb_target	@target_alias@
 
-Name:         %{rpmprefix}%{gdb_target}-gdb-collection
+Name:         %{rpmprefix}%{gdb_target}-gdb
 Release:      @Release@
 License:      GPL/LGPL
 Group:        %{rpmgroup}
@@ -43,6 +43,9 @@ BuildPreReq:	ncurses-devel
 #  and targets which require extra arguments.
 %define _sim	1
 
+%if "%{gdb_target}" == "avr-rtems@osversion@"
+%define _sim	0
+%endif
 %if "%{gdb_target}" == "m68k-rtems@osversion@"
 %define _sim	0
 %endif
@@ -99,16 +102,20 @@ test -d build || mkdir build
   rm -rf $RPM_BUILD_ROOT%{_prefix}/lib/lib*a
 
   # These come from other packages
-  rm -rf $RPM_BUILD_ROOT%{_prefix}/info/bfd*
-  rm -rf $RPM_BUILD_ROOT%{_prefix}/info/configure*
-  rm -rf $RPM_BUILD_ROOT%{_prefix}/info/standards*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/bfd*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/configure*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/standards*
  
   # gzip info files
-  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-? 2>/dev/null
-%if "%{gdb_version}" < "6.0"
-  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-?? 2>/dev/null
-%endif
+  ls $RPM_BUILD_ROOT%{_infodir}/*.info \
+    $RPM_BUILD_ROOT%{_infodir}/*.info-? \
+    $RPM_BUILD_ROOT%{_infodir}/*.info-?? \
+  | while read a; do \
+    gzip -9qf $a 2>/dev/null; \
+  done
 
   # We don't ship info/dir
-  rm -f $RPM_BUILD_ROOT%{_prefix}/info/dir
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+
+  # gzip man pages
+  gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/*.? 2>/dev/null
