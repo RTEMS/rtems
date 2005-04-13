@@ -1,5 +1,12 @@
 2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/mkspec.in: New.
+	* mkbspspec.in: Remove.
+	* Makefile.am: Reflect changes above.
+	* configure.ac: Reflect changes above.
+
+2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* common/clean.add.in: Always rm -rf $RPM_BUILD_ROOT.
 
 2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>

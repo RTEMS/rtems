@@ -90,6 +90,7 @@ AC_CONFIG_FILES([binutils/mkspec],[chmod +x binutils/mkspec])
 AC_CONFIG_FILES([mkbspspec],[chmod +x mkbspspec])
 AC_CONFIG_FILES([gccnewlib/mkspec],[chmod +x gccnewlib/mkspec])
 AC_CONFIG_FILES([cpukit/mkspec],[chmod +x cpukit/mkspec])
+AC_CONFIG_FILES([rtems/mkspec],[chmod +x mkspec/mkspec])
 
 AC_CONFIG_COMMANDS([default],[[chmod 755 buildall
 chmod 755 buildalltar

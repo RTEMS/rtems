@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 SUBDIRS = . binutils gccnewlib gdb rtems autotools cpukit
 SUBDIRS += rtemsdoc
 
-noinst_SCRIPTS = setup buildall buildalltar mkbspspec mkrpms mkspec
+noinst_SCRIPTS = setup buildall buildalltar mkrpms mkspec
 
 noinst_DATA = setup.def
 
