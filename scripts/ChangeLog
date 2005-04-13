@@ -1,5 +1,15 @@
 2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/mkspec.in: Remove rpm_build_root.
+	* common/common.add.in: Remove _defaultbuildroot.
+	* cpukit/mkspec.in: Remove rpm_build_root.
+	* gccnewlib/mkspec.in: Remove rpm_build_root.
+	* gdb/mkspec.in: Remove rpm_build_root.
+	* gccnewlib/gccnewlib.add: Let %install rm -f $RPM_BUILD_ROOT.
+	* binutils/binutils.add: Let %install rm -f $RPM_BUILD_ROOT.
+
+2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gdb/Makefile.am: Remove obsolete targets.
 	* gdb/gdb.add: Pass bindir, infodir, mandir to configure.
 
