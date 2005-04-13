@@ -39,11 +39,6 @@ i386-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
 RPM_SPECS_DATA += i386-rtems@osversion@-$(GDBVERS).spec
 
-# does not build with 5.2
-# i386-RTEMS-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-# 	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-RTEMS > $@
-# RPM_SPECS_DATA += i386-RTEMS-$(GDBVERS).spec
-
 m68k-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems@osversion@ > $@
 RPM_SPECS_DATA += m68k-rtems@osversion@-$(GDBVERS).spec
@@ -60,11 +55,6 @@ mipstx39-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mipstx39-rtems@osversion@ > $@
 RPM_SPECS_DATA += mipstx39-rtems@osversion@-$(GDBVERS).spec
 
-# does not build with 5.2
-# powerpc-RTEMS-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-# 	$(MKSPEC) -cfg $(top_builddir)/setup.cache powerpc-RTEMS > $@
-# RPM_SPECS_DATA += powerpc-RTEMS-$(GDBVERS).spec
-
 powerpc-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache powerpc-rtems@osversion@ > $@
 RPM_SPECS_DATA += powerpc-rtems@osversion@-$(GDBVERS).spec
@@ -73,9 +63,9 @@ sh-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtems@osversion@ > $@
 RPM_SPECS_DATA += sh-rtems@osversion@-$(GDBVERS).spec
 
-sh-rtemself@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtemself@osversion@ > $@
-RPM_SPECS_DATA += sh-rtemself@osversion@-$(GDBVERS).spec
+sh-rtemscoff@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtemscoff@osversion@ > $@
+RPM_SPECS_DATA += sh-rtemscoff@osversion@-$(GDBVERS).spec
 
 sparc-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems@osversion@ > $@

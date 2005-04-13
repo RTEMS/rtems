@@ -1,5 +1,10 @@
 2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gdb/Makefile.am: Remove obsolete targets.
+	* gdb/gdb.add: Pass bindir, infodir, mandir to configure.
+
+2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* binutils/Makefile.am, gdb/Makefile.am: Move target-*.add before
 	base*.add.
 	* gdb/gdb.add, gdb/target-gdb.add: Introduce %{_infodir}, %{_mandir},

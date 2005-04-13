@@ -86,7 +86,9 @@ test -d build || mkdir build
   ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \
     --target=%{gdb_target} \
-    --verbose --prefix=%{_prefix} $simargs \
+    --prefix=%{_prefix} --bindir=%{_bindir} }
+    --mandir=%{_mandir} --infodir=%{_infodir} \
+    --verbose $simargs \
     --disable-nls
 
   make all
