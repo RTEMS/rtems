@@ -1,5 +1,11 @@
 2005-04-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if_arp.h, libnetworking/net/if_ethersubr.c,
+	libnetworking/netinet/if_ether.h,
+	libnetworking/netinet/in.h: Partial updates from FreeBSD.
+
+2005-04-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/arpa/inet.h, libnetworking/net/if_dl.h:
 	Cosmetical update from FreeBSD.
 
