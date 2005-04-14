@@ -1,3 +1,8 @@
+2005-04-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/arpa/inet.h, libnetworking/net/if_dl.h:
+	Cosmetical update from FreeBSD.
+
 2005-04-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libmisc/monitor/mon-symbols.c: size_t.
