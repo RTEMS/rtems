@@ -8,8 +8,9 @@ License:      Various, Open Source.
 Group:        %{rpmgroup}
 
 Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
-BuildPreReq:    %{rpmprefix}%{rtems_target}-binutils
-BuildPreReq:    %{rpmprefix}%{rtems_target}-gcc 
+BuildRequires:    %{rpmprefix}%{rtems_target}-binutils
+BuildRequires:    %{rpmprefix}%{rtems_target}-gcc 
+
 Requires:     	%{rpmprefix}%{rtems_target}-binutils
 Requires:     	%{rpmprefix}%{rtems_target}-gcc 
 
@@ -31,9 +32,7 @@ Source:       rtems-%{rtems_version}.tar.bz2
 # your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
 # Or you can try the ftp options of rpm :-)
 #
-NoSource:      0
-# We claim to be relocatible, but in fact we are not
-Prefix:		%{_prefix}
+%{?!_with_sources:NoSource:      0}
 
 %description
 RTEMS is a free operating system for embedded systems.
@@ -42,20 +41,31 @@ This package contains the cpukit for cpu %{rtems_target}.
 
 %prep
 %setup -c -T -n %{name}-%{version} -a0
-test -d build || mkdir build
+  mkdir -p build
 
 %build
-cd build
-# rtems does not support building inside the source tree
-  ../rtems-%{rtems_version}/cpukit/configure \
-  --build=`../rtems-%{rtems_version}/config.guess` \
+  cd build
+
+  ../rtems-%{rtems_version}/configure \
   --prefix=%{_prefix} \
-  --host=%{rtems_target} --target=%{rtems_target} \
-  --exec-prefix=%{_prefix}/%{rtems_target} \
-  --enable-multilib
+  --target=%{rtems_target} \
+  --enable-multilib \
+  --disable-rtemsbsp \
+  --disable-tests \
+  --disable-deprecated
   make RTEMS_BSP=
 
 %install
-cd build
+  rm -rf $RPM_BUILD_ROOT
+
+  cd build
   make RTEMS_BSP= DESTDIR=${RPM_BUILD_ROOT} install
 
+  # For the moment, we don't want these man pages
+  rm -rf ${RPM_BUILD_ROOT}%{_prefix}/man
+
+  # Obsolete and currently broken
+  rm -rf ${RPM_BUILD_ROOT}%{_prefix}/make
+
+  # host tools
+  rm -rf ${RPM_BUILD_ROOT}%{_prefix}/bin

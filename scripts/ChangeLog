@@ -1,3 +1,8 @@
+2005-04-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* cpukit/rtems-cpukit.add, cpukit/target-cpukit.add: Bring this rpm
+	functional, again.
+
 2005-04-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/Makefile.am: Reworked.
