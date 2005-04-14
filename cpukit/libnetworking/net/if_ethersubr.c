@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_ethersubr.c	8.1 (Berkeley) 6/10/93
- * $FreeBSD: src/sys/net/if_ethersubr.c,v 1.179 2004/10/12 10:33:41 glebius Exp $
+ * $FreeBSD: src/sys/net/if_ethersubr.c,v 1.189 2005/03/06 22:59:40 sobomax Exp $
  */
  
 /*
@@ -76,6 +76,10 @@
 #include <netinet6/nd6.h>
 #endif
 
+#ifdef DEV_CARP
+#include <netinet/ip_carp.h>
+#endif
+
 #ifdef IPX
 #include <netipx/ipx.h>
 #include <netipx/ipx_if.h>
@@ -94,7 +98,7 @@ extern u_char	aarp_org_code[3];
 #endif /* NETATALK */
 
 u_char	etherbroadcastaddr[6] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
-#define senderr(e) { error = (e); goto bad;}
+#define senderr(e) do { error = (e); goto bad;} while (0)
 
 /*
  * Ethernet output routine.

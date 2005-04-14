@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_ether.h	8.3 (Berkeley) 5/2/95
- * $FreeBSD: src/sys/netinet/if_ether.h,v 1.30 2004/04/07 20:46:13 imp Exp $
+ * $FreeBSD: src/sys/netinet/if_ether.h,v 1.32 2005/02/22 13:04:03 glebius Exp $
  */
 
 /*
@@ -79,21 +79,6 @@ struct	ether_arp {
 #define	arp_pln	ea_hdr.ar_pln
 #define	arp_op	ea_hdr.ar_op
 
-
-/*
- * Structure shared between the ethernet driver modules and
- * the address resolution code.  For example, each ec_softc or il_softc
- * begins with this structure.
- */
-struct	arpcom {
-	/*
-	 * The ifnet struct _must_ be at the head of this structure.
-	 */
-	struct 	ifnet ac_if;		/* network-visible interface */
-	u_char	ac_enaddr[ETHER_ADDR_LEN];		/* ethernet hardware address */
-	struct	ether_multi *ac_multiaddrs; /* list of ether multicast addrs */
-	int	ac_multicnt;		/* length of ac_multiaddrs list */
-};
 
 struct sockaddr_inarp {
 	u_char	sin_len;

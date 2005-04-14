@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,13 +27,16 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_arp.h	8.1 (Berkeley) 6/10/93
- * $Id$
+ * $FreeBSD: src/sys/net/if_arp.h,v 1.21 2005/01/07 01:45:34 imp Exp $
  */
 
 #ifndef _NET_IF_ARP_H_
 #define	_NET_IF_ARP_H_
 
-#include <netinet/in.h>
+#ifdef __rtems__
+#define BYTE_PACK __attribute__((packed))
+#endif
+
 /*
  * Address Resolution Protocol.
  *
@@ -74,6 +73,15 @@ struct	arphdr {
 #endif
 };
 
+#define ar_sha(ap)	(((caddr_t)((ap)+1)) +   0)
+#define ar_spa(ap)	(((caddr_t)((ap)+1)) +   (ap)->ar_hln)
+#define ar_tha(ap)	(((caddr_t)((ap)+1)) +   (ap)->ar_hln + (ap)->ar_pln)
+#define ar_tpa(ap)	(((caddr_t)((ap)+1)) + 2*(ap)->ar_hln + (ap)->ar_pln)
+
+#define arphdr_len2(ar_hln, ar_pln)					\
+	(sizeof(struct arphdr) + 2*(ar_hln) + 2*(ar_pln))
+#define arphdr_len(ap)	(arphdr_len2((ap)->ar_hln, (ap)->ar_pln))
+
 /*
  * ARP ioctl request
  */
@@ -88,5 +96,32 @@ struct arpreq {
 #define	ATF_PERM	0x04	/* permanent entry */
 #define	ATF_PUBL	0x08	/* publish entry (respond for other host) */
 #define	ATF_USETRAILERS	0x10	/* has requested trailers */
+
+#ifdef _KERNEL
+/*
+ * Structure shared between the ethernet driver modules and
+ * the address resolution code.  For example, each ec_softc or il_softc
+ * begins with this structure.
+ * The code is written so that each *_softc _must_ begin with a
+ * struct arpcom, which in turn _must_ begin with a struct ifnet.
+ */
+struct	arpcom {
+	/*
+	 * The ifnet struct _must_ be at the head of this structure.
+	 */
+	struct 	ifnet ac_if;		/* network-visible interface */
+	u_char	ac_enaddr[6];		/* ethernet hardware address */
+#if defined(__rtems__)
+/* Cruft from ancient BSD - should be removed once RTEMS is updated */
+	struct	ether_multi *ac_multiaddrs; /* list of ether multicast addrs */
+	int	ac_multicnt;		/* length of ac_multiaddrs list */
+#else
+	int	now_unused;	/* XXX was length of ac_multiaddrs list */
+	void	*ac_netgraph;		/* ng_ether(4) netgraph node info */
+#endif
+};
+#define IFP2AC(ifp) ((struct arpcom *)(ifp))
+
+#endif
 
 #endif /* !_NET_IF_ARP_H_ */
