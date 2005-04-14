@@ -64,5 +64,4 @@ sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s%@gdb_version\@%${gdb_version}%g" \
     -e "s%@gdb_patch_version\@%${gdb_patch_version}%g" \
     -e "s%@gdb_suffix\@%${gdb_suffix}%g" \
-    -e "s%@extra_configure_arguments\@%${extra_configure_arguments}%g" \
 < ${specsrc}

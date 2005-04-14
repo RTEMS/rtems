@@ -1,5 +1,6 @@
 2005-04-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gdb/mkspec.in: Remove extra_configure_arguments (Unused).
 	* cpukit/rtems-cpukit.add, cpukit/target-cpukit.add: Bring this rpm
 	functional, again.
 
