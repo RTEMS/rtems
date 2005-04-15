@@ -518,7 +518,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
 
-    rtems_hdl_tbl[BSP_DECREMENTER].hdl();
+    rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
 
     _CPU_MSR_SET(msr);
     return;
@@ -550,14 +550,14 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   new_msr = msr | MSR_EE;
   _CPU_MSR_SET(new_msr);
 
-  /* rtems_hdl_tbl[irq].hdl(); */
+  /* rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle); */
   {
      rtems_irq_connect_data* vchain;
      for( vchain = &rtems_hdl_tbl[irq];
           ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
           vchain = (rtems_irq_connect_data*)vchain->next_handler )
      {
-        vchain->hdl();
+        vchain->hdl(vchain->handle);
      }
   }
 

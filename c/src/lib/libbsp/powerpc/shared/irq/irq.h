@@ -147,7 +147,8 @@ extern  volatile rtems_i8259_masks i8259s_cache;
 
 struct 	__rtems_irq_connect_data__;	/* forward declaratiuon */
 
-typedef void (*rtems_irq_hdl)		(void);
+typedef void *rtems_irq_hdl_param;
+typedef void (*rtems_irq_hdl)		(rtems_irq_hdl_param);
 typedef void (*rtems_irq_enable)	(const struct __rtems_irq_connect_data__*);
 typedef void (*rtems_irq_disable)	(const struct __rtems_irq_connect_data__*);
 typedef int  (*rtems_irq_is_enabled)	(const struct __rtems_irq_connect_data__*);
@@ -161,6 +162,10 @@ typedef struct __rtems_irq_connect_data__ {
        * handler. See comment on handler properties below in function prototype.
        */
       rtems_irq_hdl	   		hdl;
+     /*
+      * Handler handle to store private data
+      */
+      rtems_irq_hdl_param		handle;
       /*
        * function for enabling interrupts at device level (ONLY!).
        * The BSP code will automatically enable it at i8259s level and openpic level.

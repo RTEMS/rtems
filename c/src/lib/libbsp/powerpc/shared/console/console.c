@@ -54,9 +54,9 @@ int BSPBaseBaud    = BSP_UART_BAUD_BASE;
 static int  conSetAttr(int minor, const struct termios *);
 
 typedef struct TtySTblRec_ {
-		char	*name;
-		void	(*isr)(void); /* STUPID API doesn't pass a parameter :-( */
-} TtySTblRec, *TtySTbl;
+		char	      *name;
+		rtems_irq_hdl isr;
+} TtySTblRec, *TtySTbl;               
 
 static TtySTblRec ttyS[]={
 		{ "/dev/ttyS0",

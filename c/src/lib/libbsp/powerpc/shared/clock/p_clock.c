@@ -20,6 +20,7 @@
 
 static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
 					      clockIsr,
+                                              NULL,
 					      (rtems_irq_enable)clockOn,
 					      (rtems_irq_disable)clockOff,
 					      (rtems_irq_is_enabled) clockIsOn};
