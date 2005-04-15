@@ -1,3 +1,9 @@
+2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        PR 779/bsp
+        * irq/irq.c, irq/irq.h:  add parameter to new exception
+        interrupt handlers in powerpc bsps
+
 2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c: include <rtems/powerpc/powerpc.h>.
