@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip.h	8.2 (Berkeley) 6/1/94
+ * $FreeBSD: src/sys/netinet/ip.h,v 1.29 2005/01/07 01:45:44 imp Exp $
+ */
+
+/*
  *	$Id$
  */
 
@@ -45,21 +45,17 @@
 
 /*
  * Structure of an internet header, naked of options.
- *
- * We declare ip_len and ip_off to be short, rather than u_short
- * pragmatically since otherwise unsigned comparisons can result
- * against negative integers quite easily, and fail in subtle ways.
  */
 struct ip {
 #ifdef _IP_VHL
 	u_char	ip_vhl;			/* version << 4 | header length >> 2 */
 #else
 #if BYTE_ORDER == LITTLE_ENDIAN
-	u_char	ip_hl:4,		/* header length */
+	u_int	ip_hl:4,		/* header length */
 		ip_v:4;			/* version */
 #endif
 #if BYTE_ORDER == BIG_ENDIAN
-	u_char	ip_v:4,			/* version */
+	u_int	ip_v:4,			/* version */
 		ip_hl:4;		/* header length */
 #endif
 #endif /* not _IP_VHL */
@@ -85,6 +81,10 @@ struct ip {
 #define	IP_VHL_BORING		0x45
 #endif
 
+#ifdef CTASSERT
+CTASSERT(sizeof (struct ip) == 20);
+#endif
+
 #define	IP_MAXPACKET	65535		/* maximum packet size */
 
 /*
@@ -94,6 +94,11 @@ struct ip {
 #define	IPTOS_THROUGHPUT	0x08
 #define	IPTOS_RELIABILITY	0x04
 #define	IPTOS_MINCOST		0x02
+#if 1
+/* ECN RFC3168 obsoletes RFC2481, and these will be deprecated soon. */
+#define	IPTOS_CE		0x01
+#define	IPTOS_ECT		0x02
+#endif
 
 /*
  * Definitions for IP precedence (also in ip_tos) (hopefully unused)
@@ -106,6 +111,16 @@ struct ip {
 #define	IPTOS_PREC_IMMEDIATE		0x40
 #define	IPTOS_PREC_PRIORITY		0x20
 #define	IPTOS_PREC_ROUTINE		0x00
+
+/*
+ * ECN (Explicit Congestion Notification) codepoints in RFC3168
+ * mapped to the lower 2 bits of the TOS field.
+ */
+#define	IPTOS_ECN_NOTECT	0x00	/* not-ECT */
+#define	IPTOS_ECN_ECT1		0x01	/* ECN-capable transport (1) */
+#define	IPTOS_ECN_ECT0		0x02	/* ECN-capable transport (0) */
+#define	IPTOS_ECN_CE		0x03	/* congestion experienced */
+#define	IPTOS_ECN_MASK		0x03	/* ECN field mask */
 
 /*
  * Definitions for options.
@@ -126,6 +141,8 @@ struct ip {
 #define	IPOPT_TS		68		/* timestamp */
 #define	IPOPT_SECURITY		130		/* provide s,c,h,tcc */
 #define	IPOPT_LSRR		131		/* loose source route */
+#define	IPOPT_ESO		133		/* extended security */
+#define	IPOPT_CIPSO		134		/* commerical security */
 #define	IPOPT_SATID		136		/* satnet id */
 #define	IPOPT_SSRR		137		/* strict source route */
 #define	IPOPT_RA		148		/* router alert */
@@ -146,11 +163,11 @@ struct	ip_timestamp {
 	u_char	ipt_len;		/* size of structure (variable) */
 	u_char	ipt_ptr;		/* index of current entry */
 #if BYTE_ORDER == LITTLE_ENDIAN
-	u_char	ipt_flg:4,		/* flags, see below */
+	u_int	ipt_flg:4,		/* flags, see below */
 		ipt_oflw:4;		/* overflow counter */
 #endif
 #if BYTE_ORDER == BIG_ENDIAN
-	u_char	ipt_oflw:4,		/* overflow counter */
+	u_int	ipt_oflw:4,		/* overflow counter */
 		ipt_flg:4;		/* flags, see below */
 #endif
 	union ipt_timestamp {
@@ -188,4 +205,16 @@ struct	ip_timestamp {
 
 #define	IP_MSS		576		/* default maximum segment size */
 
+/*
+ * This is the real IPv4 pseudo header, used for computing the TCP and UDP
+ * checksums. For the Internet checksum, struct ipovly can be used instead.
+ * For stronger checksums, the real thing must be used.
+ */
+struct ippseudo {
+	struct	in_addr	ippseudo_src;	/* source internet address */
+	struct	in_addr	ippseudo_dst;	/* destination internet address */
+	u_char		ippseudo_pad;	/* pad, must be zero */
+	u_char		ippseudo_p;	/* protocol */
+	u_short		ippseudo_len;	/* protocol length */
+};
 #endif

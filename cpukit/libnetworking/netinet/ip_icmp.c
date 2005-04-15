@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,7 +27,11 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip_icmp.c	8.2 (Berkeley) 1/4/94
- *	$Id$
+ * $FreeBSD: src/sys/netinet/ip_icmp.c,v 1.98 2005/01/07 01:45:44 imp Exp $
+ */
+
+/*
+ * $Id$
  */
 
 #include <sys/param.h>
@@ -57,6 +57,19 @@
 #include <netinet/ip_var.h>
 #include <netinet/icmp_var.h>
 
+#ifdef IPSEC
+#include <netinet6/ipsec.h>
+#include <netkey/key.h>
+#endif
+
+#ifdef FAST_IPSEC
+#include <netipsec/ipsec.h>
+#include <netipsec/key.h>
+#define	IPSEC
+#endif
+
+#include <machine/in_cksum.h>
+
 /*
  * ICMP routines: error generation, receive packet processing, and
  * routines to turnaround packets back to the originator, and
@@ -80,9 +93,9 @@ SYSCTL_INT(_net_inet_icmp, OID_AUTO, bmcastecho, CTLFLAG_RW, &icmpbmcastecho,
 int	icmpprintfs = 0;
 #endif
 
-static void	icmp_reflect __P((struct mbuf *));
-static void	icmp_send __P((struct mbuf *, struct mbuf *));
-static int	ip_next_mtu __P((int, int));
+static void	icmp_reflect(struct mbuf *);
+static void	icmp_send(struct mbuf *, struct mbuf *);
+static int	ip_next_mtu(int, int);
 
 extern	struct protosw inetsw[];
 
@@ -131,7 +144,12 @@ icmp_error(n, type, code, dest, destifp)
 	m = m_gethdr(M_DONTWAIT, MT_HEADER);
 	if (m == NULL)
 		goto freeit;
-	icmplen = oiplen + min(8, oip->ip_len);
+#ifdef MAC
+	mac_create_mbuf_netlayer(n, m);
+#endif
+	icmplen = min(oiplen + 8, oip->ip_len);
+	if (icmplen < sizeof(struct ip))
+		panic("icmp_error: bad length");
 	m->m_len = icmplen + ICMP_MINLEN;
 	MH_ALIGN(m, m->m_len);
 	icp = mtod(m, struct icmp *);
@@ -191,17 +209,17 @@ static struct sockaddr_in icmpgw = { sizeof (struct sockaddr_in), AF_INET };
  * Process a received ICMP message.
  */
 void
-icmp_input(m, hlen)
-	register struct mbuf *m;
-	int hlen;
+icmp_input(m, off)
+	struct mbuf *m;
+	int off;
 {
-	register struct icmp *icp;
-	register struct ip *ip = mtod(m, struct ip *);
-	int icmplen = ip->ip_len;
-	register int i;
+	struct icmp *icp;
 	struct in_ifaddr *ia;
-	void (*ctlfunc) __P((int, struct sockaddr *, void *));
-	int code;
+	struct ip *ip = mtod(m, struct ip *);
+	int hlen = off;
+	int icmplen = ip->ip_len;
+	int i, code;
+	void (*ctlfunc)(int, struct sockaddr *, void *);
 
 	/*
 	 * Locate icmp structure in mbuf, and check
@@ -257,7 +275,7 @@ icmp_input(m, hlen)
 			case ICMP_UNREACH_PROTOCOL:
 			case ICMP_UNREACH_PORT:
 			case ICMP_UNREACH_SRCFAIL:
-				code += PRC_UNREACH_NET;
+				code = PRC_UNREACH_NET;
 				break;
 
 			case ICMP_UNREACH_NEEDFRAG:
@@ -506,8 +524,8 @@ static void
 icmp_reflect(m)
 	struct mbuf *m;
 {
-	register struct ip *ip = mtod(m, struct ip *);
-	register struct in_ifaddr *ia;
+	struct ip *ip = mtod(m, struct ip *);
+	struct in_ifaddr *ia;
 	struct in_addr t;
 	struct mbuf *opts = 0;
 	int optlen = (IP_VHL_HL(ip->ip_vhl) << 2) - sizeof(struct ip);
@@ -575,8 +593,11 @@ icmp_reflect(m)
 			    if (opt == IPOPT_NOP)
 				    len = 1;
 			    else {
+				    if (cnt < IPOPT_OLEN + sizeof(*cp))
+					    break;
 				    len = cp[IPOPT_OLEN];
-				    if (len <= 0 || len > cnt)
+				    if (len < IPOPT_OLEN + sizeof(*cp) ||
+				        len > cnt)
 					    break;
 			    }
 			    /*
