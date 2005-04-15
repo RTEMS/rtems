@@ -7,7 +7,7 @@
 void rtemsReboot()
 {
 
-  printk("\Printing a stack trace for your convenience :-)\n");
+  printk("\nPrinting a stack trace for your convenience :-)\n");
   CPU_print_stack();
 
   printk("RTEMS terminated; Rebooting ...\n");

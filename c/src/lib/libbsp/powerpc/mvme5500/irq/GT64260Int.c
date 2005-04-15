@@ -54,7 +54,7 @@ void BSP_GT64260INT_init()
 
 static void UpdateMainIrqTbl(int irqNum)
 {
-  int i=0, j, shifted=0, found=0;
+  int i=0, j, shifted=0;
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   unsigned long val2, val1;
@@ -110,7 +110,7 @@ static void CleanMainIrqTbl(int irqNum)
 */
 void BSP_enable_main_irq(const rtems_irq_symbolic_name irqNum) 
 {
-  unsigned bitNum, mask;
+  unsigned bitNum;
   unsigned int level;
 
   bitNum = ((int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET;
@@ -141,7 +141,7 @@ void BSP_enable_main_irq(const rtems_irq_symbolic_name irqNum)
 void BSP_disable_main_irq(const rtems_irq_symbolic_name irqNum) 
 {
   unsigned bitNum;
-  unsigned int mask, level;
+  unsigned int level;
 
   bitNum = ((int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET;
 

@@ -126,7 +126,7 @@ enum GTeth_hash_op {
 
 #define	ET_MINLEN 64		/* minimum message length */
 
-static int GTeth_ifioctl(struct ifnet *ifp,unsigned cmd, caddr_t data);
+static int GTeth_ifioctl(struct ifnet *ifp, int cmd, caddr_t data);
 static void GTeth_ifstart (struct ifnet *);
 static void GTeth_ifchange(struct GTeth_softc *sc);
 static void GTeth_init_rx_ring(struct GTeth_softc *sc);
@@ -151,19 +151,6 @@ static void GTeth_hash_init(struct GTeth_softc *sc);
 
 static struct GTeth_softc *root_GT64260eth_dev = NULL;
 static int GTeth_MissedFrame_err=0;  
-
-/* We can hard code the address here if config->hardware_address failed */
-static int GTethGet_macaddr(int macno, char *hwaddr)
-{
-  hwaddr[0] = 0x00;
-  hwaddr[1] = 0x01;
-  hwaddr[2] = 0xaf;
-  hwaddr[3] = 0x0b;
-  hwaddr[4] = 0x75;
-  hwaddr[5] = 0x36;
-
-  return 0;
-}
 
 static void GT64260eth_irq_on(const rtems_irq_connect_data *irq)
 {
@@ -536,25 +523,25 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
   printf("       Rx Interrupts:%-8lu\n", sc->stats.rxInterrupts);
   printf("     Receive Packets:%-8lu\n", ifp->if_ipackets);
   printf("     Receive  errors:%-8lu\n", ifp->if_ierrors);
-  printf(" Missed Frame errors:%-8lu\n", GTeth_MissedFrame_err);
+  printf(" Missed Frame errors:%-8u\n",  GTeth_MissedFrame_err);
   printf("      Framing Errors:%-8lu\n", sc->stats.frame_errors);
   printf("          Crc Errors:%-8lu\n", sc->stats.crc_errors);
   printf("    Oversized Frames:%-8lu\n", sc->stats.length_errors);
-  printf("         Active Rxqs:%-8lu\n", sc->rxq_active); 
+  printf("         Active Rxqs:%-8u\n",  sc->rxq_active); 
   printf("       Tx Interrupts:%-8lu\n", sc->stats.txInterrupts);
   printf("Multi-Buffer Packets:%-8lu\n", sc->stats.txMultiBuffPacket);
   printf("   Transmitt Packets:%-8lu\n", ifp->if_opackets);
   printf("   Transmitt  errors:%-8lu\n", ifp->if_oerrors);
   printf("    Tx/Rx collisions:%-8lu\n", ifp->if_collisions);
-  printf("         Active Txqs:%-8lu\n", sc->txq_nactive); 
+  printf("         Active Txqs:%-8u\n", sc->txq_nactive); 
 }
 
 void GT64260eth_err()
 {
-  printf(" Missed Frame errors:%-8lu\n", GTeth_MissedFrame_err);
+  printf(" Missed Frame errors:%-8u\n", GTeth_MissedFrame_err);
 }
 
-static int GTeth_ifioctl(struct ifnet *ifp,unsigned cmd, caddr_t data)
+static int GTeth_ifioctl(struct ifnet *ifp, int cmd, caddr_t data)
 {
   struct GTeth_softc *sc = ifp->if_softc;
   struct ifreq *ifr = (struct ifreq *) data;
@@ -651,7 +638,7 @@ static void GTeth_init_rx_ring(struct GTeth_softc *sc)
   sc->rxq_head_desc = &sc->rxq_desc[0];
   rxd = sc->rxq_head_desc;
 
-  sc->rxq_desc_busaddr = sc->rxq_head_desc;
+  sc->rxq_desc_busaddr = (unsigned long) sc->rxq_head_desc;
 #ifdef GT_DEBUG
   printk("rxq_desc_busaddr %x ,&sc->rxq_desc[0] %x\n",
         sc->rxq_desc_busaddr, sc->rxq_head_desc);
@@ -673,7 +660,7 @@ static void GTeth_init_rx_ring(struct GTeth_softc *sc)
     sc->rxq_mbuf[i] = m;
 
     /* convert mbuf pointer to data pointer of correct type */	
-    rxd->ed_bufptr = mtod(m, void *);
+    rxd->ed_bufptr = (unsigned) mtod(m, void *);
 
     /*
      * update the nxtptr to point to the next txd.
@@ -720,7 +707,6 @@ static int GT64260eth_rx(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
   int nloops=0;
-  unsigned int intr_status = sc->intr_errsts[sc->intr_err_ptr1];
 
   if (GTeth_rx_debug>0) printk("GT64260eth_rx(");
   if (GTeth_rx_debug>5) printk("(%d)", rxprio);
@@ -809,7 +795,7 @@ static int GT64260eth_rx(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
      m->m_pkthdr.rcvif = ifp;
      sc->rxq_mbuf[sc->rxq_fi]= m;
      /* convert mbuf pointer to data pointer of correct type */	
-     rxd->ed_bufptr = mtod(m, void*); 
+     rxd->ed_bufptr = (unsigned) mtod(m, void*); 
      rxd->ed_lencnt = (unsigned long) sc->rx_buf_sz <<16;
      rxd->ed_cmdsts = RX_CMD_F|RX_CMD_L|RX_CMD_O|RX_CMD_EI;
 
@@ -945,7 +931,6 @@ static int txq_high_limit(struct GTeth_softc *sc)
 
 static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m, enum GTeth_txprio txprio)
 {
-  struct ifnet *ifp=&sc->arpcom.ac_if;
   volatile struct GTeth_desc *txd = &sc->txq_desc[sc->txq_lo];
   unsigned intrmask = sc->sc_intrmask;
   unsigned index= sc->txq_lo;
@@ -1000,7 +985,7 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m, enum GTe
   }
   if (m->m_len < ET_MINLEN) m->m_len = ET_MINLEN;
 
-  txd->ed_bufptr = mtod(m, void*); 
+  txd->ed_bufptr = (unsigned) mtod(m, void*); 
   txd->ed_lencnt = m->m_len << 16;
   txd->ed_cmdsts = TX_CMD_L|TX_CMD_GC|TX_CMD_P|TX_CMD_O|TX_CMD_F|TX_CMD_EI; 
 
@@ -1099,7 +1084,7 @@ static void GTeth_tx_start(struct GTeth_softc *sc, enum GTeth_txprio txprio)
 			     ETH_IR_TxEndLow |ETH_IR_TxBufferLow);
 
   txd = &sc->txq_desc[0];
-  sc->txq_desc_busaddr = &sc->txq_desc[0];
+  sc->txq_desc_busaddr = (unsigned long) &sc->txq_desc[0];
 #ifdef GT_DEBUG
   printk("txq_desc_busaddr %x, &sc->txq_desc[0] %x \n",
          sc->txq_desc_busaddr,&sc->txq_desc[0]);
@@ -1139,7 +1124,7 @@ static void GTeth_tx_start(struct GTeth_softc *sc, enum GTeth_txprio txprio)
 	 sc->txq_esdcmrbits = ETH_ESDCMR_TXDH; /* Start Tx high */
 	 sc->txq_epsrbits = ETH_EPSR_TxHigh;
          /* offset to current tx desc ptr reg */
-	 sc->txq_ectdp = ETH0_ECTDP1;
+	 sc->txq_ectdp = (caddr_t)ETH0_ECTDP1;
          /* Current Tx Desc Pointer 1 */
 	 outl(sc->txq_desc_busaddr,ETH0_ECTDP1);
 #ifdef GT_DEBUG
@@ -1151,7 +1136,7 @@ static void GTeth_tx_start(struct GTeth_softc *sc, enum GTeth_txprio txprio)
 	 sc->txq_intrbits = ETH_IR_TxEndLow|ETH_IR_TxBufferLow;
 	 sc->txq_esdcmrbits = ETH_ESDCMR_TXDL; /* Start TX low */
 	 sc->txq_epsrbits = ETH_EPSR_TxLow;
-	 sc->txq_ectdp = ETH0_ECTDP0;
+	 sc->txq_ectdp = (caddr_t)ETH0_ECTDP0;
          /* Current Tx Desc Pointer 0 */
 	 outl(sc->txq_desc_busaddr,ETH0_ECTDP0);
 #ifdef GT_DEBUG

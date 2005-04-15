@@ -176,10 +176,12 @@ void pci_initialize()
 {
   int PciNumber;
   unchar ucBusNumber, ucSlotNumber, ucFnNumber, ucNumFuncs;
-  unchar ucMaxSubordinate;
-  unsigned long ulHeader;
-  unsigned int data, datal, datah, pcidata, ulClass, ulDeviceID;
+  unsigned int ulHeader;
+  unsigned int pcidata, ulDeviceID;
+#if PCI_DEBUG
+  unsigned int data, pcidata, ulClass;
   unsigned short sdata;
+#endif
 
   PCI_interface();
   

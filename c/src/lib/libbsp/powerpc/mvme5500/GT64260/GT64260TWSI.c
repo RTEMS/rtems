@@ -130,7 +130,7 @@ int GT64260TWSIstart()
   return(-1);
 }
 
-int GT64260TWSIread(unsigned char * pData,int lastByte) 
+int GT64260TWSIread(unsigned char * pData, int lastByte) 
 {
   unsigned int loop;		
 
