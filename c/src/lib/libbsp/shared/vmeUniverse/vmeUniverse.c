@@ -904,7 +904,7 @@ vmeUniverseISRGet(unsigned long vector, void **parg)
 }
 
 static void
-universeSpecialISR(void)
+universeSpecialISR(rtems_irq_hdl_param handle)
 {
 register UniverseIRQEntry	ip;
 register unsigned			vec;
@@ -978,7 +978,7 @@ register unsigned long		status;
  */
 
 static void
-universeVMEISR(void)
+universeVMEISR(rtems_irq_hdl_param handle)
 {
 UniverseIRQEntry ip;
 unsigned long lvl,msk,lintstat,linten,status;
@@ -992,7 +992,7 @@ unsigned long lvl,msk,lintstat,linten,status;
 		}
 		if (!lvl) {
 				/* try the special handler */
-				universeSpecialISR();
+				universeSpecialISR(NULL);
 
 				/*
 				 * let the pic end this cycle
