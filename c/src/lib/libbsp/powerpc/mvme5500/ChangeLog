@@ -1,3 +1,7 @@
+2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * startup/linkcmds: add missing section to link cmds
+
 2005-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* pci/pci.h, pci/pcifinddevice.c: Continue PCI API unification. All use

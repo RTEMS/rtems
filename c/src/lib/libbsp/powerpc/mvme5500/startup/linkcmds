@@ -121,8 +121,7 @@ _SDA2_BASE_ = __SDATA2_START__ + 0x8000;
  .data  ALIGN(0x1000)  :
   {
 	PROVIDE(__DATA_START__ = ABSOLUTE(.) );
-    *(.data)
-    *(.gnu.linkonce.d*)	
+    *(.data .data.* .gnu.linkonce.d*)
     CONSTRUCTORS
   } > CODE
   .data1   : { *(.data1) }	> CODE
