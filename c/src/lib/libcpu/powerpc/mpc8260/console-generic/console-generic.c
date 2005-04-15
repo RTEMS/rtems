@@ -102,12 +102,12 @@ static rtems_isr_entry old_handler[NUM_PORTS];
 void m8xx_console_reserve_resources(rtems_configuration_table *);
 static int m8xx_smc_set_attributes(int, const struct termios*);
 static int m8xx_scc_set_attributes(int, const struct termios*);
-static rtems_isr m8xx_smc1_interrupt_handler();
-static rtems_isr m8xx_smc2_interrupt_handler();
-static rtems_isr m8xx_scc1_interrupt_handler();
-static rtems_isr m8xx_scc2_interrupt_handler();
-static rtems_isr m8xx_scc3_interrupt_handler();
-static rtems_isr m8xx_scc4_interrupt_handler();
+static rtems_isr m8xx_smc1_interrupt_handler(rtems_irq_hdl_param unused);
+static rtems_isr m8xx_smc2_interrupt_handler(rtems_irq_hdl_param unused);
+static rtems_isr m8xx_scc1_interrupt_handler(rtems_irq_hdl_param unused);
+static rtems_isr m8xx_scc2_interrupt_handler(rtems_irq_hdl_param unused);
+static rtems_isr m8xx_scc3_interrupt_handler(rtems_irq_hdl_param unused);
+static rtems_isr m8xx_scc4_interrupt_handler(rtems_irq_hdl_param unused);
 
 
 
@@ -352,7 +352,7 @@ m8xx_uart_setAttributes(
  */
 
 static void
-m8xx_scc1_interrupt_handler ()
+m8xx_scc1_interrupt_handler (rtems_irq_hdl_param unused)
 {
   int nb_overflow;
 
@@ -396,7 +396,7 @@ m8xx_scc1_interrupt_handler ()
 }
 
 static void
-m8xx_scc2_interrupt_handler ()
+m8xx_scc2_interrupt_handler (rtems_irq_hdl_param unused)
 {
   int nb_overflow;
 
@@ -441,7 +441,7 @@ m8xx_scc2_interrupt_handler ()
 
 
 static void
-m8xx_scc3_interrupt_handler ()
+m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
 {
   int nb_overflow;
 
@@ -487,7 +487,7 @@ m8xx_scc3_interrupt_handler ()
 
 
 static void
-m8xx_scc4_interrupt_handler ()
+m8xx_scc4_interrupt_handler (rtems_irq_hdl_param unused)
 {
   int nb_overflow;
 
@@ -531,7 +531,7 @@ m8xx_scc4_interrupt_handler ()
 }
 
 static void
-m8xx_smc1_interrupt_handler ()
+m8xx_smc1_interrupt_handler (rtems_irq_hdl_param unused)
 {
   int nb_overflow;
 
@@ -576,7 +576,7 @@ m8xx_smc1_interrupt_handler ()
 
 
 static void
-m8xx_smc2_interrupt_handler ()
+m8xx_smc2_interrupt_handler (rtems_irq_hdl_param unused)
 {
   int nb_overflow;
 
@@ -677,6 +677,7 @@ static rtems_irq_connect_data consoleIrqData =
 {
   BSP_CPM_IRQ_SCC1,
   (rtems_irq_hdl)m8xx_scc1_interrupt_handler,
+  NULL,
   (rtems_irq_enable) m8xx_scc_enable,
   (rtems_irq_disable) m8xx_scc_disable,
   (rtems_irq_is_enabled) m8xx_scc_isOn

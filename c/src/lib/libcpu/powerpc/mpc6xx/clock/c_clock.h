@@ -31,7 +31,7 @@
 
 extern void clockOff	(void* unused);
 extern void clockOn	(void* unused);
-extern void clockIsr	(void);
+extern void clockIsr	(void* unused);
 extern int  clockIsOn	(void* unused);
 
 /*

@@ -74,7 +74,7 @@ void clockOn(void* unused)
  *
  */
 
-void clockIsr()
+void clockIsr(void *unused)
 {
 int decr;
   /*
@@ -201,7 +201,7 @@ rtems_device_driver Clock_control(
       (rtems_configuration_get_microseconds_per_tick()/1000);
 
     if      (args->command == rtems_build_name('I', 'S', 'R', ' '))
-      clockIsr();
+      clockIsr(NULL);
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
 		Clock_initialize(major, minor, 0);

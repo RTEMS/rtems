@@ -1,3 +1,9 @@
+2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * mpc6xx/clock/c_clock.c, mpc6xx/clock/c_clock.h,
+        mpc8260/console-generic/console-generic.c: add parameter to new
+        exception interrupt handlers in powerpc bsps
+
 2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* new-exceptions/cpu.c, rtems/powerpc/powerpc.h: 
