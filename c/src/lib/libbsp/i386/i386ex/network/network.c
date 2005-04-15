@@ -777,7 +777,7 @@ uti596_rxDaemon(void *arg)
 
   struct i596_rfd *pRfd;
   ISR_Level level;
-  int tid;
+  rtems_id tid;
   rtems_event_set events;
   struct ether_header *eh;
 
