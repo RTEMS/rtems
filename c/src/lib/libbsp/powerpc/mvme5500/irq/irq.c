@@ -112,7 +112,7 @@ void GT_GPP_IntHandler0()
         irqNum = bitNum+BSP_GPP_IRQ_LOWEST_OFFSET;
         /* call the necessary interrupt handlers */
         if (rtems_hdl_tbl[irqNum].hdl != default_rtems_entry.hdl)
-	   rtems_hdl_tbl[irqNum].hdl();
+	   rtems_hdl_tbl[irqNum].hdl(rtems_hdl_tbl[irqNum].handle);
         else
 	   gpp_int_error= bitNum; /*GPP interrupt bitNum not connected */
     }
@@ -136,7 +136,7 @@ void GT_GPP_IntHandler1()
         irqNum = bitNum+BSP_GPP8_IRQ_OFFSET;
         /* call the necessary interrupt handlers */
         if (rtems_hdl_tbl[irqNum].hdl != default_rtems_entry.hdl)
-	   rtems_hdl_tbl[irqNum].hdl();
+	   rtems_hdl_tbl[irqNum].hdl(rtems_hdl_tbl[irqNum].handle);
         else
 	   gpp_int_error= bitNum+8; /*GPP interrupt bitNum not connected */
     }
@@ -159,7 +159,7 @@ void GT_GPP_IntHandler2()
         irqNum = bitNum+BSP_GPP16_IRQ_OFFSET;
         /* call the necessary interrupt handlers */
         if (rtems_hdl_tbl[irqNum].hdl != default_rtems_entry.hdl)
-	    rtems_hdl_tbl[irqNum].hdl();
+	    rtems_hdl_tbl[irqNum].hdl(rtems_hdl_tbl[irqNum].handle);
         else
 	   gpp_int_error= bitNum+16; /*GPP interrupt bitNum not connected */
     }
@@ -183,7 +183,7 @@ void GT_GPP_IntHandler3()
         irqNum = bitNum+BSP_GPP24_IRQ_OFFSET;
         /* call the necessary interrupt handlers */
         if (rtems_hdl_tbl[irqNum].hdl != default_rtems_entry.hdl)
-	    rtems_hdl_tbl[irqNum].hdl();
+	    rtems_hdl_tbl[irqNum].hdl(rtems_hdl_tbl[irqNum].handle);
         else
 	   gpp_int_error= bitNum+24; /*GPP interrupt bitNum not connected */
     }
@@ -455,7 +455,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
     
-    rtems_hdl_tbl[BSP_DECREMENTER].hdl();
+    rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
 
     _CPU_MSR_SET(msr);
     return;
@@ -506,7 +506,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
       _CPU_MSR_GET(msr);
       new_msr = msr | MSR_EE;
       _CPU_MSR_SET(new_msr);
-      rtems_hdl_tbl[irq].hdl();
+      rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
       _CPU_MSR_SET(msr);
       break;
     }

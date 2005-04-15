@@ -1,5 +1,11 @@
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
+        PR 779/bsp
+        * irq/irq.c, irq/irq.h, irq/irq_init.c, network/GT64260eth.c: add
+        parameter to new exception interrupt handlers in powerpc bsps
+
+2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
+
         * startup/linkcmds: add missing section to link cmds
 
 2005-03-14	Joel Sherrill <joel@OARcorp.com>

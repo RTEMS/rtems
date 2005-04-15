@@ -222,6 +222,7 @@ static void GT64260eth_isr()
 static rtems_irq_connect_data GT64260ethIrqData={
 	BSP_MAIN_ETH0_IRQ,
 	(rtems_irq_hdl) GT64260eth_isr,
+        NULL,
 	(rtems_irq_enable) GT64260eth_irq_on,
 	(rtems_irq_disable) GT64260eth_irq_off,
 	(rtems_irq_is_enabled) GT64260eth_irq_is_on, 
