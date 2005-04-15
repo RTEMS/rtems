@@ -25,6 +25,7 @@ extern void Clock_isr();
 
 static rtems_irq_connect_data clockIrqData = {BSP_PERIODIC_TIMER,
 					      (rtems_irq_hdl)Clock_isr,
+					      NULL,
 					      (rtems_irq_enable)clockOn,
 					      (rtems_irq_disable)clockOff,
 					      (rtems_irq_is_enabled)clockIsOn};

@@ -437,7 +437,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 		new_msr = msr | MSR_EE;
 		_CPU_MSR_SET(new_msr);
 
-		rtems_hdl_tbl[BSP_DECREMENTER].hdl();
+		rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
 
 		_CPU_MSR_SET(msr);
 
@@ -482,7 +482,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 			_CPU_MSR_SET(new_msr);
 
 			/* call handler */
-			rtems_hdl_tbl[irq].hdl();
+			rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
 
 			/* disable exceptions again */
 			_CPU_MSR_SET(msr);

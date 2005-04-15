@@ -150,7 +150,7 @@ static int  m8xx_scc3_hdlc_isOn(const rtems_irq_connect_data* ptr)
  *      SCCs.
  */
 static void
-m8xx_scc3_interrupt_handler ()
+m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
 {
   /*
    * Frame received?
@@ -188,6 +188,7 @@ m8xx_scc3_interrupt_handler ()
 static rtems_irq_connect_data hdlcSCC3IrqData = {
   BSP_CPM_IRQ_SCC3,
   (rtems_irq_hdl) m8xx_scc3_interrupt_handler,
+  NULL,
   (rtems_irq_enable) m8xx_scc3_hdlc_on,
   (rtems_irq_disable) m8xx_scc3_hdlc_off,
   (rtems_irq_is_enabled)m8xx_scc3_hdlc_isOn
