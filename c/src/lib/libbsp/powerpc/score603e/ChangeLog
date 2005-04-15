@@ -1,3 +1,7 @@
+2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * clock/clock.c: Fix multiple defined warning
+
 2005-04-11	Jennifer Averett<jennifer.averett@oarcorp.com>
 
 	PR 778/bsps
