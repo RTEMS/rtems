@@ -270,10 +270,6 @@ $(PROJECT_INCLUDE)/nfs/nfs.h: nfs/nfs.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/nfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/nfs.h
 
-$(PROJECT_INCLUDE)/nfs/nfsdiskless.h: nfs/nfsdiskless.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/nfsdiskless.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/nfsdiskless.h
-
 $(PROJECT_INCLUDE)/nfs/nfsproto.h: nfs/nfsproto.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/nfsproto.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/nfsproto.h
@@ -285,6 +281,19 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/rpcv2.h
 $(PROJECT_INCLUDE)/nfs/xdr_subs.h: nfs/xdr_subs.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/xdr_subs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/xdr_subs.h
+
+$(PROJECT_INCLUDE)/nfsclient/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/nfsclient
+	@: > $(PROJECT_INCLUDE)/nfsclient/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/nfsclient/$(dirstamp)
+
+$(PROJECT_INCLUDE)/nfsclient/nfsargs.h: nfsclient/nfsargs.h $(PROJECT_INCLUDE)/nfsclient/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfsclient/nfsargs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfsclient/nfsargs.h
+
+$(PROJECT_INCLUDE)/nfsclient/nfsdiskless.h: nfsclient/nfsdiskless.h $(PROJECT_INCLUDE)/nfsclient/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfsclient/nfsdiskless.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfsclient/nfsdiskless.h
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems

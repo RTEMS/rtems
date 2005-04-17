@@ -1,3 +1,18 @@
+2005-04-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/mount.h: Remove nfs_args.
+	* libnetworking/nfsclient/nfsargs.h: New (extracted from
+	sys/mount.h).
+	* libnetworking/nfsclient/nfsdiskless.h: New (Relocated from nfs/).
+	* libnetworking/nfs/nfsdiskless.h: Remove.
+	* libnetworking/net/netisr.h: Partial update from FreeBSD.
+	* libnetworking/net/rtsock.c: Cosmetical update from FreeBSD.
+	* libnetworking/sys/socket.h: Cosmetical update from FreeBSD.
+	* libnetworking/sys/queue.h: Cosmetical update from FreeBSD.
+	Remove special casing of arm/mips.
+	* libnetworking/nfs/bootp_subr.c: Reflect having introduced nfsclient/.
+	* libnetworking/Makefile.am: Remove changes above.
+
 2005-04-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if_arp.h, libnetworking/netinet/ip.h,
