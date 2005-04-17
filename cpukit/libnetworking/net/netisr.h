@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)netisr.h	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/net/netisr.h,v 1.33 2005/01/07 01:45:35 imp Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -45,9 +45,6 @@
  * level for the clock (so you can enter the network in routines called
  * at timeout time).
  */
-#if defined(vax) || defined(tahoe)
-#define	setsoftnet()	mtpr(SIRR, 12)
-#endif
 
 /*
  * Each ``pup-level-1'' input queue has a bit in a ``netisr'' status
@@ -58,7 +55,6 @@
 #define	NETISR_RAW	0		/* same as AF_UNSPEC */
 #define	NETISR_IP	2		/* same as AF_INET */
 #define	NETISR_IMP	3		/* same as AF_IMPLINK */
-#define	NETISR_NS	6		/* same as AF_NS */
 #define	NETISR_ISO	7		/* same as AF_ISO */
 #define	NETISR_CCITT	10		/* same as AF_CCITT */
 #define NETISR_ATALK    16              /* same as AF_APPLETALK */
