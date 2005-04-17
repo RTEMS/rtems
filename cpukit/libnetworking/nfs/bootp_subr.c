@@ -65,7 +65,8 @@
 #include <nfs/rpcv2.h>
 #include <nfs/nfsproto.h>
 #include <nfs/nfs.h>
-#include <nfs/nfsdiskless.h>
+#include <nfsclient/nfsargs.h>
+#include <nfsclient/nfsdiskless.h>
 #include <nfs/krpc.h>
 #include <nfs/xdr_subs.h>
 
