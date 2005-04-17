@@ -1,5 +1,9 @@
 2005-04-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/rtsock.c: More updates from FreeBSD.
+
+2005-04-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/sys/mount.h: Remove nfs_args.
 	* libnetworking/nfsclient/nfsargs.h: New (extracted from
 	sys/mount.h).
