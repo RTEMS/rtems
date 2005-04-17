@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)queue.h	8.5 (Berkeley) 8/20/94
- * $FreeBSD: src/sys/sys/queue.h,v 1.54 2002/08/05 05:18:43 alfred Exp $
+ * $FreeBSD: src/sys/sys/queue.h,v 1.60 2005/03/02 21:33:29 joerg Exp $
  */
 
 #ifndef _SYS_QUEUE_H_
@@ -568,13 +564,8 @@ struct {								\
 #ifdef	__GNUC__
 
 struct quehead {
-#if (defined(__arm__) || defined(__mips__))
-    struct quehead *qh_link  __attribute__((packed));
-    struct quehead *qh_rlink __attribute__((packed));
-#else /* !defined(__arm__)) */
     struct quehead *qh_link;
     struct quehead *qh_rlink;
-#endif 
 };
 
 static __inline void
