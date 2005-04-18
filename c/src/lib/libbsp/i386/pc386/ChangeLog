@@ -1,3 +1,8 @@
+2005-04-18      Eric Valette <eric.valette@free.fr>
+
+        * clock/ckinit.c, console/console.c, console/ps2_mouse.c,
+        console/serial_mouse.c, timer/timer.c: Added parameter to irq handler
+
 2005-02-18	Joel Sherrill <joel@OARcorp.com>
 
 	* console/keyboard.h: Add include file and cleanup file header.

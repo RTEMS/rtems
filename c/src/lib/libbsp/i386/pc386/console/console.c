@@ -86,10 +86,11 @@ static int  isr_is_on(const rtems_irq_connect_data *);
 extern int rtems_kbpoll( void );
 
 static rtems_irq_connect_data console_isr_data = {BSP_KEYBOARD,
-                     keyboard_interrupt,
-						   isr_on,
-						   isr_off,
-						   isr_is_on};
+                                                  keyboard_interrupt,
+                                                  0,
+                                                  isr_on,
+                                                  isr_off,
+                                                  isr_is_on};
 
 static void
 isr_on(const rtems_irq_connect_data *unused)

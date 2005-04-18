@@ -189,7 +189,8 @@ timerOn(const rtems_raw_irq_connect_data* used)
 static int
 timerIsOn(const rtems_raw_irq_connect_data *used)
 {
-     return BSP_irq_enabled_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);}
+     return BSP_irq_enabled_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+}
 
 static rtems_raw_irq_connect_data timer_raw_irq_data = {
   BSP_PERIODIC_TIMER + BSP_IRQ_VECTOR_BASE,

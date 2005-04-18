@@ -18,6 +18,9 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.7  2004/04/21 16:01:33  ralf
+ * Remove duplicate white lines.
+ *
  * Revision 1.6  2004/04/21 10:42:44  ralf
  * Remove stray white spaces.
  *
@@ -92,6 +95,7 @@ static rtems_irq_connect_data serial_mouse_isr_data =
 {
   BSP_UART_IRQ,
   BSP_ISR_FUNC,
+  0,
   isr_on,
   isr_off,
   isr_is_on};
