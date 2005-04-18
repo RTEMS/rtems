@@ -361,6 +361,7 @@ extern	void ether_demux(struct ifnet *, struct mbuf *);
 extern  void ether_ifattach(struct ifnet *);
 extern	void ether_ifdetach(struct ifnet *);
 extern	int  ether_ioctl(struct ifnet *, int, caddr_t);
+extern  void	ether_input (struct ifnet *, struct ether_header *, struct mbuf *);
 extern	int  ether_output(struct ifnet *,
 		   struct mbuf *, struct sockaddr *, struct rtentry *);
 extern	int  ether_output_frame(struct ifnet *, struct mbuf *);

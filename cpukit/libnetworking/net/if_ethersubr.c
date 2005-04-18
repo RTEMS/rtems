@@ -520,14 +520,14 @@ ether_input(ifp, eh, m)
  * is protected by the RTEMS network mutex.
  */
 char *
-ether_sprintf(const u_int8_t *addr)
+ether_sprintf(const u_char *ap)
 {
 	static char buf[32];
 	char *b = buf;
 	int i;
 
 	for (i = 0; i < ETHER_ADDR_LEN; i++, b+=3)
-		sprintf(b, "%02x:", *addr++);
+		sprintf(b, "%02x:", *ap++);
 	*--b = '\0';
 	return buf;
 }
@@ -848,7 +848,7 @@ ether_ioctl(struct ifnet *ifp, int command, caddr_t data)
 		 */
 		case AF_IPX:
 			{
-			register struct ipx_addr *ina = &(IA_SIPX(ifa)->sipx_addr);
+			struct ipx_addr *ina = &(IA_SIPX(ifa)->sipx_addr);
 			struct arpcom *ac = (struct arpcom *) (ifp->if_softc);
 
 			if (ipx_nullhost(*ina))

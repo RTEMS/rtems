@@ -51,6 +51,7 @@
 #include <net/if.h>
 #include <net/if_dl.h>
 #include <net/if_types.h>
+#include <net/if_var.h>
 #include <net/radix.h>
 
 /*
@@ -79,8 +80,7 @@ struct	ifnet *ifnet;
  */
 /* ARGSUSED*/
 void
-ifinit(dummy)
-	void *dummy;
+ifinit(void *dummy)
 {
 	struct ifnet *ifp;
 
@@ -475,7 +475,7 @@ ifunit(char *name)
  * Interface ioctls.
  */
 int
-ifioctl(struct socket *so, int cmd, caddr_t data, struct proc *p)
+ifioctl(struct socket *so, u_long cmd, caddr_t data, struct proc *p)
 {
 	struct ifnet *ifp;
 	struct ifreq *ifr;
@@ -582,7 +582,7 @@ ifioctl(struct socket *so, int cmd, caddr_t data, struct proc *p)
 		error = suser(p->p_ucred, &p->p_acflag);
 		if (error)
 			return (error);
-		if (ifp->if_ioctl == 0)
+		if (ifp->if_ioctl == NULL)
 			return (EOPNOTSUPP);
 		error = (*ifp->if_ioctl)(ifp, cmd, data);
 		if (error == 0)
@@ -590,7 +590,7 @@ ifioctl(struct socket *so, int cmd, caddr_t data, struct proc *p)
 		return error;
 
 	case SIOCGIFMEDIA:
-		if (ifp->if_ioctl == 0)
+		if (ifp->if_ioctl == NULL)
 			return (EOPNOTSUPP);
 		return ((*ifp->if_ioctl)(ifp, cmd, data));
 

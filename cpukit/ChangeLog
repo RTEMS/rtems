@@ -1,5 +1,8 @@
 2005-04-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ethernet.h: Add RTEMS outdated either_input.
+	* libnetworking/net/if.c: Partial update from FreeBSD.
+	* libnetworking/net/if_ethersubr.c: Partial update from FreeBSD.
 	* libnetworking/net/if_var.h: New (extracted from net/if.h).
 	* libnetworking/Makefile.am: Add net/if_var.h.
 
