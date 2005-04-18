@@ -1,5 +1,10 @@
 2005-04-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if.c, libnetworking/net/if.h,
+	libnetworking/sys/mbuf.h: Cosmetics from FreeBSD.
+
+2005-04-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/sys/mount.h: More updates from FreeBSD.
 	Remove ufs, mfs, dosfs, isofs.
 	* libnetworking/nfsclient/nfsargs.h: More updates from FreeBSD.
