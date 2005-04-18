@@ -1,3 +1,8 @@
+2005-04-18      Eric Valette <eric.valette@free.fr>
+
+        * irq/irq.c, irq/irq.h, irq/irq_asm.S, irq/irq_init.c: Added parameter
+        to irq handler
+
 2005-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* pci/pcibios.c, pci/pcibios.h: Continue PCI API unification. All use

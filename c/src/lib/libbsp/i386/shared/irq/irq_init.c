@@ -81,8 +81,8 @@ static rtems_raw_irq_connect_data 	defaultRawIrq = {
 };
 
 static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,	 hdl		, on		, off		, isOn */
-  0, 			 nop_func	, nop_func	, nop_func	, not_connected
+  /* vectorIdex,	 hdl		, handle	, on		, off		, isOn */
+  0, 			 nop_func	, 0		, nop_func	, nop_func	, not_connected
 };
 
 static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={

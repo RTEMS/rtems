@@ -107,9 +107,13 @@ nested:
 	 */
 
         pushl     ecx                       /* push vector number */
-        mov       SYM (current_irq) (,ecx,4),eax
-                                            /* eax = Users handler */
-        call      *eax                      /* invoke user ISR */
+        lea       (ecx,ecx,2), eax
+        mov       SYM (rtems_hdl_tbl), edx
+        shl       $0x3,eax
+        pushl     0x8(edx,eax,1)            /* push hdl argument */
+        call      *0x4(edx,eax,1)           /* call hdl */
+        addl      $4, esp
+
 	/*
 	 * disable interrupts_again
 	 */

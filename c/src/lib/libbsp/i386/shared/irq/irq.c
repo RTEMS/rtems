@@ -27,13 +27,6 @@
 rtems_i8259_masks 	irq_mask_or_tbl[BSP_IRQ_LINES_NUMBER];
 
 /*
- * Copy of data given via initial BSP_rtems_irq_mngt_set() for
- * the sake of efficiency.
- * CAUTION : this table is accessed directly by interrupt routine
- * 	     prologue.
- */
-rtems_irq_hdl		current_irq[BSP_IRQ_LINES_NUMBER];
-/*
  * default handler connected on each irq after bsp initialization
  */
 static rtems_irq_connect_data	default_rtems_entry;
@@ -43,7 +36,7 @@ static rtems_irq_connect_data	default_rtems_entry;
  * management.
  */
 static rtems_irq_global_settings* 	internal_config;
-static rtems_irq_connect_data*		rtems_hdl_tbl;
+rtems_irq_connect_data*			rtems_hdl_tbl;
 /*-------------------------------------------------------------------------+
 | Cache for 1st and 2nd PIC IRQ line's status (enabled or disabled) register.
 +--------------------------------------------------------------------------*/
@@ -190,19 +183,6 @@ static void compute_i8259_masks_from_prio ()
 }
 
 /*
- * Caution : this function assumes the variable "internal_config"
- * is already set and that the tables it contains are still valid
- * and accessible.
- */
-static void make_copy_of_handlers ()
-{
-  int i;
-  for (i=0; i < internal_config->irqNb; i++) {
-    current_irq [i] = internal_config->irqHdlTbl[i].hdl;
-  }
-}
-
-/*
  * This function check that the value given for the irq line
  * is valid.
  */
@@ -242,10 +222,6 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * store the data provided by user
      */
     rtems_hdl_tbl[irq->name] = *irq;
-    /*
-     * update table used directly by rtems interrupt prologue
-     */
-    current_irq [irq->name] = irq->hdl;
     /*
      * Enable interrupt at PIC level
      */
@@ -308,8 +284,6 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      */
     rtems_hdl_tbl[irq->name] = default_rtems_entry;
 
-    current_irq[irq->name] = default_rtems_entry.hdl;
-
     _CPU_ISR_Enable(level);
 
     return 1;
@@ -335,7 +309,6 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
      * set up internal tables used by rtems interrupt prologue
      */
     compute_i8259_masks_from_prio ();
-    make_copy_of_handlers ();
 
     for (i=0; i < internal_config->irqNb; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
@@ -379,3 +352,9 @@ void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
    * This will include DEBUG session requested from keyboard...
    */
 }
+
+void processIrq(unsigned index)
+{
+  rtems_hdl_tbl[index].hdl(rtems_hdl_tbl[index].handle);
+}
+
