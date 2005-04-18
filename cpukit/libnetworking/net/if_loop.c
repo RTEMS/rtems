@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_loop.c	8.2 (Berkeley) 1/9/95
- * $FreeBSD: src/sys/net/if_loop.c,v 1.102 2004/08/27 18:33:07 andre Exp $
+ * $FreeBSD: src/sys/net/if_loop.c,v 1.104 2005/02/24 01:34:01 sam Exp $
  */
 
 /*
@@ -83,14 +83,12 @@
 #ifdef NETATALK
 #include <netatalk/at.h>
 #include <netatalk/at_var.h>
-#endif /* NETATALK */
+#endif
 
-#include "bpfilter.h"
+static int loioctl(struct ifnet *, u_long, caddr_t);
+static void lortrequest(int, struct rtentry *, struct sockaddr *);
 
-static int loioctl __P((struct ifnet *, int, caddr_t));
-static void lortrequest __P((int, struct rtentry *, struct sockaddr *));
-
-       void rtems_bsdnet_loopattach __P((void *));
+       void rtems_bsdnet_loopattach(void *);
 PSEUDO_SET(loopattach, if_loop);
 
 #ifdef TINY_LOMTU
@@ -246,7 +244,7 @@ lortrequest(cmd, rt, sa)
 static int
 loioctl(ifp, cmd, data)
 	register struct ifnet *ifp;
-	int cmd;
+	u_long cmd;
 	caddr_t data;
 {
 	register struct ifaddr *ifa;
@@ -276,6 +274,10 @@ loioctl(ifp, cmd, data)
 		case AF_INET:
 			break;
 #endif
+#ifdef INET6
+		case AF_INET6:
+			break;
+#endif
 
 		default:
 			error = EAFNOSUPPORT;
@@ -285,6 +287,9 @@ loioctl(ifp, cmd, data)
 
 	case SIOCSIFMTU:
 		ifp->if_mtu = ifr->ifr_mtu;
+		break;
+
+	case SIOCSIFFLAGS:
 		break;
 
 	default:

@@ -1,5 +1,9 @@
 2005-04-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if.h: Update from FreeBSD.
+	* libnetworking/net/if_loop.c: Reflect updates.
+	* libnetworking/net/if_ppp.c: Reflect updates.
+	* libnetworking/net/if_types.h: Update from FreeBSD.
 	* libnetworking/net/ethernet.h: Add RTEMS outdated either_input.
 	* libnetworking/net/if.c: Partial update from FreeBSD.
 	* libnetworking/net/if_ethersubr.c: Partial update from FreeBSD.

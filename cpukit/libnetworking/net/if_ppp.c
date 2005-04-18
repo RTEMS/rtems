@@ -127,7 +127,7 @@
 #include <net/ppp-comp.h>
 #endif
 
-static int	pppsioctl(struct ifnet *, int, caddr_t);
+static int	pppsioctl(struct ifnet *ifp, u_long cmd, caddr_t data);
 static void	ppp_requeue(struct ppp_softc *);
 #ifdef PPP_COMPRESS
 static void	ppp_ccp(struct ppp_softc *, struct mbuf *m, int rcvd);
@@ -833,10 +833,7 @@ pppioctl(sc, cmd, data, flag, p)
  * Process an ioctl request to the ppp network interface.
  */
 static int
-pppsioctl(ifp, cmd, data)
-    register struct ifnet *ifp;
-    int cmd;
-    caddr_t data;
+pppsioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
 {
     /*struct proc *p = curproc;*/	/* XXX */
     register struct ppp_softc *sc = &ppp_softc[ifp->if_unit];
