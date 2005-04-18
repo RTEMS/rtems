@@ -245,7 +245,7 @@ typedef void if_init_f_t __P((void *));
 #define	IFF_NOARP	0x80		/* no address resolution protocol */
 #define	IFF_PROMISC	0x100		/* receive all packets */
 #define	IFF_ALLMULTI	0x200		/* receive all multicast packets */
-#define	IFF_OACTIVE	0x400		/* transmission in progress */
+#define	IFF_OACTIVE	0x400		/* tx hardware queue is full */
 #define	IFF_SIMPLEX	0x800		/* can't hear own transmissions */
 #define	IFF_LINK0	0x1000		/* per link layer defined bit */
 #define	IFF_LINK1	0x2000		/* per link layer defined bit */
@@ -511,7 +511,6 @@ void	if_up(struct ifnet *);
 /*void	ifinit __P((void));*/ /* declared in systm.h for main() */
 int	ifioctl(struct socket *, int, caddr_t, struct proc *);
 int	ifpromisc(struct ifnet *, int);
-struct	ifnet *ifunit(char *);
 
 struct	ifaddr *ifa_ifwithaddr(struct sockaddr *);
 struct	ifaddr *ifa_ifwithdstaddr(struct sockaddr *);

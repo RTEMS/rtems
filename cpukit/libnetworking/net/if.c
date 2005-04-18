@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -30,7 +26,11 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	@(#)if.c	8.3 (Berkeley) 1/4/94
+ *	@(#)if.c	8.5 (Berkeley) 1/9/95
+ * $FreeBSD: src/sys/net/if.c,v 1.226 2005/04/15 01:51:26 cperciva Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -57,11 +57,11 @@
  * System initialization
  */
 
-static int ifconf __P((int, caddr_t));
-       void ifinit __P((void *));
-static void if_qflush __P((struct ifqueue *));
-static void if_slowtimo __P((void *));
-static void link_rtrequest __P((int, struct rtentry *, struct sockaddr *));
+static int ifconf(u_long, caddr_t);
+       void ifinit(void *);
+static void if_qflush(struct ifqueue *);
+static void if_slowtimo(void *);
+static void link_rtrequest(int, struct rtentry *, struct sockaddr *);
 
 SYSINIT(interfaces, SI_SUB_PROTO_IF, SI_ORDER_FIRST, ifinit, NULL)
 
@@ -82,7 +82,7 @@ void
 ifinit(dummy)
 	void *dummy;
 {
-	register struct ifnet *ifp;
+	struct ifnet *ifp;
 
 	for (ifp = ifnet; ifp; ifp = ifp->if_next)
 		if (ifp->if_snd.ifq_maxlen == 0)
@@ -99,15 +99,14 @@ struct ifaddr **ifnet_addrs;
  * list of "active" interfaces.
  */
 void
-if_attach(ifp)
-	struct ifnet *ifp;
+if_attach(struct ifnet *ifp)
 {
 	unsigned socksize, ifasize;
 	int namelen, masklen;
 	char workbuf[64];
-	register struct ifnet **p = &ifnet;
-	register struct sockaddr_dl *sdl;
-	register struct ifaddr *ifa;
+	struct ifnet **p = &ifnet;
+	struct sockaddr_dl *sdl;
+	struct ifaddr *ifa;
 	static int if_indexlim = 8;
 
 
@@ -168,11 +167,10 @@ if_attach(ifp)
  */
 /*ARGSUSED*/
 struct ifaddr *
-ifa_ifwithaddr(addr)
-	register struct sockaddr *addr;
+ifa_ifwithaddr(struct sockaddr *addr)
 {
-	register struct ifnet *ifp;
-	register struct ifaddr *ifa;
+	struct ifnet *ifp;
+	struct ifaddr *ifa;
 
 #define	equal(a1, a2) \
   (bcmp((caddr_t)(a1), (caddr_t)(a2), ((struct sockaddr *)(a1))->sa_len) == 0)
@@ -193,11 +191,10 @@ ifa_ifwithaddr(addr)
  */
 /*ARGSUSED*/
 struct ifaddr *
-ifa_ifwithdstaddr(addr)
-	register struct sockaddr *addr;
+ifa_ifwithdstaddr(struct sockaddr *addr)
 {
-	register struct ifnet *ifp;
-	register struct ifaddr *ifa;
+	struct ifnet *ifp;
+	struct ifaddr *ifa;
 
 	for (ifp = ifnet; ifp; ifp = ifp->if_next)
 	    if (ifp->if_flags & IFF_POINTOPOINT)
@@ -215,23 +212,22 @@ ifa_ifwithdstaddr(addr)
  * is most specific found.
  */
 struct ifaddr *
-ifa_ifwithnet(addr)
-	struct sockaddr *addr;
+ifa_ifwithnet(struct sockaddr *addr)
 {
-	register struct ifnet *ifp;
-	register struct ifaddr *ifa;
+	struct ifnet *ifp;
+	struct ifaddr *ifa;
 	struct ifaddr *ifa_maybe = (struct ifaddr *) 0;
 	u_int af = addr->sa_family;
 	char *addr_data = addr->sa_data, *cplim;
 
 	if (af == AF_LINK) {
-	    register struct sockaddr_dl *sdl = (struct sockaddr_dl *)addr;
+	    struct sockaddr_dl *sdl = (struct sockaddr_dl *)addr;
 	    if (sdl->sdl_index && sdl->sdl_index <= if_index)
 		return (ifnet_addrs[sdl->sdl_index - 1]);
 	}
 	for (ifp = ifnet; ifp; ifp = ifp->if_next) {
 		for (ifa = ifp->if_addrlist; ifa; ifa = ifa->ifa_next) {
-			register char *cp, *cp2, *cp3;
+			char *cp, *cp2, *cp3;
 
 			if (ifa->ifa_addr->sa_family != af)
 				next: continue;
@@ -264,10 +260,18 @@ ifa_ifwithnet(addr)
 				cp = addr_data;
 				cp2 = ifa->ifa_addr->sa_data;
 				cp3 = ifa->ifa_netmask->sa_data;
-				cplim = ifa->ifa_netmask->sa_len + (char *)ifa->ifa_netmask;
+				cplim = ifa->ifa_netmask->sa_len 
+					+ (char *)ifa->ifa_netmask;
 				while (cp3 < cplim)
 					if ((*cp++ ^ *cp2++) & *cp3++)
-						goto next;
+						goto next; /* next address! */
+				/*
+				 * If the netmask of what we just found
+				 * is more specific than what we had before
+				 * (if we had one) then remember the new one
+				 * before continuing to search
+				 * for an even better one.
+				 */
 				if (ifa_maybe == 0 ||
 				    rn_refines((caddr_t)ifa->ifa_netmask,
 				    (caddr_t)ifa_maybe->ifa_netmask))
@@ -283,13 +287,11 @@ ifa_ifwithnet(addr)
  * a given address.
  */
 struct ifaddr *
-ifaof_ifpforaddr(addr, ifp)
-	struct sockaddr *addr;
-	register struct ifnet *ifp;
+ifaof_ifpforaddr(struct sockaddr *addr, struct ifnet *ifp)
 {
-	register struct ifaddr *ifa;
-	register char *cp, *cp2, *cp3;
-	register char *cplim;
+	struct ifaddr *ifa;
+	char *cp, *cp2, *cp3;
+	char *cplim;
 	struct ifaddr *ifa_maybe = 0;
 	u_int af = addr->sa_family;
 
@@ -332,12 +334,9 @@ ifaof_ifpforaddr(addr, ifp)
  * This should be moved to /sys/net/link.c eventually.
  */
 static void
-link_rtrequest(cmd, rt, sa)
-	int cmd;
-	register struct rtentry *rt;
-	struct sockaddr *sa;
+link_rtrequest(int cmd, struct rtentry *rt, struct sockaddr *sa)
 {
-	register struct ifaddr *ifa;
+	struct ifaddr *ifa;
 	struct sockaddr *dst;
 	struct ifnet *ifp;
 
@@ -360,10 +359,9 @@ link_rtrequest(cmd, rt, sa)
  * NOTE: must be called at splnet or eqivalent.
  */
 void
-if_down(ifp)
-	register struct ifnet *ifp;
+if_down(struct ifnet *ifp)
 {
-	register struct ifaddr *ifa;
+	struct ifaddr *ifa;
 
 	ifp->if_flags &= ~IFF_UP;
 	microtime(&ifp->if_lastchange);
@@ -379,14 +377,13 @@ if_down(ifp)
  * NOTE: must be called at splnet or eqivalent.
  */
 void
-if_up(ifp)
-	register struct ifnet *ifp;
+if_up(struct ifnet *ifp)
 {
 
 	ifp->if_flags |= IFF_UP;
 	microtime(&ifp->if_lastchange);
 #ifdef notyet
-	register struct ifaddr *ifa;
+	struct ifaddr *ifa;
 	/* this has no effect on IP, and will kill all iso connections XXX */
 	for (ifa = ifp->if_addrlist; ifa; ifa = ifa->ifa_next)
 		pfctlinput(PRC_IFUP, ifa->ifa_addr);
@@ -398,10 +395,9 @@ if_up(ifp)
  * Flush an interface queue.
  */
 static void
-if_qflush(ifq)
-	register struct ifqueue *ifq;
+if_qflush(struct ifqueue *ifq)
 {
-	register struct mbuf *m, *n;
+	struct mbuf *m, *n;
 
 	n = ifq->ifq_head;
 	while ((m = n) != 0) {
@@ -419,10 +415,9 @@ if_qflush(ifq)
  * call the appropriate interface routine on expiration.
  */
 static void
-if_slowtimo(arg)
-	void *arg;
+if_slowtimo(void *arg)
 {
-	register struct ifnet *ifp;
+	struct ifnet *ifp;
 	int s = splimp();
 
 	for (ifp = ifnet; ifp; ifp = ifp->if_next) {
@@ -440,11 +435,10 @@ if_slowtimo(arg)
  * interface structure pointer.
  */
 struct ifnet *
-ifunit(name)
-	register char *name;
+ifunit(char *name)
 {
-	register char *cp;
-	register struct ifnet *ifp;
+	char *cp;
+	struct ifnet *ifp;
 	int unit;
 	unsigned len;
 	char *ep, c;
@@ -481,14 +475,10 @@ ifunit(name)
  * Interface ioctls.
  */
 int
-ifioctl(so, cmd, data, p)
-	struct socket *so;
-	int cmd;
-	caddr_t data;
-	struct proc *p;
+ifioctl(struct socket *so, int cmd, caddr_t data, struct proc *p)
 {
-	register struct ifnet *ifp;
-	register struct ifreq *ifr;
+	struct ifnet *ifp;
+	struct ifreq *ifr;
 	int error;
 
 	switch (cmd) {
@@ -686,9 +676,7 @@ ifioctl(so, cmd, data, p)
  * Results are undefined if the "off" and "on" requests are not matched.
  */
 int
-ifpromisc(ifp, pswitch)
-	struct ifnet *ifp;
-	int pswitch;
+ifpromisc(struct ifnet *ifp, int pswitch)
 {
 	struct ifreq ifr;
 
@@ -721,13 +709,11 @@ ifpromisc(ifp, pswitch)
  */
 /*ARGSUSED*/
 static int
-ifconf(cmd, data)
-	int cmd;
-	caddr_t data;
+ifconf(u_long cmd, caddr_t data)
 {
-	register struct ifconf *ifc = (struct ifconf *)data;
-	register struct ifnet *ifp = ifnet;
-	register struct ifaddr *ifa;
+	struct ifconf *ifc = (struct ifconf *)data;
+	struct ifnet *ifp = ifnet;
+	struct ifaddr *ifa;
 	struct ifreq ifr, *ifrp;
 	int space = ifc->ifc_len, error = 0;
 
@@ -752,7 +738,7 @@ ifconf(cmd, data)
 			space -= sizeof (ifr), ifrp++;
 		} else
 		    for ( ; space > sizeof (ifr) && ifa; ifa = ifa->ifa_next) {
-			register struct sockaddr *sa = ifa->ifa_addr;
+			struct sockaddr *sa = ifa->ifa_addr;
 #ifdef COMPAT_43
 			if (cmd == OSIOCGIFCONF) {
 				struct osockaddr *osa =

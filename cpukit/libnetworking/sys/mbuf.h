@@ -10,11 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
- * 4. Neither the name of the University nor the names of its contributors
+ * 3. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -31,9 +27,13 @@
  * SUCH DAMAGE.
  *
  *	@(#)mbuf.h	8.5 (Berkeley) 2/19/95
- * $Id$
+ * $FreeBSD: src/sys/sys/mbuf.h,v 1.169 2005/03/17 19:34:57 jmg Exp $
  */
 
+/*
+ * $Id$
+ */
+ 
 #ifndef _SYS_MBUF_H_
 #define _SYS_MBUF_H_
 
@@ -63,27 +63,33 @@
  * cltom(x) -	convert cluster # to ptr to beginning of cluster
  */
 #define	mtod(m,t)	((t)((m)->m_data))
-#define	dtom(x)		((struct mbuf *)((long)(x) & ~(MSIZE-1)))
+#define	dtom(x)		((struct mbuf *)((intptr_t)(x) & ~(MSIZE-1)))
 #define	mtocl(x)	(((u_long)(x) - (u_long)mbutl) >> MCLSHIFT)
 #define	cltom(x)	((caddr_t)((u_long)mbutl + ((u_long)(x) << MCLSHIFT)))
 
-/* header at beginning of each mbuf: */
+/*
+ * Header present at the beginning of every mbuf.
+ */
 struct m_hdr {
 	struct	mbuf *mh_next;		/* next buffer in chain */
 	struct	mbuf *mh_nextpkt;	/* next chain in queue/record */
 	caddr_t	mh_data;		/* location of data */
 	int	mh_len;			/* amount of data in this mbuf */
+	int	mh_flags;		/* flags; see below */
 	short	mh_type;		/* type of data in this mbuf */
-	short	mh_flags;		/* flags; see below */
 };
 
-/* record/packet header in first mbuf of chain; valid if M_PKTHDR set */
+/*
+ * Record/packet header in first mbuf of chain; valid only if M_PKTHDR is set.
+ */
 struct	pkthdr {
 	struct	ifnet *rcvif;		/* rcv interface */
 	int	len;			/* total packet length */
 };
 
-/* description of external storage mapped into mbuf, valid if M_EXT set */
+/*
+ * Description of external storage mapped into mbuf; valid only if M_EXT is set.
+ */
 struct m_ext {
 	caddr_t	ext_buf;		/* start of buffer */
 	void	(*ext_free)		/* free routine if not the usual */
@@ -93,6 +99,10 @@ struct m_ext {
 		__P((caddr_t, u_int));
 };
 
+/*
+ * The core of the mbuf object along with some shortcut defines for
+ * practical purposes.
+ */
 struct mbuf {
 	struct	m_hdr m_hdr;
 	union {
