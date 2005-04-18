@@ -70,34 +70,26 @@ struct nfs_args {
 #define	NFSMNT_WSIZE		0x00000002  /* set write size */
 #define	NFSMNT_RSIZE		0x00000004  /* set read size */
 #define	NFSMNT_TIMEO		0x00000008  /* set initial timeout */
-#define	NFSMNT_RETRANS		0x00000010  /* set number of request retrys */
+#define	NFSMNT_RETRANS		0x00000010  /* set number of request retries */
 #define	NFSMNT_MAXGRPS		0x00000020  /* set maximum grouplist size */
 #define	NFSMNT_INT		0x00000040  /* allow interrupts on hard mount */
 #define	NFSMNT_NOCONN		0x00000080  /* Don't Connect the socket */
-#define	NFSMNT_NQNFS		0x00000100  /* Use Nqnfs protocol */
+/* 0x100 free, was NFSMNT_NQNFS */
 #define	NFSMNT_NFSV3		0x00000200  /* Use NFS Version 3 protocol */
-#define	NFSMNT_KERB		0x00000400  /* Use Kerberos authentication */
+/* 0x400 free, was NFSMNT_KERB */
 #define	NFSMNT_DUMBTIMR		0x00000800  /* Don't estimate rtt dynamically */
-#define	NFSMNT_LEASETERM	0x00001000  /* set lease term (nqnfs) */
+/* 0x1000 free, was NFSMNT_LEASETERM */
 #define	NFSMNT_READAHEAD	0x00002000  /* set read ahead */
 #define	NFSMNT_DEADTHRESH	0x00004000  /* set dead server retry thresh */
 #define	NFSMNT_RESVPORT		0x00008000  /* Allocate a reserved port */
 #define NFSMNT_RDIRPLUS		0x00010000  /* Use Readdirplus for V3 */
 #define NFSMNT_READDIRSIZE	0x00020000  /* Set readdir size */
-#define	NFSMNT_INTERNAL		0xfffc0000  /* Bits set internally */
-#define NFSMNT_HASWRITEVERF	0x00040000  /* Has write verifier for V3 */
-#define NFSMNT_GOTPATHCONF	0x00080000  /* Got the V3 pathconf info */
-#define NFSMNT_GOTFSINFO	0x00100000  /* Got the V3 fsinfo */
-#define	NFSMNT_MNTD		0x00200000  /* Mnt server for mnt point */
-#define	NFSMNT_DISMINPROG	0x00400000  /* Dismount in progress */
-#define	NFSMNT_DISMNT		0x00800000  /* Dismounted */
-#define	NFSMNT_SNDLOCK		0x01000000  /* Send socket lock */
-#define	NFSMNT_WANTSND		0x02000000  /* Want above */
-#define	NFSMNT_RCVLOCK		0x04000000  /* Rcv socket lock */
-#define	NFSMNT_WANTRCV		0x08000000  /* Want above */
-#define	NFSMNT_WAITAUTH		0x10000000  /* Wait for authentication */
-#define	NFSMNT_HASAUTH		0x20000000  /* Has authenticator */
-#define	NFSMNT_WANTAUTH		0x40000000  /* Wants an authenticator */
-#define	NFSMNT_AUTHERR		0x80000000  /* Authentication error */
+#define	NFSMNT_ACREGMIN		0x00040000
+#define	NFSMNT_ACREGMAX		0x00080000
+#define	NFSMNT_ACDIRMIN		0x00100000
+#define	NFSMNT_ACDIRMAX		0x00200000
+#define	NFSMNT_NOLOCKD		0x00400000 /* Locks are local */
+#define	NFSMNT_NFSV4		0x00800000 /* Use NFS Version 4 protocol */
+#define	NFSMNT_HASWRITEVERF	0x01000000 /* NFSv4 Write verifier */
 
 #endif
