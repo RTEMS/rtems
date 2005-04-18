@@ -67,7 +67,13 @@ console_fns ns16550_fns_polled = {
   FALSE                                /* deviceOutputUsesInterrupts */
 };
 
+#if defined(__PPC__)
+#ifdef _OLD_EXCEPTIONS
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
+#else
+#include <bsp/irq.h>
+#endif
+#endif
 
 /*
  *  ns16550_init
@@ -510,6 +516,9 @@ NS16550_STATIC void ns16550_process(
   } while((ucInterruptId&0xf)!=0x1);
 }
 
+#if defined(__PPC__)
+#ifdef _OLD_EXCEPTIONS 
+
 /*
  *  ns16550_isr
  */
@@ -527,6 +536,26 @@ NS16550_STATIC rtems_isr ns16550_isr(
     }
   }
 }
+
+#else
+
+NS16550_STATIC rtems_isr ns16550_isr(
+  void *entry 
+)
+{
+  console_tbl *ptr = entry;
+  int         minor;
+
+  for(minor=0;minor<Console_Port_Count;minor++) {
+    if( &Console_Port_Tbl[minor] == ptr ) {
+      ns16550_process(minor);
+    }
+  }
+
+}
+
+#endif
+#endif
 
 /*
  *  ns16550_enable_interrupts
@@ -554,6 +583,8 @@ NS16550_STATIC void ns16550_enable_interrupts(
  *  This routine initializes the port to operate in interrupt driver mode.
  */
 
+#if defined(__PPC__)
+#ifdef _OLD_EXCEPTIONS
 NS16550_STATIC void ns16550_initialize_interrupts(int minor)
 {
   ns16550_init(minor);
@@ -561,9 +592,41 @@ NS16550_STATIC void ns16550_initialize_interrupts(int minor)
   Console_Port_Data[minor].bActive = FALSE;
 
   set_vector(ns16550_isr, Console_Port_Tbl[minor].ulIntVector, 1);
+  
+  ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
+}
+#else
+
+static void null_fun(){}
+
+NS16550_STATIC void ns16550_initialize_interrupts(int minor)
+{
+  rtems_irq_connect_data IrqData = {0,
+                                    ns16550_isr,
+                                    &Console_Port_Data[minor],
+                                    (rtems_irq_enable)null_fun,
+                                    (rtems_irq_disable)null_fun,
+                                    (rtems_irq_is_enabled)null_fun,
+                                    NULL
+                                   };
+
+  ns16550_init(minor);
+
+  Console_Port_Data[minor].bActive = FALSE;
+
+  IrqData.name  = (rtems_irq_symbolic_name)(
+    (unsigned int)BSP_PCI_IRQ0 +  Console_Port_Tbl[minor].ulIntVector );
+
+  if (!BSP_install_rtems_shared_irq_handler (&IrqData)) {
+    printk("Error installing interrupt handler!\n");
+    rtems_fatal_error_occurred(1);
+  }
 
   ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
 }
+
+#endif
+#endif
 
 /*
  *  ns16550_write_support_int
