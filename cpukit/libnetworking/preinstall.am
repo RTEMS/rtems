@@ -128,6 +128,10 @@ $(PROJECT_INCLUDE)/net/if_types.h: net/if_types.h $(PROJECT_INCLUDE)/net/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_types.h
 
+$(PROJECT_INCLUDE)/net/if_var.h: net/if_var.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_var.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_var.h
+
 $(PROJECT_INCLUDE)/net/netisr.h: net/netisr.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/netisr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/netisr.h
