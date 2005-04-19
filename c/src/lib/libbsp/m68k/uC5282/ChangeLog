@@ -1,3 +1,9 @@
+2005-04-19  Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Expose read/write copy of cache control registers
+                          in case some application diagnostic code wants to
+                          display the values.
+
 2005-04-13  Eric Norum <norume@aps.anl.gov>
 
 	* network/network.c: Add some more diagnostics.
