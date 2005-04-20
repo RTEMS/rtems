@@ -1,7 +1,11 @@
-Name:         rtems-@target_alias@-@bsp@
-Version:      @rtems_version@
-Summary:      A free operating system for embedded systems
-Source:       ftp://ftp.rtems.org/pub/rtems/rtems-%{version}.tar.bz2
+Name:		rtems-@target_alias@-@bsp@
+Summary:	A free operating system for embedded systems
+Group:		%{rpmgroup}
+Release:	@Release@
+License:	Distributable
+
+Version:      	@rtems_version@
+Source:       	ftp://ftp.rtems.org/pub/rtems/%{version}/rtems-%{version}.tar.bz2
 
 #
 # The original sources are not included in the source RPM.
@@ -16,8 +20,6 @@ RTEMS is a free operating system for embedded systems.
 %prep
 # untar the sources inside rtems-@target_alias@-@bsp@-@rtems_version@
 %setup -c -T -n rtems-@target_alias@-@bsp@-@rtems_version@ -a0
-# no patch needed
-# %patch
 
 %build
 # rtems does not support building inside the source tree

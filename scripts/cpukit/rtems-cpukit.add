@@ -19,7 +19,7 @@ BuildArch:	noarch
 
 Version:      %{rpmvers}
 Summary:      A free operating system for embedded systems
-Source:       rtems-%{rtems_version}.tar.bz2
+Source:       ftp://ftp.rtems.org/pub/rtems/%{version}/rtems-%{rtems_version}.tar.bz2
 
 #
 # The original sources are not included in the source RPM.

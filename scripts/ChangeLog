@@ -1,3 +1,12 @@
+2005-04-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: chmod +x rtems/mkspec.
+	* binutils/binutils.add: Remove Prefix.
+	Use mkdir -p.
+	* cpukit/rtems-cpukit.add: Fix Source URL.
+	* rtems/Makefile.am: Append @osversion@ to rules.
+	* rtems/rtems.add: Fix Source URL. Misc cosmetics.
+
 2005-04-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gdb/mkspec.in: Remove extra_configure_arguments (Unused).

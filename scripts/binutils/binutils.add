@@ -9,7 +9,6 @@ Release:      @Release@
 License:      GPL/LGPL
 
 Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
-Prefix:		%{_prefix}
 BuildPreReq:	/sbin/install-info
 BuildPreReq:	texinfo >= 4.2
 BuildPreReq:	flex
@@ -44,7 +43,7 @@ cd binutils-%{version}
 %{?PATCH0:%patch0 -p1}
 cd ..
 
-  test -d build || mkdir build
+  mkdir -p build
 
 %build
   cd build
