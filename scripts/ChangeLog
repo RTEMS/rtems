@@ -1,5 +1,11 @@
 2005-04-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gdb/base-gdb.add, gdb/gdb.add, gdb/target-gdb.add:
+	Use mkdir -p. Introduce %{_includedir}, %{_libdir}. Remove
+	superfluous %doc.
+
+2005-04-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: chmod +x rtems/mkspec.
 	* binutils/binutils.add: Remove Prefix.
 	Use mkdir -p.

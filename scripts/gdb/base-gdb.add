@@ -16,55 +16,41 @@ This is the base for gdb regardless of target CPU.
 %defattr(-,root,root)
 
 %dir %{_infodir}
-%doc %{_infodir}/gdb.info*
+%{_infodir}/gdb.info*
+
 # FIXME: When had mmalloc.info been removed?
 %if "%{gdb_version}" < "6.3"
-%doc %{_infodir}/mmalloc.info*
+%{_infodir}/mmalloc.info*
 %endif
 # FIXME: When had gdbint and stabs been introduced?
 %if "%{gdb_version}" >= "5.0"
-%doc %{_infodir}/gdbint.info*
-%doc %{_infodir}/stabs.info*
-%endif
-# gdb 4.18 installed this, gdb 5.0 does not
-%if "%{gdb_version}" < "5.0"
-%doc %{_infodir}/readline.info*
+%{_infodir}/gdbint.info*
+%{_infodir}/stabs.info*
 %endif
 
 %if "{gdb_version}" >= "6.0"
-%doc %{_infodir}/annotate.info*
+%{_infodir}/annotate.info*
 %endif
 
-%dir %{_prefix}/man
-%dir %{_prefix}/man/man1
-
-# %dir %{_prefix}/include
-# We install libbfd from binutils
-# %{_prefix}/include/bfd.h
-# %{_prefix}/include/bfdlink.h
-
-%dir %{_prefix}/lib
-# We install libbfd from binutils
-# %{_prefix}/lib/libbfd*
-# We use libiberty from gcc
-# %{_prefix}/lib/libiberty*
+%dir %{_mandir}
+%dir %{_mandir}/man1
 
 %post -n %{rpmprefix}rtems@osversion@-base-gdb
-  if test -d $RPM_INSTALL_PREFIX/rtems/info;
+  if test -d %{_infodir};
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f %{_infodir}/dir
+    f=`find %{_infodir} -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i %{_infodir}/dir
     done
   fi
 
 %postun -n %{rpmprefix}rtems@osversion@-base-gdb
-  if test -d $RPM_INSTALL_PREFIX/rtems/info;
+  if test -d %{_infodir};
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f %{_infodir}/dir
+    f=`find %{_infodir} -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i %{_infodir}/dir
     done
   fi

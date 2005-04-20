@@ -14,9 +14,9 @@ This is the GNU gdb for RTEMS targetting %{gdb_target}.
 
 %files -n %{rpmprefix}%{gdb_target}-gdb
 %defattr(-,root,root)
-%doc %{_mandir}/man1/%{gdb_target}-gdb.1*
+%{_mandir}/man1/%{gdb_target}-gdb.1*
 %if "%_sim" == "1"
-%doc %{_mandir}/man1/%{gdb_target}-run.1*
+%{_mandir}/man1/%{gdb_target}-run.1*
 %endif
 %if "%{gdb_version}" >= "6.3"
 %{_mandir}/man1/%{gdb_target}-gdbtui.1*

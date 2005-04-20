@@ -86,13 +86,14 @@ cd ..
  # simargs="$simargs --enable-sim-inline"
 %endif
 
-test -d build || mkdir build
+  mkdir -p build
   cd build
   export PATH="%{_bindir}:${PATH}"
   ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \
     --target=%{gdb_target} \
     --prefix=%{_prefix} --bindir=%{_bindir} \
+    --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir} \
     --verbose $simargs \
     --disable-nls
@@ -106,23 +107,31 @@ test -d build || mkdir build
   cd build
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     install
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     install-info
 
   # host files
-  rm -rf $RPM_BUILD_ROOT%{_prefix}/include/*.h
-  rm -rf $RPM_BUILD_ROOT%{_prefix}/lib/lib*a
+  rm -rf $RPM_BUILD_ROOT%{_includedir}/*.h
+  rm -rf $RPM_BUILD_ROOT%{_libdir}/lib*a
 
   # These come from other packages
   rm -rf $RPM_BUILD_ROOT%{_infodir}/bfd*
   rm -rf $RPM_BUILD_ROOT%{_infodir}/configure*
   rm -rf $RPM_BUILD_ROOT%{_infodir}/standards*
+
+  # gdb 4.18 installed this, later versions don't
+  # Don't care about it, anymore
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/readline.info*
  
   # gzip info files
   ls $RPM_BUILD_ROOT%{_infodir}/*.info \
