@@ -13,57 +13,37 @@ RTEMS is an open source operating system for embedded systems.
 This is the base for binutils regardless of target CPU.
 
 %post -n %{rpmprefix}rtems@osversion@-base-binutils
-  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  if test -d %{_infodir}; 
   then
-    rm -f $RPM_INSTALL_PREFIX%{_infodir}/dir
-    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    rm -f %{_infodir}/dir
+    f=`find %{_infodir} -name '*.info.gz'`
     test x"$f" != x"" && for i in $f; do
-      /sbin/install-info $i $RPM_INSTALL_PREFIX%{_infodir}/dir
+      /sbin/install-info $i %{_infodir}/dir
     done
   fi
 
 %postun -n %{rpmprefix}rtems@osversion@-base-binutils
-  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  if test -d %{_infodir}; 
   then
-    rm -f $RPM_INSTALL_PREFIX%{_infodir}/dir
-    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    rm -f %{_infodir}/dir
+    f=`find %{_infodir} -name '*.info.gz'`
     test x"$f" != x"" && for i in $f; do
-      /sbin/install-info $i $RPM_INSTALL_PREFIX%{_infodir}/dir
+      /sbin/install-info $i %{_infodir}/dir
     done
   fi
 
 %files -n %{rpmprefix}rtems@osversion@-base-binutils
 %defattr(-,root,root)
-%dir %{_prefix}/info
-%doc %{_infodir}/dir
-%doc %{_infodir}/as.info*
-%doc %{_infodir}/bfd.info*
-%doc %{_infodir}/binutils.info*
-%doc %{_infodir}/ld.info*
+%dir %{_infodir}
+%{_infodir}/as.info*
+%{_infodir}/bfd.info*
+%{_infodir}/binutils.info*
+%{_infodir}/ld.info*
+%{_infodir}/standards.info*
 
 %if "%{binutils_version}" < "2.13"
-%doc %{_infodir}/gasp.info*
+%{_infodir}/gasp.info*
 %endif
-%doc %{_infodir}/standards.info*
-
-%if "%{binutils_version}" < "2.9.5"
-%doc %{_infodir}/configure.info*
-%endif
-
-# %dir %{_mandir}
-# %dir %{_mandir}/man1
-
-# deleted as of 2.13
-# %dir %{_prefix}/include
-# %{_prefix}/include/bfd.h
-# %{_prefix}/include/ansidecl.h
-# %{_prefix}/include/bfdlink.h
-
-# %dir %{_prefix}/lib
-# %{_prefix}/lib/libiberty*
-# deleted as of 2.13
-# %{_prefix}/lib/libbfd*
-# %{_prefix}/lib/libopcodes*
 
 %dir %{_prefix}/share
 %dir %{_prefix}/share/locale

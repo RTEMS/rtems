@@ -51,7 +51,9 @@ cd ..
     --build=%_build --host=%_host \
     --target=%{binutils_target} \
     --verbose --disable-nls \
-    --prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir}
+    --prefix=%{_prefix} --bindir=%{_bindir} \
+    --includedir=%{_includedir} --libdir=%{_libdir} \
+    --mandir=%{_mandir} --infodir=%{_infodir} \
 
   make all
   make info
@@ -62,20 +64,29 @@ cd ..
 
   cd build
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
-    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
     install
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
-    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
     install-info
+
 # A bug in binutils: binutils does not install share/locale
 # however it uses it
-  ../binutils-%{binutils_version}/mkinstalldirs \
-    $RPM_BUILD_ROOT%{_prefix}/share/locale
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}/share/locale
+
+%if "%{binutils_version}" < "2.9.5"
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/configure.info*
+%endif
 
 # gzip info files
-  # gzip info files
   ls $RPM_BUILD_ROOT%{_infodir}/*.info \
     $RPM_BUILD_ROOT%{_infodir}/*.info-? \
     $RPM_BUILD_ROOT%{_infodir}/*.info-?? 2>/dev/null \
@@ -85,7 +96,7 @@ cd ..
 
 # We assume that info/dir exists when building the RPMs
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-  f=`find $RPM_BUILD_ROOT%{_prefix}/info -name '*.info.gz'`
+  f=`find $RPM_BUILD_ROOT%{_infodir} -name '*.info.gz'`
   test x"$f" != x"" && for i in $f; do
     /sbin/install-info $i $RPM_BUILD_ROOT%{_infodir}/dir
   done
@@ -94,4 +105,4 @@ cd ..
   gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/*.? 2>/dev/null
 
 # We don't ship host files
-  rm -f ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty*
+  rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*

@@ -14,26 +14,28 @@ This is the GNU binutils for RTEMS targetting %{binutils_target}.
 
 %files -n %{rpmprefix}%{binutils_target}-binutils
 %defattr(-,root,root)
-%doc %{_mandir}/man1/%{binutils_target}-*.1*
+%dir %{_mandir}
+%dir %{_mandir}/man1
+%{_mandir}/man1/%{binutils_target}-*.1*
 
-%dir %{_prefix}/bin
-%{_prefix}/bin/%{binutils_target}-addr2line%{_exeext}
-%{_prefix}/bin/%{binutils_target}-ar%{_exeext}
-%{_prefix}/bin/%{binutils_target}-as%{_exeext}
-%{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
+%dir %{_bindir}
+%{_bindir}/%{binutils_target}-addr2line%{_exeext}
+%{_bindir}/%{binutils_target}-ar%{_exeext}
+%{_bindir}/%{binutils_target}-as%{_exeext}
+%{_bindir}/%{binutils_target}-c++filt%{_exeext}
 %if "%{binutils_version}" < "2.13"
 # deleted as of 2.13
-%{_prefix}/bin/%{binutils_target}-gasp%{_exeext}
+%{_bindir}/%{binutils_target}-gasp%{_exeext}
 %endif
-%{_prefix}/bin/%{binutils_target}-ld%{_exeext}
-%{_prefix}/bin/%{binutils_target}-nm%{_exeext}
-%{_prefix}/bin/%{binutils_target}-objcopy%{_exeext}
-%{_prefix}/bin/%{binutils_target}-objdump%{_exeext}
-%{_prefix}/bin/%{binutils_target}-ranlib%{_exeext}
-%{_prefix}/bin/%{binutils_target}-readelf%{_exeext}
-%{_prefix}/bin/%{binutils_target}-size%{_exeext}
-%{_prefix}/bin/%{binutils_target}-strings%{_exeext}
-%{_prefix}/bin/%{binutils_target}-strip%{_exeext}
+%{_bindir}/%{binutils_target}-ld%{_exeext}
+%{_bindir}/%{binutils_target}-nm%{_exeext}
+%{_bindir}/%{binutils_target}-objcopy%{_exeext}
+%{_bindir}/%{binutils_target}-objdump%{_exeext}
+%{_bindir}/%{binutils_target}-ranlib%{_exeext}
+%{_bindir}/%{binutils_target}-readelf%{_exeext}
+%{_bindir}/%{binutils_target}-size%{_exeext}
+%{_bindir}/%{binutils_target}-strings%{_exeext}
+%{_bindir}/%{binutils_target}-strip%{_exeext}
 
 %dir %{_prefix}/%{binutils_target}
 %dir %{_prefix}/%{binutils_target}/bin

@@ -1,5 +1,11 @@
 2005-04-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/base-binutils.add, binutils/binutils.add,
+	binutils/target-binutils.add: Introduce %{_includedir}, %{_libdir},
+	%{_bindir}. Remove superfluous %doc. Misc. fixes.
+
+2005-04-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gdb/base-gdb.add, gdb/gdb.add, gdb/target-gdb.add:
 	Use mkdir -p. Introduce %{_includedir}, %{_libdir}. Remove
 	superfluous %doc.
