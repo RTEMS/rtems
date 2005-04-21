@@ -1,0 +1,44 @@
+%if %build_f95
+# ==============================================================
+# rtems-base-gfortran
+# ==============================================================
+%package -n %{rpmprefix}rtems@osversion@-base-gfortran
+Summary:      rtems base package for gcc/gfortran compiler
+Group: %{rpmgroup}
+Requires: rtems-base-gcc
+
+%description -n %{rpmprefix}rtems@osversion@-base-gfortran
+RTEMS is an open source operating system for embedded systems.
+
+This is the files for gcc/gfortran that are shared by all targets.
+
+%files -n %{rpmprefix}rtems@osversion@-base-gfortran
+%defattr(-,root,root)
+%dir %{_infodir}
+%{_infodir}/gfortran.info*.gz
+
+%dir %{_mandir}
+%dir %{_mandir}/man1
+%{_mandir}/man1/%{gcc_target}-gfortran.1*
+
+%post -n %{rpmprefix}rtems@osversion@-base-gfortran
+  if test -d %{_infodir}; 
+  then
+    rm -f %{_infodir}/dir
+    f=`find %{_infodir} -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i %{_infodir}/dir
+    done
+  fi
+
+%postun -n %{rpmprefix}rtems@osversion@-base-gfortran
+  if test -d %{_infodir}; 
+  then
+    rm -f %{_infodir}/dir
+    f=`find %{_infodir} -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i %{_infodir}/dir
+    done
+  fi
+
+%endif
