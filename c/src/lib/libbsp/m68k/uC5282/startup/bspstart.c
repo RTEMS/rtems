@@ -69,19 +69,23 @@ char *rtems_progname;
  * corruption problem.
  * DATECODES AFFECTED: All
  */
-#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr ; nop" : : "d" (_cacr))
+#define m68k_set_cacr_nop(_cacr) asm volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
+#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
 #define m68k_set_acr0(_acr0) asm volatile ("movec %0,%%acr0" : : "d" (_acr0))
 #define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
 
 /*
  * Read/write copy of cache registers
- *   Split I/D cache
+ *   Split instruction/data or instruction-only
  *   Allow CPUSHL to invalidate a cache line
  *   Enable buffered writes
  *   No burst transfers on non-cacheable accesses
  *   Default cache mode is *disabled* (cache only ACRx areas)
  */
 uint32_t mcf5282_cacr_mode = MCF5XXX_CACR_CENB |
+#ifndef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
+                             MCF5XXX_CACR_DISD |
+#endif
                              MCF5XXX_CACR_DBWE |
                              MCF5XXX_CACR_DCM;
 uint32_t mcf5282_acr0_mode = 0;
@@ -122,7 +126,7 @@ void _CPU_cache_disable_instruction(void)
 
 void _CPU_cache_invalidate_entire_instruction(void)
 {
-    m68k_set_cacr(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVI);
+    m68k_set_cacr_nop(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVI);
 }
 
 void _CPU_cache_invalidate_1_instruction_line(const void *addr)
@@ -136,37 +140,45 @@ void _CPU_cache_invalidate_1_instruction_line(const void *addr)
 
 void _CPU_cache_enable_data(void)
 {
+#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
     rtems_interrupt_level level;
 
     rtems_interrupt_disable(level);
-    mcf5282_cacr_mode &= ~MCF5XXX_CACR_DISD;
+    mcf5282_cacr_mode &= ~MCF5XXX_CACR_CENB;
     m68k_set_cacr(mcf5282_cacr_mode);
     rtems_interrupt_enable(level);
+#endif
 }
 
 void _CPU_cache_disable_data(void)
 {
+#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
     rtems_interrupt_level level;
 
     rtems_interrupt_disable(level);
     rtems_interrupt_disable(level);
-    mcf5282_cacr_mode |= MCF5XXX_CACR_DISD;
+    mcf5282_cacr_mode |= MCF5XXX_CACR_CENB;
     m68k_set_cacr(mcf5282_cacr_mode);
     rtems_interrupt_enable(level);
+#endif
 }
 
 void _CPU_cache_invalidate_entire_data(void)
 {
-    m68k_set_cacr(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVD);
+#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
+    m68k_set_cacr_nop(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVD);
+#endif
 }
 
 void _CPU_cache_invalidate_1_data_line(const void *addr)
 {
+#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
     /*
      * Bottom half of cache is D-space
      */
     addr = (void *)((int)addr & ~0x400);
     asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
+#endif
 }
 
 /*
@@ -220,7 +232,7 @@ void bsp_start( void )
      */
     m68k_set_acr0(mcf5282_acr0_mode);
     m68k_set_acr1(mcf5282_acr1_mode);
-    m68k_set_cacr(MCF5XXX_CACR_CINV);
+    m68k_set_cacr_nop(MCF5XXX_CACR_CINV);
 
     /*
      * Cache SDRAM

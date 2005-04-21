@@ -17,6 +17,14 @@ extern "C" {
 #include <rtems/bspIo.h>
 
 /***************************************************************************/
+/**  BSP Configuration                                                    **/
+/*
+ * Uncomment to use instruction/data cache
+ * Leave commented to use instruction-only cache
+ */
+/* #define RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE */
+
+/***************************************************************************/
 /**  Hardware data structure headers                                      **/
 #include <mcf5282/mcf5282.h>   /* internal MCF5282 modules */
 

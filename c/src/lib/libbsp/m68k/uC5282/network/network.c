@@ -407,16 +407,18 @@ fec_rxDaemon (void *arg)
             struct ether_header *eh;
             int len = rxBd->length - sizeof(uint32_t);;
 
-            /*
-             * Invalidate the cache and push the packet up.
-             * The cache is so small that it's more efficient to just
-             * invalidate the whole thing unless the packet is very small.
-             */
             m = sc->rxMbuf[rxBdIndex];
+#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
+            /*
+             * Invalidate the cache.  The cache is so small that it's
+             * more efficient to just invalidate the whole thing unless
+             * the packet is very small.
+             */
             if (len < 128)
                 rtems_cache_invalidate_multiple_data_lines(m->m_data, len);
             else
                 rtems_cache_invalidate_entire_data();
+#endif
             m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
             eh = mtod(m, struct ether_header *);
             m->m_data += sizeof(struct ether_header);
