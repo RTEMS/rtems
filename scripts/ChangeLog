@@ -1,3 +1,17 @@
+2005-04-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/base-gfortran.add, gccnewlib/target-gfortran.add: New.
+	* gccnewlib/Makefile.am: Reflect addition of gfortran.
+	* gccnewlib/base-g77.add, gccnewlib/base-gcc.add, gccnewlib/base-gcj.add,
+	gccnewlib/base-gnat.add, gccnewlib/target-g++.add, gccnewlib/target-g77.add,
+	gccnewlib/target-gcc.add, gccnewlib/target-gcj.add,
+	gccnewlib/target-gnat.add:
+	Remove RPM_INSTALL_PREFIX. Remove superfluous
+	%doc directives. Use %_infodir, %_includedir, %_bindir, %_libdir.
+	* gccnewlib/gccnewlib.add: Ditto.
+	Add further BR's, Reflect addition of gfortran.
+	Reflect gcc's changes to "version_string".
+
 2005-04-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/base-binutils.add, binutils/binutils.add,

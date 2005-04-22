@@ -56,7 +56,13 @@ BuildPreReq:	%{rpmprefix}%{gcc_target}-binutils
 %define _gcj	%{?gcj:%gcj}%{!?gcj:0}
 
 %define build_cxx 	%{?cxx:%cxx}%{!?cxx:1}
+%if "%{gcc_version}" >= "4.0.0"
+%define build_f95	%{?f95:%f95}%{!?f95:0}
+%define build_g77	0
+%else
+%define build_f95	0
 %define build_g77 	%{?g77:%g77}%{!?g77:0}
+%endif
 %define build_objc	%{?objc:%objc}%{!?objc:0}
 %define build_gcj	0
 %define build_gnat	0
@@ -115,11 +121,14 @@ BuildPreReq:	zlib-devel
 %endif
 %endif
 
+%if "%_vendor" == "redhat"
 %if %build_gnat
 # Building gnat requires gnat
-%if "%_vendor" == "redhat"
 # This really isn't available until RedHat 8.0.  How to conditionalize this?
-# BuildPreReq:	gcc-gnat
+BuildRequires:	gcc-gnat
+%endif
+%if %build_f95
+BuildRequires: gmp-devel
 %endif
 %endif
 
@@ -158,7 +167,7 @@ cd newlib-%{newlib_version}
 cd ..
 
   cd gcc-%{gcc_version}
-    sed -e 's/\(version_string = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
+    sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
     gcc/version.c > gcc/version.c~
     mv gcc/version.c~  gcc/version.c 
 
@@ -183,6 +192,9 @@ cd ..
 %endif
 %if %build_g77
   languages="$languages,g77"
+%endif
+%if %build_f95
+  languages="$languages,f95"
 %endif
 %if %build_gcj
   languages="$languages,java"
@@ -261,8 +273,7 @@ cd ..
 # Bug in gcc-2.95.1: It doesn't build this installation directory
 # If it doesn't find it, gcc doesn't install %{gcc_target}/bin/gcc
 %if "%{gcc_version}" < "3.0"
-  ../gcc-%{gcc_version}/mkinstalldirs \
-    $RPM_BUILD_ROOT%{_prefix}/%{gcc_target}/bin
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}/%{gcc_target}/bin
 %endif
 
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
@@ -293,29 +304,35 @@ cd ..
   rm -f  ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty.a
 
   # We use the version from binutils
-  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-c++filt%{_exeext}
+  rm -f $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-c++filt%{_exeext}
 
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 
+%if %build_f95
+#  # Bug in gcc-4.0.0pre
+#  mv $RPM_BUILD_ROOT%{_bindir}/gfortran $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-gfortran
+%endif
+
 %if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
-  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-%{gcc_target}-gcjh%{_exeext}
+  rm -f $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-%{gcc_target}-gcjh%{_exeext}
 %endif
 
 %if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/%{gcc_target}/%{gcc_version}/install-tools
   rm -rf ${RPM_BUILD_ROOT}%{gccexec}/%{gcc_target}/%{gcc_version}/install-tools
 %endif
 
 %if "%{gcc_version}" < "3.0"
   # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
   # Rename it to target_alias-cpp
-  if test -f $RPM_BUILD_ROOT%{_prefix}/bin/cpp%{_exeext};
+  if test -f $RPM_BUILD_ROOT%{_bindir}/cpp%{_exeext};
   then
-    mv $RPM_BUILD_ROOT%{_prefix}/bin/cpp%{_exeext} \
-      $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-cpp%{_exeext}
+    mv $RPM_BUILD_ROOT%{_bindir}/cpp%{_exeext} \
+      $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-cpp%{_exeext}
   fi
 %endif
 
@@ -362,6 +379,7 @@ cd ..
   # Collect files to go into different packages
   cp dirs files.gcc
   cp dirs files.g77
+  cp dirs files.gfortran
   cp dirs files.objc
   cp dirs files.gcj
   cp dirs files.g++
@@ -372,6 +390,7 @@ cd ..
     case $i in
     *lib*.la) rm ${RPM_BUILD_ROOT}/$i ;; # ignore: gcc produces bogus libtool libs
     *f771) ;;
+    *f951) ;;
     *cc1) ;;
     *cc1obj) ;;
     *cc1plus) ;; # ignore: explicitly put into rpm elsewhere
@@ -385,6 +404,7 @@ cd ..
     *gnat1);;
     *jc1) ;;
     *jvgenmain) ;;
+    *libgfortran*.a) echo "$i" >> files.gfortran ;;
     *libstdc++.a) echo "$i" >> files.g++ ;;
     *libsupc++.a) echo "$i" >> files.g++ ;;
     *) echo "$i" >> files.gcc ;;

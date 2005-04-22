@@ -10,9 +10,13 @@ SUBPACKAGES = header.add
 SUBPACKAGES += $(top_builddir)/common/common.add
 SUBPACKAGES += gccnewlib.add
 SUBPACKAGES += $(top_builddir)/common/clean.add
-SUBPACKAGES += base-gcc.add target-gcc.add base-g77.add target-g77.add \
-    base-gcj.add target-gcj.add target-objc.add target-c++.add base-gnat.add \
-    target-gnat.add
+SUBPACKAGES += base-gcc.add target-gcc.add
+SUBPACKAGES += base-g77.add target-g77.add
+SUBPACKAGES += base-gcj.add target-gcj.add
+SUBPACKAGES += base-gfortran.add target-gfortran.add
+SUBPACKAGES += target-objc.add
+SUBPACKAGES += target-c++.add
+SUBPACKAGES += base-gnat.add target-gnat.add
 
 noinst_DATA = gccnewlib.spec.in
 

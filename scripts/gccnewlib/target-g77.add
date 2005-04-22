@@ -14,8 +14,8 @@ This is the gcc/g77 compiler for %{gcc_target}
 
 %files -n %{rpmprefix}%{gcc_target}-g77 -f build/files.g77
 %defattr(-,root,root)
-%dir %{_prefix}/bin
-%{_prefix}/bin/%{gcc_target}-g77%{_exeext}
+%dir %{_bindir}
+%{_bindir}/%{gcc_target}-g77%{_exeext}
 
 %{gcclib}/%{gcc_target}/%{gcc_version}/f771%{_exeext}
 %endif

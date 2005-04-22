@@ -15,27 +15,27 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %files -n %{rpmprefix}rtems@osversion@-base-gcj
 %defattr(-,root,root)
 %if "%{gcc_version}" <= "3.4"
-%dir %{_prefix}/bin
-%{_prefix}/bin/jar%{_exeext}
-%{_prefix}/bin/grepjar%{_exeext}
+%dir %{_bindir}
+%{_bindir}/jar%{_exeext}
+%{_bindir}/grepjar%{_exeext}
 %endif
 
 %dir %{_infodir}
-%doc %{_infodir}/gcj.info*
+%{_infodir}/gcj.info*
 %if "%{gcc_version}" >= "3.3"
-%doc %{_infodir}/fastjar.info*
+%{_infodir}/fastjar.info*
 %endif
 %if "%{gcc_version}" >= "3.3" && "%{gcc_version}" <= "3.4"
 %dir %{_mandir}/man1
-%doc %{_mandir}/man1/gcjh.1*
-%doc %{_mandir}/man1/jv-scan.1*
-%doc %{_mandir}/man1/jcf-dump.1*
-%doc %{_mandir}/man1/gij.1*
-%doc %{_mandir}/man1/jv-convert.1*
-%doc %{_mandir}/man1/rmic.1*
-%doc %{_mandir}/man1/rmiregistry.1*
-%doc %{_mandir}/man1/jar.1*
-%doc %{_mandir}/man1/grepjar.1*
+%{_mandir}/man1/gcjh.1*
+%{_mandir}/man1/jv-scan.1*
+%{_mandir}/man1/jcf-dump.1*
+%{_mandir}/man1/gij.1*
+%{_mandir}/man1/jv-convert.1*
+%{_mandir}/man1/rmic.1*
+%{_mandir}/man1/rmiregistry.1*
+%{_mandir}/man1/jar.1*
+%{_mandir}/man1/grepjar.1*
 %endif
 
 %endif

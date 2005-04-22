@@ -14,46 +14,46 @@ This is the files for gcc and newlib that are shared by all targets.
 %files -n %{rpmprefix}rtems@osversion@-base-gcc
 %defattr(-,root,root)
 %dir %{_infodir}
-%doc %{_infodir}/cpp.info*
-%doc %{_infodir}/cppinternals.info*
-%doc %{_infodir}/gcc.info*
-%doc %{_infodir}/libc.info*
-%doc %{_infodir}/libm.info*
-%doc %{_infodir}/gccint.info*
+%{_infodir}/cpp.info*
+%{_infodir}/cppinternals.info*
+%{_infodir}/gcc.info*
+%{_infodir}/libc.info*
+%{_infodir}/libm.info*
+%{_infodir}/gccint.info*
 %if "%{gcc_version}" >= "3.4"
-%doc %{_infodir}/gccinstall.info*
+%{_infodir}/gccinstall.info*
 %endif
 
 %dir %{_mandir}
 %if "%{gcc_version}" < "3.4"
 %dir %{_mandir}/man1
-%doc %{_mandir}/man1/cpp.1*
-%doc %{_mandir}/man1/gcov.1*
+%{_mandir}/man1/cpp.1*
+%{_mandir}/man1/gcov.1*
 %endif
 %dir %{_mandir}/man7
-%doc %{_mandir}/man7/fsf-funding.7*
-%doc %{_mandir}/man7/gfdl.7*
-%doc %{_mandir}/man7/gpl.7*
+%{_mandir}/man7/fsf-funding.7*
+%{_mandir}/man7/gfdl.7*
+%{_mandir}/man7/gpl.7*
 
-%dir %{_prefix}/include
+%dir %{_includedir}
 
 %post -n %{rpmprefix}rtems@osversion@-base-gcc
-  if test -d $RPM_INSTALL_PREFIX%{_infodir}; 
+  if test -d %{_infodir}; 
   then
-    rm -f $RPM_INSTALL_PREFIX%{_infodir}/dir
-    f=`find $RPM_INSTALL_PREFIX%{_infodir} -name '*.info.gz'`
+    rm -f %{_infodir}/dir
+    f=`find %{_infodir} -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX%{_infodir}/dir
+      install-info $i %{_infodir}/dir
     done
   fi
 
 %postun -n %{rpmprefix}rtems@osversion@-base-gcc
-  if test -d $RPM_INSTALL_PREFIX%{_infodir}; 
+  if test -d %{_infodir}; 
   then
-    rm -f $RPM_INSTALL_PREFIX%{_infodir}/dir
-    f=`find $RPM_INSTALL_PREFIX%{_infodir} -name '*.info.gz'`
+    rm -f %{_infodir}/dir
+    f=`find %{_infodir} -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX%{_infodir}/dir
+      install-info $i %{_infodir}/dir
     done
   fi
 

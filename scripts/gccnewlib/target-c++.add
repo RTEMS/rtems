@@ -14,11 +14,11 @@ This is the gcc/g++ compiler for %{gcc_target}
 
 %files -n %{rpmprefix}%{gcc_target}-c++ -f build/files.g++
 %defattr(-,root,root)
-%doc %{_mandir}/man1/%{gcc_target}-g++.1*
+%{_mandir}/man1/%{gcc_target}-g++.1*
 
-%dir %{_prefix}/bin
-%{_prefix}/bin/%{gcc_target}-c++%{_exeext}
-%{_prefix}/bin/%{gcc_target}-g++%{_exeext}
+%dir %{_bindir}
+%{_bindir}/%{gcc_target}-c++%{_exeext}
+%{_bindir}/%{gcc_target}-g++%{_exeext}
 
 %{gccexec}/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
 %dir %{gcclib}/%{gcc_target}/%{gcc_version}/include
