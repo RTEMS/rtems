@@ -1,3 +1,7 @@
+2005-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* score/cpu/Makefile.am: Remove or32 (target abandoned).
+
 2005-04-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if.h: Update from FreeBSD.
