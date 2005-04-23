@@ -27,6 +27,10 @@ h8300-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(BINUTILSVERS).spec
 
+h8300-rtemscoff@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache h8300-rtemscoff@osversion@ > $@
+RPM_SPECS_DATA += h8300-rtemscoff@osversion@-$(BINUTILSVERS).spec
+
 i386-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
 RPM_SPECS_DATA += i386-rtems@osversion@-$(BINUTILSVERS).spec
@@ -42,10 +46,6 @@ RPM_SPECS_DATA += mips-rtems@osversion@-$(BINUTILSVERS).spec
 mips64-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips64-rtems@osversion@ > $@
 RPM_SPECS_DATA += mips64-rtems@osversion@-$(BINUTILSVERS).spec
-
-or32-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache or32-rtems@osversion@ > $@
-RPM_SPECS_DATA += or32-rtems@osversion@-$(BINUTILSVERS).spec
 
 powerpc-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache powerpc-rtems@osversion@ > $@

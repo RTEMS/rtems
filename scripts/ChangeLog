@@ -1,5 +1,11 @@
 2005-04-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/Makefile.am: Add h8300-rtemscoff.
+	Remove or32-rtems.
+	* binutils/binutils.add: Propagate RPM_OPT_FLAGS to configure.
+
+2005-04-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/base-gfortran.add, gccnewlib/target-gfortran.add: New.
 	* gccnewlib/Makefile.am: Reflect addition of gfortran.
 	* gccnewlib/base-g77.add, gccnewlib/base-gcc.add, gccnewlib/base-gcj.add,

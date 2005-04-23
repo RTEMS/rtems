@@ -47,6 +47,7 @@ cd ..
 
 %build
   cd build
+  CFLAGS="$RPM_OPT_FLAGS" \
   ../binutils-%{binutils_version}/configure \
     --build=%_build --host=%_host \
     --target=%{binutils_target} \
