@@ -1,5 +1,6 @@
 2005-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/gccnewlib.add: Use %_bindir, %_libdir, %_includedir.
 	* gccnewlib/target-gfortran.add: Let package obsolete g77.
 	* gccnewlib/target-objc.add: Reflect new location of cc1obj.
 

@@ -115,13 +115,13 @@ BuildPreReq:	%{rpmprefix}%{gcc_target}-binutils
 
 %if %build_gcj
 # Building gcj requires bison and zlib
-BuildPreReq:	bison
-%if "%_vendor" == "redhat"
-BuildPreReq:	zlib-devel
-%endif
+BuildRequires:	bison
 %endif
 
 %if "%_vendor" == "redhat"
+%if %build_gcj
+BuildRequires:	zlib-devel
+%endif
 %if %build_gnat
 # Building gnat requires gnat
 # This really isn't available until RedHat 8.0.  How to conditionalize this?
@@ -182,10 +182,6 @@ cd ..
 %build
   cd build
 
-#  ALERT: GCJ would be better if we could add this flag and build
-#  it's libraries but this code isn't ready to be embedded.
-#  libgcj_flag="--enable-libgcj"
-
   languages="c"
 %if %build_cxx
   languages="$languages,c++"
@@ -208,7 +204,11 @@ cd ..
 
   export PATH="%{_bindir}:${PATH}"
   ../gcc-%{gcc_version}/configure \
-    --prefix=%{_prefix} --mandir=%{_mandir} \
+    --prefix=%{_prefix} \
+    --bindir=%{_bindir} \
+    --includedir=%{_includedir} \
+    --libdir=%{_libdir} \
+    --mandir=%{_mandir} \
     --infodir=%{_infodir} \
     --build=%_build --host=%_host \
     --target=%{gcc_target} \
@@ -278,12 +278,16 @@ cd ..
 
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     install
   cd %{gcc_target}/newlib
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     install-info
