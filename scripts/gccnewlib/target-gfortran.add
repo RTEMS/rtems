@@ -6,6 +6,7 @@
 Summary:	gcc/gfortran compiler for %{gcc_target}
 Group: %{rpmgroup}
 Requires: %{rpmprefix}rtems@osversion@-base-gfortran %{rpmprefix}%{gcc_target}-gcc
+Obsoletes: %{rpmprefix}%{gcc_target}-g77
 
 %description -n %{rpmprefix}%{gcc_target}-gfortran
 RTEMS is an open source operating system for embedded systems.
