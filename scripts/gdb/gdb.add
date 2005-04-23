@@ -89,6 +89,7 @@ cd ..
   mkdir -p build
   cd build
   export PATH="%{_bindir}:${PATH}"
+  CFLAGS="$RPM_OPT_FLAGS" \
   ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \
     --target=%{gdb_target} \

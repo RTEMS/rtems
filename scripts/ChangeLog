@@ -1,3 +1,7 @@
+2005-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gdb/gdb.add: Propagate RPM_OPT_FLAGS to configure.
+
 2005-04-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/Makefile.am: Add h8300-rtemscoff.
