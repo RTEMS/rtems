@@ -1,3 +1,10 @@
+2005-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h, rtems/score/cpu.h,
+	rtems/score/cpu_asm.h, rtems/score/or32.h,
+	rtems/asm.h, Makefile.am, cpu.c, cpu_asm.c,
+	preinstall.am: Remove.
+
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Split out preinstallation rules.
