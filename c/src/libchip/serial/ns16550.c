@@ -27,6 +27,7 @@
 
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
+#include <rtems/bspIo.h>
 #include "ns16550_p.h"
 
 /*
@@ -601,6 +602,7 @@ static void null_fun(){}
 
 NS16550_STATIC void ns16550_initialize_interrupts(int minor)
 {
+#ifdef BSP_SHARED_HANDLER_SUPPORT
   rtems_irq_connect_data IrqData = {0,
                                     ns16550_isr,
                                     &Console_Port_Data[minor],
@@ -609,15 +611,27 @@ NS16550_STATIC void ns16550_initialize_interrupts(int minor)
                                     (rtems_irq_is_enabled)null_fun,
                                     NULL
                                    };
+#else
+  rtems_irq_connect_data IrqData = {0,
+                                    ns16550_isr,
+                                    &Console_Port_Data[minor],
+                                    (rtems_irq_enable)null_fun,
+                                    (rtems_irq_disable)null_fun,
+                                    (rtems_irq_is_enabled)null_fun
+                                   };
+#endif
 
   ns16550_init(minor);
 
   Console_Port_Data[minor].bActive = FALSE;
 
-  IrqData.name  = (rtems_irq_symbolic_name)(
-    (unsigned int)BSP_PCI_IRQ0 +  Console_Port_Tbl[minor].ulIntVector );
+  IrqData.name  = (rtems_irq_symbolic_name)(Console_Port_Tbl[minor].ulIntVector );
 
+#ifdef BSP_SHARED_HANDLER_SUPPORT
   if (!BSP_install_rtems_shared_irq_handler (&IrqData)) {
+#else
+  if (!BSP_install_rtems_irq_handler(&IrqData)) {
+#endif
     printk("Error installing interrupt handler!\n");
     rtems_fatal_error_occurred(1);
   }
