@@ -165,7 +165,8 @@ int CPU_irq_level_from_symbolic_name(const rtems_irq_symbolic_name name);
 typedef unsigned char  rtems_irq_prio;
 struct 	__rtems_irq_connect_data__;	/* forward declaratiuon */
 
-typedef void (*rtems_irq_hdl)		(void);
+typedef void *rtems_irq_hdl_param;
+typedef void (*rtems_irq_hdl)           (rtems_irq_hdl_param);
 typedef void (*rtems_irq_enable)	(const struct __rtems_irq_connect_data__*);
 typedef void (*rtems_irq_disable)	(const struct __rtems_irq_connect_data__*);
 typedef int  (*rtems_irq_is_enabled)	(const struct __rtems_irq_connect_data__*);
@@ -179,6 +180,10 @@ typedef struct __rtems_irq_connect_data__ {
    * Handler. See comment on handler properties below in function prototype.
    */
   rtems_irq_hdl	   		hdl;
+  /*
+   * Handler handle to store private data
+   */
+   rtems_irq_hdl_param		handle;
   /*
    * Function for enabling interrupts at device level (ONLY!).
    * The CPU code will automatically enable it at USIU level and UIMB level.

@@ -270,7 +270,7 @@ m5xx_uart_setAttributes(
  * Interrupt handling.
  */
 static void
-m5xx_sci_interrupt_handler (void)
+m5xx_sci_interrupt_handler (rtems_irq_hdl_param unused)
 {
   int minor;
   

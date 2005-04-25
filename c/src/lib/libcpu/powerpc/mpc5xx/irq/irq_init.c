@@ -48,8 +48,8 @@ static int connected() {return 1;}
 static rtems_irq_connect_data     	rtemsIrq[CPU_IRQ_COUNT];
 static rtems_irq_global_settings     	initial_config;
 static rtems_irq_connect_data     	defaultIrq = {
-  /* vector,	 hdl		, on		, off		, isOn */
-  0, 		 nop_func	, nop_func	, nop_func	, not_connected
+  /* vector,	 hdl		,handle		, on		, off		, isOn */
+  0, 		 nop_func	,NULL		, nop_func	, nop_func	, not_connected
 };
 
 static rtems_irq_prio irqPrioTable[CPU_IRQ_COUNT]={
