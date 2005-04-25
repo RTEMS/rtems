@@ -1,3 +1,10 @@
+2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        PR 779/bsp
+        * clock/p_clock.c, console/console.c, console/uart.c, console/uart.h,
+        irq/irq.c, irq/irq.h, irq/irq_init.c:
+        powerpc: add parameter to new exception interrupt handlers
+
 2005-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* pci/pci.c, pci/pci.h, pci/pcifinddevice.c: Continue PCI API
