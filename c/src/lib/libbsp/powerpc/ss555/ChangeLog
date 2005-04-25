@@ -1,3 +1,8 @@
+2005-04-25      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        PR 779/bsp
+        * clock/p_clock.c: Add parameter to powerpc exception handler routines
+
 2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c: include <rtems/powerpc/powerpc.h>.
