@@ -84,6 +84,11 @@ BuildPreReq:	%{rpmprefix}%{gcc_target}-binutils
 %define build_cxx	0
 %endif
 
+# OBSOLETE: use tic4x instead
+%if "%{gcc_target}" == "c4x-rtems@osversion@"
+%define build_cxx	0
+%endif
+
 %if "%{gcc_target}" == "i386-rtems@osversion@"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
