@@ -1,6 +1,6 @@
 2005-04-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* gccnewlib/gccnewlib.add: Abandond c4x-*.
+	* gccnewlib/gccnewlib.add: Abandon c4x-*.
 
 2005-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
