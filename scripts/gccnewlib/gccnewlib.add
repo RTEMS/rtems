@@ -15,20 +15,13 @@ Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
 
 Version:      	gcc%{gcc_version}newlib%{newlib_version}
 
-%if "%{gcc_version}" >= "3.2.2"
-Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}@gcc_suffix@
-%else
-%if "%{gcc_version}" >= "3.0"
-Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.gz
-%else
-Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}-everything.tar.gz
-%endif
-%endif
+Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}@gcc_suffix@
 Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}@newlib_suffix@
 @PATCH1@
 @PATCH3@
-BuildPreReq:	texinfo >= 4.2
-BuildPreReq:	%{rpmprefix}%{gcc_target}-binutils
+BuildRequires:	texinfo >= 4.2
+BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
+
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target

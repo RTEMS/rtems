@@ -9,9 +9,9 @@ Release:      @Release@
 License:      GPL/LGPL
 
 Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
-BuildPreReq:	/sbin/install-info
-BuildPreReq:	texinfo >= 4.2
-BuildPreReq:	flex
+BuildRequires:	/sbin/install-info
+BuildRequires:	texinfo >= 4.2
+BuildRequires:	flex
 
 Version:      	%{binutils_version}
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutils_suffix@

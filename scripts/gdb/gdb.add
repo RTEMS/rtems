@@ -23,7 +23,7 @@ Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}@gdb_suffix@
 %endif
 
 %if "%{_vendor}" == "redhat"
-BuildPreReq:	ncurses-devel
+BuildRequires:	ncurses-devel
 %endif
 
 #

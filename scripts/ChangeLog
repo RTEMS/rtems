@@ -1,5 +1,9 @@
 2005-04-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/binutils.add: Use BuildRequires instead of BuildPreReq.
+	* gccnewlib/gccnewlib.add: Use BuildRequires instead of BuildPreReq.
+	* gdb/gdb.add: Use BuildRequires instead of BuildPreReq.
+	* gccnewlib/gccnewlib.add: Remove Source0-magic for gcc < 3.0.
 	* gccnewlib/gccnewlib.add: Abandon c4x-*.
 
 2005-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
