@@ -1,3 +1,8 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clock.c: Eliminate warning for duplicate definition of
+	PPC_Set_decrementer.
+
 2005-03-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h, pci/pci.c, startup/bspstart.c: Make PCI initialize
