@@ -1,3 +1,7 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* network/network.c: Eliminate warnings.
+
 2005-02-24	Jay Monkman <jtm@lopingdog.com>
 
 	PR 751/bsps

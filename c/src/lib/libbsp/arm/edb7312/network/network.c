@@ -105,7 +105,7 @@ unsigned short cs8900_get_data_block (cs8900_device *cs, unsigned char *data)
 void cs8900_tx_load (cs8900_device *cs, struct mbuf *m)
 {
     int len;
-    short *data;
+    unsigned short *data;
     int i;
 
     len = 0;

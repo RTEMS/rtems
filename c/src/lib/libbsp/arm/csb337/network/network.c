@@ -180,15 +180,17 @@ int rtems_at91rm9200_emac_attach (
     int mtu;
     int unitnumber;
     char *unitname;
+    void *p;
     
-    /* an array of receive buffer descriptors */
-    rxbuf_hdrs = (RXBUF_HDR *)&at91rm9200_emac_rxbuf_hdrs;
+    /* an array of receive buffer descriptors -- avoid type punned warning */
+    p = (void *)&at91rm9200_emac_rxbuf_hdrs;
+    rxbuf_hdrs = (RXBUF_HDR *)p;
 
     /* one transmit buffer, 1536 bytes maximum */
-    txbuf = (char *)&at91rm9200_emac_txbuf;
+    txbuf = (unsigned char *)&at91rm9200_emac_txbuf;
 
     /* receive buffers starting address */
-    rxbuf = (char *)&at91rm9200_emac_rxbufs;
+    rxbuf = (unsigned char *)&at91rm9200_emac_rxbufs;
     /*
      * Parse driver name
      */
