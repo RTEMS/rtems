@@ -1,3 +1,7 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/alloc360.c: Eliminate warnings.
+
 2005-03-11	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/init68360.c: Add _RomBase declaration.

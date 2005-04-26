@@ -23,14 +23,14 @@
  *	- Dual-Port RAM section 2
  */
 static struct {
-	char		*base;
-	unsigned int	size;
-	unsigned int	used;
+	uint8_t        *base;
+	uint32_t	size;
+	uint32_t	used;
 } bdregions[] = {
-	{ (char *)&m360.dpram1[0],	sizeof m360.dpram1,	0 },
-	{ (char *)&m360.dpram3[0],	sizeof m360.dpram3,	0 },
-	{ (char *)&m360.dpram0[0],	sizeof m360.dpram0,	0 },
-	{ (char *)&m360.dpram2[0],	sizeof m360.dpram2,	0 },
+	{ (uint8_t *)&m360.dpram1[0],	sizeof m360.dpram1,	0 },
+	{ (uint8_t *)&m360.dpram3[0],	sizeof m360.dpram3,	0 },
+	{ (uint8_t *)&m360.dpram0[0],	sizeof m360.dpram0,	0 },
+	{ (uint8_t *)&m360.dpram2[0],	sizeof m360.dpram2,	0 },
 };
 
 /*
@@ -57,7 +57,7 @@ M360AllocateBufferDescriptors (int count)
 		 * less dual-port RAM.
 		 */
 		if (bdregions[i].used == 0) {
-			volatile unsigned char *cp = bdregions[i].base;
+			volatile uint8_t *cp = bdregions[i].base;
 			*cp = 0xAA;
 			if (*cp != 0xAA) {
 				bdregions[i].used = bdregions[i].size;
