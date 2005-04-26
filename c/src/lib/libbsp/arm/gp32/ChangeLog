@@ -1,0 +1,4 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/bspstart.c: Add include rtems/bspIo.h to eliminate warning.
+

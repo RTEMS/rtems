@@ -17,6 +17,7 @@
 #include <bsp.h>
 #include <rtems/libcsupport.h>
 #include <rtems/libio.h>
+#include <rtems/bspIo.h>
 #include <s3c2400.h>
 
 /*-------------------------------------------------------------------------+
