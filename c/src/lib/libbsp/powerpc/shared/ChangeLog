@@ -1,3 +1,7 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* console/uart.h: Eliminate tabs.
+
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         PR 779/bsp
