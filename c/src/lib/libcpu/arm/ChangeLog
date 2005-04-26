@@ -1,3 +1,7 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* s3c2400/clock/clockdrv.c: Eliminate warning.
+
 2005-03-11	Philippe Simons <loki_666@fastmail.fm>
 
 	* Makefile.am, configure.ac: Added gp32 BSP.
