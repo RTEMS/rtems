@@ -21,6 +21,7 @@
 
 #include <errno.h>
 #include <rtems/error.h>
+#include <rtems/bspIo.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>

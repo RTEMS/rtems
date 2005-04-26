@@ -1,3 +1,7 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* network/network.c: Add include rtems/bspIo.h to eliminate warning.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
