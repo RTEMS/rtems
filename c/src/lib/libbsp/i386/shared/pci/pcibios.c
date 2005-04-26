@@ -184,7 +184,7 @@ pci_find_device(
 )
 {
   int status;
-  int sig;
+  int sig = 0;
 
   status = pcib_find_by_devid( vendorid, deviceid, instance, &sig );
 
@@ -241,25 +241,23 @@ BusCountPCI()
 {
    if( ucBusCount == 0xff )
    {
-      unsigned char bus,dev,hd;
-      unsigned int d;
+      unsigned char bus;
+      unsigned char dev;
+      unsigned char hd = 0;
+      unsigned int d = 0;
       int sig;
 
       ucBusCount = 0;
 
-      for(bus=0; bus< 0xff; bus++)
-      {  
-         for(dev=0; dev<PCI_MAX_DEVICES; dev++)
-         {
+      for (bus=0; bus< 0xff; bus++) {  
+         for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
             sig = PCIB_DEVSIG_MAKE(bus,dev,0);
             pcib_conf_read32(sig, PCI_VENDOR_ID, &d); 
 
-            if( d != -1 )
-            {
+            if( d != -1 ) {
                pcib_conf_read32(sig, PCI_CLASS_REVISION, &d); 
                
-               if( (d >> 16) == PCI_CLASS_BRIDGE_PCI )
-               {
+               if( (d >> 16) == PCI_CLASS_BRIDGE_PCI ) {
                   pcib_conf_read8(sig, PCI_SUBORDINATE_BUS, &hd); 
 
                   if( hd > ucBusCount ) 
@@ -270,13 +268,10 @@ BusCountPCI()
          
       }
 
-      if( ucBusCount == 0 )
-      {
+      if( ucBusCount == 0 ) {
          printk("BusCountPCI() found 0 busses, assuming 1\n");
          ucBusCount = 1;
-      }
-      else if( ucBusCount == 0xff )
-      {
+      } else if( ucBusCount == 0xff ) {
          printk("BusCountPCI() found 0xff busses, assuming 1\n");
          ucBusCount = 1;
       }
@@ -291,9 +286,12 @@ BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun )
 {
    int sig;
-   unsigned int d;
-   unsigned short s;
-   unsigned char bus,dev,fun,hd;
+   unsigned int d = 0;
+   unsigned short s = 0;
+   unsigned char bus;
+   unsigned char dev;
+   unsigned char fun;
+   unsigned char hd = 0;
 
    for (bus=0; bus<BusCountPCI(); bus++) 
    {

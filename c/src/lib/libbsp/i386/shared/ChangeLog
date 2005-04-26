@@ -1,3 +1,7 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* pci/pcibios.c: Reformatted.
+
 2005-04-18      Eric Valette <eric.valette@free.fr>
 
         * irq/irq.c, irq/irq.h, irq/irq_asm.S, irq/irq_init.c: Added parameter
