@@ -58,6 +58,12 @@
  *
  * MODIFICATION/HISTORY:
  * $Log$
+ * Revision 1.5  2004/07/25 14:21:43  joel
+ * 2004-07-25	Joel Sherrill <joel@OARcorp.com>
+ *
+ * 	* 3c509/3c509.c: Add <sys/errno.h>.
+ * 	* startup/linkcmds: Add .jcr section.
+ *
  * Revision 1.4  2004/04/21 16:01:33  ralf
  * Remove duplicate white lines.
  *
@@ -242,7 +248,7 @@ extern void Wait_X_ms( unsigned int timeToWait );  /* timer.c ??? */
  * RETURNS: nothing.
  *
  **********************************************************************************/
-static __inline void outsl( unsigned short io_addr, unsigned char *out_data, int len )
+static __inline void outsl( unsigned short io_addr, uint8_t *out_data, int len )
 {
    u_long *pl = ( u_long *)out_data;
    while( len-- )
@@ -260,7 +266,7 @@ static __inline void outsl( unsigned short io_addr, unsigned char *out_data, int
  * RETURNS:
  *
  **********************************************************************************/
-static __inline void outsw( unsigned short io_addr, unsigned char *out_data, int len )
+static __inline void outsw( unsigned short io_addr, uint8_t *out_data, int len )
 {
    u_short *ps = ( u_short *)out_data;
    while( len-- )
@@ -278,7 +284,7 @@ static __inline void outsw( unsigned short io_addr, unsigned char *out_data, int
  * RETURNS: nothing
  *
  **********************************************************************************/
-static __inline void outsb( unsigned short io_addr, unsigned char *out_data, int len )
+static __inline void outsb( unsigned short io_addr, uint8_t *out_data, int len )
 {
    while( len-- )
    {
@@ -295,7 +301,7 @@ static __inline void outsb( unsigned short io_addr, unsigned char *out_data, int
  * RETURNS: nothing.
  *
  **********************************************************************************/
-static __inline void insw( unsigned short io_addr, unsigned char *in_data, int len )
+static __inline void insw( unsigned short io_addr, uint8_t *in_data, int len )
 {
    u_short *ps = ( u_short *)in_data;
    while( len-- )
@@ -313,7 +319,7 @@ static __inline void insw( unsigned short io_addr, unsigned char *in_data, int l
  * RETURNS: nothing.
  *
  **********************************************************************************/
-static __inline void insl( unsigned short io_addr, unsigned char *in_data, int len )
+static __inline void insl( unsigned short io_addr, uint8_t *in_data, int len )
 {
    u_long *pl = ( u_long *)in_data;
    while( len-- )
@@ -331,7 +337,7 @@ static __inline void insl( unsigned short io_addr, unsigned char *in_data, int l
  * RETURNS: nothing.
  *
  **********************************************************************************/
-static __inline void insb( unsigned short io_addr, unsigned char *in_data, int len )
+static __inline void insb( unsigned short io_addr, uint8_t *in_data, int len )
 {
    while( len-- )
    {
@@ -375,7 +381,7 @@ static __inline unsigned short inw( unsigned short io_addr )
  * RETURNS: nothing.
  *
  **********************************************************************************/
-void __inline outb( unsigned short io_addr, unsigned char out_data )
+void __inline outb( unsigned short io_addr, uint8_t out_data )
 {
   outport_byte( io_addr, out_data );
 }
@@ -387,9 +393,9 @@ void __inline outb( unsigned short io_addr, unsigned char out_data )
  * RETURNS: byte read.
  *
  **********************************************************************************/
-static __inline unsigned char inb( unsigned short io_addr )
+static __inline uint8_t inb( unsigned short io_addr )
 {
-  unsigned char in_data;
+  uint8_t in_data;
   inport_byte( io_addr, in_data );
   return in_data;
 }
@@ -1329,15 +1335,15 @@ startagain:
 	{
        if( ep_ftst(F_ACCESS_32_BITS ) )
        {
-	      outsl( BASE + EP_W1_TX_PIO_WR_1, mtod(m, caddr_t), m->m_len / 4 );
+	      outsl( BASE + EP_W1_TX_PIO_WR_1, mtod(m, uint8_t *), m->m_len / 4 );
 	      if( m->m_len & 3 )
-             outsb(BASE + EP_W1_TX_PIO_WR_1, mtod(m, caddr_t) + (m->m_len & (~3)), m->m_len & 3 );
+             outsb(BASE + EP_W1_TX_PIO_WR_1, mtod(m, uint8_t *) + (m->m_len & (~3)), m->m_len & 3 );
        }
        else
        {
-	      outsw( BASE + EP_W1_TX_PIO_WR_1, mtod(m, caddr_t), m->m_len / 2 );
+	      outsw( BASE + EP_W1_TX_PIO_WR_1, mtod(m, uint8_t *), m->m_len / 2 );
 	      if( m->m_len & 1 )
-		  outb( BASE + EP_W1_TX_PIO_WR_1, *(mtod(m, caddr_t) + m->m_len - 1) );
+		  outb( BASE + EP_W1_TX_PIO_WR_1, *(mtod(m, uint8_t *) + m->m_len - 1) );
 	   }
 	}
     while( pad-- )
@@ -1423,7 +1429,7 @@ read_again:
 	   top->m_data += EOFF;
 
   	   /* Read what should be the header. */
-	   insw(BASE + EP_W1_RX_PIO_RD_1, mtod(top, caddr_t), sizeof(struct ether_header) / 2);
+	   insw(BASE + EP_W1_RX_PIO_RD_1, mtod(top, uint8_t *), sizeof(struct ether_header) / 2);
 	   top->m_len = sizeof(struct ether_header);
 	   rx_fifo -= sizeof(struct ether_header);
 	   sc->cur_len = rx_fifo2;
@@ -1454,18 +1460,18 @@ read_again:
 	   }
 	   if( ep_ftst( F_ACCESS_32_BITS ) )
 	   { /* default for EISA configured cards*/
-	      insl( BASE + EP_W1_RX_PIO_RD_1, mtod(m, caddr_t) + m->m_len, lenthisone / 4);
+	      insl( BASE + EP_W1_RX_PIO_RD_1, mtod(m, uint8_t *) + m->m_len, lenthisone / 4);
 	      m->m_len += (lenthisone & ~3);
 	      if (lenthisone & 3)
-		     insb(BASE + EP_W1_RX_PIO_RD_1, mtod(m, caddr_t) + m->m_len, lenthisone & 3);
+		     insb(BASE + EP_W1_RX_PIO_RD_1, mtod(m, uint8_t *) + m->m_len, lenthisone & 3);
 	      m->m_len += (lenthisone & 3);
 	    }
 	    else
 	    {
-	      insw(BASE + EP_W1_RX_PIO_RD_1, mtod(m, caddr_t) + m->m_len, lenthisone / 2);
+	      insw(BASE + EP_W1_RX_PIO_RD_1, mtod(m, uint8_t *) + m->m_len, lenthisone / 2);
 	      m->m_len += lenthisone;
 	      if( lenthisone & 1 )
-		     *(mtod(m, caddr_t) + m->m_len - 1) = inb(BASE + EP_W1_RX_PIO_RD_1);
+		     *(mtod(m, uint8_t *) + m->m_len - 1) = inb(BASE + EP_W1_RX_PIO_RD_1);
 	   }
 	   rx_fifo -= lenthisone;
     }

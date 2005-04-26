@@ -1,3 +1,7 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* 3c509/3c509.c, wd8003/wd8003.c: Eliminate warnings.
+
 2005-04-18      Eric Valette <eric.valette@free.fr>
 
         * clock/ckinit.c, console/console.c, console/ps2_mouse.c,

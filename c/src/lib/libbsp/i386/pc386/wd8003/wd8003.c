@@ -323,7 +323,7 @@ wd_rxDaemon (void *arg)
       MCLGET (m, M_WAIT);
       m->m_pkthdr.rcvif = ifp;
 
-      temp = m->m_data;
+      temp = (unsigned char *) m->m_data;
       m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
 
       if ((i2 = (OUTPAGE - start) * SHAPAGE - 4) < len){
@@ -363,7 +363,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	struct wd_softc *dp = ifp->if_softc;
 	struct mbuf *n;
 	unsigned int len, tport;
-	char *shp, txReady;
+	uint8_t *shp, txReady;
 
 	tport = dp->port;
 
