@@ -33,17 +33,17 @@
  * current operating values
  */
 typedef struct mcfuart {
-   uint32_t            chn;      /* UART channel number */
-   uint8_t             intvec;   /* UART interrupt vector number, or
-                                          0 if polled I/O */
-   void                     *tty;      /* termios channel descriptor */
+   uint32_t            chn;              /* UART channel number */
+   uint8_t             intvec;           /* UART interrupt vector number, or
+                                                0 if polled I/O */
+   void               *tty;              /* termios channel descriptor */
    
-   volatile const char      *tx_buf;    /* Transmit buffer from termios */
-   volatile uint32_t   tx_buf_len;/* Transmit buffer length */
-   volatile uint32_t   tx_ptr;    /* Index of next char to transmit*/
-   rtems_isr_entry           old_handler;/* Saved interrupt handler */
+   volatile const uint8_t  *tx_buf;      /* Transmit buffer from termios */
+   volatile uint32_t        tx_buf_len;  /* Transmit buffer length */
+   volatile uint32_t        tx_ptr;      /* Index of next char to transmit*/
+   rtems_isr_entry          old_handler; /* Saved interrupt handler */
    
-   tcflag_t                  c_iflag;  /* termios input mode flags */
+   tcflag_t                  c_iflag;    /* termios input mode flags */
    rtems_boolean             parerr_mark_flag; /* Parity error processing
                                                   state */
 } mcfuart;
