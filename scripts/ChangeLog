@@ -1,3 +1,11 @@
+2005-04-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/base-gcc.add: Install infos using FC conventions.
+	* gccnewlib/base-gcj.add: Install infos using FC conventions.
+	Various minor fixes.
+	* gccnewlib/base-gfortran.add: Install infos using FC conventions.
+	* gccnewlib/target-gcj.add: Various minor fixes.
+
 2005-04-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/binutils.add: Use BuildRequires instead of BuildPreReq.
