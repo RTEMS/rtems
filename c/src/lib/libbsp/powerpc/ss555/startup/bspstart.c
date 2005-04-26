@@ -105,10 +105,10 @@ void bsp_pretasking_hook(void)
    *  the kernel and the application can be linked and burned into ROM
    *  independently of each other.
    */
-    unsigned char *_HeapStart =
-      (char*)BSP_Configuration.work_space_start
+    uint8_t *_HeapStart =
+      (uint8_t *)BSP_Configuration.work_space_start
            + BSP_Configuration.work_space_size;
-    extern unsigned char _HeapEnd[];
+    extern uint8_t _HeapEnd[];
 
     bsp_libc_init( _HeapStart, _HeapEnd - _HeapStart, 0 );
 
