@@ -43,7 +43,7 @@ PERIPHERALS
 ===========
 TIMERS:             Four PIT (RTEMS clock is PIT3), Four Timers
   RESOLUTION:       1 microsecond 
-SERIAL PORTS:       Internal UART 1, 2 and 3
+SERIAL PORTS:       Internal UART 0, 1 and 2
 REAL-TIME CLOCK:    none
 DMA:                none
 VIDEO:              none
@@ -56,7 +56,7 @@ CLOCK DRIVER:       PIT3
 IOSUPP DRIVER:      none
 SHMSUPP:            none
 TIMER DRIVER:       TIMER3
-TTY DRIVER:         UART1, 2 and 3
+TTY DRIVER:         UART0, 1 and 2
 
 STDIO
 =====
@@ -81,7 +81,7 @@ port into RAM then executed or programmed into flash memory.
 
 3) Run 'tftp' on your host machine:
             tftp> binary
-            tftp> connect www.xxx.yyy.zzz      (You're ucDIMM's address)
+            tftp> connect www.xxx.yyy.zzz      (Your ucDIMM's address)
             tftp> put someFile.exe
 
 4) When the file has downloaded press the <ESC> key to terminate
