@@ -417,7 +417,8 @@ int main(
 
   printf( "\nSeek directory\n" );
   printf( "telldir() should report only sizeof(struct dirent) increments \n" );
-  printf( "in position. Sizeof(struct dirent): %d\n", sizeof(struct dirent) );
+  printf( "in position. Sizeof(struct dirent): %ld\n",
+                          (unsigned long) sizeof(struct dirent) );
   rewinddir( directory );
   for( off=0 ; off<=200 ; off=off + sizeof(struct dirent) / 4 ) {
     seekdir( directory, off );
