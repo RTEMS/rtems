@@ -402,7 +402,6 @@ ENDFRAME(get_mem_conf)
 #define XLEAF(label) \
 	.globl label ; \
 label:
-#define END(label)	ENDFRAME(label)
 
 /*
  * cacheop macro to automate cache operations
@@ -521,7 +520,7 @@ LEAF(_size_cache)
 	li	t7,16
 	sll	t7,t1
 1:	j	ra
-END(_size_cache)
+ENDFRAME(_size_cache)
 
 /*
  * void config_cache()   R4000
@@ -542,7 +541,7 @@ LEAF(config_cache)
 	sw	t5,dcache_linesize
 	sw	t7,scache_linesize
 8:	j	ra
-END(config_cache)
+ENDFRAME(config_cache)
 
 /*
  * void _init_cache()   R4000
@@ -593,7 +592,7 @@ LEAF(_init_cache)
 
 1:	mtc0	v0,C0_SR
 	j	ra
-END(_init_cache)
+ENDFRAME(_init_cache)
 
 /*
  * void flush_cache (void)   R4000
@@ -625,7 +624,7 @@ LEAF(flush_cache)
 	icacheop(a0,a1,a2,a3,Index_Writeback_Inv_D)
 
 2:	j	ra
-END(flush_cache)
+ENDFRAME(flush_cache)
 
 /*
  * void flush_cache_nowrite (void)   R4000
@@ -662,7 +661,7 @@ LEAF(flush_cache_nowrite)
 
 2:	mtc0	v0,C0_SR
 	j	ra
-END(flush_cache_nowrite)
+ENDFRAME(flush_cache_nowrite)
 
 /*
  * void clean_cache (unsigned kva, size_t n)   R4000
@@ -695,7 +694,7 @@ XLEAF(clear_cache)
 	vcacheop(a0,a1,a2,a3,Hit_Writeback_Inv_D)
 
 2:	j	ra
-END(clean_cache)
+ENDFRAME(clean_cache)
 
 /*
  * void clean_dcache (unsigned kva, size_t n)   R4000
@@ -710,7 +709,7 @@ LEAF(clean_dcache)
 	vcacheop(a0,a1,a2,a3,Hit_Writeback_Inv_D)
 
 2:	j	ra
-END(clean_dcache)
+ENDFRAME(clean_dcache)
 
 /*
  * void clean_dcache_indexed (unsigned kva, size_t n)   R4000
@@ -734,7 +733,7 @@ LEAF(clean_dcache_indexed)
 	icacheop(a0,a1,a2,a3,Index_Writeback_Inv_D)
 
 2:	j	ra
-END(clean_dcache_indexed)
+ENDFRAME(clean_dcache_indexed)
 
 /*
  * void clean_dcache_nowrite (unsigned kva, size_t n)   R4000
@@ -749,7 +748,7 @@ LEAF(clean_dcache_nowrite)
 	vcacheop(a0,a1,a2,a3,Hit_Invalidate_D)
 
 2:	j	ra
-END(clean_dcache_nowrite)
+ENDFRAME(clean_dcache_nowrite)
 
 /*
  * void clean_dcache_nowrite_indexed (unsigned kva, size_t n)   R4000
@@ -781,7 +780,7 @@ LEAF(clean_dcache_nowrite_indexed)
 
 2:	mtc0	v0,C0_SR
 	j	ra
-END(clean_dcache_nowrite_indexed)
+ENDFRAME(clean_dcache_nowrite_indexed)
 
 /*
  * void clean_icache (unsigned kva, size_t n)   R4000
@@ -796,7 +795,7 @@ LEAF(clean_icache)
 	vcacheop(a0,a1,a2,a3,Hit_Invalidate_I)
 
 2:	j	ra
-END(clean_icache)
+ENDFRAME(clean_icache)
 
 /*
  * void clean_icache_indexed (unsigned kva, size_t n)   R4000
@@ -820,7 +819,7 @@ LEAF(clean_icache_indexed)
 	icacheop(a0,a1,a2,a3,Index_Invalidate_I)
 
 2:	j	ra
-END(clean_icache_indexed)
+ENDFRAME(clean_icache_indexed)
 
 /*
  * void clean_scache (unsigned kva, size_t n)   R4000
@@ -834,7 +833,7 @@ LEAF(clean_scache)
 	vcacheop(a0,a1,a2,a3,Hit_Writeback_Inv_SD)
 
 2:	j	ra
-END(clean_scache)
+ENDFRAME(clean_scache)
 
 /*
  * void clean_scache_indexed (unsigned kva, size_t n)   R4000
@@ -849,7 +848,7 @@ LEAF(clean_scache_indexed)
 	icacheop(a0,a1,a2,a3,Index_Writeback_Inv_SD)
 
 2:	j	ra
-END(clean_scache_indexed)
+ENDFRAME(clean_scache_indexed)
 
 /*
  * void clean_scache_nowrite (unsigned kva, size_t n)   R4000
@@ -864,7 +863,7 @@ LEAF(clean_scache_nowrite)
 	vcacheop(a0,a1,a2,a3,Hit_Invalidate_SD)
 
 2:	j	ra
-END(clean_scache_nowrite)
+ENDFRAME(clean_scache_nowrite)
 
 /*
  * void clean_scache_nowrite_indexed (unsigned kva, size_t n)   R4000
@@ -887,7 +886,7 @@ LEAF(clean_scache_nowrite_indexed)
 
 2:	mtc0	v0,C0_SR
 	j	ra
-END(clean_scache_nowrite_indexed)
+ENDFRAME(clean_scache_nowrite_indexed)
 
 /**************************************************************************
 **
