@@ -87,19 +87,14 @@ cd ..
   rm -rf $RPM_BUILD_ROOT%{_infodir}/configure.info*
 %endif
 
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+
 # gzip info files
   ls $RPM_BUILD_ROOT%{_infodir}/*.info \
     $RPM_BUILD_ROOT%{_infodir}/*.info-? \
     $RPM_BUILD_ROOT%{_infodir}/*.info-?? 2>/dev/null \
   | while read a; do \
     gzip -9qf $a 2>/dev/null; \
-  done
-
-# We assume that info/dir exists when building the RPMs
-  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-  f=`find $RPM_BUILD_ROOT%{_infodir} -name '*.info.gz'`
-  test x"$f" != x"" && for i in $f; do
-    /sbin/install-info $i $RPM_BUILD_ROOT%{_infodir}/dir
   done
 
 # gzip man pages
