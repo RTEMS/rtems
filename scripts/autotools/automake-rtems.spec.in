@@ -33,7 +33,7 @@ Release:      1
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
-BuildPreReq:  %{requirements} perl help2man
+BuildRequires:  %{requirements} perl help2man
 Requires:     %{requirements}
 Requires(post):	      	/sbin/install-info
 Requires(preun):	/sbin/install-info

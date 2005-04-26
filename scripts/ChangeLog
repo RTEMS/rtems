@@ -1,5 +1,10 @@
 2005-04-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* autotools/automake-rtems.spec.in,
+	autotools/autoconf-rtems.spec.in: Remove rpm anachronisms.
+
+2005-04-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* binutils/binutils.add: Install infos using FC conventions.
 	* binutils/base-binutils.add: Install infos using FC conventions.
 	* gdb/base-gdb.add: Install infos using FC conventions.
