@@ -117,7 +117,7 @@ name:;                                          \
         .globl  _##name;\
 _##name:
 #define ENDFRAME(name)
-#endif  XDS
+#endif /* XDS */
 
 /*
  * Hardware Floating Point Registers
