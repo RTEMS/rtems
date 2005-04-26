@@ -10,21 +10,22 @@
  */
 #include <rtems.h>
 #include <libcpu/au1x00.h>
+#include <rtems/bspIo.h>
 
 void bsp_cleanup( void )
 {
-    void (*reset_func)(void);
+  int console_inbyte_nonblocking(int);
+  void (*reset_func)(void);
   
-    reset_func = (void *)0xbfc00000;
+  reset_func = (void *)0xbfc00000;
 
-    mips_set_sr( 0x00200000 ); /* all interrupts off, boot exception vectors */
+  mips_set_sr( 0x00200000 ); /* all interrupts off, boot exception vectors */
 
-    printk("\nEXECUTIVE SHUTDOWN! Any key to reboot...");
-    while (console_inbyte_nonblocking(0) < 0) {
-        continue;
-    }
+  printk("\nEXECUTIVE SHUTDOWN! Any key to reboot...");
+  while (console_inbyte_nonblocking(0) < 0) {
+    continue;
+  }
 
-    /* Try to restart bootloader */
-    reset_func();
-
+  /* Try to restart bootloader */
+  reset_func();
 }

@@ -16,7 +16,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <libcpu/au1x00.h>
-
+#include <rtems/bspIo.h>
 
 unsigned32 tick_interval;
 unsigned32 last_match;

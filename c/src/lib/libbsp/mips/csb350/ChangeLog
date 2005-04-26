@@ -1,3 +1,10 @@
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clockdrv.c: Add include of rtems/bspIo.h.
+	* include/tm27.h: Delete TX3904 code and leave stub.
+	* network/network.c: Eliminate warnings.
+	* startup/bspclean.c: Add include of rtems/bspIo.h.  Reformat.
+
 2005-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* include/.cvsignore: Fixed typo.

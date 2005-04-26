@@ -14,6 +14,7 @@
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
 #include <bsp.h>
+#include <rtems/bspIo.h>
 #include <libcpu/au1x00.h>
 
 #include <stdio.h>
@@ -131,7 +132,7 @@ typedef struct
     unsigned long                   tx_pkts;
 } au1x00_emac_softc_t;
 
-static volatile au1x00_emac_softc_t softc[NUM_IFACES];
+static au1x00_emac_softc_t softc[NUM_IFACES];
 
 
 /* function prototypes */
@@ -240,7 +241,7 @@ int rtems_au1x00_emac_attach (
      *  zero out the control structure
      */
     
-    memset(sc, 0, sizeof(*sc));
+    memset((void *)sc, 0, sizeof(*sc));
     
     sc->unitnumber = unitnumber;
     sc->int_ctrlr = AU1X00_IC0_ADDR;
@@ -458,7 +459,7 @@ void  au1x00_emac_init_hw(au1x00_emac_softc_t *sc)
          * boundary. 
          */
         if (mtod(m, unsigned32) & 0x1f) {
-	  unsigned32 *p = &mtod(m, unsigned32);
+	  unsigned32 *p = mtod(m, unsigned32 *);
           *p = (mtod(m, unsigned32) + 0x1f) & 0x1f;
         }
         sc->rx_dma[i].addr = (mtod(m, unsigned32) & ~0xe0000000);
@@ -653,7 +654,8 @@ void au1x00_emac_rx_daemon (void *arg)
                  * The receive buffer must be aligned with a cache line
                  * boundary. 
                  */
-		{ unsigned32 *p = &mtod(m, unsigned32);
+		{
+                  unsigned32 *p = mtod(m, unsigned32 *);
                   *p = (mtod(m, unsigned32) + 0x1f) & ~0x1f;
 		}
             
@@ -828,14 +830,12 @@ au1x00_emac_ioctl (struct ifnet *ifp, int command, caddr_t data)
 rtems_isr au1x00_emac_isr (rtems_vector_number v)
 {
     volatile au1x00_emac_softc_t *sc;
-    int index;
     int tx_flag = 0;
     int rx_flag = 0;
 
-    if (v == AU1X00_IRQ_MAC0) {
-        sc = &softc[0];
-    } else {
-        assert(v == AU1X00_IRQ_MAC0);
+    sc = &softc[0];
+    if (v != AU1X00_IRQ_MAC0) {
+      assert(v == AU1X00_IRQ_MAC0);
     }
 
     sc->interrupts++;
