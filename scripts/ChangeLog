@@ -1,5 +1,11 @@
 2005-04-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/binutils.add: Install infos using FC conventions.
+	* binutils/base-binutils.add: Install infos using FC conventions.
+	* gdb/base-gdb.add: Install infos using FC conventions.
+
+2005-04-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/base-gcc.add: Install infos using FC conventions.
 	* gccnewlib/base-gcj.add: Install infos using FC conventions.
 	Various minor fixes.
