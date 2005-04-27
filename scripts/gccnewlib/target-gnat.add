@@ -17,7 +17,11 @@ This is the gcc/gnat compiler for %{gcc_target}
 %dir %{_bindir}
 %{_bindir}/%{gcc_target}-gnat*
 
-%{gccexec}/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
+%if "%{gcc_version}" >= "4.0"
+%{_bindir}/%{gcc_target}-gprmake%{_exeext}
+%endif
+
+%{gccexec}/%{gcc_target}/%{gcc_version}/gnat1%{_exeext}
 %{gcclib}/%{gcc_target}/%{gcc_version}/adalib
 %{gcclib}/%{gcc_target}/%{gcc_version}/adainclude
 %endif

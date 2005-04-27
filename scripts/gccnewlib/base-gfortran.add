@@ -24,7 +24,7 @@ This is the files for gcc/gfortran that are shared by all targets.
 %{_mandir}/man1/%{gcc_target}-gfortran.1*
 
 %post -n %{rpmprefix}rtems@osversion@-base-gfortran
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gfortran.info.gz
+  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gfortran.info.gz
 
 %postun -n %{rpmprefix}rtems@osversion@-base-gfortran
 if [ $1 -eq 0 ]; then

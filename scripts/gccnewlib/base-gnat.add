@@ -6,6 +6,9 @@
 Summary:	gcc/gnat tools
 Group: %{rpmgroup}
 
+Requires(post): 	/sbin/install-info
+Requires(postun):	/sbin/install-info
+
 %description -n %{rpmprefix}rtems@osversion@-base-gnat
 RTEMS is an open source operating system for embedded systems.
 
@@ -13,7 +16,10 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 
 %files -n %{rpmprefix}rtems@osversion@-base-gnat
 %defattr(-,root,root)
+%if "%{gcc_version}" >= "4.0"
 %dir %{_bindir}
+%{_bindir}/vxaddr2line%{_exeext}
+%endif
 
 %if "%{gcc_version}" >= "3.3"
 %{_infodir}/gnat*
@@ -21,23 +27,15 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 
 %if "%{gcc_version}" >= "3.3"
 %post -n %{rpmprefix}rtems@osversion@-base-gnat
-  if test -d %{_infodir}; 
-  then
-    rm -f %{_infodir}/dir
-    f=`find %{_infodir} -name '*.info.gz'`
-    test -n "$f" && for i in $f; do
-      install-info $i %{_infodir}/dir
-    done
-  fi
+  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gnat_rm.info.gz
+  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gnat-style.info.gz
+  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
 
 %postun -n %{rpmprefix}rtems@osversion@-base-gnat
-  if test -d %{_infodir}; 
-  then
-    rm -f %{_infodir}/dir
-    f=`find %{_infodir} -name '*.info.gz'`
-    test -n "$f" && for i in $f; do
-      install-info $i %{_infodir}/dir
-    done
-  fi
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gnat_rm.info.gz
+  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gnat-style.info.gz
+  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
+fi
 %endif
 %endif
