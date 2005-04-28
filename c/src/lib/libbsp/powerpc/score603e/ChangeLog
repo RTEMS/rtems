@@ -5,6 +5,14 @@
         * irq/FPGA.c, irq/irq.c, irq/irq.h, irq/irq_init.c: New files.
         * startup/FPGA.c: Removed.
 
+2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * score603e/Makefile.am, score603e/configure.ac,
+        score603e/console/console.c, score603e/include/bsp.h,
+        score603e/include/gen2.h, score603e/include/tm27.h,
+        score603e/startup/bspstart.c: Update score603e to new exception model
+        NOTE: These modifications have not been tested on hardware.
+
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * clock/clock.c: Fix multiple defined warning
