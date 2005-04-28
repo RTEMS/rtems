@@ -133,7 +133,7 @@ typedef struct _SP_INTERRUPT_ID {
  */
 
 #define NS16550_Baud(_clock, _baud_rate) \
-  ((((_clock) == 0) ? 115200 : (_clock))/(_baud_rate))
+  ((((_clock) == 0) ? 115200 : (_clock))/(_baud_rate*16))
 
 /*
  * Define serial port modem control register structure.

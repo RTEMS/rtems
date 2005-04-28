@@ -1,3 +1,8 @@
+2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        PR 781/rtems_misc
+        * libchip/serial/ns16550_p.h: Fix baud rate calculation
+
 2005-04-25      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * libchip/serial/ns16550.c:
