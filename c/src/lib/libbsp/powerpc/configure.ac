@@ -4,7 +4,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-lib-libbsp-powerpc],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
-AC_CONFIG_SRCDIR([dmv177])
+AC_CONFIG_SRCDIR([ep1a])
 RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU

@@ -1,5 +1,9 @@
 2005-04-28	Joel Sherrill <joel@OARcorp.com>
 
+	* configure.ac: Remove reference to dmv177.
+
+2005-04-28	Joel Sherrill <joel@OARcorp.com>
+
 	* acinclude.m4: Remove dmv177 and ppcn_60x.
 	* dmv177/.cvsignore, dmv177/ChangeLog, dmv177/Makefile.am,
 	dmv177/QUIRKS, dmv177/README, dmv177/README.net, dmv177/STATUS,
