@@ -1,4 +1,10 @@
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * Add/remove files for the Update to new exception model.
+        * pci/no_host_bridge.c, vme/vmeconfig.c: New files.
+        * clock/clock.c: Removed.
+
+2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
         
         * Add/move files for the Update to new exception model.
           NOTE: These modifications have not been tested on hardware.
