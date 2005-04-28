@@ -1,3 +1,8 @@
+2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * custom/score603e.cfg: Update score603e to new exception model
+        NOTE: These modifications have not been tested on hardware.
+
 2005-03-11	Jay Monkman <jtm@lopingdog.com>
 
 	* custom/vegaplus.cfg: Removed.
