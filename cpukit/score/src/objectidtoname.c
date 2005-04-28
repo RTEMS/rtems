@@ -62,8 +62,8 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   if ( information->is_string )
     return OBJECTS_INVALID_ID;
 
-  the_object = _Objects_Get( information, id, &ignored_location  );
-  if (!the_object)
+  the_object = _Objects_Get( information, id, &ignored_location );
+  if ( !the_object )
     return OBJECTS_INVALID_ID;
 
   *name = the_object->name;

@@ -1,3 +1,7 @@
+2005-04-28	Joel Sherrill <joel@OARcorp.com>
+
+	* score/src/objectidtoname.c: Fixed spacing.
+
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * score/src/objectidtoname.c: Add enable dispatch
