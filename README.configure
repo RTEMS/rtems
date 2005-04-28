@@ -118,13 +118,13 @@ BSPs to build only works from the top level build directory.
 
 Installation is done under $(prefix)/rtems.
 
-As an example, to build and install the mvme136 and dmv152 bsps for m68k do:
+As an example, to build and install the mvme136 and mvme162 bsps for m68k do:
 
 	(path_to_rtems_src)/configure --target=m68k-rtems
 
-	make RTEMS_BSP="mvme136 dmv152"
+	make RTEMS_BSP="mvme136 mvme162"
 	
-	make install RTEMS_BSP="mvme136 dmv152"
+	make install RTEMS_BSP="mvme136 mvme162"
 
 The sample tests are built by 'make all', do a 'make test' to build the full
 test suite.
@@ -176,7 +176,7 @@ The following bsps are supported:
 
 host-based	: posix (on Linux, FreeBSD, Cygwin, Solaris, and HPUX)
 
-arm             : arm_bare_bsp armulator csb336 csb337 edb7312 vegaplus
+arm             : arm_bare_bsp armulator csb336 csb337 edb7312 gp32 vegaplus
 
 c4x             : c3xsim c4xsim
 
@@ -187,19 +187,18 @@ i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
                         variety of PC configurations including PC-104
                         based solutions.
 
-m68k		: dmv152 csb360 gen68302 gen68340 gen68360 gen68360_040 
+m68k		: csb360 dmv152 gen68302 gen68340 gen68360 gen68360_040 
                   idp mcf5206elite mrm332 mvme136 mvme147 mvme147s
-                  mvme162 mvme162lx ods68302 sim68000 simcpu32
+                  mvme162 mvme162lx ods68302 sim68000 simcpu32 uC5282
 
 no_cpu          : no_bsp  (porting example)
 
-mips            : p4600 p4650 (p4000 port with either R4600 or R4650)
-                  jmr3904 genmongoosev
+mips            : csb350 genmongoosev
+                  p4600 p4650 (p4000 port with either R4600 or R4650)
+                  jmr3904
 
-or32:           : orp
-
-powerpc		: dmv177 eth_comm gen405 helas403 mcp750 mbx8xx mtx603e
-                  mpc8260ads mvme230x ppcn_60x psim score603e ss555
+powerpc		: ep1a gen405 helas403 mcp750 mbx8xx mtx603e
+                  mpc8260ads mvme230x mvme5500 psim score603e ss555
 
                   NOTE: The "motorola_powerpc" BSP is a single BSP which
                   can be conditionally compiled to support most Motorola
@@ -212,7 +211,7 @@ sparc 		: erc32 erc32nfp leon1 leon2
 any             : bare
 
 The following ports were considered obsoleted after the 4.6 releases
-and were removed: a29k, hppa, i960, and mips64orion.
+and were removed: a29k, hppa, i960, mips64orion, and or32.
 
 
 5. Makefile structure

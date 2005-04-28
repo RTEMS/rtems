@@ -1,3 +1,8 @@
+2005-04-28	Joel Sherrill <joel@OARcorp.com>
+
+	* README.configure: Updated to account for removal of dmv177 and
+	ppcn_60x as well as other additions and deletions.
+
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/enable-itron.m4: Allow unix.
