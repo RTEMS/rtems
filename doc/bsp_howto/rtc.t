@@ -33,9 +33,49 @@ RTC chip.  Each of these README explains how to configure the
 shared libchip implementation of the RTC driver for that particular
 RTC chip.
 
-The DY-4 DMV177 BSP uses the shared libchip implementation of the RTC
-driver.  Its @code{RTC_Table} configuration table can be found in
-@code{c/src/lib/libbsp/powerpc/dmv177/tod/config.c}.
+The DY-4 DMV177 BSP used the shared libchip implementation of the RTC
+driver.  There were no DMV177 specific configuration routines.  A BSP
+could use configuration routines to dynamically determine what type
+of real-time clock is on a particular board.  This would be useful for
+a BSP supporting multiple board models.  The relevant ports of
+the DMV177's @code{RTC_Table} configuration table is below:
+
+@example
+
+#include <bsp.h>
+#include <libchip/rtc.h>
+#include <libchip/icm7170.h>
+
+boolean dmv177_icm7170_probe(int minor);
+
+rtc_tbl	RTC_Table[] = {
+  { "/dev/rtc0",                /* sDeviceName */
+    RTC_ICM7170,                /* deviceType */
+    &icm7170_fns,               /* pDeviceFns */
+    dmv177_icm7170_probe,       /* deviceProbe */
+    (void *) ICM7170_AT_1_MHZ,  /* pDeviceParams */
+    DMV170_RTC_ADDRESS,         /* ulCtrlPort1 */
+    0,                          /* ulDataPort */
+    icm7170_get_register_8,     /* getRegister */
+    icm7170_set_register_8,     /* setRegister */
+  }
+};
+
+unsigned long  RTC_Count = (sizeof(RTC_Table)/sizeof(rtc_tbl));
+rtems_device_minor_number  RTC_Minor;
+
+boolean dmv177_icm7170_probe(int minor)
+{
+  volatile unsigned16 *card_resource_reg;
+
+  card_resource_reg = (volatile unsigned16 *) DMV170_CARD_RESORCE_REG;
+
+  if ( (*card_resource_reg & DMV170_RTC_INST_MASK) == DMV170_RTC_INSTALLED )
+    return TRUE;
+  return FALSE;
+}
+
+@end example
 
 @section Initialization
 

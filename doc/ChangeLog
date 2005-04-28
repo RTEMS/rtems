@@ -1,3 +1,7 @@
+2005-04-28	Joel Sherrill <joel@OARcorp.com>
+
+	* bsp_howto/rtc.t: Rewritten to account for removal of dmv177.
+
 2005-03-04	Joel Sherrill <joel@OARcorp.com>
 
 	* networking/decdriver.t: Make PCI initialize function part of the
