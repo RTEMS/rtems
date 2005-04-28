@@ -1,3 +1,10 @@
+2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+        
+        * Add/move files for the Update to new exception model.
+          NOTE: These modifications have not been tested on hardware.
+        * irq/FPGA.c, irq/irq.c, irq/irq.h, irq/irq_init.c: New files.
+        * startup/FPGA.c: Removed.
+
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * clock/clock.c: Fix multiple defined warning
