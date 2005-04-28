@@ -52,7 +52,6 @@ AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
 AC_MSG_CHECKING([whether CPU supports librpc])
   case "$RTEMS_CPU" in
   c4x )  LIBRPC=no;;
-  or32 ) LIBRPC=no;;
   * )    LIBRPC=yes;;
   esac
 AC_MSG_RESULT([$LIBRPC])
@@ -296,7 +295,6 @@ score/cpu/h8300/Makefile
 score/cpu/i386/Makefile
 score/cpu/m68k/Makefile
 score/cpu/mips/Makefile
-score/cpu/or32/Makefile
 score/cpu/powerpc/Makefile
 score/cpu/sh/Makefile
 score/cpu/sparc/Makefile

@@ -1,3 +1,7 @@
+2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * configure.ac: Remove or32-rtems
+
 2005-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* score/cpu/Makefile.am: Remove or32 (target abandoned).
