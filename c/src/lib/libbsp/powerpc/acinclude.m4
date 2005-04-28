@@ -2,8 +2,6 @@
 AC_DEFUN([RTEMS_CHECK_BSPDIR],
 [
   case "$1" in
-  dmv177 )
-    AC_CONFIG_SUBDIRS([dmv177]);;
   ep1a )
     AC_CONFIG_SUBDIRS([ep1a]);;
   gen405 )
@@ -18,8 +16,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([mpc8260ads]);;
   mvme5500 )
     AC_CONFIG_SUBDIRS([mvme5500]);;
-  ppcn_60x )
-    AC_CONFIG_SUBDIRS([ppcn_60x]);;
   psim )
     AC_CONFIG_SUBDIRS([psim]);;
   score603e )

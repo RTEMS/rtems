@@ -1,3 +1,43 @@
+2005-04-28	Joel Sherrill <joel@OARcorp.com>
+
+	* acinclude.m4: Remove dmv177 and ppcn_60x.
+	* dmv177/.cvsignore, dmv177/ChangeLog, dmv177/Makefile.am,
+	dmv177/QUIRKS, dmv177/README, dmv177/README.net, dmv177/STATUS,
+	dmv177/bsp_specs, dmv177/cable.doc, dmv177/configure.ac,
+	dmv177/times, dmv177/clock/clock.c, dmv177/console/conscfg.c,
+	dmv177/console/debugio.c, dmv177/include/.cvsignore,
+	dmv177/include/bsp.h, dmv177/include/dmv170.h, dmv177/include/tm27.h,
+	dmv177/scv64/scv64.c, dmv177/sonic/dmvsonic.c, dmv177/start/start.S,
+	dmv177/startup/bspclean.c, dmv177/startup/bspstart.c,
+	dmv177/startup/genpvec.c, dmv177/startup/linkcmds,
+	dmv177/startup/setvec.c, dmv177/startup/vmeintr.c,
+	dmv177/timer/timer.c, dmv177/tod/todcfg.c, ppcn_60x/.cvsignore,
+	ppcn_60x/ChangeLog, ppcn_60x/Makefile.am, ppcn_60x/README,
+	ppcn_60x/STATUS, ppcn_60x/bsp_specs, ppcn_60x/configure.ac,
+	ppcn_60x/clock/clock.c, ppcn_60x/console/config.c,
+	ppcn_60x/console/console.c, ppcn_60x/console/console.h,
+	ppcn_60x/console/debugio.c, ppcn_60x/console/i8042.c,
+	ppcn_60x/console/i8042_p.h, ppcn_60x/console/i8042vga.c,
+	ppcn_60x/console/i8042vga.h, ppcn_60x/console/ns16550cfg.c,
+	ppcn_60x/console/ns16550cfg.h, ppcn_60x/console/vga.c,
+	ppcn_60x/console/vga_p.h, ppcn_60x/console/z85c30cfg.c,
+	ppcn_60x/console/z85c30cfg.h, ppcn_60x/include/.cvsignore,
+	ppcn_60x/include/bsp.h, ppcn_60x/include/extisrdrv.h,
+	ppcn_60x/include/nvram.h, ppcn_60x/include/pci.h,
+	ppcn_60x/include/tm27.h, ppcn_60x/network/amd79c970.c,
+	ppcn_60x/network/amd79c970.h, ppcn_60x/nvram/ds1385.h,
+	ppcn_60x/nvram/mk48t18.h, ppcn_60x/nvram/nvram.c,
+	ppcn_60x/nvram/prepnvr.h, ppcn_60x/nvram/stk11c68.h,
+	ppcn_60x/pci/pci.c, ppcn_60x/start/start.S,
+	ppcn_60x/startup/bspclean.c, ppcn_60x/startup/bspstart.c,
+	ppcn_60x/startup/bsptrap.S, ppcn_60x/startup/genpvec.c,
+	ppcn_60x/startup/linkcmds, ppcn_60x/startup/rtems-ctor.cc,
+	ppcn_60x/startup/setvec.c, ppcn_60x/startup/spurious.c,
+	ppcn_60x/startup/swap.c, ppcn_60x/timer/timer.c, ppcn_60x/tod/cmos.h,
+	ppcn_60x/tod/tod.c, ppcn_60x/universe/universe.c,
+	ppcn_60x/vectors/README, ppcn_60x/vectors/align_h.S,
+	ppcn_60x/vectors/vectors.S: Removed.
+
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * score603e/Makefile.am, score603e/configure.ac,
