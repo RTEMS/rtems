@@ -1,3 +1,8 @@
+2005-04-28	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/README.sonic: Rewritten to account for removal of
+	dmv177.
+
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         PR 781/rtems_misc
