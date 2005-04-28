@@ -1,5 +1,13 @@
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
+        * score603e/Makefile.am, score603e/configure.ac,
+        score603e/console/console.c, score603e/include/bsp.h,
+        score603e/include/gen2.h, score603e/include/tm27.h,
+        score603e/startup/bspstart.c: Update score603e to new exception model
+        NOTE: These modifications have not been tested on hardware.
+
+2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+
         * acinclude.m4: Initial release of ep1a bsp
         * ep1a/Makefile.am, ep1a/bsp_specs, ep1a/configure.ac,
         ep1a/console/alloc360.c, ep1a/console/console.c,

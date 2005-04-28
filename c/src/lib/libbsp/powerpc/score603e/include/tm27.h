@@ -15,14 +15,27 @@
 #ifndef __tm27_h
 #define __tm27_h
 
+#include <bsp/irq.h>
+
 /*
  *  Stuff for Time Test 27
  */
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-#define Install_tm27_vector( _handler ) \
-  set_vector( (_handler), PPC_IRQ_DECREMENTER, 1 )
+static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
+                                              0,
+                                              (rtems_irq_enable)nullFunc,
+                                              (rtems_irq_disable)nullFunc,
+                                              (rtems_irq_is_enabled) nullFunc};
+void Install_tm27_vector(void (*_handler)())
+{
+  clockIrqData.hdl = _handler;
+  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
+        printk("Error installing clock interrupt handler!\n");
+        rtems_fatal_error_occurred(1);
+  }
+}
 
 #define Cause_tm27_intr()  \
   do { \

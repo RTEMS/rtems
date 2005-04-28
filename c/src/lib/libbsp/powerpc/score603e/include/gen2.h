@@ -47,10 +47,12 @@ extern "C" {
 /*
  * PSC8 - PMC Card
  */
+/* address of our ram on the PCI bus   */
+#define PCI_DRAM_OFFSET              PREP_PCI_DRAM_OFFSET
 #define BSP_PCI_CONFIGURATION_BASE   0x80800000
 #define BSP_PMC_BASE                 BSP_PCI_CONFIGURATION_BASE
+#define PCI_MEM_BASE_ADJUSTMENT      0
 #define BSP_PCI_PMC_DEVICE_BASE      0x80808000
-
 #define BSP_PCI_REGISTER_BASE        0xfc000000
 
 #define BSP_PCI_DEVICE_ADDRESS( _offset) \
@@ -80,12 +82,14 @@ extern "C" {
 #define SCORE603E_85C30_CTRL_11       BSP_PMC_SERIAL_ADDRESS(0x200018)
 #define SCORE603E_85C30_DATA_11       BSP_PMC_SERIAL_ADDRESS(0x20001c)
 
+#define	_IO_BASE		       PREP_ISA_IO_BASE
 #define SCORE603E_PCI_IO_CFG_ADDR      0x80000cf8
 #define SCORE603E_PCI_IO_CFG_DATA      0x80000cfc
 
 #define SCORE603E_UNIVERSE_BASE        0x80030000
 #define SCORE603E_IO_VME_UNIVERSE_BASE 0x80007000
-#define BSP_PCI_MEM_BASE         0xc0000000
+#define PCI_MEM_BASE                   0xc0000000
+#define BSP_PCI_MEM_BASE               PCI_MEM_BASE  /* XXX - May want to remove this later */
 #define BSP_NVRAM_BASE           0xfd100000
 #define BSP_RTC_ADDRESS          ((volatile unsigned char *)0xfd180000)
 #define SCORE603E_JP1_JP2_PROM_BASE    0xfff00000
@@ -244,6 +248,8 @@ extern "C" {
 #define BSP_TIMER_AVG_OVERHEAD   4  /* It typically takes xx clicks        */
                                     /*     to start/stop the timer.        */
 #define BSP_TIMER_LEAST_VALID    1  /* Don't trust a value lower than this */
+
+#define BSP_PIC_DO_EOI              /* XXX - Don't know what this corresponds to on the score board */
 
 /*
  *  Convert decrement value to tenths of microsecnds (used by

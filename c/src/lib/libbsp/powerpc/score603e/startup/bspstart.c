@@ -20,6 +20,22 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+#include <rtems/bspIo.h>
+
+/*
+ * PCI Bus Frequency
+ */
+unsigned int BSP_bus_frequency;  /* XXX - Set this based upon the Score board */
+
+/*
+ * processor clock frequency
+ */
+unsigned int BSP_processor_frequency; /* XXX - Set this based upon the Score board */
+
+/*
+ * Time base divisior (how many tick for 1 second).
+ */
+unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
 
 /*
  *  The original table from the application and our copy of it with
@@ -30,6 +46,18 @@ extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 rtems_cpu_table                   Cpu_table;
 uint32_t                          bsp_isr_level;
+
+void BSP_panic(char *s)
+{
+  printk("%s PANIC %s\n",_RTEMS_version, s);
+  __asm__ __volatile ("sc");
+}
+
+void _BSP_Fatal_error(unsigned int v)
+{
+  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
+  __asm__ __volatile ("sc");
+}
 
 /*
  *  Use the shared implementations of the following routines
@@ -79,9 +107,11 @@ void initialize_PMC();
 void bsp_predriver_hook(void)
 {
   init_RTC();
-
+/*   XXX - What Does this now ????
   init_PCI();
   initialize_universe();
+*/
+
   initialize_PCI_bridge ();
 
 #if (HAS_PMC_PSC8)
@@ -200,6 +230,9 @@ void bsp_start( void )
     0,
     (unsigned char *)&RAM_END - (unsigned char *) &end
   );
+
+  BSP_processor_frequency = 266000000;
+  BSP_bus_frequency       =  66000000;
 
   /*
    *  There are multiple ROM monitors available for this board.

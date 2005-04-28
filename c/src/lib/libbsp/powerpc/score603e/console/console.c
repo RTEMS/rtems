@@ -21,6 +21,7 @@
 #include <assert.h>
 
 #include "consolebsp.h"
+#include <rtems/bspIo.h>
 
 #if (1)
 /*
@@ -467,3 +468,23 @@ void console_outbyte_interrupts(
 }
 
 #endif
+
+/* const char arg to be compatible with BSP_output_char decl. */
+void
+debug_putc_onlcr(const char c)
+{
+  int                      console;
+  volatile uint8_t         *csr;
+  uint32_t                 isrlevel;
+
+  console = USE_FOR_CONSOLE;
+  csr = Ports_85C30[ console ].ctrl;
+
+  rtems_interrupt_disable( isrlevel );
+  outbyte_polled_85c30( csr, c );
+  rtems_interrupt_enable( isrlevel );
+}
+
+BSP_output_char_function_type   BSP_output_char = debug_putc_onlcr;
+/* const char arg to be compatible with BSP_output_char decl. */
+
