@@ -1,5 +1,17 @@
 2005-04-28	Joel Sherrill <joel@OARcorp.com>
 
+	* libnetworking/kern/kern_sysctl.c, libnetworking/libc/inet_ntop.c,
+	libnetworking/net/if_ppp.c, libnetworking/net/pppcompress.c,
+	libnetworking/net/slcompress.c, libnetworking/netinet/ip_output.c,
+	libnetworking/netinet/udp_usrreq.c, libnetworking/nfs/bootp_subr.c,
+	libnetworking/rtems/rtems_select.c,
+	libnetworking/rtems/rtems_showifstat.c,
+	libnetworking/rtems/rtems_showroute.c,
+	libnetworking/rtems/rtems_syscall.c: Fixed type mismatch and
+	uninitialized variable warnings.
+
+2005-04-28	Joel Sherrill <joel@OARcorp.com>
+
 	* score/src/objectidtoname.c: Fixed spacing.
 
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>

@@ -100,7 +100,7 @@ ip_output(m0, opt, ro, flags, imo)
 	struct ifnet *ifp;
 	struct mbuf *m = m0;
 	int hlen = sizeof (struct ip);
-	int len, off, error = 0;
+	int len = 0, off, error = 0;
 	struct sockaddr_in *dst;
 	struct in_ifaddr *ia;
 	int isbroadcast;

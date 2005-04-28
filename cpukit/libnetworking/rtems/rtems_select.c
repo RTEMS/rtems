@@ -119,7 +119,7 @@ select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 	fd_mask *ibits[3], *obits[3];
 	fd_set ob[3];
 	int error, timo;
-	int retval;
+	int retval = 0;
 	rtems_id tid;
 	rtems_interval then, now;
 	rtems_event_set events;

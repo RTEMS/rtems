@@ -289,7 +289,8 @@ sendmsg (int s, const struct msghdr *mp, int flags)
 	struct uio auio;
 	struct iovec *iov;
 	struct socket *so;
-	struct mbuf *to, *control;
+	struct mbuf *to;
+	struct mbuf *control = NULL;
 	int i;
 	int len;
 

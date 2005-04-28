@@ -405,7 +405,8 @@ vj_uncompress_tcp(bufp, len, type, comp)
 	struct vjcompress *comp;
 {
 	u_char *hdr, *cp;
-	int hlen, vjlen;
+	u_int hlen;
+	int vjlen;
 
 	cp = bufp? *bufp: NULL;
 	vjlen = vj_uncompress_tcp_core(cp, len, len, type, comp, &hdr, &hlen);

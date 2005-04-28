@@ -147,7 +147,7 @@ link_ascii (struct sockaddr_dl *sdl, char *buf, int bufsize)
 	int i;
 	int first = 1;
 	int nleft = sdl->sdl_alen;
-	unsigned char *ap = LLADDR (sdl);
+	char *ap = LLADDR (sdl);
 	static const char hextab[16] = "0123456789ABCDEF";
 
 	cp = buf;

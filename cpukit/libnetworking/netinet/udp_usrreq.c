@@ -367,6 +367,7 @@ udp_output(inp, m, addr, control)
 	struct in_addr laddr;
 	int s = 0, error = 0;
 
+	laddr.s_addr = 0;
 	if (control)
 		m_freem(control);		/* XXX */
 

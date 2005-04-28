@@ -736,7 +736,7 @@ processOptions (unsigned char *optbuf, int optbufSize)
   int j = 0;
   int len;
   int code, ncode;
-  char *p;
+  unsigned char *p;
 
   ncode = optbuf[0];
   while (j < optbufSize) {
@@ -832,10 +832,10 @@ processOptions (unsigned char *optbuf, int optbufSize)
       /* Host name */
       if (len>=MAXHOSTNAMELEN)
         panic ("bootpc: hostname >=%d bytes", MAXHOSTNAMELEN);
-      if (sethostname (p, len) < 0)
+      if (sethostname ((char *)p, len) < 0)
         panic("Can't set host name");
       printf("Hostname is %s\n", p);
-      dhcp_hostname = bootp_strdup_realloc(dhcp_hostname,p);
+      dhcp_hostname = bootp_strdup_realloc(dhcp_hostname,(char *)p);
       break;
 
     case 7:
@@ -852,7 +852,7 @@ processOptions (unsigned char *optbuf, int optbufSize)
       /* Domain name */
       if (p[0]) {
         rtems_bsdnet_domain_name = 
-	  bootp_strdup_realloc(rtems_bsdnet_domain_name,p);
+	  bootp_strdup_realloc(rtems_bsdnet_domain_name,(char *)p);
         printf("Domain name is %s\n", rtems_bsdnet_domain_name);
       }
       break;
@@ -888,14 +888,14 @@ processOptions (unsigned char *optbuf, int optbufSize)
       /* DHCP server name option */
       if (p[0])
         rtems_bsdnet_bootp_server_name = 
-	  bootp_strdup_realloc(rtems_bsdnet_bootp_server_name,p);
+	  bootp_strdup_realloc(rtems_bsdnet_bootp_server_name,(char *)p);
       break;
 
     case 67:
       /* DHCP bootfile option */
       if (p[0])
         rtems_bsdnet_bootp_boot_file_name = 
-	  bootp_strdup_realloc(rtems_bsdnet_bootp_boot_file_name,p);
+	  bootp_strdup_realloc(rtems_bsdnet_bootp_boot_file_name,(char *)p);
       break;
 
 	case 129:
@@ -903,7 +903,7 @@ processOptions (unsigned char *optbuf, int optbufSize)
 	   * a 'command line string'
 	   */
 	  if (p[0])
-	  	rtems_bsdnet_bootp_cmdline = strdup(p);
+	  	rtems_bsdnet_bootp_cmdline = strdup((char *)p);
 	  break;
 
     default:
@@ -1054,7 +1054,7 @@ bootpc_init(int update_files)
     processOptions (&reply.vend[4], sizeof(reply.vend) - 4);
   }
   if (dhcpOptionOverload & 1) {
-    processOptions (reply.file, sizeof reply.file);
+    processOptions ((unsigned char *)reply.file, sizeof reply.file);
   }
   else {
     if (reply.file[0])
@@ -1062,7 +1062,7 @@ bootpc_init(int update_files)
 	bootp_strdup_realloc(rtems_bsdnet_bootp_boot_file_name,reply.file);
   }
   if (dhcpOptionOverload & 2) {
-    processOptions (reply.sname, sizeof reply.sname);
+    processOptions ((unsigned char *)reply.sname, sizeof reply.sname);
   }
   else {
     if (reply.sname[0])

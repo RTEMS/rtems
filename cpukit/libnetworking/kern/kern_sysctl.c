@@ -1010,6 +1010,8 @@ kernel_sysctlbyname(struct thread *td, char *name, void *old, size_t *oldlenp,
         size_t oidlen, plen;
 	int error;
 
+	plen = 0; /* RTEMS - to avoid warnings */
+
 	oid[0] = 0;		/* sysctl internal magic */
 	oid[1] = 3;		/* name2oid */
 	oidlen = sizeof(oid);

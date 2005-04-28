@@ -423,7 +423,8 @@ sl_uncompress_tcp(bufp, len, type, comp)
 	struct slcompress *comp;
 {
 	u_char *hdr, *cp;
-	int hlen, vjlen;
+	u_int hlen;
+	int vjlen;
 
 	cp = bufp? *bufp: NULL;
 	vjlen = sl_uncompress_tcp_core(cp, len, len, type, comp, &hdr, &hlen);

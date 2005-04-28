@@ -59,7 +59,7 @@ rtems_bsdnet_show_if_stats (void)
 				case AF_LINK:
 					{
 					struct sockaddr_dl *sdl = (struct sockaddr_dl *)ifa->ifa_addr;
-					unsigned char   *cp = LLADDR(sdl);
+					char   *cp = LLADDR(sdl);
 					int		i;
 
 					switch ( sdl->sdl_type ) {

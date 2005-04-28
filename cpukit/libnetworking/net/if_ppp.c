@@ -1169,7 +1169,10 @@ struct mbuf *
 ppp_dequeue(sc)
     struct ppp_softc *sc;
 {
-    struct mbuf *m, *mp;
+#ifdef PPP_COMPRESS
+    struct mbuf *mp;
+#endif
+    struct mbuf *m;
     u_char *cp;
     int address, control, protocol;
 
