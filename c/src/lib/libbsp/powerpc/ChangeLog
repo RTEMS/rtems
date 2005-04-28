@@ -1,3 +1,16 @@
+2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * acinclude.m4: Initial release of ep1a bsp
+        * ep1a/Makefile.am, ep1a/bsp_specs, ep1a/configure.ac,
+        ep1a/console/alloc360.c, ep1a/console/console.c,
+        ep1a/console/console.h, ep1a/console/init68360.c,
+        ep1a/console/m68360.h, ep1a/console/mc68360_scc.c,
+        ep1a/console/ns16550cfg.c, ep1a/console/ns16550cfg.h,
+        ep1a/console/rsPMCQ1.c, ep1a/console/rsPMCQ1.h, ep1a/include/bsp.h,
+        ep1a/irq/irq.c, ep1a/irq/irq_init.c, ep1a/pci/no_host_bridge.c,
+        ep1a/start/start.S, ep1a/startup/bspstart.c, ep1a/startup/linkcmds,
+        ep1a/vme/vmeconfig.c: New files.
+
 2004-12-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* acinclude.m4: Reflect eth_comm having been removed.
