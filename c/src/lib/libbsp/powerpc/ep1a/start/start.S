@@ -36,7 +36,7 @@
 #include <bsp.h>
 */
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/io.h>
 #include <ppc-asm.h>

@@ -83,31 +83,6 @@ static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
  */
  
 /*
- * Caution : this function assumes the variable "internal_config"
- * is already set and that the tables it contains are still valid
- * and accessible.
- */
-static void compute_i8259_masks_from_prio ()
-{
-  int i;
-  int j;
-  /*
-   * Always mask at least current interrupt to prevent re-entrance
-   */
-  for (i=BSP_ISA_IRQ_LOWEST_OFFSET; i < BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER; i++) {
-    * ((unsigned short*) &irq_mask_or_tbl[i]) = (1 << i);
-    for (j = BSP_ISA_IRQ_LOWEST_OFFSET; j < BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER; j++) {
-      /*
-       * Mask interrupts at i8259 level that have a lower priority
-       */
-      if (internal_config->irqPrioTbl [i] > internal_config->irqPrioTbl [j]) {
-	* ((unsigned short*) &irq_mask_or_tbl[i]) |= (1 << j);
-      }
-    }
-  }
-}
-
-/*
  * This function check that the value given for the irq line
  * is valid.
  */
