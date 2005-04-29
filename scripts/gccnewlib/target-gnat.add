@@ -16,10 +16,7 @@ This is the gcc/gnat compiler for %{gcc_target}
 %defattr(-,root,root)
 %dir %{_bindir}
 %{_bindir}/%{gcc_target}-gnat*
-
-%if "%{gcc_version}" >= "4.0"
 %{_bindir}/%{gcc_target}-gprmake%{_exeext}
-%endif
 
 %{gccexec}/%{gcc_target}/%{gcc_version}/gnat1%{_exeext}
 %{gcclib}/%{gcc_target}/%{gcc_version}/adalib

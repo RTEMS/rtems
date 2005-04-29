@@ -16,16 +16,12 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 
 %files -n %{rpmprefix}rtems@osversion@-base-gnat
 %defattr(-,root,root)
-%if "%{gcc_version}" >= "4.0"
 %dir %{_bindir}
 %{_bindir}/vxaddr2line%{_exeext}
-%endif
 
-%if "%{gcc_version}" >= "3.3"
+%dir %{_infodir}
 %{_infodir}/gnat*
-%endif
 
-%if "%{gcc_version}" >= "3.3"
 %post -n %{rpmprefix}rtems@osversion@-base-gnat
   /sbin/install-info --infodir=%{_infodir} %{_infodir}/gnat_rm.info.gz
   /sbin/install-info --infodir=%{_infodir} %{_infodir}/gnat-style.info.gz
@@ -37,5 +33,4 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gnat-style.info.gz
   /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
 fi
-%endif
 %endif

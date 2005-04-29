@@ -1,3 +1,8 @@
+2005-04-29	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/base-gnat.add, gccnewlib/gccnewlib.add,
+	gccnewlib/target-gnat.add: Abandon Gnat for gcc < 4.0
+
 2005-04-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/base-gfortran.add: Fix broken install-info.
