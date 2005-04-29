@@ -1,5 +1,12 @@
 2005-04-29	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/gccnewlib.add: Don't build mips-gcj. Further gnat
+	cleanup.
+	* rtemsdoc/supplement.add.in, rtemsdoc/templ.add.in: Misc. info
+	fixes.
+
+2005-04-29	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/base-gnat.add, gccnewlib/gccnewlib.add,
 	gccnewlib/target-gnat.add: Abandon Gnat for gcc < 4.0
 

@@ -26,9 +26,9 @@ This package contains the @target@ documentation.
 %{_datadir}/rtems/html/@target@*
 
 %post @target@
-/sbin/install-info %{_infodir}/@target@.info.gz %{_infodir}/dir
+/sbin/install-info --infodir=%{_infodir} %{_infodir}/@target@.info.gz
 
 %preun @target@
-if [ $1 = 0 ]; then
-    /sbin/install-info --delete %{_infodir}/@target@.info.gz %{_infodir}/dir
+if [ $1 -eq 0 ]; then
+    /sbin/install-info --delete --infodir=%{_infodir}/dir %{_infodir}/@target@.info.gz
 fi
