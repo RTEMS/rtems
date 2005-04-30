@@ -1,3 +1,7 @@
+2005-05-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/ppcn_60x.cfg: Remove (Gone from libbsp).
+
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * Makefile.am: Initial release of ep1a bsp
