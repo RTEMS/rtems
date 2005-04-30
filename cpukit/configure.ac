@@ -266,7 +266,7 @@ AM_CONDITIONAL(HAS_ITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
 AM_CONDITIONAL(HAS_NETWORKING,test x"$HAS_NETWORKING" = x"yes")
 
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
-  && test x"$HAS_POSIX_API" = x"yes"])
+  && test x"$rtems_cv_HAS_POSIX_API" = x"yes"])
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
 AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])

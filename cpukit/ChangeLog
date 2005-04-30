@@ -1,3 +1,9 @@
+2005-04-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: fix evaluating --enable-ada.
+	* ada/Makefile.am: Use preinstall.am
+	* ada/preinstall.am: New.
+
 2005-04-29      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * score/src/objectidtoname.c: Removed warnings
