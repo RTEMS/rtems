@@ -37,6 +37,6 @@
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES              20
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  10
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* end of include file */

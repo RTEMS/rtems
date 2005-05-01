@@ -29,6 +29,6 @@
 
 #define CONFIGURE_MAXIMUM_TASKS             4
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* end of include file */
