@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,9 +27,13 @@
  * SUCH DAMAGE.
  *
  *	@(#)libkern.h	8.1 (Berkeley) 6/10/93
- * $Id$
+ * $FreeBSD: src/sys/sys/libkern.h,v 1.48 2005/02/10 20:39:39 glebius Exp $
  */
 
+/*
+ * $Id$
+ */
+ 
 #ifndef _SYS_LIBKERN_H_
 #define	_SYS_LIBKERN_H_
 
@@ -61,29 +61,34 @@ static __inline u_long ulmax(u_long a, u_long b) { return (a > b ? a : b); }
 static __inline u_long ulmin(u_long a, u_long b) { return (a < b ? a : b); }
 
 /* Prototypes for non-quad routines. */
-int	 bcmp __P((const void *, const void *, size_t));
+int	 bcmp(const void *, const void *, size_t);
 #ifndef HAVE_INLINE_FFS
-int	 ffs __P((int));
+int	 ffs(int);
 #endif
 #ifndef	HAVE_INLINE_FLS
-int	 fls __P((int));
+int	 fls(int);
 #endif
-int	 locc __P((int, char *, u_int));
-void	 qsort __P((void *base, size_t nmemb, size_t size,
-		    int (*compar)(const void *, const void *)));
-u_long	 random __P((void));
-char	*index __P((const char *, int));
-char	*rindex __P((const char *, int));
-int	 scanc __P((u_int, const u_char *, const u_char *, int));
-int	 skpc __P((int, int, char *));
-void	 srandom __P((u_long));
-char	*strcat __P((char *, const char *));
-int	 strcmp __P((const char *, const char *));
-char	*strdup __P((const char *s));
-char	*strcpy __P((char *, const char *));
-size_t	 strlen __P((const char *));
-int	 strncmp __P((const char *, const char *, size_t));
-char	*strncpy __P((char *, const char *, size_t));
-char	*strerror __P((int errnum));
+int	 locc(int, char *, u_int);
+void	 qsort(void *base, size_t nmemb, size_t size,
+		    int (*compar)(const void *, const void *));
+#if defined(__rtems__)
+u_long	rtems_bsdnet_random(void);
+#define random()	rtems_bsdnet_random()
+#else
+u_long	 random(void);
+#endif
+char	*index(const char *, int);
+char	*rindex(const char *, int);
+int	 scanc(u_int, const u_char *, const u_char *, int);
+int	 skpc(int, int, char *);
+void	 srandom(u_long);
+char	*strcat(char * __restrict, const char * __restrict);
+int	 strcmp(const char *, const char *);
+char	*strdup(const char *s);
+char	*strcpy(char * __restrict, const char * __restrict);
+size_t	 strlen(const char *);
+int	 strncmp(const char *, const char *, size_t);
+char	*strncpy(char * __restrict, const char * __restrict, size_t);
+char	*strerror(int errnum);
 
 #endif /* !_SYS_LIBKERN_H_ */

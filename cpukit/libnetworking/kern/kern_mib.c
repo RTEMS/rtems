@@ -16,10 +16,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -37,7 +33,11 @@
  * SUCH DAMAGE.
  *
  *	@(#)kern_sysctl.c	8.4 (Berkeley) 4/14/94
- * $FreeBSD: src/sys/kern/kern_mib.c,v 1.62 2002/11/07 23:57:17 tmm Exp $
+ * $FreeBSD: src/sys/kern/kern_mib.c,v 1.74 2005/02/28 21:42:56 wes Exp $
+ */
+
+/*
+ * $Id$
  */
 
 #ifndef __rtems__
@@ -97,7 +97,10 @@ SYSCTL_NODE(, OID_AUTO, security, CTLFLAG_RW, 0,
 SYSCTL_NODE(, OID_AUTO, regression, CTLFLAG_RW, 0,
      "Regression test MIB");
 #endif
-#endif
+
+SYSCTL_STRING(_kern, OID_AUTO, ident, CTLFLAG_RD,
+    kern_ident, 0, "Kernel identifier");
+#endif /* __rtems__ */
 
 SYSCTL_STRING(_kern, KERN_OSRELEASE, osrelease, CTLFLAG_RD,
     osrelease, 0, "Operating system release");
