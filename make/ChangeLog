@@ -1,3 +1,8 @@
+2005-05-02	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Remove dmv177 and ppcn_60x.
+	* custom/dmv177.cfg: Removed.
+
 2005-05-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/ppcn_60x.cfg: Remove (Gone from libbsp).
