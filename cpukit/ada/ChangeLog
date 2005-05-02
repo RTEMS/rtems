@@ -1,7 +1,7 @@
 2005-04-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* ada/Makefile.am: Use preinstall.am
-	* ada/preinstall.am: New.
+	* Makefile.am: Use preinstall.am
+	* preinstall.am: New.
 
 2004-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
