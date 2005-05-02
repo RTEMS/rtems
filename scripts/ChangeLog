@@ -1,3 +1,12 @@
+2005-05-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* autotools/automake-rtems.spec.in, autotools/autoconf-rtems.spec.in:
+	Remove.
+	* autotools/automake.add, autotools/autoconf.add,
+	autotools/header.add: New.
+	* autotools/Makefile.am: Streamline specs generation with other
+	tools.
+
 2005-04-29	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/gccnewlib.add: Don't build mips-gcj. Further gnat
