@@ -95,7 +95,7 @@ MC68681_STATIC int mc68681_set_attributes(
   unsigned int           mode2;
   unsigned int           baud_mask;
   unsigned int           acr_bit;
-  unsigned int           cmd;
+  unsigned int           cmd = 0;
   setRegister_f          setReg;
   rtems_interrupt_level  Irql;
 

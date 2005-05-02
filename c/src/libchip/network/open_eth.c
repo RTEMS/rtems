@@ -55,6 +55,12 @@
 #undef free
 #endif
 
+/*
+ *  XXX fix this
+ */
+
+void *set_vector(void *, uint32_t, uint32_t);
+
  /*
 #define OPEN_ETH_DEBUG
  */
@@ -637,7 +643,7 @@ open_eth_stats (struct open_eth_softc *sc)
  * Driver ioctl handler
  */
 static int
-open_eth_ioctl (struct ifnet *ifp, int command, caddr_t data)
+open_eth_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
 {
     struct open_eth_softc *sc = ifp->if_softc;
     int error = 0;

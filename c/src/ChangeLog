@@ -1,3 +1,10 @@
+2005-05-02      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * libchip/network/cs8900.c, libchip/network/i82586.c,
+        libchip/network/open_eth.c, libchip/network/sonic.c,
+        libchip/serial/mc68681.c: Modified types to remove 
+        warnings.  Added initialization to remove warnings.
+
 2005-04-28	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/network/README.sonic: Rewritten to account for removal of

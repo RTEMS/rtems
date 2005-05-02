@@ -1079,7 +1079,7 @@ cs8900_init (void *arg)
 }
 
 static int
-cs8900_ioctl (struct ifnet *ifp, int cmd, caddr_t data)
+cs8900_ioctl (struct ifnet *ifp, u_long cmd, caddr_t data)
 {
   cs8900_device *cs = ifp->if_softc;
   int           error = 0;
