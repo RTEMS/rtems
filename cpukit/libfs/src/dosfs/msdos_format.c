@@ -310,7 +310,7 @@ static int msdos_format_determine_fmt_params
   int ret_val = 0;
   uint32_t fatdata_sect_cnt;
   uint32_t onebit;
-  uint32_t sectors_per_cluster_adj;
+  uint32_t sectors_per_cluster_adj = 0;
 
   memset(fmt_params,0,sizeof(*fmt_params));
   /* 
