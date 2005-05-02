@@ -499,6 +499,38 @@ package body RTEMS is
 
    end Task_Set_Note;
  
+   procedure Task_Variable_Add (
+      ID            : in     RTEMS.ID;
+      Task_Variable : in     RTEMS.Address;
+      Dtor          : in     RTEMS.Task_Variable_Dtor;
+      Result        :    out RTEMS.Status_Codes
+   ) is
+   begin
+     -- FIXME
+     Result := Internal_Error;
+   end Task_Variable_Add;
+
+   procedure Task_Variable_Get (
+      ID                  : in     RTEMS.ID;
+      Task_Variable       :    out RTEMS.Address;
+      Task_Variable_Value :    out RTEMS.Address;
+      Result              :    out RTEMS.Status_Codes
+   ) is
+   begin
+     -- FIXME
+     Result := Internal_Error;
+   end Task_Variable_Get;
+
+   procedure Task_Variable_Delete (
+      ID                  : in     RTEMS.ID;
+      Task_Variable       :    out RTEMS.Address;
+      Result              :    out RTEMS.Status_Codes
+   ) is
+   begin
+     -- FIXME
+     Result := Internal_Error;
+   end Task_Variable_Delete;
+
    procedure Task_Wake_When (
       Time_Buffer : in     RTEMS.Time_Of_Day;
       Result      :    out RTEMS.Status_Codes

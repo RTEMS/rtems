@@ -899,7 +899,7 @@ pragma Elaborate_Body (RTEMS);
    );
    
    type Task_Variable_Dtor is access procedure (
-      Argument : in     RTEMS.Address;
+      Argument : in     RTEMS.Address
    );
 
    procedure Task_Variable_Add (

@@ -1,3 +1,10 @@
+2005-05-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 782/rtems
+	* rtems.ads: Remove stray ';'.
+	* rtems.adb: Stub Task_Variable_Add, Task_Variable_Get,
+	Task_Variable_Delete.
+
 2005-04-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Use preinstall.am
