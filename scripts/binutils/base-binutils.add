@@ -5,7 +5,7 @@
 Summary:      base package for rtems binutils
 Group: %{rpmgroup}
 Requires(post):		/sbin/install-info
-Requires(postun):	/sbin/install-info
+Requires(preun):	/sbin/install-info
 
 %description -n %{rpmprefix}rtems@osversion@-base-binutils
 
@@ -23,7 +23,7 @@ This is the base for binutils regardless of target CPU.
   /sbin/install-info --infodir=%{_infodir} %{_infodir}/gasp.info.gz
 %endif
 
-%postun -n %{rpmprefix}rtems@osversion@-base-binutils
+%preun -n %{rpmprefix}rtems@osversion@-base-binutils
 if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/as.info.gz
   /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/bfd.info.gz
@@ -38,6 +38,7 @@ fi
 %files -n %{rpmprefix}rtems@osversion@-base-binutils
 %defattr(-,root,root)
 %dir %{_infodir}
+%ghost %{_infodir}/dir
 %{_infodir}/as.info*
 %{_infodir}/bfd.info*
 %{_infodir}/binutils.info*
@@ -50,4 +51,3 @@ fi
 
 %dir %{_prefix}/share
 %dir %{_prefix}/share/locale
-

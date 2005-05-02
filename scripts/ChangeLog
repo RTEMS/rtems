@@ -1,5 +1,10 @@
 2005-05-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/base-binutils.add, binutils/binutils.add:
+	Misc %infodir/dir handling changes.
+
+2005-05-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Reflect changes to autotools/*.
 	* autotools/Makefile.am: Update.
 
