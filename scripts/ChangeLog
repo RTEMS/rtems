@@ -1,5 +1,7 @@
 2005-05-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/gccnewlib.add: Suppress building tools not supported by
+	avr, h8300 and mips.
 	* rtemsdoc/supplement.add.in, rtemsdoc/templ.add.in: Misc.
 	%infodir/dir handling changes.
 	* rtemsdoc/rtemsdoc.add: Use BuildRequires instead of BuildPreReq

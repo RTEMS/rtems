@@ -57,15 +57,20 @@ BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
 %define build_g77 	%{?g77:%g77}%{!?g77:0}
 %endif
 %define build_objc	%{?objc:%objc}%{!?objc:0}
-%define build_gcj	0
-%define build_gnat	0
-
-%if "%{gcc_target}" == "arm-rtems@osversion@"
 %define build_gcj	%_gcj
-%endif
+%define build_gnat	%_gnat
 
 %if "%{gcc_target}" == "avr-rtems@osversion@"
 %define build_cxx	0
+%define build_f95	0
+%define build_gcj	0
+%define build_gnat	0
+%endif
+
+%if "%{gcc_target}" == "h8300-rtems@osversion@"
+%define build_f95	0
+%define build_gcj	0
+%define build_gnat	0
 %endif
 
 %if "%{gcc_target}" == "tic4x-rtems@osversion@"
@@ -82,7 +87,7 @@ BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
 %endif
 
 %if "%{gcc_target}" == "mips-rtems@osversion@"
-%define build_gnat      %_gnat
+%define build_gcj      %_gcj
 %endif
 
 %if "%{gcc_target}" == "powerpc-rtems@osversion@"
