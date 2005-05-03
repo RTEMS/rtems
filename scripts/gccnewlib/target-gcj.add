@@ -5,7 +5,8 @@
 %package -n %{rpmprefix}%{gcc_target}-gcj
 Summary:      gcc/java compiler (gcj) for %{gcc_target}
 Group: %{rpmgroup}
-Requires: %{rpmprefix}rtems@osversion@-base-gcj %{rpmprefix}%{gcc_target}-gcc
+Requires: %{rpmprefix}rtems@osversion@-base-gcj
+Requires: %{rpmprefix}%{gcc_target}-gcc = %{version}-%{release}
 
 %description -n %{rpmprefix}%{gcc_target}-gcj
 RTEMS is an open source operating system for embedded systems.

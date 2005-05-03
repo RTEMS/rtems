@@ -5,7 +5,8 @@
 %package -n %{rpmprefix}%{gcc_target}-gfortran
 Summary:	gcc/gfortran compiler for %{gcc_target}
 Group: %{rpmgroup}
-Requires: %{rpmprefix}rtems@osversion@-base-gfortran %{rpmprefix}%{gcc_target}-gcc
+Requires: %{rpmprefix}rtems@osversion@-base-gfortran
+Requires: %{rpmprefix}%{gcc_target}-gcc = %{version}-%{release}
 Obsoletes: %{rpmprefix}%{gcc_target}-g77
 
 %description -n %{rpmprefix}%{gcc_target}-gfortran
