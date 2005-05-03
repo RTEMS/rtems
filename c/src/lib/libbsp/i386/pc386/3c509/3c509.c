@@ -58,6 +58,11 @@
  *
  * MODIFICATION/HISTORY:
  * $Log$
+ * Revision 1.6  2005/04/26 23:03:51  joel
+ * 2005-04-26	Joel Sherrill <joel@OARcorp.com>
+ *
+ * 	* 3c509/3c509.c, wd8003/wd8003.c: Eliminate warnings.
+ *
  * Revision 1.5  2004/07/25 14:21:43  joel
  * 2004-07-25	Joel Sherrill <joel@OARcorp.com>
  *
@@ -703,7 +708,7 @@ static void _3c509_stats (struct ep_softc *sc)
  * RETURNS:
  *
  **********************************************************************************/
-static int _3c509_ioctl (struct ifnet *ifp, int command, caddr_t data)
+static int _3c509_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
 {
 	struct ep_softc *sc = ifp->if_softc;
 	int error = 0;

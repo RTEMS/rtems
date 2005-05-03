@@ -74,7 +74,8 @@ extern void kbd_init( void );
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern void keyboard_interrupt(void);
+extern void keyboard_interrupt(void );
+extern void keyboard_interrupt_wrapper(void *);
 extern char BSP_wait_polled_input(void);
 extern void _IBMPC_initVideo(void);
 
@@ -86,7 +87,7 @@ static int  isr_is_on(const rtems_irq_connect_data *);
 extern int rtems_kbpoll( void );
 
 static rtems_irq_connect_data console_isr_data = {BSP_KEYBOARD,
-                                                  keyboard_interrupt,
+                                                  keyboard_interrupt_wrapper,
                                                   0,
                                                   isr_on,
                                                   isr_off,
@@ -556,6 +557,10 @@ conSetAttr(int minor, const struct termios *t)
   BSP_uart_set_attributes(BSPConsolePort, baud, databits, parity, stopbits);
 
   return 0;
+}
+
+void keyboard_interrupt_wrapper(void *unused){
+  keyboard_interrupt();
 }
 
 /*

@@ -129,7 +129,7 @@ static struct wd_softc wd_softc[NWDDRIVER];
  * WD interrupt handler
  */
 static void
-wd8003Enet_interrupt_handler (void)
+wd8003Enet_interrupt_handler (void *unused)
 {
   unsigned int tport;
   unsigned char status, status2;
@@ -523,7 +523,7 @@ wd_stats (struct wd_softc *sc)
  * Driver ioctl handler
  */
 static int
-wd_ioctl (struct ifnet *ifp, int command, caddr_t data)
+wd_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
 {
 	struct wd_softc *sc = ifp->if_softc;
 	int error = 0;
