@@ -1,5 +1,7 @@
 2005-05-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtemsdoc/supplement.add.in, rtemsdoc/templ.add.in: Misc.
+	%infodir/dir handling changes.
 	* rtemsdoc/rtemsdoc.add: Use BuildRequires instead of BuildPreReq
 	(rpm anachronism).
 	* gdb/base-gdb.add, gdb/gdb.add: Misc. %infodir/dir handling
