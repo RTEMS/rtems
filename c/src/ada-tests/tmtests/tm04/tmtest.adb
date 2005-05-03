@@ -58,7 +58,6 @@ package body TMTEST is
 
    procedure TEST_INIT
    is
-      INDEX    : RTEMS.UNSIGNED32;
       STATUS   : RTEMS.STATUS_CODES;
    begin
 
@@ -164,7 +163,6 @@ package body TMTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       OLD_PRIORITY : RTEMS.TASK_PRIORITY;
-      INDEX        : RTEMS.UNSIGNED32;
       OVERHEAD     : RTEMS.UNSIGNED32;
       NAME         : RTEMS.NAME;
       STATUS       : RTEMS.STATUS_CODES;
@@ -480,9 +478,6 @@ package body TMTEST is
    procedure RESTART_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX    : RTEMS.UNSIGNED32;
-      PRIORITY : RTEMS.TASK_PRIORITY;
-      ID       : RTEMS.ID;
       STATUS   : RTEMS.STATUS_CODES;
    begin
    

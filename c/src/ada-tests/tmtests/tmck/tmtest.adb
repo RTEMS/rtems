@@ -80,7 +80,6 @@ package body TMTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX                    : RTEMS.UNSIGNED32;
    begin
 
       TMTEST.CHECK_READ_TIMER;
@@ -164,7 +163,6 @@ TEST_SUPPORT.PAUSE;
 
    procedure CHECK_READ_TIMER 
    is
-      INDEX : RTEMS.UNSIGNED32;
       TIME  : RTEMS.UNSIGNED32;
    begin
 

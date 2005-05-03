@@ -38,7 +38,6 @@ package body TMTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      TASK_ID : RTEMS.ID;
       STATUS  : RTEMS.STATUS_CODES;
    begin
 
@@ -59,7 +58,6 @@ package body TMTEST is
 
    procedure TEST_INIT
    is
-      INDEX      : RTEMS.UNSIGNED32;
       ID         : RTEMS.ID;
       STATUS     : RTEMS.STATUS_CODES;
    begin
@@ -90,7 +88,6 @@ package body TMTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX        : RTEMS.UNSIGNED32;
       OVERHEAD     : RTEMS.UNSIGNED32;
       STATUS       : RTEMS.STATUS_CODES;
    begin

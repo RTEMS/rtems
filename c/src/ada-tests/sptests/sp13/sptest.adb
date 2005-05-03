@@ -219,7 +219,6 @@ package body SPTEST is
       QID            : RTEMS.ID;
       BUFFER         : SPTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
-      TIMES          : RTEMS.UNSIGNED32;
       COUNT          : RTEMS.UNSIGNED32;
       MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;

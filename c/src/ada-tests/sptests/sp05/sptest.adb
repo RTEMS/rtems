@@ -117,7 +117,6 @@ package body SPTEST is
    ) is
       TID2   : RTEMS.ID;
       TID3   : RTEMS.ID;
-      PASS   : RTEMS.UNSIGNED32;
       STATUS : RTEMS.STATUS_CODES;
    begin
 

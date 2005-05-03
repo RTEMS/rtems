@@ -204,9 +204,7 @@ package body TMTEST is
    procedure LOW_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX    : RTEMS.UNSIGNED32;
       OVERHEAD : RTEMS.UNSIGNED32;
-      STATUS   : RTEMS.STATUS_CODES;
    begin
 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;

@@ -40,7 +40,6 @@ package body TMTEST is
    ) is
       OVERHEAD      : RTEMS.UNSIGNED32;
       TASK_PRIORITY : RTEMS.TASK_PRIORITY;
-      INDEX         : RTEMS.UNSIGNED32;
       ID            : RTEMS.ID;
       TASK_ENTRY    : RTEMS.TASK_ENTRY;
       STATUS        : RTEMS.STATUS_CODES;
@@ -115,7 +114,6 @@ package body TMTEST is
    procedure HIGH_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX    : RTEMS.TASK_PRIORITY;
       OVERHEAD : RTEMS.UNSIGNED32;
       STATUS   : RTEMS.STATUS_CODES;
    begin

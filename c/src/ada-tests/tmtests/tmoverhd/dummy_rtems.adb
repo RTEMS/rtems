@@ -59,6 +59,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end TASK_CREATE;
@@ -71,6 +72,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end TASK_IDENT;
@@ -136,6 +138,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      OLD_PRIORITY := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end TASK_SET_PRIORITY;
@@ -148,6 +151,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      PREVIOUS_MODE_SET := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end TASK_MODE;
@@ -160,6 +164,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      NOTE := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end TASK_GET_NOTE;
@@ -206,6 +211,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      OLD_ISR_HANDLER := RTEMS.Null_Address;
       RESULT := RTEMS.SUCCESSFUL;
 
    end INTERRUPT_CATCH;
@@ -251,6 +257,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end TIMER_CREATE;
@@ -272,6 +279,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end TIMER_IDENT;
@@ -334,6 +342,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end SEMAPHORE_CREATE;
@@ -356,6 +365,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end SEMAPHORE_IDENT;
@@ -394,6 +404,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end MESSAGE_QUEUE_CREATE;
@@ -406,6 +417,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end MESSAGE_QUEUE_IDENT;
@@ -453,6 +465,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      COUNT := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end MESSAGE_QUEUE_BROADCAST;
@@ -467,6 +480,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      Size := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end MESSAGE_QUEUE_RECEIVE;
@@ -478,6 +492,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      COUNT := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end MESSAGE_QUEUE_FLUSH;
@@ -504,6 +519,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      EVENT_OUT := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end EVENT_RECEIVE;
@@ -545,6 +561,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end PARTITION_CREATE;
@@ -557,6 +574,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end PARTITION_IDENT;
@@ -578,6 +596,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      BUFFER := RTEMS.Null_Address;
       RESULT := RTEMS.SUCCESSFUL;
 
    end PARTITION_GET_BUFFER;
@@ -606,6 +625,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end REGION_CREATE;
@@ -617,6 +637,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end REGION_IDENT;
@@ -641,6 +662,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      SEGMENT := RTEMS.Null_Address;
       RESULT := RTEMS.SUCCESSFUL;
 
    end REGION_GET_SEGMENT;
@@ -668,6 +690,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end PORT_CREATE;
@@ -679,6 +702,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end PORT_IDENT;
@@ -701,6 +725,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      INTERNAL := RTEMS.Null_Address;
       RESULT := RTEMS.SUCCESSFUL;
 
    end PORT_EXTERNAL_TO_INTERNAL;
@@ -713,6 +738,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      EXTERNAL := RTEMS.Null_Address;
       RESULT := RTEMS.SUCCESSFUL;
 
    end PORT_INTERNAL_TO_EXTERNAL;
@@ -811,6 +837,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end RATE_MONOTONIC_CREATE;
@@ -822,6 +849,7 @@ package body DUMMY_RTEMS is
    ) is
    begin
 
+      ID := 0;
       RESULT := RTEMS.SUCCESSFUL;
 
    end RATE_MONOTONIC_IDENT;

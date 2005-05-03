@@ -138,7 +138,6 @@ package body TMTEST is
       ID             : RTEMS.ID;
       BUFFER         : TMTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
-      INDEX          : RTEMS.UNSIGNED32;
       OVERHEAD       : RTEMS.UNSIGNED32;
       COUNT          : RTEMS.UNSIGNED32;
       MESSAGE_SIZE   : RTEMS.UNSIGNED32;

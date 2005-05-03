@@ -114,7 +114,6 @@ package body TMTEST is
    procedure PROCESS_ASR_FOR_PASS_1 (
       SIGNALS : in     RTEMS.SIGNAL_SET
    ) is
-      STATUS  : RTEMS.STATUS_CODES;
    begin
 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
@@ -227,7 +226,6 @@ package body TMTEST is
    procedure PROCESS_ASR_FOR_TASK_2 (
       SIGNALS : in     RTEMS.SIGNAL_SET
    ) is
-      STATUS  : RTEMS.STATUS_CODES;
    begin
 
       NULL;

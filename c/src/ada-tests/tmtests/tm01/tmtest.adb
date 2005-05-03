@@ -85,8 +85,6 @@ package body TMTEST is
       SEMAPHORE_OBTAIN_NO_WAIT_TIME : RTEMS.UNSIGNED32;
       SEMAPHORE_OBTAIN_LOOP_TIME    : RTEMS.UNSIGNED32;
       SEMAPHORE_RELEASE_LOOP_TIME   : RTEMS.UNSIGNED32;
-      INDEX                         : RTEMS.UNSIGNED32;
-      ITERATIONS                    : RTEMS.UNSIGNED32;
       NAME                          : RTEMS.NAME;
       SMID                          : RTEMS.ID;
       STATUS                        : RTEMS.STATUS_CODES;

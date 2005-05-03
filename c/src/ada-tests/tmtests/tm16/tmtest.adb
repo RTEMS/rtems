@@ -78,7 +78,6 @@ package body TMTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       PRIORITY   : RTEMS.TASK_PRIORITY;
-      INDEX      : RTEMS.UNSIGNED32;
       TASK_ENTRY : RTEMS.TASK_ENTRY;
       STATUS     : RTEMS.STATUS_CODES;
    begin

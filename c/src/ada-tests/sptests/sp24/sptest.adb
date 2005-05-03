@@ -36,7 +36,6 @@ package body SPTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       TIME   : RTEMS.TIME_OF_DAY;
-      INDEX  : RTEMS.UNSIGNED32;
       STATUS : RTEMS.STATUS_CODES;
    begin
 

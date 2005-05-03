@@ -39,7 +39,6 @@ package body TMTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       ID         : RTEMS.ID;
-      INDEX      : RTEMS.UNSIGNED32;
       STATUS     : RTEMS.STATUS_CODES;
    begin
 
@@ -99,7 +98,6 @@ package body TMTEST is
    procedure HIGH_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX    : RTEMS.UNSIGNED32;
       STATUS   : RTEMS.STATUS_CODES;
    begin
 

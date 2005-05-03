@@ -126,7 +126,6 @@ package body TMTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       NAME           : RTEMS.NAME;
-      INDEX          : RTEMS.UNSIGNED32;
       OVERHEAD       : RTEMS.UNSIGNED32;
       ID             : RTEMS.ID;
       IN_PRIORITY    : RTEMS.TASK_PRIORITY;
@@ -153,6 +152,14 @@ package body TMTEST is
       NAME := RTEMS.BUILD_NAME(  'N', 'A', 'M', 'E' );
 
       BUFFER_POINTER := BUFFER'ADDRESS;
+      OVERHEAD := 0;
+      IN_PRIORITY := 0;
+      IN_MODE := 0;
+      SIGNALS := 0;
+      EVENTS := 0;
+      MAJOR := 0;
+      MINOR := 0;
+      ERROR := 0;
      
 -- INITIALIZE_EXECUTIVE
 

@@ -35,8 +35,6 @@ package body SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      TIME   : RTEMS.TIME_OF_DAY;
-      STATUS : RTEMS.STATUS_CODES;
    begin
 
       TEXT_IO.NEW_LINE( 2 );

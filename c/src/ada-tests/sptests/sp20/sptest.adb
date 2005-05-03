@@ -94,7 +94,6 @@ package body SPTEST is
    ) is
       RMID      : RTEMS.ID;
       TEST_RMID : RTEMS.ID;
-      INDEX     : RTEMS.UNSIGNED32;
       PASS      : RTEMS.UNSIGNED32;
       FAILED    : RTEMS.UNSIGNED32;
       STATUS    : RTEMS.STATUS_CODES;

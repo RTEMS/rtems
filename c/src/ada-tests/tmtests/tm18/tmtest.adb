@@ -60,7 +60,6 @@ package body TMTEST is
    is
       ID         : RTEMS.ID;
       TASK_ENTRY : RTEMS.TASK_ENTRY;
-      INDEX      : RTEMS.UNSIGNED32;
       STATUS     : RTEMS.STATUS_CODES;
    begin
 

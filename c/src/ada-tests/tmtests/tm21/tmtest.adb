@@ -72,7 +72,6 @@ package body TMTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX    : RTEMS.UNSIGNED32;
       ID       : RTEMS.ID;
       OVERHEAD : RTEMS.UNSIGNED32;
       STATUS   : RTEMS.STATUS_CODES;

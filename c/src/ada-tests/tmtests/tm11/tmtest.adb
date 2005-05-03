@@ -77,13 +77,11 @@ package body TMTEST is
    procedure TEST_INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX          : RTEMS.UNSIGNED32;
       TASK_ENTRY     : RTEMS.TASK_ENTRY;
       PRIORITY       : RTEMS.TASK_PRIORITY;
       TASK_ID        : RTEMS.ID;
       BUFFER         : TMTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 

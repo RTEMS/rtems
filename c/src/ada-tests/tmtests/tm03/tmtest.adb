@@ -72,7 +72,6 @@ package body TMTEST is
    procedure TEST_INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX    : RTEMS.UNSIGNED32;
       PRIORITY : RTEMS.TASK_PRIORITY;
       TASK_ID  : RTEMS.ID;
       STATUS   : RTEMS.STATUS_CODES;
@@ -138,9 +137,6 @@ package body TMTEST is
    procedure MIDDLE_TASKS (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX    : RTEMS.UNSIGNED32;
-      PRIORITY : RTEMS.TASK_PRIORITY;
-      ID       : RTEMS.ID;
       STATUS   : RTEMS.STATUS_CODES;
    begin
    
@@ -163,9 +159,6 @@ package body TMTEST is
    procedure HIGH_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX    : RTEMS.UNSIGNED32;
-      PRIORITY : RTEMS.TASK_PRIORITY;
-      ID       : RTEMS.ID;
       STATUS   : RTEMS.STATUS_CODES;
    begin
    
