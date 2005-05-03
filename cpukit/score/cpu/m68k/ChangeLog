@@ -1,3 +1,7 @@
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Remove warning.
+
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Split out preinstallation rules.

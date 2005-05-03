@@ -135,7 +135,7 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 )
 {
-  proc_ptr ignored;
+  proc_ptr ignored = 0;  /* to avoid warning */
 
   *old_handler = _ISR_Vector_table[ vector ];
 
