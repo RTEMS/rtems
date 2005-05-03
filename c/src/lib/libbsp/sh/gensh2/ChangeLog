@@ -1,3 +1,8 @@
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds, startup/linkcmds.ram, startup/linkcmds.rom: Fix
+	overflow of _CPU_Interrupt_stack_high calculation.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.

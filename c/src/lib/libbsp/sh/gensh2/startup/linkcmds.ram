@@ -184,8 +184,8 @@ SECTIONS
   . = 0x00480000 ;
   PROVIDE(_WorkSpaceEnd = .);
 
-  _CPU_Interrupt_stack_low  = 0xFFFFF000 ;
-  _CPU_Interrupt_stack_high = _CPU_Interrupt_stack_low + 4096 ;
+  _CPU_Interrupt_stack_low  = 0xFFFFF000;
+  _CPU_Interrupt_stack_high = 0xFFFFFFFF;
 
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }
