@@ -1,3 +1,8 @@
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/init5282.c: Remove use of _Coldfire_VBR and use _VBR as rest
+	of m68k family.
+
 2005-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* network/network.c: Eliminate warnings.
