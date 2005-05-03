@@ -1,5 +1,10 @@
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
+	* rtems/score/cpu.h: Change definition of _VBR to a simple pointer.
+	* rtems/score/m68k.h: Remove use of _Coldfire_VBR.
+
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
 	* cpu.c: Remove warning.
 
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
