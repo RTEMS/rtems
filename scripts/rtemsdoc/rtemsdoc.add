@@ -11,10 +11,10 @@ License:      Distributable
 Group:        %{rpmgroup}/Documentation
 
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
-BuildPreReq:    texinfo >= 4.2
-BuildPreReq:    tetex
-BuildPreReq:    perl
-BuildPreReq:    gcc
+BuildRequires:	texinfo >= 4.2
+BuildRequires:	tetex
+BuildRequires:	perl
+BuildRequires:	gcc
 
 Version:      %{rpmvers}
 Summary:      A free operating system for embedded systems

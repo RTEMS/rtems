@@ -1,5 +1,7 @@
 2005-05-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtemsdoc/rtemsdoc.add: Use BuildRequires instead of BuildPreReq
+	(rpm anachronism).
 	* gdb/base-gdb.add, gdb/gdb.add: Misc. %infodir/dir handling
 	changes.
 	* gccnewlib/base-g77.add, gccnewlib/base-gcc.add,
