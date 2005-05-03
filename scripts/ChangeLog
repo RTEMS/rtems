@@ -1,6 +1,6 @@
 2005-05-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* gccnewlib.add: Remove gnatgcc hacks.
+	* gccnewlib/gccnewlib.add: Remove gnatgcc hacks.
 	Misc  %infodir/dir handling changes.
 	* gccnewlib/target-c++.add, gccnewlib/target-g77.add,
 	gccnewlib/target-gcj.add, gccnewlib/target-gfortran.add,
