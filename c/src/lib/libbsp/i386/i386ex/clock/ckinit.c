@@ -78,7 +78,8 @@ int ClockIsOn(const rtems_irq_connect_data* unused)
 
 static rtems_irq_connect_data clockIrqData = {BSP_PERIODIC_TIMER,
 					      Clock_isr,
-					      ClockOn,
+					      0,
+                                              ClockOn,
 					      ClockOff,
 					      ClockIsOn};
 

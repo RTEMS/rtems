@@ -112,7 +112,7 @@ void        uti596_init                   (void * );
 int         uti596initRxBufs              (int num);
 int         uti596_initRFA                (int num);
 int         uti596initRxBufs              (int num);
-static int  uti596_ioctl                  (struct ifnet *, int, caddr_t);
+static int  uti596_ioctl                  (struct ifnet *, u_long, caddr_t);
 rtems_isr   uti596DynamicInterruptHandler (rtems_vector_number);
 
 void        uti596_txDaemon               (void *);
@@ -2463,7 +2463,7 @@ void uti596_stop(struct uti596_softc *sc)
 }
 
 static int
-uti596_ioctl (struct ifnet *ifp, int command, caddr_t data)
+uti596_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
 {
 	struct uti596_softc *sc = ifp->if_softc;
 	int error = 0;
