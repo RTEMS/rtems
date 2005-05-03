@@ -2,8 +2,9 @@
 
 	* gccnewlib.add: Remove gnatgcc hacks.
 	Misc  %infodir/dir handling changes.
-	* target-c++.add, target-g77.add, target-gcj.add,
-	target-gfortran.add, target-gnat.add, target-objc.add:
+	* gccnewlib/target-c++.add, gccnewlib/target-g77.add,
+	gccnewlib/target-gcj.add, gccnewlib/target-gfortran.add,
+	gccnewlib/target-gnat.add, gccnewlib/target-objc.add:
 	Requires: %{rpmprefix}%{gcc_target}-gcc = %{version}-%{release}.
 
 2005-05-02	Ralf Corsepius <ralf.corsepius@rtems.org>
