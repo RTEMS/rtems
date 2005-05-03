@@ -76,8 +76,6 @@ gccnewlib/Makefile
 gdb/Makefile
 rtems/Makefile
 autotools/Makefile
-autotools/automake-rtems.spec
-autotools/autoconf-rtems.spec
 cpukit/Makefile
 rtemsdoc/Makefile
 ])
