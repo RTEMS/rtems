@@ -133,7 +133,8 @@ ptrace (int request, int pid, char *addr, int data, char *addr2)
        */
 
       if (diag == 0) {
-        copyback_data_cache_and_invalidate_instr_cache (addr, sizeof data);
+        copyback_data_cache_and_invalidate_instr_cache(
+          (unsigned char *)addr, sizeof data);
         return 0;
       }
       goto mem_error;
