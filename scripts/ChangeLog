@@ -1,3 +1,11 @@
+2005-05-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib.add: Remove gnatgcc hacks.
+	Misc  %infodir/dir handling changes.
+	* target-c++.add, target-g77.add, target-gcj.add,
+	target-gfortran.add, target-gnat.add, target-objc.add:
+	Requires: %{rpmprefix}%{gcc_target}-gcc = %{version}-%{release}.
+
 2005-05-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/base-binutils.add, binutils/binutils.add:
