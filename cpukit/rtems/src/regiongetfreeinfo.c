@@ -75,7 +75,7 @@ rtems_status_code rtems_region_get_free_information(
       _Heap_Get_free_information( &the_region->Memory, &the_info->Free );
 
       _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ADDRESS;
+      return RTEMS_SUCCESSFUL;
   }
 
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
