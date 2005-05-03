@@ -84,7 +84,7 @@ typedef struct {
 #define IMFS_MEMFILE_BLOCK_SLOTS \
   (IMFS_MEMFILE_BYTES_PER_BLOCK / sizeof(void *))
 
-typedef char * block_p;
+typedef uint8_t *block_p;
 typedef block_p *block_ptr;
 
 typedef struct {
@@ -266,7 +266,7 @@ int IMFS_fsunmount(
 
 int rtems_tarfs_load(
    char         *mountpoint,
-   char         *tar_image,
+   uint8_t      *tar_image,
    size_t        tar_size
 );
 

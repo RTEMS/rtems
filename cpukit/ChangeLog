@@ -1,3 +1,8 @@
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_load_tar.c: Use uint8_t
+	instead of char for raw data buffer.
+
 2005-05-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/kern/kern_mib.c, libnetworking/sys/libkern.h:

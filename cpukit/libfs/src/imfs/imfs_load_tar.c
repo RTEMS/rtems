@@ -73,9 +73,11 @@
  *    create_node.
  *************************************************************************/
 int
-rtems_tarfs_load(char *mountpoint,
-                 char *tar_image,
-                 size_t tar_size)
+rtems_tarfs_load(
+  char *mountpoint,
+  uint8_t *tar_image,
+  size_t tar_size
+)
 {
    rtems_filesystem_location_info_t root_loc;
    rtems_filesystem_location_info_t loc;
@@ -90,7 +92,6 @@ rtems_tarfs_load(char *mountpoint,
    unsigned long   nblocks;
    IMFS_jnode_t    *node;
    int             status;
-
 
    status = rtems_filesystem_evaluate_path(mountpoint, 0, &root_loc, 0);
    if (status != 0)
@@ -111,7 +112,7 @@ rtems_tarfs_load(char *mountpoint,
       /******************************************************************
        * Read a header.
        ******************************************************************/
-      hdr_ptr = &tar_image[offset];
+      hdr_ptr = (char *) &tar_image[offset];
       offset += 512;
       if (strncmp(&hdr_ptr[257], "ustar  ", 7))
          break;
