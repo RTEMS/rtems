@@ -1,5 +1,10 @@
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
+	* libcsupport/include/ringbuf.h: Use uint8_t instead of char for raw
+	data buffer.
+
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
 	* rtems/src/regiongetfreeinfo.c: Return RTEMS_SUCCESSFUL instead of
 	RTEMS_INVALID_ADDRESS on success path.
 

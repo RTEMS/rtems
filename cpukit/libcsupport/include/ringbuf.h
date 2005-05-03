@@ -16,7 +16,7 @@
 #endif
 
 typedef struct {
-  char buffer[RINGBUF_QUEUE_LENGTH];
+  uint8_t buffer[RINGBUF_QUEUE_LENGTH];
   volatile int  head;
   volatile int  tail;
 } Ring_buffer_t;
