@@ -77,16 +77,16 @@
 /*  #define SH_SCI_DEF_COMM_1   B9600 | CS8 */
 
 struct scidev_t {
-  char *			name ;
-  uint32_t  			addr ;
-  rtems_device_minor_number	minor ;
-  unsigned short		opened ;
-  tcflag_t			cflags ;
+  char *			name;
+  uint32_t  			addr;
+  rtems_device_minor_number	minor;
+  unsigned short		opened;
+  tcflag_t			cflags;
 } sci_device[SCI_MINOR_DEVICES] =
 {
   { "/dev/sci0", SH_SCI_BASE_0, 0, 0, SH_SCI_DEF_COMM_0 },
   { "/dev/sci1", SH_SCI_BASE_1, 1, 0, SH_SCI_DEF_COMM_1 }
-} ;
+};
 
 /*  local data structures maintain hardware configuration */
 #if UNUSED
@@ -97,20 +97,22 @@ static sci_setup_t sio_param[2];
 extern int _sci_get_brparms(
   tcflag_t      cflag,
   unsigned char *smr,
-  unsigned char *brr );
+  unsigned char *brr
+);
 
 /* Translate termios' tcflag_t into sci settings */
 static int _sci_set_cflags(
-  struct scidev_t      *sci_dev,
-  tcflag_t      c_cflag )
+  struct scidev_t  *sci_dev,
+  tcflag_t          c_cflag
+)
 {
-  uint8_t  	smr ;
-  uint8_t  	brr ;
+  uint8_t  	smr;
+  uint8_t  	brr;
 
   if ( c_cflag & CBAUD )
   {
     if ( _sci_get_brparms( c_cflag, &smr, &brr ) != 0 )
-      return -1 ;
+      return -1;
   }
 
   if ( c_cflag & CSIZE )
@@ -120,7 +122,7 @@ static int _sci_set_cflags(
     else if ( c_cflag & CS7 )
       smr |= SCI_SEVEN_BIT_DATA;
     else
-      return -1 ;
+      return -1;
   }
 
   if ( c_cflag & CSTOPB )
@@ -129,19 +131,19 @@ static int _sci_set_cflags(
     smr &= ~SCI_STOP_BITS_2;
 
   if ( c_cflag & PARENB )
-    smr |= SCI_PARITY_ON ;
+    smr |= SCI_PARITY_ON;
   else
-    smr &= ~SCI_PARITY_ON ;
+    smr &= ~SCI_PARITY_ON;
 
   if ( c_cflag & PARODD )
-    smr |= SCI_ODD_PARITY ;
+    smr |= SCI_ODD_PARITY;
   else
     smr &= ~SCI_ODD_PARITY;
 
   write8( smr, sci_dev->addr + SCI_SMR );
   write8( brr, sci_dev->addr + SCI_BRR );
 
-  return 0 ;
+  return 0;
 }
 
 /*
@@ -213,7 +215,7 @@ rtems_boolean rdSCI0(unsigned char *ch)
     temp = read8(SCI_SSR0) & ~SCI_RDRF;
     write8(temp, SCI_SSR0);
     /* Check for transmission errors */
-    if(temp & (SCI_ORER | SCI_FER | SCI_PER)){
+    if (temp & (SCI_ORER | SCI_FER | SCI_PER)) {
         /* TODO: report to RTEMS transmission error */
 
         /* clear error flags*/
@@ -237,7 +239,7 @@ rtems_boolean rdSCI1(unsigned char *ch)
     temp= read8(SCI_SSR1) & ~SCI_RDRF;
     write8(temp, SCI_SSR1);
     /* Check for transmission errors */
-    if(temp & (SCI_ORER | SCI_FER | SCI_PER)){
+    if (temp & (SCI_ORER | SCI_FER | SCI_PER)) {
         /* TODO: report to RTEMS transmission error */
 
         /* clear error flags*/
@@ -251,26 +253,24 @@ rtems_boolean rdSCI1(unsigned char *ch)
 
 
 /* initial version pulls byte from selected port */
-char sh_sci_inbyte_polled(
-    rtems_device_minor_number  minor )
+char sh_sci_inbyte_polled( rtems_device_minor_number  minor )
 {
-	char ch;
+  uint8_t ch = 0;
 
-	if (minor == 0) /* blocks until char.ready */
-		while (rdSCI0(&ch) != TRUE); /* SCI0 */
-	else
-		while (rdSCI1(&ch) != TRUE); /* SCI1 */
-	return ch;
+  if (minor == 0) /* blocks until char.ready */
+    while (rdSCI0(&ch) != TRUE); /* SCI0 */
+  else
+    while (rdSCI1(&ch) != TRUE); /* SCI1 */
+  return ch;
 } /* sh_sci_inbyte_polled */
 
 /* Initial version calls polled input driver */
-char inbyte(
-  rtems_device_minor_number  minor )
+char inbyte( rtems_device_minor_number  minor )
 {
-	char ch;
+  char ch;
 
-	ch = sh_sci_inbyte_polled(minor);
-	return ch;
+  ch = sh_sci_inbyte_polled(minor);
+  return ch;
 } /* inbyte */
 
 
@@ -311,7 +311,7 @@ rtems_device_driver sh_sci_initialize(
     status = rtems_io_lookup_name(
         sci_device[i].name,
         &driver);
-    if( status != RTEMS_SUCCESSFUL )
+    if ( status != RTEMS_SUCCESSFUL )
     {
         /* OK. We assume it is not registered yet. */
         status = rtems_io_register_name(
@@ -342,10 +342,10 @@ rtems_device_driver sh_sci_open(
   uint8_t   temp8;
   uint16_t   temp16;
 
-  unsigned 	a ;
+  unsigned 	a;
 
  /* check for valid minor number */
-   if(( minor > ( SCI_MINOR_DEVICES -1 )) || ( minor < 0 ))
+   if (( minor > ( SCI_MINOR_DEVICES -1 )) || ( minor < 0 ))
    {
      return RTEMS_INVALID_NUMBER;
    }
@@ -353,8 +353,8 @@ rtems_device_driver sh_sci_open(
   /* device already opened */
   if ( sci_device[minor].opened > 0 )
   {
-    sci_device[minor].opened++ ;
-    return RTEMS_SUCCESSFUL ;
+    sci_device[minor].opened++;
+    return RTEMS_SUCCESSFUL;
   }
 
   /* set PFC registers to enable I/O pins */
@@ -378,7 +378,7 @@ rtems_device_driver sh_sci_open(
                                                    /* set SMR and BRR */
     _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
 
-    for(a=0; a < 10000L; a++) {                      /* Delay */
+    for (a=0; a < 10000L; a++) {                      /* Delay */
       asm volatile ("nop");
     }
 
@@ -387,7 +387,7 @@ rtems_device_driver sh_sci_open(
 
     /* clear error flags */
     temp8 = read8(sci_device[minor].addr + SCI_SSR);
-    while(temp8 & (SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER)){
+    while (temp8 & (SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER)) {
         temp8 = read8(sci_device[minor].addr + SCI_RDR);   /* flush input */
         temp8 = read8(sci_device[minor].addr + SCI_SSR); /* clear some flags */
         write8(temp8 & ~(SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER),
@@ -403,9 +403,9 @@ rtems_device_driver sh_sci_open(
     /* add interrupt setup if required */
 
 
-  sci_device[minor].opened++ ;
+  sci_device[minor].opened++;
 
-  return RTEMS_SUCCESSFUL ;
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
@@ -420,11 +420,11 @@ rtems_device_driver sh_sci_close(
 {
   /* FIXME: Incomplete */
   if ( sci_device[minor].opened > 0 )
-    sci_device[minor].opened-- ;
+    sci_device[minor].opened--;
   else
-    return RTEMS_INVALID_NUMBER ;
+    return RTEMS_INVALID_NUMBER;
 
-  return RTEMS_SUCCESSFUL ;
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
@@ -501,7 +501,7 @@ rtems_device_driver sh_sci_control(
 )
 {
   /* Not yet supported */
-  return RTEMS_SUCCESSFUL ;
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
@@ -525,27 +525,27 @@ static int _sh_sci_last_close(int major, int minor, void *arg)
  */
 static int _sh_sci_poll_read(int minor)
 {
-    int value = -1;
-    char ch;
+  int value = -1;
+  uint8_t ch = 0;
 
-    if( minor == 0 ){
-        if( rdSCI0( &ch ) )
-            value = (int) ch;
-    }else if( minor == 1 ){
-        if( rdSCI1( &ch ) )
-            value = (int) ch;
-    }
-    return value;
+  if ( minor == 0 ) {
+    if ( rdSCI0( &ch ) )
+      value = (int) ch;
+  } else if ( minor == 1 ) {
+    if ( rdSCI1( &ch ) )
+      value = (int) ch;
+  }
+  return value;
 }
 
 /*
  * Termios polled write
  */
-static int _sh_sci_poll_write(int minor, const char *buf, int len)
+static int _sh_sci_poll_write(int minor, const uint8_t *buf, int len)
 {
     int count;
 
-    for(count = 0; count < len; count++)
+    for (count = 0; count < len; count++)
         outbyte( minor, buf[count] );
     return count;
 }

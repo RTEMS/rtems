@@ -1,3 +1,7 @@
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* sh7045/sci/sci.c, sh7045/sci/sci_termios.c: Remove warnings.
+
 2005-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* sh7750/sci/sh4uart.c: Now compiles under gcc 4.x and reformatted.
