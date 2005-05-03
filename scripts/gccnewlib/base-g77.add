@@ -6,6 +6,8 @@
 Summary:      rtems base package for gcc/g77 compiler
 Group: %{rpmgroup}
 Requires: rtems-base-gcc
+Requires(post): /sbin/install-info
+Requires(preun): /sbin/install-info
 
 %description -n %{rpmprefix}rtems@osversion@-base-g77
 RTEMS is an open source operating system for embedded systems.
@@ -15,6 +17,7 @@ This is the files for gcc/g77 that are shared by all targets.
 %files -n %{rpmprefix}rtems@osversion@-base-g77
 %defattr(-,root,root)
 %dir %{_infodir}
+%ghost %{_infodir}/dir
 %{_infodir}/g77.info*.gz
 
 %dir %{_mandir}
@@ -22,23 +25,11 @@ This is the files for gcc/g77 that are shared by all targets.
 %{_mandir}/man1/%{gcc_target}-g77.1*
 
 %post -n %{rpmprefix}rtems@osversion@-base-g77
-  if test -d %{_infodir}; 
-  then
-    rm -f %{_infodir}/dir
-    f=`find %{_infodir} -name '*.info.gz'`
-    test -n "$f" && for i in $f; do
-      install-info $i %{_infodir}/dir
-    done
-  fi
+  /sbin/install-info --infodir=%{_infodir} %{_infodir}/g77.info.gz 
 
-%postun -n %{rpmprefix}rtems@osversion@-base-g77
-  if test -d %{_infodir}; 
-  then
-    rm -f %{_infodir}/dir
-    f=`find %{_infodir} -name '*.info.gz'`
-    test -n "$f" && for i in $f; do
-      install-info $i %{_infodir}/dir
-    done
-  fi
+%preun -n %{rpmprefix}rtems@osversion@-base-g77
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/g77.info.gz
+fi
 
 %endif

@@ -53,7 +53,7 @@ BuildRequires:	ncurses-devel
 %define _sim	0
 %endif
 %if "%{gdb_target}" == "powerpc-rtems@osversion@"
-%define _sim	0
+%define _sim	1
 %endif
 %if "%{gdb_target}" == "sparc-rtems@osversion@"
 %define _sim	0
@@ -133,6 +133,9 @@ cd ..
   # gdb 4.18 installed this, later versions don't
   # Don't care about it, anymore
   rm -rf $RPM_BUILD_ROOT%{_infodir}/readline.info*
+
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
  
   # gzip info files
   ls $RPM_BUILD_ROOT%{_infodir}/*.info \
@@ -141,9 +144,6 @@ cd ..
   | while read a; do \
     gzip -9qf $a 2>/dev/null; \
   done
-
-  # We don't ship info/dir
-  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 
   # gzip man pages
   gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/*.? 2>/dev/null
