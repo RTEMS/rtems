@@ -1,3 +1,9 @@
+2005-05-03      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * libchip/network/dec21140.c, libchip/network/elnk.c,
+        libchip/network/if_fxp.c, libchip/serial/mc68681.c:
+        Modified parameter list to remove warnings.
+
 2005-05-02      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * libchip/network/cs8900.c, libchip/network/i82586.c,

@@ -278,7 +278,7 @@ MC68681_STATIC int mc68681_open(
   unsigned int           baud;
   unsigned int           acr_bit;
   unsigned int           vector;
-  unsigned int           command;
+  unsigned int           command = 0;
   rtems_interrupt_level  Irql;
   setRegister_f          setReg;
   unsigned int			 status;

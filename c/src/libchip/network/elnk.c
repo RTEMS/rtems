@@ -3037,7 +3037,7 @@ elnk_stats (struct elnk_softc *sc)
  * Driver ioctl handler
  */
 static int
-elnk_ioctl (struct ifnet *ifp, int command, caddr_t data)
+elnk_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
 {
    struct elnk_softc *sc = ifp->if_softc;
    int error = 0;
