@@ -1,5 +1,6 @@
 2005-05-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* common/common.add.in: Use FC compliant BuildRoot.
 	* gccnewlib/gccnewlib.add: Remove gnatgcc hacks.
 	Misc  %infodir/dir handling changes.
 	* gccnewlib/target-c++.add, gccnewlib/target-g77.add,
