@@ -1,3 +1,7 @@
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: New file.
+
 2005-04-29      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * irq/irq.c, start/start.S: Removed warnings
