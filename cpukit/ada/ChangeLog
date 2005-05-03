@@ -1,3 +1,7 @@
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems.adb: Remove gcc 4.x warnings.
+
 2005-05-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 782/rtems
