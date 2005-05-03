@@ -38,7 +38,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_interrupt_level level;
     rtems_irq_hdl *bsp_tbl;
 
-    bsp_tbl = &bsp_vector_table;
+    bsp_tbl = (rtems_irq_hdl *)&bsp_vector_table;
     
     if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -82,7 +82,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_interrupt_level level;
     rtems_irq_hdl *bsp_tbl;
 
-    bsp_tbl = &bsp_vector_table;
+    bsp_tbl = (rtems_irq_hdl *)&bsp_vector_table;
   
     if (!isValidInterrupt(irq->name)) {
       return 0;

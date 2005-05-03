@@ -1,3 +1,7 @@
+2005-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* mc9328mxl/irq/irq.c, s3c2400/irq/irq.c: Remove warnings.
+
 2005-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* s3c2400/clock/clockdrv.c: Eliminate warning.
