@@ -31,14 +31,14 @@
  *      - Dual-Port RAM section 3
  */
 static struct {
-  char		*base;
+  uint8_t	*base;
   size_t         size;
   unsigned int   used;
 } dpram_regions[] = {
-/*  { (char *)&m8260.dpram0[0],    sizeof m8260.dpram0,     0 },*/
-  { (char *)&m8260.dpram1[0],    sizeof m8260.dpram1,     0 },
-/*  { (char *)&m8260.dpram2[0],    sizeof m8260.dpram2,     0 },*/
-  { (char *)&m8260.dpram3[0],    sizeof m8260.dpram3,     0 }
+/*  { (uint8_t *)&m8260.dpram0[0],    sizeof m8260.dpram0,     0 },*/
+  { (uint8_t *)&m8260.dpram1[0],    sizeof m8260.dpram1,     0 },
+/*  { (uint8_t *)&m8260.dpram2[0],    sizeof m8260.dpram2,     0 },*/
+  { (uint8_t *)&m8260.dpram3[0],    sizeof m8260.dpram3,     0 }
 };
 
 #define	NUM_DPRAM_REGIONS	(sizeof(dpram_regions) / sizeof(dpram_regions[0]))

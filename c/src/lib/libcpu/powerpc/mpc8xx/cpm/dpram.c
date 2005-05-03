@@ -28,15 +28,15 @@
  *      - Dual-Port RAM section 4
  */
 static struct {
-  char	 	*base;
+  uint8_t       *base;
   size_t	 size;
   unsigned int   used;
 } dpram_regions[] = {
-  { (char *)&m8xx.dpram0[0],    sizeof m8xx.dpram0,     0 },
-  { (char *)&m8xx.dpram1[0],    sizeof m8xx.dpram1,     0 },
-  { (char *)&m8xx.dpram2[0],    sizeof m8xx.dpram2,     0 },
-  { (char *)&m8xx.dpram3[0],    sizeof m8xx.dpram3,     0 },
-  { (char *)&m8xx.dpram4[0],    sizeof m8xx.dpram4,     0 },
+  { (uint8_t *) &m8xx.dpram0[0],    sizeof m8xx.dpram0,     0 },
+  { (uint8_t *) &m8xx.dpram1[0],    sizeof m8xx.dpram1,     0 },
+  { (uint8_t *) &m8xx.dpram2[0],    sizeof m8xx.dpram2,     0 },
+  { (uint8_t *) &m8xx.dpram3[0],    sizeof m8xx.dpram3,     0 },
+  { (uint8_t *) &m8xx.dpram4[0],    sizeof m8xx.dpram4,     0 },
 };
 
 #define	NUM_DPRAM_REGIONS	(sizeof(dpram_regions) / sizeof(dpram_regions[0]))

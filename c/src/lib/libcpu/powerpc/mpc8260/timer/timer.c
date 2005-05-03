@@ -54,11 +54,6 @@ static volatile uint32_t   Timer_starting;
 static rtems_boolean Timer_driver_Find_average_overhead;
 
 extern rtems_cpu_table Cpu_table;
-#define rtems_cpu_configuration_get_timer_average_overhead() \
-   (Cpu_table.timer_average_overhead)
-
-#define rtems_cpu_configuration_get_timer_least_valid() \
-   (Cpu_table.timer_least_valid)
 
 /*
  *  This is so small that this code will be reproduced where needed.
