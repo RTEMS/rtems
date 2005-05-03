@@ -239,14 +239,6 @@ cd ..
   # cd back to build/
   cd ../..
 
-%if %build_gnat
-# Install a copy of gcc as gnatgcc
-# Enables us to mix different versions of gnat and gnatgcc
-  rm -f $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-gnatgcc%{_exeext}
-  ln $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-gcc%{_exeext} \
-    $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-gnatgcc%{_exeext}
-%endif
-
   # Bug in gcc-3.x: It puts the build dirs into *.la files
 
   # host library
@@ -257,6 +249,7 @@ cd ..
 
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
 
 %if %build_f95
 #  # Bug in gcc-4.0.0pre
