@@ -1,3 +1,7 @@
+2005-05-04	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/open_eth.c: Remove prototype of set_vector.
+
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* librdbg/src/ptrace.c: Remove warning.

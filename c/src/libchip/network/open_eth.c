@@ -55,12 +55,6 @@
 #undef free
 #endif
 
-/*
- *  XXX fix this
- */
-
-void *set_vector(void *, uint32_t, uint32_t);
-
  /*
 #define OPEN_ETH_DEBUG
  */
