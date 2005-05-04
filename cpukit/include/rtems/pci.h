@@ -1220,6 +1220,6 @@ pci_find_device(
 /*
  * Return the number of PCI busses in the system
  */
-extern unsigned char BusCountPCI();
+extern unsigned char pci_bus_count();
 
 #endif /* _RTEMS_PCI_H */

@@ -1,3 +1,7 @@
+2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * include/rtems/pci.h: Name change to support common PCI interface
+
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* libcsupport/include/ringbuf.h: Use uint8_t instead of char for raw
