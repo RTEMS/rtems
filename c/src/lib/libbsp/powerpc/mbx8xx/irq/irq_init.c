@@ -28,7 +28,9 @@ volatile unsigned int ppc_cached_irq_mask;
 /*
  * default on/off function
  */
-static void nop_func(){}
+static void nop_func1(void *unused){}
+static void nop_func2(){}
+
 /*
  * default isOn function
  */
@@ -41,8 +43,8 @@ static int connected() {return 1;}
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
 static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,	 hdl		, on		, off		, isOn */
-  0, 			 nop_func	, nop_func	, nop_func	, not_connected
+  /* vectorIdex,	 hdl		, handle	, on		, off		, isOn */
+  0, 			 nop_func1	, 0		, nop_func2	, nop_func2	, not_connected
 };
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   /*

@@ -467,7 +467,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
 
-    rtems_hdl_tbl[irq].hdl();
+    rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
 
     _CPU_MSR_SET(msr);
 
