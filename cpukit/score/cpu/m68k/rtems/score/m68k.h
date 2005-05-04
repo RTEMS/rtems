@@ -338,7 +338,7 @@ extern void *_VBR;
 #define m68k_set_vbr( vbr ) \
   do { \
     asm volatile ( "movec   %0,%%vbr " : : "r" (vbr)); \
-    _ColdFire_VBR = (void *)vbr; \
+    _VBR = (void *)vbr; \
   } while(0)
   
 #else
