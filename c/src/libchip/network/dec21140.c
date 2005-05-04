@@ -48,7 +48,6 @@
 #if defined(__i386__)
   #define DEC21140_SUPPORTED
 #endif
-
 #if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(mpc603e))
   #define DEC21140_SUPPORTED
 #endif
@@ -56,9 +55,7 @@
 #if defined(DEC21140_SUPPORTED)
 #include <bsp.h>
 #include <rtems/pci.h>
-#if defined(__i386__)
-#include <pcibios.h>
-#endif
+
 #if defined(__PPC__)
 #include <libcpu/byteorder.h>
 #include <libcpu/io.h>
@@ -1011,7 +1008,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    int          mtu;
    unsigned char cvalue;
 #if defined(__i386__)
-   int          signature;
    unsigned int value;
    unsigned char interrupt;
 #endif
@@ -1049,8 +1045,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
         /* the 21143 chip must be enabled before it can be accessed */
 #if defined(__i386__)
-        signature =  PCIB_DEVSIG_MAKE( pbus, pdev, pfun );
-        pcib_conf_write32( signature, 0x40, 0 );
+        pci_write_config_dword(pbus, pdev, pfun, 0x40, 0 );
 #else
         pci_write_config_dword(pbus, pdev, pfun, 0x40, PCI_DEVICE_ID_DEC_21143);
 #endif
@@ -1067,12 +1062,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
              config->name, pbus, pdev, pfun);
    }
 #endif
-
-#if defined(__i386__)
-   signature =  PCIB_DEVSIG_MAKE( pbus, pdev, pfun );
-#endif
-
-
 
    if ((unitNumber < 1) || (unitNumber > NDECDRIVER))
    {
@@ -1106,10 +1095,10 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
     */
 #if defined(__i386__)
 
-   pcib_conf_read32(signature, 16, &value);
+   pci_read_config_dword(pbus, pdev, pfun, 16, &value);
    sc->port = value & ~IO_MASK;
 
-   pcib_conf_read32(signature, 20, &value);
+   pci_read_config_dword(pbus, pdev, pfun, 20, &value);
    if (_CPU_is_paging_enabled())
       _CPU_map_phys_address((void **) &(sc->base),
                             (void *)(value & ~MEM_MASK),
@@ -1118,7 +1107,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    else
       sc->base = (unsigned int *)(value & ~MEM_MASK);
 
-   pcib_conf_read8(signature, 60, &interrupt);
+   pci_read_config_byte(pbus, pdev, pfun, 60, &interrupt);
    cvalue = interrupt;
 #endif
 #if defined(__PPC__)
@@ -1153,12 +1142,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    ** Prep the board
    */
 
-#if defined(__PPC__)
    pci_write_config_word(pbus, pdev, pfun,
-#endif
-#if defined(__i386__)
-   pcib_conf_write16(signature, 
-#endif
       PCI_COMMAND,
       (uint16_t) ( PCI_COMMAND_IO | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER ) );
 

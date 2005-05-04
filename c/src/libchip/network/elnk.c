@@ -83,11 +83,9 @@
 
 #if defined(ELNK_SUPPORTED)
 #include <bsp.h>
-#if defined(__i386__)
-#include <pcibios.h>
-#endif
+#include <rtems/pci.h>
+
 #if defined(__PPC__)
-#include <bsp/pci.h>
 #include <libcpu/byteorder.h>
 #include <libcpu/io.h>
 #endif
@@ -3138,7 +3136,6 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    int                      numFound = 0;
    int          pbus, pdev, pfun;
 #if defined(__i386__)
-   int          signature;
    unsigned int   value;
    unsigned char  interrupt;
 #endif
@@ -3248,9 +3245,6 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       pbus = sysboards[unitNumber-1].pbus;
       pdev = sysboards[unitNumber-1].pdev;
       pfun = sysboards[unitNumber-1].pfun;
-#if defined(__i386__)
-      signature = PCIB_DEVSIG_MAKE(pbus,pdev,pfun);
-#endif
    }
 
    sc = &elnk_softc[unitNumber - 1];
@@ -3318,10 +3312,10 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
 
 #if defined(__i386__)
-   pcib_conf_read32(signature, 16, &value);
+   pci_read_config_dword(pbus, pdev, pfun, 16, &value);
    sc->ioaddr = value & ~IO_MASK;
 
-   pcib_conf_read8(signature, 60, &interrupt);
+   pci_read_config_byte(pbus, pdev, pfun, 60, &interrupt);
    cvalue = interrupt;
 #endif
 #if defined(__PPC__)
@@ -3369,7 +3363,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
          when the timer expires during a transfer.  This bug exists the Vortex
          chip only. */
 #if defined(__i386__)
-      pcib_conf_read8(signature, 0x0d, &pci_latency);
+      pci_read_config_byte(pbus, pdev, pfun, 0x0d, &pci_latency);
 #endif
 #if defined(__PPC__)
       pci_read_config_byte(pbus,pdev,pfun, PCI_LATENCY_TIMER, &pci_latency);
@@ -3378,7 +3372,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       {
          printk("etherlink : unit elnk%d Overriding PCI latency, timer (CFLT) setting of %d, new value is %d.\n", sc->xl_unit, pci_latency, new_latency );
 #if defined(__i386__)
-         pcib_conf_write8(signature, 0x0d, new_latency);
+         pci_write_config_byte(pbus, pdev, pfun, 0x0d, new_latency);
 #endif
 #if defined(__PPC__)
          pci_write_config_byte(pbus,pdev,pfun, PCI_LATENCY_TIMER, new_latency);
