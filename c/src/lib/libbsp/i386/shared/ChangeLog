@@ -1,3 +1,9 @@
+2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * pci/pcibios.c, pci/pcibios.h: Corrected spacing
+        Name modifications for a generic PCI interface      
+        Added wrapper routines for pci read/write configuration data
+
 2005-05-03      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * comm/tty_drv.c: Modified to support addition of parameter to ISRs.

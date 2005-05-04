@@ -11,32 +11,32 @@
 #include <bsp.h>
 #include <pcibios.h>
 
-#include <string.h>	/* memcpy */
+#include <string.h>  /* memcpy */
 
 /*
  * This is simpliest possible PCI BIOS, it assumes that addressing
- * is flat and that stack is big enough 
- */ 
+ * is flat and that stack is big enough
+ */
 
 
 static int pcibInitialized = 0;
 static unsigned int pcibEntry;
 
 /*
- * Array to pass data between c and asm parts, at the time of 
- * writing I am not yet that familiar with extended asm feature 
- * of gcc. This code is not on performance path, so we can care 
- * relatively little about performance here 
+ * Array to pass data between c and asm parts, at the time of
+ * writing I am not yet that familiar with extended asm feature
+ * of gcc. This code is not on performance path, so we can care
+ * relatively little about performance here
  */
 static volatile unsigned int pcibExchg[5];
 
 static int pcib_convert_err(int err);
 
 /*
- * Detects presense of PCI BIOS, returns 
+ * Detects presense of PCI BIOS, returns
  * error code
  */
-int 
+int
 pci_initialize(void)
 {
   unsigned char *ucp;
@@ -46,45 +46,41 @@ pci_initialize(void)
   pcibInitialized = 0;
 
   /* First, we have to look for BIOS-32 */
-  for(ucp=(unsigned char *)0xE0000; ucp < (unsigned char *)0xFFFFF; ucp+=0x10)
-    {
-      if(memcmp(ucp, "_32_", 4) != 0)
-	{
-	  continue;
-	}
+  for (ucp = (unsigned char *)0xE0000;
+       ucp < (unsigned char *)0xFFFFF;
+       ucp += 0x10) {
+    if (memcmp(ucp, "_32_", 4) != 0) {
+      continue;
+    }
 
       /* Got signature, check length  */
-      if(*(ucp + 9) != 1)
-	{
-	  continue;
-	}
-
-      /* Verify checksum */
-      sum = 0;
-      for(i=0; i<16; i++)
-	{
-	  sum += *(ucp+i);
-	}
-
-      if(sum == 0)
-	{
-	  /* found */
-	  break;
-	}
+    if (*(ucp + 9) != 1) {
+      continue;
     }
 
-  if(ucp >= (unsigned char *)0xFFFFF)
-    {
-      /* BIOS-32 not found */
-      return PCIB_ERR_NOTPRESENT;
+    /* Verify checksum */
+    sum = 0;
+    for (i=0; i<16; i++) {
+      sum += *(ucp+i);
     }
+
+    if (sum == 0) {
+      /* found */
+      break;
+    }
+  }
+
+  if (ucp >= (unsigned char *)0xFFFFF) {
+    /* BIOS-32 not found */
+    return PCIB_ERR_NOTPRESENT;
+  }
 
   /* BIOS-32 found, let us find PCI BIOS */
   ucp += 4;
 
   pcibExchg[0] = *(unsigned int *)ucp;
 
-  asm ("    pusha");                  /* Push all registers */  
+  asm ("    pusha");                  /* Push all registers */
   asm ("    movl pcibExchg, %edi");   /* Move entry point to esi */
   asm ("    movl $0x49435024, %eax"); /* Move signature to eax */
   asm ("    xorl %ebx, %ebx");        /* Zero ebx */
@@ -96,23 +92,22 @@ pci_initialize(void)
   asm ("    movl %edx, pcibExchg+12");
   asm ("    popa");
 
-  if((pcibExchg[0] & 0xff) != 0)
-    {
-      /* Not found */
-      return PCIB_ERR_NOTPRESENT;
-    }
+  if ((pcibExchg[0] & 0xff) != 0) {
+    /* Not found */
+    return PCIB_ERR_NOTPRESENT;
+  }
 
   /* Found PCI entry point */
   pcibEntry = pcibExchg[1] + pcibExchg[3];
 
   /* Let us check whether PCI bios is present */
   pcibExchg[0] = pcibEntry;
-  
+
   asm("    pusha");
   asm("    movl pcibExchg, %edi");
   asm("    movb $0xb1, %ah");
   asm("    movb $0x01, %al");
-  asm ("   pushl %cs");
+  asm("    pushl %cs");
   asm("    call *%edi");
   asm("    movl %eax, pcibExchg");
   asm("    movl %ebx, pcibExchg+4");
@@ -120,35 +115,32 @@ pci_initialize(void)
   asm("    movl %edx, pcibExchg+12");
   asm("    popa");
 
-  if((pcibExchg[0] & 0xff00) != 0)
-    {
-      /* Not found */
-      return PCIB_ERR_NOTPRESENT;
-    }
+  if ((pcibExchg[0] & 0xff00) != 0) {
+    /* Not found */
+    return PCIB_ERR_NOTPRESENT;
+  }
 
-  if(pcibExchg[3] != 0x20494350)
-    {
-      /* Signature does not match */
-      return PCIB_ERR_NOTPRESENT;
-    }
+  if (pcibExchg[3] != 0x20494350) {
+    /* Signature does not match */
+    return PCIB_ERR_NOTPRESENT;
+  }
 
   /* Success */
-  
+
   pcibInitialized = 1;
   return PCIB_ERR_SUCCESS;
 }
 
-/* 
- * Find specified device and return its signature: combination 
+/*
+ * Find specified device and return its signature: combination
  * of bus number, device number and function number
  */
 int
 pcib_find_by_devid(int vendorId, int devId, int idx, int *sig)
 {
-  if(!pcibInitialized)
-    {
-      return PCIB_ERR_UNINITIALIZED;
-    }
+  if (!pcibInitialized) {
+    return PCIB_ERR_UNINITIALIZED;
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = vendorId;
@@ -194,17 +186,16 @@ pci_find_device(
   return status;
 }
 
-/* 
- * Find specified class code return device signature: combination 
+/*
+ * Find specified class code return device signature: combination
  * of bus number, device number and function number
  */
 int
 pcib_find_by_class(int classCode, int idx, int *sig)
 {
-  if(!pcibInitialized)
-    {
-      return PCIB_ERR_UNINITIALIZED;
-    }
+  if (!pcibInitialized) {
+    return PCIB_ERR_UNINITIALIZED;
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = classCode;
@@ -222,62 +213,59 @@ pcib_find_by_class(int classCode, int idx, int *sig)
   asm("    movl %ebx, pcibExchg+4");
   asm("    popa");
 
-  if((pcibExchg[0] & 0xff00) != 0)
-    {
-      return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
-    }
+  if ((pcibExchg[0] & 0xff00) != 0) {
+    return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
+  }
 
   *sig = pcibExchg[1] & 0xffff;
 
   return PCIB_ERR_SUCCESS;
 }
-  
+
 #define PCI_MULTI_FUNCTION      0x80
 
 static unsigned8 ucBusCount = 0xff;
 
 unsigned char
-BusCountPCI()
+pci_bus_count()
 {
-   if( ucBusCount == 0xff )
-   {
-      unsigned char bus;
-      unsigned char dev;
-      unsigned char hd = 0;
-      unsigned int d = 0;
-      int sig;
+  if ( ucBusCount == 0xff ) {
+    unsigned char bus;
+    unsigned char dev;
+    unsigned char hd = 0;
+    unsigned int d = 0;
+    int sig;
 
-      ucBusCount = 0;
+    ucBusCount = 0;
 
-      for (bus=0; bus< 0xff; bus++) {  
-         for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
-            sig = PCIB_DEVSIG_MAKE(bus,dev,0);
-            pcib_conf_read32(sig, PCI_VENDOR_ID, &d); 
+    for (bus=0; bus< 0xff; bus++) {
+      for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
+        sig = PCIB_DEVSIG_MAKE(bus,dev,0);
+        pcib_conf_read32(sig, PCI_VENDOR_ID, &d);
 
-            if( d != -1 ) {
-               pcib_conf_read32(sig, PCI_CLASS_REVISION, &d); 
-               
-               if( (d >> 16) == PCI_CLASS_BRIDGE_PCI ) {
-                  pcib_conf_read8(sig, PCI_SUBORDINATE_BUS, &hd); 
+        if ( d != -1 ) {
+           pcib_conf_read32(sig, PCI_CLASS_REVISION, &d);
 
-                  if( hd > ucBusCount ) 
-                     ucBusCount = hd;
-               }
-            }
-         }
-         
+           if ( (d >> 16) == PCI_CLASS_BRIDGE_PCI ) {
+             pcib_conf_read8(sig, PCI_SUBORDINATE_BUS, &hd);
+
+             if ( hd > ucBusCount )
+               ucBusCount = hd;
+           }
+        }
       }
+    }
 
-      if( ucBusCount == 0 ) {
-         printk("BusCountPCI() found 0 busses, assuming 1\n");
-         ucBusCount = 1;
-      } else if( ucBusCount == 0xff ) {
-         printk("BusCountPCI() found 0xff busses, assuming 1\n");
-         ucBusCount = 1;
-      }
-   }                       
+    if ( ucBusCount == 0 ) {
+      printk("pci_bus_count() found 0 busses, assuming 1\n");
+      ucBusCount = 1;
+    } else if ( ucBusCount == 0xff ) {
+      printk("pci_bus_count() found 0xff busses, assuming 1\n");
+      ucBusCount = 1;
+    }
+  }
 
-   return ucBusCount;
+  return ucBusCount;
 }
 
 
@@ -285,72 +273,66 @@ int
 BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun )
 {
-   int sig;
-   unsigned int d = 0;
-   unsigned short s = 0;
-   unsigned char bus;
-   unsigned char dev;
-   unsigned char fun;
-   unsigned char hd = 0;
+  int sig;
+  unsigned int d = 0;
+  unsigned short s = 0;
+  unsigned char bus;
+  unsigned char dev;
+  unsigned char fun;
+  unsigned char hd = 0;
 
-   for (bus=0; bus<BusCountPCI(); bus++) 
-   {
-      for (dev=0; dev<PCI_MAX_DEVICES; dev++) 
-      {
-         sig = PCIB_DEVSIG_MAKE(bus,dev,0);
+  for (bus=0; bus<pci_bus_count(); bus++) {
+    for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
+      sig = PCIB_DEVSIG_MAKE(bus,dev,0);
 
-         /* pci_read_config_byte(bus,dev,0, PCI_HEADER_TYPE, &hd); */
-         pcib_conf_read8(sig, 0xe, &hd); 
+      /* pci_read_config_byte(bus,dev,0, PCI_HEADER_TYPE, &hd); */
+      pcib_conf_read8(sig, 0xe, &hd);
 
-         hd = (hd & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
+      hd = (hd & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
 
-         for (fun=0; fun<hd; fun++) {
-            /* 
-             * The last devfn id/slot is special; must skip it
-             */
-            if( PCI_MAX_DEVICES-1 == dev && PCI_MAX_FUNCTIONS-1 == fun )
-               break;
+      for (fun=0; fun<hd; fun++) {
+        /*
+         * The last devfn id/slot is special; must skip it
+         */
+        if ( PCI_MAX_DEVICES-1 == dev && PCI_MAX_FUNCTIONS-1 == fun )
+          break;
 
-            /*pci_read_config_dword(bus,dev,fun,PCI_VENDOR_ID,&d); */
-            pcib_conf_read32(sig, 0, &d); 
-            if( d == -1 )
-               continue;
+        /*pci_read_config_dword(bus,dev,fun,PCI_VENDOR_ID,&d); */
+        pcib_conf_read32(sig, 0, &d);
+        if ( d == -1 )
+          continue;
 #ifdef PCI_DEBUG
-            printk("BSP_pciFindDevice: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
+        printk("BSP_pciFindDevice: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
 #endif
-            /* pci_read_config_word(bus,dev,fun,PCI_VENDOR_ID,&s); */
-            pcib_conf_read16(sig, 0, &s); 
-            if (vendorid != s)
-               continue;
+        /* pci_read_config_word(bus,dev,fun,PCI_VENDOR_ID,&s); */
+        pcib_conf_read16(sig, 0, &s);
+        if (vendorid != s)
+          continue;
 
-            /* pci_read_config_word(bus,dev,fun,PCI_DEVICE_ID,&s); */
-            pcib_conf_read16(sig, 0x2, &s); 
-            if (deviceid == s) {
-               if (instance--) continue;
-               *pbus=bus; 
-               *pdev=dev; 
-               *pfun=fun;
-               return 0;
-            }
-         }
+        /* pci_read_config_word(bus,dev,fun,PCI_DEVICE_ID,&s); */
+        pcib_conf_read16(sig, 0x2, &s);
+        if (deviceid == s) {
+          if (instance--) continue;
+          *pbus=bus;
+          *pdev=dev;
+          *pfun=fun;
+          return 0;
+        }
       }
-   }
-   return -1;
+    }
+  }
+  return -1;
 }
 
-
-  
-
-/* 
+/*
  * Generate Special Cycle
  */
 int
 pcib_special_cycle(int busNo, int data)
 {
-  if(!pcibInitialized)
-    {
-      return PCIB_ERR_UNINITIALIZED;
-    }
+  if (!pcibInitialized) {
+    return PCIB_ERR_UNINITIALIZED;
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = busNo << 8;
@@ -370,18 +352,17 @@ pcib_special_cycle(int busNo, int data)
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
-  
 
-/* 
+
+/*
  * Read byte from config space
  */
 int
 pcib_conf_read8(int sig, int off, unsigned char *data)
 {
-  if(!pcibInitialized)
-    {
-      return PCIB_ERR_UNINITIALIZED;
-    }
+  if (!pcibInitialized) {
+    return PCIB_ERR_UNINITIALIZED;
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = sig;
@@ -399,27 +380,25 @@ pcib_conf_read8(int sig, int off, unsigned char *data)
   asm("    movl %ecx, pcibExchg+4");
   asm("    popa");
 
-  if((pcibExchg[0] & 0xff00) != 0)
-    {
-      return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
-    }
+  if ((pcibExchg[0] & 0xff00) != 0) {
+    return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
+  }
 
   *data = (unsigned char)pcibExchg[1] & 0xff;
 
   return PCIB_ERR_SUCCESS;
 }
-  
 
-/* 
+
+/*
  * Read word from config space
  */
 int
 pcib_conf_read16(int sig, int off, unsigned short *data)
 {
-  if(!pcibInitialized)
-    {
-      return PCIB_ERR_UNINITIALIZED;
-    }
+  if (!pcibInitialized) {
+    return PCIB_ERR_UNINITIALIZED;
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = sig;
@@ -437,27 +416,25 @@ pcib_conf_read16(int sig, int off, unsigned short *data)
   asm("    movl %ecx, pcibExchg+4");
   asm("    popa");
 
-  if((pcibExchg[0] & 0xff00) != 0)
-    {
-      return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
-    }
+  if ((pcibExchg[0] & 0xff00) != 0) {
+    return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
+  }
 
   *data = (unsigned short)pcibExchg[1] & 0xffff;
 
   return PCIB_ERR_SUCCESS;
 }
-  
 
-/* 
+
+/*
  * Read dword from config space
  */
 int
 pcib_conf_read32(int sig, int off, unsigned int *data)
 {
-  if(!pcibInitialized)
-    {
-      return PCIB_ERR_UNINITIALIZED;
-    }
+  if (!pcibInitialized) {
+    return PCIB_ERR_UNINITIALIZED;
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = sig;
@@ -475,27 +452,25 @@ pcib_conf_read32(int sig, int off, unsigned int *data)
   asm("    movl %ecx, pcibExchg+4");
   asm("    popa");
 
-  if((pcibExchg[0] & 0xff00) != 0)
-    {
-      return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
-    }
+  if ((pcibExchg[0] & 0xff00) != 0) {
+    return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
+  }
 
   *data = (unsigned int)pcibExchg[1];
 
   return PCIB_ERR_SUCCESS;
 }
-  
 
-/* 
+
+/*
  * Write byte into  config space
  */
 int
 pcib_conf_write8(int sig, int off, unsigned int data)
 {
-  if(!pcibInitialized)
-    {
-      return PCIB_ERR_UNINITIALIZED;
-    }
+  if (!pcibInitialized) {
+    return PCIB_ERR_UNINITIALIZED;
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = sig;
@@ -517,16 +492,15 @@ pcib_conf_write8(int sig, int off, unsigned int data)
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
 
-/* 
+/*
  * Write word into config space
  */
 int
 pcib_conf_write16(int sig, int off, unsigned int data)
 {
-  if(!pcibInitialized)
-    {
-      return PCIB_ERR_UNINITIALIZED;
-    }
+  if (!pcibInitialized) {
+    return PCIB_ERR_UNINITIALIZED;
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = sig;
@@ -547,19 +521,18 @@ pcib_conf_write16(int sig, int off, unsigned int data)
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
-  
 
 
-/* 
+
+/*
  * Write dword into config space
  */
 int
 pcib_conf_write32(int sig, int off, unsigned int data)
 {
-  if(!pcibInitialized)
-    {
+  if (!pcibInitialized){
       return PCIB_ERR_UNINITIALIZED;
-    }
+  }
 
   pcibExchg[0] = pcibEntry;
   pcibExchg[1] = sig;
@@ -580,13 +553,12 @@ pcib_conf_write32(int sig, int off, unsigned int data)
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
-  
+
 
 static int
 pcib_convert_err(int err)
 {
-  switch(err & 0xff)
-    {
+  switch(err & 0xff){
     case 0:
       return PCIB_ERR_SUCCESS;
     case 0x81:
@@ -599,16 +571,117 @@ pcib_convert_err(int err)
       return PCIB_ERR_BADREG;
     default:
       break;
-    }
+  }
   return PCIB_ERR_NOFUNC;
 }
-	
-      
 
+static int
+indirect_pci_read_config_byte(
+  unsigned char bus,
+  unsigned char slot,
+  unsigned char fun,
+  unsigned char offset,
+  unsigned char *val
+) 
+{
+  int sig;
 
-  
-      
-  
+  sig = PCIB_DEVSIG_MAKE(bus,slot,fun);
+  pcib_conf_read8(sig, offset, val);
+  return PCIBIOS_SUCCESSFUL;
+}
 
+static int
+indirect_pci_read_config_word(
+  unsigned char bus,
+  unsigned char slot,
+  unsigned char fun,
+  unsigned char offset,
+  unsigned short *val
+) 
+{
+  int sig;
 
+  sig = PCIB_DEVSIG_MAKE(bus,slot,fun);
+  pcib_conf_read16(sig, offset, val);
+  return PCIBIOS_SUCCESSFUL;
+}
 
+static int
+indirect_pci_read_config_dword(
+  unsigned char bus,
+  unsigned char slot,
+  unsigned char fun,
+  unsigned char offset,
+  unsigned int *val
+) 
+{
+  int sig;
+
+  sig = PCIB_DEVSIG_MAKE(bus,slot,fun);
+  pcib_conf_read32(sig, offset, val);
+  return PCIBIOS_SUCCESSFUL;
+}
+
+static int
+indirect_pci_write_config_byte(
+  unsigned char bus,
+  unsigned char slot,
+  unsigned char fun,
+  unsigned char offset,
+  unsigned char val
+) 
+{
+  int sig;
+
+  sig = PCIB_DEVSIG_MAKE(bus,slot,fun);
+  pcib_conf_write8(sig, offset, val);
+  return PCIBIOS_SUCCESSFUL;
+}
+
+static int
+indirect_pci_write_config_word(
+  unsigned char bus,
+  unsigned char slot,
+  unsigned char fun,
+  unsigned char offset,
+  unsigned short val
+) 
+{
+  int sig;
+
+  sig = PCIB_DEVSIG_MAKE(bus,slot,fun);
+  pcib_conf_write16(sig, offset, val);
+  return PCIBIOS_SUCCESSFUL;
+}
+
+static int
+indirect_pci_write_config_dword(
+  unsigned char bus,
+  unsigned char slot,
+  unsigned char fun,
+  unsigned char offset,
+  unsigned int val
+) 
+{
+  int sig;
+
+  sig = PCIB_DEVSIG_MAKE(bus,slot,fun);
+  pcib_conf_write32(sig, offset, val);
+  return PCIBIOS_SUCCESSFUL;
+}
+
+const pci_config_access_functions pci_indirect_functions = {
+  indirect_pci_read_config_byte,
+  indirect_pci_read_config_word,
+  indirect_pci_read_config_dword,
+  indirect_pci_write_config_byte,
+  indirect_pci_write_config_word,
+  indirect_pci_write_config_dword
+};
+
+pci_config BSP_pci_configuration = {
+  (volatile unsigned char*)0,
+  (volatile unsigned char*)0,
+  &pci_indirect_functions
+};
