@@ -457,7 +457,7 @@ ShowBATS();
   pci_initialize();
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Number of PCI buses found is : %d\n", BusCountPCI());
+  printk("Number of PCI buses found is : %d\n", pci_bus_count());
 #endif
 #ifdef TEST_RAW_EXCEPTION_CODE  
   printk("Testing exception handling Part 1\n");
