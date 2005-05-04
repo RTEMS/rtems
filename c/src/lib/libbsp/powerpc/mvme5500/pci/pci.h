@@ -1188,7 +1188,7 @@ extern int pci_write_config_dword();
 /*
  * Return the number of PCI busses in the system
  */
-extern unsigned char BusCountPCI();
+extern unsigned char pci_bus_count();
 extern void pci_initialize();
 #endif
 

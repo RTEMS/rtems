@@ -1,3 +1,8 @@
+2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * pci/pci.c, pci/pci.h, startup/bspstart.c: Name change to support
+        common PCI interface
+
 2005-04-15	Joel Sherrill <joel@OARcorp.com>
 
 	* GT64260/GT64260TWSI.c, GT64260/GT64260TWSI.h, irq/GT64260Int.c,

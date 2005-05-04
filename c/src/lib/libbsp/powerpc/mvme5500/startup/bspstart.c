@@ -591,7 +591,7 @@ void bsp_start( void )
 #endif  
   pci_initialize();
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Number of PCI buses found is : %d\n", BusCountPCI());
+  printk("Number of PCI buses found is : %d\n", pci_bus_count());
 #endif
 
   /* Install our own exception handler (needs PCI) */

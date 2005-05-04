@@ -373,7 +373,7 @@ void pci_initialize()
 /*
  * Return the number of PCI buses in the system
  */
-unsigned char BusCountPCI()
+unsigned char pci_bus_count()
 {
   return(ucMaxPCIBus);
 }
