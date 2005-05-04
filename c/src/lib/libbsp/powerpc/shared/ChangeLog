@@ -1,3 +1,8 @@
+2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * irq/irq_init.c, pci/pci.c, pci/pcifinddevice.c, startup/bspstart.c:
+        Name change to support common PCI interface
+
 2005-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* console/uart.h: Eliminate tabs.

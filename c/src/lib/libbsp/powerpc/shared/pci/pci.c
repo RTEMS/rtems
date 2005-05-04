@@ -332,7 +332,7 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
   uint8_t      bussec, buspri;
   uint16_t     devid, vendorid, dclass;
 
-  for(pbus=0; pbus< BusCountPCI(); pbus++) {
+  for(pbus=0; pbus< pci_bus_count(); pbus++) {
     for(pslot=0; pslot< PCI_MAX_DEVICES; pslot++) {
       pci_read_config_word(pbus, pslot, 0, PCI_DEVICE_ID, &devid);
       if ( devid == 0xffff ) continue;
@@ -382,7 +382,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
    * trivially use INTERRUPT_NAME to hook up with devices.
    */
 
-  for (pbus=0; pbus< BusCountPCI(); pbus++) {
+  for (pbus=0; pbus< pci_bus_count(); pbus++) {
     for (pslot=0; pslot< PCI_MAX_DEVICES; pslot++) {
       pci_read_config_word(pbus, pslot, 0, PCI_DEVICE_ID, &devid);
       if ( devid == 0xffff ) continue;
@@ -608,7 +608,7 @@ int pci_initialize()
 /*
  * Return the number of PCI busses in the system
  */
-unsigned char BusCountPCI()
+unsigned char pci_bus_count()
 {
   return (ucMaxPCIBus+1);
 }

@@ -159,7 +159,7 @@ void VIA_isa_bridge_interrupts_setup(void)
   unsigned char maxBus;
   unsigned found = 0;
 
-  maxBus = BusCountPCI();
+  maxBus = pci_bus_count();
   pci_dev.function 	= 0; /* Assumes the bidge is the first function */
 
   for (pci_dev.bus = 0; pci_dev.bus < maxBus; pci_dev.bus++) {

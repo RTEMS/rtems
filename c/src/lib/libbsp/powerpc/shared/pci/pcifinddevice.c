@@ -26,7 +26,7 @@ pci_find_device(
    unsigned short s;
    unsigned char bus,dev,fun,hd;
 
-   for (bus=0; bus<BusCountPCI(); bus++) {
+   for (bus=0; bus<pci_bus_count(); bus++) {
      for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
 
        pci_read_config_byte(bus,dev,0, PCI_HEADER_TYPE, &hd);
