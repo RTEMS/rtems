@@ -1,3 +1,7 @@
+2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * include/tm27.h: Correct error in tm27 test
+
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * Add/remove files for the Update to new exception model.

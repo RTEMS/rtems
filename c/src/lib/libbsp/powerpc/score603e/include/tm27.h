@@ -23,6 +23,8 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
+void nullFunc() {}
+
 static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
                                               0,
                                               (rtems_irq_enable)nullFunc,
