@@ -95,12 +95,12 @@ static unsigned char m8xx_get_brg_clk(int);
 void m8xx_console_reserve_resources(rtems_configuration_table *);
 static int m8xx_smc_set_attributes(int, const struct termios*);
 static int m8xx_scc_set_attributes(int, const struct termios*);
-static void m8xx_smc1_interrupt_handler(void);
-static void m8xx_smc2_interrupt_handler(void);
-static void m8xx_scc2_interrupt_handler(void);
+static void m8xx_smc1_interrupt_handler(void *unused);
+static void m8xx_smc2_interrupt_handler(void *unused);
+static void m8xx_scc2_interrupt_handler(void *unused);
 #if defined(mpc860)
-static void m8xx_scc3_interrupt_handler(void);
-static void m8xx_scc4_interrupt_handler(void);
+static void m8xx_scc3_interrupt_handler(void *unused);
+static void m8xx_scc4_interrupt_handler(void *unused);
 #endif
 
 /*
@@ -383,7 +383,7 @@ m8xx_uart_setAttributes(
 /*
  * Interrupt handlers
  */
-static void m8xx_scc2_interrupt_handler ()
+static void m8xx_scc2_interrupt_handler (void *unused)
 {
   int nb_overflow;
 
@@ -425,7 +425,7 @@ static void m8xx_scc2_interrupt_handler ()
 
 #ifdef mpc860
 static void
-m8xx_scc3_interrupt_handler (void)
+m8xx_scc3_interrupt_handler (void *unused)
 {
   int nb_overflow;
 
@@ -466,7 +466,7 @@ m8xx_scc3_interrupt_handler (void)
 
 
 static void
-m8xx_scc4_interrupt_handler (void)
+m8xx_scc4_interrupt_handler (void *unused)
 {
   int nb_overflow;
 
@@ -507,7 +507,7 @@ m8xx_scc4_interrupt_handler (void)
 #endif
 
 static void
-m8xx_smc1_interrupt_handler (void)
+m8xx_smc1_interrupt_handler (void *unused)
 {
   int nb_overflow;
 
@@ -548,7 +548,7 @@ m8xx_smc1_interrupt_handler (void)
 
 
 static void
-m8xx_smc2_interrupt_handler (void)
+m8xx_smc2_interrupt_handler (void *unused)
 {
   int nb_overflow;
 

@@ -1,3 +1,7 @@
+2005-05-05      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * mpc8xx/console-generic/console-generic.c: Added parameter to ISRs.
+
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc8260/cpm/dpram.c, mpc8260/timer/timer.c, mpc8xx/cpm/dpram.c:
