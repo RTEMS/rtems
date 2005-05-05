@@ -155,6 +155,7 @@ package body TMTEST is
       OVERHEAD := 0;
       IN_PRIORITY := 0;
       IN_MODE := 0;
+      MASK := 0;
       SIGNALS := 0;
       EVENTS := 0;
       MAJOR := 0;

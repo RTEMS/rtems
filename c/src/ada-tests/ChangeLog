@@ -1,3 +1,8 @@
+2005-05-05	Joel Sherrill <joel@OARcorp.com>
+
+	* sptests/sp04/sptest.adb, tmtests/tm02/tmtest.adb,
+	tmtests/tmoverhd/tmtest.adb: Removed warnings.
+
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* samples/hello/sptest.adb, sptests/sp03/sptest.adb,

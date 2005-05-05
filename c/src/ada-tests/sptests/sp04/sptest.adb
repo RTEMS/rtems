@@ -229,8 +229,9 @@ package body SPTEST is
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_MODE" );
 
-<<LOOP_LABEL>>
-            goto LOOP_LABEL;
+            LOOP
+               NULL;
+            END LOOP;
 
          end if;
 
@@ -248,8 +249,9 @@ package body SPTEST is
    ) is
    begin
 
-<<LOOP_LABEL>>
-         goto LOOP_LABEL;
+      LOOP
+         NULL;
+      END LOOP;
 
    end TASK_2;
 
@@ -263,8 +265,9 @@ package body SPTEST is
    ) is
    begin
 
-<<LOOP_LABEL>>
-         goto LOOP_LABEL;
+      LOOP
+         NULL;
+      END LOOP;
 
    end TASK_3;
 

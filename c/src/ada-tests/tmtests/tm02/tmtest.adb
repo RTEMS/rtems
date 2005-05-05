@@ -188,7 +188,6 @@ package body TMTEST is
    procedure LOW_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      STATUS                   : RTEMS.STATUS_CODES;
    begin
 
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
