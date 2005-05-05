@@ -1,3 +1,8 @@
+2005-05-05      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * irq/irq_init.c, network/network.c: Fix calls/routines to match 
+        prototypes. Modified when a parameter was added to ISRs.
+
 2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * clock/p_clock.c, irq/irq.c, irq/irq_init.c: Addition of a parameter

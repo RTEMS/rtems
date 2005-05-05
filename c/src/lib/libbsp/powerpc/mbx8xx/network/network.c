@@ -146,7 +146,7 @@ static void  m8xx_scc1_ethernet_isOn(const rtems_irq_connect_data* ptr)
 /*
  * SCC1 interrupt handler
  */
-static void m8xx_scc1_interrupt_handler ()
+static void m8xx_scc1_interrupt_handler (void *unused)
 {
     /* Frame received? */
 	if ((m8xx.scc1.sccm & 0x8) && (m8xx.scc1.scce & 0x8)) {
@@ -194,6 +194,7 @@ static void m860_fec_interrupt_handler ()
 static rtems_irq_connect_data ethernetSCC1IrqData = {
   BSP_CPM_IRQ_SCC1,
   (rtems_irq_hdl) m8xx_scc1_interrupt_handler,
+  0,
   (rtems_irq_enable) m8xx_scc1_ethernet_on,
   (rtems_irq_disable) m8xx_scc1_ethernet_off,
   (rtems_irq_is_enabled)m8xx_scc1_ethernet_isOn
@@ -1426,7 +1427,7 @@ enet_stats (struct m8xx_enet_struct *sc)
  * Driver ioctl handler
  */
 static int
-scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
+scc_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
 {
   struct m8xx_enet_struct *sc = ifp->if_softc;
   int error = 0;

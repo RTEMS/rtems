@@ -144,8 +144,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
     vectorDesc.hdl.raw_hdl	=	decrementer_exception_vector_prolog_code;
     vectorDesc.hdl.raw_hdl_size	=	(unsigned) &decrementer_exception_vector_prolog_code_size;
-    vectorDesc.on		=	nop_func;
-    vectorDesc.off		=	nop_func;
+    vectorDesc.on		=	nop_func2;
+    vectorDesc.off		=	nop_func2;
     vectorDesc.isOn		=	connected;
     if (!mpc8xx_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
