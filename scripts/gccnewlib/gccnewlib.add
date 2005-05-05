@@ -60,6 +60,11 @@ BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
 %define build_gcj	%_gcj
 %define build_gnat	%_gnat
 
+%if "%{gcc_target}" == "arm-rtems@osversion@"
+# Gnat lacks arm support
+%define build_gnat	0
+%endif
+
 %if "%{gcc_target}" == "avr-rtems@osversion@"
 %define build_cxx	0
 %define build_f95	0
@@ -73,31 +78,21 @@ BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
 %define build_gnat	0
 %endif
 
-%if "%{gcc_target}" == "tic4x-rtems@osversion@"
-%define build_cxx	0
-%endif
-
-%if "%{gcc_target}" == "i386-rtems@osversion@"
-%define build_gnat      %_gnat
-%define build_gcj	%_gcj
-%endif
-
-%if "%{gcc_target}" == "m68k-rtems@osversion@"
-%define build_gcj	%_gcj
+%if "%{gcc_target}" == "sh-rtems@osversion@"
+# Triggers an ICE in GCC-4.0.0
+%define build_gnat	0
 %endif
 
 %if "%{gcc_target}" == "mips-rtems@osversion@"
-%define build_gcj      %_gcj
+# Libffi is missing in GCC-4.0.0
+%define build_gcj      0
 %endif
 
-%if "%{gcc_target}" == "powerpc-rtems@osversion@"
-%define build_gnat      %_gnat
-%define build_gcj	%_gcj
-%endif
-
-%if "%{gcc_target}" == "sparc-rtems@osversion@"
-%define build_gnat      %_gnat
-%define build_gcj	%_gcj
+%if "%{gcc_target}" == "tic4x-rtems@osversion@"
+%define build_cxx	0
+%define build_gnat	0
+%define build_gcj	0
+%define build_f95	0
 %endif
 
 %if %build_gcj
@@ -203,7 +198,7 @@ cd ..
     --with-system-zlib --disable-nls \
     --enable-version-specific-runtime-libs \
     --enable-threads=rtems \
-    --enable-languages=$languages ${libgcj_flag}
+    --enable-languages=$languages %{?build_libgcj:--enable-libgcj}
 
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:

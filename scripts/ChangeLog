@@ -1,3 +1,9 @@
+2005-05-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/gccnewlib.add: Further clean up of tools not supported
+	by individual targets. Add %build_libgcj.
+	* gccnewlib/target-gcc.add: Remove dep to base-gcc.
+
 2005-05-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/gccnewlib.add: Suppress building tools not supported by
