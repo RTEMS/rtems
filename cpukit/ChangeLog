@@ -1,5 +1,10 @@
 2005-05-06	Joel Sherrill <joel@OARcorp.com>
 
+	* libnetworking/net/if.h: Revert include of sys/mbuf.h in this .h file
+	since it causes other problems.
+
+2005-05-06	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/src/termios.c: Removed warnings.
 
 2005-05-06	Joel Sherrill <joel@OARcorp.com>

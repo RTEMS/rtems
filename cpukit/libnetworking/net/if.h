@@ -39,8 +39,6 @@
 
 #include <sys/cdefs.h>
 
-#include <sys/mbuf.h>
-
 #if defined(__rtems__)
 /*
  * FIXME - HACK: BSD defines __BSD_VISIBLE in sys/cdefs.h
