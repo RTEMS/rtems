@@ -14,13 +14,12 @@
  *  This driver current only supports architectures with the old style
  *  exception processing.  The following checks try to keep this
  *  from being compiled on systems which can't support this driver.
+ *
+ *  NOTE: The i386, ARM, and PowerPC use a different interrupt API than
+ *        that used by this driver.
  */
 
-#if defined(__i386__)
-  #define OPENETH_NOT_SUPPORTED
-#endif
-
-#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(mpc603e))
+#if defined(__i386__) || defined(__arm__) || defined(__PPC__)
   #define OPENETH_NOT_SUPPORTED
 #endif
 

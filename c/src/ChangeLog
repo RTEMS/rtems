@@ -1,5 +1,10 @@
 2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
 
+        * libchip/network/open_eth.c, libchip/serial/mc68681.c,
+        libchip/serial/ns16550.c, libchip/serial/z85c30.c: Removed warning
+
+2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
+
         * libchip/network/dec21140.c, libchip/network/elnk.c,
         libchip/network/if_fxp.c: Moved irq.h to bsp subdirectory.
 

@@ -627,7 +627,7 @@ MC68681_STATIC void mc68681_process(
   uint32_t                pMC68681_port;
   volatile uint8_t        ucLineStatus;
   volatile uint8_t        ucISRStatus;
-  unsigned char           cChar;
+  char                    cChar;
   getRegister_f           getReg;
   setRegister_f           setReg;
 

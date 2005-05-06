@@ -453,7 +453,7 @@ NS16550_STATIC void ns16550_process(
   uint32_t                pNS16550;
   volatile uint8_t        ucLineStatus;
   volatile uint8_t        ucInterruptId;
-  unsigned char           cChar;
+  char                    cChar;
   getRegister_f           getReg;
   setRegister_f           setReg;
 
