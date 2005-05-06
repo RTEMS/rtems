@@ -411,6 +411,14 @@ package body TMTEST is
 
 -- TASK_WAKE_WHEN
 
+      TIME.YEAR    := 2000;
+      TIME.MONTH   := 12;
+      TIME.DAY     := 25;
+      TIME.HOUR    := 6;
+      TIME.MINUTE  := 1;
+      TIME.SECOND  := 2;
+      TIME.TICKS   := 0;
+      
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
@@ -427,6 +435,8 @@ package body TMTEST is
       );
 
 -- TASK_WAKE_AFTER
+
+      TIMEOUT := 1;
 
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
