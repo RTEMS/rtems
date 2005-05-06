@@ -18,6 +18,12 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.8  2005/04/18 17:21:58  jennifer
+ * 2005-04-18	Eric Valette <eric.valette@free.fr>
+ *
+ * 	* clock/ckinit.c, console/console.c, console/ps2_mouse.c,
+ * 	console/serial_mouse.c, timer/timer.c: Added parameter to irq handler
+ *
  * Revision 1.7  2004/04/21 16:01:33  ralf
  * Remove duplicate white lines.
  *
@@ -47,7 +53,7 @@
 #include <assert.h>
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <termios.h>
 #include <uart.h>

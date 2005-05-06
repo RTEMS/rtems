@@ -11,6 +11,9 @@
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.3  2004/04/21 16:01:33  ralf
+// Remove duplicate white lines.
+//
 // Revision 1.2  2004/04/21 10:42:44  ralf
 // Remove stray white spaces.
 //
@@ -57,7 +60,7 @@
 #include <sys/types.h>
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 
 #include <rtems/mw_fb.h>

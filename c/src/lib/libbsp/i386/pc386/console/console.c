@@ -38,7 +38,7 @@
 void __assert (const char *file, int line, const char *msg);
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <termios.h>
 #include <uart.h>

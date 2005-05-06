@@ -58,6 +58,14 @@
  *
  * MODIFICATION/HISTORY:
  * $Log$
+ * Revision 1.7  2005/05/03 14:20:07  jennifer
+ * 2005-05-03	Jennifer Averett <jennifer.averett@oarcorp.com>
+ *
+ * 	* 3c509/3c509.c, ne2000/ne2000.c: Modified parameters to
+ * 	remove warnings.
+ * 	* console/console.c, wd8003/wd8003.c: Added support for
+ * 	addition of parameter in ISRs.
+ *
  * Revision 1.6  2005/04/26 23:03:51  joel
  * 2005-04-26	Joel Sherrill <joel@OARcorp.com>
  *
@@ -102,7 +110,7 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-#include <irq.h>
+#include <bsp/irq.h>
 
 /* Local includes */
 #include "3c509.h"

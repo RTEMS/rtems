@@ -21,7 +21,7 @@
 #include <sys/types.h>
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <termios.h>
 #include <i386_io.h>
