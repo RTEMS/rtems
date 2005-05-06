@@ -1,3 +1,8 @@
+2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * console/init68360.c, include/bsp.h, startup/bspstart.c: Changed
+        rtems_unsigned types to uint types
+
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* include/.cvsignore: New file.

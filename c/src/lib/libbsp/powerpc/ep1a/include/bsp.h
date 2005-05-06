@@ -181,9 +181,9 @@ extern int BSP_connect_clock_handler (void);
 /*
  * FLASH 
  */
-int BSP_FLASH_Enable_writes( rtems_unsigned32 area );
-int BSP_FLASH_Disable_writes(  rtems_unsigned32 area );
-void BSP_FLASH_set_page( rtems_unsigned8  page );
+int BSP_FLASH_Enable_writes( uint32_t area );
+int BSP_FLASH_Disable_writes(  uint32_t area );
+void BSP_FLASH_set_page( uint8_t  page );
 
 #define BSP_FLASH_ENABLE_WRITES( _area) BSP_FLASH_Enable_writes( _area )
 #define BSP_FLASH_DISABLE_WRITES(_area) BSP_FLASH_Disable_writes( _area )

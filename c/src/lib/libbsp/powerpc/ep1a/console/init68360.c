@@ -25,7 +25,7 @@
  * Send a command to the CPM RISC processer
  */
 
-void M360ExecuteRISC( volatile m360_t *m360, rtems_unsigned16 command)
+void M360ExecuteRISC( volatile m360_t *m360, uint16_t command)
 {
 	rtems_unsigned16 sr;
 

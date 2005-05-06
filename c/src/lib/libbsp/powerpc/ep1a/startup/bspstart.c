@@ -157,7 +157,7 @@ rtems_cpu_table Cpu_table;
 char *rtems_progname;
 
 int BSP_FLASH_Disable_writes(
-  rtems_unsigned32    area
+  uint32_t    area
 )
 {
   unsigned char    data;
@@ -170,7 +170,7 @@ int BSP_FLASH_Disable_writes(
 }
 
 int BSP_FLASH_Enable_writes(
-  rtems_unsigned32               area                           /* IN  */
+ uint32_t               area                           /* IN  */
 )
 {
   unsigned char    data;
@@ -183,7 +183,7 @@ int BSP_FLASH_Enable_writes(
 }
 
 void BSP_FLASH_set_page(
-  rtems_unsigned8  page
+  uint8_t  page
 )
 {
   unsigned char  data;
@@ -218,27 +218,30 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    rtems_unsigned32        heap_start;    
-    rtems_unsigned32        heap_size;
-    rtems_unsigned32        heap_sbrk_spared;
-	extern rtems_unsigned32 _bsp_sbrk_init(rtems_unsigned32, rtems_unsigned32*);
-    heap_start = ((rtems_unsigned32) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
-    if (heap_start & (CPU_ALIGNMENT-1))
-        heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+  uint32_t        heap_start;    
+  uint32_t        heap_size;
+  uint32_t        heap_sbrk_spared;
 
-    heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
+  extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
+  
+  heap_start = ((uint32_t) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
+  if (heap_start & (CPU_ALIGNMENT-1))
+    heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-	heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
+  heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
+
+  heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-   	printk(" HEAP start %x  size %x (%x bytes spared for sbrk)\n", heap_start, heap_size, heap_sbrk_spared);
+  printk(" HEAP start %x  size %x (%x bytes spared for sbrk)\n", 
+    heap_start, heap_size, heap_sbrk_spared);
 #endif    
 
-    bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
-    rsPMCQ1Init();
+  bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
+  rsPMCQ1Init();
 
 #ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
+  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 }
 
