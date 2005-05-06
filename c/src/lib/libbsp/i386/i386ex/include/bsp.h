@@ -26,7 +26,7 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpu.h>
-#include <irq.h>
+#include <bsp/irq.h>
 
 /*
  *  confdefs.h overrides for this BSP:

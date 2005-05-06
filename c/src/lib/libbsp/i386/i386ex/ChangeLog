@@ -1,3 +1,8 @@
+2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * clock/ckinit.c, console/console.c, include/bsp.h, startup/bspstart.c:
+        Moved irq.h to bsp subdirectory.
+
 2005-05-03      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * clock/ckinit.c, console/console.c: Added support for 

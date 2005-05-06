@@ -37,7 +37,7 @@
 #include <assert.h>
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <rtems/error.h>
 #include <termios.h>
