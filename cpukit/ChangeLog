@@ -1,5 +1,10 @@
 2005-05-06	Joel Sherrill <joel@OARcorp.com>
 
+	* libnetworking/net/if.h, libnetworking/net/if_ppp.c,
+	libnetworking/net/ppp_tty.c: Removed warnings.
+
+2005-05-06	Joel Sherrill <joel@OARcorp.com>
+
 	* libblock/src/blkdev.c, libfs/src/dosfs/fat_file.c,
 	libfs/src/dosfs/fat_file.h, libfs/src/dosfs/msdos.h,
 	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_dir.c,

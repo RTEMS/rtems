@@ -562,7 +562,7 @@ pppasyncctlp(sc)
 int
 pppstart(struct rtems_termios_tty *tp)
 {
-  char               *sendBegin;
+  u_char             *sendBegin;
   u_long              ioffset = (u_long       )0;
   struct mbuf        *m       = (struct mbuf *)0;
   struct ppp_softc   *sc      = tp->t_sc;
@@ -604,7 +604,7 @@ pppstart(struct rtems_termios_tty *tp)
         sc->sc_outflag |= SC_TX_LASTCHAR;
         sc->sc_outflag &=~(SC_TX_FCS);
 		sc->sc_outchar = (u_char)PPP_FLAG;
-        (*tp->device.write)(tp->minor, &sc->sc_outchar, 1);
+        (*tp->device.write)(tp->minor, (char *)&sc->sc_outchar, 1);
         return(0);
       }
     }
@@ -641,7 +641,7 @@ pppstart(struct rtems_termios_tty *tp)
       }
 
       /* write out the character(s) and update the stats */
-      (*tp->device.write)(tp->minor, sendBegin, (ioffset > 0) ? ioffset : 1);
+      (*tp->device.write)(tp->minor, (char *)sendBegin, (ioffset > 0) ? ioffset : 1);
       sc->sc_stats.ppp_obytes += (ioffset > 0) ? ioffset : 1;
       sc->sc_outoff += ioffset;
     }
