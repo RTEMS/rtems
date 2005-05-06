@@ -49,7 +49,7 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-#include <irq.h>
+#include <bsp/irq.h>
 
 /* Define this to force byte-wide data transfers with the NIC. This
    is needed for boards like the TS-1325 386EX PC, which support only

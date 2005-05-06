@@ -20,7 +20,7 @@
  */
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 
 #include <rtems/libio.h>
 
