@@ -32,4 +32,7 @@ struct _int_map
 
 void FixupPCI( const struct _int_map *, int (*swizzler)(int,int) );
 
+/* FIXME: This probably belongs into rtems/pci.h */
+extern unsigned char pci_bus_count();
+
 #endif /* BSP_POWERPC_PCI_H */

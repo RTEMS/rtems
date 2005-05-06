@@ -1,3 +1,7 @@
+2005-05-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* pci/pci.h: Add pci_bus_count().
+
 2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * irq/irq_init.c, pci/pci.c, pci/pcifinddevice.c, startup/bspstart.c:
