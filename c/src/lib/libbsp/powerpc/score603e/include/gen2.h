@@ -56,11 +56,11 @@ extern "C" {
 #define BSP_PCI_REGISTER_BASE        0xfc000000
 
 #define BSP_PCI_DEVICE_ADDRESS( _offset) \
-         ((volatile rtems_unsigned32 *)( BSP_PCI_PMC_DEVICE_BASE + _offset ))
+         ((volatile uint32_t *)( BSP_PCI_PMC_DEVICE_BASE + _offset ))
 
 
 #define BSP_PMC_SERIAL_ADDRESS( _offset )    \
-        ((volatile rtems_unsigned8 *)(BSP_PCI_REGISTER_BASE + _offset))
+        ((volatile uint8_t *)(BSP_PCI_REGISTER_BASE + _offset))
 
 /*
  * PMC serial channels - (4-7: 232 and 8-11: 422)
