@@ -757,7 +757,7 @@ rtems_termios_write (void *arg)
 	}
 	if (tty->termios.c_oflag & OPOST) {
 		uint32_t   count = args->count;
-		uint8_t   *buffer = args->buffer;
+		char      *buffer = args->buffer;
 		while (count--)
 			oproc (*buffer++, tty);
 		args->bytes_moved = args->count;
@@ -1079,7 +1079,7 @@ rtems_termios_read (void *arg)
 	rtems_libio_rw_args_t *args = arg;
 	struct rtems_termios_tty *tty = args->iop->data1;
 	uint32_t   count = args->count;
-	uint8_t   *buffer = args->buffer;
+	char      *buffer = args->buffer;
 	rtems_status_code sc;
 
 	sc = rtems_semaphore_obtain (tty->isem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);

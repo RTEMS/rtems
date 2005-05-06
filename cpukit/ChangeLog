@@ -1,5 +1,9 @@
 2005-05-06	Joel Sherrill <joel@OARcorp.com>
 
+	* libcsupport/src/termios.c: Removed warnings.
+
+2005-05-06	Joel Sherrill <joel@OARcorp.com>
+
 	* libnetworking/net/if.h, libnetworking/net/if_ppp.c,
 	libnetworking/net/ppp_tty.c: Removed warnings.
 
