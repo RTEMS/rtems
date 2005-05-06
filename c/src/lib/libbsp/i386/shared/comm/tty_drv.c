@@ -18,6 +18,11 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.8  2005/05/03 14:45:12  jennifer
+ * 2005-05-03	Jennifer Averett <jennifer.averett@oarcorp.com>
+ *
+ * 	* comm/tty_drv.c: Modified to support addition of parameter to ISRs.
+ *
  * Revision 1.7  2004/04/21 16:01:33  ralf
  * Remove duplicate white lines.
  *
@@ -74,7 +79,7 @@
 #include <assert.h>
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
 #include <termios.h>

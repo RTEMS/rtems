@@ -12,7 +12,7 @@
  */
 
 #include <rtems/asm.h>
-#include <irq_asm.h>
+#include <bsp/irq_asm.h>
 
 	       BEGIN_CODE
 

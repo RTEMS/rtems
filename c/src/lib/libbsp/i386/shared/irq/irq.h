@@ -29,7 +29,7 @@ extern "C" {
  * Include some preprocessor value also used by assember code
  */
 
-#include <irq_asm.h>
+#include <bsp/irq_asm.h>
 #include <rtems.h>
 /*-------------------------------------------------------------------------+
 | Constants

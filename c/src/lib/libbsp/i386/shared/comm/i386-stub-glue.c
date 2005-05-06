@@ -10,7 +10,7 @@
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <uart.h>
 #include <assert.h>
 

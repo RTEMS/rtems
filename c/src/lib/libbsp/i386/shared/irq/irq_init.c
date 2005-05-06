@@ -13,7 +13,7 @@
  */
 
 #include <libcpu/cpu.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
 

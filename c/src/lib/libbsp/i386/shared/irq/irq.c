@@ -12,7 +12,7 @@
  */
 
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apiext.h>
 

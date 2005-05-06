@@ -13,8 +13,10 @@ EXTRA_DIST += comm/i386-stub-glue.c comm/i386-stub.c comm/uart.c \
 
 EXTRA_DIST += comm/GDB.HOWTO
 
+include_bspdir = $(includedir)/bsp
+
 # irq
-include_HEADERS += irq/irq.h irq/irq_asm.h
+include_bsp_HEADERS = irq/irq.h irq/irq_asm.h
 
 EXTRA_DIST += irq/idt.c irq/irq.c irq/irq_init.c
 EXTRA_DIST += irq/irq_asm.S
@@ -47,17 +49,22 @@ $(PROJECT_INCLUDE)/i386_io.h: comm/i386_io.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i386_io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i386_io.h
 
-$(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+$(PROJECT_INCLUDE)/bsp/irq.h: irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
-$(PROJECT_INCLUDE)/irq_asm.h: irq/irq_asm.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq_asm.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq_asm.h
+$(PROJECT_INCLUDE)/bsp/irq_asm.h: irq/irq_asm.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_asm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_asm.h
 
 $(PROJECT_INCLUDE)/pcibios.h: pci/pcibios.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pcibios.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/pcibios.h
+
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
 CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)

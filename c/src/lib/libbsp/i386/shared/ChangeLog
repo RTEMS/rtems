@@ -1,3 +1,9 @@
+2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * Makefile.am, comm/i386-stub-glue.c, comm/tty_drv.c, comm/uart.c,
+        irq/idt.c, irq/irq.c, irq/irq.h, irq/irq_asm.S, irq/irq_init.c: Moved
+        irq.h and irq_asm.h to bsp subdirectory.
+
 2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * pci/pcibios.c, pci/pcibios.h: Corrected spacing

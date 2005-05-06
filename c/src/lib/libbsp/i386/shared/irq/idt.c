@@ -19,7 +19,7 @@
  */
 
 #include <libcpu/cpu.h>
-#include <irq.h>
+#include <bsp/irq.h>
 
 static rtems_raw_irq_connect_data* 	raw_irq_table;
 static rtems_raw_irq_connect_data  	default_raw_irq_entry;

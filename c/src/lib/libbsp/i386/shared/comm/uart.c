@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <bsp.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <uart.h>
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
