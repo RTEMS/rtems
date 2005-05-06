@@ -1,3 +1,11 @@
+2005-05-06	Joel Sherrill <joel@OARcorp.com>
+
+	* libblock/src/blkdev.c, libfs/src/dosfs/fat_file.c,
+	libfs/src/dosfs/fat_file.h, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_dir.c,
+	libfs/src/dosfs/msdos_initsupp.c, libfs/src/dosfs/msdos_misc.c:
+	Removed warnings.
+
 2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * include/rtems/pci.h: Name change to support common PCI interface

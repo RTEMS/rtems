@@ -258,8 +258,8 @@ fat_file_read(
     fat_file_fd_t                        *fat_fd,
     uint32_t                              start,
     uint32_t                              count,
-    char                                 *buf
-    )
+    uint8_t                              *buf
+)
 {
     int            rc = RC_OK;
     ssize_t        ret = 0;
@@ -363,7 +363,7 @@ fat_file_write(
     fat_file_fd_t                        *fat_fd,
     uint32_t                              start,
     uint32_t                              count,
-    const char                           *buf
+    const uint8_t                        *buf
     )
 {
     int            rc = 0;

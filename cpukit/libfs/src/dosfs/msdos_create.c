@@ -214,7 +214,7 @@ msdos_creat_node(
          */
         ret = fat_file_write(parent_loc->mt_entry, fat_fd, 0,
                              MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2,
-                             dot_dotdot);
+                             (uint8_t *)dot_dotdot);
         if (ret < 0)
         {
             rc = -1;
@@ -233,7 +233,7 @@ msdos_creat_node(
         /* rewrite dot entry */
         ret = fat_file_write(parent_loc->mt_entry, fat_fd, 0,
                              MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
-                             DOT_NODE_P(dot_dotdot));
+                             (uint8_t *)DOT_NODE_P(dot_dotdot));
         if (ret < 0)
         {
             rc = -1;

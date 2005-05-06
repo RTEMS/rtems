@@ -285,7 +285,7 @@ msdos_get_name_node(
         ret = fat_file_write(parent_loc->mt_entry, fat_fd,
                              fat_fd->fat_file_size,
                              MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
-                             name_dir_entry);
+                             (uint8_t *)name_dir_entry);
         if (ret == -1)
             return -1;
 
@@ -706,11 +706,12 @@ msdos_dir_is_empty(
 
         assert(ret == fs_info->fat.vol.bps);
 
+        /* have to look at the DIR_NAME as "raw" 8-bit data */
         for (i = 0;
              i < fs_info->fat.vol.bps;
              i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
-            if (((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
+            if (((*(uint8_t *)MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                  MSDOS_THIS_DIR_ENTRY_EMPTY) ||
                 (strncmp(MSDOS_DIR_NAME((fs_info->cl_buf + i)), MSDOS_DOT_NAME,
                          MSDOS_SHORT_NAME_LEN) == 0) ||
@@ -790,12 +791,13 @@ msdos_find_name_in_fat_file(
 
         assert(ret == bts2rd);
 
+        /* have to look at the DIR_NAME as "raw" 8-bit data */
         for (i = 0; i < bts2rd; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
             /* is the entry empty ? */
-            if (((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
+            if (((*(uint8_t *)MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                  MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY) ||
-                 ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
+                 ((*(uint8_t *)MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                  MSDOS_THIS_DIR_ENTRY_EMPTY))
             {
                 /* whether we are looking for an empty entry */
@@ -813,7 +815,7 @@ msdos_find_name_in_fat_file(
                     /* write new node entry */
                     ret = fat_file_write(mt_entry, fat_fd, j * bts2rd + i,
                                          MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
-                                         name_dir_entry);
+                                         (uint8_t *)name_dir_entry);
                     if (ret != MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
                         return -1;
 
@@ -914,8 +916,9 @@ msdos_find_node_by_cluster_num_in_fat_file(
                 MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY)
                 return MSDOS_NAME_NOT_FOUND_ERR;
 
+            /* have to look at the DIR_NAME as "raw" 8-bit data */
             /* if this entry is empty - skip it */
-            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
+            if ((*(uint8_t *)MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                 MSDOS_THIS_DIR_ENTRY_EMPTY)
                 continue;
 

@@ -149,14 +149,14 @@ fat_file_read(rtems_filesystem_mount_table_entry_t *mt_entry,
               fat_file_fd_t                        *fat_fd,
               uint32_t                              start,
               uint32_t                              count,
-              char                                 *buf);
+              uint8_t                              *buf);
 
 ssize_t
 fat_file_write(rtems_filesystem_mount_table_entry_t *mt_entry,
                fat_file_fd_t                        *fat_fd,
                uint32_t                              start,
                uint32_t                              count,
-               const char                           *buf);
+               const uint8_t                        *buf);
 
 int
 fat_file_extend(rtems_filesystem_mount_table_entry_t *mt_entry,

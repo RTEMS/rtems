@@ -83,7 +83,7 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
  */
 #define MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE    32 /* 32 bytes */
 
-#define MSDOS_DIR_NAME(x)                 (uint8_t   *)((x) + 0)
+#define MSDOS_DIR_NAME(x)                 (char      *)((x) + 0)
 #define MSDOS_DIR_ATTR(x)                 (uint8_t   *)((x) + 11)
 #define MSDOS_DIR_NT_RES(x)               (uint8_t   *)((x) + 12)
 #define MSDOS_DIR_CRT_TIME_TENTH(x)       (uint8_t   *)((x) + 13)

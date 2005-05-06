@@ -260,7 +260,8 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
                 return cmpltd;
             }
 
-            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
+            /* have to look at the DIR_NAME as "raw" 8-bit data */
+            if ((*(uint8_t *)MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                 MSDOS_THIS_DIR_ENTRY_EMPTY)
                 continue;
 
@@ -309,9 +310,9 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
 	     * convert dir entry from fixed 8+3 format (without dot)
 	     * to 0..8 + 1dot + 0..3 format
 	     */
-	    tmp_dirent.d_namlen =
-	      msdos_format_dirent_with_dot(tmp_dirent.d_name,
-					 fs_info->cl_buf + i); /* src text */
+	    tmp_dirent.d_namlen = msdos_format_dirent_with_dot(
+              tmp_dirent.d_name,
+	      (char *) fs_info->cl_buf + i); /* src text */
             memcpy(buffer + cmpltd, &tmp_dirent, sizeof(struct dirent));
 
             iop->offset = iop->offset + sizeof(struct dirent);

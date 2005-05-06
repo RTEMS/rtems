@@ -118,7 +118,7 @@ msdos_initialize_support(
         cl_buf_size = fs_info->fat.vol.bpc;
     }
 
-    fs_info->cl_buf = (char *)calloc(cl_buf_size, sizeof(char));
+    fs_info->cl_buf = (uint8_t *)calloc(cl_buf_size, sizeof(char));
     if (fs_info->cl_buf == NULL)
     {
         fat_file_close(temp_mt_entry, fat_fd);
