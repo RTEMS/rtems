@@ -76,7 +76,7 @@
 #include <sys/systm.h>
 #include <bsp.h>
 #include <pcibios.h>
-#include <irq.h>
+#include <bsp/irq.h>
 #include <rtems/pci.h>
 
 #ifdef NS

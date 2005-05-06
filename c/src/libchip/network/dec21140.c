@@ -79,12 +79,7 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-#if defined(__i386__)
-#include <irq.h>
-#endif
-#if defined(__PPC__)
 #include <bsp/irq.h>
-#endif
 
 #ifdef malloc
 #undef malloc

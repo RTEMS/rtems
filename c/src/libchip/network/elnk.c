@@ -110,16 +110,11 @@
 
 #include "if_media.h"
 #include "mii.h"
+#include <bsp/irq.h>
 
 #if defined(__i386__)
-#include <irq.h>
-
 #define IO_MASK   0x3
 #define MEM_MASK  0xF
-
-#endif
-#if defined(__PPC__)
-#include <bsp/irq.h>
 #endif
 
 #ifdef malloc
