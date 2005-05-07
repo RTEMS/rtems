@@ -1,3 +1,7 @@
+2005-05-07	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am, configure.ac, acinclude.m4: Remove.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
