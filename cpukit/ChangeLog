@@ -1,7 +1,6 @@
-	* libnetworking/rtems/rtems_showifstat.c: Remove warning.
-
 2005-05-06	Joel Sherrill <joel@OARcorp.com>
 
+	* libnetworking/rtems/rtems_showifstat.c: Remove warning.
 	* libnetworking/net/if.h: Revert include of sys/mbuf.h in this .h file
 	since it causes other problems.
 
