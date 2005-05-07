@@ -1,3 +1,8 @@
+2005-05-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/rtems/rtems_bsdnet.h: Eliminate rtems_* fixed size
+	types.
+
 2005-05-06	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/rtems/rtems_showifstat.c: Remove warning.
