@@ -1,5 +1,12 @@
-2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+2005-05-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* bsp_specs, clock/clockdrv.c, configure.ac,
+	console/console.c, console/console.h, include/bsp.h,
+	include/tm27.h, Makefile.am, README, start/start.S, 
+	startup/bspclean.c, startup/bspstart.c, startup/linkcmds, 
+	startup/setvec.c, timer/timer.c, timer/timerisr.c, times: Remove.
+
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
 
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
