@@ -38,6 +38,31 @@
 #define	_NET_IF_VAR_H_
 
 /*
+ * Structures defining a network interface, providing a packet
+ * transport mechanism (ala level 0 of the PUP protocols).
+ *
+ * Each interface accepts output datagrams of a specified maximum
+ * length, and provides higher level routines with input datagrams
+ * received from its medium.
+ *
+ * Output occurs when the routine if_output is called, with three parameters:
+ *	(*ifp->if_output)(ifp, m, dst, rt)
+ * Here m is the mbuf chain to be sent and dst is the destination address.
+ * The output routine encapsulates the supplied datagram if necessary,
+ * and then transmits it on its medium.
+ *
+ * On input, each interface unwraps the data received by it, and either
+ * places it on the input queue of an internetwork datagram routine
+ * and posts the associated software interrupt, or passes the datagram to a raw
+ * packet input routine.
+ *
+ * Routines exist for locating interfaces by their addresses
+ * or for locating an interface on a certain network, as well as more general
+ * routing and gateway routines maintaining information used to locate
+ * interfaces.  These routines live in the files if.c and route.c
+ */
+
+/*
  * Forward structure declarations for function prototypes [sic].
  */
 struct	mbuf;
@@ -89,8 +114,6 @@ struct ifnet {
 		     struct rtentry *);
 	void	(*if_start)		/* initiate output routine */
 		(struct ifnet *);
-	int	(*if_done)		/* output complete routine */
-		(struct ifnet *);	/* (XXX not used; fake prototype) */
 	int	(*if_ioctl)		/* ioctl routine */
 		(struct ifnet *, u_long, caddr_t);
 	void	(*if_watchdog)		/* timer routine */
