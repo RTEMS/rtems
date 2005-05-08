@@ -65,7 +65,15 @@
 #include <sys/types.h>
 #include <sys/cdefs.h>
 
-struct in_addr;
+#ifndef _IN_ADDR_T_DECLARED
+typedef	uint32_t	in_addr_t;
+#define	_IN_ADDR_T_DECLARED
+#endif
+
+#ifndef _IN_PORT_T_DECLARED
+typedef	uint16_t	in_port_t;
+#define	_IN_PORT_T_DECLARED
+#endif
 
 #if 0	/* RTEMS -- Why rename these? */
 /* XXX all new diversions!! argh!! */
@@ -104,4 +112,4 @@ u_int		 inet_nsap_addr __P((const char *, u_char *, int));
 char		*inet_nsap_ntoa __P((int, const u_char *, char *));
 __END_DECLS
 
-#endif /* !_INET_H_ */
+#endif /* !_ARPA_INET_H_ */
