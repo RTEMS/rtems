@@ -43,6 +43,10 @@
  */
 #define	IPVERSION	4
 
+#ifndef BYTE_PACK
+#define BYTE_PACK __attribute__((packed))
+#endif
+
 /*
  * Structure of an internet header, naked of options.
  */
