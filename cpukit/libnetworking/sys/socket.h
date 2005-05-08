@@ -55,7 +55,9 @@ typedef unsigned char 	sa_family_t;
 #define	SOCK_STREAM	1		/* stream socket */
 #define	SOCK_DGRAM	2		/* datagram socket */
 #define	SOCK_RAW	3		/* raw-protocol interface */
+#if __BSD_VISIBLE
 #define	SOCK_RDM	4		/* reliably-delivered message */
+#endif
 #define	SOCK_SEQPACKET	5		/* sequenced packet stream */
 
 /*
@@ -67,11 +69,18 @@ typedef unsigned char 	sa_family_t;
 #define	SO_KEEPALIVE	0x0008		/* keep connections alive */
 #define	SO_DONTROUTE	0x0010		/* just use interface addresses */
 #define	SO_BROADCAST	0x0020		/* permit sending of broadcast msgs */
+#if __BSD_VISIBLE
 #define	SO_USELOOPBACK	0x0040		/* bypass hardware when possible */
+#endif
 #define	SO_LINGER	0x0080		/* linger on close if data present */
 #define	SO_OOBINLINE	0x0100		/* leave received OOB data in line */
+#if __BSD_VISIBLE
 #define	SO_REUSEPORT	0x0200		/* allow local address & port reuse */
 #define	SO_TIMESTAMP	0x0400		/* timestamp received dgram traffic */
+#define	SO_NOSIGPIPE	0x0800		/* no SIGPIPE from EPIPE */
+#define	SO_ACCEPTFILTER	0x1000		/* there is an accept filter */
+#define	SO_BINTIME	0x2000		/* timestamp received dgram traffic */
+#endif
 
 /*
  * Additional options, not kept in so_options.
@@ -118,8 +127,10 @@ struct	sockwakeup {
  * Address families.
  */
 #define	AF_UNSPEC	0		/* unspecified */
-#define	AF_LOCAL	1		/* local to host (pipes, portals) */
-#define	AF_UNIX		AF_LOCAL	/* backward compatibility */
+#if __BSD_VISIBLE
+#define	AF_LOCAL	AF_UNIX		/* local to host (pipes, portals) */
+#endif
+#define	AF_UNIX		1		/* standardized name for AF_LOCAL */
 #define	AF_INET		2		/* internetwork: UDP, TCP, etc. */
 #define	AF_IMPLINK	3		/* arpanet imp addresses */
 #define	AF_PUP		4		/* pup protocols: e.g. BSP */

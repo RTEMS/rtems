@@ -64,12 +64,12 @@ static char rcsid[] = "$Id$";
 #include <ctype.h>
 
 /*
- * Ascii internet address interpretation routine.
+ * ASCII internet address interpretation routine.
  * The value returned is in network order.
  */
 u_long
 inet_addr(cp)
-	register const char *cp;
+	const char *cp;
 {
 	struct in_addr val;
 
@@ -79,7 +79,7 @@ inet_addr(cp)
 }
 
 /* 
- * Check whether "cp" is a valid ascii representation
+ * Check whether "cp" is a valid ASCII representation
  * of an Internet address and convert to a binary address.
  * Returns 1 if the address is valid, 0 if not.
  * This replaces inet_addr, the return value from which
@@ -87,7 +87,7 @@ inet_addr(cp)
  */
 int
 inet_aton(cp, addr)
-	register const char *cp;
+	const char *cp;
 	struct in_addr *addr;
 {
 	register u_long val;
@@ -174,7 +174,7 @@ inet_aton(cp, addr)
 		val |= (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8);
 		break;
 	}
-	if (addr)
+	if (addr != NULL)
 		addr->s_addr = htonl(val);
 	return (1);
 }
