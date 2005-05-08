@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_ether.c	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/netinet/if_ether.c,v 1.136 2005/03/13 11:23:22 glebius Exp $
+ */
+ 
+/*
  * $Id$
  */
 
@@ -42,8 +42,8 @@
 
 #include <sys/param.h>
 #include <sys/kernel.h>
-#include <sys/sysctl.h>
 #include <sys/queue.h>
+#include <sys/sysctl.h>
 #include <sys/systm.h>
 #include <sys/mbuf.h>
 #include <sys/malloc.h>
