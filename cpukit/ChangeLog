@@ -1,3 +1,10 @@
+2005-05-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/if_ether.c: Cosmetics from FreeBSD.
+	* libnetworking/libc/inet_addr.c: Cosmetics from FreeBSD.
+	* libnetworking/netinet/in.h: Cosmetics from FreeBSD.
+	* libnetworking/sys/socket.h: Cosmetics from FreeBSD.
+
 2005-05-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/un.h: Cosmetical updates from FreeBSD.
