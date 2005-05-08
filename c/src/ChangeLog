@@ -1,3 +1,7 @@
+2005-05-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/pppd/Makefile.am: CPPFLAGS += -D__BSD_VISIBLE.
+
 2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * libchip/network/open_eth.c, libchip/serial/mc68681.c,
