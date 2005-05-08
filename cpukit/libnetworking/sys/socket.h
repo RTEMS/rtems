@@ -39,10 +39,19 @@
 
 #include <sys/cdefs.h>
 
-#if defined(__rtems__)
-/* RTEMS doesn't have FreeBSD's sys/_types.h machinery. */
-typedef int socklen_t;
-typedef unsigned char 	sa_family_t;
+#ifndef _IN_PORT_T_DECLARED
+typedef	unsigned short		in_port_t;
+#define	_IN_PORT_T_DECLARED
+#endif
+
+#ifndef _SA_FAMILY_T_DECLARED
+typedef	unsigned char		sa_family_t;
+#define	_SA_FAMILY_T_DECLARED
+#endif
+
+#ifndef _SOCKLEN_T_DECLARED
+typedef	int	socklen_t;
+#define	_SOCKLEN_T_DECLARED
 #endif
 
 /*
