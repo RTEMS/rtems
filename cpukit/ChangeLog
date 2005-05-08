@@ -1,5 +1,12 @@
 2005-05-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/in.h: Partial update from FreeBSD.
+	Remove BYTE_PACK.
+	* libnetworking/netinet/ip.h: Add BYTE_PACK.
+	* libnetworking/sys/socket.h: Partial update from FreeBSD.
+
+2005-05-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/if_ether.c: Cosmetics from FreeBSD.
 	* libnetworking/libc/inet_addr.c: Cosmetics from FreeBSD.
 	* libnetworking/netinet/in.h: Cosmetics from FreeBSD.
