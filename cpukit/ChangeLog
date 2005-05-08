@@ -1,5 +1,12 @@
 2005-05-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/arpa/inet.h: Add in_addr_t, in_port_t.
+	* libnetworking/netinet/in.h: Sync in_port_t with arpa/inet.h.
+	* libnetworking/sys/socket.h: Include <sys/types.h>.
+	Remove in_port_t. Misc. updates from FreeBSD.
+
+2005-05-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/in.h: Partial update from FreeBSD.
 	Remove BYTE_PACK.
 	* libnetworking/netinet/ip.h: Add BYTE_PACK.
