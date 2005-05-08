@@ -49,7 +49,7 @@
 #define	INADDR_BROADCAST	(u_int32_t)0xffffffff	/* must be masked */
 
 #ifndef _IN_PORT_T_DECLARED
-typedef	unsigned short		in_port_t;
+typedef	uint16_t		in_port_t;
 #define	_IN_PORT_T_DECLARED
 #endif
 
