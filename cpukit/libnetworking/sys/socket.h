@@ -38,11 +38,15 @@
 #define	_SYS_SOCKET_H_
 
 #include <sys/cdefs.h>
+#include <sys/types.h>
 
-#ifndef _IN_PORT_T_DECLARED
-typedef	unsigned short		in_port_t;
-#define	_IN_PORT_T_DECLARED
-#endif
+/*
+ * Definitions related to sockets: types, address families, options.
+ */
+
+/*
+ * Data types.
+ */
 
 #ifndef _SA_FAMILY_T_DECLARED
 typedef	unsigned char		sa_family_t;
@@ -53,10 +57,6 @@ typedef	unsigned char		sa_family_t;
 typedef	int	socklen_t;
 #define	_SOCKLEN_T_DECLARED
 #endif
-
-/*
- * Definitions related to sockets: types, address families, options.
- */
 
 /*
  * Types
@@ -141,6 +141,7 @@ struct	sockwakeup {
 #endif
 #define	AF_UNIX		1		/* standardized name for AF_LOCAL */
 #define	AF_INET		2		/* internetwork: UDP, TCP, etc. */
+#if __BSD_VISIBLE
 #define	AF_IMPLINK	3		/* arpanet imp addresses */
 #define	AF_PUP		4		/* pup protocols: e.g. BSP */
 #define	AF_CHAOS	5		/* mit CHAOS protocols */
@@ -168,6 +169,7 @@ struct	sockwakeup {
 #define	AF_ISDN		26		/* Integrated Services Digital Network*/
 #define	AF_E164		AF_ISDN		/* CCITT E.164 recommendation */
 #define	pseudo_AF_KEY	27		/* Internal key-management function */
+#endif
 #define	AF_INET6	28		/* IPv6 */
 
 #define	AF_MAX		29
@@ -315,9 +317,11 @@ struct msghdr {
 #define	MSG_TRUNC	0x10		/* data discarded before delivery */
 #define	MSG_CTRUNC	0x20		/* control data lost before delivery */
 #define	MSG_WAITALL	0x40		/* wait for full request or error */
+#if __BSD_VISIBLE
 #define	MSG_DONTWAIT	0x80		/* this message should be nonblocking */
 #define	MSG_EOF		0x100		/* data completes connection */
 #define MSG_COMPAT      0x8000		/* used in sendit() */
+#endif
 
 /*
  * Header for ancillary data objects in msg_control buffer.
