@@ -45,6 +45,37 @@
 #define	IPPROTO_TCP		6		/* tcp */
 #define	IPPROTO_UDP		17		/* user datagram protocol */
 
+#define	INADDR_ANY		(u_int32_t)0x00000000
+#define	INADDR_BROADCAST	(u_int32_t)0xffffffff	/* must be masked */
+
+#ifndef _IN_PORT_T_DECLARED
+typedef	unsigned short		in_port_t;
+#define	_IN_PORT_T_DECLARED
+#endif
+
+#ifndef _SA_FAMILY_T_DECLARED
+typedef	unsigned char		sa_family_t;
+#define	_SA_FAMILY_T_DECLARED
+#endif
+
+/* Internet address (a structure for historical reasons) */
+#ifndef _STRUCT_IN_ADDR_DECLARED
+struct in_addr {
+	u_long s_addr;
+};
+#define _STRUCT_IN_ADDR_DECLARED
+#endif
+
+/* Socket address, internet style. */
+struct sockaddr_in {
+	uint8_t	sin_len;
+	sa_family_t	sin_family;
+	in_port_t	sin_port;
+	struct	in_addr sin_addr;
+	char	sin_zero[8];
+};
+
+
 /*
  * Constants and structures defined by the internet system,
  * Per RFC 790, September 1981, and numerous additions.
@@ -151,7 +182,12 @@
 #define	IPPROTO_ENCAP		98		/* encapsulation header */
 #define	IPPROTO_APES		99		/* any private encr. scheme */
 #define	IPPROTO_GMTP		100		/* GMTP*/
-/* 101-254: Unassigned */
+#define	IPPROTO_IPCOMP		108		/* payload compression (IPComp) */
+/* 101-254: Partly Unassigned */
+#define	IPPROTO_PIM		103		/* Protocol Independent Mcast */
+#define	IPPROTO_CARP		112		/* CARP */
+#define	IPPROTO_PGM		113		/* PGM */
+#define	IPPROTO_PFSYNC		240		/* PFSYNC */
 /* 255: Reserved */
 /* BSD Private, local use, namespace incursion */
 #define	IPPROTO_DIVERT		254		/* divert pseudo-protocol */
@@ -169,8 +205,8 @@
  *
  * When a user does a bind(2) or connect(2) with a port number of zero,
  * a non-conflicting local port address is chosen.
- * The default range is IPPORT_RESERVED through
- * IPPORT_USERRESERVED, although that is settable by sysctl.
+ * The default range is IPPORT_HIFIRSTAUTO through
+ * IPPORT_HILASTAUTO, although that is settable by sysctl.
  *
  * A user may set the IPPROTO_IP option IP_PORTRANGE to change this
  * default assignment range.
@@ -191,7 +227,7 @@
  * sysctl(3).  (net.inet.ip.port{hi,low}{first,last}_auto)
  *
  * Changing those values has bad security implications if you are
- * using a a stateless firewall that is allowing packets outside of that
+ * using a stateless firewall that is allowing packets outside of that
  * range in order to allow transparent outgoing connections.
  *
  * Such a firewall configuration will generally depend on the use of these
@@ -221,14 +257,6 @@
  * have a fit if we use.
  */
 #define IPPORT_RESERVEDSTART	600
-#define BYTE_PACK __attribute__((packed))
-/*
- * Internet address (a structure for historical reasons)
- */
-struct in_addr {
-	u_long s_addr BYTE_PACK;
-};
-
 /*
  * Definitions of bits in internet address integers.
  * On subnets, the decomposition of addresses to host and net parts
@@ -260,8 +288,6 @@ struct in_addr {
 #define	IN_EXPERIMENTAL(i)	(((u_int32_t)(i) & 0xf0000000) == 0xf0000000)
 #define	IN_BADCLASS(i)		(((u_int32_t)(i) & 0xf0000000) == 0xf0000000)
 
-#define	INADDR_ANY		(u_long)0x00000000
-#define	INADDR_BROADCAST	(u_long)0xffffffff	/* must be masked */
 #ifndef _KERNEL
 #define	INADDR_NONE		0xffffffff		/* -1 return */
 #endif
@@ -275,17 +301,6 @@ struct in_addr {
 #ifndef INADDR_LOOPBACK
 #define	INADDR_LOOPBACK		(u_long)0x7F000001	/* 127.0.0.1 */
 #endif
-
-/*
- * Socket address, internet style.
- */
-struct sockaddr_in {
-	u_char	sin_len;
-	u_char	sin_family;
-	u_short	sin_port;
-	struct	in_addr sin_addr;
-	char	sin_zero[8];
-};
 
 /*
  * Structure used to describe IP options.
