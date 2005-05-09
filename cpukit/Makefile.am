@@ -40,6 +40,7 @@ include_HEADERS += backward/asm.h backward/chain.h backward/clockdrv.h \
 
 if HAS_NETWORKING
 include_HEADERS += backward/ftpd.h
+
 endif
 
 include_motoroladir = $(includedir)/motorola
@@ -76,6 +77,12 @@ include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
     libcsupport/include/sys/sockio.h libcsupport/include/sys/ttycom.h \
     libcsupport/include/sys/termios.h libcsupport/include/sys/utsname.h \
     libcsupport/include/sys/cdefs.h
+
+if HAS_NETWORKING
+include_rtems_bsdnetdir = $(includedir)/rtems/bsdnet
+include_rtems_bsdnet_HEADERS = libnetworking/rtems/bsdnet/servers.h
+include_rtems_bsdnet_HEADERS += libnetworking/rtems/bsdnet/_types.h
+endif
 endif
 
 include_rtems_HEADERS += include/rtems/bspIo.h include/rtems/userenv.h \
