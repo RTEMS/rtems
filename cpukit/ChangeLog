@@ -1,5 +1,17 @@
 2005-05-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/bsdnet/_types.h: New.
+	* Makefile.am: Add rtems_bsdnet_HEADERS.
+	* libnetworking/Makefile.am: Remove rtems_bsdnet_HEADERS.
+	* preinstall.am, libnetworking/preinstall.am: Regenerate.
+	* libcsupport/include/sys/cdefs.h: Partial update from FreeBSD.
+	* libnetworking/arpa/inet.h: Partial update from FreeBSD.
+	* libnetworking/netinet/in.h: Partial update from FreeBSD.
+	* libnetworking/sys/socket.h: Partial update from FreeBSD.
+	* librpc/src/rpc/bindresvport.c: socklen_t.
+	* libnetworking/sys/mbuf.h: Ansification.
+	* libnetworking/kern/uipc_mbuf.c: Partial update from FreeBSD.
+	* libnetworking/libc/inet_addr.c: in_addr_t.
 	* libnetworking/lib/tftpDriver.c: socklen_t.
 	* libnetworking/libc/inet_lnaof.c: in_addr_t.
 	* libnetworking/libc/inet_makeaddr.c: in_addr_t.
