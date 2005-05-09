@@ -331,8 +331,8 @@ getPacket (struct tftpStream *tp, int retryCount)
             struct sockaddr s;
             struct sockaddr_in i;
         } from;
-        int fromlen = sizeof from;
-        len = recvfrom (tp->socket, (char *)&tp->pkbuf,
+        socklen_t fromlen = sizeof from;
+        len = recvfrom (tp->socket, &tp->pkbuf,
                                                     sizeof tp->pkbuf, 0,
                                                     &from.s, &fromlen);
         if (len < 0)
