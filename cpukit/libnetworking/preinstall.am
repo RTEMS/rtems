@@ -324,15 +324,6 @@ $(PROJECT_INCLUDE)/rtems/mkrootfs.h: rtems/mkrootfs.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mkrootfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mkrootfs.h
 
-$(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/bsdnet
-	@: > $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/bsdnet/servers.h: rtems/bsdnet/servers.h $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsdnet/servers.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsdnet/servers.h
-
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)

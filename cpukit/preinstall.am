@@ -172,6 +172,21 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
 $(PROJECT_INCLUDE)/sys/cdefs.h: libcsupport/include/sys/cdefs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/cdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
+
+if HAS_NETWORKING
+$(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/bsdnet
+	@: > $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/bsdnet/servers.h: libnetworking/rtems/bsdnet/servers.h $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsdnet/servers.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsdnet/servers.h
+
+$(PROJECT_INCLUDE)/rtems/bsdnet/_types.h: libnetworking/rtems/bsdnet/_types.h $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsdnet/_types.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsdnet/_types.h
+endif
 endif
 $(PROJECT_INCLUDE)/rtems/bspIo.h: include/rtems/bspIo.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bspIo.h
