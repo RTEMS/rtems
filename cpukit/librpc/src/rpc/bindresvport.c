@@ -80,7 +80,7 @@ bindresvport_sa(sd, sa)
 #endif
 	int proto, portrange, portlow;
 	u_int16_t port;
-	int salen;
+	socklen_t salen;
 
 	if (sa == NULL) {
 		salen = sizeof(myaddr);
@@ -121,7 +121,7 @@ bindresvport_sa(sd, sa)
 	sa->sa_len = salen;
 
 	if (port == 0) {
-		int oldlen = sizeof(old);
+		socklen_t oldlen = sizeof(old);
 
 		error = getsockopt(sd, proto, portrange, &old, &oldlen);
 		if (error < 0)
