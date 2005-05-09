@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -165,27 +161,25 @@ m_getclr(nowait, type)
 }
 
 struct mbuf *
-m_free(m)
-	struct mbuf *m;
+m_free(struct mbuf *m)
 {
-	register struct mbuf *n;
+	struct mbuf *n;
 
 	MFREE(m, n);
 	return (n);
 }
 
 void
-m_freem(m)
-	register struct mbuf *m;
+m_freem(struct mbuf *mb)
 {
-	register struct mbuf *n;
+	struct mbuf *n;
 
-	if (m == NULL)
+	if (mb == NULL)
 		return;
 	do {
-		MFREE(m, n);
-		m = n;
-	} while (m);
+		MFREE(mb, n);
+		mb = n;
+	} while (mb);
 }
 
 /*
@@ -198,9 +192,7 @@ m_freem(m)
  * copy junk along.
  */
 struct mbuf *
-m_prepend(m, len, how)
-	register struct mbuf *m;
-	int len, how;
+m_prepend(struct mbuf *m, int len, int how)
 {
 	struct mbuf *mn;
 
@@ -229,13 +221,10 @@ m_prepend(m, len, how)
 static int MCFail;
 
 struct mbuf *
-m_copym(m, off0, len, wait)
-	register struct mbuf *m;
-	int off0, wait;
-	register int len;
+m_copym(struct mbuf *m, int off0, int len, int wait)
 {
-	register struct mbuf *n, **np;
-	register int off = off0;
+	struct mbuf *n, **np;
+	int off = off0;
 	struct mbuf *top;
 	int copyhdr = 0;
 
@@ -244,7 +233,7 @@ m_copym(m, off0, len, wait)
 	if (off == 0 && m->m_flags & M_PKTHDR)
 		copyhdr = 1;
 	while (off > 0) {
-		if (m == 0)
+		if (m == NULL)
 			panic("m_copym");
 		if (off < m->m_len)
 			break;
@@ -254,14 +243,14 @@ m_copym(m, off0, len, wait)
 	np = &top;
 	top = 0;
 	while (len > 0) {
-		if (m == 0) {
+		if (m == NULL) {
 			if (len != M_COPYALL)
 				panic("m_copym");
 			break;
 		}
 		MGET(n, wait, m->m_type);
 		*np = n;
-		if (n == 0)
+		if (n == NULL)
 			goto nospace;
 		if (copyhdr) {
 			M_COPY_PKTHDR(n, m);
@@ -290,13 +279,13 @@ m_copym(m, off0, len, wait)
 		m = m->m_next;
 		np = &n->m_next;
 	}
-	if (top == 0)
+	if (top == NULL)
 		MCFail++;
 	return (top);
 nospace:
 	m_freem(top);
 	MCFail++;
-	return (0);
+	return (NULL);
 }
 
 /*
@@ -304,9 +293,7 @@ nospace:
  * An optimization of the common case `m_copym(m, 0, M_COPYALL, how)'.
  */
 struct mbuf *
-m_copypacket(m, how)
-	struct mbuf *m;
-	int how;
+m_copypacket(struct mbuf *m, int how)
 {
 	struct mbuf *top, *n, *o;
 
@@ -360,14 +347,9 @@ nospace:
  * size is bigger than available
  */
 int
-m_copydata(m, off, len, cp)
-	register struct mbuf *m;
-	register int off;
-	register int len;
-	caddr_t cp;
+m_copydata(const struct mbuf *m, int off, int len, caddr_t cp)
 {
-	register unsigned count;
-/*	struct mbuf *m0 = m; */
+	u_int count;
 
 	if (off < 0 || len < 0)
 		panic("m_copydata");
@@ -413,8 +395,7 @@ m_copydata(m, off, len, cp)
  * Any m_pkthdr is not updated.
  */
 void
-m_cat(m, n)
-	register struct mbuf *m, *n;
+m_cat(struct mbuf *m, struct mbuf *n)
 {
 	while (m->m_next)
 		m = m->m_next;
@@ -434,13 +415,11 @@ m_cat(m, n)
 }
 
 void
-m_adj(mp, req_len)
-	struct mbuf *mp;
-	int req_len;
+m_adj(struct mbuf *mp, int req_len)
 {
-	register int len = req_len;
-	register struct mbuf *m;
-	register int count;
+	int len = req_len;
+	struct mbuf *m;
+	int count;
 
 	if ((m = mp) == NULL)
 		return;
@@ -518,12 +497,10 @@ m_adj(mp, req_len)
 static int MPFail;
 
 struct mbuf *
-m_pullup(n, len)
-	register struct mbuf *n;
-	int len;
+m_pullup(struct mbuf *n, int len)
 {
-	register struct mbuf *m;
-	register int count;
+	struct mbuf *m;
+	int count;
 	int space;
 
 	/*
@@ -542,7 +519,7 @@ m_pullup(n, len)
 		if (len > MHLEN)
 			goto bad;
 		MGET(m, M_DONTWAIT, n->m_type);
-		if (m == 0)
+		if (m == NULL)
 			goto bad;
 		m->m_len = 0;
 		if (n->m_flags & M_PKTHDR) {
@@ -570,10 +547,10 @@ m_pullup(n, len)
 	}
 	m->m_next = n;
 	return (m);
-bad:
+ bad:
 	m_freem(n);
 	MPFail++;
-	return (0);
+	return (NULL);
 }
 
 /*
@@ -582,22 +559,20 @@ bad:
  * attempts to restore the chain to its original state.
  */
 struct mbuf *
-m_split(m0, len0, wait)
-	register struct mbuf *m0;
-	int len0, wait;
+m_split(struct mbuf *m0, int len0, int wait)
 {
-	register struct mbuf *m, *n;
-	unsigned len = len0, remain;
+	struct mbuf *m, *n;
+	u_int len = len0, remain;
 
 	for (m = m0; m && len > m->m_len; m = m->m_next)
 		len -= m->m_len;
-	if (m == 0)
-		return (0);
+	if (m == NULL)
+		return (NULL);
 	remain = m->m_len - len;
 	if (m0->m_flags & M_PKTHDR) {
 		MGETHDR(n, wait, m0->m_type);
-		if (n == 0)
-			return (0);
+		if (n == NULL)
+			return (NULL);
 		n->m_pkthdr.rcvif = m0->m_pkthdr.rcvif;
 		n->m_pkthdr.len = m0->m_pkthdr.len - len0;
 		m0->m_pkthdr.len = len0;
@@ -616,7 +591,7 @@ m_split(m0, len0, wait)
 			MH_ALIGN(n, remain);
 	} else if (remain == 0) {
 		n = m->m_next;
-		m->m_next = 0;
+		m->m_next = NULL;
 		return (n);
 	} else {
 		MGET(n, wait, m->m_type);
@@ -641,23 +616,21 @@ extpacket:
 	n->m_len = remain;
 	m->m_len = len;
 	n->m_next = m->m_next;
-	m->m_next = 0;
+	m->m_next = NULL;
 	return (n);
 }
 /*
  * Routine to copy from device local memory into mbufs.
  */
 struct mbuf *
-m_devget(buf, totlen, off0, ifp, copy)
-	char *buf;
-	int totlen, off0;
-	struct ifnet *ifp;
-	void (*copy) __P((char *from, caddr_t to, u_int len));
+m_devget(char *buf, int totlen, int off0, struct ifnet *ifp, 
+	void (*copy)(char *from, caddr_t to, u_int len))
 {
-	register struct mbuf *m;
-	struct mbuf *top = 0, **mp = &top;
-	register int off = off0, len;
-	register char *cp;
+	struct mbuf *m;
+	struct mbuf *top = NULL, **mp = &top;
+	int len;
+	int off = off0;
+	char *cp;
 	char *epkt;
 
 	cp = buf;
@@ -701,9 +674,9 @@ m_devget(buf, totlen, off0, ifp, copy)
 				len = m->m_len;
 		}
 		if (copy)
-			copy(cp, mtod(m, caddr_t), (unsigned)len);
+			copy(cp, mtod(m, caddr_t), (u_int)len);
 		else
-			bcopy(cp, mtod(m, caddr_t), (unsigned)len);
+			bcopy(cp, mtod(m, caddr_t), (u_int)len);
 		cp += len;
 		*mp = m;
 		mp = &m->m_next;
@@ -726,18 +699,18 @@ m_copyback(m0, off, len, cp)
 	register int len;
 	caddr_t cp;
 {
-	register int mlen;
-	register struct mbuf *m = m0, *n;
+	int mlen;
+	struct mbuf *m = m0, *n;
 	int totlen = 0;
 
-	if (m0 == 0)
+	if (m0 == NULL)
 		return 0;
 	while (off > (mlen = m->m_len)) {
 		off -= mlen;
 		totlen += mlen;
-		if (m->m_next == 0) {
+		if (m->m_next == NULL) {
 			n = m_getclr(M_DONTWAIT, m->m_type);
-			if (n == 0) {
+			if (n == NULL) {
 				/*panic("m_copyback() : malformed chain\n");*/
 				return -1;
 				}
@@ -748,7 +721,7 @@ m_copyback(m0, off, len, cp)
 	}
 	while (len > 0) {
 		mlen = min (m->m_len - off, len);
-		bcopy(cp, off + mtod(m, caddr_t), (unsigned)mlen);
+		bcopy(cp, off + mtod(m, caddr_t), (u_int)mlen);
 		cp += mlen;
 		len -= mlen;
 		mlen += off;
@@ -758,7 +731,7 @@ m_copyback(m0, off, len, cp)
 			/* m->m_len = mlen; */
 			break;
 		}
-		if (m->m_next == 0) {
+		if (m->m_next == NULL) {
 			n = m_get(M_DONTWAIT, m->m_type);
 			if (n == 0) {
 				/*panic("m_copyback() : malformed chain 2\n");*/
