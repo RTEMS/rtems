@@ -1,5 +1,10 @@
 2005-05-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/un.h: Partial update from FreeBSD.
+	Remove non-implemented functions/variables.
+
+2005-05-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/bsdnet/_types.h: New.
 	* Makefile.am: Add rtems_bsdnet_HEADERS.
 	* libnetworking/Makefile.am: Remove rtems_bsdnet_HEADERS.

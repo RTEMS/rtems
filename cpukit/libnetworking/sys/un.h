@@ -37,26 +37,35 @@
 #ifndef _SYS_UN_H_
 #define _SYS_UN_H_
 
+#include <sys/cdefs.h>
+#include <rtems/bsdnet/_types.h>
+
+#ifndef _SA_FAMILY_T_DECLARED
+typedef	__sa_family_t	sa_family_t;
+#define	_SA_FAMILY_T_DECLARED
+#endif
+
 /*
  * Definitions for UNIX IPC domain.
  */
 struct	sockaddr_un {
-	u_char	sun_len;		/* sockaddr len including null */
-	u_char	sun_family;		/* AF_UNIX */
+	unsigned char	sun_len;		/* sockaddr len including null */
+	sa_family_t	sun_family;		/* AF_UNIX */
 	char	sun_path[104];		/* path name (gag) */
 };
+
+#if __BSD_VISIBLE
+
+/* Socket options. */
+#define	LOCAL_PEERCRED		0x001	/* retrieve peer credentials */
+#define	LOCAL_CREDS		0x002	/* pass credentials to receiver */
+#define	LOCAL_CONNWAIT		0x004	/* connects block until accepted */
 
 #ifdef _KERNEL
 struct mbuf;
 struct socket;
+struct sockopt;
 
-int	uipc_usrreq __P((struct socket *so, int req, struct mbuf *m,
-		struct mbuf *nam, struct mbuf *control));
-int	unp_connect2 __P((struct socket *so, struct socket *so2));
-void	unp_dispose __P((struct mbuf *m));
-int	unp_externalize __P((struct mbuf *rights));
-void	unp_init __P((void));
-extern	struct pr_usrreqs uipc_usrreqs;
 #else /* !_KERNEL */
 
 /* actual length of an initialized sockaddr_un */
@@ -64,5 +73,7 @@ extern	struct pr_usrreqs uipc_usrreqs;
 	(sizeof(*(su)) - sizeof((su)->sun_path) + strlen((su)->sun_path))
 
 #endif /* _KERNEL */
+
+#endif /* __BSD_VISIBLE */
 
 #endif /* !_SYS_UN_H_ */
