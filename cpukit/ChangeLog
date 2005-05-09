@@ -1,3 +1,13 @@
+2005-05-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/lib/tftpDriver.c: socklen_t.
+	* libnetworking/libc/inet_lnaof.c: in_addr_t.
+	* libnetworking/libc/inet_makeaddr.c: in_addr_t.
+	* libnetworking/libc/inet_netof.c: in_addr_t.
+	* libnetworking/libc/inet_network.c: in_addr_t.
+	* libnetworking/libc/inet_ntop.c: Ansify, socklen_t.
+	* libnetworking/lib/ftpfs.c: socklen_t, PRIu32.
+
 2005-05-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/arpa/inet.h: Add in_addr_t, in_port_t.
