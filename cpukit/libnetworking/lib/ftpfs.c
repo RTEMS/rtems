@@ -41,6 +41,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <inttypes.h>
 #include <ctype.h>
 #include <rtems.h>
 #include <rtems/libio.h>
@@ -538,7 +539,7 @@ int rtems_ftp_open(
   rtems_boolean sema_obtained = FALSE;
   struct ftpStream *fsp = NULL;
   int msg_tmp;
-  int sockaddr_size;
+  socklen_t sockaddr_size;
   /*
    * check for R/O or W/O flags
    */
@@ -636,7 +637,7 @@ int rtems_ftp_open(
       
       hent = gethostbyname(hostname);
       if (hent != NULL) {
-	memcpy((char *)(&(fsp->farCtrlAddress.sin_addr)), 
+	memcpy(&fsp->farCtrlAddress.sin_addr, 
   	      hent->h_addr, 
 	      sizeof(fsp->farCtrlAddress.sin_addr));
       }
@@ -796,7 +797,7 @@ int rtems_ftp_open(
      */
     my_ip   = ntohl(fsp->myCtrlAddress.sin_addr.s_addr);
     my_port = ntohs(fsp->myDataAddress.sin_port);
-    sprintf(port_buffer,"%s%u,%u,%u,%u,%u,%u\n",
+    sprintf(port_buffer,"%s%" PRIu32 ",%" PRIu32 ",%" PRIu32 ",%" PRIu32 ",%" PRIu16 ",%" PRIu16 "\n",
 	    FTP_PORT_CMD,
 	    (my_ip >> 24) & 0x00ff,
 	    (my_ip >> 16) & 0x00ff,
