@@ -38,7 +38,7 @@
 #define	_SYS_SOCKET_H_
 
 #include <sys/cdefs.h>
-#include <sys/types.h>
+#include <rtems/bsdnet/_types.h>
 
 /*
  * Definitions related to sockets: types, address families, options.
@@ -49,12 +49,12 @@
  */
 
 #ifndef _SA_FAMILY_T_DECLARED
-typedef	unsigned char		sa_family_t;
+typedef	__sa_family_t	sa_family_t;
 #define	_SA_FAMILY_T_DECLARED
 #endif
 
 #ifndef _SOCKLEN_T_DECLARED
-typedef	int	socklen_t;
+typedef	__socklen_t	socklen_t;
 #define	_SOCKLEN_T_DECLARED
 #endif
 

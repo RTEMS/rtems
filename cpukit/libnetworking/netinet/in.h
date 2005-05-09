@@ -37,6 +37,7 @@
 #ifndef _NETINET_IN_H_
 #define _NETINET_IN_H_
 
+#include <rtems/bsdnet/_types.h>
 #include <machine/endian.h>
 
 /* Protocols common to RFC 1700, POSIX, and X/Open. */
@@ -54,7 +55,7 @@ typedef	uint16_t		in_port_t;
 #endif
 
 #ifndef _SA_FAMILY_T_DECLARED
-typedef	unsigned char		sa_family_t;
+typedef	__sa_family_t		sa_family_t;
 #define	_SA_FAMILY_T_DECLARED
 #endif
 

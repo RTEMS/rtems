@@ -62,8 +62,11 @@
 
 /* External definitions for functions in inet(3), addr2ascii(3) */
 
-#include <sys/types.h>
 #include <sys/cdefs.h>
+#include <rtems/bsdnet/_types.h>
+
+#define	INET_ADDRSTRLEN		16
+#define	INET6_ADDRSTRLEN	46
 
 #ifndef _IN_ADDR_T_DECLARED
 typedef	uint32_t	in_addr_t;
@@ -75,8 +78,25 @@ typedef	uint16_t	in_port_t;
 #define	_IN_PORT_T_DECLARED
 #endif
 
-#if 0	/* RTEMS -- Why rename these? */
+/*
+ * XXX socklen_t is used by a POSIX.1-2001 interface, but not required by
+ * POSIX.1-2001.
+ */
+#ifndef _SOCKLEN_T_DECLARED
+typedef	__socklen_t	socklen_t;
+#define	_SOCKLEN_T_DECLARED
+#endif
+
+#ifndef _STRUCT_IN_ADDR_DECLARED
+struct in_addr {
+	in_addr_t s_addr;
+};
+#define	_STRUCT_IN_ADDR_DECLARED
+#endif
+
+#if !defined(__rtems__)	/* RTEMS -- Why rename these? */
 /* XXX all new diversions!! argh!! */
+#if __BSD_VISIBLE
 #define	inet_addr	__inet_addr
 #define	inet_aton	__inet_aton
 #define	inet_lnaof	__inet_lnaof
@@ -91,25 +111,30 @@ typedef	uint16_t	in_port_t;
 #define	inet_ntop	__inet_ntop
 #define	inet_nsap_addr	__inet_nsap_addr
 #define	inet_nsap_ntoa	__inet_nsap_ntoa
-#endif
+#endif /* __BSD_VISIBLE */
+#endif /* __rtems__ */
 
 __BEGIN_DECLS
-int		 ascii2addr __P((int, const char *, void *));
-char		*addr2ascii __P((int, const void *, int, char *));
-unsigned long	 inet_addr __P((const char *));
-int		 inet_aton __P((const char *, struct in_addr *));
-unsigned long	 inet_lnaof __P((struct in_addr));
-struct in_addr	 inet_makeaddr __P((u_long , u_long));
-char *		 inet_neta __P((u_long, char *, size_t));
-unsigned long	 inet_netof __P((struct in_addr));
-unsigned long	 inet_network __P((const char *));
-char		*inet_net_ntop __P((int, const void *, int, char *, size_t));
-int		 inet_net_pton __P((int, const char *, void *, size_t));
-char		*inet_ntoa __P((struct in_addr));
-int              inet_pton __P((int, const char *, void *));
-const char	*inet_ntop __P((int, const void *, char *, size_t));
-u_int		 inet_nsap_addr __P((const char *, u_char *, int));
-char		*inet_nsap_ntoa __P((int, const u_char *, char *));
+in_addr_t	 inet_addr(const char *);
+char		*inet_ntoa(struct in_addr);
+const char	*inet_ntop(int, const void * __restrict, char * __restrict,
+		    socklen_t);
+int              inet_pton(int, const char * __restrict, void * __restrict);
+
+#if __BSD_VISIBLE
+int		 ascii2addr(int, const char *, void *);
+char		*addr2ascii(int, const void *, int, char *);
+int		 inet_aton(const char *, struct in_addr *);
+in_addr_t	 inet_lnaof(struct in_addr);
+struct in_addr	 inet_makeaddr(in_addr_t, in_addr_t);
+char *		 inet_neta(in_addr_t, char *, size_t);
+in_addr_t	 inet_netof(struct in_addr);
+in_addr_t	 inet_network(const char *);
+char		*inet_net_ntop(int, const void *, int, char *, size_t);
+int		 inet_net_pton(int, const char *, void *, size_t);
+unsigned	 inet_nsap_addr(const char *, unsigned char *, int);
+char		*inet_nsap_ntoa(int, const unsigned char *, char *);
+#endif /* __BSD_VISIBLE */
 __END_DECLS
 
 #endif /* !_ARPA_INET_H_ */
