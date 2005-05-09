@@ -51,18 +51,17 @@
 
 #define	MLEN		(MSIZE - sizeof(struct m_hdr))	/* normal data len */
 #define	MHLEN		(MLEN - sizeof(struct pkthdr))	/* data len w/pkthdr */
-
 #define	MINCLSIZE	(MHLEN + MLEN)	/* smallest amount to put in cluster */
 #define	M_MAXCOMPRESS	(MHLEN / 2)	/* max amount to copy for compression */
 
-/*
- * Macros for type conversion
- * mtod(m,t) -	convert mbuf pointer to data pointer of correct type
- * dtom(x) -	convert data pointer within mbuf to mbuf pointer (XXX)
- * mtocl(x) -	convert pointer within cluster to cluster index #
- * cltom(x) -	convert cluster # to ptr to beginning of cluster
+/*-
+ * Macros for type conversion:
+ * mtod(m, t) 	-- Convert mbuf pointer to data pointer of correct type.
+ * dtom(x)	-- Convert data pointer within mbuf to mbuf pointer (XXX).
+ * mtocl(x) 	-- Convert pointer within cluster to cluster index #
+ * cltom(x) 	-- Convert cluster # to ptr to beginning of cluster
  */
-#define	mtod(m,t)	((t)((m)->m_data))
+#define	mtod(m, t)	((t)((m)->m_data))
 #define	dtom(x)		((struct mbuf *)((intptr_t)(x) & ~(MSIZE-1)))
 #define	mtocl(x)	(((u_long)(x) - (u_long)mbutl) >> MCLSHIFT)
 #define	cltom(x)	((caddr_t)((u_long)mbutl + ((u_long)(x) << MCLSHIFT)))
@@ -400,27 +399,27 @@ extern int	max_hdr;		/* largest link+protocol header */
 extern int	max_datalen;		/* MHLEN - max_hdr */
 extern int	mbtypes[];		/* XXX */
 
-struct	mbuf *m_copym __P((struct mbuf *, int, int, int));
-struct	mbuf *m_copypacket __P((struct mbuf *, int));
-struct	mbuf *m_devget __P((char *, int, int, struct ifnet *,
-			    void (*copy)(char *, caddr_t, u_int)));
-struct	mbuf *m_free __P((struct mbuf *));
-struct	mbuf *m_get __P((int, int));
-struct	mbuf *m_getclr __P((int, int));
-struct	mbuf *m_gethdr __P((int, int));
-struct	mbuf *m_prepend __P((struct mbuf *,int,int));
-struct	mbuf *m_pullup __P((struct mbuf *, int));
-struct	mbuf *m_retry __P((int, int));
-struct	mbuf *m_retryhdr __P((int, int));
-struct	mbuf *m_split __P((struct mbuf *,int,int));
-void	m_adj __P((struct mbuf *, int));
-void	m_cat __P((struct mbuf *,struct mbuf *));
-int	m_mballoc __P((int, int));
-int	m_clalloc __P((int, int));
-int	m_copyback __P((struct mbuf *, int, int, caddr_t));
-int	m_copydata __P((struct mbuf *, int, int, caddr_t));
-void	m_freem __P((struct mbuf *));
-void	m_reclaim __P((void));
+struct	mbuf *m_copym(struct mbuf *, int, int, int);
+struct	mbuf *m_copypacket(struct mbuf *, int);
+struct	mbuf *m_devget(char *, int, int, struct ifnet *,
+			    void (*copy)(char *, caddr_t, u_int));
+struct	mbuf *m_free(struct mbuf *);
+struct	mbuf *m_get(int, int);
+struct	mbuf *m_getclr(int, int);
+struct	mbuf *m_gethdr(int, int);
+struct	mbuf *m_prepend(struct mbuf *,int,int);
+struct	mbuf *m_pullup(struct mbuf *, int);
+struct	mbuf *m_retry(int, int);
+struct	mbuf *m_retryhdr(int, int);
+struct	mbuf *m_split(struct mbuf *,int,int);
+void	m_adj(struct mbuf *, int);
+void	m_cat(struct mbuf *,struct mbuf *);
+int	m_mballoc(int, int);
+int	m_clalloc(int, int);
+int	m_copyback(struct mbuf *, int, int, caddr_t);
+int	m_copydata(const struct mbuf *, int, int, caddr_t);
+void	m_freem(struct mbuf *);
+void	m_reclaim(void);
 
 #ifdef MBTYPES
 int mbtypes[] = {				/* XXX */
