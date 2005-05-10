@@ -13,7 +13,7 @@ include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
     rtems/powerpc/debugmod.h rtems/powerpc/powerpc.h
 
-SUBDIRS = shared mpc5xx mpc505 mpc6xx mpc8260 mpc8xx ppc403
+SUBDIRS = mpc5xx mpc505 mpc6xx mpc8260 mpc8xx ppc403
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
@@ -38,6 +38,41 @@ new_exceptions_rtems_cpu_rel_SOURCES = new-exceptions/cpu.c \
 new_exceptions_rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
+
+# shared/include
+if shared
+include_libcpudir = $(includedir)/libcpu
+
+include_libcpu_HEADERS = shared/include/io.h shared/include/mmu.h shared/include/page.h \
+    shared/include/byteorder.h shared/include/pgtable.h
+
+noinst_PROGRAMS += shared/cpuIdent.rel
+shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c shared/include/cpuIdent.h
+shared_cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
+shared_cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+include_libcpu_HEADERS += shared/include/cpuIdent.h
+
+## shared/cache
+noinst_PROGRAMS += shared/cache.rel
+shared_cache_rel_SOURCES = shared/src/cache.c shared/src/cache_.h \
+    ../shared/src/cache_aligned_malloc.c ../shared/src/cache_manager.c \
+    ../shared/include/cache.h
+shared_cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/src
+shared_cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+include_libcpu_HEADERS += ../shared/include/cache.h
+
+## shared/stack
+noinst_PROGRAMS += shared/stack.rel
+shared_stack_rel_SOURCES = shared/src/stack.c shared/include/spr.h shared/src/stackTrace.h
+shared_stack_rel_CPPFLAGS = $(AM_CPPFLAGS)
+shared_stack_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+include_libcpu_HEADERS += shared/include/spr.h
+include_libcpu_HEADERS += shared/src/stackTrace.h
+endif
+
 
 include $(srcdir)/preinstall.am
 
