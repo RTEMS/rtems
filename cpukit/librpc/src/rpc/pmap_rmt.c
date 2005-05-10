@@ -240,7 +240,8 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
 	AUTH *unix_auth = authunix_create_default();
 	XDR xdr_stream;
 	register XDR *xdrs = &xdr_stream;
-	int outlen, inlen, fromlen, nets;
+	int outlen, inlen, nets;
+	socklen_t fromlen;
 	register int sock;
 	int on = 1;
 	fd_set *fds = 0, readfds; /* initialized to avoid warning */

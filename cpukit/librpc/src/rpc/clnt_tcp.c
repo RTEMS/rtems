@@ -365,7 +365,7 @@ clnttcp_control(cl, request, info)
 {
 	register struct ct_data *ct = (struct ct_data *)cl->cl_private;
 	register struct timeval *tv;
-	int len;
+	socklen_t len;
 
 	switch (request) {
 	case CLSET_FD_CLOSE:

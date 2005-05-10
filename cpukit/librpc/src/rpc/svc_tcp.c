@@ -132,7 +132,7 @@ svctcp_create(sock, sendsize, recvsize)
 	register SVCXPRT *xprt;
 	register struct tcp_rendezvous *r;
 	struct sockaddr_in addr;
-	int len = sizeof(struct sockaddr_in);
+	socklen_t len = sizeof(struct sockaddr_in);
 	int on;
 
 	if (sock == RPC_ANYSOCK) {
@@ -242,7 +242,7 @@ rendezvous_request(xprt)
 	int sock;
 	struct tcp_rendezvous *r;
 	struct sockaddr_in addr;
-	int len;
+	socklen_t len;
 	int off;
 
 	r = (struct tcp_rendezvous *)xprt->xp_p1;

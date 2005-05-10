@@ -1496,7 +1496,7 @@ command_pasv(FTPD_SessionInfo_t *info)
   else
   {
     struct sockaddr_in addr;
-    int addrLen = sizeof(addr);
+    socklen_t addrLen = sizeof(addr);
 
     addr = info->ctrl_addr;
     addr.sin_port = htons(0);
@@ -1900,7 +1900,7 @@ static void
 daemon()
 {
   int                 s;
-  int                 addrLen;
+  socklen_t	      addrLen;
   struct sockaddr_in  addr;
   FTPD_SessionInfo_t  *info = NULL;
 

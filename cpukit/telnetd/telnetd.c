@@ -45,7 +45,7 @@ rtems_task rtems_task_telnetd(rtems_task_argument task_argument) {
 	struct sockaddr_in srv;
 	char * devname;
 	int i=1;
-	int size_adr;
+	socklen_t size_adr;
 	if ((des_socket=socket(PF_INET,SOCK_STREAM,0))<0) {
 		perror("telnetd:socket");
 		rtems_task_delete(RTEMS_SELF);

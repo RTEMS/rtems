@@ -226,7 +226,7 @@ clntudp_call(cl, proc, xargs, argsp, xresults, resultsp, utimeout)
 	register XDR *xdrs;
 	register int outlen;
 	register int inlen;
-	int fromlen;
+	socklen_t fromlen;
 	fd_set *fds, readfds;
 	struct sockaddr_in from;
 	struct rpc_msg reply_msg;
@@ -443,7 +443,7 @@ clntudp_control(cl, request, info)
 {
 	register struct cu_data *cu = (struct cu_data *)cl->cl_private;
 	register struct timeval *tv;
-	int len;
+	socklen_t len;
 
 	switch (request) {
 	case CLSET_FD_CLOSE:
