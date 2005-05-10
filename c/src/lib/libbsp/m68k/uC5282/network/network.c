@@ -73,9 +73,9 @@
 #endif
 
 typedef struct mcf5282BufferDescriptor_ {
-    volatile uint16_t           status;
+    volatile uint16_t   status;
     uint16_t			length;
-    volatile void               *buffer;
+    volatile void      *buffer;
 } mcf5282BufferDescriptor_t;
 
 /*
@@ -438,8 +438,7 @@ fec_rxDaemon (void *arg)
          * Reenable the buffer descriptor
          */
         rxBd->status = (status & MCF5282_FEC_RxBD_W) | MCF5282_FEC_RxBD_E;
-        if ((MCF5282_FEC_RDAR & MCF5282_FEC_RDAR_R_DES_ACTIVE) == 0)
-            MCF5282_FEC_RDAR = 0;
+        MCF5282_FEC_RDAR = 0;
 
         /*
          * Move to next buffer descriptor
@@ -561,8 +560,7 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
                                   | MCF5282_FEC_TxBD_TC;
             if (nAdded > 1)
                 firstTxBd->status |= MCF5282_FEC_TxBD_R;
-            if ((MCF5282_FEC_TDAR & MCF5282_FEC_TDAR_X_DES_ACTIVE) == 0)
-                MCF5282_FEC_TDAR = 0;
+            MCF5282_FEC_TDAR = 0;
             sc->txBdActiveCount += nAdded;
           }
           break;
@@ -742,6 +740,28 @@ enet_stats(struct mcf5282_enet_struct *sc)
     printf(" TCR:%8.8lx\n",  MCF5282_FEC_TCR);
     printf("FRBR:%8.8lx  ",  MCF5282_FEC_FRBR);
     printf("FRSR:%8.8lx\n",  MCF5282_FEC_FRSR);
+    if (sc->txBdActiveCount != 0) {
+        int i, n;
+        /*
+         * Yes, there are races here with adding and retiring descriptors,
+         * but this diagnostic is more for when things have backed up.
+         */
+        printf("Transmit Buffer Descriptors (Tail %d, Head %d, Active %d):\n",
+                                                    sc->txBdTail,
+                                                    sc->txBdHead,
+                                                    sc->txBdActiveCount);
+        i = sc->txBdTail;
+        for (n = 0 ; n < sc->txBdCount ; n++) {
+            if ((sc->txBdBase[i].status & MCF5282_FEC_TxBD_R) != 0)
+                printf("  %3d: status:%4.4x  length:%-4d  buffer:%p\n",
+                                                    i,
+                                                    sc->txBdBase[i].status,
+                                                    sc->txBdBase[i].length,
+                                                    sc->txBdBase[i].buffer);
+            if (++i == sc->txBdCount)
+                i = 0;
+        }
+    }
 }
 
 static int

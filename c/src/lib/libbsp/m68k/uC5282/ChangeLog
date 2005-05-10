@@ -1,3 +1,8 @@
+2005-05-10  Eric Norum <norume@aps.anl.gov>
+
+	* network/network.c: Poke RDAR/TDAR every time.
+                         Add more diagnostic printout.
+
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/init5282.c: Remove use of _Coldfire_VBR and use _VBR as rest
