@@ -1,5 +1,11 @@
 2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/lib/rtems_bsdnet_ntp.c: socklen_t.
+	* libnetworking/libc/rcmd.c: socklen_t.
+	* libnetworking/libc/res_send.c: socklen_t.
+
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/if.h: Remove IFI_* (obsolete, unused).
 	* libnetworking/net/if_var.h: Remove if_ipending (obsolete, unused).
 
