@@ -186,8 +186,8 @@ m5xx_uart_setAttributes(
   const struct termios *t
 )
 {
-  rtems_unsigned16 sccr0 = sci_descs[minor].regs->sccr0;
-  rtems_unsigned16 sccr1 = sci_descs[minor].regs->sccr1;
+  uint16_t sccr0 = sci_descs[minor].regs->sccr0;
+  uint16_t sccr1 = sci_descs[minor].regs->sccr1;
   int baud;
   
   /*
