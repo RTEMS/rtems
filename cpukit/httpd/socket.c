@@ -354,7 +354,7 @@ static void socketAccept(socket_t *sp)
         } overlay;
 	struct sockaddr_in	*addr;
 	socket_t 			*nsp;
-	int				len;
+	socklen_t			len;
 	char				*pString;
 	int 				newSock, nid;
 
@@ -415,7 +415,8 @@ int socketGetInput(int sid, char *buf, int toRead, int *errCode)
 {
 	struct sockaddr_in 	server;
 	socket_t			*sp;
-	int 				len, bytesRead;
+	socklen_t			len;
+	int				bytesRead;
 
 	a_assert(buf);
 	a_assert(errCode);
