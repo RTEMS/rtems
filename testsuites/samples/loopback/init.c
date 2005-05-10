@@ -132,7 +132,7 @@ static rtems_task workerTask(rtems_task_argument arg)
 static rtems_task serverTask(rtems_task_argument arg)
 {
     int s, s1;
-    int addrlen;
+    socklen_t addrlen;
 	struct sockaddr_in myAddr, farAddr;
     rtems_task_priority myPriority;
 
