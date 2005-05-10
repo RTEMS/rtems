@@ -1,3 +1,7 @@
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* pci/pcibios.c: Eliminate unsigned8.
+
 2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * Makefile.am, comm/i386-stub-glue.c, comm/tty_drv.c, comm/uart.c,

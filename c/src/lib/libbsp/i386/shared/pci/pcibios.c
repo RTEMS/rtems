@@ -224,7 +224,7 @@ pcib_find_by_class(int classCode, int idx, int *sig)
 
 #define PCI_MULTI_FUNCTION      0x80
 
-static unsigned8 ucBusCount = 0xff;
+static uint8_t ucBusCount = 0xff;
 
 unsigned char
 pci_bus_count()
