@@ -50,10 +50,10 @@ SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
 #if defined(DEBUG_BATS)
-void printBAT( int bat, unsigned32 upper, unsigned32 lower )
+void printBAT( int bat, uint32_t upper, uint32_t lower )
 {
-  unsigned32 lowest_addr;
-  unsigned32 size;
+  uint32_t lowest_addr;
+  uint32_t size;
 
   printk("BAT%d raw(upper=0x%08x, lower=0x%08x) ", bat, upper, lower );
 
@@ -74,8 +74,8 @@ void printBAT( int bat, unsigned32 upper, unsigned32 lower )
 }
 
 void ShowBATS(){
-  unsigned32 lower;
-  unsigned32 upper;
+  uint32_t lower;
+  uint32_t upper;
 
   __MFSPR(536, upper); __MFSPR(537, lower); printBAT( 0, upper, lower );
   __MFSPR(538, upper); __MFSPR(539, lower); printBAT( 1, upper, lower );
