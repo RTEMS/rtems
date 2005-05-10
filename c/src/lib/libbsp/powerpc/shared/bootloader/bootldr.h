@@ -67,7 +67,7 @@ typedef struct _boot_data {
 	void *mover;  /* where to copy codemove to avoid overlays */
 	u_long o_msr, o_hid0, o_r31;
 	opaque * mm_private;
-	const struct pci_config_access_functions * pci_functions;
+	const struct pci_bootloader_config_access_functions* pci_functions;
 	opaque * pci_private;
 	struct pci_dev * pci_devices;
 	opaque * v86_private;
@@ -113,42 +113,42 @@ pcibios_write_config_dword(u_char bus, u_char dev_fn,
 }
 
 extern inline int
-pci_read_config_byte(struct pci_dev *dev, u_char where, u_char * val) {
+pci_bootloader_read_config_byte(struct pci_dev *dev, u_char where, u_char * val) {
 	return bd->pci_functions->read_config_byte(dev->bus->number,
 						   dev->devfn,
 						   where, val);
 }
 
 extern inline int
-pci_read_config_word(struct pci_dev *dev, u_char where, u_short * val) {
+pci_bootloader_read_config_word(struct pci_dev *dev, u_char where, u_short * val) {
 	return bd->pci_functions->read_config_word(dev->bus->number,
 						   dev->devfn,
 						   where, val);
 }
 
 extern inline int
-pci_read_config_dword(struct pci_dev *dev, u_char where, u_int * val) {
+pci_bootloader_read_config_dword(struct pci_dev *dev, u_char where, u_int * val) {
 	return bd->pci_functions->read_config_dword(dev->bus->number,
 						    dev->devfn,
 						    where, val);
 }
 
 extern inline int
-pci_write_config_byte(struct pci_dev *dev, u_char where, u_char val) {
+pci_bootloader_write_config_byte(struct pci_dev *dev, u_char where, u_char val) {
 	return bd->pci_functions->write_config_byte(dev->bus->number,
 						    dev->devfn,
 						    where, val);
 }
 
 extern inline int
-pci_write_config_word(struct pci_dev *dev, u_char where, u_short val) {
+pci_bootloader_write_config_word(struct pci_dev *dev, u_char where, u_short val) {
 	return bd->pci_functions->write_config_word(dev->bus->number,
 						    dev->devfn,
 						    where, val);
 }
 
 extern inline int
-pci_write_config_dword(struct pci_dev *dev, u_char where, u_int val) {
+pci_bootloader_write_config_dword(struct pci_dev *dev, u_char where, u_int val) {
 	return bd->pci_functions->write_config_dword(dev->bus->number,
 						     dev->devfn,
 						     where, val);

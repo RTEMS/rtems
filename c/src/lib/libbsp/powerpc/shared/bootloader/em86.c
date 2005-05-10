@@ -530,8 +530,8 @@ void em86_main(struct pci_dev *dev){
 	st_le32((u_int *)p->vbase + 0x10, 0xf000f065);
 
 	/* Enable the ROM, read it and disable it immediately */
-	pci_read_config_dword(dev, PCI_ROM_ADDRESS, &saved_rom);
-	pci_write_config_dword(dev, PCI_ROM_ADDRESS, 0x000c0001);
+	pci_bootloader_read_config_dword(dev, PCI_ROM_ADDRESS, &saved_rom);
+	pci_bootloader_write_config_dword(dev, PCI_ROM_ADDRESS, 0x000c0001);
 
 	/* Check that there is an Intel ROM. Should we also check that
 	 * the first instruction is a jump (0xe9 or 0xeb) ?
@@ -560,7 +560,7 @@ void em86_main(struct pci_dev *dev){
 	 * according to comments in linux/arch/alpha/kernel/bios32.c.
 	 */
 
-	pci_write_config_dword(dev, PCI_ROM_ADDRESS, saved_rom);
+	pci_bootloader_write_config_dword(dev, PCI_ROM_ADDRESS, saved_rom);
 	vmap(p->vbase+0xc0000, (u_long)p->rom|PTE_RAM, length*512);
 
 	/* Now actually emulate the ROM init routine */

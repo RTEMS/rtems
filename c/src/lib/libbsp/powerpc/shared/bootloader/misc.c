@@ -328,7 +328,7 @@ setup_hw(void)
 		/* Only one can be active in text mode, which for now will
 		 * be assumed as equivalent to having I/O response enabled.
 		 */
-		pci_read_config_word(p, PCI_COMMAND, &cmd);
+		pci_bootloader_read_config_word(p, PCI_COMMAND, &cmd);
 		if(cmd & PCI_COMMAND_IO || !default_vga) {
 		  	default_vga=p;
 			default_vga_cmd=cmd;
@@ -337,7 +337,7 @@ setup_hw(void)
 
 	/* Disable the enabled VGA device, if any. */
 	if (default_vga)
-		pci_write_config_word(default_vga, PCI_COMMAND,
+		pci_bootloader_write_config_word(default_vga, PCI_COMMAND,
 				      default_vga_cmd&
 				      ~(PCI_COMMAND_IO|PCI_COMMAND_MEMORY));
 	init_v86();
@@ -348,19 +348,19 @@ setup_hw(void)
 		    ((p->class) >> 16 != PCI_BASE_CLASS_DISPLAY))
 		  	continue;
 		if (p->bus->number != 0) continue;
-		pci_read_config_word(p, PCI_COMMAND, &cmd);
-		pci_write_config_word(p, PCI_COMMAND,
+		pci_bootloader_read_config_word(p, PCI_COMMAND, &cmd);
+		pci_bootloader_write_config_word(p, PCI_COMMAND,
 				      cmd|PCI_COMMAND_IO|PCI_COMMAND_MEMORY);
 		printk("Calling the emulator.\n");
 		em86_main(p);
-		pci_write_config_word(p, PCI_COMMAND, cmd);
+		pci_bootloader_write_config_word(p, PCI_COMMAND, cmd);
 	}
 
 	cleanup_v86_mess();
 #endif
 	/* Reenable the primary VGA device */
 	if (default_vga) {
-		pci_write_config_word(default_vga, PCI_COMMAND,
+		pci_bootloader_write_config_word(default_vga, PCI_COMMAND,
 				      default_vga_cmd|
 				      (PCI_COMMAND_IO|PCI_COMMAND_MEMORY));
 		if (err) {
@@ -524,12 +524,12 @@ find_max_mem( struct pci_dev *dev )
 		      (dev->device == PCI_DEVICE_ID_MOTOROLA_MPC105)) ||
 		     ((dev->vendor == PCI_VENDOR_ID_IBM) &&
 		      (dev->device == 0x0037/*IBM 660 Bridge*/)) ) {
-			pci_read_config_byte(dev, 0xa0, &banks);
+			pci_bootloader_read_config_byte(dev, 0xa0, &banks);
 			for (i = 0; i < 8; i++) {
 				if ( banks & (1<<i) ) {
-					pci_read_config_byte(dev, 0x90+i, &tmp);
+					pci_bootloader_read_config_byte(dev, 0x90+i, &tmp);
 					top = tmp;
-					pci_read_config_byte(dev, 0x98+i, &tmp);
+					pci_bootloader_read_config_byte(dev, 0x98+i, &tmp);
 					top |= (tmp&3)<<8;
 					if ( top > max ) max = top;
 				}

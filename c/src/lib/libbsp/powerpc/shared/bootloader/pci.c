@@ -509,15 +509,15 @@ static void reconfigure_pci(void) {
    for (r=pci->resources; r; r= r->next) {
       if (!r->dev->sysdata) {
          r->dev->sysdata=r;
-         pci_read_config_word(r->dev, PCI_COMMAND, &r->cmd);
-         pci_write_config_word(r->dev, PCI_COMMAND,
+         pci_bootloader_read_config_word(r->dev, PCI_COMMAND, &r->cmd);
+         pci_bootloader_write_config_word(r->dev, PCI_COMMAND,
                                r->cmd & ~(PCI_COMMAND_IO|
                                           PCI_COMMAND_MEMORY));
       }
    }
 
    for (r=pci->resources; r; r= r->next) {
-      pci_write_config_dword(r->dev,
+      pci_bootloader_write_config_dword(r->dev,
                              PCI_BASE_ADDRESS_0+(r->reg<<2),
                              r->base);
       if ((r->type&
@@ -525,14 +525,14 @@ static void reconfigure_pci(void) {
             PCI_BASE_ADDRESS_MEM_TYPE_MASK)) ==
           (PCI_BASE_ADDRESS_SPACE_MEMORY|
            PCI_BASE_ADDRESS_MEM_TYPE_64)) {
-         pci_write_config_dword(r->dev,
+         pci_bootloader_write_config_dword(r->dev,
                                 PCI_BASE_ADDRESS_1+(r->reg<<2),
                                 0);
       }
    }
    for (dev=bd->pci_devices; dev; dev= dev->next) {
       if (dev->sysdata) {
-         pci_write_config_word(dev, PCI_COMMAND,
+         pci_bootloader_write_config_word(dev, PCI_COMMAND,
                                ((pci_resource *)dev->sysdata)
                                ->cmd);
          dev->sysdata=NULL;
@@ -600,7 +600,7 @@ indirect_pci_write_config_dword(unsigned char bus, unsigned char dev_fn,
    return PCIBIOS_SUCCESSFUL;
 }
 
-static const struct pci_config_access_functions indirect_functions = {
+static const struct pci_bootloader_config_access_functions indirect_functions = {
    indirect_pci_read_config_byte,
    indirect_pci_read_config_word,
    indirect_pci_read_config_dword,
@@ -689,7 +689,7 @@ direct_pci_write_config_dword(unsigned char bus, unsigned char dev_fn,
    return PCIBIOS_SUCCESSFUL;
 }
 
-static const struct pci_config_access_functions direct_functions = {
+static const struct pci_bootloader_config_access_functions direct_functions = {
    direct_pci_read_config_byte,
    direct_pci_read_config_word,
    direct_pci_read_config_dword,
@@ -706,14 +706,14 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
 
    u_short cmd;
    uint32_t l, ml;
-   pci_read_config_word(dev, PCI_COMMAND, &cmd);
+   pci_bootloader_read_config_word(dev, PCI_COMMAND, &cmd);
 
    for(reg=0; reg<howmany; reg=nextreg)
    {
       pci_resource *r;
 
       nextreg=reg+1;
-      pci_read_config_dword(dev, REG, &l);
+      pci_bootloader_read_config_dword(dev, REG, &l);
 #if 0
       if (l == 0xffffffff /*AJF || !l*/) continue;
 #endif
@@ -722,16 +722,16 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
        * bootloader we don't care however. Also we can't print any
        * message for a while since we might just disable the console.
        */
-      pci_write_config_word(dev, PCI_COMMAND, cmd &
+      pci_bootloader_write_config_word(dev, PCI_COMMAND, cmd &
                             ~(PCI_COMMAND_IO|PCI_COMMAND_MEMORY));
-      pci_write_config_dword(dev, REG, ~0);
-      pci_read_config_dword(dev, REG, &ml);
-      pci_write_config_dword(dev, REG, l);
+      pci_bootloader_write_config_dword(dev, REG, ~0);
+      pci_bootloader_read_config_dword(dev, REG, &ml);
+      pci_bootloader_write_config_dword(dev, REG, l);
 
       /* Reenable the device now that we've played with
        * base registers.
        */
-      pci_write_config_word(dev, PCI_COMMAND, cmd);
+      pci_bootloader_write_config_word(dev, PCI_COMMAND, cmd);
 
       /* seems to be an unused entry skip it */
       if ( ml == 0 || ml == 0xffffffff ) continue;
