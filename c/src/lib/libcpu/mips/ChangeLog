@@ -1,5 +1,15 @@
 2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* preinstall.am: New.
+	* Makefile.am: Merge in au1x00/Makefile.am, mongoosev/Makefile.am,
+	r46xx/Makefile.am, tx39/Makefile.am, shared/Makefile.am.
+	Include preinstall.am.
+	* au1x00/Makefile.am, mongoosev/Makefile.am,
+        r46xx/Makefile.am, tx39/Makefile.am, shared/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* au1x00/vectorisrs/vectorisrs.c: Eliminate unsigned32.
 
 2005-03-14	Joel Sherrill <joel@OARcorp.com>

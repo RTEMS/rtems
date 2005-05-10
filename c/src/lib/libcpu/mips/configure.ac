@@ -32,12 +32,11 @@ AM_CONDITIONAL(mongoosev, test "$RTEMS_CPU_MODEL" = "mongoosev")
 
 AM_CONDITIONAL(au1x00, test "$RTEMS_CPU_MODEL" = "au1x00")
 
+AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
+AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
+  && test -n "$AMPOLISH3"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-au1x00/Makefile
-mongoosev/Makefile
-shared/Makefile
-r46xx/Makefile
-tx39/Makefile
 ])
 AC_OUTPUT
