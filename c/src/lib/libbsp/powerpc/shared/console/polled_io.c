@@ -47,10 +47,6 @@ void  pfree(void *);
 #include <rtems/bspIo.h>
 #endif
 
-typedef unsigned long long u64;
-typedef long long s64;
-typedef unsigned int u32;
-
 #ifndef __BOOT__
 BSP_output_char_function_type	BSP_output_char = debug_putc_onlcr;
 #endif
@@ -912,7 +908,7 @@ int printk(const char *fmt, ...) {
 
 /* Necessary to avoid including a library, and GCC won't do this inline. */
 #define div10(num, rmd)							 \
-do {	u32 t1, t2, t3;							 \
+do {	uint32_t t1, t2, t3;							 \
 	asm("lis %4,0xcccd; "						 \
 	    "addi %4,%4,0xffffcccd; "	/* Build 0xcccccccd */		 \
 	    "mulhwu %3,%0+1,%4; "	/* (num.l*cst.l).h  */		 \
@@ -950,7 +946,7 @@ do {	u32 t1, t2, t3;							 \
 #define LLONG	128		/* 64 bit argument */
 
 #if defined(__BOOT__)
-static char * number(char * str, int size, int type, u64 num)
+static char * number(char * str, int size, int type, uint64_t num)
 {
 	char fill,sign,tmp[24];
 	const char *digits="0123456789abcdef";
@@ -961,7 +957,7 @@ static char * number(char * str, int size, int type, u64 num)
 	fill = (type & ZEROPAD) ? '0' : ' ';
 	sign = 0;
 	if (type & SIGN) {
-		if ((s64)num <0) {
+		if ((int64_t)num <0) {
 			sign = '-';
 			num = -num;
 			size--;
@@ -999,7 +995,7 @@ static char * number(char * str, int size, int type, u64 num)
 int k_vsprintf(char *buf, const char *fmt, va_list args)
 {
 	int len;
-	u64 num;
+	uint64_t num;
 	int i;
 	char * str;
 	const char *s;
