@@ -1,3 +1,9 @@
+2005-05-10      Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* console/console.c, console/init68360.c, console/ns16550cfg.c
+	console/ns16550cfg.h, console/rsPMCQ1.h, include/tm27.h,
+	startup/bspstart.c, vme/vmeconfig.c: Eliminate {un|}signed{8|16|32}.
+
 2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * console/init68360.c, include/bsp.h, startup/bspstart.c: Changed
