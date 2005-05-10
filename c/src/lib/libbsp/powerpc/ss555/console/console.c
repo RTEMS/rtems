@@ -117,7 +117,7 @@ static rtems_status_code do_poll_read(
   int c;
 
   while( (c = m5xx_uart_pollRead(minor)) == -1 );
-  rw_args->buffer[0] = (unsigned8)c;
+  rw_args->buffer[0] = (uint8_t)c;
   if( rw_args->buffer[0] == '\r' )
       rw_args->buffer[0] = '\n';
   rw_args->bytes_moved = 1;
