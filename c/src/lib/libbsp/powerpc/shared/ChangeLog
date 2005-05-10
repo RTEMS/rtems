@@ -1,3 +1,10 @@
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* startup/bspstart.c, tod/todcfg.c:
+	Eliminate {un|}signed{8|16|32}.
+	* bootloader/pci.c: Eliminate {un|}signed{8|16|32}.
+	Eliminate u32.
+
 2005-05-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* pci/pci.h: Add pci_bus_count().
