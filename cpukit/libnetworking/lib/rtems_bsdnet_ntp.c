@@ -94,7 +94,7 @@ tryServer (int i, int s, rtems_bsdnet_ntp_callback_t callback, void *usr_data)
 {
 	int l = 0;
 	struct timeval tv;
-	int farlen;
+	socklen_t farlen;
 	struct sockaddr_in farAddr;
 	struct ntpPacketSmall packet;
 

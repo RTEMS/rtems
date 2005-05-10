@@ -548,7 +548,7 @@ read_len:
 			int dsmasklen;
 #endif
 			struct sockaddr_in from;
-			int fromlen;
+			socklen_t fromlen;
 
 			if ((s < 0) || vc) {
 				if (vc)
