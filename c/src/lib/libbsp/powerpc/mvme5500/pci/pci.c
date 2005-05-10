@@ -126,45 +126,47 @@ unchar func, unchar offset, unsigned int val)
   return PCIBIOS_SUCCESSFUL;
 }
 
-/* backwards compatible with other PPC board for the vmeUniverse.c */
-int pci_read_config_byte(unchar bus, unchar dev,unchar func,unchar offset,
+/* backwards compatible with other PPC board for the vmeUniverse.c 
+ * Note: We must override the default with these in pci.h
+ */
+int pci_bsp_read_config_byte(unchar bus, unchar dev,unchar func,unchar offset,
 unchar *val)
 {
   return(PCIx_read_config_byte(0, bus, dev, func, offset, val));
 }
 
-int pci_read_config_word(unchar bus, unchar dev,
+int pci_bsp_read_config_word(unchar bus, unchar dev,
 unchar func, unchar offset, unsigned short *val)
 {
   return(PCIx_read_config_word(0, bus, dev, func, offset, val));
 }
 
-int pci_read_config_dword(unchar bus, unchar dev,
+int pci_bsp_read_config_dword(unchar bus, unchar dev,
 unchar func, unchar offset, unsigned int *val) 
 {
   return(PCIx_read_config_dword(0, bus, dev, func, offset, val));
 }
 
-int pci_write_config_byte(unchar bus, unchar dev,
+int pci_bsp_write_config_byte(unchar bus, unchar dev,
 unchar func, unchar offset, unchar val) 
 {
   return(PCIx_write_config_byte(0, bus, dev, func, offset, val));
 }
 
-int pci_write_config_word(unchar bus, unchar dev,
+int pci_bsp_write_config_word(unchar bus, unchar dev,
 unchar func, unchar offset, unsigned short val) 
 {
   return(PCIx_write_config_word(0, bus, dev, func, offset, val));
 }
 
-int pci_write_config_dword(unchar bus,unchar dev,
+int pci_bsp_write_config_dword(unchar bus,unchar dev,
 unchar func, unchar offset, unsigned int val) 
 {
   return(PCIx_write_config_dword(0, bus, dev, func, offset, val));
 }
 
 
-pci_config BSP_pci_config[2] = {
+pci_bsp_config BSP_pci_config[2] = {
   {PCI0_CONFIG_ADDR,PCI0_CONFIG_DATA/*,&pci_functions*/},
        {PCI1_CONFIG_ADDR,PCI1_CONFIG_DATA/*,&pci_functions*/}
 };
@@ -172,7 +174,7 @@ pci_config BSP_pci_config[2] = {
 /*
  * This routine determines the maximum bus number in the system
  */
-void pci_initialize()
+int pci_initialize()
 {
   int PciNumber;
   unchar ucBusNumber, ucSlotNumber, ucFnNumber, ucNumFuncs;
@@ -368,6 +370,8 @@ void pci_initialize()
     }
     }
   } /* PCI number */
+
+  return PCIB_ERR_SUCCESS;
 }
 
 /*

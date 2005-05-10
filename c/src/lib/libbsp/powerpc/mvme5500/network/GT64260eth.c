@@ -126,7 +126,7 @@ enum GTeth_hash_op {
 
 #define	ET_MINLEN 64		/* minimum message length */
 
-static int GTeth_ifioctl(struct ifnet *ifp, int cmd, caddr_t data);
+static int GTeth_ifioctl(struct ifnet *ifp, u_long cmd, caddr_t data);
 static void GTeth_ifstart (struct ifnet *);
 static void GTeth_ifchange(struct GTeth_softc *sc);
 static void GTeth_init_rx_ring(struct GTeth_softc *sc);
@@ -541,7 +541,7 @@ void GT64260eth_err()
   printf(" Missed Frame errors:%-8u\n", GTeth_MissedFrame_err);
 }
 
-static int GTeth_ifioctl(struct ifnet *ifp, int cmd, caddr_t data)
+static int GTeth_ifioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
 {
   struct GTeth_softc *sc = ifp->if_softc;
   struct ifreq *ifr = (struct ifreq *) data;
