@@ -1,5 +1,12 @@
 2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add AMPOLISH3.
+	* libnetworking/rtems_telnetd/Makefile.am: Include preinstall.am.
+	* libnetworking/rtems_telnetd/preinstall.am: New.
+	* libnetworking/rtems_telnetd/telnetd.c: socklen_t.
+
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Let enable_rpcgen default to "no".
 
 2005-05-08	Ralf Corsepius <ralf.corsepius@rtems.org>
