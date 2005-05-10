@@ -163,12 +163,6 @@ struct if_data {
 #define	IF_Mbps(x)	(IF_Kbps((x) * 1000))	/* megabits/sec. */
 #define	IF_Gbps(x)	(IF_Mbps((x) * 1000))	/* gigabits/sec. */
 
-/*
- * Bit values in if_ipending
- */
-#define	IFI_RECV	1	/* I want to receive */
-#define	IFI_XMIT	2	/* I want to transmit */
-
 #define	IFQ_MAXLEN	50
 #define	IFNET_SLOWHZ	1		/* granularity is 1 second */
 
