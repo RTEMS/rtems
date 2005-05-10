@@ -263,7 +263,7 @@ void DEBUG_puts(
 )
 {
 	char *s;
-	unsigned32	Irql;
+	uint32_t	Irql;
 
 	rtems_interrupt_disable(Irql);
 
@@ -293,11 +293,11 @@ void DEBUG_puts(
  */
 void
 DEBUG_puth(
-    unsigned32 ulHexNum
+    uint32_t ulHexNum
     )
 {
 	unsigned long i,d;
-	unsigned32 Irql;
+	uint32_t Irql;
 
 	rtems_interrupt_disable(Irql);
 	

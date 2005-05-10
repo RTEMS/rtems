@@ -38,20 +38,20 @@ void Install_tm27_vector(void (*_handler)())
 
 #define Cause_tm27_intr()  \
   do { \
-    unsigned32 _clicks = 8; \
+    uint32_t _clicks = 8; \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
 
 #define Clear_tm27_intr() \
   do { \
-    unsigned32 _clicks = 0xffffffff; \
+    uint32_t _clicks = 0xffffffff; \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
    } while (0)
 
 #define Lower_tm27_intr() \
   do { \
-    unsigned32 _msr = 0; \
+    uint32_t _msr = 0; \
     _ISR_Set_level( 0 ); \
     asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
     _msr |=  0x8002; \

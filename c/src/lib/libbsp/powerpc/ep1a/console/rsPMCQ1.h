@@ -96,8 +96,8 @@
 #define PMCQ1_RAM               0x00200000
 
 /*
-#define PMCQ1_Read_EPLD( _base, _reg ) ( *((unsigned long *) ((unsigned32)_base + _reg)) )
-#define PMCQ1_Write_EPLD( _base, _reg, _data ) *((unsigned long *) ((unsigned32)_base + _reg)) = _data
+#define PMCQ1_Read_EPLD( _base, _reg ) ( *((unsigned long *) ((uint32_t)_base + _reg)) )
+#define PMCQ1_Write_EPLD( _base, _reg, _data ) *((unsigned long *) ((uint32_t)_base + _reg)) = _data
 */
 uint32_t PMCQ1_Read_EPLD( uint32_t base, uint32_t reg );
 void     PMCQ1_Write_EPLD( uint32_t base, uint32_t reg, uint32_t data );

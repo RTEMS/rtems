@@ -36,15 +36,15 @@ extern "C" {
  *  Board specific register access routines
  */
 
-unsigned8 Read_ns16550_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t Read_ns16550_register(
+  uint32_t  ulCtrlPort,
+  uint8_t   ucRegNum
 );
 
 void  Write_ns16550_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t  ulCtrlPort,
+  uint8_t   ucRegNum,
+  uint8_t   ucData
 );
 
 extern console_fns ns16550_fns_8245;

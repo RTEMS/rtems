@@ -27,7 +27,7 @@
 
 void M360ExecuteRISC( volatile m360_t *m360, uint16_t command)
 {
-	rtems_unsigned16 sr;
+	uint16_t sr;
 
 	rtems_interrupt_disable(sr);
 	while (m360->cr & M360_CR_FLG)

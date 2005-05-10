@@ -46,8 +46,8 @@ SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
 void ShowBATS(){
-  unsigned32 lower;
-  unsigned32 upper;
+  uint32_t lower;
+  uint32_t upper;
 
   __MFSPR(536, upper);
   __MFSPR(537, lower);
@@ -99,7 +99,7 @@ printk("0x%x ==> %d\n", offset, data );
  * Vital Board data Start using DATA RESIDUAL
  */
 
-unsigned32 VME_Slot1 = FALSE;
+uint32_t VME_Slot1 = FALSE;
 
 /*
  * Total memory.
@@ -200,7 +200,7 @@ void BSP_FLASH_set_page(
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -417,7 +417,7 @@ ShowBATS();
   stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
 
  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((unsigned32 *)stack) = 0;
+  *((uint32_t *)stack) = 0;
 
   /*
    * Initialize the interrupt related settings

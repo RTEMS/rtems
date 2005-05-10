@@ -21,22 +21,22 @@ typedef struct uart_reg
         unsigned char pad[7];
 } uartReg;
 
-unsigned8 Read_ns16550_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t Read_ns16550_register(
+  uint32_t  ulCtrlPort,
+  uint8_t   ucRegNum
 )
 {
   struct uart_reg *p = (struct uart_reg *)ulCtrlPort;
-  unsigned8  ucData;
+  uint8_t  ucData;
   ucData = p[ucRegNum].reg;
   asm volatile("sync");
   return ucData;
 }
 
 void  Write_ns16550_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t  ulCtrlPort,
+  uint8_t   ucRegNum,
+  uint8_t   ucData
 )
 {
   struct uart_reg *p = (struct uart_reg *)ulCtrlPort;
