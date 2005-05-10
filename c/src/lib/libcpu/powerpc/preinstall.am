@@ -38,3 +38,45 @@ $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: old-exceptions/rtems/score/ppc_offs.h
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 endif
+if shared
+$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
+	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+
+$(PROJECT_INCLUDE)/libcpu/io.h: shared/include/io.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/io.h
+
+$(PROJECT_INCLUDE)/libcpu/mmu.h: shared/include/mmu.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
+
+$(PROJECT_INCLUDE)/libcpu/page.h: shared/include/page.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/page.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/page.h
+
+$(PROJECT_INCLUDE)/libcpu/byteorder.h: shared/include/byteorder.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/byteorder.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/byteorder.h
+
+$(PROJECT_INCLUDE)/libcpu/pgtable.h: shared/include/pgtable.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/pgtable.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/pgtable.h
+
+$(PROJECT_INCLUDE)/libcpu/cpuIdent.h: shared/include/cpuIdent.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
+
+$(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
+
+$(PROJECT_INCLUDE)/libcpu/spr.h: shared/include/spr.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/spr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/spr.h
+
+$(PROJECT_INCLUDE)/libcpu/stackTrace.h: shared/src/stackTrace.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/stackTrace.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/stackTrace.h
+endif
