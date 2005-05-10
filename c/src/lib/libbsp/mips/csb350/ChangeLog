@@ -1,3 +1,8 @@
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* clock/clockdrv.c, include/bsp.h, network/network.c,
+	startup/bspstart.c, timer/timer.c: Eliminate unsigned{8|16|32}.
+
 2005-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/clockdrv.c: Add include of rtems/bspIo.h.
