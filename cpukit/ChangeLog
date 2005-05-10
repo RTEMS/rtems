@@ -1,3 +1,8 @@
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/if.h: Remove IFI_* (obsolete, unused).
+	* libnetworking/net/if_var.h: Remove if_ipending (obsolete, unused).
+
 2005-05-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/un.h: Partial update from FreeBSD.
