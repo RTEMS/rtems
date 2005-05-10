@@ -27,9 +27,6 @@
 
 #include <string.h>
 
-typedef unsigned int u32;
-
-
 
 /*
 #define DEBUG
@@ -708,7 +705,7 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
 #define REG (PCI_BASE_ADDRESS_0 + (reg<<2))
 
    u_short cmd;
-   u32 l, ml;
+   uint32_t l, ml;
    pci_read_config_word(dev, PCI_COMMAND, &cmd);
 
    for(reg=0; reg<howmany; reg=nextreg)
@@ -1194,12 +1191,12 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          pcibios_write_config_word(pdev->bus->number, 
                                    pdev->devfn, 
                                    PCI_BRIDGE_CONTROL, 
-                                   (unsigned16)( 0 ));
+                                   (uint16_t)( 0 ));
 
          pcibios_write_config_word(pdev->bus->number, 
                                    pdev->devfn, 
                                    PCI_COMMAND, 
-                                   (unsigned16)( PCI_COMMAND_IO | 
+                                   (uint16_t)( PCI_COMMAND_IO | 
                                                  PCI_COMMAND_MEMORY |
                                                  PCI_COMMAND_MASTER ));
 #endif
