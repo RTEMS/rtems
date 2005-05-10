@@ -5,6 +5,8 @@
 include $(top_srcdir)/automake/compile.am
 
 noinst_LIBRARIES =
+CLEANFILES =
+DISTCLEANFILES =
 
 if HAS_NETWORKING
 include_rtemsdir = $(includedir)/rtems
@@ -19,25 +21,6 @@ EXTRA_DIST = README
 
 all-local: $(PREINSTALL_FILES)
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
-
-if HAS_NETWORKING
-$(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
-	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/pty.h: pty.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/pty.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/pty.h
-
-$(PROJECT_INCLUDE)/rtems/telnetd.h: telnetd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/telnetd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/telnetd.h
-endif
-
-CLEANFILES = $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/automake/local.am
