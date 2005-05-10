@@ -17,7 +17,7 @@
 #include <libcpu/au1x00.h>
 
 void mips_default_isr( int vector );
-static void call_vectored_isr(CPU_Interrupt_frame *, unsigned32 , void *);
+static void call_vectored_isr(CPU_Interrupt_frame *, uint32_t , void *);
 
 #define CALL_ISR(_vector,_frame) \
   do { \
@@ -91,12 +91,12 @@ void mips_default_isr( int vector )
 
 static void call_vectored_isr(
     CPU_Interrupt_frame *frame, 
-    unsigned32 cause, 
+    uint32_t cause, 
     void *ctrlr
     )
 {
-    unsigned32 src;
-    unsigned32 mask;
+    uint32_t src;
+    uint32_t mask;
     int index;
 
     /* get mask register */
@@ -142,9 +142,9 @@ static void call_vectored_isr(
 }
 
 /* Generate a software interrupt */
-int assert_sw_irq(unsigned32 irqnum)
+int assert_sw_irq(uint32_t irqnum)
 {
-    unsigned32 cause;
+    uint32_t cause;
 
     if (irqnum <= 1) {
         mips_get_cause(cause);
@@ -158,9 +158,9 @@ int assert_sw_irq(unsigned32 irqnum)
 }
 
 /* Clear a software interrupt */
-int negate_sw_irq(unsigned32 irqnum)
+int negate_sw_irq(uint32_t irqnum)
 {
-    unsigned32 cause;
+    uint32_t cause;
 
     if (irqnum <= 1) {
         mips_get_cause(cause);
