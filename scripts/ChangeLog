@@ -1,3 +1,9 @@
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/Makefile.am: Add h8300-rtemscoff*.
+	* gccnewlib/gccnewlib.add: Let building gnat require gcc.
+	Allow building arm-rtems*-gnat.
+
 2005-05-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/gccnewlib.add: Further clean up of tools not supported

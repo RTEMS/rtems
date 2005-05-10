@@ -83,11 +83,6 @@ BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
 %define build_gnat	0
 %endif
 
-%if "%{gcc_target}" == "mips-rtems@osversion@"
-# Libffi is missing in GCC-4.0.0
-%define build_gcj      0
-%endif
-
 %if "%{gcc_target}" == "tic4x-rtems@osversion@"
 %define build_cxx	0
 %define build_gnat	0
@@ -108,6 +103,8 @@ BuildRequires:	zlib-devel
 # Building gnat requires gnat
 # This really isn't available until RedHat 8.0.  How to conditionalize this?
 BuildRequires:	gcc-gnat
+# Urgh, building gnat requires the target c-toolchain
+BuildRequires:  %{rpmprefix}%{gcc_target}-gcc < %{version}-%{release}
 %endif
 %if %build_f95
 BuildRequires: gmp-devel
