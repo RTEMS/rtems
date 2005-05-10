@@ -94,10 +94,10 @@ typedef struct
     /*
      * register addresses
      */
-    unsigned32                      ctrl_regs;
-    unsigned32                     *en_reg;
-    unsigned32                      int_mask;
-    unsigned32                      int_ctrlr;
+    uint32_t                      ctrl_regs;
+    uint32_t                     *en_reg;
+    uint32_t                      int_mask;
+    uint32_t                      int_ctrlr;
 
     /*
      * device
@@ -147,11 +147,11 @@ void au1x00_emac_rx_daemon (void *arg);
 void au1x00_emac_sendpacket (struct ifnet *ifp, struct mbuf *m);
 void au1x00_emac_stats (au1x00_emac_softc_t *sc);
 static int au1x00_emac_ioctl (struct ifnet *ifp, int command, caddr_t data);
-static void mii_write(au1x00_emac_softc_t *sc, unsigned8 reg, unsigned16 val);
-static void mii_read(au1x00_emac_softc_t *sc, unsigned8 reg, unsigned16 *val);
+static void mii_write(au1x00_emac_softc_t *sc, uint8_t reg, uint16_t val);
+static void mii_read(au1x00_emac_softc_t *sc, uint8_t reg, uint16_t *val);
 static void mii_init(au1x00_emac_softc_t *sc);
 
-static void mii_write(au1x00_emac_softc_t *sc, unsigned8 reg, unsigned16 val)
+static void mii_write(au1x00_emac_softc_t *sc, uint8_t reg, uint16_t val)
 {
     /* wait for the interface to get unbusy */
     while (AU1X00_MAC_MIICTRL(sc->ctrl_regs) & AU1X00_MAC_MIICTRL_MB) {
@@ -170,7 +170,7 @@ static void mii_write(au1x00_emac_softc_t *sc, unsigned8 reg, unsigned16 val)
     }
 }
 
-static void mii_read(au1x00_emac_softc_t *sc, unsigned8 reg, unsigned16 *val)
+static void mii_read(au1x00_emac_softc_t *sc, uint8_t reg, uint16_t *val)
 {
     /* wait for the interface to get unbusy */
     while (AU1X00_MAC_MIICTRL(sc->ctrl_regs) & AU1X00_MAC_MIICTRL_MB) {
@@ -190,7 +190,7 @@ static void mii_read(au1x00_emac_softc_t *sc, unsigned8 reg, unsigned16 *val)
 
 static void mii_init(au1x00_emac_softc_t *sc)
 {
-    unsigned16 data;
+    uint16_t data;
 
     mii_write(sc, 0, 0x8000);     /* reset */
     do {
@@ -458,11 +458,11 @@ void  au1x00_emac_init_hw(au1x00_emac_softc_t *sc)
          * The receive buffer must be aligned with a cache line
          * boundary. 
          */
-        if (mtod(m, unsigned32) & 0x1f) {
-	  unsigned32 *p = mtod(m, unsigned32 *);
-          *p = (mtod(m, unsigned32) + 0x1f) & 0x1f;
+        if (mtod(m, uint32_t) & 0x1f) {
+	  uint32_t *p = mtod(m, uint32_t *);
+          *p = (mtod(m, uint32_t) + 0x1f) & 0x1f;
         }
-        sc->rx_dma[i].addr = (mtod(m, unsigned32) & ~0xe0000000);
+        sc->rx_dma[i].addr = (mtod(m, uint32_t) & ~0xe0000000);
         sc->rx_mbuf[i] = m;
     }
 
@@ -521,7 +521,7 @@ void au1x00_emac_tx_daemon (void *arg)
     struct ifnet *ifp = &sc->arpcom.ac_if;
     struct mbuf *m;
     rtems_event_set events;
-    unsigned32 ic_base;     /* interrupt controller */
+    uint32_t ic_base;     /* interrupt controller */
 
     ic_base = AU1X00_IC0_ADDR;
 
@@ -566,7 +566,7 @@ void au1x00_emac_rx_daemon (void *arg)
     struct mbuf *m;
     struct ether_header *eh;
     rtems_event_set events;
-    unsigned32 status;
+    uint32_t status;
 
     while (1) {
         rtems_bsdnet_event_receive(
@@ -655,8 +655,8 @@ void au1x00_emac_rx_daemon (void *arg)
                  * boundary. 
                  */
 		{
-                  unsigned32 *p = mtod(m, unsigned32 *);
-                  *p = (mtod(m, unsigned32) + 0x1f) & ~0x1f;
+                  uint32_t *p = mtod(m, uint32_t *);
+                  *p = (mtod(m, uint32_t) + 0x1f) & ~0x1f;
 		}
             
             } else {
@@ -667,7 +667,7 @@ void au1x00_emac_rx_daemon (void *arg)
             }
             
             /* set up the receive dma to use the mbuf's cluster */
-            sc->rx_dma[sc->rx_head].addr = (mtod(m, unsigned32) & ~0xe0000000);
+            sc->rx_dma[sc->rx_head].addr = (mtod(m, uint32_t) & ~0xe0000000);
             au_sync();
             sc->rx_mbuf[sc->rx_head] = m;
 
@@ -690,7 +690,7 @@ void au1x00_emac_sendpacket (struct ifnet *ifp, struct mbuf *m)
     struct mbuf *l = NULL;
     unsigned int pkt_offset = 0;
     au1x00_emac_softc_t *sc = (au1x00_emac_softc_t *)ifp->if_softc;
-    unsigned32 txbuf;
+    uint32_t txbuf;
 
     /* Wait for EMAC Transmit Queue to become available. */
     while((sc->tx_dma[sc->tx_head].addr & (AU1X00_MAC_DMA_TXADDR_EN ||
@@ -701,7 +701,7 @@ void au1x00_emac_sendpacket (struct ifnet *ifp, struct mbuf *m)
     /* copy the mbuf chain into the transmit buffer */
     l = m;
 
-    txbuf = (unsigned32)sc->tx_buf[sc->tx_head];
+    txbuf = (uint32_t)sc->tx_buf[sc->tx_head];
     while (l != NULL)
     {
         
@@ -862,7 +862,7 @@ rtems_isr au1x00_emac_isr (rtems_vector_number v)
 
     /* transmit interrupt */
     while (sc->tx_dma[sc->tx_tail].addr & AU1X00_MAC_DMA_TXADDR_DN) {
-        unsigned32 status;
+        uint32_t status;
         tx_flag = 1;
         sc->tx_interrupts++;
         

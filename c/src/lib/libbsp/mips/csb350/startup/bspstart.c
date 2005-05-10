@@ -49,7 +49,7 @@ au1x00_uart_t *uart3 = (au1x00_uart_t *)AU1X00_UART3_ADDR;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -67,8 +67,8 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    unsigned32 heap_start;
-    unsigned32 heap_size;
+    uint32_t heap_start;
+    uint32_t heap_size;
 
     /* 
      * Set up the heap. 
@@ -104,10 +104,10 @@ void bsp_start( void )
   /* Place RTEMS workspace at beginning of free memory. */
   BSP_Configuration.work_space_start = (void *)&_bss_free_start;
   
-  free_mem_start = ((unsigned32)&_bss_free_start + 
+  free_mem_start = ((uint32_t)&_bss_free_start + 
                     BSP_Configuration.work_space_size);
   
-  free_mem_end = ((unsigned32)&_sdram_base + (unsigned32)&_sdram_size);
+  free_mem_end = ((uint32_t)&_sdram_base + (uint32_t)&_sdram_size);
   
   mips_set_sr( 0x7f00 );  /* all interrupts unmasked but globally off */
                           /* depend on the IRC to take care of things */

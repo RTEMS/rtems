@@ -42,8 +42,8 @@ extern "C" {
 /*
  *  Define the interrupt mechanism for Time Test 27
  */
-int assert_sw_irw(unsigned32 irqnum);
-int negate_sw_irw(unsigned32 irqnum);
+int assert_sw_irw(uint32_t irqnum);
+int negate_sw_irw(uint32_t irqnum);
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 

@@ -18,8 +18,8 @@
 #include <libcpu/au1x00.h>
 #include <rtems/bspIo.h>
 
-unsigned32 tick_interval;
-unsigned32 last_match;
+uint32_t tick_interval;
+uint32_t last_match;
 
 #define CLOCK_VECTOR AU1X00_IRQ_TOY_MATCH2
 
@@ -45,7 +45,7 @@ unsigned32 last_match;
 
 void au1x00_clock_init(void)
 {
-    unsigned32 wakemask;
+    uint32_t wakemask;
     /* Clear the trim register */ 
     AU1X00_SYS_TOYTRIM(AU1X00_SYS_ADDR) = 0; 
     

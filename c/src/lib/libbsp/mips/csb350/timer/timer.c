@@ -17,7 +17,7 @@
 #include <bsp.h>
 
 rtems_boolean Timer_driver_Find_average_overhead;
-unsigned32 tstart;
+uint32_t tstart;
 
 void Timer_initialize()
 {
@@ -32,8 +32,8 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  unsigned32  total;
-  unsigned32  cnt;
+  uint32_t  total;
+  uint32_t  cnt;
 
   asm volatile ("mfc0 %0, $9\n" : "=r" (cnt));
 
