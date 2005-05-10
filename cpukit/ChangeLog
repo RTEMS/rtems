@@ -1,5 +1,10 @@
 2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/svc.h: Cosmetical update from FreeBSD.
+	* librpc/src/rpc/clnt_tcp.c, librpc/src/rpc/clnt_udp.c,
+	librpc/src/rpc/pmap_rmt.c, librpc/src/rpc/rtime.c,
+	librpc/src/rpc/svc_tcp.c, librpc/src/rpc/svc_udp.c: socklen_t.
+	* ftpd/ftpd.c: socklen_t.
 	* libnetworking/lib/rtems_bsdnet_ntp.c: socklen_t.
 	* libnetworking/libc/rcmd.c: socklen_t.
 	* libnetworking/libc/res_send.c: socklen_t.
