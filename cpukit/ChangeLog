@@ -1,5 +1,6 @@
 2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* httpd/socket.c: socklen_t.
 	* librpc/include/rpc/svc.h: Cosmetical update from FreeBSD.
 	* librpc/src/rpc/clnt_tcp.c, librpc/src/rpc/clnt_udp.c,
 	librpc/src/rpc/pmap_rmt.c, librpc/src/rpc/rtime.c,
