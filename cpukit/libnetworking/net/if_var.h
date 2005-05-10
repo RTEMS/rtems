@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	From: @(#)if.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: src/sys/net/if_var.h,v 1.94 2005/03/01 10:59:14 glebius Exp $
+ * $FreeBSD: src/sys/net/if_var.h,v 1.95 2005/04/20 09:30:54 glebius Exp $
  */
  
 /*
@@ -104,7 +104,6 @@ struct ifnet {
 	short	if_unit;		/* sub-unit for lower level driver */
 	short	if_timer;		/* time 'til if_watchdog called */
 	int	if_flags;		/* up/down, broadcast, etc. */
-	int	if_ipending;		/* interrupts pending */
 	void	*if_linkmib;		/* link-type-specific MIB data */
 	size_t	if_linkmiblen;		/* length of above data */
 	struct	if_data if_data;
