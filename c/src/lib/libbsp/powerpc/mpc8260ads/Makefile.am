@@ -63,6 +63,7 @@ vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+network_CPPFLAGS += -D__BSD_VISIBLE
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/network.c network/if_hdlcsubr.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)

@@ -1,3 +1,7 @@
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add -D__BSD_VISIBLE to network_CPPFLAGS.
+
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         PR 779/bsp
