@@ -26,7 +26,7 @@ AC_ARG_ENABLE(rpcgen,
   yes) enable_rpcgen=yes ;;
   no) enable_rpcgen=no ;;
   *)  enable_rpcgen=no ;;
-esac],[enable_rpcgen=yes]) 
+esac],[enable_rpcgen=no]) 
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
