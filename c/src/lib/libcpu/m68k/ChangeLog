@@ -1,5 +1,13 @@
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Merge-in shared/Makefile.am.
+	* preinstall.am: New.
+	* shared/Makefile.am: Remove.
+	* configure.ac: Remove shared/Makefile.
+	Add AMPOLISH3.
+
+2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* mcf5282/include/Makefile.am: Remove (unused).
 
 2005-04-26	Joel Sherrill <joel@OARcorp.com>
