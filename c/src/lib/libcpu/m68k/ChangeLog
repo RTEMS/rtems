@@ -1,5 +1,12 @@
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Merge-in mcf5272/Makefile.am.
+	* preinstall.am: Regenerate.
+	* mcf5272/Makefile.am: Remove.
+	* configure.ac: Remove mcf5272/Makefile.
+
+2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Merge-in mcf5206/Makefile.am.
 	* preinstall.am: Regenerate.
 	* mcf5206/Makefile.am: Remove.
