@@ -1,5 +1,12 @@
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Merge-in sh7045/Makefile.am.
+	* preinstall.am: Regenerate.
+	* sh7045/Makefile.am: Remove.
+	* configure.ac: Remove sh7045/Makefile.
+
+2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Merge-in sh7032/Makefile.am.
 	* preinstall.am: New.
 	* sh7032/Makefile.am: Remove.
