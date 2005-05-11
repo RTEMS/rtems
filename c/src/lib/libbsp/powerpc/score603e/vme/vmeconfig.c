@@ -26,7 +26,7 @@ void BSP_vme_config(void) __attribute__ (( weak, alias("__BSP_default_vme_config
 
 SPR_RO(DBAT0U)
 
-extern unsigned32 VME_Slot1;
+extern uint32_t VME_Slot1;
 
 void
 __BSP_default_vme_config(void)
