@@ -10,10 +10,7 @@ CLEANFILES =
 DISTCLEANFILES =
 EXTRA_DIST =
 
-SUBDIRS = s3c2400
-
 noinst_PROGRAMS =
-
 
 ## shared/include
 if shared
@@ -29,9 +26,7 @@ shared_arm920_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if at91rm9200
-include_at91rm9200dir = $(includedir)/at91rm9200
-include_HEADERS =
-include_HEADERS += at91rm9200/include/at91rm9200.h at91rm9200/include/at91rm9200_dbgu.h \
+include_HEADERS = at91rm9200/include/at91rm9200.h at91rm9200/include/at91rm9200_dbgu.h \
     at91rm9200/include/at91rm9200_emac.h at91rm9200/include/at91rm9200_gpio.h \
     at91rm9200/include/at91rm9200_mem.h at91rm9200/include/at91rm9200_pmc.h at91rm9200/include/bits.h
 
@@ -71,7 +66,6 @@ at91rm9200_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mc9328mxl
-include_mc9328mxldir = $(includedir)/mc9328mxl
 include_HEADERS = mc9328mxl/include/mc9328mxl.h
 
 ## mc9328mxl/clock
@@ -97,9 +91,34 @@ mc9328mxl_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mc9328mxl_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if s3c2400
+include_HEADERS = s3c2400/include/s3c2400.h
+
+## s3c2400/clock
+noinst_PROGRAMS += s3c2400/clock.rel
+s3c2400_clock_rel_SOURCES = s3c2400/clock/clockdrv.c
+s3c2400_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+s3c2400_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## s3c2400/timer
+noinst_PROGRAMS += s3c2400/timer.rel
+s3c2400_timer_rel_SOURCES = s3c2400/timer/timer.c
+s3c2400_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+s3c2400_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## s3c2400/interrupt
+include_HEADERS += s3c2400/irq/irq.h
+
+noinst_PROGRAMS += s3c2400/irq.rel
+s3c2400_irq_rel_SOURCES = s3c2400/irq/irq.c s3c2400/irq/bsp_irq_init.c \
+    ../../libbsp/arm/shared/irq/irq_init.c s3c2400/irq/bsp_irq_asm.S \
+    ../../libbsp/arm/shared/irq/irq_asm.S s3c2400/irq/irq.h
+s3c2400_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
+s3c2400_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
 
-include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
