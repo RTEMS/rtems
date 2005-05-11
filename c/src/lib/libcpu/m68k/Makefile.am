@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/compile.am
 
-SUBDIRS = mcf5206 mcf5272 mcf5282
+SUBDIRS = mcf5272 mcf5282
 
 CLEANFILES =
 DISTCLEANFILES =
@@ -42,6 +42,7 @@ shared_misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if m68040
+## m68040/fpsp
 noinst_PROGRAMS += m68040/fpsp.rel
 m68040_fpsp_rel_SOURCES = m68040/fpsp/rtems_fpsp.c m68040/fpsp/bindec.S \
     m68040/fpsp/binstr.S m68040/fpsp/bugfix.S m68040/fpsp/decbin.S \
@@ -64,6 +65,37 @@ m68040_fpsp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_HEADERS = m68040/fpsp/fpsp.defs
 endif
 EXTRA_DIST = m68040/fpsp/README
+
+if mcf5206
+# mcf5206/include
+include_mcf5206dir = $(includedir)/mcf5206
+include_mcf5206_HEADERS = mcf5206/include/mcf5206e.h mcf5206/include/mcfmbus.h \
+    mcf5206/include/mcfuart.h
+
+## mcf5206/clock
+noinst_PROGRAMS += mcf5206/clock.rel
+mcf5206_clock_rel_SOURCES = mcf5206/clock/ckinit.c
+mcf5206_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf5206_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mcf5206/mcfuart
+noinst_PROGRAMS += mcf5206/mcfuart.rel
+mcf5206_mcfuart_rel_SOURCES = mcf5206/console/mcfuart.c
+mcf5206_mcfuart_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf5206_mcfuart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mcf5206/mbus
+noinst_PROGRAMS += mcf5206/mbus.rel
+mcf5206_mbus_rel_SOURCES = mcf5206/mbus/mcfmbus.c
+mcf5206_mbus_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf5206_mbus_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mcf5206/timer
+noinst_PROGRAMS += mcf5206/timer.rel
+mcf5206_timer_rel_SOURCES = mcf5206/timer/timer.c mcf5206/timer/timerisr.S
+mcf5206_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf5206_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
 
 include $(srcdir)/preinstall.am
 
