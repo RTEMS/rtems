@@ -98,8 +98,6 @@ route_usrreq(so, req, m, nam, control)
 			route_cb.ip_count--;
 		else if (af == AF_IPX)
 			route_cb.ipx_count--;
-		else if (af == AF_NS)
-			route_cb.ns_count--;
 		else if (af == AF_ISO)
 			route_cb.iso_count--;
 		route_cb.any_count--;
@@ -118,8 +116,6 @@ route_usrreq(so, req, m, nam, control)
 			route_cb.ip_count++;
 		else if (af == AF_IPX)
 			route_cb.ipx_count++;
-		else if (af == AF_NS)
-			route_cb.ns_count++;
 		else if (af == AF_ISO)
 			route_cb.iso_count++;
 		rp->rcb_faddr = &route_src;
