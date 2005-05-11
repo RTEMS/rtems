@@ -49,6 +49,5 @@ AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-mcf5282/Makefile
 ])
 AC_OUTPUT
