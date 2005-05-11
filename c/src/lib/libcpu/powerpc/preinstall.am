@@ -33,17 +33,17 @@ $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
+$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
+	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+
 if OLD_EXCEPTIONS
 $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: old-exceptions/rtems/score/ppc_offs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 endif
 if shared
-$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
-	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-
 $(PROJECT_INCLUDE)/libcpu/io.h: shared/include/io.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/io.h
@@ -79,4 +79,45 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/spr.h
 $(PROJECT_INCLUDE)/libcpu/stackTrace.h: shared/src/stackTrace.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/stackTrace.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/stackTrace.h
+endif
+if mpc5xx
+$(PROJECT_INCLUDE)/mpc5xx/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc5xx
+	@: > $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp)
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mpc5xx.h: mpc5xx/include/mpc5xx.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc5xx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc5xx.h
+
+$(PROJECT_INCLUDE)/mpc5xx/console.h: mpc5xx/include/console.h $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc5xx/console.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc5xx/console.h
+
+$(PROJECT_INCLUDE)/libcpu/raw_exception.h: mpc5xx/exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+
+$(PROJECT_INCLUDE)/libcpu/irq.h: mpc5xx/irq/irq.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/irq.h
+
+$(PROJECT_INCLUDE)/libcpu/vectors.h: mpc5xx/vectors/vectors.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/vectors.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/vectors.h
+endif
+if mpc505
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/ictrl.h: mpc505/ictrl/ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ictrl.h
 endif
