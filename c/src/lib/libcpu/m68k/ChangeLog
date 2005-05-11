@@ -1,5 +1,11 @@
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Merge-in m68040/Makefile.am.
+	* m68040/Makefile.am: Remove.
+	* configure.ac: Remove m68040/Makefile.
+
+2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Merge-in shared/Makefile.am.
 	* preinstall.am: New.
 	* shared/Makefile.am: Remove.
