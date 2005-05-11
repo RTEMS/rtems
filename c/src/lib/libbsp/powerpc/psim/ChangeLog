@@ -1,3 +1,7 @@
+2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* include/tm27.h: Elininate unsigned32.
+
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         PR 779/bsp
