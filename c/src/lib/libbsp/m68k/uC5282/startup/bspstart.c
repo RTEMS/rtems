@@ -44,6 +44,11 @@ char *rtems_progname;
 #define VME_TWO_BASE    0x31000000
 
 /*
+ * Read/write copy of vector-base register
+ */
+void *_VBR;
+
+/*
  * CPU-space access
  * The NOP after writing the CACR is there to address the following issue as
  * described in "Device Errata MCF5282DE", Rev. 1.7, 09/2004:
