@@ -138,3 +138,34 @@ $(PROJECT_INCLUDE)/libcpu/c_clock.h: mpc6xx/clock/c_clock.h $(PROJECT_INCLUDE)/l
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/c_clock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/c_clock.h
 endif
+if mpc8xx
+$(PROJECT_INCLUDE)/mpc8xx/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc8xx
+	@: > $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mpc8xx.h: mpc8xx/include/mpc8xx.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8xx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx.h
+
+$(PROJECT_INCLUDE)/mpc8xx/console.h: mpc8xx/include/console.h $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8xx/console.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx/console.h
+
+$(PROJECT_INCLUDE)/mpc8xx/cpm.h: mpc8xx/include/cpm.h $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8xx/cpm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx/cpm.h
+
+$(PROJECT_INCLUDE)/libcpu/raw_exception.h: mpc8xx/exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+
+$(PROJECT_INCLUDE)/mpc8xx/mmu.h: mpc8xx/include/mmu.h $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8xx/mmu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx/mmu.h
+endif
