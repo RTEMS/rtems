@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/compile.am
 
-SUBDIRS = mcf5272 mcf5282
+SUBDIRS = mcf5282
 
 CLEANFILES =
 DISTCLEANFILES =
@@ -95,6 +95,24 @@ noinst_PROGRAMS += mcf5206/timer.rel
 mcf5206_timer_rel_SOURCES = mcf5206/timer/timer.c mcf5206/timer/timerisr.S
 mcf5206_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mcf5206_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+if mcf5272
+## mcf5272/include
+include_mcf5272dir = $(includedir)/mcf5272
+include_mcf5272_HEADERS = mcf5272/include/mcf5272.h
+
+## clock
+noinst_PROGRAMS += mcf5272/clock.rel
+mcf5272_clock_rel_SOURCES = mcf5272/clock/ckinit.c
+mcf5272_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf5272_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## timer
+noinst_PROGRAMS += mcf5272/timer.rel
+mcf5272_timer_rel_SOURCES = mcf5272/timer/timer.c mcf5272/timer/timerisr.S
+mcf5272_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf5272_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 include $(srcdir)/preinstall.am
