@@ -6,8 +6,6 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/compile.am
 
-SUBDIRS = mcf5282
-
 CLEANFILES =
 DISTCLEANFILES =
 noinst_PROGRAMS =
@@ -115,7 +113,12 @@ mcf5272_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mcf5272_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if mcf5282
+## mcf5282/include
+include_mcf5282dir = $(includedir)/mcf5282
+include_mcf5282_HEADERS = mcf5282/include/mcf5282.h
+endif
+
 include $(srcdir)/preinstall.am
 
-include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
