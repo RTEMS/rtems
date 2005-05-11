@@ -1,3 +1,9 @@
+2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* preinstall.am: New.
+	* Makefile.am: Include preinstall.am.
+	* configure.ac: Reflect changes above.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
