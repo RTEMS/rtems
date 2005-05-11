@@ -13,7 +13,7 @@ include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
     rtems/powerpc/debugmod.h rtems/powerpc/powerpc.h
 
-SUBDIRS = mpc8260 ppc403
+SUBDIRS = ppc403
 
 
 include_rtems_scoredir = $(includedir)/rtems/score
@@ -227,6 +227,60 @@ noinst_PROGRAMS += mpc8xx/timer.rel
 mpc8xx_timer_rel_SOURCES = mpc8xx/timer/timer.c
 mpc8xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+if mpc8260
+include_mpc8260dir = $(includedir)/mpc8260
+
+include_HEADERS = mpc8260/include/mpc8260.h
+
+## mpc8260/console-generic
+include_mpc8260_HEADERS = mpc8260/include/console.h
+
+noinst_PROGRAMS += mpc8260/console-generic.rel
+mpc8260_console_generic_rel_SOURCES = mpc8260/console-generic/console-generic.c \
+    mpc8260/include/console.h
+mpc8260_console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8260_console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8260/clock
+noinst_PROGRAMS += mpc8260/clock.rel
+mpc8260_clock_rel_SOURCES = mpc8260/clock/clock.c
+mpc8260_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8260_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8260/cpm
+include_mpc8260_HEADERS += mpc8260/include/cpm.h
+
+noinst_PROGRAMS += mpc8260/cpm.rel
+mpc8260_cpm_rel_SOURCES = mpc8260/cpm/cp.c mpc8260/cpm/dpram.c mpc8260/cpm/brg.c \
+    mpc8260/include/cpm.h
+mpc8260_cpm_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8260_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8260/exceptions
+include_libcpu_HEADERS = mpc8260/exceptions/raw_exception.h
+
+noinst_PROGRAMS += mpc8260/exceptions.rel
+mpc8260_exceptions_rel_SOURCES = mpc8260/exceptions/raw_exception.c \
+    mpc8260/exceptions/asm_utils.S \
+    mpc8260/exceptions/raw_exception.h
+mpc8260_exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8260_exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8260/mmu
+include_mpc8260_HEADERS += mpc8260/include/mmu.h
+
+noinst_PROGRAMS += mpc8260/mmu.rel
+mpc8260_mmu_rel_SOURCES = mpc8260/mmu/mmu.c mpc8260/include/mmu.h
+mpc8260_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8260_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8260/timer
+noinst_PROGRAMS += mpc8260/timer.rel
+mpc8260_timer_rel_SOURCES = mpc8260/timer/timer.c
+mpc8260_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8260_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
