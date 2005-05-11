@@ -13,7 +13,7 @@ include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
     rtems/powerpc/debugmod.h rtems/powerpc/powerpc.h
 
-SUBDIRS = mpc8260 mpc8xx ppc403
+SUBDIRS = mpc8260 ppc403
 
 
 include_rtems_scoredir = $(includedir)/rtems/score
@@ -176,6 +176,57 @@ noinst_PROGRAMS += mpc6xx/timer.rel
 mpc6xx_timer_rel_SOURCES = mpc6xx/timer/timer.c
 mpc6xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc6xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+if mpc8xx
+include_mpc8xxdir = $(includedir)/mpc8xx
+
+include_HEADERS = mpc8xx/include/mpc8xx.h
+
+## mpc8xx/clock
+noinst_PROGRAMS += mpc8xx/clock.rel
+mpc8xx_clock_rel_SOURCES = mpc8xx/clock/clock.c
+mpc8xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8xx/console-generic
+include_mpc8xx_HEADERS = mpc8xx/include/console.h
+
+noinst_PROGRAMS += mpc8xx/console-generic.rel
+mpc8xx_console_generic_rel_SOURCES = mpc8xx/console-generic/console-generic.c
+mpc8xx_console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8xx_console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8xx/cpm
+include_mpc8xx_HEADERS += mpc8xx/include/cpm.h
+
+noinst_PROGRAMS += mpc8xx/cpm.rel
+mpc8xx_cpm_rel_SOURCES = mpc8xx/cpm/cp.c mpc8xx/cpm/dpram.c
+mpc8xx_cpm_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8xx_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8xx/exceptions
+include_libcpu_HEADERS = mpc8xx/exceptions/raw_exception.h
+
+noinst_PROGRAMS += mpc8xx/exceptions.rel
+mpc8xx_exceptions_rel_SOURCES = mpc8xx/exceptions/raw_exception.c \
+    mpc8xx/exceptions/asm_utils.S
+mpc8xx_exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8xx_exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8xx/mmu
+include_mpc8xx_HEADERS += mpc8xx/include/mmu.h
+
+noinst_PROGRAMS += mpc8xx/mmu.rel
+mpc8xx_mmu_rel_SOURCES = mpc8xx/mmu/mmu.c
+mpc8xx_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8xx_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc8xx/timer
+noinst_PROGRAMS += mpc8xx/timer.rel
+mpc8xx_timer_rel_SOURCES = mpc8xx/timer/timer.c
+mpc8xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc8xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
