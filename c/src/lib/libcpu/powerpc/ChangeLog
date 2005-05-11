@@ -1,5 +1,12 @@
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Merge-in mpc6xx/Makefile.am.
+	* configure.ac: Remove mpc6xx/Makefile.
+	* preinstall.am: Regenerate.
+	* mpc6xx/Makefile.am: Remove.
+
+2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Merge-in mpc5xx/Makefile.am.
 	Merge-in mpc505/Makefile.am.
 	* configure.ac: Remove mpc5xx/Makefile.
