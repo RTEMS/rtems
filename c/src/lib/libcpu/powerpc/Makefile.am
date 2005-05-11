@@ -13,11 +13,11 @@ include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
     rtems/powerpc/debugmod.h rtems/powerpc/powerpc.h
 
-SUBDIRS = mpc5xx mpc505 mpc6xx mpc8260 mpc8xx ppc403
+SUBDIRS = mpc6xx mpc8260 mpc8xx ppc403
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include_rtems_scoredir = $(includedir)/rtems/score
+include_libcpudir = $(includedir)/libcpu
 
 if OLD_EXCEPTIONS
 include_rtems_score_HEADERS = old-exceptions/rtems/score/ppc_offs.h
@@ -41,8 +41,6 @@ endif
 
 # shared/include
 if shared
-include_libcpudir = $(includedir)/libcpu
-
 include_libcpu_HEADERS = shared/include/io.h shared/include/mmu.h shared/include/page.h \
     shared/include/byteorder.h shared/include/pgtable.h
 
@@ -73,6 +71,79 @@ include_libcpu_HEADERS += shared/include/spr.h
 include_libcpu_HEADERS += shared/src/stackTrace.h
 endif
 
+if mpc5xx
+include_mpc5xxdir = $(includedir)/mpc5xx
+
+include_HEADERS = mpc5xx/include/mpc5xx.h
+
+## mpc5xx/clock
+noinst_PROGRAMS += mpc5xx/clock.rel
+mpc5xx_clock_rel_SOURCES = mpc5xx/clock/clock.c
+mpc5xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc5xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc5xx/console-generic
+include_mpc5xx_HEADERS = mpc5xx/include/console.h
+
+noinst_PROGRAMS += mpc5xx/console-generic.rel
+mpc5xx_console_generic_rel_SOURCES = mpc5xx/console-generic/console-generic.c
+mpc5xx_console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc5xx_console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc5xx/exceptions
+include_libcpu_HEADERS = mpc5xx/exceptions/raw_exception.h
+
+noinst_PROGRAMS += mpc5xx/exceptions.rel
+mpc5xx_exceptions_rel_SOURCES = mpc5xx/exceptions/raw_exception.c
+mpc5xx_exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc5xx_exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc5xx/irq
+include_libcpu_HEADERS += mpc5xx/irq/irq.h
+
+noinst_PROGRAMS += mpc5xx/irq.rel
+mpc5xx_irq_rel_SOURCES = mpc5xx/irq/irq.c mpc5xx/irq/irq_init.c mpc5xx/irq/irq_asm.S
+mpc5xx_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc5xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc5xx/timer
+noinst_PROGRAMS += mpc5xx/timer.rel
+mpc5xx_timer_rel_SOURCES = mpc5xx/timer/timer.c
+mpc5xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc5xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc5xx/vectors
+include_libcpu_HEADERS += mpc5xx/vectors/vectors.h
+
+noinst_PROGRAMS += mpc5xx/vectors.rel
+mpc5xx_vectors_rel_SOURCES = mpc5xx/vectors/vectors_init.c mpc5xx/vectors/vectors.S
+mpc5xx_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc5xx_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+if mpc505
+# mpc505/ictrl
+include_HEADERS = mpc505/ictrl/ictrl.h
+
+noinst_PROGRAMS += mpc505/ictrl.rel
+mpc505_ictrl_rel_SOURCES = mpc505/ictrl/ictrl.c
+mpc505_ictrl_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc505_ictrl_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc505/timer
+noinst_PROGRAMS += mpc505/timer.rel
+mpc505_timer_rel_SOURCES = mpc505/timer/timer.c
+mpc505_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc505_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc505/vector
+noinst_PROGRAMS += mpc505/vectors.rel
+mpc505_vectors_rel_SOURCES = mpc505/vectors/vectors.S
+mpc505_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mpc505_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
 
