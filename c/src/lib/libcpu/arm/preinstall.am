@@ -21,3 +21,46 @@ $(PROJECT_INCLUDE)/libcpu/mmu.h: shared/include/mmu.h $(PROJECT_INCLUDE)/libcpu/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
 endif
+if at91rm9200
+$(PROJECT_INCLUDE)/at91rm9200/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/at91rm9200
+	@: > $(PROJECT_INCLUDE)/at91rm9200/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/at91rm9200/$(dirstamp)
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/at91rm9200.h: at91rm9200/include/at91rm9200.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200.h
+
+$(PROJECT_INCLUDE)/at91rm9200_dbgu.h: at91rm9200/include/at91rm9200_dbgu.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_dbgu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_dbgu.h
+
+$(PROJECT_INCLUDE)/at91rm9200_emac.h: at91rm9200/include/at91rm9200_emac.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_emac.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_emac.h
+
+$(PROJECT_INCLUDE)/at91rm9200_gpio.h: at91rm9200/include/at91rm9200_gpio.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_gpio.h
+
+$(PROJECT_INCLUDE)/at91rm9200_mem.h: at91rm9200/include/at91rm9200_mem.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_mem.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_mem.h
+
+$(PROJECT_INCLUDE)/at91rm9200_pmc.h: at91rm9200/include/at91rm9200_pmc.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_pmc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_pmc.h
+
+$(PROJECT_INCLUDE)/bits.h: at91rm9200/include/bits.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bits.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bits.h
+
+$(PROJECT_INCLUDE)/irq.h: at91rm9200/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+endif
