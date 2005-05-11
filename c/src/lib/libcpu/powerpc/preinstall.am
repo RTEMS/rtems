@@ -121,3 +121,20 @@ $(PROJECT_INCLUDE)/ictrl.h: mpc505/ictrl/ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ictrl.h
 endif
+if mpc6xx
+$(PROJECT_INCLUDE)/libcpu/raw_exception.h: mpc6xx/exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+
+$(PROJECT_INCLUDE)/libcpu/bat.h: mpc6xx/mmu/bat.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/bat.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/bat.h
+
+$(PROJECT_INCLUDE)/libcpu/pte121.h: mpc6xx/mmu/pte121.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/pte121.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/pte121.h
+
+$(PROJECT_INCLUDE)/libcpu/c_clock.h: mpc6xx/clock/c_clock.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/c_clock.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/c_clock.h
+endif
