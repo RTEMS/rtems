@@ -57,7 +57,7 @@ SECTIONS
          */
         . = ALIGN (16);
         PROVIDE(_rodata_start = . );
-        *(.rodata)
+        *(.rodata*)
         *(.gnu.linkonce.r*)
         PROVIDE(_erodata = . );
 

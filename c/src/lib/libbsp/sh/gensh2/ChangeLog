@@ -1,3 +1,7 @@
+2005-05-11	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Add .rodata.* sections.
+
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmds.ram, startup/linkcmds.rom: Fix
