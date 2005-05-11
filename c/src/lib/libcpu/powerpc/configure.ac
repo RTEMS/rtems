@@ -78,7 +78,6 @@ AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
 AC_CONFIG_FILES([Makefile
 mpc8xx/Makefile
 ppc403/Makefile
-mpc6xx/Makefile
 mpc8260/Makefile
 ])
 AC_OUTPUT
