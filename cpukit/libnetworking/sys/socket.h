@@ -145,7 +145,7 @@ struct	sockwakeup {
 #define	AF_IMPLINK	3		/* arpanet imp addresses */
 #define	AF_PUP		4		/* pup protocols: e.g. BSP */
 #define	AF_CHAOS	5		/* mit CHAOS protocols */
-#define	AF_NS		6		/* XEROX NS protocols */
+#define	AF_NETBIOS	6		/* SMB protocols */
 #define	AF_ISO		7		/* ISO protocols */
 #define	AF_OSI		AF_ISO
 #define	AF_ECMA		8		/* European computer manufacturers */
@@ -203,7 +203,7 @@ struct sockproto {
 #define	PF_IMPLINK	AF_IMPLINK
 #define	PF_PUP		AF_PUP
 #define	PF_CHAOS	AF_CHAOS
-#define	PF_NS		AF_NS
+#define	PF_NETBIOS	AF_NETBIOS
 #define	PF_ISO		AF_ISO
 #define	PF_OSI		AF_ISO
 #define	PF_ECMA		AF_ECMA
