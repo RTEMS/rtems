@@ -43,9 +43,12 @@ AM_CONDITIONAL(mcpu32p, test "$RTEMS_CPU_MODEL" = "m68360" \
 AM_CONDITIONAL(mcf5272, test "$RTEMS_CPU_MODEL" = "mcf5272" )
 AM_CONDITIONAL(mcf5282, test "$RTEMS_CPU_MODEL" = "mcf5282" )
 
+AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
+AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
+  && test -n "$AMPOLISH3"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-shared/Makefile
 m68040/Makefile
 mcf5206/Makefile
 mcf5272/Makefile
