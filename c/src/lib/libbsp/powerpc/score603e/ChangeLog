@@ -1,3 +1,7 @@
+2005-05-11	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Add .data.* sections.
+
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* vme/vmeconfig.c: Eliminate unsigned32.

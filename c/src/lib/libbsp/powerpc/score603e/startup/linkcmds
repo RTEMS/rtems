@@ -98,7 +98,8 @@ SECTIONS
   PROVIDE (sdata = .);
   .data    :
   {
-    *(.data)
+   *(.data)
+    *(.data.*)
     *(.gnu.linkonce.d.*)
     CONSTRUCTORS
   } >RAM
