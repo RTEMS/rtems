@@ -33,6 +33,5 @@ AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-sh7750/Makefile
 ])
 AC_OUTPUT
