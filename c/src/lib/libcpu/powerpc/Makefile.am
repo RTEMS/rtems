@@ -13,9 +13,6 @@ include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
     rtems/powerpc/debugmod.h rtems/powerpc/powerpc.h
 
-SUBDIRS = ppc403
-
-
 include_rtems_scoredir = $(includedir)/rtems/score
 include_libcpudir = $(includedir)/libcpu
 
@@ -69,6 +66,54 @@ shared_stack_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_libcpu_HEADERS += shared/include/spr.h
 include_libcpu_HEADERS += shared/src/stackTrace.h
+endif
+
+if ppc403
+## ppc403/clock
+noinst_PROGRAMS += ppc403/clock.rel
+ppc403_clock_rel_SOURCES = ppc403/clock/clock.c
+ppc403_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+ppc403_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## ppc403/console
+noinst_PROGRAMS += ppc403/console.rel
+if ppc405
+ppc403_console_rel_SOURCES = ppc403/console/console405.c
+else
+ppc403_console_rel_SOURCES = ppc403/console/console.c
+endif
+ppc403_console_rel_CPPFLAGS = $(AM_CPPFLAGS)
+ppc403_console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## ppc403/ictrl
+include_HEADERS = ppc403/ictrl/ictrl.h
+
+noinst_PROGRAMS += ppc403/ictrl.rel
+ppc403_ictrl_rel_SOURCES = ppc403/ictrl/ictrl.c ppc403/ictrl/ictrl.h
+ppc403_ictrl_rel_CPPFLAGS = $(AM_CPPFLAGS)
+ppc403_ictrl_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## ppc403/timer
+noinst_PROGRAMS += ppc403/timer.rel
+ppc403_timer_rel_SOURCES = ppc403/timer/timer.c
+ppc403_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+ppc403_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## ppc403/tty_drv
+if ppc405
+include_HEADERS += ppc403/tty_drv/tty_drv.h
+
+noinst_PROGRAMS += ppc403/tty_drv.rel
+ppc403_tty_drv_rel_SOURCES = ppc403/tty_drv/tty_drv.c ppc403/tty_drv/tty_drv.h
+ppc403_tty_drv_rel_CPPFLAGS = $(AM_CPPFLAGS)
+ppc403_tty_drv_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+## ppc403/vectors
+noinst_PROGRAMS += ppc403/vectors.rel
+ppc403_vectors_rel_SOURCES = ppc403/vectors/vectors.S ppc403/vectors/align_h.S
+ppc403_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
+ppc403_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mpc5xx
@@ -287,5 +332,4 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
 
-include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
