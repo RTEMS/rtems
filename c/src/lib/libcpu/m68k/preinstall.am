@@ -22,3 +22,31 @@ $(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
 
 endif
+if mcf5206
+$(PROJECT_INCLUDE)/mcf5206/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5206
+	@: > $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mcf5206/mcf5206e.h: mcf5206/include/mcf5206e.h $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5206/mcf5206e.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/mcf5206e.h
+
+$(PROJECT_INCLUDE)/mcf5206/mcfmbus.h: mcf5206/include/mcfmbus.h $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5206/mcfmbus.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/mcfmbus.h
+
+$(PROJECT_INCLUDE)/mcf5206/mcfuart.h: mcf5206/include/mcfuart.h $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
+endif
+if mcf5272
+$(PROJECT_INCLUDE)/mcf5272/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5272
+	@: > $(PROJECT_INCLUDE)/mcf5272/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5272/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mcf5272/mcf5272.h: mcf5272/include/mcf5272.h $(PROJECT_INCLUDE)/mcf5272/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5272/mcf5272.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5272/mcf5272.h
+endif
