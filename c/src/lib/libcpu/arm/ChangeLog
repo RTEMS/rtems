@@ -1,5 +1,12 @@
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Merge-in at91rm9200/Makefile.am.
+	* preinstall.am: Regenerate.
+	* at91rm9200/Makefile.am: Remove.
+	* configure.ac: Remove at91rm9200/Makefile.
+
+2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Merge-in shared/Makefile.am.
 	* preinstall.am: New.
 	* shared/Makefile.am: Remove.
