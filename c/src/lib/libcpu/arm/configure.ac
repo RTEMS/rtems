@@ -36,7 +36,6 @@ AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-at91rm9200/Makefile
 mc9328mxl/Makefile
 s3c2400/Makefile
 ])
