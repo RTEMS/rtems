@@ -22,11 +22,6 @@ $(PROJECT_INCLUDE)/libcpu/mmu.h: shared/include/mmu.h $(PROJECT_INCLUDE)/libcpu/
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
 endif
 if at91rm9200
-$(PROJECT_INCLUDE)/at91rm9200/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/at91rm9200
-	@: > $(PROJECT_INCLUDE)/at91rm9200/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/at91rm9200/$(dirstamp)
-
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
@@ -65,11 +60,6 @@ $(PROJECT_INCLUDE)/irq.h: at91rm9200/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
 endif
 if mc9328mxl
-$(PROJECT_INCLUDE)/mc9328mxl/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mc9328mxl
-	@: > $(PROJECT_INCLUDE)/mc9328mxl/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mc9328mxl/$(dirstamp)
-
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
@@ -80,6 +70,20 @@ $(PROJECT_INCLUDE)/mc9328mxl.h: mc9328mxl/include/mc9328mxl.h $(PROJECT_INCLUDE)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mc9328mxl.h
 
 $(PROJECT_INCLUDE)/irq.h: mc9328mxl/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+endif
+if s3c2400
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/s3c2400.h: s3c2400/include/s3c2400.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/s3c2400.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/s3c2400.h
+
+$(PROJECT_INCLUDE)/irq.h: s3c2400/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
 endif
