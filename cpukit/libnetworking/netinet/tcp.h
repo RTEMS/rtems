@@ -37,6 +37,10 @@
 #ifndef _NETINET_TCP_H_
 #define _NETINET_TCP_H_
 
+#ifndef BYTE_PACK
+#define BYTE_PACK __attribute__((packed))
+#endif
+
 typedef	u_long	tcp_seq;
 typedef u_long	tcp_cc;			/* connection count per rfc1644 */
 

@@ -37,6 +37,10 @@
 #ifndef _NETINET_IP_VAR_H_
 #define	_NETINET_IP_VAR_H_
 
+#ifndef BYTE_PACK
+#define BYTE_PACK __attribute__((packed))
+#endif
+
 /*
  * Overlay for ip header used by other protocols (tcp, udp).
  */

@@ -37,6 +37,10 @@
 #ifndef _NETINET_IP_ICMP_H_
 #define _NETINET_IP_ICMP_H_
 
+#ifndef BYTE_PACK
+#define BYTE_PACK __attribute__((packed))
+#endif
+
 /*
  * Interface Control Message Protocol Definitions.
  * Per RFC 792, September 1981.

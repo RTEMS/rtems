@@ -40,6 +40,10 @@
 #include <net/ethernet.h>
 #include <net/if_arp.h>
 
+#ifndef BYTE_PACK
+#define BYTE_PACK __attribute__((packed))
+#endif
+
 #ifdef _KERNEL
 /*
  * Macro to map an IP multicast address to an Ethernet multicast address.

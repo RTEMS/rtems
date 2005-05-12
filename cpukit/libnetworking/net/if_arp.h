@@ -33,7 +33,7 @@
 #ifndef _NET_IF_ARP_H_
 #define	_NET_IF_ARP_H_
 
-#ifdef __rtems__
+#ifndef BYTE_PACK
 #define BYTE_PACK __attribute__((packed))
 #endif
 
