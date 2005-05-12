@@ -1,5 +1,10 @@
 2005-05-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/ip_var.h: Partial update from FreeBSD.
+	Remove some useless BYTE_PACKs.
+
+2005-05-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	PR 784/networking
 	* libnetworking/net/if_arp.h, libnetworking/netinet/if_ether.h,
 	libnetworking/netinet/ip_icmp.h, libnetworking/netinet/ip_var.h,
