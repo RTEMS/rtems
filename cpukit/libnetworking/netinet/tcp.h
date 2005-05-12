@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,17 +27,25 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp.h	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/netinet/tcp.h,v 1.30 2005/01/07 01:45:45 imp Exp $
+ */
+ 
+/*
  * $Id$
  */
 
 #ifndef _NETINET_TCP_H_
 #define _NETINET_TCP_H_
 
-#ifndef BYTE_PACK
-#define BYTE_PACK __attribute__((packed))
-#endif
+#include <sys/cdefs.h>
 
-typedef	u_long	tcp_seq;
+#if __BSD_VISIBLE
+
+typedef	u_int32_t tcp_seq;
+
+#define tcp6_seq	tcp_seq	/* for KAME src sync over BSD*'s */
+#define tcp6hdr		tcphdr	/* for KAME src sync over BSD*'s */
+
 typedef u_long	tcp_cc;			/* connection count per rfc1644 */
 
 /*
@@ -49,16 +53,16 @@ typedef u_long	tcp_cc;			/* connection count per rfc1644 */
  * Per RFC 793, September, 1981.
  */
 struct tcphdr {
-	u_short	th_sport BYTE_PACK;	/* source port */
-	u_short	th_dport BYTE_PACK;	/* destination port */
-	tcp_seq	th_seq BYTE_PACK;	/* sequence number */
-	tcp_seq	th_ack BYTE_PACK;	/* acknowledgement number */
+	u_short	th_sport;		/* source port */
+	u_short	th_dport;		/* destination port */
+	tcp_seq	th_seq;			/* sequence number */
+	tcp_seq	th_ack;			/* acknowledgement number */
 #if BYTE_ORDER == LITTLE_ENDIAN
-	u_char	th_x2:4,		/* (unused) */
+	u_int	th_x2:4,		/* (unused) */
 		th_off:4;		/* data offset */
 #endif
 #if BYTE_ORDER == BIG_ENDIAN
-	u_char	th_off:4,		/* data offset */
+	u_int	th_off:4,		/* data offset */
 		th_x2:4;		/* (unused) */
 #endif
 	u_char	th_flags;
@@ -68,11 +72,13 @@ struct tcphdr {
 #define	TH_PUSH	0x08
 #define	TH_ACK	0x10
 #define	TH_URG	0x20
-#define TH_FLAGS (TH_FIN|TH_SYN|TH_RST|TH_ACK|TH_URG)
+#define	TH_ECE	0x40
+#define	TH_CWR	0x80
+#define	TH_FLAGS	(TH_FIN|TH_SYN|TH_RST|TH_ACK|TH_URG|TH_ECE|TH_CWR)
 
-	u_short	th_win BYTE_PACK;	/* window */
-	u_short	th_sum BYTE_PACK;	/* checksum */
-	u_short	th_urp BYTE_PACK;	/* urgent pointer */
+	u_short	th_win;			/* window */
+	u_short	th_sum;			/* checksum */
+	u_short	th_urp;			/* urgent pointer */
 };
 
 #define	TCPOPT_EOL		0
@@ -100,7 +106,7 @@ struct tcphdr {
 
 /*
  * Default maximum segment size for TCP.
- * With an IP MSS of 576, this is 536,
+ * With an IP MTU of 576, this is 536,
  * but 512 is probably more convenient.
  * This should be defined as MIN(512, IP_MSS - sizeof (struct tcpiphdr)).
  */
@@ -114,13 +120,18 @@ struct tcphdr {
 #define TCP_MAXHLEN	(0xf<<2)	/* max length of header in bytes */
 #define TCP_MAXOLEN	(TCP_MAXHLEN - sizeof(struct tcphdr))
 					/* max space left for options */
+#endif /* __BSD_VISIBLE */
 
 /*
  * User-settable options (used with setsockopt).
  */
 #define	TCP_NODELAY	0x01	/* don't delay send to coalesce packets */
+#if __BSD_VISIBLE
 #define	TCP_MAXSEG	0x02	/* set maximum segment size */
 #define TCP_NOPUSH	0x04	/* don't push last block of write */
 #define TCP_NOOPT	0x08	/* don't use TCP options */
-
+#define TCP_MD5SIG	0x10	/* use MD5 digests (RFC2385) */
+#define	TCP_INFO	0x20	/* retrieve tcp_info structure */
 #endif
+
+#endif /* !_NETINET_TCP_H_ */

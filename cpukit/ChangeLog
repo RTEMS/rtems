@@ -1,5 +1,7 @@
 2005-05-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/tcp.h: Partial update from FreeBSD.
+	Remove BYTE_PACK.
 	* libnetworking/netinet/ip_var.h: Partial update from FreeBSD.
 	Remove some useless BYTE_PACKs.
 
