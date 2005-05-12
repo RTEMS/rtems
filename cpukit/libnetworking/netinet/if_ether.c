@@ -40,6 +40,8 @@
  *	add "inuse/lock" bit (or ref. count) along with valid bit
  */
 
+#include "opt_inet.h"
+
 #include <sys/param.h>
 #include <sys/kernel.h>
 #include <sys/queue.h>
@@ -52,6 +54,7 @@
 
 #include <net/if.h>
 #include <net/if_dl.h>
+#include <net/if_types.h>
 #include <net/route.h>
 #include <net/netisr.h>
 
@@ -106,11 +109,13 @@ SYSCTL_INT(_net_link_ether_inet, OID_AUTO, proxyall, CTLFLAG_RW,
 static void	arp_rtrequest __P((int, struct rtentry *, struct sockaddr *));
 static void	arprequest __P((struct arpcom *, u_long *, u_long *, u_char *));
 void	arpintr __P((void));
-static void	arptfree __P((struct llinfo_arp *));
-static void	arptimer __P((void *));
+static void	arptfree(struct llinfo_arp *);
+static void	arptimer(void *);
 static struct llinfo_arp
-		*arplookup __P((u_long, int, int));
-static void	in_arpinput __P((struct mbuf *));
+		*arplookup(u_long, int, int);
+#ifdef INET
+static void	in_arpinput(struct mbuf *);
+#endif
 
 /*
  * Timeout routine.  Age arp_tab entries periodically.
@@ -121,9 +126,9 @@ arptimer(ignored_arg)
 	void *ignored_arg;
 {
 	int s = splnet();
-	register struct llinfo_arp *la = llinfo_arp.lh_first;
-	struct llinfo_arp *ola;
+	struct llinfo_arp *la, *ola;
 
+	la = llinfo_arp.lh_first;
 	timeout(arptimer, (caddr_t)0, arpt_prune * hz);
 	while ((ola = la) != 0) {
 		register struct rtentry *rt = la->la_rt;
@@ -140,11 +145,11 @@ arptimer(ignored_arg)
 static void
 arp_rtrequest(req, rt, sa)
 	int req;
-	register struct rtentry *rt;
+	struct rtentry *rt;
 	struct sockaddr *sa;
 {
-	register struct sockaddr *gate = rt->rt_gateway;
-	register struct llinfo_arp *la = (struct llinfo_arp *)rt->rt_llinfo;
+	struct sockaddr *gate;
+	struct llinfo_arp *la;
 	static struct sockaddr_dl null_sdl = {sizeof(null_sdl), AF_LINK};
 	static int arpinit_done;
 
@@ -155,6 +160,8 @@ arp_rtrequest(req, rt, sa)
 	}
 	if (rt->rt_flags & RTF_GATEWAY)
 		return;
+	gate = rt->rt_gateway;
+	la = (struct llinfo_arp *)rt->rt_llinfo;
 	switch (req) {
 
 	case RTM_ADD:
@@ -164,6 +171,7 @@ arp_rtrequest(req, rt, sa)
 		 * restore cloning bit.
 		 */
 		if ((rt->rt_flags & RTF_HOST) == 0 &&
+		    rt_mask(rt) != NULL &&
 		    SIN(rt_mask(rt))->sin_addr.s_addr != 0xffffffff)
 			rt->rt_flags |= RTF_CLONING;
 		if (rt->rt_flags & RTF_CLONING) {
@@ -205,7 +213,8 @@ arp_rtrequest(req, rt, sa)
 			log(LOG_DEBUG, "arp_rtrequest: malloc failed\n");
 			break;
 		}
-		arp_inuse++, arp_allocated++;
+		arp_inuse++;
+		arp_allocated++;
 		Bzero(la, sizeof(*la));
 		la->la_rt = rt;
 		rt->rt_flags |= RTF_LLINFO;
@@ -270,13 +279,13 @@ arp_rtrequest(req, rt, sa)
  */
 static void
 arprequest(ac, sip, tip, enaddr)
-	register struct arpcom *ac;
-	register u_long *sip, *tip;
-	register u_char *enaddr;
+	struct arpcom *ac;
+	u_long *sip, *tip;
+	u_char *enaddr;
 {
-	register struct mbuf *m;
-	register struct ether_header *eh;
-	register struct ether_arp *ea;
+	struct mbuf *m;
+	struct ether_header *eh;
+	struct ether_arp *ea;
 	struct sockaddr sa;
 
 	if ((m = m_gethdr(M_DONTWAIT, MT_DATA)) == NULL)
@@ -314,14 +323,14 @@ arprequest(ac, sip, tip, enaddr)
  */
 int
 arpresolve(ac, rt, m, dst, desten, rt0)
-	register struct arpcom *ac;
-	register struct rtentry *rt;
+	struct arpcom *ac;
+	struct rtentry *rt;
 	struct mbuf *m;
-	register struct sockaddr *dst;
-	register u_char *desten;
+	struct sockaddr *dst;
+	u_char *desten;
 	struct rtentry *rt0;
 {
-	register struct llinfo_arp *la;
+	struct llinfo_arp *la = 0;
 	struct sockaddr_dl *sdl;
 
 	if (m->m_flags & M_BCAST) {	/* broadcast */
@@ -390,8 +399,8 @@ arpresolve(ac, rt, m, dst, desten, rt0)
 void
 arpintr(void)
 {
-	register struct mbuf *m;
-	register struct arphdr *ar;
+	struct mbuf *m;
+	struct arphdr *ar;
 	int s;
 
 	while (arpintrq.ifq_head) {
@@ -436,12 +445,13 @@ static void
 in_arpinput(m)
 	struct mbuf *m;
 {
-	register struct ether_arp *ea;
-	register struct arpcom *ac = (struct arpcom *)m->m_pkthdr.rcvif;
+	struct ether_arp *ea;
+	struct arpcom *ac = (struct arpcom *)m->m_pkthdr.rcvif;
 	struct ether_header *eh;
-	register struct llinfo_arp *la = 0;
-	register struct rtentry *rt;
-	struct in_ifaddr *ia, *maybe_ia = 0;
+	struct llinfo_arp *la = 0;
+	struct rtentry *rt;
+	struct in_ifaddr *ia;
+	struct in_ifaddr *maybe_ia = 0;
 	struct sockaddr_dl *sdl;
 	struct sockaddr sa;
 	struct in_addr isaddr, itaddr, myaddr;
@@ -574,10 +584,10 @@ reply:
  */
 static void
 arptfree(la)
-	register struct llinfo_arp *la;
+	struct llinfo_arp *la;
 {
-	register struct rtentry *rt = la->la_rt;
-	register struct sockaddr_dl *sdl;
+	struct rtentry *rt = la->la_rt;
+	struct sockaddr_dl *sdl;
 	if (rt == 0)
 		panic("arptfree");
 	if (rt->rt_refcnt > 0 && (sdl = SDL(rt->rt_gateway)) &&
@@ -598,10 +608,12 @@ arplookup(addr, create, proxy)
 	u_long addr;
 	int create, proxy;
 {
-	register struct rtentry *rt;
+	struct rtentry *rt;
 	static struct sockaddr_inarp sin = {sizeof(sin), AF_INET };
 	const char *why = 0;
 
+	sin.sin_len = sizeof(sin);
+	sin.sin_family = AF_INET;
 	sin.sin_addr.s_addr = addr;
 	sin.sin_other = proxy ? SIN_PROXY : 0;
 	rt = rtalloc1((struct sockaddr *)&sin, create, 0UL);
