@@ -70,8 +70,8 @@ AC_ARG_ENABLE([deprecated],
 [case "${enable_deprecated}" in
   yes) ;;
   no) ;;
-  *) enable_deprecated=yes ;;
-esac],[enable_deprecated=yes])
+  *) enable_deprecated=no ;;
+esac],[enable_deprecated=no])
 AM_CONDITIONAL([DEPRECATED],[test "$enable_deprecated" = "yes"])
 
 # HACK: We should use a feature-based configuration.

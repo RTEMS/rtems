@@ -1,5 +1,6 @@
 2005-05-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Let --enable-deprecated default to "no".
 	* libnetworking/net/if_arp.h: Remove BYTE_PACK.
 	* libnetworking/net/if_llc.h: Update from FreeBSD, add __packed.
 	* libnetworking/net/route.h: Partial update from FreeBSD.
