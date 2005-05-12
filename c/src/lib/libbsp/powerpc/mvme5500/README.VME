@@ -6,7 +6,7 @@ command following the out_xx() function (e.g. out_be16()) if mvme5500 is
 used as the SBC.  The mechanism is a hardware hook to help software
 synchronize between the CPU and PCI activities. The PCI sync is
 implemented in pci/pci_interface.c. For more example of the usage,one
-can refrence the drvOMS58.cc file that is posted in synAppRTEMS of 
+can reference the drvOMS58.cc file that is posted in synAppRTEMS of 
 http://www.nsls.bnl.gov/organization/UserScience/Detectors/Software/Default.htm.
 
 

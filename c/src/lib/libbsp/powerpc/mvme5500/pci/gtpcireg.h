@@ -38,6 +38,16 @@
  */
 #define	PCI_ARBCTL_EN	(1<<31)
 
+#define  PCI_COMMAND_SB_DIS     0x2000  /* PCI configuration read will stop
+                                         * acting as sync barrier transactin
+                                         */
+
+#define PCI_MEM_BASE_ADDR PCI_BASE_ADDRESS_4
+
+#define PCI_IO_BASE_ADDR  PCI_BASE_ADDRESS_5
+
+#define  PCI_STATUS_CLRERR_MASK 0xf9000000 /* <SKF> */
+
 #define PCI_BARE_IntMemEn     0x200
 
 #define PCI_ACCCTLBASEL_PrefetchEn     0x0001000
@@ -82,8 +92,6 @@
 #define PCI_SNOOP_TOP1                          0x1f18
 
 #define PCI0_CMD_CNTL                           0xc00
-#define PCI0_CONFIG_ADDR			0xcf8
-#define PCI0_CONFIG_DATA			0xcfc
 
 #define PCI1_P2P_CONFIG                         0x1d94
 #define PCI1_CMD_CNTL                           0xc80

@@ -131,16 +131,16 @@ static void GTeth_ifstart (struct ifnet *);
 static void GTeth_ifchange(struct GTeth_softc *sc);
 static void GTeth_init_rx_ring(struct GTeth_softc *sc);
 static void GT64260eth_daemon(void *arg);
-static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m,enum GTeth_txprio);
-static unsigned GTeth_txq_done(struct GTeth_softc *sc, enum GTeth_txprio txprio);
-static void GTeth_tx_cleanup(struct GTeth_softc *sc, enum GTeth_txprio, int);
-static void GTeth_tx_start(struct GTeth_softc *sc, enum GTeth_txprio);
-static void GTeth_tx_stop(struct GTeth_softc *sc, enum GTeth_whack_op op);
-static void GTeth_rx_cleanup(struct GTeth_softc *sc, enum GTeth_rxprio);
-static int GT64260eth_rx(struct GTeth_softc *sc, enum GTeth_rxprio);
+static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m);
+static unsigned GTeth_txq_done(struct GTeth_softc *sc);
+static void GTeth_tx_cleanup(struct GTeth_softc *sc);
+static void GTeth_tx_start(struct GTeth_softc *sc);
+static void GTeth_tx_stop(struct GTeth_softc *sc);
+static void GTeth_rx_cleanup(struct GTeth_softc *sc);
+static int GT64260eth_rx(struct GTeth_softc *sc);
 static void GTeth_rx_setup(struct GTeth_softc *sc);
-static void GTeth_rxprio_setup(struct GTeth_softc *sc, enum GTeth_rxprio);
-static void GTeth_rx_stop(struct GTeth_softc *dc, enum GTeth_whack_op op);
+static void GTeth_rxprio_setup(struct GTeth_softc *sc);
+static void GTeth_rx_stop(struct GTeth_softc *dc);
 static void GT64260eth_isr();
 static int GTeth_hash_compute(struct GTeth_softc *sc,unsigned char eaddr[ETHER_ADDR_LEN]);
 static int GTeth_hash_entry_op(struct GTeth_softc *sc, enum GTeth_hash_op op,
@@ -150,7 +150,6 @@ static int GTeth_hash_fill(struct GTeth_softc *sc);
 static void GTeth_hash_init(struct GTeth_softc *sc);
 
 static struct GTeth_softc *root_GT64260eth_dev = NULL;
-static int GTeth_MissedFrame_err=0;  
 
 static void GT64260eth_irq_on(const rtems_irq_connect_data *irq)
 {
@@ -160,7 +159,7 @@ static void GT64260eth_irq_on(const rtems_irq_connect_data *irq)
     printk("GT64260eth_irq_on\n");
     outl(0x30883444,ETH0_EIMR); /* MOTLoad default interrupt mask */
     return;
-  }
+  }  
 }
 
 static void GT64260eth_irq_off(const rtems_irq_connect_data *irq)
@@ -186,17 +185,27 @@ static void GT64260eth_isr()
   cause = inl(ETH0_EICR);
   outl( ~cause,ETH0_EICR);  /* clear the ICR */
 
-  if (cause & (ETH_IR_RxBuffer_3|ETH_IR_RxError_3)) {
+  /* ETH_IR_RxBuffer_3|ETH_IR_RxError_3 */
+  if (cause & 0x880000) {
      sc->stats.rxInterrupts++;
      events |= RX_EVENT;
   }
   /* If there is an error, we want to continue to next descriptor */
-  if (cause & (ETH_IR_TxBufferHigh|ETH_IR_TxEndHigh|ETH_IR_TxErrorHigh)) {
+  /* ETH_IR_TxBufferHigh|ETH_IR_TxEndHigh|ETH_IR_TxErrorHigh */
+  if (cause & 0x444) {
        sc->stats.txInterrupts++;
        events |= TX_EVENT;
-       if ((sc->txq_nactive) && ((inl(ETH0_ESDCMR)&ETH_ESDCMR_TXDH)==0))
-          outl(ETH_ESDCMR_TXDH | ETH_ESDCMR_ERD,ETH0_ESDCMR);
-  } 
+       /* It seems to be unnecessary. However, it's there
+        * to be on the safe side due to the datasheet.
+        * So far, it does not seem to affect the network performance
+        * based on the EPICS catime.
+        */
+       /* ETH_ESDCMR_TXDH | ETH_ESDCMR_ERD = 0x800080 */
+       if ((sc->txq_nactive > 1)&& ((inl(ETH0_ESDCMR)&ETH_ESDCMR_TXDH)==0))
+          outl(0x800080,ETH0_ESDCMR);
+
+
+  }
   if ( (!cause) || (cause & 0x803d00)) {
        sc->intr_errsts[sc->intr_err_ptr2++]=cause;
        sc->intr_err_ptr2 %=INTR_ERR_SIZE;   /* Till Straumann */
@@ -235,7 +244,7 @@ static void GT64260eth_init_hw(struct GTeth_softc *sc)
 #endif
 
 #ifndef GE_NOTX
-  GTeth_tx_start(sc, GE_TXPRIO_HI);
+  GTeth_tx_start(sc);
 #endif
 
   sc->sc_pcr |= ETH_EPCR_HS_512;
@@ -286,10 +295,10 @@ static void GT64260eth_stop_hw(struct GTeth_softc *sc)
 
   sc->arpcom.ac_if.if_flags &= ~IFF_RUNNING;
 #ifndef GE_NOTX
-  GTeth_tx_stop(sc, GE_WHACK_STOP);
+  GTeth_tx_stop(sc);
 #endif
 #ifndef GE_NORX
-  GTeth_rx_stop(sc, GE_WHACK_STOP);
+  GTeth_rx_stop(sc);
 #endif
   sc->sc_hashtable = NULL;
   if (GTeth_debug>0) printk(")");
@@ -523,7 +532,6 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
   printf("       Rx Interrupts:%-8lu\n", sc->stats.rxInterrupts);
   printf("     Receive Packets:%-8lu\n", ifp->if_ipackets);
   printf("     Receive  errors:%-8lu\n", ifp->if_ierrors);
-  printf(" Missed Frame errors:%-8u\n",  GTeth_MissedFrame_err);
   printf("      Framing Errors:%-8lu\n", sc->stats.frame_errors);
   printf("          Crc Errors:%-8lu\n", sc->stats.crc_errors);
   printf("    Oversized Frames:%-8lu\n", sc->stats.length_errors);
@@ -534,11 +542,6 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
   printf("   Transmitt  errors:%-8lu\n", ifp->if_oerrors);
   printf("    Tx/Rx collisions:%-8lu\n", ifp->if_collisions);
   printf("         Active Txqs:%-8u\n", sc->txq_nactive); 
-}
-
-void GT64260eth_err()
-{
-  printf(" Missed Frame errors:%-8u\n", GTeth_MissedFrame_err);
 }
 
 static int GTeth_ifioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
@@ -677,39 +680,23 @@ static void GTeth_init_rx_ring(struct GTeth_softc *sc)
   }
 }
 
-static void GTeth_rxprio_setup(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
+void GTeth_rxprio_setup(struct GTeth_softc *sc)
 {
 
-  if (GTeth_debug>0) printk("GTeth_rxprio_setup(\n");
   GTeth_init_rx_ring(sc);
 
-  sc->rxq_intrbits = ETH_IR_RxBuffer | ETH_IR_RxError;
-
-  switch (rxprio) {
-    case GE_RXPRIO_HI:
-      sc->rxq_intrbits |= ETH_IR_RxBuffer_3|ETH_IR_RxError_3;
-	 break;
-    case GE_RXPRIO_MEDHI:
-	 sc->rxq_intrbits |= ETH_IR_RxBuffer_2|ETH_IR_RxError_2;
-	 break;
-    case GE_RXPRIO_MEDLO:
-	 sc->rxq_intrbits |= ETH_IR_RxBuffer_1|ETH_IR_RxError_1;
-	 break;
-    case GE_RXPRIO_LO:
-	 sc->rxq_intrbits |= ETH_IR_RxBuffer_0|ETH_IR_RxError_0;
-	 break;
-  }
-  if (GTeth_debug>0) printk(")");
+  sc->rxq_intrbits = ETH_IR_RxBuffer|ETH_IR_RxError|ETH_IR_RxBuffer_3|ETH_IR_RxError_3;
 }
 
-static int GT64260eth_rx(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
+static int GT64260eth_rx(struct GTeth_softc *sc)
 {
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
   int nloops=0;
 
+#ifdef GT_DEBUG
   if (GTeth_rx_debug>0) printk("GT64260eth_rx(");
-  if (GTeth_rx_debug>5) printk("(%d)", rxprio);
+#endif
 
   while (sc->rxq_active > 0) {
     volatile struct GTeth_desc *rxd = &sc->rxq_desc[sc->rxq_fi];
@@ -749,8 +736,6 @@ static int GT64260eth_rx(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
      * is new packet in the descriptor/buffer
      */
 
-    if (GTeth_rx_debug>0) printk("desc%d: cmdsts=%x, len=%d\n",
-	   sc->rxq_fi,cmdsts,byteCount);
     nloops++;
     /*
      * If this is not a single buffer packet with no errors
@@ -758,32 +743,24 @@ static int GT64260eth_rx(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
      * ignore it and go to the next packet.
      */
     if ((cmdsts & (RX_CMD_F|RX_CMD_L|RX_STS_ES)) !=
-			    (RX_CMD_F|RX_CMD_L) ||
-		    byteCount > sc->sc_max_frame_length) {
-	if (GTeth_rx_debug>0) printk("Rx Error");
-	--sc->rxq_active;
-	ifp->if_ipackets++;
-	ifp->if_ierrors++;
+                            (RX_CMD_F|RX_CMD_L) ||
+                    byteCount > sc->sc_max_frame_length) {
+        --sc->rxq_active;
+        ifp->if_ipackets++;
+        ifp->if_ierrors++;
         if (cmdsts & RX_STS_OR) sc->stats.or_errors++;
         if (cmdsts & RX_STS_CE) sc->stats.crc_errors++;
-	if (cmdsts & RX_STS_MFL) sc->stats.length_errors++;
-	if (cmdsts & RX_STS_SF) sc->stats.frame_errors++;
-	/*	if (cmdsts & RX_STS_M) GTeth_MissedFrame_err++;*/
+        if (cmdsts & RX_STS_MFL) sc->stats.length_errors++;
+        if (cmdsts & RX_STS_SF) sc->stats.frame_errors++;
         if ((cmdsts & RX_STS_LC) || (cmdsts & RX_STS_COL))
-	   ifp->if_collisions++;
-	goto give_it_back;
+           ifp->if_collisions++;
+        goto give_it_back;
      }
-
      m = sc->rxq_mbuf[sc->rxq_fi];
-     sc->rxq_mbuf[sc->rxq_fi] = NULL;
      m->m_len = m->m_pkthdr.len = byteCount - sizeof(struct ether_header);
      eh = mtod (m, struct ether_header *);
      m->m_data += sizeof(struct ether_header);
      ether_input (ifp, eh, m);
-     if (GTeth_rx_debug>20) {
-       if ( m->m_flags & M_BCAST ) printk("desc%d broadcast\n",sc->rxq_fi);
-       if ( m->m_flags & M_MCAST ) printk("multicast ");
-     }
 
      ifp->if_ipackets++;
      ifp->if_ibytes+=byteCount;
@@ -803,7 +780,9 @@ static int GT64260eth_rx(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
 
      sc->rxq_active++;
   } /* while (sc->rxq_active > 0) */
+#ifdef GT_DEBUG
   if (GTeth_rx_debug>0) printk(")");
+#endif
   return nloops;
 }
 
@@ -812,7 +791,7 @@ static void GTeth_rx_setup(struct GTeth_softc *sc)
 
   if (GTeth_rx_debug>0) printk("GTeth_rx_setup(");
 
-  GTeth_rxprio_setup(sc, GE_RXPRIO_HI);
+  GTeth_rxprio_setup(sc);
 
   if ((sc->sc_flags & GE_RXACTIVE) == 0) {
      /* First Rx Descriptor Pointer 3 */
@@ -829,13 +808,11 @@ static void GTeth_rx_setup(struct GTeth_softc *sc)
   if (GTeth_rx_debug>0) printk(")\n");
 }
 
-static void GTeth_rx_cleanup(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
+static void GTeth_rx_cleanup(struct GTeth_softc *sc)
 {
   int i;
 
   if (GTeth_rx_debug>0) printk( "GTeth_rx_cleanup(");
-  if (sc->rxq_curpkt)
-     m_freem(sc->rxq_curpkt);
 
   for (i=0; i< RX_RING_SIZE; i++) {
     if (sc->rxq_mbuf[i]) {
@@ -846,7 +823,7 @@ static void GTeth_rx_cleanup(struct GTeth_softc *sc, enum GTeth_rxprio rxprio)
   if (GTeth_rx_debug>0) printk(")");
 }
 
-static void GTeth_rx_stop(struct GTeth_softc *sc, enum GTeth_whack_op op)
+static void GTeth_rx_stop(struct GTeth_softc *sc)
 {
   if (GTeth_rx_debug>0) printk( "GTeth_rx_stop(");
   sc->sc_flags &= ~GE_RXACTIVE;
@@ -857,7 +834,7 @@ static void GTeth_rx_stop(struct GTeth_softc *sc, enum GTeth_whack_op op)
   do {
      rtems_bsp_delay(10);
   } while (inl(ETH0_ESDCMR) & ETH_ESDCMR_AR);
-  GTeth_rx_cleanup(sc, GE_RXPRIO_HI);
+  GTeth_rx_cleanup(sc);
   if (GTeth_rx_debug>0) printk(")");
 }
 
@@ -929,13 +906,11 @@ static int txq_high_limit(struct GTeth_softc *sc)
   return 0;
 }
 
-static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m, enum GTeth_txprio txprio)
+static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
 {
   volatile struct GTeth_desc *txd = &sc->txq_desc[sc->txq_lo];
   unsigned intrmask = sc->sc_intrmask;
   unsigned index= sc->txq_lo;
-
-  if (GTeth_debug>0) printk("sendpacket(");
 
   /* 
    * The end-of-list descriptor we put on last time is the starting point
@@ -987,7 +962,8 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m, enum GTe
 
   txd->ed_bufptr = (unsigned) mtod(m, void*); 
   txd->ed_lencnt = m->m_len << 16;
-  txd->ed_cmdsts = TX_CMD_L|TX_CMD_GC|TX_CMD_P|TX_CMD_O|TX_CMD_F|TX_CMD_EI; 
+  /*txd->ed_cmdsts = TX_CMD_L|TX_CMD_GC|TX_CMD_P|TX_CMD_O|TX_CMD_F|TX_CMD_EI;*/
+  txd->ed_cmdsts = 0x80c70000;
 
 #ifdef GT_DEBUG 
   printk("len = %d, cmdsts 0x%x ", m->m_len,txd->ed_cmdsts);
@@ -995,13 +971,14 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m, enum GTe
 
   /*
    * Tell the SDMA engine to "Fetch!"
-   * Start Tx high and Tx low.
+   * Start Tx high.
    */
-  outl(ETH_ESDCMR_TXDH,ETH0_ESDCMR);
   sc->txq_nactive++;
+  outl(0x800080, ETH0_ESDCMR); /* ETH_ESDCMR_TXDH| ETH_ESDCMR_ERD */
   if ( ++sc->txq_lo == TX_RING_SIZE) sc->txq_lo = 0;
   sc->txq_free--;
 
+#if 0
   /*
    * Since we have put an item into the packet queue, we now want
    * an interrupt when the transmit queue finishes processing the
@@ -1012,6 +989,7 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m, enum GTe
       sc->sc_intrmask = intrmask;
       outl(sc->sc_intrmask, ETH0_EIMR);
   }
+#endif
 
 #if 0
   printk("EICR= %x, EIMR= %x ", inl(ETH0_EICR), inl(ETH0_EIMR));
@@ -1020,11 +998,10 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m, enum GTe
   printk("pcr %x, pcxr %x DMA dcr %x cmr %x\n", inl(ETH0_EPCR), inl(ETH0_EPCXR), inl(ETH0_ESDCR), inl(ETH0_ESDCMR));
 #endif
 
-  if (GTeth_debug>0) printk(")");
   return 1;
 }
 
-static unsigned GTeth_txq_done(struct GTeth_softc *sc, enum GTeth_txprio txprio)
+static unsigned GTeth_txq_done(struct GTeth_softc *sc)
 {
   if (GTeth_debug>0) printk("Txdone(" );
 
@@ -1071,7 +1048,7 @@ static unsigned GTeth_txq_done(struct GTeth_softc *sc, enum GTeth_txprio txprio)
   return(1);
 }
 
-static void GTeth_tx_start(struct GTeth_softc *sc, enum GTeth_txprio txprio)
+static void GTeth_tx_start(struct GTeth_softc *sc)
 {
   int i;
   volatile struct GTeth_desc *txd;
@@ -1117,78 +1094,44 @@ static void GTeth_tx_start(struct GTeth_softc *sc, enum GTeth_txprio txprio)
       printk("next desc. @ 0x%x\n",txd->ed_nxtptr);
 #endif
   }
-
-  switch (txprio) {
-    case GE_TXPRIO_HI:
-      sc->txq_intrbits = ETH_IR_TxEndHigh|ETH_IR_TxBufferHigh;
-	 sc->txq_esdcmrbits = ETH_ESDCMR_TXDH; /* Start Tx high */
-	 sc->txq_epsrbits = ETH_EPSR_TxHigh;
-         /* offset to current tx desc ptr reg */
-	 sc->txq_ectdp = (caddr_t)ETH0_ECTDP1;
-         /* Current Tx Desc Pointer 1 */
-	 outl(sc->txq_desc_busaddr,ETH0_ECTDP1);
-#ifdef GT_DEBUG
-	 printk("ETH0_ECTDP1 %x",inl(ETH0_ECTDP1));
-#endif
-	 break;
-
-    case GE_TXPRIO_LO:
-	 sc->txq_intrbits = ETH_IR_TxEndLow|ETH_IR_TxBufferLow;
-	 sc->txq_esdcmrbits = ETH_ESDCMR_TXDL; /* Start TX low */
-	 sc->txq_epsrbits = ETH_EPSR_TxLow;
-	 sc->txq_ectdp = (caddr_t)ETH0_ECTDP0;
-         /* Current Tx Desc Pointer 0 */
-	 outl(sc->txq_desc_busaddr,ETH0_ECTDP0);
-#ifdef GT_DEBUG
-	 printk("ETH0_ECTDP1 %x",inl(ETH0_ECTDP0));
-#endif
-	 break;
-
-    default:
-         printk("Invalid Txq prio\n");
-	 break;
-  }
  
+  sc->txq_intrbits = ETH_IR_TxEndHigh|ETH_IR_TxBufferHigh;
+  sc->txq_esdcmrbits = ETH_ESDCMR_TXDH; /* Start Tx high */
+  sc->txq_epsrbits = ETH_EPSR_TxHigh;
+  /* offset to current tx desc ptr reg */
+  sc->txq_ectdp = (caddr_t)ETH0_ECTDP1;
+  /* Current Tx Desc Pointer 1 */
+  outl(sc->txq_desc_busaddr,ETH0_ECTDP1);
+
 #ifdef GT_DEBUG
   printk(")\n");
 #endif
 }
 
-static void GTeth_tx_cleanup(struct GTeth_softc *sc,enum GTeth_txprio txprio,int flush)
+static void GTeth_tx_cleanup(struct GTeth_softc *sc)
 {
   int i;
 
-  if (GTeth_debug>0) printk( "GTeth_tx_cleanup(");
-
-  if (!flush) {
-     if (GTeth_debug>0) printk("--");
-     return;
-  }
   for (i=0; i< TX_RING_SIZE; i++) {
     if (sc->txq_mbuf[i]) {
       m_freem(sc->txq_mbuf[i]);
       sc->txq_mbuf[i]=0;
     }
   }
-  if (GTeth_debug>0) printk(")");
 }
 
-static void GTeth_tx_stop(struct GTeth_softc *sc, enum GTeth_whack_op op)
+static void GTeth_tx_stop(struct GTeth_softc *sc)
 {
-  if (GTeth_debug>0) printk("GTeth_tx_stop( ");
-
   /* SDMA command register : stop Tx high and low */
   outl(ETH_ESDCMR_STDH|ETH_ESDCMR_STDL, ETH0_ESDCMR);
 
-  GTeth_txq_done(sc, GE_TXPRIO_HI);
+  GTeth_txq_done(sc);
   sc->sc_intrmask &= ~(ETH_IR_TxEndHigh|ETH_IR_TxBufferHigh|
-			     ETH_IR_TxEndLow |ETH_IR_TxBufferLow);
-  GTeth_tx_cleanup(sc, GE_TXPRIO_HI, op == GE_WHACK_STOP);
+                             ETH_IR_TxEndLow |ETH_IR_TxBufferLow);
+  GTeth_tx_cleanup(sc);
 
   sc->arpcom.ac_if.if_timer = 0;
-  if (GTeth_debug>0) printk(")");
 }
-
 
 /* TOCHECK : Should it be about rx or tx ? */
 static void GTeth_ifchange(struct GTeth_softc *sc)
@@ -1227,7 +1170,9 @@ static int GTeth_hash_compute(struct GTeth_softc *sc,unsigned char eaddr[ETHER_A
   add1 = ((add1 & 0x00cccccc) >> 2) | ((add1 & 0x00333333) << 2);
   add1 = ((add1 & 0x00aaaaaa) >> 1) | ((add1 & 0x00555555) << 1);
 
-  if (GTeth_debug>0) printk("eaddr= %s add1:%x add0:%x\n", ether_sprintf(eaddr), add1, add0);
+#ifdef GT_DEBUG
+  printk("eaddr= %s add1:%x add0:%x\n", ether_sprintf1(eaddr), add1, add0);
+#endif
     
   /*
    * hashResult is the 15 bits Hash entry address.
@@ -1250,7 +1195,9 @@ static int GTeth_hash_compute(struct GTeth_softc *sc,unsigned char eaddr[ETHER_A
       *   hashResult[14:9] = ethernetADD[7:2]
       */
      result |= (add0 & ~3) << 7;	/* excess bits will be masked */
-     if (GTeth_debug>0) printk("hash result %x  ", result & 0x7fff);
+#ifdef GT_DEBUG
+     printk("hash result %x  ", result & 0x7fff);
+#endif
   } else {
 #define	TRIBITFLIP	073516240	/* yes its in octal */
      /*
@@ -1274,9 +1221,14 @@ static int GTeth_hash_compute(struct GTeth_softc *sc,unsigned char eaddr[ETHER_A
       */
      result |= ((TRIBITFLIP >> (((add0 >> 0) & 7) * 3)) & 7) << 12;
      result |= ((TRIBITFLIP >> (((add0 >> 3) & 7) * 3)) & 7) << 9;
-     if (GTeth_debug>5) printk("1(%#x)", result);
+#ifdef GT_DEBUG
+     printk("1(%#x)", result);
+#endif
   }
-  if (GTeth_debug>0) printk(")");
+#ifdef GT_DEBUG
+  printk(")");
+#endif
+
   /* 1/2K address filtering (MOTLoad default )? ->16KB memory required 
    * or 8k address filtering ? -> 256KB memory required 
    */
@@ -1292,15 +1244,18 @@ static int GTeth_hash_entry_op(struct GTeth_softc *sc, enum GTeth_hash_op op,
   int hash;
   int maybe_hash = 0;
 
-  if (GTeth_debug>0) printk("GTeth_hash_entry_op(prio %d ", prio);
+#ifdef GT_DEBUG
+  printk("GTeth_hash_entry_op(prio %d ", prio);
+#endif
 
   hash = GTeth_hash_compute(sc, eaddr);
 
   if (sc->sc_hashtable == NULL) {
 	rtems_panic("hashtable == NULL!");
   }
-  if (GTeth_debug>0) printk("Hash computed %x eaddr %s\n", hash,ether_sprintf(eaddr));
-
+#ifdef GT_DEBUG
+  printk("Hash computed %x eaddr %s\n", hash,ether_sprintf1(eaddr));
+#endif
 
   /*
    * Assume we are going to insert so create the hash entry we
@@ -1320,13 +1275,15 @@ static int GTeth_hash_entry_op(struct GTeth_softc *sc, enum GTeth_hash_op op,
    */
   hash &= (sc->sc_hashmask / sizeof(he));
 
+#ifdef GT_DEBUG
   if (GTeth_debug>0) {
     unsigned val1, val2;
 
     val1= he & 0xffffffff;
     val2= (he >>32) & 0xffffffff;
-    printk("Hash addr value %x%x, entry %x\n",val2,val1, hash); 
+    printk("Hash addr value %x%x, entry %x\n",val2,val1, hash);
   }
+#endif
 
   for (limit = HSH_LIMIT; limit > 0 ; --limit) {
       /*
@@ -1424,7 +1381,9 @@ static int GTeth_hash_fill(struct GTeth_softc *sc)
   struct ether_multi *enm;
   int error;
 
-  if (GTeth_debug>0) printk( "GTeth_hash_fill(");
+#ifdef GT_DEBUG
+  printk( "GTeth_hash_fill(");
+#endif
   error = GTeth_hash_entry_op(sc,GE_HASH_ADD,GE_RXPRIO_HI,sc->arpcom.ac_enaddr);
 
   if (error) {
@@ -1452,7 +1411,9 @@ static int GTeth_hash_fill(struct GTeth_softc *sc)
     }
     ETHER_NEXT_MULTI(step, enm);
   }
-  if (GTeth_debug>0) printk(")\n");
+#ifdef GT_DEBUG
+  printk(")\n");
+#endif
   return error;
 }
 
@@ -1475,8 +1436,9 @@ static void GTeth_hash_init(struct GTeth_softc *sc)
   sc->sc_hashmask = HASH_DRAM_SIZE - 1;
 
   memset((void *)sc->sc_hashtable, 0,HASH_DRAM_SIZE);
-  if (GTeth_debug>0)
-    printk("hashtable addr:%x, mask %x)\n", sc->sc_hashtable,sc->sc_hashmask);
+#ifdef GT_DEBUG
+  printk("hashtable addr:%x, mask %x)\n", sc->sc_hashtable,sc->sc_hashmask);
+#endif
 }
 
 static void GT64260eth_error(struct GTeth_softc *sc)
@@ -1548,29 +1510,33 @@ static void GT64260eth_daemon(void *arg)
      if (KILL_EVENT & events) break;
 
 #ifndef GE_NORX
-     if (events & RX_EVENT) GT64260eth_rx(sc,GE_RXPRIO_HI);
+     if (events & RX_EVENT) GT64260eth_rx(sc);
+#endif
+#if 0
+     printk("%x ", inb(ETH0_EPSR));
+     if ( ((i++) % 15)==0) printk("\n");
 #endif
 
      /* clean up and try sending packets */
      do { 
-#if 1
+#if 0
 	if (gpp_int_error!=0) {
            printk("GPP interrupt error %d\n", gpp_int_error);
            gpp_int_error=0;
 	}
 #endif
-	 if (sc->txq_nactive) GTeth_txq_done(sc, GE_TXPRIO_HI);
+	 if (sc->txq_nactive) GTeth_txq_done(sc);
 
          while (sc->txq_free>0) {
            if (sc->txq_free>TXQ_HiLmt_OFF) {
 	      m=0;
 	      IF_DEQUEUE(&ifp->if_snd,m);
               if (m==0) break;
-              GT64260eth_sendpacket(sc, m, GE_TXPRIO_HI); 
+              GT64260eth_sendpacket(sc, m); 
            }
            else {
-	     if (txq_high_limit(sc)) 
-                 break;
+              GTeth_txq_done(sc);
+              break;
            }
          }
          /* we leave this loop

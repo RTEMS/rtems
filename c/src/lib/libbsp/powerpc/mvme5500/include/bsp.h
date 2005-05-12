@@ -43,6 +43,16 @@
 #define PCI1_MEM_BASE		0xe0000000
 #define PCI1_MEM_SIZE           0x10000000
 
+/* Needed for hot adding via PMCspan on the PCI0 local bus.
+ * This is board dependent, only because mvme5500
+ * supports hot adding and has more than one local PCI
+ * bus.
+ */
+#define BSP_MAX_PCI_BUS_ON_PCI0 8
+#define BSP_MAX_PCI_BUS_ON_PCI1 2
+#define BSP_MAX_PCI_BUS  (BSP_MAX_PCI_BUS_ON_PCI0+BSP_MAX_PCI_BUS_ON_PCI1)
+
+
 /* The glues to Till's vmeUniverse, although the name does not
  * actually reflect the relevant architect of the MVME5500.
  * Till TODO ? :  BSP_PCI_DO_EOI instead ? 

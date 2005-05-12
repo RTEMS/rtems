@@ -28,18 +28,18 @@
 unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet)
 {
   unsigned int pcidata, pcidata1;
-  int PciNumber;
+  int PciLocal, busNumber=0;
   
   /* On the mvme5500 board, the GT64260B system controller had the MCP
    * signal pulled up high.  Thus, the MCP signal is not used as it is
    * on other boards such as mvme2307.
    */
   if (enableMCP) return(-1);
-  for (PciNumber=0; PciNumber<1; PciNumber++) {
-     PCIx_read_config_dword(PciNumber, 0,
+  for (PciLocal=0; PciLocal<1; PciLocal++ ) {
+     pci_read_config_dword(busNumber,
 			0,
 			0,
-		PCI0_COMMAND+(PciNumber * 0x80),
+		        PCI_COMMAND,
                         &pcidata); 
 
     if (!quiet)
@@ -52,21 +52,22 @@ unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet)
     pcidata1= pcidata;
     pcidata1 |= PCI_STATUS_CLRERR_MASK;
     pcidata1 |= 0x140; 
-    PCIx_write_config_dword(PciNumber, 0,
+    pci_write_config_dword(busNumber,
  			       0,
 			       0,
-			  PCI0_COMMAND+(PciNumber * 0x80),
+			  PCI_COMMAND,
                           pcidata1);
 
-    PCIx_read_config_dword(PciNumber, 0,
+    pci_read_config_dword(busNumber,
 			       0,
 			       0,
-			  PCI0_COMMAND+(PciNumber * 0x80),
+			  PCI_COMMAND,
                           &pcidata1); 
 
     if (!quiet) printk("After _BSP_clear_hostbridge_errors(): sts 0x%x\n", 
                         pcidata1);
     if (pcidata1 & HOSTBRIDGET_ERROR) printk("BSP_clear_hostbridge_errors(): unable to clear pending hostbridge errors\n");
+    busNumber += BSP_MAX_PCI_BUS_ON_PCI0;
   }
   return(pcidata &  HOSTBRIDGET_ERROR);
 }

@@ -82,7 +82,9 @@
 
 #define ADDR_PIPELINE 0x00020000
 
-void PCI_interface()
+void  pciAccessInit();
+
+void pci_interface()
 {
   unsigned int data;
 
@@ -113,31 +115,32 @@ void PCI_interface()
   outl(0xc0060002, DLOCK_ORDER_REG);
   outl(0x07fff600, CNT_SYNC_REG);
 #else
-  outl(inl(PCI0_CMD_CNTL)|PCI_COMMAND_SB_DIS, PCI0_CMD_CNTL);
+  outl(inl(PCI_CMD_CNTL)|PCI_COMMAND_SB_DIS, PCI_CMD_CNTL);
 #endif
 
   /* asserts SERR upon various detection */
   outl(0x3fffff, 0xc28);
 
+  pciAccessInit();
 }
-
 /* Use MOTLoad default for Writeback Priority and Buffer Depth 
  */
-void pciAccessInit(int PciNum)
+void pciAccessInit()
 {
-  unsigned int data;
+  unsigned int PciLocal, data;
 
-  /* MOTLoad combines the two banks of SDRAM into
-   * one PCI access control because the top = 0x1ff
-   */
-  data = inl(GT_SCS0_Low_Decode) & 0xfff; 
-  data |= PCI_ACCCTLBASEL_VALUE;
-  data &= ~0x300000;
-  outl(data, PCI0_ACCESS_CNTL_BASE0_LOW+(PciNum * 0x80));
+  for (PciLocal=0; PciLocal < 2; PciLocal++) {
+    /* MOTLoad combines the two banks of SDRAM into
+     * one PCI access control because the top = 0x1ff
+     */
+    data = inl(GT_SCS0_Low_Decode) & 0xfff; 
+    data |= PCI_ACCCTLBASEL_VALUE;
+    data &= ~0x300000;
+    outl(data, PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80));
 #if PCI_DEBUG
-  printk("PCI%d_ACCESS_CNTL_BASE0_LOW 0x%x\n",PciNum,inl(PCI0_ACCESS_CNTL_BASE0_LOW+(PciNum * 0x80))); 
+    printk("PCI%d_ACCESS_CNTL_BASE0_LOW 0x%x\n",PciLocal,inl(PCI_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80))); 
 #endif
-
+  }
 }
 
 /* Sync Barrier Trigger. A write to the CPU_SYNC_TRIGGER register triggers
@@ -166,6 +169,8 @@ void CPU1_PciEnhanceSync(unsigned int syncVal)
 void pciToCpuSync(int pci_num)
 {
   unsigned char data;
+  unsigned char bus=0;
 
-  PCIx_read_config_byte(pci_num, 0,0,0,4, &data);
+  if (pci_num) bus += BSP_MAX_PCI_BUS_ON_PCI0;
+  pci_read_config_byte(bus,0,0,4, &data);
 }

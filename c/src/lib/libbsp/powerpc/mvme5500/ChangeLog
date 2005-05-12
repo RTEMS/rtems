@@ -1,3 +1,11 @@
+2005-05-12      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * README.VME, include/bsp.h, irq/irq.h, network/GT64260eth.c,
+        pci/detect_host_bridge.c, pci/gtpcireg.h, pci/pci.c, pci/pci.h,
+        pci/pci_interface.c, pci/pcifinddevice.c: 
+        Submitted by Kate Feng <feng1@bnl.gov> as RTEMS-MVME5500 BSP v1.1 release.
+        Modifications made to merge this release with the current tree.
+
 2005-05-10      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * network/GT64260eth.c: Fixed warning. 
