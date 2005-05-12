@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,11 +27,18 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_var.h	8.4 (Berkeley) 5/24/95
+ * $FreeBSD: src/sys/netinet/tcp_var.h,v 1.121 2005/04/21 20:11:01 ps Exp $
+ */
+ 
+/*
  * 	$Id$
  */
 
 #ifndef _NETINET_TCP_VAR_H_
 #define _NETINET_TCP_VAR_H_
+
+#include <netinet/tcp.h>
+
 /*
  * Kernel variables for tcp.
  */
@@ -47,31 +50,37 @@ struct tcpcb {
 	struct	tcpiphdr *seg_next;	/* sequencing queue */
 	struct	tcpiphdr *seg_prev;
 	int	t_state;		/* state of this connection */
+	u_int	t_flags;
+#define	TF_ACKNOW	0x000001	/* ack peer immediately */
+#define	TF_DELACK	0x000002	/* ack, but try to delay it */
+#define	TF_NODELAY	0x000004	/* don't delay packets to coalesce */
+#define	TF_NOOPT	0x000008	/* don't use tcp options */
+#define	TF_SENTFIN	0x000010	/* have sent FIN */
+#define	TF_REQ_SCALE	0x000020	/* have/will request window scaling */
+#define	TF_RCVD_SCALE	0x000040	/* other side has requested scaling */
+#define	TF_REQ_TSTMP	0x000080	/* have/will request timestamps */
+#define	TF_RCVD_TSTMP	0x000100	/* a timestamp was received in SYN */
+#define	TF_SACK_PERMIT	0x000200	/* other side said I could SACK */
+#define	TF_NEEDSYN	0x000400	/* send SYN (implicit state) */
+#define	TF_NEEDFIN	0x000800	/* send FIN (implicit state) */
+#define	TF_NOPUSH	0x001000	/* don't push */
+#define	TF_REQ_CC	0x002000	/* have/will request CC */
+#define	TF_RCVD_CC	0x004000	/* a CC was received in SYN */
+#define	TF_SENDCCNEW	0x008000	/* send CCnew instead of CC in SYN */
+#define	TF_MORETOCOME	0x010000	/* More data to be appended to sock */
+#define	TF_LQ_OVERFLOW	0x020000	/* listen queue overflow */
+#define	TF_LASTIDLE	0x040000	/* connection was previously idle */
+#define	TF_RXWIN0SENT	0x080000	/* sent a receiver win 0 in response */
+#define	TF_FASTRECOVERY	0x100000	/* in NewReno Fast Recovery */
+#define	TF_WASFRECOVERY	0x200000	/* was in NewReno Fast Recovery */
+#define	TF_SIGNATURE	0x400000	/* require MD5 digests (RFC2385) */
+	int	t_force;		/* 1 if forcing out a byte */
 	int	t_timer[TCPT_NTIMERS];	/* tcp timers */
 	int	t_rxtshift;		/* log(2) of rexmt exp. backoff */
 	int	t_rxtcur;		/* current retransmit value */
 	int	t_dupacks;		/* consecutive dup acks recd */
 	u_int	t_maxseg;		/* maximum segment size */
 	u_int	t_maxopd;		/* mss plus options */
-	int	t_force;		/* 1 if forcing out a byte */
-	u_int	t_flags;
-#define	TF_ACKNOW	0x0001		/* ack peer immediately */
-#define	TF_DELACK	0x0002		/* ack, but try to delay it */
-#define	TF_NODELAY	0x0004		/* don't delay packets to coalesce */
-#define	TF_NOOPT	0x0008		/* don't use tcp options */
-#define	TF_SENTFIN	0x0010		/* have sent FIN */
-#define	TF_REQ_SCALE	0x0020		/* have/will request window scaling */
-#define	TF_RCVD_SCALE	0x0040		/* other side has requested scaling */
-#define	TF_REQ_TSTMP	0x0080		/* have/will request timestamps */
-#define	TF_RCVD_TSTMP	0x0100		/* a timestamp was received in SYN */
-#define	TF_SACK_PERMIT	0x0200		/* other side said I could SACK */
-#define TF_NEEDSYN	0x0400		/* send SYN (implicit state) */
-#define TF_NEEDFIN	0x0800		/* send FIN (implicit state) */
-#define TF_NOPUSH	0x1000		/* don't push */
-#define TF_REQ_CC	0x2000		/* have/will request CC */
-#define	TF_RCVD_CC	0x4000		/* a CC was received in SYN */
-#define TF_SENDCCNEW	0x8000		/* send CCnew instead of CC in SYN */
-
 	struct	tcpiphdr *t_template;	/* skeletal packet for transmit */
 	struct	inpcb *t_inpcb;		/* back pointer to internet pcb */
 /*
@@ -80,26 +89,26 @@ struct tcpcb {
  */
 /* send sequence variables */
 	tcp_seq	snd_una;		/* send unacknowledged */
-	tcp_seq	snd_nxt;		/* send next */
-	tcp_seq	snd_up;			/* send urgent pointer */
-	tcp_seq	snd_wl1;		/* window update seg seq number */
-	tcp_seq	snd_wl2;		/* window update seg ack number */
-	tcp_seq	iss;			/* initial send sequence number */
-	u_long	snd_wnd;		/* send window */
-/* receive sequence variables */
-	u_long	rcv_wnd;		/* receive window */
-	tcp_seq	rcv_nxt;		/* receive next */
-	tcp_seq	rcv_up;			/* receive urgent pointer */
-	tcp_seq	irs;			/* initial receive sequence number */
-/*
- * Additional variables for this implementation.
- */
-/* receive variables */
-	tcp_seq	rcv_adv;		/* advertised window */
-/* retransmit variables */
 	tcp_seq	snd_max;		/* highest sequence number sent;
 					 * used to recognize retransmits
 					 */
+	tcp_seq	snd_nxt;		/* send next */
+	tcp_seq	snd_up;			/* send urgent pointer */
+
+	tcp_seq	snd_wl1;		/* window update seg seq number */
+	tcp_seq	snd_wl2;		/* window update seg ack number */
+	tcp_seq	iss;			/* initial send sequence number */
+	tcp_seq	irs;			/* initial receive sequence number */
+
+	tcp_seq	rcv_nxt;		/* receive next */
+	tcp_seq	rcv_adv;		/* advertised window */
+	u_long	rcv_wnd;		/* receive window */
+	tcp_seq	rcv_up;			/* receive urgent pointer */
+
+	u_long	snd_wnd;		/* send window */
+/*
+ * Additional variables for this implementation.
+ */
 /* congestion control (for slow start, source quench, retransmit after loss) */
 	u_long	snd_cwnd;		/* congestion-controlled window */
 	u_long	snd_ssthresh;		/* snd_cwnd size threshold for
@@ -118,19 +127,19 @@ struct tcpcb {
 	u_int	t_rttmin;		/* minimum rtt allowed */
 	u_long	max_sndwnd;		/* largest window peer has offered */
 
+	int	t_softerror;		/* possible error not yet reported */
 /* out-of-band data */
 	char	t_oobflags;		/* have some */
 	char	t_iobc;			/* input character */
 #define	TCPOOB_HAVEDATA	0x01
 #define	TCPOOB_HADDATA	0x02
-	int	t_softerror;		/* possible error not yet reported */
-
 /* RFC 1323 variables */
 	u_char	snd_scale;		/* window scaling for send window */
 	u_char	rcv_scale;		/* window scaling for recv window */
 	u_char	request_r_scale;	/* pending window scaling */
 	u_char	requested_s_scale;
 	u_long	ts_recent;		/* timestamp echo data */
+
 	u_long	ts_recent_age;		/* when last updated */
 	tcp_seq	last_ack_sent;
 /* RFC 1644 variables */
@@ -151,13 +160,18 @@ struct tcpcb {
  * to tcp_dooptions.
  */
 struct tcpopt {
-	u_long	to_flag;		/* which options are present */
-#define TOF_TS		0x0001		/* timestamp */
-#define TOF_CC		0x0002		/* CC and CCnew are exclusive */
-#define TOF_CCNEW	0x0004
+	u_long		to_flags;	/* which options are present */
+#define	TOF_TS		0x0001		/* timestamp */
+#define	TOF_CC		0x0002		/* CC and CCnew are exclusive */
+#define	TOF_CCNEW	0x0004
 #define	TOF_CCECHO	0x0008
-	u_long	to_tsval;
-	u_long	to_tsecr;
+#define	TOF_MSS		0x0010
+#define	TOF_SCALE	0x0020
+#define	TOF_SIGNATURE	0x0040		/* signature option present */
+#define	TOF_SIGLEN	0x0080		/* signature length valid (RFC2385) */
+#define	TOF_SACK	0x0100		/* Peer sent SACK option */
+	u_int32_t	to_tsval;
+	u_int32_t	to_tsecr;
 	tcp_cc	to_cc;		/* holds CC or CCnew */
 	tcp_cc	to_ccecho;
 };
@@ -180,6 +194,7 @@ struct rmxp_tao {
 #define rmx_taop(r)	((struct rmxp_tao *)(r).rmx_filler)
 
 #define	intotcpcb(ip)	((struct tcpcb *)(ip)->inp_ppcb)
+#define	intotw(ip)	((struct tcptw *)(ip)->inp_ppcb)
 #define	sototcpcb(so)	(intotcpcb(sotoinpcb(so)))
 
 /*
@@ -335,7 +350,7 @@ struct	xtcpcb {
 #define	TCPCTL_KEEPINTVL	7	/* interval to send keepalives */
 #define	TCPCTL_SENDSPACE	8	/* send buffer space */
 #define	TCPCTL_RECVSPACE	9	/* receive buffer space */
-#define	TCPCTL_KEEPINIT		10	/* receive buffer space */
+#define	TCPCTL_KEEPINIT		10	/* timeout for establishing syn */
 #define	TCPCTL_PCBLIST		11	/* list of all outstanding PCBs */
 #define TCPCTL_MAXID		12
 
@@ -366,35 +381,35 @@ extern	u_long tcp_now;		/* for RFC 1323 timestamps */
 
 void	 tcp_canceltimers __P((struct tcpcb *));
 struct tcpcb *
-	 tcp_close __P((struct tcpcb *));
-void	 tcp_ctlinput __P((int, struct sockaddr *, void *));
+	 tcp_close(struct tcpcb *);
+void	 tcp_ctlinput(int, struct sockaddr *, void *);
 int	 tcp_ctloutput __P((int, struct socket *, int, int, struct mbuf **));
 struct tcpcb *
-	 tcp_drop __P((struct tcpcb *, int));
-void	 tcp_drain __P((void));
-void	 tcp_fasttimo __P((void));
+	 tcp_drop(struct tcpcb *, int);
+void	 tcp_drain(void);
+void	 tcp_fasttimo(void);
 struct rmxp_tao *
 	 tcp_gettaocache __P((struct inpcb *));
-void	 tcp_init __P((void));
-void	 tcp_input __P((struct mbuf *, int));
-void	 tcp_mss __P((struct tcpcb *, int));
+void	 tcp_init(void);
+void	 tcp_input(struct mbuf *, int);
+void	 tcp_mss(struct tcpcb *, int);
 int	 tcp_mssopt __P((struct tcpcb *));
-void	 tcp_mtudisc __P((struct inpcb *, int));
+void	 tcp_mtudisc(struct inpcb *, int);
 struct tcpcb *
-	 tcp_newtcpcb __P((struct inpcb *));
-int	 tcp_output __P((struct tcpcb *));
-void	 tcp_quench __P((struct inpcb *, int));
-void	 tcp_respond __P((struct tcpcb *,
-	    struct tcpiphdr *, struct mbuf *, u_long, u_long, int));
+	 tcp_newtcpcb(struct inpcb *);
+int	 tcp_output(struct tcpcb *);
+void	 tcp_quench(struct inpcb *, int);
+void	 tcp_respond(struct tcpcb *,
+	    struct tcpiphdr *, struct mbuf *, tcp_seq, tcp_seq, int);
 struct rtentry *
 	 tcp_rtlookup __P((struct inpcb *));
-void	 tcp_setpersist __P((struct tcpcb *));
-void	 tcp_slowtimo __P((void));
+void	 tcp_setpersist(struct tcpcb *);
+void	 tcp_slowtimo(void);
 struct tcpiphdr *
 	 tcp_template __P((struct tcpcb *));
 struct tcpcb *
-	 tcp_timers __P((struct tcpcb *, int));
-void	 tcp_trace __P((int, int, struct tcpcb *, struct tcpiphdr *, int));
+	 tcp_timers(struct tcpcb *, int);
+void	 tcp_trace(int, int, struct tcpcb *, struct tcpiphdr *, int);
 
 extern	struct pr_usrreqs tcp_usrreqs;
 extern	u_long tcp_sendspace;

@@ -506,7 +506,7 @@ findpcb:
 	if (tp->t_state == TCPS_ESTABLISHED &&
 	    (tiflags & (TH_SYN|TH_FIN|TH_RST|TH_URG|TH_ACK)) == TH_ACK &&
 	    ((tp->t_flags & (TF_NEEDSYN|TF_NEEDFIN)) == 0) &&
-	    ((to.to_flag & TOF_TS) == 0 ||
+	    ((to.to_flags & TOF_TS) == 0 ||
 	     TSTMP_GEQ(to.to_tsval, tp->ts_recent)) &&
 	    /*
 	     * Using the CC option is compulsory if once started:
@@ -514,7 +514,7 @@ findpcb:
 	     *   if the segment has a CC option equal to CCrecv
 	     */
 	    ((tp->t_flags & (TF_REQ_CC|TF_RCVD_CC)) != (TF_REQ_CC|TF_RCVD_CC) ||
-	     ((to.to_flag & TOF_CC) != 0 && to.to_cc == tp->cc_recv)) &&
+	     ((to.to_flags & TOF_CC) != 0 && to.to_cc == tp->cc_recv)) &&
 	    ti->ti_seq == tp->rcv_nxt &&
 	    tiwin && tiwin == tp->snd_wnd &&
 	    tp->snd_nxt == tp->snd_max) {
@@ -525,7 +525,7 @@ findpcb:
 		 * NOTE that the test is modified according to the latest
 		 * proposal of the tcplw@cray.com list (Braden 1993/04/26).
 		 */
-		if ((to.to_flag & TOF_TS) != 0 &&
+		if ((to.to_flags & TOF_TS) != 0 &&
 		   SEQ_LEQ(ti->ti_seq, tp->last_ack_sent)) {
 			tp->ts_recent_age = tcp_now;
 			tp->ts_recent = to.to_tsval;
@@ -540,7 +540,7 @@ findpcb:
 				 * this is a pure ack for outstanding data.
 				 */
 				++tcpstat.tcps_predack;
-				if ((to.to_flag & TOF_TS) != 0)
+				if ((to.to_flags & TOF_TS) != 0)
 					tcp_xmit_timer(tp,
 					    tcp_now - to.to_tsecr + 1);
 				else if (tp->t_rtt &&
@@ -719,7 +719,7 @@ findpcb:
 		 *	processing: drop SYN, process data and FIN.
 		 * - otherwise do a normal 3-way handshake.
 		 */
-		if ((to.to_flag & TOF_CC) != 0) {
+		if ((to.to_flags & TOF_CC) != 0) {
 		    if (taop->tao_cc != 0 && CC_GT(to.to_cc, taop->tao_cc)) {
 			taop->tao_cc = to.to_cc;
 			tp->t_state = TCPS_ESTABLISHED;
@@ -842,7 +842,7 @@ findpcb:
 			 * by the old rules.  If no CC.ECHO option, make sure
 			 * we don't get fooled into using T/TCP.
 			 */
-			if (to.to_flag & TOF_CCECHO) {
+			if (to.to_flags & TOF_CCECHO) {
 				if (tp->cc_send != to.to_ccecho) {
 					if (taop->tao_ccsent != 0)
 						goto drop;
@@ -899,7 +899,7 @@ findpcb:
 		 */
 			tp->t_flags |= TF_ACKNOW;
 			tp->t_timer[TCPT_REXMT] = 0;
-			if (to.to_flag & TOF_CC) {
+			if (to.to_flags & TOF_CC) {
 				if (taop->tao_cc != 0 &&
 				    CC_GT(to.to_cc, taop->tao_cc)) {
 					/*
@@ -970,7 +970,7 @@ trimthenstep6:
 	case TCPS_CLOSING:
 	case TCPS_TIME_WAIT:
 		if ((tiflags & TH_SYN) &&
-		    (to.to_flag & TOF_CC) && tp->cc_recv != 0) {
+		    (to.to_flags & TOF_CC) && tp->cc_recv != 0) {
 			if (tp->t_state == TCPS_TIME_WAIT &&
 					tp->t_duration > TCPTV_MSL)
 				goto dropwithreset;
@@ -995,7 +995,7 @@ trimthenstep6:
 	 * RFC 1323 PAWS: If we have a timestamp reply on this segment
 	 * and it's less than ts_recent, drop it.
 	 */
-	if ((to.to_flag & TOF_TS) != 0 && (tiflags & TH_RST) == 0 &&
+	if ((to.to_flags & TOF_TS) != 0 && (tiflags & TH_RST) == 0 &&
 	    tp->ts_recent && TSTMP_LT(to.to_tsval, tp->ts_recent)) {
 
 		/* Check to see if ts_recent is over 24 days old.  */
@@ -1027,7 +1027,7 @@ trimthenstep6:
 	 *   RST segments do not have to comply with this.
 	 */
 	if ((tp->t_flags & (TF_REQ_CC|TF_RCVD_CC)) == (TF_REQ_CC|TF_RCVD_CC) &&
-	    ((to.to_flag & TOF_CC) == 0 || tp->cc_recv != to.to_cc) &&
+	    ((to.to_flags & TOF_CC) == 0 || tp->cc_recv != to.to_cc) &&
 	    (tiflags & TH_RST) == 0)
  		goto dropafterack;
 
@@ -1135,7 +1135,7 @@ trimthenstep6:
 	 * NOTE that the test is modified according to the latest
 	 * proposal of the tcplw@cray.com list (Braden 1993/04/26).
 	 */
-	if ((to.to_flag & TOF_TS) != 0 &&
+	if ((to.to_flags & TOF_TS) != 0 &&
 	    SEQ_LEQ(ti->ti_seq, tp->last_ack_sent)) {
 		tp->ts_recent_age = tcp_now;
 		tp->ts_recent = to.to_tsval;
@@ -1370,7 +1370,7 @@ process_ACK:
 		 * timer backoff (cf., Phil Karn's retransmit alg.).
 		 * Recompute the initial retransmit timer.
 		 */
-		if (to.to_flag & TOF_TS)
+		if (to.to_flags & TOF_TS)
 			tcp_xmit_timer(tp, tcp_now - to.to_tsecr + 1);
 		else if (tp->t_rtt && SEQ_GT(ti->ti_ack, tp->t_rtseq))
 			tcp_xmit_timer(tp,tp->t_rtt);
@@ -1783,7 +1783,7 @@ tcp_dooptions(tp, cp, cnt, ti, to)
 		case TCPOPT_TIMESTAMP:
 			if (optlen != TCPOLEN_TIMESTAMP)
 				continue;
-			to->to_flag |= TOF_TS;
+			to->to_flags |= TOF_TS;
 			bcopy((char *)cp + 2,
 			    (char *)&to->to_tsval, sizeof(to->to_tsval));
 			NTOHL(to->to_tsval);
@@ -1804,7 +1804,7 @@ tcp_dooptions(tp, cp, cnt, ti, to)
 		case TCPOPT_CC:
 			if (optlen != TCPOLEN_CC)
 				continue;
-			to->to_flag |= TOF_CC;
+			to->to_flags |= TOF_CC;
 			bcopy((char *)cp + 2,
 			    (char *)&to->to_cc, sizeof(to->to_cc));
 			NTOHL(to->to_cc);
@@ -1820,7 +1820,7 @@ tcp_dooptions(tp, cp, cnt, ti, to)
 				continue;
 			if (!(ti->ti_flags & TH_SYN))
 				continue;
-			to->to_flag |= TOF_CCNEW;
+			to->to_flags |= TOF_CCNEW;
 			bcopy((char *)cp + 2,
 			    (char *)&to->to_cc, sizeof(to->to_cc));
 			NTOHL(to->to_cc);
@@ -1835,7 +1835,7 @@ tcp_dooptions(tp, cp, cnt, ti, to)
 				continue;
 			if (!(ti->ti_flags & TH_SYN))
 				continue;
-			to->to_flag |= TOF_CCECHO;
+			to->to_flags |= TOF_CCECHO;
 			bcopy((char *)cp + 2,
 			    (char *)&to->to_ccecho, sizeof(to->to_ccecho));
 			NTOHL(to->to_ccecho);
