@@ -1,3 +1,10 @@
+2005-05-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 784/networking
+	* libnetworking/net/if_arp.h, libnetworking/netinet/if_ether.h,
+	libnetworking/netinet/ip_icmp.h, libnetworking/netinet/ip_var.h,
+	libnetworking/netinet/tcp.h: Define BYTE_PACK.
+
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/rtsock.c: Abandon AF_NS.
