@@ -30,12 +30,12 @@
  * $FreeBSD: src/sys/net/if_arp.h,v 1.21 2005/01/07 01:45:34 imp Exp $
  */
 
+/*
+ * $Id$
+ */
+
 #ifndef _NET_IF_ARP_H_
 #define	_NET_IF_ARP_H_
-
-#ifndef BYTE_PACK
-#define BYTE_PACK __attribute__((packed))
-#endif
 
 /*
  * Address Resolution Protocol.
@@ -48,16 +48,16 @@
  * specified.  Field names used correspond to RFC 826.
  */
 struct	arphdr {
-	u_short	ar_hrd BYTE_PACK;		/* format of hardware address */
+	u_short	ar_hrd;		/* format of hardware address */
 #define ARPHRD_ETHER 	1	/* ethernet hardware format */
 #define ARPHRD_IEEE802	6	/* token-ring hardware format */
 #define ARPHRD_ARCNET	7	/* arcnet hardware format */
 #define ARPHRD_FRELAY 	15	/* frame relay hardware format */
 #define ARPHRD_IEEE1394	24	/* firewire hardware format */
-	u_short	ar_pro BYTE_PACK;		/* format of protocol address */
-	u_char	ar_hln BYTE_PACK;		/* length of hardware address */
-	u_char	ar_pln BYTE_PACK;		/* length of protocol address */
-	u_short	ar_op BYTE_PACK;		/* one of: */
+	u_short	ar_pro;		/* format of protocol address */
+	u_char	ar_hln;		/* length of hardware address */
+	u_char	ar_pln;		/* length of protocol address */
+	u_short	ar_op;		/* one of: */
 #define	ARPOP_REQUEST	1	/* request to resolve address */
 #define	ARPOP_REPLY	2	/* response to previous request */
 #define	ARPOP_REVREQUEST 3	/* request protocol address given hardware */
