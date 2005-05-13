@@ -11,9 +11,6 @@
  *  $Id$
  */
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <rtems/system.h>
 #include <rtems/score/sysstate.h>
@@ -40,24 +37,19 @@ void _Heap_Get_free_information(
 )
 {
   Heap_Block *the_block;
-  Heap_Block *const tail = _Heap_Tail(the_heap);
 
-  info->number = 0;
+  info->number  = 0;
   info->largest = 0;
-  info->total = 0;
+  info->total   = 0;
 
-  for(the_block = _Heap_First(the_heap);
-      the_block != tail;
-      the_block = the_block->next)
-  {
-    uint32_t const the_size = _Heap_Block_size(the_block);
-
-    /* As we always coalesce free blocks, prev block must have been used. */
-    _HAssert(_Heap_Is_prev_used(the_block));
-
+  for ( the_block = the_heap->first ; ; the_block = the_block->next ) {
+    if ( the_block == _Heap_Tail( the_heap ) )
+      return;
+    
     info->number++;
-    info->total += the_size;
-    if ( info->largest < the_size )
-        info->largest = the_size;
+    info->total += the_block->front_flag;
+
+    if ( the_block->front_flag > info->largest )
+      info->largest = the_block->front_flag;
   }
 }

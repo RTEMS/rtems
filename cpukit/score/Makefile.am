@@ -125,7 +125,7 @@ CORE_SEMAPHORE_C_FILES = src/coresem.c src/coresemflush.c src/coresemseize.c \
     src/coresemsurrender.c
 
 HEAP_C_FILES = src/heap.c src/heapallocate.c src/heapextend.c src/heapfree.c \
-    src/heapsizeofuserarea.c src/heapwalk.c src/heapgetinfo.c
+    src/heapsizeofuserarea.c src/heapwalk.c src/heapgetinfo.c src/heapgetfreeinfo.c
 
 OBJECT_C_FILES = src/object.c src/objectallocate.c src/objectallocatebyindex.c \
     src/objectclearname.c src/objectcomparenameraw.c src/objectcomparenamestring.c \

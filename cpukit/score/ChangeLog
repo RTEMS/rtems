@@ -1,3 +1,10 @@
+2005-05-13      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        PR 786/rtems    
+        Backport mallocfreespace optimization.  
+        * Makefile.am, include/rtems/score/heap.h, src/heapgetinfo.c: 
+        * src/heapgetfreeinfo.c: New file.
+
 2005-03-17	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/score/object.h, src/objectinitializeinformation.c: Fix

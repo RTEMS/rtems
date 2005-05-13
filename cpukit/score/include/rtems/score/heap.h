@@ -46,6 +46,18 @@ typedef enum {
 }  Heap_Get_information_status;
         
 /*
+ *  Information block returned by the Heap routines used to
+ *  obtain statistics.  This information is returned about
+ *  either free or used blocks.
+ */
+
+typedef struct {
+  unsigned32 number;  /* Number of blocks */
+  unsigned32 largest; /* Largest blocks */
+  unsigned32 total;   /* Total size of the blocks */
+} Heap_Information;
+
+/*
  *  Information block returned by _Heap_Get_information
  */
 
@@ -256,6 +268,10 @@ Heap_Get_information_status _Heap_Get_information(
   Heap_Information_block  *the_info
 );
 
+void _Heap_Get_free_information(
+  Heap_Control        *the_heap,
+  Heap_Information    *info
+);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/heap.inl>

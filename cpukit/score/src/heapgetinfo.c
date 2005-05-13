@@ -91,10 +91,9 @@ Heap_Get_information_status _Heap_Get_information(
         }
       }
 
+      the_block = next_block;
       if ( the_block->front_flag == HEAP_DUMMY_FLAG )
         notdone = 0;
-      else
-        the_block = next_block;
   }  /* while(notdone) */
 
   return HEAP_GET_INFORMATION_SUCCESSFUL;
