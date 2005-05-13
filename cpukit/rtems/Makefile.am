@@ -118,7 +118,7 @@ SIGNAL_C_FILES = src/signal.c src/signalcatch.c src/signalsend.c
 
 REGION_C_FILES = src/region.c src/regioncreate.c src/regiondelete.c src/regionextend.c \
     src/regiongetsegment.c src/regiongetsegmentsize.c src/regionident.c \
-    src/regionreturnsegment.c src/regiongetinfo.c
+    src/regionreturnsegment.c src/regiongetinfo.c src/regiongetfreeinfo.c
 
 PARTITION_C_FILES = src/part.c src/partcreate.c src/partdelete.c src/partgetbuffer.c \
     src/partident.c src/partreturnbuffer.c

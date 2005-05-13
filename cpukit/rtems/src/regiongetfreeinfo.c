@@ -12,10 +12,6 @@
  *  $Id$
  */
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
@@ -39,14 +35,14 @@
  *    the_info   - pointer to region information block
  *
  *  Output parameters:
- *    *the_info   - region information block filled in
+ *    *the_info        - region information block filled in
  *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_region_get_free_information(
-  Objects_Id              id,
-  Heap_Information_block *the_info
+  Objects_Id        id,
+  Heap_Information *the_info
 )
 {
   register Region_Control *the_region;
@@ -68,11 +64,11 @@ rtems_status_code rtems_region_get_free_information(
 
     case OBJECTS_LOCAL:
 
-      the_info->Used.number   = 0;
-      the_info->Used.total    = 0;
-      the_info->Used.largest  = 0;
+      the_info->number   = 0;
+      the_info->total    = 0;
+      the_info->largest  = 0;
 
-      _Heap_Get_free_information( &the_region->Memory, &the_info->Free );
+      _Heap_Get_free_information( &the_region->Memory, the_info );
 
       _RTEMS_Unlock_allocator();
       return RTEMS_SUCCESSFUL;
