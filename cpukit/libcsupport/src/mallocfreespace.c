@@ -35,10 +35,10 @@ extern rtems_id RTEMS_Malloc_Heap;
 
 size_t malloc_free_space( void )
 {
-  region_information_block   heap_info;
+  Heap_Information  heap_info;
 
-  if ( !rtems_region_get_information( RTEMS_Malloc_Heap, &heap_info ) ) {
-    return (size_t) heap_info.free_size;
+  if ( !rtems_region_get_free_information( RTEMS_Malloc_Heap, &heap_info ) ) {
+    return (size_t) heap_info.largest;
   }
   return (size_t) -1;
 }

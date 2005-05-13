@@ -1,3 +1,9 @@
+2005-05-13      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * src/mallocfreespace.c: 
+        PR 786/rtems
+        Backport mallocfreespace optimization.
+
 2005-01-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* src/gxx_wrappers.c: Backport from trunk. Add support for GCC-4.0.
