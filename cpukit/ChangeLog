@@ -1,3 +1,8 @@
+2005-05-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/tcp_usrreq.c: Cosmetics from FreeBSD.
+	* libnetworking/netinet/tcp_subr.c: Partical update from FreeBSD.
+
 2005-05-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Let --enable-deprecated default to "no".

@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_subr.c	8.2 (Berkeley) 5/24/95
+ * $FreeBSD: src/sys/netinet/tcp_subr.c,v 1.226 2005/05/07 00:41:36 cperciva Exp $
+ */
+ 
+/*
  *	$Id$
  */
 
@@ -70,12 +70,11 @@
 #include <netinet/tcp_debug.h>
 #endif
 
-int 	tcp_mssdflt = TCP_MSS;
-SYSCTL_INT(_net_inet_tcp, TCPCTL_MSSDFLT, mssdflt,
-	CTLFLAG_RW, &tcp_mssdflt , 0, "");
+int	tcp_mssdflt = TCP_MSS;
+SYSCTL_INT(_net_inet_tcp, TCPCTL_MSSDFLT, mssdflt, CTLFLAG_RW,
+    &tcp_mssdflt , 0, "Default TCP Maximum Segment Size");
 
 static int	tcp_do_rfc1323 = 1;
-static int	tcp_do_rfc1644 = 1;
 #if !defined(__rtems__)
 static int 	tcp_rttdflt = TCPTV_SRTTDFLT / PR_SLOWHZ;
 SYSCTL_INT(_net_inet_tcp, TCPCTL_RTTDFLT, rttdflt,
@@ -83,12 +82,8 @@ SYSCTL_INT(_net_inet_tcp, TCPCTL_RTTDFLT, rttdflt,
 
 SYSCTL_INT(_net_inet_tcp, TCPCTL_DO_RFC1323, rfc1323,
 	CTLFLAG_RW, &tcp_do_rfc1323 , 0, "");
-
-SYSCTL_INT(_net_inet_tcp, TCPCTL_DO_RFC1644, rfc1644,
-	CTLFLAG_RW, &tcp_do_rfc1644 , 0, "");
 #endif
 
-static void	tcp_cleartaocache(void);
 static void	tcp_notify __P((struct inpcb *, int));
 
 /*
@@ -108,7 +103,6 @@ tcp_init()
 
 	tcp_iss = random();	/* wrong, but better than a constant */
 	tcp_ccgen = 1;
-	tcp_cleartaocache();
 	LIST_INIT(&tcb);
 	tcbinfo.listhead = &tcb;
 	tcbinfo.hashbase = hashinit(TCBHASHSIZE, M_PCB, &tcbinfo.hashmask);
@@ -193,7 +187,7 @@ tcp_respond(tp, ti, m, ack, seq, flags)
 		ro = &sro;
 		bzero(ro, sizeof *ro);
 	}
-	if (m == 0) {
+	if (m == NULL) {
 		m = m_gethdr(M_DONTWAIT, MT_HEADER);
 		if (m == NULL)
 			return;
@@ -208,7 +202,7 @@ tcp_respond(tp, ti, m, ack, seq, flags)
 		flags = TH_ACK;
 	} else {
 		m_freem(m->m_next);
-		m->m_next = 0;
+		m->m_next = NULL;
 		m->m_data = (caddr_t)ti;
 		m->m_len = sizeof (struct tcpiphdr);
 		tlen = 0;
@@ -257,7 +251,7 @@ struct tcpcb *
 tcp_newtcpcb(inp)
 	struct inpcb *inp;
 {
-	register struct tcpcb *tp;
+	struct tcpcb *tp;
 
 	tp = malloc(sizeof(*tp), M_PCB, M_NOWAIT);
 	if (tp == NULL)
@@ -268,8 +262,6 @@ tcp_newtcpcb(inp)
 
 	if (tcp_do_rfc1323)
 		tp->t_flags = (TF_REQ_SCALE|TF_REQ_TSTMP);
-	if (tcp_do_rfc1644)
-		tp->t_flags |= TF_REQ_CC;
 	tp->t_inpcb = inp;
 	/*
 	 * Init srtt to TCPTV_SRTTBASE (0), so we can tell that we have no
@@ -319,7 +311,7 @@ tcp_drop(tp, errnum)
  */
 struct tcpcb *
 tcp_close(tp)
-	register struct tcpcb *tp;
+	struct tcpcb *tp;
 {
 	register struct tcpiphdr *t;
 	struct inpcb *inp = tp->t_inpcb;
@@ -433,8 +425,8 @@ tcp_notify(inp, error)
 	struct inpcb *inp;
 	int error;
 {
-	register struct tcpcb *tp = (struct tcpcb *)inp->inp_ppcb;
-	register struct socket *so = inp->inp_socket;
+	struct tcpcb *tp = (struct tcpcb *)inp->inp_ppcb;
+	struct socket *so = inp->inp_socket;
 
 	/*
 	 * Ignore some errors if we are hooked up.
@@ -444,8 +436,8 @@ tcp_notify(inp, error)
 	 * can never complete.
 	 */
 	if (tp->t_state == TCPS_ESTABLISHED &&
-	     (error == EHOSTUNREACH || error == ENETUNREACH ||
-	      error == EHOSTDOWN)) {
+	    (error == EHOSTUNREACH || error == ENETUNREACH ||
+	     error == EHOSTDOWN)) {
 		return;
 	} else if (tp->t_state < TCPS_ESTABLISHED && tp->t_rxtshift > 3 &&
 	    tp->t_softerror)
@@ -476,15 +468,15 @@ tcp_pcblist(SYSCTL_HANDLER_ARGS)
 	 * The process of preparing the TCB list is too time-consuming and
 	 * resource-intensive to repeat twice on every request.
 	 */
-	if (req->oldptr == 0) {
+	if (req->oldptr == NULL) {
 		n = tcbinfo.ipi_count;
 		req->oldidx = 2 * (sizeof xig)
 			+ (n + n/8) * sizeof(struct xtcpcb);
-		return 0;
+		return (0);
 	}
 
-	if (req->newptr != 0)
-		return EPERM;
+	if (req->newptr != NULL)
+		return (EPERM);
 
 	/*
 	 * OK, now we're committed to doing something.
@@ -587,8 +579,8 @@ tcp_ctlinput(cmd, sa, vip)
 	struct sockaddr *sa;
 	void *vip;
 {
-	register struct ip *ip = vip;
-	register struct tcphdr *th;
+	struct ip *ip = vip;
+	struct tcphdr *th;
 	void (*notify) __P((struct inpcb *, int)) = tcp_notify;
 
 	if (cmd == PRC_QUENCH)
@@ -624,7 +616,6 @@ tcp_quench(inp, errnum)
 		tp->snd_cwnd = tp->t_maxseg;
 }
 
-#if 1
 /*
  * When `need fragmentation' ICMP is received, update our idea of the MSS
  * based on the new value in the route.  Also nudge TCP to send something,
@@ -699,11 +690,10 @@ tcp_mtudisc(inp, errnum)
 		tcp_output(tp);
 	}
 }
-#endif
 
 /*
  * Look-up the routing entry to the peer of this inpcb.  If no route
- * is found and it cannot be allocated the return NULL.  This routine
+ * is found and it cannot be allocated, then return NULL.  This routine
  * is called by TCP routines that access the rmx structure and by tcp_mss
  * to get the interface MTU.
  */
@@ -748,15 +738,3 @@ tcp_gettaocache(inp)
 
 	return rmx_taop(rt->rt_rmx);
 }
-
-/*
- * Clear all the TAO cache entries, called from tcp_init.
- *
- * XXX
- * This routine is just an empty one, because we assume that the routing
- * routing tables are initialized at the same time when TCP, so there is
- * nothing in the cache left over.
- */
-static void
-tcp_cleartaocache(void)
-{ }
