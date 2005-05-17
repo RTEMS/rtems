@@ -34,7 +34,6 @@
 	* libnetworking/net/rtsock.c: Abandon AF_NS.
 	* libnetworking/sys/socket.h: Abandon AF_NS, PF_NS.
 
->>>>>>> 1.520
 2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* httpd/socket.c: socklen_t.
