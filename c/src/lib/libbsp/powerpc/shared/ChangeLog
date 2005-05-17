@@ -1,3 +1,8 @@
+2005-05-17      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * clock/p_clock.c, irq/i8259.c, irq/irq.c, irq/irq.h: Modified to use
+        rtems/irq.h.
+
 2005-05-10      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * bootloader/bootldr.h, bootloader/em86.c, bootloader/misc.c,

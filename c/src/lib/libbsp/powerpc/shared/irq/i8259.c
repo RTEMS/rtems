@@ -31,7 +31,7 @@ volatile rtems_i8259_masks i8259s_cache = 0xfffb;
 |        Arguments: vector_offset - number of IRQ line to mask.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
-int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
+int BSP_irq_disable_at_i8259s    (const rtems_irq_number irqLine)
 {
   unsigned short mask;
   unsigned int 	level;
@@ -66,7 +66,7 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
 |        Arguments: irqLine - number of IRQ line to mask.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
-int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
+int BSP_irq_enable_at_i8259s    (const rtems_irq_number irqLine)
 {
   unsigned short mask;
   unsigned int 	level;
@@ -94,7 +94,7 @@ int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
   return 0;
 } /* mask_irq */
 
-int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
+int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine)
 {
   unsigned short mask;
 
@@ -114,7 +114,7 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
 |        Arguments: irqLine - number of IRQ line to acknowledge.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
-int BSP_irq_ack_at_i8259s  	(const rtems_irq_symbolic_name irqLine)
+int BSP_irq_ack_at_i8259s  	(const rtems_irq_number irqLine)
 {
   if (irqLine >= 8) {
     outport_byte(PIC_MASTER_COMMAND_IO_PORT, SLAVE_PIC_EOSI);
