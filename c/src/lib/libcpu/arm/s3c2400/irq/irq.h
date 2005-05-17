@@ -32,43 +32,40 @@ extern void default_int_handler();
 | Constants
 +--------------------------------------------------------------------------*/
 
-  /* enum of the possible interrupt sources */
-typedef enum {
-    BSP_EINT0 = 0,
-    BSP_EINT1,
-    BSP_EINT2,
-    BSP_EINT3,
-    BSP_EINT4,
-    BSP_EINT5,
-    BSP_EINT6,
-    BSP_EINT7,
-    BSP_INT_TICK,
-    BSP_INT_WDT,
-    BSP_INT_TIMER0,
-    BSP_INT_TIMER1,
-    BSP_INT_TIMER2,
-    BSP_INT_TIMER3,
-    BSP_INT_TIMER4,
-    BSP_INT_UERR01,
-    _res0,
-    BSP_INT_DMA0,
-    BSP_INT_DMA1,
-    BSP_INT_DMA2,
-    BSP_INT_DMA3,
-    BSP_INT_MMC,
-    BSP_INT_SPI,
-    BSP_INT_URXD0,
-    BSP_INT_URXD1,
-    BSP_INT_USBD,
-    BSP_INT_USBH,
-    BSP_INT_IIC,
-    BSP_INT_UTXD0,
-    BSP_INT_UTXD1,
-    BSP_INT_RTC,
-    BSP_INT_ADC,
-  
-    BSP_MAX_INT
-} rtems_irq_symbolic_name;
+  /* possible interrupt sources */
+#define BSP_EINT0             0
+#define BSP_EINT1             1
+#define BSP_EINT2             2
+#define BSP_EINT3             3
+#define BSP_EINT4             4
+#define BSP_EINT5             5
+#define BSP_EINT6             6
+#define BSP_EINT7             7
+#define BSP_INT_TICK          8  
+#define BSP_INT_WDT           9 
+#define BSP_INT_TIMER0       10    
+#define BSP_INT_TIMER1       11    
+#define BSP_INT_TIMER2       12    
+#define BSP_INT_TIMER3       13    
+#define BSP_INT_TIMER4       14    
+#define BSP_INT_UERR01       15    
+#define _res0                16        
+#define BSP_INT_DMA0         17  
+#define BSP_INT_DMA1         18  
+#define BSP_INT_DMA2         19  
+#define BSP_INT_DMA3         20  
+#define BSP_INT_MMC          21 
+#define BSP_INT_SPI          22 
+#define BSP_INT_URXD0        23   
+#define BSP_INT_URXD1        24   
+#define BSP_INT_USBD         25  
+#define BSP_INT_USBH         26  
+#define BSP_INT_IIC          27 
+#define BSP_INT_UTXD0        28   
+#define BSP_INT_UTXD1        29   
+#define BSP_INT_RTC          30 
+#define BSP_INT_ADC          31 
+#define BSP_MAX_INT          32 
 
 extern void *bsp_vector_table;
 #define VECTOR_TABLE &bsp_vector_table
@@ -80,7 +77,7 @@ typedef unsigned char  rtems_irq_level;
 typedef unsigned char  rtems_irq_trigger;
 
 struct  __rtems_irq_connect_data__;     /* forward declaratiuon */
-
+typedef unsigned int rtems_irq_number;
 typedef void (*rtems_irq_hdl) (void);
 typedef void (*rtems_irq_enable) (const struct __rtems_irq_connect_data__*);
 typedef void (*rtems_irq_disable) (const struct __rtems_irq_connect_data__*);
@@ -90,7 +87,7 @@ typedef struct __rtems_irq_connect_data__ {
     /*
      * IRQ line
      */
-    rtems_irq_symbolic_name     name;
+    rtems_irq_number                    name;
 
     /*
      * handler. See comment on handler properties below in function prototype.

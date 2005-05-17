@@ -34,79 +34,77 @@ extern void default_int_handler();
  * Constants
  **********************************************************************/
 
-/* enum of the possible interrupt sources on the AT91RM9200 */
-typedef enum {
-    BSP_INT_UART3_PFERR = 0,
-    BSP_INT_UART3_RTS,
-    BSP_INT_UART3_DTR,
-    BSP_INT_UART3_UARTC,
-    BSP_INT_UART3_TX,
-    BSP_INT_PEN_UP,
-    BSP_INT_CSI,
-    BSP_INT_MMA_MAC,
-    BSP_INT_MMA,
-    BSP_INT_COMP,
-    BSP_INT_MSIRQ,
-    BSP_INT_GPIO_PORTA,
-    BSP_INT_GPIO_PORTB,
-    BSP_INT_GPIO_PORTC,
-    BSP_INT_LCDC,
-    BSP_INT_SIM_IRQ,
-    BSP_INT_SIM_DATA,
-    BSP_INT_RTC,
-    BSP_INT_RTC_SAM,
-    BSP_INT_UART2_PFERR,
-    BSP_INT_UART2_RTS,
-    BSP_INT_UART2_DTR,
-    BSP_INT_UART2_UARTC,
-    BSP_INT_UART2_TX,
-    BSP_INT_UART2_RX,
-    BSP_INT_UART1_PFERR,
-    BSP_INT_UART1_RTS,
-    BSP_INT_UART1_DTR,
-    BSP_INT_UART1_UARTC,
-    BSP_INT_UART1_TX,
-    BSP_INT_UART1_RX,
-    BSP_INT_RES31,
-    BSP_INT_RES32,
-    BSP_INT_PEN_DATA,
-    BSP_INT_PWM,
-    BSP_INT_MMC_IRQ,
-    BSP_INT_SSI2_TX,
-    BSP_INT_SSI2_RX,
-    BSP_INT_SSI2_ERR,
-    BSP_INT_I2C,
-    BSP_INT_SPI2,
-    BSP_INT_SPI1,
-    BSP_INT_SSI_TX,
-    BSP_INT_SSI_TX_ERR,
-    BSP_INT_SSI_RX,
-    BSP_INT_SSI_RX_ERR,
-    BSP_INT_TOUCH,
-    BSP_INT_USBD0,
-    BSP_INT_USBD1,
-    BSP_INT_USBD2,
-    BSP_INT_USBD3,
-    BSP_INT_USBD4,
-    BSP_INT_USBD5,
-    BSP_INT_USBD6,
-    BSP_INT_UART3_RX,
-    BSP_INT_BTSYS,
-    BSP_INT_BTTIM,
-    BSP_INT_BTWUI,
-    BSP_INT_TIMER2,
-    BSP_INT_TIMER1,
-    BSP_INT_DMA_ERR,
-    BSP_INT_DMA,
-    BSP_INT_GPIO_PORTD,
-    BSP_INT_WDT,
-
-    BSP_MAX_INT
-} rtems_irq_symbolic_name;
-
+/* possible interrupt sources on the AT91RM9200 */
+#define BSP_INT_UART3_PFERR       0 
+#define BSP_INT_UART3_RTS         1     
+#define BSP_INT_UART3_DTR         2     
+#define BSP_INT_UART3_UARTC       3       
+#define BSP_INT_UART3_TX          4    
+#define BSP_INT_PEN_UP            5  
+#define BSP_INT_CSI               6
+#define BSP_INT_MMA_MAC           7    
+#define BSP_INT_MMA               8
+#define BSP_INT_COMP              9
+#define BSP_INT_MSIRQ            10  
+#define BSP_INT_GPIO_PORTA       11       
+#define BSP_INT_GPIO_PORTB       12       
+#define BSP_INT_GPIO_PORTC       13       
+#define BSP_INT_LCDC             14 
+#define BSP_INT_SIM_IRQ          15    
+#define BSP_INT_SIM_DATA         16     
+#define BSP_INT_RTC              17
+#define BSP_INT_RTC_SAM          18    
+#define BSP_INT_UART2_PFERR      19        
+#define BSP_INT_UART2_RTS        20      
+#define BSP_INT_UART2_DTR        21      
+#define BSP_INT_UART2_UARTC      22        
+#define BSP_INT_UART2_TX         23     
+#define BSP_INT_UART2_RX         24     
+#define BSP_INT_UART1_PFERR      25        
+#define BSP_INT_UART1_RTS        26      
+#define BSP_INT_UART1_DTR        27      
+#define BSP_INT_UART1_UARTC      28        
+#define BSP_INT_UART1_TX         29     
+#define BSP_INT_UART1_RX         30     
+#define BSP_INT_RES31            31 
+#define BSP_INT_RES32            32 
+#define BSP_INT_PEN_DATA         33    
+#define BSP_INT_PWM              34
+#define BSP_INT_MMC_IRQ          35   
+#define BSP_INT_SSI2_TX          36   
+#define BSP_INT_SSI2_RX          37   
+#define BSP_INT_SSI2_ERR         38    
+#define BSP_INT_I2C              39
+#define BSP_INT_SPI2             40
+#define BSP_INT_SPI1             41
+#define BSP_INT_SSI_TX           42  
+#define BSP_INT_SSI_TX_ERR       43      
+#define BSP_INT_SSI_RX           44   
+#define BSP_INT_SSI_RX_ERR       45      
+#define BSP_INT_TOUCH            46 
+#define BSP_INT_USBD0            47 
+#define BSP_INT_USBD1            48 
+#define BSP_INT_USBD2            49 
+#define BSP_INT_USBD3            50 
+#define BSP_INT_USBD4            51 
+#define BSP_INT_USBD5            52 
+#define BSP_INT_USBD6            53 
+#define BSP_INT_UART3_RX         54    
+#define BSP_INT_BTSYS            55 
+#define BSP_INT_BTTIM            56 
+#define BSP_INT_BTWUI            57 
+#define BSP_INT_TIMER2           58  
+#define BSP_INT_TIMER1           59   
+#define BSP_INT_DMA_ERR          60    
+#define BSP_INT_DMA              61
+#define BSP_INT_GPIO_PORTD       62      
+#define BSP_INT_WDT              63
+#define BSP_MAX_INT              64
+              
 typedef unsigned char  rtems_irq_level;
 typedef unsigned char  rtems_irq_trigger;
 
+typedef unsigned int rtems_irq_number;
 struct  __rtems_irq_connect_data__;     /* forward declaratiuon */
 
 typedef void (*rtems_irq_hdl)       (void);
@@ -119,7 +117,7 @@ extern rtems_irq_hdl bsp_vector_table[BSP_MAX_INT];
   											   
 typedef struct __rtems_irq_connect_data__ {
     /* IRQ line */
-    rtems_irq_symbolic_name       name;
+    rtems_irq_number              name;
 
     /* Handler */
     rtems_irq_hdl                 hdl;

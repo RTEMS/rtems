@@ -32,42 +32,40 @@ extern void default_int_handler();
 /***********************************************************************
  * Constants
  **********************************************************************/
-/* enum of the possible interrupt sources on the AT91RM9200 */
-typedef enum {
-    AT91RM9200_INT_FIQ  = 0,
-    AT91RM9200_INT_SYSIRQ,
-    AT91RM9200_INT_PIOA,
-    AT91RM9200_INT_PIOB,
-    AT91RM9200_INT_PIOC,
-    AT91RM9200_INT_PIOD,
-    AT91RM9200_INT_US0,
-    AT91RM9200_INT_US1,
-    AT91RM9200_INT_US2,
-    AT91RM9200_INT_US3,
-    AT91RM9200_INT_MCI,
-    AT91RM9200_INT_UDP,
-    AT91RM9200_INT_TWI,
-    AT91RM9200_INT_SPI,
-    AT91RM9200_INT_SSC0,
-    AT91RM9200_INT_SSC1,
-    AT91RM9200_INT_SSC2,
-    AT91RM9200_INT_TC0,
-    AT91RM9200_INT_TC1,
-    AT91RM9200_INT_TC2,
-    AT91RM9200_INT_TC3,
-    AT91RM9200_INT_TC4,
-    AT91RM9200_INT_TC5,
-    AT91RM9200_INT_UHP,
-    AT91RM9200_INT_EMAC,
-    AT91RM9200_INT_IRQ0,
-    AT91RM9200_INT_IRQ1,
-    AT91RM9200_INT_IRQ2,
-    AT91RM9200_INT_IRQ3,
-    AT91RM9200_INT_IRQ4,
-    AT91RM9200_INT_IRQ5,
-    AT91RM9200_INT_IRQ6,
-    AT91RM9200_MAX_INT
-} rtems_irq_symbolic_name;
+/* possible interrupt sources on the AT91RM9200 */
+#define AT91RM9200_INT_FIQ        0
+#define AT91RM9200_INT_SYSIRQ     1
+#define AT91RM9200_INT_PIOA       2 
+#define AT91RM9200_INT_PIOB       3
+#define AT91RM9200_INT_PIOC       4
+#define AT91RM9200_INT_PIOD       5
+#define AT91RM9200_INT_US0        6
+#define AT91RM9200_INT_US1        7
+#define AT91RM9200_INT_US2        8
+#define AT91RM9200_INT_US3        9
+#define AT91RM9200_INT_MCI       10
+#define AT91RM9200_INT_UDP       11
+#define AT91RM9200_INT_TWI       12
+#define AT91RM9200_INT_SPI       13
+#define AT91RM9200_INT_SSC0      14
+#define AT91RM9200_INT_SSC1      15
+#define AT91RM9200_INT_SSC2      16
+#define AT91RM9200_INT_TC0       17
+#define AT91RM9200_INT_TC1       18
+#define AT91RM9200_INT_TC2       19
+#define AT91RM9200_INT_TC3       20
+#define AT91RM9200_INT_TC4       21
+#define AT91RM9200_INT_TC5       22
+#define AT91RM9200_INT_UHP       23
+#define AT91RM9200_INT_EMAC      24
+#define AT91RM9200_INT_IRQ0      25
+#define AT91RM9200_INT_IRQ1      26
+#define AT91RM9200_INT_IRQ2      27
+#define AT91RM9200_INT_IRQ3      28
+#define AT91RM9200_INT_IRQ4      28
+#define AT91RM9200_INT_IRQ5      30
+#define AT91RM9200_INT_IRQ6      31
+#define AT91RM9200_MAX_INT       32
 
 /* vector table used by shared/irq_init.c */
 /* we can treat the AT91RM9200 AIC_SVR_BASE as */
@@ -78,7 +76,7 @@ typedef unsigned char  rtems_irq_level;
 typedef unsigned char  rtems_irq_trigger;
 
 struct  __rtems_irq_connect_data__;     /* forward declaratiuon */
-
+typedef unsigned int rtems_irq_number;
 typedef void (*rtems_irq_hdl)       (void);
 typedef void (*rtems_irq_enable)    (const struct __rtems_irq_connect_data__*);
 typedef void (*rtems_irq_disable)   (const struct __rtems_irq_connect_data__*);
@@ -86,7 +84,7 @@ typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);
 
 typedef struct __rtems_irq_connect_data__ {
     /* IRQ line */
-    rtems_irq_symbolic_name       name;
+    rtems_irq_number		 name;
 
     /* Handler */
     rtems_irq_hdl                 hdl;

@@ -1,3 +1,9 @@
+2005-05-17      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * at91rm9200/irq/irq.h, mc9328mxl/irq/irq.h, s3c2400/irq/irq.h:
+        Modified names and types to match rtems/irq.h. Note: rtems/irq.h
+        should be included after the addition of a parameter to ISRs.
+
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Merge-in s3c2400/Makefile.am.
