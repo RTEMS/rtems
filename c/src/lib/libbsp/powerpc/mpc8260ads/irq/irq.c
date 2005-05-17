@@ -41,7 +41,7 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
 /*
  * Check if symbolic IRQ name is an CPM IRQ
  */
-static inline int is_cpm_irq(const rtems_irq_symbolic_name irqLine)
+static inline int is_cpm_irq(const rtems_irq_number irqLine)
 {
 	return (((int) irqLine <= BSP_CPM_IRQ_MAX_OFFSET) &
 			((int) irqLine >= BSP_CPM_IRQ_LOWEST_OFFSET)
@@ -51,7 +51,7 @@ static inline int is_cpm_irq(const rtems_irq_symbolic_name irqLine)
 /*
  * Check if symbolic IRQ name is a Processor IRQ
  */
-static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
+static inline int is_processor_irq(const rtems_irq_number irqLine)
 {
 	return (((int) irqLine <= BSP_PROCESSOR_IRQ_MAX_OFFSET) &
 			((int) irqLine >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
@@ -196,7 +196,7 @@ static int isValidInterrupt(int irq)
 	return 1;
 }
 
-int BSP_irq_enable_at_cpm(const rtems_irq_symbolic_name irqLine)
+int BSP_irq_enable_at_cpm(const rtems_irq_number irqLine)
 {
 	int cpm_irq_index;
 
@@ -211,7 +211,7 @@ int BSP_irq_enable_at_cpm(const rtems_irq_symbolic_name irqLine)
 	return 0;
 }
 
-int BSP_irq_disable_at_cpm(const rtems_irq_symbolic_name irqLine)
+int BSP_irq_disable_at_cpm(const rtems_irq_number irqLine)
 {
 	int cpm_irq_index;
 
@@ -226,7 +226,7 @@ int BSP_irq_disable_at_cpm(const rtems_irq_symbolic_name irqLine)
 	return 0;
 }
 
-int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name irqLine)
+int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine)
 {
 	int cpm_irq_index;
 
