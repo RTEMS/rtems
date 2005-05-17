@@ -594,7 +594,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	 */
 	pcib_conf_read8(sc->pci_signature, 60, &interrupt);
 	DBGLVL_PRINTK(3,"fxp_attach: interrupt = 0x%x\n",interrupt);
-	sc->irqInfo.name = (rtems_irq_symbolic_name)interrupt;
+	sc->irqInfo.name = (rtems_irq_number)interrupt;
 	/*
 	 * Set up interrupts
 	 */

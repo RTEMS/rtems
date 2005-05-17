@@ -625,7 +625,7 @@ NS16550_STATIC void ns16550_initialize_interrupts(int minor)
 
   Console_Port_Data[minor].bActive = FALSE;
 
-  IrqData.name  = (rtems_irq_symbolic_name)(Console_Port_Tbl[minor].ulIntVector );
+  IrqData.name  = (rtems_irq_number)(Console_Port_Tbl[minor].ulIntVector );
 
 #ifdef BSP_SHARED_HANDLER_SUPPORT
   if (!BSP_install_rtems_shared_irq_handler (&IrqData)) {
