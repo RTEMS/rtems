@@ -50,7 +50,7 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
 /*
  * Check if IRQ is an ISA IRQ
  */
-static inline int is_isa_irq(const rtems_irq_symbolic_name irqLine)
+static inline int is_isa_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= BSP_ISA_IRQ_MAX_OFFSET) &
 	  ((int) irqLine >= BSP_ISA_IRQ_LOWEST_OFFSET)
@@ -60,7 +60,7 @@ static inline int is_isa_irq(const rtems_irq_symbolic_name irqLine)
 /*
  * Check if IRQ is an OPENPIC IRQ
  */
-static inline int is_pci_irq(const rtems_irq_symbolic_name irqLine)
+static inline int is_pci_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= BSP_PCI_IRQ_MAX_OFFSET) &
 	  ((int) irqLine >= BSP_PCI_IRQ_LOWEST_OFFSET)
@@ -70,7 +70,7 @@ static inline int is_pci_irq(const rtems_irq_symbolic_name irqLine)
 /*
  * Check if IRQ is a Porcessor IRQ
  */
-static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
+static inline int is_processor_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= BSP_PROCESSOR_IRQ_MAX_OFFSET) &
 	  ((int) irqLine >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET)

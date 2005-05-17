@@ -309,7 +309,7 @@ unsigned int rsPMCQ1Init()
   int i;
   unsigned char int_vector;
   int fun;
-  int temp;
+  unsigned int temp;
   PPMCQ1BoardData       boardData;
   rtems_irq_connect_data IrqData = {0,
                                     rsPMCQ1Int,
@@ -436,7 +436,7 @@ unsigned int rsPMCQ1Init()
 #ifdef DEBUG_360
     printk("PMCQ1 int_vector %d\n", int_vector);
 #endif
-    IrqData.name  = (rtems_irq_symbolic_name)((unsigned int)BSP_PCI_IRQ0 + int_vector);
+    IrqData.name  = (rtems_irq_number)((unsigned int)BSP_PCI_IRQ0 + int_vector);
     IrqData.handle = boardData;
     if (!BSP_install_rtems_shared_irq_handler (&IrqData)) {
         printk("Error installing interrupt handler!\n");
@@ -477,8 +477,8 @@ unsigned int rsPMCQ1Commission( unsigned long busNo, unsigned long slotNo )
   unsigned int bridgeaddr = 0;
   unsigned long val;
   int i;
-  int venId1;
-  int venId2;
+  unsigned int venId1;
+  unsigned int venId2;
 
   pci_read_config_dword(busNo, slotNo, 0, PCI_VENDOR_ID, &venId1);
   pci_read_config_dword(busNo, slotNo, 0, PCI_VENDOR_ID, &venId2);

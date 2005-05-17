@@ -1,3 +1,7 @@
+2005-05-17      Jennifer Averett <jennifer.averett@oarcorp.com>
+
+        * console/rsPMCQ1.c, irq/irq.c: Modified to use rtems/irq.h.
+
 2005-05-10      Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* console/console.c, console/init68360.c, console/ns16550cfg.c
