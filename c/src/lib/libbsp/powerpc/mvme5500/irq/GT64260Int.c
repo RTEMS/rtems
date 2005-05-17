@@ -108,7 +108,7 @@ static void CleanMainIrqTbl(int irqNum)
 * "main cause cpu int mask register".  
 *
 */
-void BSP_enable_main_irq(const rtems_irq_symbolic_name irqNum) 
+void BSP_enable_main_irq(const rtems_irq_number irqNum) 
 {
   unsigned bitNum;
   unsigned int level;
@@ -138,7 +138,7 @@ void BSP_enable_main_irq(const rtems_irq_symbolic_name irqNum)
 * main cause cpu int mask register. 
 *
 */
-void BSP_disable_main_irq(const rtems_irq_symbolic_name irqNum) 
+void BSP_disable_main_irq(const rtems_irq_number irqNum) 
 {
   unsigned bitNum;
   unsigned int level;
@@ -169,7 +169,7 @@ void BSP_disable_main_irq(const rtems_irq_symbolic_name irqNum)
 * corresponding interrupt vector.
 *
 */
-void BSP_enable_gpp_irq(const rtems_irq_symbolic_name irqNum) 
+void BSP_enable_gpp_irq(const rtems_irq_number irqNum) 
 {
   unsigned bitNum;
   unsigned int mask, level;
@@ -205,7 +205,7 @@ void BSP_enable_gpp_irq(const rtems_irq_symbolic_name irqNum)
 * corresponding interrupt vector.
 *
 */
-void BSP_disable_gpp_irq(const rtems_irq_symbolic_name irqNum) 
+void BSP_disable_gpp_irq(const rtems_irq_number irqNum) 
 {
   unsigned bitNum;
   unsigned int mask, level;
