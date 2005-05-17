@@ -38,34 +38,33 @@ extern void default_int_handler();
 +--------------------------------------------------------------------------*/
 
   /* enum of the possible interrupt sources */
-typedef enum {
+typedef unsigned int rtems_irq_number;
   /* int interrupt status/mask register 1 */
-  BSP_EXTFIQ = 0,
-  BSP_BLINT,
-  BSP_WEINT,
-  BSP_MCINT,
-  BSP_CSINT,
-  BSP_EINT1,
-  BSP_EINT2,
-  BSP_EINT3,
-  BSP_TC1OI,
-  BSP_TC2OI,
-  BSP_RTCMI,
-  BSP_TINT,
-  BSP_UTXINT1,
-  BSP_URXINT1,
-  BSP_UMSINT,
-  BSP_SSEOTI,
-  /* int interrupt status/mask register 2 */
-  BSP_KBDINT,
-  BSP_SS2RX,
-  BSP_SS2TX,
-  BSP_UTXINT2,
-  BSP_URXINT2,
-  /* int interrupt status/mask register 3 */
-  BSP_DAIINT,
-  BSP_MAX_INT,
-} rtems_irq_symbolic_name;
+#define BSP_EXTFIQ     0
+#define BSP_BLINT      1
+#define BSP_WEINT      2
+#define BSP_MCINT      3
+#define BSP_CSINT      4
+#define BSP_EINT1      5
+#define BSP_EINT2      6
+#define BSP_EINT3      7
+#define BSP_TC1OI      8
+#define BSP_TC2OI      9
+#define BSP_RTCMI     10
+#define BSP_TINT      11
+#define BSP_UTXINT1   12
+#define BSP_URXINT1   13
+#define BSP_UMSINT    14
+#define BSP_SSEOTI    15
+ /* int interrupt status/mask register 2 */
+#define BSP_KBDINT    16
+#define BSP_SS2RX     17
+#define BSP_SS2TX     18
+#define BSP_UTXINT2   19 
+#define BSP_URXINT2   20 
+ /* int interrupt status/mask register 3 */
+#define BSP_DAIINT    21
+#define BSP_MAX_INT   22 
 
 /*
  * Type definition for RTEMS managed interrupts
@@ -84,7 +83,7 @@ typedef struct __rtems_irq_connect_data__ {
   /*
    * IRQ line
    */
-  rtems_irq_symbolic_name 	name;
+  rtems_irq_number   		name;
   /*
    * handler. See comment on handler properties below in function prototype.
    */
