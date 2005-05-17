@@ -56,7 +56,7 @@
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>   /* for printk */
 
-int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name irqLine);
+int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);
 extern rtems_cpu_table Cpu_table;
 
 /* BSP supplied routine */

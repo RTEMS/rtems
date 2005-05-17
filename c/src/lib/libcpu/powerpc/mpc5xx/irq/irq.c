@@ -25,11 +25,11 @@
 #include <libcpu/irq.h>
 
 /*
- * Convert an rtems_irq_symbolic_name constant to an interrupt level
+ * Convert an rtems_irq_number constant to an interrupt level
  * suitable for programming into an I/O device's interrupt level field.
  */
  
-int CPU_irq_level_from_symbolic_name(const rtems_irq_symbolic_name name)
+int CPU_irq_level_from_symbolic_name(const rtems_irq_number name)
 {
   if (CPU_USIU_EXT_IRQ_0 <= name && name <= CPU_USIU_INT_IRQ_7)
     return (name - CPU_USIU_EXT_IRQ_0) / 2;
@@ -55,7 +55,7 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
 /*
  * Check if symbolic IRQ name is an USIU IRQ
  */
-static inline int is_usiu_irq(const rtems_irq_symbolic_name irqLine)
+static inline int is_usiu_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= CPU_USIU_IRQ_MAX_OFFSET) &&
 	  ((int) irqLine >= CPU_USIU_IRQ_MIN_OFFSET)
@@ -65,7 +65,7 @@ static inline int is_usiu_irq(const rtems_irq_symbolic_name irqLine)
 /*
  * Check if symbolic IRQ name is an UIMB IRQ
  */
-static inline int is_uimb_irq(const rtems_irq_symbolic_name irqLine)
+static inline int is_uimb_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= CPU_UIMB_IRQ_MAX_OFFSET) &&
 	  ((int) irqLine >= CPU_UIMB_IRQ_MIN_OFFSET)
@@ -75,7 +75,7 @@ static inline int is_uimb_irq(const rtems_irq_symbolic_name irqLine)
 /*
  * Check if symbolic IRQ name is a Processor IRQ
  */
-static inline int is_proc_irq(const rtems_irq_symbolic_name irqLine)
+static inline int is_proc_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= CPU_PROC_IRQ_MAX_OFFSET) &&
 	  ((int) irqLine >= CPU_PROC_IRQ_MIN_OFFSET)
@@ -140,28 +140,28 @@ static int isValidInterrupt(int irq)
   return 1;
 }
 
-int CPU_irq_enable_at_uimb(const rtems_irq_symbolic_name irqLine)
+int CPU_irq_enable_at_uimb(const rtems_irq_number irqLine)
 {
   if (!is_uimb_irq(irqLine))
     return 1;
   return 0;
 }
 
-int CPU_irq_disable_at_uimb(const rtems_irq_symbolic_name irqLine)
+int CPU_irq_disable_at_uimb(const rtems_irq_number irqLine)
 {
   if (!is_uimb_irq(irqLine))
     return 1;
   return 0;
 }
 
-int CPU_irq_enabled_at_uimb(const rtems_irq_symbolic_name irqLine)
+int CPU_irq_enabled_at_uimb(const rtems_irq_number irqLine)
 {
   if (!is_uimb_irq(irqLine))
     return 0;
   return 1;
 }
 
-int CPU_irq_enable_at_usiu(const rtems_irq_symbolic_name irqLine)
+int CPU_irq_enable_at_usiu(const rtems_irq_number irqLine)
 {
   int usiu_irq_index;
   
@@ -175,7 +175,7 @@ int CPU_irq_enable_at_usiu(const rtems_irq_symbolic_name irqLine)
   return 0;
 }
 
-int CPU_irq_disable_at_usiu(const rtems_irq_symbolic_name irqLine)
+int CPU_irq_disable_at_usiu(const rtems_irq_number irqLine)
 {
   int usiu_irq_index;
 
@@ -189,7 +189,7 @@ int CPU_irq_disable_at_usiu(const rtems_irq_symbolic_name irqLine)
   return 0;
 }
 
-int CPU_irq_enabled_at_usiu(const rtems_irq_symbolic_name irqLine)
+int CPU_irq_enabled_at_usiu(const rtems_irq_number irqLine)
 {
   int usiu_irq_index;
 
