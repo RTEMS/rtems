@@ -1,3 +1,8 @@
+2005-05-18	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/capture/capture-cli.c: Fix the output of ctload when
+	there exists a large number of tasks.
+
 2005-05-17      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * Makefile.am, preinstall.am: Added a common irq.h

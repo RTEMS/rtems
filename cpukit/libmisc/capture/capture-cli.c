@@ -433,12 +433,16 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
       fprintf(stdout,"   %qi\n", rtems_capture_task_time (tasks[i]));
     }
 
-    while (j)
+    if (count < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS)
     {
-      fprintf(stdout,"\x1b[K\n");
-      j--;
+      j = RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS - count;   
+      while (j > 0)
+      {
+        fprintf(stdout,"\x1b[K\n");
+        j--;
+      }
     }
-
+    
     last_count = count;
 
     cli_load_thread_active = 0;
