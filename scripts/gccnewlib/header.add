@@ -1,4 +1,14 @@
 #
 # spec file for building gcc for rtems
 # 
-# Copyright  (c) 1999,2000,2001,2002,2003 OARCorp, Huntsville, AL
+# supported --with/--without options:
+# --with sources	build src.rpm instead of nosrc.rpm
+#
+# --with fortran	force building fortran
+# --with objc		force building objc
+# --with cxx		force building cxx
+#
+# --without fortran	suppress building fortran
+# --without objc	suppress building objc
+# --without cxx		suppress building cxx
+#
