@@ -17,8 +17,8 @@ Version:      	gcc%{gcc_version}newlib%{newlib_version}
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}@gcc_suffix@
 Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}@newlib_suffix@
+@PATCH0@
 @PATCH1@
-@PATCH3@
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
 
@@ -36,59 +36,75 @@ BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
 %{?!_with_sources:NoSource:	0}
 %{?!_with_sources:NoSource:	1}
 
-# Use rpm -ba --define 'gnat [0|1]' xxx.spec to override building gnat for 
-# those targets wanting to support ada.
+# default languages to build
+%define _cxx		1
+%define _fortran	0
+%define _gcj		0
+%define _gnat		0
+%define _objc		0
+%define _libgcj 	0
 
-# default to not building gnat
-%define _gnat	%{?gnat:%gnat}%{!?gnat:0}
 
-# Use rpm -ba --define 'gcj [0|1]' xxx.spec to override building gcj for 
-# those targets wanting to support gcj.
-
-# default to not building gcj
-%define _gcj	%{?gcj:%gcj}%{!?gcj:0}
-
-%define build_cxx 	%{?cxx:%cxx}%{!?cxx:1}
-%if "%{gcc_version}" >= "4.0.0"
-%define build_f95	%{?f95:%f95}%{!?f95:0}
-%define build_g77	0
-%else
-%define build_f95	0
-%define build_g77 	%{?g77:%g77}%{!?g77:0}
-%endif
-%define build_objc	%{?objc:%objc}%{!?objc:0}
-%define build_gcj	%_gcj
-%define build_gnat	%_gnat
-
+# custom defaults for specific targets
 %if "%{gcc_target}" == "arm-rtems@osversion@"
 # Gnat lacks arm support
-%define build_gnat	0
+%define _gnat		0
 %endif
 
 %if "%{gcc_target}" == "avr-rtems@osversion@"
-%define build_cxx	0
-%define build_f95	0
-%define build_gcj	0
-%define build_gnat	0
+%define _cxx		0
+%define _fortran	0
+%define _gcj		0
+%define _gnat		0
 %endif
 
 %if "%{gcc_target}" == "h8300-rtems@osversion@"
-%define build_f95	0
-%define build_gcj	0
-%define build_gnat	0
+%define _fortran	0
+%define _gcj		0
+%define _gnat		0
 %endif
 
 %if "%{gcc_target}" == "sh-rtems@osversion@"
 # Triggers an ICE in GCC-4.0.0
-%define build_gnat	0
+%define _gnat		0
 %endif
 
 %if "%{gcc_target}" == "tic4x-rtems@osversion@"
-%define build_cxx	0
-%define build_gnat	0
-%define build_gcj	0
-%define build_f95	0
+%define _cxx		0
+%define _gnat		0
+%define _gcj		0
+%define _fortran	0
 %endif
+
+
+# Allow the user to build arbitrary languages
+%{?_with_cxx:%define _cxx 1}
+%{?_with_fortran:%define _fortran 1}
+%{?_with_gcj:%define _gcj 1}
+%{?_with_gnat:%define _gnat 1}
+%{?_with_objc:%define _objc 1}
+%{?_with_libgcj:%define _libgcj 1}
+
+# Allow the user to suppress building languages
+%{?_without_cxx:%define _cxx 0}
+%{?_without_fortran:%define _fortran 0}
+%{?_without_gcj:%define _gcj 0}
+%{?_without_gnat:%define _gnat 0}
+%{?_without_objc:%define _objc 0}
+%{?_without_libgcj:%define _libgcj 0}
+
+%define build_cxx	%_cxx
+%if "%{gcc_version}" >= "4.0.0"
+%define build_f95	%_fortran
+%define build_g77	0
+%else
+%define build_f95	0
+%define build_g77 	%_fortran
+%endif
+%define build_gnat	%_gnat
+%define build_gcj	%_gcj
+%define build_objc	%_objc
+%define build_libgcj	%_libgcj
 
 %if %build_gcj
 # Building gcj requires bison and zlib
@@ -180,7 +196,9 @@ cd ..
 %if %build_gnat
   languages="$languages,ada"
 %endif
-
+%if %build_libgcj
+  optargs="--enable-libgcj"
+%endif
   export PATH="%{_bindir}:${PATH}"
   ../gcc-%{gcc_version}/configure \
     --prefix=%{_prefix} \
@@ -195,7 +213,7 @@ cd ..
     --with-system-zlib --disable-nls \
     --enable-version-specific-runtime-libs \
     --enable-threads=rtems \
-    --enable-languages=$languages %{?build_libgcj:--enable-libgcj}
+    --enable-languages=$languages $optargs
 
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:
