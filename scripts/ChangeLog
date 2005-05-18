@@ -1,3 +1,10 @@
+2005-05-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/mkspec.in: Correct patch handling magic.
+	* gccnewlib/gccnewlib.add: Reflect changes to mkspec.in.
+	Use --with/--without, rework logic for building optional languages.
+	* gccnewlib/header.add: Document --with/--without.
+
 2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/Makefile.am: Add h8300-rtemscoff*.
