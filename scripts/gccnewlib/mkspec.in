@@ -16,7 +16,7 @@ usage()
   exit 1 ;
 }
 
-specsrc=${RTEMS_DIR}/gccnewlib/gccnewlib.spec.in
+specsrc=./gccnewlib.spec.in
 
 while test $# -ge 2; do
 case $1 in
@@ -57,8 +57,8 @@ PATCH1="Patch1: newlib-${newlib_version}-rtems-${newlib_patch_version}.diff"
 fi
 
 # note that the variables in the gccnewlib directory are actually the same
-sed -e "s,@PATCH1\@,${PATCH1}," \
-    -e "s,@PATCH3\@,${PATCH3}," \
+sed -e "s,@PATCH0\@,${PATCH0}," \
+    -e "s,@PATCH1\@,${PATCH1}," \
     -e "s%@Release\@%${gccnewlib_rpm_release}%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
     -e "s%@prefix\@%@prefix@%g" \
