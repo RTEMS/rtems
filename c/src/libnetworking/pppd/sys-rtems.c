@@ -513,13 +513,21 @@ void
 wait_input(timo)
     struct timeval *timo;
 {
-  rtems_interval     ticks;
   rtems_event_set    events;
+  rtems_interval     ticks = 0;
+  rtems_option       wait = RTEMS_WAIT;
 
-  ticks = ((timo->tv_sec*1000000)+timo->tv_usec)/rtems_bsdnet_microseconds_per_tick;
-  if ( ticks > 0 ) {
-    rtems_event_receive(RTEMS_EVENT_31, (RTEMS_EVENT_ANY|RTEMS_WAIT), ticks, &events);
+  if(timo) {
+    if(timo->tv_sec == 0 && timo->tv_usec == 0)
+      wait = RTEMS_NO_WAIT;
+    else {
+      ticks = (timo->tv_sec * 1000000 + timo->tv_usec) /
+        rtems_bsdnet_microseconds_per_tick;
+      if(ticks <= 0)
+        ticks = 1;
+    }
   }
+  rtems_event_receive(RTEMS_EVENT_31, RTEMS_EVENT_ANY | wait, ticks, &events);
 }
 
 /*
