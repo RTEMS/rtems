@@ -42,6 +42,8 @@ clock_rel_SOURCES = clock/clockdrv.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
+
 scitab.c: $(SHGEN)
 	$(SHGEN) -H @CPU_CLOCK_RATE_HZ@ sci > $@
 BUILT_SOURCES = scitab.c
