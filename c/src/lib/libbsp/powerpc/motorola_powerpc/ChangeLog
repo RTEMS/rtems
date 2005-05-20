@@ -1,3 +1,8 @@
+2005-05-20	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 717/bsps
+	* bootloader/Makefile.am: Typo results in wrong flags being used.
+
 2004-11-16	Richard Campbell <richard.campbell@OARcorp.com>
 
 	* README.MVME2100: Update to include DBAT0.

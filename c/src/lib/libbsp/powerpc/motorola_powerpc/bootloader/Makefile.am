@@ -24,7 +24,7 @@ LD = @LD@
 DEFAULT_INCLUDES =
 
 # Remove references to EABI when compiling bootloader
-BOOTLOADER_CPU_FLAGS=$(subst -msdata=eabi,,$(subst -meabi,,$(CPU_CFLAGS)))
+BOOTLOADER_CPU_CFLAGS=$(subst -msdata=eabi,,$(subst -meabi,,$(CPU_CFLAGS)))
 AM_CPPFLAGS = -D__BOOT__
 AM_CFLAGS = \
     $(GCC_SPECS) -specs bsp_specs -qrtems -mrelocatable \
