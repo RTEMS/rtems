@@ -39,29 +39,29 @@ This is the base for gdb regardless of target CPU.
 %dir %{_mandir}/man1
 
 %post -n %{rpmprefix}rtems@osversion@-base-gdb
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gdb.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdb.info.gz
 %if "%{gdb_version}" < "6.3"
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/mmalloc.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz
 %endif
 %if "%{gdb_version}" >= "5.0"
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gdbint.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/stabs.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/stabs.info.gz
 %endif
 %if "{gdb_version}" >= "6.0"
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/annotate.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz
 %endif
 
 %preun -n %{rpmprefix}rtems@osversion@-base-gdb
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gdb.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdb.info.gz
 %if "%{gdb_version}" < "6.3"
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/mmalloc.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz
 %endif
 %if "%{gdb_version}" >= "5.0"
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gdbint.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/stabs.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/stabs.info.gz
 %endif
 %if "{gdb_version}" >= "6.0"
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/annotate.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/annotate.info.gz
 %endif
 fi

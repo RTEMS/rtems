@@ -25,11 +25,11 @@ This is the files for gcc/g77 that are shared by all targets.
 %{_mandir}/man1/%{gcc_target}-g77.1*
 
 %post -n %{rpmprefix}rtems@osversion@-base-g77
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/g77.info.gz 
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/g77.info.gz 
 
 %preun -n %{rpmprefix}rtems@osversion@-base-g77
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/g77.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/g77.info.gz
 fi
 
 %endif

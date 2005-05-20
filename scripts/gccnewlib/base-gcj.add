@@ -46,18 +46,18 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %endif
 
 %post -n %{rpmprefix}rtems@osversion@-base-gcj
-/sbin/install-info --infodir=%{_infodir} %{_infodir}/gcj.info*
+/sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcj.info*
 
 %if "%{gcc_version}" >= "3.3"
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/fastjar.info*
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/fastjar.info*
 %endif
 
 %preun -n %{rpmprefix}rtems@osversion@-base-gcj
 if [ $1 -eq 0 ]; then
-/sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gcj.info*
+/sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcj.info*
 
 %if "%{gcc_version}" >= "3.3"
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/fastjar.info*
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/fastjar.info*
 %endif
 fi
 

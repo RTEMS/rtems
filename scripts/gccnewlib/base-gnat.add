@@ -24,14 +24,14 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 %{_infodir}/gnat*
 
 %post -n %{rpmprefix}rtems@osversion@-base-gnat
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gnat_rm.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gnat-style.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat_rm.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
 
 %preun -n %{rpmprefix}rtems@osversion@-base-gnat
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gnat_rm.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gnat-style.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat_rm.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
 fi
 %endif

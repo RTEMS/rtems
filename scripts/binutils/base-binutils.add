@@ -14,24 +14,24 @@ RTEMS is an open source operating system for embedded systems.
 This is the base for binutils regardless of target CPU.
 
 %post -n %{rpmprefix}rtems@osversion@-base-binutils
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/as.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/bfd.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/binutils.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/ld.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/standards.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/as.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/bfd.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/binutils.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/ld.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/standards.info.gz
 %if "%{binutils_version}" < "2.13"
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gasp.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gasp.info.gz
 %endif
 
 %preun -n %{rpmprefix}rtems@osversion@-base-binutils
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/as.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/bfd.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/binutils.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/ld.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/standards.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/as.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/bfd.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/binutils.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/ld.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/standards.info.gz
 %if "%{binutils_version}" < "2.13"
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gasp.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gasp.info.gz
 %endif
 fi
 

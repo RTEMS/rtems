@@ -42,26 +42,26 @@ This is the files for gcc and newlib that are shared by all targets.
 %dir %{_includedir}
 
 %post -n %{rpmprefix}rtems@osversion@-base-gcc
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/cpp.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/cppinternals.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gcc.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/libc.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/libm.info.gz
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gccint.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cpp.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz
 %if "%{gcc_version}" >= "3.4"
-  /sbin/install-info --infodir=%{_infodir} %{_infodir}/gccinstall.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz
 %endif
 
 %preun -n %{rpmprefix}rtems@osversion@-base-gcc
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/cpp.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/cppinternals.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gcc.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/libc.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/libm.info.gz
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gccint.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cpp.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz
 %if "%{gcc_version}" >= "3.4"
-  /sbin/install-info --delete --infodir=%{_infodir} %{_infodir}/gccinstall.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz
 %endif
 fi
 
