@@ -1,3 +1,8 @@
+2005-05-20	Sergei Organov  <osv@topconrd.ru>
+
+	PR 749/networking
+	* libnetworking/rtems/rtems_showroute.c: Avoid NULL dereference.
+
 2005-05-14  Sergei Organov  <osv@topconrd.ru>
 
 	PR 746/rtems
