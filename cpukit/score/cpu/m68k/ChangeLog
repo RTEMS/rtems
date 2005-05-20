@@ -1,3 +1,7 @@
+2005-05-20	Chris Johns <chrisj@rtems.org>
+
+	* rtems/score/cpu.h, rtems/score/m68k.h: Change declaration of _VBR.
+
 2005-05-04	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/m68k.h: Change _ColdFire_VBR to _VBR.

@@ -332,7 +332,7 @@ extern "C" {
   asm volatile ( "movec   %0,%%vbr " : : "r" (vbr))
 
 #elif ( M68K_COLDFIRE_ARCH == 1 )
-extern void *_VBR;
+extern uint32_t                     _VBR[]; 
 #define m68k_get_vbr( _vbr ) _vbr = _VBR
 
 #define m68k_set_vbr( vbr ) \
