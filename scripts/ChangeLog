@@ -1,3 +1,10 @@
+2005-05-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* binutils/base-binutils.add, gccnewlib/base-g77.add,
+	gccnewlib/base-gcc.add, gccnewlib/base-gcj.add,
+	gccnewlib/base-gfortran.add, gccnewlib/base-gnat.add,
+	gdb/base-gdb.add: install-info --info-dir=.
+
 2005-05-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/mkspec.in: Correct patch handling magic.
