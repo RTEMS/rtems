@@ -37,7 +37,7 @@ unsigned char Pit_initialized = 0;
 /*#####################################################################
 # The volatile routine to initialize the duart -- port a and port b
 ######################################################################*/
-volatile void init_pit()
+void init_pit()
 {
   /*
    *  ports A & B while configuring PIT by:
