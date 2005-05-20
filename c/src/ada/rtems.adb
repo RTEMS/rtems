@@ -1505,10 +1505,38 @@ package body RTEMS is
          Segment,
          Size_Base'Unchecked_Access
       );
-      Size := SIZE_Base;
+      Size := Size_Base;
 
    end Region_Get_Segment_Size;
  
+   procedure Region_Resize_Segment (
+      ID         : in     RTEMS.ID;
+      Segment    : in     RTEMS.Address;
+      Size       : in     RTEMS.Unsigned32;
+      Old_Size   :    out RTEMS.Unsigned32;
+      Result     :    out RTEMS.Status_Codes
+   ) is
+      function Region_Resize_Segment_Base (
+         ID       : RTEMS.ID;
+         Segment  : RTEMS.Address;
+         Size     : RTEMS.Unsigned32;
+         Old_Size : access RTEMS.Unsigned32
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Region_Resize_Segment_Base,
+         "rtems_region_get_segment_size");
+      Old_Size_Base : aliased RTEMS.Unsigned32;
+   begin
+ 
+      Result := Region_Resize_Segment_Base (
+         ID,
+         Segment,
+         Size,
+         Size_Base'Unchecked_Access
+      );
+      Old_Size := Old_Size_Base;
+
+   end Region_Resize_Segment;
+
    procedure Region_Return_Segment (
       ID      : in     RTEMS.ID;
       Segment : in     RTEMS.Address;

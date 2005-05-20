@@ -232,8 +232,39 @@ rtems_status_code rtems_region_return_segment(
   void       *segment
 );
 
+/*
+ *  rtems_region_resize_segment
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_region_resize_segment directive.  It
+ *  tries to resize segment in the region associated with 'id' to the new size
+ *  'size' in place. The first 'size' or old size bytes of the segment
+ *  (whatever is less) are guaranteed to remain unmodified. The segment must
+ *  have been previously allocated from the same region.  If resizing the
+ *  segment results in enough memory being available to satisfy the
+ *  rtems_region_get_segment of the first blocked task, then that task and as
+ *  many subsequent tasks as possible will be unblocked with their requests
+ *  satisfied.
+ *  Returns:
+ *    RTEMS_SUCCESSFUL  - operation successful
+ *    RTEMS_UNSATISFIED - the segment can't be resized in place
+ *    any other code    - failure.
+ *  On RTEMS_SUCCESSFUL or RTEMS_UNSATISFIED exit it returns into the
+ *  'old_size' the old size in bytes of the user memory area of the specified
+ *  segment.
+ */
+
+rtems_status_code rtems_region_resize_segment(
+  Objects_Id  id,
+  void       *segment,
+  size_t      size,
+  size_t     *old_size
+);
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/region.inl>
+extern void _Region_Process_queue(Region_Control *the_region);
 #endif
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/regionmp.h>

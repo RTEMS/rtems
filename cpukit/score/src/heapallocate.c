@@ -62,7 +62,7 @@ void *_Heap_Allocate(
     /* Don't bother to mask out the HEAP_PREV_USED bit as it won't change the
        result of the comparison. */
     if(the_block->size >= the_size) {
-      the_block = _Heap_Block_allocate(the_heap, the_block, the_size );
+      (void)_Heap_Block_allocate(the_heap, the_block, the_size );
 
       ptr = _Heap_User_area(the_block);
 

@@ -44,7 +44,7 @@ static uint32_t instance = 0;
  *            |  unused space due to alignment |
  *            |       size < page_size         |
  *         0  +--------------------------------+ <- first block
- *            |  prev_size = 1 (arbitrary)     |
+ *            |  prev_size = page_size         |
  *         4  +--------------------------------+
  *            |  size = size0              | 1 |
  *         8  +---------------------+----------+ <- aligned on page_size
@@ -59,7 +59,7 @@ static uint32_t instance = 0;
  *     size0  +--------------------------------+ <- last dummy block
  *            |  prev_size = size0             |
  *        +4  +--------------------------------+
- *            |  size = 0 (arbitrary)      | 0 | <- prev block is free
+ *            |  size = page_size          | 0 | <- prev block is free
  *        +8  +--------------------------------+ <- aligned on page_size
  *            |  unused space due to alignment |
  *            |       size < page_size         |
@@ -74,36 +74,36 @@ static uint32_t instance = 0;
  *            +--------------------------------+ <- begin = starting_address
  *            |  unused space due to alignment |
  *            |       size < page_size         |
- *         0  +--------------------------------+ <- first block
- *            |  prev_size = 1 (arbitrary)     |
+ *         0  +--------------------------------+ <- used block
+ *            |  prev_size = page_size         |
  *         4  +--------------------------------+
- *            |  size = S = size0 - BSIZE  | 1 |
- *         8  +---------------------+----------+ <- aligned on page_size
- *            |  next = HEAP_TAIL   |          |
- *        12  +---------------------+          |
- *            |  prev = HEAP_HEAD   |  memory  |
- *            +---------------------+          |
- *            |                     available  |
- *            |                                |
- *            |                for allocation  |
- *            |                                |
- *         S  +--------------------------------+ <- used block
- *            |  prev_size = size0 - BSIZE     |
- *        +4  +--------------------------------+
- *            |  size = BSIZE              | 0 | <- prev block is free
- *        +8  +--------------------------------+ <- aligned on page_size
+ *            |  size = BSIZE              | 1 | <- prev block is used
+ *         8  +--------------------------------+ <- aligned on page_size
  *            |              .                 | Pointer returned to the user
- *            |              .                 | is (S+8) for _Heap_Allocate()
+ *            |              .                 | is 8 for _Heap_Allocate()
  *            |              .                 | and is in range
- * S + 8 +    |         user-accessible        | [S+8,S+8+page_size) for
- *   page_size+- - -                      - - -+ _Heap_Allocate_aligned()
+ * 8 +        |         user-accessible        | [8,8+page_size) for
+ *  page_size +- - -                      - - -+ _Heap_Allocate_aligned()
  *            |             area               |
  *            |              .                 |
- * S + BSIZE  +- - - - -     .        - - - - -+ <- last dummy block
+ *     BSIZE  +- - - - -     .        - - - - -+ <- free block
  *            |              .                 |
- *        +4  +--------------------------------+
- *            |  size = 0 (arbitrary)      | 1 | <- prev block is used
- *        +8  +--------------------------------+ <- aligned on page_size
+ * BSIZE  +4  +--------------------------------+
+ *            |  size = S = size0 - BSIZE  | 1 | <- prev block is used
+ * BSIZE  +8  +-------------------+------------+ <- aligned on page_size
+ *            |  next = HEAP_TAIL |            |
+ * BSIZE +12  +-------------------+            |
+ *            |  prev = HEAP_HEAD |     memory |
+ *            +-------------------+            |
+ *            |                   .  available |
+ *            |                   .            |
+ *            |                   .        for |
+ *            |                   .            |
+ * BSIZE +S+0 +-------------------+ allocation + <- last dummy block
+ *            |  prev_size = S    |            |
+ *       +S+4 +-------------------+------------+
+ *            |  size = page_size          | 0 | <- prev block is free
+ *       +S+8 +--------------------------------+ <- aligned on page_size
  *            |  unused space due to alignment |
  *            |       size < page_size         |
  *            +--------------------------------+ <- end = begin + size
@@ -160,7 +160,7 @@ uint32_t   _Heap_Initialize(
 
   the_block = (Heap_Block *) aligned_start;
 
-  the_block->prev_size = HEAP_PREV_USED;
+  the_block->prev_size = page_size;
   the_block->size = the_size | HEAP_PREV_USED;
   the_block->next = _Heap_Tail( the_heap );
   the_block->prev = _Heap_Head( the_heap );
@@ -175,7 +175,7 @@ uint32_t   _Heap_Initialize(
   the_block = _Heap_Block_at( the_block, the_size );
   the_heap->final = the_block;       /* Permanent final block of the heap */
   the_block->prev_size = the_size;   /* Previous block is free */
-  the_block->size = 0;  /* This is the only block with size=0  */
+  the_block->size = page_size;
 
   stats->size = size;
   stats->free_size = the_size;
@@ -187,6 +187,7 @@ uint32_t   _Heap_Initialize(
   stats->allocs = 0;
   stats->searches = 0;
   stats->frees = 0;
+  stats->resizes = 0;
   stats->instance = instance++;
 
   return ( the_size - HEAP_BLOCK_USED_OVERHEAD );
@@ -213,15 +214,17 @@ uint32_t _Heap_Calc_block_size(
   uint32_t block_size = size + HEAP_BLOCK_USED_OVERHEAD;
   _Heap_Align_up(&block_size, page_size);
   if(block_size < min_size) block_size = min_size;
+  /* 'block_size' becomes <= 'size' if and only if overflow occured. */
   return (block_size > size) ? block_size : 0;
 }
 
 /*
  * Allocate block of size 'alloc_size' from 'the_block' belonging to
- * 'the_heap'. Either split 'the_block' or allocate it entirely.
- * Return the block allocated.
+ * 'the_heap'. Split 'the_block' if possible, otherwise allocate it entirely.
+ * When split, make the lower part used, and leave the upper part free.
+ * Return the size of allocated block.
  */
-Heap_Block* _Heap_Block_allocate(
+unsigned32 _Heap_Block_allocate(
   Heap_Control* the_heap,
   Heap_Block* the_block,
   uint32_t alloc_size)
@@ -233,14 +236,18 @@ Heap_Block* _Heap_Block_allocate(
   _HAssert(_Heap_Is_aligned(block_size, the_heap->page_size));
   _HAssert(_Heap_Is_aligned(alloc_size, the_heap->page_size));
   _HAssert(alloc_size <= block_size);
+  _HAssert(_Heap_Is_prev_used(the_block));
 
   if(the_rest >= the_heap->min_block_size) {
-    /* Split the block so that lower part is still free, and upper part
-       becomes used. */
-    the_block->size = the_rest | HEAP_PREV_USED;
-    the_block = _Heap_Block_at(the_block, the_rest);
-    the_block->prev_size = the_rest;
-    the_block->size = alloc_size;
+    /* Split the block so that upper part is still free, and lower part
+       becomes used. This is slightly less optimal than leaving lower part
+       free as it requires replacing block in the free blocks list, but it
+       makes it possible to reuse this code in the _Heap_Resize_block(). */
+    Heap_Block *next_block = _Heap_Block_at(the_block, alloc_size);
+    _Heap_Block_replace(the_block, next_block);
+    the_block->size = alloc_size | HEAP_PREV_USED;
+    next_block->size = the_rest | HEAP_PREV_USED;
+    _Heap_Block_at(next_block, the_rest)->prev_size = the_rest;
   }
   else {
     /* Don't split the block as remainder is either zero or too small to be
@@ -248,14 +255,13 @@ Heap_Block* _Heap_Block_allocate(
        block and remove the block from the list of free blocks. */
     _Heap_Block_remove(the_block);
     alloc_size = block_size;
+    _Heap_Block_at(the_block, alloc_size)->size |= HEAP_PREV_USED;
     stats->free_blocks -= 1;
   }
-  /* Mark the block as used (in the next block). */
-  _Heap_Block_at(the_block, alloc_size)->size |= HEAP_PREV_USED;
   /* Update statistics */
   stats->free_size -= alloc_size;
   if(stats->min_free_size > stats->free_size)
     stats->min_free_size = stats->free_size;
   stats->used_blocks += 1;
-  return the_block;
+  return alloc_size;
 }

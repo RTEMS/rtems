@@ -308,13 +308,24 @@ void *realloc(
   }
 
   /*
-   * Continue with calloc().
+   * Continue with realloc().
    */
   if ( !ptr )
     return malloc( size );
 
   if ( !size ) {
     free( ptr );
+    return (void *) 0;
+  }
+
+  status =
+    rtems_region_resize_segment( RTEMS_Malloc_Heap, ptr, size, &old_size );
+
+  if( status == RTEMS_SUCCESSFUL ) {
+    return ptr;
+  }
+  else if ( status != RTEMS_UNSATISFIED ) {
+    errno = EINVAL;
     return (void *) 0;
   }
 

@@ -55,12 +55,15 @@ boolean _Heap_Size_of_user_area(
 
   _Heap_Start_of_block( the_heap, starting_address, &the_block );
 
+  _HAssert(_Heap_Is_block_in( the_heap, the_block ));
   if ( !_Heap_Is_block_in( the_heap, the_block ) )
     return( FALSE );
 
   the_size   = _Heap_Block_size( the_block );
   next_block = _Heap_Block_at( the_block, the_size );
 
+  _HAssert(_Heap_Is_block_in( the_heap, next_block ));
+  _HAssert(_Heap_Is_prev_used( next_block ));
   if (
     !_Heap_Is_block_in( the_heap, next_block ) ||
     !_Heap_Is_prev_used( next_block )

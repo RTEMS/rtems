@@ -165,6 +165,8 @@ typedef struct Heap_Statistics_tag {
   uint32_t searches;
   /** total number of suceessful calls to free */
   uint32_t frees;
+  /** total number of successful resizes */
+  uint32_t resizes;
 } Heap_Statistics;
 
 /**
@@ -190,7 +192,7 @@ typedef struct {
 } Heap_Control;
 
 /**
- *  Status codes for heap_extend
+ *  Status codes for _Heap_Extend
  */
 
 typedef enum {
@@ -198,6 +200,16 @@ typedef enum {
   HEAP_EXTEND_ERROR,
   HEAP_EXTEND_NOT_IMPLEMENTED
 } Heap_Extend_status;
+
+/**
+ *  Status codes for _Heap_Resize_block
+ */
+
+typedef enum {
+  HEAP_RESIZE_SUCCESSFUL,
+  HEAP_RESIZE_UNSATISFIED,
+  HEAP_RESIZE_FATAL_ERROR
+} Heap_Resize_status;
 
 /**
  *  Status codes for _Heap_Get_information
@@ -326,6 +338,36 @@ boolean _Heap_Size_of_user_area(
   size_t              *size
 );
 
+/*
+ *  This function tries to resize in place the block that is pointed to by the
+ *  @a starting_address to the new @a size.
+ *
+ *  @param the_heap (in) is the heap to operate upon
+ *  @param starting_address (in) is the starting address of the user block
+ *         to be resized
+ *  @param size (in) is the new size
+ *  @param old_mem_size (in) points to a user area to return the size of the
+ *         user memory area of the block before resizing.
+ *  @param avail_mem_size (in) points to a user area to return the size of
+ *         the user memory area of the free block that has been enlarged or
+ *         created due to resizing, 0 if none.
+ *  @return HEAP_RESIZE_SUCCESSFUL if successfully able to resize the block,
+ *          HEAP_RESIZE_UNSATISFIED if the block can't be resized in place,
+ *          HEAP_RESIZE_FATAL_ERROR if failure
+ *  @return *old_mem_size filled in with the size of the user memory area of
+ *          the block before resizing.
+ *  @return *avail_mem_size filled in with the size of the user memory area
+ *          of the free block that has been enlarged or created due to
+ *          resizing, 0 if none.
+ */
+Heap_Resize_status _Heap_Resize_block(
+  Heap_Control *the_heap,
+  void         *starting_address,
+  uint32_t     size,
+  uint32_t     *old_mem_size,
+  uint32_t     *avail_mem_size
+);
+
 /**
  *  This routine returns the block of memory which begins
  *  at @a starting_address to @a the_heap.  Any coalescing which is
@@ -404,7 +446,7 @@ extern uint32_t _Heap_Calc_block_size(
   uint32_t page_size,
   uint32_t min_size);
 
-extern Heap_Block* _Heap_Block_allocate(
+extern uint32_t _Heap_Block_allocate(
   Heap_Control* the_heap,
   Heap_Block* the_block,
   uint32_t alloc_size);

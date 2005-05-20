@@ -172,8 +172,7 @@ void *_Heap_Allocate_aligned(
 
           _HAssert(_Heap_Is_aligned_ptr((void*)aligned_user_addr, alignment));
 
-          the_block =
-            _Heap_Block_allocate(the_heap, the_block, alloc_size);
+          (void)_Heap_Block_allocate(the_heap, the_block, alloc_size);
 
           stats->searches += search_count + 1;
           stats->allocs += 1;

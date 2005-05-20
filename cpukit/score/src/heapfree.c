@@ -51,18 +51,19 @@ boolean _Heap_Free(
 
   if ( !_Heap_Is_block_in( the_heap, the_block ) ) {
     _HAssert(starting_address == NULL);
+    _HAssert(FALSE);
     return( FALSE );
   }
 
   the_size = _Heap_Block_size( the_block );
   next_block = _Heap_Block_at( the_block, the_size );
 
-  if ( !_Heap_Is_prev_used( next_block ) ) {
+  if ( !_Heap_Is_block_in( the_heap, next_block ) ) {
     _HAssert(FALSE);
     return( FALSE );
   }
 
-  if ( !_Heap_Is_block_in( the_heap, next_block ) ) {
+  if ( !_Heap_Is_prev_used( next_block ) ) {
     _HAssert(FALSE);
     return( FALSE );
   }

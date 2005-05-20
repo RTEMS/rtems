@@ -1,3 +1,66 @@
+2005-05-14  Sergei Organov  <osv@topconrd.ru>
+
+	PR 746/rtems
+	Optimize realloc(). The problem is that realloc() can neither grow
+	nor shrink efficiently the current memory region without support
+	from underlying heap/region modules. The patch introduces one new
+	routine for each of heap and region modules, _Heap_Resize_block(),
+	and rtems_region_resize_segment(), respectively, and uses the
+	latter to optimize realloc().
+
+	The implementation of _Heap_Resize_block() lead to changing of the
+	heap allocation strategy: now the heap manager, when splits larger
+	free block into used and new free parts, makes the first part of
+	the block used, not the last one as it was before. Due to this new
+	strategy, _Heap_Resize_block() never needs to change the user
+	pointer.
+
+	Caveat: unlike previous heap implementation, first few bytes of
+	the contents of the memory allocated from the heap are now almost
+	never all zero. This can trigger bugs in client code that have not
+	been visible before this patch.
+
+	* libcsupport/src/malloc.c (realloc): try to resize segment in
+	place using new rtems_region_resize_segment() routine before
+	falling back to the malloc()/free() method.
+	* score/src/heap.c:
+	(_Heap_Initialize): change initial heap layout to reflect new
+	allocation strategy of using of the lower part of a previously
+	free block when splitting it for the purpose of allocation.
+	(_Heap_Block_allocate): when split, make the lower part used, and
+	leave the upper part free. Return type changed from Heap_Block* to
+	uint32_t.
+	* score/include/rtems/score/heap.h:
+	(Heap_Statistics): added 'resizes' field.
+	(Heap_Resize_status): new enum.
+	(_Heap_Resize_block): new routine.
+	(_Heap_Block_allocate): return type changed from Heap_Block* to
+	uint32_t.
+	* score/src/heapwalk.c: reflect new heap layout in checks.
+	* score/src/heapsizeofuserarea.c: more assertions added.
+	* score/src/heapresizeblock.c: new file.
+	(_Heap_Resize_block): new routine.
+	* score/src/heapfree.c: reverse the checks _Heap_Is_block_in() and
+	_Heap_Is_prev_used() on entry to be in this order.
+	* score/src/heapallocate.c, score/src/heapallocatealigned.c:
+	ignore return value of _Heap_Block_allocate(). 
+	* score/Makefile.am (HEAP_C_FILES): added src/heapresizeblock.c.
+	* rtems/include/rtems/rtems/region.h:
+	(rtems_region_resize_segment): new interface routine.
+	(_Region_Process_queue): new internal routine called from
+	rtems_region_resize_segment() and rtems_region_return_segment().
+	* rtems/src/regionreturnsegment.c: move queue management code into
+	the new internal routine _Region_Process_queue() and call it.
+
+	* rtems/src/regionresizesegment.c: new file.
+	(rtems_region_resize_segment): new interface routine.
+	* rtems/src/regionprocessqueue.c: new file.
+	(_Region_Process_queue): new internal routine containing queue
+	management code factored out from 'regionreturnsegment.c'.
+	* rtems/Makefile.am (REGION_C_FILES): Added
+	src/regionresizesegment.c, and src/regionprocessqueue.c.
+	* ada/rtems.adb, ada/rtems.ads: Added Region_Resize_Segment.
+
 2005-05-20	Eric Norum <norume@aps.anl.gov>
 
 	PR 793/networking

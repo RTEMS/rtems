@@ -87,8 +87,8 @@ boolean _Heap_Walk(
     error = 1;
   }
 
-  if (the_block->prev_size != HEAP_PREV_USED) {
-    printf("PASS: %d !prev_size of 1st block isn't HEAP_PREV_USED\n", source);
+  if (the_block->prev_size != the_heap->page_size) {
+    printf("PASS: %d !prev_size of 1st block isn't page_size\n", source);
     error = 1;
   }
 
@@ -162,8 +162,8 @@ boolean _Heap_Walk(
     error = 1;
   }
 
-  if (_Heap_Block_size(the_block) != 0) {
-    printf("PASS: %d !last block's size isn't 0\n", source);
+  if (_Heap_Block_size(the_block) != the_heap->page_size) {
+    printf("PASS: %d !last block's size isn't page_size\n", source);
     error = 1;
   }
 
