@@ -219,6 +219,7 @@
 
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
+	PR 775/core
 	* rtems/src/regiongetfreeinfo.c: Return RTEMS_SUCCESSFUL instead of
 	RTEMS_INVALID_ADDRESS on success path.
 
