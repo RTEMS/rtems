@@ -1,3 +1,9 @@
+2005-05-20  Sergei Organov  <osv@javad.ru>
+
+	PR networking/772.
+	* rtems_select.c (socket_select): fixed bug setting SB_WAIT flag
+	of so_rcv instead of so_snd when FWRITE.
+
 2005-05-20	Sergei Organov  <osv@topconrd.ru>
 
 	PR 749/networking

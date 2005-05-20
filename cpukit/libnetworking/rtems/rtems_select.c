@@ -63,7 +63,7 @@ socket_select (struct socket *so, int which, rtems_id tid)
 	case FWRITE:
 		if (sowriteable(so))
 			return (1);
-		so->so_rcv.sb_flags |= SB_WAIT;
+		so->so_snd.sb_flags |= SB_WAIT;
 		so->so_snd.sb_sel.si_pid = tid;
 		break;
 
