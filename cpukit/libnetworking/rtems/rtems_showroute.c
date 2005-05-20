@@ -128,7 +128,7 @@ show_inet_route (rn, vw)
 	r->pksent = rt->rt_rmx.rmx_pksent;
 	r->expire = rt->rt_rmx.rmx_expire;
 	ifp = rt->rt_ifp;
-	strncpy (r->ifname, ifp->if_name, sizeof r->ifname);
+	strncpy (r->ifname, (ifp->if_name ? ifp->if_name : ""), sizeof r->ifname);
 	r->ifunit = ifp->if_unit;
 	return 0;
 }
