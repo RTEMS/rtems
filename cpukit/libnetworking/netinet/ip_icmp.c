@@ -138,6 +138,10 @@ icmp_error(n, type, code, dest, destifp)
 	/* Don't send error in response to a multicast or broadcast packet */
 	if (n->m_flags & (M_BCAST|M_MCAST))
 		goto freeit;
+    /* Don't send error in response to malicious packet */
+	icmplen = min(oiplen + 8, oip->ip_len);
+	if (icmplen < sizeof(struct ip))
+		goto freeit;
 	/*
 	 * First, formulate icmp message
 	 */
@@ -147,9 +151,6 @@ icmp_error(n, type, code, dest, destifp)
 #ifdef MAC
 	mac_create_mbuf_netlayer(n, m);
 #endif
-	icmplen = min(oiplen + 8, oip->ip_len);
-	if (icmplen < sizeof(struct ip))
-		panic("icmp_error: bad length");
 	m->m_len = icmplen + ICMP_MINLEN;
 	MH_ALIGN(m, m->m_len);
 	icp = mtod(m, struct icmp *);

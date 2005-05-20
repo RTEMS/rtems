@@ -1,3 +1,9 @@
+2005-05-20	Eric Norum <norume@aps.anl.gov>
+
+	PR 793/networking
+	* libnetworking/netinet/ip_icmp.c: Malicious ICMP packet causes panic.
+	Just ignore it.
+
 2005-05-18	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/capture/capture-cli.c: Fix the output of ctload when
