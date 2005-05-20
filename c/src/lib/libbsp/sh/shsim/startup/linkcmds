@@ -108,10 +108,13 @@ SECTIONS
     *(.gnu.warning)
     *(.gnu.linkonce.t*)
   } > ram
+  .fini           :
+  {
+    KEEP (*(.fini))
+  } =0
   _etext = .;
   PROVIDE (etext = .);
-  .fini    .  : { *(.fini)    } =0
-  .rodata  .  : { *(.rodata*) *(.gnu.linkonce.r*) }
+  .rodata  .  : { *(.rodata*) .rodata.* *(.gnu.linkonce.r*) }
   .rodata1 .  : { *(.rodata1) }
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  */
