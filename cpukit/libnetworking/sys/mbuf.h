@@ -127,20 +127,28 @@ struct mbuf {
 #define	m_pktdat	M_dat.MH.MH_dat.MH_databuf
 #define	m_dat		M_dat.M_databuf
 
-/* mbuf flags */
+/*
+ * mbuf flags.
+ */
 #define	M_EXT		0x0001	/* has associated external storage */
 #define	M_PKTHDR	0x0002	/* start of record */
 #define	M_EOR		0x0004	/* end of record */
 #define	M_PROTO1	0x0008	/* protocol-specific */
 
-/* mbuf pkthdr flags, also in m_flags */
+/*
+ * mbuf pkthdr flags (also stored in m_flags).
+ */
 #define	M_BCAST		0x0100	/* send/received as link-level broadcast */
 #define	M_MCAST		0x0200	/* send/received as link-level multicast */
 
-/* flags copied when copying m_pkthdr */
+/*
+ * Flags copied when copying m_pkthdr.
+ */
 #define	M_COPYFLAGS	(M_PKTHDR|M_EOR|M_PROTO1|M_BCAST|M_MCAST)
 
-/* mbuf types */
+/*
+ * mbuf types.
+ */
 #define	MT_FREE		0	/* should be on free list */
 #define	MT_DATA		1	/* dynamic (data) allocation */
 #define	MT_HEADER	2	/* packet header */
@@ -156,6 +164,21 @@ struct mbuf {
 #define	MT_IFADDR	13	/* interface address */
 #define MT_CONTROL	14	/* extra-data protocol message */
 #define MT_OOBDATA	15	/* expedited data  */
+
+/*
+ * General mbuf allocator statistics structure.
+ */
+struct mbstat {
+	u_long	m_mbufs;	/* mbufs obtained from page pool */
+	u_long	m_clusters;	/* clusters obtained from page pool */
+	u_long	m_spare;	/* spare field */
+	u_long	m_clfree;	/* free clusters */
+	u_long	m_drops;	/* times failed to find space */
+	u_long	m_wait;		/* times waited for space */
+	u_long	m_drain;	/* times drained protocols for space */
+	u_short	m_mtypes[256];	/* type specific mbuf allocations */
+};
+
 
 /* flags to m_get/MGET */
 #define	M_DONTWAIT	M_NOWAIT
@@ -316,14 +339,17 @@ union mcluster {
  * Set the m_data pointer of a newly-allocated mbuf (m_get/MGET) to place
  * an object of the specified size at the end of the mbuf, longword aligned.
  */
-#define	M_ALIGN(m, len) \
-	{ (m)->m_data += (MLEN - (len)) &~ (sizeof(long) - 1); }
+#define	M_ALIGN(m, len) do {						\
+	(m)->m_data += (MLEN - (len)) & ~(sizeof(long) - 1);		\
+} while (0)
+
 /*
  * As above, for mbufs allocated with m_gethdr/MGETHDR
  * or initialized by M_COPY_PKTHDR.
  */
-#define	MH_ALIGN(m, len) \
-	{ (m)->m_data += (MHLEN - (len)) &~ (sizeof(long) - 1); }
+#define	MH_ALIGN(m, len) do {						\
+	(m)->m_data += (MHLEN - (len)) & ~(sizeof(long) - 1);		\
+} while (0)
 
 /*
  * Compute the amount of space available
@@ -359,31 +385,20 @@ union mcluster {
 		(m)->m_pkthdr.len += (plen); \
 }
 
-/* change mbuf to new type */
+/*
+ * Change mbuf to new type.
+ * This is a relatively expensive operation and should be avoided.
+ */
 #define MCHTYPE(m, t) { \
 	MBUFLOCK(mbstat.m_mtypes[(m)->m_type]--; mbstat.m_mtypes[t]++;) \
 	(m)->m_type = t;\
 }
 
-/* length to m_copy to copy all */
+/* Length to m_copy to copy all. */
 #define	M_COPYALL	1000000000
 
-/* compatibility with 4.3 */
+/* Compatibility with 4.3. */
 #define  m_copy(m, o, l)	m_copym((m), (o), (l), M_DONTWAIT)
-
-/*
- * Mbuf statistics.
- */
-struct mbstat {
-	u_long	m_mbufs;	/* mbufs obtained from page pool */
-	u_long	m_clusters;	/* clusters obtained from page pool */
-	u_long	m_spare;	/* spare field */
-	u_long	m_clfree;	/* free clusters */
-	u_long	m_drops;	/* times failed to find space */
-	u_long	m_wait;		/* times waited for space */
-	u_long	m_drain;	/* times drained protocols for space */
-	u_short	m_mtypes[256];	/* type specific mbuf allocations */
-};
 
 #ifdef	_KERNEL
 extern struct mbuf *mbutl;		/* virtual address of mclusters */
@@ -397,7 +412,6 @@ extern int	max_linkhdr;		/* largest link-level header */
 extern int	max_protohdr;		/* largest protocol header */
 extern int	max_hdr;		/* largest link+protocol header */
 extern int	max_datalen;		/* MHLEN - max_hdr */
-extern int	mbtypes[];		/* XXX */
 
 struct	mbuf *m_copym(struct mbuf *, int, int, int);
 struct	mbuf *m_copypacket(struct mbuf *, int);
@@ -421,29 +435,6 @@ int	m_copydata(const struct mbuf *, int, int, caddr_t);
 void	m_freem(struct mbuf *);
 void	m_reclaim(void);
 
-#ifdef MBTYPES
-int mbtypes[] = {				/* XXX */
-	M_FREE,		/* MT_FREE	0	   should be on free list */
-	M_MBUF,		/* MT_DATA	1	   dynamic (data) allocation */
-	M_MBUF,		/* MT_HEADER	2	   packet header */
-	M_SOCKET,	/* MT_SOCKET	3	   socket structure */
-	M_PCB,		/* MT_PCB	4	   protocol control block */
-	M_RTABLE,	/* MT_RTABLE	5	   routing tables */
-	M_HTABLE,	/* MT_HTABLE	6	   IMP host tables */
-	0,		/* MT_ATABLE	7	   address resolution tables */
-	M_MBUF,		/* MT_SONAME	8	   socket name */
-	0,		/* 		9 */
-	M_SOOPTS,	/* MT_SOOPTS	10	   socket options */
-	M_FTABLE,	/* MT_FTABLE	11	   fragment reassembly header */
-	M_MBUF,		/* MT_RIGHTS	12	   access rights */
-	M_IFADDR,	/* MT_IFADDR	13	   interface address */
-	M_MBUF,		/* MT_CONTROL	14	   extra-data protocol message */
-	M_MBUF,		/* MT_OOBDATA	15	   expedited data  */
-#ifdef DATAKIT
-	25, 26, 27, 28, 29, 30, 31, 32		/* datakit ugliness */
-#endif
-};
-#endif
-#endif
+#endif /* _KERNEL */
 
 #endif /* !_SYS_MBUF_H_ */

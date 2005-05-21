@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip_icmp.c	8.2 (Berkeley) 1/4/94
- * $FreeBSD: src/sys/netinet/ip_icmp.c,v 1.98 2005/01/07 01:45:44 imp Exp $
+ * $FreeBSD: src/sys/netinet/ip_icmp.c,v 1.101 2005/05/04 13:23:54 andre Exp $
  */
 
 /*
@@ -95,7 +95,6 @@ int	icmpprintfs = 0;
 
 static void	icmp_reflect(struct mbuf *);
 static void	icmp_send(struct mbuf *, struct mbuf *);
-static int	ip_next_mtu(int, int);
 
 extern	struct protosw inetsw[];
 
@@ -692,20 +691,19 @@ iptime()
 	return (htonl(t));
 }
 
-#if 1
 /*
  * Return the next larger or smaller MTU plateau (table from RFC 1191)
  * given current value MTU.  If DIR is less than zero, a larger plateau
  * is returned; otherwise, a smaller value is returned.
  */
-static int
+int
 ip_next_mtu(mtu, dir)
 	int mtu;
 	int dir;
 {
 	static int mtutab[] = {
-		65535, 32000, 17914, 8166, 4352, 2002, 1492, 1006, 508, 296,
-		68, 0
+		65535, 32000, 17914, 8166, 4352, 2002, 1492, 1280, 1006, 508,
+		296, 68, 0
 	};
 	int i;
 
@@ -730,4 +728,3 @@ ip_next_mtu(mtu, dir)
 		}
 	}
 }
-#endif
