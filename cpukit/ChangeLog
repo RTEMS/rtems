@@ -1,5 +1,7 @@
 2005-05-21  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/ip_icmp.c: Partial update from FreeBSD.
+	* libnetworking/sys/mbuf.h: Partial update from FreeBSD.
 	* libnetworking/netinet/ip_icmp.h: Update from FreeBSD.
 	Abandon BYTE_PACK.
 	* libnetworking/netdb.h: Update from FreeBSD.
