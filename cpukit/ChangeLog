@@ -1,3 +1,7 @@
+2005-05-21  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	* libnetworking/netdb.h: Update from FreeBSD.
+
 2005-05-20  Sergei Organov  <osv@javad.ru>
 
 	PR networking/772.
