@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,15 +27,15 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip_icmp.h	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/netinet/ip_icmp.h,v 1.26 2005/05/04 13:09:19 andre Exp $
+ */
+
+/*
  * $Id$
  */
 
 #ifndef _NETINET_IP_ICMP_H_
 #define _NETINET_IP_ICMP_H_
-
-#ifndef BYTE_PACK
-#define BYTE_PACK __attribute__((packed))
-#endif
 
 /*
  * Interface Control Message Protocol Definitions.
@@ -58,28 +54,28 @@ struct icmp_ra_addr {
  * Structure of an icmp header.
  */
 struct icmp {
-	u_char	icmp_type BYTE_PACK;		/* type of message, see below */
-	u_char	icmp_code BYTE_PACK;		/* type sub code */
-	u_short	icmp_cksum BYTE_PACK;		/* ones complement cksum of struct */
+	u_char	icmp_type;			/* type of message, see below */
+	u_char	icmp_code;			/* type sub code */
+	u_short	icmp_cksum;			/* ones complement cksum of struct */
 	union {
-		u_char ih_pptr BYTE_PACK;			/* ICMP_PARAMPROB */
-		struct in_addr ih_gwaddr BYTE_PACK;	/* ICMP_REDIRECT */
+		u_char ih_pptr;			/* ICMP_PARAMPROB */
+		struct in_addr ih_gwaddr;	/* ICMP_REDIRECT */
 		struct ih_idseq {
-			n_short	icd_id BYTE_PACK;
-			n_short	icd_seq BYTE_PACK;
+			n_short	icd_id;
+			n_short	icd_seq;
 		} ih_idseq;
-		int ih_void BYTE_PACK;
+		int ih_void;
 
 		/* ICMP_UNREACH_NEEDFRAG -- Path MTU Discovery (RFC1191) */
 		struct ih_pmtu {
-			n_short ipm_void BYTE_PACK;
-			n_short ipm_nextmtu BYTE_PACK;
+			n_short ipm_void;
+			n_short ipm_nextmtu;
 		} ih_pmtu;
 
 		struct ih_rtradv {
-			u_char irt_num_addrs BYTE_PACK;
-			u_char irt_wpa BYTE_PACK;
-			u_int16_t irt_lifetime BYTE_PACK;
+			u_char irt_num_addrs;
+			u_char irt_wpa;
+			u_int16_t irt_lifetime;
 		} ih_rtradv;
 	} icmp_hun;
 #define	icmp_pptr	icmp_hun.ih_pptr
@@ -93,17 +89,17 @@ struct icmp {
 #define	icmp_wpa	icmp_hun.ih_rtradv.irt_wpa
 #define	icmp_lifetime	icmp_hun.ih_rtradv.irt_lifetime
 	union {
-		struct id_ts {
-			n_time its_otime BYTE_PACK;
-			n_time its_rtime BYTE_PACK;
-			n_time its_ttime BYTE_PACK;
+		struct id_ts {			/* ICMP Timestamp */
+			n_time its_otime;	/* Originate */
+			n_time its_rtime;	/* Receive */
+			n_time its_ttime;	/* Transmit */
 		} id_ts;
 		struct id_ip  {
-			struct ip idi_ip BYTE_PACK;
+			struct ip idi_ip;
 			/* options and then 64 bits of data */
 		} id_ip;
-		struct icmp_ra_addr id_radv BYTE_PACK;
-		u_long	id_mask BYTE_PACK;
+		struct icmp_ra_addr id_radv;
+		u_int32_t	id_mask;
 		char	id_data[1];
 	} icmp_dun;
 #define	icmp_otime	icmp_dun.id_ts.its_otime
@@ -162,22 +158,39 @@ struct icmp {
 #define		ICMP_REDIRECT_HOST	1		/* for host */
 #define		ICMP_REDIRECT_TOSNET	2		/* for tos and net */
 #define		ICMP_REDIRECT_TOSHOST	3		/* for tos and host */
+#define	ICMP_ALTHOSTADDR	6		/* alternate host address */
 #define	ICMP_ECHO		8		/* echo service */
 #define	ICMP_ROUTERADVERT	9		/* router advertisement */
+#define		ICMP_ROUTERADVERT_NORMAL		0	/* normal advertisement */
+#define		ICMP_ROUTERADVERT_NOROUTE_COMMON	16	/* selective routing */
 #define	ICMP_ROUTERSOLICIT	10		/* router solicitation */
 #define	ICMP_TIMXCEED		11		/* time exceeded, code: */
 #define		ICMP_TIMXCEED_INTRANS	0		/* ttl==0 in transit */
 #define		ICMP_TIMXCEED_REASS	1		/* ttl==0 in reass */
 #define	ICMP_PARAMPROB		12		/* ip header bad */
+#define		ICMP_PARAMPROB_ERRATPTR 0		/* error at param ptr */
 #define		ICMP_PARAMPROB_OPTABSENT 1		/* req. opt. absent */
+#define		ICMP_PARAMPROB_LENGTH 2			/* bad length */
 #define	ICMP_TSTAMP		13		/* timestamp request */
 #define	ICMP_TSTAMPREPLY	14		/* timestamp reply */
 #define	ICMP_IREQ		15		/* information request */
 #define	ICMP_IREQREPLY		16		/* information reply */
 #define	ICMP_MASKREQ		17		/* address mask request */
 #define	ICMP_MASKREPLY		18		/* address mask reply */
+#define	ICMP_TRACEROUTE		30		/* traceroute */
+#define	ICMP_DATACONVERR	31		/* data conversion error */
+#define	ICMP_MOBILE_REDIRECT	32		/* mobile host redirect */
+#define	ICMP_IPV6_WHEREAREYOU	33		/* IPv6 where-are-you */
+#define	ICMP_IPV6_IAMHERE	34		/* IPv6 i-am-here */
+#define	ICMP_MOBILE_REGREQUEST	35		/* mobile registration req */
+#define	ICMP_MOBILE_REGREPLY	36		/* mobile registration reply */
+#define	ICMP_SKIP		39		/* SKIP */
+#define	ICMP_PHOTURIS		40		/* Photuris */
+#define		ICMP_PHOTURIS_UNKNOWN_INDEX	1	/* unknown sec index */
+#define		ICMP_PHOTURIS_AUTH_FAILED	2	/* auth failed */
+#define		ICMP_PHOTURIS_DECRYPT_FAILED	3	/* decrypt failed */
 
-#define	ICMP_MAXTYPE		18
+#define	ICMP_MAXTYPE		40
 
 #define	ICMP_INFOTYPE(type) \
 	((type) == ICMP_ECHOREPLY || (type) == ICMP_ECHO || \
@@ -187,8 +200,9 @@ struct icmp {
 	(type) == ICMP_MASKREQ || (type) == ICMP_MASKREPLY)
 
 #ifdef _KERNEL
-void	icmp_error __P((struct mbuf *, int, int, n_long, struct ifnet *));
-void	icmp_input __P((struct mbuf *, int));
+void	icmp_error(struct mbuf *, int, int, n_long, struct ifnet *);
+void	icmp_input(struct mbuf *, int);
+int	ip_next_mtu(int, int);
 #endif
 
 #endif

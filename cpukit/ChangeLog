@@ -1,5 +1,7 @@
 2005-05-21  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/ip_icmp.h: Update from FreeBSD.
+	Abandon BYTE_PACK.
 	* libnetworking/netdb.h: Update from FreeBSD.
 
 2005-05-20  Sergei Organov  <osv@javad.ru>
