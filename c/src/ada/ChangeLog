@@ -1,5 +1,9 @@
 2005-05-23	Joel Sherrill <joel@OARcorp.com>
 
+	* rtems.adb: Fix variable name.
+
+2005-05-23	Joel Sherrill <joel@OARcorp.com>
+
 	PR rtems_misc/795
 	* rtems.ads: Fix parameter ordering.
 

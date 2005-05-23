@@ -1531,7 +1531,7 @@ package body RTEMS is
          ID,
          Segment,
          Size,
-         Size_Base'Unchecked_Access
+         Old_Size_Base'Unchecked_Access
       );
       Old_Size := Old_Size_Base;
 
