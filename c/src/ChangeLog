@@ -1,3 +1,7 @@
+2005-05-23	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add ada/.
+
 2005-05-20	Sergei Organov  <osv@topconrd.ru>
 
 	PR 750/networking

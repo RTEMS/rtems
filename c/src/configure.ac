@@ -162,6 +162,7 @@ AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
 ])
 
 BSP_SUBDIRS="$BSP_SUBDIRS support"
+BSP_SUBDIRS="$BSP_SUBDIRS ada"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
 AC_ARG_ENABLE([ada],
@@ -225,6 +226,9 @@ AM_CONDITIONAL([RPCTOOLS],[test "$RPCGEN" = rpcgen \
 && test -n "$AWK" \
 && test "$enable_rpcgen" = yes])
 
+AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
+  && test x"$rtems_cv_HAS_POSIX_API" = x"yes"])
+
 RTEMS_PROJECT_ROOT
 
 AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
@@ -255,6 +259,8 @@ lib/Makefile
 lib/libcpu/Makefile
 
 lib/libbsp/Makefile
+
+ada/Makefile
 
 wrapup/Makefile
 ])
