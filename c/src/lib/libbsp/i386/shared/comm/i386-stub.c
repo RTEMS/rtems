@@ -591,7 +591,7 @@ set_mem_err (void)
    that the compiler won't save any registers (if there is a fault
    to mem_fault, they won't get restored, so there better not be any
    saved).  */
-int
+static int
 get_char (char *addr)
 {
   return *addr;
