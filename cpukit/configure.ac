@@ -37,9 +37,6 @@ RTEMS_CANONICALIZE_TOOLS
 AM_PROG_CC_C_O
 AC_PROG_RANLIB
 
-# FIXME: For the moment, no reason to check for ada
-# RTEMS_PROG_GNAT
-
 RTEMS_CHECK_NEWLIB
 
 RTEMS_CHECK_MULTIPROCESSING
@@ -56,14 +53,6 @@ AC_MSG_CHECKING([whether CPU supports librpc])
   esac
 AC_MSG_RESULT([$LIBRPC])
 ])
-
-AC_ARG_ENABLE([ada],
-[AS_HELP_STRING(--enable-ada,enable ada support)],
-[case "${enable_ada}" in
-  yes) ;;
-  no) ;;
-  *)  AC_MSG_ERROR([bad value ${enable_ada} for --enable-ada]) ;;
-esac],[enable_ada=no])
 
 AC_ARG_ENABLE([deprecated],
 [AS_HELP_STRING(--enable-deprecated,allow using deprecated files)],
@@ -265,9 +254,6 @@ AM_CONDITIONAL(HAS_POSIX,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
 AM_CONDITIONAL(HAS_ITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
 AM_CONDITIONAL(HAS_NETWORKING,test x"$HAS_NETWORKING" = x"yes")
 
-AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
-  && test x"$rtems_cv_HAS_POSIX_API" = x"yes"])
-
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
 AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
 
@@ -283,7 +269,6 @@ AC_CONFIG_HEADER(config.h)
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([
 Makefile
-ada/Makefile
 rtems/Makefile
 sapi/Makefile
 score/Makefile

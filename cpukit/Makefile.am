@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I aclocal
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/multilib.am
 
-SUBDIRS = . ada score rtems sapi posix itron
+SUBDIRS = . score rtems sapi posix itron
 SUBDIRS += libcsupport libblock libfs
 SUBDIRS += libnetworking librpc
 SUBDIRS += libmisc
