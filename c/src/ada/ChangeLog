@@ -1,3 +1,8 @@
+2005-05-23	Joel Sherrill <joel@OARcorp.com>
+
+	PR rtems_misc/795
+	* rtems.ads: Fix parameter ordering.
+
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems.adb: Remove gcc 4.x warnings.

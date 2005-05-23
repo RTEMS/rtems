@@ -1302,8 +1302,8 @@ pragma Elaborate_Body (RTEMS);
    procedure Region_Resize_Segment (
       ID         : in     RTEMS.ID;
       Segment    : in     RTEMS.Address;
-      Old_Size   : in     RTEMS.Unsigned32;
-      Size       :    out RTEMS.Unsigned32;
+      Size       : in     RTEMS.Unsigned32;
+      Old_Size   :    out RTEMS.Unsigned32;
       Result     :    out RTEMS.Status_Codes
    );
 
