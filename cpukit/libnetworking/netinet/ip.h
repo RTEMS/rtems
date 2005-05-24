@@ -37,14 +37,20 @@
 #ifndef _NETINET_IP_H_
 #define _NETINET_IP_H_
 
+#include <sys/cdefs.h>
+
 /*
  * Definitions for internet protocol version 4.
  * Per RFC 791, September 1981.
  */
 #define	IPVERSION	4
 
-#ifndef BYTE_PACK
-#define BYTE_PACK __attribute__((packed))
+#ifndef __packed
+#if defined(__GNUC__)
+#define __packed __attribute__((packed))
+#else
+#define __packed
+#endif
 #endif
 
 /*
@@ -64,19 +70,18 @@ struct ip {
 #endif
 #endif /* not _IP_VHL */
 	u_char	ip_tos;			/* type of service */
-	u_short	ip_len BYTE_PACK;	/* total length */
-	u_short	ip_id BYTE_PACK;	/* identification */
-	u_short	ip_off BYTE_PACK;	/* fragment offset field */
+	u_short	ip_len;			/* total length */
+	u_short	ip_id;			/* identification */
+	u_short	ip_off;			/* fragment offset field */
 #define	IP_RF 0x8000			/* reserved fragment flag */
 #define	IP_DF 0x4000			/* dont fragment flag */
 #define	IP_MF 0x2000			/* more fragments flag */
 #define	IP_OFFMASK 0x1fff		/* mask for fragmenting bits */
 	u_char	ip_ttl;			/* time to live */
 	u_char	ip_p;			/* protocol */
-	u_short	ip_sum BYTE_PACK;			/* checksum */
-	struct	in_addr ip_src BYTE_PACK; /* source address */
-	struct	in_addr ip_dst BYTE_PACK; /* dest address */
-};
+	u_short	ip_sum;			/* checksum */
+	struct	in_addr ip_src,ip_dst;	/* source and dest address */
+} __packed;
 
 #ifdef _IP_VHL
 #define	IP_MAKE_VHL(v, hl)	((v) << 4 | (hl))
