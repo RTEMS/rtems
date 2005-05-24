@@ -27,7 +27,7 @@ Make a clean exit routine to return to Arcturus monitor
 The bsp relies on the Arcturus monitor to set up DRAM and all chip selects. 
 This seems OK to me, but others may find it lame.....
 
-I/O pin restrictions make simultatenous operation
+I/O pin restrictions make simultaneous operation
 of I2C, CAN and UART2 impossible.
  
 BSP NAME:           uC5282
