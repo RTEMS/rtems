@@ -50,6 +50,10 @@
 
 /*
  *	From: Id: nameser.h,v 8.16 1998/02/06 00:35:58 halley Exp
+ * $FreeBSD: src/include/arpa/nameser.h,v 1.16 2002/03/23 17:24:55 imp Exp $
+ */
+
+/*
  *	$Id$
  */
 
@@ -140,7 +144,7 @@ extern struct _ns_flagdata _ns_flagdata[];
 typedef	struct __ns_rr {
 	char		name[NS_MAXDNAME];	/* XXX need to malloc */
 	u_int16_t	type;
-	u_int16_t	class;
+	u_int16_t	rr_class;
 	u_int32_t	ttl;
 	u_int16_t	rdlength;
 	const u_char	*rdata;
@@ -149,7 +153,7 @@ typedef	struct __ns_rr {
 /* Accessor macros - this is part of the public interface. */
 #define ns_rr_name(rr)	(((rr).name[0] != '\0') ? (rr).name : ".")
 #define ns_rr_type(rr)	((rr).type + 0)
-#define ns_rr_class(rr)	((rr).class + 0)
+#define ns_rr_class(rr)	((rr).rr_class + 0)
 #define ns_rr_ttl(rr)	((rr).ttl + 0)
 #define ns_rr_rdlen(rr)	((rr).rdlength + 0)
 #define ns_rr_rdata(rr)	((rr).rdata + 0)
@@ -273,6 +277,7 @@ typedef enum __ns_type {
 	ns_t_srv = 33,		/* Server Selection. */
 	ns_t_atma = 34,		/* ATM Address */
 	ns_t_naptr = 35,	/* Naming Authority PoinTeR */
+	ns_t_opt = 41,		/* OPT pseudo-RR, RFC2761 */
 	/* Query type values which do not appear in resource records. */
 	ns_t_ixfr = 251,	/* Incremental zone transfer. */
 	ns_t_axfr = 252,	/* Transfer zone of authority. */
@@ -414,31 +419,31 @@ typedef enum __ns_class {
 #define	ns_name_uncompress	__ns_name_uncompress
 
 __BEGIN_DECLS
-u_int		ns_get16 __P((const u_char *));
-u_long		ns_get32 __P((const u_char *));
-void		ns_put16 __P((u_int, u_char *));
-void		ns_put32 __P((u_long, u_char *));
-int		ns_initparse __P((const u_char *, int, ns_msg *));
-int		ns_parserr __P((ns_msg *, ns_sect, int, ns_rr *));
-int		ns_sprintrr __P((const ns_msg *, const ns_rr *,
-				 const char *, const char *, char *, size_t));
-int		ns_sprintrrf __P((const u_char *, size_t, const char *,
+u_int		ns_get16(const u_char *);
+u_long		ns_get32(const u_char *);
+void		ns_put16(u_int, u_char *);
+void		ns_put32(u_long, u_char *);
+int		ns_initparse(const u_char *, int, ns_msg *);
+int		ns_parserr(ns_msg *, ns_sect, int, ns_rr *);
+int		ns_sprintrr(const ns_msg *, const ns_rr *,
+				 const char *, const char *, char *, size_t);
+int		ns_sprintrrf(const u_char *, size_t, const char *,
 				  ns_class, ns_type, u_long, const u_char *,
 				  size_t, const char *, const char *,
-				  char *, size_t));
-int		ns_format_ttl __P((u_long, char *, size_t));
-int		ns_parse_ttl __P((const char *, u_long *));
-int		ns_name_ntop __P((const u_char *, char *, size_t));
-int		ns_name_pton __P((const char *, u_char *, size_t));
-int		ns_name_unpack __P((const u_char *, const u_char *,
-				    const u_char *, u_char *, size_t));
-int		ns_name_pack __P((const u_char *, u_char *, int,
-				  const u_char **, const u_char **));
-int		ns_name_uncompress __P((const u_char *, const u_char *,
-					const u_char *, char *, size_t));
-int		ns_name_compress __P((const char *, u_char *, size_t,
-				      const u_char **, const u_char **));
-int		ns_name_skip __P((const u_char **, const u_char *));
+				  char *, size_t);
+int		ns_format_ttl(u_long, char *, size_t);
+int		ns_parse_ttl(const char *, u_long *);
+int		ns_name_ntop(const u_char *, char *, size_t);
+int		ns_name_pton(const char *, u_char *, size_t);
+int		ns_name_unpack(const u_char *, const u_char *,
+				    const u_char *, u_char *, size_t);
+int		ns_name_pack(const u_char *, u_char *, int,
+				  const u_char **, const u_char **);
+int		ns_name_uncompress(const u_char *, const u_char *,
+					const u_char *, char *, size_t);
+int		ns_name_compress(const char *, u_char *, size_t,
+				      const u_char **, const u_char **);
+int		ns_name_skip(const u_char **, const u_char *);
 __END_DECLS
 
 #ifdef BIND_4_COMPAT
