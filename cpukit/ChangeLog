@@ -1,9 +1,9 @@
-2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+2005-05-24  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	* libnetworking/arpa/telnet.h: Remove (Unused, Non-POSIX/SUSV3).
 	* libnetworking/Makefile.am: Reflect removing arpa/telnet.h.
 
-2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+2005-05-24  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	* libnetworking/arpa/nameser.h: Update from FreeBSD.
 	* libnetworking/libc/ns_parse.c: Reflect changes above.
