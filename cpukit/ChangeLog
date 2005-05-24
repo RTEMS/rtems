@@ -1,5 +1,7 @@
 2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* libnetworking/arpa/nameser.h: Update from FreeBSD.
+	* libnetworking/libc/ns_parse.c: Reflect changes above.
 	* libnetworking/netinet/ip.h: Remove BYTE_PACK.
 	Add __packed. Partial update from FreeBSD.
 	* libnetworking/netinet/ip_divert.c: Cosmetics from FreeBSD.
