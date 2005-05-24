@@ -1,3 +1,9 @@
+2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/ip.h: Remove BYTE_PACK.
+	Add __packed. Partial update from FreeBSD.
+	* libnetworking/netinet/ip_divert.c: Cosmetics from FreeBSD.
+
 2005-05-23      Eric Norum <norume@aps.anl.gov>
 
 	* libnetworking/rtems/rtems_showicmpstat.c
@@ -5,6 +11,7 @@
 
 2005-05-23  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	PR rtems_misc/795
 	* Makefile.am: Remove ada.
 	* configure.ac: Remove ada.
 
