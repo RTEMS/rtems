@@ -1,3 +1,8 @@
+2005-05-23  Eric Norum <norume@aps.anl.gov>
+
+	* startup/linkcmds
+	  startup/bspstart.c: Followup fix to Joel's/Chris's VBR changes.
+
 2005-05-11  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Followup fix to Joel's changes of 2005-05-03.

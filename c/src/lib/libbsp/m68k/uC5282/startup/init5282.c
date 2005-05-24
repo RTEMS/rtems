@@ -19,11 +19,6 @@ void Init5282 (void)
     extern void CopyDataClearBSSAndStart (void);
     
     /*
-     * Set the VBR to point to where the assembly code copied it
-     */
-    m68k_set_vbr(0);
-
-    /*
      * Copy data, clear BSS and call boot_card()
      */
     CopyDataClearBSSAndStart ();
