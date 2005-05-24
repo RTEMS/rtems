@@ -97,6 +97,7 @@ static void	icmp_reflect(struct mbuf *);
 static void	icmp_send(struct mbuf *, struct mbuf *);
 
 extern	struct protosw inetsw[];
+unsigned int icmplenPanicAvoided;
 
 /*
  * Generate an error packet of type error
@@ -139,8 +140,11 @@ icmp_error(n, type, code, dest, destifp)
 		goto freeit;
     /* Don't send error in response to malicious packet */
 	icmplen = min(oiplen + 8, oip->ip_len);
-	if (icmplen < sizeof(struct ip))
+	if (icmplen < sizeof(struct ip)) {
+		icmplenPanicAvoided++;
 		goto freeit;
+    }
+
 	/*
 	 * First, formulate icmp message
 	 */

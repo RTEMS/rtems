@@ -36,6 +36,7 @@ rtems_bsdnet_show_icmp_stats (void)
 {
 	int i;
 	char cbuf[20];
+	extern unsigned int icmplenPanicAvoided;
 
 	printf ("************ ICMP Statistics ************\n");
 	showicmpstat ("Calls to icmp_error()", icmpstat.icps_error);
@@ -59,6 +60,6 @@ rtems_bsdnet_show_icmp_stats (void)
 			showicmpstat (cbuf, icmpstat.icps_inhist[i]);
 		}
 	}
-
+	showicmpstat ("ICMP panic avoided", icmplenPanicAvoided);
 	printf ("\n");
 }
