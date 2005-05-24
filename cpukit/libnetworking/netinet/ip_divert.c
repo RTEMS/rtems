@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -30,6 +26,10 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
+ * $FreeBSD: src/sys/netinet/ip_divert.c,v 1.113 2005/05/13 11:44:37 glebius Exp $
+ *
+
+/*
  *	$Id$
  */
 
@@ -80,8 +80,7 @@ u_short ip_divert_port;
  */
 u_short ip_divert_ignore;
 
-/* Internal variables */
-
+/* Internal variables. */
 static struct inpcbhead divcb;
 static struct inpcbinfo divcbinfo;
 
@@ -203,10 +202,8 @@ div_input(struct mbuf *m, int hlen)
  * back to this socket; otherwise, don't.
  */
 static int
-div_output(so, m, addr, control)
-	struct socket *so;
-	register struct mbuf *m;
-	struct mbuf *addr, *control;
+div_output(struct socket *so, struct mbuf *m,
+	struct mbuf *addr, struct mbuf *control)
 {
 	register struct inpcb *const inp = sotoinpcb(so);
 	register struct ip *const ip = mtod(m, struct ip *);
