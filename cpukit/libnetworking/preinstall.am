@@ -58,10 +58,6 @@ $(PROJECT_INCLUDE)/arpa/nameser_compat.h: arpa/nameser_compat.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/nameser_compat.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/nameser_compat.h
 
-$(PROJECT_INCLUDE)/arpa/telnet.h: arpa/telnet.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/telnet.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/telnet.h
-
 $(PROJECT_INCLUDE)/machine/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/machine
 	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
