@@ -1,3 +1,14 @@
+2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	* librpc/src/rpc/PSD.doc/rpc.prog.ms, 
+	librpc/src/rpc/PSD.doc/rpcgen.ms, 
+	librpc/src/rpc/PSD.doc/nfs.rfc.ms,
+	librpc/src/rpc/PSD.doc/xdr.rfc.ms,
+	librpc/src/rpc/PSD.doc/rpc.rfc.ms,
+	librpc/src/rpc/PSD.doc/xdr.nts.ms:
+	Remove (Unused, obsolete).
+	* librpc/Makefile.am: Reflect changes above.
+
 2005-05-24  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	* libnetworking/arpa/telnet.h: Remove (Unused, Non-POSIX/SUSV3).

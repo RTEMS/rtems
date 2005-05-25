@@ -73,9 +73,6 @@ endif
 
 EXTRA_DIST += src/rpc/DISCLAIMER src/rpc/README
 
-EXTRA_DIST += src/rpc/PSD.doc/nfs.rfc.ms src/rpc/PSD.doc/rpc.prog.ms \
-    src/rpc/PSD.doc/rpc.rfc.ms src/rpc/PSD.doc/rpcgen.ms \
-    src/rpc/PSD.doc/xdr.nts.ms src/rpc/PSD.doc/xdr.rfc.ms
 EXTRA_DIST += README_RTEMS
 
 ## FIXME: Unused
