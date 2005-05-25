@@ -37,10 +37,6 @@ $(PROJECT_INCLUDE)/rpc/clnt_stat.h: include/rpc/clnt_stat.h $(PROJECT_INCLUDE)/r
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/clnt_stat.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/clnt_stat.h
 
-$(PROJECT_INCLUDE)/rpc/des_crypt.h: include/rpc/des_crypt.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/des_crypt.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/des_crypt.h
-
 $(PROJECT_INCLUDE)/rpc/pmap_clnt.h: include/rpc/pmap_clnt.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/pmap_clnt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/pmap_clnt.h
