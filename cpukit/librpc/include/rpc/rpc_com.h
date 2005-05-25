@@ -1,3 +1,6 @@
+/*	$NetBSD: rpc_com.h,v 1.3 2000/12/10 04:10:08 christos Exp $	*/
+/*	$FreeBSD: src/include/rpc/rpc_com.h,v 1.6 2003/01/16 07:13:51 mbr Exp $ */
+
 /*
  * Sun RPC is a product of Sun Microsystems, Inc. and is provided for
  * unrestricted use provided that this legend is included on all tape
@@ -31,6 +34,10 @@
  */
 
 /*
+ * $Id$
+ */
+ 
+/*
  * rpc_com.h, Common definitions for both the server and client side.
  * All for the topmost layer of rpc
  *
@@ -39,17 +46,10 @@
 #ifndef _RPC_RPCCOM_H
 #define	_RPC_RPCCOM_H
 
-/* From: #pragma ident	"@(#)rpc_com.h	1.11	93/07/05 SMI" */
+#include <sys/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+/* #pragma ident	"@(#)rpc_com.h	1.11	93/07/05 SMI" */
 
-/*
- * File descriptor to be used on xxx_create calls to get default descriptor
- */
-#define	RPC_ANYSOCK	-1
-#define	RPC_ANYFD	RPC_ANYSOCK
 /*
  * The max size of the transport, if the size cannot be determined
  * by other means.
@@ -57,22 +57,12 @@ extern "C" {
 #define	RPC_MAXDATASIZE 9000
 #define	RPC_MAXADDRSIZE 1024
 
-#if defined(__STDC__) || defined(__cplusplus)
-extern u_int __rpc_get_t_size (int, long);
-extern u_int __rpc_get_a_size (long);
-extern int __rpc_dtbsize (void);
-extern int _rpc_dtablesize (void);
+__BEGIN_DECLS
+extern u_int __rpc_get_a_size(int);
+extern u_int __rpc_get_t_size(int, long);
+extern int __rpc_dtbsize(void);
+extern int _rpc_dtablesize(void);
 extern  int  _rpc_get_default_domain(char **);
-#else
-extern u_int __rpc_get_t_size ();
-extern u_int __rpc_get_a_size ();
-extern int __rpc_dtbsize ();
-extern int _rpc_dtablesize ();
-extern  int _rpc_get_default_domain();
-#endif
-
-#ifdef __cplusplus
-}
-#endif
+__END_DECLS
 
 #endif /* _RPC_RPCCOM_H */

@@ -43,6 +43,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_simple.c,v 1.9 1999/08/28 0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
 #include <rpc/rpc.h>
 #include <rpc/pmap_clnt.h>
 #include <sys/socket.h>
@@ -50,8 +51,8 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_simple.c,v 1.9 1999/08/28 0
 
 struct prog_lst {
 	char *(*p_progname)();
-	int  p_prognum;
-	int  p_procnum;
+	rpcprog_t  p_prognum;
+	rpcproc_t  p_procnum;
 	xdrproc_t p_inproc, p_outproc;
 	struct prog_lst *p_nxt;
 };
@@ -72,7 +73,7 @@ registerrpc(
 
 	if (procnum == NULLPROC) {
 		(void) fprintf(stderr,
-		    "can't reassign procedure number %ld\n", NULLPROC);
+		    "can't reassign procedure number %" PRIu32 "\n", NULLPROC);
 		return (-1);
 	}
 	if (transp == 0) {

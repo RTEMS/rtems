@@ -28,7 +28,7 @@
  *
  *	from: @(#)rpc_msg.h 1.7 86/07/16 SMI
  *	from: @(#)rpc_msg.h	2.1 88/07/29 4.0 RPCSRC
- * $FreeBSD: src/include/rpc/rpc_msg.h,v 1.12 1999/08/27 23:45:05 peter Exp $
+ * $FreeBSD: src/include/rpc/rpc_msg.h,v 1.15 2003/01/01 18:48:42 schweikh Exp $
  */
 
 /*
@@ -38,10 +38,14 @@
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
-#ifndef _RPC_RPCMSG_H
-#define _RPC_RPCMSG_H
+/*
+ * $Id$
+ */
 
-#define RPC_MSG_VERSION		((u_long) 2)
+#ifndef _RPC_RPC_MSG_H
+#define _RPC_RPC_MSG_H
+
+#define RPC_MSG_VERSION		((u_int32_t) 2)
 #define RPC_SERVICE_PORT	((u_short) 2048)
 
 /*
@@ -165,7 +169,7 @@ __BEGIN_DECLS
  * 	XDR *xdrs;
  * 	struct rpc_msg *cmsg;
  */
-extern bool_t	xdr_callmsg	__P((XDR *, struct rpc_msg *));
+extern bool_t	xdr_callmsg(XDR *, struct rpc_msg *);
 
 /*
  * XDR routine to pre-serialize the static part of a rpc message.
@@ -173,7 +177,7 @@ extern bool_t	xdr_callmsg	__P((XDR *, struct rpc_msg *));
  * 	XDR *xdrs;
  * 	struct rpc_msg *cmsg;
  */
-extern bool_t	xdr_callhdr	__P((XDR *, struct rpc_msg *));
+extern bool_t	xdr_callhdr(XDR *, struct rpc_msg *);
 
 /*
  * XDR routine to handle a rpc reply.
@@ -189,8 +193,7 @@ extern bool_t	xdr_replymsg	__P((XDR *, struct rpc_msg *));
  * 	struct rpc_msg *msg;
  * 	struct rpc_err *error;
  */
-struct rpc_err;
-extern void	_seterr_reply	__P((struct rpc_msg *, struct rpc_err *));
+extern void	_seterr_reply(struct rpc_msg *, struct rpc_err *);
 __END_DECLS
 
-#endif /* !_RPC_RPCMSG_H */
+#endif /* !_RPC_RPC_MSG_H */
