@@ -13,7 +13,7 @@ if LIBRPC
 include_rpcdir = $(includedir)/rpc
 include_rpc_HEADERS = include/rpc/auth.h include/rpc/auth_des.h \
     include/rpc/auth_unix.h include/rpc/clnt.h include/rpc/clnt_stat.h \
-    include/rpc/des_crypt.h include/rpc/pmap_clnt.h \
+    include/rpc/pmap_clnt.h \
     include/rpc/pmap_prot.h include/rpc/pmap_rmt.h include/rpc/rpc.h \
     include/rpc/rpc_com.h include/rpc/rpc_msg.h include/rpc/rpcent.h \
     include/rpc/svc.h include/rpc/svc_auth.h include/rpc/types.h \
