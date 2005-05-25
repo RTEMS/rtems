@@ -1,7 +1,12 @@
 2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
-	* include/rpc/rpc_com.h, include/rpc/rpc_msg.h,
-	src/rpc/svc_simple.c: Minor fixes.
+	* librpc/include/rpc/auth_des.h: Remove (Unused, unsupported).
+	* librpc/include/rpc/rpc.h, librpc/Makefile.am: Reflect removing 
+	auth_des.h.
+
+2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+	* librpc/include/rpc/rpc_com.h, librpc/include/rpc/rpc_msg.h,
+	librpc/src/rpc/svc_simple.c: Minor fixes.
 	* include/rpc/clnt.h, include/rpc/svc.h,
 	librpc/include/rpc/clnt.h, librpc/include/rpc/clnt_soc.h,
 	src/rpc/clnt_perror.c: More updates from FreeBSD.
