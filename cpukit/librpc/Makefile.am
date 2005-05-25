@@ -12,8 +12,7 @@ DISTCLEANFILES =
 if LIBRPC
 include_rpcdir = $(includedir)/rpc
 
-include_rpc_HEADERS = include/rpc/auth.h include/rpc/auth_des.h \
-    include/rpc/auth_unix.h
+include_rpc_HEADERS = include/rpc/auth.h include/rpc/auth_unix.h
 include_rpc_HEADERS += include/rpc/clnt.h include/rpc/clnt_stat.h \
     include/rpc/clnt_soc.h
 include_rpc_HEADERS += include/rpc/svc.h include/rpc/svc_auth.h \
