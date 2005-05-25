@@ -199,11 +199,11 @@ __END_DECLS
  */
 
 __BEGIN_DECLS
-extern bool_t	svc_sendreply(SVCXPRT *, xdrproc_t, char *);
+extern bool_t	svc_sendreply(SVCXPRT *, xdrproc_t, void *);
 extern void	svcerr_decode(SVCXPRT *);
 extern void	svcerr_weakauth(SVCXPRT *);
 extern void	svcerr_noproc(SVCXPRT *);
-extern void	svcerr_progvers(SVCXPRT *, u_long, u_long);
+extern void	svcerr_progvers(SVCXPRT *, rpcvers_t, rpcvers_t);
 extern void	svcerr_auth(SVCXPRT *, enum auth_stat);
 extern void	svcerr_noprog(SVCXPRT *);
 extern void	svcerr_systemerr(SVCXPRT *);

@@ -45,65 +45,27 @@
  * 2550 Garcia Avenue
  * Mountain View, California  94043
  *
- *	from: @(#)clnt.h 1.31 88/02/08 SMI
+ *	from: @(#)clnt.h 1.31 94/04/29 SMI
  *	from: @(#)clnt.h	2.1 88/07/29 4.0 RPCSRC
- * $FreeBSD: src/include/rpc/clnt.h,v 1.11 1999/08/27 23:45:03 peter Exp $
+ * $FreeBSD: src/include/rpc/clnt.h,v 1.21 2003/01/24 01:47:55 fjoe Exp $
  */
 
 /*
  * clnt.h - Client side remote procedure call interface.
  *
- * Copyright (C) 1984, Sun Microsystems, Inc.
+ * Copyright (c) 1986-1991,1994-1999 by Sun Microsystems, Inc.
+ * All rights reserved.
  */
+
+/*
+ * $Id$
+ */ 
 
 #ifndef _RPC_CLNT_H_
 #define _RPC_CLNT_H_
+#include <rpc/clnt_stat.h>
 #include <sys/cdefs.h>
 #include <sys/un.h>
-
-/*
- * Rpc calls return an enum clnt_stat.  This should be looked at more,
- * since each implementation is required to live with this (implementation
- * independent) list of errors.
- */
-enum clnt_stat {
-	RPC_SUCCESS=0,			/* call succeeded */
-	/*
-	 * local errors
-	 */
-	RPC_CANTENCODEARGS=1,		/* can't encode arguments */
-	RPC_CANTDECODERES=2,		/* can't decode results */
-	RPC_CANTSEND=3,			/* failure in sending call */
-	RPC_CANTRECV=4,			/* failure in receiving result */
-	RPC_TIMEDOUT=5,			/* call timed out */
-	/*
-	 * remote errors
-	 */
-	RPC_VERSMISMATCH=6,		/* rpc versions not compatible */
-	RPC_AUTHERROR=7,		/* authentication error */
-	RPC_PROGUNAVAIL=8,		/* program not available */
-	RPC_PROGVERSMISMATCH=9,		/* program version mismatched */
-	RPC_PROCUNAVAIL=10,		/* procedure unavailable */
-	RPC_CANTDECODEARGS=11,		/* decode arguments error */
-	RPC_SYSTEMERROR=12,		/* generic "other problem" */
-
-	/*
-	 * callrpc & clnt_create errors
-	 */
-	RPC_UNKNOWNHOST=13,		/* unknown host name */
-	RPC_UNKNOWNPROTO=17,		/* unkown protocol */
-
-	/*
-	 * _ create errors
-	 */
-	RPC_PMAPFAILURE=14,		/* the pmapper failed in its call */
-	RPC_PROGNOTREGISTERED=15,	/* remote program is not registered */
-	/*
-	 * unspecified error
-	 */
-	RPC_FAILED=16
-};
-
 
 /*
  * Error info.
@@ -158,6 +120,7 @@ typedef struct __rpc_client {
 	caddr_t			cl_private;	/* private stuff */
 } CLIENT;
 
+#define RPCSMALLMSGSIZE	400	/* a more reasonable packet size */
 
 /*
  * client side rpc interface ops
@@ -347,10 +310,6 @@ struct rpc_createerr {
 };
 
 extern struct rpc_createerr rpc_createerr;
-
-
-#define UDPMSGSIZE	8800	/* rpc imposed limit on udp msg size */
-#define RPCSMALLMSGSIZE	400	/* a more reasonable packet size */
 
 /* For backward compatibility */
 #include <rpc/clnt_soc.h>
