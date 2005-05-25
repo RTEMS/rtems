@@ -1,5 +1,11 @@
 2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/clnt.h, librpc/include/rpc/svc.h,
+	src/rpc/pmap_rmt.c: Use void* instead of caddr_t. 
+	Cosmetics from FreeBSD.
+
+2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
 	* librpc/include/rpc/auth_des.h: Remove (Unused, unsupported).
 	* librpc/include/rpc/rpc.h, librpc/Makefile.am: Reflect removing 
 	auth_des.h.
