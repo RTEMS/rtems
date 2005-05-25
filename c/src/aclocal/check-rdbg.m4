@@ -17,21 +17,14 @@ AC_CACHE_CHECK([whether BSP supports librdbg],
       rtems_cv_HAS_RDBG="yes" ;
     elif test "${RTEMS_CPU}" = "powerpc"; 
     then
-	A=`grep -l RTEMS_PPC_EXCEPTION_PROCESSING_MODEL $srcdir/${RTEMS_TOPdir}/make/custom/* 2>/dev/null`;
-	C=""
-	for i in ${A} ;
-	do
-	   B=`basename ${i} .cfg`;
-	   C="${C} ${B}";
-	done
-	rtems_cv_HAS_RDBG="no";
-	for j in ${C} ;
-	do
-		if test "${$1}" = "${j}" ;
-		then
-			rtems_cv_HAS_RDBG="yes";
-		fi
-	done
+      AC_COMPILE_IFELSE(
+        [AC_LANG_PROGRAM(
+          [],
+          [#if defined(_OLD_EXCEPTIONS)
+            choke me
+           #endif])],
+          [rtems_cv_HAS_RDBG=yes],
+          [rtems_cv_HAS_RDBG=no])
     else
       rtems_cv_HAS_RDBG="no";
     fi
