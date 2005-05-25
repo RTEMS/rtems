@@ -84,20 +84,20 @@ typedef struct __rpc_svcxprt {
 	    enum xprt_stat (*xp_stat)(struct __rpc_svcxprt *);
 	    /* get arguments */
 	    bool_t	(*xp_getargs)(struct __rpc_svcxprt *, xdrproc_t,
-				caddr_t);
+				void *);
 	    /* send reply */
 	    bool_t	(*xp_reply)(struct __rpc_svcxprt *, struct rpc_msg *);
 	    /* free mem allocated for args */
 	    bool_t	(*xp_freeargs)(struct __rpc_svcxprt *, xdrproc_t,
-				caddr_t);
+				void *);
 	    /* destroy this struct */
 	    void	(*xp_destroy)(struct __rpc_svcxprt *);
 	} *xp_ops;
 	int		xp_addrlen;	 /* length of remote address */
 	struct sockaddr_in xp_raddr;	 /* remote addr. (backward ABI compat) */
 	struct opaque_auth xp_verf;	 /* raw response verifier */
-	caddr_t		xp_p1;		 /* private */
-	caddr_t		xp_p2;		 /* private */
+	void		*xp_p1;		 /* private: for use by svc ops */
+	void		*xp_p2;		 /* private: for use by svc ops */
 } SVCXPRT;
 
 /*

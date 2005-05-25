@@ -41,23 +41,30 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_rmt.c,v 1.15 2000/01/27 23
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+
+#include <net/if.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
 #include <rpc/rpc.h>
 #include <rpc/pmap_prot.h>
 #include <rpc/pmap_clnt.h>
 #include <rpc/pmap_rmt.h>
-#include <sys/socket.h>
-#include <stdio.h>
+
 #include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <arpa/inet.h>
 #include <sys/select.h>
+
 #define MAX_BROADCAST_SIZE 1400
 
-static struct timeval timeout = { 3, 0 };
+static const struct timeval timeout = { 3, 0 };
 
 /*
  * pmapper remote-call-service interface.
@@ -67,7 +74,8 @@ static struct timeval timeout = { 3, 0 };
  * programs to do a lookup and call in one step.
 */
 enum clnt_stat
-pmap_rmtcall(addr, prog, vers, proc, xdrargs, argsp, xdrres, resp, tout, port_ptr)
+pmap_rmtcall(addr, prog, vers, proc, xdrargs, argsp, xdrres, resp, tout,
+    port_ptr)
 	struct sockaddr_in *addr;
 	u_long prog, vers, proc;
 	xdrproc_t xdrargs, xdrres;
@@ -75,15 +83,18 @@ pmap_rmtcall(addr, prog, vers, proc, xdrargs, argsp, xdrres, resp, tout, port_pt
 	struct timeval tout;
 	u_long *port_ptr;
 {
-	int socket = -1;
-	register CLIENT *client;
+	int sock = -1;
+	CLIENT *client;
 	struct rmtcallargs a;
 	struct rmtcallres r;
 	enum clnt_stat stat;
 
+	assert(addr != NULL);
+	assert(port_ptr != NULL);
+
 	addr->sin_port = htons(PMAPPORT);
-	client = clntudp_create(addr, PMAPPROG, PMAPVERS, timeout, &socket);
-	if (client != (CLIENT *)NULL) {
+	client = clntudp_create(addr, PMAPPROG, PMAPVERS, timeout, &sock);
+	if (client != NULL) {
 		a.prog = prog;
 		a.vers = vers;
 		a.proc = proc;
@@ -92,14 +103,15 @@ pmap_rmtcall(addr, prog, vers, proc, xdrargs, argsp, xdrres, resp, tout, port_pt
 		r.port_ptr = port_ptr;
 		r.results_ptr = resp;
 		r.xdr_results = xdrres;
-		stat = CLNT_CALL(client, PMAPPROC_CALLIT, xdr_rmtcall_args, &a,
-		    xdr_rmtcallres, &r, tout);
+		stat = CLNT_CALL(client, (rpcproc_t)PMAPPROC_CALLIT,
+		    (xdrproc_t)xdr_rmtcall_args, &a, (xdrproc_t)xdr_rmtcallres, 
+		    &r, tout);
 		CLNT_DESTROY(client);
 	} else {
 		stat = RPC_FAILED;
 	}
-	if (socket != -1)
-		(void)_RPC_close(socket);
+	if (sock != -1)
+		(void)_RPC_close(sock);
 	addr->sin_port = 0;
 	return (stat);
 }
@@ -111,10 +123,13 @@ pmap_rmtcall(addr, prog, vers, proc, xdrargs, argsp, xdrres, resp, tout, port_pt
  */
 bool_t
 xdr_rmtcall_args(xdrs, cap)
-	register XDR *xdrs;
-	register struct rmtcallargs *cap;
+	XDR *xdrs;
+	struct rmtcallargs *cap;
 {
 	u_int lenposition, argposition, position;
+
+	assert(xdrs != NULL);
+	assert(cap != NULL);
 
 	if (xdr_u_long(xdrs, &(cap->prog)) &&
 	    xdr_u_long(xdrs, &(cap->vers)) &&
@@ -142,15 +157,18 @@ xdr_rmtcall_args(xdrs, cap)
  */
 bool_t
 xdr_rmtcallres(xdrs, crp)
-	register XDR *xdrs;
-	register struct rmtcallres *crp;
+	XDR *xdrs;
+	struct rmtcallres *crp;
 {
 	caddr_t port_ptr;
 
-	port_ptr = (caddr_t)crp->port_ptr;
+	assert(xdrs != NULL);
+	assert(crp != NULL);
+
+	port_ptr = (caddr_t)(void *)crp->port_ptr;
 	if (xdr_reference(xdrs, &port_ptr, sizeof (u_long),
-	    (xdrproc_t) xdr_u_long) && xdr_u_long(xdrs, &crp->resultslen)) {
-		crp->port_ptr = (u_long *)port_ptr;
+	    (xdrproc_t)xdr_u_long) && xdr_u_long(xdrs, &crp->resultslen)) {
+		crp->port_ptr = (u_long *)(void *)port_ptr;
 		return ((*(crp->xdr_results))(xdrs, crp->results_ptr));
 	}
 	return (FALSE);

@@ -110,14 +110,14 @@ typedef struct __rpc_client {
 					struct rpc_err *);
 		/* frees results */
 		bool_t		(*cl_freeres)(struct __rpc_client *,
-					xdrproc_t, caddr_t);
+					xdrproc_t, void *);
 		/* destroy this structure */
 		void		(*cl_destroy)(struct __rpc_client *);
 		/* the ioctl() of rpc */
 		bool_t          (*cl_control)(struct __rpc_client *, u_int,
 					void *);
 	} *cl_ops;
-	caddr_t			cl_private;	/* private stuff */
+	void			*cl_private;	/* private stuff */
 } CLIENT;
 
 #define RPCSMALLMSGSIZE	400	/* a more reasonable packet size */
