@@ -1,5 +1,7 @@
 2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* include/rpc/rpc_com.h, include/rpc/rpc_msg.h,
+	src/rpc/svc_simple.c: Minor fixes.
 	* include/rpc/clnt.h, include/rpc/svc.h,
 	librpc/include/rpc/clnt.h, librpc/include/rpc/clnt_soc.h,
 	src/rpc/clnt_perror.c: More updates from FreeBSD.
