@@ -1,5 +1,10 @@
 2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/des.h: Remove (Unused, unsupported).
+	* librpc/Makefile.am: Reflect changes above.
+
+2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
 	* librpc/src/rpc/auth_des.c, 
 	librpc/src/rpc/auth_time.c,
 	librpc/src/rpc/authdes_prot.c,
