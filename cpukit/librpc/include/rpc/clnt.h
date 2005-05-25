@@ -1,4 +1,23 @@
+/*	$NetBSD: clnt.h,v 1.14 2000/06/02 22:57:55 fvdl Exp $	*/
+
 /*
+ * The contents of this file are subject to the Sun Standards
+ * License Version 1.0 the (the "License";) You may not use
+ * this file except in compliance with the License.  You may
+ * obtain a copy of the License at lib/libc/rpc/LICENSE
+ *
+ * Software distributed under the License is distributed on
+ * an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
+ * express or implied.  See the License for the specific
+ * language governing rights and limitations under the License.
+ *
+ * The Original Code is Copyright 1998 by Sun Microsystems, Inc
+ *
+ * The Initial Developer of the Original Code is:  Sun
+ * Microsystems, Inc.
+ *
+ * All Rights Reserved.
+ *
  * Sun RPC is a product of Sun Microsystems, Inc. and is provided for
  * unrestricted use provided that this legend is included on all tape
  * media and as a part of the software program in whole or part.  Users
@@ -95,8 +114,8 @@ struct rpc_err {
 		int RE_errno;		/* related system error */
 		enum auth_stat RE_why;	/* why the auth error occurred */
 		struct {
-			u_int32_t low;	/* lowest verion supported */
-			u_int32_t high;	/* highest verion supported */
+			rpcvers_t low;	/* lowest version supported */
+			rpcvers_t high;	/* highest version supported */
 		} RE_vers;
 		struct {		/* maybe meaningful if RPC_FAILED */
 			int32_t s1;
@@ -119,22 +138,22 @@ typedef struct __rpc_client {
 	AUTH	*cl_auth;			/* authenticator */
 	struct clnt_ops {
 		/* call remote procedure */
-		enum clnt_stat	(*cl_call) __P((struct __rpc_client *,
-					u_long, xdrproc_t, caddr_t, xdrproc_t,
-					caddr_t, struct timeval));
+		enum clnt_stat	(*cl_call)(struct __rpc_client *,
+				    rpcproc_t, xdrproc_t, void *, xdrproc_t,
+				        void *, struct timeval);
 		/* abort a call */
-		void		(*cl_abort) __P((struct __rpc_client *));
+		void		(*cl_abort)(struct __rpc_client *);
 		/* get specific error code */
-		void		(*cl_geterr) __P((struct __rpc_client *,
-					struct rpc_err *));
+		void		(*cl_geterr)(struct __rpc_client *,
+					struct rpc_err *);
 		/* frees results */
-		bool_t		(*cl_freeres) __P((struct __rpc_client *,
-					xdrproc_t, caddr_t));
+		bool_t		(*cl_freeres)(struct __rpc_client *,
+					xdrproc_t, caddr_t);
 		/* destroy this structure */
-		void		(*cl_destroy) __P((struct __rpc_client *));
+		void		(*cl_destroy)(struct __rpc_client *);
 		/* the ioctl() of rpc */
-		bool_t          (*cl_control) __P((struct __rpc_client *, u_int,
-					void *));
+		bool_t          (*cl_control)(struct __rpc_client *, u_int,
+					void *);
 	} *cl_ops;
 	caddr_t			cl_private;	/* private stuff */
 } CLIENT;
@@ -228,7 +247,7 @@ typedef struct __rpc_client {
 #define CLSET_POP_TIMOD     18	/* pop timod                             XXX */
 
 /*
- * udp only control operations
+ * Connectionless only control operations
  */
 #define CLSET_RETRY_TIMEOUT 4   /* set retry timeout (timeval) */
 #define CLGET_RETRY_TIMEOUT 5   /* get retry timeout (timeval) */
@@ -272,18 +291,6 @@ typedef struct __rpc_client {
  */
 
 /*
- * Memory based rpc (for speed check and testing)
- * CLIENT *
- * clntraw_create(prog, vers)
- *	u_long prog;
- *	u_long vers;
- */
-__BEGIN_DECLS
-extern CLIENT *clntraw_create	__P((u_long, u_long));
-__END_DECLS
-
-
-/*
  * Generic client creation routine. Supported protocols are "udp", "tcp"
  * and "unix".
  * CLIENT *
@@ -294,86 +301,15 @@ __END_DECLS
  *	char *prot;	-- protocol
  */
 __BEGIN_DECLS
-extern CLIENT *clnt_create	__P((char *, u_long, u_long, char *));
+extern CLIENT *clnt_create(char *, u_long, u_long, char *);
 __END_DECLS
 
 
 /*
- * TCP based rpc
- * CLIENT *
- * clnttcp_create(raddr, prog, vers, sockp, sendsz, recvsz)
- *	struct sockaddr_in *raddr;
- *	u_long prog;
- *	u_long version;
- *	register int *sockp;
- *	u_int sendsz;
- *	u_int recvsz;
+ * Added for compatibility to old rpc 4.0. Obsoleted by clnt_vc_create().
  */
-__BEGIN_DECLS
-extern CLIENT *clnttcp_create	__P((struct sockaddr_in *,
-				     u_long,
-				     u_long,
-				     int *,
-				     u_int,
-				     u_int));
-__END_DECLS
-
-
-/*
- * UDP based rpc.
- * CLIENT *
- * clntudp_create(raddr, program, version, wait, sockp)
- *	struct sockaddr_in *raddr;
- *	u_long program;
- *	u_long version;
- *	struct timeval wait;
- *	int *sockp;
- *
- * Same as above, but you specify max packet sizes.
- * CLIENT *
- * clntudp_bufcreate(raddr, program, version, wait, sockp, sendsz, recvsz)
- *	struct sockaddr_in *raddr;
- *	u_long program;
- *	u_long version;
- *	struct timeval wait;
- *	int *sockp;
- *	u_int sendsz;
- *	u_int recvsz;
- */
-__BEGIN_DECLS
-extern CLIENT *clntudp_create	__P((struct sockaddr_in *,
-				     u_long,
-				     u_long,
-				     struct timeval,
-				     int *));
-extern CLIENT *clntudp_bufcreate __P((struct sockaddr_in *,
-				     u_long,
-				     u_long,
-				     struct timeval,
-				     int *,
-				     u_int,
-				     u_int));
-__END_DECLS
-
-
-/*
- * AF_UNIX based rpc
- * CLIENT *
- * clntunix_create(raddr, prog, vers, sockp, sendsz, recvsz)
- *	struct sockaddr_un *raddr;
- *	u_long prog;
- *	u_long version;
- *	register int *sockp;
- *	u_int sendsz;
- *	u_int recvsz;
- */
-__BEGIN_DECLS
-extern CLIENT *clntunix_create	__P((struct sockaddr_un *,
-				     u_long,
-				     u_long,
-				     int *,
-				     u_int,
-				     u_int));
+extern CLIENT *clntunix_create(struct sockaddr_un *,
+			       u_long, u_long, int *, u_int, u_int);
 __END_DECLS
 
 
@@ -381,8 +317,8 @@ __END_DECLS
  * Print why creation failed
  */
 __BEGIN_DECLS
-extern void clnt_pcreateerror(char *);			/* stderr */
-extern char *clnt_spcreateerror(char *);		/* string */
+extern void clnt_pcreateerror(const char *);			/* stderr */
+extern char *clnt_spcreateerror(const char *);		/* string */
 __END_DECLS
 
 /*
@@ -397,8 +333,8 @@ __END_DECLS
  * Print an English error message, given the client error code
  */
 __BEGIN_DECLS
-extern void clnt_perror(CLIENT *, char *); 		/* stderr */
-extern char *clnt_sperror(CLIENT *, char *);		/* string */
+extern void clnt_perror(CLIENT *, const char *); 		/* stderr */
+extern char *clnt_sperror(CLIENT *, const char *);		/* string */
 __END_DECLS
 
 

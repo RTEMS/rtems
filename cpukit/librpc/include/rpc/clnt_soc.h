@@ -103,21 +103,4 @@ extern CLIENT *clntudp_bufcreate(struct sockaddr_in *, u_long, u_long,
 				     struct timeval, int *, u_int, u_int);
 __END_DECLS
 
-
-/*
- * AF_UNIX based rpc
- * CLIENT *
- * clntunix_create(raddr, prog, vers, sockp, sendsz, recvsz)
- *	struct sockaddr_un *raddr;
- *	u_long prog;
- *	u_long version;
- *	register int *sockp;
- *	u_int sendsz;
- *	u_int recvsz;
- */
-__BEGIN_DECLS
-extern CLIENT *clntunix_create(struct sockaddr_un *, u_long, u_long,
-				     int *, u_int, u_int);
-__END_DECLS
-
 #endif /* _RPC_CLNT_SOC_H */
