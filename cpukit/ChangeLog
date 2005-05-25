@@ -1,5 +1,10 @@
 2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/clnt.h, librpc/include/rpc/clnt_soc.h,
+	src/rpc/clnt_perror.c: More updates from FreeBSD.
+
+2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
 	* librpc/include/rpc/svc.h: Partial update from FreeBSD.
 	* librpc/include/rpc/clnt.h: Partial update from FreeBSD.
 
