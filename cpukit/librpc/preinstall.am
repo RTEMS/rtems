@@ -21,10 +21,6 @@ $(PROJECT_INCLUDE)/rpc/auth.h: include/rpc/auth.h $(PROJECT_INCLUDE)/rpc/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/auth.h
 
-$(PROJECT_INCLUDE)/rpc/auth_des.h: include/rpc/auth_des.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth_des.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/auth_des.h
-
 $(PROJECT_INCLUDE)/rpc/auth_unix.h: include/rpc/auth_unix.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth_unix.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/auth_unix.h
