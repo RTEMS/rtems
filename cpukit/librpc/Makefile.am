@@ -51,11 +51,6 @@ librpc_a_SOURCES = src/rpc/auth_none.c src/rpc/auth_unix.c \
     src/rpc/svc_raw.c src/rpc/svc_run.c src/rpc/svc_simple.c \
     src/rpc/svc_tcp.c src/rpc/svc_udp.c src/rpc/rtems_portmapper.c \
     src/rpc/rtems_rpc.c
-# librpc_UNUSED_C_FILES
-EXTRA_DIST += src/rpc/auth_des.c src/rpc/auth_time.c src/rpc/authdes_prot.c \
-    src/rpc/clnt_unix.c src/rpc/crypt_client.c src/rpc/des_crypt.c \
-    src/rpc/des_soft.c src/rpc/getpublickey.c src/rpc/key_call.c \
-    src/rpc/key_prot_xdr.c src/rpc/svc_auth_des.c src/rpc/svc_unix.c
 
 librpc_CPPFLAGS = -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close \
     -D_RTEMS_RPC_INTERNAL_
