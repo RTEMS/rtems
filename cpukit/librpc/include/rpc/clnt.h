@@ -112,7 +112,7 @@ struct rpc_err {
 
 /*
  * Client rpc handle.
- * Created by individual implementations, see e.g. rpc_udp.c.
+ * Created by individual implementations
  * Client is responsible for initializing auth, see e.g. auth_none.c.
  */
 typedef struct __rpc_client {
@@ -214,7 +214,7 @@ typedef struct __rpc_client {
 #define CLGET_TIMEOUT       2   /* get timeout (timeval) */
 #define CLGET_SERVER_ADDR   3   /* get server's address (sockaddr) */
 #define CLGET_FD            6	/* get connections file descriptor */
-#define CLGET_SVC_ADDR      7   /* get server's address (netbuf)         XXX */
+#define CLGET_SVC_ADDR      7   /* get server's address (netbuf) */
 #define CLSET_FD_CLOSE      8   /* close fd while clnt_destroy */
 #define CLSET_FD_NCLOSE     9   /* Do not close fd while clnt_destroy */
 #define CLGET_XID           10	/* Get xid */
@@ -254,16 +254,16 @@ typedef struct __rpc_client {
  * and network administration.
  */
 
-#define RPCTEST_PROGRAM		((u_long)1)
-#define RPCTEST_VERSION		((u_long)1)
-#define RPCTEST_NULL_PROC	((u_long)2)
-#define RPCTEST_NULL_BATCH_PROC	((u_long)3)
+#define RPCTEST_PROGRAM		((rpcprog_t)1)
+#define RPCTEST_VERSION		((rpcvers_t)1)
+#define RPCTEST_NULL_PROC	((rpcproc_t)2)
+#define RPCTEST_NULL_BATCH_PROC	((rpcproc_t)3)
 
 /*
  * By convention, procedure 0 takes null arguments and returns them
  */
 
-#define NULLPROC ((u_long)0)
+#define NULLPROC ((rpcproc_t)0)
 
 /*
  * Below are the client handle creation routines for the various
@@ -381,24 +381,24 @@ __END_DECLS
  * Print why creation failed
  */
 __BEGIN_DECLS
-extern void clnt_pcreateerror	__P((char *));			/* stderr */
-extern char *clnt_spcreateerror	__P((char *));			/* string */
+extern void clnt_pcreateerror(char *);			/* stderr */
+extern char *clnt_spcreateerror(char *);		/* string */
 __END_DECLS
 
 /*
  * Like clnt_perror(), but is more verbose in its output
  */
 __BEGIN_DECLS
-extern void clnt_perrno		__P((enum clnt_stat));		/* stderr */
-extern char *clnt_sperrno	__P((enum clnt_stat));		/* string */
+extern void clnt_perrno(enum clnt_stat);		/* stderr */
+extern char *clnt_sperrno(enum clnt_stat);		/* string */
 __END_DECLS
 
 /*
  * Print an English error message, given the client error code
  */
 __BEGIN_DECLS
-extern void clnt_perror		__P((CLIENT *, char *)); 	/* stderr */
-extern char *clnt_sperror	__P((CLIENT *, char *));	/* string */
+extern void clnt_perror(CLIENT *, char *); 		/* stderr */
+extern char *clnt_sperror(CLIENT *, char *);		/* string */
 __END_DECLS
 
 
@@ -416,4 +416,7 @@ extern struct rpc_createerr rpc_createerr;
 #define UDPMSGSIZE	8800	/* rpc imposed limit on udp msg size */
 #define RPCSMALLMSGSIZE	400	/* a more reasonable packet size */
 
-#endif /* !_RPC_CLNT_H */
+/* For backward compatibility */
+#include <rpc/clnt_soc.h>
+
+#endif /* !_RPC_CLNT_H_ */
