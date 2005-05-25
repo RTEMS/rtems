@@ -1,5 +1,11 @@
 2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/clnt_soc.h, librpc/include/rpc/svc_soc.h:
+	New (Partial update from FreeBSD).
+	* librpc/Makefile.am: Reflect changes above.
+
+2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
 	* librpc/include/rpc/des_crypt.h: Remove (Unused, unsupported).
 	* librpc/Makefile.am: Reflect changes above.
 
