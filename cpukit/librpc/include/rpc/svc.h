@@ -109,14 +109,9 @@ struct svc_req {
 	u_int32_t	rq_proc;	/* the desired procedure */
 	struct opaque_auth rq_cred;	/* raw creds from the wire */
 	caddr_t		rq_clntcred;	/* read only cooked cred */
-	SVCXPRT	*rq_xprt;		/* associated transport */
+	SVCXPRT		*rq_xprt;	/* associated transport */
 };
 
-
-/*
- *  Approved way of getting address of caller
- */
-#define svc_getcaller(x) (&(x)->xp_raddr)
 
 /*
  * Operations defined on an SVCXPRT handle
@@ -156,33 +151,6 @@ struct svc_req {
 #define svc_destroy(xprt)				\
 	(*(xprt)->xp_ops->xp_destroy)(xprt)
 
-
-/*
- * Service registration
- *
- * svc_register(xprt, prog, vers, dispatch, protocol)
- *	SVCXPRT *xprt;
- *	u_long prog;
- *	u_long vers;
- *	void (*dispatch)();
- *	int protocol;        (like TCP or UDP, zero means do not register)
- */
-__BEGIN_DECLS
-extern bool_t	svc_register (SVCXPRT *, u_long, u_long,
-			void (*) (struct svc_req *, SVCXPRT *), int);
-__END_DECLS
-
-/*
- * Service un-registration
- *
- * svc_unregister(prog, vers)
- *	u_long prog;
- *	u_long vers;
- */
-__BEGIN_DECLS
-extern void	svc_unregister (u_long, u_long);
-__END_DECLS
-
 /*
  * Transport registration.
  *
@@ -202,8 +170,6 @@ __END_DECLS
 __BEGIN_DECLS
 extern void	xprt_unregister(SVCXPRT *);
 __END_DECLS
-
-
 
 
 /*
@@ -289,37 +255,35 @@ __END_DECLS
  * These are the existing service side transport implementations
  */
 
-/*
- * Memory based rpc for testing and timing.
- */
 __BEGIN_DECLS
-extern SVCXPRT *svcraw_create (void);
+/*
+ * Transport independent svc_create routine.
+ */
+
+/*
+ * Connectionless and connectionful create routines
+ */
+
+extern SVCXPRT *svc_vc_create(const int, const u_int, const u_int);
+/*
+ *      const int fd;                           -- open connection end point
+ *      const u_int sendsize;                   -- max send size
+ *      const u_int recvsize;                   -- max recv size
+ */
+
+/*
+ * Added for compatibility to old rpc 4.0. Obsoleted by svc_vc_create().
+ */
+extern SVCXPRT *svcunix_create(int, u_int, u_int, char *);
+
+/*
+ * Added for compatibility to old rpc 4.0. Obsoleted by svc_fd_create().
+ */
+extern SVCXPRT *svcunixfd_create(int, u_int, u_int);
 __END_DECLS
 
 
-/*
- * Udp based rpc.
- */
-__BEGIN_DECLS
-extern SVCXPRT *svcudp_create (int);
-extern SVCXPRT *svcudp_bufcreate (int, u_int, u_int);
-__END_DECLS
-
-
-/*
- * Tcp based rpc.
- */
-__BEGIN_DECLS
-extern SVCXPRT *svctcp_create (int, u_int, u_int);
-extern SVCXPRT *svcfd_create (int, u_int, u_int);
-__END_DECLS
-
-/*
- * AF_UNIX socket based rpc.
- */
-__BEGIN_DECLS
-extern SVCXPRT *svcunix_create (int, u_int, u_int, char *);
-extern SVCXPRT *svcunixfd_create (int, u_int, u_int);
-__END_DECLS
+/* for backward compatibility */
+#include <rpc/svc_soc.h>
 
 #endif /* !_RPC_SVC_H */
