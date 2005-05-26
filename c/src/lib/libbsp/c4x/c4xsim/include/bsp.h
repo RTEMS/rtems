@@ -12,8 +12,8 @@
  *  $Id$
  */
 
-#ifndef __C4XSIM_h
-#define __C4XSIM_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

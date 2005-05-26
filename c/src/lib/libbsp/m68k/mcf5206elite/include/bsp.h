@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __mcf5206elite_BSP_h
-#define __mcf5206elite_BSP_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #include "mcf5206/mcf5206e.h"
 

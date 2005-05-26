@@ -14,8 +14,8 @@
  *  $Id$
  */
 
-#ifndef __GEN68302_BSP_h
-#define __GEN68302_BSP_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

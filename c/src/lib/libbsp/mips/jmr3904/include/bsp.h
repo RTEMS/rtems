@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __JMR3904_h
-#define __JMR3904_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

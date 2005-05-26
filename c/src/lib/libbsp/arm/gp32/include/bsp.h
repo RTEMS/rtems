@@ -15,8 +15,8 @@
 +--------------------------------------------------------------------------*/
 
 
-#ifndef __BSP_H_
-#define __BSP_H_
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +50,6 @@ void LCD_BREAK();
 }
 #endif
 
-#endif /* __BSP_H_ */
+#endif /* _BSP_H */
 /* end of include file */
 

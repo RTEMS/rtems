@@ -2,8 +2,8 @@
  *  uC5282 BSP header file
  */
  
-#ifndef __SBC5282_BSP_H
-#define __SBC5282_BSP_H
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

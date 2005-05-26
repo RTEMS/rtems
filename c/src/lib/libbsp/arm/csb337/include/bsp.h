@@ -12,8 +12,8 @@
  *
  *  $Id$
  */
-#ifndef __BSP_H__
-#define __BSP_H__
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,5 +61,5 @@ int rtems_at91rm9200_emac_attach(struct rtems_bsdnet_ifconfig *config, int attac
 }
 #endif
 
-#endif /* __BSP_H__ */
+#endif /* _BSP_H */
 

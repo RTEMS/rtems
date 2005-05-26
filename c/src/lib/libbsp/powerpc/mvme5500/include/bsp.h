@@ -11,8 +11,8 @@
  *
  */
 
-#ifndef LIBBSP_POWERPC_MVME5500_BSP_H
-#define LIBBSP_POWERPC_MVME5500_BSP_H
+#ifndef _BSP_H
+#define _BSP_H
 
 #include <bspopts.h>
 

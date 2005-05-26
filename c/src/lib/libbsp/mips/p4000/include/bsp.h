@@ -15,8 +15,8 @@
  */
 /* @(#)bsp.h       03/15/96     1.1 */
 
-#ifndef __P4000_BSP_h
-#define __P4000_BSP_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

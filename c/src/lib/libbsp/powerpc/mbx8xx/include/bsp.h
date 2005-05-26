@@ -14,8 +14,8 @@
  *  $Id$
  */
 
-#ifndef __MBX8xx_h
-#define __MBX8xx_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

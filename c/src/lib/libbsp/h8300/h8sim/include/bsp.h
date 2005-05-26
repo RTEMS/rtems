@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __H8SIM_h
-#define __H8SIM_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

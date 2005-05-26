@@ -9,8 +9,8 @@
  *
  * $Id$
  */
-#ifndef LIBBSP_POWERPC_MOTOROLA_SHARED_BSP_H
-#define LIBBSP_POWERPC_MOTOROLA_SHARED_BSP_H
+#ifndef _BSP_H
+#define _BSP_H
 
 #include <bspopts.h>
 

@@ -11,8 +11,8 @@
  *  $Id$
  */
 
-#ifndef __TS386_h
-#define __TS386_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __GENERIC_MONGOOSE_V_h
-#define __GENERIC_MONGOOSE_V_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

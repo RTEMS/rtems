@@ -29,8 +29,8 @@
  *  $Id$
  */
 
-#ifndef __PAPYRUS_h
-#define __PAPYRUS_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

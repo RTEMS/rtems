@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef __MVME167_H
-#define __MVME167_H
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

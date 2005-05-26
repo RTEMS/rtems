@@ -1,3 +1,7 @@
+2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* include/bsp.h: New header guard.
+
 2005-02-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/tm27.h, timer/timer.c: #include <rtems/tic4x/c4xio.h>

@@ -17,8 +17,8 @@
  *  bsp.h,v 1.1 2001/10/26 19:30:10 joel Exp
  */
 
-#ifndef __CSB360_BSP_H__
-#define __CSB360_BSP_H__
+#ifndef _BSP_H
+#define _BSP_H
 
 #include <mcf5272/mcf5272.h>
 

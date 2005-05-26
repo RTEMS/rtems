@@ -11,8 +11,8 @@
  *
  *  $Id$
 */
-#ifndef __BSP_H__
-#define __BSP_H__
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,4 +50,4 @@ extern rtems_configuration_table BSP_Configuration;
 }
 #endif
 
-#endif /* __BSP_H__ */
+#endif /* _BSP_H */

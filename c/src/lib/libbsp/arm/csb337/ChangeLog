@@ -1,3 +1,7 @@
+2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* include/bsp.h: New header guard.
+
 2005-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* network/network.c: Eliminate warnings.

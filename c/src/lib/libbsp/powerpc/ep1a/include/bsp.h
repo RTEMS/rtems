@@ -10,8 +10,8 @@
  *  $Id$
  */
 
-#ifndef EP1A_BSP_H
-#define EP1A_BSP_H
+#ifndef _BSP_H
+#define _BSP_H
 
 #include <bspopts.h>
 

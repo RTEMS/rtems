@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __BSP_H__
-#define __BSP_H__
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

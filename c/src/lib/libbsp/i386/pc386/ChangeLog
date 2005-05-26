@@ -1,3 +1,7 @@
+2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* include/bsp.h: New header guard.
+
 2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * 3c509/3c509.c, clock/ckinit.c, console/console.c, console/fb_vga.c,

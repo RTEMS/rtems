@@ -37,8 +37,8 @@
  *  $Id$
  */
 
-#ifndef __gensh4_h
-#define __gensh4_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {

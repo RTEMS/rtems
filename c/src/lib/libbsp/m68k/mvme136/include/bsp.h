@@ -12,8 +12,8 @@
  *  $Id$
  */
 
-#ifndef __MVME136_h
-#define __MVME136_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {
