@@ -1,3 +1,9 @@
+2005-05-26	Joel Sherrill <joel@OARcorp.com>
+
+	PR 799/bsps
+	* include/bsp.h: Add include of bsp/vectors.h so rdbg.h can be
+	compiled.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.

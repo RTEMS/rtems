@@ -31,6 +31,7 @@ extern "C" {
 #include <mpc8260/mmu.h>
 #include <mpc8260/console.h>
 #include <bsp/irq.h>
+#include <bsp/vectors.h>
 
 /*
  * Board configuration registers
