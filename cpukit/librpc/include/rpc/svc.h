@@ -93,7 +93,7 @@ typedef struct __rpc_svcxprt {
 	    /* destroy this struct */
 	    void	(*xp_destroy)(struct __rpc_svcxprt *);
 	} *xp_ops;
-	int		xp_addrlen;	 /* length of remote address */
+	socklen_t	xp_addrlen;	 /* length of remote address */
 	struct sockaddr_in xp_raddr;	 /* remote addr. (backward ABI compat) */
 	struct opaque_auth xp_verf;	 /* raw response verifier */
 	void		*xp_p1;		 /* private: for use by svc ops */

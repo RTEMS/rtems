@@ -1,3 +1,9 @@
+2005-05-26	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/lib/ftpfs.c, librpc/include/rpc/svc.h,
+	librpc/src/rpc/get_myaddress.c, librpc/src/rpc/pmap_getmaps.c,
+	librpc/src/rpc/pmap_getport.c: Remove warnings.
+
 2005-05-25  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	* librpc/include/rpc/clnt.h, librpc/include/rpc/svc.h,

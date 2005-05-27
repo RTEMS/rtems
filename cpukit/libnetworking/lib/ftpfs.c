@@ -538,7 +538,7 @@ int rtems_ftp_open(
   rtems_boolean is_write = FALSE;
   rtems_boolean sema_obtained = FALSE;
   struct ftpStream *fsp = NULL;
-  int msg_tmp;
+  int msg_tmp = 0;
   socklen_t sockaddr_size;
   /*
    * check for R/O or W/O flags
@@ -970,7 +970,7 @@ ssize_t rtems_ftp_read(
   struct ftpStream *fsp;
   size_t want_cnt;
   ssize_t rd_cnt;
-  int msg_tmp;
+  int msg_tmp = 0;
 
   fsp = iop->data1;
   want_cnt = count;
@@ -1024,7 +1024,7 @@ ssize_t rtems_ftp_write(
   struct ftpStream *fsp;
   size_t want_cnt;
   ssize_t wr_cnt;
-  int msg_tmp;
+  int msg_tmp = 0;
 
   fsp = iop->data1;
   want_cnt = count;
