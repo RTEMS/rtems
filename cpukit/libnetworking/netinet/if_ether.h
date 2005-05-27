@@ -40,10 +40,6 @@
 #include <net/ethernet.h>
 #include <net/if_arp.h>
 
-#ifndef BYTE_PACK
-#define BYTE_PACK __attribute__((packed))
-#endif
-
 #ifdef _KERNEL
 /*
  * Macro to map an IP multicast address to an Ethernet multicast address.
@@ -71,7 +67,7 @@
  * RFC 826.
  */
 struct	ether_arp {
-	struct	arphdr ea_hdr BYTE_PACK;	/* fixed-size header */
+	struct	arphdr ea_hdr;			/* fixed-size header */
 	u_char	arp_sha[ETHER_ADDR_LEN];	/* sender hardware address */
 	u_char	arp_spa[4];	/* sender protocol address */
 	u_char	arp_tha[ETHER_ADDR_LEN];	/* target hardware address */
@@ -82,7 +78,6 @@ struct	ether_arp {
 #define	arp_hln	ea_hdr.ar_hln
 #define	arp_pln	ea_hdr.ar_pln
 #define	arp_op	ea_hdr.ar_op
-
 
 struct sockaddr_inarp {
 	u_char	sin_len;

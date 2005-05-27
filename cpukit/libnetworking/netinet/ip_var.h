@@ -37,10 +37,6 @@
 #ifndef _NETINET_IP_VAR_H_
 #define	_NETINET_IP_VAR_H_
 
-#ifndef BYTE_PACK
-#define BYTE_PACK __attribute__((packed))
-#endif
-
 /*
  * Overlay for ip header used by other protocols (tcp, udp).
  */
@@ -90,12 +86,12 @@ struct	ipasfrag {
 	u_char	ipf_mff;		/* XXX overlays ip_tos: use low bit
 					 * to avoid destroying tos;
 					 * copied from (ip_off&IP_MF) */
-	u_short	ip_len BYTE_PACK;
-	u_short	ip_id BYTE_PACK;
-	u_short	ip_off BYTE_PACK;
+	u_short	ip_len;
+	u_short	ip_id;
+	u_short	ip_off;
 	u_char	ip_ttl;
 	u_char	ip_p;
-	u_short	ip_sum BYTE_PACK;
+	u_short	ip_sum;
 	struct	ipasfrag *ipf_next;	/* next fragment */
 	struct	ipasfrag *ipf_prev;	/* previous fragment */
 };
@@ -162,8 +158,11 @@ struct	ipstat {
 #define	IP_ROUTETOIF		SO_DONTROUTE	/* bypass routing tables */
 #define	IP_ALLOWBROADCAST	SO_BROADCAST	/* can send broadcast packets */
 
+struct ip;
 struct inpcb;
 struct route;
+struct sockopt;
+struct mbuf;
 
 extern struct	ipstat	ipstat;
 extern u_short	ip_id;				/* ip packet ctr, for ids */
