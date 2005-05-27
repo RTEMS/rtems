@@ -1,5 +1,8 @@
 2005-05-27  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if.h: Partial update from FreeBSD.
+	* libnetworking/netinet/if_ether.h: Remove BYTE_PACK.
+	* libnetworking/netinet/ip_var.h: Remove BYTE_PACK.
 	* libnetworking/netinet/ip_divert.c: Fix broken comment.
 
 2005-05-26	Joel Sherrill <joel@OARcorp.com>
