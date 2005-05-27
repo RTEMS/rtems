@@ -1,3 +1,7 @@
+2005-05-27  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/ip_divert.c: Fix broken comment.
+
 2005-05-26	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/lib/ftpfs.c, librpc/include/rpc/svc.h,
