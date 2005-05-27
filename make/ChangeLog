@@ -1,9 +1,15 @@
+2005-05-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/mbx860_005b.cfg, custom/mcp750.cfg, custom/mtx603e.cfg,
+	custom/mvme2100.cfg, custom/mvme2307.cfg, custom/mvme5500.cfg:
+	Remove RTEMS_PPC_EXCEPTION_PROCESSING_MODEL (Obsolete).
+
 2005-05-02	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Remove dmv177 and ppcn_60x.
 	* custom/dmv177.cfg: Removed.
 
-2005-05-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+2005-04-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/ppcn_60x.cfg: Remove (Gone from libbsp).
 
