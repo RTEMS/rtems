@@ -77,13 +77,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
         /* set MUX for Timer4 to 1/16 */ \
         cr=rTCFG1 & 0xFFF0FFFF; \
         rTCFG1=(cr | (3<<16)); \
-        /* compute MPLL freq */ \
-        m = M_MDIV + 8; \
-        p = M_PDIV + 2; \
-        s = M_SDIV; \
-        freq =(BSP_OSC_FREQ * m) / (p << s); \
-        /* PCLK = MPLL/4 */ \
-        freq = freq / 4; \
+        freq = get_PCLK(); \
         /* set TIMER4 counter, input freq=PLCK/16/16Mhz*/ \
         freq = (freq /16)/16; \
         rTCNTB4 = ((freq / 1000) * BSP_Configuration.microseconds_per_tick) / 1000; \

@@ -1,3 +1,9 @@
+2005-06-01	Philippe Simons <loki_666@fastmail.fm>
+
+	* Makefile.am: Add s3c2400/lcd/lcd.c, s3c2400/clock/support.c
+	* s3c2400/clock/clockdrv.c: Update to use get_PCLK()
+	* s3c2400/timer/timer.c: Update to use get_PCLK()
+
 2005-05-17      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * at91rm9200/irq/irq.h, mc9328mxl/irq/irq.h, s3c2400/irq/irq.h:

@@ -36,9 +36,6 @@ rtems_boolean Timer_driver_Find_average_overhead;
 void Timer_initialize( void )
 {
     uint32_t cr;
-    uint32_t m;
-    uint32_t p;
-    uint32_t s;
 
     /* stop TIMER1*/ 
     cr=rTCON & 0xFFFFF0FF;
@@ -48,17 +45,8 @@ void Timer_initialize( void )
     cr=rTCFG1 & 0xFFFFFF0F;
     rTCFG1=(cr | (0<<4));
 
-    /* compute MPLL freq */
-    m = M_MDIV + 8;
-    p = M_PDIV + 2;
-    s = M_SDIV;
-    g_freq =(BSP_OSC_FREQ * m) / (p << s);
-
-    /* PCLK = MPLL/4 */ 
-    g_freq = g_freq / 4; 
-
     /* input freq=PLCK/2 Mhz*/ 
-    g_freq = g_freq / 2000; 
+    g_freq = get_PCLK() / 2000; 
     rTCNTB1 = 0xFFFF;
 
     /* start TIMER1 with manual reload */ 

@@ -5,8 +5,8 @@
  * Based on 24x.h for the Samsung Development Board
  ************************************************/
 
-#ifndef __S3C2400_H__
-#define __S3C2400_H__
+#ifndef S3C2400_H_
+#define S3C2400_H_
 
 /* Memory control */
 #define rBWSCON         (*(volatile unsigned *)0x14000000)
@@ -95,7 +95,7 @@
 #define rDP6_7          (*(volatile unsigned *)0x14A00048)
 #define rDITHMODE       (*(volatile unsigned *)0x14A0004C)
 #define rTPAL           (*(volatile unsigned *)0x14A00050)
-#define GP32_PALETTE            (*(volatile unsigned *)0x14A00400)      /* SJS */
+#define GP32_PALETTE    (*(volatile unsigned *)0x14A00400)      /* SJS */
 
 
 /* UART */
@@ -426,9 +426,183 @@
                  rINTPND;\
                  }
 /* Wait until rINTPND is changed for the case that the ISR is very short. */
+
+//////////////////////////////////////////////////////////////////////////////
+// Typedefs                                                                 //
+//////////////////////////////////////////////////////////////////////////////
+typedef union {
+	struct _reg {
+		unsigned STOP_BIT:1;	// Enters STOP mode. This bit isn't be cleared automatically.
+		unsigned SL_IDLE:1;		// SL_IDLE mode option. This bit isn't be cleared automatically. To enter SL_IDLE mode, CLKCON register has to be 0xe.
+		unsigned IDLE_BIT:1;	// Enters IDLE mode. This bit isn't be cleared automatically.
+		unsigned LCDC:1;		// Controls HCLK into LCDC block
+		unsigned USB_host:1;	// Controls HCLK into USB host block
+		unsigned USB_device:1;	// Controls PCLK into USB device block
+		unsigned PWMTIMER:1;	// Controls PCLK into PWMTIMER block
+		unsigned MMC:1;			// Controls PCLK into MMC interface block
+		unsigned UART0:1;		// Controls PCLK into UART0 block
+		unsigned UART1:1;		// Controls PCLK into UART1 block
+		unsigned GPIO:1;		// Controls PCLK into GPIO block
+		unsigned RTC:1;			// Controls PCLK into RTC control block. Even if this bit is cleared to 0, RTC timer is alive.
+		unsigned ADC:1;			// Controls PCLK into ADC block
+		unsigned IIC:1;			// Controls PCLK into IIC block
+		unsigned IIS:1;			// Controls PCLK into IIS block
+		unsigned SPI:1;			// Controls PCLK into SPI block
+	} reg;
+	unsigned long all;
+} CLKCON;
+
+typedef union
+{
+	struct {
+		unsigned ENVID:1;		// LCD video output and the logic 1=enable/0=disable.
+		unsigned BPPMODE:4;		// 1011 = 8 bpp for TFT, 1100 = 16 bpp for TFT, 1110 = 16 bpp TFT skipmode
+		unsigned PNRMODE:2;		// TFT: 3
+		unsigned MMODE:1;		// This bit determines the toggle rate of the VM. 0 = Each Frame, 1 = The rate defined by the MVAL
+		unsigned CLKVAL:10;		// TFT: VCLK = HCLK / [(CLKVAL+1) x 2] (CLKVAL >= 1)
+		unsigned LINECNT:10;	// (read only) These bits provide the status of the line counter. Down count from LINEVAL to 0
+	} reg;
+	unsigned long all;
+} LCDCON1;
+
+typedef union { 
+	struct {
+		unsigned VSPW:6;		// TFT: Vertical sync pulse width determines the VSYNC pulse's high level width by counting the number of inactive lines.
+		unsigned VFPD:8;		// TFT: Vertical front porch is the number of inactive lines at the end of a frame, before vertical synchronization period.
+		unsigned LINEVAL:10;	// TFT/STN: These bits determine the vertical size of LCD panel.
+		unsigned VBPD:8;		// TFT: Vertical back porch is the number of inactive lines at the start of a frame, after vertical synchronization period.
+	} reg;
+	unsigned long all;
+} LCDCON2;
+
+typedef union {
+	struct {
+		unsigned HFPD:8;		// TFT: Horizontal front porch is the number of VCLK periods between the end of active data and the rising edge of HSYNC.
+		unsigned HOZVAL:11;		// TFT/STN: These bits determine the horizontal size of LCD panel. 2n bytes.
+		unsigned HBPD:7;		// TFT: Horizontal back porch is the number of VCLK periods between the falling edge of HSYNC and the start of active data.
+	} reg;
+	unsigned long all;
+} LCDCON3;
+
+typedef union {
+	struct {
+		unsigned HSPW:8;		// TFT: Horizontal sync pulse width determines the HSYNC pulse's high level width by counting the number of the VCLK.
+		unsigned MVAL:8;		// STN:
+		unsigned ADDVAL:8;		// TFT: Palette Index offset value
+		unsigned PALADDEN:1;	// TFT: Palette Index offset enable. 0 = Disable 1 = Enable
+	} reg;
+	unsigned long all;
+} LCDCON4;
+
+typedef union {
+	struct {
+		unsigned HWSWP:1;		// STN/TFT: Half-Word swap control bit. 0 = Swap Disable 1 = Swap Enable
+		unsigned BSWP:1;		// STN/TFT: Byte swap control bit. 0 = Swap Disable 1 = Swap Enable
+		unsigned ENLEND:1;		// TFT: LEND output signal enable/disable. 0 = Disable LEND signal. 1 = Enable LEND signal
+		unsigned RESERVED1:1;
+		unsigned INVENDLINE:1;	// TFT: This bit indicates the LEND signal polarity. 0 = normal 1 = inverted
+		unsigned RESERVED2:1;
+		unsigned INVVDEN:1;		// TFT: This bit indicates the VDEN signal polarity. 0 = normal 1 = inverted
+		unsigned INVVD:1;		// STN/TFT: This bit indicates the VD (video data) pulse polarity. 0 = Normal. 1 = VD is inverted.
+		unsigned INVVFRAME:1;	// STN/TFT: This bit indicates the VFRAME/VSYNC pulse polarity. 0 = normal 1 = inverted
+		unsigned INVVLINE:1;	// STN/TFT: This bit indicates the VLINE/HSYNC pulse polarity. 0 = normal 1 = inverted
+		unsigned INVVCLK:1;		// STN/TFT: This bit controls the polarity of the VCLK active edge. 0 = The video data is fetched at VCLK falling edge. 1 = The video data is fetched at VCLK rising edge
+		unsigned RESERVED3:2;
+		unsigned SELFREF:1;		// STN:
+		unsigned SLOWCLKSYNC:1;	// STN:
+		unsigned RESERVED4:2;	// must be 0
+		unsigned HSTATUS:2;		// TFT: Horizontal Status (Read only) 00 = HSYNC 01 = BACK Porch. 10 = ACTIVE 11 = FRONT Porch
+		unsigned VSTATUS:2;		// TFT: Vertical Status (Read only). 00 = VSYNC 01 = BACK Porch. 10 = ACTIVE 11 = FRONT Porch
+	} reg;
+	unsigned long all;
+} LCDCON5;
+
+typedef union {
+	struct {
+		unsigned LCDBASEU:21;	// For single-scan LCD: These bits indicate A[21:1] of the start address of the LCD frame buffer.
+		unsigned LCDBANK:7;		// A[28:22]
+	} reg;
+	unsigned long all;
+} LCDSADDR1;
+
+typedef union {
+	struct {
+		unsigned LCDBASEL:21;	// For single scan LCD: These bits indicate A[21:1] of the end address of the LCD frame buffer. LCDBASEL = ((the fame end address) >>1) + 1 = LCDBASEU + (PAGEWIDTH+OFFSIZE)x(LINEVAL+1)
+	} reg;
+	unsigned long all;
+} LCDSADDR2;
+
+typedef union {
+	struct {
+		unsigned PAGEWIDTH:11;	// Virtual screen page width(the number of half words) This value defines the width of the view port in the frame
+		unsigned OFFSIZE:11;	// Virtual screen offset size(the number of half words) This value defines the difference between the address of the last half word displayed on the previous LCD line and the address of the first half word to be displayed in the new LCD line.
+	} reg;
+	unsigned long all;
+} LCDSADDR3;
+
+//
+//
+//
+
+typedef union {
+	struct {
+		unsigned IISIFENA:1;	// IIS interface enable (start)
+		unsigned IISPSENA:1;	// IIS prescaler enable
+		unsigned RXCHIDLE:1;	// Receive channel idle command
+		unsigned TXCHIDLE:1;	// Transmit channel idle command
+		unsigned RXDMAENA:1;	// Receive DMA service request enable
+		unsigned TXDMAENA:1;	// Transmit DMA service request enable
+		unsigned RXFIFORDY:1;	// Receive FIFO ready flag (read only)
+		unsigned TXFIFORDY:1;	// Transmit FIFO ready flag (read only)
+		unsigned LRINDEX:1;		// Left/right channel index (read only)
+	} reg;
+	unsigned long all;
+} IISCON;
+
+typedef union {
+	struct {
+		unsigned SBCLKFS:2;		// Serial bit clock frequency select
+		unsigned MCLKFS:1;		// Master clock frequency select
+		unsigned SDBITS:1;		// Serial data bit per channel
+		unsigned SIFMT:1;		// Serial interface format
+		unsigned ACTLEVCH:1;	// Active level pf left/right channel
+		unsigned TXRXMODE:2;	// Transmit/receive mode select
+		unsigned MODE:1;		// Master/slave mode select
+	} reg;
+	unsigned long all;
+} IISMOD;
+
+typedef union {
+	struct {
+		unsigned PSB:5;			// Prescaler control B
+		unsigned PSA:5;			// Prescaler control A
+	} reg;
+	unsigned long all;
+} IISPSR;
+
+typedef union {
+	struct {
+		unsigned RXFIFOCNT:4;	// (read only)
+		unsigned TXFIFOCNT:4;	// (read only)
+		unsigned RXFIFOENA:1;	//
+		unsigned TXFIFOENA:1;	//
+		unsigned RXFIFOMODE:1;	//
+		unsigned TXFIFOMODE:1;	//
+	} reg;
+	unsigned long all;
+} IISSFIFCON;
+
+typedef union {
+	struct {
+		unsigned FENTRY:16;		//
+	} reg;
+	unsigned long all;
+} IISSFIF;
+
+
 #define LCD_WIDTH 240
-#define LCD_HEIGH 320
-#define LCD_ASPECT ((flaot)(LCD_WIDTH/LCD_HEIGHT))
+#define LCD_HEIGHT 320
+#define LCD_ASPECT ((float)(LCD_WIDTH/LCD_HEIGHT))
 
 #define GP32_KEY_SELECT 512
 #define GP32_KEY_START 256
@@ -441,4 +615,4 @@
 #define GP32_KEY_LEFT 1
 #define GP32_KEY_RIGHT 4
 
-#endif /*__S3C2400_H__*/
+#endif /*S3C2400_H_*/
