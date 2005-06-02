@@ -1,3 +1,7 @@
+2005-06-01	Philippe Simons <loki_666@fastmail.fm>
+
+	* custom/gp32.cfg: Add make-cxx-exe.
+
 2005-05-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/mbx860_005b.cfg, custom/mcp750.cfg, custom/mtx603e.cfg,
