@@ -71,6 +71,9 @@ void    gpconio_gotoxy(int _x, int _y);
 char    gpconio_getch(void);
 char    gpconio_getch_noblock(void);
 
+void	InitConIO();
+void	ShowConIO();
+
 
 #ifdef __cplusplus
 }

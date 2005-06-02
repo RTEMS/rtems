@@ -5,19 +5,22 @@
 %rename link old_link
 
 *cpp:
-%(old_cpp) %{qrtems: -D__embedded__ -DUSE_ENHANCED_INTR_API} -Asystem(embedded)
+%(old_cpp) %{qrtems: -D__embedded__ -D__USE_INIT_FINI__ -DUSE_ENHANCED_INTR_API} -Asystem(embedded)
 
 *lib:
-%{!qrtems: %(old_lib)} %{qrtems: --start-group \
-%{!qrtems_debug: -lrtemsbsp -lrtemscpu} %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
+%{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: --start-group \
+%{!qrtems_debug: -lrtemsbsp -lrtemscpu} \
+  %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
 -lc -lgcc --end-group \
-%{!qnolinkcmds: -T linkcmds%s}}
+%{!qnolinkcmds: -T linkcmds%s}}}
 
 *startfile:
-%{!qrtems: %(old_startfile)} %{qrtems: \
-%{!qrtems_debug: start.o%s crtbegin.o%s} \
-%{qrtems_debug: start_g.o%s crtbegin.o%s}}
+%{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems: \
+%{!qrtems_debug: start.o%s crti.o%s crtbegin.o%s} \
+%{qrtems_debug: start_g.o%s crti.o%s crtbegin.o%s}}}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -N -e _start}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}
 
+*endfile:
+%{!qrtems: *(old_endfiles)} %{qrtems: crtend.o%s crtn.o%s }

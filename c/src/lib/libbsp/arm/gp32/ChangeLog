@@ -1,3 +1,10 @@
+2005-06-01	Philippe Simons <loki_666@fastmail.fm>
+
+	* bsp_specs: Add rules for cpp support
+	* include/bsp.h: Add gp32 support fct prototypes
+	* console/conio.c: Moved video buffer to 0x0c7ed000
+	* startup/bspstart.c: Add some init code, some cleaning...
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.

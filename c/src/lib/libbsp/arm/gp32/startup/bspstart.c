@@ -19,6 +19,7 @@
 #include <rtems/libio.h>
 #include <rtems/bspIo.h>
 #include <s3c2400.h>
+#include <conio.h>
 
 /*-------------------------------------------------------------------------+
 | Global Variables
@@ -89,6 +90,9 @@ void bsp_pretasking_hook(void)
 void bsp_start_default( void )
 {
     uint32_t cr;
+    uint32_t pend,last;
+    uint32_t REFCNT;
+    int i;
     /* If we don't have command line arguments set default program name. */
 
     Cpu_table.pretasking_hook      = bsp_pretasking_hook; /* init libc, etc. */
@@ -100,19 +104,39 @@ void bsp_start_default( void )
     Cpu_table.interrupt_stack_size = 4096;
     Cpu_table.extra_mpci_receive_server_stack = 0;
 
-    /* stop all timers */
+    /* setup rCLKCON */
+    /* disable all but IIS,IIC,PWMTIMER and LCD */
+    rCLKCON=0x6048;
+
+    /* stop RTC */
+    rTICINT=0x0;
+
+    /* stop watchdog,ADC and timers */
+    rWTCON=0x0;
     rTCON=0x0;
+    rADCCON=0x0;
 
     /* disable interrupts */
     rINTMOD=0x0;
     rINTMSK=BIT_ALLMSK; /* unmasked by drivers */
-    rSRCPND=BIT_ALLMSK;
+    /*rSRCPND=BIT_ALLMSK;
     rINTMSK=BIT_ALLMSK;
-    rINTPND=BIT_ALLMSK;
+    rINTPND=BIT_ALLMSK;*/
+    for(i=0; i<4; i++) {
+	pend=rSRCPND;
+	if(pend == 0 || pend == last)
+	    break;
+	rSRCPND=pend;
+	rINTPND=pend;
+	last=pend;
+    }
 
-    /* setup clocks 133/66/33) */
-    rCLKDIVN=3;
+    /* setup clocks */
+    rCLKDIVN=M_CLKDIVN;
     rMPLLCON=((M_MDIV<<12)+(M_PDIV<<4)+M_SDIV);
+    /* setup rREFRESH */
+    REFCNT=2048+1-(15.6*get_HCLK()/1000000); /* period=15.6 us, HCLK=66Mhz, (2048+1-15.6*66) */
+    rREFRESH=((REFEN<<23)+(TREFMD<<22)+(Trp<<20)+(Trc<<18)+(Tchr<<16)+REFCNT);
 
     /* set prescaler for timers 2,3,4 to 16(15+1) */
     cr=rTCFG0 & 0xFFFF00FF;
@@ -176,21 +200,6 @@ void bsp_reset(void)
     rtems_interrupt_level level;
     _CPU_ISR_Disable(level);
     printk("bsp_reset.....\n");
+    ShowConIO();
     while(1);
 }
-
-void LCD_BREAK()
-{ 
-    int x,y; 
-    unsigned short color=0; 
-    volatile unsigned char* framebuffer = (unsigned char*) 0x0C7B4000; 
-    while(1) { 
-        for(y = 0; y < 240; y++) {
-            for(x = 0; x < 320; x++) {
-                *(framebuffer + (239 - y) + (240 * x)) = color; 
-            }
-        }
-        color++; 
-    } 
-}
-

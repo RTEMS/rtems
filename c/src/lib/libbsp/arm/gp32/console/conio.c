@@ -22,6 +22,7 @@
  *---------------------------------------------------------------------------*/
 #include <rtems/score/types.h>
 #include <s3c2400.h>
+#include <bsp.h>
 #include <conio.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -33,16 +34,14 @@
 /*---------------------------------------------------------------------------*
  * Defines                                                                   *
  *---------------------------------------------------------------------------*/
-#define LCD_WIDTH 240
-#define LCD_HEIGHT 320
 #define DEFAULT_FONT_WIDTH  4
 #define DEFAULT_FONT_HEIGHT 6
 #define W                   (LCD_WIDTH/DEFAULT_FONT_WIDTH)
 #define H                   (LCD_HEIGHT/DEFAULT_FONT_HEIGHT)
 
 typedef unsigned char       Bitmap[LCD_HEIGHT][LCD_WIDTH];
-#define GP32_VRAM 0x0c7b4000
-#define bg_bitmap          (*(Bitmap *)GP32_VRAM)
+#define GP32_CONIO_VRAM 0x0c7ed000
+#define bg_bitmap          (*(Bitmap *)GP32_CONIO_VRAM)
 
 /* color conversion */
 #define RGB(r,g,b)              ( (r)<<11 | (g)<<6 | (b)<<1 )
@@ -228,17 +227,12 @@ int gpconio_printf(const char *_format, ...)
     return r;
 }
 
-
-/*---------------------------------------------------------------------------*
- *  InitConIO                                                                *
- *---------------------------------------------------------------------------*/
-void InitConIO()
+void ShowConIO()
 {
-    uint32_t GPHCLK = 66750000;
     unsigned short BPPMODE = 11;
-    unsigned short CLKVAL = (GPHCLK/(83385*2*60))-1;
-    uint32_t LCDBANK  =  GP32_VRAM >> 22;
-    uint32_t LCDBASEU = (GP32_VRAM & 0x3FFFFF) >> 1;
+    unsigned short CLKVAL = (get_HCLK()/(83385*2*60))-1;
+    uint32_t LCDBANK  =  GP32_CONIO_VRAM >> 22;
+    uint32_t LCDBASEU = (GP32_CONIO_VRAM & 0x3FFFFF) >> 1;
     uint32_t LCDBASEL;
     unsigned short OFFSIZE = 0;
     unsigned short PAGEWIDTH;
@@ -260,7 +254,16 @@ void InitConIO()
     rLCDSADDR1 = (LCDBANK<<21) | (LCDBASEU<<0) ;
     rLCDSADDR2 = (LCDBASEL<<0) ;
     rLCDSADDR3 = (OFFSIZE<<11) | (PAGEWIDTH<<0) ;
+}
 
+
+/*---------------------------------------------------------------------------*
+ *  InitConIO                                                                *
+ *---------------------------------------------------------------------------*/
+void InitConIO()
+{
+    ShowConIO();
+    
     gp_initButtons();
     gpconio_textattr(0);
     gpconio_textcolor(DEF_TEXTCOLOR);
