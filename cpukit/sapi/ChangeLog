@@ -1,3 +1,10 @@
+2005-06-09	Jacques Seronie Vivien <jacques.seronievivien@astrium.eads.net>
+
+	PR 790/rtems
+	* src/extensioncreate.c, src/extensionident.c: Correct use of name.
+	This was missed when the other ident services in rtems/src where
+	changed.
+
 2004-06-08	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog, include/confdefs.h: Reverse previous accidental commit

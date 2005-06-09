@@ -57,7 +57,11 @@ rtems_status_code rtems_extension_create(
 
   _User_extensions_Add_set( &the_extension->Extension, extension_table );
 
-  _Objects_Open( &_Extension_Information, &the_extension->Object, &name );
+  _Objects_Open(
+    &_Extension_Information,
+    &the_extension->Object,
+    (Objects_Name) name
+  );
 
   *id = the_extension->Object.id;
   _Thread_Enable_dispatch();
