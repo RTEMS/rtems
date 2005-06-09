@@ -1,3 +1,10 @@
+2005-06-09	Jacques Seronie Vivien <jacques.seronievivien@astrium.eads.net>
+
+	PR 790/rtems
+	* sapi/src/extensioncreate.c, sapi/src/extensionident.c: Correct use of
+	name. This was missed when the other ident services in rtems/src
+	where changed.
+
 2005-05-27  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if.h: Partial update from FreeBSD.
