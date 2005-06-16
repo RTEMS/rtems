@@ -1,3 +1,9 @@
+2005-06-16	Daron Chabot <daron@nucleus.usask.ca>
+
+	* libchip/Makefile.am: Add driver for Tulip clones.
+	* libchip/network/README.tulipclone, libchip/network/if_dc.c,
+	libchip/network/if_dcreg.h: New files.
+
 2005-05-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-rdbg.m4: Use compilation check on _OLD_EXCEPTIONS

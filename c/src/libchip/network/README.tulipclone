@@ -1,0 +1,102 @@
+******** $Id$                                  
+*****************************************************************
+********                                          ***************
+******** ttcp benchmark tests of dec2114x driver  ***************
+******** adapted from FreeBSD's if_dc.c for RTEMS ***************
+********        by: Daron Chabot (12/15/03),      ***************
+********  	<daron@nucleus.usask.ca>          ***************
+*****************************************************************
+
+Test Equipment:
+----------------------- 
+- Intel 450 MHz P3's
+- RH Linux v7.3, 2.4.7-10 kernel, D-Link DFE-530TX (via-rhine)
+- RTEMS rtems-ss-20030703, pc386 BSP, Linksys LNE100TX ( actually,
+a cleverly disguised ADMtek Centaur, aka "Comet").
+- the PCs were directly connected ( RJ-45 X-over cable ) on a class C
+subnet (private)
+
+NOTE:
+-----------------------
+- the following lines must be added to the BSP's "bsp.h" file, or
+inserted into an application header (e.g. a "network_config.h" file, or
+similar):
+
+extern int rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *, int);
+#define BSP_DEC_NETWORK_DRIVER_NAME    "tl1" /* "tl" as in "tulip-clone" */
+#define BSP_DEC_NETWORK_DRIVER_ATTACH    rtems_dc_driver_attach
+
+
+**************************
+Linux Tx ----> RTEMS Rx: *
+**************************
+TRANSMITTER:
+ttcp-t: buflen=8192, nbuf=65536, align=16384/0, port=5001  tcp  -> rtems
+ttcp-t: 536870912 bytes in 45.72 real seconds = 11468.54 KB/sec +++
+ttcp-t: 536870912 bytes in 6.87 CPU seconds = 76315.57 KB/cpu sec
+ttcp-t: 65536 I/O calls, msec/call = 0.71, calls/sec = 1433.57
+ttcp-t: 0.1user 6.7sys 0:45real 15% 0i+0d 0maxrss 0+2pf 0+0csw
+
+
+RECEIVER:
+ttcp-r: buflen=8192, nbuf=65536, align=16384/0, port=5001  tcp
+ttcp-r: 536870912 bytes in 45.72 real seconds = 11467.37 KB/sec +++
+ttcp-r: 536870912 bytes in 45.87 CPU seconds = 11467.37 KB/cpu sec
+ttcp-r: 370837 I/O calls, msec/call = 0.13, calls/sec = 8111.05
+ttcp-r: 0.0user 45.7sys 0:45real 100% 0i+0d 0maxrss 0+0pf 0+0csw
+
+
+
+**************************
+RTEMS Tx ----> Linux Rx: *
+**************************
+TRANSMITTER:
+ttcp-t: buflen=8192, nbuf=65536, align=16384/0, port=5001  tcp  ->192.168.1.1
+ttcp-t: 536870912 bytes in 46.22 real seconds = 11343.31 KB/sec +++
+ttcp-t: 536870912 bytes in 46.22 CPU seconds = 11343.31 KB/cpu sec
+ttcp-t: 65536 I/O calls, msec/call = 0.72, calls/sec = 1417.91
+ttcp-t: 0.0user 46.2sys 0:46real 100% 0i+0d 0maxrss 0+0pf 0+0csw
+
+
+
+
+RECEIVER:
+ttcp-r: buflen=8192, nbuf=65536, align=16384/0, port=5001  tcp
+ttcp-r: 536870912 bytes in 46.22 real seconds = 11343.05 KB/sec +++
+ttcp-r: 536870912 bytes in 11.60 CPU seconds = 45197.24 KB/cpu sec
+ttcp-r: 356183 I/O calls, msec/call = 0.13, calls/sec = 7706.07
+ttcp-r: 0.6user 10.9sys 0:46real 25% 0i+0d 0maxrss 0+2pf 0+0csw
+
+
+
+****************************************************************************
+****************************************************************************
+****************************************************************************
+******************* Test with 40kB buffer size *****************************
+****************************************************************************
+****************************************************************************
+****************************************************************************
+
+
+**************************
+RTEMS Tx ----> Linux Rx: *
+**************************
+TRANSMITTER:
+ttcp-t: buflen=40960, nbuf=13107, align=16384/0, port=5001  tcp -> 192.168.1.1
+ttcp-t: 536862720 bytes in 46.23 real seconds = 11340.69 KB/sec +++
+ttcp-t: 536862720 bytes in 46.23 CPU seconds = 11340.69 KB/cpu sec
+ttcp-t: 13107 I/O calls, msec/call = 3.61, calls/sec = 283.52
+ttcp-t: 0.0user 46.2sys 0:46real 100% 0i+0d 0maxrss 0+0pf 0+0csw
+
+
+RECEIVER:
+ttcp-r: buflen=40960, nbuf=13107, align=16384/0, port=5001  tcp
+ttcp-r: 536862720 bytes in 46.23 real seconds = 11339.54 KB/sec +++
+ttcp-r: 536862720 bytes in 10.70 CPU seconds = 48998.13 KB/cpu sec
+ttcp-r: 355970 I/O calls, msec/call = 0.13, calls/sec = 7699.20
+ttcp-r: 0.5user 10.1sys 0:46real 23% 0i+0d 0maxrss 0+5pf 0+0csw
+
+
+
+****************************************************************************
+****************************************************************************

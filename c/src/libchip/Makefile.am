@@ -31,19 +31,20 @@ if LIBCHIP
 if HAS_NETWORKING
 include_libchip_HEADERS += network/cs8900.h network/i82586var.h \
     network/if_fxpvar.h network/sonic.h network/if_media.h network/mii.h \
-    network/open_eth.h
+    network/open_eth.h network/if_dcreg.h
 
 libnetchip_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_LIBRARIES += libnetchip.a
 libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
-    network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c
+    network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c \
+    network/if_dc.c
 libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS) $(libnetchip_CPPFLAGS)
 endif
 endif
 
 EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
     network/README.i82586 network/README.open_eth network/README.sonic \
-    network/cs8900.c.bsp
+    network/cs8900.c.bsp README.tulipclone
 
 # rtc
 if LIBCHIP
