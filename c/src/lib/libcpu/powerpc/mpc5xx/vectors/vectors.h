@@ -151,6 +151,10 @@ typedef void rtems_exception_handler_t (CPU_Exception_frame* excPtr);
  */
 extern rtems_exception_handler_t* exception_handler_table[NUM_EXCEPTIONS];
 
+/* for compatability -- XXX remove */
+typedef rtems_exception_handler_t *cpuExcHandlerType;
+extern cpuExcHandlerType *globalExceptHdl;
+
 #endif /* ASM */
 
 #endif /* _LIBCPU_VECTORS_H */
