@@ -24,6 +24,7 @@ provided by the region manager are:
 @item @code{@value{DIRPREFIX}region_get_segment} - Get segment from a region
 @item @code{@value{DIRPREFIX}region_return_segment} - Return segment to a region
 @item @code{@value{DIRPREFIX}region_get_segment_size} - Obtain size of a segment
+@item @code{@value{DIRPREFIX}region_resize_segment} - Change size of a segment
 @end itemize
 
 @section Background
@@ -201,6 +202,15 @@ The @code{@value{DIRPREFIX}region_get_segment_size} directive returns the
 size in bytes of the specified segment.  The size returned
 includes any "extra" memory included in the segment because of
 rounding up to a page size boundary.
+
+@subsection Changing the Size of a Segment
+
+The @code{@value{DIRPREFIX}region_resize_segment} directive 
+is used to change the size in bytes of the specified segment.  The
+size may be increased or decreased.  When increasing the
+size of a segment, it is possible that the request cannot be 
+satisfied.  This directive is used to support the @code{realloc()}
+function in the Standard C Library.
 
 @subsection Deleting a Region
 
@@ -662,4 +672,61 @@ This directive obtains the size in bytes of the specified segment.
 The actual length of the allocated segment may be
 larger than the requested size because a segment size is always
 a multiple of the region's page size.
+
+@c
+@c
+@c
+@page
+@subsection REGION_RESIZE_SEGMENT - Change size of a segment
+
+@cindex resize segment
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_region_resize_segment
+@example
+rtems_status_code rtems_region_resize_segment(
+  rtems_id     id,
+  void        *segment,
+  size_t       size,
+  size_t      *old_size
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Region_Resize_Segment (
+   ID         : in     RTEMS.ID;
+   Segment    : in     RTEMS.Address;
+   Size       : in     RTEMS.Unsigned32;
+   Old_Size   :    out RTEMS.Unsigned32;
+   Result     :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+@code{@value{RPREFIX}SUCCESSFUL} - segment obtained successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{segment} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{old_size} is NULL@*
+@code{@value{RPREFIX}INVALID_ID} - invalid region id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - segment address not in region
+@code{@value{RPREFIX}UNSATISFIED} - unable to make segment larger
+
+@subheading DESCRIPTION:
+
+This directive is used to increase or decrease the size of 
+a @a{segment}.  When increasing the size of a segment, it
+is possible that there is not memory available contiguous
+to the segment.  In this case, the request is unsatisfied.
+
+@subheading NOTES:
+
+If an attempt to increase the size of a @a{segment} fails, then
+the application may want to allocate a new segment of the desired
+size, copy the contents of the original segment to the new, larger
+segment and then return the original segment.
 

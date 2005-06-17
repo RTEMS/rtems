@@ -1,3 +1,7 @@
+2005-06-17	Joel Sherrill <joel@OARcorp.com>
+
+	* user/region.t: Add documentation on region_resize_segment.
+
 2005-04-28	Joel Sherrill <joel@OARcorp.com>
 
 	* bsp_howto/rtc.t: Rewritten to account for removal of dmv177.
