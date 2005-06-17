@@ -1,3 +1,8 @@
+2005-06-17	Markku Puro <markku.puro@kopteri.net>
+
+	* Makefile.am: Adding GameBoy Advance BSP.
+	* custom/gba.cfg: New file.
+
 2005-06-17	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/mcf5235.cfg: New file.
