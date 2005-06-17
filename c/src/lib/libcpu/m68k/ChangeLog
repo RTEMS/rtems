@@ -1,3 +1,14 @@
+2005-06-17	Mike Bertosh <mbertosh@motioncontrol.org>
+
+	* ChangeLog, Makefile.am, configure.ac, preinstall.am: Addition of
+	mcf5235 support.
+	* mcf5235/include/mcf5235.h: New file.
+
+2005-06-17	Mike Bertosh <mbertosh@motioncontrol.org>
+
+	* Makefile.am, configure.ac, preinstall.am: Addition of mcf5235
+	support.
+
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Merge-in mcf5282/Makefile.am.
