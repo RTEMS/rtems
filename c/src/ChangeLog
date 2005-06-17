@@ -1,5 +1,10 @@
 2005-06-17	Joel Sherrill <joel@OARcorp.com>
 
+	* librdbg/src/powerpc/excep_f.c: Conditionalize use of ISI vector since
+	it is not supported by the MPC5xx.
+
+2005-06-17	Joel Sherrill <joel@OARcorp.com>
+
 	* libchip/network/if_dc.c: Begin to convert to new PCI and IRQ
 	interface. Also correct attempting to build on other than PowerPC and
 	x86.

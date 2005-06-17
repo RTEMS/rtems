@@ -17,7 +17,7 @@
 #include <rdbg/rdbg.h>
 #include <rdbg/servrpc.h>
 
-  int
+int
 ExcepToSig (Exception_context * ctx)
 {
   int excep = getExcNum (ctx);
@@ -31,8 +31,11 @@ ExcepToSig (Exception_context * ctx)
   case ASM_SYS_VECTOR:
     return SIGTRAP;
 
+  /* At lest the MPC5xx series does not have this vector */
+#if defined(ASM_ISI_VECTOR)
   case ASM_ISI_VECTOR:
     return SIGSEGV;
+#endif
 
   case ASM_RESET_VECTOR:
   case ASM_MACH_VECTOR:
