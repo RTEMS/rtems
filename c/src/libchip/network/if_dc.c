@@ -94,6 +94,23 @@
  * AX88140A doesn't support internal NWAY.
  */
 
+/*
+ *  This driver only supports architectures with the new style
+ *  exception processing.  The following checks try to keep this
+ *  from being compiled on systems which can't support this driver.
+ */
+
+#if defined(__i386__)
+  #define DRIVER_SUPPORTED
+#endif
+
+#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(mpc603e))
+  #define DRIVER_SUPPORTED
+#endif
+
+#undef DRIVER_SUPPORTED
+
+#if defined(DRIVER_SUPPORTED)
 #include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
@@ -114,8 +131,8 @@
 #include <bsp.h>
  
 #include "if_media.h"
-#include "pci.h"
-/*#include <rtems/pci.h>  moved to cpukit/include/rtems in CVS current !
+#include <rtems/pci.h>
+/*
 #include <sys/kernel.h>
 #include <sys/sysctl.h>
 */
@@ -160,10 +177,7 @@
 #define SRM_MEDIA
 #endif
 
-#if defined(__i386__)
-#include <irq.h>
-#include <pcibios.h>
-#endif
+#include <bsp/irq.h>
 
  
 #include "if_dcreg.h"
@@ -1904,7 +1918,7 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * First, find a DEC board
 	 */
-	if (pcib_init() == PCIB_ERR_NOTPRESENT) {
+	if (pci_initialize() == PCIB_ERR_NOTPRESENT) {
 		rtems_panic("PCI BIOS not found !!");
 	}
 
@@ -3796,3 +3810,4 @@ static int dc_resume(dev)
 #endif
 
 
+#endif  /* end if supported */
