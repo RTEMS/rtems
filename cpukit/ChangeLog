@@ -1,3 +1,8 @@
+2005-06-17	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/net/if.h: Avoid use of struct mbuf to avoid unintended
+	dependencies added by the RTEMS specific tap interface.
+
 2005-06-09	Jacques Seronie Vivien <jacques.seronievivien@astrium.eads.net>
 
 	PR 790/rtems

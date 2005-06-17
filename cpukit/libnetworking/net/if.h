@@ -212,7 +212,8 @@ struct	ifreq {
 		int	ifru_phys;
 		int	ifru_media;
 		caddr_t	ifru_data;
-		int	(*ifru_tap)(struct ifnet *, struct ether_header *, struct mbuf *);
+		/* third argument must be cast to a struct mbuf * */
+		int	(*ifru_tap)(struct ifnet *, struct ether_header *, void *);
 	} ifr_ifru;
 #define	ifr_addr	ifr_ifru.ifru_addr	/* address */
 #define	ifr_dstaddr	ifr_ifru.ifru_dstaddr	/* other end of p-to-p link */
