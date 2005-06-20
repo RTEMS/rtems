@@ -1,10 +1,5 @@
 /*
  * RTEMS/TCPIP driver for MCF5282 Fast Ethernet Controller
- *
- * TO DO: Check network stack code -- Is it possible force longword alignment
- *                                    of all tx mbufs?  If so, the stupid 
- *                                    realignment code in the output routine
- *                                    could be removed.
  */
 
 #include <bsp.h>
@@ -103,7 +98,7 @@ struct mcf5282_enet_struct {
     unsigned long   txInterrupts;
     unsigned long   txRawWait;
     unsigned long   txRealign;
-    unsigned long   txRealignBytes;
+    unsigned long   txRealignDrop;
 };
 static struct mcf5282_enet_struct enet_driver[NIFACES];
 
@@ -320,11 +315,14 @@ static void
 fec_retire_tx_bd(volatile struct mcf5282_enet_struct *sc )
 {
     struct mbuf *m, *n;
+    uint16_t status;
 
     while ((sc->txBdActiveCount != 0)
-        && ((sc->txBdBase[sc->txBdTail].status & MCF5282_FEC_TxBD_R) == 0)) {
-        m = sc->txMbuf[sc->txBdTail];
-        MFREE(m, n);
+        && (((status = sc->txBdBase[sc->txBdTail].status) & MCF5282_FEC_TxBD_R) == 0)) {
+        if ((status & MCF5282_FEC_TxBD_TO1) == 0) {
+            m = sc->txMbuf[sc->txBdTail];
+            MFREE(m, n);
+        }
         if (++sc->txBdTail == sc->txBdCount)
             sc->txBdTail = 0;
         sc->txBdActiveCount--;
@@ -337,7 +335,7 @@ fec_rxDaemon (void *arg)
     volatile struct mcf5282_enet_struct *sc = (volatile struct mcf5282_enet_struct *)arg;
     struct ifnet *ifp = (struct ifnet* )&sc->arpcom.ac_if;
     struct mbuf *m;
-    volatile uint16_t status;
+    uint16_t status;
     volatile mcf5282BufferDescriptor_t *rxBd;
     int rxBdIndex;
 
@@ -454,6 +452,7 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
     struct mcf5282_enet_struct *sc = ifp->if_softc;
     volatile mcf5282BufferDescriptor_t *firstTxBd, *txBd;
     uint16_t status;
+    int offset;
     int nAdded;
 
    /*
@@ -471,7 +470,7 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
     nAdded = 0;
     firstTxBd = sc->txBdBase + sc->txBdHead;
     
-    for (;;) {
+    while (m != NULL) {
         /* 
          * Wait for buffer descriptor to become available
          */
@@ -517,56 +516,62 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
         txBd = sc->txBdBase + sc->txBdHead;
         if (m->m_len) {
             char *p = mtod(m, char *);
-            /*
-             * Stupid FEC can't handle misaligned data!
-             * Given the way that mbuf's are layed out it should be
-             * safe to shuffle the data down like this.....
-             * Perhaps this code could be improved with a "Duff's Device".
-             */
-            if ((int)p & 0x3) {
-                int l = m->m_len;
-                char *dest = p - ((int)p & 0x3);
-                uint16_t *o = (uint16_t *)dest, *i = (uint16_t *)p;
-                while (l > 0) {
-                    *o++ = *i++;
-                    l -= sizeof(uint16_t);
-                }
-                p = dest;
-                sc->txRealign++;
-                sc->txRealignBytes += m->m_len;
+            if ((offset = (int)p & 0x3) == 0) {
+                txBd->buffer = p;
+                txBd->length = m->m_len;
+                sc->txMbuf[sc->txBdHead] = m;
+                m = m->m_next;
             }
-            txBd->buffer = p;
-            txBd->length = m->m_len;
-            sc->txMbuf[sc->txBdHead] = m;
+            else {
+                /*
+                 * Stupid FEC can't handle misaligned data!
+                 * Move offending bytes to a local buffer.
+                 * Use buffer descriptor TO1 bit to indicate this.
+                 */
+                int nmove = 4 - offset;
+                char *d = (char *)&sc->txMbuf[sc->txBdHead];
+                status |= MCF5282_FEC_TxBD_TO1;
+                sc->txRealign++;
+                if (nmove > m->m_len)
+                    nmove = m->m_len;
+                m->m_data += nmove;
+                m->m_len -= nmove;
+                txBd->buffer = d;
+                txBd->length = nmove;
+                while (nmove--)
+                    *d++ = *p++;
+                if (m->m_len == 0) {
+                    struct mbuf *n;
+                    sc->txRealignDrop++;
+                    MFREE(m, n);
+                    m = n;
+                }
+            }
             nAdded++;
             if (++sc->txBdHead == sc->txBdCount) {
                 status |= MCF5282_FEC_TxBD_W;
                 sc->txBdHead = 0;
             }
-            m = m->m_next;
+            txBd->status = status;
         }
         else {
             /*
-             * Just toss empty mbufs
+             * Toss empty mbufs.
              */
             struct mbuf *n;
             MFREE(m, n);
             m = n;
         }
-        if (m == NULL) {
-          if (nAdded) {
-            txBd->status = status | MCF5282_FEC_TxBD_R
-                                  | MCF5282_FEC_TxBD_L
-                                  | MCF5282_FEC_TxBD_TC;
-            if (nAdded > 1)
-                firstTxBd->status |= MCF5282_FEC_TxBD_R;
-            MCF5282_FEC_TDAR = 0;
-            sc->txBdActiveCount += nAdded;
-          }
-          break;
-        }
-        txBd->status = status;
     }
+    if (nAdded) {
+        txBd->status = status | MCF5282_FEC_TxBD_R
+                              | MCF5282_FEC_TxBD_L
+                              | MCF5282_FEC_TxBD_TC;
+        if (nAdded > 1)
+            firstTxBd->status |= MCF5282_FEC_TxBD_R;
+        MCF5282_FEC_TDAR = 0;
+        sc->txBdActiveCount += nAdded;
+      }
 }
 
 void
@@ -699,37 +704,37 @@ enet_stats(struct mcf5282_enet_struct *sc)
     printf("   Rx Octets OK:%-10lu\n", MCF5282_FEC_IEEE_R_OCTETS_OK);
     printf("  Tx Interrupts:%-10lu",   sc->txInterrupts);
     printf("Tx Output Waits:%-10lu",   sc->txRawWait);
-    printf("Tx Realignments:%-10lu\n",   sc->txRealign);
-    printf(" Tx RealignByte:%-10lu", sc->txRealignBytes);
-    printf(" Tx Unaccounted:%-10lu", MCF5282_FEC_RMON_T_DROP);
-    printf("Tx Packet Count:%-10lu\n",   MCF5282_FEC_RMON_T_PACKETS);
+    printf("Tx mbuf realign:%-10lu\n", sc->txRealign);
+    printf("Tx realign drop:%-10lu",   sc->txRealignDrop);
+    printf(" Tx Unaccounted:%-10lu",   MCF5282_FEC_RMON_T_DROP);
+    printf("Tx Packet Count:%-10lu\n", MCF5282_FEC_RMON_T_PACKETS);
     printf("   Tx Broadcast:%-10lu",   MCF5282_FEC_RMON_T_BC_PKT);
-    printf("   Tx Multicast:%-10lu", MCF5282_FEC_RMON_T_MC_PKT);
-    printf("CRC/Align error:%-10lu\n",   MCF5282_FEC_RMON_T_CRC_ALIGN);
+    printf("   Tx Multicast:%-10lu",   MCF5282_FEC_RMON_T_MC_PKT);
+    printf("CRC/Align error:%-10lu\n", MCF5282_FEC_RMON_T_CRC_ALIGN);
     printf("   Tx Undersize:%-10lu",   MCF5282_FEC_RMON_T_UNDERSIZE);
-    printf("    Tx Oversize:%-10lu", MCF5282_FEC_RMON_T_OVERSIZE);
-    printf("    Tx Fragment:%-10lu\n",   MCF5282_FEC_RMON_T_FRAG);
+    printf("    Tx Oversize:%-10lu",   MCF5282_FEC_RMON_T_OVERSIZE);
+    printf("    Tx Fragment:%-10lu\n", MCF5282_FEC_RMON_T_FRAG);
     printf("      Tx Jabber:%-10lu",   MCF5282_FEC_RMON_T_JAB);
-    printf("  Tx Collisions:%-10lu", MCF5282_FEC_RMON_T_COL);
-    printf("          Tx 64:%-10lu\n",   MCF5282_FEC_RMON_T_P64);
+    printf("  Tx Collisions:%-10lu",   MCF5282_FEC_RMON_T_COL);
+    printf("          Tx 64:%-10lu\n", MCF5282_FEC_RMON_T_P64);
     printf("      Tx 65-127:%-10lu",   MCF5282_FEC_RMON_T_P65TO127);
-    printf("     Tx 128-255:%-10lu", MCF5282_FEC_RMON_T_P128TO255);
-    printf("     Tx 256-511:%-10lu\n",   MCF5282_FEC_RMON_T_P256TO511);
+    printf("     Tx 128-255:%-10lu",   MCF5282_FEC_RMON_T_P128TO255);
+    printf("     Tx 256-511:%-10lu\n", MCF5282_FEC_RMON_T_P256TO511);
     printf("    Tx 511-1023:%-10lu",   MCF5282_FEC_RMON_T_P512TO1023);
-    printf("   Tx 1024-2047:%-10lu", MCF5282_FEC_RMON_T_P1024TO2047);
-    printf("      Tx >=2048:%-10lu\n",   MCF5282_FEC_RMON_T_P_GTE2048);
+    printf("   Tx 1024-2047:%-10lu",   MCF5282_FEC_RMON_T_P1024TO2047);
+    printf("      Tx >=2048:%-10lu\n", MCF5282_FEC_RMON_T_P_GTE2048);
     printf("      Tx Octets:%-10lu",   MCF5282_FEC_RMON_T_OCTETS);
-    printf("     Tx Dropped:%-10lu", MCF5282_FEC_IEEE_T_DROP);
-    printf("    Tx Frame OK:%-10lu\n",   MCF5282_FEC_IEEE_T_FRAME_OK);
+    printf("     Tx Dropped:%-10lu",   MCF5282_FEC_IEEE_T_DROP);
+    printf("    Tx Frame OK:%-10lu\n", MCF5282_FEC_IEEE_T_FRAME_OK);
     printf(" Tx 1 Collision:%-10lu",   MCF5282_FEC_IEEE_T_1COL);
-    printf("Tx >1 Collision:%-10lu", MCF5282_FEC_IEEE_T_MCOL);
-    printf("    Tx Deferred:%-10lu\n",   MCF5282_FEC_IEEE_T_DEF);
+    printf("Tx >1 Collision:%-10lu",   MCF5282_FEC_IEEE_T_MCOL);
+    printf("    Tx Deferred:%-10lu\n", MCF5282_FEC_IEEE_T_DEF);
     printf(" Late Collision:%-10lu",   MCF5282_FEC_IEEE_T_LCOL);
-    printf(" Excessive Coll:%-10lu", MCF5282_FEC_IEEE_T_EXCOL);
-    printf("  FIFO Underrun:%-10lu\n",   MCF5282_FEC_IEEE_T_MACERR);
+    printf(" Excessive Coll:%-10lu",   MCF5282_FEC_IEEE_T_EXCOL);
+    printf("  FIFO Underrun:%-10lu\n", MCF5282_FEC_IEEE_T_MACERR);
     printf("  Carrier Error:%-10lu",   MCF5282_FEC_IEEE_T_CSERR);
-    printf("   Tx SQE Error:%-10lu", MCF5282_FEC_IEEE_T_SQE);
-    printf("Tx Pause Frames:%-10lu\n",   MCF5282_FEC_IEEE_T_FDXFC);
+    printf("   Tx SQE Error:%-10lu",   MCF5282_FEC_IEEE_T_SQE);
+    printf("Tx Pause Frames:%-10lu\n", MCF5282_FEC_IEEE_T_FDXFC);
     printf("   Tx Octets OK:%-10lu\n", MCF5282_FEC_IEEE_T_OCTETS_OK);
     printf(" EIR:%8.8lx  ",  MCF5282_FEC_EIR);
     printf("EIMR:%8.8lx  ",  MCF5282_FEC_EIMR);
@@ -746,7 +751,7 @@ enet_stats(struct mcf5282_enet_struct *sc)
          * Yes, there are races here with adding and retiring descriptors,
          * but this diagnostic is more for when things have backed up.
          */
-        printf("Transmit Buffer Descriptors (Tail %d, Head %d, Active %d):\n",
+        printf("Transmit Buffer Descriptors (Tail %d, Head %d, Unretired %d):\n",
                                                     sc->txBdTail,
                                                     sc->txBdHead,
                                                     sc->txBdActiveCount);

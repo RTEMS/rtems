@@ -78,16 +78,16 @@ port into RAM then executed or programmed into flash memory.
 
 2) (first time only)
    Set the uC5282 board Internet configuration:
-        setenv IPADDR0 www.xxx.yyy.zzz      (Your board's address)
-        setenv NETMASK ppp.qqq.rrr.sss      (Your local network address mask)
-        setenv HOSTNAME somename            (Your board's name)
+        setenv IPADDR0 www.xxx.yyy.zzz  (Your board's address)
+        setenv NETMASK ppp.qqq.rrr.sss  (Your local network address mask)
+        setenv HOSTNAME somename        (Your board's name)
 
 3) Type 'tftp<CR>'
 
 4) Run 'tftp' on your host machine:
-            tftp> binary
-            tftp> connect www.xxx.yyy.zzz      (Your ucDIMM's address)
-            tftp> put someFile.exe
+        tftp> binary
+        tftp> connect www.xxx.yyy.zzz   (Your ucDIMM's address)
+        tftp> put someFile.exe          (someFile.boot for the EPICS build system)
 
 5) When the file has downloaded press the <ESC> key to terminate
    the uCDIMM tftp command.
