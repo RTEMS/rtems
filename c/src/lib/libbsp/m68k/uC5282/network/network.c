@@ -452,7 +452,6 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
     struct mcf5282_enet_struct *sc = ifp->if_softc;
     volatile mcf5282BufferDescriptor_t *firstTxBd, *txBd;
     uint16_t status;
-    int offset;
     int nAdded;
 
    /*
@@ -516,7 +515,8 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
         txBd = sc->txBdBase + sc->txBdHead;
         if (m->m_len) {
             char *p = mtod(m, char *);
-            if ((offset = (int)p & 0x3) == 0) {
+            int offset = (int)p & 0x3;
+            if (offset == 0) {
                 txBd->buffer = p;
                 txBd->length = m->m_len;
                 sc->txMbuf[sc->txBdHead] = m;
