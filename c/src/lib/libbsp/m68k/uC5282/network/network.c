@@ -1,5 +1,5 @@
 /*
- * RTEMS/TCPIP driver for MCF5282 Fast Ethernet Controller
+ * RTEMS driver for MCF5282 Fast Ethernet Controller
  */
 
 #include <bsp.h>
@@ -30,6 +30,11 @@
 
 #define FEC_INTC0_TX_VECTOR (64+23)
 #define FEC_INTC0_RX_VECTOR (64+27)
+#define MII_VECTOR (64+7)  /* IRQ7* pin connected to external transceiver */
+#define MII_EPPAR  MCF5282_EPORT_EPPAR_EPPA7_LEVEL
+#define MII_EPDDR  MCF5282_EPORT_EPDDR_EPDD7
+#define MII_EPIER  MCF5282_EPORT_EPIER_EPIE7
+#define MII_EPPDR  MCF5282_EPORT_EPPDR_EPPD7
 
 /*
  * Default number of buffer descriptors set aside for this driver.
@@ -96,11 +101,47 @@ struct mcf5282_enet_struct {
      */
     unsigned long   rxInterrupts;
     unsigned long   txInterrupts;
+    unsigned long   miiInterrupts;
     unsigned long   txRawWait;
     unsigned long   txRealign;
     unsigned long   txRealignDrop;
+    uint16_t        mii_sr2;
 };
 static struct mcf5282_enet_struct enet_driver[NIFACES];
+
+/*
+ * Read MII register
+ * Busy-waits, but transfer time should be short!
+ */
+static int
+getMII(int phyNumber, int regNumber)
+{
+    MCF5282_FEC_MMFR = (0x1 << 30)       |
+                       (0x2 << 28)       |
+                       (phyNumber << 23) |
+                       (regNumber << 18) |
+                       (0x2 << 16);
+    while ((MCF5282_FEC_EIR & MCF5282_FEC_EIR_MII) == 0);
+    MCF5282_FEC_EIR = MCF5282_FEC_EIR_MII;
+    return MCF5282_FEC_MMFR & 0xFFFF;
+}
+
+/*
+ * Write MII register
+ * Busy-waits, but transfer time should be short!
+ */
+static void
+setMII(int phyNumber, int regNumber, int value)
+{
+    MCF5282_FEC_MMFR = (0x1 << 30)       |
+                       (0x1 << 28)       |
+                       (phyNumber << 23) |
+                       (regNumber << 18) |
+                       (0x2 << 16)       |
+                       (value & 0xFFFF);
+    while ((MCF5282_FEC_EIR & MCF5282_FEC_EIR_MII) == 0);
+    MCF5282_FEC_EIR = MCF5282_FEC_EIR_MII;
+}
 
 static rtems_isr
 mcf5282_fec_rx_interrupt_handler( rtems_vector_number v )
@@ -120,6 +161,22 @@ mcf5282_fec_tx_interrupt_handler( rtems_vector_number v )
     rtems_event_send(enet_driver[0].txDaemonTid, TX_INTERRUPT_EVENT);
 }
 
+static rtems_isr
+mcf5282_mii_interrupt_handler( rtems_vector_number v )
+{
+    uint16 sr2;
+
+    enet_driver[0].miiInterrupts++;
+    getMII(1, 19); /* Read and clear interrupt status bits */
+    enet_driver[0].mii_sr2 = sr2 = getMII(1, 17);
+    if (((sr2 & 0x200) != 0)
+     && ((MCF5282_FEC_TCR & MCF5282_FEC_TCR_FDEN) == 0))
+        MCF5282_FEC_TCR |= MCF5282_FEC_TCR_FDEN;
+    else if (((sr2 & 0x200) == 0)
+          && ((MCF5282_FEC_TCR & MCF5282_FEC_TCR_FDEN) != 0))
+        MCF5282_FEC_TCR &= ~MCF5282_FEC_TCR_FDEN;
+}
+
 /*
  * Allocate buffer descriptors from (non-cached) on-chip static RAM
  * Ensure 128-bit (16-byte) alignment
@@ -137,42 +194,6 @@ mcf5282_bd_allocate(unsigned int count)
     return p;
 }
 
-#if UNUSED
-/*
- * Read MII register
- * Busy-waits, but transfer time should be short!
- */
-static int
-getMII(int phyNumber, int regNumber)
-{
-    MCF5282_FEC_MMFR = (0x1 << 30)       |
-                       (0x2 << 28)       |
-                       (phyNumber << 23) |
-                       (regNumber << 18) |
-                       (0x2 << 16);
-    while ((MCF5282_FEC_EIR & MCF5282_FEC_EIR_MII) == 0);
-    MCF5282_FEC_EIR = MCF5282_FEC_EIR_MII;
-    return MCF5282_FEC_MMFR & 0xFFFF;
-}
-#endif
-
-/*
- * Write MII register
- * Busy-waits, but transfer time should be short!
- */
-static void
-setMII(int phyNumber, int regNumber, int value)
-{
-    MCF5282_FEC_MMFR = (0x1 << 30)       |
-                       (0x1 << 28)       |
-                       (phyNumber << 23) |
-                       (regNumber << 18) |
-                       (0x2 << 16)       |
-                       (value & 0xFFFF);
-    while ((MCF5282_FEC_EIR & MCF5282_FEC_EIR_MII) == 0);
-    MCF5282_FEC_EIR = MCF5282_FEC_EIR_MII;
-}
-
 static void
 mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
 {
@@ -186,7 +207,7 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
      * Issue reset to FEC
      */
     MCF5282_FEC_ECR = MCF5282_FEC_ECR_RESET;
-    rtems_task_wake_after(1);
+    rtems_task_wake_after(2);
     MCF5282_FEC_ECR = 0;
 
     /*
@@ -267,9 +288,18 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
     MCF5282_FEC_MSCR = MCF5282_FEC_MSCR_MII_SPEED(i);
 
     /*
-     * Set PHYS to 100 Mb/s, full duplex
+     * Set PHYS
+     *  Advertise 100 Mb/s, full-duplex, IEEE-802.3
+     *  Turn off auto-negotiate
+     *  Enable speed-change, duplex-change and link-status-change interrupts
+     *  Start auto-negotiate
      */
-    setMII(1, 0, 0x2100);
+    setMII(1,  4, 0x0181);
+    setMII(1,  0, 0x0000);
+    rtems_task_wake_after(2);
+    sc->mii_sr2 = getMII(1, 17);
+    setMII(1, 18, 0x0072);
+    setMII(1,  0, 0x1000);
 
     /*
      * Set up receive buffer descriptors
@@ -293,19 +323,29 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
     status = rtems_interrupt_catch( mcf5282_fec_tx_interrupt_handler, FEC_INTC0_TX_VECTOR, &old_handler );
     if (status != RTEMS_SUCCESSFUL)
         rtems_panic ("Can't attach MCF5282 FEC TX interrupt handler: %s\n",
-                     rtems_status_text(status));
-    status = rtems_interrupt_catch(mcf5282_fec_rx_interrupt_handler, FEC_INTC0_RX_VECTOR, &old_handler);
-    if (status != RTEMS_SUCCESSFUL)
-        rtems_panic ("Can't attach MCF5282 FEC RX interrupt handler: %s\n",
-                     rtems_status_text(status));
+                                                 rtems_status_text(status));
     bsp_allocate_interrupt(FEC_IRQ_LEVEL, FEC_IRQ_TX_PRIORITY);
     MCF5282_INTC0_ICR23 = MCF5282_INTC_ICR_IL(FEC_IRQ_LEVEL) |
                           MCF5282_INTC_ICR_IP(FEC_IRQ_TX_PRIORITY);
     MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT23 | MCF5282_INTC_IMRL_MASKALL);
+
+    status = rtems_interrupt_catch(mcf5282_fec_rx_interrupt_handler, FEC_INTC0_RX_VECTOR, &old_handler);
+    if (status != RTEMS_SUCCESSFUL)
+        rtems_panic ("Can't attach MCF5282 FEC RX interrupt handler: %s\n",
+                                                 rtems_status_text(status));
     bsp_allocate_interrupt(FEC_IRQ_LEVEL, FEC_IRQ_RX_PRIORITY);
     MCF5282_INTC0_ICR27 = MCF5282_INTC_ICR_IL(FEC_IRQ_LEVEL) |
                           MCF5282_INTC_ICR_IP(FEC_IRQ_RX_PRIORITY);
     MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT27 | MCF5282_INTC_IMRL_MASKALL);
+
+    status = rtems_interrupt_catch(mcf5282_mii_interrupt_handler, MII_VECTOR, &old_handler);
+    if (status != RTEMS_SUCCESSFUL)
+        rtems_panic ("Can't attach MCF5282 FEC MII interrupt handler: %s\n",
+                                                 rtems_status_text(status));
+    MCF5282_EPORT_EPPAR &= ~MII_EPPAR;
+    MCF5282_EPORT_EPDDR &= ~MII_EPDDR;
+    MCF5282_EPORT_EPIER |=  MII_EPIER;
+    MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT7 | MCF5282_INTC_IMRL_MASKALL);
 }
 
 /*
@@ -735,7 +775,16 @@ enet_stats(struct mcf5282_enet_struct *sc)
     printf("  Carrier Error:%-10lu",   MCF5282_FEC_IEEE_T_CSERR);
     printf("   Tx SQE Error:%-10lu",   MCF5282_FEC_IEEE_T_SQE);
     printf("Tx Pause Frames:%-10lu\n", MCF5282_FEC_IEEE_T_FDXFC);
-    printf("   Tx Octets OK:%-10lu\n", MCF5282_FEC_IEEE_T_OCTETS_OK);
+    printf("   Tx Octets OK:%-10lu",   MCF5282_FEC_IEEE_T_OCTETS_OK);
+    printf(" MII interrupts:%-10lu\n", sc->miiInterrupts);
+    if ((sc->mii_sr2 & 0x400) == 0) {
+        printf("LINK DOWN!\n");
+    }
+    else {
+        printf("Link speed %d Mb/s, %s-duplex.\n",
+                                    sc->mii_sr2  & 0x4000 ? 100 : 10,
+                                    sc->mii_sr2 & 0x200 ? "full" : "half");
+    }
     printf(" EIR:%8.8lx  ",  MCF5282_FEC_EIR);
     printf("EIMR:%8.8lx  ",  MCF5282_FEC_EIMR);
     printf("RDAR:%8.8lx  ",  MCF5282_FEC_RDAR);
