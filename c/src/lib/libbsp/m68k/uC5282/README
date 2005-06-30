@@ -177,6 +177,9 @@ x - Final 16-bit location of CS2* space is reserved for FPGA interrupt status.
 
       Interrupt map
 
+External interrupt lines (priority is fixed between 3 and 4):
+    IRQ7* - Ethernet Transceiver interrupts
+    IRQ1* - FPGA ('VME') interrupts.
 +-----+-----------------------------------------------------------------------+
 |     |                                PRIORITY                               |
 +-----+--------+--------+--------+--------+--------+--------+--------+--------+
