@@ -13,11 +13,11 @@
 Name:         %{name}
 Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-Copyright:    GPL
+License:    GPL
 URL:          http://www.gnu.org/software/autoconf
 Group:        @rpmgroup@
 Version:      %{rpmvers}
-Release:      4
+Release:      4%{?dist}
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRequires: perl m4 gawk emacs

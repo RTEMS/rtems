@@ -1,5 +1,8 @@
 2005-07-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* autotools/automake.add: Add %{?dist}.
+	* autotools/autoconf.add: Add %{?dist}.
+	Replace Copyright: by Licence:. 
 	* gccnewlib/gccnewlib.add: Remove Epoch.
 
 2005-05-20	Ralf Corsepius <ralf.corsepius@rtems.org>
