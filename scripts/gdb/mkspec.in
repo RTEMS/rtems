@@ -55,13 +55,13 @@ PATCH1="Patch${patchn}: gdb-${gdb_version}-rtems-${gdb_patch_version}.diff"
 fi
 
 sed -e "s,@PATCH1\@,${PATCH1}," \
-    -e "s%@Release\@%${gdb_rpm_release}%g" \
-    -e "s%@prefix\@%@prefix@%g" \
-    -e "s%@target_alias\@%${target_alias}%g" \
+    -e "s,@Release\@,${gdb_rpm_release},g" \
+    -e "s,@prefix\@,@prefix@,g" \
+    -e "s,@target_alias\@,${target_alias},g" \
     -e "s,@rpmprefix\@,@rpmprefix@,g" \
-    -e "s%@rpmgroup\@%@rpmgroup@%g" \
-    -e "s%@osversion\@%@osversion@%g" \
-    -e "s%@gdb_version\@%${gdb_version}%g" \
-    -e "s%@gdb_patch_version\@%${gdb_patch_version}%g" \
-    -e "s%@gdb_suffix\@%${gdb_suffix}%g" \
+    -e "s,@rpmgroup\@,@rpmgroup@,g" \
+    -e "s,@osversion\@,@osversion@,g" \
+    -e "s,@gdb_version\@,${gdb_version},g" \
+    -e "s,@gdb_patch_version\@,${gdb_patch_version},g" \
+    -e "s,@gdb_suffix\@,${gdb_suffix},g" \
 < ${specsrc}

@@ -1,5 +1,7 @@
 2005-07-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/mkspec.in, gccnewlib/mkspec.in, gdb/mkspec.in:
+	Use ',' as sed pattern delimiter.
 	* autotools/automake.add: Add %{?dist}.
 	* autotools/autoconf.add: Add %{?dist}.
 	Replace Copyright: by Licence:. 

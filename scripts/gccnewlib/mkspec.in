@@ -59,16 +59,16 @@ fi
 # note that the variables in the gccnewlib directory are actually the same
 sed -e "s,@PATCH0\@,${PATCH0}," \
     -e "s,@PATCH1\@,${PATCH1}," \
-    -e "s%@Release\@%${gccnewlib_rpm_release}%g" \
-    -e "s%@target_alias\@%${target_alias}%g" \
-    -e "s%@prefix\@%@prefix@%g" \
+    -e "s,@Release\@,${gccnewlib_rpm_release},g" \
+    -e "s,@target_alias\@,${target_alias},g" \
+    -e "s,@prefix\@,@prefix@,g" \
     -e "s,@rpmprefix\@,@rpmprefix@,g" \
-    -e "s%@rpmgroup\@%@rpmgroup@%g" \
-    -e "s%@osversion\@%@osversion@%g" \
-    -e "s%@gcc_version\@%${gcc_version}%g" \
-    -e "s%@gcc_patch_version\@%${gcc_patch_version}%g" \
-    -e "s%@gcc_suffix\@%${gcc_suffix}%g" \
-    -e "s%@newlib_version\@%${newlib_version}%g" \
-    -e "s%@newlib_patch_version\@%${newlib_patch_version}%g" \
-    -e "s%@newlib_suffix\@%${newlib_suffix}%g" \
+    -e "s,@rpmgroup\@,@rpmgroup@,g" \
+    -e "s,@osversion\@,@osversion@,g" \
+    -e "s,@gcc_version\@,${gcc_version},g" \
+    -e "s,@gcc_patch_version\@,${gcc_patch_version},g" \
+    -e "s,@gcc_suffix\@,${gcc_suffix},g" \
+    -e "s,@newlib_version\@,${newlib_version},g" \
+    -e "s,@newlib_patch_version\@,${newlib_patch_version},g" \
+    -e "s,@newlib_suffix\@,${newlib_suffix},g" \
 < ${specsrc} 
