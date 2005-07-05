@@ -8,7 +8,6 @@ Name:           %{rpmprefix}%{gcc_target}-gcc-newlib
 Summary:        gcc and newlib C Library for %{gcc_target}.
 Group:          %{rpmgroup}
 Release:        @Release@
-Epoch:          0
 License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
 Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
