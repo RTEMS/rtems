@@ -145,6 +145,9 @@ typedef struct disk_desc_s {
     part_desc_t *partitions[RTEMS_IDE_PARTITION_MAX_PARTITION_NUMBER];
 } disk_desc_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * rtems_ide_part_table_free --
@@ -189,5 +192,8 @@ rtems_ide_part_table_get(const char *dev_name, disk_desc_t *disk_desc);
 rtems_status_code
 rtems_ide_part_table_initialize(char *dev_name);
 
+#ifdef __cplusplus
+}
+#endif
 
-#endif /* __RTEMS_IDE_PART_TABLE_H__ */
+#endif /* _RTEMS_IDE_PART_TABLE_H */
