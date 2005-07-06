@@ -162,7 +162,7 @@ openlog (const char *ident, int logstat, int logfac)
 					0,
 					&LogSemaphore);
 	if (sc != RTEMS_SUCCESSFUL) {
-		printf ("Can't create syslog seamphore: %d\n", sc);
+		printf ("Can't create syslog semaphore: %d\n", sc);
 		close (LogFd);
 		LogFd = -1;
 	}
