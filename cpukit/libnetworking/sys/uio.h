@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,11 +27,17 @@
  * SUCH DAMAGE.
  *
  *	@(#)uio.h	8.5 (Berkeley) 2/22/94
+ * $FreeBSD: src/sys/sys/uio.h,v 1.38 2005/01/07 02:29:24 imp Exp $
+ */
+
+/*
  * $Id$
  */
 
 #ifndef _SYS_UIO_H_
 #define	_SYS_UIO_H_
+
+#include <sys/cdefs.h>
 
 /*
  * XXX
@@ -46,6 +48,7 @@ struct iovec {
 	size_t	 iov_len;	/* Length. */
 };
 
+#if __BSD_VISIBLE
 enum	uio_rw { UIO_READ, UIO_WRITE };
 
 /* Segment flag values. */
@@ -55,8 +58,10 @@ enum uio_seg {
 	UIO_USERISPACE,		/* from user I space */
 	UIO_NOCOPY		/* don't copy, already in object */
 };
+#endif
 
 #ifdef _KERNEL
+
 struct uio {
 	struct	iovec *uio_iov;
 	int	uio_iovcnt;
@@ -69,22 +74,24 @@ struct uio {
 
 /*
  * Limits
+ *
+ * N.B.: UIO_MAXIOV must be no less than IOV_MAX from <sys/syslimits.h>
+ * which in turn must be no less than _XOPEN_IOV_MAX from <limits.h>.  If
+ * we ever make this tunable (probably pointless), then IOV_MAX should be
+ * removed from <sys/syslimits.h> and applications would be expected to use
+ * sysconf(3) to find out the correct value, or else assume the worst
+ * (_XOPEN_IOV_MAX).  Perhaps UIO_MAXIOV should be simply defined as
+ * IOV_MAX.
  */
 #define UIO_MAXIOV	1024		/* max 1K of iov's */
-#define UIO_SMALLIOV	8		/* 8 on stack, else malloc */
-#endif /* _KERNEL */
 
-#ifdef _KERNEL
-
-int	uiomove __P((caddr_t, int, struct uio *));
+int	uiomove(void *cp, int n, struct uio *uio);
 
 #else /* !_KERNEL */
 
-#include <sys/cdefs.h>
-
 __BEGIN_DECLS
-ssize_t	readv __P((int, const struct iovec *, int));
-ssize_t	writev __P((int, const struct iovec *, int));
+ssize_t	readv(int, const struct iovec *, int);
+ssize_t	writev(int, const struct iovec *, int);
 __END_DECLS
 
 #endif /* _KERNEL */
