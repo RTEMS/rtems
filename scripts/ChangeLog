@@ -1,3 +1,8 @@
+2005-07-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* binutils/binutils.add: Take out -D_FORTIFY_SOURCE from CFLAGS
+	to prevent fortify from rendering ar unusable.
+
 2005-07-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/mkspec.in, gccnewlib/mkspec.in, gdb/mkspec.in:
