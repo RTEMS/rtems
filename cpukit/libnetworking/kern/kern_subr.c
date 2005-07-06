@@ -46,10 +46,7 @@
 #include <sys/queue.h>
 
 int
-uiomove(cp, n, uio)
-	register caddr_t cp;
-	register int n;
-	register struct uio *uio;
+uiomove(void *cp, int n, struct uio *uio)
 {
 	register struct iovec *iov;
 	u_int cnt;
