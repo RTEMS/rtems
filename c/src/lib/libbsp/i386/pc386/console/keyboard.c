@@ -4,6 +4,7 @@
  *   Rosimildo da Silva:  rdasilva@connecttel.com
  */
 
+#include <limits.h>
 #include <sys/types.h>
 #include <rtems/keyboard.h>
 #include "i386kbd.h"
@@ -74,7 +75,7 @@ int test_bit(int nr, unsigned long * addr)
  * in this module: prev_scancode, shift_state, diacr, npadch, dead_key_next.
  * (last_console is now a global variable)
  */
-#define  BITS_PER_LONG  32
+#define  BITS_PER_LONG (sizeof(long)*CHAR_BIT)
 
 /* shift state counters.. */
 static unsigned char k_down[NR_SHIFT] = {0, };

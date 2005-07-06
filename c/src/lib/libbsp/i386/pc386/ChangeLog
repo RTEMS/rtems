@@ -1,3 +1,7 @@
+2005-07-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* console/keyboard.c: Apply CHAR_BIT to compute BITS_PER_LONG.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.
