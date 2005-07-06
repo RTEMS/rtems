@@ -1,0 +1,26 @@
+%rename cpp old_cpp
+%rename lib old_lib
+%rename endfile old_endfile
+%rename startfile old_startfile
+%rename link old_link
+
+*cpp:
+%(old_cpp) %{qrtems: -D__embedded__ -D__USE_INIT_FINI__} -Asystem(embedded)
+
+*lib:
+%{!qrtems: %(old_lib)} %{qrtems: --start-group \
+%{!qrtems_debug: -lrtemsbsp -lrtemscpu} %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
+-lc -lgcc --end-group \
+%{!qnolinkcmds: -T linkcmds%s}}
+
+*startfile:
+%{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems: \
+%{!qrtems_debug: start.o%s crti.o%s crtbegin.o%s} \
+%{qrtems_debug: start_g.o%s crti.o%s crtbegin.o%s}}}
+
+*link:
+%{!qrtems: %(old_link)} %{qrtems: -Qy -dc -dp -Bstatic -N -e _start}
+
+*endfile:
+%{!qrtems: *(old_endfiles)} %{qrtems: crtend.o%s crtn.o%s }
+

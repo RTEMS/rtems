@@ -1,0 +1,12 @@
+2005-07-06	Markku Puro <markku.puro@kopteri.net>
+
+	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
+	clock/clockdrv.c, console/conio.c, console/console.c,
+	console/defaultfont.c, include/arm_mode_bits.h, include/asm_macros.h,
+	include/bsp.h, include/bspopts.h.in, include/conio.h, include/gba.h,
+	include/gba_registers.h, include/tm27.h, irq/bsp_irq_asm.S,
+	irq/bsp_irq_init.c, irq/irq.c, irq/irq.h, irq/irq_asm.S,
+	irq/irq_init.c, start/logo.S, start/start.S, startup/bspstart.c,
+	startup/cpu.c, startup/cpu_asm.S, startup/exit.c, startup/linkcmds,
+	timer/timer.c: New files.
+
