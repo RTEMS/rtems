@@ -1,3 +1,8 @@
+2005-07-06	<ralf.corsepius@rtems.org>
+
+	PR 810/rtems
+	* include/rtems/ide_part_table.h: Add C++ guards.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/ide_part_table.h, src/ide_part_table.c: URL for license
