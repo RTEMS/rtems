@@ -43,8 +43,6 @@ void console_outbyte_polled(
   char ch
 )
 {
-    volatile int i;
-
     /* wait for the fifo to make room */
     while ((uart0->linestat & 0x20) == 0) {
         continue;
