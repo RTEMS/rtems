@@ -1,3 +1,7 @@
+2005-07-05  Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Ensure that CS[12]n are enabled.
+
 2005-06-28  Eric Norum <norume@aps.anl.gov>
 
 	* network/network.c: Add full/half-duplex auto-negotiation support.

@@ -269,6 +269,7 @@ void bsp_start( void )
                        MCF5282_CS_CSMR_UD |
                        MCF5282_CS_CSMR_V;
     MCF5282_CS2_CSCR = MCF5282_CS_CSCR_PS_16;
+    MCF5282_GPIO_PJPAR |= 0x06;
 }
 
 uint32_t bsp_get_CPU_clock_speed(void)
