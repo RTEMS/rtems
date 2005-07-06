@@ -6,6 +6,7 @@
 
 2005-07-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	PR 810/rtems
 	* libblock/include/rtems/ide_part_table.h: Add C++ guards.
 
 2005-06-17	Joel Sherrill <joel@OARcorp.com>
