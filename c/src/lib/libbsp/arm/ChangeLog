@@ -1,3 +1,7 @@
+2005-07-06	Markku Puro <markku.puro@kopteri.net>
+
+	* acinclude.m4: Added GBA BSP.
+
 2005-03-11	Jay Monkman <jtm@lopingdog.com>
 
 	* acinclude.m4: Removed vegaplus BSP.
