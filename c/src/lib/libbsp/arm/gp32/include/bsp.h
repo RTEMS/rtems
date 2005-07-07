@@ -32,9 +32,6 @@ extern "C" {
 
 extern rtems_configuration_table BSP_Configuration;
 
-void gp32_setFramebuffer(void *add);
-short gp32_initFramebufferN(void *add, uint32_t bitmode, uint32_t refreshrate);
-short gp32_initFramebufferBP(void *add, uint32_t bitmode, uint32_t refreshrate);
 #define gp32_initButtons() {rPBCON=0x0;}
 #define gp32_getButtons() ( (((~rPEDAT >> 6) & 0x3 )<<8) | (((~rPBDAT >> 8) & 0xFF)<<0) )
 

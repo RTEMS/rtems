@@ -10,7 +10,6 @@ include $(top_srcdir)/../../bsp.am
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
-include_HEADERS += include/conio.h
 include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
@@ -36,7 +35,7 @@ startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/conio.c console/defaultfont.c console/console.c
+console_rel_SOURCES = console/uart.c ../../shared/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -46,8 +45,7 @@ libbsp_a_LIBADD = startup.rel console.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/lcd.rel
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
@@ -72,10 +70,6 @@ PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
-
-$(PROJECT_INCLUDE)/conio.h: include/conio.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/conio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/conio.h
 
 $(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h

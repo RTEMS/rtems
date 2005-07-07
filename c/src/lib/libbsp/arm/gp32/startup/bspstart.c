@@ -19,7 +19,6 @@
 #include <rtems/libio.h>
 #include <rtems/bspIo.h>
 #include <s3c2400.h>
-#include <conio.h>
 
 /*-------------------------------------------------------------------------+
 | Global Variables
@@ -79,6 +78,13 @@ void bsp_pretasking_hook(void)
 #endif /* RTEMS_DEBUG */
 
 } /* bsp_pretasking_hook */
+
+void bsp_idle_task(void)
+{
+	while(1){
+		asm volatile ("MCR p15,0,r0,c7,c0,4     \n");
+	}
+}
  
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start
@@ -98,15 +104,11 @@ void bsp_start_default( void )
     Cpu_table.pretasking_hook      = bsp_pretasking_hook; /* init libc, etc. */
     Cpu_table.predriver_hook       = NULL;                /* use system's    */
     Cpu_table.postdriver_hook      = bsp_postdriver_hook;
-    Cpu_table.idle_task            = NULL;
+    Cpu_table.idle_task            = bsp_idle_task;
                                           
     Cpu_table.do_zero_of_workspace = TRUE;
     Cpu_table.interrupt_stack_size = 4096;
     Cpu_table.extra_mpci_receive_server_stack = 0;
-
-    /* setup rCLKCON */
-    /* disable all but IIS,IIC,PWMTIMER and LCD */
-    rCLKCON=0x6048;
 
     /* stop RTC */
     rTICINT=0x0;
@@ -119,9 +121,8 @@ void bsp_start_default( void )
     /* disable interrupts */
     rINTMOD=0x0;
     rINTMSK=BIT_ALLMSK; /* unmasked by drivers */
-    /*rSRCPND=BIT_ALLMSK;
-    rINTMSK=BIT_ALLMSK;
-    rINTPND=BIT_ALLMSK;*/
+
+    last=0;
     for(i=0; i<4; i++) {
 	pend=rSRCPND;
 	if(pend == 0 || pend == last)
@@ -200,6 +201,27 @@ void bsp_reset(void)
     rtems_interrupt_level level;
     _CPU_ISR_Disable(level);
     printk("bsp_reset.....\n");
-    ShowConIO();
-    while(1);
+        /* disable mmu, invalide i-cache and call swi #4 */
+        asm volatile(""
+                "mrc    p15,0,r0,c1,c0,0        \n"
+                "bic    r0,r0,#1                        \n"
+                "mcr    p15,0,r0,c1,c0,0        \n"
+                "nop                                            \n"
+                "nop                                            \n"
+                "nop                                            \n"
+                "nop                                            \n"
+                "nop                                            \n"
+                "mov    r0,#0                                   \n"
+                "MCR    p15,0,r0,c7,c5,0                        \n"
+                "nop                                            \n"
+                "nop                                            \n"
+                "nop                                            \n"
+                "nop                                            \n"
+                "nop                                            \n"
+                "swi    #4                                      "
+        :
+        :
+        : "r0"
+	);
+	/* we should be back in bios now */
 }

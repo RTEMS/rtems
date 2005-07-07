@@ -1,3 +1,14 @@
+2005-07-07	Philippe Simons <loki_666@fastmail.fm>
+
+	* Makefile.am: Remove lcd.rel, added console/uart.c,
+	removed conio stuffs.
+	* console/conio.c, console/console.c, console/defaultfont.c,
+	include/conio.h : files removed.
+	* console/uart.c: New file.
+	* include/bsp.h: lcd.c prototypes removed.
+	* startup/bspstart.c: bsp_reset() cause gp32 to reset to bios,
+	added a bsp_idle_task which put s3c2400 in a "wait for IRQ" state.
+
 2005-06-06	Philippe Simons <loki_666@fastmail.fm>
 
 	* Makefile.am: Include lcd.rel.
