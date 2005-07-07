@@ -1,3 +1,7 @@
+2005-07-06      Philippe Simons
+
+        * MAINTAINERS: Added me as arm/gp32 bsp maintainer.
+
 2005-04-28	Joel Sherrill <joel@OARcorp.com>
 
 	* README.configure: Updated to account for removal of dmv177 and
