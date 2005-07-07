@@ -106,12 +106,6 @@ s3c2400_timer_rel_SOURCES = s3c2400/timer/timer.c
 s3c2400_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 s3c2400_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-## s3c2400/lcd
-noinst_PROGRAMS += s3c2400/lcd.rel
-s3c2400_lcd_rel_SOURCES = s3c2400/lcd/lcd.c
-s3c2400_lcd_rel_CPPFLAGS = $(AM_CPPLAGS)
-s3c2400_lcd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 ## s3c2400/interrupt
 include_HEADERS += s3c2400/irq/irq.h
 

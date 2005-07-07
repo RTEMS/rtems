@@ -2,9 +2,6 @@
 #include <bsp.h>
 #include <s3c2400.h>
 
-#define MPLL 0
-#define UPLL 1
-
 /* ------------------------------------------------------------------------- */
 /* NOTE: This describes the proper use of this file.
  *
@@ -15,17 +12,12 @@
  */
 /* ------------------------------------------------------------------------- */
 
-static uint32_t get_PLLCLK(int pllreg)
+/* return FCLK frequency */
+uint32_t get_FCLK(void)
 {
     uint32_t r, m, p, s;
 
-    if (pllreg == MPLL)
-	r = rMPLLCON;
-    else if (pllreg == UPLL)
-	r = rUPLLCON;
-    else
-	return 0;
-
+    r = rMPLLCON;
     m = ((r & 0xFF000) >> 12) + 8;
     p = ((r & 0x003F0) >> 4) + 2;
     s = r & 0x3;
@@ -33,27 +25,33 @@ static uint32_t get_PLLCLK(int pllreg)
     return((BSP_OSC_FREQ * m) / (p << s));
 }
 
-/* return FCLK frequency */
-uint32_t get_FCLK(void)
+/* return UCLK frequency */
+uint32_t get_UCLK(void)
 {
-    return(get_PLLCLK(MPLL));
+    uint32_t r, m, p, s;
+
+    r = rUPLLCON;
+    m = ((r & 0xFF000) >> 12) + 8;
+    p = ((r & 0x003F0) >> 4) + 2;
+    s = r & 0x3;
+
+    return((BSP_OSC_FREQ * m) / (p << s));
 }
 
 /* return HCLK frequency */
 uint32_t get_HCLK(void)
 {
-    return((rCLKDIVN & 0x2) ? get_FCLK()/2 : get_FCLK());
+    if (rCLKDIVN & 0x2) 
+	return get_FCLK()/2;
+    else
+	return get_FCLK();    
 }
 
 /* return PCLK frequency */
 uint32_t get_PCLK(void)
 {
-    return((rCLKDIVN & 0x1) ? get_HCLK()/2 : get_HCLK());
+    if (rCLKDIVN & 0x1)
+	return get_HCLK()/2;
+    else
+	return get_HCLK();
 }
-
-/* return UCLK frequency */
-uint32_t get_UCLK(void)
-{
-    return(get_PLLCLK(UPLL));
-}
-

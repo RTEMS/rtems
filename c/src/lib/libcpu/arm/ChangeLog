@@ -1,3 +1,9 @@
+2005-07-07	Philippe Simons <loki_666@fastmail.fm>
+
+	* Makefile.am: Remove s3c2400/lcd/lcd.c
+	* s3c2400/lcd/lcd.c: Remove.
+	* s3c2400/clock/support.c: file "rewrote" to avoid GPL.
+
 2005-06-01	Philippe Simons <loki_666@fastmail.fm>
 
 	* Makefile.am: Add s3c2400/lcd/lcd.c, s3c2400/clock/support.c
