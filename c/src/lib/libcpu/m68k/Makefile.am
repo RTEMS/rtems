@@ -96,7 +96,7 @@ mcf5206_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mcf5235
-## mcf5238/include
+## mcf5235/include
 include_mcf5235dir = $(includedir)/mcf5235
 include_mcf5235_HEADERS = mfc5235/include/mcf5235.h
 endif
@@ -123,12 +123,6 @@ if mcf5282
 ## mcf5282/include
 include_mcf5282dir = $(includedir)/mcf5282
 include_mcf5282_HEADERS = mcf5282/include/mcf5282.h
-endif
-
-if mcf5235
-## mcf5235/include
-include_mcf5235dir = $(includedir)/mcf5235
-include_mcf5235_HEADERS = mcf5235/include/mcf5235.h
 endif
 
 include $(srcdir)/preinstall.am
