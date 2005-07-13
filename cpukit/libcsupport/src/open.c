@@ -174,6 +174,7 @@ int open(
   if ( (flags & O_TRUNC) == O_TRUNC ) {
     rc = ftruncate( iop - rtems_libio_iops, 0 );
     if ( rc ) {
+      if(errno) rc = errno;
       close( iop - rtems_libio_iops );
       /* those are released by close(): */
       iop = 0;

@@ -1,3 +1,7 @@
+2005-07-08	Eric Norum <norume@aps.anl.gov>
+
+    * libcsupport/src/open.c: Pass along errno from failed ftruncate().
+
 2005-07-06  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	* libnetworking/lib/syslog.c: Fix spelling mistake.
