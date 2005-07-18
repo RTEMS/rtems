@@ -1,3 +1,13 @@
+2005-07-18	Lars Munch <lars@segv.dk>
+
+	PR 813/networking
+	* ne2000/ne2000.c: The ne2000 driver on pc386 has been broken since a
+	parameter was added to irq handlers (2005-04-18). Before these
+	changes the argument to the interrupt handler was the interrupt
+	number, now the argument is handle, but the ne2000 driver needs the
+	interrupt number. The fix is to set the handle to the interrupt
+	number.
+
 2005-07-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* console/keyboard.c: Apply CHAR_BIT to compute BITS_PER_LONG.
