@@ -195,7 +195,7 @@ struct fxp_ident {
  * them.
  */
 static struct fxp_ident fxp_ident_table[] = {
-    { 0x1229,		"Intel Pro 10/100B/100+ Ethernet", UNTESTED },
+    { 0x1229,		"Intel Pro 10/100B/100+ Ethernet", 0 },
     { 0x2449,		"Intel Pro/100 Ethernet", UNTESTED },
     { 0x1209,		"Intel Embedded 10/100 Ethernet", 0 },
     { 0x1029,		"Intel Pro/100 Ethernet", UNTESTED },

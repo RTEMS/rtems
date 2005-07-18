@@ -1,3 +1,8 @@
+2005-07-18	Karel Gardas <kgardas@objectsecurity.com>
+
+	* libchip/network/if_fxp.c: Change status of PCI Id 0x1229 from
+	UNTESTED to tested.
+
 2005-06-17	Joel Sherrill <joel@OARcorp.com>
 
 	* librdbg/src/powerpc/excep_f.c: Conditionalize use of ISI vector since
