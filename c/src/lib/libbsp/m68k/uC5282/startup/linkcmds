@@ -160,7 +160,7 @@ SECTIONS
         .bss : {
                 _clear_start = .;
                 *(.bss)
-                .gnu.linkonce.b.*
+                *(.gnu.linkonce.b.*)
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);
