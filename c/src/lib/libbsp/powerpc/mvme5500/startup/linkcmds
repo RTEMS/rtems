@@ -63,10 +63,10 @@ SECTIONS
   .rela.dtors     : { *(.rela.dtors)    }	> CODE
   .rela.init      : { *(.rela.init)     }	> CODE
   .rela.fini      : { *(.rela.fini)     }	> CODE
-  .rela.bss       : { *(.rela.bss)      }	> CODE
+  .rela.bss       : { *(.rela.bss) *(.gnu.linkonce.b.*) }	> CODE
   .rela.plt       : { *(.rela.plt)      }	> CODE
   .rela.sdata     : { *(.rela.sdata)    }	> CODE
-  .rela.sbss      : { *(.rela.sbss)     }	> CODE
+  .rela.sbss      : { *(.rela.sbss) *(.gnu.linkonce.sb.*) }	> CODE
   .rela.sdata2    : { *(.rela.sdata2)   }	> CODE
   .rela.sbss2     : { *(.rela.sbss2)    }	> CODE
 

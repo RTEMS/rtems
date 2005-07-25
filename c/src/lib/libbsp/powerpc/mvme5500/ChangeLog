@@ -1,3 +1,7 @@
+2005-07-25	Eric Norum <norume@aps.anl.gov>
+
+	* startup/linkcmds: Add .gnu.linkonce.b. and .gnu.linkonce.sb. regions.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.
