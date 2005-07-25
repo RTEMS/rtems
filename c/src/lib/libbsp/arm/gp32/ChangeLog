@@ -1,3 +1,8 @@
+2005-07-25	Philippe Simons <loki_666@fastmail.fm>
+
+	* Makefile.am: added smc.rel.
+	* smc/smc.c, smc/smc.h: New files.
+
 2005-07-07	Philippe Simons <loki_666@fastmail.fm>
 
 	* Makefile.am: Remove lcd.rel, added console/uart.c,

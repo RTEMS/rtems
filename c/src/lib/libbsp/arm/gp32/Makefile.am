@@ -10,6 +10,7 @@ include $(top_srcdir)/../../bsp.am
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
+include_HEADERS += smc/smc.h
 include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
@@ -39,9 +40,14 @@ console_rel_SOURCES = console/uart.c ../../shared/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += smc.rel
+smc_rel_SOURCES = smc/smc.c smc/smc.h
+smc_rel_CPPFLAGS = $(AM_CPPFLAGS)
+smc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel console.rel
+libbsp_a_LIBADD = startup.rel console.rel smc.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
@@ -70,6 +76,10 @@ PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
+
+$(PROJECT_INCLUDE)/smc.h: smc/smc.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/smc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/smc.h
 
 $(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
