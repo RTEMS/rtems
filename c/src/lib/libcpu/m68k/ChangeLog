@@ -1,3 +1,7 @@
+2005-07-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix broken patch to mcf5235.
+
 2005-07-08	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Eliminate duplicate entry for include_mcf5235... .

@@ -98,7 +98,7 @@ endif
 if mcf5235
 ## mcf5235/include
 include_mcf5235dir = $(includedir)/mcf5235
-include_mcf5235_HEADERS = mfc5235/include/mcf5235.h
+include_mcf5235_HEADERS = mcf5235/include/mcf5235.h
 endif
 
 if mcf5272
