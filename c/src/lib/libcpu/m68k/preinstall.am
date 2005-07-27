@@ -40,6 +40,16 @@ $(PROJECT_INCLUDE)/mcf5206/mcfuart.h: mcf5206/include/mcfuart.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
 endif
+if mcf5235
+$(PROJECT_INCLUDE)/mcf5235/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5235
+	@: > $(PROJECT_INCLUDE)/mcf5235/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5235/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mcf5235/mcf5235.h: mcf5235/include/mcf5235.h $(PROJECT_INCLUDE)/mcf5235/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5235/mcf5235.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5235/mcf5235.h
+endif
 if mcf5272
 $(PROJECT_INCLUDE)/mcf5272/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5272
@@ -59,14 +69,4 @@ PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5282/$(dirstamp)
 $(PROJECT_INCLUDE)/mcf5282/mcf5282.h: mcf5282/include/mcf5282.h $(PROJECT_INCLUDE)/mcf5282/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5282/mcf5282.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5282/mcf5282.h
-endif
-if mcf5235
-$(PROJECT_INCLUDE)/mcf5235/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5235
-	@: > $(PROJECT_INCLUDE)/mcf5235/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5235/$(dirstamp)
-
-$(PROJECT_INCLUDE)/mcf5235/mcf5235.h: mcf5235/include/mcf5235.h $(PROJECT_INCLUDE)/mcf5235/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5235/mcf5235.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5235/mcf5235.h
 endif
