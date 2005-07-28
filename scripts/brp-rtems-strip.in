@@ -1,0 +1,19 @@
+#!/bin/sh
+# If using normal root, avoid changing anything.
+if [ -z "$RPM_BUILD_ROOT" -o "$RPM_BUILD_ROOT" = "/" ]; then
+	exit 0
+fi
+
+cd "$RPM_BUILD_ROOT"
+
+[ -z "$STRIP" -a -n "$1" ] && STRIP="$1"
+[ -z "$STRIP" ] && STRIP=strip
+
+# Strip native binaries
+for f in `find @BRPSTRIPPATH@ \
+       -type f \( -perm -0100 -or -perm -0010 -or -perm -0001 \) -exec file {} \; | \
+        grep -v "^./\?usr/lib/debug"  | \
+	grep -v ' shared object,' | \
+	sed -n -e 's/^\(.*\):[ 	]*ELF.*, not stripped/\1/p'`; do
+	$STRIP -g $f || :
+done
