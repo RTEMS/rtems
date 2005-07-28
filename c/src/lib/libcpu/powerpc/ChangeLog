@@ -1,3 +1,7 @@
+2005-07-28	Eric Norum <norume@aps.anl.gov>
+
+	* mpc6xx/clock/c_clock.c: Changes provided by Phillip Sorensen <pas37@cornell.edu> to get MVME550 BSP running.
+
 2005-06-17	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc5xx/vectors/vectors.h: Add hack to avoid warning.

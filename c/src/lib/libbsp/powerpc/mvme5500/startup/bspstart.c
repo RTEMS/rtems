@@ -406,6 +406,7 @@ void bsp_start( void )
   /*
    * Initialize default raw exception hanlders. See vectors/vectors_init.c
    */
+  Cpu_table.exceptions_in_RAM = TRUE;
   initialize_exceptions();
   /*
    * Init MMU block address translation to enable hardware
