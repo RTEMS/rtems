@@ -1,3 +1,11 @@
+2005-07-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* autotools/automake.add: Update to automake-1.9.6.
+	* brp-rtems-strip.in: New.
+	* brp-rtems-compress.in: New.
+	* binutils/binutils.add: Reflect using brp-rtems*.
+	* gccnewlib/gccnewlib.add: Reflect using brp-rtems*.
+
 2005-07-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/binutils.add: Take out -D_FORTIFY_SOURCE from CFLAGS
