@@ -17,6 +17,11 @@ Version:      	%{binutils_version}
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutils_suffix@
 @PATCH1@
 
+Source98:	brp-rtems-strip.in
+Source99:	brp-rtems-compress.in
+
+%define __os_install_post ./brp-rtems-compress && ./brp-rtems-strip
+
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
@@ -39,6 +44,14 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutil
 %prep
 %setup -c -T -n %{name}-%{version} -a0
 
+sed 's,@BRPSTRIPPATH@,.%_bindir .%_prefix/%binutils_target/bin,' \
+  %SOURCE98 > brp-rtems-strip
+chmod +x brp-rtems-strip
+
+sed 's,@BRPCOMPRESSPATH@,.%_mandir/man* .%_infodir,' \
+  %SOURCE99 > brp-rtems-compress
+chmod +x brp-rtems-compress
+
 cd binutils-%{version}
 %{?PATCH0:%patch0 -p1}
 cd ..
@@ -47,13 +60,7 @@ cd ..
 
 %build
   cd build
-%if "%{binutils_version}" <= "2.16.1"
-# ar leaks memory - Disable fortify to prevent it from killing ar 
-  OPT_FLAGS=$(echo "$RPM_OPT_FLAGS" | sed -e 's/\-Wp,\-D_FORTIFY_SOURCE=[^ ]*//')
-%else
-  OPT_FLAGS="$RPM_OPT_FLAGS"
-%endif
-  CFLAGS="$OPT_FLAGS" \
+  CFLAGS="$RPM_OPT_FLAGS" \
   ../binutils-%{binutils_version}/configure \
     --build=%_build --host=%_host \
     --target=%{binutils_target} \
@@ -95,17 +102,8 @@ cd ..
 
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
-
-# gzip info files
-  ls $RPM_BUILD_ROOT%{_infodir}/*.info \
-    $RPM_BUILD_ROOT%{_infodir}/*.info-? \
-    $RPM_BUILD_ROOT%{_infodir}/*.info-?? 2>/dev/null \
-  | while read a; do \
-    gzip -9qf $a 2>/dev/null; \
-  done
-
-# gzip man pages
-  gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/*.? 2>/dev/null
-
+  
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
+
+  cd ..
