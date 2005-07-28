@@ -2,8 +2,8 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.9.5
-%define srcvers	1.9.5
+%define rpmvers 1.9.6
+%define srcvers	1.9.6
 %define amvers  1.9
 
 %define _name 	automake
@@ -24,7 +24,7 @@ License:      GPL
 Group:        @rpmgroup@
 
 Version:      %{rpmvers}
-Release:      2%{?dist}
+Release:      0%{?dist}
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRequires:  %{requirements} perl help2man
