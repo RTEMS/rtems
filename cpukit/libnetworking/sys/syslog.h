@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)syslog.h	8.1 (Berkeley) 6/2/93
+ * $FreeBSD: src/sys/sys/syslog.h,v 1.26 2005/01/07 02:29:24 imp Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -68,8 +68,8 @@
 				/* mark "facility" */
 #define	INTERNAL_MARK	LOG_MAKEPRI((LOG_NFACILITIES<<3), 0)
 typedef struct _code {
-	char	*c_name;
-	int	c_val;
+	const char	*c_name;
+	int		c_val;
 } CODE;
 
 CODE prioritynames[] = {
@@ -94,13 +94,13 @@ CODE prioritynames[] = {
 #define	LOG_USER	(1<<3)	/* random user-level messages */
 #define	LOG_MAIL	(2<<3)	/* mail system */
 #define	LOG_DAEMON	(3<<3)	/* system daemons */
-#define	LOG_AUTH	(4<<3)	/* security/authorization messages */
+#define	LOG_AUTH	(4<<3)	/* authorization messages */
 #define	LOG_SYSLOG	(5<<3)	/* messages generated internally by syslogd */
 #define	LOG_LPR		(6<<3)	/* line printer subsystem */
 #define	LOG_NEWS	(7<<3)	/* network news subsystem */
 #define	LOG_UUCP	(8<<3)	/* UUCP subsystem */
 #define	LOG_CRON	(9<<3)	/* clock daemon */
-#define	LOG_AUTHPRIV	(10<<3)	/* security/authorization messages (private) */
+#define	LOG_AUTHPRIV	(10<<3)	/* authorization messages (private) */
 				/* Facility #10 clashes in DEC UNIX, where */
 				/* it's defined as LOG_MEGASAFE for AdvFS  */
 				/* event logging.                          */
@@ -174,22 +174,21 @@ CODE facilitynames[] = {
 #define	LOG_NOWAIT	0x10	/* don't wait for console forks: DEPRECATED */
 #define	LOG_PERROR	0x20	/* log to stderr as well */
 
-/*
 #ifdef _KERNEL
 
-#else not _KERNEL */
+#else /* not _KERNEL */
 
 #include <sys/cdefs.h>
 #include <stdarg.h>
 
 __BEGIN_DECLS
-void	closelog __P((void));
-void	openlog __P((const char *, int, int));
-int	setlogmask __P((int));
-void	syslog __P((int, const char *, ...));
-void	vsyslog __P((int, const char *, va_list));
+void	closelog(void);
+void	openlog(const char *, int, int);
+int	setlogmask(int);
+void	syslog(int, const char *, ...);
+void	vsyslog(int, const char *, va_list);
 __END_DECLS
 
-/* #endif !_KERNEL */
+#endif /* !_KERNEL */
 
 #endif
