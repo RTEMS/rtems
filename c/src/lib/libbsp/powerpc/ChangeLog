@@ -1,9 +1,3 @@
-2005-07-28	Eric Norum <norume@aps.anl.gov>
-
-    * mvme5500/startup/bspstart.c
-    * shared/clock/p_clock.c
-            Changes provided by Phillip Sorensen <pas37@cornell.edu> to get MVME550 BSP running.
-
 2005-04-28	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: Remove reference to dmv177.

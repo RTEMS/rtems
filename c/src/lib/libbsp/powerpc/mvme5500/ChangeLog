@@ -1,3 +1,9 @@
+2005-07-28	Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Changes provided by Phillip Sorensen
+	<pas37@cornell.edu> to get MVME550 BSP running.  Corresponding
+	change made to ../shared/clock/p_clock.c.
+
 2005-07-25	Eric Norum <norume@aps.anl.gov>
 
 	* startup/linkcmds: Add .gnu.linkonce.b. and .gnu.linkonce.sb. regions.
