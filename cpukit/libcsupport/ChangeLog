@@ -1,3 +1,10 @@
+2005-08-02  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	PR 817/rtems
+	* src/gxx_wrappers.c: Rename
+	rtems_gxx_recursive_mutex_init_function to
+	rtems_gxx_recursive_mutex_init.
+
 2005-05-13      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         * src/mallocfreespace.c: 
