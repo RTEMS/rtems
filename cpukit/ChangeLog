@@ -1,3 +1,10 @@
+2005-08-02  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	PR 817/rtems
+	* libcsupport/src/gxx_wrappers.c: Rename
+	rtems_gxx_recursive_mutex_init_function to
+	rtems_gxx_recursive_mutex_init.
+
 2005-08-01  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/syslog.h: Partial update from FreeBSD.

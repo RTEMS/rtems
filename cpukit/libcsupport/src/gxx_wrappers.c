@@ -221,7 +221,7 @@ int rtems_gxx_mutex_unlock (__gthread_mutex_t *mutex)
   return (rtems_semaphore_release( (rtems_id)*mutex ) ==  RTEMS_SUCCESSFUL) ? 0 :-1;
 }
 
-void rtems_gxx_recursive_mutex_init_function(__gthread_recursive_mutex_t *mutex)
+void rtems_gxx_recursive_mutex_init(__gthread_recursive_mutex_t *mutex)
 {
   rtems_gxx_mutex_init(mutex);
 }
