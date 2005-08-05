@@ -1,3 +1,8 @@
+2005-08-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add libnetworking/memory.h
+	* libnetworking/Makefile.am: Remove memory.h
+
 2005-08-02  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	PR 817/rtems

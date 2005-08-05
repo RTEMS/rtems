@@ -64,6 +64,8 @@ if NEWLIB
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
 
+include_HEADERS += libnetworking/memory.h
+
 if RTEMS_PROVIDES_STDINT_H
 include_HEADERS += libcsupport/include/stdint.h
 endif
