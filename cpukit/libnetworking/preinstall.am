@@ -33,10 +33,6 @@ $(PROJECT_INCLUDE)/syslog.h: syslog.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/syslog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/syslog.h
 
-$(PROJECT_INCLUDE)/memory.h: memory.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/memory.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/memory.h
-
 $(PROJECT_INCLUDE)/arpa/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/arpa
 	@: > $(PROJECT_INCLUDE)/arpa/$(dirstamp)
@@ -307,6 +303,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h
 $(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h: rtems/rtems_bsdnet_internal.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h
+
+$(PROJECT_INCLUDE)/rtems/dhcp.h: rtems/dhcp.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dhcp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dhcp.h
 
 $(PROJECT_INCLUDE)/rtems/tftp.h: rtems/tftp.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tftp.h
