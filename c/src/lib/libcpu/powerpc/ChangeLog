@@ -1,3 +1,7 @@
+2005-08-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Unconditionally initialize include_libcpu_HEADERS.
+
 2005-07-28	Eric Norum <norume@aps.anl.gov>
 
 	* mpc6xx/clock/c_clock.c: Changes provided by Phillip Sorensen

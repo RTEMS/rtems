@@ -16,6 +16,8 @@ include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
 include_rtems_scoredir = $(includedir)/rtems/score
 include_libcpudir = $(includedir)/libcpu
 
+include_libcpu_HEADERS =
+
 if OLD_EXCEPTIONS
 include_rtems_score_HEADERS = old-exceptions/rtems/score/ppc_offs.h
 
@@ -38,7 +40,7 @@ endif
 
 ## shared/include
 if shared
-include_libcpu_HEADERS = shared/include/io.h shared/include/mmu.h shared/include/page.h \
+include_libcpu_HEADERS += shared/include/io.h shared/include/mmu.h shared/include/page.h \
     shared/include/byteorder.h shared/include/pgtable.h
 
 noinst_PROGRAMS += shared/cpuIdent.rel
@@ -136,7 +138,7 @@ mpc5xx_console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc5xx_console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## mpc5xx/exceptions
-include_libcpu_HEADERS = mpc5xx/exceptions/raw_exception.h
+include_libcpu_HEADERS += mpc5xx/exceptions/raw_exception.h
 
 noinst_PROGRAMS += mpc5xx/exceptions.rel
 mpc5xx_exceptions_rel_SOURCES = mpc5xx/exceptions/raw_exception.c
@@ -189,7 +191,7 @@ mpc505_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mpc6xx
-include_libcpu_HEADERS = mpc6xx/exceptions/raw_exception.h
+include_libcpu_HEADERS += mpc6xx/exceptions/raw_exception.h
 
 ## mpc6xx/exceptions
 noinst_PROGRAMS += mpc6xx/exceptions.rel
@@ -251,7 +253,7 @@ mpc8xx_cpm_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8xx_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## mpc8xx/exceptions
-include_libcpu_HEADERS = mpc8xx/exceptions/raw_exception.h
+include_libcpu_HEADERS += mpc8xx/exceptions/raw_exception.h
 
 noinst_PROGRAMS += mpc8xx/exceptions.rel
 mpc8xx_exceptions_rel_SOURCES = mpc8xx/exceptions/raw_exception.c \
@@ -304,7 +306,7 @@ mpc8260_cpm_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8260_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## mpc8260/exceptions
-include_libcpu_HEADERS = mpc8260/exceptions/raw_exception.h
+include_libcpu_HEADERS += mpc8260/exceptions/raw_exception.h
 
 noinst_PROGRAMS += mpc8260/exceptions.rel
 mpc8260_exceptions_rel_SOURCES = mpc8260/exceptions/raw_exception.c \
