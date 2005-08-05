@@ -285,7 +285,7 @@ err:
  * RETURNS:
  *     RC_OK on success, or -1 if error occured (errno set appropriately)
  */
-int
+msdos_status_t
 msdos_file_link(rtems_filesystem_location_info_t *to_loc,
 		rtems_filesystem_location_info_t *par_loc,
 		const char                       *token

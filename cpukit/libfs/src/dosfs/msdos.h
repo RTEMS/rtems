@@ -27,6 +27,8 @@ extern "C" {
 
 #define MSDOS_NAME_NOT_FOUND_ERR  0xDD000001
 
+typedef uint32_t msdos_status_t;
+
 /*
  * This structure identifies the instance of the filesystem on the MSDOS
  * level.
@@ -195,18 +197,18 @@ typedef enum msdos_token_types_e
 #define MSDOS_DPS512_NUM    16
 
 /* Prototypes */
-int
+msdos_status_t
 msdos_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
-int
+msdos_status_t
 msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
-int
+msdos_status_t
 msdos_eval_path(const char                       *pathname, /* IN */
                 int                               flags,    /* IN */
                 rtems_filesystem_location_info_t *pathloc   /* IN/OUT */);
 
-int
+msdos_status_t
 msdos_eval4make(const char                       *path,     /* IN */
                 rtems_filesystem_location_info_t *pathloc,  /* IN/OUT */
                 const char                       **name     /* OUT    */);
@@ -214,19 +216,19 @@ msdos_eval4make(const char                       *path,     /* IN */
 int
 msdos_unlink(rtems_filesystem_location_info_t *pathloc /* IN */);
 
-int
+msdos_status_t
 msdos_free_node_info(rtems_filesystem_location_info_t *pathloc /* IN */);
 
 rtems_filesystem_node_types_t
 msdos_node_type(rtems_filesystem_location_info_t    *pathloc);
 
-int
+msdos_status_t
 msdos_mknod(const char                       *path,   /* IN */
             mode_t                            mode,   /* IN */
             dev_t                             dev,    /* IN */
             rtems_filesystem_location_info_t *pathloc /* IN/OUT */);
 
-int
+msdos_status_t
 msdos_utime(rtems_filesystem_location_info_t *pathloc, /* IN */
             time_t                            actime,  /* IN */
             time_t                            modtime  /* IN */);
@@ -294,10 +296,10 @@ msdos_file_ioctl(
   void          *buffer           /* IN  */
 );
 
-int
+msdos_status_t
 msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc /* IN */);
 
-int
+msdos_status_t
 msdos_file_link(rtems_filesystem_location_info_t *to_loc,
 		rtems_filesystem_location_info_t *pa_loc,
 		const char                       *token);
@@ -355,7 +357,7 @@ int
 msdos_find_name(rtems_filesystem_location_info_t *parent_loc,
                 char                             *name);
 
-int
+msdos_status_t
 msdos_get_name_node(rtems_filesystem_location_info_t *parent_loc,
                     char                             *name,
                     fat_auxiliary_t                  *paux,
@@ -400,7 +402,7 @@ msdos_dir_is_empty(rtems_filesystem_mount_table_entry_t *mt_entry,
                    fat_file_fd_t                        *fat_fd,
                    rtems_boolean                        *ret_val);
 
-int
+msdos_status_t
 msdos_find_name_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
@@ -408,7 +410,7 @@ msdos_find_name_in_fat_file(
     fat_auxiliary_t                      *paux,
     char                                 *name_dir_entry);
 
-int
+msdos_status_t
 msdos_find_node_by_cluster_num_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,

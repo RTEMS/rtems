@@ -37,7 +37,7 @@
  *     RC_OK on success, or -1 code if error occured
  *
  */
-int
+msdos_status_t
 msdos_free_node_info(rtems_filesystem_location_info_t *pathloc)
 {
     int                rc = RC_OK;

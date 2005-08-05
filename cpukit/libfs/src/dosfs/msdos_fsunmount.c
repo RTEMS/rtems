@@ -43,10 +43,10 @@
  *     RC_OK on success, or -1 if error occured (errno set apropriately).
  *
  */
-int
+msdos_status_t
 msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
 {
-    int              rc = RC_OK;
+    msdos_status_t   rc = RC_OK;
     msdos_fs_info_t *fs_info = temp_mt_entry->fs_info;
     fat_file_fd_t   *fat_fd = temp_mt_entry->mt_fs_root.node_access;
 
