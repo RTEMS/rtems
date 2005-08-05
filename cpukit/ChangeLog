@@ -1,5 +1,14 @@
 2005-08-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_create.c,
+	libfs/src/dosfs/msdos_eval.c, libfs/src/dosfs/msdos_file.c,
+	libfs/src/dosfs/msdos_free.c, libfs/src/dosfs/msdos_fsunmount.c,
+	libfs/src/dosfs/msdos_init.c, libfs/src/dosfs/msdos_misc.c,
+	libfs/src/dosfs/msdos_mknod.c: 
+	Introduce msdos_status_t (dosfs statii are at least 32bit, not int).
+
+2005-08-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Add libnetworking/memory.h
 	* libnetworking/Makefile.am: Remove memory.h
 
