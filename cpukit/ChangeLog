@@ -1,3 +1,8 @@
+2005-08-06  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	* libnetworking/nfs/bootp_subr.c: Don't include
+	nfs/nfs.h, nfs/krpc.h.
+
 2005-08-05  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_create.c,
