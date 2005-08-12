@@ -1,3 +1,9 @@
+2005-08-12	Chris Johns <chrisj@rtems.org>
+
+	PR 808/rtems_misc
+	* src/printk.c: Fix bug where specifying field width crashed on pc386
+	BSP.
+
 2005-08-02  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	PR 817/rtems
