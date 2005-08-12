@@ -506,8 +506,8 @@ typedef struct m8xxSCCENparms_ {
       uint16_t          iaddr3;
       uint16_t          iaddr4;
       uint16_t          _boff_cnt;
-      uint16_t          taddr_l;
       uint16_t          taddr_m;
+      uint16_t          taddr_l;
       uint16_t          taddr_h;
     } ethernet;
   } un;

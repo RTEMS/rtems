@@ -1,3 +1,11 @@
+2005-08-12	Phil Torre <ptorre@zetron.com>
+
+	PR 816/bsps
+	* mpc8xx/include/mpc8xx.h: The struct which describes SCC Ethernet mode
+	parameters (m8xxSCCENparms_t) does not match the hardware: members
+	taddr_h and taddr_l are transposed. When loading new multicast group
+	addresses into the hash table, the wrong hash bit is set.
+
 2005-08-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Unconditionally initialize include_libcpu_HEADERS.
