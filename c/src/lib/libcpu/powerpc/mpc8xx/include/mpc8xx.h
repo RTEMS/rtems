@@ -506,9 +506,9 @@ typedef struct m8xxSCCENparms_ {
       rtems_unsigned16        iaddr3;
       rtems_unsigned16        iaddr4;
       rtems_unsigned16        _boff_cnt;
-      rtems_unsigned16        taddr_l;
-      rtems_unsigned16        taddr_m;
       rtems_unsigned16        taddr_h;
+      rtems_unsigned16        taddr_m;
+      rtems_unsigned16        taddr_l;
     } ethernet;
   } un;
 } m8xxSCCENparms_t;
