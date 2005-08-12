@@ -53,10 +53,8 @@ printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
   }
   toPrint[count++] = num;
 
-  if (maxwidth) {
-    for (n=maxwidth-count ; n ; n-- )
-      BSP_output_char(lead);
-  }
+  for (n=maxwidth ; n > count; n-- )
+    BSP_output_char(lead);
 
   for (n = 0; n < count; n++){
     BSP_output_char("0123456789ABCDEF"[(int)(toPrint[count-(n+1)])]);
