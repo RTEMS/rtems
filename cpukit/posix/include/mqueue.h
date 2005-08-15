@@ -103,7 +103,7 @@ ssize_t mq_receive(
 
 #if defined(_POSIX_TIMEOUTS)
 
-int mq_timedreceive(                  /* XXX: should this be ssize_t */
+ssize_t mq_timedreceive(
   mqd_t                  mqdes,
   char                  *msg_ptr,
   size_t                 msg_len,

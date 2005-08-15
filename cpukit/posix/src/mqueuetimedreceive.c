@@ -39,7 +39,7 @@
  *  NOTE: P1003.4b/D8, p. 45 adds mq_timedreceive().
  */
 
-int mq_timedreceive(                  /* XXX: should this be ssize_t */
+ssize_t mq_timedreceive(
   mqd_t                  mqdes,
   char                  *msg_ptr,
   size_t                 msg_len,
