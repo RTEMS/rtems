@@ -1,5 +1,7 @@
 2005-08-15  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
+	* posix/include/mqueue.h, posix/src/mqueuetimedreceive.c: 
+	ssize_t mq_timedreceive() (POSIX compliance).
 	* wrapup/Makefile.am: Use librtemscpu_a_LIBRARIES.
 
 2005-08-12	Chris Johns <chrisj@rtems.org>
