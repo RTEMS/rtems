@@ -1,3 +1,7 @@
+2005-08-15  Ralf Corsepius  <ralf.corsepius@rtems.org>
+
+	* wrapup/Makefile.am: Use librtemscpu_a_LIBRARIES.
+
 2005-08-12	Chris Johns <chrisj@rtems.org>
 
 	PR 808/rtems_misc

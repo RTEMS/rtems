@@ -8,8 +8,9 @@ include $(top_srcdir)/automake/compile.am
 ## Setup the variant build subdirectory
 ARCH = o-optimize
 
-project_lib_DATA = librtemscpu.a
-CLEANFILES = librtemscpu.a
+project_lib_LIBRARIES = librtemscpu.a
+librtemscpu_a_SOURCES =
+CLEANFILES =
 DISTCLEANFILES =
 
 TMP_LIBS =
