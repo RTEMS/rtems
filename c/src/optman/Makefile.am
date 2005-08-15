@@ -68,58 +68,10 @@ no_timer_rel_SOURCES = rtems/no-timer.c
 no_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 no_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-all-local: $(TMPINSTALL_FILES)
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-TMPINSTALL_FILES =
+CLEANFILES =
 
-$(PROJECT_LIB)/no-ext.rel: no-ext.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-ext.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-ext.rel
-
-$(PROJECT_LIB)/no-io.rel: no-io.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-io.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-io.rel
-
-$(PROJECT_LIB)/no-dpmem.rel: no-dpmem.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-dpmem.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-dpmem.rel
-
-$(PROJECT_LIB)/no-event.rel: no-event.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-event.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-event.rel
-
-$(PROJECT_LIB)/no-msg.rel: no-msg.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-msg.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-msg.rel
-
-$(PROJECT_LIB)/no-mp.rel: no-mp.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-mp.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-mp.rel
-
-$(PROJECT_LIB)/no-part.rel: no-part.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-part.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-part.rel
-
-$(PROJECT_LIB)/no-region.rel: no-region.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-region.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-region.rel
-
-$(PROJECT_LIB)/no-rtmon.rel: no-rtmon.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-rtmon.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-rtmon.rel
-
-$(PROJECT_LIB)/no-sem.rel: no-sem.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-sem.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-sem.rel
-
-$(PROJECT_LIB)/no-signal.rel: no-signal.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-signal.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-signal.rel
-
-$(PROJECT_LIB)/no-timer.rel: no-timer.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-timer.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-timer.rel
-
-CLEANFILES = $(TMPINSTALL_FILES)
+include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/automake/local.am

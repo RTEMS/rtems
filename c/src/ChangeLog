@@ -1,3 +1,7 @@
+2005-08-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* optman/Makefile.am: Add preinstall.am.
+
 2005-07-18	Karel Gardas <kgardas@objectsecurity.com>
 
 	* libchip/network/if_fxp.c: Change status of PCI Id 0x1229 from
