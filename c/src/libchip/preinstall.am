@@ -63,6 +63,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mii.h
 $(PROJECT_INCLUDE)/libchip/open_eth.h: network/open_eth.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/open_eth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/open_eth.h
+
+$(PROJECT_INCLUDE)/libchip/if_dcreg.h: network/if_dcreg.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/if_dcreg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/if_dcreg.h
 endif
 endif
 if LIBCHIP
