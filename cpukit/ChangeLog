@@ -1,3 +1,10 @@
+2005-08-17	Nuno Costa <nuno-costa@iol.pt>
+
+	PR 805/rtems
+	* posix/include/rtems/posix/timer.h: Due to bad choice of error
+	constants by original submitter, it was impossible to create more
+	than 10 POSIX timers.
+
 2005-08-17	Andrew Sinclair <Andrew.Sinclair@elprotech.com>
 
 	PR 807/rtems
