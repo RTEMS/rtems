@@ -1,3 +1,11 @@
+2005-08-17	Andrew Sinclair <Andrew.Sinclair@elprotech.com>
+
+	PR 807/rtems
+	* rtems/src/timerfireafter.c, rtems/src/timerserverfireafter.c,
+	score/src/watchdoginsert.c: Tighten critical section checks on an ISR
+	using the same timer being inserted by a lower priority ISR or
+	interupt task.
+
 2005-08-17	Nickolay Semyonov <snob@oktetlabs.ru>
 
 	PR 744/filesystem
