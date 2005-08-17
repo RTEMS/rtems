@@ -36,10 +36,20 @@ void _Watchdog_Insert(
   
 
   insert_isr_nest_level   = _ISR_Nest_level;
-  the_watchdog->state = WATCHDOG_BEING_INSERTED;
 
   _ISR_Disable( level );
 
+  /*
+   *  Check to see if the watchdog has just been inserted by a
+   *  higher priority interrupt.  If so, abandon this insert.
+   */
+
+  if ( the_watchdog->state != WATCHDOG_INACTIVE ) {
+    _ISR_Enable( level );
+    return;
+  }
+
+  the_watchdog->state = WATCHDOG_BEING_INSERTED;
   _Watchdog_Sync_count++;
 
 restart:
