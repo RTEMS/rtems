@@ -1,3 +1,12 @@
+2005-08-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* binutils/binutils.add:
+	Special-case _prefix=/usr.
+	* gccnewlib/base-g77.add, gccnewlib/base-gcc.add,
+	gccnewlib/base-gcj.add, gccnewlib/base-gfortran.add,
+	gccnewlib/base-gnat.add, gccnewlib/gccnewlib.add:
+	Special-case _prefix=/usr.
+
 2005-08-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/Makefile.am: Remove h8300-rtemscoff.
