@@ -1,0 +1,9 @@
+2005-08-17	Mike Bertosh <mbertosh@motioncontrol.org>
+
+	* .cvsignore, Makefile.am, README, bsp_specs, configure.ac,
+	clock/clock.c, console/console.c, include/bsp.h,
+	include/bspopts.h.in, include/coverhd.h, include/tm27.h,
+	network/network.c, start/start.S, startup/bspclean.c,
+	startup/bspstart.c, startup/init5282.c, startup/linkcmds,
+	startup/linkcmdsflash, startup/linkcmdsram, timer/timer.c: New files.
+
