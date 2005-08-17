@@ -119,7 +119,7 @@ msdos_eval_path(
                  */
                 if (fat_fd->fat_file_type != FAT_DIRECTORY)
                 {
-                    errno = ENOTDIR;
+                    errno = ENOTSUP;
                     rc = -1;
                     goto error;
                 }  
@@ -174,7 +174,7 @@ msdos_eval_path(
                  */
                 if (fat_fd->fat_file_type != FAT_DIRECTORY)
                 {
-                    errno = ENOTDIR;
+                    errno = ENOTSUP;
                     rc = -1;
                     goto error;
                 }  
