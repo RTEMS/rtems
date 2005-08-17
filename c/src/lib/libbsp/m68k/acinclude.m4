@@ -2,6 +2,8 @@
 AC_DEFUN([RTEMS_CHECK_BSPDIR],
 [
   case "$1" in
+  av5282 )
+    AC_CONFIG_SUBDIRS([av5282]);;
   csb360 )
     AC_CONFIG_SUBDIRS([csb360]);;
   dmv152 )
