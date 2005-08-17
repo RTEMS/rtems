@@ -1,3 +1,4 @@
+%if "%{_prefix}" != "/usr"
 %if %build_gcj
 # ==============================================================
 # rtems-base-gcj
@@ -61,4 +62,5 @@ if [ $1 -eq 0 ]; then
 %endif
 fi
 
+%endif
 %endif

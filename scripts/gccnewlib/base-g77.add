@@ -1,3 +1,4 @@
+%if "%{_prefix}" != "/usr"
 %if %build_g77
 # ==============================================================
 # rtems-base-g77
@@ -32,4 +33,5 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/g77.info.gz
 fi
 
+%endif
 %endif

@@ -1,3 +1,4 @@
+%if "%{_prefix}" != "/usr"
 %if %build_gnat
 # ==============================================================
 # rtems-base-gnat
@@ -34,4 +35,5 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
 fi
+%endif
 %endif

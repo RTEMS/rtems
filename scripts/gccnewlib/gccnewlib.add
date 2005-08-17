@@ -269,6 +269,14 @@ chmod +x brp-rtems-compress
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
 
+%if "%{_prefix}" == "/usr"
+# Conflict with a native GCC's infos
+  rm -rf $RPM_BUILD_ROOT%{_infodir}
+
+# Conflict with a native GCC's man pages
+  rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
+%endif
+
 %if %build_f95
 #  # Bug in gcc-4.0.0pre
 #  mv $RPM_BUILD_ROOT%{_bindir}/gfortran $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-gfortran

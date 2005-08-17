@@ -1,3 +1,4 @@
+%if "%{_prefix}" != "/usr"
 %if %build_f95
 # ==============================================================
 # rtems-base-gfortran
@@ -32,4 +33,5 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gfortran.info.gz
 fi
 
+%endif
 %endif

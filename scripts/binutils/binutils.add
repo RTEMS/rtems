@@ -96,14 +96,12 @@ cd ..
 # however it uses it
   mkdir -p $RPM_BUILD_ROOT%{_prefix}/share/locale
 
-%if "%{_prefix}" != "/usr"
 %if "%{binutils_version}" < "2.9.5"
   rm -rf $RPM_BUILD_ROOT%{_infodir}/configure.info*
 %endif
 
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
-%endif
 
 %if "%{_prefix}" == "/usr"
 # Conflict with a native binutils' infos
