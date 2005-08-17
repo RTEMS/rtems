@@ -71,8 +71,8 @@ void Install_clock(rtems_isr_entry clock_isr)
 
     /* the system timer is driven from SLCK */
     slck = at91rm9200_get_slck();
-    st_pimr_reload = ((BSP_Configuration.microseconds_per_tick * 1000) /
-                      slck);
+    st_pimr_reload = ((BSP_Configuration.microseconds_per_tick * slck) /
+                      1000000);
 
     /* read the status to clear the int */ 
     st_str = ST_REG(ST_SR);
