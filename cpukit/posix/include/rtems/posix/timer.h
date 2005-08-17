@@ -22,8 +22,8 @@
 /* Nanoseconds in a second               */
 #define NSEC_PER_SEC_C (unsigned32)1000000000
 
-#define NO_MORE_TIMERS_C      11 /* There is not available timers          */
-#define BAD_TIMER_C           11 /* The timer does not exist in the table  */
+#define NO_MORE_TIMERS_C      -1 /* There are no available timers          */
+#define BAD_TIMER_C           -2 /* The timer does not exist in the table  */
 
 #define SECONDS_PER_YEAR_C    (unsigned32)(360 * 24) * (unsigned32)(60 * 60)
 #define SECONDS_PER_MONTH_C   (unsigned32)( 30 * 24) * (unsigned32)(60 * 60)
