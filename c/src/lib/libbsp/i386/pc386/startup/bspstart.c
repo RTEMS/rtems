@@ -33,6 +33,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+#include <rtems/pci.h>
 #include <libcpu/cpuModel.h>
 
 /*-------------------------------------------------------------------------+
@@ -134,6 +135,7 @@ void bsp_pretasking_hook(void)
 +--------------------------------------------------------------------------*/
 void bsp_start_default( void )
 {
+  int pci_init_retval;
   void Calibrate_loop_1ms(void);
 
   /*
@@ -173,6 +175,15 @@ void bsp_start_default( void )
    * Init rtems exceptions management
    */
   rtems_exception_init_mngt();
+
+  /*
+   * init PCI Bios interface...
+   */
+  pci_init_retval = pci_initialize();
+  if (pci_init_retval != PCIB_ERR_SUCCESS) {
+      printk("PCI bus: could not initialize PCI BIOS interface\n");
+  }
+
   /*
    *  The following information is very useful when debugging.
    */
