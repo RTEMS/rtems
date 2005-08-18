@@ -79,6 +79,7 @@ rtems_status_code rtems_timer_fire_after(
 
         if ( the_timer->Ticker.state != WATCHDOG_INACTIVE ) {
           _ISR_Enable( level );
+          _Thread_Enable_dispatch();
           return RTEMS_SUCCESSFUL;
         }
 
