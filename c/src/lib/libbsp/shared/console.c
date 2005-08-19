@@ -128,10 +128,15 @@ rtems_device_driver console_close(
 {
   rtems_libio_open_close_args_t *args = arg;
 
-  if ( (args->iop->flags&LIBIO_FLAGS_READ) &&
-        Console_Port_Tbl[minor].pDeviceFlow &&
-        Console_Port_Tbl[minor].pDeviceFlow->deviceStopRemoteTx) {
-    Console_Port_Tbl[minor].pDeviceFlow->deviceStopRemoteTx(minor);
+  /* Get the tty refcount to determine if we need to do deviceStopRemoteTx.
+   * Stop only if it's the last one opened.
+   */
+  if ( (current_tty->refcount == 1) ) {
+    if ( (args->iop->flags&LIBIO_FLAGS_READ) &&
+          Console_Port_Tbl[minor].pDeviceFlow &&
+          Console_Port_Tbl[minor].pDeviceFlow->deviceStopRemoteTx) {
+      Console_Port_Tbl[minor].pDeviceFlow->deviceStopRemoteTx(minor);
+    }
   }
 
   return rtems_termios_close (arg);
