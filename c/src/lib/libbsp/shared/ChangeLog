@@ -1,3 +1,11 @@
+2005-08-19	Cedric Aubert <cedric_aubert@yahoo.fr>
+
+	PR 577/bsps
+	* console.c: The console_close() method currently calls StopRemoteTx()
+	on all invocations. It should should be ok for last close only but
+	not for any others. If you open a port multiple times, you only want
+	to call StopRemoteTx() only as part of the last close.
+
 2004-12-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 704/bsps.
