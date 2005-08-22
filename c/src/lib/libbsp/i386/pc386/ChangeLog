@@ -2,10 +2,6 @@
 
 	* startup/bspstart.c: Initialize PCI bus in bsp_start function.
 
-2005-08-18  Karel Gardas  <kgardas@objectsecurity.com>
-
-	* startup/bspstart.c: Initialize PCI bus in bsp_start function.
-
 2005-07-18	Lars Munch <lars@segv.dk>
 
 	PR 813/networking
