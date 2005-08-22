@@ -1027,9 +1027,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       return 0;
    }
 
-   if (pci_initialize() != PCIB_ERR_SUCCESS)
-      rtems_panic("dec2114x: Unable to initialize PCI");
-
    /*
     * Find the board
     */

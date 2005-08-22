@@ -1918,10 +1918,6 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * First, find a DEC board
 	 */
-	if (pci_initialize() == PCIB_ERR_NOTPRESENT) {
-		rtems_panic("PCI BIOS not found !!");
-	}
-
 	sc = &dc_softc_devs[unitNumber - 1];
 	ifp = &sc->arpcom.ac_if;
 

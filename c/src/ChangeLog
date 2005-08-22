@@ -1,3 +1,8 @@
+2005-08-18  Karel Gardas  <kgardas@objectsecurity.com>
+
+	* libchip/network/if_fxp.c, libchip/network/if_dc.c,
+	libchip/network/dec21140.c: Remove initialization of PCI bus.
+
 2005-08-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* optman/Makefile.am: Add preinstall.am.
