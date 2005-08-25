@@ -1,3 +1,8 @@
+2005-08-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/gccnewlib.add: Remove vxaddr2line.
+	Further minor cleanup.
+
 2005-08-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/binutils.add:

@@ -265,6 +265,11 @@ chmod +x brp-rtems-compress
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-c++filt%{_exeext}
 
+%if %build_gnat
+  # Seemingly a VAX tool. Not meaningful for RTEMS
+  rm -f $RPM_BUILD_ROOT%{_bindir}/vxaddr2line%{_exeext}
+%endif
+
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
@@ -306,7 +311,9 @@ chmod +x brp-rtems-compress
 
   rm -f dirs ;
   echo "%defattr(-,root,root)" >> dirs
-  echo "%dir %{_prefix}/lib" >> dirs ;
+%if "%{_prefix}" != "/usr"
+  echo "%dir %{_libdir}" >> dirs ;
+%endif
   echo "%dir %{gcclib}" >> dirs ;
   echo "%dir %{gcclib}/%{gcc_target}" >> dirs ;
 
