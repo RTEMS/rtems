@@ -1,3 +1,7 @@
+2005-08-29	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, gdb/gdb.add: Use DESTDIR as override with gdb 6.3.
+
 2005-08-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/gccnewlib.add: Remove vxaddr2line.
