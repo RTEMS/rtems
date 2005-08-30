@@ -1,5 +1,6 @@
 2005-08-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/base-gcc.add: Remove %_includedir.
 	* gccnewlib/base-g77.add: Remove %_mandir.
 	Remove %{gcc_target}-g77.1.
 	* gccnewlib/base-gfortran.add: Remove %_mandir.
