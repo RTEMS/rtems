@@ -21,10 +21,6 @@ This is the files for gcc/g77 that are shared by all targets.
 %ghost %{_infodir}/dir
 %{_infodir}/g77.info*.gz
 
-%dir %{_mandir}
-%dir %{_mandir}/man1
-%{_mandir}/man1/%{gcc_target}-g77.1*
-
 %post -n %{rpmprefix}rtems@osversion@-base-g77
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/g77.info.gz 
 
