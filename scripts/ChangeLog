@@ -1,3 +1,19 @@
+2005-08-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/base-g77.add: Remove %_mandir.
+	Remove %{gcc_target}-g77.1.
+	* gccnewlib/base-gfortran.add: Remove %_mandir.
+	Remove %{gcc_target}-gfortran.1.
+	* gccnewlib/gccnewlib.add: Remove Packager:.
+	Add %gccnewlib_version.
+	* gccnewlib/target-c++.add: Remove %_bindir.
+	* gccnewlib/target-g77.add: Add %{gcc_target}-g77.1.
+	* gccnewlib/target-gcj.add: Remove %_bindir.
+	Remove %_mandir.
+	* gccnewlib/target-gfortran.add: Remove %_bindir.
+	Add %{gcc_target}-gfortran.1.
+	* gccnewlib/target-gnat.add: Remove %_bindir.
+
 2005-08-29	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, gdb/gdb.add: Use DESTDIR as override with gdb 6.3.
