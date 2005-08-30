@@ -15,7 +15,6 @@ This is the gcc/java compiler for %{gcc_target}
 
 %files -n %{rpmprefix}%{gcc_target}-gcj -f build/files.gcj
 %defattr(-,root,root)
-%dir %{_bindir}
 %{_bindir}/%{gcc_target}-gcj%{_exeext}
 %{_bindir}/%{gcc_target}-jcf-dump%{_exeext}
 %{_bindir}/%{gcc_target}-jv-scan%{_exeext}
@@ -24,8 +23,6 @@ This is the gcc/java compiler for %{gcc_target}
 %if "%{gcc_version}" >= "3.4"
 %{_bindir}/%{gcc_target}-*jar%{_exeext}
 
-%dir %{_mandir}
-%dir %{_mandir}/man1
 %{_mandir}/man1/%{gcc_target}-*jar.1*
 %{_mandir}/man1/%{gcc_target}-gcj*.1*
 %{_mandir}/man1/%{gcc_target}-jv-*.1*
