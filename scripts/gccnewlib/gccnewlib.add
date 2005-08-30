@@ -1,6 +1,7 @@
 
-%define gcc_version	@gcc_version@
-%define newlib_version	@newlib_version@
+%define gcc_version		@gcc_version@
+%define newlib_version		@newlib_version@
+%define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 
 %define gcc_target	@target_alias@
 
@@ -9,8 +10,6 @@ Summary:        gcc and newlib C Library for %{gcc_target}.
 Group:          %{rpmgroup}
 Release:        @Release@
 License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
-
-Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
 
 Version:      	gcc%{gcc_version}newlib%{newlib_version}
 
