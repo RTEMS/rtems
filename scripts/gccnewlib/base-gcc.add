@@ -40,8 +40,6 @@ This is the files for gcc and newlib that are shared by all targets.
 %{_mandir}/man7/gfdl.7*
 %{_mandir}/man7/gpl.7*
 
-%dir %{_includedir}
-
 %post -n %{rpmprefix}rtems@osversion@-base-gcc
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cpp.info.gz
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz
