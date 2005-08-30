@@ -5,7 +5,9 @@
 %package -n %{rpmprefix}%{gcc_target}-gcj
 Summary:        gcc/java compiler (gcj) for %{gcc_target}
 Group:          %{rpmgroup}
+%if "%{_prefix}" != "/usr"
 Requires:       %{rpmprefix}rtems@osversion@-base-gcj
+%endif
 Requires:       %{rpmprefix}%{gcc_target}-gcc = %{gccnewlib_version}-%{release}
 
 %description -n %{rpmprefix}%{gcc_target}-gcj
