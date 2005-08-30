@@ -15,7 +15,6 @@ This is the gcc/gnat compiler for %{gcc_target}
 
 %files -n %{rpmprefix}%{gcc_target}-gnat
 %defattr(-,root,root)
-%dir %{_bindir}
 %{_bindir}/%{gcc_target}-gnat*
 %{_bindir}/%{gcc_target}-gprmake%{_exeext}
 

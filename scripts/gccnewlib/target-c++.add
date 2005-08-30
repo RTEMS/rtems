@@ -17,7 +17,6 @@ This is the gcc/g++ compiler for %{gcc_target}
 %defattr(-,root,root)
 %{_mandir}/man1/%{gcc_target}-g++.1*
 
-%dir %{_bindir}
 %{_bindir}/%{gcc_target}-c++%{_exeext}
 %{_bindir}/%{gcc_target}-g++%{_exeext}
 
