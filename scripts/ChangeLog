@@ -1,5 +1,14 @@
 2005-08-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/base-g77.add, gccnewlib/base-gcc.add,
+	gccnewlib/gccnewlib.add, gccnewlib/target-c++.add,
+	gccnewlib/target-g77.add, gccnewlib/target-gcj.add,
+	gccnewlib/target-gfortran.add, gccnewlib/target-gnat.add,
+	gccnewlib/target-objc.add: Use gccnewlib_version.
+	Cosmetics. Minor cleanups.
+
+2005-08-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/base-gcc.add: Remove %_includedir.
 	* gccnewlib/base-g77.add: Remove %_mandir.
 	Remove %{gcc_target}-g77.1.
