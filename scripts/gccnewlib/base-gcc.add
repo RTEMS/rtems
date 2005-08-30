@@ -3,8 +3,8 @@
 # %{rpmprefix}rtems@osversion@-base-gcc
 # ==============================================================
 %package -n %{rpmprefix}rtems@osversion@-base-gcc
-Summary:      	base package for rtems gcc and newlib C Library 
-Group: %{rpmgroup}
+Summary:	base package for rtems gcc and newlib C Library 
+Group:          %{rpmgroup}
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info

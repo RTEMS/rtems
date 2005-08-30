@@ -4,11 +4,10 @@
 # rtems-base-g77
 # ==============================================================
 %package -n %{rpmprefix}rtems@osversion@-base-g77
-Summary:      rtems base package for gcc/g77 compiler
-Group: %{rpmgroup}
-Requires: rtems-base-gcc
-Requires(post): /sbin/install-info
-Requires(preun): /sbin/install-info
+Summary:        rtems base package for gcc/g77 compiler
+Group:          %{rpmgroup}
+Requires(post): 	/sbin/install-info
+Requires(preun): 	/sbin/install-info
 
 %description -n %{rpmprefix}rtems@osversion@-base-g77
 RTEMS is an open source operating system for embedded systems.

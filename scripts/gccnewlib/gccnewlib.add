@@ -124,7 +124,7 @@ BuildRequires:	zlib-devel
 # This really isn't available until RedHat 8.0.  How to conditionalize this?
 BuildRequires:	gcc-gnat
 # Urgh, building gnat requires the target c-toolchain
-BuildRequires:  %{rpmprefix}%{gcc_target}-gcc < %{version}-%{release}
+BuildRequires:  %{rpmprefix}%{gcc_target}-gcc < %{gccnewlib_version}-%{release}
 %endif
 %if %build_f95
 BuildRequires: gmp-devel
