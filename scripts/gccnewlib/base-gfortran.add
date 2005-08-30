@@ -4,8 +4,8 @@
 # rtems-base-gfortran
 # ==============================================================
 %package -n %{rpmprefix}rtems@osversion@-base-gfortran
-Summary:      rtems base package for gcc/gfortran compiler
-Group: %{rpmgroup}
+Summary:	rtems base package for gcc/gfortran compiler
+Group:          %{rpmgroup}
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
@@ -20,10 +20,6 @@ This is the files for gcc/gfortran that are shared by all targets.
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/gfortran.info*.gz
-
-%dir %{_mandir}
-%dir %{_mandir}/man1
-%{_mandir}/man1/%{gcc_target}-gfortran.1*
 
 %post -n %{rpmprefix}rtems@osversion@-base-gfortran
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gfortran.info.gz
