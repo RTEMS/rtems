@@ -3,10 +3,12 @@
 # ==============================================================
 %package -n %{rpmprefix}%{gcc_target}-gcc
 Summary:      	rtems gcc and newlib C Library for %{gcc_target}
-Group: %{rpmgroup}
-Requires: %{rpmprefix}%{gcc_target}-binutils
-Provides: %{rpmprefix}%{gcc_target}-newlib = %{newlib_version}-%{release}
-Provides: %{rpmprefix}%{gcc_target}-libc = %{newlib_version}-%{release}
+Group:          %{rpmgroup}
+Requires:       %{rpmprefix}%{gcc_target}-binutils
+Requires:       %{rpmprefix}%{gcc_target}-libc = %{newlib_version}-%{release}
+
+Provides:       %{rpmprefix}%{gcc_target}-newlib = %{newlib_version}-%{release}
+Provides:       %{rpmprefix}%{gcc_target}-libc = %{newlib_version}-%{release}
 
 %description -n %{rpmprefix}%{gcc_target}-gcc
 RTEMS is an open source operating system for embedded systems.

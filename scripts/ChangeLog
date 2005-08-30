@@ -1,6 +1,6 @@
 2005-08-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* gccnewlib/gccnewlib.add: Add Requires/Provides *-newlib/*-libc.
+	* gccnewlib/target-gcc.add: Add Requires/Provides *-newlib/*-libc.
 
 2005-08-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
