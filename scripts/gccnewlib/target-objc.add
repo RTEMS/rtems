@@ -3,7 +3,7 @@
 # %{gcc_target}-objc
 # ==============================================================
 %package -n %{rpmprefix}%{gcc_target}-objc
-Summary:	gcc/objc compiler for %{gcc_target}
+Summary:        gcc/objc compiler for %{gcc_target}
 Group:          %{rpmgroup}
 Requires:       %{rpmprefix}%{gcc_target}-gcc = %{gccnewlib_version}-%{release}
 

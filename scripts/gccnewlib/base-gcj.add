@@ -4,8 +4,8 @@
 # rtems-base-gcj
 # ==============================================================
 %package -n %{rpmprefix}rtems@osversion@-base-gcj
-Summary:      base package for rtems gcc/java compiler (gcj).
-Group: %{rpmgroup}
+Summary:        base package for rtems gcc/java compiler (gcj).
+Group:          %{rpmgroup}
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
