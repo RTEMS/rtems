@@ -11,7 +11,7 @@ Group:          %{rpmgroup}
 Release:        @Release@
 License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
-Version:      	gcc%{gcc_version}newlib%{newlib_version}
+Version:      	%{gccnewlib_version}
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}@gcc_suffix@
 Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}@newlib_suffix@
