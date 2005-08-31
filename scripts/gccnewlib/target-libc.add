@@ -1,0 +1,18 @@
+# ==============================================================
+# %{gcc_target}-libc
+# ==============================================================
+%package -n %{rpmprefix}%{gcc_target}-libc
+Summary:      	newlib C Library for %{gcc_target}
+Group: 		%{rpmgroup}
+License:	Distributable
+Version:	%{newlib_version}
+Provides:	%{rpmprefix}%{gcc_target}-newlib = %{newlib_version}-%{release}
+
+%description -n %{rpmprefix}%{gcc_target}-libc
+RTEMS is an open source operating system for embedded systems.
+
+This is the newlib C Library for %{gcc_target}.
+
+%files -n %{rpmprefix}%{gcc_target}-libc -f build/files.libc
+%defattr(-,root,root)
+%{_prefix}/%{gcc_target}/include
