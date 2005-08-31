@@ -134,8 +134,7 @@ MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c src/__sbrk.c
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 
-TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c src/ttyname.c \
-    src/ttyname_r.c
+TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c src/ttyname.c
 
 LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
     src/truncate.c src/access.c src/stat.c src/lstat.c src/pathconf.c \
