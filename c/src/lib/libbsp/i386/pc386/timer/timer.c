@@ -61,17 +61,26 @@
 volatile uint32_t         Ttimer_val;
 rtems_boolean    	  Timer_driver_Find_average_overhead = TRUE;
 volatile unsigned int     fastLoop1ms, slowLoop1ms;
+void (*Timer_initialize_function)(void) = 0;
+uint32_t (*Read_timer_function)(void) = 0;
+void (*Timer_exit_function)(void) = 0;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
 extern void timerisr(void);
        /* timer (int 08h) Interrupt Service Routine (defined in 'timerisr.s') */
+extern int x86_capability;
+
+/*
+ * forward declarations
+ */
+
+void Timer_exit();
 
 /*-------------------------------------------------------------------------+
 | Pentium optimized timer handling.
 +--------------------------------------------------------------------------*/
-#if defined(pentium)
 
 /*-------------------------------------------------------------------------+
 |         Function: rdtsc
@@ -98,9 +107,9 @@ rdtsc(void)
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-Timer_exit(void)
+tsc_timer_exit(void)
 {
-} /* Timer_exit */
+} /* tsc_timer_exit */
 
 /*-------------------------------------------------------------------------+
 |         Function: Timer_initialize
@@ -110,7 +119,7 @@ Timer_exit(void)
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-Timer_initialize(void)
+tsc_timer_initialize(void)
 {
   static rtems_boolean First = TRUE;
 
@@ -121,7 +130,7 @@ Timer_initialize(void)
     atexit(Timer_exit); /* Try not to hose the system at exit. */
   }
   Ttimer_val = rdtsc(); /* read starting time */
-} /* Timer_initialize */
+} /* tsc_timer_initialize */
 
 /*-------------------------------------------------------------------------+
 |         Function: Read_timer
@@ -131,7 +140,7 @@ Timer_initialize(void)
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 uint32_t
-Read_timer(void)
+tsc_read_timer(void)
 {
   register uint32_t         total;
 
@@ -143,9 +152,7 @@ Read_timer(void)
     return 0; /* below timer resolution */
   else
     return (total - AVG_OVERHEAD);
-} /* Read_timer */
-
-#else /* pentium */
+} /* tsc_read_timer */
 
 /*-------------------------------------------------------------------------+
 | Non-Pentium timer handling.
@@ -209,7 +216,7 @@ static rtems_raw_irq_connect_data timer_raw_irq_data = {
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-Timer_exit(void)
+i386_timer_exit(void)
 {
   i386_delete_idt_entry (&timer_raw_irq_data);
 } /* Timer_exit */
@@ -222,7 +229,7 @@ Timer_exit(void)
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-Timer_initialize(void)
+i386_timer_initialize(void)
 {
   static rtems_boolean First = TRUE;
 
@@ -251,7 +258,7 @@ Timer_initialize(void)
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 uint32_t
-Read_timer(void)
+i386_read_timer(void)
 {
   register uint32_t         total, clicks;
   register uint8_t          lsb, msb;
@@ -270,7 +277,49 @@ Read_timer(void)
     return (total - AVG_OVERHEAD);
 }
 
-#endif /* pentium */
+/*
+ * General timer functions using either TSC-based implementation
+ * or interrupt-based implementation
+ */
+
+void
+Timer_initialize(void)
+{
+    static rtems_boolean First = TRUE;
+
+    if (First) {
+        if (x86_capability & (1 << 4) ) {
+#if defined(DEBUG)
+            printk("TSC: timer initialization\n");
+#endif // DEBUG
+            Timer_initialize_function = &tsc_timer_initialize;
+            Read_timer_function = &tsc_read_timer;
+            Timer_exit_function = &tsc_timer_exit;
+        }
+        else {
+#if defined(DEBUG)
+            printk("ISR: timer initialization\n");
+#endif // DEBUG
+            Timer_initialize_function = &i386_timer_initialize;
+            Read_timer_function = &i386_read_timer;
+            Timer_exit_function = &i386_timer_exit;
+        }
+        First = FALSE;
+    }
+    (*Timer_initialize_function)();
+}
+
+uint32_t
+Read_timer()
+{
+    return (*Read_timer_function)();
+}
+
+void
+Timer_exit()
+{
+    return (*Timer_exit_function)();
+}
 
 /*-------------------------------------------------------------------------+
 |         Function: Empty_function
