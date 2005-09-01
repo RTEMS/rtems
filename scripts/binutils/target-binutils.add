@@ -14,11 +14,15 @@ This is the GNU binutils for RTEMS targetting %{binutils_target}.
 
 %files -n %{rpmprefix}%{binutils_target}-binutils
 %defattr(-,root,root)
+%if "%{_prefix}" != "/usr"
 %dir %{_mandir}
+%endif
 %dir %{_mandir}/man1
 %{_mandir}/man1/%{binutils_target}-*.1*
 
+%if "%{_prefix}" != "/usr"
 %dir %{_bindir}
+%endif
 %{_bindir}/%{binutils_target}-addr2line%{_exeext}
 %{_bindir}/%{binutils_target}-ar%{_exeext}
 %{_bindir}/%{binutils_target}-as%{_exeext}
