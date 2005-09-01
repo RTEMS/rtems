@@ -1,5 +1,14 @@
 2005-09-01	Joel Sherrill <joel@OARcorp.com>
 
+	PR 820/rtems
+	* score/inline/rtems/score/coremsg.inl,
+	score/macros/rtems/score/coremsg.inl, score/src/coremsginsert.c:
+	Increment of pending message count should be atomic with insertion on
+	the pending message chain. Determination of the need to call the
+	notification handler should also be in this atomic section of code.
+
+2005-09-01	Joel Sherrill <joel@OARcorp.com>
+
 	PR 796/rtems
 	* posix/src/semtimedwait.c: sem_timedwait is supposed to use absolute
 	time for timeout specification. This patch is a modified version of

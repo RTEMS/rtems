@@ -97,8 +97,9 @@
  *
  */
 
-#define _CORE_message_queue_Append( _the_message_queue, _the_message ) \
-   _Chain_Append( &(_the_message_queue)->Pending_messages, \
+#define _CORE_message_queue_Append_unprotected( \
+          _the_message_queue, _the_message ) \
+   _Chain_Append_unprotected( &(_the_message_queue)->Pending_messages, \
                   &(_the_message)->Node )
 
 /*PAGE
@@ -107,8 +108,9 @@
  *
  */
 
-#define _CORE_message_queue_Prepend( _the_message_queue, _the_message ) \
-   _Chain_Prepend( &(_the_message_queue)->Pending_messages, \
+#define _CORE_message_queue_Prepend_unprotected( \
+          _the_message_queue, _the_message ) \
+   _Chain_Prepend_unprotected( &(_the_message_queue)->Pending_messages, \
                    &(_the_message)->Node )
 
 /*PAGE
