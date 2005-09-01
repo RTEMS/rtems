@@ -1,3 +1,12 @@
+2005-09-01	Joel Sherrill <joel@OARcorp.com>
+
+	PR 820/rtems
+	* inline/rtems/score/coremsg.inl, macros/rtems/score/coremsg.inl,
+	src/coremsginsert.c: Increment of pending message count should be
+	atomic with insertion on the pending message chain. Determination of
+	the need to call the notification handler should also be in this
+	atomic section of code.
+
 2005-08-17	Andrew Sinclair <Andrew.Sinclair@elprotech.com>
 
 	PR 807/rtems

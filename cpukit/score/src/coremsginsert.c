@@ -7,7 +7,7 @@
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2005.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -54,19 +54,27 @@ void _CORE_message_queue_Insert_message(
   CORE_message_queue_Submit_types    submit_type
 )
 {
-  the_message_queue->number_of_pending_messages += 1;
+  ISR_Level  level;
+  boolean    notify = FALSE;
 
   the_message->priority = submit_type;
 
   switch ( submit_type ) {
     case CORE_MESSAGE_QUEUE_SEND_REQUEST:
-      _CORE_message_queue_Append( the_message_queue, the_message );
+      _ISR_Disable( level );
+        if ( the_message_queue->number_of_pending_messages++ == 0 )
+          notify = TRUE;
+        _CORE_message_queue_Append_unprotected(the_message_queue, the_message);
+      _ISR_Enable( level );
       break;
     case CORE_MESSAGE_QUEUE_URGENT_REQUEST:
-      _CORE_message_queue_Prepend( the_message_queue, the_message );
+      _ISR_Disable( level );
+        if ( the_message_queue->number_of_pending_messages++ == 0 )
+          notify = TRUE;
+        _CORE_message_queue_Prepend_unprotected(the_message_queue, the_message);
+      _ISR_Enable( level );
       break;
     default:
-      /* XXX interrupt critical section needs to be addressed */
       {
         CORE_message_queue_Buffer_control *this_message;
         Chain_Node                        *the_node;
@@ -85,7 +93,11 @@ void _CORE_message_queue_Insert_message(
 
           break;
         }
-        _Chain_Insert( the_node->previous, &the_message->Node );
+        _ISR_Disable( level );
+          if ( the_message_queue->number_of_pending_messages++ == 0 )
+            notify = TRUE;
+          _Chain_Insert_unprotected( the_node->previous, &the_message->Node );
+        _ISR_Enable( level );
       }
       break;
   }
@@ -96,7 +108,6 @@ void _CORE_message_queue_Insert_message(
    *  the message is actually in the queue at this point.
    */
 
-  if ( the_message_queue->number_of_pending_messages == 1 && 
-       the_message_queue->notify_handler )
+  if ( notify && the_message_queue->notify_handler )
     (*the_message_queue->notify_handler)( the_message_queue->notify_argument );
 }

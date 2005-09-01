@@ -182,7 +182,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_priority(
 
 /*PAGE
  *
- *  _CORE_message_queue_Append
+ *  _CORE_message_queue_Append_unprotected
  *
  *  DESCRIPTION:
  *
@@ -190,17 +190,20 @@ RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_priority(
  *  messages on the_message_queue.
  */
 
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Append (
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Append_unprotected (
   CORE_message_queue_Control        *the_message_queue,
   CORE_message_queue_Buffer_control *the_message
 )
 {
-  _Chain_Append( &the_message_queue->Pending_messages, &the_message->Node );
+  _Chain_Append_unprotected(
+    &the_message_queue->Pending_messages,
+    &the_message->Node
+  );
 }
 
 /*PAGE
  *
- *  _CORE_message_queue_Prepend
+ *  _CORE_message_queue_Prepend_unprotected
  *
  *  DESCRIPTION:
  *
@@ -208,12 +211,12 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Append (
  *  messages on the_message_queue.
  */
 
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Prepend (
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Prepend_unprotected (
   CORE_message_queue_Control        *the_message_queue,
   CORE_message_queue_Buffer_control *the_message
 )
 {
-  _Chain_Prepend(
+  _Chain_Prepend_unprotected(
     &the_message_queue->Pending_messages,
     &the_message->Node
   );
