@@ -1,3 +1,10 @@
+2005-09-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/target-c++.add, gccnewlib/target-g77.add,
+	gccnewlib/target-gcj.add, gccnewlib/target-gfortran.add,
+	gccnewlib/target-gnat.add, gccnewlib/target-objc.add:
+	Fix directory ownerships.
+
 2005-08-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/target-gcc.add: Add Requires/Provides *-newlib/*-libc.
