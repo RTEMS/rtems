@@ -9,11 +9,15 @@ if HAS_NETWORKING
 WD80X3 = wd80x3.h
 endif
 
-include_HEADERS = bsp.h crt.h coverhd.h $(WD80X3) bspopts.h
+include_HEADERS = bsp.h crt.h coverhd.h tod.h $(WD80X3) bspopts.h
 
 coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 	cp $< $@
-CLEANFILES = coverhd.h
+
+tod.h: $(top_srcdir)/../../shared/tod.h
+	cp $< $@
+
+CLEANFILES = coverhd.h tod.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
