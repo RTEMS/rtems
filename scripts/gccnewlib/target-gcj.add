@@ -40,6 +40,9 @@ This is the gcc/java compiler for %{gcc_target}
 %endif
 %endif
 
+%dir %{gccexec}
+%dir %{gccexec}/%{gcc_target}
+%dir %{gccexec}/%{gcc_target}/%{gcc_version}
 %{gccexec}/%{gcc_target}/%{gcc_version}/jc1%{_exeext}
 %{gccexec}/%{gcc_target}/%{gcc_version}/jvgenmain%{_exeext}
 

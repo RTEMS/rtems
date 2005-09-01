@@ -22,7 +22,11 @@ This is the gcc/g++ compiler for %{gcc_target}
 %{_bindir}/%{gcc_target}-c++%{_exeext}
 %{_bindir}/%{gcc_target}-g++%{_exeext}
 
+%dir %{gccexec}
+%dir %{gccexec}/%{gcc_target}
+%dir %{gccexec}/%{gcc_target}/%{gcc_version}
 %{gccexec}/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
+
 %dir %{gcclib}/%{gcc_target}/%{gcc_version}/include
 %if "%{gcc_version}" >= "3.2"
 %{gcclib}/%{gcc_target}/%{gcc_version}/include/c++

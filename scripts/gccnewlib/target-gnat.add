@@ -20,7 +20,11 @@ This is the gcc/gnat compiler for %{gcc_target}
 %{_bindir}/%{gcc_target}-gnat*
 %{_bindir}/%{gcc_target}-gprmake%{_exeext}
 
+%dir %{gccexec}
+%dir %{gccexec}/%{gcc_target}
+%dir %{gccexec}/%{gcc_target}/%{gcc_version}
 %{gccexec}/%{gcc_target}/%{gcc_version}/gnat1%{_exeext}
+
 %{gcclib}/%{gcc_target}/%{gcc_version}/adalib
 %{gcclib}/%{gcc_target}/%{gcc_version}/adainclude
 %endif

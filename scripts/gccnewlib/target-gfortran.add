@@ -22,5 +22,8 @@ This is the gcc/gfortran compiler for %{gcc_target}
 
 %{_mandir}/man1/%{gcc_target}-gfortran.1*
 
+%dir %{gccexec}
+%dir %{gccexec}/%{gcc_target}
+%dir %{gccexec}/%{gcc_target}/%{gcc_version}
 %{gccexec}/%{gcc_target}/%{gcc_version}/f951%{_exeext}
 %endif

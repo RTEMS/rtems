@@ -19,5 +19,8 @@ This is the gcc/g77 compiler for %{gcc_target}
 
 %{_mandir}/man1/%{gcc_target}-g77.1*
 
-%{gcclib}/%{gcc_target}/%{gcc_version}/f771%{_exeext}
+%dir %{gccexec}
+%dir %{gccexec}/%{gcc_target}
+%dir %{gccexec}/%{gcc_target}/%{gcc_version}
+%{gccexec}/%{gcc_target}/%{gcc_version}/f771%{_exeext}
 %endif
