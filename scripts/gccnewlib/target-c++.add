@@ -5,10 +5,11 @@
 %package -n %{rpmprefix}%{gcc_target}-c++
 Summary:	gcc/g++ compiler (c++) for %{gcc_target}
 Group:          %{rpmgroup}
+Version:	%{gcc_version}
 %if "%{_prefix}" != "/usr"
 Requires:       %{rpmprefix}rtems@osversion@-base-gcc
 %endif
-Requires:       %{rpmprefix}%{gcc_target}-gcc = %{gccnewlib_version}-%{release}
+Requires:       %{rpmprefix}%{gcc_target}-gcc = %{gcc_version}-%{release}
 
 %description -n %{rpmprefix}%{gcc_target}-c++
 RTEMS is an open source operating system for embedded systems.

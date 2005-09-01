@@ -6,6 +6,8 @@
 %package -n %{rpmprefix}rtems@osversion@-base-g77
 Summary:        rtems base package for gcc/g77 compiler
 Group:          %{rpmgroup}
+Version:        %{gcc_version}
+
 Requires(post): 	/sbin/install-info
 Requires(preun): 	/sbin/install-info
 
