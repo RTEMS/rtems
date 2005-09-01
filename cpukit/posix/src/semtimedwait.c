@@ -29,12 +29,40 @@
 
 int sem_timedwait(
   sem_t                 *sem,
-  const struct timespec *timeout
+  const struct timespec *abstime
 )
 {
-  return _POSIX_Semaphore_Wait_support(
-    sem,
-    TRUE,
-    _POSIX_Timespec_to_interval( timeout )
-  );
+  /*
+   *  The abstime is a walltime.  We turn it into an interval.
+   */
+  Watchdog_Interval ticks;
+  struct timespec   current_time;
+  struct timespec   difference;
+
+  /*
+   *  Error check the absolute time to timeout
+   */
+  if ( /* abstime->tv_sec < 0 || */ abstime->tv_nsec ) /* tv_sec is unsigned */
+    return EINVAL;
+
+  if ( abstime->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
+    return EINVAL;
+  
+  (void) clock_gettime( CLOCK_REALTIME, &current_time );
+
+  /*
+   *  Make sure the abstime is in the future
+   */
+  if ( abstime->tv_sec < current_time.tv_sec )
+    return EINVAL;
+  if ( (abstime->tv_sec == current_time.tv_sec) &&
+       (abstime->tv_nsec <= current_time.tv_nsec) )
+    return EINVAL;
+
+  _POSIX_Timespec_subtract( &current_time, abstime, &difference );
+
+  ticks = _POSIX_Timespec_to_interval( &difference );
+
+  return _POSIX_Semaphore_Wait_support( sem, TRUE, ticks );
 }
+
