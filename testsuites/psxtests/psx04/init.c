@@ -421,8 +421,10 @@ void *POSIX_Init(
   puts( "Init: sigaddset - EINVAL (set invalid)" );
 
   status = sigaddset( &mask, 0 );
-  assert( !status );
-  puts( "Init: sigaddset - SUCCESSFUL (signal = 0)" );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: sigaddset - EINVAL (signal = 0)" );
 
   status = sigaddset( &mask, 999 );
   if ( status != -1 )
@@ -463,8 +465,10 @@ void *POSIX_Init(
   puts( "Init: sigismember - EINVAL (signal invalid)" );
 
   status = sigaction( 0, &act, 0 );
-  assert( !status );
-  puts( "Init: sigaction - SUCCESSFUL (signal = 0)" );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: sigaction - EINVAL (signal = 0)" );
 
   status = sigaction( 999, &act, NULL );
   if ( status != -1 )
@@ -523,8 +527,10 @@ void *POSIX_Init(
   puts( "Init: pthread_kill - ESRCH (signal SA_SIGINFO)" );
 
   status = pthread_kill( Init_id, 0 );
-  assert( !status );
-  puts( "Init: pthread_kill - SUCCESSFUL (signal = 0)" );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: pthread_kill - EINVAL (signal = 0)" );
 
   act.sa_handler = SIG_IGN;
   act.sa_flags = 0;
@@ -540,8 +546,10 @@ void *POSIX_Init(
   puts( "Init: kill - ESRCH (pid invalid)" );
 
   status = kill( getpid(), 0 );
-  assert( !status );
-  puts( "Init: kill - SUCCESSFUL (signal = 0)" );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: kill - EINVAL (signal = 0)" );
 
   status = kill( getpid(), 999 );
   if ( status != -1 )
