@@ -12,6 +12,7 @@
 
 2005-07-28	Eric Norum <norume@aps.anl.gov>
 
+	PR 773/bsps
 	* mpc6xx/clock/c_clock.c: Changes provided by Phillip Sorensen
 	<pas37@cornell.edu> to get MVME5500 BSP running.
 
