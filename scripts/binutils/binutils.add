@@ -8,7 +8,6 @@ Group:        %{rpmgroup}
 Release:      @Release@
 License:      GPL/LGPL
 
-Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	flex
