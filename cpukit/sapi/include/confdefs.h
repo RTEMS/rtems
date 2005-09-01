@@ -485,6 +485,7 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/threadsup.h>
+#include <rtems/posix/timer.h>
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
 #define CONFIGURE_MAXIMUM_POSIX_THREADS      0
@@ -580,8 +581,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
    ( sizeof(POSIX_Keys_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
 
 #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
-  ((_timers) * \
-   ( 0 ) )
+   ((_timers) * (sizeof(POSIX_Timer_Control) + CONFIGURE_OBJECT_TABLE_STUFF))
 
 #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
   ((_queued_signals) * \
@@ -610,6 +610,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
         CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ) + \
     CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
         CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ) + \
     (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE) \
    )
 

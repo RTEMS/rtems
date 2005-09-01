@@ -1,3 +1,9 @@
+2005-09-01	Nuno Costa <nuno-costa@iol.pt>
+
+	PR 804
+	* sapi/include/confdefs.h: Memory for POSIX timers not accounted for.
+	Patch adapted from edit comment in PR filed.
+
 2005-08-31  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
 	PR 819/filesystem
