@@ -5,6 +5,10 @@
 	gccnewlib/target-gnat.add, gccnewlib/target-objc.add:
 	Fix directory ownerships.
 
+2005-08-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/target-libc.add: New.
+
 2005-08-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/target-gcc.add: Add Requires/Provides *-newlib/*-libc.
