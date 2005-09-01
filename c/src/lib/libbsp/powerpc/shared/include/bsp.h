@@ -151,7 +151,7 @@ extern unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet);
  *  TM27 stuff
  */
 
-#if defined(USE_ENHANCED_INTR_API) && defined(RTEMS_TM27)
+#if defined(RTEMS_TM27)
 
 #include <bsp/irq.h>
 
