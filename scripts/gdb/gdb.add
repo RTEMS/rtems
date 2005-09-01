@@ -7,8 +7,6 @@ Release:      @Release@
 License:      GPL/LGPL
 Group:        %{rpmgroup}
 
-Packager:     ralf.corsepius@rtems.org and joel@OARcorp.com
-
 Version:      %{gdb_version}
 Summary:      gdb for target %{gdb_version}
 

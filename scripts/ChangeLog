@@ -1,5 +1,9 @@
 2005-09-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gdb/gdb.add: Remove Packager:.
+
+2005-09-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/base-g77.add, gccnewlib/base-gcc.add,
 	gccnewlib/base-gcj.add, gccnewlib/target-c++.add,
 	gccnewlib/target-g77.add, gccnewlib/target-gcc.add,
