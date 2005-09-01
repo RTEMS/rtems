@@ -4,6 +4,8 @@
 	gccnewlib/target-gcj.add, gccnewlib/target-gfortran.add,
 	gccnewlib/target-gnat.add, gccnewlib/target-objc.add:
 	Fix directory ownerships.
+	* binutils/binutils.add: Remove Packager:.
+	* binutils/target-binutils.add: Further adaptations to /usr.
 
 2005-08-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
