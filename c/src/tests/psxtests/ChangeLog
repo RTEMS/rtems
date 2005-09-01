@@ -1,3 +1,9 @@
+2005-09-01	Joel Sherrill <joel@OARcorp.com>
+
+	PR 628/rtems
+	* psx04/init.c, psx04/psx04.scn: Update tests to reflect a signal of 0
+	being an error.
+
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
 	* psxmsgq01/init.c, psxtimer/psxtimer.c: Eliminate warning from
