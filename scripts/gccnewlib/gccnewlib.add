@@ -174,7 +174,7 @@ chmod +x brp-rtems-compress
 
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_version}
-  test -d build || mkdir build
+  mkdir -p build
 
 %build
   cd build
@@ -220,7 +220,7 @@ chmod +x brp-rtems-compress
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:
   # Somehow, gcc doesn't get syslimits.h right for Cdn-Xs
-  test -d gcc/include || mkdir -p gcc/include
+  mkdir -p gcc/include
   cp ../gcc-%{gcc_version}/gcc/gsyslimits.h gcc/include/syslimits.h
 %endif
 
@@ -308,28 +308,33 @@ chmod +x brp-rtems-compress
   fi
 %endif
 
-  rm -f dirs ;
-  echo "%defattr(-,root,root)" >> dirs
-%if "%{_prefix}" != "/usr"
-  echo "%dir %{_libdir}" >> dirs ;
-%endif
-  echo "%dir %{gcclib}" >> dirs ;
-  echo "%dir %{gcclib}/%{gcc_target}" >> dirs ;
-
   # Collect multilib subdirectories
   f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
-  TGTDIR="%{gcclib}/%{gcc_target}/%{gcc_version}"
+  echo "%defattr(-,root,root,-)" > files.libc
+  TGTDIR="%{_prefix}/%{gcc_target}/lib"
   for i in $f; do
     case $i in
-    \.) echo "%dir ${TGTDIR}" >> dirs
+    \.) echo "%dir ${TGTDIR}" >> files.libc
       ;;
-    *)  echo "%dir ${TGTDIR}/$i" >> dirs
+    *)  echo "%dir ${TGTDIR}/$i" >> files.libc
       ;;
     esac
   done
 
-  TGTDIR="%{_prefix}/%{gcc_target}/lib"
+  rm -f dirs ;
+  echo "%defattr(-,root,root,-)" >> dirs
+%if "%{_prefix}" != "/usr"
+  echo "%dir %{_prefix}" >> dirs
+  echo "%dir %{_libdir}" >> dirs
+%if "%{gcc_version}" >= "3.4"
+  echo "%dir %{_libexecdir}" >> dirs
+%endif
+%endif
+  echo "%dir %{gcclib}" >> dirs
+  echo "%dir %{gcclib}/%{gcc_target}" >> dirs
+
+  TGTDIR="%{gcclib}/%{gcc_target}/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -380,8 +385,8 @@ chmod +x brp-rtems-compress
     case $i in
     *lib*.la) rm ${RPM_BUILD_ROOT}/$i;; # ignore - gcc produces bogus libtool libs
     *libiberty.a) rm ${RPM_BUILD_ROOT}/$i ;; # ignore - GPL'ed
-# all other files belong to gcc
-    *) echo "$i" >> files.gcc ;; 
+# all other files belong to libc
+    *) echo "$i" >> files.libc ;; 
     esac
   done
 

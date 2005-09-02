@@ -11,6 +11,7 @@ SUBPACKAGES += $(top_builddir)/common/common.add
 SUBPACKAGES += gccnewlib.add
 SUBPACKAGES += $(top_builddir)/common/clean.add
 SUBPACKAGES += base-gcc.add target-gcc.add
+SUBPACKAGES += target-libc.add
 SUBPACKAGES += base-g77.add target-g77.add
 SUBPACKAGES += base-gcj.add target-gcj.add
 SUBPACKAGES += base-gfortran.add target-gfortran.add

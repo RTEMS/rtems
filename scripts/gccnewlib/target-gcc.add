@@ -36,8 +36,6 @@ This is gcc for %{gcc_target}.
 %{_bindir}/%{gcc_target}-gcov%{_exeext}
 %{_bindir}/%{gcc_target}-gccbug
 
-%{_prefix}/%{gcc_target}/include
-
 %dir %{gcclib}/%{gcc_target}/%{gcc_version}/include
 
 %dir %{gccexec}
