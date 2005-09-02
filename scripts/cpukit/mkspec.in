@@ -49,6 +49,7 @@ target_alias=$1
 sed -e "s%@Release\@%${rtems_rpm_release}%g" \
     -e "s%@rtems_version\@%${RTEMS_VERSION}%g" \
     -e "s%@rpmgroup\@%@rpmgroup@%g" \
+    -e "s,@rpmprefix\@,@rpmprefix@,g" \
     -e "s%@osversion\@%@osversion@%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
 < ${RTEMS_DIR}/cpukit/rtems-cpukit.spec.in
