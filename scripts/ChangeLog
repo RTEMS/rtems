@@ -1,5 +1,19 @@
 2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/base-binutils.add, binutils/binutils.add,
+	binutils/target-binutils.add, common/common.add.in,
+	cpukit/rtems-cpukit.add, cpukit/target-cpukit.add, 
+	gccnewlib/base-g77.add, gccnewlib/base-gcc.add,
+	gccnewlib/base-gcj.add, gccnewlib/base-gfortran.add,
+	gccnewlib/base-gnat.add, gccnewlib/gccnewlib.add,
+	gccnewlib/target-c++.add, gccnewlib/target-g77.add,
+	gccnewlib/target-gcc.add, gccnewlib/target-gcj.add,
+	gccnewlib/target-gfortran.add, gccnewlib/target-gnat.add,
+	gccnewlib/target-libc.add, gccnewlib/target-objc.add,
+	gdb/base-gdb.add, gdb/gdb.add, gdb/target-gdb.add,
+	rtemsdoc/rtemsdoc.add, rtemsdoc/supplement.add.in,
+	rtemsdoc/templ.add.in, rtems/rtems-source.add:
+	Replace %{rpmprefix} with @rpmprefix@.
 	* cpukit/mkspec.in, rtems/mkspec.in: Propagate @rpmprefix@.
 
 2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
