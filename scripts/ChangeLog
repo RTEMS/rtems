@@ -1,5 +1,6 @@
 2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* common/common.add.in: Remove Vendor:. Remove Distribution:.
 	* Makefile.am, autotools/Makefile.am, binutils/Makefile.am
 	cpukit/Makefile.am, gccnewlib/Makefile.am, gdb/Makefile.am
 	rtems/Makefile.am: Rename *.spec into @rpmprefix@*.spec.
