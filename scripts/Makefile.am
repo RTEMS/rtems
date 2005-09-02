@@ -23,6 +23,7 @@ noinst_DATA += rtems/rtems-source.spec
 rtems/rtems-source.spec: $(rtems_source_spec_DEPS)
 	cat $(rtems_source_spec_DEPS) | sed \
         -e 's,[@]rtems_version[@],$(RTEMS_VERSION),g' \
+        -e 's,[@]rpmprefix[@],$(rpmprefix),g' \
         -e 's,[@]RTEMS_RPM_RELEASE[@],$(RTEMS_RPM_RELEASE),g' > $@
 
 CLEANFILES = rtems/rtems-source.spec

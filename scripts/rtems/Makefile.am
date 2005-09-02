@@ -15,32 +15,33 @@ noinst_DATA = rtems.spec.in
 rtems.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
 CLEANFILES = rtems.spec.in
-RPM_SPECS_DATA =
 
 MKBSPSPEC = $(SHELL) ./mkspec
 
 MKBSPSPEC_DEPS = $(top_builddir)/mkspec rtems.spec.in \
     $(top_builddir)/setup.cache
 
-i386-rtems-pc386-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
+RPM_SPECS_DATA =
+
+@rpmprefix@i386-rtems-pc386-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems@osversion@ pc386
-RPM_SPECS_DATA += i386-rtems-pc386-$(BSPVERS).spec
+RPM_SPECS_DATA += @rpmprefix@i386-rtems-pc386-$(BSPVERS).spec
 
-m68k-rtems-gen68360-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
+@rpmprefix@m68k-rtems-gen68360-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems@osversion@ gen68360
-RPM_SPECS_DATA += m68k-rtems-gen68360-$(BSPVERS).spec
+RPM_SPECS_DATA += @rpmprefix@m68k-rtems-gen68360-$(BSPVERS).spec
 
-powerpc-rtems-mcp750-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
+@rpmprefix@powerpc-rtems-mcp750-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-rtems@osversion@ mcp750
-RPM_SPECS_DATA += powerpc-rtems-mcp750-$(BSPVERS).spec
+RPM_SPECS_DATA += @rpmprefix@powerpc-rtems-mcp750-$(BSPVERS).spec
 
-sh-rtems-gensh1-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
+@rpmprefix@sh-rtems-gensh1-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtems@osversion@ gensh1
-RPM_SPECS_DATA += sh-rtems-gensh1-$(BSPVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sh-rtems-gensh1-$(BSPVERS).spec
 
-sparc-rtems-erc32-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
+@rpmprefix@sparc-rtems-erc32-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems@osversion@ erc32
-RPM_SPECS_DATA += sparc-rtems-erc32-$(BSPVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sparc-rtems-erc32-$(BSPVERS).spec
 
 CLEANFILES += $(RPM_SPECS_DATA)
 

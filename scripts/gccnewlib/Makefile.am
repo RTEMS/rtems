@@ -29,53 +29,53 @@ MKGCCNEWLIBSPEC_DEPS = mkspec gccnewlib.spec.in $(top_builddir)/setup.cache
 
 RPM_SPECS_DATA =
 
-arm-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@arm-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@
-RPM_SPECS_DATA += arm-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@arm-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-avr-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@avr-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache avr-rtems@osversion@ > $@
-RPM_SPECS_DATA += avr-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@avr-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
-RPM_SPECS_DATA += h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-i386-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@i386-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
-RPM_SPECS_DATA += i386-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@i386-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-m68k-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@m68k-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems@osversion@ > $@
-RPM_SPECS_DATA += m68k-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@m68k-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-mips-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@mips-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips-rtems@osversion@ > $@
-RPM_SPECS_DATA += mips-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@mips-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-mips64-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@mips64-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips64-rtems@osversion@ > $@
-RPM_SPECS_DATA += mips64-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@mips64-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-powerpc-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@powerpc-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache powerpc-rtems@osversion@ > $@
-RPM_SPECS_DATA += powerpc-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@powerpc-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-sh-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@sh-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtems@osversion@ > $@
-RPM_SPECS_DATA += sh-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sh-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-sh-rtemscoff@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@sh-rtemscoff@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtemscoff@osversion@ > $@
-RPM_SPECS_DATA += sh-rtemscoff@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sh-rtemscoff@osversion@-$(GCC3NEWLIBVERS).spec
 
-sparc-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@sparc-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems@osversion@ > $@
-RPM_SPECS_DATA += sparc-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sparc-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+@rpmprefix@tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
-RPM_SPECS_DATA += tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
 CLEANFILES += $(RPM_SPECS_DATA)
 
