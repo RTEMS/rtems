@@ -6,6 +6,10 @@
 
     * aclocal/version.m4: Updated to rtems-4.6.99.2.
 
+2005-09-02  Joel Sherrill <joel@OARcorp.com>
+
+    * aclocal/version.m4: Updated to rtems-4.6.99.2.
+
 2005-08-18  Karel Gardas  <kgardas@objectsecurity.com>
 
 	* libchip/network/if_fxp.c, libchip/network/if_dc.c,
