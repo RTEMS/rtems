@@ -1,5 +1,9 @@
 2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* cpukit/mkspec.in, rtems/mkspec.in: Propagate @rpmprefi@.
+
+2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/Makefile.am: Use target-libc.add
 	* gccnewlib/gccnewlib.add, gccnewlib/target-gcc.add,
 	gccnewlib/target-libc.add: Misc. fixes.
