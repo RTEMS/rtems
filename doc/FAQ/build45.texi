@@ -58,7 +58,7 @@ rtems-users mailing list.
 @item A target (typically cross) C- and (optional) C++-Toolchain.
 @item autoconf/automake (optional, recommended)
 @item Perl (optional, recommended, needed by automake and some tools within RTEMS)
-@item m4 (optional, recommended, needed by autoconf, GNU-m4 preferred)
+@item GNU-m4
 
 @end itemize
 
@@ -110,7 +110,7 @@ supported in RTEMS anymore (@ref{Can I use a non-gcc cross-toolchain?}).
 The sources of all gnutools are available at any
 @uref{ftp://ftp.gnu.org,GNU} mirror.
 Native Linux binaries should come with any Linux distribution.
-Native Cygwin binaries should be available at Cygnus.
+Native Cygwin binaries should be available at @uref{http://www.cygwin.com}.
 
 GNU-Toolchain binaries (gcc, binutils etc.) for Linux and patches required
 to build them from source are available from
@@ -182,7 +182,8 @@ configuration (Cf. @ref{configure --program-[prefix|suffix|transform-name]})
 While running a configure script, you see a message like this:
 @example
 checking for m68k-rtems-gcc... (cached) m68k-rtems-gcc
-checking for C compiler default output... configure: error: C compiler cannot create executables
+checking for C compiler default output... configure: error: C compiler
+cannot create executables
 configure: error: /bin/sh '../../../../rtems-ss-@value{VERSION}/c/make/configure'
 failed for c/make
 @end example
@@ -240,7 +241,7 @@ Host tools are supposed not to be prefixed.
 e.g.: cc, ld, gcc, autoconf, automake, aclocal etc.
 
 If using the pre-built tool binaries provided by the RTEMS project,
-simply prepend @code{@value{RTEMSPREFIX}} to @code{$PATH}.
+simply prepend @code{@value{RTEMSPREFIX}}/bin to @code{$PATH}.
 
 
 @node Can I build RTEMS Canadian Cross?, Building RTEMS is slow, How to set up $PATH?, Issues when building RTEMS

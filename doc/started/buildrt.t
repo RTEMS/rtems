@@ -57,7 +57,7 @@ tools.  The following command prepends the directory
 where the tools were installed in a previous step:
 
 @example
-export PATH=<INSTALL_POINT>/bin:${PATH}
+export PATH=<INSTALL_POINT>/bin:$@{PATH@}
 @end example
 
 NOTE:  The above command is in Bourne shell (@code{sh}) syntax and

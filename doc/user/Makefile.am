@@ -111,7 +111,7 @@ region.texi: region.t
 
 dpmem.texi: dpmem.t
 	$(BMENU2) \
-	  -p "Region Manager REGION_GET_SEGMENT_SIZE - Obtain size of a segment" \
+	  -p "Region Manager REGION_RESIZE_SEGMENT - Change size of a segment" \
 	    -u "Top" \
 	    -n "I/O Manager" < $< > $@
 

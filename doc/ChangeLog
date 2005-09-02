@@ -1,3 +1,12 @@
+2005-09-02	Joel Sherrill <joel@OARcorp.com>
+
+	* FAQ/basic.texi, FAQ/bsp.texi, FAQ/build45.texi, FAQ/concepts.texi,
+	FAQ/debug.texi, FAQ/endoftime.texi, FAQ/freesw.texi,
+	FAQ/hwdebugaids.texi, FAQ/projects.texi, FAQ/stamp-vti,
+	FAQ/tools.texi, FAQ/version.texi, bsp_howto/rtc.t, started/buildc.t,
+	started/buildrt.t, user/Makefile.am, user/region.t: Fix typos and
+	regenerate.
+
 2005-06-17	Joel Sherrill <joel@OARcorp.com>
 
 	* user/region.t: Add documentation on region_resize_segment.

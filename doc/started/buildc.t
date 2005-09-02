@@ -503,7 +503,7 @@ containing the executables is the prefix used above with
 @file{bin} post-fixed.
 
 @example
-export PATH=@value{RTEMSPREFIX}/bin:${PATH}
+export PATH=@value{RTEMSPREFIX}/bin:$@{PATH@}
 @end example
 
 Failure to have the binutils in the path will cause the GCC and NEWLIB

@@ -48,8 +48,8 @@ the DMV177's @code{RTC_Table} configuration table is below:
 
 boolean dmv177_icm7170_probe(int minor);
 
-rtc_tbl	RTC_Table[] = {
-  { "/dev/rtc0",                /* sDeviceName */
+rtc_tbl	RTC_Table[] = @{
+  @{ "/dev/rtc0",                /* sDeviceName */
     RTC_ICM7170,                /* deviceType */
     &icm7170_fns,               /* pDeviceFns */
     dmv177_icm7170_probe,       /* deviceProbe */
@@ -58,14 +58,14 @@ rtc_tbl	RTC_Table[] = {
     0,                          /* ulDataPort */
     icm7170_get_register_8,     /* getRegister */
     icm7170_set_register_8,     /* setRegister */
-  }
-};
+  @}
+@};
 
 unsigned long  RTC_Count = (sizeof(RTC_Table)/sizeof(rtc_tbl));
 rtems_device_minor_number  RTC_Minor;
 
 boolean dmv177_icm7170_probe(int minor)
-{
+@{
   volatile unsigned16 *card_resource_reg;
 
   card_resource_reg = (volatile unsigned16 *) DMV170_CARD_RESORCE_REG;
@@ -73,7 +73,7 @@ boolean dmv177_icm7170_probe(int minor)
   if ( (*card_resource_reg & DMV170_RTC_INST_MASK) == DMV170_RTC_INSTALLED )
     return TRUE;
   return FALSE;
-}
+@}
 
 @end example
 

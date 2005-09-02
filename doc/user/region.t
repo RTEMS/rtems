@@ -719,13 +719,13 @@ procedure Region_Resize_Segment (
 @subheading DESCRIPTION:
 
 This directive is used to increase or decrease the size of 
-a @a{segment}.  When increasing the size of a segment, it
+a segment.  When increasing the size of a segment, it
 is possible that there is not memory available contiguous
 to the segment.  In this case, the request is unsatisfied.
 
 @subheading NOTES:
 
-If an attempt to increase the size of a @a{segment} fails, then
+If an attempt to increase the size of a segment fails, then
 the application may want to allocate a new segment of the desired
 size, copy the contents of the original segment to the new, larger
 segment and then return the original segment.
