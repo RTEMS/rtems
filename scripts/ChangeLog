@@ -1,5 +1,8 @@
 2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am, autotools/Makefile.am, binutils/Makefile.am
+	cpukit/Makefile.am, gccnewlib/Makefile.am, gdb/Makefile.am
+	rtems/Makefile.am: Rename *.spec into @rpmprefix@*.spec.
 	* binutils/base-binutils.add, binutils/binutils.add,
 	binutils/target-binutils.add, common/common.add.in,
 	cpukit/rtems-cpukit.add, cpukit/target-cpukit.add, 
