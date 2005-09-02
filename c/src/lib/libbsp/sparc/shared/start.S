@@ -226,6 +226,7 @@ SYM(hard_reset):
         mov     %sp, %fp                ! Set frame pointer
         nop
 
+#if 0
         /*
          *  Copy the initialized data to RAM
          *
@@ -255,6 +256,7 @@ copy_data:
         cmp   %g3, %g4                  ! Is the pointer past the end of dest?
         bl    copy_data
         nop
+#endif
 
         /* clear the bss */
 1:
