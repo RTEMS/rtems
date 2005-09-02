@@ -1,3 +1,8 @@
+2005-09-02	Joel Sherrill <joel@OARcorp.com>
+
+	PR 577/bsps
+	* console.c: Make the previously committed patch for this PR compile.
+
 2005-08-19	Cedric Aubert <cedric_aubert@yahoo.fr>
 
 	PR 577/bsps
