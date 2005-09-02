@@ -2,21 +2,21 @@
 # ==============================================================
 # %{gcc_target}-gnat
 # ==============================================================
-%package -n %{rpmprefix}%{gcc_target}-gnat
+%package -n @rpmprefix@%{gcc_target}-gnat
 Summary:        gcc/gnat compiler for %{gcc_target}
 Group:          %{rpmgroup}
 Version:        %{gcc_version}
 %if "%{_prefix}" != "/usr"
-Requires:       %{rpmprefix}rtems@osversion@-base-gnat
+Requires:       @rpmprefix@rtems@osversion@-base-gnat
 %endif
-Requires:       %{rpmprefix}%{gcc_target}-gcc = %{gcc_version}-%{release}
+Requires:       @rpmprefix@%{gcc_target}-gcc = %{gcc_version}-%{release}
 
-%description -n %{rpmprefix}%{gcc_target}-gnat
+%description -n @rpmprefix@%{gcc_target}-gnat
 RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/gnat compiler for %{gcc_target}
 
-%files -n %{rpmprefix}%{gcc_target}-gnat
+%files -n @rpmprefix@%{gcc_target}-gnat
 %defattr(-,root,root)
 %{_bindir}/%{gcc_target}-gnat*
 %{_bindir}/%{gcc_target}-gprmake%{_exeext}

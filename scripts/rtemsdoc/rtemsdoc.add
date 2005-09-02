@@ -4,7 +4,7 @@
 %define srcvers	@rtems_version@
 %define rpmvers  %{expand:%%(echo @rtems_version@ | tr - _ )}
 
-Name:         %{rpmprefix}rtemsdoc
+Name:         @rpmprefix@rtemsdoc
 Release:      @rtems_rpm_release@
 Epoch:	      0
 License:      Distributable

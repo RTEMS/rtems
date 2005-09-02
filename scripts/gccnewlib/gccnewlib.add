@@ -5,7 +5,7 @@
 
 %define gcc_target	@target_alias@
 
-Name:           %{rpmprefix}%{gcc_target}-gcc-newlib
+Name:           @rpmprefix@%{gcc_target}-gcc-newlib
 Summary:        gcc and newlib C Library for %{gcc_target}.
 Group:          %{rpmgroup}
 Release:        @Release@
@@ -23,7 +23,7 @@ Source99:	brp-rtems-compress.in
 %define __os_install_post ./brp-rtems-compress && ./brp-rtems-strip
 
 BuildRequires:	texinfo >= 4.2
-BuildRequires:	%{rpmprefix}%{gcc_target}-binutils
+BuildRequires:	@rpmprefix@%{gcc_target}-binutils
 
 
 #
@@ -124,7 +124,7 @@ BuildRequires:	zlib-devel
 # This really isn't available until RedHat 8.0.  How to conditionalize this?
 BuildRequires:	gcc-gnat
 # Urgh, building gnat requires the target c-toolchain
-BuildRequires:  %{rpmprefix}%{gcc_target}-gcc < %{gccnewlib_version}-%{release}
+BuildRequires:  @rpmprefix@%{gcc_target}-gcc < %{gccnewlib_version}-%{release}
 %endif
 %if %build_f95
 BuildRequires: gmp-devel

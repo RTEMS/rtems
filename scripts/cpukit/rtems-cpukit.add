@@ -2,17 +2,17 @@
 %define rtems_target  @target_alias@
 %define rpmvers %{expand: %%(echo %rtems_version | tr - _ )}
 
-Name:         %{rpmprefix}@target_alias@-cpukit
+Name:         @rpmprefix@@target_alias@-cpukit
 Release:      @Release@
 License:      Various, Open Source.
 Group:        %{rpmgroup}
 
 Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
-BuildRequires:    %{rpmprefix}%{rtems_target}-binutils
-BuildRequires:    %{rpmprefix}%{rtems_target}-gcc 
+BuildRequires:    @rpmprefix@%{rtems_target}-binutils
+BuildRequires:    @rpmprefix@%{rtems_target}-gcc 
 
-Requires:     	%{rpmprefix}%{rtems_target}-binutils
-Requires:     	%{rpmprefix}%{rtems_target}-gcc 
+Requires:     	@rpmprefix@%{rtems_target}-binutils
+Requires:     	@rpmprefix@%{rtems_target}-gcc 
 
 # These are target libs, arch doesn't matter for the host
 BuildArch:	noarch

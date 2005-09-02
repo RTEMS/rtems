@@ -5,7 +5,7 @@ Summary: Documentation for RTEMS @target@ support
 Group: %{rpmgroup}/Documentation
 Requires(post): /sbin/install-info
 Requires(preun): /sbin/install-info
-Requires: %{rpmprefix}rtemsdoc-base
+Requires: @rpmprefix@rtemsdoc-base
 
 %description @target@
 RTEMS is a free operating system for embedded systems.

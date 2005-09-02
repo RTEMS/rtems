@@ -2,7 +2,7 @@
 %define binutils_version     @binutils_version@
 %define binutils_target      @target_alias@
 
-Name:         %{rpmprefix}%{binutils_target}-binutils
+Name:         @rpmprefix@%{binutils_target}-binutils
 Summary:      binutils for target %{binutils_target}
 Group:        %{rpmgroup}
 Release:      @Release@

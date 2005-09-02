@@ -3,28 +3,28 @@
 # ==============================================================
 # rtems-base-gfortran
 # ==============================================================
-%package -n %{rpmprefix}rtems@osversion@-base-gfortran
+%package -n @rpmprefix@rtems@osversion@-base-gfortran
 Summary:	rtems base package for gcc/gfortran compiler
 Group:          %{rpmgroup}
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-%description -n %{rpmprefix}rtems@osversion@-base-gfortran
+%description -n @rpmprefix@rtems@osversion@-base-gfortran
 RTEMS is an open source operating system for embedded systems.
 
 This is the files for gcc/gfortran that are shared by all targets.
 
-%files -n %{rpmprefix}rtems@osversion@-base-gfortran
+%files -n @rpmprefix@rtems@osversion@-base-gfortran
 %defattr(-,root,root)
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/gfortran.info*.gz
 
-%post -n %{rpmprefix}rtems@osversion@-base-gfortran
+%post -n @rpmprefix@rtems@osversion@-base-gfortran
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gfortran.info.gz
 
-%preun -n %{rpmprefix}rtems@osversion@-base-gfortran
+%preun -n @rpmprefix@rtems@osversion@-base-gfortran
 if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gfortran.info.gz
 fi

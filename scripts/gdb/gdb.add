@@ -2,7 +2,7 @@
 %define gdb_version	@gdb_version@
 %define gdb_target	@target_alias@
 
-Name:         %{rpmprefix}%{gdb_target}-gdb
+Name:         @rpmprefix@%{gdb_target}-gdb
 Release:      @Release@
 License:      GPL/LGPL
 Group:        %{rpmgroup}

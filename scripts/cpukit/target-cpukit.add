@@ -1,10 +1,10 @@
 # ==============================================================
 # @target_alias@-cpukit
 # ==============================================================
-# %package -n %{rpmprefix}@target_alias@-cpukit
+# %package -n @rpmprefix@@target_alias@-cpukit
 # Summary:      rtems cpukit for @target_alias@
 # Group: 	%{rpmgroup}
-# Requires: 	%{rpmprefix}@target_alias@-gcc
+# Requires: 	@rpmprefix@@target_alias@-gcc
 
 %files
 %{_prefix}/%{rtems_target}

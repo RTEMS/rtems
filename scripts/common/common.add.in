@@ -10,7 +10,6 @@
 %define _mandir			%{_prefix}/man
 %endif
 
-%define rpmprefix		@rpmprefix@
 %define rpmgroup		@rpmgroup@
 
 %ifos cygwin cygwin32

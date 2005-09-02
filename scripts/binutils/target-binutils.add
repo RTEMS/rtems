@@ -1,18 +1,18 @@
 # ==============================================================
 # %{binutils_target}-binutils
 # ==============================================================
-# %package -n %{rpmprefix}%{binutils_target}-binutils
+# %package -n @rpmprefix@%{binutils_target}-binutils
 # Summary:      rtems binutils for %{binutils_target}
 # Group: %{rpmgroup}
-# Requires: %{rpmprefix}rtems@osversion@-base-binutils
+# Requires: @rpmprefix@rtems@osversion@-base-binutils
 
-%description -n %{rpmprefix}%{binutils_target}-binutils
+%description -n @rpmprefix@%{binutils_target}-binutils
 
 RTEMS is an open source operating system for embedded systems.
 
 This is the GNU binutils for RTEMS targetting %{binutils_target}.
 
-%files -n %{rpmprefix}%{binutils_target}-binutils
+%files -n @rpmprefix@%{binutils_target}-binutils
 %defattr(-,root,root)
 %if "%{_prefix}" != "/usr"
 %dir %{_mandir}

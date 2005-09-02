@@ -1,18 +1,18 @@
 # =====================================================================
 # %{gdb_target}-gdb
 # =====================================================================
-# %package -n %{rpmprefix}%{gdb_target}-gdb
+# %package -n @rpmprefix@%{gdb_target}-gdb
 # Summary:      rtems gdb for %{gdb_target}
 # Group: %{rpmgroup}
-# Requires: %{rpmprefix}rtems@osversion@-base-gdb
+# Requires: @rpmprefix@rtems@osversion@-base-gdb
 
-%description -n %{rpmprefix}%{gdb_target}-gdb
+%description -n @rpmprefix@%{gdb_target}-gdb
 
 RTEMS is an open source operating system for embedded systems.
 
 This is the GNU gdb for RTEMS targetting %{gdb_target}.
 
-%files -n %{rpmprefix}%{gdb_target}-gdb
+%files -n @rpmprefix@%{gdb_target}-gdb
 %defattr(-,root,root)
 %{_mandir}/man1/%{gdb_target}-gdb.1*
 %if "%_sim" == "1"

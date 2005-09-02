@@ -2,22 +2,22 @@
 # ==============================================================
 # %{gcc_target}-gfortran
 # ==============================================================
-%package -n %{rpmprefix}%{gcc_target}-gfortran
+%package -n @rpmprefix@%{gcc_target}-gfortran
 Summary:	gcc/gfortran compiler for %{gcc_target}
 Group:          %{rpmgroup}
 Version:	%{gcc_version}
 %if "%{_prefix}" != "/usr"
-Requires:       %{rpmprefix}rtems@osversion@-base-gfortran
+Requires:       @rpmprefix@rtems@osversion@-base-gfortran
 %endif
-Requires:       %{rpmprefix}%{gcc_target}-gcc = %{gcc_version}-%{release}
-Obsoletes:      %{rpmprefix}%{gcc_target}-g77
+Requires:       @rpmprefix@%{gcc_target}-gcc = %{gcc_version}-%{release}
+Obsoletes:      @rpmprefix@%{gcc_target}-g77
 
-%description -n %{rpmprefix}%{gcc_target}-gfortran
+%description -n @rpmprefix@%{gcc_target}-gfortran
 RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/gfortran compiler for %{gcc_target}
 
-%files -n %{rpmprefix}%{gcc_target}-gfortran -f build/files.gfortran
+%files -n @rpmprefix@%{gcc_target}-gfortran -f build/files.gfortran
 %defattr(-,root,root)
 %{_bindir}/%{gcc_target}-gfortran%{_exeext}
 
