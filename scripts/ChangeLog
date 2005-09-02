@@ -1,6 +1,6 @@
 2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* cpukit/mkspec.in, rtems/mkspec.in: Propagate @rpmprefi@.
+	* cpukit/mkspec.in, rtems/mkspec.in: Propagate @rpmprefix@.
 
 2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
