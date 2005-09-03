@@ -1,3 +1,7 @@
+2005-09-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* binutils/binutils.add: Remove dlltool, nlmconv, windres man pages.
+
 2005-09-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* common/common.add.in: Remove Vendor:. Remove Distribution:.
