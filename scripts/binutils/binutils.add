@@ -110,4 +110,9 @@ cd ..
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
 
+# manpages without corresponding tools
+  rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-dlltool*
+  rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-nlmconv*
+  rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-windres*
+
   cd ..
