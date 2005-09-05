@@ -1,3 +1,8 @@
+2005-09-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* binutils/target-binutils.add: Don't own %{_mandir}/man1 for
+	%_prefix == /usr.
+
 2005-09-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/binutils.add: Remove dlltool, nlmconv, windres man pages.
