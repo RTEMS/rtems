@@ -127,6 +127,10 @@ rtems_device_driver console_close(
 )
 {
   rtems_libio_open_close_args_t *args = arg;
+  struct rtems_termios_tty      *current_tty;
+
+  /* Get tty pointeur from the Console_Port_Data */
+  current_tty = Console_Port_Data[minor].termios_data;
 
   /* Get the tty refcount to determine if we need to do deviceStopRemoteTx.
    * Stop only if it's the last one opened.
