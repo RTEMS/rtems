@@ -1,5 +1,6 @@
 2005-09-12	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
+	PR 527/bsps
 	PR 822/bsps
 	* console/console.c, startup/bspstart.c, startup/imbx8xx.c,
 	startup/mmutlbtab.c, startup/start.S, vectors/vectors_init.c:
