@@ -239,6 +239,46 @@ spin:
 	cmpwi	r3, 0x1
 	beq	.spin
 /*
+ * test function:	 blink orange led once
+ */
+#define LEDBLINK_DELAY (5*1000*1000)	
+#define LEDPORT 0xFA100001
+#define LEDMASK 0xf0
+#define LEDON   0x00
+#define LEDOFF  0x08
+		
+	PUBLIC_VAR(ledblink)
+SYM(ledblink):
+	lis	r3,LEDBLINK_DELAY>>16
+ledblink1:	
+	subi	r3,r3,1
+	cmpi	0,1,r3,0
+	bne	ledblink1
+	/*
+	 * turn orange led off
+	 */
+	lis	r3,LEDPORT@ha
+	lbz	r0,LEDPORT@l(r3)
+	andi.	r0,r0,LEDMASK
+	ori	r0,r0,LEDOFF
+	stb	r0,LEDPORT@l(r3)
+	
+	lis	r3,LEDBLINK_DELAY>>16
+ledblink2:	
+	subi	r3,r3,1
+	cmpi	0,1,r3,0
+	bne	ledblink2
+	/*
+	 * turn orange led on
+	 */
+	lis	r3,LEDPORT@ha
+	lbz	r0,LEDPORT@l(r3)
+	andi.	r0,r0,LEDMASK
+	ori	r0,r0,LEDON
+	stb	r0,LEDPORT@l(r3)
+	
+	blr	
+/*
  * #define LOADED_BY_EPPCBUG
  */
 #define LOADED_BY_EPPCBUG

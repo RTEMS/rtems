@@ -31,19 +31,8 @@
  * location is equal to its real address.
  */
 MMU_TLB_table_t MMU_TLB_table[] = {
-#if ( defined(mbx860_001b) )
-  /*
-	 * DRAM: CS1, Start address 0x00000000, 2M,
-	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy,
-	 *	R/W,X for all, no ASID comparison, not cache-inhibited.
-	 *	Last 512K block is cache-inhibited, but not guarded for use by EPPCBug.
-	 * EPN		TWC	RPN
-	 */
-  { 0x00000200,	0x05,	0x000009FD },	/* DRAM - PS=512K */
-  { 0x00080200,	0x05,	0x000809FD },	/* DRAM - PS=512K */
-  { 0x00100200,	0x05,	0x001009FD },	/* DRAM - PS=512K */
-  { 0x00180200,	0x05,	0x001809FF },	/* DRAM - PS=512K, cache-inhibited */
-#elif ( defined(mbx860_002b) || \
+#if    ( defined(mbx860_001b) || \
+         defined(mbx860_002b) || \
          defined(mbx860_003b) || \
          defined(mbx821_001b) || \
          defined(mbx821_002b) || \

@@ -271,6 +271,7 @@ void _InitMBX8xx (void)
   m8xx.sccrk = M8xx_UNLOCK_KEY;		/* unlock SCCR */
   m8xx.sccr = 0x02800000;		/* for MBX860/MBX821 */
 
+#if 0 /* IMD hack: do not init PLL after EPPCbug load */
   /* Initialize the PLL, Low-Power, and Reset Control Register (PLPRCR) */
   /* - set the clock speed and set normal power mode */
   m8xx.plprck = M8xx_UNLOCK_KEY;	/* unlock PLPRCR */
@@ -301,6 +302,7 @@ void _InitMBX8xx (void)
 #else
 #error "MBX board not defined"
 #endif
+#endif
   /* Unlock the timebase and decrementer registers. */
   m8xx.tbk = M8xx_UNLOCK_KEY;
   /*
@@ -316,6 +318,7 @@ void _InitMBX8xx (void)
   _mtspr( M8xx_TBU_WR, r1 );
   _mtspr( M8xx_TBL_WR, r1 );
 
+#if 0 /* IMD hack: do not init UPMs after EPPCbug load */
   /*
    * Memory Controller Initialization
    */
@@ -584,6 +587,7 @@ void _InitMBX8xx (void)
 #endif
   m8xx.memc[7]._br = M8xx_BR_BA(0xFC000000) | M8xx_BR_AT(0) | M8xx_BR_PS8 |
 		M8xx_BR_MS_GPCM | M8xx_MEMC_BR_V;
+#endif /* IMD hack */
   /*
    * PCMCIA initialization
    */

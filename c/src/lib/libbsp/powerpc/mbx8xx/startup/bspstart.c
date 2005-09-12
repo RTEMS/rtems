@@ -196,6 +196,7 @@ void bsp_start(void)
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
+
   if( Cpu_table.interrupt_stack_size < 4 * 1024 )
       Cpu_table.interrupt_stack_size = 4 * 1024;
 
