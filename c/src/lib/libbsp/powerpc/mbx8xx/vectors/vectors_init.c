@@ -115,6 +115,11 @@ void initialize_exceptions()
     if (!mpc8xx_vector_is_valid (i)) {
       continue;
     }
+#if 0 /* FIXME: refine this condition, leave Syscall for EPPCBug console */
+    if (i == ASM_SYS_VECTOR) {
+      continue;
+    }
+#endif
     exception_table[i].exceptIndex	= i;
     exception_table[i].hdl		= exception_config.defaultRawEntry.hdl;
     exception_table[i].hdl.vector	= i;

@@ -542,6 +542,13 @@ serial_init()
 	unsigned int		dpaddr, memaddr;
 	bd_t	*bd;
 
+#if NVRAM_CONFIGURE == 1
+	if ( ((nvram->console_mode & 0x06) != 0x04 ) || 
+	     ((nvram->console_mode & 0x30) != 0x20 )) {
+	  /*
+	   * FIXME: refine this condition...
+	   */
+#endif
 	bd = eppcbugInfo;
 	
 	cp = cpmp;
@@ -647,7 +654,26 @@ serial_init()
 	/* Enable transmitter/receiver.
 	*/
 	sp->smc_smcmr |= SMCMR_REN | SMCMR_TEN;
+#if NVRAM_CONFIGURE == 1
+	}
+	else {
+	  const char bootmsg_text[]= "using EPPC bug for console I/O\n";
+	  _EPPCBug_pollWrite((nvram->console_printk_port & 0x70) >> 4,
+			     bootmsg_text,
+			     sizeof(bootmsg_text)-1);
+	}
+#endif
+#if NVRAM_CONFIGURE == 1
+	if ((nvram->console_mode & 0x30) == 0x20 ) {
+	  BSP_output_char = _BSP_output_char;
+	}
+	else {
+	  BSP_output_char = serial_putchar;
+	}
+#else
+
 	BSP_output_char = serial_putchar;
+#endif
 }
 
 void
