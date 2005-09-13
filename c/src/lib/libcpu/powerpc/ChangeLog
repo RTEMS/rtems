@@ -1,3 +1,13 @@
+2005-09-12	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 527/bsps
+	PR 822/bsps
+	* mpc8xx/clock/clock.c: Currently the MBX8xx BSP does not boot,
+	because some logical errors are in the startup code. Additionally,
+	the mpc8xx shared clock driver does not support the clocking scheme
+	of some of the board variants, which are clocked from a 32768Hz (!)
+	external crystal.
+
 2005-08-12	Phil Torre <ptorre@zetron.com>
 
 	PR 816/bsps

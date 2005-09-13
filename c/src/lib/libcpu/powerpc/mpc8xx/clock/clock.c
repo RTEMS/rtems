@@ -71,15 +71,45 @@ void clockOn(void* unused)
 {
   unsigned desiredLevel;
   uint32_t   pit_value;
+  rtems_unsigned32 mf_value;
+  rtems_unsigned32 extclk_value;
+  rtems_boolean force_prescaler = FALSE;
+  if (rtems_cpu_configuration_get_clicks_per_usec() == 0) {
+    /*
+     * oscclk is too low for PIT, compute extclk and derive PIT from there
+     */
+    mf_value  = m8xx.plprcr >> 20;    
+    pit_value = (_CPU_Table.clock_speed
+		 / (mf_value+1) 
+		 / 1000
+		 / 4
+		 * rtems_configuration_get_microseconds_per_tick()
+		 / 1000);
+    m8xx.sccr |=  (1<<23);
+    force_prescaler = TRUE;
+  }
+  else {
+    pit_value = (rtems_configuration_get_microseconds_per_tick() *
+		 rtems_cpu_configuration_get_clicks_per_usec());
   
-  pit_value = (rtems_configuration_get_microseconds_per_tick() *
-               rtems_cpu_configuration_get_clicks_per_usec()) - 1 ;
-  
+    m8xx.sccr &= ~(1<<23);
+  }
+if ((pit_value > 0xffff) || force_prescaler){
+    /*
+     * try to activate prescaler
+     * NOTE: divider generates odd values now...
+     */
+    pit_value = pit_value / 128;
+    m8xx.sccr |= (1<<24);
+  }
+  else {
+    m8xx.sccr &= ~(1<<24);
+  }
+
   if (pit_value > 0xffff) {           /* pit is only 16 bits long */
     rtems_fatal_error_occurred(-1);
   }
-  m8xx.sccr &= ~(1<<24);
-  m8xx.pitc = pit_value;
+  m8xx.pitc = pit_value - 1;
 
   desiredLevel = BSP_get_clock_irq_level();
   /* set PIT irq level, enable PIT, PIT interrupts */
