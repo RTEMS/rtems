@@ -1,5 +1,10 @@
 2005-09-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/gccnewlib.add: Pass CC="%__cc $RPM_OPT_FLAGS" to
+	configure.
+
+2005-09-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* gccnewlib/gccnewlib.add, gdb/gdb.add: Append %_bindir to PATH
 	only if %_prefix != /usr.
 

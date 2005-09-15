@@ -204,6 +204,8 @@ chmod +x brp-rtems-compress
 %if "%{_prefix}" != "/usr"
   export PATH="%{_bindir}:${PATH}"
 %endif
+
+  CC="%{__cc} ${RPM_OPT_FLAGS}" \
   ../gcc-%{gcc_version}/configure \
     --prefix=%{_prefix} \
     --bindir=%{_bindir} \
