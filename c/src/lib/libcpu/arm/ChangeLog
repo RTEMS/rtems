@@ -1,3 +1,9 @@
+2005-09-15	Jay Monkman <jtm@lopingdog.com>
+
+	PR 776/bsps
+	* at91rm9200/irq/bsp_irq_asm.S, at91rm9200/irq/irq.h: Added code to
+	pass interrupt vector number to ISR on AT91RM9200.
+
 2005-08-17	Lars Munch <lars@segv.dk>
 
 	PR 727/bsps

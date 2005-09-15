@@ -77,7 +77,7 @@ typedef unsigned char  rtems_irq_trigger;
 
 struct  __rtems_irq_connect_data__;     /* forward declaratiuon */
 typedef unsigned int rtems_irq_number;
-typedef void (*rtems_irq_hdl)       (void);
+typedef void (*rtems_irq_hdl)       (uint32_t vector);
 typedef void (*rtems_irq_enable)    (const struct __rtems_irq_connect_data__*);
 typedef void (*rtems_irq_disable)   (const struct __rtems_irq_connect_data__*);
 typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);

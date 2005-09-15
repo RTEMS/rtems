@@ -18,11 +18,14 @@ ExecuteITHandler :
 /*
  * Look at interrupt status register to determine source.
  * From source, determine offset into expanded vector table
- * and load handler address into r0.
+ * and load vector into r0 and handler address into r1.
  */
         ldr     r0, =0xFFFFF100   /* AIC_CTL_BASE + AIC_IVR */
         ldr     r1, [r0]                
         str     r1, [r0]          /* write back in case we are using protect */
+
+	ldr     r0, =0xFFFFF108   /* AIC_CTL_BASE + AIC_ISR */
+        ldr     r0, [r0]          /* Read interrupt vector  */
 
         stmdb   sp!,{lr}
         ldr     lr, =IRQ_return   /* prepare the return from handler  */
