@@ -86,7 +86,9 @@ cd ..
 
   mkdir -p build
   cd build
+%if "%{_prefix}" != "/usr"
   export PATH="%{_bindir}:${PATH}"
+%endif
   CFLAGS="$RPM_OPT_FLAGS" \
   ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \

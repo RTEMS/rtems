@@ -201,7 +201,9 @@ chmod +x brp-rtems-compress
 %if %build_libgcj
   optargs="--enable-libgcj"
 %endif
+%if "%{_prefix}" != "/usr"
   export PATH="%{_bindir}:${PATH}"
+%endif
   ../gcc-%{gcc_version}/configure \
     --prefix=%{_prefix} \
     --bindir=%{_bindir} \
