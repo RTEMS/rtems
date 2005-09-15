@@ -19,53 +19,53 @@ RPM_SPECS_DATA =
 
 MKBINUTILSSPEC_DEPS = mkspec binutils.spec.in $(top_builddir)/setup.cache
 
-@rpmprefix@arm-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@arm-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@arm-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@arm-rtems@osversion@-binutils.spec
 
-@rpmprefix@h8300-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@h8300-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@h8300-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@h8300-rtems@osversion@-binutils.spec
 
-@rpmprefix@i386-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@i386-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@i386-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@i386-rtems@osversion@-binutils.spec
 
-@rpmprefix@m68k-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@m68k-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@m68k-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@m68k-rtems@osversion@-binutils.spec
 
-@rpmprefix@mips-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@mips-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@mips-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@mips-rtems@osversion@-binutils.spec
 
-@rpmprefix@mips64-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@mips64-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips64-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@mips64-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@mips64-rtems@osversion@-binutils.spec
 
-@rpmprefix@powerpc-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@powerpc-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache powerpc-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@powerpc-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@powerpc-rtems@osversion@-binutils.spec
 
-@rpmprefix@sh-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@sh-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sh-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@sh-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sh-rtems@osversion@-binutils.spec
 
-@rpmprefix@sh-rtemscoff@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@sh-rtemscoff@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sh-rtemscoff@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@sh-rtemscoff@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sh-rtemscoff@osversion@-binutils.spec
 
-@rpmprefix@sparc-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@sparc-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@sparc-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sparc-rtems@osversion@-binutils.spec
 
-@rpmprefix@tic4x-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@tic4x-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@tic4x-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@tic4x-rtems@osversion@-binutils.spec
 
-@rpmprefix@avr-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+@rpmprefix@avr-rtems@osversion@-binutils.spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache avr-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@avr-rtems@osversion@-$(BINUTILSVERS).spec
+RPM_SPECS_DATA += @rpmprefix@avr-rtems@osversion@-binutils.spec
 
 CLEANFILES += $(RPM_SPECS_DATA)
 
