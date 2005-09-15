@@ -1,5 +1,10 @@
 2005-09-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/gccnewlib.add, gdb/gdb.add: Append %_bindir to PATH
+	only if %_prefix != /usr.
+
+2005-09-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove GCC3NEWLIBVERS, BINUTILSVERS, GDBVERS.
 	* binutils/Makefile.am: Generate unversioned *binutils.spec.
 	* gccnewlib/Makefile.am: Generate unversioned *gcc-newlib.spec.
