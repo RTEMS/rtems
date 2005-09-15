@@ -67,13 +67,10 @@ __ARM_ARCH5TE__ "ARMv5TE"
 
 @section Count Leading Zeroes Instruction
 
-The macro @code{ARM_HAS_CLZ} is set to 1 to indicate that
-the architectural version has the @code{clz} instruction.
-On ARM architectural version 5 and above, the count
-leading zeroes instruction (@code{clz}) is available and
-can be used to speed up the find first bit operation.  
-The use of this instruction significantly speeds up the
-scheduling associated with a thread blocking.
+The ARMv5 and later has the count leading zeroes (@code{clz})
+instruction which could be used to speed up the find first bit
+operation.  The use of this instruction should significantly speed up
+the scheduling associated with a thread blocking.
 
 @section Floating Point Unit
 
