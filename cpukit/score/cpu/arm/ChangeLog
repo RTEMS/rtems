@@ -1,3 +1,9 @@
+2005-09-15	Jay Monkman <jtm@lopingdog.com>
+
+	PR 365/rtems
+	* rtems/score/arm.h, rtems/score/cpu.h: Removed unused ARM_HAS_CLZ
+	macro.
+
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Split out preinstallation rules.
