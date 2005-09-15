@@ -23,58 +23,58 @@ MKGDBSPEC_DEPS = mkspec gdb.spec.in $(top_builddir)/setup.cache
 
 RPM_SPECS_DATA =
 
-@rpmprefix@arm-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@arm-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@arm-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@arm-rtems@osversion@-gdb.spec
 
-@rpmprefix@avr-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@avr-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache avr-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@avr-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@avr-rtems@osversion@-gdb.spec
 
-@rpmprefix@h8300-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@h8300-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@h8300-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@h8300-rtems@osversion@-gdb.spec
 
-@rpmprefix@i386-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@i386-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@i386-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@i386-rtems@osversion@-gdb.spec
 
-@rpmprefix@m68k-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@m68k-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@m68k-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@m68k-rtems@osversion@-gdb.spec
 
-@rpmprefix@mips-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@mips-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@mips-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@mips-rtems@osversion@-gdb.spec
 
-@rpmprefix@mips64-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@mips64-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips64-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@mips64-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@mips64-rtems@osversion@-gdb.spec
 
-@rpmprefix@mipstx39-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@mipstx39-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mipstx39-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@mipstx39-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@mipstx39-rtems@osversion@-gdb.spec
 
-@rpmprefix@powerpc-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@powerpc-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache powerpc-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@powerpc-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@powerpc-rtems@osversion@-gdb.spec
 
-@rpmprefix@sh-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@sh-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@sh-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sh-rtems@osversion@-gdb.spec
 
-@rpmprefix@sh-rtemscoff@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@sh-rtemscoff@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtemscoff@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@sh-rtemscoff@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sh-rtemscoff@osversion@-gdb.spec
 
-@rpmprefix@sparc-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+@rpmprefix@sparc-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems@osversion@ > $@
-RPM_SPECS_DATA += @rpmprefix@sparc-rtems@osversion@-$(GDBVERS).spec
+RPM_SPECS_DATA += @rpmprefix@sparc-rtems@osversion@-gdb.spec
 
 # does not build with 5.2
-# @rpmprefix@tic4x-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+# @rpmprefix@tic4x-rtems@osversion@-gdb.spec: $(MKGDBSPEC_DEPS)
 # 	$(MKSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
-# RPM_SPECS_DATA += @rpmprefix@tic4x-rtems@osversion@-$(GDBVERS).spec
+# RPM_SPECS_DATA += @rpmprefix@tic4x-rtems@osversion@-gdb.spec
 
 CLEANFILES += $(RPM_SPECS_DATA)
 
