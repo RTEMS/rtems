@@ -1,3 +1,10 @@
+2005-09-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove GCC3NEWLIBVERS, BINUTILSVERS, GDBVERS.
+	* binutils/Makefile.am: Generate unversioned *binutils.spec.
+	* gccnewlib/Makefile.am: Generate unversioned *gcc-newlib.spec.
+	* gdb/Makefile.am: Generate unversioned *gdb.spec.
+
 2005-09-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/target-binutils.add: Don't own %{_mandir}/man1 for
