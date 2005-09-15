@@ -56,12 +56,6 @@ case "$host" in
 esac
 AC_MSG_RESULT($RPM_CPU)
 
-GCC3NEWLIBVERS="gcc-${gcc_version}-newlib-${newlib_version}"
-AC_SUBST(GCC3NEWLIBVERS)
-BINUTILSVERS="binutils-${binutils_version}"
-AC_SUBST(BINUTILSVERS)
-GDBVERS="gdb-${gdb_version}"
-AC_SUBST(GDBVERS)
 BSPVERS="${rtems_version}"
 AC_SUBST(RTEMS_VERSION,[_RTEMS_VERSION])
 AC_SUBST(BSPVERS)
