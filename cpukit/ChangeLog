@@ -1,6 +1,7 @@
 2005-09-16  Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/Makefile.am: Cosmetics.
+	* libnetworking/nfs/rpcv2.h: Update from FreeBSD.
 	* libnetworking/nfs/bootp_subr.c: Remove superfluous includes.
 	* libnetworking/nfs/xdr_subs.h: Partial update from FreeBSD.
 	* libnetworking/netinet/in.h: Partial update from FreeBSD.
