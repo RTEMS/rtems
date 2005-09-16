@@ -43,7 +43,7 @@ dnl RTEMS_BSPOPTS_SET(VAR,BSP,DEFAULT)
 dnl Set up a value DEFAULT to be used as default value for variable VAR for
 dnl BSP in RTEMS_BSPOPTS_HELP.
 
-dnl MUST be use in front of exactly _one_ corresponding RTEMS_BSPOPTS_HELP
+dnl MUST be used in front of exactly _one_ corresponding RTEMS_BSPOPTS_HELP
 
 AC_DEFUN([RTEMS_BSPOPTS_SET],[dnl
 m4_append([_$1],
@@ -61,6 +61,6 @@ dnl Stripped down version of autoconf-2.52's AC_ARG_VAR.
 AC_DEFUN([RTEMS_ARG_VAR],
 [
 m4_expand_once([m4_divert_once([HELP_VAR],
-[AS_HELP_STRING($1,$2,              )])],
+[AS_HELP_STRING([$1],[$2],              )])],
       [$0($1)])dnl
 ])

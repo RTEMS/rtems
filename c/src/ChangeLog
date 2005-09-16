@@ -1,10 +1,6 @@
-2005-09-02  Joel Sherrill <joel@OARcorp.com>
+2005-09-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-    * aclocal/version.m4: Updated to rtems-4.6.99.2.
-
-2005-09-02  Joel Sherrill <joel@OARcorp.com>
-
-    * aclocal/version.m4: Updated to rtems-4.6.99.2.
+	* aclocal/bspopts.m4: Add missing m4 quotes.
 
 2005-09-02  Joel Sherrill <joel@OARcorp.com>
 
