@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)in.h	8.3 (Berkeley) 1/3/94
- * $FreeBSD: src/sys/netinet/in.h,v 1.90 2005/02/22 13:04:03 glebius Exp $
+ * $FreeBSD: src/sys/netinet/in.h,v 1.91 2005/08/22 16:13:07 andre Exp $
  */
  
 /*
@@ -59,7 +59,7 @@ typedef	__sa_family_t		sa_family_t;
 #define	_SA_FAMILY_T_DECLARED
 #endif
 
-/* Internet address (a structure for historical reasons) */
+/* Internet address (a structure for historical reasons). */
 #ifndef _STRUCT_IN_ADDR_DECLARED
 struct in_addr {
 	u_long s_addr;
@@ -289,19 +289,17 @@ struct sockaddr_in {
 #define	IN_EXPERIMENTAL(i)	(((u_int32_t)(i) & 0xf0000000) == 0xf0000000)
 #define	IN_BADCLASS(i)		(((u_int32_t)(i) & 0xf0000000) == 0xf0000000)
 
+#define	INADDR_LOOPBACK		(u_int32_t)0x7f000001
 #ifndef _KERNEL
 #define	INADDR_NONE		0xffffffff		/* -1 return */
 #endif
 
-#define	INADDR_UNSPEC_GROUP	(u_long)0xe0000000	/* 224.0.0.0 */
-#define	INADDR_ALLHOSTS_GROUP	(u_long)0xe0000001	/* 224.0.0.1 */
-#define	INADDR_ALLRTRS_GROUP	(u_long)0xe0000002	/* 224.0.0.2 */
-#define	INADDR_MAX_LOCAL_GROUP	(u_long)0xe00000ff	/* 224.0.0.255 */
+#define	INADDR_UNSPEC_GROUP	(u_int32_t)0xe0000000	/* 224.0.0.0 */
+#define	INADDR_ALLHOSTS_GROUP	(u_int32_t)0xe0000001	/* 224.0.0.1 */
+#define	INADDR_ALLRTRS_GROUP	(u_int32_t)0xe0000002	/* 224.0.0.2 */
+#define	INADDR_MAX_LOCAL_GROUP	(u_int32_t)0xe00000ff	/* 224.0.0.255 */
 
 #define	IN_LOOPBACKNET		127			/* official! */
-#ifndef INADDR_LOOPBACK
-#define	INADDR_LOOPBACK		(u_long)0x7F000001	/* 127.0.0.1 */
-#endif
 
 /*
  * Structure used to describe IP options.
@@ -444,11 +442,11 @@ struct ip_mreq {
 #ifdef _KERNEL
 struct ifnet; struct mbuf;	/* forward declarations for Standard C */
 
-int	 in_broadcast __P((struct in_addr, struct ifnet *));
-int	 in_canforward __P((struct in_addr));
-int	 in_cksum __P((struct mbuf *, int));
-int	 in_localaddr __P((struct in_addr));
-char 	*inet_ntoa __P((struct in_addr)); /* in libkern */
+int	 in_broadcast(struct in_addr, struct ifnet *);
+int	 in_canforward(struct in_addr);
+int	 in_cksum(struct mbuf *, int);
+int	 in_localaddr(struct in_addr);
+char 	*inet_ntoa(struct in_addr); /* in libkern */
 
 /* Firewall hooks */
 struct ip;

@@ -13,10 +13,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -33,7 +29,11 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	@(#)xdr_subs.h	8.1 (Berkeley) 6/10/93
+ *	@(#)xdr_subs.h	8.3 (Berkeley) 3/30/95
+ * $FreeBSD: src/sys/nfs/xdr_subs.h,v 1.15 2005/01/07 01:45:50 imp Exp $
+ */
+ 
+/*
  * $Id$
  */
 
@@ -51,8 +51,8 @@
  * but we cannot count on their alignment anyway.
  */
 
-#define	fxdr_unsigned(t, v)	((t)ntohl((long)(v)))
-#define	txdr_unsigned(v)	(htonl((long)(v)))
+#define	fxdr_unsigned(t, v)	((t)ntohl((int32_t)(v)))
+#define	txdr_unsigned(v)	(htonl((int32_t)(v)))
 
 #define	fxdr_nfsv2time(f, t) { \
 	(t)->tv_sec = ntohl(((struct nfsv2_time *)(f))->nfsv2_sec); \
@@ -78,13 +78,13 @@
 	((struct nfsv3_time *)(t))->nfsv3_nsec = htonl((f)->tv_nsec); \
 }
 
-#define	fxdr_hyper(f, t) { \
-	((long *)(t))[_QUAD_HIGHWORD] = ntohl(((long *)(f))[0]); \
-	((long *)(t))[_QUAD_LOWWORD] = ntohl(((long *)(f))[1]); \
-}
-#define	txdr_hyper(f, t) { \
-	((long *)(t))[0] = htonl(((long *)(f))[_QUAD_HIGHWORD]); \
-	((long *)(t))[1] = htonl(((long *)(f))[_QUAD_LOWWORD]); \
-}
+#define	fxdr_hyper(f) \
+	((((u_quad_t)ntohl(((u_int32_t *)(f))[0])) << 32) | \
+	 (u_quad_t)(ntohl(((u_int32_t *)(f))[1])))
+#define	txdr_hyper(f, t) \
+do { \
+	((u_int32_t *)(t))[0] = htonl((u_int32_t)((f) >> 32)); \
+	((u_int32_t *)(t))[1] = htonl((u_int32_t)((f) & 0xffffffff)); \
+} while (0)
 
 #endif
