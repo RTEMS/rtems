@@ -22,8 +22,6 @@ This BSP is based on the work of:
 
 TODO:
 =====
-Make a clean exit routine to return to Arcturus monitor
-
 The bsp relies on the Arcturus monitor to set up DRAM and all chip selects. 
 This seems OK to me, but others may find it lame.....
 

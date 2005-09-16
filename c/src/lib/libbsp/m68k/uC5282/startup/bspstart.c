@@ -362,6 +362,7 @@ type bsp_##name(d1type d1, d2type d2, d3type d3)            \
 #define SysCode_setbenv           15 /* get bootloader environment variable */
 #define SysCode_flash_erase_range 19 /* erase a section of flash */
 #define SysCode_flash_write_range 20 /* write a section of flash */
+syscall_1(int, reset, int, flags)
 syscall_1(unsigned const char *, gethwaddr, int, a)
 syscall_1(const char *, getbenv, const char *, a)
 syscall_2(int, program, bsp_mnode_t *, chain, int, flags)

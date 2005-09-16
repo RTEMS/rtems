@@ -26,10 +26,5 @@
 void bsp_cleanup( void )
 {
 	printk("\nRTEMS exited!\n");
-	for ( ;; )
-	{
-		asm volatile ( " nop " );
-		asm volatile ( " nop " );
-	}
-
+    bsp_reset(0);
 }
