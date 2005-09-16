@@ -1,3 +1,7 @@
+2005-09-16  Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/nfs/nfsproto.h: Partial update from FreeBSD.
+
 2005-09-02  Joel Sherrill <joel@OARcorp.com>
 
     * aclocal/version.m4: Updated to rtems-4.6.99.2.
