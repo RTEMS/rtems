@@ -635,10 +635,8 @@ bootpc_adjust_interface(struct ifreq *ireq,struct socket *so,
 }
 
 #if !defined(__rtems__)
-static int setfs(addr, path, p)
-	struct sockaddr_in *addr;
-	char *path;
-	char *p;
+static int
+setfs(struct sockaddr_in *addr, char *path, char *p)
 {
 	unsigned ip = 0;
 	int val;
@@ -670,8 +668,8 @@ static int setfs(addr, path, p)
 #endif
 
 #if !defined(__rtems__)
-static int getdec(ptr)
-	char **ptr;
+static int
+getdec(char **ptr)
 {
 	char *p = *ptr;
 	int ret=0;
@@ -686,8 +684,8 @@ static int getdec(ptr)
 #endif
 
 #if !defined(__rtems__)
-static char *substr(a,b)
-	char *a,*b;
+static char *
+substr(char *a, char *b)
 {
 	char *loc1;
 	char *loc2;
