@@ -47,9 +47,9 @@
 #include <sys/kernel.h>
 #include <sys/conf.h>
 #include <sys/sockio.h>
-#include <sys/proc.h>
 #include <sys/mount.h>
 #include <sys/mbuf.h>
+#include <sys/proc.h>
 #include <sys/reboot.h>
 #include <sys/socket.h>
 #include <sys/socketvar.h>
@@ -62,14 +62,11 @@
 #include <net/if_dl.h>
 #include <netinet/if_ether.h>
 
-#include <nfs/rpcv2.h>
 #include <nfs/nfsproto.h>
 #include <nfsclient/nfsargs.h>
 #include <nfsclient/nfsdiskless.h>
 #include <nfs/xdr_subs.h>
 
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <fcntl.h>
 #include <rtems/mkrootfs.h>
 #include <rtems/rtems_bsdnet.h>
