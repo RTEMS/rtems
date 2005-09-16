@@ -218,21 +218,8 @@ unsigned int EUMBBAR;
  * Processor Address Map B (CHRP).
  */ 
 unsigned int get_eumbbar() {
-  register int a, e;
-
-  asm volatile( "lis %0,0xfec0; ori  %0,%0,0x0000": "=r" (a) );
-  asm volatile("sync");
-                                                                
-  asm volatile("lis %0,0x8000; ori %0,%0,0x0078": "=r"(e) ); 
-  asm volatile("stwbrx  %0,0x0,%1": "=r"(e): "r"(a));  
-  asm volatile("sync");
-
-  asm volatile("lis %0,0xfee0; ori %0,%0,0x0000": "=r" (a) ); 
-  asm volatile("sync");
-                                                         
-  asm volatile("lwbrx %0,0x0,%1": "=r" (e): "r" (a));
-  asm volatile("isync");
-  return e;
+  out_le32( (volatile unsigned32*)0xfec00000, 0x80000078 );
+  return in_le32( (volatile unsigned32*)0xfee00000 );
 }
 #endif
 
@@ -399,8 +386,8 @@ void bsp_start( void )
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to start PCI buses scanning and initialization\n");
 #endif
-  pci_initialize();
 
+  pci_initialize();
   {
     const struct _int_map *bspmap  = motorolaIntMap(currentBoard);
     if( bspmap ) {
@@ -518,6 +505,7 @@ void bsp_start( void )
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to initialize VME bridge\n");
 #endif
+
   /*
    * VME initialization is in a separate file so apps which don't use VME or
    * want a different configuration may link against a customized routine.

@@ -1,3 +1,8 @@
+2005-09-16	richard.campbell@OARCorp.com
+
+	* startup/bspstart.c: Rewrote get_eumbbar() in C. Function was written
+	in inline assembly and containined a register direction error.
+
 2005-07-28	Eric Norum <norume@aps.anl.gov>
 
 	* shared/clock/p_clock.c: Changes provided by Phillip Sorensen
