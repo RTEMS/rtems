@@ -13,10 +13,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -33,7 +29,11 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	@(#)nfsproto.h	8.1 (Berkeley) 6/10/93
+ *	@(#)nfsproto.h  8.2 (Berkeley) 3/30/95
+ * $FreeBSD: src/sys/nfs/nfsproto.h,v 1.11 2005/01/07 01:45:50 imp Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -88,7 +88,7 @@
 #define	NFSERR_STALE		70
 #define	NFSERR_REMOTE		71	/* Version 3 only */
 #define	NFSERR_WFLUSH		99	/* Version 2 only */
-#define	NFSERR_BADHANDLE	10001	/* The rest Version 3 only */
+#define	NFSERR_BADHANDLE	10001	/* The rest Version 3, 4 only */
 #define	NFSERR_NOT_SYNC		10002
 #define	NFSERR_BAD_COOKIE	10003
 #define	NFSERR_NOTSUPP		10004
@@ -98,6 +98,8 @@
 #define	NFSERR_JUKEBOX		10008
 #define NFSERR_TRYLATER		NFSERR_JUKEBOX
 #define	NFSERR_STALEWRITEVERF	30001	/* Fake return for nfs_commit() */
+
+
 
 #define NFSERR_RETVOID		0x20000000 /* Return void, not error */
 #define NFSERR_AUTHERR		0x40000000 /* Mark an authentication error */
@@ -169,14 +171,8 @@
 #define	NFSPROC_FSINFO		19
 #define	NFSPROC_PATHCONF	20
 #define	NFSPROC_COMMIT		21
-
-/* And leasing (nqnfs) procedure numbers (must be last) */
-#define	NQNFSPROC_GETLEASE	22
-#define	NQNFSPROC_VACATED	23
-#define	NQNFSPROC_EVICTED	24
-
-#define NFSPROC_NOOP		25
-#define	NFS_NPROCS		26
+#define NFSPROC_NOOP		22
+#define	NFS_NPROCS		23
 
 /* Actual Version 2 procedure numbers */
 #define	NFSV2PROC_NULL		0
@@ -226,17 +222,6 @@
 #define NFSV3FSINFO_HOMOGENEOUS		0x08
 #define NFSV3FSINFO_CANSETTIME		0x10
 
-/* Conversion macros */
-#define	vtonfsv2_mode(t,m) \
-		txdr_unsigned(((t) == VFIFO) ? MAKEIMODE(VCHR, (m)) : \
-				MAKEIMODE((t), (m)))
-#define vtonfsv3_mode(m)	txdr_unsigned((m) & 07777)
-#define	nfstov_mode(a)		(fxdr_unsigned(u_short, (a))&07777)
-#define	vtonfsv2_type(a)	txdr_unsigned(nfsv2_type[((long)(a))])
-#define	vtonfsv3_type(a)	txdr_unsigned(nfsv3_type[((long)(a))])
-#define	nfsv2tov_type(a)	nv2tov_type[fxdr_unsigned(u_long,(a))&0x7]
-#define	nfsv3tov_type(a)	nv3tov_type[fxdr_unsigned(u_long,(a))&0x7]
-
 /* File types */
 typedef enum { NFNON=0, NFREG=1, NFDIR=2, NFBLK=3, NFCHR=4, NFLNK=5,
 	NFSOCK=6, NFFIFO=7 } nfstype;
@@ -259,14 +244,14 @@ union nfsfh {
 typedef union nfsfh nfsfh_t;
 
 struct nfsv2_time {
-	u_long	nfsv2_sec;
-	u_long	nfsv2_usec;
+	u_int32_t	nfsv2_sec;
+	u_int32_t	nfsv2_usec;
 };
 typedef struct nfsv2_time	nfstime2;
 
 struct nfsv3_time {
-	u_long	nfsv3_sec;
-	u_long	nfsv3_nsec;
+	u_int32_t	nfsv3_sec;
+	u_int32_t	nfsv3_nsec;
 };
 typedef struct nfsv3_time	nfstime3;
 
@@ -275,7 +260,7 @@ typedef struct nfsv3_time	nfstime3;
  * protocol and to facilitate xdr conversion.
  */
 struct nfs_uquad {
-	u_long	nfsuquad[2];
+	u_int32_t	nfsuquad[2];
 };
 typedef	struct nfs_uquad	nfsuint64;
 
@@ -283,7 +268,7 @@ typedef	struct nfs_uquad	nfsuint64;
  * Used to convert between two u_longs and a u_quad_t.
  */
 union nfs_quadconvert {
-	u_long		lval[2];
+	u_int32_t	lval[2];
 	u_quad_t	qval;
 };
 typedef union nfs_quadconvert	nfsquad_t;
@@ -292,8 +277,8 @@ typedef union nfs_quadconvert	nfsquad_t;
  * NFS Version 3 special file number.
  */
 struct nfsv3_spec {
-	u_long	specdata1;
-	u_long	specdata2;
+	u_int32_t	specdata1;
+	u_int32_t	specdata2;
 };
 typedef	struct nfsv3_spec	nfsv3spec;
 
@@ -307,19 +292,19 @@ typedef	struct nfsv3_spec	nfsv3spec;
  *     NFSX_FATTR(v3) macro.
  */
 struct nfs_fattr {
-	u_long	fa_type;
-	u_long	fa_mode;
-	u_long	fa_nlink;
-	u_long	fa_uid;
-	u_long	fa_gid;
+	u_int32_t	fa_type;
+	u_int32_t	fa_mode;
+	u_int32_t	fa_nlink;
+	u_int32_t	fa_uid;
+	u_int32_t	fa_gid;
 	union {
 		struct {
-			u_long		nfsv2fa_size;
-			u_long		nfsv2fa_blocksize;
-			u_long		nfsv2fa_rdev;
-			u_long		nfsv2fa_blocks;
-			u_long		nfsv2fa_fsid;
-			u_long		nfsv2fa_fileid;
+			u_int32_t	nfsv2fa_size;
+			u_int32_t	nfsv2fa_blocksize;
+			u_int32_t	nfsv2fa_rdev;
+			u_int32_t	nfsv2fa_blocks;
+			u_int32_t	nfsv2fa_fsid;
+			u_int32_t	nfsv2fa_fileid;
 			nfstime2	nfsv2fa_atime;
 			nfstime2	nfsv2fa_mtime;
 			nfstime2	nfsv2fa_ctime;
@@ -357,10 +342,10 @@ struct nfs_fattr {
 #define	fa3_ctime		fa_un.fa_nfsv3.nfsv3fa_ctime
 
 struct nfsv2_sattr {
-	u_long		sa_mode;
-	u_long		sa_uid;
-	u_long		sa_gid;
-	u_long		sa_size;
+	u_int32_t	sa_mode;
+	u_int32_t	sa_uid;
+	u_int32_t	sa_gid;
+	u_int32_t	sa_size;
 	nfstime2	sa_atime;
 	nfstime2	sa_mtime;
 };
@@ -369,27 +354,25 @@ struct nfsv2_sattr {
  * NFS Version 3 sattr structure for the new node creation case.
  */
 struct nfsv3_sattr {
-	u_long		sa_modetrue;
-	u_long		sa_mode;
-	u_long		sa_uidtrue;
-	u_long		sa_uid;
-	u_long		sa_gidtrue;
-	u_long		sa_gid;
-	u_long		sa_sizefalse;
-	u_long		sa_atimetype;
+	u_int32_t	sa_modetrue;
+	u_int32_t	sa_mode;
+	u_int32_t	sa_uidfalse;
+	u_int32_t	sa_gidfalse;
+	u_int32_t	sa_sizefalse;
+	u_int32_t	sa_atimetype;
 	nfstime3	sa_atime;
-	u_long		sa_mtimetype;
+	u_int32_t	sa_mtimetype;
 	nfstime3	sa_mtime;
 };
 
 struct nfs_statfs {
 	union {
 		struct {
-			u_long		nfsv2sf_tsize;
-			u_long		nfsv2sf_bsize;
-			u_long		nfsv2sf_blocks;
-			u_long		nfsv2sf_bfree;
-			u_long		nfsv2sf_bavail;
+			u_int32_t	nfsv2sf_tsize;
+			u_int32_t	nfsv2sf_bsize;
+			u_int32_t	nfsv2sf_blocks;
+			u_int32_t	nfsv2sf_bfree;
+			u_int32_t	nfsv2sf_bavail;
 		} sf_nfsv2;
 		struct {
 			nfsuint64	nfsv3sf_tbytes;
@@ -398,7 +381,7 @@ struct nfs_statfs {
 			nfsuint64	nfsv3sf_tfiles;
 			nfsuint64	nfsv3sf_ffiles;
 			nfsuint64	nfsv3sf_afiles;
-			u_long		nfsv3sf_invarsec;
+			u_int32_t	nfsv3sf_invarsec;
 		} sf_nfsv3;
 	} sf_un;
 };
@@ -417,25 +400,25 @@ struct nfs_statfs {
 #define sf_invarsec	sf_un.sf_nfsv3.nfsv3sf_invarsec
 
 struct nfsv3_fsinfo {
-	u_long		fs_rtmax;
-	u_long		fs_rtpref;
-	u_long		fs_rtmult;
-	u_long		fs_wtmax;
-	u_long		fs_wtpref;
-	u_long		fs_wtmult;
-	u_long		fs_dtpref;
+	u_int32_t	fs_rtmax;
+	u_int32_t	fs_rtpref;
+	u_int32_t	fs_rtmult;
+	u_int32_t	fs_wtmax;
+	u_int32_t	fs_wtpref;
+	u_int32_t	fs_wtmult;
+	u_int32_t	fs_dtpref;
 	nfsuint64	fs_maxfilesize;
 	nfstime3	fs_timedelta;
-	u_long		fs_properties;
+	u_int32_t	fs_properties;
 };
 
 struct nfsv3_pathconf {
-	u_long		pc_linkmax;
-	u_long		pc_namemax;
-	u_long		pc_notrunc;
-	u_long		pc_chownrestricted;
-	u_long		pc_caseinsensitive;
-	u_long		pc_casepreserving;
+	u_int32_t	pc_linkmax;
+	u_int32_t	pc_namemax;
+	u_int32_t	pc_notrunc;
+	u_int32_t	pc_chownrestricted;
+	u_int32_t	pc_caseinsensitive;
+	u_int32_t	pc_casepreserving;
 };
 
 #endif
