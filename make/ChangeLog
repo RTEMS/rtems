@@ -1,5 +1,7 @@
 2005-09-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* custom/orp.cfg: Remove (abandoned).
+	* custom/av5282.cfg: Remove obsolete vars.
 	* custom/gba.cfg: Remove PROFILE* (abandoned).
 	Remove -static (bogus).
 
