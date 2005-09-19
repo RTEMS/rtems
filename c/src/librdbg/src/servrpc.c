@@ -13,7 +13,7 @@
  */
 
 #include <string.h>
-#include <sys/errno.h>
+#include <errno.h>
 #include <rdbg/rdbg.h>
 #include <rdbg/remdeb.h>
 #include <rdbg/servrpc.h>

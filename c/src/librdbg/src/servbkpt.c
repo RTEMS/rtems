@@ -11,7 +11,7 @@
  **********************************************************************
  */
 
-#include <sys/errno.h>
+#include <errno.h>
 #include <assert.h>
 #include <rdbg/rdbg.h>
 #include <rdbg/servrpc.h>
