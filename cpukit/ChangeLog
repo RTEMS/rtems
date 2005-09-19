@@ -1,5 +1,7 @@
 2005-09-19  Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/mount.h: Cosmetical update from FreeBSD.
+	Remove non-implemented interfaces (vfs, nfs, fsstat, etc.).
 	* configure.ac: Check for sys/errno.h.
 
 2005-09-16  Ralf Corsepius <ralf.corsepius@rtems.org>
