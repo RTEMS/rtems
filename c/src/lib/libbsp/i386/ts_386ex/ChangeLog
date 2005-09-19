@@ -19,7 +19,7 @@
 
 	* Makefile.am: Remove build-variant support.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
@@ -28,39 +28,39 @@
 	* Makefile.am: Add -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ for network.
 	* network/ne2000.c: Add include of <sys/errno.h>.
 
-2004-04-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 610/bsps
 	* Makefile.am: Add include/tm27.h, Cosmetics.
 	* include/tm27.h: Final cosmetics.
 
-2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: Split out tmtest27 support.
 	* include/tm27.h: New.
 
-2004-04-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 613/bsps
 	* include/bsp.h: Remove MAX_LONG_TEST_DURATION.
 
-2004-04-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 614/bsps
 	* include/bsp.h: Remove MAX_SHORT_TEST_DURATION (Unused).
 
-2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* start/start.S: Include <rtems/asm.h> instead of <asm.h>.
 	* timer/timerisr.S: Include <rtems/asm.h> instead of <asm.h>.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
 	* include/bsp.h: Include <rtems/console.h> instead of <console.h>.
 	* include/bsp.h: Include <rtems/iosupp.h> instead of <iosupp.h>.
 
-2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* clock/ckinit.c, clock/rtc.c, include/bsp.h, startup/bspstart.c,
 	timer/timer.c: Convert to using c99 fixed size types.
