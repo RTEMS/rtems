@@ -1,3 +1,9 @@
+2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* network/network.c: Remove #define KERNEL.
+	Include <errno.h>.
+	* Makefile.am: Add -D_KERNEL to network_CPPFLAGS.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.

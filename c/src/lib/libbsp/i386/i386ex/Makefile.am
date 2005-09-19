@@ -55,7 +55,7 @@ timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D_KERNEL
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/netexterns.h network/network.c \
     network/uti596.h

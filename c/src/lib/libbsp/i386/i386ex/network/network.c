@@ -12,8 +12,6 @@ void printk_time(void);
 #define BREAKPOINT()
 #endif
 
-#define KERNEL
-
 /*
 
   EII: Oct 16 : Version 0.0
@@ -42,6 +40,7 @@ int count_rx = 0;
 #include <bsp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
