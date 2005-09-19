@@ -1,3 +1,7 @@
+2005-09-19  Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for sys/errno.h.
+
 2005-09-16  Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/Makefile.am: Cosmetics.

@@ -81,6 +81,11 @@ AC_CHECK_HEADER([stdint.h])
 AC_CHECK_HEADER([inttypes.h])
 AC_CHECK_HEADER([tar.h])
 
+## BSD-ism, should not be used in RTEMS, 
+## nevertheless it still is.
+AC_CHECK_HEADER([sys/errno.h],[],
+  [AC_MSG_ERROR([Missing required header sys/errno.h])])
+
 ## if using newlib, we provide stdint.h and inttypes.h
 AM_CONDITIONAL([RTEMS_PROVIDES_STDINT_H],
   [test x"${RTEMS_USE_NEWLIB}" = xyes \
