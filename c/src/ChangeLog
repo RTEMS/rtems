@@ -1,3 +1,8 @@
+2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* bsp.pc.in: Remove CFLAGS_DEBUG_V, CFLAGS_OPTIMIZE_V.
+	* configure.ac: Move optman to the end of BSP_SUBDIRS.
+
 2005-09-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/bspopts.m4: Add missing m4 quotes.
