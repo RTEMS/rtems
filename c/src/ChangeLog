@@ -1,5 +1,8 @@
 2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* librdbg/src/servbkpt.c, librdbg/src/servcon.c,
+	librdbg/src/servrpc.c, librdbg/src/servtgt.c
+	librdbg/src/servtsp.c: Include <errno.h> instead of <sys/errno.h>.
 	* bsp.pc.in: Remove CFLAGS_DEBUG_V, CFLAGS_OPTIMIZE_V.
 	* configure.ac: Move optman to the end of BSP_SUBDIRS.
 
