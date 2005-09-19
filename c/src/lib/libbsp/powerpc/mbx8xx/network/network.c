@@ -25,6 +25,7 @@
  */
 #include <bsp.h>
 #include <stdio.h>
+#include <errno.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
@@ -32,7 +33,6 @@
 #include <sys/mbuf.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
-#include <sys/errno.h>
 
 #include <net/if.h>
 
