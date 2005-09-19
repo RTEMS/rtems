@@ -59,7 +59,7 @@
 #include <sys/protosw.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
-#include <sys/errno.h>
+#include <errno.h>
 #include <sys/syslog.h>
 #include <sys/sysctl.h>
 
