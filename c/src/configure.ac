@@ -132,7 +132,6 @@ RTEMS_BSP_CONFIG_SUBDIR(
 ## Note: the order of the directories below is essential
 AC_CONFIG_SUBDIRS([make])
 BSP_SUBDIRS="$BSP_SUBDIRS make"
-BSP_SUBDIRS="$BSP_SUBDIRS optman"
 
 RTEMS_CPU_SUBDIRS(lib/libcpu)
 if test -d "${srcdir}/lib/libcpu/${RTEMS_CPU}"; then
@@ -165,6 +164,8 @@ AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
 BSP_SUBDIRS="$BSP_SUBDIRS support"
 BSP_SUBDIRS="$BSP_SUBDIRS ada"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
+
+BSP_SUBDIRS="$BSP_SUBDIRS optman"
 
 AC_ARG_ENABLE([ada],
 [AS_HELP_STRING(--enable-ada,enable ada support)],
