@@ -42,7 +42,7 @@
 #include <sys/mbuf.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
-#include <sys/errno.h>
+#include <errno.h>
 
 #include <net/if.h>
 

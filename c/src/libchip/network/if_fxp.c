@@ -64,7 +64,7 @@
 #include <rtems/rtems_bsdnet.h>
 #include <bsp.h>
 
-#include <sys/errno.h>
+#include <errno.h>
 #include <sys/param.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>
