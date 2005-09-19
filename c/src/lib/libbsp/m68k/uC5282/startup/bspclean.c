@@ -25,6 +25,5 @@
 
 void bsp_cleanup( void )
 {
-	printk("\nRTEMS exited!\n");
     bsp_reset(0);
 }
