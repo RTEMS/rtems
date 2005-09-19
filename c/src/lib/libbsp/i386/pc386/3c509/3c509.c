@@ -1,4 +1,4 @@
-/**********************************************************************************
+/*
  * $Header$
  *
  * Ported by Rosimildo da Silva.
@@ -53,50 +53,13 @@
  * University of Saskatchewan
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
- *******************************************************************************
- *
- *
- * MODIFICATION/HISTORY:
- * $Log$
- * Revision 1.7  2005/05/03 14:20:07  jennifer
- * 2005-05-03	Jennifer Averett <jennifer.averett@oarcorp.com>
- *
- * 	* 3c509/3c509.c, ne2000/ne2000.c: Modified parameters to
- * 	remove warnings.
- * 	* console/console.c, wd8003/wd8003.c: Added support for
- * 	addition of parameter in ISRs.
- *
- * Revision 1.6  2005/04/26 23:03:51  joel
- * 2005-04-26	Joel Sherrill <joel@OARcorp.com>
- *
- * 	* 3c509/3c509.c, wd8003/wd8003.c: Eliminate warnings.
- *
- * Revision 1.5  2004/07/25 14:21:43  joel
- * 2004-07-25	Joel Sherrill <joel@OARcorp.com>
- *
- * 	* 3c509/3c509.c: Add <sys/errno.h>.
- * 	* startup/linkcmds: Add .jcr section.
- *
- * Revision 1.4  2004/04/21 16:01:33  ralf
- * Remove duplicate white lines.
- *
- * Revision 1.3  2004/04/21 10:42:43  ralf
- * Remove stray white spaces.
- *
- * Revision 1.2  1999/12/13 21:21:31  joel
- * Warning removal patch from Philip A. Prindeville <philipp@zembu.com>.
- *
- * Revision 1.1  1999/05/14 16:23:42  joel
- * Added 3COM 3C509 driver from Rosimildo DaSilva <rdasilva@connecttel.com>.
- *
- *
- **********************************************************************************/
+ */
 
 #include <bsp.h>
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <sys/errno.h>
+#include <errno.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 

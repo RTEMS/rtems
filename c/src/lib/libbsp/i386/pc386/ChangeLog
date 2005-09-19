@@ -1,3 +1,8 @@
+2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* 3c509/3c509.c: Remove [$]Log.
+	Include <errno.h> instead of <sys/errno.h>.
+
 2005-08-23  Karel Gardas  <kgardas@objectsecurity.com>>
 
 	* timer/timer.c: Enhance to use either interupt-based timer
