@@ -1,5 +1,6 @@
 2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/pppd/Makefile.am: Use preinstall.am.
 	* librdbg/src/servbkpt.c, librdbg/src/servcon.c,
 	librdbg/src/servrpc.c, librdbg/src/servtgt.c
 	librdbg/src/servtsp.c: Include <errno.h> instead of <sys/errno.h>.

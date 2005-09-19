@@ -22,25 +22,9 @@ EXTRA_DIST = ipxcp.c ipxcp.h
 
 all-local: $(PREINSTALL_FILES)
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
-
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-if HAS_NETWORKING
-$(PROJECT_INCLUDE)/rtemspppd.h: rtemspppd.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtemspppd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtemspppd.h
-
-$(PROJECT_INCLUDE)/rtemsdialer.h: rtemsdialer.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtemsdialer.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtemsdialer.h
-endif
-
 CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
+
+include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/automake/local.am
