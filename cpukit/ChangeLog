@@ -1,3 +1,8 @@
+2005-09-25	Joel Sherrill <joel@OARcorp.com>
+
+	* sapi/include/rtems/init.h, sapi/src/exinit.c: Remove unused and
+	obsolete rtems_initialize_executive.
+
 2005-09-19  Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/mount.h: Cosmetical update from FreeBSD.

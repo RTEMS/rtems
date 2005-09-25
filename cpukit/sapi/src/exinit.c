@@ -61,35 +61,6 @@
 
 Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
-/*PAGE
- *
- *  rtems_initialize_executive
- *
- *  This directive initializes all the kernels data structures
- *  to the states necessary for the kernel to begin execution.  All
- *  include files that contain global variable definitions should be
- *  included in this file.  The system threads and initialization threads
- *  are created and started by this routine.  This routine then
- *  initiates multithreading.
- *
- *  Input parameters:
- *    configuration_table - pointer to the user's configuration table
- *    cpu_table           - pointer to the user's CPU configuration table
- *
- *  Output parameters:  NONE
- */
-
-void rtems_initialize_executive(
-  rtems_configuration_table *configuration_table,
-  rtems_cpu_table           *cpu_table
-)
-{
-  rtems_interrupt_level bsp_level;
-
-  bsp_level = rtems_initialize_executive_early(configuration_table, cpu_table);
-  rtems_initialize_executive_late( bsp_level );
-}
-
 rtems_interrupt_level rtems_initialize_executive_early(
   rtems_configuration_table *configuration_table,
   rtems_cpu_table           *cpu_table

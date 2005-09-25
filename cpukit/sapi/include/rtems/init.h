@@ -45,21 +45,6 @@ extern const rtems_multiprocessing_table
   _Initialization_Default_multiprocessing_table;
 
 /*
- *  rtems_initialize_executive
- *
- *  DESCRIPTION:
- *
- *  This routine implements the rtems_initialize_executive directive.  This
- *  directive is invoked at system startup to initialize the RTEMS
- *  multitasking environment.
- */
-
-void rtems_initialize_executive(
-  rtems_configuration_table *configuration_table,
-  rtems_cpu_table           *cpu_table
-);
-
-/*
  *  rtems_initialize_executive_early
  *
  *  DESCRIPTION:
