@@ -1,3 +1,11 @@
+2005-09-29	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* ide/idecfg.c: added configuration items for primary/secondary
+	IDE interface
+
+	* configure.ac: added configuration items for primary/secondary
+	IDE interface
+	
 2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* 3c509/3c509.c: Remove [$]Log.
