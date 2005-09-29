@@ -1,3 +1,12 @@
+2005-09-29	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR649/filesystem
+	* ide/idecfg.c: added configuration items for primary/secondary
+	IDE interface
+
+	* configure.ac: added configuration items for primary/secondary
+	IDE interface
+	
 2005-09-01	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/Makefile.am, include/Makefile.am: Install tod.h

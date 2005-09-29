@@ -16,6 +16,22 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_NETWORKING
 
+RTEMS_BSPOPTS_SET([IDE_USE_PRIMARY_INTERFACE],[*],[1])
+RTEMS_BSPOPTS_HELP([IDE_USE_PRIMARY_INTERFACE],
+[Determines, whether RTEMS will try to use the primary IDE interface. 
+ Disable it, if:
+ - you have no primary IDE interface 
+ - or you have no disk attached to this interface  
+ - or you do not want to access disks attached to this interface])
+
+RTEMS_BSPOPTS_SET([IDE_USE_SECONDARY_INTERFACE],[*],[0])
+RTEMS_BSPOPTS_HELP([IDE_USE_SECONDARY_INTERFACE],
+[Determines, whether RTEMS will try to use the primary IDE interface. 
+ Enable it, if:
+ - you have a secondary IDE interface 
+ - and you have at least one disk attached to this interface  
+ - and you do want to access disks attached to this interface])
+
 ## if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,[test "$RTEMS_GAS_CODE16" = "yes"])
