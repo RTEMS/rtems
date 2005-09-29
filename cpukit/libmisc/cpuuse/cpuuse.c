@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id$
+ *  cpuuse.c,v 1.20 2004/04/17 08:12:01 ralf Exp
  *
  */
 
@@ -42,6 +42,7 @@ void CPU_usage_Dump( void )
   uint32_t             u32_name;
   char                *cname;
   char                 name[5];
+  uint32_t             ival, fval;
   uint32_t             total_units = 0;
 
   for ( api_index = 1 ;
@@ -61,11 +62,7 @@ void CPU_usage_Dump( void )
   }
 
   fprintf(stdout,"CPU Usage by thread\n");
-#if defined(unix) || ( CPU_HARDWARE_FP == TRUE )
   fprintf(stdout, "   ID        NAME        TICKS    PERCENT\n" );
-#else
-  fprintf(stdout, "   ID        NAME        TICKS\n" );
-#endif
 
   for ( api_index = 1 ;
         api_index <= OBJECTS_APIS_LAST ;
@@ -101,22 +98,16 @@ void CPU_usage_Dump( void )
         if ( !isprint(name[2]) ) name[2] = '*';
         if ( !isprint(name[3]) ) name[3] = '*';
 
-#if defined(unix) || ( CPU_HARDWARE_FP == TRUE )
-        fprintf(stdout, "0x%08x   %4s    %8d     %5.3f\n",
+        ival = total_units ? the_thread->ticks_executed * 10000 / total_units : 0;
+		fval = ival % 100;
+		ival /= 100;
+		fprintf(stdout, "0x%08x   %4s    %8d     %3d.%2.2d\n",
           the_thread->Object.id,
           name,
           the_thread->ticks_executed,
-          (total_units) ?
-            (double)the_thread->ticks_executed / (double)total_units :
-            (double)total_units
+		  ival,
+		  fval
         );
-#else
-        fprintf(stdout, "0x%08x   %4s   %8d\n",
-          the_thread->Object.id,
-          name,
-          the_thread->ticks_executed
-        );
-#endif
       }
     }
   }

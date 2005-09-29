@@ -1,3 +1,8 @@
+2005-09-29	Eric Norum <norume@aps.anl.gov>
+
+    * libmisc/cpuuse/cpuuse.c: Remove floating point calculations and the
+                               C preprocessor conditions which enabled them.
+
 2005-09-25	Joel Sherrill <joel@OARcorp.com>
 
 	* sapi/include/rtems/init.h, sapi/src/exinit.c: Remove unused and
