@@ -56,10 +56,14 @@ rtems_status_code rtems_task_variable_delete(
       if (tvp->ptr == ptr) {
         if (prev) prev->next = tvp->next;
         else      the_thread->task_variables = tvp->next;
-        if (tvp->dtor)
-          (*tvp->dtor)(*tvp->ptr);
-	if (_Thread_Is_executing(the_thread))
+        if (_Thread_Is_executing(the_thread)) {
+          if (tvp->dtor)
+            (*tvp->dtor)(*tvp->ptr);
           *tvp->ptr = tvp->gval;
+	} else {
+          if (tvp->dtor)
+            (*tvp->dtor)(tvp->tval);
+        }
         _Workspace_Free(tvp);
         _Thread_Enable_dispatch();
         return RTEMS_SUCCESSFUL;
