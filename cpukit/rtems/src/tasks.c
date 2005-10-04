@@ -112,10 +112,14 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
   deleted->task_variables = NULL;
   while (tvp) {
     next = tvp->next;
-    if  (tvp->dtor)
+    if (_Thread_Is_executing(deleted)) {
+      if  (tvp->dtor)
         (*tvp->dtor)(*tvp->ptr);
-    if (_Thread_Is_executing(deleted))
-        *tvp->ptr = tvp->gval;
+      *tvp->ptr = tvp->gval;
+    } else {
+      if  (tvp->dtor)
+        (*tvp->dtor)(tvp->tval);
+    }
     _Workspace_Free( tvp );
     tvp = next;
   }

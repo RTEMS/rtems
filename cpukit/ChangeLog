@@ -1,3 +1,13 @@
+2005-10-04	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 829/rtems
+	* rtems/src/tasks.c, rtems/src/taskvariabledelete.c: If task variables
+	are deleted from a different context (i.e., executing context !=
+	owner of the task variable. The owner meaning the task that
+	registered the dtor in question) the argument passed to the task
+	variable dtor must be tvar and not *ptr which yields the executing
+	task's value of the task variable instead of the owner's.
+
 2005-09-29	Eric Norum <norume@aps.anl.gov>
 
     * libmisc/cpuuse/cpuuse.c: Remove floating point calculations and the
