@@ -1,3 +1,15 @@
+2005-10-05  Jiri Gaisler <jiri@gaisler.com>
+            Edvin Catovic <edvin@gaisler.com>
+            Konrad Eisele <konrad@gaisler.com>
+
+	PR 827/bsps
+	* network/Makefile.am, network/open_eth.c, network/open_eth.h: Portion
+	of large update of SPARC BSPs. Includes addition of sis, leon2 and
+	leon3 BSPs, deletion of leon BSP, addition of SMC91111 NIC driver and
+	much more.
+	* network/README.smc91111, network/smc91111.c, network/smc91111.h,
+	network/smc91111config.h, network/smc91111exp.h: New files.
+
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
         PR 781/misc

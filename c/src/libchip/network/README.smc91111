@@ -1,0 +1,15 @@
+#
+#  $Id$
+#
+
+Driver for smc91111 chip  - README
+----------------------------------
+
+The driver for SMC's 91111 ethernet chip.
+
+Each BSP must provide its own attach function.  Examples can be found
+in the SPARC leon2 and leon3 BSPs.  The attach function for the leon3
+BSP is rtems_smc91111_driver_attach_leon3().
+
+Tested on leon2, using the Pender Electronic Design GR-CPCI-AT697 board.
+

@@ -6,7 +6,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.OARcorp.com/rtems/license.html.
  *
  */
 
@@ -89,8 +89,6 @@ struct MDRX
 #define OETH_SUSPEND_NOTXBUF
  */
 
-#define OETH_RATE_10MHZ
-
 #if (MCLBYTES < RBUF_SIZE)
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
@@ -116,6 +114,7 @@ struct open_eth_softc
     struct MDTX *txdesc;
     struct MDRX *rxdesc;
     rtems_vector_number vector;
+    unsigned int en100MHz;
 
 
     /*
@@ -218,18 +217,14 @@ open_eth_initialize_hardware (struct open_eth_softc *sc)
     regs->moder = 0;			/* Reset OFF */
 
     /* reset PHY and wait for complettion */
-    mii_cr = read_mii(0);
-    mii_cr = 0x3320;
-#ifdef OETH_RATE_10MHZ
-    mii_cr = 0;
-#endif
+    /*
+    */
+    mii_cr = 0x3300;
+    if (!sc->en100MHz) mii_cr = 0;
     write_mii(0, mii_cr | 0x8000); 
     while (read_mii(0) & 0x8000) {}
-    write_mii(20, 0x1422);
-#ifdef OETH_RATE_10MHZ
-    mii_cr = 0;
-#endif
-    write_mii(0, mii_cr); 
+    if (!sc->en100MHz) write_mii(0, 0); 
+    mii_cr = read_mii(0);
     printf("open_eth: driver attached, PHY config : 0x%04x\n", read_mii(0));
 
 #ifdef OPEN_ETH_DEBUG
@@ -483,6 +478,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	len_status &= ~OETH_TX_BD_PAD;
 
       /* write buffer descriptor length and status */
+      len_status &= 0x0000ffff;
       len_status |= (len << 16) | (OETH_TX_BD_READY | OETH_TX_BD_CRC);
       dp->regs->xd[dp->tx_ptr].len_status = len_status;
       dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
@@ -709,6 +705,7 @@ rtems_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *config,
     sc->vector = chip->vector;
     sc->txbufs = chip->txd_count;
     sc->rxbufs = chip->rxd_count;
+    sc->en100MHz = chip->en100MHz;
 
 
     /*

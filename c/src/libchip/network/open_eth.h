@@ -12,6 +12,7 @@ typedef struct {
   unsigned32              vector;
   unsigned32              txd_count;
   unsigned32              rxd_count;
+  unsigned32              en100MHz;
 } open_eth_configuration_t;
 
 
