@@ -38,7 +38,6 @@
 |  $Id$
 +--------------------------------------------------------------------------*/
 
-
 #include <stdlib.h>
 
 #include <bsp.h>
@@ -51,7 +50,7 @@
 #define LEAST_VALID   1              /* Don't trust a value lower than this.  */
 #define SLOW_DOWN_IO  0x80     	/* io which does nothing */
 
-#define TWO_MS	(rtems_unsigned32)(2000)     /* TWO_MS = 2000us (sic!) */
+#define TWO_MS	(uint32_t)(2000)     /* TWO_MS = 2000us (sic!) */
 
 #define MSK_NULL_COUNT 0x40	/* bit counter available for reading */
 
@@ -59,27 +58,36 @@
 /*-------------------------------------------------------------------------+
 | Global Variables
 +--------------------------------------------------------------------------*/
-volatile rtems_unsigned32 Ttimer_val;
+volatile uint32_t         Ttimer_val;
 rtems_boolean    	  Timer_driver_Find_average_overhead = TRUE;
 volatile unsigned int     fastLoop1ms, slowLoop1ms;
+void (*Timer_initialize_function)(void) = 0;
+uint32_t (*Read_timer_function)(void) = 0;
+void (*Timer_exit_function)(void) = 0;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
 extern void timerisr(void);
        /* timer (int 08h) Interrupt Service Routine (defined in 'timerisr.s') */
+extern int x86_capability;
+
+/*
+ * forward declarations
+ */
+
+void Timer_exit();
 
 /*-------------------------------------------------------------------------+
 | Pentium optimized timer handling.
 +--------------------------------------------------------------------------*/
-#if defined(pentium)
 
 /*-------------------------------------------------------------------------+
 |         Function: rdtsc
 |      Description: Read the value of PENTIUM on-chip cycle counter.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Value of PENTIUM on-chip cycle counter. 
+|          Returns: Value of PENTIUM on-chip cycle counter.
 +--------------------------------------------------------------------------*/
 static inline unsigned long long
 rdtsc(void)
@@ -90,30 +98,28 @@ rdtsc(void)
   return result;
 } /* rdtsc */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: Timer_exit
 |      Description: Timer cleanup routine at RTEMS exit. NOTE: This routine is
 |                   not really necessary, since there will be a reset at exit.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-Timer_exit(void)
+tsc_timer_exit(void)
 {
-} /* Timer_exit */
-
+} /* tsc_timer_exit */
 
 /*-------------------------------------------------------------------------+
 |         Function: Timer_initialize
 |      Description: Timer initialization routine.
 | Global Variables: Ttimer_val.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-Timer_initialize(void)
+tsc_timer_initialize(void)
 {
   static rtems_boolean First = TRUE;
 
@@ -124,22 +130,21 @@ Timer_initialize(void)
     atexit(Timer_exit); /* Try not to hose the system at exit. */
   }
   Ttimer_val = rdtsc(); /* read starting time */
-} /* Timer_initialize */
-
+} /* tsc_timer_initialize */
 
 /*-------------------------------------------------------------------------+
 |         Function: Read_timer
 |      Description: Read hardware timer value.
 | Global Variables: Ttimer_val, Timer_driver_Find_average_overhead.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
-rtems_unsigned32
-Read_timer(void)
+uint32_t
+tsc_read_timer(void)
 {
-  register rtems_unsigned32 total;
+  register uint32_t         total;
 
-  total =  (rtems_unsigned32)(rdtsc() - Ttimer_val);
+  total =  (uint32_t)(rdtsc() - Ttimer_val);
 
   if (Timer_driver_Find_average_overhead)
     return total;
@@ -147,15 +152,12 @@ Read_timer(void)
     return 0; /* below timer resolution */
   else
     return (total - AVG_OVERHEAD);
-} /* Read_timer */
-
-#else /* pentium */
+} /* tsc_read_timer */
 
 /*-------------------------------------------------------------------------+
 | Non-Pentium timer handling.
 +--------------------------------------------------------------------------*/
 #define US_PER_ISR   250  /* Number of micro-seconds per timer interruption */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: Timer_exit
@@ -163,7 +165,7 @@ Read_timer(void)
 |                   not really necessary, since there will be a reset at exit.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static void
 timerOff(const rtems_raw_irq_connect_data* used)
@@ -178,8 +180,7 @@ timerOff(const rtems_raw_irq_connect_data* used)
      outport_byte(TIMER_CNTR0, 0);
 } /* Timer_exit */
 
-
-static void 
+static void
 timerOn(const rtems_raw_irq_connect_data* used)
 {
      /* load timer for US_PER_ISR microsecond period */
@@ -192,10 +193,11 @@ timerOn(const rtems_raw_irq_connect_data* used)
      BSP_irq_enable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
-static int 
+static int
 timerIsOn(const rtems_raw_irq_connect_data *used)
 {
-     return BSP_irq_enabled_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);}
+     return BSP_irq_enabled_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+}
 
 static rtems_raw_irq_connect_data timer_raw_irq_data = {
   BSP_PERIODIC_TIMER + BSP_IRQ_VECTOR_BASE,
@@ -211,10 +213,10 @@ static rtems_raw_irq_connect_data timer_raw_irq_data = {
 |                   not really necessary, since there will be a reset at exit.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-Timer_exit(void)
+i386_timer_exit(void)
 {
   i386_delete_idt_entry (&timer_raw_irq_data);
 } /* Timer_exit */
@@ -224,10 +226,10 @@ Timer_exit(void)
 |      Description: Timer initialization routine.
 | Global Variables: Ttimer_val.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-Timer_initialize(void)
+i386_timer_initialize(void)
 {
   static rtems_boolean First = TRUE;
 
@@ -248,19 +250,18 @@ Timer_initialize(void)
   Ttimer_val = 0;
 } /* Timer_initialize */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: Read_timer
 |      Description: Read hardware timer value.
 | Global Variables: Ttimer_val, Timer_driver_Find_average_overhead.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
-rtems_unsigned32
-Read_timer(void)
+uint32_t
+i386_read_timer(void)
 {
-  register rtems_unsigned32 total, clicks;
-  register rtems_unsigned8  lsb, msb;
+  register uint32_t         total, clicks;
+  register uint8_t          lsb, msb;
 
   outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);
   inport_byte(TIMER_CNTR0, lsb);
@@ -276,28 +277,68 @@ Read_timer(void)
     return (total - AVG_OVERHEAD);
 }
 
-#endif /* pentium */
+/*
+ * General timer functions using either TSC-based implementation
+ * or interrupt-based implementation
+ */
 
+void
+Timer_initialize(void)
+{
+    static rtems_boolean First = TRUE;
+
+    if (First) {
+        if (x86_capability & (1 << 4) ) {
+#if defined(DEBUG)
+            printk("TSC: timer initialization\n");
+#endif
+            Timer_initialize_function = &tsc_timer_initialize;
+            Read_timer_function = &tsc_read_timer;
+            Timer_exit_function = &tsc_timer_exit;
+        }
+        else {
+#if defined(DEBUG)
+            printk("ISR: timer initialization\n");
+#endif
+            Timer_initialize_function = &i386_timer_initialize;
+            Read_timer_function = &i386_read_timer;
+            Timer_exit_function = &i386_timer_exit;
+        }
+        First = FALSE;
+    }
+    (*Timer_initialize_function)();
+}
+
+uint32_t
+Read_timer()
+{
+    return (*Read_timer_function)();
+}
+
+void
+Timer_exit()
+{
+    return (*Timer_exit_function)();
+}
 
 /*-------------------------------------------------------------------------+
 |         Function: Empty_function
 |      Description: Empty function used in time tests.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 rtems_status_code Empty_function(void)
 {
   return RTEMS_SUCCESSFUL;
 } /* Empty function */
- 
 
 /*-------------------------------------------------------------------------+
 |         Function: Set_find_average_overhead
 |      Description: Set internal Timer_driver_Find_average_overhead flag value.
 | Global Variables: Timer_driver_Find_average_overhead.
 |        Arguments: find_flag - new value of the flag.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
 Set_find_average_overhead(rtems_boolean find_flag)
@@ -319,11 +360,10 @@ void loadTimerValue( unsigned short loadedValue )
   outport_byte(TIMER_CNTR0, (loadedValue >> 8) & 0xff);
 }
 
-
 /*-------------------------------------------------------------------------+
-| Description: Reads the current value of the timer, and converts the 
-|			   number of ticks to micro-seconds.	
-| Returns: number of clock bits elapsed since last load. 
+| Description: Reads the current value of the timer, and converts the
+|			   number of ticks to micro-seconds.
+| Returns: number of clock bits elapsed since last load.
 +--------------------------------------------------------------------------*/
 unsigned int readTimer0()
 {
@@ -338,7 +378,7 @@ unsigned int readTimer0()
   count = ( msb << 8 ) | lsb ;
   if (status & RB_OUTPUT )
   	count += lastLoadedValue;
-  
+
   return (2*lastLoadedValue - count);
 }
 
@@ -372,19 +412,19 @@ Calibrate_loop_1ms(void)
   unsigned int targetClockBits, currentClockBits;
   unsigned int slowLoopGranularity, fastLoopGranularity;
   rtems_interrupt_level  level;
-  
+
 #ifdef DEBUG_CALIBRATE
   printk( "Calibrate_loop_1ms is starting,  please wait ( but not too loooong. )\n" );
-#endif  
+#endif
   targetClockBits = US_TO_TICK(1000);
-  
+
   rtems_interrupt_disable(level);
   /*
    * Fill up the cache to get a correct offset
    */
   Timer0Reset();
   readTimer0();
-  /* 
+  /*
    * Compute the minimal offset to apply due to read counter register.
    */
   offset = 0xffffffff;
@@ -437,24 +477,24 @@ Calibrate_loop_1ms(void)
     while (1);
   }
   slowLoopGranularity = (res - offset - emptyCall)/ 10;
-  
+
   if (slowLoopGranularity == 0) {
     printk("Problem #3 in Calibrate_loop_1ms in file libbsp/i386/pc386/timer/timer.c\n");
     while (1);
   }
 
   targetClockBits += offset;
-#ifdef DEBUG_CALIBRATE  
+#ifdef DEBUG_CALIBRATE
   printk("offset = %u, emptyCall = %u, targetClockBits = %u\n",
 	 offset, emptyCall, targetClockBits);
   printk("slowLoopGranularity = %u fastLoopGranularity =  %u\n",
 	 slowLoopGranularity, fastLoopGranularity);
-#endif  
+#endif
   slowLoop1ms = (targetClockBits - emptyCall) / slowLoopGranularity;
   if (slowLoop1ms != 0) {
     fastLoop1ms = targetClockBits % slowLoopGranularity;
     if (fastLoop1ms > emptyCall) fastLoop1ms -= emptyCall;
-  }    
+  }
   else
     fastLoop1ms = targetClockBits - emptyCall / fastLoopGranularity;
 
@@ -462,7 +502,7 @@ Calibrate_loop_1ms(void)
     /*
      * calibrate slow loop
      */
-  
+
     while(1)
       {
 	int previousSign = 0; /* 0 = unset, 1 = incrementing,  2 = decrementing */
@@ -497,7 +537,7 @@ Calibrate_loop_1ms(void)
   /*
    * calibrate fast loop
    */
-  
+
   if (fastLoopGranularity != 0 ) {
     while(1) {
       int previousSign = 0; /* 0 = unset, 1 = incrementing,  2 = decrementing */
@@ -525,11 +565,11 @@ Calibrate_loop_1ms(void)
       }
     }
   }
-#ifdef DEBUG_CALIBRATE  
+#ifdef DEBUG_CALIBRATE
   printk("slowLoop1ms = %u, fastLoop1ms = %u\n", slowLoop1ms, fastLoop1ms);
-#endif  
+#endif
   rtems_interrupt_enable(level);
-  
+
 }
 
 /*-------------------------------------------------------------------------+
@@ -537,7 +577,7 @@ Calibrate_loop_1ms(void)
 |      Description: loop which waits at least timeToWait ms
 | Global Variables: loop1ms
 |        Arguments: timeToWait
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
 Wait_X_ms( unsigned int timeToWait){
@@ -550,9 +590,3 @@ Wait_X_ms( unsigned int timeToWait){
   }
 
 }
-
-
-
-
-
-

@@ -1,3 +1,14 @@
+2005-08-23  Karel Gardas  <kgardas@objectsecurity.com>>
+
+	* timer/timer.c: Enhance to use either interupt-based timer
+	functions on older CPUs or to use TSC-based timer functions on
+	more recent (Pentium and above) CPUs. The decision is made in
+	Timer_initialize function when it is called for the first time
+	based on a result obtained from cpuid instruction during the BSP
+	initialization phase. During the first call, there are also late
+	bindings to the implementation functions initialized to
+	appropriate values.
+
 2005-09-29	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR649/filesystem
