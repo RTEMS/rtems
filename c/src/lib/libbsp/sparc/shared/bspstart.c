@@ -198,8 +198,8 @@ void bsp_start( void )
 
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
-  work_space_start = 
-    (unsigned char *)rdb_start - BSP_Configuration.work_space_size;
+  work_space_start = (unsigned char *)rdb_start;
+  work_space_start -= BSP_Configuration.work_space_size;
 
   if ( work_space_start <= (unsigned char *)&end ) {
     DEBUG_puts( "bspstart: Not enough RAM!!!\n" );

@@ -1,3 +1,12 @@
+2005-10-05  Jiri Gaisler <jiri@gaisler.com>
+            Edvin Catovic <edvin@gaisler.com>
+            Konrad Eisele <konrad@gaisler.com>
+
+	PR 827/bsps
+	* Makefile.am, bspstart.c, gnatcommon.c, start.S: Portion of large
+	update of SPARC BSPs. Includes addition of sis, leon2 and leon3 BSPs,
+	deletion of leon BSP, addition of SMC91111 NIC driver and much more.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* bspclean.c, bspstart.c: URL for license changed.
