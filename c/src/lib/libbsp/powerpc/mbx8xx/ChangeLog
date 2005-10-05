@@ -1,7 +1,3 @@
-2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* network/network.c: Include <errno.h> instead of <sys/errno.h>.
-
 2005-09-12	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 527/bsps
@@ -13,239 +9,20 @@
 	does not support the clocking scheme of some of the board variants,
 	which are clocked from a 32768Hz (!) external crystal.
 
-2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+2003-12-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* include/bsp.h: New header guard.
-
-2005-05-17      Jennifer Averett <jennifer.averett@oarcorp.com>
-
-        * irq/irq.c, irq/irq.h, network/network.c: Modified to use rtems/irq.h.
-
-2005-05-05      Jennifer Averett <jennifer.averett@oarcorp.com>
-
-        * irq/irq_init.c, network/network.c: Fix calls/routines to match 
-        prototypes. Modified when a parameter was added to ISRs.
-
-2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
-
-        * clock/p_clock.c, irq/irq.c, irq/irq_init.c: Addition of a parameter
-        to ISRs
-
-2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
-
-        PR 779/bsp
-        * irq/irq.c, irq/irq.h:  add parameter to new exception
-        interrupt handlers in powerpc bsps
-
-2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* startup/bspstart.c: include <rtems/powerpc/powerpc.h>.
-	Use PPC_MINIMUM_STACK_FRAME_SIZE instead of
-	CPU_MINIMUM_STACK_FRAME_SIZE.
-
-2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* configure.ac: Remove argument from RTEMS_PPC_EXCEPTIONS.
-
-2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* Makefile.am: Merge-in wrapup/Makefile.am.
-	* wrapup/Makefile.am: Remove.
-	* configure.ac: Reflect changes above.
-
-2005-01-20	Joel Sherrill <joel@OARcorp.com>
-
-	* include/commproc.h: The variable cpmp was not used anywhere but
-	console.c and was static in console.c, so should not have been in
-	this file as extern.
-
-2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
-
-2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* Makefile.am, wrapup/Makefile.am: Remove build-variant support.
-
-2004-11-20      Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
-
-        PR 703/filesystem
-	* ide/pcmcia_ide.c: Extend the "modes_available" and "mode_active" parameters
-	to uint16_t for UDMA support.
-
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* configure.ac: Require automake > 1.9.
-
-2004-07-25	Joel Sherrill <joel@OARcorp.com>
-
-	* network/network.c: Add include of <sys/errno.h>.
-
-2004-04-23	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	PR 610/bsps
-	* Makefile.am: Add include/tm27.h, Cosmetics.
-	* include/tm27.h: Final cosmetics.
-
-2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* include/bsp.h: Split out tmtest27 support.
-	* include/tm27.h: New.
-
-2004-04-21	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	PR 613/bsps
-	* include/bsp.h: Remove MAX_LONG_TEST_DURATION.
-
-2004-04-21	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	PR 614/bsps
-	* include/bsp.h: Remove MAX_SHORT_TEST_DURATION (Unused).
-
-2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* startup/start.S: Include <rtems/asm.h> instead of <asm.h>.
-
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* irq/irq_asm.S: Include <rtems/asm.h> instead of <asm.h>.
-	* vectors/vectors.S: Include <rtems/asm.h> instead of <asm.h>.
-	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
-	* include/bsp.h: Include <rtems/console.h> instead of <console.h>.
-
-2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* console/console.c, ide/pcmcia_ide.c, network/network.c,
-	startup/bspstart.c, startup/bspstart.c.nocache, startup/imbx8xx.c:
-	Convert to using c99 fixed size types.
-
-2004-02-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Reflect changes to bsp.am. 
-	Preinstall dist_project_lib*.
-
-2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Reflect changes to bsp.am.
-
-2004-02-08	Joel Sherrill <joel@OARcorp.com>
-
-	* Makefile.am: Add irq.h and vectors.h
-
-2004-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* wrapup/Makefile.am: Convert to automake-building rules.
-
-2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
-	ide/Makefile.am, irq/Makefile.am, network/Makefile.am,
-	startup/Makefile.am, vectors/Makefile.am. Use automake compilation rules.
-	* clock/Makefile.am, console/Makefile.am, ide/Makefile.am,
-	irq/Makefile.am, network/Makefile.am, startup/Makefile.am,
-	vectors/Makefile.am: Remove.
-	* configure.ac: Reflect changes above.
-	* wrapup/Makefile.am: Reflect changes above.
-
-2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* wrapup/Makefile.am: Reflect changes to
-	../support/*exception_processing/*.
-
-2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.
-	Add RTEMS_PROG_CCAS.
-
-2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Add PREINSTALL_DIRS.
-	* irq/Makefile.am: Add PREINSTALL_DIRS.
-	* vectors/Makefile.am: Add PREINSTALL_DIRS.
-	* wrapup/Makefile.am: Reflect changes to libcpu.
-
-2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
-	Add PRE/TMPINSTALL_FILES to CLEANFILES.
-	* irq/Makefile.am: Ditto.
-	* startup/Makefile.am: Ditto.
-	* vectors/Makefile.am: Ditto.
-
-2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* wrapup/Makefile.am: Eliminate $(LIB). 
-	Use noinst_DATA to trigger building libbsp.a.
-
-2003-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* clock/Makefile.am: Eliminate VPATH.
-	* console/Makefile.am: Eliminate VPATH.
-	* ide/Makefile.am: Eliminate VPATH.
-	* irq/Makefile.am: Eliminate VPATH.
-	* network/Makefile.am: Eliminate VPATH.
-	* startup/Makefile.am: Eliminate VPATH.
+	* startup/Makefile.am: start.S instead of start.s.
 
 2003-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 545/bsps
 	* startup/setvec.c: Removed.
-
-2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* startup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* irq/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* startup/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* vectors/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
-
-2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Misc cleanups and fixes.
-	* startup/Makefile.am: Misc cleanups and fixes.
-	* wrapup/Makefile.am: Misc cleanups and fixes.
-
-2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Add preinstallation dirstamp support.
-	* clock/Makefile.am: Cosmetics.
-	* console/Makefile.am: Cosmetics.
-	* ide/Makefile.am: Cosmetics.
-	* irq/Makefile.am: Add preinstallation dirstamp support.
-	* network/Makefile.am: Cosmetics.
-	* startup/Makefile.am: Cosmetics.
-	* vectors/Makefile.am: Add preinstallation dirstamp support.
-	* wrapup/Makefile.am: Cosmetics.
-
-2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* clock/Makefile.am: Remove all-local: $(ARCH).
-	* console/Makefile.am: Remove all-local: $(ARCH).
-	* ide/Makefile.am: Remove all-local: $(ARCH).
-	* irq/Makefile.am: Remove all-local: $(ARCH).
-	* network/Makefile.am: Remove all-local: $(ARCH).
-	* startup/Makefile.am: Remove all-local: $(ARCH).
-	* vectors/Makefile.am: Remove all-local: $(ARCH).
-	* wrapup/Makefile.am: Remove all-local: $(ARCH).
+	* startup/Makefile.am: Remove setvec.c.
 
 2003-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 510/bsps
 	* irq/irq.h: Add extern C wrapper.
-
-2003-09-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Merge-in include/Makefile.am.
-	Reflect changes to bsp.am.
-	* include/Makefile.am: Remove.
-	* configure.ac: Reflect changes above.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
@@ -255,46 +32,25 @@
 	startup/mmutlbtab.c, startup/setvec.c, startup/start.S,
 	vectors/vectors.h, vectors/vectors_init.c: URL for license changed.
 
-2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2003-08-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 445/bsps
+	* bsp_specs: Hand edited to duplicate change Ralf applied to the CVS
+	trunk.
+
+2003-08-21      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ide/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-
-2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Reflect having moved aclocal/.
-
-2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Reflect having moved automake/.
-	* clock/Makefile.am: Reflect having moved automake/.
-	* console/Makefile.am: Reflect having moved automake/.
-	* ide/Makefile.am: Reflect having moved automake/.
-	* include/Makefile.am: Reflect having moved automake/.
-	* irq/Makefile.am: Reflect having moved automake/.
-	* network/Makefile.am: Reflect having moved automake/.
-	* startup/Makefile.am: Reflect having moved automake/.
-	* vectors/Makefile.am: Reflect having moved automake/.
-	* wrapup/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
-
-2003-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	PR 445/bsps
-	* bsp_specs: Remove -D__embedded__ -Asystem(embedded) from cpp.
-	Remove cpp, old_cpp (now unused).
 
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 288/rtems
 	* irq/irq_asm.S, startup/bspstart.c: _ISR_Nest_level is now properly
 	maintained.
-
-2003-04-04	 Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* ide/.cvsignore: Add.
 
 2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
