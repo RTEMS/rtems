@@ -17,6 +17,7 @@
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <rtems/bspIo.h>
 
 /*
  *  Should we use a polled or interrupt drived console?
@@ -416,4 +417,24 @@ rtems_device_driver console_control(
 {
   return rtems_termios_ioctl (arg);
 }
+
+/* putchar/getchar for printk */
+
+static void bsp_out_char (char c)
+{
+  console_outbyte_polled(0, c);
+}
+
+BSP_output_char_function_type BSP_output_char = bsp_out_char;
+
+static char bsp_in_char(void)
+{
+  int tmp;
+
+  while ((tmp = console_inbyte_nonblocking(0)) < 0);
+  return (char) tmp;
+}
+
+BSP_polling_getchar_function_type BSP_poll_char = bsp_in_char;
+
 

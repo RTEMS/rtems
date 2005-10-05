@@ -11,7 +11,7 @@ C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c main.c bootcard.c sbrk.c \
     setvec.c spurious.c erc32mec.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-S_FILES = boardinit.S
+S_FILES =
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
@@ -40,6 +40,6 @@ all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = linkcmds setvec.c spurious.c boardinit.S
+EXTRA_DIST = linkcmds setvec.c spurious.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -1,3 +1,32 @@
+2005-10-05  Jiri Gaisler <jiri@gaisler.com>
+            Edvin Catovic <edvin@gaisler.com>
+            Konrad Eisele <konrad@gaisler.com>
+
+	PR 827/bsps
+	* ChangeLog, configure.ac, console/Makefile.am, console/console.c,
+	console/debugputs.c, startup/Makefile.am, startup/linkcmds,
+	tools/Makefile.am: Portion of large update of SPARC BSPs. Includes
+	addition of sis, leon2 and leon3 BSPs, deletion of leon BSP, addition
+	of SMC91111 NIC driver and much more.
+
+
+2005-01-20      Jiri Gaisler <jiri@gaisler.com>
+
+        Added support for printk in console/console.c
+
+2004-11-17      Edvin Catovic <edvin@gaisler.com>
+
+        Removed obsolete startup/boardinit.S
+
+
+2004-06-16	Edvin Catovic <edvin@gaisler.com>
+
+	* Makefile.am: Added bspstart (moved here from ../shared)
+	* configure.ac: Added bspstart/Makefile
+	* bspstart/bspstart.c: Moved here from ../shared
+	* bspstart/Makefile.am: New file
+	* wrapup/Makefile.am: Included bspstart	in BSP_PIECES
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, console/console.c, console/consolereserveresources.c,

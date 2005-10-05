@@ -5,7 +5,7 @@
 
 PGM = $(ARCH)/console.rel
 
-C_FILES = console.c consolereserveresources.c debugputs.c
+C_FILES = console.c debugputs.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)

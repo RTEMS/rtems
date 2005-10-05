@@ -17,6 +17,7 @@
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <stdarg.h>
 
 /*
  *  console_outbyte_polled

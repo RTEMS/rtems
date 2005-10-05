@@ -36,6 +36,13 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
 
+RTEMS_BSPOPTS_SET([ENABLE_SIS_QUIRKS],[sis],[1])
+RTEMS_BSPOPTS_SET([ENABLE_SIS_QUIRKS],[*],[0])
+RTEMS_BSPOPTS_HELP([ENABLE_SIS_QUIRKS],
+[If defined, then the SIS simulator specific code in the 
+ BSP will be enabled.  In particular, SIS requires special
+ initialization not used on real ERC32 hardware.])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
