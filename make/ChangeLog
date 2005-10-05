@@ -1,3 +1,14 @@
+2005-10-05  Jiri Gaisler <jiri@gaisler.com>
+            Edvin Catovic <edvin@gaisler.com>
+            Konrad Eisele <konrad@gaisler.com>
+
+	PR 827/bsps
+	* custom/Makefile.am, custom/erc32.cfg, custom/erc32nfp.cfg,
+	custom/leon1.cfg, custom/leon2.cfg: Portion of large update of SPARC
+	BSPs. Includes addition of sis, leon2 and leon3 BSPs, deletion of
+	leon BSP, addition of SMC91111 NIC driver and much more.
+	* custom/sis.cfg: New file.
+
 2005-09-12	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 822/bsps
