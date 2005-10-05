@@ -1,3 +1,8 @@
+2005-10-05	Joel Sherrill <joel@OARcorp.com>
+
+	* amba/amba.c: Fix obvious typo introduced with addition of missing CVS
+	Ids.
+
 2005-10-05  Jiri Gaisler <jiri@gaisler.com>
             Edvin Catovic <edvin@gaisler.com>
             Konrad Eisele <konrad@gaisler.com>

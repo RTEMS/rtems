@@ -13,9 +13,6 @@
  *  $Id$
  */
 
- *
- */
-
 #include <leon.h>
 
 #define amba_insert_device(tab, address) \
