@@ -1,3 +1,12 @@
+2005-10-05  Jiri Gaisler <jiri@gaisler.com>
+            Edvin Catovic <edvin@gaisler.com>
+            Konrad Eisele <konrad@gaisler.com>
+
+	PR 827/bsps
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Portion of large update
+	of SPARC BSPs. Includes addition of sis, leon2 and leon3 BSPs,
+	deletion of leon BSP, addition of SMC91111 NIC driver and much more.
+
 2005-09-01	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-4.6.4.

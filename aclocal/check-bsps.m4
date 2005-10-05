@@ -21,8 +21,8 @@ AC_MSG_CHECKING([for bsps])
           mbx8xx)            $1="[$]$1 mbx821_001 mbx860_002 mbx860_005b";;
 	  motorola_powerpc)  $1="[$]$1 mvme2307 mcp750 mtx603e";;
 	  pc386)             $1="[$]$1 pc386 pc386dx pc486 pc586 pc686 pck6";;
-	  erc32)             $1="[$]$1 erc32 erc32nfp";;
-	  leon)              $1="[$]$1 leon1 leon2";;
+	  erc32)             $1="[$]$1 erc32 sis";;
+	  leon)              $1="[$]$1 leon2 leon3";;
 	  sim68000)          $1="[$]$1 sim68000 simcpu32";;
 	  shsim)             $1="[$]$1 simsh7032 simsh7045";;
 	  *) 		     $1="[$]$1 $file";;
