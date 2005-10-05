@@ -1,3 +1,30 @@
+2005-10-05  Jiri Gaisler <jiri@gaisler.com>
+            Edvin Catovic <edvin@gaisler.com>
+            Konrad Eisele <konrad@gaisler.com>
+
+	PR 827/bsps
+	* .cvsignore, acinclude.m4: Portion of large update of SPARC BSPs.
+	Includes addition of sis, leon2 and leon3 BSPs, deletion of leon BSP,
+	addition of SMC91111 NIC driver and much more.
+	* leon/.cvsignore, leon/ChangeLog, leon/Makefile.am, leon/README,
+	leon/bsp_specs, leon/configure.ac, leon/times, leon/clock/.cvsignore,
+	leon/clock/Makefile.am, leon/clock/ckinit.c, leon/console/.cvsignore,
+	leon/console/Makefile.am, leon/console/console.c,
+	leon/console/consolereserveresources.c, leon/console/debugputs.c,
+	leon/gnatsupp/.cvsignore, leon/gnatsupp/Makefile.am,
+	leon/gnatsupp/gnatsupp.c, leon/include/.cvsignore,
+	leon/include/Makefile.am, leon/include/bsp.h, leon/include/coverhd.h,
+	leon/include/leon.h, leon/leon_open_eth/.cvsignore,
+	leon/leon_open_eth/Makefile.am, leon/leon_open_eth/leon_open_eth.c,
+	leon/start/.cvsignore, leon/start/Makefile.am,
+	leon/startup/.cvsignore, leon/startup/Makefile.am,
+	leon/startup/boardinit.S, leon/startup/linkcmds,
+	leon/startup/setvec.c, leon/startup/spurious.c,
+	leon/timer/.cvsignore, leon/timer/Makefile.am, leon/timer/timer.c,
+	leon/tools/.cvsignore, leon/tools/ChangeLog, leon/tools/Makefile.am,
+	leon/tools/configure.ac, leon/tools/runtest.in,
+	leon/wrapup/.cvsignore, leon/wrapup/Makefile.am: Removed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
