@@ -1,3 +1,20 @@
+2005-10-05  Jiri Gaisler <jiri@gaisler.com>
+            Edvin Catovic <edvin@gaisler.com>
+            Konrad Eisele <konrad@gaisler.com>
+
+	PR 827/bsps
+	* ChangeLog, cpu.c, cpu_asm.S, rtems/score/cpu.h: Portion of large
+	update of SPARC BSPs. Includes addition of sis, leon2 and leon3 BSPs,
+	deletion of leon BSP, addition of SMC91111 NIC driver and much more.
+
+2004-06-16	Edvin Catovic <edvin@gaisler.com>
+
+	* cpu_asm.S: Added FP context initialization routine 
+	_CPU_Context_initialize_fp
+	* cpu.c: Changed FP context initialization. 
+	* rtems/score/sparc.h: Defined SPARC_HAS_FPU to be 1 (Non-FP BSPs 
+	erc32nfp and leon1 are removed)	
+
 2004-02-26	Andreas Karlsson <andreas.karlsson@space.se>
 
 	604/bsps

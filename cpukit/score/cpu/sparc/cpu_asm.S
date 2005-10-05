@@ -23,7 +23,31 @@
 
 #include <asm.h>
 
-#if (SPARC_HAS_FPU == 1)
+/*
+ *  void _CPU_Context_initialize_fp(
+ *    void *fp_context_ptr
+ *  )
+ *
+ *  This routine is responsible for initializing the FP context
+ *  at *fp_context_ptr. All registers and FSR in the FP context
+ *  are initailized to 0.  
+ *  
+ */
+
+        .align 4
+        PUBLIC(_CPU_Context_initialize_fp)
+SYM(_CPU_Context_initialize_fp):
+	set	0, %l1
+fpcontextinit:	
+	std	%g0, [%o0]		! write register fields of the FP context
+	add	%l1, 1, %l1
+	cmp	%l1, 16
+	bne	fpcontextinit							
+	add	%o0, 8, %o0
+	retl		
+	st	%g0, [%o0]		! write fsr field of the FP context
+		
+	
 
 /*
  *  void _CPU_Context_save_fp(
@@ -122,8 +146,6 @@ SYM(_CPU_Context_restore_fp):
         ld      [%l0 + FSR_OFFSET], %fsr
         ret
         restore
-
-#endif /* SPARC_HAS_FPU */
 
 /*
  *  void _CPU_Context_switch(

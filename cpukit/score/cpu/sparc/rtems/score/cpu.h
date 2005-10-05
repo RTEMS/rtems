@@ -154,7 +154,7 @@ extern "C" {
  *  not provide one.
  */
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 
 /*
  *  Does the stack grow up (toward higher addresses) or down

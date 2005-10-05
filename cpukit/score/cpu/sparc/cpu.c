@@ -53,18 +53,15 @@ void _CPU_Initialize(
   void            (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-#if (SPARC_HAS_FPU == 1)
   void                  *pointer;
 
   /*
-   *  This seems to be the most appropriate way to obtain an initial
-   *  FP context on the SPARC.  The NULL fp context is copied it to
+   *  FP context is initialized.  The NULL fp context is copied it to
    *  the task's FP context during Context_Initialize.
    */
 
   pointer = &_CPU_Null_fp_context;
-  _CPU_Context_save_fp( &pointer );
-#endif
+  _CPU_Context_initialize_fp(pointer);
 
   /*
    *  Grab our own copy of the user's CPU table.
@@ -316,7 +313,6 @@ void _CPU_Context_Initialize(
     tmp_psr |= (new_level << 8) & SPARC_PSR_PIL_MASK;
     tmp_psr &= ~SPARC_PSR_EF_MASK;      /* disabled by default */
     
-#if (SPARC_HAS_FPU == 1)
     /*
      *  If this bit is not set, then a task gets a fault when it accesses
      *  a floating point register.  This is a nice way to detect floating
@@ -325,6 +321,6 @@ void _CPU_Context_Initialize(
 
     if ( is_fp )
       tmp_psr |= SPARC_PSR_EF_MASK;
-#endif
+
     the_context->psr = tmp_psr;
 }
