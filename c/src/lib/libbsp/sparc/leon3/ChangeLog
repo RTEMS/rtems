@@ -1,0 +1,36 @@
+2005-10-05  Jiri Gaisler <jiri@gaisler.com>
+            Edvin Catovic <edvin@gaisler.com>
+            Konrad Eisele <konrad@gaisler.com>
+
+	PR 827/bsps
+	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
+	times, amba/.cvsignore, amba/Makefile.am, amba/amba.c,
+	clock/.cvsignore, clock/Makefile.am, clock/ckinit.c,
+	console/.cvsignore, console/Makefile.am, console/console.c,
+	console/consolereserveresources.c, console/debugputs.c,
+	gnatsupp/.cvsignore, gnatsupp/Makefile.am, gnatsupp/gnatsupp.c,
+	include/.cvsignore, include/Makefile.am, include/amba.h,
+	include/bsp.h, include/coverhd.h, include/leon.h,
+	leon_open_eth/.cvsignore, leon_open_eth/Makefile.am,
+	leon_open_eth/leon_open_eth.c, leon_smc91111/.cvsignore,
+	leon_smc91111/Makefile.am, leon_smc91111/leon_smc91111.c,
+	start/.cvsignore, start/Makefile.am, startup/.cvsignore,
+	startup/Makefile.am, startup/bspstart.c, startup/ithread.S,
+	startup/linkcmds, startup/setvec.c, startup/spurious.c,
+	timer/.cvsignore, timer/Makefile.am, timer/timer.c, tools/.cvsignore,
+	tools/ChangeLog, tools/Makefile.am, tools/configure.ac,
+	tools/runtest.in, wrapup/.cvsignore, wrapup/Makefile.am: New files.
+
+2005-01-20      Jiri Gaisler <jiri@gaisler.com>
+
+        Added support for printk in console/console.c
+
+2004-11-17      Edvin Catovic <edvin@gaisler.com>
+
+        Removed obsolete startup/boardinit.S
+	Added power-down support
+
+2004-06-16	Edvin Catovic <edvin@gaisler.com>
+
+	* Added LEON3 BSP.
+
