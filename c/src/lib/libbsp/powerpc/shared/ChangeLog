@@ -1,3 +1,12 @@
+2005-10-06	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 833/bsps
+	* irq/irq_asm.S: Currently, all (new exception) BSPs explicitely enable
+	the FPU across the user ISR but DONT save/restore the FPU context.
+	Any use of the FPU fron the user handler (e.g., due to GCC
+	optimizations) result in corruption. The fix results in an exception
+	in such cases (user ISR must explicitely save/enable/restore FPU).
+
 2005-09-01	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h: This file is only to be used by BSPs with the new
