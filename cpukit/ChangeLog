@@ -1,3 +1,8 @@
+2005-10-06	Joel Sherrill <joel@OARcorp.com>
+
+	PR 828/filesystems
+	* libfs/src/dosfs/msdos_misc.c: Problem retracted. Revert patch.
+
 2005-10-04	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 829/rtems

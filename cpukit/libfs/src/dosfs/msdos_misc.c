@@ -252,7 +252,7 @@ msdos_find_name(
  *     error occured (errno set apropriately)
  *
  */
-msdos_status_t
+int
 msdos_get_name_node(
     rtems_filesystem_location_info_t *parent_loc,
     char                             *name,
@@ -260,7 +260,7 @@ msdos_get_name_node(
     char                             *name_dir_entry
     )
 {
-    msdos_status_t   rc = RC_OK;
+    int              rc = RC_OK;
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = parent_loc->mt_entry->fs_info;
     fat_file_fd_t   *fat_fd = parent_loc->node_access;
@@ -762,7 +762,7 @@ msdos_dir_is_empty(
  *     appropriately)
  *
  */
-msdos_status_t
+int
 msdos_find_name_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
@@ -771,7 +771,7 @@ msdos_find_name_in_fat_file(
     char                                 *name_dir_entry
     )
 {
-    msdos_status_t   rc = RC_OK;
+    int              rc = RC_OK;
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t         i = 0, j = 0;
@@ -880,7 +880,7 @@ msdos_find_name_in_fat_file(
  *     RC_OK on success, or error code if error occured
  *
  */
-msdos_status_t
+int
 msdos_find_node_by_cluster_num_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
@@ -889,7 +889,7 @@ msdos_find_node_by_cluster_num_in_fat_file(
     char                                 *dir_entry
     )
 {
-    msdos_status_t   rc = RC_OK;
+    int              rc = RC_OK;
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t         bts2rd = 0;
