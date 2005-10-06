@@ -34,7 +34,6 @@ extern "C" {
 #include <clockdrv.h>
 
 #include <console.h>
-#include <libchip/smc91111exp.h>
   
 /*
  *  confdefs.h overrides for this BSP:
