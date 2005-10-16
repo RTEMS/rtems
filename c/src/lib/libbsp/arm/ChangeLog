@@ -8,18 +8,6 @@
 
 	* acinclude.m4: Added GBA BSP.
 
-2005-03-11	Jay Monkman <jtm@lopingdog.com>
-
-	* acinclude.m4: Removed vegaplus BSP.
-	* vegaplus/.cvsignore, vegaplus/ChangeLog, vegaplus/Makefile.am,
-	vegaplus/bsp_specs, vegaplus/configure.ac, vegaplus/clock/clockdrv.c,
-	vegaplus/include/.cvsignore, vegaplus/include/bsp.h,
-	vegaplus/include/registers.h, vegaplus/include/tm27.h,
-	vegaplus/irq/bsp_irq_asm.S, vegaplus/irq/bsp_irq_init.c,
-	vegaplus/irq/irq.c, vegaplus/irq/irq.h, vegaplus/start/start.S,
-	vegaplus/startup/bspstart.c, vegaplus/startup/exit.c,
-	vegaplus/startup/linkcmds: Removed.
-
 2005-03-11	Philippe Simons <loki_666@fastmail.fm>
 
 	* acinclude.m4: Added gp32 BSP.
@@ -29,13 +17,25 @@
 	gp32/include/.cvsignore, gp32/include/bsp.h, gp32/include/conio.h,
 	gp32/include/tm27.h, gp32/start/.cvsignore, gp32/start/start.S,
 	gp32/startup/.cvsignore, gp32/startup/bspstart.c,
-	gp32/startup/exit.c, gp32/startup/linkcmds, gp32/startup/memmap.c: New files.
+	gp32/startup/exit.c, gp32/startup/linkcmds, gp32/startup/memmap.c:
+	New files.
+
+2005-03-11	Jay Monkman <jtm@lopingdog.com>
+
+	* vegaplus/.cvsignore, vegaplus/ChangeLog, vegaplus/Makefile.am,
+	vegaplus/bsp_specs, vegaplus/configure.ac,
+	vegaplus/clock/clockdrv.c, vegaplus/include/.cvsignore,
+	vegaplus/include/bsp.h, vegaplus/include/registers.h,
+	vegaplus/include/tm27.h, vegaplus/irq/bsp_irq_asm.S,
+	vegaplus/irq/bsp_irq_init.c, vegaplus/irq/irq.c, vegaplus/irq/irq.h,
+	vegaplus/start/start.S, vegaplus/startup/bspstart.c,
+	vegaplus/startup/exit.c, vegaplus/startup/linkcmds: Removed.
+	* acinclude.m4: Removed vegaplus BSP.
 
 2005-03-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* acinclude.m4: Remove arm_bare_bsp.
-
 	PR bsps/771
+	* acinclude.m4: Remove arm_bare_bsp.
 	* configure.ac: Remove reference to arm_bare_bsp in
 	AC_CONFIG_SRCDIR. Use ../arm instead.
 
@@ -59,13 +59,23 @@
 
 	* acinclude.m4: Added csb336 and csb337 BSPs
 
-2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
-	* acinclude.m4: Regenerate.
+	* shared/irq/irq_asm.S: Include <rtems/asm.h> instead of <asm.h>.
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_CHECK_BSPDIR([$RTEMS_BSP_FAMILY]).
+	* acinclude.m4: Regenerate.
+
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Add PREINSTALL_DIRS.
+
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -74,11 +84,16 @@
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* shared/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove shared/comm/Makefile, shared/irq/Makefile.
+	* shared/Makefile.am: Merge-in comm/Makefile.am, irq/Makefile.am
+	* shared/Makefile.am: Add preinstallation dirstamp support.
+	* shared/comm/Makefile.am, shared/irq/Makefile.am: Remove.
 
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -90,17 +105,25 @@
 	PR 480/bsps
 	* shared/irq/irq_asm.S: Remove duplicate code.
 
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/comm/console.c, shared/comm/uart.c, shared/comm/uart.h,
+	shared/irq/irq_asm.S, shared/irq/irq_init.c: URL for license
+	changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Reflect having moved automake/.
+	* Makefile.am, shared/Makefile.am, shared/comm/Makefile.am,
+	shared/irq/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -109,9 +132,6 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -120,52 +140,86 @@
 
 2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
 
+	* shared/irq/irq_asm.S, shared/irq/irq_init.c: Fixes a bug with
+	handling the situation where we are processing an IRQ, and we
+	receive an FIQ.
 	* acinclude.m4: Added edb7312.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+
+2002-10-04	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* shared/irq/irq_asm.S: Add FIQ support.
+
+2002-07-30	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* shared/irq/irq_asm.S: ARM port works well enough to run all
+	sptests, tmtests, and ttcp.  In addition to general cleanup, there
+	has been considerable optimization to interrupt disable/enable,
+	endian swapping, and context switching.
+
+2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* shared/irq/irq_asm.S: Significant rework in attempt to make
+	interrupts work.  They appear to be very close to correct but not
+	100%.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* Makefile.am, shared/comm/Makefile.am, shared/Makefile.am,
+	shared/irq/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/comm/console.c, shared/irq/irq_init.c: Include
+	rtems/bspIo.h instead of bspIo.h.
 
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
-	* configure.in: Remove.
 	* configure.ac: New file, generated from configure.in by autoupdate.
+	* configure.in: Remove.
 
 2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: New file.
 	* configure.in: Use RTEMS_BSP_SUBDIR.
 
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/comm/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: remove shared/io/Makefile.
+	* shared/comm/Makefile.am: Use *_HEADERS instead of *H_FILES.
+
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/comm/console.c: Added casts to eliminate warnings.
+	* shared/comm/console.c (console_reserve_resources): Removed.
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 
+2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
+
 2000-11-02	Joel Sherrill <joel@OARcorp.com>
 
 	* bsp_specs: Remove -Tlinkcmds from *link rule.
 
-2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
-
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to
+	GNU canonicalization.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -174,4 +228,5 @@
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: New file.
+	* ChangeLog, shared/ChangeLog: New file.
+
