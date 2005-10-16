@@ -1,14 +1,21 @@
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2005-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Merge-in shared/Makefile.am.
+	* ChangeLog: Merge-in shared/ChangeLog.
+	* configure.ac: Remove shared/Makefile.am.
+
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-03-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* acinclude.m4: Regenerate.
+	* shared/bspspuriousinit.c: Convert to using c99 fixed size types.
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_CHECK_BSPDIR([$RTEMS_BSP_FAMILY]).
+	* acinclude.m4: Regenerate.
 
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -19,10 +26,19 @@
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Remove C_FILES (Unused).
+
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Reflect changes to bootstrap.
 	* configure.ac: Remove RTEMS_CHECK_CUSTON_BSP.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/bspspuriousinit.c, shared/c3xspurious.c,
+	shared/c4xspurious.c: URL for license changed.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -30,11 +46,12 @@
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Reflect having moved automake/.
+	* Makefile.am, shared/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -43,9 +60,6 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -54,28 +68,24 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* Makefile.am, shared/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* shared/bspspuriousinit.c: Include rtems/bspIo.h instead of bspIo.h.
-	* shared/c3xspurious.c: Include rtems/bspIo.h instead of bspIo.h.
-	* shared/c4xspurious.c: Include rtems/bspIo.h instead of bspIo.h.
+	* shared/bspspuriousinit.c, shared/c3xspurious.c,
+	shared/c4xspurious.c: Include rtems/bspIo.h instead of bspIo.h.
 
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
-	* configure.in: Remove.
 	* configure.ac: New file, generated from configure.in by autoupdate.
+	* configure.in: Remove.
 
 2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -88,12 +98,13 @@
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
 
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to
+	GNU canonicalization.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -101,4 +112,5 @@
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: New file.
+	* ChangeLog, shared/ChangeLog: New file.
+
