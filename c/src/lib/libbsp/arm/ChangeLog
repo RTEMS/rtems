@@ -1,3 +1,9 @@
+2005-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Merge-in shared/Makefile.am.
+	* ChangeLog: Merge-in shared/ChangeLog.
+	* configure.ac: Remove shared/Makefile.am.
+
 2005-07-06	Markku Puro <markku.puro@kopteri.net>
 
 	* acinclude.m4: Added GBA BSP.
