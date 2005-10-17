@@ -17,10 +17,6 @@ RTEMS_PROJECT_ROOT
 
 RTEMS_CHECK_BSPDIR([$RTEMS_BSP_FAMILY])
 
-AM_CONDITIONAL(need_shared, test "$RTEMS_BSP_FAMILY" = "motorola_powerpc" \
-                         || test "$RTEMS_BSP_FAMILY" = "mvme5500")
-
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-shared/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

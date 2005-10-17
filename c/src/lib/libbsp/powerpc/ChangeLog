@@ -1,89 +1,137 @@
-2005-04-28	Joel Sherrill <joel@OARcorp.com>
+2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* configure.ac: Remove reference to dmv177.
+	* Makefile.am: Merge-in shared/Makefile.am.
+	* configure.ac: Remove shared/Makefile.am.
+	* ChangeLog: Merge-in shared/ChangeLog.
+
+2005-10-06	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 833/bsps
+	* shared/irq/irq_asm.S: Currently, all (new exception) BSPs
+	explicitely enable the FPU across the user ISR but DONT save/restore
+	the FPU context. Any use of the FPU fron the user handler (e.g., due
+	to GCC optimizations) result in corruption. The fix results in an
+	exception in such cases (user ISR must explicitely
+	save/enable/restore FPU).
+
+2005-09-16	richard.campbell@OARCorp.com
+
+	* shared/startup/bspstart.c: Rewrote get_eumbbar() in C. Function
+	was written in inline assembly and containined a register direction
+	error.
+
+2005-07-28	Eric Norum <norume@aps.anl.gov>
+
+	* shared/shared/clock/p_clock.c: Changes provided by Phillip
+	Sorensen <pas37@cornell.edu> to get MVME550 BSP running. 
+	Corresponding changes made to mvme5500/startup/bspstart.c.
+
+2005-05-17	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* shared/clock/p_clock.c, shared/irq/i8259.c, shared/irq/irq.c,
+	shared/irq/irq.h: Modified to use rtems/irq.h.
+
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/startup/bspstart.c, shared/tod/todcfg.c: Eliminate
+	{un|}signed{8|16|32}.
+	* shared/bootloader/pci.c: Eliminate {un|}signed{8|16|32}. Eliminate
+	u32.
+
+2005-05-10	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* shared/bootloader/bootldr.h, shared/bootloader/em86.c,
+	shared/bootloader/misc.c, shared/bootloader/pci.c,
+	shared/bootloader/pci.h: Modified to depend upon rtems/pci.h
+
+2005-05-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/pci/pci.h: Add pci_bus_count().
+
+2005-05-04	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* shared/irq/irq_init.c, shared/pci/pci.c,
+	shared/pci/pcifinddevice.c, shared/startup/bspstart.c: Name change
+	to support common PCI interface
 
 2005-04-28	Joel Sherrill <joel@OARcorp.com>
 
 	* acinclude.m4: Remove dmv177 and ppcn_60x.
-	* dmv177/.cvsignore, dmv177/ChangeLog, dmv177/Makefile.am,
-	dmv177/QUIRKS, dmv177/README, dmv177/README.net, dmv177/STATUS,
-	dmv177/bsp_specs, dmv177/cable.doc, dmv177/configure.ac,
-	dmv177/times, dmv177/clock/clock.c, dmv177/console/conscfg.c,
-	dmv177/console/debugio.c, dmv177/include/.cvsignore,
-	dmv177/include/bsp.h, dmv177/include/dmv170.h, dmv177/include/tm27.h,
-	dmv177/scv64/scv64.c, dmv177/sonic/dmvsonic.c, dmv177/start/start.S,
-	dmv177/startup/bspclean.c, dmv177/startup/bspstart.c,
-	dmv177/startup/genpvec.c, dmv177/startup/linkcmds,
-	dmv177/startup/setvec.c, dmv177/startup/vmeintr.c,
-	dmv177/timer/timer.c, dmv177/tod/todcfg.c, ppcn_60x/.cvsignore,
-	ppcn_60x/ChangeLog, ppcn_60x/Makefile.am, ppcn_60x/README,
-	ppcn_60x/STATUS, ppcn_60x/bsp_specs, ppcn_60x/configure.ac,
-	ppcn_60x/clock/clock.c, ppcn_60x/console/config.c,
-	ppcn_60x/console/console.c, ppcn_60x/console/console.h,
-	ppcn_60x/console/debugio.c, ppcn_60x/console/i8042.c,
-	ppcn_60x/console/i8042_p.h, ppcn_60x/console/i8042vga.c,
-	ppcn_60x/console/i8042vga.h, ppcn_60x/console/ns16550cfg.c,
-	ppcn_60x/console/ns16550cfg.h, ppcn_60x/console/vga.c,
-	ppcn_60x/console/vga_p.h, ppcn_60x/console/z85c30cfg.c,
-	ppcn_60x/console/z85c30cfg.h, ppcn_60x/include/.cvsignore,
-	ppcn_60x/include/bsp.h, ppcn_60x/include/extisrdrv.h,
-	ppcn_60x/include/nvram.h, ppcn_60x/include/pci.h,
-	ppcn_60x/include/tm27.h, ppcn_60x/network/amd79c970.c,
-	ppcn_60x/network/amd79c970.h, ppcn_60x/nvram/ds1385.h,
-	ppcn_60x/nvram/mk48t18.h, ppcn_60x/nvram/nvram.c,
-	ppcn_60x/nvram/prepnvr.h, ppcn_60x/nvram/stk11c68.h,
-	ppcn_60x/pci/pci.c, ppcn_60x/start/start.S,
-	ppcn_60x/startup/bspclean.c, ppcn_60x/startup/bspstart.c,
-	ppcn_60x/startup/bsptrap.S, ppcn_60x/startup/genpvec.c,
-	ppcn_60x/startup/linkcmds, ppcn_60x/startup/rtems-ctor.cc,
-	ppcn_60x/startup/setvec.c, ppcn_60x/startup/spurious.c,
-	ppcn_60x/startup/swap.c, ppcn_60x/timer/timer.c, ppcn_60x/tod/cmos.h,
-	ppcn_60x/tod/tod.c, ppcn_60x/universe/universe.c,
-	ppcn_60x/vectors/README, ppcn_60x/vectors/align_h.S,
-	ppcn_60x/vectors/vectors.S: Removed.
+	* configure.ac: Remove reference to dmv177.
 
-2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
+2005-04-28	Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * acinclude.m4: Initial release of ep1a bsp
-        * ep1a/Makefile.am, ep1a/bsp_specs, ep1a/configure.ac,
-        ep1a/console/alloc360.c, ep1a/console/console.c,
-        ep1a/console/console.h, ep1a/console/init68360.c,
-        ep1a/console/m68360.h, ep1a/console/mc68360_scc.c,
-        ep1a/console/ns16550cfg.c, ep1a/console/ns16550cfg.h,
-        ep1a/console/rsPMCQ1.c, ep1a/console/rsPMCQ1.h, ep1a/include/bsp.h,
-        ep1a/irq/irq.c, ep1a/irq/irq_init.c, ep1a/pci/no_host_bridge.c,
-        ep1a/start/start.S, ep1a/startup/bspstart.c, ep1a/startup/linkcmds,
-        ep1a/vme/vmeconfig.c: New files.
+	* acinclude.m4: Initial release of ep1a bsp
+
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/console/uart.h: Eliminate tabs.
+
+2005-04-15	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	PR 779/bsp
+	* shared/clock/p_clock.c, shared/console/console.c,
+	shared/console/uart.c, shared/console/uart.h, shared/irq/irq.c,
+	shared/irq/irq.h, shared/irq/irq_init.c: powerpc: add parameter to
+	new exception interrupt handlers
+
+2005-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/pci/pci.c, shared/pci/pci.h, shared/pci/pcifinddevice.c:
+	Continue PCI API unification. All use pci_find_device(). Also
+	reformat to remove tabs.
+
+2005-03-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/pci/pci.c, shared/pci/pcifinddevice.c,
+	shared/startup/bspstart.c: Make PCI initialize function part of the
+	unified PCI API as pci_initialize().
+
+2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/startup/bspstart.c: Eliminate rtems_unsigned32.
+	* shared/startup/bspstart.c, shared/start/start.S: include
+	<rtems/powerpc/powerpc.h>. Use PPC_MINIMUM_STACK_FRAME_SIZE instead
+	of CPU_MINIMUM_STACK_FRAME_SIZE.
+
+2005-02-12	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/pci/pci.h: Remove contents that are duplicates of the pci.h
+	in cpukit and include rtems/pci.h for the base set of PCI
+	functionality.
+
+2005-01-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/tod/todcfg.c: size_t RTC_Count.
+
+2005-01-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/ChangeLog, shared/startup/bspstart.c, shared/tod/todcfg.c:
+	Remove warnings.
 
 2004-12-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* acinclude.m4: Reflect eth_comm having been removed.
 
+2004-11-30	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 729/bsps
+	PR 728/bsps
+	* shared/bootloader/ppcboot.lds: Modified ppcboot.lds to include new
+	.data and .rodata sections being generated by gcc-3.3.3 and above,
+	the lack of which was causing the bootloader to crash.
+	* shared/bootloader/pci.c: Removed the r->size=0 and r->base=0
+	assignement which makes too-large regions conflict with onboard
+	hardware, replacing it with sfree which deletes the memory region
+	from the setup code, leaving it disabled.
+
 2004-11-30	Eric Norum <norume@aps.anl.gov>
 
 	* mvme5500/include/bsp.h: Add definition for PCI_MEM_BASE_ADJUSTMENT
 
-2004-11-23	Joel Sherrill <joel@OARcorp.com>
-
-	* eth_comm/.cvsignore, eth_comm/ChangeLog, eth_comm/Makefile.am,
-	eth_comm/README, eth_comm/bsp_specs, eth_comm/configure.ac,
-	eth_comm/times, eth_comm/canbus/canbus.c, eth_comm/clock/p_clock.c,
-	eth_comm/console/console.c, eth_comm/include/.cvsignore,
-	eth_comm/include/8xx_immap.h, eth_comm/include/bsp.h,
-	eth_comm/include/canbus.h, eth_comm/include/commproc.h,
-	eth_comm/include/coverhd.h, eth_comm/include/info.h,
-	eth_comm/include/tm27.h, eth_comm/irq/irq.c, eth_comm/irq/irq.h,
-	eth_comm/irq/irq_asm.S, eth_comm/irq/irq_init.c,
-	eth_comm/network/README, eth_comm/network/network.c,
-	eth_comm/start/start.S, eth_comm/startup/bspstart.c,
-	eth_comm/startup/cpuinit.c, eth_comm/startup/linkcmds,
-	eth_comm/startup/mmutlbtab.c, eth_comm/vectors/vectors.S,
-	eth_comm/vectors/vectors.h, eth_comm/vectors/vectors_init.c,
-	eth_comm/wrapup/.cvsignore, eth_comm/wrapup/Makefile.am: Removed.
-
 2004-10-26	Eric Norum <norume@aps.anl.gov>
 
-    Remove environ common area -- it breaks newlib
+	Remove environ common area -- it breaks newlib
 	* powerpc/dmv177/start/start.S
 	* powerpc/eth_comm/start/start.S
 	* powerpc/mbx8xx/startup/start.S
@@ -96,9 +144,19 @@
 
 2004-10-20	Eric Norum <norume@aps.anl.gov>
 
-	* acinclude.m4:        Add mvme5500 BSP
 	* configure.ac
 	* mvme5500/.......
+	* acinclude.m4: Add mvme5500 BSP
+
+2004-09-27	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 606/bsps
+	* shared/bootloader/pci.c, shared/bootloader/pci.c: Fixed IO
+	remapping so buses >= 1 are remapped. Reduced PCI space to match
+	bat2.  Fixed incorrect region size calculation in pci_read_bases. 
+	Set PCI latency timers to known sane values.  Changed bridge PCI
+	settings to minimum sane instead of whatever sounded neat in the PCI
+	spec.  Force pf regions to memory mapped to preserve byte access.
 
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
@@ -110,11 +168,8 @@
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* acinclude.m4: Regenerate.
-
-2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: RTEMS_CHECK_BSPDIR([$RTEMS_BSP_FAMILY]).
+	* acinclude.m4: Regenerate.
 
 2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -147,13 +202,112 @@
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
 
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 288/rtems
 	* support/new_exception_processing/cpu.c: _ISR_Nest_level is now
 	properly maintained and does not reside in SPRG0.
+
+2003-07-16	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 432/bsps
+	* shared/bootloader/pci.c: Re-instated code that prevents remapping
+	small IO regions, which if remapped would cause i8259 registers to
+	move out from under the #define'd base addresses.
+	* shared/startup/bspstart.c: Reduced BAT2 PCI memory allocation to
+	256 megs, I incorrectly had extended it which would cause problems
+	with PCI devices that defined prefetchable memory.
+
+2003-06-13	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 415/bsps
+	* shared/include/bsp.h, shared/pci/detect_raven_bridge.c,
+	shared/startup/bspstart.c: Support enabling MCP exceptions on the
+	host bridge. This can be used for memory probing on the VME bus.
+
+2003-06-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 405/bsps
+	* shared/irq/irq.c, shared/irq/irq.h: Added support for shared
+	interrupts. Existing single hander vectors are undisturbed, a new
+	function added to allow adding/removing handlers from a vector.
+	* shared/bootloader/pci.c: Added support for configuring devices for
+	pci busses > 0
+	* shared/motorola/motorola.c, shared/motorola/motorola.h: Added
+	interrupt routing tables in support of FixupPCI.  This is
+	board-specific, each board will have to supply information for
+	FixupPCI() to do anything for it.
+	* shared/startup/bspstart.c: Extended bat2 to cover entire PCI
+	address space.
+	* shared/pci/pci.c, shared/pci/pci.h: Added FixupPCI() to store
+	vectors in the INTERRUPT_LINE register of pci devices any # of hops
+	away from the host processor.
+
+2003-04-15	Joel Sherrill <joel@OARcorp.com>
+
+	PR 386/bsps
+	* shared/vme/vmeconfig.c, shared/vme/vmeconfig.c: Removed
+	declaration of _BSP_vme_bridge_irq.
+
+2003-04-10	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 379/bsps
+	* shared/console/console.c, shared/console/consoleIo.h,
+	shared/console/polled_io.c, shared/irq/irq_init.c,
+	shared/openpic/openpic.c, shared/pci/detect_raven_bridge.c:
+	Unfortunately, the supported 'printk' format string subset of the
+	polled-io and libcpu implementations are different - hence, a few
+	format strings in the ppc/shared BSP were changed.
+	* shared/console/uart.c, shared/console/uart.h:
+	BSP_output_char_via_serial() prototype changed to match the
+	BSP_output_char_function_type.  Note that the motorola BSPs use
+	polled-io for the output_char routine, not the uart.c version. The
+	latter can be used be other BSPs however (e.g. SVGM).
+	* shared/console/polled_io.c: libcpu provides 'printk' already.
+	Therefore, the implementation in this file was removed (still used
+	for the bootloader, though).  It now provides BSP_output_char() for
+	libcpu's printk().
+
+2003-04-10	Joel Sherrill <joel@OARcorp.com>
+
+	PR 383/bsps
+	* shared/irq/irq.c: Fix bug introduced by conflicts in previous
+	patches.
+
+2003-03-25	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 360/bsps
+	PR 349/bsps
+	* shared/irq/irq.c, shared/vme/VME.h, shared/vme/vmeconfig.c,
+	shared/irq/irq.c, shared/vme/VME.h, shared/vme/vmeconfig.c,
+	shared/irq/irq.c, shared/vme/VME.h, shared/vme/vmeconfig.c: Fixes
+	library dependency on the vmeUniverse driver. It is now possible to
+	use the ppc/shared/irq code on non-VME BSPs without triggering
+	linkage of the vmeUniverse driver.
+	* shared/irq/irq.c, shared/irq/irq_init.c, shared/openpic/openpic.c,
+	shared/openpic/openpic.h: BSP code had set the task priority
+	register multiple times of the OpenPIC instead of setting the
+	individual source priorities. This patch adds
+	openpic_get_source_priority() and openpic_set_source_priority()
+	calls and lets IRQ management code use them.
+
+2003-03-18	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 356/bsps
+	This patch makes RTEMS/powerpc/shared EABI compliant.
+	* shared/irq/irq_init.c, shared/start/Makefile.am,
+	shared/start/start.S, shared/startup/bspstart.c,
+	shared/startup/pgtbl_setup.c, shared/vectors/vectors.h,
+	shared/vectors/vectors_init.c: zero_bss() should clear not only bss
+	but sbss and sbss2 also (this is probably a bugfix, as sbss/sbss2
+	are probably used even if -msdata=eabi is not specified).
+	* shared/start/rtems_crti.S: New file which must be linked
+	immediately after ecrti.o. rtems_crti.o contains a code snippet who
+	lets __init() return immediately. Also, a new entry point '_init' to
+	the C++ Ctors is generated for use by the RTEMS Thread_Handler.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -162,56 +316,140 @@
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 349/bsps
-	* configure.ac: Add glue to the powerpc/shared BSP
-	to use the vmeUniverse VME-PCI bridge driver.
+	* shared/console/console.c, shared/console/uart.c,
+	shared/console/uart.h: implement IOCTLs for the serial (UART)
+	console to install/retrieve a BREAK-IRQ callback.  The callback
+	routine (if installed) is invoked from the UART ISR when a BREAK
+	interrupt is detected.  This can be used e.g. to enforce a "hotkey"
+	reboot a la vxWorks Ctrl-X (although we use the serial line break
+	condition) NOTE: The callback runs in ISR context.
+	* shared/startup/pgtbl_setup.c, shared/startup/pgtbl_activate.c: New
+	files
+	* shared/add BSP hook to let a VME interrupt acknowledge the
+	PCI/openpic IRQ. (SEE ALSO THE ppc-sharedbsp-vme.diff patch) - fix:
+	EABI compliance; isr/exception lowlevel handlers must not clobber R2
+	or R13 - fix: openpic_init was called with the polarity/senses
+	tables swapped (fixed wrong order of arguments) - cosmetics: use new
+	_read_SPRXX() _write_SPRXX() macros
+	* shared/fix: remove implicit assumption that ISA interrupt vectors
+	start at 0
+	* configure.ac, shared/vme/.cvsignore, shared/vme/Makefile.am,
+	shared/vme/VME.h, shared/vme/VMEConfig.h, shared/vme/vmeconfig.c:
+	Add glue to the powerpc/shared BSP to use the vmeUniverse VME-PCI
+	bridge driver.
+	* shared/console/polled_io.c, shared/console/reboot.c,
+	shared/irq/irq.c, shared/irq/irq_asm.S, shared/irq/irq_init.c,
+	shared/openpic/Makefile.am, shared/startup/linkcmds,
+	shared/vectors/vectors.S, shared/vectors/vectors_init.c: - install
+	the 'openpic.h' and 'pci.h' headers  - avoid a name clash by
+	renaming 'vsprintf' & friends to 'k_vsprintf' etc. - let
+	'rtemsReboot' print a stack trace (in case an 'assert' failed) -
+	irq.c:
+	* shared/startup/Makefile.am, shared/startup/bspstart.c,
+	shared/startup/linkcmds: Let the powerpc/shared (+derived) BSPs use
+	pagetable support from libcpu.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
+
+2003-01-20	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/startup/linkcmds*: Add FreeBSD sysctl() sections.
+
+2002-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/console/console.c: Removed __assert() which conflicts with
+	newlib.
 
 2002-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
 
+2002-12-08	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* shared/bootloader/head.S: Added support for optional debug via
+	PPCbug. Also turn off mmu/caches for the bootstrap phase, which
+	seems to cause trouble with the 603.  The cpu init functions in the
+	bsp get all that stuff going properly.
+
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
 
+2002-11-17	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* shared/irq/irq_init.c, shared/motorola/motorola.c: Support for
+	MTX603e.
+
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/bootloader/em86.c, shared/console/inch.c,
+	shared/console/polled_io.c, shared/irq/irq.c,
+	shared/motorola/motorola.c, shared/pci/detect_raven_bridge.c,
+	shared/vectors/vectors_init.c: Removed warnings.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+
+2002-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/bootloader/em86real.S: Fix syntax error in comment near
+	line 1185.
+
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/irq/irq_init.c: Include <rtems/bspIo.h>.
+	* shared/bootloader/exception.S, shared/start/start.S: Reflect
+	changes to <rtems/score/cpu.h>.
+	* shared/bootloader/head.S, shared/bootloader/misc.c,
+	shared/console/polled_io.c, shared/irq/irq.c, shared/irq/irq_asm.S,
+	shared/vectors/vectors.S: Ditto.
+
+2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/startup/bspstart.c: Include <libcpu/cpuIdent.h>.
+
+2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/residual/residual.c: Include <string.h>.
+	* shared/vectors/vectors_init.c: Include <rtems/bspIo.h> for printk.
+	* shared/bootloader/mm.c, shared/bootloader/pci.c,
+	shared/console/console.c, shared/openpic/openpic.c: Ditto.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* Makefile.am, shared/bootloader/Makefile.am, shared/Makefile.am,
+	shared/clock/Makefile.am, shared/console/Makefile.am,
+	shared/include/Makefile.am, shared/irq/Makefile.am,
+	shared/motorola/Makefile.am, shared/openpic/Makefile.am,
+	shared/pci/Makefile.am, shared/residual/Makefile.am,
+	shared/start/Makefile.am, shared/startup/Makefile.am,
+	shared/vectors/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2001-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* shared/include/Makefile.am: Use _HEADER instead of H_FILES.
 	* Makefile.am: Add DIST_SUBDIRS.
+	* shared/include/bsp.h: Include <bspopts.h>.
+	* shared/irq/Makefile.am, shared/openpic/Makefile.am: Ditto.
 
-2001-11-20	Joel Sherrill <joel@OARcorp.com>
+2001-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* acinclude.m4: papyrus reference removed.
-	* papyrus/.cvsignore, papyrus/ChangeLog, papyrus/Makefile.am,
-	papyrus/README, papyrus/bsp_specs, papyrus/configure.ac, papyrus/times,
-	papyrus/dlentry/.cvsignore, papyrus/dlentry/Makefile.am,
-	papyrus/dlentry/dlentry.S, papyrus/flashentry/.cvsignore,
-	papyrus/flashentry/Makefile.am, papyrus/flashentry/flashentry.S,
-	papyrus/include/.cvsignore, papyrus/include/Makefile.am,
-	papyrus/include/bsp.h, papyrus/include/coverhd.h,
-	papyrus/startup/.cvsignore, papyrus/startup/Makefile.am,
-	papyrus/startup/bspclean.c, papyrus/startup/bspstart.c,
-	papyrus/startup/linkcmds, papyrus/startup/setvec.c,
-	papyrus/wrapup/.cvsignore, papyrus/wrapup/Makefile.am: Deleted.
+	* support/new_exception_processing/Makefile.am,
+	support/old_exception_processing/Makefile.am,
+	support/old_exception_processing/cpu_asm.S,
+	support/old_exception_processing/irq_stub.S: Modified to reflect old
+	versus new exception processing being a per BSP option.
+	* support/new_exception_processing/c_isr.inl,
+	support/new_exception_processing/cpu.h,
+	support/old_exception_processing/c_isr.inl,
+	support/old_exception_processing/cpu.h,
+	support/old_exception_processing/ppc_offs.h: Removed.
 
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
 
@@ -223,51 +461,124 @@
 	support/old_exception_processing/rtems/score/cpu.h,
 	support/old_exception_processing/rtems/score/ppc_offs.h: New files
 	missed in previous commit.
-
-2001-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* support/new_exception_processing/Makefile.am,
-	support/old_exception_processing/Makefile.am,
-	support/old_exception_processing/cpu_asm.S,
-	support/old_exception_processing/irq_stub.S: Modified to reflect
-	old versus new exception processing being a per BSP option.
-	* support/new_exception_processing/c_isr.inl,
-	support/new_exception_processing/cpu.h,
-	support/old_exception_processing/c_isr.inl,
-	support/old_exception_processing/cpu.h,
-	support/old_exception_processing/ppc_offs.h: Removed.
+	* papyrus/.cvsignore, papyrus/ChangeLog, papyrus/Makefile.am,
+	papyrus/README, papyrus/bsp_specs, papyrus/configure.ac,
+	papyrus/times, papyrus/dlentry/.cvsignore,
+	papyrus/dlentry/Makefile.am, papyrus/dlentry/dlentry.S,
+	papyrus/flashentry/.cvsignore, papyrus/flashentry/Makefile.am,
+	papyrus/flashentry/flashentry.S, papyrus/include/.cvsignore,
+	papyrus/include/Makefile.am, papyrus/include/bsp.h,
+	papyrus/include/coverhd.h, papyrus/startup/.cvsignore,
+	papyrus/startup/Makefile.am, papyrus/startup/bspclean.c,
+	papyrus/startup/bspstart.c, papyrus/startup/linkcmds,
+	papyrus/startup/setvec.c, papyrus/wrapup/.cvsignore,
+	papyrus/wrapup/Makefile.am: Deleted.
+	* acinclude.m4: papyrus reference removed.
 
 2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
 
-	This modification is part of the submitted modifications necessary to
+	This modification is part of the submitted modifications necessary
+	to
 	support the IBM PPC405 family.  This submission was reviewed by
 	Thomas Doerfler <Thomas.Doerfler@imd-systems.de> who ensured it did
 	not negatively impact the ppc403 BSPs.  The submission and tracking
 	process was captured as PR50.
-	* acinclude.m4: Added gen405 BSP.
 	* ChangeLog: Removed bogus comment on edit of generated file.
+	* acinclude.m4: Added gen405 BSP.
+
+2001-10-25	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/startup/linkcmds: Added _init and _fini.
 
 2001-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	* acinclude.m4: Added mpc8260ads subdirectory.
 
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/clock/p_clock.c, shared/startup/bspstart.c: Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
-	* configure.in: Remove.
 	* configure.ac: New file, generated from configure.in by autoupdate.
+	* configure.in: Remove.
 
 2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: New file.
 	* configure.in: Use RTEMS_BSP_SUBDIR.
 
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/console/Makefile.am, shared/residual/Makefile.am,
+	shared/irq/Makefile.am, shared/motorola/Makefile.am,
+	shared/vectors/Makefile.am, shared/pci/Makefile.am,
+	shared/openpic/Makefile.am: Use 'PREINSTALL_FILES ='.
+
+2001-05-14	Tom Armistead <tom_armistead@phx.mcd.mot.com>
+
+	* shared/start/start.S: Increased BAT0 mapping of RAM from 64 meg to
+	256 meg to allow operation on boards with larger RAM sizes.
+	* shared/vectors/vectors_init.c: Modified to call 'generic' powerpc
+	vector function (mpc60x_vector_is_valid) instead of MPC750  specific
+	function to allow operation on boards with CPUs other than the
+	MPC750.
+
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/bootloader/misc.c, shared/console/Makefile.am,
+	shared/console/console.c, shared/console/consoleIo.h,
+	shared/console/inch.c, shared/console/polled_io.c,
+	shared/console/uart.c, shared/console/uart.h, shared/include/bsp.h,
+	shared/irq/Makefile.am, shared/irq/irq.c, shared/irq/irq.h,
+	shared/irq/irq_init.c, shared/openpic/openpic.c,
+	shared/openpic/openpic.h, shared/pci/Makefile.am, shared/pci/pci.c,
+	shared/pci/pci.h, shared/residual/Makefile.am, shared/start/start.S,
+	shared/startup/bspstart.c, shared/vectors/vectors.S,
+	shared/vectors/vectors.h, shared/vectors/vectors_init.c: Per PR216,
+	"libbsp/powerpc/shared" BSP has been modified considerably with the
+	goal to make it more flexible and reusable by other BSPs. The main
+	strategies were: - eliminate hardcoded base addresses; devices use
+	offsets and a BSP defined base address. - separate functionality
+	into different files (e.g. reboot from inch.c to reboot.c) which can
+	be overridden by a 'derived' BSP. - separate initialization code
+	into separate files (e.g.  PCI bridge detection/initialization was
+	separated from the more generic PCI access routines), also to make
+	it easier for 'derived' BSPs to substitute their own initialization
+	code. There are also a couple of enhancements and fixes: - IRQ
+	handling code now has a hook for attaching a VME bridge. - OpenPIC
+	is now explicitely initialized (polarities, senses). Eliminated the
+	implicit assumption on the presence of an ISA PIC. - UART and
+	console driver now supports more than 1 port. The current maximum of
+	2 can easily be extended by enlarging a table (it would even be
+	easier if the ISR API was not broken by design). - fixed polled_io.c
+	so it correctly supports console on COM2 - fixed TLB invalidation
+	code (start.S). - exception handler prints a stack backtrace. -
+	added BSP_pciFindDevice() to scan the pci bus for a particular
+	vendor/device/instance.
+
+2001-05-09	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/startup/linkcmds: In support of gcc 3.1, added one of more
+	of the sections .jcr, .rodata*, .data.*, .gnu.linkonce.s2.*,
+	.gnu.linkonce.sb2.*, and .gnu.linkonce.s.*.  Spacing corrections and
+	direction of segments to memory regions may also have been
+	addressed.  This was a sweep across all BSPs.
+
+2001-04-08	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/startup/linkcmds: Per PR170, PR171, and PR172 add .eh_frame
+
 2001-03-30	Eric Valette <valette@crf.canon.fr>
 
+	* shared/Makefile.am, shared/console/consoleIo.h,
+	shared/include/bsp.h: These modifications are part of the conversion
+	of the mpc8xx CPU to the "new exception processing model."
 	* configure.in, motorola_powerpc/Makefile.am,
-	motorola_powerpc/configure.in: These modifications are in
-	support of switching the mpc8xx to the use the "new exception
-	processing model."
+	motorola_powerpc/configure.in: These modifications are in support of
+	switching the mpc8xx to the use the "new exception processing
+	model."
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -275,13 +586,32 @@
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
+
+2000-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/startup/bspstart.c: assoc.h, error.h, libio_.h, libio.h,
+	and libcsupport.h moved from libc to lib/include/rtems and now must
+	be referenced as <rtems/XXX.h>.   Header file order was cleaned up
+	while doing this.
 
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to
+	GNU canonicalization.
+
+2000-09-29	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
+	* shared/startup/linkcmds: Added lines so DWARF debug information
+	would be available.  Otherwise gdb complains that the offsets for
+	the debug info are incorrect and doesn't load the files.
+
+2000-09-05	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/start/start.S: Include proper files to compile.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: New file.
+	* ChangeLog, shared/ChangeLog: New file.
+
