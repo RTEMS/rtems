@@ -54,7 +54,8 @@ clock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 clock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/conio.c console/console.c console/defaultfont.c
+console_rel_SOURCES = console/conio.c console/console.c \
+    console/defaultfont.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -76,9 +77,8 @@ timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_HEADERS += irq/irq.h
 
 noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq.c irq/bsp_irq_init.c \
-    irq/irq_init.c irq/bsp_irq_asm.S \
-    irq/irq_asm.S
+irq_rel_SOURCES = irq/irq.c irq/bsp_irq_init.c irq/irq_init.c \
+    irq/bsp_irq_asm.S irq/irq_asm.S
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
