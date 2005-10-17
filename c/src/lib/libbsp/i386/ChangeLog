@@ -1,3 +1,51 @@
+2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Merge-in shared/Makefile.am.
+	* ChangeLog: Merge-in shared/ChangeLog.
+	* configure.ac: Remove shared/Makefile.am.
+
+2005-05-23	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/comm/i386-stub.c: Make get_char() static since it is such a
+	common name and conflicts with names in the standard Ada run-time.
+
+2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/pci/pcibios.c: Eliminate unsigned8.
+
+2005-05-06	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* shared/Makefile.am, shared/comm/i386-stub-glue.c,
+	shared/comm/tty_drv.c, shared/comm/uart.c, shared/irq/idt.c,
+	shared/irq/irq.c, shared/irq/irq.h, shared/irq/irq_asm.S,
+	shared/irq/irq_init.c: Moved irq.h and irq_asm.h to bsp
+	subdirectory.
+
+2005-05-04	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* shared/pci/pcibios.c, shared/pci/pcibios.h: Corrected spacing Name
+	modifications for a generic PCI interface       Added wrapper
+	routines for pci read/write configuration data
+
+2005-05-03	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* shared/comm/tty_drv.c: Modified to support addition of parameter
+	to ISRs.
+
+2005-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/pci/pcibios.c: Reformatted.
+
+2005-04-18	Eric Valette <eric.valette@free.fr>
+
+	* shared/irq/irq.c, shared/irq/irq.h, shared/irq/irq_asm.S,
+	shared/irq/irq_init.c: Added parameter to irq handler
+
+2005-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/pci/pcibios.c, shared/pci/pcibios.h: Continue PCI API
+	unification. All use pci_find_device().
+
 2005-03-04	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/pci/pcibios.c, shared/pci/pcibios.h: Make PCI initialize
@@ -5,20 +53,47 @@
 
 2005-01-19	Joel Sherrill <joel@OARcorp.com>
 
-	* pc386/console/vgainit.c, pc386/wd8003/wd8003.c, shared/comm/uart.c:
-	Fix errors caught by gcc 4.x.
+	* pc386/console/vgainit.c, pc386/wd8003/wd8003.c,
+	shared/comm/uart.c: Fix errors caught by gcc 4.x.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2005-01-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/comm/gdb_glue.c, shared/irq/idt.c: Remove warnings.
+
+2004-09-27	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 608/bsps
+	* shared/pci/pcibios.c: BusCountPCI().
+
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-04-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* acinclude.m4: Regenerate.
+	* shared/irq/irq_asm.S: Include <rtems/asm.h> instead of <asm.h>.
+
+2004-03-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/pci/pcibios.c: Convert to using c99 fixed size types.
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_CHECK_BSPDIR([$RTEMS_BSP_FAMILY]).
+	* acinclude.m4: Regenerate.
+
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/irq/irq_asm.S: Convert #..-comments to /*..*/ comments.
+
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Add PREINSTALL_DIRS.
+
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -27,17 +102,40 @@
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* shared/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* shared/Makefile.am: Merge-in Makefile.ams above. Add
+	preinstallation dirstamp support.
 	* configure.ac: Remove shared/io/Makefile, shared/comm/Makefile,
 	shared/pci/Makefile, shared/irq/Makefile.
+	* shared/io/.cvsignore, shared/pci/Makefile.am,
+	shared/irq/Makefile.am, shared/io/Makefile.am,
+	shared/comm/Makefile.am: Remove.
 
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Reflect changes to bootstrap.
 	* configure.ac: Remove RTEMS_CHECK_CUSTON_BSP.
+
+2003-10-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/comm/uart.h: Add extern "C" guards.
+	* shared/pci/pcibios.h: Ditto.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/comm/gdb_glue.c, shared/irq/idt.c, shared/irq/irq.c,
+	shared/irq/irq.h, shared/irq/irq_asm.S, shared/irq/irq_asm.h,
+	shared/irq/irq_init.c: URL for license changed.
+
+2003-08-21	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 456/bsps
+	* shared/irq/irq.c: Fix race condition when installing an ISR.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -45,11 +143,25 @@
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Reflect having moved automake/.
+	* Makefile.am, shared/Makefile.am, shared/comm/Makefile.am,
+	shared/io/Makefile.am, shared/irq/Makefile.am,
+	shared/pci/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
+
+2003-07-16	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 428/bsps
+	PR 432/bsps
+	* shared/pci/pcibios.c, shared/pci/pcibios.h: Added
+	BSP_pci_Find_Device() which is copied from motorola_shared.
+
+2003-03-18	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/comm/GDB.HOWTO: Updated.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -58,38 +170,100 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
 
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/comm/i386-stub.c: Fixed places where debug_error() was not
+	called with enough arguments.
+	* shared/comm/i386-stub.c: Removed warnings.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+
+2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/pci/pcibios.c: #include <string.h>.
+
+2002-08-05	Eric Norum <eric.norum@usask.ca>
+
+	* shared/pci/pcibios.c: Per PR262, removed all asserts so probes for
+	 devices that are not present will work.  This lets you have
+	multiple PCI Ethernet drivers in an application and dynamically use
+	the one for the card othat is present.
+
+2002-07-16	Eric Norum <eric.norum@usask.ca>
+
+	* shared/comm/uart.c: I am using a PC-104 card with no video output.
+	 I found that things would lock up if a printk was followed closely
+	by a printf when BSPConsolePort = BSP_UART_COM2 and BSPPrintkPort =
+	BSP_UART_COM1.  With this change in place, printf/printk calls can
+	be intermingled with no apparent problems.
+
+2002-05-01	Eric Norum <eric.norum@usask.ca>
+
+	* shared/console/console.c, shared/fatal/bspfatal.c,
+	shared/startup/bspclean.c, shared/ startup/page_table.c: Per PR200
+	fix multi-line inline assembly  to satisfy gcc 3.1 and newer.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* Makefile.am, shared/comm/Makefile.am, shared/io/Makefile.am,
+	shared/Makefile.am, shared/irq/Makefile.am, shared/pci/Makefile.am:
+	Remove AUTOMAKE_OPTIONS.
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/irq/irq_init.c: Include rtems/bspIo.h instead of bspIo.h.
+
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/startup/linkcmds: Fixed typo.
 
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
-	* configure.in: Remove.
 	* configure.ac: New file, generated from configure.in by autoupdate.
+	* configure.in: Remove.
 
 2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: New file.
 	* configure.in: Use RTEMS_BSP_SUBDIR.
+
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/irq/Makefile.am, shared/comm/Makefile.am,
+	shared/pci/Makefile.am: Use 'PREINSTALL_FILES ='.
+
+2001-08-16	Mike Siers <mikes@poliac.com>
+
+	* shared/comm/tty_drv.c, shared/comm/uart.c: Correct some minor cut
+	and paste bugs.
+
+2001-07-03	Mike Seirs <mike@poliac.com>
+
+	* shared/comm/tty_drv.c, shared/comm/uart.c, shared/comm/uart.h:
+	Adds the capability to use task driven serial I/O to ti386 BSPs.
+	This patch leaves thex default I/O mode to be IRQ.  If you want to
+	use task I/O mode, then the tty_drv.c file needs to be modified. 
+	Basically, all you need to change is the data values of the termios
+	callbacks structure.  This callback structure is used in the
+	tty1_open and tty2_open functions.  The values you need to set are
+	commented out in the source code.
+
+2001-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/comm/Makefile.am: Use *_HEADERS instead of *H_FILES.
+	* shared/io/Makefile.am, shared/irq/Makefile.am,
+	shared/pci/Makefile.am: Ditto.
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -97,13 +271,51 @@
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
 
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to
+	GNU canonicalization.
+
+2000-10-19	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/common/uart.h: Added prototype for BSP_uart_set_baud().
+
+2000-10-19	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
+	* shared/comm/uart.c (BSP_uart_init): Save more line state
+	parameters.
+
+2000-10-18	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
+	* shared/comm/i386-stub-glue.c, shared/comm/tty_drv.c,
+	shared/comm/uart.c, shared/comm/uart.h: Add the ability to set
+	parity, number of data bits and number of stop bits to the existing
+	i386 serial drivers.
+
+2000-10-17	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/irq/idt.c, shared/irq/Makefile.am: Moved idt.c to from
+	libcpu/i386 so  i386 RTEMS can be multilib'ed.
+
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/io/Makefile.am: Formatting.
+
+2000-08-26	Rosimildo da Silva  <rdasilva@connecttel.com>
+
+	* shared/shared/comm: Added "/dev/ttyS1" & "/dev/ttyS2" support for
+	the i386 BSPs.
+	* shared/shared/comm/uart.c: Adds support for sending characters to 
+	another "line discipline."
+	* shared/shared/comm/gdb_glue.c, shared/shared/comm/i386_io.c,
+	shared/shared/comm/tty_drv.c, shared/shared/comm/tty_drv.h: New
+	file.
+	* shared/shared/comm/Makefile.am: Account for new files.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: New file.
+	* ChangeLog, shared/ChangeLog: New file.
+
