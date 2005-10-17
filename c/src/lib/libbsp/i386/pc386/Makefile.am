@@ -24,6 +24,10 @@ noinst_PROGRAMS =
 
 SUBDIRS = . tools
 
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
+    ../../i386/shared/irq/irq_asm.h
+
 include_HEADERS += include/crt.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
@@ -60,6 +64,7 @@ include_rtems_HEADERS = console/keyboard.h console/kd.h \
     console/serial_mouse.h console/ps2_drv.h console/fb_vga.h
 
 noinst_PROGRAMS += console.rel
+include_HEADERS += ../../i386/shared/comm/i386_io.h
 console_rel_SOURCES = console/console.c console/inch.c console/outch.c \
     console/defkeymap.c console/fb_vga.c console/keyboard.c \
     console/mouse_parser.c console/pc_keyb.c console/ps2_mouse.c \
@@ -81,11 +86,13 @@ gnat_rel_CPPFLAGS = $(AM_CPPFLAGS)
 gnat_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += pci.rel
+include_HEADERS += ../../i386/shared/pci/pcibios.h
 pci_rel_SOURCES = ../../i386/shared/pci/pcibios.c
 pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += startup.rel
+include_HEADERS += ../../i386/shared/comm/uart.h
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspstart.c startup/exit.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
@@ -179,6 +186,19 @@ $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
+$(PROJECT_INCLUDE)/bsp/irq.h: ../../i386/shared/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
+
+$(PROJECT_INCLUDE)/bsp/irq_asm.h: ../../i386/shared/irq/irq_asm.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_asm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_asm.h
+
 $(PROJECT_INCLUDE)/crt.h: include/crt.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/crt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/crt.h
@@ -223,6 +243,18 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ps2_drv.h
 $(PROJECT_INCLUDE)/rtems/fb_vga.h: console/fb_vga.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fb_vga.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fb_vga.h
+
+$(PROJECT_INCLUDE)/i386_io.h: ../../i386/shared/comm/i386_io.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i386_io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/i386_io.h
+
+$(PROJECT_INCLUDE)/pcibios.h: ../../i386/shared/pci/pcibios.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pcibios.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/pcibios.h
+
+$(PROJECT_INCLUDE)/uart.h: ../../i386/shared/comm/uart.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/uart.h
 
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/wd80x3.h: include/wd80x3.h $(PROJECT_INCLUDE)/$(dirstamp)
