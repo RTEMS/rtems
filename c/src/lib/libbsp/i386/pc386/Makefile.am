@@ -87,7 +87,7 @@ gnat_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += pci.rel
 include_HEADERS += ../../i386/shared/pci/pcibios.h
-pci_rel_SOURCES = ../../i386/shared/pci/pcibios.c
+pci_rel_SOURCES = ../../i386/shared/pci/pcibios.c ../../i386/shared/pci/pcibios.h
 pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
