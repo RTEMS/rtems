@@ -1,5 +1,10 @@
 2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* shared/comm/i386_io.h, shared/comm/tty_drv.c,
+	shared/comm/tty_drv.h: Remove CVS Log.
+
+2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Merge-in shared/Makefile.am.
 	* ChangeLog: Merge-in shared/ChangeLog.
 	* configure.ac: Remove shared/Makefile.am.
