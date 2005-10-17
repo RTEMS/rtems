@@ -77,7 +77,7 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
+libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel pci.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
