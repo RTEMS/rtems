@@ -60,6 +60,13 @@ console_rel_SOURCES = console/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += pci.rel
+include_HEADERS += ../../i386/shared/pci/pcibios.h
+pci_rel_SOURCES = ../../i386/shared/pci/pcibios.c \
+    ../../i386/shared/pci/pcibios.h
+pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
+pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c timer/timerisr.S
 timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
@@ -146,6 +153,10 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 $(PROJECT_INCLUDE)/uart.h: ../../i386/shared/comm/uart.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/uart.h
+
+$(PROJECT_INCLUDE)/pcibios.h: ../../i386/shared/pci/pcibios.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pcibios.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/pcibios.h
 
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/wd80x3.h: include/wd80x3.h $(PROJECT_INCLUDE)/$(dirstamp)

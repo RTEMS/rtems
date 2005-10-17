@@ -1,5 +1,9 @@
 2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Add pci.rel.
+
+2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Install/preinstall headers from ../../i386/shared.
 
 2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
