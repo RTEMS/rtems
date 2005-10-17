@@ -1,3 +1,7 @@
+2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libfs/src/dosfs/msdos_misc.c: Revert to vers. 1.9.
+
 2005-10-06	Joel Sherrill <joel@OARcorp.com>
 
 	PR 828/filesystems
