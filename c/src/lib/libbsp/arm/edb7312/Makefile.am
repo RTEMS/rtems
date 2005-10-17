@@ -28,6 +28,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
+include_HEADERS += ../../arm/shared/comm/uart.h
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspstart.c startup/exit.c ../../shared/bootcard.c \
     ../../shared/main.c ../../shared/sbrk.c \
@@ -121,6 +122,10 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
+$(PROJECT_INCLUDE)/uart.h: ../../arm/shared/comm/uart.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/uart.h
 
 $(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h

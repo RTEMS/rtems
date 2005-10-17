@@ -1,3 +1,7 @@
+2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Install/preinstall headers from ../../arm/shared.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.
@@ -29,7 +33,7 @@
 	* startup/linkcmds: Add .gnu.linkonce.b section and account for memory
 	area being named sdram NOT RAM.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
@@ -38,24 +42,24 @@
 	* network/network.c: Changes to network driver to get it to compile
 	again.
 
-2004-04-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 610/bsps
 	* Makefile.am: Add include/tm27.h, Cosmetics.
 	* include/tm27.h: Final cosmetics.
 
-2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: Split out tmtest27 support.
 	* include/tm27.h: New.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
 	* include/bsp.h: Include <rtems/console.h> instead of <console.h>.
 	* include/bsp.h: Include <rtems/iosupp.h> instead of <iosupp.h>.
 
-2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* console/uart.c, include/ep7312.h, startup/bspstart.c,
 	timer/timer.c: Convert to using c99 fixed size types.
