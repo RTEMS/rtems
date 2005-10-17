@@ -19,7 +19,7 @@
 
 2005-09-29	Eric Norum <norume@aps.anl.gov>
 
-    * libmisc/cpuuse/cpuuse.c: Remove floating point calculations and the
+	* libmisc/cpuuse/cpuuse.c: Remove floating point calculations and the
                                C preprocessor conditions which enabled them.
 
 2005-09-25	Joel Sherrill <joel@OARcorp.com>
@@ -44,7 +44,7 @@
 
 2005-09-02  Joel Sherrill <joel@OARcorp.com>
 
-    * aclocal/version.m4: Updated to rtems-4.6.99.2.
+	* aclocal/version.m4: Updated to rtems-4.6.99.2.
 
 2005-09-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -148,7 +148,7 @@
 
 2005-07-08	Eric Norum <norume@aps.anl.gov>
 
-    * libcsupport/src/open.c: Pass along errno from failed ftruncate().
+	* libcsupport/src/open.c: Pass along errno from failed ftruncate().
 
 2005-07-06  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
@@ -372,8 +372,8 @@
 
 2005-05-17      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * Makefile.am, preinstall.am: Added a common irq.h
-        * include/rtems/irq.h: New file.
+	* Makefile.am, preinstall.am: Added a common irq.h
+	* include/rtems/irq.h: New file.
 
 2005-05-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
@@ -503,7 +503,7 @@
 
 2005-05-04      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * include/rtems/pci.h: Name change to support common PCI interface
+	* include/rtems/pci.h: Name change to support common PCI interface
 
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -532,7 +532,7 @@
 
 2005-04-29      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * score/src/objectidtoname.c: Removed warnings
+	* score/src/objectidtoname.c: Removed warnings
 
 2005-04-28	Joel Sherrill <joel@OARcorp.com>
 
@@ -552,11 +552,11 @@
 
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * score/src/objectidtoname.c: Add enable dispatch
+	* score/src/objectidtoname.c: Add enable dispatch
 
 2005-04-28      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * configure.ac: Remove or32-rtems
+	* configure.ac: Remove or32-rtems
 
 2005-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
@@ -1381,7 +1381,7 @@
 
 	* libfs/src/dosfs/msdos_misc.c
 	(msdos_get_dotdot_dir_info_cluster_num_and_offset):
-        Remove cur_node (Unused).
+	Remove cur_node (Unused).
 
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
@@ -2670,9 +2670,9 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libmisc/serdbg/serdbgcnf.h: Include <rtems/serdbg.h> instead of
-        <serdbg.h>
+	<serdbg.h>
 	* libmisc/serdbg/termios_printk_cnf.h: Include <rtems/termios_printk.h>
-        instead of <termios_printk.h>.
+	instead of <termios_printk.h>.
 
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
