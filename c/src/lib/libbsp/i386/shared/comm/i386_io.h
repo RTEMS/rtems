@@ -11,25 +11,6 @@
 //
 //  by: Rosimildo da Silva:  rdasilva@connecttel.com
 //
-// MODIFICATION/HISTORY:
-// $Log$
-// Revision 1.2  2004/04/15 13:26:12  ralf
-// Remove stray white spaces.
-//
-// Revision 1.1  2000/08/30 08:18:56  joel
-// 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
-//
-// 	* shared/comm: Added "/dev/ttyS1" & "/dev/ttyS2" support for
-// 	the i386 BSPs.
-// 	* shared/comm/gdb_glue.c: New file.
-// 	* shared/comm/i386_io.c: New file.
-// 	* shared/comm/tty_drv.c: New file.
-// 	* shared/comm/tty_drv.h: New file.
-// 	* shared/comm/Makefile.am: Account for new files.
-// 	* shared/comm/uart.c: Adds support for sending characters to
-// 	another "line discipline."
-//
-//
 /////////////////////////////////////////////////////////////////////////////
 */
 

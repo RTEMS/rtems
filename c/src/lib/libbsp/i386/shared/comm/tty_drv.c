@@ -15,63 +15,6 @@
  *     rdasilva@connecttel.com
  *     http://www.connecttel.com
  *
- * MODIFICATION/HISTORY:
- *
- * $Log$
- * Revision 1.8  2005/05/03 14:45:12  jennifer
- * 2005-05-03	Jennifer Averett <jennifer.averett@oarcorp.com>
- *
- * 	* comm/tty_drv.c: Modified to support addition of parameter to ISRs.
- *
- * Revision 1.7  2004/04/21 16:01:33  ralf
- * Remove duplicate white lines.
- *
- * Revision 1.6  2004/04/21 10:42:44  ralf
- * Remove stray white spaces.
- *
- * Revision 1.5  2001/08/16 20:52:05  joel
- * 2001-08-16	Mike Siers <mikes@poliac.com>
- *
- * 	* comm/tty_drv.c, comm/uart.c: Correct some minor cut and paste bugs.
- *
- * Revision 1.4  2001/07/03 17:56:32  joel
- * 2001-07-03	Mike Seirs <mike@poliac.com>
- *
- * 	* comm/tty_drv.c, comm/uart.c, comm/uart.h:  Adds the capability
- * 	to use task driven serial I/O to ti386 BSPs. This patch leaves thex
- * 	default I/O mode to be IRQ.  If you want to use task I/O mode,
- * 	then the tty_drv.c file needs to be modified.  Basically, all
- * 	you need to change is the data values of the termios callbacks
- * 	structure.  This callback structure is used in the tty1_open
- * 	and tty2_open functions.  The values you need to set are commented
- * 	out in the source code.
- *
- * Revision 1.3  2000/12/05 16:37:38  joel
- * 2000-12-01	Joel Sherrill <joel@OARcorp.com>
- *
- * 	* pc386/console/console.c, pc386/console/serial_mouse.c,
- * 	pc386/console/vgainit.c, shared/comm/tty_drv.c: Remove warnings.
- *
- * Revision 1.2  2000/10/18 16:10:50  joel
- * 2000-10-18	 Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
- *
- * 	* comm/i386-stub-glue.c, comm/tty_drv.c, comm/uart.c, comm/uart.h:
- * 	Add the ability to set parity, number of data bits and
- * 	number of stop bits to the existing i386 serial drivers.
- *
- * Revision 1.1  2000/08/30 08:18:56  joel
- * 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
- *
- * 	* shared/comm: Added "/dev/ttyS1" & "/dev/ttyS2" support for
- * 	the i386 BSPs.
- * 	* shared/comm/gdb_glue.c: New file.
- * 	* shared/comm/i386_io.c: New file.
- * 	* shared/comm/tty_drv.c: New file.
- * 	* shared/comm/tty_drv.h: New file.
- * 	* shared/comm/Makefile.am: Account for new files.
- * 	* shared/comm/uart.c: Adds support for sending characters to
- * 	another "line discipline."
- *
  ****************************************************************************/
 
 #include <stdio.h>

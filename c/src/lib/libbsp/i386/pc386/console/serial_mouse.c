@@ -15,37 +15,6 @@
  *     rdasilva@connecttel.com
  *     http://www.connecttel.com
  *
- * MODIFICATION/HISTORY:
- *
- * $Log$
- * Revision 1.8  2005/04/18 17:21:58  jennifer
- * 2005-04-18	Eric Valette <eric.valette@free.fr>
- *
- * 	* clock/ckinit.c, console/console.c, console/ps2_mouse.c,
- * 	console/serial_mouse.c, timer/timer.c: Added parameter to irq handler
- *
- * Revision 1.7  2004/04/21 16:01:33  ralf
- * Remove duplicate white lines.
- *
- * Revision 1.6  2004/04/21 10:42:44  ralf
- * Remove stray white spaces.
- *
- * Revision 1.5  2000/12/05 16:37:38  joel
- * 2000-12-01	Joel Sherrill <joel@OARcorp.com>
- *
- * 	* pc386/console/console.c, pc386/console/serial_mouse.c,
- * 	pc386/console/vgainit.c, shared/comm/tty_drv.c: Remove warnings.
- *
- * Revision 1.4  2000/10/23 14:10:25  joel
- * 2000-10-23	Joel Sherrill <joel@OARcorp.com>
- *
- * 	* console/serial_mouse.c: Fixed typos introduced by removal of CR/LF.
- *
- * Revision 1.3  2000/10/20 16:01:13  joel
- * 2000-10-20	Rosimildo da Silva <rdasilva@connecttel.com>
- *
- * 	* console/serial_mouse.c: Added support for changing serial parameters.
- *
  ****************************************************************************/
 
 #include <stdio.h>
