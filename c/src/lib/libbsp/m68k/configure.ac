@@ -17,6 +17,5 @@ RTEMS_PROJECT_ROOT
 RTEMS_CHECK_BSPDIR([$RTEMS_BSP_FAMILY])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-shared/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -1,3 +1,9 @@
+2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Merge-in shared/Makefile.am.
+	* ChangeLog: Merge-in shared/ChangeLog.
+	* configure.ac: Remove shared/Makefile.am.
+
 2005-08-17	Mike Bertosh <mbertosh@motioncontrol.org>
 
 	* acinclude.m4: Add the av5282 BSP.
@@ -6,7 +12,17 @@
 
 	* acinclude.m4: Added mcf5235.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2005-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/m68kpretaskinghook.c: Correct type of symbols from linkcmds
+	to compile with gcc 4.x.
+
+2005-01-28	Eric Norum <norume@aps.anl.gov>
+
+	* shared/m68kpretaskinghook.c: Work around agressive optimizing
+	compilers.
+
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
@@ -23,23 +39,34 @@
 	csb360/startup/bspclean.c, csb360/startup/bspstart.c,
 	csb360/startup/init5272.c, csb360/startup/linkcmds: New files.
 
-2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-04-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* acinclude.m4: Regenerate.
+	* shared/start.S: Include <rtems/asm.h> instead of <asm.h>.
+
+2004-03-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/bspspuriousinit.c: Convert to using c99 fixed size types.
+
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	PR 505/bsps
+	* shared/setvec.c: Rework to remove punned pointer warning generated
+	by gcc 3.3 and newer.
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_CHECK_BSPDIR([$RTEMS_BSP_FAMILY]).
+	* acinclude.m4: Regenerate.
+
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Remove gdbstub/rtems-stub-glue.c
+	(Non-existent)
 
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use @RTEMS_BSP_FAMILY@ instead of
 	$(RTEMS_BSP_FAMILY).
-
-2004-01-07	Joel Sherrill <joel@OARcorp.com>
-
-	* acinclude.m4: Remove efi68k and efi332 references as they are no
-	longer in the tree.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -80,19 +107,39 @@
 	efi68k/timer/.cvsignore, efi68k/timer/Makefile.am,
 	efi68k/timer/timer.c, efi68k/wrapup/.cvsignore,
 	efi68k/wrapup/Makefile.am: Removed.
+	* acinclude.m4: Remove efi68k and efi332 references as they are no
+	longer in the tree.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
+2003-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Cosmetics.
+
 2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* shared/Makefile.am: merge-in gdbstub/Makefile.am. Add stray files
+	bspspuriousinit.c, m68000spurious.c.
+	* shared/gdbstub/Makefile.am: Remove.
 	* configure.ac: Remove shared/gdbstub/Makefile.
+
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Cosmetics. Add mvme/mvme16x_hw.h. Add
+	mvme/mvme16x_hw.h.
 
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Reflect changes to bootstrap.
 	* configure.ac: Remove RTEMS_CHECK_CUSTON_BSP.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/bspspuriousinit.c, shared/m68000spurious.c,
+	shared/m68kpretaskinghook.c, shared/setvec.c, shared/start.S,
+	shared/mvme/mvme16x_hw.h: URL for license changed.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -100,11 +147,12 @@
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Reflect having moved automake/.
+	* Makefile.am, shared/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -113,9 +161,6 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -124,22 +169,27 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-06-25	Joel Sherrill <joel@OARcorp.com>
 
 	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k
 	support to the shared gdb stub glue thus adding a directory.
-	* configure.ac: Modified to reflect above.
+	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k
+	support to the shared gdb stub glue thus adding a directory.
+	* shared/gdbstub: New directory.
+	* configure.ac, shared/Makefile.am: Modified to reflect above.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* Makefile.am, shared/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/bspspuriousinit.c, shared/m68000spurious.c: Include
+	rtems/bspIo.h instead of bspIo.h.
 
 2001-10-26	Joel Sherrill <joel@OARcorp.com>
 
@@ -148,8 +198,8 @@
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
-	* configure.in: Remove.
 	* configure.ac: New file, generated from configure.in by autoupdate.
+	* configure.in: Remove.
 
 2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -162,13 +212,22 @@
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
+
+2000-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/shared/bsppretaskinghook.c: assoc.h, error.h, libio_.h,
+	libio.h, and libcsupport.h moved from libc to lib/include/rtems and
+	now must be referenced as <rtems/XXX.h>.   Header file order was
+	cleaned up while doing this.
 
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to
+	GNU canonicalization.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: New file.
+	* ChangeLog, shared/ChangeLog: New file.
+
