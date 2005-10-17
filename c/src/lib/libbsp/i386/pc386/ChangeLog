@@ -1,5 +1,10 @@
 2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* console/fb_vga.h, console/kd.h, console/ps2_drv.h,
+	console/serial_mouse.c, console/serial_mouse.h: Remove CVS Log.
+
+2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Install/preinstall headers from ../../i386/shared.
 
 2005-09-29	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
