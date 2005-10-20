@@ -1,6 +1,6 @@
 2005-10-20  Eric Norum <norume@aps.anl.gov>
 
-    * libchip/network/dec21140.c: Clean up PCI mapping
+	* libchip/network/dec21140.c: Clean up PCI mapping.
 
 2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 

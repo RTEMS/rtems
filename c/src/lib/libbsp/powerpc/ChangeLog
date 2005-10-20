@@ -1,8 +1,7 @@
 2005-10-20	Eric Norum <norume@aps.anl.gov>
 
-    shared/pci/detect_raven_bridge.c: Support MVME2100
-    shared/startup/bspstart.c: Support MVME2100
-    shared/vme/VMEConfig.h: Support MVME2100
+	* shared/pci/detect_raven_bridge.c, shared/startup/bspstart.c
+	shared/vme/VMEConfig.h: Support MVME2100.
 
 2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
