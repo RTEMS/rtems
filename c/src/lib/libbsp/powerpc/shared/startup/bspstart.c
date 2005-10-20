@@ -333,7 +333,7 @@ void bsp_start( void )
    *
    * T. Straumann: give more PCI address space
    */
-  setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
+  setdbat(2, PCI_MEM_BASE+PCI_MEM_WIN0, PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
 
   /*
    * Must have acces to open pic PCI ACK registers provided by the RAVEN

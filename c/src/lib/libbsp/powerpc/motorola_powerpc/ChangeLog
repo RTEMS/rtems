@@ -1,3 +1,7 @@
+2005-10-20	Eric Norum <norume@aps.anl.gov>
+
+    * include/bsp.h: Support MVME2100.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.

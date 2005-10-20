@@ -1118,7 +1118,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                                &lvalue);
 
    tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK))
-      + (unsigned int)PCI_MEM_BASE_ADJUSTMENT;
+      + (unsigned int)PCI_MEM_BASE;
 
    sc->base = (unsigned int *)(tmp);
 

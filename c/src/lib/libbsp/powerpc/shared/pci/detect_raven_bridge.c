@@ -32,26 +32,50 @@ extern unsigned int EUMBBAR;
 extern const pci_config_access_functions pci_direct_functions;
 extern const pci_config_access_functions pci_indirect_functions;
 
+#define PCI_ERR_BITS        0xf900
+#define PCI_STATUS_OK(x)    (!((x)&PCI_ERR_BITS))
+
+/* For now, just clear errors in the PCI status reg.
+ *
+ * Returns: (for diagnostic purposes)
+ *          original settings (i.e. before applying the clearing
+ *          sequence) or the error bits or 0 if there were no errors.
+ *
+ */
+
 unsigned long
 _BSP_clear_hostbridge_errors(int enableMCP, int quiet)
 {
-unsigned merst;
+unsigned long   rval;
+unsigned short  pcistat;
+int             count;
 
-    merst = in_be32(RAVEN_MPIC_MERST);
-    /* write back value to clear status */
-    out_be32(RAVEN_MPIC_MERST, merst);
+    if (enableMCP)
+	return -1; /* exceptions not supported / MCP not wired */
 
-    if (enableMCP) {
-      if (!quiet)
-        printk("Enabling MCP generation on hostbridge errors\n");
-      out_be32(RAVEN_MPIC_MEREN, MEREN_VAL);
-    } else {
-      out_be32(RAVEN_MPIC_MEREN, 0);
-      if ( !quiet && enableMCP ) {
-        printk("leaving MCP interrupt disabled\n");
-      }
+    /* read error status for info return */
+    pci_read_config_word(0,0,0,PCI_STATUS,&pcistat);
+    rval = pcistat;
+
+    count=10;
+    do {
+        /* clear error reporting registers */
+
+        /* clear PCI status register */
+        pci_write_config_word(0,0,0,PCI_STATUS, PCI_ERR_BITS);
+
+        /* read  new status */
+        pci_read_config_word(0,0,0,PCI_STATUS, &pcistat);
+
+    } while ( ! PCI_STATUS_OK(pcistat) && count-- );
+
+    if ( !PCI_STATUS_OK(rval) && !quiet) {
+        printk("Cleared PCI errors: pci_stat was 0x%04x\n", rval);
     }
-    return (merst & 0xffff);
+    if ( !PCI_STATUS_OK(pcistat) ) {
+        printk("Unable to clear PCI errors: still 0x%04x after 10 attempts\n", pcistat);
+    }
+    return rval & PCI_ERR_BITS;
 }
 
 void detect_host_bridge()

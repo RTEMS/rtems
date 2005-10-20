@@ -38,8 +38,8 @@
 #define	_ISA_MEM_BASE		CHRP_ISA_MEM_BASE
 /* address of our ram on the PCI bus   */
 #define	PCI_DRAM_OFFSET		CHRP_PCI_DRAM_OFFSET
-#define PCI_MEM_BASE		0x80000000 
-#define PCI_MEM_BASE_ADJUSTMENT	0
+#define PCI_MEM_BASE		0
+#define PCI_MEM_WIN0		0x80000000 
 
 #else
 #define	_IO_BASE		PREP_ISA_IO_BASE
@@ -48,7 +48,7 @@
 #define	PCI_DRAM_OFFSET		PREP_PCI_DRAM_OFFSET
 /* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE		PREP_ISA_MEM_BASE
-#define PCI_MEM_BASE_ADJUSTMENT	PREP_ISA_MEM_BASE
+#define PCI_MEM_WIN0		0
 #endif
 
 
