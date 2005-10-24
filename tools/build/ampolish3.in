@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! @PERL@ -w
 
 # Helper script to generate pre/tmpinstall rules for cpukit Makefile.am.
 #
@@ -68,7 +68,7 @@ foreach my $l ( @buffer1 ) {
     $dirmap{"\$\($1\)"} = replace($2);
   } elsif ( $l =~ /^\s*noinst_(.*)\s*[\+]?\=(.*)$/o )
   { #ignore: noinst_* are not relevant here.
-  } elsif ( $l =~ /^\s*(nodist_|dist_|)(project_|)(include)_(HEADERS)\s*\=(.*)/o )
+  } elsif ( $l =~ /^\s*(nodist_|dist_|)(project_|)(include|lib)_(HEADERS|LIBRARIES)\s*\=(.*)/o )
   {
     push @buffer2, "$3dir = \$($3dir)\n";
     push @buffer2, "$l";
