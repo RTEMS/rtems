@@ -23,6 +23,6 @@ AC_CONFIG_HEADERS([config.h])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile]
-AC_CONFIG_FILES([install-if-change],[chmod +x install-if-change)
+AC_CONFIG_FILES([install-if-change],[chmod +x install-if-change])
 AC_CONFIG_FILES([ampolish3],[chmod +x ampolish3])
 AC_OUTPUT
