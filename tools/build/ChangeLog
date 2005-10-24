@@ -1,4 +1,10 @@
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2005-10-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add ampolish3.
+	* Makefile.am: Add ampolish3.
+	* ampolish3.in: New.
+
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 

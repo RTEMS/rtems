@@ -16,12 +16,13 @@ AC_PROG_CC
 AC_CHECK_HEADERS([getopt.h])
 AC_CHECK_FUNCS(strerror strtol)
 
+AC_PATH_PROG([PERL],[perl])
 RTEMS_PATH_KSH
 
 AC_CONFIG_HEADERS([config.h])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-install-if-change
-])
+AC_CONFIG_FILES([Makefile]
+AC_CONFIG_FILES([install-if-change],[chmod +x install-if-change)
+AC_CONFIG_FILES([ampolish3],[chmod +x ampolish3])
 AC_OUTPUT
