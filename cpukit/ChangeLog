@@ -1,3 +1,7 @@
+2005-10-25	Eric Norum <norume@aps.anl.gov>
+
+    * libnetworking/rtems/rtems_showifstat.c: Don't sign-extend address components.
+
 2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add telnetd.
