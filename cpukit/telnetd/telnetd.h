@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __TELNETD_H
-#define __TELNETD_H
+#ifndef _RTEMS_TELNETD_H
+#define _RTEMS_TELNETD_H
 
 #ifdef __cplusplus
 extern "C" {

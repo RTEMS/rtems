@@ -34,6 +34,10 @@
 #include <stdlib.h>
 #include <string.h>	/* memset */
 #include <stdio.h>
+
+/* FIXME: This should not be here */
+extern void _rtems_telnetd_register_icmds(void);
+
 /***********************************************************/
 rtems_id            telnetd_task_id      =0;
 uint32_t            telnetd_stack_size   =16384;
@@ -71,7 +75,7 @@ rtems_task rtems_task_telnetd(rtems_task_argument task_argument) {
 		perror("telnetd:accept");
 		break;
 	  };
-	  if ((devname = get_pty(acp_socket)) ) {
+	  if ((devname = rtems_pty_get(acp_socket)) ) {
 	   shell_init(&devname[5],
 		      telnetd_stack_size,
 		      telnetd_task_priority,
@@ -85,10 +89,9 @@ rtems_task rtems_task_telnetd(rtems_task_argument task_argument) {
 }
 /***********************************************************/
 int rtems_telnetd_initialize(void) {
-	void register_icmds(void);
 	rtems_status_code sc;
 	
-	register_icmds(); /* stats for tcp/ip */
+	_rtems_telnetd_register_icmds(); /* stats for tcp/ip */
 	
 	if (telnetd_task_id         ) return RTEMS_RESOURCE_IN_USE;
 	if (telnetd_stack_size<=0   ) telnetd_stack_size   =16384;

@@ -11,8 +11,8 @@
  *  $Id$
  */
 
-#ifndef __PTY_H
-#define __PTY_H
+#ifndef _RTEMS_PTY_H
+#define _RTEMS_PTY_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,7 +20,18 @@ extern "C" {
 
 #include <rtems.h>	
 
-char * get_pty(int socket);
+/* Number of ptys to setup */
+extern size_t rtems_pty_maximum_ptys;
+
+/* Return the devname for a free pty slot.
+ * If no slot available (socket>=0) 
+ * then the socket argument is closed
+ */
+char * rtems_pty_get(int socket);
+
+
+/* OBSOLETE */
+#define get_pty		rtems_pty_get
 
 rtems_device_driver pty_initialize(
   rtems_device_major_number  major,

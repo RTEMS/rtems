@@ -1,5 +1,16 @@
 2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* telnetd/icmds.c: Rename register_icmds to 
+	_rtems_telnet_register_icmds. Make main_* functions static.
+	* telnetd/pty.c: Make many functions static.
+	Rename rtems_telnetd_maximum_ptys to rtems_pty_maximum_ptys.
+	* telnetd/pty.h: Reflect changes above.
+	Rename get_pty to rtems_pty_get. New header guards.
+	* telnetd/telnetd.c: Reflect changes above.
+	* telnetd/telnetd.h: New header guards.
+
+2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* telnet/telnet.h, telnet/telnet.c: Rename
 	rtems_initialize_telnetd to rtems_telnetd_initialize,
 	main_telnetd to rtems_telnetd_main,
