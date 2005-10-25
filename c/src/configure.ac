@@ -248,7 +248,6 @@ support/Makefile
 
 libnetworking/Makefile
 libnetworking/pppd/Makefile
-libnetworking/rtems_telnetd/Makefile
 
 librdbg/Makefile
 
