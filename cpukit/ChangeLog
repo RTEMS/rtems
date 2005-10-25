@@ -1,5 +1,10 @@
 2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Add telnetd.
+	* configure.ac: Add telnetd.
+
+2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* telnetd/icmds.c: Rename register_icmds to 
 	_rtems_telnet_register_icmds. Make main_* functions static.
 	* telnetd/pty.c: Make many functions static.
