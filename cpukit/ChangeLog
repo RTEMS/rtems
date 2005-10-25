@@ -1,3 +1,10 @@
+2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* telnet/telnet.h, telnet/telnet.c: Rename
+	rtems_initialize_telnetd to rtems_telnetd_initialize,
+	main_telnetd to rtems_telnetd_main,
+	register_telnetd to rtems_telnetd_register.
+
 2005-10-25	Joel Sherrill <joel@OARcorp.com>
 
 	* sapi/include/confdefs.h, telnetd/pty.c, telnetd/pty.h: Attempt

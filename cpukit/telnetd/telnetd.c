@@ -84,7 +84,7 @@ rtems_task rtems_task_telnetd(rtems_task_argument task_argument) {
 	rtems_task_delete(RTEMS_SELF);
 }
 /***********************************************************/
-int rtems_initialize_telnetd(void) {
+int rtems_telnetd_initialize(void) {
 	void register_icmds(void);
 	rtems_status_code sc;
 	
@@ -111,7 +111,7 @@ int rtems_initialize_telnetd(void) {
 	return (int)sc;
 }
 /***********************************************************/
-int main_telnetd(int argc,char * argv[]) {
+int rtems_telnetd_main(int argc,char * argv[]) {
 	rtems_status_code sc;
 	if (telnetd_task_id) {
 		printf("ERROR:telnetd already started\n");
@@ -126,7 +126,7 @@ int main_telnetd(int argc,char * argv[]) {
 	return 0;
 }
 /***********************************************************/
-int register_telnetd(void) {
+int rtems_telnetd_register(void) {
 	shell_add_cmd("telnetd","telnet","telnetd [stacksize [tsk_priority]]",main_telnetd);
 	return 0;
 }

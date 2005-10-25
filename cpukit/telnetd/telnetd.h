@@ -23,10 +23,15 @@
 extern "C" {
 #endif	
 
-int rtems_initialize_telnetd(void);
-int main_telnetd(int argc,char * argv[]);
-int register_telnetd(void);
- 
+extern int rtems_telnetd_initialize(void);
+extern int rtems_telnetd_main(int argc,char * argv[]);
+extern int rtems_telnetd_register(void);
+
+/* OBSOLETE */
+#define rtems_initialize_telnetd	rtems_telnetd_initialize
+#define main_telnetd  			rtems_telnetd_main
+#define register_telnetd		rtems_telnetd_register
+
 #ifdef __cplusplus
 }
 #endif	
