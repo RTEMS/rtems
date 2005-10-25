@@ -13,6 +13,7 @@ SUBDIRS += libnetworking librpc
 SUBDIRS += libmisc
 SUBDIRS += httpd
 SUBDIRS += ftpd
+SUBDIRS += telnetd
 SUBDIRS += wrapup
 
 CLEANFILES =
