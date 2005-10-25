@@ -148,8 +148,8 @@ foreach my $l ( @buffer2 ) {
         push @buffer3,
           "$v/$x: $f $v/\$(dirstamp)\n",
           "\t\$(INSTALL_PROGRAM) \$< $v/$x\n",
-          "PREINSTALL_FILES += $v/$x\n\n";
-        $seen{"PREINSTALL_FILES"} = 1;
+          "TMPINSTALL_FILES += $v/$x\n\n";
+        $seen{"TMPINSTALL_FILES"} = 1;
       }
   } elsif ( $l =~ /^\s*(nodist_|)([a-zA-Z0-9_]*)_LIBRARIES\s*[\+]?\=(.*)$/o )
   {

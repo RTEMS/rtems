@@ -1,3 +1,7 @@
+2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Sync with private bleeding-edge .
+
 2005-10-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* ampolish3.in: Use @PERL@, partial update from local sources.
