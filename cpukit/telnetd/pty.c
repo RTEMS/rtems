@@ -45,10 +45,7 @@
 #define IAC_SE     240
 #define IAC_EOR    239
 
-struct pty_tt;
-typedef struct pty_tt pty_t;
-
-struct pty_tt {
+typedef struct {
  char                     *devname;
  struct rtems_termios_tty *ttyp;
  tcflag_t                  c_cflag;
@@ -57,11 +54,12 @@ struct pty_tt {
 
  int                       last_cr;
  int                       iac_mode;   
-};
+} pty_t;
 
 
 int ptys_initted=FALSE;
-pty_t ptys[MAX_PTYS];
+pty_t *ptys;
+int rtems_telnetd_maximum_ptys;
 
 /* This procedure returns the devname for a pty slot free.
  * If not slot availiable (field socket>=0) 
@@ -71,7 +69,7 @@ pty_t ptys[MAX_PTYS];
 char *  get_pty(int socket) {
 	int ndx;
 	if (!ptys_initted) return NULL;
-	for (ndx=0;ndx<MAX_PTYS;ndx++) {
+	for (ndx=0;ndx<rtems_telnetd_maximum_ptys;ndx++) {
 		if (ptys[ndx].socket<0) {
 			ptys[ndx].socket=socket;
 			return ptys[ndx].devname;
@@ -205,7 +203,7 @@ const rtems_termios_callbacks * pty_get_termios_handlers(int polled) ;
 /*-----------------------------------------------------------*/
 static int
 ptySetAttributes(int minor,const struct termios *t) {
-	if (minor<MAX_PTYS) {	
+	if (minor<rtems_telnetd_maximum_ptys) {	
 	 ptys[minor].c_cflag=t->c_cflag;	
 	} else {
 	 return -1;
@@ -217,7 +215,7 @@ static int
 ptyPollInitialize(int major,int minor,void * arg) {
 	rtems_libio_open_close_args_t * args = arg;
 	struct termios t;
-        if (minor<MAX_PTYS) {	
+        if (minor<rtems_telnetd_maximum_ptys) {	
          if (ptys[minor].socket<0) return -1;		
 	 ptys[minor].opened=TRUE;
 	 ptys[minor].ttyp=args->iop->data1;
@@ -230,7 +228,7 @@ ptyPollInitialize(int major,int minor,void * arg) {
 /*-----------------------------------------------------------*/
 static int 
 ptyShutdown(int major,int minor,void * arg) {
-        if (minor<MAX_PTYS) {	
+        if (minor<rtems_telnetd_maximum_ptys) {	
 	 ptys[minor].opened=FALSE;
          if (ptys[minor].socket>=0) close(ptys[minor].socket);
 	 ptys[minor].socket=-1;
@@ -246,7 +244,7 @@ ptyShutdown(int major,int minor,void * arg) {
 static int
 ptyPollWrite(int minor, const char * buf,int len) {
 	int count;
-        if (minor<MAX_PTYS) {	
+        if (minor<rtems_telnetd_maximum_ptys) {	
          if (ptys[minor].socket<0) return -1;		
 	 count=write(ptys[minor].socket,buf,len);
 	} else {
@@ -258,7 +256,7 @@ ptyPollWrite(int minor, const char * buf,int len) {
 static int
 ptyPollRead(int minor) {
 	int result;
-        if (minor<MAX_PTYS) {	
+        if (minor<rtems_telnetd_maximum_ptys) {	
          if (ptys[minor].socket<0) return -1;		
 	 result=read_pty(minor);
 	 return result;
@@ -283,7 +281,8 @@ const rtems_termios_callbacks * pty_get_termios_handlers(int polled) {
 /*-----------------------------------------------------------*/
 void init_ptys(void) {
 	int ndx;
-	for (ndx=0;ndx<MAX_PTYS;ndx++) {
+	ptys = malloc( sizeof(pty_t) * rtems_telnetd_maximum_ptys );
+	for (ndx=0;ndx<rtems_telnetd_maximum_ptys;ndx++) {
 		ptys[ndx].devname=malloc(strlen("/dev/ptyXX")+1);
 		sprintf(ptys[ndx].devname,"/dev/pty%X",ndx);
 		ptys[ndx].ttyp=NULL;
@@ -315,7 +314,7 @@ rtems_device_driver pty_initialize(
 )
 {
   int ndx;	
-  rtems_status_code status ;
+  rtems_status_code status;
 
   /* 
    * Set up ptys
@@ -326,14 +325,15 @@ rtems_device_driver pty_initialize(
   /*
    * Register the devices
    */
-  for (ndx=0;ndx<MAX_PTYS;ndx++) {
+  for (ndx=0;ndx<rtems_telnetd_maximum_ptys;ndx++) {
    status = rtems_io_register_name(ptys[ndx].devname, major, ndx);
    if (status != RTEMS_SUCCESSFUL)
      rtems_fatal_error_occurred(status);
    chmod(ptys[ndx].devname,0660);
    chown(ptys[ndx].devname,2,0); /* tty,root*/
   };
-  printk("Device: /dev/pty%X../dev/pty%X (%d)pseudo-terminals registered.\n",0,MAX_PTYS-1,MAX_PTYS);
+  printk("Device: /dev/pty%X../dev/pty%X (%d)pseudo-terminals registered.\n",
+      0,rtems_telnetd_maximum_ptys-1,rtems_telnetd_maximum_ptys);
 
   return RTEMS_SUCCESSFUL;
 }

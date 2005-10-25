@@ -20,10 +20,6 @@ extern "C" {
 
 #include <rtems.h>	
 
-#ifndef MAX_PTYS	
-#define MAX_PTYS	16
-#endif
-
 char * get_pty(int socket);
 
 rtems_device_driver pty_initialize(
