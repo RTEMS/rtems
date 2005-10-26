@@ -26,6 +26,8 @@ include $(top_srcdir)/sample.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
+LD_LIBS = -lpppd
+
 all-local: $(TMPINSTALL_FILES)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
