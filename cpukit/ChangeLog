@@ -1,5 +1,10 @@
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add pppd.
+	* Makefile.am: Add pppd.
+
+2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* pppd/Makefile.am: 
 	Install rtemsdialer.h, rtemspppd.h to $(includedir)/rtems.
 	* pppd/ipxcp.c, pppd/ipxcp.h: Remove (Unused).
