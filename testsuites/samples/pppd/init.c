@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <rtems/rtems_bsdnet.h>
-#include <rtemspppd.h>
+#include <rtems/rtemspppd.h>
 
 #define CONFIGURE_INIT
 #include "system.h"

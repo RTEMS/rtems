@@ -1,6 +1,6 @@
 
 #include <stdio.h>
-#include <rtemspppd.h>
+#include <rtems/rtemspppd.h>
 #include "system.h"
 
 
