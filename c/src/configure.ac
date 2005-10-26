@@ -153,7 +153,6 @@ fi
 
 BSP_SUBDIRS="$BSP_SUBDIRS lib"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
-BSP_SUBDIRS="$BSP_SUBDIRS libnetworking"
 BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
 
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
@@ -245,9 +244,6 @@ AC_CONFIG_FILES([Makefile],
 
 AC_CONFIG_FILES([
 support/Makefile 
-
-libnetworking/Makefile
-libnetworking/pppd/Makefile
 
 librdbg/Makefile
 
