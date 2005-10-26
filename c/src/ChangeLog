@@ -1,5 +1,17 @@
 2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems_telnetd/icmds.c,
+	libnetworking/rtems_telnetd/Makefile.am,
+	libnetworking/rtems_telnetd/preinstall.am,
+	libnetworking/rtems_telnetd/pty.c,
+	libnetworking/rtems_telnetd/pty.h,
+	libnetworking/rtems_telnetd/README,
+	libnetworking/rtems_telnetd/telnetd.c,
+	libnetworking/rtems_telnetd/telnetd.h:
+	Remove (Moved to cpukit).
+
+2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove libnetworking/rtems_telnetd.
 	* libnetworking/Makefile.am: Remove rtems_telnetd.
 	* libnetworking/README: Remove (Obsolete).
