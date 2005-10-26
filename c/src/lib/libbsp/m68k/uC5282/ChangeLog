@@ -1,3 +1,7 @@
+2005-10-26  Eric Norum <norume@aps.anl.gov>
+
+    * README, network/network.c: Add support for forcing link parameters.
+
 2005-09-16  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Add bsp_reset bootrom call.
