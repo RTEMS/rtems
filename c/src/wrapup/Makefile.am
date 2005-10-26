@@ -16,10 +16,6 @@ if HAS_LIBBSP
 SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp.a
 endif
 
-if HAS_NETWORKING
-SRCS += ../libnetworking/pppd/libpppd.a
-endif
-
 if HAS_RDBG
 SRCS += ../librdbg/librdbg.a
 endif
