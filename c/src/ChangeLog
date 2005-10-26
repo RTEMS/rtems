@@ -1,3 +1,10 @@
+2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove libnetworking/rtems_telnetd.
+	* libnetworking/Makefile.am: Remove rtems_telnetd.
+	* libnetworking/README: Remove (Obsolete).
+	* wrapup/Makefile.am: Remove libtelnetd.a (Moved to cpukit).
+
 2005-10-20  Eric Norum <norume@aps.anl.gov>
 
 	* libchip/network/dec21140.c: Clean up PCI mapping.
