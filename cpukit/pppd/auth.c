@@ -853,7 +853,7 @@ get_secret(unit, client, server, secret, secret_len, am_server)
     int unit;
     char *client;
     char *server;
-    char *secret;
+    unsigned char *secret;
     int *secret_len;
     int am_server;
 {

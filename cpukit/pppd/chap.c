@@ -403,7 +403,7 @@ ChapReceiveChallenge(cstate, inp, id, len)
     int rchallenge_len;
     u_char *rchallenge;
     int secret_len;
-    char secret[MAXSECRETLEN];
+    unsigned char secret[MAXSECRETLEN];
     char rhostname[256];
     MD5_CTX mdContext;
     u_char hash[MD5_SIGNATURE_SIZE];
@@ -498,7 +498,7 @@ ChapReceiveResponse(cstate, inp, id, len)
     int code;
     char rhostname[256];
     MD5_CTX mdContext;
-    char secret[MAXSECRETLEN];
+    unsigned char secret[MAXSECRETLEN];
     u_char hash[MD5_SIGNATURE_SIZE];
 
     if (cstate->serverstate == CHAPSS_CLOSED ||

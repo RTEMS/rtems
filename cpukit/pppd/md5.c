@@ -122,7 +122,7 @@ MD5_CTX *mdContext;
  */
 void MD5Update (mdContext, inBuf, inLen)
 MD5_CTX *mdContext;
-unsigned char *inBuf;
+const unsigned char *inBuf;
 unsigned int inLen;
 {
   UINT4 in[16];

@@ -39,8 +39,10 @@
 
 #ifndef __MD5_INCLUDE__
 
+#include <stdint.h>
+
 /* typedef a 32-bit type */
-typedef unsigned int UINT4;
+typedef uint32_t UINT4;
 
 /* Data structure for MD5 (Message-Digest) computation */
 typedef struct {
@@ -50,9 +52,9 @@ typedef struct {
   unsigned char digest[16];     /* actual digest after MD5Final call */
 } MD5_CTX;
 
-void MD5Init ();
-void MD5Update ();
-void MD5Final ();
+void MD5Init (MD5_CTX *);
+void MD5Update (MD5_CTX *, const unsigned char *, unsigned int);
+void MD5Final (unsigned char [16], MD5_CTX *);
 
 #define __MD5_INCLUDE__
 #endif /* __MD5_INCLUDE__ */

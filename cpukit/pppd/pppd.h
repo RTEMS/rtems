@@ -28,7 +28,7 @@
 #include <sys/types.h>		/* for u_int32_t, if defined */
 #include <sys/time.h>		/* for struct timeval */
 #include <net/ppp_defs.h>
-#include "rtemsdialer.h"
+#include <rtems/rtemsdialer.h>
 
 #if defined(__STDC__)
 #include <stdarg.h>
@@ -343,7 +343,7 @@ int  auth_check_options __P((void));
 void auth_reset __P((int));	/* check what secrets we have */
 int  check_passwd __P((int, char *, int, char *, int, char **));
 				/* Check peer-supplied username/password */
-int  get_secret __P((int, char *, char *, char *, int *, int));
+int  get_secret __P((int, char *, char *, unsigned char *, int *, int));
 				/* get "secret" for chap */
 int  auth_ip_addr __P((int, u_int32_t));
 				/* check if IP address is authorized */
