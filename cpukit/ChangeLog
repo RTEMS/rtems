@@ -1,5 +1,8 @@
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* pppd/Makefile.am: 
+	Install rtemsdialer.h, rtemspppd.h to $(includedir)/rtems.
+	* pppd/ipxcp.c, pppd/ipxcp.h: Remove (Unused).
 	* backward/rtemspppd.h, backward/rtemsdialer.h: New.
 	* Makefile.am: Add backward/rtemspppd.h, backward/rtemsdialer.h.
 
