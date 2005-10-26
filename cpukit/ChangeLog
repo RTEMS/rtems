@@ -1,5 +1,10 @@
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* pppd/Makefile.am, pppd/auth.c, pppd/chap.c, pppd/md5.c, pppd/md5.h,
+	pppd/pppd.h: Misc. minor fixes.
+
+2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Add pppd.
 	* Makefile.am: Add pppd.
 
