@@ -4,11 +4,6 @@
 
 #include <rtems.h>
 
-/* HACK */
-#if defined(__i386__)
-#include <tty_drv.h>
-#endif
-
 /* functions */
 extern rtems_task Init(rtems_task_argument argument);
 

@@ -1,3 +1,9 @@
+2005-10-26  Eric Norum <norume@aps.anl.gov>
+
+    * samples/pppd/system.h: PR 839.  Remove i386-specific conditional.
+      This at least lets the sample compile.   It's unlikely to actually
+      work, though.
+
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* pppd/init.c, pppd/pppdapp.c: include rtems/rtemspppd.h instead of
