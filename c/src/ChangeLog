@@ -1,5 +1,10 @@
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove libnetworking, libnetworking/pppd.
+	* wrapup/Makefile.am: Remove libpppd.a.
+
+2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/pppd/Makefile.am: Install rtemspppd.h and
 	rtemsdialer.h to $(includedir)/rtems.
 
