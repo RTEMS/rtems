@@ -42,6 +42,8 @@ include_HEADERS += backward/asm.h backward/chain.h backward/clockdrv.h \
 if HAS_NETWORKING
 include_HEADERS += backward/ftpd.h
 
+include_HEADERS += backward/rtemspppd.h
+include_HEADERS += backward/rtemsdialer.h
 endif
 
 include_motoroladir = $(includedir)/motorola

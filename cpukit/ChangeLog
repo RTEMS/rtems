@@ -1,6 +1,16 @@
+2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* backward/rtemspppd.h, backward/rtemsdialer.h: New.
+	* Makefile.am: Add backward/rtemspppd.h, backward/rtemsdialer.h.
+
+2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* telnet/Makefile.am: Install libtelnetd.a.
+
 2005-10-25	Eric Norum <norume@aps.anl.gov>
 
-    * libnetworking/rtems/rtems_showifstat.c: Don't sign-extend address components.
+	* libnetworking/rtems/rtems_showifstat.c: Don't sign-extend address components.
+
 
 2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
