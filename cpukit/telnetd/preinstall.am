@@ -8,6 +8,9 @@ endif
 PREINSTALL_DIRS =
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 
+TMPINSTALL_FILES =
+CLEANFILES += $(TMPINSTALL_FILES)
+
 PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
@@ -24,4 +27,13 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/pty.h
 $(PROJECT_INCLUDE)/rtems/telnetd.h: telnetd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/telnetd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/telnetd.h
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
+
+$(PROJECT_LIB)/libtelnetd.a: libtelnetd.a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtelnetd.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libtelnetd.a
 endif
