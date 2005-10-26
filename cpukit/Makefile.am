@@ -14,6 +14,7 @@ SUBDIRS += libmisc
 SUBDIRS += httpd
 SUBDIRS += ftpd
 SUBDIRS += telnetd
+SUBDIRS += pppd
 SUBDIRS += wrapup
 
 CLEANFILES =

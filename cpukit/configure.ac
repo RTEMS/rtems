@@ -301,6 +301,7 @@ libmisc/Makefile
 httpd/Makefile
 ftpd/Makefile
 telnetd/Makefile
+pppd/Makefile
 wrapup/Makefile
 ])
 
