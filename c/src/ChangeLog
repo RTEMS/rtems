@@ -1,3 +1,8 @@
+2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/pppd/Makefile.am: Install rtemspppd.h and
+	rtemsdialer.h to $(includedir)/rtems.
+
 2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/rtems_telnetd/icmds.c,
