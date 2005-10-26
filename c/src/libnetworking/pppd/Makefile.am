@@ -7,7 +7,8 @@ include $(top_srcdir)/automake/compile.am
 noinst_LIBRARIES =
 
 if HAS_NETWORKING
-include_HEADERS = rtemspppd.h rtemsdialer.h
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = rtemspppd.h rtemsdialer.h
 
 noinst_LIBRARIES += libpppd.a
 libpppd_a_SOURCES = auth.c ccp.c ccp.h chap.c chap.h chap_ms.c chap_ms.h \
