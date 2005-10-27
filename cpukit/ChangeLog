@@ -1,3 +1,7 @@
+2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* telnetd/Makefile.am: Only build if LIBSHELL is available.
+
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* pppd/Makefile.am, pppd/auth.c, pppd/chap.c, pppd/md5.c, pppd/md5.h,
