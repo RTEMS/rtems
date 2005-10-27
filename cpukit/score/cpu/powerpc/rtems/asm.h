@@ -64,10 +64,7 @@
 #define __PROC_LABEL_PREFIX__  __USER_LABEL_PREFIX__
 #endif
 
-/* ANSI concatenation macros.  */
-
-#define CONCAT1(a, b) CONCAT2(a, b)
-#define CONCAT2(a, b) a ## b
+#include <rtems/concat.h>
 
 /* Use the right prefix for global labels.  */
 

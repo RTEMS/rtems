@@ -64,13 +64,7 @@
 #endif
 */
 
-/* ANSI concatenation macros.  */
-
-#define CONCAT1(a, b) CONCAT2(a, b)
-#define CONCAT2(a, b) a ## b
-
-#define EVAL(x) x
-#define CONCAT0(a, b) EVAL(a)EVAL(b)
+#include <rtems/concat.h>
 
 /* Use the right prefix for global labels.  */
 

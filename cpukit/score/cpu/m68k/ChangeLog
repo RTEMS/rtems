@@ -1,3 +1,8 @@
+2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/asm.h: Remove private version of CONCAT macros.
+	Include <rtems/concat.h> instead.
+
 2005-06-07	Brett Swimley <brett.swimley@aedbozeman.com>
 
 	PR 803/patch
