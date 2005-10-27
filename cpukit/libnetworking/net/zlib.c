@@ -10,8 +10,10 @@
  * - added inflateIncomp and deflateOutputPending
  * - allow strm->next_out to be NULL, meaning discard the output
  *
- * $Id$
+ * $FreeBSD: src/sys/net/zlib.c,v 1.20 2005/09/11 16:13:02 rodrigc Exp $
  */
+
+/* $Id$ */
 
 /* 
  *  ==FILEVERSION 971210==
@@ -24,13 +26,14 @@
 #define NO_ZCFUNCS
 #define MY_ZCALLOC
 
-#if defined(__FreeBSD__) && (defined(KERNEL) || defined(_KERNEL))
+#if defined(__FreeBSD__) && defined(_KERNEL)
 #define inflate	inflate_ppp	/* FreeBSD already has an inflate :-( */
 #endif
 
 
 /* +++ zutil.h */
-/* zutil.h -- internal interface and configuration of the compression library
+/*-
+ * zutil.h -- internal interface and configuration of the compression library
  * Copyright (C) 1995-1996 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
@@ -45,18 +48,23 @@
 #ifndef _Z_UTIL_H
 #define _Z_UTIL_H
 
+#ifdef _KERNEL
+#include <net/zlib.h>
+#else
 #include "zlib.h"
+#endif
 
-#if defined(KERNEL) || defined(_KERNEL)
+#ifdef _KERNEL
 /* Assume this is a *BSD or SVR4 kernel */
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/systm.h>
-#undef u
+#include <sys/param.h>
+#include <sys/kernel.h>
+#ifndef __rtems__
+#include <sys/module.h>
+#endif
 #  define HAVE_MEMCPY
-#  define memcpy(d, s, n)	bcopy((s), (d), (n))
-#  define memset(d, v, n)	bzero((d), (n))
-#  define memcmp		bcmp
 
 #else
 #if defined(__KERNEL__)
@@ -77,7 +85,7 @@
 #  include <stdlib.h>
 #endif
 #endif /* __KERNEL__ */
-#endif /* _KERNEL || KERNEL */
+#endif /* _KERNEL */
 
 #ifndef local
 #  define local static
@@ -90,13 +98,13 @@ typedef unsigned short ush;
 typedef ush FAR ushf;
 typedef unsigned long  ulg;
 
-extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
+static const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 /* (size given to avoid silly warnings with Visual C++) */
 
 #define ERR_MSG(err) z_errmsg[Z_NEED_DICT-(err)]
 
 #define ERR_RETURN(strm,err) \
-  return (strm->msg = (char*)ERR_MSG(err), (err))
+  return (strm->msg = (const char*)ERR_MSG(err), (err))
 /* To be used only when the state is known to be valid */
 
         /* common constants */
@@ -773,7 +781,7 @@ int deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
         windowBits = -windowBits;
     }
     if (memLevel < 1 || memLevel > MAX_MEM_LEVEL || method != Z_DEFLATED ||
-        windowBits < 8 || windowBits > 15 || level < 0 || level > 9 ||
+        windowBits < 9 || windowBits > 15 || level < 0 || level > 9 ||
 	strategy < 0 || strategy > Z_HUFFMAN_ONLY) {
         return Z_STREAM_ERROR;
     }
@@ -804,7 +812,7 @@ int deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 
     if (s->window == Z_NULL || s->prev == Z_NULL || s->head == Z_NULL ||
         s->pending_buf == Z_NULL) {
-        strm->msg = (char*)ERR_MSG(Z_MEM_ERROR);
+        strm->msg = (const char*)ERR_MSG(Z_MEM_ERROR);
         deflateEnd (strm);
         return Z_MEM_ERROR;
     }
@@ -1983,7 +1991,7 @@ local void copy_block     OF((deflate_state *s, charf *buf, unsigned len,
                               int header));
 
 #ifndef DEBUG_ZLIB
-#  define send_code(s, c, tree) send_bits(s, tree[c].Code, tree[c].Len)
+#  define send_code(s, c, tree) send_bits(s, tree[(c)].Code, tree[(c)].Len)
    /* Send a code of the given tree. c and tree must not have side effects */
 
 #else /* DEBUG_ZLIB */
@@ -2041,22 +2049,22 @@ local void send_bits(s, value, length)
 #else /* !DEBUG_ZLIB */
 
 #define send_bits(s, value, length) \
-{ int len = length;\
-  if (s->bi_valid > (int)Buf_size - len) {\
-    int val = value;\
-    s->bi_buf |= (val << s->bi_valid);\
-    put_short(s, s->bi_buf);\
-    s->bi_buf = (ush)val >> (Buf_size - s->bi_valid);\
-    s->bi_valid += len - Buf_size;\
+{ int len = (length);\
+  if ((s)->bi_valid > (int)Buf_size - len) {\
+    int val = (value);\
+    (s)->bi_buf |= (val << (s)->bi_valid);\
+    put_short((s), (s)->bi_buf);\
+    (s)->bi_buf = (ush)val >> (Buf_size - (s)->bi_valid);\
+    (s)->bi_valid += len - Buf_size;\
   } else {\
-    s->bi_buf |= (value) << s->bi_valid;\
-    s->bi_valid += len;\
+    (s)->bi_buf |= (value) << (s)->bi_valid;\
+    (s)->bi_valid += len;\
   }\
 }
 #endif /* DEBUG_ZLIB */
 
-
 #define MAX(a,b) (a >= b ? a : b)
+
 /* the arguments must not have side effects */
 
 /* ===========================================================================
@@ -3861,10 +3869,11 @@ int r;
                              &s->sub.trees.tb, z);
       if (t != Z_OK)
       {
-        ZFREE(z, s->sub.trees.blens);
         r = t;
-        if (r == Z_DATA_ERROR)
+        if (r == Z_DATA_ERROR) {
+        ZFREE(z, s->sub.trees.blens);
           s->mode = BADB;
+        }
         LEAVE
       }
       s->sub.trees.index = 0;
@@ -3929,11 +3938,12 @@ int r;
 #endif
         t = inflate_trees_dynamic(257 + (t & 0x1f), 1 + ((t >> 5) & 0x1f),
                                   s->sub.trees.blens, &bl, &bd, &tl, &td, z);
-        ZFREE(z, s->sub.trees.blens);
         if (t != Z_OK)
         {
-          if (t == (uInt)Z_DATA_ERROR)
+          if (t == (uInt)Z_DATA_ERROR) {
+            ZFREE(z, s->sub.trees.blens);
             s->mode = BADB;
+          }
           r = t;
           LEAVE
         }
@@ -3946,6 +3956,11 @@ int r;
           r = Z_MEM_ERROR;
           LEAVE
         }
+	/*
+	 * this ZFREE must occur *BEFORE* we mess with sub.decode, because
+	 * sub.trees is union'd with sub.decode.
+	 */
+        ZFREE(z, s->sub.trees.blens);
         s->sub.decode.codes = c;
         s->sub.decode.tl = tl;
         s->sub.decode.td = td;
@@ -5128,7 +5143,7 @@ struct internal_state      {int dummy;}; /* for buggy compilers */
 extern void exit OF((int));
 #endif
 
-const char *z_errmsg[10] = {
+static const char *z_errmsg[10] = {
 "need dictionary",     /* Z_NEED_DICT       2  */
 "stream end",          /* Z_STREAM_END      1  */
 "",                    /* Z_OK              0  */
@@ -5338,10 +5353,10 @@ void  zcfree (opaque, ptr)
 #define NMAX 5552
 /* NMAX is the largest n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1 */
 
-#define DO1(buf,i)  {s1 += buf[i]; s2 += s1;}
-#define DO2(buf,i)  DO1(buf,i); DO1(buf,i+1);
-#define DO4(buf,i)  DO2(buf,i); DO2(buf,i+2);
-#define DO8(buf,i)  DO4(buf,i); DO4(buf,i+4);
+#define DO1(buf,i)  {s1 += buf[(i)]; s2 += s1;}
+#define DO2(buf,i)  DO1(buf,i); DO1(buf,(i)+1);
+#define DO4(buf,i)  DO2(buf,i); DO2(buf,(i)+2);
+#define DO8(buf,i)  DO4(buf,i); DO4(buf,(i)+4);
 #define DO16(buf)   DO8(buf,0); DO8(buf,8);
 
 /* ========================================================================= */

@@ -1,4 +1,4 @@
-/*	$Id$	*/
+/* $FreeBSD: src/sys/net/zlib.h,v 1.10 2005/01/07 01:45:35 imp Exp $	*/
 
 /*
  * This file is derived from zlib.h and zconf.h from the zlib-1.0.4
@@ -16,7 +16,8 @@
 
 
 /* +++ zlib.h */
-/* zlib.h -- interface of the 'zlib' general purpose compression library
+/*-
+  zlib.h -- interface of the 'zlib' general purpose compression library
   version 1.0.4, Jul 24th, 1996.
 
   Copyright (C) 1995-1996 Jean-loup Gailly and Mark Adler
@@ -39,8 +40,8 @@
 
   Jean-loup Gailly        Mark Adler
   gzip@prep.ai.mit.edu    madler@alumni.caltech.edu
-
-
+*/
+/*
   The data format used by the zlib library is described by RFCs (Request for
   Comments) 1950 to 1952 in the files ftp://ds.internic.net/rfc/rfc1950.txt
   (zlib format), rfc1951.txt (deflate format) and rfc1952.txt (gzip format).
@@ -281,7 +282,7 @@ typedef struct z_stream_s {
     uInt     avail_out; /* remaining free space at next_out */
     uLong    total_out; /* total nb of bytes output so far */
 
-    char     *msg;      /* last error message, NULL if no error */
+    const char     *msg; /* last error message, NULL if no error */
     struct internal_state FAR *state; /* not visible by applications */
 
     alloc_func zalloc;  /* used to allocate the internal state */
@@ -507,6 +508,9 @@ extern int EXPORT inflateInit OF((z_streamp strm));
    done by inflate().
 */
 
+#if defined(__FreeBSD__) && defined(_KERNEL)
+#define inflate       inflate_ppp     /* FreeBSD already has an inflate :-( */
+#endif
 
 extern int EXPORT inflate OF((z_streamp strm, int flush));
 /*
@@ -925,7 +929,7 @@ extern const char * EXPORT gzerror OF((gzFile file, int *errnum));
 /*
      Returns the error message for the last error which occurred on the
    given compressed file. errnum is set to zlib error number. If an
-   error occurred in the file system and not in the compression library,
+   error occurred in the filesystem and not in the compression library,
    errnum is set to Z_ERRNO and the application may consult errno
    to get the exact error code.
 */
