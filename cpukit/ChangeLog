@@ -1,5 +1,9 @@
 2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* include/rtems/concat.h: Add EXPAND0, CONCAT0.
+
+2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* telnetd/Makefile.am: Only build if LIBSHELL is available.
 
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
