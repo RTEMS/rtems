@@ -1,5 +1,7 @@
 2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/zlib.h, libnetworking/net/zlib.c:
+	Update from FreeBSD.
 	* libnetworking/opt_ppp.h: New.
 	* libnetworking/net/ppp.h: Remove.
 	* libnetworking/net/if_ppp.c, libnetworking/net/ppp_tty.c:
