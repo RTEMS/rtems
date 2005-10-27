@@ -1,6 +1,11 @@
 2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/opt_ppp.h: New.
+	* libnetworking/net/ppp.h: Remove.
+	* libnetworking/net/if_ppp.c, libnetworking/net/ppp_tty.c:
+	Reflect changes above. Cosmetics from FreeBSD.
 	* libnetworking/Makefile.am: Don't install loop.h.
+	Add opt_ppp.h, remove net/ppp.h.
 	* include/rtems/concat.h: Add EXPAND0, CONCAT0.
 
 2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
