@@ -71,11 +71,17 @@
  * Paul Mackerras (paulus@cs.anu.edu.au).
  */
 
-/* $Id$ */
+/* $FreeBSD: src/sys/net/if_ppp.c,v 1.109 2005/10/12 19:52:16 thompsa Exp $ */
 /* from if_sl.c,v 1.11 84/10/04 12:54:47 rick Exp */
 /* from NetBSD: if_ppp.c,v 1.15.2.2 1994/07/28 05:17:58 cgd Exp */
 
-#include "ppp.h"
+/* $Id$ */
+
+#include "opt_inet.h"
+#include "opt_ipx.h"
+#include "opt_mac.h"
+#include "opt_ppp.h"
+
 #if NPPP > 0
 
 #include <termios.h>
@@ -106,7 +112,6 @@
 #include <netinet/ip.h>
 #endif
 
-#include "bpfilter.h"
 #if NBPFILTER > 0
 #include <net/bpf.h>
 #endif

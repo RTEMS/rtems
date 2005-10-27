@@ -70,11 +70,14 @@
  * Paul Mackerras (paulus@cs.anu.edu.au).
  */
 
-/* $Id$ */
+/* $FreeBSD: src/sys/net/ppp_tty.c,v 1.69 2005/10/16 20:44:18 phk Exp $ */
 /* from if_sl.c,v 1.11 84/10/04 12:54:47 rick Exp */
 /* from NetBSD: if_ppp.c,v 1.15.2.2 1994/07/28 05:17:58 cgd Exp */
 
-#include "ppp.h"
+/* $Id$ */
+
+#include "opt_ppp.h"		/* XXX for ppp_defs.h */
+
 #if NPPP > 0
 
 #include <sys/param.h>
@@ -110,20 +113,20 @@
 #include <net/if_pppvar.h>
 
 
-void	pppasyncattach __P((void));
-int     pppopen __P((struct rtems_termios_tty *tty));
-int     pppclose __P((struct rtems_termios_tty *tty));
-int     pppread __P((struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args));
-int     pppwrite __P((struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args));
-int     ppptioctl __P((struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args));
-int     pppinput __P((int c, struct rtems_termios_tty *tty));
-int     pppstart __P((struct rtems_termios_tty *tp));
-u_short pppfcs __P((u_short fcs, u_char *cp, int len));
-void    pppallocmbuf __P((struct ppp_softc *sc, struct mbuf **mp));
+void	pppasyncattach(void);
+int     pppopen(struct rtems_termios_tty *tty);
+int     pppclose(struct rtems_termios_tty *tty);
+int     pppread(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args);
+int     pppwrite(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args);
+int     ppptioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args);
+int     pppinput(int c, struct rtems_termios_tty *tty);
+int     pppstart(struct rtems_termios_tty *tp);
+u_short pppfcs(u_short fcs, u_char *cp, int len);
+void    pppallocmbuf(struct ppp_softc *sc, struct mbuf **mp);
 
-static void pppasyncstart __P((struct ppp_softc *));
-static void pppasyncctlp __P((struct ppp_softc *));
-static void pppasyncrelinq __P((struct ppp_softc *));
+static void pppasyncstart(struct ppp_softc *);
+static void pppasyncctlp(struct ppp_softc *);
+static void pppasyncrelinq(struct ppp_softc *);
 /*static void ppp_timeout __P((void *)); */
 /*static void pppdumpb __P((u_char *b, int l)); */
 /*static void ppplogchar __P((struct ppp_softc *, int)); */
@@ -310,9 +313,8 @@ pppread(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args)
     struct mbuf                 *m0;
     u_char                      *p;
 
-    if (sc == NULL) {
+    if (sc == NULL)
         return 0;
-    }
 
     /*
      * Loop waiting for input, checking that nothing disasterous
