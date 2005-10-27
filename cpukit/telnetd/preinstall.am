@@ -15,6 +15,7 @@ PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
 if HAS_NETWORKING
+if LIBSHELL
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
@@ -36,4 +37,5 @@ PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 $(PROJECT_LIB)/libtelnetd.a: libtelnetd.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtelnetd.a
 TMPINSTALL_FILES += $(PROJECT_LIB)/libtelnetd.a
+endif
 endif
