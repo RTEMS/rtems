@@ -1,5 +1,6 @@
 2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/Makefile.am: Don't install loop.h.
 	* include/rtems/concat.h: Add EXPAND0, CONCAT0.
 
 2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
