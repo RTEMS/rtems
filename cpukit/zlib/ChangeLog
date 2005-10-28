@@ -1,5 +1,10 @@
 2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* zconf.h: Use uint_least*_t types.
+	* crc32.c, zutil.c, zutil.h: Misc. type fixes.
+
+2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: New.
 	* preinstall.am: New.
 
