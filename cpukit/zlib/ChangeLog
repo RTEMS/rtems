@@ -1,5 +1,10 @@
 2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: New.
+	* preinstall.am: New.
+
+2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* adler32.c, compress.c, crc32.c, deflate.c, deflate.h, gzio.c,
 	trees.c, uncompr.c, zconf.h, zconf.in.h, zutil.c, zutil.h: Reformat
 	CVS Ids.
