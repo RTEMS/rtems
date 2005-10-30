@@ -1,3 +1,8 @@
+2005-10-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* zconf.h: Hard-code using unistd.h.
+	Hard-code Z_PREFIX.
+
 2005-10-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* zconf.in.h: Remove (Unused).
