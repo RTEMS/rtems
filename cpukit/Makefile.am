@@ -14,6 +14,8 @@ SUBDIRS += libnetworking librpc
 SUBDIRS += libmisc
 SUBDIRS += wrapup
 
+SUBDIRS += zlib
+
 # applications
 SUBDIRS += httpd
 SUBDIRS += ftpd

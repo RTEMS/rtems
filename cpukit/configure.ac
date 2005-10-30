@@ -298,6 +298,7 @@ libcsupport/Makefile
 libnetworking/Makefile
 librpc/Makefile
 libmisc/Makefile
+zlib/Makefile
 httpd/Makefile
 ftpd/Makefile
 telnetd/Makefile
