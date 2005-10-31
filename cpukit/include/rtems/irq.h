@@ -15,7 +15,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * $Id&
+ * $Id$
  */
 
 #ifndef _RTEMS_IRQ_H
@@ -54,7 +54,6 @@ typedef struct __rtems_irq_connect_data__ {
    * Handler handle to store private data
    */
   rtems_irq_hdl_param           handle;
-  /*
   /*
    * function for enabling interrupts at device level (ONLY!).
    * The BSP code will automatically enable it at i8259s level.
@@ -114,7 +113,7 @@ typedef struct {
    * The interrupt source  will be physically masked at i8259 level.
    */
     rtems_irq_prio*             irqPrioTbl;
-}rtems_irq_global_settings;
+} rtems_irq_global_settings;
 
 /*-------------------------------------------------------------------------+
 | Function Prototypes.
@@ -214,5 +213,5 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
 }
 #endif
 
-#endif
+#endif /* ASM */
 #endif /* _RTEMS_IRQ_H */

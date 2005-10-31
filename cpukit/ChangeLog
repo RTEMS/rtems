@@ -1,3 +1,8 @@
+2005-10-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 840/rtems:
+	* include/rtems/irq.h: Fix several typos.
+
 2005-10-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add zlib.
