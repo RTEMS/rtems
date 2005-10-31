@@ -1,8 +1,8 @@
 # ==============================================================
 # %{gcc_target}-gcc
 # ==============================================================
-%package -n @rpmprefix@%{gcc_target}-gcc
-Summary:      	rtems gcc and newlib C Library for %{gcc_target}
+# %%package -n @rpmprefix@%{gcc_target}-gcc
+Summary:      	gcc for %{gcc_target}
 Group:          %{rpmgroup}
 Version:        %{gcc_version}
 Requires:       @rpmprefix@%{gcc_target}-binutils

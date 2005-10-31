@@ -1,3 +1,9 @@
+2005-10-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/gccnewlib.add: Rename src.rpm to *-gcc.src.rpm.
+	* gccnewlib/target-gcc.add: Reflect changes above.
+	* gccnewlib/Makefile.am: Re-sort sub-package fragments.
+
 2005-09-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/gccnewlib.add: Pass CC="%__cc $RPM_OPT_FLAGS" to
