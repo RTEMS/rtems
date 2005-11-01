@@ -1,3 +1,7 @@
+2005-11-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* pppd/Makefile.am: Fix typo.
+
 2005-10-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 840/rtems:
