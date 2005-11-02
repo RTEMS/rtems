@@ -1,3 +1,9 @@
+2005-11-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/zlib.c: Remove.
+	* libnetworking/net/zlib.h: Remove.
+	* libnetworking/Makefile.am: Reflect changes above.
+
 2005-11-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* pppd/Makefile.am: Fix typo.
