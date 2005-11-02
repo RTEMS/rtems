@@ -23,6 +23,7 @@ extern "C" {
 #endif
 
 /* Bit encodings for Machine State Register (MSR) */
+#define MSR_VE		(1<<25)		/* Alti-Vec enable (7400+) */
 #define MSR_POW		(1<<18)		/* Enable Power Management */
 #define MSR_TGPR	(1<<17)		/* TLB Update registers in use */
 #define MSR_ILE		(1<<16)		/* Interrupt Little-Endian enable */
@@ -46,6 +47,14 @@ extern "C" {
 
 /* Bit encodings for Hardware Implementation Register (HID0)
    on PowerPC 603, 604, etc. processors (not 601). */
+
+/* WARNING: HID0/HID1 are *truely* implementation dependent! 
+ *          you *cannot* rely on the same bits to be present,
+ *          at the same place or even in the same register
+ *          on different CPU familys.
+ *          E.g., EMCP isHID0_DOZE is HID0_HI_BAT_EN on the
+ *          on the 7450s. IFFT is XBSEN on 7450 and so on...
+ */
 #define HID0_EMCP	(1<<31)		/* Enable Machine Check pin */
 #define HID0_EBA	(1<<29)		/* Enable Bus Address Parity */
 #define HID0_EBD	(1<<28)		/* Enable Bus Data Parity */
@@ -59,6 +68,9 @@ extern "C" {
 #define HID0_ECLK	(1<<25)
 #define HID0_PAR	(1<<24)
 #define HID0_DOZE	(1<<23)
+/* this HI_BAT_EN only on 7445, 7447, 7448, 7455 & 7457 !!          */
+#define HID0_7455_HIGH_BAT_EN (1<<23)
+
 #define HID0_NAP	(1<<22)
 #define HID0_SLEEP	(1<<21)
 #define HID0_DPM	(1<<20)
@@ -68,6 +80,8 @@ extern "C" {
 #define HID0_DLOCK	(1<<12)		/* Data Cache Lock */
 #define HID0_ICFI	(1<<11)		/* Instruction Cache Flash Invalidate */
 #define HID0_DCI	(1<<10)		/* Data Cache Invalidate */
+/* this bit is XSBSEN (xtended block size enable) on 7447, 7448, 7455 and 7457 only */
+#define HID0_7455_XBSEN       (1<<8)
 #define HID0_SIED	(1<<7)		/* Serial Instruction Execution [Disable] */
 #define HID0_BTIC	(1<<5)          /* Branch Target Instruction Cache [Enable] */
 /* S.K. Feng 10/03, added for MPC7455 */
@@ -121,6 +135,17 @@ n:
 #define IBAT2L	533
 #define IBAT3U	534	/* Instruction BAT #3 Upper/Lower */
 #define IBAT3L	535
+
+/* Only present on 7445, 7447, 7448, 7455 and 7457 (if HID0[HIGH_BAT_EN]) */
+#define IBAT4U	560	/* Instruction BAT #0 Upper/Lower */
+#define IBAT4L	561
+#define IBAT5U	562	/* Instruction BAT #1 Upper/Lower */
+#define IBAT5L	563
+#define IBAT6U	564	/* Instruction BAT #2 Upper/Lower */
+#define IBAT6L	565
+#define IBAT7U	566	/* Instruction BAT #3 Upper/Lower */
+#define IBAT7L	567
+
 #define DBAT0U	536	/* Data BAT #0 Upper/Lower */
 #define DBAT0L	537
 #define DBAT1U	538	/* Data BAT #1 Upper/Lower */
@@ -129,6 +154,17 @@ n:
 #define DBAT2L	541
 #define DBAT3U	542	/* Data BAT #3 Upper/Lower */
 #define DBAT3L	543
+
+/* Only present on 7445, 7447, 7448, 7455 and 7457 (if HID0[HIGH_BAT_EN]) */
+#define DBAT4U	568	/* Instruction BAT #0 Upper/Lower */
+#define DBAT4L	569
+#define DBAT5U	570	/* Instruction BAT #1 Upper/Lower */
+#define DBAT5L	571
+#define DBAT6U	572	/* Instruction BAT #2 Upper/Lower */
+#define DBAT6L	573
+#define DBAT7U	574	/* Instruction BAT #3 Upper/Lower */
+#define DBAT7L	575
+
 #define DMISS	976	/* TLB Lookup/Refresh registers */
 #define DCMP	977
 #define HASH1	978
