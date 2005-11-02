@@ -119,7 +119,7 @@ int _dns_ttl_;
 
 #ifdef DEBUG
 static void
-dprintf(msg, num)
+debugprintf(msg, num)
 	char *msg;
 	int num;
 {
@@ -131,7 +131,7 @@ dprintf(msg, num)
 	}
 }
 #else
-# define dprintf(msg, num) /*nada*/
+#define debugprintf(msg, num) /*nada*/
 #endif
 
 #define BOUNDED_INCR(x) \
@@ -393,13 +393,13 @@ gethostanswer(answer, anslen, qname, qtype)
 			bp += sizeof(align) - ((u_long)bp % sizeof(align));
 
 			if (bp + n >= &hostbuf[sizeof hostbuf]) {
-				dprintf("size (%d) too big\n", n);
+				debugprintf("size (%d) too big\n", n);
 				had_error++;
 				continue;
 			}
 			if (hap >= &h_addr_ptrs[MAXADDRS-1]) {
 				if (!toobig++)
-					dprintf("Too many addresses (%d)\n",
+					debugprintf("Too many addresses (%d)\n",
 						MAXADDRS);
 				cp += n;
 				continue;
@@ -414,7 +414,7 @@ gethostanswer(answer, anslen, qname, qtype)
 			}
 			break;
 		default:
-			dprintf("Impossible condition (type=%d)\n", type);
+			debugprintf("Impossible condition (type=%d)\n", type);
 			h_errno = NO_RECOVERY;
 			return (NULL);
 			/* BIND has abort() here, too risky on bad data */
@@ -585,7 +585,7 @@ _gethostbydnsname(name, af)
 		}
 
 	if ((n = res_search(name, C_IN, type, buf.buf, sizeof(buf))) < 0) {
-		dprintf("res_search failed (%d)\n", n);
+		debugprintf("res_search failed (%d)\n", n);
 		return (NULL);
 	}
 	return (gethostanswer(&buf, n, name, type));
@@ -662,7 +662,7 @@ _gethostbydnsaddr(addr, len, af)
 	}
 	n = res_query(qbuf, C_IN, T_PTR, (u_char *)buf.buf, sizeof buf.buf);
 	if (n < 0) {
-		dprintf("res_query failed (%d)\n", n);
+		debugprintf("res_query failed (%d)\n", n);
 		return (NULL);
 	}
 	if (!(hp = gethostanswer(&buf, n, qbuf, T_PTR)))
