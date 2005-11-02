@@ -169,6 +169,7 @@ int mpc60x_vector_is_valid(rtems_vector vector)
         case PPC_604e:
         case PPC_604r:
         case PPC_7455:   /* Kate Feng */
+        case PPC_7457: 
             if (!mpc604_vector_is_valid(vector)) {
                 return 0;
             }
