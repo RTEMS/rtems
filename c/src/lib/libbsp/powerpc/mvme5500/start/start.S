@@ -17,6 +17,7 @@
 #include <rtems/score/cpu.h>
 #include <rtems/powerpc/powerpc.h>
 #include <libcpu/io.h>
+#include <libcpu/bat.h>
 
 #define SYNC \
 	sync; \
@@ -64,7 +65,7 @@ __rtems_entry_point:
 	/*
 	 * Make sure we have nothing in BATS and TLB
 	 */
-	bl	clear_bats
+	bl	CPU_clear_bats_early
 	bl	flush_tlbs
 /*
  * Use the first pair of BAT registers to map the 1st 256MB
@@ -172,41 +173,6 @@ _return_to_ppcbug:
 	bl	MMUon
 	mtctr	r30
 	bctr	
-
-/* 
- * An undocumented "feature" of 604e requires that the v bit
- * be cleared before changing BAT values.
- *
- * Also, newer IBM firmware does not clear bat3 and 4 so
- * this makes sure it's done.
- *  -- Cort 
- */
-clear_bats:
-	li	r20,0
-	mfspr	r9,PVR
-	rlwinm	r9,r9,16,16,31		/* r9 = 1 for 601, 4 for 604 */
-	cmpwi	r9, 1
-	SYNC
-	beq	1f
-	mtspr	DBAT0U,r20
-	mtspr	DBAT0L,r20	
-	mtspr	DBAT1U,r20
-	mtspr	DBAT1L,r20
-	mtspr	DBAT2U,r20
-	mtspr	DBAT2L,r20	
-	mtspr	DBAT3U,r20
-	mtspr	DBAT3L,r20
-1:	
-	mtspr	IBAT0U,r20
-	mtspr	IBAT0L,r20
-	mtspr	IBAT1U,r20
-	mtspr	IBAT1L,r20
-	mtspr	IBAT2U,r20
-	mtspr	IBAT2L,r20
-	mtspr	IBAT3U,r20
-	mtspr	IBAT3L,r20
-	SYNC	
-	blr
 
 flush_tlbs:
 	lis	r20, 0x1000
