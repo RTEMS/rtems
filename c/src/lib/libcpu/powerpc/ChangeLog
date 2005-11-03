@@ -1,3 +1,8 @@
+2005-11-03	straumanatslacdotstanford.edu
+
+	* mpc6xx/clock/c_clock.c: disable interrupts around decrementer update
+	to eliminate a race condition
+
 2005-11-02	straumanatslacdotstanford.edu
 
 	* mpc6xx/mmu/pte121.c, mpc6xx/mmu/pte121.h: enhancements to mpc6xx page

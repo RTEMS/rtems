@@ -81,7 +81,10 @@ int decr;
    *  The driver has seen another tick.
    */
   do {
+	register uint32_t flags;
+	rtems_interrupt_disable(flags);
 	asm volatile ("mfdec %0; add %0, %0, %1; mtdec %0":"=&r"(decr):"r"(Clock_Decrementer_value));
+	rtems_interrupt_enable(flags);
 
 	Clock_driver_ticks += 1;
 
