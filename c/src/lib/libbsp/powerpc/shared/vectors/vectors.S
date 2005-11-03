@@ -152,6 +152,10 @@ SYM (push_normalized_frame):
 	mtsrr0	r3
 
 	lwz	r3, GPR3_OFFSET(r1)
-	addi 	r1,r1, EXCEPTION_FRAME_END
+	/* DONT add back the frame size but reload the value
+	 * stored in the frame -- maybe the exception handler
+	 * changed it with good reason (e.g., gdb pushed a dummy frame)
+	 */
+	lwz r1, GPR1_OFFSET(r1)
 	SYNC
 	rfi
