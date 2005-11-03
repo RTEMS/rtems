@@ -524,7 +524,7 @@ void log_putc(const u_char c) {
  * at the end. So it is made private to avoid confusion in other files.
  */
 static
-void puts(const u_char *s)
+void my_puts(const u_char *s)
 {
         char c;
 
@@ -543,7 +543,7 @@ void flush_log(void) {
 #endif
 	}
 	for(p=console_global_data.log; p; p=next) {
-		puts(p->data);
+		my_puts(p->data);
 		next = p->next;
 		pfree(p);
 	}
@@ -900,7 +900,7 @@ int printk(const char *fmt, ...) {
 	va_start(args, fmt);
 	i = k_vsprintf(buf, fmt, args);
 	va_end(args);
-	puts(buf);
+	my_puts((u_char*)buf);
 	return  i;
 }
 

@@ -21,10 +21,10 @@
 
 static int same_DevID(unsigned short vendor,
 	       unsigned short Number,
-	       char * str)
+	       unsigned char * str)
 {
 	static unsigned const char hexdigit[]="0123456789ABCDEF";
-	if (strlen(str)!=7) return 0;
+	if (strlen((char*)str)!=7) return 0;
 	if ( ( ((vendor>>10)&0x1f)+'A'-1 == str[0])  &&
 	     ( ((vendor>>5)&0x1f)+'A'-1 == str[1])   &&
 	     ( (vendor&0x1f)+'A'-1 == str[2])        &&
