@@ -1,5 +1,14 @@
 2005-11-02	straumanatslacdotstanford.edu
 
+	* libnetworking/Makefile.am,
+	libnetworking/preinstall.am: Added simple implementation of ethernet
+	media ioctl SIOCSIFMEDIA/SIOCGIFMEDIA for mii compliant phys.
+	* libnetworking/rtems/rtems_mii_ioctl.c,
+	libnetworking/rtems/rtems_mii_ioctl.h,
+	libnetworking/rtems/rtems_mii_ioctl_kern.c: New files.
+
+2005-11-02	straumanatslacdotstanford.edu
+
 	* libi2c/Makefile.am, libi2c/Makefile.in, libi2c/libi2c.c,
 	libi2c/libi2c.h: New files.
 	* Makefile.am, configure.ac, preinstall.am, wrapup/Makefile.am: added a
