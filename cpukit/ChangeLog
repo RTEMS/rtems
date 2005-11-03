@@ -1,3 +1,11 @@
+2005-11-02	straumanatslacdotstanford.edu
+
+	* libi2c/Makefile.am, libi2c/Makefile.in, libi2c/libi2c.c,
+	libi2c/libi2c.h: New files.
+	* Makefile.am, configure.ac, preinstall.am, wrapup/Makefile.am: added a
+	simple API/library for i2c devices and drivers for i2c 2-byte eeproms
+	and a ds1621 temperature sensor; API is documented in libi2c.h
+
 2005-11-02	Fredic Praca <freebsd-fr.org>
 
 	PR 842/networking

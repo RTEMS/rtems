@@ -57,6 +57,8 @@ TMP_LIBS += ../libmisc/libmw-fb.a
 TMP_LIBS += ../libmisc/libcapture.a
 TMP_LIBS += ../libmisc/libfsmount.a
 
+TMP_LIBS += ../libi2c/libi2c.a
+
 if HAS_NETWORKING
 TMP_LIBS += ../libnetworking/libnetworking.a
 TMP_LIBS += ../libnetworking/libc.a

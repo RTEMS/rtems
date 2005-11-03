@@ -11,6 +11,7 @@ include $(top_srcdir)/automake/multilib.am
 SUBDIRS = . score rtems sapi posix itron
 SUBDIRS += libcsupport libblock libfs
 SUBDIRS += libnetworking librpc
+SUBDIRS += libi2c
 SUBDIRS += libmisc
 SUBDIRS += wrapup
 
@@ -149,6 +150,9 @@ endif
 
 ## rtmonuse
 include_rtems_HEADERS += libmisc/rtmonuse/rtmonuse.h
+
+## i2c
+include_rtems_HEADERS += libi2c/libi2c.h
 
 ## serdbg
 if LIBSERDBG
