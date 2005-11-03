@@ -103,7 +103,7 @@
 	PUBLIC_VAR(__rtems_start)
 	PUBLIC_VAR(__rtems_entry_point)
 	PUBLIC_VAR(__rtems_end)
-	.section .mvme5500_preloader_section,"awx",@progbits
+	.section .entry_point_section,"awx",@progbits
 preload:
 	/* find out where we are */
 	bl	here

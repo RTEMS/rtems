@@ -1,3 +1,12 @@
+2005-11-03	straumanatslacdotstanforddotedu
+
+	* startup/linkcmds: Removed.
+	* Makefile.am, start/preload.S, startup/bspstart.c: use linkcmds
+    from shared area - this version seemed broken anyways. Let the
+    preloader use the generic 'entry_point_section' rather than its own
+    'mvme5500_preloader_section'. Also, let zero_bss use (implicit?)
+    __SBSSxxx__ symbols.
+
 2005-11-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 844/bsps

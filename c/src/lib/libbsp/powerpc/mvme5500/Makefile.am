@@ -21,7 +21,7 @@ noinst_PROGRAMS =
 include_bspdir = $(includedir)/bsp
 
 ###
-dist_project_lib_DATA += startup/linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds
 
 # UNUSED
 EXTRA_DIST = startup/bootpstuff.c
@@ -187,7 +187,7 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
-$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
+$(PROJECT_LIB)/linkcmds: ../shared/startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
