@@ -1,3 +1,12 @@
+2005-11-02	straumanatslacdotstanford.edu
+
+	* libchip/i2c/i2c-2b-eeprom.c, libchip/i2c/i2c-2b-eeprom.h,
+	libchip/i2c/i2c-ds1621.c, libchip/i2c/i2c-ds1621.h: New files.
+	* libchip/Makefile.am, libchip/preinstall.am, wrapup/Makefile.am:
+    added a simple API/library
+	for i2c devices and drivers for i2c 2-byte eeproms and a ds1621
+	temperature sensor; API is documented in libi2c.h
+
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/pppd/ipxcp.c,

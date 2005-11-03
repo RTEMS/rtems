@@ -62,6 +62,15 @@ endif
 EXTRA_DIST += rtc/README.ds1643 rtc/README.icm7170 rtc/README.m48t08 \
     rtc/README.m48t18 rtc/STATUS
 
+# i2c
+if LIBCHIP
+include_libchip_HEADERS += i2c/i2c-ds1621.h i2c/i2c-2b-eeprom.h
+
+noinst_LIBRARIES += libi2cio.a
+libi2cio_a_CPPFLAGS = $(AM_CPPFLAGS)
+libi2cio_a_SOURCES  = i2c/i2c-ds1621.c i2c/i2c-2b-eeprom.c
+endif
+
 # serial
 if LIBCHIP
 include_libchip_HEADERS += serial/mc68681.h serial/ns16550.h serial/z85c30.h \

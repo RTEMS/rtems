@@ -30,6 +30,7 @@ SRCS += ../libchip/libide.a
 if HAS_NETWORKING
 SRCS += ../libchip/libnetchip.a
 endif
+SRCS += ../libchip/libi2cio.a
 endif
 
 if HAS_MP
