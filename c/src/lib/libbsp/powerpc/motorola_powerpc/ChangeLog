@@ -1,3 +1,10 @@
+2005-11-03	straumanatslacdotstanforddotedu
+
+	* Makefile.am, motorola_powerpc/Makefile.am, mvme5500/Makefile.am,
+	mvme5500/start/preload.S, mvme5500/startup/bspstart.c,
+	shared/startup/bspstart.c: moved linkcmds to shared area for other
+	BSPs to use
+
 2005-10-20	Eric Norum <norume@aps.anl.gov>
 
     * include/bsp.h: Support MVME2100.
