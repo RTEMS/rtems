@@ -1,3 +1,8 @@
+2005-11-02	straumanatslacdotstanford.edu
+
+	* shared/pci/pcibios.c: replaced pci_find_device implementation by a
+	pcibios call which already provides the functionality
+
 2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* shared/comm/i386_io.h, shared/comm/tty_drv.c,
