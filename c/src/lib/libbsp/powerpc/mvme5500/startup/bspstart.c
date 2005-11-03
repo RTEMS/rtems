@@ -44,6 +44,7 @@
 #include <bsp/vectors.h>
 #include <bsp/bspException.h>
 
+#include <rtems/bspIo.h>
 #include <rtems/sptables.h>
 
 #ifdef __RTEMS_APPLICATION__

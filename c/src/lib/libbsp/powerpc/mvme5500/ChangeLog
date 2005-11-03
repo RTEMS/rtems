@@ -1,3 +1,8 @@
+2005-11-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 844/bsps
+	* startup/bspstart.c: Include <rtems/bspIo.h>.
+
 2005-07-28	Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Changes provided by Phillip Sorensen
