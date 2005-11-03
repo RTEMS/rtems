@@ -4,7 +4,6 @@
 
 include $(top_srcdir)/automake/compile.am
 
-noinst_LIBRARIES =
 CLEANFILES =
 DISTCLEANFILES =
 
