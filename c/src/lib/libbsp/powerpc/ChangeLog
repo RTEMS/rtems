@@ -1,5 +1,12 @@
 2005-11-03	straumanatslacdotstanforddotedu
 
+	* Makefile.am, motorola_powerpc/Makefile.am, mvme5500/Makefile.am,
+	mvme5500/start/preload.S, mvme5500/startup/bspstart.c,
+	shared/startup/bspstart.c: moved linkcmds to shared area for other
+	BSPs to use
+
+2005-11-03	straumanatslacdotstanforddotedu
+
 	* shared/bootloader/misc.c, shared/console/polled_io.c,
     shared/residual/residual.c: silenced compiler warnings (type cast &
 	renaming puts->my_puts)
