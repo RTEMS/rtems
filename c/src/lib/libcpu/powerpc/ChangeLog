@@ -1,5 +1,12 @@
 2005-11-02	straumanatslacdotstanford.edu
 
+	* mpc6xx/mmu/pte121.c, mpc6xx/mmu/pte121.h: enhancements to mpc6xx page
+	table support - PTEs can now be modified even if the page table is
+	already active; bugfix: address range crossing 256MB boundary was not
+	handled correctly
+
+2005-11-02	straumanatslacdotstanford.edu
+
 	* mpc6xx/mmu/bat.c, mpc6xx/mmu/bat.h, mpc6xx/mmu/mmuAsm.S: moved
 	assembly code to C; setdbat now supports high bats on 7450 CPUs;
 	added argument checking to setdbat; added getdbat; moved early
