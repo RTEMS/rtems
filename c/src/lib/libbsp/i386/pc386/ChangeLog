@@ -1,3 +1,9 @@
+2005-11-02	straumanatslacdotstanford.edu
+
+	* startup/ldsegs.S: put IDT and GDT into data segment. The CPU modifies
+	the 'accessed' bit and GDB's (rtems-gdb-stub) text segment checksum
+	comparison failed...
+
 2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* console/fb_vga.h, console/kd.h, console/ps2_drv.h,
