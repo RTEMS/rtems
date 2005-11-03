@@ -1,3 +1,11 @@
+2005-11-02	straumanatslacdotstanford.edu
+
+	* mpc6xx/mmu/bat.c, mpc6xx/mmu/bat.h, mpc6xx/mmu/mmuAsm.S: moved
+	assembly code to C; setdbat now supports high bats on 7450 CPUs;
+	added argument checking to setdbat; added getdbat; moved early
+	initialization code (clear_bats) from BSP to libcpu
+	(CPU_clear_bats_early)
+
 2005-11-02      straumanatslacdotstanford.edu
  
     * configure.ac, mpc6xx/exceptions/raw_exception.c,

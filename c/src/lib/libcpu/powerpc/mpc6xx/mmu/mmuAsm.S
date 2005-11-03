@@ -10,7 +10,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.OARcorp.com/rtems/license.html.
  *	
  *  T. Straumann - 11/2001: added support for 7400 (no AltiVec yet)
  *  S.K. Feng    - 10/2003: added support for 7455 (no AltiVec yet)
@@ -20,6 +20,7 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/io.h>
+#include <libcpu/bat.h>
 
 /* Unfortunately, the CPU types defined in cpu.h are
  * an 'enum' type and hence not available :-(
@@ -34,6 +35,7 @@
 #define PPC_604r  0xA
 #define PPC_7400  0xC
 #define PPC_7455  0x8001
+#define PPC_7457  0x8002
 #define PPC_620   0x16
 #define PPC_860   0x50
 #define PPC_821   PPC_860
@@ -53,76 +55,8 @@
 #define DL1HWF	(1<<(31-8))
 #define L2HWF	(1<<(31-20))
 	
-/*
- * Each setdbat routine start by invalidating the DBAT as some
- * proc (604e) request the valid bit set to 0 before accepting 
- * to write in BAT
- */
+#FIXME Should really move this to C code
 
-	.globl  asm_setdbat0
-	.type	asm_setdbat0,@function
-asm_setdbat0:
-	li	r0,0
-	sync
-	isync
-	mtspr	DBAT0U,r0
-	mtspr	DBAT0L,r0
-	sync
-	isync
-	mtspr DBAT0L, r4
-	mtspr DBAT0U, r3
-	sync
-	isync
-	blr
-
-	.globl  asm_setdbat1
-	.type	asm_setdbat1,@function
-asm_setdbat1:
-	li	r0,0
-	sync
-	isync
-	mtspr	DBAT1U,r0
-	mtspr	DBAT1L,r0
-	sync
-	isync
-	mtspr DBAT1L, r4
-	mtspr DBAT1U, r3
-	sync
-	isync
-	blr
-
-	.globl  asm_setdbat2
-	.type	asm_setdbat2,@function
-asm_setdbat2:	
-	li	r0,0
-	sync
-	isync
-	mtspr	DBAT2U,r0
-	mtspr	DBAT2L,r0
-	sync
-	isync
-	mtspr DBAT2L, r4
-	mtspr DBAT2U, r3
-	sync
-	isync
-	blr
-
-	.globl  asm_setdbat3
-	.type	asm_setdbat3,@function
-asm_setdbat3:	
-	li	r0,0
-	sync
-	isync
-	mtspr	DBAT3U,r0
-	mtspr	DBAT3L,r0
-	sync
-	isync
-	mtspr DBAT3L, r4
-	mtspr DBAT3U, r3
-	sync
-	isync
-	blr
-		
 	.globl L1_caches_enables
 	.type  L1_caches_enables, @function
 	
@@ -157,7 +91,10 @@ L1_caches_enables:
 	cmpi	2,r9,PPC_7400	/* or 7400 */
 	cror	6,6,10		
 	cmpli   0,r9,PPC_7455   /* or 7455 */
-	bne     2f
+	beq     1f
+	cmpli   0,r9,PPC_7457   /* or 7457 */
+	bne		2f
+1:
 	/* 7455:link register stack,branch folding & 
 	 * TBEN : enable the time base and decrementer.
 	 * EMCP bit is defined in HID1. However, it's not used
@@ -168,7 +105,7 @@ L1_caches_enables:
 	ori     r11,r11,(HID0_LRSTK|HID0_FOLD|HID0_TBEN)@l
 2:	cror    2,2,10	
 	bne	3f
-	ori	r11,r11,HID0_BTIC	/* enable branch tgt cache on 7400 & 7455 */
+	ori	r11,r11,HID0_BTIC	/* enable branch tgt cache on 7400 , 7455 , 7457 */
 3:	cror	2,2,6
 	bne	4f
 	/* on 7400 SIED is actually SGE (store gathering enable) */
@@ -198,6 +135,8 @@ get_L2CR:
 	cmplwi  r3,PPC_7400	/* it's a 7400 */
 	beq	1f
 	cmplwi  r3,PPC_7455	/* it's a 7455 */
+	beq	1f	
+	cmplwi  r3,PPC_7457	/* it's a 7457 */
 	beq	1f	
 	li	r3,-1
 	blr
@@ -248,6 +187,8 @@ set_L2CR:
 	beq	thisIs750
 	cmplwi	r0,PPC_7455
 	beq	thisIs750	
+	cmplwi	r0,PPC_7457
+	beq	thisIs750	
 	li	r3,-1
 	blr
 	
@@ -293,9 +234,12 @@ disableCache:
 	mtmsr	r4
 	isync				/* make sure memory accesses have completed */
 	cmplwi  r0,PPC_7455             /* 7455 ? */
+	beq     1f
+	cmplwi  r0,PPC_7457             /* 7457 ? */
 	bne	not745x
-	/* 7455:L1 Load/Flush, L2, L3 :	 hardware flush */
-	/* If not using AltiVec data streaming instructions,DSSALL not necessary */
+1:
+	/* 745x:L1 Load/Flush, L2, L3 :	 hardware flush */
+	DSSALL
 	sync
 	mfspr	r4, MSSCR0	
 	rlwinm	r4,r4,0,29,0		/* Turn off the L2PFE bits */
@@ -406,6 +350,8 @@ get_L3CR:
 	rlwinm	r3,r3,16,16,31
 	cmplwi  r3,PPC_7455	/* it's a 7455 */
 	beq	1f	
+	cmplwi  r3,PPC_7457	/* it's a 7457 */
+	beq	1f	
 	li	r3,-1
 	blr
 	
@@ -433,6 +379,8 @@ set_L3CR:
 	mfspr	r0,PVR
 	rlwinm	r0,r0,16,16,31
 	cmplwi	r0,PPC_7455
+	beq	thisIs7455	
+	cmplwi	r0,PPC_7457
 	beq	thisIs7455	
 	li	r3,-1
 	blr
@@ -515,3 +463,64 @@ enableL3Cache:
 	mtspr	L3CR,r3
 	sync
 	blr
+
+/*
+ * An undocumented "feature" of 604e requires that the v bit
+ * be cleared before changing BAT values.
+ *
+ * Also, newer IBM firmware does not clear bat3 and 4 so
+ * this makes sure it's done.
+ *  -- Cort
+ */
+	.globl	CPU_clear_bats_early
+	.type	CPU_clear_bats_early,@function
+CPU_clear_bats_early:
+	li		r3,0
+	mfspr	r4,PVR
+	rlwinm	r4,r4,16,16,31		/* r4 = 1 for 601, 4 for 604 */
+	cmpwi	r4, 1
+	sync
+	isync
+	beq	1f
+	cmplwi	r4,0x8001			/* 7445, 7455 (0x8001), 7447, 7457 (0x8002)      */
+	blt 2f						/* 7447a (0x8003) and 7448 (0x8004) have 16 bats */
+	cmplwi	r4,0x8004
+	bgt 2f
+	mtspr	DBAT4U,r3
+	mtspr	DBAT4L,r3
+	mtspr	DBAT5U,r3
+	mtspr	DBAT5L,r3
+	mtspr	DBAT6U,r3
+	mtspr	DBAT6L,r3
+	mtspr	DBAT7U,r3
+	mtspr	DBAT7L,r3
+	mtspr	IBAT4U,r3
+	mtspr	IBAT4L,r3
+	mtspr	IBAT5U,r3
+	mtspr	IBAT5L,r3
+	mtspr	IBAT6U,r3
+	mtspr	IBAT6L,r3
+	mtspr	IBAT7U,r3
+	mtspr	IBAT7L,r3
+2:
+	mtspr	DBAT0U,r3
+	mtspr	DBAT0L,r3
+	mtspr	DBAT1U,r3
+	mtspr	DBAT1L,r3
+	mtspr	DBAT2U,r3
+	mtspr	DBAT2L,r3
+	mtspr	DBAT3U,r3
+	mtspr	DBAT3L,r3
+1:
+	mtspr	IBAT0U,r3
+	mtspr	IBAT0L,r3
+	mtspr	IBAT1U,r3
+	mtspr	IBAT1L,r3
+	mtspr	IBAT2U,r3
+	mtspr	IBAT2L,r3
+	mtspr	IBAT3U,r3
+	mtspr	IBAT3L,r3
+	sync
+	isync
+	blr
+
