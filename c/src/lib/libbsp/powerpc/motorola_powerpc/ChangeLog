@@ -1,5 +1,15 @@
 2005-11-03	<strauman@slac.stanford.edu>
 
+	* shared/irq/openpic_i8259_irq.c: New file.
+	* ChangeLog, Makefile.am, motorola_powerpc/ChangeLog,
+	motorola_powerpc/Makefile.am, shared/irq/irq.c, shared/irq/irq.h,
+	shared/irq/irq_asm.S, shared/irq/irq_init.c: Separated openpic/i8259
+	specifica from generic irq handling into openpic_i8259_irq.c; added
+	some compilation conditionals to help BSPs without ISA to omit ISA
+	interrupts and calling i8259 code.
+
+2005-11-03	<strauman@slac.stanford.edu>
+
 	* Makefile.am, include/bsp.h: Added new shared pretaskinghook.c and
     zerobss.c files to list to be made. Added some explanations about
     CPU <-> PCI <-> VME address mapping issues.

@@ -38,11 +38,6 @@ typedef struct {
 pci_isa_bridge_device* via_82c586 = 0;
 static pci_isa_bridge_device bridge;
 
-extern unsigned int external_exception_vector_prolog_code_size[];
-extern void external_exception_vector_prolog_code();
-extern unsigned int decrementer_exception_vector_prolog_code_size[];
-extern void decrementer_exception_vector_prolog_code();
-
 /*
  * default on/off function
  */
@@ -53,8 +48,8 @@ static void nop_func(){}
 static int not_connected() {return 0;}
 /*
  * default possible isOn function
- */
 static int connected() {return 1;}
+ */
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
@@ -265,25 +260,21 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #if !defined(mvme2100)
   int known_cpi_isa_bridge = 0;
 #endif
-  rtems_raw_except_connect_data vectorDesc;
   int i;
 
   /*
    * First initialize the Interrupt management hardware
    */
 #if defined(mvme2100)
-#ifdef TRACE_IRQ_INIT 
+#ifdef TRACE_IRQ_INIT
   printk("Going to initialize EPIC interrupt controller (openpic compliant)\n");
 #endif
   openpic_init(1, mvme2100_openpic_initpolarities, mvme2100_openpic_initsenses);
 #else
-#ifdef TRACE_IRQ_INIT 
+#ifdef TRACE_IRQ_INIT  
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
 #endif
   openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses);
-#endif       
-
-#if !defined(mvme2100)
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif
@@ -336,29 +327,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
        */
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
-
-  /*
-   * We must connect the raw irq handler for the two
-   * expected interrupt sources : decrementer and external interrupts.
-   */
-    vectorDesc.exceptIndex 	=	ASM_DEC_VECTOR;
-    vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
-    vectorDesc.hdl.raw_hdl	=	decrementer_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	(unsigned) decrementer_exception_vector_prolog_code_size;
-    vectorDesc.on		=	nop_func;
-    vectorDesc.off		=	nop_func;
-    vectorDesc.isOn		=	connected;
-    if (!mpc60x_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
-    }
-    vectorDesc.exceptIndex	=	ASM_EXT_VECTOR;
-    vectorDesc.hdl.vector	=	ASM_EXT_VECTOR;
-    vectorDesc.hdl.raw_hdl	=	external_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	(unsigned) external_exception_vector_prolog_code_size;
-    if (!mpc60x_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS external raw exception\n");
-    }
-#ifdef TRACE_IRQ_INIT
+  
+#ifdef TRACE_IRQ_INIT  
     printk("RTEMS IRQ management is now operational\n");
 #endif
 }

@@ -80,7 +80,7 @@ console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h
 
 noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = ../../powerpc/shared/irq/irq_init.c \
+irq_rel_SOURCES = ../../powerpc/shared/irq/irq_init.c ../../powerpc/shared/irq/openpic_i8259_irq.c \
     ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.c \
     ../../powerpc/shared/irq/irq_asm.S ../../powerpc/shared/irq/irq.h
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)

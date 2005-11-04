@@ -93,9 +93,6 @@ SYM (shared_raw_irq_code_entry):
 	mfmsr	r3
 	/*
 	 * Enable data and instruction address translation, exception recovery
-     *
-     * also, on CPUs with FP, enable FP so that FP context can be
-     * saved and restored (using FP instructions)
 	 */
 	ori     r3, r3, MSR_RI | MSR_IR | MSR_DR
 	mtmsr   r3
