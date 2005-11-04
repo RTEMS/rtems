@@ -110,15 +110,77 @@ static struct _int_map mtx603_intmap[] = {
 
    NULL_INTMAP };
 
+static struct _int_map mvme23xx_intmap[] = {
+/* Raven Hostbridge; has int_pin == 0
+   {0,  0, 0, {{0, {-1,-1,-1,-1}}, 
+               NULL_PINMAP}},
+*/
+
+/* Winbond PCI/ISA 83c553; has int_pin == 0
+   {0, 11, 0, {{0, {-1,-1,-1,-1}}, 
+               NULL_PINMAP}},
+*/
+
+#if 0 /* Leave as ISA interrupts for now */
+   {0, 13, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {11,21,-1,-1,-1}},  /* Universe  ISA/PCI */
+			/* strictly speaking, a non-multi function device
+			 * must only use pin A
+			 */
+			 {2, {22,-1,-1,-1,-1}},  /* Universe          */
+			 {3, {23,-1,-1,-1,-1}},  /* Universe          */
+			 {4, {24,-1,-1,-1,-1}},  /* Universe          */
+             NULL_PINMAP}},
+
+   {0, 14, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {10,18,-1,-1}},  /* DEC Tulip enet (ISA/PCI)  */
+             NULL_PINMAP}},
+#endif
+
+   {0, 16, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {25,-1,-1,-1}},  /* pci/pmc slot 1   */
+             {2, {26,-1,-1,-1}},
+             {3, {27,-1,-1,-1}},
+             {4, {28,-1,-1,-1}},
+             NULL_PINMAP}},
+
+   {0, 17, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {28,-1,-1,-1}},  /* pci/pmc slot 2   */ /* orig: 0xf */
+             {2, {25,-1,-1,-1}},
+             {3, {26,-1,-1,-1}},
+             {4, {27,-1,-1,-1}},
+             NULL_PINMAP}},
+
+   NULL_INTMAP };
+
 static struct _int_map mvme2100_intmap[] = {
-   {0, 0, 0, {{1, {16,-1,-1,-1}}, /* something shows up in slot 0 and OpenPIC */
-                                  /* 0 is unused.  This hushes the init code. */
+   {0, 0, 0, {{1, {16,-1,-1,-1}}, /* something shows up in slot 0 and OpenPIC  */
+                                  /* 0 is unused.  This hushes the init code.  */
                NULL_PINMAP}},
 
-   {0, 13, 0, {{1, {23,24,25,26}},  /* PCI INT[A-D]/Universe Lint[0-3] */
+   {0, 13, 0, {{1, {23,-1,-1,-1}},  /* Universe Lint[0-3]; not quite legal     */
+               {2, {24,-1,-1,-1}},  /* since the universe is a single-function */
+               {3, {25,-1,-1,-1}},  /* device. We leave it for info purposes   */
+               {4, {26,-1,-1,-1}},
                NULL_PINMAP}},
 
    {0, 14, 0, {{1, {17,-1,-1,-1}},  /* onboard ethernet */
+               NULL_PINMAP}},
+
+   {0, 16, PCI_FIXUP_OPT_OVERRIDE_NAME,
+              {{1, {18,-1,-1,-1}},  /* PMC slot; all pins are routed to 18     */
+               {2, {18,-1,-1,-1}},  /* I give the OVERRIDE option since I had  */
+               {3, {18,-1,-1,-1}},  /* problems with devices behind a bridge   */
+               {4, {18,-1,-1,-1}},  /* on a PMC card reading irq line 0...     */
+               NULL_PINMAP}},
+
+   /* FIXME: I don't know how MIP works or what it is; these probably won't work */
+
+   {0, -1, PCI_FIXUP_OPT_OVERRIDE_NAME,
+              {{1, {23,-1,-1,-1}},  /* PCI INT[A-D] expansion */
+               {2, {24,-1,-1,-1}},
+               {3, {25,-1,-1,-1}},
+               {4, {26,-1,-1,-1}},
                NULL_PINMAP}},
 
    NULL_INTMAP };
@@ -169,8 +231,8 @@ static const mot_info_t mot_boards[] = {
   {0x1E0, 0xF6, "MTX Plus", NULL, NULL},
   {0x1E0, 0xF7, "MTX w/o Parallel Port", mtx603_intmap, prep_pci_swizzle},
   {0x1E0, 0xF8, "MTX w/ Parallel Port", mtx603_intmap, prep_pci_swizzle},
-  {0x1E0, 0xF9, "MVME 2300", NULL, NULL},
-  {0x1E0, 0xFA, "MVME 2300SC/2600", NULL, NULL},
+  {0x1E0, 0xF9, "MVME 2300", mvme23xx_intmap, prep_pci_swizzle},
+  {0x1E0, 0xFA, "MVME 2300SC/2600", mvme23xx_intmap, prep_pci_swizzle},
   {0x1E0, 0xFB, "MVME 2600 with MVME712M", NULL, NULL},
   {0x1E0, 0xFC, "MVME 2600/2700 with MVME761", NULL, NULL},
   {0x1E0, 0xFD, "MVME 3600 with MVME712M", NULL, NULL},
@@ -188,9 +250,9 @@ prep_t checkPrepBoardType(RESIDUAL *res)
   prep_t PREP_type;
   /* figure out what kind of prep workstation we are */
   if ( res->ResidualLength != 0 ) {
-    if ( !strncmp(res->VitalProductData.PrintableModel,"IBM",3) )
+    if ( !strncmp((char*)res->VitalProductData.PrintableModel,"IBM",3) )
       PREP_type = PREP_IBM;
-    else if (!strncmp(res->VitalProductData.PrintableModel,
+    else if (!strncmp((char*)res->VitalProductData.PrintableModel,
 		      "Radstone",8)){
       PREP_type = PREP_Radstone;
     }

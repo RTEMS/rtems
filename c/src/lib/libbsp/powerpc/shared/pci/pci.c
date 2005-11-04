@@ -19,6 +19,9 @@
  *   - separated bridge detection code out of this file
  */
 
+#include <rtems.h>
+#include <bsp.h>
+
 #include <libcpu/io.h>
 #include <bsp/pci.h>
 #include <rtems/bspIo.h>
@@ -278,8 +281,8 @@ const pci_config_access_functions pci_direct_functions = {
 };
 
 #define PRINT_MSG() \
-  printk("pci : Device %d:%02x routed to interrupt_line %d\n", \
-    pbus, pslot, int_name )
+  printk("pci : Device %d:0x%02x:%d routed to interrupt_line %d\n", \
+    pbus, pslot, pfun, int_name )
 
 /*
 ** Validate a test interrupt name and print a warning if its not one of
@@ -289,6 +292,7 @@ static int test_intname(
   const struct _int_map *row,
   int pbus,
   int pslot,
+  int pfun,
   int int_pin,
   int int_name
 ) {
@@ -308,16 +312,25 @@ static int test_intname(
     }
   }
 
-  if ( _nopin  ) {
-    printk("pci : Device %d:%02x supplied a bogus interrupt_pin %d\n",
-   pbus, pslot, int_pin );
-    return -1;
-  } else {
-    if ( _noname )
-   printk("pci : Device %d:%02x supplied a suspicious interrupt_line %d,"
-          " using it anyway\n", pbus, pslot, int_name );
-  }
-  return 0;
+   if( _nopin  ) 
+   {
+      printk("pci : Device %d:0x%02x:%d supplied a bogus interrupt_pin %d\n", pbus, pslot, pfun, int_pin );
+      return -1;
+   }
+   else
+   {
+      if( _noname ) {
+		unsigned char v = row->pin_route[j].int_name[0];
+		printk("pci : Device %d:0x%02x:%d supplied a suspicious interrupt_line %d, ", pbus, pslot, pfun, int_name );
+		if ( (row->opts & PCI_FIXUP_OPT_OVERRIDE_NAME) && 255 != (v = row->pin_route[j].int_name[0]) ) {
+			printk("OVERRIDING with %d from fixup table\n", v);
+            pci_write_config_byte(pbus,pslot,pfun,PCI_INTERRUPT_LINE,v);
+		} else {
+         	printk("using it anyway\n");
+		}
+	  }
+   }
+   return 0;
 }
 
 struct pcibridge
@@ -347,7 +360,7 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
         pci_read_config_byte(pbus, pslot, 0, PCI_SECONDARY_BUS,  &bussec);
 
 #if 0
-         printk("pci : Found bridge at %d:%d, mybus %d, pribus %d, secbus %d ",
+         printk("pci : Found bridge at %d:0x%02x, mybus %d, pribus %d, secbus %d ",
                  pbus, pslot, mybus, buspri, bussec );
 #endif
          if ( bussec == mybus ) {
@@ -374,7 +387,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 {
   unsigned char        cvalue;
   uint16_t             devid;
-  int                  ismatch, i, j, pbus, pslot, int_pin, int_name;
+  int                  ismatch, i, j, pbus, pslot, pfun, int_pin, int_name, nfuns;
 
   /*
    * If the device has a non-zero INTERRUPT_PIN, assign a bsp-specific
@@ -383,173 +396,180 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
    */
 
   for (pbus=0; pbus< pci_bus_count(); pbus++) {
-    for (pslot=0; pslot< PCI_MAX_DEVICES; pslot++) {
-      pci_read_config_word(pbus, pslot, 0, PCI_DEVICE_ID, &devid);
-      if ( devid == 0xffff ) continue;
+	for (pslot=0; pslot< PCI_MAX_DEVICES; pslot++) {
+	  pci_read_config_word(pbus, pslot, 0, PCI_DEVICE_ID, &devid);
+	  if ( devid == 0xffff ) continue;
 
-      /* got a device */
+	  /* got a device */
+	  pci_read_config_byte(pbus, pslot, 0, PCI_HEADER_TYPE, &cvalue);
+	  nfuns = cvalue & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1;
 
-      pci_read_config_byte( pbus, pslot, 0, PCI_INTERRUPT_PIN, &cvalue);
-      int_pin = cvalue;
+	  for (pfun=0; pfun< nfuns; pfun++) {
+		pci_read_config_word(pbus, pslot, pfun, PCI_DEVICE_ID, &devid);
+		if( devid == 0xffff ) continue;
 
-      pci_read_config_byte( pbus, pslot, 0, PCI_INTERRUPT_LINE, &cvalue);
-      int_name = cvalue;
+		pci_read_config_byte( pbus, pslot, pfun, PCI_INTERRUPT_PIN, &cvalue);
+		int_pin = cvalue;
 
-      /* printk("pci : device %d:%02x devid %04x, intpin %d, intline  %d\n",
-         pbus, pslot, devid, int_pin, int_name ); */
+		pci_read_config_byte( pbus, pslot, pfun, PCI_INTERRUPT_LINE, &cvalue);
+		int_name = cvalue;
+
+		/* printk("pci : device %d:0x%02x:%i devid %04x, intpin %d, intline  %d\n",
+		   pbus, pslot, pfun, devid, int_pin, int_name ); */
 
 #if 0
-      {
-         unsigned short cmd,stat;
-         unsigned char  lat, seclat, csize;
+		{
+		  unsigned short cmd,stat;
+		  unsigned char  lat, seclat, csize;
 
-         pci_read_config_word(pbus,pslot,0,PCI_COMMAND, &cmd );
-         pci_read_config_word(pbus,pslot,0,PCI_STATUS, &stat );
-         pci_read_config_byte(pbus,pslot,0,PCI_LATENCY_TIMER, &lat );
-         pci_read_config_byte(pbus,pslot,0,PCI_SEC_LATENCY_TIMER, &seclat );
-         pci_read_config_byte(pbus,pslot,0,PCI_CACHE_LINE_SIZE, &csize );
-         
+		  pci_read_config_word(pbus,pslot,pfun,PCI_COMMAND, &cmd );
+		  pci_read_config_word(pbus,pslot,pfun,PCI_STATUS, &stat );
+		  pci_read_config_byte(pbus,pslot,pfun,PCI_LATENCY_TIMER, &lat );
+		  pci_read_config_byte(pbus,pslot,pfun,PCI_SEC_LATENCY_TIMER, &seclat );
+		  pci_read_config_byte(pbus,pslot,pfun,PCI_CACHE_LINE_SIZE, &csize );
 
-         printk("pci : device %d:%02x  cmd %04X, stat %04X, latency %d, "
-                " sec_latency %d, clsize %d\n", pbus, pslot, cmd, stat,
-                lat, seclat, csize);
-      }
+
+		  printk("pci : device %d:0x%02x:%d  cmd %04X, stat %04X, latency %d, "
+			  " sec_latency %d, clsize %d\n", pbus, pslot, pfun, cmd, stat,
+			  lat, seclat, csize);
+		}
 #endif
 
-      if ( int_pin > 0 ) {
-        ismatch = 0;
+		if ( int_pin > 0 ) {
+		  ismatch = 0;
 
-        /*
-         * first run thru the bspmap table and see if we have an
-         * explicit configuration
-         */
-        for (i=0; bspmap[i].bus > -1; i++) {
-          if ( bspmap[i].bus == pbus && bspmap[i].slot == pslot ) {
-            ismatch = -1;
-            /* we have a record in the table that gives specific
-             * pins and interrupts for devices in this slot */
-            if ( int_name == 255 ) {
-              /* find the vector associated with whatever pin the
-               * device gives us
-               */
-              for ( int_name=-1, j=0; bspmap[i].pin_route[j].pin > -1; j++ ) {
-                if ( bspmap[i].pin_route[j].pin == int_pin ) {
-                  int_name = bspmap[i].pin_route[j].int_name[0];
-                  break;
-                }
-              }
-              if ( int_name == -1 ) {
-                printk("pci : Unable to resolve device %d:%d w/ swizzled int "
-                       "pin %i to an interrupt_line.\n", pbus, pslot, int_pin );
-              } else {
-                PRINT_MSG();
-                pci_write_config_byte( pbus,pslot,0,
-                    PCI_INTERRUPT_LINE,(cvalue= int_name, cvalue));
-              }
-            } else {
-              test_intname( &bspmap[i],pbus,pslot,int_pin,int_name);
-            }
-            break;
-          }
-        }
+		  /*
+		   * first run thru the bspmap table and see if we have an
+		   * explicit configuration
+		   */
+		  for (i=0; bspmap[i].bus > -1; i++) {
+			if ( bspmap[i].bus == pbus && bspmap[i].slot == pslot ) {
+			  ismatch = -1;
+			  /* we have a record in the table that gives specific
+			   * pins and interrupts for devices in this slot */
+			  if ( int_name == 255 ) {
+				/* find the vector associated with whatever pin the
+				 * device gives us
+				 */
+				for ( int_name=-1, j=0; bspmap[i].pin_route[j].pin > -1; j++ ) {
+				  if ( bspmap[i].pin_route[j].pin == int_pin ) {
+					int_name = bspmap[i].pin_route[j].int_name[0];
+					break;
+				  }
+				}
+				if ( int_name == -1 ) {
+				  printk("pci : Unable to resolve device %d:0x%02x:%d w/ swizzled int "
+					  "pin %i to an interrupt_line.\n", pbus, pslot, pfun, int_pin );
+				} else {
+				  PRINT_MSG();
+				  pci_write_config_byte( pbus,pslot,pfun,
+					  PCI_INTERRUPT_LINE,(cvalue= int_name, cvalue));
+				}
+			  } else {
+				test_intname( &bspmap[i],pbus,pslot,pfun,int_pin,int_name);
+			  }
+			  break;
+			}
+		  }
 
-        if ( !ismatch ) {
-          /*
-           * no match, which means we're on a bus someplace.  Work
-           * backwards from it to one of our defined busses,
-           * swizzling thru each bridge on the way.
-           */
+		  if ( !ismatch ) {
+			/*
+			 * no match, which means we're on a bus someplace.  Work
+			 * backwards from it to one of our defined busses,
+			 * swizzling thru each bridge on the way.
+			 */
 
-          /* keep pbus, pslot pointed to the device being
-           * configured while we track down the bridges using
-           * tbus,tslot.  We keep searching the routing table because
-           * we may end up finding our bridge in it
-           */
+			/* keep pbus, pslot pointed to the device being
+			 * configured while we track down the bridges using
+			 * tbus,tslot.  We keep searching the routing table because
+			 * we may end up finding our bridge in it
+			 */
 
-          int tbus= pbus, tslot= pslot;
+			int tbus= pbus, tslot= pslot;
 
-          for (;;) {
-            for (i=0; bspmap[i].bus > -1; i++) {
-              if ( bspmap[i].bus == tbus &&
-                   (bspmap[i].slot == tslot || bspmap[i].slot == -1) ) {
-                ismatch = -1;
-                /* found a record for this bus, so swizzle the
-                 * int_pin which we then use to find the
-                 * interrupt_name.
-                 */
+			for (;;) {
+			  for (i=0; bspmap[i].bus > -1; i++) {
+				if ( bspmap[i].bus == tbus &&
+					(bspmap[i].slot == tslot || bspmap[i].slot == -1) ) {
+				  ismatch = -1;
+				  /* found a record for this bus, so swizzle the
+				   * int_pin which we then use to find the
+				   * interrupt_name.
+				   */
 
-                if ( int_name == 255 ) {
-                  /*
-                   * FIXME.  I can't believe this little hack
-                   * is right.  It does not yield an error in
-                   * convienently simple situations.
-                   */
-                  if ( tbus ) int_pin = (*swizzler)(tslot,int_pin);
+				  if ( int_name == 255 ) {
+					/*
+					 * FIXME.  I can't believe this little hack
+					 * is right.  It does not yield an error in
+					 * convienently simple situations.
+					 */
+					if ( tbus ) int_pin = (*swizzler)(tslot,int_pin);
 
-                  /*
-                   * int_pin points to the interrupt channel
-                   * this card ends up delivering interrupts
-                   * on.  Find the int_name servicing it.
-                   */
-                  for (int_name=-1, j=0; bspmap[i].pin_route[j].pin > -1; j++){
-                    if ( bspmap[i].pin_route[j].pin == int_pin ) {
-                      int_name = bspmap[i].pin_route[j].int_name[0];
-                      break;
-                    }
-                  }
+					/*
+					 * int_pin points to the interrupt channel
+					 * this card ends up delivering interrupts
+					 * on.  Find the int_name servicing it.
+					 */
+					for (int_name=-1, j=0; bspmap[i].pin_route[j].pin > -1; j++){
+					  if ( bspmap[i].pin_route[j].pin == int_pin ) {
+						int_name = bspmap[i].pin_route[j].int_name[0];
+						break;
+					  }
+					}
 
-                  if ( int_name == -1 ) {
-                    printk("pci : Unable to resolve device %d:%d w/ swizzled "
-                           "int pin %i to an interrupt_line.\n",
-                           pbus, pslot, int_pin );
-                  } else {
-                    PRINT_MSG();
-                    pci_write_config_byte(pbus,pslot,0,
-                      PCI_INTERRUPT_LINE,(cvalue=int_name, cvalue));
-                  }
-                } else {
-                  test_intname(&bspmap[i],pbus,pslot,int_pin,int_name);
-                }
-                goto donesearch;
-              }
-            }
+					if ( int_name == -1 ) {
+					  printk("pci : Unable to resolve device %d:0x%02x:%d w/ swizzled "
+						  "int pin %i to an interrupt_line.\n",
+						  pbus, pslot, pfun, int_pin );
+					} else {
+					  PRINT_MSG();
+					  pci_write_config_byte(pbus,pslot,pfun,
+						  PCI_INTERRUPT_LINE,(cvalue=int_name, cvalue));
+					}
+				  } else {
+					test_intname(&bspmap[i],pbus,pslot,pfun,int_pin,int_name);
+				  }
+				  goto donesearch;
+				}
+			  }
 
-            if ( !ismatch ) {
-              struct pcibridge   pb;
+			  if ( !ismatch ) {
+				struct pcibridge   pb;
 
-              /*
-               * Haven't found our bus in the int map, so work
-               * upwards thru the bridges till we find it.
-               */
+				/*
+				 * Haven't found our bus in the int map, so work
+				 * upwards thru the bridges till we find it.
+				 */
 
-              if ( FindPCIbridge( tbus, &pb )== 0 ) {
-                int_pin = (*swizzler)(tslot,int_pin);
+				if ( FindPCIbridge( tbus, &pb )== 0 ) {
+				  int_pin = (*swizzler)(tslot,int_pin);
 
-                /* our next bridge up is on pb.bus, pb.slot- now
-                 * instead of pointing to the device we're
-                 * trying to configure, we move from bridge to
-                 * bridge.
-                 */
+				  /* our next bridge up is on pb.bus, pb.slot- now
+				   * instead of pointing to the device we're
+				   * trying to configure, we move from bridge to
+				   * bridge.
+				   */
 
-                tbus = pb.bus;
-                tslot = pb.slot;
-              } else {
-                printk("pci : No bridge from bus %i towards root found\n",
-                       tbus );
-                goto donesearch;
-              }
-            }
-          }
-        }
-        donesearch:
+				  tbus = pb.bus;
+				  tslot = pb.slot;
+				} else {
+				  printk("pci : No bridge from bus %i towards root found\n",
+					  tbus );
+				  goto donesearch;
+				}
+			  }
+			}
+		  }
+donesearch:
 
-        if ( !ismatch && int_pin != 0 && int_name == 255 ) {
-            printk("pci : Unable to match device %d:%d with an int "
-                   "routing table entry\n", pbus, pslot  );
-        }
-      }
-     }
-   }
+		  if ( !ismatch && int_pin != 0 && int_name == 255 ) {
+			printk("pci : Unable to match device %d:0x%02x:%d with an int "
+				"routing table entry\n", pbus, pslot, pfun  );
+		  }
+		}
+	  }
+	}
+  }
 }
 
 /*

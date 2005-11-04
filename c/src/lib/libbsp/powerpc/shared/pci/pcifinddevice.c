@@ -12,6 +12,48 @@
 
 #include <bsp/pci.h>
 #include <rtems/bspIo.h>
+#include <stdio.h>
+
+/* Stolen from i386... */
+
+/*
+ * Make device signature from bus number, device number and function
+ * number
+ */
+#define PCIB_DEVSIG_MAKE(b,d,f) ((b<<8)|(d<<3)|(f))
+
+/*
+ * Extract various parts from device signature
+ */
+#define PCIB_DEVSIG_BUS(x) (((x)>>8) &0xff)
+#define PCIB_DEVSIG_DEV(x) (((x)>>3) & 0x1f)
+#define PCIB_DEVSIG_FUNC(x) ((x) & 0x7)
+
+typedef struct {
+	unsigned short	vid,did;
+	int				inst;
+} fd_arg;
+
+static int
+find_dev_cb(
+   int bus,
+   int dev,
+   int fun,
+   void *uarg
+) {
+fd_arg         *a = uarg;
+unsigned short  s;
+
+  pci_read_config_word(bus,dev,fun,PCI_VENDOR_ID,&s);
+  if (a->vid == s) {
+    pci_read_config_word(bus,dev,fun,PCI_DEVICE_ID,&s);
+	if (a->did == s && 0 == a->inst-- ) {
+	  a->inst = PCIB_DEVSIG_MAKE( bus, dev, fun );
+	  return 1;
+	}
+  }
+  return 0;
+}
 
 int
 pci_find_device(
@@ -22,39 +64,109 @@ pci_find_device(
   int *pdev,
   int *pfun
 ) {
+fd_arg a;
+void   *h;
+	a.vid  = vendorid;
+	a.did  = deviceid;
+	a.inst = instance; 
+
+	if ( (h = BSP_pciScan(0, find_dev_cb, (void*)&a)) ) {
+      *pbus = PCIB_DEVSIG_BUS(  a.inst );
+      *pdev = PCIB_DEVSIG_DEV(  a.inst );
+      *pfun = PCIB_DEVSIG_FUNC( a.inst );
+	  return 0;
+	}
+	return -1;
+}
+
+static int
+dump_dev_cb(
+   int bus,
+   int dev,
+   int fun,
+   void *uarg
+) {
+unsigned short vi,di;
+unsigned short cd,st;
+unsigned int   b1,b2;
+unsigned char  il,ip;
+FILE           *f = uarg;
+
+	pci_read_config_word (bus, dev, fun, PCI_VENDOR_ID,      &vi);
+	pci_read_config_word (bus, dev, fun, PCI_DEVICE_ID,      &di);
+	pci_read_config_word (bus, dev, fun, PCI_COMMAND,        &cd);
+	pci_read_config_word (bus, dev, fun, PCI_STATUS,         &st);
+	pci_read_config_dword(bus, dev, fun, PCI_BASE_ADDRESS_0, &b1);
+	pci_read_config_dword(bus, dev, fun, PCI_BASE_ADDRESS_1, &b2);
+	pci_read_config_byte (bus, dev, fun, PCI_INTERRUPT_LINE, &il);
+	pci_read_config_byte (bus, dev, fun, PCI_INTERRUPT_PIN,  &ip);
+
+	fprintf(f,"%3d:0x%02x:%d    0x%04x-0x%04x:  0x%04x 0x%04x 0x%08x 0x%08x       %d -> %3d (=0x%02x)\n",
+		bus, dev, fun, vi, di, cd, st, b1, b2, ip, il, il);
+	return 0;
+}
+
+void
+BSP_pciConfigDump(FILE *f)
+{
+	if ( !f )
+		f = stdout;
+	fprintf(f,"BUS:SLOT:FUN  VENDOR-DEV_ID: COMMAND STATUS BASE_ADDR0 BASE_ADDR1 IRQ_PIN -> IRQ_LINE\n");
+	BSP_pciScan(0, dump_dev_cb, f);
+}
+
+BSP_PciScanHandle
+BSP_pciScan(
+  BSP_PciScanHandle handle,
+  BSP_PciScannerCb cb,
+  void *uarg
+) {
+
    unsigned int d;
-   unsigned short s;
    unsigned char bus,dev,fun,hd;
 
-   for (bus=0; bus<pci_bus_count(); bus++) {
-     for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
+   bus = PCIB_DEVSIG_BUS(  (unsigned long)handle );
+   dev = PCIB_DEVSIG_DEV(  (unsigned long)handle );
+   fun = PCIB_DEVSIG_FUNC( (unsigned long)handle );
 
-       pci_read_config_byte(bus,dev,0, PCI_HEADER_TYPE, &hd);
-       hd = (hd & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
+   hd = fun > 0 ? PCI_MAX_FUNCTIONS : 1;
 
-       for (fun=0; fun<hd; fun++) {
+   for (; bus<pci_bus_count(); bus++, dev=0) {
+     for (; dev<PCI_MAX_DEVICES; dev++, fun=0) {
+       for (; fun<hd; fun++) {
          /*
           * The last devfn id/slot is special; must skip it
           */
-        if (PCI_MAX_DEVICES-1==dev && PCI_MAX_FUNCTIONS-1 == fun)
-          break;
+         if (PCI_MAX_DEVICES-1==dev && PCI_MAX_FUNCTIONS-1 == fun)
+           break;
+
+         (void)pci_read_config_dword(bus,dev,0,PCI_VENDOR_ID,&d);
+         if (PCI_INVALID_VENDORDEVICEID == d)
+           continue;
+
+         if ( 0 == fun ) {
+           pci_read_config_byte(bus,dev,0, PCI_HEADER_TYPE, &hd);
+           hd = (hd & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
+		 }
+
         (void)pci_read_config_dword(bus,dev,fun,PCI_VENDOR_ID,&d);
         if (PCI_INVALID_VENDORDEVICEID == d)
           continue;
 #ifdef PCI_DEBUG
-        printk("pci_find_by_devid: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
+        printk("BSP_pciScan: found 0x%08x at %d/x%02x/%d\n",d,bus,dev,fun);
 #endif
-        (void) pci_read_config_word(bus,dev,fun,PCI_VENDOR_ID,&s);
-        if (vendorid != s)
-          continue;
-        (void) pci_read_config_word(bus,dev,fun,PCI_DEVICE_ID,&s);
-        if (deviceid == s) {
-          if (instance--) continue;
-          *pbus=bus; *pdev=dev; *pfun=fun;
-          return 0;
-        }
+		if ( cb(bus,dev,fun,uarg) > 0 ) {
+			if ( ++fun >= hd ) {
+				fun = 0;
+				if ( ++dev >= PCI_MAX_DEVICES ) {
+					dev = 0;
+					bus++;
+				}
+			}
+			return (void*) PCIB_DEVSIG_MAKE(bus,dev,fun);
+		}
       }
     }
   }
-  return -1;
+  return 0;
 }

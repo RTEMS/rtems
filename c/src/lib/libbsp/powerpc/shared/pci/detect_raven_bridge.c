@@ -23,14 +23,13 @@
 
 #define RAVEN_MPIC_MEREN    ((volatile unsigned *)0xfeff0020)
 #define RAVEN_MPIC_MERST    ((volatile unsigned *)0xfeff0024)
-/* enable machine check on all conditions */
 #define MEREN_VAL           0x2f00
 
 #define pci BSP_pci_configuration
-extern unsigned int EUMBBAR;
 
 extern const pci_config_access_functions pci_direct_functions;
 extern const pci_config_access_functions pci_indirect_functions;
+
 
 #define PCI_ERR_BITS        0xf900
 #define PCI_STATUS_OK(x)    (!((x)&PCI_ERR_BITS))
@@ -78,9 +77,15 @@ int             count;
     return rval & PCI_ERR_BITS;
 }
 
+#if (defined(mpc8240) || defined(mpc8245))
+/* FIXME - this should really be in a separate file - the 2100 doesn't
+ *         have a raven chip so there is no point having 2100 code here
+ */
+
+extern unsigned int EUMBBAR;
+
 void detect_host_bridge()
 {
-#if (defined(mpc8240) || defined(mpc8245))
   /*
    * If the processor is an 8240 or an 8245 then the PIC is built
    * in instead of being on the PCI bus. The MVME2100 is using Processor
@@ -92,8 +97,57 @@ void detect_host_bridge()
   pci.pci_functions = &pci_indirect_functions;
   pci.pci_config_addr = (volatile unsigned char *) 0xfec00000;
   pci.pci_config_data = (volatile unsigned char *) 0xfee00000;
+}
 
 #else
+
+#if 0
+/* Unfortunately, PCI config space access to empty slots generates
+ * a 'signalled master abort' condition --> we can't really use
+ * the machine check interrupt for memory probing unless
+ * we use probing for PCI scanning also (which would make
+ * all that code either BSP dependent or requiring yet another
+ * API, sigh...).
+ * So for the moment, we just don't use MCP on all mvme2xxx
+ * boards (using the generic, hostbridge-independent 'clear'
+ * implementation above).
+ */
+/*
+ * enableMCP: whether to enable MCP checkstop / machine check interrupts
+ *            on the hostbridge and in HID0.
+ *
+ *            NOTE: HID0 and MEREN are left alone if this flag is 0
+ *
+ * quiet    : be silent
+ *
+ * RETURNS  : raven MERST register contents (lowermost 16 bits), 0 if
+ *            there were no errors
+ */
+unsigned long
+_BSP_clear_hostbridge_errors(int enableMCP, int quiet)
+{
+unsigned merst;
+
+    merst = in_be32(RAVEN_MPIC_MERST);
+    /* write back value to clear status */
+    out_be32(RAVEN_MPIC_MERST, merst);
+
+    if (enableMCP) {
+      if (!quiet)
+        printk("Enabling MCP generation on hostbridge errors\n");
+      out_be32(RAVEN_MPIC_MEREN, MEREN_VAL);
+    } else {
+      out_be32(RAVEN_MPIC_MEREN, 0);
+      if ( !quiet && enableMCP ) {
+        printk("leaving MCP interrupt disabled\n");
+      }
+    }
+    return (merst & 0xffff);
+}
+#endif
+
+void detect_host_bridge()
+{
   PPC_DEVICE *hostbridge;
   unsigned int id0;
   unsigned int tmp;
@@ -173,9 +227,10 @@ void detect_host_bridge()
       printk("OpenPIC found at %x.\n", OpenPIC);
     }
   }
-#endif
   if (OpenPIC == (volatile struct OpenPIC *)0) {
     BSP_panic("OpenPic Not found\n");
   }
 
 }
+
+#endif
