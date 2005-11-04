@@ -63,6 +63,7 @@ EXTRA_DIST += shared/vectors/vectors_init.c shared/vectors/vectors.S
 
 ## shared/vme
 EXTRA_DIST += shared/vme/vmeconfig.c shared/vme/VMEConfig.h shared/vme/VME.h
+	shared/vme/README shared/vme/vme_universe.c
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

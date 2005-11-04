@@ -76,7 +76,7 @@ __BSP_default_vme_config(void)
   vmeUniverseSlavePortsShow(0);
 
   /* install the VME insterrupt manager */
-  vmeUniverseInstallIrqMgr(0,12,1,13);    
+  vmeUniverseInstallIrqMgr(0,64+12,1,64+13);    
   if (vmeUniverse0PciIrqLine<0)
 	BSP_panic("Unable to get interrupt line info from PCI config");
   _BSP_vme_bridge_irq= BSP_GPP_IRQ_LOWEST_OFFSET+vmeUniverse0PciIrqLine;
