@@ -68,7 +68,8 @@ include_libchip_HEADERS += i2c/i2c-ds1621.h i2c/i2c-2b-eeprom.h
 
 noinst_LIBRARIES += libi2cio.a
 libi2cio_a_CPPFLAGS = $(AM_CPPFLAGS)
-libi2cio_a_SOURCES  = i2c/i2c-ds1621.c i2c/i2c-2b-eeprom.c
+libi2cio_a_SOURCES  = i2c/i2c-ds1621.c i2c/i2c-2b-eeprom.c \
+    i2c/i2c-ds1621.h i2c/i2c-2b-eeprom.h
 endif
 
 # serial
