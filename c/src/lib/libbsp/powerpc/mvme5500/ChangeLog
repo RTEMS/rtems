@@ -1,5 +1,11 @@
 2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
+	* include/bsp.h, vme/vmeconfig.c: Reverted redefinition of _IO_BASE;
+	this normally points to ISA space but is misused by this BSP
+	(inb/outb & friends are all over the place).
+
+2005-11-03	Till Straumann <strauman@slac.stanford.edu>
+
 	* irq/irq.c, irq/irq.h: removed BSP_SHARED_HANDLER_SUPPORT definition;
 	this BSP does not implement sharing interrupts.
 

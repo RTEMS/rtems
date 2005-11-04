@@ -25,11 +25,11 @@
 #include <bsp/bspMvme5500.h>
 
 /* fundamental addresses for this BSP (PREPxxx are from libcpu/io.h) */
+#define _IO_BASE GT64260_REG_BASE
 
 /* PCI0 Domain I/O space */
 #define PCI0_IO_BASE            0xf0000000
 #define PCI1_IO_BASE            0xf0800000
-#define _IO_BASE				PCI0_IO_BASE
 
 /* PCI 0 memory space as seen from the CPU */
 #define PCI0_MEM_BASE		0x80000000
