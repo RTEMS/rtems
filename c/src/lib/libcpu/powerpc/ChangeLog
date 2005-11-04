@@ -1,3 +1,7 @@
+2005-11-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Partially cleanup EXTRA_DIST.
+
 2005-11-03	straumanatslacdotstanford.edu
 
 	* mpc6xx/clock/c_clock.c: disable interrupts around decrementer update
@@ -20,9 +24,9 @@
 
 2005-11-02      straumanatslacdotstanford.edu
  
-    * configure.ac, mpc6xx/exceptions/raw_exception.c,
-    shared/include/cpuIdent.c, shared/include/cpuIdent.h: recognize
-    mpc7457 CPU; added definitions for high bats (#4..7) on 7450 CPUs
+	* configure.ac, mpc6xx/exceptions/raw_exception.c,
+    	shared/include/cpuIdent.c, shared/include/cpuIdent.h: recognize
+    	mpc7457 CPU; added definitions for high bats (#4..7) on 7450 CPUs
  
 2005-09-12	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 

@@ -18,11 +18,10 @@ include_libcpudir = $(includedir)/libcpu
 
 include_libcpu_HEADERS =
 
+EXTRA_DIST = old-exceptions/TODO old-exceptions/README
+EXTRA_DIST += old-exceptions/irq_stub.S old-exceptions/ppccache.c
 if OLD_EXCEPTIONS
 include_rtems_score_HEADERS = old-exceptions/rtems/score/ppc_offs.h
-
-EXTRA_DIST = old-exceptions/TODO old-exceptions/irq_stub.S \
-    old-exceptions/ppccache.c
 
 noinst_PROGRAMS = old-exceptions/rtems-cpu.rel
 old_exceptions_rtems_cpu_rel_SOURCES = old-exceptions/cpu.c \
@@ -70,6 +69,7 @@ include_libcpu_HEADERS += shared/include/spr.h
 include_libcpu_HEADERS += shared/src/stackTrace.h
 endif
 
+EXTRA_DIST += ppc403/README ppc403/vectors/README
 if ppc403
 ## ppc403/clock
 noinst_PROGRAMS += ppc403/clock.rel
@@ -118,6 +118,7 @@ ppc403_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+EXTRA_DIST += mpc5xx/README
 if mpc5xx
 include_mpc5xxdir = $(includedir)/mpc5xx
 
@@ -225,6 +226,7 @@ mpc6xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc6xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+EXTRA_DIST += mpc8xx/README
 if mpc8xx
 include_mpc8xxdir = $(includedir)/mpc8xx
 
@@ -276,6 +278,7 @@ mpc8xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+EXTRA_DIST += mpc8260/README
 if mpc8260
 include_mpc8260dir = $(includedir)/mpc8260
 
