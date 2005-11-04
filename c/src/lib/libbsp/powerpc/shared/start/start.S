@@ -74,20 +74,10 @@ __rtems_entry_point:
 	ori	r11,r11,0x1ffe		
 	li	r8,2			/* R/W access */
 	isync
-#if defined(mvme2100)
-        /* BSP_vme_config() wants to use BAT0, this board will use the
-         * available BAT1 to map RAM.
-         */
-	mtspr	DBAT1L,r8		/* N.B. 6xx (not 601) have valid */
-	mtspr	DBAT1U,r11		/* bit in upper BAT register */
-	mtspr	IBAT1L,r8
-	mtspr	IBAT1U,r11
-#else
 	mtspr	DBAT0L,r8		/* N.B. 6xx (not 601) have valid */
 	mtspr	DBAT0U,r11		/* bit in upper BAT register */
 	mtspr	IBAT0L,r8
 	mtspr	IBAT0U,r11
-#endif
 	isync
 
 /*
@@ -134,10 +124,6 @@ enter_C_code:
 MMUon:
 	mfmsr	r0
 	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
-#if defined(mvme2100)
-        /* Data addr translation is broken for the mvme2100, disable it here */
-	xori	r0,r0, MSR_DR
-#endif
 #if (PPC_HAS_FPU == 0)
 	xori	r0, r0, MSR_EE | MSR_IP | MSR_FP
 #else

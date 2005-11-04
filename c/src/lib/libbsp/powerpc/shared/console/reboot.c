@@ -19,4 +19,7 @@ void rtemsReboot(void)
 #if defined(BSP_KBD_IOBASE)
   kbd_outb(0x4, 0xFE);      /* use keyboard controler to do the job... */
 #endif
+#if defined(mvme2100)
+  *(unsigned char*)0xffe00000 |= 0x80;
+#endif
 } /* rtemsReboot */
