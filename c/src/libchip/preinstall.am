@@ -77,14 +77,6 @@ $(PROJECT_INCLUDE)/libchip/rtc.h: rtc/rtc.h $(PROJECT_INCLUDE)/libchip/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/rtc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/rtc.h
 
-$(PROJECT_INCLUDE)/libchip/i2c-ds1621.h: i2c/i2c-ds1621.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/i2c-ds1621.h
-
-$(PROJECT_INCLUDE)/libchip/i2c-2b-eeprom.h: i2c/i2c-2b-eeprom.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/i2c-2b-eeprom.h
-
 $(PROJECT_INCLUDE)/libchip/icm7170.h: rtc/icm7170.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/icm7170.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/icm7170.h
@@ -96,6 +88,15 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/m48t08.h
 $(PROJECT_INCLUDE)/libchip/mc146818a.h: rtc/mc146818a.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mc146818a.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mc146818a.h
+endif
+if LIBCHIP
+$(PROJECT_INCLUDE)/libchip/i2c-ds1621.h: i2c/i2c-ds1621.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/i2c-ds1621.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/i2c-ds1621.h
+
+$(PROJECT_INCLUDE)/libchip/i2c-2b-eeprom.h: i2c/i2c-2b-eeprom.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/i2c-2b-eeprom.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/i2c-2b-eeprom.h
 endif
 if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/mc68681.h: serial/mc68681.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
