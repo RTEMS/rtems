@@ -1,5 +1,10 @@
 2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
+	* irq/irq.c, irq/irq.h: removed BSP_SHARED_HANDLER_SUPPORT definition;
+	this BSP does not implement sharing interrupts.
+
+2005-11-03	Till Straumann <strauman@slac.stanford.edu>
+
 	* include/bsp.h: fixed misuse of _IO_BASE
 
 2005-11-03	straumanatslacdotstanforddotedu

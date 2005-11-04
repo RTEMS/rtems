@@ -271,7 +271,6 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * store the data provided by user
      */
     rtems_hdl_tbl[irq->name] = *irq;
-    rtems_hdl_tbl[irq->name].next_handler = (void *)-1;
 
     if (is_main_irq(irq->name)) {
       /*
