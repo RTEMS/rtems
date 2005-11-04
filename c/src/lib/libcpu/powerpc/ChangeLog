@@ -2,12 +2,12 @@
 
 	* Makefile.am: Partially cleanup EXTRA_DIST.
 
-2005-11-03	straumanatslacdotstanford.edu
+2005-11-03	Till Strauman <strauman@slac.stanford.edu>
 
 	* mpc6xx/clock/c_clock.c: disable interrupts around decrementer
 	update to eliminate a race condition
 
-2005-11-02	straumanatslacdotstanford.edu
+2005-11-02	Till Strauman <strauman@slac.stanford.edu>
 
 	* mpc6xx/mmu/pte121.c, mpc6xx/mmu/pte121.h: enhancements to mpc6xx
 	page table support - PTEs can now be modified even if the page table
@@ -126,7 +126,7 @@
 	(Conflict with C99). Make spiBaudRound static.
 	* mpc8260/mmu/mmu.c: Use _CPU_MSR_GET instead of _CPU_MSR_Value.
 	(Unify old/new-exception processing API).
-	* old-exceptions/rtems/score/ppc_offs.h,  old-exceptions/ChangeLog,
+	* old-exceptions/rtems/score/ppc_offs.h,
 	old-exceptions/README, old-exceptions/TODO, old-exceptions/cpu.c,
 	old-exceptions/cpu_asm.S, old-exceptions/irq_stub.S,
 	old-exceptions/ppccache.c: New (Copied from
@@ -136,8 +136,7 @@
 	* new-exceptions/cpu.c (_CPU_ISR_install_vector): New.
 	* new-exceptions/cpu.c: Add CPU_MINIMUM_STACK_FRAME_SIZE.
 	* Makefile.am: Reflect changes above.
-	* new-exceptions/ChangeLog, new-exceptions/cpu.c,
-	new-exceptions/cpu_asm.S: New (Copied from 
+	* new-exceptions/cpu.c, new-exceptions/cpu_asm.S: New (Copied from 
 	../../libbsp/powerpc/support/new_exception_processing).
 
 2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
@@ -872,12 +871,7 @@
 	* configure.ac: Remove ppc603e from old_exception_processing.
 	* configure.ac: Remove mpc750 from new_exception_processing, Remove
 	mpc604 from new_exception_processing.
-	* old-exceptions/ChangeLog: New file.
 	* old-exceptions/Makefile.am: Preinstall c_isr.inl (HACK).
-
-2001-11-20	Joel Sherrill <joel@OARcorp.com>
-
-	* ChangeLog: Corrected spacing.
 
 2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1050,7 +1044,6 @@
 
 2001-04-17	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: Corrected paths on past few commits.
 	* shared/include/cpu.h: Added ifndef ASM.
 
 2001-04-03	Joel Sherrill <joel@OARcorp.com>
@@ -1175,18 +1168,10 @@
 	mpc8xx/vectors/Makefile.am, new_exception_processing/Makefile.am,
 	old_exception_processing/Makefile.am: Include compile.am
 
-2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
-
-	* ChangeLog: File paths corrected.
-
 2000-08-11	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
 	* mpc8xx/console-generic/console-generic.c: Add support for
 	configuration parameters in NVRAM
-
-2000-08-10	Joel Sherrill <joel@OARcorp.com>
-
-	* ChangeLog: New file.
 
 2000-08-10	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
