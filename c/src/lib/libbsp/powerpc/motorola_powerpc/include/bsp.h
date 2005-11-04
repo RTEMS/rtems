@@ -32,13 +32,63 @@
 
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
+/*
+ * diagram illustrating the role of the configuration
+ * constants
+ *  PCI_MEM_WIN0:        CPU starting addr where PCI memory space is visible
+ *  PCI_MEM_BASE:        CPU address of PCI mem addr. zero. (regardless of this
+ *                       address being 'visible' or not!).
+ * _VME_A32_WIN0_ON_PCI: PCI starting addr of the 1st window to VME
+ * _VME_A32_WIN0_ON_VME: VME address of that same window
+ *
+ * AFAIK, only PreP boards have a non-zero PCI_MEM_BASE (i.e., an offset between
+ * CPU and PCI addresses). The mvme2300 'ppcbug' firmware configures the PCI
+ * bus using PCI base addresses! I.e., drivers need to add PCI_MEM_BASE to
+ * the base address read from PCI config.space in order to translate that
+ * into a CPU address.
+ *
+ * NOTE: VME addresses should NEVER be translated using these constants!
+ *       they are strictly for BSP internal use. Drivers etc. should use
+ *       the translation routines int VME.h (BSP_vme2local_adrs/BSP_local2vme_adrs).
+ * 
+ *           CPU ADDR                  PCI_ADDR                                VME ADDR
+ * 
+ *           00000000                  XXXXXXXX                                XXXXXXXX
+ *    ^  ^   ........         
+ *    |  |
+ *    |  |  e.g., RAM                  XXXXXXXX
+ *    |  |                                                                     00000000
+ *    |  |  .........                                                          ^
+ *    |  |            (possible offset                                         |
+ *    |  |             between pci and XXXXXXXX                                | ......
+ *    |  |             cpu addresses)                                          |
+ *    |  v                                                                     |
+ *    |  PCI_MEM_BASE  ------------->  00000000 ---------------                |
+ *    |     ........                   ........               ^                |
+ *    |                                invisible              |                |
+ *    |     ........                   from CPU               |                |
+ *    v                                                       |                |
+ *       PCI_MEM_WIN0 =============  first visible PCI addr   |                |
+ *                                                            |                |
+ *        pci devices   pci window                            |                |
+ *       visible here                                         v                v
+ *                      mapped by   ========== _VME_A32_WIN0_ON_PCI =======  _VME_A32_WIN0_ON_VME
+ *                                                 vme window
+ *        VME devices   hostbridge                 mapped by
+ *       visible here                              universe
+ *                    =====================================================
+ * 
+ */
+
 /* fundamental addresses for BSP (CHRPxxx and PREPxxx are from libcpu/io.h) */
 #if defined(mvme2100)
 #define	_IO_BASE		CHRP_ISA_IO_BASE
 #define	_ISA_MEM_BASE		CHRP_ISA_MEM_BASE
 /* address of our ram on the PCI bus   */
 #define	PCI_DRAM_OFFSET		CHRP_PCI_DRAM_OFFSET
+/* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE		0
+/* where (in CPU addr. space) does the PCI window start */
 #define PCI_MEM_WIN0		0x80000000 
 
 #else
@@ -102,6 +152,10 @@
  */
 extern unsigned int BSP_mem_size;
 /*
+ * Start of the heap
+ */
+extern unsigned int BSP_heap_start;
+/*
  * PCI Bus Frequency
  */
 extern unsigned int BSP_bus_frequency;
@@ -126,15 +180,13 @@ extern int BSP_connect_clock_handler (void);
 
 /* clear hostbridge errors
  *
- * enableMCP: whether to enable MCP checkstop / machine check interrupts
- *            on the hostbridge and in HID0.
- *
- *            NOTE: HID0 and MEREN are left alone if this flag is 0
- *
- * quiet    : be silent
- *
- * RETURNS  : raven MERST register contents (lowermost 16 bits), 0 if
- *            there were no errors
+ * NOTE: The routine returns always (-1) if 'enableMCP==1'
+ *       [semantics needed by libbspExt] if the MCP input is not wired.
+ *       It returns and clears the error bits of the PCI status register.
+ *       MCP support is disabled because:
+ *         a) the 2100 has no raven chip
+ *         b) the raven (2300) would raise machine check interrupts
+ *            on PCI config space access to empty slots.
  */
 extern unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet);
 
