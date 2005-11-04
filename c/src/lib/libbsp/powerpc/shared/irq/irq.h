@@ -130,6 +130,9 @@ extern "C" {
 #define BSP_UART_COM1_IRQ               (BSP_PCI_IRQ_LOWEST_OFFSET + 13)
 #define BSP_FRONT_PANEL_ABORT_IRQ       (BSP_PCI_IRQ_LOWEST_OFFSET + 14)
 #define BSP_RTC_IRQ                     (BSP_PCI_IRQ_LOWEST_OFFSET + 15)
+#else
+#define BSP_UART_COM1_IRQ		BSP_ISA_UART_COM1_IRQ
+#define BSP_UART_COM2_IRQ		BSP_ISA_UART_COM2_IRQ
 #endif
 
 /*

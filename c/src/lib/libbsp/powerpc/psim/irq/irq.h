@@ -105,9 +105,9 @@
 
 #define BSP_ISA_KEYBOARD          	(1)
 
-#define BSP_ISA_UART_COM2_IRQ		(3)
+#define BSP_UART_COM2_IRQ		(3)
 
-#define BSP_ISA_UART_COM1_IRQ		(4)
+#define BSP_UART_COM1_IRQ		(4)
 
 #define BSP_ISA_RT_TIMER1	      	(8)
   

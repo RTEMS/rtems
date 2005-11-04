@@ -21,6 +21,7 @@
 struct uart_data
 {
   unsigned long			ioBase;
+  int					irq;
   int					hwFlow;
   int					baud;
   BSP_UartBreakCbRec	breakCallback;
@@ -41,15 +42,19 @@ static struct uart_data uart_data[2] = {
 	{
 #ifdef	BSP_UART_IOBASE_COM1
 		BSP_UART_IOBASE_COM1,
+		BSP_UART_COM1_IRQ,
 #else
 		UART_UNSUPP,
+		-1,
 #endif
 	},
 	{
 #ifdef	BSP_UART_IOBASE_COM2
 		BSP_UART_IOBASE_COM2,
+		BSP_UART_COM2_IRQ,
 #else
 		UART_UNSUPP,
+		-1,
 #endif
 	},
 };
@@ -135,6 +140,12 @@ BSP_uart_init(int uart, int baud, int hwFlow)
 
   /* Sanity check */
   SANITY_CHECK(uart);
+  
+  /* Make sure any printk activity drains before
+   * re-initializing.
+   */
+  while ( ! (uread(uart, LSR) & THRE) )
+	;
 
   switch(baud)
     {
@@ -460,12 +471,9 @@ uart_isr_is_on(const rtems_irq_connect_data *irq)
 {
   int uart;
 
-#if defined(mvme2100)
-  uart = BSP_UART_COM1;
-#else
-  uart = (irq->name == BSP_ISA_UART_COM1_IRQ) ?
+  uart = (irq->name == BSP_UART_COM1_IRQ) ?
 			BSP_UART_COM1 : BSP_UART_COM2;
-#endif
+
   return uread(uart,IER);
 }
 
@@ -473,12 +481,7 @@ static int
 doit(int uart, rtems_irq_hdl handler, int (*p)(const rtems_irq_connect_data*))
 {
 	rtems_irq_connect_data d={0};
-#if defined(mvme2100)
-	d.name = BSP_UART_COM1_IRQ;
-#else
-	d.name = (uart == BSP_UART_COM1) ?
-			BSP_ISA_UART_COM1_IRQ : BSP_ISA_UART_COM2_IRQ;
-#endif
+	d.name = uart_data[uart].irq;
 	d.off  = d.on = uart_noop;
 	d.isOn = uart_isr_is_on;
 	d.hdl  = handler;
@@ -488,7 +491,15 @@ doit(int uart, rtems_irq_hdl handler, int (*p)(const rtems_irq_connect_data*))
 int
 BSP_uart_install_isr(int uart, rtems_irq_hdl handler)
 {
+/* Using shared interrupts by default might break things.. the
+ * shared IRQ installer uses malloc() and if a BSP had called this
+ * during early init it might not work...
+ */
+#ifdef BSP_UART_USE_SHARED_IRQS
+	return doit(uart, handler, BSP_install_rtems_shared_irq_handler);
+#else
 	return doit(uart, handler, BSP_install_rtems_irq_handler);
+#endif
 }
 
 int
