@@ -15,7 +15,13 @@ EXTRA_DIST += shared/bootcard.c shared/bspclean.c shared/bsplibc.c \
     shared/gnatinstallhandler.c shared/main.c shared/sbrk.c shared/tod.c \
     shared/tod.h
 EXTRA_DIST += shared/vmeUniverse/vmeUniverse.c \
-    shared/vmeUniverse/vmeUniverse.h
+    shared/vmeUniverse/vmeUniverse.h \
+    shared/vmeUniverse/vmeTsi148.c	\
+    shared/vmeUniverse/vmeTsi148.h	\
+    shared/vmeUniverse/vme_am_defs.h \
+    shared/vmeUniverse/README.porting \
+    shared/vmeUniverse/README.universe
+
 EXTRA_DIST += shared/include/coverhd.h
 EXTRA_DIST += shared/gdbstub/rtems-stub-glue.c
 

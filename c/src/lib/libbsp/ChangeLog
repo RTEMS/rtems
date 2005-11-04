@@ -1,3 +1,26 @@
+2005-11-04	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/vmeUniverse/vmeTsi148.c, shared/vmeUniverse/vmeTsi148.h,
+	shared/vmeUniverse/vme_am_defs.h: New files.
+	* Makefile.am, shared/vmeUniverse/README.universe,
+	shared/vmeUniverse/vmeUniverse.c, shared/vmeUniverse/vmeUniverse.h:
+	Several VME related upgrades and fixes, hopefully addressing PR#835:
+	vmeUniverse driver now supports shared interrupts. vmeUniverse now
+	supports up to four wires between universe and PIC. A new irq mgr
+	installation routine has been added allowing to use the new features.
+	(old version is still present for bwd compatibility). Calls have been
+	added to change interrupt routing (e.g., if wires have different
+	priorities at the PIC this feature can be used to configure
+	priorites). Routine for testing VME interrupts has been added (useful
+	during BSP development). A new header defining standard VME address
+	modes has been added so that the VME API doesn't have to #include a
+	particular bridge driver header. For all driver entry points, a 'XX'
+	variant has been added which allows to pass the chip's base address
+	[in case a second universe is sitting on a VME card :-)]. Driver now
+	uses interrupt line as read from PCI config. space (without offset)
+	BSP needs to use PCI fixup if necessary. Added a driver for the
+	tundra tsi148 VME bridge.
+
 2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp.am: Remove everything but CPPASCOMPILE.

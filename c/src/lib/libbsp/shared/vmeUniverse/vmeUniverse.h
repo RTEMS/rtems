@@ -13,27 +13,70 @@
 #ifdef __vxworks
 #include <vme.h>
 #else
-/* vxworks compatible addressing modes */
-#define	VME_AM_STD_SUP_ASCENDING	0x3f
-#define	VME_AM_STD_SUP_PGM	0x3e
-#define	VME_AM_STD_USR_ASCENDING	0x3b
-#define	VME_AM_STD_USR_PGM	0x3a
-#define	VME_AM_STD_SUP_DATA	0x3d
-#define	VME_AM_STD_USR_DATA	0x39
-#define	VME_AM_EXT_SUP_ASCENDING	0x0f
-#define	VME_AM_EXT_SUP_PGM	0x0e
-#define	VME_AM_EXT_USR_ASCENDING	0x0b
-#define	VME_AM_EXT_USR_PGM	0x0a
-#define	VME_AM_EXT_SUP_DATA	0x0d
-#define	VME_AM_EXT_USR_DATA	0x09
-#define	VME_AM_SUP_SHORT_IO	0x2d
-#define	VME_AM_USR_SHORT_IO	0x29
 
-#define VME_AM_IS_SHORT(a)	(((a) & 0xf0) == 0x20)
-#define VME_AM_IS_STD(a)	(((a) & 0xf0) == 0x30)
-#define VME_AM_IS_EXT(a)	(((a) & 0xf0) == 0x00)
+/* vxworks compatible addressing modes */
+
+#ifndef VME_AM_STD_SUP_ASCENDING
+#define	VME_AM_STD_SUP_ASCENDING	0x3f
+#endif
+#ifndef VME_AM_STD_SUP_PGM
+#define	VME_AM_STD_SUP_PGM			0x3e
+#endif
+#ifndef VME_AM_STD_USR_ASCENDING
+#define	VME_AM_STD_USR_ASCENDING	0x3b
+#endif
+#ifndef VME_AM_STD_USR_PGM
+#define	VME_AM_STD_USR_PGM			0x3a
+#endif
+#ifndef VME_AM_STD_SUP_DATA
+#define	VME_AM_STD_SUP_DATA			0x3d
+#endif
+#ifndef VME_AM_STD_USR_DATA
+#define	VME_AM_STD_USR_DATA			0x39
+#endif
+#ifndef VME_AM_EXT_SUP_ASCENDING
+#define	VME_AM_EXT_SUP_ASCENDING	0x0f
+#endif
+#ifndef VME_AM_EXT_SUP_PGM
+#define	VME_AM_EXT_SUP_PGM			0x0e
+#endif
+#ifndef VME_AM_EXT_USR_ASCENDING
+#define	VME_AM_EXT_USR_ASCENDING	0x0b
+#endif
+#ifndef VME_AM_EXT_USR_PGM
+#define	VME_AM_EXT_USR_PGM			0x0a
+#endif
+#ifndef VME_AM_EXT_SUP_DATA
+#define	VME_AM_EXT_SUP_DATA			0x0d
+#endif
+#ifndef VME_AM_EXT_USR_DATA
+#define	VME_AM_EXT_USR_DATA			0x09
+#endif
+#ifndef VME_AM_SUP_SHORT_IO
+#define	VME_AM_SUP_SHORT_IO			0x2d
+#endif
+#ifndef VME_AM_USR_SHORT_IO
+#define	VME_AM_USR_SHORT_IO			0x29
+#endif
+#ifndef VME_AM_IS_SHORT
+#define VME_AM_IS_SHORT(a)			(((a) & 0xf0) == 0x20)
+#endif
+#ifndef VME_AM_IS_STD
+#define VME_AM_IS_STD(a)			(((a) & 0xf0) == 0x30)
+#endif
+#ifndef VME_AM_IS_EXT
+#define VME_AM_IS_EXT(a)			(((a) & 0xf0) == 0x00)
+#endif
+#ifndef VME_AM_IS_SUP
+#define VME_AM_IS_SUP(a)			((a)  & 4)
+#endif
+#ifndef VME_AM_MASK
+#define VME_AM_MASK					0xff
+#endif
 
 #endif
+
+#include <stdarg.h>
 
 typedef unsigned long LERegister; /* emphasize contents are little endian */
 
@@ -203,6 +246,7 @@ typedef struct VmeUniverseDMAPacketRec_ {
 #define		UNIV_REGOFF_D_LLUE	0x224
 # define	UNIV_D_LLUE_UPDATE	(1<<31)
 
+
 /* PCI (local) interrupt enable register */
 #define		UNIV_REGOFF_LINT_EN	0x300
 # define	UNIV_LINT_EN_LM3	(1<<23)	/* location monitor 3 mask */
@@ -279,15 +323,28 @@ typedef struct VmeUniverseDMAPacketRec_ {
 /* enabling of generation of VME bus IRQs, TODO */
 #define		UNIV_REGOFF_VINT_EN		0x310
 # define	UNIV_VINT_EN_DISABLE_ALL    0
+# define	UNIV_VINT_EN_SWINT			(1<<12)
+# define	UNIV_VINT_EN_SWINT_LVL(l)	(1<<(((l)&7)+24))	/* universe II only */
 
-/* status of generation of VME bus IRQs, TODO */
+
+/* status of generation of VME bus IRQs */
 #define		UNIV_REGOFF_VINT_STAT	0x314
 # define	UNIV_VINT_STAT_LINT(lint)	(1<<((lint)&7))
 # define	UNIV_VINT_STAT_LINT_MASK	(0xff)
 # define	UNIV_VINT_STAT_CLR			(0xfe0f17ff)
+# define	UNIV_VINT_STAT_SWINT(l)	    (1<<(((l)&7)+24))
+
 #define		UNIV_REGOFF_VINT_MAP0	0x318	/* VME destination of PCI IRQ source, TODO */
+
 #define		UNIV_REGOFF_VINT_MAP1	0x31c	/* VME destination of PCI IRQ source, TODO */
+# define	UNIV_VINT_MAP1_SWINT(level)	(((level)&0x7)<<16)
+
+/* NOTE: The universe seems to always set LSB (which has a special purpose in
+ *       the STATID register: enable raising a SW_INT on IACK) on the
+ *		 vector it puts out on the bus...
+ */
 #define		UNIV_REGOFF_VINT_STATID	0x320	/* our status/id response to IACK, TODO */
+# define	UNIV_VINT_STATID(id)	    ((id)<<24)
 
 #define		UNIV_REGOFF_VIRQ1_STATID 0x324	/* status/id of VME IRQ level 1 */
 #define		UNIV_REGOFF_VIRQ2_STATID 0x328	/* status/id of VME IRQ level 2 */
@@ -360,7 +417,7 @@ typedef struct VmeUniverseDMAPacketRec_ {
 
 /* Location Monitor control register */
 #define		UNIV_REGOFF_LM_CTL		0xf64
-# define	UNIV_LM_CTL_EN				(1<<31)	/* image enable */
+# define	UNIV_LM_CTL_EN				(1<<31)	/* image enable */ 
 # define	UNIV_LM_CTL_PGM				(1<<23)	/* program AM */
 # define	UNIV_LM_CTL_DATA			(1<<22)	/* data AM */
 # define	UNIV_LM_CTL_SUPER			(1<<21)	/* supervisor AM */
@@ -374,7 +431,7 @@ typedef struct VmeUniverseDMAPacketRec_ {
 
 /* VMEbus register access image control register */
 #define		UNIV_REGOFF_VRAI_CTL	0xf70
-# define	UNIV_VRAI_CTL_EN			(1<<31)	/* image enable */
+# define	UNIV_VRAI_CTL_EN			(1<<31)	/* image enable */ 
 # define	UNIV_VRAI_CTL_PGM			(1<<23)	/* program AM */
 # define	UNIV_VRAI_CTL_DATA			(1<<22)	/* data AM */
 # define	UNIV_VRAI_CTL_SUPER			(1<<21)	/* supervisor AM */
@@ -433,6 +490,7 @@ extern "C" {
 extern volatile LERegister *vmeUniverse0BaseAddr;
 extern int vmeUniverse0PciIrqLine;
 
+
 /* Initialize the driver */
 int
 vmeUniverseInit(void);
@@ -451,7 +509,7 @@ vmeUniverseReset(void);
  *  #include <vmeUniverse.h>
  */
 #ifdef _VME_UNIVERSE_DECLARE_SHOW_ROUTINES
-/* print the current configuration of all master ports to
+/* print the current configuration of all master ports to 
  * f (stderr if NULL)
  */
 void
@@ -508,12 +566,12 @@ vmeUniverseMasterPortCfg(
 
 /* translate an address through the bridge
  *
- * vmeUniverseXlateAddr(0,0,addr,as,&result)
+ * vmeUniverseXlateAddr(0,0,as,addr,&result)
  * yields a VME a address that reflects
  * a local memory location as seen from the VME bus through the universe
  * VME slave.
  *
- * likewise does vmeUniverseXlateAddr(1,0,addr,as,&result)
+ * likewise does vmeUniverseXlateAddr(1,0,as,addr,&result)
  * translate a VME bus addr (through the VME master) to the
  * PCI side of the bridge.
  *
@@ -575,13 +633,119 @@ void
 vmeUniverseCvtToLE(unsigned long *ptr, unsigned long num);
 
 /* reset the VME bus */
-static inline void
-vmeUniverseResetBus(void)
-{
-	vmeUniverseWriteReg(
-		vmeUniverseReadReg(UNIV_REGOFF_MISC_CTL) | UNIV_MISC_CTL_SW_SYSRST,
-		UNIV_REGOFF_MISC_CTL);
-}
+void
+vmeUniverseResetBus(void);
+
+/* The ...XX routines take the universe base address as an additional
+ * argument - this allows for programming secondary devices.
+ */
+
+unsigned long
+vmeUniverseReadRegXX(volatile LERegister *ubase, unsigned long offset);
+
+void
+vmeUniverseWriteRegXX(volatile LERegister *ubase, unsigned long value, unsigned long offset);
+
+int
+vmeUniverseXlateAddrXX(
+	volatile LERegister *ubase,
+	int master,
+	int reverse,
+	unsigned long as,
+	unsigned long addr,
+	unsigned long *paOut
+	);
+
+int
+vmeUniverseMasterPortCfgXX(
+	volatile LERegister *ubase,
+	unsigned long	port,
+	unsigned long	address_space,
+	unsigned long	vme_address,
+	unsigned long	local_address,
+	unsigned long	length);
+
+int
+vmeUniverseSlavePortCfgXX(
+	volatile LERegister *ubase,
+	unsigned long	port,
+	unsigned long	address_space,
+	unsigned long	vme_address,
+	unsigned long	local_address,
+	unsigned long	length);
+
+void
+vmeUniverseDisableAllMastersXX(volatile LERegister *ubase);
+
+void
+vmeUniverseDisableAllSlavesXX(volatile LERegister *ubase);
+
+#ifdef _VME_UNIVERSE_DECLARE_SHOW_ROUTINES
+/* print the current configuration of all master ports to 
+ * f (stderr if NULL)
+ */
+void
+vmeUniverseMasterPortsShowXX(
+	volatile LERegister *ubase,FILE *f);
+
+/* print the current configuration of all slave ports to
+ * f (stderr if NULL)
+ */
+void
+vmeUniverseSlavePortsShowXX(
+	volatile LERegister *ubase,FILE *f);
+#else
+void
+vmeUniverseMasterPortsShowXX();
+void
+vmeUniverseSlavePortsShowXX();
+#endif
+
+int
+vmeUniverseStartDMAXX(
+	volatile LERegister *ubase,
+	unsigned long local_addr,
+	unsigned long vme_addr,
+	unsigned long count);
+
+/* Raise a VME Interrupt at 'level' and respond with 'vector' to a
+ * handler on the VME bus. (The handler could be a different board
+ * or the universe itself - [only works with universe II]).
+ * 
+ * Note that you could install a interrupt handler at UNIV_VME_SW_IACK_INT_VEC
+ * to be notified of an IACK cycle having completed.
+ *
+ * This routine is mainly FOR TESTING.
+ *
+ * NOTES:
+ *   - several registers are modified: the vector is written to VINT_STATID
+ *     and (universe 1 chip only) the level is written to the SW_INT bits
+ *     int VINT_MAP1
+ *   - NO MUTUAL EXCLUSION PROTECTION (reads VINT_EN, modifies then writes back).
+ *     If several users need access to VINT_EN and/or VINT_STATID (and VINT_MAP1
+ *     on the universe 1) it is their responsibility to serialize access.
+ *
+ * Arguments:
+ *  'level':  interrupt level, 1..7
+ *  'vector': vector number (0..254) that the universe puts on the bus in response to
+ *            an IACK cycle. NOTE: the vector number *must be even* (hardware restriction
+ *            of the universe -- it always clears the LSB when the interrupter is
+ *            a software interrupt).
+ *
+ * RETURNS:
+ *        0:  Success
+ *       -1:  Invalid argument (level not 1..7, vector odd or >= 256)
+ *       -2:  Interrupt 'level' already asserted (maybe nobody handles it).
+ *            You can manually clear it be writing the respective bit in
+ *            VINT_STAT. Make sure really nobody responds to avoid spurious
+ *            interrupts (consult universe docs).
+ */
+
+int
+vmeUniverseIntRaiseXX(volatile LERegister *base, int level, unsigned vector);
+
+int
+vmeUniverseIntRaise(int level, unsigned vector);
 
 #ifdef __rtems__
 /* VME Interrupt Handler functionality */
@@ -625,7 +789,10 @@ vmeUniverseRemoveISR(unsigned long vector, VmeUniverseISR handler, void *usrArg)
 VmeUniverseISR
 vmeUniverseISRGet(unsigned long vector, void **parg);
 
-/* utility routines to enable/disable a VME IRQ level
+/* utility routines to enable/disable a VME IRQ level.
+ * 
+ * To enable/disable the internal interrupt sources (special vectors above)
+ * pass a vector argument > 255.
  *
  * RETURNS 0 on success, nonzero on failure
  */
@@ -634,8 +801,58 @@ vmeUniverseIntEnable(unsigned int level);
 int
 vmeUniverseIntDisable(unsigned int level);
 
+/* Check if an interrupt level or internal source is enabled:
+ *
+ * 'level': VME level 1..7 or internal special vector > 255
+ * 
+ * RETURNS: value > 0 if interrupt is currently enabled, 
+ *          zero      if interrupt is currently disabled,
+ *          -1        on error (invalid argument).
+ */
+int
+vmeUniverseIntIsEnabled(unsigned int level);
+
+
+/* Change the routing of IRQ 'level' to 'pin'.
+ * If the BSP connects more than one of the eight
+ * physical interrupt lines from the universe to
+ * the board's PIC then you may change the physical
+ * line a given 'level' is using. By default,
+ * all 7 VME levels use the first wire (pin==0) and
+ * all internal sources use the (optional) second
+ * wire (pin==1) [The driver doesn't support more than
+ * to wires].
+ * This feature is useful if you want to make use of
+ * different hardware priorities of the PIC. Let's
+ * say you want to give IRQ level 7 the highest priority.
+ * You could then give 'pin 0' a higher priority (at the
+ * PIC) and 'pin 1' a lower priority and issue. 
+ *
+ *   for ( i=1; i<7; i++ ) vmeUniverseIntRoute(i, 1);
+ *
+ * PARAMETERS:
+ *    'level' : VME interrupt level '1..7' or one of
+ *              the internal sources. Pass the internal
+ *              source's vector number (>=256).
+ *    'pin'   : a value of 0 routes the requested IRQ to
+ *              the first line registered with the manager
+ *              (vmeIrqUnivOut parameter), a value of 1
+ *              routes it to the alternate wire
+ *              (specialIrqUnivOut)
+ * RETURNS: 0 on success, nonzero on error (invalid arguments)
+ * 
+ * NOTES:	- DONT change the universe 'map' registers
+ *            directly. The driver caches routing internally.
+ *          - support for the 'specialIrqUnivOut' wire is
+ *            board dependent. If the board only provides
+ *            a single physical wire from the universe to
+ *            the PIC then the feature might not be available.
+ */
+int
+vmeUniverseIntRoute(unsigned int level, unsigned int pin);
+
 /* use these special vectors to connect a handler to the
- * universe specific interrupts (such as "DMA done",
+ * universe specific interrupts (such as "DMA done", 
  * VOWN, error irqs etc.)
  * NOTE: The wrapper clears all status LINT bits (except
  * for regular VME irqs). Also note that it is the user's
@@ -646,36 +863,41 @@ vmeUniverseIntDisable(unsigned int level);
  * DO NOT CHANGE THE ORDER OF THESE VECTORS - THE DRIVER
  * DEPENDS ON IT
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
+ * 
  */
 #define UNIV_VOWN_INT_VEC			256
 #define UNIV_DMA_INT_VEC			257
 #define UNIV_LERR_INT_VEC			258
 #define UNIV_VERR_INT_VEC			259
-#define UNIV_VME_SW_IACK_INT_VEC	260
-#define UNIV_PCI_SW_INT_VEC			261
-#define UNIV_SYSFAIL_INT_VEC		262
-#define UNIV_ACFAIL_INT_VEC			263
-#define UNIV_MBOX0_INT_VEC			264
-#define UNIV_MBOX1_INT_VEC			265
-#define UNIV_MBOX2_INT_VEC			266
-#define UNIV_MBOX3_INT_VEC			267
-#define UNIV_LM0_INT_VEC			268
-#define UNIV_LM1_INT_VEC			269
-#define UNIV_LM2_INT_VEC			270
-#define UNIV_LM3_INT_VEC			271
+/* 260 is reserved */
+#define UNIV_VME_SW_IACK_INT_VEC	261
+#define UNIV_PCI_SW_INT_VEC			262
+#define UNIV_SYSFAIL_INT_VEC		263
+#define UNIV_ACFAIL_INT_VEC			264
+#define UNIV_MBOX0_INT_VEC			265
+#define UNIV_MBOX1_INT_VEC			266
+#define UNIV_MBOX2_INT_VEC			267
+#define UNIV_MBOX3_INT_VEC			268
+#define UNIV_LM0_INT_VEC			269
+#define UNIV_LM1_INT_VEC			270
+#define UNIV_LM2_INT_VEC			271
+#define UNIV_LM3_INT_VEC			272
 
-#define UNIV_NUM_INT_VECS			272
+#define UNIV_NUM_INT_VECS			273
 
 /* the universe interrupt handler is capable of routing all sorts of
  * (VME) interrupts to 8 different lines (some of) which may be hooked up
  * in a (board specific) way to a PIC.
  *
- * This driver only supports at most two lines. It routes the 7 VME
- * interrupts to the main line and optionally, it routes the 'special'
+ * This driver only supports at most two lines. By default, it routes the
+ * 7 VME interrupts to the main line and optionally, it routes the 'special'
  * interrupts generated by the universe itself (DMA done, VOWN etc.)
  * to a second line. If no second line is available, all IRQs are routed
  * to the main line.
+ *
+ * The routing of interrupts to the two lines can be modified (using
+ * the vmeUniverseIntRoute() call - see above - i.e., to make use of
+ * different hardware priorities of the two pins.
  *
  * Because the driver has no way to figure out which lines are actually
  * wired to the PIC, this information has to be provided when installing
@@ -686,7 +908,7 @@ vmeUniverseIntDisable(unsigned int level);
  * are wired.
  * Optionally, the first PIC input line can be read from PCI config space
  * but the second must be passed to this routine. Note that the info read
- * from PCI config space is wrong for many boards!
+ * from PCI config space is wrong for many boards! 
  *
  * PARAMETERS:
  *       vmeIrqUnivOut: to which output pin (of the universe) should the 7
@@ -702,13 +924,59 @@ vmeUniverseIntDisable(unsigned int level);
  *                      the PIC is determined by reading PCI config space.
  *
  * RETURNS: 0 on success, -1 on failure.
- *
+ *						
  */
 int
 vmeUniverseInstallIrqMgr(int vmeIrqUnivOut,
 						 int vmeIrqPicLine,
 						 int specialIrqUnivOut,
 						 int specialIrqPicLine);
+
+/* up to 4 universe outputs are now supported by this alternate
+ * entry point.
+ * Terminate the vararg list (uni_pin/pic_pin pairs) with a 
+ * '-1' uni_pin.
+ * E.g., the old interface is now just a wrapper to 
+ *   vmeUniverseInstallIrqMgrAlt(0, vmeUnivOut, vmePicLint, specUnivOut, specPicLine, -1);
+ *
+ * The 'shared' argument uses the BSP_install_rtems_shared_irq_handler()
+ * API. CAVEAT: shared interrupts need RTEMS workspace, i.e., the 
+ * VME interrupt manager can only be installed *after workspace is initialized*
+ * if 'shared' is nonzero (i.e., *not* from bspstart()).
+ */
+int
+vmeUniverseInstallIrqMgrAlt(int shared, int uni_pin0, int pic_pin0, ...);
+
+int
+vmeUniverseInstallIrqMgrVa(int shared, int uni_pin0, int pic_pin0, va_list ap);
+
+/* Loopback test of the VME interrupt subsystem.
+ *  - installs ISRs on 'vector' and on UNIV_VME_SW_IACK_INT_VEC
+ *  - asserts VME interrupt 'level'
+ *  - waits for both interrupts: 'ordinary' VME interrupt of 'level' and
+ *    IACK completion interrupt ('special' vector UNIV_VME_SW_IACK_INT_VEC).
+ *
+ * NOTES: 
+ *  - make sure no other handler responds to 'level'.
+ *  - make sure no ISR is installed on both vectors yet.
+ *  - ISRs installed by this routine are removed after completion.
+ *  - no concurrent access protection of all involved resources
+ *    (levels, vectors and registers  [see vmeUniverseIntRaise()])
+ *    is implemented.
+ *  - this routine is intended for TESTING (when implementing new BSPs etc.).
+ *  - one RTEMS message queue is temporarily used (created/deleted).
+ *  - the universe 1 always yields a zero vector (VIRQx_STATID) in response
+ *    to a self-generated VME interrupt. As a workaround, the routine
+ *    only accepts a zero vector when running on a universe 1.
+ *
+ * RETURNS:
+ *                 0: Success.
+ *                -1: Invalid arguments.
+ *                 1: Test failed (outstanding interrupts).
+ * rtems_status_code: Failed RTEMS directive.
+ */
+int
+vmeUniverseIntLoopbackTst(int level, unsigned vector);
 
 #endif
 

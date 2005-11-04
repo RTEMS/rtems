@@ -5,6 +5,228 @@
  *         Nov 2000, Oct 2001, Jan 2002
  */
 
+#if 0
+/*
+ * $Log$
+ * Revision 1.55  2005/10/25 20:07:18  till
+ *  - check #if BSP_SHARED_HANDLER_SUPPORT > 0 before using the shared irq API.
+ *    Bail to use non-shared interrupts if the BSP doesn't support the shared API
+ *    (giving a warning).
+ *
+ * Revision 1.54  2005/10/25 19:52:26  till
+ *  - Loopback test: ISR check return status of message_queue_send and assumes
+ *    there's a IRQ storm on error (queue full). The interrupt level is disabled
+ *    if this occurs.
+ *
+ * Revision 1.53  2005/10/21 17:52:08  till
+ *  - reverted default definition of PCI_MEM_BASE and introduced a short explanation
+ *
+ * Revision 1.52  2005/10/21 17:46:37  till
+ *  - use 0 if PCI_MEM_BASE is undefined
+ *
+ * Revision 1.51  2005/10/14 19:04:51  till
+ *  - removed shared irq handler kludge for mvme5500 bsp -- this *really* doesn't belong here...
+ *
+ * Revision 1.50  2005/10/10 21:57:59  till
+ *  - xxIrqMgrInstalled must be set prior to calling xxIntRoute() because
+ *    xxIntRoute() now checks the 'installed' flag.
+ *
+ * Revision 1.49  2005/10/10 19:45:08  till
+ *  - enable PCI busmaster and memory access from the 'find' routine
+ *
+ * Revision 1.48  2005/10/10 19:35:47  till
+ *  - added 'Va' version of IrqMgrInstall
+ *
+ * Revision 1.47  2005/10/10 18:04:50  till
+ *  - maintain copy of vme_am_defs.h in driver headers (backwards compat, sigh...)
+ *
+ * Revision 1.46  2005/10/10 17:52:58  strauman
+ *  - separated basic AM definitions into separate file
+ *
+ * Revision 1.45  2005/10/10 17:45:58  strauman
+ *  - added check for initialized 'base' to tsi driver
+ *
+ * Revision 1.44  2005/10/10 06:24:15  till
+ *  - if vector is unknown, the message number (and not the vector number) needs to
+ *    be printed (IntLoopbackTest()).
+ *
+ * Revision 1.43  2005/10/09 00:28:20  till
+ *  - added vmeUniverseIntRaise() and vmeUniverseIntLoopbackTest() routines
+ *
+ * Revision 1.42  2005/10/08 23:48:03  till
+ *  - 'special' level numbers are now (almost - except for VOWN) aligned
+ *    with bitmask; removed extra shift for levels >= SW_IACK.
+ *  - use helper function to convert level -> bitmask. Also used by new feature
+ *    to let vmeUniverseIntEnable/Disable handle 'special/internal' interrupts
+ *    as well.
+ *  - undid bad change. The level sensitive VME interrupts must really be cleared only
+ *    *after* calling the user handler to prevent the chip to ACK another IRQ at the level
+ *    currently processed.
+ *  - added printk() statements in error-branches of ISR (no handler installed or bus error
+ *    during IACK.
+ *  - added kludgy weak alias that maps  BSP_install_rtems_shared_irq_handler
+ *    to BSP_install_rtems_irq_handler -- the mvme5500 bsp doesn't implement the shared handlers...
+ *  - bugfix: vmeUniverseIntRoute 'pin' argument is actually the slot # in the wire table,
+ *    so the 'special' pin has to be 1 not universe_wire[1].
+ *  - added vmeUniverseIntIsEnabled() to check current setting.
+ *
+ * Revision 1.41  2005/10/06 21:41:57  till
+ *  - FIX: protect handler table by switching interrupt off
+ *  - FIX: skip vector # for nonexistent special IRQ
+ *  - upgrade: new InstallMgr API allows for requesting shared irqs and more pin/line pairs
+ *  - only do EOI if BSP defines macro
+ *  - dont add PCI_LOWEST_OFFSET anymore to irq line info
+ *
+ * Revision 1.40  2005/06/04 05:47:00  till
+ *  - added comment about STAT_ID pecularity
+ *
+ * Revision 1.39  2005/05/06 00:03:14  till
+ *  - added interface to secondary devices (pass base addr of universe)
+ *  - made the 'ResetBus' routine public
+ *
+ * Revision 1.38  2005/04/26 00:02:47  till
+ *  - fix in inline assembly
+ *
+ * Revision 1.37  2004/11/08 22:43:09  till
+ *  - fix: zero value of specialIrqUnivOut is legal.
+ *
+ * Revision 1.36  2003/03/21 20:54:18  till
+ *  - modified 'printf()' formats to be compliant with the
+ *    cpukit 'printk()' implementation and use the latter
+ *    prior to stdio/libc being initialized.
+ *
+ * Revision 1.35  2003/03/06 20:52:44  till
+ *  - fix lazy init bug reported by Kate Feng
+ *  - rename misspelled dccp/DCCP to dcpp/DCPP ( :-( )
+ *  - added 'packed' attribute (probably not really necessary)
+ *
+ * Revision 1.34  2003/02/10 23:20:05  till
+ *  - added some macro magic to make porting easier (ppcn_60x BSP in mind)
+ *  - made mgrInstalled public (vmeUniverseIrqMgrInstalled) so BSPs can
+ *    supply their own versions of the mgrInstall() routine.
+ *  - added READMEs to CVS
+ *
+ * Revision 1.33.2.1  2003/02/10 23:01:40  till
+ *  - added some macro magic to make porting easier (ppcn_60x BSP in mind)
+ *  - made mgrInstalled public (vmeUniverseIrqMgrInstalled) so BSPs can
+ *    supply their own versions of the mgrInstall() routine.
+ *
+ * Revision 1.32  2002/09/05 02:50:41  till
+ *  - use k_vsprintf(), not vsprintf() during early boot (RTEMS)
+ *
+ * Revision 1.31  2002/08/16 23:35:15  strauman
+ *  - fixed typos
+ *
+ * Revision 1.30  2002/08/16 22:53:37  till
+ *  - made address translation more generic; allow to look for reverse mappings
+ *    also.
+ *  - removed vmeUniverseLocalToBus() and vmeUniverseBusToLocal() and made
+ *    vmeUniverseXlateAddr() public instead.
+ *
+ * Revision 1.29  2002/08/16 22:16:25  till
+ *  - tweak U2SPEC (fix Joerger vtr10012_8 problem) the same
+ *    way the synergy BSP does (rev 2 chips only)
+ *
+ * Revision 1.28  2002/08/15 23:16:01  till
+ *  - bugfix: vmeUniverseISRGet() dereferenced a possibly NULL pointer
+ *
+ * Revision 1.25  2002/07/19 05:18:40  till
+ *  - CVS log: again a problem. Cannot embed /_* *_/ comments in the log
+ *    because the log has to be commented as a whole. I had tried
+ *    #if 0 #endif - doesn't work because cpp expands char constants???
+ *    WHAT A NUISANCE
+ *
+ * Revision 1.24  2002/07/19 02:44:14  till
+ *  - added a new parameter to the IRQ manager install routine:
+ *    the main interrupt's line can now also be specified (reading
+ *    from PCI config does not always work - some boards don't
+ *    have correct information there - PMC's will have a similar
+ *    problem, though!)
+ *
+ * Revision 1.21  2002/04/11 06:54:48  till
+ *  - silenced message about 'successfully configured a port'
+ *
+ * Revision 1.20  2002/03/27 21:14:50  till
+ *  - fix: handler table holds pointers, so hdlrTbl[vector]->usrData etc.
+ *    not hdlrTbl[vector].usrData...
+ *
+ * Revision 1.19  2002/03/09 00:14:36  till
+ *  - added vmeUniverseISRGet() to retrieve the currently installed
+ *    ISR for a given vector
+ *  - swapped the argument order for ISRs to (usrarg, vector)
+ *
+ * Revision 1.18  2002/02/07 19:53:48  till
+ *  - reverted back to publish base_addr/irq_line as variables rather than
+ *    through functions: the irq_line is read by the interrupt dispatcher...
+ *
+ * Revision 1.17  2002/01/24 08:28:10  till
+ *  - initialize driver when reading base address or irq line.
+ *    however, this requires the pci driver to be working already.
+ *
+ * Revision 1.16  2002/01/24 08:21:48  till
+ *  - replaced public global vars for base address/irq line by routines.
+ *
+ * Revision 1.15  2002/01/23 06:15:30  till
+ *   - changed master port data width to 64 bit.
+ *        NOTE: reading the CY961 (Echotek ECDR814) with VDW32
+ *              generated bus errors when reading 32-bit words
+ *              - very weird, because the registers are 16-bit
+ *                AFAIK.
+ *              - 32-bit accesses worked fine on vxWorks which
+ *                has the port set to 64-bit.
+ *              ????????
+ *
+ * Revision 1.14  2002/01/11 19:30:54  till
+ *  - added more register defines to header
+ *  - completed vmeUniverseReset
+ *
+ * Revision 1.13  2002/01/11 05:06:18  till
+ *  - fixed VMEISR failing to check (lint_stat & msk) when determining
+ *    the highes level...
+ *  - tested interrupt handling & nesting. Seems to work.
+ *
+ * Revision 1.12  2002/01/11 02:25:55  till
+ *  - added interrupt manager
+ *
+ * Revision 1.11  2002/01/08 03:59:52  till
+ *  - vxworks always defines _LITTLE_ENDIAN, fixed the conditionals
+ *    so it should work on __vxworks and on __rtems__ now.
+ *  - rtems uprintf wrapper reverts to printk if stdio is not yet
+ *    initialized (uses _impure_ptr->__sdidinit)
+ *  - tested bus address translation utility routines
+ *
+ * Revision 1.9  2002/01/05 02:36:32  till
+ *  - added vmeUniverseBusToLocalAdrs / vmeUniverseLocalToBusAdrs for address
+ *    space translations.
+ *  - include bsp.h under rtems to hack around the libcpu/powerpc/shared/io.h
+ *    #define _IO_BASE & friends problem.
+ *
+ * Revision 1.8  2002/01/04 04:12:51  till
+ *  - changed some rtems/pci related names
+ *
+ * Revision 1.7  2002/01/04 03:06:30  till
+ *  - added further register definitions
+ *
+ * Revision 1.6  2001/12/20 04:42:44  till
+ *  - fixed endianness stuff; theoretically, PPC could be LITTLE_ENDIAN...
+ *
+ * Revision 1.4  2001/12/19 01:59:02  till
+ *  - started adding interrupt stuff
+ *  - private implementation of PCI scanning if necessary
+ *
+ * Revision 1.3  2001/07/27 22:22:51  till
+ *  - added more DMA support routines and defines to include file
+ *  - xxxPortsShow can now print to a given file descriptor argument
+ *
+ * Revision 1.2  2001/07/26 18:06:13  till
+ *  - ported to RTEMS
+ *  - fixed a couple of wrong pointer calculations.
+ *
+ * Revision 1.1.1.1  2001/07/12 23:15:19  till
+ *  - cvs import
+ */
+#endif
+
 #include <stdio.h>
 #include <stdarg.h>
 #include "vmeUniverse.h"
@@ -47,30 +269,37 @@
 
 #define UNIV_SCTL_AM_MASK	(UNIV_CTL_VAS | UNIV_SCTL_PGM | UNIV_SCTL_DAT | UNIV_SCTL_USER | UNIV_SCTL_SUPER)
 
-/* we rely on a vxWorks definition here */
-#define VX_AM_SUP		4
-
 #ifdef __rtems__
 
 #include <stdlib.h>
 #include <rtems/bspIo.h>	/* printk */
+#include <rtems/error.h>
 #include <bsp/pci.h>
 #include <bsp.h>
 
 /* allow the BSP to override the default routines */
 #ifndef BSP_PCI_FIND_DEVICE
-#define BSP_PCI_FIND_DEVICE	pci_find_device
+#define BSP_PCI_FIND_DEVICE			pci_find_device
 #endif
 #ifndef BSP_PCI_CONFIG_IN_LONG
-#define BSP_PCI_CONFIG_IN_LONG	pci_read_config_dword
+#define BSP_PCI_CONFIG_IN_LONG		pci_read_config_dword
 #endif
 #ifndef BSP_PCI_CONFIG_IN_BYTE
-#define BSP_PCI_CONFIG_IN_BYTE	pci_read_config_byte
+#define BSP_PCI_CONFIG_IN_BYTE		pci_read_config_byte
+#endif
+#ifndef BSP_PCI_CONFIG_IN_SHORT
+#define BSP_PCI_CONFIG_IN_SHORT		pci_read_config_word
+#endif
+#ifndef BSP_PCI_CONFIG_OUT_SHORT
+#define BSP_PCI_CONFIG_OUT_SHORT	pci_write_config_word
 #endif
 
+/* PCI_MEM_BASE is a possible offset between CPU- and PCI addresses.
+ * Should be defined by the BSP.
+ */
 typedef unsigned int pci_ulong;
-#define PCI_TO_LOCAL_ADDR(memaddr) \
-    ((pci_ulong)(memaddr) + PCI_MEM_BASE)
+#define PCI_TO_LOCAL_ADDR(memaddr) ((pci_ulong)(memaddr) + PCI_MEM_BASE)
+
 
 #elif defined(__vxworks)
 typedef unsigned long pci_ulong;
@@ -88,6 +317,21 @@ typedef unsigned long pci_ulong;
 
 volatile LERegister *vmeUniverse0BaseAddr=0;
 int vmeUniverse0PciIrqLine=-1;
+
+#define DFLT_BASE	volatile LERegister *base = vmeUniverse0BaseAddr
+
+#define CHECK_DFLT_BASE(base) \
+	do { \
+		/* get the universe base address */ \
+		if (!base) { \
+			if (vmeUniverseInit()) { \
+				uprintf(stderr,"unable to find the universe in pci config space\n"); \
+				return -1; \
+			} else { \
+				base = vmeUniverse0BaseAddr; \
+			} \
+		} \
+	} while (0)
 
 #if 0
 /* public access functions */
@@ -131,7 +375,7 @@ WRITE_LE(
 #warning "SYNC instruction unknown for this architecture"
 #endif
 
-/* registers should be mapped to guarded, non-cached memory; hence
+/* registers should be mapped to guarded, non-cached memory; hence 
  * subsequent stores are ordered. eieio is only needed to enforce
  * ordering of loads with respect to stores.
  */
@@ -174,10 +418,11 @@ return READ_LE0((volatile LERegister *)(((unsigned long)adrs)+off));
 }
 
 #define PORT_UNALIGNED(addr,port) \
-	( (port)%4 ? ((addr) & 0xffff) : ((addr) & 4095) )
+	( (port)%4 ? ((addr) & 0xffff) : ((addr) & 4095) ) 
+
 
 #define UNIV_REV(base) (READ_LE(base,2*sizeof(LERegister)) & 0xff)
-
+	
 #if defined(__rtems__) && 0
 static int
 uprintk(char *fmt, va_list ap)
@@ -197,6 +442,7 @@ char	buf[200];
 }
 #endif
 
+
 /* private printing wrapper */
 static void
 uprintf(FILE *f, char *fmt, ...)
@@ -211,7 +457,7 @@ va_list	ap;
 		 * to a buffer.
 		 */
 		vprintk(fmt,ap);
-	} else
+	} else 
 #endif
 	{
 		vfprintf(f,fmt,ap);
@@ -226,6 +472,7 @@ vmeUniverseFindPciBase(
 	)
 {
 int bus,dev,fun;
+unsigned short wrd;
 pci_ulong busaddr;
 unsigned char irqline;
 
@@ -249,10 +496,12 @@ unsigned char irqline;
 
 	if (BSP_PCI_CONFIG_IN_BYTE(bus,dev,fun,PCI_INTERRUPT_LINE,&irqline))
 		return -1;
-	else
-		vmeUniverse0PciIrqLine = irqline;
 
-	return 0;
+	/* Enable PCI master and memory access */
+	BSP_PCI_CONFIG_IN_SHORT(bus, dev, fun, PCI_COMMAND, &wrd);
+	BSP_PCI_CONFIG_OUT_SHORT(bus, dev, fun, PCI_COMMAND, wrd | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
+
+	return irqline;
 }
 
 /* convert an address space selector to a corresponding
@@ -305,7 +554,7 @@ unsigned long mode=0;
 		default:
 			return -1;
 	}
-	if (address_space & VX_AM_SUP)
+	if ( VME_AM_IS_SUP(address_space) )
 		mode |= (ismaster ? UNIV_MCTL_SUPER : UNIV_SCTL_SUPER);
 	*pmode = mode;
 	return 0;
@@ -324,6 +573,7 @@ unsigned long cntrl;
 
 static int
 cfgUniversePort(
+	volatile LERegister *base,
 	unsigned long	ismaster,
 	unsigned long	port,
 	unsigned long	address_space,
@@ -331,10 +581,11 @@ cfgUniversePort(
 	unsigned long	local_address,
 	unsigned long	length)
 {
-#define base vmeUniverse0BaseAddr
 volatile LERegister *preg;
 unsigned long	p=port;
 unsigned long	mode=0;
+
+	CHECK_DFLT_BASE(base);
 
 	/* check parameters */
 	if (port >= (ismaster ? UNIV_NUM_MPORTS : UNIV_NUM_SPORTS)) {
@@ -438,7 +689,7 @@ unsigned long	mode=0;
                  */
 		if (ismaster)
 			mode |= UNIV_MCTL_EN | UNIV_MCTL_PWEN | UNIV_MCTL_VDW64 | UNIV_MCTL_VCT;
-		else
+		else 
 			mode |= UNIV_SCTL_EN | UNIV_SCTL_PWEN | UNIV_SCTL_PREN;
 
 #ifdef TSILL
@@ -463,7 +714,6 @@ unsigned long	mode=0;
 #endif
 	}
 	return 0;
-#undef base
 }
 
 static int
@@ -518,7 +768,7 @@ showUniversePort(
 			cntrl&UNIV_MCTL_PGM ?   "Pgm" : "Dat",
 			cntrl&UNIV_MCTL_SUPER ? "Sup" : "Usr");
 	} else {
-		uprintf(f,"%s %s %s %s",
+		uprintf(f,"%s %s %s %s", 
 			cntrl&UNIV_SCTL_PGM ?   "Pgm," : "    ",
 			cntrl&UNIV_SCTL_DAT ?   "Dat," : "    ",
 			cntrl&UNIV_SCTL_SUPER ? "Sup," : "    ",
@@ -597,20 +847,17 @@ unsigned long cntrl, start, bound, offst, mask, x;
 	return 0;
 }
 
+
 static int
-mapOverAll(int ismaster, int (*func)(int,int,volatile LERegister *,void*), void *arg)
+mapOverAll(volatile LERegister *base, int ismaster, int (*func)(int,int,volatile LERegister *,void*), void *arg)
 {
-#define base	vmeUniverse0BaseAddr
 volatile LERegister	*rptr;
 unsigned long	port;
 int	rval;
 
-	/* get the universe base address */
-	if (!base && vmeUniverseInit()) {
-		uprintf(stderr,"unable to find the universe in pci config space\n");
-		return -1;
-	}
-	rptr = (base +
+	CHECK_DFLT_BASE(base);
+
+	rptr = (base + 
 		(ismaster ? UNIV_REGOFF_PCITGT0_CTRL : UNIV_REGOFF_VMESLV0_CTRL)/sizeof(LERegister));
 #undef TSILL
 #ifdef TSILL
@@ -625,27 +872,27 @@ int	rval;
 	/* only rev. 2 has 8 ports */
 	if (UNIV_REV(base)<2) return -1;
 
-	rptr = (base +
+	rptr = (base + 
 		(ismaster ? UNIV_REGOFF_PCITGT4_CTRL : UNIV_REGOFF_VMESLV4_CTRL)/sizeof(LERegister));
 	for (port=4; port<UNIV_NUM_MPORTS; port++) {
 		if ((rval=func(ismaster,port,rptr,arg))) return rval;
 		rptr+=5; /* register block spacing */
 	}
 	return 0;
-#undef base
 }
 
 static void
-showUniversePorts(int ismaster, FILE *f)
+showUniversePorts(volatile LERegister *base, int ismaster, FILE *f)
 {
 	if (!f) f=stdout;
 	uprintf(f,"Universe %s Ports:\n",ismaster ? "Master" : "Slave");
 	uprintf(f,"Port  VME-Addr   Size       PCI-Adrs   Mode:\n");
-	mapOverAll(ismaster,showUniversePort,f);
+	mapOverAll(base,ismaster,showUniversePort,f);
 }
 
 int
-vmeUniverseXlateAddr(
+vmeUniverseXlateAddrXX(
+	volatile LERegister *base,	/* Universe base address */
 	int master, 		/* look in the master windows */
 	int reverse,		/* reverse mapping; for masters: map local to VME */
 	unsigned long as,	/* address space */
@@ -659,10 +906,24 @@ XlatRec l;
 	l.address = aIn;
 	l.reverse = reverse;
 	/* map result -1/0/1 to -2/-1/0 with 0 on success */
-	rval = mapOverAll(master,xlatePort,(void*)&l) - 1;
+	rval = mapOverAll(base,master,xlatePort,(void*)&l) - 1;
 	*paOut = l.address;
 	return rval;
 }
+
+int
+vmeUniverseXlateAddr(
+	int master, 		/* look in the master windows */
+	int reverse,		/* reverse mapping; for masters: map local to VME */
+	unsigned long as,	/* address space */
+	unsigned long aIn,	/* address to look up */
+	unsigned long *paOut/* where to put result */
+	)
+{
+	DFLT_BASE;
+	return vmeUniverseXlateAddrXX(base, master, reverse, as, aIn, paOut);
+}
+
 
 void
 vmeUniverseReset(void)
@@ -693,6 +954,7 @@ vmeUniverseReset(void)
 	/* disable VME bus image of VME CSR */
 	vmeUniverseWriteReg(0, UNIV_REGOFF_VCSR_CTL);
 
+
 	/* I had problems with a Joerger vtr10012_8 card who would
 	 * only be accessible after tweaking the U2SPEC register
 	 * (the t27 parameter helped).
@@ -719,7 +981,7 @@ vmeUniverseReset(void)
 	vmeUniverseDisableAllSlaves();
 
 	vmeUniverseDisableAllMasters();
-
+	
 	vmeUniverseWriteReg(UNIV_VCSR_CLR_SYSFAIL, UNIV_REGOFF_VCSR_CLR);
 
 	/* clear interrupt status bits */
@@ -746,9 +1008,11 @@ int
 vmeUniverseInit(void)
 {
 int rval;
-	if ((rval=vmeUniverseFindPciBase(0,&vmeUniverse0BaseAddr))) {
+	if ( (rval=vmeUniverseFindPciBase(0,&vmeUniverse0BaseAddr)) < 0 ) {
 		uprintf(stderr,"unable to find the universe in pci config space\n");
 	} else {
+		vmeUniverse0PciIrqLine = rval;
+		rval                   = 0;
 		uprintf(stderr,"Universe II PCI-VME bridge detected at 0x%08x, IRQ %d\n",
 				(unsigned int)vmeUniverse0BaseAddr, vmeUniverse0PciIrqLine);
 	}
@@ -756,15 +1020,41 @@ int rval;
 }
 
 void
+vmeUniverseMasterPortsShowXX(volatile LERegister *base, FILE *f)
+{
+	showUniversePorts(base,1,f);
+}
+
+void
 vmeUniverseMasterPortsShow(FILE *f)
 {
-	showUniversePorts(1,f);
+	DFLT_BASE;
+	showUniversePorts(base,1,f);
+}
+
+void
+vmeUniverseSlavePortsShowXX(volatile LERegister *base, FILE *f)
+{
+	showUniversePorts(base,0,f);
 }
 
 void
 vmeUniverseSlavePortsShow(FILE *f)
 {
-	showUniversePorts(0,f);
+	DFLT_BASE;
+	showUniversePorts(base,0,f);
+}
+
+int
+vmeUniverseMasterPortCfgXX(
+	volatile LERegister *base,
+	unsigned long	port,
+	unsigned long	address_space,
+	unsigned long	vme_address,
+	unsigned long	local_address,
+	unsigned long	length)
+{
+	return cfgUniversePort(base,1,port,address_space,vme_address,local_address,length);
 }
 
 int
@@ -775,7 +1065,20 @@ vmeUniverseMasterPortCfg(
 	unsigned long	local_address,
 	unsigned long	length)
 {
-	return cfgUniversePort(1,port,address_space,vme_address,local_address,length);
+	DFLT_BASE;
+	return cfgUniversePort(base,1,port,address_space,vme_address,local_address,length);
+}
+
+int
+vmeUniverseSlavePortCfgXX(
+	volatile LERegister *base,
+	unsigned long	port,
+	unsigned long	address_space,
+	unsigned long	vme_address,
+	unsigned long	local_address,
+	unsigned long	length)
+{
+	return cfgUniversePort(base,0,port,address_space,vme_address,local_address,length);
 }
 
 int
@@ -786,29 +1089,44 @@ vmeUniverseSlavePortCfg(
 	unsigned long	local_address,
 	unsigned long	length)
 {
-	return cfgUniversePort(0,port,address_space,vme_address,local_address,length);
+	DFLT_BASE;
+	return cfgUniversePort(base,0,port,address_space,vme_address,local_address,length);
+}
+
+
+void
+vmeUniverseDisableAllSlavesXX(volatile LERegister *base)
+{
+	mapOverAll(base,0,disableUniversePort,0);
 }
 
 void
 vmeUniverseDisableAllSlaves(void)
 {
-	mapOverAll(0,disableUniversePort,0);
+	DFLT_BASE;
+	mapOverAll(base,0,disableUniversePort,0);
+}
+
+void
+vmeUniverseDisableAllMastersXX(volatile LERegister *base)
+{
+	mapOverAll(base,1,disableUniversePort,0);
 }
 
 void
 vmeUniverseDisableAllMasters(void)
 {
-	mapOverAll(1,disableUniversePort,0);
+	DFLT_BASE;
+	mapOverAll(base,1,disableUniversePort,0);
 }
 
 int
-vmeUniverseStartDMA(
+vmeUniverseStartDMAXX(
+	volatile LERegister *base,
 	unsigned long local_addr,
 	unsigned long vme_addr,
 	unsigned long count)
 {
-
-	if (!vmeUniverse0BaseAddr && vmeUniverseInit()) return -1;
 	if ((local_addr & 7) != (vme_addr & 7)) {
 		uprintf(stderr,"vmeUniverseStartDMA: misaligned addresses\n");
 		return -1;
@@ -816,7 +1134,7 @@ vmeUniverseStartDMA(
 
 	{
 	/* help the compiler allocate registers */
-	register volatile LERegister *b=vmeUniverse0BaseAddr;
+	register volatile LERegister *b=base;;
 	register unsigned long dgcsoff=UNIV_REGOFF_DGCS,dgcs;
 
 	dgcs=READ_LE(b, dgcsoff);
@@ -840,6 +1158,25 @@ vmeUniverseStartDMA(
 	return 0;
 }
 
+int
+vmeUniverseStartDMA(
+	unsigned long local_addr,
+	unsigned long vme_addr,
+	unsigned long count)
+{
+	DFLT_BASE; /* vmeUniverseStartDMAXX doesn't check for a valid base address for efficiency reasons */
+	return vmeUniverseStartDMAXX(base, local_addr, vme_addr, count);
+}
+
+unsigned long
+vmeUniverseReadRegXX(volatile LERegister *base, unsigned long offset)
+{
+unsigned long rval;
+	rval = READ_LE(base,offset);
+	return rval;
+}
+
+
 unsigned long
 vmeUniverseReadReg(unsigned long offset)
 {
@@ -849,9 +1186,23 @@ unsigned long rval;
 }
 
 void
+vmeUniverseWriteRegXX(volatile LERegister *base, unsigned long value, unsigned long offset)
+{
+	WRITE_LE(value, base, offset);
+}
+
+void
 vmeUniverseWriteReg(unsigned long value, unsigned long offset)
 {
 	WRITE_LE(value, vmeUniverse0BaseAddr, offset);
+}
+
+void
+vmeUniverseResetBus(void)
+{
+	vmeUniverseWriteReg(
+		vmeUniverseReadReg(UNIV_REGOFF_MISC_CTL) | UNIV_MISC_CTL_SW_SYSRST,
+		UNIV_REGOFF_MISC_CTL);
 }
 
 void
@@ -864,7 +1215,7 @@ register unsigned long *p=ptr+num;
 		__asm__ __volatile__(
 			"lwzu 0, -4(%0)\n"
 			"stwbrx 0, 0, %0\n"
-			: "=r"(p) : "r"(p) : "r0"
+			: "=r"(p) : "0"(p) : "r0"
 			);
 #elif defined(__rtems__)
 		p--; st_le32(p, *p);
@@ -874,6 +1225,56 @@ register unsigned long *p=ptr+num;
 	}
 #endif
 }
+
+int
+vmeUniverseIntRaiseXX(volatile LERegister *base, int level, unsigned vector)
+{
+unsigned long v;
+unsigned long b;
+
+	CHECK_DFLT_BASE(base);
+
+	if ( level < 1 || level > 7 || vector > 255 )
+		return -1;	/* invalid argument */
+
+	if ( vector & 1 ) /* SW interrupts always ACK an even vector (pp 2-67) */
+		return -1;
+
+
+	/* Check if already asserted */
+	if ( vmeUniverseReadRegXX(base, UNIV_REGOFF_VINT_STAT ) & UNIV_VINT_STAT_SWINT(level) ) {
+		return -2;  /* already asserted */
+	}
+
+	/* Write Vector */
+	vmeUniverseWriteRegXX(base, UNIV_VINT_STATID(vector), UNIV_REGOFF_VINT_STATID );
+
+	if ( UNIV_REV(base) >= 2 ) {
+		/* universe II has individual bits for individual levels */
+		b = UNIV_VINT_STAT_SWINT(level);
+	} else {
+		/* version that is compatible with universe I */
+		v  = vmeUniverseReadRegXX(base, UNIV_REGOFF_VINT_MAP1);
+		v &= ~UNIV_VINT_MAP1_SWINT(0x7);
+		v |=  UNIV_VINT_MAP1_SWINT(level);
+		vmeUniverseWriteRegXX(base, v, UNIV_REGOFF_VINT_MAP1);
+		b  = UNIV_VINT_EN_SWINT;
+	}
+	v = vmeUniverseReadRegXX(base, UNIV_REGOFF_VINT_EN);
+	/* make sure it is clear, then assert */
+	vmeUniverseWriteRegXX(base, v & ~b, UNIV_REGOFF_VINT_EN );
+	vmeUniverseWriteRegXX(base, v |  b, UNIV_REGOFF_VINT_EN );
+
+	return 0;
+	
+}
+
+int
+vmeUniverseIntRaise(int level, unsigned vector)
+{
+	return vmeUniverseIntRaiseXX(vmeUniverse0BaseAddr, level, vector);
+}
+
 
 /* RTEMS interrupt subsystem */
 
@@ -889,30 +1290,112 @@ UniverseIRQEntryRec_ {
 static UniverseIRQEntry universeHdlTbl[UNIV_NUM_INT_VECS]={0};
 
 int        vmeUniverseIrqMgrInstalled=0;
-static int vmeIrqUnivOut=-1;
-static int specialIrqUnivOut=-1;
+
+/* We support 4 wires between universe + PIC */
+
+#define UNIV_NUM_WIRES 4
+
+static volatile unsigned long	wire_mask[UNIV_NUM_WIRES]     = {0};
+/* wires are offset by 1 so we can initialize the wire table to all zeros */
+static int						universe_wire[UNIV_NUM_WIRES] = {0};
+
+static int
+lvl2bit(unsigned int level)
+{
+int shift = -1;
+	if ( level >= UNIV_DMA_INT_VEC && level <= UNIV_LM3_INT_VEC ) {
+		shift = 8 + (level-UNIV_DMA_INT_VEC);
+	} else if ( UNIV_VOWN_INT_VEC == level ) {
+		shift = 0;
+	} else if ( 1 <= level && level <=7 ) {
+		shift = level;
+	} else {
+		/* invalid level */
+	}
+	return shift;
+}
+
+int
+vmeUniverseIntRoute(unsigned int level, unsigned int pin)
+{
+int				i, shift;
+unsigned long	mask, mapreg, flags, wire;
+
+	if ( pin >= UNIV_NUM_WIRES || ! universe_wire[pin] || !vmeUniverseIrqMgrInstalled )
+		return -1;
+
+	if ( (shift = lvl2bit(level)) < 0 ) {
+		return -1; /* invalid level */
+	}
+
+	mask = 1<<shift;
+
+	/* calculate the mapping register and contents */
+	if ( shift < 8 ) {
+		mapreg = UNIV_REGOFF_LINT_MAP0;
+	} else if ( shift < 16 ) {
+		shift -= 8;
+		mapreg = UNIV_REGOFF_LINT_MAP1;
+	} else if ( shift < 24 ) {
+		shift -= 16;
+		mapreg = UNIV_REGOFF_LINT_MAP2;
+	} else {
+		return -1;
+	}
+
+	shift <<=2;
+
+	/* wires are offset by 1 so we can initialize the wire table to all zeros */
+	wire = (universe_wire[pin]-1) << shift;
+
+rtems_interrupt_disable(flags);
+
+	for ( i = 0; i<UNIV_NUM_WIRES; i++ ) {
+		wire_mask[i] &= ~mask;
+	}
+	wire_mask[pin] |= mask;
+
+	mask = vmeUniverseReadReg(mapreg) & ~ (0xf<<shift);
+	mask |= wire;
+	vmeUniverseWriteReg( mask, mapreg );
+
+rtems_interrupt_enable(flags);
+	return 0;
+}
 
 VmeUniverseISR
 vmeUniverseISRGet(unsigned long vector, void **parg)
 {
-	if (vector>=UNIV_NUM_INT_VECS ||
-		! universeHdlTbl[vector])
+unsigned long             flags;
+VmeUniverseISR			  rval = 0;
+volatile UniverseIRQEntry *pe  = universeHdlTbl + vector;
+
+	if ( vector>=UNIV_NUM_INT_VECS || ! *pe )
 		return 0;
-	if (parg)
-		*parg=universeHdlTbl[vector]->usrData;
-	return universeHdlTbl[vector]->isr;
+
+	rtems_interrupt_disable(flags);
+		if ( *pe ) {
+			if (parg)
+				*parg=(*pe)->usrData;
+			rval = (*pe)->isr;
+		}
+	rtems_interrupt_enable(flags);
+	return rval;
 }
 
+#define SPECIAL_IRQ_MSK  ( ~((UNIV_LINT_STAT_VIRQ7<<1)-UNIV_LINT_STAT_VIRQ1) )
+
 static void
-universeSpecialISR(rtems_irq_hdl_param handle)
+universeSpecialISR(unsigned long status)
 {
 register UniverseIRQEntry	ip;
 register unsigned			vec;
-register unsigned long		status;
+register unsigned long		s;
 
-	status=vmeUniverseReadReg(UNIV_REGOFF_LINT_STAT);
+	/* handle all LINT bits except for the 'normal' VME interrupts */
 
-	/* scan all LINT bits except for the 'normal' VME interrupts */
+	/* clear all detected special interrupts */
+	vmeUniverseWriteReg( (status & SPECIAL_IRQ_MSK), UNIV_REGOFF_LINT_STAT );
 
 	/* do VOWN first */
 	vec=UNIV_VOWN_INT_VEC;
@@ -925,16 +1408,11 @@ register unsigned long		status;
 	 * The initial right shift brings the DMA bit into position 0;
 	 * the loop is left early if there are no more bits set.
 	 */
-	for (status>>=8; status; status>>=1) {
+	for ( s = status>>8; s; s >>= 1) {
 		vec++;
-		if ((status&1) && (ip=universeHdlTbl[vec]))
+		if ( (s&1) && (ip=universeHdlTbl[vec]) )
 			ip->isr(ip->usrData,vec);
 	}
-	/* clear all special interrupts */
-	vmeUniverseWriteReg(
-					~((UNIV_LINT_STAT_VIRQ7<<1)-UNIV_LINT_STAT_VIRQ1),
-					UNIV_REGOFF_LINT_STAT
-					);
 
 /*
  *	clear our line in the VINT_STAT register
@@ -950,14 +1428,14 @@ register unsigned long		status;
  * like this:
  *
  *
- *   VME IRQ ------
- *                  & ----- LINT_STAT ----
+ *   VME IRQ ------ 
+ *                  & ----- LINT_STAT ---- 
  *                  |                       &  ---------- PCI LINE
  *                  |                       |
- *                  |                       |
- *       LINT_EN ---------------------------
+ *                  |                       | 
+ *       LINT_EN --------------------------- 
  *
- *  I.e.
+ *  I.e. 
  *   - if LINT_EN is disabled, a VME IRQ will not set LINT_STAT.
  *   - while LINT_STAT is set, it will pull the PCI line unless
  *     masked by LINT_EN.
@@ -978,34 +1456,60 @@ register unsigned long		status;
  */
 
 static void
-universeVMEISR(rtems_irq_hdl_param handle)
+universeVMEISR(rtems_irq_hdl_param arg)
 {
-UniverseIRQEntry ip;
-unsigned long lvl,msk,lintstat,linten,status;
+int					pin = (int)arg;
+UniverseIRQEntry	ip;
+unsigned long	 	msk,lintstat,status;
+int					lvl;
+#ifdef BSP_PIC_DO_EOI
+unsigned long 		linten;
+#endif
 
 		/* determine the highest priority IRQ source */
-		lintstat=vmeUniverseReadReg(UNIV_REGOFF_LINT_STAT);
+		lintstat  = vmeUniverseReadReg(UNIV_REGOFF_LINT_STAT);
+
+		/* only handle interrupts routed to this pin */
+		lintstat &= wire_mask[pin];
+
+#ifdef __PPC__
+		asm volatile("cntlzw %0, %1":"=r"(lvl):"r"(lintstat & ~SPECIAL_IRQ_MSK));
+		lvl = 31-lvl;
+		msk = 1<<lvl;
+#else
 		for (msk=UNIV_LINT_STAT_VIRQ7, lvl=7;
 			 lvl>0;
 			 lvl--, msk>>=1) {
 			if (lintstat & msk) break;
 		}
-		if (!lvl) {
-				/* try the special handler */
-				universeSpecialISR(NULL);
+#endif
 
-				/*
+#ifndef BSP_PIC_DO_EOI /* Software priorities not supported */
+
+		if ( (status = (lintstat & SPECIAL_IRQ_MSK)) )
+			universeSpecialISR( status );
+
+		if ( lvl <= 0)
+			return;
+
+#else
+		if ( lvl <= 0 ) {
+				/* try the special handler */
+				universeSpecialISR( lintstat & SPECIAL_IRQ_MSK );
+
+				/* 
 				 * let the pic end this cycle
 				 */
-				BSP_PIC_DO_EOI;
+				if ( 0 == pin )
+					BSP_PIC_DO_EOI;
 
 				return;
 		}
 		linten = vmeUniverseReadReg(UNIV_REGOFF_LINT_EN);
 
-		/* mask this and all lower levels */
+		/* mask this and all lower levels that are routed to the same pin */
 		vmeUniverseWriteReg(
-						linten & ~((msk<<1)-UNIV_LINT_STAT_VIRQ1),
+						linten & ~( ((msk<<1)-UNIV_LINT_STAT_VIRQ1) & wire_mask[pin]),
 						UNIV_REGOFF_LINT_EN
 						);
 
@@ -1013,7 +1517,9 @@ unsigned long lvl,msk,lintstat,linten,status;
 		 * cycle on the PCI bus, so higher level interrupts can be
 		 * caught from now on...
 		 */
-		BSP_PIC_DO_EOI;
+		if ( 0 == pin )
+			BSP_PIC_DO_EOI;
+#endif
 
 		/* get vector and dispatch handler */
 		status = vmeUniverseReadReg(UNIV_REGOFF_VIRQ1_STATID - 4 + (lvl<<2));
@@ -1021,15 +1527,18 @@ unsigned long lvl,msk,lintstat,linten,status;
 
 		if (status & UNIV_VIRQ_ERR) {
 				/* TODO: log error message - RTEMS has no logger :-( */
+			printk("vmeUniverse ISR: error read from STATID register; (level: %i) STATID: 0x%08x\n", lvl, status);
 		} else if (!(ip=universeHdlTbl[status & UNIV_VIRQ_STATID_MASK])) {
 				/* TODO: log error message - RTEMS has no logger :-( */
+			printk("vmeUniverse ISR: no handler installed for this vector; (level: %i) STATID: 0x%08x\n", lvl, status);
 		} else {
 				/* dispatch handler, it must clear the IRQ at the device */
 				ip->isr(ip->usrData, status&UNIV_VIRQ_STATID_MASK);
 		}
 
-		/* clear this interrupt level */
+		/* clear this interrupt level; allow the universe to handler further interrupts */
 		vmeUniverseWriteReg(msk, UNIV_REGOFF_LINT_STAT);
+
 /*
  *  this seems not to be necessary; we just leave the
  *  bit set to save a couple of instructions...
@@ -1038,9 +1547,13 @@ unsigned long lvl,msk,lintstat,linten,status;
 					UNIV_REGOFF_VINT_STAT);
 */
 
+#ifdef BSP_PIC_DO_EOI
+
 		/* re-enable the previous level */
 		vmeUniverseWriteReg(linten, UNIV_REGOFF_LINT_EN);
+#endif
 }
+
 
 /* STUPID API */
 static void
@@ -1053,129 +1566,379 @@ my_isOn(const rtems_irq_connect_data *arg)
 		return (int)vmeUniverseReadReg(UNIV_REGOFF_LINT_EN);
 }
 
-int
-vmeUniverseInstallIrqMgr(int vmeOut,
-						 int vmeIrqPicLine,
-						 int specialOut,
-						 int specialIrqPicLine)
+typedef struct {
+	int uni_pin, pic_pin;
+} IntRoute;
+
+static void
+connectIsr(int shared, rtems_irq_hdl isr, int pic_line, int pic_pin)
 {
-rtems_irq_connect_data aarrggh;
+rtems_irq_connect_data	aarrggh;
+	aarrggh.on     = my_no_op; /* at _least_ they could check for a 0 pointer */
+	aarrggh.off    = my_no_op;
+	aarrggh.isOn   = my_isOn;
+	aarrggh.hdl    = isr;
+	aarrggh.handle = (rtems_irq_hdl_param)pic_pin;
+	aarrggh.name   = pic_line;
+
+	if ( shared ) {
+#if BSP_SHARED_HANDLER_SUPPORT > 0
+		if (!BSP_install_rtems_shared_irq_handler(&aarrggh))
+			BSP_panic("unable to install vmeUniverse shared irq handler");
+#else
+		uprintf(stderr,"vmeUniverse: WARNING: your BSP doesn't support sharing interrupts\n");
+		if (!BSP_install_rtems_irq_handler(&aarrggh))
+			BSP_panic("unable to install vmeUniverse irq handler");
+#endif
+	} else {
+		if (!BSP_install_rtems_irq_handler(&aarrggh))
+			BSP_panic("unable to install vmeUniverse irq handler");
+	}
+}
+
+int
+vmeUniverseInstallIrqMgrAlt(int shared, int uni_pin0, int pic_pin0, ...)
+{
+int		rval;
+va_list	ap;
+	va_start(ap, pic_pin0);
+	rval = vmeUniverseInstallIrqMgrVa(shared, uni_pin0, pic_pin0, ap);
+	va_end(ap);
+	return rval;
+}
+
+int
+vmeUniverseInstallIrqMgrVa(int shared, int uni_pin0, int pic_pin0, va_list ap)
+{
+int	i,j, specialPin, uni_pin[UNIV_NUM_WIRES+1], pic_pin[UNIV_NUM_WIRES];
+
+	if (vmeUniverseIrqMgrInstalled)                return -4;
 
 	/* check parameters */
-	if ((vmeIrqUnivOut=vmeOut) < 0 || vmeIrqUnivOut > 7) return -1;
-	if ((specialIrqUnivOut=specialOut) > 7) return -2;
-	if (specialOut >=0 && specialIrqPicLine < 0) return -3;
+
+	if ( uni_pin0 < 0 || uni_pin0 > 7 )            return -1;
+
+	uni_pin[0] = uni_pin0;
+	pic_pin[0] = pic_pin0 < 0 ? vmeUniverse0PciIrqLine : pic_pin0;
+	i = 1;
+	while ( (uni_pin[i] = va_arg(ap, int)) >= 0 ) {
+		
+		if ( i >= UNIV_NUM_WIRES ) {
+			                                       return -5;
+		}
+
+		pic_pin[i] = va_arg(ap,int);
+
+		if ( uni_pin[i] > 7 ) {
+                                                   return -2;
+		}
+		if ( pic_pin[i] < 0 ) {
+                                                   return -3;
+		}
+		i++;
+	}
+
+	/* all routings must be different */
+	for ( i=0; uni_pin[i] >= 0; i++ ) {
+		for ( j=i+1; uni_pin[j] >= 0; j++ ) {
+			if ( uni_pin[j] == uni_pin[i] )        return -6;
+			if ( pic_pin[j] == pic_pin[i] )        return -7;
+		}
+	}
+
 	/* give them a chance to override buggy PCI info */
-	if (vmeIrqPicLine >= 0) {
+	if ( pic_pin[0] >= 0 && vmeUniverse0PciIrqLine != pic_pin[0] ) {
 		uprintf(stderr,"Overriding main IRQ line PCI info with %d\n",
-				vmeIrqPicLine);
-		vmeUniverse0PciIrqLine=vmeIrqPicLine;
+				pic_pin[0]);
+		vmeUniverse0PciIrqLine=pic_pin[0];
 	}
 
-	if (vmeUniverseIrqMgrInstalled) return -4;
-
-	aarrggh.on=my_no_op; /* at _least_ they could check for a 0 pointer */
-	aarrggh.off=my_no_op;
-	aarrggh.isOn=my_isOn;
-	aarrggh.hdl=universeVMEISR;
-	aarrggh.name=vmeUniverse0PciIrqLine + BSP_PCI_IRQ0;
-	if (!BSP_install_rtems_irq_handler(&aarrggh))
-			BSP_panic("unable to install vmeUniverse irq handler");
-	if (specialIrqUnivOut > 0) {
-			/* install the special handler to a separate irq */
-			aarrggh.hdl=universeSpecialISR;
-			aarrggh.name=specialIrqPicLine + BSP_PCI_IRQ0;
-			if (!BSP_install_rtems_irq_handler(&aarrggh))
-				BSP_panic("unable to install vmeUniverse secondary irq handler");
-	} else {
-		specialIrqUnivOut = vmeIrqUnivOut;
+	for ( i = 0; uni_pin[i] >= 0; i++ ) {
+		/* offset wire # by one so we can initialize to 0 == invalid */
+		universe_wire[i] = uni_pin[i] + 1;
+		connectIsr(shared, universeVMEISR, pic_pin[i], i);
 	}
+
+	specialPin = uni_pin[1] >= 0 ? 1 : 0;
+
 	/* setup routing */
 
-	vmeUniverseWriteReg(
-		(UNIV_LINT_MAP0_VIRQ7(vmeIrqUnivOut) |
-		 UNIV_LINT_MAP0_VIRQ6(vmeIrqUnivOut) |
-		 UNIV_LINT_MAP0_VIRQ5(vmeIrqUnivOut) |
-		 UNIV_LINT_MAP0_VIRQ4(vmeIrqUnivOut) |
-		 UNIV_LINT_MAP0_VIRQ3(vmeIrqUnivOut) |
-		 UNIV_LINT_MAP0_VIRQ2(vmeIrqUnivOut) |
-		 UNIV_LINT_MAP0_VIRQ1(vmeIrqUnivOut) |
-		 UNIV_LINT_MAP0_VOWN(specialIrqUnivOut)
-		),
-		UNIV_REGOFF_LINT_MAP0);
-	vmeUniverseWriteReg(
-		(UNIV_LINT_MAP1_ACFAIL(specialIrqUnivOut) |
-		 UNIV_LINT_MAP1_SYSFAIL(specialIrqUnivOut) |
-		 UNIV_LINT_MAP1_SW_INT(specialIrqUnivOut) |
-		 UNIV_LINT_MAP1_SW_IACK(specialIrqUnivOut) |
-		 UNIV_LINT_MAP1_VERR(specialIrqUnivOut) |
-		 UNIV_LINT_MAP1_LERR(specialIrqUnivOut) |
-		 UNIV_LINT_MAP1_DMA(specialIrqUnivOut)
-		),
-		UNIV_REGOFF_LINT_MAP1);
+	/* IntRoute checks for mgr being installed */
 	vmeUniverseIrqMgrInstalled=1;
+
+	/* route 7 VME irqs to first / 'normal' pin */
+	for ( i=1; i<8; i++ )
+		vmeUniverseIntRoute( i, 0 );
+	for ( i=UNIV_VOWN_INT_VEC; i<=UNIV_LM3_INT_VEC; i++ ) {
+		if ( vmeUniverseIntRoute( i, specialPin ) )
+			printk("Routing lvl %i -> wire # %i failed\n", i, specialPin);
+	}
+
 	return 0;
+}
+
+int
+vmeUniverseInstallIrqMgr(int vmeIrqUnivOut,
+						 int vmeIrqPicLine,
+						 int specialIrqUnivOut,
+						 int specialIrqPicLine)
+{
+	return vmeUniverseInstallIrqMgrAlt(
+				0,	/* bwds compat. */
+				vmeIrqUnivOut, vmeIrqPicLine,
+				specialIrqUnivOut, specialIrqPicLine,
+				-1);
 }
 
 int
 vmeUniverseInstallISR(unsigned long vector, VmeUniverseISR hdl, void *arg)
 {
-UniverseIRQEntry ip;
+UniverseIRQEntry          ip;
+unsigned long             flags;
+volatile UniverseIRQEntry *pe;
 
 		if (vector>sizeof(universeHdlTbl)/sizeof(universeHdlTbl[0]) || !vmeUniverseIrqMgrInstalled)
 				return -1;
 
-		ip=universeHdlTbl[vector];
+		pe = universeHdlTbl + vector;
 
-		if (ip || !(ip=(UniverseIRQEntry)malloc(sizeof(UniverseIRQEntryRec))))
+		if (*pe || !(ip=(UniverseIRQEntry)malloc(sizeof(UniverseIRQEntryRec))))
 				return -1;
+
 		ip->isr=hdl;
 		ip->usrData=arg;
-		universeHdlTbl[vector]=ip;
+
+	rtems_interrupt_disable(flags);
+		if ( *pe ) {
+			/* oops; someone intervened */
+			rtems_interrupt_enable(flags);
+			free(ip);
+			return -1;
+		}
+		*pe = ip;
+	rtems_interrupt_enable(flags);
 		return 0;
 }
 
 int
 vmeUniverseRemoveISR(unsigned long vector, VmeUniverseISR hdl, void *arg)
 {
-UniverseIRQEntry ip;
+UniverseIRQEntry          ip;
+unsigned long             flags;
+volatile UniverseIRQEntry *pe;
 
 		if (vector>sizeof(universeHdlTbl)/sizeof(universeHdlTbl[0]) || !vmeUniverseIrqMgrInstalled)
 				return -1;
 
-		ip=universeHdlTbl[vector];
+		pe = universeHdlTbl + vector;
 
-		if (!ip || ip->isr!=hdl || ip->usrData!=arg)
-				return -1;
-		universeHdlTbl[vector]=0;
+	rtems_interrupt_disable(flags);
+		ip = *pe;
+		if (!ip || ip->isr!=hdl || ip->usrData!=arg) {
+			rtems_interrupt_enable(flags);
+			return -1;
+		}
+		*pe = 0;
+	rtems_interrupt_enable(flags);
 		free(ip);
+		return 0;
+}
+
+static int
+intDoEnDis(unsigned int level, int dis)
+{
+unsigned long	flags, v;
+int				shift;
+
+	if (  ! vmeUniverseIrqMgrInstalled || (shift = lvl2bit(level)) < 0 )
+		return -1;
+
+	v = 1<<shift;
+
+	if ( !dis )
+		return vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) & v ? 1 : 0;
+
+	rtems_interrupt_disable(flags);
+	if ( dis<0 )
+		vmeUniverseWriteReg( vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) & ~v, UNIV_REGOFF_LINT_EN ); 
+	else {
+		vmeUniverseWriteReg( vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) |  v, UNIV_REGOFF_LINT_EN  ); 
+	}
+	rtems_interrupt_enable(flags);
 		return 0;
 }
 
 int
 vmeUniverseIntEnable(unsigned int level)
 {
-		if (!vmeUniverseIrqMgrInstalled || level<1 || level>7)
-				return -1;
-		vmeUniverseWriteReg(
-				(vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) |
-				 (UNIV_LINT_EN_VIRQ1 << (level-1))
-				),
-				UNIV_REGOFF_LINT_EN);
-		return 0;
+	return intDoEnDis(level, 1);
 }
 
 int
 vmeUniverseIntDisable(unsigned int level)
 {
-		if (!vmeUniverseIrqMgrInstalled || level<1 || level>7)
-				return -1;
-		vmeUniverseWriteReg(
-				(vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) &
-				 ~ (UNIV_LINT_EN_VIRQ1 << (level-1))
-				),
-				UNIV_REGOFF_LINT_EN);
-		return 0;
+	return intDoEnDis(level, -1);
+}
+
+int
+vmeUniverseIntIsEnabled(unsigned int level)
+{
+	return intDoEnDis(level, 0);
+}
+
+/* Loopback test of VME/universe interrupts */
+
+typedef struct {
+	rtems_id	q;
+	int			l;
+} LoopbackTstArgs;
+
+static void
+loopbackTstIsr(void *arg, unsigned long vector)
+{
+LoopbackTstArgs *pa = arg;
+	if ( RTEMS_SUCCESSFUL != rtems_message_queue_send(pa->q, (void*)&vector, sizeof(vector)) ) {
+		/* Overrun ? */
+		printk("vmeUniverseIntLoopbackTst: (ISR) message queue full / overrun ? disabling IRQ level %i\n", pa->l);
+		vmeUniverseIntDisable(pa->l);
+	}
+}
+
+int
+vmeUniverseIntLoopbackTst(int level, unsigned vector)
+{
+DFLT_BASE;
+rtems_status_code	sc;
+rtems_id			q = 0;
+int					installed = 0;
+int					i, err = 0;
+int					doDisable = 0;
+unsigned32			size;
+unsigned long		msg;
+char *				irqfmt  = "VME IRQ @vector %3i %s";
+char *				iackfmt = "VME IACK            %s";
+LoopbackTstArgs		a;
+
+	CHECK_DFLT_BASE(base);
+
+	/* arg check */
+	if ( level < 1 || level > 7 || vector > 255 )
+		return -1;
+
+	if ( UNIV_REV(base) < 2 && vector != 0 ) {
+		fprintf(stderr,
+			"vmeUniverseIntLoopbackTst(): Universe 1 has a bug. IACK in response to\n");
+		fprintf(stderr,
+			"self-generated VME interrupt yields always a zero vector. As a workaround,\n");
+		fprintf(stderr,
+			"use vector 0, please.\n");
+		return -1;
+	}
+
+	/* Create message queue */
+	if ( RTEMS_SUCCESSFUL != (sc=rtems_message_queue_create(
+        								rtems_build_name('t' ,'U','I','I'),
+								        4,
+        								sizeof(unsigned long),
+        								0,  /* default attributes: fifo, local */
+        								&q)) ) {
+		rtems_error(sc, "vmeUniverseIntLoopbackTst: Unable to create message queue");
+		goto bail;
+	}
+
+	a.q = q;
+	a.l = level;
+
+	/* Install handlers */
+	if ( vmeUniverseInstallISR(vector, loopbackTstIsr, (void*)&a) ) {
+		fprintf(stderr,"Unable to install VME ISR to vector %i\n",vector);
+		goto bail;
+	}
+	installed++;
+	if ( vmeUniverseInstallISR(UNIV_VME_SW_IACK_INT_VEC, loopbackTstIsr, (void*)&a) ) {
+		fprintf(stderr,"Unable to install VME ISR to IACK special vector %i\n",UNIV_VME_SW_IACK_INT_VEC);
+		goto bail;
+	}
+	installed++;
+
+	if ( !vmeUniverseIntIsEnabled(level) && 0==vmeUniverseIntEnable(level) )
+		doDisable = 1;
+	
+	/* make sure there are no pending interrupts */
+	vmeUniverseWriteReg( UNIV_LINT_STAT_SW_IACK,  UNIV_REGOFF_LINT_STAT );
+
+	if ( vmeUniverseIntEnable( UNIV_VME_SW_IACK_INT_VEC ) ) {
+		fprintf(stderr,"Unable to enable IACK interrupt\n");
+		goto bail;
+	}	
+
+	printf("vmeUniverse VME interrupt loopback test; STARTING...\n");
+	printf(" --> asserting VME IRQ level %i\n", level);
+	vmeUniverseIntRaise(level, vector);
+
+	for ( i = 0; i< 3; i++ ) {
+    	sc = rtems_message_queue_receive(
+       			    q,
+		            &msg,
+		            &size,
+		            RTEMS_WAIT,
+		            20);
+		if ( sc ) {
+			if ( RTEMS_TIMEOUT == sc && i>1 ) {
+				/* OK; we dont' expect more to happen */
+				sc = 0;
+			} else {
+				rtems_error(sc,"Error waiting for interrupts");
+			}
+			break;
+		}
+		if ( msg == vector ) {
+			if ( !irqfmt ) {
+				printf("Excess VME IRQ received ?? -- BAD\n");
+				err = 1;
+			} else {
+				printf(irqfmt, vector, "received -- PASSED\n");
+				irqfmt = 0;
+			}
+		} else if ( msg == UNIV_VME_SW_IACK_INT_VEC ) {
+			if ( !iackfmt ) {
+				printf("Excess VME IACK received ?? -- BAD\n");
+				err = 1;
+			} else {
+				printf(iackfmt, "received -- PASSED\n");
+				iackfmt = 0;
+			}
+		} else {
+			printf("Unknown IRQ (vector %lu) received -- BAD\n", msg);
+			err = 1;
+		}
+	}
+
+
+	/* Missing anything ? */
+	if ( irqfmt ) {
+		printf(irqfmt,vector, "MISSED -- BAD\n");
+		err = 1;
+	}
+	if ( iackfmt ) {
+		printf(iackfmt, "MISSED -- BAD\n");
+		err = 1;
+	}
+
+	printf("FINISHED.\n");
+
+bail:
+	if ( doDisable )
+		vmeUniverseIntDisable(level);
+	vmeUniverseIntDisable( UNIV_VME_SW_IACK_INT_VEC );
+	if ( installed > 0 )
+		vmeUniverseRemoveISR(vector, loopbackTstIsr, (void*)&a);
+	if ( installed > 1 )
+		vmeUniverseRemoveISR(UNIV_VME_SW_IACK_INT_VEC, loopbackTstIsr, (void*)&a);
+	if ( q )
+		rtems_message_queue_delete(q);
+
+	return sc ? sc : err;
 }
 
 #endif

@@ -1,19 +1,21 @@
-The universe II driver is in a separate subdir
-because it is maintained at SSRL outside of the
-rtems CVS tree (it supports other OSes as well)
+The tundra drivers are in a separate subdir
+because they are maintained at SSRL outside of the
+rtems CVS tree. The directory is called 'vmeUniverse'
+for historic reasons. 'tundra' would be better
+since we now support the tundra tsi148 as well...
 
-Till Straumann <strauman@slac.stanford.edu> 1/2002
+Till Straumann <strauman@slac.stanford.edu> 1/2002, 2005
 
 NOTES:
-This driver is maintained _outside_ rtems.
+These driver are maintained _outside_ rtems.
 Please forward future modifications to me.
 
-A BSP that wants to use the vmeUniverse driver
+A BSP that wants to use these drivers
 must implement the following headers / functionality:
  - <bsp/pci.h> offering an API like 'libbsp/powerpc/shared/pci'
  - <bsp/irq.h> offering the 'new style' RTEMS irq API
    (like 'libbsp/powerpc/shared/irq').
 
 The BSP should then use "VPATH magic" (to use Joel's
-words :-) to reach the vmeUniverse.* files in the
-universe subdir.
+words :-) to reach the vmeUniverse.* / vmeTsi148.* files
+in this subdir.
