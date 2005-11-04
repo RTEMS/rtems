@@ -39,14 +39,14 @@ shared_interrupts_rel_SOURCES = shared/interrupts/installisrentries.c \
 shared_interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) $(interrupts_CPPFLAGS)
 shared_interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+EXTRA_DIST += mongoosev/README
+EXTRA_DIST += mongoosev/duart/README.mguart
 if mongoosev
 include_libcpu_HEADERS += mongoosev/include/mongoose-v.h
 
 ## mongoosev/duart
 include_libchipdir = $(includedir)/libchip
 include_libchip_HEADERS = mongoosev/duart/mg5uart.h
-
-EXTRA_DIST += mongoosev/duart/README.mguart
 
 noinst_PROGRAMS += mongoosev/duart.rel
 mongoosev_duart_rel_SOURCES = mongoosev/duart/mg5uart.c \
