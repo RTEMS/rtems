@@ -353,7 +353,7 @@
 	* Makefile.am, configure.ac: Reflect having added mpc5xx.
 	* shared/include/cpuIdent.h, shared/include/cpuIdent.c: Add defines
 	for MPC_5XX.
-	* mpc5xx/.cvsignore, mpc5xx/Makefile.am: New.
+	* mpc5xx/Makefile.am: New.
 	* mpc5xx/exceptions/asm_utils.S,  mpc5xx/exceptions/raw_exception.c,
 	mpc5xx/exceptions/raw_exception.h, mpc5xx/ictrl/ictrl.c,
 	mpc5xx/ictrl/ictrl.h, mpc5xx/timer/timer.c: New (Submission from
@@ -415,7 +415,7 @@
 
 	* configure.ac: Reflect changes to mpc505/Makefile.ams.
 	* configure.ac: Reflect changes to mpc8xx/Makefile.ams.
-	* mpc6xx/wrapup/.cvsignore, ppc403/clock/Makefile.am,
+	* ppc403/clock/Makefile.am,
 	ppc403/console/Makefile.am, ppc403/ictrl/Makefile.am,
 	ppc403/timer/Makefile.am, ppc403/tty_drv/Makefile.am,
 	ppc403/vectors/Makefile.am, mpc505/ictrl/Makefile.am,
@@ -712,11 +712,6 @@
 	* mpc6xx/clock/c_clock.c, mpc6xx/exceptions/raw_exception.c,
 	mpc6xx/mmu/bat.c: Removed warnings.
 
-2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* .cvsignore, old-exceptions/.cvsignore, new-exceptions/.cvsignore:
-	Reformat. Add autom4te*cache. Remove autom4te.cache.
-
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
 	* old-exceptions/cpu.c: Include declaration of variable i in ifdef
@@ -877,12 +872,10 @@
 2001-11-27	Joel Sherrill <joel@OARcorp.com>,
 
 	* new_exception_processing/Makefile.in,
-	new_exception_processing/.cvsignore,
 	new_exception_processing/Makefile.am,
 	new_exception_processing/c_isr.inl, new_exception_processing/cpu.c,
 	new_exception_processing/cpu.h, new_exception_processing/cpu_asm.S,
 	old_exception_processing/Makefile.in,
-	old_exception_processing/.cvsignore,
 	old_exception_processing/Makefile.am,
 	old_exception_processing/README, old_exception_processing/TODO,
 	old_exception_processing/c_isr.inl, old_exception_processing/cpu.c,
@@ -892,17 +885,11 @@
 	old_exception_processing/ppccache.c,
 	old_exception_processing/rtems.S: Deleted since now under libbsp.
 
-2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* old-exceptions/.cvsignore, new-exceptions/.cvsignore: Add
-	aclocal.m4, autom4te.*, config.*, configure.
-
 2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove ppc603e from old_exception_processing.
 	* configure.ac: Remove mpc750 from new_exception_processing, Remove
 	mpc604 from new_exception_processing.
-	* new-exceptions/ChangeLog: New file.
 	* old-exceptions/Makefile.am, new-exceptions/Makefile.am: Preinstall
 	c_isr.inl (HACK).
 
@@ -927,7 +914,7 @@
 	Thomas Doerfler <Thomas.Doerfler@imd-systems.de> who ensured it did
 	not negatively impact the ppc403 BSPs.  The submission and tracking
 	process was captured as PR50.
-	* ppc403/console/console405.c ppc403/tty_drv/.cvsignore,
+	* ppc403/console/console405.c,
 	ppc403/tty_drv/Makefile.am, ppc403/tty_drv/tty_drv.c,
 	ppc403/tty_drv/tty_drv.h: New files.
 	* Makefile.am, README, configure.ac, old_exception_processing/cpu.c,
@@ -958,10 +945,6 @@
 2001-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc8260/include/mpc8260.h: "or" is a keyword in C++.
-	* mpc8260/clock/.cvsignore, mpc8260/console-generic/.cvsignore,
-	mpc8260/cpm/.cvsignore, mpc8260/exceptions/.cvsignore,
-	mpc8260/include/.cvsignore, mpc8260/mmu/.cvsignore,
-	mpc8260/timer/.cvsignore, mpc8260/.cvsignore: New files.
 
 2001-10-22	Andy Dachs <a.dachs@sstl.co.uk>
 
@@ -972,9 +955,9 @@
 	Added mpc8260 support.
 	* mpc8260/Makefile.am, mpc8260/README, mpc8260/clock/Makefile.am,
 	mpc8260/clock/clock.c, mpc8260/console-generic/Makefile.am,
-	mpc8260/console-generic/console-generic.c, mpc8260/cpm/.cvsignore,
+	mpc8260/console-generic/console-generic.c,
 	mpc8260/cpm/Makefile.am, mpc8260/cpm/brg.c, mpc8260/cpm/cp.c,
-	mpc8260/cpm/dpram.c, mpc8260/exceptions/.cvsignore,
+	mpc8260/cpm/dpram.c,
 	mpc8260/exceptions/Makefile.am, mpc8260/exceptions/asm_utils.S,
 	mpc8260/exceptions/raw_exception.c,
 	mpc8260/exceptions/raw_exception.h, mpc8260/include/Makefile.am,
@@ -994,7 +977,6 @@
 
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
 	* configure.ac: New file, generated from configure.in by autoupdate.
 	* configure.in: Remove.
 
@@ -1110,7 +1092,7 @@
 
 2001-03-30	Eric Valette <valette@crf.canon.fr>
 
-	* mpc8xx/vectors/.cvsignore, mpc8xx/vectors/Makefile.am,
+	* mpc8xx/vectors/Makefile.am,
 	mpc8xx/vectors/README, mpc8xx/vectors/align_h.S
 	mpc8xx/vectors/vectors.S: These files were removed in support of
 	switching the mpc8xx to the use the "new exception processing
@@ -1121,7 +1103,7 @@
 	new_exception_processing/cpu.h, shared/include/byteorder.h,
 	wrapup/Makefile.am: This is conversion of the mpc8xx CPU to the "new
 	exception processing model."
-	* mpc8xx/exceptions/.cvsignore, mpc8xx/exceptions/Makefile.am,
+	* mpc8xx/exceptions/Makefile.am,
 	mpc8xx/exceptions/asm_utils.S, mpc8xx/exceptions/raw_exception.c,
 	mpc8xx/exceptions/raw_exception.h: New files.
 
@@ -1133,7 +1115,6 @@
 	old_exception_processing/Makefile.am, pc403/ictrl/Makefile.am,
 	shared/include/Makefile.am, shared/src/Makefile.am: Apply *_HEADERS
 	instead of *H_FILES.
-	* shared/src/.cvsignore: Add cache.h.
 
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -1186,7 +1167,7 @@
 	volatile.
 	* mpc505/vectors/Makefile.am: alignment exception handler now
 	included.
-	* mpc505/ictrl/.cvsignore, mpc505/ictrl/Makefile.am,
+	* mpc505/ictrl/Makefile.am,
 	mpc505/ictrl/ictrl.c, mpc505/ictrl/ictrl.h: New files.
 
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
