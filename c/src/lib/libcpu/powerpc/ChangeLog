@@ -64,14 +64,14 @@
 2005-05-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove mpc6xx/Makefile.
-	* Makefile.am: Merge-in mpc8xx/Makefile.am.
-	* configure.ac: Remove mpc8260/Makefile.
-	* Makefile.am: Merge-in mpc8260/Makefile.am.
+	* Makefile.am: Merge-in ppc403/Makefile.am.
 	* ppc403/Makefile.am, mpc8260/Makefile.am, mpc8xx/Makefile.am,
 	mpc6xx/Makefile.am, mpc505/Makefile.am, mpc5xx/Makefile.am: Remove.
-	* Makefile.am: Merge-in ppc403/Makefile.am.
-	* configure.ac: Remove mpc5xx/Makefile. Remove mpc505/Makefile.
+	* Makefile.am: Merge-in mpc8260/Makefile.am.
+	* configure.ac: Remove mpc8260/Makefile.
+	* Makefile.am: Merge-in mpc8xx/Makefile.am.
 	* configure.ac: Remove mpc8xx/Makefile.
+	* configure.ac: Remove mpc5xx/Makefile. Remove mpc505/Makefile.
 	* Makefile.am: Merge-in mpc5xx/Makefile.am. Merge-in
 	mpc505/Makefile.am.
 	* configure.ac: Remove ppc403/Makefile.
@@ -126,18 +126,17 @@
 	(Conflict with C99). Make spiBaudRound static.
 	* mpc8260/mmu/mmu.c: Use _CPU_MSR_GET instead of _CPU_MSR_Value.
 	(Unify old/new-exception processing API).
-	* old-exceptions/rtems/score/ppc_offs.h,
-	old-exceptions/README, old-exceptions/TODO, old-exceptions/cpu.c,
-	old-exceptions/cpu_asm.S, old-exceptions/irq_stub.S,
-	old-exceptions/ppccache.c: New (Copied from
-	../../libbsp/powerpc/support/old_exception_processing)
+	* old-exceptions/rtems/score/ppc_offs.h, old-exceptions/README,
+	old-exceptions/TODO, old-exceptions/cpu.c, old-exceptions/cpu_asm.S,
+	old-exceptions/irq_stub.S, old-exceptions/ppccache.c: New (Copied
+	from ../../libbsp/powerpc/support/old_exception_processing)
+	* new-exceptions/cpu.c: Add CPU_MINIMUM_STACK_FRAME_SIZE.
+	* new-exceptions/cpu.c (_CPU_ISR_install_vector): New.
 	* old-exceptions/cpu.c: Use _CPU_MSR_GET instead of _CPU_MSR_Value
 	(Unify old/new exception processing API).
-	* new-exceptions/cpu.c (_CPU_ISR_install_vector): New.
-	* new-exceptions/cpu.c: Add CPU_MINIMUM_STACK_FRAME_SIZE.
-	* Makefile.am: Reflect changes above.
 	* new-exceptions/cpu.c, new-exceptions/cpu_asm.S: New (Copied from 
 	../../libbsp/powerpc/support/new_exception_processing).
+	* Makefile.am: Reflect changes above.
 
 2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
@@ -146,14 +145,15 @@
 	* rtems/powerpc/powerpc.h: Remove PPC_ALIGNMENT.
 	* mpc8xx/mmu/mmu.c, rtems/powerpc/cache.h, rtems/powerpc/powerpc.h,
 	old-exceptions/cpu.c, old-exceptions/cpu_asm.S,
-	old-exceptions/irq_stub.S: #include <rtems/powerpc/powerpc.h>.
+	old-exceptions/irq_stub.S, new-exceptions/cpu.c,
+	new-exceptions/cpu_asm.S: #include <rtems/powerpc/powerpc.h>.
 	* rtems/powerpc/powerpc.h: Remove mpc603e specific 
 	PPC_TLB_*/PPC_IRQ_* defines. Use mpc603 specific defines on mpc603e.
 
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* old-exceptions/cpu.c: Add _PPC_MSR_DISABLE_MASK.
 	* rtems/powerpc/powerpc.h: New header guard.
+	* old-exceptions/cpu.c: Add _PPC_MSR_DISABLE_MASK.
 	* mpc5xx/include/mpc5xx.h, mpc5xx/include/console.h,
 	mpc5xx/exceptions/raw_exception.h, mpc5xx/irq/irq.h,
 	mpc5xx/vectors/vectors.h, mpc6xx/exceptions/raw_exception.h,
@@ -179,7 +179,8 @@
 	use #include <rtems/error.h>.
 	* Makefile.am: Build exception processing in  old-exceptions rsp.
 	new-exceptions subdirs (Merge-in former libbsp/powerpc/support/*).
-	* old-exceptions/Makefile.am, old-exceptions/configure.ac: Remove
+	* old-exceptions/Makefile.am, old-exceptions/configure.ac,
+	new-exceptions/Makefile.am, new-exceptions/configure.ac: Remove
 	(Unused).
 
 2005-02-10	Ralf Corsepius <ralf.corsepius@rtems.org>
@@ -203,8 +204,8 @@
 
 	* mpc505/Makefile.am, mpc5xx/Makefile.am, mpc6xx/Makefile.am,
 	mpc8260/Makefile.am, mpc8xx/Makefile.am, ppc403/Makefile.am,
-	shared/Makefile.am, old-exceptions/Makefile.am: Eliminate
-	CFLAGS_OPTIMIZE_V.
+	shared/Makefile.am, old-exceptions/Makefile.am,
+	new-exceptions/Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
 
 2005-01-04	Joel Sherrill <joel@OARcorp.com>
 
@@ -214,8 +215,8 @@
 
 	* mpc505/Makefile.am, mpc5xx/Makefile.am, mpc6xx/Makefile.am,
 	mpc8260/Makefile.am, mpc8xx/Makefile.am, ppc403/Makefile.am,
-	shared/Makefile.am, old-exceptions/Makefile.am: Remove build-variant
-	support.
+	shared/Makefile.am, old-exceptions/Makefile.am,
+	new-exceptions/Makefile.am: Remove build-variant support.
 
 2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
 
@@ -261,7 +262,8 @@
 
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
-	* configure.ac, old-exceptions/configure.ac: Require automake > 1.9.
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac: Require automake > 1.9.
 
 2004-05-22	Till Strauman <strauman@slac.stanford.edu>
 
@@ -306,19 +308,19 @@
 
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
-	* mpc8260/clock/clock.c, mpc8xx/clock/clock.c, ppc403/clock/clock.c:
-	Include <rtems/clockdrv.h> instead of <clockdrv.h>.
 	* mpc505/vectors/vectors.S, mpc6xx/exceptions/asm_utils.S,
 	mpc6xx/mmu/mmuAsm.S, mpc8260/exceptions/asm_utils.S,
 	mpc8xx/exceptions/asm_utils.S, ppc403/vectors/vectors.S,
-	mpc5xx/exceptions/asm_utils.S, old-exceptions/cpu_asm.S: Include
-	<rtems/asm.h> instead of <asm.h>.
+	mpc5xx/exceptions/asm_utils.S, old-exceptions/cpu_asm.S,
+	new-exceptions/cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.
+	* mpc8260/clock/clock.c, mpc8xx/clock/clock.c, ppc403/clock/clock.c:
+	Include <rtems/clockdrv.h> instead of <clockdrv.h>.
 
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* mpc6xx/timer/timer.c: Cosmetics.
-	* old-exceptions/cpu.c, old-exceptions/ppccache.c: Convert to using
-	c99 fixed size types.
+	* old-exceptions/cpu.c, old-exceptions/ppccache.c,
+	new-exceptions/cpu.c: Convert to using c99 fixed size types.
 
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
@@ -349,9 +351,9 @@
 
 	PR 587/bsps
 	* Makefile.am, configure.ac: Reflect having added mpc5xx.
-	* mpc5xx/.cvsignore, mpc5xx/Makefile.am: New.
 	* shared/include/cpuIdent.h, shared/include/cpuIdent.c: Add defines
 	for MPC_5XX.
+	* mpc5xx/.cvsignore, mpc5xx/Makefile.am: New.
 	* mpc5xx/exceptions/asm_utils.S,  mpc5xx/exceptions/raw_exception.c,
 	mpc5xx/exceptions/raw_exception.h, mpc5xx/ictrl/ictrl.c,
 	mpc5xx/ictrl/ictrl.h, mpc5xx/timer/timer.c: New (Submission from
@@ -373,9 +375,11 @@
 
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* old-exceptions/configure.ac: Add RTEMS_PROG_CCAS.
+	* old-exceptions/configure.ac, new-exceptions/configure.ac: Add
+	RTEMS_PROG_CCAS.
 	* wrapup/Makefile.am: Remove.
-	* old-exceptions/Makefile.am: Use automake compilation rules.
+	* old-exceptions/Makefile.am, new-exceptions/Makefile.am: Use
+	automake compilation rules.
 	* shared/Makefile.am: Use automake compilation rules. Build *.rels.
 	* configure.ac: Remove wrapup.
 
@@ -390,16 +394,16 @@
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* mpc505/Makefile.am, mpc6xx/Makefile.am, mpc8260/Makefile.am,
-	mpc8xx/Makefile.am, ppc403/Makefile.am, shared/Makefile.am: Ditto.
 	* Makefile.am, old-exceptions/Makefile.am: Re-add dirstamps to
 	PRE/TMPINSTALL_FILES. Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* mpc505/Makefile.am, mpc6xx/Makefile.am, mpc8260/Makefile.am,
+	mpc8xx/Makefile.am, ppc403/Makefile.am, shared/Makefile.am: Ditto.
 
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shared/Makefile.am: Fix typo  EXTRA_DIST = $(libcpuspec_C_FILES)
-	* mpc505/Makefile.am: Fix typo vectors/vectors.S.
 	* mpc6xx/Makefile.am: Remove libcpuspec.a (Unused).
+	* mpc505/Makefile.am: Fix typo vectors/vectors.S.
 
 2003-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -409,8 +413,8 @@
 
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Reflect changes to mpc8xx/Makefile.ams.
 	* configure.ac: Reflect changes to mpc505/Makefile.ams.
+	* configure.ac: Reflect changes to mpc8xx/Makefile.ams.
 	* mpc6xx/wrapup/.cvsignore, ppc403/clock/Makefile.am,
 	ppc403/console/Makefile.am, ppc403/ictrl/Makefile.am,
 	ppc403/timer/Makefile.am, ppc403/tty_drv/Makefile.am,
@@ -445,10 +449,11 @@
 	mpc8xx/Makefile.am, mpc8xx/exceptions/Makefile.am,
 	ppc403/ictrl/Makefile.am, ppc403/tty_drv/Makefile.am,
 	shared/include/Makefile.am, shared/src/Makefile.am,
-	old-exceptions/Makefile.am: Use mkdir_p. Remove dirs from
-	PRE/TMPINSTALL_FILES.
-	* configure.ac, old-exceptions/configure.ac: Require automake >=
-	1.8, autoconf >= 2.59.
+	old-exceptions/Makefile.am, new-exceptions/Makefile.am: Use mkdir_p.
+	Remove dirs from PRE/TMPINSTALL_FILES.
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac: Require automake >= 1.8, autoconf >=
+	2.59.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -482,7 +487,10 @@
 	ppc403/vectors/Makefile.am: Remove all-local,
 	shared/include/Makefile.am: Remove all-local,
 	shared/src/Makefile.am: Remove all-local, wrapup/Makefile.am: Remove
-	all-local, old-exceptions/Makefile.am: Remove all-local: $(ARCH).
+	all-local, old-exceptions/Makefile.am: Remove all-local,
+	new-exceptions/Makefile.am: Remove all-local: $(ARCH).
+	* new-exceptions/Makefile.am: Remove include_rtems_score_HEADERS.
+	Reformat for preinstallation dirstamp support.
 	* old-exceptions/Makefile.am: Reformat for preinstallation dirstamp
 	support.
 
@@ -510,12 +518,13 @@
 
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac, old-exceptions/configure.ac: Remove
-	RTEMS_CANONICAL_HOST.
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac: Remove RTEMS_CANONICAL_HOST.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac, old-exceptions/configure.ac: Remove RTEMS_CHECK_CPU.
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac: Remove RTEMS_CHECK_CPU.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
@@ -537,7 +546,8 @@
 	shared/include/cpuIdent.h, shared/include/io.h,
 	shared/include/mmu.h, shared/include/page.h,
 	shared/include/pgtable.h, shared/include/spr.h,
-	old-exceptions/cpu.c, old-exceptions/cpu_asm.S: URL for license
+	old-exceptions/cpu.c, old-exceptions/cpu_asm.S,
+	new-exceptions/cpu.c, new-exceptions/cpu_asm.S: URL for license
 	changed.
 	* mpc505/timer/timer.c, ppc403/console/console.c,
 	ppc403/console/console405.c: Removed incorrect statement about
@@ -549,8 +559,8 @@
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am, old-exceptions/Makefile.am: Reflect having moved
-	aclocal/.
+	* Makefile.am, old-exceptions/Makefile.am,
+	new-exceptions/Makefile.am: Reflect having moved aclocal/.
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -571,13 +581,14 @@
 	ppc403/timer/Makefile.am, ppc403/tty_drv/Makefile.am,
 	ppc403/vectors/Makefile.am, shared/Makefile.am,
 	shared/include/Makefile.am, shared/src/Makefile.am,
-	wrapup/Makefile.am, old-exceptions/Makefile.am: Reflect having moved
-	automake/.
+	wrapup/Makefile.am, old-exceptions/Makefile.am,
+	new-exceptions/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac, old-exceptions/configure.ac: Use
-	rtems-bugs@rtems.com as bug report email address.
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac: Use rtems-bugs@rtems.com as bug report
+	email address.
 
 2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -602,10 +613,16 @@
 	PR 368/filesystems
 	* mpc8xx/include/mpc8xx.h: Add PCMCIA registers.
 
+2003-03-18	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 356/bsps
+	* new-exceptions/cpu.c: This patch makes RTEMS/PowerPC eabi
+	compliant.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac, old-exceptions/configure.ac: Remove
-	AC_CONFIG_AUX_DIR.
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
@@ -628,9 +645,10 @@
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac, old-exceptions/configure.ac:
-	AM_INIT_AUTOMAKE([1.7.2]).
-	* configure.ac, old-exceptions/configure.ac: AC_PREREQ(2.57).
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac: AC_PREREQ(2.57).
 
 2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -653,8 +671,10 @@
 
 2002-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* old-exceptions/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* old-exceptions/configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
+	* old-exceptions/Makefile.am, new-exceptions/Makefile.am: Don't
+	include @RTEMS_BSP@.cfg.
+	* old-exceptions/configure.ac, new-exceptions/configure.ac: Remove
+	RTEMS_CHECK_CUSTOM_BSP.
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -680,6 +700,9 @@
 
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
+	* new-exceptions/cpu.c: Currently only the mpc8260 BSP supports
+	interrupt nesting. NOTE: These needs to be generalized as the patch
+	is applied to other BSPs.
 	* mpc8xx/console-generic/console-generic.c, mpc8xx/cpm/dpram.c,
 	mpc8xx/exceptions/raw_exception.c, ppc403/clock/clock.c: Removed
 	warnings.
@@ -691,8 +714,8 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore, old-exceptions/.cvsignore: Reformat. Add
-	autom4te*cache. Remove autom4te.cache.
+	* .cvsignore, old-exceptions/.cvsignore, new-exceptions/.cvsignore:
+	Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -725,8 +748,8 @@
 	ppc403/console/Makefile.am, ppc403/ictrl/Makefile.am,
 	ppc403/timer/Makefile.am, ppc403/tty_drv/Makefile.am,
 	ppc403/vectors/Makefile.am, shared/include/Makefile.am,
-	shared/src/Makefile.am, old-exceptions/Makefile.am: Use .$(OBJEXT)
-	instead of .o.
+	shared/src/Makefile.am, old-exceptions/Makefile.am,
+	new-exceptions/Makefile.am: Use .$(OBJEXT) instead of .o.
 
 2002-07-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -752,23 +775,24 @@
 
 2002-04-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* old-exceptions/cpu.c: Include <rtems/powerpc/cache.h>.
 	* rtems/powerpc/cache.h: New file (extracted from
 	old-exceptions/cpu.h)
+	* old-exceptions/cpu.c: Include <rtems/powerpc/cache.h>.
 	* Makefile.am: Relect changes above.
 
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* shared/include/cpu.h, old-exceptions/rtems/score/cpu.h: Removed.
-	* ppc403/vectors/vectors.S: Include <asm.h> instead of "asm.h".
+	* shared/include/cpu.h, old-exceptions/rtems/score/cpu.h,
+	new-exceptions/rtems/score/cpu.h: Removed.
 	* mpc6xx/clock/c_clock.c: Reflect changes to <rtems/score/cpu.h>.
+	* ppc403/vectors/vectors.S: Include <asm.h> instead of "asm.h".
 	* mpc6xx/exceptions/asm_utils.S, mpc6xx/exceptions/raw_exception.c,
 	mpc6xx/mmu/mmuAsm.S, mpc6xx/timer/timer.c,
 	mpc8260/exceptions/asm_utils.S, mpc8260/exceptions/raw_exception.c,
 	mpc8xx/exceptions/asm_utils.S, mpc8xx/exceptions/raw_exception.c:
 	Ditto.
-	* shared/include/Makefile.am, old-exceptions/Makefile.am: Reflect
-	changes above.
+	* shared/include/Makefile.am, old-exceptions/Makefile.am,
+	new-exceptions/Makefile.am: Reflect changes above.
 	* shared/include/spr.h: Include rtems/powerpc/registers.h instead of
 	libcpu/cpu.h.
 
@@ -783,8 +807,8 @@
 
 	* shared/include/cpuIdent.c: Reflect having added cpuIdent.h.
 	* shared/include/cpu.h: Ditto.
-	* shared/include/Makefile.am: Add cpuIndent.h. Fix EXTRA_DIST.
 	* shared/include/cpuIdent.h: New.
+	* shared/include/Makefile.am: Add cpuIndent.h. Fix EXTRA_DIST.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -806,8 +830,10 @@
 	ppc403/timer/Makefile.am, ppc403/tty_drv/Makefile.am,
 	ppc403/vectors/Makefile.am, shared/include/Makefile.am,
 	shared/Makefile.am, shared/src/Makefile.am, wrapup/Makefile.am,
-	old-exceptions/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* configure.ac, old-exceptions/configure.ac:
+	old-exceptions/Makefile.am, new-exceptions/Makefile.am: Remove
+	AUTOMAKE_OPTIONS.
+	* configure.ac, old-exceptions/configure.ac,
+	new-exceptions/configure.ac:
 	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 
@@ -826,14 +852,19 @@
 2001-11-28	Joel Sherrill <joel@OARcorp.com>,
 
 	This was tracked as PR91.
-	* old-exceptions/Makefile.am: Deleted reference to c_isr.inl.
-	* old-exceptions/rtems/score/cpu.h: Added
+	This was tracked as PR91.
+	* old-exceptions/Makefile.am, new-exceptions/Makefile.am: Deleted
+	reference to c_isr.inl.
+	* old-exceptions/rtems/score/cpu.h,
+	new-exceptions/rtems/score/cpu.h: Added
 	CPU_PROVIDES_ISR_IS_IN_PROGRESS macro which is used to specify if
 	the port uses the standard macro for this (FALSE). A TRUE setting
 	indicates the port provides its own implementation.
-	* old-exceptions/rtems/score/c_isr.inl: Deleted and contents merged
+	* old-exceptions/rtems/score/c_isr.inl,
+	new-exceptions/rtems/score/c_isr.inl: Deleted and contents merged
 	into cpu.c.
-	* old-exceptions/cpu.c: Received contents of c_isr.inl.
+	* old-exceptions/cpu.c, new-exceptions/cpu.c: Received contents of
+	c_isr.inl.
 
 2001-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -863,15 +894,17 @@
 
 2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* old-exceptions/.cvsignore: Add aclocal.m4, autom4te.*, config.*,
-	configure.
+	* old-exceptions/.cvsignore, new-exceptions/.cvsignore: Add
+	aclocal.m4, autom4te.*, config.*, configure.
 
 2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove ppc603e from old_exception_processing.
 	* configure.ac: Remove mpc750 from new_exception_processing, Remove
 	mpc604 from new_exception_processing.
-	* old-exceptions/Makefile.am: Preinstall c_isr.inl (HACK).
+	* new-exceptions/ChangeLog: New file.
+	* old-exceptions/Makefile.am, new-exceptions/Makefile.am: Preinstall
+	c_isr.inl (HACK).
 
 2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -894,14 +927,14 @@
 	Thomas Doerfler <Thomas.Doerfler@imd-systems.de> who ensured it did
 	not negatively impact the ppc403 BSPs.  The submission and tracking
 	process was captured as PR50.
+	* ppc403/console/console405.c ppc403/tty_drv/.cvsignore,
+	ppc403/tty_drv/Makefile.am, ppc403/tty_drv/tty_drv.c,
+	ppc403/tty_drv/tty_drv.h: New files.
 	* Makefile.am, README, configure.ac, old_exception_processing/cpu.c,
 	old_exception_processing/cpu.h, ppc403/Makefile.am,
 	ppc403/clock/clock.c, ppc403/console/Makefile.am,
 	ppc403/console/console.c, ppc403/ictrl/ictrl.c,
 	ppc403/ictrl/ictrl.h, ppc403/timer/timer.c: Modified.
-	* ppc403/console/console405.c ppc403/tty_drv/.cvsignore,
-	ppc403/tty_drv/Makefile.am, ppc403/tty_drv/tty_drv.c,
-	ppc403/tty_drv/tty_drv.h: New files.
 
 2001-11-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -1026,6 +1059,20 @@
 	the SVR ABI by using r20 as a scratch register; changed for r0 -
 	according to the book, a context synchronizing instruction is
 	necessary prior to and after changing a DBAT -> isync added
+	* new-exceptions/cpu.c: Per PR211 fix saving/restoring floating
+	point context.  The fpsave and fprestore routines are only used in a
+	executing context which _is_ fp and hence has the FPU enabled. The
+	current behavior required the FPU always to be on which is very
+	dangerous if lazy context switching is used.   [Joel Note: Some
+	ports explicitly enabled the FPU in the FP save and restore routines
+	to avoid this.] The patch also makes sure (on powerpc only) that the
+	FPU is disabled for integer tasks. Note that this is crucial if
+	deferred fp context switching is used. Otherwise, fp context
+	corruption may go undetected! Also note that even tasks which merely
+	push/pop FP registers to/from the stack without modifying them still
+	MUST be FP tasks - otherwise (if lazy FP context switching is used),
+	FP register corruption (of other, FP, tasks may occur)! Furthermore,
+	(on PPC) by default, lazy FP context save/restore is _disabled_.
 	* shared/include/io.h: Per PR215 address the following issues: -
 	_IO_BASE, _ISA_MEM_BASE and PCI_DRAM_OFFSET are no longer defined by
 	libcpu (powerpc/shared/include/io.h) but by the BSP (who is the only
@@ -1052,11 +1099,14 @@
 	at its discretion.
 	* Per PR94, all rtems/score/CPUtypes.h are named
 	rtems/score/types.h.
+	* Per PR94, all rtems/score/CPUtypes.h are named
+	rtems/score/types.h.
 	* mpc8xx/timer/timer.c: Removed #warning declaring providing a 
 	default definition for the macros
 	rtems_cpu_configuration_get_timer_least_valid and
 	rtems_cpu_configuration_get_timer_average_overhead.
-	* old-exceptions/rtems/score/cpu.h: Account for name change.
+	* old-exceptions/rtems/score/cpu.h,
+	new-exceptions/rtems/score/cpu.h: Account for name change.
 
 2001-03-30	Eric Valette <valette@crf.canon.fr>
 
@@ -1126,14 +1176,14 @@
 	* Added full support for MPC505.
 	* configure.in, mpc505/Makefile.am: Modified to reflect ictrl
 	addition.
-	* old_exception_processing/cpu_asm.S: Offsets moved to ppc_offs.h.
 	* old_exception_processing/Makefile.am: Account for ppc_offs.h.
+	* old_exception_processing/cpu_asm.S: Offsets moved to ppc_offs.h.
 	* mpc505/timer/timer.c: Use <rtems.h>, not "rtems.h".
 	* mpc505/vectors/vectors.S: Now use constants for exception numbers.
 	* mpc505/ictrl: New directory.
+	* old_exception_processing/ppc_offs.h: New file.
 	* old_exception_processing/cpu.h: Make Nest and Disable levels
 	volatile.
-	* old_exception_processing/ppc_offs.h: New file.
 	* mpc505/vectors/Makefile.am: alignment exception handler now
 	included.
 	* mpc505/ictrl/.cvsignore, mpc505/ictrl/Makefile.am,
@@ -1146,9 +1196,9 @@
 	mbx8xx_console_use_maximum_buffer_size() which can be hard coded or
 	check non-volatile memory for configuration.
 	* mpc8xx/console-generic/console-generic.c: Removed warnings.
-	* mpc6xx/timer/timer.c, mpc6xx/timer/timer.c: Ditto.
 	* mpc6xx/clock/c_clock.h: Removed commented out reference to
 	<bsp.h>.
+	* mpc6xx/timer/timer.c, mpc6xx/timer/timer.c: Ditto.
 	* mpc6xx/clock/c_clock.c, mpc6xx/clock/c_clock.h: Removed use of
 	bsp.h and replaced it with use of proper interfaces or explicit
 	externs of required functions and data.
