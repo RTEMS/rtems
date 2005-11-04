@@ -61,6 +61,10 @@
 #include <libcpu/io.h>
 #endif
 
+#if defined(__i386__)
+#include <libcpu/byteorder.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -233,17 +237,6 @@ extern void Wait_X_ms( unsigned int timeToWait );
 #define bus_to_phys(address) ((unsigned int) ((address)))
 #define rtems_bsp_delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE
-
-static inline void st_le32(volatile uint32_t   *addr, uint32_t   value)
-{
-  *(addr)=value ;
-}
-
-static inline uint32_t   ld_le32(volatile uint32_t   *addr)
-{
-  return(*addr);
-}
-
 #endif
 
 #if (MCLBYTES < RBUF_SIZE)
