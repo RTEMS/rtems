@@ -1,5 +1,6 @@
 2005-11-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* shared/include/byteorder.h: Remove __arch_swap (Unused).
 	* Makefile.am: Partially cleanup EXTRA_DIST.
 
 2005-11-03	Till Strauman <strauman@slac.stanford.edu>
