@@ -28,7 +28,6 @@
 #include <bsp/pci.h>
 #include <bsp/openpic.h>
 #include <bsp/irq.h>
-#include <bsp/VME.h>
 #include <libcpu/bat.h>
 #include <libcpu/pte121.h>
 #include <libcpu/cpuIdent.h>
@@ -101,6 +100,10 @@ char loaderParam[MAX_LOADER_ADD_PARM];
  */
 unsigned int BSP_mem_size;
 /*
+ * Where the heap starts; is used by bsp_pretasking_hook;
+ */
+unsigned int BSP_heap_start;
+/*
  * PCI Bus Frequency
  */
 unsigned int BSP_bus_frequency;
@@ -148,58 +151,8 @@ char *rtems_progname;
  */
 
 void bsp_postdriver_hook(void);
+void bsp_pretasking_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
-
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- */
-
-void bsp_pretasking_hook(void)
-{
-  uint32_t        heap_start;    
-  uint32_t        heap_size;
-  uint32_t        heap_sbrk_spared;
-  extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
-
-  heap_start = ((uint32_t) __rtems_end) +
-                INIT_STACK_SIZE + INTR_STACK_SIZE;
-  if (heap_start & (CPU_ALIGNMENT-1))
-      heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-
-  heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
-  heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
-
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk( "HEAP start %x  size %x (%x bytes spared for sbrk)\n",
-             heap_start, heap_size, heap_sbrk_spared);
-#endif    
-
-  bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
-
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
-}
-
-void zero_bss()
-{
-  /* prevent these from being accessed in the short data areas */
-  extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
-  extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
-  memset(__SBSS_START__, 0, ((unsigned) __SBSS_END__) - ((unsigned)__SBSS_START__));
-  memset(__SBSS2_START__, 0, ((unsigned) __SBSS2_END__) - ((unsigned)__SBSS2_START__));
-  memset(__bss_start, 0, ((unsigned) __rtems_end) - ((unsigned)__bss_start));
-}
 
 void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
 {
@@ -249,14 +202,36 @@ void bsp_start( void )
    * function store the result in global variables so that it can be used 
    * later...
    */
-  myCpu 	= get_ppc_cpu_type();
+  myCpu 	    = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
-#if defined(mvme2100)
-  EUMBBAR = get_eumbbar(); 
+  /*
+   * Init MMU block address translation to enable hardware access
+   */
 
-  Cpu_table.exceptions_in_RAM 	 = TRUE;
-  { unsigned v = 0x3000 ; _CPU_MSR_SET(v); }
+#if !defined(mvme2100)
+  /*
+   * PC legacy IO space used for inb/outb and all PC compatible hardware
+   */
+  setdbat(1, _IO_BASE, _IO_BASE, 0x10000000, IO_PAGE);
+#endif
+
+  /*
+   * PCI devices memory area. Needed to access OpenPIC features
+   * provided by the Raven
+   *
+   * T. Straumann: give more PCI address space
+   */
+  setdbat(2, PCI_MEM_BASE+PCI_MEM_WIN0, PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
+
+  /*
+   * Must have acces to open pic PCI ACK registers provided by the RAVEN
+   */
+  setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
+
+#if defined(mvme2100)
+  /* Need 0xfec00000 mapped for this */
+  EUMBBAR = get_eumbbar(); 
 #endif
 
 #if !defined(mpc8240) && !defined(mpc8245)
@@ -296,8 +271,10 @@ void bsp_start( void )
    * This could be done later (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  intrStack = ((uint32_t) __rtems_end) + 
-          INIT_STACK_SIZE + INTR_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
+  BSP_heap_start = ((uint32_t) __rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE;
+
+  /* reserve space for the marker/tag frame */
+  intrStack      = BSP_heap_start - PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
   intrStack &= ~(CPU_STACK_ALIGNMENT-1);
@@ -311,34 +288,12 @@ void bsp_start( void )
   /* signal them that we have fixed PR288 - eventually, this should go away */
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
+  /* initialize_exceptions() evaluates the exceptions_in_RAM flag */
+  Cpu_table.exceptions_in_RAM 	 = TRUE;
   /*
    * Initialize default raw exception handlers. See vectors/vectors_init.c
    */
   initialize_exceptions();
-
-  /*
-   * Init MMU block address translation to enable hardware access
-   */
-
-#if !defined(mvme2100)
-  /*
-   * PC legacy IO space used for inb/outb and all PC compatible hardware
-   */
-  setdbat(1, _IO_BASE, _IO_BASE, 0x10000000, IO_PAGE);
-#endif
-
-  /*
-   * PCI devices memory area. Needed to access OpenPIC features
-   * provided by the Raven
-   *
-   * T. Straumann: give more PCI address space
-   */
-  setdbat(2, PCI_MEM_BASE+PCI_MEM_WIN0, PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
-
-  /*
-   * Must have acces to open pic PCI ACK registers provided by the RAVEN
-   */
-  setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
 
   select_console(CONSOLE_LOG);
 
@@ -460,8 +415,7 @@ void bsp_start( void )
   Cpu_table.postdriver_hook 	 = bsp_postdriver_hook;
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-  Cpu_table.clicks_per_usec 	 = BSP_processor_frequency/(BSP_time_base_divisor * 1000);
-  Cpu_table.exceptions_in_RAM 	 = TRUE;
+  Cpu_table.clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("BSP_Configuration.work_space_size = %x\n",
@@ -493,24 +447,9 @@ void bsp_start( void )
     printk("Page table setup finished; will activate it NOW...\n");
 #endif
     BSP_pgtbl_activate(pt);
-#if !defined(mvme2100)
     /* finally, switch off DBAT3 */
     setdbat(3, 0, 0, 0, 0); 
-#endif
   }
-
-  /*
-   * Initialize VME bridge - needs working PCI and IRQ subsystems...
-   */
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Going to initialize VME bridge\n");
-#endif
-
-  /*
-   * VME initialization is in a separate file so apps which don't use VME or
-   * want a different configuration may link against a customized routine.
-   */
-  BSP_vme_config();
 
 #if defined(DEBUG_BATS)
   ShowBATS();
