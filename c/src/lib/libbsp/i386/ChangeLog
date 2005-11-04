@@ -1,7 +1,7 @@
-2005-11-02	straumanatslacdotstanford.edu
+2005-11-02	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/pci/pcibios.c: replaced pci_find_device implementation by a
-	pcibios call which already provides the functionality
+	pcibios call which already provides the functionality (PR#832)
 
 2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
