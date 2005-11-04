@@ -1,5 +1,7 @@
 2005-11-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Add preinstall.am
+	* preinstall.am: New.
 	* configure.ac: Add AMPOLISH3.
 	* byteorder.h: New.
 
