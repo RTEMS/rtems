@@ -21,6 +21,10 @@ AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
+AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
+AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
+  && test -n "$AMPOLISH3"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

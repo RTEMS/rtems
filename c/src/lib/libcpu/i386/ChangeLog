@@ -1,5 +1,6 @@
 2005-11-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add AMPOLISH3.
 	* byteorder.h: New.
 
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
