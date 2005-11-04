@@ -1,6 +1,6 @@
 2005-11-02	Till Straumann <strauman@slac.stanford.edu>
 
-	* startup/ldsegs.S: put IDT and GDT into data segment (PR#838).
+	* startup/ldsegs.S: put IDT and GDT into data segment (PR#832).
     The CPU modifies the 'accessed' bit and GDB's (rtems-gdb-stub)
     text segment checksum comparison failed...
 
