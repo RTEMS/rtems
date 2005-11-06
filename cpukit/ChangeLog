@@ -1,8 +1,16 @@
+2005-11-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libi2c/libi2c.c: Include config.h.
+	* libi2c/libi2c.c, libi2c/libi2c.h, 
+	libnetworking/rtems/rtems_mii_ioctl.h, 
+	libnetworking/rtems/rtems_mii_ioctl_kern.c,
+	score/src/heap.c: Eliminate obsolete types.
+
 2005-11-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* httpd/Makefile.am: Remove bogus noinst_LIBRARIES.
 
-2005-11-02	straumanatslacdotstanford.edu
+2005-11-02	Till Straumann <strauman@slac.stanford.edu>
 
 	* libnetworking/Makefile.am,
 	libnetworking/preinstall.am: Added simple implementation of ethernet
@@ -11,7 +19,7 @@
 	libnetworking/rtems/rtems_mii_ioctl.h,
 	libnetworking/rtems/rtems_mii_ioctl_kern.c: New files.
 
-2005-11-02	straumanatslacdotstanford.edu
+2005-11-02	Till Straumann <strauman@slac.stanford.edu>
 
 	* libi2c/Makefile.am, libi2c/Makefile.in, libi2c/libi2c.c,
 	libi2c/libi2c.h: New files.
