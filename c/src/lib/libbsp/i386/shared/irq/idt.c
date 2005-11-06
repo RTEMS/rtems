@@ -93,9 +93,9 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
     return 1;
 }
 
-void _CPU_ISR_install_vector (unsigned vector,
-			      void* hdl,
-			      void** oldHdl)
+void _CPU_ISR_install_vector (uint32_t vector,
+			      proc_ptr hdl,
+			      proc_ptr * oldHdl)
 {
     interrupt_gate_descriptor* 	idt_entry_tbl;
     unsigned			limit;
