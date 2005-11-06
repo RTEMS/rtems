@@ -1,16 +1,21 @@
+2005-11-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libchip/i2c/i2c-2b-eeprom.c: Eliminate obsolete types.
+	* libchip/rtc/mc146818a.h: Eliminate obsolete types.
+
 2005-11-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libchip/network/dec21140.c, libchip/network/elnk.c: Use
 	libcpu/byteorder.h for i386.
 
-2005-11-02	straumanatslacdotstanford.edu
+2005-11-02	Till Straumann <strauman@slac.stanford.edu>
 
 	* libchip/i2c/i2c-2b-eeprom.c, libchip/i2c/i2c-2b-eeprom.h,
 	libchip/i2c/i2c-ds1621.c, libchip/i2c/i2c-ds1621.h: New files.
 	* libchip/Makefile.am, libchip/preinstall.am, wrapup/Makefile.am:
-	added a simple API/library
-	for i2c devices and drivers for i2c 2-byte eeproms and a ds1621
-	temperature sensor; API is documented in libi2c.h
+	added a simple API/library for i2c devices and drivers for i2c 
+	2-byte eeproms and a ds1621 temperature sensor; API is documented
+	in libi2c.h.
 
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
