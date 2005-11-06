@@ -2,6 +2,10 @@
 
 /* libi2c Implementation */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -380,7 +384,7 @@ not_started (int busno)
 }
 
 rtems_status_code
-rtems_libi2c_send_start (unsigned32 minor)
+rtems_libi2c_send_start (uint32_t minor)
 {
   int rval;
   DECL_CHECKED_BH (busno, bush, minor, +)
@@ -411,7 +415,7 @@ rtems_libi2c_send_start (unsigned32 minor)
 }
 
 rtems_status_code
-rtems_libi2c_send_stop (unsigned32 minor)
+rtems_libi2c_send_stop (uint32_t minor)
 {
   rtems_status_code rval;
   DECL_CHECKED_BH (busno, bush, minor, +)
@@ -428,7 +432,7 @@ rtems_libi2c_send_stop (unsigned32 minor)
 }
 
 rtems_status_code
-rtems_libi2c_send_addr (unsigned32 minor, int rw)
+rtems_libi2c_send_addr (uint32_t minor, int rw)
 {
   rtems_status_code sc;
   DECL_CHECKED_BH (busno, bush, minor, +)
@@ -443,7 +447,7 @@ rtems_libi2c_send_addr (unsigned32 minor, int rw)
 }
 
 int
-rtems_libi2c_read_bytes (unsigned32 minor, unsigned char *bytes, int nbytes)
+rtems_libi2c_read_bytes (uint32_t minor, unsigned char *bytes, int nbytes)
 {
   int sc;
   DECL_CHECKED_BH (busno, bush, minor, -)
@@ -458,7 +462,7 @@ rtems_libi2c_read_bytes (unsigned32 minor, unsigned char *bytes, int nbytes)
 }
 
 int
-rtems_libi2c_write_bytes (unsigned32 minor, unsigned char *bytes, int nbytes)
+rtems_libi2c_write_bytes (uint32_t minor, unsigned char *bytes, int nbytes)
 {
   int sc;
   DECL_CHECKED_BH (busno, bush, minor, -)
@@ -473,7 +477,7 @@ rtems_libi2c_write_bytes (unsigned32 minor, unsigned char *bytes, int nbytes)
 }
 
 static int
-do_s_rw (unsigned32 minor, unsigned char *bytes, int nbytes, int rw)
+do_s_rw (uint32_t minor, unsigned char *bytes, int nbytes, int rw)
 {
   rtems_status_code sc;
   rtems_libi2c_bus_t *bush;
@@ -501,14 +505,14 @@ do_s_rw (unsigned32 minor, unsigned char *bytes, int nbytes, int rw)
 }
 
 int
-rtems_libi2c_start_read_bytes (unsigned32 minor, unsigned char *bytes,
+rtems_libi2c_start_read_bytes (uint32_t minor, unsigned char *bytes,
                                int nbytes)
 {
   return do_s_rw (minor, bytes, nbytes, 1);
 }
 
 int
-rtems_libi2c_start_write_bytes (unsigned32 minor, unsigned char *bytes,
+rtems_libi2c_start_write_bytes (uint32_t minor, unsigned char *bytes,
                                 int nbytes)
 {
   return do_s_rw (minor, bytes, nbytes, 0);
@@ -549,7 +553,7 @@ rtems_libi2c_register_drv (char *name, rtems_libi2c_drv_t * drvtbl,
     if (!drvs[i].drv) {
       char *str;
       dev_t dev;
-      unsigned32 mode;
+      uint32_t mode;
 
       /* found a free slot; encode slot + 1 ! */
       minor = ((i + 1) << 13) | RTEMS_LIBI2C_MAKE_MINOR (busno, i2caddr);

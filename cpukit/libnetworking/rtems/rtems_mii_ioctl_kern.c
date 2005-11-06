@@ -44,7 +44,7 @@ int
 rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
                  int *media)
 {
-  unsigned32 bmcr, bmsr, bmcr2 = 0, bmsr2 = 0, anar, lpar;
+  uint32_t bmcr, bmsr, bmcr2 = 0, bmsr2 = 0, anar, lpar;
   int phy = IFM_INST (*media);
   unsigned tmp;
   int subtype = 0, options = 0;

@@ -26,13 +26,13 @@ extern "C" {
  * RETURNS 0 on success, -1 otherwise (e.g., illegal phy)
  */
 typedef int (*rtems_mdio_read_func) (int phy, void *uarg, unsigned reg,
-                                     unsigned32 * pval);
+                                     uint32_t * pval);
 
 /* write mii register 'reg' at 'phy' (-1 meaning any/currently active)
  * RETURNS 0 on success, -1 otherwise (e.g., illegal phy)
  */
 typedef int (*rtems_mdio_write_func) (int phy, void *uarg, unsigned reg,
-                                      unsigned32 val);
+                                      uint32_t val);
 
 /* Values to this must be provided by the driver */
 struct rtems_mdio_info

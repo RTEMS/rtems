@@ -49,7 +49,7 @@ typedef struct rtems_libi2c_bus_ops_
   rtems_status_code (*send_stop) (rtems_libi2c_bus_t * bushdl);
   /* initiate transfer from (rw!=0) or to a device */
   rtems_status_code (*send_addr) (rtems_libi2c_bus_t * bushdl,
-                                  unsigned32 addr, int rw);
+                                  uint32_t addr, int rw);
   /* read a number of bytes */
   int (*read_bytes) (rtems_libi2c_bus_t * bushdl, unsigned char *bytes,
                      int nbytes);
@@ -219,12 +219,12 @@ rtems_libi2c_write_bytes (rtems_device_minor_number minor,
 
 /* Send start, send address and read bytes */
 int
-rtems_libi2c_start_read_bytes (unsigned32 minor, unsigned char *bytes,
+rtems_libi2c_start_read_bytes (uint32_t minor, unsigned char *bytes,
                                int nbytes);
 
 /* Send start, send address and write bytes */
 int
-rtems_libi2c_start_write_bytes (unsigned32 minor, unsigned char *bytes,
+rtems_libi2c_start_write_bytes (uint32_t minor, unsigned char *bytes,
                                 int nbytes);
 
 #ifdef __cplusplus

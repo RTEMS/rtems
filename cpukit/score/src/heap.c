@@ -224,7 +224,7 @@ uint32_t _Heap_Calc_block_size(
  * When split, make the lower part used, and leave the upper part free.
  * Return the size of allocated block.
  */
-unsigned32 _Heap_Block_allocate(
+uint32_t _Heap_Block_allocate(
   Heap_Control* the_heap,
   Heap_Block* the_block,
   uint32_t alloc_size)
