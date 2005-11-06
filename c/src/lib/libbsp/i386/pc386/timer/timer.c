@@ -291,7 +291,7 @@ Timer_initialize(void)
         if (x86_capability & (1 << 4) ) {
 #if defined(DEBUG)
             printk("TSC: timer initialization\n");
-#endif // DEBUG
+#endif /* DEBUG */
             Timer_initialize_function = &tsc_timer_initialize;
             Read_timer_function = &tsc_read_timer;
             Timer_exit_function = &tsc_timer_exit;
@@ -299,7 +299,7 @@ Timer_initialize(void)
         else {
 #if defined(DEBUG)
             printk("ISR: timer initialization\n");
-#endif // DEBUG
+#endif /* DEBUG */
             Timer_initialize_function = &i386_timer_initialize;
             Read_timer_function = &i386_read_timer;
             Timer_exit_function = &i386_timer_exit;
