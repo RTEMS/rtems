@@ -1,3 +1,7 @@
+2005-11-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/irq/idt.c: Reflect API changes.
+
 2005-11-02	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/pci/pcibios.c: replaced pci_find_device implementation by a
