@@ -1,8 +1,13 @@
+2005-11-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* timer/timer.c: Remove C++-style comments.
+
 2005-11-02	Till Straumann <strauman@slac.stanford.edu>
 
-	* startup/ldsegs.S: put IDT and GDT into data segment (PR#832).
-    The CPU modifies the 'accessed' bit and GDB's (rtems-gdb-stub)
-    text segment checksum comparison failed...
+	PR 832/bsps
+	* startup/ldsegs.S: put IDT and GDT into data segment.
+	The CPU modifies the 'accessed' bit and GDB's (rtems-gdb-stub)
+    	text segment checksum comparison failed...
 
 2005-10-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
