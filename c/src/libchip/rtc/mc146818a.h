@@ -57,12 +57,12 @@ boolean mc146818a_probe(
  */
 uint32_t mc146818a_get_register(
   uint32_t  ulCtrlPort,
-  unsigned8   ucRegNum
+  uint8_t   ucRegNum
 );
 
 void  mc146818a_set_register(
   uint32_t  ulCtrlPort,
-  unsigned8   ucRegNum,
+  uint8_t   ucRegNum,
   uint32_t  ucData
 );
 

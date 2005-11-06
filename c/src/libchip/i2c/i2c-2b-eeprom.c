@@ -15,7 +15,7 @@
 #include <rtems/libio.h>
 
 #define EEPROM_PG_SZ	32
-#define ALGN(x)	(((unsigned32)(x) + EEPROM_PG_SZ) & ~(EEPROM_PG_SZ-1))
+#define ALGN(x)	(((uint32_t)(x) + EEPROM_PG_SZ) & ~(EEPROM_PG_SZ-1))
 
 static rtems_status_code
 send_file_ptr (rtems_device_minor_number minor, unsigned pos, int tout)
