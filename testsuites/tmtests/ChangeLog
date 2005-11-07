@@ -1,5 +1,9 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* tmtests.am: Remove LIB_VARIANT.
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* tm01/Makefile.am, tm02/Makefile.am, tm03/Makefile.am,
 	tm04/Makefile.am, tm05/Makefile.am, tm06/Makefile.am,
 	tm07/Makefile.am, tm08/Makefile.am, tm09/Makefile.am,
