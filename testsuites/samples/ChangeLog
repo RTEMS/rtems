@@ -1,3 +1,13 @@
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* sample.am: Add $(PGM): ${ARCH}/$(dirstamp).
+	* base_mp/node1/Makefile.am, base_mp/node2/Makefile.am,
+	base_sp/Makefile.am, cdtest/Makefile.am, fileio/Makefile.am,
+	hello/Makefile.am, iostream/Makefile.am, loopback/Makefile.am,
+	minimum/Makefile.am, paranoia/Makefile.am, pppd/Makefile.am,
+	ticker/Makefile.am, unlimited/Makefile.am: 
+	Partial conversion to automake.
+
 2005-10-26  Eric Norum <norume@aps.anl.gov>
 
 	PR 839/tests
@@ -7,6 +17,7 @@
 
 2005-10-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* pppd/Makefile.am: Reflect libpppd having been split out.
 	* pppd/init.c, pppd/pppdapp.c: include rtems/rtemspppd.h instead of
 	rtemspppd.h.
 
