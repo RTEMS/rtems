@@ -1,5 +1,9 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* itrontests.am: Remove LIB_VARIANT.
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* itronhello/Makefile.am, itronmbf01/Makefile.am,
 	itronmbox01/Makefile.am, itronsem01/Makefile.am,
 	itrontask01/Makefile.am, itrontask02/Makefile.am,
