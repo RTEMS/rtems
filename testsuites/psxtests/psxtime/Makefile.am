@@ -12,10 +12,8 @@ lib_a_SOURCES = main.c test.c
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS = $(DOCS)
 OBJS = $(lib_a_OBJECTS)
 
-PRINT_SRCS = $(DOCS)
 
 PGM = ${ARCH}/$(TEST).exe
 

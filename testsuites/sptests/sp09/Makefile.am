@@ -16,10 +16,8 @@ lib_a_SOURCES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen04.c
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS =
 OBJS = $(lib_a_OBJECTS)
 
-PRINT_SRCS = $(DOCS)
 
 PGM = ${ARCH}/$(TEST).exe
 

@@ -14,10 +14,8 @@ lib_a_SOURCES = ../init.c ../task1.c ../recvmsg.c ../sendmsg.c system.h
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS = $(DOCS)
 OBJS = $(lib_a_OBJECTS)
 
-PRINT_SRCS = $(DOCS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

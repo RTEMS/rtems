@@ -14,9 +14,7 @@ endif
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS = $(DOCS)
 
-PRINT_SRCS = $(DOCS)
 
 PGM = ${ARCH}/$(TEST).exe
 

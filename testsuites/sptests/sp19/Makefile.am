@@ -12,10 +12,8 @@ lib_a_SOURCES = init.c first.c fptask.c task1.c system.h fptest.h inttest.h
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS =
 OBJS = $(lib_a_OBJECTS)
 
-PRINT_SRCS = $(DOCS)
 
 PGM = ${ARCH}/$(TEST).exe
 

@@ -12,7 +12,6 @@ lib_a_SOURCES = init.c getint.c size.c system.h
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS =
 OBJS = $(lib_a_OBJECTS)
 
 PGM = ${ARCH}/$(TEST).exe

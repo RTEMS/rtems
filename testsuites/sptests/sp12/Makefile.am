@@ -13,10 +13,8 @@ lib_a_SOURCES = init.c task1.c task2.c task3.c task4.c task5.c pridrv.c \
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS =
 OBJS = $(lib_a_OBJECTS)
 
-PRINT_SRCS = $(DOCS)
 
 PGM = ${ARCH}/$(TEST).exe
 

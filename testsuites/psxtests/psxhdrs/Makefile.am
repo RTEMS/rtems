@@ -25,7 +25,6 @@ lib_a_SOURCES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c \
     time08.c time09.c time10.c time11.c time12.c time13.c timer01.c \
     timer02.c timer03.c timer04.c timer05.c timer06.c timer07.c
 
-SRCS =
 OBJS = $(lib_a_OBJECTS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

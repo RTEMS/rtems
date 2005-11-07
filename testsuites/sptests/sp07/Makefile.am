@@ -13,10 +13,8 @@ lib_a_SOURCES = init.c buffered_io.c task1.c task2.c task3.c task4.c taskexit.c 
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS =
 OBJS = $(lib_a_OBJECTS)
 
-PRINT_SRCS = $(DOCS)
 
 PGM = ${ARCH}/$(TEST).exe
 
