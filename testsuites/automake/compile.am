@@ -9,8 +9,6 @@ if RTEMS_USE_GCC
 GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
 endif # RTEMS_USE_GCC
 
-depend:
-
 if RTEMS_USE_GCC
 RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
 endif
