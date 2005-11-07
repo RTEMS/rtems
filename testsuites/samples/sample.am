@@ -9,14 +9,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(SAMPLE)$(LIB_VARIANT).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/$(SAMPLE).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(SAMPLE)$(LIB_VARIANT).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/$(SAMPLE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(PGM): ${ARCH}/$(dirstamp)
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/$(SAMPLE)$(LIB_VARIANT).exe \
-$(project_bspdir)/samples/$(SAMPLE)$(LIB_VARIANT).exe
+$(project_bspdir)/tests/$(SAMPLE).exe \
+$(project_bspdir)/samples/$(SAMPLE).exe

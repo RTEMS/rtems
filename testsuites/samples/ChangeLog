@@ -1,5 +1,9 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* sample.am: Remove LIB_VARIANT.
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* base_mp/node1/Makefile.am, base_mp/node2/Makefile.am,
 	base_sp/Makefile.am, cdtest/Makefile.am, fileio/Makefile.am,
 	hello/Makefile.am, iostream/Makefile.am, loopback/Makefile.am,
