@@ -16,6 +16,8 @@ $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp):
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
+$(PGM): ${ARCH}/$(dirstamp)
+
 TMPINSTALL_FILES = \
 $(project_bspdir)/tests/$(TEST)-node$(NODE)$(LIB_VARIANT).exe \
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn

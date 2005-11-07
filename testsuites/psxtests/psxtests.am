@@ -16,6 +16,8 @@ $(project_bspdir)/tests/screens/psxtests/$(dirstamp):
 $(project_bspdir)/tests/screens/psxtests/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
+$(PGM): ${ARCH}/$(dirstamp)
+
 TMPINSTALL_FILES = \
 $(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe \
 $(project_bspdir)/tests/screens/psxtests/$(TEST).scn
