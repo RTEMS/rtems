@@ -107,6 +107,10 @@ struct mcf5282_enet_struct {
 };
 static struct mcf5282_enet_struct enet_driver[NIFACES];
 
+static int
+getMII(int phyNumber, int regNumber);
+
+
 static rtems_isr
 mcf5282_fec_rx_interrupt_handler( rtems_vector_number v )
 {
@@ -128,7 +132,7 @@ mcf5282_fec_tx_interrupt_handler( rtems_vector_number v )
 static rtems_isr
 mcf5282_mii_interrupt_handler( rtems_vector_number v )
 {
-    uint16 sr2;
+    uint16_t sr2;
 
     enet_driver[0].miiInterrupts++;
     getMII(1, 19); /* Read and clear interrupt status bits */
@@ -344,6 +348,7 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
 /*
  * Soak up buffer descriptors that have been sent.
  */
+void
 fec_retire_tx_bd(volatile struct mcf5282_enet_struct *sc )
 {
     struct mbuf *m, *n;
