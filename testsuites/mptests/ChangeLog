@@ -1,5 +1,20 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* mp01/Makefile.am, mp01/node1/Makefile.am, mp01/node2/Makefile.am,
+	mp02/Makefile.am, mp02/node1/Makefile.am, mp02/node2/Makefile.am,
+	mp03/Makefile.am, mp03/node1/Makefile.am, mp03/node2/Makefile.am,
+	mp04/Makefile.am, mp04/node1/Makefile.am, mp04/node2/Makefile.am,
+	mp05/Makefile.am, mp05/node1/Makefile.am, mp05/node2/Makefile.am,
+	mp06/Makefile.am, mp06/node1/Makefile.am, mp06/node2/Makefile.am,
+	mp07/Makefile.am, mp07/node1/Makefile.am, mp07/node2/Makefile.am,
+	mp08/Makefile.am, mp08/node1/Makefile.am, mp08/node2/Makefile.am,
+	mp09/Makefile.am, mp09/node1/Makefile.am, mp09/node2/Makefile.am,
+	mp10/Makefile.am, mp10/node1/Makefile.am, mp10/node2/Makefile.am,
+	mp11/Makefile.am, mp11/node1/Makefile.am, mp11/node2/Makefile.am,
+	mp12/Makefile.am, mp12/node1/Makefile.am, mp12/node2/Makefile.am,
+	mp13/Makefile.am, mp13/node1/Makefile.am, mp13/node2/Makefile.am,
+	mp14/Makefile.am, mp14/node1/Makefile.am, mp14/node2/Makefile.am:
+	Misc bugfixes.
 	* mptests.am: Remove LIB_VARIANT.
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
