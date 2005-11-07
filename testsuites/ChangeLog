@@ -1,5 +1,7 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-posix.m4: Sync with cpukit.
+	* configure.ac: Sync POSIX and ITRON magic with cpukit.
 	* aclocal/config-subdirs.m4, aclocal/path-ksh.m4,
 	aclocal/quoting.m4, aclocal/tool-paths.m4: Remove.
 
