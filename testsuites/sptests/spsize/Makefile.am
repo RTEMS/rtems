@@ -18,7 +18,7 @@ OBJS = $(lib_a_OBJECTS)
 PGM = ${ARCH}/$(TEST).exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../automake/amcompile.am
+include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/sptests.am
 

@@ -14,6 +14,7 @@
  */
 
 #include <rtems.h>
+#include <inttypes.h>
 
 /* functions */
 
@@ -60,7 +61,7 @@ extern rtems_name Task_name[ 4 ];       /* array of task names */
 
 #define print_time(_s1, _tb, _s2) \
   do { \
-    printf( "%s%02d:%02d:%02d   %02d/%02d/%04d%s", \
+    printf( "%s%02" PRId32 ":%02" PRId32 ":%02" PRId32 "   %02" PRId32 "/%02" PRId32 "/%04" PRId32 "%s", \
        _s1, (_tb)->hour, (_tb)->minute, (_tb)->second, \
        (_tb)->month, (_tb)->day, (_tb)->year, _s2 ); \
     fflush(stdout); \

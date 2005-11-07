@@ -163,7 +163,7 @@ void fileio_list_file(void)
 {
   char fname[1024];
   char *buf_ptr = NULL;
-  uint32_t   flen = 0;
+  ssize_t   flen = 0;
   int fd = -1;
   ssize_t n;
   size_t buf_size = 100;
