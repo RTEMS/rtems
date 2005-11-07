@@ -7,22 +7,21 @@ PGM = ${ARCH}/$(TEST).exe
 
 MANAGERS = all
 
-C_FILES = init.c task1.c task2.c task3.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
+noinst_LIBRARIES = lib.a
+lib_a_SOURCES = init.c task1.c task2.c task3.c
 
-H_FILES = system.h
-noinst_HEADERS = $(H_FILES)
+lib_a_SOURCES += system.h
 
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS = $(DOCS) $(C_FILES) $(H_FILES)
-OBJS = $(C_O_FILES)
+SRCS = $(DOCS)
+OBJS = $(lib_a_OBJECTS)
 
 PRINT_SRCS = $(DOCS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/amcompile.am
 include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/itrontests.am
 
@@ -35,7 +34,7 @@ ${PGM}: $(OBJS) $(LINK_FILES)
 
 all-local: $(TMPINSTALL_FILES)
 
-EXTRA_DIST = $(C_FILES) $(DOCS)
+EXTRA_DIST = $(DOCS)
 
 CLEANFILES = $(TMPINSTALL_FILES)
 
