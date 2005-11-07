@@ -8,25 +8,20 @@ PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 
 MANAGERS = io mp event partition semaphore timer message
 
-C_FILES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
-    ../pttask1.c ../smtask1.c ../msgtask1.c
-C_O_FILES = $(C_FILES:../%.c=${ARCH}/%.$(OBJEXT))
-
-$(ARCH)/%.$(OBJEXT): ../%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-
-H_FILES = system.h
+noinst_LIBRARIES = lib.a
+lib_a_SOURCES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
+    ../pttask1.c ../smtask1.c ../msgtask1.c system.h
 
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS = $(DOCS) $(C_FILES) $(H_FILES)
-OBJS = $(C_O_FILES)
+SRCS = $(DOCS)
+OBJS = $(lib_a_OBJECTS)
 
 PRINT_SRCS = $(DOCS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/amcompile.am
 include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/mptests.am
 
