@@ -8,9 +8,7 @@ PGM = ${ARCH}/$(TEST).exe
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c dormant.c
-
-lib_a_SOURCES += system.h
+lib_a_SOURCES = init.c dormant.c system.h
 
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
