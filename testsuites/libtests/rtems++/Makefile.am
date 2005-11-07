@@ -6,23 +6,22 @@ TEST = rtems++
 
 MANAGERS = event io msg sem signal timer rate_monotonic
 
-CC_FILES = Init.cc Task1.cc Task2.cc Task3.cc
-OBJS = $(CC_FILES:%.cc=${ARCH}/%.$(OBJEXT))
-
-H_FILES = System.h
-noinst_HEADERS = $(H_FILES)
+if HAS_CXX
+noinst_LIBRARIES = lib.a
+lib_a_SOURCES = Init.cc Task1.cc Task2.cc Task3.cc System.h
+endif
 
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS = $(DOCS) $(C_FILES) $(H_FILES)
+SRCS = $(DOCS)
 
 PRINT_SRCS = $(DOCS)
 
 PGM = ${ARCH}/$(TEST).exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/amcompile.am
 include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/libtests.am
 
@@ -42,7 +41,7 @@ else
 all-local:
 endif
 
-EXTRA_DIST = $(CC_FILES) $(DOCS)
+EXTRA_DIST = $(DOCS)
 
 CLEANFILES = $(TMPINSTALL_FILES)
 
