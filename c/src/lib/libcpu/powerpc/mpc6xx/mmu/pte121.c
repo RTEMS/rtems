@@ -112,8 +112,8 @@
 
 /* read VSID from segment register */
 #ifndef DEBUG_MAIN
-static unsigned32
-seg2vsid (unsigned32 ea)
+static uint32_t
+seg2vsid (uint32_t ea)
 {
   asm volatile ("mfsrin %0, %0":"=r" (ea):"0" (ea));
   return ea & ((1 << LD_VSID_SIZE) - 1);
@@ -498,7 +498,7 @@ triv121PgTblMap (Triv121PgTbl pt,
             /* mark it valid */
             pte->marked = 0;
             if (pt->active) {
-              unsigned32 flags;
+              uint32_t flags;
               rtems_interrupt_disable (flags);
               /* order setting 'v' after writing everything else */
               asm volatile ("eieio");
@@ -796,7 +796,7 @@ triv121FindPte (unsigned long vsid, unsigned long pi)
 APte
 triv121UnmapEa (unsigned long ea)
 {
-  unsigned32 flags;
+  uint32_t flags;
   APte pte;
 
   if (!pgTbl.active) {
