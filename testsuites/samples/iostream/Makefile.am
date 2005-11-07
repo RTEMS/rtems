@@ -7,22 +7,19 @@ PGM = ${ARCH}/$(SAMPLE).exe
 
 MANAGERS = io
 
-CC_FILES = init.cc
-CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.$(OBJEXT))
-
-H_FILES = system.h
-noinst_HEADERS = $(H_FILES)
+noinst_LIBRARIES = lib.a
+lib_a_SOURCES = init.cc system.h
 
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(SAMPLE).%)
 
-SRCS = $(DOCS) $(CC_FILES) $(H_FILES)
-OBJS = $(CC_O_FILES)
+SRCS = $(DOCS)
+OBJS = $(lib_a_OBJECTS)
 
 PRINT_SRCS = $(DOCS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/amcompile.am
 include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/sample.am
 
@@ -35,7 +32,7 @@ all-local: $(TMPINSTALL_FILES)
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-cxx-exe)
 
-EXTRA_DIST = $(C_FILES) $(DOCS)
+EXTRA_DIST = $(DOCS)
 
 CLEANFILES = $(TMPINSTALL_FILES)
 
