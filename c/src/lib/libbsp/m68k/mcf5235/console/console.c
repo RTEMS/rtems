@@ -107,9 +107,9 @@ static void
 IntUartSet(int minor, int baud, int databits, int parity, int stopbits, int hwflow)
 {
 	int                         divisor;
-	unsigned32					clock_speed;
-	unsigned8                   umr1 = 0;
-	unsigned8                   umr2 = 0;
+	uint32_t					clock_speed;
+	uint8_t                   umr1 = 0;
+	uint8_t                   umr2 = 0;
 	struct IntUartInfoStruct   *info = &IntUartInfo[minor];
 	int                         level;
 
