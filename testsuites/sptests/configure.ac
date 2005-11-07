@@ -61,6 +61,7 @@ sp30/Makefile
 sp31/Makefile
 sp32/Makefile
 spsize/Makefile
+spfatal/Makefile
 ])
 AC_OUTPUT
 
