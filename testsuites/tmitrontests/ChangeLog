@@ -1,5 +1,9 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* tmitronsem01/Makefile.am: Remove SRC, PRINT_SRC.
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Cleanup.
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
