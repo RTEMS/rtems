@@ -1,5 +1,7 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* sp27/Makefile.am, sp28/Makefile.am, sp29/Makefile.am,
+	sp30/Makefile.am, sp31/Makefile.am: Misc. bugfixes.
 	* sptests.am: Remove LIB_VARIANT.
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
