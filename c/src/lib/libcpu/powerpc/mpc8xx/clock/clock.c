@@ -71,8 +71,8 @@ void clockOn(void* unused)
 {
   unsigned desiredLevel;
   uint32_t   pit_value;
-  rtems_unsigned32 mf_value;
-  rtems_unsigned32 extclk_value;
+  uint32_t mf_value;
+  uint32_t extclk_value;
   rtems_boolean force_prescaler = FALSE;
   if (rtems_cpu_configuration_get_clicks_per_usec() == 0) {
     /*
