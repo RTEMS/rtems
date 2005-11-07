@@ -1,0 +1,71 @@
+##
+## $Id$
+##
+
+## RTEMS_USE_GCC     .. if we are using GCC
+
+if RTEMS_USE_GCC
+## All the stuff below is specific to gcc
+GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
+endif # RTEMS_USE_GCC
+
+depend:
+
+if RTEMS_USE_GCC
+RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
+endif
+LINK_LIBS = $(LD_LIBS)
+
+#COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+#	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+#CCLD = $(CC)
+#LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+#        $(AM_LDFLAGS) $(LDFLAGS) -o $@
+#
+#CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+#	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+#CXXLD = $(CXX)
+#CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
+#	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+#
+#CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
+
+${ARCH}/$(dirstamp):
+	@$(mkdir_p) $(ARCH)
+	@: > $(ARCH)/$(dirstamp)
+
+# spell out all the LINK_FILE's, rather than using -lbsp, so
+#  that $(LINK_FILES) can be a dependency
+
+LINK_OBJS = \
+    $(OBJS) \
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
+
+LINK_FILES =\
+    $(START_FILE) \
+    $(OBJS) \
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
+
+## -------------------------------------------------------------------------
+ARCH = o-optimize
+
+## -------------------------------------------------------------------------
+CC = @CC@ $(GCCSPECS)
+CXX = @CXX@ $(GCCSPECS)
+CPP = @CPP@ $(GCCSPECS)
+CCAS = @CCAS@ $(GCCSPECS)
+
+LD = @LD@
+OBJCOPY = @OBJCOPY@
+NM = @NM@
+SIZE = @SIZE@
+STRIP = @STRIP@
+
+##
+AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
+AM_CFLAGS = $(RTEMS_CFLAGS)
+AM_CXXFLAGS = $(RTEMS_CXXFLAGS)
+AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
+
+clean-local:
+	$(RM) -r ${ARCH}
