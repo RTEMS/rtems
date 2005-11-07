@@ -10,7 +10,7 @@ MANAGERS = io mp event partition semaphore timer message
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
-    ../pttask1.c ../smtask1.c ../msgtask1.c system.h
+    ../pttask1.c ../smtask1.c ../msgtask1.c ../system.h
 
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

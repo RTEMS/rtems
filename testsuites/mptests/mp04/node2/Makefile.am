@@ -9,7 +9,7 @@ PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 MANAGERS = io mp
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = ../init.c ../task1.c system.h
+lib_a_SOURCES = ../init.c ../task1.c ../system.h
 
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

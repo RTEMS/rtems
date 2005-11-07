@@ -7,9 +7,9 @@ TEST = sp31
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = delay.c init.c prtime.c task1.c
+lib_a_SOURCES = delay.c init.c prtime.c task1.c system.h
 
-DOCTYPES = scn
+DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
 OBJS = $(lib_a_OBJECTS)

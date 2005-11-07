@@ -9,7 +9,7 @@ PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 MANAGERS = io mp timer event
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = ../init.c ../task1.c ../delay.c system.h
+lib_a_SOURCES = ../init.c ../task1.c ../delay.c ../system.h
 
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
