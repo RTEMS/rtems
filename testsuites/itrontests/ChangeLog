@@ -1,5 +1,9 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Cleanup.
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* itrontests.am: Add $(PGM): ${ARCH}/$(dirstamp).
 	* itronhello/Makefile.am, itronmbf01/Makefile.am,
 	itronmbox01/Makefile.am, itronsem01/Makefile.am,

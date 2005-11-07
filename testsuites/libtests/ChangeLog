@@ -1,5 +1,9 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Cleanup.
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libtests.am: Add $(PGM): ${ARCH}/$(dirstamp).
 	* cpuuse/Makefile.am, malloctest/Makefile.am, monitor/Makefile.am,
 	putenvtest/Makefile.am, rtems++/Makefile.am, rtmonuse/Makefile.am,

@@ -13,7 +13,5 @@ POSIX_FILES_DIRS = psxfile01 psxreaddir psxstat psxmount psx13 psxchroot01
 
 SUBDIRS = $(POSIX_DIRS) $(POSIX_FILES_DIRS)
 
-EXTRA_DIST = psxtests.am
-
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am
