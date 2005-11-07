@@ -1,5 +1,13 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* spsize/Makefile.am: Rename TEST to spsize.
+	* spsize/size.scn: Remove.
+	* spsize/spsize.scn: New (renamed from size.scn).
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add spfatal/Makefile.
+	* Makefile.am: Add spfatal to DIST_SUBDIRS.
 	* sp27/Makefile.am, sp28/Makefile.am, sp29/Makefile.am,
 	sp30/Makefile.am, sp31/Makefile.am: Misc. bugfixes.
 	* sptests.am: Remove LIB_VARIANT.
