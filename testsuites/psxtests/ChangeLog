@@ -1,5 +1,10 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Remove noinst_HEADERS. Remove POSIX_FILES_DIRS,
+	POSIX_FILES_DIRS.
+	* psx13/Makefile.am, psxcancel/Makefile.am, psxchroot01/Makefile.am,
+	psxfile01/Makefile.am, psxmount/Makefile.am, psxreaddir/Makefile.am,
+	psxstat/Makefile.am: Add ../include/pmacros.h
 	* psxtests.am: Remove LIB_VARIANT.
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
