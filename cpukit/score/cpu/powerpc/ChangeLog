@@ -1,8 +1,8 @@
-2005-11-02      straumanatslacdotstanford.edu
- 
-    * rtems/powerpc/registers.h: recognize mpc7457 CPU; added definitions
-    for high bats (#4..7) on 7450 CPUs
- 
+2005-11-02      Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/powerpc/registers.h: recognize mpc7457 CPU; added definitions
+	for high bats (#4..7) on 7450 CPUs
+
 2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/asm.h: Remove private version of CONCAT macros.
@@ -10,7 +10,7 @@
 
 2005-05-06      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        * rtems/score/powerpc.h: Removed warning
+	* rtems/score/powerpc.h: Removed warning
 
 2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 

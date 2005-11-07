@@ -8,7 +8,7 @@
 2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/bootloader/misc.c, shared/console/polled_io.c,
-    shared/residual/residual.c: silenced compiler warnings (type cast &
+	shared/residual/residual.c: silenced compiler warnings (type cast &
 	renaming puts->my_puts)
 
 2005-11-02	Till Straumann <strauman@slac.stanford.edu>

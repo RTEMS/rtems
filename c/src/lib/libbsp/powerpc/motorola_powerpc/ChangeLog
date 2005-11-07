@@ -11,8 +11,8 @@
 2005-11-03	<strauman@slac.stanford.edu>
 
 	* Makefile.am, include/bsp.h: Added new shared pretaskinghook.c and
-    zerobss.c files to list to be made. Added some explanations about
-    CPU <-> PCI <-> VME address mapping issues.
+	zerobss.c files to list to be made. Added some explanations about
+	CPU <-> PCI <-> VME address mapping issues.
 2005-11-03	straumanatslacdotstanforddotedu
 
 	* Makefile.am, startup/linkcmds:
@@ -20,7 +20,7 @@
 
 2005-10-20	Eric Norum <norume@aps.anl.gov>
 
-    * include/bsp.h: Support MVME2100.
+	* include/bsp.h: Support MVME2100.
 
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 

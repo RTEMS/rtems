@@ -10,7 +10,7 @@
 	r46xx/Makefile.am, tx39/Makefile.am, shared/Makefile.am.
 	Include preinstall.am.
 	* au1x00/Makefile.am, mongoosev/Makefile.am,
-        r46xx/Makefile.am, tx39/Makefile.am, shared/Makefile.am: Remove.
+	r46xx/Makefile.am, tx39/Makefile.am, shared/Makefile.am: Remove.
 	* configure.ac: Reflect changes above.
 
 2005-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
@@ -28,7 +28,7 @@
 2005-02-24	Jay Monkman <jtm@lopingdog.com>
 
 	* Makefile.am, configure.ac: New CPU.
-        * shared/interrupts/installisrentries.c,
+	* shared/interrupts/installisrentries.c,
 	shared/interrupts/isr_entries.S: Added CPU32 support.
 	* au1x00/Makefile.am, au1x00/include/au1x00.h,
 	au1x00/vectorisrs/maxvectors.c, au1x00/vectorisrs/vectorisrs.c: New CPU.
