@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-TEST = size
+TEST = spsize
 
 MANAGERS = io
 
