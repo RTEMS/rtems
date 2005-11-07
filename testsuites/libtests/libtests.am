@@ -6,10 +6,10 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(PGM): ${ARCH}/$(dirstamp)
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe
+$(project_bspdir)/tests/$(TEST).exe

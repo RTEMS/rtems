@@ -1,5 +1,9 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libtests.am: Remove LIB_VARIANT.
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* cpuuse/Makefile.am, malloctest/Makefile.am, monitor/Makefile.am,
 	putenvtest/Makefile.am, rtems++/Makefile.am, rtmonuse/Makefile.am,
 	stackchk/Makefile.am, termios/Makefile.am: Remove SRC, PRINT_SRC.
