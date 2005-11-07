@@ -1,5 +1,6 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/subdirs.am: Remove depend-recursive.
 	* automake/compile.am: Take contents of amcompile.am.
 	* automake/amcompile.am: Remove.
 
