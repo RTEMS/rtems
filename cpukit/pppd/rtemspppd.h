@@ -1,3 +1,14 @@
+/*
+ * COPYRIGHT (c) 2001, Michael Siers <mikes@poliac.com>.
+ *                     Poliac Research, Burnsville, Minnesota USA.
+ * COPYRIGHT (c) 2001, On-Line Applications Research Corporation (OAR).
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ * 
+ *  $Id$
+ */
 
 #ifndef RTEMSPPPD_H
 #define RTEMSPPPD_H

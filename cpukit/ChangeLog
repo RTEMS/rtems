@@ -1,3 +1,8 @@
+2005-11-07	Michael Siers <mikes@poliac.com>
+
+	* pppd/rtemspppd.c, pppd/rtemspppd.h: Per confirmation from Michael add
+	missing copyright notice.
+
 2005-11-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libi2c/libi2c.c: Include config.h.
