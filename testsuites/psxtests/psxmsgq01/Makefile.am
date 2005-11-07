@@ -7,7 +7,7 @@ TEST = psxmsgq01
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c system.h
+lib_a_SOURCES = init.c system.h ../include/pmacros.h
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

@@ -7,7 +7,7 @@ TEST = psxtimer
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = psxtimer.c system.h
+lib_a_SOURCES = psxtimer.c system.h ../include/pmacros.h
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

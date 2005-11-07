@@ -7,7 +7,7 @@ TEST = psx06
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c task.c task2.c system.h
+lib_a_SOURCES = init.c task.c task2.c system.h ../include/pmacros.h
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
