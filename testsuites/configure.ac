@@ -42,15 +42,15 @@ if test "$enable_tests" = "yes"; then
   if test "$HAS_MP" = "yes"; then
     AC_CONFIG_SUBDIRS(mptests)
   fi
-  if test "$HAS_POSIX_API" = "yes"; then
+  if test "$rtems_cv_HAS_POSIX_API" = "yes"; then
     AC_CONFIG_SUBDIRS(psxtests)
   fi
-  if test "$HAS_ITRON_API" = "yes"; then
+  if test "$rtems_cv_HAS_ITRON_API" = "yes"; then
     AC_CONFIG_SUBDIRS(itrontests)
   fi
   # Now do performance tests
   AC_CONFIG_SUBDIRS(tmtests)
-  if test "$HAS_ITRON_API" = "yes"; then
+  if test "$rtems_cv_HAS_ITRON_API" = "yes"; then
     AC_CONFIG_SUBDIRS(tmitrontests)
   fi
 fi
