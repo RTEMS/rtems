@@ -1,10 +1,6 @@
-2005-09-02  Joel Sherrill <joel@OARcorp.com>
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-    * aclocal/version.m4: Updated to rtems-4.6.99.2.
-
-2005-09-02  Joel Sherrill <joel@OARcorp.com>
-
-    * aclocal/version.m4: Updated to rtems-4.6.99.2.
+	* automake/amcompile.am: New.
 
 2005-09-02  Joel Sherrill <joel@OARcorp.com>
 
