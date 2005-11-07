@@ -7,7 +7,7 @@ TEST = psxchroot01
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = main.c test.c
+lib_a_SOURCES = main.c test.c ../include/pmacros.h
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

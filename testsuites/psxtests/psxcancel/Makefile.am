@@ -7,7 +7,7 @@ TEST = psxcancel
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c
+lib_a_SOURCES = init.c ../include/pmacros.h
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
