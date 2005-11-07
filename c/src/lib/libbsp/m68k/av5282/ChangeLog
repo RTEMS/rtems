@@ -1,3 +1,9 @@
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* include/bsp.h: Eliminate unsigned32.
+	* network/network.c: Several minor bug fixes.
+	* startup/bspstart.c: Eliminate unsigned32.
+
 2005-08-17	Mike Bertosh <mbertosh@motioncontrol.org>
 
 	* .cvsignore, Makefile.am, README, bsp_specs, configure.ac,
