@@ -7,9 +7,7 @@ TEST = tm26
 MANAGERS = io semaphore
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = task1.c
-
-lib_a_SOURCES += system.h fptest.h
+lib_a_SOURCES = task1.c system.h fptest.h
 
 DOCTYPES = doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
