@@ -1,14 +1,19 @@
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* mpc6xx/mmu/pte121.c: Eliminate unsigned32.
+	* mpc8xx/clock/clock.c: Eliminate rtems_unsigned32.
+
 2005-11-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* shared/include/byteorder.h: Remove __arch_swap (Unused).
 	* Makefile.am: Partially cleanup EXTRA_DIST.
 
-2005-11-03	Till Strauman <strauman@slac.stanford.edu>
+2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* mpc6xx/clock/c_clock.c: disable interrupts around decrementer
 	update to eliminate a race condition
 
-2005-11-02	Till Strauman <strauman@slac.stanford.edu>
+2005-11-02	Till Straumann <strauman@slac.stanford.edu>
 
 	* mpc6xx/mmu/pte121.c, mpc6xx/mmu/pte121.h: enhancements to mpc6xx
 	page table support - PTEs can now be modified even if the page table
