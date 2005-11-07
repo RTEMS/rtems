@@ -1,5 +1,14 @@
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* base_mp/node1/Makefile.am, base_mp/node2/Makefile.am,
+	base_sp/Makefile.am, cdtest/Makefile.am, fileio/Makefile.am,
+	hello/Makefile.am, iostream/Makefile.am, loopback/Makefile.am,
+	minimum/Makefile.am, paranoia/Makefile.am, pppd/Makefile.am
+	ticker/Makefile.am, unlimited/Makefile.am:
+	Remove SRCS, PRINT_SRCS.
+
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* base_mp/node1/Makefile.am, base_mp/node2/Makefile.am: Cleanup.
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
