@@ -9,12 +9,7 @@ PGM = ${ARCH}/$(SAMPLE).exe
 MANAGERS = io mp
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = ../init.c ../apptask.c
-
-$(ARCH)/%.$(OBJEXT): ../%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-
-lib_a_SOURCES += system.h
+lib_a_SOURCES = ../init.c ../apptask.c system.h
 
 DOCTYPES = doc scn
 DOCS = $(DOCTYPES:%=base_mp.%)
