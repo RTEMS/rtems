@@ -3,19 +3,15 @@
  *
  *  This routine returns control from RTEMS to the monitor.
  *
- *  Author:
- *    David Fiddes, D.J@fiddes.surfaid.org
- *    http://www.calm.hw.ac.uk/davidf/coldfire/
+ *  Author: W. Eric Norum <norume@aps.anl.gov>
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 2005.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- * 
  *  http://www.OARcorp.com/rtems/license.html.
- * 
+ *
  *  $Id$
  */
 

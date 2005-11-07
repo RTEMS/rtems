@@ -2,7 +2,9 @@
  *  This file contains directives for the GNU linker which are specific
  *  to the Arcturus uC DIMM ColdFire 5282
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  Author: W. Eric Norum <norume@aps.anl.gov>
+ *
+ *  COPYRIGHT (c) 2005.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

@@ -1,5 +1,14 @@
 /*
  * RTEMS driver for MCF5282 Fast Ethernet Controller
+ *
+ *  Author: W. Eric Norum <norume@aps.anl.gov>
+ *
+ *  COPYRIGHT (c) 2005.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  */
 
 #include <bsp.h>

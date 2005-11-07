@@ -1,10 +1,19 @@
 /*
- *  This is where the real hardware setup is done. A minimal stack
- *  has been provided by the start.S code. No normal C or RTEMS
- *  functions can be called from here.
+ * This is where the real hardware setup is done. A minimal stack
+ * has been provided by the start.S code. No normal C or RTEMS
+ * functions can be called from here.
  * 
  * This routine is pretty simple for the uC5282 because all the hard
  * work has been done by the bootstrap dBUG code.
+ *
+ *  Author: W. Eric Norum <norume@aps.anl.gov>
+ *
+ *  COPYRIGHT (c) 2005.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  */
 
 #include <rtems.h>

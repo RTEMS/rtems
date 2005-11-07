@@ -1,3 +1,7 @@
+2005-11-07  Eric Norum <norume@aps.anl.gov>
+
+    * Almost everything: Assign copyright to OAR.
+
 2005-10-26  Eric Norum <norume@aps.anl.gov>
 
 	* README, network/network.c: Add support for forcing link parameters.
