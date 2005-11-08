@@ -1,5 +1,13 @@
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/env-rtemsbsp.m4: Merge RTEMS_BSP_SPECS and
+	GCC_SPECS into GCCSPECS.
+	* automake/compile.am: Remove RTEMS_BSP_SPECS, GCC_SPECS.
+	Don't manually set up GCCSPEC (Now setup from inside configure).
+	Remove RTEMS_RELLDFLAGS (Used).
+
+2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* automake/compile.am: Remove CCAS support.
 	* aclocal/multilib.m4: Remove (Unused).
 	* aclocal/check-multiprocessing.m4: Don't require
