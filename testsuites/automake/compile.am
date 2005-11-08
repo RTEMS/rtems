@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-## RTEMS_USE_GCC     .. if we are using GCC
-
 LINK_LIBS = $(LD_LIBS)
 
 #COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
