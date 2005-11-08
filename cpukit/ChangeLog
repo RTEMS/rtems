@@ -1,3 +1,11 @@
+2005-11-08	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/net/if.h: Add forward reference declaration to
+	struct mbuf so ifru_tap callback is properly typed.
+	* libnetworking/rtems/rtems_bsdnet.h: Add definition of _BSD_VISIBLE
+	which needs to be defined so various pieces of the .h files are
+	visible to device drives.
+
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/Makefile.am: Comment out using

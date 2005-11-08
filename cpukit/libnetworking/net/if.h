@@ -194,6 +194,9 @@ struct ifa_msghdr {
 	int	ifam_metric;	/* value of ifa_metric */
 };
 
+/* forward declaration */
+struct mbuf;
+
 /*
  * Interface request structure used for socket
  * ioctl's.  All interface ioctl's must have parameter
@@ -212,8 +215,7 @@ struct	ifreq {
 		int	ifru_phys;
 		int	ifru_media;
 		caddr_t	ifru_data;
-		/* third argument must be cast to a struct mbuf * */
-		int	(*ifru_tap)(struct ifnet *, struct ether_header *, void *);
+		int	(*ifru_tap)(struct ifnet *, struct ether_header *, struct mbuf *);
 	} ifr_ifru;
 #define	ifr_addr	ifr_ifru.ifru_addr	/* address */
 #define	ifr_dstaddr	ifr_ifru.ifru_dstaddr	/* other end of p-to-p link */

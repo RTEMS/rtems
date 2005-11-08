@@ -24,6 +24,7 @@
 #undef NFS
 #undef DIAGNOSTIC
 #undef BOOTP_COMPAT
+#undef __BSD_VISIBLE
 
 #define _COMPILING_BSD_KERNEL_
 #define _KERNEL
@@ -31,6 +32,7 @@
 #define NFS
 #define DIAGNOSTIC
 #define BOOTP_COMPAT
+#define __BSD_VISIBLE 1
 #endif
 
 /*
