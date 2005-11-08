@@ -1,3 +1,9 @@
+2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/Makefile.am: Comment out using
+	rtems/rtems_mii_ioctl.h, rtems/rtems_mii_ioctl.c,
+	rtems/rtems_mii_ioctl_kern.c.
+
 2005-11-07	Michael Siers <mikes@poliac.com>
 
 	* pppd/rtemspppd.c, pppd/rtemspppd.h: Per confirmation from Michael add
