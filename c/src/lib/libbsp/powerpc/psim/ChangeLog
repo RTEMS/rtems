@@ -1,3 +1,9 @@
+2005-11-07	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 834/bsps
+	* vectors/vectors.S: reload stack pointer/R1 from exception frame
+    instead of adding static offset.
+
 2005-04-11      Jennifer Averett <jennifer@OARcorp.com>
 
         PR 777/bsps
