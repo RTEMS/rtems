@@ -1,3 +1,7 @@
+2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* irq/irq.c, startup/bspstart.c: Remove obsolete types (*unsigned32).
+
 2005-07-06	Markku Puro <markku.puro@kopteri.net>
 
 	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
