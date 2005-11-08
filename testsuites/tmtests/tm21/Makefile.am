@@ -7,7 +7,7 @@ TEST = tm21
 MANAGERS = io dpmem message partition region semaphore rate_monotonic timer
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = task1.c system.h
+lib_a_SOURCES = task1.c system.h ../include/timesys.h
 
 DOCTYPES = doc
 DOCS = $(DOCTYPES:%=$(TEST).%)

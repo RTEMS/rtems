@@ -7,7 +7,7 @@ TEST = tm28
 MANAGERS = io dpmem
 
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = task1.c system.h
+lib_a_SOURCES = task1.c system.h ../include/timesys.h
 
 DOCTYPES = doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
