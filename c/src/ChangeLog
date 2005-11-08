@@ -1,3 +1,9 @@
+2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* automake/compile.am: Remove GCCSPECS.
+	* aclocal/prog-cc.m4: Add GCCSPECS.
+	* aclocal/env-rtemsbsp.m4: Remove RTEMS_BSP_SPECS. Remove GCC_SPECS.
+
 2005-11-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libchip/i2c/i2c-2b-eeprom.c: Eliminate obsolete types.
