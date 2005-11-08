@@ -1,3 +1,12 @@
+2005-11-08	Till Straumann <strauman@slac.stanford.edu>
+
+	PR832/bsps
+	* startup/ldsegs.S: move CPU segment descriptor tables from .text to
+	.data; the CPU modifies the descriptor tables and this could be a
+	problem: a) if text segment is ever write-protected b) rtems-gdb-stub
+	checksums the text segment against the file gdb is using. A checksum
+	mismatch results because of the CPU touching the accessed bit...
+
 2005-08-23  Karel Gardas  <kgardas@objectsecurity.com>>
 
 	* timer/timer.c: Enhance to use either interupt-based timer
