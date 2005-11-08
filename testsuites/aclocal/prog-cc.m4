@@ -26,12 +26,4 @@ AS_IF([test x"$GCC" = xyes],[
 GCCSPECS="-B\$(PROJECT_ROOT)/lib/ -B\$(PROJECT_ROOT)/$RTEMS_BSP/lib/"
 GCCSPECS="${GCCSPECS} -specs bsp_specs -qrtems"])
 AC_SUBST(GCCSPECS)
-
-if test "$GCC" = yes; then
-RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
-m4_if([$1],,[],[RTEMS_CFLAGS="$RTEMS_CFLAGS $1"])
-fi
-AC_SUBST(RTEMS_CFLAGS)
-
-AC_SUBST(RTEMS_CPPFLAGS)
 ])
