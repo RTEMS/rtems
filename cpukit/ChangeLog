@@ -1,3 +1,10 @@
+2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add RTEMS_NETWORKING to cpuopts.h.
+	Add RTEMS_DEPRECATED_TYPES to config.h.
+	Add AC_CONFIG_COMMANDS(preinstall-stamp) magic.
+	Misc. cleanups.
+
 2005-11-08	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/net/if.h: Add forward reference declaration to

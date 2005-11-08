@@ -63,6 +63,11 @@ AC_ARG_ENABLE([deprecated],
 esac],[enable_deprecated=no])
 AM_CONDITIONAL([DEPRECATED],[test "$enable_deprecated" = "yes"])
 
+AS_IF([ test "$enable_deprecated" = "yes" ],[
+AC_DEFINE_UNQUOTED([RTEMS_DEPRECATED_TYPES],[1],
+  [whether to support deprecated types])
+])
+
 # HACK: We should use a feature-based configuration.
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 # HACK: silently accept --enable-unixlib
@@ -149,27 +154,32 @@ RTEMS_CPUOPT([RTEMS_ITRON_API],
   [if itron api is supported])
 
 RTEMS_CPUOPT([RTEMS_MULTIPROCESSING],
-  [test x"$enable_multiprocessing" = x"yes"],
+  [test x"$enable_multiprocessing" = xyes],
   [1],
   [if multiprocessing is enabled])
 
 RTEMS_CPUOPT([RTEMS_NEWLIB],
-  [test x"$RTEMS_USE_NEWLIB" = x"yes"],
+  [test x"$RTEMS_USE_NEWLIB" = xyes],
   [1],
   [if using newlib])
 
 RTEMS_CPUOPT([RTEMS_POSIX_API],
-  [test x"$rtems_cv_HAS_POSIX_API" = x"yes"],
+  [test x"$rtems_cv_HAS_POSIX_API" = xyes],
   [1],
   [if posix api is supported])
 
+RTEMS_CPUOPT([RTEMS_NETWORKING],
+  [test x"$rtems_cv_HAS_NETWORKING" = xyes],
+  [1],
+  [if networking is enabled])
+
 RTEMS_CPUOPT([RTEMS_UNIX],
-  [test x"$RTEMS_CPU" = x"unix"],
+  [test x"$RTEMS_CPU" = xunix],
   [1],
   [to indicate RTEMS unix])
 
 RTEMS_CPUOPT([RTEMS_UNIXLIB],
-  [test x"${enable_unixlib}" = x"yes"],
+  [test x"${enable_unixlib}" = xyes],
   [1],
   [to indicate RTEMS using RTEMS's unixlib])
 
@@ -304,7 +314,11 @@ httpd/Makefile
 ftpd/Makefile
 telnetd/Makefile
 pppd/Makefile
-wrapup/Makefile
-])
+wrapup/Makefile])
+
+AC_CONFIG_COMMANDS([preinstall-stamp],
+[test -z "$with_multisubdir" && ${MAKE} preinstall-stamp],
+[MAKE=${MAKE}
+with_multisubdir="$with_multisubdir"])
 
 AC_OUTPUT
