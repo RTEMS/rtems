@@ -1,5 +1,7 @@
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am: Remove RTEMS_CPPFLAGS, RTEMS_CFLAGS,
+	RTEMS_CXXFLAGS.
 	* aclocal/gcc-isystem.m4: Remove (Unused).
 	* aclocal/env-rtemsbsp.m4: Remove GCCSPECS.
 	* aclocal/prog-cc.m4: Add GCCSPECS. Remove RTEMS_CPPFLAGS.
