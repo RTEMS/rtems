@@ -15,8 +15,6 @@ test -z "$CC" && \
   AC_MSG_ERROR([no acceptable cc found in \$PATH])
 AC_PROG_CC
 AC_PROG_CPP
-
-AM_CONDITIONAL(RTEMS_USE_GCC,test x"$GCC" = x"yes")
 ])
 
 AC_DEFUN([RTEMS_PROG_CC_FOR_TARGET],
@@ -26,11 +24,6 @@ RTEMS_PROG_CC
 dnl check if the compiler supports -isystem
 RTEMS_GCC_ISYSTEM
 dnl check if the target compiler may use --pipe
-RTEMS_GCC_PIPE
-test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
-
-dnl check if the compiler supports --specs
-RTEMS_GCC_SPECS
 
 if test "$GCC" = yes; then
 RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
