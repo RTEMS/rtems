@@ -34,11 +34,11 @@ extern "C" {
 
 typedef unsigned long long unsigned64; /* unsigned 64-bit integer */
 
-typedef unsigned16     Priority_Bit_map_control;
+typedef uint16_t     Priority_Bit_map_control;
 
 typedef signed long long signed64;     /* 64 bit signed integer */
 
-typedef unsigned32 boolean;     /* Boolean value   */
+typedef uint32_t boolean;     /* Boolean value   */
 
 typedef float          single_precision;     /* single precision float */
 typedef double         double_precision;     /* double precision float */
