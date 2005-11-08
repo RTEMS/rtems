@@ -1,5 +1,6 @@
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/gcc-isystem.m4: Remove (Unused).
 	* aclocal/env-rtemsbsp.m4: Remove GCCSPECS.
 	* aclocal/prog-cc.m4: Add GCCSPECS. Remove RTEMS_CPPFLAGS.
 	Remove RTEMS_CFLAGS.
