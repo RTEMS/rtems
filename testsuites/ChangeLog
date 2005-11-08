@@ -1,3 +1,10 @@
+2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/multilib.m4: Remove (Unused).
+	* aclocal/check-multiprocessing.m4: Don't require
+	RTEMS_ENABLE_MULTILIB.
+	* aclocal/env-rtemsbsp.m4: Don't provide MULTILIB conditional.
+
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-posix.m4: Sync with cpukit.
