@@ -21,8 +21,11 @@ AC_DEFUN([RTEMS_PROG_CC_FOR_TARGET],
 [
 dnl check target cc
 RTEMS_PROG_CC
-dnl check if the compiler supports -isystem
-RTEMS_GCC_ISYSTEM
+
+AS_IF([test x"$GCC" = xyes],[
+GCCSPECS="-B\$(PROJECT_ROOT)/lib/ -B\$(PROJECT_ROOT)/$RTEMS_BSP/lib/"
+GCCSPECS="${GCCSPECS} -specs bsp_specs -qrtems"])
+AC_SUBST(GCCSPECS)
 
 if test "$GCC" = yes; then
 RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
@@ -30,9 +33,5 @@ m4_if([$1],,[],[RTEMS_CFLAGS="$RTEMS_CFLAGS $1"])
 fi
 AC_SUBST(RTEMS_CFLAGS)
 
-AS_IF([test x"$rtems_cv_gcc_isystem" = x"yes"],[
-  RTEMS_CPPFLAGS="-isystem \$(PROJECT_INCLUDE)"],[
-  RTEMS_CPPFLAGS="-I\$(PROJECT_INCLUDE)"
-])
 AC_SUBST(RTEMS_CPPFLAGS)
 ])
