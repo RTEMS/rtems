@@ -34,13 +34,18 @@ test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 dnl check if the compiler supports --specs
 RTEMS_GCC_SPECS
 
+AS_IF([test x"$rtems_cv_gcc_specs" = xyes],[
+GCCSPECS="-B\$(PROJECT_ROOT)/lib/ -B\$(PROJECT_ROOT)/$RTEMS_BSP/lib/"
+GCCSPECS="${GCCSPECS} -specs bsp_specs -qrtems"])
+AC_SUBST(GCCSPECS)
+
 if test "$GCC" = yes; then
 RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
 m4_if([$1],,[],[RTEMS_CFLAGS="$RTEMS_CFLAGS $1"])
 fi
 AC_SUBST(RTEMS_CFLAGS)
 
-AS_IF([test x"$rtems_cv_gcc_isystem" = x"yes"],[
+AS_IF([test x"$rtems_cv_gcc_isystem" = xyes],[
   RTEMS_CPPFLAGS="-isystem \$(PROJECT_INCLUDE)"],[
   RTEMS_CPPFLAGS="-I\$(PROJECT_INCLUDE)"
 ])
