@@ -1,5 +1,9 @@
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/prog-cc.m4: Remove RTEMS_USE_GCC.
+	Remove RTEMS_GCC_PIPE. Remove RTEMS_GCC_SPECS.
+	* aclocal/gcc-pipe.m4: Remove (Unused).
+	* aclocal/gcc-specs.m4: Remove (Unused).
 	* aclocal/env-rtemsbsp.m4: Merge RTEMS_BSP_SPECS and
 	GCC_SPECS into GCCSPECS.
 	* automake/compile.am: Remove RTEMS_BSP_SPECS, GCC_SPECS.
