@@ -23,7 +23,6 @@ dnl check target cc
 RTEMS_PROG_CC
 dnl check if the compiler supports -isystem
 RTEMS_GCC_ISYSTEM
-dnl check if the target compiler may use --pipe
 
 if test "$GCC" = yes; then
 RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
