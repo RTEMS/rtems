@@ -473,6 +473,20 @@ IntUartInterruptOpen(int major, int minor, void *arg)
 {
 	struct IntUartInfoStruct   *info = &IntUartInfo[minor];
 
+	/*
+	 * Enable serial I/O pin assignments
+	 */
+	switch(minor) {
+	case 0:
+		MCF5282_GPIO_PUAPAR |= MCF5282_GPIO_PUAPAR_PUAPA1|MCF5282_GPIO_PUAPAR_PUAPA0;
+		break;
+	case 1:
+		MCF5282_GPIO_PUAPAR |= MCF5282_GPIO_PUAPAR_PUAPA3|MCF5282_GPIO_PUAPAR_PUAPA2;
+		break;
+	case 2:
+		MCF5282_GPIO_PASPAR |= MCF5282_GPIO_PASPAR_PASPA3(2)|MCF5282_GPIO_PASPAR_PASPA2(2);
+		break;
+	}
 	/* enable the uart */
 	MCF5282_UART_UCR(minor) = (MCF5282_UART_UCR_TX_ENABLED | MCF5282_UART_UCR_RX_ENABLED);
 
@@ -635,13 +649,14 @@ rtems_device_driver console_initialize(
 	void  *arg )
 {
 	rtems_status_code status;
-
+	int chan;
 
 	/* Set up TERMIOS */
 	rtems_termios_initialize ();
 
 	/* set io modes for the different channels and initialize device */
-    IntUartInfo[minor].iomode = TERMIOS_IRQ_DRIVEN;
+	for ( chan = 0; chan < MAX_UART_INFO; chan++ )
+		IntUartInfo[chan].iomode = TERMIOS_IRQ_DRIVEN;
 	IntUartInitialize(); 
 
 	/* Register the console port */

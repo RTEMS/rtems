@@ -1,3 +1,7 @@
+2005-11-08  Eric Norum <norume@aps.anl.gov>
+
+    * console/console.c: Add code to set up pin assignments
+
 2005-11-07  Eric Norum <norume@aps.anl.gov>
 
     * Almost everything: Assign copyright to OAR.
