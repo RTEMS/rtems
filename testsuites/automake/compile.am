@@ -4,14 +4,6 @@
 
 ## RTEMS_USE_GCC     .. if we are using GCC
 
-if RTEMS_USE_GCC
-## All the stuff below is specific to gcc
-GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
-endif # RTEMS_USE_GCC
-
-if RTEMS_USE_GCC
-RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
-endif
 LINK_LIBS = $(LD_LIBS)
 
 #COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
