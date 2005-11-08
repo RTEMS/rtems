@@ -34,8 +34,6 @@ RTEMS_ENABLE_BARE
 AC_SUBST(BARE_CPU_MODEL)
 AC_SUBST(BARE_CPU_CFLAGS)
 
-AM_CONDITIONAL([MULTILIB],[false])
-
 includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
 libdir="\${exec_prefix}/${RTEMS_BSP}/lib"
 
