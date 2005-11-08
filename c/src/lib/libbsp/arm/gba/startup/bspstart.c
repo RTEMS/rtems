@@ -58,7 +58,7 @@ rtems_configuration_table  BSP_Configuration;
 /* External Prototypes */
 extern void bsp_cleanup( void );
 extern void rtems_irq_mngt_init(void);
-extern void bsp_libc_init( void *, rtems_unsigned32, int );
+extern void bsp_libc_init( void *, uint32_t, int );
 extern void bsp_postdriver_hook(void);
 
 
@@ -69,10 +69,10 @@ volatile unsigned int *Regs = (unsigned int *)GBA_IO_REGS_ADDR;
  *  Size of heap if it is 0 it will be dynamically defined by memory size,
  *  otherwise the value should be changed by binary patch
  */
-rtems_unsigned32   _heap_size = 0;
+uint32_t   _heap_size = 0;
 
 /** Address of start of free memory - should be updated after creating new partitions or regions.*/
-rtems_unsigned32   rtemsFreeMemStart;
+uint32_t   rtemsFreeMemStart;
 
 /** CPU configuration table.    */
 rtems_cpu_table    Cpu_table;
@@ -95,7 +95,7 @@ void bsp_pretasking_hook(void)
 {
 
   if (_heap_size == 0) {
-     _heap_size = (rtems_unsigned32)&__heap_limit - rtemsFreeMemStart;
+     _heap_size = (uint32_t)&__heap_limit - rtemsFreeMemStart;
   }
 
   bsp_libc_init((void *)rtemsFreeMemStart, _heap_size, 0);
@@ -111,19 +111,19 @@ void bsp_pretasking_hook(void)
   /*  The following information is very useful when debugging. */
   printk("[bsp_pretasking_hook]\n");
   printk("_heap_size  = 0x%x\n", _heap_size);
-  printk("_stack_size = 0x%x\n", (rtems_unsigned32)&_stack_size);
-  printk("_irq_max_vector = 0x%x\n", (rtems_unsigned32)&_irq_max_vector);
-  printk("__ro_start      = 0x%x : __ro_end     = 0x%x\n", (rtems_unsigned32)&__ro_start, (rtems_unsigned32)&__ro_end);
-  printk("__ewram_start   = 0x%x : __ewram_end  = 0x%x\n", (rtems_unsigned32)&__ewram_start, (rtems_unsigned32)&__ewram_end);
-  printk("__data_start    = 0x%x : __data_end   = 0x%x\n", (rtems_unsigned32)&__data_start, (rtems_unsigned32)&__data_end);
-  printk("__bss_start     = 0x%x : __bss_end    = 0x%x\n", (rtems_unsigned32)&__bss_start,(rtems_unsigned32)&__bss_end);
-  printk("__iwram_start   = 0x%x : __iwram_end  = 0x%x\n", (rtems_unsigned32)&__iwram_start,(rtems_unsigned32)&__iwram_end);
-  printk("__load_start_iwram = 0x%x\n", (rtems_unsigned32)&__load_start_iwram);
-  printk("__load_stop_iwram  = 0x%x\n", (rtems_unsigned32)&__load_stop_iwram);
-  printk("__load_start_ewram = 0x%x\n", (rtems_unsigned32)&__load_start_ewram);
-  printk("__load_stop_ewram  = 0x%x\n", (rtems_unsigned32)&__load_stop_ewram);
-  printk("__load_start_data  = 0x%x\n", (rtems_unsigned32)&__load_start_data);
-  printk("__load_stop_data   = 0x%x\n", (rtems_unsigned32)&__load_stop_data);
+  printk("_stack_size = 0x%x\n", (uint32_t)&_stack_size);
+  printk("_irq_max_vector = 0x%x\n", (uint32_t)&_irq_max_vector);
+  printk("__ro_start      = 0x%x : __ro_end     = 0x%x\n", (uint32_t)&__ro_start, (uint32_t)&__ro_end);
+  printk("__ewram_start   = 0x%x : __ewram_end  = 0x%x\n", (uint32_t)&__ewram_start, (uint32_t)&__ewram_end);
+  printk("__data_start    = 0x%x : __data_end   = 0x%x\n", (uint32_t)&__data_start, (uint32_t)&__data_end);
+  printk("__bss_start     = 0x%x : __bss_end    = 0x%x\n", (uint32_t)&__bss_start,(uint32_t)&__bss_end);
+  printk("__iwram_start   = 0x%x : __iwram_end  = 0x%x\n", (uint32_t)&__iwram_start,(uint32_t)&__iwram_end);
+  printk("__load_start_iwram = 0x%x\n", (uint32_t)&__load_start_iwram);
+  printk("__load_stop_iwram  = 0x%x\n", (uint32_t)&__load_stop_iwram);
+  printk("__load_start_ewram = 0x%x\n", (uint32_t)&__load_start_ewram);
+  printk("__load_stop_ewram  = 0x%x\n", (uint32_t)&__load_stop_ewram);
+  printk("__load_start_data  = 0x%x\n", (uint32_t)&__load_start_data);
+  printk("__load_stop_data   = 0x%x\n", (uint32_t)&__load_stop_data);
 #endif
 }
 
@@ -139,7 +139,7 @@ void bsp_pretasking_hook(void)
 void bsp_start_default( void )
 {
   /* set the value of start of free memory. */
-  rtemsFreeMemStart = (rtems_unsigned32)&_end;
+  rtemsFreeMemStart = (uint32_t)&_end;
 
   /* If we don't have command line arguments set default program name. */
   Cpu_table.pretasking_hook         = bsp_pretasking_hook; /* init libc, etc. */
@@ -169,7 +169,7 @@ void bsp_start_default( void )
   /* The following information is very useful when debugging. */
   printk("[bsp_start]\n");
   printk("rtemsFreeMemStart= 0x%x\n", rtemsFreeMemStart);
-  printk("__heap_limit     = 0x%x\n", (rtems_unsigned32)&__heap_limit);
+  printk("__heap_limit     = 0x%x\n", (uint32_t)&__heap_limit);
   printk("work_space_start = 0x%x size = 0x%x\n", BSP_Configuration.work_space_start,BSP_Configuration.work_space_size);
   printk("maximum_extensions    = 0x%x\n", BSP_Configuration.maximum_extensions);
   printk("microseconds_per_tick = 0x%x\n", BSP_Configuration.microseconds_per_tick);
@@ -180,7 +180,7 @@ void bsp_start_default( void )
 #endif
 
   /* Do we have enough memory */
-  if ((rtems_unsigned32)&__heap_limit < rtemsFreeMemStart) {
+  if ((uint32_t)&__heap_limit < rtemsFreeMemStart) {
      printk("\nFatal Error: Memory overflow[0x%x]!\n",rtemsFreeMemStart);
      bsp_cleanup();
   }

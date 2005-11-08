@@ -62,7 +62,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Check if default handler is actually connected. If not issue an error.
      */
-    HdlTable = (rtems_irq_hdl *) (unsigned32)VECTOR_TABLE;
+    HdlTable = (rtems_irq_hdl *) (uint32_t)VECTOR_TABLE;
     if (*(HdlTable + irq->name) != default_int_handler) {
        return 0;
     }
@@ -111,7 +111,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Check if the handler is actually connected. If not issue an error.
      */
-    HdlTable = (rtems_irq_hdl *) (unsigned32)VECTOR_TABLE;
+    HdlTable = (rtems_irq_hdl *) (uint32_t)VECTOR_TABLE;
     if (*(HdlTable + irq->name) != irq->hdl) {
        return 0;
     }
