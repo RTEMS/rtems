@@ -28,6 +28,8 @@ include $(top_srcdir)/psxtests.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
