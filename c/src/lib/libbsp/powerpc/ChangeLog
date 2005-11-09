@@ -1,3 +1,7 @@
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/startup/bspstart.c: Eliminate obsolete types.
+
 2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, motorola_powerpc/Makefile.am, mvme5500/Makefile.am,
