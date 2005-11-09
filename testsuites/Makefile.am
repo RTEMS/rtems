@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I aclocal
 DISTCLEANFILES =
 CLEANFILES =
 
-include_HEADERS = support/include/tmacros.h support/include/buffer_test_io.h
+noinst_HEADERS = support/include/tmacros.h support/include/buffer_test_io.h
 
 SUBDIRS = @subdirs@
 

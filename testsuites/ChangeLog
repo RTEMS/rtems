@@ -1,5 +1,6 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Don't preinstall support/include headers.
 	* configure.ac: Fix config-variables of conditionally built subdirs.
 
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
