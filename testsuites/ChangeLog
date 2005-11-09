@@ -1,5 +1,13 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-itron.m4, aclocal/check-multiprocessing.m4,
+	aclocal/check-networking.m4, aclocal/check-posix.m4,
+	aclocal/check-tests.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4: Remove (Unused).
+
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Apply RTEMS_CHECK_CPUOPTS.
 	* aclocal/prog-cc.m4: Apply cpukit_root, project_root to set up
 	GCCSPECS.
