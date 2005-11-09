@@ -1,5 +1,9 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* tmitronsem01/Makefile.am: AM_CPPFLAGS += -I..../support/include.
+
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* tmitrontests.am: Set project_bspdir=$(PROJECT_ROOT)
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
