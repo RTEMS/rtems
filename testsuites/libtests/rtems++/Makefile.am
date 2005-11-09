@@ -31,6 +31,8 @@ LD_LIBS = -lrtems++
 
 if HAS_CXX
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-cxx-exe)
 

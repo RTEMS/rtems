@@ -21,6 +21,8 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/sptests.am
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 

@@ -29,6 +29,8 @@ include $(top_srcdir)/tmtests.am
 OPERATION_COUNT = @OPERATION_COUNT@
 AM_CPPFLAGS += -I$(top_srcdir)/include -DOPERATION_COUNT=$(OPERATION_COUNT)
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 

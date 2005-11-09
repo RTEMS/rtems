@@ -32,6 +32,8 @@ if HAS_MP
 # (OPTIONAL) Add local stuff here using +=
 #
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
