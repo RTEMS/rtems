@@ -183,15 +183,31 @@ RTEMS_BSP_CONFIG_SUBDIR(
   ],
   [test x"$enable_tests" = xyes && test x"$enable_ada" = xyes])
 
+# HACK ALERT!
+
+# FIXME: Assume multilib implies in-source-tree multilibs
+# Build testsuites multilibbed
 RTEMS_BSP_CONFIG_SUBDIR(
   [testsuites],[../../testsuites],
   ['--enable-rtems-root=../' \
-   '--with-project-root=${with_project_root}../' \
+   '--enable-project-root=${with_project_root}../$RTEMS_BSP' \
    '--with-project-top=${with_project_top}../' \
    '--enable-rtemsbsp=$RTEMS_BSP' \
    'CFLAGS="${CFLAGS}"' \
   ],
-  [test x"$enable_tests" != x"no"])
+  [test x"$enable_tests" != x"no" && test x"$multilib" = xno])
+
+# Build testsuites non-multilibbed
+RTEMS_BSP_CONFIG_SUBDIR(
+  [testsuites],[../../testsuites],
+  ['--enable-rtems-root=../' \
+   '--enable-cpukit-root=${with_project_root}..' \
+   '--enable-project-root=${with_project_root}../$RTEMS_BSP' \
+   '--with-project-top=${with_project_top}../' \
+   '--enable-rtemsbsp=$RTEMS_BSP' \
+   'CFLAGS="${CFLAGS}"' \
+  ],
+  [test x"$enable_tests" != x"no" && test x"$multilib" = xyes])
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
 
