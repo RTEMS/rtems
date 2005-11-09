@@ -1,5 +1,7 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-cpuopts.m4: Apply cpukit_root, project_root to set
+	up temporary CPPFLAGS to compile check cpuopts.h.
 	* aclocal/rtems-top.m4: Add --enable-cpukit-root,
 	--enable-project-root. Remove --with-project-root.
 	Fix --enable-rtems-root.
