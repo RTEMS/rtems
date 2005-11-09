@@ -1,5 +1,6 @@
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-cpuopts.m4: New.
 	* automake/compile.am: Remove RTEMS_CPPFLAGS, RTEMS_CFLAGS,
 	RTEMS_CXXFLAGS.
 	* aclocal/gcc-isystem.m4: Remove (Unused).
