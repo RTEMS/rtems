@@ -1,9 +1,17 @@
 2005-11-08	Till Straumann <strauman@slac.stanford.edu>
 
+	PR 845/bsps
+	* startup/bspstart.c, start/start.S: setup BATs prior to attempting any
+	device access - missing BAT mappings were probably the reason for the
+	MMU malfunction assumption. Enabled MSR_DR.
+
+2005-11-08	Till Straumann <strauman@slac.stanford.edu>
+
 	PR 837/bsps
-	make sure exceptions_in_RAM flag is set prior to initializing exception
-	handling. Keep MCP disabled for memory probes :-( (the raven would
-	otherwise fault on PCI config space access to empty slots).
+	* startup/bspstart.c, pci/detect_raven_bridge.c: make sure exceptions_in_RAM
+	flag is set prior to initializing exception handling. Keep MCP disabled for
+	memory probes :-( (the raven would otherwise fault on PCI config space access
+	to empty slots).
 
 2005-11-07	Till Straumann <strauman@slac.stanford.edu>
 

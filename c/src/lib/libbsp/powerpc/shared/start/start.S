@@ -131,10 +131,6 @@ enter_C_code:
 MMUon:
 	mfmsr	r0
 	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
-#if defined(mvme2100)
-        /* Data addr translation is broken for the mvme2100, disable it here */
-	xori	r0,r0, MSR_DR
-#endif
 #if (PPC_HAS_FPU == 0)
 	xori	r0, r0, MSR_EE | MSR_IP | MSR_FP
 #else

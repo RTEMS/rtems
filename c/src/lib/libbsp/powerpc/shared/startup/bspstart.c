@@ -262,9 +262,32 @@ void bsp_start( void )
   myCpu 	= get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
+  /*
+   * Init MMU block address translation to enable hardware access
+   */
+
+#if !defined(mvme2100)
+  /*
+   * PC legacy IO space used for inb/outb and all PC compatible hardware
+   */
+   setdbat(1, _IO_BASE, _IO_BASE, 0x10000000, IO_PAGE);
+#endif
+
+  /*
+   * PCI devices memory area. Needed to access OpenPIC features
+   * provided by the Raven
+   *
+   * T. Straumann: give more PCI address space
+   */
+   setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
+
+  /*
+   * Must have access to OpenPIC PCI ACK registers provided by the Raven
+   */
+  setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
+
 #if defined(mvme2100)
   EUMBBAR = get_eumbbar(); 
-  { unsigned v = 0x3000 ; _CPU_MSR_SET(v); }
 #endif
 
   /*
@@ -322,29 +345,6 @@ void bsp_start( void )
    * Initialize default raw exception handlers. See vectors/vectors_init.c
    */
   initialize_exceptions();
-
-  /*
-   * Init MMU block address translation to enable hardware access
-   */
-#if !defined(mvme2100)
-  /*
-   * PC legacy IO space used for inb/outb and all PC compatible hardware
-   */
-   setdbat(1, _IO_BASE, _IO_BASE, 0x10000000, IO_PAGE);
-#endif
-
-  /*
-   * PCI devices memory area. Needed to access OpenPIC features
-   * provided by the Raven
-   *
-   * T. Straumann: give more PCI address space
-   */
-   setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
-
-  /*
-   * Must have access to OpenPIC PCI ACK registers provided by the Raven
-   */
-  setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
 
   select_console(CONSOLE_LOG);
 
