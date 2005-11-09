@@ -1,5 +1,6 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Apply RTEMS_CHECK_CPUOPTS.
 	* aclocal/prog-cc.m4: Apply cpukit_root, project_root to set up
 	GCCSPECS.
 	* aclocal/check-cpuopts.m4: Apply cpukit_root, project_root to set

@@ -1,5 +1,6 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Apply RTEMS_CHECK_CPUOPTS.
 	* mptests.am: Set project_bspdir=$(PROJECT_ROOT)
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
