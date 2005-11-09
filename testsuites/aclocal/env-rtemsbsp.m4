@@ -31,9 +31,9 @@ AC_SUBST(BARE_CPU_CFLAGS)
 includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
 libdir="\${exec_prefix}/${RTEMS_BSP}/lib"
 
-AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"])
-AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/$RTEMS_BSP/lib"])
-AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)/$RTEMS_BSP"])
+AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/lib/include"])
+AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/lib"])
+AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)"])
 
 AC_SUBST([project_libdir],["\$(libdir)"])
 AC_SUBST([project_includedir],["\$(includedir)"])

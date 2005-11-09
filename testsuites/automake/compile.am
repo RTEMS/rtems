@@ -25,10 +25,10 @@ ${ARCH}/$(dirstamp):
 
 LINK_OBJS = \
     $(OBJS) \
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_ROOT)/@RTEMS_BSP@/lib/no-%.rel)
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_ROOT)/lib/no-%.rel)
 
 LINK_FILES =\
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_ROOT)/@RTEMS_BSP@/lib/no-%.rel)
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_ROOT)/lib/no-%.rel)
 
 ## -------------------------------------------------------------------------
 ARCH = o-optimize
