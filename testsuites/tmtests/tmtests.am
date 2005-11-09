@@ -1,6 +1,6 @@
 ## $Id$
 
-project_bspdir=$(PROJECT_ROOT)/@RTEMS_BSP@
+project_bspdir=$(PROJECT_ROOT)
 
 $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
