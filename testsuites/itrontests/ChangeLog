@@ -1,5 +1,14 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* itronhello/Makefile.am, itronmbf01/Makefile.am,
+	itronmbox01/Makefile.am, itronsem01/Makefile.am,
+	itrontask01/Makefile.am, itrontask02/Makefile.am,
+	itrontask03/Makefile.am, itrontask04/Makefile.am,
+	itrontime01/Makefile.am:
+	AM_CPPFLAGS += -I..../support/include.
+
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* itrontests.am: Set project_bspdir=$(PROJECT_ROOT)
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
