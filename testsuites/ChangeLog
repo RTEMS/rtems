@@ -1,5 +1,10 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am, aclocal/env-rtemsbsp.m4: 
+	Assume PROJECT_ROOT to contain RTEMS_BSP.
+
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/check-cxx.m4: Remove CPLUS_LD_LIBS.
 	* Makefile.am: Merge-in support/Makefile.am
 	* aclocal/check-cpuopts.m4: Add config.cache support.
