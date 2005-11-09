@@ -1,3 +1,8 @@
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* vmeUniverse/vmeUniverse.c: Eliminate obsolete types.
+	Remove CVS log.
+
 2005-10-20  Eric Norum <norume@aps.anl.gov>
 
 	* vmeUniverse/vmeUniverse.c: Support MVME2100.
