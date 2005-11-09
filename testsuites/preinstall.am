@@ -5,22 +5,3 @@ $(srcdir)/preinstall.am: Makefile.am
 	$(AMPOLISH3) $(srcdir)/Makefile.am > $(srcdir)/preinstall.am
 endif
 
-PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
-
-PREINSTALL_FILES =
-CLEANFILES += $(PREINSTALL_FILES)
-
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_INCLUDE)/tmacros.h: support/include/tmacros.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tmacros.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tmacros.h
-
-$(PROJECT_INCLUDE)/buffer_test_io.h: support/include/buffer_test_io.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/buffer_test_io.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/buffer_test_io.h
-
