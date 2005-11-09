@@ -1,3 +1,7 @@
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* psxtests.am: Set project_bspdir=$(PROJECT_ROOT)
+
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* psx13/Makefile.am, psxcancel/Makefile.am, psxchroot01/Makefile.am,
