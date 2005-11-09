@@ -18,9 +18,4 @@ AC_CACHE_CHECK([whether to build rtems++],
     fi])
 HAS_CPLUSPLUS="$rtems_cv_HAS_CPLUSPLUS";
 AC_SUBST(HAS_CPLUSPLUS)dnl
-
-if test "$HAS_CPLUSPLUS" = "yes"; then
-CPLUS_LD_LIBS='$(PROJECT_RELEASE)/lib/librtems++$(LIB_VARIANT).a'
-fi
-AC_SUBST(CPLUS_LD_LIBS)
 ])
