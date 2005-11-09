@@ -1,3 +1,7 @@
+2005-11-09	Eric Norum <norume@aps.anl.gov>
+
+    * bootloader/Makefile.am: Fix disagreement between GCCSPECS and GCC_SPECS.
+
 2005-11-03	<strauman@slac.stanford.edu>
 
 	* shared/irq/openpic_i8259_irq.c: New file.

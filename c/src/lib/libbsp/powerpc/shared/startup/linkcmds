@@ -52,6 +52,7 @@ SECTIONS
   .rela.sbss      : { *(.rela.sbss)     }	> CODE
   .rela.sdata2    : { *(.rela.sdata2)   }	> CODE
   .rela.sbss2     : { *(.rela.sbss2)    }	> CODE
+  .rela.dyn       : { *(.rela.dyn)      }	> CODE
 
   .init		  : { KEEP(*(.init))		} > CODE
 

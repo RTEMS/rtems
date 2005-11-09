@@ -30,10 +30,10 @@ DEFAULT_INCLUDES =
 # Remove references to EABI when compiling bootloader
 BOOTLOADER_CPU_CFLAGS=$(subst -msdata=eabi,,$(subst -meabi,,$(CPU_CFLAGS)))
 AM_CPPFLAGS = -D__BOOT__
-AM_CFLAGS = $(GCC_SPECS) -specs bsp_specs -qrtems -mrelocatable -msoft-float \
+AM_CFLAGS = $(GCCSPECS) -mrelocatable -msoft-float \
     -mstrict-align -fno-builtin -Wall -mmultiple -mstring -O2 \
     -fomit-frame-pointer -ffixed-r13 -mno-sdata $(BOOTLOADER_CPU_CFLAGS)
-AM_CCASFLAGS = $(AM_CPPFLAGS) $(GCC_SPECS) -specs bsp_specs -qrtems \
+AM_CCASFLAGS = $(AM_CPPFLAGS) $(GCCSPECS) \
     -mrelocatable -DASM $(BOOTLOADER_CPU_CFLAGS)
 
 #
