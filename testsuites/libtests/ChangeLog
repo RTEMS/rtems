@@ -1,5 +1,12 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* cpuuse/Makefile.am, malloctest/Makefile.am, monitor/Makefile.am,
+	putenvtest/Makefile.am, rtems++/Makefile.am, rtmonuse/Makefile.am,
+	stackchk/Makefile.am, termios/Makefile.am:
+	AM_CPPFLAGS += -I..../support/include.
+
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Apply RTEMS_CHECK_CPUOPTS.
 	* libtests.am: Set project_bspdir=$(PROJECT_ROOT)
 
