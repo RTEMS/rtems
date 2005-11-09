@@ -1,192 +1,166 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-cxx.m4: Remove CPLUS_LD_LIBS.
 	* Makefile.am: Merge-in support/Makefile.am
+	* aclocal/check-cpuopts.m4: Add config.cache support.
+	* automake/compile.am: Eliminate PROJECT_LIB. Remove START_FILE,
+	OBJS from LINK_FILES.
 	* configure.ac: Add AMPOLISH3. Remove support/.
 
-2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* aclocal/check-cpuopts.m4: Add config.cache support.
-	* aclocal/check-cxx.m4: Remove CPLUS_LD_LIBS.
-	* automake/compile.am: Eliminate PROJECT_LIB.
-	Remove START_FILE, OBJS from LINK_FILES.
-
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* aclocal/check-cpuopts.m4: New.
-	* automake/compile.am: Remove RTEMS_CPPFLAGS, RTEMS_CFLAGS,
-	RTEMS_CXXFLAGS.
-	* aclocal/gcc-isystem.m4: Remove (Unused).
+	* aclocal/env-rtemsbsp.m4: Don't provide MULTILIB conditional.
 	* aclocal/env-rtemsbsp.m4: Remove GCCSPECS.
-	* aclocal/prog-cc.m4: Add GCCSPECS. Remove RTEMS_CPPFLAGS.
-	Remove RTEMS_CFLAGS.
-
-2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* aclocal/prog-cc.m4: Remove RTEMS_USE_GCC.
-	Remove RTEMS_GCC_PIPE. Remove RTEMS_GCC_SPECS.
-	* aclocal/gcc-pipe.m4: Remove (Unused).
-	* aclocal/gcc-specs.m4: Remove (Unused).
-	* aclocal/env-rtemsbsp.m4: Merge RTEMS_BSP_SPECS and
-	GCC_SPECS into GCCSPECS.
-	* automake/compile.am: Remove RTEMS_BSP_SPECS, GCC_SPECS.
-	Don't manually set up GCCSPEC (Now setup from inside configure).
-	Remove RTEMS_RELLDFLAGS (Used).
-
-2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* automake/compile.am: Remove CCAS support.
-	* aclocal/multilib.m4: Remove (Unused).
+	* aclocal/prog-cc.m4: Remove RTEMS_USE_GCC. Remove RTEMS_GCC_PIPE.
+	Remove RTEMS_GCC_SPECS.
 	* aclocal/check-multiprocessing.m4: Don't require
 	RTEMS_ENABLE_MULTILIB.
-	* aclocal/env-rtemsbsp.m4: Don't provide MULTILIB conditional.
-
-2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* aclocal/check-posix.m4: Sync with cpukit.
-	* configure.ac: Sync POSIX and ITRON magic with cpukit.
-	* aclocal/config-subdirs.m4, aclocal/path-ksh.m4,
-	aclocal/quoting.m4, aclocal/tool-paths.m4: Remove.
+	* aclocal/env-rtemsbsp.m4: Merge RTEMS_BSP_SPECS and GCC_SPECS into
+	GCCSPECS.
+	* automake/compile.am: Remove RTEMS_CPPFLAGS, RTEMS_CFLAGS,
+	RTEMS_CXXFLAGS.
+	* aclocal/prog-cc.m4: Add GCCSPECS. Remove RTEMS_CPPFLAGS. Remove
+	RTEMS_CFLAGS.
+	* aclocal/check-cpuopts.m4: New.
+	* automake/compile.am: Remove RTEMS_BSP_SPECS, GCC_SPECS. Don't
+	manually set up GCCSPEC (Now setup from inside configure). Remove
+	RTEMS_RELLDFLAGS (Used).
+	* aclocal/gcc-isystem.m4, aclocal/gcc-pipe.m4, aclocal/gcc-specs.m4,
+	aclocal/multilib.m4: Remove (Unused).
+	* automake/compile.am: Remove CCAS support.
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* automake/compile.am: Remove depend.
-	* automake/local.am: Remove depend-am.
-	* automake/subdirs.am: Remove depend-recursive.
 	* automake/compile.am: Take contents of amcompile.am.
-	* automake/amcompile.am: Remove.
-
-2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
-
+	* aclocal/check-posix.m4: Sync with cpukit.
+	* automake/local.am: Remove depend-am.
+	* aclocal/config-subdirs.m4, aclocal/path-ksh.m4,
+	aclocal/quoting.m4, aclocal/tool-paths.m4, automake/amcompile.am:
+	Remove.
+	* automake/subdirs.am: Remove depend-recursive.
+	* configure.ac: Sync POSIX and ITRON magic with cpukit.
 	* automake/amcompile.am: New.
 
-2005-09-02  Joel Sherrill <joel@OARcorp.com>
+2005-09-02	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-4.6.99.2.
 
-2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* aclocal/prog-cxx.m4: Re-add am__fastdepCXX conditional.
-
-2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* aclocal/rtems-flags.m4: Remove (Unused).
-
-2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* aclocal/env-rtemsbsp.m4:
-	Remove CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V.
-	* aclocal/prog-cc.m4:
-	Don't invoke _RTEMS_FLAGS to set up RTEMS_CFLAGS.
-	* aclocal/prog-cxx.m4: Let CXXFLAGS default to CFLAGS.
-	Don't invoke _RTEMS_FLAGS to set up RTEMS_CXXFLAGS.
-	Remove am__fastdepCXX conditional.
-
-2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* automake/compile.am: Remove CLEANDIRS (Unused).
-	Remove DEFS (Implicitly handled by automake).
-
-2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* automake/compile.am: Remove CONFIG.CC (Unused).
-	Remove CPPFLAGS, CFLAGS, CXXFLAGS, ASFLAGS (Implicitly handled by
-	automake). Add CCAS. Use AM_*FLAGS = RTEMS_*FLAGS.
-	Remove LIB_VARIANT from LINK_*.
-	Cleanup comments.
-
-2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	* automake/compile.am: Remove AS, ASCOMPILE, make-rel (Unused).
-	Remove build-variants. Hard-code ARCH=o-optimize.
-
 2004-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* aclocal/enable-itron.m4, aclocal/check-itron.m4:
-	Allow building itron for unix.
+	* support/include/buffer_test_io.h: Use iprintf iff _NEWLIB_VERSION
+	is defined.
+	* aclocal/enable-itron.m4, aclocal/check-itron.m4: Allow building
+	itron for unix.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
-
-	* configure.ac: Require automake > 1.9.
-
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-cpu-subdirs.m4: Remove (unused).
+	* configure.ac, support/configure.ac: Require automake > 1.9.
 
-2004-07-28  Joel Sherrill <joel@OARcorp.com>
+2004-07-28	Joel Sherrill <joel@OARcorp.com>
 
-    * aclocal/version.m4: Updated to rtems-4.6.99.1.
+	* aclocal/version.m4: Updated to rtems-4.6.99.1.
 
-2004-04-14	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Add project_top/with_project_top processing.
 
-2004-03-28	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: s/RTEMS_RTEMS/RTEMS_ROOT (typo).
 
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* aclocal/check-custom-bsp.m4: Fix minor typo.
-
-2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* aclocal/rtems-top.m4: Add rtems_rootdir.
-	* aclocal/check-custom-bsp.m4: Check for $RTEMS_BSP.cfg in $rtems_rootdir.
-
-2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* aclocal/rtems-top.m4: Add 2nd arg to RTEMS_TOP.
-	Rework with_project_root/PROJECT_ROOT and with_project_top/PROJECT_TOPdir.
-	Add --enable-rtems-root. Rework RTEMS_ROOT.
-
-2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* aclocal/check-custom-bsp.m4: Check for $RTEMS_BSP.cfg in
+	$rtems_rootdir.
+	* support/include/tmacros.h: Convert to using c99 fixed size types.
+	* configure.ac, configure.ac, support/configure.ac: Add 2nd arg to
+	RTEMS_TOP.
+	* aclocal/check-custom-bsp.m4: Fix minor typo.
 	* aclocal/enable-bare.m4, aclocal/enable-cxx.m4,
 	aclocal/enable-itron.m4, aclocal/enable-multiprocessing.m4,
 	aclocal/enable-networking.m4, aclocal/enable-posix.m4,
 	aclocal/enable-tests.m4, aclocal/multilib.m4,
 	aclocal/rtems-test-no-pause.m4: Autoupdate to autoconf-2.59.
+	* aclocal/rtems-top.m4: Add 2nd arg to RTEMS_TOP. Rework
+	with_project_root/PROJECT_ROOT and with_project_top/PROJECT_TOPdir.
+	Add --enable-rtems-root. Rework RTEMS_ROOT.
 
-2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-03-03	Joel Sherrill <joel@OARcorp.com>
 
-	* configure.ac: Add 2nd arg to RTEMS_TOP.
-
-2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Add 2nd arg to RTEMS_TOP.
+	* support/include/buffer_test_io.h: Correct typo.
 
 2004-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: AC_CONFIG_SRCDIR([PROBLEMS]).
-	* aclocal/check-custom-bsp.m4: Sync with c/src/aclocal.
+	* aclocal/rtems-top.m4: Rework.
 	* aclocal/project-root.m4: Remove obsolete comments.
 	* aclocal/env-rtemsbsp.m4: Remove RTEMS_ROOT.
-	* aclocal/rtems-top.m4: Rework.
+	* aclocal/check-custom-bsp.m4: Sync with c/src/aclocal.
+	* configure.ac: AC_CONFIG_SRCDIR([PROBLEMS]).
 
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove subdir tools.
-
-2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* aclocal/target.m4: Remove (Unused).
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/version.m4: 4.6.99.0.
 
+2004-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	* support/include/buffer_test_io.h: Do not use iprintf() if in ANSI
+	compiler mode.
+
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* support/Makefile.am: Add PREINSTALL_DIRS.
+
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* support/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
-	* aclocal/rtems-cpu-subdirs.m4: mips64orion port removed as mips port
-	more completely covers the MIPS family.
+	* aclocal/rtems-cpu-subdirs.m4: mips64orion port removed as mips
+	port more completely covers the MIPS family.
 
-2003-12-17  Joel Sherrill <joel@OARcorp.com>
+2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-    * aclocal/version.m4: Updated to rtems-20031217-test.
+	* automake/compile.am: Remove CONFIG.CC (Unused). Remove CPPFLAGS,
+	CFLAGS, CXXFLAGS, ASFLAGS (Implicitly handled by automake). Add
+	CCAS. Use AM_*FLAGS = RTEMS_*FLAGS. Remove LIB_VARIANT from LINK_*.
+	Cleanup comments.
+	* automake/compile.am: Remove AS, ASCOMPILE, make-rel (Unused).
+	Remove build-variants. Hard-code ARCH=o-optimize.
+	* aclocal/prog-cxx.m4: Let CXXFLAGS default to CFLAGS. Don't invoke
+	_RTEMS_FLAGS to set up RTEMS_CXXFLAGS. Remove am__fastdepCXX
+	conditional.
+	* aclocal/env-rtemsbsp.m4: Remove CPU_CFLAGS, CFLAGS_OPTIMIZE_V,
+	CFLAGS_DEBUG_V.
+	* aclocal/rtems-flags.m4: Remove (Unused).
+	* aclocal/prog-cxx.m4: Re-add am__fastdepCXX conditional.
+	* automake/compile.am: Remove CLEANDIRS (Unused). Remove DEFS
+	(Implicitly handled by automake).
+	* aclocal/prog-cc.m4: Don't invoke _RTEMS_FLAGS to set up
+	RTEMS_CFLAGS.
 
 2003-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Use $(mkdir_p) instead of $(mkinstalldirs).
+
+2003-12-17	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/version.m4: Updated to rtems-20031217-test.
+
+2003-12-16	Joel Sherrill <joel@OARcorp.com>
+
+	PR 544/tests
+	* support/include/buffer_test_io.h: Various modifications to make
+	tests account for resources and not print at inappropriate times.
 
 2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -195,24 +169,20 @@
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* aclocal/lead-dot.m4: Remove (Provided by automake-1.8).
-	* aclocal/env-rtemsbsp.m4: Remove bsplibdir.
-	Cleanups.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* aclocal/env-rtemsbsp.m4: Remove bsplibdir. Cleanups.
 	* automake/compila.am: Remove ARCH.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+	* configure.ac, support/configure.ac: Require automake >= 1.8,
+	autoconf >= 2.59.
+	* support/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES. Use include_HEADERS.
+	* aclocal/lead-dot.m4: Remove (Provided by automake-1.8).
 
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Add $(ARCH)/$(dirstamp) rules.
+	* aclocal/rtems-top.m4: Require AM_SET_LEADING_DOT. Add
+	AC_SUBST(dirstamp).
 	* aclocal/lead-dot.m4: New (from automake-1.7f).
-	* aclocal/rtems-top.m4: Require AM_SET_LEADING_DOT.
-	Add AC_SUBST(dirstamp).
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -226,31 +196,28 @@
 	aclocal/enable-networking.m4, aclocal/enable-posix.m4,
 	aclocal/enable-rtemsbsp.m4, aclocal/enable-tests.m4,
 	aclocal/env-rtemsbsp.m4, aclocal/gcc-isystem.m4,
-	aclocal/gcc-pipe.m4, aclocal/gcc-specs.m4,
-	aclocal/multilib.m4, aclocal/path-ksh.m4,
-	aclocal/prog-cc.m4, aclocal/prog-cxx.m4,
+	aclocal/gcc-pipe.m4, aclocal/gcc-specs.m4, aclocal/multilib.m4,
+	aclocal/path-ksh.m4, aclocal/prog-cc.m4, aclocal/prog-cxx.m4,
 	aclocal/project-root.m4, aclocal/rtems-test-no-pause.m4,
-	aclocal/rtems-top.m4, aclocal/target.m4,
-	aclocal/tool-paths.m4:
-	Fix underquoting to silence automake-1.8.
+	aclocal/rtems-top.m4, aclocal/target.m4, aclocal/tool-paths.m4: Fix
+	underquoting to silence automake-1.8.
 
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Reflect having moved to testsuites/.
+	* configure.ac, support/configure.ac: Reflect having moved to
+	testsuites/.
 
 2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* aclocal/rtems-top.m4: Add support for --with-project-root.
-	Remove RTEMS Version message.
+	* aclocal/rtems-top.m4: Add support for --with-project-root. Remove
+	RTEMS Version message.
 
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/canonical-host.m4: Remove.
-	* aclocal/canonical-target-name.m4: Merge-in aclocal/canonical-host.m4.
-
-2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.
+	* aclocal/canonical-target-name.m4: Merge-in
+	aclocal/canonical-host.m4.
 
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -259,12 +226,16 @@
 
 2003-10-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:Remove RTEMS_CHECK_CPU.
-	* aclocal/check-cpu.m4: Remove.
 	* aclocal/check-cxx.m4, aclocal/check-itron.m4, 
 	aclocal/check-multiprocessing.m4, aclocal/check-networking.m4,
-	aclocal/check-posix.m4: AC_REQUIRE RTEMS_CANONICAL_TARGET_CPU instead of
-	RTEMS_CHECK_CPU.
+	aclocal/check-posix.m4: AC_REQUIRE RTEMS_CANONICAL_TARGET_CPU
+	instead of RTEMS_CHECK_CPU.
+	* aclocal/check-cpu.m4: Remove.
+	* configure.ac: Remove RTEMS_CHECK_CPU.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* support/include/tmacros.h: URL for license changed.
 
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -280,84 +251,72 @@
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Reflect having moved aclocal/.
-
-2003-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* aclocal/bsp-alias.m4: New (Copied from ../../../aclocal).
-	* aclocal/canonical-host.m4: New (Copied from ../../../aclocal).
-	* aclocal/canonicalize-tools.m4: New (Copied from ../../../aclocal).
-	* aclocal/canonical-target-name.m4: New (Copied from ../../../aclocal).
-	* aclocal/check-cpu.m4: New (Copied from ../../../aclocal).
-	* aclocal/check-custom-bsp.m4: New (Copied from ../../../aclocal).
-	* aclocal/check-cxx.m4: New (Copied from ../../../aclocal).
-	* aclocal/check-itron.m4: New (Copied from ../../../aclocal).
-	* aclocal/check-multiprocessing.m4: New (Copied from ../../../aclocal).
-	* aclocal/check-networking.m4: New (Copied from ../../../aclocal).
-	* aclocal/check-posix.m4: New (Copied from ../../../aclocal).
-	* aclocal/check-tool.m4: New (Copied from ../../../aclocal).
-	* aclocal/config-subdirs.m4: New (Copied from ../../../aclocal).
-	* aclocal/enable-bare.m4: New (Copied from ../../../aclocal).
-	* aclocal/enable-cxx.m4: New (Copied from ../../../aclocal).
-	* aclocal/enable-itron.m4: New (Copied from ../../../aclocal).
-	* aclocal/enable-multiprocessing.m4: New (Copied from ../../../aclocal).
-	* aclocal/enable-networking.m4: New (Copied from ../../../aclocal).
-	* aclocal/enable-posix.m4: New (Copied from ../../../aclocal).
-	* aclocal/enable-rtemsbsp.m4: New (Copied from ../../../aclocal).
-	* aclocal/enable-tests.m4: New (Copied from ../../../aclocal).
-	* aclocal/env-rtemsbsp.m4: New (Copied from ../../../aclocal).
-	* aclocal/gcc-isystem.m4: New (Copied from ../../../aclocal).
-	* aclocal/gcc-pipe.m4: New (Copied from ../../../aclocal).
-	* aclocal/gcc-specs.m4: New (Copied from ../../../aclocal).
-	* aclocal/multilib.m4: New (Copied from ../../../aclocal).
-	* aclocal/path-ksh.m4: New (Copied from ../../../aclocal).
-	* aclocal/prog-cc.m4: New (Copied from ../../../aclocal).
-	* aclocal/prog-cxx.m4: New (Copied from ../../../aclocal).
-	* aclocal/project-root.m4: New (Copied from ../../../aclocal).
-	* aclocal/quoting.m4: New (Copied from ../../../aclocal).
-	* aclocal/rtems-cpu-subdirs.m4: New (Copied from ../../../aclocal).
-	* aclocal/rtems-flags.m4: New (Copied from ../../../aclocal).
-	* aclocal/rtems-test-no-pause.m4: New (Copied from ../../../aclocal).
-	* aclocal/rtems-top.m4: New (Copied from ../../../aclocal).
-	* aclocal/target.m4: New (Copied from ../../../aclocal).
-	* aclocal/tool-paths.m4: New (Copied from ../../../aclocal).
-	* aclocal/version.m4: New (Copied from ../../../aclocal).
+	* Makefile.am, support/Makefile.am: Reflect having moved aclocal/.
 
 2003-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/local.am, automake/host.am: Remove "debug".
+	* aclocal/bsp-alias.m4, aclocal/canonical-host.m4,
+	aclocal/canonicalize-tools.m4, aclocal/canonical-target-name.m4,
+	aclocal/check-cpu.m4, aclocal/check-custom-bsp.m4,
+	aclocal/check-cxx.m4, aclocal/check-itron.m4,
+	aclocal/check-multiprocessing.m4, aclocal/check-networking.m4,
+	aclocal/check-posix.m4, aclocal/check-tool.m4,
+	aclocal/config-subdirs.m4, aclocal/enable-bare.m4,
+	aclocal/enable-cxx.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4, aclocal/enable-rtemsbsp.m4,
+	aclocal/enable-tests.m4, aclocal/env-rtemsbsp.m4,
+	aclocal/gcc-isystem.m4, aclocal/gcc-pipe.m4, aclocal/gcc-specs.m4,
+	aclocal/multilib.m4, aclocal/path-ksh.m4, aclocal/prog-cc.m4,
+	aclocal/prog-cxx.m4, aclocal/project-root.m4, aclocal/quoting.m4,
+	aclocal/rtems-cpu-subdirs.m4, aclocal/rtems-flags.m4,
+	aclocal/rtems-test-no-pause.m4, aclocal/rtems-top.m4,
+	aclocal/target.m4, aclocal/tool-paths.m4, aclocal/version.m4: New
+	(Copied from ../../../aclocal).
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Reflect having moved automake/.
-
-2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* Makefile.am, support/Makefile.am: Reflect having moved automake/.
 	* automake/compile.am, automake/host.am, automake/leaf.am
 	automake/local.am, automake/subdirs.am: New (copied from
 	../../../automake).
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+	* configure.ac, support/configure.ac: Use rtems-bugs@rtems.com as
+	bug report email address.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* configure.ac, support/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: AC_PREREQ(2.57).
+	* configure.ac, support/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* configure.ac, support/configure.ac: AC_PREREQ(2.57).
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
+	* .cvsignore, support/.cvsignore: Reformat. Add autom4te*cache.
 	Remove autom4te.cache.
+
+2002-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* support/configure.ac: Reflect changes above.  Take out unnecessary
+	autoconf macros.
+	* support/include/Makefile.am: Remove.
+	* support/Makefile.am: Merge in former include/Makefile.am.
+
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR47 add support for buffered test output.  This involved
+	adding defines to redirect output to a buffer and dump it when full,
+	at "test pause", and at exit.  To avoid problems when redefining
+	exit(), all tests were modified to call rtems_test_exit(). Some
+	tests, notable psxtests, had to be modified to include  the standard
+	test macro .h file (pmacros.h or tmacros.h) to enable this support.
+	* support/include/buffer_test_io.h: New file.
 
 2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -365,40 +324,80 @@
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
+	* Makefile.am, support/include/Makefile.am, support/Makefile.am:
+	Remove AUTOMAKE_OPTIONS.
+	* configure.ac, support/configure.ac:
 	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2001-11-07	Joel Sherrill <joel@OARcorp.com>
+
+	Tracked as PR72 but related to the object id problem (PR36)
+	reported by Todor.Todorov@barco.com.
+	but discovered independently.
+	* support/include/tmacros.h: Added
+	fatal_directive_check_status_only().
 
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
-	* configure.in: Remove.
-	* configure.ac: New file, generated from configure.in by autoupdate.
+	* .cvsignore, support/.cvsignore: Add autom4te.cache for autoconf >
+	2.52.
+	* configure.ac, support/configure.ac: New file, generated from
+	configure.in by autoupdate.
+	* configure.in, support/configure.in: Remove.
 
 2001-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: autoupdate to autoconf-2.52, new CONFIG_SUBDIRS
 	handling.
 
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
+	* support/include/tmacros.h: Attempt to print errno as further
+	information.
+
 2001-05-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Remove RTEMS_PROG_CC_FOR_TARGET,
 	RTEMS_PROG_CXX_FOR_TARGET, RTEMS_CANONICALIZE_TOOLS.
 
+2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
+
+	* support/configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
+
+2001-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* support/configure.in: Remove stubdr, wrapup, AC_INIT(include).
+	* support/Makefile.am: Remove stubdr, wrapup.
+	* support/stubdr/Makefile.am, support/stubdr/open.c,
+	support/stubdr/close.c, support/stubdr/init.c,
+	support/stubdr/stubdrv.h, support/stubdr/cntrl.c,
+	support/stubdr/.cvsignore, support/stubdr/read.c,
+	support/stubdr/write.c, support/wrapup/Makefile.am,
+	support/wrapup/.cvsignore, support/stubdr/, support/wrapup/: Remove.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+	* Makefile.am, support/Makefile.am: Use ... instead of RTEMS_TOPdir
+	in ACLOCAL_AMFLAGS.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+	* support/stubdr/Makefile.am: Replace leaf.cfg w/ automake/lib.am.
+	* Makefile.am, support/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
 
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am, support/Makefile.am: ACLOCAL_AMFLAGS= -I
+	$(RTEMS_TOPdir)/macros. Switch to GNU canonicalization.
+
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* support/stubdr/Makefile.am, support/wrapup/Makefile.am: Include
+	compile.am
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: New file.
+	* ChangeLog, support/ChangeLog: New file.
+
