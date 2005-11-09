@@ -23,7 +23,10 @@ dnl check target cc
 RTEMS_PROG_CC
 
 AS_IF([test x"$GCC" = xyes],[
-GCCSPECS="-B\$(PROJECT_ROOT)/lib/ -B\$(PROJECT_ROOT)/$RTEMS_BSP/lib/"
+AS_IF([test "${enable_cpukit_root+set}"],[
+  GCCSPECS="-B\$(CPUKIT_ROOT)/lib/"])
+AS_IF([test "${enable_project_root+set}"],[
+  GCCSPECS="$GCCSPECS -B\$(PROJECT_ROOT)/lib/"])
 GCCSPECS="${GCCSPECS} -specs bsp_specs -qrtems"])
 AC_SUBST(GCCSPECS)
 ])
