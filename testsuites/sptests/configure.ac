@@ -64,5 +64,3 @@ spsize/Makefile
 spfatal/Makefile
 ])
 AC_OUTPUT
-
-# spfatal/Makefile
