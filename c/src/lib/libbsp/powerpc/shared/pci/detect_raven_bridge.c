@@ -42,6 +42,8 @@ unsigned merst;
     out_be32(RAVEN_MPIC_MERST, merst);
 
     if (enableMCP) {
+	/* disallow MCP for now; (pci config access to empty slot faults :-() */
+	return -1;
       if (!quiet)
         printk("Enabling MCP generation on hostbridge errors\n");
       out_be32(RAVEN_MPIC_MEREN, MEREN_VAL);

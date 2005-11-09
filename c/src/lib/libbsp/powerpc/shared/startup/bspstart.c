@@ -264,8 +264,6 @@ void bsp_start( void )
 
 #if defined(mvme2100)
   EUMBBAR = get_eumbbar(); 
-
-  Cpu_table.exceptions_in_RAM 	 = TRUE;
   { unsigned v = 0x3000 ; _CPU_MSR_SET(v); }
 #endif
 
@@ -318,6 +316,8 @@ void bsp_start( void )
   /* signal them that we have fixed PR288 - eventually, this should go away */
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
+  /* initialize_exceptions() evaluates the exceptions_in_RAM flag */
+  Cpu_table.exceptions_in_RAM 	 = TRUE;
   /*
    * Initialize default raw exception handlers. See vectors/vectors_init.c
    */
@@ -467,7 +467,6 @@ void bsp_start( void )
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   Cpu_table.clicks_per_usec 	 = BSP_processor_frequency/(BSP_time_base_divisor * 1000);
-  Cpu_table.exceptions_in_RAM 	 = TRUE;
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("BSP_Configuration.work_space_size = %x\n",
