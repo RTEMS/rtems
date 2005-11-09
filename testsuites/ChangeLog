@@ -1,5 +1,9 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Fix config-variables of conditionally built subdirs.
+
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/check-itron.m4, aclocal/check-multiprocessing.m4,
 	aclocal/check-networking.m4, aclocal/check-posix.m4,
 	aclocal/check-tests.m4, aclocal/enable-itron.m4,
