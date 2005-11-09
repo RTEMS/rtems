@@ -1,5 +1,10 @@
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Merge-in support/Makefile.am
+	* configure.ac: Add AMPOLISH3. Remove support/.
+
+2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/check-cpuopts.m4: Add config.cache support.
 	* aclocal/check-cxx.m4: Remove CPLUS_LD_LIBS.
 	* automake/compile.am: Eliminate PROJECT_LIB.
