@@ -7,14 +7,14 @@ PGM = ${ARCH}/$(SAMPLE).exe
 
 MANAGERS = io message semaphore
 
+if LIBCHIP
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c system.h
+OBJS = $(lib_a_OBJECTS)
+endif
 
 DOCTYPES = doc
 DOCS = $(DOCTYPES:%=$(SAMPLE).%)
-
-OBJS = $(lib_a_OBJECTS)
-
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
