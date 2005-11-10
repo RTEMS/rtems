@@ -3,7 +3,7 @@
 ##
 
 NODE = 2
-SAMPLE = base_mp-node$(NODE)
+TEST = base_mp-node$(NODE)
 PGM = ${ARCH}/$(SAMPLE).exe
 
 MANAGERS = io mp
