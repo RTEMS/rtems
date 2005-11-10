@@ -1,9 +1,15 @@
 2005-11-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* base_mp/node1/base_mp.doc, base_mp/node1/base_mp.scn,
+	base_mp/node2/base_mp.doc, base_mp/node2/base_mp.scn: Remove.
+	* base_mp/node1/base_mp-node1.doc, base_mp/node1/base_mp-node1.scn,
+	base_mp/node2/base_mp-node2.doc, base_mp/node2/base_mp-node2.scn:
+	New (Renamed from base_mp.*).
 	* sample.am, base_sp/Makefile.am, cdtest/Makefile.am,
 	fileio/Makefile.am, hello/Makefile.am, iostream/Makefile.am,
 	loopback/Makefile.am, minimum/Makefile.am, paranoia/Makefile.am,
-	pppd/Makefile.am, ticker/Makefile.am, unlimited/Makefile.am:
+	pppd/Makefile.am, ticker/Makefile.am, unlimited/Makefile.am,
+	base_mp/node1/Makefile.am, base_mp/node2/Makefile.am:
 	s/SAMPLE/TEST/ for improved consistency with other tests.
 
 2005-11-10	Ralf Corsepius <ralf.corsepius@rtems.org>
