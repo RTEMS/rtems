@@ -1,5 +1,13 @@
 2005-11-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* sample.am, base_sp/Makefile.am, cdtest/Makefile.am,
+	fileio/Makefile.am, hello/Makefile.am, iostream/Makefile.am,
+	loopback/Makefile.am, minimum/Makefile.am, paranoia/Makefile.am,
+	pppd/Makefile.am, ticker/Makefile.am, unlimited/Makefile.am:
+	s/SAMPLE/TEST/ for improved consistency with other tests.
+
+2005-11-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Add ampolish3.
 	* base_mp/Makefile.am: Remove redundant EXTRA_DIST.
 
