@@ -4,15 +4,14 @@
 
 NODE = 2
 TEST = base_mp-node$(NODE)
-PGM = ${ARCH}/$(SAMPLE).exe
+PGM = ${ARCH}/$(TEST).exe
 
 MANAGERS = io mp
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../apptask.c ../system.h
 
-DOCTYPES = doc scn
-DOCS = $(DOCTYPES:%=base_mp.%)
+DOCS = $(TEST).doc $(TEST).scn
 
 OBJS = $(lib_a_OBJECTS)
 
