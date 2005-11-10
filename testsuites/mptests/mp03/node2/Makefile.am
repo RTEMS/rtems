@@ -3,8 +3,8 @@
 ##
 
 NODE = 2
-TEST = mp03
-PGM = ${ARCH}/$(TEST)-node$(NODE).exe
+TEST = mp03-node$(NODE)
+PGM = $(ARCH)/$(TEST).exe
 
 MANAGERS = io mp timer event
 

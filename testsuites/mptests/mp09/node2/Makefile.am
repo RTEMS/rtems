@@ -3,8 +3,8 @@
 ##
 
 NODE = 2
-TEST = mp09
-PGM = ${ARCH}/$(TEST)-node$(NODE).exe
+TEST = mp09-node$(NODE)
+PGM = $(ARCH)/$(TEST).exe
 
 MANAGERS = io mp message
 

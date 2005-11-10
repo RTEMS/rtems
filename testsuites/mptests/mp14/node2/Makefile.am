@@ -3,8 +3,8 @@
 ##
 
 NODE = 2
-TEST = mp14
-PGM = ${ARCH}/$(TEST)-node$(NODE).exe
+TEST = mp14-node$(NODE)
+PGM = $(ARCH)/$(TEST).exe
 
 MANAGERS = io mp event partition semaphore timer message
 

@@ -3,8 +3,8 @@
 ##
 
 NODE = 2
-TEST = mp12
-PGM = ${ARCH}/$(TEST)-node$(NODE).exe
+TEST = mp12-node$(NODE)
+PGM = $(ARCH)/$(TEST).exe
 
 MANAGERS = io mp partition
 

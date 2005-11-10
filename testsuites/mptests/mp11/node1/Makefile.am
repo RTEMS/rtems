@@ -3,8 +3,8 @@
 ##
 
 NODE = 1
-TEST = mp11
-PGM = ${ARCH}/$(TEST)-node$(NODE).exe
+TEST = mp11-node$(NODE)
+PGM = $(ARCH)/$(TEST).exe
 
 MANAGERS = io mp message partition semaphore
 
