@@ -11,7 +11,6 @@ noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c system.h
 
 DOCS = $(TEST).scn
-DOCS = #$(DOCTYPES:%=$(TEST).%)
 
 OBJS = $(lib_a_OBJECTS)
 
