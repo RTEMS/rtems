@@ -2,8 +2,8 @@
 ##  $Id$
 ##
 
-SAMPLE = pppd
-PGM = ${ARCH}/$(SAMPLE).exe
+TEST = pppd
+PGM = ${ARCH}/$(TEST).exe
 
 MANAGERS = io event semaphore
 

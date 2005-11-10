@@ -2,8 +2,8 @@
 ##  $Id$
 ##
 
-SAMPLE = paranoia
-PGM = ${ARCH}/$(SAMPLE).exe
+TEST = paranoia
+PGM = ${ARCH}/$(TEST).exe
 
 MANAGERS = all
 
@@ -11,7 +11,7 @@ noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c paranoia.c system.h
 
 DOCTYPES = doc
-DOCS = $(DOCTYPES:%=$(SAMPLE).%)
+DOCS = $(DOCTYPES:%=$(TEST).%)
 
 OBJS = $(lib_a_OBJECTS)
 

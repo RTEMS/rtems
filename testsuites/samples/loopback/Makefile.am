@@ -2,8 +2,8 @@
 ##  $Id$
 ##
 
-SAMPLE = loopback
-PGM = ${ARCH}/$(SAMPLE).exe
+TEST = loopback
+PGM = ${ARCH}/$(TEST).exe
 
 MANAGERS = io event
 
@@ -11,7 +11,7 @@ noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c
 
 DOCTYPES = scn
-DOCS = $(DOCTYPES:%=$(SAMPLE).%)
+DOCS = $(DOCTYPES:%=$(TEST).%)
 
 OBJS = $(lib_a_OBJECTS)
 

@@ -2,8 +2,8 @@
 ##  Makefile.am,v 1.9 2002/08/11 05:18:59 ralf Exp
 ##
 
-SAMPLE = fileio
-PGM = ${ARCH}/$(SAMPLE).exe
+TEST = fileio
+PGM = ${ARCH}/$(TEST).exe
 
 MANAGERS = io message semaphore
 
@@ -14,7 +14,7 @@ OBJS = $(lib_a_OBJECTS)
 endif
 
 DOCTYPES = doc
-DOCS = $(DOCTYPES:%=$(SAMPLE).%)
+DOCS = $(DOCTYPES:%=$(TEST).%)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
