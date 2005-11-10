@@ -1,0 +1,22 @@
+*** TEST 9 -- NODE 1 ***
+Creating Message Queue (Global)
+Creating Test_task (local)
+Starting Test_task (local)
+Deleting initialization task
+Getting QID of message queue
+Receiving message ...
+Received : 123456789012345
+Receiving message ...
+Received : abcdefghijklmno
+Receiving message ...
+Received : ABCDEFGHIJKLMNO
+Receiver delaying for a second
+rtems_message_queue_send: 123456789012345
+Delaying for a second
+rtems_message_queue_urgent: abcdefghijklmno
+Delaying for a second
+rtems_message_queue_broadcast: ABCDEFGHIJKLMNO
+Delaying for a second
+Delaying for 5 seconds
+Deleting Message queue
+*** END OF TEST 9 ***

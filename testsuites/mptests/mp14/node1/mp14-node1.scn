@@ -1,0 +1,41 @@
+*** TEST 14 -- NODE 1 ***
+Creating Semaphore (Global)
+Creating Message Queue (Global)
+Creating Partition (Global)
+Creating Event task (Global)
+Starting Event task (Global)
+Creating Semaphore task (Global)
+About to go to sleep!
+Starting Semaphore task (Global)
+Creating Message Queue task (Global)
+Getting SMID of semaphore
+Starting Message Queue task (Global)
+Creating Partition task (Global)
+Getting ID of msg queue
+Starting Partition task (Global)
+Getting ID of partition
+Waking up!
+Remote task's name is : 222
+Getting TID of remote task
+Sending events to remote task
+<stream of following characters>
+
+. - indicates 100 iterations of
+    tm_evafter of 1 tick and rtems_event_receive.
+
+e - indicates that 100
+    events have been sent to the remote task.
+
+m - indicates 100 iterations of
+    rtems_message_queue_send and rtems_message_queue_receive.
+
+p - indicates 100 iterations of
+    rtems_partition_get_buffer and rtems_partition_return_buffer.
+
+s - indicates 100 iterations of
+    rtems_semaphore_obtain and rtems_semaphore_release.
+
+NOTES: 1.  The messages could be interspersed.
+       2.  If one of the nodes exits first, the other may report
+           timeout errors on blocking directives.
+    

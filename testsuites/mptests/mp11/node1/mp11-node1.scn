@@ -1,0 +1,10 @@
+*** TEST 11 -- NODE 1 ***
+Attempting to create Test_task (Global)
+rtems_task_create correctly returned RTEMS_TOO_MANY
+Attempting to create Message Queue (Global)
+rtems_message_queue_create correctly returned RTEMS_TOO_MANY
+Attempting to create Semaphore (Global)
+rtems_semaphore_create correctly returned RTEMS_TOO_MANY
+Attempting to create Partition (Global)
+rtems_partition_create correctly returned RTEMS_TOO_MANY
+*** END OF TEST 11 ***

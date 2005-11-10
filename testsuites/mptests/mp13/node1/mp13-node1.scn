@@ -1,0 +1,14 @@
+*** TEST 13 -- NODE 1 ***
+Creating Message Queue (Global)
+Creating Semaphore (Global)
+Creating Test_task 1 (local)
+Starting Test_task 1 (local)
+Creating Test_task 2 (local)
+Starting Test_task 2 (local)
+Getting QID of message queue
+Receiving message ...
+Getting SMID of semaphore
+Releasing semaphore ...
+Getting semaphore ...
+Getting semaphore ...
+*** END OF TEST 13 ***
