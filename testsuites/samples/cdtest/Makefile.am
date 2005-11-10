@@ -10,8 +10,7 @@ MANAGERS = all
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c main.cc system.h
 
-DOCTYPES = scn
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn
 
 OBJS = $(lib_a_OBJECTS)
 

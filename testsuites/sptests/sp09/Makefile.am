@@ -13,8 +13,7 @@ lib_a_SOURCES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen04.c
     screen11.c screen12.c screen13.c screen14.c task1.c task2.c task3.c \
     task4.c system.h
 
-DOCTYPES = scn doc
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn $(TEST).doc
 
 OBJS = $(lib_a_OBJECTS)
 

@@ -9,8 +9,7 @@ MANAGERS = io
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c first.c fptask.c task1.c system.h fptest.h inttest.h
 
-DOCTYPES = scn doc
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn $(TEST).doc
 
 OBJS = $(lib_a_OBJECTS)
 

@@ -9,8 +9,7 @@ MANAGERS = io
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = blow.c init.c task1.c system.h
 
-DOCTYPES = scn
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn
 
 OBJS = $(lib_a_OBJECTS)
 

@@ -10,7 +10,7 @@ MANAGERS = dpmem event io msg mp part region sem signal timer rate_monotonic \
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c system.h
 
-DOCTYPES = scn
+DOCS = $(TEST).scn
 DOCS = #$(DOCTYPES:%=$(TEST).%)
 
 OBJS = $(lib_a_OBJECTS)

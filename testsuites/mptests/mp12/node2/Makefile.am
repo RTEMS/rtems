@@ -11,8 +11,7 @@ MANAGERS = io mp partition
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../system.h
 
-DOCTYPES = doc scn
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).doc $(TEST).scn
 
 OBJS = $(lib_a_OBJECTS)
 

@@ -11,8 +11,7 @@ noinst_LIBRARIES = lib.a
 lib_a_SOURCES = Init.cc Task1.cc Task2.cc Task3.cc System.h
 endif
 
-DOCTYPES = scn doc
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn $(TEST).doc
 
 
 

@@ -9,8 +9,7 @@ MANAGERS = all
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = main.c test.c test_cat.c test_extend.c test_write.c ../include/pmacros.h
 
-DOCTYPES = scn
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn
 
 OBJS = $(lib_a_OBJECTS)
 

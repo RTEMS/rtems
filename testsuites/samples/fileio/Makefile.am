@@ -13,8 +13,7 @@ lib_a_SOURCES = init.c system.h
 OBJS = $(lib_a_OBJECTS)
 endif
 
-DOCTYPES = doc
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

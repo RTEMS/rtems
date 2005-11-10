@@ -10,8 +10,7 @@ noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c task1.c task2.c task3.c task4.c task5.c pridrv.c \
     pritask.c system.h
 
-DOCTYPES = scn doc
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn $(TEST).doc
 
 OBJS = $(lib_a_OBJECTS)
 

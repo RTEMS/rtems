@@ -9,8 +9,7 @@ MANAGERS = io
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = testtask.c empty.c system.h dumrtems.h ../include/timesys.h
 
-DOCTYPES = doc
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).doc
 
 OBJS = $(lib_a_OBJECTS)
 

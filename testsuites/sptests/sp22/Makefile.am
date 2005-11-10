@@ -9,8 +9,7 @@ MANAGERS = io timer
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c prtime.c delay.c task1.c system.h
 
-DOCTYPES = scn doc
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn $(TEST).doc
 
 OBJS = $(lib_a_OBJECTS)
 

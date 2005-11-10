@@ -9,8 +9,7 @@ MANAGERS = io
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c
 
-DOCTYPES =
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS =
 
 OBJS = $(lib_a_OBJECTS)
 

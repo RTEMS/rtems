@@ -11,8 +11,7 @@ MANAGERS = io mp message
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../task1.c ../recvmsg.c ../sendmsg.c ../system.h
 
-DOCTYPES = doc scn
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).doc $(TEST).scn
 
 OBJS = $(lib_a_OBJECTS)
 

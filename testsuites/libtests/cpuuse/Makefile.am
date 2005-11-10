@@ -9,8 +9,7 @@ MANAGERS = io rate_monotonic
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h
 
-DOCTYPES = scn
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).scn
 
 OBJS = $(lib_a_OBJECTS)
 

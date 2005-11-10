@@ -12,8 +12,7 @@ noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
     ../pttask1.c ../smtask1.c ../msgtask1.c ../system.h
 
-DOCTYPES = doc scn
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).doc $(TEST).scn
 
 OBJS = $(lib_a_OBJECTS)
 

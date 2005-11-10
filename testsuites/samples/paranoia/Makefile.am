@@ -10,8 +10,7 @@ MANAGERS = all
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c paranoia.c system.h
 
-DOCTYPES = doc
-DOCS = $(DOCTYPES:%=$(TEST).%)
+DOCS = $(TEST).doc
 
 OBJS = $(lib_a_OBJECTS)
 
