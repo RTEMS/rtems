@@ -19,7 +19,19 @@ PGM = ${ARCH}/$(TEST).exe
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
-include $(top_srcdir)/tmitrontests.am
+
+project_bspdir=$(PROJECT_ROOT)
+
+$(project_bspdir)/tests/$(dirstamp):
+	@$(mkdir_p) $(project_bspdir)/tests
+	@: > $(project_bspdir)/tests/$(dirstamp)
+
+$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+	$(INSTALL_PROGRAM) $< $@
+
+TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
+
+$(PGM): ${ARCH}/$(dirstamp)
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -27,7 +39,6 @@ include $(top_srcdir)/tmitrontests.am
 
 OPERATION_COUNT = @OPERATION_COUNT@
 AM_CPPFLAGS += -I$(top_srcdir)/include -DOPERATION_COUNT=$(OPERATION_COUNT)
-
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
 ${PGM}: $(OBJS) $(LINK_FILES)
