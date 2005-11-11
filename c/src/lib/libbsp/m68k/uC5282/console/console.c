@@ -472,10 +472,12 @@ static int
 IntUartInterruptOpen(int major, int minor, void *arg)
 {
 	struct IntUartInfoStruct   *info = &IntUartInfo[minor];
+	int level;
 
 	/*
 	 * Enable serial I/O pin assignments
 	 */
+	rtems_interrupt_disable(level);
 	switch(minor) {
 	case 0:
 		MCF5282_GPIO_PUAPAR |= MCF5282_GPIO_PUAPAR_PUAPA1|MCF5282_GPIO_PUAPAR_PUAPA0;
@@ -484,9 +486,12 @@ IntUartInterruptOpen(int major, int minor, void *arg)
 		MCF5282_GPIO_PUAPAR |= MCF5282_GPIO_PUAPAR_PUAPA3|MCF5282_GPIO_PUAPAR_PUAPA2;
 		break;
 	case 2:
-		MCF5282_GPIO_PASPAR |= MCF5282_GPIO_PASPAR_PASPA3(2)|MCF5282_GPIO_PASPAR_PASPA2(2);
+		MCF5282_GPIO_PASPAR = MCF5282_GPIO_PASPAR
+             & ~(MCF5282_GPIO_PASPAR_PASPA3(3)|MCF5282_GPIO_PASPAR_PASPA2(3))
+             |  (MCF5282_GPIO_PASPAR_PASPA3(2)|MCF5282_GPIO_PASPAR_PASPA2(2));
 		break;
 	}
+	rtems_interrupt_enable(level);
 	/* enable the uart */
 	MCF5282_UART_UCR(minor) = (MCF5282_UART_UCR_TX_ENABLED | MCF5282_UART_UCR_RX_ENABLED);
 
