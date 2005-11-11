@@ -2,16 +2,18 @@
 ## $Id$
 ##
 
-
 MANAGERS = io signal timer
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c asr.c task1.c task2.c system.h
 
-DOCS = sp14.scn sp14.doc
+testsdir = $(libdir)/tests
+scndir = $(testsdir)
+dist_scn_DATA = sp14.scn
+docdir = $(testsdir)
+dist_doc_DATA = sp14.doc
 
 OBJS = $(lib_a_OBJECTS)
-
 
 PGM = ${ARCH}/sp14.exe
 
@@ -19,36 +21,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-project_bspdir=$(PROJECT_ROOT)
-
-$(project_bspdir)/tests/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/tests
-	@: > $(project_bspdir)/tests/$(dirstamp)
-
-$(project_bspdir)/tests/sp14.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $@
-
-$(project_bspdir)/tests/screens/sptests/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/tests/screens/sptests
-	@: > $(project_bspdir)/tests/screens/sptests/$(dirstamp)
-
-$(project_bspdir)/tests/screens/sptests/sp14.scn: sp14.scn $(project_bspdir)/tests/screens/sptests/$(dirstamp)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES = $(project_bspdir)/tests/sp14.exe
-TMPINSTALL_FILES += $(project_bspdir)/tests/screens/sptests/sp14.scn
-
 $(PGM): ${ARCH}/$(dirstamp)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-${PGM}: $(OBJS) $(LINK_FILES)
+tests_SCRIPTS = $(PGM)
+
+$(PGM): $(OBJS) $(LINK_FILES)
 	$(make-exe)
-
-all-local: $(TMPINSTALL_FILES)
-
-EXTRA_DIST = $(DOCS)
-
-CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../automake/local.am
