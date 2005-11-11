@@ -1,5 +1,9 @@
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* tmitrontests/tmitronsem01/Makefile.am: Rework.
+
+2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* tmitrontests.am: Remove.
 	* tmitronsem01/Makefile.am: Expand tmitrontests.am.
 
