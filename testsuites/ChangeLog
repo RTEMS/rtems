@@ -1,5 +1,7 @@
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Remove preinstall.am
+	* preinstall.am: Remove.
 	* support/.cvsignore: Remove (Revert Joel's yesterday's patch).
 
 2005-11-10	Joel Sherrill <joel@OARcorp.com>
