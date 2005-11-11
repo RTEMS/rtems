@@ -1,3 +1,21 @@
+2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* mptests.am: Remove.
+	* mp01/node1/Makefile.am, mp01/node2/Makefile.am,
+	mp02/node1/Makefile.am, mp02/node2/Makefile.am,
+	mp03/node1/Makefile.am, mp03/node2/Makefile.am,
+	mp04/node1/Makefile.am, mp04/node2/Makefile.am,
+	mp05/node1/Makefile.am, mp05/node2/Makefile.am,
+	mp06/node1/Makefile.am, mp06/node2/Makefile.am,
+	mp07/node1/Makefile.am, mp07/node2/Makefile.am,
+	mp08/node1/Makefile.am, mp08/node2/Makefile.am,
+	mp09/node1/Makefile.am, mp09/node2/Makefile.am,
+	mp10/node1/Makefile.am, mp10/node2/Makefile.am,
+	mp11/node1/Makefile.am, mp11/node2/Makefile.am,
+	mp12/node1/Makefile.am, mp12/node2/Makefile.am,
+	mp13/node1/Makefile.am, mp13/node2/Makefile.am,
+	mp14/node1/Makefile.am, mp14/node2/Makefile.am: Expand mptests.am.
+
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* mp03/node1/mp03-node1.doc, mp03/node1/mp03-node1.scn,
