@@ -1,12 +1,13 @@
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* samples/base_mp/node1/Makefile.am,
-	samples/base_mp/node2/Makefile.am, samples/base_sp/Makefile.am,
-	samples/cdtest/Makefile.am, samples/fileio/Makefile.am,
-	samples/hello/Makefile.am, samples/iostream/Makefile.am,
-	samples/loopback/Makefile.am, samples/minimum/Makefile.am,
-	samples/paranoia/Makefile.am, samples/pppd/Makefile.am,
-	samples/ticker/Makefile.am, samples/unlimited/Makefile.am: Rework.
+	* configure.ac: Remove AMPOLISH3.
+	* base_mp/node1/Makefile.am,
+	base_mp/node2/Makefile.am, base_sp/Makefile.am,
+	cdtest/Makefile.am, fileio/Makefile.am,
+	hello/Makefile.am, iostream/Makefile.am,
+	loopback/Makefile.am, minimum/Makefile.am,
+	paranoia/Makefile.am, pppd/Makefile.am,
+	ticker/Makefile.am, unlimited/Makefile.am: Rework.
 
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
@@ -75,7 +76,7 @@
 2005-10-26  Eric Norum <norume@aps.anl.gov>
 
 	PR 839/tests
-	* samples/pppd/system.h: Remove i386-specific conditional.
+	* pppd/system.h: Remove i386-specific conditional.
 	This at least lets the sample compile.   It's unlikely to actually
 	work, though.
 
