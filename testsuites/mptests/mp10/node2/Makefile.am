@@ -2,15 +2,14 @@
 ## $Id$
 ##
 
-NODE = 2
-PGM = $(ARCH)/mp10-node$(NODE).exe
+PGM = $(ARCH)/mp10-node2.exe
 
 MANAGERS = io mp message semaphore
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../task1.c ../task2.c ../task3.c ../system.h
 
-DOCS = mp10-node$(NODE).doc mp10-node$(NODE).scn
+DOCS = mp10-node2.doc mp10-node2.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -25,23 +24,23 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/mp10--node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/mp10--node2.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node$(NODE)
-	@: > $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
+$(project_bspdir)/tests/screens/mptests/node2/$(dirstamp):
+	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node2
+	@: > $(project_bspdir)/tests/screens/mptests/node2/$(dirstamp)
 
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp10-node$(NODE).scn: mp10-node$(NODE).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
+$(project_bspdir)/tests/screens/mptests/node2/mp10-node2.scn: mp10-node2.scn $(project_bspdir)/tests/screens/mptests/node2/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/mp10--node$(NODE).exe \
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp10-node$(NODE).scn
+$(project_bspdir)/tests/mp10--node2.exe \
+$(project_bspdir)/tests/screens/mptests/node2/mp10-node2.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I$(srcdir)/..
+AM_CPPFLAGS += -DNODE_NUMBER=2 -I$(srcdir)/..
 
 if HAS_MP
 

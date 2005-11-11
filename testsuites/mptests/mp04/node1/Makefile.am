@@ -2,15 +2,14 @@
 ## $Id$
 ##
 
-NODE = 1
-PGM = $(ARCH)/mp04-node$(NODE).exe
+PGM = $(ARCH)/mp04-node1.exe
 
 MANAGERS = io mp
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../task1.c ../system.h
 
-DOCS = mp04-node$(NODE).doc mp04-node$(NODE).scn
+DOCS = mp04-node1.doc mp04-node1.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -25,23 +24,23 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/mp04--node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/mp04--node1.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node$(NODE)
-	@: > $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
+$(project_bspdir)/tests/screens/mptests/node1/$(dirstamp):
+	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node1
+	@: > $(project_bspdir)/tests/screens/mptests/node1/$(dirstamp)
 
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp04-node$(NODE).scn: mp04-node$(NODE).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
+$(project_bspdir)/tests/screens/mptests/node1/mp04-node1.scn: mp04-node1.scn $(project_bspdir)/tests/screens/mptests/node1/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/mp04--node$(NODE).exe \
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp04-node$(NODE).scn
+$(project_bspdir)/tests/mp04--node1.exe \
+$(project_bspdir)/tests/screens/mptests/node1/mp04-node1.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I$(srcdir)/..
+AM_CPPFLAGS += -DNODE_NUMBER=1 -I$(srcdir)/..
 
 if HAS_MP
 

@@ -2,15 +2,14 @@
 ## $Id$
 ##
 
-NODE = 2
-PGM = $(ARCH)/mp11-node$(NODE).exe
+PGM = $(ARCH)/mp11-node2.exe
 
 MANAGERS = io mp message partition semaphore
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../system.h
 
-DOCS = mp11-node$(NODE).doc mp11-node$(NODE).scn
+DOCS = mp11-node2.doc mp11-node2.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -25,23 +24,23 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/mp11--node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/mp11--node2.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node$(NODE)
-	@: > $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
+$(project_bspdir)/tests/screens/mptests/node2/$(dirstamp):
+	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node2
+	@: > $(project_bspdir)/tests/screens/mptests/node2/$(dirstamp)
 
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp11-node$(NODE).scn: mp11-node$(NODE).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
+$(project_bspdir)/tests/screens/mptests/node2/mp11-node2.scn: mp11-node2.scn $(project_bspdir)/tests/screens/mptests/node2/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/mp11--node$(NODE).exe \
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp11-node$(NODE).scn
+$(project_bspdir)/tests/mp11--node2.exe \
+$(project_bspdir)/tests/screens/mptests/node2/mp11-node2.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I$(srcdir)/..
+AM_CPPFLAGS += -DNODE_NUMBER=2 -I$(srcdir)/..
 
 if HAS_MP
 

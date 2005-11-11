@@ -2,15 +2,14 @@
 ##  $Id$
 ##
 
-NODE = 2
-PGM = ${ARCH}/base_mp-node$(NODE).exe
+PGM = ${ARCH}/base_mp-node2.exe
 
 MANAGERS = io mp
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../apptask.c ../system.h
 
-DOCS = base_mp-node$(NODE).doc base_mp-node$(NODE).scn
+DOCS = base_mp-node2.doc base_mp-node2.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -28,18 +27,18 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/base_mp-node$(NODE).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/base_mp-node2.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/base_mp-node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/base_mp-node2.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/base_mp-node$(NODE).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/base_mp-node$(NODE).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/base_mp-node2.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/base_mp-node2.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I.
+AM_CPPFLAGS += -DNODE_NUMBER=2 -I.
 
 #
 # (OPTIONAL) Add local stuff here using +=
