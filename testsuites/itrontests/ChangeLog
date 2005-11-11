@@ -1,3 +1,12 @@
+2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* itronhello/Makefile.am, itronmbf01/Makefile.am,
+	itronmbox01/Makefile.am, itronsem01/Makefile.am,
+	itrontask01/Makefile.am, itrontask02/Makefile.am,
+	itrontask03/Makefile.am, itrontask04/Makefile.am,
+	itrontime01/Makefile.am: Expand itrontests.am.
+	* itrontests.am: Remove.
+
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* itronhello/Makefile.am, itronmbf01/Makefile.am,
