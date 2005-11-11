@@ -9,53 +9,27 @@ MANAGERS = io mp timer event
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../task1.c ../delay.c ../system.h
 
-DOCS = mp03-node1.doc mp03-node1.scn
+testsdir = $(libdir)/tests
+scndir = $(testsdir)
+dist_scn_DATA = mp03-node1.scn
+docdir = $(testsdir)
+dist_doc_DATA = mp03-node1.doc
 
 OBJS = $(lib_a_OBJECTS)
-
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-project_bspdir=$(PROJECT_ROOT)
-
-$(project_bspdir)/tests/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/tests
-	@: > $(project_bspdir)/tests/$(dirstamp)
-
-$(project_bspdir)/tests/mp03-node1.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $@
-
-$(project_bspdir)/tests/screens/mptests/node1/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node1
-	@: > $(project_bspdir)/tests/screens/mptests/node1/$(dirstamp)
-
-$(project_bspdir)/tests/screens/mptests/node1/mp03-node1.scn: mp03-node1.scn $(project_bspdir)/tests/screens/mptests/node1/$(dirstamp)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES = $(project_bspdir)/tests/mp03-node1.exe
-TMPINSTALL_FILES += $(project_bspdir)/tests/screens/mptests/node1/mp03-node1.scn
-
 $(PGM): ${ARCH}/$(dirstamp)
 
 AM_CPPFLAGS += -DNODE_NUMBER=1 -I$(srcdir)/..
 
-if HAS_MP
-
-
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-${PGM}: $(OBJS) $(LINK_FILES)
+tests_SCRIPTS = $(PGM)
+
+$(PGM): $(OBJS) $(LINK_FILES)
 	$(make-exe)
-
-all-local: $(TMPINSTALL_FILES)
-else
-all-local:
-endif
-
-EXTRA_DIST = $(DOCS)
-
-CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../automake/local.am
