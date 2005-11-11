@@ -1,3 +1,8 @@
+2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* tmitrontests.am: Remove.
+	* tmitronsem01/Makefile.am: Expand tmitrontests.am.
+
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* tmitronsem01/Makefile.am: AM_CPPFLAGS += -I..../support/include.
