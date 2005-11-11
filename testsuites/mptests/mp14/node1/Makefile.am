@@ -45,9 +45,6 @@ AM_CPPFLAGS += -DMAX_LONG_TEST_DURATION=$(MAX_LONG_TEST_DURATION)
 
 if HAS_MP
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 

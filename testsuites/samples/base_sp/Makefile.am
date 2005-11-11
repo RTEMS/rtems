@@ -38,9 +38,6 @@ TMPINSTALL_FILES += $(project_bspdir)/samples/base_sp.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 all-local: $(TMPINSTALL_FILES)
 

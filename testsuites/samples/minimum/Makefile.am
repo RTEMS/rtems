@@ -38,9 +38,6 @@ TMPINSTALL_FILES += $(project_bspdir)/samples/minimum.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 all-local: $(TMPINSTALL_FILES)
 # 	This test should not be executed

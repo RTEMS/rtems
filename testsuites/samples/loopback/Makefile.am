@@ -38,9 +38,6 @@ TMPINSTALL_FILES += $(project_bspdir)/samples/loopback.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 all-local: $(TMPINSTALL_FILES)
 

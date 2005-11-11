@@ -41,9 +41,6 @@ $(project_bspdir)/tests/screens/itrontests/itronhello.scn
 $(PGM): ${ARCH}/$(dirstamp)
 
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 

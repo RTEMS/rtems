@@ -36,9 +36,6 @@ TMPINSTALL_FILES += $(project_bspdir)/samples/pppd.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 LD_LIBS = -lpppd
 

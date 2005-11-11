@@ -40,9 +40,6 @@ $(PGM): ${ARCH}/$(dirstamp)
 
 AM_CPPFLAGS += -DNODE_NUMBER=1 -I.
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

@@ -31,9 +31,6 @@ TMPINSTALL_FILES = $(project_bspdir)/tests/tmoverhd.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 OPERATION_COUNT = @OPERATION_COUNT@
 AM_CPPFLAGS += -I$(top_srcdir)/include -DOPERATION_COUNT=$(OPERATION_COUNT)

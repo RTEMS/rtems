@@ -38,9 +38,6 @@ TMPINSTALL_FILES += $(project_bspdir)/samples/fileio.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 if LIBCHIP
 all-local: $(TMPINSTALL_FILES)

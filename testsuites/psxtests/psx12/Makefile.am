@@ -40,9 +40,6 @@ TMPINSTALL_FILES += $(project_bspdir)/tests/screens/psxtests/psx12.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 

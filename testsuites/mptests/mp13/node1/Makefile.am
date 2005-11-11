@@ -43,9 +43,6 @@ AM_CPPFLAGS += -DNODE_NUMBER=1 -I$(srcdir)/..
 
 if HAS_MP
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 

@@ -38,11 +38,7 @@ TMPINSTALL_FILES += $(project_bspdir)/samples/paranoia.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 #  -DCYGNUS   turns on more verbose msgs
-#
 
 AM_CPPFLAGS += -DNOSIGNAL -DCYGNUS -DNOMAIN
 

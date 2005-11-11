@@ -40,9 +40,6 @@ $(PGM): ${ARCH}/$(dirstamp)
 
 # AM_CPPFLAGS += -DRTEMS_TEST_IO_STREAM
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 

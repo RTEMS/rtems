@@ -33,9 +33,6 @@ TMPINSTALL_FILES = $(project_bspdir)/tests/rtems++.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 LD_LIBS = -lrtems++
 

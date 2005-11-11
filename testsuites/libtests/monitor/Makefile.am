@@ -33,9 +33,6 @@ TMPINSTALL_FILES = $(project_bspdir)/tests/monitor.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
