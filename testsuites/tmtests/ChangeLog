@@ -1,5 +1,24 @@
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* tmtests/tm01/Makefile.am, tmtests/tm02/Makefile.am,
+	tmtests/tm03/Makefile.am, tmtests/tm04/Makefile.am,
+	tmtests/tm05/Makefile.am, tmtests/tm06/Makefile.am,
+	tmtests/tm07/Makefile.am, tmtests/tm08/Makefile.am,
+	tmtests/tm09/Makefile.am, tmtests/tm10/Makefile.am,
+	tmtests/tm11/Makefile.am, tmtests/tm12/Makefile.am,
+	tmtests/tm13/Makefile.am, tmtests/tm14/Makefile.am,
+	tmtests/tm15/Makefile.am, tmtests/tm16/Makefile.am,
+	tmtests/tm17/Makefile.am, tmtests/tm18/Makefile.am,
+	tmtests/tm19/Makefile.am, tmtests/tm20/Makefile.am,
+	tmtests/tm21/Makefile.am, tmtests/tm22/Makefile.am,
+	tmtests/tm23/Makefile.am, tmtests/tm24/Makefile.am,
+	tmtests/tm25/Makefile.am, tmtests/tm26/Makefile.am,
+	tmtests/tm27/Makefile.am, tmtests/tm28/Makefile.am,
+	tmtests/tm29/Makefile.am, tmtests/tmck/Makefile.am,
+	tmtests/tmoverhd/Makefile.am: Rework.
+
+2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* tm01/Makefile.am, tm02/Makefile.am, tm03/Makefile.am,
 	tm04/Makefile.am, tm05/Makefile.am, tm06/Makefile.am,
 	tm07/Makefile.am, tm08/Makefile.am, tm09/Makefile.am,
