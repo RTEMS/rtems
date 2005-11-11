@@ -24,7 +24,7 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/mp06--node1.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/mp06-node1.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/mptests/node1/$(dirstamp):
@@ -34,9 +34,8 @@ $(project_bspdir)/tests/screens/mptests/node1/$(dirstamp):
 $(project_bspdir)/tests/screens/mptests/node1/mp06-node1.scn: mp06-node1.scn $(project_bspdir)/tests/screens/mptests/node1/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES = \
-$(project_bspdir)/tests/mp06--node1.exe \
-$(project_bspdir)/tests/screens/mptests/node1/mp06-node1.scn
+TMPINSTALL_FILES = $(project_bspdir)/tests/mp06-node1.exe
+TMPINSTALL_FILES += $(project_bspdir)/tests/screens/mptests/node1/mp06-node1.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 
