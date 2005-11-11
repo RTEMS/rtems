@@ -25,7 +25,7 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/mp01-node$(NODE)-node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/mp01--node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp):
@@ -36,7 +36,7 @@ $(project_bspdir)/tests/screens/mptests/node$(NODE)/mp01-node$(NODE).scn: mp01-n
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/mp01-node$(NODE)-node$(NODE).exe \
+$(project_bspdir)/tests/mp01--node$(NODE).exe \
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/mp01-node$(NODE).scn
 
 $(PGM): ${ARCH}/$(dirstamp)
