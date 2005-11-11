@@ -2,19 +2,18 @@
 ## $Id$
 ##
 
-TEST = tm20
 
 MANAGERS = io partition region
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = task1.c system.h ../include/timesys.h
 
-DOCS = $(TEST).doc
+DOCS = tm20.doc
 
 OBJS = $(lib_a_OBJECTS)
 
 
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/tm20.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -26,10 +25,10 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/tm20.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/tm20.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

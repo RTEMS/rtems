@@ -2,18 +2,17 @@
 ## $Id$
 ##
 
-TEST = tmoverhd
 
 MANAGERS = io
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = testtask.c empty.c system.h dumrtems.h ../include/timesys.h
 
-DOCS = $(TEST).doc
+DOCS = tmoverhd.doc
 
 OBJS = $(lib_a_OBJECTS)
 
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/tmoverhd.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -25,10 +24,10 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/tmoverhd.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/tmoverhd.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

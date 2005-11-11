@@ -2,19 +2,18 @@
 ## $Id$
 ##
 
-TEST = psx10
 
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c task.c task2.c task3.c system.h ../include/pmacros.h
 
-DOCS = $(TEST).scn
+DOCS = psx10.scn
 
 OBJS = $(lib_a_OBJECTS)
 
 
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/psx10.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -26,18 +25,18 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/psx10.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/psxtests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests/screens/psxtests
 	@: > $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
 
-$(project_bspdir)/tests/screens/psxtests/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
+$(project_bspdir)/tests/screens/psxtests/psx10.scn: psx10.scn $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/tests/screens/psxtests/$(TEST).scn
+TMPINSTALL_FILES = $(project_bspdir)/tests/psx10.exe
+TMPINSTALL_FILES += $(project_bspdir)/tests/screens/psxtests/psx10.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 

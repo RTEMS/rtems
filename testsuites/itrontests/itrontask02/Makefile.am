@@ -2,15 +2,14 @@
 ## $Id$
 ##
 
-TEST = itrontask02
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/itrontask02.exe
 
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c dormant.c system.h
 
-DOCS = $(TEST).doc $(TEST).scn
+DOCS = itrontask02.doc itrontask02.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -25,19 +24,19 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/itrontask02.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/itrontests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests/screens/itrontests
 	@: > $(project_bspdir)/tests/screens/itrontests/$(dirstamp)
 
-$(project_bspdir)/tests/screens/itrontests/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/itrontests/$(dirstamp)
+$(project_bspdir)/tests/screens/itrontests/itrontask02.scn: itrontask02.scn $(project_bspdir)/tests/screens/itrontests/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/$(TEST).exe \
-$(project_bspdir)/tests/screens/itrontests/$(TEST).scn
+$(project_bspdir)/tests/itrontask02.exe \
+$(project_bspdir)/tests/screens/itrontests/itrontask02.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 

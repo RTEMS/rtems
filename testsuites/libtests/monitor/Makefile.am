@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-TEST = monitor
 
 MANAGERS = dpmem event io msg mp part region sem signal timer rate_monotonic \
     ext
@@ -10,12 +9,12 @@ MANAGERS = dpmem event io msg mp part region sem signal timer rate_monotonic \
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c system.h
 
-DOCS = $(TEST).scn
+DOCS = monitor.scn
 
 OBJS = $(lib_a_OBJECTS)
 
 
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/monitor.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -27,10 +26,10 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/monitor.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/monitor.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

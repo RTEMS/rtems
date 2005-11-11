@@ -2,19 +2,18 @@
 ## $Id$
 ##
 
-TEST = psxtime
 
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = main.c test.c
 
-DOCS = $(TEST).scn
+DOCS = psxtime.scn
 
 OBJS = $(lib_a_OBJECTS)
 
 
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/psxtime.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -26,18 +25,18 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/psxtime.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/psxtests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests/screens/psxtests
 	@: > $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
 
-$(project_bspdir)/tests/screens/psxtests/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
+$(project_bspdir)/tests/screens/psxtests/psxtime.scn: psxtime.scn $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/tests/screens/psxtests/$(TEST).scn
+TMPINSTALL_FILES = $(project_bspdir)/tests/psxtime.exe
+TMPINSTALL_FILES += $(project_bspdir)/tests/screens/psxtests/psxtime.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 

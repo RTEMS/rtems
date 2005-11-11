@@ -2,15 +2,14 @@
 ##  $Id$
 ##
 
-TEST = paranoia
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/paranoia.exe
 
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c paranoia.c system.h
 
-DOCS = $(TEST).doc
+DOCS = paranoia.doc
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -28,14 +27,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(TEST).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/paranoia.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/paranoia.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/paranoia.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/paranoia.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

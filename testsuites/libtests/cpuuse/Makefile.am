@@ -2,19 +2,18 @@
 ## $Id$
 ##
 
-TEST = cpuuse
 
 MANAGERS = io rate_monotonic
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h
 
-DOCS = $(TEST).scn
+DOCS = cpuuse.scn
 
 OBJS = $(lib_a_OBJECTS)
 
 
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/cpuuse.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -26,10 +25,10 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/cpuuse.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/cpuuse.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

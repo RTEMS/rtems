@@ -2,15 +2,14 @@
 ##  $Id$
 ##
 
-TEST = hello
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/hello.exe
 
 MANAGERS = io
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c system.h
 
-DOCS = $(TEST).doc $(TEST).scn
+DOCS = hello.doc hello.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -28,14 +27,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(TEST).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/hello.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/hello.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/hello.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/hello.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

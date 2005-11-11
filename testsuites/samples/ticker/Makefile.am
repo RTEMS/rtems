@@ -2,15 +2,14 @@
 ##  $Id$
 ##
 
-TEST = ticker
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/ticker.exe
 
 MANAGERS = io
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c tasks.c system.h
 
-DOCS = $(TEST).doc $(TEST).scn
+DOCS = ticker.doc ticker.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -28,14 +27,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(TEST).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/ticker.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/ticker.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/ticker.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/ticker.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

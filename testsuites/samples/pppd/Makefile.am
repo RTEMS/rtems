@@ -2,8 +2,7 @@
 ##  $Id$
 ##
 
-TEST = pppd
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/pppd.exe
 
 MANAGERS = io event semaphore
 
@@ -26,14 +25,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(TEST).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/pppd.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/pppd.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/pppd.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/pppd.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

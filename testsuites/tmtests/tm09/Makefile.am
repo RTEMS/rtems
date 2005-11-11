@@ -2,19 +2,18 @@
 ## $Id$
 ##
 
-TEST = tm09
 
 MANAGERS = io message
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = task1.c system.h ../include/timesys.h
 
-DOCS = $(TEST).doc
+DOCS = tm09.doc
 
 OBJS = $(lib_a_OBJECTS)
 
 
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/tm09.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -26,10 +25,10 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/tm09.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/tm09.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

@@ -3,8 +3,7 @@
 ##
 
 NODE = 2
-TEST = mp14-node$(NODE)
-PGM = $(ARCH)/$(TEST).exe
+PGM = $(ARCH)/mp14-node$(NODE).exe
 
 MANAGERS = io mp event partition semaphore timer message
 
@@ -12,7 +11,7 @@ noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
     ../pttask1.c ../smtask1.c ../msgtask1.c ../system.h
 
-DOCS = $(TEST).doc $(TEST).scn
+DOCS = mp14-node$(NODE).doc mp14-node$(NODE).scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -27,19 +26,19 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST)-node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/mp14-node$(NODE)-node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node$(NODE)
 	@: > $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
 
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
+$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp14-node$(NODE).scn: mp14-node$(NODE).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/$(TEST)-node$(NODE).exe \
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn
+$(project_bspdir)/tests/mp14-node$(NODE)-node$(NODE).exe \
+$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp14-node$(NODE).scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 

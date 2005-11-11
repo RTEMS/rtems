@@ -2,8 +2,7 @@
 ##  Makefile.am,v 1.9 2002/08/11 05:18:59 ralf Exp
 ##
 
-TEST = fileio
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/fileio.exe
 
 MANAGERS = io message semaphore
 
@@ -13,7 +12,7 @@ lib_a_SOURCES = init.c system.h
 OBJS = $(lib_a_OBJECTS)
 endif
 
-DOCS = $(TEST).doc
+DOCS = fileio.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -28,14 +27,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(TEST).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/fileio.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/fileio.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/fileio.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/fileio.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

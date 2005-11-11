@@ -2,19 +2,18 @@
 ## $Id$
 ##
 
-TEST = psxcancel
 
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c ../include/pmacros.h
 
-DOCS = $(TEST).scn
+DOCS = psxcancel.scn
 
 OBJS = $(lib_a_OBJECTS)
 
 
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/psxcancel.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
@@ -26,18 +25,18 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/psxcancel.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/psxtests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests/screens/psxtests
 	@: > $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
 
-$(project_bspdir)/tests/screens/psxtests/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
+$(project_bspdir)/tests/screens/psxtests/psxcancel.scn: psxcancel.scn $(project_bspdir)/tests/screens/psxtests/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/tests/screens/psxtests/$(TEST).scn
+TMPINSTALL_FILES = $(project_bspdir)/tests/psxcancel.exe
+TMPINSTALL_FILES += $(project_bspdir)/tests/screens/psxtests/psxcancel.scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 

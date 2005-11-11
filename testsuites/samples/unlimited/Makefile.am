@@ -2,15 +2,14 @@
 ##  $Id$
 ##
 
-TEST = unlimited
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/unlimited.exe
 
 MANAGERS = io event
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c test1.c test2.c test3.c system.h
 
-DOCS = $(TEST).doc $(TEST).scn
+DOCS = unlimited.doc unlimited.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -28,14 +27,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(TEST).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/unlimited.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/unlimited.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/unlimited.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/unlimited.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

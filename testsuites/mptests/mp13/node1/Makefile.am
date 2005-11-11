@@ -3,15 +3,14 @@
 ##
 
 NODE = 1
-TEST = mp13-node$(NODE)
-PGM = $(ARCH)/$(TEST).exe
+PGM = $(ARCH)/mp13-node$(NODE).exe
 
 MANAGERS = io mp message semaphore
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = ../init.c ../task1.c ../task2.c ../system.h
 
-DOCS = $(TEST).doc $(TEST).scn
+DOCS = mp13-node$(NODE).doc mp13-node$(NODE).scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -26,19 +25,19 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST)-node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/mp13-node$(NODE)-node$(NODE).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node$(NODE)
 	@: > $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
 
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
+$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp13-node$(NODE).scn: mp13-node$(NODE).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests/$(TEST)-node$(NODE).exe \
-$(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn
+$(project_bspdir)/tests/mp13-node$(NODE)-node$(NODE).exe \
+$(project_bspdir)/tests/screens/mptests/node$(NODE)/mp13-node$(NODE).scn
 
 $(PGM): ${ARCH}/$(dirstamp)
 

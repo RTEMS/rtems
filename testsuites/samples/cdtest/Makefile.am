@@ -2,15 +2,14 @@
 ##  $Id$
 ##
 
-TEST = cdtest
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/cdtest.exe
 
 MANAGERS = all
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c main.cc system.h
 
-DOCS = $(TEST).scn
+DOCS = cdtest.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -28,14 +27,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(TEST).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/cdtest.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/cdtest.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/cdtest.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/cdtest.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 

@@ -2,15 +2,14 @@
 ##  $Id$
 ##
 
-TEST = loopback
-PGM = ${ARCH}/$(TEST).exe
+PGM = ${ARCH}/loopback.exe
 
 MANAGERS = io event
 
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = init.c
 
-DOCS = $(TEST).scn
+DOCS = loopback.scn
 
 OBJS = $(lib_a_OBJECTS)
 
@@ -28,14 +27,14 @@ $(project_bspdir)/tests/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/tests
 	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/samples/$(TEST).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
+$(project_bspdir)/samples/loopback.exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/$(TEST).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
+$(project_bspdir)/tests/loopback.exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES = $(project_bspdir)/tests/$(TEST).exe
-TMPINSTALL_FILES += $(project_bspdir)/samples/$(TEST).exe
+TMPINSTALL_FILES = $(project_bspdir)/tests/loopback.exe
+TMPINSTALL_FILES += $(project_bspdir)/samples/loopback.exe
 
 $(PGM): ${ARCH}/$(dirstamp)
 
