@@ -1,19 +1,19 @@
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* mptests/mp01/node1/Makefile.am, mptests/mp01/node2/Makefile.am,
-	mptests/mp02/node1/Makefile.am, mptests/mp02/node2/Makefile.am,
-	mptests/mp03/node1/Makefile.am, mptests/mp03/node2/Makefile.am,
-	mptests/mp04/node1/Makefile.am, mptests/mp04/node2/Makefile.am,
-	mptests/mp05/node1/Makefile.am, mptests/mp05/node2/Makefile.am,
-	mptests/mp06/node1/Makefile.am, mptests/mp06/node2/Makefile.am,
-	mptests/mp07/node1/Makefile.am, mptests/mp07/node2/Makefile.am,
-	mptests/mp08/node1/Makefile.am, mptests/mp08/node2/Makefile.am,
-	mptests/mp09/node1/Makefile.am, mptests/mp09/node2/Makefile.am,
-	mptests/mp10/node1/Makefile.am, mptests/mp10/node2/Makefile.am,
-	mptests/mp11/node1/Makefile.am, mptests/mp11/node2/Makefile.am,
-	mptests/mp12/node1/Makefile.am, mptests/mp12/node2/Makefile.am,
-	mptests/mp13/node1/Makefile.am, mptests/mp13/node2/Makefile.am,
-	mptests/mp14/node1/Makefile.am, mptests/mp14/node2/Makefile.am:
+	* mp01/node1/Makefile.am, mp01/node2/Makefile.am,
+	mp02/node1/Makefile.am, mp02/node2/Makefile.am,
+	mp03/node1/Makefile.am, mp03/node2/Makefile.am,
+	mp04/node1/Makefile.am, mp04/node2/Makefile.am,
+	mp05/node1/Makefile.am, mp05/node2/Makefile.am,
+	mp06/node1/Makefile.am, mp06/node2/Makefile.am,
+	mp07/node1/Makefile.am, mp07/node2/Makefile.am,
+	mp08/node1/Makefile.am, mp08/node2/Makefile.am,
+	mp09/node1/Makefile.am, mp09/node2/Makefile.am,
+	mp10/node1/Makefile.am, mp10/node2/Makefile.am,
+	mp11/node1/Makefile.am, mp11/node2/Makefile.am,
+	mp12/node1/Makefile.am, mp12/node2/Makefile.am,
+	mp13/node1/Makefile.am, mp13/node2/Makefile.am,
+	mp14/node1/Makefile.am, mp14/node2/Makefile.am:
 	Rework.
 
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
@@ -267,34 +267,34 @@
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mptests.am: Add dirstamp support.
-	* mptests/mp01/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp01/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp02/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp02/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp03/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp03/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp04/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp04/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp05/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp05/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp06/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp06/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp07/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp07/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp08/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp08/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp09/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp09/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp10/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp10/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp11/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp11/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp12/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp12/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp13/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp13/node2/Makefile.am: Eliminate VPATH.
-	* mptests/mp14/node1/Makefile.am: Eliminate VPATH.
-	* mptests/mp14/node2/Makefile.am: Eliminate VPATH.
+	* mp01/node1/Makefile.am: Eliminate VPATH.
+	* mp01/node2/Makefile.am: Eliminate VPATH.
+	* mp02/node1/Makefile.am: Eliminate VPATH.
+	* mp02/node2/Makefile.am: Eliminate VPATH.
+	* mp03/node1/Makefile.am: Eliminate VPATH.
+	* mp03/node2/Makefile.am: Eliminate VPATH.
+	* mp04/node1/Makefile.am: Eliminate VPATH.
+	* mp04/node2/Makefile.am: Eliminate VPATH.
+	* mp05/node1/Makefile.am: Eliminate VPATH.
+	* mp05/node2/Makefile.am: Eliminate VPATH.
+	* mp06/node1/Makefile.am: Eliminate VPATH.
+	* mp06/node2/Makefile.am: Eliminate VPATH.
+	* mp07/node1/Makefile.am: Eliminate VPATH.
+	* mp07/node2/Makefile.am: Eliminate VPATH.
+	* mp08/node1/Makefile.am: Eliminate VPATH.
+	* mp08/node2/Makefile.am: Eliminate VPATH.
+	* mp09/node1/Makefile.am: Eliminate VPATH.
+	* mp09/node2/Makefile.am: Eliminate VPATH.
+	* mp10/node1/Makefile.am: Eliminate VPATH.
+	* mp10/node2/Makefile.am: Eliminate VPATH.
+	* mp11/node1/Makefile.am: Eliminate VPATH.
+	* mp11/node2/Makefile.am: Eliminate VPATH.
+	* mp12/node1/Makefile.am: Eliminate VPATH.
+	* mp12/node2/Makefile.am: Eliminate VPATH.
+	* mp13/node1/Makefile.am: Eliminate VPATH.
+	* mp13/node2/Makefile.am: Eliminate VPATH.
+	* mp14/node1/Makefile.am: Eliminate VPATH.
+	* mp14/node2/Makefile.am: Eliminate VPATH.
 
 2003-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

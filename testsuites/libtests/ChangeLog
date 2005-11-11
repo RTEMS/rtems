@@ -1,9 +1,9 @@
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* libtests/cpuuse/Makefile.am, libtests/malloctest/Makefile.am,
-	libtests/monitor/Makefile.am, libtests/putenvtest/Makefile.am,
-	libtests/rtems++/Makefile.am, libtests/rtmonuse/Makefile.am,
-	libtests/stackchk/Makefile.am, libtests/termios/Makefile.am: Rework.
+	* cpuuse/Makefile.am, malloctest/Makefile.am,
+	monitor/Makefile.am, putenvtest/Makefile.am,
+	rtems++/Makefile.am, rtmonuse/Makefile.am,
+	stackchk/Makefile.am, termios/Makefile.am: Rework.
 
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
