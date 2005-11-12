@@ -1,3 +1,7 @@
+2005-11-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove %cpp.
+
 2005-11-11  Eric Norum <norume@aps.anl.gov>
 
     * console/console.c: Clean up UART2 pin setup.  Protect pin setup code.
