@@ -41,11 +41,6 @@ RTEMS_BSPOPTS_SET([mpc8240],[*],[])
 RTEMS_BSPOPTS_HELP([mpc8240],
 [Defined for boards with MPC8240 -- undefined for others])
 
-## HACK: This should better be propagated through the BSP's bsp.h.
-## however, this BSP doesn't have one :(
-AC_DEFINE_UNQUOTED([USE_ENHANCED_INTR_API],[1],
- [Use enhanced intr API])
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 bootloader/Makefile])

@@ -1,9 +1,13 @@
+2005-11-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove USE_ENHANCED_INTR_API.
+
 2005-11-09	Eric Norum <norume@aps.anl.gov>
 
-    * bootloader/Makefile.am: Fix disagreement between GCCSPECS and GCC_SPECS.
-    * Makefile.am: Need to install vme_am_defs.h,
+	* bootloader/Makefile.am: Fix disagreement between GCCSPECS and GCC_SPECS.
+    	* Makefile.am: Need to install vme_am_defs.h,
 
-2005-11-03	<strauman@slac.stanford.edu>
+2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/irq/openpic_i8259_irq.c: New file.
 	* ChangeLog, Makefile.am, motorola_powerpc/ChangeLog,
@@ -13,12 +17,13 @@
 	some compilation conditionals to help BSPs without ISA to omit ISA
 	interrupts and calling i8259 code.
 
-2005-11-03	<strauman@slac.stanford.edu>
+2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, include/bsp.h: Added new shared pretaskinghook.c and
 	zerobss.c files to list to be made. Added some explanations about
 	CPU <-> PCI <-> VME address mapping issues.
-2005-11-03	straumanatslacdotstanforddotedu
+
+2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, startup/linkcmds:
 	moved linkcmds to shared area for other BSPs to use
