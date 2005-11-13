@@ -1,17 +1,21 @@
-2004-10-18	Ralf Corsepius <ralf_corsepius@rtems.org>
+2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove depend-am.
+
+2004-10-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Rework checking for BSPs.
 
-2004-10-18	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-10-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* acinclude.m4: Remove RTEMS_CHECK_CPU.
 	* configure.ac: Remove RTEMS_CHECK_CPU, RTEMS_ENABLE_BARE. 
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add --with-project-root, --with-project-top to
 	rtems_bsp_configure.
