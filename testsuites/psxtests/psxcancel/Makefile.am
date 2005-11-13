@@ -4,30 +4,26 @@
 
 MANAGERS = all
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c ../include/pmacros.h
+rtems_tests_PROGRAMS = psxcancel.exe
+psxcancel_exe_SOURCES = init.c ../include/pmacros.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = psxcancel.scn
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/psxcancel.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+psxcancel_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
-
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(psxcancel_exe_OBJECTS) $(psxcancel_exe_LDADD)
+LINK_LIBS = $(psxcancel_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+psxcancel.exe$(EXEEXT): $(psxcancel_exe_OBJECTS) $(psxcancel_exe_DEPENDENCIES)
+	@rm -f psxcancel.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

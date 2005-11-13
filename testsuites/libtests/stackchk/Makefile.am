@@ -4,28 +4,25 @@
 
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = blow.c init.c task1.c system.h
+rtems_tests_PROGRAMS = stackchk.exe
+stackchk_exe_SOURCES = blow.c init.c task1.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = stackchk.scn
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/stackchk.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+stackchk_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(stackchk_exe_OBJECTS) $(stackchk_exe_LDADD)
+LINK_LIBS = $(stackchk_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+stackchk.exe$(EXEEXT): $(stackchk_exe_OBJECTS) $(stackchk_exe_DEPENDENCIES)
+	@rm -f stackchk.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

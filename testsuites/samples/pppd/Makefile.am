@@ -2,28 +2,24 @@
 ##  $Id$
 ##
 
-PGM = ${ARCH}/pppd.exe
-
 MANAGERS = io event semaphore
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c pppdapp.c netconfig.h system.h
-
-OBJS = $(lib_a_OBJECTS)
-
-testsdir = $(libdir)/tests
+rtems_tests_PROGRAMS = pppd.exe
+pppd_exe_SOURCES = init.c pppdapp.c netconfig.h system.h
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+pppd_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-LD_LIBS = -lpppd
+pppd_exe_LDLIBS = -lpppd
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(pppd_exe_OBJECTS) $(pppd_exe_LDADD)
+LINK_LIBS = $(pppd_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+pppd.exe$(EXEEXT): $(pppd_exe_OBJECTS) $(pppd_exe_DEPENDENCIES)
+	@rm -f pppd.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

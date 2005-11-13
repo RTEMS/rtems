@@ -4,30 +4,27 @@
 
 MANAGERS = io semaphore
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = task1.c system.h ../include/timesys.h
+rtems_tests_PROGRAMS = tm01.exe
+tm01_exe_SOURCES = task1.c system.h ../include/timesys.h
 
-testsdir = $(libdir)/tests
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = tm01.doc
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/tm01.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+tm01_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 OPERATION_COUNT = @OPERATION_COUNT@
 AM_CPPFLAGS += -I$(top_srcdir)/include -DOPERATION_COUNT=$(OPERATION_COUNT)
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(tm01_exe_OBJECTS) $(tm01_exe_LDADD)
+LINK_LIBS = $(tm01_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+tm01.exe$(EXEEXT): $(tm01_exe_OBJECTS) $(tm01_exe_DEPENDENCIES)
+	@rm -f tm01.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

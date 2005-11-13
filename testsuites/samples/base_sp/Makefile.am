@@ -2,30 +2,27 @@
 ##  $Id$
 ##
 
-PGM = ${ARCH}/base_sp.exe
-
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c apptask.c system.h
+rtems_tests_PROGRAMS = base_sp.exe
+base_sp_exe_SOURCES = init.c apptask.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = base_sp.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = base_sp.doc
-
-OBJS = $(lib_a_OBJECTS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+base_sp_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(base_sp_exe_OBJECTS) $(base_sp_exe_LDADD)
+LINK_LIBS = $(base_sp_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+base_sp.exe$(EXEEXT): $(base_sp_exe_OBJECTS) $(base_sp_exe_DEPENDENCIES)
+	@rm -f base_sp.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

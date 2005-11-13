@@ -2,30 +2,27 @@
 ##  $Id$
 ##
 
-PGM = ${ARCH}/hello.exe
-
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c system.h
+rtems_tests_PROGRAMS = hello.exe
+hello_exe_SOURCES = init.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = hello.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = hello.doc
-
-OBJS = $(lib_a_OBJECTS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+hello_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(hello_exe_OBJECTS) $(hello_exe_LDADD)
+LINK_LIBS = $(hello_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+hello.exe$(EXEEXT): $(hello_exe_OBJECTS) $(hello_exe_DEPENDENCIES)
+	@rm -f hello.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

@@ -2,32 +2,30 @@
 ##  $Id$
 ##
 
-PGM = ${ARCH}/cdtest.exe
-
 MANAGERS = all
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c main.cc system.h
+rtems_tests_PROGRAMS = cdtest.exe
+cdtest_exe_SOURCES = init.c main.cc system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = cdtest.scn
-
-OBJS = $(lib_a_OBJECTS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+cdtest_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 # AM_CPPFLAGS += -DRTEMS_TEST_IO_STREAM
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(cdtest_exe_OBJECTS) $(cdtest_exe_LDADD)
+LINK_LIBS = $(cdtest_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+cdtest.exe$(EXEEXT): $(cdtest_exe_OBJECTS) $(cdtest_exe_DEPENDENCIES)
+	@rm -f cdtest.exe$(EXEEXT)
+	$(make-exe)
 	$(make-cxx-exe)
 
 include $(top_srcdir)/../automake/local.am

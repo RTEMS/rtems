@@ -2,30 +2,28 @@
 ##  $Id$
 ##
 
-PGM = ${ARCH}/iostream.exe
-
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.cc system.h
+rtems_tests_PROGRAMS = iostream.exe
+iostream_exe_SOURCES = init.cc system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = iostream.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = iostream.doc
-
-OBJS = $(lib_a_OBJECTS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+iostream_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(iostream_exe_OBJECTS) $(iostream_exe_LDADD)
+LINK_LIBS = $(iostream_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+iostream.exe$(EXEEXT): $(iostream_exe_OBJECTS) $(iostream_exe_DEPENDENCIES)
+	@rm -f iostream.exe$(EXEEXT)
+	$(make-exe)
 	$(make-cxx-exe)
 
 include $(top_srcdir)/../automake/local.am

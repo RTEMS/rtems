@@ -4,28 +4,25 @@
 
 MANAGERS = io rate_monotonic
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h
+rtems_tests_PROGRAMS = cpuuse.exe
+cpuuse_exe_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = cpuuse.scn
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/cpuuse.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+cpuuse_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(cpuuse_exe_OBJECTS) $(cpuuse_exe_LDADD)
+LINK_LIBS = $(cpuuse_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+cpuuse.exe$(EXEEXT): $(cpuuse_exe_OBJECTS) $(cpuuse_exe_DEPENDENCIES)
+	@rm -f cpuuse.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

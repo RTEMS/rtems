@@ -2,32 +2,29 @@
 ##  $Id$
 ##
 
-PGM = ${ARCH}/base_mp-node1.exe
-
 MANAGERS = io mp
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = ../init.c ../apptask.c ../system.h
+rtems_tests_PROGRAMS = base_mp-node1.exe
+base_mp_node1_exe_SOURCES = ../init.c ../apptask.c ../system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = base_mp-node1.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = base_mp-node1.doc
-
-OBJS = $(lib_a_OBJECTS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+base_mp_node1_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -DNODE_NUMBER=1 -I.
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(base_mp_node1_exe_OBJECTS) $(base_mp_node1_exe_LDADD)
+LINK_LIBS = $(base_mp_node1_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+base_mp-node1.exe$(EXEEXT): $(base_mp_node1_exe_OBJECTS) $(base_mp_node1_exe_DEPENDENCIES)
+	@rm -f base_mp-node1.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

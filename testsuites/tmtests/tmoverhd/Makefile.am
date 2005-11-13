@@ -4,31 +4,27 @@
 
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = testtask.c empty.c system.h dumrtems.h ../include/timesys.h
+rtems_tests_PROGRAMS = tmoverhd.exe
+tmoverhd_exe_SOURCES = testtask.c empty.c system.h dumrtems.h ../include/timesys.h
 
-testsdir = $(libdir)/tests
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = tmoverhd.doc
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/tmoverhd.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+tmoverhd_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 OPERATION_COUNT = @OPERATION_COUNT@
 AM_CPPFLAGS += -I$(top_srcdir)/include -DOPERATION_COUNT=$(OPERATION_COUNT)
-
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(tmoverhd_exe_OBJECTS) $(tmoverhd_exe_LDADD)
+LINK_LIBS = $(tmoverhd_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+tmoverhd.exe$(EXEEXT): $(tmoverhd_exe_OBJECTS) $(tmoverhd_exe_DEPENDENCIES)
+	@rm -f tmoverhd.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

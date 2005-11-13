@@ -4,28 +4,25 @@
 
 MANAGERS = io rate_monotonic
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c getall.c task1.c system.h
+rtems_tests_PROGRAMS = rtmonuse.exe
+rtmonuse_exe_SOURCES = init.c getall.c task1.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = rtmonuse.scn
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/rtmonuse.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+rtmonuse_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(rtmonuse_exe_OBJECTS) $(rtmonuse_exe_LDADD)
+LINK_LIBS = $(rtmonuse_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+rtmonuse.exe$(EXEEXT): $(rtmonuse_exe_OBJECTS) $(rtmonuse_exe_DEPENDENCIES)
+	@rm -f rtmonuse.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

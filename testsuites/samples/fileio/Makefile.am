@@ -2,18 +2,14 @@
 ##  Makefile.am,v 1.9 2002/08/11 05:18:59 ralf Exp
 ##
 
-
 MANAGERS = io message semaphore
 
 if LIBCHIP
-PGM = ${ARCH}/fileio.exe
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c system.h
-OBJS = $(lib_a_OBJECTS)
+rtems_tests_PROGRAMS = fileio.exe
+fileio_exe_SOURCES = init.c system.h
 
-testsdir = $(libdir)/tests
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = fileio.doc
 endif
 
@@ -21,13 +17,14 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-
 if LIBCHIP
-$(PGM): ${ARCH}/$(dirstamp)
+fileio_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(fileio_exe_OBJECTS) $(fileio_exe_LDADD)
+LINK_LIBS = $(fileio_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+fileio.exe$(EXEEXT): $(fileio_exe_OBJECTS) $(fileio_exe_DEPENDENCIES)
+	@rm -f fileio.exe$(EXEEXT)
 	$(make-exe)
 endif
 

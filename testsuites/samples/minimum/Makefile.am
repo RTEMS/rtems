@@ -2,32 +2,29 @@
 ##  $Id$
 ##
 
-PGM = ${ARCH}/minimum.exe
-
 MANAGERS = all
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c
+rtems_tests_PROGRAMS = minimum.exe
+minimum_exe_SOURCES = init.c
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = minimum.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = minimum.doc
-
-OBJS = $(lib_a_OBJECTS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+minimum_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 # 	This test should not be executed
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(minimum_exe_OBJECTS) $(minimum_exe_LDADD)
+LINK_LIBS = $(minimum_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+minimum.exe$(EXEEXT): $(minimum_exe_OBJECTS) $(minimum_exe_DEPENDENCIES)
+	@rm -f minimum.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

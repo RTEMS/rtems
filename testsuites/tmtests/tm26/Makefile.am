@@ -4,30 +4,27 @@
 
 MANAGERS = io semaphore
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = task1.c system.h fptest.h ../include/timesys.h ../include/timesys.h
+rtems_tests_PROGRAMS = tm26.exe
+tm26_exe_SOURCES = task1.c system.h fptest.h ../include/timesys.h ../include/timesys.h
 
-testsdir = $(libdir)/tests
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = tm26.doc
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/tm26.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+tm26_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 OPERATION_COUNT = @OPERATION_COUNT@
 AM_CPPFLAGS += -I$(top_srcdir)/include -DOPERATION_COUNT=$(OPERATION_COUNT)
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(tm26_exe_OBJECTS) $(tm26_exe_LDADD)
+LINK_LIBS = $(tm26_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+tm26.exe$(EXEEXT): $(tm26_exe_OBJECTS) $(tm26_exe_DEPENDENCIES)
+	@rm -f tm26.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

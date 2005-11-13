@@ -5,31 +5,30 @@
 MANAGERS = event io msg sem signal timer rate_monotonic
 
 if HAS_CXX
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = Init.cc Task1.cc Task2.cc Task3.cc System.h
+rtems_tests_PROGRAMS = rtems++.exe
+rtems___exe_SOURCES = Init.cc Task1.cc Task2.cc Task3.cc System.h
 endif
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = rtems++.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = rtems++.doc
-
-PGM = ${ARCH}/rtems++.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 if HAS_CXX
-LD_LIBS = -lrtems++
+rtems___exe_LDLIBS = -lrtems++
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+rtems___exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-$(PGM): ${ARCH}/$(dirstamp)
+LINK_OBJS = $(rtems___exe_OBJECTS) $(rtems___exe_LDADD)
+LINK_LIBS = $(rtems___exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+rtems++.exe$(EXEEXT): $(rtems___exe_OBJECTS) $(rtems___exe_DEPENDENCIES)
+	@rm -f rtems++.exe$(EXEEXT)
 	$(make-cxx-exe)
 endif
 

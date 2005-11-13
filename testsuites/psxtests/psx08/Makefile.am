@@ -4,30 +4,26 @@
 
 MANAGERS = all
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c task1.c task2.c task3.c system.h ../include/pmacros.h
+rtems_tests_PROGRAMS = psx08.exe
+psx08_exe_SOURCES = init.c task1.c task2.c task3.c system.h ../include/pmacros.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = psx08.scn
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/psx08.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+psx08_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
-
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(psx08_exe_OBJECTS) $(psx08_exe_LDADD)
+LINK_LIBS = $(psx08_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+psx08.exe$(EXEEXT): $(psx08_exe_OBJECTS) $(psx08_exe_DEPENDENCIES)
+	@rm -f psx08.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

@@ -2,30 +2,27 @@
 ##  $Id$
 ##
 
-PGM = ${ARCH}/ticker.exe
-
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c tasks.c system.h
+rtems_tests_PROGRAMS = ticker.exe
+ticker_exe_SOURCES = init.c tasks.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = ticker.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = ticker.doc
-
-OBJS = $(lib_a_OBJECTS)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+ticker_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(ticker_exe_OBJECTS) $(ticker_exe_LDADD)
+LINK_LIBS = $(ticker_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+ticker.exe$(EXEEXT): $(ticker_exe_OBJECTS) $(ticker_exe_DEPENDENCIES)
+	@rm -f ticker.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am
