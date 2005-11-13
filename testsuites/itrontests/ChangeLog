@@ -68,11 +68,11 @@
 	PR 721/tests
 	* itronsem01/init.c: Fix bogus assert.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* itronhello/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* itronmbf01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
@@ -84,7 +84,7 @@
 	* itrontask04/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* itrontime01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* itronhello/system.h: Include <rtems/itron.h> instead of <itron.h>.
 	* itronmbf01/system.h: Include <rtems/itron.h> instead of <itron.h>.

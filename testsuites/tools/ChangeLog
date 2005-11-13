@@ -1,4 +1,4 @@
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 

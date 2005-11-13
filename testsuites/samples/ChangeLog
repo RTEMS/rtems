@@ -108,11 +108,11 @@
 
 	* Makefile.am: Remove DIST_SUBDIRS.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-05-10	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add CXX-checks. New conditionals CXXTESTS, MPTESTS,
 	NETTESTS. Add iostream/.
@@ -121,13 +121,13 @@
 	Reflect changes above.
 	* cdtest/main.cc: Adaptation to new C++ standards.
 
-2004-05-10	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-05-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* iostream/Makefile.am, iostream/init.cc, iostream/iostream.doc,
 	iostream/iostream.scn, iostream/system.h: 
 	New (C++ variant of hello).
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* base_mp/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* base_sp/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
@@ -141,11 +141,11 @@
 	* ticker/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* unlimited/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* fileio/init.c: Include <rtems/dosfs.h> instead of <dosfs.h>.
 
-2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* fileio/init.c, fileio/system.h, ticker/system.h, ticker/tasks.c,
 	unlimited/init.c, unlimited/test1.c, unlimited/test2.c,

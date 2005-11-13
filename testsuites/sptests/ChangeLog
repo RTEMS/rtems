@@ -97,7 +97,7 @@
 
 	* Makefile.am: Cleanup.
 
-2005-11-07	Ralf Corsepius <ralf_corsepius@rtems.org>
+2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* sptests.am: Add $(PGM): ${ARCH}/$(dirstamp).
 	* sp01/Makefile.am, sp02/Makefile.am, sp03/Makefile.am,
@@ -121,11 +121,11 @@
 
 	* spsize/size.c: i960 obsoleted and all references removed.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* sp01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* sp02/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
@@ -160,7 +160,7 @@
 	* spfatal/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* spsize/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* sp07/buffered_io.c: Include <rtems/ringbuf.h> instead of <ringbuf.h>.
 
@@ -180,7 +180,7 @@
 	<tmacros.h> means that buffered output will not work even if selected
 	in buffer_test_io.h.
 
-2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* sp02/task1.c, sp04/system.h, sp04/task1.c, sp04/tswitch.c,
 	sp05/task1.c, sp06/task1.c, sp09/screen01.c, sp09/screen07.c,

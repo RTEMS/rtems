@@ -122,11 +122,11 @@
 	tmoverhd/Makefile.am:
 	Partial conversion to automake.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-04-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 610/bsps
 	* tm27/task1.c: Use _RTEMS_RMTEST27 instead of RTEMS_TM27.
@@ -138,7 +138,7 @@
 	* tm27/task1.c: Follow conventions for tm27 and do not add another
 	macro definition.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* tm01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* tm02/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
@@ -187,7 +187,7 @@
 	this. This results in unnecessary memory exhaustion on small-memory
 	systems such as the SS555.
 
-2004-03-28	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/timesys.h, tm01/task1.c, tm02/task1.c, tm03/task1.c,
 	tm04/task1.c, tm05/task1.c, tm06/task1.c, tm07/task1.c,

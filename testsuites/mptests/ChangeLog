@@ -204,18 +204,18 @@
 	mp14/node1/Makefile.am, mp14/node2/Makefile.am:
 	Remove $(LIB_VARIANT).
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 613/bsps
 	* configure.ac: Add AC_ARG_VAR([MAX_LONG_TEST_DURATION],...).
 	* mp14/node1/Makefile.am, mp14/node2/Makefile.am: Add AM_CPPFLAGS +=
 	-DMAX_LONG_TEST_DURATION=$(MAX_LONG_TEST_DURATION).
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* mp01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* mp02/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
@@ -232,7 +232,7 @@
 	* mp13/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 	* mp14/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 
-2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* mp02/task1.c, mp03/system.h, mp03/task1.c, mp04/task1.c,
 	mp05/system.h, mp06/task1.c, mp07/task1.c, mp08/task1.c,

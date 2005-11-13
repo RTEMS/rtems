@@ -37,23 +37,23 @@
 	* tmitronsem01/Makefile.am:
 	Partial conversion to automake.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* tmitronsem01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
 
-2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-04-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* tmitronsem01/system.h: Include <rtems/itron.h> instead of <itron.h>.
 
-2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/timesys.h: Convert to using c99 fixed size types.
 
-2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-03-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/Makefile.am: Remove.
 	* Makefile.am: Merge-in include/Makefile.am.
