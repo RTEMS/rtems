@@ -1,5 +1,7 @@
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/local.am: Remove depend.
+	* automake/host.am: Remove depend.
 	* automake/subdirs.am: Remove preinstall, preinstall-recursive.
 	* automake/local.am: Remove preinstall-am.
 	* aclocal/env-rtemsbsp.m4: Remove includedir. Remove libdir.
