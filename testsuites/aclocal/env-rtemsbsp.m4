@@ -35,6 +35,5 @@ AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/lib/include"])
 AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/lib"])
 AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)"])
 
-AC_SUBST([project_libdir],["\$(libdir)"])
-AC_SUBST([project_includedir],["\$(includedir)"])
+AC_SUBST([rtems_testsdir],["\$(libdir)/rtems/tests"])
 ])
