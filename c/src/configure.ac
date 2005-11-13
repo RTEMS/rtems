@@ -193,6 +193,8 @@ RTEMS_BSP_CONFIG_SUBDIR(
    '--enable-project-root=${with_project_root}../$RTEMS_BSP' \
    '--with-project-top=${with_project_top}../' \
    '--enable-rtemsbsp=$RTEMS_BSP' \
+   '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
+   '--libdir=${exec_prefix}/${RTEMS_BSP}/lib' \
    'CFLAGS="${CFLAGS}"' \
   ],
   [test x"$enable_tests" != x"no" && test x"$multilib" = xno])
@@ -205,6 +207,8 @@ RTEMS_BSP_CONFIG_SUBDIR(
    '--enable-project-root=${with_project_root}../$RTEMS_BSP' \
    '--with-project-top=${with_project_top}../' \
    '--enable-rtemsbsp=$RTEMS_BSP' \
+   '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
+   '--libdir=${exec_prefix}/${RTEMS_BSP}/lib' \
    'CFLAGS="${CFLAGS}"' \
   ],
   [test x"$enable_tests" != x"no" && test x"$multilib" = xyes])
