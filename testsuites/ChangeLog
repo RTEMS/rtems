@@ -1,5 +1,7 @@
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/subdirs.am: Remove preinstall, preinstall-recursive.
+	* automake/local.am: Remove preinstall-am.
 	* aclocal/env-rtemsbsp.m4: Remove includedir. Remove libdir.
 	Set rtems_testsdir to $libdir/rtems-4.7/tests.
 	* configure.ac: Remove AMPOLISH3 (Unused).
