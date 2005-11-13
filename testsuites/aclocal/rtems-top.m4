@@ -80,6 +80,4 @@ project_rootdir=
 PROJECT_ROOT=
 ])
 AC_SUBST([PROJECT_ROOT])
-
-AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
 ])dnl
