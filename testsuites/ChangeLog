@@ -1,3 +1,7 @@
+2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4: Remove dirstamp.
+
 2005-11-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove preinstall.am
