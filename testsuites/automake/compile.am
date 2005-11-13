@@ -2,38 +2,6 @@
 ## $Id$
 ##
 
-LINK_LIBS = $(LD_LIBS)
-
-#COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-#	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-#CCLD = $(CC)
-#LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-#        $(AM_LDFLAGS) $(LDFLAGS) -o $@
-#
-#CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-#	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-#CXXLD = $(CXX)
-#CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
-#	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-
-${ARCH}/$(dirstamp):
-	@$(mkdir_p) $(ARCH)
-	@: > $(ARCH)/$(dirstamp)
-
-# spell out all the LINK_FILE's, rather than using -lbsp, so
-#  that $(LINK_FILES) can be a dependency
-
-LINK_OBJS = \
-    $(OBJS) \
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_ROOT)/lib/no-%.rel)
-
-LINK_FILES =\
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_ROOT)/lib/no-%.rel)
-
-## -------------------------------------------------------------------------
-ARCH = o-optimize
-
-## -------------------------------------------------------------------------
 CC = @CC@ $(GCCSPECS)
 CXX = @CXX@ $(GCCSPECS)
 CPP = @CPP@ $(GCCSPECS)
@@ -50,4 +18,4 @@ AM_CFLAGS =
 AM_CXXFLAGS =
 
 clean-local:
-	$(RM) -r ${ARCH}
+	$(RM) *.num *.nxe *.coff *.elf *.srec* *.obj *.bin 
