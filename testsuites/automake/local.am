@@ -3,7 +3,4 @@
 preinstall:
 .PHONY: preinstall
 
-depend:
-.PHONY: depend
-
 PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools

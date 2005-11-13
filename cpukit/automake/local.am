@@ -3,6 +3,3 @@
 preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
-
-depend:
-.PHONY: depend
