@@ -1,5 +1,7 @@
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am, automake/host.am, automake/local.am,
+	automake/subdirs.am: Remove depend.
 	* configure.ac: Explicitly pass --libdir and --includedir to
 	testsuites.
 
