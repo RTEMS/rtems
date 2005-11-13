@@ -8,7 +8,3 @@
 preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
-
-depend-am:
-depend: depend-am
-.PHONY: depend depend-am

@@ -4,8 +4,6 @@
 
 ## RTEMS_USE_GCC     .. if we are using GCC
 
-depend:
-
 if RTEMS_USE_GCC
 RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
 endif

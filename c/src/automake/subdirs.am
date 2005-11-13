@@ -7,7 +7,6 @@
 ## Once automake is fully integrated these make targets 
 ## and this file will probably be removed
 
-depend-recursive \
 preinstall-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
@@ -31,6 +30,3 @@ preinstall-recursive:
 
 preinstall: preinstall-recursive
 .PHONY: preinstall-recursive
-
-depend: depend-recursive
-.PHONY: depend-recursive
