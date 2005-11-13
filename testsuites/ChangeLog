@@ -1,5 +1,6 @@
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove AMPOLISH3 (Unused).
 	* aclocal/env-rtemsbsp.m4: Remove RTEMS_CPU_MODEL.
 	* automake/compile.am: Remove LINK_OBJS. Remove LINK_FILES.
 	Remove ARCH. Remove LINK_LIBS.

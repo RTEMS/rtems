@@ -55,10 +55,6 @@ fi
 AC_SUBST(BARE_CPU_CFLAGS)
 AC_SUBST(BARE_CPU_MODEL)
 
-AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-  && test -n "$AMPOLISH3"])
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
