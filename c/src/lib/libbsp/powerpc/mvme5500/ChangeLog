@@ -1,3 +1,7 @@
+2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove %cpp.
+
 2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* include/bsp.h, vme/vmeconfig.c: Reverted redefinition of _IO_BASE;
