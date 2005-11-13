@@ -27,12 +27,9 @@ RTEMS_ENABLE_BARE
 AC_SUBST(BARE_CPU_MODEL)
 AC_SUBST(BARE_CPU_CFLAGS)
 
-includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
-libdir="\${exec_prefix}/${RTEMS_BSP}/lib"
-
 AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/lib/include"])
 AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/lib"])
 AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)"])
 
-AC_SUBST([rtems_testsdir],["\$(libdir)/rtems/tests"])
+AC_SUBST([rtems_testsdir],["\$(libdir)/rtems-][RTEMS_API][/tests"])
 ])
