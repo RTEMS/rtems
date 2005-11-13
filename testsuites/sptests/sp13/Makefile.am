@@ -4,30 +4,27 @@
 
 MANAGERS = io message
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c fillbuff.c putbuff.c task1.c task2.c task3.c system.h
+rtems_tests_PROGRAMS = sp13.exe
+sp13_exe_SOURCES = init.c fillbuff.c putbuff.c task1.c task2.c task3.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = sp13.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = sp13.doc
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/sp13.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+sp13_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(sp13_exe_OBJECTS) $(sp13_exe_LDADD)
+LINK_LIBS = $(sp13_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+sp13.exe$(EXEEXT): $(sp13_exe_OBJECTS) $(sp13_exe_DEPENDENCIES)
+	@rm -f sp13.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

@@ -4,30 +4,27 @@
 
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h
+rtems_tests_PROGRAMS = sp04.exe
+sp04_exe_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = sp04.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = sp04.doc
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/sp04.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+sp04_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(sp04_exe_OBJECTS) $(sp04_exe_LDADD)
+LINK_LIBS = $(sp04_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+sp04.exe$(EXEEXT): $(sp04_exe_OBJECTS) $(sp04_exe_DEPENDENCIES)
+	@rm -f sp04.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

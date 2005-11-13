@@ -4,28 +4,25 @@
 
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c getint.c size.c system.h
+rtems_tests_PROGRAMS = spsize.exe
+spsize_exe_SOURCES = init.c getint.c size.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = spsize.scn
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/spsize.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+spsize_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(spsize_exe_OBJECTS) $(spsize_exe_LDADD)
+LINK_LIBS = $(spsize_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+spsize.exe$(EXEEXT): $(spsize_exe_OBJECTS) $(spsize_exe_DEPENDENCIES)
+	@rm -f spsize.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

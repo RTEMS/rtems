@@ -4,30 +4,27 @@
 
 MANAGERS = all
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = delay.c init.c prtime.c task1.c system.h
+rtems_tests_PROGRAMS = sp31.exe
+sp31_exe_SOURCES = delay.c init.c prtime.c task1.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = sp31.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = sp31.doc
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/sp31.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+sp31_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(sp31_exe_OBJECTS) $(sp31_exe_LDADD)
+LINK_LIBS = $(sp31_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+sp31.exe$(EXEEXT): $(sp31_exe_OBJECTS) $(sp31_exe_DEPENDENCIES)
+	@rm -f sp31.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

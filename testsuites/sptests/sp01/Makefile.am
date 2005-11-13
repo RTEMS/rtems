@@ -4,30 +4,27 @@
 
 MANAGERS = io
 
-noinst_LIBRARIES = lib.a
-lib_a_SOURCES = init.c task1.c system.h
+rtems_tests_PROGRAMS = sp01.exe
+sp01_exe_SOURCES = init.c task1.c system.h
 
-testsdir = $(libdir)/tests
-scndir = $(testsdir)
+scndir = $(rtems_testsdir)
 dist_scn_DATA = sp01.scn
-docdir = $(testsdir)
+docdir = $(rtems_testsdir)
 dist_doc_DATA = sp01.doc
-
-OBJS = $(lib_a_OBJECTS)
-
-PGM = ${ARCH}/sp01.exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-$(PGM): ${ARCH}/$(dirstamp)
+sp01_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-tests_SCRIPTS = $(PGM)
+LINK_OBJS = $(sp01_exe_OBJECTS) $(sp01_exe_LDADD)
+LINK_LIBS = $(sp01_exe_LDLIBS)
 
-$(PGM): $(OBJS) $(LINK_FILES)
+sp01.exe$(EXEEXT): $(sp01_exe_OBJECTS) $(sp01_exe_DEPENDENCIES)
+	@rm -f sp01.exe$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am
