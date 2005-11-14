@@ -130,7 +130,7 @@
 #include <sys/systm.h>
 #include <bsp.h>
  
-#include "if_media.h"
+#include <net/if_media.h>
 #include <rtems/pci.h>
 /*
 #include <sys/kernel.h>
@@ -161,8 +161,9 @@
 #include <machine/resource.h>
 #include <sys/bus.h>
 #include <sys/rman.h>
-
+#endif
 #include <dev/mii/mii.h>
+#if 0
 #include <dev/mii/miivar.h>
 
 #include <pci/pcireg.h>

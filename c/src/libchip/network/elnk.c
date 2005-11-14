@@ -112,8 +112,8 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-#include "if_media.h"
-#include "mii.h"
+#include <net/if_media.h>
+#include <dev/mii/mii.h>
 #include <bsp/irq.h>
 
 #if defined(__i386__)
