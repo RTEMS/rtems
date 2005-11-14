@@ -30,8 +30,8 @@ endif
 if LIBCHIP
 if HAS_NETWORKING
 include_libchip_HEADERS += network/cs8900.h network/i82586var.h \
-    network/if_fxpvar.h network/sonic.h network/if_media.h network/mii.h \
-    network/open_eth.h network/if_dcreg.h
+    network/if_fxpvar.h network/sonic.h
+include_libchip_HEADERS += network/open_eth.h network/if_dcreg.h
 
 libnetchip_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_LIBRARIES += libnetchip.a
