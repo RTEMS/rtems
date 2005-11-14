@@ -55,14 +55,6 @@ $(PROJECT_INCLUDE)/libchip/sonic.h: network/sonic.h $(PROJECT_INCLUDE)/libchip/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/sonic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/sonic.h
 
-$(PROJECT_INCLUDE)/libchip/if_media.h: network/if_media.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/if_media.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/if_media.h
-
-$(PROJECT_INCLUDE)/libchip/mii.h: network/mii.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mii.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mii.h
-
 $(PROJECT_INCLUDE)/libchip/open_eth.h: network/open_eth.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/open_eth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/open_eth.h
