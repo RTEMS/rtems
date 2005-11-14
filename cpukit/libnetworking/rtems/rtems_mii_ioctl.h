@@ -11,9 +11,8 @@
 
 /* Author: Till Straumann, <straumanatslacdotstandorddotedu>, 2005 */
 
-/* These should be moved out of <libchip>... */
-#include <libchip/mii.h>        /* MII register definitions                                                                     */
-#include <libchip/if_media.h>   /* media word definitions; rest of API (ifmedia) unused!        */
+#include <dev/mii/mii.h>        /* MII register definitions                                                                     */
+#include <net/if_media.h>   /* media word definitions; rest of API (ifmedia) unused!        */
 
 #ifdef __cplusplus
 extern "C" {
