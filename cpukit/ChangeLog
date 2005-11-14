@@ -3,6 +3,8 @@
 	* libnetworking/Makefile.am: Re-add  rtems/rtems_mii_ioctl.h, 
 	rtems/rtems_mii_ioctl.c, rtems/rtems_mii_ioctl_kern.c.
 	Add dev/mii/mii.h, net/if_media.h (Moved from c/src/libchip).
+	* libnetworking/net/if_media.h, libnetworking/dev/mii/mii.h:
+	New (Moved from c/src/libchip).
 
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
