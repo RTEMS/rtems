@@ -5,6 +5,8 @@
 	Add dev/mii/mii.h, net/if_media.h (Moved from c/src/libchip).
 	* libnetworking/net/if_media.h, libnetworking/dev/mii/mii.h:
 	New (Moved from c/src/libchip).
+	* libnetworking/rtems/rtems_mii_ioctl.h: Reflect mii.h and
+	if_media.h having moved.
 
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
