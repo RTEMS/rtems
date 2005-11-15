@@ -23,7 +23,6 @@ LINK_LIBS = $(iostream_exe_LDLIBS)
 
 iostream.exe$(EXEEXT): $(iostream_exe_OBJECTS) $(iostream_exe_DEPENDENCIES)
 	@rm -f iostream.exe$(EXEEXT)
-	$(make-exe)
 	$(make-cxx-exe)
 
 include $(top_srcdir)/../automake/local.am
