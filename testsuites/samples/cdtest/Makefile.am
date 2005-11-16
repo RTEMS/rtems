@@ -25,7 +25,6 @@ LINK_LIBS = $(cdtest_exe_LDLIBS)
 
 cdtest.exe$(EXEEXT): $(cdtest_exe_OBJECTS) $(cdtest_exe_DEPENDENCIES)
 	@rm -f cdtest.exe$(EXEEXT)
-	$(make-exe)
 	$(make-cxx-exe)
 
 include $(top_srcdir)/../automake/local.am
