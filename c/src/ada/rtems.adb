@@ -219,64 +219,18 @@ package body RTEMS is
    --  Initialization Manager
    --
 
-   procedure Initialize_Executive (
-      Configuration_Table   : in     RTEMS.Configuration_Table_Pointer;
-      CPU_Table             : in     RTEMS.CPU_Table_Pointer
-   ) is
-      procedure Initialize_Executive_Base (
-         Configuration_Table   : in     RTEMS.Configuration_Table_Pointer;
-         CPU_Table             : in     RTEMS.CPU_Table_Pointer
-      );
-      pragma Import (C, Initialize_Executive_Base,
-         "rtems_initialize_executive");
-
-   begin
-
-      Initialize_Executive_Base (Configuration_Table, CPU_Table);
-
-   end Initialize_Executive;
- 
-   procedure Initialize_Executive_Early (
-      Configuration_Table : in     RTEMS.Configuration_Table_Pointer;
-      CPU_Table           : in     RTEMS.CPU_Table_Pointer;
-      Level               :    out RTEMS.ISR_Level
-   ) is
-      function Initialize_Executive_Early_Base (
-         Configuration_Table   : in     RTEMS.Configuration_Table_Pointer;
-         CPU_Table             : in     RTEMS.CPU_Table_Pointer
-      ) return RTEMS.ISR_Level;
-      pragma Import (C, Initialize_Executive_Early_Base,
-         "rtems_initialize_executive_early");
-
-   begin
-
-      Level := Initialize_Executive_Early_Base (Configuration_Table, CPU_Table);
-
-   end Initialize_Executive_Early;
-
-   procedure Initialize_Executive_Late (
-      BSP_Level : in    RTEMS.ISR_Level
-   ) is
-      procedure Initialize_Executive_Late_Base (
-         Level : in     RTEMS.ISR_Level
-      );
-      pragma Import (C, Initialize_Executive_Late_Base,
-         "rtems_initialize_executive_late");
-
-   begin
-
-      Initialize_Executive_Late_Base (BSP_Level);
-
-   end Initialize_Executive_Late;
+   -- RTEMS Initialization not supported from Ada.  Please write BSPs in C.
 
    procedure Shutdown_Executive (
       Result : in     RTEMS.Unsigned32
    ) is
-      procedure Shutdown_Executive_Base;
+      procedure Shutdown_Executive_Base(
+         Result : in     RTEMS.Unsigned32
+      );
       pragma Import (C,Shutdown_Executive_Base,"rtems_shutdown_executive");
    begin
 
-      Shutdown_Executive_Base;
+      Shutdown_Executive_Base( Result );
 
    end Shutdown_Executive;
 

@@ -802,20 +802,7 @@ pragma Elaborate_Body (RTEMS);
    --  Initialization Manager
    --
 
-   procedure Initialize_Executive (
-      Configuration_Table   : in     RTEMS.Configuration_Table_Pointer;
-      CPU_Table             : in     RTEMS.CPU_Table_Pointer
-   );
-
-   procedure Initialize_Executive_Early (
-      Configuration_Table : in     RTEMS.Configuration_Table_Pointer;
-      CPU_Table           : in     RTEMS.CPU_Table_Pointer;
-      Level               :    out RTEMS.ISR_Level
-   );
-
-   procedure Initialize_Executive_Late (
-      BSP_Level : in    RTEMS.ISR_Level
-   );
+   -- RTEMS Initialization not supported from Ada.  Please write BSPs in C.
 
    procedure Shutdown_Executive (
       Result : in     RTEMS.Unsigned32
