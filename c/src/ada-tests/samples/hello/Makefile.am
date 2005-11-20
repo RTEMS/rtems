@@ -15,6 +15,7 @@ noinst_PROGRAMS = hello
 
 hello_SOURCES = hello.adb config.h sptest.adb sptest.ads
 
-EXTRA_DIST = hello.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = hello.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

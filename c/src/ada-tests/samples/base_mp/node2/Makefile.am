@@ -19,6 +19,7 @@ endif
 
 node2_SOURCES = mptest-per_node_configuration.adb
 
-EXTRA_DIST = base_mp-node2.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = base_mp-node2.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

@@ -12,6 +12,7 @@ sp23_SOURCES += ../../support/init.c
 sp23$(EXEEXT): sp23.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-EXTRA_DIST = sp23.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = sp23.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

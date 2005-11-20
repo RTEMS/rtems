@@ -12,6 +12,7 @@ sp25_SOURCES += ../../support/init.c
 sp25$(EXEEXT): sp25.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-EXTRA_DIST = sp25.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = sp25.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

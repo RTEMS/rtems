@@ -13,6 +13,7 @@ sp21_SOURCES += ../../support/init.c
 sp21$(EXEEXT): sp21.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-EXTRA_DIST = sp21.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = sp21.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

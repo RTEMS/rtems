@@ -17,6 +17,7 @@ if EXPADA
 noinst_PROGRAMS = node1
 endif
 
-EXTRA_DIST = base_mp-node1.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = base_mp-node1.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

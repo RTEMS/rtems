@@ -12,6 +12,7 @@ sp05_SOURCES += ../../support/init.c
 sp05$(EXEEXT): sp05.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-EXTRA_DIST = sp05.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = sp05.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

@@ -15,6 +15,7 @@ noinst_PROGRAMS = base_sp
 
 base_sp_SOURCES = base_sp.adb config.h sptest.adb sptest.ads
 
-EXTRA_DIST = base_sp.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = base_sp.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

@@ -15,6 +15,7 @@ noinst_PROGRAMS = ticker
 
 ticker_SOURCES = ticker.adb config.h sptest.adb sptest.ads
 
-EXTRA_DIST = ticker.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = ticker.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

@@ -17,6 +17,7 @@ CLEANFILES += sptest.adb
 sp19$(EXEEXT): sp19.adb sptest.adb sptest.ads init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-EXTRA_DIST = sp19.scn
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = sp19.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am
