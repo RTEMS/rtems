@@ -1,0 +1,33 @@
+*** TEST 14 -- NODE 1 ***
+Creating Semaphore (Global)
+Creating Message Queue (Global)
+Creating Partition (Global)
+Creating Event task (Global)
+Starting  Event task (Global)
+Creating Semaphore task (Global)
+About to go to sleep!
+Starting  Semaphore task (Global)
+Creating Message Queue task (Global)
+Getting SMID of semaphore
+Starting  Message Queue task (Global)
+Creating Partition task (Global)
+Getting ID of msg queue
+Starting  Partition task (Global)
+Getting ID of partition
+Waking up!
+Remote task's name is : 222
+Getting TID of remote task
+Sending events to remote task
+<stream of following characters>
+. - indicates 100 iterations of 
+tm_evafter of 1 tick and event_receive.
+e - indicates that 100 
+events have been sent to the remote task.
+m - indicates 100 iterations of 
+message_queue_send and message_queue_receive.
+p - indicates 100 iterations of 
+partition_get_buffer and partition_return_buffer.
+s - indicates 100 iterations of 
+semaphore_obtain and semaphore_release.
+NOTE: The characters in the stream could begin to appear whenever any
+task is started.

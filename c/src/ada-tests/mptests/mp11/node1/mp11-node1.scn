@@ -1,0 +1,10 @@
+*** TEST 11 -- NODE 1 ***
+Attempting to create Test_task (Global)
+task_create correctly returned TOO_MANY
+Attempting to create Message Queue (Global)
+message_queue_create correctly returned TOO_MANY
+Creating Semaphore (Global)
+semaphore_create correctly returned TOO_MANY
+Creating Partition (Global)
+partition_create correctly returned TOO_MANY
+*** END OF TEST 11 ***

@@ -1,0 +1,9 @@
+*** TEST 12 -- NODE 2 ***
+Got to the initialization task
+Getting ID of remote Partition (Global)
+Attempting to delete remote Partition (Global)
+partition_delete correctly returned ILLEGAL_ON_REMOTE_OBJECT!!
+Obtaining a buffer from the global partition
+Address returned was : 0x200f0000
+NOTE: Address printed will probably differ!!!
+*** END OF TEST 12 ***

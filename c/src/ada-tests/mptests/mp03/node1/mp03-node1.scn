@@ -1,0 +1,28 @@
+*** TEST 3 -- NODE 1 ***
+Creating Test_task (Global)
+Starting Test_task (Global)
+Deleting initialization task
+Getting TID of remote task
+Remote task's name is : 222
+111  - Suspending remote task
+111  - Resuming remote task
+111  - Suspending remote task
+111  - Resuming remote task
+111  - Suspending remote task
+111  - Resuming remote task
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+222  - have I been suspended???
+*** END OF TEST 3 ***
+

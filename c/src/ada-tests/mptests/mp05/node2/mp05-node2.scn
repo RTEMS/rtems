@@ -1,0 +1,10 @@
+*** TEST 5 -- NODE 2 ***
+Creating Test_task (Global)
+Starting Test_task (Global)
+Deleting initialization task
+signal_catch: initializing signal catcher
+Remote task's name is : 111
+Getting TID of remote task
+....................................................   
+....................................................   
+*** END OF TEST 5 ***
