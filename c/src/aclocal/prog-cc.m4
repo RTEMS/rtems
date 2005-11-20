@@ -17,8 +17,6 @@ test -z "$CC" && \
   AC_MSG_ERROR([no acceptable cc found in \$PATH])
 AC_PROG_CC
 AC_PROG_CPP
-
-AM_CONDITIONAL(RTEMS_USE_GCC,test x"$GCC" = x"yes")
 ])
 
 AC_DEFUN([RTEMS_PROG_CC_FOR_TARGET],
@@ -50,4 +48,9 @@ AS_IF([test x"$rtems_cv_gcc_isystem" = xyes],[
   RTEMS_CPPFLAGS="-I\$(PROJECT_INCLUDE)"
 ])
 AC_SUBST(RTEMS_CPPFLAGS)
+
+AS_IF([test "$GCC" = yes],[
+  RTEMS_RELLDFLAGS="-qnolinkcmds -nostdlib -Wl,-r"
+])
+AC_SUBST(RTEMS_RELLDFLAGS)
 ])
