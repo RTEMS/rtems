@@ -1,5 +1,10 @@
 2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Re-add mptests*Makefile.am.
+	* mptests/Makefile.am: Re-add  mp?? tests.
+
+2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* mptests/mp02/Makefile.am, mptests/mp02/node1/Makefile.am, 
 	mptests/mp02/node2/Makefile.am, mptests/mp03/Makefile.am,
 	mptests/mp03/node1/Makefile.am, mptests/mp03/node2/Makefile.am,
