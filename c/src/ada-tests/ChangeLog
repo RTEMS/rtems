@@ -1,3 +1,8 @@
+2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Reflect changes to testsuites/automake,
+	testsuites/aclocal.
+
 2005-05-06	Joel Sherrill <joel@OARcorp.com>
 
 	* tmtests/tmoverhd/tmtest.adb: Removed warnings.

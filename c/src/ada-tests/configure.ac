@@ -16,23 +16,23 @@ AC_CHECK_PROGS([M4],[gm4 m4])
 RTEMS_PROG_GNAT
 RTEMS_CANONICALIZE_TOOLS
 
-RTEMS_ENABLE_MULTILIB
-RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENV_RTEMSBSP
+RTEMS_PROJECT_ROOT
+
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
+RTEMS_CHECK_CPUOPTS([RTEMS_MULTIPROCESSING])
 
 AS_IF([test x"$HAVE_GNAT" = x"no"],[
   AC_MSG_ERROR([No acceptable GNATMAKE found.])
 ])
 
-AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
+AM_CONDITIONAL(HAS_MP,[test "$rtems_cv_RTEMS_MULTIPROCESSING" = yes])
 
 RTEMS_CHECK_TOOL([GNATPREP],[gnatprep],[])
 
 # FIXME: Enable building the examples which are known to be broken
 AM_CONDITIONAL([EXPADA],
-  [test x"$enable_expada" = x"yes" && test x"$HAVE_GNAT" = x"yes"])
+  [test x"$enable_expada" = xyes && test x"$HAVE_GNAT" = xyes])
 
 RTEMS_PROJECT_ROOT
 
