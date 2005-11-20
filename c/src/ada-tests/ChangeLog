@@ -1,5 +1,28 @@
 2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* mptests/mp02/Makefile.am, mptests/mp02/node1/Makefile.am, 
+	mptests/mp02/node2/Makefile.am, mptests/mp03/Makefile.am,
+	mptests/mp03/node1/Makefile.am, mptests/mp03/node2/Makefile.am,
+	mptests/mp04/Makefile.am, mptests/mp04/node1/Makefile.am,
+	mptests/mp04/node2/Makefile.am, mptests/mp05/Makefile.am,
+	mptests/mp05/node1/Makefile.am, mptests/mp05/node2/Makefile.am,
+	mptests/mp06/Makefile.am, mptests/mp06/node1/Makefile.am,
+	mptests/mp06/node2/Makefile.am, mptests/mp07/Makefile.am,
+	mptests/mp07/node1/Makefile.am, mptests/mp07/node2/Makefile.am,
+	mptests/mp08/Makefile.am, mptests/mp08/node1/Makefile.am,
+	mptests/mp08/node2/Makefile.am, mptests/mp09/Makefile.am,
+	mptests/mp09/node1/Makefile.am, mptests/mp09/node2/Makefile.am,
+	mptests/mp10/Makefile.am, mptests/mp10/node1/Makefile.am,
+	mptests/mp10/node2/Makefile.am, mptests/mp11/Makefile.am,
+	mptests/mp11/node1/Makefile.am, mptests/mp11/node2/Makefile.am,
+	mptests/mp12/Makefile.am, mptests/mp12/node1/Makefile.am,
+	mptests/mp12/node2/Makefile.am, mptests/mp13/Makefile.am,
+	mptests/mp13/node1/Makefile.am, mptests/mp13/node2/Makefile.am,
+	mptests/mp14/Makefile.am, mptests/mp14/node1/Makefile.am,
+	mptests/mp14/node2/Makefile.am: New.
+
+2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* samples/base_mp/node1/Makefile.am,
 	samples/base_mp/node2/Makefile.am, samples/base_sp/Makefile.am,
 	samples/hello/Makefile.am, samples/ticker/Makefile.am,
