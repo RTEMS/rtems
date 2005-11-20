@@ -36,6 +36,8 @@ AM_CONDITIONAL([EXPADA],
 
 RTEMS_PROJECT_ROOT
 
+AC_SUBST([rtems_ada_testsdir],["\$(libdir)/rtems-][RTEMS_API][/ada-tests"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 
