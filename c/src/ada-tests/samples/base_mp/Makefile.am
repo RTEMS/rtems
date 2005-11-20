@@ -15,10 +15,8 @@ SUBDIRS = node1 node2
 
 #mptest_SOURCES = mptest.adb mptest.ads
 
-#EXTRA_DIST = node1/base_mp.scn
 #EXTRA_DIST += node1/mptest-per_node_configuration.adb
 
-#EXTRA_DIST += node2/base_mp.scn
 #EXTRA_DIST += node2/mptest-per_node_configuration.adb
 
 include $(top_srcdir)/../../../testsuites/automake/subdirs.am
