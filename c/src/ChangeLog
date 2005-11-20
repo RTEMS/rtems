@@ -1,5 +1,9 @@
 2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/prog-cc.m4: Remove RTEMS_USE_GCC.
+	Add RTEMS_RELLDFLAGS.
+	* automake/compile.am: Remove RTEMS_USE_GCC.
+	Remove RTEMS_RELLDFLAGS.
 	* configure.ac: Pass --enable-rtems-root to ada-tests/configure.
 
 2005-11-14	Ralf Corsepius <ralf.corsepius@rtems.org>
