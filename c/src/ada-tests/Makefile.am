@@ -2,8 +2,6 @@
 
 ACLOCAL_AMFLAGS = -I aclocal -I ../../../testsuites/aclocal
 
-include $(top_srcdir)/../../../testsuites/automake/compile.am
-
 SUBDIRS = support samples sptests tmtests
 if HAS_MP
 SUBDIRS += mptests
