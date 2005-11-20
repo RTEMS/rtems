@@ -2,12 +2,6 @@
 ## $Id$
 ##
 
-## RTEMS_USE_GCC     .. if we are using GCC
-
-if RTEMS_USE_GCC
-RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
-endif
-
 ## -------------------------------------------------------------------------
 
 CC = @CC@ $(GCCSPECS)
