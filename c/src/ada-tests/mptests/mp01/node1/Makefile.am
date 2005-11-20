@@ -16,6 +16,4 @@ endif
 
 node1_SOURCES = mptest-per_node_configuration.adb
 
-EXTRA_DIST = base_mp.scn
-
 include $(top_srcdir)/../../../testsuites/automake/local.am
