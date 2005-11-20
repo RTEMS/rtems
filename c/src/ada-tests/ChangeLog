@@ -1,5 +1,17 @@
 2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* samples/base_mp/Makefile.am: Remove references to *.scn.
+	* samples/base_mp/node1/base_mp.scn: Remove.
+	* samples/base_mp/node1/base_mp-node1.scn: New.
+	* samples/base_mp/node1/Makefile.am: Eliminate NODE.
+	Reflect having renamed base_mp.scn.
+	* samples/base_mp/node2/base_mp.scn: Remove.
+	* samples/base_mp/node2/base_mp-node2.scn: New.
+	* samples/base_mp/node2/Makefile.am: Eliminate NODE.
+	Reflect having renamed base_mp.scn.
+
+2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Reflect changes to testsuites/automake,
 	testsuites/aclocal.
 
