@@ -177,7 +177,7 @@ esac],[enable_ada=no])
 RTEMS_BSP_CONFIG_SUBDIR(
   [ada-tests],[ada-tests],
   ['--enable-rtems-root=../' \
-   '--with-project-root=${with_project_root}../' \
+   '--enable-project-root=${with_project_root}../$RTEMS_BSP' \
    '--with-project-top=${with_project_top}../' \
    '--enable-rtemsbsp=$RTEMS_BSP' \
   ],

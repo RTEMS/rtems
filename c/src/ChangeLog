@@ -1,3 +1,7 @@
+2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Pass --enable-rtems-root to ada-tests/configure.
+
 2005-11-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libchip/network/if_media.h, libchip/network/mii.h: 
