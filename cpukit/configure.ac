@@ -134,8 +134,8 @@ cat >>cpuopts.tmp <<\_ACEOF
  */
 /* target cpu dependent options file */
 /* automatically generated -- DO NOT EDIT!! */
-#ifndef _CPU_OPTIONS_H
-#define _CPU_OPTIONS_H
+#ifndef _RTEMS_SCORE_CPUOPTS_H
+#define _RTEMS_SCORE_CPUOPTS_H
 _ACEOF
 
 RTEMS_CPUOPT([RTEMS_DEBUG],
@@ -205,7 +205,7 @@ RTEMS_CPUOPT([SIZEOF_CPU_CONTEXT],
 
 cat >>cpuopts.tmp <<\_ACEOF
 
-#endif
+#endif /* _RTEMS_SCORE_CPUOPTS_H */
 _ACEOF
 
 AS_MKDIR_P(score/include/rtems/score)
