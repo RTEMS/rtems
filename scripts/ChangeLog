@@ -1,3 +1,9 @@
+2005-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gccnewlib/base-g77.add, gccnewlib/base-gcc.add, 
+	gccnewlib/base-gcj.add, gccnewlib/base-gfortran.add,
+	gccnewlib/base-gnat.add: Add License.
+
 2005-10-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/gccnewlib.add: Rename src.rpm to *-gcc.src.rpm.
