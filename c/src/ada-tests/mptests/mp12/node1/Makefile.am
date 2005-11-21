@@ -16,4 +16,7 @@ endif
 
 node1_SOURCES = mptest-per_node_configuration.adb
 
+scndir = $(rtems_ada_testsdir)
+dist_scn_DATA = mp12-node1.scn
+
 include $(top_srcdir)/../../../testsuites/automake/local.am
