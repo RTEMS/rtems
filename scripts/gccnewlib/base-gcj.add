@@ -7,6 +7,7 @@
 Summary:        base package for rtems gcc/java compiler (gcj).
 Group:          %{rpmgroup}
 Version:        %{gcc_version}
+License:	GPL
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info

@@ -6,6 +6,7 @@
 %package -n @rpmprefix@rtems@osversion@-base-gfortran
 Summary:	rtems base package for gcc/gfortran compiler
 Group:          %{rpmgroup}
+License:	GPL
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
