@@ -5,12 +5,7 @@
 
 %define gcc_target	@target_alias@
 
-Name:           @rpmprefix@%{gcc_target}-gcc
-Summary:        gcc and newlib C Library for %{gcc_target}.
-Group:          %{rpmgroup}
 Release:        @Release@
-License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
-
 Version:      	%{gccnewlib_version}
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}@gcc_suffix@
@@ -25,6 +20,10 @@ Source99:	brp-rtems-compress.in
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	@rpmprefix@%{gcc_target}-binutils
 
+Name:           @rpmprefix@%{gcc_target}-gcc-newlib
+Summary:        gcc and newlib C Library for %{gcc_target}.
+Group:          %{rpmgroup}
+License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
 #
 # The original sources are not included in the source RPM.
@@ -39,6 +38,12 @@ BuildRequires:	@rpmprefix@%{gcc_target}-binutils
 #
 %{?!_with_sources:NoSource:	0}
 %{?!_with_sources:NoSource:	1}
+
+%description
+RTEMS is an open source operating system for embedded systems.
+
+This is gcc for %{gcc_target}.
+
 
 # default languages to build
 %define _cxx		1
@@ -124,7 +129,8 @@ BuildRequires:	zlib-devel
 # This really isn't available until RedHat 8.0.  How to conditionalize this?
 BuildRequires:	gcc-gnat
 # Urgh, building gnat requires the target c-toolchain
-BuildRequires:  @rpmprefix@%{gcc_target}-gcc < %{gccnewlib_version}-%{release}
+# BuildRequires:  @rpmprefix@%{gcc_target}-gcc < %{gcc_version}-%{release}
+BuildRequires:	@rpmprefix@%{gcc_target}-libc < %{newlib_version}-%{release}
 %endif
 %if %build_f95
 BuildRequires: gmp-devel
