@@ -1,12 +1,13 @@
 # ==============================================================
 # %{gcc_target}-gcc
 # ==============================================================
-# %%package -n @rpmprefix@%{gcc_target}-gcc
-Summary:      	gcc for %{gcc_target}
+%package -n @rpmprefix@%{gcc_target}-gcc
+Summary:        gcc for %{gcc_target}
 Group:          %{rpmgroup}
 Version:        %{gcc_version}
 Requires:       @rpmprefix@%{gcc_target}-binutils
 Requires:       @rpmprefix@%{gcc_target}-libc = %{newlib_version}-%{release}
+License:	GPL
 
 %description -n @rpmprefix@%{gcc_target}-gcc
 RTEMS is an open source operating system for embedded systems.

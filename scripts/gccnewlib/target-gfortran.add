@@ -6,6 +6,8 @@
 Summary:	gcc/gfortran compiler for %{gcc_target}
 Group:          %{rpmgroup}
 Version:	%{gcc_version}
+License:	GPL
+
 %if "%{_prefix}" != "/usr"
 Requires:       @rpmprefix@rtems@osversion@-base-gfortran
 %endif

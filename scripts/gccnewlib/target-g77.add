@@ -6,6 +6,7 @@
 Summary:        gcc/g77 compiler for %{gcc_target}
 Group:          %{rpmgroup}
 Version:	%{gcc_version}
+License:	GPL
 Requires:       @rpmprefix@rtems@osversion@-base-g77
 Requires:       @rpmprefix@%{gcc_target}-gcc = %{gcc_version}-%{release}
 
