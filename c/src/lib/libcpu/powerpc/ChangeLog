@@ -1,9 +1,9 @@
 2005-11-21	Till Straumann <strauman@slac.stanford.edu>
 
-    * new-exceptions/cpu_asm.S: the book says a context
-    synchronizing instruction (isync) is necessary after flipping
-    certain bits (e.g, MSR_FP) in msr -- since this could happen as
-    part of a context switch I added 'isync'.
+	* new-exceptions/cpu_asm.S: the book says a context
+	synchronizing instruction (isync) is necessary after flipping
+	certain bits (e.g, MSR_FP) in msr -- since this could happen as
+	part of a context switch I added 'isync'.
 
 2005-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
