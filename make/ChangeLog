@@ -1,3 +1,8 @@
+2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/gp32.cfg: Replace .gxb with .elf.
+	* custom/i386ex.cfg, custom/ts_386ex.cfg: Replace .coff with .elf.
+
 2005-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* custom/mvme5500.cfg: Fixed PR#846; must not use -mcpu=74xx, use
