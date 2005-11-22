@@ -1,5 +1,12 @@
 2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* custom/dmv152.cfg, custom/i386ex.cfg, custom/idp.cfg,
+	custom/mcf5235.cfg, custom/mrm332.cfg, custom/mvme136.cfg,
+	custom/mvme147.cfg, custom/mvme162.cfg, custom/mvme162lx.cfg:
+	Use .srec for files containing SRECs.
+
+2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* custom/gp32.cfg: Replace .gxb with .elf.
 	* custom/i386ex.cfg, custom/ts_386ex.cfg: Replace .coff with .elf.
 
