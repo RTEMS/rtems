@@ -52,9 +52,6 @@ if test "$enable_tests" = "yes"; then
   fi
 fi
 
-AC_SUBST(BARE_CPU_CFLAGS)
-AC_SUBST(BARE_CPU_MODEL)
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

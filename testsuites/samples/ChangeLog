@@ -1,3 +1,8 @@
+2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_ENABLE_BARE, 
+	BARE_CPU_CFLAGS, BARE_CPU_MODEL.
+
 2005-11-15  Eric Norum <norume@aps.anl.gov>
 
     * cdtest/Makefile.am: Remove extraneous make-exe.

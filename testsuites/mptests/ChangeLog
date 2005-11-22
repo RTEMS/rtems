@@ -1,3 +1,8 @@
+2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_ENABLE_BARE, 
+	BARE_CPU_CFLAGS, BARE_CPU_MODEL.
+
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* mp01/node1/Makefile.am, mp01/node2/Makefile.am,
