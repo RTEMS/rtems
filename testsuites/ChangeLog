@@ -1,5 +1,6 @@
 2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/enable-bare.m4: Remove (Unused).
 	* aclocal/env-rtemsbsp.m4, configure.ac: 
 	Remove RTEMS_ENABLE_BARE, 
 	BARE_CPU_CFLAGS, BARE_CPU_MODEL.
