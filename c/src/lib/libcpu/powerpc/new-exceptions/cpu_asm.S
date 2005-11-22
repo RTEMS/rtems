@@ -352,6 +352,7 @@ PROC (_CPU_Context_switch):
 	mtcrf	255, r6
 	mtlr	r7
 	mtmsr	r8
+	isync
 
 	blr
 
@@ -375,6 +376,7 @@ PROC (_CPU_Context_restore):
 	mtcrf	255, r5
 	mtlr	r6
 	mtmsr	r7
+	isync
 	lwz	r1, GP_1(r3)
 	lwz	r2, GP_2(r3)
 #if (PPC_USE_MULTIPLE == 1)
