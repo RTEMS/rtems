@@ -1,3 +1,7 @@
+2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: remove %lib.
+
 2005-11-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove %cpp.
