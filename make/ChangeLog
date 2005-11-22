@@ -1,5 +1,9 @@
 2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* custom/gba.cfg, custom/pc386.cfg: Use .elf instead of .obj.
+
+2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* custom/dmv152.cfg, custom/i386ex.cfg, custom/idp.cfg,
 	custom/mcf5235.cfg, custom/mrm332.cfg, custom/mvme136.cfg,
 	custom/mvme147.cfg, custom/mvme162.cfg, custom/mvme162lx.cfg:
