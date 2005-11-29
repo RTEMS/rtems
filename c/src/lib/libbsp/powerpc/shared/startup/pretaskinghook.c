@@ -69,7 +69,7 @@ void bsp_pretasking_hook(void)
    * and IRQ subsystems...
    *
    * NOTE: vmeUniverse driver now uses shared interrupts.
-   *       this requires workspace which is not available
+   *       this requires malloc/free which are not available
    *       from bspstart()...
    */
 #ifdef SHOW_MORE_INIT_SETTINGS
