@@ -275,6 +275,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
           /* first handler isn't malloc'ed, so just overwrite it.  Since
           the contents of vchain are being struct copied, vchain itself
           goes away */
+          vchain = vchain->next_handler;
           rtems_hdl_tbl[irq->name]= *vchain;
        }
        free(vchain);

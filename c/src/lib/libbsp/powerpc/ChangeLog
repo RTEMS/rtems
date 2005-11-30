@@ -1,3 +1,7 @@
+2005-11-29	Till Straumann <strauman@slac.stanford.edu>
+	* shared/irq/irq.c: Fixed incorrect removal of first shared
+        interrupt in chain.
+
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* shared/startup/bspstart.c: Eliminate obsolete types.
