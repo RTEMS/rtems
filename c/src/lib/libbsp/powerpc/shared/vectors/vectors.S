@@ -112,6 +112,8 @@ SYM (push_normalized_frame):
 	 * store the execption frame address in r3 (first param)
 	 */
 	addi	r3, r1, 0x8
+	/* clear CR[6] to make sure no varargs fn callee assumes there are FP args passed */
+	crxor	6,6,6
 	/*
 	 * globalExceptHdl(r3)
 	 */

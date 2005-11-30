@@ -192,6 +192,8 @@ nested:
 	 * in case...
 	 */
 	addi	r3, r14, 0x8
+	/* clear CR[6] to make sure no varargs fn callee assumes there are FP args passed */
+	crxor	6,6,6
 	bl	C_dispatch_irq_handler /* C_dispatch_irq_handler(cpu_interrupt_frame* r3, vector r4) */
 	/*
 	 * start decrementing nesting level. Note : do not test result against 0
