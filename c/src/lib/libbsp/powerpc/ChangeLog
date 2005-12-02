@@ -1,3 +1,11 @@
+2005-12-02	Till Straumann <strauman@slac.stanford.edu>
+	* shared/irq/irq_init.c, shared/openpic/openpic.h
+        shared/openpic/openpic.c: The 8240's EPIC has a 'serial'
+        mode of operation for multiplexing 16 interrupt lines.
+        This introduces a pipeline delay which can cause
+        spurious interrupts unless ending the interrupt cycle
+        (EOI) is delayed accordingly.
+
 2005-12-01	Till Straumann <strauman@slac.stanford.edu>
 	* shared/vectors/vectors.h, shared/vectors/vectors.S,
         shared/vectors/vectors_init.c: Reduced size of default

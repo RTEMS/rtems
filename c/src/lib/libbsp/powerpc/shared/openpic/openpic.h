@@ -43,6 +43,13 @@
 
 #if defined(mpc8240) || defined(mpc8245)
 #define OPENPIC_MAX_SOURCES    (2048 - 16)
+/* If the BSP uses the serial interrupt mode / 'multiplexer' then
+ * EOI must be delayed by at least 16 SRAM_CLK cycles to avoid
+ * spurious interrupts.
+ * It is the BSP's responsibility to set up an appropriate delay
+ * (in timebase-clock cycles) at init time.
+ */
+extern void openpic_set_eoi_delay(unsigned tb_cycles);
 #else
 #define OPENPIC_MAX_SOURCES	2048
 #endif

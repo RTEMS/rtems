@@ -39,6 +39,10 @@ volatile struct OpenPIC *OpenPIC = NULL;
 static unsigned int NumProcessors;
 static unsigned int NumSources;
 
+#if defined(mpc8240) || defined(mpc8245)
+static unsigned int openpic_eoi_delay = 0;
+#endif
+
     /*
      *  Accesses to the current processor's registers
      */
@@ -312,8 +316,19 @@ unsigned int openpic_irq(unsigned int cpu)
 void openpic_eoi(unsigned int cpu)
 {
     check_arg_cpu(cpu);
+#if defined(mpc8240) || defined(mpc8245)
+    if ( openpic_eoi_delay )
+        rtems_bsp_delay_in_bus_cycles(openpic_eoi_delay);
+#endif
     openpic_write(&OpenPIC->THIS_CPU.EOI, 0);
 }
+
+#if defined(mpc8240) || defined(mpc8245)
+void openpic_set_eoi_delay(unsigned tb_cycles)
+{
+    openpic_eoi_delay = tb_cycles;
+}
+#endif
 
     /*
      *  Get/set the current task priority

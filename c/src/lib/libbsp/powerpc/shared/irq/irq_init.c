@@ -270,6 +270,39 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   printk("Going to initialize EPIC interrupt controller (openpic compliant)\n");
 #endif
   openpic_init(1, mvme2100_openpic_initpolarities, mvme2100_openpic_initsenses);
+  /* Speed up the serial interface; if it is too slow then we might get spurious
+   * interrupts:
+   * After an ISR clears the interrupt condition at the source/device, the wire
+   * remains asserted during the propagation delay introduced by the serial interface
+   * (something really stupid). If the ISR returns while the wire is not released
+   * yet, then a spurious interrupt happens.
+   * The book says we should be careful if the serial clock is > 33MHz.
+   * Empirically, it seems that running it at 33MHz is fast enough. Otherwise,
+   * we should introduce a delay in openpic_eoi().
+   * The maximal delay are 16 (serial) clock cycles. If the divisor is 8
+   * [power-up default] then the lag is 2us [66MHz SDRAM clock; I assume this
+   * is equal to the bus frequency].
+   * FIXME: This should probably be a 8240-specific piece in 'openpic.c'
+   */
+  {
+  uint32_t eicr_val, ratio;
+    /* On the 8240 this is the EICR register */
+    eicr_val = in_le32( &OpenPIC->Global.Global_Configuration1 ) & ~(7<<28);
+    if ( (1<<27) & eicr_val ) {
+      /* serial interface mode enabled */
+
+      /* round to nearest integer:
+       *   round(Bus_freq/33000000) = floor( 2*(Bus_freq/33e6) + 1 ) / 2
+       */ 
+      ratio   = BSP_bus_frequency / 16500000 + 1;
+      ratio >>= 2; /* EICR value is half actual divisor */
+      if ( 0==ratio )
+        ratio = 1;
+      out_le32(&OpenPIC->Global.Global_Configuration1, eicr_val | ((ratio &7) << 28));
+      /*  Delay in TB cycles (assuming TB runs at 1/4 of the bus frequency) */
+      openpic_set_eoi_delay( 16 * (2*ratio) / 4 );
+    }
+  }
 #else
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
