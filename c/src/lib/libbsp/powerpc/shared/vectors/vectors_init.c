@@ -12,12 +12,15 @@
  *
  *  $Id$
  */
+#include <rtems.h>
+#include <bsp.h>
+
 #include <rtems/bspIo.h>
 
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
 #include <libcpu/spr.h>
-#include <bsp.h>
+#include <libcpu/cpuIdent.h>
 
 static rtems_raw_except_global_settings exception_config;
 static rtems_raw_except_connect_data    exception_table[LAST_VALID_EXC + 1];
@@ -143,6 +146,7 @@ int mpc60x_vector_is_valid(rtems_vector vector);
 void initialize_exceptions()
 {
   int i;
+  int has_shadowed_gprs = 0;
 
   /*
    * Initialize pointer used by low level execption handling
@@ -162,12 +166,27 @@ void initialize_exceptions()
    * is not a bug as it is defined a .set directly in asm...
    */
   exception_config.defaultRawEntry.hdl.raw_hdl_size = (unsigned) default_exception_vector_code_prolog_size;
+
+  switch ( get_ppc_cpu_type() ) {
+    case PPC_603e:
+    case PPC_8240:
+      has_shadowed_gprs = 1;  
+    default: break;
+  }
   for (i=0; i <= exception_config.exceptSize; i++) {
     if (!mpc60x_vector_is_valid (i)) {
       continue;
     }
     exception_table[i].exceptIndex	= i;
-    exception_table[i].hdl		= exception_config.defaultRawEntry.hdl;
+    if ( has_shadowed_gprs
+         && (   ASM_IMISS_VECTOR  == i
+             || ASM_DLMISS_VECTOR == i
+             || ASM_DSMISS_VECTOR == i ) ) {
+      exception_table[i].hdl.raw_hdl	  = tgpr_clr_exception_vector_code_prolog;
+      exception_table[i].hdl.raw_hdl_size = (unsigned)tgpr_clr_exception_vector_code_prolog_size;
+    } else {
+      exception_table[i].hdl		  = exception_config.defaultRawEntry.hdl;
+    }
     exception_table[i].hdl.vector	= i;
     exception_table[i].on		= nop_except_enable;
     exception_table[i].off		= nop_except_enable;

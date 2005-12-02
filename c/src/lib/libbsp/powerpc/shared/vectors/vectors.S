@@ -11,6 +11,7 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <bsp/vectors.h>
+#include <libcpu/raw_exception.h>
 
 #define SYNC \
 	sync; \
@@ -28,23 +29,46 @@ SYM (__rtems_start):
 	 * end of special Entry point section
 	 */
 	.text
-	.p2align 5
-
+	/* 603e shadows GPR0..GPR3 for certain exceptions. We must switch
+	 * that off before we can use the stack pointer. Note that this is
+	 * ONLY safe if the shadowing is actually active -- otherwise, r1
+         * is destroyed. We deliberately use r1 so problems become obvious
+	 * if this is abused!
+	 */
+PUBLIC_VAR(tgpr_clr_exception_vector_code_prolog)
+SYM (tgpr_clr_exception_vector_code_prolog):
+	mfmsr	r1
+	rlwinm	r1,r1,0,15,13
+	mtmsr	r1
+	isync
+	/* fall thru */
 PUBLIC_VAR(default_exception_vector_code_prolog)
 SYM (default_exception_vector_code_prolog):
 	/*
 	 * let room for exception frame
 	 */
-	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
-	stw	r3, GPR3_OFFSET(r1)
-	/* R2 should never change (EABI: pointer to .sdata2) - we
-     * save it nevertheless..
-	 */
-	stw	r2, GPR2_OFFSET(r1)
+	stw	r3, GPR3_OFFSET-EXCEPTION_FRAME_END(r1)
 	mflr	r3
-	stw	r3, EXC_LR_OFFSET(r1)
-	bl	0f
-0:	/*
+	stw	r3, EXC_LR_OFFSET-EXCEPTION_FRAME_END(r1)
+	bla	push_normalized_frame
+
+	/* IMPORTANT: prologue size MUST be < 32 bytes; 'altivec unavailable' exception
+	 *            is already at 0xf20 :-(
+	 */
+
+	PUBLIC_VAR (default_exception_vector_code_prolog_size)
+	PUBLIC_VAR (tgpr_clr_exception_vector_code_prolog_size)
+
+	default_exception_vector_code_prolog_size = . - default_exception_vector_code_prolog
+	tgpr_clr_exception_vector_code_prolog_size= . - tgpr_clr_exception_vector_code_prolog
+
+	.p2align 5
+PUBLIC_VAR (push_normalized_frame)
+SYM (push_normalized_frame):
+	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
+	mfcr	r3
+	stw	r3,  EXC_CR_OFFSET(r1)
+	/*
 	 * r3 = exception vector entry point
 	 * (256 * vector number) + few instructions
 	 */
@@ -53,25 +77,20 @@ SYM (default_exception_vector_code_prolog):
 	 * r3 = r3 >> 8 = vector
 	 */
 	srwi	r3,r3,8
-	ba	push_normalized_frame
-
-	PUBLIC_VAR (default_exception_vector_code_prolog_size)
-
-	default_exception_vector_code_prolog_size= . - default_exception_vector_code_prolog
-
-	.p2align 5
-PUBLIC_VAR (push_normalized_frame)
-SYM (push_normalized_frame):
 	stw	r3, EXCEPTION_NUMBER_OFFSET(r1)
 	stw	r0, GPR0_OFFSET(r1)
+	/* R2 should never change (EABI: pointer to .sdata2) - we
+	 * save it nevertheless..
+	 */
+	stw	r2, GPR2_OFFSET(r1)
 	mfsrr0  r3
 	stw	r3, SRR0_FRAME_OFFSET(r1)
 	mfsrr1  r3
 	stw	r3, SRR1_FRAME_OFFSET(r1)
 	/*
 	 * Save general purpose registers
-	 * Already saved in prolog : R1, R2, R3, LR.
-	 * Saved a few line above  : R0
+	 * Already saved in prolog : R1, R3, LR.
+	 * Saved a few line above  : R0, R2
 	 *
 	 * Manual says that "stmw" instruction may be slower than
 	 * series of individual "stw" but who cares about performance
@@ -79,8 +98,6 @@ SYM (push_normalized_frame):
 	 */
 	stmw	r4, GPR4_OFFSET(r1)	/* save R4->R31 */
 
-	mfcr	r31
-	stw	r31,  EXC_CR_OFFSET(r1)
 	mfctr	r30
 	stw	r30,  EXC_CTR_OFFSET(r1)
 	mfxer	r28

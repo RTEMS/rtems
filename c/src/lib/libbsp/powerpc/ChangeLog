@@ -1,3 +1,11 @@
+2005-12-01	Till Straumann <strauman@slac.stanford.edu>
+	* shared/vectors/vectors.h, shared/vectors/vectors.S,
+        shared/vectors/vectors_init.c: Reduced size of default
+        prologue (some exceptions, e.g., altivec unavail.) are only
+        0x20 bytes apart. Also introduced a modified prologue
+        that switches r0..r3 shadowing off (r0..r3 undefined
+        on certain 603e variants when incurring a TLB miss).
+
 2005-11-29	Till Straumann <strauman@slac.stanford.edu>
 	* shared/irq/irq_asm.S, shared/vectors/vectors.S: Clear
         CR[6] before invoking high-level handler to make sure no
