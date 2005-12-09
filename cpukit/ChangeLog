@@ -1,3 +1,9 @@
+2005-11-02	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 849/networking
+	* librpc/src/rpc/rtems_portmapper.c: Increased stack size
+    by ARGSIZE to prevent overrun.
+
 2005-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New header guard for cpuopts.h.
