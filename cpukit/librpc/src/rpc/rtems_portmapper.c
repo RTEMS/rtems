@@ -470,7 +470,7 @@ int rtems_rpc_start_portmapper (int priority)
 	}
 	sc = rtems_task_create (rtems_build_name('P', 'M', 'A', 'P'),
 		priority,
-		8000,
+		ARGSIZE + 8000,
 		RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
 		RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
 		&tid);
