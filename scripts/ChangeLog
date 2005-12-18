@@ -1,3 +1,9 @@
+2005-12-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* common/common.add.in: Remove __os_install_post.
+	* cpukit/rtems-cpukit.add, gdb/gdb.add, rtems/rtems.add, 
+	rtemsdoc/rtemsdoc.add: Add __os_install_post.
+
 2005-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/gccnewlib.add: Rename src.rpm back to
