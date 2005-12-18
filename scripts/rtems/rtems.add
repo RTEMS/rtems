@@ -7,6 +7,9 @@ License:	Distributable
 Version:      	@rtems_version@
 Source:       	ftp://ftp.rtems.org/pub/rtems/%{version}/rtems-%{version}.tar.bz2
 
+# Work around to a bug in rpm-4.2
+%define __os_install_post	%{nil}
+
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target

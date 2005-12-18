@@ -24,6 +24,9 @@ Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}@gdb_suffix@
 BuildRequires:	ncurses-devel
 %endif
 
+# Work around to a bug in rpm-4.2
+%define __os_install_post	%{nil}
+
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
