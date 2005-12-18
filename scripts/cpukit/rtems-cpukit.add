@@ -7,7 +7,6 @@ Release:      @Release@
 License:      Various, Open Source.
 Group:        %{rpmgroup}
 
-Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
 BuildRequires:    @rpmprefix@%{rtems_target}-binutils
 BuildRequires:    @rpmprefix@%{rtems_target}-gcc 
 
