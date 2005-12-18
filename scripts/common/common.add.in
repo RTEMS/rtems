@@ -18,8 +18,5 @@
 %define _exeext %{nil}
 %endif
 
-# Work around to a bug in rpm-4.2
-%define __os_install_post	%{nil}
-
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
