@@ -44,3 +44,4 @@ This is gcc for %{gcc_target}.
 %dir %{gccexec}/%{gcc_target}/%{gcc_version}
 %{gccexec}/%{gcc_target}/%{gcc_version}/cc1%{_exeext}
 %{gccexec}/%{gcc_target}/%{gcc_version}/collect2%{_exeext}
+

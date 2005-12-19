@@ -31,3 +31,4 @@ This is the gcc/gnat compiler for %{gcc_target}
 %{gcclib}/%{gcc_target}/%{gcc_version}/adalib
 %{gcclib}/%{gcc_target}/%{gcc_version}/adainclude
 %endif
+

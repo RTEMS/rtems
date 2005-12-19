@@ -50,3 +50,4 @@ This is the gcc/java compiler for %{gcc_target}
 %{gccexec}/%{gcc_target}/%{gcc_version}/jvgenmain%{_exeext}
 
 %endif
+

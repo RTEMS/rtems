@@ -20,3 +20,4 @@ This is the newlib C Library for %{gcc_target}.
 %endif
 %dir %{_prefix}/%{gcc_target}
 %{_prefix}/%{gcc_target}/include
+
