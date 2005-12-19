@@ -7,11 +7,12 @@
 
 Release:        @Release@
 Version:      	%{gccnewlib_version}
+URL:		http://gcc.gnu.org
 
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}@gcc_suffix@
-Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}@newlib_suffix@
+Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_version}@gcc_suffix@
+Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}@newlib_suffix@
 @PATCH0@
-@PATCH1@
+@PATCH50@
 Source98:	brp-rtems-strip.in
 Source99:	brp-rtems-compress.in
 
@@ -37,7 +38,7 @@ License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 # Or you can try the ftp options of rpm :-)
 #
 %{?!_with_sources:NoSource:	0}
-%{?!_with_sources:NoSource:	1}
+%{?!_with_sources:NoSource:	50}
 
 %description
 RTEMS is an open source operating system for embedded systems.
@@ -128,8 +129,7 @@ BuildRequires:	zlib-devel
 # Building gnat requires gnat
 # This really isn't available until RedHat 8.0.  How to conditionalize this?
 BuildRequires:	gcc-gnat
-# Urgh, building gnat requires the target c-toolchain
-# BuildRequires:  @rpmprefix@%{gcc_target}-gcc < %{gcc_version}-%{release}
+# Urgh, building gnat requires the target libc
 BuildRequires:	@rpmprefix@%{gcc_target}-libc < %{newlib_version}-%{release}
 %endif
 %if %build_f95
@@ -153,13 +153,16 @@ BuildRequires: gmp-devel
 
 %prep
 # untar the sources inside %{gcc_target}-gcc-newlib
-%setup -c -T -n %{name}-%{version} -a0 -a1
+%setup -c -T -n %{name}-%{version}
 
+%setup -T -D -n %{name}-%{version} -a0
 cd gcc-%{gcc_version}
 %{?PATCH0:%patch0 -p1}
 cd ..
+
+%setup -T -D -n %{name}-%{version} -a50
 cd newlib-%{newlib_version}
-%{?PATCH1:%patch1 -p1}
+%{?PATCH50:%patch50 -p1}
 cd ..
 
 sed 's,@BRPSTRIPPATH@,.%_bindir .%_prefix/%gcc_target/bin,' \
@@ -266,8 +269,6 @@ chmod +x brp-rtems-compress
     install-info
   # cd back to build/
   cd ../..
-
-  # Bug in gcc-3.x: It puts the build dirs into *.la files
 
   # host library
   rm -f  ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty.a
@@ -402,3 +403,4 @@ chmod +x brp-rtems-compress
   done
 
   cd ..
+
