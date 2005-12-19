@@ -21,6 +21,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+#include <stdio.h>
 #include <string.h>
 #include <errno.h>
  
@@ -533,4 +534,40 @@ BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr
     }
     *plocaladdr = vmeaddr + offset;
     return 0;
+}
+
+void
+rtems_bsp_reset_cause(char *buf, size_t capacity)
+{
+   int bit, rsr;
+   size_t i;
+   const char *cp;
+    
+    if (buf == NULL)
+        return;
+    if (capacity)
+        buf[0] = '\0';
+    rsr = MCF5282_RESET_RSR;
+    for (i = 0, bit = 0x80 ; bit != 0 ; bit >>= 1) {
+        if (rsr & bit) {
+            switch (bit) {
+            case MCF5282_RESET_RSR_SOFT: cp = "Software reset";     break;
+            case MCF5282_RESET_RSR_WDR:  cp = "Watchdog reset";     break;
+            case MCF5282_RESET_RSR_POR:  cp = "Power-on reset";     break;
+            case MCF5282_RESET_RSR_EXT:  cp = "External reset";     break;
+            case MCF5282_RESET_RSR_LOC:  cp = "Loss of clock";      break;
+            case MCF5282_RESET_RSR_LOL:  cp = "Loss of lock";       break;
+            default:                     cp = "??";                 break;
+            }
+            i += snprintf(buf+i, capacity-i, cp); 
+            if (i >= capacity)
+                break;
+            rsr &= ~bit;
+            if (rsr == 0)
+                break;
+            i += snprintf(buf+i, capacity-i, ", "); 
+            if (i >= capacity)
+                break;
+        }
+    }
 }
