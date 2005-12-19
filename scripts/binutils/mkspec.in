@@ -49,7 +49,7 @@ target_alias=$1
 . ./$CFG
 
 if test -n "${binutils_patch_version}"; then
-PATCH1="Patch0: binutils-${binutils_version}-rtems-${binutils_patch_version}.diff"
+PATCH1="Patch0:		binutils-${binutils_version}-rtems-${binutils_patch_version}.diff"
 fi
 
 sed -e "s,@Release\@,${binutils_rpm_release},g" \

@@ -2,17 +2,17 @@
 %define binutils_version     @binutils_version@
 %define binutils_target      @target_alias@
 
-Name:         @rpmprefix@%{binutils_target}-binutils
-Summary:      binutils for target %{binutils_target}
-Group:        %{rpmgroup}
-Release:      @Release@
-License:      GPL/LGPL
+Name:		@rpmprefix@%{binutils_target}-binutils
+Summary:	Binutils for target %{binutils_target}
+Group:		%{rpmgroup}
+Release:	@Release@
+License:	GPL/LGPL
 
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	flex
 
-Version:      	%{binutils_version}
+Version:	%{binutils_version}
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutils_suffix@
 @PATCH1@
 
@@ -116,3 +116,4 @@ cd ..
   rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-windres*
 
   cd ..
+

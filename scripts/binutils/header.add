@@ -1,4 +1,6 @@
 #
-# spec file for binutils package targetting @target_alias@
-# 
-# Copyright  (c)  1999,2000,2002 OARCorp, Huntsville, AL
+# spec file for building binutils for @target_alias@
+#
+# supported --with/--without options:
+# --with sources	build src.rpm instead of nosrc.rpm
+#
