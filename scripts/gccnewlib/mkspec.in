@@ -49,16 +49,16 @@ target_alias=$1
 . ./$CFG
 
 if test -n "${gcc_patch_version}"; then
-PATCH0="Patch0: gcc-${gcc_version}-rtems-${gcc_patch_version}.diff"
+PATCH0="Patch0:		gcc-${gcc_version}-rtems-${gcc_patch_version}.diff"
 fi
 
 if test -n "${newlib_patch_version}"; then
-PATCH1="Patch1: newlib-${newlib_version}-rtems-${newlib_patch_version}.diff"
+PATCH50="Patch50:	newlib-${newlib_version}-rtems-${newlib_patch_version}.diff"
 fi
 
 # note that the variables in the gccnewlib directory are actually the same
 sed -e "s,@PATCH0\@,${PATCH0}," \
-    -e "s,@PATCH1\@,${PATCH1}," \
+    -e "s,@PATCH50\@,${PATCH50}," \
     -e "s,@Release\@,${gccnewlib_rpm_release},g" \
     -e "s,@target_alias\@,${target_alias},g" \
     -e "s,@prefix\@,@prefix@,g" \
