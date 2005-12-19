@@ -1,3 +1,10 @@
+2005-12-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* binutils/binutils.add: Add URL:.
+	* gccnewlib/gccnewlib.add: Add URL:.
+	Use Source50/Patch50 for newlib.
+	* gccnewlib/mkspec.in: Use Source50/Patch50 for newlib.
+
 2005-12-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* common/common.add.in: Remove __os_install_post.
