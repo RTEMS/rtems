@@ -7,6 +7,7 @@ Summary:	Binutils for target %{binutils_target}
 Group:		%{rpmgroup}
 Release:	@Release@
 License:	GPL/LGPL
+URL: 		http://sources.redhat.com/binutils
 
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
