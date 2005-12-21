@@ -1,3 +1,7 @@
+2005-12-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gdb/gdb.add: Add URL:.
+
 2005-12-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/binutils.add: Add URL:.

@@ -2,21 +2,22 @@
 %define gdb_version	@gdb_version@
 %define gdb_target	@target_alias@
 
-Name:         @rpmprefix@%{gdb_target}-gdb
-Release:      @Release@
-License:      GPL/LGPL
-Group:        %{rpmgroup}
+Name:		@rpmprefix@%{gdb_target}-gdb
+Release:	@Release@
+License:	GPL/LGPL
+Group:		%{rpmgroup}
 
-Version:      %{gdb_version}
-Summary:      gdb for target %{gdb_version}
+Version:	%{gdb_version}
+Summary:	gdb for target %{gdb_version}
+URL:		http://gnu.org/software/gdb
 
 %if "%{gdb_version}" < "6.0"
-Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}@gdb_suffix@
-Patch0:	      gdb-%{gdb_version}-rtems-base-@gdb_patch_version@.diff
-Patch1:	      gdb-%{gdb_version}-rtems-cg-@gdb_patch_version@.diff
-Patch2:	      gdb-%{gdb_version}-rtems-rdbg-@gdb_patch_version@.diff
+Source0:	ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}@gdb_suffix@
+Patch0:		gdb-%{gdb_version}-rtems-base-@gdb_patch_version@.diff
+Patch1:		gdb-%{gdb_version}-rtems-cg-@gdb_patch_version@.diff
+Patch2:		gdb-%{gdb_version}-rtems-rdbg-@gdb_patch_version@.diff
 %else
-Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}@gdb_suffix@
+Source0:	ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}@gdb_suffix@
 @PATCH1@
 %endif
 
@@ -155,3 +156,4 @@ cd ..
 
   # gzip man pages
   gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/*.? 2>/dev/null
+
