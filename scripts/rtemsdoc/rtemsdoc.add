@@ -6,11 +6,9 @@
 
 Name:         @rpmprefix@rtemsdoc
 Release:      @rtems_rpm_release@
-Epoch:	      0
 License:      Distributable
 Group:        %{rpmgroup}/Documentation
 
-Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	tetex
 BuildRequires:	perl
