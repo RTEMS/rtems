@@ -3,7 +3,7 @@
 # %{gcc_target}-gnat
 # ==============================================================
 %package -n @rpmprefix@%{gcc_target}-gnat
-Summary:        gcc/gnat compiler for %{gcc_target}
+Summary:        Ada support for for %{gcc_target}-gcc
 Group:          %{rpmgroup}
 Version:        %{gcc_version}
 License:	GPL
@@ -16,7 +16,7 @@ Requires:       @rpmprefix@%{gcc_target}-gcc = %{gcc_version}-%{release}
 %description -n @rpmprefix@%{gcc_target}-gnat
 RTEMS is an open source operating system for embedded systems.
 
-This is the gcc/gnat compiler for %{gcc_target}
+This is the gcc/gnat compiler for %{gcc_target}.
 
 %files -n @rpmprefix@%{gcc_target}-gnat
 %defattr(-,root,root)

@@ -1,4 +1,6 @@
 #
-# spec file for building gdb for rtems
-# 
-# Copyright  (c)  1999  OARCorp, Huntsville, AL
+# spec file for building gdb for @target_alias@
+#
+# supported --with/--without options:
+# --with sources	build src.rpm instead of nosrc.rpm
+#

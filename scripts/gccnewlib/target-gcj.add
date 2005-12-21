@@ -3,7 +3,7 @@
 # %{gcc_target}-gcj
 # ==============================================================
 %package -n @rpmprefix@%{gcc_target}-gcj
-Summary:        gcc/java compiler (gcj) for %{gcc_target}
+Summary:        Java support (gcj) for %{gcc_target}-gcc
 Group:          %{rpmgroup}
 Version:	%{gcc_version}
 License:	GPL

@@ -2,7 +2,7 @@
 # %{gcc_target}-libc
 # ==============================================================
 %package -n @rpmprefix@%{gcc_target}-libc
-Summary:      	newlib C Library for %{gcc_target}
+Summary:      	C Library (newlib) for %{gcc_target}
 Group: 		%{rpmgroup}
 License:	Distributable
 Version:	%{newlib_version}

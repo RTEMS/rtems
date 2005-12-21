@@ -3,7 +3,7 @@
 # %{gcc_target}-g77
 # ==============================================================
 %package -n @rpmprefix@%{gcc_target}-g77
-Summary:        gcc/g77 compiler for %{gcc_target}
+Summary:        Fortran 77 support for %{gcc_target}-gcc
 Group:          %{rpmgroup}
 Version:	%{gcc_version}
 License:	GPL
@@ -13,7 +13,7 @@ Requires:       @rpmprefix@%{gcc_target}-gcc = %{gcc_version}-%{release}
 %description -n @rpmprefix@%{gcc_target}-g77
 RTEMS is an open source operating system for embedded systems.
 
-This is the gcc/g77 compiler for %{gcc_target}
+This is the gcc/g77 compiler for %{gcc_target}.
 
 %files -n @rpmprefix@%{gcc_target}-g77 -f build/files.g77
 %defattr(-,root,root)

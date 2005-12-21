@@ -22,7 +22,7 @@ BuildRequires:	texinfo >= 4.2
 BuildRequires:	@rpmprefix@%{gcc_target}-binutils
 
 Name:           @rpmprefix@%{gcc_target}-gcc-newlib
-Summary:        gcc and newlib C Library for %{gcc_target}.
+Summary:        GCC and newlib C Library for %{gcc_target}.
 Group:          %{rpmgroup}
 License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
