@@ -4,7 +4,7 @@
 # rtems-base-gnat
 # ==============================================================
 %package -n @rpmprefix@rtems@osversion@-base-gnat
-Summary:	gcc/gnat tools
+Summary:	Base package for RTEMS gcc/gnat compiler
 Group: 		%{rpmgroup}
 License:	GPL
 

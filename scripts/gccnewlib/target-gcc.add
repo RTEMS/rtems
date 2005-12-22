@@ -2,7 +2,7 @@
 # %{gcc_target}-gcc
 # ==============================================================
 %package -n @rpmprefix@%{gcc_target}-gcc
-Summary:        GNU cc compiler for %{gcc_target}.
+Summary:        GNU cc compiler for %{gcc_target}
 Group:          %{rpmgroup}
 Version:        %{gcc_version}
 Requires:       @rpmprefix@%{gcc_target}-binutils

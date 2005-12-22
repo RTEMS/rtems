@@ -4,7 +4,7 @@
 # rtems-base-gfortran
 # ==============================================================
 %package -n @rpmprefix@rtems@osversion@-base-gfortran
-Summary:	rtems base package for gcc/gfortran compiler
+Summary:	Base package for RTEMS gcc/gfortran compiler
 Group:          %{rpmgroup}
 License:	GPL
 
