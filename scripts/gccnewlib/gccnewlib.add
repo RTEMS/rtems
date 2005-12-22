@@ -5,8 +5,12 @@
 
 %define gcc_target	@target_alias@
 
-Release:        @Release@
+Name:           @rpmprefix@%{gcc_target}-gcc-newlib
+Summary:        GCC and newlib C Library for %{gcc_target}
+Group:          %{rpmgroup}
+License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 Version:      	%{gccnewlib_version}
+Release:        @Release@
 URL:		http://gcc.gnu.org
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_version}@gcc_suffix@
@@ -21,10 +25,6 @@ Source99:	brp-rtems-compress.in
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	@rpmprefix@%{gcc_target}-binutils
 
-Name:           @rpmprefix@%{gcc_target}-gcc-newlib
-Summary:        GCC and newlib C Library for %{gcc_target}.
-Group:          %{rpmgroup}
-License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
 #
 # The original sources are not included in the source RPM.
@@ -121,7 +121,7 @@ This is gcc for %{gcc_target}.
 BuildRequires:	bison
 %endif
 
-%if "%_vendor" == "redhat"
+%if "%{_vendor}" == "redhat"
 %if %build_gcj
 BuildRequires:	zlib-devel
 %endif
@@ -184,9 +184,10 @@ chmod +x brp-rtems-compress
 
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_version}
-  mkdir -p build
 
 %build
+  mkdir -p build
+
   cd build
 
   languages="c"
@@ -239,10 +240,15 @@ chmod +x brp-rtems-compress
 %endif
 
   make all
+%if "%{_prefix}" != "/usr"
   make info
+%endif
+  cd ..
 
 %install
+%if "%{_prefix}" != "/usr"
   export PATH="%{_bindir}:${PATH}"
+%endif
   rm -rf $RPM_BUILD_ROOT
 
   cd build
@@ -259,6 +265,8 @@ chmod +x brp-rtems-compress
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     install
+
+%if "%{_prefix}" != "/usr"
   cd %{gcc_target}/newlib
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
@@ -269,6 +277,7 @@ chmod +x brp-rtems-compress
     install-info
   # cd back to build/
   cd ../..
+%endif
 
   # host library
   rm -f  ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty.a
@@ -281,9 +290,11 @@ chmod +x brp-rtems-compress
   rm -f $RPM_BUILD_ROOT%{_bindir}/vxaddr2line%{_exeext}
 %endif
 
+%if "%{_prefix}" != "/usr"
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
+%endif
 
 %if "%{_prefix}" == "/usr"
 # Conflict with a native GCC's infos
