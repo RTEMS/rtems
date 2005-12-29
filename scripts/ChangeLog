@@ -1,6 +1,8 @@
 2005-12-29	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* binutils/binutils.add: Remove BuildRoot.
+	* cpukit/rtems-cpukit: Add BuildRoot.
+	* gccnewlib/gccnewlib.add: Add BuildRoot.
+	* binutils/binutils.add: Add BuildRoot.
 	Don't build infos for prefix==/usr.
 	* common/common.add.in: Remove BuildRoot.
 	* autotools/autoconf.add, autotools/automake.add:
