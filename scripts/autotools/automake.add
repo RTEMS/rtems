@@ -17,15 +17,14 @@
 %endif
 
 Name:         %{name}
-Packager:     Ralf Corsepius <ralf_corsepius@rtems.org>
 URL: 	      http://sources.redhat.com/automake
-
 License:      GPL
 Group:        @rpmgroup@
-
 Version:      %{rpmvers}
 Release:      0%{?dist}
 Summary:      Tool for automatically generating GNU style Makefile.in's
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:    noarch
 BuildRequires:  %{requirements} perl help2man
 Requires:     %{requirements}
