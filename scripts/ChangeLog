@@ -1,5 +1,6 @@
 2005-12-29	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* common/common.add.in: Remove BuildRoot.
 	* autotools/autoconf.add, autotools/automake.add:
 	Add BuildRoot. Remove Packager.
 
