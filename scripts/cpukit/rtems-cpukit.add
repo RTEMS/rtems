@@ -6,6 +6,7 @@ Name:         @rpmprefix@@target_alias@-cpukit
 Release:      @Release@
 License:      Various, Open Source.
 Group:        %{rpmgroup}
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:    @rpmprefix@%{rtems_target}-binutils
 BuildRequires:    @rpmprefix@%{rtems_target}-gcc 
