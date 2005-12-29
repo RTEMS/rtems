@@ -1,5 +1,8 @@
 2005-12-29	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+
+	* gdb/gdb.add, rtems/rtems.add, rtemsdoc/rtemsdoc.add:
+	Add BuildRoot.
 	* cpukit/rtems-cpukit: Add BuildRoot.
 	* gccnewlib/gccnewlib.add: Add BuildRoot.
 	* binutils/binutils.add: Add BuildRoot.
