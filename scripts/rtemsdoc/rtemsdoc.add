@@ -8,6 +8,7 @@ Name:         @rpmprefix@rtemsdoc
 Release:      @rtems_rpm_release@
 License:      Distributable
 Group:        %{rpmgroup}/Documentation
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	tetex

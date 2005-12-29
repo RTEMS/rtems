@@ -3,8 +3,9 @@ Summary:	A free operating system for embedded systems
 Group:		%{rpmgroup}
 Release:	@Release@
 License:	Distributable
-
 Version:      	@rtems_version@
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
 Source:       	ftp://ftp.rtems.org/pub/rtems/%{version}/rtems-%{version}.tar.bz2
 
 # Work around to a bug in rpm-4.2

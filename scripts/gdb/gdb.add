@@ -10,6 +10,7 @@ Group:		%{rpmgroup}
 Version:	%{gdb_version}
 Summary:	gdb for target %{gdb_version}
 URL:		http://gnu.org/software/gdb
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if "%{gdb_version}" < "6.0"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}@gdb_suffix@
