@@ -5,15 +5,19 @@
 Name:		@rpmprefix@%{binutils_target}-binutils
 Summary:	Binutils for target %{binutils_target}
 Group:		%{rpmgroup}
+Version:	%{binutils_version}
 Release:	@Release@
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if "%{_prefix}" != "/usr"
+# Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
+%endif
 BuildRequires:	flex
 
-Version:	%{binutils_version}
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutils_suffix@
 @PATCH1@
 
@@ -56,9 +60,8 @@ cd binutils-%{version}
 %{?PATCH0:%patch0 -p1}
 cd ..
 
-  mkdir -p build
-
 %build
+  mkdir -p build
   cd build
   CFLAGS="$RPM_OPT_FLAGS" \
   ../binutils-%{binutils_version}/configure \
@@ -70,8 +73,10 @@ cd ..
     --mandir=%{_mandir} --infodir=%{_infodir} \
 
   make all
+%if "%{_prefix}" != "/usr"
   make info
-
+%endif
+  cd ..
 
 %install
   rm -rf $RPM_BUILD_ROOT
@@ -84,6 +89,8 @@ cd ..
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     install
+
+%if "%{_prefix}" != "/usr"
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
     includedir=$RPM_BUILD_ROOT%{_includedir} \
@@ -91,6 +98,7 @@ cd ..
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     install-info
+%endif
 
 # A bug in binutils: binutils does not install share/locale
 # however it uses it
