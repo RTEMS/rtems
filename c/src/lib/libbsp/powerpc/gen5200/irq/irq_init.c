@@ -30,6 +30,9 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.2  2005/12/31 09:28:01  ralf
+|* Misc include file fixes.
+|*
 |* Revision 1.1  2005/12/31 05:09:26  ralf
 |* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
 |* submission).
@@ -96,13 +99,11 @@
 /*                                                                     */
 /***********************************************************************/
 
-/*#include <bsp.h>*/
 #include <bsp.h>
 #include <rtems.h>
-/*#include "../irq/irq.h"*/
 #include "../irq/irq.h"
 #include <rtems/bspIo.h>
-#include "../include/raw_exception.h"
+#include <libcpu/raw_exception.h>
 #include "../include/mpc5200.h"
 
 extern unsigned int external_exception_vector_prolog_code_size;

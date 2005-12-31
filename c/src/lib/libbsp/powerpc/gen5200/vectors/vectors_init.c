@@ -30,6 +30,9 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.2  2005/12/31 09:28:02  ralf
+|* Misc include file fixes.
+|*
 |* Revision 1.1  2005/12/31 05:09:26  ralf
 |* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
 |* submission).
@@ -93,7 +96,7 @@
 /***********************************************************************/
 
 #include "../vectors/vectors.h"
-#include "../include/raw_exception.h"
+#include <libcpu/raw_exception.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
