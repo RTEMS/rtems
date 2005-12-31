@@ -1,5 +1,10 @@
 2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* include/raw_exception.h, vectors/raw_exception.c: Remove.
+	Use implementation from libcpu instead.
+
+2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* bestcomm/bestcomm_glue.c, clock/clock.c, console/console.c,
 	i2c/i2c.c, i2c/i2cdrv.c, ide/idecfg.c, ide/pcmcia_ide.c,
 	ide/pcmcia_ide.h, include/i2c.h, irq/irq.c, irq/irq_init.c,
