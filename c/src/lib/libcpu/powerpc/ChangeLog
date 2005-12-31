@@ -1,4 +1,9 @@
-2005-11-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 851/bsps
+	* mpc6xx/exceptions/raw_exception.c: Add PPC_603le.
+
+2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* mpc6xx/exceptions/raw_exception.c: Cosmetics.
 

@@ -176,6 +176,7 @@ int mpc60x_vector_is_valid(rtems_vector vector)
             break;
         case PPC_603:
         case PPC_603e:
+        case PPC_603le:
         case PPC_603ev:
         case PPC_8260:
         /* case PPC_8240: -- same value as 8260 */
