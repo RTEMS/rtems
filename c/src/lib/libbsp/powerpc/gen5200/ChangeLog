@@ -1,0 +1,40 @@
+2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am, README, bsp_specs, configure.ac,
+	bestcomm/bestcomm_api.c, bestcomm/bestcomm_api.h,
+	bestcomm/bestcomm_glue.c, bestcomm/bestcomm_glue.h,
+	bestcomm/bestcomm_priv.h, bestcomm/dma_image.c,
+	bestcomm/dma_image.capi.h, bestcomm/dma_image.h,
+	bestcomm/dma_image.reloc.c, bestcomm/load_task.c,
+	bestcomm/tasksetup_ata.c, bestcomm/tasksetup_bdtable.c,
+	bestcomm/tasksetup_crc16_dp_0.c, bestcomm/tasksetup_crc16_dp_1.c,
+	bestcomm/tasksetup_fec_rx_bd.c, bestcomm/tasksetup_fec_tx_bd.c,
+	bestcomm/tasksetup_gen_dp_0.c, bestcomm/tasksetup_gen_dp_1.c,
+	bestcomm/tasksetup_gen_dp_2.c, bestcomm/tasksetup_gen_dp_3.c,
+	bestcomm/tasksetup_gen_dp_bd_0.c, bestcomm/tasksetup_gen_dp_bd_1.c,
+	bestcomm/tasksetup_gen_rx_bd.c, bestcomm/tasksetup_gen_tx_bd.c,
+	bestcomm/tasksetup_lpc.c, bestcomm/tasksetup_pci_rx.c,
+	bestcomm/tasksetup_pci_tx.c, bestcomm/include/mgt5200/mgt5200.h,
+	bestcomm/include/mgt5200/sdma.h,
+	bestcomm/task_api/bestcomm_api_mem.h,
+	bestcomm/task_api/bestcomm_cntrl.h,
+	bestcomm/task_api/tasksetup_bdtable.h,
+	bestcomm/task_api/tasksetup_general.h, clock/clock.c,
+	console/console.c, i2c/i2c.c, i2c/i2cdrv.c, i2c/mpc5200mbus.c,
+	i2c/mpc5200mbus.h, ide/idecfg.c, ide/pcmcia_ide.c, ide/pcmcia_ide.h,
+	include/bsp.h, include/coverhd.h, include/i2c.h, include/i2cdrv.h,
+	include/mpc5200.h, include/raw_exception.h, include/tm27.h,
+	include/u-boot.h, irq/irq.c, irq/irq.h, irq/irq_asm.S,
+	irq/irq_init.c, mscan/mscan.c, mscan/mscan.h,
+	network_5200/network.c, nvram/m93cxx.h, nvram/nvram.c,
+	nvram/nvram.h, slicetimer/slicetimer.c, slicetimer/slicetimer.h,
+	start/start.S, startup/bspstart.c, startup/cpuinit.c,
+	startup/linkcmds, startup/linkcmds.pm520, tod/pcf8563.c,
+	tod/pcf8563.h, tod/todcfg.c, vectors/asm_utils.S,
+	vectors/raw_exception.c, vectors/vectors.S, vectors/vectors.h,
+	vectors/vectors_init.c: New (CVS import submission by 
+	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>)
+
+2005-12-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Integrated gen5200 BSP to source tree
