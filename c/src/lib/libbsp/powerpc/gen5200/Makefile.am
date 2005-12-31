@@ -32,8 +32,9 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.pm520
 
 noinst_PROGRAMS += bestcomm.rel
-bestcomm_rel_SOURCES = bestcomm/bestcomm_api.c bestcomm/bestcomm_glue.c \
-    bestcomm/dma_image.c bestcomm/dma_image.reloc.c \
+bestcomm_rel_SOURCES = bestcomm/bestcomm_api.c bestcomm/bestcomm_api.h
+bestcomm_rel_SOURCES += bestcomm/bestcomm_glue.c bestcomm/bestcomm_glue.h
+bestcomm_rel_SOURCES += bestcomm/dma_image.c bestcomm/dma_image.reloc.c \
     bestcomm/load_task.c bestcomm/tasksetup_ata.c \
     bestcomm/tasksetup_bdtable.c bestcomm/tasksetup_crc16_dp_0.c \
     bestcomm/tasksetup_crc16_dp_1.c bestcomm/tasksetup_fec_rx_bd.c \
@@ -57,12 +58,13 @@ console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += i2c.rel
-i2c_rel_SOURCES = i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c
+i2c_rel_SOURCES = i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c \
+    i2c/mpc5200mbus.h
 i2c_rel_CPPFLAGS = $(AM_CPPFLAGS)
 i2c_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += ide.rel
-ide_rel_SOURCES = ide/idecfg.c ide/pcmcia_ide.c
+ide_rel_SOURCES = ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
 ide_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ide_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -80,7 +82,7 @@ mscan_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mscan_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += nvram.rel
-nvram_rel_SOURCES = nvram/nvram.c
+nvram_rel_SOURCES = nvram/nvram.c nvram/nvram.h nvram/m93cxx.h
 nvram_rel_CPPFLAGS = $(AM_CPPFLAGS)
 nvram_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -90,7 +92,8 @@ slicetimer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 slicetimer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += tod.rel
-tod_rel_SOURCES = tod/todcfg.c tod/pcf8563.c ../../shared/tod.c
+tod_rel_SOURCES = tod/todcfg.c tod/pcf8563.c tod/pcf8563.h \
+    ../../shared/tod.c
 tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -134,8 +137,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/exceptions.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
-EXTRA_DIST += times
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
