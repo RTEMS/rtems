@@ -1,5 +1,14 @@
 2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* bestcomm/bestcomm_glue.c, clock/clock.c, console/console.c,
+	i2c/i2c.c, i2c/i2cdrv.c, ide/idecfg.c, ide/pcmcia_ide.c,
+	ide/pcmcia_ide.h, include/i2c.h, irq/irq.c, irq/irq_init.c,
+	mscan/mscan.c, network_5200/network.c, nvram/nvram.c, nvram/nvram.h,
+	slicetimer/slicetimer.c, startup/bspstart.c, startup/cpuinit.c,
+	tod/todcfg.c, vectors/vectors_init.c: Misc include file fixes.
+
+2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* Makefile.am, README, bsp_specs, configure.ac,
 	bestcomm/bestcomm_api.c, bestcomm/bestcomm_api.h,
 	bestcomm/bestcomm_glue.c, bestcomm/bestcomm_glue.h,
