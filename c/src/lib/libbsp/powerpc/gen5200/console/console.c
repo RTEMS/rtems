@@ -30,6 +30,10 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.1  2005/12/31 05:09:25  ralf
+|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
+|* submission).
+|*
 |* Revision 1.11  2005/12/09 08:57:03  thomas
 |* added/modifed file headers
 |*
@@ -114,7 +118,7 @@
 
 #include <rtems.h>
 #include "../include/mpc5200.h"
-#include "../include/bsp.h"
+#include <bsp.h>
 #include "../irq/irq.h"
 
 #include <rtems/bspIo.h>

@@ -27,6 +27,10 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.1  2005/12/31 05:09:26  ralf
+|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
+|* submission).
+|*
 |* Revision 1.31  2005/12/11 23:00:27  peter
 |* initialization according to bitrate and max. no of tq per can bit
 |*
@@ -49,10 +53,10 @@
 #include <rtems/error.h>
 #include <rtems/libio.h>
 #include <string.h>
-#include "../include/bsp.h"
+#include <bsp.h>
 #include "../irq/irq.h"
 #include "../include/mpc5200.h"
-#include "../mscan/mscan.h"
+#include "mscan.h"
 
 /* #define MSCAN_LOOPBACK */
 

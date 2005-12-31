@@ -16,7 +16,7 @@
 #define __RTEMS__I2C_H__
 
 #include <rtems.h>
-#include "../include/bsp.h"
+#include <bsp.h>
 /* This header file define the generic interface to i2c buses available in
  * system. This interface may be used by user applications or i2c-device
  * drivers (like RTC, NVRAM, etc).

@@ -30,6 +30,10 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.1  2005/12/31 05:09:26  ralf
+|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
+|* submission).
+|*
 |* Revision 1.4  2005/12/09 08:57:03  thomas
 |* added/modifed file headers
 |*
@@ -98,13 +102,11 @@
 #include <rtems/libio.h>
 #include <errno.h>
 #include <string.h>
-/*#include "../include/bsp.h"*/
-#include "../include/bsp.h"
-#include "../include/mpc5200.h"
-/*#include "../nvram/nvram.h"*/
-#include "../nvram/nvram.h"
-#include "../nvram/m93cxx.h"
 #include <stdio.h>
+#include <bsp.h>
+#include "../include/mpc5200.h"
+#include "nvram.h"
+#include "m93cxx.h"
 
 /*
  * Simple usec delay function using lower half of HARPO Time Base Register

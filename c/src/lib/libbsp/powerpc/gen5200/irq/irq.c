@@ -30,6 +30,10 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.1  2005/12/31 05:09:26  ralf
+|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
+|* submission).
+|*
 |* Revision 1.6  2005/12/09 08:57:03  thomas
 |* added/modifed file headers
 |*
@@ -96,12 +100,9 @@
 /*                                                                     */
 /***********************************************************************/
 
-/*#include "../include/bsp.h"*/
-#include "../include/bsp.h"
+#include <bsp.h>
 #include <rtems.h>
-/*#include "../irq/irq.h"*/
 #include "../irq/irq.h"
-/*#include <rtems/score/thread.h>*/
 #include <rtems/score/apiext.h>
 #include <rtems/bspIo.h>
 #include "../include/raw_exception.h"

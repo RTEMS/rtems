@@ -30,6 +30,10 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.1  2005/12/31 05:09:25  ralf
+|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
+|* submission).
+|*
 |* Revision 1.8  2005/12/09 08:57:03  thomas
 |* added/modifed file headers
 |*
@@ -57,7 +61,7 @@
  * @(#) i2cdrv.c,v 1.6 2004/04/21 16:01:34 ralf Exp
  */
 
-#include "../include/bsp.h"
+#include <bsp.h>
 #include <stdlib.h>
 #include <string.h>
 

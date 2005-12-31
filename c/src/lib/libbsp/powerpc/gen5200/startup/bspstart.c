@@ -30,6 +30,10 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.1  2005/12/31 05:09:26  ralf
+|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
+|* submission).
+|*
 |* Revision 1.8  2005/12/09 08:57:03  thomas
 |* added/modifed file headers
 |*
@@ -114,8 +118,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/*#include "../include/bsp.h"*/
-#include "../include/bsp.h"
+#include <bsp.h>
 
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>

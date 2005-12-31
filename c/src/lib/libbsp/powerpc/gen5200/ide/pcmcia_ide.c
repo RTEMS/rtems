@@ -30,6 +30,10 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.1  2005/12/31 05:09:26  ralf
+|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
+|* submission).
+|*
 |* Revision 1.10  2005/12/09 09:05:16  thomas
 |* changed names of board variations
 |*
@@ -103,7 +107,7 @@
 
 #include <rtems.h>
 #include <rtems/error.h>
-#include "../include/bsp.h"
+#include <bsp.h>
 #include "../irq/irq.h"
 #include "../include/mpc5200.h"
 #include "./pcmcia_ide.h"

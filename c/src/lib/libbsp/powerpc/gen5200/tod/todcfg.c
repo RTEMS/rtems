@@ -30,6 +30,10 @@
 |*do not edit here)                                               |
 |*****************************************************************|
 |* $Log$
+|* Revision 1.1  2005/12/31 05:09:26  ralf
+|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
+|* submission).
+|*
 |* Revision 1.4  2005/12/06 14:11:12  thomas
 |* added EB file headers
 |*
@@ -51,7 +55,7 @@
  * @(#) todcfg.c,v 1.4 2005/01/22 04:12:39 ralf Exp
  */
 
-#include "../include/bsp.h"
+#include <bsp.h>
 #include "../include/i2c.h"
 #include <libchip/rtc.h>
 #include "../tod/pcf8563.h"

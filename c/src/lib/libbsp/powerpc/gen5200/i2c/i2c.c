@@ -11,7 +11,7 @@
  * @(#) i2c.c,v 1.5 2004/04/21 16:01:34 ralf Exp
  */
 
-#include "../include/bsp.h"
+#include <bsp.h>
 #include "../include/i2c.h"
 
 /* i2c_transfer_sema_done_func --
