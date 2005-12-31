@@ -26,9 +26,10 @@ AC_MSG_CHECKING([for available BSPs])
                              bsps="$bsps mbx860_002"
                              bsps="$bsps mbx860_005b"
                              ;;
+          gen5200)           bsps="pm520_cr825 pm520_ze30 brs5l";;
 	  motorola_powerpc)  bsps="mvme2307 mcp750 mtx603e mvme2100";;
 	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686 pck6";;
-	  erc32)             bsps="erc32 erc32nfp";;
+          erc32)             bsps="erc32 erc32nfp";;
 	  leon)              bsps="leon1 leon2";;
 	  sim68000)          bsps="sim68000 simcpu32";;
 	  shsim)             bsps="simsh7032 simsh7045";;
