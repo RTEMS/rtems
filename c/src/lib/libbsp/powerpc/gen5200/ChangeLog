@@ -1,5 +1,7 @@
 2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* irq/irq.c, irq/irq_init.c, vectors/vectors_init.c:
+	include <libcpu/raw_exceptions.h>.
 	* include/raw_exception.h, vectors/raw_exception.c: Remove.
 	Use implementation from libcpu instead.
 
