@@ -4,7 +4,7 @@
  *	 	      More detailed information can be found on motorola
  *	    	      site and more precisely in the following book :
  *
- *		      MPC750 
+ *		      MPC750
  *		      Risc Microporcessor User's Manual
  *		      Motorola REF : MPC750UM/AD 8/97
  *
@@ -223,14 +223,14 @@ int mpc60x_set_exception  (const rtems_raw_except_connect_data* except)
     }
 
     _CPU_ISR_Disable(level);
-    
+
     raw_except_table [except->exceptIndex] = *except;
     codemove((void*)mpc60x_get_vector_addr(except->exceptIndex),
 	     except->hdl.raw_hdl,
 	     except->hdl.raw_hdl_size,
 	     PPC_CACHE_ALIGNMENT);
     except->on(except);
-    
+
     _CPU_ISR_Enable(level);
     return 1;
 }
@@ -240,16 +240,16 @@ int mpc60x_get_current_exception (rtems_raw_except_connect_data* except)
   if (!mpc60x_vector_is_valid(except->exceptIndex)){
     return 0;
   }
-    
+
   *except = raw_except_table [except->exceptIndex];
-    
+
   return 1;
 }
 
 int mpc60x_delete_exception (const rtems_raw_except_connect_data* except)
 {
   unsigned int level;
-  
+
   if (!mpc60x_vector_is_valid(except->exceptIndex)){
     return 0;
   }
@@ -273,12 +273,12 @@ int mpc60x_delete_exception (const rtems_raw_except_connect_data* except)
 	   default_raw_except_entry.hdl.raw_hdl_size,
 	   PPC_CACHE_ALIGNMENT);
 
-    
+
   raw_except_table[except->exceptIndex] = default_raw_except_entry;
   raw_except_table[except->exceptIndex].exceptIndex = except->exceptIndex;
 
   _CPU_ISR_Enable(level);
-    
+
   return 1;
 }
 
@@ -289,7 +289,7 @@ int mpc60x_init_exceptions (rtems_raw_except_global_settings* config)
 {
     unsigned 			i;
     unsigned int level;
-    
+
     /*
      * store various accelerators
      */
