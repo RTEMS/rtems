@@ -1,3 +1,7 @@
+2005-11-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* mpc6xx/exceptions/raw_exception.c: Cosmetics.
+
 2005-11-21	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/cpu_asm.S: the book says a context
