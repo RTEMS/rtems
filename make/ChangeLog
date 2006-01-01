@@ -1,3 +1,9 @@
+2006-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 851/bsps
+	* custom/gen5200.cfg, custom/pm520_cr825.cfg, custom/pm520_ze30.cfg:
+	New (Submission by Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>).
+
 2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/gba.cfg, custom/pc386.cfg: Use .elf instead of .obj.
