@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: $File$
-+-----------------------------------------------------------------+
 |                    Copyright (c) 2005                           |
 |                    Embedded Brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
@@ -17,34 +15,6 @@
 |                                                                 |
 +-----------------------------------------------------------------+
 | this file contains the MSCAN driver                             |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.1  2005/12/31 05:09:26  ralf
-|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
-|* submission).
-|*
-|* Revision 1.31  2005/12/11 23:00:27  peter
-|* initialization according to bitrate and max. no of tq per can bit
-|*
-|* Revision 1.30  2005/12/09 08:57:03  thomas
-|* added/modifed file headers
-|*
-|* Revision 1.29  2005/12/06 14:30:42  thomas
-|* updated name for peripheral register block
-|*
-|* Revision 1.28  2005/12/06 14:11:12  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 
 #include <stdio.h>

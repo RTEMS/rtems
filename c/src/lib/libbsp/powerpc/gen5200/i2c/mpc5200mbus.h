@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: mpc5200mbus.h
-+-----------------------------------------------------------------+
 |                    Copyright (c) 2005                           |
 |                    Embedded Brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
@@ -20,24 +18,6 @@
 +-----------------------------------------------------------------+
 | This file has been adapted from an existing source code file,   |
 | see the original file header below for reference                |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.5  2005/12/09 08:57:03  thomas
-|* added/modifed file headers
-|*
-|* Revision 1.4  2005/12/06 14:11:11  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 /*
  * MCF5206e MBUS module (I2C bus) driver header file
@@ -49,8 +29,6 @@
  * found in the file LICENSE in this distribution or at
  *
  * http://www.rtems.com/license/LICENSE.
- *
- * @(#) mcfmbus.h,v 1.3 2004/03/31 01:59:32 ralf Exp
  */
 
 #ifndef __MPC5200BSP_MPC5200MBUS_H__

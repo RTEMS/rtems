@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: slicetimer.h
-+-----------------------------------------------------------------+
 | Partially based on the code references which are named below.   |
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
@@ -20,21 +18,6 @@
 |                                                                 |
 +-----------------------------------------------------------------+
 | this file declares functions to use the slice timer module
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.4  2005/12/09 08:57:03  thomas
-|* added/modifed file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 #ifndef __SLICETIMER_H__
 #define __SLICETIMER_H__

@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: $File$
-+-----------------------------------------------------------------+
 | Partially based on the code references which are named below.   |
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
@@ -20,21 +18,6 @@
 |                                                                 |
 +-----------------------------------------------------------------+
 | this file contains the tod driver for a Philips pcf8563 I2C RTC |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.3  2005/12/06 14:11:12  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 /*
  * This file interfaces with the real-time clock found in a

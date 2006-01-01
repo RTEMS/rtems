@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: bsp.h
-+-----------------------------------------------------------------+
 | Partially based on the code references which are named below.   |
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
@@ -20,24 +18,6 @@
 |                                                                 |
 +-----------------------------------------------------------------+
 | this file contains board specific definitions                   |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.11  2005/12/09 08:57:03  thomas
-|* added/modifed file headers
-|*
-|* Revision 1.10  2005/12/06 14:11:12  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 
 #ifndef __GEN5200_BSP_h

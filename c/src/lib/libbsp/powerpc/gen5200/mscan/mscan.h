@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: $File$
-+-----------------------------------------------------------------+
 | Partially based on the code references which are named below.   |
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
@@ -20,24 +18,6 @@
 |                                                                 |
 +-----------------------------------------------------------------+
 | this file declares stuff for the mscan driver                   |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.18  2005/12/11 23:02:16  peter
-|* added can bitrate and timings
-|*
-|* Revision 1.17  2005/12/06 14:11:12  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 #ifndef __MSCAN_H__
 #define __MSCAN_H__

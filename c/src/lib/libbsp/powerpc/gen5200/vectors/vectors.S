@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: vectors.S
-+-----------------------------------------------------------------+
 | Partially based on the code references which are named below.   |
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
@@ -20,21 +18,6 @@
 |                                                                 |
 +-----------------------------------------------------------------+
 | this file contains the irq controller handler                   |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.3  2005/12/09 08:57:03  thomas
-|* added/modifed file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 /***********************************************************************/
 /*                                                                     */
@@ -84,7 +67,6 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
-/*#include <bsp/vectors.h>*/
 #include "vectors.h"	
 
 #define SYNC \

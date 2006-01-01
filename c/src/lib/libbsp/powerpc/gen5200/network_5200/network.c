@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: $File$
-+-----------------------------------------------------------------+
 | Partially based on the code references which are named below.   |
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
@@ -20,28 +18,6 @@
 |                                                                 |
 +-----------------------------------------------------------------+
 | this file contains the networking driver                        |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.1  2005/12/31 05:09:26  ralf
-|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
-|* submission).
-|*
-|* Revision 1.10  2005/12/06 14:30:42  thomas
-|* updated name for peripheral register block
-|*
-|* Revision 1.9  2005/12/06 14:11:12  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 /*
  *  RTEMS/TCPIP driver for MPC5200 FEC Ethernet
@@ -75,8 +51,6 @@
  *  Modifications by Darlene Stewart <Darlene.Stewart@iit.nrc.ca>
  *  and Charles-Antoine Gauthier <charles.gauthier@iit.nrc.ca>
  *  Copyright (c) 1999, National Research Council of Canada
- *
- *  network.c,v 1.7 2001/08/31 14:57:48 joel Exp
  *
  */
 #include <rtems.h>

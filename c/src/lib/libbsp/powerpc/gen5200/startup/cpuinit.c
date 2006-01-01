@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: $File$
-+-----------------------------------------------------------------+
 | Partially based on the code references which are named below.   |
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
@@ -20,31 +18,6 @@
 |                                                                 |
 +-----------------------------------------------------------------+
 | this file contains the code to initialize the cpu               |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.1  2005/12/31 05:09:26  ralf
-|* New (CVS import Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>'s
-|* submission).
-|*
-|* Revision 1.8  2005/12/09 09:05:16  thomas
-|* changed names of board variations
-|*
-|* Revision 1.7  2005/12/09 08:57:03  thomas
-|* added/modifed file headers
-|*
-|* Revision 1.6  2005/12/06 14:11:12  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 /***********************************************************************/
 /*                                                                     */

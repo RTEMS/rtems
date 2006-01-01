@@ -21,23 +21,6 @@
 +-----------------------------------------------------------------+
 | this file contains the assembler portion of the irq handling    |
 +-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.5  2005/12/09 08:57:03  thomas
-|* added/modifed file headers
-|*
-|* Revision 1.4  2005/12/06 14:11:12  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 /***********************************************************************/
 /*                                                                     */
@@ -95,7 +78,7 @@
 #include <rtems/score/cpuopts.h>  /* for PPC_HAS_FPU */
 #include <rtems/score/cpu.h>
 #include <rtems/asm.h>
-#include "../include/raw_exception.h"
+#include <libcpu/raw_exception.h>
 	
 #define SYNC \
 	sync; \

@@ -1,8 +1,6 @@
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
-| File: mpc5200mbus.c
-+-----------------------------------------------------------------+
 |                    Copyright (c) 2005                           |
 |                    Embedded Brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
@@ -20,27 +18,6 @@
 +-----------------------------------------------------------------+
 | This file has been adapted from an existing source code file,   |
 | see the original file header below for reference                |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.12.05  creation                                         doe  |
-|*****************************************************************|
-|*CVS information:                                                |
-|*(the following information is created automatically,            |
-|*do not edit here)                                               |
-|*****************************************************************|
-|* $Log$
-|* Revision 1.7  2005/12/09 08:57:03  thomas
-|* added/modifed file headers
-|*
-|* Revision 1.6  2005/12/06 14:30:42  thomas
-|* updated name for peripheral register block
-|*
-|* Revision 1.5  2005/12/06 14:11:11  thomas
-|* added EB file headers
-|*
- *
-|*****************************************************************|
 \*===============================================================*/
 
 /* MCF5206e MBUS module (I2C bus) driver
