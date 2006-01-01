@@ -1,3 +1,16 @@
+2006-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* bestcomm/bestcomm_glue.c, bestcomm/bestcomm_glue.h, clock/clock.c,
+	console/console.c, i2c/i2cdrv.c, i2c/mpc5200mbus.c,
+	i2c/mpc5200mbus.h, ide/idecfg.c, ide/pcmcia_ide.c, ide/pcmcia_ide.h,
+	include/bsp.h, include/mpc5200.h, irq/irq.c, irq/irq.h,
+	irq/irq_asm.S, irq/irq_init.c, mscan/mscan.c, mscan/mscan.h,
+	network_5200/network.c,	nvram/m93cxx.h, nvram/nvram.c,
+	nvram/nvram.h, slicetimer/slicetimer.c, slicetimer/slicetimer.h,
+	start/start.S, startup/bspstart.c, startup/cpuinit.c, tod/pcf8563.c,
+	tod/pcf8563.h, tod/todcfg.c, vectors/vectors.S,
+	vectors/vectors_init.c: Cleanup CVS data.
+
 2005-12-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* irq/irq.c, irq/irq_init.c, vectors/vectors_init.c:
