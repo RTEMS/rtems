@@ -1,3 +1,7 @@
+2006-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* vectors/asm_utils.S: Remove (Bogus, now in libcpu).
+
 2006-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* bestcomm/bestcomm_glue.c, bestcomm/bestcomm_glue.h, clock/clock.c,
