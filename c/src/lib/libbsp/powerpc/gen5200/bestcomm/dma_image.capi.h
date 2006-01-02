@@ -26,7 +26,7 @@
 ******************************************************************************/
 
 
-#include "../bestcomm/dma_image.h"
+#include "dma_image.h"
 
 typedef enum {
 	TASK_PCI_TX,

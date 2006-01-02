@@ -39,11 +39,11 @@
  * inline in capi/bestcomm_api.h.
  */
 
-#include "../bestcomm/include/ppctypes.h"
-#include "../bestcomm/bestcomm_api.h"
-#include "../bestcomm/task_api/bestcomm_cntrl.h"
-#include "../bestcomm/task_api/bestcomm_api_mem.h"
-#include "../bestcomm/task_api/tasksetup_bdtable.h"
+#include "include/ppctypes.h"
+#include "bestcomm_api.h"
+#include "task_api/bestcomm_cntrl.h"
+#include "task_api/bestcomm_api_mem.h"
+#include "task_api/tasksetup_bdtable.h"
 
 /***********************************************************************
  */

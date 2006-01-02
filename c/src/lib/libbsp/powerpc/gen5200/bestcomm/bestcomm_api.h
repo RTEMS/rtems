@@ -36,11 +36,11 @@
  * linked.
  */
 
-#include "../bestcomm/include/ppctypes.h"
-#include "../bestcomm/include/mgt5200/sdma.h"
-#include "../bestcomm/task_api/tasksetup_bdtable.h"
-#include "../bestcomm/task_api/bestcomm_cntrl.h"
-#include "../bestcomm/task_api/bestcomm_api_mem.h"
+#include "include/ppctypes.h"
+#include "include/mgt5200/sdma.h"
+#include "task_api/tasksetup_bdtable.h"
+#include "task_api/bestcomm_cntrl.h"
+#include "task_api/bestcomm_api_mem.h"
 
 /*!
  * \brief	TaskSetup() debugging
@@ -245,8 +245,8 @@ typedef struct {
  * Start of API Prototypes
  ***************************/
 
-#include "../bestcomm/bestcomm_priv.h"
-#include "../bestcomm/dma_image.capi.h"
+#include "bestcomm_priv.h"
+#include "dma_image.capi.h"
   
 /*!
  * \brief	Initialize a single task.

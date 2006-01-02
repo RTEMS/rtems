@@ -26,7 +26,7 @@
 ******************************************************************************/
 
 
-#include "../bestcomm/include/ppctypes.h"
+#include "include/ppctypes.h"
 
 void init_dma_image_TASK_PCI_TX(uint8 *vMem_taskBar, sint64 vMemOffset);
 void init_dma_image_TASK_PCI_RX(uint8 *vMem_taskBar, sint64 vMemOffset);

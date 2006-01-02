@@ -22,9 +22,9 @@
 *
 ******************************************************************************/
 
-#include "../bestcomm/bestcomm_api.h"
-#include "../bestcomm/task_api/tasksetup_bdtable.h"
-#include "../bestcomm/include/mgt5200/mgt5200.h"
+#include "bestcomm_api.h"
+#include "task_api/tasksetup_bdtable.h"
+#include "include/mgt5200/mgt5200.h"
 
 #ifdef __MWERKS__
 __declspec(section ".text") extern const uint32 taskTable;

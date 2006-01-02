@@ -21,12 +21,12 @@
 #include <bsp.h>
 #include "../irq/irq.h"
 #include "../include/mpc5200.h"
-#include "../bestcomm/include/ppctypes.h"			/* uint32, et. al.		   */
-#include "../bestcomm/dma_image.h"
-#include "../bestcomm/task_api/bestcomm_cntrl.h"
-#include "../bestcomm/bestcomm_api.h"
-#include "../bestcomm/bestcomm_glue.h"
-#include "../bestcomm/include/mgt5200/sdma.h"
+#include "include/ppctypes.h"			/* uint32, et. al.		   */
+#include "dma_image.h"
+#include "task_api/bestcomm_cntrl.h"
+#include "bestcomm_api.h"
+#include "bestcomm_glue.h"
+#include "include/mgt5200/sdma.h"
 
 /*=========================================================================*\
 | Function:                                                                 |

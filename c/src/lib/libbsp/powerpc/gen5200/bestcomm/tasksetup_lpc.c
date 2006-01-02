@@ -34,5 +34,5 @@
 #define INCR_DST          0
 #define TYPE_DST          FLEX_T
 
-#include "../bestcomm/task_api/tasksetup_general.h"
+#include "task_api/tasksetup_general.h"
 
