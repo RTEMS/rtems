@@ -32,18 +32,23 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.pm520
 
 noinst_PROGRAMS += bestcomm.rel
-bestcomm_rel_SOURCES = bestcomm/bestcomm_api.c bestcomm/bestcomm_api.h
-bestcomm_rel_SOURCES += bestcomm/bestcomm_glue.c bestcomm/bestcomm_glue.h
-bestcomm_rel_SOURCES += bestcomm/dma_image.c bestcomm/dma_image.reloc.c \
-    bestcomm/load_task.c bestcomm/tasksetup_ata.c \
-    bestcomm/tasksetup_bdtable.c bestcomm/tasksetup_crc16_dp_0.c \
-    bestcomm/tasksetup_crc16_dp_1.c bestcomm/tasksetup_fec_rx_bd.c \
-    bestcomm/tasksetup_fec_tx_bd.c bestcomm/tasksetup_gen_dp_0.c \
-    bestcomm/tasksetup_gen_dp_1.c bestcomm/tasksetup_gen_dp_2.c \
-    bestcomm/tasksetup_gen_dp_3.c bestcomm/tasksetup_gen_dp_bd_0.c \
-    bestcomm/tasksetup_gen_dp_bd_1.c bestcomm/tasksetup_gen_rx_bd.c \
-    bestcomm/tasksetup_gen_tx_bd.c bestcomm/tasksetup_lpc.c \
-    bestcomm/tasksetup_pci_rx.c bestcomm/tasksetup_pci_tx.c
+bestcomm_rel_SOURCES = bestcomm/include/ppctypes.h \
+    bestcomm/include/mgt5200/mgt5200.h bestcomm/include/mgt5200/sdma.h \
+    bestcomm/bestcomm_api.c bestcomm/bestcomm_api.h bestcomm/bestcomm_glue.c \
+    bestcomm/bestcomm_glue.h bestcomm/dma_image.c bestcomm/dma_image.capi.h \
+    bestcomm/dma_image.h bestcomm/dma_image.reloc.c bestcomm/load_task.c \
+    bestcomm/tasksetup_ata.c bestcomm/tasksetup_bdtable.c \
+    bestcomm/tasksetup_crc16_dp_0.c bestcomm/tasksetup_crc16_dp_1.c \
+    bestcomm/tasksetup_fec_rx_bd.c bestcomm/tasksetup_fec_tx_bd.c \
+    bestcomm/tasksetup_gen_dp_0.c bestcomm/tasksetup_gen_dp_1.c \
+    bestcomm/tasksetup_gen_dp_2.c bestcomm/tasksetup_gen_dp_3.c \
+    bestcomm/tasksetup_gen_dp_bd_0.c bestcomm/tasksetup_gen_dp_bd_1.c \
+    bestcomm/tasksetup_gen_rx_bd.c bestcomm/tasksetup_gen_tx_bd.c \
+    bestcomm/tasksetup_lpc.c bestcomm/tasksetup_pci_rx.c \
+    bestcomm/tasksetup_pci_tx.c bestcomm/bestcomm_priv.h \
+    bestcomm/task_api/bestcomm_api_mem.h bestcomm/task_api/bestcomm_cntrl.h \
+    bestcomm/task_api/tasksetup_bdtable.h \
+    bestcomm/task_api/tasksetup_general.h
 bestcomm_rel_CPPFLAGS = $(AM_CPPFLAGS)
 bestcomm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
