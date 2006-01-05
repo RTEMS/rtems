@@ -210,7 +210,7 @@ void bsp_start( void )
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
   /*
-   * Initialize default raw exception hanlders. See vectors/vectors_init.c
+   * Initialize default raw exception handlers. See vectors/vectors_init.c
    */
   initialize_exceptions();
 
