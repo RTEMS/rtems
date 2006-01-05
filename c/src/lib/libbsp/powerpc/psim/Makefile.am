@@ -66,7 +66,7 @@ irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 EXTRA_DIST += vectors/README
 
 noinst_PROGRAMS += vectors.rel
-vectors_rel_SOURCES = vectors/align_h.S vectors/vectors.S \
+vectors_rel_SOURCES = vectors/align_h.S ../../powerpc/shared/vectors/vectors.S \
     ../../powerpc/shared/vectors/vectors_init.c
 vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

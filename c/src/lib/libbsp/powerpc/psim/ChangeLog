@@ -1,3 +1,7 @@
+2006-01-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, vectors/vectors.S: use shared version of vectors.S.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.
