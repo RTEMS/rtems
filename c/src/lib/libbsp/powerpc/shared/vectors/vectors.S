@@ -74,9 +74,10 @@ SYM (push_normalized_frame):
 	 */
 	mflr	r3
 	/*
-	 * r3 = r3 >> 8 = vector
+	 * r3 = r3 >> 8 = vector #
+	 * mask upper bits in case vectors are in the high area (psim)
 	 */
-	srwi	r3,r3,8
+	rlwinm	r3,r3,32-8,20,31
 	stw	r3, EXCEPTION_NUMBER_OFFSET(r1)
 	stw	r0, GPR0_OFFSET(r1)
 	/* R2 should never change (EABI: pointer to .sdata2) - we
