@@ -2,7 +2,7 @@
 #
 #  Shell script to ease invocation of the powerpc simulator
 #
-#  COPYRIGHT (c) 1989-2004.
+#  COPYRIGHT (c) 1989-2006.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -18,8 +18,9 @@ TREE_FILE=psim_tree.${LOGNAME}
 
 #  Build this user's device tree file
 echo "/#address-cells 2"                              >  ${TREE_FILE}
-#echo "/openprom/options/oea-memory-size 4194304"      >> ${TREE_FILE}
+echo "/openprom/init/register/pvr 0xfffe0000"         >> ${TREE_FILE}
 echo "/openprom/options/oea-memory-size 8388608"      >> ${TREE_FILE}
+
 # These require the semaphore and shared memory device models.
 # echo "/shm@0xc0000000/reg 0xc0000000 0x10000"         >> ${TREE_FILE}
 # echo "/shm@0xc0000000/key ${RTEMS_SHM_KEY}"           >> ${TREE_FILE}

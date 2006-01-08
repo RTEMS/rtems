@@ -1,3 +1,8 @@
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* psim, psim-gdb: Add setting of PVR to 0xfffe0000 since psim needs a
+	special processor version value or exceptions will not work.
+
 2005-01-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Reflect psim-gdb having been added.
