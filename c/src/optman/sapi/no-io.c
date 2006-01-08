@@ -59,9 +59,9 @@ rtems_status_code rtems_io_unregister_driver(
 }
   
 rtems_status_code rtems_io_register_name(
-    char *device_name,
-    rtems_device_major_number major,
-    rtems_device_minor_number minor
+    const char                *device_name,
+    rtems_device_major_number  major,
+    rtems_device_minor_number  minor
 )
 {
   _Internal_error_Occurred(

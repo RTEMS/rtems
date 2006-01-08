@@ -1,5 +1,10 @@
 2006-01-08	Joel Sherrill <joel@OARcorp.com>
 
+	* optman/sapi/no-io.c: Change rtems_io_register_name to take a const
+	char *.
+
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
 	* libchip/i2c/i2c-2b-eeprom.c, libchip/i2c/i2c-ds1621.c: Eliminate
 	warnings.
 
