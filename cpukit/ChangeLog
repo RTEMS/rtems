@@ -1,5 +1,10 @@
 2006-01-08	Joel Sherrill <joel@OARcorp.com>
 
+	* libcsupport/src/unixlibc.c, libfs/src/imfs/ioman.c: Change
+	rtems_io_register_name to take a const char *.
+
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
 	* sapi/include/rtems/io.h, sapi/src/io.c: Change rtems_io_register_name
 	to take a const char *.
 
