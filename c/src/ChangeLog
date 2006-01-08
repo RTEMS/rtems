@@ -1,3 +1,8 @@
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/i2c/i2c-2b-eeprom.c, libchip/i2c/i2c-ds1621.c: Eliminate
+	warnings.
+
 2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Remove RTEMS_USE_GCC.

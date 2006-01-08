@@ -20,7 +20,7 @@ ds1621_init (rtems_device_major_number major, rtems_device_minor_number minor,
              void *arg)
 {
   int sc;
-  char csr[2] = { DS1621_CMD_CSR_ACCESS, 0 }, cmd;
+  unsigned char csr[2] = { DS1621_CMD_CSR_ACCESS, 0 }, cmd;
 
   /* First start command acquires a lock for the bus */
 
@@ -58,14 +58,14 @@ ds1621_read (rtems_device_major_number major, rtems_device_minor_number minor,
 {
   int sc;
   rtems_libio_rw_args_t *rwargs = arg;
-  char cmd = DS1621_CMD_READ_TEMP;
+  unsigned char cmd = DS1621_CMD_READ_TEMP;
 
   sc = rtems_libi2c_start_write_bytes (minor, &cmd, 1);
   if (sc < 0)
     return -sc;
   if (sc < 1)
     return RTEMS_IO_ERROR;
-  sc = rtems_libi2c_start_read_bytes (minor, rwargs->buffer, 1);
+  sc = rtems_libi2c_start_read_bytes(minor, (unsigned char *)rwargs->buffer, 1);
   if (sc < 0) {
     rwargs->bytes_moved = 0;
     return -sc;

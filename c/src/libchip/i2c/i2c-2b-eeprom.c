@@ -45,7 +45,7 @@ i2c_2b_eeprom_write (rtems_device_major_number major,
   rtems_libio_rw_args_t *rwargs = arg;
   unsigned off = rwargs->offset;
   int cnt = rwargs->count;
-  char *buf = rwargs->buffer;
+  unsigned char *buf = (unsigned char *)rwargs->buffer;
   int sc;
   unsigned end;
   int l;
@@ -96,7 +96,11 @@ i2c_2b_eeprom_read (rtems_device_major_number major,
   if (RTEMS_SUCCESSFUL != (sc = send_file_ptr (minor, rwargs->offset, 0)))
     return -sc;
 
-  sc = rtems_libi2c_start_read_bytes (minor, rwargs->buffer, rwargs->count);
+  sc = rtems_libi2c_start_read_bytes(
+    minor,
+    (unsigned char *)rwargs->buffer,
+    rwargs->count
+  );
 
   if (sc < 0) {
     rwargs->bytes_moved = 0;
