@@ -162,7 +162,7 @@ void uti596_txDaemon ( void * );
 void uti596_rxDaemon ( void * );
 void uti596_resetDaemon( void * );
 rtems_isr uti596_DynamicInterruptHandler ( rtems_vector_number );
-static int uti596_ioctl ( struct ifnet *, int, caddr_t );
+static int uti596_ioctl ( struct ifnet *, u_long, caddr_t );
 void uti596_stats ( uti596_softc_ * );
 
 #ifdef DBG_PACKETS
@@ -2586,7 +2586,7 @@ void uti596_resetDaemon(
 
 static int uti596_ioctl(
   struct ifnet *ifp,
-  int command,
+  u_long command,
   caddr_t data
 )
 {
