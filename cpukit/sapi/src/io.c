@@ -209,7 +209,7 @@ rtems_status_code rtems_io_unregister_driver(
 
 #if 0
 rtems_status_code rtems_io_register_name(
-    char *device_name,
+    const char *device_name,
     rtems_device_major_number major,
     rtems_device_minor_number minor
   )
