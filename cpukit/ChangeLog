@@ -1,5 +1,9 @@
 2006-01-08	Joel Sherrill <joel@OARcorp.com>
 
+	* libnetworking/rtems/rtems_mii_ioctl.h: Fix formatting.
+
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/src/unixlibc.c, libfs/src/imfs/ioman.c: Change
 	rtems_io_register_name to take a const char *.
 
