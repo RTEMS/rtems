@@ -1,3 +1,13 @@
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, vme/vmeconfig.c: VME code now compiles but is untested.
+	Jennifer will have to test this.
+
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, vme/vmeconfig.c: VME code now compiles but is untested.
+	Jennifer will have to test this.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.
