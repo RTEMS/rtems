@@ -6,6 +6,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([ep1a]);;
   gen405 )
     AC_CONFIG_SUBDIRS([gen405]);;
+  gen5200 )
+    AC_CONFIG_SUBDIRS([gen5200]);;
   helas403 )
     AC_CONFIG_SUBDIRS([helas403]);;
   mbx8xx )
