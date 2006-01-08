@@ -409,7 +409,7 @@ initialized.
 @findex rtems_io_register_name
 @example
 rtems_status_code rtems_io_register_name(
-  char                      *name,
+  const char                *name,
   rtems_device_major_number  major,
   rtems_device_minor_number  minor
 );

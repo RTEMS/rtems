@@ -1,3 +1,7 @@
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* user/io.t: Change rtems_io_register_name to take a const char *.
+
 2005-09-15	Jay Monkman <jtm@lopingdog.com>
 
 	PR 365/rtems
