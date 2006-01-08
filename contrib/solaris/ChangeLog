@@ -1,3 +1,7 @@
+2006-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Add install-sh and missing.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
