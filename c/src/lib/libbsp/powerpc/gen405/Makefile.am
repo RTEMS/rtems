@@ -95,5 +95,4 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.dl
 CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 
-include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

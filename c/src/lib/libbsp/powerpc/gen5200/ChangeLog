@@ -1,3 +1,7 @@
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Don't include subdirs.am.
+
 2006-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* vectors/asm_utils.S: Remove (Bogus, now in libcpu).

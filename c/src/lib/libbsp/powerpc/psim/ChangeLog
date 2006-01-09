@@ -1,3 +1,7 @@
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Don't include subdirs.am.
+
 2006-01-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, vectors/vectors.S: use shared version of vectors.S.
