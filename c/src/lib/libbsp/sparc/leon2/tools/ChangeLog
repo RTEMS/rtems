@@ -1,0 +1,4 @@
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am, runtest.in, configure.ac: Backport from
+	rtems-4-6-branch.
