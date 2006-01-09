@@ -1,0 +1,9 @@
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* leon_smc91111/leon_smc91111.c, README, timer/timer.c,
+	startup/setvec.c, startup/spurious.c, startup/linkcmds,
+	console/console.c, console/debugputs.c,
+	console/consolereserveresources.c, bsp_specs, gnatsupp/gnatsupp.c,
+	include/coverhd.h, include/tm27.h, include/leon.h, include/bsp.h,
+	Makefile.am, configure.ac, times, leon_open_eth/leon_open_eth.c,
+	clock/ckinit.c: Backport from rtems-4-6-branch.
