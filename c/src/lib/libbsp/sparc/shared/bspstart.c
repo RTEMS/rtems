@@ -38,13 +38,13 @@
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 
-rtems_cpu_table   Cpu_table;
+rtems_cpu_table Cpu_table;
 
 /*
  *  Tells us where to put the workspace in case remote debugger is present.
  */
 
-extern uint32_t          rdb_start;
+extern uint32_t rdb_start;
 
 /*
  * Amount to increment itimer by each pass
@@ -52,7 +52,7 @@ extern uint32_t          rdb_start;
  * script to bump it without recompiling rtems
  */
 
-uint32_t         CPU_SPARC_CLICKS_PER_TICK;
+uint32_t CPU_SPARC_CLICKS_PER_TICK;
 
 #if SIMSPARC_FAST_IDLE
 
@@ -71,8 +71,8 @@ rtems_extension fast_idle_switch_hook(
   rtems_tcb *heir_task
 )
 {
-    static uint32_t         normal_clock = ~0;
-    static uint32_t         fast_clock;
+    static uint32_t normal_clock = ~0;
+    static uint32_t fast_clock;
 
     /* init our params on first call */
     if (normal_clock == ~0)
@@ -113,8 +113,8 @@ extern void bsp_spurious_initialize();
 void bsp_pretasking_hook(void)
 {
   extern int end;
-  uint32_t         heap_start;
-  uint32_t         heap_size;
+  uint32_t heap_start;
+  uint32_t heap_size;
 
   heap_start = (uint32_t) &end;
   if (heap_start & (CPU_ALIGNMENT-1))
