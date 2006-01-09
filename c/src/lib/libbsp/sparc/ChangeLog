@@ -1,3 +1,7 @@
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* shared/start.S: Backport from rtems-4-6-branch.
+
 2005-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Merge-in shared/Makefile.am.
