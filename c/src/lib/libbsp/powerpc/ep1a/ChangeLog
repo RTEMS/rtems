@@ -1,3 +1,9 @@
+2006-01-09	Joel Sherrill <joel@OARcorp.com>
+
+	PR 858/bsps
+	* Makefile.am: Added vme_am_defs.h;
+	* vme/vmeconfig.c: Added appropriate include files.
+
 2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Don't include subdirs.am. Cleanup.

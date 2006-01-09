@@ -15,6 +15,8 @@
 
 #include <bsp.h>
 #include <bsp/VME.h>
+#include <bsp/vmeUniverse.h>
+#include <bsp/VMEConfig.h>
 #include <bsp/irq.h>
 #include <libcpu/bat.h>
 #include <libcpu/spr.h>
