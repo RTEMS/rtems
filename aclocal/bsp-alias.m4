@@ -19,7 +19,6 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     p4650)        $2=p4000            ;; # mips - p4000 board w/IDT 4650
     mbx8*)        $2=mbx8xx           ;; # MBX821/MBX860 board
     pm520*)       $2=gen5200          ;; # MPC5200 based board
-    brs5l*)       $2=gen5200          ;; # MPC5200 based board
     pc386dx)      $2=pc386            ;; # i386 - PC w/o FPU
     pc486)        $2=pc386            ;; # i386 - PC with i486DX
     pc586)        $2=pc386            ;; # i386 - PC with Pentium
@@ -27,10 +26,10 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     pck6)         $2=pc386            ;; # i386 - PC with K6
     bare*)        $2=bare             ;; # EXP: bare-aliases
     erc32nfp)     $2=erc32            ;; # erc32 without fpu
-    leon1)     	  $2=leon             ;; # leon without fpu
-    leon2)     	  $2=leon             ;; # leon with fpu
+    leon1)     	  $2=leon2            ;; # leon without fpu
     simsh7032)    $2=shsim            ;; # SH7032 simulator
     simsh7045)    $2=shsim            ;; # SH7045 simulator
+    sis)          $2=erc32            ;; # ERC32 SIS simulator
     *)            $2=$1;;
   esac]
 )

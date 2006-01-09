@@ -1,3 +1,10 @@
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/bsp-alias.m4: Remove brs5l. Remove leon2.
+	Alias leon1 to leon2. Add sis.
+	* aclocal/check_bsps.m4: Remove brs5l.
+	Remove leon. Add leon2. Add sis to erc32 family.
+
 2005-11-31	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 851/bsps
