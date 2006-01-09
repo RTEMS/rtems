@@ -8,8 +8,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([leon2]);;
   leon3 )
     AC_CONFIG_SUBDIRS([leon3]);;
-  leon )
-    AC_CONFIG_SUBDIRS([leon]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
