@@ -1,3 +1,11 @@
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libchip/network/smc91111.c
+	libchip/network/smc91111config.h
+	libchip/network/smc91111exp.h
+	libchip/network/smc91111.h: New. Merger from rtems-4-6-branch.
+	* libchip/Makefile.am: Reflect adding smc91111*.
+
 2006-01-08	Joel Sherrill <joel@OARcorp.com>
 
 	* optman/sapi/no-io.c: Change rtems_io_register_name to take a const
