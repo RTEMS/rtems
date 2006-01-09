@@ -29,6 +29,7 @@
 
 #include <bsp.h>
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -105,8 +106,6 @@ struct MDRX
 #define OETH_SUSPEND_NOTXBUF
  */
 
-#define OETH_RATE_10MHZ
-
 #if (MCLBYTES < RBUF_SIZE)
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
@@ -132,7 +131,7 @@ struct open_eth_softc
     struct MDTX *txdesc;
     struct MDRX *rxdesc;
     rtems_vector_number vector;
-
+    unsigned int en100MHz;
 
     /*
      * Statistics
@@ -163,7 +162,7 @@ static struct open_eth_softc oc;
 static rtems_isr
 open_eth_interrupt_handler (rtems_vector_number v)
 {
-    uint32_t   status;
+    uint32_t status;
 
     /* read and clear interrupt cause */
 
@@ -191,7 +190,7 @@ open_eth_interrupt_handler (rtems_vector_number v)
       */
 }
 
-static uint32_t   read_mii(uint32_t   addr)
+static uint32_t read_mii(uint32_t addr)
 {
     while (oc.regs->miistatus & OETH_MIISTATUS_BUSY) {}
     oc.regs->miiaddress = addr << 8;
@@ -205,7 +204,7 @@ static uint32_t   read_mii(uint32_t   addr)
     }
 }
 
-static void write_mii(uint32_t   addr, uint32_t   data)
+static void write_mii(uint32_t addr, uint32_t data)
 {
     while (oc.regs->miistatus & OETH_MIISTATUS_BUSY) {}
     oc.regs->miiaddress = addr << 8;
@@ -234,19 +233,13 @@ open_eth_initialize_hardware (struct open_eth_softc *sc)
     regs->moder = 0;			/* Reset OFF */
 
     /* reset PHY and wait for complettion */
-    mii_cr = read_mii(0);
-    mii_cr = 0x3320;
-#ifdef OETH_RATE_10MHZ
-    mii_cr = 0;
-#endif
+    mii_cr = 0x3300;
+    if (!sc->en100MHz) mii_cr = 0;
     write_mii(0, mii_cr | 0x8000);
     while (read_mii(0) & 0x8000) {}
-    write_mii(20, 0x1422);
-#ifdef OETH_RATE_10MHZ
-    mii_cr = 0;
-#endif
-    write_mii(0, mii_cr);
-    printf("open_eth: driver attached, PHY config : 0x%04x\n", read_mii(0));
+    if (!sc->en100MHz) write_mii(0, 0); 
+    mii_cr = read_mii(0);
+    printf("open_eth: driver attached, PHY config : 0x%04" PRIx32 "\n", read_mii(0));
 
 #ifdef OPEN_ETH_DEBUG
     printf("mii_cr: %04x\n", mii_cr);
@@ -499,6 +492,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	len_status &= ~OETH_TX_BD_PAD;
 
       /* write buffer descriptor length and status */
+      len_status &= 0x0000ffff;
       len_status |= (len << 16) | (OETH_TX_BD_READY | OETH_TX_BD_CRC);
       dp->regs->xd[dp->tx_ptr].len_status = len_status;
       dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
@@ -725,6 +719,7 @@ rtems_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *config,
     sc->vector = chip->vector;
     sc->txbufs = chip->txd_count;
     sc->rxbufs = chip->rxd_count;
+    sc->en100MHz = chip->en100MHz;
 
 
     /*

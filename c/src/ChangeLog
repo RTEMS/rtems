@@ -1,5 +1,10 @@
 2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libchip/network/open_eth.c, libchip/network/open_eth.h:
+	Merger from rtems-4-6-branch.
+
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libchip/network/smc91111.c
 	libchip/network/smc91111config.h
 	libchip/network/smc91111exp.h
