@@ -41,7 +41,6 @@ pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
 include_bsp_HEADERS = ../../powerpc/shared/console/uart.h \
-    ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/motorola/motorola.h \
     ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h \
@@ -174,10 +173,6 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 $(PROJECT_INCLUDE)/bsp/uart.h: ../../powerpc/shared/console/uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
-
-$(PROJECT_INCLUDE)/bsp/consoleIo.h: ../../powerpc/shared/console/consoleIo.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
 
 $(PROJECT_INCLUDE)/bsp/motorola.h: ../../powerpc/shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
