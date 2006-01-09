@@ -1,3 +1,8 @@
+2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/erc32nfg.cfg: Correct file having been broken by
+	2005-10-05's changes.
+
 2005-10-06	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/leon3.cfg: New file.
