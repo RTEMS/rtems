@@ -14,6 +14,11 @@ CLEANFILES += $(TMPINSTALL_FILES)
 PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
+
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
@@ -27,11 +32,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtemspppd.h
 $(PROJECT_INCLUDE)/rtems/rtemsdialer.h: rtemsdialer.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtemsdialer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtemsdialer.h
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/libpppd.a: libpppd.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libpppd.a
