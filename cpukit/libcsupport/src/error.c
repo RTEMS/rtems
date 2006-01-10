@@ -48,7 +48,7 @@
 
 #include <rtems/error.h>
 #include <rtems/assoc.h>
-
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <errno.h>
@@ -134,7 +134,7 @@ static int rtems_verror(
         local_errno = errno;
 
     if (_System_state_Is_multiprocessing)
-        fprintf(stderr, "[%d] ", _Configuration_MP_table->node);
+        fprintf(stderr, "[%" PRIu32 "] ", _Configuration_MP_table->node);
 
     if (rtems_progname && *rtems_progname)
         chars_written += fprintf(stderr, "%s: ", rtems_progname);
