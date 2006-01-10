@@ -11,6 +11,7 @@
  */
 
 #include <rtems/asm.h>
+#include <bspopts.h>
 
 /*
  *  Unexpected trap will halt the processor by forcing it to error state

@@ -1,3 +1,7 @@
+2006-01-10	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/start.S: Add include of bspopts.h so SIS quirks will trigger.
+
 2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* shared/start.S: Backport from rtems-4-6-branch.
