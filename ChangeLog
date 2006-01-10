@@ -1,3 +1,7 @@
+2006-01-10	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/bsp-alias.m4: Add sis as alias of erc32.
+
 2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/bsp-alias.m4: Remove brs5l. Remove leon2.

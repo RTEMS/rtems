@@ -25,6 +25,7 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     pc686)        $2=pc386            ;; # i386 - PC with PentiumPro
     pck6)         $2=pc386            ;; # i386 - PC with K6
     bare*)        $2=bare             ;; # EXP: bare-aliases
+    sis)          $2=erc32            ;; # erc32 simulator in gdb
     erc32nfp)     $2=erc32            ;; # erc32 without fpu
     leon1)     	  $2=leon2            ;; # leon without fpu
     simsh7032)    $2=shsim            ;; # SH7032 simulator
