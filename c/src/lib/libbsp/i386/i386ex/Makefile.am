@@ -86,71 +86,8 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
-TMPINSTALL_FILES =
+CLEANFILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
-
-$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
-PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
-
-$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
-
-$(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
-
-$(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
-
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
-$(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
-	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-
-$(PROJECT_INCLUDE)/bsp/irq.h: ../../i386/shared/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
-
-$(PROJECT_INCLUDE)/bsp/irq_asm.h: ../../i386/shared/irq/irq_asm.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_asm.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_asm.h
-
-$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
-
-$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
-
-$(PROJECT_INCLUDE)/uart.h: ../../i386/shared/comm/uart.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/uart.h
-
-$(PROJECT_INCLUDE)/pcibios.h: ../../i386/shared/pci/pcibios.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pcibios.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/pcibios.h
-
-CLEANFILES = $(PREINSTALL_FILES)
-DISTCLEANFILES += $(PREINSTALL_DIRS)
-CLEANFILES += $(TMPINSTALL_FILES)
+include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/../../../../automake/local.am
