@@ -31,6 +31,10 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 [This defines the base address of the exception table.
  NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
+AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
+AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
+  && test -n "$AMPOLISH3"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 

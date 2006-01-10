@@ -41,6 +41,10 @@ RTEMS_BSPOPTS_SET([mpc8240],[*],[])
 RTEMS_BSPOPTS_HELP([mpc8240],
 [Defined for boards with MPC8240 -- undefined for others])
 
+AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
+AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
+  && test -n "$AMPOLISH3"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 bootloader/Makefile])

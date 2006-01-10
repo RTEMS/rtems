@@ -1,3 +1,8 @@
+2006-01-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add ampolish3 support.
+	* Makefile.am: Add preinstall.am.
+
 2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Don't include subdirs.am.
