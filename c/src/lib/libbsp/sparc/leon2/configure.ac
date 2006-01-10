@@ -37,6 +37,10 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
 
+AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
+AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
+  && test -n "$AMPOLISH3"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

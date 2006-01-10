@@ -1,3 +1,8 @@
+2006-01-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add ampolish3 support.
+	* Makefile.am: Add preinstall.am.
+
 2006-01-10	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Merge from 4.6 branch. Now the copy_data loop
