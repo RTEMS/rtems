@@ -91,7 +91,8 @@ vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
-    ../../powerpc/shared/vme/VMEConfig.h ../../powerpc/shared/vme/VME.h
+    ../../powerpc/shared/vme/VMEConfig.h ../../powerpc/shared/vme/VME.h \
+    ../../shared/vmeUniverse/vme_am_defs.h
 
 noinst_PROGRAMS += vme.rel
 vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c vme/vmeconfig.c \
@@ -215,10 +216,6 @@ $(PROJECT_INCLUDE)/bsp/vmeUniverse.h: ../../shared/vmeUniverse/vmeUniverse.h $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
 
-$(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
-
 $(PROJECT_INCLUDE)/bsp/VMEConfig.h: ../../powerpc/shared/vme/VMEConfig.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEConfig.h
@@ -226,6 +223,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 $(PROJECT_INCLUDE)/bsp/VME.h: ../../powerpc/shared/vme/VME.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VME.h
+
+$(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
 
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
