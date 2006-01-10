@@ -1,5 +1,10 @@
 2006-01-10	Joel Sherrill <joel@OARcorp.com>
 
+	* startup/linkcmds: Merge from 4.6 branch. Now the copy_data loop
+	works.
+
+2006-01-10	Joel Sherrill <joel@OARcorp.com>
+
 	* configure.ac: Add configuration for ENABLE_SIS_QUIRKS.
 
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
