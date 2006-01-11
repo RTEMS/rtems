@@ -1,3 +1,7 @@
+2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add preinstall.am.
+
 2005-11-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove %cpp.

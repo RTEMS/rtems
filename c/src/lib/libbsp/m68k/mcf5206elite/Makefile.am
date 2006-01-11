@@ -14,7 +14,7 @@ include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
-
+CLEANFILES =
 noinst_PROGRAMS =
 
 SUBDIRS = . tools
@@ -78,78 +78,5 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
-TMPINSTALL_FILES =
-
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
-
-$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
-PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
-
-$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
-
-$(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
-
-$(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
-
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
-$(PROJECT_INCLUDE)/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2c.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2c.h
-
-$(PROJECT_INCLUDE)/i2cdrv.h: include/i2cdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cdrv.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cdrv.h
-
-$(PROJECT_INCLUDE)/ds1307.h: include/ds1307.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ds1307.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/ds1307.h
-
-$(PROJECT_INCLUDE)/nvram.h: include/nvram.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nvram.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/nvram.h
-
-$(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
-
-$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
-
-$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
-
-$(PROJECT_LIB)/gdbinit: startup/gdbinit $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/gdbinit
-PREINSTALL_FILES += $(PROJECT_LIB)/gdbinit
-
-$(PROJECT_LIB)/linkcmds.flash: startup/linkcmds.flash $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.flash
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.flash
-
-CLEANFILES = $(PREINSTALL_FILES)
-DISTCLEANFILES += $(PREINSTALL_DIRS)
-CLEANFILES += $(TMPINSTALL_FILES)
-
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

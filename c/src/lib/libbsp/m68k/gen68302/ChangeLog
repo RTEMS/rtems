@@ -1,3 +1,7 @@
+2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add preinstall.am.
+
 2005-09-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* network/network.c: Include <errno.h> instead of <sys/errno.h>.
