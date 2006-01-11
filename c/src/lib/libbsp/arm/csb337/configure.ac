@@ -2,7 +2,7 @@
 ## 
 ## configure.ac,v 1.5 2003/03/11 09:39:07 ralf Exp
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-lib-libbsp-arm-csb337],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
@@ -21,4 +21,3 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
-
