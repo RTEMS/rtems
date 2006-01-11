@@ -8,18 +8,25 @@ AC_DEFUN([RTEMS_BSP_CONFIGURE],
   AM_MAINTAINER_MODE
   RTEMS_ENV_RTEMSBSP
 
+  AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
+  AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
+    && test -n "$AMPOLISH3"])
+
   RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
   AC_CONFIG_HEADERS([include/bspopts.tmp:include/bspopts.h.in],[
 echo "/* BSP dependent options file */"         >$tmp/config.h
 echo "/* automatically generated -- DO NOT EDIT!! */" >>$tmp/config.h
 echo                                                  >>$tmp/config.h
-echo "#ifndef __BSP_OPTIONS_h"                        >>$tmp/config.h
-echo "#define __BSP_OPTIONS_h"                        >>$tmp/config.h
+echo "#ifndef __BSP_OPTIONS_H"                        >>$tmp/config.h
+echo "#define __BSP_OPTIONS_H"                        >>$tmp/config.h
 echo                                                  >>$tmp/config.h
-sed -e '/.*PACKAGE.*/d' include/bspopts.tmp >> $tmp/config.h
+sed \
+  -e '/.*PACKAGE.*/d' \
+  -e '/\/\* Define to.*this package.*\*\//d' \
+include/bspopts.tmp >> $tmp/config.h
 echo                                                  >>$tmp/config.h
-echo "#endif"                                         >>$tmp/config.h
+echo "#endif /* __BSP_OPTIONS_H */"                   >>$tmp/config.h
   AS_IF([cmp -s include/bspopts.h $tmp/config.h 2>/dev/null],[
     AC_MSG_NOTICE([include/bspopts.h is unchanged])
     rm -f $tmp/config.h],[
