@@ -1,5 +1,6 @@
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* librdbg/Makefile.am: Add preinstall.am.
 	* aclocal/bsp-configure.m4: Add ampolish3.
 	New header guards.
 

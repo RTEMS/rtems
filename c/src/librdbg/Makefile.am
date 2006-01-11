@@ -4,6 +4,7 @@
 
 include $(top_srcdir)/automake/compile.am
 
+DISTCLEANFILES =
 CLEANFILES =
 BUILT_SOURCES =
 MAINTAINERCLEANFILES =
@@ -171,73 +172,5 @@ EXTRA_DIST += src/awk.svc
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
-
-if HAS_RDBG
-$(PROJECT_INCLUDE)/rdbg/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rdbg
-	@: > $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rdbg/rdbg.h: include/rdbg/rdbg.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/rdbg.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/rdbg.h
-
-$(PROJECT_INCLUDE)/rdbg/servrpc.h: include/rdbg/servrpc.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/servrpc.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/servrpc.h
-endif
-
-if HAS_RDBG
-if HAS_RDBG_powerpc
-$(PROJECT_INCLUDE)/rdbg/remdeb.h: src/powerpc/new_exception_processing/remdeb.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/remdeb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/remdeb.h
-
-$(PROJECT_INCLUDE)/rdbg/rdbg_f.h: include/rdbg/powerpc/rdbg_f.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
-
-$(PROJECT_INCLUDE)/rdbg/reg.h: include/rdbg/powerpc/reg.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/reg.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/reg.h
-endif
-endif
-
-if HAS_RDBG
-if HAS_RDBG_i386
-$(PROJECT_INCLUDE)/rdbg/remdeb.h: src/i386/any/remdeb.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/remdeb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/remdeb.h
-
-$(PROJECT_INCLUDE)/rdbg/rdbg_f.h: include/rdbg/i386/rdbg_f.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
-
-$(PROJECT_INCLUDE)/rdbg/reg.h: include/rdbg/i386/reg.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/reg.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/reg.h
-endif
-endif
-
-if HAS_RDBG
-if HAS_RDBG_m68k
-$(PROJECT_INCLUDE)/rdbg/remdeb.h: src/m68k/any/remdeb.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/remdeb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/remdeb.h
-
-$(PROJECT_INCLUDE)/rdbg/rdbg_f.h: include/rdbg/m68k/rdbg_f.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
-
-$(PROJECT_INCLUDE)/rdbg/reg.h: include/rdbg/m68k/reg.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/reg.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/reg.h
-endif
-endif
-
-CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
-
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
