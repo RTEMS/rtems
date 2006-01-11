@@ -20,15 +20,15 @@ include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
-
+CLEANFILES =
 noinst_PROGRAMS =
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 project_lib_DATA =
-
+noinst_LIBRARIES =
 if HAS_CXX
-EXTRA_LIBRARIES = librtemscxx.a
+noinst_LIBRARIES += librtemscxx.a
 
 librtemscxx_a_SOURCES = startup/no-ctor.c
 
@@ -73,7 +73,7 @@ shmsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shmsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 if HAS_CXX
 libbsp_a_SOURCES += startup/rtems-ctor.cc
@@ -87,52 +87,5 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = times
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
-TMPINSTALL_FILES =
-
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
-
-$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
-PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
-
-$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
-
-$(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
-
-$(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
-
-$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
-if HAS_CXX
-$(PROJECT_LIB)/no-ctor.$(OBJEXT): no-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-ctor.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-ctor.$(OBJEXT)
-
-$(PROJECT_LIB)/rtems-ctor.$(OBJEXT): rtems-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
-endif
-
-CLEANFILES = $(PREINSTALL_FILES)
-DISTCLEANFILES += $(PREINSTALL_DIRS)
-CLEANFILES += $(TMPINSTALL_FILES)
-
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
