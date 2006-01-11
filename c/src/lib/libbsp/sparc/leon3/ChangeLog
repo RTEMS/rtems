@@ -1,3 +1,8 @@
+2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove explicit ampolish3 support (now in
+	RTEMS_BSP_CONFIGURE).
+
 2006-01-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add ampolish3 support.

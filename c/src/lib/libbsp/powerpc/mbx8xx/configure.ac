@@ -114,10 +114,6 @@ RTEMS_BSPOPTS_SET([DISPATCH_HANDLER_STAT],[*],[])
 RTEMS_BSPOPTS_HELP([DISPATCH_HANDLER_STAT],
 [used by irq/irq.c])
 
-AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-  && test -n "$AMPOLISH3"])
-
 # Explicitly list a Makefile here 
 AC_CONFIG_FILES([Makefile])
 

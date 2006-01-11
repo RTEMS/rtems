@@ -44,10 +44,6 @@ RTEMS_BSPOPTS_HELP([ENABLE_SIS_QUIRKS],
  BSP will be enabled.  In particular, SIS requires special
  initialization not used on real ERC32 hardware.])
 
-AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-  && test -n "$AMPOLISH3"])
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -44,10 +44,6 @@ RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
  I/O.  Don't open the printk port from RTEMS unless also using polled I/O
  for the SCI ports.])
 
-AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-  && test -n "$AMPOLISH3"])
-
 # Explicitly list a Makefile here 
 AC_CONFIG_FILES([Makefile])
 
