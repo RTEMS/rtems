@@ -1,3 +1,7 @@
+2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add preinstall.am.
+
 2006-01-08	Joel Sherrill <joel@OARcorp.com>
 
 	* network/network.c: Remove warnings.

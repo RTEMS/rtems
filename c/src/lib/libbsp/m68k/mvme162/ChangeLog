@@ -2,6 +2,10 @@
 
 	* Makefile.am: Add preinstall.am.
 
+2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add preinstall.am.
+
 2005-05-26	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: New header guard.
