@@ -6,10 +6,15 @@ $(srcdir)/preinstall.am: Makefile.am
 endif
 
 PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 PREINSTALL_FILES =
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/powerpc
@@ -81,11 +86,6 @@ $(PROJECT_INCLUDE)/libcpu/stackTrace.h: shared/src/stackTrace.h $(PROJECT_INCLUD
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/stackTrace.h
 endif
 if ppc403
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/ictrl.h: ppc403/ictrl/ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ictrl.h
@@ -101,11 +101,6 @@ $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc5xx
 	@: > $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp)
-
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc5xx.h: mpc5xx/include/mpc5xx.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc5xx.h
@@ -128,11 +123,6 @@ $(PROJECT_INCLUDE)/libcpu/vectors.h: mpc5xx/vectors/vectors.h $(PROJECT_INCLUDE)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/vectors.h
 endif
 if mpc505
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/ictrl.h: mpc505/ictrl/ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ictrl.h
@@ -160,11 +150,6 @@ $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/mpc8xx.h: mpc8xx/include/mpc8xx.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8xx.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx.h
@@ -190,11 +175,6 @@ $(PROJECT_INCLUDE)/mpc8260/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc8260
 	@: > $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
-
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc8260.h: mpc8260/include/mpc8260.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260.h

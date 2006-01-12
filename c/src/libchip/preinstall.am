@@ -6,13 +6,23 @@ $(srcdir)/preinstall.am: Makefile.am
 endif
 
 PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 TMPINSTALL_FILES =
-CLEANFILES += $(TMPINSTALL_FILES)
+CLEANFILES = $(TMPINSTALL_FILES)
 
 PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
@@ -120,11 +130,6 @@ $(PROJECT_INCLUDE)/libchip/sersupp.h: serial/sersupp.h $(PROJECT_INCLUDE)/libchi
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/sersupp.h
 endif
 if HAS_MP
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/shm_driver.h: shmdr/shm_driver.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/shm_driver.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/shm_driver.h

@@ -6,13 +6,18 @@ $(srcdir)/preinstall.am: Makefile.am
 endif
 
 PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 TMPINSTALL_FILES =
-CLEANFILES += $(TMPINSTALL_FILES)
+CLEANFILES = $(TMPINSTALL_FILES)
 
 PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 if HAS_CXX
 $(PROJECT_INCLUDE)/rtems++/$(dirstamp):
@@ -51,11 +56,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems++/rtemsTaskMode.h
 $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h: include/rtems++/rtemsTimer.h $(PROJECT_INCLUDE)/rtems++/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/librtems++.a: librtems++.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtems++.a
