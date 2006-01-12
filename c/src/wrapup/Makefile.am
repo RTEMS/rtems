@@ -37,8 +37,6 @@ if HAS_MP
 SRCS += ../libchip/shmdr.rel
 endif
 
-all-local: $(TMPINSTALL_FILES)
-
 o-optimize/librtemsbsp.a: $(SRCS)
 	rm -f $@
 	$(mkdir_p) o-optimize
@@ -70,17 +68,5 @@ o-optimize/librtemsbsp.a: $(SRCS)
 	rm -f o-optimize/*.$(OBJEXT) o-optimize/*.rel
 	$(RANLIB) $@
 
-TMPINSTALL_FILES =
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
-
-$(PROJECT_LIB)/librtemsbsp.a: o-optimize/librtemsbsp.a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemsbsp.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/librtemsbsp.a
-
-CLEANFILES += $(TMPINSTALL_FILES)
-
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
