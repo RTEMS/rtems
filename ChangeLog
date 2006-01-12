@@ -1,5 +1,7 @@
 2006-01-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/bsp-alias.m4: Revert Joel's 2006-01-10 change.
+	Alpha-sort the aliases list.
 	* automake/host.am, automake/local.am, automake/subdirs.am:
 	Remove depend-am, depend-recursive.
 
