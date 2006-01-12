@@ -40,31 +40,21 @@
 
 /* ----------------- compat layer ----------------- */
 
-/* -------------------------------------------------------------------------
-   Define basic types for using integers in memory and structures;
-   depends on compiler defaults and CPU type. */
+#include <rtems/stdint.h>
 
-typedef unsigned char    cyg_uint8  ;
-typedef   signed char    cyg_int8   ;
-typedef unsigned short   cyg_uint16 ;
-typedef   signed short   cyg_int16  ;
-typedef unsigned int     cyg_uint32 ;
-typedef   signed int     cyg_int32  ;
-typedef unsigned int     cyg_bool   ;
-
-typedef cyg_uint32  CYG_WORD;
-typedef cyg_uint8   CYG_BYTE;
-typedef cyg_uint16  CYG_WORD16;
-typedef cyg_uint32  CYG_WORD32;
+typedef uint32_t  CYG_WORD;
+typedef uint8_t   CYG_BYTE;
+typedef uint16_t  CYG_WORD16;
+typedef uint32_t  CYG_WORD32;
 
 #ifndef CYG_SWAP16
 # define CYG_SWAP16(_x_)                                        \
-    ({ cyg_uint16 _x = (_x_); ((_x << 8) | (_x >> 8)); })
+    ({ uint16_t _x = (_x_); ((_x << 8) | (_x >> 8)); })
 #endif
 
 #ifndef CYG_SWAP32
 # define CYG_SWAP32(_x_)                        \
-    ({ cyg_uint32 _x = (_x_);                   \
+    ({ uint32_t _x = (_x_);                   \
        ((_x << 24) |                            \
        ((0x0000FF00UL & _x) <<  8) |            \
        ((0x00FF0000UL & _x) >>  8) |            \

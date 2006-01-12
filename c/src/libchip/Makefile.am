@@ -35,9 +35,8 @@ include_libchip_HEADERS += network/open_eth.h network/if_dcreg.h
 libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
     network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c \
     network/if_dc.c
-# FIXME: These don't compile
 include_libchip_HEADERS += network/smc91111.h network/smc91111exp.h
-# libnetchip_a_SOURCES += network/smc91111.c network/smc91111config.h
+libnetchip_a_SOURCES += network/smc91111.c network/smc91111config.h
 endif
 endif
 

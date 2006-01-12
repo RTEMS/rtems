@@ -1,3 +1,8 @@
+2006-01-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+	* libchip/Makefile.am: Build libchip/network/smc91111.
+	* libchip/network/smc91111.c, libchip/network/smc91111config.h:
+	Eliminate cyg_int* crap.
+
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* librdbg/Makefile.am: Add preinstall.am.

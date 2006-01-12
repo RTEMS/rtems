@@ -61,11 +61,11 @@
 struct lan91cxx_priv_data smc91111;
 
 int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd);
-static cyg_uint16 lan91cxx_read_phy(struct lan91cxx_priv_data *cpd,
-				    cyg_uint8 phyaddr, cyg_uint8 phyreg);
+static uint16_t lan91cxx_read_phy(struct lan91cxx_priv_data *cpd,
+				    uint8_t phyaddr, uint8_t phyreg);
 static void lan91cxx_write_phy(struct lan91cxx_priv_data *cpd,
-			       cyg_uint8 phyaddr, cyg_uint8 phyreg,
-			       cyg_uint16 value);
+			       uint8_t phyaddr, uint8_t phyreg,
+			       uint16_t value);
 static void lan91cxx_start(struct ifnet *ifp);
 static void smc91111_start(struct ifnet *ifp);
 static int smc_probe(struct lan91cxx_priv_data *cpd);
@@ -355,7 +355,7 @@ static int readpacket(struct lan91cxx_priv_data *cpd)
 	unsigned short stat, complen;
 	struct ifnet *ifp = &cpd->arpcom.ac_if;
 #ifdef LAN91CXX_32BIT_RX
-	cyg_uint32 val;
+	uint32_t val;
 #endif
 
 	DEBUG_FUNCTION();
@@ -486,7 +486,7 @@ static void sendpacket(struct ifnet *ifp, struct mbuf *m)
 	struct mbuf *n = m;
 	unsigned short *sdata = NULL;
 	unsigned short ints, control;
-	cyg_uint16 packet, status;
+	uint16_t packet, status;
 	dbg_prefix = ">";
 	DEBUG_FUNCTION();
 
@@ -1078,8 +1078,8 @@ static void lan91cxx_start(struct ifnet *ifp)
 {
 	struct lan91cxx_priv_data *cpd = ifp->if_softc;
 
-	cyg_uint16 intr;
-	cyg_uint16 phy_ctl;
+	uint16_t intr;
+	uint16_t phy_ctl;
 	int delay;
 	DEBUG_FUNCTION();
 
@@ -1414,13 +1414,13 @@ static void lan91cxx_phy_configure(struct lan91cxx_priv_data *cpd)
 }
 #endif
 
-static cyg_uint16
-lan91cxx_read_phy(struct lan91cxx_priv_data *cpd, cyg_uint8 phyaddr,
-		  cyg_uint8 phyreg)
+static uint16_t
+lan91cxx_read_phy(struct lan91cxx_priv_data *cpd, uint8_t phyaddr,
+		  uint8_t phyreg)
 {
 	int i, mask, input_idx, clk_idx = 0;
-	cyg_uint16 mii_reg, value;
-	cyg_uint8 bits[64];
+	uint16_t mii_reg, value;
+	uint8_t bits[64];
 
 	/* 32 consecutive ones on MDO to establish sync */
 	for (i = 0; i < 32; ++i)
@@ -1503,12 +1503,12 @@ lan91cxx_read_phy(struct lan91cxx_priv_data *cpd, cyg_uint8 phyaddr,
 }
 
 static void
-lan91cxx_write_phy(struct lan91cxx_priv_data *cpd, cyg_uint8 phyaddr,
-		   cyg_uint8 phyreg, cyg_uint16 value)
+lan91cxx_write_phy(struct lan91cxx_priv_data *cpd, uint8_t phyaddr,
+		   uint8_t phyreg, uint16_t value)
 {
 	int i, mask, clk_idx = 0;
-	cyg_uint16 mii_reg;
-	cyg_uint8 bits[65];
+	uint16_t mii_reg;
+	uint8_t bits[65];
 
 	/* 32 consecutive ones on MDO to establish sync */
 	for (i = 0; i < 32; ++i)
