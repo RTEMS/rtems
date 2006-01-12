@@ -529,6 +529,8 @@ char				*name = (isout ? "Outbound" : "Inbound");
 
 	CHECK_BASE(base,0,-1);
 
+	mode = 0; /* silence warning */
+
 	if ( port >= (isout ? TSI148_NUM_OPORTS : TSI148_NUM_IPORTS) ) {
 		uprintf(stderr,"Tsi148 %s Port Cfg: invalid port\n", name);
 		return -1;
@@ -584,11 +586,11 @@ char				*name = (isout ? "Outbound" : "Inbound");
 
 	/* Force to 32-bits */
 	TSI_WR(base, tsau_reg       , 0);
-	TSI_WR(base, tsau_reg + 0x04, (unsigned32)start);
+	TSI_WR(base, tsau_reg + 0x04, (uint32_t)start);
 	TSI_WR(base, tsau_reg + 0x08, 0);
-	TSI_WR(base, tsau_reg + 0x0c, (unsigned32)limit);
-	TSI_WR(base, tsau_reg + 0x10, (unsigned32)(offst>>32));
-	TSI_WR(base, tsau_reg + 0x14, (unsigned32)offst);
+	TSI_WR(base, tsau_reg + 0x0c, (uint32_t)limit);
+	TSI_WR(base, tsau_reg + 0x10, (uint32_t)(offst>>32));
+	TSI_WR(base, tsau_reg + 0x14, (uint32_t)offst);
 
 	/* (outbound only:) leave 2eSST broadcast register alone for user to program */
 
@@ -670,6 +672,8 @@ unsigned long long	start, limit, offst, a;
 unsigned long		tsau_reg, tat_reg, gran, skip;
 
 	CHECK_BASE(base,0,-1);
+
+	mode = 0; /* silence warning */
 
 	if ( VME_MODE_EXACT_MATCH & as ) {
 		mode_msk = ~0;
@@ -1166,7 +1170,7 @@ my_isOn(const rtems_irq_connect_data *arg)
 }
 
 static void
-connectIsr(int shared, void (*isr)(void), int pic_line, int slot)
+connectIsr(int shared, rtems_irq_hdl isr, int pic_line, int slot)
 {
 rtems_irq_connect_data	xx;
 	xx.on     = my_no_op; /* at _least_ they could check for a 0 pointer */
@@ -1461,7 +1465,7 @@ rtems_id			q = 0;
 int					installed = 0;
 int					i, err = 0;
 int					doDisable = 0;
-unsigned32			size;
+uint32_t			size;
 unsigned long		msg;
 char *				irqfmt  = "VME IRQ @vector %3i %s";
 char *				iackfmt = "VME IACK            %s";

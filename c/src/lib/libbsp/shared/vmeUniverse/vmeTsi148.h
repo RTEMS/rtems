@@ -13,7 +13,7 @@
 
 /* These can be ored with the AM */
 
-#define VME_MODE_PREFETCH_ENABLE			(4<<12)
+#define VME_MODE_PREFETCH_ENABLE			VME_AM_IS_MEMORY
 #define VME_MODE_PREFETCH_SIZE(x)			(((x)&3)<<12)
 #define VME_MODE_2eSSTM(x)					(((x)&7)<<16)
 
@@ -39,7 +39,7 @@
 extern "C" {
 #endif
 
-typedef volatile unsigned32 BERegister; /* emphasize contents are big endian */
+typedef volatile uint32_t BERegister; /* emphasize contents are big endian */
 
 /*
  * Scan the PCI busses for the Nth (N=='instance') Tsi148 VME bridge.
