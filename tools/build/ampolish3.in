@@ -220,21 +220,29 @@ $output .= "endif\n\n";
 
 foreach my $k ( keys %seen )
 {
-  $output .= "$k =\n";
-  if ( $k =~ /.*FILES/o ) {
+  if ( $k =~ /PREINSTALL_FILES/o ) {
+    $output .= "all: \$(PREINSTALL_FILES) all-am\n\n";
+
+    $output .= "$k =\n";
     $output .= "CLEANFILES ";
-    if ( $predefs{"CLEANFILES"} ) {
-      $output .= "+";
-      $predefs{"CLEANFILES"} = 1;
-    }
+    if ( $predefs{"CLEANFILES"} ) { $output .= "+"; }
     $output .= "= \$($k)\n";
+    $predefs{"CLEANFILES"} = 1;
+  } elsif ( $k =~ /TMPINSTALL_FILES/o ) {
+
+    $output .= "all-local: \$(TMPINSTALL_FILES)\n\n";
+
+    $output .= "$k =\n";
+    $output .= "CLEANFILES ";
+    if ( $predefs{"CLEANFILES"} ) { $output .= "+"; }
+    $output .= "= \$($k)\n";
+    $predefs{"CLEANFILES"} = 1;
   } elsif ( $k =~ /.*DIRS/o ) {
+    $output .= "$k =\n";
     $output .= "DISTCLEANFILES ";
-    if ( $predefs{"DISTCLEANFILES"} ) {
-      $output .= "+";
-      $predefs{"DISTCLEANFILES"} = 1;
-    }
+    if ( $predefs{"DISTCLEANFILES"} ) { $output .= "+"; }
     $output .= "= \$($k)\n";
+    $predefs{"DISTCLEANFILES"} = 1;
   }
   $output .= "\n";
 }

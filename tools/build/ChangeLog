@@ -1,5 +1,11 @@
 2006-10-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* ampolish3.in: Add all: for PREINSTALL_FILES.
+	Add all-local for TMPINSTALL_FILES.
+	Misc bug fixes.
+
+2006-10-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* ampolish3.in: Check if Makefile.am already contains CLEANFILES or
 	DISTCLEANFILES.
 
