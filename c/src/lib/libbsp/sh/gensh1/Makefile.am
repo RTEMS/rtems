@@ -4,8 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-CLEANFILES =
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -42,7 +40,7 @@ SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
 scitab.c: $(SHGEN)
 	$(SHGEN) -H @CPU_CLOCK_RATE_HZ@ sci > $@
 BUILT_SOURCES = scitab.c
-CLEANFILES += scitab.c
+CLEANFILES = scitab.c
 
 noinst_PROGRAMS += scitab.rel
 scitab_rel_SOURCES = scitab.c
@@ -68,5 +66,4 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../../automake/local.am
