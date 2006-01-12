@@ -1,4 +1,13 @@
 2006-01-11	Till Straumann <strauman@slac.stanford.edu>
+	* vmeUniverse/vmeTsi148.c, vmeUniverse/vmeTsi148.h,
+	vmeUniverse/vmeUniverse.c, vmeUniverse/vmeUniverse.h,
+    vmeUniverse/vme_amd_defs.h: No longer enable posted-writes
+    on master windows (creates race-condition on memory-mapped
+    devices). A new flag allows for signalling that a window
+    maps 'ordinary memory'. Disable VME IRQ level if no
+    handler is registered with interrupting vector.
+
+2006-01-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/vmeTsi148.c, vmeUniverse/vmeTsi148.h:
     Eliminate obsolete types.

@@ -58,10 +58,22 @@
 #define VME_AM_IS_SUP(a)			((a)  & 4)
 #endif
 
-/* Higher order bits are driver specific */
+/* Mask for standard address modifiers */
 
 #ifndef VME_AM_MASK
 #define VME_AM_MASK					0xff
 #endif
+
+/* Hint that the a window is mapping memory; the 
+ * driver may assume it to be safe to enable decoupled
+ * cycles, caching and the like...
+ */
+#ifndef VME_AM_IS_MEMORY
+#define VME_AM_IS_MEMORY			(1<<8)
+#endif
+
+/* Flags 1<<11 .. 1<<8  are reserved
+ * Flags 1<<12 .. 1<<31 are for driver specific options
+ */
 
 #endif

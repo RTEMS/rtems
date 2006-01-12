@@ -1147,8 +1147,9 @@ int					lvl;
 
 			if ( !(ip=irqHdlTbl[vector])) {
 				/* TODO: log error message - RTEMS has no logger :-( */
-				printk("vmeTsi148 ISR: ERROR: no handler registered (level %i) IACK 0x%08x\n",
-						lvl, vector);
+				vmeTsi148IntDisable(lvl);
+				printk("vmeTsi148 ISR: ERROR: no handler registered (level %i) IACK 0x%08x -- DISABING level %i\n",
+						lvl, vector, lvl);
 			} else {
 				/* dispatch handler, it must clear the IRQ at the device */
 				ip->isr(ip->usrData, vecarg);

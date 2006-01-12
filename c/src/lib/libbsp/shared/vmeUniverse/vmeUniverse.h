@@ -74,7 +74,17 @@
 #define VME_AM_MASK					0xff
 #endif
 
+/* Enables posted writes (and on a VME slave: prefetched reads, too) */
+#ifndef VME_AM_IS_MEMORY
+#define VME_AM_IS_MEMORY			(1<<8)
 #endif
+
+#endif
+
+
+
+/* When looking for an address translation, ask for a match of VME_MODE_PWEN etc., too */
+#define VME_MODE_EXACT_MATCH		(1<<31)
 
 #include <stdarg.h>
 

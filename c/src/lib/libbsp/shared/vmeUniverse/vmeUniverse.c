@@ -290,10 +290,31 @@ static int
 am2mode(int ismaster, unsigned long address_space, unsigned long *pmode)
 {
 unsigned long mode=0;
+
+    /* NOTE: reading the CY961 (Echotek ECDR814) with VDW32
+     *       generated bus errors when reading 32-bit words
+     *       - very weird, because the registers are 16-bit
+     *         AFAIK.
+     *       - 32-bit accesses worked fine on vxWorks which
+     *         has the port set to 64-bit.
+     *       ????????
+     */
+
 	if (!ismaster) {
 		mode |= UNIV_SCTL_DAT | UNIV_SCTL_PGM;
 		mode |= UNIV_SCTL_USER;
+		if ( VME_AM_IS_MEMORY & address_space )
+			mode |= UNIV_SCTL_PWEN | UNIV_SCTL_PREN;
+		mode |= UNIV_SCTL_EN;
+	} else {
+		mode |= UNIV_MCTL_VDW64 | UNIV_MCTL_VCT /* enable block transfers */;
+		if ( VME_AM_IS_MEMORY & address_space )
+			mode |= UNIV_MCTL_PWEN;
+		mode |= UNIV_MCTL_EN;
 	}
+
+	address_space &= ~VME_AM_IS_MEMORY;
+
 	switch (address_space) {
 		case VME_AM_STD_SUP_PGM:
 		case VME_AM_STD_USR_PGM:
@@ -456,19 +477,6 @@ unsigned long	mode=0;
 #else
 		WRITE_LE(offst,preg,12);
 #endif
-		/* calculate configuration word and enable the port */
-		/* NOTE: reading the CY961 (Echotek ECDR814) with VDW32
-		 *       generated bus errors when reading 32-bit words
-                 *       - very weird, because the registers are 16-bit
-                 *         AFAIK.
-		 *       - 32-bit accesses worked fine on vxWorks which
-                 *         has the port set to 64-bit.
-                 *       ????????
-                 */
-		if (ismaster)
-			mode |= UNIV_MCTL_EN | UNIV_MCTL_PWEN | UNIV_MCTL_VDW64 | UNIV_MCTL_VCT;
-		else 
-			mode |= UNIV_SCTL_EN | UNIV_SCTL_PWEN | UNIV_SCTL_PREN;
 
 #ifdef TSILL
 		uprintf(stderr,"writing 0x%08x to 0x%08x + 0\n",mode,preg);
@@ -545,12 +553,18 @@ showUniversePort(
 		uprintf(f,"%s, %s",
 			cntrl&UNIV_MCTL_PGM ?   "Pgm" : "Dat",
 			cntrl&UNIV_MCTL_SUPER ? "Sup" : "Usr");
+		if ( cntrl & UNIV_MCTL_PWEN )
+			uprintf(f,", PWEN");
 	} else {
 		uprintf(f,"%s %s %s %s", 
 			cntrl&UNIV_SCTL_PGM ?   "Pgm," : "    ",
 			cntrl&UNIV_SCTL_DAT ?   "Dat," : "    ",
 			cntrl&UNIV_SCTL_SUPER ? "Sup," : "    ",
 			cntrl&UNIV_SCTL_USER  ? "Usr" :  "");
+		if ( cntrl & UNIV_SCTL_PWEN )
+			uprintf(f,", PWEN");
+		if ( cntrl & UNIV_SCTL_PREN )
+			uprintf(f,", PREN");
 	}
 	uprintf(f,"\n");
 	return 0;
@@ -590,8 +604,13 @@ unsigned long cntrl, start, bound, offst, mask, x;
 		               l->aspace);
 		return -1;
 	}
-	if ( (cntrl & (ismaster ? UNIV_MCTL_AM_MASK : UNIV_SCTL_AM_MASK))
-	    != offst )
+
+	if ( ! (VME_MODE_EXACT_MATCH & l->aspace) ) {
+		cntrl &= (ismaster ? UNIV_MCTL_AM_MASK : UNIV_SCTL_AM_MASK);
+		offst &= (ismaster ? UNIV_MCTL_AM_MASK : UNIV_SCTL_AM_MASK);
+	}
+
+	if ( cntrl != offst )
 		return 0; /* mode doesn't match requested AM */
 
 	/* OK, we found a matching mode, now we must check the address range */
@@ -1305,10 +1324,20 @@ unsigned long 		linten;
 
 		if (status & UNIV_VIRQ_ERR) {
 				/* TODO: log error message - RTEMS has no logger :-( */
-			printk("vmeUniverse ISR: error read from STATID register; (level: %i) STATID: 0x%08x\n", lvl, status);
+#ifdef BSP_PIC_DO_EOI
+			linten &= ~msk;
+#else
+			vmeUniverseIntDisable(lvl);
+#endif
+			printk("vmeUniverse ISR: error read from STATID register; (level: %i) STATID: 0x%08x -- DISABLING\n", lvl, status);
 		} else if (!(ip=universeHdlTbl[status & UNIV_VIRQ_STATID_MASK])) {
+#ifdef BSP_PIC_DO_EOI
+			linten &= ~msk;
+#else
+			vmeUniverseIntDisable(lvl);
+#endif
 				/* TODO: log error message - RTEMS has no logger :-( */
-			printk("vmeUniverse ISR: no handler installed for this vector; (level: %i) STATID: 0x%08x\n", lvl, status);
+			printk("vmeUniverse ISR: no handler installed for this vector; (level: %i) STATID: 0x%08x -- DISABLING\n", lvl, status);
 		} else {
 				/* dispatch handler, it must clear the IRQ at the device */
 				ip->isr(ip->usrData, status&UNIV_VIRQ_STATID_MASK);
