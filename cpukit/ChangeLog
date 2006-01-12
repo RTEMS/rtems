@@ -1,3 +1,18 @@
+2006-01-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am, ftpd/Makefile.am, httpd/Makefile.am,
+	itron/Makefile.am, libblock/Makefile.am, libcsupport/Makefile.am,
+	libfs/Makefile.am, libmisc/Makefile.am, libnetworking/Makefile.am,
+	librpc/Makefile.am, posix/Makefile.am, pppd/Makefile.am, 
+	rtems/Makefile.am, sapi/Makefile.am, score/Makefile.am,
+	score/cpu/arm/Makefile.am, score/cpu/avr/Makefile.am,
+	score/cpu/c4x/Makefile.am, score/cpu/h8300/Makefile.am, 
+	score/cpu/i386/Makefile.am, score/cpu/m68k/Makefile.am,
+	score/cpu/mips/Makefile.am, score/cpu/no_cpu/Makefile.am,
+	score/cpu/powerpc/Makefile.am, score/cpu/sh/Makefile.am,
+	score/cpu/sparc/Makefile.am, score/cpu/unix/Makefile.am,
+	telnetd/Makefile.am, zlib/Makefile.am: Remove all-local:.
+
 2006-01-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/error.c: include and use inttypes.h.
