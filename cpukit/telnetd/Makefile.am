@@ -17,7 +17,5 @@ endif
 
 EXTRA_DIST = README
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

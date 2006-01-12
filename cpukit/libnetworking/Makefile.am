@@ -5,9 +5,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 AM_CPPFLAGS += -I$(srcdir)
 
 EXTRA_DIST = README
@@ -17,8 +14,7 @@ UNUSED_FILES = poll.h
 # Original FreeBSD file
 UNUSED_FILES += sys/poll.h
 
-UNUSED_FILES += net/zlib.c net/zlib.h
-UNUSED_FILES += net/ppp.h net/ppp-deflate.c net/bsd-comp.c
+UNUSED_FILES += net/ppp-deflate.c net/bsd-comp.c
 
 if HAS_NETWORKING
 # Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
@@ -30,12 +26,13 @@ libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(libnetworking_CPPFLAGS)
 
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
-include_HEADERS = loop.h netdb.h
+include_HEADERS = netdb.h
 include_HEADERS += resolv.h syslog.h
 
 libnetworking_a_SOURCES = opt_atalk.h opt_bdg.h opt_compat.h opt_inet6.h \
     opt_inet.h opt_ipfw.h opt_ipx.h opt_mac.h opt_mrouting.h opt_netgraph.h \
-    opt_tcpdebug.h opt_ipsec.h
+    opt_tcpdebug.h opt_ipsec.h loop.h
+libnetworking_a_SOURCES += opt_ppp.h
 libnetworking_a_SOURCES += bpfilter.h
 
 # arpa
@@ -68,6 +65,7 @@ include_net_HEADERS = net/bpf.h net/ethernet.h net/if.h net/if_arp.h \
     net/if_dl.h net/if_llc.h net/if_ppp.h net/if_types.h net/if_var.h \
     net/netisr.h net/ppp-comp.h net/ppp_defs.h net/radix.h net/raw_cb.h \
     net/route.h net/if_pppvar.h net/pppcompress.h net/slcompress.h
+include_net_HEADERS += net/if_media.h
 
 libnetworking_a_SOURCES += net/if.c net/if_ethersubr.c net/if_loop.c \
     net/radix.c net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c \
@@ -98,8 +96,11 @@ libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
 
 include_nfsdir = $(includedir)/nfs
 
-include_nfs_HEADERS = nfs/krpc.h nfs/nfs.h nfs/nfsproto.h \
-    nfs/rpcv2.h nfs/xdr_subs.h
+include_nfs_HEADERS = nfs/krpc.h
+include_nfs_HEADERS += nfs/nfs.h
+include_nfs_HEADERS += nfs/nfsproto.h
+include_nfs_HEADERS += nfs/rpcv2.h
+include_nfs_HEADERS += nfs/xdr_subs.h
 
 libnetworking_a_SOURCES += nfs/bootp_subr.c
 
@@ -114,6 +115,7 @@ include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = rtems/rtems_bsdnet.h rtems/rtems_bsdnet_internal.h \
     rtems/dhcp.h rtems/tftp.h rtems/ftpfs.h rtems/mkrootfs.h
+include_rtems_HEADERS += rtems/rtems_mii_ioctl.h
 
 libnetworking_a_SOURCES += rtems/sghostname.c rtems/issetugid.c \
     rtems/rtems_glue.c rtems/rtems_syscall.c \
@@ -122,6 +124,7 @@ libnetworking_a_SOURCES += rtems/sghostname.c rtems/issetugid.c \
     rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c \
     rtems/rtems_showtcpstat.c rtems/rtems_showudpstat.c rtems/rtems_select.c \
     rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c
+libnetworking_a_SOURCES += rtems/rtems_mii_ioctl.c rtems/rtems_mii_ioctl_kern.c
 
 ## sys
 
@@ -139,6 +142,10 @@ include_sys_HEADERS = sys/buf.h sys/callout.h sys/conf.h sys/domain.h \
 include_vmdir = $(includedir)/vm
 
 include_vm_HEADERS = vm/vm.h vm/vm_extern.h vm/vm_kern.h vm/vm_param.h
+
+# dev
+include_dev_miidir = $(includedir)/dev/mii
+include_dev_mii_HEADERS = dev/mii/mii.h
 
 ## libc
 
@@ -190,8 +197,5 @@ endif
 
 EXTRA_DIST += $(UNUSED_FILES)
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

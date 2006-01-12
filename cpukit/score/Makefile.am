@@ -155,8 +155,6 @@ EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
 
 DISTCLEANFILES = include/rtems/score/cpuopts.h
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

@@ -164,7 +164,5 @@ not:
 
 EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES)
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

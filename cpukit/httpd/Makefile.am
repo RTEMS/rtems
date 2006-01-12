@@ -25,7 +25,5 @@ endif
 
 EXTRA_DIST = webcomp.c webpage.c
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

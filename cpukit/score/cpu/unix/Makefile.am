@@ -17,7 +17,5 @@ noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

@@ -17,7 +17,5 @@ libpppd_a_SOURCES = auth.c ccp.c ccp.h chap.c chap.h chap_ms.c chap_ms.h \
 libpppd_a_CPPFLAGS = $(AM_CPPFLAGS) -D__BSD_VISIBLE
 endif
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

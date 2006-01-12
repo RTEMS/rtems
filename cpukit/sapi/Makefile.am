@@ -29,7 +29,5 @@ libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/io.c src/itronapi.c src/posixapi.c src/rtemsapi.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

@@ -87,7 +87,5 @@ EXTRA_DIST += include/rpcsvc/bootparam_prot.x include/rpcsvc/crypt.x \
     include/rpcsvc/ypupdate_prot.x include/rpcsvc/yp.x \
     include/rpcsvc/ypxfrd.x
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

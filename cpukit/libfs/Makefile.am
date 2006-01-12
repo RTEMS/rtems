@@ -51,8 +51,6 @@ libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/dosfs.h
 endif
 
-all-local: $(PREINSTALL_FILES)
-
 # ---
-
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

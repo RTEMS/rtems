@@ -99,7 +99,5 @@ libfsmount_a_SOURCES = fsmount/fsmount.c fsmount/fsmount.h
 EXTRA_DIST += fsmount/README
 
 ## ---
-
-all-local: $(PREINSTALL_FILES)
-
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

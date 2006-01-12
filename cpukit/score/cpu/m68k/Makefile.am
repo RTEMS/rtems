@@ -20,7 +20,5 @@ include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/m68k.h \
 
 libscorecpu_a_SOURCES = cpu.c cpu_asm.S
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

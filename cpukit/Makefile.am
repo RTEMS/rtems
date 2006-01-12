@@ -166,8 +166,6 @@ include_rtems_HEADERS += libmisc/untar/untar.h
 ## fsmount
 include_rtems_HEADERS += libmisc/fsmount/fsmount.h
 
-all-local: $(PREINSTALL_FILES)
-
 cpukit.doxy: cpukit.doxy.in Makefile
 	d=`pwd`;cd $(PROJECT_INCLUDE);project_include=`pwd`;cd $$d; \
 	sed \

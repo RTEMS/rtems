@@ -115,7 +115,5 @@ UNUSED_C_FILES = src/cre_mbx.c src/del_mbx.c src/mboxtranslatereturncode.c \
 
 EXTRA_DIST += $(UNUSED_C_FILES) src/TODO
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

@@ -124,7 +124,5 @@ librtems_a_SOURCES += src/eventmp.c src/mp.c src/msgmp.c src/partmp.c \
     src/regionmp.c src/semmp.c src/signalmp.c src/taskmp.c
 endif
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

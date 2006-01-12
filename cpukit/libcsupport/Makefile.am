@@ -33,8 +33,6 @@ include_rtems_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
     include/zilog/z8536.h
 
 ##  General stuff
-all-local: $(PREINSTALL_FILES)
-
 ERROR_C_FILES = src/error.c
 
 ASSOCIATION_C_FILES = src/assoc.c src/assocnamebad.c
@@ -91,8 +89,6 @@ libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
 endif
 
 EXTRA_DIST = src/TODO src/CASES src/README
-
-all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
