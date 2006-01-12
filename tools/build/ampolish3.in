@@ -1,5 +1,7 @@
 #! @PERL@ -w
 
+# $Id$
+
 # Helper script to generate pre/tmpinstall rules for cpukit Makefile.am.
 #
 # Usage: ampolish3 Makefile.am > preinstall.am
@@ -101,6 +103,12 @@ foreach my $l ( @buffer1 ) {
   } elsif ( $l =~ /^\s*(if|else|endif)\s*.*$/o )
   { # conditionals
     push @buffer2, "$l";
+  }
+
+  # Check if Makefile.am already contains CLEANFILES or DISTCLEANFILES
+  if ( $l =~ /^\s*(CLEANFILES|DISTCLEANFILES)\s*\=.*$/o )
+  {
+    $predefs{"$1"} = 1;
   }
 }
 
@@ -214,9 +222,19 @@ foreach my $k ( keys %seen )
 {
   $output .= "$k =\n";
   if ( $k =~ /.*FILES/o ) {
-    $output .= "CLEANFILES += \$($k)\n";
+    $output .= "CLEANFILES ";
+    if ( $predefs{"CLEANFILES"} ) {
+      $output .= "+";
+      $predefs{"CLEANFILES"} = 1;
+    }
+    $output .= "= \$($k)\n";
   } elsif ( $k =~ /.*DIRS/o ) {
-    $output .= "DISTCLEANFILES += \$($k)\n";
+    $output .= "DISTCLEANFILES ";
+    if ( $predefs{"DISTCLEANFILES"} ) {
+      $output .= "+";
+      $predefs{"DISTCLEANFILES"} = 1;
+    }
+    $output .= "= \$($k)\n";
   }
   $output .= "\n";
 }

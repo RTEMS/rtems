@@ -1,6 +1,11 @@
+2006-10-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Check if Makefile.am already contains CLEANFILES or
+	DISTCLEANFILES.
+
 2006-10-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* ampolish3.im: Update.
+	* ampolish3.in: Update.
 
 2005-10-25	Ralf Corsepius <ralf.corsepius@rtems.org>
 
