@@ -56,8 +56,6 @@ libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am

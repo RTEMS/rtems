@@ -152,8 +152,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/page.rel \
     ../../../libcpu/@RTEMS_CPU@/score.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST += HOWTO README.dec21140 STATUS times_i486dx times_p5
 
 include $(srcdir)/preinstall.am

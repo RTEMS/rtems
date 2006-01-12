@@ -47,8 +47,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/vectors.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/ictrl.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST = times
 
 include $(srcdir)/preinstall.am

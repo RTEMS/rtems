@@ -75,7 +75,5 @@ libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel clock.rel console.rel gdbsci.rel scitab.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

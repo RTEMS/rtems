@@ -105,7 +105,5 @@ EXTRA_DIST += shmdr/README
 
 ## --
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

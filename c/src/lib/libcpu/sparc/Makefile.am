@@ -31,7 +31,5 @@ reg_win_rel_SOURCES = reg_win/window.S
 reg_win_rel_CPPFLAGS = $(AM_CPPFLAGS)
 reg_win_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

@@ -61,8 +61,6 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel console.rel clock.rel timer.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am

@@ -102,7 +102,5 @@ r46xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 r46xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-all-local: $(PREINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

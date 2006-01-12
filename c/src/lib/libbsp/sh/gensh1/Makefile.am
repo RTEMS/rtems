@@ -61,8 +61,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/delay.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am

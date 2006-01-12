@@ -23,7 +23,5 @@ librtems___a_SOURCES = src/rtemsEvent.cc src/rtemsInterrupt.cc \
 librtems___a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../automake/local.am

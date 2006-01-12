@@ -30,7 +30,5 @@ page_rel_SOURCES = page.c cpu.h
 page_rel_CPPFLAGS = $(AM_CPPFLAGS)
 page_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

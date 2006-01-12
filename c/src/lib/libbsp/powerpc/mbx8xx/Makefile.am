@@ -88,7 +88,5 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/exceptions.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

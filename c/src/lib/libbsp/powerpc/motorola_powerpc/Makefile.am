@@ -158,8 +158,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST += BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
     README.OTHERBOARDS README.mcp750 README.MVME2307 README.dec21140
 EXTRA_DIST += times.mcp750 times.mvme2307

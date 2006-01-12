@@ -170,7 +170,5 @@ endif
 
 EXTRA_DIST += src/awk.svc
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

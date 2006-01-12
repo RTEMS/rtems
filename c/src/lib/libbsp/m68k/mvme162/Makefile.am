@@ -83,8 +83,6 @@ if HAS_FPSP
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/fpsp.rel
 endif
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am

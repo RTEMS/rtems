@@ -53,8 +53,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/r46xx/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/r46xx/vectorisrs.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am

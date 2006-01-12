@@ -75,7 +75,5 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/mbus.rel
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
