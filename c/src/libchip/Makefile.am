@@ -4,9 +4,6 @@
 
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 if LIBCHIP
 include_libchipdir = $(includedir)/libchip
 include_libchip_HEADERS =
@@ -112,5 +109,4 @@ EXTRA_DIST += shmdr/README
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am
