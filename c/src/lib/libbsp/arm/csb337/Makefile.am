@@ -14,7 +14,6 @@ include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
-CLEANFILES =
 noinst_PROGRAMS =
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
@@ -63,5 +62,4 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../../automake/local.am

@@ -14,7 +14,6 @@ include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
-
 noinst_PROGRAMS =
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
@@ -56,8 +55,6 @@ libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST += times
-CLEANFILES =
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../../automake/local.am

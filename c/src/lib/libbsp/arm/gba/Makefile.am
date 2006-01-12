@@ -20,7 +20,6 @@ include_HEADERS += include/gba.h
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 DISTCLEANFILES = include/bspopts.h
-CLEANFILES =
 noinst_PROGRAMS =
 
 EXTRA_DIST = start/start.S
@@ -73,5 +72,4 @@ endif
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../../automake/local.am

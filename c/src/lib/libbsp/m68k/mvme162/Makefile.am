@@ -14,7 +14,6 @@ include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
-CLEANFILES =
 noinst_PROGRAMS =
 
 # wrapup is the one that actually builds and installs the library

@@ -17,7 +17,6 @@ DISTCLEANFILES = include/bspopts.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_PROGRAMS =
-CLEANFILES =
 
 EXTRA_DIST = start/start.S start/regs.S
 start.$(OBJEXT): start/start.S
@@ -72,5 +71,4 @@ libbsp_a_LIBADD += ../../../libcpu/mips/shared/cache.rel \
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../../automake/local.am

@@ -6,8 +6,6 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
 noinst_PROGRAMS =
 
 if shared
@@ -126,5 +124,4 @@ include_mcf5282_HEADERS = mcf5282/include/mcf5282.h
 endif
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../automake/local.am

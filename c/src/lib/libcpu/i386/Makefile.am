@@ -4,9 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
-CLEANFILES =
-DISTCLEANFILES =
-
 noinst_PROGRAMS =
 
 include $(top_srcdir)/../../../automake/compile.am
@@ -36,5 +33,4 @@ page_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../automake/local.am

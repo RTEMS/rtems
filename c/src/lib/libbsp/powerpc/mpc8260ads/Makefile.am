@@ -89,8 +89,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST += times
-CLEANFILES =
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../../automake/local.am

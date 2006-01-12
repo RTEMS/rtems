@@ -157,5 +157,4 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 EXTRA_DIST += HOWTO README.dec21140 STATUS times_i486dx times_p5
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../../automake/local.am

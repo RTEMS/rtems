@@ -6,8 +6,6 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
 noinst_PROGRAMS =
 
 if sh7032
@@ -122,5 +120,4 @@ sh7750_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../automake/local.am

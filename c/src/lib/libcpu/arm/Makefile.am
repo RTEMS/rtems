@@ -6,8 +6,6 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
 EXTRA_DIST =
 
 noinst_PROGRAMS =
@@ -120,5 +118,4 @@ endif
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../automake/local.am
