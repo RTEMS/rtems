@@ -19,9 +19,5 @@ endif
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-CLEANFILES =
-DISTCLEANFILES =
-
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

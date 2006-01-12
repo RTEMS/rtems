@@ -6,8 +6,6 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
-CLEANFILES =
-DISTCLEANFILES =
 
 if HAS_POSIX
 
@@ -169,5 +167,4 @@ EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES)
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

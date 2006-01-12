@@ -5,9 +5,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = include/confdefs.h
@@ -35,5 +32,4 @@ libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

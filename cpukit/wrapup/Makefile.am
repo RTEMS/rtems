@@ -10,8 +10,6 @@ ARCH = o-optimize
 
 project_lib_LIBRARIES = librtemscpu.a
 librtemscpu_a_SOURCES =
-CLEANFILES =
-DISTCLEANFILES =
 
 TMP_LIBS =
 TMP_LIBS += ../score/cpu/@RTEMS_CPU@/libscorecpu.a
@@ -104,5 +102,4 @@ librtemscpu.a: $(TMP_LIBS)
 all-local: $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

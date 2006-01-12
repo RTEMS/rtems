@@ -6,8 +6,6 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
-CLEANFILES =
-DISTCLEANFILES =
 
 if HAS_ITRON
 ## include
@@ -120,5 +118,4 @@ EXTRA_DIST += $(UNUSED_C_FILES) src/TODO
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

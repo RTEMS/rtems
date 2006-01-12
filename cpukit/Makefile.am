@@ -23,14 +23,11 @@ SUBDIRS += ftpd
 SUBDIRS += telnetd
 SUBDIRS += pppd
 
-CLEANFILES =
-DISTCLEANFILES =
-
 noinst_DATA = preinstall-stamp
 preinstall-stamp:
 	$(MAKE) $(AM_MAKEFLAGS) preinstall
 	touch preinstall-stamp
-CLEANFILES += preinstall-stamp
+CLEANFILES = preinstall-stamp
 
 include_HEADERS =
 
@@ -171,7 +168,16 @@ include_rtems_HEADERS += libmisc/fsmount/fsmount.h
 
 all-local: $(PREINSTALL_FILES)
 
-include $(srcdir)/preinstall.am
+cpukit.doxy: cpukit.doxy.in Makefile
+	d=`pwd`;cd $(PROJECT_INCLUDE);project_include=`pwd`;cd $$d; \
+	sed \
+	-e "s,[@]PROJECT_INCLUDE[@],$${project_include}," \
+	-e  's,[@]DOXY_FILTER[@],$(top_srcdir)/$(RTEMS_TOPdir)/tools/build/doxy-filter,' \
+	$(srcdir)/cpukit.doxy.in > cpukit.doxy
+	  
+doxy:	preinstall-stamp cpukit.doxy
+	doxygen cpukit.doxy
 
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

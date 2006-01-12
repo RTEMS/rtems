@@ -5,9 +5,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 SUBDIRS = . cpu
 
 ## include
@@ -156,11 +153,10 @@ libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
 
-DISTCLEANFILES += include/rtems/score/cpuopts.h
+DISTCLEANFILES = include/rtems/score/cpuopts.h
 
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

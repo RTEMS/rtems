@@ -4,9 +4,6 @@
 
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 project_lib_LIBRARIES = libz.a
 
 libz_a_SOURCES = adler32.c
@@ -30,5 +27,4 @@ include_HEADERS = zlib.h zconf.h
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

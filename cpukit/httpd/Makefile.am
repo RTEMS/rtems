@@ -4,9 +4,6 @@
 
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 AM_CPPFLAGS += -DWEBS -DUEMF
 
 if HAS_NETWORKING
@@ -31,5 +28,4 @@ EXTRA_DIST = webcomp.c webpage.c
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

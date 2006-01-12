@@ -4,9 +4,6 @@
 
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
@@ -26,5 +23,4 @@ libscorecpu_a_SOURCES = cpu.c cpu_asm.S
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

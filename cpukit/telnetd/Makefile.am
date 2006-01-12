@@ -4,9 +4,6 @@
 
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 if HAS_NETWORKING
 if LIBSHELL
 include_rtemsdir = $(includedir)/rtems
@@ -23,5 +20,4 @@ EXTRA_DIST = README
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

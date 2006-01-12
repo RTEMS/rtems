@@ -5,9 +5,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 noinst_LIBRARIES = libcsupport.a
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
 
@@ -98,5 +95,4 @@ EXTRA_DIST = src/TODO src/CASES src/README
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

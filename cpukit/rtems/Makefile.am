@@ -5,9 +5,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-CLEANFILES =
-DISTCLEANFILES =
-
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = librtems.a
@@ -130,5 +127,4 @@ endif
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am

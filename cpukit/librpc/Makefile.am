@@ -6,8 +6,6 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
-CLEANFILES =
-DISTCLEANFILES =
 
 if LIBRPC
 include_rpcdir = $(includedir)/rpc
@@ -92,5 +90,4 @@ EXTRA_DIST += include/rpcsvc/bootparam_prot.x include/rpcsvc/crypt.x \
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/automake/local.am
