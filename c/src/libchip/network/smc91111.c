@@ -192,7 +192,8 @@ static void lan91cxx_recv(struct lan91cxx_priv_data *cpd, struct mbuf *m)
 			start = (char *)data;
 			mlen = n->m_len;
 			if ((data) && (mlen > 1)) {
-				*((unsigned short *)data)++ = (val & 0xffff);
+				*(unsigned short *)data = (val & 0xffff);
+				data = (rxd_t *)((unsigned short *)data + 1);
 				plen -= 2;
 				mlen -= 2;
 			}
@@ -213,9 +214,10 @@ static void lan91cxx_recv(struct lan91cxx_priv_data *cpd, struct mbuf *m)
 			while (mlen >= sizeof(*data)) {
 #ifdef LAN91CXX_32BIT_RX
 				val = get_data(cpd);
-				*((unsigned short *)data)++ =
-				    (val >> 16) & 0xffff;
-				*((unsigned short *)data)++ = (val & 0xffff);
+				*(unsigned short *)data = (val >> 16) & 0xffff;
+				data = (rxd_t *)((unsigned short *)data + 1);
+				*(unsigned short *)data = (val & 0xffff);
+				data = (rxd_t *)((unsigned short *)data + 1);
 #else
 				*data++ = get_data(cpd);
 #endif
@@ -250,7 +252,8 @@ static void lan91cxx_recv(struct lan91cxx_priv_data *cpd, struct mbuf *m)
 #ifdef LAN91CXX_32BIT_RX
 	if (plen & 2) {
 		if (data) {
-			*((unsigned short *)data)++ = (val >> 16) & 0xffff;
+			*(unsigned short *)data = (val >> 16) & 0xffff;
+            data = (rxd_t *)((unsigned short *)data + 1);
 			val <<= 16;
 		}
 	}
