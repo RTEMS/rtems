@@ -6,17 +6,19 @@ $(srcdir)/preinstall.am: Makefile.am
 endif
 
 PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
+
+all-local: $(TMPINSTALL_FILES)
 
 TMPINSTALL_FILES =
-CLEANFILES += $(TMPINSTALL_FILES)
+CLEANFILES = $(TMPINSTALL_FILES)
 
-if HAS_NETWORKING
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
+if HAS_NETWORKING
 $(PROJECT_LIB)/libftpd.a: libftpd.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libftpd.a
 TMPINSTALL_FILES += $(PROJECT_LIB)/libftpd.a
