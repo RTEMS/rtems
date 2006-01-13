@@ -166,16 +166,6 @@ include_rtems_HEADERS += libmisc/untar/untar.h
 ## fsmount
 include_rtems_HEADERS += libmisc/fsmount/fsmount.h
 
-cpukit.doxy: cpukit.doxy.in Makefile
-	d=`pwd`;cd $(PROJECT_INCLUDE);project_include=`pwd`;cd $$d; \
-	sed \
-	-e "s,[@]PROJECT_INCLUDE[@],$${project_include}," \
-	-e  's,[@]DOXY_FILTER[@],$(top_srcdir)/$(RTEMS_TOPdir)/tools/build/doxy-filter,' \
-	$(srcdir)/cpukit.doxy.in > cpukit.doxy
-	  
-doxy:	preinstall-stamp cpukit.doxy
-	doxygen cpukit.doxy
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
