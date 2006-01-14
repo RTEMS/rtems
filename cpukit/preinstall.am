@@ -6,7 +6,9 @@ $(srcdir)/preinstall.am: Makefile.am
 endif
 
 PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
+
+all-am: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
@@ -79,6 +81,14 @@ if HAS_NETWORKING
 $(PROJECT_INCLUDE)/ftpd.h: backward/ftpd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ftpd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ftpd.h
+
+$(PROJECT_INCLUDE)/rtemspppd.h: backward/rtemspppd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtemspppd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtemspppd.h
+
+$(PROJECT_INCLUDE)/rtemsdialer.h: backward/rtemsdialer.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtemsdialer.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtemsdialer.h
 endif
 $(PROJECT_INCLUDE)/motorola/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/motorola
@@ -299,6 +309,10 @@ endif
 $(PROJECT_INCLUDE)/rtems/rtmonuse.h: libmisc/rtmonuse/rtmonuse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtmonuse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtmonuse.h
+
+$(PROJECT_INCLUDE)/rtems/libi2c.h: libi2c/libi2c.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libi2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libi2c.h
 
 if LIBSERDBG
 $(PROJECT_INCLUDE)/rtems/serdbgcnf.h: libmisc/serdbg/serdbgcnf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)

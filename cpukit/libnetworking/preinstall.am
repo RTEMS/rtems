@@ -6,21 +6,19 @@ $(srcdir)/preinstall.am: Makefile.am
 endif
 
 PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
+
+all-am: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 
-if HAS_NETWORKING
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-$(PROJECT_INCLUDE)/loop.h: loop.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/loop.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/loop.h
-
+if HAS_NETWORKING
 $(PROJECT_INCLUDE)/netdb.h: netdb.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netdb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netdb.h
@@ -159,6 +157,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/pppcompress.h
 $(PROJECT_INCLUDE)/net/slcompress.h: net/slcompress.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/slcompress.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/slcompress.h
+
+$(PROJECT_INCLUDE)/net/if_media.h: net/if_media.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_media.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_media.h
 
 $(PROJECT_INCLUDE)/netinet/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/netinet
@@ -320,6 +322,10 @@ $(PROJECT_INCLUDE)/rtems/mkrootfs.h: rtems/mkrootfs.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mkrootfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mkrootfs.h
 
+$(PROJECT_INCLUDE)/rtems/rtems_mii_ioctl.h: rtems/rtems_mii_ioctl.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_mii_ioctl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_mii_ioctl.h
+
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
@@ -453,4 +459,13 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/vm_kern.h
 $(PROJECT_INCLUDE)/vm/vm_param.h: vm/vm_param.h $(PROJECT_INCLUDE)/vm/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vm/vm_param.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/vm_param.h
+
+$(PROJECT_INCLUDE)/dev/mii/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/dev/mii
+	@: > $(PROJECT_INCLUDE)/dev/mii/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/dev/mii/$(dirstamp)
+
+$(PROJECT_INCLUDE)/dev/mii/mii.h: dev/mii/mii.h $(PROJECT_INCLUDE)/dev/mii/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/mii/mii.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/mii/mii.h
 endif
