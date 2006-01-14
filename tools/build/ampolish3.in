@@ -106,7 +106,7 @@ foreach my $l ( @buffer1 ) {
   }
 
   # Check if Makefile.am already contains CLEANFILES or DISTCLEANFILES
-  if ( $l =~ /^\s*(CLEANFILES|DISTCLEANFILES)\s*\=.*$/o )
+  if ( $l =~ /^\s*(CLEANFILES|DISTCLEANFILES|SUBDIRS)\s*\=.*$/o )
   {
     $predefs{"$1"} = 1;
   }
@@ -221,7 +221,7 @@ $output .= "endif\n\n";
 foreach my $k ( keys %seen )
 {
   if ( $k =~ /PREINSTALL_FILES/o ) {
-    $output .= "all: \$(PREINSTALL_FILES) all-am\n\n";
+    $output .= "all-am: \$(PREINSTALL_FILES)\n\n";
 
     $output .= "$k =\n";
     $output .= "CLEANFILES ";

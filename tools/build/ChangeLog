@@ -1,3 +1,8 @@
+2006-10-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Check Makefile.am for SUBDIRS.
+	Add all-am: for PREINSTALL_FILES.
+
 2006-10-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* ampolish3.in: Add all: for PREINSTALL_FILES.
