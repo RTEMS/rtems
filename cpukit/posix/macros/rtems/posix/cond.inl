@@ -67,7 +67,7 @@
        *  Do an "auto-create" here. \
        */ \
     \
-      _status = pthread_cond_init( _id, 0 ); \
+      _status = pthread_cond_init( (pthread_cond_t *)_id, 0 ); \
       if ( _status ) { \
         *_location = OBJECTS_ERROR;  \
         return (POSIX_Condition_variables_Control *) 0; \

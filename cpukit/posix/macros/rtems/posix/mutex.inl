@@ -59,7 +59,7 @@
        *  Do an "auto-create" here. \
        */ \
     \
-      _status = pthread_mutex_init( _id, 0 ); \
+      _status = pthread_mutex_init( (pthread_mutex_t *)_id, 0 ); \
       if ( _status ) { \
         *_location = OBJECTS_ERROR;  \
         return (POSIX_Mutex_Control *) 0; \

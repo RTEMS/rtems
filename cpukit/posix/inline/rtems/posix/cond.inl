@@ -72,7 +72,7 @@ RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control
      *  Do an "auto-create" here.
      */
 
-    status = pthread_cond_init( id, 0 );
+    status = pthread_cond_init( (pthread_cond_t *)id, 0 );
     if ( status ) {
       *location = OBJECTS_ERROR;
       return (POSIX_Condition_variables_Control *) 0;
