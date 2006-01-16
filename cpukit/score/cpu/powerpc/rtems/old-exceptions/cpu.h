@@ -20,7 +20,7 @@
  *
  *  Derived from c/src/exec/cpu/no_cpu/cpu.h:
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -102,8 +102,7 @@ typedef void ( *ppc_isr_entry )( int, struct CPU_Interrupt_frame * );
  *  If TRUE, then the memory is allocated during initialization.
  *  If FALSE, then the memory is allocated during initialization.
  *
- *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE
- *  or CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
+ *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE.
  */
 
 #define CPU_ALLOCATE_INTERRUPT_STACK TRUE

@@ -299,7 +299,7 @@ typedef struct CPU_Interrupt_frame {
 #endif
 
 /*
- *  Should be large enough to run all RTEMS tests.  This insures
+ *  Should be large enough to run all RTEMS tests.  This ensures
  *  that a "reasonable" small application should not have any problems.
  */
 
@@ -365,7 +365,7 @@ typedef struct CPU_Interrupt_frame {
  *  Some CPUs have special instructions which swap a 32-bit quantity in
  *  a single instruction (e.g. i486).  It is probably best to avoid
  *  an "endian swapping control bit" in the CPU.  One good reason is
- *  that interrupts would probably have to be disabled to insure that
+ *  that interrupts would probably have to be disabled to ensure that
  *  an interrupt does not try to access the same "chunk" with the wrong
  *  endian.  Another good reason is that on some CPUs, the endian bit
  *  endianness for ALL fetches -- both code and data -- so the code
