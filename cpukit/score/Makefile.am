@@ -5,7 +5,7 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-SUBDIRS = . cpu
+SUBDIRS = cpu
 
 ## include
 
@@ -79,26 +79,39 @@ EXTRA_DIST = macros/README
 
 ## src
 
-# We only build multiprocessing related files if HAS_MP was defined
-MP_C_FILES = src/mpci.c src/objectmp.c src/threadmp.c
+AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-CORE_MESSAGE_QUEUE_C_FILES = src/coremsg.c src/coremsgbroadcast.c \
+noinst_LIBRARIES = libscore.a
+libscore_a_SOURCES =
+libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
+
+# We only build multiprocessing related files if HAS_MP was defined
+if HAS_MP
+libscore_a_SOURCES += src/mpci.c src/objectmp.c src/threadmp.c
+endif
+
+## CORE_MESSAGE_QUEUE_C_FILES
+libscore_a_SOURCES += src/coremsg.c src/coremsgbroadcast.c \
     src/coremsgclose.c src/coremsgflush.c src/coremsgflushwait.c \
     src/coremsginsert.c src/coremsgflushsupp.c src/coremsgseize.c \
     src/coremsgsubmit.c
 
-CORE_MUTEX_C_FILES = src/coremutex.c src/coremutexflush.c \
+## CORE_MUTEX_C_FILES
+libscore_a_SOURCES += src/coremutex.c src/coremutexflush.c \
     src/coremutexseize.c src/coremutexsurrender.c
 
-CORE_SEMAPHORE_C_FILES = src/coresem.c src/coresemflush.c src/coresemseize.c \
+## CORE_SEMAPHORE_C_FILES
+libscore_a_SOURCES += src/coresem.c src/coresemflush.c src/coresemseize.c \
     src/coresemsurrender.c
 
-HEAP_C_FILES = src/heap.c src/heapallocate.c src/heapextend.c src/heapfree.c \
+## HEAP_C_FILES
+libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c src/heapfree.c \
     src/heapsizeofuserarea.c src/heapwalk.c src/heapgetinfo.c \
     src/heapgetfreeinfo.c src/heapallocatealigned.c \
     src/heapresizeblock.c
 
-OBJECT_C_FILES = src/object.c src/objectallocate.c \
+## OBJECT_C_FILES
+libscore_a_SOURCES += src/object.c src/objectallocate.c \
     src/objectallocatebyindex.c src/objectclearname.c \
     src/objectcomparenameraw.c src/objectcomparenamestring.c \
     src/objectcopynameraw.c src/objectcopynamestring.c \
@@ -108,7 +121,8 @@ OBJECT_C_FILES = src/object.c src/objectallocate.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
     src/objectidtoname.c
 
-THREAD_C_FILES = src/thread.c src/threadchangepriority.c \
+## THREAD_C_FILES
+libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \
     src/threaddelayended.c src/threaddispatch.c src/threadevaluatemode.c \
     src/threadget.c src/threadhandler.c src/threadidlebody.c \
@@ -120,7 +134,8 @@ THREAD_C_FILES = src/thread.c src/threadchangepriority.c \
     src/threadsuspend.c src/threadtickletimeslice.c \
     src/threadyieldprocessor.c src/iterateoverthreads.c
 
-THREADQ_C_FILES = src/threadq.c src/threadqdequeue.c \
+## THREADQ_C_FILES
+libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
     src/threadqdequeuefifo.c src/threadqdequeuepriority.c \
     src/threadqenqueue.c src/threadqenqueuefifo.c \
     src/threadqenqueuepriority.c src/threadqextract.c \
@@ -128,30 +143,19 @@ THREADQ_C_FILES = src/threadq.c src/threadqdequeue.c \
     src/threadqextractwithproxy.c src/threadqfirst.c src/threadqfirstfifo.c \
     src/threadqfirstpriority.c src/threadqflush.c src/threadqtimeout.c
 
-TOD_C_FILES = src/coretod.c src/coretodset.c src/coretodtickle.c \
+## TOD_C_FILES
+libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodtickle.c \
     src/coretodtoseconds.c src/coretodvalidate.c
 
-WATCHDOG_C_FILES = src/watchdog.c src/watchdogadjust.c src/watchdoginsert.c \
+## WATCHDOG_C_FILES
+libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c src/watchdoginsert.c \
     src/watchdogremove.c src/watchdogtickle.c
 
-STD_C_FILES = src/apiext.c src/chain.c $(CORE_MESSAGE_QUEUE_C_FILES) \
-    $(CORE_MUTEX_C_FILES) $(CORE_SEMAPHORE_C_FILES) $(HEAP_C_FILES) \
-    src/interr.c src/isr.c $(OBJECT_C_FILES) $(THREAD_C_FILES) \
-    $(THREADQ_C_FILES) $(TOD_C_FILES) src/userext.c $(WATCHDOG_C_FILES) \
-    src/wkspace.c
+## STD_C_FILES
+libscore_a_SOURCES += src/apiext.c src/chain.c \
+    src/interr.c src/isr.c src/userext.c src/wkspace.c
 
-C_FILES = $(STD_C_FILES)
-if HAS_MP
-C_FILES += $(MP_C_FILES)
-endif
-
-AM_CPPFLAGS += -D__RTEMS_INSIDE__
-
-noinst_LIBRARIES = libscore.a
-libscore_a_SOURCES = $(C_FILES)
-libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
-
-EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
+EXTRA_DIST += src/Unlimited.txt
 
 DISTCLEANFILES = include/rtems/score/cpuopts.h
 

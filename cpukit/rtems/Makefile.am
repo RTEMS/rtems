@@ -64,59 +64,67 @@ endif
 ## src
 librtems_a_SOURCES =
 
-TASK_C_FILES = src/tasks.c src/taskcreate.c src/taskdelete.c \
+## TASK_C_FILES 
+librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
     src/taskgetnote.c src/taskident.c src/taskinitusers.c \
     src/taskissuspended.c src/taskmode.c src/taskrestart.c src/taskresume.c \
     src/tasksetnote.c src/tasksetpriority.c src/taskstart.c \
     src/tasksuspend.c src/taskwakeafter.c src/taskwakewhen.c \
     src/taskvariableadd.c src/taskvariabledelete.c src/taskvariableget.c
 
-RATEMON_C_FILES = src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
+## RATEMON_C_FILES 
+librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
     src/ratemondelete.c src/ratemongetstatus.c src/ratemonident.c \
     src/ratemonperiod.c src/ratemontimeout.c
 
-INTR_C_FILES = src/intr.c src/intrbody.c src/intrcatch.c
+## INTR_C_FILES 
+librtems_a_SOURCES += src/intr.c src/intrbody.c src/intrcatch.c
 
-CLOCK_C_FILES = src/rtclock.c src/clockget.c src/clockset.c src/clocktick.c
+## CLOCK_C_FILES
+librtems_a_SOURCES += src/rtclock.c src/clockget.c src/clockset.c src/clocktick.c
 
-TIMER_C_FILES = src/rtemstimer.c src/timercancel.c src/timercreate.c \
+## TIMER_C_FILES
+librtems_a_SOURCES += src/rtemstimer.c src/timercancel.c src/timercreate.c \
     src/timerdelete.c src/timerfireafter.c src/timerfirewhen.c \
     src/timergetinfo.c src/timerident.c src/timerreset.c src/timerserver.c \
     src/timerserverfireafter.c src/timerserverfirewhen.c
 
-MESSAGE_QUEUE_C_FILES = src/msg.c src/msgqallocate.c src/msgqbroadcast.c \
+## MESSAGE_QUEUE_C_FILES
+librtems_a_SOURCES += src/msg.c src/msgqallocate.c src/msgqbroadcast.c \
     src/msgqcreate.c src/msgqdelete.c src/msgqflush.c \
     src/msgqgetnumberpending.c src/msgqident.c src/msgqreceive.c \
     src/msgqsend.c src/msgqsubmit.c src/msgqtranslatereturncode.c \
     src/msgqurgent.c
 
-SEMAPHORE_C_FILES = src/sem.c src/semcreate.c src/semdelete.c src/semident.c \
+## SEMAPHORE_C_FILES
+librtems_a_SOURCES += src/sem.c src/semcreate.c src/semdelete.c src/semident.c \
     src/semobtain.c src/semrelease.c src/semflush.c \
     src/semtranslatereturncode.c
 
-EVENT_C_FILES = src/event.c src/eventreceive.c src/eventseize.c \
+## EVENT_C_FILES
+librtems_a_SOURCES += src/event.c src/eventreceive.c src/eventseize.c \
     src/eventsend.c src/eventsurrender.c src/eventtimeout.c
 
-SIGNAL_C_FILES = src/signal.c src/signalcatch.c src/signalsend.c
+## SIGNAL_C_FILES
+librtems_a_SOURCES += src/signal.c src/signalcatch.c src/signalsend.c
 
-REGION_C_FILES = src/region.c src/regioncreate.c src/regiondelete.c \
+## REGION_C_FILES
+librtems_a_SOURCES += src/region.c src/regioncreate.c src/regiondelete.c \
     src/regionextend.c src/regiongetsegment.c src/regiongetsegmentsize.c \
     src/regionident.c src/regionreturnsegment.c src/regiongetinfo.c \
     src/regiongetfreeinfo.c src/regionresizesegment.c \
     src/regionprocessqueue.c
 
-PARTITION_C_FILES = src/part.c src/partcreate.c src/partdelete.c \
+## PARTITION_C_FILES
+librtems_a_SOURCES += src/part.c src/partcreate.c src/partdelete.c \
     src/partgetbuffer.c src/partident.c src/partreturnbuffer.c
 
-DPMEM_C_FILES = src/dpmem.c src/dpmemcreate.c src/dpmemdelete.c \
+## DPMEM_C_FILES
+librtems_a_SOURCES += src/dpmem.c src/dpmemcreate.c src/dpmemdelete.c \
     src/dpmemexternal2internal.c src/dpmemident.c \
     src/dpmeminternal2external.c
 
-librtems_a_SOURCES += src/attr.c src/rtemsidtoname.c $(TASK_C_FILES) \
-    $(RATEMON_C_FILES) $(INTR_C_FILES) $(CLOCK_C_FILES) $(TIMER_C_FILES) \
-    $(SEMAPHORE_C_FILES) $(MESSAGE_QUEUE_C_FILES) $(EVENT_C_FILES) \
-    $(SIGNAL_C_FILES) $(PARTITION_C_FILES) $(REGION_C_FILES) \
-    $(DPMEM_C_FILES)
+librtems_a_SOURCES += src/attr.c src/rtemsidtoname.c
 
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
