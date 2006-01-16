@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,7 +24,7 @@
 /**
  *  @defgroup ScoreSemaphore Semaphore Handler
  *
- *  This group contains functionality which provides the foundation
+ *  This handler encapsulates functionality which provides the foundation
  *  Semaphore services used in all of the APIs supported by RTEMS.
  */
 /**@{*/
@@ -118,9 +118,9 @@ typedef struct {
 /**
  *  This routine initializes the semaphore based on the parameters passed.
  *
- *  @param the_semaphore (in) is the semaphore to initialize
- *  @param the_semaphore_attributes (in) define the behavior of this instance
- *  @param initial_value (in) is the initial count of the semaphore
+ *  @param[in] the_semaphore is the semaphore to initialize
+ *  @param[in] the_semaphore_attributes define the behavior of this instance
+ *  @param[in] initial_value is the initial count of the semaphore
  */
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control       *the_semaphore,
@@ -134,11 +134,11 @@ void _CORE_semaphore_Initialize(
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.
  *
- *  @param the_semaphore (in) is the semaphore to seize
- *  @param id (in) is the Id of the API level Semaphore object associated
+ *  @param[in] the_semaphore is the semaphore to seize
+ *  @param[in] id is the Id of the API level Semaphore object associated
  *         with this instance of a SuperCore Semaphore
- *  @param wait (in) is TRUE if the calling thread is willing to wait
- *  @param timeout (in) is the number of ticks the calling thread is willing
+ *  @param[in] wait is TRUE if the calling thread is willing to wait
+ *  @param[in] timeout is the number of ticks the calling thread is willing
  *         to wait if @a wait is TRUE.
  */
 void _CORE_semaphore_Seize(
@@ -153,10 +153,10 @@ void _CORE_semaphore_Seize(
  *  for a unit from this semaphore, then that task will be readied and the unit
  *  given to that task.  Otherwise, the unit will be returned to the semaphore.
  *
- *  @param the_semaphore (in) is the semaphore to surrender
- *  @param id (in) is the Id of the API level Semaphore object associated
+ *  @param[in] the_semaphore is the semaphore to surrender
+ *  @param[in] id is the Id of the API level Semaphore object associated
  *         with this instance of a SuperCore Semaphore
- *  @param api_semaphore_mp_support (in) is the routine to invoke if the
+ *  @param[in] api_semaphore_mp_support is the routine to invoke if the
  *         thread unblocked is remote
  *
  *  @return an indication of whether the routine succeeded or failed
@@ -171,10 +171,10 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
  *  This routine assists in the deletion of a semaphore by flushing the
  *  associated wait queue.
  *
- *  @param the_semaphore (in) is the semaphore to flush
- *  @param remote_extract_callout (in) is the routine to invoke if the
+ *  @param[in] the_semaphore is the semaphore to flush
+ *  @param[in] remote_extract_callout is the routine to invoke if the
  *         thread unblocked is remote
- *  @param status (in) is the status to be returned to the unblocked thread
+ *  @param[in] status is the status to be returned to the unblocked thread
  */
 void _CORE_semaphore_Flush(
   CORE_semaphore_Control         *the_semaphore,

@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -224,7 +224,11 @@ RTEMS_INLINE_ROUTINE boolean _Thread_Is_null (
  *  Otherwise, location is set to OBJECTS_ERROR and
  *  the_thread is undefined.
  *
- *  @note  XXX... This routine may be able to be optimized.
+ *  @note  The performance of many RTEMS services depends upon
+ *         the quick execution of the "good object" path in this
+ *         routine.  If there is a possibility of saving a few
+ *         cycles off the execution time, this routine is worth
+ *         further optimization attention.
  */
 
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get (

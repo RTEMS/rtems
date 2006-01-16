@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,10 +25,15 @@
  */
 
 /**
+ *  @brief Is Mutex Locked
+ *
  *  This routine returns TRUE if the mutex specified is locked and FALSE
  *  otherwise.
+ *
+ *  @param[in] the_mutex is the mutex to check
+ *
+ *  @return This method returns TRUE if the mutex is locked.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_locked(
   CORE_mutex_Control  *the_mutex
 )
@@ -37,10 +42,15 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_locked(
 }
  
 /**
+ *  @brief Does Core Mutex Use FIFO Blocking
+ *
  *  This routine returns TRUE if the mutex's wait discipline is FIFO and FALSE
  *  otherwise.
+ *
+ *  @param[in] the_attribute is the attribute set of the mutex
+ *
+ *  @return This method returns TRUE if the mutex is using FIFO blocking order.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_fifo(
   CORE_mutex_Attributes *the_attribute
 )
@@ -49,10 +59,16 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_fifo(
 }
  
 /**
+ *  @brief Doex Core Mutex Use Priority Blocking
+ *
  *  This routine returns TRUE if the mutex's wait discipline is PRIORITY and
  *  FALSE otherwise.
+ *
+ *  @param[in] the_attribute is the attribute set of the mutex
+ *
+ *  @return This method returns TRUE if the mutex is using
+ *          priority blocking order.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority(
   CORE_mutex_Attributes *the_attribute
 )
@@ -61,10 +77,16 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority(
 }
  
 /**
+ *  @brief Does Mutex Use Priority Inheritance
+ *
  *  This routine returns TRUE if the mutex's wait discipline is
  *  INHERIT_PRIORITY and FALSE otherwise.
+ *
+ *  @param[in] the_attribute is the attribute set of the mutex
+ *
+ *  @return This method returns TRUE if the mutex is using priority
+ *          inheritance.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_inherit_priority(
   CORE_mutex_Attributes *the_attribute
 )
@@ -73,10 +95,16 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_inherit_priority(
 }
  
 /**
+ *  @brief Does Mutex Use Priority Ceiling
+ *
  *  This routine returns TRUE if the mutex's wait discipline is
  *  PRIORITY_CEILING and FALSE otherwise.
+ *
+ *  @param[in] the_attribute is the attribute set of the mutex
+ *
+ *  @return This method returns TRUE if the mutex is using priority
+ *          ceiling.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
   CORE_mutex_Attributes *the_attribute
 )
@@ -85,14 +113,10 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
 }
  
 /*
- *  This routine returns 0 if "trylock" can resolve whether or not the
- *  mutex is immediately obtained or there was an error attempting to
- *  get it.  It returns 1 to indicate that the caller cannot obtain
- *  the mutex and will have to block to do so.
+ *  Seize Mutex with Quick Success Path
  *
- *  NOTE: There is no MACRO version of this routine.
- *        A body is in coremutexseize.c that is duplicated
- *        from the .inl by hand.
+ *  NOTE: There is no MACRO version of this routine.  A body is in
+ *  coremutexseize.c that is duplicated from the .inl by hand.
  *
  *  NOTE: The Doxygen for this routine is in the .h file.
  */

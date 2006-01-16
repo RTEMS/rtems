@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,7 +22,7 @@
 /**
  *  @defgroup ScoreTOD Time Of Day (TOD) Handler
  *
- *  This group contains functionality which XXX
+ *  This handler encapsulates functionality used to manage time of day. 
  */
 /**@{*/
 
@@ -39,62 +39,62 @@ extern "C" {
 /**@{*/
 
 /**
- *  XXX
+ *  This constant represents the number of seconds in a minute.
  */
-#define TOD_SECONDS_PER_MINUTE (uint32_t  )60
+#define TOD_SECONDS_PER_MINUTE (uint32_t)60
 
 /**
- *  XXX
+ *  This constant represents the number of minutes per hour.
  */
-#define TOD_MINUTES_PER_HOUR   (uint32_t  )60
+#define TOD_MINUTES_PER_HOUR   (uint32_t)60
 
 /**
- *  XXX
+ *  This constant represents the number of months in a year.
  */
-#define TOD_MONTHS_PER_YEAR    (uint32_t  )12
+#define TOD_MONTHS_PER_YEAR    (uint32_t)12
 
 /**
- *  XXX
+ *  This constant represents the number of days in a non-leap year.
  */
-#define TOD_DAYS_PER_YEAR      (uint32_t  )365
+#define TOD_DAYS_PER_YEAR      (uint32_t)365
 
 /**
- *  XXX
+ *  This constant represents the number of hours per day.
  */
-#define TOD_HOURS_PER_DAY      (uint32_t  )24
+#define TOD_HOURS_PER_DAY      (uint32_t)24
 
 /**
- *  XXX
+ *  This constant represents the number of seconds in a day which does
+ *  not include a leap second.
  */
-#define TOD_SECONDS_PER_DAY    (uint32_t  ) (TOD_SECONDS_PER_MINUTE * \
+#define TOD_SECONDS_PER_DAY    (uint32_t) (TOD_SECONDS_PER_MINUTE * \
                                 TOD_MINUTES_PER_HOUR   * \
                                 TOD_HOURS_PER_DAY)
 
-
 /**
- *  XXX
+ *  This constant represents the number of seconds in a non-leap year.
  */
 #define TOD_SECONDS_PER_NON_LEAP_YEAR (365 * TOD_SECONDS_PER_DAY)
 
 /**
- *  XXX
+ *  This constant represents the number of seconds in a millisecond.
  */
-#define TOD_MILLISECONDS_PER_SECOND     (uint32_t  )1000
+#define TOD_MILLISECONDS_PER_SECOND     (uint32_t)1000
 
 /**
- *  XXX
+ *  This constant represents the number of microseconds in a second.
  */
-#define TOD_MICROSECONDS_PER_SECOND     (uint32_t  )1000000
+#define TOD_MICROSECONDS_PER_SECOND     (uint32_t)1000000
 
 /**
- *  XXX
+ *  This constant represents the number of nanoseconds in a second.
  */
-#define TOD_NANOSECONDS_PER_SECOND      (uint32_t  )1000000000
+#define TOD_NANOSECONDS_PER_SECOND      (uint32_t)1000000000
 
 /**
- *  XXX
+ *  This constant represents the number of nanoseconds in a second.
  */
-#define TOD_NANOSECONDS_PER_MICROSECOND (uint32_t  )1000
+#define TOD_NANOSECONDS_PER_MICROSECOND (uint32_t)1000
 
 /**@}*/
 
@@ -204,18 +204,24 @@ const uint16_t   _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
 
 #else
 
-/** @brief
+/** @brief Convert Month to Julian Days
  *
+ *  This is a prototype for a table which assists in converting the 
+ *  current day into the Julian days since the first of the year.
  */
 extern const uint16_t   _TOD_Days_to_date[2][13]; /* Julian days */
 
-/** @brief
+/** @brief Days since Beginning of Last Leap Year
  *
+ *  This is a prototype for a table which assists in calculating the
+ *  number of days since the beginning of the last leap year.
  */
 extern const uint16_t   _TOD_Days_since_last_leap_year[4];
 
-/** @brief
+/** @brief Days Per Month Table
  *
+ *  This is a prototype for a table which holds the number of days
+ *  per month for a leap year and non-leap year.
  */
 extern const uint32_t   _TOD_Days_per_month[2][13];
 

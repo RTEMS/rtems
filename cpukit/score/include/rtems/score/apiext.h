@@ -1,11 +1,11 @@
-/** 
+/**
  *  @file  rtems/score/apiext.h
  *
  *  This is the API Extensions Handler.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,9 +21,9 @@
 /**
  *  @defgroup ScoreAPIExtension API Extension Handler
  *
- *  This group contains functionality which provides mechanisms for the
- *  SuperCore to perform API specific actions without there being 
- *  "up-references" from the SuperCore to APIs.  If these references 
+ *  This handler encapsulates functionality which provides mechanisms for the
+ *  SuperCore to perform API specific actions without there beingg
+ *  "up-references" from the SuperCore to APIs.  If these referencesg
  *  were allowed in the implementation, the cohesion would be too high
  *  and adding an API would be more difficult.  The SuperCore is supposed
  *  to be largely independent of any API.
@@ -87,31 +87,36 @@ typedef struct {
  */
 SCORE_EXTERN Chain_Control _API_extensions_List;
 
-/**
+/** @brief Initialize the API Extensions Handler
+ *
  *  This routine initializes the API extension handler.
  */
 void _API_extensions_Initialization( void );
 
-/**
+/** @brief Add Extension Set to the Active Set
+ *
  *  This routine adds an extension to the active set of API extensions.
  *
- *  @param the_extension (in) is the extension set to add.
+ *  @param[in] the_extension is the extension set to add.
  */
 void _API_extensions_Add(
   API_extensions_Control *the_extension
 );
 
-/**
+/** @brief Execute all Pre-Driver Extensions
+ *
  *  This routine executes all of the predriver callouts.
  */
 void _API_extensions_Run_predriver( void );
 
-/**
+/** @brief Execute all Post-Driver Extensions
+ *
  *  This routine executes all of the postdriver callouts.
  */
 void _API_extensions_Run_postdriver( void );
 
-/**
+/** @brief Execute all Post Context Switch Extensions
+ *
  *  This routine executes all of the post context switch callouts.
  */
 void _API_extensions_Run_postswitch( void );

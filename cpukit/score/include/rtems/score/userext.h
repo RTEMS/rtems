@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,8 @@
 /**
  *  @defgroup ScoreUserExt User Extension Handler
  *
- *  This group contains functionality which XXX
+ *  This handler encapsulates functionality related to the management of
+ *  the user extensions to the SuperCore that are available to the user.
  */
 /**@{*/
 
@@ -35,6 +36,8 @@ extern "C" {
 #include <rtems/score/chain.h>
 #include <rtems/score/thread.h>
 
+/*@}*/
+
 /** @defgroup ScoreUserExtStruct User Extension Handler Structures
  *
  *  The following records defines the User Extension Table.
@@ -45,12 +48,13 @@ extern "C" {
 /*@{*/
 
 /**
- *  XXX
+ *  This type indicates the return type of a user extension method.
  */
 typedef void User_extensions_routine;
 
 /**
- *  XXX
+ *  This type defines the prototype of a thread creation extension handler.
+ *  The handler is passed the thread executing and the thread being created.
  */
 typedef boolean ( *User_extensions_thread_create_extension )(
                  Thread_Control *,
@@ -58,7 +62,8 @@ typedef boolean ( *User_extensions_thread_create_extension )(
              );
 
 /**
- *  XXX
+ *  This type defines the prototype of a thread deletion extension handler.
+ *  The handler is passed the thread executing and the thread being deleted.
  */
 typedef User_extensions_routine ( *User_extensions_thread_delete_extension )(
                  Thread_Control *,
@@ -66,7 +71,8 @@ typedef User_extensions_routine ( *User_extensions_thread_delete_extension )(
              );
 
 /**
- *  XXX
+ *  This type defines the prototype of thread starting extension handler.
+ *  The handler is passed the thread executing and the thread being started.
  */
 typedef User_extensions_routine ( *User_extensions_thread_start_extension )(
                  Thread_Control *,
@@ -74,7 +80,8 @@ typedef User_extensions_routine ( *User_extensions_thread_start_extension )(
              );
 
 /**
- *  XXX
+ *  This type defines the prototype of a thread restarting extension handler.
+ *  The handler is passed the thread executing and the thread being restarted.
  */
 typedef User_extensions_routine ( *User_extensions_thread_restart_extension )(
                  Thread_Control *,
@@ -82,7 +89,9 @@ typedef User_extensions_routine ( *User_extensions_thread_restart_extension )(
              );
 
 /**
- *  XXX
+ *  This type defines the prototype of thread context switch extension handler.
+ *  The handler is passed the thread currently executing and the thread being 
+ *  switched to.
  */
 typedef User_extensions_routine ( *User_extensions_thread_switch_extension )(
                  Thread_Control *,
@@ -90,29 +99,34 @@ typedef User_extensions_routine ( *User_extensions_thread_switch_extension )(
              );
 
 /**
- *  XXX
+ *  This type defines the prototype of a post context switch extension handler.
+ *  The handler is passed the thread thread being switched to.
  */
-typedef User_extensions_routine (
-                                *User_extensions_thread_post_switch_extension )(
+typedef User_extensions_routine (*User_extensions_thread_post_switch_extension)(
                  Thread_Control *
              );
 
 /**
- *  XXX
+ *  This type defines the prototype of a thread beginning to execute
+ *  extension handler.  The handler is passed the thread executing.  This
+ *  extension is executed in the context of the beginning thread.
  */
 typedef User_extensions_routine ( *User_extensions_thread_begin_extension )(
                  Thread_Control *
              );
 
 /**
- *  XXX
+ *  This type defines the prototype of a thread exiting extension handler.
+ *  The handler is passed the thread exiting.
  */
 typedef User_extensions_routine ( *User_extensions_thread_exitted_extension )(
                  Thread_Control *
              );
 
 /**
- *  XXX
+ *  This type defines the prototype of the fatal error extension handler.
+ *  The handler is passed an indicator of the source of the fatal error,
+ *  whether it is internal to RTEMS and an error code.
  */
 typedef User_extensions_routine ( *User_extensions_fatal_extension )(
                  Internal_errors_Source  /* the_source  */,
@@ -121,36 +135,37 @@ typedef User_extensions_routine ( *User_extensions_fatal_extension )(
              );
 
 /**
- *  XXX
+ *  This type defines a set of user extensions.
  */
 typedef struct {
-  /** This field is XXX */
+  /** This field is the thread creation handler. */
   User_extensions_thread_create_extension       thread_create;
-  /** This field is XXX */
+  /** This field is the thread starting handler. */
   User_extensions_thread_start_extension        thread_start;
-  /** This field is XXX */
+  /** This field is the thread restarting handler. */
   User_extensions_thread_restart_extension      thread_restart;
-  /** This field is XXX */
+  /** This field is the thread deleting handler */
   User_extensions_thread_delete_extension       thread_delete;
-  /** This field is XXX */
+  /** This field is thread context switch handler. */
   User_extensions_thread_switch_extension       thread_switch;
-  /** This field is XXX */
+  /** This field is the thread beginning handler. */
   User_extensions_thread_begin_extension        thread_begin;
-  /** This field is XXX */
+  /** This field is thread exiting handler. */
   User_extensions_thread_exitted_extension      thread_exitted;
-  /** This field is XXX */
+  /** This field is the fatal error extension. */
   User_extensions_fatal_extension               fatal;
 }   User_extensions_Table;
 
-/*@}*/
-
 /**
- *  This is used to manage the list of switch handlers.
+ *  This is used to manage the list of switch handlers.  They are managed
+ *  separately from other extensions for performance reasons.
  */
 typedef struct {
-  /** This field is XXX */
+  /** This field is a Chain Node structure and allows this to be placed on
+   *  chains for set management.
+   */
   Chain_Node                              Node;
-  /** This field is XXX */
+  /** This field is the thread switch extension. */
   User_extensions_thread_switch_extension thread_switch;
 }   User_extensions_Switch_control;
 
@@ -161,11 +176,13 @@ typedef struct {
  *  handler.
  */
 typedef struct {
-  /** This field is XXX */
+  /** This field is a Chain Node structure and allows this to be placed on
+   *  chains for set management.
+   */
   Chain_Node                     Node;
-  /** This field is XXX */
+  /** This field is the thread switch user extension. */
   User_extensions_Switch_control Switch;
-  /** This field is XXX */
+  /** This field is the rest of this user extension's entry points.  */
   User_extensions_Table          Callouts;
 }   User_extensions_Control;
 
@@ -180,10 +197,20 @@ SCORE_EXTERN Chain_Control _User_extensions_List;
  */
 SCORE_EXTERN Chain_Control _User_extensions_Switches_list;
 
+/*@}*/
+/** @addtogroup ScoreUserExt */
+
+/*@{*/
+
 /** @brief  User extensions Thread create
  *
  *  This routine is used to invoke the user extension for
  *  the thread creation operate.
+ *
+ *  @param[in] the_thread is the thread being created.
+ *
+ *  @return This method returns TRUE if the user extension executed
+ *          successfully.
  */
 boolean _User_extensions_Thread_create (
   Thread_Control *the_thread
@@ -193,6 +220,8 @@ boolean _User_extensions_Thread_create (
  *
  *  This routine is used to invoke the user extension for
  *  the thread deletion operation.
+ *
+ *  @param[in] the_thread is the thread being deleted.
  */
 void _User_extensions_Thread_delete (
   Thread_Control *the_thread
@@ -202,6 +231,8 @@ void _User_extensions_Thread_delete (
  *
  *  This routine is used to invoke the user extension for
  *  the thread start operation.
+ *
+ *  @param[in] the_thread is the thread being started.
  */
 void _User_extensions_Thread_start (
   Thread_Control *the_thread
@@ -211,6 +242,8 @@ void _User_extensions_Thread_start (
  *
  *  This routine is used to invoke the user extension for
  *  the thread restart operation.
+ *
+ *  @param[in] the_thread is the thread being restarted.
  */
 void _User_extensions_Thread_restart (
   Thread_Control *the_thread
@@ -220,6 +253,8 @@ void _User_extensions_Thread_restart (
  *
  *  This routine is used to invoke the user extension which
  *  is invoked when a thread begins.
+ *
+ *  @param[in] executing is the thread beginning to execute.
  */
 void _User_extensions_Thread_begin (
   Thread_Control *executing
@@ -229,6 +264,8 @@ void _User_extensions_Thread_begin (
  *
  *  This routine is used to invoke the user extension which
  *  is invoked when a thread exits.
+ *
+ *  @param[in] executing is the thread voluntarily exiting.
  */
 void _User_extensions_Thread_exitted (
   Thread_Control *executing
@@ -238,6 +275,10 @@ void _User_extensions_Thread_exitted (
  *
  *  This routine is used to invoke the user extension invoked
  *  when a fatal error occurs.
+ *
+ *  @param[in] the_source is the source of the fatal error.
+ *  @param[in] is_internal is TRUE if the error originated inside RTEMS.
+ *  @param[in] the_error is an indication of the actual error.
  */
 void _User_extensions_Fatal (
   Internal_errors_Source  the_source,

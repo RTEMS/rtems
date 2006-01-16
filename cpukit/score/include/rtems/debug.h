@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,69 +24,49 @@
 extern "C" {
 #endif
 
-/*
+/**
  *  The following type is used to manage the debug mask.
  */
-
 typedef uint32_t   rtems_debug_control;
 
 /*
  *  These constants represent various classes of debugging.
  */
 
+/** Macro which indicates that all debugging modes are enabled */
 #define RTEMS_DEBUG_ALL_MASK 0xffffffff
+
+/** Macro which indicates that debugging for heaps/regions is enabled */
 #define RTEMS_DEBUG_REGION   0x00000001
 
-/*
+/**
  *  This variable contains the current debug level.
  */
-
 SCORE_EXTERN rtems_debug_control _Debug_Level;
 
-/*
- *  _Debug_Manager_initialization
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine performs the initialization necessary for this manager.
  */
-
 void _Debug_Manager_initialization( void );
 
-/*
- *  rtems_debug_enable
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine enables the specified types of debug checks.
  */
-
 void rtems_debug_enable (
   rtems_debug_control  to_be_enabled
 );
 
-/*
- *  rtems_debug_disable
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine disables the specified types of debug checks.
  */
-
 void rtems_debug_disable (
   rtems_debug_control  to_be_disabled
 );
 
-/*
- *
- *  _Debug_Is_enabled
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine returns TRUE if the requested debug level is
  *  enabled, and FALSE otherwise.
  */
-
 boolean _Debug_Is_enabled(
   rtems_debug_control  level
 );

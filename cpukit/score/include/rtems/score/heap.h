@@ -18,7 +18,7 @@
  *         required to be multiple of CPU_ALIGNMENT and explicitly not
  *         required to be a power of two.
  *
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +34,7 @@
 /**
  *  @defgroup ScoreHeap Heap Handler
  *
- *  This group contains functionality which provides the foundation
+ *  This handler encapsulates functionality which provides the foundation
  *  Heap services used in all of the APIs supported by RTEMS.
  */
 /**@{*/
@@ -251,12 +251,14 @@ typedef struct {
  *  @a page_size byte units. If @a page_size is 0 or is not multiple of
  *  CPU_ALIGNMENT, it's aligned up to the nearest CPU_ALIGNMENT boundary.
  *
- *  @param the_heap (in) is the heap to operate upon
- *  @param starting_address (in) is the starting address of the memory for
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] starting_address is the starting address of the memory for
  *         the heap
- *  @param size (in) is the size in bytes of the memory area for the heap
- *  @param page_size (in) is the size in bytes of the allocation unit
- *  @return XXX
+ *  @param[in] size is the size in bytes of the memory area for the heap
+ *  @param[in] page_size is the size in bytes of the allocation unit
+ *
+ *  @return This method returns the maximum memory available.  If
+ *          unsuccessful, 0 will be returned.
  */
 uint32_t   _Heap_Initialize(
   Heap_Control *the_heap,
@@ -269,11 +271,11 @@ uint32_t   _Heap_Initialize(
  *  This routine grows @a the_heap memory area using the size bytes which
  *  begin at @a starting_address.
  *
- *  @param the_heap (in) is the heap to operate upon
- *  @param starting_address (in) is the starting address of the memory
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] starting_address is the starting address of the memory
  *         to add to the heap
- *  @param size (in) is the size in bytes of the memory area to add
- *  @param amount_extended (in) points to a user area to return the
+ *  @param[in] size is the size in bytes of the memory area to add
+ *  @param[in] amount_extended points to a user area to return the
  *  @return a status indicating success or the reason for failure
  *  @return *size filled in with the amount of memory added to the heap
  */
@@ -289,8 +291,8 @@ Heap_Extend_status _Heap_Extend(
  *  @a the_heap.  If insufficient memory is free in @a the_heap to allocate
  *  a block of the requested size, then NULL is returned.
  *
- *  @param the_heap (in) is the heap to operate upon
- *  @param size (in) is the amount of memory to allocate in bytes
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] size is the amount of memory to allocate in bytes
  *  @return NULL if unsuccessful and a pointer to the block if successful
  */
 void *_Heap_Allocate(
@@ -307,9 +309,9 @@ void *_Heap_Allocate(
  *  Returns pointer to the start of the memory block if success, NULL if
  *  failure.
  *
- *  @param the_heap (in) is the heap to operate upon
- *  @param size (in) is the amount of memory to allocate in bytes
- *  @param alignment (in) the required alignment
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] size is the amount of memory to allocate in bytes
+ *  @param[in] alignment the required alignment
  *  @return NULL if unsuccessful and a pointer to the block if successful
  */
 void *_Heap_Allocate_aligned(
@@ -325,10 +327,10 @@ void *_Heap_Allocate_aligned(
  *  Returns TRUE if the @a starting_address is in the heap, and FALSE
  *  otherwise.
  *
- *  @param the_heap (in) is the heap to operate upon
- *  @param starting_address (in) is the starting address of the user block
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] starting_address is the starting address of the user block
  *         to obtain the size of
- *  @param size (in) points to a user area to return the size in
+ *  @param[in] size points to a user area to return the size in
  *  @return TRUE if successfully able to determine the size, FALSE otherwise
  *  @return *size filled in with the size of the user area for this block
  */
@@ -338,17 +340,17 @@ boolean _Heap_Size_of_user_area(
   size_t              *size
 );
 
-/*
+/**
  *  This function tries to resize in place the block that is pointed to by the
  *  @a starting_address to the new @a size.
  *
- *  @param the_heap (in) is the heap to operate upon
- *  @param starting_address (in) is the starting address of the user block
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] starting_address is the starting address of the user block
  *         to be resized
- *  @param size (in) is the new size
- *  @param old_mem_size (in) points to a user area to return the size of the
+ *  @param[in] size is the new size
+ *  @param[in] old_mem_size points to a user area to return the size of the
  *         user memory area of the block before resizing.
- *  @param avail_mem_size (in) points to a user area to return the size of
+ *  @param[in] avail_mem_size points to a user area to return the size of
  *         the user memory area of the free block that has been enlarged or
  *         created due to resizing, 0 if none.
  *  @return HEAP_RESIZE_SUCCESSFUL if successfully able to resize the block,
@@ -373,8 +375,8 @@ Heap_Resize_status _Heap_Resize_block(
  *  at @a starting_address to @a the_heap.  Any coalescing which is
  *  possible with the freeing of this routine is performed.
  *
- *  @param the_heap (in) is the heap to operate upon
- *  @param starting_address (in) is the starting address of the user block
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] start_address is the starting address of the user block
  *         to free
  *  @return TRUE if successfully freed, FALSE otherwise
  */
@@ -386,12 +388,12 @@ boolean _Heap_Free(
 /**
  *  This routine walks the heap to verify its integrity.
  *
- *  @param the_heap (in) is the heap to operate upon
- *  @param source (in) XXX
- *  @param do_dump (in) is set to TRUE if errors should be printed
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] source is a user specified integer which may be used to
+ *         indicate where in the application this was invoked from
+ *  @param[in] do_dump is set to TRUE if errors should be printed
  *  @return TRUE if the test passed fine, FALSE otherwise.
  */
-
 boolean _Heap_Walk(
   Heap_Control *the_heap,
   int           source,
@@ -402,8 +404,8 @@ boolean _Heap_Walk(
  *  This routine walks the heap and tots up the free and allocated
  *  sizes.
  *
- *  @param the_heap (in) pointer to heap header
- *  @param the_info (in) pointer to a status information area
+ *  @param[in] the_heap pointer to heap header
+ *  @param[in] the_info pointer to a status information area
  *  @return *the_info is filled with status information
  *  @return 0=success, otherwise heap is corrupt.
  */
@@ -416,12 +418,11 @@ Heap_Get_information_status _Heap_Get_information(
  *  This heap routine returns information about the free blocks
  *  in the specified heap.
  *
- *  @param the_heap (in) pointer to heap header.
- *  @param info (in) pointer to the free block information.
+ *  @param[in] the_heap pointer to heap header.
+ *  @param[in] info pointer to the free block information.
  *
  *  @return free block information filled in.
  */
-
 void _Heap_Get_free_information(
   Heap_Control        *the_heap,
   Heap_Information    *info
@@ -429,27 +430,53 @@ void _Heap_Get_free_information(
 
 #if !defined(__RTEMS_APPLICATION__)
 
-/*
+/**
  *  A pointer to unsigned integer conversion.
  */
 #define _H_p2u(_p) ((_H_uptr_t)(_p))
 
 #include <rtems/score/heap.inl>
 
-/*
- *  Internal routines shared by _Heap_Allocate() and _Heap_Allocate_aligned().
- *  Refer to 'heap.c' for details.
+/**
+ *  Convert user requested 'size' of memory block to the block size.
+ *
+ *  @note This is an internal routine used by _Heap_Allocate() and
+ *  _Heap_Allocate_aligned().  Refer to 'heap.c' for details.
+ *
+ *  @param[in] size is the size of the block requested
+ *  @param[in] page_size is the page size of this heap instance
+ *  @param[in] min_size is minimum size block that should be allocated
+ *         from this heap instance
+ *
+ *  @return This method returns block size on success, 0 if overflow occured.
  */
-
 extern uint32_t _Heap_Calc_block_size(
   uint32_t size,
   uint32_t page_size,
-  uint32_t min_size);
+  uint32_t min_size
+);
 
+/**
+ *  This method allocates a block of size @a alloc_size from @a the_block
+ *  belonging to @a the_heap. Split @a the_block if possible, otherwise
+ *  allocate it entirely.  When split, make the lower part used, and leave
+ *  the upper part free.
+ *
+ *  This is an internal routines used by _Heap_Allocate() and
+ *  _Heap_Allocate_aligned().  Refer to 'heap.c' for details.
+ *
+ *  @param[in] the_heap is the heap to operate upon
+ *  @param[in] the_block is the block to allocates the requested size from
+ *  @param[in] alloc_size is the requested number of bytes to take out of 
+ *         the block
+ *
+ *  @return This methods returns the size of the allocated block.
+ */
 extern uint32_t _Heap_Block_allocate(
   Heap_Control* the_heap,
-  Heap_Block* the_block,
-  uint32_t alloc_size);
+  Heap_Block*   the_block,
+  uint32_t      alloc_size
+);
 
 /*
  * Debug support
@@ -459,16 +486,14 @@ extern uint32_t _Heap_Block_allocate(
 #define RTEMS_HEAP_DEBUG
 #endif
 
-#if defined(RTEMS_HEAP_DEBUG)
-
-#include <assert.h>
-
-/*
+/**
  *  We do asserts only for heaps with instance number greater than 0 assuming
  *  that the heap used for malloc is initialized first and thus has instance
  *  number 0. Asserting malloc heap may lead to troubles as printf may invoke
  *  malloc thus probably leading to infinite recursion.
  */
+#if defined(RTEMS_HEAP_DEBUG)
+#include <assert.h>
 
 #define _HAssert(cond_) \
   do { \

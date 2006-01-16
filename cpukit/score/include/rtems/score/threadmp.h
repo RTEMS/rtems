@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,7 +22,10 @@
 /**
  *  @defgroup ScoreThreadMP Thread Handler Multiprocessing Support
  *
- *  This group contains functionality which XXX
+ *  This handler encapsulates functionality which is related to managing 
+ *  threads in a multiprocessor system configuration.  This handler must
+ *  manage proxies which represent remote threads blocking on local
+ *  operations.
  */
 /**@{*/
 
@@ -37,6 +40,7 @@ extern "C" {
 void _Thread_MP_Handler_initialization (
   uint32_t   maximum_proxies
 );
+
 /** @brief _Thread_MP_Allocate_proxy
  *
  *  This  allocates a proxy control block from
@@ -66,7 +70,7 @@ Thread_Control *_Thread_MP_Find_proxy (
  */
 SCORE_EXTERN Thread_Control *_Thread_MP_Receive;
 
-/* @brief Active Proxy Set
+/** @brief Active Proxy Set
  *
  * The following chain is used to manage the active set proxies.
  */

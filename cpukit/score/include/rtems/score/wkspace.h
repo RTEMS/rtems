@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,8 @@
 /**
  *  @defgroup ScoreWorkspace Workspace Handler
  *
- *  This group contains functionality which XXX
+ *  This handler encapsulates functionality related to the management of
+ *  the RTEMS Executive Workspace.
  */
 /**@{*/
 
@@ -45,9 +46,9 @@ SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
  *
  *  This routine performs the initialization necessary for this handler.
  *
- *  @param starting_address (in) is the base address of the RTEMS Executive
+ *  @param[in] starting_address is the base address of the RTEMS Executive
  *         Workspace
- *  @param size (in) is the number of bytes in the RTEMS Executive Workspace
+ *  @param[in] size is the number of bytes in the RTEMS Executive Workspace
  */
 void _Workspace_Handler_initialization(
   void       *starting_address,
@@ -60,7 +61,7 @@ void _Workspace_Handler_initialization(
  *  bytes.  If a block of the appropriate size cannot be allocated
  *  from the workspace, then the internal error handler is invoked.
  *
- *  @param size (in) is the desired number of bytes to allocate
+ *  @param[in] size is the desired number of bytes to allocate
  *  @return If successful, the starting address of the allocated memory
  */
 void *_Workspace_Allocate_or_fatal_error(

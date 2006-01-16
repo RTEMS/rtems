@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,11 @@
 /**
  *  @defgroup ScoreWatchdog Watchdog Handler
  *
- *  This group contains functionality which XXX
+ *  This handler encapsulates functionality related to the scheduling of
+ *  watchdog functions to be called at specific times in the future.
+ *
+ *  @note This handler does not have anything to do with hardware watchdog
+ *        timers.
  */
 /**@{*/
 
@@ -109,14 +113,27 @@ typedef enum {
  *  to manage each watchdog timer.
  */
 typedef struct {
+  /** This field is a Chain Node structure and allows this to be placed on
+   *  chains for set management.
+   */
   Chain_Node                      Node;
+  /** This field is the state of the watchdog. */
   Watchdog_States                 state;
+  /** This field is the initially requested interval. */
   Watchdog_Interval               initial;
+  /** This field is the remaining portion of the interval. */
   Watchdog_Interval               delta_interval;
+  /** This field is the number of system clock ticks when this was scheduled. */
   Watchdog_Interval               start_time;
+  /** This field is the number of system clock ticks when this was suspended. */
   Watchdog_Interval               stop_time;
+  /** This field is the function to invoke. */
   Watchdog_Service_routine_entry  routine;
+  /** This field is the Id to pass as an argument to the routine. */
   Objects_Id                      id;
+  /** This field is an untyped pointer to user data that is passed to the
+   *  watchdog handler routine.
+   */
   void                           *user_data;
 }   Watchdog_Control;
 
@@ -166,7 +183,7 @@ void _Watchdog_Handler_initialization( void );
  *  This routine removes @a the_watchdog from the watchdog chain on which
  *  it resides and returns the state @a the_watchdog timer was in.
  *  
- *  @param the_watchdog (in) will be removed
+ *  @param[in] the_watchdog will be removed
  *  @return the state in which @a the_watchdog was in when removed
  */
 Watchdog_States _Watchdog_Remove (
@@ -178,9 +195,9 @@ Watchdog_States _Watchdog_Remove (
  *  This routine adjusts the @a header watchdog chain in the forward
  *  or backward @a direction for @a units ticks.
  *
- *  @param header (in) is the watchdog chain to adjust
- *  @param direction (in) is the direction to adjust @a header
- *  @param units (in) is the number of units to adjust @a header
+ *  @param[in] header is the watchdog chain to adjust
+ *  @param[in] direction is the direction to adjust @a header
+ *  @param[in] units is the number of units to adjust @a header
  */
 void _Watchdog_Adjust (
   Chain_Control              *header,
@@ -193,8 +210,8 @@ void _Watchdog_Adjust (
  *  This routine inserts @a the_watchdog into the @a header watchdog chain
  *  for a time of @a units.  
  *
- *  @param header (in) is @a the_watchdog list to insert @a the_watchdog on
- *  @param the_watchdog (in) is the watchdog to insert
+ *  @param[in] header is @a the_watchdog list to insert @a the_watchdog on
+ *  @param[in] the_watchdog is the watchdog to insert
  */
 void _Watchdog_Insert (
   Chain_Control         *header,
@@ -206,7 +223,7 @@ void _Watchdog_Insert (
  *  This routine is invoked at appropriate intervals to update
  *  the @a header watchdog chain.
  *
- *  @param header (in) is the watchdog chain to tickle
+ *  @param[in] header is the watchdog chain to tickle
  */
 
 void _Watchdog_Tickle (

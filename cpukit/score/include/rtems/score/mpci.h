@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,8 +22,12 @@
 /**
  *  @defgroup ScoreMPCI MPCI Handler
  *
- *  This group contains functionality which XXX
- */
+ *  The MPCI Handler encapsulates functionality which is related to the
+ *  generation, receipt, and processing of remote operations in a 
+ *  multiprocessor system.  This handler contains the message passing
+ *  support for making remote service calls as well as the server thread
+ *  which processes requests from remote nodes.
+*/
 /**@{*/
 
 #ifdef __cplusplus
@@ -38,7 +42,7 @@ extern "C" {
 #include <rtems/score/watchdog.h>
 #include <rtems/score/coresem.h>
 
-/*
+/**
  *  The following constants define the stack size requirements for
  *  the system threads.
  */
@@ -48,12 +52,12 @@ extern "C" {
     _CPU_Table.extra_mpci_receive_server_stack \
   )
 
-/*
+/**
  *  The following defines the node number used when a broadcast is desired.
  */
 #define MPCI_ALL_NODES 0
 
-/*
+/**
  *  For packets associated with requests that don't already have a timeout,
  *  use the one specified by this MPCI driver.  The value specified by
  *   the MPCI driver sets an upper limit on how long a remote request
@@ -61,71 +65,83 @@ extern "C" {
  */
 #define MPCI_DEFAULT_TIMEOUT    0xFFFFFFFF
 
-/*
- *  The following records define the Multiprocessor Communications
- *  Interface (MPCI) Table.  This table defines the user-provided
- *  MPCI which is a required part of a multiprocessor system.
- *
- *  For non-blocking local operations that become remote operations,
- *  we need a timeout.  This is a per-driver timeout: default_timeout
- */
-
 /**
  *  This type is returned by all user provided MPCI routines.
  */
 typedef void MPCI_Entry;
 
 /**
- *  This type is XXX
+ *  This type defines the prototype for the initization entry point
+ *  in an Multiprocessor Communications Interface.
  */
 typedef MPCI_Entry ( *MPCI_initialization_entry )( void );
 
 /**
- *  This type is XXX
+ *  This type defines the prototype for the get packet entry point
+ *  in an Multiprocessor Communications Interface.  The single 
+ *  parameter will point to the packet allocated.
  */
 typedef MPCI_Entry ( *MPCI_get_packet_entry )(
-                 MP_packet_Prefix **
-             );
+                     MP_packet_Prefix **
+                   );
 
 /**
- *  This type is XXX
+ *  This type defines the prototype for the return packet entry point
+ *  in an Multiprocessor Communications Interface.  The single 
+ *  parameter will point to a packet previously allocated by the
+ *  get packet MPCI entry.
  */
 typedef MPCI_Entry ( *MPCI_return_packet_entry )(
-                 MP_packet_Prefix *
-             );
+                     MP_packet_Prefix *
+                   );
 
 /**
- *  This type is XXX
+ *  This type defines the prototype for send get packet entry point
+ *  in an Multiprocessor Communications Interface.  The single 
+ *  parameter will point to a packet previously allocated by the
+ *  get packet entry point that has been filled in by the caller.
  */
 typedef MPCI_Entry ( *MPCI_send_entry )(
-                 uint32_t  ,
-                 MP_packet_Prefix *
-             );
+                     uint32_t,
+                     MP_packet_Prefix *
+                   );
 
 /**
- *  This type is XXX
+ *  This type defines the prototype for the receive packet entry point
+ *  in an Multiprocessor Communications Interface.  The single 
+ *  parameter will point to a packet allocated and filled in by the
+ *  receive packet handler.  The caller will block until a packet is
+ *  received.
  */
 typedef MPCI_Entry ( *MPCI_receive_entry )(
-                 MP_packet_Prefix **
-             );
+                     MP_packet_Prefix **
+                   );
 
 /**
- *  This type is XXX
+ *  This type defines the Multiprocessor Communications
+ *  Interface (MPCI) Table.  This table defines the user-provided
+ *  MPCI which is a required part of a multiprocessor system.
+ *
+ *  For non-blocking local operations that become remote operations,
+ *  we need a timeout.  This is a per-driver timeout: default_timeout
  */
 typedef struct {
-  /** timeout for MPCI operations in ticks */
+  /** This fields contains the timeout for MPCI operations in ticks. */
   uint32_t                   default_timeout;
-  /** XXX */
+  /** This field contains the maximum size of a packet supported by this
+   *  MPCI layer.  This size places a limit on the size of a message 
+   *  which can be transmitted over this interface.
+   **/
   uint32_t                   maximum_packet_size;
-  /** XXX */
+  /** This field points to the MPCI initialization entry point. */
   MPCI_initialization_entry  initialization;
-  /** XXX */
+  /** This field points to the MPCI get packet entry point. */
   MPCI_get_packet_entry      get_packet;
-  /** XXX */
+  /** This field points to the MPCI return packet entry point. */
   MPCI_return_packet_entry   return_packet;
-  /** XXX */
+  /** This field points to the MPCI send packet entry point. */
   MPCI_send_entry            send_packet;
-  /** XXX */
+  /** This field points to the MPCI receive packet entry point. */
   MPCI_receive_entry         receive_packet;
 } MPCI_Control;
 
@@ -148,13 +164,17 @@ typedef enum {
  *  remote event operations.
  */
 typedef struct {
-  /** XXX */
+  /** This field is the general header for all packets. */
   MP_packet_Prefix                 Prefix;
-  /** XXX */
+  /** This value specifies the operation. */
   MPCI_Internal_Remote_operations  operation;
-  /** XXX */
+  /** This is the maximum number of nodes in the system. It must agree
+   *  on all nodes.
+   */
   uint32_t                         maximum_nodes;
-  /** XXX */
+  /** This field is the maximum number of concurrently existent 
+   *  globally offered objects.
+   */
   uint32_t                         maximum_global_objects;
 }    MPCI_Internal_packet;
 
@@ -189,6 +209,12 @@ SCORE_EXTERN MPCI_Packet_processor
 
 /**
  *  This routine performs the initialization necessary for this handler.
+ *
+ *  @param[in] users_mpci_table is a pointer to the application configured
+ *             MPCI Table.  This table contains pointers to the MPCI Layers
+ *             entry points.
+ *  @param[in] timeout_status is the value which should be returned to
+ *             blocking threads when they timeout on a remote operation.
  */
 void _MPCI_Handler_initialization(
   MPCI_Control            *users_mpci_table,
@@ -209,6 +235,11 @@ void _MPCI_Initialization ( void );
 /**
  *  This routine registers the MPCI packet processor for the
  *  designated object class.
+ *
+ *  @param[in] the_class is the class indicator for packets which will
+ *             be processed by @a the_packet_processor method.
+ *  @param[in] the_packet_processor is a pointer to a method which is 
+ *             invoked when packets with @a the_class are received.
  */
 void _MPCI_Register_packet_processor(
   MP_packet_Classes      the_class,
@@ -219,12 +250,18 @@ void _MPCI_Register_packet_processor(
 /**
  *  This function obtains a packet by invoking the user provided
  *  MPCI get packet callout.
+ *
+ *  @return This method returns a pointer to a MPCI packet which can be
+ *          filled in by the caller and used to perform a subsequent
+ *          remote operation.
  */
 MP_packet_Prefix *_MPCI_Get_packet ( void );
 
 /**
- *  This routine returns a packet by invoking the user provided
+ *  This routine deallocates a packet by invoking the user provided
  *  MPCI return packet callout.
+ *
+ *  @param[in] the_packet is the MP packet to deallocate.
  */
 void _MPCI_Return_packet (
   MP_packet_Prefix *the_packet
@@ -233,6 +270,9 @@ void _MPCI_Return_packet (
 /**
  *  This routine sends a process packet by invoking the user provided
  *  MPCI send callout.
+ *
+ *  @param[in] destination is the node which should receive this packet.
+ *  @param[in] the_packet is the packet to be sent.
  */
 void _MPCI_Send_process_packet (
   uint32_t          destination,
@@ -242,8 +282,17 @@ void _MPCI_Send_process_packet (
 /**
  *  This routine sends a request packet by invoking the user provided
  *  MPCI send callout.
+ *
+ *  @param[in] destination is the node which should receive this packet.
+ *  @param[in] the_packet is the packet to be sent.
+ *  @param[in] extra_state is the extra thread state bits which should be
+ *             set in addition to the remote operation pending state.  It
+ *             may indicate the caller is blocking on a message queue
+ *             operation.
+ *
+ *  @return This method returns the operation status from the remote node.
  */
-uint32_t   _MPCI_Send_request_packet (
+uint32_t _MPCI_Send_request_packet (
   uint32_t           destination,
   MP_packet_Prefix  *the_packet,
   States_Control     extra_state
@@ -252,6 +301,9 @@ uint32_t   _MPCI_Send_request_packet (
 /**
  *  This routine sends a response packet by invoking the user provided
  *  MPCI send callout.
+ *
+ *  @param[in] destination is the node which should receive this packet.
+ *  @param[in] the_packet is the packet to be sent.
  */
 void _MPCI_Send_response_packet (
   uint32_t          destination,
@@ -261,12 +313,20 @@ void _MPCI_Send_response_packet (
 /**
  *  This routine receives a packet by invoking the user provided
  *  MPCI receive callout.
+ *
+ *  @return This method returns the packet received.
  */
 MP_packet_Prefix  *_MPCI_Receive_packet ( void );
 
 /**
- *  This routine obtains a packet by invoking the user provided
- *  MPCI get packet callout.
+ *  This routine is responsible for passing @a the_packet to the thread
+ *  waiting on the remote operation to complete.  The unblocked thread is
+ *  responsible for eventually freeing @a the_packet.
+ *
+ *  @param[in] the_packet is the response packet to be processed.
+ *
+ *  @return This method returns a pointer to the thread which was if unblocked
+ *          or NULL if the waiting thread no longer exists. 
  */
 Thread_Control *_MPCI_Process_response (
   MP_packet_Prefix *the_packet
@@ -274,6 +334,8 @@ Thread_Control *_MPCI_Process_response (
 
 /**
  *  This is the server thread which receives and processes all MCPI packets.
+ *
+ *  @param[in] ignored is the thread argument.  It is not used.
  */
 Thread _MPCI_Receive_server(
   uint32_t   ignored
@@ -287,12 +349,14 @@ void _MPCI_Announce ( void );
 /**
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
+ *
+ *  @param[in] operation is the remote operation to perform.
  */
 void _MPCI_Internal_packets_Send_process_packet (
    MPCI_Internal_Remote_operations operation
 );
 
-/*
+/**
  *  _MPCI_Internal_packets_Send_request_packet
  *
  *  This routine performs a remote procedure call so that a
@@ -302,7 +366,7 @@ void _MPCI_Internal_packets_Send_process_packet (
  *  packets to be sent by this manager.
  */
 
-/*
+/**
  *  _MPCI_Internal_packets_Send_response_packet
  *
  *  This routine performs a remote procedure call so that a
@@ -320,7 +384,7 @@ void _MPCI_Internal_packets_Process_packet (
   MP_packet_Prefix *the_packet_prefix
 );
 
-/*
+/**
  *  _MPCI_Internal_packets_Send_object_was_deleted
  *
  *  This routine is invoked indirectly by the thread queue
@@ -331,7 +395,7 @@ void _MPCI_Internal_packets_Process_packet (
  *  deleted by this manager.
  */
 
-/*
+/**
  *  _MPCI_Internal_packets_Send_extract_proxy
  *
  *  This routine is invoked when a task is deleted and it

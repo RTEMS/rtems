@@ -9,7 +9,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,7 +25,9 @@
 /**
  *  @defgroup ScoreMPPacket MP Packet Handler
  *
- *  This group contains functionality which XXX
+ *  This handler encapsulates the primary definition of MPCI packets.  This
+ *  handler defines the part of the packet that is common to all remote
+ *  operations.
  */
 /**@{*/
 
@@ -56,12 +58,12 @@ typedef enum {
 }   MP_packet_Classes;
 
 /**
- *  XXX
+ *  This constant defines the first entry in the MP_packet_Classes enumeration.
  */
 #define MP_PACKET_CLASSES_FIRST  MP_PACKET_MPCI_INTERNAL
 
 /**
- *  XXX
+ *  This constant defines the last entry in the MP_packet_Classes enumeration.
  */
 #define MP_PACKET_CLASSES_LAST   MP_PACKET_SIGNAL
 
@@ -74,21 +76,21 @@ typedef enum {
  *        alignment rule encountered yet.
  */
 typedef struct {
-  /** XXX */
+  /** This field indicates the API class of the operation being performed. */
   MP_packet_Classes       the_class;
-  /** XXX */
+  /** This field is the id of the object to be acted upon. */
   Objects_Id              id;
-  /** XXX */
+  /** This field is the ID of the originating thread. */
   Objects_Id              source_tid;
-  /** XXX */
+  /** This field is the priority of the originating thread. */
   Priority_Control        source_priority;
-  /** XXX */
+  /** This field is where the status of the operation will be returned. */
   uint32_t                return_code;
-  /** XXX */
+  /** This field is the length of the data following the prefix. */
   uint32_t                length;
-  /** XXX */
+  /** This field is the length of the data which required network conversion. */
   uint32_t                to_convert;
-  /** XXX */
+  /** This field is the requested timeout for this operation. */
   Watchdog_Interval       timeout;
 }   MP_packet_Prefix;
 

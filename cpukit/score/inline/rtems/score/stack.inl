@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -53,7 +53,7 @@ RTEMS_INLINE_ROUTINE boolean _Stack_Is_enough (
 }
 
 /**
- *  This function increases the stack size to insure that the thread
+ *  This function increases the stack size to ensure that the thread
  *  has the desired amount of stack space after the initial stack
  *  pointer is determined based on alignment restrictions.
  *

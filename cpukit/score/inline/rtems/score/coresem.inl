@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,7 +31,7 @@
  *  This function returns TRUE if the priority attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  *
- *  @param the_attribute (in) is the attribute set to test
+ *  @param[in] the_attribute is the attribute set to test
  *  @return TRUE if the priority attribute is enabled
  */
 RTEMS_INLINE_ROUTINE boolean _CORE_semaphore_Is_priority(
@@ -44,7 +44,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_semaphore_Is_priority(
 /**
  *  This routine returns the current count associated with the semaphore.
  *
- *  @param the_semaphore (in) is the semaphore to obtain the count of
+ *  @param[in] the_semaphore is the semaphore to obtain the count of
  *  @return the current count of this semaphore
  */
 RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
@@ -60,11 +60,11 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.
  *
- *  @param the_semaphore (in) is the semaphore to obtain
- *  @param id (in) is the Id of the owning API level Semaphore object
- *  @param wait (in) is TRUE if the thread is willing to wait
- *  @param timeout (in) is the maximum number of ticks to block
- *  @param level_p (in) is a temporary variable used to contain the ISR
+ *  @param[in] the_semaphore is the semaphore to obtain
+ *  @param[in] id is the Id of the owning API level Semaphore object
+ *  @param[in] wait is TRUE if the thread is willing to wait
+ *  @param[in] timeout is the maximum number of ticks to block
+ *  @param[in] level_p is a temporary variable used to contain the ISR
  *         disable level cookie
  *
  *  @note There is currently no MACRO version of this routine.

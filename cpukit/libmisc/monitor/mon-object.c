@@ -130,7 +130,7 @@ rtems_monitor_id_fixup(
     node = rtems_get_node(id);
     if (node == 0)
     {
-        if (rtems_get_class(id) != OBJECTS_NO_CLASS)
+        if (rtems_get_class(id) != OBJECTS_CLASSIC_NO_CLASS)
             type = rtems_get_class(id);
 
         id = _Objects_Build_id(

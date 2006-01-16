@@ -2,7 +2,7 @@
  *  Multiprocessing Support for the Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -96,7 +96,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
   );
 
   /*
-   *  NOTE: The following return insures that the compiler will
+   *  NOTE: The following return ensures that the compiler will
    *        think that all paths return a value.
    */
 

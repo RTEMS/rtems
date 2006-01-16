@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,7 @@
 /**
  *  @defgroup ScoreAPIMutex API Mutex Handler
  *
- *  This group contains functionality which provides mutexes to be used
+ *  This handler encapsulates functionality which provides mutexes to be used
  *  in the implementation of API functionality. 
  */
 /**@{*/
@@ -56,7 +56,7 @@ SCORE_EXTERN Objects_Information  _API_Mutex_Information;
 /**
  *  This routine performs the initialization necessary for this handler.
  *
- *  @param _maximum_mutexes (in) is the maximum number of API mutexes
+ *  @param[in] _maximum_mutexes is the maximum number of API mutexes
  *         that may exist at any time
  */
 #if defined(RTEMS_MULTIPROCESSING)
@@ -88,7 +88,7 @@ SCORE_EXTERN Objects_Information  _API_Mutex_Information;
 /**
  *  This routine allocates an API mutex from the inactive set.
  *
- *  @param _the_mutex (out) will contain the allocated mutex.
+ *  @param[out] _the_mutex will contain the allocated mutex.
  */
 #define _API_Mutex_Allocate( _the_mutex ) \
   do { \
@@ -104,7 +104,7 @@ SCORE_EXTERN Objects_Information  _API_Mutex_Information;
 /**
  *  This routine acquires the specified API mutex.
  *
- *  @param _the_mutex (in) is the mutex to acquire.
+ *  @param[in] _the_mutex is the mutex to acquire.
  */
 #define _API_Mutex_Lock( _the_mutex ) \
   do { \
@@ -117,7 +117,7 @@ SCORE_EXTERN Objects_Information  _API_Mutex_Information;
 /**
  *  This routine releases the specified API mutex.
  *
- *  @param _the_mutex (in) is the mutex to release.
+ *  @param[in] _the_mutex is the mutex to release.
  */
 
 #define _API_Mutex_Unlock( _the_mutex ) \

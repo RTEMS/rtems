@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,7 +21,7 @@
 /**
  *  @defgroup ScoreBitfield Bitfield Handler
  *
- *  This group contains functionality that is used to manipulate the
+ *  This handler encapsulates functionality that is used to manipulate the
  *  priority bitfields used to lookup which priority has the highest
  *  priority ready to execute thread.
  */
@@ -70,8 +70,8 @@ const unsigned char __log2table[256] = {
  *  the first bit set may run from most to least significant bit
  *  or vice-versa.
  *
- *  @param _value (in) is the value to bit scan.
- *  @param _bit_number (in) is the position of the first bit set.
+ *  @param[in] _value is the value to bit scan.
+ *  @param[in] _bit_number is the position of the first bit set.
  *
  *  @note This routine is used when the executing thread is removed
  *  from the ready state and, as a result, its performance has a

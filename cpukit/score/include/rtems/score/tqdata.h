@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,7 +22,9 @@
 /**
  *  @defgroup ScoreThreadQData Thread Queue Handler Data Definition
  *
- *  This group contains functionality which XXX
+ *  This handler defines the data shared between the thread and thread
+ *  queue handlers.  Having this handler define these data structure
+ *  avoids potentially circular references.
  */
 /**@{*/
 
@@ -34,21 +36,19 @@ extern "C" {
 #include <rtems/score/priority.h>
 #include <rtems/score/states.h>
 
-/*
+/**
  *  The following enumerated type details all of the disciplines
  *  supported by the Thread Queue Handler.
  */
-
 typedef enum {
   THREAD_QUEUE_DISCIPLINE_FIFO,     /* FIFO queue discipline */
   THREAD_QUEUE_DISCIPLINE_PRIORITY  /* PRIORITY queue discipline */
 }   Thread_queue_Disciplines;
 
-/*
+/**
  *  The following enumerated types indicate what happened while the thread
  *  queue was in the synchronization window.
  */
-
 typedef enum {
   THREAD_QUEUE_SYNCHRONIZED,
   THREAD_QUEUE_NOTHING_HAPPENED,
@@ -56,8 +56,8 @@ typedef enum {
   THREAD_QUEUE_SATISFIED
 }  Thread_queue_States;
 
-/*
- *  The following constants are used to manage the priority queues.
+/**
+ *  This is one of the constants used to manage the priority queues.
  *
  *  There are four chains used to maintain a priority -- each chain
  *  manages a distinct set of task priorities.  The number of chains
@@ -70,20 +70,45 @@ typedef enum {
  *  is in, then the search is performed from the rear of the chain.
  *  This halves the search time to find the insertion point.
  */
-
 #define TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS 4
+
+/**
+ *  This is one of the constants used to manage the priority queues.
+ *  @ref TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS for more details.
+ */
 #define TASK_QUEUE_DATA_PRIORITIES_PER_HEADER      64
+
+/**
+ *  This is one of the constants used to manage the priority queues.
+ *  @ref TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS for more details.
+ */
 #define TASK_QUEUE_DATA_REVERSE_SEARCH_MASK        0x20
 
+/**
+ *  This is the structure used to manage sets of tasks which are blocked
+ *  waiting to acquire a resource.
+ */
 typedef struct {
+  /** This union contains the data structures used to manage the blocked
+   *  set of tasks which varies based upon the discipline.
+   */
   union {
-    Chain_Control Fifo;                /* FIFO discipline list           */
+    /** This is the FIFO discipline list. */
+    Chain_Control Fifo;
+    /** This is the set of lists for priority discipline waiting. */
     Chain_Control Priority[TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS];
-                                       /* priority discipline list       */
   } Queues;
-  Thread_queue_States      sync_state; /* alloc/dealloc critical section */
-  Thread_queue_Disciplines discipline; /* queue discipline               */
-  States_Control           state;      /* state of threads on Thread_q   */
+  /** This field is used to manage the critical section. */
+  Thread_queue_States      sync_state;
+  /** This field indicates the thread queue's blocking discipline. */
+  Thread_queue_Disciplines discipline;
+  /** This indicates the blocking state for threads waiting on this
+   *  thread queue.
+   */
+  States_Control           state;
+  /** This is the status value returned to threads which timeout while
+   *  waiting on this thread queue.
+   */
   uint32_t                 timeout_status;
 }   Thread_queue_Control;
 

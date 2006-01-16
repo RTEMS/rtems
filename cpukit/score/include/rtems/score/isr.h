@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,7 +24,7 @@
 /**
  *  @defgroup ScoreISR ISR Handler
  *
- *  This group contains functionality which provides the foundation
+ *  This handler encapsulates functionality which provides the foundation
  *  ISR services used in all of the APIs supported by RTEMS.
  */
 /**@{*/
@@ -123,7 +123,7 @@ void _ISR_Handler_initialization ( void );
  *  critical code when a point is reached at which interrupts can
  *  be temporarily enabled.  Deciding where to flash interrupts
  *  in a long critical section is often difficult and the point
- *  must be selected with care to insure that the critical section
+ *  must be selected with care to ensure that the critical section
  *  properly protects itself.
  */
 #define _ISR_Flash( _level ) \
@@ -158,7 +158,7 @@ void _ISR_Handler_initialization ( void );
  *  interrupt service routine is invoked.   After the application's
  *  interrupt service routine returns control to this routine, it
  *  will determine if a thread dispatch is necessary.  If so, it will
- *  insure that the necessary thread scheduling operations are
+ *  ensure that the necessary thread scheduling operations are
  *  performed when the outermost interrupt service routine exits.
  *
  *  @note  Implemented in assembly language.

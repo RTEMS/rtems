@@ -7,7 +7,7 @@
  *  This include file contains the static inline implementation of all
  *  of the inlined routines in the Object Handler.
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,16 +20,18 @@
 #ifndef _RTEMS_SCORE_OBJECT_INL
 #define _RTEMS_SCORE_OBJECT_INL
 
-/*PAGE
- *
- *  _Objects_Build_id
- *
- *  DESCRIPTION:
- *
+/**
  *  This function builds an object's id from the processor node and index
  *  values specified.
+ *
+ *  @param[in] the_api indicates the API associated with this Id.
+ *  @param[in] the_class indicates the class of object.
+ *             It is specific to @a the_api.
+ *  @param[in] node is the node where this object resides.
+ *  @param[in] index is the instance number of this object.
+ *
+ *  @return This method returns an object Id constructed from the arguments.
  */
-
 RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
   Objects_APIs     the_api,
   uint32_t         the_class,
@@ -43,15 +45,13 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
          (( (Objects_Id) index )     << OBJECTS_INDEX_START_BIT);
 }
 
-/*PAGE
- *
- *  _Objects_Get_API
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns the API portion of the ID.
+ *
+ *  @param[in] id is the object Id to be processed.
+ *
+ *  @return This method returns an object Id constructed from the arguments.
  */
-
 RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
   Objects_Id id
 )
@@ -59,15 +59,11 @@ RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
   return (Objects_APIs) ((id >> OBJECTS_API_START_BIT) & OBJECTS_API_VALID_BITS);
 }
 
-/*PAGE
- *
- *  _Objects_Get_class
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns the class portion of the ID.
+ *
+ *  @param[in] id is the object Id to be processed
  */
- 
 RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_class(
   Objects_Id id
 )
@@ -76,15 +72,13 @@ RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_class(
     ((id >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS);
 }
  
-/*PAGE
- *
- *  _Objects_Get_node
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns the node portion of the ID.
+ *
+ *  @param[in] id is the object Id to be processed
+ *
+ *  @return This method returns the node portion of an object ID.
  */
-
 RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_node(
   Objects_Id id
 )
@@ -92,15 +86,13 @@ RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_node(
   return (id >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS;
 }
 
-/*PAGE
- *
- *  _Objects_Get_index
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns the index portion of the ID.
+ *
+ *  @param[in] id is the Id to be processed
+ *
+ *  @return This method returns the class portion of the specified object ID.
  */
-
 RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_index(
   Objects_Id id
 )
@@ -108,15 +100,14 @@ RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_index(
   return (id >> OBJECTS_INDEX_START_BIT) & OBJECTS_INDEX_VALID_BITS;
 }
 
-/*PAGE
- *
- *  _Objects_Is_class_valid
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the class is valid.
+ *
+ *  @param[in] the_class is the class portion of an object ID.
+ *
+ *  @return This method returns TRUE if the specified class value is valid
+ *          and FALSE otherwise.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
   uint32_t   the_class
 )
@@ -125,17 +116,17 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
   return TRUE; /* the_class && the_class <= OBJECTS_CLASSES_LAST; */
 }
 
-/*PAGE
- *
- *  _Objects_Is_local_node
- *
- *  DESCRIPTION:
- *
+#if defined(RTEMS_MULTIPROCESSING)
+/**
  *  This function returns TRUE if the node is of the local object, and
  *  FALSE otherwise.
+ *
+ *  @param[in] node is the node number and corresponds to the node number
+ *         portion of an object ID.
+ *
+ *  @return This method returns TRUE if the specified node is the local node
+ *          and FALSE otherwise.
  */
-
-#if defined(RTEMS_MULTIPROCESSING)
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
   uint32_t   node
 )
@@ -144,16 +135,17 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
 }
 #endif
 
-/*PAGE
- *
- *  _Objects_Is_local_id
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the id is of a local object, and
  *  FALSE otherwise.
+ *
+ *  @param[in] id is an object ID
+ *
+ *  @return This method returns TRUE if the specified object Id is local
+ *          and FALSE otherwise.
+ *
+ *  @note On a single processor configuration, this always returns TRUE.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_id(
   Objects_Id id
 )
@@ -165,17 +157,16 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_id(
 #endif
 }
 
-
-/*PAGE
- *
- *  _Objects_Are_ids_equal
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if left and right are equal,
  *  and FALSE otherwise.
+ *
+ *  @param[in] left is the Id on the left hand side of the comparison
+ *  @param[in] right is the Id on the right hand side of the comparison
+ *
+ *  @return This method returns TRUE if the specified object IDs are equal
+ *          and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Objects_Are_ids_equal(
   Objects_Id left,
   Objects_Id right
@@ -184,16 +175,16 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Are_ids_equal(
   return ( left == right );
 }
 
-/*PAGE
- *
- *  _Objects_Get_local_object
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns a pointer to the local_table object
  *  referenced by the index.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] index is the index of the object the caller wants to access
+ *
+ *  @return This method returns a pointer to a local object or NULL if the
+ *          index is invalid.
  */
-
 RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
   Objects_Information *information,
   uint16_t             index
@@ -204,14 +195,13 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
   return information->local_table[ index ];
 }
 
-/*PAGE
- *
- *  _Objects_Set_local_object
- *
- *  DESCRIPTION:
- *
+/**
  *  This function sets the pointer to the local_table object
  *  referenced by the index.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] index is the index of the object the caller wants to access
+ *  @param[in] the_object is the local object pointer
  */
 
 RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
@@ -224,17 +214,16 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
     information->local_table[ index ] = the_object;
 }
 
-
-/*PAGE
- *
- *  _Objects_Get_information
- *
- *  DESCRIPTION:
- *
+/**
  *  This function return the information structure given
  *  an id of an object.
+ *
+ *  @param[in] id is an object ID
+ *
+ *
+ *  @return This method returns a pointer to the Object Information Table
+ *          for the class of objects which corresponds to this object ID.
  */
- 
 RTEMS_INLINE_ROUTINE Objects_Information *_Objects_Get_information(
   Objects_Id  id
 )
@@ -252,16 +241,14 @@ RTEMS_INLINE_ROUTINE Objects_Information *_Objects_Get_information(
   return _Objects_Information_table[ the_api ][ the_class ];
 }
 
-/*PAGE
- *
- *  _Objects_Open
- *
- *  DESCRIPTION:
- *
+/**
  *  This function places the_object control pointer and object name
  *  in the Local Pointer and Local Name Tables, respectively.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] the_object is a pointer to an object
+ *  @param[in] name is the name of the object to make accessible
  */
-
 RTEMS_INLINE_ROUTINE void _Objects_Open(
   Objects_Information *information,
   Objects_Control     *the_object,
@@ -281,16 +268,13 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
     the_object->name = name;
 }
 
-/*PAGE
- *
- *  _Objects_Close
- *
- *  DESCRIPTION:
- *
+/**
  *  This function removes the_object control pointer and object name
  *  in the Local Pointer and Local Name Tables.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] the_object is a pointer to an object
  */
-
 RTEMS_INLINE_ROUTINE void _Objects_Close(
   Objects_Information  *information,
   Objects_Control      *the_object
@@ -304,15 +288,12 @@ RTEMS_INLINE_ROUTINE void _Objects_Close(
   the_object->name = 0;
 }
 
-/*PAGE
- *
- *  _Objects_Namespace_remove
- *
- *  DESCRIPTION:
- *
+/**
  *  This function removes the_object from the namespace.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] the_object is a pointer to an object
  */
-
 RTEMS_INLINE_ROUTINE void _Objects_Namespace_remove(
   Objects_Information  *information,
   Objects_Control      *the_object

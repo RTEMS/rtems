@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,7 +22,11 @@
 /**
  *  @defgroup ScoreChain Chain Handler
  *
- *  The Chain Handler contains XXX
+ *  The Chain Handler is used to manage sets of entities.  This handler
+ *  provides two data structures.  The Chain Node data structure is included
+ *  as the first part of every data structure that will be placed on
+ *  a chain.  The second data structure is Chain Control which is used
+ *  to manage a set of Chain Nodes.
  */
 /**@{*/
 
@@ -37,7 +41,8 @@ extern "C" {
  *
  *  This type definition promotes the name for the Chain Node used by
  *  all RTEMS code.  It is a separate type definition because a forward
- *  reference is required to define it.
+ *  reference is required to define it.  See @ref Chain_Node_struct for
+ *  detailed information.
  */
 typedef struct Chain_Node_struct Chain_Node;
 
@@ -95,11 +100,11 @@ typedef struct {
  *  contiguous array of @a number_nodes nodes which starts at
  *  @a starting_address.  Each node is of @a node_size bytes.
  *
- *  @param the_chain (in) specifies the chain to initialize
- *  @param starting_address (in) is the starting address of the array
+ *  @param[in] the_chain specifies the chain to initialize
+ *  @param[in] starting_address is the starting address of the array
  *         of elements
- *  @param number_nodes (in) is the numebr of nodes that will be in the chain
- *  @param node_size (in) is the size of each node
+ *  @param[in] number_nodes is the numebr of nodes that will be in the chain
+ *  @param[in] node_size is the size of each node
  */
 void _Chain_Initialize(
   Chain_Control *the_chain,
@@ -112,9 +117,9 @@ void _Chain_Initialize(
 /**
  *  @brief Get the first node (do not disable interrupts)
  *
- *  This method attempts to obtain the first node from \a the_chain.
+ *  This method attempts to obtain the first node from @a the_chain.
  *
- *  @param the_chain (in) points to the chain to operate upon
+ *  @param[in] the_chain points to the chain to operate upon
  *  @return If successful, a chain node is returned.  Otherwise, NULL
  *  is returned.
  */
@@ -126,8 +131,8 @@ Chain_Node *_Chain_Get_first_unprotected(
 /**
  *  @brief Extract the specified node from a chain
  *
- *  This routine extracts \a the_node from the chain on which it resides.
- *  It disables interrupts to insure the atomicity of the
+ *  This routine extracts @a the_node from the chain on which it resides.
+ *  It disables interrupts to ensure the atomicity of the
  *  extract operation.
  *
  *  @arg the_node specifies the node to extract
@@ -139,11 +144,14 @@ void _Chain_Extract(
 /**
  *  @brief Obtain the first node on a chain
  *
- *  This function removes the first node from \a the_chain and returns
- *  a pointer to that node.  If \a the_chain is empty, then NULL is returned.
+ *  This function removes the first node from @a the_chain and returns
+ *  a pointer to that node.  If @a the_chain is empty, then NULL is returned.
  *
- *  @note It disables interrupts to insure the atomicity of the
- *  get operation.
+ *  @return This method returns a pointer a node.  If a node was removed,
+ *          then a pointer to that node is returned.  If @a the_chain was
+ *          empty, then NULL is returned.
+ *
+ *  @note It disables interrupts to ensure the atomicity of the get operation.
  */
 Chain_Node *_Chain_Get(
   Chain_Control *the_chain
@@ -152,10 +160,10 @@ Chain_Node *_Chain_Get(
 /**
  *  @brief Insert a node on a chain
  *
- *  This routine inserts \a the_node on a chain immediately following
- *  \a after_node.  
+ *  This routine inserts @a the_node on a chain immediately following
+ *  @a after_node.  
  *
- *  @note It disables interrupts to insure the atomicity
+ *  @note It disables interrupts to ensure the atomicity
  *  of the extract operation.
  */
 void _Chain_Insert(
@@ -166,9 +174,9 @@ void _Chain_Insert(
 /**
  *  @brief Append a node on the end of a chain
  *
- *  This routine appends \a the_node onto the end of \a the_chain.
+ *  This routine appends @a the_node onto the end of @a the_chain.
  *
- *  @note It disables interrupts to insure the atomicity of the
+ *  @note It disables interrupts to ensure the atomicity of the
  *  append operation.
  */
 void _Chain_Append(

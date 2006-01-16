@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,8 +22,8 @@
 /**
  *  @defgroup ScoreAddress Address Handler
  *
- *  This group contains functionality which abstracts address manipulation
- *  in a portable manner.
+ *  This handler encapsulates functionality which abstracts address
+ *  manipulation in a portable manner.
  */
 /**@{*/
 

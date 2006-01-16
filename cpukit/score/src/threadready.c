@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,7 +43,7 @@
  *  Output parameters:  NONE
  *
  *  NOTE:  This routine uses the "blocking" heir selection mechanism.
- *         This insures the correct heir after a thread restart.
+ *         This ensures the correct heir after a thread restart.
  *
  *  INTERRUPT LATENCY:
  *    ready chain

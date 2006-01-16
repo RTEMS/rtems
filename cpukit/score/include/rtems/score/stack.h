@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,8 @@
 /**
  *  @defgroup ScoreStack Stack Handler
  *
- *  This group contains functionality which XXX
+ *  This handler encapsulates functionality which is used in the management
+ *  of thread stacks.
  */
 /**@{*/
 
@@ -31,20 +32,20 @@
 extern "C" {
 #endif
 
-/*
+/**
  *  The following constant defines the minimum stack size which every
  *  thread must exceed.
  */
-
 #define STACK_MINIMUM_SIZE  CPU_STACK_MINIMUM_SIZE
 
-/*
+/**
  *  The following defines the control block used to manage each stack.
  */
-
 typedef struct {
-  uint32_t    size;        /* stack size */
-  void       *area;        /* low memory addr of stack */
+  /** This is the stack size. */
+  uint32_t    size;
+  /** This is the low memory address of stack. */
+  void       *area;
 }   Stack_Control;
 
 #ifndef __RTEMS_APPLICATION__

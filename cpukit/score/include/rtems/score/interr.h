@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,7 +22,7 @@
 /**
  *  @defgroup ScoreIntErr Internal Error Handler
  *
- *  This group contains functionality which provides the foundation
+ *  This handler encapsulates functionality which provides the foundation
  *  Semaphore services used in all of the APIs supported by RTEMS.
  */
 /**@{*/
@@ -42,7 +42,7 @@ typedef enum {
   INTERNAL_ERROR_ITRON_API
 } Internal_errors_Source;
 
-/*
+/**
  *  A list of errors which are generated internally by the executive core.
  */
 typedef enum {
@@ -65,16 +65,19 @@ typedef enum {
   INTERNAL_ERROR_BAD_ATTRIBUTES
 } Internal_errors_Core_list;
 
-/*
+/**
  *  This type holds the fatal error information.
  */
 typedef struct {
+  /** This is the source of the error. */
   Internal_errors_Source  the_source;
+  /** This indicates if the error is internal of external. */
   boolean                 is_internal;
+  /** This is the error code. */
   uint32_t                the_error;
 } Internal_errors_Information;
 
-/*
+/**
  *  When a fatal error occurs, the error information is stored here.
  */
 SCORE_EXTERN Internal_errors_Information Internal_errors_What_happened;

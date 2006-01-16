@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,7 +24,7 @@
 /**
  *  @defgroup ScoreMutex Mutex Handler
  *
- *  This group contains functionality which provides the foundation
+ *  This handler encapsulates functionality which provides the foundation
  *  Mutex services used in all of the APIs supported by RTEMS.
  */
 /**@{*/
@@ -41,6 +41,8 @@ extern "C" {
 #include <rtems/score/sysstate.h>
 
 /**
+ *  @brief MP Support Callback Prototype
+ *
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on mutexes.
  */
@@ -50,7 +52,9 @@ typedef void ( *CORE_mutex_API_mp_support_callout )(
              );
 
 /**
- *  Blocking disciplines for a mutex.
+ *  @brief Blocking Disciplines Enumerated Type
+ *
+ *  This enumerated type defines the blocking disciplines for a mutex.
  */
 typedef enum {
   /** This specifies that threads will wait for the mutex in FIFO order. */
@@ -68,7 +72,9 @@ typedef enum {
 }   CORE_mutex_Disciplines;
 
 /**
- *  Mutex handler return statuses.
+ *  @brief Mutex method return statuses
+ *
+ *  This enumerated type defines the possible Mutex handler return statuses.
  */
 typedef enum {
   /** This status indicates that the operation completed successfully. */
@@ -102,32 +108,35 @@ typedef enum {
 }   CORE_mutex_Status;
 
 /**
- *  Mutex lock nesting behavior
+ *  @brief Mutex Lock Nesting Behavior Enumeration
  *
- *  + CORE_MUTEX_NESTING_ACQUIRES:
- *    This sequence has no blocking or errors:
- *
- *         + lock(m)
- *         + lock(m)
- *         + unlock(m)
- *         + unlock(m)
- *
- *  + CORE_MUTEX_NESTING_IS_ERROR
- *    This sequence returns an error at the indicated point:
- *
- *        + lock(m)
- *        + lock(m)   - already locked error
- *        + unlock(m)
- *
- *  + CORE_MUTEX_NESTING_BLOCKS
- *    This sequence performs as indicated:
- *        + lock(m)
- *        + lock(m)   - deadlocks or timeouts
- *        + unlock(m) - releases
+ *  This enumerated type defines the possible behaviors for
+ *  lock nesting.
  */
 typedef enum {
+  /**
+   *    This sequence has no blocking or errors:
+   *
+   *         + lock(m)
+   *         + lock(m)
+   *         + unlock(m)
+   *         + unlock(m)
+   */
   CORE_MUTEX_NESTING_ACQUIRES,
+  /**
+   *    This sequence returns an error at the indicated point:
+   *
+   *        + lock(m)
+   *        + lock(m)   - already locked error
+   *        + unlock(m)
+   */
   CORE_MUTEX_NESTING_IS_ERROR,
+  /**
+   *    This sequence performs as indicated:
+   *        + lock(m)
+   *        + lock(m)   - deadlocks or timeouts
+   *        + unlock(m) - releases
+   */
   CORE_MUTEX_NESTING_BLOCKS
 }  CORE_mutex_Nesting_behaviors;
 
@@ -142,6 +151,8 @@ typedef enum {
 #define CORE_MUTEX_LOCKED   0
 
 /**
+ *  @brief Core Mutex Attributes
+ *
  *  The following defines the control block used to manage the
  *  attributes of each mutex.
  */
@@ -165,6 +176,8 @@ typedef struct {
 }   CORE_mutex_Attributes;
 
 /**
+ *  @brief Core Mutex Control Structure
+ *
  *  The following defines the control block used to manage each mutex.
  */
 typedef struct {
@@ -195,13 +208,14 @@ typedef struct {
 }   CORE_mutex_Control;
 
 /**
+ *  @brief Initialize a Core Mutex
  *
  *  This routine initializes the mutex based on the parameters passed.
  *
- *  @param the_mutex (in) is the mutex to initalize
- *  @param the_mutex_attributes (in) is the attributes associated with this
+ *  @param[in] the_mutex is the mutex to initalize
+ *  @param[in] the_mutex_attributes is the attributes associated with this
  *         mutex instance
- *  @param initial_lock (in) is the initial value of the mutex
+ *  @param[in] initial_lock is the initial value of the mutex
  */
 void _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
@@ -211,13 +225,20 @@ void _CORE_mutex_Initialize(
 
 #ifndef __RTEMS_APPLICATION__
 /**
+ *  @brief Seize Mutex with Quick Success Path
+ *
  *  This routine attempts to receive a unit from the_mutex.
  *  If a unit is available or if the wait flag is FALSE, then the routine
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.
  *
- *  @param the_mutex (in) is the mutex to attempt to lock
- *  @param level_p (in) is the interrupt level holder
+ *  @param[in] the_mutex is the mutex to attempt to lock
+ *  @param[in] level_p is the interrupt level holder
+ *
+ *  @return This routine returns 0 if "trylock" can resolve whether or not
+ *  the mutex is immediately obtained or there was an error attempting to
+ *  get it.  It returns 1 to indicate that the caller cannot obtain
+ *  the mutex and will have to block to do so.
  *
  *  @note  For performance reasons, this routine is implemented as
  *         a macro that uses two support routines.
@@ -228,12 +249,14 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
 );
 
 /**
+ *  @brief Seize Mutex with Blockign
+ *
  *  This routine performs the blocking portion of a mutex obtain.
  *  It is an actual subroutine and is not implemented as something
  *  that may be inlined.
  *
- *  @param the_mutex (in) is the mutex to attempt to lock
- *  @param timeout (in) is the maximum number of ticks to block
+ *  @param[in] the_mutex is the mutex to attempt to lock
+ *  @param[in] timeout is the maximum number of ticks to block
  */
 void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
@@ -241,16 +264,22 @@ void _CORE_mutex_Seize_interrupt_blocking(
 );
 
 /**
+ *  @brief Sieze Interrupt Wrapper
+ *
  *  This routine attempts to obtain the mutex.  If the mutex is available,
  *  then it will return immediately.  Otherwise, it will invoke the
  *  support routine @a _Core_mutex_Seize_interrupt_blocking.
  *
- *  @param _the_mutex (in) is the mutex to attempt to lock
- *  @param _id (in) is the Id of the owning API level Semaphore object
- *  @param _wait (in) is TRUE if the thread is willing to wait
- *  @param _timeout (in) is the maximum number of ticks to block
- *  @param _level (in) is a temporary variable used to contain the ISR
+ *  @param[in] _the_mutex is the mutex to attempt to lock
+ *  @param[in] _id is the Id of the owning API level Semaphore object
+ *  @param[in] _wait is TRUE if the thread is willing to wait
+ *  @param[in] _timeout is the maximum number of ticks to block
+ *  @param[in] _level is a temporary variable used to contain the ISR
  *         disable level cookie
+ *
+ *  @note If the mutex is called from an interrupt service routine,
+ *        with context switching disabled, or before multitasking,
+ *        then a fatal error is generated. 
  */
 #define _CORE_mutex_Seize( \
   _the_mutex, _id, _wait, _timeout, _level ) \
@@ -281,13 +310,15 @@ void _CORE_mutex_Seize_interrupt_blocking(
   } while (0)
 
 /**
+ *  @brief Surrender the Mutex
+ *
  *  This routine frees a unit to the mutex.  If a task was blocked waiting for
  *  a unit from this mutex, then that task will be readied and the unit
  *  given to that task.  Otherwise, the unit will be returned to the mutex.
  *
- *  @param the_mutex (in) is the mutex to surrender
- *  @param id (in) is the id of the RTEMS Object associated with this mutex
- *  @param api_mutex_mp_support (in) is the routine that will be called when
+ *  @param[in] the_mutex is the mutex to surrender
+ *  @param[in] id is the id of the RTEMS Object associated with this mutex
+ *  @param[in] api_mutex_mp_support is the routine that will be called when
  *         unblocking a remote mutex
  *
  *  @return an indication of whether the routine succeeded or failed
@@ -299,13 +330,15 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 );
 
 /**
+ *  @brief Flush all waiting threads
+ *
  *  This routine assists in the deletion of a mutex by flushing the associated
  *  wait queue.
  *
- *  @param the_mutex (in) is the mutex to flush
- *  @param remote_extract_callout (in) is the routine to invoke when a remote
+ *  @param[in] the_mutex is the mutex to flush
+ *  @param[in] remote_extract_callout is the routine to invoke when a remote
  *         thread is extracted
- *  @param status (in) is the status value which each unblocked thread will
+ *  @param[in] status is the status value which each unblocked thread will
  *         return to its caller.
  */
 void _CORE_mutex_Flush(

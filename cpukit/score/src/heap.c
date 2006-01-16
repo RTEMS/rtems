@@ -1,7 +1,7 @@
 /*
  *  Heap Handler
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -198,8 +198,7 @@ uint32_t   _Heap_Initialize(
  * Internal routines shared by _Heap_Allocate() and _Heap_Allocate_aligned().
  *
  * Note: there is no reason to put them into a separate file(s) as they are
- * always required for heap to be usefull.
- *
+ * always required for heap to be useful.
  */
 
 /*
@@ -213,7 +212,7 @@ uint32_t _Heap_Calc_block_size(
 {
   uint32_t block_size = size + HEAP_BLOCK_USED_OVERHEAD;
   _Heap_Align_up(&block_size, page_size);
-  if(block_size < min_size) block_size = min_size;
+  if (block_size < min_size) block_size = min_size;
   /* 'block_size' becomes <= 'size' if and only if overflow occured. */
   return (block_size > size) ? block_size : 0;
 }
@@ -226,8 +225,9 @@ uint32_t _Heap_Calc_block_size(
  */
 uint32_t _Heap_Block_allocate(
   Heap_Control* the_heap,
-  Heap_Block* the_block,
-  uint32_t alloc_size)
+  Heap_Block*   the_block,
+  uint32_t      alloc_size
+)
 {
   Heap_Statistics *const stats = &the_heap->stats;
   uint32_t const block_size = _Heap_Block_size(the_block);

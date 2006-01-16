@@ -1,3 +1,111 @@
+2006-01-16	Joel Sherrill <joel@OARcorp.com>
+
+	Large patch to improve Doxygen output.  As a side-effect, grammar and
+	spelling errors were corrected, spacing errors were address, and some
+	variable names were improved.
+	* libmisc/monitor/mon-object.c, libmisc/monitor/monitor.h:
+	Account for changing OBJECTS_NO_CLASS to OBJECTS_CLASSIC_NO_CLASS.
+	* score/Doxyfile: Set output directory.  Predefine some macro values.
+	Turn on graphical output.
+	* score/include/rtems/debug.h, score/include/rtems/seterr.h,
+	score/include/rtems/system.h, score/include/rtems/score/address.h,
+	score/include/rtems/score/apiext.h,
+	score/include/rtems/score/apimutex.h,
+	score/include/rtems/score/bitfield.h,
+	score/include/rtems/score/chain.h,
+	score/include/rtems/score/context.h,
+	score/include/rtems/score/coremsg.h,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/coresem.h,
+	score/include/rtems/score/heap.h, score/include/rtems/score/interr.h,
+	score/include/rtems/score/isr.h, score/include/rtems/score/mpci.h,
+	score/include/rtems/score/mppkt.h,
+	score/include/rtems/score/object.h,
+	score/include/rtems/score/objectmp.h,
+	score/include/rtems/score/priority.h,
+	score/include/rtems/score/stack.h,
+	score/include/rtems/score/states.h,
+	score/include/rtems/score/sysstate.h,
+	score/include/rtems/score/thread.h,
+	score/include/rtems/score/threadmp.h,
+	score/include/rtems/score/threadq.h, score/include/rtems/score/tod.h,
+	score/include/rtems/score/tqdata.h,
+	score/include/rtems/score/userext.h,
+	score/include/rtems/score/watchdog.h,
+	score/include/rtems/score/wkspace.h,
+	score/inline/rtems/score/address.inl,
+	score/inline/rtems/score/chain.inl,
+	score/inline/rtems/score/coremutex.inl,
+	score/inline/rtems/score/coresem.inl,
+	score/inline/rtems/score/heap.inl,
+	score/inline/rtems/score/object.inl,
+	score/inline/rtems/score/stack.inl,
+	score/inline/rtems/score/thread.inl,
+	score/inline/rtems/score/tqdata.inl, score/macros/README,
+	score/src/heap.c, score/src/threadmp.c, score/src/threadready.c,
+	score/src/threadstartmultitasking.c: Improve generated Doxygen
+	output. Fix spelling and grammar errors in comments. Correct names of
+	some variables and propagate changes.
+
+2006-01-16	Joel Sherrill <joel@OARcorp.com>
+
+	Large patch to improve Doxygen output.  As a side-effect, grammar and
+	spelling errors were corrected, spacing errors were address, and some
+	variable names were improved.
+	* libmisc/monitor/mon-object.c, libmisc/monitor/monitor.h:
+	Account for changing OBJECTS_NO_CLASS to OBJECTS_CLASSIC_NO_CLASS.
+	* score/Doxyfile: Set output directory.  Predefine some macro values.
+	Turn on graphical output.
+	* score/cpu/arm/rtems/score/cpu.h,
+	score/cpu/avr/rtems/score/cpu.h, score/cpu/c4x/rtems/score/cpu.h,
+	score/cpu/h8300/rtems/score/cpu.h, score/cpu/m68k/rtems/score/cpu.h,
+	score/cpu/mips/rtems/score/cpu.h, score/cpu/no_cpu/rtems/asm.h,
+	score/cpu/no_cpu/rtems/score/cpu.h,
+	score/cpu/no_cpu/rtems/score/types.h,
+	score/cpu/powerpc/rtems/new-exceptions/cpu.h,
+	score/cpu/powerpc/rtems/old-exceptions/cpu.h,
+	score/cpu/powerpc/rtems/score/cpu.h, score/cpu/sh/rtems/score/cpu.h,
+	score/cpu/sparc/rtems/score/cpu.h, score/cpu/unix/rtems/score/cpu.h,
+	score/include/rtems/debug.h, score/include/rtems/seterr.h,
+	score/include/rtems/system.h, score/include/rtems/score/address.h,
+	score/include/rtems/score/apiext.h,
+	score/include/rtems/score/apimutex.h,
+	score/include/rtems/score/bitfield.h,
+	score/include/rtems/score/chain.h,
+	score/include/rtems/score/context.h,
+	score/include/rtems/score/coremsg.h,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/coresem.h,
+	score/include/rtems/score/heap.h, score/include/rtems/score/interr.h,
+	score/include/rtems/score/isr.h, score/include/rtems/score/mpci.h,
+	score/include/rtems/score/mppkt.h,
+	score/include/rtems/score/object.h,
+	score/include/rtems/score/objectmp.h,
+	score/include/rtems/score/priority.h,
+	score/include/rtems/score/stack.h,
+	score/include/rtems/score/states.h,
+	score/include/rtems/score/sysstate.h,
+	score/include/rtems/score/thread.h,
+	score/include/rtems/score/threadmp.h,
+	score/include/rtems/score/threadq.h, score/include/rtems/score/tod.h,
+	score/include/rtems/score/tqdata.h,
+	score/include/rtems/score/userext.h,
+	score/include/rtems/score/watchdog.h,
+	score/include/rtems/score/wkspace.h,
+	score/inline/rtems/score/address.inl,
+	score/inline/rtems/score/chain.inl,
+	score/inline/rtems/score/coremutex.inl,
+	score/inline/rtems/score/coresem.inl,
+	score/inline/rtems/score/heap.inl,
+	score/inline/rtems/score/object.inl,
+	score/inline/rtems/score/stack.inl,
+	score/inline/rtems/score/thread.inl,
+	score/inline/rtems/score/tqdata.inl, score/macros/README,
+	score/src/heap.c, score/src/threadmp.c, score/src/threadready.c,
+	score/src/threadstartmultitasking.c: Improve generated Doxygen
+	output. Fix spelling and grammar errors in comments. Correct names of
+	some variables and propagate changes.
+
 2006-01-15	Eric Norum <norume@aps.anl.gov>
 
     * /posix/inline/rtems/posix/cond.inl, /posix/inline/rtems/posix/mutex.inl,

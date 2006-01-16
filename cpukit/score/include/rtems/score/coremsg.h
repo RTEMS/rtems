@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,7 +22,7 @@
 /**
  *  @defgroup ScoreMessageQueue Message Queue Handler
  *
- *  This group contains functionality which provides the foundation
+ *  This handler encapsulates functionality which provides the foundation
  *  Message Queue services used in all of the APIs supported by RTEMS.
  */
 /**@{*/
@@ -38,6 +38,8 @@ extern "C" {
 #include <rtems/score/watchdog.h>
 
 /**
+ *  @brief  Message Queue MP Callback Prototype
+ *
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on message_queues.
  */
@@ -47,6 +49,8 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
              );
 
 /**
+ *  @brief Message Buffer Contents Management Structure
+ *
  *  The following defines the data types needed to manipulate
  *  the contents of message buffers.
  *
@@ -61,6 +65,8 @@ typedef struct {
 } CORE_message_queue_Buffer;
 
 /**
+ *  @brief Message Structure
+ *
  *  The following records define the organization of a message
  *  buffer.
  */
@@ -74,7 +80,10 @@ typedef struct {
 }   CORE_message_queue_Buffer_control;
 
 /**
- *  Blocking disciplines for a message queue.
+ *  @brief Message Queue Blocking Disciplines
+ *
+ *  This enumerated types defines the possible blocking disciplines
+ *  for a message queue.
  */
 typedef enum {
   /** This value indicates that pending messages are in FIFO order. */
@@ -84,19 +93,25 @@ typedef enum {
 }   CORE_message_queue_Disciplines;
 
 /** 
+ *  @brief Message Priority for Appending
+ *
  *  This is the priority constant used when appending messages onto
  *  a message queue.
  */
 #define  CORE_MESSAGE_QUEUE_SEND_REQUEST   INT_MAX
 
 /** 
+ *  @brief Message Priority for Prepending
+ *
  *  This is the priority constant used when prepending messages onto
  *  a message queue.
  */
 #define  CORE_MESSAGE_QUEUE_URGENT_REQUEST INT_MIN
 
 /**
- *  The following enumerated type details the modes in which a message
+ *  @brief Message Insertion Operation Types
+ *
+ *  The following type details the modes in which a message
  *  may be submitted to a message queue.  The message may be posted
  *  in a send or urgent fashion.
  *
@@ -106,7 +121,10 @@ typedef enum {
 typedef int CORE_message_queue_Submit_types;
 
 /**
- *  Core Message queue handler return statuses.
+ *  @brief Core Message Queue Return Statuses
+ *
+ *  This enumerated type defines the possible set of Core Message
+ *  Queue handler return statuses.
  */
 typedef enum {
   /** This value indicates the operation completed sucessfully. */
@@ -132,6 +150,8 @@ typedef enum {
 }   CORE_message_queue_Status;
 
 /**
+ *  @brief Message Queue Attributes Type
+ *
  *  The following defines the control block used to manage the
  *  attributes of each message queue.
  */
@@ -141,6 +161,8 @@ typedef struct {
 }   CORE_message_queue_Attributes;
 
 /**
+ *  @brief Message Queue Notification Callback Prototype
+ *
  *  The following defines the type for a Notification handler.  A notification
  *  handler is invoked when the message queue makes a 0->1 transition on
  *  pending messages.
@@ -148,8 +170,10 @@ typedef struct {
 typedef void (*CORE_message_queue_Notify_Handler)( void * );
 
 /**
+ *  @brief Core Message Queue Control Structure
+ *
  *  The following defines the control block used to manage each
- *  counting message_queue.
+ *  Message Queue
  */
 typedef struct {
   /** This field is the Waiting Queue used to manage the set of tasks
@@ -193,14 +217,16 @@ typedef struct {
 }   CORE_message_queue_Control;
 
 /**
- *  This routine initializes the message_queue based on the parameters passed.
+ *  @brief Initialize a Message Queue
  *
- *  @param the_message_queue (in) points to the message queue to initialize
- *  @param the_message_queue_attributes (in) points to the attributes that
+ *  This routine initializes @a the_message_queue based on the parameters passed.
+ *
+ *  @param[in] the_message_queue points to the message queue to initialize
+ *  @param[in] the_message_queue_attributes points to the attributes that
  *         will be used with this message queue instance
- *  @param maximum_pending_messages (in) is the maximum number of messages
+ *  @param[in] maximum_pending_messages is the maximum number of messages
  *         that will be allowed to pend at any given time
- *  @param maximum_message_size (in) is the size of largest message that
+ *  @param[in] maximum_message_size is the size of largest message that
  *         may be sent to this message queue instance
  *
  *  @return TRUE if the message queue can be initialized.  In general,
@@ -215,13 +241,15 @@ boolean _CORE_message_queue_Initialize(
 );
 
 /**
- *  This function closes a message by returning all allocated space and
- *  flushing the message_queue's task wait queue.
+ *  @brief Close a Message Queue
  *
- *  @param the_message_queue (in) points to the message queue to close
- *  @param remote_extract_callout (in) is the routine to call for each thread
+ *  This function closes a message by returning all allocated space and
+ *  flushing @a the_message_queue's task wait queue.
+ *
+ *  @param[in] the_message_queue points to the message queue to close
+ *  @param[in] remote_extract_callout is the routine to call for each thread
  *         that is extracted from the set of waiting threads
- *  @param status (in) is the status that each waiting thread will return
+ *  @param[in] status is the status that each waiting thread will return
  *         from it's blocking service
  */
 void _CORE_message_queue_Close(
@@ -231,50 +259,60 @@ void _CORE_message_queue_Close(
 );
 
 /**
- *  This function flushes the message_queue's pending message queue.  The
+ *  @brief Flush Pending Messages
+ *
+ *  This function flushes @a the_message_queue's pending message queue.  The
  *  number of messages flushed from the queue is returned.
  *
- *  @param the_message_queue (in) points to the message queue to flush
- *  @return the number of message pending messages flushed
+ *  @param[in] the_message_queue points to the message queue to flush
+ *
+ *  @return This method returns the number of message pending messages flushed.
  */
 uint32_t   _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue
 );
 
 /**
+ *  @brief Flush Messages Support Routine
+ *
  *  This routine flushes all outstanding messages and returns
  *  them to the inactive message chain.
  *
- *  @param the_message_queue (in) points to the message queue to flush
- *  @return the number of message pending messages flushed
+ *  @param[in] the_message_queue points to the message queue to flush
+ *
+ *  @return This method returns the number of message pending messages flushed.
  */
 uint32_t   _CORE_message_queue_Flush_support(
   CORE_message_queue_Control *the_message_queue
 );
 
 /**
- *  This function flushes the threads which are blocked on this
- *  message_queue's pending message queue.  They are unblocked whether
- *  blocked sending or receiving.
+ *  @brief Flush Waiting Threads.
  *
- *  @param the_message_queue (in) points to the message queue to flush
+ *  This function flushes the threads which are blocked on
+ *  @a the_message_queue's pending message queue.  They are
+ *  unblocked whether blocked sending or receiving.
+ *
+ *  @param[in] the_message_queue points to the message queue to flush
  */
 void _CORE_message_queue_Flush_waiting_threads(
   CORE_message_queue_Control *the_message_queue
 );
 
 /**
+ *  @brief Broadcast a Message to the Message Queue
+ *
  *  This function sends a message for every thread waiting on the queue and
  *  returns the number of threads made ready by the message.
  *
- *  @param the_message_queue (in) points to the message queue
- *  @param buffer (in) is the starting address of the message to broadcast
- *  @param size (in) is the size of the message being broadcast
- *  @param id (in) is the RTEMS object Id associated with this message queue.
+ *  @param[in] the_message_queue points to the message queue
+ *  @param[in] buffer is the starting address of the message to broadcast
+ *  @param[in] size is the size of the message being broadcast
+ *  @param[in] id is the RTEMS object Id associated with this message queue.
  *         It is used when unblocking a remote thread.
- *  @param api_message_queue_mp_support (in) is the routine to invoke if 
+ *  @param[in] api_message_queue_mp_support is the routine to invoke if 
  *         a thread that is unblocked is actually a remote thread.
- *  @param count (out) points to the variable that will contain the
+ *  @param[out] count points to the variable that will contain the
  *         number of tasks that are sent this message
  *  @return @a *count will contain the number of messages sent
  *  @return indication of the successful completion or reason for failure
@@ -289,6 +327,8 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
 );
 
 /**
+ *  @brief Submit a Message to the Message Queue
+ *
  *  This routine implements the send and urgent message functions. It
  *  processes a message that is to be submitted to the designated
  *  message queue.  The message will either be processed as a
@@ -296,18 +336,18 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  *  or it will be processed as an urgent message which will be inserted
  *  at the front of the queue.
  *
- *  @param the_message_queue (in) points to the message queue
- *  @param buffer (in) is the starting address of the message to send
- *  @param size (in) is the size of the message being send
- *  @param id (in) is the RTEMS object Id associated with this message queue.
+ *  @param[in] the_message_queue points to the message queue
+ *  @param[in] buffer is the starting address of the message to send
+ *  @param[in] size is the size of the message being send
+ *  @param[in] id is the RTEMS object Id associated with this message queue.
  *         It is used when unblocking a remote thread.
- *  @param api_message_queue_mp_support (in) is the routine to invoke if 
+ *  @param[in] api_message_queue_mp_support is the routine to invoke if 
  *         a thread that is unblocked is actually a remote thread.
- *  @param submit_type (in) determines whether the message is prepended,
+ *  @param[in] submit_type determines whether the message is prepended,
  *         appended, or enqueued in priority order.
- *  @param wait (in) indicates whether the calling thread is willing to block
+ *  @param[in] wait indicates whether the calling thread is willing to block
  *         if the message queue is full.
- *  @param timeout (in) is the maximum number of clock ticks that the calling
+ *  @param[in] timeout is the maximum number of clock ticks that the calling
  *         thread is willing to block if the message queue is full.
  *  @return indication of the successful completion or reason for failure
  */
@@ -323,21 +363,23 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
 );
 
 /**
+ *  @brief Size a Message from the Message Queue
+ *
  *  This kernel routine dequeues a message, copies the message buffer to
  *  a given destination buffer, and frees the message buffer to the
  *  inactive message pool.  The thread will be blocked if wait is TRUE,
  *  otherwise an error will be given to the thread if no messages are available.
  *
- *  @param the_message_queue (in) points to the message queue
- *  @param id (in) is the RTEMS object Id associated with this message queue.
+ *  @param[in] the_message_queue points to the message queue
+ *  @param[in] id is the RTEMS object Id associated with this message queue.
  *         It is used when unblocking a remote thread.
- *  @param buffer (in) is the starting address of the message buffer to
+ *  @param[in] buffer is the starting address of the message buffer to
  *         to be filled in with a message
- *  @param size (in) is the size of the @a buffer and indicates the maximum
+ *  @param[in] size is the size of the @a buffer and indicates the maximum
  *         size message that the caller can receive.
- *  @param wait (in) indicates whether the calling thread is willing to block
+ *  @param[in] wait indicates whether the calling thread is willing to block
  *         if the message queue is empty.
- *  @param timeout (in) is the maximum number of clock ticks that the calling
+ *  @param[in] timeout is the maximum number of clock ticks that the calling
  *         thread is willing to block if the message queue is empty.
  * 
  *  @return indication of the successful completion or reason for failure
@@ -357,9 +399,9 @@ void _CORE_message_queue_Seize(
  *  message queue.  It is assumed that the message has been filled
  *  in before this routine is called.
  *
- *  @param the_message_queue (in) points to the message queue
- *  @param the_message (in) is the message to enqueue
- *  @param submit_type (in) determines whether the message is prepended,
+ *  @param[in] the_message_queue points to the message queue
+ *  @param[in] the_message is the message to enqueue
+ *  @param[in] submit_type determines whether the message is prepended,
  *         appended, or enqueued in priority order.
  */
 void _CORE_message_queue_Insert_message(

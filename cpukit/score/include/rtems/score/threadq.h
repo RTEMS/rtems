@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,7 +22,8 @@
 /**
  *  @defgroup ScoreThreadQ Thread Queue Handler
  *
- *  This group contains functionality which XXX
+ *  This handler encapsulates functionality related to managing sets of threads
+ *  blocked waiting for resources.
  */
 /**@{*/
 
