@@ -19,7 +19,7 @@
  *    add CPU family specific information in this section
  */
 
-/*  COPYRIGHT (c) 1989-2004.
+/*  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -144,8 +144,7 @@ extern "C" {
  *  If TRUE, then the memory is allocated during initialization.
  *  If FALSE, then the memory is allocated during initialization.
  *
- *  This should be TRUE is @ref CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE
- *  or @ref CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
+ *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE.
  *
  *  Port Specific Information:
  *
@@ -169,8 +168,8 @@ extern "C" {
  *
  *  Does the CPU have hardware floating point?
  *
- *  If TRUE, then the @ref RTEMS_FLOATING_POINT task attribute is supported.
- *  If FALSE, then the @ref RTEMS_FLOATING_POINT task attribute is ignored.
+ *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is supported.
+ *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is ignored.
  *
  *  If there is a FP coprocessor such as the i387 or mc68881, then
  *  the answer is TRUE.
@@ -209,8 +208,8 @@ extern "C" {
 /**
  *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
  *
- *  If TRUE, then the @ref RTEMS_FLOATING_POINT task attribute is assumed.
- *  If FALSE, then the @ref RTEMS_FLOATING_POINT task attribute is followed.
+ *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is assumed.
+ *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is followed.
  *
  *  So far, the only CPUs in which this option has been used are the
  *  HP PA-RISC and PowerPC.  On the PA-RISC, The HP C compiler and
@@ -235,7 +234,7 @@ extern "C" {
 /**
  *  Should the IDLE task have a floating point context?
  *
- *  If TRUE, then the IDLE task is created as a @ref RTEMS_FLOATING_POINT task
+ *  If TRUE, then the IDLE task is created as a RTEMS_FLOATING_POINT task
  *  and it has a floating point context which is switched in and out.
  *  If FALSE, then the IDLE task does not have a floating point context.
  *
@@ -469,6 +468,7 @@ typedef struct {
  *  be saved during any context switch from one thread to another.
  */
 typedef struct {
+    /** FPU registers are listed here */
     double      some_float_register;
 } Context_Control_fp;
 
@@ -775,7 +775,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in @a _isr_cookie.
  *
- *  @param _isr_cookie (out) will contain the previous level cookie
+ *  @param[out] _isr_cookie will contain the previous level cookie
  *
  *  Port Specific Information:
  *
@@ -792,7 +792,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  This indicates the end of an RTEMS critical section.  The parameter
  *  @a _isr_cookie is not modified.
  *
- *  @param _isr_cookie (in) contain the previous level cookie
+ *  @param[in] _isr_cookie contain the previous level cookie
  *
  *  Port Specific Information:
  *
@@ -809,7 +809,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  sections into two or more parts.  The parameter @a _isr_cookie is not
  *  modified.
  *
- *  @param _isr_cookie (in) contain the previous level cookie
+ *  @param[in] _isr_cookie contain the previous level cookie
  *
  *  Port Specific Information:
  *
@@ -873,13 +873,13 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  in the context.  The state of the "general data" registers is
  *  undefined at task start time.
  *
- *  @param _the_context (in) is the context structure to be initialized
- *  @param _stack_base (in) is the lowest physical address of this task's stack
- *  @param _size (in) is the size of this task's stack
- *  @param _isr (in) is the interrupt disable level
- *  @param _entry_point (in) is the thread's entry point.  This is
+ *  @param[in] _the_context is the context structure to be initialized
+ *  @param[in] _stack_base is the lowest physical address of this task's stack
+ *  @param[in] _size is the size of this task's stack
+ *  @param[in] _isr is the interrupt disable level
+ *  @param[in] _entry_point is the thread's entry point.  This is
  *         always @a _Thread_Handler
- *  @param _is_fp (in) is TRUE if the thread is to be a floating
+ *  @param[in] _is_fp is TRUE if the thread is to be a floating
  *        point thread.  This is typically only used on CPUs where the
  *        FPU may be easily disabled by software such as on the SPARC
  *        where the PSR contains an enable FPU bit.
@@ -893,12 +893,14 @@ uint32_t   _CPU_ISR_Get_level( void );
   { \
   }
 
-/*
+/**
  *  This routine is responsible for somehow restarting the currently
  *  executing task.  If you are lucky, then all that is necessary
  *  is restoring the context.  Otherwise, there will need to be
  *  a special assembly routine which does something special in this
- *  case.  @ref _CPU_Context_Restore should work most of the time.  It will
+ *  case.  For many ports, simply adding a label to the restore path
+ *  of @ref _CPU_Context_switch will work.  On other ports, it may be
+ *  possibly to load a few arguments and jump to the restore path. It will
  *  not work if restarting self conflicts with the stack frame
  *  assumptions of restoring a context.
  *
@@ -923,9 +925,9 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  a "dump context" instruction which could fill in from high to low
  *  or low to high based on the whim of the CPU designers.
  *
- *  @param _base (in) is the lowest physical address of the floating point
+ *  @param[in] _base is the lowest physical address of the floating point
  *         context area
- *  @param _offset (in) is the offset into the floating point area
+ *  @param[in] _offset is the offset into the floating point area
  *
  *  Port Specific Information:
  *
@@ -946,7 +948,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *    -# not doing anything, and
  *    -# putting a "null FP status word" in the correct place in the FP context.
  *
- *  @param _destination (in) is the floating point context area
+ *  @param[in] _destination is the floating point context area
  *
  *  Port Specific Information:
  *
@@ -1060,8 +1062,8 @@ uint32_t   _CPU_ISR_Get_level( void );
  *    where bit_set_table[ 16 ] has values which indicate the first
  *      bit set
  *
- *  @param _value (in) is the value to be scanned
- *  @param _output (in) is the first bit set
+ *  @param[in] _value is the value to be scanned
+ *  @param[in] _output is the first bit set
  *
  *  Port Specific Information:
  *
@@ -1100,7 +1102,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  a major or minor component of a priority.  See the discussion
  *  for that routine.
  *
- *  @param _priority (in) is the major or minor number to translate
+ *  @param[in] _priority is the major or minor number to translate
  *
  *  Port Specific Information:
  *
@@ -1120,8 +1122,8 @@ uint32_t   _CPU_ISR_Get_level( void );
 /**
  *  This routine performs CPU dependent initialization.
  *
- *  @param cpu_table (in) is the CPU Dependent Configuration Table
- *  @param thread_dispatch (in) is the address of @ref _Thread_Dispatch
+ *  @param[in] cpu_table is the CPU Dependent Configuration Table
+ *  @param[in] thread_dispatch is the address of @ref _Thread_Dispatch
  *
  *  Port Specific Information:
  *
@@ -1137,9 +1139,9 @@ void _CPU_Initialize(
  *  This routine installs a "raw" interrupt handler directly into the 
  *  processor's vector table.
  *
- *  @param vector (in) is the vector number
- *  @param new_handler (in) is the raw ISR handler to install
- *  @param old_handler (in) is the previously installed ISR Handler
+ *  @param[in] vector is the vector number
+ *  @param[in] new_handler is the raw ISR handler to install
+ *  @param[in] old_handler is the previously installed ISR Handler
  *
  *  Port Specific Information:
  *
@@ -1155,9 +1157,9 @@ void _CPU_ISR_install_raw_handler(
  *  @ingroup CPUInterrupt
  *  This routine installs an interrupt vector.
  *
- *  @param vector (in) is the vector number
- *  @param new_handler (in) is the RTEMS ISR handler to install
- *  @param old_handler (in) is the previously installed ISR Handler
+ *  @param[in] vector is the vector number
+ *  @param[in] new_handler is the RTEMS ISR handler to install
+ *  @param[in] old_handler is the previously installed ISR Handler
  *
  *  Port Specific Information:
  *
@@ -1198,8 +1200,8 @@ void _CPU_Thread_Idle_body( void );
  *  @ingroup CPUContext
  *  This routine switches from the run context to the heir context.
  *
- *  @param run (in) points to the context of the currently executing task
- *  @param heir (in) points to the context of the heir task
+ *  @param[in] run points to the context of the currently executing task
+ *  @param[in] heir points to the context of the heir task
  *
  *  Port Specific Information:
  *
@@ -1215,7 +1217,7 @@ void _CPU_Context_switch(
  *  This routine is generally used only to restart self in an
  *  efficient manner.  It may simply be a label in @ref _CPU_Context_switch.
  *
- *  @param new_context (in) points to the context to be restored.
+ *  @param[in] new_context points to the context to be restored.
  *
  *  @note May be unnecessary to reload some registers.
  *
@@ -1231,7 +1233,7 @@ void _CPU_Context_restore(
  *  @ingroup CPUContext
  *  This routine saves the floating point context passed to it.
  *
- *  @param fp_context_ptr (in) is a pointer to a pointer to a floating
+ *  @param[in] fp_context_ptr is a pointer to a pointer to a floating
  *  point context area
  *
  *  @return on output @a *fp_context_ptr will contain the address that
@@ -1249,7 +1251,7 @@ void _CPU_Context_save_fp(
  *  @ingroup CPUContext
  *  This routine restores the floating point context passed to it.
  *
- *  @param fp_context_ptr (in) is a pointer to a pointer to a floating
+ *  @param[in] fp_context_ptr is a pointer to a pointer to a floating
  *  point context area to restore
  *
  *  @return on output @a *fp_context_ptr will contain the address that
@@ -1278,13 +1280,13 @@ void _CPU_Context_restore_fp(
  *  Some CPUs have special instructions which swap a 32-bit quantity in
  *  a single instruction (e.g. i486).  It is probably best to avoid
  *  an "endian swapping control bit" in the CPU.  One good reason is
- *  that interrupts would probably have to be disabled to insure that
+ *  that interrupts would probably have to be disabled to ensure that
  *  an interrupt does not try to access the same "chunk" with the wrong
  *  endian.  Another good reason is that on some CPUs, the endian bit
  *  endianness for ALL fetches -- both code and data -- so the code
  *  will be fetched incorrectly.
  *
- *  @param value (in) is the value to be swapped
+ *  @param[in] value is the value to be swapped
  *  @return the value after being endian swapped
  *
  *  Port Specific Information:
@@ -1310,7 +1312,7 @@ static inline uint32_t CPU_swap_u32(
  *  @ingroup CPUEndian
  *  This routine swaps a 16 bir quantity.
  *
- *  @param value (in) is the value to be swapped
+ *  @param[in] value is the value to be swapped
  *  @return the value after being endian swapped
  */
 #define CPU_swap_u16( value ) \

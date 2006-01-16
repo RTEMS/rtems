@@ -1,3 +1,10 @@
+2006-01-16	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/asm.h, rtems/score/cpu.h, rtems/score/types.h: Part of a large
+	patch to improve Doxygen output. As a side-effect, grammar and
+	spelling errors were corrected, spacing errors were address, and some
+	variable names were improved.
+
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Eliminate unsigned16, unsigned32.
