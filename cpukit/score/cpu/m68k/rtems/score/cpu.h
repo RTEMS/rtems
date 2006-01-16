@@ -6,7 +6,7 @@
  *  This include file contains information pertaining to the Motorola
  *  m68xxx processor family.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -672,7 +672,7 @@ void _CPU_Context_restore_fp(
  *    compliant with IEEE floating-point standards."
  *
  *  M68KFPSPInstallExceptionHandlers is in libcpu/m68k/MODEL/fpsp and
- *  is invoked early in the application code to insure that proper FP
+ *  is invoked early in the application code to ensure that proper FP
  *  behavior is installed.  This is not left to the BSP to call, since
  *  this would force all applications using that BSP to use FPSP which
  *  is not necessarily desirable.

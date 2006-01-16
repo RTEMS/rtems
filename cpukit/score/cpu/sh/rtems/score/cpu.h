@@ -16,7 +16,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * 
  *
- *  COPYRIGHT (c) 1998-2001.
+ *  COPYRIGHT (c) 1998-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -499,7 +499,7 @@ SCORE_EXTERN void CPU_delay( uint32_t   microseconds );
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
 /*
- *  Should be large enough to run all RTEMS tests.  This insures
+ *  Should be large enough to run all RTEMS tests.  This ensures
  *  that a "reasonable" small application should not have any problems.
  *
  *  We have been able to run the sptests with this value, but have not

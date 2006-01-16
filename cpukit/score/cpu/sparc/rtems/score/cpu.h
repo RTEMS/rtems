@@ -6,7 +6,7 @@
  *  This include file contains information pertaining to the port of 
  *  the executive to the SPARC processor.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -638,7 +638,7 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
 /*
- *  Should be large enough to run all tests.  This insures
+ *  Should be large enough to run all tests.  This ensures
  *  that a "reasonable" small application should not have any problems.
  *
  *  This appears to be a fairly generous number for the SPARC since

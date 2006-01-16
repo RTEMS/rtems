@@ -6,7 +6,7 @@
  *  This include file contains information pertaining to the C4x
  *  processor.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -138,8 +138,7 @@ extern "C" {
  *  If TRUE, then the memory is allocated during initialization.
  *  If FALSE, then the memory is allocated during initialization.
  *
- *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE
- *  or CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
+ *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE.
  *
  *  C4x Specific Information:
  *
@@ -678,7 +677,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
 /*
- *  Should be large enough to run all RTEMS tests.  This insures
+ *  Should be large enough to run all RTEMS tests.  This ensures
  *  that a "reasonable" small application should not have any problems.
  *
  *  C4x Specific Information:
@@ -1225,7 +1224,7 @@ void _CPU_Context_restore_fp(
  *  Some CPUs have special instructions which swap a 32-bit quantity in
  *  a single instruction (e.g. i486).  It is probably best to avoid
  *  an "endian swapping control bit" in the CPU.  One good reason is
- *  that interrupts would probably have to be disabled to insure that
+ *  that interrupts would probably have to be disabled to ensure that
  *  an interrupt does not try to access the same "chunk" with the wrong
  *  endian.  Another good reason is that on some CPUs, the endian bit
  *  endianness for ALL fetches -- both code and data -- so the code
