@@ -1,3 +1,7 @@
+2006-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/Makefile.am: Build devctl.
+
 2006-01-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/Makefile.am: Rework.

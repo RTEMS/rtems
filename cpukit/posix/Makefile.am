@@ -11,10 +11,10 @@ if HAS_POSIX
 
 # include
 
-noinst_HEADERS = include/devctl.h include/intr.h
+noinst_HEADERS = include/intr.h
 
 include_HEADERS = include/sched.h include/aio.h include/mqueue.h \
-    include/semaphore.h
+    include/semaphore.h include/devctl.h
 
 # include/rtems/posix
 
@@ -57,10 +57,10 @@ endif
 ## src
 
 # following are semi-implemented and untested
-UNUSED_C_FILES = src/devctl.c src/intr.c
+UNUSED_C_FILES = src/intr.c
 
 # These are really in the stand but not really functional
-BUILD_FOR_NOW_C_FILES = src/aio.c
+BUILD_FOR_NOW_C_FILES = src/aio.c src/devctl.c
 
 ENOSYS_C_FILES = src/execl.c src/execle.c src/execlp.c src/execv.c \
     src/execve.c src/execvp.c src/fork.c src/pthreadatfork.c src/wait.c \
