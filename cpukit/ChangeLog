@@ -1,5 +1,14 @@
 2006-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/intr.h, posix/include/rtems/posix/intr.h
+	posix/include/rtems/posix/threadsup.h,
+	posix/inline/rtems/posix/intr.inl.
+	posix/macros/rtems/posix/intr.inl, posix/src/intr.c:
+	Remove (Unused, dead).
+	* posix/Makefile.am: Reflect changes above. Rework.
+
+2006-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/Makefile.am: Build devctl.
 
 2006-01-16	Ralf Corsépius <ralf.corsepius@rtems.org>
