@@ -26,14 +26,6 @@ typedef struct {
   sigset_t                signals_blocked;
   sigset_t                signals_pending;
 
-#if 0
-  /*
-   *  POSIX Interrupts
-   */
-  uint32_t                interrupts_installed;
-  CORE_semaphore_Control  Interrupt_Semaphore;
-#endif
-
   /*
    *  POSIX Cancelability
    */
