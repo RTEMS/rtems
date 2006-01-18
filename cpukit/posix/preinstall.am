@@ -35,6 +35,10 @@ $(PROJECT_INCLUDE)/semaphore.h: include/semaphore.h $(PROJECT_INCLUDE)/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/semaphore.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/semaphore.h
 
+$(PROJECT_INCLUDE)/devctl.h: include/devctl.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/devctl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/devctl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/posix
 	@: > $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
