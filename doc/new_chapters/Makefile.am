@@ -13,7 +13,7 @@ include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
 GENERATED_FILES = \
-    eventlog.texi stackchk.texi rtmonuse.texi cpuuse.texi error.texi \
+    stackchk.texi rtmonuse.texi cpuuse.texi error.texi \
     monitor.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
@@ -22,11 +22,6 @@ FILES =
 
 info_TEXINFOS = new_chapters.texi
 new_chapters_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
-
-eventlog.texi: eventlog.t
-	 $(BMENU2) -p "" \
-	    -u "Top" \
-	    -n "" < $< > $@
 
 stackchk.texi: stackchk.t
 	$(BMENU2) -p "" \
@@ -56,7 +51,7 @@ monitor.texi: monitor.t
 noinst_SCRIPTS = gen_section
 
 EXTRA_DIST = base.t cpuuse.t error.t \
-    eventlog.t monitor.t rtmonuse.t stackchk.t STATUS TODO \
+    monitor.t rtmonuse.t stackchk.t STATUS TODO \
     $(noinst_SCRIPTS)
 
 CLEANFILES += new_chapters.info new_chapters.info-?
