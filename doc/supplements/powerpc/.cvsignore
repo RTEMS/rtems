@@ -1,15 +1,9 @@
-bsp.texi
-callconv.texi
-cpumodel.texi
-cputable.texi
-fatalerr.texi
 index.html
 intr.t
 intr.texi
 Makefile
 Makefile.in
 mdate-sh
-memmodel.texi
 powerpc
 powerpc-?
 powerpc-??
@@ -30,9 +24,7 @@ rtems_footer.html
 rtems_header.html
 stamp-vti
 timeDMV177_.t
-timeDMV177.texi
 timePSIM_.t
-timePSIM.texi
 timing.t
 timing.texi
 version.texi

@@ -1,8 +1,3 @@
-bsp.texi
-callconv.texi
-cpumodel.texi
-cputable.texi
-fatalerr.texi
 index.html
 intr.t
 intr.texi
@@ -25,12 +20,10 @@ m68k.vr
 Makefile
 Makefile.in
 mdate-sh
-memmodel.texi
 rtems_footer.html
 rtems_header.html
 stamp-vti
 timeMVME136_.t
-timeMVME136.texi
 timing.t
 timing.texi
 version.texi

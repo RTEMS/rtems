@@ -1,15 +1,9 @@
-bsp.texi
-callconv.texi
-cpumodel.texi
-cputable.texi
-fatalerr.texi
 index.html
 intr.t
 intr.texi
 Makefile
 Makefile.in
 mdate-sh
-memmodel.texi
 mips
 mips-?
 mips-??
@@ -30,7 +24,6 @@ rtems_footer.html
 rtems_header.html
 stamp-vti
 timeBSP_.t
-timeBSP.texi
 timing.t
 timing.texi
 version.texi

@@ -1,14 +1,7 @@
-codetuning.texi
-cpuinit.texi
-cpumodels.texi
-developtools.texi
-idlethread.texi
 index.html
-interrupts.texi
 Makefile
 Makefile.in
 mdate-sh
-miscellaneous.texi
 porting
 porting-?
 porting-??
@@ -25,10 +18,7 @@ porting.ps
 porting.toc
 porting.tp
 porting.vr
-prioritybitmap.texi
 rtems_footer.html
 rtems_header.html
-sourcecode.texi
 stamp-vti
-taskcontext.texi
 version.texi

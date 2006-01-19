@@ -1,10 +1,4 @@
-basic.texi
-bsp.texi
-build45.texi
-concepts.texi
-debug.texi
 embeddedinfo.texi
-endoftime.texi
 FAQ
 FAQ.aux
 FAQ.cp
@@ -19,15 +13,11 @@ FAQ.ps
 FAQ.toc
 FAQ.tp
 FAQ.vr
-freesw.texi
-hwdebugaids.texi
 index.html
 Makefile
 Makefile.in
 mdate-sh
-projects.texi
 rtems_footer.html
 rtems_header.html
 stamp-vti
-tools.texi
 version.texi

@@ -1,8 +1,3 @@
-bsp.texi
-callconv.texi
-cpumodel.texi
-cputable.texi
-fatalerr.texi
 i386
 i386-?
 i386-??
@@ -25,12 +20,10 @@ intr.texi
 Makefile
 Makefile.in
 mdate-sh
-memmodel.texi
 rtems_footer.html
 rtems_header.html
 stamp-vti
 timeFORCE386_.t
-timeFORCE386.texi
 timing.t
 timing.texi
 version.texi

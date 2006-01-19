@@ -1,17 +1,9 @@
-comm.texi
-conclusion.texi
-daemon.texi
-gdbinternals.texi
 index.html
-interfacing.texi
-intro.texi
 layers.pdf
 Makefile
 Makefile.in
 mdate-sh
-objectives.texi
 process.pdf
-revision.texi
 rgdb_specs
 rgdb_specs.aux
 rgdb_specs.cp
