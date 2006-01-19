@@ -1,3 +1,9 @@
+2006-01-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* adminiface.t: Remove.
+	* new_chapters.texi: Remove adminiface.
+	* Makefile.am: Remove adminiface.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.

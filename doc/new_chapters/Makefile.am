@@ -12,7 +12,7 @@ EDITION = 1
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
-GENERATED_FILES = adminiface.texi confspace.texi dumpcontrol.texi \
+GENERATED_FILES = confspace.texi dumpcontrol.texi \
     eventlog.texi stackchk.texi rtmonuse.texi cpuuse.texi error.texi \
     monitor.texi
 
@@ -34,11 +34,6 @@ dumpcontrol.texi: dumpcontrol.t
 	    -n "" < $< > $@
 
 confspace.texi: confspace.t
-	 $(BMENU2) -p "" \
-	    -u "Top" \
-	    -n "" < $< > $@
-
-adminiface.texi: adminiface.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
@@ -70,7 +65,7 @@ monitor.texi: monitor.t
 
 noinst_SCRIPTS = gen_section
 
-EXTRA_DIST = adminiface.t base.t confspace.t cpuuse.t dumpcontrol.t error.t \
+EXTRA_DIST = base.t confspace.t cpuuse.t dumpcontrol.t error.t \
     eventlog.t monitor.t rtmonuse.t stackchk.t STATUS TODO \
     $(noinst_SCRIPTS)
 
