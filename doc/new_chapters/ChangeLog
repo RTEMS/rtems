@@ -1,5 +1,11 @@
 2006-01-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* confspace.t: Remove.
+	* new_chapters.texi: Remove confspace.
+	* Makefile.am: Remove confspace.
+
+2006-01-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* adminiface.t: Remove.
 	* new_chapters.texi: Remove adminiface.
 	* Makefile.am: Remove adminiface.
