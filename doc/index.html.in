@@ -198,16 +198,6 @@
                RTEMS MIPS Applications Supplement</A>
             </LI>
 
-        <LI><A HREF="HELP.html">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-               RTEMS OpenCores OR32 Applications Supplement</A>
-            </LI>
-
         <LI><A HREF="../pdf/powerpc.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/powerpc.ps">
