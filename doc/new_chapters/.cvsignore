@@ -1,7 +1,3 @@
-adminiface.texi
-confspace.texi
-dumpcontrol.texi
-eventlog.texi
 Makefile
 Makefile.in
 mdate-sh
