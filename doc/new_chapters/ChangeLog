@@ -1,5 +1,10 @@
 2006-01-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* base.t: Remove.
+	* Makefile.am: Remove base.t.
+
+2006-01-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* eventlog.t: Remove.
 	* new_chapters.texi: Remove eventlog.
 	* Makefile.am: Remove eventlog.

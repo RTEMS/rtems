@@ -50,7 +50,7 @@ monitor.texi: monitor.t
 
 noinst_SCRIPTS = gen_section
 
-EXTRA_DIST = base.t cpuuse.t error.t \
+EXTRA_DIST = cpuuse.t error.t \
     monitor.t rtmonuse.t stackchk.t STATUS TODO \
     $(noinst_SCRIPTS)
 
