@@ -12,7 +12,7 @@ EDITION = 1
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
-GENERATED_FILES = dumpcontrol.texi \
+GENERATED_FILES = \
     eventlog.texi stackchk.texi rtmonuse.texi cpuuse.texi error.texi \
     monitor.texi
 
@@ -24,11 +24,6 @@ info_TEXINFOS = new_chapters.texi
 new_chapters_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
 eventlog.texi: eventlog.t
-	 $(BMENU2) -p "" \
-	    -u "Top" \
-	    -n "" < $< > $@
-
-dumpcontrol.texi: dumpcontrol.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
@@ -60,7 +55,7 @@ monitor.texi: monitor.t
 
 noinst_SCRIPTS = gen_section
 
-EXTRA_DIST = base.t cpuuse.t dumpcontrol.t error.t \
+EXTRA_DIST = base.t cpuuse.t error.t \
     eventlog.t monitor.t rtmonuse.t stackchk.t STATUS TODO \
     $(noinst_SCRIPTS)
 

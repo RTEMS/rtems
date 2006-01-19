@@ -79,7 +79,6 @@
 @c  The alternative is to rework a sentence to avoid this problem.
 
 @include eventlog.texi
-@include dumpcontrol.texi
 @include stackchk.texi
 @include rtmonuse.texi
 @include cpuuse.texi
@@ -93,7 +92,6 @@ This is the online version of the RTEMS POSIX API User's Guide
 
 @menu
 * Event Logging Manager::
-* Process Dump Control Manager::
 * Stack Bounds Checker::
 * Rate Monotonic Period Statistics::
 * CPU Usage Statistics::
