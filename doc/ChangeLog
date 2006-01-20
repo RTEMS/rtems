@@ -1,4 +1,12 @@
-2006-01-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+2006-01-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* user/rtemsarc.gif, user/states.gif, user/rtemspie.gif:
+	Remove (Unused).
+	* user/rtemsarc.txt, user/rtemspie.txt, user/states.txt:
+	New (Extracted from other docs).
+	* user/Makefile.am: Reflect changes above.
+
+2006-01-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* index.html.in: Remove OR32.
 

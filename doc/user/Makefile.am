@@ -24,6 +24,8 @@ COMMON_FILES += $(top_srcdir)/common/cpright.texi
 info_TEXINFOS = c_user.texi
 c_user_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
+TXT_FILES = rtemsarc.txt rtemspie.txt states.txt
+
 PNG_FILES = rtemsarc.png rtemspie.png states.png
 
 EPS_IMAGES = rtemspie.eps states.eps
@@ -156,11 +158,9 @@ mp.texi: mp.t
 	    -u "Top" \
 	    -n "Directive Status Codes" < $< > $@
 
-noinst_DATA = states.gif rtemspie.gif
-
 EXTRA_DIST = bsp.t concepts.t clock.t datatypes.t conf.t dpmem.t event.t \
     fatal.t init.t intr.t io.t mp.t msg.t overview.t part.t region.t rtmon.t \
-    sem.t schedule.t signal.t task.t timer.t userext.t $(PNG_FILES) \
+    sem.t schedule.t signal.t task.t timer.t userext.t $(TXT_FILES) $(PNG_FILES) \
     $(EPS_IMAGES) $(noinst_DATA)
 
 CLEANFILES += c_user.info c_user.info-? c_user.info-??
