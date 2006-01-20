@@ -1,3 +1,7 @@
+2006-01-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* texi2www: Add provisory support for @image.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.

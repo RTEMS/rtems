@@ -295,6 +295,16 @@ sub get_more_stuff_to_parse
 		&copy_to_destdir($atarg);
 		$atarg =~ s|.*/||;
 		$x = "<IMG SRC=\"$atarg\">";
+	    } elsif ($atcmd eq 'image') {
+	        my ($f,$w,$h,$a) = split(',',$atarg);
+		$f .= '.png';
+		&copy_to_destdir($f);
+		$x = "<IMG ALIGN=MIDDLE SRC=\"$f\" ALT=\"$a\"";
+		if ( $w =~ /([0-9]+)(in)/ ) {
+		  my $scale = 500.0/4.0; # 500dots/4in
+		  $x .= " WIDTH=" . ( $scale * $1 );
+		}
+		$x .= ">"
             } else {
                 print "**WARNING** Don't know how to expand "
                     . "\@$atcmd\{$atarg\}\n";
