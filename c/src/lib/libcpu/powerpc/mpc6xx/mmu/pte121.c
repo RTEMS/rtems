@@ -694,6 +694,7 @@ triv121PgTblConsistency (Triv121PgTbl pt, int pass, int expected)
   int i;
   unsigned v, m;
   int warn = 0;
+  int errs = 0;
   static int maxw = 20;         /* mute after detecting this many errors */
 
   PRINTF ("Checking page table at 0x%08x (size %i==0x%x)\n",
@@ -734,12 +735,16 @@ triv121PgTblConsistency (Triv121PgTbl pt, int pass, int expected)
       /* never reached */ ;
 #endif
 
-    if ((*lp & (0xfffff0 << 7)) || *(lp + 1) & 0xe00
+    if ( /* T.S: allow any VSID... (*lp & (0xfffff0 << 7)) || */ (*(lp + 1) & 0xe00)
         || (pte->v && pte->marked)) {
       /* check for vsid (without segment bits) == 0, unused bits == 0, valid && marked */
-      sprintf (buf, "invalid VSID , unused bits or v && m");
+      sprintf (buf, "unused bits or v && m");
       err = 1;
     } else {
+      if ( (*lp & (0xfffff0 << 7)) ) {
+        sprintf(buf,"(warning) non-1:1 VSID found");
+        err = 2;
+      }
       if (pte->v)
         v++;
       if (pte->marked)
@@ -751,13 +756,23 @@ triv121PgTblConsistency (Triv121PgTbl pt, int pass, int expected)
          pass, (unsigned) pte, i, i);
       PRINTF ("Reason: %s\n", buf);
       dumpPte (pte);
-      warn++;
+      if ( err & 2 ) {
+         warn++;
+      } else {
+         errs++;
+      }
       maxw--;
     }
   }
+  if (errs) {
+    PRINTF ("%i errors %s", errs, warn ? "and ":"");
+  }
   if (warn) {
-    PRINTF ("%i errors found; currently %i entries marked, %i are valid\n",
-            warn, m, v);
+    PRINTF ("%i warnings ",warn);
+  }
+  if (errs || warn) {
+    PRINTF ("found; currently %i entries marked, %i are valid\n",
+            m, v);
   }
   v += m;
   if (maxw && expected >= 0 && expected != v) {
@@ -963,9 +978,9 @@ dumpPteg (unsigned long vsid, unsigned long pi, unsigned long hash)
 }
 #endif
 
-/* Verify that a range of EAs is mapped the page table
- * (if vsid has one of the special values -- otherwise,
- * start/end are page indices).
+/* Verify that a range of addresses is mapped the page table.
+ * start/end are segment offsets or EAs (if vsid has one of
+ * the special values), respectively.
  *
  * RETURNS: address of the first page for which no
  *          PTE was found (i.e. page index * page size)
@@ -974,12 +989,19 @@ dumpPteg (unsigned long vsid, unsigned long pi, unsigned long hash)
  *          [which is not page aligned and hence is not
  *          a valid page address].
  */
+
 unsigned long
 triv121IsRangeMapped (long vsid, unsigned long start, unsigned long end)
 {
+unsigned pi;
+
   start &= ~((1 << LD_PG_SIZE) - 1);
   while (start < end) {
-    if (!alreadyMapped (&pgTbl, vsid, start))
+    if ( TRIV121_SEG_VSID != vsid && TRIV121_121_VSID != vsid )
+      pi = PI121(start);
+    else
+      pi = start;
+    if (!alreadyMapped (&pgTbl, vsid, pi))
       return start;
     start += 1 << LD_PG_SIZE;
   }
