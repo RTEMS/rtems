@@ -1,3 +1,7 @@
+2006-01-23	Joel Sherrill <joel@OARcorp.com>
+
+	* runtest: Add pvr setting.
+
 2006-01-20	Joel Sherrill <joel@OARcorp.com>
 
 	* psim: Enhance to add limit on how long a single test is allowed to

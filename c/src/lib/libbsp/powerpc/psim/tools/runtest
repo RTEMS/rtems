@@ -190,6 +190,7 @@ do
        ${simulator} $extra_options -c ${instruction_limit} \
            -o "/#address-cells 2" \
            -o "/openprom/options/oea-memory-size ${sizeof_ram}" \
+           -o "/openprom/init/register/pvr 0xfffe0000" \
            -o "/shm@0xc0000000/reg 0xc0000000 0x10000" \
            -o "/shm@0xc0000000/key 0x1234" \
            -o "/sem@0xc0010000/reg 0xc0010000 12" \
@@ -200,6 +201,7 @@ do
        ${simulator} $extra_options -c ${instruction_limit} \
            -o "/#address-cells 2" \
            -o "/openprom/options/oea-memory-size ${sizeof_ram}" \
+           -o "/openprom/init/register/pvr 0xfffe0000" \
            -o "/shm@0xc0000000/reg 0xc0000000 0x10000" \
            -o "/shm@0xc0000000/key 0x1234" \
            -o "/sem@0xc0010000/reg 0xc0010000 12" \
@@ -243,6 +245,7 @@ do
      ${simulator} $extra_options -c ${instruction_limit} \
            -o "/#address-cells 2" \
            -o "/openprom/options/oea-memory-size ${sizeof_ram}" \
+           -o "/openprom/init/register/pvr 0xfffe0000" \
            $tfile | sed -e 's///' -e '/^$/d' > ${logfile}
    fi
 
