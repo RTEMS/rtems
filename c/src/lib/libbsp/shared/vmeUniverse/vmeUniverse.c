@@ -25,6 +25,7 @@
 #define UNIV_CTL_VAS16		(0x00000000)
 #define UNIV_CTL_VAS24		(0x00010000)
 #define UNIV_CTL_VAS32		(0x00020000)
+#define UNIV_MCTL_VASCSR	(0x00050000)
 #define UNIV_CTL_VAS		(0x00070000)
 
 #define UNIV_MCTL_EN		(0x80000000)
@@ -347,6 +348,12 @@ unsigned long mode=0;
 			mode |= UNIV_CTL_VAS16;
 			break;
 
+		case VME_AM_CSR:
+			if ( !ismaster )
+				return -1;
+			mode |= UNIV_MCTL_VASCSR;
+			break;
+
 		case 0: /* disable the port alltogether */
 			break;
 
@@ -543,9 +550,11 @@ showUniversePort(
 	}
 
 	switch (cntrl & UNIV_CTL_VAS) {
-		case UNIV_CTL_VAS16: uprintf(f,"A16, "); break;
-		case UNIV_CTL_VAS24: uprintf(f,"A24, "); break;
-		case UNIV_CTL_VAS32: uprintf(f,"A32, "); break;
+		case UNIV_CTL_VAS16:   uprintf(f,"A16, "); break;
+		case UNIV_CTL_VAS24:   uprintf(f,"A24, "); break;
+		case UNIV_CTL_VAS32:   uprintf(f,"A32, "); break;
+		case UNIV_MCTL_VASCSR: if ( ismaster ) { uprintf(f,"CSR, "); break; }
+		                       /* else fallthru */
 		default: uprintf(f,"A??, "); break;
 	}
 

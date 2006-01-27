@@ -63,6 +63,7 @@
 #	define TSI_OTAT_ADMODE_A24	1
 #	define TSI_OTAT_ADMODE_A32	2
 #	define TSI_OTAT_ADMODE_A64	4
+#	define TSI_OTAT_ADMODE_CSR	5
 #	define TSI_OTAT_ADMODE_USR1	8
 #	define TSI_OTAT_ADMODE_USR2	9
 #	define TSI_OTAT_ADMODE_USR3	0xa
@@ -399,6 +400,10 @@ unsigned long tm, mask;
 		case VME_AM_SUP_SHORT_IO:
 		case VME_AM_USR_SHORT_IO:
 			mode |= TSI_OTAT_ADMODE_A16;
+			break;
+
+		case VME_AM_CSR:
+			mode |= TSI_OTAT_ADMODE_CSR;
 			break;
 
 		case 0: /* disable the port alltogether */
@@ -789,6 +794,7 @@ unsigned long long	start, limit, offst;
 			case TSI_OTAT_ADMODE_A24: uprintf(f,"A24"); break;
 			case TSI_OTAT_ADMODE_A32: uprintf(f,"A32"); break;
 			case TSI_OTAT_ADMODE_A64: uprintf(f,"A64"); break;
+			case TSI_OTAT_ADMODE_CSR: uprintf(f,"CSR"); break;
 			default:                  uprintf(f,"A??"); break;
 		}
 

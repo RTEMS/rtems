@@ -52,6 +52,9 @@
 #ifndef VME_AM_EXT_USR_DATA
 #define	VME_AM_EXT_USR_DATA			0x09
 #endif
+#ifndef VME_AM_CSR
+#define VME_AM_CSR					0x2f
+#endif
 #ifndef VME_AM_SUP_SHORT_IO
 #define	VME_AM_SUP_SHORT_IO			0x2d
 #endif
