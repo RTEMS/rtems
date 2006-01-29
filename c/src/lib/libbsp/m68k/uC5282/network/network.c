@@ -194,12 +194,13 @@ mcf5282_mii_interrupt_handler( rtems_vector_number v )
 /*
  * Allocate buffer descriptors from (non-cached) on-chip static RAM
  * Ensure 128-bit (16-byte) alignment
+ * Allow some space at the beginning for other diagnostic counters
  */
 static mcf5282BufferDescriptor_t *
 mcf5282_bd_allocate(unsigned int count)
 {
     extern char __SRAMBASE[];
-    static mcf5282BufferDescriptor_t *bdp = (mcf5282BufferDescriptor_t *)__SRAMBASE;
+    static mcf5282BufferDescriptor_t *bdp = (mcf5282BufferDescriptor_t *)(__SRAMBASE+16);
     mcf5282BufferDescriptor_t *p = bdp;
 
     bdp += count;

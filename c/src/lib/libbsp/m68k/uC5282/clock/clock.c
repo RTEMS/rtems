@@ -23,12 +23,27 @@
 #define CLOCK_VECTOR (64+58)
 
 /*
+ * CPU load counters
+ * Place in static RAM so updates don't hit the SDRAM
+ */
+extern int __SRAMBASE[];
+#define IDLE_COUNTER      __SRAMBASE[0]
+#define FILTERED_IDLE     __SRAMBASE[1]
+#define MAX_IDLE_COUNT    __SRAMBASE[2]
+#define FILTER_SHIFT    6
+
+/*
  * Periodic interval timer interrupt handler
  */
-#define Clock_driver_support_at_tick()             \
-    do {                                           \
-        MCF5282_PIT3_PCSR |= MCF5282_PIT_PCSR_PIF; \
-    } while (0)                                    \
+#define Clock_driver_support_at_tick()                                       \
+    do {                                                                     \
+        int idle = IDLE_COUNTER;                                             \
+        IDLE_COUNTER = 0;                                                    \
+        if (idle > MAX_IDLE_COUNT)                                           \
+            MAX_IDLE_COUNT = idle;                                           \
+        FILTERED_IDLE = idle + FILTERED_IDLE - (FILTERED_IDLE>>FILTER_SHIFT);\
+        MCF5282_PIT3_PCSR |= MCF5282_PIT_PCSR_PIF;                           \
+    } while (0)
 
 /*
  * Attach clock interrupt handler
@@ -61,6 +76,9 @@
             preScaleDivisor >>= 1;                                       \
             preScaleCode++;                                              \
         }                                                                \
+        IDLE_COUNTER = 0;                                                \
+        FILTERED_IDLE = 0;                                               \
+        MAX_IDLE_COUNT = 0;                                              \
         bsp_allocate_interrupt(PIT3_IRQ_LEVEL, PIT3_IRQ_PRIORITY);       \
         MCF5282_INTC0_ICR58 = MCF5282_INTC_ICR_IL(PIT3_IRQ_LEVEL) |      \
                               MCF5282_INTC_ICR_IP(PIT3_IRQ_PRIORITY);    \
@@ -68,11 +86,29 @@
         MCF5282_INTC0_IMRH &= ~MCF5282_INTC_IMRH_INT58;                  \
 		MCF5282_PIT3_PCSR &= ~MCF5282_PIT_PCSR_EN;                       \
         rtems_interrupt_enable( level );                                 \
+		MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
+                            MCF5282_PIT_PCSR_OVW |                       \
+                            MCF5282_PIT_PCSR_PIE |                       \
+                            MCF5282_PIT_PCSR_RLD;                        \
 		MCF5282_PIT3_PMR = BSP_Configuration.microseconds_per_tick - 1;  \
 		MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD |                       \
                             MCF5282_PIT_PCSR_EN;                         \
     } while (0)
+
+/*
+ * Provide our own version of the idle task
+ */
+void _BSP_Thread_Idle_body(void)
+{
+    for(;;)
+        asm volatile ("addq.l #1,__SRAMBASE"); /* Atomic increment */
+}
+
+int rtems_bsp_cpu_load_percentage(void)
+{
+    return 100 - ((100 * (FILTERED_IDLE >> FILTER_SHIFT)) / MAX_IDLE_COUNT);
+}
 
 #include "../../../shared/clockdrv_shell.c"
