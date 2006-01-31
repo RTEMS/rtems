@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 1998,1999,2000 Ralf Corsepius (corsepiu@faw.uni-ulm.de)
+ * Copyright (c) 1998,1999,2000, 2006 Ralf Corsepius, Ulm Germany.
  *
  * See the file COPYING for copyright notice.
  */
 
 #include <stdio.h>
 #include <string.h>	/* strcmp, strerror */
+#include <stdlib.h>	/* exit */
 #include <errno.h>
 #include <getopt.h>
 
