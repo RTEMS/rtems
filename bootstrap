@@ -173,7 +173,7 @@ clean)
   fi; done
 
   find . -name '*~' -print | xargs rm -f
-  find . -name 'bspopts.h*' -print | xargs rm -f
+  find . -name 'bspopts.h.in' -print | xargs rm -f
   find . -name '*.orig' -print | xargs rm -f
   find . -name '*.rej' -print | xargs rm -f
   find . -name 'config.status' -print | xargs rm -f
