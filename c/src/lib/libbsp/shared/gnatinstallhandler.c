@@ -12,6 +12,8 @@
  *  $Id$
  */
 
-void __gnat_install_handler( void )
+/*
+void __bsp_gnat_install_handler( void )
 {
 }
+*/
