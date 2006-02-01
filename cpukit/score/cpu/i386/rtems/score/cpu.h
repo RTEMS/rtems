@@ -264,7 +264,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  Minimum size of a thread's stack.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          1024
+#define CPU_STACK_MINIMUM_SIZE          4096
 
 /*
  *  i386 is pretty tolerant of alignment.  Just put things on 4 byte boundaries.

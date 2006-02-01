@@ -1,3 +1,10 @@
+2006-02-01	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Increase default stack size on i386 from 1K to 4K.
+	Most i386 targets are not memory strapped so making this a bit large
+	is not a burden. It lets more tests run. ticker and psxtimer will not
+	even run with 1K of stack.
+
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Eliminate unsigned16, unsigned32.
