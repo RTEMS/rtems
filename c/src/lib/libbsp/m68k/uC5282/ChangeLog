@@ -1,7 +1,7 @@
 2006-01-29  Eric Norum <norume@aps.anl.gov>
 
-    * clock/clock.c, network/network.c, startup/bspstart.c:
-            Add an 'extended BSP' routine which returns the CPU load average.
+	* clock/clock.c, network/network.c, startup/bspstart.c:
+	Add an 'extended BSP' routine which returns the CPU load average.
 
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 

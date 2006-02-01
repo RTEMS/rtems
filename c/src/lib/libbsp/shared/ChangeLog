@@ -4,18 +4,19 @@
 	Added 2F address modifier for VME64 CSR access.
 
 2006-01-11	Till Straumann <strauman@slac.stanford.edu>
+
 	* vmeUniverse/vmeTsi148.c, vmeUniverse/vmeTsi148.h,
 	vmeUniverse/vmeUniverse.c, vmeUniverse/vmeUniverse.h,
-    vmeUniverse/vme_amd_defs.h: No longer enable posted-writes
-    on master windows (creates race-condition on memory-mapped
-    devices). A new flag allows for signalling that a window
-    maps 'ordinary memory'. Disable VME IRQ level if no
-    handler is registered with interrupting vector.
+	vmeUniverse/vme_amd_defs.h: No longer enable posted-writes
+	on master windows (creates race-condition on memory-mapped
+	devices). A new flag allows for signalling that a window
+	maps 'ordinary memory'. Disable VME IRQ level if no
+	handler is registered with interrupting vector.
 
 2006-01-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/vmeTsi148.c, vmeUniverse/vmeTsi148.h:
-    Eliminate obsolete types.
+	Eliminate obsolete types.
 
 2005-11-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
@@ -41,9 +42,9 @@
 
 2005-04-15      Jennifer Averett <jennifer.averett@oarcorp.com>
 
-        PR 779/bsp
-        * vmeUniverse/vmeUniverse.c: add parameter to new exception interrupt
-        handlers in powerpc bsps
+	PR 779/bsp
+	* vmeUniverse/vmeUniverse.c: add parameter to new exception interrupt
+	handlers in powerpc bsps
 
 2005-03-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -61,7 +62,7 @@
 
 2004-11-20      Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
-        PR 703/filesystem
+	PR 703/filesystem
 	* ide_ctrl.c: Extend the "modes_available" and "mode_active" 
 	parameters to uint16_t for UDMA support.
 
