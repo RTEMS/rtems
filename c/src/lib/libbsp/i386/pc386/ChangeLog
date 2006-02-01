@@ -1,3 +1,9 @@
+2006-02-01	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac, console/console.c: Add USE_COM1_AS_CONSOLE BSP option.
+	This makes it easy to build the pc386 BSP in a configuration that
+	corresponds to qemu with COM1 redirected to stdio.
+
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove explicit ampolish3 support (now in
