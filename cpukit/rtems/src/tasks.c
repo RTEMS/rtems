@@ -111,7 +111,7 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
   tvp = deleted->task_variables;
   deleted->task_variables = NULL;
   while (tvp) {
-    next = tvp->next;
+    next = (rtems_task_variable_t *)tvp->next;
     if (_Thread_Is_executing(deleted)) {
       if  (tvp->dtor)
         (*tvp->dtor)(*tvp->ptr);
@@ -154,14 +154,14 @@ void _RTEMS_tasks_Switch_extension(
   while (tvp) {
     tvp->tval = *tvp->ptr;
     *tvp->ptr = tvp->gval;
-    tvp = tvp->next;
+    tvp = (rtems_task_variable_t *)tvp->next;
   }
 
   tvp = heir->task_variables;
   while (tvp) {
     tvp->gval = *tvp->ptr;
     *tvp->ptr = tvp->tval;
-    tvp = tvp->next;
+    tvp = (rtems_task_variable_t *)tvp->next;
   }
 }
 

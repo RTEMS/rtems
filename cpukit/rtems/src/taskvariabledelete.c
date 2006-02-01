@@ -58,8 +58,10 @@ rtems_status_code rtems_task_variable_delete(
     tvp = the_thread->task_variables;
     while (tvp) {
       if (tvp->ptr == ptr) {
-        if (prev) prev->next = tvp->next;
-        else      the_thread->task_variables = tvp->next;
+        if (prev)
+          prev->next = tvp->next;
+        else      
+          the_thread->task_variables = (rtems_task_variable_t *)tvp->next;
         if (_Thread_Is_executing(the_thread)) {
           if (tvp->dtor)
             (*tvp->dtor)(*tvp->ptr);
@@ -73,7 +75,7 @@ rtems_status_code rtems_task_variable_delete(
         return RTEMS_SUCCESSFUL;
       }
       prev = tvp;
-      tvp = tvp->next;
+      tvp = (rtems_task_variable_t *)tvp->next;
     }
     _Thread_Enable_dispatch();
     return RTEMS_INVALID_ADDRESS;

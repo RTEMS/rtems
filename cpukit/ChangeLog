@@ -1,3 +1,9 @@
+2006-02-01	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/src/tasks.c, rtems/src/taskvariableadd.c,
+	rtems/src/taskvariabledelete.c, rtems/src/taskvariableget.c: Remove
+	warnings.
+
 2006-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/include/intr.h, posix/include/rtems/posix/intr.h

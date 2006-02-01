@@ -73,7 +73,7 @@ rtems_status_code rtems_task_variable_get(
         _Thread_Enable_dispatch();
         return RTEMS_SUCCESSFUL;
       }
-      tvp = tvp->next;
+      tvp = (rtems_task_variable_t *)tvp->next;
     }
     _Thread_Enable_dispatch();
     return RTEMS_INVALID_ADDRESS;
