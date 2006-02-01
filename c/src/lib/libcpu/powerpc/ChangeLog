@@ -1,8 +1,9 @@
 2006-01-20	Till Straumann <strauman@slac.stanford.edu>
-    * mpc6xx/mmu/pte121.c: consistency check now warns instead
-    of reporting an error when coming across a non 1:1 VSID;
-    fix: triv121IsRangeMapped() needs to convert segment offset
-    into a page index if the vsid argument is non-special.
+
+	* mpc6xx/mmu/pte121.c: consistency check now warns instead
+	of reporting an error when coming across a non 1:1 VSID;
+	fix: triv121IsRangeMapped() needs to convert segment offset
+	into a page index if the vsid argument is non-special.
 
 2006-01-05	Till Straumann <strauman@slac.stanford.edu>
 	* shared/include/cpuIdent.c: Accept PPC_PSIM as a
