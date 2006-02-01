@@ -144,7 +144,7 @@ extern "C" {
 
 #define sprint_time(_str, _s1, _tb, _s2) \
   do { \
-    sprintf( (str), "%s%02d:%02d:%02d   %02d/%02d/%04d%s", \
+    sprintf( (_str), "%s%02d:%02d:%02d   %02d/%02d/%04d%s", \
        _s1, (_tb)->hour, (_tb)->minute, (_tb)->second, \
        (_tb)->month, (_tb)->day, (_tb)->year, _s2 ); \
   } while ( 0 )
