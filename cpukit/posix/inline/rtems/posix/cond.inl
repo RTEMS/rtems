@@ -56,10 +56,11 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
 
 RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control 
 *_POSIX_Condition_variables_Get (
-  Objects_Id        *id,
+  pthread_cond_t    *cond,
   Objects_Locations *location
 )
 {
+  Objects_Id        *id = (Objects_Id *)cond;
   int status;
 
   if ( !id ) {

@@ -53,8 +53,9 @@
  *        PTHREAD_COND_INITIALIZER without adding overhead.
  */
 
-#define ___POSIX_Condition_variables_Get_support( _id, _location ) \
+#define ___POSIX_Condition_variables_Get_support( _cond, _location ) \
   do { \
+    Objects_Id        *id = (Objects_Id *)_cond; \
     int _status; \
     \
     if ( !_id ) { \

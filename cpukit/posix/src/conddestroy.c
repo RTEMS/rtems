@@ -27,8 +27,8 @@ int pthread_cond_destroy(
   pthread_cond_t           *cond
 )
 {
-  register POSIX_Condition_variables_Control *the_cond;
-  Objects_Locations                           location;
+  POSIX_Condition_variables_Control *the_cond;
+  Objects_Locations                  location;
 
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
