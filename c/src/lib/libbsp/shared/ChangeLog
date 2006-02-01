@@ -1,3 +1,8 @@
+2006-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* gnatinstallhandler.c: Rename since old name is now used
+	by GNAT source.
+
 2006-01-26	Till Straumann <strauman@slac.stanford.edu>
 	* vmeUniverse/vmeTsi148.c, vmeUniverse/vmeUniverse.c,
 	vmeUniverse/vmeUniverse.h, vmeUniverse/vme_amd_defs.h:
