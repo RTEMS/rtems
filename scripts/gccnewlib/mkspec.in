@@ -49,7 +49,12 @@ target_alias=$1
 . ./$CFG
 
 if test -n "${gcc_patch_version}"; then
-PATCH0="Patch0:		gcc-${gcc_version}-rtems-${gcc_patch_version}.diff"
+PATCH0="Patch0:		gcc-core-${gcc_version}-rtems-${gcc_patch_version}.diff"
+PATCH1="Patch1:		gcc-g++-${gcc_version}-rtems-${gcc_patch_version}.diff"
+PATCH2="Patch2:		gcc-fortran-${gcc_version}-rtems-${gcc_patch_version}.diff"
+PATCH3="Patch3:		gcc-gcj-${gcc_version}-rtems-${gcc_patch_version}.diff"
+PATCH4="Patch4:		gcc-ada-${gcc_version}-rtems-${gcc_patch_version}.diff"
+PATCH5="Patch5:		gcc-objc-${gcc_version}-rtems-${gcc_patch_version}.diff"
 fi
 
 if test -n "${newlib_patch_version}"; then
@@ -58,6 +63,11 @@ fi
 
 # note that the variables in the gccnewlib directory are actually the same
 sed -e "s,@PATCH0\@,${PATCH0}," \
+    -e "s,@PATCH1\@,${PATCH1}," \
+    -e "s,@PATCH2\@,${PATCH2}," \
+    -e "s,@PATCH3\@,${PATCH3}," \
+    -e "s,@PATCH4\@,${PATCH4}," \
+    -e "s,@PATCH5\@,${PATCH5}," \
     -e "s,@PATCH50\@,${PATCH50}," \
     -e "s,@Release\@,${gccnewlib_rpm_release},g" \
     -e "s,@target_alias\@,${target_alias},g" \

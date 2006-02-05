@@ -1,5 +1,6 @@
 2006-02-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* gccnewlib/mkspec.in: Split patches.
 	* gccnewlib/gccnewlib.add: Dynamically create brp-*.
 	Use split source tar balls.
 	* binutils/binutils.add: Dynamically create brp-*.
