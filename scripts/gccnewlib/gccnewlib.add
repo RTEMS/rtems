@@ -18,10 +18,6 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_version
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}@newlib_suffix@
 @PATCH0@
 @PATCH50@
-Source98:	brp-rtems-strip.in
-Source99:	brp-rtems-compress.in
-
-%define __os_install_post ./brp-rtems-compress && ./brp-rtems-strip
 
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	@rpmprefix@%{gcc_target}-binutils
@@ -40,12 +36,6 @@ BuildRequires:	@rpmprefix@%{gcc_target}-binutils
 #
 %{?!_with_sources:NoSource:	0}
 %{?!_with_sources:NoSource:	50}
-
-%description
-RTEMS is an open source operating system for embedded systems.
-
-This is gcc for %{gcc_target}.
-
 
 # default languages to build
 %define _cxx		1
@@ -117,6 +107,36 @@ This is gcc for %{gcc_target}.
 %define build_objc	%_objc
 %define build_libgcj	%_libgcj
 
+%if %build_cxx
+Source1:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-g++-%{gcc_version}@gcc_suffix@
+@PATCH1@
+%{?!_with_sources:NoSource:	1}
+%endif
+
+%if %build_f95
+Source2:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-fortran-%{gcc_version}@gcc_suffix@
+@PATCH2@
+%{?!_with_sources:NoSource:	2}
+%endif
+
+%if %build_gcj
+Source3:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-java-%{gcc_version}@gcc_suffix@
+@PATCH3@
+%{?!_with_sources:NoSource:	3}
+%endif
+
+%if %build_gnat
+Source4:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-ada-%{gcc_version}@gcc_suffix@
+@PATCH4@
+%{?!_with_sources:NoSource:	4}
+%endif
+
+%if %build_objc
+Source5:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-objc-%{gcc_version}@gcc_suffix@
+@PATCH5@
+%{?!_with_sources:NoSource:	5}
+%endif
+
 %if %build_gcj
 # Building gcj requires bison and zlib
 BuildRequires:	bison
@@ -146,33 +166,80 @@ BuildRequires: gmp-devel
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-# %%description
-# RTEMS is an open source operating system for embedded systems.
-#
-# This is gcc's and newlib C Library's sources with patches for RTEMS.
-#
+%description
+RTEMS is an open source operating system for embedded systems.
+
+This is gcc for %{gcc_target}.
+
 
 %prep
 # untar the sources inside %{gcc_target}-gcc-newlib
 %setup -c -T -n %{name}-%{version}
 
 %setup -T -D -n %{name}-%{version} -a0
-cd gcc-%{gcc_version}
-%{?PATCH0:%patch0 -p1}
-cd ..
+%{?PATCH0:%patch0 -p0}
+
+%if %build_cxx
+%setup -T -D -n %{name}-%{version} -a1
+%{?PATCH1:%patch1 -p0}
+%endif
+
+%if %build_f95
+%setup -T -D -n %{name}-%{version} -a2
+%{?PATCH2:%patch2 -p0}
+%endif
+
+%if %build_gcj
+%setup -T -D -n %{name}-%{version} -a3
+%{?PATCH3:%patch3 -p0}
+%endif
+
+%if %build_gnat
+%setup -T -D -n %{name}-%{version} -a4
+%{?PATCH4:%patch4 -p0}
+%endif
+
+%if %build_objc
+%setup -T -D -n %{name}-%{version} -a5
+%{?PATCH5:%patch5 -p0}
+%endif
 
 %setup -T -D -n %{name}-%{version} -a50
 cd newlib-%{newlib_version}
 %{?PATCH50:%patch50 -p1}
 cd ..
 
-sed 's,@BRPSTRIPPATH@,.%_bindir .%_prefix/%gcc_target/bin,' \
-  %SOURCE98 > brp-rtems-strip
-chmod +x brp-rtems-strip
+# Extract %%__os_install_post into os_install_post~
+cat << \EOF >> os_install_post~
+%__os_install_post
+EOF
 
-sed 's,@BRPCOMPRESSPATH@,.%_mandir/man* .%_infodir,' \
-  %SOURCE99 > brp-rtems-compress
-chmod +x brp-rtems-compress
+# Generate customized brp-*scripts
+cat os_install_post~ | while read a x y; do
+case $a in
+# Prevent brp-strip* from trying to handle foreign binaries
+*/brp-strip*)
+  b=$(basename $a)
+  sed -e 's,find $RPM_BUILD_ROOT,find $RPM_BUILD_ROOT%_bindir $RPM_BUILD_ROOT%_libexecdir,' $a > $b
+  chmod a+x $b
+  ;;
+%if "%{_prefix}" != "/usr"
+# Fix up brp-compress to handle %%_prefix != /usr
+*/brp-compress*)
+  b=$(basename $a)
+  sed -e 's,\./usr/,./%{_prefix},' < $a > $b
+  chmod a+x $b
+  ;;
+%endif
+esac
+done
+
+sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
+%if "%{_prefix}" != "/usr"
+  -e 's,^[ ]*/usr/lib/rpm.*/brp-compress,./brp-compress,' \
+%endif
+< os_install_post~ > os_install_post 
+%define __os_install_post . ./os_install_post
 
   cd gcc-%{gcc_version}
     sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
