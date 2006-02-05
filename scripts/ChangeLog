@@ -1,5 +1,9 @@
-2005-12-29	Ralf Corsepius <ralf.corsepius@rtems.org>
+2006-02-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/binutils.add: Dynamically create brp-*.
+	Misc. update.
+
+2005-12-29	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gdb/gdb.add, rtems/rtems.add, rtemsdoc/rtemsdoc.add:
 	Add BuildRoot.

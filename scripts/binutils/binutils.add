@@ -21,11 +21,6 @@ BuildRequires:	flex
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutils_suffix@
 @PATCH1@
 
-Source98:	brp-rtems-strip.in
-Source99:	brp-rtems-compress.in
-
-%define __os_install_post ./brp-rtems-compress && ./brp-rtems-strip
-
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
@@ -48,13 +43,30 @@ Source99:	brp-rtems-compress.in
 %prep
 %setup -c -T -n %{name}-%{version} -a0
 
-sed 's,@BRPSTRIPPATH@,.%_bindir .%_prefix/%binutils_target/bin,' \
-  %SOURCE98 > brp-rtems-strip
-chmod +x brp-rtems-strip
+%if "%{_prefix}" != "/usr"
+# Extract %%__os_install_post into os_install_post~
+cat << \EOF >> os_install_post~
+%__os_install_post
+EOF
 
-sed 's,@BRPCOMPRESSPATH@,.%_mandir/man* .%_infodir,' \
-  %SOURCE99 > brp-rtems-compress
-chmod +x brp-rtems-compress
+# Generate customized brp-*scripts
+cat os_install_post~ | while read a x y; do
+case $a in
+%if "%{_prefix}" != "/usr"
+# Fix up brp-compress to handle %%_prefix != /usr
+*/brp-compress*)
+  b=$(basename $a)
+  sed -e 's,\./usr/,./%{_prefix},' < $a > $b
+  chmod a+x $b
+  ;;
+%endif
+esac
+done
+
+sed -e 's,^[ ]*/usr/lib/rpm.*/brp-compress,./brp-compress,' \
+< os_install_post~ > os_install_post 
+%define __os_install_post . ./os_install_post
+%endif
 
 cd binutils-%{version}
 %{?PATCH0:%patch0 -p1}
@@ -100,10 +112,10 @@ cd ..
     install-info
 %endif
 
-# A bug in binutils: binutils does not install share/locale
-# however it uses it
-  mkdir -p $RPM_BUILD_ROOT%{_prefix}/share/locale
-
+%if "%{_prefix}" == "/usr"
+# Conflict with a native binutils' infos
+  rm -rf $RPM_BUILD_ROOT%{_infodir}
+%else
 %if "%{binutils_version}" < "2.9.5"
   rm -rf $RPM_BUILD_ROOT%{_infodir}/configure.info*
 %endif
@@ -111,11 +123,10 @@ cd ..
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
 
-%if "%{_prefix}" == "/usr"
-# Conflict with a native binutils' infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
+# binutils does not install share/locale, however it uses it
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}/share/locale
 %endif
-  
+
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
 
