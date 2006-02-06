@@ -108,7 +108,9 @@ void _BSP_Thread_Idle_body(void)
 
 int rtems_bsp_cpu_load_percentage(void)
 {
-    return 100 - ((100 * (FILTERED_IDLE >> FILTER_SHIFT)) / MAX_IDLE_COUNT);
+    return MAX_IDLE_COUNT ?
+           (100 - ((100 * (FILTERED_IDLE >> FILTER_SHIFT)) / MAX_IDLE_COUNT)) :
+           0;
 }
 
 #include "../../../shared/clockdrv_shell.c"

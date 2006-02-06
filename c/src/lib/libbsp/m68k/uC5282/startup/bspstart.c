@@ -223,7 +223,7 @@ void bsp_start( void )
   Cpu_table.interrupt_stack_size = 4096;
   {
   extern void _BSP_Thread_Idle_body(void);
-  _CPU_Table.idle_task = _BSP_Thread_Idle_body;
+  Cpu_table.idle_task = _BSP_Thread_Idle_body;
   }
   Cpu_table.interrupt_vector_table = (m68k_isr *)0; /* vectors at start of RAM */
 

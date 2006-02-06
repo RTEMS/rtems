@@ -1,3 +1,7 @@
+2006-02-06  Eric Norum <norume@aps.anl.gov>
+
+    * clock/clock.c: Avoid division by zero.
+
 2006-01-29  Eric Norum <norume@aps.anl.gov>
 
 	* clock/clock.c, network/network.c, startup/bspstart.c:
