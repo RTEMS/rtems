@@ -1,3 +1,7 @@
+2006-02-07	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Add sections to fix C++ linking errors.
+
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove explicit ampolish3 support (now in
