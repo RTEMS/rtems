@@ -63,7 +63,7 @@ SECTIONS
     CREATE_OBJECT_SYMBOLS
     text_start = .;
     _text_start = .;
-    *(.text)
+    *(.text*)
     . = ALIGN (16);
 
 
@@ -180,7 +180,7 @@ SECTIONS
     _clear_start = .;
     *(.shbss)
     *(.dynbss)
-    *(.bss .bss.* .gnu.linkonce.b.*)
+    *(.bss* .gnu.linkonce.b.*)
     *(COMMON)
     . = ALIGN (16);
     end = .;
