@@ -113,7 +113,7 @@ SECTIONS
   .plt      	 : { *(.plt)	}
   .text   .   	 :
   {
-    *(.text)
+    *(.text*)
     *(.stub)
 
     /*
@@ -166,11 +166,11 @@ SECTIONS
   _edata  =  .;
   PROVIDE (edata = .);
   __bss_start = .;
-  .sbss    .  : { *(.sbss) *(.scommon) }
+  .sbss    .  : { *(.sbss*) *(.scommon) }
   .bss     .  :
   {
    *(.dynbss)
-   *(.bss)
+   *(.bss*)
    *(COMMON)
   } > ram
   _end = . ;
