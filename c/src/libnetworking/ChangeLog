@@ -1,3 +1,11 @@
+2006-02-08	Thomas Rauscher  <trauscher@loytec.com>
+
+	PR 890/networking
+	* rtems_webserver/webs.c: The webservers enters an infinite loop when a
+	POST request with less data than indicated in the Content-Length
+	header is received. It also consumes additional heap memory and a
+	file descriptor for each invalid POST.
+
 2005-05-20	Sergei Organov  <osv@topconrd.ru>
 
 	PR 750/networking

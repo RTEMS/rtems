@@ -565,6 +565,11 @@ static int websGetInput(webs_t wp, char_t **ptext, int *pnbytes)
 			return -1;
 
 		}  else if (nbytes == 0) {				/* EOF or No data available */
+	                /* Bugfix for POST DoS attack with invalid content length */
+                  	if (socketEof(wp->sid)) {
+                    		websDone(wp, 0);
+                  	}
+	                /* End of bugfix */
 			return -1;
 
 		} else {								/* Valid data */
