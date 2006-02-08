@@ -1,3 +1,11 @@
+2006-02-08	Thomas Rauscher  <trauscher@loytec.com>
+
+	PR 890/networking
+	* httpd/webs.c: The webservers enters an infinite loop when a POST
+	request with less data than indicated in the Content-Length header is
+	received. It also consumes additional heap memory and a file
+	descriptor for each invalid POST.
+
 2006-02-01	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/inline/rtems/posix/cond.inl, posix/macros/rtems/posix/cond.inl,
