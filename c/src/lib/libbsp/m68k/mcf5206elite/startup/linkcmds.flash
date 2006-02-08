@@ -78,7 +78,7 @@ SECTIONS
    */
    .text : AT(0x30020000) {
            CREATE_OBJECT_SYMBOLS
-           *(.text)
+           *(.text*)
 
 	   /*
 	    * C++ constructors/destructors
@@ -160,7 +160,7 @@ SECTIONS
     clear_start = . ;
     *(.shbss)
     *(.dynbss)
-    *(.bss .bss.* .gnu.linkonce.b.*)
+    *(.bss* .gnu.linkonce.b.*)
     *(COMMON)
     . = ALIGN(0x10);
     _end = .;
