@@ -32,7 +32,7 @@ SECTIONS
   {
      text.start = . ;
      *(.entry2)
-     *(.text)
+     *(.text*)
      *(.gnu.linkonce.t.*)
      *(.rodata*)
      *(.gnu.linkonce.r.*)
@@ -102,7 +102,7 @@ SECTIONS
     *(.data1)
     *(.data.* .gnu.linkonce.d*)
     PROVIDE (__SDATA_START__ = .);
-    *(.sdata)
+    *(.sdata*)
     *(.gnu.linkonce.s.*)
     . = ALIGN(0x10);
     copy.tmptop.dat = .;
@@ -176,7 +176,7 @@ SECTIONS
   .bss :
   {
     bss.start = .;
-    *(.bss) *(.sbss) *(COMMON)
+    *(.bss*) *(.sbss*) *(COMMON)
     bss.end = ALIGN(4);
   } > RAM
   __SBSS_END__ = .;

@@ -31,7 +31,7 @@ SECTIONS
      text.start = . ;
      *(.entry)
      *(.entry2)
-     *(.text)
+     *(.text*)
      *(.rodata)
      *(.rodata1)
 
@@ -80,7 +80,7 @@ SECTIONS
     *(.data)
     *(.data1)
     PROVIDE (__SDATA_START__ = .);
-    *(.sdata)
+    *(.sdata*)
   } > RAM
  
   PROVIDE (__EXCEPT_START__ = .);
@@ -130,7 +130,7 @@ SECTIONS
   .bss :
   {
     bss.start = .;
-    *(.bss) *(.sbss) *(COMMON)
+    *(.bss*) *(.sbss*) *(COMMON)
     bss.end = ALIGN(4);
   } > RAM
   __SBSS_END__ = .;
