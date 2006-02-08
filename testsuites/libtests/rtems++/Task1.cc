@@ -499,8 +499,8 @@ void Task1::screen6(void)
   rtemsMessageQueue mq_2("MQ2", 4, 50);
   printf("%s\n", mq_2.last_status_string());
 
-  char *u1 = "normal send";
-  char *u2 = "urgent send";
+  const char *u1 = "normal send";
+  const char *u2 = "urgent send";
   char in[100];
   uint32_t   size;
   
@@ -572,7 +572,7 @@ void Task1::screen6(void)
 
   wake_after(3000000);
   
-  char *b1 = "broadcast message";
+  const char *b1 = "broadcast message";
   uint32_t   count;
   
   printf("%s - broadcast send b1 ...\n", name_string());
@@ -628,7 +628,7 @@ void Task1::screen6(void)
   // start these after getting the broadcast message
   wake_after(7000000);  
 
-  char *f1 = "flush message";
+  const char *f1 = "flush message";
   
   printf("%s - send f1 to mq_2 - ", name_string());
   mq_2.send(f1, strlen(f1) + 1);
