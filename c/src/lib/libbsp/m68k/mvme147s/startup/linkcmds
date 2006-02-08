@@ -39,7 +39,7 @@ SECTIONS
          * Text, data and bss segments
          */
         .text : {
-                *(.text)
+                *(.text*)
 
 		/*
 		 * C++ constructors/destructors
@@ -130,7 +130,7 @@ SECTIONS
         .bss : {
                 _clear_start = .;
                 *(.dynbss)
-                *(.bss .bss.* .gnu.linkonce.b.*)
+                *(.bss* .gnu.linkonce.b.*)
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);

@@ -91,7 +91,7 @@ SECTIONS
     CREATE_OBJECT_SYMBOLS
     text_start = .;
     _text_start = .;
-    *(.text)
+    *(.text*)
     . = ALIGN (16);
 
 
@@ -168,7 +168,7 @@ SECTIONS
     __bss_start = ALIGN(0x8);
     _bss_start = .;
     bss_start = .;
-    *(.bss)
+    *(.bss*)
     *(COMMON)
     end = .;
     _end = ALIGN(0x8);
