@@ -100,8 +100,7 @@ SECTIONS
   .text      :
   {
     . = . + 16;
-    *(.text)
-    *(.text.*)
+    *(.text*)
     *(.stub)
 
     /*
@@ -191,15 +190,13 @@ SECTIONS
   .sbss      :
   {
     *(.dynsbss)
-    *(.sbss)
-    *(.sbss.*)
+    *(.sbss*)
     *(.scommon)
   } > ram
   .bss       :
   {
    *(.dynbss)
-   *(.bss)
-   *(.bss.*)
+   *(.bss*)
    *(COMMON)
    /* Align here to ensure that the .bss section occupies space up to
       _end.  Align after .bss to ensure correct alignment even if the
