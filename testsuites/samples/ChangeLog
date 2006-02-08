@@ -1,3 +1,7 @@
+2006-02-08	Joel Sherrill <joel@OARcorp.com>
+
+	* cdtest/main.cc: Fix warnings.
+
 2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_ENABLE_BARE, 
