@@ -32,8 +32,7 @@ SECTIONS
 
       */start.o(.text)
 
-      *(.text)
-      *(.text.*)
+      *(.text*)
       *(.gnu.linkonce.t*)
       *(.mips16.fn.*)
       *(.mips16.call.*)
@@ -145,8 +144,7 @@ SECTIONS
 
   .sdata :   
   {
-    *(.sdata)
-    *(.sdata.*)
+    *(.sdata*)
     *(.gnu.linkonce.s*)
   } >ram  
 
@@ -155,7 +153,7 @@ SECTIONS
    edata  =  .;
    _edata  =  .;
    _fbss = .;
-    *(.sbss)
+    *(.sbss*)
     *(.scommon)
   } >ram   
 
@@ -163,7 +161,7 @@ SECTIONS
   .bss : 
   {
     _bss_start = . ;
-    *(.bss)
+    *(.bss*)
     *(.reginfo)
     *(COMMON)
     . = ALIGN (64);
