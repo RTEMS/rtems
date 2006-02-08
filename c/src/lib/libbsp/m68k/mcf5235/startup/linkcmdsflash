@@ -54,7 +54,7 @@ SECTIONS
      */
     .text : {
        
-       *(.text)
+       *(.text*)
         *(.ram_code)
 
         /*
@@ -159,7 +159,7 @@ SECTIONS
         
         .bss : {
                 _clear_start = .;
-                *(.bss)
+                *(.bss*)
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);
