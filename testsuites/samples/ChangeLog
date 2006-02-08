@@ -9,7 +9,7 @@
 
 2005-11-15  Eric Norum <norume@aps.anl.gov>
 
-    * cdtest/Makefile.am: Remove extraneous make-exe.
+	* cdtest/Makefile.am: Remove extraneous make-exe.
 
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
