@@ -19,8 +19,7 @@ SECTIONS
     { 
        _ftext = . ;
        eprol  =  .;
-      *(.text)
-      *(.text.*)
+      *(.text*)
       *(.gnu.linkonce.t*)
       *(.mips16.fn.*)
       *(.mips16.call.*)
@@ -128,12 +127,12 @@ SECTIONS
    _fbss = .;
 
   .sbss : {
-    *(.sbss)
+    *(.sbss*)
     *(.scommon)
   }
   .bss : {
     _bss_start = . ;
-    *(.bss)
+    *(.bss*)
     *(COMMON)
     . = ALIGN (64);
     _stack_limit = .;

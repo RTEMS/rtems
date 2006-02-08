@@ -55,8 +55,7 @@ SECTIONS
     *(.entry2)
 
     /* Actual code */
-    *(.text)
-    *(.text.*)
+    *(.text*)
 	     
     /* C++ constructors/destructors */
     *(.gnu.linkonce.t*)
@@ -151,7 +150,7 @@ SECTIONS
     *(.data1)
     
     PROVIDE (__SDATA_START__ = .);
-    *(.sdata)
+    *(.sdata*)
     *(.gnu.linkonce.d*)
     *(.gnu.linkonce.s.*)
     PROVIDE (__SDATA_END__ = .);
@@ -199,8 +198,8 @@ SECTIONS
     PROVIDE (__SBSS2_END__ = .);
 	
     bss.start = .;
-    *(.bss) 
-    *(.sbss)
+    *(.bss*) 
+    *(.sbss*)
     *(COMMON)
     . = ALIGN(4);
     bss.end = .;

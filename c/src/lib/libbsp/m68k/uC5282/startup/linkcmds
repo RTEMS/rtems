@@ -57,7 +57,7 @@ SECTIONS
      */
     .text _DownloadLocation : {
        
-       *(.text)
+       *(.text*)
         *(.ram_code)
 
         /*
@@ -161,7 +161,7 @@ SECTIONS
         
         .bss : {
                 _clear_start = .;
-                *(.bss)
+                *(.bss*)
                 *(.gnu.linkonce.b.*)
                 *(COMMON)
                 . = ALIGN (16);

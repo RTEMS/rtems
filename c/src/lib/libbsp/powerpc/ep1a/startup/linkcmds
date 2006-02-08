@@ -44,7 +44,7 @@ SECTIONS
   .text      :
   {
     _start = .;
-    *(.text)
+    *(.text*)
     /*
      * Special FreeBSD sysctl sections.
      */
@@ -130,7 +130,7 @@ SECTIONS
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
   PROVIDE (__SDATA_START__ = .);
-  .sdata     : { *(.sdata) *(.gnu.linkonce.s.*)	}
+  .sdata     : { *(.sdata*) *(.gnu.linkonce.s.*)	}
   _edata  =  .;
   PROVIDE (edata = .);
   PROVIDE (RAM_END = ADDR(.text) + 10M);
@@ -139,7 +139,7 @@ SECTIONS
   .sbss      :
   {
     PROVIDE (__sbss_start = .);
-    *(.sbss)
+    *(.sbss*)
     *(.scommon)
     PROVIDE (__sbss_end = .);
   }
@@ -148,7 +148,7 @@ SECTIONS
   {
    PROVIDE (__bss_start = .);
    *(.dynbss)
-   *(.bss)
+   *(.bss*)
    *(COMMON)
    PROVIDE (__bss_end = .);
   }

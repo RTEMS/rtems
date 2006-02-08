@@ -32,15 +32,16 @@ MEMORY
 
 
 SECTIONS
-{ 
+{
    .vectors :
    {
         *(.vectors)
    }  > vectors
 
-    .text : 
-    { 
-	*(.text) 
+    .text :
+    {
+	*(.text*)
+	*(.gnu.linkonce.t*)
 	
         /*
          * Special FreeBSD sysctl sections.
@@ -64,7 +65,7 @@ SECTIONS
 	 _etext = .;
     }  >ram
    .tors SIZEOF(.text) + ADDR(.text): {
-        ___ctors = . ; 
+        ___ctors = . ;
         *(.ctors)
         ___ctors_end = . ;
         ___dtors = . ;
@@ -72,17 +73,17 @@ SECTIONS
         ___dtors_end = . ;
     }  >ram
     .data SIZEOF(.tors) + ADDR(.tors):
-    { 
- 	*(.data) 
+    {
+ 	*(.data)
         *(.gcc_exc*)
 	CONSTRUCTORS
 	 _edata = .;
     }  >ram
     .bss SIZEOF(.data) + ADDR(.data):
-    { 
+    {
 	 _bss_start = .;
-	*(.bss)	 
-	*(COMMON) 
+	*(.bss* .gnu.linkonce.b.*)
+	*(COMMON)
 	. = ALIGN (64);
 	. += _StackSize;
 	_stack_init = .;
@@ -104,4 +105,4 @@ SECTIONS
         [ .stabstr ]
     }
 
-} 
+}

@@ -46,12 +46,12 @@ SECTIONS
                  * Needs to be first. 8K limit on CS0 at reset.
                  */
 		*(.resettext);
-                *cpuboot.o(.text)
+                *cpuboot.o(.text*)
 
                 /*
                  * The reset of the text is entered once CS0 is remapped.
                  */
-                *(.text)
+                *(.text*)
 
 		/*
 		 * C++ constructors/destructors
@@ -144,7 +144,7 @@ SECTIONS
         .bss (ADDR(.data) + SIZEOF(.data)) : {
                 _clear_start = .;
                 *(.dynbss)
-                *(.bss .bss.* .gnu.linkonce.b.*)
+                *(.bss* .gnu.linkonce.b.*)
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);

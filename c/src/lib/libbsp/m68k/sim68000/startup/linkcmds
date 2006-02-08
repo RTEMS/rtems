@@ -32,7 +32,7 @@ SECTIONS
          * Text, data and bss segments
          */
         .text 0x0 : {
-                *(.text)
+                *(.text*)
 
 		/*
 		 * C++ constructors/destructors
@@ -123,7 +123,7 @@ SECTIONS
         .bss ADDR(.data) + SIZEOF(.data) : {
                 _clear_start = .;
                 *(.dynbss)
-                *(.bss .bss.* .gnu.linkonce.b.*)
+                *(.bss* .gnu.linkonce.b.*)
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);

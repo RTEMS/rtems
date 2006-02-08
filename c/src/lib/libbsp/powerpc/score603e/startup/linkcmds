@@ -52,7 +52,7 @@ SECTIONS
  .text  0x100000:
   {
     
-    *(.text)
+    *(.text*)
     *(.gnu.linkonce.t.*)
     *(.descriptors)
 
@@ -140,7 +140,7 @@ SECTIONS
      we can shorten the on-disk segment size.  */
   PROVIDE (__SDATA_START__ = .);
   .sdata	  : {
-     *(.sdata)
+     *(.sdata*)
      *(.gnu.linkonce.s.*)
      _edata  =  .;
   } >RAM
@@ -151,8 +151,7 @@ SECTIONS
   .sbss      :
   {
     PROVIDE (__sbss_start = .);
-    *(.sbss)
-    *(.sbss.*)
+    *(.sbss*)
     *(.scommon)
     *(.gnu.linkonce.sb.*)
     PROVIDE (__sbss_end = .);
@@ -162,7 +161,7 @@ SECTIONS
   {
     PROVIDE (__bss_start = .);
     *(.dynbss)
-    *(.bss .bss.* .gnu.linkonce.b.*)
+    *(.bss* .gnu.linkonce.b.*)
     *(COMMON)
     . =  ALIGN(8) + 0x8000;
     PROVIDE (__stack = .);
