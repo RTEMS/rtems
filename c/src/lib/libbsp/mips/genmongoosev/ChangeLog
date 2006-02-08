@@ -1,5 +1,9 @@
 2006-02-08	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/clockdrv.c: Correct path to clockdrv_shell.c
+
+2006-02-08	Joel Sherrill <joel@OARcorp.com>
+
 	* startup/linkcmds: Add sections required by newer gcc versions.
 
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
