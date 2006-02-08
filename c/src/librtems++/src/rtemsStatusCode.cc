@@ -24,7 +24,7 @@
     Status Code string table
 */
 
-static char *status_strings[RTEMS_STATUS_CODES_LAST + 1] =
+static const char *status_strings[RTEMS_STATUS_CODES_LAST + 1] =
 {
   "RTEMS[00] successful completion",
   "RTEMS[01] task exitted, returned from a thread",
