@@ -1,5 +1,9 @@
 2006-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* binutils/binutils.add: Conditionally remove manpage of DOS tools.
+	* binutils/target-binutils.add: Be less restrictive on picking up
+	target tools to enable using rpm.specs for DOSish OSes.
+	Generalize comments.
 	* common/common.add.in: Add mingw exeext magic.
 	Remove stray tab.
 
