@@ -1,3 +1,8 @@
+2006-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* common/common.add.in: Add mingw exeext magic.
+	Remove stray tab.
+
 2006-02-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* gccnewlib/mkspec.in: Split patches.

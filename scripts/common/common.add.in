@@ -4,7 +4,7 @@
 # or	mailto:@PACKAGE_BUGREPORT@
 #
 
-%define	_prefix			@prefix@
+%define _prefix			@prefix@
 %if "%{_prefix}" != "/usr"
 %define _infodir		%{_prefix}/info
 %define _mandir			%{_prefix}/man
@@ -12,7 +12,7 @@
 
 %define rpmgroup		@rpmgroup@
 
-%ifos cygwin cygwin32
+%ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
 %else
 %define _exeext %{nil}
