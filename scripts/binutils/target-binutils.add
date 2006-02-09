@@ -8,9 +8,7 @@
 
 %description -n @rpmprefix@%{binutils_target}-binutils
 
-RTEMS is an open source operating system for embedded systems.
-
-This is the GNU binutils for RTEMS targetting %{binutils_target}.
+GNU binutils targetting %{binutils_target}.
 
 %files -n @rpmprefix@%{binutils_target}-binutils
 %defattr(-,root,root)
@@ -23,35 +21,11 @@ This is the GNU binutils for RTEMS targetting %{binutils_target}.
 %if "%{_prefix}" != "/usr"
 %dir %{_bindir}
 %endif
-%{_bindir}/%{binutils_target}-addr2line%{_exeext}
-%{_bindir}/%{binutils_target}-ar%{_exeext}
-%{_bindir}/%{binutils_target}-as%{_exeext}
-%{_bindir}/%{binutils_target}-c++filt%{_exeext}
-%if "%{binutils_version}" < "2.13"
-# deleted as of 2.13
-%{_bindir}/%{binutils_target}-gasp%{_exeext}
-%endif
-%{_bindir}/%{binutils_target}-ld%{_exeext}
-%{_bindir}/%{binutils_target}-nm%{_exeext}
-%{_bindir}/%{binutils_target}-objcopy%{_exeext}
-%{_bindir}/%{binutils_target}-objdump%{_exeext}
-%{_bindir}/%{binutils_target}-ranlib%{_exeext}
-%{_bindir}/%{binutils_target}-readelf%{_exeext}
-%{_bindir}/%{binutils_target}-size%{_exeext}
-%{_bindir}/%{binutils_target}-strings%{_exeext}
-%{_bindir}/%{binutils_target}-strip%{_exeext}
+%{_bindir}/%{binutils_target}-*
 
 %dir %{_prefix}/%{binutils_target}
 %dir %{_prefix}/%{binutils_target}/bin
-%{_prefix}/%{binutils_target}/bin/ar%{_exeext}
-%{_prefix}/%{binutils_target}/bin/as%{_exeext}
-%{_prefix}/%{binutils_target}/bin/ld%{_exeext}
-%{_prefix}/%{binutils_target}/bin/nm%{_exeext}
-%{_prefix}/%{binutils_target}/bin/ranlib%{_exeext}
-%{_prefix}/%{binutils_target}/bin/strip%{_exeext}
-%if "%{binutils_version}" >= "2.16"
-%{_prefix}/%{binutils_target}/bin/objdump%{_exeext}
-%endif
+%{_prefix}/%{binutils_target}/bin/*
 
 %dir %{_prefix}/%{binutils_target}/lib
 %{_prefix}/%{binutils_target}/lib/ldscripts
