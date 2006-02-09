@@ -41,7 +41,8 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}@binutil
 # This is binutils sources with patches for RTEMS.
 
 %prep
-%setup -c -T -n %{name}-%{version} -a0
+%setup -q -c -T -n %{name}-%{version}
+%setup -q -D -T -n %{name}-%{version} -a0
 
 %if "%{_prefix}" != "/usr"
 # Extract %%__os_install_post into os_install_post~
@@ -131,9 +132,15 @@ cd ..
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
 
 # manpages without corresponding tools
-  rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-dlltool*
-  rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-nlmconv*
-  rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-windres*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/%{binutils_target}-dlltool%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-dlltool*
+  fi
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/%{binutils_target}-nlmconv%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-nlmconv*
+  fi
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/%{binutils_target}-windres%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/%{binutils_target}-windres*
+  fi
 
   cd ..
 
