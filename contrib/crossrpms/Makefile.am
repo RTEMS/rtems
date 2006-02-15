@@ -13,6 +13,11 @@ DIST_SUBDIRS += mingw32
 DIST_SUBDIRS += solaris2.7
 DIST_SUBDIRS += rtems
 
+EXTRA_DIST += binutils/base-binutils.add
+EXTRA_DIST += binutils/binutils.add
+EXTRA_DIST += binutils/rpm-install.add
+EXTRA_DIST += binutils/target-binutils.add
+
 EXTRA_DIST += gcc/base-g77.add
 EXTRA_DIST += gcc/base-gcc.add
 EXTRA_DIST += gcc/base-gcj.add
