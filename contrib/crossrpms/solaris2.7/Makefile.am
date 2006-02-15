@@ -60,13 +60,13 @@ GCC_VERS = 4.0.2
 GCC_RPMREL = 0.20060213.0
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
-GCC_SUBPACKAGES += ../gccnewlib/gccnewlib.add
-GCC_SUBPACKAGES += ../gccnewlib/install.add
-GCC_SUBPACKAGES += ../gccnewlib/rpm-install.add
+GCC_SUBPACKAGES += ../gcc/gccnewlib.add
+GCC_SUBPACKAGES += ../gcc/install.add
+GCC_SUBPACKAGES += ../gcc/rpm-install.add
 GCC_SUBPACKAGES += $(top_builddir)/common/clean.add
-GCC_SUBPACKAGES += ../gccnewlib/target-gcc.add
-GCC_SUBPACKAGES += ../gccnewlib/base-gcc.add
-GCC_SUBPACKAGES += ../gccnewlib/target-c++.add
+GCC_SUBPACKAGES += ../gcc/target-gcc.add
+GCC_SUBPACKAGES += ../gcc/base-gcc.add
+GCC_SUBPACKAGES += ../gcc/target-c++.add
 
 $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	cat $(GCC_SUBPACKAGES) | sed \
