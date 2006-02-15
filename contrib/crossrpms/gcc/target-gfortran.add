@@ -1,0 +1,33 @@
+%if %build_f95
+# ==============================================================
+# @tool_target@-gfortran
+# ==============================================================
+%package -n @rpmprefix@@tool_target@-gfortran
+Summary:	Fortran 95 support for @tool_target@-gcc
+Group:          %{rpmgroup}
+Version:	%{gcc_version}
+License:	GPL
+
+%if "%{_prefix}" != "/usr"
+Requires:       @rpmprefix@rtems@osversion@-base-gfortran
+%endif
+Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_version}-%{release}
+Obsoletes:      @rpmprefix@@tool_target@-g77
+
+%description -n @rpmprefix@@tool_target@-gfortran
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/gfortran compiler for @tool_target@.
+
+%files -n @rpmprefix@@tool_target@-gfortran -f build/files.gfortran
+%defattr(-,root,root)
+%{_bindir}/@tool_target@-gfortran%{_exeext}
+
+%{_mandir}/man1/@tool_target@-gfortran.1*
+
+%dir %{gccexec}
+%dir %{gccexec}/@tool_target@
+%dir %{gccexec}/@tool_target@/%{gcc_version}
+%{gccexec}/@tool_target@/%{gcc_version}/f951%{_exeext}
+%endif
+

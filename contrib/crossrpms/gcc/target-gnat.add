@@ -1,0 +1,34 @@
+%if %build_gnat
+# ==============================================================
+# @tool_target@-gnat
+# ==============================================================
+%package -n @rpmprefix@@tool_target@-gnat
+Summary:        Ada support for for @tool_target@-gcc
+Group:          %{rpmgroup}
+Version:        %{gcc_version}
+License:	GPL
+
+%if "%{_prefix}" != "/usr"
+Requires:       @rpmprefix@rtems@osversion@-base-gnat
+%endif
+Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_version}-%{release}
+
+%description -n @rpmprefix@@tool_target@-gnat
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/gnat compiler for @tool_target@.
+
+%files -n @rpmprefix@@tool_target@-gnat
+%defattr(-,root,root)
+%{_bindir}/@tool_target@-gnat*
+%{_bindir}/@tool_target@-gprmake%{_exeext}
+
+%dir %{gccexec}
+%dir %{gccexec}/@tool_target@
+%dir %{gccexec}/@tool_target@/%{gcc_version}
+%{gccexec}/@tool_target@/%{gcc_version}/gnat1%{_exeext}
+
+%{gcclib}/@tool_target@/%{gcc_version}/adalib
+%{gcclib}/@tool_target@/%{gcc_version}/adainclude
+%endif
+

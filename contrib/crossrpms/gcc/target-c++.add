@@ -1,0 +1,38 @@
+%if %build_cxx
+# ==============================================================
+# @tool_target@-c++
+# ==============================================================
+%package -n @rpmprefix@@tool_target@-c++
+Summary:	GCC c++ compiler for @tool_target@
+Group:		%{rpmgroup}
+Version:	%{gcc_version}
+License:	GPL
+
+%if "%{_prefix}" != "/usr"
+Requires:       @rpmprefix@rtems@osversion@-base-gcc
+%endif
+Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_version}-%{release}
+
+%description -n @rpmprefix@@tool_target@-c++
+GCC c++ compiler for @tool_target@.
+
+%files -n @rpmprefix@@tool_target@-c++ -f build/files.g++
+%defattr(-,root,root)
+%{_mandir}/man1/@tool_target@-g++.1*
+
+%{_bindir}/@tool_target@-c++%{_exeext}
+%{_bindir}/@tool_target@-g++%{_exeext}
+
+%dir %{gccexec}
+%dir %{gccexec}/@tool_target@
+%dir %{gccexec}/@tool_target@/%{gcc_version}
+%{gccexec}/@tool_target@/%{gcc_version}/cc1plus%{_exeext}
+
+%dir %{gcclib}/@tool_target@/%{gcc_version}/include
+%if "%{gcc_version}" >= "3.2"
+%{gcclib}/@tool_target@/%{gcc_version}/include/c++
+%else
+%{gcclib}/@tool_target@/%{gcc_version}/include/g++
+%endif
+%endif
+

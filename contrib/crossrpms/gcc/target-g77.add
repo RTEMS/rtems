@@ -1,0 +1,29 @@
+%if %build_g77
+# ==============================================================
+# @tool_target@-g77
+# ==============================================================
+%package -n @rpmprefix@@tool_target@-g77
+Summary:        Fortran 77 support for @tool_target@-gcc
+Group:          %{rpmgroup}
+Version:	%{gcc_version}
+License:	GPL
+Requires:       @rpmprefix@rtems@osversion@-base-g77
+Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_version}-%{release}
+
+%description -n @rpmprefix@@tool_target@-g77
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/g77 compiler for @tool_target@.
+
+%files -n @rpmprefix@@tool_target@-g77 -f build/files.g77
+%defattr(-,root,root)
+%{_bindir}/@tool_target@-g77%{_exeext}
+
+%{_mandir}/man1/@tool_target@-g77.1*
+
+%dir %{gccexec}
+%dir %{gccexec}/@tool_target@
+%dir %{gccexec}/@tool_target@/%{gcc_version}
+%{gccexec}/@tool_target@/%{gcc_version}/f771%{_exeext}
+%endif
+

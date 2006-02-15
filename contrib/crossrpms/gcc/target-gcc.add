@@ -1,0 +1,45 @@
+# ==============================================================
+# @tool_target@-gcc
+# ==============================================================
+%package -n @rpmprefix@@tool_target@-gcc
+Summary:        GNU cc compiler for @tool_target@
+Group:          %{rpmgroup}
+Version:        %{gcc_version}
+Requires:       @rpmprefix@@tool_target@-binutils
+Requires:       @rpmprefix@@tool_target@-libc = %{newlib_version}-%{release}
+License:	GPL
+
+%description -n @rpmprefix@@tool_target@-gcc
+GNU cc compiler for @tool_target@.
+
+%files -n @rpmprefix@@tool_target@-gcc -f build/files.gcc
+%defattr(-,root,root)
+%if "%{_prefix}" != "/usr"
+%dir %{_mandir}
+%dir %{_mandir}/man1
+%endif
+%{_mandir}/man1/@tool_target@-gcc.1*
+%if "%{gcc_version}" >= "3.4"
+%{_mandir}/man1/@tool_target@-cpp.1*
+%{_mandir}/man1/@tool_target@-gcov.1*
+%endif
+
+%if "%{_prefix}" != "/usr"
+%dir %{_bindir}
+%endif
+%{_bindir}/@tool_target@-cpp%{_exeext}
+%{_bindir}/@tool_target@-gcc%{_exeext}
+%if "%{gcc_version}" >= "3.3"
+%{_bindir}/@tool_target@-gcc-%{gcc_version}%{_exeext}
+%endif
+%{_bindir}/@tool_target@-gcov%{_exeext}
+%{_bindir}/@tool_target@-gccbug
+
+%dir %{gcclib}/@tool_target@/%{gcc_version}/include
+
+%dir %{gccexec}
+%dir %{gccexec}/@tool_target@
+%dir %{gccexec}/@tool_target@/%{gcc_version}
+%{gccexec}/@tool_target@/%{gcc_version}/cc1%{_exeext}
+%{gccexec}/@tool_target@/%{gcc_version}/collect2%{_exeext}
+

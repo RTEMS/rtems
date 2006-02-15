@@ -1,0 +1,23 @@
+# ==============================================================
+# @tool_target@-libc
+# ==============================================================
+%package -n @rpmprefix@@tool_target@-libc
+Summary:      	C Library (newlib) for @tool_target@
+Group: 		%{rpmgroup}
+License:	Distributable
+Version:	%{newlib_version}
+Provides:	@rpmprefix@@tool_target@-newlib = %{newlib_version}-%{release}
+
+%description -n @rpmprefix@@tool_target@-libc
+RTEMS is an open source operating system for embedded systems.
+
+This is the newlib C Library for @tool_target@.
+
+%files -n @rpmprefix@@tool_target@-libc -f build/files.libc
+%defattr(-,root,root)
+%if "%{_prefix}" != "/usr"
+%dir %{_prefix}
+%endif
+%dir %{_prefix}/@tool_target@
+%{_prefix}/@tool_target@/include
+

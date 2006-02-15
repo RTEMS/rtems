@@ -1,0 +1,158 @@
+%install
+%if "%{_prefix}" != "/usr"
+  export PATH="%{_bindir}:${PATH}"
+%endif
+  rm -rf $RPM_BUILD_ROOT
+
+  cd build
+# Bug in gcc-2.95.1: It doesn't build this installation directory
+# If it doesn't find it, gcc doesn't install @tool_target@/bin/gcc
+%if "%{gcc_version}" < "3.0"
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}/@tool_target@/bin
+%endif
+
+  make DESTDIR=$RPM_BUILD_ROOT install
+  # cd back to build/
+  cd ..
+
+%if "%{gcc_version}" < "4.0.3"
+# Misplaced header file
+  if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
+    mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
+      $RPM_BUILD_ROOT%{gcclib}/@tool_target@/%{gcc_version}/include/
+  fi
+%endif
+
+  # host library
+  rm -f  ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty.a
+
+  # We use the version from binutils
+  rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-c++filt%{_exeext}
+
+%if %build_gnat
+  # Seemingly a VAX tool. Not meaningful for RTEMS
+  rm -f $RPM_BUILD_ROOT%{_bindir}/vxaddr2line%{_exeext}
+%endif
+
+%if "%{_prefix}" != "/usr"
+  # We don't ship info/dir
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
+%endif
+
+%if "%{_prefix}" == "/usr"
+# Conflict with a native GCC's infos
+  rm -rf $RPM_BUILD_ROOT%{_infodir}
+
+# Conflict with a native GCC's man pages
+  rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
+%endif
+
+%if %build_f95
+#  # Bug in gcc-4.0.0pre
+#  mv $RPM_BUILD_ROOT%{_bindir}/gfortran $RPM_BUILD_ROOT%{_bindir}/@tool_target@-gfortran
+%endif
+
+%if "%{gcc_version}" >= "3.4"
+  # Bug in gcc-3.4.0pre
+  rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-@tool_target@-gcjh%{_exeext}
+%endif
+
+%if "%{gcc_version}" >= "3.3"
+  # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
+  # the fixinclude-install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/@tool_target@/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{gccexec}/@tool_target@/%{gcc_version}/install-tools
+%endif
+
+%if "%{gcc_version}" < "3.0"
+  # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
+  # Rename it to target_alias-cpp
+  if test -f $RPM_BUILD_ROOT%{_bindir}/cpp%{_exeext};
+  then
+    mv $RPM_BUILD_ROOT%{_bindir}/cpp%{_exeext} \
+      $RPM_BUILD_ROOT%{_bindir}/@tool_target@-cpp%{_exeext}
+  fi
+%endif
+
+  # Collect multilib subdirectories
+  f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
+
+  echo "%defattr(-,root,root,-)" > build/files.libc
+  TGTDIR="%{_prefix}/@tool_target@/lib"
+  for i in $f; do
+    case $i in
+    \.) echo "%dir ${TGTDIR}" >> build/files.libc
+      ;;
+    *)  echo "%dir ${TGTDIR}/$i" >> build/files.libc
+      ;;
+    esac
+  done
+
+  rm -f dirs ;
+  echo "%defattr(-,root,root,-)" >> dirs
+%if "%{_prefix}" != "/usr"
+  echo "%dir %{_prefix}" >> dirs
+  echo "%dir %{_libdir}" >> dirs
+%if "%{gcc_version}" >= "3.4"
+  echo "%dir %{_libexecdir}" >> dirs
+%endif
+%endif
+  echo "%dir %{gcclib}" >> dirs
+  echo "%dir %{gcclib}/@tool_target@" >> dirs
+
+  TGTDIR="%{gcclib}/@tool_target@/%{gcc_version}"
+  for i in $f; do
+    case $i in
+    \.) echo "%dir ${TGTDIR}" >> dirs
+      ;;
+    *)  echo "%dir ${TGTDIR}/$i" >> dirs
+      ;;
+    esac
+  done
+
+  # Collect files to go into different packages
+  cp dirs build/files.gcc
+  cp dirs build/files.g77
+  cp dirs build/files.gfortran
+  cp dirs build/files.objc
+  cp dirs build/files.gcj
+  cp dirs build/files.g++
+
+  TGTDIR="%{gcclib}/@tool_target@/%{gcc_version}"
+  f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
+  for i in $f; do
+    case $i in
+    *lib*.la) rm ${RPM_BUILD_ROOT}/$i ;; # ignore: gcc produces bogus libtool libs
+    *f771) ;;
+    *f951) ;;
+    *cc1) ;;
+    *cc1obj) ;;
+    *cc1plus) ;; # ignore: explicitly put into rpm elsewhere
+    *collect2) ;;
+    *libobjc*) echo "$i" >> build/files.objc ;;
+    *include/objc*) ;;
+    *include/g++*);;
+    *include/c++*);;
+    *adainclude*);;
+    *adalib*);;
+    *gnat1);;
+    *jc1) ;;
+    *jvgenmain) ;;
+    *libgfortran*.a) echo "$i" >> build/files.gfortran ;;
+    */libstdc++.*) echo "$i" >> build/files.g++ ;;
+    */libsupc++.*) echo "$i" >> build/files.g++ ;;
+    *) echo "$i" >> build/files.gcc ;;
+    esac
+  done
+
+  TGTDIR="%{_prefix}/@tool_target@/lib"
+  f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
+  for i in $f; do
+    case $i in
+    *lib*.la) rm ${RPM_BUILD_ROOT}/$i;; # ignore - gcc produces bogus libtool libs
+    *libiberty.a) rm ${RPM_BUILD_ROOT}/$i ;; # ignore - GPL'ed
+# all other files belong to libc
+    *) echo "$i" >> build/files.libc ;; 
+    esac
+  done

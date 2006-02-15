@@ -1,0 +1,69 @@
+%if "%{_prefix}" != "/usr"
+# ==============================================================
+# @rpmprefix@rtems@osversion@-base-gcc
+# ==============================================================
+%package -n @rpmprefix@rtems@osversion@-base-gcc
+Summary:	Base package for rtems gcc and newlib C Library
+Group:          %{rpmgroup}
+Version:        %{gcc_version}
+License:	GPL
+
+Requires(post): 	/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+%description -n @rpmprefix@rtems@osversion@-base-gcc
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the files for gcc and newlib that are shared by all targets.
+
+%files -n @rpmprefix@rtems@osversion@-base-gcc
+%defattr(-,root,root)
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/cpp.info*
+%{_infodir}/cppinternals.info*
+%{_infodir}/gcc.info*
+%{_infodir}/libc.info*
+%{_infodir}/libm.info*
+%{_infodir}/gccint.info*
+%if "%{gcc_version}" >= "3.4"
+%{_infodir}/gccinstall.info*
+%endif
+
+%dir %{_mandir}
+%if "%{gcc_version}" < "3.4"
+%dir %{_mandir}/man1
+%{_mandir}/man1/cpp.1*
+%{_mandir}/man1/gcov.1*
+%endif
+%dir %{_mandir}/man7
+%{_mandir}/man7/fsf-funding.7*
+%{_mandir}/man7/gfdl.7*
+%{_mandir}/man7/gpl.7*
+
+%post -n @rpmprefix@rtems@osversion@-base-gcc
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cpp.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz
+%if "%{gcc_version}" >= "3.4"
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz
+%endif
+
+%preun -n @rpmprefix@rtems@osversion@-base-gcc
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cpp.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz
+%if "%{gcc_version}" >= "3.4"
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz
+%endif
+fi
+
+%endif

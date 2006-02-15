@@ -1,0 +1,27 @@
+%if %build_objc
+# ==============================================================
+# @tool_target@-objc
+# ==============================================================
+%package -n @rpmprefix@@tool_target@-objc
+Summary:        Objective C support for @tool_target@-gcc
+Group:          %{rpmgroup}
+Version:        %{gcc_version}
+License:	GPL
+Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_version}-%{release}
+
+%description -n @rpmprefix@@tool_target@-objc
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/objc compiler for @tool_target@.
+
+%files -n @rpmprefix@@tool_target@-objc -f build/files.objc
+%defattr(-,root,root)
+
+%dir %{gccexec}
+%dir %{gccexec}/@tool_target@
+%dir %{gccexec}/@tool_target@/%{gcc_version}
+%{gccexec}/@tool_target@/%{gcc_version}/cc1obj%{_exeext}
+
+%{gcclib}/@tool_target@/%{gcc_version}/include/objc
+%endif
+
