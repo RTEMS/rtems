@@ -4,3 +4,6 @@ aclocal.m4
 configure
 config.*
 autom4te*
+missing
+install-sh
+
