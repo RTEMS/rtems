@@ -1,0 +1,4 @@
+*.spec
+*.spec.in
+Makefile
+Makefile.in

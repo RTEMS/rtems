@@ -1,28 +1,13 @@
 # $Id$
 
-TARGET = sparc-sun-solaris2.7
+# Just testing
+TARGET = sparc-rtems4.7
 
 noinst_DATA =
 CLEANFILES =
 
-SOLARIS_VERS = 2.7
-SOLARIS_RPMREL = 0.20060213.0
-
-$(TARGET)-libs.spec: libs.spec.in
-	sed -e "/[@]INSTALL_POST[@]/r ../common/installpost.add" \
-	  -e "/[@]INSTALL_POST[@]/d" \
-	  -e "/[@]FIND_REQPROV[@]/r ../common/find-reqprov.add" \
-	  -e "/[@]FIND_REQPROV[@]/d" \
-	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  -e "s/[@]SOLARIS_VERS[@]/$(SOLARIS_VERS)/g" \
-	  -e "s/[@]SOLARIS_RPMREL[@]/$(SOLARIS_RPMREL)/g" \
-	  $(srcdir)/libs.spec.in > $@
-CLEANFILES += $(TARGET)-libs.spec
-noinst_DATA += $(TARGET)-libs.spec
-
-
 BINUTILS_VERS = 2.16.1
-BINUTILS_RPMREL = 0.20060214.0
+BINUTILS_RPMREL = 0.20060215.0
 
 BINUTILS_SUBPACKAGES = $(top_builddir)/common/common.add
 BINUTILS_SUBPACKAGES += ../binutils/binutils.add
@@ -50,14 +35,13 @@ $(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
-	  -e "s,[@]PATCH0[@],," \
 	  $(srcdir)/$(TARGET)-binutils.spec.in > $@
 CLEANFILES += $(TARGET)-binutils.spec
 noinst_DATA += $(TARGET)-binutils.spec
 
 
 GCC_VERS = 4.0.2
-GCC_RPMREL = 0.20060213.0
+GCC_RPMREL = 0.20060215.0
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
 GCC_SUBPACKAGES += ../gccnewlib/gccnewlib.add
@@ -78,11 +62,8 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	  -e "s,[@]rpmprefix[@],,g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "s,%{rpmgroup},Development/Tools,g" \
-	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
-	  -e "s,= %{newlib_version}-%{release},," \
-	  -e "/--with-newlib/d" \
 	  -e "/^%package -n @tool_target@-gcc/d" \
-	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
+	  -e 's,^%define build_newlib.*$$,%define build_newlib 1,' \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
 

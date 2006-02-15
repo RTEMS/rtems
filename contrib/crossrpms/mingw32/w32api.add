@@ -1,0 +1,48 @@
+#
+# spec file for package @tool_target@
+# 
+
+%define w32api_version @W32API_VERS@
+%define w32api_rpmvers %{expand: %(echo @W32API_VERS@ | tr - _)} 
+
+%define _use_internal_dependency_generator 0
+%define __debug_install_post %{nil}
+
+Name:         @tool_target@-w32api
+Release:      @W32API_RPMREL@%{?dist}
+License:      GPL
+Group:        Development/Tools
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:	noarch
+
+Version:      	%w32api_rpmvers
+Summary:      	MinGW Libraries
+
+Source0:	http://dl.sourceforge.net/sourceforge/mingw/w32api-%{w32api_version}.tar.gz
+NoSource:	0
+
+%description
+Mingw libraries.
+
+%prep
+%setup -c -q
+
+%build
+  rm -rf @tool_target@
+
+  # Setup sys-root (Usable for gcc >= 3.4)
+  mkdir -p @tool_target@/sys-root/usr
+  cp -a include lib @tool_target@/sys-root/usr
+
+  # Setup sys-lib and sys-include (Required by gcc < 3.4)
+  mkdir -p @tool_target@/lib
+  cp -a @tool_target@/sys-root/usr/lib/* @tool_target@/lib
+  mkdir -p @tool_target@/include
+  cp -a @tool_target@/sys-root/usr/include/* @tool_target@/include
+
+%install
+  rm -rf $RPM_BUILD_ROOT
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}
+  cp -a @tool_target@ $RPM_BUILD_ROOT%{_prefix}
+
