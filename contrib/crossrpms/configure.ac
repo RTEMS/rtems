@@ -5,12 +5,13 @@ AC_INIT([crossbuild],[0.20060211.0],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9])
-
 AC_CANONICAL_HOST
+
+AM_INIT_AUTOMAKE([no-define foreign 1.9])
 
 RTEMS_ENABLE_RPMPREFIX
 
+AS_IF([test "${host}" != "${build}"],[
 AC_MSG_CHECKING(for RPM OS)
 case "$host" in
   i?86-*cygwin*) 	RPM_OS=cygwin ;;
@@ -23,6 +24,7 @@ case "$host" in
     ;;
 esac
 AC_MSG_RESULT($RPM_OS)
+])
 AC_SUBST(RPM_OS)
 
 AC_CONFIG_FILES([Makefile])
