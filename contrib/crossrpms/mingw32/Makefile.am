@@ -110,7 +110,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	  -e "s,[@]rpmprefix[@],,g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
-	  -e "s,= %{newlib_version}-%{release},," \
+	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
 	  -e "/^%package -n @tool_target@-gcc/d" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
 	  > $(TARGET)-gcc.spec.in
