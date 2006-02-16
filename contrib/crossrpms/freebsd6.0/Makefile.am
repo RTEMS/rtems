@@ -36,7 +36,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) binutils-sources.add
 	  -e "/[@]SOURCES[@]/r ./binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e '/^%define _prefix.*$$/d' \
-	  -e "s,[@]rpmprefix[@],,g" \
+	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
@@ -70,7 +70,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e '/^%define _prefix.*$$/d' \
-	  -e "s,[@]rpmprefix[@],,g" \
+	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
 	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
