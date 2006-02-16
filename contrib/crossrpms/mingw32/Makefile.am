@@ -106,7 +106,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e '/^%define _prefix.*$$/d' \
-	  -e '/^%define gcc_target.*$$/d' \
 	  -e "s,[@]rpmprefix[@],,g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \

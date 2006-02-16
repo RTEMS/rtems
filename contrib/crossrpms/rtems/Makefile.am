@@ -56,7 +56,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e '/^%define _prefix.*$$/d' \
-	  -e '/^%define gcc_target.*$$/d' \
 	  -e "s,[@]rpmprefix[@],,g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "/^%package -n @tool_target@-gcc/d" \

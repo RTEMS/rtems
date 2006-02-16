@@ -10,8 +10,6 @@
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 %endif
 
-%define gcc_target	@target_alias@
-
 Name:         	@rpmprefix@@tool_target@-gcc
 Summary:      	@tool_target@ gcc
 
