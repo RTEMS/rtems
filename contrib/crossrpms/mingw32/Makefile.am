@@ -6,7 +6,7 @@ noinst_DATA =
 CLEANFILES =
 
 MINGW32_VERS = 3.9
-MINGW32_RPMREL = 0.20060215.0
+MINGW32_RPMREL = 0.20060216.0
 
 LIBS_SUBPACKAGES = $(top_builddir)/common/common.add
 LIBS_SUBPACKAGES += libs.add
@@ -32,7 +32,7 @@ CLEANFILES += $(TARGET)-libs.spec
 noinst_DATA += $(TARGET)-libs.spec
 
 W32API_VERS = 3.6
-W32API_RPMREL = 0.20060215.0
+W32API_RPMREL = 0.20060216.0
 
 W32API_SUBPACKAGES = $(top_builddir)/common/common.add
 W32API_SUBPACKAGES += w32api.add
@@ -94,7 +94,7 @@ noinst_DATA += $(TARGET)-binutils.spec
 
 
 GCC_VERS = 4.0.2
-GCC_RPMREL = 0.20060213.0
+GCC_RPMREL = 0.20060216.0
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
 GCC_SUBPACKAGES += ../gcc/gccnewlib.add
@@ -127,6 +127,7 @@ $(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
+	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-gcc.spec.in > $@
 CLEANFILES += $(TARGET)-gcc.spec
 noinst_DATA += $(TARGET)-gcc.spec
