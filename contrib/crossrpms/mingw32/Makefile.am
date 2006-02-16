@@ -83,7 +83,7 @@ $(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
-	  -e "s,[@]PATCH0[@],," \
+	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-binutils.spec.in > $@
 CLEANFILES += $(TARGET)-binutils.spec
 noinst_DATA += $(TARGET)-binutils.spec

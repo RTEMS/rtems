@@ -33,6 +33,7 @@ $(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
+	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-binutils.spec.in > $@
 CLEANFILES += $(TARGET)-binutils.spec
 noinst_DATA += $(TARGET)-binutils.spec
@@ -68,12 +69,7 @@ $(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
-	  -e "/@PATCH0@/d" \
-	  -e "/@PATCH1@/d" \
-	  -e "/@PATCH2@/d" \
-	  -e "/@PATCH3@/d" \
-	  -e "/@PATCH4@/d" \
-	  -e "/@PATCH5@/d" \
+	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-gcc.spec.in > $@
 CLEANFILES += $(TARGET)-gcc.spec
 noinst_DATA += $(TARGET)-gcc.spec
