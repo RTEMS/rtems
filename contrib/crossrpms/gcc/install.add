@@ -5,11 +5,6 @@
   rm -rf $RPM_BUILD_ROOT
 
   cd build
-# Bug in gcc-2.95.1: It doesn't build this installation directory
-# If it doesn't find it, gcc doesn't install @tool_target@/bin/gcc
-%if "%{gcc_version}" < "3.0"
-  mkdir -p $RPM_BUILD_ROOT%{_prefix}/@tool_target@/bin
-%endif
 
   make DESTDIR=$RPM_BUILD_ROOT install
   # cd back to build/
@@ -63,16 +58,6 @@
   # the fixinclude-install-tools
   rm -rf ${RPM_BUILD_ROOT}%{gcclib}/@tool_target@/%{gcc_version}/install-tools
   rm -rf ${RPM_BUILD_ROOT}%{gccexec}/@tool_target@/%{gcc_version}/install-tools
-%endif
-
-%if "%{gcc_version}" < "3.0"
-  # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
-  # Rename it to target_alias-cpp
-  if test -f $RPM_BUILD_ROOT%{_bindir}/cpp%{_exeext};
-  then
-    mv $RPM_BUILD_ROOT%{_bindir}/cpp%{_exeext} \
-      $RPM_BUILD_ROOT%{_bindir}/@tool_target@-cpp%{_exeext}
-  fi
 %endif
 
   # Collect multilib subdirectories
