@@ -1,6 +1,5 @@
 %define binutils_version @BINUTILS_VERS@
 %define binutils_rpmvers %{expand: %(echo @BINUTILS_VERS@ | tr - _)} 
-%define binutils_target  @target_alias@
 
 Name:		@rpmprefix@@tool_target@-binutils
 Summary:	Binutils for target @tool_target@

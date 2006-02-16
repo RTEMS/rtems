@@ -21,7 +21,6 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) binutils-sources.add
 	  -e "/[@]SOURCES[@]/r ./binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e '/^%define _prefix.*$$/d' \
-	  -e '/^%define binutils_target.*$$/d' \
 	  -e "s,[@]rpmprefix[@],,g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  > $(TARGET)-binutils.spec.in
