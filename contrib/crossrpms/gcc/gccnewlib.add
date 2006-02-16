@@ -15,7 +15,7 @@
 Name:         	@rpmprefix@@tool_target@-gcc
 Summary:      	@tool_target@ gcc
 
-Group:	      	%{rpmgroup}
+Group:	      	Development/Tools
 Version:        %gcc_rpmvers
 Release:      	@GCC_RPMREL@%{?dist}
 License:      	GPL

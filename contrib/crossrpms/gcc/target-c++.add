@@ -4,7 +4,7 @@
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-c++
 Summary:	GCC c++ compiler for @tool_target@
-Group:		%{rpmgroup}
+Group:		Development/Tools
 Version:	%{gcc_version}
 License:	GPL
 

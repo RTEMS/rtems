@@ -3,7 +3,7 @@
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-gcc
 Summary:        GNU cc compiler for @tool_target@
-Group:          %{rpmgroup}
+Group:          Development/Tools
 Version:        %{gcc_version}
 Requires:       @rpmprefix@@tool_target@-binutils
 Requires:       @rpmprefix@@tool_target@-libc = %{newlib_version}-%{release}

@@ -4,7 +4,7 @@
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-g77
 Summary:        Fortran 77 support for @tool_target@-gcc
-Group:          %{rpmgroup}
+Group:          Development/Tools
 Version:	%{gcc_version}
 License:	GPL
 Requires:       @rpmprefix@rtems@osversion@-base-g77

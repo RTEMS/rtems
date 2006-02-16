@@ -5,7 +5,7 @@
 # ==============================================================
 %package -n @rpmprefix@rtems@osversion@-base-g77
 Summary:        Base package for RTEMS gcc/g77 compiler
-Group:          %{rpmgroup}
+Group:          Development/Tools
 Version:        %{gcc_version}
 License:	GPL
 

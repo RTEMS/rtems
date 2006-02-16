@@ -4,7 +4,7 @@
 
 Name:		@rpmprefix@@tool_target@-binutils
 Summary:	Binutils for target @tool_target@
-Group:		%{rpmgroup}
+Group:		Development/Tools
 Version:	%{binutils_rpmvers}
 Release:	@BINUTILS_RPMREL@%{?dist}
 License:	GPL/LGPL

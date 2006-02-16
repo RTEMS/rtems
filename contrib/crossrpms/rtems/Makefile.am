@@ -21,11 +21,9 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) binutils-sources.add
 	  -e "/[@]SOURCES[@]/r ./binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e '/^%define _prefix.*$$/d' \
-	  -e '/^%define rpmgroup.*$$/d' \
 	  -e '/^%define binutils_target.*$$/d' \
 	  -e "s,[@]rpmprefix[@],,g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
-	  -e "s,%{rpmgroup},Development/Tools,g" \
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
@@ -57,11 +55,9 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e '/^%define _prefix.*$$/d' \
-	  -e '/^%define rpmgroup.*$$/d' \
 	  -e '/^%define gcc_target.*$$/d' \
 	  -e "s,[@]rpmprefix[@],,g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
-	  -e "s,%{rpmgroup},Development/Tools,g" \
 	  -e "/^%package -n @tool_target@-gcc/d" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 1,' \
 	  > $(TARGET)-gcc.spec.in

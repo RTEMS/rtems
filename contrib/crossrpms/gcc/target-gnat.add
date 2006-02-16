@@ -4,7 +4,7 @@
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-gnat
 Summary:        Ada support for for @tool_target@-gcc
-Group:          %{rpmgroup}
+Group:          Development/Tools
 Version:        %{gcc_version}
 License:	GPL
 

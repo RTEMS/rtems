@@ -3,7 +3,7 @@
 # ==============================================================
 # %package -n @rpmprefix@@tool_target@-binutils
 # Summary:      rtems binutils for @tool_target@
-# Group: %{rpmgroup}
+# Group: Development/Tools
 # Requires: @rpmprefix@rtems@osversion@-base-binutils
 
 %description -n @rpmprefix@@tool_target@-binutils

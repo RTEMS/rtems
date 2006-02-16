@@ -4,7 +4,7 @@
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-gcj
 Summary:        Java support (gcj) for @tool_target@-gcc
-Group:          %{rpmgroup}
+Group:          Development/Tools
 Version:	%{gcc_version}
 License:	GPL
 

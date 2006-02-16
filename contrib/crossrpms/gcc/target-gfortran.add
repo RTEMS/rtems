@@ -4,7 +4,7 @@
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-gfortran
 Summary:	Fortran 95 support for @tool_target@-gcc
-Group:          %{rpmgroup}
+Group:          Development/Tools
 Version:	%{gcc_version}
 License:	GPL
 

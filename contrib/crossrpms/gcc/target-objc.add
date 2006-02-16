@@ -4,7 +4,7 @@
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-objc
 Summary:        Objective C support for @tool_target@-gcc
-Group:          %{rpmgroup}
+Group:          Development/Tools
 Version:        %{gcc_version}
 License:	GPL
 Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_version}-%{release}

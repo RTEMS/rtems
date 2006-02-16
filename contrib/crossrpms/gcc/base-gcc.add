@@ -4,7 +4,7 @@
 # ==============================================================
 %package -n @rpmprefix@rtems@osversion@-base-gcc
 Summary:	Base package for rtems gcc and newlib C Library
-Group:          %{rpmgroup}
+Group:          Development/Tools
 Version:        %{gcc_version}
 License:	GPL
 

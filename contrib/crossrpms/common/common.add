@@ -10,10 +10,9 @@
 %define _mandir			%{_prefix}/man
 %endif
 
-%define rpmgroup		RTEMS/4.7
-
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
 %else
 %define _exeext %{nil}
 %endif
+
