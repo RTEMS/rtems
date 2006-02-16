@@ -1,14 +1,10 @@
-#
-# spec file for package @tool_target@
-# 
-
 %define w32api_version @W32API_VERS@
 %define w32api_rpmvers %{expand: %(echo @W32API_VERS@ | tr - _)} 
 
 %define _use_internal_dependency_generator 0
 %define __debug_install_post %{nil}
 
-Name:         @tool_target@-w32api
+Name:         @rpmprefix@@tool_target@-w32api
 Release:      @W32API_RPMREL@%{?dist}
 License:      GPL
 Group:        Development/Tools
@@ -20,7 +16,7 @@ Version:      	%w32api_rpmvers
 Summary:      	MinGW Libraries
 
 Source0:	http://dl.sourceforge.net/sourceforge/mingw/w32api-%{w32api_version}.tar.gz
-NoSource:	0
+%{?!_with_sources:NoSource:	0}
 
 %description
 Mingw libraries.
@@ -32,14 +28,8 @@ Mingw libraries.
   rm -rf @tool_target@
 
   # Setup sys-root (Usable for gcc >= 3.4)
-  mkdir -p @tool_target@/sys-root/usr
-  cp -a include lib @tool_target@/sys-root/usr
-
-  # Setup sys-lib and sys-include (Required by gcc < 3.4)
-  mkdir -p @tool_target@/lib
-  cp -a @tool_target@/sys-root/usr/lib/* @tool_target@/lib
-  mkdir -p @tool_target@/include
-  cp -a @tool_target@/sys-root/usr/include/* @tool_target@/include
+  mkdir -p @tool_target@/sys-root/mingw
+  cp -a include lib @tool_target@/sys-root/mingw
 
 %install
   rm -rf $RPM_BUILD_ROOT
