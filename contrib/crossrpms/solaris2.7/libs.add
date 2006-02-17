@@ -1,16 +1,12 @@
-#
-# spec file for package @tool_target@
-# 
-
 %define solaris_version @SOLARIS_VERS@
 %define solaris_rpmvers %{expand: %(echo @SOLARIS_VERS@ | tr - _)} 
 
 %define _use_internal_dependency_generator 0
 %define __debug_install_post %{nil}
 
-Name:         @tool_target@
+Name:         @rpmprefix@@tool_target@
 Release:      @SOLARIS_RPMREL@%{?dist}
-License:      Sun Microsystems.
+License:      Sun Microsystems
 Group:        Development/Tools
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -20,7 +16,7 @@ Version:      	%solaris_rpmvers
 Summary:      	@tool_target@ Libraries
 
 Source0:	sparc-sun-solaris2.7-libs-%{solaris_version}.tar.bz2
-NoSource:	0
+%{?!_with_sources:NoSource:	0}
 
 %description
 @tool_target@ libraries.
@@ -34,12 +30,6 @@ NoSource:	0
   # Setup sys-root (Usable for gcc >= 3.4)
   mkdir -p @tool_target@/sys-root
   tar cvf - usr/lib usr/include lib | ( cd @tool_target@/sys-root ; tar xvf -)
-
-  # Setup sys-lib and sys-include (Required by gcc < 3.4)
-  mkdir -p @tool_target@/lib
-  cp -a @tool_target@/sys-root/usr/lib/* @tool_target@/lib
-  mkdir -p @tool_target@/include
-  cp -a @tool_target@/sys-root/usr/include/* @tool_target@/include
 
 %install
   rm -rf $RPM_BUILD_ROOT
