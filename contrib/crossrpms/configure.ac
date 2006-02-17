@@ -18,12 +18,12 @@ AC_ARG_ENABLE([rpmprefix],
   /usr)   rpmprefix=
     AC_MSG_WARN([Ignoring given rpmprefix])
     ;;
-  NONE)   rpmprefix=["rtems-"]RTEMS_API["-"]
+  NONE)   rpmprefix=[rtems-]RTEMS_API[-]
     AC_MSG_WARN([Ignoring given rpmprefix])
     ;;
   *)
      case $enable_rpmprefix in
-     ''|["rtems-"]RTEMS_API["-"])
+     ''|[rtems-]RTEMS_API[-])
        AC_MSG_ERROR([Invalid --enable-rpmprefix]);;
      *)
         rpmprefix=$enable_rpmprefix;;
@@ -34,7 +34,7 @@ AC_ARG_ENABLE([rpmprefix],
 # defaults
   case "$prefix" in
   /usr)   rpmprefix=;;
-  NONE)   rpmprefix=["rtems-"]RTEMS_API["-"];;
+  NONE)   rpmprefix=[rtems-]RTEMS_API[-];;
   *)      AC_MSG_ERROR([Missing --enable-rpmprefix]) ;;
   esac
 ])
