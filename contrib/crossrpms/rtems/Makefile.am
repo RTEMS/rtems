@@ -20,7 +20,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) binutils-sources.add
 	cat $(BINUTILS_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e '/^%define _prefix.*$$/d' \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  > $(TARGET)-binutils.spec.in
@@ -54,7 +54,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e '/^%define _prefix.*$$/d' \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "/^%package -n @tool_target@-gcc/d" \

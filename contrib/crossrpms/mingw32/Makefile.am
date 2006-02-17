@@ -16,7 +16,7 @@ LIBS_SUBPACKAGES += target-libs.add
 
 $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES)
 	cat $(LIBS_SUBPACKAGES) | sed \
-	  -e '/^%define _prefix.*$$/d' \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	> $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec.in
@@ -41,7 +41,7 @@ W32API_SUBPACKAGES += target-w32api.add
 
 $(TARGET)-w32api.spec.in: $(W32API_SUBPACKAGES)
 	cat $(W32API_SUBPACKAGES) | sed \
-	  -e '/^%define _prefix.*$$/d' \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	> $(TARGET)-w32api.spec.in
 CLEANFILES += $(TARGET)-w32api.spec.in
@@ -70,7 +70,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) binutils-sources.add
 	cat $(BINUTILS_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e '/^%define _prefix.*$$/d' \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  > $(TARGET)-binutils.spec.in
@@ -104,12 +104,12 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e '/^%define _prefix.*$$/d' \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
 	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
-	  -e "/^%package -n @tool_target@-gcc/d" \
+	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
