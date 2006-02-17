@@ -1,3 +1,4 @@
+%if %build_newlib
 # ==============================================================
 # @tool_target@-libc
 # ==============================================================
@@ -9,9 +10,7 @@ Version:	%{newlib_version}
 Provides:	@rpmprefix@@tool_target@-newlib = %{newlib_version}-%{release}
 
 %description -n @rpmprefix@@tool_target@-libc
-RTEMS is an open source operating system for embedded systems.
-
-This is the newlib C Library for @tool_target@.
+Newlib C Library for @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-libc -f build/files.libc
 %defattr(-,root,root)
@@ -21,3 +20,4 @@ This is the newlib C Library for @tool_target@.
 %dir %{_prefix}/@tool_target@
 %{_prefix}/@tool_target@/include
 
+%endif
