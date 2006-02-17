@@ -79,7 +79,7 @@ Source41: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/@FREEBSD_VERS@-RELEASE
 %build
   # Setup sys-root (Usable for gcc >= 3.4)
   mkdir -p @tool_target@/sys-root
-  tar cf - lib usr/lib usr/include | ( cd @tool_target@/sys-root ; tar xf -)
+  %{__tar} cf - lib usr/lib usr/include | ( cd @tool_target@/sys-root ; %{__tar} xf -)
 
   pushd @tool_target@/sys-root/usr/lib > /dev/null
   # missing files
