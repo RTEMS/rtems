@@ -14,7 +14,7 @@ Name:         	@rpmprefix@@tool_target@-gcc
 Summary:      	@tool_target@ gcc
 
 Group:	      	Development/Tools
-Version:        %gcc_rpmvers
+Version:        %{gcc_rpmvers}
 Release:      	@GCC_RPMREL@%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org

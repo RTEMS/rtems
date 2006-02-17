@@ -10,9 +10,7 @@ License:	GPL
 Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_version}-%{release}
 
 %description -n @rpmprefix@@tool_target@-objc
-RTEMS is an open source operating system for embedded systems.
-
-This is the gcc/objc compiler for @tool_target@.
+GCC objc compiler for @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-objc -f build/files.objc
 %defattr(-,root,root)

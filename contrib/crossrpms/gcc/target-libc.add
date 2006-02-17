@@ -1,6 +1,6 @@
 %if %build_newlib
 # ==============================================================
-# @tool_target@-libc
+# @rpmprefix@@tool_target@-libc
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-libc
 Summary:      	C Library (newlib) for @tool_target@
