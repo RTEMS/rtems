@@ -13,9 +13,7 @@ Requires(preun):	/sbin/install-info
 
 %description -n @rpmprefix@rtems@osversion@-base-gcc
 
-RTEMS is an open source operating system for embedded systems.
-
-This is the files for gcc and newlib that are shared by all targets.
+GCC and newlib files that are shared by all targets.
 
 %files -n @rpmprefix@rtems@osversion@-base-gcc
 %defattr(-,root,root)
@@ -24,9 +22,11 @@ This is the files for gcc and newlib that are shared by all targets.
 %{_infodir}/cpp.info*
 %{_infodir}/cppinternals.info*
 %{_infodir}/gcc.info*
+%{_infodir}/gccint.info*
+%if %build_newlib
 %{_infodir}/libc.info*
 %{_infodir}/libm.info*
-%{_infodir}/gccint.info*
+%endif
 %if "%{gcc_version}" >= "3.4"
 %{_infodir}/gccinstall.info*
 %endif
