@@ -1,15 +1,45 @@
 ## $Id$
 
+m4_define([RTEMS_API],[4.7])
+
 AC_PREREQ(2.59)
 AC_INIT([crossbuild],[0.20060211.0],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
 AC_CANONICAL_HOST
+AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
 AM_INIT_AUTOMAKE([no-define foreign 1.9])
 
-RTEMS_ENABLE_RPMPREFIX
+AC_ARG_ENABLE([rpmprefix],
+[  --enable-rpmprefix=<rpmprefix>      prefix rpms],[
+  case "$prefix" in
+  /usr)   rpmprefix=
+    AC_MSG_WARN([Ignoring given rpmprefix])
+    ;;
+  NONE)   rpmprefix=["rtems-"]RTEMS_API["-"]
+    AC_MSG_WARN([Ignoring given rpmprefix])
+    ;;
+  *)
+     case $enable_rpmprefix in
+     ''|["rtems-"]RTEMS_API["-"])
+       AC_MSG_ERROR([Invalid --enable-rpmprefix]);;
+     *)
+        rpmprefix=$enable_rpmprefix;;
+     esac
+    ;;
+  esac
+],[
+# defaults
+  case "$prefix" in
+  /usr)   rpmprefix=;;
+  NONE)   rpmprefix=["rtems-"]RTEMS_API["-"];;
+  *)      AC_MSG_ERROR([Missing --enable-rpmprefix]) ;;
+  esac
+])
+AC_SUBST(rpmprefix)
+
 
 AS_IF([test "${host}" != "${build}"],[
 AC_MSG_CHECKING(for RPM OS)
