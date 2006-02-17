@@ -49,6 +49,8 @@ GCC_SUBPACKAGES += $(top_builddir)/common/clean.add
 GCC_SUBPACKAGES += ../gcc/target-gcc.add
 GCC_SUBPACKAGES += ../gcc/base-gcc.add
 GCC_SUBPACKAGES += ../gcc/target-c++.add
+GCC_SUBPACKAGES += ../gcc/base-libc.add
+GCC_SUBPACKAGES += ../gcc/target-libc.add
 
 $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	cat $(GCC_SUBPACKAGES) | sed \
