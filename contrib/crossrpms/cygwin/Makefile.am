@@ -8,17 +8,28 @@ CLEANFILES =
 CYGWIN_VERS = 1.5.19-4
 CYGWIN_RPMREL = 0
 
-$(TARGET)-libs.spec: libs.spec.in
-	sed -e "/[@]INSTALL_POST[@]/r ../common/installpost.add" \
-	  -e "/[@]INSTALL_POST[@]/d" \
-	  -e "/[@]FIND_REQPROV[@]/r ../common/find-reqprov.add" \
-	  -e "/[@]FIND_REQPROV[@]/d" \
-	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
+LIBS_SUBPACKAGES = $(top_builddir)/common/common.add
+LIBS_SUBPACKAGES += libs.add
+LIBS_SUBPACKAGES += ../gcc/rpm-install.add
+LIBS_SUBPACKAGES += $(top_builddir)/common/clean.add
+LIBS_SUBPACKAGES += target-libs.add
+
+$(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES)
+	cat $(LIBS_SUBPACKAGES) | sed \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
+	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
+	> $(TARGET)-libs.spec.in
+CLEANFILES += $(TARGET)-libs.spec.in
+	                      
+$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
+	sed \
+	  -e "s/@tool_target@/$(TARGET)/g" \
 	  -e "s/[@]CYGWIN_VERS[@]/$(CYGWIN_VERS)/g" \
 	  -e "s/[@]CYGWIN_RPMREL[@]/$(CYGWIN_RPMREL)/g" \
-	  $(srcdir)/libs.spec.in > $@
+	  $(srcdir)/$(TARGET)-libs.spec.in > $@
 CLEANFILES += $(TARGET)-libs.spec
 noinst_DATA += $(TARGET)-libs.spec
+
 
 
 BINUTILS_VERS = 20050610-1
