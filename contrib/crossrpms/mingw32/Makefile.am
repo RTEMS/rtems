@@ -14,7 +14,7 @@ LIBS_SUBPACKAGES += ../gcc/rpm-install.add
 LIBS_SUBPACKAGES += $(top_builddir)/common/clean.add
 LIBS_SUBPACKAGES += target-libs.add
 
-$(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES)
+$(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	cat $(LIBS_SUBPACKAGES) | sed \
 	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
@@ -39,7 +39,7 @@ W32API_SUBPACKAGES += ../gcc/rpm-install.add
 W32API_SUBPACKAGES += $(top_builddir)/common/clean.add
 W32API_SUBPACKAGES += target-w32api.add
 
-$(TARGET)-w32api.spec.in: $(W32API_SUBPACKAGES)
+$(TARGET)-w32api.spec.in: $(W32API_SUBPACKAGES) Makefile.am
 	cat $(W32API_SUBPACKAGES) | sed \
 	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
@@ -66,7 +66,7 @@ BINUTILS_SUBPACKAGES += $(top_builddir)/common/clean.add
 BINUTILS_SUBPACKAGES += ../binutils/target-binutils.add
 BINUTILS_SUBPACKAGES += ../binutils/base-binutils.add
 
-$(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) binutils-sources.add
+$(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources.add
 	cat $(BINUTILS_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
@@ -100,7 +100,7 @@ GCC_SUBPACKAGES += ../gcc/target-gcc.add
 GCC_SUBPACKAGES += ../gcc/base-gcc.add
 GCC_SUBPACKAGES += ../gcc/target-c++.add
 
-$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) gcc-sources.add
+$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
