@@ -13,7 +13,7 @@ Requires(preun):	/sbin/install-info
 
 %description -n @rpmprefix@rtems@osversion@-base-gcc
 
-GCC and newlib files that are shared by all targets.
+GCC files that are shared by all targets.
 
 %files -n @rpmprefix@rtems@osversion@-base-gcc
 %defattr(-,root,root)
@@ -23,10 +23,6 @@ GCC and newlib files that are shared by all targets.
 %{_infodir}/cppinternals.info*
 %{_infodir}/gcc.info*
 %{_infodir}/gccint.info*
-%if %build_newlib
-%{_infodir}/libc.info*
-%{_infodir}/libm.info*
-%endif
 %if "%{gcc_version}" >= "3.4"
 %{_infodir}/gccinstall.info*
 %endif
@@ -47,10 +43,6 @@ GCC and newlib files that are shared by all targets.
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz
-%if %build_newlib
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz
-%endif
 %if "%{gcc_version}" >= "3.4"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz
 %endif
@@ -61,10 +53,6 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz
-%if %build_newlib
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz
-%endif
 %if "%{gcc_version}" >= "3.4"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz
 %endif
