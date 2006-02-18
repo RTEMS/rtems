@@ -81,10 +81,13 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "s,[@]_prefix[@],$(prefix),g" \
-	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
-	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
+	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
+	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
+	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
+	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
+	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
 

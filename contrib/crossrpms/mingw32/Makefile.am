@@ -6,7 +6,7 @@ noinst_DATA =
 CLEANFILES =
 
 MINGW32_VERS = 3.9
-MINGW32_RPMREL = 0.20060217.0
+MINGW32_RPMREL = 0.20060218.0
 
 LIBS_SUBPACKAGES = $(top_builddir)/common/common.add
 LIBS_SUBPACKAGES += libs.add
@@ -31,7 +31,7 @@ CLEANFILES += $(TARGET)-libs.spec
 noinst_DATA += $(TARGET)-libs.spec
 
 W32API_VERS = 3.6
-W32API_RPMREL = 0.20060217.0
+W32API_RPMREL = 0.20060218.0
 
 W32API_SUBPACKAGES = $(top_builddir)/common/common.add
 W32API_SUBPACKAGES += w32api.add
@@ -57,7 +57,7 @@ noinst_DATA += $(TARGET)-w32api.spec
 
 
 BINUTILS_VERS = 2.16.91-20060119-1
-BINUTILS_RPMREL = 0.20060217.0
+BINUTILS_RPMREL = 0.20060218.0
 
 BINUTILS_SUBPACKAGES = $(top_builddir)/common/common.add
 BINUTILS_SUBPACKAGES += ../binutils/binutils.add
@@ -89,7 +89,7 @@ noinst_DATA += $(TARGET)-binutils.spec
 
 
 GCC_VERS = 4.0.2
-GCC_RPMREL = 0.20060217.0
+GCC_RPMREL = 0.20060218.0
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
 GCC_SUBPACKAGES += ../gcc/gccnewlib.add
@@ -110,6 +110,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
 	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
 	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
+	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
