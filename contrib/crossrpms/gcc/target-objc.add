@@ -1,6 +1,6 @@
 %if %build_objc
 # ==============================================================
-# @tool_target@-objc
+# @rpmprefix@@tool_target@-objc
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-objc
 Summary:        Objective C support for @tool_target@-gcc

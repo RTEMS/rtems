@@ -1,6 +1,6 @@
 %if %build_f95
 # ==============================================================
-# @tool_target@-gfortran
+# @rpmprefix@@tool_target@-gfortran
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-gfortran
 Summary:	Fortran 95 support for @tool_target@-gcc

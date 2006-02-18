@@ -1,6 +1,6 @@
 %if %build_gcj
 # ==============================================================
-# @tool_target@-gcj
+# @rpmprefix@@tool_target@-gcj
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-gcj
 Summary:        Java support (gcj) for @tool_target@-gcc

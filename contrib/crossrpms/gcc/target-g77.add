@@ -1,6 +1,6 @@
 %if %build_g77
 # ==============================================================
-# @tool_target@-g77
+# @rpmprefix@@tool_target@-g77
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-g77
 Summary:        Fortran 77 support for @tool_target@-gcc

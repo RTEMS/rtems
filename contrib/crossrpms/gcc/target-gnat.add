@@ -1,6 +1,6 @@
 %if %build_gnat
 # ==============================================================
-# @tool_target@-gnat
+# @rpmprefix@@tool_target@-gnat
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-gnat
 Summary:        Ada support for for @tool_target@-gcc

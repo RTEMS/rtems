@@ -1,6 +1,6 @@
 %if %build_cxx
 # ==============================================================
-# @tool_target@-c++
+# @rpmprefix@@tool_target@-c++
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-c++
 Summary:	GCC c++ compiler for @tool_target@

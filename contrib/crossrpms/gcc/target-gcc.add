@@ -1,5 +1,5 @@
 # ==============================================================
-# @tool_target@-gcc
+# @rpmprefix@@tool_target@-gcc
 # ==============================================================
 %package -n @rpmprefix@@tool_target@-gcc
 Summary:        GNU cc compiler for @tool_target@
