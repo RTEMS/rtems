@@ -66,6 +66,8 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
 	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
+	  -e "/--with-sysroot/d" \
+	  -e "/BuildRequires:.*@tool_target@-sys-root/d" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 1,' \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
