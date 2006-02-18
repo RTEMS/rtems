@@ -1,0 +1,21 @@
+%build
+  mkdir -p build
+  cd build
+  CFLAGS="$RPM_OPT_FLAGS" \
+  ../binutils-%{binutils_version}/configure \
+    --build=%_build --host=%_host \
+    --target=@tool_target@ \
+    --verbose --disable-nls \
+    --without-included-gettext \
+    --disable-win32-registry \
+    --disable-werror \
+    --prefix=%{_prefix} --bindir=%{_bindir} \
+    --includedir=%{_includedir} --libdir=%{_libdir} \
+    --mandir=%{_mandir} --infodir=%{_infodir}
+
+  make all
+%if "%{_prefix}" != "/usr"
+  make info
+%endif
+  cd ..
+
