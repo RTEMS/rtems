@@ -112,6 +112,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
+	  -e "s,^%define[ ]*_cxx[ 	]*1,%define _cxx		0," \
 	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
 	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
 	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
