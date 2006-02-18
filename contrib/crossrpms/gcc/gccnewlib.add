@@ -62,10 +62,6 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %define _fortran	0
 %endif
 
-%if "@tool_target@" == "i686-pc-mingw32"
-%define _cxx		0
-%endif
-
 # Allow the user to build arbitrary languages
 %{?_with_cxx:%define _cxx 1}
 %{?_with_fortran:%define _fortran 1}
