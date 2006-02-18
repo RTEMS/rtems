@@ -61,6 +61,9 @@ BINUTILS_RPMREL = 0.20060218.0
 
 BINUTILS_SUBPACKAGES = $(top_builddir)/common/common.add
 BINUTILS_SUBPACKAGES += ../binutils/binutils.add
+BINUTILS_SUBPACKAGES += ../binutils/prep.add
+BINUTILS_SUBPACKAGES += ../binutils/build.add
+BINUTILS_SUBPACKAGES += ../binutils/install.add
 BINUTILS_SUBPACKAGES += ../binutils/rpm-install.add
 BINUTILS_SUBPACKAGES += $(top_builddir)/common/clean.add
 BINUTILS_SUBPACKAGES += ../binutils/target-binutils.add
