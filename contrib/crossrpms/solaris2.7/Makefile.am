@@ -84,7 +84,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
 	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
 	  -e "/--with-newlib/d" \
-	  -e "/^%package -n @tool_target@-gcc/d" \
+	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
