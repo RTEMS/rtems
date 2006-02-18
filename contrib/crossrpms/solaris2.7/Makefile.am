@@ -30,6 +30,7 @@ $(TARGET)-libs.spec: $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec
 noinst_DATA += $(TARGET)-libs.spec
 
+
 BINUTILS_VERS = 2.16.1
 BINUTILS_RPMREL = 0.20060214.0
 
@@ -49,7 +50,6 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
-
 
 $(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	sed \

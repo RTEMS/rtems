@@ -26,7 +26,6 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
-
 $(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	sed \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
