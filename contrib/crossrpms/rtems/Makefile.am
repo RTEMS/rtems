@@ -42,6 +42,7 @@ noinst_DATA += $(TARGET)-binutils.spec
 
 GCC_VERS = 4.0.2
 GCC_RPMREL = 0.20060215.0
+NEWLIB_VERS = 1.14.0
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
 GCC_SUBPACKAGES += ../gcc/gccnewlib.add
@@ -74,6 +75,7 @@ $(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
+	  -e "s/[@]NEWLIB_VERS[@]/$(NEWLIB_VERS)/g" \
 	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-gcc.spec.in > $@
 CLEANFILES += $(TARGET)-gcc.spec

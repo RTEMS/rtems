@@ -6,7 +6,7 @@
 %define build_newlib 1
 
 %if %build_newlib
-%define newlib_version		@newlib_version@
+%define newlib_version		@NEWLIB_VERS@
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 %endif
 
