@@ -1,13 +1,13 @@
 # ==============================================================
 # @rpmprefix@@tool_target@-gcc
 # ==============================================================
-%package -n @rpmprefix@@tool_target@-gcc
-Summary:        GNU cc compiler for @tool_target@
-Group:          Development/Tools
-Version:        %{gcc_version}
-Requires:       @rpmprefix@@tool_target@-binutils
-Requires:       @rpmprefix@@tool_target@-libc = %{newlib_version}-%{release}
-License:	GPL
+# %package -n @rpmprefix@@tool_target@-gcc
+# Summary:        GNU cc compiler for @tool_target@
+# Group:          Development/Tools
+# Version:        %{gcc_version}
+# Requires:       @rpmprefix@@tool_target@-binutils
+# Requires:       @rpmprefix@@tool_target@-libc = %{newlib_version}-%{release}
+# License:	GPL
 
 %description -n @rpmprefix@@tool_target@-gcc
 GNU cc compiler for @tool_target@.
