@@ -67,6 +67,8 @@ GCC_RPMREL = 0.20060213.0
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
 GCC_SUBPACKAGES += ../gcc/gccnewlib.add
+GCC_SUBPACKAGES += ../gcc/prep.add
+GCC_SUBPACKAGES += ../gcc/build.add
 GCC_SUBPACKAGES += ../gcc/install.add
 GCC_SUBPACKAGES += ../gcc/rpm-install.add
 GCC_SUBPACKAGES += $(top_builddir)/common/clean.add
