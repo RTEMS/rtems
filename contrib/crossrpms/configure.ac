@@ -8,6 +8,8 @@ AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
 AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
 AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
 AM_INIT_AUTOMAKE([no-define foreign 1.9])
@@ -40,7 +42,6 @@ AC_ARG_ENABLE([rpmprefix],
 ])
 AC_SUBST(rpmprefix)
 
-
 AS_IF([test "${host}" != "${build}"],[
 AC_MSG_CHECKING(for RPM OS)
 case "$host" in
@@ -56,6 +57,15 @@ esac
 AC_MSG_RESULT($RPM_OS)
 ])
 AC_SUBST(RPM_OS)
+
+case "${target_os}" in
+  rtems|[rtems]RTEMS_API[])
+    TARGET_SUBDIRS=rtems
+    ;;
+  *)
+    AC_MSG_ERROR([Unsupported target ${target}])
+esac
+AC_SUBST([TARGET_SUBDIRS])
 
 AC_CONFIG_FILES([Makefile])
 
