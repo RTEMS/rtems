@@ -6,7 +6,7 @@ noinst_DATA =
 CLEANFILES =
 
 FREEBSD_VERS = 6.0
-FREEBSD_RPMREL = 0.20060213.0
+FREEBSD_RPMREL = @VERSION@
 
 LIBS_SUBPACKAGES = $(top_builddir)/common/common.add
 LIBS_SUBPACKAGES += libs.add
@@ -32,7 +32,7 @@ noinst_DATA += $(TARGET)-libs.spec
 
 
 BINUTILS_VERS = 2.16.1
-BINUTILS_RPMREL = 0.20060214.0
+BINUTILS_RPMREL = @VERSION@
 
 BINUTILS_SUBPACKAGES = $(top_builddir)/common/common.add
 BINUTILS_SUBPACKAGES += ../binutils/binutils.add
@@ -66,7 +66,7 @@ noinst_DATA += $(TARGET)-binutils.spec
 
 
 GCC_VERS = 4.0.2
-GCC_RPMREL = 0.20060213.0
+GCC_RPMREL = @VERSION@
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
 GCC_SUBPACKAGES += ../gcc/gccnewlib.add
