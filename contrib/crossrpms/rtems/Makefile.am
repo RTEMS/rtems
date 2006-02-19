@@ -1,7 +1,6 @@
 # $Id$
 
-# Just testing
-TARGET = sparc-rtems4.7
+TARGET = @target_alias@
 
 noinst_DATA =
 CLEANFILES =
