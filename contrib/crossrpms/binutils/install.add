@@ -24,9 +24,9 @@
 # Conflict with a native binutils' infos
   rm -rf $RPM_BUILD_ROOT%{_infodir}
 %else
-%if "%{binutils_version}" < "2.9.5"
+
+# Dropped in FSF-binutils-2.9.5, but Cygwin still ships it.
   rm -rf $RPM_BUILD_ROOT%{_infodir}/configure.info*
-%endif
 
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
