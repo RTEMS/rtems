@@ -16,16 +16,16 @@ LIBS_SUBPACKAGES += target-libs.add
 
 $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	cat $(LIBS_SUBPACKAGES) | sed \
-	  -e "s,[@]_prefix[@],$(prefix),g" \
+	  -e "s/[@]CYGWIN_VERS[@]/$(CYGWIN_VERS)/g" \
+	  -e "s/[@]CYGWIN_RPMREL[@]/$(CYGWIN_RPMREL)/g" \
 	> $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec.in
 	                      
 @rpmprefix@$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
 	sed \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  -e "s/[@]CYGWIN_VERS[@]/$(CYGWIN_VERS)/g" \
-	  -e "s/[@]CYGWIN_RPMREL[@]/$(CYGWIN_RPMREL)/g" \
 	  $(srcdir)/$(TARGET)-libs.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
@@ -48,7 +48,8 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 	cat $(BINUTILS_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e "s,[@]_prefix[@],$(prefix),g" \
+	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
+	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
@@ -56,9 +57,8 @@ CLEANFILES += $(TARGET)-binutils.spec.in
 @rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	sed \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
-	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
 	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-binutils.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
@@ -83,7 +83,8 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e "s,[@]_prefix[@],$(prefix),g" \
+	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
+	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
 	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
@@ -96,9 +97,8 @@ CLEANFILES += $(TARGET)-gcc.spec.in
 @rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
 	sed \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
-	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-gcc.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
