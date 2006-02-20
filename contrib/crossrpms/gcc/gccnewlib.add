@@ -100,8 +100,11 @@ BuildRequires:	bison
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	@rpmprefix@@tool_target@-binutils
 BuildRequires:	@rpmprefix@@tool_target@-sys-root
+BuildRequires:	@rpmprefix@@tool_target@-w32api-sys-root
 
 Requires:	@rpmprefix@@tool_target@-binutils
+Requires:	@rpmprefix@@tool_target@-sys-root
+Requires:	@rpmprefix@@tool_target@-w32api-sys-root
 
 %if "%{_vendor}" == "redhat"
 %if %build_gcj
@@ -111,7 +114,6 @@ BuildRequires:	zlib-devel
 # Building gnat requires gnat
 # This really isn't available until RedHat 8.0.  How to conditionalize this?
 BuildRequires:	gcc-gnat
-# Urgh, building gnat requires the target libc
 BuildRequires:	@rpmprefix@@tool_target@-libc < %{newlib_version}-%{release}
 %endif
 %if %build_f95
