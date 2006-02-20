@@ -46,3 +46,4 @@ grep -E -v '^${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/(lib|include|sys-root)' \
 EOF
 chmod +x %{_builddir}/%{name}-%{version}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{version}/find-requires
+
