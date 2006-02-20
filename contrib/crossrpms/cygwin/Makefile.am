@@ -21,14 +21,14 @@ $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	> $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec.in
 	                      
-$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
+@rpmprefix@$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
 	sed \
 	  -e "s/@tool_target@/$(TARGET)/g" \
 	  -e "s/[@]CYGWIN_VERS[@]/$(CYGWIN_VERS)/g" \
 	  -e "s/[@]CYGWIN_RPMREL[@]/$(CYGWIN_RPMREL)/g" \
 	  $(srcdir)/$(TARGET)-libs.spec.in > $@
-CLEANFILES += $(TARGET)-libs.spec
-noinst_DATA += $(TARGET)-libs.spec
+CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
+noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 
 BINUTILS_VERS = 20050610-1
@@ -54,15 +54,15 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
-$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
+@rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	sed \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
 	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-binutils.spec.in > $@
-CLEANFILES += $(TARGET)-binutils.spec
-noinst_DATA += $(TARGET)-binutils.spec
+CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
+noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
 
 GCC_VERS = 3.4.4-1
@@ -94,12 +94,12 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
 
-$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
+@rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
 	sed \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-gcc.spec.in > $@
-CLEANFILES += $(TARGET)-gcc.spec
-noinst_DATA += $(TARGET)-gcc.spec
+CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
+noinst_DATA += @rpmprefix@$(TARGET)-gcc.spec

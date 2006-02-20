@@ -28,15 +28,15 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
-$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
+@rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
 	sed \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
 	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-binutils.spec.in > $@
-CLEANFILES += $(TARGET)-binutils.spec
-noinst_DATA += $(TARGET)-binutils.spec
+CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
+noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
 
 GCC_VERS = 4.0.2
@@ -71,7 +71,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
 
-$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
+@rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
 	sed \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
@@ -79,5 +79,5 @@ $(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
 	  -e "s/[@]NEWLIB_VERS[@]/$(NEWLIB_VERS)/g" \
 	  -e "/[@]PATCH/d" \
 	  $(srcdir)/$(TARGET)-gcc.spec.in > $@
-CLEANFILES += $(TARGET)-gcc.spec
-noinst_DATA += $(TARGET)-gcc.spec
+CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
+noinst_DATA += @rpmprefix@$(TARGET)-gcc.spec
