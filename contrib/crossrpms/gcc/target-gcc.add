@@ -6,7 +6,7 @@
 # Group:          Development/Tools
 # Version:        %{gcc_version}
 # Requires:       @rpmprefix@@tool_target@-binutils
-# Requires:       @rpmprefix@@tool_target@-libc = %{newlib_version}-%{release}
+# Requires:       @rpmprefix@@tool_target@-newlib = %{newlib_version}-%{release}
 # License:	GPL
 
 %description -n @rpmprefix@@tool_target@-gcc
