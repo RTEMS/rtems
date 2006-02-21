@@ -29,14 +29,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 CLEANFILES += $(TARGET)-binutils.spec.in
 
 @rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
-	sed \
-	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
-	  -e "s,[@]_prefix[@],$(prefix),g" \
-	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
-	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
-	  -e "/[@]PATCH/d" \
-	  $(srcdir)/$(TARGET)-binutils.spec.in > $@
+	$(MKSPEC) $(srcdir)/$(TARGET)-binutils.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
 noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
