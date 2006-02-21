@@ -1,0 +1,5 @@
+MKSPEC = sed \
+	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
+	  -e "s,[@]_prefix[@],$(prefix),g" \
+	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
+	  -e "/[@]PATCH/d"
