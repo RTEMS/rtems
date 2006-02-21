@@ -1,18 +1,18 @@
 %if %build_newlib
 # ==============================================================
-# @rpmprefix@@tool_target@-libc
+# @rpmprefix@@tool_target@-newlib
 # ==============================================================
-%package -n @rpmprefix@@tool_target@-libc
+%package -n @rpmprefix@@tool_target@-newlib
 Summary:      	C Library (newlib) for @tool_target@
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
 Provides:	@rpmprefix@@tool_target@-newlib = %{newlib_version}-%{release}
 
-%description -n @rpmprefix@@tool_target@-libc
+%description -n @rpmprefix@@tool_target@-newlib
 Newlib C Library for @tool_target@.
 
-%files -n @rpmprefix@@tool_target@-libc -f build/files.libc
+%files -n @rpmprefix@@tool_target@-newlib -f build/files.newlib
 %defattr(-,root,root)
 %if "%{_prefix}" != "/usr"
 %dir %{_prefix}

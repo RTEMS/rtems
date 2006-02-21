@@ -63,13 +63,13 @@
   # Collect multilib subdirectories
   f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
-  echo "%defattr(-,root,root,-)" > build/files.libc
+  echo "%defattr(-,root,root,-)" > build/files.newlib
   TGTDIR="%{_prefix}/@tool_target@/lib"
   for i in $f; do
     case $i in
-    \.) echo "%dir ${TGTDIR}" >> build/files.libc
+    \.) echo "%dir ${TGTDIR}" >> build/files.newlib
       ;;
-    *)  echo "%dir ${TGTDIR}/$i" >> build/files.libc
+    *)  echo "%dir ${TGTDIR}/$i" >> build/files.newlib
       ;;
     esac
   done
@@ -137,7 +137,7 @@
     case $i in
     *lib*.la) rm ${RPM_BUILD_ROOT}/$i;; # ignore - gcc produces bogus libtool libs
     *libiberty.a) rm ${RPM_BUILD_ROOT}/$i ;; # ignore - GPL'ed
-# all other files belong to libc
-    *) echo "$i" >> build/files.libc ;; 
+# all other files belong to newlib
+    *) echo "$i" >> build/files.newlib ;; 
     esac
   done
