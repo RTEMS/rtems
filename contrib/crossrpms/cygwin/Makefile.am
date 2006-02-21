@@ -93,11 +93,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 CLEANFILES += $(TARGET)-gcc.spec.in
 
 @rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
-	sed \
-	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
-	  -e "s,[@]_prefix[@],$(prefix),g" \
-	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  -e "/[@]PATCH/d" \
-	  $(srcdir)/$(TARGET)-gcc.spec.in > $@
+	$(MKSPEC) $(srcdir)/$(TARGET)-gcc.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
 noinst_DATA += @rpmprefix@$(TARGET)-gcc.spec
