@@ -62,8 +62,8 @@ case "${target_os}" in
   rtems|[rtems]RTEMS_API[])
     TARGET_SUBDIRS=rtems
     ;;
-  *)
-    AC_MSG_ERROR([Unsupported target ${target}])
+  *) # ignore
+#    AC_MSG_ERROR([Unsupported target ${target}])
 esac
 AC_SUBST([TARGET_SUBDIRS])
 
