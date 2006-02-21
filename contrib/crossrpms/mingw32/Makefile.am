@@ -45,11 +45,7 @@ $(TARGET)-w32api.spec.in: $(W32API_SUBPACKAGES) Makefile.am
 CLEANFILES += $(TARGET)-w32api.spec.in
 	                      
 @rpmprefix@$(TARGET)-w32api.spec: $(TARGET)-w32api.spec.in
-	sed \
-	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
-	  -e "s,[@]_prefix[@],$(prefix),g" \
-	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  $(srcdir)/$(TARGET)-w32api.spec.in > $@
+	$(MKSPEC) $(srcdir)/$(TARGET)-w32api.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
 noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
