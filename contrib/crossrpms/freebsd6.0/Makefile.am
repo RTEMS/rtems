@@ -80,8 +80,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "/[@]tool_target[@]-newlib/d" \
 	  -e "/[@]tool_target[@]-w32api-sys-root/d" \
 	  -e "/--with-newlib/d" \
-	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
-	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in

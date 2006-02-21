@@ -100,8 +100,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "/[@]tool_target[@]-newlib/d" \
 	  -e "s,^%define[ ]*_cxx[ 	]*1,%define _cxx		0," \
-	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
-	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in

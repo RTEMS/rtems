@@ -59,8 +59,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "s/[@]NEWLIB_VERS[@]/$(NEWLIB_VERS)/g" \
-	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
-	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
 	  -e "/--with-sysroot/d" \
 	  -e "/[@]tool_target[@]-sys-root/d" \
 	  -e "/[@]tool_target[@]-w32api-sys-root/d" \
