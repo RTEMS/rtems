@@ -24,11 +24,7 @@ $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 CLEANFILES += $(TARGET)-libs.spec.in
 	                      
 @rpmprefix@$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
-	sed \
-	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
-	  -e "s,[@]_prefix[@],$(prefix),g" \
-	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  $(srcdir)/$(TARGET)-libs.spec.in > $@
+	$(MKSPEC) $(srcdir)/$(TARGET)-libs.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
