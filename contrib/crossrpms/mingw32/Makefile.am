@@ -98,7 +98,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
-	  -e "/[@]rpmprefix[@][@]tool_target[@]-libc/d" \
+	  -e "/[@]tool_target[@]-newlib/d" \
 	  -e "s,^%define[ ]*_cxx[ 	]*1,%define _cxx		0," \
 	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
 	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
