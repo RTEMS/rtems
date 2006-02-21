@@ -2,6 +2,8 @@
 
 TARGET = i686-pc-cygwin
 
+include ../mkspec.am
+
 noinst_DATA =
 CLEANFILES =
 

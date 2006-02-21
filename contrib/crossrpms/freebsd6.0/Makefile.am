@@ -2,6 +2,8 @@
 
 TARGET = i586-pc-freebsd6.0
 
+include ../mkspec.am
+
 noinst_DATA =
 CLEANFILES =
 

@@ -2,6 +2,8 @@
 
 TARGET = sparc-sun-solaris2.7
 
+include ../mkspec.am
+
 noinst_DATA =
 CLEANFILES =
 

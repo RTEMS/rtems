@@ -2,6 +2,8 @@
 
 TARGET = @target_alias@
 
+include ../mkspec.am
+
 noinst_DATA =
 CLEANFILES =
 

@@ -2,6 +2,8 @@
 
 TARGET = i686-pc-mingw32
 
+include ../mkspec.am
+
 noinst_DATA =
 CLEANFILES =
 
