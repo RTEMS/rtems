@@ -69,7 +69,6 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
-	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
@@ -99,7 +98,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
-	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "/[@]rpmprefix[@][@]tool_target[@]-libc/d" \
 	  -e "s,^%define[ ]*_cxx[ 	]*1,%define _cxx		0," \
 	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \

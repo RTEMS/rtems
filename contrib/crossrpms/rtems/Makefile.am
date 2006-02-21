@@ -24,7 +24,6 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 	cat $(BINUTILS_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./binutils-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
@@ -55,7 +54,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
 	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
 	  -e "/--with-sysroot/d" \
