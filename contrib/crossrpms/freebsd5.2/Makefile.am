@@ -80,7 +80,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "s,rtems[@]osversion[@],rtems,g" \
 	  -e "s,[@]tool_target[@]-libc,@tool_target@-sys-root,g" \
-	  -e "s,[=<][ ]*%{newlib_version}-%{release},," \
 	  -e "/--with-newlib/d" \
 	  -e "/^%package -n @rpmprefix@@tool_target@-gcc/d" \
 	  -e "s/-n @rpmprefix@@tool_target@-gcc//" \
