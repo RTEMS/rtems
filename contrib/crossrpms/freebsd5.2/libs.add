@@ -55,7 +55,7 @@ Source25: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/@FREEBSD_VERS@-RELEASE
  %SOURCE15 %SOURCE16 %SOURCE17 %SOURCE18 %SOURCE19 \
  %SOURCE20 %SOURCE21 %SOURCE22 %SOURCE23 %SOURCE24 \
  %SOURCE25 \
- | %{__tar} xzvf - ./lib ./usr/lib ./usr/include
+ | %{__tar} xzf - ./lib ./usr/lib ./usr/include
 
 %build
   # Setup sys-root (Usable for gcc >= 3.4)
