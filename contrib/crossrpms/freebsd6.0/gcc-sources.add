@@ -1,11 +1,11 @@
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 @PATCH0@
-%{?!_with_sources:NoSource:    0}
+%{?!_with_sources:NoSource:	0}
 
 %if %build_cxx
 Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 @PATCH1@
-%{?!_with_sources:NoSource:     1}
+%{?!_with_sources:NoSource:	1}
 %endif
 
 %if %build_f95

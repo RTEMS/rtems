@@ -1,9 +1,9 @@
 Source0: 	ftp://cygwin.com/pub/cygwin/release/gcc/gcc-core/gcc-core-%{gcc_pkgvers}-src.tar.bz2
-# NoSource:	0
+%{?!_with_sources:NoSource:	0}
 
 %if %build_cxx
 Source1: 	ftp://cygwin.com/pub/cygwin/release/gcc/gcc-g++/gcc-g++-%{gcc_pkgvers}-src.tar.bz2
-%{?!_with_sources:NoSource:     1}
+%{?!_with_sources:NoSource:	1}
 %endif
 
 %if %build_f95

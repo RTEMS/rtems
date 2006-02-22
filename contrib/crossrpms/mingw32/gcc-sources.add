@@ -5,7 +5,7 @@ Patch0:		gcc-4.0.2-mingw.diff
 %if %build_cxx
 Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 @PATCH1@
-%{?!_with_sources:NoSource:     1}
+%{?!_with_sources:NoSource:	1}
 %endif
 
 %if %build_f95
