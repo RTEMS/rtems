@@ -10,6 +10,12 @@
   # cd back to build/
   cd ..
 
+%if %build_newlib
+  cd build/@tool_target@/newlib
+  make DESTDIR=$RPM_BUILD_ROOT install-info
+  cd ../../..
+%endif
+
 %if "%{gcc_version}" < "4.0.3"
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
