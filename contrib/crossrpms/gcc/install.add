@@ -25,7 +25,7 @@
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-c++filt%{_exeext}
 
 %if %build_gnat
-  # Seemingly a VAX tool. Not meaningful for RTEMS
+  # Seemingly a VAX tool. Not meaningful, here.
   rm -f $RPM_BUILD_ROOT%{_bindir}/vxaddr2line%{_exeext}
 %endif
 
