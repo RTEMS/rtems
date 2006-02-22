@@ -16,7 +16,7 @@ case $a in
 # Fix up brp-compress to handle %%_prefix != /usr
 */brp-compress*)
   b=$(basename $a)
-  sed -e 's,\./usr/,.%{_prefix}/,' < $a > $b
+  sed -e 's,\./usr/,.%{_prefix}/,g' < $a > $b
   chmod a+x $b
   ;;
 %endif
