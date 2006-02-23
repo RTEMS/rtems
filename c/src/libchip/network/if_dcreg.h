@@ -474,7 +474,10 @@ struct dc_type {
 	u_int16_t		dc_vid;
 	u_int16_t		dc_did;
 	char			*dc_name;
-	int			dc_devsig;
+	int				dc_devsig;
+    int				dc_bus;
+	int				dc_dev;
+	int				dc_fun;
 };
 
 struct dc_mii_frame {
@@ -678,7 +681,7 @@ struct dc_mii_frame {
 struct dc_softc {
 	struct arpcom		arpcom;		/* interface info */
 	rtems_irq_connect_data  irqInfo;
-	volatile unsigned32	membase;
+	volatile u_int32_t	membase;
 	rtems_id		daemontid;
 #if 0
 	bus_space_handle_t	dc_bhandle;	/* bus space handle */

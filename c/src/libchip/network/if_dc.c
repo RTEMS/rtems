@@ -100,22 +100,28 @@
  *  from being compiled on systems which can't support this driver.
  */
 
+#if defined(DRIVER_SUPPORTED)
+	#undef DRIVER_SUPPORTED
+#endif
+
 #if defined(__i386__)
-  #define DRIVER_SUPPORTED
+  	#define DRIVER_SUPPORTED
 #endif
 
 #if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(mpc603e))
-  #define DRIVER_SUPPORTED
+  	#define DRIVER_SUPPORTED
+	#warning The if_dc driver is untested on the PPC platform !!!
 #endif
+  
 
-#undef DRIVER_SUPPORTED
-
-#if defined(DRIVER_SUPPORTED)
+#if defined(DRIVER_SUPPORTED) /* this covers the file "globally"... */
+#include <bsp.h>
 #include <rtems.h>
-#include <rtems/error.h>
-#include <rtems/rtems_bsdnet.h>
+#include <rtems/pci.h>
 
- 
+#include <rtems/error.h>
+#include <errno.h>
+#include <rtems/rtems_bsdnet.h>
 
 #include <net/if_types.h>
 
@@ -130,6 +136,9 @@
 #include <sys/systm.h>
 #include <bsp.h>
  
+/* moved to cpukit/include/rtems in CVS current ! */
+//#include "if_media.h"
+//#include "pci.h"
 #include <net/if_media.h>
 #include <rtems/pci.h>
 /*
@@ -188,6 +197,8 @@
 #define NDRIVER		1
 #define IRQ_EVENT	RTEMS_EVENT_13	/* Ha ... */
 static struct dc_softc dc_softc_devs[NDRIVER];
+
+#define UNUSED
 
 #if 0
 /* "controller miibus0" required.  See GENERIC if you get errors here. */
@@ -283,7 +294,7 @@ static void 		dc_tx_underrun(struct dc_softc *);
 static rtems_isr 	dc_intr(rtems_vector_number);
 static void		dc_daemon(void *);
 static void 		dc_start(struct ifnet *);
-static int 		dc_ioctl(struct ifnet *, int, caddr_t);
+static int 		dc_ioctl(struct ifnet *, u_long, caddr_t);
 static void 		dc_init(void *);
 static void 		dc_stop(struct dc_softc *);
 static void 		dc_watchdog(struct ifnet *);
@@ -315,7 +326,9 @@ static void dc_miibus_mediainit	__P((device_t));
 
 static void 		dc_setcfg(struct dc_softc *, int);
 static u_int32_t 	dc_crc_le(struct dc_softc *, caddr_t);
+#ifndef UNUSED
 static u_int32_t 	dc_crc_be(caddr_t);
+#endif
 static void 		dc_setfilt_21143(struct dc_softc *);
 static void 		dc_setfilt_asix(struct dc_softc *);
 static void 		dc_setfilt_admtek(struct dc_softc *);
@@ -1129,6 +1142,7 @@ static u_int32_t dc_crc_le(sc, addr)
 	return (crc & ((1 << DC_BITS_512) - 1));
 }
 
+#ifndef UNUSED
 /*
  * Calculate CRC of a multicast group address, return the lower 6 bits.
  */
@@ -1156,7 +1170,7 @@ static u_int32_t dc_crc_be(addr)
 	/* return the filter bit position */
 	return((crc >> 26) & 0x0000003F);
 }
-
+#endif
 
 /*
  * 21143-style RX filter setup routine. Filter programming is done by
@@ -1597,12 +1611,15 @@ struct dc_type *dc_devtype( int unitnum )
 	t = dc_devs;
 
 	while(t->dc_name != NULL) {
-		rc = pcib_find_by_devid(t->dc_vid, t->dc_did, \
-				(unitnum - 1), &t->dc_devsig);
+		rc = pci_find_device(t->dc_vid, t->dc_did, \
+				(unitnum - 1), &t->dc_bus, &t->dc_dev, &t->dc_fun);
 		if (rc == PCIB_ERR_SUCCESS) {
 			/* Check the PCI revision */
-			pcib_conf_read32(t->dc_devsig, DC_PCI_CFRV, &rev);
-		        rev &= 0xFF;
+			//pcib_conf_read32(t->dc_devsig, DC_PCI_CFRV, &rev);
+			pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+									DC_PCI_CFRV, &rev);
+			rev &= 0xFF;
+			
 			if (t->dc_did == DC_DEVICEID_98713 &&
 			    rev >= DC_REVISION_98713A)
 				t++;
@@ -1885,7 +1902,7 @@ decISON(const rtems_irq_connect_data* irq)
 int
 rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 {
-	/*int			s, tmp = 0;*/
+	int				rc;	
 	u_char			eaddr[ETHER_ADDR_LEN];
 	
 	char		        *unitName;
@@ -1894,12 +1911,10 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	u_int32_t		command;
 	struct dc_softc		*sc;
 	struct ifnet		*ifp;
+	struct dc_type		*t;
 	u_int32_t		revision;
 	int			error = 0, mac_offset;
-#if defined(__i386__)
-	int          		sig;
-	int          		value;
-#endif
+	unsigned int		value;
 	
 	/*
 	 * Get the instance number for the board we're going to configure
@@ -1915,10 +1930,6 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		return 0;
 	}
 
-
-	/*
-	 * First, find a DEC board
-	 */
 	sc = &dc_softc_devs[unitNumber - 1];
 	ifp = &sc->arpcom.ac_if;
 
@@ -1944,16 +1955,23 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		printk("Can't find any dec2114x NICs in PCI space.\n");
 		return 0;
 	}
+	t = sc->dc_info;
 
 	
 	/*
 	 * Map control/status registers.
 	 */
-	sig = sc->dc_info->dc_devsig;
-	pcib_conf_read32(sig, PCI_COMMAND, &command);
+	//sig = sc->dc_info->dc_devsig;
+	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+					PCI_COMMAND, &command);
+	//pcib_conf_read32(sig, PCI_COMMAND, &command);
 	command |= (PCI_COMMAND_IO | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
-	pcib_conf_write32(sig, PCI_COMMAND, command);
-	pcib_conf_read32(sig, PCI_COMMAND, &command);
+	pci_write_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+					PCI_COMMAND, command);
+	//pcib_conf_write32(sig, PCI_COMMAND, command);
+	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+					PCI_COMMAND, &command);
+	//pcib_conf_read32(sig, PCI_COMMAND, &command);
 
 #ifdef DC_USEIOSPACE
 	if (!(command & PCI_COMMAND_IO)) {
@@ -1984,20 +2002,30 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 #endif
 
 	/* sc->membase is the address of the card's CSRs !!! */
-	pcib_conf_read32(sig, DC_PCI_CFBMA, &value);
+	//pcib_conf_read32(sig, DC_PCI_CFBMA, &value);
+	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+					DC_PCI_CFBMA, &value);
 	sc->membase = value;
 	
 	/* Allocate interrupt */
 	memset(&sc->irqInfo, 0, sizeof(rtems_irq_connect_data));
-	pcib_conf_read32(sig, DC_PCI_CFIT, &value);
+	//pcib_conf_read32(sig, DC_PCI_CFIT, &value);
+	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+					DC_PCI_CFIT, &value);
+	
 	sc->irqInfo.name = value & 0xFF;
-
 	sc->irqInfo.hdl = (rtems_irq_hdl)dc_intr;
+	sc->irqInfo.handle = (void *)sc; /* new parameter */
 	sc->irqInfo.on = nop;
 	sc->irqInfo.off = nop;
 	sc->irqInfo.isOn = decISON;
 	
-	if(!(BSP_install_rtems_irq_handler( &sc->irqInfo ))) {
+#ifdef BSP_SHARED_HANDLER_SUPPORT
+	rc = BSP_install_rtems_shared_irq_handler( &sc->irqInfo );
+#else
+	rc = BSP_install_rtems_irq_handler( &sc->irqInfo );
+#endif
+	if(!rc) {
 		rtems_panic("Can't install dec2114x irq handler.\n");
 	}
 	
@@ -2029,7 +2057,9 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/* Need this info to decide on a chip type.
 	sc->dc_info = dc_devtype(dev);
 	*/
-	pcib_conf_read32(sig, DC_PCI_CFRV, &revision);
+	//pcib_conf_read32(sig, DC_PCI_CFRV, &revision);
+	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+					DC_PCI_CFRV, &revision);
 	revision &= 0x000000FF;
 
 	/* Get the eeprom width, but PNIC has diff eeprom */
@@ -2052,10 +2082,14 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		sc->dc_flags |= DC_REDUCED_MII_POLL|DC_TX_STORENFWD;
 		sc->dc_pmode = DC_PMODE_MII;
 		/* Increase the latency timer value. */
-		pcib_conf_read32(sig, DC_PCI_CFLT, &command);
+		//pcib_conf_read32(sig, DC_PCI_CFLT, &command);
+		pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+						DC_PCI_CFLT, &command);
 		command &= 0xFFFF00FF;
 		command |= 0x00008000;
-		pcib_conf_write32(sig, DC_PCI_CFLT, command);
+		//pcib_conf_write32(sig, DC_PCI_CFLT, command);
+		pci_write_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+						DC_PCI_CFLT, command);
 		break;
 	case DC_DEVICEID_AL981:
 		sc->dc_type = DC_TYPE_AL981;
@@ -2142,7 +2176,9 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		sc->dc_cachesize = 0;
 	}
 	else {
-		pcib_conf_read32(sig, DC_PCI_CFLT, &value);
+		//pcib_conf_read32(sig, DC_PCI_CFLT, &value);
+		pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+						DC_PCI_CFLT, &value);
 		sc->dc_cachesize = (u_int8_t)(value & 0xFF);
 	}
 
@@ -2151,9 +2187,13 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 
 	/* Take 21143 out of snooze mode */
 	if (DC_IS_INTEL(sc)) {
-		pcib_conf_read32(sig, DC_PCI_CFDD, &command);
+		//pcib_conf_read32(sig, DC_PCI_CFDD, &command);
+		pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+						DC_PCI_CFDD, &command);
 		command &= ~(DC_CFDD_SNOOZE_MODE|DC_CFDD_SLEEP_MODE);
-		pcib_conf_write32(sig, DC_PCI_CFDD, command);
+		//pcib_conf_write32(sig, DC_PCI_CFDD, command);
+		pci_write_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
+						DC_PCI_CFDD, command);
 	}
 	
 	
@@ -2241,7 +2281,7 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	ifp->if_unit = unitNumber; /*sc->dc_unit;*/
 	ifp->if_name = unitName; /*sc->dc_name;*/
 	ifp->if_mtu = ETHERMTU;
-	ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;/* | IFF_MULTICAST;*/
+	ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX; /* | IFF_MULTICAST;*/
 	ifp->if_ioctl = dc_ioctl;
 	ifp->if_output = ether_output;
 	ifp->if_start = dc_start;
@@ -2326,7 +2366,7 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	ifp->if_data.ifi_hdrlen = sizeof(struct ether_vlan_header);
 	*/
 
-#ifdef SRM_MEDIA
+#ifdef SRM_MEDIA /* only defined if __alpha__ is defined... */
         sc->dc_srm_media = 0;
 
 	/* Remember the SRM console media setting */
@@ -3285,8 +3325,8 @@ static void dc_start(ifp)
 	struct ifnet		*ifp;
 {
 	struct dc_softc		*sc;
-	struct mbuf		*m_head = NULL;
-	int			idx;
+	struct mbuf			*m_head = NULL;
+	unsigned int		idx;
 
 	sc = ifp->if_softc;
 #if 0
@@ -3581,7 +3621,7 @@ static void dc_ifmedia_sts(ifp, ifmr)
 
 static int dc_ioctl(ifp, command, data)
 	struct ifnet		*ifp;
-	int			command;
+	u_long			command;
 	caddr_t			data;
 {
 	struct dc_softc		*sc = ifp->if_softc;
@@ -3806,5 +3846,4 @@ static int dc_resume(dev)
 }
 #endif
 
-
-#endif  /* end if supported */
+#endif /* end if supported */
