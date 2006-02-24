@@ -130,7 +130,7 @@
     *gnat1);;
     *jc1) ;;
     *jvgenmain) ;;
-    *libgfortran*.a) echo "$i" >> build/files.gfortran ;;
+    */libgfortran*.*) echo "$i" >> build/files.gfortran ;;
     */libstdc++.*) echo "$i" >> build/files.g++ ;;
     */libsupc++.*) echo "$i" >> build/files.g++ ;;
     *) echo "$i" >> build/files.gcc ;;
