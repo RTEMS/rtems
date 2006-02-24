@@ -52,10 +52,12 @@ GCC_SUBPACKAGES += ../gcc/target-c++.add
 GCC_SUBPACKAGES += ../gcc/base-libc.add
 GCC_SUBPACKAGES += ../gcc/target-libc.add
 
-$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
+$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add gcc-prep.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
+	  -e "/[@]PREP[@]/r ./gcc-prep.add" \
+	  -e "/[@]PREP[@]/d" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "s/[@]NEWLIB_VERS[@]/$(NEWLIB_VERS)/g" \

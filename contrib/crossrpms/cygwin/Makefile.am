@@ -71,10 +71,12 @@ GCC_SUBPACKAGES += ../gcc/target-gcc.add
 GCC_SUBPACKAGES += ../gcc/base-gcc.add
 GCC_SUBPACKAGES += ../gcc/target-c++.add
 
-$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add
+$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add gcc-prep.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r ./gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
+	  -e "/[@]PREP[@]/r ./gcc-prep.add" \
+	  -e "/[@]PREP[@]/d" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "/[@]tool_target[@]-newlib/d" \
