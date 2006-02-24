@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.7])
 
 AC_PREREQ(2.59)
-AC_INIT([crossbuild],[0.20060211.0],[rtems-bugs@rtems.com])
+AC_INIT([crossbuild],[0.20060221.0],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -12,7 +12,7 @@ AC_CANONICAL_TARGET
 
 AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9])
+AM_INIT_AUTOMAKE([1.9])
 
 AC_ARG_ENABLE([rpmprefix],
 [  --enable-rpmprefix=<rpmprefix>      prefix rpms],[
