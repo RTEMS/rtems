@@ -38,18 +38,8 @@ cd ..
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_version}
 %endif
 
-  cd gcc-%{gcc_pkgvers}
-
-  case @tool_target@ in
-  *rtems*)
-    sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
-    gcc/version.c > gcc/version.c~
-    mv gcc/version.c~  gcc/version.c
-    ;;
-  esac
+@PREP@
 
   # Fix timestamps
-    contrib/gcc_update --touch
-  cd ..
-
+  gcc-%{gcc_version}/contrib/gcc_update --touch
 
