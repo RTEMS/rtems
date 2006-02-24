@@ -30,7 +30,7 @@
 %endif
 
   CC="%{__cc} ${RPM_OPT_FLAGS}" \
-  ../gcc-%{gcc_pkgvers}/configure \
+  ../gcc-%{gcc_version}/configure \
     --prefix=%{_prefix} \
     --bindir=%{_bindir} \
     --includedir=%{_includedir} \
