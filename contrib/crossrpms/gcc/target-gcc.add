@@ -4,7 +4,7 @@
 # %package -n @rpmprefix@@tool_target@-gcc
 # Summary:        GNU cc compiler for @tool_target@
 # Group:          Development/Tools
-# Version:        %{gcc_version}
+# Version:        %{gcc_rpmvers}
 # Requires:       @rpmprefix@@tool_target@-binutils
 # Requires:       @rpmprefix@@tool_target@-newlib = %{newlib_version}-%{release}
 # License:	GPL

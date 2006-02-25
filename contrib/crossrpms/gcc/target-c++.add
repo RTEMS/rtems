@@ -5,7 +5,7 @@
 %package -n @rpmprefix@@tool_target@-c++
 Summary:	GCC c++ compiler for @tool_target@
 Group:		Development/Tools
-Version:	%{gcc_version}
+Version:        %{gcc_rpmvers}
 License:	GPL
 
 %if "%{_prefix}" != "/usr"
