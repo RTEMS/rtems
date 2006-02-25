@@ -1,5 +1,5 @@
 # Extract %%__os_install_post into os_install_post~
-cat << \EOF >> os_install_post~
+cat << \EOF > os_install_post~
 %__os_install_post
 EOF
 
