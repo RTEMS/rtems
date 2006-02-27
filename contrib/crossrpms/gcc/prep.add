@@ -41,5 +41,6 @@ cd ..
 @PREP@
 
   # Fix timestamps
-  gcc-%{gcc_version}/contrib/gcc_update --touch
-
+  cd gcc-%{gcc_version}
+  contrib/gcc_update --touch
+  cd ..
