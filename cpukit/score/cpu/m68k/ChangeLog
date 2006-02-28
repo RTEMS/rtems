@@ -1,3 +1,18 @@
+2006-02-28	Eric Norum <norume@aps.anl.gov>
+
+    PR 904/patch
+    * rtems/score/m68k.h: Just "cc" in the clobbered register list for
+    interrupt enable/disable/flash operations.  The "memory" barrier will
+    move the the generic interrupt enable/disable/flash macros.
+
+2006-02-24	Eric Norum <norume@aps.anl.gov>
+
+    PR 904/patch
+    * rtems/score/m68k.h: Add "memory" to the clobbered register list for
+    interrupt enable/disable/flash operations.  This is necessary to prevent
+    the compiler from hoisting/sinking other operations past the interrupt
+    enable/disable/flash operations.
+
 2006-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Part of a large patch to improve Doxygen output.
