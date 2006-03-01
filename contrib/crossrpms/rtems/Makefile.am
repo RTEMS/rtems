@@ -26,6 +26,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
+	  -e "/--with-sysroot/d" \
 	  > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
@@ -35,7 +36,8 @@ CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
 noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
 
-GCC_VERS = 4.0.2
+# GCC_VERS = 4.0.2
+GCC_VERS = 4.1.0-20060223
 GCC_RPMREL = @VERSION@
 NEWLIB_VERS = 1.14.0
 
