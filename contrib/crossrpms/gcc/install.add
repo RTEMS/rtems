@@ -16,7 +16,7 @@
   cd ../../..
 %endif
 
-%if "%{gcc_version}" < "4.0.3"
+%if "%{gcc_version}" <= "4.1.0"
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
@@ -67,7 +67,7 @@
 %endif
 
   # Collect multilib subdirectories
-  f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
+  f=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
   echo "%defattr(-,root,root,-)" > build/files.newlib
   TGTDIR="%{_prefix}/@tool_target@/lib"
