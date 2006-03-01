@@ -260,17 +260,19 @@ extern "C" {
         asm volatile ( "move.w %%sr,%0\n\t" \
  		       "or.l   %0,%1\n\t" \
  		       "move.w %1,%%sr" \
- 		       : "=d" (_level), "=d"(_tmpsr) : "1"(_tmpsr) ); \
+ 		       : "=d" (_level), "=d"(_tmpsr) : "1"(_tmpsr) \
+               : "cc" ); \
    } while( 0 )
 #else
 #define m68k_disable_interrupts( _level ) \
   asm volatile ( "move.w  %%sr,%0\n\t" \
                  "or.w    #0x0700,%%sr" \
-                    : "=d" (_level))
+                    : "=d" (_level) \
+                    : : "cc" )
 #endif
 
 #define m68k_enable_interrupts( _level ) \
-  asm volatile ( "move.w  %0,%%sr " : : "d" (_level));
+  asm volatile ( "move.w  %0,%%sr " : : "d" (_level) : "cc");
 
 #if ( M68K_COLDFIRE_ARCH == 1 )
 #define m68k_flash_interrupts( _level ) \
@@ -278,13 +280,15 @@ extern "C" {
 	asm volatile ( "move.w %2,%%sr\n\t" \
 		       "or.l   %2,%1\n\t" \
 		       "move.w %1,%%sr" \
-		       : "=d"(_tmpsr) : "0"(_tmpsr), "d"(_level) ); \
+		       : "=d"(_tmpsr) : "0"(_tmpsr), "d"(_level) \
+               : "cc"); \
    } while( 0 )
 #else
 #define m68k_flash_interrupts( _level ) \
   asm volatile ( "move.w  %0,%%sr\n\t" \
                  "or.w    #0x0700,%%sr" \
-                    : : "d" (_level))
+                    : : "d" (_level) \
+                    : "cc" )
 #endif
 
 #define m68k_get_interrupt_level( _level ) \

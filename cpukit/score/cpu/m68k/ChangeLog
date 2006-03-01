@@ -1,3 +1,8 @@
+2006-03-01      Eric Norum <norume@aps.anl.gov>
+
+    * rtems/score/m68k.h: Add "cc" in the clobbered register list for
+    interrupt enable/disable/flash operations.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c, cpu_asm.S, rtems/score/cpu.h, rtems/score/m68k.h,
