@@ -91,6 +91,8 @@ GCC_SUBPACKAGES += $(top_builddir)/common/clean.add
 GCC_SUBPACKAGES += ../gcc/target-gcc.add
 GCC_SUBPACKAGES += ../gcc/base-gcc.add
 GCC_SUBPACKAGES += ../gcc/target-c++.add
+GCC_SUBPACKAGES += ../gcc/target-gfortran.add ../gcc/base-gfortran.add
+GCC_SUBPACKAGES += ../gcc/target-objc.add
 
 $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add gcc-prep.add
 	cat $(GCC_SUBPACKAGES) | sed \
