@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.7])
 
 AC_PREREQ(2.59)
-AC_INIT([crossbuild],[0.20060221.0],[rtems-bugs@rtems.com])
+AC_INIT([crossbuild],[0.20060302.0],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -66,6 +66,15 @@ case "${target_os}" in
 #    AC_MSG_ERROR([Unsupported target ${target}])
 esac
 AC_SUBST([TARGET_SUBDIRS])
+
+case "${target_os}" in
+  [rtems]RTEMS_API[])
+    osversion=[]RTEMS_API[]
+    ;;
+  *)
+  osversion=
+esac
+AC_SUBST([osversion])
 
 AC_CONFIG_FILES([Makefile])
 
