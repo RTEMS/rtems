@@ -20,6 +20,7 @@ $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	cat $(LIBS_SUBPACKAGES) | sed \
 	  -e "s/[@]FREEBSD_VERS[@]/$(FREEBSD_VERS)/g" \
 	  -e "s/[@]FREEBSD_RPMREL[@]/$(FREEBSD_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{freebsd_rpmvers},g" \
 	> $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec.in
 	                      

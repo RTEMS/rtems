@@ -20,6 +20,7 @@ $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	cat $(LIBS_SUBPACKAGES) | sed \
 	  -e "s/[@]CYGWIN_VERS[@]/$(CYGWIN_VERS)/g" \
 	  -e "s/[@]CYGWIN_RPMREL[@]/$(CYGWIN_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{cygwin_rpmvers},g" \
 	> $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec.in
 	                      

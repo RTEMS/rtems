@@ -20,9 +20,10 @@ $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	cat $(LIBS_SUBPACKAGES) | sed \
 	  -e "s/[@]SOLARIS_VERS[@]/$(SOLARIS_VERS)/g" \
 	  -e "s/[@]SOLARIS_RPMREL[@]/$(SOLARIS_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{solaris_rpmvers},g" \
 	> $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec.in
-	                      
+
 @rpmprefix@$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
 	$(MKSPEC) $(srcdir)/$(TARGET)-libs.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-libs.spec

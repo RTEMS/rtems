@@ -20,6 +20,7 @@ $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	cat $(LIBS_SUBPACKAGES) | sed \
 	  -e "s/[@]MINGW32_VERS[@]/$(MINGW32_VERS)/g" \
 	  -e "s/[@]MINGW32_RPMREL[@]/$(MINGW32_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{mingw32_rpmvers},g" \
 	> $(TARGET)-libs.spec.in
 CLEANFILES += $(TARGET)-libs.spec.in
 	                      
@@ -41,6 +42,7 @@ $(TARGET)-w32api.spec.in: $(W32API_SUBPACKAGES) Makefile.am
 	cat $(W32API_SUBPACKAGES) | sed \
 	  -e "s/[@]W32API_VERS[@]/$(W32API_VERS)/g" \
 	  -e "s/[@]W32API_RPMREL[@]/$(W32API_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{w32api_rpmvers},g" \
 	> $(TARGET)-w32api.spec.in
 CLEANFILES += $(TARGET)-w32api.spec.in
 	                      
