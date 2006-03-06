@@ -80,7 +80,7 @@ CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
 noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
 
-GCC_VERS = 4.0.2
+GCC_VERS = 4.1.0
 GCC_RPMREL = @VERSION@
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add

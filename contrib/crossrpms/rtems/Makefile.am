@@ -36,8 +36,7 @@ CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
 noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
 
-# GCC_VERS = 4.0.2
-GCC_VERS = 4.1.0-20060223
+GCC_VERS = 4.1.0
 GCC_RPMREL = @VERSION@
 NEWLIB_VERS = 1.14.0
 
