@@ -1,5 +1,5 @@
 %define freebsd_version @FREEBSD_VERS@
-%define freebsd_rpmvers %{expand: %(echo @FREEBSD_VERS@ | tr - _)}
+%define freebsd_rpmvers %{expand:%(echo @FREEBSD_VERS@ | tr - _)}
 
 %define _use_internal_dependency_generator 0
 %define __debug_install_post %{nil}

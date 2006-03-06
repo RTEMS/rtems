@@ -1,5 +1,5 @@
 %define mingw32_version @MINGW32_VERS@
-%define mingw32_rpmvers %{expand: %(echo @MINGW32_VERS@ | tr - _)} 
+%define mingw32_rpmvers %{expand:%(echo @MINGW32_VERS@ | tr - _)} 
 
 %define _use_internal_dependency_generator 0
 %define __debug_install_post %{nil}

@@ -1,5 +1,5 @@
 %define solaris_version @SOLARIS_VERS@
-%define solaris_rpmvers %{expand: %(echo @SOLARIS_VERS@ | tr - _)} 
+%define solaris_rpmvers %{expand:%(echo @SOLARIS_VERS@ | tr - _)} 
 
 %define _use_internal_dependency_generator 0
 %define __debug_install_post %{nil}
