@@ -32,5 +32,6 @@ EXTRA_DIST += gcc/target-gcc.add
 EXTRA_DIST += gcc/target-gcj.add
 EXTRA_DIST += gcc/target-gfortran.add
 EXTRA_DIST += gcc/target-gnat.add
-EXTRA_DIST += gcc/target-libc.add
 EXTRA_DIST += gcc/target-objc.add
+EXTRA_DIST += gcc/base-newlib.add
+EXTRA_DIST += gcc/target-newlib.add
