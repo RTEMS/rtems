@@ -72,6 +72,7 @@ EOF
     touch c/src/librdbg/src/*/*/remdeb*.[hc]
     # now remove left overs from auto* -- they take 2MB even with bzip
     find . -name autom4te.cache -print | xargs -e rm -rf 
+    find . -name .cvsignore -print | xargs -e rm -rf 
     ;;
   aftertar)
     current=$2
