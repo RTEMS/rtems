@@ -613,8 +613,13 @@ rtems_termios_ioctl (void *arg)
 		break;
 #endif
  	case FIONREAD:
+		{
+		int rawnc = tty->rawInBuf.Tail - tty->rawInBuf.Head;
+		if ( rawnc < 0 )
+			rawnc += tty->rawInBuf.Size;
 		/* Half guess that this is the right operation */
-		*(int *)args->buffer = tty->ccount - tty->cindex;
+		*(int *)args->buffer = tty->ccount - tty->cindex + rawnc;
+		}
 		break;
 	}
 	rtems_semaphore_release (tty->osem);

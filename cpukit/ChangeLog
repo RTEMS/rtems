@@ -1,3 +1,10 @@
+2006-03-07	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 830/filesystem
+	* libcsupport/src/termios.c: termios ioctl(FIONREAD) reported wrong
+	number of characters. So add chars in low-level/raw buffer to total
+	count.
+
 2006-03-07	Steven Johnson <sjohnson@sakuraindustries.com>
 
 	PR 850/rtems
