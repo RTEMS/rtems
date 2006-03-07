@@ -1,3 +1,11 @@
+2006-03-07	Aaron Frye <aaron@frye.com>
+
+	PR 719/bsps
+	* m68kpretaskinghook.c: The optimizer on gcc 3.4.2 assumes that the
+	address of a variable cannot be 0, so it optimizes out any such
+	checks. this breaks the shared m68k bsp_pretasking_hook() which uses
+	such a check to determine heap size during runtime.
+
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
 	PR 505/bsps

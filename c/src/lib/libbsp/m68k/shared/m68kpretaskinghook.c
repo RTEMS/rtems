@@ -36,20 +36,21 @@ extern rtems_configuration_table  BSP_Configuration;
 
 extern void          *_RamBase;
 extern void          *_WorkspaceBase;
-extern void          *_HeapSize;
+extern volatile void *_HeapSize;
 
 
 unsigned long  _M68k_Ramsize;
 
 void bsp_pretasking_hook(void)
 {
-    void         *heapStart;
-    unsigned long heapSize = (unsigned long)&_HeapSize;
-    unsigned long ramSpace;
+    void                   *heapStart;
+    volatile unsigned long  heapSize = (volatile unsigned long)&_HeapSize;
+    unsigned long           ramSpace;
 
     heapStart =  (void *)
        ((unsigned long)&_WorkspaceBase + BSP_Configuration.work_space_size);
-    ramSpace = (unsigned long) &_RamBase + _M68k_Ramsize - (unsigned long) heapStart;
+    ramSpace = (unsigned long) &_RamBase + _M68k_Ramsize -
+               (unsigned long) heapStart;
 
     if (heapSize == 0)
         heapSize = ramSpace;
