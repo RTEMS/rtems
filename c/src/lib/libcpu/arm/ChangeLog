@@ -1,3 +1,13 @@
+2006-03-07	Lars Munch <lars@segv.dk>
+
+	* at91rm9200/clock/clock.c: The clock tick is not very precise on
+	at91rm9200. The attached patch improves the situation by:
+	  (1) Not reloading the "period interval timer" register in the
+	      interrupt handler since this is done automatically.
+	  (2) Use integer rounding in the calculation of the "period interval
+	      timer" register value to get as close as posible to the
+	      CONFIGURE_MICROSECONDS_PER_TICK value.
+
 2005-11-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
