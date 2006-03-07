@@ -1,13 +1,13 @@
 2006-02-a32	Eric Norum <norume@aps.anl.gov>
 
-    * libchip/network/if_dc.c, if_dcreg.c: Changes from Daron Chabot:
-                                "newer" PCI access calls
-                                minor cleanups
-                                comments
+	* libchip/network/if_dc.c, if_dcreg.c: Changes from Daron Chabot:
+        "newer" PCI access calls.  Minor cleanups.  Comments.
 
 2006-01-12	Eric Norum <norume@aps.anl.gov>
 
-    * libchip/network/smc91111.c: Fix illegal lvalue increments
+	PR 861/networking
+	PR 863/networking
+	* libchip/network/smc91111.c: Fix illegal lvalue increments.
 
 2006-01-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
