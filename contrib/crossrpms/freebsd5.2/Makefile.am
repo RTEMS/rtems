@@ -6,9 +6,12 @@ include ../mkspec.am
 
 noinst_DATA =
 CLEANFILES =
+EXTRA_DIST =
 
 FREEBSD_VERS = 5.2.1
 FREEBSD_RPMREL = @VERSION@
+EXTRA_DIST += libs.add
+EXTRA_DIST += target-libs.add
 
 LIBS_SUBPACKAGES = $(top_builddir)/common/common.add
 LIBS_SUBPACKAGES += libs.add
@@ -32,6 +35,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 BINUTILS_VERS = 2.16.1
 BINUTILS_RPMREL = @VERSION@
+EXTRA_DIST += binutils-sources.add
 
 BINUTILS_SUBPACKAGES = $(top_builddir)/common/common.add
 BINUTILS_SUBPACKAGES += ../binutils/binutils.add
@@ -60,6 +64,8 @@ noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
 GCC_VERS = 4.1.0
 GCC_RPMREL = @VERSION@
+EXTRA_DIST += gcc-prep.add
+EXTRA_DIST += gcc-sources.add
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
 GCC_SUBPACKAGES += ../gcc/gccnewlib.add
