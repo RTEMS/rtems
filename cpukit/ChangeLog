@@ -1,3 +1,16 @@
+2006-03-07	Steven Johnson <sjohnson@sakuraindustries.com>
+
+	PR 850/rtems
+	* score/src/watchdogtickle.c: A Watchdog (used to timeout an event)
+	with a delay of 1 sometimes does not seem to timeout.  The problem
+	occurs, because for whatever reason when the watchdog tickle function
+	executes, the watchdog->delta_interval is 0. it is then decremented
+	before being tested, becomes huge and so doesnt time out.  It is
+	thought there is a race condition where the watchdog->delta_interval
+	is calculated by reference to a head (also with a delay of 1). But
+	before it can be added after the head, the head is removed, so the
+	new head now has a delay of 0.
+
 2006-03-07	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	PR 852/filesystem
