@@ -1,3 +1,10 @@
+2006-03-07	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	PR 852/filesystem
+	* libblock/src/bdbuf.c: Increase performance of MSDOS file accesses by
+	using a simple read-ahead and write-combining scheme. Improvement is
+	dramatic.
+
 2006-03-07	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 886/filesystem

@@ -31,8 +31,31 @@
 #define SWAPOUT_PRIORITY 15
 #define SWAPOUT_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE * 2)
 
+#define READ_MULTIPLE
+
+#if defined(READ_MULTIPLE)
+#define READ_AHEAD_MAX_BLK_CNT 32
+typedef struct {
+  blkdev_request   req;
+  blkdev_sg_buffer sg[READ_AHEAD_MAX_BLK_CNT];
+} blkdev_request_read_ahead;
+/*
+ * list of bd_bufs related to one transfer request
+ */
+typedef struct {
+  int cnt;
+  bdbuf_buffer *bd_bufs[READ_AHEAD_MAX_BLK_CNT];
+} read_ahead_bd_buf_group;
+#endif
+
+typedef struct {
+  blkdev_request *req;
+  bdbuf_buffer   **write_store;
+} write_tfer_done_arg_t;
+
 static rtems_task bdbuf_swapout_task(rtems_task_argument unused);
 
+static rtems_status_code bdbuf_release(bdbuf_buffer *bd_buf);
 /*
  * The groups of the blocks with the same size are collected in the
  * bd_pool. Note that a several of the buffer's groups with the
@@ -67,6 +90,18 @@ struct bdbuf_context {
                                     buffer modified */
     rtems_id       swapout_task; /* Swapout task ID */
 };
+/*
+ * maximum number of blocks that might be chained together to one
+ * write driver call
+ */
+#define SWAP_OUT_MAX_BLK_CNT 32 
+/*#define SWAP_OUT_MAX_BLK_CNT 1 */
+/*
+ * XXX: this is a global buffer. It is used in the swapout task
+ * and currently will be reused only after it is no longer in use
+ * 
+ */
+static bdbuf_buffer *bd_buf_write_store[SWAP_OUT_MAX_BLK_CNT];
 
 /* Block device request with a single buffer provided */
 typedef struct blkdev_request1 {
@@ -228,8 +263,7 @@ avl_insert(bdbuf_buffer **root, bdbuf_buffer *node)
     blkdev_bnum block = node->block;
 
     bdbuf_buffer *p = *root;
-    bdbuf_buffer *q = NULL;
-    bdbuf_buffer *p1, *p2;
+    bdbuf_buffer *q, *p1, *p2;
     bdbuf_buffer *buf_stack[AVL_MAX_HEIGHT];
     bdbuf_buffer **buf_prev = buf_stack;
 
@@ -1115,13 +1149,21 @@ bdbuf_initialize_transfer_sema(bdbuf_buffer *bd_buf)
 static void
 bdbuf_write_transfer_done(void *arg, rtems_status_code status, int error)
 {
-    bdbuf_buffer *bd_buf = arg;
-    bd_buf->status = status;
-    bd_buf->error = RTEMS_IO_ERROR;
-    bd_buf->in_progress = bd_buf->modified = FALSE;
-    _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
-    _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL,
-                      CORE_MUTEX_STATUS_SUCCESSFUL);
+    int i;
+    write_tfer_done_arg_t *wtd_arg = arg;
+    blkdev_request *req = wtd_arg->req;
+    bdbuf_buffer **bd_buf_write_store = wtd_arg->write_store;
+    bdbuf_buffer *bd_buf;
+    for (i = 0;i < req->count;i++) {
+      bd_buf = bd_buf_write_store[i];
+      bd_buf->status = status;
+      bd_buf->error = RTEMS_IO_ERROR;
+      
+      bd_buf->in_progress = FALSE;
+      _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
+      _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL, 
+			CORE_MUTEX_STATUS_SUCCESSFUL);
+    }
 }
 
 /* bdbuf_read_transfer_done --
@@ -1142,12 +1184,28 @@ bdbuf_write_transfer_done(void *arg, rtems_status_code status, int error)
 static void
 bdbuf_read_transfer_done(void *arg, rtems_status_code status, int error)
 {
+#if defined(READ_MULTIPLE)  
+  
+  read_ahead_bd_buf_group *bd_buf_group = arg;
+  bdbuf_buffer *bd_buf;
+  int i;
+  for (i = 0;i < bd_buf_group->cnt;i++) {
+    bd_buf = bd_buf_group->bd_bufs[i];
+
+    bd_buf->status = status;
+    bd_buf->error = RTEMS_IO_ERROR;
+    _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
+    _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL, 
+                      CORE_MUTEX_STATUS_SUCCESSFUL);
+  }
+#else
     bdbuf_buffer *bd_buf = arg;
     bd_buf->status = status;
     bd_buf->error = RTEMS_IO_ERROR;
     _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
     _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL,
                       CORE_MUTEX_STATUS_SUCCESSFUL);
+#endif
 }
 
 /* rtems_bdbuf_read --
@@ -1171,6 +1229,7 @@ bdbuf_read_transfer_done(void *arg, rtems_status_code status, int error)
  * SIDE EFFECTS:
  *     bufget_sema and transfer_sema semaphores obtained by this primitive.
  */
+#if !defined(READ_MULTIPLE)
 rtems_status_code
 rtems_bdbuf_read(dev_t device,
                  blkdev_bnum block,
@@ -1244,9 +1303,149 @@ rtems_bdbuf_read(dev_t device,
     ENABLE_PREEMPTION(key);
 
     *bd = bd_buf;
-
+           
     return RTEMS_SUCCESSFUL;
 }
+#else /* READ_MULTIPLE */
+rtems_status_code
+rtems_bdbuf_read(dev_t device, 
+                 blkdev_bnum block,
+                 bdbuf_buffer **bd)
+{
+    preemption_key key;
+    ISR_Level level;
+
+    bdbuf_buffer *bd_buf,*first_bd_buf;
+    rtems_status_code rc;
+    int result;
+    disk_device *dd;
+    disk_device *pdd;
+    blkdev_request_read_ahead req;
+    read_ahead_bd_buf_group bd_buf_group;
+    boolean find_more_buffers;
+    int i;
+
+    dd = rtems_disk_lookup(device);
+    if (dd == NULL)
+        return RTEMS_INVALID_ID;
+     
+    if (block >= dd->size)
+    {
+        rtems_disk_release(dd);
+        return RTEMS_INVALID_NUMBER;
+    }
+    
+    pdd = dd->phys_dev;
+    block += dd->start;
+
+    DISABLE_PREEMPTION(key);
+    rc = find_or_assign_buffer(pdd, block, &first_bd_buf);
+
+    if (rc != RTEMS_SUCCESSFUL)
+    {
+        ENABLE_PREEMPTION(key);
+        rtems_disk_release(dd);
+        return rc;
+    }
+    if (!first_bd_buf->actual)
+    {
+
+	bd_buf_group.bd_bufs[0] = first_bd_buf;
+	bd_buf_group.cnt = 1;
+
+        first_bd_buf->in_progress = TRUE;
+
+        req.req.req = BLKDEV_REQ_READ;
+        req.req.req_done = bdbuf_read_transfer_done;
+        req.req.done_arg = &bd_buf_group;
+        req.req.start = block;
+        req.req.count = 1;
+        req.req.bufnum = 1;
+        req.req.bufs[0].length = dd->block_size;
+        req.req.bufs[0].buffer = first_bd_buf->buffer;
+        
+        bdbuf_initialize_transfer_sema(first_bd_buf);
+	/*
+	 * FIXME: check for following blocks to be:
+	 *   - still in range of partition size
+	 *   - not yet assigned
+	 *   - buffer available
+	 * allocate for read call, if possible
+	 */
+	find_more_buffers = TRUE;
+	while (find_more_buffers) {	  
+	  block++;
+	  /*
+	   * still bd_buf_group entries free and 
+	   * still in range of this disk? 
+	   */
+	  if ((bd_buf_group.cnt >= READ_AHEAD_MAX_BLK_CNT) ||
+	      (block >= dd->size)) {
+	    find_more_buffers = FALSE;
+	  }
+	  if (find_more_buffers) {
+	    rc = find_or_assign_buffer(pdd, block, &bd_buf);
+	    if (rc != RTEMS_SUCCESSFUL) {
+	      find_more_buffers = FALSE;
+	    }      
+	    else if (bd_buf->actual) {
+	      find_more_buffers = FALSE;
+          bdbuf_release(bd_buf);
+	    }      
+	  }
+	  if (find_more_buffers) {
+	    bdbuf_initialize_transfer_sema(bd_buf);
+	    bd_buf->in_progress = TRUE;
+
+	    req.req.bufs[req.req.count].length = dd->block_size;
+	    req.req.bufs[req.req.count].buffer = bd_buf->buffer;
+	    req.req.count++;
+	    req.req.bufnum++;
+	    bd_buf_group.bd_bufs[bd_buf_group.cnt] = bd_buf;
+	    bd_buf_group.cnt++;
+	  }
+	}	    
+
+	/* do the actual read call here 
+	 */
+        result = dd->ioctl(pdd->dev, BLKIO_REQUEST, &req);
+
+	/*
+	 * cleanup: 
+	 * wait, until all bd_bufs are processed
+	 * set status in all bd_bufs
+	 */
+	for (i = 0;i < bd_buf_group.cnt;i++) {
+	  bd_buf = bd_buf_group.bd_bufs[i];
+	  if (result == -1)
+	    {
+	      bd_buf->status = RTEMS_IO_ERROR;
+	      bd_buf->error = errno;
+	      bd_buf->actual = FALSE;
+	    }
+	  else
+	    {
+	      rtems_interrupt_disable(level);
+	      _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
+				WATCHDOG_NO_TIMEOUT, level);
+	      bd_buf->actual = TRUE;
+	    }	
+	  bd_buf->in_progress = FALSE;
+	  /* release any pre-read buffers */
+	  if (i > 0) {
+	    bdbuf_release(bd_buf);
+	  }
+	}
+    }
+    rtems_disk_release(dd);
+    
+    ENABLE_PREEMPTION(key);
+
+    *bd = first_bd_buf;
+           
+    return RTEMS_SUCCESSFUL;
+}
+#endif /* READ_MULTIPLE */
 
 
 /* bdbuf_release --
@@ -1484,82 +1683,149 @@ bdbuf_swapout_task(rtems_task_argument unused)
 {
     rtems_status_code rc;
     int result;
+    int i;
     ISR_Level level;
     bdbuf_buffer *bd_buf;
-    bdbuf_pool *bd_pool;
-    disk_device *dd;
-    blkdev_request1 req;
+    bdbuf_buffer *nxt_bd_buf;
+    bdbuf_pool *bd_pool = NULL;
+    disk_device *dd = NULL;
+    struct {
+      blkdev_request   req;
+      blkdev_sg_buffer sg[SWAP_OUT_MAX_BLK_CNT];
+    } req;
+    write_tfer_done_arg_t write_tfer_done_arg;
 
+    /*
+     * provide info needed for write_transfer_done function
+     */
+    write_tfer_done_arg.req         = (blkdev_request *)&req.req;
+    write_tfer_done_arg.write_store =  bd_buf_write_store;
+    nxt_bd_buf = NULL;
     while (1)
     {
-        rc = rtems_semaphore_obtain(bd_ctx.flush_sema, RTEMS_WAIT, 0);
-        if (rc != RTEMS_SUCCESSFUL)
-        {
-            rtems_fatal_error_occurred(BLKDEV_FATAL_BDBUF_SWAPOUT);
-        }
+	req.req.req = BLKDEV_REQ_WRITE;
+	req.req.req_done = bdbuf_write_transfer_done;
+	req.req.done_arg = &write_tfer_done_arg;
+	req.req.count = 0;
+	req.req.bufnum = 0;
+	bd_buf = NULL;
+	do {
+	  /*
+	   * if a buffer was left over from last loop, then use this buffer
+	   * otherwise fetch new buffer from chain. 
+	   * Wait for buffer, if this is the first one of the request,
+	   * otherwise do not wait, if no buffer available
+	   */
+	  if (nxt_bd_buf == NULL) {
+	    rc = rtems_semaphore_obtain(bd_ctx.flush_sema, 
+					(req.req.count == 0)
+					? RTEMS_WAIT
+					: RTEMS_NO_WAIT, 
+					0);
+	    if (rc == RTEMS_SUCCESSFUL) {
+	      nxt_bd_buf = (bdbuf_buffer *)Chain_Get(&bd_ctx.mod);
+          if (nxt_bd_buf != NULL) {
+  	        nxt_bd_buf->in_progress = TRUE;
+            /* IMD try: clear "modified" bit early             */
+            /* (and not in bdbuf_write_transfer_done) to allow */
+            /* another modification during write processing    */
+            nxt_bd_buf->modified    = FALSE;
 
-        bd_buf = (bdbuf_buffer *)Chain_Get(&bd_ctx.mod);
-        if (bd_buf == NULL)
-        {
-            /* It is possible that flush_sema semaphore will be released, but
-             * buffer to be removed from mod chain before swapout task start
-             * its processing. */
-            continue;
-        }
-
-        bd_buf->in_progress = TRUE;
-        bd_buf->use_count++;
-        bd_pool = bd_ctx.pool + bd_buf->pool;
-        dd = rtems_disk_lookup(bd_buf->dev);
-
-        req.req.req = BLKDEV_REQ_WRITE;
-        req.req.req_done = bdbuf_write_transfer_done;
-        req.req.done_arg = bd_buf;
-        req.req.start = bd_buf->block + dd->start;
-        req.req.count = 1;
-        req.req.bufnum = 1;
-        req.req.bufs[0].length = dd->block_size;
-        req.req.bufs[0].buffer = bd_buf->buffer;
-
-        /* transfer_sema initialized when bd_buf inserted in the mod chain
+	        nxt_bd_buf->use_count++;
+		  }
+	    }
+	    else if ((rc != RTEMS_UNSATISFIED) && 
+		     (rc != RTEMS_TIMEOUT)) {
+	      rtems_fatal_error_occurred(BLKDEV_FATAL_BDBUF_SWAPOUT);
+	    }
+	  }
+	  /* 
+	   * It is possible that flush_sema semaphore will be released, but
+	   * buffer to be removed from mod chain before swapout task start
+	   * its processing. 
+	   */
+	  if ((req.req.count == 0)  || /* first bd_buf for this request */
+	      ((nxt_bd_buf        != NULL)            && 
+	       (nxt_bd_buf->dev   == bd_buf->dev)     && /* same device */
+	       (nxt_bd_buf->block == bd_buf->block+1))) {/* next block  */
+	    bd_buf     = nxt_bd_buf;
+	    nxt_bd_buf = NULL;
+	  }
+	  else {
+	    bd_buf = NULL;
+	  }
+	  /*
+	   * here we have three possible states:
+	   * bd_buf == NULL, nxt_bd_buf == NULL: no further block available
+	   * bd_buf != NULL, nxt_bd_buf == NULL: append bd_buf to request
+	   * bd_buf == NULL, nxt_bd_buf != NULL: nxt_bd_buf canot be appended 
+	   *                                     to current request, keep it
+	   *                                     for next main loop
+	   */
+	  if (bd_buf != NULL) {
+	    bd_pool = bd_ctx.pool + bd_buf->pool;
+	    if (req.req.count == 0) {
+	      /*
+	       * this is the first block, so use its address
+	       */
+	      dd = rtems_disk_lookup(bd_buf->dev);
+	      req.req.start = bd_buf->block + dd->start;
+	    }
+	    req.req.bufs[req.req.bufnum].length = dd->block_size;
+	    req.req.bufs[req.req.bufnum].buffer = bd_buf->buffer;
+	    /*
+	     * keep bd_buf for postprocessing
+	     */
+	    bd_buf_write_store[req.req.bufnum] = bd_buf;
+	    req.req.count++;
+	    req.req.bufnum++;
+	  }
+	} while ((bd_buf != NULL) &&
+		 (req.req.count < SWAP_OUT_MAX_BLK_CNT));
+		 
+        /* transfer_sema initialized when bd_buf inserted in the mod chain 
            first time */
         result = dd->ioctl(dd->phys_dev->dev, BLKIO_REQUEST, &req);
 
         rtems_disk_release(dd);
+        
+	for (i = 0;i < req.req.count;i++) {
+	  bd_buf = bd_buf_write_store[i];
+	  if (result == -1)
+	    {
+	      
+	      bd_buf->status = RTEMS_IO_ERROR;
+	      bd_buf->error = errno;
+	      /* Release tasks waiting on syncing this buffer */
+	      _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL,
+				CORE_MUTEX_STATUS_SUCCESSFUL);
+	    }
+	  else
+	    {
+	      if (bd_buf->in_progress)
+		{
+		  rtems_interrupt_disable(level);
+		  _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE, 0, level);
+		}
+	    }
+	  bd_buf->use_count--;
 
-        if (result == -1)
-        {
-            bd_buf->status = RTEMS_IO_ERROR;
-            bd_buf->error = errno;
-            /* Release tasks waiting on syncing this buffer */
-            _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL,
-                              CORE_MUTEX_STATUS_SUCCESSFUL);
-        }
-        else
-        {
-            if (bd_buf->in_progress)
-            {
-                rtems_interrupt_disable(level);
-                _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE, 0, level);
-            }
-        }
-        bd_buf->use_count--;
-
-        /* Another task have chance to use this buffer, or even
-         * modify it. If buffer is not in use, insert it in appropriate chain
-         * and release semaphore */
-        if (bd_buf->use_count == 0)
-        {
-            if (bd_buf->modified)
-            {
-                Chain_Append(&bd_ctx.mod, &bd_buf->link);
-                rc = rtems_semaphore_release(bd_ctx.flush_sema);
-            }
-            else
-            {
-                Chain_Append(&bd_pool->lru, &bd_buf->link);
-                rc = rtems_semaphore_release(bd_pool->bufget_sema);
-            }
+	  /* Another task have chance to use this buffer, or even
+	   * modify it. If buffer is not in use, insert it in appropriate chain
+	   * and release semaphore */
+	  if (bd_buf->use_count == 0)
+	    {
+	      if (bd_buf->modified)
+		{
+		  Chain_Append(&bd_ctx.mod, &bd_buf->link);
+		  rc = rtems_semaphore_release(bd_ctx.flush_sema);
+		}
+	      else
+		{
+		  Chain_Append(&bd_pool->lru, &bd_buf->link);
+		  rc = rtems_semaphore_release(bd_pool->bufget_sema);
+		}
+	    }
         }
     }
 }
