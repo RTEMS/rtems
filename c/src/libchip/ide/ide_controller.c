@@ -51,9 +51,10 @@ ide_controller_initialize(rtems_device_major_number  major,
     {
         IDE_Controller_Table[minor].status = IDE_CTRL_NON_INITIALIZED;
 
-        if ((IDE_Controller_Table[minor].probe != NULL &&
-             IDE_Controller_Table[minor].probe(minor)) ||
-            IDE_Controller_Table[minor].fns->ctrl_probe(minor))
+        if ((IDE_Controller_Table[minor].probe == NULL ||
+             IDE_Controller_Table[minor].probe(minor)) &&
+            (IDE_Controller_Table[minor].fns->ctrl_probe == NULL || 
+	     IDE_Controller_Table[minor].fns->ctrl_probe(minor)))
         {
             status = rtems_io_register_name(IDE_Controller_Table[minor].name,
                                             major, minor);

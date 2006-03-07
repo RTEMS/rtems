@@ -26,11 +26,34 @@
 #include <libchip/ide_ctrl_cfg.h>
 #include "ata_internal.h"
 #include <libchip/ata.h>
-
-#define DEBUG
+/* #define DEBUG */
 
 #ifdef DEBUG
 #include <stdio.h>
+#endif
+
+/*
+ * FIXME: make this better...
+ * find out, which exception model is used
+ * assume, that all i386 BSPs use new exception handling
+ * assume, that some PPC BSPs use new exception handling
+ * assume, that all other BSPs use old exception handling
+ */
+#if defined(_OLD_EXCEPTIONS) || (!defined(__i386__) && !defined(__PPC__))
+
+#define ATA_USE_OLD_EXCEPTIONS
+#endif
+
+#if !defined(ATA_USE_OLD_EXCEPTIONS)
+#include <bsp/irq.h>
+#define ATA_IRQ_CHAIN_MAX_CNT 4 /* support up to 4 ATA devices */
+typedef struct {
+  rtems_irq_number name;
+  Chain_Control irq_chain;
+} ata_irq_chain_t;
+
+ata_irq_chain_t ata_irq_chain[ATA_IRQ_CHAIN_MAX_CNT];
+int ata_irq_chain_cnt = 0;
 #endif
 
 #define SAFE
@@ -95,8 +118,10 @@ static rtems_boolean ata_initialized = FALSE;
 static rtems_id ata_task_id;
 static rtems_id ata_queue_id;
 
+#if defined (ATA_USE_OLD_EXCEPTIONS)
 /* Mapping of interrupt vectors to devices */
 static Chain_Control ata_int_vec[ATA_MAX_RTEMS_INT_VEC_NUMBER + 1];
+#endif
 
 static void
 ata_process_request(rtems_device_minor_number ctrl_minor);
@@ -554,10 +579,11 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
     Chain_Append(&ata_ide_ctrls[ctrl_minor].reqs, &areq->link);
     if (Chain_Has_only_one_node(&ata_ide_ctrls[ctrl_minor].reqs))
     {
-        uint16_t        val;
+
         ata_queue_msg_t msg;
 
 #ifdef DEBUG
+	uint16_t      val;
         /*
          * read IDE_REGISTER_ALTERNATE_STATUS instead IDE_REGISTER_STATUS
          * to prevent clearing of pending interrupt
@@ -584,6 +610,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
  * RETURNS:
  *     NONE
  */
+#if defined(ATA_USE_OLD_EXCEPTIONS)
 rtems_isr
 ata_interrupt_handler(rtems_vector_number vec)
 {
@@ -607,6 +634,82 @@ ata_interrupt_handler(rtems_vector_number vec)
         the_node = the_node->next;
     }
 }
+#else
+
+void ata_interrupt_handler(rtems_irq_hdl_param handle)
+{
+  int ata_irq_chain_index = (int) handle;
+    Chain_Node      *the_node =
+      ata_irq_chain[ata_irq_chain_index].irq_chain.last;
+    ata_queue_msg_t  msg;
+    uint16_t       byte; /* emphasize that only 8 low bits is meaningful */
+
+
+    for ( ; !Chain_Is_tail(&ata_irq_chain[ata_irq_chain_index].irq_chain,
+			   the_node) ; )
+    {
+        /* if (1) - is temporary hack - currently I don't know how to identify
+         * controller which asserted interrupt if few controllers share one
+         * interrupt line
+         */
+        if (1)
+        {
+            msg.ctrl_minor = ((ata_int_st_t *)the_node)->ctrl_minor;
+            ide_controller_read_register(msg.ctrl_minor, IDE_REGISTER_STATUS,
+                                         &byte);
+            ATA_SEND_EVT(msg, ATA_MSG_GEN_EVT, msg.ctrl_minor, 0);
+        }
+        the_node = the_node->next;
+    }
+}
+
+void ata_interrupt_on(const rtems_irq_connect_data *ptr)
+  {
+
+    /* enable ATA device interrupt */
+    ide_controller_write_register(0,
+                                  IDE_REGISTER_DEVICE_CONTROL_OFFSET,
+                                  0x00
+                                 );
+  }
+
+
+void ata_interrupt_off(const rtems_irq_connect_data *ptr)
+  {
+
+    /* disable ATA device interrupt */
+    ide_controller_write_register(0,
+                                  IDE_REGISTER_DEVICE_CONTROL_OFFSET,
+                                  IDE_REGISTER_DEVICE_CONTROL_nIEN
+                                 );
+  }
+
+
+int ata_interrupt_isOn(const rtems_irq_connect_data *ptr)
+  {
+  uint16_t byte; /* emphasize that only 8 low bits is meaningful */
+
+    /* return int. status od ATA device */
+    ide_controller_read_register(0,
+                                IDE_REGISTER_DEVICE_CONTROL_OFFSET,
+                                &byte
+                                );
+
+    return !(byte & IDE_REGISTER_DEVICE_CONTROL_nIEN);
+  }
+
+
+static rtems_irq_connect_data ata_irq_data =
+  {
+
+    0, /* filled out before use... */
+    (rtems_irq_hdl) ata_interrupt_handler,/* filled out before use... */
+    (rtems_irq_hdl_param) NULL,
+    (rtems_irq_enable) ata_interrupt_on,
+    (rtems_irq_disable) ata_interrupt_off,
+    (rtems_irq_is_enabled) ata_interrupt_isOn
+  };
+#endif
 
 /* ata_pio_in_protocol --
  *     ATA PIO_IN protocol implementation, see specification
@@ -810,7 +913,9 @@ ata_queue_task(rtems_task_argument arg)
                         break;
 
                     default:
+#ifdef DEBUG
                         printf("ata_queue_task: non-supported command type\n");
+#endif
                         ata_request_done(areq, ctrl_minor,
                                          RTEMS_UNSATISFIED,
                                          RTEMS_NOT_IMPLEMENTED);
@@ -907,7 +1012,11 @@ ata_initialize(rtems_device_major_number major,
     char               name[ATA_MAX_NAME_LENGTH];
     dev_t              device;
     ata_int_st_t      *int_st;
+#if defined(ATA_USE_OLD_EXCEPTIONS)
     rtems_isr_entry    old_isr;
+#else
+    int ata_irq_chain_use;
+#endif
 
     if (ata_initialized)
         return RTEMS_SUCCESSFUL;
@@ -976,9 +1085,15 @@ ata_initialize(rtems_device_major_number major,
     for (i = 0; i < (2 * IDE_CTRL_MAX_MINOR_NUMBER); i++)
         ata_devs[i].device = ATA_UNDEFINED_VALUE;
 
+#if defined(ATA_USE_OLD_EXCEPTIONS)
     /* prepare ATA driver for handling  interrupt driven devices */
     for (i = 0; i < ATA_MAX_RTEMS_INT_VEC_NUMBER; i++)
         Chain_Initialize_empty(&ata_int_vec[i]);
+#else
+    for (i = 0; i < ATA_IRQ_CHAIN_MAX_CNT; i++) {
+      Chain_Initialize_empty(&(ata_irq_chain[i].irq_chain));
+    }
+#endif
 
     /*
      * during ATA driver initialization EXECUTE DEVICE DIAGNOSTIC and
@@ -1017,11 +1132,49 @@ ata_initialize(rtems_device_major_number major,
             }
 
             int_st->ctrl_minor = ctrl_minor;
-
+#if defined(ATA_USE_OLD_EXCEPTIONS)
             status = rtems_interrupt_catch(
                          ata_interrupt_handler,
                          IDE_Controller_Table[ctrl_minor].int_vec,
                          &old_isr);
+#else
+	    /*
+	     * FIXME: check existing entries. if they use the same
+	     * IRQ name, then append int_st to respective chain
+	     * otherwise, use new ata_irq_chain entry
+	     */
+	    ata_irq_chain_use = -1;
+	    for (i = 0;
+		 ((i < ata_irq_chain_cnt) &&
+		  (ata_irq_chain_use < 0));i++) {
+	      if (ata_irq_chain[i].name ==
+		  IDE_Controller_Table[ctrl_minor].int_vec) {
+		ata_irq_chain_use = i;
+	      }
+	    }
+	    if (ata_irq_chain_use < 0) {
+	      /*
+	       * no match found, try to use new channel entry
+	       */
+	      if (ata_irq_chain_cnt < ATA_IRQ_CHAIN_MAX_CNT) {
+		ata_irq_chain_use = ata_irq_chain_cnt++;
+
+		ata_irq_chain[ata_irq_chain_use].name =
+		  IDE_Controller_Table[ctrl_minor].int_vec;
+		ata_irq_data.name   =
+		  IDE_Controller_Table[ctrl_minor].int_vec;
+		ata_irq_data.hdl    = ata_interrupt_handler;
+		ata_irq_data.handle = ctrl_minor;
+
+		status = ((0 == BSP_install_rtems_irq_handler(&ata_irq_data))
+			  ? RTEMS_INVALID_NUMBER
+			  : RTEMS_SUCCESSFUL);
+	      }
+	      else {
+		status = RTEMS_TOO_MANY;
+	      }
+	    }
+#endif
             if (status != RTEMS_SUCCESSFUL)
             {
                 free(int_st);
@@ -1031,9 +1184,15 @@ ata_initialize(rtems_device_major_number major,
                 rtems_disk_io_done();
                 return status;
             }
+#if defined(ATA_USE_OLD_EXCEPTIONS)
             Chain_Append(
                 &ata_int_vec[IDE_Controller_Table[ctrl_minor].int_vec],
                 &int_st->link);
+#else
+            Chain_Append(
+		&(ata_irq_chain[ata_irq_chain_use].irq_chain),
+                &int_st->link);
+#endif
 
             /* disable interrupts */
             ide_controller_write_register(ctrl_minor,
@@ -1310,7 +1469,9 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
             break;
 
         default:
+#ifdef DEBUG
             printf("ata_queue_task: non-supported command type\n");
+#endif
             areq->breq->status = RTEMS_UNSATISFIED;
             areq->breq->error = RTEMS_NOT_IMPLEMENTED;
             break;

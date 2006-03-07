@@ -1,3 +1,10 @@
+2006-03-07	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	PR 853/filesystem
+	* libchip/ide/ata.c, libchip/ide/ide_controller.c: The ata driver
+	should be modified to support the new exception scheme and to use the
+	handle parameter.
+
 2006-02-a32	Eric Norum <norume@aps.anl.gov>
 
 	* libchip/network/if_dc.c, if_dcreg.c: Changes from Daron Chabot:
