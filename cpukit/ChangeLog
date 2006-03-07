@@ -430,8 +430,9 @@
 
 2005-09-29	Eric Norum <norume@aps.anl.gov>
 
+	PR 835/rtems_misc
 	* libmisc/cpuuse/cpuuse.c: Remove floating point calculations and the
-                               C preprocessor conditions which enabled them.
+        C preprocessor conditions which enabled them.
 
 2005-09-25	Joel Sherrill <joel@OARcorp.com>
 
