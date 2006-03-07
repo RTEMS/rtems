@@ -1,3 +1,7 @@
+2006-03-07	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Correct minor mistakes.
+
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
 	* runtest.in: Add fileio to list of interactive tests.
