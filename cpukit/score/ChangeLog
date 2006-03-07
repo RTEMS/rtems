@@ -1,3 +1,12 @@
+2006-03-07	Joel Sherrill <joel@OARcorp.com>
+
+	PR 866/rtems
+	* include/rtems/system.h, include/rtems/score/isr.h,
+	inline/rtems/score/thread.inl, macros/rtems/score/thread.inl: Added
+	memory barriers to enter and exit of dispatching and interrupt
+	critical sections so GCC will not optimize and reorder code out of a
+	critical section.
+
 2005-09-01	Joel Sherrill <joel@OARcorp.com>
 
 	PR 820/rtems

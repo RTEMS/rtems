@@ -102,6 +102,17 @@ extern "C" {
 #endif
 
 /*
+ *  The following macro is a compiler specific way to ensure that memory
+ *  writes are not reordered around certian points.  This specifically can
+ *  impact interrupt disable and thread dispatching critical sections.
+ */
+#ifdef __GNUC__
+  #define RTEMS_COMPILER_MEMORY_BARRIER() asm volatile("" ::: "memory")
+#else
+  #define RTEMS_COMPILER_MEMORY_BARRIER()
+#endif
+
+/*
  *  The following are used by the POSIX implementation to catch bad paths.
  */
 

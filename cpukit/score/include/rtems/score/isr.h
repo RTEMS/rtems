@@ -111,7 +111,10 @@ void _ISR_Handler_initialization ( void );
  */
 
 #define _ISR_Disable( _level ) \
-        _CPU_ISR_Disable( _level )
+  do { \
+    _CPU_ISR_Disable( _level ); \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+  } while (0)
 
 /*
  *  _ISR_Enable
@@ -124,7 +127,10 @@ void _ISR_Handler_initialization ( void );
  */
 
 #define _ISR_Enable( _level ) \
-        _CPU_ISR_Enable( _level )
+  do { \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+    _CPU_ISR_Enable( _level ); \
+  } while (0)
 
 /*
  *  _ISR_Flash
@@ -144,7 +150,11 @@ void _ISR_Handler_initialization ( void );
  */
 
 #define _ISR_Flash( _level ) \
-        _CPU_ISR_Flash( _level )
+  do { \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+    _CPU_ISR_Flash( _level ); \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+  } while (0)
 
 /*
  *  _ISR_Install_vector
