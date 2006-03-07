@@ -602,7 +602,7 @@ int socketReady(int sid)
  *	noticed events. Timeout is in milliseconds.
  */
 
-#if WIN || CE
+#if WIN || CE || __rtems__ 
 
 int socketSelect(int sid, int timeout)
 {
@@ -610,12 +610,16 @@ int socketSelect(int sid, int timeout)
 	socket_t		*sp;
 	fd_set		 	readFds, writeFds, exceptFds;
 	int 			nEvents;
-	int				all, socketHighestFd;	/* Highest socket fd opened */
+	int				all;
+#if WIN || CE
+    int  socketHighestFd;	/* Highest socket fd opened */
+	socketHighestFd = -1;
+#endif     
 
 	FD_ZERO(&readFds);
 	FD_ZERO(&writeFds);
 	FD_ZERO(&exceptFds);
-	socketHighestFd = -1;
+
 
 	tv.tv_sec = timeout / 1000;
 	tv.tv_usec = (timeout % 1000) * 1000;
@@ -659,6 +663,7 @@ int socketSelect(int sid, int timeout)
 		}
 	}
 
+#if WIN || CE     
 /*
  *	Windows select() fails if no descriptors are set, instead of just sleeping
  *	like other, nice select() calls. So, if WIN, sleep.
@@ -667,7 +672,8 @@ int socketSelect(int sid, int timeout)
 		Sleep(timeout);
 		return 0;
 	}
-
+#endif
+    
 /*
  * 	Wait for the event or a timeout.
  */

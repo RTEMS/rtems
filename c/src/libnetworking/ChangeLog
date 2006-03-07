@@ -1,3 +1,11 @@
+2006-03-07	Paul Whitfield <paulw@omnitronics.com.au>
+
+	PR 843/rtems_misc
+	* rtems_webserver/socket.c: There is a memory corruption problem in the
+	selectSocket function in the web server, this only become apparent if
+	you disable the built in memory allocation functions. I have disabled
+	the internal memory management to get file upload working.
+
 2006-02-08	Thomas Rauscher  <trauscher@loytec.com>
 
 	PR 890/networking
