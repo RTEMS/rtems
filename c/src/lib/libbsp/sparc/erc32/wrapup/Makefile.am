@@ -13,7 +13,7 @@ CPU_PIECES = cache reg_win syscall
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
-    $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/*.$(OBJEXT))
+    $(foreach piece, $(CPU_PIECES), $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/*.$(OBJEXT)))
 LIB = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../../../automake/compile.am
