@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.7])
 
 AC_PREREQ(2.59)
-AC_INIT([crossbuild],[0.20060302.0],[rtems-bugs@rtems.com])
+AC_INIT([crossrpms],[0.20060307.0],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
