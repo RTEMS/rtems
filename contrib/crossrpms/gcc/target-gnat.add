@@ -11,7 +11,7 @@ License:	GPL
 %if "%{_prefix}" != "/usr"
 Requires:       @rpmprefix@rtems@osversion@-base-gnat
 %endif
-Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_version}-%{release}
+Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}-%{release}
 
 %description -n @rpmprefix@@tool_target@-gnat
 RTEMS is an open source operating system for embedded systems.
