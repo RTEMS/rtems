@@ -1,7 +1,7 @@
 
 %define gcc_pkgvers @GCC_VERS@
-%define gcc_version %{expand:%%(echo "@GCC_VERS@" | sed -e 's,-.*,,')}
-%define gcc_rpmvers %{expand:%%(echo "@GCC_VERS@" | tr - _ )}
+%define gcc_version %{expand:%(echo "@GCC_VERS@" | sed -e 's,-.*,,')}
+%define gcc_rpmvers %{expand:%(echo "@GCC_VERS@" | tr - _ )}
 
 %define build_newlib 1
 
