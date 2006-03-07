@@ -1,0 +1,4 @@
+gcc/build.add:
+	* Use --languages=fortran instead of f95 for gcc >= 4.1
+	(--languages=f95 is deprecated in gcc >= 4.1)
+
