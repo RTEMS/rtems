@@ -142,6 +142,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
 RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 {
   _Thread_Dispatch_disable_level += 1;
+  RTEMS_COMPILER_MEMORY_BARRIER();
 }
 
 /**
@@ -154,6 +155,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 #if ( CPU_INLINE_ENABLE_DISPATCH == TRUE )
 RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch()
 {
+  RTEMS_COMPILER_MEMORY_BARRIER();
   if ( (--_Thread_Dispatch_disable_level) == 0 )
     _Thread_Dispatch();
 }
@@ -171,6 +173,7 @@ void _Thread_Enable_dispatch( void );
 
 RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
 {
+  RTEMS_COMPILER_MEMORY_BARRIER();
   _Thread_Dispatch_disable_level -= 1;
 }
 

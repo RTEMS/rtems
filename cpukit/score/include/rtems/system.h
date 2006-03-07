@@ -135,6 +135,17 @@ extern "C" {
 # define RTEMS_INLINE_ROUTINE
 #endif
 
+/**
+ *  The following macro is a compiler specific way to ensure that memory
+ *  writes are not reordered around certian points.  This specifically can
+ *  impact interrupt disable and thread dispatching critical sections.
+ */
+#ifdef __GNUC__
+  #define RTEMS_COMPILER_MEMORY_BARRIER() asm volatile("" ::: "memory")
+#else
+  #define RTEMS_COMPILER_MEMORY_BARRIER()
+#endif
+
 #ifdef RTEMS_POSIX_API
 /** The following is used by the POSIX implementation to catch bad paths.  */
 int POSIX_MP_NOT_IMPLEMENTED( void );

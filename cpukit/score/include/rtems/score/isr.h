@@ -104,7 +104,10 @@ void _ISR_Handler_initialization ( void );
  *  the argument _level will contain the previous interrupt mask level.
  */
 #define _ISR_Disable( _level ) \
-        _CPU_ISR_Disable( _level )
+  do { \
+    _CPU_ISR_Disable( _level ); \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+  } while (0)
 
 /**
  *  This routine enables interrupts to the previous interrupt mask
@@ -112,7 +115,10 @@ void _ISR_Handler_initialization ( void );
  *  enable interrupts so they can be processed again.
  */
 #define _ISR_Enable( _level ) \
-        _CPU_ISR_Enable( _level )
+  do { \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+    _CPU_ISR_Enable( _level ); \
+  } while (0)
 
 /**
  *  This routine temporarily enables interrupts to the previous
@@ -127,7 +133,11 @@ void _ISR_Handler_initialization ( void );
  *  properly protects itself.
  */
 #define _ISR_Flash( _level ) \
-        _CPU_ISR_Flash( _level )
+  do { \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+    _CPU_ISR_Flash( _level ); \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+  } while (0)
 
 /**
  *  This routine installs new_handler as the interrupt service routine

@@ -126,7 +126,10 @@
  */
 
 #define _Thread_Disable_dispatch() \
-  _Thread_Dispatch_disable_level += 1
+  do { \
+    _Thread_Dispatch_disable_level += 1; \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+  } while (0)
 
 /*PAGE
  *
@@ -136,9 +139,11 @@
 
 #if ( CPU_INLINE_ENABLE_DISPATCH == TRUE )
 #define _Thread_Enable_dispatch()  \
-      { if ( (--_Thread_Dispatch_disable_level) == 0 ) \
-             _Thread_Dispatch();  \
-      }
+  do { \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+    if ( (--_Thread_Dispatch_disable_level) == 0 ) \
+       _Thread_Dispatch(); \
+  } while (0)
 #endif
 
 #if ( CPU_INLINE_ENABLE_DISPATCH == FALSE )
@@ -152,7 +157,10 @@ void _Thread_Enable_dispatch( void );
  */
 
 #define _Thread_Unnest_dispatch()  \
-  _Thread_Dispatch_disable_level -= 1
+  do { \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+    _Thread_Dispatch_disable_level -= 1; \
+  } while (0)
 
 /*PAGE
  *
