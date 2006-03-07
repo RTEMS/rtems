@@ -26,16 +26,19 @@
 #include <assert.h>
 #include <errno.h>
 
-#if ! defined(O_NDELAY)
-# if defined(solaris2)
-#  define O_NDELAY O_NONBLOCK
-# elif defined(__CYGWIN__)
-#   define O_NDELAY _FNBIO
-# elif defined(RTEMS_NEWLIB)
-#  define O_NDELAY _FNBIO
-# endif
-#endif
-
+/* define this to alias O_NDELAY to  O_NONBLOCK, i.e., 
+ * O_NDELAY is accepted on input but fcntl(F_GETFL) returns
+ * O_NONBLOCK. This is because rtems has no distinction 
+ * between the two (but some systems have).
+ * Note that accepting this alias creates a problem:
+ * an application trying to clear the non-blocking flag
+ * using a
+ *
+ *    fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) & ~O_NDELAY);
+ *
+ * does (silently) ignore the operation.
+ */
+#undef ACCEPT_O_NDELAY_ALIAS
 
 #include <errno.h>
 #include <string.h>                     /* strcmp */
@@ -114,7 +117,9 @@ rtems_assoc_t access_modes_assoc[] = {
 };
 
 rtems_assoc_t status_flags_assoc[] = {
+#ifdef ACCEPT_O_NDELAY_ALIAS
   { "NO DELAY",  LIBIO_FLAGS_NO_DELAY,  O_NDELAY },
+#endif
   { "NONBLOCK",  LIBIO_FLAGS_NO_DELAY,  O_NONBLOCK },
   { "APPEND",    LIBIO_FLAGS_APPEND,    O_APPEND },
   { "CREATE",    LIBIO_FLAGS_CREATE,    O_CREAT },
@@ -166,7 +171,7 @@ unsigned32 rtems_libio_to_fcntl_flags(
   }
 
   if ( (flags & LIBIO_FLAGS_NO_DELAY) == LIBIO_FLAGS_NO_DELAY ) {
-    fcntl_flags |= O_NDELAY;
+    fcntl_flags |= O_NONBLOCK;
   }
 
   if ( (flags & LIBIO_FLAGS_APPEND) == LIBIO_FLAGS_APPEND ) {

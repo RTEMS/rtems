@@ -1,3 +1,9 @@
+2006-03-07	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 886/filesystem
+	* src/libio.c: fcntl(fd,F_GETFL) fails to set O_NONBLOCK if the
+	descriptor is in non-blocking mode.
+
 2005-08-31  Ralf Corsepius  <ralf.corsepius@rtems.org>
 
         PR 819/filesystem
