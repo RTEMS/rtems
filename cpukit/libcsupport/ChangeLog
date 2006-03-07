@@ -1,5 +1,11 @@
 2006-03-07	Till Strauman <strauman@slac.stanford.edu>
 
+	PR 830/filesystem
+	* src/termios.c: termios ioctl(FIONREAD) reported wrong number of
+	characters. So add chars in low-level/raw buffer to total count.
+
+2006-03-07	Till Strauman <strauman@slac.stanford.edu>
+
 	PR 886/filesystem
 	* src/libio.c: fcntl(fd,F_GETFL) fails to set O_NONBLOCK if the
 	descriptor is in non-blocking mode.
