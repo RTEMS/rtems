@@ -6,9 +6,11 @@ include ../mkspec.am
 
 noinst_DATA =
 CLEANFILES =
+EXTRA_DIST =
 
 BINUTILS_VERS = 2.16.1
 BINUTILS_RPMREL = @VERSION@
+EXTRA_DIST += binutils-sources.add
 
 BINUTILS_SUBPACKAGES = $(top_builddir)/common/common.add
 BINUTILS_SUBPACKAGES += ../binutils/binutils.add
@@ -39,6 +41,8 @@ noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 GCC_VERS = 4.1.0
 GCC_RPMREL = @VERSION@
 NEWLIB_VERS = 1.14.0
+EXTRA_DIST += gcc-prep.add
+EXTRA_DIST += gcc-sources.add
 
 GCC_SUBPACKAGES = $(top_builddir)/common/common.add
 GCC_SUBPACKAGES += ../gcc/gccnewlib.add
@@ -50,8 +54,11 @@ GCC_SUBPACKAGES += $(top_builddir)/common/clean.add
 GCC_SUBPACKAGES += ../gcc/target-gcc.add
 GCC_SUBPACKAGES += ../gcc/base-gcc.add
 GCC_SUBPACKAGES += ../gcc/target-c++.add
-GCC_SUBPACKAGES += ../gcc/base-libc.add
-GCC_SUBPACKAGES += ../gcc/target-libc.add
+GCC_SUBPACKAGES += ../gcc/target-gfortran.add
+GCC_SUBPACKAGES += ../gcc/base-gfortran.add
+GCC_SUBPACKAGES += ../gcc/target-objc.add
+GCC_SUBPACKAGES += ../gcc/target-newlib.add
+GCC_SUBPACKAGES += ../gcc/base-newlib.add
 
 $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add gcc-prep.add
 	cat $(GCC_SUBPACKAGES) | sed \
