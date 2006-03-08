@@ -209,7 +209,7 @@ SECTIONS
     *(.sbss*)
     PROVIDE (__SBSS_END__ = .);
 
-    *(.bss*) 
+    *(.bss .bss* .gnu.linkonce.b*)
     *(COMMON)
 
     . = ALIGN(4);

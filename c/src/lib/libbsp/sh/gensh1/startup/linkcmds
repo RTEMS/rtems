@@ -164,7 +164,7 @@ SECTIONS
   .bss     .  :
   {
    *(.dynbss)
-   *(.bss*)
+   *(.bss .bss* .gnu.linkonce.b*)
    *(COMMON)
   } > ram
   _end = . ;

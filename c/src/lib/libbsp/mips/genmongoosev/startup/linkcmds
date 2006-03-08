@@ -161,7 +161,7 @@ SECTIONS
   .bss : 
   {
     _bss_start = . ;
-    *(.bss*)
+    *(.bss .bss.* .gnu.linkonce.b.*)
     *(.reginfo)
     *(COMMON)
     . = ALIGN (64);

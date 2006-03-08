@@ -197,7 +197,7 @@ SECTIONS
   {
    PROVIDE (__bss_start = .);
    *(.dynbss)
-   *(.bss* .gnu.linkonce.b.*)
+   *(.bss .bss* .gnu.linkonce.b*)
    *(COMMON)
   } >RAM
   . =  ALIGN(8) + 0x8000;
