@@ -218,7 +218,7 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
   {
    PROVIDE (__bss_start = .);
    *(.dynbss)
-   *(.bss* .gnu.linkonce.b.*)
+   *(.bss .bss* .gnu.linkonce.b*)
    *(COMMON)
   . = ALIGN(16);
   } > CODE
