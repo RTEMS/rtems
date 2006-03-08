@@ -92,6 +92,8 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add gcc-prep.a
 	  -e "/[@]tool_target[@]-w32api-sys-root/d" \
 	  -e "/--with-newlib/d" \
 	  -e 's,^%define build_newlib.*$$,%define build_newlib 0,' \
+	  -e "s,^%define[ ]*_fortran[ 	]*0,%define _fortran		1," \
+	  -e "s,^%define[ ]*_objc[ 	]*0,%define _objc		1," \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
 
