@@ -1,3 +1,7 @@
+2006-03-08	Joel Sherrill <joel@oarcorp.com>
+
+	* setup.def: Update tool versions to gcc 4.0.2/newlib 1.14.0
+
 2006-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/binutils.add: Conditionally remove manpage of DOS tools.
