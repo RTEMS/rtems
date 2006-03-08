@@ -1,5 +1,12 @@
 2006-03-08	Joel Sherrill <joel@OARcorp.com>
 
+	PR 761/rtems
+	* score/src/threadhandler.c: Add volatile cast so test is weak function
+	is present will do something. Otherwise, it can be assume by gcc to
+	always be a true condition.
+
+2006-03-08	Joel Sherrill <joel@OARcorp.com>
+
 	* itron/macros/rtems/itron/semaphore.inl,
 	itron/macros/rtems/itron/task.inl: Fix warnings.
 	* posix/macros/rtems/posix/cond.inl: Fix typo.
