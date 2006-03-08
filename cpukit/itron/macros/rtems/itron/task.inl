@@ -59,7 +59,7 @@ extern "C" {
  */
 
 /* XXX fix me */
-static Thread_Control *_ITRON_Task_Get (
+static inline Thread_Control *_ITRON_Task_Get (
   ID                 id,
   Objects_Locations *location
 )

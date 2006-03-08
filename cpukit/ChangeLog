@@ -1,3 +1,10 @@
+2006-03-08	Joel Sherrill <joel@OARcorp.com>
+
+	* itron/macros/rtems/itron/semaphore.inl,
+	itron/macros/rtems/itron/task.inl: Fix warnings.
+	* posix/macros/rtems/posix/cond.inl: Fix typo.
+	* score/macros/rtems/score/heap.inl: Fix missed type change.
+
 2006-03-07	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 830/filesystem

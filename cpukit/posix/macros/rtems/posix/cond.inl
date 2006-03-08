@@ -55,7 +55,7 @@
 
 #define ___POSIX_Condition_variables_Get_support( _cond, _location ) \
   do { \
-    Objects_Id        *id = (Objects_Id *)_cond; \
+    Objects_Id        *_id = (Objects_Id *)_cond; \
     int _status; \
     \
     if ( !_id ) { \

@@ -75,7 +75,7 @@ extern "C" {
  */
 
 /* XXX fix me */
-static  ER _ITRON_Semaphore_Translate_core_semaphore_return_code (
+static inline ER _ITRON_Semaphore_Translate_core_semaphore_return_code (
   uint32_t   the_semaphore_status
 )
 {

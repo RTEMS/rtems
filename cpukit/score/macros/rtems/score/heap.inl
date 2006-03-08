@@ -115,9 +115,9 @@
 
 #define _Heap_Align_up( _value, _alignment ) \
   do { \
-    unsigned32 v = *(_value); \
-    unsigned32 a = (_alignment); \
-    unsigned32 r = v % a; \
+    uint32_t v = *(_value); \
+    uint32_t a = (_alignment); \
+    uint32_t r = v % a; \
     *(_value) = r ? v - r + a : v; \
   } while(0)
 
@@ -128,7 +128,7 @@
 
 #define _Heap_Align_down( _value, _alignment ) \
   do { \
-    unsigned32 v = *(_value); \
+    uint32_t v = *(_value); \
     *(_value) = v - (v % (_alignment)); \
   } while(0)
 
@@ -148,7 +148,7 @@
 #define _Heap_Align_up_uptr( _value, _alignment ) \
   do { \
     _H_uptr_t v = *(_value); \
-    unsigned32 a = (_alignment); \
+    uint32_t a = (_alignment); \
     _H_uptr_t r = v % a; \
     *(_value) = r ? v - r + a : v; \
   } while(0)
