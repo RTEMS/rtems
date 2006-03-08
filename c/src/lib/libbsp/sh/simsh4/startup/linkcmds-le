@@ -196,7 +196,7 @@ SECTIONS
   .bss       :
   {
    *(.dynbss)
-   *(.bss*)
+   *(.bss .bss* .gnu.linkonce.b*)
    *(COMMON)
    /* Align here to ensure that the .bss section occupies space up to
       _end.  Align after .bss to ensure correct alignment even if the

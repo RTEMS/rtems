@@ -1,3 +1,8 @@
+2006-03-08	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds, startup/linkcmds-le, startup/linkcmds-le.coff: Add
+	.gnu.linkonce.b.* section.
+
 2006-02-08	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmds-le, startup/linkcmds-le.coff: Add
