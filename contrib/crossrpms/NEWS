@@ -1,1 +1,7 @@
+2006-03-09	Add fortran and objc to GCC's default languages for freebsd5.2,
+		freebsd6.0 and solaris.
+
+2006-03-02	Pass --enable-sysroot to non-rtems binutils (Required by
+		GCC-4.1 sys-root'ed toolchains).
+
 2006-02-25	Put this package under the GPL.

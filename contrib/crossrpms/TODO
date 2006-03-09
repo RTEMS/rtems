@@ -1,4 +1,22 @@
-gcc/build.add:
-	* Use --languages=fortran instead of f95 for gcc >= 4.1
-	(--languages=f95 is deprecated in gcc >= 4.1)
+* Add support for multiple rtems targets.
+- Allow building several specs at one time.
+- Support different versions and patches for different targets
+  (target-specific specs).
+
+* Improve info files treatment:
+- Problem: Infos are not target canonicalized. Therefore, installing them to 
+  /usr or /usr/local is likely to conflict with vendor provided infos rsp.
+  locally installed packages. Additionally, installing to /usr/local is
+  completely out of our control.
+- Current approach: Install infos/provide base packages for $prefix!=/usr.
+  This is insufficient to solve the problems noted above.
+- Consider to install infos/provide base packages only for
+  $prefix=/opt/rtems*
+- Consider to canonicalize the infos (How?). Probably better be done by
+  upstream.
+
+* Strip unnecessary stuff from generated *.specs.
+
+* gcc/build.add: Use --languages=fortran instead of f95 for gcc >= 4.1
+  (--languages=f95 is deprecated in gcc >= 4.1)
 
