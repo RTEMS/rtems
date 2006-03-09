@@ -3,7 +3,7 @@
 ## ${TARGET_CONFIGDIRS_LIST} is directories we build using the target tools.
 ## ${BUILD_CONFIGDIRS_LIST} is directories we build using the build tools
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.59)
 
 dnl RTEMS_ARG_VAR(VAR,HELP-STRING)
 dnl An internal macros to have help strings pretty

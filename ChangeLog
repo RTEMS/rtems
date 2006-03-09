@@ -1,3 +1,7 @@
+2006-03-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* acinclude.m4: Requires autoconf-2.59.
+
 2006-03-07	Joel Sherrill <joel@OARcorp.com>
 
 	PR 694/rtems
