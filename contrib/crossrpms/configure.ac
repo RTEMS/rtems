@@ -14,33 +14,51 @@ AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
 AM_INIT_AUTOMAKE([1.9])
 
+case "$prefix" in
+/usr)
+  build_infos=0
+  rpmprefix=
+  ;;
+/usr/local)
+  build_infos=0
+  rpmprefix="local-"
+  ;;
+/opt/rtems)
+  build_infos=1
+  rpmprefix="rtems-"
+  ;;
+NONE) # Default prefix
+  build_infos=1
+  rpmprefix="[rtems-]RTEMS_API[-]"
+  ;;
+esac
+
 AC_ARG_ENABLE([rpmprefix],
 [  --enable-rpmprefix=<rpmprefix>      prefix rpms],[
-  case "$prefix" in
-  /usr)   rpmprefix=
-    AC_MSG_WARN([Ignoring given rpmprefix])
+  case "$enable_rpmprefix" in
+  yes) # ignore, use default
     ;;
-  NONE)   rpmprefix=[rtems-]RTEMS_API[-]
-    AC_MSG_WARN([Ignoring given rpmprefix])
+  no) rpmprefix=
     ;;
-  *)
-     case $enable_rpmprefix in
-     ''|[rtems-]RTEMS_API[-])
-       AC_MSG_ERROR([Invalid --enable-rpmprefix]);;
-     *)
-        rpmprefix=$enable_rpmprefix;;
-     esac
-    ;;
-  esac
-],[
-# defaults
-  case "$prefix" in
-  /usr)   rpmprefix=;;
-  NONE)   rpmprefix=[rtems-]RTEMS_API[-];;
-  *)      AC_MSG_ERROR([Missing --enable-rpmprefix]) ;;
+  *) # presume user knows what he is doing
+    rpmprefix=$enable_rpmprefix;;
   esac
 ])
 AC_SUBST(rpmprefix)
+
+AC_ARG_ENABLE([infos],
+[  --enable-infos                      enable building infos],[
+  case "$enable_infos" in
+  yes)
+    build_infos=1;;
+  no)
+    build_infos=0;;
+  *)
+    AC_MSG_ERROR([Invalid argument to --enable-infos])
+  esac
+])
+AC_SUBST(build_infos)
+
 
 AS_IF([test "${host}" != "${build}"],[
 AC_MSG_CHECKING(for RPM OS)
