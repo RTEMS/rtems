@@ -8,10 +8,8 @@
   /usr or /usr/local is likely to conflict with vendor provided infos rsp.
   locally installed packages. Additionally, installing to /usr/local is
   completely out of our control.
-- Current approach: Install infos/provide base packages for $prefix!=/usr.
-  This is insufficient to solve the problems noted above.
-- Consider to install infos/provide base packages only for
-  $prefix=/opt/rtems*
+- Current approach: Install infos/provide base packages only for
+  $prefix ==/opt/rtems* or if user is forcing them with --enable-infos
 - Consider to canonicalize the infos (How?). Probably better be done by
   upstream.
 
