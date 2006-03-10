@@ -35,3 +35,11 @@ EXTRA_DIST += gcc/target-gnat.add
 EXTRA_DIST += gcc/target-objc.add
 EXTRA_DIST += gcc/base-newlib.add
 EXTRA_DIST += gcc/target-newlib.add
+
+EXTRA_DIST += gdb/base-gdb.add
+EXTRA_DIST += gdb/build.add
+EXTRA_DIST += gdb/gdb.add
+EXTRA_DIST += gdb/install.add
+EXTRA_DIST += gdb/prep.add
+EXTRA_DIST += gdb/rpm-install.add
+EXTRA_DIST += gdb/target-gdb.add
