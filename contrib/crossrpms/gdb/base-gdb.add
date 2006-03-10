@@ -1,0 +1,65 @@
+%if "%{_prefix}" != "/usr"
+# ==============================================================
+# rtems-base-gdb
+# ==============================================================
+%package -n @rpmprefix@rtems@osversion@-base-gdb
+Summary:      base package for rtems gdb
+Group: Development/Tools
+Requires(post):		/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+%description -n @rpmprefix@rtems@osversion@-base-gdb
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the base for gdb regardless of target CPU.
+
+%post -n @rpmprefix@rtems@osversion@-base-gdb
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdb.info.gz
+%if "%{gdb_version}" < "6.3"
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz
+%endif
+%if "%{gdb_version}" >= "5.0"
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/stabs.info.gz
+%endif
+%if "{gdb_version}" >= "6.0"
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz
+%endif
+
+%preun -n @rpmprefix@rtems@osversion@-base-gdb
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdb.info.gz
+%if "%{gdb_version}" < "6.3"
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz
+%endif
+%if "%{gdb_version}" >= "5.0"
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/stabs.info.gz
+%endif
+%if "{gdb_version}" >= "6.0"
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/annotate.info.gz
+%endif
+fi
+
+%files -n @rpmprefix@rtems@osversion@-base-gdb
+%defattr(-,root,root)
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/gdb.info*
+
+# FIXME: When had mmalloc.info been removed?
+%if "%{gdb_version}" < "6.3"
+%{_infodir}/mmalloc.info*
+%endif
+# FIXME: When had gdbint and stabs been introduced?
+%if "%{gdb_version}" >= "5.0"
+%{_infodir}/gdbint.info*
+%{_infodir}/stabs.info*
+%endif
+
+%if "{gdb_version}" >= "6.0"
+%{_infodir}/annotate.info*
+%endif
+
+%endif

@@ -1,0 +1,32 @@
+# Extract %%__os_install_post into os_install_post~
+cat << \EOF > os_install_post~
+%__os_install_post
+EOF
+
+# Generate customized brp-*scripts
+cat os_install_post~ | while read a x y; do
+case $a in
+# Prevent brp-strip* from trying to handle foreign binaries
+*/brp-strip*)
+  b=$(basename $a)
+  sed -e 's,find $RPM_BUILD_ROOT,find $RPM_BUILD_ROOT%_bindir $RPM_BUILD_ROOT%_libexecdir,' $a > $b
+  chmod a+x $b
+  ;;
+%if "%{_prefix}" != "/usr"
+# Fix up brp-compress to handle %%_prefix != /usr
+*/brp-compress*)
+  b=$(basename $a)
+  sed -e 's,\./usr/,.%{_prefix}/,g' < $a > $b
+  chmod a+x $b
+  ;;
+%endif
+esac
+done
+
+sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
+%if "%{_prefix}" != "/usr"
+  -e 's,^[ ]*/usr/lib/rpm.*/brp-compress,./brp-compress,' \
+%endif
+< os_install_post~ > os_install_post 
+%define __os_install_post . ./os_install_post
+

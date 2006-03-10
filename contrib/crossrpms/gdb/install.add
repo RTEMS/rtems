@@ -1,0 +1,40 @@
+%install
+  rm -rf $RPM_BUILD_ROOT
+
+  cd build
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    install
+
+%if "%{_prefix}" != "/usr"
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    install-info
+%endif
+
+%if "%{_prefix}" == "/usr"
+# Conflict with a native gdb's infos
+  rm -rf $RPM_BUILD_ROOT%{_infodir}
+%else
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
+
+# These come from other packages
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/bfd*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/configure*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/standards*
+%endif
+
+# We don't ship host files
+  rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
+
+  cd ..
+

@@ -1,0 +1,25 @@
+# ==============================================================
+# @tool_target@-gdb
+# ==============================================================
+# %package -n @rpmprefix@@tool_target@-gdb
+# Summary:      rtems gdb for @tool_target@
+# Group: Development/Tools
+# Requires: @rpmprefix@rtems@osversion@-base-gdb
+
+%description -n @rpmprefix@@tool_target@-gdb
+
+GNU gdb targetting @tool_target@.
+
+%files -n @rpmprefix@@tool_target@-gdb
+%defattr(-,root,root)
+%if "%{_prefix}" != "/usr"
+%dir %{_mandir}
+%dir %{_mandir}/man1
+%endif
+%{_mandir}/man1/@tool_target@-*.1*
+
+%if "%{_prefix}" != "/usr"
+%dir %{_bindir}
+%endif
+%{_bindir}/@tool_target@-*
+

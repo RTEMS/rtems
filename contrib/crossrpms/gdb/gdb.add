@@ -1,0 +1,24 @@
+%define gdb_version @GDB_VERS@
+%define gdb_rpmvers %{expand:%(echo @GDB_VERS@ | tr - _)} 
+
+Name:		@rpmprefix@@tool_target@-gdb
+Summary:	Gdb for target @tool_target@
+Group:		Development/Tools
+Version:	%{gdb_rpmvers}
+Release:	@GDB_RPMREL@%{?dist}
+License:	GPL/LGPL
+URL: 		http://sources.redhat.com/gdb
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+%if "%{_prefix}" != "/usr"
+# Required for building the infos
+BuildRequires:	/sbin/install-info
+BuildRequires:	texinfo >= 4.2
+%endif
+BuildRequires:	flex
+BuildRequires:	bison
+
+@SOURCES@
+
+%description
+Cross gdb for target @tool_target@
