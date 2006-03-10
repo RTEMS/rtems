@@ -4,6 +4,7 @@
 %define gcc_rpmvers %{expand:%(echo "@GCC_VERS@" | tr - _ )}
 
 %define build_newlib 1
+%define build_infos  @build_infos@
 
 %if %build_newlib
 %define newlib_version		@NEWLIB_VERS@

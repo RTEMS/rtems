@@ -10,7 +10,7 @@
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     install
 
-%if "%{_prefix}" != "/usr"
+%if %{build_infos}
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
     includedir=$RPM_BUILD_ROOT%{_includedir} \
@@ -20,10 +20,7 @@
     install-info
 %endif
 
-%if "%{_prefix}" == "/usr"
-# Conflict with a native gdb's infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
-%else
+%if %{build_infos}
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
 
@@ -31,6 +28,9 @@
   rm -rf $RPM_BUILD_ROOT%{_infodir}/bfd*
   rm -rf $RPM_BUILD_ROOT%{_infodir}/configure*
   rm -rf $RPM_BUILD_ROOT%{_infodir}/standards*
+%else
+# Conflict with a native gdb's infos
+  rm -rf $RPM_BUILD_ROOT%{_infodir}
 %endif
 
 # We don't ship host files

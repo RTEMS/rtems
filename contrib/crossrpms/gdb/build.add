@@ -15,8 +15,8 @@
     --mandir=%{_mandir} --infodir=%{_infodir}
 
   make all
-#%if "%{_prefix}" != "/usr"
+%if %{build_infos}
   make info
-#%endif
+%endif
   cd ..
 

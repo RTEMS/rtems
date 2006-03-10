@@ -10,7 +10,7 @@
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     install
 
-%if "%{_prefix}" != "/usr"
+%if %{build_infos}
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
     includedir=$RPM_BUILD_ROOT%{_includedir} \
@@ -20,11 +20,7 @@
     install-info
 %endif
 
-%if "%{_prefix}" == "/usr"
-# Conflict with a native binutils' infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
-%else
-
+%if %{build_infos}
 # Dropped in FSF-binutils-2.9.5, but Cygwin still ships it.
   rm -rf $RPM_BUILD_ROOT%{_infodir}/configure.info*
 
@@ -33,6 +29,9 @@
 
 # binutils does not install share/locale, however it uses it
   mkdir -p $RPM_BUILD_ROOT%{_prefix}/share/locale
+%else
+# Conflict with a native binutils' infos
+  rm -rf $RPM_BUILD_ROOT%{_infodir}
 %endif
 
 # We don't ship host files

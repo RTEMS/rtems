@@ -7,7 +7,6 @@
   cd build
 
   make DESTDIR=$RPM_BUILD_ROOT install
-  # cd back to build/
   cd ..
 
 %if %build_newlib
@@ -35,7 +34,7 @@
   rm -f $RPM_BUILD_ROOT%{_bindir}/vxaddr2line%{_exeext}
 %endif
 
-%if "%{_prefix}" != "/usr"
+%if %{build_infos}
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir

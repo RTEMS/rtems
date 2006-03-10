@@ -1,4 +1,4 @@
-%if "%{_prefix}" != "/usr"
+%if %{build_infos}
 %if %build_gcj
 # ==============================================================
 # rtems-base-gcj

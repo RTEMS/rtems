@@ -1,6 +1,8 @@
 %define gdb_version @GDB_VERS@
 %define gdb_rpmvers %{expand:%(echo @GDB_VERS@ | tr - _)} 
 
+%define build_infos @build_infos@
+
 Name:		@rpmprefix@@tool_target@-gdb
 Summary:	Gdb for target @tool_target@
 Group:		Development/Tools
@@ -10,13 +12,12 @@ License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-%if "%{_prefix}" != "/usr"
+%if %{build_infos}
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %endif
-BuildRequires:	flex
-BuildRequires:	bison
+BuildRequires:	ncurses-devel
 
 @SOURCES@
 
