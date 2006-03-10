@@ -80,3 +80,33 @@ CLEANFILES += $(TARGET)-gcc.spec.in
 	$(MKSPEC) $(srcdir)/$(TARGET)-gcc.spec.in > $@
 CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
 noinst_DATA += @rpmprefix@$(TARGET)-gcc.spec
+
+
+GDB_VERS = 6.4
+GDB_RPMREL = @VERSION@
+EXTRA_DIST += gdb-sources.add
+
+GDB_SUBPACKAGES = $(top_builddir)/common/common.add
+GDB_SUBPACKAGES += ../gdb/gdb.add
+GDB_SUBPACKAGES += ../gdb/prep.add
+GDB_SUBPACKAGES += ../gdb/build.add
+GDB_SUBPACKAGES += ../gdb/install.add
+GDB_SUBPACKAGES += ../gdb/rpm-install.add
+GDB_SUBPACKAGES += $(top_builddir)/common/clean.add
+GDB_SUBPACKAGES += ../gdb/target-gdb.add
+GDB_SUBPACKAGES += ../gdb/base-gdb.add
+
+$(TARGET)-gdb.spec.in: $(GDB_SUBPACKAGES) Makefile.am gdb-sources.add
+	cat $(GDB_SUBPACKAGES) | sed \
+	  -e "/[@]SOURCES[@]/r ./gdb-sources.add" \
+	  -e "/[@]SOURCES[@]/d" \
+	  -e "s/[@]GDB_VERS[@]/$(GDB_VERS)/g" \
+	  -e "s/[@]GDB_RPMREL[@]/$(GDB_RPMREL)/g" \
+	  -e "/--with-sysroot/d" \
+	  > $(TARGET)-gdb.spec.in
+CLEANFILES += $(TARGET)-gdb.spec.in
+
+@rpmprefix@$(TARGET)-gdb.spec: $(TARGET)-gdb.spec.in
+	$(MKSPEC) $(srcdir)/$(TARGET)-gdb.spec.in > $@
+CLEANFILES += @rpmprefix@$(TARGET)-gdb.spec
+noinst_DATA += @rpmprefix@$(TARGET)-gdb.spec
