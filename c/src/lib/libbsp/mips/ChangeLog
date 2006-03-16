@@ -1,5 +1,6 @@
 2006-03-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* README: Remove (obsolete).
 	* acinclude.m4: Remove p4000.
 
 2005-02-24	Jay Monkman <jtm@lopingdog.com>
