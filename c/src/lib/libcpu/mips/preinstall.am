@@ -41,8 +41,22 @@ $(PROJECT_INCLUDE)/libcpu/tx3904.h: tx39/include/tx3904.h $(PROJECT_INCLUDE)/lib
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/tx3904.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/tx3904.h
 endif
+if tx49
+$(PROJECT_INCLUDE)/libcpu/tx4925.h: tx49/include/tx4925.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/tx4925.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/tx4925.h
+
+$(PROJECT_INCLUDE)/libcpu/tx4938.h: tx49/include/tx4938.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/tx4938.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/tx4938.h
+endif
 if au1x00
 $(PROJECT_INCLUDE)/libcpu/au1x00.h: au1x00/include/au1x00.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/au1x00.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/au1x00.h
+endif
+if rm52xx
+$(PROJECT_INCLUDE)/libcpu/rm5231.h: rm52xx/include/rm5231.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/rm5231.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/rm5231.h
 endif
