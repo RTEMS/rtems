@@ -1,5 +1,6 @@
 2006-03-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am, configure.ac: Reflect addition of rm52xx, tx49.
 	* rm52xx/include/rm5231.h, rm52xx/vectorisrs/maxvectors.c,
 	rm52xx/vectorisrs/vectorisrs.c, tx49/include/tx4925.h, 
 	tx49/include/tx4938.h, tx49/vectorisrs/maxvectors.c,

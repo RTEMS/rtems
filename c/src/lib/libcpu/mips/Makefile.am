@@ -23,8 +23,16 @@ shared_cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## interrupts
 
+if rm52xx
+interrupts_CPPFLAGS = -DRM52XX
+endif
+
 if tx39
 interrupts_CPPFLAGS = -DTX39
+endif
+
+if tx49
+interrupts_CPPFLAGS = -DTX49
 endif
 
 if mongoosev
@@ -70,6 +78,22 @@ tx39_vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tx39_vectorisrs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if tx49
+include_libcpu_HEADERS += tx49/include/tx4925.h tx49/include/tx4938.h
+
+noinst_PROGRAMS += tx49/vectorisrs.rel
+tx49_vectorisrs_rel_SOURCES = tx49/vectorisrs/maxvectors.c tx49/vectorisrs/vectorisrs.c
+tx49_vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS)
+tx49_vectorisrs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+if tx49
+noinst_PROGRAMS += tx49/timer.rel
+tx49_timer_rel_SOURCES = timer/timer.c timer/gettime.S
+tx49_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+tx49_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
 if au1x00
 include_libcpu_HEADERS += au1x00/include/au1x00.h
 
@@ -100,6 +124,22 @@ noinst_PROGRAMS += r46xx/clock.rel
 r46xx_clock_rel_SOURCES = clock/ckinit.c clock/clock.S clock/clock.h
 r46xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 r46xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+if rm52xx
+include_libcpu_HEADERS += rm52xx/include/rm5231.h
+
+noinst_PROGRAMS += rm52xx/vectorisrs.rel
+rm52xx_vectorisrs_rel_SOURCES = rm52xx/vectorisrs/maxvectors.c rm52xx/vectorisrs/vectorisrs.c
+rm52xx_vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS)
+rm52xx_vectorisrs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+if rm52xx
+noinst_PROGRAMS += rm52xx/timer.rel
+rm52xx_timer_rel_SOURCES = timer/timer.c timer/gettime.S
+rm52xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+rm52xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 include $(srcdir)/preinstall.am

@@ -26,6 +26,11 @@ AM_CONDITIONAL(r46xx, test "$RTEMS_CPU_MODEL" = "R4600" \
 
 AM_CONDITIONAL(tx39, test "$RTEMS_CPU_MODEL" = "tx3904")
 
+AM_CONDITIONAL(tx49, test "$RTEMS_CPU_MODEL" = "tx4925" \
+|| test "$RTEMS_CPU_MODEL" = "tx4938" )
+
+AM_CONDITIONAL(rm52xx, test "$RTEMS_CPU_MODEL" = "rm5231")
+
 AM_CONDITIONAL(mongoosev, test "$RTEMS_CPU_MODEL" = "mongoosev")
 
 AM_CONDITIONAL(au1x00, test "$RTEMS_CPU_MODEL" = "au1x00")
