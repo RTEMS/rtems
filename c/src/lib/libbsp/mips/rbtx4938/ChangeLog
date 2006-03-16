@@ -1,0 +1,13 @@
+2006-03-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* .cvsignore, liblnk/pmon.S, liblnk/regs.S, liblnk/lnklib.S,
+	README, bsp_specs, configure.ac, startup/inittlb.c,
+	startup/bspstart.c, startup/idtmem.S, startup/exception.S,
+	startup/bspclean.c, startup/idttlb.S, startup/linkcmds,
+	include/tm27.h, include/bsp.h, clock/yamon_api.h,
+	clock/clockdrv.c, Makefile.am, start/start.S
+	console/yamon_api.h, console/console-io.c:
+	New (Submission by Bruce Robinson <brucer@pmccorp.com>).
+
+	* The RBTX4938 BSP is for a Toshiba TX4938 evaluation board.
+
