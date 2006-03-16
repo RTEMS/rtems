@@ -1,3 +1,8 @@
+2006-03-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/p4000.cfg, custom/p4600.cfg, custom/p4650.cfg:
+	Remove (abandoned).
+
 2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/leon1.cfg, custom/leon2.cfg, custom/leon3.cfg, sis.cfg:
