@@ -1,0 +1,13 @@
+2006-03-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* liblnk/pmon.S, liblnk/regs.S, liblnk/lnklib.S, README,
+	bsp_specs, configure.ac, startup/inittlb.c, startup/bspstart.c,
+	startup/setvec.c, startup/ghlinkcmds, startup/idtmem.S, 
+	startup/exception.S, startup/bspclean.c, startup/idttlb.S,
+	startup/linkcmds, include/usc.h, include/tm27.h, include/bsp.h,
+	include/coverhd.h, clock/clock.h, clock/clock.S, clock/ckinit.c,
+	Makefile.am, start/start.S, console/console.c, times: 
+	New (Submission by Bruce Robinson <brucer@pmccorp.com>). 
+
+	* The HURRICANE BSP is for a Quick Logic Hurricane evaluation board.
+	  This board has a PMC-Sierra RM5230 or RM5231 MIPS Processor.

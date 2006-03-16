@@ -1,0 +1,19 @@
+#
+#  ghlinkcmds,v 1.2 1998/01/16 16:56:32 joel Exp
+#
+
+-map
+-sec
+{
+  .text 0x80010000  :
+  .data  align(16)  :
+  .rodata :
+  .fini :
+#  .sdata :
+  .symtab :
+  .strtab :
+  .debug :
+#  .sbss :
+  .bss     align(8)  :
+  .init 0xbfc00000 :
+}

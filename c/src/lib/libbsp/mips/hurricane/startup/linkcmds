@@ -1,0 +1,162 @@
+/*
+ *   linkcmds,v 1.6 2003/01/20 20:20:10 joel Exp
+ */
+
+/*
+ * Declare some sizes.
+ */
+_RamBase = DEFINED(_RamBase) ? _RamBase : 0x80000000;
+_RamSize = DEFINED(_RamSize) ? _RamSize : 4M;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
+
+SECTIONS
+{
+  /* 0x80000000 - 0x8001FFFF used by PMON (with 0x80010000 - 0x8001FFFF as heap for symbol storage)
+	0x80020000 - 0x8002FFFF reserved for shared memory
+	0x80030000 beginning of text (code) section
+   */
+  .text 0x80030000  :
+  {
+    _ftext = . ;
+    eprol = .;
+    *(.text)
+    *(.text.*)
+    *(.gnu.linkonce.t*)
+    *(.mips16.fn.*)
+    *(.mips16.call.*)
+    PROVIDE (__runtime_reloc_start = .);
+    *(.rel.sdata)
+    PROVIDE (__runtime_reloc_stop = .);
+
+      /*
+       * Special FreeBSD sysctl sections.
+       */
+      . = ALIGN (16);
+      __start_set_sysctl_set = .;
+      *(set_sysctl_*);
+      __stop_set_sysctl_set = ABSOLUTE(.);
+      *(set_domain_*);
+      *(set_pseudo_*);
+
+      *(.gcc_except_table)
+      *(.eh_frame_hdr)
+      *(.eh_frame)
+  }
+
+  .init :
+  {
+	KEEP(*crti.o(.init))
+	KEEP(*(.init))
+	KEEP(*crtn.o(.init))
+  }
+
+  .fini :
+  {
+	KEEP(*crti.o(.fini))
+	KEEP(*(.fini))
+	KEEP(*crtn.o(.fini))
+  }
+
+  .ctors    :
+  {
+    /* gcc uses crtbegin.o to find the start of
+       the constructors, so we make sure it is
+       first.  Because this is a wildcard, it
+       doesn't matter if the user does not
+       actually link against crtbegin.o; the
+       linker won't look for a file to match a
+       wildcard.  The wildcard also means that it
+       doesn't matter which directory crtbegin.o
+       is in.  */
+
+    KEEP (*crtbegin.o(.ctors))
+
+    /* We don't want to include the .ctor section from
+       from the crtend.o file until after the sorted ctors.
+       The .ctor section from the crtend file contains the
+       end of ctors marker and it must be last */
+
+    KEEP (*(EXCLUDE_FILE (*crtend.o) .ctors))
+    KEEP (*(SORT(.ctors.*)))
+    KEEP (*(.ctors))
+  }
+
+  .dtors    :
+  {
+    KEEP (*crtbegin.o(.dtors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
+    KEEP (*(SORT(.dtors.*)))
+    KEEP (*(.dtors))
+
+    etext  =  .;
+    _etext  =  .;
+  }
+
+  .rdata : {
+    *(.rdata)
+    *(.rodata)
+    *(.rodata.*)
+    *(.gnu.linkonce.r*)
+  }
+   _fdata = ALIGN(16);
+
+  .data : {
+    *(.data)
+    *(.data.*)
+    *(.gnu.linkonce.d*)
+    SORT(CONSTRUCTORS)
+  }
+  . = ALIGN(8);
+
+  .jcr : {
+	KEEP (*(.jcr))
+  }
+
+  _gp = ALIGN(16) + 0x8000;
+  __global = _gp;
+
+  .sdata : {
+    *(.sdata)
+    *(.sdata.*)
+    *(.gnu.linkonce.s*)
+  }
+  .lit8 : {
+    *(.lit8)
+  }
+  .lit4 : {
+    *(.lit4)
+  }
+
+   edata  =  .;
+   _edata  =  .;
+   _fbss = .;
+
+  .sbss : {
+    *(.sbss)
+    *(.scommon)
+  }
+  .bss : {
+    _bss_start = . ;
+    *(.bss)
+    *(.reginfo)
+    *(COMMON)
+    . = ALIGN (64);
+    _stack_limit = .;
+    . += _StackSize;
+    __stack = .;
+    _stack_init = .;
+     end = .;
+    _end = .;
+  }
+
+
+  /* Debug sections.  These should never be loadable, but they must have
+     zero addresses for the debuggers to work correctly.  */
+  .line			0 : { *(.line)			}
+  .debug		0 : { *(.debug)			}
+  .debug_sfnames	0 : { *(.debug_sfnames)		}
+  .debug_srcinfo	0 : { *(.debug_srcinfo)		}
+  .debug_macinfo	0 : { *(.debug_macinfo)		}
+  .debug_pubnames	0 : { *(.debug_pubnames)	}
+  .debug_aranges	0 : { *(.debug_aranges)		}
+}
