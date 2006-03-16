@@ -1,5 +1,7 @@
-2006-03-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+2006-03-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: AC_CONFIG_SRCDIR(csb350).
+	* acinclude.m4: Regenerate.
 	* README: Remove (obsolete).
 	* acinclude.m4: Remove p4000.
 
