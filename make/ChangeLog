@@ -1,5 +1,7 @@
 2006-03-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* custom/hurricane.cfg, custom/rbtx4925.cfg, custom/rbtx4938.cfg:
+	New (Submission by Bruce Robinson <brucer@pmccorp.com>).
 	* custom/p4000.cfg, custom/p4600.cfg, custom/p4650.cfg:
 	Remove (abandoned).
 
