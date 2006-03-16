@@ -6,10 +6,14 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([csb350]);;
   genmongoosev )
     AC_CONFIG_SUBDIRS([genmongoosev]);;
+  hurricane )
+    AC_CONFIG_SUBDIRS([hurricane]);;
   jmr3904 )
     AC_CONFIG_SUBDIRS([jmr3904]);;
-  p4000 )
-    AC_CONFIG_SUBDIRS([p4000]);;
+  rbtx4925 )
+    AC_CONFIG_SUBDIRS([rbtx4925]);;
+  rbtx4938 )
+    AC_CONFIG_SUBDIRS([rbtx4938]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
