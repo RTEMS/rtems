@@ -1,3 +1,11 @@
+2006-03-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rm52xx/include/rm5231.h, rm52xx/vectorisrs/maxvectors.c,
+	rm52xx/vectorisrs/vectorisrs.c, tx49/include/tx4925.h, 
+	tx49/include/tx4938.h, tx49/vectorisrs/maxvectors.c,
+	tx49/vectorisrs/vectorisrs.c:
+	New (Submission by Bruce Robinson <brucer@pmccorp.com>).
+
 2005-11-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
