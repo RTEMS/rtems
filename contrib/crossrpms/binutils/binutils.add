@@ -16,6 +16,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
+Requires:	@rpmprefix@rtems@osversion@-base-binutils
 %endif
 BuildRequires:	flex
 BuildRequires:	bison
