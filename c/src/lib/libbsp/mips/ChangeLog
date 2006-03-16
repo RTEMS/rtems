@@ -1,3 +1,7 @@
+2006-03-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* acinclude.m4: Remove p4000.
+
 2005-02-24	Jay Monkman <jtm@lopingdog.com>
 
 	* acinclude.m4: Added csb350 to list of BSPs.
