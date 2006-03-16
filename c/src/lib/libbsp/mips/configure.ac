@@ -4,7 +4,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-lib-libbsp-mips],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
-AC_CONFIG_SRCDIR([p4000])
+AC_CONFIG_SRCDIR([csb350])
 RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
