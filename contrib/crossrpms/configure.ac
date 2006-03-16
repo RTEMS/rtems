@@ -27,7 +27,8 @@ case "$prefix" in
   build_infos=1
   rpmprefix="rtems-"
   ;;
-NONE) # Default prefix
+NONE|${ac_default_prefix}) # Default prefix
+echo "DEFAULT:$prefix"
   build_infos=1
   rpmprefix="[rtems-]RTEMS_API[-]"
   ;;
