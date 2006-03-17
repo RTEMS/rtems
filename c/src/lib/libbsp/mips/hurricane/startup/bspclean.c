@@ -14,17 +14,8 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  bspclean.c,v 1.9.6.1 2003/09/04 18:44:52 joel Exp
+ *  $Id$
  */
-
-/*
- *  Rather than deleting this, it is commented out to (hopefully) help
- *  the submitter send updates.
- *
- *  static char _sccsid[] = "@(#)bspclean.c 03/15/96     1.1\n";
- */
-
-
 
 #include <rtems.h>
 #include <bsp.h>

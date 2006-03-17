@@ -4,9 +4,8 @@
 #  NOTE: This is just a template.  The times are irrelevant since this BSP
 #        can only be compiled -- not executed.
 #
-#  times,v 1.2 1998/01/16 16:56:32 joel Exp
+#  $Id$
 #
-# @(#)times        08/01/96     1.4
 
 NOTE:  To obtain the execution time in microseconds, divide the number of
        cycles by the clock speed.  For example, if rtems_semaphore create

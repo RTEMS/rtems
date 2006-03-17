@@ -12,8 +12,8 @@
  *  bsp.h,v 1.7.6.1 2003/09/04 18:44:49 joel Exp
  */
 
-#ifndef __RBTX4938_h
-#define __RBTX4938_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -93,4 +93,3 @@ rtems_isr_entry set_vector(
 #endif
 
 #endif
-/* end of include file */

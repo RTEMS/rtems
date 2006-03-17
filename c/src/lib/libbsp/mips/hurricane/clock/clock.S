@@ -17,9 +17,8 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  clock.S,v 1.5 2001/05/24 13:23:48 joel Exp
+ *  $Id$
  */
-/* @(#)clock.S       08/20/96     1.2 */
 
 #include <iregdef.h>
 #include <idtcpu.h>

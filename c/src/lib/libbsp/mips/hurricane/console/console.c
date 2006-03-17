@@ -25,18 +25,8 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  console.c,v 1.10.4.1 2003/09/04 18:44:52 joel Exp
+ *  $Id$
  */
-
-
-/*
- *  Rather than deleting this, it is commented out to (hopefully) help
- *  the submitter send updates.
- *
- *  static char _sccsid[] = "@(#)console.c 08/20/96     1.6\n";
- */
-
-
 
 #include <bsp.h>
 #include <rtems/libio.h>

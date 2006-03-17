@@ -21,9 +21,8 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  coverhd.h,v 1.7.6.1 2003/09/04 18:44:52 joel Exp
+ *  $Id$
  */
-/* @(#)coverhd.h       04/08/96     1.3 */
 
 #ifndef __COVERHD_h
 #define __COVERHD_h
@@ -112,4 +111,3 @@ extern "C" {
 #endif
 
 #endif
-/* end of include file */

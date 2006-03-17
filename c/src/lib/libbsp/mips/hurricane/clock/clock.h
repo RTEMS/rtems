@@ -17,9 +17,7 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  clock.h,v 1.2 1996/09/11 19:14:52 joel Exp
+ *  $Id$
  */
-
-/* @(#)clock.h       08/20/96     1.2 */
 
 extern void mips_set_timer( uint32_t timer_clock_interval );

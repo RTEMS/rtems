@@ -11,12 +11,11 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  bsp.h,v 1.12.4.1 2003/09/04 18:44:52 joel Exp
+ *  $Id$
  */
-/* @(#)bsp.h       03/15/96     1.1 */
 
-#ifndef __HURRICANE_BSP_h
-#define __HURRICANE_BSP_h
+#ifndef _BSP_H
+#define _BSP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -125,5 +124,3 @@ rtems_isr_entry set_vector(
 #endif
 
 #endif	/* __HURRICANE_BSP_h */
-
-/* end of include file */

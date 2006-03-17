@@ -19,8 +19,6 @@ two paragraphs in the transferred software.
 
 COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
-
-  start.S,v 1.6 2001/09/28 23:14:23 joel Exp
 */ 
 
 /*************************************************************************
@@ -28,9 +26,12 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 ** Copyright 1991-95 Integrated Device Technology, Inc.
 **	All Rights Reserved
 **
-** idt_csu.S -- IDT stand alone startup code
-**
 **************************************************************************/
+
+/*
+ * $Id$
+ */
+
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
@@ -339,4 +340,3 @@ __sizemem:
 	j	ra
 	nop
 	.end	__sizemem
-

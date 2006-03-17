@@ -20,16 +20,12 @@ two paragraphs in the transferred software.
 COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
-  idttlb.S,v 1.3 2000/10/24 21:50:37 joel Exp
 */
-
 
 /*
-**	idttlb.s - fetch the registers associated with and the contents
-**		   of the tlb.
-**
-*/
-/* 950308: Ketan patched a few tlb functions that would not have worked.*/
+ * $Id$
+ */
+
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
