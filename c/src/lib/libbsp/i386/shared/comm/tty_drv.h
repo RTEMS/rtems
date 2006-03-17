@@ -87,6 +87,5 @@ rtems_device_driver tty2_control(
 #ifdef __cplusplus
 }
 #endif
-/* end of include file */
 
 #endif  /* __tty_drv__  */

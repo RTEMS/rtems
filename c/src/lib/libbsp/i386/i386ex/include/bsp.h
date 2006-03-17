@@ -119,4 +119,3 @@ BSP_EXTERN unsigned int   Gdt_base;
 #endif
 
 #endif
-/* end of include file */

@@ -250,4 +250,3 @@
 /* A20GATE AND FAST CPU RESET -- SLOT 0 ADDRESS */
 #define PORT92DOS    0x0092
 
-/* end of include file */

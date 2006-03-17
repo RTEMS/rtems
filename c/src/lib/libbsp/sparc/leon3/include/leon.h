@@ -409,5 +409,4 @@ extern volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 #endif
 
 #endif /* !_INCLUDE_LEON_h */
-/* end of include file */
 

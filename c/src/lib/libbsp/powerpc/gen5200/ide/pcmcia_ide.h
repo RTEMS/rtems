@@ -100,4 +100,3 @@
 #define ATA_PIO_TIMING_2(t4,t1,ta)                   (((COUNT_VAL(t4)) << 24) | ((COUNT_VAL(t1)) << 16) | ((COUNT_VAL(ta)) << 8))
 
 #endif
-/* end of include file */

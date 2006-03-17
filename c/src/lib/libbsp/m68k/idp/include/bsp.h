@@ -75,4 +75,3 @@ void transmit_char( char ch );
 void transmit_char_portb( char ch );
 
 #endif
-/* end of include file */

@@ -69,5 +69,4 @@ void gp32_setPalette( unsigned char pos, uint16_t color);
 #endif
 
 #endif /* _BSP_H */
-/* end of include file */
 

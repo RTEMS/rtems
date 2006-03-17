@@ -79,4 +79,3 @@ extern int cpu_number;
 #endif
 
 #endif
-/* end of include file */

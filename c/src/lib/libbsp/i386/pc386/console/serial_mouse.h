@@ -71,6 +71,5 @@ rtems_device_driver serial_mouse_write(
 #ifdef __cplusplus
 }
 #endif
-/* end of include file */
 
 #endif  /* __tty_drv__  */

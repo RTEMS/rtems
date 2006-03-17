@@ -101,4 +101,3 @@ m68k_isr_entry set_vector(
 #endif
 
 #endif
-/* end of include file */

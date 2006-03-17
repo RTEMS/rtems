@@ -51,4 +51,3 @@ rtems_device_driver ramdisk_control(rtems_device_major_number major,
 #endif
 
 #endif
-/* end of include file */

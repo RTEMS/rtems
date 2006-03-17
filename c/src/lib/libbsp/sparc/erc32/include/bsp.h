@@ -119,4 +119,3 @@ extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 #endif
 
 #endif
-/* end of include file */

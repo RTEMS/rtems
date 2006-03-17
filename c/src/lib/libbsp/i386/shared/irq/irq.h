@@ -99,4 +99,3 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine);
 #endif
 
 #endif /* _IRQ_H_ */
-/* end of include file */

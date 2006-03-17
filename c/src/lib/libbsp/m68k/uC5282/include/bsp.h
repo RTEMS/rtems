@@ -166,4 +166,3 @@ int BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocal
 #endif
 
 #endif
-/* end of include file */

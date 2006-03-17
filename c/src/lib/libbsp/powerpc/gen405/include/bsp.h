@@ -105,4 +105,3 @@ rtems_isr_entry set_vector(                    /* returns old vector */
 #endif
 
 #endif
-/* end of include file */

@@ -69,6 +69,5 @@ rtems_device_driver paux_control(
 #ifdef __cplusplus
 }
 #endif
-/* end of include file */
 
 #endif  /* __paux_drv__  */
