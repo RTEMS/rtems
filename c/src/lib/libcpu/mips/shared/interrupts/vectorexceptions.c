@@ -14,7 +14,7 @@
 #include <rtems/mips/idtcpu.h>
 #include <rtems/bspIo.h>
 
-char *cause_strings[32] =
+static const char *cause_strings[32] =
 {
   /*  0 */ "Int",
   /*  1 */ "TLB Mods",
@@ -55,7 +55,7 @@ struct regdef
   char *name;
 };
 
-struct regdef dumpregs[]= {
+static const struct regdef dumpregs[]= {
   { R_RA, "R_RA" }, { R_V0, "R_V0" },     { R_V1, "R_V1" },
   { R_A0, "R_A0" }, { R_A1, "R_A1" },     { R_A2, "R_A2" },
   { R_A3, "R_A3" }, { R_T0, "R_T0" },     { R_T1, "R_T1" },
@@ -68,23 +68,28 @@ struct regdef dumpregs[]= {
 
 void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
 {
-  unsigned int *frame_u32;
+  uint32_t *frame_u32;
   int   i, j;
 
-  frame_u32 = (uint32_t*)frame;
+  frame_u32 = (uint32_t *)frame;
   for(i=0; dumpregs[i].offset > -1; i++)
   {
      printk("   %s", dumpregs[i].name);
      for(j=0; j< 7-strlen(dumpregs[i].name); j++) printk(" ");
+#if (__mips == 1 ) || (__mips == 32)
      printk("  %08X%c", frame_u32[dumpregs[i].offset], (i%3) ? '\t' : '\n' );
+#elif __mips == 3
+     printk("  %08X", frame_u32[2 * dumpregs[i].offset + 1] );
+     printk("%08X%c", frame_u32[2 * dumpregs[i].offset], (i%2) ? '\t' : '\n' );
+#endif
   }
   printk( "\n" );
 }
 
 void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
 {
-  unsigned int sr;
-  unsigned int cause;
+  uint32_t sr;
+  uint32_t cause;
 
   mips_get_sr( sr );
   mips_get_cause( cause );

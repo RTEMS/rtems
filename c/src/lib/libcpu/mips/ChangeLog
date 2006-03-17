@@ -1,3 +1,9 @@
+2006-03-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/interrupts/vectorexceptions.c: Merger with submission from
+	Bruce Robinson <brucer@pmccorp.com>.
+	Make some arrays static const.
+
 2006-03-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am, configure.ac: Reflect addition of rm52xx, tx49.
