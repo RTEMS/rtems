@@ -18,10 +18,10 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 
 %files -n @rpmprefix@rtems@osversion@-base-gnat
 %defattr(-,root,root)
-%dir %{_bindir}
+%sysdir %{_bindir}
 %{_bindir}/vxaddr2line%{_exeext}
 
-%dir %{_infodir}
+%sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/gnat*
 

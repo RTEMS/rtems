@@ -17,7 +17,7 @@ GCC files that are shared by all targets.
 
 %files -n @rpmprefix@rtems@osversion@-base-gcc
 %defattr(-,root,root)
-%dir %{_infodir}
+%sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/cpp.info*
 %{_infodir}/cppinternals.info*
@@ -27,13 +27,13 @@ GCC files that are shared by all targets.
 %{_infodir}/gccinstall.info*
 %endif
 
-%dir %{_mandir}
+%sysdir %{_mandir}
 %if "%{gcc_version}" < "3.4"
-%dir %{_mandir}/man1
+%sysdir %{_mandir}/man1
 %{_mandir}/man1/cpp.1*
 %{_mandir}/man1/gcov.1*
 %endif
-%dir %{_mandir}/man7
+%sysdir %{_mandir}/man7
 %{_mandir}/man7/fsf-funding.7*
 %{_mandir}/man7/gfdl.7*
 %{_mandir}/man7/gpl.7*

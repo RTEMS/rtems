@@ -12,14 +12,10 @@ GNU gdb targetting @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-gdb
 %defattr(-,root,root)
-%if "%{_prefix}" != "/usr"
-%dir %{_mandir}
-%dir %{_mandir}/man1
-%endif
+%sysdir %{_mandir}
+%sysdir %{_mandir}/man1
 %{_mandir}/man1/@tool_target@-*.1*
 
-%if "%{_prefix}" != "/usr"
-%dir %{_bindir}
-%endif
+%sysdir %{_bindir}
 %{_bindir}/@tool_target@-*
 

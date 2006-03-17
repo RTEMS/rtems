@@ -14,19 +14,15 @@ GNU cc compiler for @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-gcc -f build/files.gcc
 %defattr(-,root,root)
-%if "%{_prefix}" != "/usr"
-%dir %{_mandir}
-%dir %{_mandir}/man1
-%endif
+%sysdir %{_mandir}
+%sysdir %{_mandir}/man1
 %{_mandir}/man1/@tool_target@-gcc.1*
 %if "%{gcc_version}" >= "3.4"
 %{_mandir}/man1/@tool_target@-cpp.1*
 %{_mandir}/man1/@tool_target@-gcov.1*
 %endif
 
-%if "%{_prefix}" != "/usr"
-%dir %{_bindir}
-%endif
+%sysdir %{_bindir}
 %{_bindir}/@tool_target@-cpp%{_exeext}
 %{_bindir}/@tool_target@-gcc%{_exeext}
 %if "%{gcc_version}" >= "3.3"

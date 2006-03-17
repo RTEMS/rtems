@@ -44,7 +44,7 @@ fi
 
 %files -n @rpmprefix@rtems@osversion@-base-gdb
 %defattr(-,root,root)
-%dir %{_infodir}
+%sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/gdb.info*
 

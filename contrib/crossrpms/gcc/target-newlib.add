@@ -14,9 +14,7 @@ Newlib C Library for @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-newlib -f build/files.newlib
 %defattr(-,root,root)
-%if "%{_prefix}" != "/usr"
-%dir %{_prefix}
-%endif
+%sysdir %{_prefix}
 %dir %{_prefix}/@tool_target@
 %{_prefix}/@tool_target@/include
 
