@@ -1,5 +1,6 @@
 2006-03-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* cpu.c (_CPU_Initialize): Add fpu initialization.
 	* rtems/score/cpu.h: Setup CPU_*_ENDIAN from GCC's__MIPS{EL|EB}__.
 	(Partial merger of submission by Bruce Robinson <brucer@pmccorp.com>).
 

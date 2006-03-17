@@ -81,8 +81,12 @@ void _CPU_Initialize(
    *  the task's during Context_Initialize.
    */
 
+#if CPU_HARDWARE_FP
   /* FP context initialization support goes here */
-
+  _CPU_Null_fp_context.fpcs = 0x1000000; 	/* Set FS flag in floating point coprocessor
+  						   control register to prevent underflow and
+  						   inexact exceptions */
+#endif
   _CPU_Table = *cpu_table;
 }
 
