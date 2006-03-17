@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.7])
 
 AC_PREREQ(2.59)
-AC_INIT([crossrpms],[0.20060315.3],[rtems-bugs@rtems.com])
+AC_INIT([crossrpms],[0.20060317.0],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -17,21 +17,26 @@ AM_INIT_AUTOMAKE([1.9])
 case "$prefix" in
 /usr)
   build_infos=0
+  sysdirpattern="/%sysdir/d"
   rpmprefix=
   ;;
 /usr/local)
   build_infos=0
+  sysdirpattern="/%sysdir/d"
   rpmprefix="local-"
   ;;
 /opt/rtems)
   build_infos=1
+  sysdirpattern="s/^%sysdir/^%dir/g"
   rpmprefix="rtems-"
   ;;
 NONE|${ac_default_prefix}) # Default prefix
   build_infos=1
+  sysdirpattern="s/^%sysdir/^%dir/g"
   rpmprefix="[rtems-]RTEMS_API[-]"
   ;;
 esac
+AC_SUBST(sysdirpattern)
 
 AC_ARG_ENABLE([rpmprefix],
 [  --enable-rpmprefix=<rpmprefix>      prefix rpms],[
