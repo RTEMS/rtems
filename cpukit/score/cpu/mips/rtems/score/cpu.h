@@ -312,8 +312,17 @@ extern "C" {
  */
 
 #define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
+
+/* __MIPSEB__ or __MIPSEL__ is defined by GCC based on -EB or -EL command line options */
+#if defined(__MIPSEB__)
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
+#elif defined(__MIPSEL__)
+#define CPU_BIG_ENDIAN                           FALSE
+#define CPU_LITTLE_ENDIAN                        TRUE
+#else
+#error "Unknown endianness"
+#endif
 
 /*
  *  The following defines the number of bits actually used in the

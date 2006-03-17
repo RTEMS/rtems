@@ -1,3 +1,8 @@
+2006-03-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/cpu.h: Setup CPU_*_ENDIAN from GCC's__MIPS{EL|EB}__.
+	(Partial merger of submission by Bruce Robinson <brucer@pmccorp.com>).
+
 2006-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Part of a large patch to improve Doxygen output.
