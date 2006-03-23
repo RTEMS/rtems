@@ -27,13 +27,18 @@ case "$prefix" in
   ;;
 /opt/rtems)
   build_infos=1
-  sysdirpattern="s/^%sysdir/^%dir/g"
+  sysdirpattern="s/^%sysdir/%dir/g"
   rpmprefix="rtems-"
   ;;
 NONE|${ac_default_prefix}) # Default prefix
   build_infos=1
-  sysdirpattern="s/^%sysdir/^%dir/g"
+  sysdirpattern="s/^%sysdir/%dir/g"
   rpmprefix="[rtems-]RTEMS_API[-]"
+  ;;
+*)
+  build_infos=0
+  sysdirpattern="s/^%sysdir/%dir/g"
+  rpmprefix="custom-"
   ;;
 esac
 AC_SUBST(sysdirpattern)
