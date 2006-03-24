@@ -554,6 +554,7 @@ rtems_bsp_reset_cause(char *buf, size_t capacity)
     for (i = 0, bit = 0x80 ; bit != 0 ; bit >>= 1) {
         if (rsr & bit) {
             switch (bit) {
+            case MCF5282_RESET_RSR_LVD:  cp = "Low voltage";        break;
             case MCF5282_RESET_RSR_SOFT: cp = "Software reset";     break;
             case MCF5282_RESET_RSR_WDR:  cp = "Watchdog reset";     break;
             case MCF5282_RESET_RSR_POR:  cp = "Power-on reset";     break;
