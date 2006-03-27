@@ -48,7 +48,7 @@ rtems_monitor_dump_char(char ch)
     if (isprint(ch))
         return fprintf(stdout,"%c", ch);
     else
-        return fprintf(stdout,"%02x", ch);
+        return fprintf(stdout,"%02x", (unsigned char)ch);
 }
 
 int

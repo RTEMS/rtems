@@ -1,3 +1,7 @@
+2006-03-27	Eric Norum <norume@aps.anl.gov>
+
+	* libmisc/monitor/prmisc.c: Eliminate undesired sign-extension.
+
 2006-03-08	Joel Sherrill <joel@OARcorp.com>
 
 	PR 761/rtems
