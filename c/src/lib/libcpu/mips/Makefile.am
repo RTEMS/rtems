@@ -98,7 +98,7 @@ include_libcpu_HEADERS += au1x00/include/au1x00.h
 noinst_PROGRAMS += au1x00/vectorisrs.rel
 au1x00_vectorisrs_rel_SOURCES = au1x00/vectorisrs/maxvectors.c \
   au1x00/vectorisrs/vectorisrs.c
-au1x00_vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+au1x00_vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS)
 au1x00_vectorisrs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
