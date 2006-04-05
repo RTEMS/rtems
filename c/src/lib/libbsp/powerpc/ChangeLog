@@ -4,8 +4,8 @@
 
 2006-02-13	Till Straumann <strauman@slac.stanford.edu>
 	* shared/startup/panic.c, shared/startup/probeMemEnd.c:
-    added code for BSPs to use: panic using printk() to display
-    reason. probeMemEnd() to determine memory size by probing.
+	added code for BSPs to use: panic using printk() to display
+	reason. probeMemEnd() to determine memory size by probing.
 
 2006-02-08	Joel Sherrill <joel@OARcorp.com>
 
