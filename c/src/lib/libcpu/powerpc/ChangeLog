@@ -1,3 +1,7 @@
+2006-04-05	Victor V. Vengerov <Victor.Vengerov@oktetlabs.ru>
+
+	* mpc6xx/clock/c_clock.c: Now works with MPCI SHM driver.
+
 2006-01-20	Till Straumann <strauman@slac.stanford.edu>
 
 	* mpc6xx/mmu/pte121.c: consistency check now warns instead

@@ -60,6 +60,13 @@ void clockOn(void* unused)
   PPC_Set_decrementer( Clock_Decrementer_value );
 }
 
+static void clockHandler(void)
+{
+    rtems_clock_tick();
+}
+
+static void (*clock_handler)(void);
+
 /*
  *  Clock_isr
  *
@@ -73,7 +80,6 @@ void clockOn(void* unused)
  *  Return values:      NONE
  *
  */
-
 void clockIsr(void *unused)
 {
 int decr;
@@ -91,7 +97,7 @@ int decr;
 	/*
 	 *  Real Time Clock counter/timer is set to automatically reload.
 	 */
-	rtems_clock_tick();
+	clock_handler();
   } while ( decr < 0 );
 }
 
@@ -161,6 +167,7 @@ rtems_device_driver Clock_initialize(
    * the correct value.
    */
 
+  clock_handler = clockHandler;
   if (!BSP_connect_clock_handler ()) {
     printk("Unable to initialize system clock\n");
     rtems_fatal_error_occurred(1);
@@ -204,10 +211,12 @@ rtems_device_driver Clock_control(
       (rtems_configuration_get_microseconds_per_tick()/1000);
 
     if      (args->command == rtems_build_name('I', 'S', 'R', ' '))
-      clockIsr(NULL);
+      clockHandler();
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-		Clock_initialize(major, minor, 0);
+        if (clock_handler == NULL)
+            Clock_initialize(major, minor, 0);
+        clock_handler = args->buffer;
     }
 done:
     return RTEMS_SUCCESSFUL;
