@@ -195,8 +195,11 @@ SCORE_EXTERN Thread_queue_Control _MPCI_Remote_blocked_threads;
  */
 SCORE_EXTERN MPCI_Control *_MPCI_table;
 
-/**
- *  The following points to the MPCI Receive Server.
+/** @brief Pointer to MP Thread Control Block
+ *
+ *  The following is used to determine when the multiprocessing receive
+ *  thread is executing so that a proxy can be allocated instead of
+ *  blocking the multiprocessing receive thread.
  */
 SCORE_EXTERN Thread_Control *_MPCI_Receive_server_tcb;
 

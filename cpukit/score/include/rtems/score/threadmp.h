@@ -62,14 +62,6 @@ Thread_Control *_Thread_MP_Find_proxy (
   Objects_Id the_id
 );
 
-/** @brief Pointer to MP Thread Control Block
- *
- *  The following is used to determine when the multiprocessing receive
- *  thread is executing so that a proxy can be allocated instead of
- *  blocking the multiprocessing receive thread.
- */
-SCORE_EXTERN Thread_Control *_Thread_MP_Receive;
-
 /** @brief Active Proxy Set
  *
  * The following chain is used to manage the active set proxies.

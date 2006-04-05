@@ -33,7 +33,7 @@ RTEMS_INLINE_ROUTINE boolean _Thread_MP_Is_receive (
   Thread_Control *the_thread
 )
 {
-  return the_thread == _Thread_MP_Receive;
+  return the_thread == _MPCI_Receive_server_tcb;
 }
 
 /**

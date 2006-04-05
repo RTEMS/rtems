@@ -23,7 +23,7 @@
  */
 
 #define _Thread_MP_Is_receive( _the_thread ) \
-  ( (_the_thread) == _Thread_MP_Receive)
+  ( (_the_thread) == _MPCI_Receive_server_tcb)
 
 /*PAGE
  *

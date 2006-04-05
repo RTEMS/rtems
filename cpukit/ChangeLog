@@ -1,3 +1,16 @@
+2006-04-05	Joel Sherrill <joel@OARcorp.com>
+		Victor V. Vengerov <Victor.Vengerov@oktetlabs.ru>
+
+	* score/include/rtems/score/mpci.h,
+	score/include/rtems/score/threadmp.h,
+	score/inline/rtems/score/threadmp.inl,
+	score/macros/rtems/score/threadmp.inl, score/src/threadmp.c,
+	score/src/threadqenqueue.c: Victor spotted the problem that
+	_MPCI_Receive_server_tcb and _Thread_MP_Receive were duplicate
+	variables and needed to be set to the same value.  I took that
+	idea and just removed _Thread_MP_Receive.  All uses are now
+	_MPCI_Receive_server_tcb.
+
 2006-03-27	Eric Norum <norume@aps.anl.gov>
 
 	* libmisc/monitor/prmisc.c: Eliminate undesired sign-extension.

@@ -19,6 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/mpci.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/isr.h>
 
@@ -73,12 +74,12 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 
     _Thread_Executing->Wait.return_code = THREAD_STATUS_PROXY_BLOCKING;
 
-    the_proxy->receive_packet = _Thread_MP_Receive->receive_packet;
+    the_proxy->receive_packet = _MPCI_Receive_server_tcb->receive_packet;
 
-    the_proxy->Object.id = _Thread_MP_Receive->receive_packet->source_tid;
+    the_proxy->Object.id = _MPCI_Receive_server_tcb->receive_packet->source_tid;
 
     the_proxy->current_priority =
-      _Thread_MP_Receive->receive_packet->source_priority;
+      _MPCI_Receive_server_tcb->receive_packet->source_priority;
 
     the_proxy->current_state = _States_Set( STATES_DORMANT, the_state );
 
