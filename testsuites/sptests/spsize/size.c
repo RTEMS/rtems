@@ -360,8 +360,7 @@ uninitialized =
                 (sizeof _Thread_Idle)                     +
 
 #if defined(RTEMS_MULTIPROCESSING)
-/*threadmp.h*/  (sizeof _Thread_MP_Receive)               +
-                (sizeof _Thread_MP_Active_proxies)        +
+/*threadmp.h*/  (sizeof _Thread_MP_Active_proxies)        +
                 (sizeof _Thread_MP_Inactive_proxies)      +
 #endif
 

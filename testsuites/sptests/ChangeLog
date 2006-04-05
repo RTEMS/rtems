@@ -1,3 +1,12 @@
+2006-04-05	Joel Sherrill <joel@OARcorp.com>
+		Victor V. Vengerov <Victor.Vengerov@oktetlabs.ru>
+
+	* spsize/size.c: Victor spotted the problem that
+	_MPCI_Receive_server_tcb and _Thread_MP_Receive were duplicate
+	variables and needed to be set to the same value.  I took that
+	idea and just removed _Thread_MP_Receive.  All uses are now
+	_MPCI_Receive_server_tcb.
+
 2005-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_ENABLE_BARE, 
