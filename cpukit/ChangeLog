@@ -1,3 +1,6 @@
+	* score/inline/rtems/score/threadmp.inl,
+	score/macros/rtems/score/threadmp.inl: Fix compile error.
+
 2006-04-05	Joel Sherrill <joel@OARcorp.com>
 		Victor V. Vengerov <Victor.Vengerov@oktetlabs.ru>
 

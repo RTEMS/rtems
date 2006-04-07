@@ -22,6 +22,7 @@
  *
  */
 
+extern Thread_Control *_MPCI_Receive_server_tcb;
 #define _Thread_MP_Is_receive( _the_thread ) \
   ( (_the_thread) == _MPCI_Receive_server_tcb)
 
