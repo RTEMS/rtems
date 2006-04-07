@@ -74,10 +74,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
   } while (0)
  
 RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
-  Objects_Id        *id,
+  pthread_mutex_t   *mutex,
   Objects_Locations *location
 )
 {
+  Objects_Id *id = (Objects_Id *)mutex;
+
   ___POSIX_Mutex_Get_support( id, location );
 
   return (POSIX_Mutex_Control *)
@@ -85,11 +87,13 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
 }
 
 RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
-  Objects_Id        *id,
+  pthread_mutex_t   *mutex,
   Objects_Locations *location,
   ISR_Level         *level
 )
 {
+  Objects_Id *id = (Objects_Id *)mutex;
+
   ___POSIX_Mutex_Get_support( id, location );
 
   return (POSIX_Mutex_Control *)

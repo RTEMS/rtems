@@ -41,7 +41,7 @@
  *  _POSIX_Timer_Get
  */
 
-#define _POSIX_Timer_Get( _the_timer ) \
+#define _POSIX_Timer_Get( _id, _location ) \
   (POSIX_Timer_Control *) \
     _Objects_Get( &_POSIX_Timer_Information, (_id), (_location) )
 

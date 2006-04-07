@@ -81,10 +81,11 @@
  * then this will have to move to a .c file.  Until then, we will use this.
  */
 static inline POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
-  Objects_Id        *id,
+  pthread_cond_t    *cond,
   Objects_Locations *location
 )
 {
+  Objects_Id        *id = (Objects_Id *)cond;
   ___POSIX_Condition_variables_Get_support( id, location );
 
   return (POSIX_Condition_variables_Control *)

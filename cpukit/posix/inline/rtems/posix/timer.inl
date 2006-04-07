@@ -84,7 +84,7 @@ RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
  */
 
 RTEMS_INLINE_ROUTINE boolean _POSIX_Timer_Is_null (
-  Timer_Control *the_timer
+  POSIX_Timer_Control *the_timer
 )
 {
   return (the_timer == NULL);

@@ -45,9 +45,10 @@
  *        PTHREAD_MUTEX_INITIALIZER without adding overhead.
  */
 
-#define ___POSIX_Mutex_Get_support( _id, _location ) \
+#define ___POSIX_Mutex_Get_support( _mutex, _location ) \
   do { \
     int _status; \
+    Objects_Id *_id = (Objects_Id *) _mutex; \
     \
     if ( !_id ) { \
       *_location = OBJECTS_ERROR; \
@@ -71,7 +72,7 @@
  * then this will have to move to a .c file.  Until then, we will use this.
  */
 static inline POSIX_Mutex_Control * _POSIX_Mutex_Get(
-  Objects_Id        *id,
+  pthread_mutex_t   *id,
   Objects_Locations *location
 )
 {
@@ -85,7 +86,7 @@ static inline POSIX_Mutex_Control * _POSIX_Mutex_Get(
  * then this will have to move to a .c file.  Until then, we will use this.
  */
 static inline POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
-  Objects_Id        *id,
+  pthread_mutex_t   *id,
   Objects_Locations *location,
   ISR_Level         *level
 )

@@ -1,3 +1,11 @@
+2006-04-06	Joel Sherrill <joel@OARcorp.com>
+
+	* posix/inline/rtems/posix/mutex.inl,
+	posix/inline/rtems/posix/timer.inl,
+	posix/macros/rtems/posix/cond.inl,
+	posix/macros/rtems/posix/mutex.inl,
+	posix/macros/rtems/posix/timer.inl: Fix warnings.
+
 	* score/inline/rtems/score/threadmp.inl,
 	score/macros/rtems/score/threadmp.inl: Fix compile error.
 
