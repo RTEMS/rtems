@@ -1,3 +1,7 @@
+2005-04-10	Eric Norum <norume@aps.anl.gov>
+
+    *  custom/uC5282.cfg: Keep frame pointer -- gdb is much more useful.
+
 2006-03-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/hurricane.cfg, custom/rbtx4925.cfg, custom/rbtx4938.cfg:
