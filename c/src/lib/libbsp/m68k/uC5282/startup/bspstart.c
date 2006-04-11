@@ -20,6 +20,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <rtems/error.h>
 #include <rtems/libcsupport.h>
 #include <stdio.h>
 #include <string.h>
@@ -186,12 +187,56 @@ void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);         /* m68k version */
 
 /*
+ * The Arcturus boot ROM prints exception information improperly
+ * so use this default exception handler instead.  This one also
+ * prints a call backtrace
+ */
+static void handler(int pc)
+{
+    int level;
+    static volatile int reent;
+    extern char _RamSize[];
+
+    rtems_interrupt_disable(level);
+    if (reent++) bsp_reset(0);
+    {
+    int *p = &pc;
+    int info = p[-1];
+    int pc = p[0];
+    int format = (info >> 28) & 0xF;
+    int faultStatus = ((info >> 24) & 0xC) | ((info >> 16) & 0x3);
+    int vector = (info >> 18) & 0xFF;
+    int statusRegister = info & 0xFFFF;
+    int *fp;
+
+    printk("\n\nPC:%x  SR:%x  VEC:%x  FORMAT:%x  STATUS:%x\n", pc,
+                                                               statusRegister,
+                                                               vector,
+                                                               format,
+                                                               faultStatus);
+    fp = &p[-2];
+    for(;;) {
+        int *nfp = (int *)*fp;
+        if ((nfp <= fp)
+         || ((char *)nfp >= _RamSize)
+         || ((char *)(nfp[1]) >= _RamSize))
+            break;
+        printk("FP:%x -> %x    PC:%x\n", fp, nfp, nfp[1]);
+        fp = nfp;
+    }
+    }
+    rtems_task_suspend(0);
+    rtems_panic("done");
+}
+
+/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialisation.
  */
 void bsp_start( void )
 {
+  int i;
   extern char _WorkspaceBase[];
   extern char _RamBase[], _RamSize[];
   extern unsigned long  _M68k_Ramsize;
@@ -205,6 +250,13 @@ void bsp_start( void )
    *  typically done by stock BSPs) by subtracting the required amount
    *  of work space from the last physical address on the CPU board.
    */
+
+    /*
+     * Set up default exception handler
+     */
+    for (i = 2 ; i < 256 ; i++)
+        if (i != (32+2)) /* Catch all but bootrom system calls */
+            *((void (**)(int))(i * 4)) = handler;
 
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and

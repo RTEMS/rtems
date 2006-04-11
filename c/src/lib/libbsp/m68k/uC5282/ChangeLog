@@ -1,6 +1,10 @@
+2006-04-11  Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Install default exception handler.
+
 2006-03-24  Eric Norum <norume@aps.anl.gov>
 
-	* startup/bspstart.c: Add missing reset-cause bit
+	* startup/bspstart.c: Add missing reset-cause bit.
 
 2006-02-08	Joel Sherrill <joel@OARcorp.com>
 
