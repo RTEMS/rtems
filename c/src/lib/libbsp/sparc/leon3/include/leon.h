@@ -26,6 +26,8 @@
 extern "C" {
 #endif
 
+#define LEON_INTERRUPT_EXTERNAL_1 5 
+
 #ifndef ASM
 /*
  *  Trap Types for on-chip peripherals
