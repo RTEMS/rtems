@@ -1,7 +1,10 @@
 2006-04-13	Joel Sherrill <joel@OARcorp.com>
 
 	PR 949/networking
-	* libnetworking/sys/socket.h:
+	* libnetworking/sys/socket.h: GNU/Linux is wrong in making
+	MSG_DONTWAIT public.  It is strictly BSD and not SUSV.  See
+	http://www.opengroup.org/onlinepubs/009695399/basedefs/sys/socket.h.html
+	for clarification.
 
 2006-04-12	Lars Munch <lars@segv.dk>
 
