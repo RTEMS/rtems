@@ -20,7 +20,7 @@
 
 2005-09-29	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
-	PR649/filesystem
+	PR 649/filesystem
 	* ide/idecfg.c: added configuration items for primary/secondary
 	IDE interface
 	* configure.ac: added configuration items for primary/secondary

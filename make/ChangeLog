@@ -8,8 +8,8 @@
 	* custom/leon3.cfg: New file.
 
 2005-10-05  Jiri Gaisler <jiri@gaisler.com>
-            Edvin Catovic <edvin@gaisler.com>
-            Konrad Eisele <konrad@gaisler.com>
+	    Edvin Catovic <edvin@gaisler.com>
+	    Konrad Eisele <konrad@gaisler.com>
 
 	PR 827/bsps
 	* custom/Makefile.am, custom/erc32.cfg, custom/erc32nfp.cfg,

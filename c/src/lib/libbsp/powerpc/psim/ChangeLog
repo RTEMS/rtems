@@ -2,12 +2,12 @@
 
 	PR 834/bsps
 	* vectors/vectors.S: reload stack pointer/R1 from exception frame
-    instead of adding static offset.
+	instead of adding static offset.
 
 2005-04-11      Jennifer Averett <jennifer@OARcorp.com>
 
-        PR 777/bsps
-        * include/bsp.h: Add a Processor_Synchronize command in bsp.h
+	PR 777/bsps
+	* include/bsp.h: Add a Processor_Synchronize command in bsp.h
 
 2005-03-17	Joel Sherrill <joel@OARcorp.com>
 

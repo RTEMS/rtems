@@ -8,16 +8,16 @@
 2005-11-08	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 837/bsps
-	* startup/bspstart.c, pci/detect_raven_bridge.c: make sure exceptions_in_RAM
-	flag is set prior to initializing exception handling. Keep MCP disabled for
-	memory probes :-( (the raven would otherwise fault on PCI config space access
-	to empty slots).
+	* startup/bspstart.c, pci/detect_raven_bridge.c: Make sure
+	exceptions_in_RAM flag is set prior to initializing exception
+	handling. Keep MCP disabled for memory probes :-( (the raven would
+	otherwise fault on PCI config space access to empty slots).
 
 2005-11-07	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 834/bsps
 	* vectors/vectors.S: reload stack pointer/R1 from exception frame
-    instead of adding static offset.
+	instead of adding static offset.
 
 2005-10-06	Till Straumann <strauman@slac.stanford.edu>
 
