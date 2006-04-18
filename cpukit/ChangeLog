@@ -1,3 +1,7 @@
+2006-04-18  Joel Sherrill <joel@OARcorp.com>
+
+    * aclocal/version.m4: Updated to rtems-4.6.99.3.
+
 2006-04-13	Joel Sherrill <joel@OARcorp.com>
 
 	PR 949/networking
