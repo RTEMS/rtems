@@ -1,10 +1,10 @@
 2006-04-18	Joel Sherrill <joel@OARcorp.com>
 
-	* VERSION: Updated to rtems-4.6.99.3.
+	* release_support: Fix typos.
 
-2006-04-18  Joel Sherrill <joel@OARcorp.com>
+2006-04-18	Joel Sherrill <joel@OARcorp.com>
 
-    * aclocal/version.m4: Updated to rtems-4.6.99.3.
+	* ChangeLog, release_support: Fix typos.
 
 2006-03-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 

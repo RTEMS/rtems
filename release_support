@@ -42,7 +42,7 @@ EOF
       ( \
        echo `date +"%Y-%m-%d"`"  ${user_name}" ;
        echo ;
-       echo "    * aclocal/version.m4: Updated to ${release_name}-${current}." ;
+       echo "	* aclocal/version.m4: Updated to ${release_name}-${current}." ;
        echo \
       ) >YYY
       cat YYY ChangeLog >XXX
@@ -74,7 +74,7 @@ EOF
     find . -name autom4te.cache -print | xargs -e rm -rf 
     find . -name .cvsignore -print | xargs -e rm -rf 
     ;;
-  aftertar)
+  after_tar)
     current=$2
     reldir_curr=$3
     module_name=rtems
