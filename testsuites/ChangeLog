@@ -1,6 +1,6 @@
 2006-04-18  Joel Sherrill <joel@OARcorp.com>
 
-    * aclocal/version.m4: Updated to rtems-4.6.99.3.
+	* aclocal/version.m4: Updated to rtems-4.6.99.3.
 
 2006-02-01	Joel Sherrill <joel@OARcorp.com>
 
