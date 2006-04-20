@@ -1,3 +1,8 @@
+2006-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Fix path on installation to avoid writing
+	to install location too early.
+
 2005-10-05	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog, Makefile.am: Fix hard-coded reference to leon BSP and use
