@@ -1,3 +1,11 @@
+2006-04-24	Jiri Gaisler <jiri@gaisler.com>
+		Edvin Catovic <edvin@gaisler.com>
+
+
+	PR bsps/972
+	* network/Makefile.am: Added Gaisler Research NIC driver.
+	* network/greth.c, network/greth.h: New files.
+
 2005-10-05  Jiri Gaisler <jiri@gaisler.com>
             Edvin Catovic <edvin@gaisler.com>
             Konrad Eisele <konrad@gaisler.com>
