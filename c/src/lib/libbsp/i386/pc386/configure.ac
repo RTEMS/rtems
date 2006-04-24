@@ -16,6 +16,12 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_NETWORKING
 
+RTEMS_BSPOPTS_SET([USE_COM1_AS_CONSOLE],[*],[0])
+RTEMS_BSPOPTS_HELP([USE_COM1_AS_CONSOLE],
+[Determines, whether the console will be associated with the standard
+ VGA display or with the COM1 serial port.  Currently only the VGA
+ display and COM1 support printk.])
+
 RTEMS_BSPOPTS_SET([IDE_USE_PRIMARY_INTERFACE],[*],[1])
 RTEMS_BSPOPTS_HELP([IDE_USE_PRIMARY_INTERFACE],
 [Determines, whether RTEMS will try to use the primary IDE interface. 

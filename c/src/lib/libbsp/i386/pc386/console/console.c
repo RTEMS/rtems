@@ -61,10 +61,14 @@ void __assert (const char *file, int line, const char *msg);
  *      to same serial device it does not work that great
  */
 
+#if (USE_COM1_AS_CONSOLE == 1)
+int BSPConsolePort = BSP_UART_COM1;
+int BSPPrintkPort  = BSP_UART_COM1;
+#else
 int BSPConsolePort = BSP_CONSOLE_PORT_CONSOLE;
 int BSPPrintkPort  = BSP_CONSOLE_PORT_CONSOLE;
+#endif
 
-/* int BSPConsolePort = BSP_UART_COM2;  */
 int BSPBaseBaud    = 115200;
 
 extern BSP_polling_getchar_function_type BSP_poll_char;

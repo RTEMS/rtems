@@ -1,3 +1,7 @@
+2006-04-24	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac, console/console.c:
+
 2005-11-08	Till Straumann <strauman@slac.stanford.edu>
 
 	PR832/bsps
