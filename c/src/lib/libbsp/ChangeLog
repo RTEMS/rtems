@@ -1,3 +1,9 @@
+2006-04-24	Jiri Gaisler <jiri@gaisler.com>
+		Edvin Catovic <edvin@gaisler.com>
+
+	PR bsps/972
+	* shmdr/shm_driver.h: Add sparc lock/unlock values.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
