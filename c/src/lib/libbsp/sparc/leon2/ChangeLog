@@ -1,3 +1,11 @@
+2006-04-24	Jiri Gaisler <jiri@gaisler.com>
+		Edvin Catovic <edvin@gaisler.com>
+
+	PR bsps/972
+	* console/debugputs.c, include/bsp.h, include/coverhd.h,
+	include/leon.h, leon_smc91111/leon_smc91111.c, startup/setvec.c,
+	startup/spurious.c: Add tm27 support and cleanup.
+
 2005-10-06	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h: Remove include of libchip/smc91111exp.h from bsp.h
