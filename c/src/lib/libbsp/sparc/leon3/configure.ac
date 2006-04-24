@@ -17,6 +17,7 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_NETWORKING
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
@@ -41,10 +42,12 @@ AC_CONFIG_FILES([Makefile
 amba/Makefile
 clock/Makefile
 console/Makefile
+leon_greth/Makefile
 leon_open_eth/Makefile
 leon_smc91111/Makefile
 gnatsupp/Makefile
 include/Makefile
+shmsupp/Makefile
 start/Makefile
 startup/Makefile
 timer/Makefile

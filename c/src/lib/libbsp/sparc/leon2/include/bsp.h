@@ -53,7 +53,12 @@ extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *conf
 extern int rtems_smc91111_driver_attach_leon2(struct rtems_bsdnet_ifconfig *config);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"open_eth1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH	 rtems_leon_open_eth_driver_attach
+#define RTEMS_BSP_NETWORK_DRIVER_NAME_SMC91111	"smc_eth1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 rtems_smc91111_driver_attach_leon2
+
+#ifndef RTEMS_BSP_NETWORK_DRIVER_NAME
+#define RTEMS_BSP_NETWORK_DRIVER_NAME   RTEMS_BSP_NETWORK_DRIVER_NAME_OPENETH
+#endif
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

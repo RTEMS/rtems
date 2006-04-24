@@ -35,8 +35,8 @@ void console_outbyte_polled(
 {
   if ((port >= 0) && (port <= CONFIGURE_NUMBER_OF_TERMIOS_PORTS))
   {
-    while ( (LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_THE) == 0 );
-    LEON3_Console_Uart[port]->data = (unsigned int) ch;
+    while ( (LEON3_Console_Uart[LEON3_Cpu_Index+port]->status & LEON_REG_UART_STATUS_THE) == 0 );
+    LEON3_Console_Uart[LEON3_Cpu_Index+port]->data = (unsigned int) ch;
   }
 }
 
@@ -52,13 +52,13 @@ int console_inbyte_nonblocking( int port )
   if ((port >=0) && (port < CONFIGURE_NUMBER_OF_TERMIOS_PORTS)) 
   {
 
-      if (LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_ERR) {
-        LEON3_Console_Uart[port]->status = ~LEON_REG_UART_STATUS_ERR;
+      if (LEON3_Console_Uart[LEON3_Cpu_Index+port]->status & LEON_REG_UART_STATUS_ERR) {
+        LEON3_Console_Uart[LEON3_Cpu_Index+port]->status = ~LEON_REG_UART_STATUS_ERR;
       }
 
-      if ((LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_DR) == 0)
+      if ((LEON3_Console_Uart[LEON3_Cpu_Index+port]->status & LEON_REG_UART_STATUS_DR) == 0)
          return -1;
-      return (int) LEON3_Console_Uart[port]->data;
+      return (int) LEON3_Console_Uart[LEON3_Cpu_Index+port]->data;
   }
 
   else
@@ -90,15 +90,15 @@ void DEBUG_puts(
 {
   char *s;
   /* unsigned32 old_level; */
-
+  
   /* LEON_Disable_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level ); */
   sparc_disable_interrupts();
   LEON3_Console_Uart[0]->ctrl = LEON_REG_UART_CTRL_TE;
-    for ( s = string ; *s ; s++ ) 
-      console_outbyte_polled( 0, *s );
-
-    console_outbyte_polled( 0, '\r' );
-    console_outbyte_polled( 0, '\n' );
+  for ( s = string ; *s ; s++ ) 
+    console_outbyte_polled( 0, *s );
+  
+  console_outbyte_polled( 0, '\r' );
+  console_outbyte_polled( 0, '\n' );
   sparc_enable_interrupts();  
-    /* LEON_Restore_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level ); */
+  /* LEON_Restore_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level ); */
 }

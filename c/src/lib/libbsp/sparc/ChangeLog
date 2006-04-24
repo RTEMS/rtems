@@ -1,3 +1,21 @@
+2006-04-24	Jiri Gaisler <jiri@gaisler.com>
+		Edvin Catovic <edvin@gaisler.com>
+
+
+	PR bsps/972
+	* ChangeLog, Makefile.am, configure.ac, amba/amba.c, clock/ckinit.c,
+	console/Makefile.am, console/console.c, console/debugputs.c,
+	include/Makefile.am, include/amba.h, include/bsp.h, include/leon.h,
+	leon_smc91111/leon_smc91111.c, startup/bspstart.c, timer/timer.c,
+	tools/Makefile.am, wrapup/Makefile.am: Added Shared Memory Support
+	Driver.  Added Leon Gaisler Research Ethernet support. Enhanced AMBA
+	bus support.
+	* console/debugprintf.c, console/spacewire.c, include/spacewire.h,
+	leon_greth/.cvsignore, leon_greth/Makefile.am,
+	leon_greth/leon_greth.c, shmsupp/.cvsignore, shmsupp/Makefile.am,
+	shmsupp/addrconv.c, shmsupp/getcfg.c, shmsupp/lock.c,
+	shmsupp/mpisr.c: New files.
+
 2005-10-05  Jiri Gaisler <jiri@gaisler.com>
             Edvin Catovic <edvin@gaisler.com>
             Konrad Eisele <konrad@gaisler.com>

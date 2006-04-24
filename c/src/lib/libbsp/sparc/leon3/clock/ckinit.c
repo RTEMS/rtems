@@ -30,6 +30,10 @@
  *  The Real Time Clock Counter Timer uses this trap type.
  */
 
+extern rtems_configuration_table Configuration;
+
+#define LEON3_CLOCK_INDEX (Configuration.User_multiprocessing_table ? LEON3_Cpu_Index : 0)
+
 #define CLOCK_VECTOR LEON_TRAP_TYPE( LEON_INTERRUPT_TIMER1 )
 
 /*
@@ -145,12 +149,18 @@ void Install_clock(
 
   clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3;
 
+  /* MP */
+  if (Configuration.User_multiprocessing_table != NULL)
+  {
+    clkirq += LEON3_Cpu_Index;
+  }
+
   if ( BSP_Configuration.ticks_per_timeslice ) {
     Old_ticker = (rtems_isr_entry) set_vector( clock_isr, LEON_TRAP_TYPE(clkirq), 1 );
 
-    LEON3_Timer_Regs->reload_t0 = CPU_SPARC_CLICKS_PER_TICK - 1;
+    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].reload = CPU_SPARC_CLICKS_PER_TICK - 1;
 
-    LEON3_Timer_Regs->conf_t0 = LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | LEON3_GPTIMER_LD | LEON3_GPTIMER_IRQEN;
+    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].conf = LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | LEON3_GPTIMER_LD | LEON3_GPTIMER_IRQEN;
  
     atexit( Clock_exit );
   }
@@ -176,7 +186,7 @@ void Clock_exit( void )
   if ( BSP_Configuration.ticks_per_timeslice ) {
     LEON_Mask_interrupt(LEON_TRAP_TYPE(clkirq));
 
-    LEON3_Timer_Regs->conf_t0 = 0;
+    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].conf = 0;
 
     /* do not restore old vector */
   }

@@ -1,11 +1,11 @@
 ##
-## $Id$
+## Makefile.am,v 1.4 2002/12/14 08:17:17 ralf Exp
 ##
 
 
-PGM = $(ARCH)/console.rel
+PGM = $(ARCH)/shmsupp.rel
 
-C_FILES = console.c spacewire.c consolereserveresources.c debugputs.c debugprintf.c
+C_FILES = addrconv.c getcfg.c lock.c mpisr.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
@@ -22,10 +22,11 @@ $(PGM): $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
+if HAS_MP
 all-local: $(ARCH) $(OBJS) $(PGM)
+endif
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = console.c consolereserveresources.c debugputs.c
-
+EXTRA_DIST = addrconv.c getcfg.c lock.c mpisr.c
 include $(top_srcdir)/../../../../../../automake/local.am

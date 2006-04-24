@@ -44,6 +44,11 @@ extern "C" {
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
+/* add a entry to the device driver table so that I can call rtems_io_register_driver */ 
+#define CONFIGURE_NUMBER_OF_DRIVERS_LEON3 \
+  (((sizeof(Device_drivers) / sizeof(rtems_driver_address_table))) + 1)
+#define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS_LEON3
+  
 /*
  * Network driver configuration
  */
@@ -57,10 +62,22 @@ extern int rtems_smc91111_driver_attach_leon3(
   struct rtems_bsdnet_ifconfig *config,
   int attach
 );
-#define RTEMS_BSP_NETWORK_DRIVER_NAME	"open_eth1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH	 rtems_leon_open_eth_driver_attach
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 rtems_smc91111_driver_attach_leon3
+extern int rtems_leon_greth_driver_attach(
+  struct rtems_bsdnet_ifconfig *config,
+  int attach
+);
 
+#define RTEMS_BSP_NETWORK_DRIVER_NAME_OPENETH	"open_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH	 rtems_leon_open_eth_driver_attach
+#define RTEMS_BSP_NETWORK_DRIVER_NAME_SMC91111	"smc_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 rtems_smc91111_driver_attach_leon3
+#define RTEMS_BSP_NETWORK_DRIVER_NAME_GRETH	 "gr_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_GRETH    rtems_leon_greth_driver_attach
+
+#ifndef RTEMS_BSP_NETWORK_DRIVER_NAME
+#define RTEMS_BSP_NETWORK_DRIVER_NAME   RTEMS_BSP_NETWORK_DRIVER_NAME_GRETH
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH RTEMS_BSP_NETWORK_DRIVER_ATTACH_GRETH
+#endif
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

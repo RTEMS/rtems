@@ -19,8 +19,8 @@
 
 #define LEON3_AHB_CONF_WORDS 8
 #define LEON3_APB_CONF_WORDS 2
-#define LEON3_AHB_MASTERS 8
-#define LEON3_AHB_SLAVES 8
+#define LEON3_AHB_MASTERS 64
+#define LEON3_AHB_SLAVES 64
 #define LEON3_APB_SLAVES 16
 #define LEON3_APBUARTS 8
 
@@ -48,6 +48,9 @@
 #define	GAISLER_PCITRACE 0x15
 #define	GAISLER_DMACTRL  0x16
 #define GAISLER_PIOPORT  0x1A
+#define GAISLER_ETHMAC   0x1D
+ 
+#define GAISLER_SPACEWIRE 0x01f
 
 /* European Space Agency device id's */
 #define ESA_LEON2        0x2 

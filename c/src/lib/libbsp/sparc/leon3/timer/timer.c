@@ -22,6 +22,13 @@
 
 #include <bsp.h>
 
+extern rtems_configuration_table Configuration;
+
+#define LEON3_TIMER_INDEX \
+  (Configuration.User_multiprocessing_table ?  \
+         (Configuration.User_multiprocessing_table)->maximum_nodes + \
+         (Configuration.User_multiprocessing_table)->node - 1 : 1)
+
 rtems_boolean Timer_driver_Find_average_overhead;
 
 rtems_boolean Timer_driver_Is_initialized = FALSE;
@@ -36,12 +43,12 @@ void Timer_initialize()
   if (LEON3_Timer_Regs) {
     if ( Timer_driver_Is_initialized == FALSE ) {
       /* approximately 1 us per countdown */
-      LEON3_Timer_Regs->reload_t1 = 0xffffff;
-      LEON3_Timer_Regs->value_t1 = 0xffffff;
+      LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].reload = 0xffffff;
+      LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].value = 0xffffff;
     } else {
       Timer_driver_Is_initialized = TRUE;
     }
-    LEON3_Timer_Regs->conf_t1 = LEON3_GPTIMER_EN | LEON3_GPTIMER_LD;
+    LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].conf = LEON3_GPTIMER_EN | LEON3_GPTIMER_LD;
   }
 }
 
@@ -54,7 +61,7 @@ int Read_timer()
   rtems_unsigned32  total;
 
   if (LEON3_Timer_Regs) {
-    total = LEON3_Timer_Regs->value_t1;
+    total = LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].value;
     
     total = 0xffffff - total;
     
@@ -63,7 +70,7 @@ int Read_timer()
     
     if ( total < LEAST_VALID )
       return 0;            /* below timer resolution */
-    
+
     return total - AVG_OVERHEAD;
   }
   return 0;

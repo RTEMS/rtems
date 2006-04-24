@@ -15,7 +15,7 @@ scmv91111_configuration_t leon_scmv91111_configuration = {
   SMC91111_BASE_ADDR,                 /* base address */ 
   LEON_TRAP_TYPE(SMC91111_BASE_IRQ),  /* vector number */ 
   SMC91111_BASE_PIO,                  /* PIO */ 
-  10,                                 /* 10b */
+  100,                                /* 100b */
   1,                                  /* fulldx */
   1                                   /* autoneg */
 };
@@ -37,7 +37,7 @@ int rtems_smc91111_driver_attach_leon3 (
 
   {
     unsigned long irq_pio, irq_mctrl, addr_pio = 0;
-    unsigned long addr_mctrl = 0, addr_timer = 0;
+    unsigned long addr_mctrl = 0;
 
     i = 0;
     while (i < amba_conf.apbslv.devnr) 
@@ -57,24 +57,13 @@ int rtems_smc91111_driver_attach_leon3 (
       iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
       addr_mctrl = (unsigned long) amba_iobar_start(amba_conf.apbmst, iobar);
     }
-        else if ((amba_vendor(conf) == VENDOR_GAISLER) &&
-                 (amba_device(conf) == GAISLER_GPTIMER))
-    {
-      iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
-      addr_timer = (unsigned long) amba_iobar_start(amba_conf.apbmst, iobar);
-    }
         i++;
       }
 
-    if (addr_timer) {
-      LEON3_Timer_Regs_Map *timer = (LEON3_Timer_Regs_Map *)addr_timer;
-      if (timer->scaler_reload >= 49)
-        leon_scmv91111_configuration.ctl_rspeed = 100;
-    }
-    
     if (addr_pio && addr_mctrl) {
       
       LEON3_IOPORT_Regs_Map *io = (LEON3_IOPORT_Regs_Map *) addr_pio;
+      /*
       {
         char buf[1024];
         
@@ -84,6 +73,7 @@ int rtems_smc91111_driver_attach_leon3 (
           (unsigned int)addr_mctrl);
         DEBUG_puts(buf);
       }
+      */
       
       *((volatile unsigned int *)addr_mctrl) |= 0x10f80000;  /*mctrl ctrl 1 */
       io->irqmask |= (1 << leon_scmv91111_configuration.pio);

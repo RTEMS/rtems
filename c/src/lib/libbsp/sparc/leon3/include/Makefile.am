@@ -3,7 +3,7 @@
 ##
 
 
-include_HEADERS = amba.h bsp.h coverhd.h leon.h bspopts.h 
+include_HEADERS = amba.h bsp.h coverhd.h leon.h bspopts.h spacewire.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
