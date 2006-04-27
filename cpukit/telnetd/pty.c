@@ -184,7 +184,7 @@ int read_pty(int minor) { /* Characters writed in the client side*/
 		     return -1;
 	       } else {
 		     result=value;  
-		     if ((value=='\n') && (ptys[minor].last_cr)) result=-1;
+		     if (ptys[minor].last_cr && ((value=='\n')||(value=='\0'))) result=-1;
 		     ptys[minor].last_cr=(value=='\r');
 		     return result;
 	       };
