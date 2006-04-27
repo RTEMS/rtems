@@ -103,7 +103,8 @@ typedef struct rtems_capture_task_s
   uint32_t               last_ticks;
   uint32_t               last_tick_offset;
   rtems_capture_control_t*     control;
-  struct rtems_capture_task_s* next;
+  struct rtems_capture_task_s* forw;
+  struct rtems_capture_task_s* back;
 } rtems_capture_task_t;
 
 /**
@@ -190,6 +191,16 @@ typedef void (*rtems_capture_timestamp)
 rtems_status_code
 rtems_capture_open (uint32_t          size,
                     rtems_capture_timestamp timestamp);
+
+/**
+ * rtems_capture_free_info_on_task_delete
+ *
+ *  DESCRIPTION:
+ *
+ * If non-zero task informaion if freed when a task is deleted.
+ *
+ */
+extern int rtems_capture_free_info_on_task_delete;
 
 /**
  * rtems_capture_close
@@ -458,7 +469,7 @@ rtems_capture_get_task_list ();
 static inline rtems_capture_task_t*
 rtems_capture_next_task (rtems_capture_task_t* task)
 {
-  return task->next;
+  return task->forw;
 }
 
 /**

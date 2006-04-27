@@ -79,6 +79,7 @@ static rtems_task_priority      capture_ceiling;
 static rtems_task_priority      capture_floor;
 static uint32_t           capture_tick_period;
 static rtems_id                 capture_reader;
+int rtems_capture_free_info_on_task_delete;
 
 /*
  * RTEMS Event text.
@@ -289,7 +290,7 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
      * We need to scan the task list as set the control to the
      * tasks.
      */
-    for (task = capture_tasks; task != NULL; task = task->next)
+    for (task = capture_tasks; task != NULL; task = task->forw)
       if (rtems_capture_match_name_id (name, id, task->name, task->id))
         task->control = control;
 
@@ -345,7 +346,10 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
 
   rtems_interrupt_disable (level);
 
-  task->next    = capture_tasks;
+  task->forw    = capture_tasks;
+  if (task->forw)
+    task->forw->back = task;
+  task->back    = NULL;
   capture_tasks = task;
 
   rtems_interrupt_enable (level);
@@ -586,6 +590,19 @@ rtems_capture_delete_task (rtems_tcb* current_task,
    * This task's tcb will be invalid.
    */
   dt->tcb = 0;
+
+  /*
+   * Unlink
+   */
+  if (rtems_capture_free_info_on_task_delete) {
+    if (dt->forw)
+      dt->forw->back = dt->back;
+    if (dt->back)
+      dt->back->forw = dt->forw;
+    else
+      capture_tasks = dt->forw;
+    _Workspace_Free (dt);
+  }
 }
 
 /*
@@ -685,7 +702,7 @@ rtems_capture_switch_task (rtems_tcb* current_task,
     {
       rtems_id ct_id = current_task->Object.id;
 
-      for (ct = capture_tasks; ct; ct = ct->next)
+      for (ct = capture_tasks; ct; ct = ct->forw)
         if (ct->id == ct_id)
           break;
     }
@@ -926,7 +943,7 @@ rtems_capture_close ()
   while (task)
   {
     rtems_capture_task_t* delete = task;
-    task = task->next;
+    task = task->forw;
     _Workspace_Free (delete);
   }
 
@@ -998,7 +1015,7 @@ rtems_capture_flush (rtems_boolean prime)
 
   rtems_interrupt_disable (level);
 
-  for (task = capture_tasks; task != NULL; task = task->next)
+  for (task = capture_tasks; task != NULL; task = task->forw)
     task->flags &= ~RTEMS_CAPTURE_TRACED;
 
   if (prime)
@@ -1075,7 +1092,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
     {
       rtems_interrupt_disable (level);
 
-      for (task = capture_tasks; task != NULL; task = task->next)
+      for (task = capture_tasks; task != NULL; task = task->forw)
         if (task->control == control)
           task->control = 0;
 
