@@ -470,12 +470,28 @@ trampoline (rtems_vector_number v)
      * Handle FPGA interrupts until all have been consumed
      */
     if (v == FPGA_VECTOR) {
+        int loopcount = 0;
         while (((v = FPGA_IRQ_INFO) & 0x80) != 0) {
             v = 192 + (v & 0x3f);
-            if (handlerTab[v].func) 
+            if (++loopcount >= 50) {
+                rtems_interrupt_level level;
+                rtems_interrupt_disable(level);
+                printk("\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v);
+                MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+                rtems_interrupt_enable(level);
+                return;
+            }
+            if (handlerTab[v].func)  {
                 (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
-            else
-                rtems_fatal_error_occurred(v);
+            }
+            else {
+                rtems_interrupt_level level;
+                rtems_interrupt_disable(level);
+                printk("\nINVALID FPGA INTERRUPT (0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v);
+                MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+                rtems_interrupt_enable(level);
+                return;
+            }
         }
     }
     else if (handlerTab[v].func) 

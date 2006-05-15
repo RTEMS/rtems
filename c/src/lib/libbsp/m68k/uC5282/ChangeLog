@@ -1,3 +1,7 @@
+2006-05-15  Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Add checks for FPGA interrupt request overflow.
+
 2006-04-11  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Install default exception handler.
