@@ -1,6 +1,7 @@
 2006-05-15  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Add checks for FPGA interrupt request overflow.
+                          Allow single spurious FPGA interrupt.
 
 2006-04-11  Eric Norum <norume@aps.anl.gov>
 

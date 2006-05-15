@@ -476,7 +476,7 @@ trampoline (rtems_vector_number v)
             if (++loopcount >= 50) {
                 rtems_interrupt_level level;
                 rtems_interrupt_disable(level);
-                printk("\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v);
+                printk("\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v & 0x3f);
                 MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
                 rtems_interrupt_enable(level);
                 return;
@@ -486,9 +486,14 @@ trampoline (rtems_vector_number v)
             }
             else {
                 rtems_interrupt_level level;
+                rtems_vector_number nv;
                 rtems_interrupt_disable(level);
-                printk("\nINVALID FPGA INTERRUPT (0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v);
-                MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+                printk("\nSPURIOUS FPGA INTERRUPT (0x%x).\n", v & 0x3f);
+                if ((((nv = FPGA_IRQ_INFO) & 0x80) != 0)
+                 && ((nv & 0x3f) == (v & 0x3f))) {
+                    printk("DISABLING ALL FPGA INTERRUPTS.\n");
+                    MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+                }
                 rtems_interrupt_enable(level);
                 return;
             }
