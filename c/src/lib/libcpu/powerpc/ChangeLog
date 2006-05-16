@@ -1,3 +1,7 @@
+2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Use RTEMS_AMPOLISH3.
+
 2006-04-05	Victor V. Vengerov <Victor.Vengerov@oktetlabs.ru>
 
 	* mpc6xx/clock/c_clock.c: Now works with MPCI SHM driver.

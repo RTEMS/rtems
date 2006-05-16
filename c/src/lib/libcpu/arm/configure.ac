@@ -28,9 +28,7 @@ AM_CONDITIONAL(at91rm9200, test "$RTEMS_CPU_MODEL" = "at91rm9200")
 AM_CONDITIONAL(mc9328mxl, test "$RTEMS_CPU_MODEL" = "mc9328mxl")
 AM_CONDITIONAL(s3c2400, test "$RTEMS_CPU_MODEL" = "s3c2400")
 
-AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-  && test -n "$AMPOLISH3"])
+RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

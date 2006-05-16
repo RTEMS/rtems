@@ -25,9 +25,7 @@ AM_CONDITIONAL([sh7032],[test x"$RTEMS_CPU_MODEL" = x"sh7032"])
 AM_CONDITIONAL([sh7045],[test x"$RTEMS_CPU_MODEL" = x"sh7045"])
 AM_CONDITIONAL([sh7750],[test x"$RTEMS_CPU_MODEL" = x"sh7750"])
 
-AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-  && test -n "$AMPOLISH3"])
+RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

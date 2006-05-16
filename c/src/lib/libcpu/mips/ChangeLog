@@ -1,3 +1,7 @@
+2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Use RTEMS_AMPOLISH3.
+
 2006-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove bogus CFLAGS_OPTIMIZE_V.

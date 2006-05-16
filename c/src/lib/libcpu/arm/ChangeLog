@@ -1,3 +1,7 @@
+2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Use RTEMS_AMPOLISH3.
+
 2006-03-07	Lars Munch <lars@segv.dk>
 
 	* at91rm9200/clock/clock.c: The clock tick is not very precise on
