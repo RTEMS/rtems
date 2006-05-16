@@ -275,9 +275,7 @@ AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
 AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 
-AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-  && test -n "$AMPOLISH3"])
+RTEMS_AMPOLISH3
 
 AC_CONFIG_HEADER(config.h)
 
