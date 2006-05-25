@@ -1,3 +1,12 @@
+2006-05-25	Eric Norum <norume@aps.anl.gov>
+
+    * libnetworking/Makefile.am,
+    libnetworking/Makefile.in,
+    libnetworking/rtems/rtems_bsdnet.h,
+    libnetworking/rtems/rtems_glue.c,
+    libnetworking/rtems/rtems_malloc_mbuf.c: Provide customisable mbuf
+        allocation.  Patch from Steven Johnson <sjohnson@sakuraindustries.com> 
+
 2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-ampolish.m4: New.

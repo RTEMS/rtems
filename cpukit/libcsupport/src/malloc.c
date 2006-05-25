@@ -35,6 +35,46 @@
 
 #include <rtems/chain.h>
 
+#ifdef MALLOC_ARENA_CHECK
+#define SENTINELSIZE    12
+#define SENTINEL       "\xD1\xAC\xB2\xF1" "BITE ME"
+#define CALLCHAINSIZE 5
+struct mallocNode {
+    struct mallocNode *back;
+    struct mallocNode *forw;
+    int                callChain[CALLCHAINSIZE];
+    size_t             size;
+    void              *memory;
+};
+static struct mallocNode mallocNodeHead = { &mallocNodeHead, &mallocNodeHead };
+void reportMallocError(const char *msg, struct mallocNode *mp)
+{
+    unsigned char *sp = (unsigned char *)mp->memory + mp->size;
+    int i, ind = 0;
+    static char cbuf[500];
+    ind += sprintf(cbuf+ind, "Malloc Error: %s\n", msg);
+    if ((mp->forw->back != mp) || (mp->back->forw != mp))
+        ind += sprintf(cbuf+ind, "mp:0x%x  mp->forw:0x%x  mp->forw->back:0x%x  mp->back:0x%x  mp->back->forw:0x%x\n",
+                        mp, mp->forw, mp->forw->back, mp->back, mp->back->forw);
+    if (mp->memory != (mp + 1))
+        ind += sprintf(cbuf+ind, "mp+1:0x%x  ", mp + 1);
+    ind += sprintf(cbuf+ind, "mp->memory:0x%x  mp->size:%d\n", mp->memory, mp->size);
+    if (memcmp((char *)mp->memory + mp->size, SENTINEL, SENTINELSIZE) != 0) {
+        ind += sprintf(cbuf+ind, "mp->sentinel: ");
+        for (i = 0 ; i < SENTINELSIZE ; i++)
+            ind += sprintf(cbuf+ind, " 0x%x", sp[i]);
+        ind += sprintf(cbuf+ind, "\n");
+    }
+    ind += sprintf(cbuf+ind, "Call chain:");
+    for (i = 0 ; i < CALLCHAINSIZE ; i++) {
+        if (mp->callChain[i] == 0)
+            break;
+        ind += sprintf(cbuf+ind, " 0x%x", mp->callChain[i]);
+    }
+    printk("\n\n%s\n\n", cbuf);
+}
+#endif
+
 Chain_Control RTEMS_Malloc_GC_list;
 
 rtems_id RTEMS_Malloc_Heap;
@@ -190,6 +230,9 @@ void *malloc(
    * If this fails then return a NULL pointer.
    */
 
+#ifdef MALLOC_ARENA_CHECK
+  size += sizeof(struct mallocNode) + SENTINELSIZE;
+#endif
   status = rtems_region_get_segment(
     RTEMS_Malloc_Heap,
     size,
@@ -261,6 +304,32 @@ void *malloc(
   (void) memset(return_this, 0xCF, size);
 #endif
 
+#ifdef MALLOC_ARENA_CHECK
+  {
+  struct mallocNode *mp = (struct mallocNode *)return_this;
+  int key, *fp, *nfp, i;
+  rtems_interrupt_disable(key);
+  mp->memory = mp + 1;
+  return_this = mp->memory;
+  mp->size = size - (sizeof(struct mallocNode) + SENTINELSIZE);
+  fp = (int *)&size - 2;
+  for (i = 0 ; i < CALLCHAINSIZE ; i++) {
+    mp->callChain[i] = fp[1];
+    nfp = (int *)(fp[0]);
+    if((nfp <= fp) || (nfp > (int *)(1 << 24)))
+     break;
+    fp = nfp;
+  }
+  while (i < CALLCHAINSIZE)
+    mp->callChain[i++] = 0;
+  memcpy((char *)mp->memory + mp->size, SENTINEL, SENTINELSIZE);
+  mp->forw = mallocNodeHead.forw;
+  mp->back = &mallocNodeHead;
+  mallocNodeHead.forw->back = mp;
+  mallocNodeHead.forw = mp;
+  rtems_interrupt_enable(key);
+  }
+#endif
   return return_this;
 }
 
@@ -318,6 +387,16 @@ void *realloc(
     return (void *) 0;
   }
 
+#ifdef MALLOC_ARENA_CHECK
+  {
+  void *np;
+  np = malloc(size);
+  if (!np) return np;
+  memcpy(np,ptr,size);
+  free(ptr);
+  return np;
+  }
+#endif
   status =
     rtems_region_resize_segment( RTEMS_Malloc_Heap, ptr, size, &old_size );
 
@@ -378,6 +457,30 @@ void free(
     }
   }
 
+#ifdef MALLOC_ARENA_CHECK
+  {
+  struct mallocNode *mp = (struct mallocNode *)ptr - 1;
+  struct mallocNode *mp1;
+  int key;
+  rtems_interrupt_disable(key);
+  if ((mp->memory != (mp + 1))
+   || (memcmp((char *)mp->memory + mp->size, SENTINEL, SENTINELSIZE) != 0))
+    reportMallocError("Freeing with inconsistent pointer/sentinel", mp);
+  mp1 = mallocNodeHead.forw;
+  while (mp1 != &mallocNodeHead) {
+    if (mp1 == mp)
+      break;
+    mp1 = mp1->forw;
+  }
+  if (mp1 != mp)
+    reportMallocError("Freeing, but not on allocated list", mp);
+  mp->forw->back = mp->back;
+  mp->back->forw = mp->forw;
+  mp->back = mp->forw = NULL;
+  ptr = mp;
+  rtems_interrupt_enable(key);
+  }
+#endif
 #ifdef MALLOC_STATS
   {
       size_t size;
@@ -394,6 +497,26 @@ void free(
     assert( 0 );
   }
 }
+
+#ifdef MALLOC_ARENA_CHECK
+void checkMallocArena(void)
+{
+    struct mallocNode *mp = mallocNodeHead.forw;
+    int key;
+    rtems_interrupt_disable(key);
+    while (mp != &mallocNodeHead) {
+        if ((mp->forw->back != mp)
+         || (mp->back->forw != mp))
+            reportMallocError("Pointers mangled", mp);
+        if((mp->memory != (mp + 1))
+         || (memcmp((char *)mp->memory + mp->size, SENTINEL, SENTINELSIZE) != 0))
+            reportMallocError("Inconsistent pointer/sentinel", mp);
+        mp = mp->forw;
+    }
+    rtems_interrupt_enable(key);
+}
+#endif
+
 /* end if RTEMS_NEWLIB */
 #endif
 

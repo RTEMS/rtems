@@ -260,4 +260,20 @@ int rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority);
  */
 void rtems_bsdnet_malloc_starvation(void);
 
+/*
+ * mbuf malloc interface to enable custom allocation of mbuf's
+ * 
+ * May be declared in user code.  If not, then the default is to
+ * malloc.
+ */
+void* rtems_bsdnet_malloc_mbuf(size_t size, int type);
+
+/*
+ * Possible values of the type parameter to rtems_bsdnet_malloc_mbuf to assist
+ * in allocation of the structure.
+ */
+#define MBUF_MALLOC_NMBCLUSTERS (0)
+#define MBUF_MALLOC_MCLREFCNT   (1)
+#define MBUF_MALLOC_MBUF        (2)
+
 #endif /* _RTEMS_BSDNET_H */

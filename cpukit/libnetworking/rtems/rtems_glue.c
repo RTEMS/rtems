@@ -149,7 +149,7 @@ bsd_init (void)
 	/*
 	 * Set up mbuf cluster data strutures
 	 */
-	p = malloc ((nmbclusters*MCLBYTES)+MCLBYTES-1);
+	p = rtems_bsdnet_malloc_mbuf ((nmbclusters*MCLBYTES)+MCLBYTES-1, MBUF_MALLOC_NMBCLUSTERS);
 	if (p == NULL) {
 		printf ("Can't get network cluster memory.\n");
 		return -1;
@@ -163,7 +163,7 @@ bsd_init (void)
 		mbstat.m_clfree++;
 	}
 	mbstat.m_clusters = nmbclusters;
-	mclrefcnt = malloc (nmbclusters);
+	mclrefcnt = rtems_bsdnet_malloc_mbuf (nmbclusters, MBUF_MALLOC_MCLREFCNT);
 	if (mclrefcnt == NULL) {
 		printf ("Can't get mbuf cluster reference counts memory.\n");
 		return -1;
@@ -174,7 +174,7 @@ bsd_init (void)
 	 * Set up mbuf data structures
 	 */
 
-	p = malloc(nmbuf * MSIZE + MSIZE - 1);
+	p = rtems_bsdnet_malloc_mbuf(nmbuf * MSIZE + MSIZE - 1,MBUF_MALLOC_MBUF);
 	p = (char *)(((unsigned int)p + MSIZE - 1) & ~(MSIZE - 1));
 	if (p == NULL) {
 		printf ("Can't get network memory.\n");
