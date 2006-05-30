@@ -88,6 +88,10 @@ static int	icmpbmcastecho = 1;
 SYSCTL_INT(_net_inet_icmp, OID_AUTO, bmcastecho, CTLFLAG_RW, &icmpbmcastecho,
 	   0, "");
 
+static int  icmpallecho = 1;
+SYSCTL_INT(_net_inet_icmp, OID_AUTO, allecho, CTLFLAG_RW, &icmpallecho,
+	   0, "");
+
 /* #define ICMPPRINTFS 1 */
 #ifdef ICMPPRINTFS
 int	icmpprintfs = 0;
@@ -399,9 +403,10 @@ icmp_input(m, off)
 		break;
 
 	case ICMP_ECHO:
-		if (!icmpbmcastecho
-		    && (m->m_flags & (M_MCAST | M_BCAST)) != 0
-		    && IN_MULTICAST(ntohl(ip->ip_dst.s_addr))) {
+		if (!icmpallecho 
+		    || (!icmpbmcastecho
+			&& (m->m_flags & (M_MCAST | M_BCAST)) != 0
+			&& IN_MULTICAST(ntohl(ip->ip_dst.s_addr)))) {
 			icmpstat.icps_bmcastecho++;
 			break;
 		}

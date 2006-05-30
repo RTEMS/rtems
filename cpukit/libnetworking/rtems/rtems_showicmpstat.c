@@ -52,6 +52,7 @@ rtems_bsdnet_show_icmp_stats (void)
 	showicmpstat ("bad checksum", icmpstat.icps_checksum);
 	showicmpstat ("calculated bound mismatch", icmpstat.icps_badlen);
 	showicmpstat ("number of responses", icmpstat.icps_reflect);
+        showicmpstat ("all echo requests dropped", icmpstat.icps_allecho);
 	showicmpstat ("b/mcast echo requests dropped", icmpstat.icps_bmcastecho);
 	showicmpstat ("b/mcast tstamp requests dropped", icmpstat.icps_bmcasttstamp);
 	for (i = 0 ; i <= ICMP_MAXTYPE ; i++) {

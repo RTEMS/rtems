@@ -54,6 +54,7 @@ struct	icmpstat {
 	u_long	icps_badlen;		/* calculated bound mismatch */
 	u_long	icps_reflect;		/* number of responses */
 	u_long	icps_inhist[ICMP_MAXTYPE + 1];
+        u_long  icps_allecho;           /* all echo requests dropped */
 	u_long	icps_bmcastecho; 	/* b/mcast echo requests dropped */
 	u_long	icps_bmcasttstamp; 	/* b/mcast tstamp requests dropped */
 };
