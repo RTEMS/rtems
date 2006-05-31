@@ -1,3 +1,7 @@
+2006-05-31	Joel Sherrill <joel@OARcorp.com>
+
+	* at91rm9200/clock/clock.c: Convert to using shared clock driver shell.
+
 2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use RTEMS_AMPOLISH3.
