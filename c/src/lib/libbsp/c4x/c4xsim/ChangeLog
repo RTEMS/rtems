@@ -1,3 +1,7 @@
+2006-05-31	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clock.c: Switch to using shared clock driver shell.
+
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add preinstall.am.
