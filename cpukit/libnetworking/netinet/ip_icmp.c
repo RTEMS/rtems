@@ -403,10 +403,13 @@ icmp_input(m, off)
 		break;
 
 	case ICMP_ECHO:
-		if (!icmpallecho 
-		    || (!icmpbmcastecho
-			&& (m->m_flags & (M_MCAST | M_BCAST)) != 0
-			&& IN_MULTICAST(ntohl(ip->ip_dst.s_addr)))) {
+		if (!icmpallecho) {
+			icmpstat.icps_allecho++;
+			break;
+		}
+		if (!icmpbmcastecho
+		    && (m->m_flags & (M_MCAST | M_BCAST)) != 0
+		    && IN_MULTICAST(ntohl(ip->ip_dst.s_addr))) {
 			icmpstat.icps_bmcastecho++;
 			break;
 		}
