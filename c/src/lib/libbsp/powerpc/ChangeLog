@@ -3,6 +3,7 @@
 	* shared/startup/linkcmds: Add .gnu.linkonce.b.* section.
 
 2006-02-13	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/startup/panic.c, shared/startup/probeMemEnd.c:
 	added code for BSPs to use: panic using printk() to display
 	reason. probeMemEnd() to determine memory size by probing.
@@ -16,11 +17,13 @@
 	* acinclude.m4: Add gen5200 to list of BSPs.
 
 2006-01-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vectors/vectors.S: mask high bits when calculating
 	the exception vector number to yield correct result even if
 	the vectors reside in the upper area (0xfff00000; psim).
 
 2005-12-02	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq_init.c, shared/openpic/openpic.h
         shared/openpic/openpic.c: The 8240's EPIC has a 'serial'
         mode of operation for multiplexing 16 interrupt lines.
@@ -29,6 +32,7 @@
         (EOI) is delayed accordingly.
 
 2005-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vectors/vectors.h, shared/vectors/vectors.S,
         shared/vectors/vectors_init.c: Reduced size of default
         prologue (some exceptions, e.g., altivec unavail.) are only
@@ -37,11 +41,13 @@
         on certain 603e variants when incurring a TLB miss).
 
 2005-11-29	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq_asm.S, shared/vectors/vectors.S: Clear
         CR[6] before invoking high-level handler to make sure no
         varargs fn callee assumes there are FP arguments.
 
 2005-11-29	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq.c: Fixed incorrect removal of first shared
         interrupt in chain.
 
