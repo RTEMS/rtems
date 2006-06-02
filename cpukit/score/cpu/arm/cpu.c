@@ -124,9 +124,9 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
 {
     printk("\n\r");
     printk("----------------------------------------------------------\n\r");
-#if 0
+#if 1
     printk("Exception 0x%x caught at PC 0x%x by thread %d\n",
-           ctx->register_pc, ctx->register_lr - 4,
+           ctx->register_ip, ctx->register_lr - 4,
            _Thread_Executing->Object.id);
 #endif
     printk("----------------------------------------------------------\n\r");
@@ -221,6 +221,47 @@ void rtems_exception_init_mngt()
 #define SET_REG(r, ctx, v)   (((uint32_t   *)ctx)[r] = v)
 #define GET_OFFSET(insn)     (insn & 0xfff)
 
+char *_print_full_context_mode2txt[0x20]={
+        [0x10]="user",  /* User */
+	[0x11]="fiq",   /* FIQ - Fast Interrupt Request */
+	[0x12]="irq",   /* IRQ - Interrupt Request */
+	[0x13]="super", /* Supervisor */
+	[0x17]="abort", /* Abort */
+	[0x1b]="undef", /* Undefined */
+	[0x1f]="system" /* System */
+    };
+
+void _print_full_context(uint32_t spsr)
+{
+    char *mode;
+    uint32_t prev_sp,prev_lr,cpsr,tmp;
+    int i;
+
+    printk("active thread thread 0x%08x\n", _Thread_Executing->Object.id);
+
+    mode=_print_full_context_mode2txt[spsr&0x1f];
+    if(!mode) mode="unknown";
+
+    asm volatile ("	MRS  %[cpsr], cpsr \n"
+              "	ORR  %[tmp], %[spsr], #0xc0 \n"
+              "	MSR  cpsr_c, %[tmp] \n"
+              "	MOV  %[prev_sp], sp \n"
+              "	MOV  %[prev_lr], lr \n"
+              "	MSR  cpsr_c, %[cpsr] \n"
+              : [prev_sp] "=&r" (prev_sp), [prev_lr] "=&r" (prev_lr),
+		[cpsr] "=&r" (cpsr), [tmp] "=&r" (tmp)
+              : [spsr] "r" (spsr)
+	      : "cc");
+
+    printk("Previous sp=0x%08x lr=0x%08x and actual cpsr=%08x\n", prev_sp, prev_lr, cpsr);
+
+    for(i=0;i<48;){
+        printk(" 0x%08x",((uint32_t*)prev_sp)[i++]);
+        if((i%6) == 0)
+            printk("\n");
+    }
+
+}
 
 /* This function is supposed to figure out what caused the 
  * data abort, do that, then return.
@@ -229,8 +270,10 @@ void rtems_exception_init_mngt()
  */
 
 void do_data_abort(uint32_t   insn, uint32_t   spsr, 
-                   CPU_Exception_frame *ctx)
+                    Context_Control *ctx)
 {
+    /* Clarify, which type is correct, CPU_Exception_frame or Context_Control */
+
     uint8_t    decode;
     uint8_t    insn_type;
 
@@ -268,6 +311,7 @@ void do_data_abort(uint32_t   insn, uint32_t   spsr,
     case INSN_LDR:
         printk("\n\nINSN_LDR\n");
 
+#if 0
         rn = GET_RN(insn);
         rd = GET_RD(insn);
 
@@ -299,6 +343,8 @@ void do_data_abort(uint32_t   insn, uint32_t   spsr,
                 break;
             }
         }
+#endif
+
         break;
     case INSN_LDRB:
         printk("\n\nINSN_LDRB\n");
@@ -310,6 +356,8 @@ void do_data_abort(uint32_t   insn, uint32_t   spsr,
     
     printk("data_abort at address 0x%x, instruction: 0x%x,   spsr = 0x%x\n",
            ctx->register_lr - 8, insn, spsr);
+
+    _print_full_context(spsr);
 
     /* disable interrupts, wait forever */
     _CPU_ISR_Disable(tmp);

@@ -134,21 +134,31 @@ _go_back_2:
 	ldr     lr,  [r13, #REG_LR]
 	add     r13,r13,#SIZE_REGS
 	subs	pc,r14,#4			/* return */
+
+#define ABORT_REGS_OFFS 32-REG_R4
+#define ABORT_SIZE_REGS SIZE_REGS+ABORT_REGS_OFFS
 	
 	.globl _exc_data_abort
 _exc_data_abort:
-	sub	sp, sp, #SIZE_REGS		/* reserve register frame */
-	stmia	sp, {r0-r12}
+	sub	sp, sp, #ABORT_SIZE_REGS	/* reserve register frame */
+	stmia	sp, {r0-r11}
+	add	sp, sp, #ABORT_REGS_OFFS	/* the Context_Control structure starts by CPSR, R4, ... */
+
+	str	ip, [sp, #REG_PC]		/* store R12 (ip) somewhere, oh hackery, hackery, hack */
 	str	lr, [sp, #REG_LR]
+
 	mov	r1, lr
 	ldr	r0, [r1, #-8]			/* r0 = bad instruction */
 	mrs	r1, spsr			/* r1 = spsr */
-	mov	r2, r13				/* r2 = exception frame */
+	mov	r2, r13				/* r2 = exception frame of Context_Control type */
 	bl	do_data_abort
 	
 	ldr	lr, [sp, #REG_LR]
-	ldmia	sp, {r0-r12}
-	add	sp, sp, #SIZE_REGS
+	ldr	ip, [sp, #REG_PC]		/* restore R12 (ip) */
+
+	sub	sp, sp, #ABORT_REGS_OFFS
+	ldmia	sp, {r0-r11}
+	add	sp, sp, #ABORT_SIZE_REGS
 
 	subs	pc, r14, #4			/* return to the instruction */
 						/* _AFTER_ the aborted one */
