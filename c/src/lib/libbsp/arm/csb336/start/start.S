@@ -72,6 +72,13 @@ _bss_init:
         ldr     sp, =_abt_stack
         add     sp, sp, r1
         
+        /* Enter UNDEF mode and set up the UNDEF stack pointer */
+        mov     r0, #(PSR_MODE_UNDEF | PSR_I | PSR_F)     /* No interrupts */
+        msr     cpsr, r0
+        ldr     r1, =_undef_stack_size
+        ldr     sp, =_undef_stack
+        add     sp, sp, r1
+        
         /* Set up the SVC stack pointer last and stay in SVC mode */
         mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)     /* No interrupts */
         msr     cpsr, r0

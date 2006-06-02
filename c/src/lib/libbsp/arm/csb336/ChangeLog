@@ -1,3 +1,8 @@
+2006-06-02	Jay Monkman <jtm@lopingdog.com>
+
+	* start/start.S, startup/linkcmds: Defined UNDEF exception
+	stack space. 
+
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add preinstall.am.
