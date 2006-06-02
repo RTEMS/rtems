@@ -1,3 +1,7 @@
+2006-06-02	Jay Monkman <jtm@lopingdog.com>
+
+	* cpu.c, cpu_asm.S: Fixed ARM Data Abort handling.
+
 2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Eliminate unsigned16, unsigned32.
