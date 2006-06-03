@@ -1,5 +1,13 @@
 2006-06-02	Jay Monkman <jtm@lopingdog.com>
 
+	* times: Reran timing tests and updated 'times' file.
+
+2006-06-02	Jay Monkman <jtm@lopingdog.com>
+
+	* startup/bspstart.c: Fixed PLL calculations.
+
+2006-06-02	Jay Monkman <jtm@lopingdog.com>
+
 	* Makefile.am, console/uart.c, startup/exit.c:  Changed UART
           driver to be interrupt driven, added support for both UARTs.
 
