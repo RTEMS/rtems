@@ -83,7 +83,7 @@ rtems_status_code rtems_task_variable_add(
     new->ptr = ptr;
     new->dtor = dtor;
 
-    new->next = the_thread->task_variables;
+    new->next = (struct rtems_task_variable_tt *)the_thread->task_variables;
     the_thread->task_variables = new;
     _Thread_Enable_dispatch();
     return RTEMS_SUCCESSFUL;

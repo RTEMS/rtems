@@ -1,3 +1,9 @@
+2006-06-02	Joel Sherrill <joel@OARcorp.com>
+
+	* itron/src/trcv_mbf.c, posix/src/semopen.c,
+	rtems/src/taskvariableadd.c, score/macros/rtems/score/heap.inl: Fix
+	warnings.
+
 2006-05-31	Eric Norum <norume@aps.anl.gov>
 
     * libnetworking/netinet/ip_icmp.c: Update icps_allecho counter.

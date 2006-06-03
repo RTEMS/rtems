@@ -36,6 +36,7 @@ ER trcv_mbf(
   CORE_message_queue_Status       status;
   boolean                         wait;
   Watchdog_Interval               interval;
+  uint32_t                        msgsz;
 
   interval = 0;
   if (tmout == TMO_POL) {
@@ -63,11 +64,12 @@ ER trcv_mbf(
           &the_message_buffer->message_queue,
           the_message_buffer->Object.id,
           msg,
-          p_msgsz,
+          &msgsz,
           wait,
           interval
       );
       _Thread_Enable_dispatch();
+      *p_msgsz = msgsz;
       status = (CORE_message_queue_Status)_Thread_Executing->Wait.return_code;
       return
         _ITRON_Message_buffer_Translate_core_message_buffer_return_code(status);

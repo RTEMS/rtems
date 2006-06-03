@@ -45,7 +45,8 @@ sem_t *sem_open(
   mode_t                     mode;
   unsigned int               value = 0;
   int                        status;
-  sem_t                 		the_semaphore_id;
+  sem_t                      the_semaphore_id;
+  Objects_Id                *id;
   POSIX_Semaphore_Control   *the_semaphore;
   Objects_Locations          location;
 
@@ -93,7 +94,8 @@ sem_t *sem_open(
     the_semaphore->open_count += 1;
     _Thread_Enable_dispatch();
     _Thread_Enable_dispatch();
-    return (sem_t *)&the_semaphore->Object.id;
+    id = &the_semaphore->Object.id;
+    return (sem_t *)id;
 
   }
 
@@ -118,5 +120,6 @@ sem_t *sem_open(
   if ( status == -1 )
     return SEM_FAILED;
 
-  return (sem_t *) &the_semaphore->Object.id;
+  id = &the_semaphore->Object.id;
+  return (sem_t *)id;
 }

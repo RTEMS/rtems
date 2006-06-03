@@ -19,7 +19,7 @@
 /*
  * WARNING: this file is only visually checked against
  * '../../../inline/rtems/score/heap.inl'. Use those file for reference
- * if encounter problems.
+ * if you encounter problems.
  */
 
 #include <rtems/score/address.h>
