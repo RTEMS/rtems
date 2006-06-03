@@ -1,3 +1,11 @@
+2006-06-02	Jay Monkman
+
+	* at91rm9200/irq/bsp_irq_init.c, mc9328mxl/clock/clockdrv.c, 
+	mc9328mxl/irq/bsp_irq_asm.S, mc9328mxl/irq/bsp_irq_init.c,
+	mc9328mxl/irq/irq.c, mc9328mxl/irq/irq.h,
+	s3c2400/irq/bsp_irq_init.c: Changed interrupt handling
+	to use shared rtems_irq_connect_data struct.
+
 2006-05-31	Joel Sherrill <joel@OARcorp.com>
 
 	* at91rm9200/clock/clock.c: Convert to using shared clock driver shell.
