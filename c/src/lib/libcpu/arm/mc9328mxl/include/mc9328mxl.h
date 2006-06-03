@@ -131,6 +131,33 @@
 #define MC9328MXL_UART2_MPR4  (*((volatile uint32_t *)((MC9328MXL_UART2_BASE) + 0xcc)))
 #define MC9328MXL_UART2_TS    (*((volatile uint32_t *)((MC9328MXL_UART2_BASE) + 0xd0)))
 
+typedef struct {
+    volatile uint32_t rxd;
+    volatile uint32_t _res0[15];
+    volatile uint32_t txd;
+    volatile uint32_t _res1[15];
+    volatile uint32_t cr1;
+    volatile uint32_t cr2;
+    volatile uint32_t cr3;
+    volatile uint32_t cr4;
+    volatile uint32_t fcr;
+    volatile uint32_t sr1;
+    volatile uint32_t sr2;
+    volatile uint32_t esc;
+    volatile uint32_t tim;
+    volatile uint32_t bir;
+    volatile uint32_t bmr;
+    volatile uint32_t brc;
+    volatile uint32_t ipr1;
+    volatile uint32_t ipr2;
+    volatile uint32_t ipr3;
+    volatile uint32_t ipr4;
+    volatile uint32_t mpr1;
+    volatile uint32_t mpr2;
+    volatile uint32_t mpr3;
+    volatile uint32_t mpr4;
+    volatile uint32_t ts;
+} mc9328mxl_uart_regs_t;
 
 #define MC9328MXL_UART_RXD_CHARRDY    (bit(15))
 #define MC9328MXL_UART_RXD_ERR        (bit(14))
@@ -204,6 +231,17 @@
 #define MC9328MXL_UART_CR4_BKEN       (bit(2))
 #define MC9328MXL_UART_CR4_OREN       (bit(1))
 #define MC9328MXL_UART_CR4_DREN       (bit(0))
+
+#define MC9328MXL_UART_FCR_TXTL(x)    (((x) & 0x3f) << 10)
+#define MC9328MXL_UART_FCR_RFDIV_1    (5 << 7)
+#define MC9328MXL_UART_FCR_RFDIV_2    (4 << 7)
+#define MC9328MXL_UART_FCR_RFDIV_3    (3 << 7)
+#define MC9328MXL_UART_FCR_RFDIV_4    (2 << 7)
+#define MC9328MXL_UART_FCR_RFDIV_5    (1 << 7)
+#define MC9328MXL_UART_FCR_RFDIV_6    (0 << 7)
+#define MC9328MXL_UART_FCR_RFDIV_7    (6 << 7)
+#define MC9328MXL_UART_FCR_RFDIV_MASK (7 << 7)
+#define MC9328MXL_UART_FCR_RXTL(x)    (((x) & 0x3f) << 0)
 
 #define MC9328MXL_UART_SR1_PARERR     (bit(15))
 #define MC9328MXL_UART_SR1_RTSS       (bit(14))
