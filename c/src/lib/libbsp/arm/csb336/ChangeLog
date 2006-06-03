@@ -1,4 +1,10 @@
-2006-06-02	Jay Monkman
+2006-06-02	Jay Monkman <jtm@lopingdog.com>
+
+	* Makefile.am, console/uart.c, startup/exit.c:  Changed UART
+          driver to be interrupt driven, added support for both UARTs.
+
+
+2006-06-02	Jay Monkman <jtm@lopingdog.com>
 
 	* network/network.c: Changed interrupt handling
 	to use shared rtems_irq_connect_data struct.

@@ -86,8 +86,24 @@ void bsp_pretasking_hook(void)
 /*   Since RTEMS is not configured, no RTEMS functions can be called.     */
 /*                                                                        */
 /**************************************************************************/
+void mmu_set_cpu_async_mode(void);
 void bsp_start_default( void )
 {
+    int i;
+
+    /* Set the MCU prescaler to divide by 1 */
+    MC9328MXL_PLL_CSCR &= ~MC9328MXL_PLL_CSCR_PRESC;
+
+    /* Enable the MCU PLL */
+    MC9328MXL_PLL_CSCR |= MC9328MXL_PLL_CSCR_MPEN;
+
+    /* Delay to allow time for PLL to get going */
+    for (i = 0; i < 100; i++) {
+        asm volatile ("nop\n");
+    }
+
+    /* Set the CPU to asynchrous clock mode, so it uses its fastest clock */
+    mmu_set_cpu_async_mode();
 
     /* disable interrupts */
     MC9328MXL_AITC_INTENABLEL = 0;
@@ -153,12 +169,12 @@ void bsp_start_default( void )
 /* Calcuate the frequency for perclk1 */
 int get_perclk1_freq(void)
 {
-    int fin;
-    int fpll;
-    int pd;
-    int mfd;
-    int mfi;
-    int mfn;
+    unsigned int fin;
+    unsigned int fpll;
+    unsigned int pd;
+    unsigned int mfd;
+    unsigned int mfi;
+    unsigned int mfn;
     uint32_t reg;
     int perclk1;
 
@@ -187,13 +203,14 @@ int get_perclk1_freq(void)
     printk("mfd = %d\n", mfd);
     printk("mfi = %d\n", mfi);
     printk("mfn = %d\n", mfn);
-    printk("(fin * mfi) / (pd + 1) = %d\n", (fin * mfi) / (pd + 1));
-    printk("(fin * mfn) / ((pd + 1) * (mfd + 1)) = %d\n",
-           (fin * mfn) / ((pd + 1) * (mfd + 1)));
+    printk("rounded (fin * mfi) / (pd + 1) = %d\n", (fin * mfi) / (pd + 1));
+    printk("rounded (fin * mfn) / ((pd + 1) * (mfd + 1)) = %d\n",
+           ((long long)fin * mfn) / ((pd + 1) * (mfd + 1)));
 #endif
 
-    fpll = 2 * ( ((fin * mfi) / (pd + 1)) +
-                 ((fin * mfn) / ((pd + 1) * (mfd + 1))) );
+    fpll = 2 * ( ((fin * mfi  + (pd + 1) / 2) / (pd + 1)) +
+                 (((long long)fin * mfn + ((pd + 1) * (mfd + 1)) / 2) / 
+		 ((pd + 1) * (mfd + 1))) );
 
     /* calculate the output of the PERCLK1 divider */
     reg = MC9328MXL_PLL_PCDR;
