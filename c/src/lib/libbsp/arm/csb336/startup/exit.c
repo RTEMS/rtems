@@ -29,7 +29,7 @@ void bsp_cleanup(void)
    */
   printk("\n");
   printk(line);
-  while (uart_poll_read(0) < 0) continue;
+  while (BSP_poll_char() < 0) continue;
 
   bsp_reset();
 
