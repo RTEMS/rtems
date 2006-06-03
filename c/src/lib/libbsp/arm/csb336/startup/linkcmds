@@ -76,9 +76,6 @@ SECTIONS
     rtems_vector_table = .;
     . += (8 * 4);                     /* 8 ARM interrupts */
 	
-    bsp_vector_table = .;
-    . += (64 * 4);                    /* 64 MC9328MXL interrupts */
-
     . = ALIGN (0x100);
 
 
