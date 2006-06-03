@@ -1,3 +1,8 @@
+2006-06-02	Jay Monkman <jtm@lopingdog.com>
+
+	* shared/irq/irq_init.c: Changed interrupt handling
+	to use shared rtems_irq_connect_data struct.
+
 2005-10-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Merge-in shared/Makefile.am.

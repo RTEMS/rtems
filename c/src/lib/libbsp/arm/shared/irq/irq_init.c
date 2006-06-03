@@ -30,20 +30,13 @@ void default_int_handler()
 void  rtems_irq_mngt_init()
 {
     int 			i;
-    long			*vectorTable;
     rtems_interrupt_level       level;
-
-    vectorTable = (long *) VECTOR_TABLE;
 
     _CPU_ISR_Disable(level);
 
     /* First, connect the ISR_Handler for IRQ and FIQ interrupts */
     _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, _ISR_Handler, NULL);
     _CPU_ISR_install_vector(ARM_EXCEPTION_FIQ, _ISR_Handler, NULL);
-
-     /* Initialize the vector table contents with default handler */
-    for (i=0; i<BSP_MAX_INT; i++)
-      *(vectorTable + i) = (long)(default_int_handler);
 
     /* Initialize the INT at the BSP level */
     BSP_rtems_irq_mngt_init();
