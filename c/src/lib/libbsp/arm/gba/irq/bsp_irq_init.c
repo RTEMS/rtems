@@ -29,6 +29,16 @@
  */
 void BSP_rtems_irq_mngt_init(void)
 {
+  long *vectorTable;
+  int i;
+
+  vectorTable = (long *) VECTOR_TABLE;
+    
+  /* Initialize the vector table contents with default handler */
+  for (i=0; i<BSP_MAX_INT; i++) {
+      *(vectorTable + i) = (long)(default_int_handler);
+  }
+
   /* clear all interrupt status flags */
   GBA_REG_IF = 0xffff;
   /* disable all interrupts */
