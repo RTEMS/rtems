@@ -31,13 +31,15 @@ ExecuteITHandler :
 
   /* find the ISR's address based on the vector */	
   ldr   r0, =bsp_vector_table
-  ldr	r0, [r0, r1, LSL #2]	/* Read the address */
-
+  mov   r1, r1, LSL #3          /* Shift vector to get offset into table */
+  add   r1, r0, r1              /* r1 has address of vector entry */
+  ldr   r0, [r1, #4]            /* Get the data pointer */
+  ldr	r1, [r1]	        /* Get the vector */
 
   stmdb	  sp!,{lr}
   ldr     lr, =IRQ_return         /* prepare the return from handler  */
 
-  mov     pc, r0		/* EXECUTE INT HANDLER */
+  mov     pc, r1		/* EXECUTE INT HANDLER */
 
 IRQ_return:
   ldmia sp!,{lr}

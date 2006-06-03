@@ -16,6 +16,8 @@
 #include <rtems/score/apiext.h>
 #include <mc9328mxl.h>
 
+mc9328mxl_irq_info_t bsp_vector_table[BSP_MAX_INT];
+
 /*
  * This function check that the value given for the irq line
  * is valid.
@@ -36,9 +38,6 @@ static int isValidInterrupt(int irq)
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level level;
-    rtems_irq_hdl *bsp_tbl;
-
-    bsp_tbl = (rtems_irq_hdl *)&bsp_vector_table;
     
     if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -47,8 +46,8 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Check if default handler is actually connected. If not issue an error.
      */
-    if (bsp_tbl[irq->name] != default_int_handler) {
-      return 0;
+    if (bsp_vector_table[irq->name].vector != default_int_handler) {
+        return 0;
     }
 
     _CPU_ISR_Disable(level);
@@ -56,7 +55,8 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * store the new handler
      */
-    bsp_tbl[irq->name] = irq->hdl;
+    bsp_vector_table[irq->name].vector = irq->hdl;
+    bsp_vector_table[irq->name].data = irq->handle;
 
     /*
      * Enable interrupt on device
@@ -80,18 +80,15 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level level;
-    rtems_irq_hdl *bsp_tbl;
 
-    bsp_tbl = (rtems_irq_hdl *)&bsp_vector_table;
-  
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
     /*
      * Check if the handler is actually connected. If not issue an error.
      */
-    if (bsp_tbl[irq->name] != irq->hdl) {
-      return 0;
+    if (bsp_vector_table[irq->name].vector != irq->hdl) {
+        return 0;
     }
 
     _CPU_ISR_Disable(level);
@@ -106,8 +103,8 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * restore the default irq value
      */
-    bsp_tbl[irq->name] = default_int_handler;
-    
+    bsp_vector_table[irq->name].vector = default_int_handler;
+    bsp_vector_table[irq->name].data = NULL;
 
     _CPU_ISR_Enable(level);
 

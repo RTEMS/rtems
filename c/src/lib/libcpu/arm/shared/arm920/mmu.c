@@ -151,7 +151,7 @@ static inline uint32_t mmu_get_id(void)
 static inline uint32_t mmu_get_ctrl(void)
 {
     uint32_t val;
-    asm volatile ("msr 15, 0, %0, cr1, cr0\n" : "=r" (val));
+    asm volatile ("mrc 15, 0, %0, cr1, cr0\n" : "=r" (val));
     return val;
 }
 
@@ -240,3 +240,13 @@ static void mmu_set_map_inval(mmu_lvl1_t *base)
         base[i] = MMU_SET_LVL1_INVAL;
     }
 }
+
+
+void mmu_set_cpu_async_mode(void)
+{
+    uint32_t reg;
+    reg = mmu_get_ctrl();
+    reg |= 0xc0000000;
+    mmu_set_ctrl(reg);
+}
+    

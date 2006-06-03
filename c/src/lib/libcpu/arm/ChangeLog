@@ -1,5 +1,10 @@
 2006-06-02	Jay Monkman
 
+	* shared/arm920/mmu.c: Fixed bug in mmu_get_ctrl(), 
+	added mmu_set_cpu_async() function.
+
+2006-06-02	Jay Monkman
+
 	* at91rm9200/irq/bsp_irq_init.c, mc9328mxl/clock/clockdrv.c, 
 	mc9328mxl/irq/bsp_irq_asm.S, mc9328mxl/irq/bsp_irq_init.c,
 	mc9328mxl/irq/irq.c, mc9328mxl/irq/irq.h,

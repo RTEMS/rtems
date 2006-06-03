@@ -20,6 +20,16 @@ extern void default_int_handler();
 
 void BSP_rtems_irq_mngt_init() 
 {
+    long *vectorTable;
+    int i;
+
+    vectorTable = (long *) VECTOR_TABLE;
+
+    /* Initialize the vector table contents with default handler */
+    for (i=0; i<BSP_MAX_INT; i++) {
+        *(vectorTable + i) = (long)(default_int_handler);
+    }
+
     /*
      * Here is the code to initialize the INT for
      * the specified BSP

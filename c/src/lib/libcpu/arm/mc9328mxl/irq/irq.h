@@ -15,6 +15,8 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
+#include <rtems/irq.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,7 +36,7 @@ extern void default_int_handler();
  * Constants
  **********************************************************************/
 
-/* possible interrupt sources on the AT91RM9200 */
+/* possible interrupt sources on the MC9328MXL */
 #define BSP_INT_UART3_PFERR       0 
 #define BSP_INT_UART3_RTS         1     
 #define BSP_INT_UART3_DTR         2     
@@ -101,63 +103,20 @@ extern void default_int_handler();
 #define BSP_INT_WDT              63
 #define BSP_MAX_INT              64
               
-typedef unsigned char  rtems_irq_level;
-typedef unsigned char  rtems_irq_trigger;
+typedef struct {
+    rtems_irq_hdl       vector;
+    rtems_irq_hdl_param data;
+} mc9328mxl_irq_info_t;
 
-typedef unsigned int rtems_irq_number;
-struct  __rtems_irq_connect_data__;     /* forward declaratiuon */
 
-typedef void (*rtems_irq_hdl)       (void);
-typedef void (*rtems_irq_enable)    (const struct __rtems_irq_connect_data__*);
-typedef void (*rtems_irq_disable)   (const struct __rtems_irq_connect_data__*);
-typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);
 
-extern rtems_irq_hdl bsp_vector_table[BSP_MAX_INT];
-#define VECTOR_TABLE bsp_vector_table
-  											   
-typedef struct __rtems_irq_connect_data__ {
-    /* IRQ line */
-    rtems_irq_number              name;
-
-    /* Handler */
-    rtems_irq_hdl                 hdl;
-
-    /* function for enabling interrupts at device level. */
-    rtems_irq_enable              on;
-
-    /* function for disabling interrupts at device level. */
-    rtems_irq_disable             off;
-
-    /* Function to test if interrupt is enabled */
-    rtems_irq_is_enabled        isOn;
-
-    /* priority level of interrupt */
-    rtems_irq_level               irqLevel;
-
-    /* Trigger method (rising/falling edge or high/low level) */
-    rtems_irq_trigger             irqTrigger;
-} rtems_irq_connect_data;
+extern mc9328mxl_irq_info_t bsp_vector_table[BSP_MAX_INT];
 
 /*
  * function to initialize the interrupt for a specific BSP
  */
 void BSP_rtems_irq_mngt_init();
 
-
-/*
- * function to connect a particular irq handler.
- */
-int BSP_install_rtems_irq_handler       (const rtems_irq_connect_data*);
-
-/*
- * function to get the current RTEMS irq handler for ptr->name. 
- */
-int BSP_get_current_rtems_irq_handler   (rtems_irq_connect_data* ptr);
-
-/*
- * function to disconnect the RTEMS irq handler for ptr->name.
- */
-int BSP_remove_rtems_irq_handler        (const rtems_irq_connect_data*);
 
 #endif /* __asm__ */
 

@@ -23,10 +23,11 @@ extern void default_int_handler();
  */
 void BSP_rtems_irq_mngt_init()
 {
-#if 0
-    /* disable all interrupts */
-    AIC_CTL_REG(AIC_IDCR) = 0xffffffff;
-#endif
+    int i;
 
+    for (i = 0; i < BSP_MAX_INT; i++) {
+        bsp_vector_table[i].vector = default_int_handler;
+        bsp_vector_table[i].data   = NULL;
+    }
 }
 

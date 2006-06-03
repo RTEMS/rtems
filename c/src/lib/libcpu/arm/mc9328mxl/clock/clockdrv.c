@@ -28,13 +28,14 @@ static void clock_isr_off(const rtems_irq_connect_data *unused);
 static int clock_isr_is_on(const rtems_irq_connect_data *irq);
 
 /* Replace the first value with the clock's interrupt name. */
-rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER1,
-                                         (rtems_irq_hdl)Clock_isr,
-                                         clock_isr_on,
-                                         clock_isr_off,
-                                         clock_isr_is_on,
-                                         3,     /* unused for ARM cpus */
-                                         0 };   /* unused for ARM cpus */
+rtems_irq_connect_data clock_isr_data = {
+    .name   = BSP_INT_TIMER1,
+    .hdl    = (rtems_irq_hdl)Clock_isr,
+    .handle = (void *)BSP_INT_TIMER1,
+    .on     = clock_isr_on,
+    .off    = clock_isr_off,
+    .isOn   = clock_isr_is_on,
+};
 
 /* If you follow the code, this is never used, so any value 
  * should work
@@ -82,7 +83,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER1,
         int cnt; \
         freq = get_perclk1_freq(); \
         printk("perclk1 freq is %d\n", freq); \
-        cnt = ((freq / 1000) * BSP_Configuration.microseconds_per_tick) / 1000;\
+        cnt = ((long long)freq * BSP_Configuration.microseconds_per_tick + 500000) / 1000000;\
         printk("cnt freq is %d\n", cnt); \
         MC9328MXL_TMR1_TCMP = cnt; \
         /* use PERCLK1 as input, enable timer */ \
