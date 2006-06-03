@@ -41,20 +41,20 @@
 /* RTEMS event used to start transmit daemon. */
 #define START_TRANSMIT_EVENT    RTEMS_EVENT_2
 
-static rtems_isr enet_isr(rtems_vector_number vector);
+static void enet_isr(rtems_irq_hdl_param);
 static void enet_isr_on(const rtems_irq_connect_data *unused);
 static void enet_isr_off(const rtems_irq_connect_data *unused);
 static int enet_isr_is_on(const rtems_irq_connect_data *irq);
 
 /* Replace the first value with the clock's interrupt name. */
-rtems_irq_connect_data mc9328mxl_enet_isr_data = {BSP_INT_GPIO_PORTA,
-                                                  (rtems_irq_hdl)enet_isr,
-                                                  enet_isr_on,
-                                                  enet_isr_off,
-                                                  enet_isr_is_on,
-                                                  3,    /* unused for ARM */
-                                                  0 };  /* unused for ARM */
-
+rtems_irq_connect_data mc9328mxl_enet_isr_data = {
+    .name    = BSP_INT_GPIO_PORTA,
+    .hdl     = (rtems_irq_hdl)enet_isr,
+    .handle  = (void *)BSP_INT_GPIO_PORTA,
+    .on      = enet_isr_on,
+    .off     = enet_isr_off,
+    .isOn    = enet_isr_is_on,
+};
 typedef struct {
   unsigned long rx_packets;        /* total packets received         */
   unsigned long tx_packets;        /* total packets transmitted      */
@@ -102,7 +102,8 @@ void mc9328mxl_enet_tx_task (void *arg);
 void mc9328mxl_enet_sendpacket (struct ifnet *ifp, struct mbuf *m);
 void mc9328mxl_enet_rx_task(void *arg);
 void mc9328mxl_enet_stats(mc9328mxl_enet_softc_t *sc);
-static int mc9328mxl_enet_ioctl(struct ifnet *ifp, int command, caddr_t data);
+static int mc9328mxl_enet_ioctl(struct ifnet *ifp, 
+                                unsigned long command, caddr_t data);
 
 
 int rtems_mc9328mxl_enet_attach (
@@ -631,7 +632,7 @@ static int enet_isr_is_on(const rtems_irq_connect_data *irq)
 
 /*  Driver ioctl handler */
 static int
-mc9328mxl_enet_ioctl (struct ifnet *ifp, int command, caddr_t data)
+mc9328mxl_enet_ioctl (struct ifnet *ifp, unsigned long command, caddr_t data)
 {
     mc9328mxl_enet_softc_t *sc = ifp->if_softc;
     int error = 0;
@@ -678,7 +679,7 @@ mc9328mxl_enet_ioctl (struct ifnet *ifp, int command, caddr_t data)
 }
 
 /* interrupt handler */
-rtems_isr enet_isr (rtems_vector_number v)
+static void enet_isr(rtems_irq_hdl_param unused)
 {
     uint16_t int_reg;
 
