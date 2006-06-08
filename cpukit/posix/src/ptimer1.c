@@ -27,7 +27,6 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/posix/psignal.h>
-#include <rtems/score/wkspace.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <signal.h>
@@ -35,126 +34,56 @@
 #include <rtems/seterr.h>
 #include <rtems/posix/timer.h>
 
-/*****************************/
-/* End of necessary includes */
-/*****************************/
+boolean _Watchdog_Insert_ticks_helper(
+  Watchdog_Control               *timer,
+  Watchdog_Interval               ticks,
+  Objects_Id                      id,
+  Watchdog_Service_routine_entry  TSR,
+  void                           *arg
+)
+{
+  ISR_Level            level;
 
-/* ************
- * Constants
- * ************/
+  (void) _Watchdog_Remove( timer );
+  _ISR_Disable( level );
+
+    /*
+     *  Check to see if the watchdog has just been inserted by a
+     *  higher priority interrupt.  If so, abandon this insert.
+     */
+    if ( timer->state != WATCHDOG_INACTIVE ) {
+      _ISR_Enable( level );
+      return FALSE;
+    }
+
+    /*
+     *  OK.  Now we now the timer was not rescheduled by an interrupt
+     *  so we can atomically initialize it as in use.
+     */
+    _Watchdog_Initialize( timer, TSR, id, arg );
+    _Watchdog_Insert_ticks( timer, ticks );
+  _ISR_Enable( level );
+  return TRUE;
+}
+
+/* #define DEBUG_MESSAGES */
 
 /*
-#define DEBUG_MESSAGES
- */
-
-/*
- * Data for the signals
- */
-
-/***********************************
- * Definition of Internal Functions
- ***********************************/
-
-/* ***************************************************************************
- * TIMER_INITIALIZE_S
- *
- *  Description: Initialize the data of a timer
- * ***************************************************************************/
-
-extern void TIMER_INITIALIZE_S ( int timer_pos );
-
-/* ***************************************************************************
- * _POSIX_Timer_Manager_initialization
- *
- *  Description: Initialize the internal structure in which the data of all
- *               the timers are stored
- * ***************************************************************************/
-
-/* split to reduce minimum size */
-
-/* ***************************************************************************
- * FIRST_FREE_POSITION_F
- *
- *  Description: Returns the first free position in the table of timers.
- *               If there is not a free position, it returns NO_MORE_TIMERS_C
- * ***************************************************************************/
-
-int FIRST_FREE_POSITION_F ()
-{
-   int index;
-
-   for (index=0; index<timer_max; index++) {
-      if ( timer_struct[index].state == STATE_FREE_C ) {
-         return index;
-      }
-   }
-
-   /* The function reaches this point only if all the position are occupied */
-
-   return NO_MORE_TIMERS_C;
-}
-
-/* ***************************************************************************
- * TIMER_POSITION_F
- *
- *  Description: Returns the position in the table of timers in which the
- *               data of the timer are stored.
- *               If the timer identifier does not exist, it returns
- *               BAD_TIMER_C
- * ***************************************************************************/
-
-int TIMER_POSITION_F ( timer_t timer_id )
-{
-  int index;
-
-  for (index=0; index<timer_max; index++ ) {
-
-     /* Looks for the position of the timer. The timer must exist and the
-      * position can not be free */
-     if ( ( timer_struct[index].timer_id == timer_id ) &&
-          ( timer_struct[index].state != STATE_FREE_C ) ) {
-        return index;
-     }
-  }
-
-  /* If the function reaches this point is because the timer identifier
-   * is not correct */
-
-   return BAD_TIMER_C;
-
-}
-
-/* ***************************************************************************
- * COPY_ITIMERSPEC_S
- *
- *  Description: Does a copy of a variable of type struct itimerspec
- * ***************************************************************************/
-
-void COPY_ITIMERSPEC_S ( const struct itimerspec *source,
-                         struct itimerspec *target )
-{
-
-   target->it_value.tv_sec     = source->it_value.tv_sec;
-   target->it_value.tv_nsec    = source->it_value.tv_nsec;
-   target->it_interval.tv_sec  = source->it_interval.tv_sec;
-   target->it_interval.tv_nsec = source->it_interval.tv_nsec;
-
-}
-
-/* ***************************************************************************
  * ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S
  *
  *  Description: This function converts the data of a structure itimerspec
  *               into structure rtems_time_of_day
- * ***************************************************************************/
+  */
 
-void ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S
-   ( const struct itimerspec *itimer, rtems_time_of_day *rtems_time )
+void ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S(
+  const struct itimerspec *itimer,
+  rtems_time_of_day *rtems_time
+)
 {
    unsigned long int seconds;
 
    /* The leap years and the months with 28, 29 or 31 days have not been
-    * considerated. It will be made in the future */
+    * considered. It will be made in the future */
 
    seconds            = itimer->it_value.tv_sec;
 
@@ -182,53 +111,46 @@ void ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S
 
 
 /* ***************************************************************************
- * FIRE_TIMER_S
+ * _POSIX_Timer_TSR
  *
  *  Description: This is the operation that is ran when a timer expires
  * ***************************************************************************/
 
 
-rtems_timer_service_routine FIRE_TIMER_S (rtems_id timer, void *data)
+void _POSIX_Timer_TSR(Objects_Id timer, void *data)
 {
-  int               timer_pos;  /* Position in the table of the timer that
-			         *  has expirated 			     */
-  rtems_status_code return_v;   /* Return value of rtems_timer_fire_after    */
-  int               sig_number; /* Number of the signal to send              */
+  POSIX_Timer_Control *ptimer;
+  boolean              activated;
 
+  ptimer = (POSIX_Timer_Control *)data;
 
-  /* The position of the table of timers that contains the data of the
-   * expired timer will be stored in "timer_pos". In theory a timer can not
-   * expire if it has not been created or has been deleted */
+  /* Increment the number of expirations. */
+  ptimer->overrun = ptimer->overrun + 1;
+  /* The timer must be reprogrammed */
+  if ( ( ptimer->timer_data.it_interval.tv_sec  != 0 ) ||
+       ( ptimer->timer_data.it_interval.tv_nsec != 0 ) ) {
+#if 0
+    status = rtems_timer_fire_after(
+         ptimer->timer_id, ptimer->ticks, _POSIX_Timer_TSR, ptimer );
+#endif
+    activated = _Watchdog_Insert_ticks_helper(
+      &ptimer->Timer,
+      ptimer->ticks,
+      ptimer->Object.id,
+      _POSIX_Timer_TSR,
+      ptimer
+    );
+    if ( !activated )
+      return;
 
-  timer_pos = TIMER_POSITION_F(timer);
+    /* Store the time when the timer was started again */
+    ptimer->time = _TOD_Current;
 
-  /* Increases the number of expiration of the timer in one unit. */
-  timer_struct[timer_pos].overrun = timer_struct[timer_pos].overrun + 1;
-
-
-  if ( ( timer_struct[timer_pos].timer_data.it_interval.tv_sec  != 0 ) ||
-       ( timer_struct[timer_pos].timer_data.it_interval.tv_nsec != 0 ) ) {
-
-     /* The timer must be reprogrammed */
-
-     return_v = rtems_timer_fire_after ( timer,
-                                        timer_struct[timer_pos].ticks,
-                                        FIRE_TIMER_S,
-                                        NULL );
-
-     /* Stores the time when the timer was started again */
-
-     timer_struct[timer_pos].time = _TOD_Current;
-
-     /* The state has not to be actualized, because nothing modifies it */
-
-     timer_struct[timer_pos].state = STATE_CREATE_RUN_C;
-
+    /* The state really did not change but just to be safe */
+    ptimer->state = STATE_CREATE_RUN_C;
   } else {
-     /* Indicates that the timer is stopped */
-
-     timer_struct[timer_pos].state = STATE_CREATE_STOP_C;
-
+   /* Indicates that the timer is stopped */
+   ptimer->state = STATE_CREATE_STOP_C;
   }
 
   /*
@@ -236,20 +158,14 @@ rtems_timer_service_routine FIRE_TIMER_S (rtems_id timer, void *data)
    * specified for that signal is simulated
    */
 
-  sig_number = timer_struct[timer_pos].inf.sigev_signo;
-
-  if( pthread_kill ( timer_struct[timer_pos].thread_id ,
-                     timer_struct[timer_pos].inf.sigev_signo ) ) {
-     /* XXX error handling */
+  if ( pthread_kill ( ptimer->thread_id, ptimer->inf.sigev_signo ) ) {
+    /* XXX error handling */
   }
 
-  /*
-   * After the signal handler returns, the count of expirations of the
+  /* After the signal handler returns, the count of expirations of the
    * timer must be set to 0.
    */
-
-  timer_struct[timer_pos].overrun = 0;
-
+  ptimer->overrun = 0;
 }
 
 /* *********************************************************************
@@ -266,10 +182,7 @@ int timer_create(
   timer_t         *timerid
 )
 {
-
-  rtems_status_code return_v;  /* return value of the operation    */
-  rtems_id          timer_id;  /* created timer identifier         */
-  int               timer_pos; /* Position in the table of timers  */
+  POSIX_Timer_Control *ptimer;
 
   if ( clock_id != CLOCK_REALTIME )
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -294,82 +207,40 @@ int timer_create(
        rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
- /*
-  *  A timer is created using the primitive rtems_timer_create
-  */
-
-  return_v = rtems_timer_create ( clock_id, &timer_id );
-
-  switch (return_v) {
-     case RTEMS_SUCCESSFUL :
-
-       /*
-        * The timer has been created properly
-        */
-
-        /* Obtains the first free position in the table of timers */
-
-        timer_pos = FIRST_FREE_POSITION_F();
-
-        if ( timer_pos == NO_MORE_TIMERS_C ) {
-           /* There is not position for another timers in spite of RTEMS
-	    * supports it. It will necessaty to increase the structure used */
-
-           rtems_set_errno_and_return_minus_one( EAGAIN );
-        }
-
-        /* Exit parameter */
-
-        *timerid  = timer_id;
-
-        /* The data of the created timer are stored to use them later */
-
-        timer_struct[timer_pos].state     = STATE_CREATE_NEW_C;
-
-        /* NEW VERSION*/
-        timer_struct[timer_pos].thread_id = pthread_self ();
-
-        if ( evp != NULL ) {
-           timer_struct[timer_pos].inf.sigev_notify = evp->sigev_notify;
-           timer_struct[timer_pos].inf.sigev_signo  = evp->sigev_signo;
-           timer_struct[timer_pos].inf.sigev_value  = evp->sigev_value;
-        }
-
-        timer_struct[timer_pos].timer_id = timer_id;
-        timer_struct[timer_pos].overrun  = 0;
-
-        timer_struct[timer_pos].timer_data.it_value.tv_sec     = 0;
-        timer_struct[timer_pos].timer_data.it_value.tv_nsec    = 0;
-        timer_struct[timer_pos].timer_data.it_interval.tv_sec  = 0;
-        timer_struct[timer_pos].timer_data.it_interval.tv_nsec = 0;
-
-        return 0;
-
-     case RTEMS_INVALID_NAME : /* The assigned name is not valid */
-
-       rtems_set_errno_and_return_minus_one( EINVAL );
-
-     case RTEMS_TOO_MANY :
-
-       /* There has been created too much timers for the same process */
-       rtems_set_errno_and_return_minus_one( EAGAIN );
-
-     default :
-
-       /*
-        * Does nothing. It only returns the error without assigning a value
-        * to errno. In theory, it can not happen because the call to
-        * rtems_timer_create can not return other different value.
-        */
-
-       rtems_set_errno_and_return_minus_one( EINVAL );
-  }
+  _Thread_Disable_dispatch();         /* to prevent deletion */
 
   /*
-   * The next sentence is used to avoid singular situations
+   *  Allocate a timer
    */
+  ptimer = _POSIX_Timer_Allocate();
+  if ( !ptimer ) {
+    _Thread_Enable_dispatch();
+    rtems_set_errno_and_return_minus_one( EAGAIN );
+  }
 
-  rtems_set_errno_and_return_minus_one( EINVAL );
+  /* The data of the created timer are stored to use them later */
+
+  ptimer->state     = STATE_CREATE_NEW_C;
+  ptimer->thread_id = _Thread_Executing->Object.id;
+
+  if ( evp != NULL ) {
+    ptimer->inf.sigev_notify = evp->sigev_notify;
+    ptimer->inf.sigev_signo  = evp->sigev_signo;
+    ptimer->inf.sigev_value  = evp->sigev_value;
+  }
+
+  ptimer->overrun  = 0;
+  ptimer->timer_data.it_value.tv_sec     = 0;
+  ptimer->timer_data.it_value.tv_nsec    = 0;
+  ptimer->timer_data.it_interval.tv_sec  = 0;
+  ptimer->timer_data.it_interval.tv_nsec = 0;
+
+  _Watchdog_Initialize( &ptimer->Timer, NULL, 0, NULL );
+  _Objects_Open(&_POSIX_Timer_Information, &ptimer->Object, (Objects_Name) 0);
+
+  *timerid  = ptimer->Object.id;
+  _Thread_Enable_dispatch();
+  return 0;
 }
 
 /*
@@ -380,7 +251,6 @@ int timer_delete(
   timer_t timerid
 )
 {
-
  /*
   * IDEA: This function must probably stop the timer first and then delete it
   *
@@ -389,33 +259,29 @@ int timer_delete(
   *       The call to rtems_timer_delete will be probably unnecessary,
   *       because rtems_timer_delete stops the timer before deleting it.
   */
+  POSIX_Timer_Control *ptimer;
+  Objects_Locations    location;
 
-  int               timer_pos;
-  rtems_status_code status;
-
-
-   /* First the position in the table of timers is obtained */
-
-   timer_pos = TIMER_POSITION_F ( timerid );
-
-   if ( timer_pos == BAD_TIMER_C ) {
-      /* The timer identifier is erroneus */
+  ptimer = _POSIX_Timer_Get( timerid, &location );
+  switch ( location ) {
+    case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
+      _Thread_Dispatch();
       rtems_set_errno_and_return_minus_one( EINVAL );
-   }
+#endif
 
-   /* The timer is deleted */
+    case OBJECTS_ERROR:
+      rtems_set_errno_and_return_minus_one( EINVAL );
 
-   status = rtems_timer_delete ( timerid );
-
-   if ( status == RTEMS_INVALID_ID ) {
-     /* The timer identifier is erroneus */
-     rtems_set_errno_and_return_minus_one( EINVAL );
-   }
-
-   /* Initializes the data of the timer */
-
-   TIMER_INITIALIZE_S ( timer_pos );
-   return 0;
+    case OBJECTS_LOCAL:
+      _Objects_Close( &_POSIX_Timer_Information, &ptimer->Object );
+      ptimer->state = STATE_FREE_C;
+      (void) _Watchdog_Remove( &ptimer->Timer );
+      _POSIX_Timer_Free( ptimer );
+      _Thread_Enable_dispatch();
+      return 0;
+  }
+  return -1;   /* unreached - only to remove warnings */
 }
 
 /*
@@ -434,224 +300,132 @@ int timer_settime(
   struct itimerspec       *ovalue
 )
 {
+  POSIX_Timer_Control *ptimer;
+  Objects_Locations    location;
+  boolean              activated;
 
-   rtems_status_code return_v;   /* Return of the calls to RTEMS        */
-   int               timer_pos;  /* Position of the timer in the table  */
-   rtems_time_of_day rtems_time; /* Time in RTEMS                       */
+  if ( value == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
+  /* First, it verifies if the structure "value" is correct */
+  if ( ( value->it_value.tv_nsec > MAX_NSEC_C ) ||
+       ( value->it_value.tv_nsec < MIN_NSEC_C ) ) {
+    /* The number of nanoseconds is not correct */
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  
+  /* XXX check for seconds in the past */
 
-   /* First the position in the table of timers is obtained */
+  if ( flags != TIMER_ABSTIME && flags != TIMER_RELATIVE_C ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
-   timer_pos = TIMER_POSITION_F ( timerid );
+  /* If the function reaches this point, then it will be necessary to do
+   * something with the structure of times of the timer: to stop, start
+   * or start it again
+   */
 
-   if ( timer_pos == BAD_TIMER_C ) {
-     /* The timer identifier is erroneus */
+  ptimer = _POSIX_Timer_Get( timerid, &location );
+  switch ( location ) {
+    case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
+      _Thread_Dispatch();
+      return -1;
      rtems_set_errno_and_return_minus_one( EINVAL );
-   }
-
-   if ( value == NULL ) {
-     /* The stucture of times of the timer is free, and then returns an
-	error but the variable errno is not actualized */
-
-     rtems_set_errno_and_return_minus_one( EINVAL );
-   }
-
-   /* If the function reaches this point, then it will be necessary to do
-    * something with the structure of times of the timer: to stop, start
-    * or start it again */
-
-   /* First, it verifies if the timer must be stopped */
-
-   if ( value->it_value.tv_sec == 0 && value->it_value.tv_nsec == 0 ) {
-      /* The timer is stopped */
-
-      return_v = rtems_timer_cancel ( timerid );
-
-      /* The old data of the timer are returned */
-
-      if ( ovalue )
-        *ovalue = timer_struct[timer_pos].timer_data;
-
-      /* The new data are set */
-
-      timer_struct[timer_pos].timer_data = *value;
-
-      /* Indicates that the timer is created and stopped */
-
-      timer_struct[timer_pos].state = STATE_CREATE_STOP_C;
-
-      /* Returns with success */
-
-      return 0;
-   }
-
-   /*
-    * If the function reaches this point, then the timer will have to be
-    * initialized with new values: to start it or start it again
-    */
-
-   /* First, it verifies if the structure "value" is correct */
-
-    if ( ( value->it_value.tv_nsec > MAX_NSEC_C ) ||
-         ( value->it_value.tv_nsec < MIN_NSEC_C ) ) {
-       /* The number of nanoseconds is not correct */
-
-       rtems_set_errno_and_return_minus_one( EINVAL );
-    }
-
-   /* Then, "value" must be converted from seconds and nanoseconds to clock
-    * ticks, to use it in the calls to RTEMS */
-
-   /* It is also necessary to take in account if the time is absolute
-    * or relative */
-
-   switch (flags) {
-      case TIMER_ABSTIME:
-
-        /* The fire time is absolute:
-         * It has to use "rtems_time_fire_when" */
-
-        /* First, it converts from struct itimerspec to rtems_time_of_day */
-
-        ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S ( value, &rtems_time );
-
-        return_v = rtems_timer_fire_when ( timerid, &rtems_time, FIRE_TIMER_S, NULL);
-
-        switch ( return_v ) {
-           case RTEMS_SUCCESSFUL:
-
-              /* The timer has been started and is running */
-
-              /* Actualizes the data of the structure and
-               * returns the old ones in "ovalue" */
-
-              if ( ovalue )
-                *ovalue = timer_struct[timer_pos].timer_data;
-
-              timer_struct[timer_pos].timer_data = *value;
-
-              /* It indicates that the time is running */
-
-              timer_struct[timer_pos].state = STATE_CREATE_RUN_C;
-
-              /* Stores the time in which the timer was started again */
-
-              timer_struct[timer_pos].time = _TOD_Current;
-              return 0;
-
-              break;
-
-           case RTEMS_INVALID_ID:
-
-              /* XXX error handling */
-              break;
-
-           case RTEMS_NOT_DEFINED:
-
-              /* XXX error handling */
-              break;
-
-           case RTEMS_INVALID_CLOCK:
-
-              /* XXX error handling */
-              break;
-
-           default: break;
-
-
-        }
-
-        break;
-
-      case TIMER_RELATIVE_C:
-
-        /* The fire time is relative:
-         * It has to use "rtems_time_fire_after" */
-
-        /* First, it converts from seconds and nanoseconds to ticks */
-
-        /* The form in which this operation is done can produce a lost
-         * of precision of 1 second */
-
-/*      This is the process to convert from nanoseconds to ticks
- *
- *      There is a tick every 10 miliseconds, then the nanoseconds are
- *      divided between 10**7. The result of this operation will be the
- *      number of ticks
- */
-
-        timer_struct[timer_pos].ticks =
-             ( SEC_TO_TICKS_C * value->it_value.tv_sec ) +
-             ( value->it_value.tv_nsec / (NSEC_PER_SEC_C / SEC_TO_TICKS_C));
-
-        return_v = rtems_timer_fire_after ( timerid,
-                                           timer_struct[timer_pos].ticks,
-                                           FIRE_TIMER_S,
-                                           NULL );
-
-        switch (return_v) {
-           case RTEMS_SUCCESSFUL:
-
-              /* The timer has been started and is running */
-
-              /* Actualizes the data of the structure and
-               * returns the old ones in "ovalue" */
-
-              if ( ovalue )
-                *ovalue = timer_struct[timer_pos].timer_data;
-
-              timer_struct[timer_pos].timer_data = *value;
-
-              /* It indicates that the time is running */
-
-              timer_struct[timer_pos].state = STATE_CREATE_RUN_C;
-
-              /* Stores the time in which the timer was started again */
-
-              timer_struct[timer_pos].time = _TOD_Current;
-
-              return 0;
-
-              break;
-
-           case RTEMS_INVALID_ID:
-
-              /* The timer identifier is not correct. In theory, this
-               * situation can not occur, but the solution is easy */
-
-              rtems_set_errno_and_return_minus_one( EINVAL );
-
-              break;
-
-           case RTEMS_INVALID_NUMBER:
-
-              /* In this case, RTEMS fails because the values of timing
-               * are incorrect */
-
-              /*
-               * I do not know if errno must be actualized
-               *
-               * errno = EINVAL;
-               */
-
-              rtems_set_errno_and_return_minus_one( EINVAL );
-              break;
-
-           default: break;
-        }
-
-        break;
-
-      default: break;
-
-        /* It does nothing, although it will be probably necessary to
-         * return an error */
-   }
-
-   /* To avoid problems */
-   return 0;
+#endif
+
+    case OBJECTS_ERROR:
+      return -1;
+
+    case OBJECTS_LOCAL:
+      /* First, it verifies if the timer must be stopped */
+      if ( value->it_value.tv_sec == 0 && value->it_value.tv_nsec == 0 ) {
+         /* Stop the timer */
+         (void) _Watchdog_Remove( &ptimer->Timer );
+         /* The old data of the timer are returned */
+         if ( ovalue )
+           *ovalue = ptimer->timer_data;
+         /* The new data are set */
+         ptimer->timer_data = *value;
+         /* Indicates that the timer is created and stopped */
+         ptimer->state = STATE_CREATE_STOP_C;
+         /* Returns with success */
+        _Thread_Enable_dispatch();
+        return 0;
+       }
+
+       /* absolute or relative? */
+       switch (flags) {
+         case TIMER_ABSTIME:
+
+           /* The fire time is absolute: use "rtems_time_fire_when" */
+           /* First, it converts from struct itimerspec to rtems_time_of_day */
+
+#if 0
+           ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S( value, &tod );
+           status = rtems_timer_fire_when(
+             ptimer->timer_id, &tod, _POSIX_Timer_TSR, ptimer);
+#endif
+           _Watchdog_Initialize(
+             &ptimer->Timer, _POSIX_Timer_TSR, ptimer->Object.id, ptimer );
+
+           _Watchdog_Insert_seconds(
+              &ptimer->Timer,
+              value->it_value.tv_sec - _TOD_Seconds_since_epoch
+           );
+
+           /* Returns the old ones in "ovalue" */
+           if ( ovalue )
+             *ovalue = ptimer->timer_data;
+           ptimer->timer_data = *value;
+
+           /* Indicate that the time is running */
+           ptimer->state = STATE_CREATE_RUN_C;
+
+           /* Stores the time in which the timer was started again */
+           ptimer->time = _TOD_Current;
+           _Thread_Enable_dispatch();
+           return 0;
+           break;
+
+         /* The fire time is relative: use "rtems_time_fire_after" */
+         case TIMER_RELATIVE_C:
+           /* First, convert from seconds and nanoseconds to ticks */
+           ptimer->ticks = ( SEC_TO_TICKS_C * value->it_value.tv_sec ) +
+                ( value->it_value.tv_nsec / (NSEC_PER_SEC_C / SEC_TO_TICKS_C));
+
+#if 0
+           status = rtems_timer_fire_after(
+             ptimer->timer_id, ptimer->ticks, _POSIX_Timer_TSR, ptimer );
+#endif
+           activated = _Watchdog_Insert_ticks_helper(
+             &ptimer->Timer,
+             ptimer->ticks,
+             ptimer->Object.id,
+             _POSIX_Timer_TSR,
+             ptimer
+           );
+           if ( !activated )
+             return 0;
+
+           /* The timer has been started and is running */
+           /* return the old ones in "ovalue" */
+           if ( ovalue )
+             *ovalue = ptimer->timer_data;
+           ptimer->timer_data = *value;
+
+           /* Indicate that the time is running */
+           ptimer->state = STATE_CREATE_RUN_C;
+           ptimer->time = _TOD_Current;
+            _Thread_Enable_dispatch();
+           return 0;
+      }
+      _Thread_Enable_dispatch();
+      rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  return -1;   /* unreached - only to remove warnings */
 }
-
 
 /*
  *  14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
@@ -679,121 +453,116 @@ int timer_gettime(
   *            between the current time and the initialization time.
   */
 
-  rtems_time_of_day current_time;
-  int               timer_pos;
-  uint32_t          hours;
-  uint32_t          minutes;
-  uint32_t          seconds;
-  uint32_t          ticks;
-  uint32_t          nanosec;
-
+  POSIX_Timer_Control *ptimer;
+  Objects_Locations    location;
+  rtems_time_of_day    current_time;
+  uint32_t             hours;
+  uint32_t             minutes;
+  uint32_t             seconds;
+  uint32_t             ticks;
+  uint32_t             nanosec;
 
   /* Reads the current time */
-
   current_time = _TOD_Current;
 
-  timer_pos = TIMER_POSITION_F ( timerid );
+  ptimer = _POSIX_Timer_Get( timerid, &location );
+  switch ( location ) {
+    case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
+      _Thread_Dispatch();
+      rtems_set_errno_and_return_minus_one( EINVAL );
+#endif
 
-  if ( timer_pos == BAD_TIMER_C ) {
-    /* The timer identifier is erroneus */
-    rtems_set_errno_and_return_minus_one( EINVAL );
+    case OBJECTS_ERROR:
+      rtems_set_errno_and_return_minus_one( EINVAL );
+
+    case OBJECTS_LOCAL:
+      /* Calculates the difference between the start time of the timer and
+       * the current one */
+
+      hours    = current_time.hour - ptimer->time.hour;
+
+      if ( current_time.minute < ptimer->time.minute ) {
+        minutes = 60 - ptimer->time.minute + current_time.minute;
+        hours--;
+      } else {
+        minutes = current_time.minute - ptimer->time.minute;
+      }
+
+      if ( current_time.second < ptimer->time.second ) {
+        seconds = 60 - ptimer->time.second + current_time.second;
+        minutes--;
+      } else {
+        seconds = current_time.second - ptimer->time.second;
+      }
+
+      if ( current_time.ticks < ptimer->time.ticks ) {
+        ticks = 100 - ptimer->time.ticks + current_time.ticks;
+        seconds--;
+      } else {
+        ticks = current_time.ticks - ptimer->time.ticks;
+      }
+
+      /* The time that the timer is running is calculated */
+      seconds = hours   * 60 * 60 +
+                minutes * 60      +
+                seconds;
+
+      nanosec  = ticks * 10 *  /* msec     */
+                 1000  *       /* microsec */
+                 1000;         /* nanosec  */
+
+
+      /* Calculates the time left before the timer finishes */
+
+      value->it_value.tv_sec  = ptimer->timer_data.it_value.tv_sec - seconds;
+      value->it_value.tv_nsec = ptimer->timer_data.it_value.tv_nsec - nanosec;
+
+      value->it_interval.tv_sec  = ptimer->timer_data.it_interval.tv_sec;
+      value->it_interval.tv_nsec = ptimer->timer_data.it_interval.tv_nsec;
+
+      _Thread_Enable_dispatch();
+      return 0;
   }
-
-  /* Calculates the difference between the start time of the timer and
-   * the current one */
-
-  hours    = current_time.hour - timer_struct[timer_pos].time.hour;
-
-  if ( current_time.minute < timer_struct[timer_pos].time.minute ) {
-     minutes = 60 - timer_struct[timer_pos].time.minute + current_time.minute;
-     hours--;
-  } else {
-     minutes = current_time.minute - timer_struct[timer_pos].time.minute;
-  }
-
-  if ( current_time.second < timer_struct[timer_pos].time.second ) {
-     seconds = 60 - timer_struct[timer_pos].time.second + current_time.second;
-     minutes--;
-  } else {
-     seconds = current_time.second - timer_struct[timer_pos].time.second;
-  }
-
-  if ( current_time.ticks < timer_struct[timer_pos].time.ticks ) {
-     ticks = 100 - timer_struct[timer_pos].time.ticks + current_time.ticks;
-     seconds--;
-  } else {
-     ticks = current_time.ticks - timer_struct[timer_pos].time.ticks;
-  }
-
-  /* The time that the timer is running is calculated */
-  seconds = hours   * 60 * 60 +
-            minutes * 60      +
-            seconds;
-
-  nanosec  = ticks * 10 *  /* msec     */
-             1000  *       /* microsec */
-             1000;         /* nanosec  */
-
-
-  /* Calculates the time left before the timer finishes */
-
-  value->it_value.tv_sec =
-    timer_struct[timer_pos].timer_data.it_value.tv_sec - seconds;
-
-  value->it_value.tv_nsec =
-    timer_struct[timer_pos].timer_data.it_value.tv_nsec - nanosec;
-
-
-  value->it_interval.tv_sec  =
-    timer_struct[timer_pos].timer_data.it_interval.tv_sec;
-  value->it_interval.tv_nsec =
-    timer_struct[timer_pos].timer_data.it_interval.tv_nsec;
-
-
-  return 0;
-
+  return -1;   /* unreached - only to remove warnings */
 }
 
 /*
  *  14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
  */
 
-/* *****************
+/*
  * timer_getoverrun
- * *****************/
+ *
+ * The expiration of a timer must increase by one a counter.
+ * After the signal handler associated to the timer finishes
+ * its execution, _POSIX_Timer_TSR will have to set this counter to 0.
+ */
 
 int timer_getoverrun(
   timer_t   timerid
 )
 {
+  int                  overrun;
+  POSIX_Timer_Control *ptimer;
+  Objects_Locations    location;
 
- /*
-  * IDEA: This function must count the times the timer expires.
-  *
-  *       The expiration of a timer must increase by one a counter.
-  *       After the signal handler associated to the timer finishs
-  *       its execution, FIRE_TIMER_S will have to set this counter to 0.
-  */
+  ptimer = _POSIX_Timer_Get( timerid, &location );
+  switch ( location ) {
+    case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
+      _Thread_Dispatch();
+      rtems_set_errno_and_return_minus_one( EINVAL );
+#endif
 
-  int timer_pos; /* Position of the timer in the structure     */
-  int overrun;   /* Overflow count                             */
+    case OBJECTS_ERROR:
+      rtems_set_errno_and_return_minus_one( EINVAL );
 
-
-  timer_pos = TIMER_POSITION_F ( timerid );
-
-  if ( timer_pos == BAD_TIMER_C ) {
-    /* The timer identifier is erroneus */
-    rtems_set_errno_and_return_minus_one( EINVAL );
+    case OBJECTS_LOCAL:
+      overrun = ptimer->overrun;
+      ptimer->overrun = 0;
+      _Thread_Enable_dispatch();
+      return overrun;
   }
-
-  /* The overflow count of the timer is stored in "overrun" */
-
-  overrun = timer_struct[timer_pos].overrun;
-
-  /* It is set to 0 */
-
-  timer_struct[timer_pos].overrun = 0;
-
-  return overrun;
-
+  return -1;   /* unreached - only to remove warnings */
 }

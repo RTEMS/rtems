@@ -32,70 +32,30 @@
 #include <stdio.h>
 #include <signal.h>
 
-/*****************************/
-/* End of necessary includes */
-/*****************************/
-
 #include <rtems/posix/timer.h>
 
-/* ***************************************************************************
- * TIMER_INITIALIZE_S
- *
- *  Description: Initialize the data of a timer
- * ***************************************************************************/
-
-void TIMER_INITIALIZE_S ( int timer_pos )
-{
-
-   /*
-    * Indicates that the position in the table is free
-    */
-
-    timer_struct[timer_pos].state = STATE_FREE_C;
-
-   /*
-    * The initial data of timing are set with null value
-    */
-
-    timer_struct[timer_pos].timer_data.it_value.tv_sec     = 0;
-    timer_struct[timer_pos].timer_data.it_value.tv_nsec    = 0;
-    timer_struct[timer_pos].timer_data.it_interval.tv_sec  = 0;
-    timer_struct[timer_pos].timer_data.it_interval.tv_nsec = 0;
-
-   /*
-    * The count of expirations is 0
-    */
-
-    timer_struct[timer_pos].overrun = 0;
-
-}
-
-/* ***************************************************************************
+/*
  * _POSIX_Timer_Manager_initialization
  *
  *  Description: Initialize the internal structure in which the data of all
  *               the timers are stored
- * ***************************************************************************/
+ */
 
-int timer_max;
-POSIX_Timer_Control *timer_struct;
-
-
-void _POSIX_Timer_Manager_initialization ( int max_timers )
+void _POSIX_Timer_Manager_initialization ( int maximum_timers )
 {
-   int index;
-
-   timer_struct = _Workspace_Allocate_or_fatal_error(
-      max_timers * sizeof(POSIX_Timer_Control) );
-
-   /*
-    *  Initialize all the timers
-    */
-
-   timer_max = max_timers;
-
-   for (index=0; index<max_timers; index++)
-     TIMER_INITIALIZE_S( index );
-
-   timer_max = max_timers;
+  _Objects_Initialize_information(
+    &_POSIX_Timer_Information,  /* object information table */
+    OBJECTS_POSIX_API,          /* object API */
+    OBJECTS_POSIX_TIMERS,       /* object class */
+    maximum_timers,             /* maximum objects of this class */
+    sizeof( POSIX_Timer_Control ),
+                                /* size of this object's control block */
+    FALSE,                      /* TRUE if names for this object are strings */
+    _POSIX_PATH_MAX             /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                      /* TRUE if this is a global object class */
+    NULL                        /* Proxy extraction support callout */
+#endif
+  );
 }

@@ -1,3 +1,10 @@
+2006-06-08	Joel Sherrill <joel@OARcorp.com>
+
+	* posix/Makefile.am, posix/preinstall.am,
+	posix/include/rtems/posix/timer.h, posix/src/ptimer.c,
+	posix/src/ptimer1.c, sapi/src/posixapi.c,
+	score/include/rtems/score/object.h:
+
 2006-06-02	Joel Sherrill <joel@OARcorp.com>
 
 	* itron/src/trcv_mbf.c, posix/src/semopen.c,

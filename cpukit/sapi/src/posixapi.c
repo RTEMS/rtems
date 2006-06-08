@@ -41,7 +41,7 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
-#include <rtems/posix/ptimer.h>
+#include <rtems/posix/timer.h>
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
 

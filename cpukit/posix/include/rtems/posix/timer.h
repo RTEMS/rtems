@@ -9,9 +9,10 @@
 #ifndef _RTEMS_POSIX_TIMER_H
 #define _RTEMS_POSIX_TIMER_H
 
-/* ************
+#include <rtems/posix/config.h>
+/*
  * Constants
- * ************/
+ */ 
 
 #define STATE_FREE_C        0x01 /* Free position of the table of timers   */
 #define STATE_CREATE_NEW_C  0x02 /* Created timer but not running          */
@@ -26,9 +27,6 @@
 /* Nanoseconds in a second               */
 #define NSEC_PER_SEC_C (uint32_t  )1000000000
 
-#define NO_MORE_TIMERS_C      -1 /* There is not available timers          */
-#define BAD_TIMER_C           -2 /* The timer does not exist in the table  */
-
 #define SECONDS_PER_YEAR_C    (uint32_t  )(360 * 24) * (uint32_t  )(60 * 60)
 #define SECONDS_PER_MONTH_C   (uint32_t  )( 30 * 24) * (uint32_t  )(60 * 60)
 #define SECONDS_PER_DAY_C     (uint32_t  )( 24 * 60) * (uint32_t  )(60)
@@ -42,31 +40,32 @@
 
 typedef struct {
   Objects_Control   Object;
-  Watchdog_Control  Ticker;
-
+  Watchdog_Control  Timer;      /* Internal Timer                        */
   pthread_t         thread_id;  /* Thread identifier                     */
   char              state;      /* State of the timer                    */
   struct sigevent   inf;        /* Information associated to the timer   */
-  timer_t           timer_id;   /* Created timer identifier              */
   struct itimerspec timer_data; /* Timing data of the timer              */
   uint32_t          ticks;      /* Number of ticks of the initialization */
   uint32_t          overrun;    /* Number of expirations of the timer    */
-  rtems_time_of_day time;       /* Time in which the timer was started   */
+  TOD_Control       time;       /* Time in which the timer was started   */
 } POSIX_Timer_Control;
 
 /*
- * Array of Timers
+ *  _POSIX_Timers_Manager_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this manager.
  */
 
-extern int timer_max;
-extern POSIX_Timer_Control *timer_struct;
+void _POSIX_Timer_Manager_initialization ( int max_timers );
 
 /*
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
 
-RTEMS_EXTERN Objects_Information  _POSIX_Timer_Information;
+POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/posix/timer.inl>

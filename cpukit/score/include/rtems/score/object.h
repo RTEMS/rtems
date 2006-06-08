@@ -249,11 +249,12 @@ typedef enum {
   OBJECTS_POSIX_MESSAGE_QUEUES      = 5,
   OBJECTS_POSIX_MUTEXES             = 6,
   OBJECTS_POSIX_SEMAPHORES          = 7,
-  OBJECTS_POSIX_CONDITION_VARIABLES = 8
+  OBJECTS_POSIX_CONDITION_VARIABLES = 8,
+  OBJECTS_POSIX_TIMERS              = 9
 } Objects_POSIX_API;
 
 /** This macro is used to generically specify the last API index. */
-#define OBJECTS_POSIX_CLASSES_LAST OBJECTS_POSIX_CONDITION_VARIABLES
+#define OBJECTS_POSIX_CLASSES_LAST OBJECTS_POSIX_TIMERS
 
 /**
  *  This enumerated type is used in the class field of the object ID
