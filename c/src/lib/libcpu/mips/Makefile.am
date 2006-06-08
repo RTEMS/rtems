@@ -41,7 +41,8 @@ endif
 
 noinst_PROGRAMS += shared/interrupts.rel
 shared_interrupts_rel_SOURCES = shared/interrupts/installisrentries.c \
-    shared/interrupts/vectorexceptions.c shared/interrupts/isr_entries.S
+    shared/interrupts/vectorexceptions.c shared/interrupts/interruptmask.c \
+    shared/interrupts/isr_entries.S
 shared_interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) $(interrupts_CPPFLAGS)
 shared_interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

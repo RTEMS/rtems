@@ -1,7 +1,13 @@
+2006-06-08	Bruce Robinson <brucer@pmccorp.com>
+
+	* Makefile.am: add interruptmask.c
+	* shared/interrupts/interuptmask.c: TX49 conditional mask computation
+	* shared/interrupts/vectorexceptions.c: Corrections to exception codes 
+	   & descriptions
+
 2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use RTEMS_AMPOLISH3.
-
 2006-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove bogus CFLAGS_OPTIMIZE_V.

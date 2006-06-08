@@ -1,6 +1,11 @@
+2006-06-08	Bruce Robinson <brucer@pmccorp.com>
+	
+        * custom/rbtx4925.cfg:  Fix CPU_CFLAGS defines.
+	* custom/rbtx4938.cfg:  Fix CPU_CFLAGS defines.
+
 2005-04-10	Eric Norum <norume@aps.anl.gov>
 
-    *  custom/uC5282.cfg: Keep frame pointer -- gdb is much more useful.
+        *  custom/uC5282.cfg: Keep frame pointer -- gdb is much more useful.
 
 2006-03-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 

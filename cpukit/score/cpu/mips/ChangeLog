@@ -1,3 +1,11 @@
+2006-06-08 Bruce Robinson <brucer@pmccorp.com>
+
+	* cpu.c: Add int64 types for __mips==3 cpus, incorporate 
+	   mips_interrupt_mask() into mask computations
+	* cpu_asm.S: Add int64 register save/restores for __mips==3 cpus.  Adjustment 
+	   of mips1 vs mips3 macros.
+	* cpu.h: Add int64 types for __mips==3 cpus.
+	
 2006-03-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* cpu.c (_CPU_Initialize): Add fpu initialization.

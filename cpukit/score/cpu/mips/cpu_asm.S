@@ -92,18 +92,20 @@
 #if __mips == 3
 /* 64 bit register operations */
 #define NOP	nop
-/*
 #define ADD	dadd
-#define MFCO	dmfc0
-#define MTCO	dmtc0
-*/
-#define ADD	add	
-#define MFCO	mfc0
-#define MTCO	mtc0
 #define STREG	sd
 #define LDREG	ld
+#define MFCO	dmfc0		/* Only use this op for coprocessor registers that are 64 bit in R4000 architecture */
+#define MTCO	dmtc0		/* Only use this op for coprocessor registers that are 64 bit in R4000 architecture */
 #define ADDU	addu
 #define ADDIU	addiu
+#if (__mips_fpr==32)
+#define STREGC1	swc1
+#define LDREGC1	lwc1
+#elif (__mips_fpr==64)		/* Use these instructions if there are 64 bit floating point registers. This requires FR bit to be set in C0_SR */
+#define STREGC1	sdc1
+#define LDREGC1	ldc1
+#endif
 #define R_SZ	8
 #define F_SZ	8
 #define SZ_INT	8
@@ -121,6 +123,8 @@
 #define MTCO	mtc0
 #define ADDU	add
 #define ADDIU	addi
+#define STREGC1	swc1
+#define LDREGC1	lwc1
 #define R_SZ	4
 #define F_SZ	4
 #define SZ_INT	4
@@ -223,20 +227,20 @@ FRAME(_CPU_Context_save_fp,sp,0,ra)
 	** is here because the FPU context switch might occur when an 
 	** integer task is switching out with a FP task switching in.
 	*/
-	MFC0	t0,C0_SR
+	mfc0	t0,C0_SR
 	li	t2,SR_CU1	
 	move	t1,t0
 	or	t0,t2		/* turn on the fpu */
-#if __mips == 3
-	li	t2,SR_EXL | SR_IE
+#if (__mips == 3) || (__mips == 32)
+	li	t2,SR_IE
 #elif __mips == 1
 	li	t2,SR_IEC
 #endif
 	not	t2
 	and	t0,t2		/* turn off interrupts */	
-	MTC0	t0,C0_SR	
-		
-	ld	a1,(a0)
+	mtc0	t0,C0_SR
+	
+	lw	a1,(a0)		/* get address of context storage area */
 	move	t0,ra
 	jal	_CPU_Context_save_fp_from_exception
 	NOP
@@ -244,44 +248,44 @@ FRAME(_CPU_Context_save_fp,sp,0,ra)
 	/* 
 	** Reassert the task's state because we've not saved it yet.
 	*/
-	MTC0	t1,C0_SR	
-	j	t0	
+	mtc0	t1,C0_SR
+	j	t0
 	NOP
 	
 	.globl _CPU_Context_save_fp_from_exception
 _CPU_Context_save_fp_from_exception:
-        swc1 $f0,FP0_OFFSET*F_SZ(a1)
-        swc1 $f1,FP1_OFFSET*F_SZ(a1)
-        swc1 $f2,FP2_OFFSET*F_SZ(a1)
-        swc1 $f3,FP3_OFFSET*F_SZ(a1)
-        swc1 $f4,FP4_OFFSET*F_SZ(a1)
-        swc1 $f5,FP5_OFFSET*F_SZ(a1)
-        swc1 $f6,FP6_OFFSET*F_SZ(a1)
-        swc1 $f7,FP7_OFFSET*F_SZ(a1)
-        swc1 $f8,FP8_OFFSET*F_SZ(a1)
-        swc1 $f9,FP9_OFFSET*F_SZ(a1)
-        swc1 $f10,FP10_OFFSET*F_SZ(a1)
-        swc1 $f11,FP11_OFFSET*F_SZ(a1)
-        swc1 $f12,FP12_OFFSET*F_SZ(a1)
-        swc1 $f13,FP13_OFFSET*F_SZ(a1)
-        swc1 $f14,FP14_OFFSET*F_SZ(a1)
-        swc1 $f15,FP15_OFFSET*F_SZ(a1)
-        swc1 $f16,FP16_OFFSET*F_SZ(a1)
-        swc1 $f17,FP17_OFFSET*F_SZ(a1)
-        swc1 $f18,FP18_OFFSET*F_SZ(a1)
-        swc1 $f19,FP19_OFFSET*F_SZ(a1)
-        swc1 $f20,FP20_OFFSET*F_SZ(a1)
-        swc1 $f21,FP21_OFFSET*F_SZ(a1)
-        swc1 $f22,FP22_OFFSET*F_SZ(a1)
-        swc1 $f23,FP23_OFFSET*F_SZ(a1)
-        swc1 $f24,FP24_OFFSET*F_SZ(a1)
-        swc1 $f25,FP25_OFFSET*F_SZ(a1)
-        swc1 $f26,FP26_OFFSET*F_SZ(a1)
-        swc1 $f27,FP27_OFFSET*F_SZ(a1)
-        swc1 $f28,FP28_OFFSET*F_SZ(a1)
-        swc1 $f29,FP29_OFFSET*F_SZ(a1)
-        swc1 $f30,FP30_OFFSET*F_SZ(a1)
-        swc1 $f31,FP31_OFFSET*F_SZ(a1)
+        STREGC1 $f0,FP0_OFFSET*F_SZ(a1)
+        STREGC1 $f1,FP1_OFFSET*F_SZ(a1)
+        STREGC1 $f2,FP2_OFFSET*F_SZ(a1)
+        STREGC1 $f3,FP3_OFFSET*F_SZ(a1)
+        STREGC1 $f4,FP4_OFFSET*F_SZ(a1)
+        STREGC1 $f5,FP5_OFFSET*F_SZ(a1)
+        STREGC1 $f6,FP6_OFFSET*F_SZ(a1)
+        STREGC1 $f7,FP7_OFFSET*F_SZ(a1)
+        STREGC1 $f8,FP8_OFFSET*F_SZ(a1)
+        STREGC1 $f9,FP9_OFFSET*F_SZ(a1)
+        STREGC1 $f10,FP10_OFFSET*F_SZ(a1)
+        STREGC1 $f11,FP11_OFFSET*F_SZ(a1)
+        STREGC1 $f12,FP12_OFFSET*F_SZ(a1)
+        STREGC1 $f13,FP13_OFFSET*F_SZ(a1)
+        STREGC1 $f14,FP14_OFFSET*F_SZ(a1)
+        STREGC1 $f15,FP15_OFFSET*F_SZ(a1)
+        STREGC1 $f16,FP16_OFFSET*F_SZ(a1)
+        STREGC1 $f17,FP17_OFFSET*F_SZ(a1)
+        STREGC1 $f18,FP18_OFFSET*F_SZ(a1)
+        STREGC1 $f19,FP19_OFFSET*F_SZ(a1)
+        STREGC1 $f20,FP20_OFFSET*F_SZ(a1)
+        STREGC1 $f21,FP21_OFFSET*F_SZ(a1)
+        STREGC1 $f22,FP22_OFFSET*F_SZ(a1)
+        STREGC1 $f23,FP23_OFFSET*F_SZ(a1)
+        STREGC1 $f24,FP24_OFFSET*F_SZ(a1)
+        STREGC1 $f25,FP25_OFFSET*F_SZ(a1)
+        STREGC1 $f26,FP26_OFFSET*F_SZ(a1)
+        STREGC1 $f27,FP27_OFFSET*F_SZ(a1)
+        STREGC1 $f28,FP28_OFFSET*F_SZ(a1)
+        STREGC1 $f29,FP29_OFFSET*F_SZ(a1)
+        STREGC1 $f30,FP30_OFFSET*F_SZ(a1)
+        STREGC1 $f31,FP31_OFFSET*F_SZ(a1)
         cfc1 a0,$31                    /* Read FP status/conrol reg */
         cfc1 a0,$31                    /* Two reads clear pipeline */
         NOP
@@ -322,20 +326,20 @@ FRAME(_CPU_Context_restore_fp,sp,0,ra)
 	** is here because the FPU context switch might occur when an 
 	** integer task is switching out with a FP task switching in.
 	*/
-	MFC0	t0,C0_SR
+	mfc0	t0,C0_SR
 	li	t2,SR_CU1	
 	move	t1,t0
 	or	t0,t2		/* turn on the fpu */
-#if __mips == 3
-	li	t2,SR_EXL | SR_IE
+#if (__mips == 3) || (__mips == 32)
+	li	t2,SR_IE
 #elif __mips == 1
 	li	t2,SR_IEC
 #endif
 	not	t2
 	and	t0,t2		/* turn off interrupts */	
-	MTC0	t0,C0_SR	
-
-	ld	a1,(a0)
+	mtc0	t0,C0_SR
+	
+	lw	a1,(a0)		/* get address of context storage area */
 	move	t0,ra
 	jal	_CPU_Context_restore_fp_from_exception
 	NOP
@@ -344,49 +348,49 @@ FRAME(_CPU_Context_restore_fp,sp,0,ra)
 	** Reassert the old task's state because we've not restored the
 	** new one yet.
 	*/
-	MTC0	t1,C0_SR	
+	mtc0	t1,C0_SR
 	j	t0
 	NOP
 	
 	.globl _CPU_Context_restore_fp_from_exception
 _CPU_Context_restore_fp_from_exception:
-        lwc1 $f0,FP0_OFFSET*4(a1)
-        lwc1 $f1,FP1_OFFSET*4(a1)
-        lwc1 $f2,FP2_OFFSET*4(a1)
-        lwc1 $f3,FP3_OFFSET*4(a1)
-        lwc1 $f4,FP4_OFFSET*4(a1)
-        lwc1 $f5,FP5_OFFSET*4(a1)
-        lwc1 $f6,FP6_OFFSET*4(a1)
-        lwc1 $f7,FP7_OFFSET*4(a1)
-        lwc1 $f8,FP8_OFFSET*4(a1)
-        lwc1 $f9,FP9_OFFSET*4(a1)
-        lwc1 $f10,FP10_OFFSET*4(a1)
-        lwc1 $f11,FP11_OFFSET*4(a1)
-        lwc1 $f12,FP12_OFFSET*4(a1)
-        lwc1 $f13,FP13_OFFSET*4(a1)
-        lwc1 $f14,FP14_OFFSET*4(a1)
-        lwc1 $f15,FP15_OFFSET*4(a1)
-        lwc1 $f16,FP16_OFFSET*4(a1)
-        lwc1 $f17,FP17_OFFSET*4(a1)
-        lwc1 $f18,FP18_OFFSET*4(a1)
-        lwc1 $f19,FP19_OFFSET*4(a1)
-        lwc1 $f20,FP20_OFFSET*4(a1)
-        lwc1 $f21,FP21_OFFSET*4(a1)
-        lwc1 $f22,FP22_OFFSET*4(a1)
-        lwc1 $f23,FP23_OFFSET*4(a1)
-        lwc1 $f24,FP24_OFFSET*4(a1)
-        lwc1 $f25,FP25_OFFSET*4(a1)
-        lwc1 $f26,FP26_OFFSET*4(a1)
-        lwc1 $f27,FP27_OFFSET*4(a1)
-        lwc1 $f28,FP28_OFFSET*4(a1)
-        lwc1 $f29,FP29_OFFSET*4(a1)
-        lwc1 $f30,FP30_OFFSET*4(a1)
-        lwc1 $f31,FP31_OFFSET*4(a1)
+        LDREGC1 $f0,FP0_OFFSET*F_SZ(a1)
+        LDREGC1 $f1,FP1_OFFSET*F_SZ(a1)
+        LDREGC1 $f2,FP2_OFFSET*F_SZ(a1)
+        LDREGC1 $f3,FP3_OFFSET*F_SZ(a1)
+        LDREGC1 $f4,FP4_OFFSET*F_SZ(a1)
+        LDREGC1 $f5,FP5_OFFSET*F_SZ(a1)
+        LDREGC1 $f6,FP6_OFFSET*F_SZ(a1)
+        LDREGC1 $f7,FP7_OFFSET*F_SZ(a1)
+        LDREGC1 $f8,FP8_OFFSET*F_SZ(a1)
+        LDREGC1 $f9,FP9_OFFSET*F_SZ(a1)
+        LDREGC1 $f10,FP10_OFFSET*F_SZ(a1)
+        LDREGC1 $f11,FP11_OFFSET*F_SZ(a1)
+        LDREGC1 $f12,FP12_OFFSET*F_SZ(a1)
+        LDREGC1 $f13,FP13_OFFSET*F_SZ(a1)
+        LDREGC1 $f14,FP14_OFFSET*F_SZ(a1)
+        LDREGC1 $f15,FP15_OFFSET*F_SZ(a1)
+        LDREGC1 $f16,FP16_OFFSET*F_SZ(a1)
+        LDREGC1 $f17,FP17_OFFSET*F_SZ(a1)
+        LDREGC1 $f18,FP18_OFFSET*F_SZ(a1)
+        LDREGC1 $f19,FP19_OFFSET*F_SZ(a1)
+        LDREGC1 $f20,FP20_OFFSET*F_SZ(a1)
+        LDREGC1 $f21,FP21_OFFSET*F_SZ(a1)
+        LDREGC1 $f22,FP22_OFFSET*F_SZ(a1)
+        LDREGC1 $f23,FP23_OFFSET*F_SZ(a1)
+        LDREGC1 $f24,FP24_OFFSET*F_SZ(a1)
+        LDREGC1 $f25,FP25_OFFSET*F_SZ(a1)
+        LDREGC1 $f26,FP26_OFFSET*F_SZ(a1)
+        LDREGC1 $f27,FP27_OFFSET*F_SZ(a1)
+        LDREGC1 $f28,FP28_OFFSET*F_SZ(a1)
+        LDREGC1 $f29,FP29_OFFSET*F_SZ(a1)
+        LDREGC1 $f30,FP30_OFFSET*F_SZ(a1)
+        LDREGC1 $f31,FP31_OFFSET*F_SZ(a1)
         cfc1 a0,$31                  /* Read from FP status/control reg */
         cfc1 a0,$31                  /* Two reads clear pipeline */
         NOP                          /* NOPs ensure execution */
         NOP
-        lw a0,FPCS_OFFSET*4(a1)      /* Load saved FPCS value */
+        lw a0,FPCS_OFFSET*F_SZ(a1)   /* Load saved FPCS value */
         NOP
         ctc1 a0,$31                  /* Restore FPCS register */
         NOP
@@ -410,7 +414,7 @@ ENDFRAME(_CPU_Context_restore_fp)
 FRAME(_CPU_Context_switch,sp,0,ra)
         .set noreorder
 
-        MFC0	t0,C0_SR
+        mfc0	t0,C0_SR
 #if (__mips == 3) || (__mips == 32)
 	li	t1,SR_IE
 #elif __mips == 1
@@ -419,7 +423,7 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	STREG	t0,C0_SR_OFFSET*R_SZ(a0)	/* save the task's SR */
 	not	t1
         and	t0,t1				/* mask off interrupts while we context switch */
-        MTC0	t0,C0_SR
+        mtc0	t0,C0_SR
 	NOP
 
         STREG ra,RA_OFFSET*R_SZ(a0)		/* save current context */
@@ -455,9 +459,9 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	NOP
 	LDREG	t0,R_EPC*R_SZ(t1)		/* get the userspace EPC from the frame */
 	b	2f
-	nop
+	NOP
 		
-1:	la    t0,_Thread_Dispatch		/* if ==0, we're switched out */
+1:	la      t0,_Thread_Dispatch		/* if ==0, we're switched out */
 
 2:	STREG   t0,C0_EPC_OFFSET*R_SZ(a0)
 	
@@ -478,7 +482,7 @@ _CPU_Context_switch_restore:
         LDREG t0, C0_SR_OFFSET*R_SZ(a1)
 	
 /*	NOP */
-/*#if __mips == 3 */
+/*#if (__mips == 3) || (__mips == 32) */
 /*        andi  t0,SR_EXL */
 /*        bnez  t0,_CPU_Context_1 */   /* set exception level from restore context */
 /*        li    t0,~SR_EXL */
@@ -530,7 +534,7 @@ _CPU_Context_switch_restore:
 	/* 
 	** Save IE
 	*/
-	or	t2, SR_IE
+	or	t2,SR_IE
 #elif __mips == 1
 	/* 
 	** Save current, previous & old int enables.  This is key because
@@ -543,11 +547,11 @@ _CPU_Context_switch_restore:
 #endif
 	and	t0,t2		/* keep only the per-task bits */
 		
-	MFC0	t1,C0_SR	/* grab the current SR */
+	mfc0	t1,C0_SR	/* grab the current SR */
 	not	t2		
 	and	t1,t2		/* mask off the old task's per-task bits */
 	or	t1,t0		/* or in the new task's bits */
-        MTC0	t1,C0_SR	/* and load the new SR */
+        mtc0	t1,C0_SR	/* and load the new SR */
 	NOP
 	
 /* _CPU_Context_1: */
@@ -578,11 +582,11 @@ FRAME(_CPU_Context_restore,sp,0,ra)
 ENDFRAME(_CPU_Context_restore)
 
 	
-ASM_EXTERN(_ISR_Nest_level, SZ_INT)
-ASM_EXTERN(_Thread_Dispatch_disable_level,SZ_INT)
-ASM_EXTERN(_Context_Switch_necessary,SZ_INT)
-ASM_EXTERN(_ISR_Signals_to_thread_executing,SZ_INT)
-ASM_EXTERN(_Thread_Executing,SZ_INT)
+ASM_EXTERN(_ISR_Nest_level,4)
+ASM_EXTERN(_Thread_Dispatch_disable_level,4)
+ASM_EXTERN(_Context_Switch_necessary,4)
+ASM_EXTERN(_ISR_Signals_to_thread_executing,4)
+ASM_EXTERN(_Thread_Executing,4)
 	
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
@@ -648,7 +652,7 @@ FRAME(_ISR_Handler,sp,0,ra)
         /* Q: _ISR_Handler, not using IDT/SIM ...save extra regs? */
 
         /* wastes a lot of stack space for context?? */
-        ADDIU    sp,sp,-EXCP_STACK_SIZE
+	ADDIU    sp,sp,-EXCP_STACK_SIZE
 
         STREG ra, R_RA*R_SZ(sp)  /* store ra on the stack */ 
         STREG v0, R_V0*R_SZ(sp)
@@ -678,21 +682,21 @@ FRAME(_ISR_Handler,sp,0,ra)
         STREG AT, R_AT*R_SZ(sp)
         .set at
 
-        MFC0     t0,C0_SR
-	MFC0     t1,C0_EPC
+        mfc0     t0,C0_SR
+	MFCO     t1,C0_EPC
         STREG    t0,R_SR*R_SZ(sp)
         STREG    t1,R_EPC*R_SZ(sp)
-	
+
 
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw t2, _Thread_Executing
 	NOP
 	sw t2, 0x8001FFF0
 #endif
-	
+
 	/* determine if an interrupt generated this exception */
 
-        MFC0     t0,C0_CAUSE
+        mfc0     t0,C0_CAUSE
 	NOP
 
 	and      t1,t0,CAUSE_EXCMASK
@@ -725,9 +729,9 @@ _ISR_Handler_Exception:
         /* CP0 special registers */
 
 #if __mips == 1
-	MFC0	 t0,C0_TAR
+	mfc0	 t0,C0_TAR
 #endif
-        MFC0     t1,C0_BADVADDR
+        MFCO     t1,C0_BADVADDR
 	
 #if __mips == 1
         STREG	 t0,R_TAR*R_SZ(sp)
@@ -737,7 +741,7 @@ _ISR_Handler_Exception:
         STREG    t1,R_BADVADDR*R_SZ(sp)
 	
 #if ( CPU_HARDWARE_FP == TRUE )
-        MFC0     t0,C0_SR                 /* we have a FPU, save state if enabled */
+        mfc0     t0,C0_SR                 /* FPU is enabled, save state */
 	NOP
         srl      t0,t0,16
         andi     t0,t0,(SR_CU1 >> 16)
@@ -747,8 +751,8 @@ _ISR_Handler_Exception:
         la       a1,R_F0*R_SZ(sp)
         jal      _CPU_Context_save_fp_from_exception 
         NOP
-        MFC1     t0,C1_REVISION
-        MFC1     t1,C1_STATUS
+        mfc1     t0,C1_REVISION
+        mfc1     t1,C1_STATUS
         STREG    t0,R_FEIR*R_SZ(sp)
         STREG    t1,R_FCSR*R_SZ(sp)
         
@@ -829,7 +833,7 @@ excreturn:
 	
 		
 #if ( CPU_HARDWARE_FP == TRUE )
-        MFC0     t0,C0_SR               /* FPU is present, restore state if enabled */
+        mfc0     t0,C0_SR               /* FPU is enabled, restore state */
 	NOP
         srl      t0,t0,16
         andi     t0,t0,(SR_CU1 >> 16)
@@ -841,8 +845,8 @@ excreturn:
         NOP
         LDREG    t0,R_FEIR*R_SZ(sp)
         LDREG    t1,R_FCSR*R_SZ(sp)
-        MTC1     t0,C1_REVISION
-        MTC1     t1,C1_STATUS
+        mtc1     t0,C1_REVISION
+        mtc1     t1,C1_STATUS
 2:
 #endif
         LDREG    s0,R_S0*R_SZ(sp)    /* restore s0 - s7 */
@@ -870,7 +874,7 @@ excreturn:
 
 _ISR_Handler_1:
 
-        MFC0     t1,C0_SR
+        mfc0     t1,C0_SR
         and      t0,CAUSE_IPMASK
         and      t0,t1
 
@@ -879,10 +883,9 @@ _ISR_Handler_1:
         /* Then where did it come from??? */
 	
 	beq      t0,zero,_ISR_Handler_exit
-	nop
+	NOP
+
 	
-	
-		
   /*
    *  save some or all context on stack
    *  may need to save some special interrupt information for exit
@@ -893,26 +896,27 @@ _ISR_Handler_1:
    *  #endif
    */
 
+
   /*
    *  _ISR_Nest_level++;
    */
-        LDREG  t0,_ISR_Nest_level
+        lw	t0,_ISR_Nest_level
 	NOP
-        ADD    t0,t0,1
-        STREG  t0,_ISR_Nest_level
+        add	t0,t0,1
+        sw	t0,_ISR_Nest_level
   /*
    *  _Thread_Dispatch_disable_level++;
    */
-        LDREG  t1,_Thread_Dispatch_disable_level
+        lw	t1,_Thread_Dispatch_disable_level
 	NOP
-        ADD    t1,t1,1
-        STREG  t1,_Thread_Dispatch_disable_level
+        add	t1,t1,1
+        sw	t1,_Thread_Dispatch_disable_level
 
   /*
    *  Call the CPU model or BSP specific routine to decode the
    *  interrupt source and actually vector to device ISR handlers.
    */
-	
+
 #ifdef INSTRUMENT_ISR_VECTORING
 	NOP
 	li	t1, 1
@@ -922,27 +926,27 @@ _ISR_Handler_1:
 	move	 a0,sp
         jal      mips_vector_isr_handlers
         NOP
-	
+
 #ifdef INSTRUMENT_ISR_VECTORING
 	li	t1, 0
 	sw	t1, 0x8001e000
 	NOP
 #endif
-		
+
   /*
    *  --_ISR_Nest_level;
    */
-        LDREG  t2,_ISR_Nest_level
+        lw	t2,_ISR_Nest_level
 	NOP
-        ADD    t2,t2,-1
-        STREG  t2,_ISR_Nest_level
+        add	t2,t2,-1
+        sw	t2,_ISR_Nest_level
   /*
    *  --_Thread_Dispatch_disable_level;
    */
-        LDREG  t1,_Thread_Dispatch_disable_level
+        lw	t1,_Thread_Dispatch_disable_level
 	NOP
-        ADD    t1,t1,-1
-        STREG  t1,_Thread_Dispatch_disable_level
+        add	t1,t1,-1
+        sw	t1,_Thread_Dispatch_disable_level
   /*
    *  if ( _Thread_Dispatch_disable_level || _ISR_Nest_level )
    *    goto the label "exit interrupt (simple case)"
@@ -952,8 +956,6 @@ _ISR_Handler_1:
         NOP
 
 
-
-	
   /*
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
    *    restore stack
@@ -962,11 +964,11 @@ _ISR_Handler_1:
    *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
    *    goto the label "exit interrupt (simple case)"
    */
-        LDREG t0,_Context_Switch_necessary
-        LDREG t1,_ISR_Signals_to_thread_executing
+        lw	t0,_Context_Switch_necessary
+        lw	t1,_ISR_Signals_to_thread_executing
 	NOP
-        or    t0,t0,t1
-        beq   t0,zero,_ISR_Handler_exit
+        or	t0,t0,t1
+        beq	t0,zero,_ISR_Handler_exit
         NOP
 
 	
@@ -984,7 +986,7 @@ _ISR_Handler_1:
 ** that prevents recursive entry into Thread_Dispatch.
 */
 
-        MFC0    t0, C0_SR
+        mfc0    t0, C0_SR
 #if __mips == 1
 	
 	li	t1,SR_IEC
@@ -1001,7 +1003,7 @@ _ISR_Handler_1:
 	or	t0, SR_IE
 	
 #endif
-        MTC0    t0, C0_SR
+        mtc0    t0, C0_SR
 	NOP
 
 	/* save off our stack frame so the context switcher can get to it */
@@ -1023,7 +1025,7 @@ _ISR_Handler_1:
 ** turn interrupts back off while we restore context so
 ** a badly timed interrupt won't mess things up
 */
-        MFC0    t0, C0_SR
+        mfc0    t0, C0_SR
 
 #if __mips == 1
  
@@ -1031,37 +1033,36 @@ _ISR_Handler_1:
 	li	t1,SR_IEC | SR_KUP | SR_KUC	
 	not	t1
 	and	t0, t1
-        MTC0    t0, C0_SR
+        mtc0    t0, C0_SR
  	NOP
 
- #elif (__mips == 3) || (__mips == 32)
+#elif (__mips == 3) || (__mips == 32)
 
- 	move	t2, t0
-	
-  /* make sure XL & IE are clear so ints are disabled & we can update EPC for the return */ 
-        li   t1,SR_EXL | SR_IE 
+	/* make sure EXL and IE are set so ints are disabled & we can update EPC for the return */ 
+        li   t1,SR_IE		/* Clear IE first (recommended) */
         not  t1 
         and  t0,t1 
-        MTC0 t0,C0_SR
+        mtc0 t0,C0_SR
   	NOP
   	
- 	/* store new EPC value, which we can do since XL=0 */
+ 	/* apply task's SR with EXL set so the eret will return properly */
+ 	or	t0, SR_EXL | SR_IE
+ 	mtc0    t0, C0_SR
+ 	NOP
+
+ 	/* store new EPC value, which we can do since EXL=0 */
         LDREG   t0, R_EPC*R_SZ(sp)
 	NOP
- 	MTC0	t0, C0_EPC
+ 	MTCO	t0, C0_EPC
  	NOP
  	
- 	/* apply task's SR with XL set so the eret will return properly */
- 	or	t2, SR_EXL
- 	MTC0	t2, C0_SR
- 	NOP
 #endif
- 
- 
- 
- 
- 
-	
+
+
+
+
+
+
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,_Thread_Executing
 	NOP

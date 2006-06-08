@@ -442,7 +442,7 @@ typedef struct {
     __MIPS_FPU_REGISTER_TYPE fp29;
     __MIPS_FPU_REGISTER_TYPE fp30;
     __MIPS_FPU_REGISTER_TYPE fp31;
-    __MIPS_FPU_REGISTER_TYPE fpcs;
+    uint32_t fpcs;
 #endif
 } Context_Control_fp;
 
@@ -767,6 +767,13 @@ extern unsigned int mips_interrupt_number_of_vectors;
 #define _CPU_Initialize_vectors()
 
 /*
+ *  Declare the function that is present in the shared libcpu directory,
+ *  that returns the processor dependent interrupt mask.
+ */
+
+uint32_t mips_interrupt_mask( void );
+
+/*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
  */
@@ -872,12 +879,16 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
 
 #if (__mips == 3) || (__mips == 32)
 #define _INTON	        SR_IE
+#if __mips_fpr==64
+#define _EXTRABITS      SR_FR
+#else
 #define _EXTRABITS      0
-#endif
+#endif /* __mips_fpr==64 */
+#endif /* __mips == 3 */
 #if __mips == 1
 #define _INTON          SR_IEC
 #define _EXTRABITS      0  /* make sure we're in user mode on MIPS1 processors */
-#endif
+#endif /* __mips == 1 */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, _isr, _entry_point, _is_fp ) \
   { \
@@ -888,9 +899,8 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
   	(_the_context)->sp = _stack_tmp; \
   	(_the_context)->fp = _stack_tmp; \
 	(_the_context)->ra = (__MIPS_REGISTER_TYPE)_entry_point; \
-	(_the_context)->c0_sr = ((_intlvl==0)?(0xFF00 | _INTON):( ((_intlvl<<9) & 0xfc00) | \
-						       0x300 | \
-						       ((_intlvl & 1)?_INTON:0)) ) | \
+	(_the_context)->c0_sr = ((_intlvl==0)?(mips_interrupt_mask() | 0x300 | _INTON): \
+		( ((_intlvl<<9) & mips_interrupt_mask()) | 0x300 | ((_intlvl & 1)?_INTON:0)) ) | \
 				SR_CU0 | ((_is_fp)?SR_CU1:0) | _EXTRABITS; \
   }
 

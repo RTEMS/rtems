@@ -50,11 +50,18 @@
 
 
 /* 
-** local dword used in cpu_asm to pass the exception stack frame to the
-** context switch code.
+** Exception stack frame pointer used in cpu_asm to pass the exception stack frame 
+** address to the context switch code.
 */
-unsigned __exceptionStackFrame = 0; 
+#if (__mips == 1)
+typedef uint32_t ESF_PTR_TYPE;
+#elif (__mips == 3)
+typedef uint64_t ESF_PTR_TYPE;
+#else
+#error "unknown MIPS ISA"
+#endif
 
+ESF_PTR_TYPE __exceptionStackFrame = 0; 
 
 
 
@@ -107,11 +114,11 @@ uint32_t   _CPU_ISR_Get_level( void )
 
 #if (__mips == 3) || (__mips == 32)
 /* IE bit and shift down hardware ints into bits 1 thru 6 */
-  sr = (sr & SR_IE) | ((sr & 0xfc00) >> 9);
+  sr = (sr & SR_IE) | ((sr & mips_interrupt_mask()) >> 9);
 
 #elif __mips == 1
 /* IEC bit and shift down hardware ints into bits 1 thru 6 */
-  sr = (sr & SR_IEC) | ((sr & 0xfc00) >> 9);
+  sr = (sr & SR_IEC) | ((sr & mips_interrupt_mask()) >> 9);
 
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
@@ -142,8 +149,8 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
 
    srbits = sr & ~(0xfc00 | SR_IE);
 
-   sr = srbits | ((new_level==0)? (0xfc00 | SR_IE): \
-		 (((new_level<<9) & 0xfc00) | \
+   sr = srbits | ((new_level==0)? (mips_interrupt_mask() | SR_IE): \
+		 (((new_level<<9) & mips_interrupt_mask()) | \
                    ((new_level & 1)?SR_IE:0)));
 /*
   if ( (new_level & SR_EXL) == (sr & SR_EXL) )
