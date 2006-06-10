@@ -53,9 +53,9 @@
 ** Exception stack frame pointer used in cpu_asm to pass the exception stack frame 
 ** address to the context switch code.
 */
-#if (__mips == 1)
+#if (__mips == 1) || (__mips == 32)
 typedef uint32_t ESF_PTR_TYPE;
-#elif (__mips == 3)
+#elif (__mips == 3) 
 typedef uint64_t ESF_PTR_TYPE;
 #else
 #error "unknown MIPS ISA"
