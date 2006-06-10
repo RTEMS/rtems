@@ -1,3 +1,8 @@
+2006-06-02	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* cpu.c: Added __mips==32 to fix build problems on those targets
+	caused by the Bruce Robinson.
+
 2006-06-08 Bruce Robinson <brucer@pmccorp.com>
 
 	* cpu.c: Add int64 types for __mips==3 cpus, incorporate 
