@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.7])
 
 AC_PREREQ(2.59)
-AC_INIT([crossrpms],[0.20060317.0],[rtems-bugs@rtems.com])
+AC_INIT([crossrpms],[0.20060617.0],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -111,6 +111,7 @@ AC_CONFIG_FILES([mingw32/Makefile])
 AC_CONFIG_FILES([solaris2.7/Makefile])
 AC_CONFIG_FILES([freebsd5.2/Makefile])
 AC_CONFIG_FILES([freebsd6.0/Makefile])
+AC_CONFIG_FILES([freebsd6.1/Makefile])
 AC_CONFIG_FILES([rtems/Makefile])
 
 AC_OUTPUT
