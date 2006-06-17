@@ -1,0 +1,3 @@
+Source0:	ftp://ftp.gnu.org/pub/binutils/binutils-%{binutils_version}.tar.bz2
+%{?!_with_sources:NoSource:	0}
+Patch0:		binutils-2.16.1-rtems-20050708.diff
