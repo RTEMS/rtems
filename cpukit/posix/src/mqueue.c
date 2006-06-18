@@ -21,7 +21,6 @@
 #include <stdarg.h>
 
 #include <pthread.h>
-#include <limits.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <mqueue.h>
