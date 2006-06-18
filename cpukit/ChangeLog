@@ -1,5 +1,9 @@
 2006-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/libio.h: Add extern "C" {}.
+
+2006-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/mqueue.c: Remove duplicate #include <limits.h>.
 	PR 1088/rtems
 	* posix/src/ptimer.c: Add missing #include <limits.h>.

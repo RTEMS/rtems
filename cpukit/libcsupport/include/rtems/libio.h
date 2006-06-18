@@ -34,6 +34,10 @@
 
 #include <rtems/fs.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Valid RTEMS file types.
  */
@@ -633,5 +637,9 @@ typedef struct {
 
 extern rtems_filesystem_mount_table_t *rtems_filesystem_mount_table;
 extern int                             rtems_filesystem_mount_table_size;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _RTEMS_LIBIO_H */
