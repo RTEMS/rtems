@@ -1,3 +1,9 @@
+2006-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/mqueue.c: Remove duplicate #include <limits.h>.
+	PR 1088/rtems
+	* posix/src/ptimer.c: Add missing #include <limits.h>.
+
 2006-06-08	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/Makefile.am, posix/preinstall.am,
@@ -40,7 +46,7 @@
 2006-04-27	Eric Norum <norume@aps.anl.gov>
 
 	* libmisc/capture/capture.h, libmisc/capture/capture.c
-      Add ability to free information on task delete.
+	Add ability to free information on task delete.
 
 2006-04-18  Joel Sherrill <joel@OARcorp.com>
 
