@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <time.h>
 #include <errno.h>
+#include <limits.h> /* _POSIX_PATH_MAX */
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
