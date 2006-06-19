@@ -299,27 +299,6 @@ nested:
 	rfi
 
 switch:
-#if ( PPC_HAS_FPU != 0 )
-#if ! defined( CPU_USE_DEFERRED_FP_SWITCH )
-#error missing include file???
-#endif
-	mfmsr  r4
-#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-	/* if the executing thread has FP enabled propagate
-	 * this now so _Thread_Dispatch can save/restore the FPREGS
-	 * NOTE: it is *crucial* to disable the FPU across the
-	 *       user ISR [independent of using the 'deferred'
-	 *       strategy or not]. We don't save FP regs across
-	 *       the user ISR and hence we prefer an exception to
-	 *       be raised rather than experiencing corruption.
-	 */
-	lwz    r3, SRR1_FRAME_OFFSET(r1)
-	rlwimi r4, r3, 0, 18, 18 /* MSR_FP */
-#else
-	ori    r4, r4, MSR_FP
-#endif
-	mtmsr  r4
-#endif
 	bl	SYM (_Thread_Dispatch)
 
 easy_exit:
