@@ -231,8 +231,6 @@ thisIs750:
 disableCache:
 	/* Disable the cache.  First, we turn off data relocation. */
 	rlwinm	r4,r4,0,28,26		/* Turn off DR bit */
-	mtmsr	r4
-	isync				/* make sure memory accesses have completed */
 	cmplwi  r0,PPC_7455             /* 7455 ? */
 	beq     1f
 	cmplwi  r0,PPC_7457             /* 7457 ? */
@@ -240,7 +238,9 @@ disableCache:
 1:
 	/* 745x:L1 Load/Flush, L2, L3 :	 hardware flush */
 	DSSALL
+	mtmsr	r4
 	sync
+	isync
 	mfspr	r4, MSSCR0	
 	rlwinm	r4,r4,0,29,0		/* Turn off the L2PFE bits */
 	mtspr	MSSCR0, r4
@@ -271,6 +271,9 @@ loadFlush:
 	b	reenableDR
 	
 not745x:			
+	sync
+	mtmsr	r4
+	isync
 	/*
 		Now, read the first 2MB of memory to put new data in the cache.
 		(Actually we only need the size of the L2 cache plus
@@ -293,9 +296,9 @@ flushLoop:
 	dcbf	r0,r4
 	addi	r4,r4,CACHE_LINE_SIZE	/* Go to start of next cache line */
 	bdnz	flushLoop
-	sync
 reenableDR:	
 	rlwinm	r4,r7,0,17,15		/* still mask EE but reenable data relocation */
+	sync
 	mtmsr	r4
 	isync
 
@@ -325,9 +328,9 @@ invalCompleteLoop:				/* Wait for the invalidation to complete */
 	rlwinm	r3,r3,0,11,9;		/* Turn off the L2I bit */
 	sync
 	mtspr	L2CR,r3
-	sync
 	
 noInval:
+	sync
 	/* re-enable interrupts, i.e. restore original MSR */
 	mtmsr	r7					/* (no sync needed) */
 	/* See if we need to enable the cache */
@@ -404,6 +407,8 @@ thisIs7455:
 	/* Before the L3 is disabled, it must be flused to prevent coherency problems */
 	/* First, we turn off data relocation. */
 	rlwinm	r4,r4,0,28,26		/* Turn off DR bit */
+	DSSALL
+	sync
 	mtmsr	r4
 	isync				/* make sure memory accesses have completed */
 	/* 7455: L3 :	 hardware flush 	
@@ -420,6 +425,7 @@ thisIs7455:
 	sync
 	/* L3 flushed,L3IO & L3DO got cleared in the dontDisableL3Cache:  */
 	rlwinm	r4,r7,0,17,15		/* still mask EE but reenable data relocation */
+	sync
 	mtmsr	r4
 	isync
 	

@@ -1,5 +1,11 @@
 2006-06-19	Till Straumann <strauman@slac.stanford.edu>
 
+	* mpc6xx/mmu/mmuAsm.S: re-checked synchronization
+	requirements when manipulating the caches against the book
+	and updated 'dssall', 'sync' and 'isync's accordingly.
+
+2006-06-19	Till Straumann <strauman@slac.stanford.edu>
+
 	* mpc6xx/exceptions/raw_exception.c, mpc6xx/exceptions/raw_exception.h:
 	Added altivec exception. Unfortunately, this doesn't fit
 	the normal scheme of vector = exception # << 8. So we picked
