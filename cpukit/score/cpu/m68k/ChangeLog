@@ -1,3 +1,9 @@
+2006-06-19 Till Straumann <strauman@slac.stanford.edu>
+
+	PR1091/patch
+	* cpu_asm.S: Reduce mask from 0xffc to 0x3fc so only the vector
+	bits are used when calculating the exception vector.
+
 2006-02-28	Eric Norum <norume@aps.anl.gov>
 
 	PR 904/patch

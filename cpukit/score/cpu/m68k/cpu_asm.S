@@ -135,7 +135,7 @@ SYM (_ISR_Handler):
 	movm.l  d0-d1/a0-a1,a7@		 | save d0-d1,a0-a1
 #endif
 	movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
-	andl    #0x0ffc,d0               | d0 = vector offset in vbr
+	andl    #0x03fc,d0               | d0 = vector offset in vbr
 
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
