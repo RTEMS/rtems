@@ -118,8 +118,10 @@ int BSP_VMEIrqMgrInstall()
 #else
   BSP_VME_UNIVERSE_INSTALL_IRQ_MGR;
 #endif
+#if defined(BSP_PCI_VME_DRIVER_DOES_EOI) && defined(BSP_PIC_DO_EOI)
   if (vmeUniverse0PciIrqLine<0)
 	BSP_panic("Unable to get universe interrupt line info from PCI config");
   _BSP_vme_bridge_irq = vmeUniverse0PciIrqLine;
+#endif
   return 0;
 }

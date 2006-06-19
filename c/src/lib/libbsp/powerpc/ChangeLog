@@ -1,5 +1,11 @@
 2006-06-19	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/vme/vme_universe.c: Only set/access the
+	_BSP_vme_bridge_irq variable on BSPs that
+	define BSP_PCI_VME_DRIVER_DOES_EOI and BSP_PIC_DO_EOI.
+
+2006-06-19	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vectors/vectors.S: filter exception vector for
 	altivec and remap 0xf20 to assigned vector number alias.
 
