@@ -1,3 +1,8 @@
+2006-06-19	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vme_amd_defs.h: Added address-modifier
+	codes for BLT/MBLT.
+
 2006-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* gnatinstallhandler.c: Rename since old name is now used
