@@ -64,10 +64,12 @@ __BSP_default_vme_config(void)
 	0x00010000);
 
 #ifdef _VME_DRAM_OFFSET
-  /* map our memory to VME */
+  /* map our memory to VME giving the driver a hint that it's ordinary memory
+   * so they can enable decoupled cycles which should give better performance...
+   */
   BSP_VMEInboundPortCfg(
 	0,
-	VME_AM_EXT_SUP_DATA,
+	VME_AM_EXT_SUP_DATA | VME_AM_IS_MEMORY,
 	_VME_DRAM_OFFSET,
 	PCI_DRAM_OFFSET,
 	BSP_mem_size);
