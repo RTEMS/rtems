@@ -30,44 +30,55 @@
  * Exception Vectors as defined in the MCP750 manual
  */
 
-#define	ASM_RESET_VECTOR 	0x01
-#define	ASM_MACH_VECTOR		0x02
-#define	ASM_PROT_VECTOR		0x03
-#define	ASM_ISI_VECTOR 		0x04
-#define	ASM_EXT_VECTOR 		0x05
-#define	ASM_ALIGN_VECTOR 	0x06
-#define	ASM_PROG_VECTOR		0x07
-#define	ASM_FLOAT_VECTOR	0x08
-#define	ASM_DEC_VECTOR		0x09
-#define	ASM_SYS_VECTOR		0x0C
-#define	ASM_TRACE_VECTOR	0x0D
-#define	ASM_PERFMON_VECTOR	0x0F
-#define	ASM_IMISS_VECTOR	0x10
-#define	ASM_DLMISS_VECTOR	0x11
-#define	ASM_DSMISS_VECTOR	0x12
-#define	ASM_ADDR_VECTOR		0x13
-#define	ASM_SYSMGMT_VECTOR	0x14
-#define	ASM_ITM_VECTOR		0x17
+#define	ASM_RESET_VECTOR 		0x01
+#define	ASM_MACH_VECTOR			0x02
+#define	ASM_PROT_VECTOR			0x03
+#define	ASM_ISI_VECTOR 			0x04
+#define	ASM_EXT_VECTOR 			0x05
+#define	ASM_ALIGN_VECTOR 		0x06
+#define	ASM_PROG_VECTOR			0x07
+#define	ASM_FLOAT_VECTOR		0x08
+#define	ASM_DEC_VECTOR			0x09
+/* Bummer: Altivec unavailable doesn't fit into this scheme... (0xf20).
+ *    We'd like to avoid reserved vectors but OTOH we don't want to use
+ *    just an available high number because tables (and copies) are of
+ *    size LAST_VALID_EXC.
+ *    So until there is a CPU that uses 0xA we'll just use that :-(
+ */
+#define ASM_VEC_VECTOR			0x0A
+#define	ASM_SYS_VECTOR			0x0C
+#define	ASM_TRACE_VECTOR		0x0D
+#define	ASM_PERFMON_VECTOR		0x0F
+#define	ASM_IMISS_VECTOR		0x10
+#define	ASM_DLMISS_VECTOR		0x11
+#define	ASM_DSMISS_VECTOR		0x12
+#define	ASM_ADDR_VECTOR			0x13
+#define	ASM_SYSMGMT_VECTOR		0x14
+#define ASM_VEC_ASSIST_VECTOR	0x16
+#define	ASM_ITM_VECTOR			0x17
 #define LAST_VALID_EXC		ASM_ITM_VECTOR
 
 /*
  * Vector offsets as defined in the MCP750 manual
  */
 
-#define	ASM_RESET_VECTOR_OFFSET 	(ASM_RESET_VECTOR << 8)
-#define	ASM_MACH_VECTOR_OFFSET 		(ASM_MACH_VECTOR  << 8)
-#define	ASM_PROT_VECTOR_OFFSET 		(ASM_PROT_VECTOR  << 8)
-#define	ASM_ISI_VECTOR_OFFSET 		(ASM_ISI_VECTOR   << 8)
-#define	ASM_EXT_VECTOR_OFFSET 		(ASM_EXT_VECTOR   << 8)
-#define	ASM_ALIGN_VECTOR_OFFSET 	(ASM_ALIGN_VECTOR << 8)
-#define	ASM_PROG_VECTOR_OFFSET 		(ASM_PROG_VECTOR  << 8)
-#define	ASM_FLOAT_VECTOR_OFFSET		(ASM_FLOAT_VECTOR << 8)
-#define	ASM_DEC_VECTOR_OFFSET		(ASM_DEC_VECTOR   << 8)
-#define	ASM_SYS_VECTOR_OFFSET		(ASM_SYS_VECTOR   << 8)
-#define	ASM_TRACE_VECTOR_OFFSET		(ASM_TRACE_VECTOR << 8)
-#define	ASM_ADDR_VECTOR_OFFSET		(ASM_ADDR_VECTOR  << 8)
-#define	ASM_SYSMGMT_VECTOR_OFFSET	(ASM_SYSMGMT_VECTOR << 8)
-#define	ASM_ITM_VECTOR_OFFSET		(ASM_ITM_VECTOR   << 8)
+#define	ASM_RESET_VECTOR_OFFSET 		(ASM_RESET_VECTOR << 8)
+#define	ASM_MACH_VECTOR_OFFSET 			(ASM_MACH_VECTOR  << 8)
+#define	ASM_PROT_VECTOR_OFFSET 			(ASM_PROT_VECTOR  << 8)
+#define	ASM_ISI_VECTOR_OFFSET 			(ASM_ISI_VECTOR   << 8)
+#define	ASM_EXT_VECTOR_OFFSET 			(ASM_EXT_VECTOR   << 8)
+#define	ASM_ALIGN_VECTOR_OFFSET 		(ASM_ALIGN_VECTOR << 8)
+#define	ASM_PROG_VECTOR_OFFSET 			(ASM_PROG_VECTOR  << 8)
+#define	ASM_FLOAT_VECTOR_OFFSET			(ASM_FLOAT_VECTOR << 8)
+#define	ASM_DEC_VECTOR_OFFSET			(ASM_DEC_VECTOR   << 8)
+#define	ASM_SYS_VECTOR_OFFSET			(ASM_SYS_VECTOR   << 8)
+#define	ASM_TRACE_VECTOR_OFFSET			(ASM_TRACE_VECTOR << 8)
+#define	ASM_PERFMON_VECTOR_OFFSET		(ASM_PERFMON_VECTOR << 8)
+#define ASM_VEC_VECTOR_OFFSET			(0xf20)
+#define	ASM_ADDR_VECTOR_OFFSET			(ASM_ADDR_VECTOR  << 8)
+#define	ASM_SYSMGMT_VECTOR_OFFSET		(ASM_SYSMGMT_VECTOR << 8)
+#define ASM_VEC_ASSIST_VECTOR_OFFSET	(ASM_VEC_ASSIST_VECTOR << 8)
+#define	ASM_ITM_VECTOR_OFFSET			(ASM_ITM_VECTOR   << 8)
 
 
 #ifndef ASM

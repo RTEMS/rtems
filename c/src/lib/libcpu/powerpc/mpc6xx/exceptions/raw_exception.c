@@ -36,12 +36,29 @@ void * codemove(void *, const void *, unsigned int, unsigned long);
 
 void* mpc60x_get_vector_addr(rtems_vector vector)
 {
+  unsigned vaddr = ((unsigned)vector) << 8;
   extern rtems_cpu_table Cpu_table;
 
-  if ( Cpu_table.exceptions_in_RAM )
-    return ((void*)  (((unsigned) vector) << 8));
+  /* Special case; altivec unavailable doesn't fit :-( */
+  if ( ASM_VEC_VECTOR == vector )
+		vaddr = ASM_VEC_VECTOR_OFFSET;
 
-  return ((void*)  (((unsigned) vector) << 8) + 0xfff00000);
+  if ( Cpu_table.exceptions_in_RAM )
+    return ((void*)  vaddr);
+
+  return ((void*)  (vaddr + 0xfff00000));
+}
+
+int altivec_vector_is_valid(rtems_vector vector)
+{
+  switch(vector) {
+  case ASM_VEC_VECTOR:
+  case ASM_VEC_ASSIST_VECTOR:
+    return 1;
+    default:
+      break;
+  }
+  return 0;
 }
 
 int mpc750_vector_is_valid(rtems_vector vector)
@@ -160,16 +177,22 @@ int mpc60x_vector_is_valid(rtems_vector vector)
 {
      switch (current_ppc_cpu) {
 	case PPC_7400:
+            if ( altivec_vector_is_valid(vector) )
+                return 1;
+            /* else fall thru */
         case PPC_750:
             if (!mpc750_vector_is_valid(vector)) {
                 return 0;
             }
             break;
+        case PPC_7455:   /* Kate Feng */
+        case PPC_7457: 
+            if ( altivec_vector_is_valid(vector) )
+                return 1;
+            /* else fall thru */
         case PPC_604:
         case PPC_604e:
         case PPC_604r:
-        case PPC_7455:   /* Kate Feng */
-        case PPC_7457: 
             if (!mpc604_vector_is_valid(vector)) {
                 return 0;
             }
