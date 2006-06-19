@@ -1,4 +1,9 @@
-2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+2006-06-19	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/cpu.c: Never allow the FPU to be switched
+	on for integer-only tasks (new gcc may use FP regs implicitely).
+
+2006-05-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use RTEMS_AMPOLISH3.
 

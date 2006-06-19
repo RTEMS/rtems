@@ -104,20 +104,20 @@ void _CPU_Context_Initialize(
    *  time (7 July 1997), this restructuring is not being done.
    */
 
-  /* Till Straumann: For deferred FPContext save/restore, make sure integer
-   *                 tasks have no FPU access in order to catch violations.
-   *                 Otherwise, the FP registers may be corrupted.
-   *				 Since we set the_contex->msr using our current MSR,
-   *				 we must make sure MSR_FP is off if (!is_fp)...
+  /* Make sure integer tasks have no FPU access in order to
+   * catch violations. Gcc may implicitely use the FPU and
+   * data corruption may happen.
+   * Since we set the_contex->msr using our current MSR,
+   * we must make sure MSR_FP is off if (!is_fp)...
+   * Unfortunately, this means that users of vfprintf_r have to use FP
+   * tasks or fix vfprintf. Furthermore, users of int-only tasks
+   * must prevent gcc from using the FPU (currently -msoft-float is the
+   * only way...)
    */
-#if defined(CPU_USE_DEFERRED_FP_SWITCH) && (CPU_USE_DEFERRED_FP_SWITCH==TRUE)
   if ( is_fp )
-#endif
     the_context->msr |= PPC_MSR_FP;
-#if defined(CPU_USE_DEFERRED_FP_SWITCH) && (CPU_USE_DEFERRED_FP_SWITCH==TRUE)
   else
-	the_context->msr &= ~PPC_MSR_FP;
-#endif
+    the_context->msr &= ~PPC_MSR_FP;
 
   the_context->pc = (uint32_t)entry_point;
 
