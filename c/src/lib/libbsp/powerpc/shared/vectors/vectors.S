@@ -73,11 +73,19 @@ SYM (push_normalized_frame):
 	 * (256 * vector number) + few instructions
 	 */
 	mflr	r3
+	/* mask upper bits in case vectors are in the high area (psim) */
+	rlwinm  r3, r3, 32-5, 20, 31
+	/*
+	 * Remap altivec unavaliable (0xf20) to its vector number...
+	 */
+	cmplwi  r3,(ASM_VEC_VECTOR_OFFSET>>5)
+	bne     1f
+	li		r3,ASM_VEC_VECTOR<<3
+1:
 	/*
 	 * r3 = r3 >> 8 = vector #
-	 * mask upper bits in case vectors are in the high area (psim)
 	 */
-	rlwinm	r3,r3,32-8,20,31
+	srwi	r3,r3,3
 	stw	r3, EXCEPTION_NUMBER_OFFSET(r1)
 	stw	r0, GPR0_OFFSET(r1)
 	/* R2 should never change (EABI: pointer to .sdata2) - we

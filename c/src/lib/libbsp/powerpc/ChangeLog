@@ -1,5 +1,10 @@
 2006-06-19	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/vectors/vectors.S: filter exception vector for
+	altivec and remap 0xf20 to assigned vector number alias.
+
+2006-06-19	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/startup/bspstart.c: fixed compiler warnings
 	(bspIo.h inclusion, cast of number constants to pointers).
 	Enable L1 cache on mvme2100.
