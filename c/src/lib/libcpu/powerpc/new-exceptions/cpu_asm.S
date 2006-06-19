@@ -33,6 +33,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/powerpc/powerpc.h>
+#include <rtems/powerpc/registers.h>
 
 /*
  * Offsets for various Contexts
@@ -161,6 +162,16 @@
 	PUBLIC_PROC (_CPU_Context_save_fp)
 PROC (_CPU_Context_save_fp):
 #if (PPC_HAS_FPU == 1)
+/* A FP context switch may occur in an ISR or exception handler when the FPU is not
+ * available. Therefore, we must explicitely enable it here!
+ */
+	mfmsr	r4
+	andi.	r5,r4,MSR_FP
+	bne	1f
+	ori	r5,r4,MSR_FP
+	mtmsr	r5
+	isync
+1:
 	lwz	r3, 0(r3)
 	STF	f0, FP_0(r3)
 	STF	f1, FP_1(r3)
@@ -196,6 +207,10 @@ PROC (_CPU_Context_save_fp):
 	STF	f31, FP_31(r3)
 	mffs	f2
 	STF	f2, FP_FPSCR(r3)
+	bne	1f
+	mtmsr	r4
+	isync
+1:
 #endif
 	blr
 
@@ -217,6 +232,16 @@ PROC (_CPU_Context_save_fp):
 PROC (_CPU_Context_restore_fp):
 #if (PPC_HAS_FPU == 1)
 	lwz	r3, 0(r3)
+/* A FP context switch may occur in an ISR or exception handler when the FPU is not
+ * available. Therefore, we must explicitely enable it here!
+ */
+	mfmsr	r4
+	andi.	r5,r4,MSR_FP
+	bne	1f
+	ori	r5,r4,MSR_FP
+	mtmsr	r5
+	isync
+1:
 	LDF	f2, FP_FPSCR(r3)
 	mtfsf	255, f2
 	LDF	f0, FP_0(r3)
@@ -251,6 +276,10 @@ PROC (_CPU_Context_restore_fp):
 	LDF	f29, FP_29(r3)
 	LDF	f30, FP_30(r3)
 	LDF	f31, FP_31(r3)
+	bne	1f
+	mtmsr	r4
+	isync
+1:
 #endif
 	blr
 
