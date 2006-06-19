@@ -22,6 +22,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+#include <rtems/bspIo.h>
 #include <bsp/consoleIo.h>
 #include <libcpu/spr.h>
 #include <bsp/residual.h>
@@ -171,8 +172,8 @@ unsigned int EUMBBAR;
  * Processor Address Map B (CHRP).
  */ 
 unsigned int get_eumbbar() {
-  out_le32( 0xfec00000, 0x80000078 );
-  return in_le32( 0xfee00000 );
+  out_le32( (uint32_t*)0xfec00000, 0x80000078 );
+  return in_le32( (uint32_t*)0xfee00000 );
 }
 #endif
 
@@ -234,13 +235,13 @@ void bsp_start( void )
   EUMBBAR = get_eumbbar(); 
 #endif
 
-#if !defined(mpc8240) && !defined(mpc8245)
   /*
    * enables L1 Cache. Note that the L1_caches_enables() codes checks for
    * relevant CPU type so that the reason why there is no use of myCpu...
    */
   L1_caches_enables();
 
+#if !defined(mpc8240) && !defined(mpc8245)
   /*
    * Enable L2 Cache. Note that the set_L2CR(L2CR) codes checks for
    * relevant CPU type (mpc750)...

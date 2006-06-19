@@ -1,5 +1,11 @@
 2006-06-19	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/startup/bspstart.c: fixed compiler warnings
+	(bspIo.h inclusion, cast of number constants to pointers).
+	Enable L1 cache on mvme2100.
+
+2006-06-19	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq_asm.S: Never allow the FPU to be switched on
 	for integer-only tasks (new gcc may use FP regs implicitely).
 
