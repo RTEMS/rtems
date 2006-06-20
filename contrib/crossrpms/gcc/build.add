@@ -57,7 +57,7 @@
 %endif
 
   make all
-%if %{build_infos}
+%if %build_infos
   make info
 %endif
   cd ..

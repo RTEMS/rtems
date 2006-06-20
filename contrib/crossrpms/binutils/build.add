@@ -15,7 +15,7 @@
     --mandir=%{_mandir} --infodir=%{_infodir}
 
   make all
-%if %{build_infos}
+%if %build_infos
   make info
 %endif
   cd ..

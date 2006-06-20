@@ -13,7 +13,7 @@
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     install
 
-%if %{build_infos}
+%if %build_infos
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
     includedir=$RPM_BUILD_ROOT%{_includedir} \
@@ -24,7 +24,7 @@
 %endif
 %endif
 
-%if %{build_infos}
+%if %build_infos
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
 

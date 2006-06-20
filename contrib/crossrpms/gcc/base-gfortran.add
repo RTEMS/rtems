@@ -1,4 +1,4 @@
-%if %{build_infos}
+%if %build_infos
 %if %build_f95
 # ==============================================================
 # @rpmprefix@rtems@osversion@-base-gfortran

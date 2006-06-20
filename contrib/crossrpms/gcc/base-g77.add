@@ -1,4 +1,4 @@
-%if %{build_infos}
+%if %build_infos
 %if %build_g77
 # ==============================================================
 # rtems-base-g77
