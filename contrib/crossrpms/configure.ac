@@ -77,7 +77,8 @@ case "$host" in
   i?86-*mingw*)		RPM_OS=mingw32 ;;
   sparc-*solaris*)	RPM_OS=solaris2.7 ;;
   i?86-*freebsd5*)	RPM_OS=freebsd5.2 ;;
-  i?86-*freebsd*)	RPM_OS=freebsd6.0 ;;
+  i?86-*freebsd6.0)	RPM_OS=freebsd6.0 ;;
+  i?86-*freebsd6.1)	RPM_OS=freebsd6.1 ;;
   *)
     AC_MSG_ERROR([Unsupported host ${host}])
     ;;
