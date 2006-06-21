@@ -16,7 +16,7 @@
 
 	* new-exceptions/cpu.c, new-exceptions/cpu_asm.S: Never
 	allow the FPU to be switched on for integer-only tasks
-	(new gcc may use FP regs implicitely).
+	(new gcc may use FP regs implicitly).
 	FP context switch may be called from environment with no
 	FPU available (ISR, int-only task) - switch FPU on
 	for the switch and restore MSR_FP after it's done.

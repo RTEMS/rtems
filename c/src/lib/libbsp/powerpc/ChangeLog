@@ -24,7 +24,7 @@
 2006-06-19	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/irq/irq_asm.S: Never allow the FPU to be switched on
-	for integer-only tasks (new gcc may use FP regs implicitely).
+	for integer-only tasks (new gcc may use FP regs implicitly).
 
 2006-03-08	Joel Sherrill <joel@OARcorp.com>
 
