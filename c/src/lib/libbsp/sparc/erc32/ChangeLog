@@ -1,3 +1,8 @@
+2006-06-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1100/bsps
+	* console/debugputs.c: Remove redundant return.
+
 2006-03-08	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Add .gnu.linkonce.b.* section.

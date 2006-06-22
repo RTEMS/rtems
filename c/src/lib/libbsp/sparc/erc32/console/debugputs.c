@@ -62,7 +62,6 @@ int console_inbyte_nonblocking( int port )
       if ((UStat & ERC32_MEC_UART_STATUS_DRA) == 0)
          return -1;
       return (int) ERC32_MEC.UART_Channel_A;
-      return 1;
 
     case 1:
       if (UStat & ERC32_MEC_UART_STATUS_ERRB) {
