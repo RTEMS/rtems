@@ -129,5 +129,4 @@ void rtems_filesystem_initialize( void )
    */
 
 #endif
-#endif
 }
