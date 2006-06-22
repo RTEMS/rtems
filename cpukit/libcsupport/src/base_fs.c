@@ -43,9 +43,6 @@ rtems_user_env_t * rtems_current_user_env = &rtems_global_user_env;
 void rtems_filesystem_initialize( void )
 {
 #if !defined(RTEMS_UNIX)
-#if 0
-  int                                   i;
-#endif
   int                                   status;
   rtems_filesystem_mount_table_entry_t *entry;
   rtems_filesystem_mount_table_t       *mt;
@@ -124,27 +121,13 @@ void rtems_filesystem_initialize( void )
     rtems_fatal_error_occurred( 0xABCD0003 );
 
   /*
-   *  This code if if'ed 0 out because you can't mount another
-   *  filesystem properly until the mount point it will be
-   *  mounted onto is created.  Moreover, if it is going to
+   *  You can't mount another filesystem properly until the mount point
+   *  it will be mounted onto is created.  Moreover, if it is going to
    *  use a device, then it is REALLY unfair to attempt this
-   *  before device drivers are initialized.
+   *  before device drivers are initialized.  So we return via a base
+   *  filesystem image and nothing auto-mounted at this point.
    */
 
-#if 0
-  /*
-   *  Now if there are other filesystems to mount, go for it.
-   */
-
-  for ( i=1 ; i < rtems_filesystem_mount_table_size ; i++ ) {
-    mt = &rtems_filesystem_mount_table[0];
-
-    status = mount(
-       &entry, mt->fs_ops, mt->fsoptions, mt->device, mt->mount_point );
-
-    if ( status == -1 )
-      rtems_fatal_error_occurred( 0xABCD0003 );
-  }
 #endif
 #endif
 }

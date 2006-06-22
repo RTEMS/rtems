@@ -256,11 +256,6 @@ void _RTEMS_tasks_Manager_initialization(
    *  There may not be any RTEMS initialization tasks configured.
    */
 
-#if 0
-  if ( user_tasks == NULL || number_of_initialization_tasks == 0 )
-    _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, TRUE, RTEMS_TOO_MANY );
-#endif
-
   _Objects_Initialize_information(
     &_RTEMS_tasks_Information, /* object information table */
     OBJECTS_CLASSIC_API,       /* object API */

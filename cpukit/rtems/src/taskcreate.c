@@ -87,11 +87,6 @@ rtems_status_code rtems_task_create(
    *  stack space.
    */
 
-#if 0
-  if ( !_Stack_Is_enough( stack_size ) )
-    return RTEMS_INVALID_SIZE;
-#endif
-
   /*
    *  Fix the attribute set to match the attributes which
    *  this processor (1) requires and (2) is able to support.
