@@ -17,10 +17,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -38,6 +34,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+ * $FreeBSD: src/sys/sys/cdefs.h,v 1.92 2006/03/13 00:49:28 deischen Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -46,7 +46,7 @@
 
 #if defined(__cplusplus)
 #define	__BEGIN_DECLS	extern "C" {
-#define	__END_DECLS	};
+#define	__END_DECLS	}
 #else
 #define	__BEGIN_DECLS
 #define	__END_DECLS
@@ -55,9 +55,11 @@
 /*
  * The __CONCAT macro is used to concatenate parts of symbol names, e.g.
  * with "#define OLD(foo) __CONCAT(old,foo)", OLD(foo) produces oldfoo.
- * The __CONCAT macro is a bit tricky -- make sure you don't put spaces
- * in between its arguments.  __CONCAT can also concatenate double-quoted
- * strings produced by the __STRING macro, but this only works with ANSI C.
+ * The __CONCAT macro is a bit tricky to use if it must work in non-ANSI
+ * mode -- there must be no spaces between its arguments, and for nested
+ * __CONCAT's, all the __CONCAT's must be at the left.  __CONCAT can also
+ * concatenate double-quoted strings produced by the __STRING macro, but
+ * this only works with ANSI C.
  *
  * __XSTRING is like __STRING, but it expands any macros in its argument
  * first.  It is only available with ANSI C.
