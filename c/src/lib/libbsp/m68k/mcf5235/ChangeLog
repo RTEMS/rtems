@@ -1,3 +1,19 @@
+2006-06-23	Worth Burruss <worth@motioncontrol.org>
+
+	* Makefile.am, README, startup/init5235.c, startup/linkcmds,
+	startup/linkcmdsflash, startup/linkcmdsram: Modify to the mcf5235
+	eval boards to either load and run from ram using the dBug moniter as
+	the boot deviced (Board setup as shipped from the factory), or it
+	allows the user to Boot his code from flash he loads onto the eval
+	board. The code changes between the two are based on the selected
+	linker script using a variable in the script.  The options to the
+	linker are used to override the default linker script and select
+	which options to configure at boot either from flash, or from ram:
+            -qnolinkcmds -T linkcmdsflash
+	If no options are given the standard linker sript assumes dBug was
+	used to set up the board and the user is going to load his program
+	to RAM.
+
 2006-02-08	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmdsflash, startup/linkcmdsram: Add

@@ -1,6 +1,6 @@
 /*
  *  This file contains directives for the GNU linker which are specific
- *  to the Arcturus uC DIMM ColdFire 5282
+ *  to the Freescale ColdFire mcf5235
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -11,6 +11,13 @@
  *
  *  $Id$
  */
+
+/*
+ * declare for the MCF5235_BSP_START_FROM_FLASH
+ * 0 - use debug monitor to load to ram
+ * 1 - load everything from flash from scratch
+ */
+MCF5235_BSP_START_FROM_FLASH = 1;
 
 /*
  * Declare some sizes.
@@ -64,8 +71,8 @@ SECTIONS
 
         /*
          * Initialization and finalization code.
-              *
-              * Various files can provide initialization and finalization
+         *
+         * Various files can provide initialization and finalization
          * functions.  crtbegin.o and crtend.o are two instances. The
          * body of these functions are in .init and .fini sections. We
          * accumulate the bodies here, and prepend function prologues

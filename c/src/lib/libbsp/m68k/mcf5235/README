@@ -11,6 +11,14 @@ ROM: 2M
 This is a Motorola evaluation board that uses the MCF5235 Coldfire CPU. 
 This board is running at 150MHz scaled from a 25MHz oscillator.
 
+By default the BSP creates an image file for use when loaded into the
+RAM of the evaluation board.  To create an image file to boot from flash
+add the following command to the applications Makefile:
+LDFLAGS += -qnolinkcmds -T linkcmdsflash
+
+Note: This BSP has also been tested with the Freescale / Axiom Manufacturing
+(M5235BCC Business Card Controller) evaluation board.
+
 ACKNOWLEDGEMENTS:
 =================
 This BSP is heavily based on the work of:
