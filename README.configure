@@ -187,8 +187,8 @@ i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
                         variety of PC configurations including PC-104
                         based solutions.
 
-m68k		: csb360 dmv152 gen68302 gen68340 gen68360 gen68360_040 
-                  idp mcf5206elite mrm332 mvme136 mvme147 mvme147s
+m68k		: av5282 csb360 dmv152 gen68302 gen68340 gen68360 gen68360_040 
+                  idp mcf5206elite mcf5235 mrm332 mvme136 mvme147 mvme147s
                   mvme162 mvme162lx ods68302 sim68000 simcpu32 uC5282
 
 no_cpu          : no_bsp  (porting example)

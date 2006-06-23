@@ -1,3 +1,7 @@
+2006-06-23	Worth Burruss <worth@motioncontrol.org>
+
+	* README.configure: Add mcf5235.
+
 2006-04-18	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-4.6.99.3.
