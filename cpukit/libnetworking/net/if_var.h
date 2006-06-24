@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	From: @(#)if.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: src/sys/net/if_var.h,v 1.95 2005/04/20 09:30:54 glebius Exp $
+ * $FreeBSD: src/sys/net/if_var.h,v 1.107 2006/06/19 22:20:44 mlaier Exp $
  */
  
 /*
@@ -76,6 +76,8 @@ struct	ether_header;
 #ifndef __rtems__
 struct	carp_if;
 #endif
+
+#include <sys/queue.h>		/* get TAILQ macros */
 
 /*
  * Structure defining a queue for a network interface.
@@ -133,7 +135,7 @@ struct ifnet {
 	struct	ifqueue *if_poll_slowq;	/* input queue for slow devices */
 };
 
-typedef void if_init_f_t(void *);       
+typedef void if_init_f_t(void *);
 
 /*
  * XXX These aliases are terribly dangerous because they could apply
