@@ -43,3 +43,5 @@ EXTRA_DIST += gdb/install.add
 EXTRA_DIST += gdb/prep.add
 EXTRA_DIST += gdb/rpm-install.add
 EXTRA_DIST += gdb/target-gdb.add
+
+EXTRA_DIST += specstrip
