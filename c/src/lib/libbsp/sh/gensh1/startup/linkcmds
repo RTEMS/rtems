@@ -69,32 +69,37 @@ SECTIONS
   .gnu.version   : { *(.gnu.version)	}
   .gnu.version_d : { *(.gnu.version_d)	}
   .gnu.version_r : { *(.gnu.version_r)	}
+  .rela.dyn       :
+    {
+      *(.rela.init)
+      *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+      *(.rela.fini)
+      *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+      *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+      *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+      *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+      *(.rela.ctors)
+      *(.rela.dtors)
+      *(.rela.got)
+      *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
+      *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
+      *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
+      *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
+      *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+    } >ram
   .rel.text      :
     { *(.rel.text) *(.rel.gnu.linkonce.t*) }
-  .rela.text     :
-    { *(.rela.text) *(.rela.gnu.linkonce.t*) }
   .rel.data      :
     { *(.rel.data) *(.rel.gnu.linkonce.d*) }
-  .rela.data     :
-    { *(.rela.data) *(.rela.gnu.linkonce.d*) }
   .rel.rodata    :
     { *(.rel.rodata*) *(.rel.gnu.linkonce.r*) }
-  .rela.rodata   :
-    { *(.rela.rodata) *(.rela.gnu.linkonce.r*) }
   .rel.got       : { *(.rel.got)		}
-  .rela.got      : { *(.rela.got)		}
   .rel.ctors     : { *(.rel.ctors)	}
-  .rela.ctors    : { *(.rela.ctors)	}
   .rel.dtors     : { *(.rel.dtors)	}
-  .rela.dtors    : { *(.rela.dtors)	}
   .rel.init      : { *(.rel.init)	}
-  .rela.init     : { *(.rela.init)	}
   .rel.fini      : { *(.rel.fini)	}
-  .rela.fini     : { *(.rela.fini)	}
   .rel.bss       : { *(.rel.bss)		}
-  .rela.bss      : { *(.rela.bss)		}
   .rel.plt       : { *(.rel.plt)		}
-  .rela.plt      : { *(.rela.plt)		}
   .init          : { *(.init)	} =0
   .plt      	 : { *(.plt)	}
   .text   .   	 :
