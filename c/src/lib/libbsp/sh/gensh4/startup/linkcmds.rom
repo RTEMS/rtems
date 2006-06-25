@@ -77,6 +77,24 @@ SECTIONS
   } > rom
   _etext = .;
   PROVIDE (etext = .);
+  .rela.dyn       :
+    {
+      *(.rela.init)
+      *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+      *(.rela.fini)
+      *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+      *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+      *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+      *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+      *(.rela.ctors)
+      *(.rela.dtors)
+      *(.rela.got)
+      *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
+      *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
+      *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
+      *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
+      *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+    } >ram
   .fini      :
   {
     KEEP (*(.fini))
