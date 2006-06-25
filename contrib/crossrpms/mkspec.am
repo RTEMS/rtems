@@ -1,3 +1,5 @@
+SPECSTRIP = $(top_srcdir)/specstrip --prefix=$(prefix)
+
 MKSPEC = sed \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,[@]_prefix[@],$(prefix),g" \
