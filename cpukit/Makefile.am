@@ -23,6 +23,8 @@ SUBDIRS += ftpd
 SUBDIRS += telnetd
 SUBDIRS += pppd
 
+EXTRA_DIST = ampolish3
+
 noinst_DATA = preinstall-stamp
 preinstall-stamp:
 	$(MAKE) $(AM_MAKEFLAGS) preinstall
