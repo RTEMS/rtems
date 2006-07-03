@@ -2,11 +2,7 @@
 
 TARGET = @target_alias@
 
-include ../mkspec.am
-
-noinst_DATA =
-CLEANFILES =
-EXTRA_DIST =
+include $(top_srcdir)/mkspec.am
 
 BINUTILS_VERS = 2.16.94
 BINUTILS_RPMREL = @VERSION@

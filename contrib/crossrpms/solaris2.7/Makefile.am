@@ -2,11 +2,7 @@
 
 TARGET = sparc-sun-solaris2.7
 
-include ../mkspec.am
-
-noinst_DATA =
-CLEANFILES =
-EXTRA_DIST =
+include $(top_srcdir)/mkspec.am
 
 SOLARIS_VERS = 2.7
 SOLARIS_RPMREL = @VERSION@

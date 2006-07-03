@@ -2,11 +2,7 @@
 
 TARGET = i686-pc-mingw32
 
-include ../mkspec.am
-
-noinst_DATA =
-CLEANFILES =
-EXTRA_DIST =
+include $(top_srcdir)/mkspec.am
 
 MINGW32_VERS = 3.9
 MINGW32_RPMREL = @VERSION@

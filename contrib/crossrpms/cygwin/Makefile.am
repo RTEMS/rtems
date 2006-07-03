@@ -2,11 +2,7 @@
 
 TARGET = i686-pc-cygwin
 
-include ../mkspec.am
-
-noinst_DATA =
-CLEANFILES =
-EXTRA_DIST =
+include $(top_srcdir)/mkspec.am
 
 CYGWIN_VERS = 1.5.19-4
 CYGWIN_RPMREL = @VERSION@

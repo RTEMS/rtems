@@ -2,11 +2,7 @@
 
 TARGET = i586-pc-freebsd6.0
 
-include ../mkspec.am
-
-noinst_DATA =
-CLEANFILES =
-EXTRA_DIST =
+include $(top_srcdir)/mkspec.am
 
 FREEBSD_VERS = 6.0
 FREEBSD_RPMREL = @VERSION@
