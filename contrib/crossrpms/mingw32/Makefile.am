@@ -28,7 +28,7 @@ $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 CLEANFILES += $(TARGET)-libs.spec.in
 	                      
 @rpmprefix@$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
-	$(MKSPEC) $(TARGET)-libs.spec.in > $@
+	$(MKSPEC) $(TARGET)-libs.spec.in | $(SPECSTRIP) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
@@ -52,7 +52,7 @@ $(TARGET)-w32api.spec.in: $(W32API_SUBPACKAGES) Makefile.am
 CLEANFILES += $(TARGET)-w32api.spec.in
 	                      
 @rpmprefix@$(TARGET)-w32api.spec: $(TARGET)-w32api.spec.in
-	$(MKSPEC) $(TARGET)-w32api.spec.in > $@
+	$(MKSPEC) $(TARGET)-w32api.spec.in | $(SPECSTRIP) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
 noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
@@ -81,7 +81,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 CLEANFILES += $(TARGET)-binutils.spec.in
 
 @rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
-	$(MKSPEC) $(TARGET)-binutils.spec.in > $@
+	$(MKSPEC) $(TARGET)-binutils.spec.in | $(SPECSTRIP) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
 noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
@@ -119,6 +119,6 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add gcc-prep.a
 CLEANFILES += $(TARGET)-gcc.spec.in
 
 @rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
-	$(MKSPEC) $(TARGET)-gcc.spec.in > $@
+	$(MKSPEC) $(TARGET)-gcc.spec.in | $(SPECSTRIP) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
 noinst_DATA += @rpmprefix@$(TARGET)-gcc.spec
