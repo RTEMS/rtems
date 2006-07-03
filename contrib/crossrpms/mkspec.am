@@ -1,3 +1,7 @@
+noinst_DATA =
+CLEANFILES =
+EXTRA_DIST =
+
 SPECSTRIP = $(top_srcdir)/specstrip --prefix=$(prefix)
 
 MKSPEC = sed \
