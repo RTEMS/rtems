@@ -53,7 +53,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources
 CLEANFILES += $(TARGET)-binutils.spec.in
 
 @rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
-	$(MKSPEC) $(TARGET)-libs.spec.in | $(SPECSTRIP) > $@
+	$(MKSPEC) $(TARGET)-binutils.spec.in | $(SPECSTRIP) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
 noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
