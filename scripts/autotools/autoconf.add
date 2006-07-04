@@ -1,5 +1,5 @@
-%define rpmvers 2.59
-%define srcvers	2.59
+%define rpmvers 2.60
+%define srcvers	2.60
 
 %define _name			autoconf
 
@@ -15,7 +15,7 @@ License:    GPL
 URL:          http://www.gnu.org/software/autoconf
 Group:        @rpmgroup@
 Version:      %{rpmvers}
-Release:      4%{?dist}
+Release:      0%{?dist}
 Summary:      Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -26,7 +26,6 @@ Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
 Source: autoconf-%{srcvers}.tar.bz2
-Patch0: autoconf-2.59-quoting-20040817-1.diff
 
 %description
 GNU's Autoconf is a tool for configuring source code and Makefiles.
@@ -43,7 +42,6 @@ their use.
 
 %prep
 %setup -q -n %{_name}-%{srcvers}
-%patch -p0 -P 0
 
 %build
 ./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
