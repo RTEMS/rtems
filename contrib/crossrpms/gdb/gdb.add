@@ -1,8 +1,6 @@
 %define gdb_version @GDB_VERS@
 %define gdb_rpmvers %{expand:%(echo @GDB_VERS@ | tr - _)} 
 
-%define build_infos @build_infos@
-
 Name:		@rpmprefix@@tool_target@-gdb
 Summary:	Gdb for target @tool_target@
 Group:		Development/Tools
