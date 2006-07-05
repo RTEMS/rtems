@@ -4,8 +4,8 @@
 # or	mailto:rtems-bugs@rtems.com
 #
 
-%define _prefix			@_prefix@
 %if "%{_prefix}" != "/usr"
+%define _prefix			@_prefix@
 %define _infodir		%{_prefix}/info
 %define _mandir			%{_prefix}/man
 %endif
