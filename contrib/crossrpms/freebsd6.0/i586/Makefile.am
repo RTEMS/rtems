@@ -10,10 +10,10 @@ EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
 
 LIBS_SUBPACKAGES = $(top_srcdir)/common/common.add
-LIBS_SUBPACKAGES += $(top_srcdir)/freebsd6.0/libs.add
+LIBS_SUBPACKAGES += $(srcdir)/libs.add
 LIBS_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
 LIBS_SUBPACKAGES += $(top_srcdir)/common/clean.add
-LIBS_SUBPACKAGES += $(top_srcdir)/freebsd6.0/target-libs.add
+LIBS_SUBPACKAGES += $(srcdir)/target-libs.add
 
 $(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
 	cat $(LIBS_SUBPACKAGES) | sed \
@@ -60,6 +60,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
 GCC_VERS = 4.1.0
 GCC_RPMREL = @VERSION@
+GCC_OPTS = --languages=c,cxx,f95
 EXTRA_DIST += gcc-prep.add
 EXTRA_DIST += gcc-sources.add
 
@@ -73,26 +74,25 @@ GCC_SUBPACKAGES += $(top_srcdir)/common/clean.add
 GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-gcc.add
 GCC_SUBPACKAGES += $(top_srcdir)/gcc/base-gcc.add
 GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-c++.add
-GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-gfortran.add $(top_srcdir)/gcc/base-gfortran.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-gfortran.add
+GCC_SUBPACKAGES += $(top_srcdir)/gcc/base-gfortran.add
 GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-objc.add
 
-$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am gcc-sources.add gcc-prep.add
+$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add $(srcdir)/../gcc-prep.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r $(srcdir)/gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
-	  -e "/[@]PREP[@]/r $(srcdir)/gcc-prep.add" \
+	  -e "/[@]PREP[@]/r $(srcdir)/../gcc-prep.add" \
 	  -e "/[@]PREP[@]/d" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "/[@]tool_target[@]-newlib/d" \
 	  -e "/[@]tool_target[@]-w32api-sys-root/d" \
 	  -e "/--with-newlib/d" \
-	  -e "s,^%define[ ]*_fortran[ 	]*0,%define _fortran		1," \
-	  -e "s,^%define[ ]*_objc[ 	]*0,%define _objc		1," \
 	  > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
 
 @rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
-	$(MKSPEC) $(TARGET)-gcc.spec.in | $(SPECSTRIP) --languages=c,cxx,f95 > $@
+	$(MKSPEC) $(TARGET)-gcc.spec.in | $(SPECSTRIP) $(GCC_OPTS) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-gcc.spec
 noinst_DATA += @rpmprefix@$(TARGET)-gcc.spec
