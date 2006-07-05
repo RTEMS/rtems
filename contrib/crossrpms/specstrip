@@ -126,13 +126,11 @@ if ( $verbose > 1 ) {
 my @buffer0 = <> ;
 
 my $buffer1 = join( '', @buffer0 );
-# print STDERR $buffer1;
 
 foreach (split /\n/, $buffer1)
 {
 #  print STDERR ">$_<\n";
 }
-# exit 1;
 
 my @buffer2 ;
 foreach (split /\n/, $buffer1)
