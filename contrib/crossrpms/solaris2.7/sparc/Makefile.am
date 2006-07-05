@@ -61,7 +61,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 GCC_VERS = 4.1.1
 GCC_RPMREL = @VERSION@
 GCC_OPTS = --languages=c,cxx,f95
-EXTRA_DIST += gcc-prep.add
+EXTRA_DIST += ../gcc-prep.add
 EXTRA_DIST += gcc-sources.add
 
 GCC_SUBPACKAGES = $(top_srcdir)/common/common.add
