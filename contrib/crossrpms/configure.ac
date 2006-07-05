@@ -108,11 +108,33 @@ AC_SUBST([osversion])
 AC_CONFIG_FILES([Makefile])
 
 AC_CONFIG_FILES([cygwin/Makefile])
+AC_CONFIG_FILES([cygwin/i686/Makefile])
+
 AC_CONFIG_FILES([mingw32/Makefile])
+AC_CONFIG_FILES([mingw32/i686/Makefile])
+
 AC_CONFIG_FILES([solaris2.7/Makefile])
+AC_CONFIG_FILES([solaris2.7/sparc/Makefile])
+
 AC_CONFIG_FILES([freebsd5.2/Makefile])
+AC_CONFIG_FILES([freebsd5.2/i586/Makefile])
+
 AC_CONFIG_FILES([freebsd6.0/Makefile])
+AC_CONFIG_FILES([freebsd6.0/i586/Makefile])
+
 AC_CONFIG_FILES([freebsd6.1/Makefile])
-AC_CONFIG_FILES([rtems/Makefile])
+AC_CONFIG_FILES([freebsd6.1/i586/Makefile])
+
+AC_CONFIG_FILES([rtems4.7/Makefile])
+AC_CONFIG_FILES([rtems4.7/arm/Makefile])
+AC_CONFIG_FILES([rtems4.7/avr/Makefile])
+AC_CONFIG_FILES([rtems4.7/h8300/Makefile])
+AC_CONFIG_FILES([rtems4.7/i386/Makefile])
+AC_CONFIG_FILES([rtems4.7/m68k/Makefile])
+AC_CONFIG_FILES([rtems4.7/mips/Makefile])
+AC_CONFIG_FILES([rtems4.7/powerpc/Makefile])
+AC_CONFIG_FILES([rtems4.7/sh/Makefile])
+AC_CONFIG_FILES([rtems4.7/sparc/Makefile])
+AC_CONFIG_FILES([rtems4.7/tic4x/Makefile])
 
 AC_OUTPUT
