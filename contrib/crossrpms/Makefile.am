@@ -9,9 +9,11 @@ SUBDIRS = @RPM_OS@ @TARGET_SUBDIRS@
 DIST_SUBDIRS  = cygwin
 DIST_SUBDIRS += freebsd5.2
 DIST_SUBDIRS += freebsd6.0
+DIST_SUBDIRS += freebsd6.1
 DIST_SUBDIRS += mingw32
 DIST_SUBDIRS += solaris2.7
 DIST_SUBDIRS += rtems
+DIST_SUBDIRS += rtems4.7
 
 EXTRA_DIST += binutils/base-binutils.add
 EXTRA_DIST += binutils/binutils.add
