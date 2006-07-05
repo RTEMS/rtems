@@ -14,6 +14,42 @@ AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
 AM_INIT_AUTOMAKE([1.9])
 
+AC_ARG_ENABLE([targets],
+  AS_HELP_STRING([--enable-targets=<targets>],[build for targets <targets>]),
+  [targets="$enable_targets"],
+  [targets=rtems]
+)
+
+case $targets in
+rtems )
+  savdir=`pwd`
+  cd $srcdir
+  targets=
+  for d in rtems4.7/*/gcc-sources.add; do
+      b=`echo $d | sed -e 's,rtems4.7/,,;s,/gcc-sources.add,,'`
+      targets="$targets $b-rtems4.7"
+  done
+  cd $savdir
+  ;;
+all )
+  savdir=`pwd`
+  cd $srcdir
+  targets=
+  for d in rtems*/*/gcc-sources.add; do
+      o=`echo $d | sed -e 's,/.*,,'`
+      a=`echo $d | sed -e 's,/gcc-sources.add,,;s,.*/,,'`
+      targets="$targets $a-$o"
+  done
+  for d in cygwin*/*/gcc-sources.add mingw*/*/gcc-sources.add \
+      freebsd*/*/gcc-sources.add; do
+      o=`echo $d | sed -e 's,/.*,,'`
+      a=`echo $d | sed -e 's,/gcc-sources.add,,;s,.*/,,'`
+      targets="$targets $a-pc-$o"
+  done
+  cd $savdir
+  ;;
+esac
+
 case "$prefix" in
 /usr)
   build_infos=0
@@ -104,6 +140,18 @@ case "${target_os}" in
   osversion=
 esac
 AC_SUBST([osversion])
+
+for f in $targets; do
+ac_cv_mytarget=`$SHELL "$ac_aux_dir/config.sub" $f` ||
+  AC_MSG_ERROR([$SHELL $ac_aux_dir/config.sub $f failed])
+  RTEMS_CANONICAL_SPLIT(mytarget)
+
+  AS_IF([test -d $srcdir/$mytarget_os/$mytarget_cpu],[
+    target_subdirs="$target_subdirs $mytarget_os/$mytarget_cpu"],[
+    AC_MSG_WARN([ignoring unsupported target $f])
+    ])
+done
+AC_SUBST(TARGET_SUBDIRS,$target_subdirs)
 
 AC_CONFIG_FILES([Makefile])
 
