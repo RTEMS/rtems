@@ -3,9 +3,6 @@
 %define gcc_version %{expand:%(echo "@GCC_VERS@" | sed -e 's,-.*,,')}
 %define gcc_rpmvers %{expand:%(echo "@GCC_VERS@" | tr - _ )}
 
-%define build_newlib 1
-%define build_infos  @build_infos@
-
 %if %build_newlib
 %define newlib_version		@NEWLIB_VERS@
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -22,76 +19,6 @@ URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %define _use_internal_dependency_generator 0
-
-# default languages to build
-%define _cxx		1
-%define _fortran	0
-%define _gcj		0
-%define _gnat		0
-%define _objc		0
-%define _libgcj 	0
-
-
-# custom defaults for specific targets
-%if "@tool_target@" == "arm-rtems@osversion@"
-# Gnat lacks arm support
-%define _gnat		0
-%endif
-
-%if "@tool_target@" == "avr-rtems@osversion@"
-%define _cxx		0
-%define _fortran	0
-%define _gcj		0
-%define _gnat		0
-%endif
-
-%if "@tool_target@" == "h8300-rtems@osversion@"
-%define _fortran	0
-%define _gcj		0
-%define _gnat		0
-%endif
-
-%if "@tool_target@" == "sh-rtems@osversion@"
-# Triggers an ICE in GCC-4.0.0
-%define _gnat		0
-%endif
-
-%if "@tool_target@" == "tic4x-rtems@osversion@"
-%define _cxx		0
-%define _gnat		0
-%define _gcj		0
-%define _fortran	0
-%endif
-
-# Allow the user to build arbitrary languages
-%{?_with_cxx:%define _cxx 1}
-%{?_with_fortran:%define _fortran 1}
-%{?_with_gcj:%define _gcj 1}
-%{?_with_gnat:%define _gnat 1}
-%{?_with_objc:%define _objc 1}
-%{?_with_libgcj:%define _libgcj 1}
-
-# Allow the user to suppress building languages
-%{?_without_cxx:%define _cxx 0}
-%{?_without_fortran:%define _fortran 0}
-%{?_without_gcj:%define _gcj 0}
-%{?_without_gnat:%define _gnat 0}
-%{?_without_objc:%define _objc 0}
-%{?_without_libgcj:%define _libgcj 0}
-
-%define build_cxx	%_cxx
-%if "%{gcc_version}" >= "4.0.0"
-%define build_f95	%_fortran
-%define build_g77	0
-%else
-%define build_f95	0
-%define build_g77	%_fortran
-%endif
-%define build_gnat	%_gnat
-%define build_gcj	%_gcj
-%define build_objc	%_objc
-%define build_libgcj	%_libgcj
-
 
 %if %build_gcj
 # Building gcj requires bison and zlib
