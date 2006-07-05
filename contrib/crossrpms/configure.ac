@@ -104,7 +104,6 @@ AC_ARG_ENABLE([infos],
 ])
 AC_SUBST(build_infos)
 
-
 AS_IF([test "${host}" != "${build}"],[
 AC_MSG_CHECKING(for RPM OS)
 case "$host" in
@@ -121,24 +120,6 @@ esac
 AC_MSG_RESULT($RPM_OS)
 ])
 AC_SUBST(RPM_OS)
-
-case "${target_os}" in
-  rtems|[rtems]RTEMS_API[])
-    TARGET_SUBDIRS=rtems
-    ;;
-  *) # ignore
-#    AC_MSG_ERROR([Unsupported target ${target}])
-esac
-AC_SUBST([TARGET_SUBDIRS])
-
-case "${target_os}" in
-  [rtems]RTEMS_API[])
-    osversion=[]RTEMS_API[]
-    ;;
-  *)
-  osversion=
-esac
-AC_SUBST([osversion])
 
 for f in $targets; do
 ac_cv_mytarget=`$SHELL "$ac_aux_dir/config.sub" $f` ||
