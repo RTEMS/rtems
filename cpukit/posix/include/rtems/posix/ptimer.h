@@ -8,7 +8,7 @@
  *  POSIX timers.
  *
  *  COPYRIGHT (c) 1998.
- *  Alfonso Escalera Piña
+ *  Alfonso Escalera PiÃ±a
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
