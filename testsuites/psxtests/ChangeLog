@@ -172,7 +172,7 @@
 	* psxfile01/test.c, psxmsgq01/init.c, psxstat/test.c,
 	psxtimer/psxtimer.c: Eliminate warnings and typos.
 
-2004-02-26	Sébastien Barré <sbarre@sdelcc.com>
+2004-02-26	SÃ©bastien BarrÃ© <sbarre@sdelcc.com>
 
 	PR 582/core
 	* psxmsgq01/init.c, psxmsgq01/psxmsgq01.scn: Fix the POSIX message
