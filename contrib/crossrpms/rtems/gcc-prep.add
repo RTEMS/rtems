@@ -1,4 +1,0 @@
-  sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
-  gcc-%{gcc_version}/gcc/version.c > gcc-%{gcc_version}/gcc/version.c~
-  mv gcc-%{gcc_version}/gcc/version.c~ gcc-%{gcc_version}/gcc/version.c
-
