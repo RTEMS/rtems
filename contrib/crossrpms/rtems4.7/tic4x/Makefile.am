@@ -14,6 +14,6 @@ NEWLIB_VERS = 1.14.0
 include $(top_srcdir)/rtems4.7/gcc.am
 GCC_OPTS +=
 
-GDB_VERS = 6.4
-GDB_RPMREL = @VERSION@
-include $(top_srcdir)/rtems4.7/gdb.am
+### GDB-6.4 doesn't support the tic4x
+## GDB_VERS = 6.4
+## include $(top_srcdir)/rtems4.7/gdb.am
