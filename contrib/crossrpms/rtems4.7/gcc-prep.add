@@ -1,4 +1,9 @@
-  sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
+%if "%{gcc_version}" < "4.1.0"
+  sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}\/newlib-%{newlib_version}-%release)/' \
   gcc-%{gcc_version}/gcc/version.c > gcc-%{gcc_version}/gcc/version.c~
+%else
+  sed -e 's/^#define VERSUFFIX.*$/#define VERSUFFIX \"(RTEMS gcc-%{gcc_version}\/newlib-%{newlib_version}-%{release})\"/' \
+    gcc-%{gcc_version}/gcc/version.c > gcc-%{gcc_version}/gcc/version.c~
+%endif
   mv gcc-%{gcc_version}/gcc/version.c~ gcc-%{gcc_version}/gcc/version.c
 
