@@ -31,32 +31,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 BINUTILS_VERS = 2.17
 BINUTILS_RPMREL = @VERSION@
-EXTRA_DIST += binutils-sources.add
-
-BINUTILS_SUBPACKAGES = $(top_srcdir)/common/common.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/binutils.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/prep.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/build.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/install.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/rpm-install.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/common/clean.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/target-binutils.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/base-binutils.add
-
-$(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am binutils-sources.add
-	cat $(BINUTILS_SUBPACKAGES) | sed \
-	  -e "/[@]SOURCES[@]/r $(srcdir)/binutils-sources.add" \
-	  -e "/[@]SOURCES[@]/d" \
-	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
-	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
-	  > $(TARGET)-binutils.spec.in
-CLEANFILES += $(TARGET)-binutils.spec.in
-
-@rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
-	$(MKSPEC) $(TARGET)-binutils.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
-noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
-
+include ../binutils.am
 
 GCC_VERS = 4.1.1
 GCC_RPMREL = @VERSION@
@@ -78,7 +53,7 @@ GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-gfortran.add
 GCC_SUBPACKAGES += $(top_srcdir)/gcc/base-gfortran.add
 GCC_SUBPACKAGES += $(top_srcdir)/gcc/target-objc.add
 
-$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add $(srcdir)/gcc-prep.add
+$(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add $(srcdir)/../gcc-prep.add
 	cat $(GCC_SUBPACKAGES) | sed \
 	  -e "/[@]SOURCES[@]/r $(srcdir)/gcc-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \

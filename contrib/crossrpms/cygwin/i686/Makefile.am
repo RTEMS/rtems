@@ -53,37 +53,9 @@ CLEANFILES += $(TARGET)-w32api.spec.in
 CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
 noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
-
-
-
 BINUTILS_VERS = 20050610-1
 BINUTILS_RPMREL = @VERSION@
-EXTRA_DIST += binutils-sources.add
-
-BINUTILS_SUBPACKAGES = $(top_srcdir)/common/common.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/binutils.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/prep.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/build.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/install.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/rpm-install.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/common/clean.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/target-binutils.add
-BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/base-binutils.add
-
-$(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binutils-sources.add
-	cat $(BINUTILS_SUBPACKAGES) | sed \
-	  -e "/[@]SOURCES[@]/r $(srcdir)/binutils-sources.add" \
-	  -e "/[@]SOURCES[@]/d" \
-	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
-	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
-	  > $(TARGET)-binutils.spec.in
-CLEANFILES += $(TARGET)-binutils.spec.in
-
-@rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
-	$(MKSPEC) $(TARGET)-binutils.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
-noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
-
+include ../binutils.am
 
 GCC_VERS = 3.4.4-1
 GCC_RPMREL = @VERSION@
