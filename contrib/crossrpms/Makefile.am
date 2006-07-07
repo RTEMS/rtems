@@ -15,4 +15,4 @@ DIST_SUBDIRS += solaris2.7
 DIST_SUBDIRS += rtems4.7
 
 EXTRA_DIST += specstrip
-EXTRA_DIST += patches/*.diff
+EXTRA_DIST += $(srcdir)/patches/*.diff
