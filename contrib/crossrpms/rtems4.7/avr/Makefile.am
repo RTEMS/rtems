@@ -12,6 +12,7 @@ GCC_VERS = 4.0.3
 GCC_RPMREL = @VERSION@
 NEWLIB_VERS = 1.14.0
 include $(top_srcdir)/rtems4.7/gcc.am
+GCC_OPTS +=
 
 GDB_VERS = 6.4
 GDB_RPMREL = @VERSION@
