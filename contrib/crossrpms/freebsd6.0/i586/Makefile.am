@@ -28,11 +28,11 @@ CLEANFILES += $(TARGET)-libs.spec.in
 CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
-BINUTILS_VERS = 2.16.1
+BINUTILS_VERS = 2.17
 BINUTILS_RPMREL = @VERSION@
 include ../binutils.am
 
-GCC_VERS = 4.1.0
+GCC_VERS = 4.1.1
 GCC_RPMREL = @VERSION@
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx,f95
