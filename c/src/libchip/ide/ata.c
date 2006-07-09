@@ -1012,6 +1012,7 @@ ata_initialize(rtems_device_major_number major,
     char               name[ATA_MAX_NAME_LENGTH];
     dev_t              device;
     ata_int_st_t      *int_st;
+
 #if defined(ATA_USE_OLD_EXCEPTIONS)
     rtems_isr_entry    old_isr;
 #else
@@ -1045,7 +1046,9 @@ ata_initialize(rtems_device_major_number major,
      */
     status = rtems_task_create(
                  rtems_build_name ('A', 'T', 'A', 'T'),
-                 ATA_DRIVER_TASK_PRIORITY,
+                 ((ata_driver_task_priority > 0) 
+		  ? ata_driver_task_priority
+		  : ATA_DRIVER_TASK_DEFAULT_PRIORITY),
                  ATA_DRIVER_TASK_STACK_SIZE,
                  RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_ASR |
                  RTEMS_INTERRUPT_LEVEL(0),

@@ -116,6 +116,7 @@
 #define __pure
 #define __pure2
 #define __unused
+#define __used
 #define	__attribute__(x)
 #endif
 #if __GNUC__ == 2 && __GNUC_MINOR__ < 5
@@ -124,6 +125,7 @@
 #define	__pure		__const
 #define __pure2
 #define __unused
+#define __used
 #endif
 #if __GNUC__ == 2 && __GNUC_MINOR__ >= 5 && __GNUC_MINOR__ < 7
 #define __dead
@@ -131,6 +133,7 @@
 #define __pure
 #define __pure2		__attribute__((__const__))
 #define __unused
+#define __used
 #endif
 #if __GNUC__ == 2 && __GNUC_MINOR__ >= 7 || __GNUC__ >= 3
 #define __dead
@@ -138,6 +141,7 @@
 #define __pure
 #define __pure2		__attribute__((__const__))
 #define __unused	__attribute__((__unused__))
+#define __used	        __attribute__((__used__))
 #endif
 
 #ifdef __GNUC__

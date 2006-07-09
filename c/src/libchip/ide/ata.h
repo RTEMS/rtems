@@ -41,9 +41,9 @@ rtems_device_driver ata_initialize(
  * FIXME: should be configured more easy...
  */
 #define ATA_DRIVER_MESSAGE_QUEUE_SIZE    50
-#define ATA_DRIVER_TASK_PRIORITY         140
 #define ATA_DRIVER_TASK_STACK_SIZE       16*1024
-
+#define ATA_DRIVER_TASK_DEFAULT_PRIORITY 140
+  extern rtems_task_priority ata_driver_task_priority;
 #ifdef __cplusplus
 }
 #endif

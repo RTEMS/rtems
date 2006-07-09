@@ -123,8 +123,15 @@ extern int rtems_telnetd_maximum_ptys;
 
 #include <rtems/imfs.h>
 
+#ifndef CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
+#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK \
+                  IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK
+#endif
 #ifdef CONFIGURE_INIT
+  int imfs_rq_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
+#endif /* CONFIGURE_INIT */
 
+#ifdef CONFIGURE_INIT
 #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
 rtems_filesystem_mount_table_t configuration_mount_table = {
 #ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
@@ -296,6 +303,18 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #include <rtems/devnull.h>
 #endif
 
+#ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
+  /* the ide driver needs the ATA driver */
+#  ifndef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+#  define CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+#  endif
+#include <libchip/ide_ctrl.h>
+#endif
+
+#ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+#include <libchip/ata.h>
+#endif
+
 #ifndef CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
 
 #ifdef CONFIGURE_INIT
@@ -312,12 +331,20 @@ rtems_driver_address_table Device_drivers[] = {
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
   DEVNULL_DRIVER_TABLE_ENTRY,
 #endif
+#ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
+  IDE_CONTROLLER_DRIVER_TABLE_ENTRY,
+#endif
+#ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+  ATA_DRIVER_TABLE_ENTRY,
+#endif
 #ifdef CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
   NULL_DRIVER_TABLE_ENTRY
 #elif !defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
     !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
     !defined(CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER)
+    !defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER) && \
+    !defined(CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER)  && \
+    !defined(CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER)
   NULL_DRIVER_TABLE_ENTRY
 #endif
 };
@@ -346,6 +373,52 @@ rtems_driver_address_table Device_drivers[] = {
 #define CONFIGURE_MAXIMUM_DEVICES   20
 #endif
 
+#ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+  /*
+   * configure the priority of the ATA driver task
+   */
+#  ifndef CONFIGURE_ATA_DRIVER_TASK_PRIORITY
+#    define CONFIGURE_ATA_DRIVER_TASK_PRIORITY ATA_DRIVER_TASK_DEFAULT_PRIORITY
+#  endif
+#  ifdef CONFIGURE_INIT
+  rtems_task_priority ata_driver_task_priority
+    = CONFIGURE_ATA_DRIVER_TASK_PRIORITY;
+#  endif /* CONFIGURE_INIT */
+#endif
+
+/*
+ * add bdbuf configuration and values for swapout task priority
+ */
+#ifdef CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+#include <rtems/bdbuf.h>
+/*
+ * configure the priority of the bdbuf swapout task
+ */
+#ifndef CONFIGURE_SWAPOUT_TASK_PRIORITY
+#define CONFIGURE_SWAPOUT_TASK_PRIORITY SWAPOUT_TASK_DEFAULT_PRIORITY
+#endif
+#ifdef CONFIGURE_INIT
+  rtems_task_priority swapout_task_priority
+    = CONFIGURE_SWAPOUT_TASK_PRIORITY;
+#endif  /* CONFIGURE_INIT */
+#ifndef CONFIGURE_HAS_OWN_BDBUF_TABLE
+
+#ifndef CONFIGURE_BDBUF_BUFFER_COUNT
+#define CONFIGURE_BDBUF_BUFFER_COUNT 64
+#endif /* CONFIGURE_BDBUF_BUFFER_COUNT */
+
+#ifndef CONFIGURE_BDBUF_BUFFER_SIZE
+#define CONFIGURE_BDBUF_BUFFER_SIZE 512
+#endif /* CONFIGURE_BDBUF_BUFFER_SIZE */
+#ifdef CONFIGURE_INIT
+rtems_bdbuf_config rtems_bdbuf_configuration[] = {
+  {CONFIGURE_BDBUF_BUFFER_SIZE,CONFIGURE_BDBUF_BUFFER_COUNT,NULL}
+};
+int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
+                                     /sizeof(rtems_bdbuf_configuration[0]));
+#endif /* CONFIGURE_INIT */
+#endif /* CONFIGURE_HAS_OWN_BDBUF_TABLE        */
+#endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
 /*
  *  Default Multiprocessing Configuration Table.  The defaults are
  *  appropriate for most of the RTEMS Multiprocessor Test Suite.  Each

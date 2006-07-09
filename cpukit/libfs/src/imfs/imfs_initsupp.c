@@ -31,6 +31,37 @@
 #endif
 
 /*
+ *  IMFS_determine_bytes_per_block
+ */
+int imfs_memfile_bytes_per_block = 0;
+
+static int IMFS_determine_bytes_per_block(
+  int *dest_bytes_per_block,
+  int requested_bytes_per_block,
+  int default_bytes_per_block
+)
+{
+  rtems_boolean is_valid = FALSE;
+  int bit_mask;
+  /*
+   * check, whether requested bytes per block is valid
+   */
+  for (bit_mask = 16;
+       !is_valid && (bit_mask <= 512); 
+       bit_mask <<= 1) {
+    if (bit_mask == requested_bytes_per_block) {
+      is_valid = TRUE;
+    }
+  }
+  *dest_bytes_per_block = ((is_valid) 
+			   ? requested_bytes_per_block
+			   : default_bytes_per_block);
+  return 0;
+    
+}
+
+
+/*
  *  IMFS_initialize
  */
 
@@ -44,6 +75,13 @@ int IMFS_initialize_support(
   IMFS_fs_info_t                        *fs_info;
   IMFS_jnode_t                          *jnode;
 
+  /*
+   * determine/check value for imfs_memfile_bytes_per_block
+   */
+  IMFS_determine_bytes_per_block(&imfs_memfile_bytes_per_block,
+				 imfs_rq_memfile_bytes_per_block,
+				 IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK);
+  
   /*
    *  Create the root node
    *

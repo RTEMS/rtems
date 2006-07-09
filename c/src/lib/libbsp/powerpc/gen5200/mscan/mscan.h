@@ -26,6 +26,11 @@
 extern "C" {
 #endif
 
+#define MIN_NO_OF_TQ         7
+#define NO_OF_TABLE_ENTRIES  4
+#define TSEG_1               1
+#define TSEG_2               2
+#define SJW                  3
 
 #define MSCAN_MAX_DATA_BYTES     8
 #define MSCAN_RX_BUFF_NUM        4
@@ -34,13 +39,19 @@ extern "C" {
 
 #define MSCAN_A_DEV_NAME         "/dev/mscana"
 #define MSCAN_B_DEV_NAME         "/dev/mscanb"
+#define MSCAN_0_DEV_NAME         "/dev/mscan0"
+#define MSCAN_1_DEV_NAME         "/dev/mscan1"
 #define MSCAN_A                  0
 #define MSCAN_B                  1
 
-#define MSCAN_INITIALIZED_MODE   0
-#define MSCAN_INIT_NORMAL_MODE   1
-#define MSCAN_NORMAL_MODE        2
-#define MSCAN_SLEEP_MODE         4
+#define MSCAN_NON_INITIALIZED_MODE   0
+#define MSCAN_INITIALIZED_MODE       1
+#define MSCAN_INIT_NORMAL_MODE       2
+#define MSCAN_NORMAL_MODE            4
+#define MSCAN_SLEEP_MODE             8
+
+#define CAN_BIT_RATE_MAX         1000000
+#define CAN_BIT_RATE_MIN         100000
 
 #define CAN_BIT_RATE             100000
 #define CAN_MAX_NO_OF_TQ         25
@@ -54,7 +65,10 @@ extern "C" {
 #define MSCAN_GET_RX_ID_MASK     4
 #define MSCAN_SET_TX_ID          5
 #define MSCAN_GET_TX_ID          6
+
 #define TOUCAN_MSCAN_INIT        7
+#define MSCAN_SET_BAUDRATE       8
+#define SET_TX_BUF_NO            9
 
 #define MSCAN_RX_BUFF_NOACTIVE   (0 << 4)
 #define MSCAN_RX_BUFF_EMPTY      (1 << 6)
@@ -62,8 +76,7 @@ extern "C" {
 #define MSCAN_RX_BUFF_OVERRUN    ((MSCAN_RX_BUFF_EMPTY) | (MSCAN_RX_BUFF_FULL))
 #define MSCAN_RX_BUFF_BUSY       (1 << 4)
 
-#define MSCAN_A_MBUFF_MASK       0x07
-#define MSCAN_B_MBUFF_MASK       0x07
+#define MSCAN_MBUFF_MASK         0x07
 
 #define MSCAN_TX_BUFF0           (1 << 0)
 #define MSCAN_TX_BUFF1           (1 << 1)
@@ -175,7 +188,7 @@ extern "C" {
 #define SET_IDR7(u16)            SET_IDR1(u16)
 
 #define GET_IDR0(u16)            ((uint16_t) ((u16) << 3))
-#define GET_IDR1(u16)            ((uint16_t)((u16) >> 5))
+#define GET_IDR1(u16)            ((uint16_t)(((u16) >> 5)&0x0007))
 
 #define GET_IDR2(u16)            GET_IDR0(u16)
 #define GET_IDR3(u16)            GET_IDR1(u16)
@@ -186,8 +199,31 @@ extern "C" {
 #define GET_IDR6(u16)            GET_IDR0(u16)
 #define GET_IDR7(u16)            GET_IDR1(u16)
 
-#define NO_OF_MSCAN_A_RX_BUFF 	 20
-#define NO_OF_MSCAN_B_RX_BUFF 	 20
+#define SET_IDMR0(u16)           ((uint8_t)((u16) >> 3))
+#define SET_IDMR1(u16)           ((uint8_t)((((u16) & 0x0007) << 5))|0x001F)
+
+#define SET_IDMR2(u16)           SET_IDMR0(u16)
+#define SET_IDMR3(u16)           SET_IDMR1(u16)
+
+#define SET_IDMR4(u16)           SET_IDMR0(u16)
+#define SET_IDMR5(u16)           SET_IDMR1(u16)
+
+#define SET_IDMR6(u16)           SET_IDMR0(u16)
+#define SET_IDMR7(u16)           SET_IDMR1(u16)
+
+#define GET_IDMR0(u16)           ((uint16_t) ((u16) << 3))
+#define GET_IDMR1(u16)           ((uint16_t)(((u16) >> 5)&0x0007))
+
+#define GET_IDMR2(u16)           GET_IDMR0(u16)
+#define GET_IDMR3(u16)           GET_IDMR1(u16)
+
+#define GET_IDMR4(u16)           GET_IDMR0(u16)
+#define GET_IDMR5(u16)           GET_IDMR1(u16)
+
+#define GET_IDMR6(u16)           GET_IDMR0(u16)
+#define GET_IDMR7(u16)           GET_IDMR1(u16)
+
+#define NO_OF_MSCAN_RX_BUFF 	 20
 #define MSCAN_MESSAGE_SIZE(size) (((size)%CPU_ALIGNMENT) ? (((size) + CPU_ALIGNMENT)-((size) + CPU_ALIGNMENT)%CPU_ALIGNMENT) : (size))
 
 #define TX_BUFFER_0              0
@@ -198,6 +234,11 @@ extern "C" {
 #define RX_BUFFER_1              1
 #define RX_BUFFER_2              2
 #define RX_BUFFER_3              3
+
+#define NO_OF_MSCAN_TX_BUFF      20
+#define RING_BUFFER_EMPTY(rbuff) ((((rbuff)->head) == ((rbuff)->tail)) ? TRUE : FALSE)
+#define RING_BUFFER_FULL(rbuff)  ((((rbuff)->head) == ((rbuff)->tail)) ? TRUE : FALSE)
+
 
 typedef struct _mscan_handle
   {
@@ -212,22 +253,33 @@ struct can_message
   uint16_t mess_time_stamp;
   uint8_t  mess_data[MSCAN_MAX_DATA_BYTES];
   uint8_t  mess_len;
+  uint32_t toucan_tx_id;
   };
+
+volatile struct ring_buf
+    {
+    volatile struct can_message *buf_ptr;
+    volatile struct can_message *head_ptr;
+    volatile struct can_message *tail_ptr;
+    };
 
 struct mpc5200_rx_cntrl
   {
   struct can_message can_rx_message[MSCAN_RX_BUFF_NUM];
   };
 
-
 struct mscan_channel_info
   {
   volatile struct mpc5200_mscan *regs;
   uint32_t   int_rx_err;
-  rtems_id           rx_qid;
+  rtems_id   rx_qid;
   uint32_t   rx_qname;
+  rtems_id   tx_rb_sid;
+  uint32_t   tx_rb_sname;
   uint8_t    id_extended;
   uint8_t    mode;
+  uint8_t    tx_buf_no;
+  volatile struct ring_buf tx_ring_buf;
   };
 
 struct mscan_rx_parms
@@ -248,6 +300,8 @@ struct mscan_ctrl_parms
     uint32_t ctrl_id;
     uint32_t ctrl_id_mask;
     uint8_t  ctrl_reg_no;
+    uint8_t  ctrl_tx_buf_no;
+    uint32_t ctrl_can_bitrate;
     void (*toucan_cb_fnc)(int16_t);
   };
 
@@ -304,6 +358,8 @@ void mpc5200_mscan_perform_init_mode_settings(volatile struct mpc5200_mscan *);
 void mpc5200_mscan_perform_normal_mode_settings(volatile struct mpc5200_mscan *);
 rtems_status_code mpc5200_mscan_set_mode(rtems_device_minor_number, uint8_t);
 rtems_status_code mscan_channel_initialize(rtems_device_major_number, rtems_device_minor_number);
+uint8_t prescaler_calculation(uint32_t, uint32_t, uint8_t *);
+void mpc5200_mscan_perform_bit_time_settings(volatile struct mpc5200_mscan *, uint32_t, uint32_t);
 
 
 #ifdef __cplusplus

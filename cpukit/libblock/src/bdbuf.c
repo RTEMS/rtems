@@ -28,8 +28,7 @@
 #define BLKDEV_FATAL_BDBUF_SWAPOUT     BLKDEV_FATAL_ERROR(2)
 
 
-#define SWAPOUT_PRIORITY 15
-#define SWAPOUT_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE * 2)
+#define SWAPOUT_TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE * 2)
 
 #define READ_MULTIPLE
 
@@ -863,9 +862,11 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
 
     /* Create and start swapout task */
     rc = rtems_task_create(
-        rtems_build_name('B', 'S', 'W', 'P'),
-        SWAPOUT_PRIORITY,
-        SWAPOUT_STACK_SIZE,
+        rtems_build_name('B', 'S', 'W', 'P'),	
+        ((swapout_task_priority > 0) 
+	 ? swapout_task_priority
+	 : SWAPOUT_TASK_DEFAULT_PRIORITY),
+        SWAPOUT_TASK_STACK_SIZE,
         RTEMS_DEFAULT_MODES | RTEMS_NO_PREEMPT,
         RTEMS_DEFAULT_ATTRIBUTES,
         &bd_ctx.swapout_task);

@@ -91,6 +91,9 @@ typedef struct rtems_bdbuf_config {
 extern rtems_bdbuf_config rtems_bdbuf_configuration[];
 extern int rtems_bdbuf_configuration_size;
 
+#define SWAPOUT_TASK_DEFAULT_PRIORITY 15
+extern rtems_task_priority swapout_task_priority;
+
 /* rtems_bdbuf_init --
  *     Prepare buffering layer to work - initialize buffer descritors
  *     and (if it is neccessary) buffers. Buffers will be allocated accoriding

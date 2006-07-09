@@ -148,7 +148,7 @@ pcf8563_get_time(int minor, rtems_time_of_day *time)
     v1 = info[PCF8563_DAY_ADR-PCF8563_SECOND_ADR] & PCF8563_DAY_MASK;
     time->day = From_BCD(v1);
 
-    v1 = info[PCF8563_HOUR_ADR-PCF8563_SECOND_ADR] & PCF8563_HOUR_ADR;
+    v1 = info[PCF8563_HOUR_ADR-PCF8563_SECOND_ADR] & PCF8563_HOUR_MASK;
     time->hour = From_BCD(v1);
 
     v1 = info[PCF8563_MINUTE_ADR-PCF8563_SECOND_ADR] & PCF8563_MINUTE_MASK;
@@ -211,7 +211,7 @@ pcf8563_set_time(int minor, rtems_time_of_day *time)
      */
     try = 0;
     do {
-        status = i2c_write(bus, addr, info, 8);
+        status = i2c_write(bus, addr, info,sizeof(info));
         try++;
     } while ((status != I2C_SUCCESSFUL) && (try < 10));
 

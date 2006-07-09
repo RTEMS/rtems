@@ -61,13 +61,15 @@
  */
 /* ROM definitions (2 MB) */
 #define	ROM_START	0xFFE00000
-#define	ROM_END		0xFFFFFFFF
+#define ROM_SIZE        0x00200000
+#define	ROM_END		(ROM_START+ROM_SIZE-1)
 #define	BOOT_START      ROM_START
 #define	BOOT_END        ROM_END
 
 /* SDRAM definitions (256 MB) */
-#define	RAM_START    0x00000000
-#define	RAM_END      0x0FFFFFFF
+#define	RAM_START       0x00000000
+#define RAM_SIZE        0x10000000
+#define	RAM_END		(RAM_START+RAM_SIZE-1)
 
 /* DPRAM definitions (64 KB) */
 #define	DPRAM_START  0xFF000000
@@ -198,7 +200,8 @@ void bsp_cleanup(void);
 #define UARTS_USE_TERMIOS_INT   1
 
 /* ata modes */
-#undef ATA_USE_INT
+/* #undef ATA_USE_INT */
+#define ATA_USE_INT
 
 /* clock settings */
 #if defined(HAS_UBOOT)
@@ -210,6 +213,21 @@ void bsp_cleanup(void);
 #define XLB_CLOCK 66000000   /* 66 MHz */
 #define G2_CLOCK  231000000  /* 231 MHz */
 #endif
+
+/*
+ *  Convert decrement value to tenths of microsecnds (used by
+ *  shared timer driver).
+ *
+ *    + CPU has a XLB_CLOCK bus,
+ *    + There are 4 bus cycles per click
+ *    + We return value in 1/10 microsecond units.
+ *   Modified following equation to integer equation to remove
+ *   floating point math.
+ *   (int) ((float)(_value) / ((XLB_CLOCK/1000000 * 0.1) / 4.0))
+ */
+
+#define BSP_Convert_decrementer( _value ) \
+  (int) (((_value) * 4000) / (XLB_CLOCK/10000))
 
 /* slicetimer settings */
 #define USE_SLICETIMER_0     TRUE

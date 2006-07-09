@@ -42,7 +42,7 @@
 #ifdef __GNUC__
 #define __MAKE_SET(set, sym)						\
 	static void const * const __set_##set##_sym_##sym 		\
-	__attribute((section("set_" #set))) __unused = &sym
+	__attribute((section("set_" #set))) __used = &sym
 #else /* !__GNUC__ */
 #ifndef lint
 #error "This file needs to be compiled by GCC or lint"

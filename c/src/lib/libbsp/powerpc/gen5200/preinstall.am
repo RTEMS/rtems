@@ -77,9 +77,13 @@ $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 
-$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+$(PROJECT_LIB)/linkcmds.brs5l: startup/linkcmds.brs5l $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.brs5l
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.brs5l
+
+$(PROJECT_LIB)/linkcmds.pm520: startup/linkcmds.pm520 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.pm520
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.pm520
 
 $(PROJECT_LIB)/linkcmds.pm520: startup/linkcmds.pm520 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.pm520

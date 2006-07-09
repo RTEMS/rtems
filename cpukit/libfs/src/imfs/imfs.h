@@ -80,7 +80,15 @@ typedef struct {
  *    max_filesize with blocks of  512 is 1,082,195,456
  */
 
-#define IMFS_MEMFILE_BYTES_PER_BLOCK     128
+#define IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK     128
+  extern int imfs_rq_memfile_bytes_per_block;
+  /*
+   * FIXME: make and use derivates from this, 
+   * a shift count and a mask
+   */
+  extern int imfs_memfile_bytes_per_block;
+
+#define IMFS_MEMFILE_BYTES_PER_BLOCK imfs_memfile_bytes_per_block  
 #define IMFS_MEMFILE_BLOCK_SLOTS \
   (IMFS_MEMFILE_BYTES_PER_BLOCK / sizeof(void *))
 

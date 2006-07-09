@@ -43,6 +43,7 @@
  * Kernel variables for tcp.
  */
 
+#ifdef __BSD_VISIBLE
 /*
  * Tcp control block, one per tcp; fields:
  */
@@ -196,6 +197,7 @@ struct rmxp_tao {
 #define	intotcpcb(ip)	((struct tcpcb *)(ip)->inp_ppcb)
 #define	intotw(ip)	((struct tcptw *)(ip)->inp_ppcb)
 #define	sototcpcb(so)	(intotcpcb(sotoinpcb(so)))
+#endif /* __BSD_VISIBLE */
 
 /*
  * The smoothed round-trip time and estimated variance

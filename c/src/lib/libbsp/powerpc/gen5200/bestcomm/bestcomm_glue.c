@@ -46,12 +46,15 @@ void bestcomm_glue_irq_enable
 |    none                                                                   |
 \*=========================================================================*/
 {
+  rtems_interrupt_level level;
   if (0 != ((1UL<<bestcomm_taskno) & SDMA_INT_BIT_IMPL)) {
+    rtems_interrupt_disable(level);
     /*
      * valid task number
      * enable interrupt in bestcomm mask
      */
     SDMA_INT_ENABLE(&mpc5200.IntMask,bestcomm_taskno);
+    rtems_interrupt_enable(level);
   }
 }
 
@@ -73,12 +76,15 @@ void bestcomm_glue_irq_disable
 |    none                                                                   |
 \*=========================================================================*/
 {
+  rtems_interrupt_level level;
   if (0 != ((1UL<<bestcomm_taskno) & SDMA_INT_BIT_IMPL)) {
+    rtems_interrupt_disable(level);
     /*
      * valid task number
      * disable interrupt in bestcomm mask
      */
     SDMA_INT_DISABLE(&mpc5200.IntMask,bestcomm_taskno);
+    rtems_interrupt_enable(level);
   }
 }
 
@@ -245,7 +251,7 @@ void bestcomm_glue_init
     TasksLoadImage( (void *)&(mpc5200.taskBar));
 
     /*
-     * FIXME: initialize interrupt dispatcher
+     * initialize interrupt dispatcher
      */
       if(!BSP_install_rtems_irq_handler (&bestcomm_glue_irq_data)) {
 	rtems_panic ("Can't attach MPC5x00 BestComm interrupt handler\n");

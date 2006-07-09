@@ -543,6 +543,15 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
   rtems_current_user_env->euid=
   rtems_current_user_env->egid=0;
 
+  /*
+   * newlib delays the creation of default stdio 'til the 
+   * first I/O operation, therefore we must perform dummy 
+   * operations before we redirect stdio
+   */
+  ftell(stdin);
+  ftell(stdout);
+  ftell(stderr);
+
   stdin =fopen(devname,"r+");
 
   if (!stdin) {

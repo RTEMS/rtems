@@ -29,7 +29,7 @@ start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds startup/linkcmds.pm520
+dist_project_lib_DATA += startup/linkcmds.brs5l startup/linkcmds.pm520
 
 noinst_PROGRAMS += bestcomm.rel
 bestcomm_rel_SOURCES = bestcomm/include/ppctypes.h \
@@ -90,11 +90,13 @@ noinst_PROGRAMS += nvram.rel
 nvram_rel_SOURCES = nvram/nvram.c nvram/nvram.h nvram/m93cxx.h
 nvram_rel_CPPFLAGS = $(AM_CPPFLAGS)
 nvram_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+include_bsp_HEADERS += nvram/nvram.h
 
 noinst_PROGRAMS += slicetimer.rel
 slicetimer_rel_SOURCES = slicetimer/slicetimer.c slicetimer/slicetimer.h
 slicetimer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 slicetimer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+include_bsp_HEADERS += slicetimer/slicetimer.h
 
 noinst_PROGRAMS += tod.rel
 tod_rel_SOURCES = tod/todcfg.c tod/pcf8563.c tod/pcf8563.h \
@@ -108,7 +110,7 @@ noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/main.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c startup/cpuinit.c
+    ../../shared/gnatinstallhandler.c startup/cpuinit.c start/start.S
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

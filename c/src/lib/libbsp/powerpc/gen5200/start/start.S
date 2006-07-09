@@ -111,8 +111,8 @@
 .endm
 
 .macro LWI reg, value
-	lis \reg , \value@h
-	ori \reg , \reg, \value@l
+	lis \reg , (\value)@h
+	ori \reg , \reg, (\value)@l
 	sync
 .endm 
 
@@ -286,7 +286,7 @@ start:
 	 
 	
 
-#ifdef RSM5LOG	
+#ifdef BRS5L
 	LWI	r30, CSBOOTROM_VAL
 	stw	r30, CSBOOTROM(r31)	 	/* Set CSBOOTROM */
 	
@@ -299,7 +299,9 @@ start:
 	rlwinm	r30, r30,17,15,31
 	stw	r30, CS0STR(r31) 		/* Set CS0STR */	
 			
-	LWI	r30, ROM_END
+	lis	r30, ROM_END@h
+	ori	r30, r30, ROM_END@l
+	
 	rlwinm	r30, r30,17,15,31
 	stw	r30, CS0STP(r31) 		/* Set CS0STP */
 			
@@ -327,7 +329,7 @@ reloc_in_CS0:
 	ori	r30,r30,0x1a                    /* size code: bank is 128MByte */
 	stw	r30,SDRAMCS0(r31) 		/* Set SDRAMCS0 */
 
-	LWI	r30,(RAM_END+1-RAM_START)/2 
+	LWI	r30,(RAM_SIZE)>>1 
 	ori	r30,r30,0x1a                    /* size code: bank is 128MByte */
 	stw	r30, SDRAMCS1(r31) 		/* Set SDRAMCS1 */
 	
@@ -441,12 +443,13 @@ skip_ROM_start:
 	stw	r30,ADREN(r31)			/* enable CS1 */
 
 /* clear entire on chip SRAM (unique for ROM startup) */
-	LWI	r30, (MBAR+ONCHIP_SRAM_OFFSET)	/* get start address of onchip SRAM */
+	lis	r30, (MBAR+ONCHIP_SRAM_OFFSET)@h	/* get start address of onchip SRAM */
+	ori	r30,r30,(MBAR+ONCHIP_SRAM_OFFSET)@l
         LWI	r29, ONCHIP_SRAM_SIZE		/* get size of onchip SRAM */
 	
         bl      clr_mem				/* Clear onchip SRAM */
 	
-#endif /* defined(RSM5LOG) */
+#endif /* defined(BRS5L) */
 /* clear .bss section (unique for ROM startup) */
 	LWI	r30, _bss_start			/* get start address of bss section */
         LWI	r29, _bss_size  		/* get size of bss section */
@@ -522,7 +525,7 @@ SDRAM_init:
 	LWI	r30, 0xCCC70004			/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */ 
 	stw	r30, CFG2(r31)			/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
 	
-#ifdef RSM5LOG
+#ifdef BRS5L
 	LWI	r30, 0xD1470000 		/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
 	stw	r30, CTRL(r31)			/* Refresh counter=0xFFFF */
 	
@@ -608,7 +611,7 @@ copy_image_byte:
 	
 copy_image_end:
 	blr
-#endif /* defined(RSM5LOG) */
+#endif /* defined(BRS5L) */
 
 FID_DCache:
 	mflr	r26			
@@ -740,10 +743,6 @@ FPU_init:
 	mtfsfi	6, 0
 	mtfsfi	7, 0
 		
-	 
-	CLRBITS r30, r29, MSR_FP		/* disable FPU and FPU exceptions  */
-	mtmsr	r30
-	
 	blr
 
 SPRG_init:					/* initialize registers */

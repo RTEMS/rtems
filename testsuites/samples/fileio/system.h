@@ -32,30 +32,9 @@ rtems_task Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-
-#define CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
-
-#ifdef CONFIGURE_INIT
-rtems_driver_address_table Device_drivers[] =
-	{
-	CONSOLE_DRIVER_TABLE_ENTRY
-	,CLOCK_DRIVER_TABLE_ENTRY
-#ifdef RTEMS_BSP_HAS_IDE_DRIVER
-	,IDE_CONTROLLER_DRIVER_TABLE_ENTRY
-	/* important: ATA driver must be after ide drivers */
-	,ATA_DRIVER_TABLE_ENTRY
-#endif
-	};
-
-#include <rtems/bdbuf.h>
-rtems_bdbuf_config rtems_bdbuf_configuration[] = {
-  {512,128,NULL}
-};
-int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
-				     /sizeof(rtems_bdbuf_configuration[0]));
-#endif
-
 
 /*
  * XXX: these values are higher than needed...

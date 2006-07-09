@@ -300,12 +300,15 @@ typedef struct mpc5200_
 #define GPT_STATUS_RESET           0x0000000F
 #define GPT_STATUS_TEXP            (1 << 3)
 #define GPT_STATUS_PIN             (1 << 8)
+#define GPT_EMSEL_GPIO_DIR         (2 << 4)
+#define GPT_EMSEL_GPIO_OUT         (1 << 4)
 #define GPT_EMSEL_GPIO_OUT_HIGH    (3 << 4)
 #define GPT_EMSEL_TIMER_MS_GPIO    (4 << 0)
 #define GPT_EMSEL_GPIO_IN          (0 << 0)
 #define GPT_EMSEL_CE               (1 << 12)
 #define GPT_EMSEL_ST_CONT          (1 << 10)
 #define GPT_EMSEL_INTEN            (1 << 8)
+#define GPT_EMSEL_WDEN				  (1 << 15)
 
 #define GPT0                       0
 #define GPT1                       1
