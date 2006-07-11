@@ -1,8 +1,6 @@
 %define binutils_version @BINUTILS_VERS@
 %define binutils_rpmvers %{expand:%(echo @BINUTILS_VERS@ | tr - _)} 
 
-%define build_infos @build_infos@
-
 Name:		@rpmprefix@@tool_target@-binutils
 Summary:	Binutils for target @tool_target@
 Group:		Development/Tools
