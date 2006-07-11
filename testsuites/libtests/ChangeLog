@@ -1,3 +1,9 @@
+2006-07-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cpuuse/Makefile.am, malloctest/Makefile.am, rtems++/Makefile.am,
+	rtmonuse/Makefile.am, stackchk/Makefile.am: Eliminate scndir,
+	docdir. Use rtems_testsdir instead.
+
 2006-02-08	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems++/Task1.cc: Fix warnings.
