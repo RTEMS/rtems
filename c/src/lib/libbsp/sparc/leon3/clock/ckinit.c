@@ -134,10 +134,11 @@ void Install_clock(
   while (i < amba_conf.apbslv.devnr) 
   {
     conf = amba_get_confword(amba_conf.apbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_GPTIMER))
-    {
+    if ((amba_vendor(conf) == VENDOR_GAISLER) &&
+       (amba_device(conf) == GAISLER_GPTIMER)) {
       iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
-      LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) amba_iobar_start(amba_conf.apbmst, iobar);
+      LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *)
+        amba_iobar_start(amba_conf.apbmst, iobar);
       break;
     }
     i++;

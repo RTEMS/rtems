@@ -84,6 +84,14 @@ leon_open_eth_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 leon_open_eth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if HAS_NETWORKING
+noinst_PROGRAMS += leon_greth.rel
+leon_greth_rel_SOURCES = leon_greth/leon_greth.c
+leon_greth_rel_CPPFLAGS = $(AM_CPPFLAGS)
+leon_greth_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+leon_greth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel amba.rel console.rel clock.rel timer.rel \
@@ -91,6 +99,10 @@ libbsp_a_LIBADD = startup.rel amba.rel console.rel clock.rel timer.rel \
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += leon_open_eth.rel
+endif
+
+if HAS_NETWORKING
+libbsp_a_LIBADD += leon_greth.rel
 endif
 
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \

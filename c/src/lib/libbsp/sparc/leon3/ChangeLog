@@ -1,3 +1,13 @@
+2006-07-11	Jerry Needell <jerry.needell@unh.edu>
+
+	* ChangeLog, Makefile.am, clock/ckinit.c, include/amba.h,
+	include/bsp.h: Merge SPARC updates from 4.6 branch.  Original
+	modifications by Gaisler Enterprises.
+
+2006-07-03	Jerry Needell <jerry.needell@unh.edu>
+
+	* leon_greth/leon_greth.c, include/bsp.h, include/amba.h: ported from 4.6.6
+
 2006-06-24	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Add .rela.dyn sections.
