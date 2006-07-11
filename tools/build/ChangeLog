@@ -1,20 +1,26 @@
-2006-10-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+2006-07-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* ampolish3.in: Remove.
+	* Makefile.am: Remove ampolish3.
+	* configure.ac: Remove ampolish3, perl.
+
+2006-01-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* ampolish3.in: Check Makefile.am for SUBDIRS.
 	Add all-am: for PREINSTALL_FILES.
 
-2006-10-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+2006-01-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* ampolish3.in: Add all: for PREINSTALL_FILES.
 	Add all-local for TMPINSTALL_FILES.
 	Misc bug fixes.
 
-2006-10-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+2006-01-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* ampolish3.in: Check if Makefile.am already contains CLEANFILES or
 	DISTCLEANFILES.
 
-2006-10-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+2006-01-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* ampolish3.in: Update.
 

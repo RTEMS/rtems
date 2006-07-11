@@ -15,7 +15,6 @@ unhex_SOURCES = unhex.c
 binpatch_SOURCES = binpatch.c
 
 bin_SCRIPTS = install-if-change
-bin_SCRIPTS += ampolish3
 
 noinst_SCRIPTS = search-id.sh multigen cvsignore-add.sh
 EXTRA_DIST = search-id.sh multigen cvsignore-add.sh
