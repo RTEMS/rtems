@@ -27,12 +27,16 @@ rtems_task Init(
 /* configuration information */
 
 #include <bsp.h> /* for device driver prototypes */
+#ifdef RTEMS_BSP_HAS_IDE_DRIVER
 #include <libchip/ata.h> /* for ata driver prototype */
 #include <libchip/ide_ctrl.h> /* for general ide driver prototype */
+#endif
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#ifdef RTEMS_BSP_HAS_IDE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
+#endif
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
