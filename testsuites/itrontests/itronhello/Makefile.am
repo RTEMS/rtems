@@ -7,10 +7,8 @@ MANAGERS = all
 rtems_tests_PROGRAMS = itronhello.exe
 itronhello_exe_SOURCES = init.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = itronhello.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = itronhello.doc
+dist_rtems_tests_DATA = itronhello.scn
+dist_rtems_tests_DATA += itronhello.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

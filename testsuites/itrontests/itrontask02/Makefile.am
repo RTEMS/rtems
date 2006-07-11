@@ -7,10 +7,8 @@ MANAGERS = all
 rtems_tests_PROGRAMS = itrontask02.exe
 itrontask02_exe_SOURCES = init.c dormant.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = itrontask02.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = itrontask02.doc
+dist_rtems_tests_DATA = itrontask02.scn
+dist_rtems_tests_DATA += itrontask02.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

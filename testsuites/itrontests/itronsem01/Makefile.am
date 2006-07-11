@@ -7,10 +7,8 @@ MANAGERS = all
 rtems_tests_PROGRAMS = itronsem01.exe
 itronsem01_exe_SOURCES = init.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = itronsem01.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = itronsem01.doc
+dist_rtems_tests_DATA = itronsem01.scn
+dist_rtems_tests_DATA += itronsem01.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
