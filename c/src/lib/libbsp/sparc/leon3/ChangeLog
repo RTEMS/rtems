@@ -1,5 +1,10 @@
 2006-07-11	Joel Sherrill <joel@OARcorp.com>
 
+	* leon_greth/.cvsignore, leon_greth/leon_greth.c: New files.
+	Missed adding in previous commit of merge.
+
+2006-07-11	Joel Sherrill <joel@OARcorp.com>
+
 	* clock/ckinit.c, timer/timer.c: Make sure LEON3_Timer_Regs is
 	initialized for the timer driver.
 
