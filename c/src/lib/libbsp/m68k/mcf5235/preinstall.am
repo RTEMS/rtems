@@ -56,3 +56,11 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
+$(PROJECT_LIB)/linkcmdsflash: startup/linkcmdsflash $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmdsflash
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmdsflash
+
+$(PROJECT_LIB)/linkcmdsram: startup/linkcmdsram $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmdsram
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmdsram
+
