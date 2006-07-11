@@ -61,6 +61,38 @@ rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
 /*
+ *  LEON3_Find_timer
+ *
+ *  This method searches for the timer on the AMBA bus.
+ *
+ *  Input parameters:  NONE
+ *
+ *  Output parameters:  NONE
+ *
+ *  Return values:      NONE
+ */
+
+void LEON3_Find_timer(void)
+{
+  int i = 0;
+  unsigned int iobar, conf;
+  
+  while (i < amba_conf.apbslv.devnr) 
+  {
+    conf = amba_get_confword(amba_conf.apbslv, i, 0);
+    if ((amba_vendor(conf) == VENDOR_GAISLER) &&
+       (amba_device(conf) == GAISLER_GPTIMER)) {
+      iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
+      LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *)
+        amba_iobar_start(amba_conf.apbmst, iobar);
+      break;
+    }
+    i++;
+  }
+
+}
+
+/*
  *  Clock_isr
  *
  *  This is the clock tick interrupt handler.
@@ -123,35 +155,18 @@ void Install_clock(
   rtems_isr_entry clock_isr
 )
 {
-  int i;
-  unsigned int iobar, conf;
-
   Clock_driver_ticks = 0;
-
-  /* Find GP Timer */
-  
-  i = 0;
-  while (i < amba_conf.apbslv.devnr) 
-  {
-    conf = amba_get_confword(amba_conf.apbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) &&
-       (amba_device(conf) == GAISLER_GPTIMER)) {
-      iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
-      LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *)
-        amba_iobar_start(amba_conf.apbmst, iobar);
-      break;
-    }
-    i++;
-  }
 
   clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3;
 
   if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, LEON_TRAP_TYPE(clkirq), 1 );
+    Old_ticker = (rtems_isr_entry)
+      set_vector( clock_isr, LEON_TRAP_TYPE(clkirq), 1 );
 
     LEON3_Timer_Regs->reload_t0 = CPU_SPARC_CLICKS_PER_TICK - 1;
 
-    LEON3_Timer_Regs->conf_t0 = LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | LEON3_GPTIMER_LD | LEON3_GPTIMER_IRQEN;
+    LEON3_Timer_Regs->conf_t0 = LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | 
+        LEON3_GPTIMER_LD | LEON3_GPTIMER_IRQEN;
  
     atexit( Clock_exit );
   }
