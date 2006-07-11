@@ -7,10 +7,8 @@ MANAGERS = io event timer
 rtems_tests_PROGRAMS = sp11.exe
 sp11_exe_SOURCES = init.c task1.c task2.c timer.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp11.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp11.doc
+dist_rtems_tests_DATA = sp11.scn
+dist_rtems_tests_DATA += sp11.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

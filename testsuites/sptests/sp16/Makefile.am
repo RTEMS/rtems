@@ -7,10 +7,8 @@ MANAGERS = io region
 rtems_tests_PROGRAMS = sp16.exe
 sp16_exe_SOURCES = init.c task1.c task2.c task3.c task4.c task5.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp16.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp16.doc
+dist_rtems_tests_DATA = sp16.scn
+dist_rtems_tests_DATA += sp16.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

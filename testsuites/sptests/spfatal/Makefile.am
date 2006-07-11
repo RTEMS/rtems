@@ -7,10 +7,8 @@ MANAGERS = io
 rtems_tests_PROGRAMS = spfatal.exe
 spfatal_exe_SOURCES = init.c puterr.c fatal.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = spfatal.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = spfatal.doc
+dist_rtems_tests_DATA = spfatal.scn
+dist_rtems_tests_DATA += spfatal.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

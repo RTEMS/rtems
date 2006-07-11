@@ -11,10 +11,8 @@ sp09_exe_SOURCES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen0
     screen11.c screen12.c screen13.c screen14.c task1.c task2.c task3.c \
     task4.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp09.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp09.doc
+dist_rtems_tests_DATA = sp09.scn
+dist_rtems_tests_DATA += sp09.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

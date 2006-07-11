@@ -7,10 +7,8 @@ MANAGERS = io signal timer
 rtems_tests_PROGRAMS = sp14.exe
 sp14_exe_SOURCES = init.c asr.c task1.c task2.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp14.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp14.doc
+dist_rtems_tests_DATA = sp14.scn
+dist_rtems_tests_DATA += sp14.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

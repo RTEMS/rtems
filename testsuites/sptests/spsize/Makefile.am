@@ -7,8 +7,7 @@ MANAGERS = io
 rtems_tests_PROGRAMS = spsize.exe
 spsize_exe_SOURCES = init.c getint.c size.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = spsize.scn
+dist_rtems_tests_DATA = spsize.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

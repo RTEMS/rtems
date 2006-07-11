@@ -7,10 +7,8 @@ MANAGERS = io
 rtems_tests_PROGRAMS = sp21.exe
 sp21_exe_SOURCES = init.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp21.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp21.doc
+dist_rtems_tests_DATA = sp21.scn
+dist_rtems_tests_DATA += sp21.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

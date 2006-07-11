@@ -8,10 +8,8 @@ rtems_tests_PROGRAMS = sp07.exe
 sp07_exe_SOURCES = init.c buffered_io.c task1.c task2.c task3.c task4.c taskexit.c \
     tcreate.c tdelete.c trestart.c tstart.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp07.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp07.doc
+dist_rtems_tests_DATA = sp07.scn
+dist_rtems_tests_DATA += sp07.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

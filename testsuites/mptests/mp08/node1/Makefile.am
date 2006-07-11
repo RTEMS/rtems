@@ -7,10 +7,8 @@ MANAGERS = io mp semaphore
 rtems_tests_PROGRAMS = mp08-node1.exe
 mp08_node1_exe_SOURCES = ../init.c ../task1.c ../system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = mp08-node1.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = mp08-node1.doc
+dist_rtems_tests_DATA = mp08-node1.scn
+dist_rtems_tests_DATA += mp08-node1.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

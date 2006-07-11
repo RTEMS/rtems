@@ -7,10 +7,8 @@ MANAGERS = all
 rtems_tests_PROGRAMS = sp29.exe
 sp29_exe_SOURCES = init.c
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp29.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp29.doc
+dist_rtems_tests_DATA = sp29.scn
+dist_rtems_tests_DATA += sp29.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

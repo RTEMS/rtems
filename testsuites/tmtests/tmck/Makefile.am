@@ -7,8 +7,7 @@ MANAGERS = io
 rtems_tests_PROGRAMS = tmck.exe
 tmck_exe_SOURCES = task1.c system.h ../include/timesys.h
 
-docdir = $(rtems_testsdir)
-dist_doc_DATA = tmck.doc
+dist_rtems_tests_DATA = tmck.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

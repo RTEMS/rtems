@@ -7,8 +7,7 @@ MANAGERS = io dpmem message partition region semaphore rate_monotonic timer
 rtems_tests_PROGRAMS = tm21.exe
 tm21_exe_SOURCES = task1.c system.h ../include/timesys.h
 
-docdir = $(rtems_testsdir)
-dist_doc_DATA = tm21.doc
+dist_rtems_tests_DATA = tm21.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

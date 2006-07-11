@@ -7,10 +7,8 @@ MANAGERS = io mp event timer
 rtems_tests_PROGRAMS = mp07-node2.exe
 mp07_node2_exe_SOURCES = ../init.c ../task1.c ../system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = mp07-node2.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = mp07-node2.doc
+dist_rtems_tests_DATA = mp07-node2.scn
+dist_rtems_tests_DATA += mp07-node2.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

@@ -7,10 +7,8 @@ MANAGERS = io signal
 rtems_tests_PROGRAMS = sp17.exe
 sp17_exe_SOURCES = init.c asr.c task1.c task2.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp17.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp17.doc
+dist_rtems_tests_DATA = sp17.scn
+dist_rtems_tests_DATA += sp17.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

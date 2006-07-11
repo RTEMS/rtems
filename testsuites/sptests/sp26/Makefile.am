@@ -7,10 +7,8 @@ MANAGERS = io region event
 rtems_tests_PROGRAMS = sp26.exe
 sp26_exe_SOURCES = init.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp26.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp26.doc
+dist_rtems_tests_DATA = sp26.scn
+dist_rtems_tests_DATA += sp26.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

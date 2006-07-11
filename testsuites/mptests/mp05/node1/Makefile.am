@@ -7,10 +7,8 @@ MANAGERS = io mp signal timer
 rtems_tests_PROGRAMS = mp05-node1.exe
 mp05_node1_exe_SOURCES = ../init.c ../asr.c ../task1.c ../system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = mp05-node1.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = mp05-node1.doc
+dist_rtems_tests_DATA = mp05-node1.scn
+dist_rtems_tests_DATA += mp05-node1.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

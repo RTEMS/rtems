@@ -7,10 +7,8 @@ MANAGERS = all
 rtems_tests_PROGRAMS = sp31.exe
 sp31_exe_SOURCES = delay.c init.c prtime.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp31.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp31.doc
+dist_rtems_tests_DATA = sp31.scn
+dist_rtems_tests_DATA += sp31.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

@@ -7,10 +7,8 @@ MANAGERS = io message
 rtems_tests_PROGRAMS = sp13.exe
 sp13_exe_SOURCES = init.c fillbuff.c putbuff.c task1.c task2.c task3.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp13.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp13.doc
+dist_rtems_tests_DATA = sp13.scn
+dist_rtems_tests_DATA += sp13.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

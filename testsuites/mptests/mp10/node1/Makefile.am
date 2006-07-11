@@ -7,10 +7,8 @@ MANAGERS = io mp message semaphore
 rtems_tests_PROGRAMS = mp10-node1.exe
 mp10_node1_exe_SOURCES = ../init.c ../task1.c ../task2.c ../task3.c ../system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = mp10-node1.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = mp10-node1.doc
+dist_rtems_tests_DATA = mp10-node1.scn
+dist_rtems_tests_DATA += mp10-node1.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

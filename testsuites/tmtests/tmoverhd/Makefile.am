@@ -7,8 +7,7 @@ MANAGERS = io
 rtems_tests_PROGRAMS = tmoverhd.exe
 tmoverhd_exe_SOURCES = testtask.c empty.c system.h dumrtems.h ../include/timesys.h
 
-docdir = $(rtems_testsdir)
-dist_doc_DATA = tmoverhd.doc
+dist_rtems_tests_DATA = tmoverhd.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

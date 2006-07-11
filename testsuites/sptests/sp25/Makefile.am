@@ -7,10 +7,8 @@ MANAGERS = io region
 rtems_tests_PROGRAMS = sp25.exe
 sp25_exe_SOURCES = init.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp25.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp25.doc
+dist_rtems_tests_DATA = sp25.scn
+dist_rtems_tests_DATA += sp25.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

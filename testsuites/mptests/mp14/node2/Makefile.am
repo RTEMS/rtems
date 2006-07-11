@@ -8,10 +8,8 @@ rtems_tests_PROGRAMS = mp14-node2.exe
 mp14_node2_exe_SOURCES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
     ../pttask1.c ../smtask1.c ../msgtask1.c ../system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = mp14-node2.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = mp14-node2.doc
+dist_rtems_tests_DATA = mp14-node2.scn
+dist_rtems_tests_DATA += mp14-node2.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

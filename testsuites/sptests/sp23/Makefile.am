@@ -7,10 +7,8 @@ MANAGERS = io dual_ported_memory
 rtems_tests_PROGRAMS = sp23.exe
 sp23_exe_SOURCES = init.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp23.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp23.doc
+dist_rtems_tests_DATA = sp23.scn
+dist_rtems_tests_DATA += sp23.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

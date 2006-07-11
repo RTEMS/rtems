@@ -7,10 +7,8 @@ MANAGERS = io event timer
 rtems_tests_PROGRAMS = sp24.exe
 sp24_exe_SOURCES = init.c resume.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp24.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp24.doc
+dist_rtems_tests_DATA = sp24.scn
+dist_rtems_tests_DATA += sp24.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

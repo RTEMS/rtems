@@ -7,10 +7,8 @@ MANAGERS = io timer
 rtems_tests_PROGRAMS = sp22.exe
 sp22_exe_SOURCES = init.c prtime.c delay.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp22.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp22.doc
+dist_rtems_tests_DATA = sp22.scn
+dist_rtems_tests_DATA += sp22.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

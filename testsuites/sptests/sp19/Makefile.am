@@ -7,10 +7,8 @@ MANAGERS = io
 rtems_tests_PROGRAMS = sp19.exe
 sp19_exe_SOURCES = init.c first.c fptask.c task1.c system.h fptest.h inttest.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp19.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp19.doc
+dist_rtems_tests_DATA = sp19.scn
+dist_rtems_tests_DATA += sp19.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

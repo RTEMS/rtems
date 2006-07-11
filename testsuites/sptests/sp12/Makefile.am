@@ -8,10 +8,8 @@ rtems_tests_PROGRAMS = sp12.exe
 sp12_exe_SOURCES = init.c task1.c task2.c task3.c task4.c task5.c pridrv.c \
     pritask.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp12.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = sp12.doc
+dist_rtems_tests_DATA = sp12.scn
+dist_rtems_tests_DATA += sp12.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

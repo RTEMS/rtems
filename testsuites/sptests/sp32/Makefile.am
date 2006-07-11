@@ -7,8 +7,7 @@ MANAGERS = io rate_monotonic
 rtems_tests_PROGRAMS = sp32.exe
 sp32_exe_SOURCES = init.c
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = sp32.scn
+dist_rtems_tests_DATA = sp32.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

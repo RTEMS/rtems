@@ -7,10 +7,8 @@ MANAGERS = io mp message partition semaphore
 rtems_tests_PROGRAMS = mp11-node2.exe
 mp11_node2_exe_SOURCES = ../init.c ../system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = mp11-node2.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = mp11-node2.doc
+dist_rtems_tests_DATA = mp11-node2.scn
+dist_rtems_tests_DATA += mp11-node2.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

@@ -7,8 +7,7 @@ MANAGERS = io message
 rtems_tests_PROGRAMS = tm13.exe
 tm13_exe_SOURCES = task1.c system.h ../include/timesys.h
 
-docdir = $(rtems_testsdir)
-dist_doc_DATA = tm13.doc
+dist_rtems_tests_DATA = tm13.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
