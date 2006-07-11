@@ -7,10 +7,8 @@ MANAGERS = io
 rtems_tests_PROGRAMS = base_sp.exe
 base_sp_exe_SOURCES = init.c apptask.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = base_sp.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = base_sp.doc
+dist_rtems_tests_DATA = base_sp.scn
+dist_rtems_tests_DATA += base_sp.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

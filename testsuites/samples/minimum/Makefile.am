@@ -7,10 +7,8 @@ MANAGERS = all
 rtems_tests_PROGRAMS = minimum.exe
 minimum_exe_SOURCES = init.c
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = minimum.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = minimum.doc
+dist_rtems_tests_DATA = minimum.scn
+dist_rtems_tests_DATA += minimum.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

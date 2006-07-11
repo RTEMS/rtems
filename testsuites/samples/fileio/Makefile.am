@@ -9,8 +9,7 @@ if LIBCHIP
 rtems_tests_PROGRAMS = fileio.exe
 fileio_exe_SOURCES = init.c system.h
 
-docdir = $(rtems_testsdir)
-dist_doc_DATA = fileio.doc
+dist_rtems_tests_DATA = fileio.doc
 endif
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

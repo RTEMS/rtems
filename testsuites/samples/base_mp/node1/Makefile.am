@@ -7,10 +7,8 @@ MANAGERS = io mp
 rtems_tests_PROGRAMS = base_mp-node1.exe
 base_mp_node1_exe_SOURCES = ../init.c ../apptask.c ../system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = base_mp-node1.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = base_mp-node1.doc
+dist_rtems_tests_DATA = base_mp-node1.scn
+dist_rtems_tests_DATA += base_mp-node1.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

@@ -7,8 +7,7 @@ MANAGERS = all
 rtems_tests_PROGRAMS = psxcancel.exe
 psxcancel_exe_SOURCES = init.c ../include/pmacros.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = psxcancel.scn
+dist_rtems_tests_DATA = psxcancel.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

@@ -7,8 +7,7 @@ MANAGERS = io
 rtems_tests_PROGRAMS = malloctest.exe
 malloctest_exe_SOURCES = init.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = malloctest.scn
+dist_rtems_tests_DATA = malloctest.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

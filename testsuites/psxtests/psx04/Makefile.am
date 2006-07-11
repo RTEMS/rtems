@@ -7,8 +7,7 @@ MANAGERS = all
 rtems_tests_PROGRAMS = psx04.exe
 psx04_exe_SOURCES = init.c task1.c task2.c task3.c system.h ../include/pmacros.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = psx04.scn
+dist_rtems_tests_DATA = psx04.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

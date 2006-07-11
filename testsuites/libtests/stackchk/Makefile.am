@@ -7,8 +7,7 @@ MANAGERS = io
 rtems_tests_PROGRAMS = stackchk.exe
 stackchk_exe_SOURCES = blow.c init.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = stackchk.scn
+dist_rtems_tests_DATA = stackchk.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

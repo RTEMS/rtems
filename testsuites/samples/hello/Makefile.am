@@ -7,10 +7,8 @@ MANAGERS = io
 rtems_tests_PROGRAMS = hello.exe
 hello_exe_SOURCES = init.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = hello.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = hello.doc
+dist_rtems_tests_DATA = hello.scn
+dist_rtems_tests_DATA += hello.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

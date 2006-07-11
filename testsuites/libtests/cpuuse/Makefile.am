@@ -7,8 +7,7 @@ MANAGERS = io rate_monotonic
 rtems_tests_PROGRAMS = cpuuse.exe
 cpuuse_exe_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = cpuuse.scn
+dist_rtems_tests_DATA = cpuuse.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

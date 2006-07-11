@@ -7,8 +7,7 @@ MANAGERS = all
 rtems_tests_PROGRAMS = paranoia.exe
 paranoia_exe_SOURCES = init.c paranoia.c system.h
 
-docdir = $(rtems_testsdir)
-dist_doc_DATA = paranoia.doc
+dist_rtems_tests_DATA = paranoia.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

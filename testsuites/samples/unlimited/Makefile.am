@@ -7,10 +7,8 @@ MANAGERS = io event
 rtems_tests_PROGRAMS = unlimited.exe
 unlimited_exe_SOURCES = init.c test1.c test2.c test3.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = unlimited.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = unlimited.doc
+dist_rtems_tests_DATA = unlimited.scn
+dist_rtems_tests_DATA += unlimited.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

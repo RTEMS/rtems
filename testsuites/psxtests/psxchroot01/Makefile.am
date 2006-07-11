@@ -7,8 +7,7 @@ MANAGERS = all
 rtems_tests_PROGRAMS = psxchroot01.exe
 psxchroot01_exe_SOURCES = main.c test.c ../include/pmacros.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = psxchroot01.scn
+dist_rtems_tests_DATA = psxchroot01.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

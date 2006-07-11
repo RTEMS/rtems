@@ -7,8 +7,7 @@ MANAGERS = io rate_monotonic
 rtems_tests_PROGRAMS = rtmonuse.exe
 rtmonuse_exe_SOURCES = init.c getall.c task1.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = rtmonuse.scn
+dist_rtems_tests_DATA = rtmonuse.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

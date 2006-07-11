@@ -9,10 +9,8 @@ rtems_tests_PROGRAMS = rtems++.exe
 rtems___exe_SOURCES = Init.cc Task1.cc Task2.cc Task3.cc System.h
 endif
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = rtems++.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = rtems++.doc
+dist_rtems_tests_DATA = rtems++.scn
+dist_rtems_tests_DATA += rtems++.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

@@ -7,10 +7,8 @@ MANAGERS = io
 rtems_tests_PROGRAMS = ticker.exe
 ticker_exe_SOURCES = init.c tasks.c system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = ticker.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = ticker.doc
+dist_rtems_tests_DATA = ticker.scn
+dist_rtems_tests_DATA += ticker.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

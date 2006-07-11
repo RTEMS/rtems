@@ -7,10 +7,8 @@ MANAGERS = io
 rtems_tests_PROGRAMS = iostream.exe
 iostream_exe_SOURCES = init.cc system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = iostream.scn
-docdir = $(rtems_testsdir)
-dist_doc_DATA = iostream.doc
+dist_rtems_tests_DATA = iostream.scn
+dist_rtems_tests_DATA += iostream.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

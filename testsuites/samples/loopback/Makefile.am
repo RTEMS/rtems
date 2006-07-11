@@ -7,8 +7,7 @@ MANAGERS = io event
 rtems_tests_PROGRAMS = loopback.exe
 loopback_exe_SOURCES = init.c
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = loopback.scn
+dist_rtems_tests_DATA = loopback.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

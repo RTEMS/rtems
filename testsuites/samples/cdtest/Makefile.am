@@ -7,8 +7,7 @@ MANAGERS = all
 rtems_tests_PROGRAMS = cdtest.exe
 cdtest_exe_SOURCES = init.c main.cc system.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = cdtest.scn
+dist_rtems_tests_DATA = cdtest.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

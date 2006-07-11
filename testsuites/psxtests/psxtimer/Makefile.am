@@ -7,8 +7,7 @@ MANAGERS = all
 rtems_tests_PROGRAMS = psxtimer.exe
 psxtimer_exe_SOURCES = psxtimer.c system.h ../include/pmacros.h
 
-scndir = $(rtems_testsdir)
-dist_scn_DATA = psxtimer.scn
+dist_rtems_tests_DATA = psxtimer.scn
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
