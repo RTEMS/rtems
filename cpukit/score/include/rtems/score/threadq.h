@@ -143,8 +143,7 @@ Thread_Control *_Thread_queue_Dequeue_priority(
  */
 void _Thread_queue_Enqueue_priority(
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  Watchdog_Interval     timeout
+  Thread_Control       *the_thread
 );
 
 /** @brief  Thread queue Extract priority
@@ -185,8 +184,7 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
  */
 void _Thread_queue_Enqueue_fifo(
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  Watchdog_Interval     timeout
+  Thread_Control       *the_thread
 );
 
 /** @brief  Thread queue Extract FIFO

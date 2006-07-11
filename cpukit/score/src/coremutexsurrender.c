@@ -127,16 +127,27 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
       the_mutex->holder     = the_thread;
       the_mutex->holder_id  = the_thread->Object.id;
-      if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
-           _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
-        the_thread->resource_count++;
       the_mutex->nest_count = 1;
 
-     /*
-      *  No special action for priority inheritance or priority ceiling
-      *  because the_thread is guaranteed to be the highest priority
-      *  thread waiting for the mutex.
-      */
+      switch ( the_mutex->Attributes.discipline ) {
+        case CORE_MUTEX_DISCIPLINES_FIFO:
+        case CORE_MUTEX_DISCIPLINES_PRIORITY:
+          break;
+        case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
+          the_thread->resource_count++;
+          break;
+        case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
+          the_thread->resource_count++;
+          if (the_mutex->Attributes.priority_ceiling <
+              the_thread->current_priority){
+              _Thread_Change_priority(
+                the_thread,
+                the_mutex->Attributes.priority_ceiling,
+                FALSE
+              );
+          }
+          break;
+      }
     }
   } else
     the_mutex->lock = CORE_MUTEX_UNLOCKED;

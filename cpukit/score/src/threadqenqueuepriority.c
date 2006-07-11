@@ -29,13 +29,11 @@
  *
  *  _Thread_queue_Enqueue_priority
  *
- *  This routine blocks a thread, places it on a thread, and optionally
- *  starts a timeout timer.
+ *  This routine places a blocked thread on a priority thread queue.
  *
  *  Input parameters:
  *    the_thread_queue - pointer to threadq
  *    thread           - thread to insert
- *    timeout          - timeout interval in ticks
  *
  *  Output parameters: NONE
  *
@@ -46,8 +44,7 @@
 
 void _Thread_queue_Enqueue_priority(
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  Watchdog_Interval     timeout
+  Thread_Control       *the_thread
 )
 {
   Priority_Control     search_priority;

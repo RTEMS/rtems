@@ -6,7 +6,7 @@
  *  This package is the implementation of the Mutex Handler.
  *  This handler provides synchronization and mutual exclusion capabilities.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -60,22 +60,6 @@ void _CORE_mutex_Seize_interrupt_blocking(
   the_mutex->blocked_count++;
   _Thread_queue_Enqueue( &the_mutex->Wait_queue, timeout );
 
-  if ( _Thread_Executing->Wait.return_code == CORE_MUTEX_STATUS_SUCCESSFUL ) {
-    /*
-     *  if CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT then nothing to do
-     *  because this task is already the highest priority.
-     */
-
-    if ( _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
-      if (the_mutex->Attributes.priority_ceiling < executing->current_priority){
-        _Thread_Change_priority(
-          executing,
-          the_mutex->Attributes.priority_ceiling,
-          FALSE
-        );
-      }
-    }
-  }
   _Thread_Enable_dispatch();
 }
 

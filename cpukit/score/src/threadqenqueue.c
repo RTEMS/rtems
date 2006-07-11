@@ -74,10 +74,10 @@ void _Thread_queue_Enqueue(
 
   switch( the_thread_queue->discipline ) {
     case THREAD_QUEUE_DISCIPLINE_FIFO:
-      _Thread_queue_Enqueue_fifo( the_thread_queue, the_thread, timeout );
+      _Thread_queue_Enqueue_fifo( the_thread_queue, the_thread );
       break;
     case THREAD_QUEUE_DISCIPLINE_PRIORITY:
-      _Thread_queue_Enqueue_priority( the_thread_queue, the_thread, timeout );
+      _Thread_queue_Enqueue_priority( the_thread_queue, the_thread );
       break;
   }
 }

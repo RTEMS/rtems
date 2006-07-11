@@ -1,3 +1,15 @@
+2006-07-11	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1124/rtems
+	* score/include/rtems/score/threadq.h, score/src/coremutexseize.c,
+	score/src/coremutexsurrender.c, score/src/threadqenqueue.c,
+	score/src/threadqenqueuefifo.c, score/src/threadqenqueuepriority.c:
+	The placement of the changing a thread's priority when using priority
+	ceiling should be on the successful transfer of the mutex -- not when
+	the thread tries to acquire. Plus the lack of a dispatch disable
+	point lead to the potential for a thread timing out and already
+	having inherited the ceiling priority.
+
 2006-06-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add ampolish3.

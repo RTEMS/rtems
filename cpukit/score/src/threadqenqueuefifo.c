@@ -29,13 +29,11 @@
  *
  *  _Thread_queue_Enqueue_fifo
  *
- *  This routine blocks a thread, places it on a thread, and optionally
- *  starts a timeout timer.
+ *  This routine places a blocked thread on a FIFO thread queue.
  *
  *  Input parameters:
  *    the_thread_queue - pointer to threadq
  *    the_thread       - pointer to the thread to block
- *    timeout          - interval to wait
  *
  *  Output parameters: NONE
  *
@@ -45,8 +43,7 @@
 
 void _Thread_queue_Enqueue_fifo (
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  Watchdog_Interval    timeout
+  Thread_Control       *the_thread
 )
 {
   ISR_Level            level;
