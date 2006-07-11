@@ -1,5 +1,9 @@
 2006-07-11	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/ckinit.c: Actually call the routine to find the LEON3 time.
+
+2006-07-11	Joel Sherrill <joel@OARcorp.com>
+
 	* leon_greth/.cvsignore, leon_greth/leon_greth.c: New files.
 	Missed adding in previous commit of merge.
 

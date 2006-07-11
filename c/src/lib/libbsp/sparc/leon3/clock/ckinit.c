@@ -157,6 +157,8 @@ void Install_clock(
 {
   Clock_driver_ticks = 0;
 
+  LEON3_Find_timer();
+
   clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3;
 
   if ( BSP_Configuration.ticks_per_timeslice ) {
