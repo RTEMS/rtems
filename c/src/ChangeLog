@@ -1,3 +1,9 @@
+2006-07-11	Jerry Needell <jerry.needell@unh.edu>
+
+	* libchip/Makefile.am, libchip/preinstall.am: Merge SPARC updates from
+	4.6 branch.  Original modifications by Gaisler Enterprises.
+	* libchip/network/greth.c, libchip/network/greth.h: New files.
+
 2006-06-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add ampolish3.
