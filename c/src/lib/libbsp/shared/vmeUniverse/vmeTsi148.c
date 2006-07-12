@@ -184,10 +184,10 @@
 #define TSI_INTM2_REG		0x45c
 
 
-#define TSI_RD(base, reg)				in_be32(((base) + (reg)/sizeof(*base)))
+#define TSI_RD(base, reg)				in_be32((volatile unsigned *)((base) + (reg)/sizeof(*base)))
 #define TSI_RD16(base, reg)				in_be16((volatile unsigned short *)(base) + (reg)/sizeof(short))
 #define TSI_RD8(base, reg)				*((volatile unsigned char *)(base) + (reg))
-#define TSI_WR(base, reg, val)			out_be32(((base) + (reg)/sizeof(*base)), val)
+#define TSI_WR(base, reg, val)			out_be32((volatile unsigned *)((base) + (reg)/sizeof(*base)), val)
 
 #define UNIV_SCTL_AM_MASK	(UNIV_CTL_VAS | UNIV_SCTL_PGM | UNIV_SCTL_DAT | UNIV_SCTL_USER | UNIV_SCTL_SUPER)
 

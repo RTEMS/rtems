@@ -1,3 +1,8 @@
+2006-07-12	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeTsi148.c: Silenced compiler warnings
+	(gcc-4.1.1 warns that uint32_t and unsigned int are different).
+
 2006-06-19	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/vme_amd_defs.h: Added address-modifier
