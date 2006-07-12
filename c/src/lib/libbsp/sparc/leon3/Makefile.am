@@ -23,6 +23,7 @@ SUBDIRS = . tools
 
 include_HEADERS += include/leon.h
 include_HEADERS += include/coverhd.h
+include_HEADERS += include/spacewire.h
 
 EXTRA_DIST = ../../sparc/shared/start.S
 start.$(OBJEXT): ../../sparc/shared/start.S

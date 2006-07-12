@@ -1,5 +1,10 @@
 2006-07-12	Joel Sherrill <joel@OARcorp.com>
 
+	* Makefile.am, include/leon.h: Try to merge rest of 4.6 BSP changes.
+	* include/spacewire.h: New file.
+
+2006-07-12	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am: Merge SHM support from 4.6 branch.
 	* shmsupp/README, shmsupp/addrconv.c, shmsupp/getcfg.c, shmsupp/lock.c,
 	shmsupp/mpisr.c: New files.

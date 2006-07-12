@@ -118,7 +118,7 @@ typedef struct {
   volatile unsigned int ipend;
   volatile unsigned int iforce;
   volatile unsigned int iclear;
-  volatile unsigned int notused00;
+  volatile unsigned int mpstat;
   volatile unsigned int notused01;
   volatile unsigned int notused02;
   volatile unsigned int notused03;
@@ -130,65 +130,24 @@ typedef struct {
   volatile unsigned int notused21;
   volatile unsigned int notused22;
   volatile unsigned int notused23;
-  volatile unsigned int mask_p0;
-  volatile unsigned int mask_p1;
-  volatile unsigned int mask_p2;
-  volatile unsigned int mask_p3;
-  volatile unsigned int mask_p4;
-  volatile unsigned int mask_p5;
-  volatile unsigned int mask_p6;
-  volatile unsigned int mask_p7;
-  volatile unsigned int mask_p8;
-  volatile unsigned int mask_p9;
-  volatile unsigned int mask_p10;
-  volatile unsigned int mask_p11;
-  volatile unsigned int mask_p12;
-  volatile unsigned int mask_p13;
-  volatile unsigned int mask_p14;
-  volatile unsigned int mask_p15;
+  volatile unsigned int mask[16];
+  volatile unsigned int force[16];
 } LEON3_IrqCtrl_Regs_Map; 
 
-/*
 typedef struct {
   volatile unsigned int value;
   volatile unsigned int reload;
   volatile unsigned int conf;
   volatile unsigned int notused;
 } LEON3_Timer_SubType;
-*/
+
 
 typedef struct {
   volatile unsigned int scaler_value;   /* common timer registers */
   volatile unsigned int scaler_reload;
   volatile unsigned int status;
   volatile unsigned int notused;
-  volatile unsigned int value_t0;       /* timer 0 */
-  volatile unsigned int reload_t0;
-  volatile unsigned int conf_t0;
-  volatile unsigned int notused0;
-  volatile unsigned int value_t1;       /* timer 1 */
-  volatile unsigned int reload_t1;
-  volatile unsigned int conf_t1;
-  volatile unsigned int notused1; 
-  volatile unsigned int value_t2;       /* timer 2 */
-  volatile unsigned int reload_t2;
-  volatile unsigned int conf_t2;
-  volatile unsigned int notused2; 
-  volatile unsigned int value_t3;       /* timer 3 */
-  volatile unsigned int reload_t3;
-  volatile unsigned int conf_t3;
-  volatile unsigned int notused3;
-  volatile unsigned int value_t4;       /* timer 4 */
-  volatile unsigned int reload_t4;
-  volatile unsigned int conf_t4;
-  volatile unsigned int notused4;
-  volatile unsigned int value_t5;       /* timer 5 */
-  volatile unsigned int reload_t5;
-  volatile unsigned int conf_t5;
-  volatile unsigned int notused5;
-  volatile unsigned int value_t6;       /* timer 6 */
-  volatile unsigned int reload_t6;
-  volatile unsigned int conf_t6;
+  LEON3_Timer_SubType timer[8];
 } LEON3_Timer_Regs_Map;
 
 typedef struct {
@@ -297,12 +256,16 @@ extern volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;  /* LEON3 Interrupt 
 extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs; /* LEON3 GP Timer */
 extern volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 
+extern int LEON3_Cpu_Index;
+
 /* Macros used for manipulating bits in LEON3 GP Timer Control Register */
 
 #define LEON3_GPTIMER_EN 1
 #define LEON3_GPTIMER_RL 2
 #define LEON3_GPTIMER_LD 4
 #define LEON3_GPTIMER_IRQEN 8
+
+#define LEON3_MP_IRQ    14        /* Irq used by shared memory driver */
 
 #ifndef ASM
 
@@ -404,6 +367,9 @@ extern volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 #define LEON_REG_TIMER_COUNTER_DEFINED_MASK       0x00000003
 #define LEON_REG_TIMER_COUNTER_CURRENT_MODE_MASK  0x00000003
 
+/* XXX really needed but I can't get it to install -- JRS */
+/* #include <spacewire.h> */
+  
 #endif /* !ASM */
 
 #ifdef __cplusplus
