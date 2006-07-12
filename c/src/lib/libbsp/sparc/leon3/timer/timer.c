@@ -27,12 +27,10 @@ rtems_boolean Timer_driver_Find_average_overhead;
 rtems_boolean Timer_driver_Is_initialized = FALSE;
 
 extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs;
-extern void LEON3_Find_timer(void);
   
 
 void Timer_initialize()
 {
-  LEON3_Find_timer();
 
   /*
    *  Timer runs long and accurate enough not to require an interrupt.

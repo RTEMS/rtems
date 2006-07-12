@@ -1,3 +1,9 @@
+2006-07-12	Jerry Needell <jerry.needell@unh.edu>
+
+	* amba/amba.c, clock/ckinit.c, include/amba.h, timer/timer.c: Search
+	for the Timer Register when initializing the amba rather than before
+	each potential use.
+
 2006-07-12	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, include/leon.h: Try to merge rest of 4.6 BSP changes.

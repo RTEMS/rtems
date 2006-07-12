@@ -10,7 +10,11 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+<<<<<<< amba.h
  *  $Id$
+=======
+ *  $Id$
+>>>>>>> 1.3
  */
 
 #define LEON3_IO_AREA 0xfff00000

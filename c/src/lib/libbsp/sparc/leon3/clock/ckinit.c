@@ -60,37 +60,6 @@ void Clock_exit( void );
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
-/*
- *  LEON3_Find_timer
- *
- *  This method searches for the timer on the AMBA bus.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- */
-
-void LEON3_Find_timer(void)
-{
-  int i = 0;
-  unsigned int iobar, conf;
-  
-  while (i < amba_conf.apbslv.devnr) 
-  {
-    conf = amba_get_confword(amba_conf.apbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) &&
-       (amba_device(conf) == GAISLER_GPTIMER)) {
-      iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
-      LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *)
-        amba_iobar_start(amba_conf.apbmst, iobar);
-      break;
-    }
-    i++;
-  }
-
-}
 
 /*
  *  Clock_isr
@@ -157,7 +126,6 @@ void Install_clock(
 {
   Clock_driver_ticks = 0;
 
-  LEON3_Find_timer();
 
   clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3;
 
