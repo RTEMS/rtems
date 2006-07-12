@@ -2,6 +2,7 @@
 #include <bsp.h>
 #include <bsp/uart.h>
 #include <rtems/bspIo.h>
+#include <rtems/error.h>
 #include <libcpu/stackTrace.h>
 
 static void
@@ -70,7 +71,7 @@ char *score_status_text(rtems_status_code sc)
 void _BSP_Fatal_error(unsigned int v)
 {
 unsigned long flags;
-char *err = 0;
+const char *err = 0;
 
   rtems_interrupt_disable(flags);
   printk("%s\n",_RTEMS_version);

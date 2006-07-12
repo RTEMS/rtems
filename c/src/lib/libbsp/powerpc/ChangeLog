@@ -1,5 +1,9 @@
 2006-06-19	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/startup/panic.c: Fixed compiler warnings.
+
+2006-06-19	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vme/vmeconfig.c: Indicate that it's ok to
 	use decoupled cycles to access on-board memory from
 	VME.
