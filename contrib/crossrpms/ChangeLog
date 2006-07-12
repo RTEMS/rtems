@@ -1,0 +1,11 @@
+2006-07-12	RTEMS
+
+	* rtems4.7/arm/gdb-sources.add, rtems4.7/avr/gdb-sources.add,
+	rtems4.7/h8300/gdb-sources.add, rtems4.7/i386/gdb-sources.add,
+	rtems4.7/m68k/gdb-sources.add, rtems4.7/mips/gdb-sources.add,
+	rtems4.7/powerpc/gdb-sources.add, rtems4.7/sh/gdb-sources.add,
+	rtems4.7/sparc/gdb-sources.add, rtems4.7/tic4x/gdb-sources.add:
+	Update gdb to use newer patch. This lets sparc build simulator and
+	mips build at all.
+	* patches/gdb-6.4-rtems-20060712.diff: New file.
+
