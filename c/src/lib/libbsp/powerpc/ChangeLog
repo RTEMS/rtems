@@ -1,4 +1,11 @@
-2006-06-19	Till Straumann <strauman@slac.stanford.edu>
+2006-07-12	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/startup/probeMemEnd.c: added paranoia to inline
+	assembly code; added 'memory' clobbers and made sure
+	any registers modified by the 'asm' appear in the output
+	operands.
+
+2006-07-12	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/startup/panic.c: Fixed compiler warnings.
 

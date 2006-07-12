@@ -49,6 +49,8 @@ extern uint32_t __rtems_end[];
 void __here_s_the_real_end();
 
 #define SWITCH_MSR(msr)		\
+	do {					\
+	register uint32_t __rr;	\
 	asm volatile(			\
 		"	mtsrr1	%0	\n"	\
 		"   bl 1f		\n"	\
@@ -58,10 +60,11 @@ void __here_s_the_real_end();
 		"	sync		\n"	\
 		"	rfi			\n"	\
 		"1:				\n"	\
-		:					\
-		:"b"(msr)			\
-		:"lr"				\
-	)
+		:"=b&"(__rr)		\
+		:"0"(msr)			\
+		:"lr","memory"		\
+	);						\
+	} while (0)
 
 SPR_RW(L2CR)
 SPR_RW(L3CR)
@@ -116,7 +119,7 @@ register uint32_t v, x;
 	x = 1<<(31-19);
 	v = doLock ? v | x : v & ~x;
 	_write_HID0(v);
-	asm volatile("sync");
+	asm volatile("sync":::"memory");
 	return 0;
 }
 
@@ -160,7 +163,7 @@ register          uint32_t flags;
 		*probe = tag;
 
 		/* make sure it's written out */
-		asm volatile ("sync");
+		asm volatile ("sync":::"memory");
 
 		/* try to read back */
 		if ( tag != *probe ) {
@@ -169,7 +172,7 @@ register          uint32_t flags;
 		/* restore */
 		*probe = scratch;
 		/* make sure the icache is not contaminated */
-		asm volatile ("sync; icbi 0, %0"::"r"(probe));
+		asm volatile ("sync; icbi 0, %0"::"r"(probe):"memory");
 	}
 
 	SWITCH_MSR(flags);
