@@ -105,9 +105,23 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += leon_greth.rel
 endif
 
+if HAS_MP
+EXTRA_DIST += shmsupp/README
+
+noinst_PROGRAMS += shmsupp.rel
+shmsupp_rel_SOURCES = shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
+    shmsupp/mpisr.c
+shmsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
+shmsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
     ../../../libcpu/@RTEMS_CPU@/syscall.rel
+
+if HAS_MP
+libbsp_a_LIBADD += shmsupp.rel
+endif
 
 EXTRA_DIST += times
 

@@ -1,3 +1,9 @@
+2006-07-12	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Merge SHM support from 4.6 branch.
+	* shmsupp/README, shmsupp/addrconv.c, shmsupp/getcfg.c, shmsupp/lock.c,
+	shmsupp/mpisr.c: New files.
+
 2006-07-11	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c: Actually call the routine to find the LEON3 time.
