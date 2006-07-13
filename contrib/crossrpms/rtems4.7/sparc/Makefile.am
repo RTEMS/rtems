@@ -14,6 +14,6 @@ NEWLIB_VERS = 1.14.0
 include ../gcc.am
 GCC_OPTS += --languages=cxx
 
-GDB_VERS = 6.4
+GDB_VERS = 6.5
 GDB_RPMREL = @VERSION@
 include ../gdb.am

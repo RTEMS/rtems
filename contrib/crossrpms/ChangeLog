@@ -1,3 +1,19 @@
+2006-07-13	Joel Sherrill <joel@oarcorp.com>
+
+	* configure.ac, rtems4.7/Makefile.am, rtems4.7/arm/Makefile.am,
+	rtems4.7/arm/gdb-sources.add, rtems4.7/avr/Makefile.am,
+	rtems4.7/avr/gdb-sources.add, rtems4.7/h8300/Makefile.am,
+	rtems4.7/h8300/gdb-sources.add, rtems4.7/i386/Makefile.am,
+	rtems4.7/i386/gdb-sources.add, rtems4.7/m68k/Makefile.am,
+	rtems4.7/m68k/gdb-sources.add, rtems4.7/mips/Makefile.am,
+	rtems4.7/mips/gdb-sources.add, rtems4.7/powerpc/Makefile.am,
+	rtems4.7/powerpc/gdb-sources.add, rtems4.7/sh/Makefile.am,
+	rtems4.7/sh/gdb-sources.add, rtems4.7/sparc/Makefile.am,
+	rtems4.7/sparc/gdb-sources.add, rtems4.7/tic4x/gdb-sources.add:
+	Updated to gdb 6.5
+	* patches/gdb-6.5-rtems-20060713.diff, rtems4.7/mipstx39/.cvsignore,
+	rtems4.7/mipstx39/Makefile.am, rtems4.7/mipstx39/gdb-sources.add: New files.
+
 2006-07-12	RTEMS
 
 	* rtems4.7/arm/gdb-sources.add, rtems4.7/avr/gdb-sources.add,
