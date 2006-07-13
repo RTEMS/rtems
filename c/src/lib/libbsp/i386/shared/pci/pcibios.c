@@ -183,7 +183,7 @@ pci_find_device(
   *pbus = PCIB_DEVSIG_BUS(sig);
   *pdev = PCIB_DEVSIG_DEV(sig);
   *pfun = PCIB_DEVSIG_FUNC(sig);
-  return status;
+  return status ? -1 : 0;
 }
 
 /*

@@ -1,3 +1,9 @@
+2006-07-12	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/pci/pcibios.c: let pci_find_device() return
+	-1 on failure, not just non-zero status. I found that
+	some driver(s) [e.g. dec21140] explicitely check for -1.
+
 2005-11-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* shared/irq/idt.c: Reflect API changes.
