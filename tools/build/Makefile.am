@@ -19,4 +19,7 @@ bin_SCRIPTS = install-if-change
 noinst_SCRIPTS = search-id.sh multigen cvsignore-add.sh
 EXTRA_DIST = search-id.sh multigen cvsignore-add.sh
 
+noinst_SCRIPTS += doxy-filter
+EXTRA_DIST += doxy-filter
+
 include $(top_srcdir)/../../automake/host.am
