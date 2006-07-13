@@ -14,7 +14,7 @@
 	* patches/gdb-6.5-rtems-20060713.diff, rtems4.7/mipstx39/.cvsignore,
 	rtems4.7/mipstx39/Makefile.am, rtems4.7/mipstx39/gdb-sources.add: New files.
 
-2006-07-12	RTEMS
+2006-07-12	Joel Sherrill <joel@oarcorp.com>
 
 	* rtems4.7/arm/gdb-sources.add, rtems4.7/avr/gdb-sources.add,
 	rtems4.7/h8300/gdb-sources.add, rtems4.7/i386/gdb-sources.add,
