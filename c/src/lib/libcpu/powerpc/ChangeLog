@@ -1,3 +1,10 @@
+2006-07-12	Till Straumann <strauman@slac.stanford.edu>
+
+	* mpc6xx/mmu/bat.c, mpc6xx/mmu/pte121.c, shared/src/cache.c:
+	Checked inline assembly code; added 'm' operands and
+	paranoia 'memory' clobbers. Also, made sure that no
+	pure input operands are modified by the asm.
+ 
 2006-06-19	Till Straumann <strauman@slac.stanford.edu>
 
 	* mpc6xx/mmu/mmuAsm.S: re-checked synchronization

@@ -180,8 +180,11 @@ static void myhdl (BSP_Exception_frame * excPtr);
 
 static void dumpPte (APte pte);
 
+#ifdef DEBUG
 static void
 dumpPteg (unsigned long vsid, unsigned long pi, unsigned long hash);
+#endif
+
 unsigned long
 triv121IsRangeMapped (long vsid, unsigned long start, unsigned long end);
 
@@ -501,9 +504,9 @@ triv121PgTblMap (Triv121PgTbl pt,
               uint32_t flags;
               rtems_interrupt_disable (flags);
               /* order setting 'v' after writing everything else */
-              asm volatile ("eieio");
+              asm volatile ("eieio"::"m"(*pte));
               pte->v = 1;
-              asm volatile ("sync");
+              asm volatile ("sync"::"m"(*pte));
               rtems_interrupt_enable (flags);
             } else {
               pte->v = 1;
@@ -549,7 +552,10 @@ void
 triv121PgTblActivate (Triv121PgTbl pt)
 {
 #ifndef DEBUG_MAIN
-  unsigned long sdr1 = triv121PgTblSDR1 (pt);
+  unsigned long          sdr1 = triv121PgTblSDR1 (pt);
+  register unsigned long tmp0 = 16;	/* initial counter value (#segment regs) */
+  register unsigned long tmp1 = (KEY_USR | KEY_SUP);
+  register unsigned long tmp2 = (MSR_EE | MSR_IR | MSR_DR);
 #endif
   pt->active = 1;
 
@@ -558,7 +564,7 @@ triv121PgTblActivate (Triv121PgTbl pt)
   /* install our exception handler */
   ohdl = globalExceptHdl;
   globalExceptHdl = myhdl;
-  __asm__ __volatile__ ("sync");
+  __asm__ __volatile__ ("sync"::"memory");
 #endif
 
   /* This section of assembly code takes care of the
@@ -578,7 +584,7 @@ triv121PgTblActivate (Triv121PgTbl pt)
    * - restore original MSR
    */
   __asm__ __volatile (
-    "	mtctr	%0\n"
+    "	mtctr	%[tmp0]\n"
     /* Get MSR and switch interrupts off - just in case.
      * Also switch the MMU off; the book
      * says that SDR1 must not be changed with either
@@ -586,34 +592,33 @@ triv121PgTblActivate (Triv121PgTbl pt)
      * be safe as long as the IBAT & DBAT mappings override
      * the page table...
      */
-    "	mfmsr	%0\n"
-    "	andc	%6, %0, %6\n"
-    "	mtmsr	%6\n"
+    "	mfmsr	%[tmp0]\n"
+    "	andc	%[tmp2], %[tmp0], %[tmp2]\n"
+    "	mtmsr	%[tmp2]\n"
     "	isync	\n"
     /* set up the segment registers */
-    "	li		%6, 0\n"
-    "1:	mtsrin	%1, %6\n"
-    "	addis	%6, %6, 0x1000\n" /* address next SR */
-    "	addi	%1, %1, 1\n"      /* increment VSID  */
+    "	li		%[tmp2], 0\n"
+    "1:	mtsrin	%[tmp1], %[tmp2]\n"
+    "	addis	%[tmp2], %[tmp2], 0x1000\n" /* address next SR */
+    "	addi	%[tmp1], %[tmp1], 1\n"      /* increment VSID  */
     "	bdnz	1b\n"
     /* Now flush all TLBs, starting with the topmost index */
-    "	lis		%6, %2@h\n"
-    "2:	addic.	%6, %6, -%3\n"    /* address the next one (decrementing) */
-    "	tlbie	%6\n"             /* invalidate & repeat */
+    "	lis		%[tmp2], %[ea_range]@h\n"
+    "2:	addic.	%[tmp2], %[tmp2], -%[pg_sz]\n"    /* address the next one (decrementing) */
+    "	tlbie	%[tmp2]\n"             /* invalidate & repeat */
     "	bgt		2b\n"
     "	eieio	\n"
     "	tlbsync \n"
     "	sync    \n"
     /* set up SDR1 */
-    "   mtspr	%4, %5\n"
+    "   mtspr	%[sdr1], %[sdr1val]\n"
     /* restore original MSR  */
-    "	mtmsr	%0\n"
+    "	mtmsr	%[tmp0]\n"
     "	isync	\n"
-      :
-      :"r" (16), "b" (KEY_USR | KEY_SUP),
-       "i" (FLUSH_EA_RANGE), "i" (1 << LD_PG_SIZE),
-       "i" (SDR1), "r" (sdr1), "b" (MSR_EE | MSR_IR | MSR_DR)
-      :"ctr", "cc"
+      :[tmp0]"+r&"(tmp0), [tmp1]"+b&"(tmp1), [tmp2]"+b&"(tmp2)
+      :[ea_range]"i"(FLUSH_EA_RANGE), [pg_sz]"i" (1 << LD_PG_SIZE),
+       [sdr1]"i"(SDR1), [sdr1val]"r" (sdr1)
+      :"ctr", "cc", "memory"
   );
 
   /* At this point, BAT0 is probably still active; it's the
@@ -833,7 +838,7 @@ triv121UnmapEa (unsigned long ea)
                 "	tlbie %0	\n\t"
                 "	eieio		\n\t"
                 "	tlbsync		\n\t"
-                "	sync		\n\t"::"r" (ea));
+                "	sync		\n\t"::"r" (ea):"memory");
   rtems_interrupt_enable (flags);
   return pte;
 }
@@ -850,7 +855,7 @@ triv121UnmapEa (unsigned long ea)
 		"1:						\n\t"	\
 		:								\
 		:"r"(msr)						\
-		:"3","lr")
+		:"3","lr","memory")
 
 /* The book doesn't mention dssall when changing PTEs
  * but they require it for BAT changes and I guess
@@ -911,14 +916,14 @@ triv121ChangeEaAttributes (unsigned long ea, int wimg, int pp)
 
   pte->v = 0;
   do_dssall ();
-  asm volatile ("sync");
+  asm volatile ("sync":::"memory");
   if (wimg >= 0)
     pte->wimg = wimg;
   if (pp >= 0)
     pte->pp = pp;
-  asm volatile ("tlbie %0; eieio"::"r" (ea));
+  asm volatile ("tlbie %0; eieio"::"r" (ea):"memory");
   pte->v = 1;
-  asm volatile ("tlbsync; sync");
+  asm volatile ("tlbsync; sync":::"memory");
 
   /* restore, i.e., switch MMU and IRQs back on */
   SYNC_LONGJMP (msr);

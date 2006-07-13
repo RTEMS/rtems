@@ -91,14 +91,14 @@ void _CPU_cache_flush_1_data_line(
 	const void * _address )
 {
   register const void *__address = _address;
-  asm volatile ( "dcbf 0,%0" :: "r" (__address) );
+  asm volatile ( "dcbf 0,%0" :: "r" (__address) : "memory" );
 }
 
 void _CPU_cache_invalidate_1_data_line(
 	const void * _address )
 {
   register const void *__address = _address;
-  asm volatile ( "dcbi 0,%0" :: "r" (__address) );
+  asm volatile ( "dcbi 0,%0" :: "r"(__address) : "memory" );
 }
 
 void _CPU_cache_flush_entire_data ( void ) {}
@@ -126,7 +126,7 @@ void _CPU_cache_invalidate_1_instruction_line(
 	const void * _address )
 {
   register const void *__address = _address;
-  asm volatile ( "icbi 0,%0" :: "r" (__address) );
+  asm volatile ( "icbi 0,%0" :: "r" (__address) : "memory");
 }
 
 void _CPU_cache_invalidate_entire_instruction ( void ) {}

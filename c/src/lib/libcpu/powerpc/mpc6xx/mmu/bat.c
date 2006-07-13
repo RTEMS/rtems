@@ -119,6 +119,7 @@ set_hid0_sync (unsigned long val)
     "	isync			\n"
     :
     :"i" (HID0), "r" (val)
+    :"memory" /* paranoia */
   );
 }
 
