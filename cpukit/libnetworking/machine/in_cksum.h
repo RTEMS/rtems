@@ -57,26 +57,28 @@
 static __inline u_int
 in_cksum_hdr(const struct ip *ip)
 {
-	register u_int sum = 0;
+	register u_int sum = ((const uint32_t*)ip)[0];
+	register u_int tmp;
+
+	__asm__ __volatile__(
+				"	addl %2, %0    \n"
+				"	adcl %3, %0    \n"
+				"	adcl %4, %0    \n"
+				"	adcl %5, %0    \n"
+				"	adcl $0, %0    \n"
+				"	movl %0, %1    \n"
+				"	roll $16, %0   \n"
+				"	addl %1, %0    \n"
+				:"+&r"(sum),"=&r"(tmp)
+				:"g"(((const uint32_t*)ip)[1]),
+				 "g"(((const uint32_t*)ip)[2]),
+				 "g"(((const uint32_t*)ip)[3]),
+				 "g"(((const uint32_t*)ip)[4]),
+				 "m"(*ip)
+				:"cc"
+	);
 		    
-#define ADD(n)	\
-    __asm__ volatile ("addl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (ip))
-#define ADDC(n)	\
-    __asm__ volatile ("adcl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (ip))
-#define MOP	\
-    __asm__ volatile ("adcl         $0, %0" : "=r" (sum) : "0" (sum))
-
-	ADD(0);
-	ADDC(4);
-	ADDC(8);
-	ADDC(12);
-	ADDC(16);
-	MOP;
-	sum = (sum & 0xffff) + (sum >> 16);
-	if (sum > 0xffff)
-		sum -= 0xffff;
-
-	return ~sum & 0xffff;
+	return (~sum) >>16;
 }
 
 static __inline void
@@ -100,7 +102,7 @@ in_cksum_hdr(const struct ip *ip)
 	register u_int sum = *ap++;
 	register u_int tmp;
 		    
-	__asm__("addl  %2@+,%0\n\t"
+	__asm__ __volatile__("addl  %2@+,%0\n\t"
 	        "movel %2@+,%1\n\t"
 	        "addxl %1,%0\n\t"
 	        "movel %2@+,%1\n\t"
@@ -110,7 +112,7 @@ in_cksum_hdr(const struct ip *ip)
 	        "moveq #0,%1\n\t"
 	        "addxl %1,%0\n" :
 		"=d" (sum), "=d" (tmp), "=a" (ap) :
-		"0" (sum), "2" (ap));
+		"0" (sum), "2" (ap), "m"(*ip));
 	sum = (sum & 0xffff) + (sum >> 16);
 	if (sum > 0xffff)
 		sum -= 0xffff;
@@ -126,27 +128,33 @@ in_cksum_hdr(const struct ip *ip)
 static __inline u_int
 in_cksum_hdr(const struct ip *ip)
 {
-        register u_int sum = 0;
-        register u_int tmp;
-
-#define ADD(n) \
-	 __asm__ volatile ("addc  %0,%0,%2" : "=r" (sum) : "0" (sum), "r" (n))
-#define ADDC(n) \
-	__asm__ volatile ("adde  %0,%0,%2" : "=r" (sum) : "0" (sum), "r" (n))
-#define MOP     \
-	__asm__ volatile ("addic %0,%0,0"  : "=r" (sum) : "0" (sum))
-
-        tmp = *(((u_int *) ip));      ADD(tmp);
-        tmp = *(((u_int *) ip) + 1);  ADDC(tmp);
-        tmp = *(((u_int *) ip) + 2);  ADDC(tmp);
-        tmp = *(((u_int *) ip) + 3);  ADDC(tmp);
-        tmp = *(((u_int *) ip) + 4);  ADDC(tmp);
-        tmp = 0;                      ADDC(tmp);
-        sum = (sum & 0xffff) + (sum >> 16);
-        if (sum > 0xffff)
-                sum -= 0xffff;
-
-        return ~sum & 0xffff;
+register u_int sum, tmp;
+	__asm__ __volatile__(
+		"	lwz   %0,  0(%2) \n"
+		"	lwz   %1,  4(%2) \n"
+		"	addc  %0, %0, %1 \n"	/* generate carry (XER[CA]) */
+		"	lwz   %1,  8(%2) \n"
+		"	adde  %0, %0, %1 \n"	/* add + generate           */
+		"	lwz   %1, 12(%2) \n"
+		"	adde  %0, %0, %1 \n"
+		"	lwz   %1, 16(%2) \n"
+		"	adde  %0, %0, %1 \n"
+		"	addze %0, %0     \n"	/* mop up XER[CA]           */
+		"	rotlwi %1, %0,16 \n"	/* word-swapped copy in %1  */
+		"	add   %0, %0, %1 \n"    /* see comment below        */
+		"	not   %0, %0     \n"
+		"	srwi  %0, %0, 16 \n"
+		:"=&r"(sum),"=&r"(tmp):"b"(ip), "m"(*ip):"xer"
+	);
+	/* Note: if 'add' generates a carry out of the lower 16 bits
+	 *       then this is automatically added to the upper 16 bits
+	 *       where the correct result is found. (Stolen from linux.)
+	 *        %0 : upper-word  lower-word
+	 *     +  %1 : lower-word  upper-word
+	 *     =       word-sum    word-sum
+	 *                     ^+inter-word-carry
+	 */
+	return sum;
 }
 
 static __inline void
@@ -170,7 +178,7 @@ in_cksum_hdr(const struct ip *ip)
    register u_int tmp_o2;
    register u_int tmp_o3;
 
-   __asm__ volatile (" \
+   __asm__ __volatile__ (" \
      ld [%0], %1 ; \
      ld [%0+4], %2 ; \
      ld [%0+8], %3 ; \
@@ -189,7 +197,7 @@ in_cksum_hdr(const struct ip *ip)
      not %1 ; \
      and %1, %3, %1 ; \
     " : "=r" (ip), "=r" (sum), "=r" (tmp_o2), "=r" (tmp_o3)
-      : "0" (ip), "1" (sum)
+      : "0" (ip), "1" (sum), "m"(*ip)
   );
   return sum;
 }

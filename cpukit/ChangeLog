@@ -1,5 +1,13 @@
 2006-07-12	Till Straumann <strauman@slac.stanford.edu>
 
+	PR 1110/networking
+	* libnetworking/machine/in_cksum.h: Replaced PPC and
+	i386 assembly algorithms (must not assume carry bit is preserved
+	across multiple asms). Added packet header as a 'm' input
+	operand for all CPU variants. Added carry bit to clobber list.
+
+2006-07-12	Till Straumann <strauman@slac.stanford.edu>
+
 	* pppd/sys-rtems.c: fixed error message so that the correct
 	ioctl is reported.
 
