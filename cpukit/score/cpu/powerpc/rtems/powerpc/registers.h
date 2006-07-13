@@ -334,7 +334,7 @@ lidate */
   { register unsigned int _disable_mask = MSR_EE; \
     asm volatile ( \
       "mtmsr %0; andc %1,%0,%1; mtmsr %1" : \
-      "=r" ((_isr_cookie)), "=r" ((_disable_mask)) : \
+      "=&r" ((_isr_cookie)), "=&r" ((_disable_mask)) : \
       "0" ((_isr_cookie)), "1" ((_disable_mask)) \
     ); \
   }

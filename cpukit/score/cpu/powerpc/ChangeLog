@@ -1,3 +1,9 @@
+2006-07-12      Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/old-exceptions/cpu.h, rtems/powerpc/registers.h:
+	Checked inline assembly; added early-clobber '&' to output operands
+	of multi-instruction asms.
+
 2006-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
