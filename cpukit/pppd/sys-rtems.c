@@ -778,7 +778,7 @@ sifvjcomp(u, vjcomp, cidcomp, maxcid)
 	return 0;
     }
     if (vjcomp && ioctl(ppp_fd, PPPIOCSMAXCID, (caddr_t) &maxcid) < 0) {
-	error("ioctl(PPPIOCSFLAGS): %m");
+	error("ioctl(PPPIOCSMAXCID): %m");
 	return 0;
     }
     return 1;

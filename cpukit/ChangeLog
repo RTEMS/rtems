@@ -1,3 +1,8 @@
+2006-07-12	Till Straumann <strauman@slac.stanford.edu>
+
+	* pppd/sys-rtems.c: fixed error message so that the correct
+	ioctl is reported.
+
 2006-07-11	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1124/rtems
