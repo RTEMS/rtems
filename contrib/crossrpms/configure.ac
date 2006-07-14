@@ -24,9 +24,10 @@ rtems )
   savdir=`pwd`
   cd $srcdir
   targets=
-  for d in rtems4.7/*/gcc-sources.add; do
-      b=`echo $d | sed -e 's,rtems4.7/,,;s,/gcc-sources.add,,'`
-      targets="$targets $b-rtems4.7"
+  for d in rtems*/*/Makefile.am; do
+      o=`echo $d | sed -e 's,/.*,,'`
+      a=`echo $d | sed -e 's,/Makefile\.am,,;s,.*/,,'`
+      targets="$targets $a-$o"
   done
   cd $savdir
   ;;
@@ -34,15 +35,18 @@ all )
   savdir=`pwd`
   cd $srcdir
   targets=
-  for d in rtems*/*/gcc-sources.add; do
+  for d in rtems*/*/Makefile.am; do
       o=`echo $d | sed -e 's,/.*,,'`
-      a=`echo $d | sed -e 's,/gcc-sources.add,,;s,.*/,,'`
+      a=`echo $d | sed -e 's,/Makefile\.am,,;s,.*/,,'`
       targets="$targets $a-$o"
   done
-  for d in cygwin*/*/gcc-sources.add mingw*/*/gcc-sources.add \
-      freebsd*/*/gcc-sources.add; do
+  for d in freebsd*/*/Makefile.am \
+    cygwin*/*/Makefile.am \
+    mingw*/*/Makefile.am \
+    solaris*/*/Makefile.am; \
+  do
       o=`echo $d | sed -e 's,/.*,,'`
-      a=`echo $d | sed -e 's,/gcc-sources.add,,;s,.*/,,'`
+      a=`echo $d | sed -e 's,/Makefile\.am,,;s,.*/,,'`
       targets="$targets $a-pc-$o"
   done
   cd $savdir
