@@ -13,7 +13,7 @@
  *  $Id$
  */
 
-#include <leon.h>
+#include <bsp.h>
 
 #define amba_insert_device(tab, address) \
 { \
@@ -31,6 +31,9 @@ amba_confarea_type amba_conf;
 /* Pointers to Interrupt Controller configuration registers */
 volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
 
+int LEON3_Cpu_Index = 0;
+static int apb_init = 0;
+
 /*
  *  bsp_leon3_predriver_hook
  *
@@ -41,12 +44,23 @@ volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
  *  amba_ahb_masters, amba_ahb_slaves and amba.
  */
 
+unsigned int getasr17();
+
+asm(" .text  \n"
+    "getasr17:   \n"
+    "retl \n"
+    "mov %asr17, %o0\n"
+);
+    
+      
+extern rtems_configuration_table Configuration;
 
 void bsp_leon3_predriver_hook(void)
 {
   unsigned int *cfg_area;  /* address to configuration area */
   unsigned int mbar, iobar, conf;
   int i, j;
+  unsigned int tmp;
 
   amba_conf.ahbmst.devnr = 0; amba_conf.ahbslv.devnr = 0; amba_conf.apbslv.devnr = 0;
   cfg_area = (unsigned int *) (LEON3_IO_AREA | LEON3_CONF_AREA);
@@ -68,7 +82,8 @@ void bsp_leon3_predriver_hook(void)
   {
     conf = amba_get_confword(amba_conf.ahbslv, i, 0);
     mbar = amba_ahb_get_membar(amba_conf.ahbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_APBMST))
+    if ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_APBMST) &&
+	(apb_init == 0))
     {
       amba_conf.apbmst = amba_membar_start(mbar);
       cfg_area = (unsigned int *) (amba_conf.apbmst | LEON3_CONF_AREA);
@@ -77,6 +92,7 @@ void bsp_leon3_predriver_hook(void)
 	amba_insert_device(&amba_conf.apbslv, cfg_area);
 	cfg_area += LEON3_APB_CONF_WORDS;
       }
+      apb_init = 1;
     }
   }    
 
@@ -89,6 +105,12 @@ void bsp_leon3_predriver_hook(void)
     {
       iobar = amba_apb_get_membar(amba_conf.apbslv, i);
       LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) amba_iobar_start(amba_conf.apbmst, iobar);
+      /* asm("mov %%asr17, %0": : "r" (tmp)); */
+      if (Configuration.User_multiprocessing_table != NULL)
+      {	
+	tmp = getasr17();
+	LEON3_Cpu_Index = (tmp >> 28) & 3;
+      }
       break;
     }
     i++;

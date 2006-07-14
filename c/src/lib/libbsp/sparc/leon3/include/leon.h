@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-#define LEON_INTERRUPT_EXTERNAL_1 5 
+#define LEON_INTERRUPT_EXTERNAL_1 5
 
 #ifndef ASM
 /*
@@ -293,23 +293,24 @@ extern int LEON3_Cpu_Index;
   (LEON3_IrqCtrl_Regs.ipend & (1 << (_source)))
  
 #define LEON_Is_interrupt_masked( _source ) \
-  (LEON3_IrqCtrl_Regs.mask_p0 & (1 << (_source)))
+  do {\
+     (LEON3_IrqCtrl_Regs.mask[LEON3_Cpu_Index] & (1 << (_source))); \
+   } while (0)
+
  
 #define LEON_Mask_interrupt( _source ) \
   do { \
     uint32_t _level; \
-    \
     _level = sparc_disable_interrupts(); \
-     LEON3_IrqCtrl_Regs->mask_p0  &= ~(1 << (_source)); \
+     LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]  &= ~(1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
  
 #define LEON_Unmask_interrupt( _source ) \
   do { \
     uint32_t _level; \
-    \
     _level = sparc_disable_interrupts(); \
-      LEON3_IrqCtrl_Regs->mask_p0 |= (1 << (_source)); \
+    LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]  |= (1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
 
@@ -317,10 +318,9 @@ extern int LEON3_Cpu_Index;
   do { \
     uint32_t _level; \
     uint32_t _mask = 1 << (_source); \
-    \
     _level = sparc_disable_interrupts(); \
-      (_previous) = LEON3_IrqCtrl_Regs->mask_p0; \
-      LEON3_IrqCtrl_Regs->mask_p0 = _previous & ~_mask; \
+     (_previous) = LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]; \
+     LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = _previous & ~_mask; \
     sparc_enable_interrupts( _level ); \
     (_previous) &= _mask; \
   } while (0)
@@ -329,12 +329,12 @@ extern int LEON3_Cpu_Index;
   do { \
     uint32_t _level; \
     uint32_t _mask = 1 << (_source); \
-    \
     _level = sparc_disable_interrupts(); \
-      LEON3_IrqCtrl_Regs->mask_p0 = \
-        (LEON3_IrqCtrl_Regs->mask_p0 & ~_mask) | (_previous); \
+      LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = \
+        (LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] & ~_mask) | (_previous); \
     sparc_enable_interrupts( _level ); \
   } while (0)
+
 
 /*
  *  Each timer control register is organized as follows:
@@ -367,9 +367,6 @@ extern int LEON3_Cpu_Index;
 #define LEON_REG_TIMER_COUNTER_DEFINED_MASK       0x00000003
 #define LEON_REG_TIMER_COUNTER_CURRENT_MODE_MASK  0x00000003
 
-/* XXX really needed but I can't get it to install -- JRS */
-/* #include <spacewire.h> */
-  
 #endif /* !ASM */
 
 #ifdef __cplusplus
@@ -377,4 +374,5 @@ extern int LEON3_Cpu_Index;
 #endif
 
 #endif /* !_INCLUDE_LEON_h */
+/* end of include file */
 

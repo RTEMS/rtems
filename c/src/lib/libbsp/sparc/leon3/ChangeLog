@@ -1,3 +1,9 @@
+2006-07-13	Jerry Needell <jerry.needell@unh.edu>
+
+	* clock/ckinit.c, include/leon.h, timer/timer.c, amba/amba.c
+	fixed up merge from 4.6.6. Correct references to 
+	LEON3_IrqCtrl_Regs_Map.mask[x] and LEON3_Timer_Regs_Map.timer[x].
+
 2006-07-12	Jerry Needell <jerry.needell@unh.edu>
 
 	* amba/amba.c, clock/ckinit.c, include/amba.h, timer/timer.c: Search
