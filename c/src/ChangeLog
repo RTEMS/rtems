@@ -8,6 +8,12 @@
 	4.6 branch.  Original modifications by Gaisler Enterprises.
 	* libchip/network/greth.c, libchip/network/greth.h: New files.
 
+2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* ide/ata.[ch]: 
+	(PR1118) fetch priority for ATA task from a variable, 
+	not a fixed configuration value.
+	
 2006-06-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add ampolish3.

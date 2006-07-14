@@ -1,3 +1,8 @@
+2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* aclocal/bsp-alias.m4: (PR1117) Add brs5l as alias for gen5200
+	* aclocal/check-bsps.m4: (PR1117) Add brs5l as alias for gen5200
+	
 2006-06-23	Worth Burruss <worth@motioncontrol.org>
 
 	* README.configure: Add mcf5235.

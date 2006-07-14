@@ -1,3 +1,7 @@
+2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* custom/brsl5.cfg: (PR1117) added
+	
 2006-06-08	Bruce Robinson <brucer@pmccorp.com>
 	
         * custom/rbtx4925.cfg:  Fix CPU_CFLAGS defines.

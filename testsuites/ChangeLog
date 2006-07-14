@@ -1,3 +1,9 @@
+2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* samples/fileio/system.h: 
+	(PR1118) make use of the new confdefs.h mechanisms 
+	for the IDE/ATA interface
+	
 2006-04-18  Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-4.6.99.3.

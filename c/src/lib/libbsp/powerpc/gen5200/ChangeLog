@@ -1,3 +1,45 @@
+2006-06-28      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, preinstall.am: 
+	(PR1117) Add  startup/linkcmds.brs5l, slicetimer.h, nvram.h 
+	to distributed files, add start/start.S to startup sources
+
+	* bestcomm/bestcomm_glue.c: 
+	(PR1117) make SDMA interrupt operations interrupt save
+	
+	* bsp_specs: (PR1117) move ecrti to proper location
+
+	* console/console.c: (PR1117) round baudrate divider to nearest match
+
+	* include/bsp.h: (PR1117) activate interrupt for ATA, 
+	modify calculation of ROM size, add BSP_Convert_decrementer
+
+	* include/mpc5200.h: (PR1117) add some register definitions
+
+	* include/tm27.h: 
+	(PR1117) adapt to make tm27 compile again with this BSP
+
+	* mscan/mscan.[ch]:
+	(PR1117) many improvements and fixes, 
+	transmit queue added, 
+	baud rate settings adapted
+
+	* network/network.c: 
+	(PR1117) add handler code to detect and restart FEC on DMA overflow
+
+	* start/start.S:
+	(PR1117) fixed some typos and minor bugs
+	enable FPU in start sequence
+
+	* startup/linkcmds:
+	(PR1117) removed, no longer used
+	
+	* startup/linkcmds.brs5l:
+	(PR1117) added
+
+	* tod/pcf8563.c: 
+	(PR1117) fixed bug which read wrong hour from RTC
+
 2006-03-08	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmds.pm520: Add .gnu.linkonce.b.*

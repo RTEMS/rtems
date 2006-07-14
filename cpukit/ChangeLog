@@ -23,6 +23,33 @@
 	point lead to the potential for a thread timing out and already
 	having inherited the ceiling priority.
 
+2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libblock/src/bdbuf.c: 
+	* libblock/include/bdbuf.h: 
+	(PR1118) fetch priority for swapout task from a variable, 
+	not a fixed configuration value.
+
+	* libfs/src/imfs/imfs.h:
+	* libfs/src/imfs/imfs_initsupp.c:
+	(PR1118) fetch bytes_per_block value from a configuration variable, 
+	not from a preprocessor macro
+
+	* sapi/include/confdefs.h: 
+	(PR1118) add configuration mechanisms for:
+	- ATA task priority
+	- swapout task priority
+	- libblock basic configuration
+	conditionally add ata driver to device driver table
+	conditionally add ide driver to device driver table
+
+	* libcsupport/include/sys/cdefs.h:
+	* libnetworking/include/sys/linker_set.h:
+	(PR1119) change attribute "unused" to "used" for sysctl data structures
+	
+	* libmisc/shell/shell.c:
+	(PR1120) adapt stdio redirection to current newlib behaviour
+	
 2006-06-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add ampolish3.
