@@ -14,10 +14,13 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
-Requires:	@rpmprefix@rtems4.7-base-binutils
 %endif
 BuildRequires:	flex
 BuildRequires:	bison
+%if %build_infos
+
+Requires:	@rpmprefix@rtems4.7-base-binutils
+%endif
 
 @SOURCES@
 
