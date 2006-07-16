@@ -8,7 +8,6 @@ MKSPEC = sed \
 	  -e "s,[@]rpmprefix[@],$(rpmprefix),g" \
 	  -e "s,[@]_prefix[@],$(prefix),g" \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
-	  -e "s,[@]osversion[@],$(osversion),g" \
 	  -e "/^%package -n [@]rpmprefix[@][@]tool_target[@]-gcc/d" \
 	  -e "s/-n [@]rpmprefix[@][@]tool_target[@]-gcc//" \
 	  -e "s,[@]build_infos[@],$(build_infos),g" \
