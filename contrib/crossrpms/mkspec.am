@@ -10,6 +10,5 @@ MKSPEC = sed \
 	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
 	  -e "/^%package -n [@]rpmprefix[@][@]tool_target[@]-gcc/d" \
 	  -e "s/-n [@]rpmprefix[@][@]tool_target[@]-gcc//" \
-	  -e "s,[@]build_infos[@],$(build_infos),g" \
 	  -e "@sysdirpattern@" \
 	  -e "/[@]PATCH/d"
