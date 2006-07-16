@@ -1,3 +1,7 @@
+2006-07-16	Joel Sherrill <joel@OARcorp.com>
+
+	* preinstall.am: Install spacewire.h
+
 2006-07-13	Jerry Needell <jerry.needell@unh.edu>
 
 	* clock/ckinit.c, include/leon.h, timer/timer.c, amba/amba.c
