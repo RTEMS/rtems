@@ -3,7 +3,7 @@
 # rtems-base-gdb
 # ==============================================================
 %package -n @rpmprefix@rtems4.7-base-gdb
-Summary:      base package for rtems gdb
+Summary:      Base package for RTEMS gdbs
 Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
