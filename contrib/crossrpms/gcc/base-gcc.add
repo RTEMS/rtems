@@ -1,8 +1,8 @@
 %if %build_infos
 # ==============================================================
-# @rpmprefix@rtems@osversion@-base-gcc
+# @rpmprefix@rtems4.7-base-gcc
 # ==============================================================
-%package -n @rpmprefix@rtems@osversion@-base-gcc
+%package -n @rpmprefix@rtems4.7-base-gcc
 Summary:	Base package for rtems gcc and newlib C Library
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
@@ -11,11 +11,11 @@ License:	GPL
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-%description -n @rpmprefix@rtems@osversion@-base-gcc
+%description -n @rpmprefix@rtems4.7-base-gcc
 
 GCC files that are shared by all targets.
 
-%files -n @rpmprefix@rtems@osversion@-base-gcc
+%files -n @rpmprefix@rtems4.7-base-gcc
 %defattr(-,root,root)
 %sysdir %{_infodir}
 %ghost %{_infodir}/dir
@@ -38,7 +38,7 @@ GCC files that are shared by all targets.
 %{_mandir}/man7/gfdl.7*
 %{_mandir}/man7/gpl.7*
 
-%post -n @rpmprefix@rtems@osversion@-base-gcc
+%post -n @rpmprefix@rtems4.7-base-gcc
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cpp.info.gz
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz
@@ -47,7 +47,7 @@ GCC files that are shared by all targets.
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz
 %endif
 
-%preun -n @rpmprefix@rtems@osversion@-base-gcc
+%preun -n @rpmprefix@rtems4.7-base-gcc
 if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cpp.info.gz
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz

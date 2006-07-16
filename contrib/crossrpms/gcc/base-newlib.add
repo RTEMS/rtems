@@ -1,34 +1,34 @@
 %if %build_infos
 %if %build_newlib
 # ==============================================================
-# @rpmprefix@rtems@osversion@-base-newlib
+# @rpmprefix@rtems4.7-base-newlib
 # ==============================================================
-%package -n @rpmprefix@rtems@osversion@-base-newlib
+%package -n @rpmprefix@rtems4.7-base-newlib
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
 License:	Distributable
 
-Provides:	@rpmprefix@rtems@osversion@-base-libc = %{newlib_version}-%{release}
+Provides:	@rpmprefix@rtems4.7-base-libc = %{newlib_version}-%{release}
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-%description -n @rpmprefix@rtems@osversion@-base-newlib
+%description -n @rpmprefix@rtems4.7-base-newlib
 newlib files that are shared by all targets.
 
-%files -n @rpmprefix@rtems@osversion@-base-newlib
+%files -n @rpmprefix@rtems4.7-base-newlib
 %defattr(-,root,root)
 %sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/libc.info*
 %{_infodir}/libm.info*
 
-%post -n @rpmprefix@rtems@osversion@-base-newlib
+%post -n @rpmprefix@rtems4.7-base-newlib
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz
 
-%preun -n @rpmprefix@rtems@osversion@-base-newlib
+%preun -n @rpmprefix@rtems4.7-base-newlib
 if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz

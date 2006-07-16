@@ -9,7 +9,7 @@ Version:        %{gcc_rpmvers}
 License:	GPL
 
 %if "%{_prefix}" != "/usr"
-Requires:       @rpmprefix@rtems@osversion@-base-gcc
+Requires:       @rpmprefix@rtems4.7-base-gcc
 %endif
 Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}-%{release}
 

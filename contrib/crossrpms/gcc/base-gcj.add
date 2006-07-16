@@ -3,7 +3,7 @@
 # ==============================================================
 # rtems-base-gcj
 # ==============================================================
-%package -n @rpmprefix@rtems@osversion@-base-gcj
+%package -n @rpmprefix@rtems4.7-base-gcj
 Summary:        Base package for rtems gcc/java compiler (gcj)
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
@@ -12,12 +12,12 @@ License:	GPL
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-%description -n @rpmprefix@rtems@osversion@-base-gcj
+%description -n @rpmprefix@rtems4.7-base-gcj
 RTEMS is an open source operating system for embedded systems.
 
 This is the files for gcc/java (gcj) that are shared by all targets.
 
-%files -n @rpmprefix@rtems@osversion@-base-gcj
+%files -n @rpmprefix@rtems4.7-base-gcj
 %defattr(-,root,root)
 %if "%{gcc_version}" <= "3.4"
 %sysdir %{_bindir}
@@ -48,14 +48,14 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %endif
 %endif
 
-%post -n @rpmprefix@rtems@osversion@-base-gcj
+%post -n @rpmprefix@rtems4.7-base-gcj
 /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcj.info*
 
 %if "%{gcc_version}" >= "3.3"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/fastjar.info*
 %endif
 
-%preun -n @rpmprefix@rtems@osversion@-base-gcj
+%preun -n @rpmprefix@rtems4.7-base-gcj
 if [ $1 -eq 0 ]; then
 /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcj.info*
 
