@@ -9,6 +9,10 @@
 # Requires:       @rpmprefix@@tool_target@-newlib = %{newlib_version}-%{release}
 # License:	GPL
 
+# %if %build_infos
+# Requires:      @rpmprefix@rtems4.7-base-gcc
+# %endif
+
 %description -n @rpmprefix@@tool_target@-gcc
 GNU cc compiler for @tool_target@.
 

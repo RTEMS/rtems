@@ -4,7 +4,9 @@
 # %package -n @rpmprefix@@tool_target@-binutils
 # Summary:      rtems binutils for @tool_target@
 # Group: Development/Tools
+# %if %build_infos
 # Requires: @rpmprefix@rtems4.7-base-binutils
+# %endif
 
 %description -n @rpmprefix@@tool_target@-binutils
 

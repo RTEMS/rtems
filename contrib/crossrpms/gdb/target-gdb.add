@@ -4,7 +4,9 @@
 # %package -n @rpmprefix@@tool_target@-gdb
 # Summary:      rtems gdb for @tool_target@
 # Group: Development/Tools
+# %if %build_infos
 # Requires: @rpmprefix@rtems4.7-base-gdb
+# %endif
 
 %description -n @rpmprefix@@tool_target@-gdb
 
