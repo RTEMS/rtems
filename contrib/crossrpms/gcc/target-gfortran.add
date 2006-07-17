@@ -8,7 +8,7 @@ Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
 
-%if "%{_prefix}" != "/usr"
+%if %build_infos
 Requires:       @rpmprefix@rtems4.7-base-gfortran
 %endif
 Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}-%{release}
