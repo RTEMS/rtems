@@ -1,9 +1,9 @@
 %if %build_infos
 # ==============================================================
-# rtems-base-binutils
+# @rpmprefix@rtems4.7-base-binutils
 # ==============================================================
 %package -n @rpmprefix@rtems4.7-base-binutils
-Summary:      base package for rtems binutils
+Summary:      Base package for RTEMS binutils
 Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info

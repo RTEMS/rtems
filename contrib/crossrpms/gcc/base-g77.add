@@ -1,7 +1,7 @@
 %if %build_infos
 %if %build_g77
 # ==============================================================
-# rtems-base-g77
+# @rpmprefix@rtems4.7-base-g77
 # ==============================================================
 %package -n @rpmprefix@rtems4.7-base-g77
 Summary:        Base package for RTEMS gcc/g77 compiler

@@ -1,6 +1,6 @@
 %if %build_infos
 # ==============================================================
-# rtems-base-gdb
+# @rpmprefix@rtems4.7-base-gdb
 # ==============================================================
 %package -n @rpmprefix@rtems4.7-base-gdb
 Summary:      Base package for RTEMS gdbs

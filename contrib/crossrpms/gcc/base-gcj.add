@@ -1,7 +1,7 @@
 %if %build_infos
 %if %build_gcj
 # ==============================================================
-# rtems-base-gcj
+# @rpmprefix@rtems4.7-base-gcj
 # ==============================================================
 %package -n @rpmprefix@rtems4.7-base-gcj
 Summary:        Base package for rtems gcc/java compiler (gcj)

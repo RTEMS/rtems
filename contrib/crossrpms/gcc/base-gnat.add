@@ -1,7 +1,7 @@
 %if %build_infos
 %if %build_gnat
 # ==============================================================
-# rtems-base-gnat
+# @rpmprefix@rtems4.7-base-gnat
 # ==============================================================
 %package -n @rpmprefix@rtems4.7-base-gnat
 Summary:	Base package for RTEMS gcc/gnat compiler
