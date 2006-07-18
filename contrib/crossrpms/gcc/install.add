@@ -38,9 +38,7 @@
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
-%endif
-
-%if "%{_prefix}" == "/usr"
+%else
 # Conflict with a native GCC's infos
   rm -rf $RPM_BUILD_ROOT%{_infodir}
 
