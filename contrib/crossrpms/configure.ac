@@ -42,12 +42,17 @@ all )
   done
   for d in freebsd*/*/Makefile.am \
     cygwin*/*/Makefile.am \
-    mingw*/*/Makefile.am \
-    solaris*/*/Makefile.am; \
+    mingw*/*/Makefile.am; \
   do
       o=`echo $d | sed -e 's,/.*,,'`
       a=`echo $d | sed -e 's,/Makefile\.am,,;s,.*/,,'`
       targets="$targets $a-pc-$o"
+  done
+  for d in solaris*/*/Makefile.am; \
+  do
+      o=`echo $d | sed -e 's,/.*,,'`
+      a=`echo $d | sed -e 's,/Makefile\.am,,;s,.*/,,'`
+      targets="$targets $a-sun-$o"
   done
   cd $savdir
   ;;
