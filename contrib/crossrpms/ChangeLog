@@ -1,3 +1,8 @@
+2006-07-19  Chris Johns  <chrisj@rtems.org>
+
+        * patches/gcc-core-4.1.1-rtems-20060720.diff:
+        Added patch to fix GCC bug PR28400.
+
 2006-07-13	Joel Sherrill <joel@oarcorp.com>
 
 	* configure.ac, rtems4.7/Makefile.am, rtems4.7/arm/Makefile.am,
