@@ -39,19 +39,26 @@ my %options = ();
 
 GetOptions(
   \%options,
-  'infos!',
+  'prefix=s' => \$prefix,
+  'enable-infos' => sub { $options{infos} = 1 },
+  'disable-infos' => sub { $options{infos} = 0 },
   'newlib!',
   'languages=s' => \@languages,
-  'prefix=s' => \$prefix,
   'sources!',
   'verbose+' => \$verbose
 ) or die( "failed to GetOptions" );
 
-if ( defined($options{infos}) )
-{
-  $infos = $options{infos};
+if ( !defined($options{infos}) )
+{ # User did not override, use defaults
+  if ( $prefix =~ m/^\/usr$/ ) {
+    $infos = 0;
+  } elsif ( $prefix =~ m/^\/usr\/local$/ ) {
+    $infos = 0;
+  } else {
+    $infos = 1;
+  }
 } else {
-  $infos = ( $prefix =~ m/\/opt\/rtems.*/ ) ? 1 : 0;
+  $infos = int($options{infos});
 }
 
 if ( defined($options{sources}) )
