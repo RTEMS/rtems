@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.7])
 
 AC_PREREQ(2.59)
-AC_INIT([crossrpms],[0.20060707.1],[rtems-bugs@rtems.com])
+AC_INIT([crossrpms],[0.20060720.1],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -60,27 +60,22 @@ esac
 
 case "$prefix" in
 /usr)
-  build_infos=0
   sysdirpattern="/%sysdir/d"
   rpmprefix=
   ;;
 /usr/local)
-  build_infos=0
   sysdirpattern="/%sysdir/d"
   rpmprefix="local-"
   ;;
 /opt/rtems)
-  build_infos=1
   sysdirpattern="s/^%sysdir/%dir/g"
   rpmprefix="rtems-"
   ;;
 NONE|${ac_default_prefix}) # Default prefix
-  build_infos=1
   sysdirpattern="s/^%sysdir/%dir/g"
   rpmprefix="[rtems-]RTEMS_API[-]"
   ;;
 *)
-  build_infos=0
   sysdirpattern="s/^%sysdir/%dir/g"
   rpmprefix="custom-"
   ;;
@@ -100,18 +95,20 @@ AC_ARG_ENABLE([rpmprefix],
 ])
 AC_SUBST(rpmprefix)
 
+SPECSTRIP_OPTS=
+
 AC_ARG_ENABLE([infos],
 [  --enable-infos                      enable building infos],[
   case "$enable_infos" in
   yes)
-    build_infos=1;;
+    SPECSTRIP_OPTS="$SPECSTRIP_OPTS --enable-infos";;
   no)
-    build_infos=0;;
+    SPECSTRIP_OPTS="$SPECSTRIP_OPTS --disable-infos";;
   *)
     AC_MSG_ERROR([Invalid argument to --enable-infos])
   esac
 ])
-AC_SUBST(build_infos)
+AC_SUBST(SPECSTRIP_OPTS)
 
 AS_IF([test "${host}" != "${build}"],[
 AC_MSG_CHECKING(for RPM OS)
