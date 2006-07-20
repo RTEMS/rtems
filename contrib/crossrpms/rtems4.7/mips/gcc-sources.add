@@ -1,6 +1,6 @@
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 %if "%{gcc_version}" == "4.1.1"
-Patch0:		gcc-core-4.1.1-rtems-20060626.diff
+Patch0:		gcc-core-4.1.1-rtems-20060720.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
