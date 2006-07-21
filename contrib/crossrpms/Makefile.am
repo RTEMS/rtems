@@ -16,3 +16,9 @@ DIST_SUBDIRS += rtems4.7
 
 EXTRA_DIST += specstrip
 EXTRA_DIST += $(srcdir)/patches/*.diff
+
+install-patches:
+	rpmsourcedir=`rpm --eval '%_sourcedir'`; \
+	for f in $(srcdir)/patches/*.diff; do \
+	  $(INSTALL_DATA) $$f $$rpmsourcedir; \
+	done
