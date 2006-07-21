@@ -28,7 +28,6 @@ use Getopt::Long;
 
 use strict;
 
-my $sources = 0;
 my $newlib = 0;
 my $infos = 0;
 my $prefix = '/usr';
@@ -44,7 +43,6 @@ GetOptions(
   'disable-infos' => sub { $options{infos} = 0 },
   'newlib!',
   'languages=s' => \@languages,
-  'sources!',
   'verbose+' => \$verbose
 ) or die( "failed to GetOptions" );
 
@@ -61,13 +59,6 @@ if ( !defined($options{infos}) )
   $infos = int($options{infos});
 }
 
-if ( defined($options{sources}) )
-{
-  $sources = $options{sources};
-} else {
-  $sources = ( $prefix =~ m/\/opt\/rtems.*/ ) ? 0 : 1;
-}
-
 if ( defined($options{newlib}) )
 {
   $newlib = $options{newlib};
@@ -76,7 +67,6 @@ if ( defined($options{newlib}) )
 }
 
 if ( $verbose ) {
-  print STDERR "SOURCES: $sources\n";
   print STDERR "INFOS  : $infos\n";
   print STDERR "PREFIX : $prefix\n";
 }
