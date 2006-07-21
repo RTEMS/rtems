@@ -19,7 +19,8 @@ BuildRequires:	flex
 BuildRequires:	bison
 %if %build_infos
 
-Requires:	@rpmprefix@rtems4.7-base-binutils
+# Requires:	@rpmprefix@rtems4.7-base-binutils
+Requires:	@rpmprefix@binutils-common
 %endif
 
 @SOURCES@
