@@ -36,6 +36,9 @@ GNU cc compiler for @tool_target@.
 %{_bindir}/@tool_target@-gccbug
 
 %dir %{gcclib}/@tool_target@/%{gcc_version}/include
+%if "%{gcc_version}" >= "4.0.0"
+%dir %{gcclib}/@tool_target@/%{gcc_version}/include/ssp
+%endif
 
 %dir %{gccexec}
 %dir %{gccexec}/@tool_target@
