@@ -18,7 +18,8 @@ EXTRA_DIST += specstrip
 EXTRA_DIST += $(srcdir)/patches/*.diff
 
 install-patches:
-	rpmsourcedir=`rpm --eval '%_sourcedir'`; \
+	@rpmsourcedir=`rpm --eval '%_sourcedir'`; \
 	for f in $(srcdir)/patches/*.diff; do \
+	  echo "$(INSTALL_DATA) $$f $$rpmsourcedir"; \
 	  $(INSTALL_DATA) $$f $$rpmsourcedir; \
 	done
