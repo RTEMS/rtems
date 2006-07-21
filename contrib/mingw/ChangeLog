@@ -1,0 +1,5 @@
+2006-07-21  Chris Johns  <chrisj@rtems.org>
+
+	* build-exes.sh, rtems-tools.nsi, rtems.ini, rtems_logo.bmp:
+	Add NSIS installer support for MinGW.
+
