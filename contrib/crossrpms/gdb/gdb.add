@@ -21,10 +21,10 @@ BuildRequires:	libtermcap-devel
 BuildRequires:	ncurses-devel
 %if %build_infos
 
-Requires:	@rpmprefix@rtems4.7-base-gdb
+Requires:	@rpmprefix@gdb-common
 %endif
 
 @SOURCES@
 
 %description
-Cross gdb for target @tool_target@
+GDB for target @tool_target@

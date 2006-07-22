@@ -1,20 +1,23 @@
 %if %build_infos
 # ==============================================================
-# @rpmprefix@rtems4.7-base-gdb
+# @rpmprefix@gdb-common
 # ==============================================================
-%package -n @rpmprefix@rtems4.7-base-gdb
+%package -n @rpmprefix@gdb-common
 Summary:      Base package for RTEMS gdbs
 Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-%description -n @rpmprefix@rtems4.7-base-gdb
+Provides:	@rpmprefix@rtems4.7-base-gdb = %{gdb_version}-%{release}
+Obsoletes:	@rpmprefix@rtems4.7-base-gdb
+Provides:	@rpmprefix@rtems-base-gdb = %{gdb_version}-%{release}
+Obsoletes:	@rpmprefix@rtems-base-gdb
 
-RTEMS is an open source operating system for embedded systems.
+%description -n @rpmprefix@gdb-common
 
-This is the base for gdb regardless of target CPU.
+GDB files shared by all targets.
 
-%post -n @rpmprefix@rtems4.7-base-gdb
+%post -n @rpmprefix@gdb-common
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdb.info.gz
 %if "%{gdb_version}" < "6.3"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz
@@ -27,7 +30,7 @@ This is the base for gdb regardless of target CPU.
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz
 %endif
 
-%preun -n @rpmprefix@rtems4.7-base-gdb
+%preun -n @rpmprefix@gdb-common
 if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdb.info.gz
 %if "%{gdb_version}" < "6.3"
@@ -42,7 +45,7 @@ if [ $1 -eq 0 ]; then
 %endif
 fi
 
-%files -n @rpmprefix@rtems4.7-base-gdb
+%files -n @rpmprefix@gdb-common
 %defattr(-,root,root)
 %sysdir %{_infodir}
 %ghost %{_infodir}/dir
