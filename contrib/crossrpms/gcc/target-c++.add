@@ -1,22 +1,25 @@
 %if %build_cxx
 # ==============================================================
-# @rpmprefix@@tool_target@-c++
+# @rpmprefix@@tool_target@-gcc-c++
 # ==============================================================
-%package -n @rpmprefix@@tool_target@-c++
+%package -n @rpmprefix@@tool_target@-gcc-c++
 Summary:	GCC c++ compiler for @tool_target@
 Group:		Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
 
+Provides:	@rpmprefix@@tool_target@-c++ = %{gcc_rpmvers}-%{release}
+Obsoletes:	@rpmprefix@@tool_target@-c++ < %{gcc_rpmvers}-%{release}
+
 %if %build_infos
-Requires:       @rpmprefix@rtems4.7-base-gcc
+Requires:       @rpmprefix@gcc-common
 %endif
 Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}-%{release}
 
-%description -n @rpmprefix@@tool_target@-c++
+%description -n @rpmprefix@@tool_target@-gcc-c++
 GCC c++ compiler for @tool_target@.
 
-%files -n @rpmprefix@@tool_target@-c++ -f build/files.g++
+%files -n @rpmprefix@@tool_target@-gcc-c++ -f build/files.g++
 %defattr(-,root,root)
 %{_mandir}/man1/@tool_target@-g++.1*
 
