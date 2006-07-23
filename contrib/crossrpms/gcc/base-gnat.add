@@ -1,9 +1,9 @@
 %if %build_infos
 %if %build_gnat
 # ==============================================================
-# @rpmprefix@rtems4.7-base-gnat
+# @rpmprefix@gcc-gnat-common
 # ==============================================================
-%package -n @rpmprefix@rtems4.7-base-gnat
+%package -n @rpmprefix@gcc-gnat-common
 Summary:	Base package for RTEMS gcc/gnat compiler
 Group: 		Development/Tools
 License:	GPL
@@ -11,12 +11,17 @@ License:	GPL
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-%description -n @rpmprefix@rtems4.7-base-gnat
+Provides:	@rpmprefix@rtems4.7-base-gnat = %{gcc_rpmvers}-%{release}
+Obsoletes:	@rpmprefix@rtems4.7-base-gnat < %{gcc_rpmvers}-%{release}
+Provides:	@rpmprefix@rtems-base-gnat = %{gcc_rpmvers}-%{release}
+Obsoletes:	@rpmprefix@rtems-base-gnat < %{gcc_rpmvers}-%{release}
+
+%description -n @rpmprefix@gcc-gnat-common
 RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/gnat tools for the gcc/gnat compiler
 
-%files -n @rpmprefix@rtems4.7-base-gnat
+%files -n @rpmprefix@gcc-gnat-common
 %defattr(-,root,root)
 %sysdir %{_bindir}
 %{_bindir}/vxaddr2line%{_exeext}
@@ -25,12 +30,12 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 %ghost %{_infodir}/dir
 %{_infodir}/gnat*
 
-%post -n @rpmprefix@rtems4.7-base-gnat
+%post -n @rpmprefix@gcc-gnat-common
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat_rm.info.gz
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
 
-%preun -n @rpmprefix@rtems4.7-base-gnat
+%preun -n @rpmprefix@gcc-gnat-common
 if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat_rm.info.gz
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz
