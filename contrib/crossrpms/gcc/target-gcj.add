@@ -7,9 +7,10 @@ Summary:        Java support (gcj) for @tool_target@-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
+Provides:	@rpmprefix@@tool_target@-gcc-gcj = %{gcc_rpmvers}-%{release}
 
 %if %build_infos
-Requires:       @rpmprefix@rtems4.7-base-gcj
+Requires:       @rpmprefix@gcc-gcj-common
 %endif
 Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}-%{release}
 
