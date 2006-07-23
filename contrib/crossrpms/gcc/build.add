@@ -46,6 +46,7 @@
     --disable-nls --without-included-gettext \
     --disable-win32-registry \
     --enable-version-specific-runtime-libs \
+    --enable-threads \
     --with-sysroot=%{_prefix}/@tool_target@/sys-root \
     --enable-languages="$languages" $optargs
 
