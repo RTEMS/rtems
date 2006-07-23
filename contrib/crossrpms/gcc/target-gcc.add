@@ -10,7 +10,7 @@
 # License:	GPL
 
 # %if %build_infos
-# Requires:      @rpmprefix@rtems4.7-base-gcc
+# Requires:      @rpmprefix@gcc-common
 # %endif
 
 %description -n @rpmprefix@@tool_target@-gcc
@@ -36,7 +36,7 @@ GNU cc compiler for @tool_target@.
 %{_bindir}/@tool_target@-gccbug
 
 %dir %{gcclib}/@tool_target@/%{gcc_version}/include
-%if "%{gcc_version}" >= "4.0.0"
+%if "%{gcc_version}" > "4.0.3"
 %dir %{gcclib}/@tool_target@/%{gcc_version}/include/ssp
 %endif
 
