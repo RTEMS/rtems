@@ -7,7 +7,13 @@ Summary:      	C Library (newlib) for @tool_target@
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Provides:	@rpmprefix@@tool_target@-newlib = %{newlib_version}-%{release}
+
+Provides:	@rpmprefix@@tool_target@-libc = %{newlib_version}-%{release}
+Obsoletes:	@rpmprefix@@tool_target@-libc < %{newlib_version}-%{release}
+
+%if %build_infos
+Requires:	@rpmprefix@newlib-common
+%endif
 
 %description -n @rpmprefix@@tool_target@-newlib
 Newlib C Library for @tool_target@.

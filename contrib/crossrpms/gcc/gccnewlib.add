@@ -31,14 +31,13 @@ BuildRequires:	@rpmprefix@@tool_target@-sys-root
 BuildRequires:	@rpmprefix@@tool_target@-w32api-sys-root
 
 %if %build_infos
-Requires:	@rpmprefix@rtems4.7-base-gcc
+Requires:	@rpmprefix@gcc-common
 %endif
 Requires:	@rpmprefix@@tool_target@-binutils
 Requires:	@rpmprefix@@tool_target@-sys-root
 Requires:	@rpmprefix@@tool_target@-w32api-sys-root
 Requires:	@rpmprefix@@tool_target@-newlib = %{newlib_version}-%{release}
 
-%if "%{_vendor}" == "redhat"
 %if %build_gcj
 BuildRequires:	zlib-devel
 %endif
@@ -50,7 +49,6 @@ BuildRequires:	@rpmprefix@@tool_target@-newlib < %{newlib_version}-%{release}
 %endif
 %if %build_f95
 BuildRequires: gmp-devel
-%endif
 %endif
 
 %if "%{gcc_version}" >= "3.4"
