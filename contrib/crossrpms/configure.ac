@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.7])
 
 AC_PREREQ(2.59)
-AC_INIT([crossrpms],[0.20060723.1],[rtems-bugs@rtems.com])
+AC_INIT([crossrpms],[0.20060724.1],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -171,5 +171,7 @@ AC_CONFIG_FILES([rtems4.7/powerpc/Makefile])
 AC_CONFIG_FILES([rtems4.7/sh/Makefile])
 AC_CONFIG_FILES([rtems4.7/sparc/Makefile])
 AC_CONFIG_FILES([rtems4.7/tic4x/Makefile])
+
+AC_CONFIG_FILES([autotools/Makefile])
 
 AC_OUTPUT
