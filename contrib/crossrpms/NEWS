@@ -1,3 +1,5 @@
+2006-07-24	Add provisory/preliminary autotools support.
+
 2006-07-23	Rename "*-base-*" packages into <tool>-common.
 		Rename GCC's "*-<lang>" packages into "*-gcc-<lang>".
 		Many small directory ownership fixes.
