@@ -1,7 +1,6 @@
-* Add support for multiple rtems targets.
-- Allow building several specs at one time.
-- Support different versions and patches for different targets
-  (target-specific specs).
+* Improve autotools support:
+- Problem: The autotools packages conflict with OS provided packages
+  for --prefix=/usr.
 
 * Improve info files treatment:
 - Problem: Infos are not target canonicalized. Therefore, installing them to 
@@ -12,8 +11,6 @@
   $prefix ==/opt/rtems* or if user is forcing them with --enable-infos
 - Consider to canonicalize the infos (How?). Probably better be done by
   upstream.
-
-* Strip unnecessary stuff from generated *.specs.
 
 * Ada:
 - Consider to remove it (Lack of multilibs renders it unusable for rtems
