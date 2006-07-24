@@ -1,1 +1,9 @@
 Ralf Corsépius	<ralf.corsepius@rtems.org>
+
+Chris Johns	<chrisj@rtems.org>
+	- Testing.
+	- Bugfixes.
+	- mingw32.
+
+Joel Sherrill	<joel@oarcorp.com>
+	- Testing.
