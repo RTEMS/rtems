@@ -1,0 +1,15 @@
+AUTOCONF_SUBPACKAGES = $(top_builddir)/common/common.add
+AUTOCONF_SUBPACKAGES += $(top_srcdir)/autotools/autoconf.add
+
+autoconf-rtems.spec.in: $(AUTOCONF_SUBPACKAGES) Makefile.in
+	cat $(AUTOCONF_SUBPACKAGES) | sed \
+	  -e "s/[@]AUTOCONF_RPMREL[@]/$(AUTOCONF_RPMREL)/" > $@
+CLEANFILES += autoconf-rtems.spec.in
+
+
+@rpmprefix@autoconf-rtems.spec: autoconf-rtems.spec.in
+	$(MKSPEC) autoconf-rtems.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@autoconf-rtems.spec
+noinst_DATA += @rpmprefix@autoconf-rtems.spec
+
+EXTRA_DIST += $(AUTOCONF_SUBPACKAGES)
