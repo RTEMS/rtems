@@ -1,0 +1,60 @@
+Index: automake.in
+===================================================================
+RCS file: /cvs/automake/automake/automake.in,v
+retrieving revision 1.1526.2.6
+diff -u -r1.1526.2.6 automake.in
+--- automake.in	10 Jan 2004 13:41:52 -0000	1.1526.2.6
++++ automake.in	12 Jan 2004 04:08:12 -0000
+@@ -768,12 +768,28 @@
+ 		   'config_vars' => ['CCAS', 'CCASFLAGS'],
+ 
+ 		   'flags' => ['CCASFLAGS'],
+-		   # Users can set AM_ASFLAGS to includes DEFS, INCLUDES,
++		   # Users can set AM_CCASFLAGS to includes DEFS, INCLUDES,
+ 		   # or anything else required.  They can also set AS.
+ 		   'compile' => '$(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)',
+ 		   'compiler' => 'CCASCOMPILE',
+ 		   'compile_flag' => '-c',
+-		   'extensions' => ['.s', '.S'],
++		   'extensions' => ['.s'],
++
++		   # With assembly we still use the C linker.
++		   '_finish' => \&lang_c_finish);
++
++# Preprocessed Assembler.
++register_language ('name' => 'cppasm',
++		   'Name' => 'Preprocessed Assembler',
++		   'config_vars' => ['CCAS', 'CCASFLAGS'],
++
++		   'flags' => ['CCASFLAGS','CPPFLAGS'],
++		   # Users can set AM_ASFLAGS to includes DEFS, INCLUDES,
++		   # or anything else required.  They can also set AS.
++		   'compile' => '$(CCAS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)',
++		   'compiler' => 'CPPASCOMPILE',
++		   'compile_flag' => '-c',
++		   'extensions' => ['.S'],
+ 
+ 		   # With assembly we still use the C linker.
+ 		   '_finish' => \&lang_c_finish);
+@@ -1296,7 +1312,7 @@
+ 					%transform, %lang);
+ 
+ 	# If the source to a program consists entirely of code from a
+-	# `pure' language, for instance C++ for Fortran 77, then we
++	# `pure' language, for instance C++ or Fortran 77, then we
+ 	# don't need the C compiler code.  However if we run into
+ 	# something unusual then we do generate the C code.  There are
+ 	# probably corner cases here that do not work properly.
+@@ -4866,6 +4882,12 @@
+ 
+ # Rewrite a single assembly file.
+ sub lang_asm_rewrite
++{
++    return &lang_sub_obj;
++}
++
++# Rewrite a single preprocessed assembly file.
++sub lang_cppasm_rewrite
+ {
+     return &lang_sub_obj;
+ }
