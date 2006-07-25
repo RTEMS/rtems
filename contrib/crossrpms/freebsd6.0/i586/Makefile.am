@@ -35,4 +35,4 @@ include ../binutils.am
 GCC_VERS = 4.1.1
 GCC_RPMREL = @VERSION@
 include ../gcc.am
-GCC_OPTS += --languages=c,cxx,f95
+GCC_OPTS += --languages=c,cxx,f95,objc
