@@ -4,7 +4,7 @@ TARGET = i686-pc-cygwin
 
 include $(top_srcdir)/mkspec.am
 
-CYGWIN_VERS = 1.5.19-4
+CYGWIN_VERS = 1.5.21-1
 CYGWIN_RPMREL = @VERSION@
 EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
@@ -57,7 +57,7 @@ BINUTILS_VERS = 20050610-1
 BINUTILS_RPMREL = @VERSION@
 include ../binutils.am
 
-GCC_VERS = 3.4.4-1
+GCC_VERS = 3.4.4-2
 GCC_RPMREL = @VERSION@
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
