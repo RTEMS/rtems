@@ -4,22 +4,22 @@
 %if "%{_prefix}" != "/usr"
 %define name			@rpmprefix@autoconf-rtems
 %else
-%define name			%{autoconf}
+%define name			autoconf
 %endif
 
 
-Name:         %{name}
-License:    GPL
-URL:          http://www.gnu.org/software/autoconf
-Group:        @rpmgroup@
-Version:      %{rpmvers}
-Release:      @AUTOCONF_RPMREL@%{?dist}
-Summary:      Tool for automatically generating GNU style Makefile.in's
+Name:		%{name}
+License:	GPL
+URL:		http://www.gnu.org/software/autoconf
+Group:		Development/Tools
+Version:	%{rpmvers}
+Release:	@AUTOCONF_RPMREL@%{?dist}
+Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch:    noarch
-BuildRequires: perl m4 gawk emacs
-Requires:     m4 gawk
+BuildArch:	noarch
+BuildRequires: 	perl m4 gawk emacs
+Requires:     	m4 gawk
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 

@@ -1,7 +1,3 @@
-#
-# spec file for automake 
-#
-
 %define rpmvers 1.9.6
 %define srcvers	1.9.6
 %define amvers  1.9
@@ -14,20 +10,20 @@
 %define requirements		autoconf >= 2.60
 %endif
 
-Name:         %{name}
-URL: 	      http://sources.redhat.com/automake
-License:      GPL
-Group:        @rpmgroup@
-Version:      %{rpmvers}
-Release:      @AUTOMAKE_RPMREL@%{?dist}
-Summary:      Tool for automatically generating GNU style Makefile.in's
+Name:		%{name}
+URL:		http://sources.redhat.com/automake
+License:	GPL
+Group:		Development/Tools
+Version:	%{rpmvers}
+Release:	@AUTOMAKE_RPMREL@%{?dist}
+Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch:    noarch
+BuildArch:	noarch
 BuildRequires:  %{requirements} perl help2man
-Requires:     %{requirements}
-Requires(post):	      	/sbin/install-info
-Requires(preun):	/sbin/install-info
+Requires:     	%{requirements}
+Requires(post):	/sbin/install-info
+Requires(preun):/sbin/install-info
 
 Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
 Patch0: automake-1.8.1-rtems-20040112-1.diff
