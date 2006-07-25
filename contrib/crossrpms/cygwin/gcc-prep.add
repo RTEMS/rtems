@@ -2,24 +2,24 @@
 
 %if %build_cxx
 %{__tar} xjf gcc-g++-%{gcc_version}.tar.bz2
-%endif
 
+%endif
 %if %build_f95
 %{__tar} xjf gcc-fortran-%{gcc_version}.tar.bz2
-%endif
 
+%endif
 %if %build_gcj
 %{__tar} xjf gcc-gcj-%{gcc_version}.tar.bz2
-%endif
 
+%endif
 %if %build_gnat
 %{__tar} xjf gcc-gnat-%{gcc_version}.tar.bz2
+
 %endif
- 
 %if %build_objc
 %{__tar} xjf gcc-objc-%{gcc_version}.tar.bz2
-%endif
 
+%endif
 cd gcc-%{gcc_version}
 patch -p1 -t < ../gcc-%{gcc_pkgvers}.patch || true
 cd ..
