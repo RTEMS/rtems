@@ -1,3 +1,7 @@
+2006-08-01  Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Add bsp_setbenv system call.
+
 2006-05-15  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Add checks for FPGA interrupt request overflow.

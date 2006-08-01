@@ -411,12 +411,13 @@ type bsp_##name(d1type d1, d2type d2, d3type d3)            \
 #define SysCode_program            5 /* program flash memory */
 #define SysCode_gethwaddr         12 /* get hardware address */
 #define SysCode_getbenv           14 /* get bootloader environment variable */
-#define SysCode_setbenv           15 /* get bootloader environment variable */
+#define SysCode_setbenv           15 /* set bootloader environment variable */
 #define SysCode_flash_erase_range 19 /* erase a section of flash */
 #define SysCode_flash_write_range 20 /* write a section of flash */
 syscall_1(int, reset, int, flags)
 syscall_1(unsigned const char *, gethwaddr, int, a)
 syscall_1(const char *, getbenv, const char *, a)
+syscall_1(int, setbenv, const char *, a)
 syscall_2(int, program, bsp_mnode_t *, chain, int, flags)
 syscall_3(int, flash_erase_range, volatile unsigned short *, flashptr, int, start, int, end);
 syscall_3(int, flash_write_range, volatile unsigned short *, flashptr, bsp_mnode_t *, chain, int, offset);
