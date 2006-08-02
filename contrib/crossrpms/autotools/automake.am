@@ -1,5 +1,8 @@
 AUTOMAKE_SUBPACKAGES = $(top_builddir)/common/common.add
 AUTOMAKE_SUBPACKAGES += $(top_srcdir)/autotools/automake.add
+AUTOMAKE_SUBPACKAGES += $(top_srcdir)/binutils/rpm-install.add
+AUTOMAKE_SUBPACKAGES += $(top_srcdir)/common/clean.add
+AUTOMAKE_SUBPACKAGES += $(top_srcdir)/autotools/target-automake.add
 
 automake-rtems.spec.in: $(AUTOMAKE_SUBPACKAGES) Makefile.in
 	cat $(AUTOMAKE_SUBPACKAGES) | sed \
