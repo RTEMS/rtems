@@ -58,36 +58,6 @@ do
   install -m 644 `basename $i`.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 done
 
-gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info* 2>/dev/null
-gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/* 2>/dev/null
-
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 touch $RPM_BUILD_ROOT%{_infodir}/dir
-
-%clean
-   rm -rf "$RPM_BUILD_ROOT"
-
-%post 
-/sbin/install-info  --info-dir=%{_infodir} %{_infodir}/automake.info.gz
-
-%preun
-if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/automake.info.gz
-fi
-
-%files
-%defattr(-,root,root)
-%doc AUTHORS COPYING ChangeLog NEWS README THANKS
-%sysdir %{_bindir}
-%{_bindir}/aclocal*
-%{_bindir}/automake*
-%sysdir %{_infodir}
-%ghost %{_infodir}/dir
-%{_infodir}/automake.info*.gz
-%sysdir %{_mandir}
-%sysdir %{_mandir}/man1
-%{_mandir}/man1/*
-%sysdir %{_datadir}
-%{_datadir}/aclocal-%{amvers}
-%{_datadir}/automake-%{amvers}
 
