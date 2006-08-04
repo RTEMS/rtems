@@ -1,3 +1,4 @@
+#! /bin/sh
 #
 # $Id$
 #
@@ -8,16 +9,19 @@
 # Note: This file should be placed in crossrpms.
 #
 
+command_line="$0 $*"
+
 terminate()
 {
   echo "error: $*" >&2
   exit 1
+  echo "after"
 }
 
 check()
 {
  if [ $? -ne 0 ]; then
-  terminate
+  terminate $*
  fi
 }
 
@@ -80,11 +84,18 @@ do
  shift
 done
 
+echo "$command_line" > $log
+
 scripts=$(dirname $0)
 
-$scripts/build-rpms.sh -i $debug $no_run $prefix $source $targets $hosts $version 2>&1 | tee $log
-check "Making the RPM files."
+$scripts/build-rpms.sh -i $debug $no_run $prefix $source $targets $hosts $version 2>&1 | tee -a $log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+ terminate "Making the RPM files."
+fi
 
 $scripts/build-exes.sh $debug $no_run $prefix $targets $relocation 2>&1 | tee -a $log
-check "Making the executable files."
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+ terminate "Making the executable files."
+fi
 
+exit 0
