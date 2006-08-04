@@ -1,3 +1,4 @@
+#! /bin/sh
 #
 # $Id$
 #
@@ -21,14 +22,16 @@ check()
 }
 
 version=4.7
+tool_version=20060720
+tool_build=1
 
 target_list="i386 m68k powerpc sparc arm mips"
 
 mingw32_cpu_list="i686"
 
-rpm_topdir=$(rpmbuild --showrc | grep "\?\?\: _topdir" | sed 's/.*:.*_topdir\t*//')
+rpm_topdir=$(rpm --eval "%{_topdir}")
 
-common_label="base"
+common_label="common"
 local_rpm_database=yes
 targets=$target_list
 run_prefix=
@@ -105,7 +108,7 @@ fi
 
 get_rpm_list()
 {
-  echo $(ls $rpm_topdir/mingw32/RPMS/$1/*.rpm | grep -v "debuginfo" | grep $2)
+  echo $(ls $rpm_topdir/mingw32/RPMS/$1/*.rpm | grep -v "debuginfo" | grep $2 | grep $3)
 }
 
 #
@@ -113,24 +116,29 @@ get_rpm_list()
 #
 for p in $mingw32_cpu_list
 do
- common_rpms=$(get_rpm_list $p base)
+ common_rpms=$(get_rpm_list $p $common_label "$tool_version.$tool_build")
+ check "getting the common RPM list"
 
  rpm_options="--ignoreos --force --nodeps --noorder "
 
  for t in $targets
  do
-  rpms=$(get_rpm_list $p $t)
+  rpms=$(get_rpm_list $p $t "$tool_version.$tool_build")
+  check "getting the RPM list"
   if [ -n "$rpms" ]; then
    echo "Clean the relocation directory"
    $rm -rf $relocation
+   check "removing the relocation directory: $relocation"
 
    for r in $common_rpms $rpms
    do
     echo "rpm $rpm_database --relocate $prefix=$relocation $rpm_options -i $r"
     $rpm $rpm_database --relocate $prefix=$relocation $rpm_options -i $r
+    check "installing rpm: $r"
    done
 
    files=$(find $relocation -type f | sed -e "s/^$(echo ${relocation} | sed 's/\//\\\//g')//" -e "s/^\///" | sort)
+   check "find the file list"
 
    of=$relocation/rtems-files.nsi
 
@@ -184,20 +192,31 @@ do
    echo " !endif" >> $of
    echo "!macroend" >> $of
 
+   rtems_binary=$rpm_topdir/mingw32/exe/$p
+   echo "mkdir -p $rtems_binary"
+   $mkdir -p $rtems_binary
+   check "make the RTEMS binary install point: $rtems_binary"
+
    of=$relocation/rtems.nsi
    echo "!define RTEMS_TARGET \"$t\"" > $of
    echo "!define RTEMS_VERSION \"$version\"" >> $of
+   echo "!define RTEMS_BUILD_VERSION \"$tool_version-$tool_build\"" >> $of
    echo "!define RTEMS_PREFIX \"rtems-tools\"" >> $of
+   echo "!define RTEMS_SOURCE \"$source\"" >> $of
+   echo "!define RTEMS_RELOCATION \"$relocation\"" >> $of
    echo "!define RTEMS_LOGO \"$source/rtems_logo.bmp\"" >> $of
-   echo "!define RTEMS_BINARY \"$rpm_topdir\"" >> $of
+   echo "!define RTEMS_BINARY \"$rtems_binary\"" >> $of
+   echo "!define RTEMS_LICENSE_FILE \"$source/rtems-license.rtf\"" >> $of
    echo "!include \"$relocation/rtems-files.nsi\"" >> $of
    echo "!include \"$source/rtems-tools.nsi\"" >> $of
 
    echo "cp $source/rtems.ini $relocation/rtems.ini"
    $cp $source/rtems.ini $relocation/rtems.ini
+   check "coping the dialog definition file: $relocation/rtems.ini"
 
    echo "makensis $of"
    $makensis $of
+   check "making the installer: $of"
 
   fi
  done
