@@ -1,3 +1,4 @@
+#! /bin/sh
 #
 # $Id$
 #
@@ -39,11 +40,15 @@ cygwin_tool_list="w32api libs $base_tool_list"
 freebsd_tool_list="libs $base_tool_list"
 mingw32_tool_list="w32api libs $base_tool_list"
 
+cygwin_cc_name="pc"
+freebsd_cc_name="pc"
+mingw32_cc_name="pc"
+
 cygwin_cpu_list="i686"
 freebsd_cpu_list="i586"
 mingw32_cpu_list="i686"
 
-rpm_topdir=$(rpmbuild --showrc | grep "\?\?\: _topdir" | sed 's/.*:.*_topdir\t*//')
+rpm_topdir=$(rpm --eval "%{_topdir}")
 
 prefix=/opt/rtems
 hosts=$host_list
@@ -195,7 +200,7 @@ export PATH=$prefix/bin:$PATH
 
 rpm_installer()
 {
- local rpm_bases=
+ local rpm_common=
  local rpm_libs=
  local rpm_tools=
  local r
@@ -218,8 +223,8 @@ rpm_installer()
  #
  for r in $rpm_names
  do
-  if [ $(echo $r | sed 's/.*base.*/yes/') = yes ]; then
-   rpm_bases="$rpm_bases $r"
+  if [ $(echo $r | sed 's/.*common.*/yes/') = yes ]; then
+   rpm_common="$rpm_common $r"
   elif [ $(echo $r | sed 's/.*lib.*/yes/') = yes ]; then
    rpm_libs="$rpm_libs $r"
   elif [ $(echo $r | sed 's/.*sys\-root.*/yes/') = yes ]; then
@@ -229,7 +234,7 @@ rpm_installer()
   fi
  done
 
- for r in $rpm_bases $rpm_libs $rpm_tools
+ for r in $rpm_common $rpm_libs $rpm_tools
  do
   echo "rpm $rpm_database --force" \
            "-i $rpm_path/$rpm_arch/$r.$rpm_arch.rpm"
@@ -333,9 +338,11 @@ do
    rpmbuild_cmd="-ba $prefix/rtems$version/$t/$rpm_prefix$t-rtems$version-$s.spec --target=$th"
 
    if [ $canadian_cross = yes ]; then
+    ccl=${h}_cc_name
     echo "rpmbuild --define '_build i686-redhat-linux' --define '_host $th' $rpm_database $rpmbuild_cmd"
     $rpmbuild --define "_build i686-redhat-linux" \
               --define "_host $th" \
+              --define "__cc $processor-${!ccl}-$h-gcc" \
               $rpm_database $rpmbuild_cmd
     check "building host cross target: $rpm_prefix$t-rtems$version-$s"
    else
