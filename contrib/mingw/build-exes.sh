@@ -22,7 +22,7 @@ check()
 }
 
 version=4.7
-tool_version=20060720
+tool_version=20060724
 tool_build=1
 
 target_list="i386 m68k powerpc sparc arm mips"
