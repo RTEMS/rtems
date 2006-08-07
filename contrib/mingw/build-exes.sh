@@ -22,7 +22,6 @@ check()
 }
 
 version=4.7
-tool_version=20060724
 tool_build=1
 
 target_list="i386 m68k powerpc sparc arm mips"
@@ -108,7 +107,9 @@ fi
 
 get_rpm_list()
 {
-  echo $(ls $rpm_topdir/mingw32/RPMS/$1/*.rpm | grep -v "debuginfo" | grep $2 | grep $3)
+  if [ -d $rpm_topdir/mingw32/RPMS/$1 ]; then
+   echo $(ls $rpm_topdir/mingw32/RPMS/$1/*.rpm | grep -v "debuginfo" | grep $2)
+  fi
 }
 
 #
@@ -116,14 +117,14 @@ get_rpm_list()
 #
 for p in $mingw32_cpu_list
 do
- common_rpms=$(get_rpm_list $p $common_label "$tool_version.$tool_build")
+ common_rpms=$(get_rpm_list $p $common_label)
  check "getting the common RPM list"
 
  rpm_options="--ignoreos --force --nodeps --noorder "
 
  for t in $targets
  do
-  rpms=$(get_rpm_list $p $t "$tool_version.$tool_build")
+  rpms=$(get_rpm_list $p $t)
   check "getting the RPM list"
   if [ -n "$rpms" ]; then
    echo "Clean the relocation directory"
@@ -200,7 +201,7 @@ do
    of=$relocation/rtems.nsi
    echo "!define RTEMS_TARGET \"$t\"" > $of
    echo "!define RTEMS_VERSION \"$version\"" >> $of
-   echo "!define RTEMS_BUILD_VERSION \"$tool_version-$tool_build\"" >> $of
+   echo "!define RTEMS_BUILD_VERSION \"$tool_build\"" >> $of
    echo "!define RTEMS_PREFIX \"rtems-tools\"" >> $of
    echo "!define RTEMS_SOURCE \"$source\"" >> $of
    echo "!define RTEMS_RELOCATION \"$relocation\"" >> $of
