@@ -36,6 +36,7 @@ target_list="i386 m68k powerpc sparc arm mips"
 host_list="cygwin freebsd5.2 freebsd6.0 freebsd6.1 mingw32"
 
 rtems_tool_list="$base_tool_list"
+linux_tool_list="$base_tool_list"
 cygwin_tool_list="w32api libs $base_tool_list"
 freebsd_tool_list="libs $base_tool_list"
 mingw32_tool_list="w32api libs $base_tool_list"
@@ -44,6 +45,7 @@ cygwin_cc_name="pc"
 freebsd_cc_name="pc"
 mingw32_cc_name="pc"
 
+linux_cpu_list="$processor"
 cygwin_cpu_list="i686"
 freebsd_cpu_list="i586"
 mingw32_cpu_list="i686"
@@ -155,7 +157,7 @@ if [ x$prefix != x ]; then
   fi
  else
   echo "Creating $(pwd)"
-  $mkdir $prefix
+  $mkdir -p $prefix
   check "making the prefix directory: $prefix"
  fi
 fi
@@ -264,7 +266,7 @@ rpm_arch()
 #
 hosts="linux $hosts"
 
-echo "Configuring host:$h($th) target:$t-rtems$version"
+echo "Configuring target: all"
 echo "configure --prefix=$prefix $rpm_prefix_arg " \
      " --target=all $infos"
 $configure --prefix=$prefix $rpm_prefix_arg \
@@ -287,76 +289,71 @@ do
   if [ $h = "linux" ]; then
    th="linux-gnu"
    sd=rtems$version
+   canadian_cross=no
   else
    th=$h
    sd=$h
-  fi
-
-  th="$processor-pc-$th"
-
-  if [ $(echo $th | sed -e "s/.*linux.*/yes/") = yes ]; then
-   canadian_cross=no
-  else
    canadian_cross=yes
   fi
 
-  echo "Canadian Cross: $canadian_cross"
+  #
+  # Associate the host to its tool list to get the packages to build.
+  #
+  tl=${h}_tool_list
+  pl=${h}_cpu_list
 
-  if [ $canadian_cross = yes ]; then
-   #
-   # Associate the host to its tool list to get the packages to build.
-   #
-   tl=${h}_tool_list
-   pl=${h}_cpu_list
+  echo "Native Host Tools: ${!tl} for ${!pl}"
+  echo "Canadian Cross: $canadian_cross ($t $h)"
 
-   echo "Native Host Tools: ${!tl} for ${!pl}"
+  for p in ${!pl}
+  do
+   pth="$p-pc-$th"
 
-   echo "make -C $sd/$p"
-   $make -C $sd/$p
-   check "building the rpm spec files failed: $sd/$p"
+   if [ $canadian_cross = yes ]; then
+    echo "make -C $sd/$p"
+    $make -C $sd/$p
+    check "building the rpm spec files failed: $sd/$p"
 
-   for p in ${!pl}
-   do
     for s in ${!tl}
     do
-     rpmbuild_cmd="-ba $prefix/$sd/$p/$rpm_prefix$th-$s.spec --target=$build"
+     rpmbuild_cmd="-ba $prefix/$sd/$p/$rpm_prefix$pth-$s.spec --target=$build"
 
      echo "rpmbuild $rpm_database $rpmbuild_cmd"
      $rpmbuild $rpm_database $rpmbuild_cmd
-     check "building the $sd/$p/$rpm_prefix$th-$s rpm failed"
+     check "building the $sd/$p/$rpm_prefix$pth-$s rpm failed"
 
      rpm_installer "$rpm_database" \
-                   $(rpm_arch $rpm_prefix$th-$s $processor) \
+                   $(rpm_arch $rpm_prefix$pth-$s $processor) \
                    $rpm_topdir/linux/RPMS \
                    $rpmbuild_cmd
     done
-   done
-  fi
-
-  for s in ${rtems_tool_list}
-  do
-   rpmbuild_cmd="-ba $prefix/rtems$version/$t/$rpm_prefix$t-rtems$version-$s.spec --target=$th"
-
-   if [ $canadian_cross = yes ]; then
-    ccl=${h}_cc_name
-    echo "rpmbuild --define '_build i686-redhat-linux' --define '_host $th' $rpm_database $rpmbuild_cmd"
-    $rpmbuild --define "_build i686-redhat-linux" \
-              --define "_host $th" \
-              --define "__cc $processor-${!ccl}-$h-gcc" \
-              $rpm_database $rpmbuild_cmd
-    check "building host cross target: $rpm_prefix$t-rtems$version-$s"
-   else
-    echo "rpmbuild $rpm_database $rpmbuild_cmd"
-    $rpmbuild $rpm_database $rpmbuild_cmd
-    check "building host cross target: $rpm_prefix$t-rtems$version-$s"
-   fi 
-
-   if [ $canadian_cross != yes ]; then
-    rpm_installer "$rpm_database" \
-                  $(rpm_arch $rpm_prefix$t-rtems$version-$s $processor) \
-                  $rpm_topdir/$h/RPMS \
-                  $rpmbuild_cmd
    fi
+
+   for s in ${rtems_tool_list}
+   do
+    rpmbuild_cmd="-ba $prefix/rtems$version/$t/$rpm_prefix$t-rtems$version-$s.spec --target=$pth"
+
+    if [ $canadian_cross = yes ]; then
+     ccl=${h}_cc_name
+     echo "rpmbuild --define '_build $processor-redhat-linux' --define '_host $pth' $rpm_database $rpmbuild_cmd"
+     $rpmbuild --define "_build $processor-redhat-linux" \
+               --define "_host $pth" \
+               --define "__cc $p-${!ccl}-$h-gcc" \
+               $rpm_database $rpmbuild_cmd
+     check "building host cross target: $rpm_prefix$t-rtems$version-$s"
+    else
+     echo "rpmbuild $rpm_database $rpmbuild_cmd"
+     $rpmbuild $rpm_database $rpmbuild_cmd
+     check "building host cross target: $rpm_prefix$t-rtems$version-$s"
+    fi 
+
+    if [ $canadian_cross != yes ]; then
+     rpm_installer "$rpm_database" \
+                   $(rpm_arch $rpm_prefix$t-rtems$version-$s $p) \
+                   $rpm_topdir/$h/RPMS \
+                   $rpmbuild_cmd
+    fi
+   done
   done
  done
 done
