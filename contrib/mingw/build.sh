@@ -88,11 +88,13 @@ echo "$command_line" > $log
 
 scripts=$(dirname $0)
 
+echo "$scripts/build-rpms.sh -i $debug $no_run $prefix $source $targets $hosts $version" >> $log
 $scripts/build-rpms.sh -i $debug $no_run $prefix $source $targets $hosts $version 2>&1 | tee -a $log
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
  terminate "Making the RPM files."
 fi
 
+echo "$scripts/build-exes.sh $debug $no_run $prefix $targets $relocation" >> $log
 $scripts/build-exes.sh $debug $no_run $prefix $targets $relocation 2>&1 | tee -a $log
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
  terminate "Making the executable files."
