@@ -44,7 +44,7 @@ int
 rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
                  int *media)
 {
-  uint32_t bmcr, bmsr, bmcr2 = 0, bmsr2 = 0, anar, lpar;
+  uint32_t bmcr, bmsr, aner, bmcr2 = 0, bmsr2 = 0, anar, lpar;
   int phy = IFM_INST (*media);
   unsigned tmp;
   int subtype = 0, options = 0;
@@ -60,6 +60,8 @@ rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
     if (info->mdio_r (phy, uarg, MII_BMCR, &bmcr))
       return EINVAL;
     if (info->mdio_r (phy, uarg, MII_BMSR, &bmsr))
+      return EINVAL;
+    if (info->mdio_r (phy, uarg, MII_ANER, &aner))
       return EINVAL;
     if (info->has_gmii) {
       if (info->mdio_r (phy, uarg, MII_1000TCR, &bmcr2))
@@ -96,7 +98,16 @@ rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
     } else if (!(BMSR_LINK & bmsr) || !(BMSR_ACOMP & bmsr)) {
       subtype = IFM_NONE;
     } else {
-      /* everything ok */
+      /* everything ok on our side */
+
+	  if ( ! (ANER_LPAN & aner) ) {
+		/* Link partner doesn't autonegotiate --> our settings are the
+		 * result of 'parallel detect' (in particular: duplex status is HALF
+		 * according to the standard!).
+		 * Let them know that something's fishy...
+		 */
+		options |= IFM_ANEG_DIS;
+	  }
 
       tmp = ((bmcr2 >> 2) & bmsr2) & (GTSR_LP_1000THDX | GTSR_LP_1000TFDX);
       if (tmp) {
