@@ -1,3 +1,8 @@
+2006-08-09	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Because gcc implicitly uses floating point turn on
+	floating point for all threads if there is a hardware FPU.
+
 2006-07-12      Till Straumann <strauman@slac.stanford.edu>
 
 	* rtems/old-exceptions/cpu.h, rtems/powerpc/registers.h:

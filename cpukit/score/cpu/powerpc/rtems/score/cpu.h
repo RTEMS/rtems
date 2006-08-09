@@ -157,9 +157,13 @@
  *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is followed.
  *
  *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
+ *
+ *  PowerPC Note: It appears the GCC can implicitly generate FPU
+ *  and Altivec instructions when you least expect them.  So make
+ *  all tasks floating point.
  */
 
-#define CPU_ALL_TASKS_ARE_FP     FALSE
+#define CPU_ALL_TASKS_ARE_FP CPU_HARDWARE_FP
 
 /*
  *  Should the IDLE task have a floating point context?
