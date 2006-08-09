@@ -293,6 +293,7 @@ score/cpu/h8300/Makefile
 score/cpu/i386/Makefile
 score/cpu/m68k/Makefile
 score/cpu/mips/Makefile
+score/cpu/nios2/Makefile
 score/cpu/powerpc/Makefile
 score/cpu/sh/Makefile
 score/cpu/sparc/Makefile

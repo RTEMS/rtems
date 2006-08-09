@@ -1,3 +1,8 @@
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
+	* configure.ac, librpc/src/xdr/xdr_float.c, score/cpu/Makefile.am: New
+	port to Altera NIOS II.
+
 2006-08-08	Till Straumann <strauman@slac.stanford.edu>
 
 	* libnetworking/rtems/rtems_mii_ioctl_kern.c:
