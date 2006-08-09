@@ -1,3 +1,7 @@
+2006-08-09	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Add INSTALL.
+
 2006-07-19  Chris Johns  <chrisj@rtems.org>
 
         * patches/gcc-core-4.1.1-rtems-20060720.diff:
