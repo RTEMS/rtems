@@ -1,3 +1,11 @@
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
+	* configure.ac: New port to Altera NIOS II.
+	* nios2/.cvsignore, nios2/Makefile.am, nios2/README, nios2/bridges.c,
+	nios2/bridges.h, nios2/clocks.c, nios2/clocks.h, nios2/configure.ac,
+	nios2/devices.c, nios2/devices.h, nios2/nios2gen.c, nios2/output.c,
+	nios2/output.h, nios2/ptf.c, nios2/ptf.h: New files.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

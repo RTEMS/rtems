@@ -1,0 +1,19 @@
+$Id$
+
+As an output from SOPC Builder you get a file with extension ".ptf" that fully
+describes the SOPC, including all CPUs, memory and integrated peripherals.
+
+It is structured as 
+
+
+
+
+nios2gen:
+  Tool to generate BSP data for boards utilizing NIOS2 soft core processor.
+
+Specify the PTF and name of the CPU (if there are more than one).
+
+
+
+
+
