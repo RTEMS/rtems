@@ -1,3 +1,7 @@
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
+	* config-ml.in: New port to Altera NIOS II.
+
 2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* aclocal/bsp-alias.m4: (PR1117) Add brs5l as alias for gen5200
