@@ -1,3 +1,7 @@
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
+	* aclocal/rtems-cpu-subdirs.m4: New port to Altera NIOS II.
+
 2006-07-12	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/shmdr/shm_driver.h: Merge sparc shm driver mods from 4.6.
