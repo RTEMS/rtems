@@ -1,3 +1,7 @@
+2006-08-09	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Clean up a bit after adding missing .rela sections.
+
 2006-03-08	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Add .gnu.linkonce.b.* section.
