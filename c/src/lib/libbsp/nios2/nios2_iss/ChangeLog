@@ -1,3 +1,7 @@
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
+	* clock/clock.c: New file.
+
 2005-12-12  Kolja Waschk
 
     * derived from no_cpu BSP 
