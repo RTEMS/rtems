@@ -1,3 +1,8 @@
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
+	* Makefile.am: New port to Altera NIOS II.
+	* custom/nios2_iss.cfg: New file.
+
 2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* custom/brsl5.cfg: (PR1117) added
