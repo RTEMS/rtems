@@ -1,3 +1,9 @@
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
+	* nios2/Makefile.am, nios2/configure.ac, nios2/preinstall.am,
+	nios2/shared/cache/cache.c, nios2/shared/cache/cache_.h,
+	nios2/shared/misc/memcpy.c: New files.
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* README: i960 obsoleted.
