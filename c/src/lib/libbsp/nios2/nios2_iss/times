@@ -1,0 +1,194 @@
+#
+#  Timing Test Suite Results for the NO_BSP
+#
+#  NOTE: This is just a template.  The times are irrelevant since this BSP
+#        can only be compiled -- not executed.
+#
+#  $Id$
+#
+
+Board:  
+CPU: include coprocessor if applicable
+Clock Speed:
+Memory Configuration: SRAM, DRAM, cache, etc
+Wait States:
+
+Times Reported in: cycles, microseconds, etc
+Timer Source: Count Down Timer, on-CPU cycle counter, etc
+
+Column X:
+Column Y:
+
+#                          DESCRIPTION                                 A    B
+== =================================================================  ==== ====
+ 1 rtems_semaphore_create                                               20
+   rtems_semaphore_delete                                               21
+   rtems_semaphore_obtain: available                                    15
+   rtems_semaphore_obtain: not available -- NO_WAIT                     15
+   rtems_semaphore_release: no waiting tasks                            16
+
+ 2 rtems_semaphore_obtain: not available -- caller blocks               62
+
+ 3 rtems_semaphore_release: task readied -- preempts caller             55
+
+ 4 rtems_task_restart: blocked task -- preempts caller                  77
+   rtems_task_restart: ready task -- preempts caller                    70
+   rtems_semaphore_release: task readied -- returns to caller           25
+   rtems_task_create                                                    57
+   rtems_task_start                                                     31
+   rtems_task_restart: suspended task -- returns to caller              36
+   rtems_task_delete: suspended task                                    47
+   rtems_task_restart: ready task -- returns to caller                  37
+   rtems_task_restart: blocked task -- returns to caller                46
+   rtems_task_delete: blocked task                                      50
+
+ 5 rtems_task_suspend: calling task                                     51
+   rtems_task_resume: task readied -- preempts caller                   49
+
+ 6 rtems_task_restart: calling task                                     59
+   rtems_task_suspend: returns to caller                                18
+   rtems_task_resume: task readied -- returns to caller                 19
+   rtems_task_delete: ready task                                        50
+
+ 7 rtems_task_restart: suspended task -- preempts caller                70
+
+ 8 rtems_task_set_priority: obtain current priority                     12
+   rtems_task_set_priority: returns to caller                           27
+   rtems_task_mode: obtain current mode                                  5
+   rtems_task_mode: no reschedule                                        5
+   rtems_task_mode: reschedule -- returns to caller                      8
+   rtems_task_mode: reschedule -- preempts caller                       39
+   rtems_task_set_note                                                  13
+   rtems_task_get_note                                                  13
+   rtems_clock_set                                                      33
+   rtems_clock_get                                                       3
+
+ 9 rtems_message_queue_create                                          110
+   rtems_message_queue_send: no waiting tasks                           37
+   rtems_message_queue_urgent: no waiting tasks                         37
+   rtems_message_queue_receive: available                               31
+   rtems_message_queue_flush: no messages flushed                       12
+   rtems_message_queue_flush: messages flushed                          16
+   rtems_message_queue_delete                                           26
+
+10 rtems_message_queue_receive: not available -- NO_WAIT                15
+   rtems_message_queue_receive: not available -- caller blocks          62
+
+11 rtems_message_queue_send: task readied -- preempts caller            72
+
+12 rtems_message_queue_send: task readied -- returns to caller          39
+
+13 rtems_message_queue_urgent: task readied -- preempts caller          72
+
+14 rtems_message_queue_urgent: task readied -- returns to caller        39
+
+15 rtems_event_receive: obtain current events                            1
+   rtems_event_receive: not available -- NO_WAIT                        12
+   rtems_event_receive: not available -- caller blocks                  56
+   rtems_event_send: no task readied                                    12
+   rtems_event_receive: available                                       12
+   rtems_event_send: task readied -- returns to caller                  24
+
+16 rtems_event_send: task readied -- preempts caller                    55
+
+17 rtems_task_set_priority: preempts caller                             62
+
+18 rtems_task_delete: calling task                                      83
+
+19 rtems_signal_catch                                                    9
+   rtems_signal_send: returns to caller                                 15
+   rtems_signal_send: signal to self                                    18
+   exit ASR overhead: returns to calling task                           22
+   exit ASR overhead: returns to preempting task                        49
+
+20 rtems_partition_create                                               35
+   rtems_region_create                                                  23
+   rtems_partition_get_buffer: available                                15
+   rtems_partition_get_buffer: not available                            13
+   rtems_partition_return_buffer                                        18
+   rtems_partition_delete                                               16
+   rtems_region_get_segment: available                                  22
+   rtems_region_get_segment: not available -- NO_WAIT                   21
+   rtems_region_return_segment: no waiting tasks                        19
+   rtems_region_get_segment: not available -- caller blocks             64
+   rtems_region_return_segment: task readied -- preempts caller         74
+   rtems_region_return_segment: task readied -- returns to caller       44
+   rtems_region_delete                                                  16
+   rtems_io_initialize                                                   2
+   rtems_io_open                                                         1
+   rtems_io_close                                                        1
+   rtems_io_read                                                         1
+   rtems_io_write                                                        1
+   rtems_io_control                                                      1
+
+21 rtems_task_ident                                                    149
+   rtems_message_queue_ident                                           145
+   rtems_semaphore_ident                                               156
+   rtems_partition_ident                                               145
+   rtems_region_ident                                                  148
+   rtems_port_ident                                                    145
+   rtems_timer_ident                                                   145
+   rtems_rate_monotonic_ident                                          145
+
+22 rtems_message_queue_broadcast: task readied -- returns to caller     42
+   rtems_message_queue_broadcast: no waiting tasks                      17
+   rtems_message_queue_broadcast: task readied -- preempts caller       78
+
+23 rtems_timer_create                                                   14
+   rtems_timer_fire_after: inactive                                     22
+   rtems_timer_fire_after: active                                       24
+   rtems_timer_cancel: active                                           15
+   rtems_timer_cancel: inactive                                         13
+   rtems_timer_reset: inactive                                          21
+   rtems_timer_reset: active                                            23
+   rtems_timer_fire_when: inactive                                      34
+   rtems_timer_fire_when: active                                        34
+   rtems_timer_delete: active                                           19
+   rtems_timer_delete: inactive                                         17
+   rtems_task_wake_when                                                 69
+
+24 rtems_task_wake_after: yield -- returns to caller                     9
+   rtems_task_wake_after: yields -- preempts caller                     45
+
+25 rtems_clock_tick                                                      4
+
+26 _ISR_Disable                                                          0
+   _ISR_Flash                                                            1
+   _ISR_Enable                                                           1
+   _Thread_Disable_dispatch                                              0
+   _Thread_Enable_dispatch                                               7
+   _Thread_Set_state                                                    11
+   _Thread_Disptach (NO FP)                                             31
+   context switch: no floating point contexts                           21
+   context switch: self                                                 10
+   context switch: to another task                                      10
+   context switch: restore 1st FP task                                  25
+   fp context switch: save idle, restore idle                           31
+   fp context switch: save idle, restore initialized                    19
+   fp context switch: save initialized, restore initialized             20
+   _Thread_Resume                                                        7
+   _Thread_Unblock                                                       7
+   _Thread_Ready                                                         9
+   _Thread_Get                                                           4
+   _Semaphore_Get                                                        2
+   _Thread_Get: invalid id                                               0
+
+27 interrupt entry overhead: returns to interrupted task                 6
+   interrupt exit overhead: returns to interrupted task                  6
+   interrupt entry overhead: returns to nested interrupt                 6
+   interrupt exit overhead: returns to nested interrupt                  5
+   interrupt entry overhead: returns to preempting task                  7
+   interrupt exit overhead: returns to preempting task                  36
+
+28 rtems_port_create                                                    16
+   rtems_port_external_to_internal                                      11
+   rtems_port_internal_to_external                                      11
+   rtems_port_delete                                                    16
+
+29 rtems_rate_monotonic_create                                          15
+   rtems_rate_monotonic_period: initiate period -- returns to caller    21
+   rtems_rate_monotonic_period: obtain status                           13
+   rtems_rate_monotonic_cancel                                          16
+   rtems_rate_monotonic_delete: inactive                                18
+   rtems_rate_monotonic_delete: active                                  20
+   rtems_rate_monotonic_period: conclude periods -- caller blocks       53
