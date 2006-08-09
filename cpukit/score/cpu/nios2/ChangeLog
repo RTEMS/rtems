@@ -1,5 +1,10 @@
 2006-08-09	Kolja Waschk <waschk@telos.de>
 
+	* rtems/score/cpu.h, rtems/score/cpu_asm.h, rtems/score/nios2.h,
+	rtems/score/types.h: New files.
+
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
 	* ChangeLog, Makefile.am, cpu.c, cpu_asm.S, irq.c, preinstall.am,
 	rtems/asm.h: New files.
 
