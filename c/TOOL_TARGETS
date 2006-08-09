@@ -28,6 +28,12 @@ mips:
 	NOTE: Little endian configuration is not in all tools and 
 	      is untested for RTEMS itself.
 
+nios2: 
+    nios2-elf           ELF     Little endian
+
+    NOTE: Currently there is no native nios2-rtems toolchain;
+      Altera's nios2-elf-tools can be used with wrapper scripts.
+
 powerpc:
 	powerpc-rtems		ELF
 	powerpcle-rtems		ELF		Little endian

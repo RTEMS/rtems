@@ -1,3 +1,7 @@
+2006-08-09	Kolja Waschk <waschk@telos.de>
+
+	* TOOL_TARGETS: New port to Altera NIOS II.
+
 2005-11-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove depend-am.
