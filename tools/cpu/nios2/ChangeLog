@@ -1,0 +1,8 @@
+2006-08-10	Joel Sherrill <joel@oarcorp.com>
+
+	* nios2gen.c: Added some very basic support for --help and --version
+	options along with output that is roughly in GNU format. This is
+	required by help2man. help2man expects this all to be written to
+	stdout instead of stderr so this was changed as well.
+	* ChangeLog: New file.
+

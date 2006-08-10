@@ -66,9 +66,25 @@ void read_include_file(struct ptf_item *pi, void *arg)
 
 void usage()
 {
-        fprintf(stderr, 
-"Please specify the name of a nios2gen PTF file that describes where to\n"
-"find the system description PTF from SOPC Builder on the command line.\n");
+printf(
+  "Usage: nios2gen [PTFFILE]\n"
+  "Generate BSP data based upon PTF file from SOPC Builder.\n"
+  "\n"
+  "Please specify the name of a nios2gen PTF file that describes where to\n"
+  "find the system description PTF from SOPC Builder on the command line.\n"
+);
+}
+
+void version()
+{
+printf(
+  "RTEMS/NIOS nios2gen\n"
+  "  Copyright (c) 2006 Kolja Waschk rtemsdev/ixo.de\n"
+  "\n"
+  "  The license and distribution terms for this file may be\n"
+  "  found in the file LICENSE in this distribution or at\n"
+  "  http://www.rtems.com/license/LICENSE.\n"
+);
 }
 
 /********************************************************/
@@ -85,6 +101,16 @@ int main(int argc, char *argv[])
     {
         usage();
         return -1;
+    };
+
+    if ( !strcmp(argv[1], "--help") || !strcmp(argv[1],"-?") ) {
+        usage();
+        return 0;
+    };
+
+    if ( !strcmp(argv[1], "--version") ) {
+        version();
+        return 0;
     };
 
     cfg = ptf_parse_file(argv[1]);
