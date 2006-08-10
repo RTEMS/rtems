@@ -238,7 +238,7 @@ void _CPU_Context_Initialize(
   int			_is_fp )
 {
   _the_context->r15 = (uint32_t  *) ((uint32_t  ) (_stack_base) + (_size) );
-#if defined(__sh1__) || defined(__sh2__)
+#if defined(__sh1__) || defined(__sh2__) || defined(__SH2E__)
   _the_context->sr  = (_isr << 4) & 0x00f0 ;
 #else
   _the_context->sr  = SH4_SR_MD | ((_isr << 4) & 0x00f0);

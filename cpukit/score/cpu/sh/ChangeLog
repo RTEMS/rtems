@@ -1,3 +1,8 @@
+2006-08-10	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c, rtems/score/sh.h: Recognize sh2e variant so multilibs will all
+	compile.
+
 2006-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Part of a large patch to improve Doxygen output.

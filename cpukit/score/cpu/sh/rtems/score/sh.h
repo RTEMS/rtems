@@ -46,7 +46,8 @@ extern "C" {
  *  predefines. 
  */
 
-#if defined(__SH3E__) || defined(__SH4__) || defined(__SH4_SINGLE_ONLY__)
+#if defined(__SH2E__) || defined(__SH3E__) || \
+    defined(__SH4__) || defined(__SH4_SINGLE_ONLY__)
 
 /* 
  * Define this if you want to use XD-registers.
@@ -63,7 +64,7 @@ extern "C" {
 #define SH_HAS_FPU 0
 #endif
 
-#elif defined(__sh1__) || defined(__sh2__) || defined(__sh3__)
+#elif defined(__sh1__) || defined(__sh2__) || defined(__sh3__) 
 #define SH_HAS_FPU 0
 #else
 #warning Cannot detect FPU support, assuming no FPU
