@@ -109,7 +109,7 @@ rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
 		options |= IFM_ANEG_DIS;
 	  }
 
-      tmp = ((bmcr2 >> 2) & bmsr2) & (GTSR_LP_1000THDX | GTSR_LP_1000TFDX);
+      tmp = ((bmcr2 << 2) & bmsr2) & (GTSR_LP_1000THDX | GTSR_LP_1000TFDX);
       if (tmp) {
         if (GTSR_LP_1000TFDX & tmp)
           options |= IFM_FDX;
