@@ -1,3 +1,9 @@
+2006-08-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/openpic_i8259_irq.c: fixed type of
+	'frame' argument to C_dispatch_irq_handler(). It's
+	really a BSP_Exception_frame*, not a CPU_Interrupt_frame*.
+
 2006-07-12	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/startup/probeMemEnd.c: added paranoia to inline

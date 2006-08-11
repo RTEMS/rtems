@@ -208,7 +208,7 @@ unsigned BSP_spuriousIntr = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+void C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
 #ifdef BSP_PCI_ISA_BRIDGE_IRQ
