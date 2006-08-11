@@ -1,0 +1,24 @@
+diff -urN gcc-4.1.1-orig/configure gcc-4.1.1/configure
+--- gcc-4.1.1-orig/configure	2005-12-16 06:57:40.000000000 -0600
++++ gcc-4.1.1/configure	2006-08-11 11:10:29.000000000 -0500
+@@ -1293,7 +1293,7 @@
+     noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj}"
+     ;;
+   bfin-*-*)
+-    noconfigdirs="$noconfigdirs target-libgloss gdb"
++    noconfigdirs="$noconfigdirs target-libgloss gdb target-libssp"
+     if test x${is_cross_compiler} != xno ; then
+       target_configdirs="${target_configdirs} target-bsp target-cygmon"
+     fi
+diff -urN gcc-4.1.1-orig/configure.in gcc-4.1.1/configure.in
+--- gcc-4.1.1-orig/configure.in	2005-12-16 06:57:40.000000000 -0600
++++ gcc-4.1.1/configure.in	2006-08-11 11:09:48.000000000 -0500
+@@ -501,7 +501,7 @@
+     noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj}"
+     ;;
+   bfin-*-*)
+-    noconfigdirs="$noconfigdirs target-libgloss gdb"
++    noconfigdirs="$noconfigdirs target-libgloss gdb target-libssp"
+     if test x${is_cross_compiler} != xno ; then
+       target_configdirs="${target_configdirs} target-bsp target-cygmon"
+     fi

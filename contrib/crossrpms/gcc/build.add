@@ -25,6 +25,12 @@
 %if %build_libgcj
   optargs="--enable-libgcj"
 %endif
+%if %disable_libssp
+  optargs="$optargs --disable-libssp"
+%endif
+%if %disable_libstcxx_pch
+ optargs="$optargs --disable-libstdcxx-pch"
+%endif
 %if "%{_prefix}" != "/usr"
   export PATH="%{_bindir}:${PATH}"
 %endif

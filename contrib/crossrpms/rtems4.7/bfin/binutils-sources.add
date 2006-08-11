@@ -1,0 +1,8 @@
+Source0:	ftp://ftp.gnu.org/pub/binutils/binutils-%{binutils_version}.tar.bz2
+%{?_without_sources:NoSource:	0}
+%if "%{binutils_version}" == "2.16.1"
+Patch0:		binutils-2.16.1-rtems-20050708.diff
+%endif
+%if "%{binutils_version}" == "2.17"
+Patch0:		binutils-2.17-rtems-bfin-20060810a.diff
+%endif
