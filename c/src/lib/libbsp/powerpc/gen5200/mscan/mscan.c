@@ -23,7 +23,7 @@
 #include <rtems/error.h>
 #include <rtems/libio.h>
 #include <string.h>
-#include <bsp.h>
+#include "../include/bsp.h"
 #include "../irq/irq.h"
 #include "../include/mpc5200.h"
 #include "mscan.h"
@@ -33,7 +33,7 @@
 volatile uint32_t tx_int_wr_count = 0;
 
 struct mpc5200_rx_cntrl mpc5200_mscan_rx_cntrl[MPC5200_CAN_NO];
-volatile static struct mscan_channel_info chan_info[MPC5200_CAN_NO];
+static struct mscan_channel_info chan_info[MPC5200_CAN_NO];
 
 /* time segmant table  */
 uint8_t can_time_segment_table[CAN_MAX_NO_OF_TQ - MIN_NO_OF_TQ + 1][NO_OF_TABLE_ENTRIES] = {
@@ -63,10 +63,10 @@ uint8_t can_time_segment_table[CAN_MAX_NO_OF_TQ - MIN_NO_OF_TQ + 1][NO_OF_TABLE_
 /*
  * MPC5x00 MSCAN tx ring buffer function to get a can message buffer from the head of the tx ring buffer
  */
-volatile static struct can_message * get_tx_buffer(struct mscan_channel_info *chan)
+static struct can_message * get_tx_buffer(struct mscan_channel_info *chan)
   {
   /* define a temp. mess ptr. */
-  volatile struct can_message * tmp_mess_ptr = NULL, *temp_head_ptr;
+  struct can_message * tmp_mess_ptr = NULL, *temp_head_ptr;
 
   /* set temp. head pointer */
   temp_head_ptr = chan->tx_ring_buf.head_ptr;
@@ -101,7 +101,7 @@ volatile static struct can_message * get_tx_buffer(struct mscan_channel_info *ch
 /*
  * MPC5x00 MSCAN tx ring buffer function to write a can message buffer to the tail of the tx ring buffer
  */
-volatile static struct can_message * fill_tx_buffer(struct mscan_channel_info *chan, struct can_message * mess_ptr)
+static struct can_message * fill_tx_buffer(struct mscan_channel_info *chan, struct can_message * mess_ptr)
   {
   /* define a temp. mess ptr. to the entry which follows the current tail entry */
   struct can_message * tmp_mess_ptr = chan->tx_ring_buf.tail_ptr + 1;
@@ -720,8 +720,8 @@ void mpc5200_mscan_wait_sync(volatile struct mpc5200_mscan *mscan)
 uint8_t prescaler_calculation(uint32_t can_bit_rate, uint32_t can_clock_frq, uint8_t *tq_no) {
 
 /* local variables */
-uint8_t tq_no_min_dev = 0;
-uint32_t frq_tq, frq_dev, frq_dev_min = 0xFFFFFFFF;
+uint8_t presc_val, tq_no_dev_min = 0;
+uint32_t bit_rate, bit_rate_dev, frq_tq, bit_rate_dev_min = 0xFFFFFFFF;
 
 /* loop through all values of time quantas */
 for(*tq_no = CAN_MAX_NO_OF_TQ; *tq_no >= MIN_NO_OF_TQ; (*tq_no)--) {
@@ -729,33 +729,53 @@ for(*tq_no = CAN_MAX_NO_OF_TQ; *tq_no >= MIN_NO_OF_TQ; (*tq_no)--) {
   /* calculate time quanta freq. */
   frq_tq = *tq_no * can_bit_rate;
 
-  /* calculate the deviation from requested tq freq. */
-  frq_dev = can_clock_frq%frq_tq;
+  /* calculate the optimized prescal. val. */
+  presc_val = (can_clock_frq+frq_tq/2)/frq_tq;
+
+  /* calculate the bitrate */
+  bit_rate = can_clock_frq/(*tq_no * presc_val);
+
+  /* calculate the bitrate deviation */
+  if(can_bit_rate >= bit_rate)
+    {
+    /* calculate the bitrate deviation */
+    bit_rate_dev = can_bit_rate - bit_rate;
+    }
+  else
+    {
+    /* calculate the bitrate deviation */
+    bit_rate_dev = bit_rate - can_bit_rate;
+    }
 
   /* check the deviation freq. */
-  if(frq_dev == 0) {
+  if(bit_rate_dev == 0) {
 
     /* return if best match (zero deviation) */
-   return (uint8_t)(can_clock_frq/frq_tq);
+   return (uint8_t)(presc_val);
     }
   else
     {
 
-    /* check for minimum of freq. deviation */
-    if(frq_dev < frq_dev_min) {
+    /* check for minimum of bit rate deviation */
+    if(bit_rate_dev < bit_rate_dev_min) {
 
       /* recognize the minimum freq. deviation */
-      frq_dev_min = frq_dev;
+      bit_rate_dev_min = bit_rate_dev;
 
       /* recognize the no. of time quantas */
-      tq_no_min_dev = *tq_no;
+      tq_no_dev_min = *tq_no;
 	  }
 	}
   }
 
-/* return the optimized prescaler value */
- *tq_no = tq_no_min_dev;
- return (uint8_t)(can_clock_frq/(tq_no_min_dev * can_bit_rate));
+  /* get the no of tq's */
+  *tq_no = tq_no_dev_min;
+
+  /* calculate time quanta freq. */
+  frq_tq = *tq_no * can_bit_rate;
+
+  /* return the optimized prescaler value */
+  return (uint8_t)((can_clock_frq+frq_tq/2)/frq_tq);
 }
 
 /*

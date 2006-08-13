@@ -256,11 +256,11 @@ struct can_message
   uint32_t toucan_tx_id;
   };
 
-volatile struct ring_buf
+struct ring_buf
     {
-    volatile struct can_message *buf_ptr;
-    volatile struct can_message *head_ptr;
-    volatile struct can_message *tail_ptr;
+    struct can_message * volatile buf_ptr;
+    struct can_message * volatile head_ptr;
+    struct can_message * volatile tail_ptr;
     };
 
 struct mpc5200_rx_cntrl
@@ -279,7 +279,7 @@ struct mscan_channel_info
   uint8_t    id_extended;
   uint8_t    mode;
   uint8_t    tx_buf_no;
-  volatile struct ring_buf tx_ring_buf;
+  struct ring_buf tx_ring_buf;
   };
 
 struct mscan_rx_parms

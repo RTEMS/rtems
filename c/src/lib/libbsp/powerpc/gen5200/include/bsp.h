@@ -106,6 +106,8 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 #include <i2cdrv.h>
+#include <bsp/irq.h>
+#include <bsp/vectors.h>
 
 #if defined(HAS_UBOOT)
 #define CONFIG_MPC5xxx
