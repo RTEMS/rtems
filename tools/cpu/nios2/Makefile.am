@@ -11,6 +11,8 @@ nios2gen_SOURCES = nios2gen.c \
                    devices.c devices.h \
 				   clocks.c clocks.h \
 				   output.c output.h \
+				   linkcmds.c linkcmds.h \
+				   memory.c memory.h \
                    ptf.h ptf.c
 
 if HELP2MAN

@@ -23,7 +23,6 @@ void add_clock_spec(struct ptf_item *pi, void *arg)
   if(new_clock == NULL) return;
 
   new_clock->freq = strtoul(pi->item[pi->level]->value, 0, 0);
-  printf("freq = %lu (%s?)\n", new_clock->freq, pi->item[pi->level]->value);
 
   new_clock->cfgname = NULL;
   new_clock->name = pi->item[pi->level-1]->value;

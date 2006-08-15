@@ -9,6 +9,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 #include "ptf.h"
 
@@ -364,7 +365,7 @@ void parse_char(struct ptf_parser_state *state, int c)
 
     default:
 #if DEBUG&DEBUG_EXPECTATIONS
-      printf("Expectation: %d (???)\n", state->expectation);
+      printf("Expectation: %d (?)\n", state->expectation);
 #endif
 
       parse_error(state, "Internal error: Unhandled state of expectation");
@@ -510,6 +511,44 @@ struct ptf *ptf_parse_file(char *filename)
 
 /***************************************************************************/
 
+struct ptf *ptf_concat(struct ptf *a, struct ptf *b)
+{
+  struct ptf *leaf = a;
+
+  if(!a) return b;
+  if(!b) return a;
+
+  for(leaf = a; leaf->next != NULL; leaf = leaf->next);
+  leaf->next = b;
+  return a;
+}
+
+/***************************************************************************/
+
+void ptf_dump_ptf_item(FILE *f, struct ptf_item *pi)
+{
+  int i;
+  fprintf(f, "level=%d in %p\n", pi->level, pi);
+  for(i=pi->level;i>=0;i--)
+  {
+    if(pi->item[i] != NULL)
+    {
+      fprintf(f, "  %d: %s name=%s value=%s\n",
+        i,
+        pi->item[i]->type == item ? "item":"section",
+        pi->item[i]->name,
+        pi->item[i]->value);
+    }
+    else
+    {
+        fprintf(f, "  %d: NULL\n");
+    }
+    fflush(f);
+  }
+}
+
+/***************************************************************************/
+
 void ptf_printf(FILE *s, struct ptf *tree, char *prefix)
 {
   struct ptf *leaf;
@@ -532,12 +571,12 @@ void ptf_printf(FILE *s, struct ptf *tree, char *prefix)
         strcat(new_prefix, leaf->name);
         if(leaf->value != NULL && leaf->value[0] != 0)
         {
-          strcat(new_prefix, "_");
+          strcat(new_prefix, ":");
           strcat(new_prefix, leaf->value);
         };
         strcat(new_prefix, "/");
         fputs(new_prefix, s);
-        fputs("\r\n", s);
+        fputs("\n", s);
         ptf_printf(s, leaf->sub, new_prefix);
         break;
       };
@@ -548,12 +587,19 @@ void ptf_printf(FILE *s, struct ptf *tree, char *prefix)
         fputs(prefix, s);
         fputs(leaf->name, s);
         fputs(" = \"", s);
-        for(c=leaf->value; *c; c++)
+        if(leaf->value == NULL)
         {
-          if(*c=='\\' || *c=='"') putc('\\', s);
-          putc(*c, s);
-        };
-        fprintf(s, "\"\r\n");
+          fputs("(NULL)", s);
+        }
+        else
+        {
+          for(c=leaf->value; *c; c++)
+          {
+            if(*c=='\\' || *c=='"') putc('\\', s);
+            putc(*c, s);
+          };
+        }
+        fprintf(s, "\"\n");
         break;
       };
 

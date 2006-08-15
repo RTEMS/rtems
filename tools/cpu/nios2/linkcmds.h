@@ -8,19 +8,17 @@
  *  $Id$
  */
 
-#ifndef __OUTPUT_H
-#define __OUTPUT_H 1
+#ifndef __LINKCMDS_H
+#define __LINKCMDS_H 1
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "ptf.h"
-#include "clocks.h"
 #include "devices.h"
 
-void fwrite_value(struct ptf_item *pi, void *arg);
-void fwrite_header_file(FILE *file, struct ptf *cfg, device_desc *devices, clock_desc *clocks);
+void fwrite_linkcmds_file(FILE *file, struct ptf *cfg, struct ptf *cpu, device_desc *devices, memory_desc *memory);
 
 #endif
 

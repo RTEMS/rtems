@@ -150,11 +150,12 @@ void fwrite_header_file( FILE *file, struct ptf *cfg, device_desc *devices, cloc
   struct ptf aclass = { section, "CLASS", 0, 0, 0 };
   struct ptf_item matchaclass = { 1, &aclass };
 
-  struct ptf header = { item, "HEADER", 0, 0, 0 };
-  struct ptf_item matchheader = { 1, &header };
+  struct ptf bspsect = { section, "BSPHEADER", 0, 0, 0 };
+  struct ptf leadtext = { item, "LEADTEXT", 0, 0, 0 };
+  struct ptf_item matchleadtext = { 2, &bspsect, &leadtext };
 
   struct ptf epilog = { item, "EPILOG", 0, 0, 0 };
-  struct ptf_item matchepilog = { 1, &epilog };
+  struct ptf_item matchepilog = { 2, &bspsect, &epilog };
 
   out_desc dinfo;
 
@@ -162,7 +163,7 @@ void fwrite_header_file( FILE *file, struct ptf *cfg, device_desc *devices, cloc
   dinfo.clocks  = clocks;
   dinfo.devices = devices;
 
-  ptf_match(cfg, &matchheader, fwrite_value, file);
+  ptf_match(cfg, &matchleadtext, fwrite_value, file);
 
   if(clocks)
   {
@@ -177,7 +178,7 @@ void fwrite_header_file( FILE *file, struct ptf *cfg, device_desc *devices, cloc
   {
     for(dinfo.dev = devices; dinfo.dev; dinfo.dev=dinfo.dev->next)
     {
-      fprintf(file, "\n");
+      /* fprintf(file, "\n#define SOPC_HAS_%s 1\n", dinfo.dev->cfgname); */
 
       p = ptf_find(dinfo.dev->ptf, &pi, item, "class", 0);
       if(p)
@@ -190,6 +191,5 @@ void fwrite_header_file( FILE *file, struct ptf *cfg, device_desc *devices, cloc
 
   ptf_match(cfg, &matchepilog, fwrite_value, file);
 }
-
 
  

@@ -29,6 +29,9 @@
    now we simply assume that bridges never translate anything.
  */
 
+#include <string.h>
+#include <stdlib.h>
+
 #include "ptf.h"
 #include "bridges.h"
 
@@ -40,24 +43,15 @@ int is_bridged(
   char *curr_master;
   bus_bridge_pair *bbp;
 
-  curr_master = dev_master;
-  while(curr_master != NULL)
-  {
-    /* Does cpu_master master curr_master? */
-    if(strcmp(cpu_master, curr_master) == 0) return 1; /* yes, cpu_masters cm */
+  if(strcmp(cpu_master, dev_master) == 0) return 1; /* cpu directly masters dev */
 
-    /* No, cm is attached to a bridge? */
-    bbp = bridges;
-    while(bbp != NULL)
+  for(bbp = bridges; bbp != NULL; bbp=bbp->next)
+  {
+    if(strcmp(cpu_master, bbp->mastered_by) == 0 && 
+       is_bridged(bbp->bridges_to, dev_master, bridges))
     {
-      if(strcmp(bbp->bridges_to, curr_master) == 0)
-      {
-        curr_master = bbp->mastered_by;
-        break;
-      };
-      bbp = bbp->next;
-    };
-    if(bbp == NULL) curr_master = NULL;
+      return 1; /* cpu masters dev via bridge */
+    }
   };
 
   return 0;

@@ -40,8 +40,10 @@ struct ptf_item
 typedef void (*ptf_match_action)(struct ptf_item *x, void *arg);
 
 struct ptf *ptf_parse_file(char *filename);
+struct ptf *ptf_concat(struct ptf *a, struct ptf *b);
 struct ptf *ptf_alloc_item(ptf_item_type t, char *name, char *value);
 void ptf_printf(FILE *s, struct ptf *tree, char *prefix);
+void ptf_dump_ptf_item(FILE *s, struct ptf_item *pi);
 
 struct ptf *ptf_find(
   struct ptf *tree, 
