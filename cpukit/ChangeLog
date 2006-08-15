@@ -1,3 +1,9 @@
+2006-08-15	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/kern/kern_sysctl.c: Change int to int32_t.
+	* libnetworking/net/if_loop.c: Add cast to long.
+	These plus a patch to machine/param.h let the h8300 build multilib.
+
 2006-08-10	Till Straumann <strauman@slac.stanford.edu>
 
 	* libnetworking/rtems/rtems_mii_ioctl_kern.c:

@@ -233,7 +233,7 @@ lortrequest(cmd, rt, sa)
 		 * overhead.
 		 */
 		rt->rt_rmx.rmx_recvpipe = 
-			rt->rt_rmx.rmx_sendpipe = 3 * LOMTU;
+			rt->rt_rmx.rmx_sendpipe = 3L * (long)LOMTU;
 	}
 }
 

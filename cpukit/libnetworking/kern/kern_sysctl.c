@@ -146,7 +146,7 @@ sysctl_register_oid(struct sysctl_oid *oidp)
 	 * accomodate e.g. net.inet.raw as a static sysctl node.
 	 */
 	if (oidp->oid_number == OID_AUTO) {
-		static int newoid = CTL_AUTO_START;
+		static int32_t newoid = CTL_AUTO_START;
 
 		oidp->oid_number = newoid++;
 		if (newoid == 0x7fffffff)
