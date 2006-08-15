@@ -29,7 +29,9 @@ start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds.brs5l startup/linkcmds.pm520
+dist_project_lib_DATA += startup/linkcmds
+dist_project_lib_DATA += startup/linkcmds.brs5l
+dist_project_lib_DATA += startup/linkcmds.pm520
 
 noinst_PROGRAMS += bestcomm.rel
 bestcomm_rel_SOURCES = bestcomm/include/ppctypes.h \

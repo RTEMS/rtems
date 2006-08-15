@@ -77,13 +77,13 @@ $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 
+$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
 $(PROJECT_LIB)/linkcmds.brs5l: startup/linkcmds.brs5l $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.brs5l
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.brs5l
-
-$(PROJECT_LIB)/linkcmds.pm520: startup/linkcmds.pm520 $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.pm520
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.pm520
 
 $(PROJECT_LIB)/linkcmds.pm520: startup/linkcmds.pm520 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.pm520
@@ -108,6 +108,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h
 $(PROJECT_INCLUDE)/bsp/u-boot.h: include/u-boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot.h
+
+$(PROJECT_INCLUDE)/bsp/nvram.h: nvram/nvram.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/nvram.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/nvram.h
+
+$(PROJECT_INCLUDE)/bsp/slicetimer.h: slicetimer/slicetimer.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/slicetimer.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/slicetimer.h
 
 $(PROJECT_INCLUDE)/bsp/vectors.h: vectors/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
