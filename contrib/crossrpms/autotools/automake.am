@@ -1,4 +1,4 @@
-AUTOMAKE_SUBPACKAGES = $(top_builddir)/common/common.add
+AUTOMAKE_SUBPACKAGES = $(top_srcdir)/common/common.add
 AUTOMAKE_SUBPACKAGES += $(top_srcdir)/autotools/automake.add
 AUTOMAKE_SUBPACKAGES += $(top_srcdir)/binutils/rpm-install.add
 AUTOMAKE_SUBPACKAGES += $(top_srcdir)/common/clean.add

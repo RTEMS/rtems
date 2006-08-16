@@ -1,4 +1,4 @@
-AUTOCONF_SUBPACKAGES = $(top_builddir)/common/common.add
+AUTOCONF_SUBPACKAGES = $(top_srcdir)/common/common.add
 AUTOCONF_SUBPACKAGES += $(top_srcdir)/autotools/autoconf.add
 AUTOCONF_SUBPACKAGES += $(top_srcdir)/binutils/rpm-install.add
 AUTOCONF_SUBPACKAGES += $(top_srcdir)/common/clean.add
