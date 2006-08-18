@@ -29,7 +29,6 @@ case "$prefix" in
   ;;
  NONE|$ac_default_prefix)
   prefix=$ac_default_prefix
-  rpmprefix="rtems-"
   ;;
  *)
   rpmprefix="custom-"
@@ -57,10 +56,9 @@ AC_ARG_ENABLE([rpmdbpath],
   no) # use default
     ;;
   *) # presume user knows what he is doing
-    rpmdbpath=$enable_rpmdbpath;;
+    rpmdbpath="--dbpath $enable_rpmdbpath";;
   esac
 ])
-rpmdbpath="--dbpath $rpmdbpath"
 
 bootstrap=no
 AC_ARG_ENABLE([bootstrap],
@@ -80,10 +78,10 @@ AC_ARG_ENABLE([bsps],
   yes) # ignore, use default
    ;;
   no)
-   bsps="RTEMS_BSPS=\"\""
+   bsps="RTEMS_BSP=\"\""
    ;;
   *) # take a the list to build
-   bsps="RTEMS_BSPS=\"$enable_bsps\""
+   bsps="RTEMS_BSP=\"$enable_bsps\""
    ;;
   esac
 ])
@@ -95,8 +93,8 @@ AC_SUBST(TARGETS, [$targets])
 AC_SUBST(RPMPREFIX, [$rpmprefix])
 AC_SUBST(RPMDBPATH, [$rpmdbpath])
 AC_SUBST(RTEMS_BOOTSTRAP, [$bootstrap])
-AC_SUBST(RTEMS_BSPS, [$bsps])
+AC_SUBST(RTEMS_BSP, [$bsps])
 
-AC_CONFIG_FILES([Makefile rtems.specs])
+AC_CONFIG_FILES([Makefile rtems.spec])
 
 AC_OUTPUT
