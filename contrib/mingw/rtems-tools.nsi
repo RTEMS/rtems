@@ -148,7 +148,7 @@ Section -BatchFiles
  FileOpen $9 $INSTDIR\rtems.bat w
  !insertmacro FILE_WRITE_LINE $9 "@echo off"
  !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_TARGET} (${RTEMS_VERSION})"
- !insertmacro FILE_WRITE_LINE $9 "set PATH=c:\rtems\${RTEMS_TARGET}\bin;c:\mingw\bin;c:\msys\1.0\bin;%PATH%"
+ !insertmacro FILE_WRITE_LINE $9 "set PATH=$INSTDIR\bin;c:\mingw\bin;c:\msys\1.0\bin;%PATH%"
  !insertmacro FILE_WRITE_LINE $9 "set PROMPT=RTEMS(${RTEMS_TARGET}) $$P$$G"
  !insertmacro FILE_WRITE_LINE $9 "If $\"x%OS%x$\" == $\"xWindows_NTx$\" Goto WinNT_Title"
  !insertmacro FILE_WRITE_LINE $9 "doskey > Nul"
