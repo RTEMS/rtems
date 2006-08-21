@@ -32,14 +32,14 @@ version=4.7
 
 base_tool_list="binutils gcc"
 
-target_list="i386 m68k powerpc sparc arm mips"
+target_list="arm avr h8300 i386 m68k mips powerpc sh sparc tic4x"
 host_list="cygwin freebsd5.2 freebsd6.0 freebsd6.1 mingw32"
 
 rtems_tool_list="$base_tool_list"
-linux_tool_list="$base_tool_list"
-cygwin_tool_list="w32api libs $base_tool_list"
-freebsd_tool_list="libs $base_tool_list"
-mingw32_tool_list="w32api libs $base_tool_list"
+linux_tool_list="autoconf automake $base_tool_list"
+cygwin_tool_list="w32api libs autoconf automake $base_tool_list"
+freebsd_tool_list="libs autoconf automake $base_tool_list"
+mingw32_tool_list="w32api libs autoconf automake $base_tool_list"
 
 cygwin_cc_name="pc"
 freebsd_cc_name="pc"
@@ -52,7 +52,7 @@ mingw32_cpu_list="i686"
 
 rpm_topdir=$(rpm --eval "%{_topdir}")
 
-prefix=/opt/rtems
+prefix=/opt/rtems-$version
 hosts=$host_list
 build=$processor-linux-gnu
 infos=
@@ -251,13 +251,15 @@ rpm_installer()
 
 rpm_arch()
 {
-  if [ $(echo $1 | sed 's/.*api.*/yes/') = yes ]; then
-   echo "noarch"
-  elif [ $(echo $1 | sed 's/.*lib.*/yes/') = yes ]; then
-   echo "noarch"
-  else
-   echo $2
-  fi
+ if [ $(echo $1 | sed 's/.*api.*/yes/') = yes ]; then
+  echo "noarch"
+ elif [ $(echo $1 | sed 's/.*lib.*/yes/') = yes ]; then
+  echo "noarch"
+ elif [ $(echo $1 | sed 's/.*auto.*/yes/') = yes ]; then
+  echo "noarch"
+ else
+  echo $2
+ fi
 }
 
 #
@@ -276,84 +278,97 @@ check "configuring the crossrpms failed"
 echo "make"
 $make
 check "building the rpm spec files failed"
+echo "make -C autotools"
+$make -C autotools
+check "building the rpm spec files failed"
 
-for t in $targets;
+for h in $hosts;
 do
- for h in $hosts;
+ #
+ # Need to translate the build host to an RTEMS host. Create a
+ # target host (th) and specs directory (sd) variable to handle
+ # the use of RTEMS.
+ #
+ if [ $h = "linux" ]; then
+  th="linux-gnu"
+  sd=rtems$version
+  canadian_cross=no
+ else
+  th=$h
+  sd=$h
+  canadian_cross=yes
+ fi
+
+ #
+ # Associate the host to its tool list to get the packages to build.
+ #
+ tl=${h}_tool_list
+ pl=${h}_cpu_list
+
+ echo "Native Host Tools: ${!tl} for ${!pl}"
+ echo "Canadian Cross: $canadian_cross ($t $h)"
+
+ for p in ${!pl}
  do
-  #
-  # Need to translate the build host to an RTEMS host. Create a
-  # target host (th) and specs directory (sd) variable to handle
-  # the use of RTEMS.
-  #
-  if [ $h = "linux" ]; then
-   th="linux-gnu"
-   sd=rtems$version
-   canadian_cross=no
-  else
-   th=$h
-   sd=$h
-   canadian_cross=yes
+  pth="$p-pc-$th"
+
+  if [ $canadian_cross = yes ]; then
+   echo "make -C $sd/$p"
+   $make -C $sd/$p
+   check "building the rpm spec files failed: $sd/$p"
+
+   for s in ${!tl}
+   do
+    case $s in
+     autoconf|automake)
+      # Hack around the prefix in the spec files for autotools.
+      ba="-ba $prefix/autotools/$rpm_prefix$s-rtems.spec"
+      ;;
+     *)
+      ba="-ba $prefix/$sd/$p/$rpm_prefix$pth-$s.spec"
+    esac
+
+    rpmbuild_cmd="$ba --target=$build"
+
+    echo "rpmbuild --define '_defaultdocdir $prefix/share/doc' $rpm_database $rpmbuild_cmd"
+    $rpmbuild --define "_defaultdocdir $prefix/share/doc" $rpm_database $rpmbuild_cmd
+    check "building the $sd/$p/$rpm_prefix$pth-$s rpm failed"
+
+    rpm_installer "$rpm_database" \
+                  $(rpm_arch $rpm_prefix$pth-$s $processor) \
+                  $rpm_topdir/linux/RPMS \
+                  $rpmbuild_cmd
+   done
   fi
+ done
 
-  #
-  # Associate the host to its tool list to get the packages to build.
-  #
-  tl=${h}_tool_list
-  pl=${h}_cpu_list
-
-  echo "Native Host Tools: ${!tl} for ${!pl}"
-  echo "Canadian Cross: $canadian_cross ($t $h)"
-
-  for p in ${!pl}
+ for t in $targets;
+ do
+  for s in ${rtems_tool_list}
   do
-   pth="$p-pc-$th"
+   rpmbuild_cmd="-ba $prefix/rtems$version/$t/$rpm_prefix$t-rtems$version-$s.spec --target=$pth"
 
    if [ $canadian_cross = yes ]; then
-    echo "make -C $sd/$p"
-    $make -C $sd/$p
-    check "building the rpm spec files failed: $sd/$p"
+    ccl=${h}_cc_name
+    echo "rpmbuild --define '_build $processor-redhat-linux' " \
+         "--define '_host $pth' $rpm_database $rpmbuild_cmd "
+    $rpmbuild --define "_build $processor-redhat-linux" \
+              --define "_host $pth" \
+              --define "__cc $p-${!ccl}-$h-gcc" \
+              $rpm_database $rpmbuild_cmd
+    check "building host cross target: $rpm_prefix$t-rtems$version-$s"
+   else
+    echo "rpmbuild $rpm_database $rpmbuild_cmd"
+    $rpmbuild $rpm_database $rpmbuild_cmd
+    check "building host cross target: $rpm_prefix$t-rtems$version-$s"
+   fi 
 
-    for s in ${!tl}
-    do
-     rpmbuild_cmd="-ba $prefix/$sd/$p/$rpm_prefix$pth-$s.spec --target=$build"
-
-     echo "rpmbuild $rpm_database $rpmbuild_cmd"
-     $rpmbuild $rpm_database $rpmbuild_cmd
-     check "building the $sd/$p/$rpm_prefix$pth-$s rpm failed"
-
-     rpm_installer "$rpm_database" \
-                   $(rpm_arch $rpm_prefix$pth-$s $processor) \
-                   $rpm_topdir/linux/RPMS \
-                   $rpmbuild_cmd
-    done
+   if [ $canadian_cross != yes ]; then
+    rpm_installer "$rpm_database" \
+                  $(rpm_arch $rpm_prefix$t-rtems$version-$s $p) \
+                  $rpm_topdir/$h/RPMS \
+                  $rpmbuild_cmd
    fi
-
-   for s in ${rtems_tool_list}
-   do
-    rpmbuild_cmd="-ba $prefix/rtems$version/$t/$rpm_prefix$t-rtems$version-$s.spec --target=$pth"
-
-    if [ $canadian_cross = yes ]; then
-     ccl=${h}_cc_name
-     echo "rpmbuild --define '_build $processor-redhat-linux' --define '_host $pth' $rpm_database $rpmbuild_cmd"
-     $rpmbuild --define "_build $processor-redhat-linux" \
-               --define "_host $pth" \
-               --define "__cc $p-${!ccl}-$h-gcc" \
-               $rpm_database $rpmbuild_cmd
-     check "building host cross target: $rpm_prefix$t-rtems$version-$s"
-    else
-     echo "rpmbuild $rpm_database $rpmbuild_cmd"
-     $rpmbuild $rpm_database $rpmbuild_cmd
-     check "building host cross target: $rpm_prefix$t-rtems$version-$s"
-    fi 
-
-    if [ $canadian_cross != yes ]; then
-     rpm_installer "$rpm_database" \
-                   $(rpm_arch $rpm_prefix$t-rtems$version-$s $p) \
-                   $rpm_topdir/$h/RPMS \
-                   $rpmbuild_cmd
-    fi
-   done
   done
  done
 done
