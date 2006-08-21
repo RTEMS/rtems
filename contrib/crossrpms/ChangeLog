@@ -1,3 +1,10 @@
+2006-08-21	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems4.7/h8300/binutils-sources.add,
+	rtems4.7/m68k/binutils-sources.add: Add h8300 _tinydata patch and
+	bump patch for targets needing it.
+	* patches/binutils-2.17-rtems-20060815.diff: New file.
+
 2006-08-11	Joel Sherrill <joel@oarcorp.com>
 
 	* configure.ac, gcc/build.add, gcc/target-gcc.add: Add bfin target
