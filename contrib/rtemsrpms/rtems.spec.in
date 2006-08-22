@@ -19,8 +19,8 @@
 %define rtems_api       @RTEMS_API@
 %define rpmprefix       @RPMPREFIX@
 %define rtems_pkgvers   @RTEMS_RELEASE@
-%define rtems_version   %{expand:%(echo @RTEMS_RELEASE@ | sed -e 's,-.*,,')}
-%define rtems_rpmvers   %{expand:%(echo @RTEMS_API@ | tr - _ )}
+%define rtems_version   %{expand:%(echo @RTEMS_VERSION@ | sed -e 's,-.*,,')}
+%define rtems_rpmvers   %{expand:%(echo @RTEMS_VERSION@ | tr - _ )}
 
 %define rtems_bsp       @RTEMS_BSP@
 
@@ -43,7 +43,7 @@ BuildRequires:	%{rpmprefix}%{rtems_target}-binutils
 BuildRequires:	%{rpmprefix}%{rtems_target}-newlib
 BuildRequires:	%{rpmprefix}%{rtems_target}-gcc
 
-Source0: 	ftp://ftp.rtems.org/pub/rtems/%{rtems_api}/rtems-%{rtems_api}-%{rtems_pkgvers}.tar.bz2
+Source0: 	ftp://ftp.rtems.org/pub/rtems/%{rtems_api}/rtems-%{rtems_api}-%{rtems_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
 
 %description
@@ -64,7 +64,7 @@ RTEMS Libraries for %{rtems_target}.
   mkdir -p build
   cd build
   bps=""
-  ../rtems-%{rtems_api}/configure \
+  ../rtems-%{rtems_version}/configure \
     --prefix=%{_prefix} \
     --target=%rtems_target \
     --verbose \
@@ -102,6 +102,7 @@ RTEMS operating system for %{rtems_target}
 %files
 %defattr(-,root,root)
 
+# broken on the avr
 %config %{_prefix}/lib/pkgconfig
 %config %{_prefix}/make
 %doc    %{_prefix}/share/man
