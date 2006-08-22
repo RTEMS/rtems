@@ -190,3 +190,13 @@ void bsp_start( void )
   Cpu_table.timer_least_valid = 3;
   Cpu_table.exceptions_in_RAM = TRUE;
 }
+
+/*
+ *  Fatal error helper
+ */
+void _BSP_Fatal_error(unsigned int v)
+{
+  /* This BSP does not yet support printk */
+  /* printk("%s PANIC ERROR %x\n",_RTEMS_version, v); */
+  __asm__ __volatile ("sc");
+}

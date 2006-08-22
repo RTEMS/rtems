@@ -1,3 +1,7 @@
+2006-08-22	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/bspstart.c: Add basic _BSP_Fatal_error.
+
 2006-08-09	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Clean up a bit after adding missing .rela sections.
