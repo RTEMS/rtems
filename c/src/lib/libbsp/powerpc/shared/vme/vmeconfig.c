@@ -49,7 +49,7 @@ __BSP_default_vme_config(void)
 	VME_AM_EXT_SUP_DATA,
 	_VME_A32_WIN0_ON_VME,
 	_VME_A32_WIN0_ON_PCI,
-	0x0F000000);
+	0x0e000000);
   BSP_VMEOutboundPortCfg(
 	1,
 	VME_AM_STD_SUP_DATA,
@@ -62,6 +62,17 @@ __BSP_default_vme_config(void)
 	0x00000000,
 	_VME_A16_ON_PCI,
 	0x00010000);
+
+#ifdef _VME_CSR_ON_PCI
+  /* Map VME64 CSR */
+  BSP_VMEOutboundPortCfg(
+		  7,
+		  VME_AM_CSR,
+		  0,
+		  _VME_CSR_ON_PCI,
+		  0x01000000);
+#endif
+
 
 #ifdef _VME_DRAM_OFFSET
   /* map our memory to VME giving the driver a hint that it's ordinary memory
