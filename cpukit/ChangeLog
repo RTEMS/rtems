@@ -1,3 +1,9 @@
+2006-08-21	Till Straumann <strauman@slac.stanford.edu>
+
+	* libnetworking/net/if_ethersubr.c: (ether_ioctl)
+	Return error for unknown/unsupported ioctl command.
+	(Change merged from freeBSD).
+
 2006-08-15	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/kern/kern_sysctl.c: Change int to int32_t.

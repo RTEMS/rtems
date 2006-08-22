@@ -894,6 +894,9 @@ ether_ioctl(struct ifnet *ifp, int command, caddr_t data)
 			ifp->if_mtu = ifr->ifr_mtu;
 		}
 		break;
+	default:
+		error = EINVAL;			/* XXX netbsd has ENOTTY??? */
+		break;
 	}
 	return (error);
 }
