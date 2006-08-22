@@ -1,6 +1,7 @@
 ## $Id$
 
 m4_define([M4_RTEMS_API],[4.7])
+m4_define([M4_RTEMS_VERSION],[4.6.99.3])
 m4_define([M4_RTEMS_RELEASE],[0])
 
 AC_PREREQ(2.59)
@@ -12,12 +13,6 @@ AC_CANONICAL_HOST
 AC_PREFIX_DEFAULT([/opt/rtems-][M4_RTEMS_API])
 
 AM_INIT_AUTOMAKE([1.9])
-
-AC_ARG_ENABLE([targets],
-  AS_HELP_STRING([--enable-targets=<targets>],[build for targets <targets>]),
-  [targets="$enable_targets"],
-  [targets="i386 m68k powerpc sparc arm mips"]
-)
 
 rpmprefix="[rtems-]M4_RTEMS_API[-]"
 
@@ -47,6 +42,7 @@ AC_ARG_ENABLE([rpmprefix],
   esac
 ])
 
+AC_MSG_CHECKING([for rpm database])
 rpmdbpath=
 AC_ARG_ENABLE([rpmdbpath],
 [  --enable-rpmdbpath=<rpmdbpath>      rpm database path],[
@@ -59,7 +55,11 @@ AC_ARG_ENABLE([rpmdbpath],
     rpmdbpath="--dbpath $enable_rpmdbpath";;
   esac
 ])
+AS_IF([test -z $rpmdbpath],
+      [AC_MSG_RESULT([system])],
+      [AC_MSG_RESULT([$rpmdbpath])])
 
+AC_MSG_CHECKING([for bootstrap])
 bootstrap=no
 AC_ARG_ENABLE([bootstrap],
 [  --enable-bootstrap=<bootstap>      bootstrap RTEMS],[
@@ -70,7 +70,19 @@ AC_ARG_ENABLE([bootstrap],
    ;;
   esac
 ])
+AC_MSG_RESULT([$bootstrap])
 
+dnl The total list:
+dnl  arm avr h8300 i386 m68k mips powerpc sh sparc tic4x
+AC_MSG_CHECKING([for targets])
+AC_ARG_ENABLE([targets],
+  AS_HELP_STRING([--enable-targets=<targets>],[build for targets <targets>]),
+  [targets="$enable_targets"],
+  [targets="arm i386 m68k mips powerpc sh sparc tic4x"]
+)
+AC_MSG_RESULT([$targets])
+
+AC_MSG_CHECKING([for bsps])
 bsps="%{nil}"
 AC_ARG_ENABLE([bsps],
 [  --enable-bsps=<yes/bsps>      BSP list],[
@@ -85,8 +97,12 @@ AC_ARG_ENABLE([bsps],
    ;;
   esac
 ])
+AS_IF([test x"$bsps" = x"%{nil}"],
+      [AC_MSG_RESULT([all])],
+      [AC_MSG_RESULT([$bsps])])
 
 AC_SUBST(RTEMS_API, [M4_RTEMS_API])
+AC_SUBST(RTEMS_VERSION, [M4_RTEMS_VERSION])
 AC_SUBST(RTEMS_RELEASE, [M4_RTEMS_RELEASE])
 AC_SUBST(PREFIX, [$prefix])
 AC_SUBST(TARGETS, [$targets])
