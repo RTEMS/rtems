@@ -1,3 +1,8 @@
+2006-08-22	Chris Johns <chrisj@rtems.org>
+        * rtems4.7/avr/gcc-sources.add: Add the 4.0.3 patch.
+	* patches/gcc-core-4.0.3-rtems-20060822.diff:
+	The .exe for the versioned execuable for MinGW.
+	
 2006-08-21	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems4.7/h8300/binutils-sources.add,
