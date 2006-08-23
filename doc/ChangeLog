@@ -1,5 +1,15 @@
 2006-08-23	Joel Sherrill <joel@OARcorp.com>
 
+	* Makefile.am, configure.ac, index.html.in: FAQ should now be
+	completely in the Wiki.
+	* FAQ/.cvsignore, FAQ/FAQ.texi, FAQ/Makefile.am, FAQ/basic.t,
+	FAQ/bsp.t, FAQ/build45.t, FAQ/concepts.t, FAQ/debug.t,
+	FAQ/endoftime.t, FAQ/entry, FAQ/freesw.t, FAQ/hwdebugaids.t,
+	FAQ/projects.t, FAQ/stamp-vti, FAQ/tools.t, FAQ/version.texi,
+	common/timemac.texi, common/timetbl.t, common/timing.t: Removed.
+
+2006-08-23	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am, configure.ac, FAQ/stamp-vti, FAQ/version.texi,
 	common/cpright.texi: Merging CPU Supplements into a single document.
 	As part of this removed the obsolete and impossible to maintain size

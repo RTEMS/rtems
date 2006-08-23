@@ -177,7 +177,6 @@ _RTEMS_UPDATE_CONDITIONAL([common/rtems.sed],[common/rtems.sed~])
 
 AC_CONFIG_FILES([
 index.html
-FAQ/Makefile
 develenv/Makefile
 user/Makefile
 bsp_howto/Makefile])

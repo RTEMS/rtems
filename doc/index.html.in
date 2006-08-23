@@ -7,15 +7,7 @@
 <HR>
 <BODY>
 <MENU>
-    <LI>
-        <A HREF="../pdf/FAQ.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-        <A HREF="../ps/FAQ.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-        <A HREF="../dvi/FAQ.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-        <A HREF="FAQ/index.html">RTEMS FAQ</A>
-        </LI>
+    <LI><A HREF="http://www.rtems.org/wiki">RTEMS Wiki</A></LI>
     <LI>C/C++ Manuals</LI>
     <MENU>
         <LI><A HREF="../pdf/started.pdf">
@@ -82,6 +74,16 @@
     </MENU>
     <LI>Miscellaneous Manuals</LI>
     <MENU>
+        <LI><A HREF="../pdf/cpu_supplement.pdf">
+                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../ps/cpu_supplement.ps">
+                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../dvi/cpu_supplement.dvi">
+                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="cpu_supplement/index.html">
+               RTEMS CPU Supplement</A>
+            </LI>
+
         <LI><A HREF="../pdf/develenv.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/develenv.ps">
@@ -153,109 +155,9 @@
             </LI>
     </MENU>
 
-
-<LI>CPU Supplements for Primary Ports
-
-  <MENU>
-
-        <LI><A HREF="HELP.html">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-               RTEMS Hitachi H8/300 Applications Supplement</A>
-            </LI>
-
-        <LI><A HREF="../pdf/i386.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/i386.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/i386.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/i386/index.html">
-               RTEMS Intel i386 Applications Supplement</A>
-            </LI>
-
-        <LI><A HREF="../pdf/m68k.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/m68k.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/m68k.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/m68k/index.html">
-               RTEMS Motorola MC68xxx Applications Supplement</A>
-            </LI>
-
-        <LI><A HREF="../pdf/mips.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/mips.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/mips.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/mips/index.html">
-               RTEMS MIPS Applications Supplement</A>
-            </LI>
-
-        <LI><A HREF="../pdf/powerpc.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/powerpc.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/powerpc.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/powerpc/index.html">
-               RTEMS PowerPC Applications Supplement</A>
-            </LI>
-
-        <LI><A HREF="../pdf/sh.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/sh.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/sh.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/sh/index.html">
-               RTEMS Hitachi SH Applications Supplement</A>
-            </LI>
-
-        <LI><A HREF="../pdf/sparc.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/sparc.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/sparc.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/sparc/index.html">
-               RTEMS SPARC Applications Supplement</A>
-            </LI>
-
-        <LI><A HREF="HELP.html">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-               RTEMS UNIX Port Applications Supplement</A>
-            </LI>
-
-    </MENU>
-
-<LI>CPU Supplements for Secondary Ports
-
-  <MENU>
-        <LI><A HREF="../pdf/c4x.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/c4x.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/c4x.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/c4x/index.html">
-               RTEMS Texas Instruments C3x/C4x Applications Supplement</A>
-            </LI>
-    </MENU>
-</LI>
+    </li>
 
 </MENU>
 <HR>
-Copyright &copy; 1988-2004 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+Copyright &copy; 1988-2006 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
 </BODY></HTML>
