@@ -214,16 +214,7 @@ rtems_gdb/Makefile
 rgdb_specs/Makefile
 relnotes/Makefile
 new_chapters/Makefile
-supplements/Makefile
-supplements/arm/Makefile
-supplements/c4x/Makefile
-supplements/i386/Makefile
-supplements/m68k/Makefile
-supplements/mips/Makefile
-supplements/powerpc/Makefile
-supplements/sh/Makefile
-supplements/sparc/Makefile
-supplements/template/Makefile
+cpu_supplement/Makefile
 gnu_docs/Makefile
 ])
 AC_OUTPUT

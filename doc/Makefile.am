@@ -9,7 +9,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = tools FAQ started user bsp_howto porting develenv posix_users \
     posix1003.1 filesystem itron3.0 networking ada_user started_ada \
-    rtems_gdb rgdb_specs new_chapters relnotes supplements gnu_docs
+    rtems_gdb rgdb_specs new_chapters relnotes cpu_supplement gnu_docs
 
 if USE_HTML
 html_DATA = index.html HELP.html

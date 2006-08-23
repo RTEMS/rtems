@@ -1,0 +1,25 @@
+@c
+@c  COPYRIGHT (c) 1988-2006.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@ifinfo
+@node Preface, ARM Specific Information, Top, Top
+@end ifinfo
+@unnumbered Preface
+
+The Real Time Executive for Multiprocessor Systems
+(RTEMS) is designed to be portable across multiple processor
+architectures.  However, the nature of real-time systems makes
+it essential that the application designer understand certain
+processor dependent implementation details.  These processor
+dependencies include calling convention, board support package
+issues, interrupt processing, exact RTEMS memory requirements,
+performance data, header files, and the assembly language
+interface to the executive.
+
+Each chapter in this document discusses the details of how
+RTEMS was ported.
