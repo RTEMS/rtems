@@ -1,5 +1,13 @@
 2006-08-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems4.7/arm/gcc-sources.add, rtems4.7/h8300/gcc-sources.add,
+	rtems4.7/i386/gcc-sources.add, rtems4.7/m68k/gcc-sources.add,
+	rtems4.7/mips/gcc-sources.add, rtems4.7/powerpc/gcc-sources.add
+	rtems4.7/sh/gcc-sources.add, rtems4.7/sparc/gcc-sources.add
+	rtems4.7/tic4x/gcc-sources.add: Add gcc-4.0.3.
+
+2006-08-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* gcc/build.add: Revert --disable-libssp etc. hacks.
 
 2006-08-22	Chris Johns <chrisj@rtems.org>
