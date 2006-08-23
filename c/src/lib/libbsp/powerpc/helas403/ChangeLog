@@ -1,3 +1,8 @@
+2006-08-23	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/bspstart.c: Revert patch adding new exception support code to
+	an old exception BSP.
+
 2006-08-22	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/bspstart.c: Add basic _BSP_Fatal_error.
