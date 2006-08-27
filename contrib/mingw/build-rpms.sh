@@ -13,6 +13,8 @@
 # Note: This file should be placed in crossrpms.
 #
 
+source=$(dirname $0)
+
 terminate()
 {
   echo "error: $*" >&2
@@ -32,10 +34,10 @@ version=4.7
 
 base_tool_list="binutils gcc"
 
-target_list="arm avr h8300 i386 m68k mips powerpc sh sparc tic4x"
+target_list=$(cat $source/targets)
 host_list="cygwin freebsd5.2 freebsd6.0 freebsd6.1 mingw32"
 
-rtems_tool_list="$base_tool_list"
+rtems_tool_list="autoconf automake $base_tool_list"
 linux_tool_list="autoconf automake $base_tool_list"
 cygwin_tool_list="w32api libs autoconf automake $base_tool_list"
 freebsd_tool_list="libs autoconf automake $base_tool_list"
@@ -62,7 +64,6 @@ rpm_prefix=custom-
 rpm_prefix_arg=
 local_rpm_database=yes
 clean=yes
-source=$(pwd)
 
 while [ $# -gt 0 ];
 do
@@ -346,20 +347,34 @@ do
  do
   for s in ${rtems_tool_list}
   do
-   rpmbuild_cmd="-ba $prefix/rtems$version/$t/$rpm_prefix$t-rtems$version-$s.spec --target=$pth"
+   case $s in
+    autoconf|automake)
+     # Hack around the prefix in the spec files for autotools.
+     ba="-ba $prefix/autotools/$rpm_prefix$s-rtems.spec"
+     ;;
+    *)
+     ba="-ba $prefix/rtems$version/$t/$rpm_prefix$t-rtems$version-$s.spec"
+   esac
+
+   rpmbuild_cmd="$ba --target=$pth"
 
    if [ $canadian_cross = yes ]; then
     ccl=${h}_cc_name
     echo "rpmbuild --define '_build $processor-redhat-linux' " \
-         "--define '_host $pth' $rpm_database $rpmbuild_cmd "
+         "--define '_host $pth' " \
+         "--define '_defaultdocdir $prefix/share/doc' " \
+         "$rpm_database $rpmbuild_cmd "
     $rpmbuild --define "_build $processor-redhat-linux" \
               --define "_host $pth" \
+              --define "_defaultdocdir $prefix/share/doc" \
               --define "__cc $p-${!ccl}-$h-gcc" \
               $rpm_database $rpmbuild_cmd
     check "building host cross target: $rpm_prefix$t-rtems$version-$s"
    else
-    echo "rpmbuild $rpm_database $rpmbuild_cmd"
-    $rpmbuild $rpm_database $rpmbuild_cmd
+    echo "rpmbuild --define '_defaultdocdir $prefix/share/doc' "\
+         "$rpm_database $rpmbuild_cmd"
+    $rpmbuild --define "_defaultdocdir $prefix/share/doc" \
+              $rpm_database $rpmbuild_cmd
     check "building host cross target: $rpm_prefix$t-rtems$version-$s"
    fi 
 
