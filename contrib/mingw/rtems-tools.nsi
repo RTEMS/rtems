@@ -144,6 +144,36 @@ Function RTEMSMessage
 
 FunctionEnd
 
+; Push $filenamestring (e.g. 'c:\this\and\that\filename.htm')
+; Push '\\'
+; Pop $R0
+; Call StrSlash
+; Pop $R0
+; ;Now $R0 contains 'c:/this/and/that/filename.htm'
+Function StrSlash
+ Exch $R0
+ Push $R1
+ Push $R2
+ StrCpy $R1 0
+loop:
+  IntOp $R1 $R1 - 1
+  StrCpy $R2 $R0 1 $R1
+  StrCmp $R2 "" done
+ StrCmp $R2 "\" 0 loop
+  StrCpy $R2 $R0 $R1
+   Push $R1
+  IntOp $R1 $R1 + 1
+  StrCpy $R1 $R0 "" $R1
+ StrCpy $R0 "$R2/$R1"
+   Pop $R1
+  IntOp $R1 $R1 - 1
+ Goto loop
+done:
+ Pop $R2
+ Pop $R1
+ Exch $R0
+FunctionEnd
+
 Section -BatchFiles
  FileOpen $9 $INSTDIR\rtems.bat w
  !insertmacro FILE_WRITE_LINE $9 "@echo off"
@@ -189,6 +219,24 @@ Section -BatchFiles
  !insertmacro FILE_WRITE_LINE $9 "                   -e 's/S:\([0-9]*\):/S(\1):/' \\"
  !insertmacro FILE_WRITE_LINE $9 "                   -e 's/s:\([0-9]*\):/s(\1):/'"
  FileClose $9
+SectionEnd
+
+Section -MSYSLinks
+ FindFirst $8 $1 c:\msys\1.0\etc\fstab
+ StrCmp $1 "" MSYSLinksdone
+  Push $INSTDIR
+  Call StrSlash
+  Pop $R0
+  DetailPrint "Setting MSYS fstab: $R0 -> ${TOOL_PREFIX}"
+  FileOpen $9 "c:\msys\1.0\etc\fstab" a
+  FileSeek $9 0 END
+  FileWrite $9 $R0
+  FileWriteByte $9 "32"
+  FileWrite $9 ${TOOL_PREFIX}
+  FileWriteByte $9 "10"
+  FileClose $9
+ MSYSLinksdone:
+ FindClose $8
 SectionEnd
 
 Section -Post
