@@ -1,3 +1,13 @@
+2006-08-27	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, configure.ac, develenv/direct.t: Remove gnu_docs. Now
+	included with RPMs.
+	* gnu_docs/.cvsignore, gnu_docs/ChangeLog, gnu_docs/Makefile.am,
+	gnu_docs/Tool_Doc_Instructions, gnu_docs/gen_docs,
+	gnu_docs/gnu_footer.html, gnu_docs/gnu_header.html,
+	gnu_docs/index.html, gnu_docs/mk_install_dir, gnu_docs/refcard.html,
+	gnu_docs/rtems_tools_index.html: Removed.
+
 2006-08-23	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, configure.ac, index.html.in: FAQ should now be

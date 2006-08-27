@@ -214,6 +214,5 @@ rgdb_specs/Makefile
 relnotes/Makefile
 new_chapters/Makefile
 cpu_supplement/Makefile
-gnu_docs/Makefile
 ])
 AC_OUTPUT

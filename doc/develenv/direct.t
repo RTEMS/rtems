@@ -581,10 +581,6 @@ and PostScript.
 
 @table @code
 
-@item $@{RTEMS_ROOT@}/doc/FAQ/
-This directory contains the source code for the @cite{RTEMS Frequently Asked
-Questions (FAQ) Collection}.
-
 @item $@{RTEMS_ROOT@}/doc/user/
 This directory contains the source code for the @cite{RTEMS
 Applications C User's Guide} which documents the Classic API.
@@ -619,11 +615,6 @@ is a continuous work in process as it attempts to
 capture the design of the interface between system
 calls and filesystem implementations as well as the
 information required by those implementing filesystems.
-
-@item $@{RTEMS_ROOT@}/doc/gnu_docs/
-This directory contains the scripts which assist in 
-generating HTML for the GNU tools in the RTEMS Cross
-Development Environment set.
 
 @item $@{RTEMS_ROOT@}/doc/images/
 This directory contains the source code for the graphics
@@ -680,9 +671,9 @@ This directory contains the source code for the
 This directory contains the source code for the 
 @cite{Getting Started with RTEMS for Ada Users} manual.
 
-@item $@{RTEMS_ROOT@}/doc/supplements/
-This directory contains the source code for the various
-RTEMS CPU Supplements.
+@item $@{RTEMS_ROOT@}/doc/cpu_supplement/
+This directory contains the source code for the 
+RTEMS CPU Supplement.
 the 
 
 @item $@{RTEMS_ROOT@}/doc/tools/
