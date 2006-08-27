@@ -8,6 +8,8 @@
 # script.
 #
 
+source=$(dirname $0)
+
 terminate()
 {
   echo "error: $*" >&2
@@ -22,9 +24,9 @@ check()
 }
 
 version=4.7
-tool_build=1
+tool_build=3
 
-target_list="i386 m68k powerpc sparc arm mips"
+target_list=$(cat $source/targets)
 
 mingw32_cpu_list="i686"
 
@@ -35,8 +37,6 @@ local_rpm_database=yes
 targets=$target_list
 run_prefix=
 relocation=
-
-source=$(dirname $0)
 
 if [ "$source" = "." ]; then
  source=$(pwd)
@@ -117,8 +117,8 @@ get_rpm_list()
 #
 for p in $mingw32_cpu_list
 do
- common_rpms=$(get_rpm_list $p $common_label)
- check "getting the common RPM list"
+ common_rpms="$(get_rpm_list noarch auto) $(get_rpm_list $p $common_label)"
+ check "getting the autotools and common RPM list"
 
  rpm_options="--ignoreos --force --nodeps --noorder "
 
@@ -139,6 +139,9 @@ do
    done
 
    files=$(find $relocation -type f | sed -e "s/^$(echo ${relocation} | sed 's/\//\\\//g')//" -e "s/^\///" | sort)
+
+   echo "$files" > $relocation/files.txt
+
    check "find the file list"
 
    of=$relocation/rtems-files.nsi
@@ -208,6 +211,7 @@ do
    echo "!define RTEMS_LOGO \"$source/rtems_logo.bmp\"" >> $of
    echo "!define RTEMS_BINARY \"$rtems_binary\"" >> $of
    echo "!define RTEMS_LICENSE_FILE \"$source/rtems-license.rtf\"" >> $of
+   echo "!define TOOL_PREFIX \"$prefix\"" >> $of
    echo "!include \"$relocation/rtems-files.nsi\"" >> $of
    echo "!include \"$source/rtems-tools.nsi\"" >> $of
 
