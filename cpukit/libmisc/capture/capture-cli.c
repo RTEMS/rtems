@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 #include <rtems.h>
 #include <rtems/capture-cli.h>
@@ -250,8 +251,8 @@ rtems_capture_cli_task_list (
   while (task)
   {
     rtems_task_priority priority;
-    int                 stack_used;
-    int                 time_used;
+    int32_t             stack_used;
+    int32_t             time_used;
 
     stack_used = rtems_capture_task_stack_usage (task) * 100;
     stack_used /= rtems_capture_task_stack_size (task);
@@ -291,7 +292,7 @@ rtems_capture_cli_task_list (
               rtems_capture_task_control (task) ?
               (rtems_capture_task_control_flags (task) & RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
               rtems_capture_watch_global_on () ? 'g' : '-');
-    fprintf(stdout," %3i%% %3i%% (%i)\n",
+    fprintf(stdout," %3" PRId32 "%% %3" PRId32 "%% (%" PRIu32 ")\n",
             stack_used, time_used, rtems_capture_task_ticks (task));
 
     task = rtems_capture_next_task (task);
@@ -542,11 +543,11 @@ rtems_capture_cli_watch_list (
   rtems_task_priority      ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority      floor = rtems_capture_watch_get_floor ();
 
-  fprintf(stdout,"watch priority ceiling is %i\n", ceiling);
-  fprintf(stdout,"watch priority floor is %i\n", floor);
+  fprintf(stdout,"watch priority ceiling is %" PRId32 "\n", ceiling);
+  fprintf(stdout,"watch priority floor is %" PRId32 "\n", floor);
   fprintf(stdout,"global watch is %s\n",
           rtems_capture_watch_global_on () ? "enabled" : "disabled");
-  fprintf(stdout,"total %d\n", rtems_capture_control_count ());
+  fprintf(stdout,"total %" PRId32 "\n", rtems_capture_control_count ());
 
   while (control)
   {
@@ -937,7 +938,7 @@ rtems_capture_cli_watch_ceiling (
     return;
   }
 
-  fprintf(stdout,"watch ceiling is %i.\n", priority);
+  fprintf(stdout,"watch ceiling is %" PRId32 ".\n", priority);
 }
 
 /*
@@ -988,7 +989,7 @@ rtems_capture_cli_watch_floor (
     return;
   }
 
-  fprintf(stdout,"watch floor is %i.\n", priority);
+  fprintf(stdout,"watch floor is %" PRId32 ".\n", priority);
 }
 
 /*
@@ -1227,8 +1228,9 @@ rtems_capture_cli_trace_records (
     for (count = 0; count < read; count++, rec++)
     {
       if (csv)
-        fprintf(stdout,"%08x,%03d,%03d,%04x,%d,%d\n",
-                (uint32_t  ) rec->task,
+        fprintf(stdout,"%08" PRIx32 ",%03" PRIu32
+                   ",%03" PRIu32 ",%04" PRIx32 ",%" PRId32 ",%" PRId32 "\n",
+                (uint32_t) rec->task,
                 (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
                 (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
                 (rec->events >> RTEMS_CAPTURE_EVENT_START),
@@ -1254,7 +1256,7 @@ rtems_capture_cli_trace_records (
             rtems_monitor_dump_id (rtems_capture_task_id (rec->task));
             fprintf(stdout," ");
             rtems_monitor_dump_name (rtems_capture_task_name (rec->task));
-            fprintf(stdout," %3i %3i %s\n",
+            fprintf(stdout," %3" PRId32 " %3" PRId32 " %s\n",
                     (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
                     (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
                     rtems_capture_event_text (e));

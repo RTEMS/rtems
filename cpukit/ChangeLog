@@ -1,5 +1,9 @@
 2006-08-29	Joel Sherrill <joel@OARcorp.com>
 
+	* libmisc/capture/capture-cli.c: Remove printf format warnings.
+
+2006-08-29	Joel Sherrill <joel@OARcorp.com>
+
 	* score/include/rtems/score/object.h: _Objects_Local_node is a uint16_t
 	so cast the _Objects_Local_node constant to 1.
 
