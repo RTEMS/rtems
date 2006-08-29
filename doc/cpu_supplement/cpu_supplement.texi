@@ -1,0 +1,109 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename cpu_supplement.info
+@setcontentsaftertitlepage
+@syncodeindex vr fn
+@synindex ky cp
+@paragraphindent 0
+@c %**end of header
+
+@c
+@c  COPYRIGHT (c) 1988-2002.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@c
+@c   Master file for the SPARC Applications Supplement
+@c
+
+@include version.texi
+@include common/setup.texi
+@include common/rtems.texi
+
+@ifset use-ascii
+@dircategory RTEMS Target Supplement
+@direntry
+* RTEMS CPU Architecture Supplement: (cpu_supplement).
+@end direntry
+@end ifset
+
+@c
+@c  Title Page Stuff
+@c
+
+@c
+@c  I don't really like having a short title page.  --joel
+@c
+@c @shorttitlepage RTEMS CPU Architecture Supplement
+
+@setchapternewpage odd
+@settitle RTEMS CPU Architecture Supplement
+@titlepage
+@finalout
+
+@title RTEMS CPU Architecture Supplement
+@subtitle Edition @value{EDITION}, for RTEMS @value{VERSION}
+@sp 1
+@subtitle @value{UPDATED}
+@author On-Line Applications Research Corporation
+@page
+@include common/cpright.texi
+@end titlepage
+
+@c  This prevents a black box from being printed on "overflow" lines.
+@c  The alternative is to rework a sentence to avoid this problem.
+
+@include preface.texi
+@include arm.texi
+@include i386.texi
+@include m68k.texi
+@include mips.texi
+@include powerpc.texi
+@include sh.texi
+@include sparc.texi
+@include tic4x.texi
+@ifinfo
+@node Top, Preface, (dir), (dir)
+@top cpu_supplement
+
+This is the online version of the RTEMS CPU Architecture Supplement
+
+@menu
+* Preface::
+* ARM Specific Information::
+* Intel/AMD x86 Specific Information::
+* Motorola M68xxx and Coldfire Specific Information::
+* MIPS Specific Information::
+* PowerPC Specific Information::
+* SuperH Specific Information::
+* SPARC Specific Information::
+* Texas Instruments C3x/C4x Specific Information::
+* Command and Variable Index::
+* Concept Index::
+@end menu
+
+@end ifinfo
+@c 
+@c 
+@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
+@c
+
+@node Command and Variable Index, Concept Index, , Top
+@unnumbered Command and Variable Index
+
+There are currently no Command and Variable Index entries.
+
+@c @printindex fn
+
+@node Concept Index, , Command and Variable Index, Top
+@unnumbered Concept Index
+
+There are currently no Concept Index entries.
+@c @printindex cp
+
+@contents
+@bye
+

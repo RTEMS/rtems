@@ -1,3 +1,7 @@
+2006-08-29	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu_supplement/cpu_supplement.texi: New file.
+
 2006-08-27	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, configure.ac, develenv/direct.t: Remove gnu_docs. Now
