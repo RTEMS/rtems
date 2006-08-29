@@ -51,10 +51,9 @@ rtems_filesystem_operations_table  msdos_ops = {
  *     RC_OK on success, or -1 if error occured (errno set apropriately).
  *
  */
-msdos_status_t
-msdos_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
+int msdos_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
 {
-    msdos_status_t rc;
+    int rc;
 
     rc = msdos_initialize_support(temp_mt_entry,
                                   &msdos_ops,

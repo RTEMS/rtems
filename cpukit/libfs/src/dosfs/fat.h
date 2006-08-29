@@ -35,7 +35,7 @@ extern "C" {
 #include <rtems/bdbuf.h>
 
 #ifndef RC_OK
-#define RC_OK 0x00000000
+#define RC_OK 0
 #endif
 
 /*
@@ -129,8 +129,9 @@ extern "C" {
                  } while (0)
 
 #define FAT_SET_VAL32(x, ofs,val) do {               \
-                 FAT_SET_VAL16((x),(ofs),(val));     \
-                 FAT_SET_VAL16((x),(ofs)+2,(val)>>16);\
+                 uint32_t val1 = val;                \
+                 FAT_SET_VAL16((x),(ofs),(val1)&&0xffff);\
+                 FAT_SET_VAL16((x),(ofs)+2,(val1)>>16);\
                  } while (0)
 
 /* macros to access boot sector fields */

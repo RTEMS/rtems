@@ -455,10 +455,10 @@ msdos_file_ioctl(rtems_libio_t *iop,uint32_t   command, void *buffer)
  * RETURNS:
  *     RC_OK on success, or -1 if error occured (errno set appropriately)
  */
-msdos_status_t
+int
 msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc)
 {
-    msdos_status_t     rc = RC_OK;
+    int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = pathloc->node_access;

@@ -69,14 +69,14 @@ msdos_set_handlers(rtems_filesystem_location_info_t *loc)
  *     (errno set appropriately)
  *
  */
-msdos_status_t
+int
 msdos_eval_path(
     const char                        *pathname,
     int                                flags,
     rtems_filesystem_location_info_t  *pathloc
     )
 {
-    msdos_status_t                    rc = RC_OK;
+    int                               rc = RC_OK;
     rtems_status_code                 sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t                  *fs_info = pathloc->mt_entry->fs_info;
     fat_file_fd_t                    *fat_fd = NULL;
@@ -250,14 +250,14 @@ err:
  *     RC_OK, filled pathloc for parent directory and name of new node on
  *     success, or -1 if error occured (errno set appropriately)
  */
-msdos_status_t
+int
 msdos_eval4make(
     const char                         *path,
     rtems_filesystem_location_info_t   *pathloc,
     const char                        **name
     )
 {
-    msdos_status_t                    rc = RC_OK;
+    int                               rc = RC_OK;
     rtems_status_code                 sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t                  *fs_info = pathloc->mt_entry->fs_info;
     fat_file_fd_t                    *fat_fd = NULL;

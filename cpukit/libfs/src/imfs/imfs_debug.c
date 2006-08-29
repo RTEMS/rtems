@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>   /* for close */
+#include <inttypes.h>
 
 #include <stdio.h>
 #include <sys/stat.h>
@@ -61,13 +62,13 @@ void IMFS_print_jnode(
       break;
 
     case IMFS_DEVICE:
-      fprintf(stdout, " (device %d, %d)",
+      fprintf(stdout, " (device %" PRId32 ", %" PRId32 ")",
         the_jnode->info.device.major, the_jnode->info.device.minor );
       break;
 
     case IMFS_LINEAR_FILE:
-      fprintf(stdout, " (file %d %p)",
-        (int)the_jnode->info.linearfile.size,
+      fprintf(stdout, " (file %" PRId32 " %p)",
+        (uint32_t)the_jnode->info.linearfile.size,
         the_jnode->info.linearfile.direct
       );
       break;
@@ -75,14 +76,15 @@ void IMFS_print_jnode(
     case IMFS_MEMORY_FILE:
       /* Useful when debugging .. varies between targets  */
 #if 0
-      fprintf(stdout, " (file %d %p %p %p)",
-        (int)the_jnode->info.file.size,
+      fprintf(stdout, " (file %" PRId32 " %p %p %p)",
+        (uint32_t)the_jnode->info.file.size,
         the_jnode->info.file.indirect,
         the_jnode->info.file.doubly_indirect,
         the_jnode->info.file.triply_indirect
       );
 #else
-      fprintf(stdout, " (file %d)", (int)the_jnode->info.file.size );
+      fprintf(stdout, " (file %" PRId32 ")",
+        (uint32_t)the_jnode->info.file.size );
 #endif
       break;
 

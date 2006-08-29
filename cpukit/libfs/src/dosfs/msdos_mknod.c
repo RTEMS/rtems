@@ -45,15 +45,14 @@
  *     RC_OK on succes, or -1 if error occured and set errno
  *
  */
-msdos_status_t
-msdos_mknod(
+int msdos_mknod(
     const char                        *token,
     mode_t                             mode,
     dev_t                              dev,
     rtems_filesystem_location_info_t  *pathloc
-    )
+)
 {
-    msdos_status_t       rc = RC_OK;
+    int                  rc = RC_OK;
     rtems_status_code    sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t     *fs_info = pathloc->mt_entry->fs_info;
     msdos_token_types_t  type = 0;

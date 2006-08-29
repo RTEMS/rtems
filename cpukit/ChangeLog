@@ -1,3 +1,12 @@
+2006-08-29	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_eval.c,
+	libfs/src/dosfs/msdos_file.c, libfs/src/dosfs/msdos_free.c,
+	libfs/src/dosfs/msdos_fsunmount.c, libfs/src/dosfs/msdos_init.c,
+	libfs/src/dosfs/msdos_misc.c, libfs/src/dosfs/msdos_mknod.c,
+	libfs/src/imfs/imfs_debug.c: Remove warnings.
+
 2006-08-21	Till Straumann <strauman@slac.stanford.edu>
 
 	* libnetworking/net/if_ethersubr.c: (ether_ioctl)
