@@ -1,5 +1,10 @@
 2006-08-29	Joel Sherrill <joel@OARcorp.com>
 
+	* score/include/rtems/score/object.h: _Objects_Local_node is a uint16_t
+	so cast the _Objects_Local_node constant to 1.
+
+2006-08-29	Joel Sherrill <joel@OARcorp.com>
+
 	* libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos.h,
 	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_eval.c,
 	libfs/src/dosfs/msdos_file.c, libfs/src/dosfs/msdos_free.c,
