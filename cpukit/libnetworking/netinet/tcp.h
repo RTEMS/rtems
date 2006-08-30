@@ -81,20 +81,23 @@ struct tcphdr {
 	u_short	th_urp;			/* urgent pointer */
 };
 
-#define	TCPOPT_EOL		0
-#define	TCPOPT_NOP		1
-#define	TCPOPT_MAXSEG		2
-#define    TCPOLEN_MAXSEG		4
-#define TCPOPT_WINDOW		3
-#define    TCPOLEN_WINDOW		3
-#define TCPOPT_SACK_PERMITTED	4		/* Experimental */
-#define    TCPOLEN_SACK_PERMITTED	2
-#define TCPOPT_SACK		5		/* Experimental */
-#define TCPOPT_TIMESTAMP	8
-#define    TCPOLEN_TIMESTAMP		10
-#define    TCPOLEN_TSTAMP_APPA		(TCPOLEN_TIMESTAMP+2) /* appendix A */
+#define	TCPOPT_EOL		0L
+#define	TCPOPT_NOP		1L
+#define	TCPOPT_MAXSEG		2L
+#define    TCPOLEN_MAXSEG		4L
+#define TCPOPT_WINDOW		3L
+#define    TCPOLEN_WINDOW		3L
+#define TCPOPT_SACK_PERMITTED	4L		/* Experimental */
+#define    TCPOLEN_SACK_PERMITTED	2L
+#define TCPOPT_SACK		5L		/* Experimental */
+#define TCPOPT_TIMESTAMP	8L
+#define    TCPOLEN_TIMESTAMP		10L
+#define    TCPOLEN_TSTAMP_APPA		(uint32_t)(TCPOLEN_TIMESTAMP+2) /* appendix A */
 #define    TCPOPT_TSTAMP_HDR		\
-    (TCPOPT_NOP<<24|TCPOPT_NOP<<16|TCPOPT_TIMESTAMP<<8|TCPOLEN_TIMESTAMP)
+    (uint32_t)(((uint32_t)TCPOPT_NOP<<24)| \
+               ((uint32_t)TCPOPT_NOP<<16)| \
+               ((uint32_t)TCPOPT_TIMESTAMP<<8)| \
+               ((uint32_t)TCPOLEN_TIMESTAMP))
 
 #define	TCPOPT_CC		11		/* CC options: RFC-1644 */
 #define TCPOPT_CCNEW		12

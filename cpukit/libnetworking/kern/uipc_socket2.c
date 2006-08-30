@@ -166,7 +166,7 @@ sodropablereq(head)
 	register struct socket *head;
 {
 	register struct socket *so;
-	unsigned int i, j, qlen, m;
+	uint32_t i, j, qlen, m;
 
 	static int rnd;
 	static long old_mono_secs;

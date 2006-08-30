@@ -1,5 +1,19 @@
 2006-08-30	Joel Sherrill <joel@OARcorp.com>
 
+	* libcsupport/include/sys/ioccom.h, libnetworking/kern/uipc_socket2.c,
+	libnetworking/net/ethernet.h, libnetworking/net/if.h,
+	libnetworking/net/if_ethersubr.c, libnetworking/net/if_ppp.c,
+	libnetworking/net/if_pppvar.h, libnetworking/net/ppp_tty.c,
+	libnetworking/net/pppcompress.c, libnetworking/net/slcompress.c,
+	libnetworking/netinet/in.h, libnetworking/netinet/ip_icmp.c,
+	libnetworking/netinet/tcp.h, libnetworking/netinet/tcp_seq.h,
+	libnetworking/sys/protosw.h, libnetworking/sys/socketvar.h: Remove
+	warnings. Most of the warnings were 16/32 bit integer sizing issues.
+	Some constants had L appended, some had casts add, some types were
+	changed to reflect a bit width requirement.
+
+2006-08-30	Joel Sherrill <joel@OARcorp.com>
+
 	* libmisc/cpuuse/cpuuse.c, libmisc/monitor/mon-command.c,
 	libmisc/monitor/mon-driver.c, libmisc/monitor/mon-symbols.c,
 	libmisc/rtmonuse/rtmonuse.c, libmisc/stackchk/check.c,

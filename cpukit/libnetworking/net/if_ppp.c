@@ -619,7 +619,7 @@ pppdealloc(sc)
 int
 pppioctl(sc, cmd, data, flag, p)
     struct ppp_softc *sc;
-    int cmd;
+    int32_t cmd;
     caddr_t data;
     int flag;
     struct proc *p;

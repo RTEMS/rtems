@@ -699,7 +699,7 @@ iptime()
 	u_long t;
 
 	microtime(&atv);
-	t = (atv.tv_sec % (24*60*60)) * 1000 + atv.tv_usec / 1000;
+	t = (atv.tv_sec % (24L*60L*60L)) * 1000L + atv.tv_usec / 1000L;
 	return (htonl(t));
 }
 

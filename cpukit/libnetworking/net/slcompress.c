@@ -474,7 +474,7 @@ sl_uncompress_tcp_core(buf, buflen, total_len, type, comp, hdrp, hlenp)
 	u_int *hlenp;
 {
 	register u_char *cp;
-	register u_int hlen, changes;
+	register uint32_t hlen, changes;
 	register struct tcphdr *th;
 	register struct cstate *cs;
 	register struct ip *ip;

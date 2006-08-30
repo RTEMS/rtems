@@ -13,7 +13,7 @@
 #define _NET_ETHERNET_H_
 
 /*
- * Somce basic Ethernet constants.
+ * Some basic Ethernet constants.
  */
 #define	ETHER_ADDR_LEN		6	/* length of an Ethernet address */
 #define	ETHER_TYPE_LEN		2	/* length of the Ethernet type field */
@@ -360,7 +360,7 @@ extern	uint32_t ether_crc32_be(const uint8_t *, size_t);
 extern	void ether_demux(struct ifnet *, struct mbuf *);
 extern  void ether_ifattach(struct ifnet *);
 extern	void ether_ifdetach(struct ifnet *);
-extern	int  ether_ioctl(struct ifnet *, int, caddr_t);
+extern	int  ether_ioctl(struct ifnet *, int32_t, caddr_t);
 extern  void	ether_input (struct ifnet *, struct ether_header *, struct mbuf *);
 extern	int  ether_output(struct ifnet *,
 		   struct mbuf *, struct sockaddr *, struct rtentry *);

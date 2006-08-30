@@ -56,7 +56,7 @@
 #define	IOC_DIRMASK	0xe0000000	/* mask for IN/OUT/VOID */
 
 #define	_IOC(inout,group,num,len) \
-	((u_int32_t)inout | \
+	(u_int32_t) ((u_int32_t)inout | \
          (u_int32_t) ((u_int32_t)((u_int32_t)len & IOCPARM_MASK) << 16) | \
          (u_int32_t)((group) << 8) | \
          (u_int32_t)(num))

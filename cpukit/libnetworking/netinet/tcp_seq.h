@@ -75,7 +75,7 @@
 	(tp)->snd_una = (tp)->snd_nxt = (tp)->snd_max = (tp)->snd_up = \
 	    (tp)->iss
 
-#define TCP_PAWS_IDLE	(24 * 24 * 60 * 60 * PR_SLOWHZ)
+#define TCP_PAWS_IDLE	(uint32_t)(24L * 24L * 60L * 60L * PR_SLOWHZ)
 					/* timestamp wrap-around time */
 
 #ifdef _KERNEL
@@ -91,9 +91,9 @@ extern tcp_cc	tcp_ccgen;		/* global connection count */
  * number in the range [0-0x3ffff] that is hard to predict.
  */
 #ifndef tcp_random18
-#define	tcp_random18()	((random() >> 14) & 0x3ffff)
+#define	tcp_random18()	(((uint32_t)random() >> 14) & 0x3ffffL)
 #endif
-#define	TCP_ISSINCR	(122*1024 + tcp_random18())
+#define	TCP_ISSINCR	(uint32_t)(122L*1024L + tcp_random18())
 
 extern tcp_seq	tcp_iss;		/* tcp initial send seq # */
 #else

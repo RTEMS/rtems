@@ -92,8 +92,8 @@ struct protosw {
 	struct	pr_usrreqs *pr_usrreqs;	/* supersedes pr_usrreq() */
 };
 
-#define	PR_SLOWHZ	2		/* 2 slow timeouts per second */
-#define	PR_FASTHZ	5		/* 5 fast timeouts per second */
+#define	PR_SLOWHZ	2L		/* 2 slow timeouts per second */
+#define	PR_FASTHZ	5L		/* 5 fast timeouts per second */
 
 /*
  * Values for pr_flags.

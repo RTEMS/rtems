@@ -427,7 +427,7 @@ ppptioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args)
 {
 /*    int                 i;	*/
     int                 error = RTEMS_SUCCESSFUL;
-    int                 cmd   = args->command;
+    int32_t             cmd   = args->command;
     caddr_t             data  = args->buffer;
     struct ppp_softc   *sc    = tty->t_sc;
 
@@ -728,9 +728,9 @@ pppallocmbuf(struct ppp_softc *sc, struct mbuf **mp)
 /*
  * tty interface receiver interrupt.
  */
-static unsigned paritytab[8] = {
-    0x96696996, 0x69969669, 0x69969669, 0x96696996,
-    0x69969669, 0x96696996, 0x96696996, 0x69969669
+static uint32_t paritytab[8] = {
+    0x96696996L, 0x69969669L, 0x69969669L, 0x96696996L,
+    0x69969669L, 0x96696996L, 0x96696996L, 0x69969669L
 };
 
 int

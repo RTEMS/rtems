@@ -90,7 +90,7 @@ struct socket {
 		void	(*sb_wakeup) __P((struct socket *, caddr_t));
 		caddr_t	sb_wakeuparg;	/* arg for above */
 	} so_rcv, so_snd;
-#define	SB_MAX		(256*1024)	/* default for max chars in sockbuf */
+#define	SB_MAX		(256L*1024L)	/* default for max chars in sockbuf */
 #define	SB_LOCK		0x01		/* lock on data queue */
 #define	SB_WANT		0x02		/* someone is waiting to lock */
 #define	SB_WAIT		0x04		/* someone is waiting for data/space */

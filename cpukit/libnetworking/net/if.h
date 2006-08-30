@@ -47,6 +47,7 @@
 #ifndef __BSD_VISIBLE
 #define __BSD_VISIBLE 1
 #endif
+#include <inttypes.h>
 #endif
 
 #ifdef _KERNEL
@@ -210,7 +211,7 @@ struct	ifreq {
 		struct	sockaddr ifru_dstaddr;
 		struct	sockaddr ifru_broadaddr;
 		short	ifru_flags[2];
-		int	ifru_metric;
+		int32_t	ifru_metric;
 		int	ifru_mtu;
 		int	ifru_phys;
 		int	ifru_media;
