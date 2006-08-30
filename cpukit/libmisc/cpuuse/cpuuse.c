@@ -23,6 +23,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <inttypes.h>
 
 #include <rtems/cpuuse.h>
 
@@ -98,25 +99,28 @@ void CPU_usage_Dump( void )
         if ( !isprint(name[2]) ) name[2] = '*';
         if ( !isprint(name[3]) ) name[3] = '*';
 
-        ival = total_units ? the_thread->ticks_executed * 10000 / total_units : 0;
-		fval = ival % 100;
-		ival /= 100;
-		fprintf(stdout, "0x%08x   %4s    %8d     %3d.%2.2d\n",
+        ival = total_units ?
+                 the_thread->ticks_executed * 10000 / total_units : 0;
+        fval = ival % 100;
+        ival /= 100;
+        fprintf(stdout,
+          "0x%08" PRIu32 "   %4s    %8" PRId32 "     %3" PRId32
+             ".%2.2" PRId32"\n",
           the_thread->Object.id,
           name,
           the_thread->ticks_executed,
-		  ival,
-		  fval
+          ival,
+          fval
         );
       }
     }
   }
 
   fprintf(stdout,
-    "\nTicks since last reset = %d\n",
+    "\nTicks since last reset = %" PRId32 "\n",
     _Watchdog_Ticks_since_boot - CPU_usage_Ticks_at_last_reset
   );
-  fprintf(stdout, "\nTotal Units = %d\n", total_units );
+  fprintf(stdout, "\nTotal Units = %" PRId32 "\n", total_units );
 }
 
 /*PAGE

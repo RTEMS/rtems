@@ -30,6 +30,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>             /* strtoul() */
+#include <inttypes.h>
 
 #define DATACOL 15
 #define CONTCOL DATACOL		/* continued col */
@@ -110,7 +111,7 @@ rtems_monitor_driver_dump(
 {
     uint32_t            length = 0;
 
-    length += fprintf(stdout,"  %d", monitor_driver->id);
+    length += fprintf(stdout,"  %" PRId32 "", monitor_driver->id);
 
     length += rtems_monitor_pad(13, length);
     length += fprintf(stdout,"init: ");

@@ -22,6 +22,7 @@
 #endif
 
 #include <rtems.h>
+#include <inttypes.h>
 
 /*
  * HACK
@@ -315,17 +316,18 @@ void Stack_check_report_blown_task(void)
 
     fprintf(
         stderr,
-        "BLOWN STACK!!! Offending task(%p): id=0x%08x; name=0x%08x",
+        "BLOWN STACK!!! Offending task(%p): id=0x%08" PRIx32
+             "; name=0x%08" PRIx32,
         running,
         running->Object.id,
-        (uint32_t  )running->Object.name
+        (uint32_t) running->Object.name
     );
     fflush(stderr);
 
     if (rtems_configuration_get_user_multiprocessing_table())
         fprintf(
           stderr,
-          "; node=%d\n",
+          "; node=%" PRId32 "\n",
           rtems_configuration_get_user_multiprocessing_table()->node
        );
     else
@@ -334,10 +336,10 @@ void Stack_check_report_blown_task(void)
 
     fprintf(
         stderr,
-        "  stack covers range 0x%08x - 0x%08x (%d bytes)\n",
-        (uint32_t  ) stack->area,
-        (uint32_t  ) stack->area + stack->size - 1,
-        (uint32_t  ) stack->size);
+        "  stack covers range %p - %p" PRIx32 " (%" PRId32 " bytes)\n",
+        stack->area,
+        stack->area + stack->size - 1,
+        stack->size);
     fflush(stderr);
 
     fprintf(
@@ -480,11 +482,12 @@ void Stack_check_Dump_threads_usage(
     name[ 4 ] = '\0';
   }
 
-  fprintf(stdout, "0x%08x  %4s  0x%08x  0x%08x   %8d   %8d\n",
+  fprintf(stdout, "0x%08" PRIx32 "  %4s  %p - %p"
+             "   %8" PRId32 "   %8" PRId32 "\n",
           the_thread ? the_thread->Object.id : ~0,
           name,
-          (uint32_t  ) stack->area,
-          (uint32_t  ) stack->area + (uint32_t  ) stack->size - 1,
+          stack->area,
+          stack->area + stack->size - 1,
           size,
           used
   );

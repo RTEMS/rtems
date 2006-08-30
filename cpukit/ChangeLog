@@ -1,5 +1,13 @@
 2006-08-30	Joel Sherrill <joel@OARcorp.com>
 
+	* libmisc/cpuuse/cpuuse.c, libmisc/monitor/mon-command.c,
+	libmisc/monitor/mon-driver.c, libmisc/monitor/mon-symbols.c,
+	libmisc/rtmonuse/rtmonuse.c, libmisc/stackchk/check.c,
+	libnetworking/libc/res_debug.c, telnetd/telnetd.c: Remove printf
+	format warnings.
+
+2006-08-30	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/src/utsname.c, libnetworking/libc/res_debug.c,
 	libnetworking/net/if_media.h, libnetworking/rtems/rtems_mii_ioctl.c,
 	librpc/src/rpc/svc_simple.c: Remove printf format warnings.

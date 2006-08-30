@@ -21,6 +21,7 @@
 #include <rtems.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 #include <rtems/monitor.h>
 #include "symbols.h"
@@ -400,15 +401,16 @@ rtems_monitor_symbol_dump(
                              (int) sizeof(canonical_symbol->name),
                              canonical_symbol->name);
         else
-            length += fprintf(stdout,"<%.*s+0x%x>",
+            length += fprintf(stdout,"<%.*s+0x%" PRIx32 ">",
                              (int) sizeof(canonical_symbol->name),
                              canonical_symbol->name,
                              canonical_symbol->offset);
         if (verbose)
-            length += fprintf(stdout," [0x%x]", canonical_symbol->value);
+            length += fprintf(stdout,
+                        " [0x%" PRIx32 "]", canonical_symbol->value);
     }
     else
-        length += fprintf(stdout,"[0x%x]", canonical_symbol->value);
+        length += fprintf(stdout,"[0x%" PRIx32 "]", canonical_symbol->value);
 
     return length;
 }

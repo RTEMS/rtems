@@ -534,7 +534,7 @@ p_time(u_int32_t value) {
 	static char nbuf[40];
 
 	if (ns_format_ttl(value, nbuf, sizeof nbuf) < 0)
-		sprintf(nbuf, "%" PRIu32, value);
+		sprintf(nbuf, "%" PRIu32, (uint32_t) value);
 	return (nbuf);
 }
 

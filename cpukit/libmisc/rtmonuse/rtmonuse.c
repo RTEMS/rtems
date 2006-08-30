@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <ctype.h>
+#include <inttypes.h>
 
 #include <rtems/rtmonuse.h>
 
@@ -192,7 +193,8 @@ void Period_usage_Dump( void )
 
 
     fprintf(stdout,
-      "0x%08x  %4s   %6d   %3d       %d/%d/%5.2f    %d/%d/%3.2f\n",
+      "0x%08" PRIx32 "  %4s   %6" PRId32 "   %3" PRId32 "       %" PRId32 
+         "/%" PRId32 "/%5.2f    %" PRId32 "/%" PRId32 "/%3.2f\n",
       the_usage->id,
       name,
       the_usage->count,

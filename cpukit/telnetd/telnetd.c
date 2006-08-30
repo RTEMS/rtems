@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <string.h>	/* memset */
 #include <stdio.h>
+#include <inttypes.h>
 
 /* FIXME: This should not be here */
 extern void _rtems_telnetd_register_icmds(void);
@@ -124,8 +125,10 @@ int rtems_telnetd_main(int argc,char * argv[]) {
 	if (argc>2) telnetd_task_priority=str2int(argv[2]);
 	sc=rtems_initialize_telnetd();
         if (sc!=RTEMS_SUCCESSFUL) return sc;
-	printf("rtems_telnetd() started with stacksize=%u,priority=%d\n",
-                        telnetd_stack_size,telnetd_task_priority);
+	printf(
+          "rtems_telnetd() started with stacksize=%" PRIu32
+             ",priority=%" PRId32 "\n",
+          telnetd_stack_size,telnetd_task_priority);
 	return 0;
 }
 /***********************************************************/

@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 #ifndef MONITOR_PROMPT
 #define MONITOR_PROMPT "rtems"          /* will have '> ' appended */
@@ -496,11 +497,11 @@ rtems_monitor_command_read(char *command,
     sprintf (monitor_prompt, "%s",
              (env_prompt == NULL) ? MONITOR_PROMPT: env_prompt);
   else if (rtems_monitor_default_node != rtems_monitor_node)
-    sprintf (monitor_prompt, "%d-%s-%d", rtems_monitor_node,
+    sprintf (monitor_prompt, "%" PRId32 "-%s-%" PRId32 "", rtems_monitor_node,
              (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt,
              rtems_monitor_default_node);
   else
-    sprintf (monitor_prompt, "%d-%s", rtems_monitor_node,
+    sprintf (monitor_prompt, "%" PRId32 "-%s", rtems_monitor_node,
              (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt);
 
 #if defined(RTEMS_UNIX)
