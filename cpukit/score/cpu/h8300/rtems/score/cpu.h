@@ -626,6 +626,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \
+    _isr_cookie = 0; /* to avoid warnings */; \
     asm volatile( "stc.w ccr, @-er7 ;\n orc #0xC0,ccr ;\n mov.w @er7+,%0" :  "=r" (_isr_cookie) : ); \
   } while (0)
 
