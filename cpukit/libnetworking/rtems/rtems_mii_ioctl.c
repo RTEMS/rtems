@@ -11,6 +11,7 @@
 /* Author: Till Straumann, <straumanatslacdotstandorddotedu>, 2005 */
 
 #include <rtems.h>
+#include <inttypes.h>
 
 #undef _KERNEL
 #undef KERNEL
@@ -61,8 +62,8 @@ rtems_ifmedia2str (int media, char *buf, int bufsz)
     dupdesc = IFM_FDX & media ? " full-duplex" : " half-duplex";
 
   return WHATPRINT (buf, bufsz,
-                    "Ethernet [phy instance: %i]: (link %s, autoneg %s) -- media: %s%s",
-                    IFM_INST (media),
+                    "Ethernet [phy instance: %" PRId32 "]: (link %s, autoneg %s) -- media: %s%s",
+                    (int32_t) IFM_INST (media),
                     IFM_LINK_OK & media ? "ok" : "down",
                     IFM_ANEG_DIS & media ? "off" : "on",
                     mdesc, dupdesc ? dupdesc : "");

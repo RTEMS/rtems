@@ -49,6 +49,8 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_simple.c,v 1.9 1999/08/28 0
 #include <sys/socket.h>
 #include <netdb.h>
 
+#include <inttypes.h> /* for PRIxx printf formats */
+
 struct prog_lst {
 	char *(*p_progname)();
 	rpcprog_t  p_prognum;
@@ -142,7 +144,7 @@ universal(
 				return;
 			if (!svc_sendreply(atransp, lpl->p_outproc, outdata)) {
 				(void) fprintf(stderr,
-				    "trouble replying to prog %d\n",
+				    "trouble replying to prog %" PRIu32 "\n",
 				    lpl->p_prognum);
 				exit(1);
 			}

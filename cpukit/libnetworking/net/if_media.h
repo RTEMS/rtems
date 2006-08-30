@@ -272,7 +272,7 @@ int	ifmedia_ioctl(struct ifnet *ifp, struct ifreq *ifr,
  * Macro to create a media word.
  */
 #define	IFM_MAKEWORD(type, subtype, options, instance)			\
-	((type) | (subtype) | (options) | ((instance) << IFM_ISHIFT))
+	((type) | (subtype) | (options) | ((uint32_t)(instance) << IFM_ISHIFT))
 #define	IFM_MAKEMODE(mode) \
 	(((mode) << IFM_MSHIFT) & IFM_MMASK)
 

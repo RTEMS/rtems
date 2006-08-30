@@ -98,6 +98,8 @@ static char sccsid[] = "@(#)res_debug.c	8.1 (Berkeley) 6/4/93";
 static char rcsid[] = "$Id$";
 #endif /* LIBC_SCCS and not lint */
 
+#include <inttypes.h>
+
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/socket.h>
@@ -532,7 +534,7 @@ p_time(u_int32_t value) {
 	static char nbuf[40];
 
 	if (ns_format_ttl(value, nbuf, sizeof nbuf) < 0)
-		sprintf(nbuf, "%u", value);
+		sprintf(nbuf, "%" PRIu32, value);
 	return (nbuf);
 }
 
