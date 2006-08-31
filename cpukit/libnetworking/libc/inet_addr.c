@@ -93,8 +93,8 @@ inet_aton(cp, addr)
 	in_addr_t val;
 	register int base, n;
 	register char c;
-	u_int parts[4];
-	register u_int *pp = parts;
+	uint32_t parts[4];
+	register uint32_t *pp = parts;
 
 	c = *cp;
 	for (;;) {

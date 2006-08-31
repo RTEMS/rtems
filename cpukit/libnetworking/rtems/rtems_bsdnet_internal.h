@@ -19,6 +19,12 @@ typedef	long long		vm_ooffset_t;
 typedef	unsigned int		vm_pindex_t;
 typedef	unsigned int		vm_size_t;
 
+#ifndef __ioctl_command_defined
+typedef u_int32_t ioctl_command_t;
+#define __ioctl_command_defined
+#endif
+
+
 #define _BSD_OFF_T_	int32_t
 #define _BSD_PID_T_	rtems_id
 #define _BSD_VA_LIST_	char *
@@ -173,7 +179,7 @@ void ipintr (void);
 void arpintr (void);
 void bootpc_init(int );
 int socket (int, int, int);
-int ioctl (int, int, ...);
+int ioctl (int, ioctl_command_t, ...);
 
 /*
  * Events used by networking routines.
@@ -183,8 +189,8 @@ int ioctl (int, int, ...);
  */
 #define SBWAIT_EVENT   RTEMS_EVENT_24
 #define SOSLEEP_EVENT  RTEMS_EVENT_25
-#define NETISR_IP_EVENT                (1 << NETISR_IP)
-#define NETISR_ARP_EVENT       (1 << NETISR_ARP)
+#define NETISR_IP_EVENT        (1L << NETISR_IP)
+#define NETISR_ARP_EVENT       (1L << NETISR_ARP)
 #define NETISR_EVENTS  (NETISR_IP_EVENT|NETISR_ARP_EVENT)
 #if (SBWAIT_EVENT & SOSLEEP_EVENT & NETISR_EVENTS)
 # error "Network event conflict"

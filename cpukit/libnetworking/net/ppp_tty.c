@@ -427,7 +427,7 @@ ppptioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args)
 {
 /*    int                 i;	*/
     int                 error = RTEMS_SUCCESSFUL;
-    int32_t             cmd   = args->command;
+    ioctl_command_t     cmd   = args->command;
     caddr_t             data  = args->buffer;
     struct ppp_softc   *sc    = tty->t_sc;
 

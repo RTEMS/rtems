@@ -68,18 +68,18 @@
  * code and should be modified for each CPU to be as fast as possible.
  */
 
-#define ADDCARRY(x)  (x > 65535 ? x -= 65535 : x)
+#define ADDCARRY(x)  (x > 65535L ? x -= 65535L : x)
 #define REDUCE \
   {l_util.l = sum; sum = l_util.s[0] + l_util.s[1];  ADDCARRY(sum);}
 
 int
 in_cksum(m, len)
 	register struct mbuf *m;
-	register int len;
+	register uint32_t len;
 {
 	register u_short *w;
-	register int sum = 0;
-	register int mlen = 0;
+	register uint32_t sum = 0;
+	register uint32_t mlen = 0;
 	int byte_swapped = 0;
 
 	union {

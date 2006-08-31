@@ -124,8 +124,8 @@ MDblock(MDp,Xb)
 MD4_CTX *MDp;
 unsigned char *Xb;
 {
-  register unsigned int tmp, A, B, C, D;
-  unsigned int X[16];
+  register uint32_t tmp, A, B, C, D;
+  uint32_t X[16];
   int i;
 
   for (i = 0; i < 16; ++i) {

@@ -74,33 +74,33 @@ typedef struct {
 	enum opt_type type;
 	void	*addr;
 	char	*description;
-	int	flags;
+	uint32_t flags;
 	void	*addr2;
 	int	upper_limit;
 	int	lower_limit;
 } option_t;
 
 /* Values for flags */
-#define OPT_VALUE	0xff	/* mask for presupplied value */
-#define OPT_HEX		0x100	/* int option is in hex */
-#define OPT_NOARG	0x200	/* option doesn't take argument */
-#define OPT_OR		0x400	/* OR in argument to value */
-#define OPT_INC		0x800	/* increment value */
-#define OPT_PRIV	0x1000	/* privileged option */
-#define OPT_STATIC	0x2000	/* string option goes into static array */
-#define OPT_LLIMIT	0x4000	/* check value against lower limit */
-#define OPT_ULIMIT	0x8000	/* check value against upper limit */
+#define OPT_VALUE	0xffL	/* mask for presupplied value */
+#define OPT_HEX		0x100L	/* int option is in hex */
+#define OPT_NOARG	0x200L	/* option doesn't take argument */
+#define OPT_OR		0x400L	/* OR in argument to value */
+#define OPT_INC		0x800L	/* increment value */
+#define OPT_PRIV	0x1000L	/* privileged option */
+#define OPT_STATIC	0x2000L	/* string option goes into static array */
+#define OPT_LLIMIT	0x4000L	/* check value against lower limit */
+#define OPT_ULIMIT	0x8000L	/* check value against upper limit */
 #define OPT_LIMITS	(OPT_LLIMIT|OPT_ULIMIT)
-#define OPT_ZEROOK	0x10000	/* 0 value is OK even if not within limits */
-#define OPT_NOINCR	0x20000	/* value mustn't be increased */
-#define OPT_ZEROINF	0x40000	/* with OPT_NOINCR, 0 == infinity */
-#define OPT_A2INFO	0x100000 /* addr2 -> option_info to update */
-#define OPT_A2COPY	0x200000 /* addr2 -> second location to rcv value */
-#define OPT_ENABLE	0x400000 /* use *addr2 as enable for option */
-#define OPT_PRIVFIX	0x800000 /* can't be overridden if noauth */
-#define OPT_PREPASS	0x1000000 /* do this opt in pre-pass to find device */
-#define OPT_INITONLY	0x2000000 /* option can only be set in init phase */
-#define OPT_DEVEQUIV	0x4000000 /* equiv to device name */
+#define OPT_ZEROOK	0x10000L	/* 0 value is OK even if not within limits */
+#define OPT_NOINCR	0x20000L	/* value mustn't be increased */
+#define OPT_ZEROINF	0x40000L	/* with OPT_NOINCR, 0 == infinity */
+#define OPT_A2INFO	0x100000L /* addr2 -> option_info to update */
+#define OPT_A2COPY	0x200000L /* addr2 -> second location to rcv value */
+#define OPT_ENABLE	0x400000L /* use *addr2 as enable for option */
+#define OPT_PRIVFIX	0x800000L /* can't be overridden if noauth */
+#define OPT_PREPASS	0x1000000L /* do this opt in pre-pass to find device */
+#define OPT_INITONLY	0x2000000L /* option can only be set in init phase */
+#define OPT_DEVEQUIV	0x4000000L /* equiv to device name */
 #define OPT_DEVNAM	(OPT_PREPASS | OPT_INITONLY | OPT_DEVEQUIV)
 
 #define OPT_VAL(x)	((x) & OPT_VALUE)

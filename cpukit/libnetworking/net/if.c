@@ -559,7 +559,7 @@ ifioctl(struct socket *so, u_long cmd, caddr_t data, struct proc *p)
 		 * 72 was chosen below because it is the size of a TCP/IP
 		 * header (40) + the minimum mss (32).
 		 */
-		if (ifr->ifr_mtu < 72 || ifr->ifr_mtu > 65535)
+		if (ifr->ifr_mtu < 72 || ifr->ifr_mtu > 65535L)
 			return (EINVAL);
 		error = (*ifp->if_ioctl)(ifp, cmd, data);
 		if (error == 0)

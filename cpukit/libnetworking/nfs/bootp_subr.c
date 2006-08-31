@@ -71,6 +71,7 @@
 #include <rtems/mkrootfs.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/bsdnet/servers.h>
+#include <inttypes.h>
 
 #define BOOTP_MIN_LEN		300	/* Minimum size of bootp udp packet */
 
@@ -706,12 +707,12 @@ substr(char *a, char *b)
 
 static void printip(char *prefix,struct in_addr addr)
 {
-  unsigned int ip;
+  uint32_t ip;
 
   ip = ntohl(addr.s_addr);
 
-  printf("%s is %d.%d.%d.%d\n",prefix,
-	 ip >> 24, (ip >> 16) & 255 ,(ip >> 8) & 255 ,ip & 255 );
+  printf("%s is %" PRId32" .%" PRId32" .%" PRId32" .%" PRId32" \n",prefix,
+	 ip >> 24, (ip >> 16) & 0xff ,(ip >> 8) & 0xff ,ip & 0xff );
 }
 
 static int dhcpOptionOverload = 0;

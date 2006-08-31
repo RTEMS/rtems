@@ -116,7 +116,7 @@ struct ifnet {
 	void	(*if_start)		/* initiate output routine */
 		(struct ifnet *);
 	int	(*if_ioctl)		/* ioctl routine */
-		(struct ifnet *, u_long, caddr_t);
+		(struct ifnet *, ioctl_command_t, caddr_t);
 	void	(*if_watchdog)		/* timer routine */
 		(struct ifnet *);
 	int	(*if_poll_recv)		/* polled receive routine */

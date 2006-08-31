@@ -1192,7 +1192,7 @@ send_dirline(int s, int wide, time_t curTime, char const* path,
       struct tm bt;
       time_t tf = stat_buf.st_mtime;
       enum { SIZE = 80 };
-      enum { SIX_MONTHS = 365*24*60*60/2 };
+      uint32_t SIX_MONTHS = (365L*24L*60L*60L)/2L;
       char timeBuf[SIZE];
       gmtime_r(&tf, &bt);
       if(curTime > tf + SIX_MONTHS || tf > curTime + SIX_MONTHS)

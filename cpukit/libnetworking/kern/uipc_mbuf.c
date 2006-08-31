@@ -221,7 +221,7 @@ m_prepend(struct mbuf *m, int len, int how)
 static int MCFail;
 
 struct mbuf *
-m_copym(struct mbuf *m, int off0, int len, int wait)
+m_copym(struct mbuf *m, int off0, uint32_t len, int wait)
 {
 	struct mbuf *n, **np;
 	int off = off0;

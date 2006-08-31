@@ -1,5 +1,20 @@
 2006-08-30	Joel Sherrill <joel@OARcorp.com>
 
+	* ftpd/ftpd.c, libcsupport/include/sys/ioccom.h,
+	libcsupport/src/ioctl.c, libnetworking/kern/uipc_mbuf.c,
+	libnetworking/libc/inet_addr.c, libnetworking/net/ethernet.h,
+	libnetworking/net/if.c, libnetworking/net/if_ethersubr.c,
+	libnetworking/net/if_ppp.c, libnetworking/net/if_pppvar.h,
+	libnetworking/net/if_var.h, libnetworking/net/ppp_tty.c,
+	libnetworking/netinet/in_cksum.c, libnetworking/nfs/bootp_subr.c,
+	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/sys/mbuf.h, pppd/md4.c, pppd/pppd.h: Remove warnings
+	due to improper use of int which shows up on 16 bit targets. Added
+	ioctl_command_t since IOCTL command argument does not reliably fit
+	into 16 bits.
+
+2006-08-30	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/include/sys/ioccom.h, libnetworking/kern/uipc_socket2.c,
 	libnetworking/net/ethernet.h, libnetworking/net/if.h,
 	libnetworking/net/if_ethersubr.c, libnetworking/net/if_ppp.c,

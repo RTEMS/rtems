@@ -395,7 +395,7 @@ union mcluster {
 }
 
 /* Length to m_copy to copy all. */
-#define	M_COPYALL	1000000000
+#define	M_COPYALL	(uint32_t)1000000000L
 
 /* Compatibility with 4.3. */
 #define  m_copy(m, o, l)	m_copym((m), (o), (l), M_DONTWAIT)
@@ -413,7 +413,7 @@ extern int	max_protohdr;		/* largest protocol header */
 extern int	max_hdr;		/* largest link+protocol header */
 extern int	max_datalen;		/* MHLEN - max_hdr */
 
-struct	mbuf *m_copym(struct mbuf *, int, int, int);
+struct	mbuf *m_copym(struct mbuf *, int, uint32_t, int);
 struct	mbuf *m_copypacket(struct mbuf *, int);
 struct	mbuf *m_devget(char *, int, int, struct ifnet *,
 			    void (*copy)(char *, caddr_t, u_int));

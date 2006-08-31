@@ -132,7 +132,7 @@
 #include <net/ppp-comp.h>
 #endif
 
-static int	pppsioctl(struct ifnet *ifp, u_long cmd, caddr_t data);
+static int	pppsioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data);
 static void	ppp_requeue(struct ppp_softc *);
 #ifdef PPP_COMPRESS
 static void	ppp_ccp(struct ppp_softc *, struct mbuf *m, int rcvd);
@@ -619,7 +619,7 @@ pppdealloc(sc)
 int
 pppioctl(sc, cmd, data, flag, p)
     struct ppp_softc *sc;
-    int32_t cmd;
+    ioctl_command_t cmd;
     caddr_t data;
     int flag;
     struct proc *p;
@@ -838,7 +838,7 @@ pppioctl(sc, cmd, data, flag, p)
  * Process an ioctl request to the ppp network interface.
  */
 static int
-pppsioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
+pppsioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data)
 {
     /*struct proc *p = curproc;*/	/* XXX */
     register struct ppp_softc *sc = &ppp_softc[ifp->if_unit];

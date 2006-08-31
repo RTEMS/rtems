@@ -27,7 +27,7 @@
 
 int ioctl(
   int  fd,
-  int  command,
+  ioctl_command_t  command,
   ...
 )
 {
