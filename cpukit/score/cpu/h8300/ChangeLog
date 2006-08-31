@@ -1,5 +1,10 @@
 2006-08-30	Joel Sherrill <joel@OARcorp.com>
 
+	* rtems/score/cpu.h: Revert change. It did not appear to correct all
+	warnings.
+
+2006-08-30	Joel Sherrill <joel@OARcorp.com>
+
 	* rtems/score/cpu.h:
 
 2006-08-29	Joel Sherrill <joel@OARcorp.com>
