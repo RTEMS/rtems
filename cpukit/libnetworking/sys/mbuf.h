@@ -83,7 +83,7 @@ struct m_hdr {
  */
 struct	pkthdr {
 	struct	ifnet *rcvif;		/* rcv interface */
-	int	len;			/* total packet length */
+	int32_t	len;			/* total packet length */
 };
 
 /*

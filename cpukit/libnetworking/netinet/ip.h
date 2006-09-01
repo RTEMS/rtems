@@ -94,7 +94,7 @@ struct ip {
 CTASSERT(sizeof (struct ip) == 20);
 #endif
 
-#define	IP_MAXPACKET	65535		/* maximum packet size */
+#define	IP_MAXPACKET	65535L		/* maximum packet size */
 
 /*
  * Definitions for IP type of service (ip_tos)

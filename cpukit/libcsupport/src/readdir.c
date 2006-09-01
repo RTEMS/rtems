@@ -45,6 +45,7 @@ static char sccsid[] = "@(#)readdir.c	5.7 (Berkeley) 6/1/90";
 #endif
 
 #include <dirent.h>
+#include <stdint.h>
 
 int getdents(
   int dd_fd,
@@ -77,7 +78,7 @@ register DIR *dirp; {
       continue;
     }
     dp = (struct dirent *)(dirp->dd_buf + dirp->dd_loc);
-    if ((int)dp & 03)	/* bogus pointer check */
+    if ((intptr_t)dp & 03)	/* bogus pointer check */
       return NULL;
     if (dp->d_reclen <= 0 ||
 	dp->d_reclen > dirp->dd_len + 1 - dirp->dd_loc)

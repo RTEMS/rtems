@@ -279,7 +279,7 @@ void _TOD_Tickle(
  *
  *  @note This must be a macro so it can be used in "static" tables.
  */
-#define TOD_MILLISECONDS_TO_MICROSECONDS(_ms) ((_ms) * 1000)
+#define TOD_MILLISECONDS_TO_MICROSECONDS(_ms) ((uint32_t)(_ms) * 1000L)
 
 /** @brief TOD_MICROSECONDS_TO_TICKS
  *

@@ -426,10 +426,10 @@ vj_uncompress_tcp(bufp, len, type, comp)
 	 * header (we assume the packet we were handed has enough space to
 	 * prepend 128 bytes of header).
 	 */
-	if ((int)cp & 3) {
+	if ((intptr_t)cp & 3) {
 		if (len > 0)
-			(void) ovbcopy(cp, (caddr_t)((int)cp &~ 3), len);
-		cp = (u_char *)((int)cp &~ 3);
+			(void) ovbcopy(cp, (caddr_t)((intptr_t)cp &~ 3), len);
+		cp = (u_char *)((intptr_t)cp &~ 3);
 	}
 	cp -= hlen;
 	len += hlen;

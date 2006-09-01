@@ -295,7 +295,7 @@ div_usrreq(so, req, m, nam, control)
 		if (error)
 			break;
 		inp = (struct inpcb *)so->so_pcb;
-		inp->inp_ip_p = (int)nam;	/* XXX */
+		inp->inp_ip_p = (intptr_t)nam;	/* XXX */
 		inp->inp_flags |= INP_HDRINCL;
 		/* The socket is always "connected" because
 		   we always know "where" to send the packet */

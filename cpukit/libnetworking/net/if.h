@@ -212,7 +212,7 @@ struct	ifreq {
 		struct	sockaddr ifru_broadaddr;
 		short	ifru_flags[2];
 		int32_t	ifru_metric;
-		int	ifru_mtu;
+		int32_t	ifru_mtu;
 		int	ifru_phys;
 		int	ifru_media;
 		caddr_t	ifru_data;

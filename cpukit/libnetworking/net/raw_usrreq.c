@@ -174,7 +174,7 @@ raw_usrreq(so, req, m, nam, control)
 			error = EACCES;
 			break;
 		}
-		error = raw_attach(so, (int)nam);
+		error = raw_attach(so, (intptr_t)nam);
 		break;
 
 	/*
