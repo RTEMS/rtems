@@ -41,6 +41,8 @@
 #undef free
 #endif
 
+extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
+
 /*
 #define GRETH_DEBUG
 */
@@ -224,7 +226,8 @@ greth_initialize_hardware (struct greth_softc *sc)
     write_mii(0, 0x8000);
     while (read_mii(0) & 0x8000) {}
     fd = regs->mdio_ctrl >> 24; /*duplex mode*/
-    printf("greth: driver attached, PHY config : 0x%04x\n", read_mii(0));
+    printf(
+      "greth: driver attached, PHY config: 0x%04" PRIx32 "\n", read_mii(0));
 
     /* Initialize rx/tx descriptor pointers */
     sc->txdesc = (greth_rxtxdesc *) almalloc(1024);
@@ -560,7 +563,7 @@ greth_stats (struct greth_softc *sc)
  * Driver ioctl handler
  */
 static int
-greth_ioctl (struct ifnet *ifp, int command, caddr_t data)
+greth_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     struct greth_softc *sc = ifp->if_softc;
     int error = 0;

@@ -182,7 +182,7 @@ Mode of operation:
 void i82586_reset (struct ie_softc *, int);
 void i82586_watchdog (struct ifnet *);
 void i82586_init (void *);
-int  i82586_ioctl (struct ifnet *, u_long cmd, caddr_t data);
+int  i82586_ioctl (struct ifnet *, ioctl_command_t cmd, caddr_t data);
 void i82586_start (struct ifnet *);
 
 void i82586_stop (struct ifnet *, int);
@@ -1952,7 +1952,7 @@ i82586_stop(struct ifnet *ifp, int disable)
 }
 
 int
-i82586_ioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
+i82586_ioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data)
 {
   struct ie_softc *sc  = ifp->if_softc;
 /*  struct ifreq    *ifr = (struct ifreq *)data; */

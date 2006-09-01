@@ -1477,7 +1477,7 @@ SONIC_STATIC void sonic_init (void *arg)
  * Driver ioctl handler
  */
 static int
-sonic_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
+sonic_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
   struct sonic_softc *sc = ifp->if_softc;
   int error = 0;

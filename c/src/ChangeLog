@@ -1,3 +1,10 @@
+2006-09-01	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/cs8900.c, libchip/network/greth.c,
+	libchip/network/i82586.c, libchip/network/open_eth.c,
+	libchip/network/sonic.c: Remove warnings -- use uintptr_t, properly
+	sized integers, and inttypes.h printf helpers.
+
 2006-08-09	Kolja Waschk <waschk@telos.de>
 
 	* aclocal/rtems-cpu-subdirs.m4: New port to Altera NIOS II.
