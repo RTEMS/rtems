@@ -55,7 +55,7 @@
 #undef free
 #endif
 
-extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
+extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 
  /*
 #define OPEN_ETH_DEBUG
