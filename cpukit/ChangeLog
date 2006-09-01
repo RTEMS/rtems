@@ -1,3 +1,9 @@
+2006-09-01	Till Straumann <strauman@slac.stanford.edu>
+
+	* pppd/rtems.main.c, pppd/pppd.h: renamed 'untimeout'
+	to 'pppuntimeout' to avoid name clash with [future]
+	bsdnet kernel routine.
+
 2006-09-01	Joel Sherrill <joel@OARcorp.com>
 
 	* libcsupport/src/malloc.c, libnetworking/rtems/rtems_glue.c,

@@ -293,7 +293,7 @@ void quit __P((void));		/* like die(1) */
 void novm __P((char *));	/* Say we ran out of memory, and die */
 void ppptimeout __P((void (*func)(void *), void *arg, int t));
 				/* Call func(arg) after t seconds */
-void untimeout __P((void (*func)(void *), void *arg));
+void pppuntimeout __P((void (*func)(void *), void *arg));
 				/* Cancel call to func(arg) */
 void update_link_stats __P((int)); /* Get stats at link termination */
 void new_phase __P((int));	/* signal start of new phase */

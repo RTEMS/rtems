@@ -789,7 +789,7 @@ ppptimeout(func, arg, time)
  * untimeout - Unschedule a timeout.
  */
 void
-untimeout(func, arg)
+pppuntimeout(func, arg)
     void (*func) __P((void *));
     void *arg;
 {
