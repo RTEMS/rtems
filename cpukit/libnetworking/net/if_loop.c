@@ -85,7 +85,7 @@
 #include <netatalk/at_var.h>
 #endif
 
-static int loioctl(struct ifnet *, u_long, caddr_t);
+static int loioctl(struct ifnet *, ioctl_command_t, caddr_t);
 static void lortrequest(int, struct rtentry *, struct sockaddr *);
 
        void rtems_bsdnet_loopattach(void *);
@@ -244,7 +244,7 @@ lortrequest(cmd, rt, sa)
 static int
 loioctl(ifp, cmd, data)
 	register struct ifnet *ifp;
-	u_long cmd;
+	ioctl_command_t cmd;
 	caddr_t data;
 {
 	register struct ifaddr *ifa;
