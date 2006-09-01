@@ -16,13 +16,14 @@
 # endif
 #endif
 
+#include <stdint.h>
 
 /* MDstruct is the data structure for a message digest computation.
 */
 typedef struct {
-	unsigned int buffer[4]; /* Holds 4-word result of MD computation */
-	unsigned char count[8]; /* Number of bits processed so far */
-	unsigned int done;      /* Nonzero means MD computation finished */
+	uint32_t buffer[4]; /* Holds 4-word result of MD computation */
+	uint8_t  count[8];  /* Number of bits processed so far */
+	uint32_t done;      /* Nonzero means MD computation finished */
 } MD4_CTX;
 
 /* MD4Init(MD4_CTX *)

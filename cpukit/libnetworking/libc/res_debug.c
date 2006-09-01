@@ -545,8 +545,8 @@ p_time(u_int32_t value) {
  * by 60*60*1000 for that.
  */
 
-static unsigned int poweroften[10] = {1, 10, 100, 1000, 10000, 100000,
-				      1000000,10000000,100000000,1000000000};
+static uint32_t poweroften[10] = {1, 10, 100, 1000, 10000, 100000,
+			      1000000,10000000,100000000,1000000000};
 
 /* takes an XeY precision/size value, returns a string representation. */
 static const char *
@@ -555,7 +555,7 @@ precsize_ntoa(prec)
 {
 	static char retbuf[sizeof "90000000.00"];
 	unsigned long val;
-	int mantissa, exponent;
+	uint32_t mantissa, exponent;
 
 	mantissa = (int)((prec >> 4) & 0x0f) % 10;
 	exponent = (int)((prec >> 0) & 0x0f) % 10;
@@ -664,13 +664,13 @@ latlon2ul(latlonstrptr,which)
 	switch (*cp) {
 	case 'N': case 'n':
 	case 'E': case 'e':
-		retval = ((unsigned)1<<31)
+		retval = ((u_int32_t)1<<31)
 			+ (((((deg * 60) + min) * 60) + secs) * 1000)
 			+ secsfrac;
 		break;
 	case 'S': case 's':
 	case 'W': case 'w':
-		retval = ((unsigned)1<<31)
+		retval = ((u_int32_t)1<<31)
 			- (((((deg * 60) + min) * 60) + secs) * 1000)
 			- secsfrac;
 		break;
@@ -853,10 +853,10 @@ loc_ntoa(binary, ascii)
 	vpval = *cp++;
 
 	GETLONG(templ, cp);
-	latval = (templ - ((unsigned)1<<31));
+	latval = (templ - ((u_int32_t)1<<31));
 
 	GETLONG(templ, cp);
-	longval = (templ - ((unsigned)1<<31));
+	longval = (templ - ((u_int32_t)1<<31));
 
 	GETLONG(templ, cp);
 	if (templ < referencealt) { /* below WGS 84 spheroid */

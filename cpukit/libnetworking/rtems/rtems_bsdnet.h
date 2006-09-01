@@ -42,7 +42,7 @@ extern struct in_addr rtems_bsdnet_bootp_server_address;
 extern char *rtems_bsdnet_bootp_server_name;
 extern char *rtems_bsdnet_bootp_boot_file_name;
 extern char *rtems_bsdnet_bootp_cmdline;
-extern long rtems_bsdnet_timeoffset;
+extern int32_t rtems_bsdnet_timeoffset;
 
 /*
  * Manipulate routing tables

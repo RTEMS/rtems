@@ -97,7 +97,7 @@ static struct in_addr _rtems_bsdnet_ntpserver[sizeof rtems_bsdnet_config.ntp_ser
 			sizeof rtems_bsdnet_config.ntp_server[0]];
 struct in_addr *rtems_bsdnet_ntpserver = _rtems_bsdnet_ntpserver;
 int rtems_bsdnet_ntpserver_count = 0;
-long rtems_bsdnet_timeoffset = 0;
+int32_t rtems_bsdnet_timeoffset = 0;
 
 /*
  * Perform FreeBSD memory allocation.

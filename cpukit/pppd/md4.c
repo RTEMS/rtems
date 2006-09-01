@@ -40,14 +40,16 @@
 #include "md4.h"
 #include "pppd.h"
 
+#include <inttypes.h>
+
 /* Compile-time declarations of MD4 "magic constants".
 */
-#define I0  0x67452301       /* Initial values for MD buffer */
-#define I1  0xefcdab89
-#define I2  0x98badcfe
-#define I3  0x10325476
-#define C2  013240474631     /* round 2 constant = sqrt(2) in octal */
-#define C3  015666365641     /* round 3 constant = sqrt(3) in octal */
+#define I0  0x67452301L       /* Initial values for MD buffer */
+#define I1  0xefcdab89L
+#define I2  0x98badcfeL
+#define I3  0x10325476L
+#define C2  013240474631L     /* round 2 constant = sqrt(2) in octal */
+#define C3  015666365641L     /* round 3 constant = sqrt(3) in octal */
 /* C2 and C3 are from Knuth, The Art of Programming, Volume 2
 ** (Seminumerical Algorithms), Second Edition (1981), Addison-Wesley.
 ** Table 2, page 660.
@@ -93,7 +95,7 @@ MD4_CTX *MDp;
   int i,j;
   for (i=0;i<4;i++)
     for (j=0;j<32;j=j+8)
-      printf("%02x",(MDp->buffer[i]>>j) & 0xFF);
+      printf("%02" PRIx32,(MDp->buffer[i]>>j) & 0xFF);
 }
 
 /* MD4Init(MDp)
@@ -129,7 +131,8 @@ unsigned char *Xb;
   int i;
 
   for (i = 0; i < 16; ++i) {
-    X[i] = Xb[0] + (Xb[1] << 8) + (Xb[2] << 16) + (Xb[3] << 24);
+    X[i] = Xb[0] + ((uint32_t)Xb[1] << 8) +
+           ((uint32_t)Xb[2] << 16) + ((uint32_t)Xb[3] << 24);
     Xb += 4;
   }
 

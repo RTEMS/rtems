@@ -1242,7 +1242,7 @@ setspeed(arg)
     char *arg;
 {
   int      spd;
-  int      ret      = (int    )1;
+  uint32_t ret      = (int)1;
   speed_t  spdValue = (speed_t)0;
   char    *ptr;
 
@@ -1253,25 +1253,25 @@ setspeed(arg)
     }
     else {
       switch ( spd ) {
-        case 2400:
+        case 2400L:
           spdValue = B2400;
           break;
-        case 4800:
+        case 4800L:
           spdValue = B4800;
           break;
-        case 9600:
+        case 9600L:
           spdValue = B9600;
           break;
-        case 19200:
+        case 19200L:
           spdValue = B19200;
           break;
-        case 38400:
+        case 38400L:
           spdValue = B38400;
           break;
-        case 57600:
+        case 57600L:
           spdValue = B57600;
           break;
-        case 115200:
+        case 115200L:
           spdValue = B115200;
           break;
         default:

@@ -34,7 +34,7 @@
  *  UNIX base: 1970, January 1
  *   NTP base: 1900, January 1
  */
-#define UNIX_BASE_TO_NTP_BASE (((70UL*365UL)+17UL) * (24*60*60))
+#define UNIX_BASE_TO_NTP_BASE (uint32_t)(((70UL*365UL)+17UL) * (24UL*60UL*60UL))
 
 struct ntpPacket {
 	struct ntpPacketSmall	ntp;

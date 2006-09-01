@@ -56,8 +56,8 @@ int rtems_tftp_driver_debug = 1;
 /*
  * Default limits
  */
-#define PACKET_FIRST_TIMEOUT_MILLISECONDS  400
-#define PACKET_TIMEOUT_MILLISECONDS        6000
+#define PACKET_FIRST_TIMEOUT_MILLISECONDS  400L
+#define PACKET_TIMEOUT_MILLISECONDS        6000L
 #define OPEN_RETRY_LIMIT                   10
 #define IO_RETRY_LIMIT                     10
 
@@ -318,12 +318,12 @@ getPacket (struct tftpStream *tp, int retryCount)
     struct timeval tv;
 
     if (retryCount == 0) {
-        tv.tv_sec = PACKET_FIRST_TIMEOUT_MILLISECONDS / 1000;
-        tv.tv_usec = (PACKET_FIRST_TIMEOUT_MILLISECONDS % 1000) * 1000;
+        tv.tv_sec = PACKET_FIRST_TIMEOUT_MILLISECONDS / 1000L;
+        tv.tv_usec = (PACKET_FIRST_TIMEOUT_MILLISECONDS % 1000L) * 1000L;
     }
     else {
-        tv.tv_sec = PACKET_TIMEOUT_MILLISECONDS / 1000;
-        tv.tv_usec = (PACKET_TIMEOUT_MILLISECONDS % 1000) * 1000;
+        tv.tv_sec = PACKET_TIMEOUT_MILLISECONDS / 1000L;
+        tv.tv_usec = (PACKET_TIMEOUT_MILLISECONDS % 1000L) * 1000L;
     }
     setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
     for (;;) {
