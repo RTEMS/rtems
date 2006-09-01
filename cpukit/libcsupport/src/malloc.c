@@ -111,8 +111,8 @@ void RTEMS_Malloc_Initialize(
 {
   rtems_status_code   status;
   void               *starting_address;
-  uint32_t      old_address;
-  uint32_t      u32_address;
+  uintptr_t           old_address;
+  uintptr_t           uaddress;
 
   /*
    *  Initialize the garbage collection list to start with nothing on it.
@@ -129,25 +129,25 @@ void RTEMS_Malloc_Initialize(
   RTEMS_Malloc_Sbrk_amount = sbrk_amount;
 
   if (!starting_address) {
-    u32_address = (unsigned int)sbrk(length);
+    uaddress = (uintptr_t)sbrk(length);
 
-    if (u32_address == (uint32_t  ) -1) {
+    if (uaddress == (uintptr_t) -1) {
       rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
       /* DOES NOT RETURN!!! */
     }
 
-    if (u32_address & (CPU_HEAP_ALIGNMENT-1)) {
-      old_address = u32_address;
-      u32_address = (u32_address + CPU_HEAP_ALIGNMENT) & ~(CPU_HEAP_ALIGNMENT-1);
+    if (uaddress & (CPU_HEAP_ALIGNMENT-1)) {
+      old_address = uaddress;
+      uaddress = (uaddress + CPU_HEAP_ALIGNMENT) & ~(CPU_HEAP_ALIGNMENT-1);
 
        /*
 	* adjust the length by whatever we aligned by
 	*/
 
-      length -= u32_address - old_address;
+      length -= uaddress - old_address;
     }
 
-    starting_address = (void *)u32_address;
+    starting_address = (void *)uaddress;
   }
 
   /*

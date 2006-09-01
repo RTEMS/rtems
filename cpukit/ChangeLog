@@ -1,3 +1,9 @@
+2006-09-01	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/src/malloc.c, libnetworking/rtems/rtems_glue.c,
+	libnetworking/sys/mbuf.h: Remove warnings -- use uintptr_t or
+	properly sized integers.
+
 2006-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* ftpd/ftpd.c, libcsupport/include/sys/ioccom.h,

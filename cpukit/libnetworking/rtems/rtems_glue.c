@@ -48,8 +48,8 @@ void sysctl_register_all(void *arg);
 /*
  * Memory allocation
  */
-static int nmbuf	= (64 * 1024) / MSIZE;
-       int nmbclusters	= (128 * 1024) / MCLBYTES;
+static uint32_t nmbuf       = (64L * 1024L) / MSIZE;
+       uint32_t nmbclusters = (128L * 1024L) / MCLBYTES;
 
 /*
  * Network task synchronization
@@ -175,7 +175,7 @@ bsd_init (void)
 	 */
 
 	p = rtems_bsdnet_malloc_mbuf(nmbuf * MSIZE + MSIZE - 1,MBUF_MALLOC_MBUF);
-	p = (char *)(((unsigned int)p + MSIZE - 1) & ~(MSIZE - 1));
+	p = (char *)(((uintptr_t)p + MSIZE - 1) & ~(MSIZE - 1));
 	if (p == NULL) {
 		printf ("Can't get network memory.\n");
 		return -1;

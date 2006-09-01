@@ -404,8 +404,8 @@ union mcluster {
 extern struct mbuf *mbutl;		/* virtual address of mclusters */
 extern char	*mclrefcnt;		/* cluster reference counts */
 extern struct mbstat mbstat;
-extern int	nmbclusters;
-extern int	nmbufs;
+extern uint32_t	nmbclusters;
+extern uint32_t	nmbufs;
 extern struct mbuf *mmbfree;
 extern union mcluster *mclfree;
 extern int	max_linkhdr;		/* largest link-level header */
