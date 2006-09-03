@@ -85,20 +85,21 @@ AC_MSG_RESULT([$targets])
 AC_MSG_CHECKING([for bsps])
 bsps="%{nil}"
 AC_ARG_ENABLE([bsps],
-[  --enable-bsps=<yes/bsps>      BSP list],[
+[  --enable-bsps=<yes/no/bsps>    BSP list],[
   case "$enable_bsps" in
   yes) # ignore, use default
+   bsps="all"
    ;;
-  no)
-   bsps="RTEMS_BSP=\"\""
+  no | none)
+   bsps="%{nil}"
    ;;
   *) # take a the list to build
-   bsps="RTEMS_BSP=\"$enable_bsps\""
+   bsps="$enable_bsps"
    ;;
   esac
 ])
 AS_IF([test x"$bsps" = x"%{nil}"],
-      [AC_MSG_RESULT([all])],
+      [AC_MSG_RESULT([none])],
       [AC_MSG_RESULT([$bsps])])
 
 AC_SUBST(RTEMS_API, [M4_RTEMS_API])

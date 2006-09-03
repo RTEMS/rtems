@@ -22,7 +22,7 @@
 %define rtems_version   %{expand:%(echo @RTEMS_VERSION@ | sed -e 's,-.*,,')}
 %define rtems_rpmvers   %{expand:%(echo @RTEMS_VERSION@ | tr - _ )}
 
-%define rtems_bsp       @RTEMS_BSP@
+%define rtems_bsps      @RTEMS_BSP@
 
 %define rtems_bootstrap @RTEMS_BOOTSTRAP@
 
@@ -57,13 +57,17 @@ RTEMS Libraries for %{rtems_target}.
 
 %build
   if [ "%{rtems_bootstrap}" = "yes" ]; then
-   cd rtems-%{rtems_api}
+   cd rtems-%{rtems_version}
    ./bootstrap
    cd ..
   fi
   mkdir -p build
+  if [ "x%{rtems_bsps}" = "x" ]; then
+   optargs="$optargs --disable-rtemsbsp"
+  else
+   optargs="$optargs --enable-rtemsbsp=\"%{rtems_bsps}\""
+  fi
   cd build
-  bps=""
   ../rtems-%{rtems_version}/configure \
     --prefix=%{_prefix} \
     --target=%rtems_target \
@@ -81,7 +85,7 @@ RTEMS Libraries for %{rtems_target}.
     --disable-expada \
     --enable-multilib \
     $optargs
-  make all %{rtems_bsp}
+  make all
   cd ..
 
 %install
@@ -103,7 +107,7 @@ RTEMS operating system for %{rtems_target}
 %defattr(-,root,root)
 
 # broken on the avr
-%config %{_prefix}/lib/pkgconfig
+#%config %{_prefix}/lib/pkgconfig
 %config %{_prefix}/make
 %doc    %{_prefix}/share/man
 
