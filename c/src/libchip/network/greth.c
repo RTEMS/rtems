@@ -41,7 +41,11 @@
 #undef free
 #endif
 
+#if defined(__m68k__)
+extern m68k_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
+#else
 extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
+#endif
 
 /*
 #define GRETH_DEBUG
