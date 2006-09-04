@@ -87,6 +87,22 @@ speakl:	jmp	speakl             # and SPIN!!!
         nop
         cli			# DISABLE INTERRUPTS!!!
 	cld
+
+		/* Save multiboot info */
+		cmp 	$0x2badb002,eax
+		jne		1f
+		/* We have multiboot info; let's hope DS and ES are OK... */
+		movl	ebx, SYM(_boot_multiboot_info_p)
+		/* Check for memory size info and save */
+		movl	ebx, esi
+		movl	$SYM(_boot_multiboot_info), edi
+		movsd
+		/* only save flag 1 since that's the only data we save */
+		and		$1,-4(edi)
+		je		1f
+		movl	$2,ecx
+		rep movsd
+1:
 #ifdef DEBUG_EARLY_START
 	/*
 	 * Must get video attribute to have a working printk.
@@ -178,6 +194,15 @@ SYM (zero_bss):
 END_CODE
 
 BEGIN_DATA
+	PUBLIC(_boot_multiboot_info_p)
+SYM(_boot_multiboot_info_p):
+	.long 0
+
+	PUBLIC(_boot_multiboot_info)
+SYM(_boot_multiboot_info):
+	.long 0	/* flags */
+	.long 0 /* mem_lower */
+	.long 0 /* mem_upper */
 
 	PUBLIC(_stack_size)
 SYM(_stack_size):

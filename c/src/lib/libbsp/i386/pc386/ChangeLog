@@ -1,5 +1,15 @@
 2006-09-04	Till Straumann <strauman@slac.stanford.edu>
 
+	* startup/bspstart.c, start/start.S: Since the crude
+	memory autodetection code can easily fail (boards with
+	'reserved' regions - I experienced a hard lockup on a
+	dell precision 490 when writing past the bios-reported
+	memory size) I added code that a) tries to save
+	and use multiboot info, if present b) allows applications
+	to override/set memory size via a weak alias.
+
+2006-09-04	Till Straumann <strauman@slac.stanford.edu>
+
 	* startup/linkcmds: added *(.text.*) *(.data.*) *(.bss.*)
 
 2006-02-01	Joel Sherrill <joel@OARcorp.com>

@@ -40,11 +40,27 @@
 | Global Variables
 +--------------------------------------------------------------------------*/
 extern uint32_t         _end;         /* End of BSS. Defined in 'linkcmds'. */
+
+/* rudimentary multiboot info */
+struct multiboot_info {
+	uint32_t	flags;		/* start.S only raises flags for items actually saved; this allows us to check for the size of the data structure */
+	uint32_t	mem_lower;	/* avail kB in lower memory */
+	uint32_t	mem_upper;	/* avail kB in lower memory */
+	/* ... (unimplemented) */
+};
+
+extern struct multiboot_info _boot_multiboot_info;
 /*
  * Size of heap if it is 0 it will be dynamically defined by memory size,
  * otherwise the value should be changed by binary patch
  */
 uint32_t         _heap_size = 0;
+
+/* Alternative way to hardcode the board's memory size [rather than heap size].
+ * Can easily be overridden by application.
+ */
+extern uint32_t bsp_mem_size __attribute__ ((weak, alias("bsp_mem_size_default")));
+uint32_t bsp_mem_size_default = 0;
 
 /* Size of stack used during initialization. Defined in 'start.s'.  */
 extern uint32_t         _stack_size;
@@ -92,26 +108,43 @@ void bsp_pretasking_hook(void)
   if ( lowest  < 2 )
       lowest = 2;
 
+  /* The memory detection algorithm is very crude; try
+   * to use multiboot info, if possible (set from start.S)
+   */
+  if (   bsp_mem_size == 0
+      && (_boot_multiboot_info.flags & 1)
+      && _boot_multiboot_info.mem_upper ) {
+    bsp_mem_size = _boot_multiboot_info.mem_upper * 1024;
+  }
+
   if (_heap_size == 0) {
-    /*
-     * We have to dynamically size memory. Memory size can be anything
-     * between no less than 2M and 2048M.
-     * let us first write
-     */
-    for (i=2048; i>=lowest; i--) {
-      topAddr = i*1024*1024 - 4;
-      *(volatile uint32_t*)topAddr = topAddr;
-    }
 
-   for(i=lowest; i<=2048; i++) {
-     topAddr = i*1024*1024 - 4;
-     val =  *(uint32_t*)topAddr;
-     if (val != topAddr) {
-       break;
-     }
-   }
+    if ( bsp_mem_size == 0 ) {
+        /*
+         * We have to dynamically size memory. Memory size can be anything
+         * between no less than 2M and 2048M.
+         * let us first write
+         */
+        for (i=2048; i>=lowest; i--) {
+          topAddr = i*1024*1024 - 4;
+          *(volatile uint32_t*)topAddr = topAddr;
+        }
 
-    topAddr = (i-1)*1024*1024 - 4;
+        for(i=lowest; i<=2048; i++) {
+          topAddr = i*1024*1024 - 4;
+          val =  *(uint32_t*)topAddr;
+          if (val != topAddr) {
+            break;
+          }
+        }
+      
+        topAddr = (i-1)*1024*1024 - 4;
+
+      } else {
+
+        topAddr = bsp_mem_size;
+
+      }
 
     _heap_size = topAddr - rtemsFreeMemStart;
   }
@@ -143,8 +176,8 @@ void bsp_start_default( void )
    */
   Calibrate_loop_1ms();
 
+  /* set the value of start of free memory. */
   rtemsFreeMemStart = (uint32_t)&_end + _stack_size;
-                                    /* set the value of start of free memory. */
 
   /* If we don't have command line arguments set default program name. */
 
