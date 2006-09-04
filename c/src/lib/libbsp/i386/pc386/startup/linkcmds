@@ -46,6 +46,7 @@ SECTIONS
     . = ALIGN(4);
     *(.m_hdr)
     *(.text)
+    *(.text.*)
     . = ALIGN (16);
 
     /*
@@ -92,6 +93,7 @@ SECTIONS
   {
     _data_start = . ;
     *(.data)
+    *(.data.*)
     *(.gnu.linkonce.d*)
     *(.gcc_except_table)
     _edata = ALIGN( 0x10 ) ;
@@ -101,6 +103,7 @@ SECTIONS
   {
     _bss_start = . ;
     *(.bss)
+    *(.bss.*)
     *(COMMON)
     _end = . ;
     __end = . ;

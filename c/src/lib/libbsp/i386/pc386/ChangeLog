@@ -1,3 +1,7 @@
+2006-09-04	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/linkcmds: added *(.text.*) *(.data.*) *(.bss.*)
+
 2006-02-01	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac, console/console.c: Add USE_COM1_AS_CONSOLE BSP option.
