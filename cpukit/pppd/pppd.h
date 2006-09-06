@@ -533,7 +533,7 @@ extern void (*auth_linkdown_hook) __P((void));
  */
 
 #define TIMEOUT(r, f, t)	ppptimeout((r), (f), (t))
-#define UNTIMEOUT(r, f)		untimeout((r), (f))
+#define UNTIMEOUT(r, f)	pppuntimeout((r), (f))
 
 #define BCOPY(s, d, l)		memcpy(d, s, l)
 #define BZERO(s, n)		memset(s, 0, n)
