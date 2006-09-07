@@ -1,3 +1,8 @@
+2006-09-07	Ken Peters <ken.peters@jpl.nasa.gov>
+
+	PR 1171/doc
+	* user/timer.t: Correct documentation for rtems_timer_initiate_server.
+
 2006-08-29	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu_supplement/cpu_supplement.texi: New file.
