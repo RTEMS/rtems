@@ -1,3 +1,10 @@
+2006-09-08	Ken Peters <ken.peters@jpl.nasa.gov>
+
+	PR 1170/rtems
+	* rtems/src/timerserver.c: Timer Server created the TIME task with a
+	hard-coded hexadecimal number instead of using rtems_build_name. This
+	resulted in a byte-swapped name on some platforms.
+
 2006-09-06	Chris Johns <chrisj@rtems.org>
 
 	* pppd/pppd.h: Fix the bug in name change. The UNTIMEOUT

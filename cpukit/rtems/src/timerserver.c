@@ -185,7 +185,7 @@ rtems_status_code rtems_timer_initiate_server(
    */
 
   status = rtems_task_create(
-    0x4954454d,           /* "TIME" */
+    rtems_build_name('T','I','M','E'),           /* "TIME" */
     _priority,            /* create with priority 1 since 0 is illegal */
     stack_size,           /* let user specify stack size */
     RTEMS_NO_PREEMPT,     /* no preempt is like an interrupt */
