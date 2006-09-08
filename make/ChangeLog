@@ -1,3 +1,10 @@
+2006-09-08	Kate Feng <feng1@bnl.gov>
+
+	PR 1150/bsps
+	* custom/mvme5500.cfg: This is a follow-up of the PR846 due to the fact
+	that gcc (4.0.2) implicitely uses the vector engine for optimization;
+	-mcpu=7450 -Dmpc7455 -mno-altivec -mabi=altivec is better.
+
 2006-08-09	Kolja Waschk <waschk@telos.de>
 
 	* Makefile.am: New port to Altera NIOS II.
