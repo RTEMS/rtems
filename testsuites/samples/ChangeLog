@@ -1,3 +1,8 @@
+2006-09-08	Ken Peters <ken.peters@jpl.nasa.gov>
+
+	PR 1162/rtems
+	* unlimited/system.h: Reserve enough memory for the stacks wanted.
+
 2006-07-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* base_mp/node1/Makefile.am, base_mp/node2/Makefile.am,

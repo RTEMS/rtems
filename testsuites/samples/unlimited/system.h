@@ -48,7 +48,7 @@ void test3();
 
 #define TASK_ALLOCATION_SIZE     (5)
 #define CONFIGURE_MAXIMUM_TASKS  rtems_resource_unlimited(TASK_ALLOCATION_SIZE)
-#define CONFIGURE_EXTRA_TASK_STACKS (62 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS (75 * RTEMS_MINIMUM_STACK_SIZE)
 
 
 #include <rtems/confdefs.h>
