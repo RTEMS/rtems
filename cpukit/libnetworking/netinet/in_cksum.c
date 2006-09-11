@@ -78,8 +78,8 @@ in_cksum(m, len)
 	register uint32_t len;
 {
 	register u_short *w;
-	register uint32_t sum = 0;
-	register uint32_t mlen = 0;
+	register int32_t sum = 0;
+	register int32_t mlen = 0;
 	int byte_swapped = 0;
 
 	union {

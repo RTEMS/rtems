@@ -1,3 +1,8 @@
+2006-09-11	Jerry Needell <jerry.needell@unh.edu>
+
+	* libnetworking/netinet/in_cksum.c: Joel should have used int32_t not
+	uint32_t when removing warnings.
+
 2006-09-08	Ken Peters <ken.peters@jpl.nasa.gov>
 
 	PR 1170/rtems
