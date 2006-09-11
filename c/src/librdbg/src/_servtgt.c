@@ -213,7 +213,7 @@ int
 TgtPtrace (int req, PID pid, char *addr, int data, void *addr2)
 {
   if ((req == RPT_SINGLESTEP || req == RPT_CONT)
-      && addr2) {               /* clear then step *//* addr2 is the old value */
+      && addr2) {         /* clear then step */ /* addr2 is the old value */
 
     int ret;
 

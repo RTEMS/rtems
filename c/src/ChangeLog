@@ -1,3 +1,7 @@
+2006-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	* librdbg/src/_servtgt.c: Convert C++ style comments to C style.
+
 2006-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/network/greth.c, libchip/network/open_eth.c,
