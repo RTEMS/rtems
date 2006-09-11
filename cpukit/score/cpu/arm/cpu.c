@@ -277,10 +277,12 @@ void do_data_abort(uint32_t   insn, uint32_t   spsr,
     uint8_t    decode;
     uint8_t    insn_type;
 
+#if 0
     uint32_t   rn;
     uint32_t   rd;
 
     uint8_t    *src_addr;
+#endif
     uint32_t    tmp;
 
     g_data_abort_insn_list[g_data_abort_cnt & 0x3ff] = ctx->register_lr - 8;

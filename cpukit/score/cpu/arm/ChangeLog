@@ -1,3 +1,7 @@
+2006-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Remove warning.
+
 2006-06-02	Jay Monkman <jtm@lopingdog.com>
 
 	* cpu.c, cpu_asm.S: Fixed ARM Data Abort handling.
