@@ -1,35 +1,12 @@
 /*
-/////////////////////////////////////////////////////////////////////////////
-// $Header$
-//
-// Copyright (c) 2000 - Rosimildo da Silva
-//
-// MODULE DESCRIPTION:
-// Micro FrameBuffer interface for Embedded Systems.
-//
-// MODIFICATION/HISTORY:
-//
-// $Log$
-// Revision 1.1  2000/08/30 08:21:24  joel
-// 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
-//
-// 	* Added generic Micro FrameBuffer interface for MicroWindows.
-// 	This interface allows MicroWindows to under RTEMS. A sample
-// 	driver has been developed for the pc386 BSP. See
-// 	pc386/fb_vga.c as a sample.
-// 	* Added Uniform Input Device interface for MicroWindows.
-// 	See PC386 bsp for sample drivers for mouse and keyboard (console).
-// 	* mw-bf: New directory.
-// 	* Makefile.am, configure.in, wrapup/Makefile.am: Account for mw-fb.
-// 	* mw-fb/Makefile.am: New file.
-// 	* mw-fb/mw_fb.c: New file.
-// 	* mw-fb/mw_fb.h: New file.
-// 	* mw-fb/mw_uid.c: New file.
-// 	* mw-fb/mw_uid.h: New file.
-//
-//
-/////////////////////////////////////////////////////////////////////////////
-*/
+ * Copyright (c) 2000 - Rosimildo da Silva
+ *
+ * MODULE DESCRIPTION:
+ * Micro FrameBuffer interface for Embedded Systems.
+ *
+ * $Id$
+ */
+
 #ifndef _MW_FB_H
 #define _MW_FB_H
 

@@ -1,108 +1,15 @@
 /*
-/////////////////////////////////////////////////////////////////////////////
-// $Header$
-//
-// Copyright (c) 2000 - Rosimildo da Silva
-//
-// MODULE DESCRIPTION:
-// This module implements the input devices interface used by MicroWindows
-// in an embedded system environment.
-// It uses the RTEMS message queue as the repository for the messages posted
-// by the devices registered.
-//
-// MODIFICATION/HISTORY:
-//
-// $Log$
-// Revision 1.6  2004/03/26 06:59:18  ralf
-// 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
-//
-// 	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
-// 	libmisc/capture/capture.h, libmisc/cpuuse/cpuuse.c,
-// 	libmisc/devnull/devnull.c, libmisc/fsmount/fsmount.h,
-// 	libmisc/monitor/mon-config.c, libmisc/monitor/mon-dname.c,
-// 	libmisc/monitor/mon-driver.c, libmisc/monitor/mon-extension.c,
-// 	libmisc/monitor/mon-itask.c, libmisc/monitor/mon-monitor.c,
-// 	libmisc/monitor/mon-mpci.c, libmisc/monitor/mon-object.c,
-// 	libmisc/monitor/mon-prmisc.c, libmisc/monitor/mon-queue.c,
-// 	libmisc/monitor/mon-server.c, libmisc/monitor/mon-symbols.c,
-// 	libmisc/monitor/monitor.h, libmisc/monitor/symbols.h,
-// 	libmisc/mw-fb/mw_uid.c, libmisc/rtmonuse/rtmonuse.c,
-// 	libmisc/serdbg/serdbg.h, libmisc/serdbg/serdbgio.c,
-// 	libmisc/serdbg/termios_printk.c, libmisc/serdbg/termios_printk.h,
-// 	libmisc/shell/shell.c, libmisc/shell/shell.h, libmisc/stackchk/check.c,
-// 	libmisc/stackchk/internal.h: Convert to using c99 fixed size types.
-//
-// Revision 1.5  2003/07/08 08:38:48  ralf
-// 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-//
-// 	* capture/capture-cli.c: Add config-header support.
-// 	* capture/capture.c: Add config-header support.
-// 	* cpuuse/cpuuse.c: Add config-header support.
-// 	* devnull/devnull.c: Add config-header support.
-// 	* dummy/dummy.c: Add config-header support.
-// 	* dumpbuf/dumpbuf.c: Add config-header support.
-// 	* monitor/mon-command.c: Add config-header support.
-// 	* monitor/mon-config.c: Add config-header support.
-// 	* monitor/mon-dname.c: Add config-header support.
-// 	* monitor/mon-driver.c: Add config-header support.
-// 	* monitor/mon-extension.c: Add config-header support.
-// 	* monitor/mon-itask.c: Add config-header support.
-// 	* monitor/mon-manager.c: Add config-header support.
-// 	* monitor/mon-monitor.c: Add config-header support.
-// 	* monitor/mon-mpci.c: Add config-header support.
-// 	* monitor/mon-object.c: Add config-header support.
-// 	* monitor/mon-prmisc.c: Add config-header support.
-// 	* monitor/mon-queue.c: Add config-header support.
-// 	* monitor/mon-server.c: Add config-header support.
-// 	* monitor/mon-symbols.c: Add config-header support.
-// 	* monitor/mon-task.c: Add config-header support.
-// 	* mw-fb/mw_fb.c: Add config-header support.
-// 	* mw-fb/mw_uid.c: Add config-header support.
-// 	* rtmonuse/rtmonuse.c: Add config-header support.
-// 	* serdbg/serdbg.c: Add config-header support.
-// 	* serdbg/serdbgio.c: Add config-header support.
-// 	* serdbg/termios_printk.c: Add config-header support.
-// 	* shell/cmds.c: Add config-header support.
-// 	* stackchk/check.c: Add config-header support.
-// 	* untar/untar.c: Add config-header support.
-//
-// Revision 1.4  2002/01/04 18:32:48  joel
-// 2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-//
-// 	* mw-fb/mw_uid.c: Apply rtems_set_errno_and_return_minus_one.
-//
-// Revision 1.3  2000/11/30 14:36:46  joel
-// 2000-11-30	Joel Sherrill <joel@OARcorp.com>
-//
-// 	* mw-fb/mw_uid.c: Removed unnecessary dependency on <bsp.h>.
-//
-// Revision 1.2  2000/08/30 17:12:55  joel
-// 2000-08-30	Joel Sherrill <joel@OARcorp.com>
-//
-// 	* Many files: Moved posix/include/rtems/posix/seterr.h to
-// 	score/include/rtems/seterr.h so it would be available within
-// 	all APIs.
-//
-// Revision 1.1  2000/08/30 08:21:24  joel
-// 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
-//
-// 	* Added generic Micro FrameBuffer interface for MicroWindows.
-// 	This interface allows MicroWindows to under RTEMS. A sample
-// 	driver has been developed for the pc386 BSP. See
-// 	pc386/fb_vga.c as a sample.
-// 	* Added Uniform Input Device interface for MicroWindows.
-// 	See PC386 bsp for sample drivers for mouse and keyboard (console).
-// 	* mw-bf: New directory.
-// 	* Makefile.am, configure.in, wrapup/Makefile.am: Account for mw-fb.
-// 	* mw-fb/Makefile.am: New file.
-// 	* mw-fb/mw_fb.c: New file.
-// 	* mw-fb/mw_fb.h: New file.
-// 	* mw-fb/mw_uid.c: New file.
-// 	* mw-fb/mw_uid.h: New file.
-//
-//
-/////////////////////////////////////////////////////////////////////////////
-*/
+ *
+ * Copyright (c) 2000 - Rosimildo da Silva
+ *
+ * MODULE DESCRIPTION:
+ * This module implements the input devices interface used by MicroWindows
+ * in an embedded system environment.
+ * It uses the RTEMS message queue as the repository for the messages posted
+ * by the devices registered.
+ *
+ *  $Id$
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
