@@ -154,9 +154,9 @@ void clear_cache( void )
    promCopyDcacheFlush();
 }
 
-/*
+#if 0
 
-//Structure filled in by get_mem_info.
+/* Structure filled in by get_mem_info. */
 
 struct s_mem
 {
@@ -174,4 +174,4 @@ void get_mem_info ( struct s_mem *mem )
    mem->dcsize = MONGOOSEV_DC_SIZE;
 }
 
-*/
+#endif
