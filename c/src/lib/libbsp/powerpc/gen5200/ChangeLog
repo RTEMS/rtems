@@ -1,3 +1,8 @@
+2006-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	* include/mpc5200.h, network_5200/network.c: Convert C++ style comments
+	to C style.
+
 2006-08-15	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, preinstall.am, startup/linkcmds, startup/linkcmds.brs5l,

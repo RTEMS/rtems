@@ -1232,11 +1232,11 @@ static void mpc5200_fec_initialize_phy(struct mpc5200_enet_struct *sc)
 
 #endif
 #if ETH_PROMISCOUS_MODE
-  mpc5200.r_cntrl |= 0x00000008;   // set to promiscous mode
+  mpc5200.r_cntrl |= 0x00000008;   /* set to promiscous mode */
 #endif
 
 #if ETH_LOOP_MODE
-  mpc5200.r_cntrl |= 0x00000001;   // set to loop mode
+  mpc5200.r_cntrl |= 0x00000001;   /* set to loop mode */
 #endif
 
 #if defined(ETH_DEBUG)

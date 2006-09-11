@@ -548,11 +548,11 @@ typedef struct mpc5200_
 	 * The word commented out below is the one which is not implemented.
 	 */
 
-	/*  volatile uint8_t  IntVect; *//*
+	/*  volatile uint8_t  IntVect; */ /*
 	 * + 0xXX sdPtd read only
 	 */
 
-	/*  volatile uint8_t  res0[3]; *//*
+	/*  volatile uint8_t  res0[3]; */ /*
 	 * + 0xXX sdPtd read only
 	 */
 	volatile uint8_t IntVect1;	    /* + 0x10 sdPtd */
