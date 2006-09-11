@@ -137,8 +137,8 @@
 #include <bsp.h>
  
 /* moved to cpukit/include/rtems in CVS current ! */
-//#include "if_media.h"
-//#include "pci.h"
+/*#include "if_media.h" */
+/*#include "pci.h" */
 #include <net/if_media.h>
 #include <rtems/pci.h>
 /*
@@ -1615,7 +1615,7 @@ struct dc_type *dc_devtype( int unitnum )
 				(unitnum - 1), &t->dc_bus, &t->dc_dev, &t->dc_fun);
 		if (rc == PCIB_ERR_SUCCESS) {
 			/* Check the PCI revision */
-			//pcib_conf_read32(t->dc_devsig, DC_PCI_CFRV, &rev);
+			/*pcib_conf_read32(t->dc_devsig, DC_PCI_CFRV, &rev); */
 			pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 									DC_PCI_CFRV, &rev);
 			rev &= 0xFF;
@@ -1961,17 +1961,17 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * Map control/status registers.
 	 */
-	//sig = sc->dc_info->dc_devsig;
+	/*sig = sc->dc_info->dc_devsig; */
 	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 					PCI_COMMAND, &command);
-	//pcib_conf_read32(sig, PCI_COMMAND, &command);
+	/*pcib_conf_read32(sig, PCI_COMMAND, &command); */
 	command |= (PCI_COMMAND_IO | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
 	pci_write_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 					PCI_COMMAND, command);
-	//pcib_conf_write32(sig, PCI_COMMAND, command);
+	/*pcib_conf_write32(sig, PCI_COMMAND, command); */
 	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 					PCI_COMMAND, &command);
-	//pcib_conf_read32(sig, PCI_COMMAND, &command);
+	/*pcib_conf_read32(sig, PCI_COMMAND, &command); */
 
 #ifdef DC_USEIOSPACE
 	if (!(command & PCI_COMMAND_IO)) {
@@ -2002,14 +2002,14 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 #endif
 
 	/* sc->membase is the address of the card's CSRs !!! */
-	//pcib_conf_read32(sig, DC_PCI_CFBMA, &value);
+	/*pcib_conf_read32(sig, DC_PCI_CFBMA, &value); */
 	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 					DC_PCI_CFBMA, &value);
 	sc->membase = value;
 	
 	/* Allocate interrupt */
 	memset(&sc->irqInfo, 0, sizeof(rtems_irq_connect_data));
-	//pcib_conf_read32(sig, DC_PCI_CFIT, &value);
+	/*pcib_conf_read32(sig, DC_PCI_CFIT, &value); */
 	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 					DC_PCI_CFIT, &value);
 	
@@ -2057,7 +2057,7 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/* Need this info to decide on a chip type.
 	sc->dc_info = dc_devtype(dev);
 	*/
-	//pcib_conf_read32(sig, DC_PCI_CFRV, &revision);
+	/*pcib_conf_read32(sig, DC_PCI_CFRV, &revision); */
 	pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 					DC_PCI_CFRV, &revision);
 	revision &= 0x000000FF;
@@ -2082,12 +2082,12 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		sc->dc_flags |= DC_REDUCED_MII_POLL|DC_TX_STORENFWD;
 		sc->dc_pmode = DC_PMODE_MII;
 		/* Increase the latency timer value. */
-		//pcib_conf_read32(sig, DC_PCI_CFLT, &command);
+		/*pcib_conf_read32(sig, DC_PCI_CFLT, &command); */
 		pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 						DC_PCI_CFLT, &command);
 		command &= 0xFFFF00FF;
 		command |= 0x00008000;
-		//pcib_conf_write32(sig, DC_PCI_CFLT, command);
+		/*pcib_conf_write32(sig, DC_PCI_CFLT, command); */
 		pci_write_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 						DC_PCI_CFLT, command);
 		break;
@@ -2176,7 +2176,7 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		sc->dc_cachesize = 0;
 	}
 	else {
-		//pcib_conf_read32(sig, DC_PCI_CFLT, &value);
+		/*pcib_conf_read32(sig, DC_PCI_CFLT, &value); */
 		pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 						DC_PCI_CFLT, &value);
 		sc->dc_cachesize = (u_int8_t)(value & 0xFF);
@@ -2187,11 +2187,11 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 
 	/* Take 21143 out of snooze mode */
 	if (DC_IS_INTEL(sc)) {
-		//pcib_conf_read32(sig, DC_PCI_CFDD, &command);
+		/*pcib_conf_read32(sig, DC_PCI_CFDD, &command); */
 		pci_read_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 						DC_PCI_CFDD, &command);
 		command &= ~(DC_CFDD_SNOOZE_MODE|DC_CFDD_SLEEP_MODE);
-		//pcib_conf_write32(sig, DC_PCI_CFDD, command);
+		/*pcib_conf_write32(sig, DC_PCI_CFDD, command); */
 		pci_write_config_dword(t->dc_bus,t->dc_dev,t->dc_fun,\
 						DC_PCI_CFDD, command);
 	}

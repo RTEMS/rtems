@@ -105,7 +105,7 @@ rtems_isr lan91cxx_interrupt_handler(rtems_vector_number v)
 	if (0 == event)
 		return;
 
-	/*put_reg(cpd, LAN91CXX_INTERRUPT, irq ); *//* ack interrupts */
+	/*put_reg(cpd, LAN91CXX_INTERRUPT, irq ); */ /* ack interrupts */
 
 	if (event & LAN91CXX_INTERRUPT_ERCV_INT) {
 		db_printf("Early receive interrupt");

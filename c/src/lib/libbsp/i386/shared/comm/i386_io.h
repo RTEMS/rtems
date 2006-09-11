@@ -1,18 +1,16 @@
 /*
-/////////////////////////////////////////////////////////////////////////////
-// $Header$
-//
-// Copyright (c) 2000 - Rosimildo da Silva.  All Rights Reserved.
-//
-// MODULE DESCRIPTION:
-//
-// IO Functions for the PC platform equivalent to DOS/Linux. They make
-// eaiser the porting of code from these platforms.
-//
-//  by: Rosimildo da Silva:  rdasilva@connecttel.com
-//
-/////////////////////////////////////////////////////////////////////////////
-*/
+ * $Id$
+ *
+ * Copyright (c) 2000 - Rosimildo da Silva.  All Rights Reserved.
+ *
+ * MODULE DESCRIPTION:
+ *
+ * IO Functions for the PC platform equivalent to DOS/Linux. They make
+ * eaiser the porting of code from these platforms.
+ *
+ *  by: Rosimildo da Silva:  rdasilva@connecttel.com
+ *
+ */
 
 #ifndef i386_io_h__
 #define i386_io_h__

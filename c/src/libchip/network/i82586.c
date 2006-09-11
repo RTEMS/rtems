@@ -305,7 +305,7 @@ i82586_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
   ifp = &sc->arpcom.ac_if;
 
 #if I82586_DEBUG
-  sc->sc_debug = 0; //IED_TINT | IED_XMIT;
+  sc->sc_debug = 0; /*IED_TINT | IED_XMIT; */
 #endif
 
   if (attaching)

@@ -84,17 +84,18 @@
  */
 
 
+#if 0
 /*
  * This is the master configuration block.
  * It tells the hardware where all the rest of the stuff is.
- *-
-struct __ie_sys_conf_ptr {
-	u_int16_t	mbz;			// must be zero
-	u_int8_t	ie_bus_use;		// true if 8-bit only
-	u_int8_t	mbz2[5];		// must be zero
-	u_int32_t	ie_iscp_ptr;		// 24-bit physaddr of ISCP
-};
  */
+struct __ie_sys_conf_ptr {
+	u_int16_t	mbz;			/* must be zero */
+	u_int8_t	ie_bus_use;		/* true if 8-bit only */
+	u_int8_t	mbz2[5];		/* must be zero */
+	u_int32_t	ie_iscp_ptr;		/* 24-bit physaddr of ISCP */
+};
+#endif
 #define IE_SCP_SZ		12
 #define IE_SCP_BUS_USE(base)	((base) + 2)
 #define IE_SCP_ISCP(base)	((base) + 8)
@@ -105,26 +106,28 @@ struct __ie_sys_conf_ptr {
  */
 #define IE_SCP_ADDR 0xfffff4
 
+#if 0
 /*
  * The tells the hardware where all the rest of the stuff is, too.
  * FIXME: some of these should be re-commented after we figure out their
  * REAL function.
- *-
+ */
 struct __ie_int_sys_conf_ptr {
 	u_int8_t	ie_busy;	// zeroed after init
 	u_int8_t	mbz;
 	u_int16_t	ie_scb_offset;	// 16-bit physaddr of next struct
 	caddr_t		ie_base;	// 24-bit physaddr for all 16-bit vars
 };
- */
+#endif
 #define IE_ISCP_SZ		8
 #define IE_ISCP_BUSY(base)	((base) + 0)
 #define IE_ISCP_SCB(base)	((base) + 2)
 #define IE_ISCP_BASE(base)	((base) + 4)
 
+#if 0
 /*
  * This FINALLY tells the hardware what to do and where to put it.
- *-
+ */
 struct __ie_sys_ctl_block {
 	u_int16_t ie_status;		// status word
 	u_int16_t ie_command;		// command word
@@ -135,7 +138,7 @@ struct __ie_sys_ctl_block {
 	u_int16_t ie_err_resource;	// Resource errors
 	u_int16_t ie_err_overrun;	// Overrun errors
 };
- */
+#endif
 #define IE_SCB_SZ		16
 #define IE_SCB_STATUS(base)	((base) + 0)
 #define IE_SCB_CMD(base)	((base) + 2)
@@ -186,9 +189,10 @@ struct __ie_sys_ctl_block {
 #define IE_RUS_NOSPACE	0x0020	/* receiver has no resources */
 #define IE_RUS_READY	0x0040	/* receiver is ready */
 
+#if 0
 /*
  * This is filled in partially by the chip, partially by us.
- *-
+ */
 struct __ie_recv_frame_desc {
 	u_int16_t	ie_fd_status;	// status for this frame
 	u_int16_t	ie_fd_last;	// end of frame list flag
@@ -199,7 +203,7 @@ struct __ie_recv_frame_desc {
 	u_int16_t	ie_length;	// 802 length/Ether type
 	u_short		mbz;		// must be zero
 };
- */
+#endif
 #define IE_RFRAME_SZ			24
 #define IE_RFRAME_ADDR(base,i)		((base) + (i) * IE_RFRAME_SZ)
 #define IE_RFRAME_STATUS(b,i)		(IE_RFRAME_ADDR(b,i) + 0)
@@ -229,9 +233,10 @@ struct __ie_recv_frame_desc {
 #define IE_FD_STATUSBITS	\
 	"\20\20COMPLT\17BUSY\16OK\14CRC\13ALGN\12RNR\11OVR\10SHORT\7NOEOF"
 
+#if 0
 /*
  * linked list of buffers...
- *-
+ */
 struct __ie_recv_buf_desc {
 	u_int16_t	ie_rbd_status;	// status for this buffer
 	u_int16_t	ie_rbd_next;	// 16-pointer to next RBD
@@ -239,7 +244,7 @@ struct __ie_recv_buf_desc {
 	u_int16_t	ie_rbd_length;	// length of the buffer
 	u_int16_t	mbz;		// must be zero
 };
- */
+#endif
 #define IE_RBD_SZ			12
 #define IE_RBD_ADDR(base,i)		((base) + (i) * IE_RBD_SZ)
 #define IE_RBD_STATUS(b,i)		(IE_RBD_ADDR(b,i) + 0)
@@ -256,15 +261,16 @@ struct __ie_recv_buf_desc {
 #define IE_RBD_EOL	0x8000		/* last buffer */
 
 
+#if 0
 /*
  * All commands share this in common.
- *-
+ */
 struct __ie_cmd_common {
 	u_int16_t ie_cmd_status;	// status of this command
 	u_int16_t ie_cmd_cmd;		// command word
 	u_int16_t ie_cmd_link;		// link to next command
 };
- */
+#endif
 #define IE_CMD_COMMON_SZ		6
 #define IE_CMD_COMMON_STATUS(base)	((base) + 0)
 #define IE_CMD_COMMON_CMD(base)		((base) + 2)
@@ -298,9 +304,10 @@ struct __ie_cmd_common {
 #define IE_CMD_NOP_LINK(b,i)		(IE_CMD_NOP_ADDR(b,i) + 4)
 
 
+#if 0
 /*
  * This is the command to transmit a frame.
- *-
+ */
 struct __ie_xmit_cmd {
 	struct __ie_cmd_common	com;		// common part
 #define __ie_xmit_status	com.ie_cmd_status
@@ -309,7 +316,7 @@ struct __ie_xmit_cmd {
 	struct __ie_en_addr ie_xmit_addr;	// destination address
 	u_int16_t	ie_xmit_length;		// 802.3 length/Ether type field
 };
- */
+#endif
 #define IE_CMD_XMIT_SZ			(IE_CMD_COMMON_SZ + 10)
 #define IE_CMD_XMIT_ADDR(base,i)	((base) + (i) * IE_CMD_XMIT_SZ)
 #define IE_CMD_XMIT_STATUS(b,i)		\
@@ -334,15 +341,16 @@ struct __ie_xmit_cmd {
 #define IE_XS_NOCARRIER	0x0400	/* No Carrier */
 #define	IE_XS_LATECOLL	0x0800	/* Late collision */
 
+#if 0
 /*
  * This is a buffer descriptor for a frame to be transmitted.
- *-
+ */
 struct __ie_xmit_buf {
 	u_int16_t ie_xmit_flags;	// see below
 	u_int16_t ie_xmit_next;		// 16-pointer to next desc
 	caddr_t ie_xmit_buf;		// 24-pointer to the actual buffer
 };
- */
+#endif
 #define IE_XBD_SZ			8
 #define IE_XBD_ADDR(base,i)		((base) + (i) * IE_XBD_SZ)
 #define IE_XBD_FLAGS(b,i)		(IE_XBD_ADDR(b,i) + 0)
@@ -354,9 +362,10 @@ struct __ie_xmit_buf {
 					   is actually the length. */
 
 
+#if 0
 /*
  * Multicast setup command.
- *-
+ */
 struct __ie_mcast_cmd {
 	struct __ie_cmd_common	com;	// common part
 #define ie_mcast_status		com.ie_cmd_status
@@ -365,20 +374,21 @@ struct __ie_mcast_cmd {
 	u_short		ie_mcast_bytes;
 	struct __ie_en_addr ie_mcast_addrs[IE_MAXMCAST + 1];// space for them
 };
- */
+#endif
 #define IE_CMD_MCAST_SZ			(IE_CMD_COMMON_SZ + 2 /* + XXX */)
 #define IE_CMD_MCAST_BYTES(base)	((base) + IE_CMD_COMMON_SZ + 0)
 #define IE_CMD_MCAST_MADDR(base)	((base) + IE_CMD_COMMON_SZ + 2)
 
+#if 0
 /*
  * Time Domain Reflectometer command.
- *-
+ */
 struct __ie_tdr_cmd {
 	struct __ie_cmd_common com;	// common part
 #define ie_tdr_status com.ie_cmd_status
 	u_short ie_tdr_time;		// error bits and time
 };
- */
+#endif
 #define IE_CMD_TDR_SZ		(IE_CMD_COMMON_SZ + 2)
 #define IE_CMD_TDR_TIME(base)	((base) + IE_CMD_COMMON_SZ + 0)
 
@@ -388,21 +398,23 @@ struct __ie_tdr_cmd {
 #define IE_TDR_SHORT	0x1000	/* TDR detected a short circuit */
 #define IE_TDR_TIME	0x07ff	/* mask for reflection time */
 
+#if 0
 /*
  * Initial Address Setup command
- *-
+ */
 struct __ie_iasetup_cmd {
 	struct __ie_cmd_common com;
 #define ie_iasetup_status com.ie_cmd_status
 	struct __ie_en_addr ie_address;
 };
- */
+#endif
 #define IE_CMD_IAS_SZ		(IE_CMD_COMMON_SZ + 6)
 #define IE_CMD_IAS_EADDR(base)	((base) + IE_CMD_COMMON_SZ + 0)
 
+#if 0
 /*
  * Configuration command
- *-
+ */
 struct __ie_config_cmd {
 	struct __ie_cmd_common com;	// common part
 #define ie_config_status com.ie_cmd_status
@@ -420,7 +432,7 @@ struct __ie_config_cmd {
 	u_int8_t ie_min_len;		// min frame length (0x40)
 	u_int8_t ie_junk;		// stuff for 82596 (0xff)
 };
- */
+#endif
 #define IE_CMD_CFG_SZ			(IE_CMD_COMMON_SZ + 12)
 #define IE_CMD_CFG_CNT(base)		((base) + IE_CMD_COMMON_SZ + 0)
 #define IE_CMD_CFG_FIFO(base)		((base) + IE_CMD_COMMON_SZ + 1)
