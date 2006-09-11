@@ -1,3 +1,8 @@
+2006-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	* console/fb_vga.c, console/kd.h: Convert C++ style comments to C
+	style.
+
 2006-09-04	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c, start/start.S: Since the crude

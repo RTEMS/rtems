@@ -1,15 +1,10 @@
 /*
-/////////////////////////////////////////////////////////////////////////////
-// $Header$
-//
-// MODULE DESCRIPTION:
-//
-// This module was based on the Linux version kd.h
-//
-//  by: Rosimildo da Silva:  rdasilva@connecttel.com
-//
-/////////////////////////////////////////////////////////////////////////////
-*/
+ * $Id$
+ *
+ *  by: Rosimildo da Silva:  rdasilva@connecttel.com
+ *
+ *
+ */
 
 #ifndef _LINUX_KD_H
 #define _LINUX_KD_H
