@@ -1,3 +1,13 @@
+2006-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	* at91rm9200/include/at91rm9200.h,
+	at91rm9200/include/at91rm9200_dbgu.h,
+	at91rm9200/include/at91rm9200_emac.h,
+	at91rm9200/include/at91rm9200_gpio.h,
+	at91rm9200/include/at91rm9200_mem.h,
+	at91rm9200/include/at91rm9200_pmc.h, s3c2400/include/s3c2400.h:
+	Convert C++ style comments to C style.
+
 2006-09-11	Chris Johns <chrisj@rtems.org>
 
 	* s3c2400/include/s3c2400.h: Remove extra CRLF.
