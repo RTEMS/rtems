@@ -114,7 +114,7 @@ void  start_c() {
 
   /* Spurious should be called in the predriver hook */
   /* Spurious_Initialize(); */
-  //console_init();
+  /*console_init(); */
 
   /*
    * Execute main with arguments argc and agrv.

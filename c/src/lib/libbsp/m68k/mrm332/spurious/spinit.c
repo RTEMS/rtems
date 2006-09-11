@@ -33,7 +33,7 @@ rtems_isr Spurious_Isr(
   rtems_vector_number vector
 )
 {
-  //int sp = 0;
+  /*int sp = 0; */
 #if 0
   const char * const VectDescrip[] = {
     _Spurious_Error_[0],   _Spurious_Error_[0],  _Spurious_Error_[1],
@@ -60,10 +60,10 @@ rtems_isr Spurious_Isr(
     _Spurious_Error_[27], _Spurious_Error_[28]};
 #endif
 
-  //asm volatile ( "movea.l   %%sp,%0 " : "=a" (sp) : "0" (sp) );
+  /*asm volatile ( "movea.l   %%sp,%0 " : "=a" (sp) : "0" (sp) ); */
 
   _CPU_ISR_Set_level( 7 );
-  //_UART_flush();
+  /*_UART_flush(); */
 #if 0
   RAW_PUTS("\n\rRTEMS: Spurious interrupt: ");
   RAW_PUTS((char *)VectDescrip[( (vector>64) ? 64 : vector )]);

@@ -1,3 +1,9 @@
+2006-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c, console/sci.c, console/sci.h, spurious/spinit.c,
+	startup/bspclean.c, startup/start_c.c: Convert C++ style comments to
+	C style.
+
 2006-02-08	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmds_ROM: Add sections required by

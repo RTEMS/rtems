@@ -37,30 +37,6 @@
 *
 *****************************************************************************/
 
-
-/*****************************************************************************
-  Compiler Options for the incurably curious
-*****************************************************************************/
-
-/*
-/opt/rtems/bin/m68k-rtems-gcc
-    --pipe                                      # use pipes, not tmp files
-    -B../../../../../../../../opti/lib/         # where the library is
-    -specs bsp_specs                            # ???
-    -qrtems                                     # ???
-    -g                                          # add debugging info
-    -Wall                                       # issue all warnings
-    -fasm                                       # allow inline asm???
-    -DCONSOLE_SCI                               # for opti-r box/rev b proto
-    -mcpu32                                     # machine = motorola cpu 32
-    -c                                          # compile, don't link
-    -O4                                         # max optimization
-    -fomit-frame-pointer                        # stack frames are optional
-    -o o-optimize/sci.o                         # the object file
-    ../../../../../../../../../rtems/c/src/lib/libbsp/m68k/opti/console/sci.c
-*/
-
-
 /*****************************************************************************
   Overview of serial port console terminal input/output
 *****************************************************************************/
@@ -112,29 +88,29 @@
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
 #include "sci.h"
-//#include "../misc/include/cpu332.h"
+/*#include "../misc/include/cpu332.h" */
 
 
 /*****************************************************************************
   Section B - Manifest Constants
 *****************************************************************************/
 
-#define SCI_MINOR       0                   // minor device number
+#define SCI_MINOR       0                   /* minor device number */
 
-// IMPORTANT - if the device driver api is opened, it means the sci is being
-// used for direct hardware access, so other users (like termios) get ignored
+/* IMPORTANT - if the device driver api is opened, it means the sci is being
+ * used for direct hardware access, so other users (like termios) get ignored
+ */
+#define DRIVER_CLOSED   0                   /* the device driver api is closed */
+#define DRIVER_OPENED   1                   /* the device driver api is opened */
 
-#define DRIVER_CLOSED   0                   // the device driver api is closed
-#define DRIVER_OPENED   1                   // the device driver api is opened
+/* system clock definitions, i dont have documentation on this... */
 
-// system clock definitions, i dont have documentation on this...
-
-#if 0 // Not needed, this is provided in mrm332.h
-#define XTAL            32768.0		        // crystal frequency in Hz
-#define NUMB_W          0			        // system clock parameters
+#if 0 /* Not needed, this is provided in mrm332.h */
+#define XTAL            32768.0    /* crystal frequency in Hz */
+#define NUMB_W          0          /* system clock parameters */
 #define NUMB_X          1
-//efine NUMB_Y          0x38		        // for 14.942 Mhz
-#define NUMB_Y          0x3F			    // for 16.777 Mhz
+#define NUMB_Y          0x38       /* for 14.942 Mhz */
+#define NUMB_Y          0x3F       /* for 16.777 Mhz */
 
 #define SYS_CLOCK       (XTAL * 4.0 * (NUMB_Y+1) * (1 << (2 * NUMB_W + NUMB_X)))
 
@@ -159,61 +135,70 @@
 
 void SCI_output_char(char c);
 
-rtems_isr SciIsr( rtems_vector_number vector );         // interrupt handler
+/*rtems_isr SciIsr( rtems_vector_number vector );   interrupt handler */
 
 const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled );
 
-rtems_device_driver SciInitialize ();                   // device driver api
-rtems_device_driver SciOpen ();                         // device driver api
-rtems_device_driver SciClose ();                        // device driver api
-rtems_device_driver SciRead ();                         // device driver api
-rtems_device_driver SciWrite ();                        // device driver api
-rtems_device_driver SciControl ();                      // device driver api
+rtems_device_driver SciInitialize(                     /* device driver api */
+    rtems_device_major_number, rtems_device_minor_number, void *);
+rtems_device_driver SciOpen(                           /* device driver api */
+    rtems_device_major_number, rtems_device_minor_number, void *);
+rtems_device_driver SciClose(                          /* device driver api */
+    rtems_device_major_number, rtems_device_minor_number, void *);
+rtems_device_driver SciRead(                           /* device driver api */
+    rtems_device_major_number, rtems_device_minor_number, void *);
+rtems_device_driver SciWrite(                          /* device driver api */
+    rtems_device_major_number, rtems_device_minor_number, void *);
+rtems_device_driver SciControl(                        /* device driver api */
+    rtems_device_major_number, rtems_device_minor_number, void *);
+rtems_device_driver SciRead (
+    rtems_device_major_number, rtems_device_minor_number, void *);
 
-int32_t   SciInterruptOpen();                            // termios api
-int32_t   SciInterruptClose();                           // termios api
-int32_t   SciInterruptWrite();                           // termios api
+int   SciInterruptOpen(int, int, void *);               /* termios api */
+int   SciInterruptClose(int, int, void *);              /* termios api */
+int   SciInterruptWrite(int, const char *, int);        /* termios api */
 
-int32_t   SciSetAttributes();                            // termios api
+int   SciSetAttributes(int, const struct termios*);     /* termios api */
+int   SciPolledOpen(int, int, void *);                  /* termios api */
+int   SciPolledClose(int, int, void *);                 /* termios api */
+int   SciPolledRead(int);                               /* termios api */
+int   SciPolledWrite(int, const char *, int);           /* termios api */
 
-int32_t   SciPolledOpen();                               // termios api
-int32_t   SciPolledClose();                              // termios api
-int32_t   SciPolledRead();                               // termios api
-int32_t   SciPolledWrite();                              // termios api
+static void SciSetBaud(uint32_t   rate);                /* hardware routine */
+static void SciSetDataBits(uint16_t   bits);            /* hardware routine */
+static void SciSetParity(uint16_t   parity);            /* hardware routine */
 
-static void SciSetBaud(uint32_t   rate);                // hardware routine
-static void SciSetDataBits(uint16_t   bits);            // hardware routine
-static void SciSetParity(uint16_t   parity);            // hardware routine
+static void inline SciDisableAllInterrupts( void );     /* hardware routine */
+static void inline SciDisableTransmitInterrupts( void );/* hardware routine */
+static void inline SciDisableReceiveInterrupts( void ); /* hardware routine */
 
-static void inline SciDisableAllInterrupts( void );     // hardware routine
-static void inline SciDisableTransmitInterrupts( void );// hardware routine
-static void inline SciDisableReceiveInterrupts( void ); // hardware routine
+static void inline SciEnableTransmitInterrupts( void ); /* hardware routine */
+static void inline SciEnableReceiveInterrupts( void );  /* hardware routine */
 
-static void inline SciEnableTransmitInterrupts( void ); // hardware routine
-static void inline SciEnableReceiveInterrupts( void );  // hardware routine
+static void inline SciDisableReceiver( void );          /* hardware routine */
+static void inline SciDisableTransmitter( void );       /* hardware routine */
 
-static void inline SciDisableReceiver( void );          // hardware routine
-static void inline SciDisableTransmitter( void );       // hardware routine
+static void inline SciEnableReceiver( void );           /* hardware routine */
+static void inline SciEnableTransmitter( void );        /* hardware routine */
 
-static void inline SciEnableReceiver( void );           // hardware routine
-static void inline SciEnableTransmitter( void );        // hardware routine
+void SciWriteCharWait  ( uint8_t );                     /* hardware routine */
+void SciWriteCharNoWait( uint8_t );                     /* hardware routine */
 
-void SciWriteCharWait  ( uint8_t);                   // hardware routine
-void SciWriteCharNoWait( uint8_t);                   // hardware routine
+uint8_t   inline SciCharAvailable( void );              /* hardware routine */
 
-uint8_t   inline SciCharAvailable( void );              // hardware routine
+uint8_t   inline SciReadCharWait( void );               /* hardware routine */
+uint8_t   inline SciReadCharNoWait( void );             /* hardware routine */
 
-uint8_t   inline SciReadCharWait( void );               // hardware routine
-uint8_t   inline SciReadCharNoWait( void );             // hardware routine
+void SciSendBreak( void );                              /* test routine */
 
-void SciSendBreak( void );                              // test routine
+static int8_t   SciRcvBufGetChar();                     /* circular rcv buf */
+static void    SciRcvBufPutChar( uint8_t);              /* circular rcv buf */
+#if 0
+static void    SciRcvBufFlush( void );                  /* unused routine */
+#endif
 
-static int8_t   SciRcvBufGetChar();                      // circular rcv buf
-static void    SciRcvBufPutChar( uint8_t);           // circular rcv buf
-//atic void    SciRcvBufFlush( void );                  // circular rcv buf
-
-void SciUnitTest();                                     // test routine
-void SciPrintStats();                                   // test routine
+void SciUnitTest();                                     /* test routine */
+void SciPrintStats();                                   /* test routine */
 
 
 /*****************************************************************************
@@ -222,32 +207,32 @@ void SciPrintStats();                                   // test routine
 
 static struct rtems_termios_tty *SciTermioTty;
 
-static uint8_t   SciInited = 0;             // has the driver been inited
+static uint8_t   SciInited = 0;             /* has the driver been inited */
 
-static uint8_t   SciOpened;                 // has the driver been opened
+static uint8_t   SciOpened;                 /* has the driver been opened */
 
-static uint8_t   SciMajor;                  // major device number
+static uint8_t   SciMajor;                  /* major device number */
 
-static uint16_t   SciBaud;                  // current value in baud register
+static uint16_t   SciBaud;                  /* current value in baud register */
 
-static uint32_t   SciBytesIn  = 0;          // bytes received
-static uint32_t   SciBytesOut = 0;          // bytes transmitted
+static uint32_t   SciBytesIn  = 0;          /* bytes received */
+static uint32_t   SciBytesOut = 0;          /* bytes transmitted */
 
-static uint32_t   SciErrorsParity  = 0;     // error counter
-static uint32_t   SciErrorsNoise   = 0;     // error counter
-static uint32_t   SciErrorsFraming = 0;     // error counter
-static uint32_t   SciErrorsOverrun = 0;     // error counter
+static uint32_t   SciErrorsParity  = 0;     /* error counter */
+static uint32_t   SciErrorsNoise   = 0;     /* error counter */
+static uint32_t   SciErrorsFraming = 0;     /* error counter */
+static uint32_t   SciErrorsOverrun = 0;     /* error counter */
 
 #if defined(CONSOLE_SCI)
 
-// this is what rtems printk uses to do polling based output
+/* this is what rtems printk uses to do polling based output */
 
 BSP_output_char_function_type      BSP_output_char = SCI_output_char;
 BSP_polling_getchar_function_type  BSP_poll_char   = NULL;
 
 #endif
 
-// cvs id string so you can use the unix ident command on the object
+/* cvs id string so you can use the unix ident command on the object */
 
 #ifdef ID_STRINGS
 static const char SciIdent[]="$Id$";
@@ -258,21 +243,21 @@ static const char SciIdent[]="$Id$";
   Section G - A circular buffer for rcv chars when the driver interface is used.
 *****************************************************************************/
 
-// it is trivial to wrap your buffer pointers when size is a power of two
+/* it is trivial to wrap your buffer pointers when size is a power of two */
 
-#define SCI_RCV_BUF_SIZE        256         // must be a power of 2 !!!
+#define SCI_RCV_BUF_SIZE        256         /* must be a power of 2 !!! */
 
-// if someone opens the sci device using the device driver interface,
-// then the receive data interrupt handler will put characters in this buffer
-// instead of sending them up to the termios module for the console
-
+/* if someone opens the sci device using the device driver interface,
+ * then the receive data interrupt handler will put characters in this buffer
+ * instead of sending them up to the termios module for the console
+ */
 static uint8_t   SciRcvBuffer[SCI_RCV_BUF_SIZE];
 
-static uint8_t   SciRcvBufPutIndex = 0;     // array index to put in next char
+static uint8_t   SciRcvBufPutIndex = 0; /* array index to put in next char */
 
-static uint8_t   SciRcvBufGetIndex = 0;     // array index to take out next char
+static uint8_t   SciRcvBufGetIndex = 0; /* array index to take out next char */
 
-static uint16_t  SciRcvBufCount = 0;        // how many bytes are in the buffer
+static uint16_t  SciRcvBufCount = 0;   /* how many bytes are in the buffer */
 
 
 
@@ -282,14 +267,14 @@ static uint16_t  SciRcvBufCount = 0;        // how many bytes are in the buffer
 
 static const rtems_termios_callbacks SciInterruptCallbacks =
 {
-    SciInterruptOpen,                       // first open
-    SciInterruptClose,                      // last close
-    NULL,                                   // polled read (not required)
-    SciInterruptWrite,                      // write
-    SciSetAttributes,                       // set attributes
-    NULL,                                   // stop remote xmit
-    NULL,                                   // start remote xmit
-    TRUE                                    // output uses interrupts
+    SciInterruptOpen,                       /* first open */
+    SciInterruptClose,                      /* last close */
+    NULL,                                   /* polled read (not required) */
+    SciInterruptWrite,                      /* write */
+    SciSetAttributes,                       /* set attributes */
+    NULL,                                   /* stop remote xmit */
+    NULL,                                   /* start remote xmit */
+    TRUE                                    /* output uses interrupts */
 };
 
 /*****************************************************************************
@@ -298,36 +283,34 @@ static const rtems_termios_callbacks SciInterruptCallbacks =
 
 static const rtems_termios_callbacks SciPolledCallbacks =
 {
-    SciPolledOpen,                          // first open
-    SciPolledClose,                         // last close
-    SciPolledRead,                          // polled read
-    SciPolledWrite,                         // write
-    SciSetAttributes,                       // set attributes
-    NULL,                                   // stop remote xmit
-    NULL,                                   // start remote xmit
-    FALSE                                   // output uses interrupts
+    SciPolledOpen,                          /* first open */
+    SciPolledClose,                         /* last close */
+    SciPolledRead,                          /* polled read */
+    SciPolledWrite,                         /* write */
+    SciSetAttributes,                       /* set attributes */
+    NULL,                                   /* stop remote xmit */
+    NULL,                                   /* start remote xmit */
+    FALSE                                   /* output uses interrupts */
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                              SECTION 0
-//                        MISCELLANEOUS ROUTINES
-//
-/////////////////////////////////////////////////////////////////////////////
+/*
+ *                              SECTION 0
+ *                        MISCELLANEOUS ROUTINES
+ */
 
 /****************************************************************************
-* Func:     SCI_output_char
-* Desc:     used by rtems printk function to send a char to the uart
-* Inputs:   the character to transmit
-* Outputs:  none
-* Errors:   none
-* Scope:    public
-****************************************************************************/
+ * Func:     SCI_output_char
+ * Desc:     used by rtems printk function to send a char to the uart
+ * Inputs:   the character to transmit
+ * Outputs:  none
+ * Errors:   none
+ * Scope:    public
+ ****************************************************************************/
 
 void SCI_output_char(char c)
 {
-//  ( minor device number, pointer to the character, length )
+/*  ( minor device number, pointer to the character, length ) */
 
     SciPolledWrite( SCI_MINOR, &c, 1);
 
@@ -349,11 +332,11 @@ const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled )
 {
     if ( polled )
     {
-        return &SciPolledCallbacks;             // polling based
+        return &SciPolledCallbacks;             /* polling based */
     }
     else
     {
-        return &SciInterruptCallbacks;          // interrupt driven
+        return &SciInterruptCallbacks;          /* interrupt driven */
     }
 }
 
@@ -376,53 +359,52 @@ rtems_isr SciIsr( rtems_vector_number vector )
     if ( (*SCSR) & SCI_ERROR_NOISE   )   SciErrorsNoise   ++;
     if ( (*SCSR) & SCI_ERROR_OVERRUN )   SciErrorsOverrun ++;
 
-    // see if it was a transmit interrupt
+    /* see if it was a transmit interrupt */
 
-    if ( (*SCSR) & SCI_XMTR_AVAILABLE )         // data reg empty, xmt complete
+    if ( (*SCSR) & SCI_XMTR_AVAILABLE )         /* data reg empty, xmt complete */
     {
         SciDisableTransmitInterrupts();
 
-        // tell termios module that the charcter was sent
-        // he will call us later to transmit more if there are any
+        /* tell termios module that the charcter was sent */
+        /* he will call us later to transmit more if there are any */
 
         if (rtems_termios_dequeue_characters( SciTermioTty, 1 ))
         {
-            // there are more bytes to transmit so enable TX interrupt
+            /* there are more bytes to transmit so enable TX interrupt */
 
             SciEnableTransmitInterrupts();
         }
     }
 
-    // see if it was a receive interrupt
-    // on the sci uart we just get one character per interrupt
+    /* see if it was a receive interrupt */
+    /* on the sci uart we just get one character per interrupt */
 
-    while (  SciCharAvailable() )               // char in data register?
+    while (  SciCharAvailable() )               /* char in data register? */
     {
-        ch = SciReadCharNoWait();               // get the char from the uart
+        ch = SciReadCharNoWait();               /* get the char from the uart */
 
-        // IMPORTANT!!!
-        // either send it to the termios module or keep it locally
+        /* IMPORTANT!!! */
+        /* either send it to the termios module or keep it locally */
 
-        if ( SciOpened == DRIVER_OPENED )       // the driver is open
+        if ( SciOpened == DRIVER_OPENED )       /* the driver is open */
         {
-            SciRcvBufPutChar(ch);               // keep it locally
+            SciRcvBufPutChar(ch);               /* keep it locally */
         }
-        else                                    // put in termios buffer
+        else                                    /* put in termios buffer */
         {
-            rtems_termios_enqueue_raw_characters( SciTermioTty, &ch, 1 );
+            char c = (char) ch;
+            rtems_termios_enqueue_raw_characters( SciTermioTty, &c, 1 );
         }
 
-        *SCSR &= SCI_CLEAR_RX_INT;              // clear the interrupt
+        *SCSR &= SCI_CLEAR_RX_INT;              /* clear the interrupt */
     }
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                              SECTION 1
-//                ROUTINES TO MANIPULATE THE CIRCULAR BUFFER
-//
-/////////////////////////////////////////////////////////////////////////////
+/*
+ *                              SECTION 1
+ *                ROUTINES TO MANIPULATE THE CIRCULAR BUFFER
+ */
 
 /****************************************************************************
 * Func:     SciRcvBufGetChar
@@ -441,22 +423,22 @@ static int8_t   SciRcvBufGetChar()
 
     if ( SciRcvBufCount == 0 )
     {
-        rtems_fatal_error_occurred(0xDEAD);     // check the count first!
+        rtems_fatal_error_occurred(0xDEAD);     /* check the count first! */
     }
 
-    rtems_interrupt_disable( level );           // disable interrupts
+    rtems_interrupt_disable( level );           /* disable interrupts */
 
-    ch = SciRcvBuffer[SciRcvBufGetIndex];       // get next byte
+    ch = SciRcvBuffer[SciRcvBufGetIndex];       /* get next byte */
 
-    SciRcvBufGetIndex++;                        // bump the index
+    SciRcvBufGetIndex++;                        /* bump the index */
 
-    SciRcvBufGetIndex &= SCI_RCV_BUF_SIZE - 1;  // and wrap it
+    SciRcvBufGetIndex &= SCI_RCV_BUF_SIZE - 1;  /* and wrap it */
 
-    SciRcvBufCount--;                           // decrement counter
+    SciRcvBufCount--;                           /* decrement counter */
 
-    rtems_interrupt_enable( level );            // restore interrupts
+    rtems_interrupt_enable( level );            /* restore interrupts */
 
-    return ch;                                  // return the char
+    return ch;                                  /* return the char */
 }
 
 
@@ -473,24 +455,24 @@ static void SciRcvBufPutChar( uint8_t   ch )
 {
     rtems_interrupt_level level;
 
-    if ( SciRcvBufCount == SCI_RCV_BUF_SIZE )   // is there room?
+    if ( SciRcvBufCount == SCI_RCV_BUF_SIZE )   /* is there room? */
     {
-        return;                                 // no, throw it away
+        return;                                 /* no, throw it away */
     }
 
-    rtems_interrupt_disable( level );           // disable interrupts
+    rtems_interrupt_disable( level );           /* disable interrupts */
 
-    SciRcvBuffer[SciRcvBufPutIndex] = ch;       // put it in the buf
+    SciRcvBuffer[SciRcvBufPutIndex] = ch;       /* put it in the buf */
 
-    SciRcvBufPutIndex++;                        // bump the index
+    SciRcvBufPutIndex++;                        /* bump the index */
 
-    SciRcvBufPutIndex &= SCI_RCV_BUF_SIZE - 1;  // and wrap it
+    SciRcvBufPutIndex &= SCI_RCV_BUF_SIZE - 1;  /* and wrap it */
 
-    SciRcvBufCount++;                           // increment counter
+    SciRcvBufCount++;                           /* increment counter */
 
-    rtems_interrupt_enable( level );            // restore interrupts
+    rtems_interrupt_enable( level );            /* restore interrupts */
 
-    return;                                     // return
+    return;                                     /* return */
 }
 
 
@@ -503,34 +485,33 @@ static void SciRcvBufPutChar( uint8_t   ch )
 * Scope:    private
 ****************************************************************************/
 
-#if 0                                           // prevents compiler warning
+#if 0                                           /* prevents compiler warning */
 static void SciRcvBufFlush( void )
 {
     rtems_interrupt_level level;
 
-    rtems_interrupt_disable( level );           // disable interrupts
+    rtems_interrupt_disable( level );           /* disable interrupts */
 
     memset( SciRcvBuffer, 0, sizeof(SciRcvBuffer) );
 
-    SciRcvBufPutIndex = 0;                      // clear
+    SciRcvBufPutIndex = 0;                      /* clear */
 
-    SciRcvBufGetIndex = 0;                      // clear
+    SciRcvBufGetIndex = 0;                      /* clear */
 
-    SciRcvBufCount = 0;                         // clear
+    SciRcvBufCount = 0;                         /* clear */
 
-    rtems_interrupt_enable( level );            // restore interrupts
+    rtems_interrupt_enable( level );            /* restore interrupts */
 
-    return;                                     // return
+    return;                                     /* return */
 }
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                              SECTION 2
-//            INTERRUPT BASED ENTRY POINTS FOR THE TERMIOS MODULE
-//
-/////////////////////////////////////////////////////////////////////////////
+/*
+ *
+ *                              SECTION 2
+ *            INTERRUPT BASED ENTRY POINTS FOR THE TERMIOS MODULE
+ */
 
 /****************************************************************************
 * Func:     SciInterruptOpen
@@ -546,43 +527,43 @@ static void SciRcvBufFlush( void )
 * Scope:    public API
 ****************************************************************************/
 
-int32_t   SciInterruptOpen(
-    int32_t    major,
-    int32_t    minor,
-    void     *arg
+int   SciInterruptOpen(
+    int    major,
+    int    minor,
+    void  *arg
 )
 {
     rtems_libio_open_close_args_t * args = arg;
     rtems_isr_entry old_vector;
 
-    if ( minor != SCI_MINOR )                   // check minor device num
+    if ( minor != SCI_MINOR )                   /* check minor device num */
     {
         return -1;
     }
 
-    if ( !args )                                // must have args
+    if ( !args )                                /* must have args */
     {
         return -1;
     }
 
-    SciTermioTty = args->iop->data1;            // save address of struct
+    SciTermioTty = args->iop->data1;            /* save address of struct */
 
-    SciDisableAllInterrupts();                  // turn off sci interrupts
+    SciDisableAllInterrupts();                  /* turn off sci interrupts */
 
-    // THIS IS ACTUALLY A BAD THING - SETTING LINE PARAMETERS HERE
-    // IT SHOULD BE DONE THROUGH TCSETATTR() WHEN THE CONSOLE IS OPENED!!!
+    /* THIS IS ACTUALLY A BAD THING - SETTING LINE PARAMETERS HERE */
+    /* IT SHOULD BE DONE THROUGH TCSETATTR() WHEN THE CONSOLE IS OPENED!!! */
 
-//  SciSetBaud(115200);                         // set the baud rate
-//  SciSetBaud( 57600);                         // set the baud rate
-//  SciSetBaud( 38400);                         // set the baud rate
-SciSetBaud( 19200);                         // set the baud rate
-//    SciSetBaud(  9600);                         // set the baud rate
+/*  SciSetBaud(115200);                         set the baud rate */
+/*  SciSetBaud( 57600);                         set the baud rate */
+/*  SciSetBaud( 38400);                         set the baud rate */
+    SciSetBaud( 19200);                      /* set the baud rate */
+/*  SciSetBaud(  9600);                         set the baud rate */
 
-    SciSetParity(SCI_PARITY_NONE);              // set parity to none
+    SciSetParity(SCI_PARITY_NONE);              /* set parity to none */
 
-    SciSetDataBits(SCI_8_DATA_BITS);            // set data bits to 8
+    SciSetDataBits(SCI_8_DATA_BITS);            /* set data bits to 8 */
 
-    // Install our interrupt handler into RTEMS, where does 66 come from?
+    /* Install our interrupt handler into RTEMS, where does 66 come from? */
 
     rtems_interrupt_catch( SciIsr, 66, &old_vector );
 
@@ -590,11 +571,11 @@ SciSetBaud( 19200);                         // set the baud rate
     *QIVR &= 0xf8;
     *QILR |= 0x06 & 0x07;
 
-    SciEnableTransmitter();                     // enable the transmitter
+    SciEnableTransmitter();                     /* enable the transmitter */
 
-    SciEnableReceiver();                        // enable the receiver
+    SciEnableReceiver();                        /* enable the receiver */
 
-    SciEnableReceiveInterrupts();               // enable rcv interrupts
+    SciEnableReceiveInterrupts();               /* enable rcv interrupts */
 
     return RTEMS_SUCCESSFUL;
 }
@@ -611,10 +592,10 @@ SciSetBaud( 19200);                         // set the baud rate
 * Scope:    public - termio entry point
 ****************************************************************************/
 
-int32_t   SciInterruptClose(
-    int32_t    major,
-    int32_t    minor,
-    void     *arg
+int   SciInterruptClose(
+    int    major,
+    int    minor,
+    void  *arg
 )
 {
     SciDisableAllInterrupts();
@@ -634,37 +615,37 @@ int32_t   SciInterruptClose(
 * Scope:    public API
 ****************************************************************************/
 
-int32_t   SciInterruptWrite(
-    int32_t      minor,
+int   SciInterruptWrite(
+    int         minor,
     const char *buf,
-    int32_t      len
+    int         len
 )
 {
-    // We are using interrupt driven output so termios only sends us
-    // one character at a time. The sci does not have a fifo.
+    /* We are using interrupt driven output so termios only sends us */
+    /* one character at a time. The sci does not have a fifo. */
 
-    if ( !len )                                 // no data?
+    if ( !len )                                 /* no data? */
     {
-        return 0;                               // return error
+        return 0;                               /* return error */
     }
 
-    if ( minor != SCI_MINOR )                   // check the minor dev num
+    if ( minor != SCI_MINOR )                   /* check the minor dev num */
     {
-        return 0;                               // return error
+        return 0;                               /* return error */
     }
 
-    if ( SciOpened == DRIVER_OPENED )           // is the driver api open?
+    if ( SciOpened == DRIVER_OPENED )           /* is the driver api open? */
     {
-        return 1;                               // yep, throw this away
+        return 1;                               /* yep, throw this away */
     }
 
-    SciWriteCharNoWait(*buf);                   // try to send a char
+    SciWriteCharNoWait(*buf);                   /* try to send a char */
 
-    *SCSR &= SCI_CLEAR_TDRE;                    // clear tx data reg empty flag
+    *SCSR &= SCI_CLEAR_TDRE;                    /* clear tx data reg empty flag */
 
-    SciEnableTransmitInterrupts();              // enable the tx interrupt
+    SciEnableTransmitInterrupts();              /* enable the tx interrupt */
 
-    return 1;                                   // return success
+    return 1;                                   /* return success */
 }
 
 
@@ -678,8 +659,8 @@ int32_t   SciInterruptWrite(
 * Scope:    public API
 ****************************************************************************/
 
-int32_t   SciSetAttributes(
-    int32_t   minor,
+int   SciSetAttributes(
+    int                   minor,
     const struct termios *t
 )
 {
@@ -688,45 +669,45 @@ int32_t   SciSetAttributes(
     uint16_t    sci_parity = 0;
     uint16_t    sci_databits = 0;
 
-    if ( minor != SCI_MINOR )                   // check the minor dev num
+    if ( minor != SCI_MINOR )                   /* check the minor dev num */
     {
-        return -1;                              // return error
+        return -1;                              /* return error */
     }
 
-    // if you look closely you will see this is the only thing we use
-    // set the baud rate
+    /* if you look closely you will see this is the only thing we use */
+    /* set the baud rate */
 
-    baud_requested = t->c_cflag & CBAUD;        // baud rate
+    baud_requested = t->c_cflag & CBAUD;        /* baud rate */
 
     if (!baud_requested)
     {
-//        baud_requested = B9600;                 // default to 9600 baud
-        baud_requested = B19200;                 // default to 19200 baud
+/*        baud_requested = B9600;                   default to 9600 baud */
+        baud_requested = B19200;                 /* default to 19200 baud */
     }
 
     sci_rate = termios_baud_to_number( baud_requested );
 
-    // parity error detection
+    /* parity error detection */
 
-    if (t->c_cflag & PARENB)                    // enable parity detection?
+    if (t->c_cflag & PARENB)                    /* enable parity detection? */
     {
         if (t->c_cflag & PARODD)
         {
-            sci_parity = SCI_PARITY_ODD;        // select odd parity
+            sci_parity = SCI_PARITY_ODD;        /* select odd parity */
         }
         else
         {
-            sci_parity = SCI_PARITY_EVEN;       // select even parity
+            sci_parity = SCI_PARITY_EVEN;       /* select even parity */
         }
     }
     else
     {
-        sci_parity = SCI_PARITY_NONE;           // no parity, most common
+        sci_parity = SCI_PARITY_NONE;           /* no parity, most common */
     }
 
-    //  set the number of data bits, 8 is most common
+    /*  set the number of data bits, 8 is most common */
 
-    if (t->c_cflag & CSIZE)                     // was it specified?
+    if (t->c_cflag & CSIZE)                     /* was it specified? */
     {
         switch (t->c_cflag & CSIZE)
         {
@@ -736,34 +717,31 @@ int32_t   SciSetAttributes(
     }
     else
     {
-        sci_databits = SCI_8_DATA_BITS;         // default to 8 data bits
+        sci_databits = SCI_8_DATA_BITS;         /* default to 8 data bits */
     }
 
-    //  the number of stop bits; always 1 for SCI
+    /*  the number of stop bits; always 1 for SCI */
 
     if (t->c_cflag & CSTOPB)
     {
-        // do nothing
+        /* do nothing */
     }
 
-    // setup the hardware with these serial port parameters
+    /* setup the hardware with these serial port parameters */
 
-    SciSetBaud(sci_rate);                       // set the baud rate
-
-    SciSetParity(sci_parity);                   // set the parity type
-
-    SciSetDataBits(sci_databits);               // set the data bits
+    SciSetBaud(sci_rate);                       /* set the baud rate */
+    SciSetParity(sci_parity);                   /* set the parity type */
+    SciSetDataBits(sci_databits);               /* set the data bits */
 
     return RTEMS_SUCCESSFUL;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                              SECTION 3
-//            POLLING BASED ENTRY POINTS FOR THE TERMIOS MODULE
-//
-/////////////////////////////////////////////////////////////////////////////
+/*
+ *
+ *                              SECTION 3
+ *            POLLING BASED ENTRY POINTS FOR THE TERMIOS MODULE
+ */
 
 /****************************************************************************
 * Func:     SciPolledOpen
@@ -777,44 +755,44 @@ int32_t   SciSetAttributes(
 * Scope:    public - termios entry point
 ****************************************************************************/
 
-int32_t   SciPolledOpen(
-    int32_t   major,
-    int32_t   minor,
-    void    *arg
+int   SciPolledOpen(
+    int   major,
+    int   minor,
+    void *arg
 )
 {
     rtems_libio_open_close_args_t * args = arg;
 
-    if ( minor != SCI_MINOR )                   // check minor device num
+    if ( minor != SCI_MINOR )                   /* check minor device num */
     {
         return -1;
     }
 
-    if ( !args )                                // must have args
+    if ( !args )                                /* must have args */
     {
         return -1;
     }
 
-    SciTermioTty = args->iop->data1;            // Store tty pointer
+    SciTermioTty = args->iop->data1;            /* Store tty pointer */
 
-    SciDisableAllInterrupts();                  // don't generate interrupts
+    SciDisableAllInterrupts();                  /* don't generate interrupts */
 
-    // THIS IS ACTUALLY A BAD THING - SETTING LINE PARAMETERS HERE
-    // IT SHOULD BE DONE THROUGH TCSETATTR() WHEN THE CONSOLE IS OPENED!!!
+    /* THIS IS ACTUALLY A BAD THING - SETTING LINE PARAMETERS HERE */
+    /* IT SHOULD BE DONE THROUGH TCSETATTR() WHEN THE CONSOLE IS OPENED!!! */
 
-//  SciSetBaud(115200);                         // set the baud rate
-//  SciSetBaud( 57600);                         // set the baud rate
-//  SciSetBaud( 38400);                         // set the baud rate
-  SciSetBaud( 19200);                         // set the baud rate
-//  SciSetBaud(  9600);                         // set the baud rate
+/*  SciSetBaud(115200);                            set the baud rate */
+/*  SciSetBaud( 57600);                            set the baud rate */
+/*  SciSetBaud( 38400);                            set the baud rate */
+  SciSetBaud( 19200);                         /* set the baud rate */
+/*  SciSetBaud(  9600);                            set the baud rate */
 
-    SciSetParity(SCI_PARITY_NONE);              // set no parity
+    SciSetParity(SCI_PARITY_NONE);              /* set no parity */
 
-    SciSetDataBits(SCI_8_DATA_BITS);            // set 8 data bits
+    SciSetDataBits(SCI_8_DATA_BITS);            /* set 8 data bits */
 
-    SciEnableTransmitter();                     // enable the xmitter
+    SciEnableTransmitter();                     /* enable the xmitter */
 
-    SciEnableReceiver();                        // enable the rcvr
+    SciEnableReceiver();                        /* enable the rcvr */
 
     return RTEMS_SUCCESSFUL;
 }
@@ -831,10 +809,10 @@ int32_t   SciPolledOpen(
 * Scope:    public termios API
 ****************************************************************************/
 
-int32_t   SciPolledClose(
-    int32_t    major,
-    int32_t    minor,
-    void     *arg
+int   SciPolledClose(
+    int    major,
+    int    minor,
+    void  *arg
 )
 {
     SciDisableAllInterrupts();
@@ -852,21 +830,21 @@ int32_t   SciPolledClose(
 * Scope:    public API
 ****************************************************************************/
 
-int32_t   SciPolledRead(
-    int32_t   minor
+int   SciPolledRead(
+    int   minor
 )
 {
-    if ( minor != SCI_MINOR )               // check the minor dev num
+    if ( minor != SCI_MINOR )               /* check the type-punned dev num */
     {
-        return -1;                          // return error
+        return -1;                          /* return error */
     }
 
-    if ( SciCharAvailable() )               // if a char is available
+    if ( SciCharAvailable() )               /* if a char is available */
     {
-        return SciReadCharNoWait();         // read the rx data register
+        return SciReadCharNoWait();         /* read the rx data register */
     }
 
-    return -1;                              // return error
+    return -1;                              /* return error */
 }
 
 
@@ -882,43 +860,42 @@ int32_t   SciPolledRead(
 * Scope:    public termios API
 ****************************************************************************/
 
-int32_t   SciPolledWrite(
-    int32_t        minor,
-    const char   *buf,
-    int32_t        len
+int   SciPolledWrite(
+    int         minor,
+    const char *buf,
+    int         len
 )
 {
     int32_t   written = 0;
 
-    if ( minor != SCI_MINOR )                   // check minor device num
+    if ( minor != SCI_MINOR )                   /* check minor device num */
     {
         return -1;
     }
 
-    if ( SciOpened == DRIVER_OPENED )           // is the driver api open?
+    if ( SciOpened == DRIVER_OPENED )           /* is the driver api open? */
     {
-        return -1;                              // toss the data
+        return -1;                              /* toss the data */
     }
 
-    // send each byte in the string out the port
+    /* send each byte in the string out the port */
 
     while ( written < len )
     {
-        SciWriteCharWait(*buf++);               // send a byte
+        SciWriteCharWait(*buf++);               /* send a byte */
 
-        written++;                              // increment counter
+        written++;                              /* increment counter */
     }
 
-    return written;                             // return count
+    return written;                             /* return count */
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                              SECTION 4
-//                 DEVICE DRIVER PUBLIC API ENTRY POINTS
-//
-/////////////////////////////////////////////////////////////////////////////
+/*
+ *
+ *                              SECTION 4
+ *                 DEVICE DRIVER PUBLIC API ENTRY POINTS
+ */
 
 /****************************************************************************
 * Func:     SciInit
@@ -937,26 +914,27 @@ rtems_device_driver SciInitialize (
     void * arg
 )
 {
-//     rtems_status_code status;
+/*     rtems_status_code status; */
 
-//printk("%s\r\n", __FUNCTION__);
+/*printk("%s\r\n", __FUNCTION__); */
 
-    // register the SCI device name for termios console i/o
-    // this is done over in console.c which doesn't seem exactly right
-    // but there were problems doing it here...
+    /* register the SCI device name for termios console i/o
+     * this is done over in console.c which doesn't seem exactly right
+     * but there were problems doing it here...
+     */
 
-//  status = rtems_io_register_name( "/dev/sci", major, 0 );
+/*  status = rtems_io_register_name( "/dev/sci", major, 0 ); */
 
-//  if (status != RTEMS_SUCCESSFUL)
-//      rtems_fatal_error_occurred(status);
+/*  if (status != RTEMS_SUCCESSFUL) */
+/*      rtems_fatal_error_occurred(status); */
 
-    SciMajor = major;                           // save the rtems major number
+    SciMajor = major;                           /* save the rtems major number */
 
-    SciOpened = DRIVER_CLOSED;                  // initial state is closed
+    SciOpened = DRIVER_CLOSED;                  /* initial state is closed */
 
-    // if you have an interrupt handler, install it here
+    /* if you have an interrupt handler, install it here */
 
-    SciInited = 1;                              // set the inited flag
+    SciInited = 1;                              /* set the inited flag */
 
     return RTEMS_SUCCESSFUL;
 }
@@ -982,24 +960,24 @@ rtems_device_driver SciOpen (
     void * arg
 )
 {
-//printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor);
+/*printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor); */
 
-    if (SciInited == 0)                         // must be initialized first!
+    if (SciInited == 0)                         /* must be initialized first! */
     {
         return RTEMS_NOT_CONFIGURED;
     }
 
     if (minor != SCI_MINOR)
     {
-        return RTEMS_INVALID_NAME;              // verify minor number
+        return RTEMS_INVALID_NAME;              /* verify minor number */
     }
 
     if (SciOpened == DRIVER_OPENED)
     {
-        return RTEMS_RESOURCE_IN_USE;           // already opened!
+        return RTEMS_RESOURCE_IN_USE;           /* already opened! */
     }
 
-    SciOpened = DRIVER_OPENED;                  // set the opened flag
+    SciOpened = DRIVER_OPENED;                  /* set the opened flag */
 
     return RTEMS_SUCCESSFUL;
 }
@@ -1024,19 +1002,19 @@ rtems_device_driver SciClose (
     void * arg
 )
 {
-//printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor);
+/*printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor); */
 
     if (minor != SCI_MINOR)
     {
-        return RTEMS_INVALID_NAME;              // check the minor number
+        return RTEMS_INVALID_NAME;              /* check the minor number */
     }
 
     if (SciOpened != DRIVER_OPENED)
     {
-        return RTEMS_INCORRECT_STATE;           // must be opened first
+        return RTEMS_INCORRECT_STATE;           /* must be opened first */
     }
 
-    SciOpened = DRIVER_CLOSED;                  // set the flag
+    SciOpened = DRIVER_CLOSED;                  /* set the flag */
 
     return RTEMS_SUCCESSFUL;
 }
@@ -1060,42 +1038,42 @@ rtems_device_driver SciRead (
     void *arg
 )
 {
-    rtems_libio_rw_args_t *rw_args;             // ptr to argument struct
-    uint8_t   *buffer;
+    rtems_libio_rw_args_t *rw_args;             /* ptr to argument struct */
+    char      *buffer;
     uint16_t   length;
 
-    rw_args = (rtems_libio_rw_args_t *) arg;    // arguments to read()
+    rw_args = (rtems_libio_rw_args_t *) arg;    /* arguments to read() */
 
     if (minor != SCI_MINOR)
     {
-        return RTEMS_INVALID_NAME;              // check the minor number
+        return RTEMS_INVALID_NAME;              /* check the minor number */
     }
 
     if (SciOpened == DRIVER_CLOSED)
     {
-        return RTEMS_INCORRECT_STATE;           // must be opened first
+        return RTEMS_INCORRECT_STATE;           /* must be opened first */
     }
 
-    buffer = rw_args->buffer;                   // points to user's buffer
+    buffer = rw_args->buffer;                   /* points to user's buffer */
 
-    length = rw_args->count;                    // how many bytes they want
+    length = rw_args->count;                    /* how many bytes they want */
 
-//  *buffer = SciReadCharWait();                // wait for a character
+/*  *buffer = SciReadCharWait();                   wait for a character */
 
-    // if there isn't a character available, wait until one shows up
-    // or the timeout period expires, which ever happens first
+    /* if there isn't a character available, wait until one shows up */
+    /* or the timeout period expires, which ever happens first */
 
-    if ( SciRcvBufCount == 0 )                  // no chars
+    if ( SciRcvBufCount == 0 )                  /* no chars */
     {
-        // wait for someone to wake me up...
-        //rtems_task_wake_after(SciReadTimeout);
+        /* wait for someone to wake me up... */
+        /*rtems_task_wake_after(SciReadTimeout); */
     }
 
-    if ( SciRcvBufCount )                       // any characters locally?
+    if ( SciRcvBufCount )                       /* any characters locally? */
     {
-        *buffer = SciRcvBufGetChar();           // get the character
+        *buffer = SciRcvBufGetChar();           /* get the character */
 
-        rw_args->bytes_moved = 1;               // how many we actually read
+        rw_args->bytes_moved = 1;               /* how many we actually read */
     }
 
     return RTEMS_SUCCESSFUL;
@@ -1120,7 +1098,7 @@ rtems_device_driver SciWrite (
     void * arg
 )
 {
-    rtems_libio_rw_args_t *rw_args;             // ptr to argument struct
+    rtems_libio_rw_args_t *rw_args;             /* ptr to argument struct */
     uint8_t   *buffer;
     uint16_t   length;
 
@@ -1128,24 +1106,24 @@ rtems_device_driver SciWrite (
 
     if (minor != SCI_MINOR)
     {
-        return RTEMS_INVALID_NAME;              // check the minor number
+        return RTEMS_INVALID_NAME;              /* check the minor number */
     }
 
     if (SciOpened == DRIVER_CLOSED)
     {
-        return RTEMS_INCORRECT_STATE;           // must be opened first
+        return RTEMS_INCORRECT_STATE;           /* must be opened first */
     }
 
-    buffer = (uint8_t*)rw_args->buffer;       // points to data
+    buffer = (uint8_t*)rw_args->buffer;       /* points to data */
 
-    length = rw_args->count;                    // how many bytes
+    length = rw_args->count;                    /* how many bytes */
 
     while (length--)
     {
-        SciWriteCharWait(*buffer++);            // send the bytes out
+        SciWriteCharWait(*buffer++);            /* send the bytes out */
     }
 
-    rw_args->bytes_moved = rw_args->count;      // how many we wrote
+    rw_args->bytes_moved = rw_args->count;      /* how many we wrote */
 
     return RTEMS_SUCCESSFUL;
 }
@@ -1169,53 +1147,52 @@ rtems_device_driver SciControl (
     void * arg
 )
 {
-    rtems_libio_ioctl_args_t *args = arg;       // rtems arg struct
-    uint16_t   command;                         // the cmd to execute
-    uint16_t   unused;                          // maybe later
-    uint16_t   *ptr;                            // ptr to user data
+    rtems_libio_ioctl_args_t *args = arg;       /* rtems arg struct */
+    uint16_t   command;                         /* the cmd to execute */
+    uint16_t   unused;                          /* maybe later */
+    uint16_t   *ptr;                            /* ptr to user data */
 
-//printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor);
+/*printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor); */
 
-    // do some sanity checking
+    /* do some sanity checking */
 
     if (minor != SCI_MINOR)
     {
-        return RTEMS_INVALID_NAME;              // check the minor number
+        return RTEMS_INVALID_NAME;              /* check the minor number */
     }
 
     if (SciOpened == DRIVER_CLOSED)
     {
-        return RTEMS_INCORRECT_STATE;           // must be open first
+        return RTEMS_INCORRECT_STATE;           /* must be open first */
     }
 
     if (args == 0)
     {
-        return RTEMS_INVALID_ADDRESS;           // must have args
+        return RTEMS_INVALID_ADDRESS;           /* must have args */
     }
 
-    args->ioctl_return = -1;                    // assume an error
+    args->ioctl_return = -1;                    /* assume an error */
 
-    command = args->command;                    // get the command
-    ptr     = args->buffer;                     // this is an address
-    unused  = *ptr;                             // brightness
+    command = args->command;                    /* get the command */
+    ptr     = args->buffer;                     /* this is an address */
+    unused  = *ptr;                             /* brightness */
 
-    if (command == SCI_SEND_BREAK)              // process the command
+    if (command == SCI_SEND_BREAK)              /* process the command */
     {
-        SciSendBreak();                         // send break char
+        SciSendBreak();                         /* send break char */
     }
 
-    args->ioctl_return = 0;                     // return status
+    args->ioctl_return = 0;                     /* return status */
 
     return RTEMS_SUCCESSFUL;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                              SECTION 5
-//                       HARDWARE LEVEL ROUTINES
-//
-/////////////////////////////////////////////////////////////////////////////
+/*
+ *
+ *                              SECTION 5
+ *                       HARDWARE LEVEL ROUTINES
+ */
 
 /****************************************************************************
 * Func:     SciSetBaud
@@ -1231,26 +1208,26 @@ static void SciSetBaud(uint32_t   rate)
     uint16_t   value;
     uint16_t   save_sccr1;
 
-// when you open the console you need to set the termio struct baud rate
-// it has a default value of 9600, when someone calls tcsetattr it reverts!
+/* when you open the console you need to set the termio struct baud rate */
+/* it has a default value of 9600, when someone calls tcsetattr it reverts! */
 
-    SciBaud = rate;                             // save the rate
+    SciBaud = rate;                             /* save the rate */
 
-    // calculate the register value as a float and convert to an int
-    // set baud rate - you must define the system clock constant
-    // see mrm332.h for an example
+    /* calculate the register value as a float and convert to an int */
+    /* set baud rate - you must define the system clock constant */
+    /* see mrm332.h for an example */
 
     value = ( (uint16_t) ( SYS_CLOCK / rate / 32.0 + 0.5 ) & 0x1fff );
 
-    save_sccr1 = *SCCR1;                        // save register
+    save_sccr1 = *SCCR1;                        /* save register */
 
-    // also turns off the xmtr and rcvr
+    /* also turns off the xmtr and rcvr */
 
-    *SCCR1 &= SCI_DISABLE_INT_ALL;              // disable interrupts
+    *SCCR1 &= SCI_DISABLE_INT_ALL;              /* disable interrupts */
 
-    *SCCR0 = value;                             // write the register
+    *SCCR0 = value;                             /* write the register */
 
-    *SCCR1 = save_sccr1;                        // restore register
+    *SCCR1 = save_sccr1;                        /* restore register */
 
     return;
 }
@@ -1269,28 +1246,28 @@ static void SciSetParity(uint16_t   parity)
 {
     uint16_t   value;
 
-    value = *SCCR1;                             // get the register
+    value = *SCCR1;                             /* get the register */
 
     if (parity == SCI_PARITY_ODD)
     {
-        value |= SCI_PARITY_ENABLE;             // parity enabled
-        value |= SCI_PARITY_ODD;                // parity odd
+        value |= SCI_PARITY_ENABLE;             /* parity enabled */
+        value |= SCI_PARITY_ODD;                /* parity odd */
     }
 
     else if (parity == SCI_PARITY_EVEN)
     {
-        value |= SCI_PARITY_ENABLE;             // parity enabled
-        value &= ~SCI_PARITY_ODD;               // parity even
+        value |= SCI_PARITY_ENABLE;             /* parity enabled */
+        value &= ~SCI_PARITY_ODD;               /* parity even */
     }
 
     else if (parity == SCI_PARITY_NONE)
     {
-        value &= ~SCI_PARITY_ENABLE;            // disabled, most common
+        value &= ~SCI_PARITY_ENABLE;            /* disabled, most common */
     }
 
     /* else no changes */
 
-    *SCCR1 = value;                             // write the register
+    *SCCR1 = value;                             /* write the register */
 
     return;
 }
@@ -1309,23 +1286,23 @@ static void SciSetDataBits(uint16_t   bits)
 {
     uint16_t   value;
 
-    value = *SCCR1;                             // get the register
+    value = *SCCR1;                             /* get the register */
 
     /* note - the parity setting affects the number of data bits */
 
     if (bits == SCI_9_DATA_BITS)
     {
-        value |= SCI_9_DATA_BITS;               // 9 data bits
+        value |= SCI_9_DATA_BITS;               /* 9 data bits */
     }
 
     else if (bits == SCI_8_DATA_BITS)
     {
-        value &= SCI_8_DATA_BITS;               // 8 data bits
+        value &= SCI_8_DATA_BITS;               /* 8 data bits */
     }
 
     /* else no changes */
 
-    *SCCR1 = value;                             // write the register
+    *SCCR1 = value;                             /* write the register */
 
     return;
 }
@@ -1344,7 +1321,7 @@ static void SciSetDataBits(uint16_t   bits)
 
 static void inline SciDisableAllInterrupts( void )
 {
-    // this also turns off the xmtr and rcvr
+    /* this also turns off the xmtr and rcvr */
 
     *SCCR1 &= SCI_DISABLE_INT_ALL;
 }
@@ -1412,7 +1389,7 @@ static void inline SciDisableReceiver( void )
 
 void SciWriteCharWait(uint8_t   c)
 {
-    // poll the fifo, waiting for room for another character
+    /* poll the fifo, waiting for room for another character */
 
     while ( ( *SCSR & SCI_XMTR_AVAILABLE ) == 0 )
     {
@@ -1426,9 +1403,9 @@ void SciWriteCharWait(uint8_t   c)
       rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
     }
 
-    *SCDR = c;                                  // send the charcter
+    *SCDR = c;                                  /* send the charcter */
 
-    SciBytesOut++;                              // increment the counter
+    SciBytesOut++;                              /* increment the counter */
 
     return;
 }
@@ -1446,12 +1423,12 @@ void SciWriteCharNoWait(uint8_t   c)
 {
     if ( ( *SCSR & SCI_XMTR_AVAILABLE ) == 0 )
     {
-        return;                                 // no room, throw it away
+        return;                                 /* no room, throw it away */
     }
 
-    *SCDR = c;                                  // put the char in the fifo
+    *SCDR = c;                                  /* put the char in the fifo */
 
-    SciBytesOut++;                              // increment the counter
+    SciBytesOut++;                              /* increment the counter */
 
     return;
 }
@@ -1470,21 +1447,21 @@ uint8_t   inline SciReadCharWait( void )
 {
     uint8_t   ch;
 
-    while ( SciCharAvailable() == 0 )           // anything there?
+    while ( SciCharAvailable() == 0 )           /* anything there? */
     {
       /* relinquish processor while waiting */
       rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
     }
 
-    // if you have rcv ints enabled, then the isr will probably
-    // get the character before you will unless you turn off ints
-    // ie polling and ints don't mix that well
+    /* if you have rcv ints enabled, then the isr will probably */
+    /* get the character before you will unless you turn off ints */
+    /* ie polling and ints don't mix that well */
 
-    ch = *SCDR;                                 // get the charcter
+    ch = *SCDR;                                 /* get the charcter */
 
-    SciBytesIn++;                               // increment the counter
+    SciBytesIn++;                               /* increment the counter */
 
-    return ch;                                  // return the char
+    return ch;                                  /* return the char */
 }
 
 /****************************************************************************
@@ -1500,14 +1477,14 @@ uint8_t   inline SciReadCharNoWait( void )
 {
     uint8_t   ch;
 
-    if ( SciCharAvailable() == 0 )              // anything there?
+    if ( SciCharAvailable() == 0 )              /* anything there? */
         return -1;
 
-    ch = *SCDR;                                 // get the character
+    ch = *SCDR;                                 /* get the character */
 
-    SciBytesIn++;                               // increment the count
+    SciBytesIn++;                               /* increment the count */
 
-    return ch;                                  // return the char
+    return ch;                                  /* return the char */
 }
 
 
@@ -1522,7 +1499,7 @@ uint8_t   inline SciReadCharNoWait( void )
 
 uint8_t   inline SciCharAvailable( void )
 {
-    return ( *SCSR & SCI_RCVR_READY );          // char in data register?
+    return ( *SCSR & SCI_RCVR_READY );          /* char in data register? */
 }
 
 
@@ -1537,27 +1514,26 @@ uint8_t   inline SciCharAvailable( void )
 
 void SciSendBreak( void )
 {
-    // From the Motorola QSM reference manual -
+    /* From the Motorola QSM reference manual - */
 
-    // "if SBK is toggled by writing it first to a one and then immediately
-    // to a zero (in less than one serial frame interval), the transmitter
-    // sends only one or two break frames before reverting to mark (idle)
-    // or before commencing to send more data"
+    /* "if SBK is toggled by writing it first to a one and then immediately */
+    /* to a zero (in less than one serial frame interval), the transmitter */
+    /* sends only one or two break frames before reverting to mark (idle) */
+    /* or before commencing to send more data" */
 
-    *SCCR1 |=  SCI_SEND_BREAK;                  // set the bit
+    *SCCR1 |=  SCI_SEND_BREAK;                  /* set the bit */
 
-    *SCCR1 &= ~SCI_SEND_BREAK;                  // clear the bit
+    *SCCR1 &= ~SCI_SEND_BREAK;                  /* clear the bit */
 
     return;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                             SECTION 6
-//                             TEST CODE
-//
-/////////////////////////////////////////////////////////////////////////////
+/*
+ *
+ *                             SECTION 6
+ *                             TEST CODE
+ */
 
 /****************************************************************************
 * Func:     SciUnitTest
@@ -1568,23 +1544,23 @@ void SciSendBreak( void )
 ****************************************************************************/
 
 #if 0
-#define O_RDWR LIBIO_FLAGS_READ_WRITE           // dont like this but...
+#define O_RDWR LIBIO_FLAGS_READ_WRITE           /* dont like this but... */
 
 void SciUnitTest()
 {
-    uint8_t   byte;                             // a character
-    uint16_t   fd;                              // file descriptor for device
-    uint16_t   result;                          // result of ioctl
+    uint8_t   byte;                             /* a character */
+    uint16_t   fd;                              /* file descriptor for device */
+    uint16_t   result;                          /* result of ioctl */
 
-    fd = open("/dev/sci",O_RDWR);               // open the device
+    fd = open("/dev/sci",O_RDWR);               /* open the device */
 
 printk("SCI open fd=%d\r\n",fd);
 
-    result = write(fd, "abcd\r\n", 6);          // send a string
+    result = write(fd, "abcd\r\n", 6);          /* send a string */
 
 printk("SCI write result=%d\r\n",result);
 
-    result = read(fd, &byte, 1);                // read a byte
+    result = read(fd, &byte, 1);                /* read a byte */
 
 printk("SCI read result=%d,byte=%x\r\n",result,byte);
 

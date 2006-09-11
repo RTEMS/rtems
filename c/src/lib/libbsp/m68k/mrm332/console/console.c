@@ -18,8 +18,6 @@
 #include <rtems/libio.h>
 #include <termios.h>
 #include "sci.h"
-//#include "../../../../../../rtems/c/src/lib/libbsp/m68k/opti/console/duart.h"
-//#include "../../../../../../rtems/c/src/lib/libc/libio_.h"
 
 /*PAGE
  *
