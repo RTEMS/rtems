@@ -20,7 +20,7 @@ void Init5282 (void)
     int x;
     int temp = 0;
     
-    //Setup the GPIO Registers
+    /*Setup the GPIO Registers */
     MCF5282_GPIO_PBCDPAR = 0x80;
     MCF5282_GPIO_PEPAR = 0x5100;
     MCF5282_GPIO_PJPAR = 0xFF;
@@ -31,12 +31,12 @@ void Init5282 (void)
     MCF5282_GPTA_GPTDDR = 0x0C;
     MCF5282_GPTA_GPTPORT = 0x4;
     
-    //Setup the Chip Selects so CS0 is flash
+    /*Setup the Chip Selects so CS0 is flash */
     MCF5282_CS0_CSAR =(0xff800000 & 0xffff0000)>>16;
     MCF5282_CS0_CSMR = 0x007f0001;
     MCF5282_CS0_CSCR =(((0xf)&0x0F)<<10)|(1<<8)|(0x80);
 
-	//Setup the SDRAM 
+	/*Setup the SDRAM  */
 	for(x=0; x<20000; x++)
 	{
 		temp +=1;
@@ -48,18 +48,18 @@ void Init5282 (void)
 	{
 		temp +=1;
 	}
-	// set ip ( bit 3 ) in dacr
+	/* set ip ( bit 3 ) in dacr */
 	MCF5282_SDRAMC_DACR0 |= (0x00000008) ; 
-	// init precharge
+	/* init precharge */
 	*((short *)MM_SDRAM_BASE) = 0;
-	// set RE in dacr
+	/* set RE in dacr */
 	MCF5282_SDRAMC_DACR0 |= (0x00008000);  
-	// wait
+	/* wait */
 	for(x=0; x<20000; x++)
 	{
 		temp +=1;
 	}
-	// issue IMRS
+	/* issue IMRS */
 	MCF5282_SDRAMC_DACR0 |= (0x00000040);
 	*((short *)MM_SDRAM_BASE) = 0x0000;
 	for(x=0; x<60000; x++)
