@@ -1,3 +1,7 @@
+2006-09-11	Chris Johns <chrisj@rtems.org>
+
+	* include/usc.h: Remove extra CRLF.
+	
 2006-03-22	Joel Sherrill <joel@OARcorp.com>
 
 	* include/.cvsignore: New file.

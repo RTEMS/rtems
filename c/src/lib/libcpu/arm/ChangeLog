@@ -1,3 +1,7 @@
+2006-09-11	Chris Johns <chrisj@rtems.org>
+
+	* s3c2400/include/s3c2400.h: Remove extra CRLF.
+	
 2006-06-02	Jay Monkman <jtm@lopingdog.com>
 
 	* mc9328mxl/include/mc9328mxl.h: Added UART register definitions.

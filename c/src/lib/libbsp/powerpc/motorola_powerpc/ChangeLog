@@ -1,3 +1,7 @@
+2006-09-11	Chris Johns <chrisj@rtems.org>
+
+	* times.mcp750: Removed extra CRLF.
+	
 2006-01-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove explicit ampolish3 support (now in
