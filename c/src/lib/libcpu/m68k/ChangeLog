@@ -1,3 +1,8 @@
+2006-09-11	Chris Johns <chrisj@rtems.org>
+
+	* m68k/mcf5282/include/mcf5282.h, arm/s3c2400/include/s3c2400.h:
+	Remove extra CRLF.
+	
 2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use RTEMS_AMPOLISH3.
