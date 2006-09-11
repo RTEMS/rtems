@@ -372,7 +372,7 @@ IntUartInitialize(void)
 		info->parity   = -1;
 		info->stopbits = -1;
 		info->hwflow   = -1;
-		info->iomode   = TERMIOS_POLLED; //polled console io
+		info->iomode   = TERMIOS_POLLED; /*polled console io */
 
 		MCF5235_UART_UACR(chan) = 0;
 		MCF5235_UART_UIMR(chan) = 0;

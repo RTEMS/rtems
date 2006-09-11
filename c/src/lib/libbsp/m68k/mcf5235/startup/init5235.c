@@ -32,18 +32,18 @@ void Init5235 (void)
     int temp = 0;
     int *address_of_MCF5235_BSP_START_FROM_FLASH;
     
-    //Setup the GPIO Registers
+    /*Setup the GPIO Registers */
     MCF5235_GPIO_UART=0x3FFF;
     MCF5235_GPIO_PAR_AD=0xE1;
     
-    //Setup the Chip Selects so CS0 is flash
+    /*Setup the Chip Selects so CS0 is flash */
     MCF5235_CS_CSAR0 =(0xFFE00000 & 0xffff0000)>>16;
     MCF5235_CS_CSMR0 = 0x001f0001;
     MCF5235_CS_CSCR0 = 0x1980;
     
     address_of_MCF5235_BSP_START_FROM_FLASH = (int *) & MCF5235_BSP_START_FROM_FLASH;
     if ( (int)address_of_MCF5235_BSP_START_FROM_FLASH == 1) {
-        //Setup the SDRAM 
+        /*Setup the SDRAM  */
         for(x=0; x<20000; x++)
         {
 	       temp +=1;
@@ -55,18 +55,18 @@ void Init5235 (void)
         {
 	        temp +=1;
         }
-        // set ip ( bit 3 ) in dacr
+        /* set ip ( bit 3 ) in dacr */
         MCF5235_SDRAMC_DACR0 |= (0x00000008) ; 
-        // init precharge
+        /* init precharge */
         *((unsigned long *)MM_SDRAM_BASE) = 0xDEADBEEF;
-        // set RE in dacr
+        /* set RE in dacr */
         MCF5235_SDRAMC_DACR0 |= (0x00008000);  
-        // wait
+        /* wait */
         for(x=0; x<20000; x++)
         {
 	        temp +=1;
         }
-        // issue IMRS
+        /* issue IMRS */
         MCF5235_SDRAMC_DACR0 |= (0x00000040);
         *((short *)MM_SDRAM_BASE) = 0;
         for(x=0; x<60000; x++)

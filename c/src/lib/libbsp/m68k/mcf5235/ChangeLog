@@ -1,3 +1,8 @@
+2006-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c, startup/init5235.c: Convert C++ style comments to
+	C style.
+
 2006-06-23	Worth Burruss <worth@motioncontrol.org>
 
 	* Makefile.am, README, startup/init5235.c, startup/linkcmds,
