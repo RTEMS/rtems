@@ -70,10 +70,10 @@ int assertSoftwareInterrupt( uint32_t   n )
   } while (0)
 
 
-//
-// Instrumentation tweaks for isr timing measurement, turning them off
-// via this #if will remove the code entirely from the RTEMS kernel.
-//
+/*
+ * Instrumentation tweaks for isr timing measurement, turning them off
+ * via this #if will remove the code entirely from the RTEMS kernel.
+ */
 
 #if 0
 #define SET_ISR_FLAG( offset )	*((uint32_t*)(0x8001e000+offset)) = 1;
@@ -94,26 +94,26 @@ static volatile uint32_t   _ivcause, _ivsr;
 static uint32_t   READ_CAUSE(void) 
 {
    mips_get_cause( _ivcause );
-   _ivcause &= SR_IMASK;	// mask off everything other than the interrupt bits
+   _ivcause &= SR_IMASK;	/* mask off everything other than the interrupt bits */
 
    return ((_ivcause & (_ivsr & SR_IMASK)) >> CAUSE_IPSHIFT);
 }
 
 
 
-//
-// This rather strangely coded routine enforces an interrupt priority
-// scheme.  As it runs thru finding whichever interrupt caused it to get
-// here, it test for other interrupts arriving in the meantime (maybe it
-// occured while the vector code is executing for instance).  Each new
-// interrupt will be served in order of its priority.  In an effort to
-// minimize overhead, the cause register is only fetched after an
-// interrupt is serviced.  Because of the intvect goto's, this routine
-// will only exit when all interrupts have been serviced and no more
-// have arrived, this improves interrupt latency at the cost of
-// increasing scheduling jitter; though scheduling jitter should only
-// become apparent in high interrupt load conditions.
-//
+/*
+ * This rather strangely coded routine enforces an interrupt priority
+ * scheme.  As it runs thru finding whichever interrupt caused it to get
+ * here, it test for other interrupts arriving in the meantime (maybe it
+ * occured while the vector code is executing for instance).  Each new
+ * interrupt will be served in order of its priority.  In an effort to
+ * minimize overhead, the cause register is only fetched after an
+ * interrupt is serviced.  Because of the intvect goto's, this routine
+ * will only exit when all interrupts have been serviced and no more
+ * have arrived, this improves interrupt latency at the cost of
+ * increasing scheduling jitter; though scheduling jitter should only
+ * become apparent in high interrupt load conditions.
+ */
 void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 {
    uint32_t  	cshifted;
@@ -127,11 +127,12 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 
    if( cshifted & 0x3 )
    {
-      // making the software interrupt the highest priority is kind of
-      // stupid, but it makes the bit testing lots easier.  On the other
-      // hand, these ints are infrequently used and the testing overhead
-      // is minimal.  Who knows, high-priority software ints might be
-      // handy in some situation.
+      /* making the software interrupt the highest priority is kind of
+       * stupid, but it makes the bit testing lots easier.  On the other
+       * hand, these ints are infrequently used and the testing overhead
+       * is minimal.  Who knows, high-priority software ints might be
+       * handy in some situation.
+       */
 
       /* unset both software int cause bits */
       mips_set_cause( _ivcause & ~(3 << CAUSE_IPSHIFT) );
@@ -210,21 +211,21 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
       } 
 */
 
-      //
-      // iterate thru 32 bits in 4 chunks of 8 bits each.  This lets us
-      // quickly get past unasserted interrupts instead of flogging our
-      // way thru a full 32 bits.  pf_mask shifts left 8 bits at a time
-      // to serve as a interrupt cause test mask.
-      //
+      /*
+       * iterate thru 32 bits in 4 chunks of 8 bits each.  This lets us
+       * quickly get past unasserted interrupts instead of flogging our
+       * way thru a full 32 bits.  pf_mask shifts left 8 bits at a time
+       * to serve as a interrupt cause test mask.
+       */
       for( bit=0, pf_mask = 0xff;    (bit < 32 && pf_icr);     (bit+=8, pf_mask <<= 8) ) 
       {
 	 if ( pf_icr & pf_mask )
 	 {
-	    // one or more of the 8 bits we're testing is high
+	    /* one or more of the 8 bits we're testing is high */
 
 	    m = (1 << bit);
 
-	    // iterate thru the 8 bits, servicing any of the interrupts
+	    /* iterate thru the 8 bits, servicing any of the interrupts */
 	    for(i=0; (i<8 && pf_icr); (i++, m <<= 1))
 	    {
 	       if( pf_icr & m )
@@ -233,17 +234,18 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 		  CALL_ISR( MONGOOSEV_IRQ_PERIPHERAL_BASE + bit + i, frame );
 		  CLR_ISR_FLAG( 0x80 + ((bit + i) * 4) );
 
-		  // or each serviced interrupt into our interrupt clear
-		  // mask
+		  /* or each serviced interrupt into our interrupt clear mask */
 		  pf_reset |= m;
 
-		  // xor off each int we service so we can immediately
-		  // exit once we get the last one
+		  /* xor off each int we service so we can immediately
+		   * exit once we get the last one
+                   */
 		  pf_icr   %= m;
 
-		  // if another interrupt has arrived, jump out right
-		  // away but be sure to reset all the interrupts we've
-		  // already serviced
+		  /* if another interrupt has arrived, jump out right
+		   * away but be sure to reset all the interrupts we've
+		   * already serviced
+                   */
 		  if( READ_CAUSE() & 0xff ) goto pfexit;
 	       }
 	    }
@@ -253,14 +255,10 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
       MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_STATUS_REGISTER, pf_reset );
    }
 
-   //
-   // this is a last ditch interrupt check, if an interrupt arrives
-   // after this step, servicing it will incur the entire interrupt
-   // overhead cost.
-   //
+   /*
+    * this is a last ditch interrupt check, if an interrupt arrives
+    * after this step, servicing it will incur the entire interrupt
+    * overhead cost.
+    */
    if( (cshifted = READ_CAUSE()) & 0xff ) goto intvect;
 }
-
-
-
-// eof
