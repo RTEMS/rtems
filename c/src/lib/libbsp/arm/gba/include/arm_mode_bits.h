@@ -43,5 +43,5 @@
 #define Mode_IRQ_MIRQ        (Mode_SVC | I_Bit | F_Bit)
 #define Mode_IRQ_UIRQ        (Mode_SVC)
 
-#endif // __ARMMODEBITS_H
+#endif /* __ARMMODEBITS_H */
 

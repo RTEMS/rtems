@@ -1,3 +1,7 @@
+2006-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	* include/arm_mode_bits.h: Convert C++ style comments to C style.
+
 2006-09-11	Chris Johns <chrisj@rtems.org>
 
 	* README, configure.ac: Remove extra CRLF.
