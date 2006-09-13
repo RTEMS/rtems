@@ -7,7 +7,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2006.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -100,6 +100,7 @@
 @include userext.texi
 @include conf.texi
 @include mp.texi
+@include stackchk.texi
 @include dirstat.texi
 @include example.texi
 @include glossary.texi
@@ -134,6 +135,7 @@ This is the online version of the RTEMS C User's Guide.
 * User Extensions Manager::
 * Configuring a System::
 * Multiprocessing Manager::
+* Stack Bounds Checker::
 * Directive Status Codes::
 * Example Application::
 * Glossary::

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2006.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved. 
 @c
@@ -15,8 +15,8 @@ if a task has overflowed its run-time stack.  The routines provided
 by the stack bounds checker manager are:
 
 @itemize @bullet
-@item @code{Stack_check_Initialize} - Initialize the Stack Bounds Checker
-@item @code{Stack_check_Dump_usage} - Report Task Stack Usage
+@item @code{@value{DIRPREFIX}stack_checker_initialize} - Initialize the Stack Bounds Checker
+@item @code{@value{DIRPREFIX}stack_checker_dump_usage} - Report Task Stack Usage
 @end itemize
 
 @section Background
@@ -68,7 +68,7 @@ provided by every RTEMS port to get for this information.
 
 The stack checker is initialized automatically when its task
 create extension runs for the first time.  When this occurs,
-the @code{Stack_check_Initialize} is invoked.
+the @code{@value{DIRPREFIX}stack_checker_initialize} is invoked.
 
 The application must include the stack bounds checker extension set
 in its set of Initial Extensions.  This set of extensions is
@@ -88,7 +88,7 @@ to define the macro @code{STACK_CHECKER_ON} before including
 @subsection Reporting Task Stack Usage
 
 The application may dynamically report the stack usage for every task
-in the system by calling the @code{Stack_check_Dump_usage} routine.
+in the system by calling the @code{@value{DIRPREFIX}stack_checker_dump_usage} routine.
 This routine prints a table with the peak usage and stack size of
 every task in the system.  The following is an example of the
 report generated:
@@ -136,13 +136,13 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection Stack_check_Initialize - Initialize the Stack Bounds Checker
+@subsection stack_checker_initialize - Initialize the Stack Bounds Checker
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-void Stack_check_Initialize( void );
+void rtems_stack_checker_initialize( void );
 @end example
 @end ifset
 
@@ -164,13 +164,13 @@ This is performed automatically the first time the stack bounds checker
 task create extension executes.
 
 @page
-@subsection Stack_check_Dump_usage - Report Task Stack Usage
+@subsection stack_checker_dump_usage - Report Task Stack Usage
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-void Stack_check_Dump_usage( void );
+void rtems_stack_checker_dump_usage( void );
 @end example
 @end ifset
 
