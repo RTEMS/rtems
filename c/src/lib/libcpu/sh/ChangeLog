@@ -1,3 +1,8 @@
+2006-09-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sh7750/include/rtems/score/sh7750_regs.h: Fix spelling of IPRC
+	(Probably a cyrillic 'C' instead of an ASCI 'C').
+
 2006-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use RTEMS_AMPOLISH3.

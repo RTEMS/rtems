@@ -1581,7 +1581,7 @@
 #define SH7750_IPRB_SCI1      0x00F0 /* SCI1 interrupt priority */
 #define SH7750_IPRB_SCI1_S    4
 
-/* Interrupt Priority Register ó - IPRó (half) */
+/* Interrupt Priority Register C - IPRC (half) */
 #define SH7750_IPRC_REGOFS    0xD00004 /* offset */
 #define SH7750_IPRC           SH7750_P4_REG32(SH7750_IPRC_REGOFS)
 #define SH7750_IPRC_A7        SH7750_A7_REG32(SH7750_IPRC_REGOFS)
