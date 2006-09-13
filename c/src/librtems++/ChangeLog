@@ -1,3 +1,7 @@
+2006-09-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Use RTEMS_AMPOLISH3.
+
 2006-02-08	Joel Sherrill <joel@OARcorp.com>
 
 	* src/rtemsStatusCode.cc: Fix warnings.

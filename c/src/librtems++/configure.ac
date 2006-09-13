@@ -24,10 +24,7 @@ RTEMS_CANONICALIZE_TOOLS
 AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
 
 RTEMS_PROJECT_ROOT
-
-AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-  && test -n "$AMPOLISH3"])
+RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
