@@ -1,5 +1,10 @@
 2006-09-13	Joel Sherrill <joel@OARcorp.com>
 
+	* libnetworking/rtems/rtems_malloc_mbuf.c: Removed warning by adding
+	prototype of malloc.
+
+2006-09-13	Joel Sherrill <joel@OARcorp.com>
+
 	* libmisc/stackchk/check.c, libmisc/stackchk/internal.h,
 	libmisc/stackchk/stackchk.h: Move stack to first class citizen
 	status. Include it in User Manual and rename to start with rtems_.

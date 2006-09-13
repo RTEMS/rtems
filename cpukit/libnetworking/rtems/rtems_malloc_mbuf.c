@@ -27,6 +27,7 @@
 
 void* rtems_bsdnet_malloc_mbuf(size_t size, int type)
 {
+   extern void *malloc(size_t);
    return malloc(size);
 }
 
