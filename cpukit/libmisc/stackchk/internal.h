@@ -3,7 +3,7 @@
  *  This include file contains internal information
  *  for the RTEMS stack checker.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,46 +46,46 @@ typedef struct {
 #define U32_PATTERN 0xA5A5A5A5
 
 /*
- *  Stack_check_Create_extension
+ *  rtems_stack_checker_create_extension
  */
 
-boolean Stack_check_Create_extension(
+boolean rtems_stack_checker_create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 );
 
 /*
- *  Stack_check_Begin_extension
+ *  rtems_stack_checker_begin_extension
  */
 
-void Stack_check_Begin_extension(
+void rtems_stack_checker_begin_extension(
   Thread_Control *the_thread
 );
 
 /*
- *  Stack_check_Switch_extension
+ *  rtems_stack_checker_switch_extension
  */
 
-void Stack_check_Switch_extension(
+void rtems_stack_checker_switch_extension(
   Thread_Control *running,
   Thread_Control *heir
 );
 
 /*
- *  Stack_check_Fatal_extension
+ *  rtems_stack_checker_fatal_extension
  */
 
-void Stack_check_Fatal_extension(
+void rtems_stack_checker_fatal_extension(
     Internal_errors_Source  source,
     boolean                 is_internal,
     uint32_t                status
 );
 
 /*
- *  Stack_check_Dump_usage
+ *  rtems_stack_checker_dump_usage
  */
 
-void Stack_check_Dump_usage( void );
+void rtems_stack_checker_dump_usage( void );
 
 #ifdef __cplusplus
 }

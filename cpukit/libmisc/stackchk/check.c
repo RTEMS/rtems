@@ -6,7 +6,7 @@
  *         CPU grows up or down and installs the correct
  *         extension routines for that direction.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,18 +55,17 @@ Thread_Control *Stack_check_Blown_task;
  *  The extension table for the stack checker.
  */
 
-rtems_extensions_table Stack_check_Extension_table = {
-  Stack_check_Create_extension,     /* rtems_task_create  */
-  0,                                /* rtems_task_start   */
-  0,                                /* rtems_task_restart */
-  0,                                /* rtems_task_delete  */
-  Stack_check_Switch_extension,     /* task_switch  */
-  Stack_check_Begin_extension,      /* task_begin   */
-  0,                                /* task_exitted */
+rtems_extensions_table rtems_stack_checker_extension_table = {
+  rtems_stack_checker_create_extension,     /* rtems_task_create  */
+  0,                                        /* rtems_task_start   */
+  0,                                        /* rtems_task_restart */
+  0,                                        /* rtems_task_delete  */
+  rtems_stack_checker_switch_extension,     /* task_switch  */
+  rtems_stack_checker_begin_extension,      /* task_begin   */ 0,                                /* task_exitted */
 #ifdef DONT_USE_FATAL_EXTENSION
-  0,                                /* fatal        */
+  0,                                        /* fatal        */
 #else
-  Stack_check_Fatal_extension,      /* fatal        */
+  rtems_stack_checker_fatal_extension,      /* fatal        */
 #endif
 };
 
@@ -124,7 +123,7 @@ Stack_Control stack_check_interrupt_stack;
  * Prototypes necessary for forward references
  */
 
-void Stack_check_Dump_usage( void );
+void rtems_stack_checker_dump_usage( void );
 
 /*
  * Fill an entire stack area with BYTE_PATTERN.
@@ -141,12 +140,12 @@ stack_check_dope_stack(Stack_Control *stack)
 
 /*PAGE
  *
- *  Stack_check_Initialize
+ *  rtems_stack_checker_initialize
  */
 
 static int   stack_check_initialized = 0;
 
-void Stack_check_Initialize( void )
+void rtems_stack_checker_initialize( void )
 {
 #if 0
   rtems_status_code    status;
@@ -202,9 +201,11 @@ void Stack_check_Initialize( void )
    *  happened.  So just run through them and fix the situation.
    */
 #if 0
-  if (_Thread_Executing)
-  {
-      Stack_check_Create_extension(_Thread_Executing, _Thread_Executing);
+  if (_Thread_Executing) {
+      rtems_stack_checker_create_extension(
+        _Thread_Executing,
+        _Thread_Executing
+      );
   }
 #endif
 
@@ -218,7 +219,7 @@ void Stack_check_Initialize( void )
     if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
-        Stack_check_Create_extension( the_thread, the_thread );
+        rtems_stack_checker_create_extension( the_thread, the_thread );
       }
     }
   }
@@ -246,7 +247,7 @@ void Stack_check_Initialize( void )
      * handler, but we don't run fatal extensions unless
      * we fatal error.
      */
-  atexit(Stack_check_Dump_usage);
+  atexit(rtems_stack_checker_dump_usage);
 #endif
 #endif
 
@@ -255,16 +256,16 @@ void Stack_check_Initialize( void )
 
 /*PAGE
  *
- *  Stack_check_Create_extension
+ *  rtems_stack_checker_create_extension
  */
 
-boolean Stack_check_Create_extension(
+boolean rtems_stack_checker_create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 )
 {
     if (!stack_check_initialized)
-      Stack_check_Initialize();
+      rtems_stack_checker_initialize();
 
     if (the_thread /* XXX && (the_thread != _Thread_Executing) */ )
         stack_check_dope_stack(&the_thread->Start.Initial_stack);
@@ -274,17 +275,17 @@ boolean Stack_check_Create_extension(
 
 /*PAGE
  *
- *  Stack_check_Begin_extension
+ *  rtems_stack_checker_Begin_extension
  */
 
-void Stack_check_Begin_extension(
+void rtems_stack_checker_begin_extension(
   Thread_Control *the_thread
 )
 {
   Stack_check_Control  *the_pattern;
 
   if (!stack_check_initialized)
-    Stack_check_Initialize();
+    rtems_stack_checker_initialize();
 
   if ( the_thread->Object.id == 0 )        /* skip system tasks */
     return;
@@ -354,21 +355,22 @@ void Stack_check_report_blown_task(void)
 
 /*PAGE
  *
- *  Stack_check_Switch_extension
+ *  rtems_stack_checker_switch_extension
  */
 
-void Stack_check_Switch_extension(
+void rtems_stack_checker_switch_extension(
   Thread_Control *running,
   Thread_Control *heir
 )
 {
+  void *pattern;
   if ( running->Object.id == 0 )        /* skip system tasks */
     return;
+  pattern = (void *)
+    Stack_check_Get_pattern_area(&running->Start.Initial_stack)->pattern;
 
-  if (0 != memcmp( (void *) Stack_check_Get_pattern_area( &running->Start.Initial_stack)->pattern,
-                  (void *) Stack_check_Pattern.pattern,
-                  PATTERN_SIZE_BYTES))
-  {
+  if (0 != memcmp( pattern,
+            (void *) Stack_check_Pattern.pattern, PATTERN_SIZE_BYTES)) {
       Stack_check_Blown_task = running;
       Stack_check_report_blown_task();
   }
@@ -412,7 +414,7 @@ void *Stack_check_find_high_water_mark(
 
 /*PAGE
  *
- *  Stack_check_Dump_threads_usage
+ *  Stack_check_Dump_threads_usage(
  *  Try to print out how much stack was actually used by the task.
  *
  */
@@ -495,10 +497,10 @@ void Stack_check_Dump_threads_usage(
 
 /*PAGE
  *
- *  Stack_check_Fatal_extension
+ *  rtems_stack_checker_fatal_extension
  */
 
-void Stack_check_Fatal_extension(
+void rtems_stack_checker_fatal_extension(
     Internal_errors_Source  source,
     boolean                 is_internal,
     uint32_t                status
@@ -506,17 +508,17 @@ void Stack_check_Fatal_extension(
 {
 #ifndef DONT_USE_FATAL_EXTENSION
     if (status == 0)
-        Stack_check_Dump_usage();
+        rtems_stack_checker_dump_usage();
 #endif
 }
 
 
 /*PAGE
  *
- *  Stack_check_Dump_usage
+ *  rtems_stack_checker_dump_usage
  */
 
-void Stack_check_Dump_usage( void )
+void rtems_stack_checker_dump_usage( void )
 {
   uint32_t             i;
   uint32_t             api_index;

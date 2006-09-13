@@ -3,7 +3,7 @@
  *  This include file contains information necessary to utilize
  *  and install the stack checker mechanism.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -13,47 +13,47 @@
  *  $Id$
  */
 
-#ifndef __STACK_CHECK_h
-#define __STACK_CHECK_h
+#ifndef __RTEMS_STACK_CHECKER_h
+#define __RTEMS_STACK_CHECKER_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /*
- *  Stack_check_Initialize
+ *  rtems_stack_checker_initialize
  */
 
-void Stack_check_Initialize( void );
+void rtems_stack_checker_initialize( void );
 
 /*
- *  Stack_check_Dump_usage
+ *  rtems_stack_checker_Dump_usage
  */
 
-void Stack_check_Dump_usage( void );
+void rtems_stack_checker_dump_usage( void );
 
 /*
- *  Stack_check_Create_extension
+ *  rtems_stack_checker_create_extension
  */
 
-boolean Stack_check_Create_extension(
+boolean rtems_stack_checker_create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 );
 
 /*
- *  Stack_check_Begin_extension
+ *  rtems_stack_checker_begin_extension
  */
 
-void Stack_check_Begin_extension(
+void rtems_stack_checker_begin_extension(
   Thread_Control *the_thread
 );
 
 /*
- *  Stack_check_Switch_extension
+ *  rtems_stack_checker_switch_extension
  */
 
-void Stack_check_Switch_extension(
+void rtems_stack_checker_switch_extension(
   Thread_Control *running,
   Thread_Control *heir
 );
@@ -62,16 +62,16 @@ void Stack_check_Switch_extension(
  *  Extension set definition
  */
 
-#define STACK_CHECKER_EXTENSION \
+#define RTEMS_STACK_CHECKER_EXTENSION \
 { \
-  Stack_check_Create_extension,        /* rtems_task_create  */ \
-  0,                                   /* rtems_task_start   */ \
-  0,                                   /* rtems_task_restart */ \
-  0,                                   /* rtems_task_delete  */ \
-  Stack_check_Switch_extension,        /* task_switch  */ \
-  Stack_check_Begin_extension,         /* task_begin   */ \
-  0,                                   /* task_exitted */ \
-  0 /* Stack_check_Fatal_extension */, /* fatal        */ \
+  rtems_stack_checker_create_extension,        /* rtems_task_create  */ \
+  0,                                           /* rtems_task_start   */ \
+  0,                                           /* rtems_task_restart */ \
+  0,                                           /* rtems_task_delete  */ \
+  rtems_stack_checker_switch_extension,        /* task_switch  */ \
+  rtems_stack_checker_begin_extension,         /* task_begin   */ \
+  0,                                           /* task_exitted */ \
+  0 /* rtems_stack_checker_fatal_extension */, /* fatal        */ \
 }
 
 #ifdef __cplusplus
