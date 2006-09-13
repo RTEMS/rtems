@@ -1,3 +1,7 @@
+2006-09-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bspkit: Remove.
+
 2006-08-09	Kolja Waschk <waschk@telos.de>
 
 	* config-ml.in: New port to Altera NIOS II.
