@@ -248,7 +248,7 @@ struct z0break
   ** written.  Making it a char * as on the i386 will cause
   ** the zbreaks to mess up the breakpoint instructions
   */
-  unsigned *address;
+  unsigned char *address;
   unsigned instr;
 };
 
@@ -502,7 +502,7 @@ hex2mem (char *buf, void *_addr, int length)
    memory. */
 static unsigned char *
 bin2mem (
-  unsigned char *buf,
+  char *buf,
   unsigned char *mem,
   int   count
 )
@@ -1204,14 +1204,15 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                /* Save current thread registers if necessary */
                if (current_thread != thread) {
                   ret = rtems_gdb_stub_set_thread_regs(
-                     current_thread, (unsigned int *) &current_thread_registers);
+                     current_thread,
+                     (unsigned int *) (void *)&current_thread_registers);
                   ASSERT(ret);
                }
 
                /* Read new registers if necessary */
                if (tmp != thread) {
                   ret = rtems_gdb_stub_get_thread_regs(
-                     tmp, (unsigned int *) &current_thread_registers);
+                     tmp, (unsigned int *) (void *)&current_thread_registers);
 
                   if (!ret) {
                      /* Thread does not exist */
@@ -1229,10 +1230,10 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
          case 'Z':  /* Add breakpoint */
          {
             int ret, type, len;
-            unsigned *address;
+            unsigned char *address;
             struct z0break *z0;
 
-            ret = parse_zbreak(inBuffer, &type, (unsigned char **)&address, &len);
+            ret = parse_zbreak(inBuffer, &type, &address, &len);
             if (!ret) {
                strcpy(outBuffer, "E01");
                break;
@@ -1287,7 +1288,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             /* Fill it */
             z0->address = address;
 
-            if( z0->address == (unsigned *) frame->epc )
+            if( z0->address == (unsigned char *) frame->epc )
             {
                /* re-asserting the breakpoint that put us in here, so
                we'll add the breakpoint but leave the code in place
@@ -1353,10 +1354,10 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             else
             {
                int ret, type, len;
-               unsigned *address;
+               unsigned char *address;
                struct z0break *z0;
 
-               ret = parse_zbreak(inBuffer, &type, (unsigned char **)&address, &len);
+               ret = parse_zbreak(inBuffer, &type, &address, &len);
                if (!ret) {
                   strcpy(outBuffer, "E01");
                   break;
