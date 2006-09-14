@@ -1,3 +1,7 @@
+2006-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* mongoosev/duart/mg5uart.c: Removed warnings.
+
 2006-09-11	Joel Sherrill <joel@OARcorp.com>
 
 	* mongoosev/vectorisrs/vectorisrs.c: Convert C++ style comments to C

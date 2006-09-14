@@ -59,9 +59,9 @@ typedef struct _mg5uart_context
  */
 
 MG5UART_STATIC int mg5uart_baud_rate(
-  int           minor,
-  int           baud,
-  unsigned int *code
+  int        minor,
+  uint32_t   baud,
+  uint32_t  *code
 );
 
 MG5UART_STATIC void mg5uart_enable_interrupts(
@@ -750,8 +750,8 @@ MG5UART_STATIC int mg5uart_inbyte_nonblocking_polled(
 
 MG5UART_STATIC int mg5uart_baud_rate(
   int           minor,
-  int           baud,
-  unsigned int *code
+  uint32_t      baud,
+  uint32_t     *code
 )
 {
   uint32_t   clock;
