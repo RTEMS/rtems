@@ -7,7 +7,7 @@
 @c
 
 @ifinfo
-@node Directive Status Codes, Example Application, Stack Bounds Checker stack_checker_dump_usage - Report Task Stack Usage, Top
+@node Directive Status Codes, Example Application, CPU Usage Statistics cpu_usage_reset - Reset CPU Usage Statistics, Top
 @end ifinfo
 @chapter Directive Status Codes
 @table @b

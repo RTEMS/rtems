@@ -18,7 +18,7 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     task.texi intr.texi clock.texi timer.texi sem.texi msg.texi event.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi bsp.texi userext.texi conf.texi mp.texi \
-    stackchk.texi
+    stackchk.texi cpuuse.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -162,11 +162,16 @@ mp.texi: mp.t
 stackchk.texi: stackchk.t
 	$(BMENU2) -p "Multiprocessing Manager MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet" \
 	    -u "Top" \
+	    -n "CPU Usage Statistics" < $< > $@
+
+cpuuse.texi: cpuuse.t
+	$(BMENU2) -p "Stack Bounds Checker stack_checker_dump_usage - Report Task Stack Usage" \
+	    -u "Top" \
 	    -n "Directive Status Codes" < $< > $@
 
-EXTRA_DIST = bsp.t concepts.t clock.t datatypes.t conf.t dpmem.t event.t \
-    fatal.t init.t intr.t io.t mp.t msg.t overview.t part.t region.t rtmon.t \
-    sem.t schedule.t signal.t stackchk.t task.t timer.t userext.t \
+EXTRA_DIST = bsp.t clock.t concepts.t cpuuse.t datatypes.t conf.t dpmem.t \
+    event.t fatal.t init.t intr.t io.t mp.t msg.t overview.t part.t region.t \
+    rtmon.t sem.t schedule.t signal.t stackchk.t task.t timer.t userext.t \
     $(TXT_FILES) $(PNG_FILES) $(EPS_IMAGES) $(noinst_DATA)
 
 CLEANFILES += c_user.info c_user.info-? c_user.info-??

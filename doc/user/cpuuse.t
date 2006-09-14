@@ -16,8 +16,8 @@ the CPU usage information associated with each task
 The routines provided by the CPU usage statistics manager are:
 
 @itemize @bullet
-@item @code{CPU_usage_Dump} - Report CPU Usage Statistics
-@item @code{CPU_usage_Reset} - Reset CPU Usage Statistics
+@item @code{@value{DIRPREFIX}cpu_usage_report} - Report CPU Usage Statistics
+@item @code{@value{DIRPREFIX}cpu_usage_reset} - Reset CPU Usage Statistics
 @end itemize
 
 @section Background
@@ -29,7 +29,8 @@ The routines provided by the CPU usage statistics manager are:
 @subsection Reporting Period Statistics
 
 The application may dynamically report the CPU usage for every
-task in the system by calling the @code{CPU_usage_Dump} routine.
+task in the system by calling the
+@code{@value{DIRPREFIX}cpu_usage_report} routine.
 This routine prints a table with the following information per task:
 
 @itemize @bullet
@@ -73,8 +74,8 @@ task that will not be included in a production build of an application.
 
 @section Reset CPU Usage Statistics
 
-Invoking the @code{CPU_usage_Reset} routine resets the CPU usage 
-statistics for all tasks in the system. 
+Invoking the @code{@value{DIRPREFIX}cpu_usage_reset} routine resets
+the CPU usage statistics for all tasks in the system. 
 
 @section Directives
 
@@ -84,13 +85,13 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection CPU_usage_Dump - Report CPU Usage Statistics
+@subsection cpu_usage_report - Report CPU Usage Statistics
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-void CPU_usage_Dump( void );
+void rtems_cpu_usage_report( void );
 @end example
 @end ifset
 
@@ -112,13 +113,13 @@ all tasks in the system.
 NONE
 
 @page
-@subsection CPU_usage_Reset - Reset CPU Usage Statistics
+@subsection cpu_usage_reset - Reset CPU Usage Statistics
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-void CPU_usage_Reset( void );
+void rtems_cpu_usage_reset( void );
 @end example
 @end ifset
 

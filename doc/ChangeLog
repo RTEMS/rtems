@@ -1,3 +1,12 @@
+2006-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* new_chapters/Makefile.am, new_chapters/gen_section,
+	new_chapters/new_chapters.texi, user/Makefile.am, user/c_user.texi,
+	user/dirstat.texi: Promote CPU Usage to first class citizen. Rename
+	to start with rtems_ and include documentation in user guide.
+	* user/cpuuse.t: New file.
+	* new_chapters/cpuuse.t: Removed.
+
 2006-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* new_chapters/Makefile.am, user/Makefile.am, user/c_user.texi,
