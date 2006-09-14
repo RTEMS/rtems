@@ -179,7 +179,7 @@ xdr_callmsg(xdrs, cmsg)
 	}
 	if (
 	    xdr_u_int32_t(xdrs, &(cmsg->rm_xid)) &&
-	    xdr_enum(xdrs, (enum_t *)&(cmsg->rm_direction)) &&
+	    xdr_enum(xdrs, (enum_t *)(void *)&(cmsg->rm_direction)) &&
 	    (cmsg->rm_direction == CALL) &&
 	    xdr_u_int32_t(xdrs, &(cmsg->rm_call.cb_rpcvers)) &&
 	    (cmsg->rm_call.cb_rpcvers == RPC_MSG_VERSION) &&

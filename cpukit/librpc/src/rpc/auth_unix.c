@@ -60,9 +60,9 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/auth_unix.c,v 1.12 1999/12/29 0
  * Unix authenticator operations vector
  */
 static void	authunix_nextverf(AUTH*);
-static bool_t	authunix_marshal(AUTH*, XDR*);
-static bool_t	authunix_validate(AUTH*, struct opaque_auth *);
-static bool_t	authunix_refresh(AUTH*);
+static int	authunix_marshal(AUTH*, XDR*);
+static int	authunix_validate(AUTH*, struct opaque_auth *);
+static int	authunix_refresh(AUTH*);
 static void	authunix_destroy(AUTH*);
 
 static struct auth_ops auth_unix_ops = {
@@ -223,7 +223,7 @@ authunix_nextverf(AUTH *auth)
 	/* no action necessary */
 }
 
-static bool_t
+static int
 authunix_marshal(AUTH *auth, XDR *xdrs)
 {
 	struct audata *au = AUTH_PRIVATE(auth);
@@ -231,7 +231,7 @@ authunix_marshal(AUTH *auth, XDR *xdrs)
 	return (XDR_PUTBYTES(xdrs, au->au_marshed, au->au_mpos));
 }
 
-static bool_t
+static int
 authunix_validate( AUTH *auth, struct opaque_auth *verf )
 {
 	register struct audata *au;
@@ -259,7 +259,7 @@ authunix_validate( AUTH *auth, struct opaque_auth *verf )
 	return (TRUE);
 }
 
-static bool_t
+static int
 authunix_refresh(AUTH *auth)
 {
 	struct audata *au = AUTH_PRIVATE(auth);

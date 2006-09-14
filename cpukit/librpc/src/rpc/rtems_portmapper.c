@@ -316,7 +316,8 @@ xdr_encap_parms(
 	struct encap_parms *epp )
 {
 
-	return (xdr_bytes(xdrs, &(epp->args), (u_int*)&(epp->arglen), ARGSIZE));
+	u_int temp_epp_arglen = epp->arglen;
+	return (xdr_bytes(xdrs, &(epp->args), &temp_epp_arglen, ARGSIZE));
 }
 
 struct rmtcallargs {

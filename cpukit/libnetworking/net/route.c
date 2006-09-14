@@ -66,16 +66,17 @@ static int	rttrash;		/* routes not in table but not freed */
 
 static void rt_maskedcopy __P((struct sockaddr *,
 	    struct sockaddr *, struct sockaddr *));
-static void rtable_init __P((void **));
+static void rtable_init __P((struct radix_node_head **));
 
 static void
-rtable_init(table)
-	void **table;
+rtable_init(
+    struct radix_node_head **table
+)
 {
 	struct domain *dom;
 	for (dom = domains; dom; dom = dom->dom_next)
 		if (dom->dom_rtattach)
-			dom->dom_rtattach(&table[dom->dom_family],
+			dom->dom_rtattach((void *)&table[dom->dom_family],
 			    dom->dom_rtoffset);
 }
 
@@ -83,7 +84,7 @@ void
 route_init()
 {
 	rn_init();	/* initialize all zeroes, all ones, mask table */
-	rtable_init((void **)rt_tables);
+	rtable_init(rt_tables);
 }
 
 /*

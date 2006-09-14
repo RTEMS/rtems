@@ -52,9 +52,9 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/auth_none.c,v 1.9 1999/08/28 00
  */
 static void	authnone_verf(AUTH*);
 static void	authnone_destroy(AUTH*);
-static bool_t	authnone_marshal(AUTH*, XDR*);
-static bool_t	authnone_validate(AUTH*, struct opaque_auth *);
-static bool_t	authnone_refresh(AUTH*);
+static int	authnone_marshal(AUTH*, XDR*);
+static int	authnone_validate(AUTH*, struct opaque_auth *);
+static int	authnone_refresh(AUTH*);
 
 static struct auth_ops ops = {
 	authnone_verf,
@@ -98,7 +98,7 @@ authnone_create()
 }
 
 /*ARGSUSED*/
-static bool_t
+static int
 authnone_marshal(AUTH *client, XDR *xdrs)
 {
 	struct authnone_private *ap = authnone_private;
@@ -114,14 +114,14 @@ authnone_verf(AUTH *client)
 {
 }
 
-static bool_t
+static int
 authnone_validate(AUTH *client, struct opaque_auth *opaque)
 {
 
 	return (TRUE);
 }
 
-static bool_t
+static int
 authnone_refresh(AUTH *client)
 {
 
