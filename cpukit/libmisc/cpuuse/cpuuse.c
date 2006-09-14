@@ -1,15 +1,14 @@
 /*
  *  CPU Usage Reporter
  *
- *  COPYRIGHT (c) 1989-1999. 1996.
+ *  COPYRIGHT (c) 1989-2006
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  cpuuse.c,v 1.20 2004/04/17 08:12:01 ralf Exp
- *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -31,10 +30,10 @@ uint32_t   CPU_usage_Ticks_at_last_reset;
 
 /*PAGE
  *
- *  CPU_usage_Dump
+ *  rtems_cpu_usage_report
  */
 
-void CPU_usage_Dump( void )
+void rtems_cpu_usage_report( void )
 {
   uint32_t             i;
   uint32_t             api_index;
@@ -123,11 +122,6 @@ void CPU_usage_Dump( void )
   fprintf(stdout, "\nTotal Units = %" PRId32 "\n", total_units );
 }
 
-/*PAGE
- *
- *  CPU_usage_Reset
- */
-
 static void CPU_usage_Per_thread_handler(
   Thread_Control *the_thread
 )
@@ -135,7 +129,10 @@ static void CPU_usage_Per_thread_handler(
   the_thread->ticks_executed = 0;
 }
 
-void CPU_usage_Reset( void )
+/*
+ *  rtems_cpu_usage_reset
+ */
+void rtems_cpu_usage_reset( void )
 {
   CPU_usage_Ticks_at_last_reset = _Watchdog_Ticks_since_boot;
 

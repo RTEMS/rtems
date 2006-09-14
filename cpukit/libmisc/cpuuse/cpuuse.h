@@ -3,7 +3,7 @@
  *  This include file contains information necessary to utilize
  *  and install the cpu usage reporting mechanism.
  *
- *  COPYRIGHT (c) 1989-1999. 1996.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -13,24 +13,24 @@
  *  $Id$
  */
 
-#ifndef __CPU_USE_h
-#define __CPU_USE_h
+#ifndef __RTEMS_CPUUSE_h
+#define __RTEMS_CPUUSE_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /*
- *  CPU_usage_Dump
+ *  rtems_cpu_usage_report
  */
 
-void CPU_usage_Dump( void );
+void rtems_cpu_usage_report( void );
 
 /*
- *  CPU_usage_Reset
+ *  rtems_cpu_usage_reset
  */
 
-void CPU_usage_Reset( void );
+void rtems_cpu_usage_reset( void );
 
 #ifdef __cplusplus
 }

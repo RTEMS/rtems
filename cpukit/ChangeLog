@@ -1,3 +1,9 @@
+2006-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/cpuuse/cpuuse.c, libmisc/cpuuse/cpuuse.h: Promote CPU Usage
+	to first class citizen. Rename to start with rtems_ and include
+	documentation in user guide.
+
 2006-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/rtems/rtems_malloc_mbuf.c: Removed warning by adding
