@@ -41,7 +41,7 @@ rtems_task Task_2(
   while ( !testsFinished );
 
   showTaskSwitches ();
-  CPU_usage_Dump();
+  rtems_cpu_usage_report();
   puts( "*** END OF CPU USAGE LIBRARY TEST ***" );
   rtems_test_exit( 0 );
 }

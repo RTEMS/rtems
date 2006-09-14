@@ -112,7 +112,7 @@ rtems_task Task_1_through_5(
 
         if ( pass == 10 ) {
           puts( "*** END OF RATE MONOTONIC PERIOD STATISTICS TEST ***" );
-          CPU_usage_Dump();
+          rtems_cpu_usage_report();
           Period_usage_Dump();
           rtems_test_exit( 0 );
         }
