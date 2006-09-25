@@ -1,3 +1,10 @@
+2006-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/net/route.c, librpc/src/rpc/auth_none.c,
+	librpc/src/rpc/auth_unix.c, librpc/src/rpc/authunix_prot.c,
+	librpc/src/rpc/rpc_callmsg.c, librpc/src/rpc/rpc_prot.c,
+	librpc/src/rpc/rtems_portmapper.c: Removed warnings.
+
 2006-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h, sapi/src/posixapi.c, sapi/src/rtemsapi.c:
