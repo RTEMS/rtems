@@ -1,3 +1,5 @@
+2006-09-25	Joel Sherrill <joel@oarcorp.com>
+
 	* score/Makefile.am, score/preinstall.am,
 	score/include/rtems/score/coresem.h,
 	score/include/rtems/score/object.h,
