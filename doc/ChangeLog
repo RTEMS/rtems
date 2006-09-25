@@ -1,3 +1,11 @@
+2006-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/barrier.t: New file.
+
+2006-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/barrier.t: New file.
+
 2006-09-14	Joel Sherrill <joel@OARcorp.com>
 
 	* new_chapters/Makefile.am, new_chapters/gen_section,
