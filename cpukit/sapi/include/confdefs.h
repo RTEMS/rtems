@@ -26,7 +26,7 @@
  */
  
 /* 
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -511,6 +511,10 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_MAXIMUM_PERIODS             0
 #endif
 
+#ifndef CONFIGURE_MAXIMUM_BARRIERS
+#define CONFIGURE_MAXIMUM_BARRIERS            0
+#endif
+
 #ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
 #endif
@@ -565,12 +569,15 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #include <signal.h>
 #include <limits.h>
 #include <mqueue.h>
+#include <rtems/posix/barrier.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/psignal.h>
+#include <rtems/posix/rwlock.h>
 #include <rtems/posix/semaphore.h>
+#include <rtems/posix/spinlock.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/timer.h>
 
@@ -604,6 +611,18 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_BARRIERS
+#define CONFIGURE_MAXIMUM_POSIX_BARRIERS 0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
+#define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
+#define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 0
 #endif
 
 #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
@@ -679,9 +698,28 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
    ( sizeof( POSIX_Message_queue_Control) + \
     CONFIGURE_OBJECT_TABLE_STUFF + \
     NAME_MAX ) )
+
 #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
   ((_semaphores) * \
    ( sizeof( POSIX_Semaphore_Control) + \
+    CONFIGURE_OBJECT_TABLE_STUFF + \
+    NAME_MAX ) )
+
+#define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_semaphores) \
+  ((_semaphores) * \
+   ( sizeof( POSIX_Barrier_Control) + \
+    CONFIGURE_OBJECT_TABLE_STUFF + \
+    NAME_MAX ) )
+
+#define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
+  ((_spinlocks) * \
+   ( sizeof( POSIX_Spinlock_Control) + \
+    CONFIGURE_OBJECT_TABLE_STUFF + \
+    NAME_MAX ) )
+
+#define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
+  ((_rwlocks) * \
+   ( sizeof( POSIX_RWLock_Control) + \
     CONFIGURE_OBJECT_TABLE_STUFF + \
     NAME_MAX ) )
 
@@ -697,11 +735,14 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
         CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ) + \
     CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
         CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_BARRIERS( CONFIGURE_MAXIMUM_POSIX_BARRIERS ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS( \
+        CONFIGURE_MAXIMUM_POSIX_SPINLOCKS ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( \
+        CONFIGURE_MAXIMUM_POSIX_RWLOCKS ) + \
     CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ) + \
     (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE) \
    )
-
-
 #else
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS         0
@@ -947,6 +988,10 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
   ( (_periods) * \
     ( sizeof(Rate_monotonic_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
 
+#define CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) \
+  ( (_barriers) * \
+    ( sizeof(Barrier_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
 #define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
   ( (_extensions) * \
     ( sizeof(Extension_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
@@ -1038,6 +1083,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
       CONFIGURE_MAXIMUM_REGIONS + CONFIGURE_MALLOC_REGION ) + \
    CONFIGURE_MEMORY_FOR_PORTS(CONFIGURE_MAXIMUM_PORTS) + \
    CONFIGURE_MEMORY_FOR_PERIODS(CONFIGURE_MAXIMUM_PERIODS) + \
+   CONFIGURE_MEMORY_FOR_BARRIERS(CONFIGURE_MAXIMUM_BARRIERS) + \
    CONFIGURE_MEMORY_FOR_USER_EXTENSIONS( \
       CONFIGURE_MAXIMUM_USER_EXTENSIONS + CONFIGURE_NEWLIB_EXTENSION + \
       CONFIGURE_STACK_CHECKER_EXTENSION ) + \
@@ -1088,6 +1134,7 @@ rtems_api_configuration_table Configuration_RTEMS_API = {
   CONFIGURE_MAXIMUM_REGIONS + CONFIGURE_MALLOC_REGION,
   CONFIGURE_MAXIMUM_PORTS,
   CONFIGURE_MAXIMUM_PERIODS,
+  CONFIGURE_MAXIMUM_BARRIERS,
   CONFIGURE_INIT_TASK_TABLE_SIZE,
   CONFIGURE_INIT_TASK_TABLE
 };
@@ -1104,6 +1151,9 @@ posix_api_configuration_table Configuration_POSIX_API = {
   CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
   CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
   CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
+  CONFIGURE_MAXIMUM_POSIX_BARRIERS,
+  CONFIGURE_MAXIMUM_POSIX_RWLOCKS,
+  CONFIGURE_MAXIMUM_POSIX_SPINLOCKS,
   CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
   CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
 };

@@ -29,6 +29,7 @@
 #include <rtems/rtems/rtemsapi.h>
 
 #include <rtems/rtems/intr.h>
+#include <rtems/rtems/barrier.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/dpmem.h>
@@ -96,6 +97,8 @@ void _RTEMS_API_Initialize(
   _Dual_ported_memory_Manager_initialization( api_configuration->maximum_ports);
 
   _Rate_monotonic_Manager_initialization( api_configuration->maximum_periods );
+
+  _Barrier_Manager_initialization( api_configuration->maximum_barriers );
 }
 
 /* end of file */
