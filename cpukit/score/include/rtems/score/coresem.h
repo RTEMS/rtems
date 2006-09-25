@@ -129,7 +129,7 @@ void _CORE_semaphore_Initialize(
 );
 
 /**
- *  This routine attempts to receive a unit from the_semaphore.
+ *  This routine attempts to receive a unit from @a the_semaphore.
  *  If a unit is available or if the wait flag is FALSE, then the routine
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.

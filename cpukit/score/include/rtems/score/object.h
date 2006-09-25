@@ -1,13 +1,14 @@
 /**
  * @file  rtems/score/object.h
- */
- 
-/*
+ *
+ *
  *  This include file contains all the constants and structures associated
  *  with the Object Handler.  This Handler provides mechanisms which
  *  can be used to initialize and manipulate all objects which have
  *  ids.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -230,7 +231,8 @@ typedef enum {
   OBJECTS_RTEMS_REGIONS        = 6,
   OBJECTS_RTEMS_PORTS          = 7,
   OBJECTS_RTEMS_PERIODS        = 8,
-  OBJECTS_RTEMS_EXTENSIONS     = 9
+  OBJECTS_RTEMS_EXTENSIONS     = 9,
+  OBJECTS_RTEMS_BARRIERS       = 10
 } Objects_Classic_API;
 
 /** This macro is used to generically specify the last API index. */
@@ -250,11 +252,14 @@ typedef enum {
   OBJECTS_POSIX_MUTEXES             = 6,
   OBJECTS_POSIX_SEMAPHORES          = 7,
   OBJECTS_POSIX_CONDITION_VARIABLES = 8,
-  OBJECTS_POSIX_TIMERS              = 9
+  OBJECTS_POSIX_TIMERS              = 9,
+  OBJECTS_POSIX_BARRIERS            = 10,
+  OBJECTS_POSIX_SPINLOCKS           = 11,
+  OBJECTS_POSIX_RWLOCKS             = 12
 } Objects_POSIX_API;
 
 /** This macro is used to generically specify the last API index. */
-#define OBJECTS_POSIX_CLASSES_LAST OBJECTS_POSIX_TIMERS
+#define OBJECTS_POSIX_CLASSES_LAST OBJECTS_POSIX_RWLOCKS
 
 /**
  *  This enumerated type is used in the class field of the object ID

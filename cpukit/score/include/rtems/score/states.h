@@ -42,19 +42,19 @@ typedef uint32_t   States_Control;
  */
 
 /** This macro corresponds to all states being set. */
-#define STATES_ALL_SET                         0xfffff /* all states */
+#define STATES_ALL_SET                         0xfffff
 /** This macro corresponds to a task being ready. */
-#define STATES_READY                           0x00000 /* ready to run */
+#define STATES_READY                           0x00000
 /** This macro corresponds to a task being created but not yet started. */
-#define STATES_DORMANT                         0x00001 /* created not started */
+#define STATES_DORMANT                         0x00001
 /** This macro corresponds to a task being suspended. */
-#define STATES_SUSPENDED                       0x00002 /* waiting for resume */
+#define STATES_SUSPENDED                       0x00002
 /** This macro corresponds to a task being in an internal state transition. */
-#define STATES_TRANSIENT                       0x00004 /* in transition */
+#define STATES_TRANSIENT                       0x00004
 /** This macro corresponds to a task which is waiting for a timeout. */
-#define STATES_DELAYING                        0x00008 /* wait for timeout */
+#define STATES_DELAYING                        0x00008
 /** This macro corresponds to a task waiting until a specific TOD. */
-#define STATES_WAITING_FOR_TIME                0x00010 /* wait for TOD */
+#define STATES_WAITING_FOR_TIME                0x00010
 /** This macro corresponds to a task waiting for a variable length buffer. */
 #define STATES_WAITING_FOR_BUFFER              0x00020
 /** This macro corresponds to a task waiting for a fixed size segment. */
@@ -77,10 +77,15 @@ typedef uint32_t   States_Control;
 #define STATES_WAITING_FOR_PERIOD              0x04000
 /** This macro corresponds to a task waiting for a signal. */
 #define STATES_WAITING_FOR_SIGNAL              0x08000
+/** This macro corresponds to a task waiting for a barrier. */
+#define STATES_WAITING_FOR_BARRIER             0x10000
+/** This macro corresponds to a task waiting for a RWLock. */
+#define STATES_WAITING_FOR_RWLOCK              0x20000
+
 /** This macro corresponds to a task which is in an interruptible
  *  blocking state.
  */
-#define STATES_INTERRUPTIBLE_BY_SIGNAL         0x10000
+#define STATES_INTERRUPTIBLE_BY_SIGNAL         0x10000000
 
 /** This macro corresponds to a task waiting for a local object operation. */
 #define STATES_LOCALLY_BLOCKED ( STATES_WAITING_FOR_BUFFER             | \
@@ -90,7 +95,9 @@ typedef uint32_t   States_Control;
                                  STATES_WAITING_FOR_MUTEX              | \
                                  STATES_WAITING_FOR_CONDITION_VARIABLE | \
                                  STATES_WAITING_FOR_JOIN_AT_EXIT       | \
-                                 STATES_WAITING_FOR_SIGNAL             )
+                                 STATES_WAITING_FOR_SIGNAL             | \
+                                 STATES_WAITING_FOR_BARRIER            | \
+                                 STATES_WAITING_FOR_RWLOCK             ) 
 
 /** This macro corresponds to a task waiting which is blocked on
  *  a thread queue. */

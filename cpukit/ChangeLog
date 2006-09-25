@@ -1,3 +1,24 @@
+	* score/Makefile.am, score/preinstall.am,
+	score/include/rtems/score/coresem.h,
+	score/include/rtems/score/object.h,
+	score/include/rtems/score/states.h,
+	score/inline/rtems/score/coresem.inl: Add SuperCore Barriers,
+	SpinLocks and a partial implementation of RWLocks.
+	* score/include/rtems/score/corebarrier.h,
+	score/include/rtems/score/corerwlock.h,
+	score/include/rtems/score/corespinlock.h,
+	score/inline/rtems/score/corebarrier.inl,
+	score/inline/rtems/score/corerwlock.inl,
+	score/inline/rtems/score/corespinlock.inl,
+	score/macros/rtems/score/corebarrier.inl,
+	score/macros/rtems/score/corerwlock.inl,
+	score/macros/rtems/score/corespinlock.inl, score/src/corebarrier.c,
+	score/src/corebarrierrelease.c, score/src/corebarrierwait.c,
+	score/src/corerwlock.c, score/src/corerwlockobtainread.c,
+	score/src/corerwlockobtainwrite.c, score/src/corerwlockrelease.c,
+	score/src/corespinlock.c, score/src/corespinlockrelease.c,
+	score/src/corespinlockwait.c: New files.
+
 2006-09-14	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/net/route.c, librpc/src/rpc/auth_none.c,

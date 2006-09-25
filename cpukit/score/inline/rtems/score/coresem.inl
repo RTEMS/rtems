@@ -2,7 +2,7 @@
  *  @file  rtems/score/coresem.inl
  *
  *  This include file contains all of the inlined routines associated
- *  with the CORE semaphore.
+ *  with the SuperCore semaphore.
  */
 
 /*
@@ -29,7 +29,7 @@
 
 /**
  *  This function returns TRUE if the priority attribute is
- *  enabled in the attribute_set and FALSE otherwise.
+ *  enabled in the @a attribute_set and FALSE otherwise.
  *
  *  @param[in] the_attribute is the attribute set to test
  *  @return TRUE if the priority attribute is enabled
