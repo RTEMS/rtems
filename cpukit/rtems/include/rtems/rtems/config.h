@@ -6,7 +6,7 @@
  *  This include file contains the table of user defined configuration
  *  parameters specific for the RTEMS API.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -44,6 +44,7 @@ typedef struct {
   uint32_t                    maximum_regions;
   uint32_t                    maximum_ports;
   uint32_t                    maximum_periods;
+  uint32_t                    maximum_barriers;
   uint32_t                    number_of_initialization_tasks;
   rtems_initialization_tasks_table *User_initialization_tasks_table;
 } rtems_api_configuration_table;

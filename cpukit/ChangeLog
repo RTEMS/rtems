@@ -1,3 +1,18 @@
+2006-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/Makefile.am, rtems/preinstall.am, rtems/include/rtems.h,
+	rtems/include/rtems/rtems/attr.h, rtems/include/rtems/rtems/config.h,
+	rtems/inline/rtems/rtems/attr.inl, rtems/macros/rtems/rtems/attr.inl:
+	Add Classic API Barriers.
+	* rtems/include/rtems/rtems/barrier.h,
+	rtems/include/rtems/rtems/barriermp.h,
+	rtems/inline/rtems/rtems/barrier.inl,
+	rtems/macros/rtems/rtems/barrier.inl, rtems/src/barrier.c,
+	rtems/src/barriercreate.c, rtems/src/barrierdelete.c,
+	rtems/src/barrierident.c, rtems/src/barrierrelease.c,
+	rtems/src/barriertranslatereturncode.c, rtems/src/barrierwait.c:
+	New files.
+
 2006-09-25	Joel Sherrill <joel@oarcorp.com>
 
 	* score/Makefile.am, score/preinstall.am,

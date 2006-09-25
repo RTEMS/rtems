@@ -31,28 +31,35 @@ typedef uint32_t   rtems_attribute;
 
 #define RTEMS_DEFAULT_ATTRIBUTES  0x00000000
 
-#define RTEMS_NO_FLOATING_POINT   0x00000000 /* don't use FP HW */
-#define RTEMS_FLOATING_POINT      0x00000001 /* utilize coprocessor */
-
 #define RTEMS_LOCAL               0x00000000 /* local resource */
 #define RTEMS_GLOBAL              0x00000002 /* global resource */
 
 #define RTEMS_FIFO                0x00000000 /* process RTEMS_FIFO */
 #define RTEMS_PRIORITY            0x00000004 /* process by priority */
 
+        /* RTEMS Task Specific Attributes */
+#define RTEMS_NO_FLOATING_POINT   0x00000000 /* don't use FP HW */
+#define RTEMS_FLOATING_POINT      0x00000001 /* utilize coprocessor */
+
+        /* RTEMS Semaphore Specific Attributes */
 #define RTEMS_SEMAPHORE_CLASS         0x00000030 /* mask */
 #define RTEMS_COUNTING_SEMAPHORE      0x00000000
 #define RTEMS_BINARY_SEMAPHORE        0x00000010
 #define RTEMS_SIMPLE_BINARY_SEMAPHORE 0x00000020
 
-#define RTEMS_NO_INHERIT_PRIORITY 0x00000000
-#define RTEMS_INHERIT_PRIORITY    0x00000040
+#define RTEMS_NO_INHERIT_PRIORITY     0x00000000
+#define RTEMS_INHERIT_PRIORITY        0x00000040
 
-#define RTEMS_NO_PRIORITY_CEILING 0x00000000
-#define RTEMS_PRIORITY_CEILING    0x00000080
+#define RTEMS_NO_PRIORITY_CEILING     0x00000000
+#define RTEMS_PRIORITY_CEILING        0x00000080
 
-#define RTEMS_APPLICATION_TASK    0x00000000
-#define RTEMS_SYSTEM_TASK         0x00000100
+        /* RTEMS Barrier Specific Attributes */
+#define RTEMS_BARRIER_AUTOMATIC_RELEASE 0x00000010
+#define RTEMS_BARRIER_MANUAL_RELEASE    0x00000000
+
+        /* RTEMS Internal Task Specific Attributes */
+#define RTEMS_APPLICATION_TASK        0x00000000
+#define RTEMS_SYSTEM_TASK             0x00008000
 
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )

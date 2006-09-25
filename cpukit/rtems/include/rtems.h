@@ -46,6 +46,7 @@ extern "C" {
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/intr.h>
+#include <rtems/rtems/barrier.h>
 #include <rtems/rtems/cache.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/extension.h>

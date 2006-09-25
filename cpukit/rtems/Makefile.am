@@ -18,7 +18,8 @@ include_HEADERS = include/rtems.h
 include_rtems_rtemsdir = $(includedir)/rtems/rtems
 
 include_rtems_rtems_HEADERS = include/rtems/rtems/asr.h \
-    include/rtems/rtems/attr.h include/rtems/rtems/cache.h \
+    include/rtems/rtems/attr.h include/rtems/rtems/barrier.h \
+    include/rtems/rtems/cache.h \
     include/rtems/rtems/clock.h include/rtems/rtems/config.h \
     include/rtems/rtems/dpmem.h include/rtems/rtems/event.h \
     include/rtems/rtems/eventset.h include/rtems/rtems/intr.h \
@@ -41,7 +42,8 @@ endif
 
 if INLINE
 include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl \
-    inline/rtems/rtems/attr.inl inline/rtems/rtems/dpmem.inl \
+    inline/rtems/rtems/attr.inl inline/rtems/rtems/barrier.inl \
+    inline/rtems/rtems/dpmem.inl \
     inline/rtems/rtems/event.inl inline/rtems/rtems/eventset.inl \
     inline/rtems/rtems/message.inl inline/rtems/rtems/modes.inl \
     inline/rtems/rtems/options.inl inline/rtems/rtems/part.inl \
@@ -51,7 +53,8 @@ include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl \
     inline/rtems/rtems/timer.inl
 else
 include_rtems_rtems_HEADERS += macros/rtems/rtems/asr.inl \
-    macros/rtems/rtems/attr.inl macros/rtems/rtems/dpmem.inl \
+    macros/rtems/rtems/attr.inl macros/rtems/rtems/barrier.inl \
+    macros/rtems/rtems/dpmem.inl \
     macros/rtems/rtems/event.inl macros/rtems/rtems/eventset.inl \
     macros/rtems/rtems/message.inl macros/rtems/rtems/modes.inl \
     macros/rtems/rtems/options.inl macros/rtems/rtems/part.inl \
@@ -80,8 +83,13 @@ librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
 ## INTR_C_FILES 
 librtems_a_SOURCES += src/intr.c src/intrbody.c src/intrcatch.c
 
+## BARRIER_C_FILES
+librtems_a_SOURCES += src/barrier.c src/barriercreate.c src/barrierdelete.c \
+   src/barrierident.c src/barriertranslatereturncode.c src/barrierwait.c
+
 ## CLOCK_C_FILES
-librtems_a_SOURCES += src/rtclock.c src/clockget.c src/clockset.c src/clocktick.c
+librtems_a_SOURCES += src/rtclock.c src/clockget.c src/clockset.c \
+    src/clocktick.c
 
 ## TIMER_C_FILES
 librtems_a_SOURCES += src/rtemstimer.c src/timercancel.c src/timercreate.c \

@@ -111,6 +111,15 @@
 
 /*PAGE
  *
+ *  _Attributes_Is_barrier_automatic
+ *
+ */
+
+#define _Attributes_Is_barrier_automatic( _attribute_set ) \
+  ( (_attribute_set) & RTEMS_BARRIER_AUTOMATIC_RELEASE )
+
+/*PAGE
+ *
  *  _Attributes_Is_system_task
  *
  */
