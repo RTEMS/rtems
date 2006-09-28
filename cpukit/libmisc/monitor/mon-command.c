@@ -242,9 +242,14 @@ rtems_monitor_line_editor (
 
   while (1)
   {
-    unsigned int extended_key = rtems_monitor_getchar ();
-    char         c = extended_key & KEYS_NORMAL_MASK;
+    unsigned int extended_key;
+    char         c;
 
+    fflush (stdout);
+
+    extended_key = rtems_monitor_getchar ();
+    c = extended_key & KEYS_NORMAL_MASK;
+    
     /*
      * Make the extended_key usable as a boolean.
      */
