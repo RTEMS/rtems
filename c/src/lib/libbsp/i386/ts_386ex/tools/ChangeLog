@@ -1,3 +1,16 @@
+2006-10-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* network_ada/adasockets/AUTHORS, 
+	network_ada/adasockets/sockets-link.ads,
+	network_ada/adasockets/sockets-multicast.adb,
+	network_ada/adasockets/sockets-multicast.ads,
+	network_ada/adasockets/sockets-utils.adb,
+	network_ada/adasockets/sockets-utils.ads,
+	network_ada/adasockets/sockets.adb,
+	network_ada/adasockets/sockets.ads,
+	network_ada/listener/listener.adb,
+	network_ada/tcprelay/tcprelay.adb: Convert to utf-8.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
