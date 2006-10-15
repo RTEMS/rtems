@@ -8,7 +8,7 @@
 --                                                                         --
 --                        $ReleaseVersion: 0.1.3 $                         --
 --                                                                         --
---  Copyright (C) 1998  École Nationale Supérieure des Télécommunications  --
+--  Copyright (C) 1998  Ã‰cole Nationale SupÃ©rieure des TÃ©lÃ©communications  --
 --                                                                         --
 --   AdaSockets is free software; you can  redistribute it and/or modify   --
 --   it  under terms of the GNU  General  Public License as published by   --
