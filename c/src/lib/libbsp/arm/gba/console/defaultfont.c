@@ -93,7 +93,7 @@ static const unsigned long	font3x5[256][6] =
 		GEN_FONT_DATA(  0,X,X,X  ),
 		GEN_FONT_DATA(  0,0,X,0  ),
 		GEN_FONT_DATA(  0,0,0,0  )
-		},{		/* '´' - ascii:0x2C font:0x0C   */
+		},{		/* 'Â´' - ascii:0x2C font:0x0C   */
 		GEN_FONT_DATA(  0,0,0,X  ),
 		GEN_FONT_DATA(  0,0,X,0  ),
 		GEN_FONT_DATA(  0,0,0,0  ),
@@ -405,7 +405,7 @@ static const unsigned long	font3x5[256][6] =
 		GEN_FONT_DATA(  0,0,0,0  ),
 		GEN_FONT_DATA(  0,0,0,0  ),
 		GEN_FONT_DATA(  0,X,X,X  )
-		},{		/* '´' - ascii:0x60 font:0x30   */
+		},{		/* 'Â´' - ascii:0x60 font:0x30   */
 		GEN_FONT_DATA(  0,0,X,0  ),
 		GEN_FONT_DATA(  0,0,0,X  ),
 		GEN_FONT_DATA(  0,0,0,0  ),
