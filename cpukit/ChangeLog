@@ -82,7 +82,6 @@
 	libmisc/stackchk/stackchk.h: Move stack to first class citizen
 	status. Include it in User Manual and rename to start with rtems_.
 
->>>>>>> 1.705
 2006-09-11	Joel Sherrill <joel@OARcorp.com>
 
 	* libmisc/mw-fb/mw_fb.c, libmisc/mw-fb/mw_fb.h, libmisc/mw-fb/mw_uid.c,
