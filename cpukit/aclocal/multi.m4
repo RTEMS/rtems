@@ -32,12 +32,10 @@ else
   multilib_arg=
 fi
 
-AC_OUTPUT_COMMANDS(
-[case " $CONFIG_FILES " in
+AC_CONFIG_COMMANDS([default-1],[case " $CONFIG_FILES " in
  *" ]m4_if([$1],,Makefile,[$1])[ "*)
     ac_file=]m4_if([$1],,Makefile,[$1])[ . ${multilib_basedir}/config-ml.in
-esac],
-[
+esac],[
   srcdir=${srcdir}
   host=${host}
   target=${target}
@@ -47,6 +45,6 @@ esac],
   ac_configure_args="${multilib_arg} ${ac_configure_args}"
   CONFIG_SHELL=${CONFIG_SHELL-/bin/sh}
   multilib_basedir=${multilib_basedir}
-  CC="${CC}"]
-)
+  CC="${CC}"
+])
 ])
