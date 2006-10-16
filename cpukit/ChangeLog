@@ -1,3 +1,8 @@
+2006-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac, aclocal/multi.m4, aclocal/prog-cc.m4, aclocal/prog-ccas.m4
+	automake/compile.am: Adaptations to automake-1.10.
+
 2006-09-29	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/monitor/mon-command.c: Flush stdout after updating the
