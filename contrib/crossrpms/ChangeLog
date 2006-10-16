@@ -1,5 +1,9 @@
 2006-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Set RTEMS_API to 4.8.
+
+2006-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* autotools/Makefile.am, autotools/automake.add: Update to
 	automake-1.10.
 

@@ -1,9 +1,9 @@
 ## $Id$
 
-m4_define([RTEMS_API],[4.7])
+m4_define([RTEMS_API],[4.8])
 
 AC_PREREQ(2.59)
-AC_INIT([crossrpms],[0.20060803.1],[rtems-bugs@rtems.com])
+AC_INIT([crossrpms],[0.20061016.1],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
