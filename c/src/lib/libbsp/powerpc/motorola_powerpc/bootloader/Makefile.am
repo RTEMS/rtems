@@ -25,8 +25,6 @@ bootloader_SOURCES = ../../../powerpc/shared/bootloader/head.S \
     ../../../powerpc/shared/console/keyboard.h
 
 # ----
-DEFAULT_INCLUDES =
-
 # Remove references to EABI when compiling bootloader
 BOOTLOADER_CPU_CFLAGS=$(subst -msdata=eabi,,$(subst -meabi,,$(CPU_CFLAGS)))
 AM_CPPFLAGS = -D__BOOT__
