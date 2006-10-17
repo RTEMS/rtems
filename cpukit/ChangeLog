@@ -1,3 +1,7 @@
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.60.
+
 2006-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac, aclocal/multi.m4, aclocal/prog-cc.m4, aclocal/prog-ccas.m4
