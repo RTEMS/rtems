@@ -374,7 +374,7 @@
 | 		+---+---+---+---+---+---+---+---+
 |
 |	rf[1..0] :  0   1    2    3
-|	refresh  : 5µs 10µs 15µs 20µs
+|	refresh  : 5Âµs 10Âµs 15Âµs 20Âµs
 |
 | ena == 0 : refresh disabled
 | ena == 1 : refresh enabled

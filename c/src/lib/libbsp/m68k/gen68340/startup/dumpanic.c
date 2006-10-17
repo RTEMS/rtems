@@ -185,5 +185,5 @@ void _dbug_dumpanic(void)
 
 		RAW_FMT(0,"---------------------------------------------\n");
 		RAW_FMT(0,"press escape to reboot\n");
-	} while ((c=RAW_GETC(0))!=ESCAPE);	/* cgets ne marche pas si les IT sont bloquées */
+	} while ((c=RAW_GETC(0))!=ESCAPE);	/* cgets ne marche pas si les IT sont bloquÃ©es */
 }
