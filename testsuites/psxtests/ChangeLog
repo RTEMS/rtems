@@ -1,3 +1,7 @@
+2006-10-17	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.60. Require automake-1.10.
+
 2006-07-11	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
