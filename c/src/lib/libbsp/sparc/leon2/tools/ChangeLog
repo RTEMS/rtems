@@ -1,3 +1,7 @@
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require autoconf-2.60. Require automake-1.10.
+
 2006-01-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am, runtest.in, configure.ac: Backport from
