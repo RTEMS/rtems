@@ -1,5 +1,9 @@
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/version.m4: Bump version to 4.7.99.0.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Require autoconf-2.60. Require automake-1.10.
 
 2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
