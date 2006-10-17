@@ -1,5 +1,9 @@
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Require autoconf-2.60. Require automake-1.10.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* clock/clock.c, console/console.c, ide/pcmcia_ide.c,
 	ide/pcmcia_ide.h, irq/irq.c, irq/irq.h, irq/irq_asm.S,
 	irq/irq_init.c, nvram/m93cxx.h, nvram/nvram.c, nvram/nvram.h,
