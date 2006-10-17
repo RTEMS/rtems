@@ -1,5 +1,9 @@
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/capture/capture-cli.c: Use size_t instead of int.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/version.m4: Bump version to 4.7.99.0.
 
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
