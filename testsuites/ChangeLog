@@ -1,5 +1,9 @@
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/prog-cxx.m4: Add AC_PROG_CXXCPP.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/version.m4: Bump version to 4.7.99.0.
 
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
