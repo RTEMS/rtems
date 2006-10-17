@@ -22,9 +22,9 @@ include_HEADERS += include/coverhd.h
 
 EXTRA_DIST = start/start.S start/crtnn.s times
 crtnn.$(OBJEXT): start/crtnn.s
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT) crtnn.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds

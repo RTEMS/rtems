@@ -1,5 +1,9 @@
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Remove superfluous -DASM.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Require autoconf-2.60. Require automake-1.10.
 
 2006-08-09	Joel Sherrill <joel@OARcorp.com>

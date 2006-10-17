@@ -27,12 +27,12 @@ include_HEADERS += include/coverhd.h
 
 EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds

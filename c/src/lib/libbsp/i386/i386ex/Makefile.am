@@ -26,7 +26,7 @@ include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
 noinst_HEADERS = start/80386ex.h start/80386ex.inc start/macros.inc
 EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 
 project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds

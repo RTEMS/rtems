@@ -24,7 +24,7 @@ include_HEADERS += include/coverhd.h
 
 EXTRA_DIST = ../../sparc/shared/start.S
 start.$(OBJEXT): ../../sparc/shared/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds

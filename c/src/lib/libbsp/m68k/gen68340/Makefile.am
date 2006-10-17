@@ -25,7 +25,7 @@ include_HEADERS += include/m68349.inc
 
 EXTRA_DIST = start/start.S start/startfor340only.S
 start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds

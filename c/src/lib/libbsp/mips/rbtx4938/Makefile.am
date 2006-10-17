@@ -21,7 +21,7 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 EXTRA_DIST = start/start.S start/regs.S
 start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 
 project_lib_DATA = start.$(OBJEXT)
 

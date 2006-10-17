@@ -117,7 +117,7 @@ vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = rtems_crti.$(OBJEXT)
 
 noinst_PROGRAMS += mvme5500start.$(OBJEXT)

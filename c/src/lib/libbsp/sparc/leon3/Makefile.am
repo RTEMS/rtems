@@ -27,7 +27,7 @@ include_HEADERS += include/spacewire.h
 
 EXTRA_DIST = ../../sparc/shared/start.S
 start.$(OBJEXT): ../../sparc/shared/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 
 project_lib_DATA = start.$(OBJEXT)
 
