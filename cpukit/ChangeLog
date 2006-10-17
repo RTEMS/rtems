@@ -1,5 +1,9 @@
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Require autoconf-2.60. Require automake-1.10.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Require autoconf-2.60.
 
 2006-10-16	Ralf Corsépius <ralf.corsepius@rtems.org>
