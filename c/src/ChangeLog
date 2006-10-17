@@ -1,5 +1,9 @@
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/prog-ccas.m4: Adaptations to automake-1.10.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/prog-cxx.m4: Add AC_PROG_CXXCPP.
 
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
