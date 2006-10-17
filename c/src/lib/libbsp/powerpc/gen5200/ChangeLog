@@ -1,3 +1,12 @@
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/clock.c, console/console.c, ide/pcmcia_ide.c,
+	ide/pcmcia_ide.h, irq/irq.c, irq/irq.h, irq/irq_asm.S,
+	irq/irq_init.c, nvram/m93cxx.h, nvram/nvram.c, nvram/nvram.h,
+	slicetimer/slicetimer.c, start/start.S, startup/bspstart.c,
+	startup/cpuinit.c, vectors/vectors.S, vectors/vectors_init.c:
+	Convert to utf-8.
+
 2006-09-11	Joel Sherrill <joel@OARcorp.com>
 
 	* include/mpc5200.h, network_5200/network.c: Convert C++ style comments
