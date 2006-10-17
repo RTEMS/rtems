@@ -68,7 +68,7 @@
 /*   Adaptions, modifications, enhancements and any recent parts of    */
 /*   the code are under the right of                                   */
 /*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
+/*         IPR Engineering, Dachauer StraÃŸe 38, D-80335 MÃ¼nchen        */
 /*                        Copyright(C) 2003                            */
 /*                                                                     */
 /*---------------------------------------------------------------------*/
