@@ -612,8 +612,8 @@ rtems_capture_cli_get_name_id (char*          arg,
                                rtems_id*      id)
 {
   uint32_t   objclass;
-  int             l;
-  int             i;
+  size_t     l;
+  size_t     i;
 
   if (*valid_name && *valid_id)
   {
