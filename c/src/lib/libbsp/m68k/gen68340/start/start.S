@@ -677,7 +677,7 @@ _dram_init2:
 	moves.b		crt0_temp,REG_WS(crt0_dram) 		| set 3 wait-states
 
 	move.b 		#0x81,crt0_temp
-	moves.b		crt0_temp,REG_REFRESH(crt0_dram) 	| refresh every 10µs
+	moves.b		crt0_temp,REG_REFRESH(crt0_dram) 	| refresh every 10Âµs
 
 	move.b 		#0,crt0_temp
 	moves.b		crt0_temp,REG_CONFIG(crt0_dram)		| default size = 4Mbytes
