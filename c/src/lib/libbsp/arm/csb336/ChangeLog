@@ -1,3 +1,7 @@
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Requires autoconf-2.59.
+
 2006-06-02	Jay Monkman <jtm@lopingdog.com>
 
 	* startup/linkcmds: Removed unnecessary global definition of
