@@ -41,7 +41,7 @@ interrupt levels - enabled and disabled.
 The _CPU_ISR_Get_level function returns the current interrupt level.
 
 @example
-unsigned32 _CPU_ISR_Get_level( void )
+uint32_t _CPU_ISR_Get_level( void )
 @end example
 
 @subsection Set the Interrupt Level
