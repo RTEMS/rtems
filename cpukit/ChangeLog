@@ -1,5 +1,9 @@
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/rtems-top.m4: Bump RTEMS_API to 4.8.
+
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/capture/capture-cli.c: Use size_t instead of int.
 
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
