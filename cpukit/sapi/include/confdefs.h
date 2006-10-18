@@ -543,7 +543,7 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
     CONFIGURE_INITIAL_EXTENSIONS,
 #endif
 #ifdef STACK_CHECKER_ON
-    STACK_CHECKER_EXTENSION,
+    RTEMS_STACK_CHECKER_EXTENSION,
 #endif
 };
 

@@ -1,3 +1,9 @@
+2006-10-18 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sapi/include/confdefs.h:
+	s/STACK_CHECKER_EXTENSION/RTEMS_STACK_CHECKER_EXTENSION/
+	(Reflect 2006-09-13's changes to libmisc/stackchk).
+
 2006-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Remove RTEMS_API.
