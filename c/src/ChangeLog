@@ -1,5 +1,9 @@
 2006-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am: Use hard-coded RTEMS_* flags.
+
+2006-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/rtems-top.m4: Remove RTEMS_API.
 	* aclocal/version.m4: Add RTEMS_API. Bump RTEMS_API to 4.8.
 
