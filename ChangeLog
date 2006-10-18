@@ -1,3 +1,8 @@
+2006-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4: Remove RTEMS_API.
+	* aclocal/version.m4: Add RTEMS_API. Bump RTEMS_API to 4.8.
+
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/version.m4: Bump version to 4.7.99.0.
