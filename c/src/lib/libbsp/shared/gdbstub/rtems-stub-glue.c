@@ -45,7 +45,7 @@ extern const char gdb_hexchars[];
  */
 
 void rtems_gdb_stub_get_registers_from_context(
-  int            *registers,
+  unsigned int   *registers,
   Thread_Control *th
 );
 
@@ -1233,7 +1233,7 @@ enum i386_stub_regnames {
 };
 
 void rtems_gdb_stub_get_registers_from_context(
-  int            *registers,
+  unsigned int   *registers,
   Thread_Control *th
 )
 {
@@ -1279,7 +1279,7 @@ int rtems_gdb_stub_get_offsets(
 #elif defined(__mips__)
 
 void rtems_gdb_stub_get_registers_from_context(
-  int            *registers,
+  unsigned int   *registers,
   Thread_Control *th
 )
 {
@@ -1323,7 +1323,7 @@ int rtems_gdb_stub_get_offsets(
 #elif defined(__mc68000__)
 
 void rtems_gdb_stub_get_registers_from_context(
-  int            *registers,
+  unsigned int   *registers,
   Thread_Control *th
 )
 {
