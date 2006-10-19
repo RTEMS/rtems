@@ -9,7 +9,7 @@ BINUTILS_RPMREL = 3
 include ../binutils.am
 
 GCC_VERS = 4.0.3
-GCC_RPMREL = 2
+GCC_RPMREL = 3
 NEWLIB_VERS = 1.14.0
 include ../gcc.am
 GCC_OPTS +=
