@@ -579,14 +579,14 @@ MG5UART_STATIC void mg5uart_process_isr_rx_ready(
   int  minor
 )
 {
-  uint32_t                pMG5UART_port;
-  unsigned char           c;
+  uint32_t   pMG5UART_port;
+  char       c;
 
   pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
 
   /* reading the RX buffer automatically resets the interrupt flag */
 
-  c = (unsigned char) MG5UART_GETREG(pMG5UART_port, MG5UART_RX_BUFFER);
+  c = (char) MG5UART_GETREG(pMG5UART_port, MG5UART_RX_BUFFER);
 
   rtems_termios_enqueue_raw_characters(
      Console_Port_Data[minor].termios_data,
