@@ -1,10 +1,10 @@
-%define rpmvers 1.9.6
-%define srcvers	1.9.6
-%define amvers  1.9
+%define rpmvers 1.10
+%define srcvers	1.10
+%define amvers  1.10
 
 %if "%{_prefix}" != "/usr"
 %define name			@rpmprefix@automake-rtems
-%define requirements		@rpmprefix@autoconf-rtems >= 2.59
+%define requirements		@rpmprefix@autoconf-rtems >= 2.60
 %else
 %define name			automake
 %define requirements		autoconf >= 2.60
@@ -26,7 +26,6 @@ Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
 
 Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
-Patch0: automake-1.8.1-rtems-20040112-1.diff
 
 %description
 Automake is a tool for automatically generating "Makefile.in"s from
@@ -37,12 +36,14 @@ standards.
 
 %prep
 %setup -q -n automake-%{srcvers}
-%patch0 -p0
 
 %build
-PATH=%{_prefix}/bin:$PATH
+PATH=%{_bindir}:$PATH
+# Don't use %%configure, it replaces config.sub/config.guess with the 
+# outdated versions bundled with rpm.
 ./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
-  --bindir=%{_bindir} --datadir=%{_datadir}
+  --bindir=%{_bindir} --datadir=%{_datadir} \
+  --docdir=%{_datadir}/automake-%{amvers}/doc
 make
 
 %install
