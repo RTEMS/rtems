@@ -1,3 +1,10 @@
+2006-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake-1.10. Require autoconf-2.60.
+	* aclocal/prog-ccas.m4, aclocal/prog-cxx.m4, aclocal/rtems-top.m4,
+	aclocal/version.m4, automake/compile.am: 
+	Adaptations to automake-1.10.
+
 2006-09-11	Joel Sherrill <joel@OARcorp.com>
 
 	* librdbg/src/_servtgt.c: Convert C++ style comments to C style.
