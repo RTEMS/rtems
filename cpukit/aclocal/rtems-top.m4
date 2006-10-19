@@ -1,7 +1,5 @@
 dnl $Id$
 
-m4_define([RTEMS_API],[4.7])
-
 dnl
 dnl RTEMS_TOP($1)
 dnl 

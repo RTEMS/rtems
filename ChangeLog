@@ -1,3 +1,9 @@
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Requires automake-1.10. Require autoconf-2.60.
+	* aclocal/rtems-top.m4, aclocal/version.m4: 
+	Adaptions to automake-1.10.
+
 2006-09-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bspkit: Remove.
