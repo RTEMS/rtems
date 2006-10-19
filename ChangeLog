@@ -1,3 +1,10 @@
+2006-10-19	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac: Remove all macro implementations and use only the
+	static inline. Static inline functions are now well supported so
+	there is no reason for duplicate maintenance.
+	* aclocal/enable-inlines.m4: Removed.
+
 2006-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Remove RTEMS_API.
