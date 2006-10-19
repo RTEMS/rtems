@@ -50,13 +50,7 @@ $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
 
-if INLINE
 $(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
 
-else
-$(PROJECT_INCLUDE)/rtems/extension.inl: macros/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
-endif

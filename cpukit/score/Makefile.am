@@ -40,7 +40,6 @@ include_rtems_score_HEADERS += include/rtems/score/mpci.h \
 endif
 
 ## inline
-if INLINE
 include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/chain.inl inline/rtems/score/corebarrier.inl \
     inline/rtems/score/coremsg.inl inline/rtems/score/corerwlock.inl \
@@ -58,27 +57,6 @@ if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined
 include_rtems_score_HEADERS += inline/rtems/score/mppkt.inl \
     inline/rtems/score/objectmp.inl inline/rtems/score/threadmp.inl
-endif
-else
-## macros
-include_rtems_score_HEADERS += macros/rtems/score/address.inl \
-    macros/rtems/score/chain.inl macros/rtems/score/corebarrier.inl \
-    macros/rtems/score/coremsg.inl \
-    macros/rtems/score/corerwlock.inl \
-    macros/rtems/score/corespinlock.inl \
-    macros/rtems/score/coremutex.inl macros/rtems/score/coresem.inl \
-    macros/rtems/score/heap.inl macros/rtems/score/isr.inl \
-    macros/rtems/score/object.inl macros/rtems/score/priority.inl \
-    macros/rtems/score/stack.inl macros/rtems/score/states.inl \
-    macros/rtems/score/sysstate.inl macros/rtems/score/thread.inl \
-    macros/rtems/score/tod.inl macros/rtems/score/tqdata.inl \
-    macros/rtems/score/userext.inl macros/rtems/score/watchdog.inl \
-    macros/rtems/score/wkspace.inl
-if HAS_MP
-## We only build multiprocessing related files if HAS_MP was defined
-include_rtems_score_HEADERS += macros/rtems/score/mppkt.inl \
-    macros/rtems/score/objectmp.inl macros/rtems/score/threadmp.inl
-endif
 endif
 
 EXTRA_DIST = macros/README

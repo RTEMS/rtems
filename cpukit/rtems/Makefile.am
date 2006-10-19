@@ -40,7 +40,6 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/eventmp.h \
     include/rtems/rtems/taskmp.h
 endif
 
-if INLINE
 include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl \
     inline/rtems/rtems/attr.inl inline/rtems/rtems/barrier.inl \
     inline/rtems/rtems/dpmem.inl \
@@ -51,18 +50,6 @@ include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl \
     inline/rtems/rtems/sem.inl inline/rtems/rtems/status.inl \
     inline/rtems/rtems/support.inl inline/rtems/rtems/tasks.inl \
     inline/rtems/rtems/timer.inl
-else
-include_rtems_rtems_HEADERS += macros/rtems/rtems/asr.inl \
-    macros/rtems/rtems/attr.inl macros/rtems/rtems/barrier.inl \
-    macros/rtems/rtems/dpmem.inl \
-    macros/rtems/rtems/event.inl macros/rtems/rtems/eventset.inl \
-    macros/rtems/rtems/message.inl macros/rtems/rtems/modes.inl \
-    macros/rtems/rtems/options.inl macros/rtems/rtems/part.inl \
-    macros/rtems/rtems/ratemon.inl macros/rtems/rtems/region.inl \
-    macros/rtems/rtems/sem.inl macros/rtems/rtems/status.inl \
-    macros/rtems/rtems/support.inl macros/rtems/rtems/tasks.inl \
-    macros/rtems/rtems/timer.inl
-endif
 
 ## src
 librtems_a_SOURCES =

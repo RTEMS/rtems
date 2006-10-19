@@ -16,7 +16,6 @@ RTEMS_ENABLE_MULTILIB
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_ITRON
-RTEMS_ENABLE_INLINES
 RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_NETWORKING
 
@@ -143,11 +142,6 @@ RTEMS_CPUOPT([RTEMS_DEBUG],
   [1],
   [if RTEMS_DEBUG is enabled])
 
-RTEMS_CPUOPT([RTEMS_INLINES],
-  [test x"${enable_rtems_inlines}" = x"yes"],
-  [1],
-  [if using inlines])
-
 RTEMS_CPUOPT([RTEMS_ITRON_API],
   [test x"$rtems_cv_HAS_ITRON_API" = x"yes"],
   [1],
@@ -261,8 +255,6 @@ AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
 AM_CONDITIONAL(UNIX,[test x"${RTEMS_CPU}" = x"unix"])
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
-AM_CONDITIONAL(INLINE,test x"$enable_rtems_inlines" = x"yes" )
-AM_CONDITIONAL(MACROS,test x"$enable_rtems_inlines" = x"no" )
 AM_CONDITIONAL(HAS_MP,test x"$enable_multiprocessing" = x"yes" )
 
 AM_CONDITIONAL(HAS_POSIX,test x"$rtems_cv_HAS_POSIX_API" = x"yes")

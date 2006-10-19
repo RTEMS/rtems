@@ -121,7 +121,6 @@ $(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h: include/rtems/posix/semaphoremp.h 
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h
 endif
-if INLINE
 $(PROJECT_INCLUDE)/rtems/posix/cond.inl: inline/rtems/posix/cond.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cond.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.inl
@@ -153,38 +152,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
 $(PROJECT_INCLUDE)/rtems/posix/timer.inl: inline/rtems/posix/timer.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.inl
-
-else
-$(PROJECT_INCLUDE)/rtems/posix/cond.inl: macros/rtems/posix/cond.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cond.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/key.inl: macros/rtems/posix/key.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/mqueue.inl: macros/rtems/posix/mqueue.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueue.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/mutex.inl: macros/rtems/posix/mutex.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mutex.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutex.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/pthread.inl: macros/rtems/posix/pthread.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/priority.inl: macros/rtems/posix/priority.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priority.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priority.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphore.inl: macros/rtems/posix/semaphore.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/timer.inl: macros/rtems/posix/timer.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.inl
-endif
 endif

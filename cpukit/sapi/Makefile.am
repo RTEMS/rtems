@@ -14,11 +14,7 @@ include_rtems_HEADERS += include/rtems/config.h include/rtems/extension.h \
 
 EXTRA_DIST = include/rtems/README
 
-if INLINE
 include_rtems_HEADERS += inline/rtems/extension.inl
-else
-include_rtems_HEADERS += macros/rtems/extension.inl
-endif
 
 ## src
 AM_CPPFLAGS += -D__RTEMS_INSIDE__

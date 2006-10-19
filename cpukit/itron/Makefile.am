@@ -44,7 +44,6 @@ EXTRA_DIST += include/rtems/itron/README
 
 ## Inline
 
-if INLINE
 include_rtems_itron_HEADERS += inline/rtems/itron/eventflags.inl \
     inline/rtems/itron/fmempool.inl inline/rtems/itron/intr.inl \
     inline/rtems/itron/mbox.inl inline/rtems/itron/msgbuffer.inl \
@@ -52,15 +51,6 @@ include_rtems_itron_HEADERS += inline/rtems/itron/eventflags.inl \
     inline/rtems/itron/semaphore.inl inline/rtems/itron/sysmgmt.inl \
     inline/rtems/itron/task.inl inline/rtems/itron/time.inl \
     inline/rtems/itron/vmempool.inl
-else
-include_rtems_itron_HEADERS += macros/rtems/itron/eventflags.inl \
-    macros/rtems/itron/fmempool.inl macros/rtems/itron/intr.inl \
-    macros/rtems/itron/mbox.inl macros/rtems/itron/msgbuffer.inl \
-    macros/rtems/itron/network.inl macros/rtems/itron/port.inl \
-    macros/rtems/itron/semaphore.inl macros/rtems/itron/sysmgmt.inl \
-    macros/rtems/itron/task.inl macros/rtems/itron/time.inl \
-    macros/rtems/itron/vmempool.inl
-endif
 
 ## Sources
 

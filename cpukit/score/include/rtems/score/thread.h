@@ -702,17 +702,6 @@ void _Thread_Resume(
  */
 boolean _Thread_Evaluate_mode( void );
 
-#ifndef RTEMS_INLINES
-/**
- *  @note  If we are not using static inlines, this must be a real
- *         subroutine call.
- */
-Thread_Control *_Thread_Get (
-  Objects_Id           id,
-  Objects_Locations   *location
-);
-#endif
-
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 /**
  *  This routine is the body of the system idle thread.

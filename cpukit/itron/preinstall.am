@@ -149,7 +149,6 @@ $(PROJECT_INCLUDE)/rtems/itron/vmempool.h: include/rtems/itron/vmempool.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/vmempool.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/vmempool.h
 
-if INLINE
 $(PROJECT_INCLUDE)/rtems/itron/eventflags.inl: inline/rtems/itron/eventflags.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/eventflags.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/eventflags.inl
@@ -197,54 +196,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/time.inl
 $(PROJECT_INCLUDE)/rtems/itron/vmempool.inl: inline/rtems/itron/vmempool.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/vmempool.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/vmempool.inl
-
-else
-$(PROJECT_INCLUDE)/rtems/itron/eventflags.inl: macros/rtems/itron/eventflags.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/eventflags.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/eventflags.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/fmempool.inl: macros/rtems/itron/fmempool.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/fmempool.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/fmempool.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/intr.inl: macros/rtems/itron/intr.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/intr.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/intr.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/mbox.inl: macros/rtems/itron/mbox.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/mbox.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/mbox.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/msgbuffer.inl: macros/rtems/itron/msgbuffer.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/msgbuffer.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/msgbuffer.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/network.inl: macros/rtems/itron/network.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/network.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/network.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/port.inl: macros/rtems/itron/port.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/port.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/port.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/semaphore.inl: macros/rtems/itron/semaphore.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/semaphore.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/semaphore.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/sysmgmt.inl: macros/rtems/itron/sysmgmt.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/sysmgmt.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/sysmgmt.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/task.inl: macros/rtems/itron/task.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/task.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/task.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/time.inl: macros/rtems/itron/time.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/time.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/time.inl
-
-$(PROJECT_INCLUDE)/rtems/itron/vmempool.inl: macros/rtems/itron/vmempool.inl $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/vmempool.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/vmempool.inl
-endif
 endif

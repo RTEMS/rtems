@@ -33,19 +33,11 @@ include_rtems_posix_HEADERS += include/rtems/posix/condmp.h \
     include/rtems/posix/pthreadmp.h include/rtems/posix/semaphoremp.h
 endif
 
-if INLINE
 include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
     inline/rtems/posix/key.inl inline/rtems/posix/mqueue.inl \
     inline/rtems/posix/mutex.inl inline/rtems/posix/pthread.inl \
     inline/rtems/posix/priority.inl inline/rtems/posix/semaphore.inl \
     inline/rtems/posix/timer.inl
-else
-include_rtems_posix_HEADERS += macros/rtems/posix/cond.inl \
-    macros/rtems/posix/key.inl macros/rtems/posix/mqueue.inl \
-    macros/rtems/posix/mutex.inl macros/rtems/posix/pthread.inl \
-    macros/rtems/posix/priority.inl macros/rtems/posix/semaphore.inl \
-    macros/rtems/posix/timer.inl
-endif
 
 ## src
 

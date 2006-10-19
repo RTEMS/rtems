@@ -125,14 +125,10 @@ extern "C" {
  *  functions.   The static inline implementation allows better
  *  type checking with no cost in code size or execution speed.
  */
-#ifdef RTEMS_INLINES
-# ifdef __GNUC__
+#ifdef __GNUC__
 #  define RTEMS_INLINE_ROUTINE static __inline__
-# else
-#  define RTEMS_INLINE_ROUTINE static inline
-# endif
 #else
-# define RTEMS_INLINE_ROUTINE
+#  define RTEMS_INLINE_ROUTINE static inline
 #endif
 
 /**

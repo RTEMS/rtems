@@ -113,21 +113,6 @@ void _Chain_Initialize(
   uint32_t       node_size
 );
 
-#ifndef RTEMS_INLINES
-/**
- *  @brief Get the first node (do not disable interrupts)
- *
- *  This method attempts to obtain the first node from @a the_chain.
- *
- *  @param[in] the_chain points to the chain to operate upon
- *  @return If successful, a chain node is returned.  Otherwise, NULL
- *  is returned.
- */
-Chain_Node *_Chain_Get_first_unprotected(
-  Chain_Control *the_chain
-);
-#endif
-
 /**
  *  @brief Extract the specified node from a chain
  *
