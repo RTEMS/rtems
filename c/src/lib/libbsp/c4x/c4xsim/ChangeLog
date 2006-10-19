@@ -1,3 +1,7 @@
+2006-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake-1.10. Require autoconf-2.60.
+
 2006-05-31	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/clock.c: Switch to using shared clock driver shell.

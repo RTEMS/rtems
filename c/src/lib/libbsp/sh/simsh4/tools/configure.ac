@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.59)
+AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-lib-libbsp-sh-simsh4-tools],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([runtest.in])
 RTEMS_TOP(../../../../../../..)
@@ -11,7 +11,7 @@ RTEMS_TOP(../../../../../../..)
 AC_ARG_VAR([RTEMS_BSP],[])
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9])
+AM_INIT_AUTOMAKE([no-define foreign 1.10])
 AM_MAINTAINER_MODE
 
 RTEMS_PROJECT_ROOT

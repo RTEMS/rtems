@@ -1,3 +1,7 @@
+2006-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake-1.10. Require autoconf-2.60.
+
 2006-01-10	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/start.S: Add include of bspopts.h so SIS quirks will trigger.

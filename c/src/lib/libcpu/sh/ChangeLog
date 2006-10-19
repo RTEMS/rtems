@@ -1,3 +1,7 @@
+2006-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake-1.10. Require autoconf-2.60.
+
 2006-09-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sh7750/include/rtems/score/sh7750_regs.h: Fix spelling of IPRC

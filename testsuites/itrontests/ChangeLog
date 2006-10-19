@@ -1,3 +1,7 @@
+2006-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake-1.10. Require autoconf-2.60.
+
 2006-07-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* itronhello/Makefile.am, itronmbf01/Makefile.am,

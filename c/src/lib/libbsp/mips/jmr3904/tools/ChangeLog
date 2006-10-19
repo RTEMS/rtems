@@ -1,3 +1,7 @@
+2006-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake-1.10. Require autoconf-2.60.
+
 2006-06-24	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: Make sure RTEMS_BSP is defined.
