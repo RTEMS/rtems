@@ -1,6 +1,6 @@
 2006-10-19	Joel Sherrill <joel@OARcorp.com>
 
-	* gdbstub/rtems-stub-glue.c:
+	* gdbstub/rtems-stub-glue.c: Change registers pointer to unsigned.
 
 2006-07-12	Till Straumann <strauman@slac.stanford.edu>
 
