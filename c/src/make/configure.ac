@@ -6,14 +6,15 @@
 ## This script configures the configuration files below make/
 ## 
 
-AC_PREREQ(2.59)
+AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-make],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([bsp.cfg.in])
 RTEMS_TOP(../../..)
+AC_SUBST(RTEMS_TOPdir,../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9])
+AM_INIT_AUTOMAKE([no-define foreign 1.10])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTIPROCESSING
