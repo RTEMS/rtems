@@ -1,12 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl NOTE: This is a very coarse port to automake
-AC_PREREQ(2.59)
+AC_PREREQ(2.60)
 
 AC_INIT([rtems-doc-tools],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([word-replace2])
 RTEMS_TOP([../..])
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9])
+AM_INIT_AUTOMAKE([no-define foreign 1.10])
 dnl Checks for programs.
 AC_PROG_CC
 

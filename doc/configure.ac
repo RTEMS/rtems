@@ -1,12 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.59)
+AC_PREREQ(2.60)
 
 AC_INIT([rtems-doc],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([project.am])
 RTEMS_TOP([..])
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9])
+AM_INIT_AUTOMAKE([no-define foreign 1.10])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_RPMPREFIX

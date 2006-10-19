@@ -1,3 +1,7 @@
+2006-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake-1.10. Require autoconf-2.60.
+
 2006-08-09	Kolja Waschk <waschk@telos.de>
 
 	* configure.ac: New port to Altera NIOS II.
