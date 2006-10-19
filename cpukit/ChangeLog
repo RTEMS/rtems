@@ -1,5 +1,10 @@
 2006-10-19	Joel Sherrill <joel@OARcorp.com>
 
+	* score/Makefile.am, score/preinstall.am: Add pieces missed in previous
+	commit.
+
+2006-10-19	Joel Sherrill <joel@OARcorp.com>
+
 	* configure.ac, itron/Makefile.am, itron/preinstall.am,
 	posix/Makefile.am, posix/preinstall.am, rtems/Makefile.am,
 	rtems/preinstall.am, sapi/Makefile.am, sapi/preinstall.am,

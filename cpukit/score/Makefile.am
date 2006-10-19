@@ -20,9 +20,10 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/apiext.h include/rtems/score/apimutex.h \
     include/rtems/score/bitfield.h include/rtems/score/chain.h \
     include/rtems/score/context.h include/rtems/score/copyrt.h \
-    include/rtems/score/corebarrier.h \
-    include/rtems/score/coremsg.h include/rtems/score/coremutex.h \
-    include/rtems/score/coresem.h include/rtems/score/heap.h \
+    include/rtems/score/corebarrier.h include/rtems/score/coremsg.h \
+    include/rtems/score/coremutex.h include/rtems/score/corerwlock.h \
+    include/rtems/score/coresem.h include/rtems/score/corespinlock.h \
+    include/rtems/score/heap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/priority.h \
     include/rtems/score/stack.h include/rtems/score/states.h \

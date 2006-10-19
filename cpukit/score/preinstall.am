@@ -168,7 +168,6 @@ $(PROJECT_INCLUDE)/rtems/score/threadmp.h: include/rtems/score/threadmp.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadmp.h
 endif
-
 $(PROJECT_INCLUDE)/rtems/score/address.inl: inline/rtems/score/address.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/address.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/address.inl
