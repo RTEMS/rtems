@@ -20,6 +20,7 @@ dnl NOTE: This might be too restrictive
 test -z "$CXX" \
   && AC_MSG_ERROR([no acceptable c++ found in \$PATH])
 AC_PROG_CXX
+AC_PROG_CXXCPP
 
   if test "$ac_cv_prog_cc_cross" != "$ac_cv_prog_cxx_cross"; then
     AC_MSG_ERROR([***]
