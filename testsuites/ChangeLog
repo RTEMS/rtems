@@ -1,3 +1,9 @@
+2006-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require automake-1.10. Requires autoconf-2.60.
+	* aclocal/prog-cxx.m4, aclocal/rtems-top.m4, aclocal/version.m4: 
+	Adaptations to automake-1.10.
+
 2006-07-09      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* samples/fileio/system.h: 
