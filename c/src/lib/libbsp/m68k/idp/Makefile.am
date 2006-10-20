@@ -21,7 +21,7 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 EXTRA_DIST = ../../m68k/shared/start.S
 start.$(OBJEXT): ../../m68k/shared/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
