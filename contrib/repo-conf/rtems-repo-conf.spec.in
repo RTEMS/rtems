@@ -4,7 +4,7 @@ Release:        1%{?dist}
 Epoch:          0
 Group:		Development/Tools
 License:        GPL
-Source0:        @PACKAGE_NAME@-@VERSION@.tar.bz2
+Source0:        @PACKAGE_TARNAME@-@VERSION@.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
