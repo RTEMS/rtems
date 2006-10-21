@@ -43,7 +43,5 @@ EXTRA_DIST += $(srcdir)/gpg/gpg-pubkey*
 
 noinst_HEADERS = rtems-@RTEMS_API@-repo-conf.spec
 rtems-@RTEMS_API@-repo-conf.spec: rtems-repo-conf.spec.in
-	sed -e 's,[@]RTEMS_API[@],@RTEMS_API@,' \
-	< $(srcdir)/rtems-repo-conf.spec.in \
-	> rtems-@RTEMS_API@-repo-conf.spec
+	./config.status --file=rtems-@RTEMS_API@-repo-conf.spec:rtems-repo-conf.spec.in
 EXTRA_DIST += rtems-repo-conf.spec.in
