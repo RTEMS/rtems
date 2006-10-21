@@ -1,3 +1,7 @@
+2006-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/enable-inlines.m4, aclocal/prog-gnat.m4: Remove (Unused).
+
 2006-10-19	Joel Sherrill <joel@OARcorp.com>
 
 	* score/Makefile.am, score/preinstall.am: Add pieces missed in previous
