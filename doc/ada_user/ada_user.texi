@@ -101,6 +101,8 @@
 @include user/userext.texi
 @include user/conf.texi
 @include user/mp.texi
+@include user/stackchk.texi
+@include user/cpuuse.texi
 @include user/dirstat.texi
 @include example.texi
 @include user/glossary.texi
@@ -135,6 +137,8 @@ This is the online version of the RTEMS Ada User's Guide.
 * User Extensions Manager::
 * Configuring a System::
 * Multiprocessing Manager::
+* Stack Bounds Checker::
+* CPU Usage Statistics::
 * Directive Status Codes::
 * Example Application::
 * Glossary::

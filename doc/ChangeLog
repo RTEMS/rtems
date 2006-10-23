@@ -1,3 +1,11 @@
+2006-10-23	Joel Sherrill <joel@OARcorp.com>
+
+	* ada_user/Makefile.am, ada_user/ada_user.texi,
+	cpu_supplement/Makefile.am, cpu_supplement/cpu_supplement.texi,
+	cpu_supplement/sparc.t: Add Blackfin CPU supplement chapter and get
+	everything building from previous breakages.
+	* cpu_supplement/bfin.t: New file.
+
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* porting/interrupts.t: Fix bogus _CPU_ISR_Get_level.

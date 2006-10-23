@@ -58,6 +58,7 @@
 
 @include preface.texi
 @include arm.texi
+@include bfin.texi
 @include i386.texi
 @include m68k.texi
 @include mips.texi
@@ -74,6 +75,7 @@ This is the online version of the RTEMS CPU Architecture Supplement
 @menu
 * Preface::
 * ARM Specific Information::
+* Blackfin Specific Information::
 * Intel/AMD x86 Specific Information::
 * Motorola M68xxx and Coldfire Specific Information::
 * MIPS Specific Information::
