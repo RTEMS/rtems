@@ -195,31 +195,3 @@ void _CPU_Context_Initialize(
 void _CPU_Install_interrupt_stack( void )
 {
 }
-
-/*PAGE
- *
- *  _CPU_Thread_Idle_body
- *
- *  NOTES:
- *
- *  1. This is the same as the regular CPU independent algorithm.
- *
- *  2. If you implement this using a "halt", "idle", or "shutdown"
- *     instruction, then don't forget to put it in an infinite loop.
- *
- *  3. Be warned. Some processors with onboard DMA have been known
- *     to stop the DMA if the CPU were put in IDLE mode.  This might
- *     also be a problem with other on-chip peripherals.  So use this
- *     hook with caution.
- *
- *  NO_CPU Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-void _CPU_Thread_Idle_body( void )
-{
-
-  for( ; ; )
-    /* insert your "halt" instruction here */ ;
-}

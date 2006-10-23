@@ -1,5 +1,9 @@
 2006-10-23	Joel Sherrill <joel@OARcorp.com>
 
+	* cpu.c, rtems/score/cpu.h: Use the default IDLE thread body.
+
+2006-10-23	Joel Sherrill <joel@OARcorp.com>
+
 	* .cvsignore, ChangeLog, Makefile.am, cpu.c, cpu_asm.S, irq.c,
 	preinstall.am, rtems/asm.h, rtems/score/bfin.h, rtems/score/cpu.h,
 	rtems/score/cpu_asm.h, rtems/score/types.h: New files.

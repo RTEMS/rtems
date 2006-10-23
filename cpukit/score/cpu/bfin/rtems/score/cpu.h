@@ -292,7 +292,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
 /**
  *  Does the stack grow up (toward higher addresses) or down
