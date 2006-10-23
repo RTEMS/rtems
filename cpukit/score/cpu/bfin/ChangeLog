@@ -1,0 +1,9 @@
+2006-10-23	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, cpu.c, cpu_asm.S, irq.c,
+	preinstall.am, rtems/asm.h, rtems/score/bfin.h, rtems/score/cpu.h,
+	rtems/score/cpu_asm.h, rtems/score/types.h: New files.
+
+2006-10-20  Alain Schaefer <alani@easc.ch>
+
+    * all files : Initial version 
