@@ -1,3 +1,7 @@
+2006-10-23	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac, score/cpu/Makefile.am: Add bfin.
+
 2006-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/enable-inlines.m4, aclocal/prog-gnat.m4: Remove (Unused).
