@@ -1,3 +1,7 @@
+2006-10-23	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/rtems-cpu-subdirs.m4: Add bfin.
+
 2006-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* automake/compile.am: Use hard-coded RTEMS_* flags.
