@@ -1,5 +1,9 @@
 2006-10-23	Joel Sherrill <joel@OARcorp.com>
 
+	* user/.cvsignore: Update.
+
+2006-10-23	Joel Sherrill <joel@OARcorp.com>
+
 	* ada_user/Makefile.am, ada_user/ada_user.texi,
 	cpu_supplement/Makefile.am, cpu_supplement/cpu_supplement.texi,
 	cpu_supplement/sparc.t: Add Blackfin CPU supplement chapter and get
