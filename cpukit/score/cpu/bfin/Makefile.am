@@ -7,6 +7,9 @@ include $(top_srcdir)/automake/compile.am
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = rtems/asm.h
 
+include_rtems_bfindir = $(includedir)/rtems/bfin
+include_rtems_bfin_HEADERS = rtems/bfin/bfin.h rtems/bfin/bf533.h
+
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/bfin.h \
     rtems/score/cpu_asm.h rtems/score/types.h

@@ -1,3 +1,10 @@
+2006-10-24	Alain Schaefer <alani@easc.ch>
+
+	* Makefile.am, cpu.c, cpu_asm.S, preinstall.am, rtems/score/bfin.h:
+	Clean up rtems/score/bfin.h removing parts that are not needed by
+	RTEMS CPUkit to bfin specific .h files.
+	* rtems/bfin/bf533.h, rtems/bfin/bfin.h: New files.
+
 2006-10-23	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Use the default IDLE thread body.

@@ -19,6 +19,7 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
 #include <rtems/score/bfin.h>
+#include <rtems/bfin/bfin.h>
 
 
 /*  _CPU_Context_switch
