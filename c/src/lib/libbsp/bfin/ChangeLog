@@ -1,3 +1,7 @@
+2006-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/start/start.S: Eliminate hi, lo, HI, LO, and MK_BMSK.
+
 2006-10-24	Alain Schaefer <alani@easc.ch>
 
 	* configure.ac, eZKit533/configure.ac, eZKit533/include/bsp.h,

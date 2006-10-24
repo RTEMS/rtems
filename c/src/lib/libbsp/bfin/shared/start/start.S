@@ -1,6 +1,15 @@
 
 
 #include <rtems/bfin/bfin.h>   
+
+#ifndef LO
+#define LO(con32) ((con32) & 0xFFFF)
+#endif
+#ifndef HI
+#define HI(con32) (((con32) >> 16) & 0xFFFF)
+#endif
+
+
         .section .init
         .globl  __init
         .type   __init,@function
