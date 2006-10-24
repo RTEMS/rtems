@@ -22,14 +22,6 @@
 extern "C" {
 #endif
 
-#define MK_BMSK_( x ) (1<<x)    
-
-#define LO(con32) ((con32) & 0xFFFF)
-#define lo(con32) ((con32) & 0xFFFF)
-#define HI(con32) (((con32) >> 16) & 0xFFFF)
-#define hi(con32) (((con32) >> 16) & 0xFFFF)
-
-
 /* Scratchpad SRAM */
  
 #define SCRATCH                0xFFB00000
@@ -83,7 +75,8 @@ extern "C" {
 
 /* Event Bit Positions */
 #define EVT_IVTMR_P            0x00000006
-#define EVT_IVTMR              MK_BMSK_(EVT_IVTMR_P )
+
+#define EVT_IVTMR              (1 << EVT_IVTMR_P)
 
 #ifdef __cplusplus
 }

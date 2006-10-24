@@ -1,3 +1,7 @@
+2006-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/bfin/bfin.h: Eliminate hi, lo, HI, LO, and MK_BMSK.
+
 2006-10-24	Alain Schaefer <alani@easc.ch>
 
 	* Makefile.am, cpu.c, cpu_asm.S, preinstall.am, rtems/score/bfin.h:
