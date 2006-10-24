@@ -1,3 +1,8 @@
+2006-10-24	Alain Schaefer <alani@easc.ch>
+
+	* configure.ac, eZKit533/configure.ac, eZKit533/include/bsp.h,
+	shared/start/start.S: Make use of separated bfin helper .h files.
+
 2006-06-05  Alain Schaefer <alani@easc.ch>
 
     * all files : Initial copy and port from no_cpu 

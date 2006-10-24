@@ -1,6 +1,6 @@
 
 
-#include <rtems/score/bfin.h>   
+#include <rtems/bfin/bfin.h>   
         .section .init
         .globl  __init
         .type   __init,@function
