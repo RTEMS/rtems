@@ -1,3 +1,7 @@
+2006-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h: Eliminate hi, lo, HI, LO, and MK_BMSK.
+
 2006-06-05  Alain Schaefer <alani@easc.ch>
 
     * all files : Initial copy and port from no_cpu 
