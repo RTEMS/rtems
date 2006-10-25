@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.60)
-AC_INIT([rtems-]_RTEMS_API[-repo-conf],[0.3],[rtems-bugs@rtems.com],
+AC_INIT([rtems-]_RTEMS_API[-repo-conf],[0.4],[rtems-bugs@rtems.com],
   [rtems-]_RTEMS_API[-repo-conf])
 RTEMS_VERSIONING
 AC_CONFIG_SRCDIR([gpg])
