@@ -1,4 +1,7 @@
+commands.texi
+example.texi
 index.html
+intro.texi
 Makefile
 Makefile.in
 mdate-sh
@@ -9,6 +12,7 @@ rtems_gdb.cp
 rtems_gdb.dvi
 rtems_gdb.fn
 rtems_gdb*.html
+rtems_gdb.info
 rtems_gdb.ky
 rtems_gdb.log
 rtems_gdb.pdf
@@ -19,4 +23,7 @@ rtems_gdb.tp
 rtems_gdb.vr
 rtems_header.html
 stamp-vti
+started.texi
+swarch.texi
+trouble.texi
 version.texi

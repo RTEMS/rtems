@@ -1,10 +1,18 @@
+binaries.texi
+buildc.texi
+buildrt.texi
 gdb.texi
 index.html
+intro.texi
 Makefile
 Makefile.in
 mdate-sh
+nextstep.texi
+nt.texi
+require.texi
 rtems_footer.html
 rtems_header.html
+sample.texi
 stamp-vti
 started
 started-?
@@ -13,6 +21,7 @@ started.cp
 started.dvi
 started.fn
 started*.html
+started.info
 started.ky
 started.log
 started.pdf
@@ -21,5 +30,6 @@ started.ps
 started.toc
 started.tp
 started.vr
-version.texi
 tversions.sed
+tversions.texi
+version.texi

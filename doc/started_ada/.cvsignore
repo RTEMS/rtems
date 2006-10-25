@@ -1,10 +1,15 @@
+buildada.texi
 buildrt.texi
+gdb.texi
 index.html
+intro.texi
 Makefile
 Makefile.in
 mdate-sh
+require.texi
 rtems_footer.html
 rtems_header.html
+sample.texi
 stamp-vti
 started_ada
 started_ada.aux
@@ -12,6 +17,7 @@ started_ada.cp
 started_ada.dvi
 started_ada.fn
 started_ada*.html
+started_ada.info
 started_ada.ky
 started_ada.log
 started_ada.pdf
