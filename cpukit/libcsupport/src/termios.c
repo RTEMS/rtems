@@ -259,7 +259,7 @@ rtems_termios_open (
 			sc = rtems_semaphore_create (
 				rtems_build_name ('T', 'R', 'r', c),
 				0,
-				RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY,
+				RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY,
 				RTEMS_NO_PRIORITY,
 				&tty->rawInBuf.Semaphore);
 			if (sc != RTEMS_SUCCESSFUL)
