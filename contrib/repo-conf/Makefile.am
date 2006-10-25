@@ -42,6 +42,6 @@ apt_gpg_DATA += gpg/gpg-pubkey-eac29b6f-3fe1f458
 EXTRA_DIST += $(srcdir)/gpg/gpg-pubkey*
 
 noinst_HEADERS = rtems-@RTEMS_API@-repo-conf.spec
-rtems-@RTEMS_API@-repo-conf.spec: rtems-repo-conf.spec.in
+rtems-@RTEMS_API@-repo-conf.spec: rtems-repo-conf.spec.in configure.ac
 	./config.status --file=rtems-@RTEMS_API@-repo-conf.spec:rtems-repo-conf.spec.in
 EXTRA_DIST += rtems-repo-conf.spec.in
