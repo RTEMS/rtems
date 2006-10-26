@@ -1,3 +1,10 @@
+2006-10-26	Joel Sherrill <joel@OARcorp.com>
+
+	* ada_user/.cvsignore, bsp_howto/.cvsignore, cpu_supplement/.cvsignore,
+	develenv/.cvsignore, filesystem/.cvsignore, itron3.0/.cvsignore,
+	networking/.cvsignore, new_chapters/.cvsignore, porting/.cvsignore,
+	posix1003.1/.cvsignore, relnotes/.cvsignore: Add missing files.
+
 2006-10-25	Joel Sherrill <joel@OARcorp.com>
 
 	* posix_users/.cvsignore, rgdb_specs/.cvsignore, rtems_gdb/.cvsignore,

@@ -6,6 +6,7 @@ filesystem.cp
 filesystem.dvi
 filesystem.fn
 filesystem*.html
+filesystem.info
 filesystem.ky
 filesystem.log
 filesystem.pdf
@@ -14,11 +15,19 @@ filesystem.ps
 filesystem.toc
 filesystem.tp
 filesystem.vr
+fsrequirements.texi
+imfs.texi
 index.html
+init.texi
 Makefile
 Makefile.in
 mdate-sh
+miniimfs.texi
+mounting.texi
+patheval.texi
 rtems_footer.html
 rtems_header.html
 stamp-vti
+syscalls.texi
+tftp.texi
 version.texi

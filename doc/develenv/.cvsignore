@@ -4,6 +4,7 @@ develenv.cp
 develenv.dvi
 develenv.fn
 develenv*.html
+develenv.info
 develenv.ky
 develenv.log
 develenv.pdf
@@ -12,11 +13,14 @@ develenv.ps
 develenv.toc
 develenv.tp
 develenv.vr
+direct.texi
 index.html
 Makefile
 Makefile.in
 mdate-sh
 rtems_footer.html
 rtems_header.html
+sample.texi
 stamp-vti
+utils.texi
 version.texi
