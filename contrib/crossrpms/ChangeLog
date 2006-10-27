@@ -1,5 +1,10 @@
 2006-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac, Makefile.am: Remove rtems4.7.
+	* rtems4.7: Remove (Development now in rtems-4-7-branch only).
+
+2006-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* patches/newlib-1.14.0-rtems4.8-20061027.diff: New.
 	* patches/newlib-1.14.0-rtems-20061026.diff: Remove (broken).
 
