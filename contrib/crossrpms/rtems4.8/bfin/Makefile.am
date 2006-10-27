@@ -9,7 +9,7 @@ BINUTILS_RPMREL = 1
 include ../binutils.am
 
 GCC_VERS = 4.1.1
-GCC_RPMREL = 1
+GCC_RPMREL = 2
 NEWLIB_VERS = 1.14.0
 include ../gcc.am
 ## GCC_OPTS += --languages=cxx
