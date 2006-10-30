@@ -64,7 +64,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Namespace_remove (
  */
  
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
-  sem_t        *id,
+  sem_t             *id,
   Objects_Locations *location
 )
 {

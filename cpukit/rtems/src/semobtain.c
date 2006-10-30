@@ -71,10 +71,9 @@ rtems_status_code rtems_semaphore_obtain(
   rtems_interval  timeout
 )
 {
-  register Semaphore_Control *the_semaphore;
-  Objects_Locations           location;
-  boolean                     wait;
-  ISR_Level                   level;
+  register Semaphore_Control     *the_semaphore;
+  Objects_Locations               location;
+  ISR_Level                       level;
 
   the_semaphore = _Semaphore_Get_interrupt_disable( id, &location, &level );
   switch ( location ) {
@@ -92,16 +91,11 @@ rtems_status_code rtems_semaphore_obtain(
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
-      if ( _Options_Is_no_wait( option_set ) )
-        wait = FALSE;
-      else
-        wait = TRUE;
-
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         _CORE_mutex_Seize(
           &the_semaphore->Core_control.mutex,
           id,
-          wait,
+          ((_Options_Is_no_wait( option_set )) ? FALSE : TRUE),
           timeout,
           level
         );
@@ -113,7 +107,8 @@ rtems_status_code rtems_semaphore_obtain(
       _CORE_semaphore_Seize_isr_disable(
         &the_semaphore->Core_control.semaphore,
         id,
-        wait,
+        ((_Options_Is_no_wait( option_set )) ?
+          CORE_SEMAPHORE_NO_WAIT : CORE_SEMAPHORE_BLOCK_FOREVER),
         timeout,
         &level
       );

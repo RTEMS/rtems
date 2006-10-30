@@ -30,23 +30,23 @@ ER twai_sem(
   TMO tmout
 )
 {
-  ITRON_Semaphore_Control *the_semaphore;
-  Objects_Locations        location;
-  Watchdog_Interval        interval;
-  boolean                  wait;
-  CORE_semaphore_Status    status;
+  ITRON_Semaphore_Control        *the_semaphore;
+  Objects_Locations               location;
+  Watchdog_Interval               interval;
+  Core_semaphore_Blocking_option  blocking;
 
   interval = 0;
   if ( tmout == TMO_POL ) {
-    wait = FALSE;
+    blocking = CORE_SEMAPHORE_NO_WAIT;
   } else {
-    wait = TRUE;
+    blocking = CORE_SEMAPHORE_BLOCK_FOREVER;
+
     if ( tmout != TMO_FEVR )
       interval = TOD_MILLISECONDS_TO_TICKS(tmout);
-  }
 
-  if ( wait && _ITRON_Is_in_non_task_state() )
-    return E_CTX;
+    if ( _ITRON_Is_in_non_task_state() )
+      return E_CTX;
+  }
 
   the_semaphore = _ITRON_Semaphore_Get( semid, &location );
   switch ( location ) {
@@ -58,12 +58,13 @@ ER twai_sem(
       _CORE_semaphore_Seize(
         &the_semaphore->semaphore,
         the_semaphore->Object.id,
-        wait,                           /* wait for a timeout */
+        blocking,                       /* wait for a timeout */
         interval                        /* timeout value */
       );
       _Thread_Enable_dispatch();
-      status = (CORE_semaphore_Status) _Thread_Executing->Wait.return_code;
-      return _ITRON_Semaphore_Translate_core_semaphore_return_code( status );
+      return _ITRON_Semaphore_Translate_core_semaphore_return_code(
+               _Thread_Executing->Wait.return_code
+             );
   }
   return E_OK;
 }

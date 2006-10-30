@@ -54,7 +54,7 @@
  *  _Semaphore_Translate_core_mutex_return_code
  *
  *  Input parameters:
- *    the_mutex_status - mutex status code to translate
+ *    status - mutex status code to translate
  *
  *  Output parameters:
  *    rtems status code - translated RTEMS status code
@@ -73,18 +73,16 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code_[] = {
 
 
 rtems_status_code _Semaphore_Translate_core_mutex_return_code (
-  uint32_t   the_mutex_status
+  uint32_t   status
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( the_mutex_status == THREAD_STATUS_PROXY_BLOCKING )
+  if ( status == THREAD_STATUS_PROXY_BLOCKING )
     return RTEMS_PROXY_BLOCKING;
-  else
 #endif
-  if ( the_mutex_status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
+  if ( status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
     return RTEMS_INTERNAL_ERROR;
-  else
-    return _Semaphore_Translate_core_mutex_return_code_[the_mutex_status];
+  return _Semaphore_Translate_core_mutex_return_code_[status];
 }
 
 /*PAGE
@@ -92,7 +90,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
  *  _Semaphore_Translate_core_semaphore_return_code
  *
  *  Input parameters:
- *    the_semaphore_status - semaphore status code to translate
+ *    status - semaphore status code to translate
  *
  *  Output parameters:
  *    rtems status code - translated RTEMS status code
@@ -105,20 +103,18 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code_[] = {
   RTEMS_OBJECT_WAS_DELETED, /* CORE_SEMAPHORE_WAS_DELETED */
   RTEMS_TIMEOUT,            /* CORE_SEMAPHORE_TIMEOUT  */
   RTEMS_INTERNAL_ERROR,     /* CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED */
-
+  RTEMS_INTERNAL_ERROR      /* CORE_SEMAPHORE_BAD_TIMEOUT_VALUE */
 };
 
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
-  uint32_t   the_semaphore_status
+  uint32_t   status
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( the_semaphore_status == THREAD_STATUS_PROXY_BLOCKING )
+  if ( status == THREAD_STATUS_PROXY_BLOCKING )
     return RTEMS_PROXY_BLOCKING;
-  else
 #endif
-  if ( the_semaphore_status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
+  if ( status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
     return RTEMS_INTERNAL_ERROR;
-  else
-    return _Semaphore_Translate_core_semaphore_return_code_[the_semaphore_status];
+  return _Semaphore_Translate_core_semaphore_return_code_[status];
 }

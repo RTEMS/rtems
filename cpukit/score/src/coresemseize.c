@@ -51,10 +51,10 @@
  */
 
 void _CORE_semaphore_Seize(
-  CORE_semaphore_Control  *the_semaphore,
-  Objects_Id               id,
-  boolean                  wait,
-  Watchdog_Interval        timeout
+  CORE_semaphore_Control         *the_semaphore,
+  Objects_Id                      id,
+  Core_semaphore_Blocking_option  wait,
+  Watchdog_Interval               timeout
 )
 {
   Thread_Control *executing;
@@ -69,16 +69,22 @@ void _CORE_semaphore_Seize(
     return;
   }
 
-  if ( !wait ) {
-    _ISR_Enable( level );
-    executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
-    return;
+  switch ( wait ) {
+    case CORE_SEMAPHORE_NO_WAIT:
+      _ISR_Enable( level );
+      executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
+      return;
+    case CORE_SEMAPHORE_BAD_TIMEOUT:
+      executing->Wait.return_code = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
+      return;
+    case CORE_SEMAPHORE_BLOCK_FOREVER:
+    case CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT:
+      _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
+      executing->Wait.queue          = &the_semaphore->Wait_queue;
+      executing->Wait.id             = id;
+      _ISR_Enable( level );
+      _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
+      break;
   }
 
-  _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
-  executing->Wait.queue          = &the_semaphore->Wait_queue;
-  executing->Wait.id             = id;
-  _ISR_Enable( level );
-
-  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
 }
