@@ -1,3 +1,9 @@
+2006-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	PR 841/rtems
+	* psxsem01/init.c: Make sem_timedwait more conformant to Open Group
+	specification.
+
 2006-10-17	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.60. Require automake-1.10.

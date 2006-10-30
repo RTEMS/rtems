@@ -89,6 +89,9 @@ void *POSIX_Init(
   fatal_posix_service_status( status, -1, "sem_trywait error return status");
   fatal_posix_service_status( errno, EINVAL, "sem_trywait errno EINVAL");
 
+  status = sem_post(&sems[2]);
+  fatal_posix_service_status( status, 0, "sem_post semaphore 2");
+
   puts( "Init: sem_timedwait - SUCCESSFUL" );
   waittime.tv_sec = 0;
   waittime.tv_nsec = 100;
@@ -96,12 +99,14 @@ void *POSIX_Init(
   fatal_posix_service_status( status, 0, "sem_timedwait semaphore 2");
 
   puts( "Init: sem_timedwait - UNSUCCESSFUL (ETIMEDOUT)" );
-  status = sem_timedwait(&sems[1], &waittime);
+  status = sem_timedwait(&sems[2], &waittime);
   fatal_posix_service_status( status, -1, "sem_timedwait error return status");
   fatal_posix_service_status( errno, ETIMEDOUT, "sem_timedwait errno ETIMEDOUT");
 
   puts( "Init: sem_timedwait - UNSUCCESSFUL (EINVAL)" );
-  status = sem_timedwait(&sem2, &waittime);
+  waittime.tv_sec = 0;
+  waittime.tv_nsec = 0x40000000;
+  status = sem_timedwait(&sems[2], &waittime);
   fatal_posix_service_status( status, -1, "sem_timedwait error return status");
   fatal_posix_service_status( errno, EINVAL, "sem_init errno EINVAL");
 
