@@ -77,7 +77,9 @@ RTEMS::~RTEMS()
 }
 
 extern "C" {
-    extern void invoke_non_gnu_constructors(void);
+    #ifndef __GNUC__
+      extern void invoke_non_gnu_constructors(void);
+    #endif
 
     int
     main(int argc,
@@ -96,7 +98,9 @@ extern "C" {
          * run any non-gnu constructors we may need
          */
         
-        invoke_non_gnu_constructors();
+        #ifndef __GNUC__
+          invoke_non_gnu_constructors();
+	#endif
 
         /*
          *  Start multitasking
