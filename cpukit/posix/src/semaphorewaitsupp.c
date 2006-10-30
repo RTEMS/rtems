@@ -26,13 +26,13 @@
  */
 
 int _POSIX_Semaphore_Wait_support(
-  sem_t              *sem,
-  boolean             blocking,
-  Watchdog_Interval   timeout
+  sem_t                          *sem,
+  Core_semaphore_Blocking_option  blocking,
+  Watchdog_Interval               timeout
 )
 {
-  register POSIX_Semaphore_Control *the_semaphore;
-  Objects_Locations                 location;
+  POSIX_Semaphore_Control *the_semaphore;
+  Objects_Locations        location;
 
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
@@ -65,6 +65,9 @@ int _POSIX_Semaphore_Wait_support(
            *  count to the largest value the count can hold.
            */
  	  break;
+	case CORE_SEMAPHORE_BAD_TIMEOUT_VALUE:
+          rtems_set_errno_and_return_minus_one( EINVAL );
+	  break;
       }
   }
   return 0;

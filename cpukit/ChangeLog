@@ -1,3 +1,16 @@
+2006-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	PR 841/rtems
+	* itron/inline/rtems/itron/semaphore.inl,
+	itron/macros/rtems/itron/semaphore.inl, itron/src/twai_sem.c,
+	posix/include/rtems/posix/semaphore.h,
+	posix/inline/rtems/posix/semaphore.inl,
+	posix/src/semaphorewaitsupp.c, posix/src/semtimedwait.c,
+	posix/src/semwait.c, rtems/src/semobtain.c,
+	rtems/src/semtranslatereturncode.c,
+	score/include/rtems/score/coresem.h, score/src/coresemseize.c: Make
+	sem_timedwait more conformant to Open Group specification.
+
 2006-10-25	Jennifer Averett <jennifer@oarcorp.com>
 
 	* libcsupport/src/termios.c: Change attribute of semaphore. It was
