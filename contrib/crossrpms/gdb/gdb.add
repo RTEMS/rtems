@@ -15,7 +15,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %endif
-%if "@tool_target@" == "sparc-rtems4.7"
+%if "@tool_target@" == "sparc-rtems4.8"
 BuildRequires:	libtermcap-devel
 %endif
 BuildRequires:	ncurses-devel
