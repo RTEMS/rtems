@@ -187,27 +187,6 @@ gethostbyaddr(const char *addr, int len, int type)
 	return hp;
 }
 
-#ifdef _THREAD_SAFE
-struct hostent_data;
-
-/*
- * Temporary function (not thread safe)
- */
-int gethostbyaddr_r(const char *addr, int len, int type,
-	struct hostent *result, struct hostent_data *buffer)
-{
-	struct hostent *hp;
-	int ret;
-	if ((hp = gethostbyaddr(addr, len, type)) == NULL) {
-		ret = -1;
-	} else {
-		memcpy(result, hp, sizeof(struct hostent));
-		ret = 0;
-	}
-	return(ret);
-}
-#endif
-
 void
 sethostent(stayopen)
 	int stayopen;
@@ -222,3 +201,211 @@ endhostent()
 	_endhosthtent();
 	_endhostdnsent();
 }
+
+#ifdef _THREAD_SAFE
+
+/* return length of decoded data or -1 */
+static int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,
+         unsigned int maxlen,unsigned char* behindpacket) {
+  unsigned char *tmp;
+  unsigned char *max=dest+maxlen;
+  unsigned char *after=packet+offset;
+  int ok=0;
+  for (tmp=after; maxlen>0&&*tmp; ) {
+    if (tmp>=behindpacket) return -1;
+    if ((*tmp>>6)==3) {   /* goofy DNS decompression */
+      unsigned int ofs=((unsigned int)(*tmp&0x3f)<<8)|*(tmp+1);
+      if (ofs>=(unsigned int)offset) return -1; /* RFC1035: "pointer to a _prior_ occurrance" */
+      if (after<tmp+2) after=tmp+2;
+      tmp=packet+ofs;
+      ok=0;
+    } else {
+      unsigned int duh;
+      if (dest+*tmp+1>max) return -1;
+      if (tmp+*tmp+1>=behindpacket) return -1;
+      for (duh=*tmp; duh>0; --duh)
+  *dest++=*++tmp;
+      *dest++='.'; ok=1;
+      ++tmp;
+      if (tmp>after) { after=tmp; if (!*tmp) ++after; }
+    }
+  }
+  if (ok) --dest;
+  *dest=0;
+  return after-packet;
+}
+
+static int __dns_gethostbyx_r(const char* name, struct hostent* result,
+      char *buf, size_t buflen,
+      struct hostent **RESULT, int *h_errnop, int lookfor) {
+
+  int names,ips;
+  unsigned char *cur;
+  unsigned char *max;
+  unsigned char inpkg[1500];
+  char* tmp;
+  int size;
+
+  if (lookfor==1) {
+    result->h_addrtype=AF_INET;
+    result->h_length=4;
+  } else {
+    result->h_addrtype=AF_INET6;
+    result->h_length=16;
+  }
+  result->h_aliases=(char**)(buf+8*sizeof(char*));
+  result->h_addr_list=(char**)buf;
+  result->h_aliases[0]=0;
+
+  cur=buf+16*sizeof(char*);
+  max=buf+buflen;
+  names=ips=0;
+
+  if ((size=res_query(name,C_IN,lookfor,inpkg,512))<0) {
+invalidpacket:
+    *h_errnop=HOST_NOT_FOUND;
+    return -1;
+  }
+  {
+    tmp=inpkg+12;
+    {
+      char Name[257];
+      unsigned short q=((unsigned short)inpkg[4]<<8)+inpkg[5];
+      while (q>0) {
+  if (tmp>(char*)inpkg+size) goto invalidpacket;
+  while (*tmp) { tmp+=*tmp+1; if (tmp>(char*)inpkg+size) goto invalidpacket; }
+  tmp+=5;
+  --q;
+      }
+      if (tmp>(char*)inpkg+size) goto invalidpacket;
+      q=((unsigned short)inpkg[6]<<8)+inpkg[7];
+      if (q<1) goto nodata;
+      while (q>0) {
+  int decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
+  if (decofs<0) break;
+  tmp=inpkg+decofs;
+  --q;
+  if (tmp[0]!=0 || tmp[1]!=lookfor || /* TYPE != A */
+      tmp[2]!=0 || tmp[3]!=1) {   /* CLASS != IN */
+    if (tmp[1]==5) {  /* CNAME */
+      tmp+=10;
+      decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
+      if (decofs<0) break;
+      tmp=inpkg+decofs;
+    } else
+      break;
+    continue;
+  }
+  tmp+=10;  /* skip type, class, TTL and length */
+  {
+    int slen;
+    if (lookfor==1 || lookfor==28) /* A or AAAA*/ {
+      slen=strlen(Name);
+      if (cur+slen+8+(lookfor==28?12:0)>=max) { *h_errnop=NO_RECOVERY; return -1; }
+    } else if (lookfor==12) /* PTR */ {
+      decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
+      if (decofs<0) break;
+      tmp=inpkg+decofs;
+      slen=strlen(Name);
+    } else
+      slen=strlen(Name);
+    strcpy(cur,Name);
+    if (names==0)
+      result->h_name=cur;
+    else
+      result->h_aliases[names-1]=cur;
+    result->h_aliases[names]=0;
+    if (names<8) ++names;
+/*    cur+=slen+1; */
+    cur+=(slen|3)+1;
+    result->h_addr_list[ips++] = cur;
+    if (lookfor==1) /* A */ {
+      *(int*)cur=*(int*)tmp;
+      cur+=4;
+      result->h_addr_list[ips]=0;
+    } else if (lookfor==28) /* AAAA */ {
+      {
+        int k;
+        for (k=0; k<16; ++k) cur[k]=tmp[k];
+      }
+      cur+=16;
+      result->h_addr_list[ips]=0;
+    }
+  }
+/*        puts(Name); */
+      }
+    }
+  }
+  if (!names) {
+nodata:
+    *h_errnop=NO_DATA;
+    return -1;
+  }
+  *h_errnop=0;
+  *RESULT=result;
+  return 0;
+}
+
+
+
+
+int gethostbyname_r(const char*      name, 
+        struct hostent*  result,
+        char            *buf, 
+        int              buflen,
+        struct hostent **RESULT, 
+        int             *h_errnop) 
+{
+        
+  size_t L=strlen(name);
+  result->h_name=buf;
+  if (buflen<L) { *h_errnop=ERANGE; return 1; }
+  strcpy(buf,name);
+
+  result->h_addr_list=(char**)(buf+strlen(name)+1);
+  result->h_addr_list+=sizeof(unsigned long)-((unsigned long)(result->h_addr_list)&(sizeof(unsigned long)-1));
+  result->h_addr_list[0]=(char*)&result->h_addr_list[2];
+  if (inet_pton(AF_INET,name,result->h_addr_list[0])) {
+    result->h_addrtype=AF_INET;
+    result->h_length=4;
+commonip:
+    result->h_aliases=result->h_addr_list+2*sizeof(char**);
+    result->h_aliases[0]=0;
+    result->h_addr_list[1]=0;
+    *RESULT=result;
+    *h_errnop=0;
+    return 0;
+  } else if (inet_pton(AF_INET6,name,result->h_addr_list[0])) {
+    result->h_addrtype=AF_INET6;
+    result->h_length=16;
+    goto commonip;
+  }
+
+
+  {
+    struct hostent* r;
+    sethostent(0);
+    while ((r=gethostent_r(buf,buflen))) {
+      int i;
+      if (r->h_addrtype==AF_INET && !strcasecmp(r->h_name,name)) {  /* found it! */
+found:
+  memmove(result,r,sizeof(struct hostent));
+  *RESULT=result;
+  *h_errnop=0;
+  endhostent();
+  return 0;
+      }
+      for (i=0; i<16; ++i) {
+  if (r->h_aliases[i]) {
+    if (!strcasecmp(r->h_aliases[i],name)) goto found;
+  } else break;
+      }
+    }
+    endhostent();
+  }
+
+  return __dns_gethostbyx_r(name,result,buf+L,buflen-L,RESULT,h_errnop,1);
+}
+
+#endif
+
