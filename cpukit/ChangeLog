@@ -1,3 +1,17 @@
+2006-11-02	Steven Johnson <sjohnson@sakuraindustries.com>
+
+	* libnetworking/netdb.h, libnetworking/libc/gethostbyht.c,
+	libnetworking/libc/gethostnamadr.c: This patch adds a functional
+	gethostbyname_r to RTEMS. We were having problems with multiple
+	threads calling gethostbyname, so we decided the best way to deal
+	with it was to do it properly, rather than kludge up our code to make
+	gethostbyname safe. We have found several slightly different
+	parameter lists for this function, it does not seem to be standard.
+	The one we used has the linux interface. In RTEMS there was an
+	existing gethostbyname_r inside a #ifdef _THREAD_SAFE which was NOT
+	Threadsafe, as this just called gethostbyname. So we have placed all
+	of the additional code inside the #ifdef _THREAD_SAFE.
+
 2006-10-30	Joel Sherrill <joel@OARcorp.com>
 
 	PR 841/rtems

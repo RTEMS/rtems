@@ -67,6 +67,7 @@ static char rcsid[] = "$Id$";
 #include <string.h>
 #include <arpa/nameser.h>	/* XXX */
 #include <resolv.h>		/* XXX */
+#include <sys/fcntl.h>
 
 #define	MAXALIASES	35
 
@@ -77,6 +78,10 @@ static FILE *hostf = NULL;
 static u_char host_addr[16];	/* IPv4 or IPv6 */
 static char *h_addr_ptrs[2];
 static int stayopen = 0;
+
+static char* hostmap = NULL;
+static unsigned int hostlen = 0; 
+static char *cur;
 
 void
 _sethosthtent(f)
@@ -200,3 +205,115 @@ _gethostbyhtaddr(addr, len, af)
 	endhostent();
 	return (p);
 }
+
+
+#ifdef _THREAD_SAFE
+
+static int isblank ( int ch )
+{
+    return ch == ' '  ||  ch == '\t';
+}
+
+struct hostent* gethostent_r(char* buf, int len) 
+{
+  char  *dest;
+  struct hostent* pe=(struct hostent*)buf;
+  char*  last;
+  char*  max=buf+len;
+  int    aliasidx;
+  int    curlen;
+  
+   
+  if (hostf<0) return 0;
+  fseek(hostf,0,SEEK_END);
+  curlen=ftell(hostf);
+  fseek(hostf,0,SEEK_SET);
+  
+  if (curlen > hostlen) {
+    if (hostmap) {
+      hostmap = realloc(hostmap,curlen);
+    }
+    else {
+      hostmap = malloc(curlen);
+    }
+  }
+  hostlen = curlen;
+  
+  if (hostmap) {
+    if (fread(hostmap,hostlen,1,hostf) != hostlen) {
+	hostmap=0; goto error; 
+    }
+    cur=hostmap;
+  }
+  last=hostmap+hostlen;
+again:
+  if ((size_t)len<sizeof(struct hostent)+11*sizeof(char*)) goto nospace;
+  dest=buf+sizeof(struct hostent);
+  pe->h_name=0;
+  pe->h_aliases=(char**)dest; pe->h_aliases[0]=0; dest+=10*sizeof(char*);
+  pe->h_addr_list=(char**)dest; dest+=2*sizeof(char**);
+  if (cur>=last) return 0;
+  if (*cur=='#' || *cur=='\n') goto parseerror;
+  /* first, the ip number */
+  pe->h_name=cur;
+  while (cur<last && !isspace(*cur)) cur++;
+  if (cur>=last) return 0;
+  if (*cur=='\n') goto parseerror;
+  {
+    char save=*cur;
+    *cur=0;
+    pe->h_addr_list[0]=dest;
+    pe->h_addr_list[1]=0;
+    if (max-dest<16) goto nospace;
+    if (inet_pton(AF_INET6,pe->h_name,dest)>0) {
+      pe->h_addrtype=AF_INET6;
+      pe->h_length=16;
+      dest+=16;
+    } else if (inet_pton(AF_INET,pe->h_name,dest)>0) {
+      pe->h_addrtype=AF_INET;
+      pe->h_length=4;
+      dest+=4;
+    } else {
+      *cur=save;
+      goto parseerror;
+    }
+    *cur=save;
+  }
+  ++cur;
+  /* now the aliases */
+  for (aliasidx=0;aliasidx<9;++aliasidx) {
+    while (cur<last && isblank(*cur)) ++cur;
+    pe->h_aliases[aliasidx]=cur;
+    while (cur<last && !isspace(*cur)) ++cur;
+    {
+      char *from=pe->h_aliases[aliasidx];
+      int len=cur-from;
+      if (max-dest<len+2) goto nospace;
+      pe->h_aliases[aliasidx]=dest;
+      memmove(dest,from,(size_t)(cur-from));
+      dest+=len;
+      *dest=0; ++dest;
+    }
+    if (*cur=='\n') { ++cur; ++aliasidx; break; }
+    if (cur>=last || !isblank(*cur)) break;
+    cur++;
+  }
+  pe->h_aliases[aliasidx]=0;
+  pe->h_name=pe->h_aliases[0];
+  pe->h_aliases++;
+  return pe;
+parseerror:
+  while (cur<last && *cur!='\n') cur++;
+  cur++;
+  goto again;
+nospace:
+  errno=ERANGE;
+  goto __error;
+error:
+  errno=ENOMEM;
+__error:
+  if (hostmap!=NULL) free(hostmap);
+  hostmap=NULL;
+  return 0;
+}
+#endif

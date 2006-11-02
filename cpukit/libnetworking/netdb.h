@@ -160,6 +160,16 @@ void		setnetent(int);
 void		setprotoent(int);
 void		setservent(int);
 
+#ifdef _THREAD_SAFE
+struct hostent* gethostent_r(char* buf, int len);
+int gethostbyname_r(const char*      name, 
+                    struct hostent*  result,
+                    char            *buf, 
+                    int              buflen,
+                    struct hostent **RESULT, 
+                    int             *h_errnop) ;
+#endif		    
+
 /*
  * PRIVATE functions specific to the FreeBSD implementation
  */
