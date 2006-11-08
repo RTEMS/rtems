@@ -21,6 +21,8 @@
 #include <rtems/score/bfin.h>
 #include <rtems/bfin/bfin.h>
 
+#define LO(con32) ((con32) & 0xFFFF)
+#define HI(con32) (((con32) >> 16) & 0xFFFF)
 
 /*  _CPU_Context_switch
  *

@@ -1,5 +1,9 @@
 2006-11-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* cpu_asm.S: Re-add HI, LO.
+
+2006-11-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* irq.c: Add missing newline.
 	* rtems/score/cpu.h: Eliminate hidden backspaces.
 
