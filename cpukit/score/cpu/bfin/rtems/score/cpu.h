@@ -912,7 +912,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
   { \
     if ( _new_level ) asm volatile ( "cli R0;" : : : "R0" ); \
     else              asm volatile ( "R0.l = 0xFFFF;\n"\
-                                     "sti R0;" : : : "R0" ); \  
+                                     "sti R0;" : : : "R0" ); \
   }
 
 
