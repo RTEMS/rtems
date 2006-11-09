@@ -9,10 +9,11 @@ BINUTILS_RPMREL = 1
 include ../binutils.am
 
 GCC_VERS = 4.0.3
+GCC_PKGVERS = $(GCC_VERS)
 GCC_RPMREL = 2
 NEWLIB_VERS = 1.14.0
 include ../gcc.am
-GCC_OPTS +=
+GCC_OPTS += --disable-infos
 
 GDB_VERS = 6.5
 GDB_RPMREL = 1
