@@ -81,8 +81,6 @@ AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
 ## Check if the installed toolchain has these headers
-AC_CHECK_HEADER([stdint.h])
-AC_CHECK_HEADER([inttypes.h])
 AC_CHECK_HEADER([tar.h])
 
 ## BSD-ism, should not be used in RTEMS, 
