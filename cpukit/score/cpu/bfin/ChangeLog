@@ -1,3 +1,8 @@
+2006-11-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/bfin/bf533.h, rtems/bfin/bfin.h: Remove stray whitespaces.
+	* rtems/score/bfin.h: Use __BFIN__ instead of BFIN.
+
 2006-11-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* cpu_asm.S: Re-add HI, LO.
