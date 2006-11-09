@@ -43,7 +43,7 @@ extern "C" {
  *  Figure out all CPU Model Feature Flags based upon compiler 
  *  predefines. 
  */
-#if defined(BFIN)
+#if defined(__BFIN__)
 #define CPU_MODEL_NAME  "BF533"
 #define BF_HAS_FPU   0
 #else
