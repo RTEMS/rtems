@@ -1,5 +1,9 @@
 2006-11-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/xdr/xdr_float.c: Add bfin.
+
+2006-11-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove redundant AC_CHECK_HEADER([stdint.h]),
 	AC_CHECK_HEADER([inttypes.h]). Now implicitly checked.
 
