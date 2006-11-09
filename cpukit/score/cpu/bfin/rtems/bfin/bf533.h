@@ -51,7 +51,7 @@ extern "C" {
 #define SPI_SHADOW             0xFFC00518
 
 /* SPORT0 Controller */
-#define SPORT0_TCR1            0xFFC00800 
+#define SPORT0_TCR1            0xFFC00800
 #define SPORT0_TCR2            0xFFC00804
 #define SPORT0_TCLKDIV         0xFFC00808
 #define SPORT0_TFSDIV          0xFFC0080C
@@ -358,24 +358,6 @@ extern "C" {
 #define EBIU_SDBCTL            0xFFC00A14
 #define EBIU_SDRRC             0xFFC00A18
 #define EBIU_SDSTAT            0xFFC00A1C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #ifdef __cplusplus
 }
