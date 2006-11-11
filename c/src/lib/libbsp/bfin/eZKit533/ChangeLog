@@ -1,3 +1,9 @@
+2006-11-11  Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/linkcmds: Use___start_set_sysctl_set, ___stop_set_sysctl_set
+	instead of __start_set_sysctl_set, __stop_set_sysctl_set
+	(bfin uses '_' prefixed c-symbols.)
+
 2006-11-10  Alain Schaefer <alani@easc.ch>
 
 	* startup/linkcmds: Put .fini into sdram.
