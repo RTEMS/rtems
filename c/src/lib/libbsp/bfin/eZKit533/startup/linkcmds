@@ -66,7 +66,7 @@ SECTIONS
     .fini :
     {
         KEEP (*(.fini))
-    } > ram  /*=0*/ 
+    } > sdram  /*=0*/ 
     
     .data :
     {
@@ -151,3 +151,5 @@ SECTIONS
 __HeapBase = _HeapBase;
 __HeapSize = _HeapSize;
 __WorkspaceBase = _WorkspaceBase;
+__edata = _edata;
+__etext = _etext;

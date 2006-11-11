@@ -1,3 +1,8 @@
+2006-11-10  Alain Schaefer <alani@easc.ch>
+
+	* startup/linkcmds: Put .fini into sdram.
+	Add __edata, __etext.
+
 2006-10-26	Joel Sherrill <joel@OARcorp.com>
 
 	* configure, include/bspopts.h.in: Removed.
