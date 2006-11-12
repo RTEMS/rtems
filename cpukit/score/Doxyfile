@@ -875,7 +875,7 @@ INCLUDE_FILE_PATTERNS  =
 # or name=definition (no spaces). If the definition and the = are 
 # omitted =1 is assumed.
 
-PREDEFINED             = RTEMS_INLINES FALSE=0 \
+PREDEFINED             = FALSE=0 \
    CPU_USE_GENERIC_BITFIELD_DATA=0
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then 
