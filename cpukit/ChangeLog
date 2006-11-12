@@ -1,5 +1,10 @@
 2006-11-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/stdint.h, libcsupport/include/inttypes.h:
+	Remove.
+
+2006-11-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/Doxyfile: Remove RTEMS_INLINES.
 
 2006-11-09	Ralf Corsépius <ralf.corsepius@rtems.org>
