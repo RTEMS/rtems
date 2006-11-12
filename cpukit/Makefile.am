@@ -75,12 +75,6 @@ include_sys_HEADERS =
 
 include_HEADERS += libnetworking/memory.h
 
-if RTEMS_PROVIDES_STDINT_H
-include_HEADERS += libcsupport/include/stdint.h
-endif
-if RTEMS_PROVIDES_INTTYPES_H
-include_HEADERS += libcsupport/include/inttypes.h
-endif
 include_HEADERS += libcsupport/include/tar.h
 
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
