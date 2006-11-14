@@ -88,10 +88,14 @@ AC_CHECK_HEADER([tar.h])
 AC_CHECK_HEADER([sys/errno.h],[],
   [AC_MSG_ERROR([Missing required header sys/errno.h])])
 
-## if using newlib, force using stdint.h
-AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
+## if libc provides stdint.h, use it.
+AS_IF([test x"${ac_cv_header_stdint_h}" = xyes],
 [RTEMS_USES_STDINT_H=yes],
-[RTEMS_USES_STDINT_H=$ac_cv_header_stdint_h])
+[RTEMS_USES_STDINT_H=no])
+
+## error out if libc doesn't at least provide inttypes.h
+AS_IF([test x"${ac_cv_header_inttypes_h}" != xyes],
+[AC_MSG_ERROR([Required header inttypes.h not found])])
 
 AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
 [RTEMS_USES_TAR_H=yes],
