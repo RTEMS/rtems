@@ -1,5 +1,6 @@
 2006-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove c4x.
 	* score/cpu/Makefile.am: Remove c4x.
 
 2006-11-02	Steven Johnson <sjohnson@sakuraindustries.com>
