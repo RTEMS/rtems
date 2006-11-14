@@ -1,5 +1,10 @@
 2006-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/c4xsim.cfg, custom/c3xsim.cfg: Remove (Port not ready for
+	  inclusion in release).
+
+2006-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/uC5282.cfg: Remove hard-code compiler flags.
 	* custom/av5282.cfg, custom/csb360.cfg, custom/mcf5206elite.cfg,
 	custom/mcf5235.cfg: Remove ASFLAGS, CPU_ASFLAGS (Unused).
