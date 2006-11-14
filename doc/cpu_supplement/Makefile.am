@@ -22,7 +22,7 @@ TEXI2WWW_ARGS=\
 -footer rtems_footer.html \
 -icons ../images
 GENERATED_FILES = arm.texi i386.texi m68k.texi mips.texi powerpc.texi \
-  sh.texi sparc.texi tic4x.texi
+  sh.texi sparc.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -66,11 +66,6 @@ sh.texi: sh.t
 	    -n "" < $< > $@
 
 sparc.texi: sparc.t
-	$(BMENU2) -p "" \
-	    -u "Top" \
-	    -n "" < $< > $@
-
-tic4x.texi: tic4x.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
