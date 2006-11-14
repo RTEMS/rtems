@@ -570,10 +570,13 @@ __sparc_fq:
         sll      %g4, 8, %g4
         and      %g4, SPARC_PSR_PIL_MASK, %g4
         andn     %l0, SPARC_PSR_PIL_MASK, %g5
+        ba       pil_fixed
         or       %g4, %g5, %g5
 #endif
 
 dont_fix_pil:
+        or       %g5, SPARC_PSR_PIL_MASK, %g5
+pil_fixed:
         wr       %g5, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
 dont_fix_pil2:
 
@@ -605,6 +608,7 @@ dont_fix_pil2:
          */
 
         mov      %l0, %psr             ! **** DISABLE TRAPS ****
+        nop; nop; nop
 
         /*
          *  Decrement ISR nest level and Thread dispatch disable level.
@@ -798,6 +802,7 @@ simple_return:
 good_task_window:
 
         mov     %l0, %psr                  !  **** DISABLE TRAPS ****
+	nop; nop; nop
                                            !  and restore condition codes.
         ld      [%g1 + ISF_G1_OFFSET], %g1 ! restore g1
         jmp     %l1                        ! transfer control and
