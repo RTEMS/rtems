@@ -82,8 +82,6 @@ AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
 ## Check if the installed toolchain has these headers
-AC_CHECK_HEADER([stdint.h])
-AC_CHECK_HEADER([inttypes.h])
 AC_CHECK_HEADER([tar.h])
 
 ## BSD-ism, should not be used in RTEMS, 
@@ -91,18 +89,14 @@ AC_CHECK_HEADER([tar.h])
 AC_CHECK_HEADER([sys/errno.h],[],
   [AC_MSG_ERROR([Missing required header sys/errno.h])])
 
-## if using newlib, we provide stdint.h and inttypes.h
-AM_CONDITIONAL([RTEMS_PROVIDES_STDINT_H],
-  [test x"${RTEMS_USE_NEWLIB}" = xyes \
-  && test x"${ac_cv_header_stdint_h}" = xno])
-AM_CONDITIONAL([RTEMS_PROVIDES_INTTYPES_H],
-  [test x"${RTEMS_USE_NEWLIB}" = xyes \
-  && test x"${ac_cv_header_inttypes_h}" = xno])
-
-## if using newlib, force using stdint.h
-AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
+## if libc provides stdint.h, use it.
+AS_IF([test x"${ac_cv_header_stdint_h}" = xyes],
 [RTEMS_USES_STDINT_H=yes],
-[RTEMS_USES_STDINT_H=$ac_cv_header_stdint_h])
+[RTEMS_USES_STDINT_H=no])
+
+## error out if libc doesn't at least provide inttypes.h
+AS_IF([test x"${ac_cv_header_inttypes_h}" != xyes],
+[AC_MSG_ERROR([Required header inttypes.h not found])])
 
 AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
 [RTEMS_USES_TAR_H=yes],
