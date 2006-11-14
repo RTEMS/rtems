@@ -1,3 +1,7 @@
+2006-11-14	Jiri Gaisler <jiri@gaisler.com>
+
+	* cpu_asm.S: Properly support synchronous traps.
+
 2006-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Part of a large patch to improve Doxygen output.
