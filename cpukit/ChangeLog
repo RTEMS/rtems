@@ -1,3 +1,12 @@
+2006-11-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_AMPOLISH3.
+	  Add checks for uint8_t, int8_t, uint16_t, int16_t,
+	  uint32_t, int32_t.
+	* aclocal/rtems-ampolish.m4: Pick up ampolish3 from ac_aux_dir.
+	* aclocal/rtems-top.m4: Add RTEMS_AMPOLISH3.
+	* ampolish3: Remove.
+
 2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/inline/rtems/score/threadq.inl, score/src/corerwlocktimeout.c:
