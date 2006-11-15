@@ -41,7 +41,7 @@ noinst_PROGRAMS += startup.rel
 include_HEADERS += ../../i386/shared/comm/uart.h
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/main.c ../../shared/sbrk.c ../../i386/shared/irq/idt.c \
+    ../../shared/sbrk.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../i386/shared/comm/i386-stub.c \
     ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/uart.c \

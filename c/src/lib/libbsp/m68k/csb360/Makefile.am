@@ -32,7 +32,7 @@ noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../m68k/shared/m68kpretaskinghook.c \
     startup/bspstart.c startup/init5272.c ../../shared/bootcard.c \
-    ../../shared/main.c ../../shared/sbrk.c ../../m68k/shared/setvec.c \
+    ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

@@ -38,7 +38,7 @@ console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/main.c ../../shared/sbrk.c \
+    ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

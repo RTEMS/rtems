@@ -31,7 +31,7 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds.rom \
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspstart.c ../../shared/bspclean.c ../../shared/sbrk.c \
-    ../../shared/bootcard.c ../../shared/main.c \
+    ../../shared/bootcard.c \
     ../../shared/gnatinstallhandler.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

@@ -31,7 +31,7 @@ startup_rel_SOURCES = startup/bspclean.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../m68k/shared/m68kpretaskinghook.c \
     startup/init5235.c startup/bspstart.c \
-    ../../shared/bootcard.c ../../shared/main.c \
+    ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)

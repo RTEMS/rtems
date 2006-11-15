@@ -1,3 +1,8 @@
+2006-11-15	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Merge c_rtems_main() into boot_card(). This eliminated a
+	file and simplified initialization.
+
 2006-10-30	Joel Sherrill <joel@OARcorp.com>
 
 	* bsp_specs: Add crti, crtbegin, crtend, and crtn.

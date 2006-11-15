@@ -31,7 +31,7 @@ noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../mips/shared/gdbstub/mips-stub.c \
     ../../shared/gdbstub/rtems-stub-glue.c ../../shared/bspclean.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c startup/bspstart.c \
-    ../../shared/bootcard.c ../../shared/main.c ../../shared/sbrk.c \
+    ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
     startup/gdb-support.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(startup_CPPFLAGS)

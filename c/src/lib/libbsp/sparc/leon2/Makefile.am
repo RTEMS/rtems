@@ -34,7 +34,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c ../../sparc/shared/bspstart.c ../../shared/main.c \
+    ../../shared/bsppost.c ../../sparc/shared/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
     startup/spurious.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)

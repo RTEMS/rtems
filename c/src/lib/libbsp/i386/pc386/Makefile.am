@@ -96,7 +96,7 @@ include_HEADERS += ../../i386/shared/comm/uart.h
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspstart.c startup/exit.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
-    ../../shared/bootcard.c ../../shared/main.c ../../shared/sbrk.c \
+    ../../shared/bootcard.c ../../shared/sbrk.c \
     startup/ldsegs.S ../../i386/shared/irq/irq_asm.S
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
