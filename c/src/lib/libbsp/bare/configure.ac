@@ -13,7 +13,7 @@ AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSBSP
 
-AM_CONFIG_HEADER(include/bspopts.h)
+AC_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
