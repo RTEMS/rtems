@@ -705,11 +705,6 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
     CONFIGURE_OBJECT_TABLE_STUFF + \
     NAME_MAX ) )
 
-#define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) 0
-#define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) 0
-#define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) 0
-
-#if 0
 #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
   ((_barriers) * \
    ( sizeof( POSIX_Barrier_Control) + \
@@ -727,7 +722,6 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
    ( sizeof( POSIX_RWLock_Control) + \
     CONFIGURE_OBJECT_TABLE_STUFF + \
     NAME_MAX ) )
-#endif
 
 #define CONFIGURE_MEMORY_FOR_POSIX \
   ( \
@@ -1157,11 +1151,9 @@ posix_api_configuration_table Configuration_POSIX_API = {
   CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
   CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
   CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
-#if 0
   CONFIGURE_MAXIMUM_POSIX_BARRIERS,
   CONFIGURE_MAXIMUM_POSIX_RWLOCKS,
   CONFIGURE_MAXIMUM_POSIX_SPINLOCKS,
-#endif
   CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
   CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
 };
