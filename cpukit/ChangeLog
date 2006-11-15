@@ -1,3 +1,8 @@
+2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/Makefile.am: Add file missed in previous commit.
+	* posix/src/posixtimespecabsolutetimeout.c: New file.
+
 2006-11-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_AMPOLISH3.
