@@ -203,7 +203,7 @@ void bsp_start( void )
    * function store the result in global variables so that it can be used 
    * later...
    */
-  myCpu 	    = get_ppc_cpu_type();
+  myCpu 	= get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
   /*
