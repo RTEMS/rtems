@@ -125,7 +125,15 @@
 typedef unsigned short rtems_i8259_masks;
 extern  volatile rtems_i8259_masks i8259s_cache;
 
+/*
+ *  Some items required to make some drivers compile, even though they
+ *  will not work with this BSP.
+ */
 
+#define BSP_irq_enabled_at_i8259s(_name) 0
+
+#define PCI_DRAM_BASE 0
+#define PCI_DRAM_OFFSET 0
 #endif
 
 #endif
