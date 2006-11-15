@@ -30,7 +30,7 @@
 
 /*PAGE
  *
- *  _Thread_queue_Enqueue
+ *  _Thread_queue_Enqueue_with_handler
  *
  *  This routine blocks a thread, places it on a thread, and optionally
  *  starts a timeout timer.
@@ -45,9 +45,10 @@
  *    only case
  */
 
-void _Thread_queue_Enqueue(
-  Thread_queue_Control *the_thread_queue,
-  Watchdog_Interval     timeout
+void _Thread_queue_Enqueue_with_handler(
+  Thread_queue_Control         *the_thread_queue,
+  Watchdog_Interval             timeout,
+  Thread_queue_Timeout_callout  handler
 )
 {
   Thread_Control *the_thread;
@@ -64,7 +65,7 @@ void _Thread_queue_Enqueue(
   if ( timeout ) {
     _Watchdog_Initialize(
        &the_thread->Timer,
-       _Thread_queue_Timeout,
+       handler,
        the_thread->Object.id,
        NULL
     );

@@ -232,6 +232,10 @@ $(PROJECT_INCLUDE)/rtems/score/thread.inl: inline/rtems/score/thread.inl $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/thread.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/thread.inl
 
+$(PROJECT_INCLUDE)/rtems/score/threadq.inl: inline/rtems/score/threadq.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadq.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadq.inl
+
 $(PROJECT_INCLUDE)/rtems/score/tod.inl: inline/rtems/score/tod.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tod.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tod.inl

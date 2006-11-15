@@ -25,7 +25,8 @@ include_rtems_posix_HEADERS = include/rtems/posix/cancel.h \
     include/rtems/posix/priority.h include/rtems/posix/psignal.h \
     include/rtems/posix/pthread.h include/rtems/posix/semaphore.h \
     include/rtems/posix/threadsup.h include/rtems/posix/time.h \
-    include/rtems/posix/timer.h
+    include/rtems/posix/timer.h include/rtems/posix/barrier.h \
+    include/rtems/posix/rwlock.h include/rtems/posix/spinlock.h
 
 if HAS_MP
 include_rtems_posix_HEADERS += include/rtems/posix/condmp.h \
@@ -37,7 +38,8 @@ include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
     inline/rtems/posix/key.inl inline/rtems/posix/mqueue.inl \
     inline/rtems/posix/mutex.inl inline/rtems/posix/pthread.inl \
     inline/rtems/posix/priority.inl inline/rtems/posix/semaphore.inl \
-    inline/rtems/posix/timer.inl
+    inline/rtems/posix/timer.inl inline/rtems/posix/barrier.inl \
+    inline/rtems/posix/rwlock.inl inline/rtems/posix/spinlock.inl
 
 ## src
 
@@ -49,6 +51,12 @@ libposix_a_SOURCES = src/aio.c src/devctl.c
 libposix_a_SOURCES += src/execl.c src/execle.c src/execlp.c src/execv.c \
     src/execve.c src/execvp.c src/fork.c src/pthreadatfork.c src/wait.c \
     src/waitpid.c
+
+## BARRIER_C_FILES
+libposix_a_SOURCES += src/barrierattrdestroy.c src/barrierattrgetpshared.c \
+    src/barrierattrinit.c src/barrierattrsetpshared.c src/pbarrier.c \
+    src/pbarrierdestroy.c src/pbarrierinit.c \
+    src/pbarriertranslatereturncode.c src/pbarrierwait.c
 
 ## CANCEL_C_FILES
 libposix_a_SOURCES += src/cancel.c src/cancelrun.c src/cleanuppop.c \
@@ -115,12 +123,25 @@ libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
     src/sigprocmask.c src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c \
     src/sigwait.c src/sigwaitinfo.c src/signal_2.c src/ualarm.c
 
+## RWLOCK_C_FILES
+libposix_a_SOURCES += src/prwlock.c src/prwlockdestroy.c src/prwlockinit.c \
+    src/prwlockrdlock.c src/prwlocktimedrdlock.c src/prwlocktimedwrlock.c \
+    src/prwlocktryrdlock.c src/prwlocktrywrlock.c src/prwlockunlock.c \
+    src/prwlockwrlock.c src/rwlockattrdestroy.c src/rwlockattrgetpshared.c \
+    src/rwlockattrinit.c src/rwlockattrsetpshared.c \
+    src/prwlocktranslatereturncode.c
+
 ## SEMAPHORE_C_FILES
 libposix_a_SOURCES += src/semaphore.c src/semaphorecreatesupp.c \
     src/semaphoredeletesupp.c src/semaphoremp.c src/semaphorenametoid.c \
     src/semaphorewaitsupp.c src/semclose.c src/semdestroy.c \
     src/semgetvalue.c src/seminit.c src/semopen.c src/sempost.c \
     src/semtimedwait.c src/semtrywait.c src/semunlink.c src/semwait.c
+
+## SPINLOCK_C_FILES
+libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
+    src/pspinlock.c src/pspinlocktranslatereturncode.c src/pspintrylock.c \
+    src/pspinunlock.c
 
 ## TIME_C_FILES
 libposix_a_SOURCES += src/adjtime.c src/time.c src/posixtimespecsubtract.c \

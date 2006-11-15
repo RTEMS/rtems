@@ -1015,7 +1015,7 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 {
 	rtems_interval timeout = tty->rawInBufSemaphoreFirstTimeout;
 	rtems_status_code sc;
-        int               wait = (int)1;
+	int               wait = (int)1;
 
 	while ( wait ) {
 		/*

@@ -50,9 +50,9 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/object.inl inline/rtems/score/priority.inl \
     inline/rtems/score/stack.inl inline/rtems/score/states.inl \
     inline/rtems/score/sysstate.inl inline/rtems/score/thread.inl \
-    inline/rtems/score/tod.inl inline/rtems/score/tqdata.inl \
-    inline/rtems/score/userext.inl inline/rtems/score/watchdog.inl \
-    inline/rtems/score/wkspace.inl
+    inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
+    inline/rtems/score/tqdata.inl inline/rtems/score/userext.inl \
+    inline/rtems/score/watchdog.inl inline/rtems/score/wkspace.inl
 
 if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined
@@ -91,7 +91,7 @@ libscore_a_SOURCES += src/coremutex.c src/coremutexflush.c \
 
 ## CORE_RWLOCK_C_FILES
 libscore_a_SOURCES += src/corerwlock.c src/corerwlockobtainread.c \
-    src/corerwlockobtainwrite.c src/corerwlockrelease.c
+    src/corerwlockobtainwrite.c src/corerwlockrelease.c src/corerwlocktimeout.c
 
 ## CORE_SEMAPHORE_C_FILES
 libscore_a_SOURCES += src/coresem.c src/coresemflush.c src/coresemseize.c \

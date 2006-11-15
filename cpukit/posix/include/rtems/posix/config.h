@@ -54,6 +54,9 @@ typedef struct {
   int                                 maximum_queued_signals;
   int                                 maximum_message_queues;
   int                                 maximum_semaphores;
+  int                                 maximum_barriers;
+  int                                 maximum_rwlocks;
+  int                                 maximum_spinlocks;
   int                                 number_of_initialization_threads;
   posix_initialization_threads_table *User_initialization_threads_table;
 } posix_api_configuration_table;

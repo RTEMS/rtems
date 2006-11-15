@@ -33,7 +33,7 @@
 #include <mqueue.h>
 #include <rtems/config.h>
 #include <rtems/score/object.h>
-/* #include <rtems/posix/barrier.h> */
+#include <rtems/posix/barrier.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
@@ -42,10 +42,10 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
-/* #include <rtems/posix/rwlock.h> */
+#include <rtems/posix/rwlock.h>
 #include <rtems/posix/timer.h>
 #include <rtems/posix/semaphore.h>
-/* #include <rtems/posix/spinlock.h> */
+#include <rtems/posix/spinlock.h>
 #include <rtems/posix/time.h>
 
 /*PAGE
@@ -65,11 +65,9 @@ posix_api_configuration_table _POSIX_Default_configuration = {
   0,                             /* number_of_initialization_threads */
   0,                             /* maximum_message_queues */
   0,                             /* maximum_semaphores */
-#if 0
   0,                             /* maximum_barriers */
   0,                             /* maximum_spinlocks */
   0,                             /* maximum_rwlocks */
-#endif
   NULL                           /* User_initialization_threads_table */
 };
 
@@ -122,14 +120,11 @@ void _POSIX_API_Initialize(
 
   _POSIX_Timer_Manager_initialization( api_configuration->maximum_timers );
 
-  /* temporary while working */
-#if 0
   _POSIX_Barrier_Manager_initialization( api_configuration->maximum_barriers );
 
   _POSIX_RWLock_Manager_initialization( api_configuration->maximum_rwlocks );
 
   _POSIX_Spinlock_Manager_initialization(api_configuration->maximum_spinlocks);
-#endif
 }
 
 #endif

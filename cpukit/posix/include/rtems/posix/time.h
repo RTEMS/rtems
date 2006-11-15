@@ -22,8 +22,7 @@
   (((1987 - 1970 + 1)  * TOD_SECONDS_PER_NON_LEAP_YEAR) + \
   (4 * TOD_SECONDS_PER_DAY))
 
-/*PAGE
- *
+/*
  *  _POSIX_Timespec_subtract
  */
 
@@ -41,14 +40,21 @@ Watchdog_Interval _POSIX_Timespec_to_interval(
   const struct timespec *time
 );
 
-/*PAGE
- *
+/*
  *  _POSIX_Interval_to_timespec
  */
 
 void _POSIX_Interval_to_timespec(
   Watchdog_Interval  ticks,
   struct timespec   *time
+);
+
+/*
+ *  _POSIX_Absolute_timeout_to_ticks
+ */
+int _POSIX_Absolute_timeout_to_ticks(
+  const struct timespec *abstime,
+  Watchdog_Interval     *ticks_out
 );
 
 #endif

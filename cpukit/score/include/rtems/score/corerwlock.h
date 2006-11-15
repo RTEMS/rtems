@@ -205,6 +205,22 @@ CORE_RWLock_Status _CORE_RWLock_Release(
     (_status) \
   )
 
+/**
+ *  @brief RWLock Specific Thread Queue Timeout
+ *
+ *  This routine processes a thread which timeouts while waiting on
+ *  an RWLock's thread queue. It is called by the watchdog handler.
+ *
+ *  @param[in] id is the Id of thread to timeout
+ *  @param[in] ignored is an unused pointer to a caller defined area
+ */
+
+void _CORE_RWLock_Timeout(
+  Objects_Id  id,
+  void       *ignored
+);
+
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/corerwlock.inl>
 #endif

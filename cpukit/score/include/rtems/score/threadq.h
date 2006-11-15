@@ -47,7 +47,17 @@ extern "C" {
  *  is extracted from a local thread queue.
  */
 typedef void ( *Thread_queue_Flush_callout )(
-                 Thread_Control *
+                  Thread_Control *
+             );
+
+/**
+ *
+ * The following type defines the callout used for timeout processing
+ * methods.
+ */
+typedef void ( *Thread_queue_Timeout_callout )(
+                 Objects_Id,
+                 void *
              );
 
 /** @brief  Thread queue Dequeue
@@ -61,14 +71,27 @@ Thread_Control *_Thread_queue_Dequeue(
   Thread_queue_Control *the_thread_queue
 );
 
+/** @brief  Thread queue Enqueue Wrapper
+ *
+ *  This routine enqueues the currently executing thread on
+ *  the_thread_queue with an optional timeout.
+ */
+#define _Thread_queue_Enqueue( _the_thread_queue, _timeout ) \
+  _Thread_queue_Enqueue_with_handler( \
+    _the_thread_queue, \
+    _timeout, \
+    _Thread_queue_Timeout )
+  
+
 /** @brief  Thread queue Enqueue
  *
  *  This routine enqueues the currently executing thread on
  *  the_thread_queue with an optional timeout.
  */
-void _Thread_queue_Enqueue(
-  Thread_queue_Control *the_thread_queue,
-  Watchdog_Interval     timeout
+void _Thread_queue_Enqueue_with_handler(
+  Thread_queue_Control*        the_thread_queue,
+  Watchdog_Interval            timeout,
+  Thread_queue_Timeout_callout handler
 );
 
 /** @brief  Thread queue Extract
@@ -219,6 +242,11 @@ void _Thread_queue_Timeout (
   Objects_Id  id,
   void       *ignored
 );
+
+
+#ifndef __RTEMS_APPLICATION__
+#include <rtems/score/threadq.inl>
+#endif
 
 #ifdef __cplusplus
 }

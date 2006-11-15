@@ -1,3 +1,36 @@
+2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/termios.c, posix/Makefile.am, posix/preinstall.am,
+	posix/include/rtems/posix/config.h, posix/include/rtems/posix/time.h,
+	sapi/src/posixapi.c, score/Makefile.am, score/preinstall.am,
+	score/include/rtems/score/corerwlock.h,
+	score/include/rtems/score/threadq.h,
+	score/src/corerwlockobtainread.c, score/src/threadqenqueue.c,
+	score/src/threadqtimeout.c: Adding POSIX barriers, POSIX spinlocks,
+	and partial implementation of POSIX rwlocks.
+	* posix/include/rtems/posix/barrier.h,
+	posix/include/rtems/posix/rwlock.h,
+	posix/include/rtems/posix/spinlock.h,
+	posix/inline/rtems/posix/barrier.inl,
+	posix/inline/rtems/posix/rwlock.inl,
+	posix/inline/rtems/posix/spinlock.inl,
+	posix/src/barrierattrdestroy.c, posix/src/barrierattrgetpshared.c,
+	posix/src/barrierattrinit.c, posix/src/barrierattrsetpshared.c,
+	posix/src/pbarrier.c, posix/src/pbarrierdestroy.c,
+	posix/src/pbarrierinit.c, posix/src/pbarriertranslatereturncode.c,
+	posix/src/pbarrierwait.c, posix/src/prwlock.c,
+	posix/src/prwlockdestroy.c, posix/src/prwlockinit.c,
+	posix/src/prwlockrdlock.c, posix/src/prwlocktimedrdlock.c,
+	posix/src/prwlocktimedwrlock.c,
+	posix/src/prwlocktranslatereturncode.c, posix/src/prwlocktryrdlock.c,
+	posix/src/prwlocktrywrlock.c, posix/src/prwlockunlock.c,
+	posix/src/prwlockwrlock.c, posix/src/pspin.c,
+	posix/src/pspindestroy.c, posix/src/pspininit.c,
+	posix/src/pspinlock.c, posix/src/pspinlocktranslatereturncode.c,
+	posix/src/pspintrylock.c, posix/src/pspinunlock.c,
+	posix/src/rwlockattrdestroy.c, posix/src/rwlockattrgetpshared.c,
+	posix/src/rwlockattrinit.c, posix/src/rwlockattrsetpshared.c: New files.
+
 2006-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require inttypes.h, check for stdint.h.
