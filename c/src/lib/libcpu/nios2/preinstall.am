@@ -8,6 +8,8 @@ endif
 PREINSTALL_DIRS =
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 
+all-am: $(PREINSTALL_FILES)
+
 PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
@@ -20,7 +22,4 @@ PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 $(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
-
 endif
-
-
