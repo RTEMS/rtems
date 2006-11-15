@@ -1,3 +1,9 @@
+2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Adding Classic API Barriers.
+	* sp33/.cvsignore, sp33/Makefile.am, sp33/init.c, sp33/sp33.scn:
+	New files.
+
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.60. Require automake-1.10.
