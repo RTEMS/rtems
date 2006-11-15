@@ -1,3 +1,11 @@
+2006-11-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* patches/gcc-core-4.2-20061114-rtems4.8-20061115.diff: New.
+	* patches/newlib-1.14.0-bfinrtems-20060810a.diff: Remove (Obsolete).
+	* patches/gcc-4.1.1-bfinrtems-20060810a.diff: Remove (Obsolete).
+	* rtems-4.8/bfin/Makefile.am, rtems-4.8/bin/gcc-sources.add:
+	GCC_REL=4. Upgrade to gcc-core-4.2-20061114-rtems4.8-20061115.diff.
+
 2006-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac, Makefile.am: Remove rtems4.7.
