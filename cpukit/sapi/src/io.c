@@ -98,7 +98,7 @@ void _IO_Initialize_all_drivers( void )
    rtems_device_major_number major;
 
    for ( major=0 ; major < _IO_Number_of_drivers ; major ++ )
-     (void) rtems_io_initialize( major, 0, NULL);
+     (void) rtems_io_initialize( major, 0, NULL );
 }
 
 /*PAGE
