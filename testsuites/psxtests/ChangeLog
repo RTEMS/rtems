@@ -1,5 +1,12 @@
 2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxrwlock01/.cvsignore, psxrwlock01/Makefile.am, psxrwlock01/main.c,
+	psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c,
+	psxspin01/.cvsignore, psxspin01/Makefile.am, psxspin01/main.c,
+	psxspin01/psxspin01.scn, psxspin01/test.c: New files.
+
+2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Adding POSIX barriers, POSIX spinlocks,
 	and partial implementation of POSIX rwlocks.
 	* psxbarrier01/.cvsignore, psxbarrier01/Makefile.am,
