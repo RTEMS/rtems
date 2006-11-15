@@ -8,7 +8,7 @@ Patch0:		gcc-core-4.1.1-rtems-20060909.diff
 %endif
 %if "%{gcc_version}" == "4.2.0"
 Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20061109.diff
+Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20061115.diff
 %endif
 %{?_without_sources:NoSource:	0}
 

@@ -9,11 +9,11 @@ BINUTILS_RPMREL = 1
 include ../binutils.am
 
 GCC_VERS = 4.2.0
-GCC_PKGVERS = 4.2-20061031
-GCC_RPMREL = 3
+GCC_PKGVERS = 4.2-20061114
+GCC_RPMREL = 4
 NEWLIB_VERS = 1.14.0
 include ../gcc.am
-# ATM, we don't want info's from bleeding edge GCC
+# ATM, we don't want infos from bleeding edge GCC
 GCC_OPTS += --disable-infos
 
 GDB_VERS = 6.5
