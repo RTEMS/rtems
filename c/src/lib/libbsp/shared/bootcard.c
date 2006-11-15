@@ -1,12 +1,27 @@
 /*
- *  A simple main which can be used on any embedded target.
+ *  This is the C entry point for ALL RTEMS BSPs.  It is invoked
+ *  from the assembly language initialization file usually called
+ *  start.S.  It provides the framework for the BSP initialization
+ *  sequence.  The basic flow of initialization is:
+ *
+ *  + start.S: basic CPU setup (stack, zero BSS) 
+ *    + boot_card
+ *      + bspstart.c: bsp_start - more advanced initialization
+ *      + rtems_initialize_executive_early
+ *        + all device drivers
+ *      + rtems_initialize_executive_late
+ *        + 1st task executes C++ global constructors
+ *        .... appplication runs ...
+ *        + exit
+ *     + back to here eventually
+ *     + bspclean.c: bsp_cleanup
  *
  *  This style of initialization insures that the C++ global
  *  constructors are executed after RTEMS is initialized.
  *
  *  Thanks to Chris Johns <cjohns@plessey.com.au> for this idea.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,7 +61,7 @@ rtems_interrupt_level bsp_isr_level;
  *  Since there is a forward reference
  */
 
-int c_rtems_main(int argc, char **argv, char **envp);
+char *rtems_progname;
 
 int boot_card(int argc, char **argv, char **envp)
 {
@@ -100,8 +115,7 @@ int boot_card(int argc, char **argv, char **envp)
 #endif
 
   /*
-   *  The atexit hook will be before the static destructor list's entry
-   *  point.
+   * XXX
    */
 
   bsp_start();
@@ -114,15 +128,25 @@ int boot_card(int argc, char **argv, char **envp)
     rtems_initialize_executive_early( &BSP_Configuration, &Cpu_table );
 
   /*
-   *  Call c_rtems_main() and eventually let the first task or the real
-   *  main() invoke the global constructors if there are any.
+   *  The atexit hook will be before the static destructor list's entry
+   *  point.
    */
 
 #if defined(__USE_INIT_FINI__)
    atexit( _fini );
 #endif
 
-  status = c_rtems_main( argc, argv_p, envp_p );
+  /*
+   *  Call c_rtems_main() and eventually let the first task or the real
+   *  main() invoke the global constructors if there are any.
+   */
+
+  if ((argc > 0) && argv && argv[0])
+    rtems_progname = argv[0];
+  else
+    rtems_progname = "RTEMS";
+
+  rtems_initialize_executive_late( bsp_isr_level );
 
   /*
    *  Perform any BSP specific shutdown actions.
