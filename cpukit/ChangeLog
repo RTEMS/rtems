@@ -1,5 +1,10 @@
 2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/inline/rtems/score/threadq.inl, score/src/corerwlocktimeout.c:
+	New files.
+
+2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/termios.c, posix/Makefile.am, posix/preinstall.am,
 	posix/include/rtems/posix/config.h, posix/include/rtems/posix/time.h,
 	sapi/src/posixapi.c, score/Makefile.am, score/preinstall.am,
