@@ -1,3 +1,7 @@
+2006-11-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Use AC_CONFIG_HEADER instead of AM_CONFIG_HEADER.
+
 2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.60. Require automake-1.10.
