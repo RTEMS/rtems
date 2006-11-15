@@ -569,15 +569,15 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #include <signal.h>
 #include <limits.h>
 #include <mqueue.h>
-/* #include <rtems/posix/barrier.h> */
+#include <rtems/posix/barrier.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/psignal.h>
-/* #include <rtems/posix/rwlock.h> */
+#include <rtems/posix/rwlock.h>
 #include <rtems/posix/semaphore.h>
-/* #include <rtems/posix/spinlock.h> */
+#include <rtems/posix/spinlock.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/timer.h>
 
