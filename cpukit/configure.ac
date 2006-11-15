@@ -97,6 +97,10 @@ AS_IF([test x"${ac_cv_header_stdint_h}" = xyes],
 AS_IF([test x"${ac_cv_header_inttypes_h}" != xyes],
 [AC_MSG_ERROR([Required header inttypes.h not found])])
 
+AC_CHECK_TYPES([ uint8_t,  int8_t])
+AC_CHECK_TYPES([uint16_t, int16_t])
+AC_CHECK_TYPES([uint32_t, int32_t])
+
 AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
 [RTEMS_USES_TAR_H=yes],
 [RTEMS_USES_TAR_H=$ac_cv_header_tar_h])
@@ -260,8 +264,6 @@ AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
 
 AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
-
-RTEMS_AMPOLISH3
 
 AC_CONFIG_HEADER(config.h)
 
