@@ -91,14 +91,14 @@ test -n "${RTEMS_BSP_FAMILY}" && \
 AC_CACHE_CHECK([for CPU_CFLAGS],[ac_cv_env_CPU_CFLAGS],
 [. ./make/${RTEMS_BSP}.cache])
 CPU_CFLAGS=$ac_cv_env_CPU_CFLAGS
-test -n "${CPU_CFLAGS}" && \
-  ac_configure_args="$ac_configure_args 'CPU_CFLAGS=${CPU_CFLAGS}'"
 
 AC_CACHE_CHECK([for CFLAGS_OPTIMIZE_V],[ac_cv_env_CFLAGS_OPTIMIZE_V],
 [. ./make/${RTEMS_BSP}.cache])
 CFLAGS_OPTIMIZE_V=$ac_cv_env_CFLAGS_OPTIMIZE_V
-test -n "${CFLAGS_OPTIMIZE_V}" && \
-  ac_configure_args="$ac_configure_args 'CFLAGS_OPTIMIZE_V=${CFLAGS_OPTIMIZE_V}'"
+
+CFLAGS="${CFLAGS-${CPU_CFLAGS} ${CFLAGS_OPTIMIZE_V}}"
+AS_IF([test x"${CFLAGS}" != x" "],[
+  ac_configure_args="$ac_configure_args 'CFLAGS=${CFLAGS}'"])
 
 RTEMS_PROG_CC_FOR_TARGET
 AM_PROG_CC_C_O
@@ -125,7 +125,6 @@ RTEMS_BSP_CONFIG_SUBDIR(
   ['--with-project-root=${with_project_root}../$RTEMS_BSP/' \
    '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
    '--libdir=${exec_prefix}/${RTEMS_BSP}/lib' \
-   'CFLAGS="${CFLAGS}"' \
   ],
   [test x"$multilib" = xno])
 
@@ -195,7 +194,6 @@ RTEMS_BSP_CONFIG_SUBDIR(
    '--enable-rtemsbsp=$RTEMS_BSP' \
    '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
    '--libdir=${exec_prefix}/${RTEMS_BSP}/lib' \
-   'CFLAGS="${CFLAGS}"' \
   ],
   [test x"$enable_tests" != x"no" && test x"$multilib" = xno])
 
@@ -209,7 +207,6 @@ RTEMS_BSP_CONFIG_SUBDIR(
    '--enable-rtemsbsp=$RTEMS_BSP' \
    '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
    '--libdir=${exec_prefix}/${RTEMS_BSP}/lib' \
-   'CFLAGS="${CFLAGS}"' \
   ],
   [test x"$enable_tests" != x"no" && test x"$multilib" = xyes])
 

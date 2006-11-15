@@ -1,3 +1,9 @@
+2006-11-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/prog-cc.m4: Remove CFLAGS.
+	* configure.ac: Don't explictly pass CFLAGS_OPTIMIZE_V, CPU_CFLAGS.
+	Compose CFLAGS. Append CFLAGS to ac_configure_args.
+
 2006-10-23	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/rtems-cpu-subdirs.m4: Add bfin.
