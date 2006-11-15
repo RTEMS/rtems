@@ -39,6 +39,7 @@ psx10/Makefile
 psx11/Makefile
 psx12/Makefile
 psx13/Makefile
+psxbarrier01/Makefile
 psxcancel/Makefile
 psxchroot01/Makefile
 psxfile01/Makefile
@@ -46,7 +47,9 @@ psxhdrs/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
 psxreaddir/Makefile
+psxrwlock01/Makefile
 psxsem01/Makefile
+psxspin01/Makefile
 psxstat/Makefile
 psxtime/Makefile
 psxtimer/Makefile
