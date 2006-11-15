@@ -71,10 +71,6 @@ rtems_configure_args="$ac_configure_args"
 ])
 ])
 
-## FIXME: This is obsolete. Only kept for backward compatibility
-AU_DEFUN([RTEMS_OUTPUT_BUILD_SUBDIRS],[])
-
-
 dnl
 dnl Misc utility macros for subdir handling to work around missing abilities
 dnl in autoconf, automake and structural issues with RTEMS

@@ -1,5 +1,6 @@
 2006-11-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/target.m4: Remove RTEMS_OUTPUT_BUILD_SUBDIRS.
 	* aclocal/prog-cc.m4: Remove CFLAGS.
 	* configure.ac: Don't explictly pass CFLAGS_OPTIMIZE_V, CPU_CFLAGS.
 	Compose CFLAGS. Append CFLAGS to ac_configure_args.
