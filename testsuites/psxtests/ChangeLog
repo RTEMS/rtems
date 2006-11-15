@@ -1,5 +1,9 @@
 2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxbarrier01/main.c: New file.
+
+2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psxrwlock01/.cvsignore, psxrwlock01/Makefile.am, psxrwlock01/main.c,
 	psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c,
 	psxspin01/.cvsignore, psxspin01/Makefile.am, psxspin01/main.c,
