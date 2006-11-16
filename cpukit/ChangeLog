@@ -1,5 +1,7 @@
 2006-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_glue.c: Rename timeout() into
+	  rtems_bsdnet_timeout().
 	* libnetworking/sys/malloc.h: Remove contigmalloc (non-implemented).
 	Remove __P-guards from malloc, free.
 

@@ -108,7 +108,7 @@ int32_t rtems_bsdnet_timeoffset = 0;
 extern void *malloc (size_t);
 extern void free (void *);
 void *
-rtems_bsdnet_malloc (unsigned long size, int type, int flags)
+rtems_bsdnet_malloc (size_t size, int type, int flags)
 {
 	void *p;
 	int try = 0;
@@ -683,7 +683,7 @@ rtems_bsdnet_random (void)
  * Callout list processing
  */
 void
-timeout(void (*ftn)(void *), void *arg, int ticks)
+rtems_bsdnet_timeout(void (*ftn)(void *), void *arg, int ticks)
 {
 	register struct callout *new, *p, *t;
 
