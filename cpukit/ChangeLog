@@ -1,5 +1,11 @@
 2006-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/gethostbydns.c, libnetworking/libc/linkaddr.c,
+	libnetworking/libc/map_v4v6.c: Cosmetic updates from FreeBSD.
+	Eliminate bcopy in favor of memcpy.
+
+2006-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/rtems_bsdnet_internal.h: Add timeout() define.
 	* libnetworking/rtems/rtems_glue.c: Rename timeout() into
 	  rtems_bsdnet_timeout().
