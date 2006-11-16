@@ -1,5 +1,6 @@
 2006-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Add timeout() define.
 	* libnetworking/rtems/rtems_glue.c: Rename timeout() into
 	  rtems_bsdnet_timeout().
 	* libnetworking/sys/malloc.h: Remove contigmalloc (non-implemented).

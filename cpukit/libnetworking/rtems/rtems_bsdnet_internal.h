@@ -127,11 +127,12 @@ struct	rtems_bsdnet_ifconfig;
 /*
  * Redo kernel memory allocation
  */
-#define malloc rtems_bsdnet_malloc
-#define free rtems_bsdnet_free
+#define malloc(size,type,flags) rtems_bsdnet_malloc(size,type,flags)
+#define free(ptr,type) rtems_bsdnet_free(ptr,type)
+#define timeout(ftn,arg,ticks) rtems_bsdnet_timeout(ftp,arg,ticks)
 
 #define	M_NOWAIT	0x0001
-void *rtems_bsdnet_malloc (unsigned long size, int type, int flags);
+void *rtems_bsdnet_malloc (size_t size, int type, int flags);
 void rtems_bsdnet_free (void *addr, int type);
 
 void rtems_bsdnet_semaphore_obtain (void);
