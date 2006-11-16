@@ -14,8 +14,7 @@ AC_CHECK_PROGS(MAKE, gmake make)
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 
 AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
-
-AC_SUBST([RTEMS_TOPdir],["$1"])
+RTEMS_TOPdir="$1"
 
 # HACK: The sed pattern in rtems_updir matches c/src/
 rtems_updir=m4_if([$2],[],[`echo "$1/" | sed 's,^\.\.\/\.\.\/,,'`],[$2/])
@@ -28,4 +27,6 @@ AC_SUBST([PROJECT_TOPdir],[${project_top}${rtems_updir}'$(top_builddir)'])
 AC_SUBST([PROJECT_ROOT],[${with_project_root}${rtems_updir}'$(top_builddir)'])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
+
+RTEMS_AMPOLISH3
 ])dnl
