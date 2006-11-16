@@ -345,11 +345,8 @@ extern struct kmemusage *kmemusage;
 extern char *kmembase;
 extern struct kmembuckets bucket[];
 
-void	*contigmalloc __P((unsigned long size, int type, int flags,
-			   unsigned long low, unsigned long high,
-			   unsigned long alignment, unsigned long boundary));
-void	free __P((void *addr, int type));
-void	*malloc __P((unsigned long size, int type, int flags));
+void	free (void *addr, int type);
+void	*malloc (size_t size, int type, int flags);
 #endif /* _KERNEL */
 
 #endif /* !_SYS_MALLOC_H_ */

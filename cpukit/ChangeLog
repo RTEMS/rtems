@@ -1,7 +1,11 @@
+2006-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/malloc.h: Remove contigmalloc (non-implemented).
+	Remove __P-guards from malloc, free.
+
 2006-11-15	Joel Sherrill <joel@OARcorp.com>
 
 	* sapi/src/io.c: Fix spacing.
-
 	* sapi/include/confdefs.h: Enable includes needed for new objects.
 
 2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
