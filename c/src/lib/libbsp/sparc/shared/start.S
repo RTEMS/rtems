@@ -7,6 +7,13 @@
  *  distribution of the SPARC Instruction Simulator (SIS) found
  *  at ftp://ftp.estec.esa.nl/pub/ws/wsd/erc32.
  *
+ *  COPYRIGHT (c) 1989-2006.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
