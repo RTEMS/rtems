@@ -1,3 +1,19 @@
+2006-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_AMPOLISH3.
+	* aclocal/rtems-ampolish.m4: Pick up ampolish3 from ac_aux_dir.
+	* aclocal/rtems-top.m4: Add RTEMS_AMPOLISH3.
+	* ampolish3: Remove.
+
+2006-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/stdint.h: Remove.
+	* libcsupport/include/inttypes.h: Remove.
+	* configure.ac: Remove RTEMS_PROVIDES_STDINT_H,
+	RTEMS_PROVIDES_INTTYPES_H.
+	Use external stdint.h, inttypes.h.
+	* Makefile.am: RTEMS_PROVIDES_STDINT_H, RTEMS_PROVIDES_INTTYPES_H.
+
 2006-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove c4x.
