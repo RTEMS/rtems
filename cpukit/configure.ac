@@ -269,8 +269,6 @@ AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
 AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 
-RTEMS_AMPOLISH3
-
 AC_CONFIG_HEADER(config.h)
 
 # Explicitly list all Makefiles here
