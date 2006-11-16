@@ -1,3 +1,12 @@
+2006-11-16	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c: Use common clock driver template and eliminate all
+	fast idle code specific to this BSP. This eliminates a fair amount of
+	code in the BSP clock driver and bsp_startup. The LEON3 has to do a
+	scan of the AMBA bus to find the timer so I added the new hook
+	Clock_driver_support_find_timer to support this. In general, there
+	was some clean up to the file headers of various files.
+
 2006-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove superfluous -DASM.
