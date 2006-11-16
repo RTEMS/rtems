@@ -79,23 +79,21 @@ typedef union {
 } align;
 
 void
-_map_v4v6_address(src, dst)
-	const char *src;
-	char *dst;
+_map_v4v6_address(const char *src, char *dst)
 {
 	u_char *p = (u_char *)dst;
 	char tmp[INADDRSZ];
 	int i;
 
 	/* Stash a temporary copy so our caller can update in place. */
-	bcopy(src, tmp, INADDRSZ);
+	memcpy(tmp, src, INADDRSZ);
 	/* Mark this ipv6 addr as a mapped ipv4. */
 	for (i = 0; i < 10; i++)
 		*p++ = 0x00;
 	*p++ = 0xff;
 	*p++ = 0xff;
 	/* Retrieve the saved copy and we're done. */
-	bcopy(tmp, (void*)p, INADDRSZ);
+	memcpy((void*)p, tmp, INADDRSZ);
 }
 
 void

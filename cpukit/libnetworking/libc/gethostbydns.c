@@ -56,8 +56,8 @@
 #if defined(LIBC_SCCS) && !defined(lint)
 static char sccsid[] = "@(#)gethostnamadr.c	8.1 (Berkeley) 6/4/93";
 static char fromrcsid[] = "From: Id: gethnamaddr.c,v 8.23 1998/04/07 04:59:46 vixie Exp $";
-static char rcsid[] = "$Id$";
 #endif /* LIBC_SCCS and not lint */
+#include <sys/cdefs.h>
 
 #include <sys/types.h>
 #include <sys/param.h>
@@ -158,9 +158,9 @@ gethostanswer(answer, anslen, qname, qtype)
 	const char *qname;
 	int qtype;
 {
-	register const HEADER *hp;
-	register const u_char *cp;
-	register int n;
+	const HEADER *hp;
+	const u_char *cp;
+	int n;
 	const u_char *eom, *erdata;
 	char *bp, **ap, **hap;
 	int type, class, buflen, ancount, qdcount;
@@ -168,7 +168,7 @@ gethostanswer(answer, anslen, qname, qtype)
 	int toobig = 0;
 	char tbuf[MAXDNAME];
 	const char *tname;
-	int (*name_ok) __P((const char *));
+	int (*name_ok)(const char *);
 
 	tname = qname;
 	host.h_name = NULL;
@@ -404,7 +404,7 @@ gethostanswer(answer, anslen, qname, qtype)
 				cp += n;
 				continue;
 			}
-			bcopy(cp, *hap++ = bp, n);
+			memcpy(*hap++ = bp, cp, n);
 			bp += n;
 			buflen -= n;
 			cp += n;
@@ -454,11 +454,7 @@ gethostanswer(answer, anslen, qname, qtype)
 }
 
 struct hostent *
-__dns_getanswer(answer, anslen, qname, qtype)
-	const char *answer;
-	int anslen;
-	const char *qname;
-	int qtype;
+__dns_getanswer(const char *answer, int anslen, const char *qname, int qtype)
 {
 	switch(qtype) {
 	case T_AAAA:
@@ -701,7 +697,7 @@ _gethostbydnsaddr(addr, len, af)
 #endif /*SUNSECURITY*/
 	hp->h_addrtype = af;
 	hp->h_length = len;
-	bcopy(addr, host_addr, len);
+	memcpy(host_addr, addr, len);
 	h_addr_ptrs[0] = (char *)host_addr;
 	h_addr_ptrs[1] = NULL;
 	if (af == AF_INET && (_res.options & RES_USE_INET6)) {
@@ -757,9 +753,9 @@ addrsort(ap, num)
 	}
 }
 #endif
+
 void
-_sethostdnsent(stayopen)
-	int stayopen;
+_sethostdnsent(int stayopen)
 {
 	if ((_res.options & RES_INIT) == 0 && res_init() == -1)
 		return;
