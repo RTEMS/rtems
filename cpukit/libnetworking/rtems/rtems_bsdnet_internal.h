@@ -129,7 +129,7 @@ struct	rtems_bsdnet_ifconfig;
  */
 #define malloc(size,type,flags) rtems_bsdnet_malloc(size,type,flags)
 #define free(ptr,type) rtems_bsdnet_free(ptr,type)
-#define timeout(ftn,arg,ticks) rtems_bsdnet_timeout(ftp,arg,ticks)
+#define timeout(ftn,arg,ticks) rtems_bsdnet_timeout(ftn,arg,ticks)
 
 #define	M_NOWAIT	0x0001
 void *rtems_bsdnet_malloc (size_t size, int type, int flags);
