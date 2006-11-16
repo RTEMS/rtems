@@ -4,13 +4,9 @@ dnl RTEMS_BSP_CONFIGURE
 dnl Common macro to be included by all bsp-configure.acs
 AC_DEFUN([RTEMS_BSP_CONFIGURE],
 [
-  AC_PREREQ(2.59)
+  AC_PREREQ(2.60)
   AM_MAINTAINER_MODE
   RTEMS_ENV_RTEMSBSP
-
-  AC_PATH_PROG([AMPOLISH3],[ampolish3],[])
-  AM_CONDITIONAL([AMPOLISH3],[test x"$USE_MAINTAINER_MODE" = x"yes" \
-    && test -n "$AMPOLISH3"])
 
   RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
