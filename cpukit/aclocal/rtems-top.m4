@@ -65,4 +65,6 @@ AC_SUBST([project_libdir],["\$(libdir)"])
 AC_SUBST([project_includedir],["\$(includedir)"])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
+
+RTEMS_AMPOLISH3
 ])dnl
