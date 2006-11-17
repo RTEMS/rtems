@@ -1,5 +1,9 @@
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
 
+	* libmisc/rtmonuse/rtmonuse.c: Do not use float for calculations.
+
+2006-11-17	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/src/sync.c: Do not dereference NULL reent.
 
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
