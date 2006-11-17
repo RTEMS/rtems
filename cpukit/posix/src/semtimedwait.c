@@ -48,18 +48,18 @@ int sem_timedwait(
     blocking = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
   else
 #endif
-  if ( abstime->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
-    blocking = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
-  else { 
-    (void) clock_gettime( CLOCK_REALTIME, &current_time );
+  if ( abstime->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
+    blocking = CORE_SEMAPHORE_BAD_TIMEOUT;
+  } else { 
+    clock_gettime( CLOCK_REALTIME, &current_time );
     /*
      *  Make sure the abstime is in the future
      */
     if ( abstime->tv_sec < current_time.tv_sec )
-      blocking = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
+      blocking = CORE_SEMAPHORE_BAD_TIMEOUT;
     else if ( (abstime->tv_sec == current_time.tv_sec) &&
          (abstime->tv_nsec <= current_time.tv_nsec) )
-      blocking = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
+      blocking = CORE_SEMAPHORE_BAD_TIMEOUT;
     else {
       _POSIX_Timespec_subtract( &current_time, abstime, &difference );
       ticks = _POSIX_Timespec_to_interval( &difference );

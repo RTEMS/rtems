@@ -1,5 +1,10 @@
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
 
+	* posix/src/semtimedwait.c: Used wrong constant for blocking with bad
+	timeout value.
+
+2006-11-17	Joel Sherrill <joel@OARcorp.com>
+
 	* posix/src/keygetspecific.c, posix/src/keysetspecific.c: Correct
 	indexing of key data to use api and index NOT class and index.
 	Class is always 1.
