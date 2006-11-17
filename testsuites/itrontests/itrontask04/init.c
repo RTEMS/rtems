@@ -55,7 +55,7 @@ void ITRON_Init( void )
   puts("INIT - dis_dsp while starting tasks");
   status = dis_dsp( );
 
-  /* dispatching disabled */
+  /* dispatching disabled -- NOT LEGAL TO PRINT UNTIL ENABLED */
 
   directive_failed_with_level( status, "dis_dsp from ITRON_Init", 1 );
   status  = sta_tsk( TA1_ID, 0 );
@@ -65,7 +65,7 @@ void ITRON_Init( void )
   status  = sta_tsk( TA3_ID, 0 );
   directive_failed_with_level( status, "sta_tsk of TA3", 1 );
 
-  puts( "INIT - suspending TA2 3 times" );
+  /* puts( "INIT - suspending TA2 3 times" ); */
   status = sus_tsk( TA2_ID  );
   directive_failed_with_level( status, "sus_tsk of TA2", 1 );
   status = sus_tsk( TA2_ID  );
@@ -73,10 +73,11 @@ void ITRON_Init( void )
   status = sus_tsk( TA2_ID  );
   directive_failed_with_level( status, "sus_tsk of TA2", 1 );
 
-  puts("INIT - ena_dsp while starting tasks");
   status = ena_dsp( );
 
-  /* dispatching enabled again */
+  /* dispatching enabled -- LEGAL TO PRINT AGAIN */
+
+  puts("INIT - ena_dsp after starting tasks");
 
   puts( "INIT - suspending TA1 3 times" );
   status = sus_tsk( TA1_ID  );
