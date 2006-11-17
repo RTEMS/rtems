@@ -7,7 +7,7 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
 
-if HAS_ITRON
+if LIBITRON
 ## include
 
 include_rtemsdir = $(includedir)/rtems

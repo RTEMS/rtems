@@ -21,7 +21,7 @@ if HAS_POSIX
 TMP_LIBS += ../posix/libposix.a
 endif
 
-if HAS_ITRON
+if LIBITRON
 TMP_LIBS += ../itron/libitron.a
 endif
 

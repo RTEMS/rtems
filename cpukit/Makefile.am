@@ -64,7 +64,7 @@ if LIBDOSFS
 include_HEADERS += backward/dosfs.h
 endif
 
-if HAS_ITRON
+if LIBITRON
 include_HEADERS += backward/itron.h
 endif
 endif
