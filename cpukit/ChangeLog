@@ -1,3 +1,9 @@
+2006-11-17	Joel Sherrill <joel@OARcorp.com>
+
+	* posix/src/keygetspecific.c, posix/src/keysetspecific.c: Correct
+	indexing of key data to use api and index NOT class and index.
+	Class is always 1.
+
 2006-11-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_AMPOLISH3.

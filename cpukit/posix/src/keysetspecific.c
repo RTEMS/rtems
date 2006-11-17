@@ -27,8 +27,8 @@ int pthread_setspecific(
 )
 {
   register POSIX_Keys_Control *the_key;
+  uint32_t                     api;
   uint32_t                     index;
-  uint32_t                     class;
   Objects_Locations            location;
 
   the_key = _POSIX_Keys_Get( key, &location );
@@ -37,9 +37,9 @@ int pthread_setspecific(
     case OBJECTS_REMOTE:   /* should never happen */
       return EINVAL;
     case OBJECTS_LOCAL:
+      api   = _Objects_Get_API( _Thread_Executing->Object.id );
       index = _Objects_Get_index( _Thread_Executing->Object.id );
-      class = _Objects_Get_class( _Thread_Executing->Object.id );
-      the_key->Values[ class ][ index ] = (void *) value;
+      the_key->Values[ api ][ index ] = (void *) value;
       _Thread_Enable_dispatch();
       return 0;
   }
