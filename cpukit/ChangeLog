@@ -1,5 +1,6 @@
 2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* wrapup/Makefile.am: Introduce AM_CONDITIONAL(LIBDOSFS).
 	* configure.ac, Makefile.am, libfs/Makefile.am:
 	Introduce AM_CONDITIONAL(LIBDOSFS).
 

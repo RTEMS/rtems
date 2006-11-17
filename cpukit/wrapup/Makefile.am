@@ -28,6 +28,8 @@ endif
 TMP_LIBS += ../libcsupport/libcsupport.a
 if !UNIX
 TMP_LIBS += ../libblock/libblock.a
+endif
+if LIBDOSFS
 TMP_LIBS += ../libfs/libdosfs.a
 endif
 TMP_LIBS += ../libfs/libimfs.a
