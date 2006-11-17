@@ -1,3 +1,9 @@
+2006-11-17	Joel Sherrill <joel@OARcorp.com>
+
+	* psxsem01/init.c: Account for change in POSIX semaphore time handling.
+	Previously the timeout was not absolute time and checked BEFORE
+	attempting to lock semaphore.
+
 2006-11-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxbarrier01/main.c: New file.

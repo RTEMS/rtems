@@ -61,6 +61,7 @@ void *POSIX_Init(
   puts( "Init: sem_wait - SUCCESSFUL" );
   status = sem_wait(&sems[1]);
   fatal_posix_service_status( status, 0, "sem_wait semaphore 1");
+  /* sem[1].count = 0 */
 
   puts( "Init: sem_wait - UNSUCCESSFUL (EINVAL)" );
   status = sem_wait(&sem2);
@@ -70,33 +71,43 @@ void *POSIX_Init(
   puts( "Init: sem_post - SUCCESSFUL" );
   status = sem_post(&sems[1]);
   fatal_posix_service_status( status, 0, "sem_post semaphore 1");
+  /* sem[1].count = 1 */
 
   puts( "Init: sem_wait - SUCCESSFUL (after a sem_post)" );
   status = sem_wait(&sems[1]);
   fatal_posix_service_status( status, 0, "sem_wait semaphore 1");
+  /* sem[1].count = 0 */
 
   puts( "Init: sem_trywait - SUCCESSFUL" );
   status = sem_trywait(&sems[2]);
   fatal_posix_service_status( status, 0, "sem_trywait semaphore 2");
+  /* sem[2].count = 1 */
 
   puts( "Init: sem_trywait - UNSUCCESSFUL (EAGAIN)" );
   status = sem_trywait(&sems[1]);
   fatal_posix_service_status( status, -1, "sem_trywait error return status");
   fatal_posix_service_status( errno, EAGAIN, "sem_trywait errno EAGAIN");
+  /* sem[1].count = 0 */
 
   puts( "Init: sem_trywait - UNSUCCESSFUL (EINVAL)" );
   status = sem_trywait(&sem2);
   fatal_posix_service_status( status, -1, "sem_trywait error return status");
   fatal_posix_service_status( errno, EINVAL, "sem_trywait errno EINVAL");
 
+#if 0
   status = sem_post(&sems[2]);
   fatal_posix_service_status( status, 0, "sem_post semaphore 2");
+  /* sem[2].count = 2 */
+#else
+  /* sem[2].count = 1 */
+#endif
 
   puts( "Init: sem_timedwait - SUCCESSFUL" );
-  waittime.tv_sec = 0;
+  waittime.tv_sec = time(NULL) + 1;
   waittime.tv_nsec = 100;
   status = sem_timedwait(&sems[2], &waittime);
   fatal_posix_service_status( status, 0, "sem_timedwait semaphore 2");
+  /* sem[2].count = 0 */
 
   puts( "Init: sem_timedwait - UNSUCCESSFUL (ETIMEDOUT)" );
   status = sem_timedwait(&sems[2], &waittime);
@@ -105,7 +116,7 @@ void *POSIX_Init(
 
   puts( "Init: sem_timedwait - UNSUCCESSFUL (EINVAL)" );
   waittime.tv_sec = 0;
-  waittime.tv_nsec = 0x40000000;
+  waittime.tv_nsec = 0x7FFFFFFF;
   status = sem_timedwait(&sems[2], &waittime);
   fatal_posix_service_status( status, -1, "sem_timedwait error return status");
   fatal_posix_service_status( errno, EINVAL, "sem_init errno EINVAL");
