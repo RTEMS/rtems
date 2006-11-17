@@ -69,10 +69,9 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   search_local_node = FALSE;
 
   if ( information->maximum != 0 &&
-      (node == OBJECTS_SEARCH_ALL_NODES || node == OBJECTS_SEARCH_LOCAL_NODE
-#if defined(RTEMS_MULTIPROCESSING)
-       || _Objects_Is_local_node( node )
-#endif
+      (node == OBJECTS_SEARCH_ALL_NODES ||
+       node == OBJECTS_SEARCH_LOCAL_NODE ||
+       _Objects_Is_local_node( node )
       ))
    search_local_node = TRUE;
 

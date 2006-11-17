@@ -116,7 +116,6 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
   return TRUE; /* the_class && the_class <= OBJECTS_CLASSES_LAST; */
 }
 
-#if defined(RTEMS_MULTIPROCESSING)
 /**
  *  This function returns TRUE if the node is of the local object, and
  *  FALSE otherwise.
@@ -133,7 +132,6 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
 {
   return ( node == _Objects_Local_node );
 }
-#endif
 
 /**
  *  This function returns TRUE if the id is of a local object, and
