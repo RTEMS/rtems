@@ -32,7 +32,7 @@ endif
 
 # dosfs
 
-if !UNIX
+if LIBDOSFS
 noinst_LIBRARIES += libdosfs.a
 
 # libdosfs_FATFS_C_FILES

@@ -60,7 +60,7 @@ include_zilogdir = $(includedir)/zilog
 include_zilog_HEADERS = backward/zilog/z8536.h backward/zilog/z8036.h \
     backward/zilog/z8030.h
 
-if !UNIX
+if LIBDOSFS
 include_HEADERS += backward/dosfs.h
 endif
 
@@ -100,7 +100,7 @@ include_rtems_HEADERS += include/rtems/irq.h
 ## libfs
 include_rtems_HEADERS += libfs/src/imfs/imfs.h
 
-if !UNIX
+if LIBDOSFS
 include_rtems_HEADERS += libfs/src/dosfs/dosfs.h
 endif
 
