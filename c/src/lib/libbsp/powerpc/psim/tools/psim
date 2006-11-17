@@ -13,7 +13,7 @@
 #
 
 TREE_FILE=psim_tree.${LOGNAME}
-RUN=powerpc-rtems4.7-run
+RUN=powerpc-rtems4.8-run
 
 
 progname=${0##*/}        # fast basename hack for ksh, bash
