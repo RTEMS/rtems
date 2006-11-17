@@ -1,5 +1,9 @@
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
 
+	* score/src/heapwalk.c: Use printk not printf.
+
+2006-11-17	Joel Sherrill <joel@OARcorp.com>
+
 	* libmisc/rtmonuse/rtmonuse.c: Do not use float for calculations.
 
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
