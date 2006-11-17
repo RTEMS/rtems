@@ -1,7 +1,7 @@
 /*
  *  Clock Tick Device Driver Shell
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +18,14 @@
 
 #if defined(CLOCK_DRIVER_USE_FAST_IDLE) && defined(CLOCK_DRIVER_ISRS_PER_TICK)
 #error "clockdrv_shell.c: fast idle and N ISRs per tick is not supported"
+#endif
+
+
+/*
+ * This method is rarely used so default it.
+ */
+#ifndef Clock_driver_support_find_timer
+#define Clock_driver_support_find_timer()
 #endif
 
 /*
@@ -135,15 +143,18 @@ void Install_clock(
   Clock_driver_ticks = 0;
 
   /*
+   *  Find timer -- some BSPs search buses for hardware timer
+   */
+  Clock_driver_support_find_timer();
+
+  /*
    *  Install vector
    */
-
   Clock_driver_support_install_isr( clock_isr, Old_ticker );
 
   /*
    *  Now initialize the hardware that is the source of the tick ISR.
    */
-
   Clock_driver_support_initialize_hardware();
 
   atexit( Clock_exit );
