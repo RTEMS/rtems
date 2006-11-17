@@ -1,3 +1,7 @@
+2006-11-17	Joel Sherrill <joel@OARcorp.com>
+
+	* timer/timer.c: Update timer overhead for start/stop.
+
 2006-11-16	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, console/console.c: Use common clock driver template
