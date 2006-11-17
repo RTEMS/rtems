@@ -1,3 +1,7 @@
+2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Remove unsigned64, signed64.
+
 2006-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c, rtems/score/sh.h: Recognize sh2e variant so multilibs will all

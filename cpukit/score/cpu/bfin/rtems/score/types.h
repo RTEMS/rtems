@@ -27,14 +27,8 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-/** This defines an unsigned 64-bit integer. */
-typedef unsigned long long unsigned64;
-
 /** This defines the type for a priority bit map entry. */
 typedef uint16_t Priority_Bit_map_control;
-
-/** This defines the type for a 64 bit signed integer */
-typedef signed long long signed64;
 
 /** This defines the type for a Boolean value, */
 typedef uint32_t boolean;     /* Boolean value   */

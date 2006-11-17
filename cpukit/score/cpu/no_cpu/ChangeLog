@@ -1,3 +1,7 @@
+2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Remove unsigned64, signed64.
+
 2006-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/asm.h, rtems/score/cpu.h, rtems/score/types.h: Part of a large

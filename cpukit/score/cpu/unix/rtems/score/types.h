@@ -42,15 +42,6 @@ extern "C" {
 
 typedef uint16_t     Priority_Bit_map_control;
 
-
-/*
- * some C++ compilers (eg: HP's) don't do 'long long'
- */
-#if defined(__GNUC__)
-typedef unsigned long long unsigned64; /* unsigned 64-bit integer */
-typedef signed long long signed64;     /* 64 bit signed integer */
-#endif
-
 typedef uint32_t boolean;     /* Boolean value   */
 
 typedef float          single_precision;     /* single precision float */

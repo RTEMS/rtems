@@ -41,11 +41,7 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef unsigned long long unsigned64; 		/* unsigned 64-bit integer */
-
 typedef uint16_t     Priority_Bit_map_control;
-
-typedef signed long long signed64;     		/* 64 bit signed integer */
 
 typedef uint16_t boolean;	     		/* Boolean value, external */
 						/* data bus has 16 bits  */

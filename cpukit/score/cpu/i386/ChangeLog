@@ -1,3 +1,7 @@
+2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Remove unsigned64, signed64.
+
 2006-02-01	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Increase default stack size on i386 from 1K to 4K.
