@@ -55,15 +55,19 @@ static void sync_wrapper(FILE *f)
 static void sync_per_thread(Thread_Control *t)
 {
    struct _reent *current_reent;
+   struct _reent *this_reent;
 
    /*
     *  The sync_wrapper() function will operate on the current thread's
     *  reent structure so we will temporarily use that.
     */
-   current_reent = _Thread_Executing->libc_reent;
-   _Thread_Executing->libc_reent = t->libc_reent;
-   _fwalk (t->libc_reent, sync_wrapper);
-   _Thread_Executing->libc_reent = current_reent;
+   this_reent = t->libc_reent;
+   if ( this_reent ) {
+     current_reent = _Thread_Executing->libc_reent;
+     _Thread_Executing->libc_reent = this_reent;
+     _fwalk (t->libc_reent, sync_wrapper);
+     _Thread_Executing->libc_reent = current_reent;
+   }
 }
 
 int sync(void)
