@@ -135,6 +135,8 @@ void Period_usage_Dump( void )
   char                   *cname;
   char                    name[5];
   uint32_t                api_index;
+  uint32_t                ival_cpu, fval_cpu;
+  uint32_t                ival_wall, fval_wall;
   Objects_Information    *information;
 
   if ( !Period_usage_Information ) {
@@ -142,8 +144,10 @@ void Period_usage_Dump( void )
     return;
   }
 
-  fprintf(stdout, "Period information by period\n" );
-  fprintf(stdout, "   ID      OWNER   PERIODS  MISSED    CPU TIME    WALL TIME\n" );
+  fprintf(stdout,
+    "Period information by period\n"
+   "   ID      OWNER   PERIODS  MISSED    CPU TIME    WALL TIME\n"
+  );
 
   /*
    *  RTEMS does not use an index of zero for object ids.
@@ -192,19 +196,30 @@ void Period_usage_Dump( void )
     if ( !isprint(name[3]) ) name[3] = '*';
 
 
+    ival_cpu = the_usage->total_cpu_time * 100 / the_usage->count;
+    fval_cpu = ival_cpu % 100;
+    ival_cpu /= 100;
+    ival_wall = the_usage->total_wall_time * 100 / the_usage->count;
+    fval_wall = ival_wall % 100;
+    ival_wall /= 100;
     fprintf(stdout,
-      "0x%08" PRIx32 "  %4s   %6" PRId32 "   %3" PRId32 "       %" PRId32 
-         "/%" PRId32 "/%5.2f    %" PRId32 "/%" PRId32 "/%3.2f\n",
+      "0x%08" PRIx32 "  %4s   %6" PRId32 "   %3" PRId32 "       "
+         "%" PRId32 "/%" PRId32 "/%" PRId32 ".%02" PRId32 "    "
+         "%" PRId32 "/%" PRId32 "/%" PRId32 ".%02" PRId32 "\n",
       the_usage->id,
       name,
       the_usage->count,
       the_usage->missed_count,
+
       the_usage->min_cpu_time,
       the_usage->max_cpu_time,
-      (double) the_usage->total_cpu_time / (double) the_usage->count,
+      ival_cpu, fval_cpu,
+      /* (double) the_usage->total_cpu_time / (double) the_usage->count, */
+
       the_usage->min_wall_time,
       the_usage->max_wall_time,
-      (double) the_usage->total_wall_time / (double) the_usage->count
+      ival_wall, fval_wall
+      /* (double) the_usage->total_wall_time / (double) the_usage->count */
     );
   }
 }
