@@ -265,6 +265,11 @@ AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
 AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 
+AM_CONDITIONAL([LIBDOSFS],[dnl
+test x"${RTEMS_CPU}" != x"unix" \
+&& test x"$ac_cv_type_uint8_t" = xyes \
+&& test x"$ac_cv_type_uint16_t" = xyes])
+
 AC_CONFIG_HEADER(config.h)
 
 # Explicitly list all Makefiles here
