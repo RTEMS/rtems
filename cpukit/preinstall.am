@@ -120,12 +120,12 @@ $(PROJECT_INCLUDE)/zilog/z8030.h: backward/zilog/z8030.h $(PROJECT_INCLUDE)/zilo
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8030.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8030.h
 
-if !UNIX
+if LIBDOSFS
 $(PROJECT_INCLUDE)/dosfs.h: backward/dosfs.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dosfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dosfs.h
 endif
-if HAS_ITRON
+if LIBITRON
 $(PROJECT_INCLUDE)/itron.h: backward/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/itron.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/itron.h
@@ -228,7 +228,7 @@ $(PROJECT_INCLUDE)/rtems/imfs.h: libfs/src/imfs/imfs.h $(PROJECT_INCLUDE)/rtems/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/imfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/imfs.h
 
-if !UNIX
+if LIBDOSFS
 $(PROJECT_INCLUDE)/rtems/dosfs.h: libfs/src/dosfs/dosfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dosfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dosfs.h
