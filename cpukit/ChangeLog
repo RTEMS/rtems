@@ -1,5 +1,11 @@
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
 
+	* score/inline/rtems/score/object.inl, score/src/objectnametoid.c:
+	Properly honor searching only local node even when on single CPU
+	system.
+
+2006-11-17	Joel Sherrill <joel@OARcorp.com>
+
 	* score/src/coresemseize.c: Add missing ISR enable.
 
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
