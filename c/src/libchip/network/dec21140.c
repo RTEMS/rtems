@@ -160,8 +160,6 @@
 #define CLEAR_IT     0xFFFFFFFF
 #define NO_IT        0x00000000
 
-
-
 /* message descriptor entry */
 struct MD {
     /* used by hardware */
@@ -172,9 +170,6 @@ struct MD {
     volatile struct mbuf *m;
     volatile struct MD *next;
 } __attribute__ ((packed));
-
-
-
 
 /*
 ** These buffers allocated for each unit, so ensure
@@ -195,12 +190,10 @@ struct MD {
 #define NRXBUFS 16	/* number of receive buffers */
 #define NTXBUFS 16	/* number of transmit buffers */
 
-
 /*
  * Number of DEC boards supported by this driver
  */
 #define NDECDRIVER	8
-
 
 /*
  * Receive buffer size -- Allow for a full ethernet packet including CRC
@@ -208,7 +201,6 @@ struct MD {
 #define RBUF_SIZE	1536
 
 #define	ET_MINLEN       60	/* minimum message length */
-
 
 /*
 ** Events, one per unit.  The event is sent to the rx task from the isr
@@ -226,7 +218,6 @@ static rtems_event_set unit_signals[NDECDRIVER]= { RTEMS_EVENT_1,
                                                    RTEMS_EVENT_7,
                                                    RTEMS_EVENT_8 };
 
-
 #if defined(__PPC__)
 #define phys_to_bus(address) ((unsigned int)((address)) + PCI_DRAM_OFFSET)
 #define bus_to_phys(address) ((unsigned int)((address)) - PCI_DRAM_OFFSET)
@@ -242,10 +233,6 @@ extern void Wait_X_ms( unsigned int timeToWait );
 #if (MCLBYTES < RBUF_SIZE)
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
-
-
-
-
 
 /*
  * Per-device data
@@ -299,22 +286,6 @@ static struct dec21140_softc dec21140_softc[NDECDRIVER];
 static rtems_id	rxDaemonTid;
 static rtems_id	txDaemonTid;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  * This routine reads a word (16 bits) from the serial EEPROM.
  */
@@ -366,42 +337,15 @@ static int eeget16(volatile unsigned int *ioaddr, int location)
    return ( ((retval<<8)&0xff00) | ((retval>>8)&0xff) );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 static void no_op(const rtems_irq_connect_data* irq)
 {
    return;
 }
 
-
-
-
 static int dec21140IsOn(const rtems_irq_connect_data* irq)
 {
   return BSP_irq_enabled_at_i8259s (irq->name);
 }
-
-
-
 
 /*
  * DEC21140 interrupt handler
@@ -430,8 +374,6 @@ dec21140Enet_interrupt_handler ( struct dec21140_softc *sc )
    }
 }
 
-
-
 static rtems_isr
 dec21140Enet_interrupt_handler_entry()
 {
@@ -447,15 +389,6 @@ dec21140Enet_interrupt_handler_entry()
          dec21140Enet_interrupt_handler( &dec21140_softc[i] );
    }
 }
-
-
-
-
-
-
-
-
-
 
 /*
  * Initialize the ethernet hardware
@@ -478,8 +411,6 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
           sc->arpcom.ac_if.if_name, sc->arpcom.ac_if.if_unit,
           sc->port, (unsigned) sc->base, sc->irqInfo.name );
 #endif
-
-
 
    tbase = sc->base;
 
@@ -602,10 +533,6 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 
    sc->TxMD = rmd+1;
 
-
-
-
-
    sc->irqInfo.hdl  = (rtems_irq_hdl)dec21140Enet_interrupt_handler_entry;
    sc->irqInfo.on   = no_op;
    sc->irqInfo.off  = no_op;
@@ -623,12 +550,6 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    if (!st)
       rtems_panic ("dec2114x : Interrupt name %d already in use\n", sc->irqInfo.name );
 }
-
-
-
-
-
-
 
 static void
 dec21140_rxDaemon (void *arg)
@@ -697,12 +618,6 @@ dec21140_rxDaemon (void *arg)
    }
 }
 
-
-
-
-
-
-
 static void
 sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
@@ -748,10 +663,6 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 
    dp->TxMD = tmd->next;
 }
-
-
-
-
 
 /*
  * Driver transmit daemon
@@ -802,9 +713,6 @@ dec21140_txDaemon (void *arg)
    }
 }
 
-
-
-
 static void
 dec21140_start (struct ifnet *ifp)
 {
@@ -812,10 +720,6 @@ dec21140_start (struct ifnet *ifp)
    rtems_event_send( txDaemonTid, sc->ioevent );
    ifp->if_flags |= IFF_OACTIVE;
 }
-
-
-
-
 
 /*
  * Initialize and start the device
@@ -849,12 +753,6 @@ dec21140_init (void *arg)
    ifp->if_flags |= IFF_RUNNING;
 }
 
-
-
-
-
-
-
 /*
  * Stop the device
  */
@@ -875,7 +773,6 @@ dec21140_stop (struct dec21140_softc *sc)
 
   /*  free((void*)sc->bufferBase); */
 }
-
 
 /*
  * Show interface statistics
@@ -902,9 +799,6 @@ dec21140_stats (struct dec21140_softc *sc)
 	printf ("           Underrun:%-8lu", sc->txUnderrun);
 	printf (" Raw output wait:%-8lu\n", sc->txRawWait);
 }
-
-
-
 
 /*
  * Driver ioctl handler
@@ -957,11 +851,6 @@ dec21140_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
 }
 
 
-
-
-
-
-
 /*
 int iftap(struct ifnet *ifp, struct ether_header *eh, struct mbuf *m )
 {
@@ -978,10 +867,6 @@ int iftap(struct ifnet *ifp, struct ether_header *eh, struct mbuf *m )
    return -1;
 }
 */
-
-
-
-
 
 /*
  * Attach an DEC21140 driver to the system
@@ -1004,7 +889,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    int          tmp;
    unsigned int lvalue;
 #endif
-
 
    /*
     * Get the instance number for the board we're going to configure
@@ -1203,7 +1087,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 #ifdef DEC_DEBUG
    printk( "dec2114x : driver attached\n" );
 #endif
-
 
    /*
     * Start driver tasks if this is the first dec unit initialized
