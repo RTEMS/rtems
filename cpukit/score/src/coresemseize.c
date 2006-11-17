@@ -75,6 +75,7 @@ void _CORE_semaphore_Seize(
       executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
       return;
     case CORE_SEMAPHORE_BAD_TIMEOUT:
+      _ISR_Enable( level );
       executing->Wait.return_code = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
       return;
     case CORE_SEMAPHORE_BLOCK_FOREVER:
