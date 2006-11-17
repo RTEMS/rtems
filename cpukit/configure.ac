@@ -101,6 +101,13 @@ AC_CHECK_TYPES([ uint8_t,  int8_t])
 AC_CHECK_TYPES([uint16_t, int16_t])
 AC_CHECK_TYPES([uint32_t, int32_t])
 
+# suppress itron if these types are not provided
+AS_IF([test x"$ac_cv_type_int8_t" != xyes \
+ && test x"$ac_cv_type_uint8_t" != xyes \
+ && test x"$ac_cv_type_int16_t" != xyes \
+ && test x"$ac_cv_type_uint16_t" != xyes],
+[rtems_cv_HAS_ITRON_API=no])
+
 AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
 [RTEMS_USES_TAR_H=yes],
 [RTEMS_USES_TAR_H=$ac_cv_header_tar_h])
@@ -256,7 +263,7 @@ AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 AM_CONDITIONAL(HAS_MP,test x"$enable_multiprocessing" = x"yes" )
 
 AM_CONDITIONAL(HAS_POSIX,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
-AM_CONDITIONAL(HAS_ITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
+AM_CONDITIONAL(LIBITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
 AM_CONDITIONAL(HAS_NETWORKING,test x"$HAS_NETWORKING" = x"yes")
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
