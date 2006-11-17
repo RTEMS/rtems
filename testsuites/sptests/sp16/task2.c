@@ -58,10 +58,10 @@ rtems_task Task_2(
   );
   directive_failed( status, "rtems_task_set_priority" );
 
-  puts("TA2 - rtems_region_get_segment - wait on 3968 byte segment");
+  puts("TA2 - rtems_region_get_segment - wait on 3950 byte segment");
   status = rtems_region_get_segment(
     Region_id[ 2 ],
-    3968,
+    3950,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT,
     &segment_address_2
