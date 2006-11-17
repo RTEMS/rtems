@@ -1,5 +1,12 @@
 2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Suppress itron if int8/int16_t are not provided.
+	* configure.ac, Makefile.am, itron/Makefile.am, wrapup/Makefile.am:
+	Introduce AM_CONDITIONAL(LIBITRON).
+	Remove AM_CONDITIONAL(HAS_ITRON).
+
+2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* wrapup/Makefile.am: Introduce AM_CONDITIONAL(LIBDOSFS).
 	* configure.ac, Makefile.am, libfs/Makefile.am:
 	Introduce AM_CONDITIONAL(LIBDOSFS).
