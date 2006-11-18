@@ -1,3 +1,7 @@
+2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bootstrap: Add -p (regenerate preinstall.ams).
+
 2006-11-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ampolish3: New.

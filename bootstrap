@@ -22,13 +22,14 @@ mode="generate"
 usage()
 {
   echo
-  echo "usage: ${progname} [-h|-q|-v]"
+  echo "usage: ${progname} [-c|-p|-h] [-q][-v]"
   echo
   echo "options:"
-  echo "	-h .. display this message and exit";
-  echo "	-q .. quiet, don't display directories";
-  echo "	-v .. verbose, pass -v to automake when invoking automake"
   echo "	-c .. clean, remove all aclocal/autoconf/automake generated files"
+  echo "	-h .. display this message and exit"
+  echo "	-p .. regenerate preinstall.am files"
+  echo "	-q .. quiet, don't display directories"
+  echo "	-v .. verbose, pass -v to autotools"
   echo
   exit 1;
 }
@@ -82,6 +83,9 @@ case $1 in
 -c|--cl|--cle|--clea|--clean)
   mode="clean";
   shift;;
+-p|--pr|--pre|--prei|--prein|--preins|--preinst)
+  mode="preinstall";
+  shift;;
 -*) echo "unknown option $1" ;
   usage ;;
 *) echo "invalid parameter $1" ;
@@ -90,6 +94,15 @@ esac
 done
 
 case $mode in
+preinstall)
+  confs=`find -name Makefile.am -exec grep -l 'include .*/preinstall\.am' {} \;`
+  for i in $confs; do
+    dir=$(dirname $i);
+    test "$quite" = "true" || echo "Generating $dir/preinstall.am"
+    ${top_srcdir}/ampolish3 "$dir/Makefile.am" > "$dir/preinstall.am"
+  done
+  ;;
+
 generate)
   AUTOCONF=${AUTOCONF-autoconf}
   if test -z "$AUTOCONF"; then
