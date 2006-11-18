@@ -1,5 +1,11 @@
 2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-networking.m4: Integrate type checks.
+	* configure.ac: Use rtems_cv_HAS_NETWORKING instead of
+	  HAS_NETWORKING.
+
+2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/check-itron.m4: Integrate ITRON-type checks.
 	* configure.ac: Remove ITRON-type checks. 
 	  Move RTEMS_CHECK* after type-checks.
