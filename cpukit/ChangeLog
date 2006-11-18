@@ -1,5 +1,6 @@
 2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove $LIBRPC.
 	* configure.ac: Check for uint64_t, int64_t.
 	* configure.ac, Makefile.am, configure.ac, ftpd/Makefile.am,
 	httpd/Makefile.am, libnetworking/Makefile.am, pppd/Makefile.am,

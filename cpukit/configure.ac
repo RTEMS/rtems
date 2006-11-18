@@ -43,16 +43,6 @@ RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_ITRON_API
 RTEMS_CHECK_NETWORKING
 
-AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
-## FIXME: Should better use a feature-based test
-AC_MSG_CHECKING([whether CPU supports librpc])
-  case "$RTEMS_CPU" in
-  c4x )  LIBRPC=no;;
-  * )    LIBRPC=yes;;
-  esac
-AC_MSG_RESULT([$LIBRPC])
-])
-
 AC_ARG_ENABLE([deprecated],
 [AS_HELP_STRING(--enable-deprecated,allow using deprecated files)],
 [case "${enable_deprecated}" in
@@ -257,7 +247,7 @@ AC_CHECK_FUNCS(strlcpy strlcat)
 
 
 # ... far too many conditionals ...
-AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
+AM_CONDITIONAL(LIBRPC,[test "$HAS_NETWORKING" = "yes"])
 AM_CONDITIONAL(UNIX,[test x"${RTEMS_CPU}" = x"unix"])
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
