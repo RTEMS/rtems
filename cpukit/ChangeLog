@@ -1,5 +1,11 @@
 2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-itron.m4: Integrate ITRON-type checks.
+	* configure.ac: Remove ITRON-type checks. 
+	  Move RTEMS_CHECK* after type-checks.
+
+2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove $LIBRPC.
 	* configure.ac: Check for uint64_t, int64_t.
 	* configure.ac, Makefile.am, configure.ac, ftpd/Makefile.am,
