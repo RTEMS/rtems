@@ -86,6 +86,7 @@ AC_CHECK_TYPES([ uint8_t,  int8_t])
 AC_CHECK_TYPES([uint16_t, int16_t])
 AC_CHECK_TYPES([uint32_t, int32_t])
 AC_CHECK_TYPES([uint64_t, int64_t])
+AC_CHECK_TYPES([uintmax_t])
 
 RTEMS_CHECK_MULTIPROCESSING
 RTEMS_CHECK_POSIX_API
