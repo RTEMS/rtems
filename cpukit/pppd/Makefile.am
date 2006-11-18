@@ -4,7 +4,7 @@
 
 include $(top_srcdir)/automake/compile.am
 
-if HAS_NETWORKING
+if LIBNETWORKING
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = rtemspppd.h rtemsdialer.h
 

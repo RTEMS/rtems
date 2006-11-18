@@ -16,7 +16,7 @@ UNUSED_FILES += sys/poll.h
 
 UNUSED_FILES += net/ppp-deflate.c net/bsd-comp.c
 
-if HAS_NETWORKING
+if LIBNETWORKING
 # Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
 libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
     -DDIAGNOSTIC -DBOOTP_COMPAT -D_KERNEL -D__BSD_VISIBLE
@@ -179,7 +179,7 @@ libc_mans = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
     libc/rcmd.3 libc/resolver.3
 EXTRA_DIST += $(libc_mans)
 
-if HAS_NETWORKING
+if LIBNETWORKING
 man_MANS = $(libc_MANS)
 
 ## lib

@@ -4,7 +4,7 @@
 
 include $(top_srcdir)/automake/compile.am
 
-if HAS_NETWORKING
+if LIBNETWORKING
 project_lib_LIBRARIES = libftpd.a
 libftpd_a_SOURCES = ftpd.c ftpd.h
 endif

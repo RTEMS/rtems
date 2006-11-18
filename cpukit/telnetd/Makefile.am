@@ -4,7 +4,7 @@
 
 include $(top_srcdir)/automake/compile.am
 
-if HAS_NETWORKING
+if LIBNETWORKING
 if LIBSHELL
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = pty.h telnetd.h

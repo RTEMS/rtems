@@ -59,7 +59,7 @@ TMP_LIBS += ../libmisc/libfsmount.a
 
 TMP_LIBS += ../libi2c/libi2c.a
 
-if HAS_NETWORKING
+if LIBNETWORKING
 TMP_LIBS += ../libnetworking/libnetworking.a
 TMP_LIBS += ../libnetworking/libc.a
 TMP_LIBS += ../libnetworking/lib.a

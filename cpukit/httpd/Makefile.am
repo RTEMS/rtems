@@ -6,7 +6,7 @@ include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -DWEBS -DUEMF
 
-if HAS_NETWORKING
+if LIBNETWORKING
 if HAS_POSIX
 include_goaheaddir = $(includedir)/goahead
 

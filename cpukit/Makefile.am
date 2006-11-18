@@ -45,7 +45,7 @@ include_HEADERS += backward/asm.h backward/chain.h backward/clockdrv.h \
     backward/ringbuf.h backward/rtc.h backward/spurious.h \
     backward/timerdrv.h backward/vmeintr.h
 
-if HAS_NETWORKING
+if LIBNETWORKING
 include_HEADERS += backward/ftpd.h
 
 include_HEADERS += backward/rtemspppd.h
@@ -83,7 +83,7 @@ include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
     libcsupport/include/sys/termios.h libcsupport/include/sys/utsname.h \
     libcsupport/include/sys/cdefs.h
 
-if HAS_NETWORKING
+if LIBNETWORKING
 include_rtems_bsdnetdir = $(includedir)/rtems/bsdnet
 include_rtems_bsdnet_HEADERS = libnetworking/rtems/bsdnet/servers.h
 include_rtems_bsdnet_HEADERS += libnetworking/rtems/bsdnet/_types.h
@@ -113,7 +113,7 @@ include_rtems_HEADERS += libblock/include/rtems/bdbuf.h \
 endif
 
 ## ftpd
-if HAS_NETWORKING
+if LIBNETWORKING
 include_rtems_HEADERS += ftpd/ftpd.h
 endif
 
