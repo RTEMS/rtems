@@ -100,6 +100,7 @@ AS_IF([test x"${ac_cv_header_inttypes_h}" != xyes],
 AC_CHECK_TYPES([ uint8_t,  int8_t])
 AC_CHECK_TYPES([uint16_t, int16_t])
 AC_CHECK_TYPES([uint32_t, int32_t])
+AC_CHECK_TYPES([uint64_t, int64_t])
 
 # suppress itron if these types are not provided
 AS_IF([test x"$ac_cv_type_int8_t" != xyes \
