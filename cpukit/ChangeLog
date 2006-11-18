@@ -1,3 +1,10 @@
+2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac, Makefile.am, configure.ac, ftpd/Makefile.am,
+	httpd/Makefile.am, libnetworking/Makefile.am, pppd/Makefile.am,
+	telnetd/Makefile.am, wrapup/Makefile.am: Replace
+	AM_CONDITIONAL(HAS_NETWORKING) with AM_CONDITIONAL(LIBNETWORKING).
+
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
 
 	* score/inline/rtems/score/object.inl, score/src/objectnametoid.c:
