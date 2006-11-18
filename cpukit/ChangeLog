@@ -1,5 +1,12 @@
 2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add check for uintmax_t.
+	* libcsupport/src/malloc.c: Use uintmax_t instead of uint64_t for
+	  MALLOC_STATS statistics. Use inttypes.h PRIxXXX macros for
+	  printing.
+
+2006-11-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/check-networking.m4: Integrate type checks.
 	* configure.ac: Use rtems_cv_HAS_NETWORKING instead of
 	  HAS_NETWORKING.
