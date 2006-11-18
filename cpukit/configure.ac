@@ -38,11 +38,6 @@ AC_PROG_RANLIB
 
 RTEMS_CHECK_NEWLIB
 
-RTEMS_CHECK_MULTIPROCESSING
-RTEMS_CHECK_POSIX_API
-RTEMS_CHECK_ITRON_API
-RTEMS_CHECK_NETWORKING
-
 AC_ARG_ENABLE([deprecated],
 [AS_HELP_STRING(--enable-deprecated,allow using deprecated files)],
 [case "${enable_deprecated}" in
@@ -92,12 +87,10 @@ AC_CHECK_TYPES([uint16_t, int16_t])
 AC_CHECK_TYPES([uint32_t, int32_t])
 AC_CHECK_TYPES([uint64_t, int64_t])
 
-# suppress itron if these types are not provided
-AS_IF([test x"$ac_cv_type_int8_t" != xyes \
- && test x"$ac_cv_type_uint8_t" != xyes \
- && test x"$ac_cv_type_int16_t" != xyes \
- && test x"$ac_cv_type_uint16_t" != xyes],
-[rtems_cv_HAS_ITRON_API=no])
+RTEMS_CHECK_MULTIPROCESSING
+RTEMS_CHECK_POSIX_API
+RTEMS_CHECK_ITRON_API
+RTEMS_CHECK_NETWORKING
 
 AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
 [RTEMS_USES_TAR_H=yes],
