@@ -18,7 +18,6 @@
 #include <rtems/system.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
-#include <rtems/bspIo.h>
 
 /*PAGE
  *
@@ -74,7 +73,7 @@ boolean _Heap_Walk(
     source = the_heap->stats.instance;
 
   if (do_dump == TRUE)
-    printk("\nPASS: %d start %p final %p first %p last %p begin %p end %p\n",
+    printf("\nPASS: %d start %p final %p first %p last %p begin %p end %p\n",
       source, the_block, end,
       _Heap_First(the_heap), _Heap_Last(the_heap),
       the_heap->begin, the_heap->end);
@@ -84,12 +83,12 @@ boolean _Heap_Walk(
    */
 
   if (!_Heap_Is_prev_used(the_block)) {
-    printk("PASS: %d !HEAP_PREV_USED flag of 1st block isn't set\n", source);
+    printf("PASS: %d !HEAP_PREV_USED flag of 1st block isn't set\n", source);
     error = 1;
   }
 
   if (the_block->prev_size != the_heap->page_size) {
-    printk("PASS: %d !prev_size of 1st block isn't page_size\n", source);
+    printf("PASS: %d !prev_size of 1st block isn't page_size\n", source);
     error = 1;
   }
 
@@ -99,32 +98,32 @@ boolean _Heap_Walk(
     boolean prev_used = _Heap_Is_prev_used(the_block);
 
     if (do_dump) {
-      printk("PASS: %d block %p size %d(%c)",
+      printf("PASS: %d block %p size %d(%c)",
         source, the_block, the_size, (prev_used ? 'U' : 'F'));
       if (prev_used)
-        printk(" prev_size %d", the_block->prev_size);
+        printf(" prev_size %d", the_block->prev_size);
       else
-        printk(" (prev_size) %d", the_block->prev_size);
+        printf(" (prev_size) %d", the_block->prev_size);
     }
 
     if (!_Heap_Is_block_in(the_heap, next_block)) {
-      if (do_dump) printk("\n");
-      printk("PASS: %d !block %p is out of heap\n", source, next_block);
+      if (do_dump) printf("\n");
+      printf("PASS: %d !block %p is out of heap\n", source, next_block);
       error = 1;
       break;
     }
 
     if (!_Heap_Is_prev_used(next_block)) {
       if (do_dump)
-        printk( " prev %p next %p", the_block->prev, the_block->next);
+        printf( " prev %p next %p", the_block->prev, the_block->next);
       if (_Heap_Block_size(the_block) != next_block->prev_size) {
-        if (do_dump) printk("\n");
-        printk("PASS: %d !front and back sizes don't match", source);
+        if (do_dump) printf("\n");
+        printf("PASS: %d !front and back sizes don't match", source);
         error = 1;
       }
       if (!prev_used) {
-        if (do_dump || error) printk("\n");
-        printk("PASS: %d !two consecutive blocks are free", source);
+        if (do_dump || error) printf("\n");
+        printf("PASS: %d !two consecutive blocks are free", source);
         error = 1;
       }
 
@@ -133,22 +132,22 @@ boolean _Heap_Walk(
         while(block != the_block && block != tail)
           block = block->next;
         if(block != the_block) {
-          if (do_dump || error) printk("\n");
-          printk("PASS: %d !the_block not in the free list", source);
+          if (do_dump || error) printf("\n");
+          printf("PASS: %d !the_block not in the free list", source);
           error = 1;
         }
       }
 
     }
-    if (do_dump || error) printk("\n");
+    if (do_dump || error) printf("\n");
 
     if (the_size < the_heap->min_block_size) {
-      printk("PASS: %d !block size is too small\n", source);
+      printf("PASS: %d !block size is too small\n", source);
       error = 1;
       break;
     }
     if (!_Heap_Is_aligned( the_size, the_heap->page_size)) {
-      printk("PASS: %d !block size is misaligned\n", source);
+      printf("PASS: %d !block size is misaligned\n", source);
       error = 1;
     }
 
@@ -159,12 +158,12 @@ boolean _Heap_Walk(
   }
 
   if (the_block != end) {
-    printk("PASS: %d !last block address isn't equal to 'final'\n", source);
+    printf("PASS: %d !last block address isn't equal to 'final'\n", source);
     error = 1;
   }
 
   if (_Heap_Block_size(the_block) != the_heap->page_size) {
-    printk("PASS: %d !last block's size isn't page_size\n", source);
+    printf("PASS: %d !last block's size isn't page_size\n", source);
     error = 1;
   }
 
