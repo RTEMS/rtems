@@ -13,16 +13,23 @@ AC_CACHE_CHECK([whether CPU supports networking],
       rtems_cv_HAS_NETWORKING="no"
       ;;
     *)
-      if test "${RTEMS_HAS_NETWORKING}" = "yes"; then
-        rtems_cv_HAS_NETWORKING="yes";
-      else
-        rtems_cv_HAS_NETWORKING="disabled";
-      fi
+      AS_IF([test "${RTEMS_HAS_NETWORKING}" = "yes"],[
+# suppress libnetworking if one these types is not available
+        AS_IF([test x"$ac_cv_type_int8_t" = xyes \
+          && test x"$ac_cv_type_uint8_t" = xyes \
+          && test x"$ac_cv_type_int16_t" = xyes \
+          && test x"$ac_cv_type_uint16_t" = xyes \
+          && test x"$ac_cv_type_int32_t" = xyes \
+          && test x"$ac_cv_type_uint32_t" = xyes \
+          && test x"$ac_cv_type_int64_t" = xyes \
+          && test x"$ac_cv_type_uint64_t" = xyes],
+        [rtems_cv_HAS_NETWORKING=yes],
+        [rtems_cv_HAS_NETWORKING=no])
+      ],[
+        rtems_cv_HAS_NETWORKING=disabled
+      ])
       ;;
-    esac])
-if test "$rtems_cv_HAS_NETWORKING" = "yes"; then
-  HAS_NETWORKING="yes";
-else
-  HAS_NETWORKING="no";
-fi
+    esac
+    ])
+  ])
 ])
