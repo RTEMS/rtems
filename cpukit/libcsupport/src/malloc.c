@@ -32,8 +32,18 @@
 #include <string.h>
 
 #include <unistd.h>    /* sbrk(2) */
+#include <inttypes.h>
 
 #include <rtems/chain.h>
+
+#ifndef HAVE_UINTMAX_T
+/* Fall back to unsigned long if uintmax_t is not available */
+#define unsigned long uintmax_t
+
+#ifndef PRIuMAX
+#define PRIuMAX		"%lu"
+#endif
+#endif
 
 #ifdef MALLOC_ARENA_CHECK
 #define SENTINELSIZE    12
@@ -95,8 +105,8 @@ struct {
     uint32_t    realloc_calls;
     uint32_t    calloc_calls;
     uint32_t    max_depth;		     /* most ever malloc'd at 1 time */
-    uint64_t    lifetime_allocated;
-    uint64_t    lifetime_freed;
+    uintmax_t    lifetime_allocated;
+    uintmax_t    lifetime_freed;
 } rtems_malloc_stats;
 
 #else			/* No rtems_malloc_stats */
@@ -533,17 +543,19 @@ void malloc_dump(void)
                      rtems_malloc_stats.lifetime_freed;
 
     printf("Malloc stats\n");
-    printf("  avail:%uk  allocated:%uk (%d%%) "
-              "max:%uk (%d%%) lifetime:%Luk freed:%Luk\n",
-           (unsigned int) rtems_malloc_stats.space_available / 1024,
-           (unsigned int) allocated / 1024,
+    printf("  avail:%"PRIu32"k  allocated:%"PRIu32"k (%"PRId32"%%) "
+              "max:%"PRIu32"k (%"PRIu32"%%)"
+              " lifetime:%"PRIuMAX"k freed:%"PRIuMAX"k\n",
+           rtems_malloc_stats.space_available / 1024,
+           allocated / 1024,
            /* avoid float! */
            (allocated * 100) / rtems_malloc_stats.space_available,
-           (unsigned int) rtems_malloc_stats.max_depth / 1024,
+           rtems_malloc_stats.max_depth / 1024,
            (rtems_malloc_stats.max_depth * 100) / rtems_malloc_stats.space_available,
-           (uint64_t  ) rtems_malloc_stats.lifetime_allocated / 1024,
-           (uint64_t  ) rtems_malloc_stats.lifetime_freed / 1024);
-    printf("  Call counts:   malloc:%d   free:%d   realloc:%d   calloc:%d\n",
+           rtems_malloc_stats.lifetime_allocated / 1024,
+           rtems_malloc_stats.lifetime_freed / 1024
+           );
+    printf("  Call counts:   malloc:%"PRIu32"   free:%"PRIu32"   realloc:%"PRIu32"   calloc:%"PRIu32"\n",
            rtems_malloc_stats.malloc_calls,
            rtems_malloc_stats.free_calls,
            rtems_malloc_stats.realloc_calls,
