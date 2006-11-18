@@ -18,7 +18,7 @@ $(PROJECT_LIB)/$(dirstamp):
 	@: > $(PROJECT_LIB)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
-if HAS_NETWORKING
+if LIBNETWORKING
 $(PROJECT_LIB)/libftpd.a: libftpd.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libftpd.a
 TMPINSTALL_FILES += $(PROJECT_LIB)/libftpd.a

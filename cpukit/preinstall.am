@@ -77,7 +77,7 @@ $(PROJECT_INCLUDE)/vmeintr.h: backward/vmeintr.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vmeintr.h
 
-if HAS_NETWORKING
+if LIBNETWORKING
 $(PROJECT_INCLUDE)/ftpd.h: backward/ftpd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ftpd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ftpd.h
@@ -177,7 +177,7 @@ $(PROJECT_INCLUDE)/sys/cdefs.h: libcsupport/include/sys/cdefs.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/cdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
 
-if HAS_NETWORKING
+if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/bsdnet
 	@: > $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
@@ -254,7 +254,7 @@ $(PROJECT_INCLUDE)/rtems/ide_part_table.h: libblock/include/rtems/ide_part_table
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ide_part_table.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ide_part_table.h
 endif
-if HAS_NETWORKING
+if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/ftpd.h: ftpd/ftpd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ftpd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ftpd.h

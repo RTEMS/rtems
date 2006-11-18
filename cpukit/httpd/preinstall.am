@@ -28,7 +28,7 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-if HAS_NETWORKING
+if LIBNETWORKING
 if HAS_POSIX
 $(PROJECT_INCLUDE)/goahead/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/goahead

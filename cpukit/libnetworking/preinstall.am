@@ -18,7 +18,7 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-if HAS_NETWORKING
+if LIBNETWORKING
 $(PROJECT_INCLUDE)/netdb.h: netdb.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netdb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netdb.h
