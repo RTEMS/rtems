@@ -1,5 +1,5 @@
-%define rpmvers 2.60
-%define srcvers	2.60
+%define rpmvers 2.61
+%define srcvers	2.61
 
 %if "%{_prefix}" != "/usr"
 %define name			@rpmprefix@autoconf-rtems
