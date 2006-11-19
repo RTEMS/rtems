@@ -41,7 +41,7 @@
 #define unsigned long uintmax_t
 
 #ifndef PRIuMAX
-#define PRIuMAX		"%lu"
+#define PRIuMAX		"lu"
 #endif
 #endif
 
