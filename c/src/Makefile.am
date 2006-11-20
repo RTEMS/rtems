@@ -7,8 +7,6 @@ ACLOCAL_AMFLAGS = -I aclocal
 SUBDIRS = . @BSP_SUBDIRS@
 DIST_SUBDIRS = @BSP_SUBDIRS@
 
-EXTRA_DIST = ampolish3
-
 clean-local:
 	$(RM) -r $(PROJECT_RELEASE)
 

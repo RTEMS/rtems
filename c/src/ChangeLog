@@ -1,3 +1,7 @@
+2006-11-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove ampolish3.
+
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/network/dec21140.c: Fix spacing -- remove long sections of
