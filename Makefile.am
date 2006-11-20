@@ -14,6 +14,7 @@ noinst_SCRIPTS = bootstrap
 
 EXTRA_DIST = README.configure SUPPORT VERSION LICENSE $(noinst_SCRIPTS)
 EXTRA_DIST += config-ml.in
+EXTRA_DIST += ampolish3
 
 dist-hook:
 	@files=`(cd $(srcdir); find doc cpukit c scripts testsuites tools \

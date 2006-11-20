@@ -86,6 +86,9 @@ case $1 in
 -p|--pr|--pre|--prei|--prein|--preins|--preinst)
   mode="preinstall";
   shift;;
+-r|--re|--rec|--reco|--recon|--reconf)
+  mode="autoreconf";
+  shift;;
 -*) echo "unknown option $1" ;
   usage ;;
 *) echo "invalid parameter $1" ;
@@ -154,6 +157,28 @@ generate)
       && test "$verbose" = "-v" && echo "${AUTOHEADER}";
     test -f Makefile.am && ${AUTOMAKE} -a -c $verbose ;
     ${AUTOCONF};
+    test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
+      && echo timestamp > stamp-h.in
+  )
+  done
+  ;;
+
+autoreconf)
+  AUTORECONF=${AUTORECONF-autoreconf}
+  if test -z "$AUTORECONF"; then
+    echo "You must have autoreconf installed to run $program"
+    exit 1
+  fi
+
+  confs=`find . -name 'configure.ac' -print`
+  for i in $confs; do
+  dir=`dirname $i`;
+  configure=`basename $i`;
+  ( test "$quiet" = "true" || echo "$dir";
+    cd $dir;
+    test -n "`grep RTEMS_CHECK_BSPDIR ${configure}`" && \
+      generate_bspdir_acinclude;
+    ${AUTORECONF} -i --no-recursive $verbose;
     test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
       && echo timestamp > stamp-h.in
   )
