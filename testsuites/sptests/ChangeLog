@@ -1,3 +1,8 @@
+2006-11-20	Joel Sherrill <joel@OARcorp.com>
+
+	* sp27/init.c, sp27/sp27.scn: Correct configured number of semaphores
+	and make output more compliant with other tests.
+
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
 
 	* sp09/screen12.c, sp16/task2.c, sp16/task3.c: Ensure tests generate
