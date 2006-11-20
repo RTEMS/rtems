@@ -1,3 +1,7 @@
+2006-11-20  Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/coverhd.h: Remove (Use shared default template instead).
+
 2006-11-15	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Merge c_rtems_main() into boot_card(). This eliminated a
