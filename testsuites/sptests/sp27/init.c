@@ -14,6 +14,7 @@ rtems_task Init (rtems_task_argument argument);
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS               6
+#define CONFIGURE_MAXIMUM_SEMAPHORES          1
 
 #define CONFIGURE_MICROSECONDS_PER_TICK       52429
 
@@ -76,11 +77,14 @@ Init (rtems_task_argument ignored)
   int pass, i;
   rtems_status_code sc;
 
-  puts("**** Semaphore flush test ****");
+  puts( "\n\n*** TEST 27 ***" );
+  puts("Testing semaphore flush"); 
   sc = rtems_semaphore_create (
     rtems_build_name ('S', 'E', 'M', 'F'),
     0,
-    RTEMS_LOCAL|RTEMS_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY|RTEMS_NO_PRIORITY_CEILING|RTEMS_FIFO,
+    RTEMS_LOCAL|
+      RTEMS_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY|
+      RTEMS_NO_PRIORITY_CEILING|RTEMS_FIFO,
     0,
     &semaphore);
   if (sc != RTEMS_SUCCESSFUL) {
@@ -101,6 +105,8 @@ Init (rtems_task_argument ignored)
       exit (1);
     }
   }
-  puts ("**** Semaphore flush test succeeded ****");
+  printf ("Flushed all waiting tasks\n", NTASK );
+  puts( "*** END OF TEST 27 ***" );
+
   exit (1);
 }
