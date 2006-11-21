@@ -13,5 +13,4 @@ libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c \
     include/rtems/ide_part_table.h
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
