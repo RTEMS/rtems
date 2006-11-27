@@ -1,3 +1,8 @@
+2006-11-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/src/threadget.c: Remove (Unused).
+	* score/Makefile.am: Removing score/src/threadget.c.
+
 2006-11-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libblock/Makefile.am: Don't include preinstall.am.
