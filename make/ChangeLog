@@ -1,3 +1,38 @@
+2006-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* custom/Cygwin-posix.cfg, custom/FreeBSD-posix.cfg,
+	custom/HPUX9-posix.cfg, custom/Linux-posix.cfg
+	custom/Solaris-posix.cfg, custom/armulator.cfg
+	custom/bare.cfg, custom/csb336.cfg
+	custom/csb337.cfg, custom/csb350.cfg
+	custom/dmv152.cfg, custom/edb7312.cfg
+	custom/ep1a.cfg, custom/erc32.cfg
+	custom/erc32nfp.cfg, custom/gba.cfg
+	custom/gen405.cfg, custom/gen5200.cfg
+	custom/gen68302.cfg, custom/gen68340.cfg
+	custom/gen68360.cfg, custom/genmongoosev.cfg
+	custom/gensh1.cfg, custom/gensh2.cfg
+	custom/gensh4.cfg, custom/gp32.cfg
+	custom/h8sim.cfg, custom/helas403.cfg
+	custom/hurricane.cfg, custom/i386ex.cfg
+	custom/idp.cfg, custom/jmr3904.cfg
+	custom/leon2.cfg, custom/leon3.cfg
+	custom/mbx821_002b.cfg, custom/mbx8xx.cfg
+	custom/mcp750.cfg, custom/mpc8260ads.cfg
+	custom/mrm332.cfg, custom/mtx603e.cfg
+	custom/mvme136.cfg, custom/mvme147.cfg
+	custom/mvme162.cfg, custom/mvme162lx.cfg
+	custom/mvme167.cfg, custom/mvme2100.cfg
+	custom/mvme2307.cfg, custom/mvme5500.cfg
+	custom/ods68302.cfg, custom/pc386.cfg
+	custom/psim.cfg, custom/rbtx4925.cfg
+	custom/rbtx4938.cfg, custom/score603e.cfg
+	custom/shsim.cfg, custom/sim68000.cfg
+	custom/simcpu32.cfg, custom/simsh4.cfg
+	custom/simsh7032.cfg, custom/simsh7045.cfg
+	custom/ss555.cfg, custom/ts_386ex.cfg:
+	Cleanup (Backport from HEAD).
+
 2006-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* custom/c4xsim.cfg, custom/c3xsim.cfg: Remove (Port not ready for
