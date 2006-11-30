@@ -191,6 +191,16 @@ vmeTsi148XlateAddr(
 	unsigned long *paOut/* where to put result */
 	);
 
+
+/* avoid pulling stdio.h into this header.
+ * Applications that want a declaration of the
+ * following routines should
+ *  #include <stdio.h>
+ *  #define _VME_TSI148_DECLARE_SHOW_ROUTINES
+ *  #include <vmeTsi148.h>
+ */
+#ifdef _VME_TSI148_DECLARE_SHOW_ROUTINES
+
 /* Print the current configuration of all outbound ports to 
  * f (stdout if NULL)
  */
@@ -210,6 +220,8 @@ vmeTsi148InboundPortsShowXX(BERegister *base, FILE *f);
 
 void
 vmeTsi148InboundPortsShow(FILE *f);
+
+#endif
 
 
 /* Disable all in- or out-bound ports, respectively */
