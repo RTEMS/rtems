@@ -1,3 +1,7 @@
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: New BUG-REPORT address.
+
 2006-11-16	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, startup/bspstart.c: Use common clock driver template

@@ -1,3 +1,7 @@
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: New BUG-REPORT address.
+
 2006-11-17	Joel Sherrill <joel@OARcorp.com>
 
 	* itrontask04/init.c, itrontask04/itrontask04.scn: Cannot print with

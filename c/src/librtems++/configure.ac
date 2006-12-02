@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.60)
-AC_INIT([rtems-c-src-librtems++],[_RTEMS_VERSION],[rtems-bugs@rtems.com],[rtems-c-src-librtems++])
+AC_INIT([rtems-c-src-librtems++],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla],[rtems-c-src-librtems++])
 AC_CONFIG_SRCDIR([include/rtems++])
 RTEMS_TOP(../../..)
 

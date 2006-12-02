@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 dnl NOTE: This is a very coarse port to automake
 AC_PREREQ(2.60)
 
-AC_INIT([rtems-doc-tools],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
+AC_INIT([rtems-doc-tools],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([word-replace2])
 RTEMS_TOP([../..])
 

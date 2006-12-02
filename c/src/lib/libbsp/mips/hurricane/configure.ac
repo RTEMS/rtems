@@ -3,7 +3,7 @@
 ## configure.ac,v 1.5.2.2 2003/08/11 14:37:57 ralf Exp
 
 AC_PREREQ(2.60)
-AC_INIT([rtems-c-src-lib-libbsp-mips-hurricane],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
+AC_INIT([rtems-c-src-lib-libbsp-mips-hurricane],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 

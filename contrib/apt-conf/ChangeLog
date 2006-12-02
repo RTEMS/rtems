@@ -1,3 +1,7 @@
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: New BUG-REPORT address.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

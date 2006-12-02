@@ -1,3 +1,7 @@
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: New BUG-REPORT address.
+
 2006-11-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use AC_CONFIG_HEADER instead of AM_CONFIG_HEADER.

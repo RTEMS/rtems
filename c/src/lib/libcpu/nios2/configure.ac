@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.60)
-AC_INIT([rtems-c-src-lib-libcpu-nios2],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
+AC_INIT([rtems-c-src-lib-libcpu-nios2],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 RTEMS_TOP([../../../../..],[../../..])
 
 RTEMS_CANONICAL_TARGET_CPU
