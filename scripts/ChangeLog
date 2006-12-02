@@ -1,3 +1,7 @@
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: New BUG-REPORT address.
+
 2006-07-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* autotools/autoconf.add: autoconf-2.60.

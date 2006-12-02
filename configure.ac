@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.59)
-AC_INIT([rtems],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
+AC_INIT([rtems],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([c])
 RTEMS_TOP([.])
 

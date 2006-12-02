@@ -1,3 +1,7 @@
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: New BUG-REPORT address.
+
 2005-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Re-add mptests*Makefile.am.

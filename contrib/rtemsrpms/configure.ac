@@ -5,7 +5,7 @@ m4_define([M4_RTEMS_VERSION],[4.6.99.3])
 m4_define([M4_RTEMS_RELEASE],[0])
 
 AC_PREREQ(2.59)
-AC_INIT([rtemsrpms],[M4_RTEMS_RELEASE],[rtems-bugs@rtems.com])
+AC_INIT([rtemsrpms],[M4_RTEMS_RELEASE],[http://www.rtems.org/bugzilla])
 AC_CONFIG_AUX_DIR(.)
 
 AC_CANONICAL_HOST

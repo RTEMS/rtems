@@ -1,3 +1,7 @@
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: New BUG-REPORT address.
+
 2006-11-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac, Makefile.am, rtems-4.7/Makefile.am: Remove tic4x. 
