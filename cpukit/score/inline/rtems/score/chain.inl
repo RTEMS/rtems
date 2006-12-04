@@ -40,8 +40,8 @@
  *          and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Are_nodes_equal(
-  Chain_Node *left,
-  Chain_Node *right
+  const Chain_Node *left,
+  const Chain_Node *right
 )
 {
   return left == right;
@@ -56,7 +56,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Are_nodes_equal(
  *  @return This method returns TRUE if the_chain is NULL and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Is_null(
-  Chain_Control *the_chain
+  const Chain_Control *the_chain
 )
 {
   return (the_chain == NULL);
