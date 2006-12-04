@@ -72,7 +72,8 @@ librtems_a_SOURCES += src/intr.c src/intrbody.c src/intrcatch.c
 
 ## BARRIER_C_FILES
 librtems_a_SOURCES += src/barrier.c src/barriercreate.c src/barrierdelete.c \
-   src/barrierident.c src/barriertranslatereturncode.c src/barrierwait.c
+   src/barrierident.c src/barriertranslatereturncode.c src/barrierrelease.c \
+   src/barrierwait.c
 
 ## CLOCK_C_FILES
 librtems_a_SOURCES += src/rtclock.c src/clockget.c src/clockset.c \

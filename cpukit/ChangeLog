@@ -1,3 +1,11 @@
+2006-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/prwlockunlock.c, rtems/Makefile.am,
+	rtems/src/barrierrelease.c, rtems/src/barrierwait.c,
+	score/src/corerwlockobtainread.c, score/src/corerwlockrelease.c:
+	Complete implementation of barrier as the rest of the test code is
+	now implemented. Also add blocking code to rwlock.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

@@ -93,7 +93,7 @@ void _CORE_RWLock_Obtain_for_reading(
     _Thread_queue_Enter_critical_section( &the_rwlock->Wait_queue );
     executing->Wait.queue       = &the_rwlock->Wait_queue;
     executing->Wait.id          = id;
-    executing->Wait.option      = CORE_RWLOCK_THREAD_WAITING_FOR_WRITE;
+    executing->Wait.option      = CORE_RWLOCK_THREAD_WAITING_FOR_READ;
     executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
     _ISR_Enable( level );
 

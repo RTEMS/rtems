@@ -57,8 +57,7 @@ rtems_status_code rtems_barrier_release(
     case OBJECTS_LOCAL:
       *released = _CORE_barrier_Release( &the_barrier->Barrier, id, NULL );
       _Thread_Enable_dispatch();
-      return _Barrier_Translate_core_barrier_return_code(
-                _Thread_Executing->Wait.return_code );
+      return RTEMS_SUCCESSFUL;
 
   }
 

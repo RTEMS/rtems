@@ -40,6 +40,7 @@ int pthread_rwlock_unlock(
 {
   POSIX_RWLock_Control  *the_rwlock;
   Objects_Locations      location;
+  CORE_RWLock_Status     status;
   
   if ( !rwlock )
     return EINVAL;
@@ -52,11 +53,9 @@ int pthread_rwlock_unlock(
       return EINVAL;
 
     case OBJECTS_LOCAL:
-
-      /* XXX */
-
+      status = _CORE_RWLock_Release( &the_rwlock->RWLock );
       _Thread_Enable_dispatch();
-      return 0;
+      return _POSIX_RWLock_Translate_core_RWLock_return_code( status );
   }
 
   return POSIX_BOTTOM_REACHED();
