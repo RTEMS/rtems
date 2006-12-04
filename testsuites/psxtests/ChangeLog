@@ -1,3 +1,8 @@
+2006-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxrwlock01/main.c, psxrwlock01/test.c: Improve rwlock test to
+	include normal blocking and unblocking on timeout.
+
 2006-12-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

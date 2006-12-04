@@ -23,8 +23,40 @@
 pthread_t ThreadIds[NUMBER_THREADS];
 pthread_rwlock_t RWLock;
 
-void *RWLockThread(void *arg)
+/*
+ * Test thread to block for read lock and unlock it
+ */
+void *ReadLockThread(void *arg)
 {
+  int status;
+
+  puts( "ReadThread - pthread_rwlock_rdlock(RWLock) blocking -- OK" );
+  status = pthread_rwlock_rdlock(&RWLock);
+  assert( !status );
+  puts( "ReadThread - pthread_rwlock_rdlock(RWLock) unblocked -- OK" );
+
+  status = pthread_rwlock_unlock(&RWLock);
+  assert( !status );
+  return NULL;
+}
+
+/*
+ * Test thread to block for write lock and unlock it
+ */
+void *WriteLockThread(void *arg)
+{
+  int status;
+
+  puts( "WriteThread - pthread_rwlock_wrlock(RWLock) blocking -- OK" );
+  status = pthread_rwlock_wrlock(&RWLock);
+  assert( !status );
+  puts( "WriteThread - pthread_rwlock_wrlock(RWLock) unblocked -- OK" );
+
+  sleep( 1 );
+
+  puts( "WriteThread - pthread_rwlock_unlock(RWLock) -- OK" );
+  status = pthread_rwlock_unlock(&RWLock);
+  assert( !status );
   return NULL;
 }
 
@@ -246,21 +278,75 @@ int main(
   status = pthread_rwlock_destroy( &rwlock );
   assert( status == 0 );
 
-#if 0
-  /*************** CREATE TESTS AND LET THEM RELEASE *****************/
-  puts( "pthread_rwlock_init( &RWLock, &attr, 2 ) -- OK" );
-  status = pthread_rwlock_init( &RWLock, &attr, 2 );
+  /*************** CREATE TESTS AND LET THEM OBTAIN READLOCK *****************/
+  puts( "pthread_rwlock_init( &RWLock, &attr ) -- OK" );
+  status = pthread_rwlock_init( &RWLock, &attr );
   assert( status == 0 );
   assert( rwlock != 0 );
 
+  puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
+  status = pthread_rwlock_trywrlock(&RWLock);
+  assert( !status );
+
   for (i=0 ; i<NUMBER_THREADS ; i++ ) {
     printf( "Init: pthread_create - thread %d OK\n", i+1 );
-    status = pthread_create(&ThreadIds[i], NULL, RWLockThread, &ThreadIds[i]);
+    status = pthread_create(&ThreadIds[i], NULL, ReadLockThread, &ThreadIds[i]);
     assert( !status );
 
     sleep(1);
   }
-#endif
+
+  puts( "pthread_rwlock_unlock(RWLock) -- OK" );
+  status = pthread_rwlock_unlock(&RWLock);
+  assert( !status );
+
+  sleep(1);
+
+ 
+  /*************** CREATE TESTS AND LET THEM OBTAIN WRITE LOCK ***************/
+  puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
+  status = pthread_rwlock_trywrlock(&RWLock);
+  assert( !status );
+
+  for (i=0 ; i<NUMBER_THREADS ; i++ ) {
+    printf( "Init: pthread_create - thread %d OK\n", i+1 );
+    status =
+      pthread_create(&ThreadIds[i], NULL, WriteLockThread, &ThreadIds[i]);
+    assert( !status );
+
+    sleep(1);
+  }
+
+  puts( "pthread_rwlock_unlock(RWLock) -- OK" );
+  status = pthread_rwlock_unlock(&RWLock);
+  assert( !status );
+
+  sleep( 3 );
+  puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
+  status = pthread_rwlock_trywrlock(&RWLock);
+  assert( !status );
+
+  /*************** TIMEOUT ON RWLOCK ***************/
+
+  puts( "clock_gettime(CLOCK_REALTIME, &abstime) -- OK" );
+  status = clock_gettime( CLOCK_REALTIME, &abstime );
+  assert( !status );
+  
+  abstime.tv_sec += 1;
+  puts( "pthread_rwlock_timedwrlock( &RWLock, &abstime) -- OK" );
+  status = pthread_rwlock_timedwrlock( &RWLock, &abstime );
+  assert( !status );
+
+  abstime.tv_sec += 1;
+  puts( "pthread_rwlock_timedrdlock( &RWLock, &abstime) -- OK" );
+  status = pthread_rwlock_timedrdlock( &RWLock, &abstime );
+  assert( !status );
+
+  /*************** DESTROY RWLOCK ***************/
+  puts( "pthread_rwlock_destroy( &rwlock ) -- OK" );
+  status = pthread_rwlock_destroy( &rwlock );
+  assert( status == 0 );
+
 
   /*************** END OF TEST *****************/
   puts( "*** END OF POSIX RWLOCK TEST 01 ***" );
