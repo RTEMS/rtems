@@ -40,8 +40,8 @@
  *          and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Are_nodes_equal(
-  Chain_Node *left,
-  Chain_Node *right
+  const Chain_Node *left,
+  const Chain_Node *right
 )
 {
   return left == right;
@@ -56,7 +56,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Are_nodes_equal(
  *  @return This method returns TRUE if the_chain is NULL and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Is_null(
-  Chain_Control *the_chain
+  const Chain_Control *the_chain
 )
 {
   return (the_chain == NULL);
@@ -71,7 +71,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_null(
  *  @return This method returns TRUE if the_node is NULL and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Is_null_node(
-  Chain_Node *the_node
+  const Chain_Node *the_node
 )
 {
   return (the_node == NULL);
@@ -136,7 +136,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_empty(
  *          a chain and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Is_first(
-  Chain_Node *the_node
+  const Chain_Node *the_node
 )
 {
   return (the_node->previous == NULL);
@@ -153,7 +153,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_first(
  *          a chain and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Is_last(
-  Chain_Node *the_node
+  const Chain_Node *the_node
 )
 {
   return (the_node->next == NULL);
@@ -170,7 +170,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_last(
  *          @a the_chain and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Has_only_one_node(
-  Chain_Control *the_chain
+  const Chain_Control *the_chain
 )
 {
   return (the_chain->first == the_chain->last);
@@ -189,7 +189,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Has_only_one_node(
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Is_head(
   Chain_Control *the_chain,
-  Chain_Node    *the_node
+  const Chain_Node    *the_node
 )
 {
    return (the_node == _Chain_Head(the_chain));
@@ -205,7 +205,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_head(
  */
 RTEMS_INLINE_ROUTINE boolean _Chain_Is_tail(
   Chain_Control *the_chain,
-  Chain_Node    *the_node
+  const Chain_Node    *the_node
 )
 {
    return (the_node == _Chain_Tail(the_chain));
