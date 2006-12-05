@@ -41,7 +41,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
  */
 
 RTEMS_INLINE_ROUTINE boolean _Thread_Is_executing (
-  Thread_Control *the_thread
+  const Thread_Control *the_thread
 )
 {
   return ( the_thread == _Thread_Executing );
@@ -53,7 +53,7 @@ RTEMS_INLINE_ROUTINE boolean _Thread_Is_executing (
  */
 
 RTEMS_INLINE_ROUTINE boolean _Thread_Is_heir (
-  Thread_Control *the_thread
+  const Thread_Control *the_thread
 )
 {
   return ( the_thread == _Thread_Heir );
@@ -116,7 +116,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 RTEMS_INLINE_ROUTINE boolean _Thread_Is_allocated_fp (
-  Thread_Control *the_thread
+  const Thread_Control *the_thread
 )
 {
   return ( the_thread == _Thread_Allocated_fp );
@@ -211,7 +211,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
  */
 
 RTEMS_INLINE_ROUTINE boolean _Thread_Is_null (
-  Thread_Control *the_thread
+  const Thread_Control *the_thread
 )
 {
   return ( the_thread == NULL );

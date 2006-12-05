@@ -1,3 +1,8 @@
+2006-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/inline/rtems/score/thread.inl: Add const qualifiers to work
+	around aliasing effects.
+
 2006-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/inline/rtems/score/chain.inl: Add const qualifiers (works
