@@ -535,8 +535,8 @@ void _Objects_Free(
  *  @param[in] length is the length of the object name field.
  */
 void _Objects_Clear_name(
-  void       *name,
-  uint16_t    length
+  void         *name,
+  const size_t  length
 );
 
 /**
@@ -547,9 +547,9 @@ void _Objects_Clear_name(
  *  @param[in] length is the number of bytes to copy.
  */
 void _Objects_Copy_name_string(
-  void       *source,
-  void       *destination,
-  uint16_t    length
+  const void   *source,
+  void         *destination,
+  const size_t  length
 );
 
 /**
@@ -560,9 +560,9 @@ void _Objects_Copy_name_string(
  *  @param[in] length is the number of bytes to copy.
  */
 void _Objects_Copy_name_raw(
-  void       *source,
-  void       *destination,
-  uint16_t    length
+  const void   *source,
+  void         *destination,
+  const size_t  length
 );
 
 /**

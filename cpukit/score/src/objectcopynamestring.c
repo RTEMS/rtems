@@ -36,9 +36,9 @@
  */
 
 void _Objects_Copy_name_string(
-  void       *source,
-  void       *destination,
-  uint16_t   length
+  const void   *source,
+  void         *destination,
+  const size_t  length
 )
 {
   uint8_t   *source_p = (uint8_t   *) source;
