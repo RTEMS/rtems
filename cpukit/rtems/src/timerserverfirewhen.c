@@ -53,7 +53,6 @@ rtems_status_code rtems_timer_server_fire_when(
   Timer_Control        *the_timer;
   Objects_Locations     location;
   rtems_interval        seconds;
-  extern Chain_Control  _Timer_Seconds_chain;
 
   if ( !_Timer_Server )
     return RTEMS_INCORRECT_STATE;
