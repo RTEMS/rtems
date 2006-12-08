@@ -1,3 +1,10 @@
+2006-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/src/timerserverfirewhen.c: Remove local
+	extern _Timer_Seconds_chain.
+	* rtems/src/timerserverfireafter.c: Remove local
+	extern _Timer_Ticks_chain.
+
 2006-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/inline/rtems/score/chain.inl: Add const qualifiers (works
