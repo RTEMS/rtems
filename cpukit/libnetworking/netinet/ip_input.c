@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -230,9 +226,9 @@ static struct	route ipforward_rt;
 void
 ip_input(struct mbuf *m)
 {
-	struct ip *ip;
+	struct ip *ip = NULL;
 	struct ipq *fp;
-	struct in_ifaddr *ia;
+	struct in_ifaddr *ia = NULL;
 	int    i, hlen;
 	u_short sum;
 
@@ -257,7 +253,7 @@ ip_input(struct mbuf *m)
 #endif
 
 	if (m->m_len < sizeof (struct ip) &&
-	    (m = m_pullup(m, sizeof (struct ip))) == 0) {
+	    (m = m_pullup(m, sizeof (struct ip))) == NULL) {
 		ipstat.ips_toosmall++;
 		return;
 	}
@@ -274,7 +270,7 @@ ip_input(struct mbuf *m)
 		goto bad;
 	}
 	if (hlen > m->m_len) {
-		if ((m = m_pullup(m, hlen)) == 0) {
+		if ((m = m_pullup(m, hlen)) == NULL) {
 			ipstat.ips_badhlen++;
 			return;
 		}
@@ -419,7 +415,7 @@ tooshort:
 			ip->ip_id = ntohs(ip->ip_id);
 
 			/*
-			 * The process-level routing demon needs to receive
+			 * The process-level routing daemon needs to receive
 			 * all multicast IGMP packets, whether or not this
 			 * host belongs to their destination groups.
 			 */
@@ -450,8 +446,9 @@ tooshort:
 	if (ipforwarding == 0) {
 		ipstat.ips_cantforward++;
 		m_freem(m);
-	} else
+	} else {
 		ip_forward(m, 0);
+	}
 	return;
 
 ours:
@@ -746,9 +743,8 @@ insert:
 #endif
 
 	/*
-	 * Create header for new ip packet by
-	 * modifying header of first packet;
-	 * dequeue and discard fragment reassembly header.
+	 * Create header for new ip packet by modifying header of first
+	 * packet;  dequeue and discard fragment reassembly header.
 	 * Make header visible.
 	 */
 	ip = fp->ipq_next;
@@ -1254,11 +1250,9 @@ u_char inetctlerrmap[PRC_NCMDS] = {
  * via a source route.
  */
 static void
-ip_forward(m, srcrt)
-	struct mbuf *m;
-	int srcrt;
+ip_forward(struct mbuf *m, int srcrt)
 {
-	register struct ip *ip = mtod(m, struct ip *);
+	struct ip *ip = mtod(m, struct ip *);
 	register struct sockaddr_in *sin;
 	register struct rtentry *rt;
 	int error, type = 0, code = 0;
@@ -1454,10 +1448,10 @@ ip_rsvp_init(struct socket *so)
 {
 	if (so->so_type != SOCK_RAW ||
 	    so->so_proto->pr_protocol != IPPROTO_RSVP)
-	  return EOPNOTSUPP;
+		return EOPNOTSUPP;
 
 	if (ip_rsvpd != NULL)
-	  return EADDRINUSE;
+		return EADDRINUSE;
 
 	ip_rsvpd = so;
 	/*

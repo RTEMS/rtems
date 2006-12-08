@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -46,19 +42,19 @@
  */
 struct	mbuf;
 
-struct	domain {
+struct domain {
 	int	dom_family;		/* AF_xxx */
 	char	*dom_name;
 	void	(*dom_init)		/* initialize domain data structures */
-		__P((void));
+		(void);
 	int	(*dom_externalize)	/* externalize access rights */
 		__P((struct mbuf *));
 	void	(*dom_dispose)		/* dispose of internalized rights */
-		__P((struct mbuf *));
+		(struct mbuf *);
 	struct	protosw *dom_protosw, *dom_protoswNPROTOSW;
 	struct	domain *dom_next;
 	int	(*dom_rtattach)		/* initialize routing table */
-		__P((void **, int));
+		(void **, int);
 	int	dom_rtoffset;		/* an arg to rtattach, in bits */
 	int	dom_maxrtkey;		/* for routing layer */
 };

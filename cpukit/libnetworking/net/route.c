@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -64,14 +60,15 @@ struct radix_node_head *rt_tables[AF_MAX+1];
 
 static int	rttrash;		/* routes not in table but not freed */
 
-static void rt_maskedcopy __P((struct sockaddr *,
-	    struct sockaddr *, struct sockaddr *));
-static void rtable_init __P((struct radix_node_head **));
+static void rt_maskedcopy(struct sockaddr *,
+	    struct sockaddr *, struct sockaddr *);
+static void rtable_init(struct radix_node_head **);
+
+/* compare two sockaddr structures */
+#define	sa_equal(a1, a2) (bcmp((a1), (a2), (a1)->sa_len) == 0)
 
 static void
-rtable_init(
-    struct radix_node_head **table
-)
+rtable_init(struct radix_node_head **table)
 {
 	struct domain *dom;
 	for (dom = domains; dom; dom = dom->dom_next)
@@ -81,7 +78,7 @@ rtable_init(
 }
 
 void
-route_init()
+route_init(void)
 {
 	rn_init();	/* initialize all zeroes, all ones, mask table */
 	rtable_init(rt_tables);
@@ -91,8 +88,7 @@ route_init()
  * Packet routing routines.
  */
 void
-rtalloc(ro)
-	register struct route *ro;
+rtalloc(struct route *ro)
 {
 	if (ro->ro_rt && ro->ro_rt->rt_ifp && (ro->ro_rt->rt_flags & RTF_UP))
 		return;				 /* XXX */
@@ -100,9 +96,7 @@ rtalloc(ro)
 }
 
 void
-rtalloc_ign(ro, ignore)
-	register struct route *ro;
-	u_long ignore;
+rtalloc_ign(struct route *ro, u_long ignore)
 {
 	if (ro->ro_rt && ro->ro_rt->rt_ifp && (ro->ro_rt->rt_flags & RTF_UP))
 		return;				 /* XXX */
@@ -114,20 +108,19 @@ rtalloc_ign(ro, ignore)
  * Or, at least try.. Create a cloned route if needed.
  */
 struct rtentry *
-rtalloc1(dst, report, ignflags)
-	register struct sockaddr *dst;
-	int report;
-	u_long ignflags;
+rtalloc1(struct sockaddr *dst, int report, u_long ignflags)
 {
-	register struct radix_node_head *rnh = rt_tables[dst->sa_family];
-	register struct rtentry *rt;
-	register struct radix_node *rn;
-	struct rtentry *newrt = 0;
+	struct radix_node_head *rnh = rt_tables[dst->sa_family];
+	struct rtentry *rt;
+	struct radix_node *rn;
+	struct rtentry *newrt;
 	struct rt_addrinfo info;
 	u_long nflags;
-	int  s = splnet(), err = 0, msgtype = RTM_MISS;
+	int  s = splnet();
+	int err = 0, msgtype = RTM_MISS;
 
-	/* 
+	newrt = NULL;
+	/*
 	 * Look up the address in the table for that Address Family
 	 */
 	if (rnh && (rn = rnh->rnh_matchaddr((caddr_t)dst, rnh)) &&
@@ -178,7 +171,7 @@ rtalloc1(dst, report, ignflags)
 			 * Authorities.
 			 * For a delete, this is not an error. (report == 0)
 			 */
-			bzero((caddr_t)&info, sizeof(info));
+			bzero(&info, sizeof(info));
 			info.rti_info[RTAX_DST] = dst;
 			rt_missmsg(msgtype, &info, 0, err);
 		}
@@ -187,9 +180,12 @@ rtalloc1(dst, report, ignflags)
 	return (newrt);
 }
 
+/*
+ * Remove a reference count from an rtentry.
+ * If the count gets low enough, take it out of the routing table
+ */
 void
-rtfree(rt)
-	register struct rtentry *rt;
+rtfree(struct rtentry *rt)
 {
 	register struct radix_node_head *rnh =
 		rt_tables[rt_key(rt)->sa_family];
@@ -241,19 +237,21 @@ ifafree(ifa)
  *
  */
 void
-rtredirect(dst, gateway, netmask, flags, src, rtp)
-	struct sockaddr *dst, *gateway, *netmask, *src;
-	int flags;
-	struct rtentry **rtp;
+rtredirect(struct sockaddr *dst, 
+	struct sockaddr *gateway, 
+	struct sockaddr *netmask, 
+	int flags,
+	struct sockaddr *src,
+	struct rtentry **rtp)
 {
-	register struct rtentry *rt;
+	struct rtentry *rt;
 	int error = 0;
-	short *stat = 0;
+	short *stat = NULL;
 	struct rt_addrinfo info;
 	struct ifaddr *ifa;
 
 	/* verify the gateway is directly reachable */
-	if ((ifa = ifa_ifwithnet(gateway)) == 0) {
+	if ((ifa = ifa_ifwithnet(gateway)) == NULL) {
 		error = ENETUNREACH;
 		goto out;
 	}
@@ -320,7 +318,7 @@ out:
 		rtstat.rts_badredirect++;
 	else if (stat != NULL)
 		(*stat)++;
-	bzero((caddr_t)&info, sizeof(info));
+	bzero(&info, sizeof(info));
 	info.rti_info[RTAX_DST] = dst;
 	info.rti_info[RTAX_GATEWAY] = gateway;
 	info.rti_info[RTAX_NETMASK] = netmask;
@@ -350,9 +348,7 @@ rtioctl(req, data, p)
 }
 
 struct ifaddr *
-ifa_ifwithroute(flags, dst, gateway)
-	int flags;
-	struct sockaddr	*dst, *gateway;
+ifa_ifwithroute(int flags, struct sockaddr *dst, struct sockaddr *gateway)
 {
 	register struct ifaddr *ifa;
 	if ((flags & RTF_GATEWAY) == 0) {
@@ -363,11 +359,11 @@ ifa_ifwithroute(flags, dst, gateway)
 		 * as our clue to the interface.  Otherwise
 		 * we can use the local address.
 		 */
-		ifa = 0;
+		ifa = NULL;
 		if (flags & RTF_HOST) {
 			ifa = ifa_ifwithdstaddr(dst);
 		}
-		if (ifa == 0)
+		if (ifa == NULL)
 			ifa = ifa_ifwithaddr(gateway);
 	} else {
 		/*
@@ -411,10 +407,12 @@ struct rtfc_arg {
  * all the bits of info needed
  */
 int
-rtrequest(req, dst, gateway, netmask, flags, ret_nrt)
-	int req, flags;
-	struct sockaddr *dst, *gateway, *netmask;
-	struct rtentry **ret_nrt;
+rtrequest(int req,
+	struct sockaddr *dst,
+	struct sockaddr *gateway,
+	struct sockaddr *netmask,
+	int flags,
+	struct rtentry **ret_nrt)
 {
 	int s = splnet(); int error = 0;
 	register struct rtentry *rt;
@@ -809,7 +807,7 @@ rt_maskedcopy(src, dst, netmask)
 	while (cp2 < cplim)
 		*cp2++ = *cp1++ & *cp3++;
 	if (cp2 < cplim2)
-		bzero((caddr_t)cp2, (unsigned)(cplim2 - cp2));
+		bzero(cp2, (unsigned)(cplim2 - cp2));
 }
 
 /*
