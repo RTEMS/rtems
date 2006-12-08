@@ -1,5 +1,15 @@
 2006-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/libio.h, libcsupport/src/read.c,
+	libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_dir.c, 
+	libfs/src/dosfs/msdos_file.c, libfs/src/imfs/deviceio.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_directory.c,
+	libfs/src/imfs/memfile.c, libnetworking/lib/ftpfs.c,
+	libnetworking/lib/tftpDriver.c, libnetworking/rtems/rtems_syscall.c:
+	Use size_t instead of uint32_t for read/write count-args.
+
+2006-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems/src/timerserverfirewhen.c: Remove local
 	extern _Timer_Seconds_chain.
 	* rtems/src/timerserverfireafter.c: Remove local
