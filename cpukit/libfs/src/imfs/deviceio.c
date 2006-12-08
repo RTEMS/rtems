@@ -130,7 +130,7 @@ int device_close(
 ssize_t device_read(
   rtems_libio_t *iop,
   void          *buffer,
-  uint32_t       count
+  size_t         count
 )
 {
   rtems_libio_rw_args_t   args;
@@ -167,7 +167,7 @@ ssize_t device_read(
 ssize_t device_write(
   rtems_libio_t *iop,
   const void    *buffer,
-  uint32_t       count
+  size_t         count
 )
 {
   rtems_libio_rw_args_t   args;

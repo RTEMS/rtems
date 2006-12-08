@@ -154,7 +154,7 @@ int memfile_close(
 ssize_t memfile_read(
   rtems_libio_t *iop,
   void          *buffer,
-  uint32_t       count
+  size_t         count
 )
 {
   IMFS_jnode_t   *the_jnode;
@@ -173,7 +173,7 @@ ssize_t memfile_read(
 ssize_t memfile_write(
   rtems_libio_t *iop,
   const void    *buffer,
-  uint32_t       count
+  size_t         count
 )
 {
   IMFS_jnode_t   *the_jnode;

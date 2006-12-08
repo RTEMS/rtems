@@ -24,7 +24,7 @@ ssize_t read(
   size_t      count
 )
 {
-  int             rc;  /* XXX change to a size_t when prototype is fixed */
+  ssize_t      rc;
   rtems_libio_t *iop;
 
   rtems_libio_check_fd( fd );
@@ -59,7 +59,7 @@ ssize_t read(
 
 #include <reent.h>
 
-_ssize_t _read_r(
+ssize_t _read_r(
   struct _reent *ptr,
   int            fd,
   void          *buf,

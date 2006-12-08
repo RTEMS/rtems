@@ -74,8 +74,8 @@ int imfs_dir_open(
 
 ssize_t imfs_dir_read(
   rtems_libio_t  *iop,
-  void *buffer,
-  uint32_t   count
+  void           *buffer,
+  size_t          count
 )
 {
   /*

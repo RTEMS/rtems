@@ -249,13 +249,13 @@ int msdos_file_close(rtems_libio_t *iop /* IN  */);
 ssize_t msdos_file_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
-  uint32_t       count             /* IN  */
+  size_t         count             /* IN  */
 );
 
 ssize_t msdos_file_write(
   rtems_libio_t *iop,             /* IN  */
   const void    *buffer,          /* IN  */
-  uint32_t       count            /* IN  */
+  size_t         count            /* IN  */
 );
 
 int msdos_file_lseek(
@@ -305,7 +305,7 @@ int msdos_dir_close(rtems_libio_t *iop /* IN  */);
 ssize_t msdos_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
-  uint32_t       count             /* IN  */
+  size_t         count             /* IN  */
 );
 
 int msdos_dir_lseek(
