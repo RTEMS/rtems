@@ -807,7 +807,6 @@ rtems_bsdnet_setup (void)
 	struct sockaddr_in broadcast;
 	struct sockaddr_in gateway;
 	int i;
-	extern char *strdup (const char *cp);
 
 	/*
 	 * Set local parameters
