@@ -794,7 +794,7 @@ static int rtems_tftp_open(
 static ssize_t rtems_tftp_read(
     rtems_libio_t *iop,
     void          *buffer,
-    uint32_t      count
+    size_t         count
 )
 {
     char              *bp;
@@ -935,7 +935,7 @@ static int rtems_tftp_close(
 static ssize_t rtems_tftp_write(
     rtems_libio_t   *iop,
     const void      *buffer,
-    uint32_t        count
+    size_t           count
 )
 {
     const char        *bp;

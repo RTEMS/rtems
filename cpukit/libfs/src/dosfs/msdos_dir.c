@@ -196,7 +196,7 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
  *     set apropriately).
  */
 ssize_t
-msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
+msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;

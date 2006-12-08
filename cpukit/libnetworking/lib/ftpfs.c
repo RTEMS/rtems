@@ -963,7 +963,7 @@ int rtems_ftp_open(
 ssize_t rtems_ftp_read(
   rtems_libio_t *iop,
   void          *buffer,
-  uint32_t       count
+  size_t         count
 )
 {
   int eno = 0;
@@ -1017,7 +1017,7 @@ ssize_t rtems_ftp_read(
 ssize_t rtems_ftp_write(
   rtems_libio_t *iop,
   const void    *buffer,
-  uint32_t       count
+  size_t         count
 )
 {
   int eno = EIO;

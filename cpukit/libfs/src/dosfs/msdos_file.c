@@ -144,7 +144,7 @@ msdos_file_close(rtems_libio_t *iop)
  *     appropriately)
  */
 ssize_t
-msdos_file_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
+msdos_file_read(rtems_libio_t *iop, void *buffer, size_t count)
 {
     ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -177,7 +177,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
  *     and errno set appropriately
  */
 ssize_t
-msdos_file_write(rtems_libio_t *iop,const void *buffer, uint32_t   count)
+msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
 {
     ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
