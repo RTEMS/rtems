@@ -1,5 +1,10 @@
 2006-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/route.c, libnetworking/netinet/ip_input.c,
+	libnetworking/sys/domain.h: Cosmetics from FreeBSD.
+
+2006-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/rtems_glue.c: Remove local
 	extern strdup.
 
