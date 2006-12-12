@@ -39,11 +39,6 @@ $(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/r
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
-if DEPRECATED
-$(PROJECT_INCLUDE)/rtems/score/ppc.h: rtems/score/ppc.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc.h
-endif
 $(PROJECT_INCLUDE)/rtems/old-exceptions/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/old-exceptions
 	@: > $(PROJECT_INCLUDE)/rtems/old-exceptions/$(dirstamp)
