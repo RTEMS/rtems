@@ -1,5 +1,6 @@
 2006-12-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/rtems-ampolish.m4: Require AM_MAINTAINER_MODE.
 	* aclocal/rtems-top.m4: Remove RTEMS_AMPOLISH.
 	* configure.ac: Add RTEMS_AMPOLISH.
 	* rtems/src/barrierrelease.c: Remove stray rtems_unsigned32.
