@@ -42,7 +42,7 @@ rtems_raw_irq_hdl get_hdl_from_vector(rtems_vector_offset index)
 {
     uint32_t                    hdl;
     interrupt_gate_descriptor* 	idt_entry_tbl;
-    uint32_t                    limit;
+    unsigned                    limit;
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 

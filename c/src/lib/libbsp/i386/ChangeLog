@@ -1,3 +1,8 @@
+2006-12-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/irq/idt.c: unsigned limits to match with
+	  i386_get_info_from_IDTR.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
