@@ -83,7 +83,7 @@ extern uint32_t mips_get_timer( void );
 
 #define rtems_bsp_delay( microseconds ) \
   { \
-     unsigned32 _end_clock = \
+     uint32_t _end_clock = \
           mips_get_timer() + microseconds * CLOCKS_PER_MICROSECOND; \
      _end_clock %= 0x100000000;  /* make sure result is 32 bits */ \
      \
