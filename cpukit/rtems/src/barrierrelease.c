@@ -39,7 +39,7 @@
 
 rtems_status_code rtems_barrier_release(
   rtems_id          id,
-  rtems_unsigned32 *released
+  uint32_t         *released
 )
 {
   Barrier_Control   *the_barrier;
