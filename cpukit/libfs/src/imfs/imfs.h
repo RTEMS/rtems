@@ -214,17 +214,6 @@ typedef struct {
   rtems_filesystem_file_handlers_r *directory_handlers;
 } IMFS_fs_info_t;
 
-#if UNUSED
-/* FIXME: Unused, we might want to remove it */
-#define increment_and_check_linkcounts( _fs_info )                  \
-  ((IMFS_fs_info_t * )_fs_info)->link_counts++;                     \
-  if ( ((IMFS_fs_info_t * )_fs_info)->link_counts  > MAXSYMLINKS )  \
-    rtems_set_errno_and_return_minus_one( ELOOP )
-#endif
-
-#define decrement_linkcounts(  _fs_info )             \
-  ((IMFS_fs_info_t * )_fs_info)->link_counts--;
-
 /*
  *  Type defination for tokens returned from IMFS_get_token
  */
