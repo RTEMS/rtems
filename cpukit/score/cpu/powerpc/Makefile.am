@@ -10,9 +10,6 @@ include_rtems_HEADERS = rtems/asm.h
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/powerpc.h rtems/score/cpu.h \
     rtems/score/types.h
-if DEPRECATED
-include_rtems_score_HEADERS += rtems/score/ppc.h
-endif
 
 include_rtems_old_exceptionsdir = $(includedir)/rtems/old-exceptions
 include_rtems_old_exceptions_HEADERS = rtems/old-exceptions/cpu.h
