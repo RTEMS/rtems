@@ -55,7 +55,7 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned32  total;
+  uint32_t total;
 
   total = LEON_REG.Timer_Counter_2;
 

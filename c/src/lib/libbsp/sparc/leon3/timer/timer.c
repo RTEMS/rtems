@@ -58,7 +58,7 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned32  total;
+  uint32_t total;
 
   if (LEON3_Timer_Regs) {
     total = LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].value;

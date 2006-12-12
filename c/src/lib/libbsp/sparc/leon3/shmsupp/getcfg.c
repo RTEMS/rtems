@@ -53,7 +53,7 @@ extern rtems_mpci_entry Shm_Return_packet(
 );
 
 extern rtems_mpci_entry Shm_Send_packet(
-  rtems_unsigned32,
+  uint32_t,
   rtems_packet_prefix *
 );
 
@@ -80,7 +80,7 @@ extern rtems_mpci_entry Shm_Send_packet(
 shm_config_table BSP_shm_cfgtbl;
 
 void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
+  uint32_t   localnode,
   shm_config_table **shmcfg
 )
 {
