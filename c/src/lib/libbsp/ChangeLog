@@ -1,4 +1,24 @@
-2006-12-13	Till Straumann <strauman@slac.stanford.edu>
+2006-10-23	Joel Sherrill <joel@OARcorp.com>
+
+	* bfin/ChangeLog, bfin/Makefile.am, bfin/acinclude.m4,
+	bfin/configure.ac, bfin/eZKit533/.cvsignore, bfin/eZKit533/ChangeLog,
+	bfin/eZKit533/Makefile.am, bfin/eZKit533/README,
+	bfin/eZKit533/bsp_specs, bfin/eZKit533/configure,
+	bfin/eZKit533/configure.ac, bfin/eZKit533/preinstall.am,
+	bfin/eZKit533/times, bfin/eZKit533/console/console-io.c,
+	bfin/eZKit533/include/.cvsignore, bfin/eZKit533/include/bsp.h,
+	bfin/eZKit533/include/bspopts.h.in, bfin/eZKit533/include/coverhd.h,
+	bfin/eZKit533/include/tm27.h, bfin/eZKit533/startup/bspstart.c,
+	bfin/eZKit533/startup/linkcmds, bfin/shared/clock/clockdrv.c,
+	bfin/shared/clock/rtc.c, bfin/shared/clock/tod.h,
+	bfin/shared/console/console.c, bfin/shared/start/start.S,
+	bfin/shared/timer/timer.c: New files.
+
+2006-01-11	Ralf Corsepius <ralf.corsepius@freenet.de>
+
+	* bspstart.am: Remove.
+
+2005-11-04	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/vmeUniverse/vmeTsi148.c, shared/vmeUniverse/vmeTsi148.h,
 	shared/vmeUniverse/vme_am_defs.h: New files.
@@ -20,10 +40,6 @@
 	uses interrupt line as read from PCI config. space (without offset)
 	BSP needs to use PCI fixup if necessary. Added a driver for the
 	tundra tsi148 VME bridge.
-
-2006-01-11	Ralf Corsepius <ralf.corsepius@freenet.de>
-
-	* bspstart.am: Remove.
 
 2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
