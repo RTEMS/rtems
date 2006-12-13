@@ -7,33 +7,27 @@
  *         Sept. 2005.
  */
 
+#include <stdint.h>
 #include <bsp/vme_am_defs.h>
+
 
 /* NOTE: A64 currently not implemented */
 
 /* These can be ored with the AM */
 
+/* NOTE: unlike the universe, the tsi148 doesn't allow for disabling posted writes ! */
+
 #define VME_MODE_PREFETCH_ENABLE			VME_AM_IS_MEMORY
-#define VME_MODE_PREFETCH_SIZE(x)			(((x)&3)<<12)
-#define VME_MODE_2eSSTM(x)					(((x)&7)<<16)
+#define	_LD_VME_MODE_PREFETCHSZ				24
+#define VME_MODE_PREFETCH_SIZE(x)			(((x)&3)<<_LD_VME_MODE_PREFETCHSZ)
 
-#define VME_MODE_DBW32_DISABLE				(8<<12)
-
-/* Transfer modes:
- *
- * On a outbound window, only the least significant
- * bit that is set is considered.
- * On a inbound window, the bitwise OR of modes
- * is accepted.
+/* These bits can be or'ed with the address-modifier when calling
+ * the 'XlateAddr' routine below to further qualify the
+ * search criteria.
  */
-#define VME_MODE_BLT						(1<<20)
-#define VME_MODE_MBLT						(1<<21)
-#define VME_MODE_2eVME						(1<<22)
-#define VME_MODE_2eSST						(1<<23)
-#define VME_MODE_2eSST_BCST					(1<<24)
-#define VME_MODE_MASK						(31<<20)
-
-#define VME_MODE_EXACT_MATCH				(1<<31)
+#define VME_MODE_MATCH_MASK					(3<<30)
+#define VME_MODE_EXACT_MATCH				(2<<30)	/* all bits must match */
+#define VME_MODE_AS_MATCH					(1<<30)	/* only A16/24/32 must match */
 
 #ifdef __cplusplus
 extern "C" {
@@ -191,6 +185,16 @@ vmeTsi148XlateAddr(
 	unsigned long *paOut/* where to put result */
 	);
 
+
+/* avoid pulling stdio.h into this header.
+ * Applications that want a declaration of the
+ * following routines should
+ *  #include <stdio.h>
+ *  #define _VME_TSI148_DECLARE_SHOW_ROUTINES
+ *  #include <vmeTsi148.h>
+ */
+#ifdef _VME_TSI148_DECLARE_SHOW_ROUTINES
+
 /* Print the current configuration of all outbound ports to 
  * f (stdout if NULL)
  */
@@ -210,6 +214,8 @@ vmeTsi148InboundPortsShowXX(BERegister *base, FILE *f);
 
 void
 vmeTsi148InboundPortsShow(FILE *f);
+
+#endif
 
 
 /* Disable all in- or out-bound ports, respectively */
@@ -248,17 +254,43 @@ vmeTsi148DisableAllOutboundPorts(void);
  *   0 if no error has occurred since this routine was last called.
  *     Contents of the 'VEAT' register (bit definitions as above)
  *     otherwise.
- *   If a non-NULL 'paddr' argument is provided then the 64-bit error
- *   address is stored in *paddr (only if return value is non-zero).
+ *   If a non-NULL 'paddr'  argument is provided then the lower 32-bit
+ *   of the error address is stored in *paddr (only if return value is
+ *   non-zero).
  *
  * SIDE EFFECTS: this routine clears the error attribute register, allowing
  *               for future errors to be latched.
  */
 unsigned long
-vmeTsi148ClearVMEBusErrorsXX(BERegister *base, unsigned long long *paddr);
+vmeTsi148ClearVMEBusErrorsXX(BERegister *base, uint32_t *paddr);
 
 unsigned long
-vmeTsi148ClearVMEBusErrors(unsigned long long *paddr);
+vmeTsi148ClearVMEBusErrors(uint32_t *paddr);
+
+/* Map internal register block to VME.
+ *
+ * This routine is intended for BSP implementors. The registers must be
+ * accessible from VME so that the interrupt handler can flush the 
+ * bridge FIFO (see below).
+ *
+ *            vme_base: VME address where the TSI registers (4k) can be mapped.
+ *                      This VME address must fall into a range covered by
+ *                      any pre-configured outbound window.
+ *       address_space: The desired VME address space.
+ *                      (all of SUP/USR/PGM/DATA are always accepted).
+ *
+ * See NOTES [vmeTsi148InstallIrqMgrAlt()] below for further information.
+ *
+ * RETURNS: 0 on success, nonzero on error. It is not possible (and results
+ *          in a non-zero return code) to change the CRG VME address after
+ *          initializing the interrupt manager as it uses the CRG.
+ */
+int
+vmeTsi148MapCRGXX(BERegister *base, uint32_t vme_base, uint32_t address_space);
+
+int
+vmeTsi148MapCRG(uint32_t vme_base, uint32_t address_space);
+
 
 /* VME Interrupt Handler functionality */
 
@@ -474,6 +506,10 @@ vmeTsi148IntLoopbackTst(int level, unsigned vector);
 
 #define TSI_NUM_INT_VECS		275
 
+#ifdef __INSIDE_RTEMS_BSP__
+
+#include <stdarg.h>
+
 /* the tsi148 interrupt handler is capable of routing all sorts of
  * (VME) interrupts to 4 different lines (some of) which may be hooked up
  * in a (board specific) way to a PIC.
@@ -501,15 +537,18 @@ vmeTsi148IntLoopbackTst(int level, unsigned vector);
  * from PCI config space is wrong for some boards! 
  *
  * PARAMETERS:
- *              shared: use the BSP_install_rtems_shared_irq_handler() instead
+ *              flags:  VMETSI148_IRQ_MGR_FLAG_SHARED:  
+ *                      use the BSP_install_rtems_shared_irq_handler() instead
  *                      of BSP_install_rtems_irq_handler(). Use this if the PIC
  *                      line is used by other devices, too.
  *                      CAVEAT: shared interrupts need RTEMS workspace, i.e., the 
  *                      VME interrupt manager can only be installed
  *                      *after workspace is initialized* if 'shared' is nonzero
  *                      (i.e., *not* from bspstart()).
+ *
  *           tsi_pin_0: to which output pin (of the tsi148) should the 7
  *       				VME irq levels be routed.
+ *
  *           pic_pin_0: specifies to which PIC input the 'main' output is
  *                      wired on your board. If passed a value < 0, the driver
  *                      reads this information from PCI config space ("IRQ line").
@@ -518,13 +557,40 @@ vmeTsi148IntLoopbackTst(int level, unsigned vector);
  *                      In any case must the varargs list be terminated by '-1'.
  *
  * RETURNS: 0 on success, -1 on failure.
- *						
+ *
+ * NOTES: The Tsi148 always does 'posted' writes through a FIFO buffer.
+ *        This effectively makes VME write operations asynchronous
+ *        which can have undesired side-effects.
+ *        In particular, consider the case of an ISR clearing the
+ *        interrupt condition by writing to a CSR. The write operation
+ *        doesn't really do anything but goes into the FIFO and
+ *        the user ISR returns. At this point, the interrupt manager
+ *        may find the IRQ still pending, trying another IACK
+ *        cycle. Because it is probable that at this time the FIFO
+ *        has been flushed and the CSR-write operation been effective,
+ *        the IACK then times out.
+ *        Note that this phenomenon becomes more obvious as CPUs
+ *        become faster.
+ *
+ *        To avoid this race condition and many VME drivers having
+ *        to be re-written, a VME read (having the desired side-effect
+ *        of flushing the write FIFO) must be issued between the
+ *        user ISR returning and the interrupt manager checking for
+ *        more pending interrupts.
+ *
+ *        Therefore, the BSP needs to map the Tsi148 register
+ *        block to VME so that a read over VME can be effectuated.
+ *        (In addition to being mapped to VME, the mapped address
+ *        range must be accessible through an outbound window.)
  */
+
+#define VMETSI148_IRQ_MGR_FLAG_SHARED	1
 int
 vmeTsi148InstallIrqMgrAlt(int shared, int tsi_pin0, int pic_pin0, ...);
 
 int
 vmeTsi148InstallIrqMgrVa(int shared, int tsi_pin0, int pic_pin0, va_list ap);
+#endif
 
 #ifdef __cplusplus
 }
