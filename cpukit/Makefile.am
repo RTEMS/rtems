@@ -37,36 +37,6 @@ include_rtems_HEADERS =
 include_rtems_rtemsdir = $(includedir)/rtems/rtems
 include_rtems_rtems_HEADERS =
 
-if DEPRECATED
-include_HEADERS += backward/asm.h backward/chain.h backward/clockdrv.h \
-    backward/confdefs.h backward/console.h backward/imfs.h backward/iosupp.h \
-    backward/ringbuf.h backward/rtc.h backward/spurious.h \
-    backward/timerdrv.h backward/vmeintr.h
-
-if LIBNETWORKING
-include_HEADERS += backward/ftpd.h
-
-include_HEADERS += backward/rtemspppd.h
-include_HEADERS += backward/rtemsdialer.h
-endif
-
-include_motoroladir = $(includedir)/motorola
-include_motorola_HEADERS = backward/motorola/mc68681.h \
-    backward/motorola/mc68230.h
-
-include_zilogdir = $(includedir)/zilog
-include_zilog_HEADERS = backward/zilog/z8536.h backward/zilog/z8036.h \
-    backward/zilog/z8030.h
-
-if LIBDOSFS
-include_HEADERS += backward/dosfs.h
-endif
-
-if LIBITRON
-include_HEADERS += backward/itron.h
-endif
-endif
-
 if NEWLIB
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
