@@ -155,7 +155,6 @@ uint32_t   _Message_queue_Flush_support(
     RTEMS_NOT_CONFIGURED
   );
   return RTEMS_NOT_CONFIGURED;
-  return 0;
 }
 
 boolean _Message_queue_Seize(
@@ -171,8 +170,6 @@ boolean _Message_queue_Seize(
     RTEMS_NOT_CONFIGURED
   );
   return RTEMS_NOT_CONFIGURED;
-  _Thread_Executing->Wait.return_code = RTEMS_UNSATISFIED;
-  return TRUE;
 }
 
 rtems_status_code _Message_queue_Submit(
