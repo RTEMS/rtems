@@ -271,7 +271,7 @@ AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 
 AC_CONFIG_HEADER(config.h)
 
-RTEMS_AMPOLISH
+RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([
