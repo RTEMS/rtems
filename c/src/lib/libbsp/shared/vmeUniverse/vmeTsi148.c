@@ -16,6 +16,8 @@
 #include <bsp.h>
 #include <libcpu/byteorder.h>
 
+#define __INSIDE_RTEMS_BSP__
+
 #include "vmeTsi148.h"
 
 #define STATIC static
@@ -54,7 +56,16 @@
 #	define TSI_OTAT_MRPFD		(1<<18)
 #	define TSI_OTAT_PFS(x)		(((x)&3)<<16)
 #	define TSI_OTAT_2eSSTM(x)	(((x)&7)<<11)
+#	define TSI_OTAT_2eSSTM_160	TSI_OTAT_2eSSTM(0)
+#	define TSI_OTAT_2eSSTM_267	TSI_OTAT_2eSSTM(1)
+#	define TSI_OTAT_2eSSTM_320	TSI_OTAT_2eSSTM(2)
 #	define TSI_OTAT_TM(x)		(((x)&7)<<8)
+#		define TSI_TM_SCT_IDX		0
+#		define TSI_TM_BLT_IDX		1
+#		define TSI_TM_MBLT_IDX		2
+#		define TSI_TM_2eVME_IDX		3
+#		define TSI_TM_2eSST_IDX		4
+#		define TSI_TM_2eSSTB_IDX	5
 #	define TSI_OTAT_DBW(x)		(((x)&3)<<6)
 #	define TSI_OTAT_SUP			(1<<5)
 #	define TSI_OTAT_PGM			(1<<4)
@@ -70,6 +81,17 @@
 #	define TSI_OTAT_ADMODE_USR4	0xb
 
 #define TSI_VIACK_1_REG		0x204
+
+#define TSI_VSTAT_REG		0x23c
+#	define TSI_VSTAT_CPURST		(1<<15)	/* clear power-up reset bit */
+#	define TSI_VSTAT_BDFAIL		(1<<14)
+#	define TSI_VSTAT_PURSTS		(1<<12)
+#	define TSI_VSTAT_BDFAILS	(1<<11)
+#	define TSI_VSTAT_SYSFLS		(1<<10)
+#	define TSI_VSTAT_ACFAILS	(1<< 9)
+#	define TSI_VSTAT_SCONS		(1<< 8)
+#	define TSI_VSTAT_GAP		(1<< 5)
+#	define TSI_VSTAT_GA_MSK		(0x1f)
 
 #define TSI_VEAU_REG		0x260
 #define TSI_VEAL_REG		0x264
@@ -96,6 +118,9 @@
 #	define TSI_ITAT_TH			(1<<18)
 #	define TSI_ITAT_VFS(x)		(((x)&3)<<16)
 #	define TSI_ITAT_2eSSTM(x)	(((x)&7)<<12)
+#	define TSI_ITAT_2eSSTM_160	TSI_ITAT_2eSSTM(0)
+#	define TSI_ITAT_2eSSTM_267	TSI_ITAT_2eSSTM(1)
+#	define TSI_ITAT_2eSSTM_320	TSI_ITAT_2eSSTM(2)
 #	define TSI_ITAT_2eSSTB		(1<<11)
 #	define TSI_ITAT_2eSST		(1<<10)
 #	define TSI_ITAT_2eVME		(1<<9)
@@ -110,6 +135,20 @@
 #	define TSI_ITAT_USR			(1<<2)
 #	define TSI_ITAT_PGM			(1<<1)
 #	define TSI_ITAT_DATA		(1<<0)
+
+#define TSI_CBAU_REG		0x40c
+#define TSI_CBAL_REG		0x410
+#define TSI_CRGAT_REG		0x414
+#   define TSI_CRGAT_EN		(1<<7)
+#	define TSI_CRGAT_AS_MSK	(7<<4)
+#	define TSI_CRGAT_A16	(0<<4)
+#	define TSI_CRGAT_A24	(1<<4)
+#	define TSI_CRGAT_A32	(2<<4)
+#	define TSI_CRGAT_A64	(4<<4)
+#   define TSI_CRGAT_SUP	(1<<3)
+#   define TSI_CRGAT_USR	(1<<2)
+#   define TSI_CRGAT_PGM	(1<<1)
+#   define TSI_CRGAT_DATA	(1<<0)
 
 #define TSI_VICR_REG		0x440
 #   define TSI_VICR_CNTS(v)		(((v)&3)<<30)
@@ -183,10 +222,18 @@
 #define TSI_INTM1_REG		0x458
 #define TSI_INTM2_REG		0x45c
 
+#define TSI_CBAR_REG		0xffc
+
+#define TSI_CSR_OFFSET		0x7f000
+
+#define TSI_CRG_SIZE		(1<<12)		/* 4k */
+
 
 #define TSI_RD(base, reg)				in_be32((volatile unsigned *)((base) + (reg)/sizeof(*base)))
 #define TSI_RD16(base, reg)				in_be16((volatile unsigned short *)(base) + (reg)/sizeof(short))
-#define TSI_RD8(base, reg)				*((volatile unsigned char *)(base) + (reg))
+#define TSI_LE_RD16(base, reg) 			in_le16((volatile unsigned short *)(base) + (reg)/sizeof(short))
+#define TSI_LE_RD32(base, reg) 			in_le32((volatile unsigned *)(base) + (reg)/sizeof(*base))
+#define TSI_RD8(base, reg)				in_8((volatile unsigned char *)(base) + (reg))
 #define TSI_WR(base, reg, val)			out_be32((volatile unsigned *)((base) + (reg)/sizeof(*base)), val)
 
 #define UNIV_SCTL_AM_MASK	(UNIV_CTL_VAS | UNIV_SCTL_PGM | UNIV_SCTL_DAT | UNIV_SCTL_USER | UNIV_SCTL_SUPER)
@@ -214,7 +261,12 @@ typedef unsigned int pci_ulong;
 /* PCI_MEM_BASE is a possible offset between CPU- and PCI addresses.
  * Should be defined by the BSP.
  */
-#define PCI_TO_LOCAL_ADDR(memaddr) ((pci_ulong)(memaddr) + PCI_MEM_BASE)
+#ifndef BSP_PCI2LOCAL_ADDR
+#ifndef PCI_MEM_BASE
+#define PCI_MEM_BASE 0
+#endif
+#define BSP_PCI2LOCAL_ADDR(memaddr) ((unsigned long)(memaddr) + PCI_MEM_BASE)
+#endif
 
 typedef struct {
 	BERegister *base;
@@ -223,6 +275,10 @@ typedef struct {
 } Tsi148Dev;
 
 static Tsi148Dev devs[NUM_TSI_DEVS] = {{0}};
+
+/* forward decl */
+extern int vmeTsi148RegPort;
+extern int vmeTsi148RegCSR;
 
 /* registers should be mapped to guarded, non-cached memory; hence 
  * subsequent stores are ordered. eieio is only needed to enforce
@@ -280,7 +336,7 @@ unsigned short		wrd;
 		return -1;
 	/* Assume upper BAR is zero */
 
-	*pbase=(BERegister*)(PCI_TO_LOCAL_ADDR(busaddr) & ~0xff);
+	*pbase=(BERegister*)(((pci_ulong)BSP_PCI2LOCAL_ADDR(busaddr)) & ~0xff);
 
 	if (BSP_PCI_CONFIG_IN_BYTE(bus,dev,fun,PCI_INTERRUPT_LINE,&irqline))
 		return -1;
@@ -339,6 +395,9 @@ int port;
 	TSI_WR(base, TSI_INTM2_REG, 0);
 	TSI_WR(base, TSI_VICR_REG, 0);
 	TSI_WR(base, TSI_VEAT_REG, TSI_VEAT_VESCL);
+	/* Clear BDFAIL / (--> SYSFAIL) */
+#	define TSI_VSTAT_BDFAIL		(1<<14)
+	TSI_WR(base, TSI_VSTAT_REG, TSI_RD(base, TSI_VSTAT_REG) & ~TSI_VSTAT_BDFAIL);
 }
 
 void
@@ -351,28 +410,31 @@ vmeTsi148Reset()
  * Tsi148 control mode word
  */
 
+static unsigned long ck2esst(unsigned long am)
+{
+	if ( VME_AM_IS_2eSST(am) ) {
+		/* make sure 2eVME is selected */
+		am &= ~VME_AM_MASK;
+		am |= VME_AM_2eVME_6U;
+	}
+	return am;
+}
+
 STATIC int
 am2omode(unsigned long address_space, unsigned long *pmode)
 {
-unsigned long mode=0;
-unsigned long tm, mask;
+unsigned long mode = 0;
+unsigned long tm   = TSI_TM_SCT_IDX;
 
-	if ( ! (VME_MODE_DBW32_DISABLE	& address_space ) )
+	if ( ! (VME_MODE_DBW16	& address_space ) )
 		mode |= TSI_OTAT_DBW(1);
 	if ( ! (VME_MODE_PREFETCH_ENABLE & address_space) )
 		mode |= TSI_OTAT_MRPFD;
 	else {
-		mode |= TSI_OTAT_PFS(address_space>>12);
+		mode |= TSI_OTAT_PFS(address_space>>_LD_VME_MODE_PREFETCHSZ);
 	}
-	mode |= TSI_OTAT_2eSSTM(address_space>>16);
 
-	for ( tm = 1, mask = VME_MODE_BLT; ! (mask & address_space); tm++, mask<<=1 ) {
-		if ( VME_MODE_2eSST_BCST == mask ) {
-			tm = 0;	/* select default: BLT enabled */
-			break;
-		}
-	}
-	mode |= TSI_OTAT_TM(tm);
+	address_space = ck2esst(address_space);
 
 	switch (address_space & VME_AM_MASK) {
 		case VME_AM_STD_SUP_PGM:
@@ -381,6 +443,17 @@ unsigned long tm, mask;
 			mode |= TSI_OTAT_PGM;
 
 			/* fall thru */
+		case VME_AM_STD_SUP_BLT:
+		case VME_AM_STD_SUP_MBLT:
+
+		case VME_AM_STD_USR_BLT:
+		case VME_AM_STD_USR_MBLT:
+			switch ( address_space & 3 ) {
+				case 0:	tm = TSI_TM_MBLT_IDX; break;
+				case 3:	tm = TSI_TM_BLT_IDX; break;
+				default: break;
+			}
+
 		case VME_AM_STD_SUP_DATA:
 		case VME_AM_STD_USR_DATA:
 
@@ -392,8 +465,20 @@ unsigned long tm, mask;
 			mode |= TSI_OTAT_PGM;
 
 			/* fall thru */
+		case VME_AM_EXT_SUP_BLT:
+		case VME_AM_EXT_SUP_MBLT:
+
+		case VME_AM_EXT_USR_BLT:
+		case VME_AM_EXT_USR_MBLT:
+			switch ( address_space & 3 ) {
+				case 0:	tm = TSI_TM_MBLT_IDX; break;
+				case 3:	tm = TSI_TM_BLT_IDX; break;
+				default: break;
+			}
+
 		case VME_AM_EXT_SUP_DATA:
 		case VME_AM_EXT_USR_DATA:
+
 			mode |= TSI_OTAT_ADMODE_A32;
 			break;
 
@@ -406,12 +491,32 @@ unsigned long tm, mask;
 			mode |= TSI_OTAT_ADMODE_CSR;
 			break;
 
+		case VME_AM_2eVME_6U:
+		case VME_AM_2eVME_3U:
+			mode |= TSI_OTAT_ADMODE_A32;
+			if ( VME_AM_IS_2eSST(address_space) ) {
+				tm = ( VME_AM_2eSST_BCST & address_space ) ?
+	 					TSI_TM_2eSSTB_IDX : TSI_TM_2eSST_IDX;
+				switch ( VME_AM_IS_2eSST(address_space) ) {
+					default:
+					case VME_AM_2eSST_LO:  mode |= TSI_OTAT_2eSSTM_160; break;
+					case VME_AM_2eSST_MID: mode |= TSI_OTAT_2eSSTM_267; break;
+					case VME_AM_2eSST_HI:  mode |= TSI_OTAT_2eSSTM_320; break;
+				}
+			} else {
+				tm    = TSI_TM_2eVME_IDX;
+			}
+		break;
+
 		case 0: /* disable the port alltogether */
 			break;
 
 		default:
 			return -1;
 	}
+
+	mode |= TSI_OTAT_TM(tm);
+
 	if ( VME_AM_IS_SUP(address_space) )
 		mode |= TSI_OTAT_SUP;
 	*pmode = mode;
@@ -422,30 +527,40 @@ STATIC int
 am2imode(unsigned long address_space, unsigned long *pmode)
 {
 unsigned long mode=0;
-unsigned long tm, mask;
+unsigned long pgm = 0;
 
-	mode |= TSI_ITAT_VFS(address_space>>12);
-	mode |= TSI_ITAT_2eSSTM(address_space>>16);
+	mode |= TSI_ITAT_VFS(address_space>>_LD_VME_MODE_PREFETCHSZ);
+
+	if ( VME_AM_IS_2eSST(address_space) ) {
+			mode |= TSI_ITAT_2eSST;
+		if ( VME_AM_2eSST_BCST & address_space )
+			mode |= TSI_ITAT_2eSSTB;
+		switch ( VME_AM_IS_2eSST(address_space) ) {
+			default:
+			case VME_AM_2eSST_LO:  mode |= TSI_ITAT_2eSSTM_160; break;
+			case VME_AM_2eSST_MID: mode |= TSI_ITAT_2eSSTM_267; break;
+			case VME_AM_2eSST_HI:  mode |= TSI_ITAT_2eSSTM_320; break;
+		}
+		address_space = ck2esst(address_space);
+	}
 
 	mode |= TSI_ITAT_BLT;
+	mode |= TSI_ITAT_MBLT;
 
-	mask = VME_MODE_BLT;
-	tm = TSI_ITAT_BLT;
-	do {
-		mask<<=1; tm<<=1;
-		if ( address_space & mask )
-			mode |= tm;
-	} while ( TSI_ITAT_2eSSTB != tm );
-
-	tm = 0;
+	mode |= TSI_ITAT_PGM; /* always allow PGM access */
+	mode |= TSI_ITAT_USR; /* always allow USR access */
 
 	switch (address_space & VME_AM_MASK) {
 		case VME_AM_STD_SUP_PGM:
 		case VME_AM_STD_USR_PGM:
 
-			tm = 1;
+			pgm = 1;
 
 			/* fall thru */
+		case VME_AM_STD_SUP_BLT:
+		case VME_AM_STD_SUP_MBLT:
+		case VME_AM_STD_USR_BLT:
+		case VME_AM_STD_USR_MBLT:
 		case VME_AM_STD_SUP_DATA:
 		case VME_AM_STD_USR_DATA:
 
@@ -454,9 +569,15 @@ unsigned long tm, mask;
 
 		case VME_AM_EXT_SUP_PGM:
 		case VME_AM_EXT_USR_PGM:
-			tm = 1;
+			pgm = 1;
 
 			/* fall thru */
+		case VME_AM_2eVME_6U:
+		case VME_AM_2eVME_3U:
+		case VME_AM_EXT_SUP_BLT:
+		case VME_AM_EXT_SUP_MBLT:
+		case VME_AM_EXT_USR_BLT:
+		case VME_AM_EXT_USR_MBLT:
 		case VME_AM_EXT_SUP_DATA:
 		case VME_AM_EXT_USR_DATA:
 			mode |= TSI_ITAT_ADMODE_A32;
@@ -477,12 +598,8 @@ unsigned long tm, mask;
 
 	if ( VME_AM_IS_SUP(address_space) )
 		mode |= TSI_ITAT_SUP;
-	else
-		mode |= TSI_ITAT_USR;
 
-	if ( tm )
-		mode |= TSI_ITAT_PGM;
-	else
+	if ( !pgm )
 		mode |= TSI_ITAT_DATA;
 
 	*pmode = mode;
@@ -531,6 +648,7 @@ configTsiPort(
 unsigned long long	start, limit, offst;
 unsigned long		mode, mask, tat_reg, tsau_reg;
 char				*name = (isout ? "Outbound" : "Inbound");
+int					i,s,l;
 
 	CHECK_BASE(base,0,-1);
 
@@ -538,6 +656,11 @@ char				*name = (isout ? "Outbound" : "Inbound");
 
 	if ( port >= (isout ? TSI148_NUM_OPORTS : TSI148_NUM_IPORTS) ) {
 		uprintf(stderr,"Tsi148 %s Port Cfg: invalid port\n", name);
+		return -1;
+	}
+
+	if ( base == devs[0].base && isout && vmeTsi148RegPort == port ) {
+		uprintf(stderr,"Tsi148 %s Port Cfg: invalid port; reserved by the interrupt manager for CRG\n", name);
 		return -1;
 	}
 
@@ -554,6 +677,21 @@ char				*name = (isout ? "Outbound" : "Inbound");
 		tat_reg   = TSI_OTAT_REG(port);
 		tsau_reg  = TSI_OTSAU_REG(port);
 		mode     |= TSI_OTAT_EN;
+
+		/* check for overlap */
+		for ( i = 0; i < TSI148_NUM_OPORTS; i++ ) {
+			/* ignore 'this' port */
+			if ( i == port || ! (TSI_OTAT_EN & TSI_RD(base, TSI_OTAT_REG(i))) )
+				continue;
+
+			/* check requested PCI range against current port 'i' config */
+			s = TSI_RD(base, TSI_OTSAU_REG(i) + 0x04); /* start */
+			l = TSI_RD(base, TSI_OTSAU_REG(i) + 0x0c); /* limit */
+			if ( ! ( start + length <= s || start > s + l ) ) {
+				uprintf(stderr,"Tsi148 Outbound Port Cfg: PCI address range overlaps with port %i (0x%08x..0x%08x)\n", i, s, l);
+				return -1;
+			}
+		}
 	} else {
 		start     = vme_address;
 		offst     = (unsigned long long)pci_address - start;
@@ -561,6 +699,31 @@ char				*name = (isout ? "Outbound" : "Inbound");
 		tat_reg   = TSI_ITAT_REG(port);
 		tsau_reg  = TSI_ITSAU_REG(port);
 		mode     |= TSI_ITAT_EN;
+
+		/* check for overlap */
+		for ( i = 0; i < TSI148_NUM_IPORTS; i++ ) {
+			/* ignore 'this' port */
+			if ( i == port || ! (TSI_ITAT_EN & (s=TSI_RD(base, TSI_ITAT_REG(i)))) )
+				continue;
+
+			if ( (TSI_ITAT_AS(-1) & s) != (TSI_ITAT_AS(-1) & mode) ) {
+				/* different address space */
+				continue;
+			}
+
+			if ( ! (mode & s & (TSI_ITAT_SUP | TSI_ITAT_USR | TSI_ITAT_PGM | TSI_ITAT_DATA)) ) {
+				/* orthogonal privileges */
+				continue;
+			}
+
+			/* check requested VME range against current port 'i' config */
+			s = TSI_RD(base, TSI_ITSAU_REG(i) + 0x04); /* start */
+			l = TSI_RD(base, TSI_ITSAU_REG(i) + 0x0c); /* limit */
+			if ( ! ( start + length <= s || start > s + l ) ) {
+				uprintf(stderr,"Tsi148 Inbound Port Cfg: VME address range overlaps with port %i (0x%08x..0x%08x)\n", i, s, l);
+				return -1;
+			}
+		}
 	}
 
 	/* If they pass 'length==0' just disable */
@@ -661,8 +824,8 @@ vmeTsi148OutboundPortCfg(
 }
 
 
-int
-vmeTsi148XlateAddrXX(
+static int
+xlateFindPort(
 	BERegister *base,	/* TSI 148 base address */
 	int outbound, 		/* look in the outbound windows */
 	int reverse,		/* reverse mapping; for outbound ports: map local to VME */
@@ -680,16 +843,27 @@ unsigned long		tsau_reg, tat_reg, gran, skip;
 
 	mode = 0; /* silence warning */
 
-	if ( VME_MODE_EXACT_MATCH & as ) {
-		mode_msk = ~0;
-	} else {
-		if ( outbound ) 
-			mode_msk = TSI_OTAT_PGM | TSI_OTAT_SUP | TSI_OTAT_ADMODE(-1) | TSI_OTAT_EN;
-		else
-			mode_msk = TSI_ITAT_PGM | TSI_ITAT_DATA | TSI_ITAT_SUP | TSI_ITAT_USR | TSI_ITAT_AS(-1) | TSI_ITAT_EN;
+	switch ( as & VME_MODE_MATCH_MASK ) {
+		case VME_MODE_EXACT_MATCH:
+			mode_msk = ~0;
+		break;
+
+		case VME_MODE_AS_MATCH:
+			if ( outbound ) 
+				mode_msk = TSI_OTAT_ADMODE(-1) | TSI_OTAT_EN;
+			else
+				mode_msk = TSI_ITAT_AS(-1) | TSI_ITAT_EN;
+		break;
+
+		default:
+			if ( outbound ) 
+				mode_msk = TSI_OTAT_PGM | TSI_OTAT_SUP | TSI_OTAT_ADMODE(-1) | TSI_OTAT_EN;
+			else
+				mode_msk = TSI_ITAT_PGM | TSI_ITAT_DATA | TSI_ITAT_SUP | TSI_ITAT_USR | TSI_ITAT_AS(-1) | TSI_ITAT_EN;
+		break;
 	}
 
-	as &= ~VME_MODE_EXACT_MATCH;
+	as &= ~VME_MODE_MATCH_MASK;
 
 	if ( outbound ? am2omode(as,&mode) : am2imode(as,&mode) ) {
 		uprintf(stderr, "vmeTsi148XlateAddr: invalid address space/mode argument");
@@ -727,13 +901,27 @@ unsigned long		tsau_reg, tat_reg, gran, skip;
 			if ( aIn >= start && aIn <= limit ) {
 				/* found it */
 				*paOut = (unsigned long)(a + offst);
-				return 0;
+				return port;
 			}
 		}
 	}
 
 	uprintf(stderr, "vmeTsi148XlateAddr: no matching mapping found\n");
 	return -1;
+}
+
+int
+vmeTsi148XlateAddrXX(
+	BERegister *base,	/* TSI 148 base address */
+	int outbound, 		/* look in the outbound windows */
+	int reverse,		/* reverse mapping; for outbound ports: map local to VME */
+	unsigned long as,	/* address space */
+	unsigned long aIn,	/* address to look up */
+	unsigned long *paOut/* where to put result */
+	)
+{
+int port = xlateFindPort( base, outbound, reverse, as, aIn, paOut );
+	return port < 0 ? -1 : 0;
 }
 
 int
@@ -922,6 +1110,48 @@ vmeTsi148DisableAllOutboundPorts(void)
 }
 
 
+/* Map internal register block to VME */
+
+int
+vmeTsi148MapCRGXX(BERegister *b, uint32_t vme_base, uint32_t as )
+{
+uint32_t mode;
+
+	CHECK_BASE( b, 0, -1 );
+
+	if ( vmeTsi148RegPort > -1 && ! vmeTsi148RegCSR ) {
+        uprintf(stderr,"vmeTsi148: CRG already mapped and in use by interrupt manager\n");
+		return -1;
+	}
+
+	/* enable all, SUP/USR/PGM/DATA accesses */
+	mode = TSI_CRGAT_EN | TSI_CRGAT_SUP | TSI_CRGAT_USR | TSI_CRGAT_PGM |  TSI_CRGAT_DATA;
+
+	if ( VME_AM_IS_SHORT(as) ) {
+		mode |= TSI_CRGAT_A16;
+	} else 
+	if ( VME_AM_IS_STD(as) ) {
+		mode |= TSI_CRGAT_A24;
+	} else 
+	if ( VME_AM_IS_EXT(as) ) {
+		mode |= TSI_CRGAT_A32;
+	} else {
+		return -2;
+	}
+
+	/* map CRG to VME bus */
+	TSI_WR( b, TSI_CBAL_REG, (vme_base & ~(TSI_CRG_SIZE-1)));
+	TSI_WR( b, TSI_CRGAT_REG, mode );
+
+	return 0;
+}
+
+int
+vmeTsi148MapCRG(uint32_t vme_base, uint32_t as )
+{
+	return vmeTsi148MapCRGXX( devs[0].base, vme_base, as );
+}
+
 /* Interrupt Subsystem */
 
 typedef struct
@@ -932,7 +1162,10 @@ IRQEntryRec_ {
 
 static IRQEntry irqHdlTbl[TSI_NUM_INT_VECS]={0};
 
-int        vmeTsi148IrqMgrInstalled=0;
+int        vmeTsi148IrqMgrInstalled = 0;
+int        vmeTsi148RegPort         = -1;
+int        vmeTsi148RegCSR			= 0;
+BERegister *vmeTsi148RegBase        = 0;
 
 static volatile unsigned long	wire_mask[TSI_NUM_WIRES]     = {0};
 /* wires are offset by 1 so we can initialize the wire table to all zeros */
@@ -1094,7 +1327,16 @@ unsigned long	 	msk,lintstat,vector, vecarg;
 int					lvl;
 
 	/* only handle interrupts routed to this pin */
-	while ( (lintstat  = (TSI_RD(b, TSI_INTS_REG) & wire_mask[pin])) ) {
+
+	/* NOTE: we read the status register over VME, thus flushing the FIFO
+	 *       where the user ISR possibly left write commands to clear
+	 *       the interrupt condition at the device.
+	 *       This is very important - otherwise, the IRQ level may still be
+	 *       asserted and we would detect an interrupt here but the subsequent
+	 *       IACK would fail since the write operation was flushed to the
+	 *       device in the mean time.
+	 */
+	while ( (lintstat  = (TSI_RD(vmeTsi148RegBase, TSI_INTS_REG) & wire_mask[pin])) ) {
 
 		/* bit 0 is never set since it is never set in wire_mask */
 
@@ -1154,11 +1396,16 @@ int					lvl;
 			if ( !(ip=irqHdlTbl[vector])) {
 				/* TODO: log error message - RTEMS has no logger :-( */
 				vmeTsi148IntDisable(lvl);
-				printk("vmeTsi148 ISR: ERROR: no handler registered (level %i) IACK 0x%08x -- DISABING level %i\n",
+				printk("vmeTsi148 ISR: ERROR: no handler registered (level %i) IACK 0x%08x -- DISABLING level %i\n",
 						lvl, vector, lvl);
 			} else {
 				/* dispatch handler, it must clear the IRQ at the device */
 				ip->isr(ip->usrData, vecarg);
+				/* convenience for disobedient users who don't use in_xxx/out_xxx; make
+				 * sure we order the subsequent read from the status register after
+				 * their business.
+				 */
+				iobarrier_rw();
 			}
 		} while ( (lintstat &= ~msk) );
 		/* check if a new irq is pending already */
@@ -1213,10 +1460,54 @@ va_list	ap;
 	return rval;
 }
 
+#ifndef BSP_EARLY_PROBE_VME
+#define BSP_EARLY_PROBE_VME(addr)	\
+	(																									\
+		vmeTsi148ClearVMEBusErrorsXX( devs[0].base, 0 ),												\
+		( ((PCI_DEVICE_TSI148 << 16) | PCI_VENDOR_TUNDRA ) == TSI_LE_RD32( ((BERegister*)(addr)), 0 )	\
+		 && 0 == vmeTsi148ClearVMEBusErrorsXX( devs[0].base, 0 ) )										\
+	)
+#endif
+
+/* Check if there is a vme address/as is mapped in any of the outbound windows
+ * and look for the PCI vendordevice ID there.
+ * RETURNS: -1 on error (no mapping or probe failure), outbound window # (0..7)
+ *          on success. Address translated into CPU address is returned in *pcpu_addr.
+ */
+static int
+mappedAndProbed(unsigned long vme_addr, unsigned as, unsigned long *pcpu_addr)
+{
+int j;
+char *regtype = (as & VME_AM_MASK) == VME_AM_CSR ? "CSR" : "CRG";
+
+	/* try to find mapping */
+	if ( 0 > (j = xlateFindPort(
+				devs[0].base,
+				1, 0,
+				as | VME_MODE_AS_MATCH,
+				vme_addr,
+				pcpu_addr ) ) ) {
+			uprintf(stderr,"vmeTsi148 - Unable to find mapping for %s VME base (0x%08x)\n", regtype, vme_addr);
+			uprintf(stderr,"            in outbound windows.\n");
+	}
+	else {
+			/* found a slot number; probe it */
+			*pcpu_addr = BSP_PCI2LOCAL_ADDR( *pcpu_addr );
+			if ( BSP_EARLY_PROBE_VME(*pcpu_addr) ) {
+				uprintf(stderr,"vmeTsi148 - IRQ manager using VME %s to flush FIFO\n", regtype);
+				return j;
+			} else {
+				uprintf(stderr,"vmeTsi148 - Found slot info but detection of tsi148 in VME %s space failed\n", regtype);
+			}
+	}
+	return -1;
+}
+
 int
 vmeTsi148InstallIrqMgrVa(int shared, int tsi_pin0, int pic_pin0, va_list ap)
 {
 int	i,j, specialPin, tsi_pin[TSI_NUM_WIRES+1], pic_pin[TSI_NUM_WIRES];
+unsigned long cpu_base, vme_reg_base;
 
 	if (vmeTsi148IrqMgrInstalled)                  return -4;
 
@@ -1247,6 +1538,57 @@ int	i,j, specialPin, tsi_pin[TSI_NUM_WIRES+1], pic_pin[TSI_NUM_WIRES];
 			if ( pic_pin[j] == pic_pin[i] )        return -7;
 		}
 	}
+
+	i        = -1;
+
+	/* first try VME CSR space; do we have a base address set ? */
+
+	uprintf(stderr,"vmeTsi148 IRQ manager: looking for registers on VME...\n");
+
+	if ( ( i = ((TSI_RD( devs[0].base, TSI_CBAR_REG ) & 0xff) >> 3) ) > 0 ) {
+		uprintf(stderr,"Trying to find CSR on VME...\n");
+		vme_reg_base = i*0x80000 + TSI_CSR_OFFSET;
+		i = mappedAndProbed( vme_reg_base, VME_AM_CSR , &cpu_base);
+		if ( i >= 0 )
+			vmeTsi148RegCSR = 1;
+	} else {
+		i = -1;
+	}
+
+	if ( -1 == i ) {
+
+		uprintf(stderr,"Trying to find CRG on VME...\n");
+
+		/* Next we see if the CRG block is mapped to VME */
+
+		if ( (TSI_CRGAT_EN & (j = TSI_RD( devs[0].base, TSI_CRGAT_REG ))) ) {
+			switch ( j & TSI_CRGAT_AS_MSK ) {
+				case TSI_CRGAT_A16 : i = VME_AM_SUP_SHORT_IO; break;
+				case TSI_CRGAT_A24 : i = VME_AM_STD_SUP_DATA; break;
+				case TSI_CRGAT_A32 : i = VME_AM_EXT_SUP_DATA; break;
+				default:
+				break;
+			}
+			vme_reg_base = TSI_RD( devs[0].base, TSI_CBAL_REG ) & ~ (TSI_CRG_SIZE - 1);
+		}
+
+		if ( -1 == i ) {
+		} else {
+			i = mappedAndProbed( vme_reg_base, (i & VME_AM_MASK), &cpu_base );
+		}
+	}
+
+	if ( i < 0 ) {
+			uprintf(stderr,"vmeTsi148 IRQ manager - BSP configuration error: registers not found on VME\n");
+			uprintf(stderr,"(should open outbound window to CSR space or map CRG [vmeTsi148MapCRG()])\n");
+			uprintf(stderr,"Falling back to PCI but you might experience spurious VME interrupts; read a register\n");
+			uprintf(stderr,"back from user ISR to flush posted-write FIFO as a work-around\n");
+			cpu_base = (unsigned long)devs[0].base;
+			i        = -1;
+	}
+
+	vmeTsi148RegBase = (BERegister*)cpu_base;
+	vmeTsi148RegPort = i;
 
 	/* give them a chance to override buggy PCI info */
 	if ( pic_pin[0] >= 0 && devs[0].irqLine != pic_pin[0] ) {
@@ -1591,7 +1933,7 @@ bail:
 }
 
 unsigned long
-vmeTsi148ClearVMEBusErrorsXX(BERegister *base, unsigned long long *paddr)
+vmeTsi148ClearVMEBusErrorsXX(BERegister *base, uint32_t *paddr)
 {
 unsigned long rval;
 
@@ -1600,8 +1942,12 @@ unsigned long rval;
 	rval = TSI_RD(base, TSI_VEAT_REG);
 	if ( rval & TSI_VEAT_VES ) {
 		if ( paddr ) {
+#if 0 /* no 64-bit support yet */
 			*paddr  = ((unsigned long long)TSI_RD(base, TSI_VEAU_REG))<<32;
 			*paddr |= TSI_RD(base, TSI_VEAL_REG);
+#else
+			*paddr = TSI_RD(base, TSI_VEAL_REG);
+#endif
 		}
 		/* clear errors */
 		TSI_WR(base, TSI_VEAT_REG, TSI_VEAT_VESCL);
@@ -1612,7 +1958,7 @@ unsigned long rval;
 }
 
 unsigned long
-vmeTsi148ClearVMEBusErrors(unsigned long long *paddr)
+vmeTsi148ClearVMEBusErrors(uint32_t *paddr)
 {
 	return vmeTsi148ClearVMEBusErrorsXX(devs[0].base, paddr);
 }

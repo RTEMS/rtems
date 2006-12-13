@@ -3,6 +3,8 @@
 
 /* vxworks compatible addressing modes */
 
+/* NOTE: 64-bit *addresses* are not supported [data are]. */
+
 #ifndef VME_AM_STD_SUP_BLT
 #define	VME_AM_STD_SUP_BLT			0x3f
 #endif
@@ -63,6 +65,12 @@
 #ifndef VME_AM_EXT_USR_MBLT
 #define	VME_AM_EXT_USR_MBLT			0x08
 #endif
+#ifndef VME_AM_2eVME_6U
+#define VME_AM_2eVME_6U				0x20
+#endif
+#ifndef VME_AM_2eVME_3U
+#define VME_AM_2eVME_3U				0x21
+#endif
 #ifndef VME_AM_CSR
 #define VME_AM_CSR					0x2f
 #endif
@@ -99,8 +107,30 @@
 #define VME_AM_IS_MEMORY			(1<<8)
 #endif
 
-/* Flags 1<<11 .. 1<<8  are reserved
- * Flags 1<<12 .. 1<<31 are for driver specific options
+/* I don't know AMs for 2eSST so we use some extra bits;
+ * HOWEVER: these are just qualifiers to the VME_AM_2eVME_xx modes
+ *          i.e., if you want 2eSST you must also select 2eVME...
+ */ 
+
+/* 2eSST broadcast; you still need to set one of the speed bits */
+#define VME_AM_2eSST_BCST			(1<<9)
+/* Low speed (driver specific) */
+#define VME_AM_2eSST_LO				(1<<10)
+/* Mid speed (driver specific) */
+#define VME_AM_2eSST_MID			(2<<10)
+/* High speed (driver specific) */
+#define VME_AM_2eSST_HI				(3<<10)
+
+#define VME_AM_IS_2eSST(am)			((am) & (3<<10))
+
+/* Use 16-bit transfers for coupled- or BLT cycles
+ * (MBLT, 2exxx are probably always 64-bit)
  */
+#define VME_MODE_DBW16				(1<<12)
+
+/* Unused Flags 1<<12 .. 1<<23  are reserved
+ * Flags 1<<24 .. 1<<31 are for driver specific options
+ */
+
 
 #endif

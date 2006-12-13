@@ -1,3 +1,37 @@
+2006-12-13	Till Straumann <strauman@slac.stanford.edu>
+	* vmeUniverse/vme_am_defs.h: Added address modifiers for 2eVME. Added
+	flags for 2eSST and DBW16.
+
+	* vmeUniverse/vmeUniverse.h: Removed AM definitions and include vme_am_defs.h
+	instead. Declare new routine vmeUniverseMapCRG(). Export 'irq manager' API
+	only if __INSIDE_RTEMS_BSP__ defined. Renamed 'shared' argument to
+	vmeUniverseInstallIrqMgrAlt() to 'flags' since now more options are available.
+	Added new flag to install 'posted-write' workaround.
+
+	* vmeUniverse/vmeUniverse.c: Allow BSP to override BSP_PCI2LOCAL_ADDR()
+	macro. Data width of outbound port can now be restricted to 16-bit
+	(if new DBW16 flag set in address modifier). Added vmeUniverseMapCRG()
+	for mapping local registers onto VME. Interrupt manager now implements
+	a workaround (enabled at installation time) which flushes the write-fifo
+	after user ISR returns. This requires the universe's registers to be
+	accessible from VME (either CSR space or CRG mapped to A16/A24/A32),
+	though.
+
+	* vmeUniverse/vmeTsi148.h: vmeTsi148ClearVMEBusErrors() now returns
+	the fault address as a 32-bit address (not ulonglong anymore). The
+	driver only supports 32-bit addresses. Declare new routine vmeTsi148MapCRG().
+	Export 'irq manager' API only if __INSIDE_RTEMS_BSP__ defined.
+	Renamed 'shared' argument to vmeTsi148InstallIrqMgrAlt() to 'flags'
+	to allow more options to be supported. Added comments explaining the
+	'posted-write' workaround implemented by the interrupt manager.
+
+	* vmeUniverse/vmeTsi148.c: Clear 'SYSFAIL' during initialization.
+	Allow BSP to override BSP_PCI2LOCAL_ADDR() macro. Added support for
+	2eSST when configuring windows (untested - I have no 2eSST).
+	Added vmeTsi148MapCRG() for mapping local registers onto VME.
+	Implemented 'posted-write' workaround for interrupt manager
+	(consult source for details).
+
 2006-12-13	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1190/bsps

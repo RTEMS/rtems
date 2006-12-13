@@ -14,82 +14,18 @@
 #include <vme.h>
 #else
 
-/* vxworks compatible addressing modes */
-
-#ifndef VME_AM_STD_SUP_ASCENDING
-#define	VME_AM_STD_SUP_ASCENDING	0x3f
-#endif
-#ifndef VME_AM_STD_SUP_PGM
-#define	VME_AM_STD_SUP_PGM			0x3e
-#endif
-#ifndef VME_AM_STD_USR_ASCENDING
-#define	VME_AM_STD_USR_ASCENDING	0x3b
-#endif
-#ifndef VME_AM_STD_USR_PGM
-#define	VME_AM_STD_USR_PGM			0x3a
-#endif
-#ifndef VME_AM_STD_SUP_DATA
-#define	VME_AM_STD_SUP_DATA			0x3d
-#endif
-#ifndef VME_AM_STD_USR_DATA
-#define	VME_AM_STD_USR_DATA			0x39
-#endif
-#ifndef VME_AM_EXT_SUP_ASCENDING
-#define	VME_AM_EXT_SUP_ASCENDING	0x0f
-#endif
-#ifndef VME_AM_EXT_SUP_PGM
-#define	VME_AM_EXT_SUP_PGM			0x0e
-#endif
-#ifndef VME_AM_EXT_USR_ASCENDING
-#define	VME_AM_EXT_USR_ASCENDING	0x0b
-#endif
-#ifndef VME_AM_EXT_USR_PGM
-#define	VME_AM_EXT_USR_PGM			0x0a
-#endif
-#ifndef VME_AM_EXT_SUP_DATA
-#define	VME_AM_EXT_SUP_DATA			0x0d
-#endif
-#ifndef VME_AM_EXT_USR_DATA
-#define	VME_AM_EXT_USR_DATA			0x09
-#endif
-#ifndef VME_AM_CSR
-#define VME_AM_CSR					0x2f
-#endif
-#ifndef VME_AM_SUP_SHORT_IO
-#define	VME_AM_SUP_SHORT_IO			0x2d
-#endif
-#ifndef VME_AM_USR_SHORT_IO
-#define	VME_AM_USR_SHORT_IO			0x29
-#endif
-#ifndef VME_AM_IS_SHORT
-#define VME_AM_IS_SHORT(a)			(((a) & 0xf0) == 0x20)
-#endif
-#ifndef VME_AM_IS_STD
-#define VME_AM_IS_STD(a)			(((a) & 0xf0) == 0x30)
-#endif
-#ifndef VME_AM_IS_EXT
-#define VME_AM_IS_EXT(a)			(((a) & 0xf0) == 0x00)
-#endif
-#ifndef VME_AM_IS_SUP
-#define VME_AM_IS_SUP(a)			((a)  & 4)
-#endif
-#ifndef VME_AM_MASK
-#define VME_AM_MASK					0xff
-#endif
-
-/* Enables posted writes (and on a VME slave: prefetched reads, too) */
-#ifndef VME_AM_IS_MEMORY
-#define VME_AM_IS_MEMORY			(1<<8)
-#endif
+#include <bsp/vme_am_defs.h>
 
 #endif
 
+/* These bits can be or'ed with the address-modifier when calling
+ * the 'XlateAddr' routine below to further qualify the
+ * search criteria.
+ */
+#define VME_MODE_MATCH_MASK					(3<<30)
+#define VME_MODE_EXACT_MATCH				(2<<30)	/* all bits must match */
+#define VME_MODE_AS_MATCH					(1<<30)	/* only A16/24/32 must match */
 
-
-/* When looking for an address translation, ask for a match of VME_MODE_PWEN etc., too */
-#define VME_MODE_EXACT_MATCH		(1<<31)
-
-#include <stdarg.h>
 
 typedef unsigned long LERegister; /* emphasize contents are little endian */
 
@@ -450,8 +386,9 @@ typedef struct VmeUniverseDMAPacketRec_ {
 # define	UNIV_VRAI_CTL_SUPER			(1<<21)	/* supervisor AM */
 # define	UNIV_VRAI_CTL_USER			(1<<20)	/* user AM */
 # define	UNIV_VRAI_CTL_VAS_A16		(0<<16)	/* A16 */
-# define	UNIV_VRAI_CTL_VAS_A24		(1<<16)	/* A16 */
-# define	UNIV_VRAI_CTL_VAS_A32		(2<<16)	/* A16 */
+# define	UNIV_VRAI_CTL_VAS_A24		(1<<16)	/* A14 */
+# define	UNIV_VRAI_CTL_VAS_A32		(2<<16)	/* A32 */
+# define	UNIV_VRAI_CTL_VAS_MSK		(3<<16)
 
 /* VMEbus register acces image base address register */
 #define		UNIV_REGOFF_VRAI_BS		0xf74
@@ -490,7 +427,10 @@ typedef struct VmeUniverseDMAPacketRec_ {
 
 /* VMEbus CSR base address register */
 #define		UNIV_REGOFF_VCSR_BS		0xffc
-#define		UNIV_VCSR_BS_MASK			(0xfff80000)
+#define		UNIV_VCSR_BS_MASK			(0xf8000000)
+
+/* offset of universe registers in VME-CSR slot */
+#define		UNIV_CSR_OFFSET				0x7f000
 
 #ifdef __cplusplus
 extern "C" {
@@ -760,7 +700,36 @@ vmeUniverseIntRaiseXX(volatile LERegister *base, int level, unsigned vector);
 int
 vmeUniverseIntRaise(int level, unsigned vector);
 
+/* Map internal register block to VME.
+ *
+ * This routine is intended for BSP implementors. The registers can be
+ * made accessible from VME so that the interrupt handler can flush the 
+ * bridge FIFO (see below). The preferred method is by accessing VME CSR,
+ * though, if these are mapped [and the BSP provides an outbound window].
+ * On the universe we can also disable posted writes in the 'ordinary'
+ * outbound windows.
+ *
+ *            vme_base: VME address where the universe registers (4k) can be mapped.
+ *                      This VME address must fall into a range covered by
+ *                      any pre-configured outbound window.
+ *       address_space: The desired VME address space.
+ *                      (all of SUP/USR/PGM/DATA are always accepted).
+ *
+ * See NOTES [vmeUniverseInstallIrqMgrAlt()] below for further information.
+ *
+ * RETURNS: 0 on success, nonzero on error. It is not possible (and results
+ *          in a non-zero return code) to change the CRG VME address after
+ *          initializing the interrupt manager as it uses the CRG.
+ */
+int
+vmeUniverseMapCRGXX(volatile LERegister *base, unsigned long vme_base, unsigned long address_space);
+
+int
+vmeUniverseMapCRG(unsigned long vme_base, unsigned long address_space);
+
+
 #ifdef __rtems__
+
 /* VME Interrupt Handler functionality */
 
 /* we dont use the current RTEMS/BSP interrupt API for the
@@ -782,6 +751,41 @@ vmeUniverseIntRaise(int level, unsigned vector);
  */
 
 typedef void (*VmeUniverseISR) (void *usrArg, unsigned long vector);
+
+/* use these special vectors to connect a handler to the
+ * universe specific interrupts (such as "DMA done", 
+ * VOWN, error irqs etc.)
+ * NOTE: The wrapper clears all status LINT bits (except
+ * for regular VME irqs). Also note that it is the user's
+ * responsibility to enable the necessary interrupts in
+ * LINT_EN
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * DO NOT CHANGE THE ORDER OF THESE VECTORS - THE DRIVER
+ * DEPENDS ON IT
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * 
+ */
+#define UNIV_VOWN_INT_VEC			256
+#define UNIV_DMA_INT_VEC			257
+#define UNIV_LERR_INT_VEC			258
+#define UNIV_VERR_INT_VEC			259
+/* 260 is reserved */
+#define UNIV_VME_SW_IACK_INT_VEC	261
+#define UNIV_PCI_SW_INT_VEC			262
+#define UNIV_SYSFAIL_INT_VEC		263
+#define UNIV_ACFAIL_INT_VEC			264
+#define UNIV_MBOX0_INT_VEC			265
+#define UNIV_MBOX1_INT_VEC			266
+#define UNIV_MBOX2_INT_VEC			267
+#define UNIV_MBOX3_INT_VEC			268
+#define UNIV_LM0_INT_VEC			269
+#define UNIV_LM1_INT_VEC			270
+#define UNIV_LM2_INT_VEC			271
+#define UNIV_LM3_INT_VEC			272
+
+#define UNIV_NUM_INT_VECS			273
+
 
 /* install a handler for a VME vector
  * RETURNS 0 on success, nonzero on failure.
@@ -864,39 +868,34 @@ vmeUniverseIntIsEnabled(unsigned int level);
 int
 vmeUniverseIntRoute(unsigned int level, unsigned int pin);
 
-/* use these special vectors to connect a handler to the
- * universe specific interrupts (such as "DMA done", 
- * VOWN, error irqs etc.)
- * NOTE: The wrapper clears all status LINT bits (except
- * for regular VME irqs). Also note that it is the user's
- * responsibility to enable the necessary interrupts in
- * LINT_EN
+/* Loopback test of the VME interrupt subsystem.
+ *  - installs ISRs on 'vector' and on UNIV_VME_SW_IACK_INT_VEC
+ *  - asserts VME interrupt 'level'
+ *  - waits for both interrupts: 'ordinary' VME interrupt of 'level' and
+ *    IACK completion interrupt ('special' vector UNIV_VME_SW_IACK_INT_VEC).
  *
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * DO NOT CHANGE THE ORDER OF THESE VECTORS - THE DRIVER
- * DEPENDS ON IT
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * 
+ * NOTES: 
+ *  - make sure no other handler responds to 'level'.
+ *  - make sure no ISR is installed on both vectors yet.
+ *  - ISRs installed by this routine are removed after completion.
+ *  - no concurrent access protection of all involved resources
+ *    (levels, vectors and registers  [see vmeUniverseIntRaise()])
+ *    is implemented.
+ *  - this routine is intended for TESTING (when implementing new BSPs etc.).
+ *  - one RTEMS message queue is temporarily used (created/deleted).
+ *  - the universe 1 always yields a zero vector (VIRQx_STATID) in response
+ *    to a self-generated VME interrupt. As a workaround, the routine
+ *    only accepts a zero vector when running on a universe 1.
+ *
+ * RETURNS:
+ *                 0: Success.
+ *                -1: Invalid arguments.
+ *                 1: Test failed (outstanding interrupts).
+ * rtems_status_code: Failed RTEMS directive.
  */
-#define UNIV_VOWN_INT_VEC			256
-#define UNIV_DMA_INT_VEC			257
-#define UNIV_LERR_INT_VEC			258
-#define UNIV_VERR_INT_VEC			259
-/* 260 is reserved */
-#define UNIV_VME_SW_IACK_INT_VEC	261
-#define UNIV_PCI_SW_INT_VEC			262
-#define UNIV_SYSFAIL_INT_VEC		263
-#define UNIV_ACFAIL_INT_VEC			264
-#define UNIV_MBOX0_INT_VEC			265
-#define UNIV_MBOX1_INT_VEC			266
-#define UNIV_MBOX2_INT_VEC			267
-#define UNIV_MBOX3_INT_VEC			268
-#define UNIV_LM0_INT_VEC			269
-#define UNIV_LM1_INT_VEC			270
-#define UNIV_LM2_INT_VEC			271
-#define UNIV_LM3_INT_VEC			272
+int
+vmeUniverseIntLoopbackTst(int level, unsigned vector);
 
-#define UNIV_NUM_INT_VECS			273
 
 /* the universe interrupt handler is capable of routing all sorts of
  * (VME) interrupts to 8 different lines (some of) which may be hooked up
@@ -939,11 +938,17 @@ vmeUniverseIntRoute(unsigned int level, unsigned int pin);
  * RETURNS: 0 on success, -1 on failure.
  *						
  */
+
+/* This routine is outside of the __INSIDE_RTEMS_BSP__ test for bwrds compatibility ONLY */
 int
 vmeUniverseInstallIrqMgr(int vmeIrqUnivOut,
 						 int vmeIrqPicLine,
 						 int specialIrqUnivOut,
 						 int specialIrqPicLine);
+
+
+#if defined(__INSIDE_RTEMS_BSP__)
+#include <stdarg.h>
 
 /* up to 4 universe outputs are now supported by this alternate
  * entry point.
@@ -952,46 +957,40 @@ vmeUniverseInstallIrqMgr(int vmeIrqUnivOut,
  * E.g., the old interface is now just a wrapper to 
  *   vmeUniverseInstallIrqMgrAlt(0, vmeUnivOut, vmePicLint, specUnivOut, specPicLine, -1);
  *
- * The 'shared' argument uses the BSP_install_rtems_shared_irq_handler()
+ * The 'IRQ_MGR_SHARED' flag uses the BSP_install_rtems_shared_irq_handler()
  * API. CAVEAT: shared interrupts need RTEMS workspace, i.e., the 
  * VME interrupt manager can only be installed *after workspace is initialized*
  * if 'shared' is nonzero (i.e., *not* from bspstart()).
- */
-int
-vmeUniverseInstallIrqMgrAlt(int shared, int uni_pin0, int pic_pin0, ...);
-
-int
-vmeUniverseInstallIrqMgrVa(int shared, int uni_pin0, int pic_pin0, va_list ap);
-
-/* Loopback test of the VME interrupt subsystem.
- *  - installs ISRs on 'vector' and on UNIV_VME_SW_IACK_INT_VEC
- *  - asserts VME interrupt 'level'
- *  - waits for both interrupts: 'ordinary' VME interrupt of 'level' and
- *    IACK completion interrupt ('special' vector UNIV_VME_SW_IACK_INT_VEC).
  *
- * NOTES: 
- *  - make sure no other handler responds to 'level'.
- *  - make sure no ISR is installed on both vectors yet.
- *  - ISRs installed by this routine are removed after completion.
- *  - no concurrent access protection of all involved resources
- *    (levels, vectors and registers  [see vmeUniverseIntRaise()])
- *    is implemented.
- *  - this routine is intended for TESTING (when implementing new BSPs etc.).
- *  - one RTEMS message queue is temporarily used (created/deleted).
- *  - the universe 1 always yields a zero vector (VIRQx_STATID) in response
- *    to a self-generated VME interrupt. As a workaround, the routine
- *    only accepts a zero vector when running on a universe 1.
+ * If 'PW_WORKAROUND' flag is set then the interrupt manager will try to
+ * find a way to access the control registers from VME so that the universe's
+ * posted write FIFO can be flushed after the user ISR returns:
  *
- * RETURNS:
- *                 0: Success.
- *                -1: Invalid arguments.
- *                 1: Test failed (outstanding interrupts).
- * rtems_status_code: Failed RTEMS directive.
+ * The installation routine looks first for CSR registers in CSR space (this
+ * requires:
+ *      - a VME64 crate with autoid or geographical addressing
+ *      - the firmware or BSP to figure out the slot number and program the CSR base
+ *        in the universe.
+ *      - the BSP to open an outbound window to CSR space.
+ *
+ * If CSR registers cannot be found then the installation routine looks for CRG registers:
+ *      - BSP must map CRG on VME
+ *      - CRG must be visible in outbound window
+ *      CAVEAT: multiple boards with same BSP on single backplane must not map their CRG
+ *              to the same address!
  */
-int
-vmeUniverseIntLoopbackTst(int level, unsigned vector);
 
-#endif
+#define VMEUNIVERSE_IRQ_MGR_FLAG_SHARED			1	/* use shared interrupts */
+#define VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND	2	/* use shared interrupts */
+
+int
+vmeUniverseInstallIrqMgrAlt(int flags, int uni_pin0, int pic_pin0, ...);
+
+int
+vmeUniverseInstallIrqMgrVa(int flags, int uni_pin0, int pic_pin0, va_list ap);
+
+#endif /* __INSIDE_RTEMS_BSP__ */
+#endif /* __rtems__ */
 
 #ifdef __cplusplus
 }
