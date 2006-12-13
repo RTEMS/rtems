@@ -81,7 +81,7 @@ const struct _int_map  *bspmap;									\
 		}														\
 		pins[4] = -1;											\
 		if ( 0 == vmeUniverseInstallIrqMgrAlt(					\
-				1, /* shared IRQs */							\
+				VMEUNIVERSE_IRQ_MGR_FLAG_SHARED, /* shared IRQs */\
 				pins[0], names[0],								\
 				pins[1], names[1],								\
 				pins[2], names[2],								\
@@ -94,7 +94,10 @@ const struct _int_map  *bspmap;									\
 	}															\
     }															\
 	if ( i >= 0 )												\
-  	  vmeUniverseInstallIrqMgrAlt(1,0,-1,-1);					\
+  	  vmeUniverseInstallIrqMgrAlt(								\
+	  			VMEUNIVERSE_IRQ_MGR_FLAG_SHARED,				\
+				0,-1,											\
+				-1);											\
   }																\
 } while (0)
 

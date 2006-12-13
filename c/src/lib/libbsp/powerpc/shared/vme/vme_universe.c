@@ -5,6 +5,7 @@
 #include <bsp/VME.h>
 #include <bsp/VMEConfig.h>
 #include <bsp/irq.h>
+#define __INSIDE_RTEMS_BSP__
 #include <bsp/vmeUniverse.h>
 
 /* Wrap BSP VME calls around driver calls - we do this so EPICS doesn't have to
@@ -110,7 +111,7 @@ int BSP_VMEIrqMgrInstall()
 #ifndef BSP_VME_UNIVERSE_INSTALL_IRQ_MGR
   /* No map; use first line only and obtain PIC wire from PCI config */
   vmeUniverseInstallIrqMgrAlt(
-	1,		/* use shared IRQs */
+	VMEUNIVERSE_IRQ_MGR_FLAG_SHARED, /* use shared IRQs */
 	0, -1,	/* Universe pin0 -> PIC line from config space */
 	-1      /* terminate list  */
   );
