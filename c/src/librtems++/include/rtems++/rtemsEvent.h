@@ -43,7 +43,7 @@ public:
   // only the first 4 characters of the name are taken  
 
   // connect to a task
-  rtemsEvent(const char* name, rtems_unsigned32 node = RTEMS_SEARCH_ALL_NODES);
+  rtemsEvent(const char* name, uint32_t node = RTEMS_SEARCH_ALL_NODES);
 
   // copy and default constructors
   rtemsEvent(const rtemsEvent& event);
@@ -54,7 +54,7 @@ public:
   // connect to an existing task object, will not be the owner
   const rtemsEvent& operator=(const rtemsEvent& event);
   virtual const rtems_status_code connect(const char *name,
-                                          const rtems_unsigned32 node = RTEMS_SEARCH_ALL_NODES);
+                                          const uint32_t node = RTEMS_SEARCH_ALL_NODES);
 
   // send an event
   inline const rtems_status_code send(const rtems_id task,

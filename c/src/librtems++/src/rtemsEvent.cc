@@ -24,7 +24,7 @@
     rtemsEvent
 */
 
-rtemsEvent::rtemsEvent(const char *name_str, rtems_unsigned32 node)
+rtemsEvent::rtemsEvent(const char *name_str, uint32_t node)
   : name(rtems_build_name('S', 'E', 'L', 'F')),
     id(RTEMS_SELF)
 {
@@ -56,7 +56,7 @@ const rtemsEvent& rtemsEvent::operator=(const rtemsEvent& event)
 }
 
 const rtems_status_code rtemsEvent::connect(const char *name_str,
-                                            const rtems_unsigned32 node)
+                                            const uint32_t node)
 {
   name = rtems_build_name(name_str[0],
                           name_str[1],

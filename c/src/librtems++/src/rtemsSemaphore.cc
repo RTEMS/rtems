@@ -27,7 +27,7 @@
 
 rtemsSemaphore::rtemsSemaphore(const char* sname,
                                const Scope scope,
-                               const rtems_unsigned32 counter,
+                               const uint32_t counter,
                                const WaitMode wait_mode,
                                const Type type,
                                const Priority priority,
@@ -48,7 +48,7 @@ rtemsSemaphore::rtemsSemaphore(const char* sname,
          priority_ceiling);  
 }
 
-rtemsSemaphore::rtemsSemaphore(const char *sname, const rtems_unsigned32 node)
+rtemsSemaphore::rtemsSemaphore(const char *sname, const uint32_t node)
   : name(0),
     owner(false),
     id(0)
@@ -90,7 +90,7 @@ void rtemsSemaphore::make_invalid()
 
 const rtems_status_code rtemsSemaphore::create(const char* sname,
                                                const Scope scope,
-                                               const rtems_unsigned32 counter,
+                                               const uint32_t counter,
                                                const WaitMode wait_mode,
                                                const Type type,
                                                const Priority priority,
@@ -148,7 +148,7 @@ const rtemsSemaphore& rtemsSemaphore::operator=(const rtemsSemaphore& semaphore)
 }
 
 const rtems_status_code rtemsSemaphore::connect(const char *sname,
-                                                const rtems_unsigned32 node)
+                                                const uint32_t node)
 {
   if (id && owner)
     return set_status_code(RTEMS_UNSATISFIED);

@@ -1,5 +1,15 @@
 2006-12-13	Joel Sherrill <joel@OARcorp.com>
 
+	* librtems++/include/rtems++/rtemsEvent.h,
+	librtems++/include/rtems++/rtemsMessageQueue.h,
+	librtems++/include/rtems++/rtemsSemaphore.h,
+	librtems++/include/rtems++/rtemsTask.h, librtems++/src/rtemsEvent.cc,
+	librtems++/src/rtemsMessageQueue.cc,
+	librtems++/src/rtemsSemaphore.cc, librtems++/src/rtemsTask.cc: Change
+	rtems_unsigned32 to uint32_t.
+
+2006-12-13	Joel Sherrill <joel@OARcorp.com>
+
 	PR 1181/bsps
 	* optman/rtems/no-msg.c: Clean up dead code.
 

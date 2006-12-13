@@ -64,7 +64,7 @@ public:
   // create a semaphore object
   rtemsSemaphore(const char* name,
                  const Scope scope = local,
-                 const rtems_unsigned32 counter = 1,
+                 const uint32_t counter = 1,
                  const WaitMode wait_mode = wait_by_fifo,
                  const Type type = binary,
                  const Priority priority = no_priority_inherit,
@@ -72,7 +72,7 @@ public:
                  const rtems_task_priority priority_ceiling = 0);
 
   // connect to an existing semaphore object by name
-  rtemsSemaphore(const char *name, const rtems_unsigned32 node);
+  rtemsSemaphore(const char *name, const uint32_t node);
 
   // attach this object to an other objects semaphore
   rtemsSemaphore(const rtemsSemaphore& semaphore);
@@ -84,7 +84,7 @@ public:
   // create or destroy (delete) a semaphore
   virtual const rtems_status_code create(const char* name,
                                          const Scope scope = local,
-                                         const rtems_unsigned32 counter = 1,
+                                         const uint32_t counter = 1,
                                          const WaitMode wait_mode = wait_by_fifo,
                                          const Type type = binary,
                                          const Priority priority = no_priority_inherit,
@@ -94,11 +94,11 @@ public:
 
   // connect to an existing semaphore object, will not be the owner
   const rtemsSemaphore& operator=(const rtemsSemaphore& semaphore);  
-  virtual const rtems_status_code connect(const char *name, rtems_unsigned32 node);
+  virtual const rtems_status_code connect(const char *name, uint32_t node);
 
   // obtain the semaphore, timeout is in micro-seconds
   inline const rtems_status_code obtain(bool wait = true,
-                                        const rtems_unsigned32 micro_secs = RTEMS_NO_TIMEOUT);
+                                        const uint32_t micro_secs = RTEMS_NO_TIMEOUT);
 
   // release the semaphore, blocks threads eligble
   inline const rtems_status_code release();
@@ -126,7 +126,7 @@ private:
 };
 
 const rtems_status_code rtemsSemaphore::obtain(const bool wait,
-                                               const rtems_unsigned32 micro_secs)
+                                               const uint32_t micro_secs)
 {
   rtems_interval usecs =
     micro_secs && (micro_secs < _TOD_Microseconds_per_tick) ?

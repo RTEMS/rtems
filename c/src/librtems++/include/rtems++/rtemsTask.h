@@ -76,7 +76,7 @@ public:
   // creates a task
   rtemsTask(const char* name,
             const rtems_task_priority initial_priority,
-            const rtems_unsigned32 stack_size,
+            const uint32_t stack_size,
             const rtems_mode preemption = RTEMS_NO_PREEMPT,
             const rtems_mode timeslice = RTEMS_NO_TIMESLICE,
             const rtems_mode asr = RTEMS_NO_ASR,
@@ -85,7 +85,7 @@ public:
             const Scope scope = local);
 
   // connects to a task
-  rtemsTask(const char *name, const rtems_unsigned32 node = RTEMS_SEARCH_ALL_NODES);
+  rtemsTask(const char *name, const uint32_t node = RTEMS_SEARCH_ALL_NODES);
 
   // copy and default constructors
   rtemsTask(const rtemsTask& task);
@@ -97,7 +97,7 @@ public:
   // create or destroy (delete) the task
   virtual const rtems_status_code create(const char* name,
                                          const rtems_task_priority initial_priority,
-                                         const rtems_unsigned32 stack_size,
+                                         const uint32_t stack_size,
                                          const rtems_mode preemption = RTEMS_NO_PREEMPT,
                                          const rtems_mode timeslice = RTEMS_NO_TIMESLICE,
                                          const rtems_mode asr = RTEMS_NO_ASR,
@@ -109,7 +109,7 @@ public:
   // connect to an existing task object, will not be the owner
   const rtemsTask& operator=(const rtemsTask& task);
   virtual const rtems_status_code connect(const char *name,
-                                          const rtems_unsigned32 node = RTEMS_SEARCH_ALL_NODES);
+                                          const uint32_t node = RTEMS_SEARCH_ALL_NODES);
 
   // run control
   virtual const rtems_status_code start(const rtems_task_argument argument);
@@ -128,10 +128,10 @@ public:
                                        rtems_task_priority& old_priority);
 
   // notepad control
-  const rtems_status_code get_note(const rtems_unsigned32 notepad,
-                                   rtems_unsigned32& note);
-  const rtems_status_code set_note(const rtems_unsigned32 notepad,
-                                   const rtems_unsigned32 note);
+  const rtems_status_code get_note(const uint32_t notepad,
+                                   uint32_t& note);
+  const rtems_status_code set_note(const uint32_t notepad,
+                                   const uint32_t note);
 
   // object id, and name
   const rtems_id id_is() const { return id; }

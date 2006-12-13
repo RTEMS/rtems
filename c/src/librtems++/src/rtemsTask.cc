@@ -29,7 +29,7 @@
 
 rtemsTask::rtemsTask(const char* tname,
                      const rtems_task_priority initial_priority,
-                     const rtems_unsigned32 stack_size,
+                     const uint32_t stack_size,
                      const rtems_mode preemption,
                      const rtems_mode timeslice,
                      const rtems_mode asr,
@@ -53,7 +53,7 @@ rtemsTask::rtemsTask(const char* tname,
          scope);
 }
 
-rtemsTask::rtemsTask(const char *tname, rtems_unsigned32 node)
+rtemsTask::rtemsTask(const char *tname, uint32_t node)
   : name(rtems_build_name('S', 'E', 'L', 'F')),
     owner(false),
     id(RTEMS_SELF),
@@ -99,7 +99,7 @@ void rtemsTask::make_self()
 
 const rtems_status_code rtemsTask::create(const char* tname,
                                           const rtems_task_priority initial_priority,
-                                          const rtems_unsigned32 stack_size,
+                                          const uint32_t stack_size,
                                           const rtems_mode preemption,
                                           const rtems_mode timeslice,
                                           const rtems_mode asr,
@@ -165,7 +165,7 @@ const rtemsTask& rtemsTask::operator=(const rtemsTask& task)
 }
 
 const rtems_status_code rtemsTask::connect(const char *sname,
-                                           const rtems_unsigned32 node)
+                                           const uint32_t node)
 {
   if (id && owner)
     return set_status_code(RTEMS_UNSATISFIED);
@@ -265,14 +265,14 @@ const rtems_status_code rtemsTask::set_priority(const rtems_task_priority priori
                                                  &old_priority));
 }
   
-const rtems_status_code rtemsTask::get_note(const rtems_unsigned32 notepad,
-                                            rtems_unsigned32& note)
+const rtems_status_code rtemsTask::get_note(const uint32_t notepad,
+                                            uint32_t& note)
 {
   return set_status_code(rtems_task_get_note(id, notepad, &note));
 }
 
-const rtems_status_code rtemsTask::set_note(const rtems_unsigned32 notepad,
-                                            const rtems_unsigned32 note)
+const rtems_status_code rtemsTask::set_note(const uint32_t notepad,
+                                            const uint32_t note)
 {
   return set_status_code(rtems_task_set_note(id, notepad, note));
 }
