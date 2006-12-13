@@ -27,24 +27,6 @@ extern "C" {
  */
 
 #include <rtems/stdint.h>
-
-/* backward compatibility types */
-typedef uint8_t        rtems_unsigned8;
-typedef uint16_t       rtems_unsigned16;
-typedef uint32_t       rtems_unsigned32;
-#if defined(uint64_t)
-/* FIXME: Some targets do not have 64-bit types */
-typedef uint64_t       rtems_unsigned64;
-#endif
-
-typedef int8_t         rtems_signed8;
-typedef int16_t        rtems_signed16;
-typedef int32_t        rtems_signed32;
-#if defined(int64_t)
-/* FIXME: Some targets do not have 64-bit types */
-typedef int64_t        rtems_signed64;
-#endif
-
 #include <rtems/score/heap.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
@@ -61,7 +43,7 @@ typedef double_precision rtems_double;    /* double precision float */
 
 typedef boolean          rtems_boolean;
 
-typedef uint32_t       rtems_name;
+typedef uint32_t         rtems_name;
 typedef Objects_Id       rtems_id;
 
 typedef Context_Control            rtems_context;
