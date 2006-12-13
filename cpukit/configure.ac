@@ -38,20 +38,6 @@ AC_PROG_RANLIB
 
 RTEMS_CHECK_NEWLIB
 
-AC_ARG_ENABLE([deprecated],
-[AS_HELP_STRING(--enable-deprecated,allow using deprecated files)],
-[case "${enable_deprecated}" in
-  yes) ;;
-  no) ;;
-  *) enable_deprecated=no ;;
-esac],[enable_deprecated=no])
-AM_CONDITIONAL([DEPRECATED],[test "$enable_deprecated" = "yes"])
-
-AS_IF([ test "$enable_deprecated" = "yes" ],[
-AC_DEFINE_UNQUOTED([RTEMS_DEPRECATED_TYPES],[1],
-  [whether to support deprecated types])
-])
-
 # HACK: We should use a feature-based configuration.
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 # HACK: silently accept --enable-unixlib
