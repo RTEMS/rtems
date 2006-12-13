@@ -61,6 +61,10 @@ $(PROJECT_INCLUDE)/bsp/uart.h: ../../powerpc/shared/console/uart.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
 
+$(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
+
 $(PROJECT_INCLUDE)/bsp/gtpcireg.h: pci/gtpcireg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gtpcireg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gtpcireg.h
