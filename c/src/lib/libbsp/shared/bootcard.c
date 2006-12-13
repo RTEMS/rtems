@@ -65,7 +65,6 @@ char *rtems_progname;
 
 int boot_card(int argc, char **argv, char **envp)
 {
-  int    status;
   static char  *argv_pointer = NULL;
   static char  *envp_pointer = NULL;
   char **argv_p = &argv_pointer;
@@ -158,5 +157,5 @@ int boot_card(int argc, char **argv, char **envp)
    *  Now return to the start code.
    */
 
-  return status;
+  return 0;
 }

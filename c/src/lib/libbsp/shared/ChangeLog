@@ -1,3 +1,8 @@
+2006-12-13	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1190/bsps
+	* bootcard.c: Remove status since unused.
+
 2006-11-29	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/vmeTsi148.h: user now must define a symbol
