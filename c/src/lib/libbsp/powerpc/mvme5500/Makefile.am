@@ -42,7 +42,8 @@ pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
-include_bsp_HEADERS = ../../powerpc/shared/console/uart.h
+include_bsp_HEADERS = ../../powerpc/shared/console/uart.h	\
+	../../shared/vmeUniverse/vme_am_defs.h
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = ../../powerpc/shared/console/uart.c \
