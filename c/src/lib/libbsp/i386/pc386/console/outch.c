@@ -141,7 +141,7 @@ videoPutChar(char car)
 		return;
 	}
    	default: {
-	    *pt_bitmap = car | attribute;
+	    *pt_bitmap = (unsigned char)car | attribute;
 		advanceCursor();
 	    return;
 	}
