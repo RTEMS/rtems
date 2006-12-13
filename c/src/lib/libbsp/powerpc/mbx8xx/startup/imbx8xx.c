@@ -154,7 +154,10 @@ static uint32_t   upmaTable[64] = {
  */
 void _InitMBX8xx (void)
 {
-  register uint32_t   r1, i;
+#if ( !defined(EPPCBUG_VECTORS) )
+  uint32_t i;
+#endif
+  register uint32_t   r1;
   extern uint32_t   simask_copy;
 
   /*

@@ -1427,7 +1427,7 @@ enet_stats (struct m8xx_enet_struct *sc)
  * Driver ioctl handler
  */
 static int
-scc_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
+scc_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
   struct m8xx_enet_struct *sc = ifp->if_softc;
   int error = 0;
