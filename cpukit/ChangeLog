@@ -1,5 +1,17 @@
 2006-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* backward/rtc.h, backward/vmeintr.h, backward/confdefs.h,
+	backward/clockdrv.h, backward/itron.h, backward/console.h,
+	backward/imfs.h, backward/iosupp.h, backward/chain.h,
+	backward/motorola/mc68681.h, backward/motorola/mc68230.h,
+	backward/spurious.h, backward/rtemspppd.h, backward/zilog/z8536.h,
+	backward/zilog/z8030.h, backward/zilog/z8036.h, backward/dosfs.h,
+	backward/rtemsdialer.h, backward/asm.h, backward/timerdrv.h,
+	backward/ringbuf.h, backward/ftpd.h:
+	Abandon.
+
+2006-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems/include/rtems/rtems/types.h: Abandon backward compatibility
 	  types.
 	* include/rtems/stdint.h: Abandon DEPRECATED_TYPES.
