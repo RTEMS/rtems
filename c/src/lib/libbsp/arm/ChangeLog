@@ -1,3 +1,7 @@
+2006-12-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/irq/irq_init.c: Remove unused var.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
