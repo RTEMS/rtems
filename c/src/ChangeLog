@@ -1,3 +1,8 @@
+2006-12-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/network/dec21140.c, libchip/network/if_fxp.c: Use
+	  ioctl_command_t as ioctl argument.
+
 2006-12-13	Joel Sherrill <joel@OARcorp.com>
 
 	* librtems++/include/rtems++/rtemsEvent.h,
