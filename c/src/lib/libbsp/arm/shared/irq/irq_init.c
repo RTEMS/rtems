@@ -29,7 +29,6 @@ void default_int_handler()
 
 void  rtems_irq_mngt_init()
 {
-    int 			i;
     rtems_interrupt_level       level;
 
     _CPU_ISR_Disable(level);
