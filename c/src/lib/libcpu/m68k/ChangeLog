@@ -1,5 +1,11 @@
 2006-12-14	Till Straumann <strauman@slac.stanford.edu>
 
+	* m68k/mcf5282/include/mcf5282.h: added __may_alias__
+	attribute to low-level scalar type definitions and
+	removed intermediate (void*) cast.
+
+2006-12-14	Till Straumann <strauman@slac.stanford.edu>
+
 	* m68k/mcf5282/include/mcf5282.h: fixed wrong value
 	of MCF5282_QSPI_QDLYR_SPE.
 
