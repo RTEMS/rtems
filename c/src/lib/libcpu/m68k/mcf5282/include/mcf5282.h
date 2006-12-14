@@ -721,7 +721,7 @@ extern uint8 __IPSBAR[];
 #define MCF5282_QSPI_QMR_CPHA   			(0x0100)
 #define MCF5282_QSPI_QMR_BAUD(x)			(((x)&0x00FF))
 											
-#define MCF5282_QSPI_QDLYR_SPE				(0x80)
+#define MCF5282_QSPI_QDLYR_SPE				(0x8000)
 #define MCF5282_QSPI_QDLYR_QCD(x)			(((x)&0x007F)<<8)
 #define MCF5282_QSPI_QDLYR_DTL(x)			(((x)&0x00FF))		
 
