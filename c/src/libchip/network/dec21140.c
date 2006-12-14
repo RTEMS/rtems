@@ -804,7 +804,7 @@ dec21140_stats (struct dec21140_softc *sc)
  * Driver ioctl handler
  */
 static int
-dec21140_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
+dec21140_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
    struct dec21140_softc *sc = ifp->if_softc;
    int error = 0;
