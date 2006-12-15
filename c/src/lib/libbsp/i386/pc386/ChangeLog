@@ -1,3 +1,8 @@
+2006-12-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* 3c509/3c509.c, ne2000/ne2000.c, wd8003/wd8003.c: Use
+	ioctl_command_t as arg in ioctl-functions.
+
 2006-12-13	Alexey Shamrin <shamrin@gmail.com>
 
 	PR 1189/bsps
