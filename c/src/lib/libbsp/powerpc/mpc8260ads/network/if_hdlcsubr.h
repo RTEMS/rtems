@@ -27,10 +27,10 @@ struct mbuf;
 struct sockaddr;
 struct rtentry;
 
-void	hdlc_ifattach __P((struct ifnet *));
-void	hdlc_input __P((struct ifnet *, struct mbuf *));
-int	hdlc_output __P((struct ifnet *,
-	   struct mbuf *, struct sockaddr *, struct rtentry *));
-int	hdlc_ioctl __P((struct ifnet *, int , caddr_t ));
+void	hdlc_ifattach (struct ifnet *);
+void	hdlc_input (struct ifnet *, struct mbuf *);
+int	hdlc_output (struct ifnet *,
+	   struct mbuf *, struct sockaddr *, struct rtentry *);
+int	hdlc_ioctl (struct ifnet *, int , caddr_t );
 
 #endif
