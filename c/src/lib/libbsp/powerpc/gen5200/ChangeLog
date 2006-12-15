@@ -1,5 +1,6 @@
 2006-12-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* bestcomm/load_task.c: Remove bogus casts.
 	* network_5200/network.c: Use ioctl_command_t as arg to ioctl functions.
 
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
