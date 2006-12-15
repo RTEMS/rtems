@@ -167,7 +167,7 @@ void at91rm9200_emac_sendpacket (struct ifnet *ifp, struct mbuf *m);
 void at91rm9200_emac_rxDaemon(void *arg);
 void at91rm9200_emac_stats (at91rm9200_emac_softc_t *sc);
 static int at91rm9200_emac_ioctl (struct ifnet *ifp, 
-                                  int command, 
+                                  ioctl_command_t command, 
                                   caddr_t data);
 
 
@@ -622,7 +622,7 @@ static int at91rm9200_emac_isr_is_on(const rtems_irq_connect_data *irq)
 
 /*  Driver ioctl handler */
 static int
-at91rm9200_emac_ioctl (struct ifnet *ifp, int command, caddr_t data)
+at91rm9200_emac_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     at91rm9200_emac_softc_t *sc = ifp->if_softc;
     int error = 0;

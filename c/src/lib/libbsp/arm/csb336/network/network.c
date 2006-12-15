@@ -103,7 +103,7 @@ void mc9328mxl_enet_sendpacket (struct ifnet *ifp, struct mbuf *m);
 void mc9328mxl_enet_rx_task(void *arg);
 void mc9328mxl_enet_stats(mc9328mxl_enet_softc_t *sc);
 static int mc9328mxl_enet_ioctl(struct ifnet *ifp, 
-                                unsigned long command, caddr_t data);
+                                ioctl_command_t command, caddr_t data);
 
 
 int rtems_mc9328mxl_enet_attach (
@@ -632,7 +632,7 @@ static int enet_isr_is_on(const rtems_irq_connect_data *irq)
 
 /*  Driver ioctl handler */
 static int
-mc9328mxl_enet_ioctl (struct ifnet *ifp, unsigned long command, caddr_t data)
+mc9328mxl_enet_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     mc9328mxl_enet_softc_t *sc = ifp->if_softc;
     int error = 0;
