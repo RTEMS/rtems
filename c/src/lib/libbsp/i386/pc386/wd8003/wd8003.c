@@ -523,7 +523,7 @@ wd_stats (struct wd_softc *sc)
  * Driver ioctl handler
  */
 static int
-wd_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
+wd_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
 	struct wd_softc *sc = ifp->if_softc;
 	int error = 0;

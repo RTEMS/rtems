@@ -679,7 +679,7 @@ static void _3c509_stats (struct ep_softc *sc)
  * RETURNS:
  *
  **********************************************************************************/
-static int _3c509_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
+static int _3c509_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
 	struct ep_softc *sc = ifp->if_softc;
 	int error = 0;

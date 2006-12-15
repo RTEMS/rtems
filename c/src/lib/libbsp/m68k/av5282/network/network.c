@@ -774,7 +774,7 @@ enet_stats(struct mcf5282_enet_struct *sc)
 }
 
 static int
-fec_ioctl(struct ifnet *ifp, int command, caddr_t data)
+fec_ioctl(struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     struct mcf5282_enet_struct *sc = ifp->if_softc;
     int error = 0;

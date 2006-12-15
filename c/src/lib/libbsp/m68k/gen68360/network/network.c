@@ -893,7 +893,7 @@ scc_stats (struct scc_softc *sc)
  * Driver ioctl handler
  */
 static int
-scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
+scc_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
 	struct scc_softc *sc = ifp->if_softc;
 	int error = 0;

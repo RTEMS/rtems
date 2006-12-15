@@ -1074,7 +1074,7 @@ ne_stats (struct ne_softc *sc)
 /* NE2000 driver ioctl handler.  */
 
 static int
-ne_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
+ne_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
   struct ne_softc *sc = ifp->if_softc;
   int error = 0;
