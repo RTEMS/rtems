@@ -465,43 +465,147 @@ BSP_getVME_isr(unsigned long vector, void **pusrArg)
 }
 
 static rtems_isr
+fpga_trampoline (rtems_vector_number v)
+{
+	/*
+	 * Handle FPGA interrupts until all have been consumed
+	 */
+	int loopcount = 0;
+	while (((v = FPGA_IRQ_INFO) & 0x80) != 0) {
+		v = 192 + (v & 0x3f);
+		if (++loopcount >= 50) {
+			rtems_interrupt_level level;
+			rtems_interrupt_disable(level);
+			printk("\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v & 0x3f);
+			MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+			rtems_interrupt_enable(level);
+			return;
+		}
+		if (handlerTab[v].func)  {
+			(*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
+		}
+		else {
+			rtems_interrupt_level level;
+			rtems_vector_number nv;
+			rtems_interrupt_disable(level);
+			printk("\nSPURIOUS FPGA INTERRUPT (0x%x).\n", v & 0x3f);
+			if ((((nv = FPGA_IRQ_INFO) & 0x80) != 0)
+					&& ((nv & 0x3f) == (v & 0x3f))) {
+				printk("DISABLING ALL FPGA INTERRUPTS.\n");
+				MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+			}
+			rtems_interrupt_enable(level);
+			return;
+		}
+	}
+}
+
+static rtems_isr
 trampoline (rtems_vector_number v)
 {
+    if (handlerTab[v].func) 
+        (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
+}
+
+static void
+enable_irq(unsigned source)
+{
+rtems_interrupt_level level;
+	rtems_interrupt_disable(level);
+	if (source >= 32)
+		MCF5282_INTC0_IMRH &= ~(1 << (source - 32));
+	else
+		MCF5282_INTC0_IMRL &= ~((1 << source) |
+				MCF5282_INTC_IMRL_MASKALL);
+	rtems_interrupt_enable(level);
+}
+
+static void
+disable_irq(unsigned source)
+{
+rtems_interrupt_level level;
+
+	rtems_interrupt_disable(level);
+	if (source >= 32)
+		MCF5282_INTC0_IMRH |= (1 << (source - 32));
+	else
+		MCF5282_INTC0_IMRL |= (1 << source);
+	rtems_interrupt_enable(level);
+}
+
+void
+BSP_enable_irq_at_pic(rtems_vector_number v)
+{
+int                   source = v - 64;
+
+	if ( source > 0 && source < 64 ) {
+		enable_irq(source);
+	}
+}
+
+void
+BSP_disable_irq_at_pic(rtems_vector_number v)
+{
+int                   source = v - 64;
+
+	if ( source > 0 && source < 64 ) {
+		disable_irq(source);
+	}
+}
+
+int
+BSP_irq_is_enabled_at_pic(rtems_vector_number v)
+{
+int                   source = v - 64;
+
+	if ( source > 0 && source < 64 ) {
+		return ! ((source >= 32) ?
+			MCF5282_INTC0_IMRH & (1 << (source - 32)) :
+			MCF5282_INTC0_IMRL & (1 << source));
+	}
+	return -1;
+}
+
+
+static int
+init_intc0_bit(unsigned long vector)
+{
+rtems_interrupt_level level;
+
     /*
-     * Handle FPGA interrupts until all have been consumed
+     * Find an unused level/priority if this is an on-chip (INTC0)
+     * source and this is the first time the source is being used.
+     * Interrupt sources 1 through 7 are fixed level/priority
      */
-    if (v == FPGA_VECTOR) {
-        int loopcount = 0;
-        while (((v = FPGA_IRQ_INFO) & 0x80) != 0) {
-            v = 192 + (v & 0x3f);
-            if (++loopcount >= 50) {
-                rtems_interrupt_level level;
-                rtems_interrupt_disable(level);
-                printk("\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v & 0x3f);
-                MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
-                rtems_interrupt_enable(level);
-                return;
-            }
-            if (handlerTab[v].func)  {
-                (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
-            }
-            else {
-                rtems_interrupt_level level;
-                rtems_vector_number nv;
-                rtems_interrupt_disable(level);
-                printk("\nSPURIOUS FPGA INTERRUPT (0x%x).\n", v & 0x3f);
-                if ((((nv = FPGA_IRQ_INFO) & 0x80) != 0)
-                 && ((nv & 0x3f) == (v & 0x3f))) {
-                    printk("DISABLING ALL FPGA INTERRUPTS.\n");
-                    MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+
+    if ((vector >= 65) && (vector <= 127)) {
+        int l, p;
+        int source = vector - 64;
+        static unsigned char installed[8];
+
+        rtems_interrupt_disable(level);
+        if (installed[source/8] & (1 << (source % 8))) {
+            rtems_interrupt_enable(level);
+            return 0;
+        }
+        installed[source/8] |= (1 << (source % 8));
+        rtems_interrupt_enable(level);
+        for (l = 1 ; l < 7 ; l++) {
+            for (p = 0 ; p < 8 ; p++) {
+                if ((source < 8)
+                 || (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL)) {
+                    if (source >= 8)
+                        *(&MCF5282_INTC0_ICR1 + (source - 1)) = 
+                                                       MCF5282_INTC_ICR_IL(l) |
+                                                       MCF5282_INTC_ICR_IP(p);
+					enable_irq(source);
+                    return 0;
                 }
-                rtems_interrupt_enable(level);
-                return;
             }
         }
+        return -1;
     }
-    else if (handlerTab[v].func) 
-        (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
+	return 0;
 }
 
 int
@@ -535,7 +639,10 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
         MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT1 |
                                 MCF5282_INTC_IMRL_MASKALL);
         setupDone = 1;
-        i = BSP_installVME_isr(FPGA_VECTOR, NULL, NULL);
+    	handlerTab[vector].func = NULL;
+    	handlerTab[vector].arg  = NULL;
+		rtems_interrupt_catch(fpga_trampoline, FPGA_VECTOR, &old_handler);
+        i = init_intc0_bit(FPGA_VECTOR);
         rtems_interrupt_enable(level);
         return i;
     }
@@ -545,45 +652,7 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
      */
     rtems_interrupt_catch(trampoline, vector, &old_handler);
 
-    /*
-     * Find an unused level/priority if this is an on-chip (INTC0)
-     * source and this is the first time the source is being used.
-     * Interrupt sources 1 through 7 are fixed level/priority
-     */
-    if ((vector >= 65) && (vector <= 127)) {
-        int l, p;
-        int source = vector - 64;
-        static unsigned char installed[8];
-
-        rtems_interrupt_disable(level);
-        if (installed[source/8] & (1 << (source % 8))) {
-            rtems_interrupt_enable(level);
-            return 0;
-        }
-        installed[source/8] |= (1 << (source % 8));
-        rtems_interrupt_enable(level);
-        for (l = 1 ; l < 7 ; l++) {
-            for (p = 0 ; p < 8 ; p++) {
-                if ((source < 8)
-                 || (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL)) {
-                    if (source >= 8)
-                        *(&MCF5282_INTC0_ICR1 + (source - 1)) = 
-                                                       MCF5282_INTC_ICR_IL(l) |
-                                                       MCF5282_INTC_ICR_IP(p);
-                    rtems_interrupt_disable(level);
-                    if (source >= 32)
-                        MCF5282_INTC0_IMRH &= ~(1 << (source - 32));
-                    else
-                        MCF5282_INTC0_IMRL &= ~((1 << source) |
-                                                MCF5282_INTC_IMRL_MASKALL);
-                    rtems_interrupt_enable(level);
-                    return 0;
-                }
-            }
-        }
-        return -1;
-    }
-    return 0;
+    return init_intc0_bit(vector);
 }
 
 int
