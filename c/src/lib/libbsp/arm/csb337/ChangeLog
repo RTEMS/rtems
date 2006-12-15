@@ -1,3 +1,7 @@
+2006-12-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* network/network.c (at91rm9200_emac_ioctl): Use ioctl_command_t.
+
 2006-11-15	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Merge c_rtems_main() into boot_card(). This eliminated a
