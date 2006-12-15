@@ -1555,7 +1555,7 @@ static void mpc5200_fec_restart(struct mpc5200_enet_struct *sc)
 /*
  * Driver ioctl handler
  */
-static int mpc5200_fec_ioctl (struct ifnet *ifp, u_long command, caddr_t data)
+static int mpc5200_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
   {
   struct mpc5200_enet_struct *sc = ifp->if_softc;
   int error = 0;

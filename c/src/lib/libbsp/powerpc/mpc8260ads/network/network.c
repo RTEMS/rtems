@@ -850,7 +850,7 @@ hdlc_stats (struct m8260_hdlc_struct *sc)
  * Driver ioctl handler
  */
 static int
-scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
+scc_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
   struct m8260_hdlc_struct *sc = ifp->if_softc;
   int error = 0;

@@ -126,7 +126,7 @@ enum GTeth_hash_op {
 
 #define	ET_MINLEN 64		/* minimum message length */
 
-static int GTeth_ifioctl(struct ifnet *ifp, u_long cmd, caddr_t data);
+static int GTeth_ifioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data);
 static void GTeth_ifstart (struct ifnet *);
 static void GTeth_ifchange(struct GTeth_softc *sc);
 static void GTeth_init_rx_ring(struct GTeth_softc *sc);
@@ -544,7 +544,7 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
   printf("         Active Txqs:%-8u\n", sc->txq_nactive); 
 }
 
-static int GTeth_ifioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
+static int GTeth_ifioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data)
 {
   struct GTeth_softc *sc = ifp->if_softc;
   struct ifreq *ifr = (struct ifreq *) data;
