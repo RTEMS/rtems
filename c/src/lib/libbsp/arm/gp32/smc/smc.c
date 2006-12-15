@@ -101,6 +101,7 @@ static uint8_t sm_read()
 
    returns 1 on success, 0 on fail
 */
+#if UNUSED
 static uint8_t sm_status()
 {
   uint8_t status;
@@ -120,7 +121,7 @@ static uint8_t sm_status()
   else
     return 0;
 }
-
+#endif
 
 void smc_read_id( uint8_t* buf, uint32_t length)
 {
