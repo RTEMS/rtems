@@ -71,7 +71,7 @@ void TasksLoadImage(sdma_regs *sdma)
 	SCTDT_T *tt;
 
 	/* copy task table from source to destination */
-	memcpy((void *)((uint8 *)(sdma->taskBar) - MBarPhysOffsetGlobal), (void *) &taskTable, (unsigned long) taskTableBytes);
+	memcpy((void *)((uint8 *)(sdma->taskBar) - MBarPhysOffsetGlobal), &taskTable, taskTableBytes);
 	/* adjust addresses in task table */
 	for (i=0; i < (uint32) taskTableTasks; i++) {
 		tt = (SCTDT_T *)(((uint8 *)(sdma->taskBar) - MBarPhysOffsetGlobal) + (uint32) offsetEntry + (i * sizeof (SCTDT_T)));
