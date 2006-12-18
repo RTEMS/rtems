@@ -129,6 +129,7 @@ void fileio_part_table_initialize(void)
   printf(" =========================\n");
   fileio_print_free_heap();
   printf(" Enter device to initialize ==>");
+  fflush(stdout);
   fgets(devname,sizeof(devname)-1,stdin);
   while (devname[strlen(devname)-1] == '\n') {
     devname[strlen(devname)-1] = '\0';
@@ -175,6 +176,7 @@ void fileio_list_file(void)
   printf(" =========================\n");
   fileio_print_free_heap();
   printf(" Enter filename to list ==>");
+  fflush(stdout);
   fgets(fname,sizeof(fname)-1,stdin);
   while (fname[strlen(fname)-1] == '\n') {
     fname[strlen(fname)-1] = '\0';
@@ -281,6 +283,7 @@ void fileio_write_file(void)
    */
   if (!failed) {
     printf("Enter path/filename ==>");
+    fflush(stdout);
     fgets(fname,sizeof(fname)-1,stdin);
     while (fname[strlen(fname)-1] == '\n') {
       fname[strlen(fname)-1] = '\0';
@@ -296,6 +299,7 @@ void fileio_write_file(void)
   if (!failed) {
     printf("use suffix K for Kbytes, M for Mbytes or no suffix for bytes:\n"
 	   "Enter filesize to write ==>");
+    fflush(stdout);
     fgets(tmp_str,sizeof(tmp_str)-1,stdin);
     failed = fileio_str2size(tmp_str,&file_size);
     if (failed) {
@@ -308,6 +312,7 @@ void fileio_write_file(void)
   if (!failed) {
     printf("use suffix K for Kbytes, M for Mbytes or no suffix for bytes:\n"
 	   "Enter block size to use for write calls ==>");
+    fflush(stdout);
     fgets(tmp_str,sizeof(tmp_str)-1,stdin);
     failed = fileio_str2size(tmp_str,&buf_size);
     if (failed) {
@@ -437,6 +442,7 @@ void fileio_read_file(void)
    */
   if (!failed) {
     printf("Enter path/filename ==>");
+    fflush(stdout);
     fgets(fname,sizeof(fname)-1,stdin);
     while (fname[strlen(fname)-1] == '\n') {
       fname[strlen(fname)-1] = '\0';
@@ -452,6 +458,7 @@ void fileio_read_file(void)
   if (!failed) {
     printf("use suffix K for Kbytes, M for Mbytes or no suffix for bytes:\n"
 	   "Enter block size to use for read calls ==>");
+    fflush(stdout);
     fgets(tmp_str,sizeof(tmp_str)-1,stdin);
     failed = fileio_str2size(tmp_str,&buf_size);
     if (failed) {
@@ -549,6 +556,7 @@ void fileio_menu (void)
     printf("   s -> start shell\n");
 #endif
     printf("   Enter your selection ==>");
+    fflush(stdout);
 
     inbuf[0] = '\0';
     fgets(inbuf,sizeof(inbuf),stdin);

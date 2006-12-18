@@ -8,7 +8,7 @@
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *
- * @(#) $Id$
+ * @(#) bdbuf.h,v 1.9 2005/02/02 00:06:18 joel Exp
  */
 
 #ifndef _RTEMS_BDBUF_H
@@ -74,6 +74,48 @@ typedef struct bdbuf_buffer {
 } bdbuf_buffer;
 
 
+/*
+ * the following data structures are internal to the bdbuf layer,
+ * but it is convenient to have them visible from the outside for inspection
+ */
+/*
+ * The groups of the blocks with the same size are collected in the
+ * bd_pool. Note that a several of the buffer's groups with the
+ * same size can exists.
+ */
+typedef struct bdbuf_pool
+{
+    bdbuf_buffer *tree;         /* Buffer descriptor lookup AVL tree root */
+
+    Chain_Control free;         /* Free buffers list */
+    Chain_Control lru;          /* Last recently used list */
+
+    int           blksize;      /* The size of the blocks (in bytes) */
+    int           nblks;        /* Number of blocks in this pool */
+    rtems_id      bufget_sema;  /* Buffer obtain counting semaphore */
+    void         *mallocd_bufs; /* Pointer to the malloc'd buffer memory,
+                                   or NULL, if buffer memory provided in
+                                   buffer configuration */
+    bdbuf_buffer *bdbufs;       /* Pointer to table of buffer descriptors
+                                   allocated for this buffer pool. */
+} bdbuf_pool;
+
+/* Buffering layer context definition */
+struct bdbuf_context {
+    bdbuf_pool    *pool;         /* Table of buffer pools */
+    int            npools;       /* Number of entries in pool table */
+
+    Chain_Control  mod;          /* Modified buffers list */
+    rtems_id       flush_sema;   /* Buffer flush semaphore; counting
+                                    semaphore; incremented when buffer
+                                    flushed to the disk; decremented when
+                                    buffer modified */
+    rtems_id       swapout_task; /* Swapout task ID */
+};
+  /*
+   * the context of the buffering layer, visible for inspection 
+   */
+extern struct bdbuf_context rtems_bdbuf_ctx;
 
 /* bdbuf_config structure describes block configuration (size,
  * amount, memory location) for buffering layer

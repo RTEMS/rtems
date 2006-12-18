@@ -26,11 +26,9 @@
 #include "../include/bsp.h"
 #include "../irq/irq.h"
 #include "../include/mpc5200.h"
-#include "mscan.h"
+#include "../mscan/mscan_int.h"
 
 /* #define MSCAN_LOOPBACK */
-
-volatile uint32_t tx_int_wr_count = 0;
 
 struct mpc5200_rx_cntrl mpc5200_mscan_rx_cntrl[MPC5200_CAN_NO];
 static struct mscan_channel_info chan_info[MPC5200_CAN_NO];
@@ -176,46 +174,42 @@ static void mpc5200_mscan_interrupt_handler(rtems_irq_hdl_param handle)
 		  mscan->txidr2 = 0;
           mscan->txidr3 = 0;
 
-          /* insert dlc into mscan register */
-		  mscan->txdlr = (uint8_t)((tx_mess_ptr->mess_len) & 0x000F);
 	      }
 
-        /* select one free tx buffer if TOUCAN not registered) */
-        if(((mscan_hdl->toucan_callback) == NULL) || (((mscan_hdl->toucan_callback) != NULL) && ((tx_mess_ptr->toucan_tx_id) == idx)))
+        /* fill in tx data if TOUCAN is activ an TOUCAN index have a match with the tx buffer or TOUCAN is disabled */
+        if(((mscan_hdl->toucan_callback) == NULL) || (((mscan_hdl->toucan_callback) != NULL) && ((tx_mess_ptr->toucan_tx_idx) == idx)))
           {
-
-          /* set tx id */
-		  mscan->txidr0 = SET_IDR0(tx_mess_ptr->mess_id);
-		  mscan->txidr1 = SET_IDR1(tx_mess_ptr->mess_id);
-		  mscan->txidr2 = 0;
-          mscan->txidr3 = 0;
 
           /* insert dlc into mscan register */
 		  mscan->txdlr = (uint8_t)((tx_mess_ptr->mess_len) & 0x000F);
 
-          /* copy tx data to MSCAN registers */
-          switch(mscan->txdlr)
+          /* skip data copy in case of RTR */
+          if(!(MSCAN_MESS_ID_HAS_RTR(tx_mess_ptr->mess_id)))
             {
-            case 8:
-              mscan->txdsr7 = tx_mess_ptr->mess_data[7];
-            case 7:
-              mscan->txdsr6 = tx_mess_ptr->mess_data[6];
-            case 6:
-              mscan->txdsr5 = tx_mess_ptr->mess_data[5];
-            case 5:
-              mscan->txdsr4 = tx_mess_ptr->mess_data[4];
-            case 4:
-              mscan->txdsr3 = tx_mess_ptr->mess_data[3];
-            case 3:
-              mscan->txdsr2 = tx_mess_ptr->mess_data[2];
-            case 2:
-              mscan->txdsr1 = tx_mess_ptr->mess_data[1];
-            case 1:
-              mscan->txdsr0 = tx_mess_ptr->mess_data[0];
-              break;
-            default:
-              break;
-            }
+            /* copy tx data to MSCAN registers */
+            switch(mscan->txdlr)
+              {
+              case 8:
+                mscan->txdsr7 = tx_mess_ptr->mess_data[7];
+              case 7:
+                mscan->txdsr6 = tx_mess_ptr->mess_data[6];
+              case 6:
+                mscan->txdsr5 = tx_mess_ptr->mess_data[5];
+              case 5:
+                mscan->txdsr4 = tx_mess_ptr->mess_data[4];
+              case 4:
+                mscan->txdsr3 = tx_mess_ptr->mess_data[3];
+              case 3:
+                mscan->txdsr2 = tx_mess_ptr->mess_data[2];
+              case 2:
+                mscan->txdsr1 = tx_mess_ptr->mess_data[1];
+              case 1:
+                mscan->txdsr0 = tx_mess_ptr->mess_data[0];
+                break;
+              default:
+                break;
+              }
+		    }
 
           /* enable message buffer specific interrupt */
 	      mscan->tier |= mscan->bsel;
@@ -225,8 +219,6 @@ static void mpc5200_mscan_interrupt_handler(rtems_irq_hdl_param handle)
 
           /* release counting semaphore of tx ring buffer */
 	 	  rtems_semaphore_release((rtems_id)(chan->tx_rb_sid));
-
-	 	  tx_int_wr_count++;
 
           }
         else
@@ -301,30 +293,34 @@ static void mpc5200_mscan_interrupt_handler(rtems_irq_hdl_param handle)
       /* get time stamp */
       rx_mess_ptr->mess_time_stamp = ((mscan->rxtimh << 8) | (mscan->rxtiml));
 
-      /* get the data */
-	  switch(rx_mess_ptr->mess_len)
-	    {
+      /* skip data copy in case of RTR */
+      if(!(MSCAN_MESS_ID_HAS_RTR(rx_mess_ptr->mess_id)))
 
-	    case 8:
-	      rx_mess_ptr->mess_data[7] = mscan->rxdsr7;
-	    case 7:
-	      rx_mess_ptr->mess_data[6] = mscan->rxdsr6;
-	    case 6:
-	      rx_mess_ptr->mess_data[5] = mscan->rxdsr5;
-	    case 5:
-	      rx_mess_ptr->mess_data[4] = mscan->rxdsr4;
-	    case 4:
-	      rx_mess_ptr->mess_data[3] = mscan->rxdsr3;
-	    case 3:
-	      rx_mess_ptr->mess_data[2] = mscan->rxdsr2;
-	    case 2:
-	      rx_mess_ptr->mess_data[1] = mscan->rxdsr1;
-	    case 1:
-	      rx_mess_ptr->mess_data[0] = mscan->rxdsr0;
-	    case 0:
-	    default:
-	      break;
+        {
 
+         /* get the data */
+	     switch(rx_mess_ptr->mess_len)
+	       {
+	       case 8:
+	         rx_mess_ptr->mess_data[7] = mscan->rxdsr7;
+	       case 7:
+	         rx_mess_ptr->mess_data[6] = mscan->rxdsr6;
+	       case 6:
+	         rx_mess_ptr->mess_data[5] = mscan->rxdsr5;
+	       case 5:
+	         rx_mess_ptr->mess_data[4] = mscan->rxdsr4;
+	       case 4:
+	         rx_mess_ptr->mess_data[3] = mscan->rxdsr3;
+	       case 3:
+	         rx_mess_ptr->mess_data[2] = mscan->rxdsr2;
+	       case 2:
+	         rx_mess_ptr->mess_data[1] = mscan->rxdsr1;
+	       case 1:
+	         rx_mess_ptr->mess_data[0] = mscan->rxdsr0;
+	       case 0:
+	       default:
+	         break;
+	       }
 	    }
 
       if(mscan_hdl->toucan_callback == NULL)
@@ -871,15 +867,15 @@ void mpc5200_mscan_perform_init_mode_settings(volatile struct mpc5200_mscan *msc
   mscan->idac &= ~(IDAC_IDAM1);
   mscan->idac |=  (IDAC_IDAM0);
 
-  /* initialize rx filter masks (16 bit) */
-  mscan->idmr0  = SET_IDMR0(0x07FF);
-  mscan->idmr1  = SET_IDMR1(0x07FF);
-  mscan->idmr2  = SET_IDMR2(0x07FF);
-  mscan->idmr3  = SET_IDMR3(0x07FF);
-  mscan->idmr4  = SET_IDMR4(0x07FF);
-  mscan->idmr5  = SET_IDMR5(0x07FF);
-  mscan->idmr6  = SET_IDMR6(0x07FF);
-  mscan->idmr7  = SET_IDMR7(0x07FF);
+  /* initialize rx filter masks (16 bit), don't care including rtr */
+  mscan->idmr0  = SET_IDMR0(0x7FF);
+  mscan->idmr1  = SET_IDMR1(0x7FF);
+  mscan->idmr2  = SET_IDMR2(0x7FF);
+  mscan->idmr3  = SET_IDMR3(0x7FF);
+  mscan->idmr4  = SET_IDMR4(0x7FF);
+  mscan->idmr5  = SET_IDMR5(0x7FF);
+  mscan->idmr6  = SET_IDMR6(0x7FF);
+  mscan->idmr7  = SET_IDMR7(0x7FF);
 
   /* Control Register 1 --------------------------------------------*/
   /*    [07]:CANE     0->1 : MSCAN Module is enabled                */
@@ -1301,7 +1297,7 @@ rtems_device_driver mscan_write( rtems_device_major_number major,
     {
 
     /* append the TOUCAN tx_id to the mess. due to interrupt handling */
-	tx_mess->toucan_tx_id = tx_parms->tx_id;
+	tx_mess->toucan_tx_idx = tx_parms->tx_idx;
 
     /* fill the tx ring buffer with the message */
     fill_tx_buffer(chan, tx_mess);
@@ -1486,19 +1482,19 @@ rtems_device_driver mscan_control( rtems_device_major_number major,
         {
 
         case RX_BUFFER_0:
-          ctrl_parms->ctrl_id_mask = GET_IDMR0(mscan->idmr0) | GET_IDMR1(mscan->idmr1);
+          ctrl_parms->ctrl_id_mask = (GET_IDMR0(mscan->idmr0) | GET_IDMR1(mscan->idmr1));
           break;
 
         case RX_BUFFER_1:
-          ctrl_parms->ctrl_id_mask = GET_IDMR2(mscan->idmr2) | GET_IDMR3(mscan->idmr3);
+          ctrl_parms->ctrl_id_mask = (GET_IDMR2(mscan->idmr2) | GET_IDMR3(mscan->idmr3));
           break;
 
         case RX_BUFFER_2:
-          ctrl_parms->ctrl_id_mask = GET_IDMR4(mscan->idmr4) | GET_IDMR5(mscan->idmr5);
+          ctrl_parms->ctrl_id_mask = (GET_IDMR4(mscan->idmr4) | GET_IDMR5(mscan->idmr5));
           break;
 
         case RX_BUFFER_3:
-          ctrl_parms->ctrl_id_mask = GET_IDMR6(mscan->idmr6) | GET_IDMR7(mscan->idmr7);
+          ctrl_parms->ctrl_id_mask = (GET_IDMR6(mscan->idmr6) | GET_IDMR7(mscan->idmr7));
           break;
 
         default:

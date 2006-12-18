@@ -91,6 +91,8 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #endif
 #define IDE_DMA_TEST            FALSE
+
+#ifdef BRS5L
 #define IDE_USE_INT             TRUE
 #define IDE_READ_USE_DMA        TRUE
 #define IDE_USE_READ_PIO_OPT    FALSE
@@ -98,6 +100,16 @@
 #define IDE_USE_WRITE_PIO_OPT   TRUE
 /* #define IDE_USE_DMA (IDE_READ_USE_DMA||IDE_WRITE_USE_DMA) */
 #define IDE_USE_DMA             TRUE
+#else
+#define IDE_USE_INT             TRUE
+#define IDE_READ_USE_DMA        FALSE
+#define IDE_USE_READ_PIO_OPT    FALSE
+#define IDE_WRITE_USE_DMA       FALSE
+#define IDE_USE_WRITE_PIO_OPT   FALSE
+/* #define IDE_USE_DMA (IDE_READ_USE_DMA||IDE_WRITE_USE_DMA) */
+#define IDE_USE_DMA             FALSE
+#endif
+
 #define IDE_USE_STATISTICS      TRUE
 
 #if IDE_USE_DMA

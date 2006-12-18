@@ -7,7 +7,7 @@
  *         Victor V. Vengerov <vvv@oktet.ru>
  *         Alexander Kukuta <kam@oktet.ru>
  *
- * @(#) $Id$
+ * @(#) bdbuf.c,v 1.14 2004/04/17 08:15:17 ralf Exp
  */
 
 #if HAVE_CONFIG_H
@@ -56,40 +56,6 @@ static rtems_task bdbuf_swapout_task(rtems_task_argument unused);
 
 static rtems_status_code bdbuf_release(bdbuf_buffer *bd_buf);
 /*
- * The groups of the blocks with the same size are collected in the
- * bd_pool. Note that a several of the buffer's groups with the
- * same size can exists.
- */
-typedef struct bdbuf_pool
-{
-    bdbuf_buffer *tree;         /* Buffer descriptor lookup AVL tree root */
-
-    Chain_Control free;         /* Free buffers list */
-    Chain_Control lru;          /* Last recently used list */
-
-    int           blksize;      /* The size of the blocks (in bytes) */
-    int           nblks;        /* Number of blocks in this pool */
-    rtems_id      bufget_sema;  /* Buffer obtain counting semaphore */
-    void         *mallocd_bufs; /* Pointer to the malloc'd buffer memory,
-                                   or NULL, if buffer memory provided in
-                                   buffer configuration */
-    bdbuf_buffer *bdbufs;       /* Pointer to table of buffer descriptors
-                                   allocated for this buffer pool. */
-} bdbuf_pool;
-
-/* Buffering layer context definition */
-struct bdbuf_context {
-    bdbuf_pool    *pool;         /* Table of buffer pools */
-    int            npools;       /* Number of entries in pool table */
-
-    Chain_Control  mod;          /* Modified buffers list */
-    rtems_id       flush_sema;   /* Buffer flush semaphore; counting
-                                    semaphore; incremented when buffer
-                                    flushed to the disk; decremented when
-                                    buffer modified */
-    rtems_id       swapout_task; /* Swapout task ID */
-};
-/*
  * maximum number of blocks that might be chained together to one
  * write driver call
  */
@@ -108,8 +74,8 @@ typedef struct blkdev_request1 {
     blkdev_sg_buffer sg[1];
 } blkdev_request1;
 
-/* The static context of buffering layer */
-static struct bdbuf_context bd_ctx;
+/* The context of buffering layer */
+struct bdbuf_context rtems_bdbuf_ctx;
 
 #define SAFE
 #ifdef SAFE
@@ -711,7 +677,7 @@ avl_remove(bdbuf_buffer **root, const bdbuf_buffer *node)
 static rtems_status_code
 bdbuf_initialize_pool(rtems_bdbuf_config *config, int pool)
 {
-    bdbuf_pool *p = bd_ctx.pool + pool;
+    bdbuf_pool *p = rtems_bdbuf_ctx.pool + pool;
     unsigned char *bufs;
     bdbuf_buffer *b;
     rtems_status_code rc;
@@ -787,7 +753,7 @@ bdbuf_initialize_pool(rtems_bdbuf_config *config, int pool)
 static rtems_status_code
 bdbuf_release_pool(rtems_bdpool_id pool)
 {
-    bdbuf_pool *p = bd_ctx.pool + pool;
+    bdbuf_pool *p = rtems_bdbuf_ctx.pool + pool;
     rtems_semaphore_delete(p->bufget_sema);
     free(p->bdbufs);
     free(p->mallocd_bufs);
@@ -818,18 +784,18 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
     if (size <= 0)
         return RTEMS_INVALID_SIZE;
 
-    bd_ctx.npools = size;
+    rtems_bdbuf_ctx.npools = size;
 
     /*
      * Allocate memory for buffer pool descriptors
      */
-    bd_ctx.pool = calloc(size, sizeof(bdbuf_pool));
-    if (bd_ctx.pool == NULL)
+    rtems_bdbuf_ctx.pool = calloc(size, sizeof(bdbuf_pool));
+    if (rtems_bdbuf_ctx.pool == NULL)
     {
         return RTEMS_NO_MEMORY;
     }
 
-    Chain_Initialize_empty(&bd_ctx.mod);
+    Chain_Initialize_empty(&rtems_bdbuf_ctx.mod);
 
     /* Initialize buffer pools and roll out if something failed */
     for (i = 0; i < size; i++)
@@ -851,12 +817,12 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
         rtems_build_name('B', 'F', 'L', 'U'), 0,
         RTEMS_FIFO | RTEMS_COUNTING_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
         RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL, 0,
-        &bd_ctx.flush_sema);
+        &rtems_bdbuf_ctx.flush_sema);
     if (rc != RTEMS_SUCCESSFUL)
     {
         for (i = 0; i < size; i++)
             bdbuf_release_pool(i);
-        free(bd_ctx.pool);
+        free(rtems_bdbuf_ctx.pool);
         return rc;
     }
 
@@ -869,24 +835,24 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
         SWAPOUT_TASK_STACK_SIZE,
         RTEMS_DEFAULT_MODES | RTEMS_NO_PREEMPT,
         RTEMS_DEFAULT_ATTRIBUTES,
-        &bd_ctx.swapout_task);
+        &rtems_bdbuf_ctx.swapout_task);
     if (rc != RTEMS_SUCCESSFUL)
     {
-        rtems_semaphore_delete(bd_ctx.flush_sema);
+        rtems_semaphore_delete(rtems_bdbuf_ctx.flush_sema);
         for (i = 0; i < size; i++)
             bdbuf_release_pool(i);
-        free(bd_ctx.pool);
+        free(rtems_bdbuf_ctx.pool);
         return rc;
     }
 
-    rc = rtems_task_start(bd_ctx.swapout_task, bdbuf_swapout_task, 0);
+    rc = rtems_task_start(rtems_bdbuf_ctx.swapout_task, bdbuf_swapout_task, 0);
     if (rc != RTEMS_SUCCESSFUL)
     {
-        rtems_task_delete(bd_ctx.swapout_task);
-        rtems_semaphore_delete(bd_ctx.flush_sema);
+        rtems_task_delete(rtems_bdbuf_ctx.swapout_task);
+        rtems_semaphore_delete(rtems_bdbuf_ctx.flush_sema);
         for (i = 0; i < size; i++)
             bdbuf_release_pool(i);
-        free(bd_ctx.pool);
+        free(rtems_bdbuf_ctx.pool);
         return rc;
     }
 
@@ -933,7 +899,7 @@ find_or_assign_buffer(disk_device *dd,
     int blksize;
 
     device = dd->dev;
-    bd_pool = bd_ctx.pool + dd->pool;
+    bd_pool = rtems_bdbuf_ctx.pool + dd->pool;
     blksize = dd->block_size;
 
 again:
@@ -1021,7 +987,7 @@ again:
              * that our buffer descriptor is in the list. */
             if (bd_buf->modified)
             {
-                rc = rtems_semaphore_obtain(bd_ctx.flush_sema,
+                rc = rtems_semaphore_obtain(rtems_bdbuf_ctx.flush_sema,
                                             RTEMS_NO_WAIT, 0);
             }
             else
@@ -1476,7 +1442,7 @@ bdbuf_release(bdbuf_buffer *bd_buf)
     if (bd_buf->use_count <= 0)
         return RTEMS_INTERNAL_ERROR;
 
-    bd_pool = bd_ctx.pool + bd_buf->pool;
+    bd_pool = rtems_bdbuf_ctx.pool + bd_buf->pool;
 
     bd_buf->use_count--;
 
@@ -1487,10 +1453,10 @@ bdbuf_release(bdbuf_buffer *bd_buf)
 
             /* Buffer was modified. Insert buffer to the modified buffers
              * list and initiate flushing. */
-            Chain_Append(&bd_ctx.mod, &bd_buf->link);
+            Chain_Append(&rtems_bdbuf_ctx.mod, &bd_buf->link);
 
             /* Release the flush_sema */
-            rc = rtems_semaphore_release(bd_ctx.flush_sema);
+            rc = rtems_semaphore_release(rtems_bdbuf_ctx.flush_sema);
         }
         else
         {
@@ -1659,7 +1625,7 @@ rtems_bdbuf_syncdev(dev_t dev)
     if (dd == NULL)
         return RTEMS_INVALID_ID;
 
-    pool = bd_ctx.pool + dd->pool;
+    pool = rtems_bdbuf_ctx.pool + dd->pool;
 
     DISABLE_PREEMPTION(key);
     do {
@@ -1718,13 +1684,13 @@ bdbuf_swapout_task(rtems_task_argument unused)
 	   * otherwise do not wait, if no buffer available
 	   */
 	  if (nxt_bd_buf == NULL) {
-	    rc = rtems_semaphore_obtain(bd_ctx.flush_sema, 
+	    rc = rtems_semaphore_obtain(rtems_bdbuf_ctx.flush_sema, 
 					(req.req.count == 0)
 					? RTEMS_WAIT
 					: RTEMS_NO_WAIT, 
 					0);
 	    if (rc == RTEMS_SUCCESSFUL) {
-	      nxt_bd_buf = (bdbuf_buffer *)Chain_Get(&bd_ctx.mod);
+	      nxt_bd_buf = (bdbuf_buffer *)Chain_Get(&rtems_bdbuf_ctx.mod);
           if (nxt_bd_buf != NULL) {
   	        nxt_bd_buf->in_progress = TRUE;
             /* IMD try: clear "modified" bit early             */
@@ -1764,7 +1730,7 @@ bdbuf_swapout_task(rtems_task_argument unused)
 	   *                                     for next main loop
 	   */
 	  if (bd_buf != NULL) {
-	    bd_pool = bd_ctx.pool + bd_buf->pool;
+	    bd_pool = rtems_bdbuf_ctx.pool + bd_buf->pool;
 	    if (req.req.count == 0) {
 	      /*
 	       * this is the first block, so use its address
@@ -1818,8 +1784,8 @@ bdbuf_swapout_task(rtems_task_argument unused)
 	    {
 	      if (bd_buf->modified)
 		{
-		  Chain_Append(&bd_ctx.mod, &bd_buf->link);
-		  rc = rtems_semaphore_release(bd_ctx.flush_sema);
+		  Chain_Append(&rtems_bdbuf_ctx.mod, &bd_buf->link);
+		  rc = rtems_semaphore_release(rtems_bdbuf_ctx.flush_sema);
 		}
 	      else
 		{
@@ -1860,7 +1826,7 @@ rtems_bdbuf_find_pool(int block_size, rtems_bdpool_id *pool)
     if (j != 1)
         return RTEMS_INVALID_SIZE;
 
-    for (i = 0, p = bd_ctx.pool; i < bd_ctx.npools; i++, p++)
+    for (i = 0, p = rtems_bdbuf_ctx.pool; i < rtems_bdbuf_ctx.npools; i++, p++)
     {
         if ((p->blksize >= block_size) &&
             (p->blksize < cursize))
@@ -1903,17 +1869,17 @@ rtems_status_code
 rtems_bdbuf_get_pool_info(rtems_bdpool_id pool, int *block_size,
                           int *blocks)
 {
-    if (pool >= bd_ctx.npools)
+    if (pool >= rtems_bdbuf_ctx.npools)
         return RTEMS_INVALID_NUMBER;
 
     if (block_size != NULL)
     {
-        *block_size = bd_ctx.pool[pool].blksize;
+        *block_size = rtems_bdbuf_ctx.pool[pool].blksize;
     }
 
     if (blocks != NULL)
     {
-        *blocks = bd_ctx.pool[pool].nblks;
+        *blocks = rtems_bdbuf_ctx.pool[pool].nblks;
     }
 
     return RTEMS_SUCCESSFUL;

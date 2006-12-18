@@ -1,3 +1,11 @@
+2006-12-18      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* gen5200/mscan/mscan.c, 
+	* gen5200/mscan/mscan.h, 
+	* gen5200/mscan/mscan_int.h:
+	split mscan.h into two headers, corrected CAN filtering code to
+	support remote requests
+
 2006-12-13	Till Straumann <strauman@slac.stanford.edu>
 
 	* mvme5500/Makefile.am, mvme5500/preinstall.am:

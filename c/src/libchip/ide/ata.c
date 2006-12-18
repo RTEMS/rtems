@@ -528,15 +528,16 @@ ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
     DISABLE_PREEMPTION(key);
     ATA_EXEC_CALLBACK(areq, status, error);
     Chain_Extract(&areq->link);
-    free(areq);
 
     if (!Chain_Is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
     {
         ENABLE_PREEMPTION(key);
+	free(areq);
         ata_process_request(ctrl_minor);
         return;
     }
     ENABLE_PREEMPTION(key);
+    free(areq);
 }
 
 /* ata_non_data_request_done --
