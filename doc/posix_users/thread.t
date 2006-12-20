@@ -988,7 +988,7 @@ void pthread_exit(
 
 @subheading DESCRIPTION:
 
-The @code{pthread_exit} routine is used to temrinate the calling thread.
+The @code{pthread_exit} routine is used to terminate the calling thread.
 The @code{status} is made available to any successful join with the
 terminating thread.
 
@@ -1102,7 +1102,7 @@ until @code{thread} terminates. If @code{thread} has already terminated,
 then this routine returns immediately. The value returned by @code{thread}
 (i.e. passed to @code{pthread_exit} is returned in @code{value_ptr}.
 
-When this routine returns, then @code{thread} has been temrinated.
+When this routine returns, then @code{thread} has been terminated.
 
 @subheading NOTES:
 
