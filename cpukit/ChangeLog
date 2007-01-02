@@ -1,3 +1,8 @@
+2007-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/aio.h: s/aoi_lio_opcode/aio_lio_opcode/ 
+	(BZ 1203).
+
 2006-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* backward/rtc.h, backward/vmeintr.h, backward/confdefs.h,
