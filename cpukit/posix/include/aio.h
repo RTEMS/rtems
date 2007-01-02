@@ -59,7 +59,7 @@ struct aiocb {
   size_t          aio_nbytes;     /* Length of transfer */
   int             aio_reqprio;    /* Request priority offset */
   struct sigevent aio_sigevent;   /* Signal number and value */
-  int             aoi_lio_opcode; /* Operation to be performed */
+  int             aio_lio_opcode; /* Operation to be performed */
 };
 
 /*
