@@ -1,5 +1,7 @@
 EXTRA_DIST += binutils-sources.add
 
+BINUTILS_OPTS =
+
 BINUTILS_SUBPACKAGES = $(top_srcdir)/common/common.add
 BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/binutils.add
 BINUTILS_SUBPACKAGES += $(top_srcdir)/binutils/prep.add
@@ -21,7 +23,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binuti
 CLEANFILES += $(TARGET)-binutils.spec.in
 
 @rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in
-	$(MKSPEC) $(TARGET)-binutils.spec.in | $(SPECSTRIP) > $@
+	$(MKSPEC) $(TARGET)-binutils.spec.in | $(SPECSTRIP) $(BINUTILS_OPTS) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-binutils.spec
 noinst_DATA += @rpmprefix@$(TARGET)-binutils.spec
 
