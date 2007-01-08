@@ -17,7 +17,7 @@ EXTRA_DIST += config-ml.in
 EXTRA_DIST += ampolish3
 
 dist-hook:
-	@files=`(cd $(srcdir); find doc cpukit c scripts testsuites tools \
+	@files=`(cd $(srcdir); find doc cpukit c testsuites tools \
 	   -name configure.ac -print | sed 's,/configure.ac,,' | sort)`; \
 	for i in $$files; do \
 	  if test -f $(distdir)/$$i/configure.ac; then : ; \
@@ -28,8 +28,6 @@ dist-hook:
 	    cp -pR $(srcdir)/$$i $(distdir)/$$i; \
 	  fi; \
 	done
-	rm -f $(distdir)/scripts/setup.cache
-	rm -f $(distdir)/scripts/*/*.spec
 	rm -rf `find $(distdir) -name 'autom4te*'`
 	rm -rf `find $(distdir) -name CVS`
 	rm -f `find $(distdir) \( -name .cvsignore \
