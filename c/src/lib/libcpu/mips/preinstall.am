@@ -14,7 +14,7 @@ PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
@@ -28,7 +28,7 @@ $(PROJECT_INCLUDE)/libcpu/mongoose-v.h: mongoosev/include/mongoose-v.h $(PROJECT
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mongoose-v.h
 
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/libchip
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/libchip
 	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 

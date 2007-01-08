@@ -14,7 +14,7 @@ PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
@@ -32,7 +32,7 @@ $(PROJECT_INCLUDE)/syslog.h: syslog.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/syslog.h
 
 $(PROJECT_INCLUDE)/arpa/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/arpa
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/arpa
 	@: > $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 
@@ -53,7 +53,7 @@ $(PROJECT_INCLUDE)/arpa/nameser_compat.h: arpa/nameser_compat.h $(PROJECT_INCLUD
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/nameser_compat.h
 
 $(PROJECT_INCLUDE)/machine/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/machine
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/machine
 	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/machine/$(dirstamp)
 
@@ -82,7 +82,7 @@ $(PROJECT_INCLUDE)/machine/vmparam.h: machine/vmparam.h $(PROJECT_INCLUDE)/machi
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/vmparam.h
 
 $(PROJECT_INCLUDE)/net/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/net
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/net
 	@: > $(PROJECT_INCLUDE)/net/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/net/$(dirstamp)
 
@@ -163,7 +163,7 @@ $(PROJECT_INCLUDE)/net/if_media.h: net/if_media.h $(PROJECT_INCLUDE)/net/$(dirst
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_media.h
 
 $(PROJECT_INCLUDE)/netinet/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/netinet
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/netinet
 	@: > $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 
@@ -256,7 +256,7 @@ $(PROJECT_INCLUDE)/netinet/udp_var.h: netinet/udp_var.h $(PROJECT_INCLUDE)/netin
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/udp_var.h
 
 $(PROJECT_INCLUDE)/nfs/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/nfs
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/nfs
 	@: > $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 
@@ -281,7 +281,7 @@ $(PROJECT_INCLUDE)/nfs/xdr_subs.h: nfs/xdr_subs.h $(PROJECT_INCLUDE)/nfs/$(dirst
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/xdr_subs.h
 
 $(PROJECT_INCLUDE)/nfsclient/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/nfsclient
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/nfsclient
 	@: > $(PROJECT_INCLUDE)/nfsclient/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/nfsclient/$(dirstamp)
 
@@ -294,7 +294,7 @@ $(PROJECT_INCLUDE)/nfsclient/nfsdiskless.h: nfsclient/nfsdiskless.h $(PROJECT_IN
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfsclient/nfsdiskless.h
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
@@ -327,7 +327,7 @@ $(PROJECT_INCLUDE)/rtems/rtems_mii_ioctl.h: rtems/rtems_mii_ioctl.h $(PROJECT_IN
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_mii_ioctl.h
 
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
@@ -440,7 +440,7 @@ $(PROJECT_INCLUDE)/sys/un.h: sys/un.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/un.h
 
 $(PROJECT_INCLUDE)/vm/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/vm
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/vm
 	@: > $(PROJECT_INCLUDE)/vm/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/vm/$(dirstamp)
 
@@ -461,7 +461,7 @@ $(PROJECT_INCLUDE)/vm/vm_param.h: vm/vm_param.h $(PROJECT_INCLUDE)/vm/$(dirstamp
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/vm_param.h
 
 $(PROJECT_INCLUDE)/dev/mii/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/dev/mii
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/dev/mii
 	@: > $(PROJECT_INCLUDE)/dev/mii/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/dev/mii/$(dirstamp)
 

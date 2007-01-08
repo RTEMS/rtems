@@ -14,17 +14,17 @@ PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/rtems
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 
@@ -91,7 +91,7 @@ $(PROJECT_INCLUDE)/rtemsdialer.h: backward/rtemsdialer.h $(PROJECT_INCLUDE)/$(di
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtemsdialer.h
 endif
 $(PROJECT_INCLUDE)/motorola/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/motorola
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/motorola
 	@: > $(PROJECT_INCLUDE)/motorola/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/motorola/$(dirstamp)
 
@@ -104,7 +104,7 @@ $(PROJECT_INCLUDE)/motorola/mc68230.h: backward/motorola/mc68230.h $(PROJECT_INC
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68230.h
 
 $(PROJECT_INCLUDE)/zilog/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/zilog
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/zilog
 	@: > $(PROJECT_INCLUDE)/zilog/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/zilog/$(dirstamp)
 
@@ -133,7 +133,7 @@ endif
 endif
 if NEWLIB
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
@@ -179,7 +179,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
 
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/bsdnet
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/bsdnet
 	@: > $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
 

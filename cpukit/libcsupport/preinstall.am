@@ -14,7 +14,7 @@ PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
@@ -55,7 +55,7 @@ $(PROJECT_INCLUDE)/rtems/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/rtems/$
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vmeintr.h
 
 $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/motorola
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/motorola
 	@: > $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
 
@@ -96,7 +96,7 @@ $(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h $(PROJECT_INCLUDE)/rtems
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
 
 $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/zilog
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/zilog
 	@: > $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
 

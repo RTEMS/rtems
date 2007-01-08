@@ -15,7 +15,7 @@ CLEANFILES = $(PREINSTALL_FILES)
 
 if RTEMS_ADA
 $(PROJECT_INCLUDE)/adainclude/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/adainclude
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/adainclude
 	@: > $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
 

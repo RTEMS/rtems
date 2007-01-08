@@ -19,13 +19,13 @@ PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
 $(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
+	@$(MKDIR_P) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 if HAS_CXX
 $(PROJECT_INCLUDE)/rtems++/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems++
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems++
 	@: > $(PROJECT_INCLUDE)/rtems++/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems++/$(dirstamp)
 
