@@ -1,3 +1,7 @@
+2007-01-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Use preinstall.am.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
