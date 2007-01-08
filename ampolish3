@@ -270,7 +270,7 @@ sub replace($)
 sub print_dirstamp($$$)
 {
   my ($obuf,$file,$inst) = @_ ;
-  push @{$obuf}, "$file/\$(dirstamp):\n\t\@\$\(mkdir_p\) $file\n" ;
+  push @{$obuf}, "$file/\$(dirstamp):\n\t\@\$\(MKDIR_P\) $file\n" ;
   push @{$obuf}, "\t\@: \> $file/\$(dirstamp)\n" ;
   push @{$obuf}, "$inst += $file/\$(dirstamp)\n\n" ;
 }
