@@ -1,5 +1,9 @@
 2007-01-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* acinclude.m4: AC_PREREQ(2.60).
+
+2007-01-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* ampolish3: Use MKDIR_P instead of mkdir_p.
 
 2007-01-08	Ralf Corsépius <ralf.corsepius@rtems.org>
