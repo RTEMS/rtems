@@ -1,3 +1,0 @@
-%files
-%defattr(-,root,root,-)
-%{_prefix}

@@ -1,5 +1,0 @@
-*.spec
-Makefile
-Makefile.in
-rtems.spec.in
-mkspec
