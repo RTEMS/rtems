@@ -15,7 +15,7 @@ CLEANFILES += $(PREINSTALL_FILES)
 
 if shared
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 

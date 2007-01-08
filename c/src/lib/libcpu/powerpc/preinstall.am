@@ -14,12 +14,12 @@ PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/powerpc
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/powerpc
 	@: > $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
 
@@ -36,12 +36,12 @@ $(PROJECT_INCLUDE)/rtems/powerpc/powerpc.h: rtems/powerpc/powerpc.h $(PROJECT_IN
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/powerpc/powerpc.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
@@ -100,7 +100,7 @@ endif
 endif
 if mpc5xx
 $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc5xx
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc5xx
 	@: > $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp)
 
@@ -148,7 +148,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/c_clock.h
 endif
 if mpc8xx
 $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc8xx
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc8xx
 	@: > $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
 
@@ -174,7 +174,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx/mmu.h
 endif
 if mpc8260
 $(PROJECT_INCLUDE)/mpc8260/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc8260
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc8260
 	@: > $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
 

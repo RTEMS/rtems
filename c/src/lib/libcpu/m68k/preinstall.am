@@ -15,7 +15,7 @@ CLEANFILES = $(PREINSTALL_FILES)
 
 if shared
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
@@ -26,7 +26,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
 endif
 if mcf5206
 $(PROJECT_INCLUDE)/mcf5206/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5206
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf5206
 	@: > $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
 
@@ -44,7 +44,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
 endif
 if mcf5235
 $(PROJECT_INCLUDE)/mcf5235/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5235
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf5235
 	@: > $(PROJECT_INCLUDE)/mcf5235/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5235/$(dirstamp)
 
@@ -54,7 +54,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5235/mcf5235.h
 endif
 if mcf5272
 $(PROJECT_INCLUDE)/mcf5272/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5272
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf5272
 	@: > $(PROJECT_INCLUDE)/mcf5272/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5272/$(dirstamp)
 
@@ -64,7 +64,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5272/mcf5272.h
 endif
 if mcf5282
 $(PROJECT_INCLUDE)/mcf5282/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5282
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf5282
 	@: > $(PROJECT_INCLUDE)/mcf5282/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf5282/$(dirstamp)
 

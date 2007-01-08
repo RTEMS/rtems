@@ -14,13 +14,13 @@ PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if shared
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 

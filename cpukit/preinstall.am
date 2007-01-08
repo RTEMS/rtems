@@ -14,23 +14,23 @@ PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/rtems
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 
 if NEWLIB
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
@@ -76,7 +76,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
 
 if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/bsdnet
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/bsdnet
 	@: > $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp)
 

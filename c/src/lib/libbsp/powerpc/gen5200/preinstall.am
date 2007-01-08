@@ -19,12 +19,12 @@ PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
 $(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
+	@$(MKDIR_P) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
@@ -61,7 +61,7 @@ $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 

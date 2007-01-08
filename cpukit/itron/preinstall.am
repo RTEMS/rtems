@@ -15,7 +15,7 @@ CLEANFILES = $(PREINSTALL_FILES)
 
 if LIBITRON
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
@@ -24,7 +24,7 @@ $(PROJECT_INCLUDE)/rtems/itron.h: include/itron.h $(PROJECT_INCLUDE)/rtems/$(dir
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron.h
 
 $(PROJECT_INCLUDE)/itronsys/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/itronsys
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/itronsys
 	@: > $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
 
@@ -85,7 +85,7 @@ $(PROJECT_INCLUDE)/itronsys/vmempool.h: include/itronsys/vmempool.h $(PROJECT_IN
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/itronsys/vmempool.h
 
 $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/itron
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/itron
 	@: > $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 

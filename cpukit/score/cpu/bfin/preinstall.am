@@ -14,7 +14,7 @@ PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
@@ -23,7 +23,7 @@ $(PROJECT_INCLUDE)/rtems/asm.h: rtems/asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
 $(PROJECT_INCLUDE)/rtems/bfin/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/bfin
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/bfin
 	@: > $(PROJECT_INCLUDE)/rtems/bfin/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/bfin/$(dirstamp)
 
@@ -36,7 +36,7 @@ $(PROJECT_INCLUDE)/rtems/bfin/bf533.h: rtems/bfin/bf533.h $(PROJECT_INCLUDE)/rte
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bfin/bf533.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
