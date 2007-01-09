@@ -61,7 +61,6 @@
 char *strerror(int);
 #endif
 
-extern char *rtems_progname;
 int          rtems_panic_in_progress;
 
 rtems_assoc_t rtems_status_assoc[] = {
@@ -136,8 +135,6 @@ static int rtems_verror(
     if (_System_state_Is_multiprocessing)
         fprintf(stderr, "[%" PRIu32 "] ", _Configuration_MP_table->node);
 
-    if (rtems_progname && *rtems_progname)
-        chars_written += fprintf(stderr, "%s: ", rtems_progname);
     chars_written += vfprintf(stderr, printf_format, arglist);
 
     if (status)
