@@ -1,7 +1,6 @@
 #
 # Please send bugfixes or comments to
-# 	http://www.rtems.com/cgi-bin/gnatweb.pl
-# or	mailto:rtems-bugs@rtems.com
+# 	http://www.rtems.org/bugzilla
 #
 
 %if "%{_prefix}" != "/usr"
