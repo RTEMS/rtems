@@ -1,3 +1,8 @@
+2007-01-10      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libblock/src/show_bdbuf.c: 
+	added missing file
+
 2007-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/include/aio.h: s/aoi_lio_opcode/aio_lio_opcode/ 
