@@ -2,7 +2,7 @@
 %define srcvers	2.61
 
 %if "%{_prefix}" != "/usr"
-%define name			@rpmprefix@autoconf-rtems
+%define name			@rpmprefix@autoconf
 %else
 %define name			autoconf
 %endif
@@ -15,6 +15,11 @@ Group:		Development/Tools
 Version:	%{rpmvers}
 Release:	@AUTOCONF_RPMREL@%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
+
+%if "%{_prefix}" != "/usr"
+Obsoletes:	@rpmprefix@autoconf-rtems < %{version}-%{release}
+Provides:	@rpmprefix@autoconf-rtems = %{version}-%{release}
+%endif
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
