@@ -82,10 +82,8 @@
  *
  */
 
-#if defined(RTEMS_MULTIPROCESSING)
 #define _Objects_Is_local_node( _node ) \
   ( (_node) == _Objects_Local_node )
-#endif
 
 /*PAGE
  *
