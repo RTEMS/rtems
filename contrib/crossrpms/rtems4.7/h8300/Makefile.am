@@ -7,6 +7,7 @@ include $(top_srcdir)/mkspec.am
 BINUTILS_VERS = 2.17
 BINUTILS_RPMREL = 3
 include ../binutils.am
+BINUTILS_OPTS +=
 
 GCC_VERS = 4.1.1
 GCC_RPMREL = 6
