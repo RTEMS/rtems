@@ -31,6 +31,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 BINUTILS_VERS = 2.17
 BINUTILS_RPMREL = @VERSION@
 include ../binutils.am
+BINUTILS_OPTS +=
 
 GCC_VERS = 4.1.1
 GCC_RPMREL = @VERSION@
