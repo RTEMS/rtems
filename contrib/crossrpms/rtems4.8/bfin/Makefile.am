@@ -10,7 +10,7 @@ include ../binutils.am
 
 GCC_VERS = 4.2.0
 GCC_PKGVERS = 4.2-20070102
-GCC_RPMREL = 5
+GCC_RPMREL = 6
 NEWLIB_VERS = 1.15.0
 include ../gcc.am
 # ATM, we don't want infos from bleeding edge GCC
