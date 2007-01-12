@@ -11,7 +11,7 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.1.1
 GCC_RPMREL = 5
-NEWLIB_VERS = 1.14.0
+NEWLIB_VERS = 1.15.0
 include ../gcc.am
 GCC_OPTS += --languages=cxx
 
