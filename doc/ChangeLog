@@ -1,5 +1,7 @@
 2007-01-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Reflect having moved setup.def.
+	Eliminate gcc3*.	
 	* setup.def: New (Formerly in ../scripts).
 
 2006-12-20	Joel Sherrill <joel@OARcorp.com>
