@@ -57,13 +57,13 @@ of a C/C++ toolset targeting the SPARC architecture.
 
 @example
 rpm -U @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 rpm -U @value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-gcc-c++-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gcc-c++-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 rpm -U @value{RTEMSRPMPREFIX}gdb-common-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 @end example
 
 Upon successful completion of the above command sequence, a 
@@ -90,13 +90,13 @@ The following is a sample session illustrating the removal
 of a C/C++ toolset targeting the SPARC architecture.
 
 @example
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gdb
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gdb
 rpm -e @value{RTEMSRPMPREFIX}gdb-common
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gcc-c++
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gcc
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-newlib
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gcc-c++
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gcc
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-newlib
 rpm -e @value{RTEMSRPMPREFIX}gcc-common
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-binutils
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-binutils
 rpm -e @value{RTEMSRPMPREFIX}binutils-common
 @end example
 
@@ -118,12 +118,12 @@ files compressed with GNU Zip (gzip):
 @example
 cd /
 tar xzf @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.gz
-tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.gz
 tar xzf @value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.gz
-tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.gz
-tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.gz
 tar xzf @value{RTEMSRPMPREFIX}gdb-common-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.gz
-tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.gz
 @end example
 
 The following command set is the equivalent command sequence
@@ -133,12 +133,12 @@ GNU BZip (bzip2):
 @example
 cd /
 tar xjf @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.bz2
-tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.bz2
 tar xjf @value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.bz2
-tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.bz2
-tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.bz2
 tar xjf @value{RTEMSRPMPREFIX}gdb-common-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.bz2
-tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}sparc-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.bz2
 @end example
 
 Upon successful completion of the above command sequence, a
