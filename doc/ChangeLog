@@ -1,5 +1,7 @@
 2007-01-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* started/binaries.t, started/buildc.t, started/tversions.texi.in:
+	Various update to reflect current toolchains.
 	* configure.ac: Reflect having moved setup.def.
 	Eliminate gcc3*.	
 	* setup.def: New (Formerly in ../scripts).

@@ -349,8 +349,8 @@ starts by installing the source RPMs as shown in the following
 example:
 
 @example 
-rpm -i @value{RTEMSRPMPREFIX}i386-rtems-binutils-collection-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.nosrc.rpm
-rpm -i @value{RTEMSRPMPREFIX}i386-rtems-gcc-newlib-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.nosrc.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.nosrc.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.nosrc.rpm
 @end example
 
 The RTEMS tool source RPMS are called "nosrc" to indicate that one or
@@ -368,9 +368,9 @@ following:
 
 @example
 @c Don't use @value{GCC*} below. This is an example
-$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems-gcc-newlib-gcc3.2.3newlib1.11.0-1.nosrc.rpm
+$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems-gcc-3.2.3-1.nosrc.rpm
 gcc-3.2.3-rtems-20030507a.diff
-i386-rtems-gcc-3.2.3-newlib-1.11.0.spec
+@value{RTEMSRPMPREFIX}-i386-rtems4.7-gcc.spec
 newlib-1.11.0-rtems-20030507.diff
 @end example
 
@@ -403,7 +403,7 @@ be generated in a build-host architecture specific subdirectory
 of the RPMS directory under the RPM root directory.
 
 @example
-@value{RTEMSRPMPREFIX}rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 @value{RTEMSRPMPREFIX}i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 @end example
 
@@ -424,8 +424,8 @@ the required source is installed.
 
 @example
 cd <RPM_ROOT_DIRECTORY>/RPMS/i386
-rpm -i @value{RTEMSRPMPREFIX}rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -i @value{RTEMSRPMPREFIX}i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 export PATH=@value{RTEMSPREFIX}/bin:$PATH
 cd <RPM_ROOT_DIRECTORY>/SPECS
 rpm -bb i386-rtems-gcc-@value{GCCVERSION}-newlib-@value{NEWLIBVERSION}.spec
@@ -436,13 +436,10 @@ be generated in a build-host architecture specific subdirectory
 of the RPMS directory under the RPM root directory.
 
 @example
-@value{RTEMSRPMPREFIX}rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}rtems-base-g77-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}rtems-base-gcj-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-g77-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-gcj-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-objc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}i386-rtems-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}i386-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}i386-rtems-gcc-c++-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @end example
 
 NOTE: Some targets do not support building all languages.
@@ -761,7 +758,7 @@ starts by installing the source RPMs as shown in the following
 example:
 
 @example
-rpm -i @value{RTEMSRPMPREFIX}i386-rtems-gdb-collection-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
 @end example
 
 Because RTEMS tool RPMS are called "nosrc" to indicate that one or
@@ -777,7 +774,7 @@ included or referenced by a particular RPM, use a command like the
 following:
 
 @example
-$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems-gdb-collection-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
+$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
 gdb-@value{GDBVERSION}-rtems-@value{GDBPATCHVERSION}.diff
 gdb-@value{GDBVERSION}.tar.gz
 i386-rtems-gdb-@value{GDBVERSION}.spec
