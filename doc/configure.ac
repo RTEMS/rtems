@@ -154,7 +154,7 @@ AS_IF([test -z "$newlib_patch_version"],
 [set_newlib_patch="@set NEWLIBPATCHVERSION $newlib_patch_version"])
 
 AS_IF([test -z "$gcc_patch_version"],
-[set_gcc3_patch="@clear GCCPATCHVERSION"],
+[set_gcc_patch="@clear GCCPATCHVERSION"],
 [set_gcc_patch="@set GCCPATCHVERSION $gcc_patch_version"])
 
 AS_IF([test -z "$gdb_patch_version"],
@@ -193,7 +193,7 @@ s/@SETBINUTILSPATCHVERSION@/$set_binutils_patch/;t t
 s/@SETGCCPATCHVERSION@/$set_gcc_patch/;t t
 s/@SETNEWLIBPATCHVERSION@/$set_newlib_patch/;t t
 s/@SETGDBPATCHVERSION@/$set_gdb_patch/;t t
-s/@GCCRPMRELEASE@/$gcc3newlib_rpm_release/;t t
+s/@GCCRPMRELEASE@/$gccnewlib_rpm_release/;t t
 s/@BINUTILSRPMRELEASE@/$binutils_rpm_release/;t t
 s/@GDBRPMRELEASE@/$gdb_rpm_release/;t t
 EOF
