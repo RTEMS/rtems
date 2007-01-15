@@ -349,8 +349,8 @@ starts by installing the source RPMs as shown in the following
 example:
 
 @example 
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.nosrc.rpm
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.nosrc.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.src.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.src.rpm
 @end example
 
 The RTEMS tool source RPMS are called "nosrc" to indicate that one or
@@ -368,7 +368,7 @@ following:
 
 @example
 @c Don't use @value{GCC*} below. This is an example
-$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-3.2.3-1.nosrc.rpm
+$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-3.2.3-1.src.rpm
 gcc-3.2.3-rtems@value{RTEMSAPI}-20030507a.diff
 @value{RTEMSRPMPREFIX}i386-rtems4.7-gcc.spec
 newlib-1.11.0-rtems@value{RTEMSAPI}-20030507.diff
@@ -378,7 +378,7 @@ Notice that there are patch files (the @code{.diff} files) and a file
 describing the build procedure and files produced (the @code{.spec} file),
 but no source archives (the @code{*tar.*} files).
 When installing this source RPM 
-(@code{rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-newlib-gcc3.2.3newlib1.11.0-1.nosrc.rpm}),
+(@code{rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-newlib-gcc3.2.3newlib1.11.0-1.src.rpm}),
 the @code{.spec} file is placed in the @code{SPECS} directory under the RPM root
 directory, while the @code{*.diff} files are placed into the @code{SOURCES}
 directory.
@@ -758,7 +758,7 @@ starts by installing the source RPMs as shown in the following
 example:
 
 @example
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.src.rpm
 @end example
 
 Because RTEMS tool RPMS are called "nosrc" to indicate that one or
@@ -774,7 +774,7 @@ included or referenced by a particular RPM, use a command like the
 following:
 
 @example
-$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
+$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.src.rpm
 gdb-@value{GDBVERSION}-rtems@value{RTEMSAPI}-@value{GDBPATCHVERSION}.diff
 gdb-@value{GDBVERSION}.tar.gz
 i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}.spec
