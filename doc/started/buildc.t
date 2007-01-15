@@ -349,8 +349,8 @@ starts by installing the source RPMs as shown in the following
 example:
 
 @example 
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.nosrc.rpm
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.nosrc.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.nosrc.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.nosrc.rpm
 @end example
 
 The RTEMS tool source RPMS are called "nosrc" to indicate that one or
@@ -368,17 +368,17 @@ following:
 
 @example
 @c Don't use @value{GCC*} below. This is an example
-$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems-gcc-3.2.3-1.nosrc.rpm
-gcc-3.2.3-rtems-20030507a.diff
-@value{RTEMSRPMPREFIX}-i386-rtems4.7-gcc.spec
-newlib-1.11.0-rtems-20030507.diff
+$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-3.2.3-1.nosrc.rpm
+gcc-3.2.3-rtems@value{RTEMSAPI}-20030507a.diff
+@value{RTEMSRPMPREFIX}i386-rtems4.7-gcc.spec
+newlib-1.11.0-rtems@value{RTEMSAPI}-20030507.diff
 @end example
 
 Notice that there are patch files (the @code{.diff} files) and a file 
 describing the build procedure and files produced (the @code{.spec} file),
 but no source archives (the @code{*tar.*} files).
 When installing this source RPM 
-(@code{rpm -U @value{RTEMSRPMPREFIX}i386-rtems-gcc-newlib-gcc3.2.3newlib1.11.0-1.nosrc.rpm}),
+(@code{rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-newlib-gcc3.2.3newlib1.11.0-1.nosrc.rpm}),
 the @code{.spec} file is placed in the @code{SPECS} directory under the RPM root
 directory, while the @code{*.diff} files are placed into the @code{SOURCES}
 directory.
@@ -395,7 +395,7 @@ RPM.  This example assumes that all of the required source is installed.
 
 @example
 cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems-binutils-@value{BINUTILSVERSION}.spec
+rpm -bb i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}.spec
 @end example
 
 If the build completes successfully, RPMS like the following will
@@ -404,7 +404,7 @@ of the RPMS directory under the RPM root directory.
 
 @example
 @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 @end example
 
 NOTE: It may be necessary to remove the build tree in the
@@ -425,10 +425,10 @@ the required source is installed.
 @example
 cd <RPM_ROOT_DIRECTORY>/RPMS/i386
 rpm -U @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 export PATH=@value{RTEMSPREFIX}/bin:$PATH
 cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems-gcc-@value{GCCVERSION}-newlib-@value{NEWLIBVERSION}.spec
+rpm -bb i386-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-newlib-@value{NEWLIBVERSION}.spec
 @end example
 
 If the build completes successfully, a set of RPMS like the following will
@@ -437,9 +437,9 @@ of the RPMS directory under the RPM root directory.
 
 @example
 @value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-gcc-c++-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gcc-c++-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @end example
 
 NOTE: Some targets do not support building all languages.
@@ -507,7 +507,7 @@ Failure to have the binutils in the path will cause the GCC and NEWLIB
 build to fail with an error message similar to:
 
 @example
-sparc-rtems-ar: command not found
+sparc-rtems@value{RTEMSAPI}-ar: command not found
 @end example
 
 @c
@@ -758,7 +758,7 @@ starts by installing the source RPMs as shown in the following
 example:
 
 @example
-rpm -U @value{RTEMSRPMPREFIX}i386-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
+rpm -U @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
 @end example
 
 Because RTEMS tool RPMS are called "nosrc" to indicate that one or
@@ -774,10 +774,10 @@ included or referenced by a particular RPM, use a command like the
 following:
 
 @example
-$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
-gdb-@value{GDBVERSION}-rtems-@value{GDBPATCHVERSION}.diff
+$ rpm -q -l -p @value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
+gdb-@value{GDBVERSION}-rtems@value{RTEMSAPI}-@value{GDBPATCHVERSION}.diff
 gdb-@value{GDBVERSION}.tar.gz
-i386-rtems-gdb-@value{GDBVERSION}.spec
+i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}.spec
 @end example
 
 Notice that there is a patch file (the @code{.diff} file), a source archive
@@ -797,7 +797,7 @@ RPM.  This example assumes that all of the required source is installed.
 
 @example
 cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems-gdb-@value{GDBVERSION}.spec
+rpm -bb i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}.spec
 @end example
 
 If the build completes successfully, RPMS like the following will
@@ -805,8 +805,8 @@ be generated in a build-host architecture specific subdirectory
 of the RPMS directory under the RPM root directory.
 
 @example
-@value{RTEMSRPMPREFIX}rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}gdb-common-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+@value{RTEMSRPMPREFIX}i386-rtems@value{RTEMSAPI}-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 @end example
 
 NOTE: It may be necessary to remove the build tree in the
