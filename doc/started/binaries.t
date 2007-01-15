@@ -56,13 +56,14 @@ The following is a sample session illustrating the installation
 of a C/C++ toolset targeting the SPARC architecture.  
 
 @example
-rpm -i @value{RTEMSRPMPREFIX}rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -i @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -i @value{RTEMSRPMPREFIX}rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -i @value{RTEMSRPMPREFIX}sparc-rtems-c++-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -i @value{RTEMSRPMPREFIX}sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -i @value{RTEMSRPMPREFIX}rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-rpm -i @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-gcc-c++-@value{GCCVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}gdb-common-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -U @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 @end example
 
 Upon successful completion of the above command sequence, a 
@@ -89,13 +90,14 @@ The following is a sample session illustrating the removal
 of a C/C++ toolset targeting the SPARC architecture.
 
 @example
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-rpm -e @value{RTEMSRPMPREFIX}rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-c++-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -e @value{RTEMSRPMPREFIX}rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-rpm -e @value{RTEMSRPMPREFIX}rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gdb
+rpm -e @value{RTEMSRPMPREFIX}gdb-common
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gcc-c++
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-gcc
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-newlib
+rpm -e @value{RTEMSRPMPREFIX}gcc-common
+rpm -e @value{RTEMSRPMPREFIX}sparc-rtems-binutils
+rpm -e @value{RTEMSRPMPREFIX}binutils-common
 @end example
 
 NOTE:  If you have installed any RTEMS BSPs, then it is likely that
@@ -115,11 +117,12 @@ files compressed with GNU Zip (gzip):
 
 @example
 cd /
-tar xzf @value{RTEMSRPMPREFIX}rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.gz
 tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.gz
-tar xzf @value{RTEMSRPMPREFIX}rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.gz
-tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.gz
-tar xzf @value{RTEMSRPMPREFIX}rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.gz
+tar xzf @value{RTEMSRPMPREFIX}gdb-common-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.gz
 tar xzf @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.gz
 @end example
 
@@ -129,11 +132,12 @@ GNU BZip (bzip2):
 
 @example
 cd /
-tar xjf @value{RTEMSRPMPREFIX}rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}binutils-common-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.bz2
 tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tar.bz2
-tar xjf @value{RTEMSRPMPREFIX}rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.bz2
-tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.bz2
-tar xjf @value{RTEMSRPMPREFIX}rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}gcc-common-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-newlib-@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-gcc-@value{GCCVERSION}-@value{GCCRPMRELEASE}.tar.bz2
+tar xjf @value{RTEMSRPMPREFIX}gdb-common-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.bz2
 tar xjf @value{RTEMSRPMPREFIX}sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tar.bz2
 @end example
 
