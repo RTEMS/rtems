@@ -103,8 +103,8 @@ of each component as well as any required RTEMS specific patches.
     File:        @value{GCCRTEMSPATCH}
 @end ifset
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES,Download RTEMS Patches and Scripts}
-    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES
+    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES,,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES}
+@c    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES
 @end ifset
 @end example
 
@@ -474,12 +474,12 @@ newlib manually using @code{configure} and @code{make} directly.
 The following example illustrates the invocation of
 @code{configure} and @code{make}
 to build and install @value{BINUTILSUNTAR} for the
-sparc-rtems target:
+sparc-rtems@value{RTEMSAPI} target:
 
 @example
 mkdir b-binutils
 cd b-binutils
-../@value{BINUTILSUNTAR}/configure --target=sparc-rtems \
+../@value{BINUTILSUNTAR}/configure --target=sparc-rtems@value{RTEMSAPI} \
   --prefix=@value{RTEMSPREFIX}
 make all
 make info
@@ -534,12 +534,12 @@ ln -s ../@value{NEWLIBUNTAR}/newlib .
 The following example illustrates the invocation of
 @code{configure} and @code{make}
 to build and install @value{GCCUNTAR} with only
-C and C++ support for the sparc-rtems target:
+C and C++ support for the sparc-rtems@value{RTEMSAPI} target:
 
 @example
 mkdir b-gcc
 cd b-gcc
-../@value{GCCUNTAR}/configure --target=sparc-rtems \
+../@value{GCCUNTAR}/configure --target=sparc-rtems@value{RTEMSAPI} \
    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
    --enable-threads --enable-languages="c,c++" \
    --prefix=@value{RTEMSPREFIX}
@@ -575,14 +575,14 @@ be included in the set of enabled languages.
 The following example illustrates the invocation of
 @code{configure} and @code{make}
 to build and install @value{GCCUNTAR} with only
-C, C++, and Ada support for the sparc-rtems target:
+C, C++, and Ada support for the sparc-rtems@value{RTEMSAPI} target:
 
 @example
 mkdir b-gcc
 cd @value{GCCUNTAR}/gcc/ada
 touch treeprs.ads [es]info.h nmake.ad[bs]
 cd ../../../b-gcc
-../@value{GCCUNTAR}/configure --target=sparc-rtems \
+../@value{GCCUNTAR}/configure --target=sparc-rtems@value{RTEMSAPI} \
    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
    --enable-threads --enable-languages="c,c++,ada" \
    --prefix=@value{RTEMSPREFIX}
@@ -822,12 +822,12 @@ This section describes how to configure the GNU debugger for
 RTEMS targets using @code{configure} and @code{make} directly.
 The following example illustrates the invocation of @code{configure}
 and @code{make} to build and install @value{GDBUNTAR} for the
-m68k-rtems target:
+m68k-rtems@value{RTEMSAPI} target:
 
 @example
 mkdir b-gdb
 cd b-gdb
-../@value{GDBUNTAR}/configure --target=m68k-rtems \
+../@value{GDBUNTAR}/configure --target=m68k-rtems@value{RTEMSAPI} \
   --prefix=@value{RTEMSPREFIX}
 make all
 make info
@@ -840,10 +840,10 @@ such as a processor simulator.  The following is a list of
 configurations for which there are extra options:
 
 @table @b
-@item powerpc-rtems
+@item powerpc-rtems@value{RTEMSAPI}
 @code{--enable-sim --enable-sim-powerpc --enable-sim-timebase --enable-sim-hardware}
 
-@item sparc-rtems
+@item sparc-rtems@value{RTEMSAPI}
 @code{--enable-sim}
 
 @end table
