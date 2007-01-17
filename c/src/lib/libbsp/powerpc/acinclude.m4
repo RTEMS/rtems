@@ -2,8 +2,6 @@
 AC_DEFUN([RTEMS_CHECK_BSPDIR],
 [
   case "$1" in
-  beatnik )
-    AC_CONFIG_SUBDIRS([beatnik]);;
   ep1a )
     AC_CONFIG_SUBDIRS([ep1a]);;
   gen405 )
