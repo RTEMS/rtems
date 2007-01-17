@@ -2,10 +2,52 @@
 #ifndef VME_UNIVERSE_UTIL_H
 #define VME_UNIVERSE_UTIL_H
 
-/* Routines to configure and use the Tundra Universe VME bridge
- * Author: Till Straumann <strauman@slac.stanford.edu>
- *         Nov 2000, July 2001
- */
+/* Driver for the Tundra Universe II pci-vme bridge */
+
+/* 
+ * Authorship
+ * ----------
+ * This software was created by
+ *     Till Straumann <strauman@slac.stanford.edu>, 2000-2007,
+ * 	   Stanford Linear Accelerator Center, Stanford University.
+ * 
+ * Acknowledgement of sponsorship
+ * ------------------------------
+ * This software was produced by
+ *     the Stanford Linear Accelerator Center, Stanford University,
+ * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
+ * 
+ * Government disclaimer of liability
+ * ----------------------------------
+ * Neither the United States nor the United States Department of Energy,
+ * nor any of their employees, makes any warranty, express or implied, or
+ * assumes any legal liability or responsibility for the accuracy,
+ * completeness, or usefulness of any data, apparatus, product, or process
+ * disclosed, or represents that its use would not infringe privately owned
+ * rights.
+ * 
+ * Stanford disclaimer of liability
+ * --------------------------------
+ * Stanford University makes no representations or warranties, express or
+ * implied, nor assumes any liability for the use of this software.
+ * 
+ * Stanford disclaimer of copyright
+ * --------------------------------
+ * Stanford University, owner of the copyright, hereby disclaims its
+ * copyright and all other rights in this software.  Hence, anyone may
+ * freely use it for any purpose without restriction.  
+ * 
+ * Maintenance of notices
+ * ----------------------
+ * In the interest of clarity regarding the origin and status of this
+ * SLAC software, this and all the preceding Stanford University notices
+ * are to remain affixed to any copy or derivative of this software made
+ * or distributed by the recipient and are to be affixed to any copy of
+ * software made or distributed by the recipient that contains a copy or
+ * derivative of this software.
+ * 
+ * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
+ */ 
 
 /* Register definitions */
 /* NOTE: all registers contents in PCI space are LITTLE ENDIAN */
