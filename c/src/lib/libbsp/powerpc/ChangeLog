@@ -1,3 +1,14 @@
+2007-01-16	Till Straumann <strauman@slac.stanford.edu>
+
+	* ep1a/vme/vmeconfig.c, mvme5500/pci/pcifinddevice.c,
+	* mvme5500/startup/pgtbl_activate.c, mvme5500/vectors/bspException.h,
+	* mvme5500/vectors/exceptionhandler.c, mvme5500/vme/VME.h,
+	* mvme5500/vme/vmeconfig.c, score603e/vme/vmeconfig.c, shared/pci/pcifinddevice.c,
+	* shared/startup/pgtbl_activate.c, shared/startup/pgtbl_setup.c,
+	* shared/startup/probeMemEnd.c, shared/startup/sbrk.c, shared/vme/VME.h,
+	* shared/vme/VMEConfig.h, shared/vme/vme_universe.c, shared/vme/vmeconfig.c:
+	Added SLAC/Stanford Authorship Note / Copyright + Liability Disclaimer.
+
 2006-12-13	Till Straumann <strauman@slac.stanford.edu>
 
 	* mvme5500/Makefile.am, mvme5500/preinstall.am:
