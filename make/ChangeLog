@@ -1,5 +1,7 @@
 2007-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/gba.cfg, custom/mbx8xx.cfg, custom/ss555.cfg: Remove
+	CXXFLAGS_OPTIMIZE_V.
 	* custom/gensh2.cfg, custom/gensh4.cfg, custom/shsim.cfg,
 	custom/simsh4.cfg, custom/simsh7032.cfg, custom/simsh7045.cfg,
 	custom/h8sim.cfg: CFLAGS_OPTIMIZE_V = -O2.
