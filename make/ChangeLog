@@ -1,5 +1,6 @@
 2007-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/h8sim.cfg: CFLAGS_OPTIMIZE_V = -O2.
 	* custom/score603e.cfg: CFLAGS_OPTIMIZE_V = -O2.
 	Remove DRIVER_ARCHITECTURE.
 	* custom/csb336.cfg, custom/edb7312.cfg, custom/gba.cfg:
