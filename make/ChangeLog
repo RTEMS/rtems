@@ -1,5 +1,18 @@
 2007-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/av5282.cfg, custom/bare.cfg, custom/dmv152.cfg,
+	custom/gen405.cfg, custom/gen5200.cfg, custom/gen68302.cfg,
+	custom/gen68340.cfg, custom/gen68360.cfg, custom/helas403.cfg,
+	custom/hurricane.cfg, custom/i386ex.cfg, custom/idp.cfg,
+	custom/mbx8xx.cfg, custom/mcf5206elite.cfg, custom/mcf5235.cfg,
+	custom/mcp750.cfg, custom/mpc8260ads.cfg, custom/mrm332.cfg,
+	custom/mtx603e.cfg, custom/mvme136.cfg, custom/mvme147.cfg,
+	custom/mvme162.cfg, custom/mvme162lx.cfg, custom/mvme167.cfg,
+	custom/mvme2100.cfg, custom/mvme2307.cfg, custom/mvme5500.cfg,
+	custom/ods68302.cfg, custom/pc386.cfg, custom/psim.cfg,
+	custom/rbtx4925.cfg, custom/sim68000.cfg, custom/simcpu32.cfg,
+	custom/ss555.cfg, custom/ts_386ex.cfg, custom/uC5282.cfg:
+	CFLAGS_OPTIMIZE_V = -O2.
 	* custom/gba.cfg, custom/mbx8xx.cfg, custom/ss555.cfg: Remove
 	CXXFLAGS_OPTIMIZE_V.
 	* custom/gensh2.cfg, custom/gensh4.cfg, custom/shsim.cfg,
