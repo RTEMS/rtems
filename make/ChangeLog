@@ -1,5 +1,8 @@
 2007-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/gensh1.cfg, custom/gensh2.cfg, custom/gensh4.cfg,
+	custom/hurricane.cfg, custom/rbtx4925.cfg, custom/simsh4.cfg:
+	Use $(NM) -g -n instead of $(NM) -n.
 	* custom/Cygwin-posix.cfg, custom/FreeBSD-posix.cfg,
 	custom/HPUX9-posix.cfg, custom/Linux-posix.cfg,
 	custom/Solaris-posix.cfg: Use $(NM) -g -n instead of $(NM) -ng.
