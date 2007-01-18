@@ -1,3 +1,10 @@
+2007-01-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* custom/eZKit533.cfg: CFLAGS_OPTIMIZE = -O0.
+	* custom/gensh1.cfg, custom/ep1a.cfg, custom/erc32.cfg, 
+	custom/erc32nfp.cfg, custom/c3xsim.cfg, custom/c4xsim.cfg, 
+	custom/armulator.cfg, custom/gp32.cfg: CFLAGS_OPTIMIZE_V = -O2.
+
 2006-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* custom/Cygwin-posix.cfg, custom/FreeBSD-posix.cfg,
