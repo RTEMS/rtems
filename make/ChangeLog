@@ -1,5 +1,11 @@
 2007-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/Cygwin-posix.cfg, custom/FreeBSD-posix.cfg,
+	custom/HPUX9-posix.cfg, custom/Linux-posix.cfg,
+	custom/Solaris-posix.cfg: Use $(NM) -g -n instead of $(NM) -ng.
+
+2007-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* custom/score603e.cfg: CFLAGS_OPTIMIZE_V = -O2. Remove
 	DRIVER_ARCHITECTURE.
 	* custom/av5282.cfg, custom/bare.cfg, custom/dmv152.cfg,
