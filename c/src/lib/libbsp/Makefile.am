@@ -19,6 +19,7 @@ EXTRA_DIST += shared/vmeUniverse/vmeUniverse.c \
     shared/vmeUniverse/vmeTsi148.c	\
     shared/vmeUniverse/vmeTsi148.h	\
     shared/vmeUniverse/vme_am_defs.h \
+	shared/vmeUniverse/VME.h \
     shared/vmeUniverse/README.porting \
     shared/vmeUniverse/README.universe
 
