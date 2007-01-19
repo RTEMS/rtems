@@ -1,4 +1,11 @@
 2007-01-19	Till Straumann <strauman@slac.stanford.edu>
+	* mvme5500/Makefile.am, mvme5500/preinstall.am,
+	* mvme5500/vme/VME.h, mvme5500/vme/VMEConfig.h,
+	* mvme5500/vme/vmeconfig.c:
+	removed copies of vmeconfig.c, VME.h - use generic
+	versions instead.
+
+2007-01-19	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, ep1a/Makefile.am, ep1a/preinstall.am,
 	* motorola_powerpc/Makefile.am, motorola_powerpc/preinstall.am,

@@ -114,7 +114,7 @@ $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h: network/GT64260ethreg.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h
 endif
-$(PROJECT_INCLUDE)/bsp/VME.h: vme/VME.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/VME.h: ../../shared/vmeUniverse/VME.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VME.h
 
