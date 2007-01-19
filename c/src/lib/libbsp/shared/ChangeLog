@@ -1,6 +1,6 @@
 2007-01-19	Till Straumann <strauman@slac.stanford.edu>
 
-	* Makefile.am:
+	* Makefile.am, vmeUniverse/VME.h:
 	moved VME.h from libbsp/powerpc/shared/vme to
 	libbsp/shared/vmeUniverse; eventually, this (and other)
 	VME API headers should migrate to cpukit.
