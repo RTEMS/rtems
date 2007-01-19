@@ -106,11 +106,12 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 ##
-include_bsp_HEADERS += vme/VME.h vme/VMEConfig.h
+include_bsp_HEADERS += ../../shared/vmeUniverse/VME.h vme/VMEConfig.h
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h
 
 noinst_PROGRAMS += vme.rel
-vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c vme/vmeconfig.c
+vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c
+vme_rel_SOURCES+= ../shared/vme/vmeconfig.c ../shared/vme/vme_universe.c
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

@@ -14,6 +14,9 @@
 #define _VME_A24_ON_PCI			0x9f000000
 #define _VME_A16_ON_PCI			0x9fff0000
 
+/* Reuse BAT 0 for VME */
+#define BSP_VME_BAT_IDX			0
+
 /* start of the A32 window on the VME bus
  * TODO: this should perhaps be a configuration option
  */
@@ -24,5 +27,10 @@
  * at _VME_DRAM_OFFSET
  */
 #define _VME_DRAM_OFFSET		0x90000000
+
+#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR			\
+	do {											\
+		vmeUniverseInstallIrqMgr(0,64+12,1,64+13);	\
+	} while (0)
 
 #endif
