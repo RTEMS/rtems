@@ -91,8 +91,9 @@ vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
-    ../../powerpc/shared/vme/VMEConfig.h ../../powerpc/shared/vme/VME.h \
-    ../../shared/vmeUniverse/vme_am_defs.h
+    ../../powerpc/shared/vme/VMEConfig.h \
+    ../../shared/vmeUniverse/vme_am_defs.h \
+    ../../shared/vmeUniverse/VME.h
 
 noinst_PROGRAMS += vme.rel
 vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c vme/vmeconfig.c \
