@@ -1,3 +1,7 @@
+2006-12-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* init.c: added stdout flushs after prompts
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

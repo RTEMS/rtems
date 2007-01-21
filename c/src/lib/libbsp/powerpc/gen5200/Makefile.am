@@ -84,7 +84,7 @@ irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += mscan.rel
-mscan_rel_SOURCES = mscan/mscan.c mscan/mscan.h
+mscan_rel_SOURCES = mscan/mscan.c mscan/mscan.h mscan/mscan_int.h
 mscan_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mscan_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
