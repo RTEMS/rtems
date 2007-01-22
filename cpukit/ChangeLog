@@ -1,15 +1,14 @@
 2007-01-20      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* libblock/src/bdbuf.c: 
-	* libblock/include/bdbuf.h: 
+	* libblock/src/bdbuf.c, libblock/include/bdbuf.h: 
 	export some internal variables to make them available in
 	"show_bdbuf" monitor add-on
 
 2007-01-16	Till Straumann <strauman@slac.stanford.edu>
 	* libnetworking/rtems/rtems_mii_ioctl.c,
-	* libnetworking/rtems/rtems_mii_ioctl.h,
-	* libnetworking/rtems/rtems_mii_ioctl_kern.c,
-	* libi2c/libi2c.c, libi2c/libi2c.h:
+	libnetworking/rtems/rtems_mii_ioctl.h,
+	libnetworking/rtems/rtems_mii_ioctl_kern.c,
+	libi2c/libi2c.c, libi2c/libi2c.h:
 	Added SLAC/Stanford Authorship Note / Copyright + Liability Disclaimer.
 
 2007-01-09	Joel Sherrill <joel@OARcorp.com>
