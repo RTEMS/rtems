@@ -1,3 +1,8 @@
+2007-01-21  Eric Norum <norume@aps.anl.gov>
+
+	* network/network.c: Add capability to lock at 10-half.
+                         Expand report to include auto/fixed status.
+
 2006-12-18	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: Changed BSP_installVME_isr() so that

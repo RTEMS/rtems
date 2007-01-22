@@ -85,7 +85,9 @@ port into RAM then executed or programmed into flash memory.
    This forces the network link to half-duplex.  If your network link is
    locked at full duplex you'll have to find another port!
    The RTEMS network driver can be forced to 100 Mbs/full-duplex by setting
-   the bootstrap environment variable IPADDR0_100FULL to Y.
+   the bootstrap environment variable IPADDR0_100FULL to Y.  The driver can
+   be forced to 10 Mbs/half-duplex by setting the bootstrap environment
+   variable IPADDR0_10HALF to Y.
 
 4) Run 'tftp' on your host machine:
         tftp> binary
