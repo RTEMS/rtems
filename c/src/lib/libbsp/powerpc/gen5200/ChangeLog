@@ -1,3 +1,8 @@
+2007-01-23      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* console/console.c: corrected typo in UART error handler (usage
+	* of ISR_PE instead of ISR_OE)
+	
 2006-12-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bestcomm/load_task.c: Remove bogus casts.
