@@ -1,3 +1,8 @@
+2007-01-24      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* console/console.c:
+	fixed typo in error processing (ISR_PE should be ISR_OE)
+	
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

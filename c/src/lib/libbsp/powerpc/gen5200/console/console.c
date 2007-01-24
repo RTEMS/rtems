@@ -391,7 +391,7 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
 	if(isr & ISR_PE)
 	  channel_info[minor].parity_errors++;
 
-	if(isr & ISR_PE)
+	if(isr & ISR_OE)
 	  channel_info[minor].overrun_errors++;
 
 	/*
