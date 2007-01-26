@@ -3,6 +3,9 @@
 #
 
 # WARNING:
+
+# THIS IS EXPERIMENTAL - DO NOT USE (YET) !
+
 # * This Makefile is only useful to RTEMS maintainers
 # * You must have write access to RTEMS CVS
 # * Running this Makefile modifies RTEMS CVS
@@ -16,10 +19,13 @@
 #    you want to cut a release tarball from
 # 2. Run "make -f Makefile.maint new-minor"
 #    (rsp. "make -f Makefile.maint new-major").
-# 3. Run "make -f Makefile.maint tag"
-# 4. Run "make -f Makefine.maint tarball"
+# 3. Run "make -f Makefile.maint commit"
+# 4. Run "make -f Makefile.maint tag"
+# 5. Run "make -f Makefine.maint tarball"
 
 # -----------------
+# SECURITY: Append a string to tag to avoid accidentially screwing up cvs-tags
+# For "hot runs" you will want to use "make -f Makefile.maint TEST_TAG= <command>"
 TEST_TAG = -test1
 
 rtems_version := $(shell cat aclocal/version.m4 | sed -n '/_RTEMS_VERSION/{s/^.*VERSION.*\[\(.*\)\].*/\1/p};')
@@ -108,4 +114,8 @@ VERSION_FILES += cpukit/aclocal/version.m4
 VERSION_FILES += c/src/aclocal/version.m4
 VERSION_FILES += testsuites/aclocal/version.m4
 
-.PHONY: new-major new-minor tag
+commit:
+	cvs -n commit -m "Upgrade to $(rtems_version)" $(VERSION_FILES) \
+	  cpukit/score/include/rtems/system.h
+
+.PHONY: commit new-major new-minor tag tarball
