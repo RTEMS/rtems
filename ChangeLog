@@ -1,3 +1,7 @@
+2007-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.maint: New.
+
 2007-01-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* acinclude.m4: AC_PREREQ(2.60).
