@@ -40,7 +40,7 @@ extern "C" {
  *
  *  @note Use this macros to test for features in specific releases.
  */
-#define __RTEMS_REVISION__ 99
+#define __RTEMS_REVISION__	99
 
 /*
  *  The cpu options include file defines all cpu dependent
