@@ -34,13 +34,13 @@ extern "C" {
  *
  *  @note Use this macros to test for features in specific releases.
  */
-#define __RTEMS_MINOR__	6
+#define __RTEMS_MINOR__	7
 
 /** This macro defines the revision version portion of an RTEMS release.
  *
  *  @note Use this macros to test for features in specific releases.
  */
-#define __RTEMS_REVISION__ 99
+#define __RTEMS_REVISION__	99
 
 /*
  *  The cpu options include file defines all cpu dependent
