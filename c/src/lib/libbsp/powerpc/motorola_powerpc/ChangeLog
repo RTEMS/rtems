@@ -1,3 +1,7 @@
+2007-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bootloader/Makefile.am: Use MKDIR_P instead of mkdir_p.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
