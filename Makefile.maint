@@ -1,0 +1,111 @@
+#
+# Maintainer Makefile
+#
+
+# WARNING:
+# * This Makefile is only useful to RTEMS maintainers
+# * You must have write access to RTEMS CVS
+# * Running this Makefile modifies RTEMS CVS
+# * Watch out for warning and error messages - Do NOT IGNORE them!
+
+
+# MAINTAINER notes:
+
+# Cutting a new release:
+# 1. Perform a non-anonymous cvs checkout of the BRANCH 
+#    you want to cut a release tarball from
+# 2. Run "make -f Makefile.maint new-minor"
+#    (rsp. "make -f Makefile.maint new-major").
+# 3. Run "make -f Makefile.maint tag"
+# 4. Run "make -f Makefine.maint tarball"
+
+# -----------------
+TEST_TAG = -test1
+
+rtems_version := $(shell cat aclocal/version.m4 | sed -n '/_RTEMS_VERSION/{s/^.*VERSION.*\[\(.*\)\].*/\1/p};')
+rtems_tag     := $(shell echo "rtems-$(rtems_version)" | tr . -)
+
+# -----------------
+# Cleanup check out and cvs-tag the files inside
+tag:
+	cvs -z9 up -dP >/dev/null
+	@./bootstrap -p >/dev/null
+	cvs tag -c $(rtems_tag)$(TEST_TAG) >/dev/null
+
+# -----------------
+# Different stages of cvs-exporting
+rtems-$(rtems_version)/stamp.export:
+	cvs -z9 export -d rtems-$(rtems_version) -r $(rtems_tag)$(TEST_TAG) rtems
+	touch rtems-$(rtems_version)/stamp.export
+
+rtems-$(rtems_version).tar.bz2: rtems-$(rtems_version)/stamp.autofiles rtems-$(rtems_version)/excludes
+	tar -cj -X rtems-$(rtems_version)/excludes \
+	  -f rtems-$(rtems_version).tar.bz2 rtems-$(rtems_version)
+
+rtems-$(rtems_version)/stamp.cleanup: rtems-$(rtems_version)/stamp.export
+	find rtems-$(rtems_version) -name .cvsignore -exec rm -f {} \;
+	find rtems-$(rtems_version) -name preinstall.am -exec touch {} \;
+	touch rtems-$(rtems_version)/c/src/librdbg/src/*/*/remdeb*.[hc]
+	rm -rf rtems-$(rtems_version)/contrib
+	touch rtems-$(rtems_version)/stamp.cleanup
+
+rtems-$(rtems_version)/stamp.autofiles: rtems-$(rtems_version)/stamp.cleanup
+	cd rtems-$(rtems_version) && ./bootstrap -r
+	touch rtems-$(rtems_version)/stamp.autofiles
+
+rtems-$(rtems_version)/excludes: Makefile.maint
+	@echo "Generating $@"
+	@echo "excludes" > $@
+	@echo "stamp.*" >> $@
+	@echo "autom4te.cache" >> $@
+	@echo "Makefile.maint" >> $@
+
+tarball: rtems-$(rtems_version).tar.bz2
+
+# -----------------
+# Create a new major release
+# increments the 2nd digit of the version number
+# set the 3rd digit of the version number to 0
+# Example: 4.6.99.4 -> 4.7.0
+new-major:
+	@v=$$(echo $(rtems_version) | sed 's,^\([0-9]\+\).*,\1,'); \
+	r=$$(echo $(rtems_version) | sed 's,^[0-9]\+\.\([0-9]\+\).*,\1,'); \
+	r=$$(($$r + 1)); version="$$v.$$r.0"; \
+	echo "New major release: $$version"; \
+	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
+	  $(VERSION_FILES); \
+	v=$$(echo $${version} | sed 's,^\([0-9]\+\).*,\1,'); \
+	m=$$(echo $${version} | sed 's,^[0-9]\+\.\([0-9]\+\).*,\1,'); \
+	n=$$(echo $${version} | sed 's,^[0-9]\+\.[0-9]\+\.\([0-9]\+\).*,\1,'); \
+	sed -i \
+	  -e "s,^\(#define.*__RTEMS_MAJOR__\).*,\1	$$v," \
+	  -e "s,^\(#define.*__RTEMS_MINOR__\).*,\1	$$m," \
+	  -e "s,^\(#define.*__RTEMS_REVISION__\).*,\1	$$n," \
+	  cpukit/score/include/rtems/system.h
+
+# Create a new minor release
+# increments the last digit of the version number
+# Examples: 4.6.99.4 -> 4.6.99.5
+#           4.7.0 -> 4.7.1
+new-minor:
+	@m=$$(echo $(rtems_version) | sed 's,^\(.*\)\.[0-9]\+,\1,'); \
+	n=$$(echo $(rtems_version) | sed 's,^.*\.\([0-9]\+\),\1,'); \
+	n=$$(($$n + 1)); version="$$m.$$n";\
+	echo "New minor release: $$version"; \
+	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
+	  $(VERSION_FILES); \
+	v=$$(echo $${version} | sed 's,^\([0-9]\+\).*,\1,'); \
+	m=$$(echo $${version} | sed 's,^[0-9]\+\.\([0-9]\+\).*,\1,'); \
+	n=$$(echo $${version} | sed 's,^[0-9]\+\.[0-9]\+\.\([0-9]\+\).*,\1,'); \
+	sed -i \
+	  -e "s,^\(#define.*__RTEMS_MAJOR__\).*,\1	$$v," \
+	  -e "s,^\(#define.*__RTEMS_MINOR__\).*,\1	$$m," \
+	  -e "s,^\(#define.*__RTEMS_REVISION__\).*,\1	$$n," \
+	  cpukit/score/include/rtems/system.h
+
+VERSION_FILES += aclocal/version.m4
+VERSION_FILES += cpukit/aclocal/version.m4
+VERSION_FILES += c/src/aclocal/version.m4
+VERSION_FILES += testsuites/aclocal/version.m4
+
+.PHONY: new-major new-minor tag
