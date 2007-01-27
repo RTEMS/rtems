@@ -114,8 +114,10 @@ VERSION_FILES += cpukit/aclocal/version.m4
 VERSION_FILES += c/src/aclocal/version.m4
 VERSION_FILES += testsuites/aclocal/version.m4
 
+CVS_RUN := $(shell if [ -n "$(TEST_TAG)" ]; then echo "cvs -n"; else echo "cvs"; fi)
+
 commit:
-	cvs -n commit -m "Upgrade to $(rtems_version)" $(VERSION_FILES) \
-	  cpukit/score/include/rtems/system.h
+	$(CVS_RUN) commit -m "Upgrade to $(rtems_version)" \
+	  $(VERSION_FILES) cpukit/score/include/rtems/system.h
 
 .PHONY: commit new-major new-minor tag tarball
