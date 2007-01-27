@@ -1,5 +1,9 @@
 2007-01-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/show_bdbuf.c: Convert from DOS to UNIX.
+
+2007-01-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/include/rtems/system.h: Remove __RTEMS_MAJOR__,
 	 __RTEMS_MINOR__, __RTEMS_REVISION__ (moved to cpuopt.h).
 	* configure.ac: Dynamically derive __ __RTEMS_MAJOR__,

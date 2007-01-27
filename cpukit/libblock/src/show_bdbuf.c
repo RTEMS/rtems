@@ -418,8 +418,8 @@ rtems_status_code rtems_bdbuf_show_pool_header
 	   pool_idx,
 	   pool_ptr->blksize,
 	   pool_ptr->nblks,
-	   (uint32_t)(pool_ptr->mallocd_bufs),
-	   (uint32_t)(pool_ptr->bdbufs));
+	   pool_ptr->mallocd_bufs,
+	   pool_ptr->bdbufs);
     printf("------------------------------------------------------------------------------\n");
   }
   return rc;
