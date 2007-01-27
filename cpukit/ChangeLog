@@ -1,3 +1,11 @@
+2007-01-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/system.h: Remove __RTEMS_MAJOR__,
+	 __RTEMS_MINOR__, __RTEMS_REVISION__ (moved to cpuopt.h).
+	* configure.ac: Dynamically derive __ __RTEMS_MAJOR__,
+	__RTEMS_MINOR__, __RTEMS_REVISION__ from _RTEMS_VERSION.
+	Add __RTEMS_MAJOR__, __RTEMS_MINOR__,__RTEMS_REVISION__ to cpuopt.h.
+
 2007-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/system.h:
