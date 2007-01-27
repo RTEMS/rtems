@@ -103,6 +103,10 @@ typedef struct {
 ])
 ])
 
+rtems_major=`echo _RTEMS_VERSION | sed "s/\..*//"`
+rtems_minor=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/\..*//"`
+rtems_revision=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/[[0-9]][[0-9]]*\.//;s/\..*//"`
+
 cat >>cpuopts.tmp <<\_ACEOF
 /**
  * @file rtems/score/cpuopts.h
@@ -172,6 +176,21 @@ RTEMS_CPUOPT([SIZEOF_CPU_CONTEXT],
   [test x"$RTEMS_CPU" = x"unix"],
   [$ac_cv_sizeof_CPU_CONTEXT],
   [The size of a 'CPU_CONTEXT', as computed by sizeof])
+
+RTEMS_CPUOPT([__RTEMS_MAJOR__],
+  [true],
+  [$rtems_major],
+  [major version portion of an RTEMS release])
+
+RTEMS_CPUOPT([__RTEMS_MINOR__],
+  [true],
+  [$rtems_minor],
+  [minor version portion of an RTEMS release])
+
+RTEMS_CPUOPT([__RTEMS_REVISION__],
+  [true],
+  [$rtems_revision],
+  [revision version portion of an RTEMS release])
 
 cat >>cpuopts.tmp <<\_ACEOF
 
