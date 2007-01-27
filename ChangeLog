@@ -1,5 +1,7 @@
 2007-01-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.maint: Remove references to
+	  cpukit/score/include/rtems/system.h.
 	* Makefile.maint: Add CVS_RUN.
 
 2007-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>

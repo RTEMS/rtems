@@ -79,15 +79,7 @@ new-major:
 	r=$$(($$r + 1)); version="$$v.$$r.0"; \
 	echo "New major release: $$version"; \
 	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
-	  $(VERSION_FILES); \
-	v=$$(echo $${version} | sed 's,^\([0-9]\+\).*,\1,'); \
-	m=$$(echo $${version} | sed 's,^[0-9]\+\.\([0-9]\+\).*,\1,'); \
-	n=$$(echo $${version} | sed 's,^[0-9]\+\.[0-9]\+\.\([0-9]\+\).*,\1,'); \
-	sed -i \
-	  -e "s,^\(#define.*__RTEMS_MAJOR__\).*,\1	$$v," \
-	  -e "s,^\(#define.*__RTEMS_MINOR__\).*,\1	$$m," \
-	  -e "s,^\(#define.*__RTEMS_REVISION__\).*,\1	$$n," \
-	  cpukit/score/include/rtems/system.h
+	  $(VERSION_FILES);
 
 # Create a new minor release
 # increments the last digit of the version number
@@ -99,15 +91,7 @@ new-minor:
 	n=$$(($$n + 1)); version="$$m.$$n";\
 	echo "New minor release: $$version"; \
 	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
-	  $(VERSION_FILES); \
-	v=$$(echo $${version} | sed 's,^\([0-9]\+\).*,\1,'); \
-	m=$$(echo $${version} | sed 's,^[0-9]\+\.\([0-9]\+\).*,\1,'); \
-	n=$$(echo $${version} | sed 's,^[0-9]\+\.[0-9]\+\.\([0-9]\+\).*,\1,'); \
-	sed -i \
-	  -e "s,^\(#define.*__RTEMS_MAJOR__\).*,\1	$$v," \
-	  -e "s,^\(#define.*__RTEMS_MINOR__\).*,\1	$$m," \
-	  -e "s,^\(#define.*__RTEMS_REVISION__\).*,\1	$$n," \
-	  cpukit/score/include/rtems/system.h
+	  $(VERSION_FILES);
 
 VERSION_FILES += aclocal/version.m4
 VERSION_FILES += cpukit/aclocal/version.m4
@@ -118,6 +102,6 @@ CVS_RUN := $(shell if [ -n "$(TEST_TAG)" ]; then echo "cvs -n"; else echo "cvs";
 
 commit:
 	$(CVS_RUN) commit -m "Upgrade to $(rtems_version)" \
-	  $(VERSION_FILES) cpukit/score/include/rtems/system.h
+	  $(VERSION_FILES)
 
 .PHONY: commit new-major new-minor tag tarball
