@@ -1,3 +1,9 @@
+2007-01-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.maint: Sync nomenclature with that being used in
+	  cpukit/score/include/rtems/system.h (major->minor,
+	  minor->revision).
+
 2007-01-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.maint: Remove references to

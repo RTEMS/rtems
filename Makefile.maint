@@ -17,8 +17,8 @@
 # Cutting a new release:
 # 1. Perform a non-anonymous cvs checkout of the BRANCH 
 #    you want to cut a release tarball from
-# 2. Run "make -f Makefile.maint new-minor"
-#    (rsp. "make -f Makefile.maint new-major").
+# 2. Run "make -f Makefile.maint new-revision"
+#    (rsp. "make -f Makefile.maint new-minor").
 # 3. Run "make -f Makefile.maint commit"
 # 4. Run "make -f Makefile.maint tag"
 # 5. Run "make -f Makefine.maint tarball"
@@ -69,27 +69,27 @@ rtems-$(rtems_version)/excludes: Makefile.maint
 tarball: rtems-$(rtems_version).tar.bz2
 
 # -----------------
-# Create a new major release
+# Create a new minor release
 # increments the 2nd digit of the version number
 # set the 3rd digit of the version number to 0
 # Example: 4.6.99.4 -> 4.7.0
-new-major:
+new-minor:
 	@v=$$(echo $(rtems_version) | sed 's,^\([0-9]\+\).*,\1,'); \
 	r=$$(echo $(rtems_version) | sed 's,^[0-9]\+\.\([0-9]\+\).*,\1,'); \
 	r=$$(($$r + 1)); version="$$v.$$r.0"; \
-	echo "New major release: $$version"; \
+	echo "New minor release: $$version"; \
 	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
 	  $(VERSION_FILES);
 
-# Create a new minor release
+# Create a new revision release
 # increments the last digit of the version number
 # Examples: 4.6.99.4 -> 4.6.99.5
 #           4.7.0 -> 4.7.1
-new-minor:
+new-revision:
 	@m=$$(echo $(rtems_version) | sed 's,^\(.*\)\.[0-9]\+,\1,'); \
 	n=$$(echo $(rtems_version) | sed 's,^.*\.\([0-9]\+\),\1,'); \
 	n=$$(($$n + 1)); version="$$m.$$n";\
-	echo "New minor release: $$version"; \
+	echo "New revision release: $$version"; \
 	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
 	  $(VERSION_FILES);
 
@@ -104,4 +104,4 @@ commit:
 	$(CVS_RUN) commit -m "Upgrade to $(rtems_version)" \
 	  $(VERSION_FILES)
 
-.PHONY: commit new-major new-minor tag tarball
+.PHONY: commit new-minor new-revision tag tarball
