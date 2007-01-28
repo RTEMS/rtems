@@ -79,9 +79,11 @@ static u_char host_addr[16];	/* IPv4 or IPv6 */
 static char *h_addr_ptrs[2];
 static int stayopen = 0;
 
+#ifdef _THREAD_SAFE
 static char* hostmap = NULL;
 static unsigned int hostlen = 0; 
 static char *cur;
+#endif
 
 void
 _sethosthtent(f)
@@ -208,12 +210,6 @@ _gethostbyhtaddr(addr, len, af)
 
 
 #ifdef _THREAD_SAFE
-
-static int isblank ( int ch )
-{
-    return ch == ' '  ||  ch == '\t';
-}
-
 struct hostent* gethostent_r(char* buf, int len) 
 {
   char  *dest;
