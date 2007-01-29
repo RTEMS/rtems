@@ -10,6 +10,8 @@
 #ifndef _MW_FB_H
 #define _MW_FB_H
 
+#include <rtems/stdint.h>
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -39,30 +41,26 @@ extern "C" {
 
 #define FB_ACCEL_NONE                  0    /* no hardware accelerator    */
 
-/* no dependency on any other header file */
-typedef  unsigned long  __u32;
-typedef  unsigned short __u16;
-
 struct fb_screeninfo {
-    __u32 xres;                  /* visible resolution        */
-    __u32 yres;
-    __u32 bits_per_pixel;        /* guess what            */
-	 __u32 line_length;          /* number of chars per line */
-     volatile char *smem_start; /* Start of frame buffer mem  */
+    uint32_t xres;                  /* visible resolution        */
+    uint32_t yres;
+    uint32_t bits_per_pixel;        /* guess what            */
+	 uint32_t line_length;          /* number of chars per line */
+    volatile char *smem_start; /* Start of frame buffer mem  */
                                 /* (physical address)         */
-    __u32 smem_len;             /* Length of frame buffer mem */
-    __u32 type;                 /* see FB_TYPE_*              */
-    __u32 visual;               /* see FB_VISUAL_*            */
+    uint32_t smem_len;             /* Length of frame buffer mem */
+    uint32_t type;                 /* see FB_TYPE_*              */
+    uint32_t visual;               /* see FB_VISUAL_*            */
 
 };
 
 struct fb_cmap {
-    __u32 start;                /* First entry    */
-    __u32 len;                  /* Number of entries */
-    __u16 *red;                 /* Red values    */
-    __u16 *green;
-    __u16 *blue;
-    __u16 *transp;              /* transparency, can be NULL */
+    uint32_t start;                /* First entry    */
+    uint32_t len;                  /* Number of entries */
+    uint16_t *red;                 /* Red values    */
+    uint16_t *green;
+    uint16_t *blue;
+    uint16_t *transp;              /* transparency, can be NULL */
 };
 
 /* type of function to be executed at the driver level */
