@@ -39,15 +39,15 @@ static struct fb_screeninfo fb_info =
 	FB_VISUAL_PSEUDOCOLOR         /* color scheme used */
 };
 
-static __u16 red16[] = {
+static uint16_t red16[] = {
     0x0000, 0x0000, 0x0000, 0x0000, 0xaaaa, 0xaaaa, 0xaaaa, 0xaaaa,
     0x5555, 0x5555, 0x5555, 0x5555, 0xffff, 0xffff, 0xffff, 0xffff
 };
-static __u16 green16[] = {
+static uint16_t green16[] = {
     0x0000, 0x0000, 0xaaaa, 0xaaaa, 0x0000, 0x0000, 0x5555, 0xaaaa,
     0x5555, 0x5555, 0xffff, 0xffff, 0x5555, 0x5555, 0xffff, 0xffff
 };
-static __u16 blue16[] = {
+static uint16_t blue16[] = {
     0x0000, 0xaaaa, 0x0000, 0xaaaa, 0x0000, 0xaaaa, 0x0000, 0xaaaa,
     0x5555, 0xffff, 0x5555, 0xffff, 0x5555, 0xffff, 0x5555, 0xffff
 };
@@ -138,7 +138,7 @@ static int get_screen_info( struct fb_screeninfo *info )
 
 static int get_palette( struct fb_cmap *cmap )
 {
-  __u32 i;
+  uint32_t i;
 
   if( cmap->start + cmap->len >= 16 )
       return 1;
@@ -154,7 +154,7 @@ static int get_palette( struct fb_cmap *cmap )
 
 static int set_palette( struct fb_cmap *cmap )
 {
-  __u32 i;
+  uint32_t i;
 
   if( cmap->start + cmap->len >= 16 )
       return 1;

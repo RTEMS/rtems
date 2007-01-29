@@ -1,3 +1,7 @@
+2007-01-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/fb_vga.c: Eliminate __u16, __u32.
+
 2006-12-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* 3c509/3c509.c, ne2000/ne2000.c, wd8003/wd8003.c: Use
