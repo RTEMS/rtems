@@ -1,3 +1,7 @@
+2007-01-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* GT64260/MVME5500I2C.c, pci/pci.c: Eliminate unchar.
+
 2006-10-30	Joel Sherrill <joel@OARcorp.com>
 
 	* include/.cvsignore: New file.

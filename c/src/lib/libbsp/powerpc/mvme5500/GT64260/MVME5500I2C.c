@@ -16,20 +16,19 @@
 
 /* #define I2C_DEBUG*/
 typedef unsigned int u32;
-typedef unsigned char unchar;
 
-unchar I2cAddrPack(unchar busAddr,u32 offset)
+unsigned char I2cAddrPack(unsigned char busAddr,u32 offset)
 {
   return(busAddr | ((offset & 0x700) >> 7));
 }
-unchar I2cDevByteAddr(u32 devA2A1A0, unchar byteNum)
+unsigned char I2cDevByteAddr(u32 devA2A1A0, unsigned char byteNum)
 {
   return(( devA2A1A0 >>(byteNum*8)) & 0xff);
 }
 /****************************************************************************
 * I2Cread_eeprom - read EEPROM VPD from the I2C
 */
-int I2Cread_eeprom(unchar I2cBusAddr,u32 devA2A1A0,u32 AddrBytes,unchar *pBuff,u32 numBytes)
+int I2Cread_eeprom(unsigned char I2cBusAddr,u32 devA2A1A0,u32 AddrBytes,unsigned char *pBuff,u32 numBytes)
 {
   int status=0, lastByte=0;
 
