@@ -1,3 +1,7 @@
+2007-01-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* GT64260/MVME5500I2C.c, pci/pci.c: Eliminate unchar.
+
 2007-01-19	Till Straumann <strauman@slac.stanford.edu>
 
 	* mvme5500/Makefile.am, mvme5500/preinstall.am,

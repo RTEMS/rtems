@@ -59,7 +59,6 @@
 /* define a shortcut */
 #define pci	BSP_pci_configuration
 
-typedef unsigned char unchar;
 static int		  numPCIDevs=0;
 extern void pci_interface();
 
@@ -72,12 +71,12 @@ extern void pci_interface();
 /*
  * Bit encode for PCI_CONFIG_HEADER_TYPE register
  */
-unchar ucMaxPCIBus=0;
+unsigned char ucMaxPCIBus=0;
 
 /* Please note that PCI0 and PCI1 does not correlate with the busNum 0 and 1.
  */
-static int direct_pci_read_config_byte(unchar bus,unchar dev,unchar func,
-unchar offset,unchar *val)
+static int direct_pci_read_config_byte(unsigned char bus,unsigned char dev,unsigned char func,
+unsigned char offset,unsigned char *val)
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -101,8 +100,8 @@ unchar offset,unchar *val)
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int direct_pci_read_config_word(unchar bus, unchar dev,
-unchar func, unchar offset, unsigned short *val)
+static int direct_pci_read_config_word(unsigned char bus, unsigned char dev,
+unsigned char func, unsigned char offset, unsigned short *val)
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -127,8 +126,8 @@ unchar func, unchar offset, unsigned short *val)
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int direct_pci_read_config_dword(unchar bus, unchar dev,
-unchar func, unchar offset, unsigned int *val) 
+static int direct_pci_read_config_dword(unsigned char bus, unsigned char dev,
+unsigned char func, unsigned char offset, unsigned int *val) 
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -153,7 +152,7 @@ unchar func, unchar offset, unsigned int *val)
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int direct_pci_write_config_byte(unchar bus, unchar dev,unchar func, unchar offset, unchar val) 
+static int direct_pci_write_config_byte(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned char val) 
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -178,7 +177,7 @@ static int direct_pci_write_config_byte(unchar bus, unchar dev,unchar func, unch
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int direct_pci_write_config_word(unchar bus, unchar dev,unchar func, unchar offset, unsigned short val) 
+static int direct_pci_write_config_word(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned short val) 
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -202,7 +201,7 @@ static int direct_pci_write_config_word(unchar bus, unchar dev,unchar func, unch
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int direct_pci_write_config_dword(unchar bus,unchar dev,unchar func, unchar offset, unsigned int val) 
+static int direct_pci_write_config_dword(unsigned char bus,unsigned char dev,unsigned char func, unsigned char offset, unsigned int val) 
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -249,7 +248,7 @@ pci_config BSP_pci_configuration = {(volatile unsigned char*) PCI_CONFIG_ADDR,
 int pci_initialize()
 {
   int deviceFound;
-  unchar ucBusNumber, ucSlotNumber, ucFnNumber, ucNumFuncs;
+  unsigned char ucBusNumber, ucSlotNumber, ucFnNumber, ucNumFuncs;
   unsigned int ulHeader;
   unsigned int pcidata, ulClass, ulDeviceID;
 
