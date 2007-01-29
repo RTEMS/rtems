@@ -1,3 +1,7 @@
+2007-01-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/mw-fb/mw_fb.h: Eliminate __u32, __u16.
+
 2007-01-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/libc/gethostbyht.c: Remove warning on unused vars.
