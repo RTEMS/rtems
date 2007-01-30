@@ -1,3 +1,7 @@
+2007-01-29	Till Straumann <strauman@slac.stanford.edu>
+	* Makefile.am:
+	added new files in shared/vmeUniverse to EXTRA_DIST
+
 2007-01-19	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am:
