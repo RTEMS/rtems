@@ -1,3 +1,7 @@
+2007-01-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libblock/src/show_bdbuf.c: Use inttypes.h macros.
+
 2007-01-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/mw-fb/mw_fb.h: Eliminate __u32, __u16.
