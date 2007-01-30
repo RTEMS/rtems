@@ -101,7 +101,7 @@ $(PROJECT_INCLUDE)/bsp/vmeUniverse.h: ../../shared/vmeUniverse/vmeUniverse.h $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
 
-$(PROJECT_INCLUDE)/bsp/VMEConfig.h: ../../powerpc/shared/vme/VMEConfig.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/VMEConfig.h: vme/VMEConfig.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 
@@ -112,6 +112,18 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
 $(PROJECT_INCLUDE)/bsp/VME.h: ../../shared/vmeUniverse/VME.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VME.h
+
+$(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h: ../../shared/vmeUniverse/vmeUniverseDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h
+
+$(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h: ../../shared/vmeUniverse/bspVmeDmaList.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h
+
+$(PROJECT_INCLUDE)/bsp/VMEDMA.h: ../../shared/vmeUniverse/VMEDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEDMA.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEDMA.h
 
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
