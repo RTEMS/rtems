@@ -53,13 +53,14 @@
 #define BSP_MAX_PCI_BUS  (BSP_MAX_PCI_BUS_ON_PCI0+BSP_MAX_PCI_BUS_ON_PCI1)
 
 
-/* The glues to Till's vmeUniverse, although the name does not
- * actually reflect the relevant architect of the MVME5500.
- * Till TODO ? :  BSP_PCI_DO_EOI instead ? 
- * BSP_EXT_IRQ0 instead of BSP_PCI_IRQ0 ?
- *
+#if 0
+/* T.S, 2007/1: in order to let the universe acknowledge the interrupt
+ * (this allows for VME software priorities) corresponding support
+ * **MUST** be present in the interrupt controller driver
+ * Unless that's implemented DO NOT define BSP_PIC_DO_EOI.
  */
 #define BSP_PIC_DO_EOI  inl(0xc34)  /* PCI IACK */
+#endif
 #define BSP_PCI_IRQ0 BSP_GPP_IRQ_LOWEST_OFFSET
 
 /*
