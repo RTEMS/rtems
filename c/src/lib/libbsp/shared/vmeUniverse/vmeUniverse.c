@@ -54,6 +54,7 @@
 #endif
 
 #include "vmeUniverse.h"
+#include "vmeUniverseDMA.h"
 
 #define UNIV_NUM_MPORTS		8 /* number of master ports */
 #define UNIV_NUM_SPORTS		8 /* number of slave ports */
@@ -102,6 +103,7 @@
 #include <rtems/error.h>
 #include <bsp/pci.h>
 #include <bsp.h>
+#include <libcpu/byteorder.h>
 
 /* allow the BSP to override the default routines */
 #ifndef BSP_PCI_FIND_DEVICE
@@ -130,6 +132,13 @@ typedef unsigned int pci_ulong;
 #define PCI_MEM_BASE 0
 #endif
 #define BSP_PCI2LOCAL_ADDR(memaddr) ((pci_ulong)(memaddr) + PCI_MEM_BASE)
+#endif
+
+#ifndef BSP_LOCAL2PCI_ADDR
+#ifndef PCI_DRAM_OFFSET
+#define PCI_DRAM_OFFSET 0
+#endif
+#define BSP_LOCAL2PCI_ADDR(pciaddr) ((uint32_t)(pciaddr) + PCI_DRAM_OFFSET)
 #endif
 
 
@@ -349,6 +358,7 @@ static int
 am2mode(int ismaster, unsigned long address_space, unsigned long *pmode)
 {
 unsigned long mode=0;
+unsigned long vdw =0;
 
     /* NOTE: reading the CY961 (Echotek ECDR814) with VDW32
      *       generated bus errors when reading 32-bit words
@@ -368,11 +378,22 @@ unsigned long mode=0;
 			mode |= UNIV_SCTL_PWEN | UNIV_SCTL_PREN;
 		mode |= UNIV_SCTL_EN;
 	} else {
-		if ( VME_MODE_DBW16 & address_space )
-			mode |= UNIV_MCTL_VDW16;
-		else
-			mode |= UNIV_MCTL_VDW64;
-		mode |= UNIV_MCTL_VCT /* enable block transfers */;
+		switch ( VME_MODE_DBW_MSK & address_space ) {
+			default:
+				vdw = UNIV_MCTL_VDW64;
+			break;
+
+			case VME_MODE_DBW8:
+				break;
+
+			case VME_MODE_DBW16:
+				vdw = UNIV_MCTL_VDW16;
+				break;
+
+			case VME_MODE_DBW32:
+				vdw = UNIV_MCTL_VDW32;
+				break;
+		}
 		if ( VME_AM_IS_MEMORY & address_space )
 			mode |= UNIV_MCTL_PWEN;
 		mode |= UNIV_MCTL_EN;
@@ -388,11 +409,35 @@ unsigned long mode=0;
 			else {
 				mode &= ~UNIV_SCTL_DAT;
 			}
+
 			/* fall thru */
+
 		case VME_AM_STD_SUP_DATA:
 		case VME_AM_STD_USR_DATA:
+		case VME_AM_STD_SUP_BLT:
+		case VME_AM_STD_SUP_MBLT:
+		case VME_AM_STD_USR_BLT:
+		case VME_AM_STD_USR_MBLT:
+
+			if ( ismaster ) {
+				switch ( address_space & 3 ) {
+					case 0: /* mblt */
+						if ( UNIV_MCTL_VDW64 != vdw )
+							return -1;
+						break;
+
+					case 3:	/* blt  */
+						mode |= UNIV_MCTL_VCT;
+						/* universe may do mblt anyways so go back to
+						 * 32-bit width
+						 */
+						vdw   = UNIV_MCTL_VDW32;
+				}
+			}
+
 			mode |= UNIV_CTL_VAS24;
 			break;
+	
 
 		case VME_AM_EXT_SUP_PGM:
 		case VME_AM_EXT_USR_PGM:
@@ -402,9 +447,32 @@ unsigned long mode=0;
 				mode &= ~UNIV_SCTL_DAT;
 			}
 			/* fall thru */
+
 		case VME_AM_EXT_SUP_DATA:
 		case VME_AM_EXT_USR_DATA:
+		case VME_AM_EXT_SUP_BLT:
+		case VME_AM_EXT_SUP_MBLT:
+		case VME_AM_EXT_USR_BLT:
+		case VME_AM_EXT_USR_MBLT:
+
+			if ( ismaster ) {
+				switch ( address_space & 3 ) {
+					case 0: /* mblt */
+						if ( UNIV_MCTL_VDW64 != vdw )
+							return -1;
+						break;
+
+					case 3:	/* blt  */
+						mode |= UNIV_MCTL_VCT;
+						/* universe may do mblt anyways so go back to
+						 * 32-bit width
+						 */
+						vdw   = UNIV_MCTL_VDW32;
+				}
+			}
+
 			mode |= UNIV_CTL_VAS32;
+
 			break;
 
 		case VME_AM_SUP_SHORT_IO:
@@ -426,6 +494,8 @@ unsigned long mode=0;
 	}
 	if ( VME_AM_IS_SUP(address_space) )
 		mode |= (ismaster ? UNIV_MCTL_SUPER : UNIV_SCTL_SUPER);
+
+	mode |= vdw; /* vdw still 0 in slave mode */
 	*pmode = mode;
 	return 0;
 }
@@ -623,6 +693,40 @@ showUniversePort(
 	}
 
 	if (ismaster) {
+		unsigned vdw;
+		switch ( cntrl & UNIV_MCTL_VDW64 ) {
+			case UNIV_MCTL_VDW64:
+				vdw = 64;
+			break;
+
+			case UNIV_MCTL_VDW32:
+				vdw = 32;
+			break;
+
+			case UNIV_MCTL_VDW16:
+				vdw = 16;
+			break;
+
+			default:
+				vdw = 8;
+			break;
+		}
+
+		if ( 64 == vdw ) {
+			switch ( UNIV_CTL_VAS & cntrl ) {
+				case UNIV_CTL_VAS24:
+				case UNIV_CTL_VAS32:
+					uprintf(f,"D64 [MBLT], ");
+					break;
+
+				default:
+					uprintf(f,"D64, ");
+					break;
+			}
+		} else {
+			uprintf(f, "D%u%s, ", vdw, (cntrl & UNIV_MCTL_VCT) ? " [BLT]" : "");
+		}
+
 		uprintf(f,"%s, %s",
 			cntrl&UNIV_MCTL_PGM ?   "Pgm" : "Dat",
 			cntrl&UNIV_MCTL_SUPER ? "Sup" : "Usr");
@@ -1030,54 +1134,6 @@ vmeUniverseDisableAllMasters(void)
 	mapOverAll(base,1,disableUniversePort,0);
 }
 
-int
-vmeUniverseStartDMAXX(
-	volatile LERegister *base,
-	unsigned long local_addr,
-	unsigned long vme_addr,
-	unsigned long count)
-{
-	if ((local_addr & 7) != (vme_addr & 7)) {
-		uprintf(stderr,"vmeUniverseStartDMA: misaligned addresses\n");
-		return -1;
-	}
-
-	{
-	/* help the compiler allocate registers */
-	register volatile LERegister *b=base;;
-	register unsigned long dgcsoff=UNIV_REGOFF_DGCS,dgcs;
-
-	dgcs=READ_LE(b, dgcsoff);
-
-	/* clear status and make sure CHAIN is clear */
-	dgcs &= ~UNIV_DGCS_CHAIN;
-	WRITE_LE(dgcs,
-		      b, dgcsoff);
-	WRITE_LE(local_addr,
-		      b, UNIV_REGOFF_DLA);
-	WRITE_LE(vme_addr,
-		      b, UNIV_REGOFF_DVA);
-	WRITE_LE(count,
-		      b, UNIV_REGOFF_DTBC);
-	dgcs |= UNIV_DGCS_GO;
-	EIEIO_REG; /* make sure GO is written after everything else */
-	WRITE_LE(dgcs,
-		      b, dgcsoff);
-	}
-	SYNC; /* enforce command completion */
-	return 0;
-}
-
-int
-vmeUniverseStartDMA(
-	unsigned long local_addr,
-	unsigned long vme_addr,
-	unsigned long count)
-{
-	DFLT_BASE; /* vmeUniverseStartDMAXX doesn't check for a valid base address for efficiency reasons */
-	return vmeUniverseStartDMAXX(base, local_addr, vme_addr, count);
-}
-
 unsigned long
 vmeUniverseReadRegXX(volatile LERegister *base, unsigned long offset)
 {
@@ -1231,10 +1287,427 @@ vmeUniverseMapCRG(unsigned long vme_base, unsigned long as )
 	return vmeUniverseMapCRGXX( vmeUniverse0BaseAddr, vme_base, as );
 }
 
+#ifdef __rtems__
+/* DMA Support -- including linked-list implementation */
+#include "bspVmeDmaListP.h"
+#include <bsp/vmeUniverseDMA.h>
+
+/* Filter valid bits of DCTL */
+#define DCTL_MODE_MASK \
+	( UNIV_DCTL_VDW_MSK | UNIV_DCTL_VAS_MSK | UNIV_DCTL_PGM | UNIV_DCTL_SUPER | UNIV_DCTL_VCT )
+
+static uint32_t
+xfer_mode2dctl(uint32_t xfer_mode)
+{
+uint32_t dctl;
+
+	/* Check requested bus mode */
+
+	/* Universe does not support 'non-incrementing' DMA */
+
+	/* NOTE: Universe IIb/d *does* support NOINC_VME but states
+	 *       that the VME address needs to be reprogrammed
+	 *       when re-issuing a transfer
+	 */
+	if ( xfer_mode & BSP_VMEDMA_MODE_NOINC_PCI )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	/* ignore memory hint */
+	xfer_mode &= ~VME_AM_IS_MEMORY;
+
+	if ( VME_AM_IS_2eSST(xfer_mode) )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	if ( ! VME_AM_IS_SHORT(xfer_mode) && ! VME_AM_IS_STD(xfer_mode) && ! VME_AM_IS_EXT(xfer_mode) )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	/* Luckily DCTL bits match MCTL bits so we can use am2mode */
+	if ( am2mode( 1, xfer_mode, &dctl ) )
+		return BSP_VMEDMA_STATUS_UNSUP;
+	
+	/* However, the book says that for DMA VAS==5 [which would
+	 * be a CSR access] is reserved. Tests indicate that
+	 * CSR access works on the IIb/d but not really (odd 32-bit
+	 * addresses read 0) on the II.
+	 * Nevertheless, we disallow DMA CSR access at this point
+	 * in order to play it safe...
+	 */
+	switch ( UNIV_DCTL_VAS_MSK & dctl ) {
+		case UNIV_DCTL_VAS_A24:
+		case UNIV_DCTL_VAS_A32:
+			/* fixup the data width; universe may always use MBLT
+			 * if data width is 64-bit so we go back to 32-bit
+			 * if they didn't explicitely ask for MBLT cycles
+			 */
+			if (   (xfer_mode & 0xb) != 8 /* MBLT */
+			    && ( UNIV_DCTL_VDW_64 == (dctl & UNIV_DCTL_VDW_MSK) ) ) {
+				dctl &= ~UNIV_DCTL_VDW_MSK;
+				dctl |= UNIV_DCTL_VDW_32;
+			}
+			break;
+
+		case UNIV_DCTL_VAS_A16:
+			break;
+
+		default:
+			return BSP_VMEDMA_STATUS_UNSUP;
+	}
+
+	/* Make sure other MCTL bits are masked */
+	dctl &= DCTL_MODE_MASK;
+
+	if ( xfer_mode & BSP_VMEDMA_MODE_NOINC_VME ) {
+		/* If they want NOINC_VME then we have to do some
+		 * fixup :-( ('errata' [in this case: feature addition] doc. pp. 11+)
+		 */
+		dctl &= ~UNIV_DCTL_VCT;	/* clear block xfer flag */
+		dctl |= UNIV_DCTL_NO_VINC;
+		/* cannot do 64 bit transfers; go back to 32 */
+		if ( UNIV_DCTL_VDW_64 == (dctl & UNIV_DCTL_VDW_MSK) ) {
+			dctl &= ~UNIV_DCTL_VDW_MSK;
+			dctl |= UNIV_DCTL_VDW_32;
+		}
+	}
+	
+	/* Set direction flag */
+
+	if ( BSP_VMEDMA_MODE_PCI2VME & xfer_mode )
+		dctl |= UNIV_DCTL_L2V;
+
+	return dctl;
+}
+
+/* Convert canonical xfer_mode into Universe setup bits; return -1 if request
+ * cannot be satisfied (unsupported features)
+ */
+int
+vmeUniverseDmaSetupXX(volatile LERegister *base, int channel, uint32_t mode, uint32_t xfer_mode, void *custom)
+{
+uint32_t dctl, dgcs;
+
+	if ( channel != 0 )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	dctl = xfer_mode2dctl(xfer_mode);
+
+	if ( (uint32_t)BSP_VMEDMA_STATUS_UNSUP == dctl )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	/* Enable all interrupts at the controller */
+	dgcs = UNIV_DGCS_INT_MSK;
+
+	switch ( mode ) {
+		case BSP_VMEDMA_OPT_THROUGHPUT:
+			dgcs |= UNIV_DGCS_VON_1024 | UNIV_DGCS_VOFF_0_US;
+			/* VON counts are different in NO_VINC mode :-( */
+			dgcs |= ( xfer_mode & BSP_VMEDMA_MODE_NOINC_VME ) ?
+					UNIV_DGCS_VON_2048 : UNIV_DGCS_VON_1024;
+		break;
+		
+		case BSP_VMEDMA_OPT_LOWLATENCY:
+			dgcs |= UNIV_DGCS_VOFF_0_US;
+			/* VON counts are different in NO_VINC mode :-( */
+			dgcs |= ( xfer_mode & BSP_VMEDMA_MODE_NOINC_VME ) ?
+					UNIV_DGCS_VON_512 : UNIV_DGCS_VON_256;
+		break;
+
+		case BSP_VMEDMA_OPT_SHAREDBUS:
+			dgcs |= UNIV_DGCS_VOFF_512_US;
+			/* VON counts are different in NO_VINC mode :-( */
+			dgcs |= ( xfer_mode & BSP_VMEDMA_MODE_NOINC_VME ) ?
+					UNIV_DGCS_VON_512 : UNIV_DGCS_VON_256;
+		break;
+
+		case BSP_VMEDMA_OPT_CUSTOM:
+			dctl = ((uint32_t*)custom)[0];
+			dgcs = ((uint32_t*)custom)[1];
+		break;
+
+		default:
+		case BSP_VMEDMA_OPT_DEFAULT:
+		break;
+	}
+
+	/* clear status bits */
+	dgcs |= UNIV_DGCS_STATUS_CLEAR;
+
+	vmeUniverseWriteRegXX(base, dctl, UNIV_REGOFF_DCTL);
+	vmeUniverseWriteRegXX(base, dgcs, UNIV_REGOFF_DGCS);
+
+	return BSP_VMEDMA_STATUS_OK;
+}
+
+int
+vmeUniverseDmaSetup(int channel, uint32_t mode, uint32_t xfer_mode, void *custom)
+{
+DFLT_BASE;
+	return vmeUniverseDmaSetupXX(base, channel, mode, xfer_mode, custom);
+}
+
+int
+vmeUniverseDmaStartXX(volatile LERegister *base, int channel, uint32_t pci_addr, uint32_t vme_addr, uint32_t n_bytes)
+{
+	if ( channel != 0 )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	if ((pci_addr & 7) != (vme_addr & 7)) {
+		uprintf(stderr,"vmeUniverseDmaStartXX: misaligned addresses\n");
+		return -1;
+	}
+
+	{
+	/* help the compiler allocate registers */
+	register volatile LERegister *b=base;;
+	register unsigned long dgcsoff=UNIV_REGOFF_DGCS,dgcs;
+
+	dgcs=READ_LE(b, dgcsoff);
+
+	/* clear status and make sure CHAIN is clear */
+	dgcs &= ~UNIV_DGCS_CHAIN;
+	WRITE_LE(dgcs,
+		      b, dgcsoff);
+	WRITE_LE(pci_addr,
+		      b, UNIV_REGOFF_DLA);
+	WRITE_LE(vme_addr,
+		      b, UNIV_REGOFF_DVA);
+	WRITE_LE(n_bytes,
+		      b, UNIV_REGOFF_DTBC);
+	dgcs |= UNIV_DGCS_GO;
+	EIEIO_REG; /* make sure GO is written after everything else */
+	WRITE_LE(dgcs,
+		      b, dgcsoff);
+	}
+	SYNC; /* enforce command completion */
+	return 0;
+}
+
+/* This entry point is deprecated */
+int
+vmeUniverseStartDMAXX(
+	volatile LERegister *base,
+	unsigned long local_addr,
+	unsigned long vme_addr,
+	unsigned long count)
+{
+	return vmeUniverseDmaStartXX(base, 0, local_addr, vme_addr, count);
+}
+
+int
+vmeUniverseDmaStart(int channel, uint32_t pci_addr, uint32_t vme_addr, uint32_t n_bytes)
+{
+	DFLT_BASE; /* vmeUniverseDmaStartXX doesn't check for a valid base address for efficiency reasons */
+	return vmeUniverseDmaStartXX(base, channel, pci_addr, vme_addr, n_bytes);
+}
+
+/* This entry point is deprecated */
+int
+vmeUniverseStartDMA(
+	unsigned long local_addr,
+	unsigned long vme_addr,
+	unsigned long count)
+{
+	DFLT_BASE; /* vmeUniverseStartDMAXX doesn't check for a valid base address for efficiency reasons */
+	return vmeUniverseDmaStartXX(base, 0, local_addr, vme_addr, count);
+}
+
+uint32_t
+vmeUniverseDmaStatusXX(volatile LERegister *base, int channel)
+{
+uint32_t dgcs;
+	if ( channel != 0 )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	dgcs = vmeUniverseReadRegXX(base, UNIV_REGOFF_DGCS);
+
+	dgcs &= UNIV_DGCS_STATUS_CLEAR;
+
+	if ( 0 == dgcs || UNIV_DGCS_DONE == dgcs )
+		return BSP_VMEDMA_STATUS_OK;
+
+	if ( UNIV_DGCS_ACT & dgcs )
+		return BSP_VMEDMA_STATUS_BUSY;
+
+	if ( UNIV_DGCS_LERR & dgcs )
+		return BSP_VMEDMA_STATUS_BERR_PCI;
+
+	if ( UNIV_DGCS_VERR & dgcs )
+		return BSP_VMEDMA_STATUS_BERR_VME;
+
+	return BSP_VMEDMA_STATUS_OERR;
+}
+
+uint32_t
+vmeUniverseDmaStatus(int channel)
+{
+DFLT_BASE;
+	return vmeUniverseDmaStatusXX(base, channel);
+}
+
+/* bspVmeDmaList driver interface implementation */
+
+/* Cannot use VmeUniverseDMAPacketRec because st_le32 expects unsigned *
+ * and we get 'alias' warnings when we submit uint32_t *
+ */
+
+typedef volatile unsigned LERegister1;
+
+typedef struct VmeUniverseDmaListDescRec_ {
+	LERegister1	dctl;
+	LERegister1	dtbc;
+	LERegister1	dla;
+	LERegister1	dummy1;
+	LERegister1	dva;
+	LERegister1	dummy2;
+	LERegister1	dcpp;
+	LERegister1	dummy3;
+} VmeUniverseDmaListDescRec
+__attribute__((aligned(32), __may_alias__));
+typedef VmeUniverseDmaListDescRec *VmeUniverseDmaListDesc;
+
+static void     uni_desc_init  (DmaDescriptor);
+static int      uni_desc_setup (DmaDescriptor, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
+static void     uni_desc_setnxt(DmaDescriptor, DmaDescriptor);
+static void     uni_desc_dump  (DmaDescriptor);
+static int      uni_desc_start (volatile void *controller_addr, int channel, DmaDescriptor p);
+
+VMEDmaListClassRec	vmeUniverseDmaListClass = {
+	desc_size:  sizeof(VmeUniverseDMAPacketRec),
+	desc_align: 32,
+	freeList:   0,
+	desc_alloc: 0,
+	desc_free:  0,
+	desc_init:  uni_desc_init,
+	desc_setnxt:uni_desc_setnxt,
+	desc_setup: uni_desc_setup,
+	desc_start: uni_desc_start,
+	desc_refr:  0,
+	desc_dump:	uni_desc_dump,
+};
+
+/* gcc complains even if unsigned and uint32 are the same size :-( */
+
+static inline void ST_LE32(volatile uint32_t *a, uint32_t v)
+{
+	st_le32( (volatile unsigned *)a, v);
+}
+
+static void     uni_desc_init  (DmaDescriptor p)
+{
+VmeUniverseDmaListDesc d = p;
+	st_le32( &d->dcpp, UNIV_DCPP_IMG_NULL );
+}
+
+static void     uni_desc_setnxt(DmaDescriptor p, DmaDescriptor n)
+{
+VmeUniverseDmaListDesc d = p;
+	if ( 0 == n ) {
+		st_le32( &d->dcpp, UNIV_DCPP_IMG_NULL );
+	} else {
+		st_le32( &d->dcpp, BSP_LOCAL2PCI_ADDR( (uint32_t)n));
+	}
+}
+
+static int
+uni_desc_setup (
+	DmaDescriptor p,
+	uint32_t	attr_mask,
+	uint32_t	xfer_mode,
+	uint32_t	pci_addr,
+	uint32_t	vme_addr,
+	uint32_t	n_bytes)
+{
+VmeUniverseDmaListDesc d = p;
+LERegister1            dctl;
+
+	if ( BSP_VMEDMA_MSK_ATTR & attr_mask ) {
+		dctl = xfer_mode2dctl(xfer_mode);
+
+		if ( (uint32_t)BSP_VMEDMA_STATUS_UNSUP == dctl )
+			return -1;
+
+		st_le32( &d->dctl, dctl );
+	}
+
+	/* Last 3 bits of src & destination addresses must be the same.
+	 * For sake of simplicity we enforce (stricter) 8-byte alignment
+	 */
+
+	if ( BSP_VMEDMA_MSK_PCIA & attr_mask ) {
+		if ( pci_addr & 0x7 )
+			return -1;
+
+		st_le32( &d->dla, pci_addr );
+	}
+
+	if ( BSP_VMEDMA_MSK_VMEA & attr_mask ) {
+		if ( vme_addr & 0x7 )
+			return -1;
+
+		st_le32( &d->dva, vme_addr );
+	}
+
+	if ( BSP_VMEDMA_MSK_BCNT & attr_mask ) {
+		st_le32( &d->dtbc, n_bytes );
+	}
+
+	return 0;
+}
+
+static int      uni_desc_start
+(volatile void *controller_addr, int channel, DmaDescriptor p)
+{
+volatile LERegister *base = controller_addr;
+uint32_t			dgcs;
+
+	if ( !base )
+		base = vmeUniverse0BaseAddr;
+
+	dgcs  = vmeUniverseReadRegXX( base, UNIV_REGOFF_DGCS );
+
+	if ( UNIV_DGCS_ACT & dgcs )
+		return BSP_VMEDMA_STATUS_BUSY;
+
+	if ( !p ) {
+		/* Chain bit is cleared by non-linked-list start command
+		 * but do this anyways...
+		 */
+		dgcs &= ~UNIV_DGCS_CHAIN;
+		vmeUniverseWriteRegXX( base, UNIV_REGOFF_DGCS, dgcs);
+		return 0;
+	}
+
+	/* clear status and set CHAIN bit */
+	dgcs |= UNIV_DGCS_CHAIN;
+
+	vmeUniverseWriteRegXX( base, UNIV_REGOFF_DGCS, dgcs);
+
+    /* make sure count is 0 for linked list DMA */
+    vmeUniverseWriteRegXX( base, 0x0, UNIV_REGOFF_DTBC);
+
+    /* set the address of the descriptor chain */
+    vmeUniverseWriteRegXX( base, BSP_LOCAL2PCI_ADDR((uint32_t)p), UNIV_REGOFF_DCPP);
+
+	/* and GO */
+	dgcs |= UNIV_DGCS_GO;
+	vmeUniverseWriteReg(dgcs, UNIV_REGOFF_DGCS);
+
+	return 0;
+}
+
+static void
+uni_desc_dump(DmaDescriptor p)
+{
+VmeUniverseDmaListDesc d = p;
+LERegister1            dcpp = ld_le32(&d->dcpp);
+
+	printf("   DLA: 0x%08x\n", ld_le32(&d->dla));
+	printf("   DVA: 0x%08x\n", ld_le32(&d->dva));
+	printf("  DCPP: 0x%08x%s\n", dcpp, (dcpp & UNIV_DCPP_IMG_NULL) ? " (LAST)" : "");
+	printf("   CTL: 0x%08x\n", ld_le32(&d->dctl));
+	printf("   TBC: 0x%08x\n", ld_le32(&d->dtbc));
+}
 
 /* RTEMS interrupt subsystem */
-
-#ifdef __rtems__
 
 #include <bsp/irq.h>
 
@@ -1421,7 +1894,7 @@ int					pin = (int)arg;
 UniverseIRQEntry	ip;
 unsigned long	 	msk,lintstat,status;
 int					lvl;
-#ifdef BSP_PIC_DO_EOI
+#if defined(BSP_PIC_DO_EOI)
 unsigned long 		linten;
 #endif
 
@@ -1443,7 +1916,7 @@ unsigned long 		linten;
 		}
 #endif
 
-#ifndef BSP_PIC_DO_EOI /* Software priorities not supported */
+#ifndef BSP_PIC_DO_EOI  /* Software priorities not supported */
 
 		if ( (status = (lintstat & SPECIAL_IRQ_MSK)) )
 			universeSpecialISR( status );

@@ -167,12 +167,15 @@
 
 #define VME_AM_IS_2eSST(am)			((am) & (3<<10))
 
-/* Use 16-bit transfers for coupled- or BLT cycles
+/* Use 8/16/32-bit transfers for coupled- or BLT cycles
  * (MBLT, 2exxx are probably always 64-bit)
  */
-#define VME_MODE_DBW16				(1<<12)
+#define VME_MODE_DBW_MSK			(3<<12)
+#define VME_MODE_DBW8				(1<<12)
+#define VME_MODE_DBW16				(2<<12)
+#define VME_MODE_DBW32				(3<<12)
 
-/* Unused Flags 1<<12 .. 1<<23  are reserved
+/* Unused Flags 1<<14 .. 1<<23  are reserved
  * Flags 1<<24 .. 1<<31 are for driver specific options
  */
 
