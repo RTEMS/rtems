@@ -40,7 +40,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <rtems/libio.h>
-
+#include <inttypes.h>
 
 typedef struct {
   boolean bdbuf_modified;
@@ -414,12 +414,12 @@ rtems_status_code rtems_bdbuf_show_pool_header
 
   if (rc == RTEMS_SUCCESSFUL) {
     printf("------------------------------------------------------------------------------\n");
-    printf(" pool #%03d: blksize=%5u nblks=%5u buf_mem=0x%08x bdbuf_mem=0x%08x\n",
+    printf(" pool #%03d: blksize=%5u nblks=%5u buf_mem=0x%08" PRIxPTR " bdbuf_mem=0x%08" PRIxPTR "\n",
 	   pool_idx,
 	   pool_ptr->blksize,
 	   pool_ptr->nblks,
-	   pool_ptr->mallocd_bufs,
-	   pool_ptr->bdbufs);
+	   (intptr_t) pool_ptr->mallocd_bufs,
+	   (intptr_t) pool_ptr->bdbufs);
     printf("------------------------------------------------------------------------------\n");
   }
   return rc;
@@ -562,13 +562,13 @@ rtems_status_code rtems_show_bdbuf_print_wait_chain
     thread_id   = the_thread->Object.id;
     thread_name = the_thread->Object.name;
     thread_name_nonstring = (uint32_t)thread_name; 
-    printf("%20s %3d (0x%08x) %c%c%c%c\n",
+    printf("%20s %3d (0x%08" PRIx32 ") %c%c%c%c\n",
 	   ((thread_cnt == 1) ? "Threads waiting:" : ""),
 	   thread_cnt,thread_id,
-	   (thread_name_nonstring >> 24) & 0xff,
-	   (thread_name_nonstring >> 16) & 0xff,
-	   (thread_name_nonstring >>  8) & 0xff,
-	   (thread_name_nonstring >>  0) & 0xff);
+	   (char)((thread_name_nonstring >> 24) & 0xff),
+	   (char)((thread_name_nonstring >> 16) & 0xff),
+	   (char)((thread_name_nonstring >>  8) & 0xff),
+	   (char)((thread_name_nonstring >>  0) & 0xff));
 
     the_chain_node = the_chain_node->next;
   }
@@ -652,7 +652,7 @@ rtems_status_code rtems_show_bdbuf_print
       printf("DEVICE ");
     }
     else {
-      printf("%3u,%2u ",
+      printf("%3" PRIu32 "%2" PRIu32,
 	     ((bdbuf_info->dev == -1) 
 	      ? 0 : rtems_filesystem_dev_major_t(bdbuf_info->dev)),
 	     ((bdbuf_info->dev == -1) 
@@ -670,7 +670,7 @@ rtems_status_code rtems_show_bdbuf_print
       printf("BLOCK  ");
     }
     else {
-      printf("%6u ",bdbuf_info->blknum);
+      printf("%6" PRIu32,bdbuf_info->blknum);
     }
   }
 
