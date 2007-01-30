@@ -31,7 +31,7 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef uint16_t     Priority_Bit_map_control;
+typedef uint_least16_t     Priority_Bit_map_control;
 
 typedef uint32_t boolean;     /* Boolean value   */
 

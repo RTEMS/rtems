@@ -1,3 +1,8 @@
+2007-01-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Use uint_least16_t for
+	Priority_Bit_map_control;
+
 2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Remove unsigned64, signed64.
