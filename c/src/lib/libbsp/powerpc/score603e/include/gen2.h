@@ -249,7 +249,7 @@ extern "C" {
                                     /*     to start/stop the timer.        */
 #define BSP_TIMER_LEAST_VALID    1  /* Don't trust a value lower than this */
 
-#define BSP_PIC_DO_EOI              /* XXX - Don't know what this corresponds to on the score board */
+#undef  BSP_PIC_DO_EOI
 
 /*
  *  Convert decrement value to tenths of microsecnds (used by

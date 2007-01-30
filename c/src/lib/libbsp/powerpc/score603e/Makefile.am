@@ -83,12 +83,20 @@ vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
     ../../shared/vmeUniverse/VME.h \
-    ../../powerpc/shared/vme/VMEConfig.h \
-    ../../powerpc/shared/motorola/motorola.h
-
+    vme/VMEConfig.h \
+    ../../powerpc/shared/motorola/motorola.h \
+	../../shared/vmeUniverse/vmeUniverseDMA.h\
+	../../shared/vmeUniverse/bspVmeDmaList.h\
+	../../shared/vmeUniverse/VMEDMA.h
+ 
 noinst_PROGRAMS += vme.rel
 vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
-    ../../shared/vmeUniverse/vme_am_defs.h vme/vmeconfig.c
+    ../../shared/vmeUniverse/bspVmeDmaList.c \
+    ../../shared/vmeUniverse/vme_am_defs.h \
+	../shared/vme/vmeconfig.c \
+	../shared/vme/vme_universe.c \
+	../shared/vme/vme_universe_dma.c
+
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
