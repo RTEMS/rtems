@@ -1,3 +1,12 @@
+2007-01-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, preinstall.am, include/bsp.h, 
+	* vme/vmeconfig.c (removed), vme/VMEConfig.h (added):
+	cleaned up vme support - use files from libbsp/powerpc/shared/vme
+	and define BSP specifica in VMEConfig.h.
+	Use VME DMA support implemented by vmeUniverse and
+	libbsp/powerpc/shared/vme/vme_universe_dma.c
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
