@@ -71,6 +71,9 @@
 
 typedef unsigned long LERegister; /* emphasize contents are little endian */
 
+/****** NOTE: USE OF VmeUniverseDMAPacket IS DEPRECATED *********
+ ******       USE API IN VMEDMA.h INSTEAD               *********/
+
 /* NOTE: DMA packet descriptors MUST be 32 byte aligned */
 typedef struct VmeUniverseDMAPacketRec_ {
 	LERegister	dctl	__attribute__((aligned(32)));
@@ -81,7 +84,7 @@ typedef struct VmeUniverseDMAPacketRec_ {
 	LERegister	dummy2	__attribute__((packed));
 	LERegister	dcpp	__attribute__((packed));
 	LERegister	dummy3	__attribute__((packed));
-} VmeUniverseDMAPacketRec, *VmeUniverseDMAPacket;
+} VmeUniverseDMAPacketRec, *VmeUniverseDMAPacket; /* DEPRECATED */
 
 /* PCI CSR register */
 #define		UNIV_REGOFF_PCI_CSR		0x4
@@ -166,6 +169,7 @@ typedef struct VmeUniverseDMAPacketRec_ {
 # define	UNIV_DCTL_PGM		(1<<14)	/* VME PGM(1)/DATA(0) */
 # define	UNIV_DCTL_SUPER_MSK	(3<<12)	/* VME SUPER/USR mask 0x00003000 */
 # define	UNIV_DCTL_SUPER		(1<<12)	/* VME SUPER(1)/USR(0) */
+# define	UNIV_DCTL_NO_VINC	(1<<9)	/* VME no VME address increment [Universe IIa/b ONLY */
 # define	UNIV_DCTL_VCT		(1<<8)	/* VME enable BLT */
 # define	UNIV_DCTL_LD64EN	(1<<7)	/* PCI 64 enable  */
 
@@ -196,10 +200,11 @@ typedef struct VmeUniverseDMAPacketRec_ {
 # define	UNIV_DGCS_VON_DONE	(0<<20) /* VON counter disabled (do until done) */
 # define	UNIV_DGCS_VON_256	(1<<20) /* VON yield bus after 256 bytes */
 # define	UNIV_DGCS_VON_512	(2<<20) /* VON yield bus after 512 bytes */
-# define	UNIV_DGCS_VON_1024	(3<<20) /* VON yield bus after 512 bytes */
-# define	UNIV_DGCS_VON_2048	(4<<20) /* VON yield bus after 1024 bytes */
+# define	UNIV_DGCS_VON_1024	(3<<20) /* VON yield bus after 1024 bytes */
+# define	UNIV_DGCS_VON_2048	(4<<20) /* VON yield bus after 2048 bytes */
 # define	UNIV_DGCS_VON_4096	(5<<20) /* VON yield bus after 4096 bytes */
 # define	UNIV_DGCS_VON_8192	(6<<20) /* VON yield bus after 8192 bytes */
+# define	UNIV_DGCS_VON_16384	(7<<20) /* VON yield bus after 16384 bytes */
 # define	UNIV_DGCS_VOFF_MSK	(15<<16) /* VOFF mask */
 # define	UNIV_DGCS_VOFF_0_US	(0<<16)	/* re-request VME master after 0 us */
 # define	UNIV_DGCS_VOFF_2_US	(8<<16)	/* re-request VME master after 2 us */
@@ -600,6 +605,9 @@ vmeUniverseSlavePortCfg(
 	unsigned long	local_address,
 	unsigned long	length);
 
+/****** NOTE: USE OF vmeUniverseStartDMA IS DEPRECATED      *********
+ ******       USE API IN VMEDMA.h/vmeUniverseDMA.h INSTEAD  *********/
+
 /* start a (direct, not linked) DMA transfer
  *
  * NOTE:  DCTL and DGCS must be set up
@@ -609,7 +617,15 @@ int
 vmeUniverseStartDMA(
 	unsigned long local_addr,
 	unsigned long vme_addr,
-	unsigned long count);
+	unsigned long count); /* DEPRECATED */
+
+int
+vmeUniverseStartDMAXX(
+	volatile LERegister *ubase,
+	unsigned long local_addr,
+	unsigned long vme_addr,
+	unsigned long count); /* DEPRECATED */
+
 
 /* read a register in PCI memory space
  * (offset being one of the declared constants)
@@ -695,13 +711,6 @@ vmeUniverseMasterPortsShowXX();
 void
 vmeUniverseSlavePortsShowXX();
 #endif
-
-int
-vmeUniverseStartDMAXX(
-	volatile LERegister *ubase,
-	unsigned long local_addr,
-	unsigned long vme_addr,
-	unsigned long count);
 
 /* Raise a VME Interrupt at 'level' and respond with 'vector' to a
  * handler on the VME bus. (The handler could be a different board
@@ -879,8 +888,7 @@ vmeUniverseIntIsEnabled(unsigned int level);
  * line a given 'level' is using. By default,
  * all 7 VME levels use the first wire (pin==0) and
  * all internal sources use the (optional) second
- * wire (pin==1) [The driver doesn't support more than
- * to wires].
+ * wire (pin==1).
  * This feature is useful if you want to make use of
  * different hardware priorities of the PIC. Let's
  * say you want to give IRQ level 7 the highest priority.

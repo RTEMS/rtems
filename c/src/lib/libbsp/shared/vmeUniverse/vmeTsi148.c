@@ -61,8 +61,18 @@
 #define __INSIDE_RTEMS_BSP__
 
 #include "vmeTsi148.h"
+#include <bsp/VMEDMA.h>
+#include "vmeTsi148DMA.h"
+#include "bspVmeDmaListP.h"
 
+
+#define DEBUG
+
+#ifdef DEBUG
+#define STATIC
+#else
 #define STATIC static
+#endif
 
 /* The tsi has 4 'local' wires that can be hooked to a PIC */
 
@@ -300,6 +310,29 @@
 
 typedef unsigned int pci_ulong;
 
+#ifdef __BIG_ENDIAN__
+	static inline void st_be32( uint32_t *a, uint32_t v)
+	{
+		*a = v;
+	}
+	static inline uint32_t ld_be32( uint32_t *a )
+	{
+		return *a;
+	}
+#elif defined(__LITTLE_ENDIAN__)
+#error "You need to implement st_be32/ld_be32"
+#else
+#error "Undefined endianness??"
+#endif
+
+#ifndef BSP_LOCAL2PCI_ADDR
+/* try legacy PCI_DRAM_OFFSET */
+#ifndef PCI_DRAM_OFFSET
+#define PCI_DRAM_OFFSET 0
+#endif
+#define BSP_LOCAL2PCI_ADDR(l)	(((uint32_t)l)+PCI_DRAM_OFFSET)
+#endif
+
 /* PCI_MEM_BASE is a possible offset between CPU- and PCI addresses.
  * Should be defined by the BSP.
  */
@@ -310,6 +343,8 @@ typedef unsigned int pci_ulong;
 #define BSP_PCI2LOCAL_ADDR(memaddr) ((unsigned long)(memaddr) + PCI_MEM_BASE)
 #endif
 
+typedef uint32_t BEValue;
+
 typedef struct {
 	BERegister *base;
 	int			irqLine;
@@ -317,6 +352,8 @@ typedef struct {
 } Tsi148Dev;
 
 static Tsi148Dev devs[NUM_TSI_DEVS] = {{0}};
+
+#define THEBASE (devs[0].base)
 
 /* forward decl */
 extern int vmeTsi148RegPort;
@@ -445,7 +482,7 @@ int port;
 void
 vmeTsi148Reset()
 {
-	vmeTsi148ResetXX(devs[0].base);
+	vmeTsi148ResetXX(THEBASE);
 }
 
 /* convert an address space selector to a corresponding
@@ -468,8 +505,19 @@ am2omode(unsigned long address_space, unsigned long *pmode)
 unsigned long mode = 0;
 unsigned long tm   = TSI_TM_SCT_IDX;
 
-	if ( ! (VME_MODE_DBW16	& address_space ) )
-		mode |= TSI_OTAT_DBW(1);
+	switch ( VME_MODE_DBW_MSK & address_space ) {
+		case VME_MODE_DBW8:
+			return -1;	/* unsupported */
+
+		case VME_MODE_DBW16:
+			break;
+
+		default:
+		case VME_MODE_DBW32:
+			mode |= TSI_OTAT_DBW(1);
+			break;
+	}
+
 	if ( ! (VME_MODE_PREFETCH_ENABLE & address_space) )
 		mode |= TSI_OTAT_MRPFD;
 	else {
@@ -701,7 +749,7 @@ int					i,s,l;
 		return -1;
 	}
 
-	if ( base == devs[0].base && isout && vmeTsi148RegPort == port ) {
+	if ( base == THEBASE && isout && vmeTsi148RegPort == port ) {
 		uprintf(stderr,"Tsi148 %s Port Cfg: invalid port; reserved by the interrupt manager for CRG\n", name);
 		return -1;
 	}
@@ -838,7 +886,7 @@ vmeTsi148InboundPortCfg(
 	unsigned long	pci_address,
 	unsigned long	length)
 {
-	return configTsiPort(devs[0].base, 0, port, address_space, vme_address, pci_address, length);
+	return configTsiPort(THEBASE, 0, port, address_space, vme_address, pci_address, length);
 }
 
 
@@ -862,7 +910,7 @@ vmeTsi148OutboundPortCfg(
 	unsigned long	pci_address,
 	unsigned long	length)
 {
-	return configTsiPort(devs[0].base, 1, port, address_space, vme_address, pci_address, length);
+	return configTsiPort(THEBASE, 1, port, address_space, vme_address, pci_address, length);
 }
 
 
@@ -975,7 +1023,7 @@ vmeTsi148XlateAddr(
 	unsigned long *paOut/* where to put result */
 	)
 {
-	return vmeTsi148XlateAddrXX(devs[0].base, outbound, reverse, as, aIn, paOut);
+	return vmeTsi148XlateAddrXX(THEBASE, outbound, reverse, as, aIn, paOut);
 }
 
 
@@ -1055,7 +1103,7 @@ unsigned long long	start, limit, offst;
 void
 vmeTsi148OutboundPortsShow(FILE *f)
 {
-	vmeTsi148OutboundPortsShowXX(devs[0].base, f);
+	vmeTsi148OutboundPortsShowXX(THEBASE, f);
 }
 
 void
@@ -1115,7 +1163,7 @@ unsigned long long	start, limit, offst;
 void
 vmeTsi148InboundPortsShow(FILE *f)
 {
-	vmeTsi148InboundPortsShowXX(devs[0].base, f);
+	vmeTsi148InboundPortsShowXX(THEBASE, f);
 }
 
 
@@ -1132,7 +1180,7 @@ int port;
 void
 vmeTsi148DisableAllInboundPorts(void)
 {
-	vmeTsi148DisableAllInboundPortsXX(devs[0].base);
+	vmeTsi148DisableAllInboundPortsXX(THEBASE);
 }
 
 void
@@ -1148,7 +1196,7 @@ int port;
 void
 vmeTsi148DisableAllOutboundPorts(void)
 {
-	vmeTsi148DisableAllOutboundPortsXX(devs[0].base);
+	vmeTsi148DisableAllOutboundPortsXX(THEBASE);
 }
 
 
@@ -1191,7 +1239,7 @@ uint32_t mode;
 int
 vmeTsi148MapCRG(uint32_t vme_base, uint32_t as )
 {
-	return vmeTsi148MapCRGXX( devs[0].base, vme_base, as );
+	return vmeTsi148MapCRGXX( THEBASE, vme_base, as );
 }
 
 /* Interrupt Subsystem */
@@ -1326,9 +1374,9 @@ rtems_interrupt_disable(flags);
 	}
 	wire_mask[pin] |= mask;
 
-	mask = TSI_RD(devs[0].base, mapreg) & ~ (0x3<<shift);
+	mask = TSI_RD(THEBASE, mapreg) & ~ (0x3<<shift);
 	mask |= wire;
-	TSI_WR( devs[0].base, mapreg, mask );
+	TSI_WR( THEBASE, mapreg, mask );
 
 rtems_interrupt_enable(flags);
 	return 0;
@@ -1363,7 +1411,7 @@ static void
 tsiVMEISR(rtems_irq_hdl_param arg)
 {
 int					pin = (int)arg;
-BERegister			*b  = devs[0].base;
+BERegister			*b  = THEBASE;
 IRQEntry			ip;
 unsigned long	 	msk,lintstat,vector, vecarg;
 int					lvl;
@@ -1462,7 +1510,7 @@ my_no_op(const rtems_irq_connect_data * arg)
 static int
 my_isOn(const rtems_irq_connect_data *arg)
 {
-		return (int)(TSI_RD(devs[0].base, TSI_INTEO_REG) & TSI_RD(devs[0].base, TSI_INTEN_REG));
+		return (int)(TSI_RD(THEBASE, TSI_INTEO_REG) & TSI_RD(THEBASE, TSI_INTEN_REG));
 }
 
 static void
@@ -1505,9 +1553,9 @@ va_list	ap;
 #ifndef BSP_EARLY_PROBE_VME
 #define BSP_EARLY_PROBE_VME(addr)	\
 	(																									\
-		vmeTsi148ClearVMEBusErrorsXX( devs[0].base, 0 ),												\
+		vmeTsi148ClearVMEBusErrorsXX( THEBASE, 0 ),												\
 		( ((PCI_DEVICE_TSI148 << 16) | PCI_VENDOR_TUNDRA ) == TSI_LE_RD32( ((BERegister*)(addr)), 0 )	\
-		 && 0 == vmeTsi148ClearVMEBusErrorsXX( devs[0].base, 0 ) )										\
+		 && 0 == vmeTsi148ClearVMEBusErrorsXX( THEBASE, 0 ) )										\
 	)
 #endif
 
@@ -1524,7 +1572,7 @@ char *regtype = (as & VME_AM_MASK) == VME_AM_CSR ? "CSR" : "CRG";
 
 	/* try to find mapping */
 	if ( 0 > (j = xlateFindPort(
-				devs[0].base,
+				THEBASE,
 				1, 0,
 				as | VME_MODE_AS_MATCH,
 				vme_addr,
@@ -1587,7 +1635,7 @@ unsigned long cpu_base, vme_reg_base;
 
 	uprintf(stderr,"vmeTsi148 IRQ manager: looking for registers on VME...\n");
 
-	if ( ( i = ((TSI_RD( devs[0].base, TSI_CBAR_REG ) & 0xff) >> 3) ) > 0 ) {
+	if ( ( i = ((TSI_RD( THEBASE, TSI_CBAR_REG ) & 0xff) >> 3) ) > 0 ) {
 		uprintf(stderr,"Trying to find CSR on VME...\n");
 		vme_reg_base = i*0x80000 + TSI_CSR_OFFSET;
 		i = mappedAndProbed( vme_reg_base, VME_AM_CSR , &cpu_base);
@@ -1603,7 +1651,7 @@ unsigned long cpu_base, vme_reg_base;
 
 		/* Next we see if the CRG block is mapped to VME */
 
-		if ( (TSI_CRGAT_EN & (j = TSI_RD( devs[0].base, TSI_CRGAT_REG ))) ) {
+		if ( (TSI_CRGAT_EN & (j = TSI_RD( THEBASE, TSI_CRGAT_REG ))) ) {
 			switch ( j & TSI_CRGAT_AS_MSK ) {
 				case TSI_CRGAT_A16 : i = VME_AM_SUP_SHORT_IO; break;
 				case TSI_CRGAT_A24 : i = VME_AM_STD_SUP_DATA; break;
@@ -1611,7 +1659,7 @@ unsigned long cpu_base, vme_reg_base;
 				default:
 				break;
 			}
-			vme_reg_base = TSI_RD( devs[0].base, TSI_CBAL_REG ) & ~ (TSI_CRG_SIZE - 1);
+			vme_reg_base = TSI_RD( THEBASE, TSI_CBAL_REG ) & ~ (TSI_CRG_SIZE - 1);
 		}
 
 		if ( -1 == i ) {
@@ -1625,7 +1673,7 @@ unsigned long cpu_base, vme_reg_base;
 			uprintf(stderr,"(should open outbound window to CSR space or map CRG [vmeTsi148MapCRG()])\n");
 			uprintf(stderr,"Falling back to PCI but you might experience spurious VME interrupts; read a register\n");
 			uprintf(stderr,"back from user ISR to flush posted-write FIFO as a work-around\n");
-			cpu_base = (unsigned long)devs[0].base;
+			cpu_base = (unsigned long)THEBASE;
 			i        = -1;
 	}
 
@@ -1725,7 +1773,7 @@ volatile IRQEntry *p;
 static int
 intDoEnDis(unsigned int level, int dis)
 {
-BERegister		*b = devs[0].base;
+BERegister		*b = THEBASE;
 unsigned long	flags, v;
 int				shift;
 
@@ -1826,7 +1874,7 @@ unsigned long v;
 int
 vmeTsi148IntRaise(int level, unsigned vector)
 {
-	return vmeTsi148IntRaiseXX(devs[0].base, level, vector);
+	return vmeTsi148IntRaiseXX(THEBASE, level, vector);
 }
 
 /* Loopback test of VME/Tsi148 internal interrupts */
@@ -1850,7 +1898,7 @@ LoopbackTstArgs *pa = arg;
 int
 vmeTsi148IntLoopbackTst(int level, unsigned vector)
 {
-BERegister			*b = devs[0].base;
+BERegister			*b = THEBASE;
 rtems_status_code	sc;
 rtems_id			q = 0;
 int					installed = 0;
@@ -2002,7 +2050,531 @@ unsigned long rval;
 unsigned long
 vmeTsi148ClearVMEBusErrors(uint32_t *paddr)
 {
-	return vmeTsi148ClearVMEBusErrorsXX(devs[0].base, paddr);
+	return vmeTsi148ClearVMEBusErrorsXX(THEBASE, paddr);
+}
+
+/** DMA Support **/
+
+/* descriptor must be 8-byte aligned */
+typedef struct VmeTsi148DmaListDescriptorRec_ {
+	BEValue						dsau,  dsal;	
+	BEValue						ddau,  ddal;	
+	BEValue						dsat,  ddat;	
+	BEValue						dnlau, dnlal;
+	BEValue						dcnt,  ddbs;
+} VmeTsi148DmaListDescriptorRec;
+
+static void     tsi_desc_init  (DmaDescriptor);
+static int      tsi_desc_setup (DmaDescriptor, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
+static void     tsi_desc_setnxt(DmaDescriptor, DmaDescriptor);
+static void     tsi_desc_dump  (DmaDescriptor);
+static int      tsi_desc_start (volatile void *controller_addr, int channel, DmaDescriptor p);
+
+VMEDmaListClassRec	vmeTsi148DmaListClass = {
+	desc_size:  sizeof(VmeTsi148DmaListDescriptorRec),
+	desc_align: 8,
+	freeList:   0,
+	desc_alloc: 0,
+	desc_free:  0,
+	desc_init:  tsi_desc_init,
+	desc_setnxt:tsi_desc_setnxt,
+	desc_setup: tsi_desc_setup,
+	desc_start: tsi_desc_start,
+	desc_refr:  0,
+	desc_dump:	tsi_desc_dump,
+};
+
+/* DMA Control */
+#define TSI_DMA_REG(off,i)	((off)+(((i)&1)<<7))	
+
+#define TSI_DCTL_REG(i)		TSI_DMA_REG(0x500,i)
+#define TSI_DCTL0_REG		0x500
+#define TSI_DCTL1_REG		0x580
+#   define TSI_DCTL_ABT		(1<<27)	/* abort */
+#   define TSI_DCTL_PAU		(1<<26) /* pause */
+#   define TSI_DCTL_DGO		(1<<25) /* GO    */
+#   define TSI_DCTL_MOD		(1<<23)	/* linked list: 0, direct: 1 */
+#   define TSI_DCTL_VFAR	(1<<17) /* flush FIFO on VME error: 1 (discard: 0) */
+#   define TSI_DCTL_PFAR	(1<<16) /* flush FIFO on PCI error: 1 (discard: 0) */
+
+#   define TSI_DCTL_VBKS(i)	(((i)&7)<<12) /* VME block size */
+#   define TSI_DCTL_VBKS_32	TSI_DCTL_VBKS(0)
+#   define TSI_DCTL_VBKS_64	TSI_DCTL_VBKS(1)
+#   define TSI_DCTL_VBKS_128	TSI_DCTL_VBKS(2)
+#   define TSI_DCTL_VBKS_256	TSI_DCTL_VBKS(3)
+#   define TSI_DCTL_VBKS_512	TSI_DCTL_VBKS(4)
+#   define TSI_DCTL_VBKS_1024	TSI_DCTL_VBKS(5)
+#   define TSI_DCTL_VBKS_2048	TSI_DCTL_VBKS(6)
+#   define TSI_DCTL_VBKS_4096	TSI_DCTL_VBKS(7)
+
+#   define TSI_DCTL_VBOT(i)	(((i)&7)<< 8) /* VME back-off time */
+#   define TSI_DCTL_VBOT_0us	TSI_DCTL_VBOT(0)
+#   define TSI_DCTL_VBOT_1us	TSI_DCTL_VBOT(1)
+#   define TSI_DCTL_VBOT_2us	TSI_DCTL_VBOT(2)
+#   define TSI_DCTL_VBOT_4us	TSI_DCTL_VBOT(3)
+#   define TSI_DCTL_VBOT_8us	TSI_DCTL_VBOT(4)
+#   define TSI_DCTL_VBOT_16us	TSI_DCTL_VBOT(5)
+#   define TSI_DCTL_VBOT_32us	TSI_DCTL_VBOT(6)
+#   define TSI_DCTL_VBOT_64us	TSI_DCTL_VBOT(7)
+
+#   define TSI_DCTL_PBKS(i)	(((i)&7)<< 4) /* PCI block size */
+#   define TSI_DCTL_PBKS_32	TSI_DCTL_PBKS(0)
+#   define TSI_DCTL_PBKS_64	TSI_DCTL_PBKS(1)
+#   define TSI_DCTL_PBKS_128	TSI_DCTL_PBKS(2)
+#   define TSI_DCTL_PBKS_256	TSI_DCTL_PBKS(3)
+#   define TSI_DCTL_PBKS_512	TSI_DCTL_PBKS(4)
+#   define TSI_DCTL_PBKS_1024	TSI_DCTL_PBKS(5)
+#   define TSI_DCTL_PBKS_2048	TSI_DCTL_PBKS(6)
+#   define TSI_DCTL_PBKS_4096	TSI_DCTL_PBKS(7)
+
+#   define TSI_DCTL_PBOT(i)	(((i)&7)<< 0) /* PCI back-off time */
+#   define TSI_DCTL_PBOT_0us	TSI_DCTL_PBOT(0)
+#   define TSI_DCTL_PBOT_1us	TSI_DCTL_PBOT(1)
+#   define TSI_DCTL_PBOT_2us	TSI_DCTL_PBOT(2)
+#   define TSI_DCTL_PBOT_4us	TSI_DCTL_PBOT(3)
+#   define TSI_DCTL_PBOT_8us	TSI_DCTL_PBOT(4)
+#   define TSI_DCTL_PBOT_16us	TSI_DCTL_PBOT(5)
+#   define TSI_DCTL_PBOT_32us	TSI_DCTL_PBOT(6)
+#   define TSI_DCTL_PBOT_64us	TSI_DCTL_PBOT(7)
+
+/* DMA Status */
+#define TSI_DSTA_REG(i)		TSI_DMA_REG(0x504,i)
+#define TSI_DSTA0_REG		0x504
+#define TSI_DSTA1_REG		0x584
+#   define TSI_DSTA_ERR		(1<<28)
+#   define TSI_DSTA_ABT		(1<<27)
+#   define TSI_DSTA_PAU		(1<<26)
+#   define TSI_DSTA_DON		(1<<25)
+#   define TSI_DSTA_BSY		(1<<24)
+#   define TSI_DSTA_ERRS	(1<<20)	/* Error source; PCI:1, VME:0 */
+#   define TSI_DSTA_ERT_MSK	(3<<16) /* Error type                 */
+#   define TSI_DSTA_ERT_BERR_E	(0<<16) /* 2eVME even or other bus error */
+#   define TSI_DSTA_ERT_BERR_O	(1<<16) /* 2eVME odd bus error        */
+#   define TSI_DSTA_ERT_SLVE_E	(2<<16) /* 2eVME even or other slave termination */
+#   define TSI_DSTA_ERT_SLVE_O	(3<<16) /* 2eVME odd slave termination; 2eSST read last word invalid */
+
+/* DMA Current source address upper */
+#define TSI_DCSAU_REG(i)	TSI_DMA_REG(0x508,i)
+#define TSI_DCSAU0_REG		0x508
+#define TSI_DCSAU1_REG		0x588
+
+/* DMA Current source address lower */
+#define TSI_DCSAL_REG(i)	TSI_DMA_REG(0x50c,i)
+#define TSI_DCSAL0_REG		0x50c
+#define TSI_DCSAL1_REG		0x58c
+
+/* DMA Current destination address upper */
+#define TSI_DCDAU_REG(i)	TSI_DMA_REG(0x510,i)
+#define TSI_DCDAU0_REG		0x510
+#define TSI_DCDAU1_REG		0x590
+
+/* DMA Current destination address lower */
+#define TSI_DCDAL_REG(i)	TSI_DMA_REG(0x514,i)
+#define TSI_DCDAL0_REG		0x514
+#define TSI_DCDAL1_REG		0x594
+
+/* DMA Current link address upper */
+#define TSI_DCLAU_REG(i)	TSI_DMA_REG(0x518,i)
+#define TSI_DCLAU0_REG		0x518
+#define TSI_DCLAU1_REG		0x598
+
+/* DMA Current link address lower */
+#define TSI_DCLAL_REG(i)	TSI_DMA_REG(0x51c,i)
+#define TSI_DCLAL0_REG		0x51c
+#define TSI_DCLAL1_REG		0x59c
+
+/* DMA Source address upper */
+#define TSI_DSAU_REG(i)		TSI_DMA_REG(0x520,i)
+#define TSI_DSAU0_REG		0x520
+#define TSI_DSAU1_REG		0x5a0
+
+/* DMA Source address lower */
+#define TSI_DSAL_REG(i)		TSI_DMA_REG(0x524,i)
+#define TSI_DSAL0_REG		0x524
+#define TSI_DSAL1_REG		0x5a4
+
+/* DMA Destination address upper */
+#define TSI_DDAU_REG(i)		TSI_DMA_REG(0x528,i)
+#define TSI_DDAU0_REG		0x528
+#define TSI_DDAU1_REG		0x5a8
+
+/* DMA Destination address lower */
+#define TSI_DDAL_REG(i)		TSI_DMA_REG(0x52c,i)
+#define TSI_DDAL0_REG		0x52c
+#define TSI_DDAL1_REG		0x5ac
+
+/* DMA Source Attribute */
+#define TSI_DSAT_REG(i)		TSI_DMA_REG(0x530,i)
+#define TSI_DSAT0_REG		0x530
+#define TSI_DSAT1_REG		0x5b0
+
+/* DMA Destination Attribute */
+#define TSI_DDAT_REG(i)		TSI_DMA_REG(0x534,i)
+#define TSI_DDAT0_REG		0x534
+#define TSI_DDAT1_REG		0x5b4
+
+#   define TSI_DXAT_TYP(i)	(((i)&3)<<28)	/* Xfer type */
+#   define TSI_DXAT_TYP_PCI	TSI_DXAT_TYP(0)
+#   define TSI_DXAT_TYP_VME	TSI_DXAT_TYP(1)
+#   define TSI_DSAT_TYP_PAT	TSI_DXAT_TYP(2) /* pattern */
+
+#   define TSI_DSAT_PSZ		(1<<25) /* pattern size 32-bit: 0, 8-bit: 1 */
+#   define TSI_DSAT_NIN		(1<<24)	/* no-increment */
+
+#	define TSI_DXAT_OTAT_MSK	((1<<13)-1)	/* get bits compatible with OTAT */
+
+#   define TSI_DXAT_SSTM(i)	(((i)&3)<<11)	/* 2eSST Xfer rate (MB/s) */
+#   define TSI_DXAT_SSTM_116	TSI_DXAT_SSTM(0)
+#   define TSI_DXAT_SSTM_267	TSI_DXAT_SSTM(1)
+#   define TSI_DXAT_SSTM_320	TSI_DXAT_SSTM(2)
+
+#   define TSI_DXAT_TM(i)	(((i)&7)<< 8) /* VME Xfer mode */
+#   define TSI_DXAT_TM_SCT	TSI_DXAT_TM(0)
+#   define TSI_DXAT_TM_BLT	TSI_DXAT_TM(1)
+#   define TSI_DXAT_TM_MBLT	TSI_DXAT_TM(2)
+#   define TSI_DXAT_TM_2eVME	TSI_DXAT_TM(3)
+#   define TSI_DXAT_TM_2eSST	TSI_DXAT_TM(4)
+#   define TSI_DSAT_TM_2eSST_B	TSI_DXAT_TM(5)	/* 2eSST broadcast */
+
+#   define TSI_DXAT_DBW(i)	(((i)&3)<< 6)	/* VME Data width */
+#   define TSI_DXAT_DBW_16	TSI_DXAT_DBW(0)
+#   define TSI_DXAT_DBW_32	TSI_DXAT_DBW(1)
+
+#   define TSI_DXAT_SUP		(1<<5)	/* supervisor access */
+#   define TSI_DXAT_PGM		(1<<4)	/* program access    */
+
+#   define TSI_DXAT_AM(i)	(((i)&15)<<0)	/* VME Address mode */
+#   define TSI_DXAT_AM_A16	TSI_DXAT_AM(0)
+#   define TSI_DXAT_AM_A24	TSI_DXAT_AM(1)
+#   define TSI_DXAT_AM_A32	TSI_DXAT_AM(2)
+#   define TSI_DXAT_AM_A64	TSI_DXAT_AM(4)
+#   define TSI_DXAT_AM_CSR	TSI_DXAT_AM(5)
+
+/* DMA Next link address upper */
+#define TSI_DNLAU_REG(i)	TSI_DMA_REG(0x538,i)
+#define TSI_DNLAU0_REG		0x538
+#define TSI_DNLAU1_REG		0x5b8
+
+/* DMA Next link address lower */
+#define TSI_DNLAL_REG(i)	TSI_DMA_REG(0x53c,i)
+#define TSI_DNLAL0_REG		0x53c
+#define TSI_DNLAL1_REG		0x5bc
+
+#	define TSI_DNLAL_LLA	1	/* last element in chain */
+
+/* DMA Byte Count */
+#define TSI_DCNT_REG(i)		TSI_DMA_REG(0x540,i)
+#define TSI_DCNT0_REG		0x540
+#define TSI_DCNT1_REG		0x54c
+
+/* DMA 2eSST destination broadcast select */
+#define TSI_DDBS_REG(i)		TSI_DMA_REG(0x544,i)
+#define TSI_DDBS0_REG		0x544
+#define TSI_DDBS1_REG		0x5c4
+
+/* Convert canonical xfer_mode into Tsi148 bits; return -1 if invalid */
+static uint32_t
+vme_attr(uint32_t xfer_mode)
+{
+uint32_t vme_mode;
+	if ( am2omode(xfer_mode, &vme_mode) )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	/* am2omode may set prefetch and other bits */
+	vme_mode &= TSI_DXAT_OTAT_MSK;
+	vme_mode |= TSI_DXAT_TYP_VME;
+
+	if ( BSP_VMEDMA_MODE_NOINC_VME & xfer_mode )  {
+		/* no-incr. only supported on source address */
+		if ( (BSP_VMEDMA_MODE_PCI2VME & xfer_mode) )
+			return BSP_VMEDMA_STATUS_UNSUP;
+		vme_mode |= TSI_DSAT_NIN;
+	}
+
+	return vme_mode;
+}
+
+static uint32_t
+pci_attr(uint32_t xfer_mode)
+{
+uint32_t pci_mode = 0;
+	if ( BSP_VMEDMA_MODE_NOINC_PCI & xfer_mode )  {
+		/* no-incr. only supported on source address */
+		if ( ! (BSP_VMEDMA_MODE_PCI2VME & xfer_mode) )
+			return BSP_VMEDMA_STATUS_UNSUP;
+		pci_mode |= TSI_DSAT_NIN;
+	}
+	return pci_mode;
+}
+
+static void tsi_desc_init(DmaDescriptor p)
+{
+VmeTsi148DmaListDescriptor d = p;
+	st_be32( &d->dnlau, 0 );
+	st_be32( &d->dnlal, TSI_DNLAL_LLA );
+	st_be32( &d->ddbs, (1<<22)-1 );	/* SSTB broadcast not yet fully supported */
+}
+
+static void
+tsi_desc_setnxt(DmaDescriptor p, DmaDescriptor n)
+{
+VmeTsi148DmaListDescriptor d = p;
+	if ( 0 == n ) {
+		st_be32( &d->dnlal, TSI_DNLAL_LLA );
+	} else {
+		st_be32( &d->dnlal, BSP_LOCAL2PCI_ADDR((uint32_t)n) );
+	}
+}
+
+static void
+tsi_desc_dump(DmaDescriptor p)
+{
+VmeTsi148DmaListDescriptor d = p;
+		printf("   DSA: 0x%08lx%08lx\n", ld_be32(&d->dsau),  ld_be32(&d->dsal));
+		printf("   DDA: 0x%08lx%08lx\n", ld_be32(&d->ddau),  ld_be32(&d->ddal));
+		printf("   NLA: 0x%08lx%08lx\n", ld_be32(&d->dnlau), ld_be32(&d->dnlal));
+		printf("   SAT: 0x%08lx              DAT: 0x%08lx\n", ld_be32(&d->dsat), ld_be32(&d->ddat));
+		printf("   CNT: 0x%08lx\n",      ld_be32(&d->dcnt));
+}
+
+
+int
+vmeTsi148DmaSetupXX(BERegister *base, int channel, uint32_t mode, uint32_t xfer_mode, void *custom)
+{
+uint32_t ctl = 0;
+uint32_t vmeatt, pciatt, sat, dat;
+
+	if ( channel < 0 || channel > 1 )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	/* Check bus mode */
+	if ( (uint32_t)BSP_VMEDMA_STATUS_UNSUP == (vmeatt = vme_attr(xfer_mode)) )
+		return -2;
+
+	/* Check PCI bus mode */
+	if ( (uint32_t)BSP_VMEDMA_STATUS_UNSUP == (pciatt = pci_attr(xfer_mode)) )
+		return -3;
+
+	/* Compute control word; bottleneck is VME; */
+	ctl |= TSI_DCTL_PBKS_32;
+	ctl |= (BSP_VMEDMA_OPT_THROUGHPUT == mode ? TSI_DCTL_PBOT_0us : TSI_DCTL_PBOT_1us);
+
+	switch ( mode ) {
+		case BSP_VMEDMA_OPT_THROUGHPUT:
+			ctl |= TSI_DCTL_VBKS_1024;		
+			ctl |= TSI_DCTL_VBOT_0us;
+		break;
+		
+		case BSP_VMEDMA_OPT_LOWLATENCY:
+			ctl |= TSI_DCTL_VBKS_32;
+			ctl |= TSI_DCTL_VBOT_0us;
+		break;
+
+		case BSP_VMEDMA_OPT_SHAREDBUS:
+			ctl |= TSI_DCTL_VBKS_128;
+			ctl |= TSI_DCTL_VBOT_64us;
+		break;
+
+		case BSP_VMEDMA_OPT_CUSTOM:
+			ctl = *(uint32_t*)custom;
+		break;
+
+		default:
+		case BSP_VMEDMA_OPT_DEFAULT:
+			ctl = 0;
+		break;
+	}
+	TSI_WR(base, TSI_DCTL_REG(channel), ctl);
+	if ( BSP_VMEDMA_MODE_PCI2VME & xfer_mode ) {
+		dat = vmeatt; sat = pciatt;
+	} else {
+		sat = vmeatt; dat = pciatt;
+	}
+	TSI_WR(base, TSI_DSAT_REG(channel), sat);
+	TSI_WR(base, TSI_DDAT_REG(channel), dat);
+	return 0;
+}
+
+int
+vmeTsi148DmaSetup(int channel, uint32_t mode, uint32_t xfer_mode, void *custom)
+{
+BERegister *base = THEBASE;
+	return vmeTsi148DmaSetupXX(base, channel, mode, xfer_mode, custom);
+}
+
+
+int
+vmeTsi148DmaListStartXX(BERegister *base, int channel, VmeTsi148DmaListDescriptor d)
+{
+uint32_t ctl;
+
+	if ( d ) {
+		/* Set list pointer and start */
+		if ( channel < 0 || channel > 1 )
+			return BSP_VMEDMA_STATUS_UNSUP;
+
+		if ( TSI_DSTA_BSY & TSI_RD(base, TSI_DSTA_REG(channel)) )
+			return BSP_VMEDMA_STATUS_BUSY; 	/* channel busy */
+
+		TSI_WR(base, TSI_DNLAL_REG(channel), (uint32_t)BSP_LOCAL2PCI_ADDR(d));
+
+		asm volatile("":::"memory");
+
+		/* Start transfer */
+		ctl  = TSI_RD(base, TSI_DCTL_REG(channel)) | TSI_DCTL_DGO;
+		ctl &= ~TSI_DCTL_MOD;
+		TSI_WR(base, TSI_DCTL_REG(channel), ctl);
+	}
+	/* else: list vs. direct mode is set by the respective start commands */
+	return 0;
+}
+
+int
+vmeTsi148DmaListStart(int channel, VmeTsi148DmaListDescriptor d)
+{
+BERegister *base = THEBASE;
+	return vmeTsi148DmaListStartXX(base, channel, d);
+}
+
+int
+vmeTsi148DmaStartXX(BERegister *base, int channel, uint32_t pci_addr, uint32_t vme_addr, uint32_t n_bytes)
+{
+uint32_t src, dst, ctl;
+
+	if ( channel < 0 || channel > 1 )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	if ( TSI_DSTA_BSY & TSI_RD(base, TSI_DSTA_REG(channel)) )
+		return BSP_VMEDMA_STATUS_BUSY; 	/* channel busy */
+
+	/* retrieve direction from dst attribute */
+	if ( TSI_DXAT_TYP_VME & TSI_RD(base, TSI_DDAT_REG(channel)) ) {
+		dst = vme_addr;
+		src = pci_addr;
+	} else {
+		src = vme_addr;
+		dst = pci_addr;
+	}
+	/* FIXME: we leave the 'upper' registers (topmost 32bits) alone.
+	 *        Probably, we should reset them at init...
+	 */
+	TSI_WR(base, TSI_DSAL_REG(channel), src);
+	TSI_WR(base, TSI_DDAL_REG(channel), dst);
+	TSI_WR(base, TSI_DCNT_REG(channel), n_bytes);
+
+	asm volatile("":::"memory");
+
+	/* Start transfer */
+	ctl  = TSI_RD(base, TSI_DCTL_REG(channel)) | TSI_DCTL_DGO | TSI_DCTL_MOD;		
+	TSI_WR(base, TSI_DCTL_REG(channel), ctl);
+
+	return 0;
+}
+
+int
+vmeTsi148DmaStart(int channel, uint32_t pci_addr, uint32_t vme_addr, uint32_t n_bytes)
+{
+BERegister *base = THEBASE;
+	return vmeTsi148DmaStartXX(base, channel, pci_addr, vme_addr, n_bytes);
+}
+
+uint32_t
+vmeTsi148DmaStatusXX(BERegister *base, int channel)
+{
+uint32_t	st = TSI_RD(base, TSI_DSTA_REG(channel));
+
+	if ( channel < 0 || channel > 1 )
+		return BSP_VMEDMA_STATUS_UNSUP;
+
+	st = TSI_RD(base, TSI_DSTA_REG(channel));
+
+	/* Status can be zero if an empty list (all counts == 0) is executed */
+	if ( (TSI_DSTA_DON & st) || 0 == st )
+		return BSP_VMEDMA_STATUS_OK;
+
+	if ( TSI_DSTA_BSY & st )
+		return BSP_VMEDMA_STATUS_BUSY; 	/* channel busy */
+
+	if ( TSI_DSTA_ERR & st ) {
+		if ( TSI_DSTA_ERRS & st )
+			return BSP_VMEDMA_STATUS_BERR_PCI;
+		if ( ! (TSI_DSTA_ERT_SLVE_E	& st) )
+			return BSP_VMEDMA_STATUS_BERR_VME;
+	}
+
+	return BSP_VMEDMA_STATUS_OERR;
+}
+
+uint32_t
+vmeTsi148DmaStatus(int channel)
+{
+BERegister *base = THEBASE;
+	return vmeTsi148DmaStatusXX(base, channel);
+}
+
+#define ALL_BITS_NEEDED	(BSP_VMEDMA_MSK_ATTR | BSP_VMEDMA_MSK_PCIA | BSP_VMEDMA_MSK_VMEA)
+
+static int
+tsi_desc_setup (
+		DmaDescriptor p,
+		uint32_t	attr_mask,
+		uint32_t	xfer_mode,
+		uint32_t	pci_addr,
+		uint32_t	vme_addr,
+		uint32_t	n_bytes)
+{
+VmeTsi148DmaListDescriptor	d = p;
+uint32_t	vmeatt = 0, pciatt = 0, tmp, src, dst, dat, sat;
+
+	/* argument check */
+
+	/* since we must vme/pci into src/dst we need the direction
+	 * bit. Reject requests that have only part of the mask
+	 * bits set. It would be possible to be more sophisticated
+	 * by caching more information but we try to be simple here...
+	 */
+	tmp = attr_mask & ALL_BITS_NEEDED;
+	if ( tmp != 0 && tmp != ALL_BITS_NEEDED )
+		return -1;
+
+	if ( BSP_VMEDMA_MSK_ATTR & attr_mask ) {
+		/* Check VME bus mode */
+		vmeatt = vme_attr(xfer_mode);
+		if ( (uint32_t)BSP_VMEDMA_STATUS_UNSUP == vmeatt  )
+			return -1;
+
+		/* Check PCI bus mode */
+		pciatt = pci_attr(xfer_mode);
+		if ( (uint32_t)BSP_VMEDMA_STATUS_UNSUP == pciatt  )
+			return -1;
+	}
+
+	if ( BSP_VMEDMA_MSK_ATTR & attr_mask ) {
+		if ( BSP_VMEDMA_MODE_PCI2VME & xfer_mode ) {
+			dat = vmeatt;   sat = pciatt;
+			dst = vme_addr; src = pci_addr;
+		} else {
+			sat = vmeatt;   dat = pciatt;
+			src = vme_addr; dst = pci_addr;
+		}
+		st_be32( &d->dsau, 0 );   st_be32( &d->dsal, src );
+		st_be32( &d->ddau, 0 );   st_be32( &d->ddal, dst );
+		st_be32( &d->dsat, sat ); st_be32( &d->ddat, dat );
+	}
+
+	if ( BSP_VMEDMA_MSK_BCNT & attr_mask )
+		st_be32( &d->dcnt, n_bytes);
+
+	return 0;
+}
+
+static int
+tsi_desc_start (volatile void *controller_addr, int channel, DmaDescriptor p)
+{
+VmeTsi148DmaListDescriptor d = p;
+	if ( !controller_addr )
+		controller_addr = THEBASE;
+	return vmeTsi148DmaListStartXX((BERegister*)controller_addr, channel, d);
 }
 
 #ifdef DEBUG_MODULAR
@@ -2030,7 +2602,7 @@ rtems_irq_connect_data	xx;
 	xx.off  = my_no_op;
 	xx.isOn = my_isOn;
 
-	TSI_WR(devs[0].base, TSI_INTEO_REG, 0);
+	TSI_WR(THEBASE, TSI_INTEO_REG, 0);
 
 	for ( i=0; i<TSI_NUM_INT_VECS; i++) {
 		/* Dont even bother to uninstall handlers */

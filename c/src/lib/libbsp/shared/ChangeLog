@@ -1,3 +1,34 @@
+2007-01-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/README.porting, vmeUniverse/README.universe:
+	updated, added more information for BSP implementors.
+
+	* vmeUniverse/VMEDMA.h (added): VME DMA API definition.
+
+	* vmeUniverse/bspVmeDmaList.h (added), vmeUniverse/bspVmeDmaListP.h (added),
+	* vmeUniverse/bspVmeDmaList.c (added):
+	Driver-independent code for linked-list DMA (public + private headers,
+	implementation).
+
+	* vmeUniverse/vmeUniverseDMA.h (added), vmeUniverse/vmeTsi148DMA.h (added):
+	interface to new DMA features of drivers.
+
+	* vmeUniverse/vme_amd_defs.h: Added definition for data-width
+	hint bits (VME_MODE_DBWxx).
+
+
+	* vmeUniverse/vmeTsi148.c: added DMA support. Added support for
+	data-width hint/modifier bits.
+
+	* vmeUniverse/vmeUniverse.c, vmeUniverse/vmeUniverse.h:
+	Added support for data-width hint/modifier bits. 
+	Added support for xxx_BLT, xxx_MBLT address modifiers.
+	Restrict DBW to 32 in non-MBLT modes (except single-beat;
+	a comment is in README.universe). Updated DMA support to
+	implement new VMEDMA.h API. Added support for non-incrementing
+	VME addresses. Restrict data width to 32 for single-beat AMs
+	when the universe would use MBLT for DMA.
+
 2007-01-19	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/VME.h:

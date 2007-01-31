@@ -1,6 +1,17 @@
 #
 # $Id$
 #
+#
+
+NOTE: (T.S, 2007/1) The information in this file is outdated
+      (but some portions may still be useful). Some more information
+	  about how to use the Universe and Tsi148 drivers in new BSPs
+	  can be found in
+
+	  	README.universe,
+		libbsp/powerpc/shared/vme/VMEConfig.h,
+
+		source files in this directory and libbsp/powerpc/shared/vme
 
 The vmeUniverse driver needs some support from the BSP for
 
