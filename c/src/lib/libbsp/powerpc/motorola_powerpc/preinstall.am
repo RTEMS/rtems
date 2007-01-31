@@ -125,3 +125,15 @@ $(PROJECT_INCLUDE)/bsp/VMEConfig.h: ../../powerpc/shared/vme/VMEConfig.h $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 
+$(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h: ../../shared/vmeUniverse/vmeUniverseDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h
+
+$(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h: ../../shared/vmeUniverse/bspVmeDmaList.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h
+
+$(PROJECT_INCLUDE)/bsp/VMEDMA.h: ../../shared/vmeUniverse/VMEDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEDMA.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEDMA.h
+

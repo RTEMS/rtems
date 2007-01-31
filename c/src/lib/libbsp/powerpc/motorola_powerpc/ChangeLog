@@ -1,3 +1,11 @@
+2007-01-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, preinstall.am, include/bsp.h:
+	Use VME DMA support implemented by vmeUniverse and
+	libbsp/powerpc/shared/vme/vme_universe_dma.c
+	Added explanation for use of BSP_PIC_DO_EOI by
+	BSP implementors who derive from this 'include/bsp.h'.
+
 2007-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bootloader/Makefile.am: Use MKDIR_P instead of mkdir_p.
