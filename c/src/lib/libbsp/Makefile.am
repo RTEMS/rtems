@@ -16,10 +16,16 @@ EXTRA_DIST += shared/bootcard.c shared/bspclean.c shared/bsplibc.c \
     shared/tod.h
 EXTRA_DIST += shared/vmeUniverse/vmeUniverse.c \
     shared/vmeUniverse/vmeUniverse.h \
+    shared/vmeUniverse/vmeUniverseDMA.h \
     shared/vmeUniverse/vmeTsi148.c	\
     shared/vmeUniverse/vmeTsi148.h	\
+    shared/vmeUniverse/vmeTsi148DMA.h	\
     shared/vmeUniverse/vme_am_defs.h \
 	shared/vmeUniverse/VME.h \
+	shared/vmeUniverse/VMEDMA.h \
+    shared/vmeUniverse/bspVmeDmaList.c \
+    shared/vmeUniverse/bspVmeDmaList.h \
+    shared/vmeUniverse/bspVmeDmaListP.h \
     shared/vmeUniverse/README.porting \
     shared/vmeUniverse/README.universe
 
