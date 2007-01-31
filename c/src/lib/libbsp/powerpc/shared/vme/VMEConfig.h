@@ -48,6 +48,7 @@
  * 
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */ 
+
 /*
  * The BSP maps VME address ranges into
  * one BAT.
@@ -60,6 +61,10 @@
  * If this is undefined, no extra BAT will be
  * configured and VME has to share the available
  * PCI address space with PCI devices.
+ *
+ * If you do define BSP_VME_BAT_IDX you must
+ * make sure the corresponding BAT is really
+ * available and unused!
  */
 
 #if defined(mvme2100)
@@ -75,30 +80,107 @@
 #endif
 
 /* start of the A32 window on the VME bus
- * TODO: this should perhaps be a configuration option
+ * TODO: this should perhaps be a run-time configuration option
  */
 #define _VME_A32_WIN0_ON_VME	0x20000000
 
 /* if _VME_DRAM_OFFSET is defined, the BSP
- * will map our RAM onto the VME bus, starting
+ * will map the board RAM onto the VME bus, starting
  * at _VME_DRAM_OFFSET
  */
 #define _VME_DRAM_OFFSET		0xc0000000
 
-/* Tell the interrupt manager that the universe driver
- * already called openpic_eoi() and that this step hence
- * must be omitted.
+/* Define BSP_PCI_VME_DRIVER_DOES_EOI to let the vmeUniverse
+ * driver (Tsi148 driver doesn't implement this) implement
+ * VME IRQ priorities in software.
+ *
+ * Here's how this works:
+ *
+ *    1) VME IRQ happens
+ *    2) universe propagates IRQ to PCI/PPC/main interrupt
+ *       controller ('PIC' - programmable interrupt controller).
+ *    3) PIC driver dispatches universe driver's ISR
+ *    4) universe driver ISR acknowledges IRQ on VME,
+ *       determines VME vector.
+ * ++++++++++++ stuff between ++ signs is related to SW priorities +++++++++
+ *    5) universe driver *masks* all VME IRQ levels <= interrupting
+ *       level.
+ *    6) universe driver calls PIC driver's 'EOI' routine.
+ *       This effectively re-enables PCI and hence higher
+ *       level VME interrupts.
+ *    7) universe driver dispatches user VME ISR.
+ *
+ * ++>> HIGHER PRIORITY VME IRQ COULD HAPPEN HERE and would be handled <<++
+ *
+ *    8) user ISR returns, universe driver re-enables lower
+ *       level VME interrupts, returns.
+ *    9) universe driver ISR returns control to PIC driver
+ *   10) PIC driver *omits* regular EOI sequence since this
+ *       was already done by universe driver (step 6).
+ * ++++++++++++ end of special handling (SW priorities) ++++++++++++++++++++
+ *   11) PIC driver ISR dispatcher returns.
+ *
+ * Note that the BSP *MUST* provide the following hooks
+ * in order for this to work:
+ *   a) bsp.h must define the symbol BSP_PIC_DO_EOI to
+ *      a sequence of instructions that terminates an
+ *      interrupt at the interrupt controller.
+ *   b) The interrupt controller driver must check the
+ *      interrupt source and *must omit* running the EOI
+ *      sequence if the interrupt source is the vmeUniverse
+ *      (because the universe driver already ran BSP_PIC_DO_EOI)
+ *      The interrupt controller must define the variable
+ *
+ *          int _BSP_vme_bridge_irq = -1;
+ *
+ *      which is assigned the universe's interrupt line information
+ *      by vme_universe.c:BSP_VMEIrqMgrInstall(). The interrupt
+ *      controller driver may use this variable to determine
+ *      if an IRQ was caused by the universe.
+ *
+ *   c) define BSP_PCI_VME_DRIVER_DOES_EOI
+ *
+ *  NOTE: If a) and b) are not implemented by the BSP
+ *        BSP_PCI_VME_DRIVER_DOES_EOI must be *undefined*.
  */
-
 #define BSP_PCI_VME_DRIVER_DOES_EOI
-/* don't reference vmeUniverse0PciIrqLine directly here - leave it up to
- * bspstart() to set BSP_vme_bridge_irq. That way, we can generate variants
- * of the BSP with / without the universe driver...
+
+#ifdef BSP_PCI_VME_DRIVER_DOES_EOI
+/* don't reference vmeUniverse0PciIrqLine directly from the irq
+ * controller driver - leave it up to BSP_VMEIrqMgrInstall() to
+ * set _BSP_vme_bridge_irq. That way, we can avoid linking
+ * the universe driver if VME is unused...
  */
 extern int _BSP_vme_bridge_irq;
+#endif
 
-extern int BSP_VMEInit();
-extern int BSP_VMEIrqMgrInstall();
+/* If your BSP requires a non-standard way to configure
+ * the VME interrupt manager then define the symbol
+ *
+ * BSP_VME_UNIVERSE_INSTALL_IRQ_MGR
+ *
+ * to a proper instruction sequence that installs the
+ * universe interrupt manager. This requires knowledge
+ * of the wiring between the universe and the PIC (main
+ * interrupt controller), i.e., which IRQ 'pins' of the
+ * universe are wired to which 'lines'/inputs at the PIC.
+ * (consult vmeUniverse.h for more information).
+ *
+ * When installing the universe IRQ manager it is also
+ * possible to specify whether it should try to share
+ * PIC interrupts with other sources. This might not
+ * be supported by all BSPs (but the unverse driver
+ * recognizes that).
+ *
+ * If BSP_VME_UNIVERSE_INSTALL_IRQ_MGR is undefined then
+ * the default algorithm is used (vme_universe.c):
+ *
+ * This default setup uses only a single wire. It reads
+ * the PIC 'line' from PCI configuration space and assumes
+ * this to be wired to the first (LIRQ0) IRQ input at the
+ * universe. The default setup tries to use interrupt
+ * sharing.
+ */
 
 #include <bsp/motorola.h>
 #include <bsp/pci.h>

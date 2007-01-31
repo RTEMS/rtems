@@ -55,6 +55,9 @@
 #include <libcpu/bat.h>
 #include <rtems/bspIo.h>
 
+extern int BSP_VMEInit();
+extern int BSP_VMEIrqMgrInstall();
+
 /* Use a weak alias for the VME configuration.
  * This permits individual applications to override
  * this routine.

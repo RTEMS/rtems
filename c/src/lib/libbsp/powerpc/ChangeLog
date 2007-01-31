@@ -1,3 +1,17 @@
+2007-01-29	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/vme/VMEConfig.h:
+	Added more comments about the semantics of the various
+	symbols BSPs should define in this file.
+	Removed declarations of BSP_VMEInit(), BSP_VMEIrqMgrInstall().
+
+	* shared/vme/vmeconfig.c: declare BSP_VMEInit(),
+	BSP_VMEIrqMgrInstall() here.
+
+	* Makefile.am, shared/vme/README,
+	* shared/vme/vme_universe_dma.c (added): Added glue code
+	implementing the VMEDMA.h API using the vmeUniverse driver.
+
 2007-01-20      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* gen5200/mscan/mscan.c, gen5200/mscan/mscan.h,
