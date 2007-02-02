@@ -4,7 +4,7 @@ Patch0:		gcc-core-4.0.3-rtems-20060822.diff
 %endif
 %if "%{gcc_version}" == "4.1.1"
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.1.1-rtems4.8-20070131.diff
+Patch0:		gcc-core-4.1.1-rtems4.8-20070201.diff
 %endif
 %if "%{gcc_version}" == "4.2.0"
 Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -43,7 +43,7 @@ Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 Patch50:	newlib-1.14.0-rtems4.8-20061109.diff
 %endif
 %if "%{newlib_version}" == "1.15.0"
-Patch50:	newlib-1.15.0-rtems4.8-20070130.diff
+Patch50:	newlib-1.15.0-rtems4.8-20070202.diff
 %endif
 %{?_without_sources:NoSource:	50}
 %endif
