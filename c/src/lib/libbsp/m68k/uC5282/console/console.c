@@ -190,12 +190,8 @@ IntUartSet(int minor, int baud, int databits, int parity, int stopbits, int hwfl
 		MCF5282_UART_UIMR(minor) = info->uimr;
 	}
 
-	/* check to see if doing hardware flow control */
-	if ( hwflow )
-	{
-		/* assert the RTS line */
-		MCF5282_UART_UOP1(minor) = 1;
-	}
+    /* assert the RTS line */
+    MCF5282_UART_UOP1(minor) = 1;
 
 	rtems_interrupt_enable(level);
 
@@ -503,12 +499,8 @@ IntUartInterruptOpen(int major, int minor, void *arg)
 		MCF5282_UART_UIMR(minor) = info->uimr;
 	}
 
-	/* check to see if doing hardware flow control */
-	if ( info->hwflow )
-	{
-		/* assert the RTS line */
-		MCF5282_UART_UOP1(minor) = 1;
-	}
+    /* assert the RTS line */
+    MCF5282_UART_UOP1(minor) = 1;
 
 	return( 0 );
 }
