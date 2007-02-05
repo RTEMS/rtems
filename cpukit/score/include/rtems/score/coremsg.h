@@ -59,7 +59,7 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
  */
 typedef struct {
   /** This field is the size of this message. */
-  uint32_t    size;
+  size_t      size;
   /** This field contains the actual message. */
   uint32_t    buffer[1];
 } CORE_message_queue_Buffer;
@@ -320,7 +320,7 @@ void _CORE_message_queue_Flush_waiting_threads(
 CORE_message_queue_Status _CORE_message_queue_Broadcast(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
-  uint32_t                                   size,
+  size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   uint32_t                                  *count
@@ -354,7 +354,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
-  uint32_t                                   size,
+  size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   CORE_message_queue_Submit_types            submit_type,
@@ -389,7 +389,7 @@ void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
   Objects_Id                       id,
   void                            *buffer,
-  uint32_t                        *size,
+  size_t                          *size,
   boolean                          wait,
   Watchdog_Interval                timeout
 );
