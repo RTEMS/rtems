@@ -1,3 +1,9 @@
+2007-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/coremsg.h: Use size_t for sizes.
+	* score/src/coremsgbroadcast.c: Use size_t for sizes.
+	* score/src/coremsgsubmit.c: Use size_t for sizes.
+
 2007-01-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libblock/src/show_bdbuf.c: Use inttypes.h macros.
