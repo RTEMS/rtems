@@ -1,5 +1,7 @@
 2007-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/rtems/posix/mqueue.h: Use size_t for sizes.
+	* posix/src/mqueuesendsupp.c: Use size_t for sizes.
 	* score/include/rtems/score/coremsg.h: Use size_t for sizes.
 	* score/src/coremsgbroadcast.c: Use size_t for sizes.
 	* score/src/coremsgsubmit.c: Use size_t for sizes.
