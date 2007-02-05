@@ -126,7 +126,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
 int _POSIX_Message_queue_Send_support(
   mqd_t               mqdes,
   const char         *msg_ptr,
-  uint32_t            msg_len,
+  size_t              msg_len,
   uint32_t            msg_prio,
   Watchdog_Interval   timeout
 );
