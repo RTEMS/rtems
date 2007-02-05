@@ -54,7 +54,7 @@ BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
 /*
  * The MCF5282 has three UARTs.  Enable all them here.  I/O pin selection
- * is assumed to have been done elsewher.
+ * is assumed to have been done elsewhere.
  */
 #define MAX_UART_INFO     3
 #define RX_BUFFER_SIZE    512
@@ -477,14 +477,21 @@ IntUartInterruptOpen(int major, int minor, void *arg)
 	switch(minor) {
 	case 0:
 		MCF5282_GPIO_PUAPAR |= MCF5282_GPIO_PUAPAR_PUAPA1|MCF5282_GPIO_PUAPAR_PUAPA0;
+		MCF5282_GPIO_PTCPAR = (MCF5282_GPIO_PTCPAR
+             & ~(MCF5282_GPIO_PTCPAR_PTCPA3(3)|MCF5282_GPIO_PTCPAR_PTCPA1(3)))
+             |  (MCF5282_GPIO_PTCPAR_PTCPA3(1)|MCF5282_GPIO_PTCPAR_PTCPA1(1));
 		break;
 	case 1:
 		MCF5282_GPIO_PUAPAR |= MCF5282_GPIO_PUAPAR_PUAPA3|MCF5282_GPIO_PUAPAR_PUAPA2;
+		MCF5282_GPIO_PTCPAR = (MCF5282_GPIO_PTCPAR
+             & ~(MCF5282_GPIO_PTCPAR_PTCPA2(3)|MCF5282_GPIO_PTCPAR_PTCPA0(3)))
+             |  (MCF5282_GPIO_PTCPAR_PTCPA2(2)|MCF5282_GPIO_PTCPAR_PTCPA0(2));
 		break;
 	case 2:
-		MCF5282_GPIO_PASPAR = MCF5282_GPIO_PASPAR
-             & ~(MCF5282_GPIO_PASPAR_PASPA3(3)|MCF5282_GPIO_PASPAR_PASPA2(3))
+		MCF5282_GPIO_PASPAR = (MCF5282_GPIO_PASPAR
+             & ~(MCF5282_GPIO_PASPAR_PASPA3(3)|MCF5282_GPIO_PASPAR_PASPA2(3)))
              |  (MCF5282_GPIO_PASPAR_PASPA3(2)|MCF5282_GPIO_PASPAR_PASPA2(2));
+        /* UART2 flow control signals are not brought out to pins! */
 		break;
 	}
 	rtems_interrupt_enable(level);
