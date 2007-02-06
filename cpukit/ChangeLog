@@ -1,5 +1,12 @@
 2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/getpagesize.c: New (moved from posix/src).
+	* posix/src/getpagesize.c: Removed.
+	* posix/Makefile.am: Remove references to getpagesize.c.
+	* libcsupport/Makefile.am: Add getpagesize.c.
+
+2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/sysconf.c: Add support for _SC_PAGESIZE (PR 1215).
 	* posix/src/mqueuesendsupp.c: Remove cast to make broken const cast
 	  visible.
