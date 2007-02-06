@@ -63,7 +63,7 @@ ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
     src/setpgid.c src/setsid.c
 
 MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c \
-    src/__sbrk.c
+    src/__sbrk.c src/getpagesize.c
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 
