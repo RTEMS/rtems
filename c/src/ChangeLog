@@ -1,3 +1,8 @@
+2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/ide/ata.c, libchip/network/elnk.c, optman/rtems/no-msg.c:
+	Use size_t for sizes.
+
 2007-01-16	Till Straumann <strauman@slac.stanford.edu>
 
 	* libchip/i2c/i2c-2b-eeprom.c, libchip/i2c/i2c-2b-eeprom.h,
