@@ -26,8 +26,8 @@
 */
 
 rtemsMessageQueue::rtemsMessageQueue(const char* mqname,
-                                     const rtems_unsigned32 count,
-                                     const rtems_unsigned32 max_message_size,
+                                     const uint32_t count,
+                                     const size_t max_message_size,
                                      const WaitMode wait_mode,
                                      const Scope scope)
   : name(0),
@@ -39,7 +39,7 @@ rtemsMessageQueue::rtemsMessageQueue(const char* mqname,
 }
 
 rtemsMessageQueue::rtemsMessageQueue(const char *mqname,
-                                     const rtems_unsigned32 node)
+                                     const uint32_t node)
   : name(0),
     owner(false),
     id(0)
@@ -80,8 +80,8 @@ void rtemsMessageQueue::make_invalid()
 }
 
 const rtems_status_code rtemsMessageQueue::create(const char* mqname,
-                                                  const rtems_unsigned32 count,
-                                                  const rtems_unsigned32 max_message_size,
+                                                  const uint32_t count,
+                                                  const size_t max_message_size,
                                                   const WaitMode wait_mode,
                                                   const Scope scope)
 {
@@ -138,7 +138,7 @@ const rtemsMessageQueue& rtemsMessageQueue::operator=(const rtemsMessageQueue& m
 }
   
 const rtems_status_code rtemsMessageQueue::connect(const char *mqname,
-                                                   const rtems_unsigned32 node)
+                                                   const uint32_t node)
 {
   if (id && owner)
     return set_status_code(RTEMS_UNSATISFIED);
