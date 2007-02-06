@@ -40,8 +40,13 @@
 /*
  * These typedefs should match with the ones defined in the file
  * gcc/gthr-rtems.h in the gcc distribution.
+ * FIXME: T.S, 2007/01/31: -> gcc/gthr-rtems.h still declares
+ *                            void * __gthread_key_t;
  */
-typedef void *__gthread_key_t;
+typedef struct __gthread_key_ {
+	void *val; 	           /* this is switched with the task      */
+	void (*dtor)(void*);   /* this remains in place for all tasks */
+} __gthread_key, *__gthread_key_t;
 typedef int   __gthread_once_t;
 typedef void *__gthread_mutex_t;
 typedef void *__gthread_recursive_mutex_t;
@@ -71,13 +76,15 @@ int rtems_gxx_once(__gthread_once_t *once, void (*func) (void))
    if( *(volatile __gthread_once_t *)once == 0 )
    {
       rtems_mode saveMode;
+      __gthread_once_t o;
       rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &saveMode);
-      if( *(volatile __gthread_once_t *)once == 0 )
+      if( (o = *(volatile __gthread_once_t *)once) == 0 )
       {
          *(volatile __gthread_once_t *)once = 1;
-         (*func)();
       }
       rtems_task_mode(saveMode, RTEMS_PREEMPT_MASK, &saveMode);
+      if ( o == 0 )
+         (*func)();
    }
    return 0;
 }
@@ -91,15 +98,16 @@ int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))
    * deal with the value of the key, as used with the POSIX API.
    */
    /* Do not pull your hair, trust me this works. :-) */
-  __gthread_key_t *new_key = ( __gthread_key_t * )malloc( sizeof( __gthread_key_t ) );
-  *key = ( __gthread_key_t )new_key;
-  *new_key = NULL;
+  __gthread_key_t new_key = ( __gthread_key_t )malloc( sizeof( *new_key ) );
+  *key = new_key;
+  new_key->val  = NULL;
+  new_key->dtor = dtor;
 
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: create key=%x, dtor=%x, new_key=%x\n", key, dtor, new_key );
 #endif
   /* register with RTEMS the buffer that will hold the key values */
-  if( rtems_task_variable_add( RTEMS_SELF, (void **)new_key, NULL ) == RTEMS_SUCCESSFUL )
+  if( rtems_task_variable_add( RTEMS_SELF, (void **)new_key, dtor ) == RTEMS_SUCCESSFUL )
        return 0;
   return -1;
 }
@@ -109,7 +117,7 @@ int rtems_gxx_key_dtor (__gthread_key_t key, void *ptr)
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: dtor key=%x, ptr=%x\n", key, ptr );
 #endif
-   *(void **)key = 0;
+   key->val  = 0;
    return 0;
 }
 
@@ -121,6 +129,7 @@ int rtems_gxx_key_delete (__gthread_key_t key)
   /* register with RTEMS the buffer that will hold the key values */
   if( rtems_task_variable_delete( RTEMS_SELF, (void **)key ) == RTEMS_SUCCESSFUL )
   {
+     /* Hmm - hopefully all tasks using this key have gone away... */
      if( key ) free( (void *)key );
      return 0;
   }
@@ -136,18 +145,18 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
   if( rtems_task_variable_get( RTEMS_SELF, (void **)key, &p ) == RTEMS_SUCCESSFUL )
   {
     /* We do not have to do this, but what the heck ! */
-     p= *( void **)key;
+     p= key->val;
   }
   else
   {
     /* fisrt time, always set to zero, it is unknown the value that the others
      * threads are using at the moment of this call
      */
-    if( rtems_task_variable_add( RTEMS_SELF, (void **)key, NULL ) != RTEMS_SUCCESSFUL )
+    if( rtems_task_variable_add( RTEMS_SELF, (void **)key, key->dtor ) != RTEMS_SUCCESSFUL )
     {
        rtems_panic ("rtems_gxx_getspecific");
     }
-    *( void ** )key = (void *)0;
+    key->val = (void *)0;
   }
 
 #ifdef DEBUG_GXX_WRAPPERS
@@ -163,10 +172,10 @@ int rtems_gxx_setspecific(__gthread_key_t key, const void *ptr)
   printk( "gxx_wrappers: setspecific key=%x, ptr=%x, id=%x\n", key, ptr, get_tid() );
 #endif
   /* register with RTEMS the buffer that will hold the key values */
-  if( rtems_task_variable_add( RTEMS_SELF, (void **)key, NULL ) == RTEMS_SUCCESSFUL )
+  if( rtems_task_variable_add( RTEMS_SELF, (void **)key, key->dtor ) == RTEMS_SUCCESSFUL )
   {
     /* now let's set the proper value */
-    *( void ** )key = (void *)ptr;
+    key->val =  (void *)ptr;
      return 0;
   }
   return -1;
