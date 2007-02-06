@@ -191,7 +191,7 @@ rtems_status_code rtems_message_queue_urgent(
 rtems_status_code rtems_message_queue_broadcast(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t              size,
+  size_t                size,
   uint32_t             *count
 );
 
@@ -266,7 +266,7 @@ rtems_status_code rtems_message_queue_get_number_pending(
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
   void                       *buffer,
-  uint32_t                    size,
+  size_t                      size,
   Message_queue_Submit_types  submit_type
 );
 
