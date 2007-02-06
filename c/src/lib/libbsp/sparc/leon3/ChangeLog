@@ -1,3 +1,7 @@
+2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shmsupp/getcfg.c: Replace rtems_unsigned32 with uint32_t.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
