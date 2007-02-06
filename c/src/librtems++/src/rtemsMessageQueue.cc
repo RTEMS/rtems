@@ -27,7 +27,7 @@
 
 rtemsMessageQueue::rtemsMessageQueue(const char* mqname,
                                      const uint32_t count,
-                                     const uint32_t max_message_size,
+                                     const size_t max_message_size,
                                      const WaitMode wait_mode,
                                      const Scope scope)
   : name(0),
@@ -81,7 +81,7 @@ void rtemsMessageQueue::make_invalid()
 
 const rtems_status_code rtemsMessageQueue::create(const char* mqname,
                                                   const uint32_t count,
-                                                  const uint32_t max_message_size,
+                                                  const size_t max_message_size,
                                                   const WaitMode wait_mode,
                                                   const Scope scope)
 {

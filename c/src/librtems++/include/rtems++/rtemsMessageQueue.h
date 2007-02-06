@@ -60,7 +60,7 @@ public:
   // creates a message queue
   rtemsMessageQueue(const char* name,
                     const uint32_t count,
-                    const uint32_t max_message_size,
+                    const size_t max_message_size,
                     const WaitMode wait_mode = wait_by_fifo,
                     const Scope scope = local);
 
@@ -77,7 +77,7 @@ public:
   // create or destroy (delete) the message queue
   virtual const rtems_status_code create(const char* name,
                                          const uint32_t count,
-                                         const uint32_t max_message_size,
+                                         const size_t max_message_size,
                                          const WaitMode wait_mode = wait_by_fifo,
                                          const Scope scope = local);
   virtual const rtems_status_code destroy();
@@ -89,16 +89,16 @@ public:
 
   // send a message of size from the buffer
   inline const rtems_status_code send(const void *buffer,
-                                      const uint32_t size);
+                                      const size_t size);
   inline const rtems_status_code urgent(const void *buffer,
-                                        const uint32_t size);
+                                        const size_t size);
   inline const rtems_status_code broadcast(const void *buffer,
-                                           const uint32_t size,
+                                           const size_t size,
                                            uint32_t& count);
 
   // receive a message of size, the timeout is in micro-secs
   inline const rtems_status_code receive(const void *buffer,
-                                         uint32_t& size,
+                                         size_t& size,
                                          rtems_interval micro_secs = RTEMS_NO_TIMEOUT,
                                          bool wait = true);
 
@@ -128,19 +128,19 @@ private:
 };
 
 const rtems_status_code rtemsMessageQueue::send(const void *buffer,
-                                                const uint32_t size)
+                                                const size_t size)
 {
   return set_status_code(rtems_message_queue_send(id, (void*) buffer, size));
 }
 
 const rtems_status_code rtemsMessageQueue::urgent(const void *buffer,
-                                                  const uint32_t size)
+                                                  const size_t size)
 {
   return set_status_code(rtems_message_queue_urgent(id, (void*) buffer, size));
 }
 
 const rtems_status_code rtemsMessageQueue::broadcast(const void *buffer,
-                                                     const uint32_t size,
+                                                     const size_t size,
                                                      uint32_t& count)
 {
   return set_status_code(rtems_message_queue_broadcast(id,
@@ -150,7 +150,7 @@ const rtems_status_code rtemsMessageQueue::broadcast(const void *buffer,
 }
 
 const rtems_status_code rtemsMessageQueue::receive(const void *buffer,
-                                                   uint32_t& size,
+                                                   size_t& size,
                                                    rtems_interval micro_secs,
                                                    bool wait)
 {
