@@ -92,9 +92,9 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
  */
 
 RTEMS_INLINE_ROUTINE void _CORE_message_queue_Copy_buffer (
-  void      *source,
-  void      *destination,
-  uint32_t   size
+  const void *source,
+  void       *destination,
+  size_t      size
 )
 {
   memcpy(destination, source, size);
