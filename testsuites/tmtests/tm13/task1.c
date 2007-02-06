@@ -1,6 +1,6 @@
 /*
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -113,7 +113,7 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
-  uint32_t   size;
+  size_t  size;
 
   (void) rtems_message_queue_receive(
            Queue_id,
@@ -130,7 +130,7 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  uint32_t   size;
+  size_t  size;
 
   (void) rtems_message_queue_receive(
            Queue_id,

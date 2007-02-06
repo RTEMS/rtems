@@ -1,6 +1,6 @@
 /*
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -103,9 +103,9 @@ void queue_test()
   uint32_t    flush_count;
   uint32_t    index;
   uint32_t    iterations;
-  long              buffer[4];
+  long        buffer[4];
   rtems_status_code status;
-  uint32_t    size;
+  size_t      size;
 
   send_loop_time    = 0;
   urgent_loop_time  = 0;
