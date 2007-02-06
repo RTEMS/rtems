@@ -819,7 +819,7 @@ static rtems_task
 ata_queue_task(rtems_task_argument arg)
 {
     ata_queue_msg_t            msg;
-    uint32_t             size;
+    size_t                     size;
     ata_req_t                 *areq;
     rtems_device_minor_number  ctrl_minor;
     uint16_t                   val;
