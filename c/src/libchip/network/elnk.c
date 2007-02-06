@@ -2403,7 +2403,7 @@ elnk_txDaemon (void *arg)
                   */
                   {
                      struct TXMD *chainhead, *chaintail;
-                     uint32_t    esize;
+                     size_t esize;
 
                      if( rtems_message_queue_receive( chainRecoveryQueue, &chainhead, &esize,
                                                       RTEMS_NO_WAIT, 0) == RTEMS_SUCCESSFUL )
@@ -2916,7 +2916,7 @@ elnk_stop (struct elnk_softc *sc)
    */
    {
       struct TXMD *chainhead;
-      uint32_t    esize;
+      size_t esize;
 
       while( rtems_message_queue_receive( chainRecoveryQueue, &chainhead, &esize,
                                           RTEMS_NO_WAIT, 0) == RTEMS_SUCCESSFUL );

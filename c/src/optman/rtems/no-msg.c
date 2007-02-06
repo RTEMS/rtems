@@ -76,7 +76,7 @@ rtems_status_code rtems_message_queue_delete(
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t              size
+  size_t                size
 )
 {
   _Internal_error_Occurred(
@@ -90,7 +90,7 @@ rtems_status_code rtems_message_queue_send(
 rtems_status_code rtems_message_queue_urgent(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t              size
+  size_t                size
 )
 {
   _Internal_error_Occurred(
@@ -104,7 +104,7 @@ rtems_status_code rtems_message_queue_urgent(
 rtems_status_code rtems_message_queue_broadcast(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t              size,
+  size_t                size,
   uint32_t             *count
 )
 {
@@ -119,7 +119,7 @@ rtems_status_code rtems_message_queue_broadcast(
 rtems_status_code rtems_message_queue_receive(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t             *size_p,
+  size_t               *size_p,
   uint32_t              option_set,
   rtems_interval        timeout
 )
@@ -161,7 +161,7 @@ boolean _Message_queue_Seize(
   Message_queue_Control  *the_message_queue,
   rtems_option            option_set,
   void                   *buffer,
-  uint32_t               *size_p
+  size_t                 *size_p
 )
 {
   _Internal_error_Occurred(
@@ -175,7 +175,7 @@ boolean _Message_queue_Seize(
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
   void                       *buffer,
-  uint32_t                    size,
+  size_t                      size,
   Message_queue_Submit_types  submit_type
 )
 {
