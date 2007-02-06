@@ -51,7 +51,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   POSIX_Message_queue_Control     *the_mq;
   POSIX_Message_queue_Control_fd  *the_mq_fd;
   Objects_Locations                location;
-  uint32_t                         length_out;
+  size_t                           length_out;
 
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
