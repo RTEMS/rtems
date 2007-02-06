@@ -1,5 +1,14 @@
 2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/msgqbroadcast.c: Use size_t for sizes.
+	* rtems/src/msgmp.c: Use size_t for sizes.
+	* rtems/src/msgqsubmit.c: Use size_t for sizes.
+	* rtems/include/rtems/rtems/msgmp.h: Use size_t for sizes.
+	* rtems/include/rtems/rtems/message.h: Use size_t for sizes.
+	* score/inline/rtems/score/coremsg.inl: Use size_t for sizes.
+
+2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* itron/src/trcv_mbf.c: Use size_t for sizes.
 	* libmisc/monitor/mon-object.c: Use size_t for sizes.
 	* libmisc/monitor/mon-server.c: Use size_t for sizes.
