@@ -212,7 +212,7 @@ rtems_status_code rtems_message_queue_broadcast(
 rtems_status_code rtems_message_queue_receive(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t             *size,
+  size_t               *size,
   uint32_t              option_set,
   rtems_interval        timeout
 );
