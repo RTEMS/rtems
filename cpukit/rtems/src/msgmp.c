@@ -93,7 +93,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
   Message_queue_MP_Remote_operations  operation,
   Objects_Id                          message_queue_id,
   void                               *buffer,
-  uint32_t                           *size_p,
+  size_t                             *size_p,
   rtems_option                        option_set,
   rtems_interval                      timeout
 )
