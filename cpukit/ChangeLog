@@ -1,5 +1,6 @@
 2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/include/rtems/rtems/message.h: Use size_t for sizes.
 	* rtems/src/msgqreceive.c: Use size_t for sizes.
 	* posix/src/mqueuerecvsupp.c: Use size_t for sizes.
 	* score/src/coremsgseize.c: Use size_t for sizes.
