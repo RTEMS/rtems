@@ -54,7 +54,7 @@
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t              size
+  size_t                size
 )
 {
   return( _Message_queue_Submit(id, buffer, size, MESSAGE_QUEUE_SEND_REQUEST) );
