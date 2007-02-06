@@ -12,7 +12,7 @@
  *  Objective Design Systems Ltd Pty (ODS)
  *  All rights reserved (R) Objective Design Systems Ltd Pty
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -502,7 +502,8 @@ void Task1::screen6(void)
   const char *u1 = "normal send";
   const char *u2 = "urgent send";
   char in[100];
-  uint32_t   size;
+  size_t  size;
+  uint32_t count;
   
   printf("%s - send u1 to mq_2 - ", name_string());
   mq_2.send(u1, strlen(u1) + 1);
@@ -573,7 +574,6 @@ void Task1::screen6(void)
   wake_after(3000000);
   
   const char *b1 = "broadcast message";
-  uint32_t   count;
   
   printf("%s - broadcast send b1 ...\n", name_string());
   mq_2.broadcast(b1, strlen(b1) + 1, count);
@@ -643,8 +643,8 @@ void Task1::screen6(void)
   printf("%s\n", mq_2.last_status_string());
 
   printf("%s - flush mq_2 - ", name_string());
-  mq_2.flush(size);
-  printf("%s, flushed=%i\n", mq_2.last_status_string(), size);
+  mq_2.flush(count);
+  printf("%s, flushed=%i\n", mq_2.last_status_string(), count);
   
   printf(" * END MessageQueue Class test *\n");  
 }

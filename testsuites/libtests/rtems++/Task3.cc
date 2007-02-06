@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -44,7 +44,7 @@ void Task3::screen6()
   {
     char in[100];
     char out[100];
-    uint32_t   size;
+    size_t   size;
     bool loopback = true;
   
     while (loopback)
