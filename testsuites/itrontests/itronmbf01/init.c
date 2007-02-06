@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -250,9 +250,9 @@ void TestRef()
 
 void TestRcv()
 {
-    ER    status;
-    char  buffer[200];
-    int   s;
+    ER         status;
+    char       buffer[200];
+    uint32_t   s;
 
     puts( "Init - rcv_mbf - bad id (less than -4) - E_OACV" );
     status = rcv_mbf(buffer, &s, -5);
@@ -287,9 +287,9 @@ void TestRcv()
 
 void TestPrcv()
 {
-    ER    status;
-    char  buffer[200];
-    int   s;
+    ER         status;
+    char       buffer[200];
+    uint32_t   s;
 
     puts( "Init - prcv_mbf - bad id (less than -4) - E_OACV" );
     status = prcv_mbf(buffer, &s, -5);
@@ -323,9 +323,9 @@ void TestPrcv()
 
 void TestTrcv()
 {
-    ER    status;
-    char  buffer[200];
-    int   s;
+    ER        status;
+    char      buffer[200];
+    uint32_t  s;
 
     puts( "Init - trcv_mbf - bad id (less than -4) - E_OACV" );
     status = trcv_mbf(buffer, &s, -5, 5000);
