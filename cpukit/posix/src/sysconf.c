@@ -13,6 +13,8 @@
 #include <rtems/system.h>
 #include <rtems/score/tod.h>
 
+#include <sys/param.h>
+
 /*PAGE
  *
  *  4.8.1 Get Configurable System Variables, P1003.1b-1993, p. 95
@@ -34,6 +36,9 @@ long sysconf(
 
     case _SC_GETPW_R_SIZE_MAX:
         return 1024;
+    
+    case _SC_PAGESIZE:
+        return PAGE_SIZE;
 
 #if defined(__sparc__)
     case 515: /* Solaris _SC_STACK_PROT */
