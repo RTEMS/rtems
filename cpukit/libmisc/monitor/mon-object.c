@@ -242,7 +242,7 @@ rtems_monitor_object_canonical_get(
     rtems_monitor_object_type_t  type,
     rtems_id             id,
     void                *canonical,
-    uint32_t            *size_p
+    size_t              *size_p
 )
 {
     rtems_monitor_object_info_t *info;

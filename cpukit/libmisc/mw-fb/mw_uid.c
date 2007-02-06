@@ -85,7 +85,7 @@ int uid_close_queue( void )
 int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
 {
   rtems_status_code status;
-  uint32_t   size = 0;
+  size_t            size = 0;
   unsigned long micro_secs = timeout*1000;
   int wait = ( timeout != 0 );
 
