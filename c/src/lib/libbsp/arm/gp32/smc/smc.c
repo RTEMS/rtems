@@ -16,6 +16,7 @@
 #include "rtems/blkdev.h"
 #include "rtems/diskdevs.h"
 #include "smc.h"
+#include <rtems/bspIo.h>
 #include <s3c2400.h>
 
 #define SMC_DEVICE_NAME "/dev/smc"
