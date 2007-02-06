@@ -1,3 +1,7 @@
+2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* smc/smc.c: include bspIo.h for printk.
+
 2006-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove superfluous -DASM.
