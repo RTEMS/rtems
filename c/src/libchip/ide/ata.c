@@ -704,11 +704,11 @@ static rtems_irq_connect_data ata_irq_data =
   {
 
     0, /* filled out before use... */
-    (rtems_irq_hdl) ata_interrupt_handler,/* filled out before use... */
-    (rtems_irq_hdl_param) NULL,
-    (rtems_irq_enable) ata_interrupt_on,
-    (rtems_irq_disable) ata_interrupt_off,
-    (rtems_irq_is_enabled) ata_interrupt_isOn
+    ata_interrupt_handler,/* filled out before use... */
+    NULL,
+    ata_interrupt_on,
+    ata_interrupt_off,
+    ata_interrupt_isOn
   };
 #endif
 
