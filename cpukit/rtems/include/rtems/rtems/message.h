@@ -156,7 +156,7 @@ rtems_status_code rtems_message_queue_delete(
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t              size
+  size_t                size
 );
 
 /*
@@ -174,7 +174,7 @@ rtems_status_code rtems_message_queue_send(
 rtems_status_code rtems_message_queue_urgent(
   Objects_Id            id,
   void                 *buffer,
-  uint32_t              size
+  size_t                size
 );
 
 /*
