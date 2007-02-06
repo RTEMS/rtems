@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,7 +25,7 @@ rtems_task Task_2(
 )
 {
   long                buffer[ 4 ];
-  uint32_t      size;
+  size_t              size;
   rtems_task_priority previous_priority;
   rtems_status_code   status;
 
