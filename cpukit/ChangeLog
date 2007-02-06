@@ -1,5 +1,10 @@
 2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* itron/src/trcv_mbf.c: Use size_t for sizes.
+	* libmisc/monitor/mon-object.c: Use size_t for sizes.
+	* libmisc/monitor/mon-server.c: Use size_t for sizes.
+	* libmisc/monitor/monitor.h: Use size_t for sizes.
+	* libmisc/mw-fb/mw_uid.c: Use size_t for sizes.
 	* rtems/include/rtems/rtems/message.h: Use size_t for sizes.
 	* rtems/src/msgqreceive.c: Use size_t for sizes.
 	* posix/src/mqueuerecvsupp.c: Use size_t for sizes.
