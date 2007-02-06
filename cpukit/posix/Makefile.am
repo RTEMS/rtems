@@ -76,7 +76,7 @@ libposix_a_SOURCES += src/key.c src/keycreate.c src/keydelete.c \
     src/keyrundestructors.c src/keysetspecific.c
 
 ## MEMORY_C_FILES
-libposix_a_SOURCES += src/getpagesize.c src/mprotect.c
+libposix_a_SOURCES += src/mprotect.c
 
 ## MESSAGE_QUEUE_C_FILES
 libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
