@@ -372,7 +372,7 @@ int        rtems_monitor_dump_notepad(uint32_t   *notepad);
 
 /* object.c */
 rtems_id   rtems_monitor_id_fixup(rtems_id, uint32_t  , rtems_monitor_object_type_t);
-rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems_id, void *, uint32_t   *size_p);
+rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems_id, void *, size_t *size_p);
 rtems_id   rtems_monitor_object_canonical_next(rtems_monitor_object_info_t *, rtems_id, void *);
 void      *rtems_monitor_object_next(void *, void *, rtems_id, rtems_id *);
 rtems_id   rtems_monitor_object_canonical(rtems_id, void *);

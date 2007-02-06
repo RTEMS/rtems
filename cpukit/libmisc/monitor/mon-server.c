@@ -41,7 +41,7 @@ rtems_monitor_server_request(
 {
     rtems_id          server_id;
     rtems_status_code status;
-    uint32_t          size;
+    size_t            size;
 
     /*
      * What is id of monitor on target node?
@@ -118,7 +118,7 @@ rtems_monitor_server_task(
     rtems_monitor_server_request_t  request;
     rtems_monitor_server_response_t response;
     rtems_status_code               status;
-    uint32_t                        size;
+    size_t                          size;
 
     for (;;)
     {

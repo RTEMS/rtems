@@ -36,7 +36,7 @@ ER trcv_mbf(
   CORE_message_queue_Status       status;
   boolean                         wait;
   Watchdog_Interval               interval;
-  uint32_t                        msgsz;
+  size_t                          msgsz;
 
   interval = 0;
   if (tmout == TMO_POL) {
