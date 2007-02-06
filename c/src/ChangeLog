@@ -1,5 +1,9 @@
 2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/ide/ata.c: Remove superfluous type casts.
+
+2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libchip/ide/ata.c, libchip/network/elnk.c, optman/rtems/no-msg.c:
 	Use size_t for sizes.
 
