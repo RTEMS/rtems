@@ -63,7 +63,7 @@ void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
   Objects_Id                       id,
   void                            *buffer,
-  uint32_t                        *size,
+  size_t                          *size,
   boolean                          wait,
   Watchdog_Interval                timeout
 )
