@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.60)
+AC_PREREQ(2.61)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([score])
 RTEMS_TOP([..],[])
@@ -72,7 +72,17 @@ AC_CHECK_TYPES([ uint8_t,  int8_t])
 AC_CHECK_TYPES([uint16_t, int16_t])
 AC_CHECK_TYPES([uint32_t, int32_t])
 AC_CHECK_TYPES([uint64_t, int64_t])
-AC_CHECK_TYPES([uintmax_t])
+AC_CHECK_TYPES([uintmax_t, intmax_t])
+AC_CHECK_TYPES([uintptr_t, intptr_t])
+
+# These are conditionally defined by the toolchain
+# FIXME: we should either conditionally compile those parts in
+# RTEMS depending on them, or abort - For now, simply check.
+AC_CHECK_HEADER([pthread.h],[
+  AC_CHECK_TYPES([pthread_rwlock_t])
+  AC_CHECK_TYPES([pthread_barrier_t])
+  AC_CHECK_TYPES([pthread_spinlock_t])
+])
 
 RTEMS_CHECK_MULTIPROCESSING
 RTEMS_CHECK_POSIX_API
