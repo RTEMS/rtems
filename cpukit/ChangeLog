@@ -1,5 +1,7 @@
 2007-02-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/vm/vm_extern.h: Remove non-implemented/unused
+	  functions.
 	* configure.ac: Check fo intmax_t, uintptr_t, intptr_t,
 	pthread.h, pthread_rwlock_t, pthread_barrier_t, pthread_spinlock_t.
 
