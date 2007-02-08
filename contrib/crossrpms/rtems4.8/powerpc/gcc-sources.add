@@ -38,7 +38,7 @@ Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 Patch50:	newlib-1.14.0-rtems4.8-20061027.diff
 %endif
 %if "%{newlib_version}" == "1.15.0"
-Patch50:	newlib-1.15.0-rtems4.8-20070202.diff
+Patch50:	newlib-1.15.0-rtems4.8-20070208.diff
 %endif
 %{?_without_sources:NoSource:	50}
 %endif
