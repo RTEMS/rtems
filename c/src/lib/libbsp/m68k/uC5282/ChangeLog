@@ -1,3 +1,7 @@
+2007-02-08	Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Fixed FPGA interrupt handling.
+
 2007-02-05  Eric Norum <norume@aps.anl.gov>
 
 	* console/console.c: Enable RTS/CTS flow-control pins.

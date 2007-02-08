@@ -639,8 +639,6 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
         MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT1 |
                                 MCF5282_INTC_IMRL_MASKALL);
         setupDone = 1;
-    	handlerTab[vector].func = NULL;
-    	handlerTab[vector].arg  = NULL;
 		rtems_interrupt_catch(fpga_trampoline, FPGA_VECTOR, &old_handler);
         i = init_intc0_bit(FPGA_VECTOR);
         rtems_interrupt_enable(level);
