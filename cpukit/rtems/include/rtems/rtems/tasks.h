@@ -140,7 +140,7 @@ typedef rtems_task ( *rtems_task_entry )(
 
 typedef struct {
   rtems_name            name;              /* task name */
-  uint32_t              stack_size;        /* task stack size */
+  size_t                stack_size;        /* task stack size */
   rtems_task_priority   initial_priority;  /* task priority */
   rtems_attribute       attribute_set;     /* task attributes */
   rtems_task_entry      entry_point;       /* task entry point */
@@ -206,7 +206,7 @@ void _RTEMS_tasks_Manager_initialization(
 rtems_status_code rtems_task_create(
   rtems_name           name,
   rtems_task_priority  initial_priority,
-  uint32_t             stack_size,
+  size_t               stack_size,
   rtems_mode           initial_modes,
   rtems_attribute      attribute_set,
   Objects_Id          *id
