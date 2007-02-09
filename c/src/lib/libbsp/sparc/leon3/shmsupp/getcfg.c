@@ -86,7 +86,7 @@ void Shm_Get_configuration(
 {
   extern rtems_configuration_table Configuration;
   int i;
-  unsigned int tmp, ncpu;
+  unsigned int tmp /* , ncpu */;
   
    BSP_shm_cfgtbl.base         = 0x40000000;
    BSP_shm_cfgtbl.length       = 0x00001000;
