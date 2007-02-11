@@ -1,6 +1,9 @@
 2007-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/score/heap.h, score/src/heap.c,
+	score/src/heapallocatealigned.c, score/src/heapresizeblock.c:
+	More size_t for heap-sizes.
+	* score/include/rtems/score/heap.h, score/src/heap.c,
 	score/src/heapallocate.c, score/src/heapextend.c: Use size_t for
 	heap-sizes.
 	* libnetworking/resolv.h: Typo fixes. Remove __P().
