@@ -205,8 +205,8 @@ uint32_t   _Heap_Initialize(
  * Convert user requested 'size' of memory block to the block size.
  * Return block size on success, 0 if overflow occured
  */
-uint32_t _Heap_Calc_block_size(
-  uint32_t size,
+size_t _Heap_Calc_block_size(
+  size_t   size,
   uint32_t page_size,
   uint32_t min_size)
 {
