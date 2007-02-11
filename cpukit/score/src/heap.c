@@ -113,7 +113,7 @@ static uint32_t instance = 0;
 uint32_t   _Heap_Initialize(
   Heap_Control        *the_heap,
   void                *starting_address,
-  uint32_t             size,
+  size_t               size,
   uint32_t             page_size
 )
 {

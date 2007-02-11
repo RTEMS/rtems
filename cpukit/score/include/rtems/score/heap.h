@@ -263,7 +263,7 @@ typedef struct {
 uint32_t   _Heap_Initialize(
   Heap_Control *the_heap,
   void         *starting_address,
-  uint32_t      size,
+  size_t        size,
   uint32_t      page_size
 );
 
@@ -316,8 +316,8 @@ void *_Heap_Allocate(
  */
 void *_Heap_Allocate_aligned(
   Heap_Control *the_heap,
-  uint32_t    size,
-  uint32_t    alignment
+  size_t        size,
+  uint32_t      alignment
 );
 
 /**
@@ -365,7 +365,7 @@ boolean _Heap_Size_of_user_area(
 Heap_Resize_status _Heap_Resize_block(
   Heap_Control *the_heap,
   void         *starting_address,
-  uint32_t     size,
+  size_t        size,
   uint32_t     *old_mem_size,
   uint32_t     *avail_mem_size
 );
