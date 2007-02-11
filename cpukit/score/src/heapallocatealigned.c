@@ -76,8 +76,8 @@ check_result(
 
 void *_Heap_Allocate_aligned(
   Heap_Control *the_heap,
-  uint32_t   size,
-  uint32_t   alignment
+  size_t        size,
+  uint32_t      alignment
 )
 {
   uint32_t search_count;
