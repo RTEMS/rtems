@@ -282,7 +282,7 @@ uint32_t   _Heap_Initialize(
 Heap_Extend_status _Heap_Extend(
   Heap_Control *the_heap,
   void         *starting_address,
-  uint32_t      size,
+  size_t        size,
   uint32_t     *amount_extended
 );
 
@@ -297,7 +297,7 @@ Heap_Extend_status _Heap_Extend(
  */
 void *_Heap_Allocate(
   Heap_Control *the_heap,
-  uint32_t    size
+  size_t        size
 );
 
 /**
@@ -450,8 +450,8 @@ void _Heap_Get_free_information(
  *
  *  @return This method returns block size on success, 0 if overflow occured.
  */
-extern uint32_t _Heap_Calc_block_size(
-  uint32_t size,
+extern size_t _Heap_Calc_block_size(
+  size_t   size,
   uint32_t page_size,
   uint32_t min_size
 );
