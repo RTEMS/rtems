@@ -1,9 +1,9 @@
 %post
-/sbin/install-info  --info-dir=%{_infodir} %{_infodir}/autoconf.info.gz
+/sbin/install-info  --info-dir=%{_infodir} %{_infodir}/autoconf.info.gz ||:
 
 %preun
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/autoconf.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/autoconf.info.gz ||:
 fi   
 
 %files
