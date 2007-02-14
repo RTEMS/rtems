@@ -1,9 +1,9 @@
 %post 
-/sbin/install-info  --info-dir=%{_infodir} %{_infodir}/automake.info.gz
+/sbin/install-info  --info-dir=%{_infodir} %{_infodir}/automake.info.gz ||:
 
 %preun
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/automake.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/automake.info.gz ||:
 fi
 
 %files
@@ -19,6 +19,9 @@ fi
 %sysdir %{_mandir}/man1
 %{_mandir}/man1/*
 %sysdir %{_datadir}
+%if "%{_prefix}" != "/usr"
+%{_datadir}/aclocal
+%endif
 %{_datadir}/aclocal-%{amvers}
 %{_datadir}/automake-%{amvers}
 
