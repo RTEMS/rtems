@@ -4,15 +4,15 @@ AUTOMAKE_SUBPACKAGES += $(top_srcdir)/binutils/rpm-install.add
 AUTOMAKE_SUBPACKAGES += $(top_srcdir)/common/clean.add
 AUTOMAKE_SUBPACKAGES += $(top_srcdir)/autotools/target-automake.add
 
-automake-rtems.spec.in: $(AUTOMAKE_SUBPACKAGES) Makefile.in
+automake.spec.in: $(AUTOMAKE_SUBPACKAGES) Makefile.in
 	cat $(AUTOMAKE_SUBPACKAGES) | sed \
 	  -e "s/[@]AUTOMAKE_RPMREL[@]/$(AUTOMAKE_RPMREL)/" > $@
-CLEANFILES += automake-rtems.spec.in
+CLEANFILES += automake.spec.in
 
 
-@rpmprefix@automake-rtems.spec: automake-rtems.spec.in
-	$(MKSPEC) automake-rtems.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@automake-rtems.spec
-noinst_DATA += @rpmprefix@automake-rtems.spec
+@rpmprefix@automake.spec: automake.spec.in
+	$(MKSPEC) automake.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@automake.spec
+noinst_DATA += @rpmprefix@automake.spec
 
 EXTRA_DIST += $(AUTOMAKE_SUBPACKAGES)
