@@ -9,5 +9,5 @@ AUTOCONF_RPMREL = 3
 include ./autoconf.am
 
 AUTOMAKE_VERS = 1.10
-AUTOMAKE_RPMREL = 4
+AUTOMAKE_RPMREL = 5
 include ./automake.am
