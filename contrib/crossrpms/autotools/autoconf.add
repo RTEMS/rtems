@@ -46,6 +46,23 @@ their use.
 %prep
 %setup -q -n autoconf-%{srcvers}
 
+# Work around rpm inserting bogus perl-module deps
+cat << \EOF > %{name}-prov
+#!/bin/sh
+%{__perl_provides} $* |\
+    sed -e '/^perl(Autom4te/d'
+EOF
+%define __perl_provides %{_builddir}/autoconf-%{srcvers}/%{name}-prov
+chmod +x %{__perl_provides}
+
+cat << \EOF > %{name}-requ
+#!/bin/sh
+%{__perl_requires} $* |\
+    sed -e '/^perl(Autom4te/d'
+EOF
+%define __perl_requires %{_builddir}/autoconf-%{srcvers}/%{name}-requ
+chmod +x %{__perl_requires}
+
 %build
 ./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
   --bindir=%{_bindir} --datadir=%{_datadir}
