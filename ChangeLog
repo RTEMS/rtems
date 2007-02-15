@@ -1,5 +1,6 @@
 2007-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.maint: Use VERSION as master source for version.m4's.
 	* VERSION: Sync with version in aclocal/version.m4.
 
 2007-01-28	Ralf Corsépius <ralf.corsepius@rtems.org>

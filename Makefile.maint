@@ -28,7 +28,7 @@
 # For "hot runs" you will want to use "make -f Makefile.maint TEST_TAG= <command>"
 TEST_TAG = -test1
 
-rtems_version := $(shell cat aclocal/version.m4 | sed -n '/_RTEMS_VERSION/{s/^.*VERSION.*\[\(.*\)\].*/\1/p};')
+rtems_version := $(shell cat VERSION | sed -n '/.* Version /{s/^.*Version[ ]*\([0-9\.]\+\)/\1/p};')
 rtems_tag     := $(shell echo "rtems-$(rtems_version)" | tr . -)
 
 # -----------------
@@ -79,7 +79,8 @@ new-minor:
 	r=$$(($$r + 1)); version="$$v.$$r.0"; \
 	echo "New minor release: $$version"; \
 	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
-	  $(VERSION_FILES);
+	  $(VERSION_FILES); \
+	sed -i -e "s,\(^RTEMS Version\).*,\1 $$version," VERSION
 
 # Create a new revision release
 # increments the last digit of the version number
@@ -91,7 +92,8 @@ new-revision:
 	n=$$(($$n + 1)); version="$$m.$$n";\
 	echo "New revision release: $$version"; \
 	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
-	  $(VERSION_FILES);
+	  $(VERSION_FILES); \
+	sed -i -e "s,\(^RTEMS Version\).*,\1 $$version," VERSION
 
 VERSION_FILES += aclocal/version.m4
 VERSION_FILES += cpukit/aclocal/version.m4
@@ -102,6 +104,6 @@ CVS_RUN := $(shell if [ -n "$(TEST_TAG)" ]; then echo "cvs -n"; else echo "cvs";
 
 commit:
 	$(CVS_RUN) commit -m "Upgrade to $(rtems_version)" \
-	  $(VERSION_FILES)
+	  $(VERSION_FILES) VERSION
 
 .PHONY: commit new-minor new-revision tag tarball
