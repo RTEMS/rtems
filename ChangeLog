@@ -1,3 +1,7 @@
+2007-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* VERSION: Sync with version in aclocal/version.m4.
+
 2007-01-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.maint: Sync nomenclature with that being used in
