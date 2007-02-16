@@ -60,8 +60,6 @@ include_rtems_score_HEADERS += inline/rtems/score/mppkt.inl \
     inline/rtems/score/objectmp.inl inline/rtems/score/threadmp.inl
 endif
 
-EXTRA_DIST = macros/README
-
 ## src
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
@@ -152,7 +150,7 @@ libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c src/watchdoginsert.c \
 libscore_a_SOURCES += src/apiext.c src/chain.c \
     src/interr.c src/isr.c src/userext.c src/wkspace.c
 
-EXTRA_DIST += src/Unlimited.txt
+EXTRA_DIST = src/Unlimited.txt
 
 DISTCLEANFILES = include/rtems/score/cpuopts.h
 
