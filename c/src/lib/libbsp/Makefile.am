@@ -12,7 +12,7 @@ EXTRA_DIST = MERGE.PROCEDURE bsp.am
 # shared
 EXTRA_DIST += shared/bootcard.c shared/bspclean.c shared/bsplibc.c \
     shared/bsppost.c shared/console-polled.c shared/console.c \
-    shared/gnatinstallhandler.c shared/main.c shared/sbrk.c shared/tod.c \
+    shared/gnatinstallhandler.c shared/sbrk.c shared/tod.c \
     shared/tod.h
 EXTRA_DIST += shared/vmeUniverse/vmeUniverse.c \
     shared/vmeUniverse/vmeUniverse.h \
