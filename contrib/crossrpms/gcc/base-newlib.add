@@ -34,13 +34,13 @@ newlib files that are shared by all targets.
 %{_infodir}/libm.info*
 
 %post -n @rpmprefix@newlib-common
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz || :
 
 %preun -n @rpmprefix@newlib-common
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz || :
 fi
 
 %endif

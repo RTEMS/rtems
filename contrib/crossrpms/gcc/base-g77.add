@@ -29,11 +29,11 @@ This is the files for gcc/g77 that are shared by all targets.
 %{_infodir}/g77.info*.gz
 
 %post -n @rpmprefix@gcc-g77-common
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/g77.info.gz 
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/g77.info.gz || :
 
 %preun -n @rpmprefix@gcc-g77-common
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/g77.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/g77.info.gz || :
 fi
 
 %endif
