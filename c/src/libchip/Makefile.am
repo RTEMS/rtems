@@ -44,7 +44,7 @@ endif
 
 EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
     network/README.i82586 network/README.open_eth network/README.sonic \
-    network/cs8900.c.bsp README.tulipclone
+    network/cs8900.c.bsp network/README.tulipclone
 
 # rtc
 if LIBCHIP
