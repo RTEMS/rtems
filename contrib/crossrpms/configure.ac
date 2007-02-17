@@ -62,25 +62,31 @@ case "$prefix" in
 /usr)
   sysdirpattern="/%sysdir/d"
   rpmprefix=
+  host_subdirs=
   ;;
 /usr/local)
   sysdirpattern="/%sysdir/d"
   rpmprefix="local-"
+  host_subdirs=autotools
   ;;
 /opt/rtems)
   sysdirpattern="s/^%sysdir/%dir/g"
   rpmprefix="rtems-"
+  host_subdirs=autotools
   ;;
 NONE|${ac_default_prefix}) # Default prefix
   sysdirpattern="s/^%sysdir/%dir/g"
   rpmprefix="[rtems-]RTEMS_API[-]"
+  host_subdirs=autotools
   ;;
 *)
   sysdirpattern="s/^%sysdir/%dir/g"
   rpmprefix="custom-"
+  host_subdirs=autotools
   ;;
 esac
 AC_SUBST(sysdirpattern)
+AC_SUBST(HOST_SUBDIRS,$host_subdirs)
 
 AC_ARG_ENABLE([rpmprefix],
 [  --enable-rpmprefix=<rpmprefix>      prefix rpms],[

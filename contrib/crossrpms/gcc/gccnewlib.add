@@ -20,6 +20,9 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %define _use_internal_dependency_generator 0
 
+%if "%{gcc_version}" >= "4.2.0"
+BuildRequires:	flex bison
+%endif
 %if %build_gcj
 # Building gcj requires bison and zlib
 BuildRequires:	bison
