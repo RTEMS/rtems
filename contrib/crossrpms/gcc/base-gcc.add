@@ -45,7 +45,7 @@ GCC files that are shared by all targets.
 
 %post -n @rpmprefix@gcc-common
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cpp.info.gz || :
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
 %if "%{gcc_version}" >= "3.4"
