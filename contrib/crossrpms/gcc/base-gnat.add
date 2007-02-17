@@ -31,15 +31,15 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 %{_infodir}/gnat*
 
 %post -n @rpmprefix@gcc-gnat-common
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat_rm.info.gz
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat_rm.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz || :
 
 %preun -n @rpmprefix@gcc-gnat-common
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat_rm.info.gz
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat_rm.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat-style.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gnat_ugn_unw.info.gz || :
 fi
 %endif
 %endif

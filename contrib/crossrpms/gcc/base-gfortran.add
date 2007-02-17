@@ -28,11 +28,11 @@ This is the files for gcc/gfortran that are shared by all targets.
 %{_infodir}/gfortran.info*.gz
 
 %post -n @rpmprefix@gcc-gfortran-common
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gfortran.info.gz
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gfortran.info.gz || :
 
 %preun -n @rpmprefix@gcc-gfortran-common
 if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gfortran.info.gz
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gfortran.info.gz || :
 fi
 
 %endif
