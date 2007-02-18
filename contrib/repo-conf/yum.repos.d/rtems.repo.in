@@ -26,7 +26,7 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
 
 # rtems-testing add-on repository
-[rtems-testing-@RTEMS_API@]
+[rtems-@RTEMS_API@-testing]
 name=RTEMS $releasever - $basearch - RTEMS
 baseurl=ftp://ftp.rtems.org/pub/rtems/linux/testing/@RTEMS_API@/fedora/$releasever/$basearch
 # metadata_expire=0
@@ -35,7 +35,7 @@ gpgcheck=1
 gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
 
-[rtems-testing-@RTEMS_API@-source]
+[rtems-@RTEMS_API@-testing-source]
 name=Fedora $releasever - $basearch - RTEMS sources
 baseurl=ftp://ftp.rtems.org/pub/rtems/linux/testing/@RTEMS_API@/fedora/$releasever/SRPMS
 # metadata_expire=0
@@ -44,7 +44,7 @@ gpgcheck=1
 gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
 
-[rtems-testing-@RTEMS_API@-debug]
+[rtems-@RTEMS_API@-testing-debug]
 name=Fedora $releasever - $basearch - RTEMS sources
 baseurl=ftp://ftp.rtems.org/pub/rtems/linux/testing/@RTEMS_API@/fedora/$releasever/$basearch/debug
 # metadata_expire=0
