@@ -5,7 +5,7 @@ TARGET = arm-rtems4.7
 include $(top_srcdir)/mkspec.am
 
 BINUTILS_VERS = 2.17
-BINUTILS_RPMREL = 3
+BINUTILS_RPMREL = 4
 include ../binutils.am
 BINUTILS_OPTS +=
 
