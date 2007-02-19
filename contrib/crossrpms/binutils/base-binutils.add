@@ -1,6 +1,6 @@
 %if %build_infos
 # ==============================================================
-# @rpmprefix@rtems4.7-base-binutils
+# @rpmprefix@binutils-common
 # ==============================================================
 %package -n @rpmprefix@binutils-common
 Summary:      Base package for RTEMS binutils
