@@ -35,12 +35,12 @@ cd newlib-%{newlib_version}
 %{?PATCH50:%patch50 -p1}
 cd ..
   # Copy the C library into gcc's source tree
-  ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_version}
+  ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
 %endif
 
 @PREP@
 
   # Fix timestamps
-  cd gcc-%{gcc_version}
+  cd gcc-%{gcc_pkgvers}
   contrib/gcc_update --touch
   cd ..
