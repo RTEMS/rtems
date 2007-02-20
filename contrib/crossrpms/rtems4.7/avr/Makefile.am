@@ -18,3 +18,4 @@ GCC_OPTS +=
 GDB_VERS = 6.5
 GDB_RPMREL = 2
 include ../gdb.am
+GDB_OPTS +=

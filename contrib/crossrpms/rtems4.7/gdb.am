@@ -1,5 +1,7 @@
 EXTRA_DIST += gdb-sources.add
 
+GDB_OPTS =
+
 GDB_SUBPACKAGES = $(top_srcdir)/common/common.add
 GDB_SUBPACKAGES += $(top_srcdir)/gdb/gdb.add
 GDB_SUBPACKAGES += $(top_srcdir)/gdb/prep.add
@@ -21,7 +23,7 @@ $(TARGET)-gdb.spec.in: $(GDB_SUBPACKAGES) Makefile.am $(srcdir)/gdb-sources.add
 CLEANFILES += $(TARGET)-gdb.spec.in
 
 @rpmprefix@$(TARGET)-gdb.spec: $(TARGET)-gdb.spec.in
-	$(MKSPEC) $(TARGET)-gdb.spec.in | $(SPECSTRIP) > $@
+	$(MKSPEC) $(TARGET)-gdb.spec.in | $(SPECSTRIP) $(GDB_OPTS) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-gdb.spec
 noinst_DATA += @rpmprefix@$(TARGET)-gdb.spec
 
