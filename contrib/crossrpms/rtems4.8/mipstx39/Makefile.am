@@ -8,3 +8,4 @@ include $(top_srcdir)/mkspec.am
 GDB_VERS = 6.5
 GDB_RPMREL = 1
 include ../gdb.am
+GDB_OPTS +=

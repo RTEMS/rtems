@@ -19,3 +19,4 @@ GCC_OPTS +=
 ### GDB-6.4 doesn't support the tic4x
 ## GDB_VERS = 6.4
 ## include ../gdb.am
+## GDB_OPTS +=
