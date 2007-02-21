@@ -60,7 +60,7 @@ rtems-$(rtems_version)/stamp.cleanup: rtems-$(rtems_version)/stamp.export
 	touch rtems-$(rtems_version)/stamp.cleanup
 
 rtems-$(rtems_version)/stamp.autofiles: rtems-$(rtems_version)/stamp.cleanup
-	cd rtems-$(rtems_version) && ./bootstrap -r
+	cd rtems-$(rtems_version) && PATH=/opt/rtems-4.8/bin:$$PATH ./bootstrap -r
 	touch rtems-$(rtems_version)/stamp.autofiles
 
 rtems-$(rtems_version)/excludes: Makefile.maint
