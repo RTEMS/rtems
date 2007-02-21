@@ -41,7 +41,10 @@ tag:
 # -----------------
 # Different stages of cvs-exporting
 rtems-$(rtems_version)/stamp.export:
-	cvs -z9 export -d rtems-$(rtems_version) -r $(rtems_tag)$(TEST_TAG) rtems
+	@cvs -z9 export -d rtems-$(rtems_version) -r $(rtems_tag)$(TEST_TAG) rtems
+	@if ! test -d rtems-$(rtems_version)/VERSION; then \
+	echo "ERROR export failed"; \
+	echo " Did you run 'make -f Makefile.maint tag' ?"; fi; exit 1
 	touch rtems-$(rtems_version)/stamp.export
 
 rtems-$(rtems_version).tar.bz2: rtems-$(rtems_version)/stamp.autofiles rtems-$(rtems_version)/excludes
