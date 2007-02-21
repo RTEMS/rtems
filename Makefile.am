@@ -23,7 +23,7 @@ dist-hook:
 	  if test -f $(distdir)/$$i/configure.ac; then : ; \
 	  else \
 	    d=`dirname $(distdir)/$$i`; \
-	    $(mkdir_p) $$d;\
+	    $(MKDIR_P) $$d;\
 	    echo "cp -pR $(srcdir)/$$i $(distdir)/$$i"; \
 	    cp -pR $(srcdir)/$$i $(distdir)/$$i; \
 	  fi; \
