@@ -88,7 +88,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
         the_thread->Wait.return_argument,
         size
       );
-      *(uint32_t   *)the_thread->Wait.return_argument_1 = size;
+      *(size_t *)the_thread->Wait.return_argument_1 = size;
       the_thread->Wait.count = submit_type;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -168,7 +168,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     executing->Wait.queue              = &the_message_queue->Wait_queue;
     executing->Wait.id                 = id;
     executing->Wait.return_argument    = buffer;
-    executing->Wait.return_argument_1  = (void *)size;
+    executing->Wait.option             = size;
     executing->Wait.count              = submit_type;
     _ISR_Enable( level );
 
