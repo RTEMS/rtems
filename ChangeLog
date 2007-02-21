@@ -1,3 +1,7 @@
+2007-02-21	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.maint: Added TOOL_VERSIONS stanza and fixed typo.
+
 2007-02-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* VERSION: sync with */version.m4.

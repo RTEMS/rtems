@@ -21,7 +21,7 @@
 #    (rsp. "make -f Makefile.maint new-minor").
 # 3. Run "make -f Makefile.maint commit"
 # 4. Run "make -f Makefile.maint tag"
-# 5. Run "make -f Makefine.maint tarball"
+# 5. Run "make -f Makefile.maint tarball"
 
 # -----------------
 # SECURITY: Append a string to tag to avoid accidentially screwing up cvs-tags
@@ -71,6 +71,23 @@ rtems-$(rtems_version)/excludes: Makefile.maint
 	@echo "Makefile.maint" >> $@
 
 tarball: rtems-$(rtems_version).tar.bz2
+
+TOOL_VERSIONS: Makefile.maint
+	( \
+	 date ; \
+	 echo ; \
+	 echo "This file contains configuration information on the " ; \
+	 echo "primary computer used to test and make the $(rtems_version)" ; \
+	 echo "version of RTEMS" ; \
+	 echo ; \
+	 echo "OS Version: " `head -1 /etc/issue` ; \
+	 echo ; \
+	 echo "The following RTEMS RPMs were installed on the machine" ; \
+	 echo "where this release was made:" ; \
+	 echo ; \
+	 rpm -q -a | grep rtems-4.7 | sed -e 's/^/    /' ; \
+	 echo \
+	 ) >TOOL_VERSIONS
 
 # -----------------
 # Create a new minor release
