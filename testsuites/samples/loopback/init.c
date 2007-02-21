@@ -220,6 +220,7 @@ static rtems_task clientTask(rtems_task_argument arg)
 {
     clientWorker(arg);
     printf("Client task terminating.\n");
+    rtems_task_delete( RTEMS_SELF );
 }
 
 /*
@@ -263,5 +264,7 @@ Init (rtems_task_argument ignored)
     spawnTask(clientTask, 120, 5);
     spawnTask(clientTask, 120, 6);
 
-    rtems_task_suspend(RTEMS_SELF);
+    rtems_task_wake_after(500);
+    puts( "*** END OF LOOPBACK TEST ***" );
+    exit( 0 );
 }
