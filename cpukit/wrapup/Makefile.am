@@ -72,7 +72,7 @@ endif
 
 librtemscpu.a: $(TMP_LIBS)
 	rm -f $@
-	$(mkdir_p) $(ARCH)
+	$(MKDIR_P) $(ARCH)
 	rm -rf $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	for f in $(TMP_LIBS); do \
 	  case $$f in \
