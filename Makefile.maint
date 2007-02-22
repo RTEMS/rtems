@@ -124,7 +124,7 @@ VERSION_FILES += testsuites/aclocal/version.m4
 CVS_RUN := $(shell if [ -n "$(TEST_TAG)" ]; then echo "cvs -n"; else echo "cvs"; fi)
 
 commit:
-	$(CVS_RUN) commit -m "Upgrade to $(rtems_version)" \
+	$(CVS_RUN) commit -m "Testing: Upgrade to $(rtems_version)" \
 	  $(VERSION_FILES) VERSION
 
 .PHONY: commit new-minor new-revision tag tarball
