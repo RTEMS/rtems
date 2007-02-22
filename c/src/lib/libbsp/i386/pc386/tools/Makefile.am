@@ -21,7 +21,7 @@ all-local: $(TMPINSTALL_FILES)
 TMPINSTALL_FILES =
 
 $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools
+	@$(MKDIR_P) $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools
 	@: > $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp)
 TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp)
 
