@@ -48,7 +48,9 @@ rtems-$(rtems_version)/stamp.export:
 	echo " Did you run 'make -f Makefile.maint tag' ?"; exit1; fi
 	touch rtems-$(rtems_version)/stamp.export
 
-rtems-$(rtems_version).tar.bz2: rtems-$(rtems_version)/stamp.autofiles rtems-$(rtems_version)/excludes
+rtems-$(rtems_version).tar.bz2: rtems-$(rtems_version)/stamp.autofiles \
+	  rtems-$(rtems_version)/excludes \
+	  rtems-$(rtems_version)/TOOL_VERSIONS
 	tar -cj -X rtems-$(rtems_version)/excludes \
 	  -f rtems-$(rtems_version).tar.bz2 rtems-$(rtems_version)
 
@@ -72,7 +74,7 @@ rtems-$(rtems_version)/excludes: Makefile.maint
 
 tarball: rtems-$(rtems_version).tar.bz2
 
-TOOL_VERSIONS: Makefile.maint
+rtems-$(rtems_version)/TOOL_VERSIONS: Makefile.maint
 	( \
 	 date ; \
 	 echo ; \
@@ -87,7 +89,7 @@ TOOL_VERSIONS: Makefile.maint
 	 echo ; \
 	 rpm -qa 'rtems-4.8*' | sed -e 's/^/    /' ; \
 	 echo \
-	 ) >TOOL_VERSIONS
+	 ) > $@
 
 # -----------------
 # Create a new minor release
