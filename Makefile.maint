@@ -37,15 +37,15 @@ PATH          := /opt/rtems-$(rtems_api)/bin:$(PATH)
 # -----------------
 # Cleanup check out and cvs-tag the files inside
 tag:
-	cvs -z9 up -dP >/dev/null
+	cvs -q -z9 up -dP
 	./bootstrap -p >/dev/null
-	cvs tag -c $(rtems_tag)$(TAG_SUFFIX)
+	cvs -q tag -c $(rtems_tag)$(TAG_SUFFIX)
 
 # -----------------
 # Different stages of cvs-exporting
 rtems-$(rtems_version)/stamp.export.$(rtems_tag)$(TAG_SUFFIX):
 	rm -rf rtems-$(rtems_version)
-	@cvs -z9 export -d rtems-$(rtems_version) -r $(rtems_tag)$(TAG_SUFFIX) rtems >/dev/null
+	@cvs -q -z9 export -d rtems-$(rtems_version) -r $(rtems_tag)$(TAG_SUFFIX) rtems
 	@if ! test -f rtems-$(rtems_version)/VERSION; then \
 	echo "ERROR export failed"; \
 	echo " Did you run 'make -f Makefile.maint tag' ?"; exit1; fi
