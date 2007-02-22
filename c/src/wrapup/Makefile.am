@@ -39,7 +39,7 @@ endif
 
 o-optimize/librtemsbsp.a: $(SRCS)
 	rm -f $@
-	$(mkdir_p) o-optimize
+	$(MKDIR_P) o-optimize
 	rm -rf o-optimize/*.a o-optimize/*.$(OBJEXT) o-optimize/*.rel
 	for f in $(SRCS); do \
 	  case $$f in \
