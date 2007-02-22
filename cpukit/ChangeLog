@@ -1,3 +1,8 @@
+2007-02-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libcsupport/Makefile.am: Move getpagesize.c to newlib-only
+	  compiled files.
+
 2007-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* wrapup/Makefile.am: Use MKDIR_P instead of mkdir_p.

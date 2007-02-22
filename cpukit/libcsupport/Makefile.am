@@ -63,7 +63,7 @@ ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
     src/setpgid.c src/setsid.c
 
 MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c \
-    src/__sbrk.c src/getpagesize.c
+    src/__sbrk.c
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 
@@ -85,7 +85,7 @@ else
 libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
     $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) src/envlock.c \
-    $(TERMIOS_C_FILES)
+    $(TERMIOS_C_FILES) src/getpagesize.c
 endif
 
 EXTRA_DIST = src/TODO src/CASES src/README
