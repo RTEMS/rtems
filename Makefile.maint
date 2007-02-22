@@ -31,12 +31,14 @@ TAG_SUFFIX = -test1
 
 rtems_version := $(shell cat VERSION | sed -n '/.* Version /{s/^.*Version[ ]*\([0-9\.]\+\)/\1/p};')
 rtems_tag     := $(shell echo "rtems-$(rtems_version)" | tr . -)
+rtems_api     := 4.8
+PATH          := /opt/rtems-$(rtems_api)/bin:$(PATH)
 
 # -----------------
 # Cleanup check out and cvs-tag the files inside
 tag:
 	cvs -z9 up -dP >/dev/null
-	PATH=/opt/rtems-4.8/bin:$$PATH ./bootstrap -p >/dev/null
+	./bootstrap -p >/dev/null
 	cvs tag -c $(rtems_tag)$(TAG_SUFFIX) >/dev/null
 
 # -----------------
@@ -63,7 +65,7 @@ rtems-$(rtems_version)/stamp.cleanup: rtems-$(rtems_version)/stamp.export
 	touch rtems-$(rtems_version)/stamp.cleanup
 
 rtems-$(rtems_version)/stamp.autofiles: rtems-$(rtems_version)/stamp.cleanup
-	cd rtems-$(rtems_version) && PATH=/opt/rtems-4.8/bin:$$PATH ./bootstrap -r
+	cd rtems-$(rtems_version) && ./bootstrap -r
 	touch rtems-$(rtems_version)/stamp.autofiles
 
 rtems-$(rtems_version)/excludes: Makefile.maint
@@ -88,7 +90,7 @@ rtems-$(rtems_version)/TOOL_VERSIONS: Makefile.maint
 	 echo "The following RTEMS RPMs were installed on the machine" ; \
 	 echo "where this release was made:" ; \
 	 echo ; \
-	 rpm -qa 'rtems-4.8*' | sed -e 's/^/    /' ; \
+	 rpm -qa 'rtems-$(rtems_api)-*' | sort | sed -e 's/^/    /' ; \
 	 echo \
 	 ) > $@
 
@@ -127,7 +129,7 @@ VERSION_FILES += testsuites/aclocal/version.m4
 CVS_RUN := $(shell if [ -n "$(TAG_SUFFIX)" ]; then echo "cvs -n"; else echo "cvs"; fi)
 
 commit:
-	$(CVS_RUN) commit -m "Testing: Upgrade to $(rtems_version)" \
+	$(CVS_RUN) commit -m "Upgrade to $(rtems_version)" \
 	  $(VERSION_FILES) VERSION
 
 .PHONY: commit new-minor new-revision tag tarball
