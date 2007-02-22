@@ -58,7 +58,7 @@ all-local: $(TMPINSTALL_FILES)
 TMPINSTALL_FILES =
 
 $(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
+	@$(MKDIR_P) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
 TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
