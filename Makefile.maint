@@ -39,7 +39,7 @@ PATH          := /opt/rtems-$(rtems_api)/bin:$(PATH)
 tag:
 	cvs -z9 up -dP >/dev/null
 	./bootstrap -p >/dev/null
-	cvs tag -c $(rtems_tag)$(TAG_SUFFIX) >/dev/null
+	cvs tag -c $(rtems_tag)$(TAG_SUFFIX)
 
 # -----------------
 # Different stages of cvs-exporting
