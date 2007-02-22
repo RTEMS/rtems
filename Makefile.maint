@@ -85,7 +85,7 @@ TOOL_VERSIONS: Makefile.maint
 	 echo "The following RTEMS RPMs were installed on the machine" ; \
 	 echo "where this release was made:" ; \
 	 echo ; \
-	 rpm -q -a | grep rtems-4.8 | sed -e 's/^/    /' ; \
+	 rpm -qa 'rtems-4.8*' | sed -e 's/^/    /' ; \
 	 echo \
 	 ) >TOOL_VERSIONS
 
