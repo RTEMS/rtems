@@ -49,7 +49,7 @@ rtems-$(rtems_version)/stamp.export:
 	@if ! test -f rtems-$(rtems_version)/VERSION; then \
 	echo "ERROR export failed"; \
 	echo " Did you run 'make -f Makefile.maint tag' ?"; exit1; fi
-	touch rtems-$(rtems_version)/stamp.export
+	echo "$(rtems_tag)$(TAG_SUFFIX)" > rtems-$(rtems_version)/stamp.export
 
 rtems-$(rtems_version)$(TAG_SUFFIX).tar.bz2: rtems-$(rtems_version)/stamp.autofiles \
 	  rtems-$(rtems_version)/excludes \
