@@ -14,6 +14,7 @@
 
 # MAINTAINER notes:
 
+
 # Cutting a new release:
 # 1. Perform a non-anonymous cvs checkout of the BRANCH 
 #    you want to cut a release tarball from
@@ -25,30 +26,33 @@
 
 # -----------------
 # SECURITY: Append a string to tag to avoid accidentially screwing up cvs-tags
-# For "hot runs" you will want to use "make -f Makefile.maint TEST_TAG= <command>"
-TEST_TAG = -test1
+# For "hot runs" you will want to use "make -f Makefile.maint TAG_SUFFIX= <command>"
+TAG_SUFFIX = -test1
 
 rtems_version := $(shell cat VERSION | sed -n '/.* Version /{s/^.*Version[ ]*\([0-9\.]\+\)/\1/p};')
 rtems_tag     := $(shell echo "rtems-$(rtems_version)" | tr . -)
+PATH          := /opt/rtems-4.7/bin:$(PATH)
 
 # -----------------
 # Cleanup check out and cvs-tag the files inside
 tag:
 	cvs -z9 up -dP >/dev/null
-	PATH=/opt/rtems-4.7/bin:$$PATH ./bootstrap -p >/dev/null
-	cvs tag -c $(rtems_tag)$(TEST_TAG) >/dev/null
+	./bootstrap -p >/dev/null
+	cvs tag -c $(rtems_tag)$(TAG_SUFFIX) >/dev/null
 
 # -----------------
 # Different stages of cvs-exporting
 rtems-$(rtems_version)/stamp.export:
 	rm -rf rtems-$(rtems_version)
-	@cvs -z9 export -d rtems-$(rtems_version) -r $(rtems_tag)$(TEST_TAG) rtems >/dev/null
+	@cvs -z9 export -d rtems-$(rtems_version) -r $(rtems_tag)$(TAG_SUFFIX) rtems >/dev/null
 	@if ! test -f rtems-$(rtems_version)/VERSION; then \
 	echo "ERROR export failed"; \
 	echo " Did you run 'make -f Makefile.maint tag' ?"; exit1; fi
 	touch rtems-$(rtems_version)/stamp.export
 
-rtems-$(rtems_version).tar.bz2: rtems-$(rtems_version)/stamp.autofiles rtems-$(rtems_version)/excludes
+rtems-$(rtems_version).tar.bz2: rtems-$(rtems_version)/stamp.autofiles \
+	  rtems-$(rtems_version)/excludes \
+	  rtems-$(rtems_version)/TOOL_VERSIONS
 	tar -cj -X rtems-$(rtems_version)/excludes \
 	  -f rtems-$(rtems_version).tar.bz2 rtems-$(rtems_version)
 
@@ -60,7 +64,7 @@ rtems-$(rtems_version)/stamp.cleanup: rtems-$(rtems_version)/stamp.export
 	touch rtems-$(rtems_version)/stamp.cleanup
 
 rtems-$(rtems_version)/stamp.autofiles: rtems-$(rtems_version)/stamp.cleanup
-	cd rtems-$(rtems_version) && PATH=/opt/rtems-4.7/bin:$$PATH ./bootstrap -r
+	cd rtems-$(rtems_version) && ./bootstrap -r
 	touch rtems-$(rtems_version)/stamp.autofiles
 
 rtems-$(rtems_version)/excludes: Makefile.maint
@@ -72,7 +76,7 @@ rtems-$(rtems_version)/excludes: Makefile.maint
 
 tarball: rtems-$(rtems_version).tar.bz2
 
-TOOL_VERSIONS: Makefile.maint
+rtems-$(rtems_version)/TOOL_VERSIONS: Makefile.maint
 	( \
 	 date ; \
 	 echo ; \
@@ -85,9 +89,9 @@ TOOL_VERSIONS: Makefile.maint
 	 echo "The following RTEMS RPMs were installed on the machine" ; \
 	 echo "where this release was made:" ; \
 	 echo ; \
-	 rpm -q -a | grep rtems-4.7 | sed -e 's/^/    /' ; \
+	 rpm -qa 'rtems-4.7*' | sed -e 's/^/    /' ; \
 	 echo \
-	 ) >TOOL_VERSIONS
+	 ) > $@
 
 # -----------------
 # Create a new minor release
@@ -121,7 +125,7 @@ VERSION_FILES += cpukit/aclocal/version.m4
 VERSION_FILES += c/src/aclocal/version.m4
 VERSION_FILES += testsuites/aclocal/version.m4
 
-CVS_RUN := $(shell if [ -n "$(TEST_TAG)" ]; then echo "cvs -n"; else echo "cvs"; fi)
+CVS_RUN := $(shell if [ -n "$(TAG_SUFFIX)" ]; then echo "cvs -n"; else echo "cvs"; fi)
 
 commit:
 	$(CVS_RUN) commit -m "Upgrade to $(rtems_version)" \
