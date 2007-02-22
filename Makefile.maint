@@ -48,7 +48,7 @@ rtems-$(rtems_version)/stamp.export.$(rtems_tag)$(TAG_SUFFIX):
 	@cvs -q -z9 export -d rtems-$(rtems_version) -r $(rtems_tag)$(TAG_SUFFIX) rtems
 	@if ! test -f rtems-$(rtems_version)/VERSION; then \
 	echo "ERROR export failed"; \
-	echo " Did you run 'make -f Makefile.maint tag' ?"; exit1; fi
+	echo " Did you run 'make -f Makefile.maint tag' ?"; exit 1; fi
 	echo "$(rtems_tag)$(TAG_SUFFIX)" > rtems-$(rtems_version)/stamp.export.$(rtems_tag)$(TAG_SUFFIX)
 
 rtems-$(rtems_version)$(TAG_SUFFIX).tar.bz2: rtems-$(rtems_version)/stamp.autofiles \
