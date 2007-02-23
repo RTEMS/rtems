@@ -29,7 +29,7 @@ CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 W32API_VERS = 3.8
-W32API_RPMREL = @VERSION@
+W32API_RPMREL = 1
 EXTRA_DIST += target-w32api.add
 EXTRA_DIST += w32api.add
 
