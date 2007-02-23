@@ -4,7 +4,7 @@ TARGET = i686-pc-mingw32
 
 include $(top_srcdir)/mkspec.am
 
-MINGW32_VERS = 3.9
+MINGW32_VERS = 3.11
 MINGW32_RPMREL = @VERSION@
 EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
@@ -28,7 +28,7 @@ CLEANFILES += $(TARGET)-libs.spec.in
 CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
-W32API_VERS = 3.6
+W32API_VERS = 3.8
 W32API_RPMREL = @VERSION@
 EXTRA_DIST += target-w32api.add
 EXTRA_DIST += w32api.add
@@ -56,10 +56,11 @@ noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 BINUTILS_VERS = 2.16.91-20060119-1
 BINUTILS_RPMREL = @VERSION@
 include ../binutils.am
-BINUTILS_OPTS +=
+BINUTILS_OPTS += --disable-infos
 
 
 GCC_VERS = 4.1.0
+GCC_PKGVERS = $(GCC_VERS)
 GCC_RPMREL = @VERSION@
 include ../gcc.am
 GCC_OPTS += --languages=c
