@@ -15,7 +15,7 @@ BuildArch:	noarch
 Version:      	%w32api_rpmvers
 Summary:      	MinGW Libraries
 
-Source0:	http://dl.sourceforge.net/sourceforge/mingw/w32api-%{w32api_version}.tar.gz
+Source0:	http://downloads.sourceforge.net/mingw/w32api-%{w32api_version}.tar.gz
 %{?_without_sources:NoSource:	0}
 
 %description
