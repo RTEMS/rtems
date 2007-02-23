@@ -5,7 +5,7 @@ TARGET = i686-pc-mingw32
 include $(top_srcdir)/mkspec.am
 
 MINGW32_VERS = 3.11
-MINGW32_RPMREL = @VERSION@
+MINGW32_RPMREL = 1
 EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
 
