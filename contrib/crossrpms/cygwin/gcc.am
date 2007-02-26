@@ -24,6 +24,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add 
 	  -e "/[@]PREP[@]/r $(srcdir)/../gcc-prep.add" \
 	  -e "/[@]PREP[@]/d" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
+	  -e "s/[@]GCC_PKGVERS[@]/$(GCC_PKGVERS)/g" \
 	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
 	  -e "/^BuildRequ.*[@]tool_target[@]-w32api-sys-root/d" \
 	  -e "s,[@]tool_target[@]-w32api-sys-root,@tool_target@-w32api," \
