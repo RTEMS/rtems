@@ -30,11 +30,13 @@ noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 
 BINUTILS_VERS = 2.17
+BINUTILS_PKGVERS = $(BINUTILS_VERS)
 BINUTILS_RPMREL = @VERSION@
 include ../binutils.am
 BINUTILS_OPTS +=
 
 GCC_VERS = 4.1.1
+GCC_PKGVERS = $(GCC_VERS)
 GCC_RPMREL = @VERSION@
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx,f95,objc
