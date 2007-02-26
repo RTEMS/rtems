@@ -1,5 +1,6 @@
+%define binutils_pkgvers @BINUTILS_PKGVERS@
 %define binutils_version @BINUTILS_VERS@
-%define binutils_rpmvers %{expand:%(echo @BINUTILS_VERS@ | tr - _)} 
+%define binutils_rpmvers %{expand:%(echo "@BINUTILS_VERS@" | tr - _ )}
 
 Name:		@rpmprefix@@tool_target@-binutils
 Summary:	Binutils for target @tool_target@
@@ -19,7 +20,6 @@ BuildRequires:	flex
 BuildRequires:	bison
 %if %build_infos
 
-# Requires:	@rpmprefix@rtems4.7-base-binutils
 Requires:	@rpmprefix@binutils-common
 %endif
 
