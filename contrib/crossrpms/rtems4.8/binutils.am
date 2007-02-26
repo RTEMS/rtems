@@ -20,7 +20,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binuti
 	  -e "s/[@]BINUTILS_PKGVERS[@]/$(BINUTILS_PKGVERS)/g" \
 	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
 	  -e "/--with-sysroot/d" \
-	  > $(TARGET)-binutils.spec.in
+	  | $(MKSPEC0) > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
 
 @rpmprefix@$(TARGET)-binutils.spec: $(TARGET)-binutils.spec.in

@@ -20,7 +20,7 @@ $(TARGET)-gdb.spec.in: $(GDB_SUBPACKAGES) Makefile.am $(srcdir)/gdb-sources.add
 	  -e "s/[@]GDB_PKGVERS[@]/$(GDB_PKGVERS)/g" \
 	  -e "s/[@]GDB_RPMREL[@]/$(GDB_RPMREL)/g" \
 	  -e "/--with-sysroot/d" \
-	  > $(TARGET)-gdb.spec.in
+	  | $(MKSPEC0) > $(TARGET)-gdb.spec.in
 CLEANFILES += $(TARGET)-gdb.spec.in
 
 @rpmprefix@$(TARGET)-gdb.spec: $(TARGET)-gdb.spec.in

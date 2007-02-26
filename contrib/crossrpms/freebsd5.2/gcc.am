@@ -29,7 +29,7 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add 
 	  -e "/[@]tool_target[@]-newlib/d" \
 	  -e "/[@]tool_target[@]-w32api-sys-root/d" \
 	  -e "/--with-newlib/d" \
-	  > $(TARGET)-gcc.spec.in
+	  | $(MKSPEC0) > $(TARGET)-gcc.spec.in
 CLEANFILES += $(TARGET)-gcc.spec.in
 
 @rpmprefix@$(TARGET)-gcc.spec: $(TARGET)-gcc.spec.in
