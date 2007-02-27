@@ -4,7 +4,7 @@ TARGET = i686-pc-cygwin
 
 include $(top_srcdir)/mkspec.am
 
-CYGWIN_VERS = 1.5.21-1
+CYGWIN_VERS = 1.5.24-2
 CYGWIN_RPMREL = @VERSION@
 EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
@@ -29,7 +29,7 @@ CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 
-W32API_VERS = 3.7-1
+W32API_VERS = 3.8-1
 W32API_RPMREL = @VERSION@
 EXTRA_DIST += target-w32api.add
 EXTRA_DIST += w32api.add
