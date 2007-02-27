@@ -54,10 +54,10 @@ noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
 
 BINUTILS_VERS = 2.16.91-20060119-1
+BINUTILS_PKGVERS = $(BINUTILS_VERS)
 BINUTILS_RPMREL = 1
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
-
 
 GCC_VERS = 4.1.0
 GCC_PKGVERS = $(GCC_VERS)
