@@ -15,7 +15,7 @@
   cd ../../..
 %endif
 
-%if "%{gcc_version}" <= "4.1.1"
+%if "%{gcc_version}" <= "4.1.2"
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
