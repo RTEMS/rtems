@@ -1,9 +1,6 @@
 %define cygwin_version @CYGWIN_VERS@
 %define cygwin_rpmvers %{expand:%(echo @CYGWIN_VERS@ | tr - _)} 
 
-%define _use_internal_dependency_generator 0
-%define __debug_install_post %{nil}
-
 Name:         @rpmprefix@@tool_target@
 Release:      @CYGWIN_RPMREL@%{?dist}
 License:      GPL

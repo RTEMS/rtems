@@ -1,9 +1,6 @@
 %define w32api_version @W32API_VERS@
 %define w32api_rpmvers %{expand:%(echo @W32API_VERS@ | tr - _)} 
 
-%define _use_internal_dependency_generator 0
-%define __debug_install_post %{nil}
-
 Name:         @rpmprefix@@tool_target@-w32api
 Release:      @W32API_RPMREL@%{?dist}
 License:      GPL
