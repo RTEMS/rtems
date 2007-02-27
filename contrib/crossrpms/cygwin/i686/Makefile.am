@@ -54,11 +54,13 @@ CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
 noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
 BINUTILS_VERS = 20050610-1
+BINUTILS_PKGVERS = $(BINUTILS_VERS)
 BINUTILS_RPMREL = @VERSION@
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 3.4.4-2
+GCC_PKGVERS = $(GCC_VERS)
 GCC_RPMREL = @VERSION@
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
