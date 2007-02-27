@@ -53,13 +53,15 @@ CLEANFILES += $(TARGET)-w32api.spec.in
 CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
 noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
-BINUTILS_VERS = 20050610-1
-BINUTILS_PKGVERS = $(BINUTILS_VERS)
+# Cygwin's binutil's versioning is bizarre
+# Check bfd/configure for the real version number
+BINUTILS_VERS = 2.17.50
+BINUTILS_PKGVERS = 20060817-1
 BINUTILS_RPMREL = @VERSION@
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
-GCC_VERS = 3.4.4-2
+GCC_VERS = 3.4.4
 GCC_PKGVERS = $(GCC_VERS)
 GCC_RPMREL = @VERSION@
 include ../gcc.am
