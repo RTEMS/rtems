@@ -122,16 +122,10 @@ if ( $verbose > 1 ) {
 
 my @buffer0 = <> ;
 
-my $buffer1 = join( '', @buffer0 );
-
-foreach (split /\n/, $buffer1)
-{
-#  print STDERR ">$_<\n";
-}
-
 my @buffer2 ;
-foreach (split /\n/, $buffer1)
+foreach (@buffer0)
 {
+   chomp $_;
    if ( /^%if(os|)\s+(.*)$/ )
    {
      push @condstack,"<$2>";
