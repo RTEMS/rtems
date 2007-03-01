@@ -21,9 +21,9 @@ GNU binutils targetting @tool_target@.
 %sysdir %{_bindir}
 %{_bindir}/@tool_target@-*
 
-%dir %{_prefix}/@tool_target@
-%dir %{_prefix}/@tool_target@/bin
-%{_prefix}/@tool_target@/bin/*
+%dir %{_exec_prefix}/@tool_target@
+%dir %{_exec_prefix}/@tool_target@/bin
+%{_exec_prefix}/@tool_target@/bin/*
 
-%dir %{_prefix}/@tool_target@/lib
-%{_prefix}/@tool_target@/lib/ldscripts
+%dir %{_exec_prefix}/@tool_target@/lib
+%{_exec_prefix}/@tool_target@/lib/ldscripts

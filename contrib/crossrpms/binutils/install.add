@@ -8,6 +8,7 @@
     libdir=$RPM_BUILD_ROOT%{_libdir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
+    exec_prefix=$RPM_BUILD_ROOT%{_exec_prefix} \
     install
 
 %if %build_infos
@@ -17,6 +18,7 @@
     libdir=$RPM_BUILD_ROOT%{_libdir} \
     infodir=$RPM_BUILD_ROOT%{_infodir} \
     mandir=$RPM_BUILD_ROOT%{_mandir} \
+    exec_prefix=$RPM_BUILD_ROOT%{_exec_prefix} \
     install-info
 %endif
 

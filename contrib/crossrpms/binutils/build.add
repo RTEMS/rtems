@@ -11,6 +11,7 @@
     --disable-werror \
     --with-sysroot=%{_prefix}/@tool_target@/sys-root \
     --prefix=%{_prefix} --bindir=%{_bindir} \
+    --exec-prefix=%{_exec_prefix} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
 
