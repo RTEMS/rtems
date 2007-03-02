@@ -1,3 +1,9 @@
+2007-03-02	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1221/doc
+	* user/rtmon.t: Add missing exponent operator in RMS CPU Utilization
+	formula.
+
 2007-01-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* common/rtems.texi.in: Use bugzilla for RTEMSBUGS.

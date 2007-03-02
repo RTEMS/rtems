@@ -267,7 +267,7 @@ overload, the processor utilization must adhere to the following
 rule:
 
 @example
-Utilization = maximum_tasks * (2(1/maximum_tasks) - 1)
+Utilization = maximum_tasks * (2**(1/maximum_tasks) - 1)
 @end example
 
 As the number of tasks increases, the above formula
@@ -355,7 +355,7 @@ period, execution time, and processor utilization for each task:
 @end ifset
 
 The total processor utilization for this task set is
-0.73 which is below the upper bound of 3 * (2(1/3) - 1), or
+0.73 which is below the upper bound of 3 * (2**(1/3) - 1), or
 0.779, imposed by the Processor Utilization Rule.  Therefore,
 this task set is guaranteed to be schedulable using RMS.
 
@@ -464,7 +464,7 @@ execution time, and processor utilization for each task:
 @end ifset
 
 The total processor utilization for the modified task
-set is 0.83 which is above the upper bound of 3 * (2(1/3) - 1),
+set is 0.83 which is above the upper bound of 3 * (2**(1/3) - 1),
 or 0.779, imposed by the Processor Utilization Rule.  Therefore,
 this task set is not guaranteed to be schedulable using RMS.
 However, the First Deadline Rule can guarantee the
