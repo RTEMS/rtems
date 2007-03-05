@@ -3,7 +3,7 @@
  *  This include file contains information that is included in every
  *  function in the test set.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,6 +28,7 @@ void task1(void);
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_EXTRA_TASK_STACKS (5 * 3 * RTEMS_MINIMUM_STACK_SIZE)
 #define CONFIGURE_MAXIMUM_TASKS               5
 #define CONFIGURE_MAXIMUM_REGIONS             1
 #define CONFIGURE_EXTRA_TASK_STACKS          (RTEMS_MINIMUM_STACK_SIZE * 4)
