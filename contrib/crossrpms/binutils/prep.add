@@ -1,8 +1,0 @@
-%prep
-%setup -q -c -T -n %{name}-%{version}
-
-%setup -q -D -T -n %{name}-%{version} -a0
-cd binutils-%{binutils_pkgvers}
-%{?PATCH0:%patch0 -p1}
-cd ..
-
