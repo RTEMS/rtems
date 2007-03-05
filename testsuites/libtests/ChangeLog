@@ -1,3 +1,8 @@
+2007-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	* malloctest/init.c: Be explicit about need for default and floating
+	point attributes. This is just a style change.
+
 2007-02-06	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems++/Task1.cc, rtems++/Task3.cc: Address size_t/uint32_t typing
