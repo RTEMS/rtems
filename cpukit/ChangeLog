@@ -1,3 +1,8 @@
+2007-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1221/cpukit
+	* posix/src/pthreadequal.c: Fix critical section nesting.
+
 2007-02-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libcsupport/Makefile.am: Move getpagesize.c to newlib-only
