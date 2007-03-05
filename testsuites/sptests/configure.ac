@@ -58,6 +58,8 @@ sp30/Makefile
 sp31/Makefile
 sp32/Makefile
 sp33/Makefile
+sp34/Makefile
+sp35/Makefile
 spsize/Makefile
 spfatal/Makefile
 ])

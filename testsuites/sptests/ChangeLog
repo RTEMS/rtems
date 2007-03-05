@@ -1,5 +1,17 @@
 2007-03-05	Joel Sherrill <joel@OARcorp.com>
 
+	PR 1222/cpukit
+	* Makefile.am, configure.ac: Enhance so that when the prioirity of a
+	thread that is blocked on a priority based thread queue is changed,
+	that its placement in the queue is reevaluated based upon the new
+	priority. This enhancement includes modifications to the SuperCore as
+	well as new test cases.
+	* sp34/.cvsignore, sp34/Makefile.am, sp34/changepri.c, sp34/sp34.doc,
+	sp34/sp34.scn, sp35/.cvsignore, sp35/Makefile.am, sp35/priinv.c,
+	sp35/sp35.doc, sp35/sp35.scn: New files.
+
+2007-03-05	Joel Sherrill <joel@OARcorp.com>
+
 	* sp26/system.h: Correct memory required for stack sizes.
 
 2007-02-06	Joel Sherrill <joel@OARcorp.com>

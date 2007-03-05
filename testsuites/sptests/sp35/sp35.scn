@@ -1,0 +1,59 @@
+Exception handling initialization done
+
+
+*** TEST 35 ***
+Sync Mutex Id = 0x1a010009
+Local Mutex Id = 0x1a01000a
+Remote Mutex Id = 0x1a01000b
+Ending Init-task
+TaMedium[0] Id = 0x0a010002
+TaMedium[1] Id = 0x0a010003
+TaMedium[2] Id = 0x0a010004
+TaHigh Id = 0x0a010005
+TaLow Id = 0x0a010006
+TaHwSim Id = 0x0a010007
+High_Exec (0) begins...
+Medium_Exec (0) begins...
+Medium_Exec (1) begins...
+Medium_Exec (2) begins...
+Low_Exec (0) begins...
+LocalHwSim_Exec begins...
+  AccessLocalHw called by MED0 -- 100
+  AccessLocalHw called by MED2 -- 100
+  AccessLocalHw called by MED1 -- 100
+AccessRemoteHw called by LOW  -- 200
+AccessRemoteHw access local LOW  -- 200
+  AccessLocalHw called by LOW  -- 200
+  AccessLocalHw returns to MED0 -- 100
+  AccessLocalHw called by MED0 -- 100
+AccessRemoteHw called by HIGH -- 10
+  AccessLocalHw returns to MED2 -- 100
+  AccessLocalHw called by MED2 -- 100
+  AccessLocalHw returns to LOW  -- 10
+AccessRemoteHw access local HIGH -- 10
+  AccessLocalHw called by HIGH -- 10
+AccessRemoteHw returns to LOW  -- 200
+AccessRemoteHw called by LOW  -- 200
+  AccessLocalHw returns to MED1 -- 100
+  AccessLocalHw called by MED1 -- 100
+  AccessLocalHw returns to HIGH -- 10
+AccessRemoteHw returns to HIGH -- 10
+AccessRemoteHw called by HIGH -- 10
+AccessRemoteHw access local LOW  -- 10
+  AccessLocalHw called by LOW  -- 10
+  AccessLocalHw returns to MED0 -- 100
+  AccessLocalHw called by MED0 -- 100
+  AccessLocalHw returns to LOW  -- 10
+AccessRemoteHw access local HIGH -- 10
+  AccessLocalHw called by HIGH -- 10
+AccessRemoteHw returns to LOW  -- 200
+AccessRemoteHw called by LOW  -- 200
+  AccessLocalHw returns to MED2 -- 100
+  AccessLocalHw called by MED2 -- 100
+  AccessLocalHw returns to HIGH -- 10
+AccessRemoteHw returns to HIGH -- 10
+AccessRemoteHw called by HIGH -- 10
+AccessRemoteHw access local LOW  -- 10
+  AccessLocalHw called by LOW  -- 10
+  AccessLocalHw returns to MED1 -- 100
+*** END OF TEST 35 ***

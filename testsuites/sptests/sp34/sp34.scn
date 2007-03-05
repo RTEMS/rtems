@@ -1,0 +1,26 @@
+Exception handling initialization done
+
+
+*** TEST 34 ***
+Blockers[0] Id = 0x0a010002
+Blockers[1] Id = 0x0a010003
+Blockers[2] Id = 0x0a010004
+Blockers[3] Id = 0x0a010005
+Blockers[4] Id = 0x0a010006
+semaphore_obtain -- BlockingTask 0 @ pri=2) blocks
+semaphore_obtain -- BlockingTask 1 @ pri=3) blocks
+semaphore_obtain -- BlockingTask 2 @ pri=4) blocks
+semaphore_obtain -- BlockingTask 3 @ pri=5) blocks
+semaphore_obtain -- BlockingTask 4 @ pri=6) blocks
+rtems_task_set_priority -- invert priorities of tasks
+rtems_semaphore_release -- OK
+semaphore_obtain -- BlockingTask 4 @ pri=2) returns
+rtems_semaphore_release -- OK
+semaphore_obtain -- BlockingTask 3 @ pri=3) returns
+rtems_semaphore_release -- OK
+semaphore_obtain -- BlockingTask 2 @ pri=4) returns
+rtems_semaphore_release -- OK
+semaphore_obtain -- BlockingTask 1 @ pri=5) returns
+rtems_semaphore_release -- OK
+semaphore_obtain -- BlockingTask 0 @ pri=6) returns
+*** END OF TEST 34 ***
