@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -81,6 +81,7 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   }
 
 dequeue:
+  the_thread->Wait.queue = NULL;
   new_first_node   = the_thread->Wait.Block2n.first;
   new_first_thread = (Thread_Control *) new_first_node;
   next_node        = the_thread->Object.Node.next;

@@ -6,7 +6,7 @@
  *  This package is the implementation of the Mutex Handler.
  *  This handler provides synchronization and mutual exclusion capabilities.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -90,6 +90,10 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     }
   }
 
+  /*
+   *  Formally release the mutex before possibly transferring it to a
+   *  blocked thread.
+   */
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
        _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
     holder->resource_count--;
@@ -101,7 +105,6 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  inherited priority must be lowered if this is the last
    *  mutex (i.e. resource) this task has.
    */
-
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
        _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
     if ( holder->resource_count == 0 &&
@@ -110,6 +113,10 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     }
   }
 
+  /*
+   *  Now we check if another thread was waiting for this mutex.  If so,
+   *  transfer the mutex to that thread.
+   */
   if ( ( the_thread = _Thread_queue_Dequeue( &the_mutex->Wait_queue ) ) ) {
 
 #if defined(RTEMS_MULTIPROCESSING)

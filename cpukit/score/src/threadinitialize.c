@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -190,6 +190,7 @@ boolean _Thread_Initialize(
   the_thread->Start.isr_level        = isr_level;
 
   the_thread->current_state          = STATES_DORMANT;
+  the_thread->Wait.queue             = NULL;
   the_thread->resource_count         = 0;
   the_thread->suspend_count          = 0;
   the_thread->real_priority          = priority;

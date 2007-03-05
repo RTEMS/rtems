@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,6 +57,8 @@ void _Thread_queue_Extract_fifo(
   }
 
   _Chain_Extract_unprotected( &the_thread->Object.Node );
+
+  the_thread->Wait.queue = NULL;
 
   if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
     _ISR_Enable( level );

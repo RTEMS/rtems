@@ -249,7 +249,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
 );
 
 /**
- *  @brief Seize Mutex with Blockign
+ *  @brief Seize Mutex with Blocking
  *
  *  This routine performs the blocking portion of a mutex obtain.
  *  It is an actual subroutine and is not implemented as something
@@ -280,6 +280,16 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  @note If the mutex is called from an interrupt service routine,
  *        with context switching disabled, or before multitasking,
  *        then a fatal error is generated. 
+ *
+ *
+ *  The logic on this routine is as follows:
+ *
+ *  * If incorrect system state
+ *      return an error 
+ *  * If mutex is available without any contention or blocking
+ *      obtain it with interrupts disabled and returned
+ *  * If the caller is willing to wait
+ *      then they are blocked. 
  */
 #define _CORE_mutex_Seize( \
   _the_mutex, _id, _wait, _timeout, _level ) \

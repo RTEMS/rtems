@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -60,8 +60,14 @@ void _Thread_queue_Enqueue_with_handler(
     the_thread = _Thread_MP_Allocate_proxy( the_thread_queue->state );
   else
 #endif
-    _Thread_Set_state( the_thread, the_thread_queue->state );
+  /*
+   *  Set the blocking state for this thread queue in the thread.
+   */
+  _Thread_Set_state( the_thread, the_thread_queue->state );
 
+  /*
+   *  If the thread wants to timeout, then schedule its timer.
+   */ 
   if ( timeout ) {
     _Watchdog_Initialize(
        &the_thread->Timer,
@@ -73,6 +79,9 @@ void _Thread_queue_Enqueue_with_handler(
     _Watchdog_Insert_ticks( &the_thread->Timer, timeout );
   }
 
+  /*
+   *  Now enqueue the thread per the discipline for this thread queue.
+   */ 
   switch( the_thread_queue->discipline ) {
     case THREAD_QUEUE_DISCIPLINE_FIFO:
       _Thread_queue_Enqueue_fifo( the_thread_queue, the_thread );

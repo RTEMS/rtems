@@ -136,7 +136,8 @@ libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
     src/threadqenqueuepriority.c src/threadqextract.c \
     src/threadqextractfifo.c src/threadqextractpriority.c \
     src/threadqextractwithproxy.c src/threadqfirst.c src/threadqfirstfifo.c \
-    src/threadqfirstpriority.c src/threadqflush.c src/threadqtimeout.c
+    src/threadqfirstpriority.c src/threadqflush.c src/threadqrequeue.c \
+    src/threadqtimeout.c
 
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodtickle.c \

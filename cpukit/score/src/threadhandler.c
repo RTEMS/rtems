@@ -98,7 +98,6 @@ void _Thread_Handler( void )
 #endif
 #endif
 
-
   /*
    * Take care that 'begin' extensions get to complete before
    * 'switch' extensions can run.  This means must keep dispatch

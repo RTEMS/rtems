@@ -73,6 +73,12 @@ void _Thread_Clear_state(
 
         _ISR_Flash( level );
 
+        /*
+         *  If the thread that was unblocked is more important than the heir,
+         *  then we have a new heir.  In addition, if the current thread
+         *  is preemptible or we are waking up one of the "pseudo-ISR" system
+         *  threads, then we need to do a context switch.
+         */
         if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
           _Thread_Heir = the_thread;
           if ( _Thread_Executing->is_preemptible ||

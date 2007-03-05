@@ -108,10 +108,11 @@ restart_forward_search:
   previous_node = search_node->previous;
   the_node      = (Chain_Node *) the_thread;
 
-  the_node->next        = search_node;
-  the_node->previous    = previous_node;
-  previous_node->next   = the_node;
-  search_node->previous = the_node;
+  the_node->next         = search_node;
+  the_node->previous     = previous_node;
+  previous_node->next    = the_node;
+  search_node->previous  = the_node;
+  the_thread->Wait.queue = the_thread_queue;
   _ISR_Enable( level );
   return;
 
@@ -153,10 +154,11 @@ restart_reverse_search:
   next_node   = search_node->next;
   the_node    = (Chain_Node *) the_thread;
 
-  the_node->next      = next_node;
-  the_node->previous  = search_node;
-  search_node->next   = the_node;
-  next_node->previous = the_node;
+  the_node->next          = next_node;
+  the_node->previous      = search_node;
+  search_node->next       = the_node;
+  next_node->previous    = the_node;
+  the_thread->Wait.queue = the_thread_queue;
   _ISR_Enable( level );
   return;
 
@@ -165,10 +167,11 @@ equal_priority:               /* add at end of priority group */
   previous_node = search_node->previous;
   the_node      = (Chain_Node *) the_thread;
 
-  the_node->next        = search_node;
-  the_node->previous    = previous_node;
-  previous_node->next   = the_node;
-  search_node->previous = the_node;
+  the_node->next         = search_node;
+  the_node->previous     = previous_node;
+  previous_node->next    = the_node;
+  search_node->previous  = the_node;
+  the_thread->Wait.queue = the_thread_queue;
   _ISR_Enable( level );
   return;
 
@@ -193,12 +196,14 @@ synchronize:
 
     case THREAD_QUEUE_TIMEOUT:
       the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
+      the_thread->Wait.queue = NULL;
       _ISR_Enable( level );
       break;
 
     case THREAD_QUEUE_SATISFIED:
       if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
         _Watchdog_Deactivate( &the_thread->Timer );
+        the_thread->Wait.queue = NULL;
         _ISR_Enable( level );
         (void) _Watchdog_Remove( &the_thread->Timer );
       } else

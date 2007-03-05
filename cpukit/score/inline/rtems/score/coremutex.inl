@@ -143,25 +143,29 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
     if ( !_CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
         _ISR_Enable( level );
         return 0;
-    }
-    /* else must be CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING */
+    } /* else must be CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING
+       *
+       * we possibly bump the priority of the current holder -- which
+       * happens to be _Thread_Executing.
+       */
     {
-       Priority_Control  ceiling;
-       Priority_Control  current;
+      Priority_Control  ceiling;
+      Priority_Control  current;
 
-       ceiling = the_mutex->Attributes.priority_ceiling;
-       current = executing->current_priority;
-       if ( current == ceiling ) {
-         _ISR_Enable( level );
-         return 0;
-       }
-       if ( current > ceiling ) {
+      ceiling = the_mutex->Attributes.priority_ceiling;
+      current = executing->current_priority;
+      if ( current == ceiling ) {
+        _ISR_Enable( level );
+        return 0;
+      }
+
+      if ( current > ceiling ) {
         _Thread_Disable_dispatch();
         _ISR_Enable( level );
         _Thread_Change_priority(
           the_mutex->holder,
           the_mutex->Attributes.priority_ceiling,
-          FALSE
+         FALSE
         );
         _Thread_Enable_dispatch();
         return 0;
@@ -177,6 +181,11 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
     return 0;
   }
 
+  /*
+   *  At this point, we know the mutex was not available.  If this thread
+   *  is the thread that has locked the mutex, let's see if we are allowed
+   *  to nest access.
+   */
   if ( _Thread_Is_executing( the_mutex->holder ) ) {
     switch ( the_mutex->Attributes.lock_nesting_behavior ) {
       case CORE_MUTEX_NESTING_ACQUIRES:
@@ -192,6 +201,10 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
     }
   }
 
+  /*
+   *  The mutex is not available and the caller must deal with the possibility
+   *  of blocking.
+   */
   return 1;
 }
 

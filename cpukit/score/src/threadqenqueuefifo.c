@@ -67,17 +67,20 @@ void _Thread_queue_Enqueue_fifo (
         &the_thread_queue->Queues.Fifo,
         &the_thread->Object.Node
       );
+      the_thread->Wait.queue = the_thread_queue;
       _ISR_Enable( level );
       return;
 
     case THREAD_QUEUE_TIMEOUT:
       the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
+      the_thread->Wait.queue = NULL;
       _ISR_Enable( level );
       break;
 
     case THREAD_QUEUE_SATISFIED:
       if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
         _Watchdog_Deactivate( &the_thread->Timer );
+      the_thread->Wait.queue = NULL;
         _ISR_Enable( level );
         (void) _Watchdog_Remove( &the_thread->Timer );
       } else

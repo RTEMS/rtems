@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,6 +55,7 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
     the_thread = (Thread_Control *)
        _Chain_Get_first_unprotected( &the_thread_queue->Queues.Fifo );
 
+    the_thread->Wait.queue = NULL;
     if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
       _ISR_Enable( level );
       _Thread_Unblock( the_thread );

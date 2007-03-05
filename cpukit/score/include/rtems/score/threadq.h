@@ -94,6 +94,20 @@ void _Thread_queue_Enqueue_with_handler(
   Thread_queue_Timeout_callout handler
 );
 
+/**
+ *  @brief Thread queue Requeue
+ *
+ *  This routine is invoked when a thread changes priority and is
+ *  blocked on a thread queue.  If the queue is priority ordered,
+ *  the_thread is removed from the_thread_queue and reinserted using
+ *  its new priority.  This method has no impact on the state of the_thread
+ *  or of any timeouts associated with this blocking.
+ */
+void _Thread_queue_Requeue(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+);
+
 /** @brief  Thread queue Extract
  *
  *  This routine removes the_thread from the_thread_queue
@@ -169,15 +183,26 @@ void _Thread_queue_Enqueue_priority(
   Thread_Control       *the_thread
 );
 
-/** @brief  Thread queue Extract priority
+/** @brief  Thread queue Extract priority Helper
  *
  *  This routine removes the_thread from the_thread_queue
  *  and cancels any timeouts associated with this blocking.
  */
-void _Thread_queue_Extract_priority(
+void _Thread_queue_Extract_priority_helper(
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_Control       *the_thread,
+  boolean               requeuing 
 );
+
+/**
+ * @brief Thread queue Extract priority
+ *
+ * This macro wraps the underlying call and hides the requeuing argument.
+ */
+
+#define _Thread_queue_Extract_priority( _the_thread_queue, _the_thread ) \
+  _Thread_queue_Extract_priority_helper( _the_thread_queue, _the_thread, FALSE )
+
 
 /** @brief  Thread queue First priority
  *

@@ -50,10 +50,10 @@
 
 void _Thread_Set_state(
   Thread_Control *the_thread,
-  States_Control         state
+  States_Control  state
 )
 {
-  ISR_Level             level;
+  ISR_Level      level;
   Chain_Control *ready;
 
   ready = the_thread->ready;

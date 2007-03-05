@@ -1,5 +1,24 @@
 2007-03-05	Joel Sherrill <joel@OARcorp.com>
 
+	PR 1222/cpukit
+	* score/Makefile.am, score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/threadq.h,
+	score/inline/rtems/score/coremutex.inl, score/src/coremsgsubmit.c,
+	score/src/coremutexsurrender.c, score/src/threadchangepriority.c,
+	score/src/threadclearstate.c, score/src/threadhandler.c,
+	score/src/threadinitialize.c, score/src/threadqdequeuefifo.c,
+	score/src/threadqdequeuepriority.c, score/src/threadqenqueue.c,
+	score/src/threadqenqueuefifo.c, score/src/threadqenqueuepriority.c,
+	score/src/threadqextractfifo.c, score/src/threadqextractpriority.c,
+	score/src/threadsetstate.c: Enhance so that when the prioirity of a
+	thread that is blocked on a priority based thread queue is changed,
+	that its placement in the queue is reevaluated based upon the new
+	priority. This enhancement includes modifications to the SuperCore as
+	well as new test cases.
+	* score/src/threadqrequeue.c: New file.
+
+2007-03-05	Joel Sherrill <joel@OARcorp.com>
+
 	* sapi/src/exinit.c: Fix spacing.
 
 2007-03-05	Joel Sherrill <joel@OARcorp.com>

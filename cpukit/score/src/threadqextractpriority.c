@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,6 +35,7 @@
  *  Input parameters:
  *    the_thread_queue - pointer to a threadq header
  *    the_thread       - pointer to a thread control block
+ *    requeuing        - TRUE if requeuing and should not alter timeout or state
  *
  *  Output parameters: NONE
  *
@@ -42,12 +43,13 @@
  *    EXTRACT_PRIORITY
  */
 
-void _Thread_queue_Extract_priority(
+void _Thread_queue_Extract_priority_helper(
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_Control       *the_thread,
+  boolean               requeuing
 )
 {
-  ISR_Level              level;
+  ISR_Level       level;
   Chain_Node     *the_node;
   Chain_Node     *next_node;
   Chain_Node     *previous_node;
@@ -58,50 +60,63 @@ void _Thread_queue_Extract_priority(
 
   the_node = (Chain_Node *) the_thread;
   _ISR_Disable( level );
-  if ( _States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
-    next_node     = the_node->next;
-    previous_node = the_node->previous;
+  if ( !_States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+    _ISR_Enable( level );
+    return;
+  }
 
-    if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
-      new_first_node   = the_thread->Wait.Block2n.first;
-      new_first_thread = (Thread_Control *) new_first_node;
-      last_node        = the_thread->Wait.Block2n.last;
-      new_second_node  = new_first_node->next;
+  /*
+   *  The thread was actually waiting on a thread queue so let's remove it.
+   */
 
-      previous_node->next      = new_first_node;
-      next_node->previous      = new_first_node;
-      new_first_node->next     = next_node;
-      new_first_node->previous = previous_node;
+  next_node     = the_node->next;
+  previous_node = the_node->previous;
 
-      if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
-                                          /* > two threads on 2-n */
-        new_second_node->previous =
-                  _Chain_Head( &new_first_thread->Wait.Block2n );
-        new_first_thread->Wait.Block2n.first = new_second_node;
+  if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
+    new_first_node   = the_thread->Wait.Block2n.first;
+    new_first_thread = (Thread_Control *) new_first_node;
+    last_node        = the_thread->Wait.Block2n.last;
+    new_second_node  = new_first_node->next;
 
-        new_first_thread->Wait.Block2n.last = last_node;
-        last_node->next = _Chain_Tail( &new_first_thread->Wait.Block2n );
-      }
-    } else {
-      previous_node->next = next_node;
-      next_node->previous = previous_node;
+    previous_node->next      = new_first_node;
+    next_node->previous      = new_first_node;
+    new_first_node->next     = next_node;
+    new_first_node->previous = previous_node;
+
+    if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
+                                        /* > two threads on 2-n */
+      new_second_node->previous =
+                _Chain_Head( &new_first_thread->Wait.Block2n );
+      new_first_thread->Wait.Block2n.first = new_second_node;
+
+      new_first_thread->Wait.Block2n.last = last_node;
+      last_node->next = _Chain_Tail( &new_first_thread->Wait.Block2n );
     }
+  } else {
+    previous_node->next = next_node;
+    next_node->previous = previous_node;
+  }
 
-    if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
-      _ISR_Enable( level );
-      _Thread_Unblock( the_thread );
-    } else {
-      _Watchdog_Deactivate( &the_thread->Timer );
-      _ISR_Enable( level );
-      (void) _Watchdog_Remove( &the_thread->Timer );
-      _Thread_Unblock( the_thread );
-    }
+  /*
+   *  If we are not supposed to touch timers or the thread's state, return.
+   */
+
+  if ( requeuing ) {
+    _ISR_Enable( level );
+    return;
+  }
+
+  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+    _ISR_Enable( level );
+  } else {
+    _Watchdog_Deactivate( &the_thread->Timer );
+    _ISR_Enable( level );
+    (void) _Watchdog_Remove( &the_thread->Timer );
+  }
+  _Thread_Unblock( the_thread );
 
 #if defined(RTEMS_MULTIPROCESSING)
-    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-      _Thread_MP_Free_proxy( the_thread );
+  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+    _Thread_MP_Free_proxy( the_thread );
 #endif
-  }
-  else
-    _ISR_Enable( level );
 }

@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,8 +55,8 @@ void _Thread_Change_priority(
   boolean           prepend_it
 )
 {
-  ISR_Level level;
-  /* boolean   do_prepend = FALSE; */
+  ISR_Level      level;
+  States_Control state;
 
   /*
    *  If this is a case where prepending the task to its priority is
@@ -66,13 +66,6 @@ void _Thread_Change_priority(
    *  change calls (e.g. rtems_task_set_priority) should always do an
    *  append not a prepend.
    */
-
-  /*
-   *  Techically, the prepend should conditional on the thread lowering
-   *  its priority but that does allow cxd2004 of the acvc 2.0.1 to
-   *  pass with rtems 4.0.0.  This should change when gnat redoes its
-   *  priority scheme.
-   */
 /*
   if ( prepend_it &&
        _Thread_Is_executing( the_thread ) &&
@@ -80,25 +73,45 @@ void _Thread_Change_priority(
     prepend_it = TRUE;
 */
 
+  /*
+   * Set a transient state for the thread so it is pulled off the Ready chains.
+   * This will prevent it from being scheduled no matter what happens in an
+   * ISR.
+   */
   _Thread_Set_transient( the_thread );
 
-  if ( the_thread->current_priority != new_priority )
+  /*
+   *  Do not bother recomputing all the priority related information if
+   *  we are not REALLY changing priority.
+   */
+ if ( the_thread->current_priority != new_priority )
     _Thread_Set_priority( the_thread, new_priority );
 
   _ISR_Disable( level );
 
-  the_thread->current_state =
-    _States_Clear( STATES_TRANSIENT, the_thread->current_state );
-
-  if ( ! _States_Is_ready( the_thread->current_state ) ) {
-    /*
-     *  XXX If a task is to be reordered while blocked on a priority
-     *  XXX priority ordered thread queue, then this is where that
-     *  XXX should occur.
-     */
+  /*
+   *  If the thread has more than STATES_TRANSIENT set, then it is blocked,
+   *  If it is blocked on a thread queue, then we need to requeue it.
+   */
+  state = the_thread->current_state;
+  if ( state != STATES_TRANSIENT ) {
+    if ( _States_Is_waiting_on_thread_queue( state ) ) {
+       _ISR_Enable( level ); 
+      _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );
+      _ISR_Disable( level );  /* redisable so state is cleared with ISR off */
+    }
+    the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
     _ISR_Enable( level );
     return;
   }
+
+  /*
+   *  Interrupts are STILL disabled.
+   *  We now know the thread will be in the READY state when we remove
+   *  the TRANSIENT state.  So we have to place it on the appropriate
+   *  Ready Queue with interrupts off.
+   */
+  the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
 
   _Priority_Add_to_bit_map( &the_thread->Priority_map );
   if ( prepend_it )
@@ -108,6 +121,10 @@ void _Thread_Change_priority(
 
   _ISR_Flash( level );
 
+  /*
+   *  We altered the set of thread priorities.  So let's figure out
+   *  who is the heir and if we need to switch to them.
+   */
   _Thread_Calculate_heir();
 
   if ( !_Thread_Is_executing_also_the_heir() &&
