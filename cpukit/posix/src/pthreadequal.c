@@ -3,7 +3,7 @@
  *
  *  NOTE:  POSIX does not define the behavior when either thread id is invalid.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,6 +55,7 @@ int pthread_equal(
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
+      /* return status == 0 */
       break;
 
     case OBJECTS_LOCAL:
@@ -67,16 +68,18 @@ int pthread_equal(
       switch ( location ) {
         case OBJECTS_ERROR:
         case OBJECTS_REMOTE:
+          /* t1 must have been valid so exit the critical section */
+          _Thread_Enable_dispatch();
+          /* return status == 0 */
           break;
         case OBJECTS_LOCAL:
           status = _Objects_Are_ids_equal( t1, t2 );
-          break;
+	  _Thread_Unnest_dispatch();
+	  _Thread_Enable_dispatch();
+	  break;
       }
-      _Thread_Unnest_dispatch();
       break;
   }
-
-  _Thread_Enable_dispatch();
   return status;
 #endif
 }
