@@ -1,5 +1,9 @@
 2007-03-05	Joel Sherrill <joel@OARcorp.com>
 
+	* sapi/src/exinit.c: Fix spacing.
+
+2007-03-05	Joel Sherrill <joel@OARcorp.com>
+
 	PR 1221/cpukit
 	* posix/src/pthreadequal.c: Fix critical section nesting.
 

@@ -208,7 +208,6 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _Thread_Create_idle();
 
-
   /*
    *  Scheduling can properly occur now as long as we avoid dispatching.
    */
