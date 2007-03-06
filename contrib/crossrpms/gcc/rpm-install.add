@@ -33,7 +33,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 #!/bin/sh
-grep -E -v '^${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/(lib|include|sys-root)' \
+grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/@tool_target@/(lib|include|sys-root)' \
   | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/@tool_target@/' | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
@@ -41,7 +41,7 @@ chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 #!/bin/sh
-grep -E -v '^${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/(lib|include|sys-root)' \
+grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/@tool_target@/(lib|include|sys-root)' \
   | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/@tool_target@/' | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
