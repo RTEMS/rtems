@@ -96,6 +96,7 @@
 @include fatal.texi
 @include schedule.texi
 @include rtmon.texi
+@include barrier.texi
 @include bsp.texi
 @include userext.texi
 @include conf.texi
@@ -132,6 +133,7 @@ This is the online version of the RTEMS C User's Guide.
 * Fatal Error Manager::
 * Scheduling Concepts::
 * Rate Monotonic Manager::
+* Barrier Manager::
 * Board Support Packages::
 * User Extensions Manager::
 * Configuring a System::

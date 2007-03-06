@@ -351,7 +351,7 @@ created the barrier.  Any local task that knows the barrier
 id can delete the barrier.
 
 @c
-@c XXX
+@c Barrier Obtain
 @c
 @page
 @subsection BARRIER_OBTAIN - Acquire a barrier
@@ -393,32 +393,22 @@ procedure Barrier_Obtain (
 @subheading DESCRIPTION:
 
 This directive acquires the barrier specified by
-id.  The @code{@value{RPREFIX}WAIT} and @code{@value{RPREFIX}NO_WAIT} components of the options parameter
-indicate whether the calling task wants to wait for the
-barrier to become available or return immediately if the
-barrier is not currently available.  With either @code{@value{RPREFIX}WAIT} or
-@code{@value{RPREFIX}NO_WAIT}, if the current barrier count is positive, then it is
+id.  The @code{@value{RPREFIX}WAIT} and @code{@value{RPREFIX}NO_WAIT}
+components of the options parameter indicate whether the calling task
+wants to wait for the barrier to become available or return immediately
+if the barrier is not currently available.  With either
+@code{@value{RPREFIX}WAIT} or @code{@value{RPREFIX}NO_WAIT},
+if the current barrier count is positive, then it is
 decremented by one and the barrier is successfully acquired by
 returning immediately with a successful return code.
 
-If the calling task chooses to return immediately and the current
-barrier count is zero or negative, then a status code is returned
-indicating that the barrier is not available. If the calling task
-chooses to wait for a barrier and the current barrier count is zero or
-negative, then it is decremented by one and the calling task is placed on
-the barrier's wait queue and blocked.  If the barrier was created with
-the @code{@value{RPREFIX}PRIORITY} attribute, then the calling task is
-inserted into the queue according to its priority.  However, if the
-barrier was created with the @code{@value{RPREFIX}FIFO} attribute, then
-the calling task is placed at the rear of the wait queue.  If the binary
-barrier was created with the @code{@value{RPREFIX}INHERIT_PRIORITY}
-attribute, then the priority of the task currently holding the binary
-barrier is guaranteed to be greater than or equal to that of the
-blocking task.  If the binary barrier was created with the
-@code{@value{RPREFIX}PRIORITY_CEILING} attribute, a task successfully
-obtains the barrier, and the priority of that task is greater than the
-ceiling priority for this barrier, then the priority of the task
-obtaining the barrier is elevated to that of the ceiling.
+Conceptually, the calling task should always be thought
+of as blocking when it makes this call and being unblocked when
+the barrier is released.  If the barrier is configured for
+manual release, this rule of thumb will always be valid.
+If the barrier is configured for automatic release, all callers
+will block except for the one which is the Nth task which trips
+the automatic release condition.
 
 The timeout parameter specifies the maximum interval the calling task is
 willing to be blocked waiting for the barrier.  If it is set to
@@ -427,26 +417,18 @@ If the barrier is available or the @code{@value{RPREFIX}NO_WAIT} option
 component is set, then timeout is ignored.
 
 @subheading NOTES:
-The following barrier acquisition option constants
-are defined by RTEMS:
+The following barrier acquisition option constants are defined by RTEMS:
 
 @itemize @bullet
 @item @code{@value{RPREFIX}WAIT} - task will wait for barrier (default)
 @item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
-Attempting to obtain a global barrier which does not reside on the local
-node will generate a request to the remote node to access the barrier.  
-If the barrier is not available and @code{@value{RPREFIX}NO_WAIT} was
-not specified, then the task must be blocked until the barrier is
-released.  A proxy is allocated on the remote node to represent the task
-until the barrier is released.
-
 A clock tick is required to support the timeout functionality of
 this directive.
 
 @c
-@c
+@c Release Barrier
 @c
 @page
 @subsection BARRIER_RELEASE - Release a barrier
@@ -477,35 +459,15 @@ procedure Barrier_Release (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - barrier released successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid barrier id@*
-@code{@value{RPREFIX}NOT_OWNER_OF_RESOURCE} - calling task does not own barrier
 
 @subheading DESCRIPTION:
 
-This directive releases the barrier specified by
-id.  The barrier count is incremented by one.  If the count is
-zero or negative, then the first task on this barrier's wait
-queue is removed and unblocked.  The unblocked task may preempt
-the running task if the running task's preemption mode is
-enabled and the unblocked task has a higher priority than the
-running task.
+This directive releases the barrier specified by id.
+All tasks waiting at the barrier will be unblocked.
+If the running task's preemption mode is enabled and one of
+the unblocked tasks has a higher priority than the running task.
 
 @subheading NOTES:
 
 The calling task may be preempted if it causes a
 higher priority task to be made ready for execution.
-
-Releasing a global barrier which does not reside on
-the local node will generate a request telling the remote node
-to release the barrier.
-
-If the task to be unblocked resides on a different
-node from the barrier, then the barrier allocation is
-forwarded to the appropriate node, the waiting task is
-unblocked, and the proxy used to represent the task is reclaimed.
-
-The outermost release of a local, binary, priority
-inheritance or priority ceiling barrier may result in the
-calling task having its priority lowered.  This will occur if
-the calling task holds no other binary barriers and it has
-inherited a higher priority.
-

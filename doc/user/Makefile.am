@@ -17,8 +17,8 @@ FILES = bsp.texi dirstat.texi example.texi glossary.texi preface.texi
 GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     task.texi intr.texi clock.texi timer.texi sem.texi msg.texi event.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
-    schedule.texi rtmon.texi bsp.texi userext.texi conf.texi mp.texi \
-    stackchk.texi cpuuse.texi
+    schedule.texi rtmon.texi barrier.texi bsp.texi userext.texi conf.texi \
+    mp.texi stackchk.texi cpuuse.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -137,10 +137,15 @@ schedule.texi: schedule.t
 rtmon.texi: rtmon.t
 	$(BMENU2) -p "Scheduling Concepts Task State Transitions" \
 	    -u "Top" \
+	    -n "Barrier Manager" < $< > $@
+
+barrier.texi: barrier.t
+	$(BMENU2) -p "Rate Monotonic Manager RATE_MONOTONIC_GET_STATUS - Obtain status information on period" \
+	    -u "Top" \
 	    -n "Board Support Packages" < $< > $@
 
 bsp.texi: bsp.t
-	$(BMENU2) -p "Rate Monotonic Manager RATE_MONOTONIC_GET_STATUS - Obtain status information on period" \
+	$(BMENU2) -p "Barrier Manager BARRIER_RELEASE - Release a barrier" \
 	    -u "Top" \
 	    -n "User Extensions Manager" < $< > $@
 
