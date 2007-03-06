@@ -12,7 +12,8 @@ EDITION = 1
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
-COMMON_FILES += $(top_builddir)/user/bsp.texi \
+COMMON_FILES += \
+    $(top_builddir)/user/barrier.texi $(top_builddir)/user/bsp.texi \
     $(top_builddir)/user/clock.texi $(top_builddir)/user/concepts.texi \
     $(top_builddir)/user/datatypes.texi $(top_builddir)/user/conf.texi \
     $(top_builddir)/user/dirstat.texi $(top_builddir)/user/dpmem.texi \

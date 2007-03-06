@@ -97,6 +97,7 @@
 @include user/fatal.texi
 @include user/schedule.texi
 @include user/rtmon.texi
+@include user/barrier.texi
 @include user/bsp.texi
 @include user/userext.texi
 @include user/conf.texi
@@ -133,6 +134,7 @@ This is the online version of the RTEMS Ada User's Guide.
 * Fatal Error Manager::
 * Scheduling Concepts::
 * Rate Monotonic Manager::
+* Barrier Manager::
 * Board Support Packages::
 * User Extensions Manager::
 * Configuring a System::
