@@ -16,7 +16,7 @@ by the stack bounds checker manager are:
 
 @itemize @bullet
 @item @code{@value{DIRPREFIX}stack_checker_initialize} - Initialize the Stack Bounds Checker
-@item @code{@value{DIRPREFIX}stack_checker_dump_usage} - Report Task Stack Usage
+@item @code{@value{DIRPREFIX}stack_checker_report_usage} - Report Task Stack Usage
 @end itemize
 
 @section Background
@@ -88,7 +88,7 @@ to define the macro @code{STACK_CHECKER_ON} before including
 @subsection Reporting Task Stack Usage
 
 The application may dynamically report the stack usage for every task
-in the system by calling the @code{@value{DIRPREFIX}stack_checker_dump_usage} routine.
+in the system by calling the @code{@value{DIRPREFIX}stack_checker_report_usage} routine.
 This routine prints a table with the peak usage and stack size of
 every task in the system.  The following is an example of the
 report generated:
@@ -164,13 +164,13 @@ This is performed automatically the first time the stack bounds checker
 task create extension executes.
 
 @page
-@subsection stack_checker_dump_usage - Report Task Stack Usage
+@subsection stack_checker_report_usage - Report Task Stack Usage
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-void rtems_stack_checker_dump_usage( void );
+void rtems_stack_checker_report_usage( void );
 @end example
 @end ifset
 

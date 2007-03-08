@@ -1,3 +1,7 @@
+2007-03-08	Joel Sherrill <joel@OARcorp.com>
+
+	* user/Makefile.am, user/stackchk.t: Change dump usage to report usage.
+
 2007-03-06	Joel Sherrill <joel@OARcorp.com>
 
 	* ada_user/Makefile.am, ada_user/ada_user.texi: Ada API manual now

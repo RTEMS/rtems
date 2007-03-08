@@ -170,7 +170,7 @@ stackchk.texi: stackchk.t
 	    -n "CPU Usage Statistics" < $< > $@
 
 cpuuse.texi: cpuuse.t
-	$(BMENU2) -p "Stack Bounds Checker stack_checker_dump_usage - Report Task Stack Usage" \
+	$(BMENU2) -p "Stack Bounds Checker stack_checker_report_usage - Report Task Stack Usage" \
 	    -u "Top" \
 	    -n "Directive Status Codes" < $< > $@
 
