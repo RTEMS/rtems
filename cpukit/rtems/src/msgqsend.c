@@ -1,8 +1,7 @@
 /*
- *  Message Queue Manager
+ *  Message Queue Manager - rtems_message_queue_send
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,11 +33,11 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
+/*
  *
  *  rtems_message_queue_send
  *
- *  This routine implements the directives q_send.  It sends a
+ *  This routine implements the directive rtems_message_queue_sent.  It sends a
  *  message to the specified message queue.
  *
  *  Input parameters:
@@ -51,11 +50,64 @@
  *    error code        - if unsuccessful
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
+#define MESSAGE_QUEUE_MP_HANDLER _Message_queue_Core_message_queue_mp_support
+#else
+#define MESSAGE_QUEUE_MP_HANDLER NULL
+#endif
+
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
   void                 *buffer,
   size_t                size
 )
 {
-  return( _Message_queue_Submit(id, buffer, size, MESSAGE_QUEUE_SEND_REQUEST) );
+  register Message_queue_Control  *the_message_queue;
+  Objects_Locations                location;
+  CORE_message_queue_Status        status;
+
+  if ( !buffer )
+    return RTEMS_INVALID_ADDRESS;
+
+  the_message_queue = _Message_queue_Get( id, &location );
+  switch ( location )
+  {
+    case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
+      return _Message_queue_MP_Send_request_packet(
+        MESSAGE_QUEUE_MP_SEND_REQUEST,
+        id,
+        buffer,
+        &size,
+        0,                               /* option_set */
+        MPCI_DEFAULT_TIMEOUT
+      );
+      break;
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
+    case OBJECTS_LOCAL:
+      status = _CORE_message_queue_Send(
+        &the_message_queue->message_queue,
+        buffer,
+        size,
+        id,
+        MESSAGE_QUEUE_MP_HANDLER,
+        FALSE,   /* sender does not block */
+        0        /* no timeout */
+      );
+
+      _Thread_Enable_dispatch();
+
+      /*
+       *  Since this API does not allow for blocking sends, we can directly
+       *  return the returned status.
+       */
+
+      return _Message_queue_Translate_core_message_queue_return_code(status);
+
+  }
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
