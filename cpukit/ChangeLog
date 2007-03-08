@@ -1,5 +1,10 @@
 2007-03-08	Joel Sherrill <joel@OARcorp.com>
 
+	* libmisc/stackchk/check.c, libmisc/stackchk/internal.h,
+	libmisc/stackchk/stackchk.h: Change dump usage to report usage.
+
+2007-03-08	Joel Sherrill <joel@OARcorp.com>
+
 	* rtems/Makefile.am, rtems/src/msgqsend.c, rtems/src/msgqurgent.c:
 	Remove wrapper for message queue send and urgent and implement them
 	directly. There was an unnecessary function call layer in addition to

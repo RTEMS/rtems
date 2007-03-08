@@ -120,12 +120,6 @@ Stack_check_Control Stack_check_Pattern;
 Stack_Control stack_check_interrupt_stack;
 
 /*
- * Prototypes necessary for forward references
- */
-
-void rtems_stack_checker_dump_usage( void );
-
-/*
  * Fill an entire stack area with BYTE_PATTERN.
  * This will be used by a Fatal extension to check for
  * amount of actual stack used
@@ -247,7 +241,7 @@ void rtems_stack_checker_initialize( void )
      * handler, but we don't run fatal extensions unless
      * we fatal error.
      */
-  atexit(rtems_stack_checker_dump_usage);
+  atexit(rtems_stack_checker_report_usage);
 #endif
 #endif
 
@@ -508,17 +502,17 @@ void rtems_stack_checker_fatal_extension(
 {
 #ifndef DONT_USE_FATAL_EXTENSION
     if (status == 0)
-        rtems_stack_checker_dump_usage();
+        rtems_stack_checker_report_usage();
 #endif
 }
 
 
 /*PAGE
  *
- *  rtems_stack_checker_dump_usage
+ *  rtems_stack_checker_report_usage
  */
 
-void rtems_stack_checker_dump_usage( void )
+void rtems_stack_checker_report_usage( void )
 {
   uint32_t             i;
   uint32_t             api_index;

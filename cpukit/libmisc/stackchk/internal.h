@@ -82,10 +82,10 @@ void rtems_stack_checker_fatal_extension(
 );
 
 /*
- *  rtems_stack_checker_dump_usage
+ *  rtems_stack_checker_report_usage
  */
 
-void rtems_stack_checker_dump_usage( void );
+void rtems_stack_checker_report_usage( void );
 
 #ifdef __cplusplus
 }

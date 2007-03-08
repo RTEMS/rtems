@@ -30,7 +30,7 @@ void rtems_stack_checker_initialize( void );
  *  rtems_stack_checker_Dump_usage
  */
 
-void rtems_stack_checker_dump_usage( void );
+void rtems_stack_checker_report_usage( void );
 
 /*
  *  rtems_stack_checker_create_extension
