@@ -4,6 +4,10 @@
 
 2007-03-08	Joel Sherrill <joel@OARcorp.com>
 
+	* libfs/src/imfs/imfs.h: Fix comment.
+
+2007-03-08	Joel Sherrill <joel@OARcorp.com>
+
 	* libmisc/stackchk/check.c, libmisc/stackchk/internal.h,
 	libmisc/stackchk/stackchk.h: Change dump usage to report usage.
 

@@ -253,29 +253,6 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #endif
 
 /*
- *  Map obsolete names to current ones
- *
- *  NOTE: These should be obsoleted in a future release.
- */
-
-#ifdef CONFIGURE_TEST_NEEDS_TIMER_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
-#endif
-#ifdef CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#endif
-#ifdef CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#endif
-#ifdef CONFIGURE_TEST_NEEDS_RTC_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
-#endif
-#ifdef CONFIGURE_TEST_NEEDS_STUB_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
-#endif
-
-
-/*
  *  Default Device Driver Table.  Each driver needed by the test is explicitly
  *  choosen by that test.  There is always a null driver entry.
  */
@@ -1097,7 +1074,8 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 
 #ifdef CONFIGURE_GNAT_RTEMS
 #define CONFIGURE_GNAT_MUTEXES 10
-#define CONFIGURE_GNAT_KEYS    1
+/* GNAT/RTEMS provides an optimized Ada self and does not use POSIX Keys */
+#define CONFIGURE_GNAT_KEYS    0
 
 /* 20 are required to run all tests in the ACVC */
 #ifndef CONFIGURE_MAXIMUM_ADA_TASKS

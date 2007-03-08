@@ -1,7 +1,7 @@
 /*
  *  Header file for the In-Memory File System
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -82,10 +82,6 @@ typedef struct {
 
 #define IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK     128
   extern int imfs_rq_memfile_bytes_per_block;
-  /*
-   * FIXME: make and use derivates from this, 
-   * a shift count and a mask
-   */
   extern int imfs_memfile_bytes_per_block;
 
 #define IMFS_MEMFILE_BYTES_PER_BLOCK imfs_memfile_bytes_per_block  
