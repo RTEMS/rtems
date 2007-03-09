@@ -114,7 +114,7 @@ int boot_card(int argc, char **argv, char **envp)
 #endif
 
   /*
-   * XXX
+   * Invoke Board Support Package initialization routine written in C.
    */
 
   bsp_start();
