@@ -131,17 +131,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config);
 #define BSP_SYSTEM_FREQUENCY (66 * 1000 * 1000)
 
 /*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */

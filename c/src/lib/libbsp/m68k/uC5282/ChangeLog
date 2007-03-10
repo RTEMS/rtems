@@ -1,3 +1,9 @@
+2007-03-10	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1227/bsps
+	* include/bsp.h: Remove MAX_LONG_TEST_DURATION and
+	MAX_SHORT_TEST_DURATION. They are obsolete and unused.
+
 2007-02-08	Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Fixed FPGA interrupt handling.

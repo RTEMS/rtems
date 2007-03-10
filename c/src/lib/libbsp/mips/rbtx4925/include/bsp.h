@@ -28,17 +28,6 @@ extern "C" {
 #include <libcpu/tx4925.h>
 
 /*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
-
-/*
  *  Define the interrupt mechanism for Time Test 27
  *
  *  NOTE: Following are for XXX and are board independent
