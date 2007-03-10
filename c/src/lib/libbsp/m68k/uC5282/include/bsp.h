@@ -50,17 +50,6 @@ extern int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config, int at
 /* define which port the console should use - all other ports are then defined as general purpose */
 #define CONSOLE_PORT        0
 
-
-/*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-#define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
-
 /* externals */
 
 /* constants */

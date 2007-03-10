@@ -54,17 +54,6 @@ extern int rtems_smc91111_driver_attach_leon2(struct rtems_bsdnet_ifconfig *conf
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 rtems_smc91111_driver_attach_leon2
 
 /*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       3   /* 3 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
-
-/*
  *  The synchronous trap is an arbitrarily chosen software trap.
  */
 

@@ -77,18 +77,6 @@ extern int rtems_leon_greth_driver_attach(
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH RTEMS_BSP_NETWORK_DRIVER_ATTACH_GRETH
 #endif
 
-
-/*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       3   /* 3 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
-
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
