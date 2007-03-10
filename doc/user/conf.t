@@ -310,8 +310,8 @@ This class of Configuration Constants are only applicable if
 @code{CONFIGURE_MP_APPLICATION} is defined.
 
 @itemize @bullet
-@findex CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
-@item @code{CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE} is defined
+@findex CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
+@item @code{CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE} is defined
 if the application wishes to provide their own Multiprocessing
 Configuration Table.  The generated table is named
 @code{Multiprocessing_configuration}.  By default, this
