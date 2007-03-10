@@ -1,3 +1,8 @@
+2007-03-10	Joel Sherrill <joel@OARcorp.com>
+
+	* sp26/system.h: Remove incorrect and duplicate
+	CONFIGURE_EXTRA_TASK_STACKS.
+
 2007-03-05	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1222/cpukit
