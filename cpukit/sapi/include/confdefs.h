@@ -403,7 +403,7 @@ int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
  */
 
 #ifdef CONFIGURE_MP_APPLICATION
-#ifndef CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
+#ifndef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
 
 #ifndef CONFIGURE_MP_NODE_NUMBER
 #define CONFIGURE_MP_NODE_NUMBER                NODE_NUMBER
@@ -438,7 +438,7 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 
 #define CONFIGURE_MULTIPROCESSING_TABLE    &Multiprocessing_configuration
 
-#endif /* CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE */
+#endif /* CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE */
 
 #else
 
