@@ -146,7 +146,6 @@ void bsp_start_default( void )
   Cpu_table.predriver_hook          = NULL;                /* use system's    */
   Cpu_table.postdriver_hook         = bsp_postdriver_hook;
   Cpu_table.idle_task               = NULL; /* don't override system IDLE task */
-  Cpu_table.do_zero_of_workspace    = TRUE;
   Cpu_table.interrupt_stack_size    = 0;
   Cpu_table.extra_mpci_receive_server_stack = 0;
 

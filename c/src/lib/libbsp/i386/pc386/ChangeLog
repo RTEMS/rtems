@@ -1,3 +1,9 @@
+2007-03-11	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/bspstart.c: Remove assignments of
+	Cpu_table.do_zero_of_workspace to TRUE since TRUE is the default
+	value in boot_card.c
+
 2007-01-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/fb_vga.c: Eliminate __u16, __u32.

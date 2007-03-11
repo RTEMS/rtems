@@ -115,9 +115,6 @@ void bsp_start_default( void )
     /* tell rtems about the hooks we are using */
     Cpu_table.pretasking_hook        = bsp_pretasking_hook;
     Cpu_table.postdriver_hook        = bsp_postdriver_hook;
-
-    /* tell rtems to clear the workspace by default */
-    Cpu_table.do_zero_of_workspace   = TRUE;
     
     /* Place RTEMS workspace at beginning of free memory. */
     BSP_Configuration.work_space_start = (void *)&_bss_free_start;

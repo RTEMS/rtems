@@ -285,7 +285,6 @@ void bsp_start(void)
   Cpu_table.predriver_hook         = bsp_predriver_hook;     /* init PCI / RTC ...   */
   Cpu_table.postdriver_hook        = bsp_postdriver_hook;
   Cpu_table.clicks_per_usec        = (IPB_CLOCK/1000000);
-  Cpu_table.do_zero_of_workspace   = TRUE;
   Cpu_table.exceptions_in_RAM      = TRUE;
 
   if( Cpu_table.interrupt_stack_size < 4*1024 )

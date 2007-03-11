@@ -99,13 +99,6 @@ void bsp_start( void )
   Cpu_table.predriver_hook = bsp_leon3_predriver_hook;     /* scan system bus */
 
   /*
-   *  SIS does zero out memory BUT only when IT begins execution.  Thus
-   *  if we want to have a clean slate in the workspace each time we
-   *  begin execution of OUR application, then we must zero the workspace.
-   */
-  Cpu_table.do_zero_of_workspace = TRUE;
-
-  /*
    *  This should be enough interrupt stack.
    */
 

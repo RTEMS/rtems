@@ -1,3 +1,9 @@
+2007-03-11	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/bspstart.c: Remove assignments of
+	Cpu_table.do_zero_of_workspace to TRUE since TRUE is the default
+	value in boot_card.c
+
 2006-12-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* network/network.c (at91rm9200_emac_ioctl): Use ioctl_command_t.

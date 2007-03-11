@@ -312,7 +312,6 @@ void bsp_start( void )
   Cpu_table.predriver_hook  = bsp_predriver_hook;   /* Init vectors    */
   Cpu_table.postdriver_hook = SCORE603e_bsp_postdriver_hook;
   Cpu_table.clicks_per_usec = 66 / 4;  /* XXX get from linkcmds */
-  Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   Cpu_table.idle_task_stack_size = (3 * STACK_MINIMUM_SIZE);
 

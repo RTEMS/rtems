@@ -186,7 +186,6 @@ void bsp_start_default( void )
   Cpu_table.postdriver_hook         = bsp_postdriver_hook;
   Cpu_table.idle_task               = NULL;
                                           /* do not override system IDLE task */
-  Cpu_table.do_zero_of_workspace    = TRUE;
   Cpu_table.interrupt_table_segment = get_ds();
   Cpu_table.interrupt_table_offset  = (void *)Interrupt_descriptor_table;
   Cpu_table.interrupt_stack_size    = CONFIGURE_INTERRUPT_STACK_MEMORY;
