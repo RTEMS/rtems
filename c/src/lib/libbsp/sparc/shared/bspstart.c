@@ -103,13 +103,6 @@ void bsp_start( void )
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
 
   /*
-   *  SIS does zero out memory BUT only when IT begins execution.  Thus
-   *  if we want to have a clean slate in the workspace each time we
-   *  begin execution of OUR application, then we must zero the workspace.
-   */
-  Cpu_table.do_zero_of_workspace = TRUE;
-
-  /*
    *  This should be enough interrupt stack.
    */
 
