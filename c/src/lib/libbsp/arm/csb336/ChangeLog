@@ -1,3 +1,11 @@
+2007-03-12	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h, network/lan91c11x.c, network/lan91c11x.h,
+	network/network.c, start/start.S, startup/bspstart.c, startup/exit.c,
+	startup/linkcmds, startup/memmap.c: Correct license URL and/or fix
+	mistake in copyright notice. Both of these mistakes appear to be from
+	code submitted after these changes were made previously.
+
 2006-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* bsp_specs: Fix typo.
