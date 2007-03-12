@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1997.
+ *  COPYRIGHT (c) 1997-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -16,7 +16,17 @@
 extern "C" {
 #endif
 
-void Dump_Buffer(
+/**
+ *  @brief Print Memory Buffer
+ *
+ *  This method prints @a length bytes beginning at @a buffer in
+ *  a nice format similar to what one would expect from a debugger
+ *  or ROM monitor.  
+ *
+ *  @param[in] buffer is the address of the buffer
+ *  @param[in] length is the length of the buffer
+ */
+void rtems_print_buffer(
   unsigned char *buffer,
   int            length
 );

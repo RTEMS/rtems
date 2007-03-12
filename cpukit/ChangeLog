@@ -1,5 +1,10 @@
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
+	* libmisc/dumpbuf/dumpbuf.c, libmisc/dumpbuf/dumpbuf.h: Rename
+	Dump_Buffer to rtems_print_buffer.
+
+2007-03-12	Joel Sherrill <joel@OARcorp.com>
+
 	* score/src/heapallocatealigned.c, score/src/threadqrequeue.c: Correct
 	license URL and/or fix mistake in copyright notice. Both of these
 	mistakes appear to be from code submitted after these changes were

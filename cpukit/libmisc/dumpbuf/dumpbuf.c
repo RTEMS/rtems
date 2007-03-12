@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1997.
+ *  COPYRIGHT (c) 1997-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -19,7 +19,7 @@
 #include <rtems/dumpbuf.h>
 
 /*
- *  Put the body below Dump_Buffer so it won't get inlined.
+ *  Put the body below rtems_print_buffer so it won't get inlined.
  */
 
 static inline void Dump_Line(
@@ -27,7 +27,7 @@ static inline void Dump_Line(
   int            length
 );
 
-void Dump_Buffer(
+void rtems_print_buffer(
   unsigned char *buffer,
   int            length
 )
