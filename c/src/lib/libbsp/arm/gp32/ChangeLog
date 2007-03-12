@@ -1,3 +1,10 @@
+2007-03-12	Joel Sherrill <joel@OARcorp.com>
+
+	* console/uart.c, start/start.S, startup/linkcmds, startup/memmap.c:
+	Correct license URL and/or fix mistake in copyright notice. Both of
+	these mistakes appear to be from code submitted after these changes
+	were made previously.
+
 2007-03-11	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/bspstart.c: Remove assignments of
