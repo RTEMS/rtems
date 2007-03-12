@@ -1,3 +1,9 @@
+2007-03-12	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc6xx/mmu/mmuAsm.S: Correct license URL and/or fix mistake in
+	copyright notice. Both of these mistakes appear to be from code
+	submitted after these changes were made previously.
+
 2007-01-16 Till Straumann <strauman@slac.stanford.edu>
 
 	* mpc6xx/mmu/pte121.h, mpc6xx/mmu/pte121.c:

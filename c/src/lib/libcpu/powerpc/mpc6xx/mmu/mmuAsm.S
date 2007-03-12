@@ -10,7 +10,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  http://www.rtems.com/license/LICENSE.
  *	
  *  T. Straumann - 11/2001: added support for 7400 (no AltiVec yet)
  *  S.K. Feng    - 10/2003: added support for 7455 (no AltiVec yet)
