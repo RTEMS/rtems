@@ -1,3 +1,10 @@
+2007-03-12	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/cs8900.c, libchip/network/cs8900.h,
+	libchip/network/greth.c, libchip/network/greth.h: Correct license URL
+	and/or fix mistake in copyright notice. Both of these mistakes appear
+	to be from code submitted after these changes were made previously.
+
 2007-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* wrapup/Makefile.am: Use MKDIR_P instead of mkdir_p.
