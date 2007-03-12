@@ -1,3 +1,22 @@
+2007-03-12	Joel Sherrill <joel@OARcorp.com>
+
+	* at91rm9200/clock/clock.c, at91rm9200/dbgu/dbgu.c,
+	at91rm9200/include/at91rm9200.h,
+	at91rm9200/include/at91rm9200_dbgu.h,
+	at91rm9200/include/at91rm9200_emac.h,
+	at91rm9200/include/at91rm9200_gpio.h,
+	at91rm9200/include/at91rm9200_mem.h,
+	at91rm9200/include/at91rm9200_pmc.h, at91rm9200/include/bits.h,
+	at91rm9200/irq/bsp_irq_asm.S, at91rm9200/irq/bsp_irq_init.c,
+	at91rm9200/irq/irq.c, at91rm9200/irq/irq.h, at91rm9200/pmc/pmc.c,
+	at91rm9200/timer/timer.c, mc9328mxl/clock/clockdrv.c,
+	mc9328mxl/include/mc9328mxl.h, mc9328mxl/irq/bsp_irq_asm.S,
+	mc9328mxl/irq/bsp_irq_init.c, mc9328mxl/irq/irq.c,
+	mc9328mxl/irq/irq.h, mc9328mxl/timer/timer.c,
+	s3c2400/clock/clockdrv.c, s3c2400/timer/timer.c: Correct license URL
+	and/or fix mistake in copyright notice. Both of these mistakes appear
+	to be from code submitted after these changes were made previously.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
