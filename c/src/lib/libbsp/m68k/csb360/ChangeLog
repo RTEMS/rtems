@@ -1,3 +1,11 @@
+2007-03-12	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console-io.c, include/bsp.h, start/start.S,
+	startup/bspclean.c, startup/bspstart.c, startup/init5272.c: Correct
+	license URL and/or fix mistake in copyright notice. Both of these
+	mistakes appear to be from code submitted after these changes were
+	made previously.
+
 2007-03-10	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1227/bsps
