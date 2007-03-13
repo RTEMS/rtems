@@ -43,7 +43,7 @@ extern "C" {
  */
 typedef struct {
   /** This is the stack size. */
-  uint32_t    size;
+  size_t      size;
   /** This is the low memory address of stack. */
   void       *area;
 }   Stack_Control;

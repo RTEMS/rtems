@@ -1,5 +1,6 @@
 2007-03-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/score/stack.h: Use size_t for stack sizes.
 	* score/include/rtems/score/chain.h, score/src/chain.c:
 	Change _Chain_Initialize to using size_t.
 
