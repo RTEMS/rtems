@@ -1,3 +1,7 @@
+2007-03-13	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/sonic.c: Rename Dump_Buffer to rtems_print_buffer.
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/network/cs8900.c, libchip/network/cs8900.h,

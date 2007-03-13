@@ -642,7 +642,7 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
         fp, fp->frag_msw, fp->frag_lsw, fp->frag_size, m->m_len, packetSize );
 #endif
 #if (SONIC_DEBUG & SONIC_DEBUG_DUMP_TX_MBUFS)
-      Dump_Buffer(
+      rtems_print_buffer(
         p,
         (fp->frag_size > MAXIMUM_FRAME_SIZE) ? MAXIMUM_FRAME_SIZE : fp->frag_size
       );
@@ -995,8 +995,8 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
 #endif
 
 #if (SONIC_DEBUG & SONIC_DEBUG_DUMP_RX_MBUFS)
-      Dump_Buffer( (void *) eh, sizeof(struct ether_header) );
-      Dump_Buffer( (void *) m, 96 /* m->m_len*/ );
+      rtems_print_buffer( (void *) eh, sizeof(struct ether_header) );
+      rtems_print_buffer( (void *) m, 96 /* m->m_len*/ );
 #endif
 
       /* printf( "ether_input %p\n", m ); */
