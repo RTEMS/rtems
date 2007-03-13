@@ -1,3 +1,9 @@
+2007-03-13	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, configure.ac: Added timezone test.
+	* tztest/Makefile.am, tztest/init.c, tztest/tztest.doc,
+	tztest/tztest.scn: New files.
+
 2007-03-05	Joel Sherrill <joel@OARcorp.com>
 
 	* malloctest/init.c: Be explicit about need for default and floating

@@ -41,5 +41,6 @@ rtems++/Makefile
 rtmonuse/Makefile
 stackchk/Makefile
 termios/Makefile
+tztest/Makefile
 ])
 AC_OUTPUT
