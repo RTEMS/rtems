@@ -1,5 +1,9 @@
 2007-03-13	Joel Sherrill <joel@OARcorp.com>
 
+	* tztest/.cvsignore: New file.
+
+2007-03-13	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am, configure.ac: Added timezone test.
 	* tztest/Makefile.am, tztest/init.c, tztest/tztest.doc,
 	tztest/tztest.scn: New files.
