@@ -50,6 +50,8 @@ rtems_task Init(
 
   setenv( "TZ", "CST6CDT,M 3.2.0,M 11.1.0", 1 );
 
+  tzset();
+
   tztester();
 
   puts( "*** END OF TIMEZONE TEST ***" );

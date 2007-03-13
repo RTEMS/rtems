@@ -1,5 +1,10 @@
 2007-03-13	Joel Sherrill <joel@OARcorp.com>
 
+	* tztest/init.c: Call tzset() even though it may be called for us
+	implicitly along the way.
+
+2007-03-13	Joel Sherrill <joel@OARcorp.com>
+
 	* tztest/.cvsignore: New file.
 
 2007-03-13	Joel Sherrill <joel@OARcorp.com>
