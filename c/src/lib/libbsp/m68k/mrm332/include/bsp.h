@@ -122,13 +122,9 @@ m68k_isr_entry set_vector(
   int                 type
 );
 
-void console_init(void);
-
 void Spurious_Initialize(void);
 
 void _UART_flush(void);
-
-void Clock_exit(void);
 
 void outbyte(char);
 
