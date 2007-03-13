@@ -43,11 +43,11 @@
 void _Chain_Initialize(
   Chain_Control *the_chain,
   void           *starting_address,
-  uint32_t       number_nodes,
-  uint32_t       node_size
+  size_t         number_nodes,
+  size_t         node_size
 )
 {
-  uint32_t    count;
+  size_t      count;
   Chain_Node *current;
   Chain_Node *next;
 

@@ -1,3 +1,8 @@
+2007-03-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/chain.h, score/src/chain.c:
+	Change _Chain_Initialize to using size_t.
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* libmisc/dumpbuf/dumpbuf.c, libmisc/dumpbuf/dumpbuf.h: Rename
