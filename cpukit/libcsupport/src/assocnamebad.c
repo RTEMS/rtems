@@ -12,11 +12,8 @@
 #include <rtems.h>
 #include <rtems/assoc.h>
 
+#include <inttypes.h>
 #include <stdio.h>              /* sprintf */
-#include <string.h>             /* strcat, strcmp */
-
-#define STREQ(a,b)      (strcmp((a), (b)) == 0)
-#define rtems_assoc_is_default(ap)  ((ap)->name && STREQ(ap->name, RTEMS_ASSOC_DEFAULT_NAME))
 
 /*
  * what to return if a value is not found
@@ -31,7 +28,7 @@ rtems_assoc_name_bad(
 #ifdef RTEMS_DEBUG
     static char bad_buffer[32];
 
-    sprintf(bad_buffer, "< %d [0x%x] >", bad_value, bad_value);
+    sprintf(bad_buffer, "< %" PRId32 "[0x%" PRIx32 " ] >", bad_value, bad_value);
 #else
     static char bad_buffer[32] = "<assoc.c: BAD NAME>";
 #endif
