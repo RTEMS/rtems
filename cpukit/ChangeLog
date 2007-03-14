@@ -1,3 +1,8 @@
+2007-03-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/mbuf.h, libnetworking/sys/rtprio.h:
+	Remove __P().
+
 2007-03-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/assocnamebad.c: Remove dead code. Use PRI* macros
