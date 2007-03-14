@@ -92,10 +92,10 @@ struct	pkthdr {
 struct m_ext {
 	caddr_t	ext_buf;		/* start of buffer */
 	void	(*ext_free)		/* free routine if not the usual */
-		__P((caddr_t, u_int));
+		(caddr_t, u_int);
 	u_int	ext_size;		/* size of buffer, for ext_free */
 	void	(*ext_ref)		/* add a reference to the ext object */
-		__P((caddr_t, u_int));
+		(caddr_t, u_int);
 };
 
 /*
