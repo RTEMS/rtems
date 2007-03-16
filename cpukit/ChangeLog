@@ -1,5 +1,9 @@
 2007-03-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/score/wkspace.h,
+	score/inline/rtems/score/wkspace.inl, score/src/wkspace.c:
+	Change _Workspace_Handler_initialization and 
+	_Workspace_Allocate_or_fatal_error to using size_t.
 	* libnetworking/sys/rtprio.h: Remove (Unused).
 	* libnetworking/Makefile.am: Remove sys/rtprio.h.
 
