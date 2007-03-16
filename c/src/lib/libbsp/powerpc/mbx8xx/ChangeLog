@@ -3,7 +3,7 @@
 	* startup/bspstart.c: set external clock to 0 for some boards to
 	match the "auto clock detection" scheme in the libcpu clock driver
 	* startup/linkcmds: remove content of dpram section to avoid
-	download hands with the EPPCBuf board monitor
+	download hangs with the EPPCBug board monitor
 
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
