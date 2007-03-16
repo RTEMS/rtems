@@ -30,7 +30,7 @@
 
 void _Workspace_Handler_initialization(
   void       *starting_address,
-  uint32_t    size
+  size_t      size
 )
 {
   uint32_t   *zero_out_array;
@@ -73,7 +73,7 @@ void _Workspace_Handler_initialization(
  */
 
 void *_Workspace_Allocate_or_fatal_error(
-  uint32_t     size
+  size_t      size
 )
 {
   void        *memory;
