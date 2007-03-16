@@ -200,7 +200,24 @@ void bsp_start(void)
   if( Cpu_table.interrupt_stack_size < 4 * 1024 )
       Cpu_table.interrupt_stack_size = 4 * 1024;
 
+#if    ( defined(mbx860_001b) || \
+         defined(mbx860_002b) || \
+         defined(mbx860_003b) || \
+         defined(mbx860_003b) || \
+         defined(mbx860_004b) || \
+         defined(mbx860_005b) || \
+         defined(mbx860_006b) || \
+         defined(mbx821_001b) || \
+         defined(mbx821_002b) || \
+         defined(mbx821_003b) || \
+         defined(mbx821_004b) || \
+         defined(mbx821_005b) || \
+         defined(mbx821_006b))
+  Cpu_table.clicks_per_usec = 0;  /* for 32768Hz extclk */
+#else
   Cpu_table.clicks_per_usec = 1;  /* for 4MHz extclk */
+#endif
+
   Cpu_table.serial_per_sec = 10000000;
   Cpu_table.serial_external_clock = 1;
   Cpu_table.serial_xon_xoff = 0;

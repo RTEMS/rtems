@@ -277,7 +277,7 @@ SECTIONS
   {
   m8xx = .;
   _m8xx = .;
-  . += (16 * 1024);
+  /*   . += (16 * 1024); this makes the mbx loader crash */
   } >immr
 
   /* Stabs debugging sections.  */
