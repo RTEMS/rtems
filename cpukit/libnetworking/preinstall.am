@@ -391,10 +391,6 @@ $(PROJECT_INCLUDE)/sys/resourcevar.h: sys/resourcevar.h $(PROJECT_INCLUDE)/sys/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/resourcevar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/resourcevar.h
 
-$(PROJECT_INCLUDE)/sys/rtprio.h: sys/rtprio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/rtprio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/rtprio.h
-
 $(PROJECT_INCLUDE)/sys/select.h: sys/select.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/select.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/select.h
