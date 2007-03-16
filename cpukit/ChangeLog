@@ -1,3 +1,8 @@
+2007-03-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/rtprio.h: Remove (Unused).
+	* libnetworking/Makefile.am: Remove sys/rtprio.h.
+
 2007-03-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/mbuf.h, libnetworking/sys/rtprio.h:
