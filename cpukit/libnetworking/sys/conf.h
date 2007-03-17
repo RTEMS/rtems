@@ -52,31 +52,31 @@ struct tty;
 struct uio;
 struct vnode;
 
-typedef int d_open_t __P((dev_t dev, int oflags, int devtype, struct proc *p));
-typedef int d_close_t __P((dev_t dev, int fflag, int devtype, struct proc *p));
-typedef void d_strategy_t __P((struct buf *bp));
-typedef int d_ioctl_t __P((dev_t dev, int cmd, caddr_t data,
-			   int fflag, struct proc *p));
-typedef int d_dump_t __P((dev_t dev));
-typedef int d_psize_t __P((dev_t dev));
+typedef int d_open_t(dev_t dev, int oflags, int devtype, struct proc *p);
+typedef int d_close_t(dev_t dev, int fflag, int devtype, struct proc *p);
+typedef void d_strategy_t(struct buf *bp);
+typedef int d_ioctl_t(dev_t dev, int cmd, caddr_t data,
+			   int fflag, struct proc *p);
+typedef int d_dump_t(dev_t dev);
+typedef int d_psize_t(dev_t dev);
 
-typedef int d_read_t __P((dev_t dev, struct uio *uio, int ioflag));
-typedef int d_write_t __P((dev_t dev, struct uio *uio, int ioflag));
-typedef void d_stop_t __P((struct tty *tp, int rw));
-typedef int d_reset_t __P((dev_t dev));
-typedef struct tty *d_devtotty_t __P((dev_t dev));
-typedef int d_select_t __P((dev_t dev, int which, struct proc *p));
-typedef int d_mmap_t __P((dev_t dev, int offset, int nprot));
+typedef int d_read_t(dev_t dev, struct uio *uio, int ioflag);
+typedef int d_write_t(dev_t dev, struct uio *uio, int ioflag);
+typedef void d_stop_t(struct tty *tp, int rw);
+typedef int d_reset_t(dev_t dev);
+typedef struct tty *d_devtotty_t(dev_t dev);
+typedef int d_select_t(dev_t dev, int which, struct proc *p);
+typedef int d_mmap_t(dev_t dev, int offset, int nprot);
 
-typedef int l_open_t __P((dev_t dev, struct tty *tp));
-typedef int l_close_t __P((struct tty *tp, int flag));
-typedef int l_read_t __P((struct tty *tp, struct uio *uio, int flag));
-typedef int l_write_t __P((struct tty *tp, struct uio *uio, int flag));
-typedef int l_ioctl_t __P((struct tty *tp, int cmd, caddr_t data,
-			   int flag, struct proc *p));
-typedef int l_rint_t __P((int c, struct tty *tp));
-typedef int l_start_t __P((struct tty *tp));
-typedef int l_modem_t __P((struct tty *tp, int flag));
+typedef int l_open_t(dev_t dev, struct tty *tp);
+typedef int l_close_t(struct tty *tp, int flag);
+typedef int l_read_t(struct tty *tp, struct uio *uio, int flag);
+typedef int l_write_t(struct tty *tp, struct uio *uio, int flag);
+typedef int l_ioctl_t(struct tty *tp, int cmd, caddr_t data,
+			   int flag, struct proc *p);
+typedef int l_rint_t(int c, struct tty *tp);
+typedef int l_start_t(struct tty *tp);
+typedef int l_modem_t(struct tty *tp, int flag);
 
 /*
  * Block device switch table
@@ -189,15 +189,15 @@ d_write_t	rawwrite;
 l_read_t	l_noread;
 l_write_t	l_nowrite;
 
-int	bdevsw_add __P((dev_t *descrip,struct bdevsw *new,struct bdevsw **old));
-int	cdevsw_add __P((dev_t *descrip,struct cdevsw *new,struct cdevsw **old));
-void	cdevsw_make __P((struct bdevsw *from));
-void	bdevsw_add_generic __P((int bdev, int cdev, struct bdevsw *bdevsw));
-dev_t	chrtoblk __P((dev_t dev));
-int	isdisk __P((dev_t dev, int type));
-int	iskmemdev __P((dev_t dev));
-int	iszerodev __P((dev_t dev));
-void	setconf __P((void));
+int	bdevsw_add(dev_t *descrip,struct bdevsw *new,struct bdevsw **old);
+int	cdevsw_add(dev_t *descrip,struct cdevsw *new,struct cdevsw **old);
+void	cdevsw_make(struct bdevsw *from);
+void	bdevsw_add_generic(int bdev, int cdev, struct bdevsw *bdevsw);
+dev_t	chrtoblk(dev_t dev);
+int	isdisk(dev_t dev, int type);
+int	iskmemdev(dev_t dev);
+int	iszerodev(dev_t dev);
+void	setconf(void);
 #endif /* _KERNEL */
 
 #include <machine/conf.h>
