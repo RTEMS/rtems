@@ -123,29 +123,6 @@ extern struct cdevsw *cdevsw[];
 #endif
 
 /*
- * Line discipline switch table
- */
-struct linesw {
-	l_open_t	*l_open;
-	l_close_t	*l_close;
-	l_read_t	*l_read;
-	l_write_t	*l_write;
-	l_ioctl_t	*l_ioctl;
-	l_rint_t	*l_rint;
-	l_start_t	*l_start;
-	l_modem_t	*l_modem;
-};
-
-#ifdef _KERNEL
-extern struct linesw linesw[];
-extern int nlinesw;
-
-int ldisc_register __P((int , struct linesw *));
-void ldisc_deregister __P((int));
-#define LDISC_LOAD 	-1		/* Loadable line discipline */
-#endif
-
-/*
  * Swap device table
  */
 struct swdevt {
