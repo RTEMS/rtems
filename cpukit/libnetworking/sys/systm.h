@@ -79,60 +79,60 @@ extern int bootverbose;		/* nonzero to print verbose messages */
 /*
  * General function declarations.
  */
-void	Debugger __P((const char *msg));
-int	nullop __P((void));
-int	eopnotsupp __P((void));
-int	einval __P((void));
-int	seltrue __P((dev_t dev, int which, struct proc *p));
-int	ureadc __P((int, struct uio *));
-void	*hashinit __P((int count, int type, u_long *hashmask));
-void	*phashinit __P((int count, int type, u_long *nentries));
+void	Debugger(const char *msg);
+int	nullop(void);
+int	eopnotsupp(void);
+int	einval(void);
+int	seltrue(dev_t dev, int which, struct proc *p);
+int	ureadc(int, struct uio *);
+void	*hashinit(int count, int type, u_long *hashmask);
+void	*phashinit(int count, int type, u_long *nentries);
 
-void	panic __P((const char *, ...)) __dead2;
-void	boot __P((int)) __dead2;
-void	cpu_boot __P((int));
-void	tablefull __P((const char *));
-int	addlog __P((const char *, ...));
-int	kvprintf __P((char const *, void (*)(int, void*), void *, int,
-		      _BSD_VA_LIST_));
-void	log __P((int, const char *, ...));
-int	printf __P((const char *, ...));
-int	sprintf __P((char *buf, const char *, ...));
-void	uprintf __P((const char *, ...));
-void	ttyprintf __P((struct tty *, const char *, ...));
+void	panic(const char *, ...)) __dead2;
+void	boot(int)) __dead2;
+void	cpu_boot(int);
+void	tablefull(const char *);
+int	addlog(const char *, ...);
+int	kvprintf(char const *, void (*)(int, void*), void *, int,
+		      _BSD_VA_LIST_);
+void	log(int, const char *, ...);
+int	printf(const char *, ...);
+int	sprintf(char *buf, const char *, ...);
+void	uprintf(const char *, ...);
+void	ttyprintf(struct tty *, const char *, ...);
 
 #define bcopy(f,t,n) memcpy((t),(f),(n))
 #define bzero(p,n) memset((p),(0),(n))
 
-int	copystr __P((const void *kfaddr, void *kdaddr, size_t len,
-		size_t *lencopied));
-int	copyinstr __P((const void *udaddr, void *kaddr, size_t len,
-		size_t *lencopied));
-int	copyin __P((const void *udaddr, void *kaddr, size_t len));
-int	copyout __P((const void *kaddr, void *udaddr, size_t len));
+int	copystr(const void *kfaddr, void *kdaddr, size_t len,
+		size_t *lencopied);
+int	copyinstr(const void *udaddr, void *kaddr, size_t len,
+		size_t *lencopied);
+int	copyin(const void *udaddr, void *kaddr, size_t len);
+int	copyout(const void *kaddr, void *udaddr, size_t len);
 
-int	fubyte __P((const void *base));
-int	fuibyte __P((const void *base));
-int	subyte __P((void *base, int byte));
-int	suibyte __P((void *base, int byte));
-int	fuword __P((const void *base));
-int	suword __P((void *base, int word));
-int	susword __P((void *base, int word));
+int	fubyte(const void *base);
+int	fuibyte(const void *base);
+int	subyte(void *base, int byte);
+int	suibyte(void *base, int byte);
+int	fuword(const void *base);
+int	suword(void *base, int word);
+int	susword(void *base, int word);
 
-int	hzto __P((struct timeval *tv));
-void	realitexpire __P((void *));
+int	hzto(struct timeval *tv);
+void	realitexpire(void *);
 
 struct clockframe;
-void	hardclock __P((struct clockframe *frame));
-void	softclock __P((void));
-void	statclock __P((struct clockframe *frame));
+void	hardclock(struct clockframe *frame);
+void	softclock(void);
+void	statclock(struct clockframe *frame);
 
-void	startprofclock __P((struct proc *));
-void	stopprofclock __P((struct proc *));
-void	setstatclockrate __P((int hzrate));
+void	startprofclock(struct proc *);
+void	stopprofclock(struct proc *);
+void	setstatclockrate(int hzrate);
 
-void	hardupdate __P((long));
-void	hardpps __P((struct timeval *tvp, long usec));
+void	hardupdate(long);
+void	hardpps(struct timeval *tvp, long usec);
 
 #include <sys/libkern.h>
 
@@ -144,14 +144,14 @@ extern void vntblinit(void);
 extern void nchinit(void);
 
 /* Finalize the world. */
-void	shutdown_nice __P((void));
+void	shutdown_nice(void);
 
 /*
  * Kernel to clock driver interface.
  */
-void	inittodr __P((time_t base));
-void	resettodr __P((void));
-void	startrtclock __P((void));
+void	inittodr(time_t base);
+void	resettodr(void);
+void	startrtclock(void);
 
 /* Timeouts */
 typedef void (timeout_t)(void *); /* actual timeout function type */
@@ -159,7 +159,7 @@ typedef timeout_t *timeout_func_t; /* a pointer to this type */
 
 void timeout(timeout_func_t, void *, int);
 void untimeout(timeout_func_t, void *);
-void	logwakeup __P((void));
+void	logwakeup(void);
 
 /* Various other callout lists that modules might want to know about */
 /* shutdown callout list definitions */
@@ -193,7 +193,7 @@ extern watchdog_tickle_fn wdog_tickler;
  * Common `proc' functions are declared here so that proc.h can be included
  * less often.
  */
-int	tsleep __P((void *chan, int pri, char *wmesg, int timo));
-void	wakeup __P((void *chan));
+int	tsleep(void *chan, int pri, char *wmesg, int timo);
+void	wakeup(void *chan);
 
 #endif /* !_SYS_SYSTM_H_ */

@@ -283,10 +283,10 @@ struct	ifconf {
 /* XXX - this should go away soon. */
 #include <net/if_var.h>
 
-void	ifafree __P((struct ifaddr *));
+void	ifafree(struct ifaddr *);
 
-int	looutput __P((struct ifnet *,
-	   struct mbuf *, struct sockaddr *, struct rtentry *));
+int	looutput(struct ifnet *,
+	   struct mbuf *, struct sockaddr *, struct rtentry *);
 #endif
 
 #endif /* !_NET_IF_H_ */

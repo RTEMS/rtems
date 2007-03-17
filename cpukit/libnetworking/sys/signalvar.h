@@ -151,21 +151,21 @@ static int sigprop[NSIG + 1] = {
 /*
  * Machine-independent functions:
  */
-void	execsigs __P((struct proc *p));
-void	gsignal __P((int pgid, int sig));
-int	issignal __P((struct proc *p));
-void	killproc __P((struct proc *p, char *why));
-void	pgsignal __P((struct pgrp *pgrp, int sig, int checkctty));
-void	postsig __P((int sig));
-void	psignal __P((struct proc *p, int sig));
-void	setsigvec __P((struct proc *p, int signum, struct sigaction *sa));
-void	sigexit __P((struct proc *p, int signum));
-void	siginit __P((struct proc *p));
-void	trapsignal __P((struct proc *p, int sig, u_long code));
+void	execsigs(struct proc *p);
+void	gsignal(int pgid, int sig);
+int	issignal(struct proc *p);
+void	killproc(struct proc *p, char *why);
+void	pgsignal(struct pgrp *pgrp, int sig, int checkctty);
+void	postsig(int sig);
+void	psignal(struct proc *p, int sig);
+void	setsigvec(struct proc *p, int signum, struct sigaction *sa);
+void	sigexit(struct proc *p, int signum);
+void	siginit(struct proc *p);
+void	trapsignal(struct proc *p, int sig, u_long code);
 
 /*
  * Machine-dependent functions:
  */
-void	sendsig __P((sig_t action, int sig, int returnmask, u_long code));
+void	sendsig(sig_t action, int sig, int returnmask, u_long code);
 #endif	/* _KERNEL */
 #endif	/* !_SYS_SIGNALVAR_H_ */
