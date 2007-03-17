@@ -60,9 +60,9 @@
 	{ NULL,	NULL,	NULL,	NULL, \
 	  NULL,	NULL,	NULL,	NULL }
 /*
- * FIXME: change linesw entries consistant with linesw entry usage...
+ * FIXME: change rtems_termios_linesw entries consistant with rtems_termios_linesw entry usage...
  */
-struct	linesw linesw[MAXLDISC] =
+struct	rtems_termios_linesw rtems_termios_linesw[MAXLDISC] =
 {
 	NODISC(0),		/* 0- termios-built-in */
 	NODISC(1),		/* 1- defunct */
@@ -74,7 +74,7 @@ struct	linesw linesw[MAXLDISC] =
 	NODISC(7),		/* loadable */
 };
 
-int	nlinesw = sizeof (linesw) / sizeof (linesw[0]);
+int	rtems_termios_nlinesw = sizeof (rtems_termios_linesw) / sizeof (rtems_termios_linesw[0]);
 
 extern struct rtems_termios_tty *rtems_termios_ttyHead;
 extern struct rtems_termios_tty *rtems_termios_ttyTail;
@@ -364,11 +364,11 @@ rtems_termios_close (void *arg)
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_fatal_error_occurred (sc);
 	if (--tty->refcount == 0) {
-                if (linesw[tty->t_line].l_close != NULL) {
+                if (rtems_termios_linesw[tty->t_line].l_close != NULL) {
 			/*
 			 * call discipline-specific close
 			 */
-			sc = linesw[tty->t_line].l_close(tty);
+			sc = rtems_termios_linesw[tty->t_line].l_close(tty);
 		}
 		else {
 			/*
@@ -525,8 +525,8 @@ rtems_termios_ioctl (void *arg)
 	}
 	switch (args->command) {
 	default:
-		if (linesw[tty->t_line].l_ioctl != NULL) {
-			sc = linesw[tty->t_line].l_ioctl(tty,args);
+		if (rtems_termios_linesw[tty->t_line].l_ioctl != NULL) {
+			sc = rtems_termios_linesw[tty->t_line].l_ioctl(tty,args);
 		}
 		else {
 			sc = RTEMS_INVALID_NUMBER;
@@ -596,16 +596,16 @@ rtems_termios_ioctl (void *arg)
 		/*
 		 * close old line discipline
 		 */
-		if (linesw[tty->t_line].l_close != NULL) {
-			sc = linesw[tty->t_line].l_close(tty);
+		if (rtems_termios_linesw[tty->t_line].l_close != NULL) {
+			sc = rtems_termios_linesw[tty->t_line].l_close(tty);
 		}
 		tty->t_line=*(int*)(args->buffer);
 		tty->t_sc = NULL; /* ensure that no more valid data */
 		/*
 		 * open new line discipline
 		 */
-		if (linesw[tty->t_line].l_open != NULL) {
-			sc = linesw[tty->t_line].l_open(tty);
+		if (rtems_termios_linesw[tty->t_line].l_open != NULL) {
+			sc = rtems_termios_linesw[tty->t_line].l_open(tty);
 		}
 		break;
 	case TIOCGETD:
@@ -755,8 +755,8 @@ rtems_termios_write (void *arg)
 	sc = rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		return sc;
-	if (linesw[tty->t_line].l_write != NULL) {
-		sc = linesw[tty->t_line].l_write(tty,args);
+	if (rtems_termios_linesw[tty->t_line].l_write != NULL) {
+		sc = rtems_termios_linesw[tty->t_line].l_write(tty,args);
 		rtems_semaphore_release (tty->osem);
 		return sc;
 	}
@@ -1090,8 +1090,8 @@ rtems_termios_read (void *arg)
 	sc = rtems_semaphore_obtain (tty->isem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		return sc;
-	if (linesw[tty->t_line].l_read != NULL) {
-		sc = linesw[tty->t_line].l_read(tty,args);
+	if (rtems_termios_linesw[tty->t_line].l_read != NULL) {
+		sc = rtems_termios_linesw[tty->t_line].l_read(tty,args);
 		tty->tty_rcvwakeup = 0;
 		rtems_semaphore_release (tty->isem);
 		return sc;
@@ -1146,10 +1146,10 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	boolean flow_rcv = FALSE; /* TRUE, if flow control char received */
 	rtems_interrupt_level level;
 
-	if (linesw[tty->t_line].l_rint != NULL) {
+	if (rtems_termios_linesw[tty->t_line].l_rint != NULL) {
 	  while (len--) {
 	    c = *buf++;
-	    linesw[tty->t_line].l_rint(c,tty);
+	    rtems_termios_linesw[tty->t_line].l_rint(c,tty);
 	  }
 
 	  /*
@@ -1416,8 +1416,8 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 		/*
 		 * call any line discipline start function
 		 */
-		if (linesw[tty->t_line].l_start != NULL) {
-			linesw[tty->t_line].l_start(tty);
+		if (rtems_termios_linesw[tty->t_line].l_start != NULL) {
+			rtems_termios_linesw[tty->t_line].l_start(tty);
 		}
 		return 0; /* nothing to output in IRQ... */
 	}
@@ -1451,8 +1451,8 @@ static rtems_task rtems_termios_txdaemon(rtems_task_argument argument)
 			/*
 			 * call any line discipline start function
 			 */
-			if (linesw[tty->t_line].l_start != NULL) {
-				linesw[tty->t_line].l_start(tty);
+			if (rtems_termios_linesw[tty->t_line].l_start != NULL) {
+				rtems_termios_linesw[tty->t_line].l_start(tty);
 			}
 			/*
 			 * try to push further characters to device

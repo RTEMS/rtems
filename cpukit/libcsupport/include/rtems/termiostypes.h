@@ -131,7 +131,7 @@ struct rtems_termios_tty {
 	int              tty_rcvwakeup;
 };
 
-struct linesw {
+struct rtems_termios_linesw {
   int (*l_open) (struct rtems_termios_tty *tp);
   int (*l_close)(struct rtems_termios_tty *tp);
   int (*l_read )(struct rtems_termios_tty *tp,rtems_libio_rw_args_t *args);
@@ -165,8 +165,8 @@ void rtems_termios_puts (const void *buf,
 /*
  * global hooks for line disciplines
  */
-extern struct linesw linesw[];
-extern int nlinesw;
+extern struct rtems_termios_linesw rtems_termios_linesw[];
+extern int rtems_termios_nlinesw;
 
 #define	TTYDISC		0		/* termios tty line discipline */
 #define	TABLDISC	3		/* tablet discipline */
