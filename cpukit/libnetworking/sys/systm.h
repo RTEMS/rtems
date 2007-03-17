@@ -88,8 +88,8 @@ int	ureadc(int, struct uio *);
 void	*hashinit(int count, int type, u_long *hashmask);
 void	*phashinit(int count, int type, u_long *nentries);
 
-void	panic(const char *, ...)) __dead2;
-void	boot(int)) __dead2;
+void	panic(const char *, ...) __dead2;
+void	boot(int) __dead2;
 void	cpu_boot(int);
 void	tablefull(const char *);
 int	addlog(const char *, ...);
