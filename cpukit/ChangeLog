@@ -1,5 +1,7 @@
 2007-03-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/buf.h, libnetworking/sys/conf.h:
+	Remove __P().
 	* libnetworking/net/if.h, libnetworking/net/if_ppp.h,
 	libnetworking/sys/signalvar.h, libnetworking/sys/systm.h:
 	Remove __P().
