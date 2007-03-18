@@ -1,5 +1,6 @@
 2007-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/conf.h: Remove non-implemented/unused symbols.
 	* libnetworking/net/ppp_tty.c: Use struct rtems_termios_linesw
 	instead of struct linesw (PR 1229)
 	* libnetworking/sys/systm.h: Comment out copyin/copyout to work
