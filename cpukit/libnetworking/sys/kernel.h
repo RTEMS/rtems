@@ -194,7 +194,7 @@ typedef enum sysinit_elem_type {
 struct sysinit {
 	unsigned int	subsystem;		/* subsystem identifier*/
 	unsigned int	order;			/* init order within subsystem*/
-	void		(*func) __P((void *));	/* init function*/
+	void		(*func)(void *);	/* init function*/
 	void		*udata;			/* multiplexer/argument */
 	si_elem_t	type;			/* sysinit_elem_type*/
 };
@@ -219,11 +219,11 @@ struct sysinit {
  */
 struct kproc_desc {
 	char		*arg0;			/* arg 0 (for 'ps' listing)*/
-	void		(*func) __P((void));	/* "main" for kernel process*/
+	void		(*func)(void);	/* "main" for kernel process*/
 	struct proc	**global_procpp;	/* ptr to proc ptr save area*/
 };
 
-void	kproc_start __P((void *udata));
+void	kproc_start(void *udata);
 
 #ifdef PSEUDO_LKM
 #include <sys/conf.h>

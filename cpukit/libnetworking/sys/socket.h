@@ -123,7 +123,7 @@ struct	linger {
  */
 struct socket;
 struct	sockwakeup {
-	void	(*sw_pfn) __P((struct socket *, caddr_t));
+	void	(*sw_pfn)(struct socket *, caddr_t);
 	caddr_t	sw_arg;
 };
 

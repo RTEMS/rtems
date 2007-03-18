@@ -68,26 +68,26 @@ struct protosw {
 	short	pr_protocol;		/* protocol number */
 	short	pr_flags;		/* see below */
 /* protocol-protocol hooks */
-	void	(*pr_input) __P((struct mbuf *, int len));
+	void	(*pr_input)(struct mbuf *, int len);
 					/* input to protocol (from below) */
-	int	(*pr_output)	__P((struct mbuf *m, struct socket *so));
+	int	(*pr_output)(struct mbuf *m, struct socket *so);
 					/* output to protocol (from above) */
-	void	(*pr_ctlinput)__P((int, struct sockaddr *, void *));
+	void	(*pr_ctlinput)(int, struct sockaddr *, void *);
 					/* control input (from below) */
-	int	(*pr_ctloutput)__P((int, struct socket *, int, int,
-				    struct mbuf **));
+	int	(*pr_ctloutput)(int, struct socket *, int, int,
+				    struct mbuf **);
 					/* control output (from above) */
 /* user-protocol hook */
-	int	(*pr_ousrreq) __P((struct socket *, int, struct mbuf *,
-				   struct mbuf *, struct mbuf *));
+	int	(*pr_ousrreq)(struct socket *, int, struct mbuf *,
+				   struct mbuf *, struct mbuf *);
 					/* user request: see list below */
 /* utility hooks */
-	void	(*pr_init) __P((void));	/* initialization hook */
-	void	(*pr_fasttimo) __P((void));
+	void	(*pr_init)(void);	/* initialization hook */
+	void	(*pr_fasttimo)(void);
 					/* fast timeout (200ms) */
-	void	(*pr_slowtimo) __P((void));
+	void	(*pr_slowtimo)(void);
 					/* slow timeout (500ms) */
-	void	(*pr_drain) __P((void));
+	void	(*pr_drain)(void);
 					/* flush any excess space possible */
 	struct	pr_usrreqs *pr_usrreqs;	/* supersedes pr_usrreq() */
 };
@@ -171,33 +171,33 @@ struct ifnet;
  * If the ordering here looks odd, that's because it's alphabetical.
  */
 struct pr_usrreqs {
-	int	(*pru_abort) __P((struct socket *so));
-	int	(*pru_accept) __P((struct socket *so, struct mbuf *nam));
-	int	(*pru_attach) __P((struct socket *so, int proto));
-	int	(*pru_bind) __P((struct socket *so, struct mbuf *nam));
-	int	(*pru_connect) __P((struct socket *so, struct mbuf *nam));
-	int	(*pru_connect2) __P((struct socket *so1, struct socket *so2));
-	int	(*pru_control) __P((struct socket *so, int cmd, caddr_t data,
-				    struct ifnet *ifp));
-	int	(*pru_detach) __P((struct socket *so));
-	int	(*pru_disconnect) __P((struct socket *so));
-	int	(*pru_listen) __P((struct socket *so));
-	int	(*pru_peeraddr) __P((struct socket *so, struct mbuf *nam));
-	int	(*pru_rcvd) __P((struct socket *so, int flags));
-	int	(*pru_rcvoob) __P((struct socket *so, struct mbuf *m,
-				   int flags));
+	int	(*pru_abort)(struct socket *so);
+	int	(*pru_accept)(struct socket *so, struct mbuf *nam);
+	int	(*pru_attach)(struct socket *so, int proto);
+	int	(*pru_bind)(struct socket *so, struct mbuf *nam);
+	int	(*pru_connect)(struct socket *so, struct mbuf *nam);
+	int	(*pru_connect2)(struct socket *so1, struct socket *so2);
+	int	(*pru_control)(struct socket *so, int cmd, caddr_t data,
+				    struct ifnet *ifp);
+	int	(*pru_detach)(struct socket *so);
+	int	(*pru_disconnect)(struct socket *so);
+	int	(*pru_listen)(struct socket *so);
+	int	(*pru_peeraddr)(struct socket *so, struct mbuf *nam);
+	int	(*pru_rcvd)(struct socket *so, int flags);
+	int	(*pru_rcvoob)(struct socket *so, struct mbuf *m,
+				   int flags);
 	/*
 	 * The `m' parameter here is almost certainly going to become a
 	 * `struct uio' at some point in the future.  Similar changes
 	 * will probably happen for the receive entry points.
 	 */
-	int	(*pru_send) __P((struct socket *so, int flags, struct mbuf *m, 
-			      struct mbuf *addr, struct mbuf *control));
+	int	(*pru_send)(struct socket *so, int flags, struct mbuf *m, 
+			      struct mbuf *addr, struct mbuf *control);
 #define	PRUS_OOB	0x1
 #define	PRUS_EOF	0x2
-	int	(*pru_sense) __P((struct socket *so, struct stat *sb));
-	int	(*pru_shutdown) __P((struct socket *so));
-	int	(*pru_sockaddr) __P((struct socket *so, struct mbuf *nam));
+	int	(*pru_sense)(struct socket *so, struct stat *sb);
+	int	(*pru_shutdown)(struct socket *so);
+	int	(*pru_sockaddr)(struct socket *so, struct mbuf *nam);
 };
 
 int	pru_accept_notsupp(struct socket *so, struct mbuf *nam);

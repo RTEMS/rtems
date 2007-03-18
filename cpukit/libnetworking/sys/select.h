@@ -54,8 +54,8 @@ struct selinfo {
 #ifdef _KERNEL
 struct proc;
 
-void	selrecord __P((struct proc *selector, struct selinfo *));
-void	selwakeup __P((struct selinfo *));
+void	selrecord(struct proc *selector, struct selinfo *);
+void	selwakeup(struct selinfo *);
 #endif
 
 /* Check the first NFDS descriptors each in READFDS (if not NULL) for read

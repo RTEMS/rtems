@@ -41,7 +41,7 @@
 struct callout {
 	struct	callout *c_next;		/* next callout in queue */
 	void	*c_arg;				/* function argument */
-	void	(*c_func) __P((void *));	/* function to call */
+	void	(*c_func)(void *);		/* function to call */
 	int	c_time;				/* ticks to the event */
 };
 

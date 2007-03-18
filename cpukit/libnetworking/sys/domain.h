@@ -48,7 +48,7 @@ struct domain {
 	void	(*dom_init)		/* initialize domain data structures */
 		(void);
 	int	(*dom_externalize)	/* externalize access rights */
-		__P((struct mbuf *));
+		(struct mbuf *);
 	void	(*dom_dispose)		/* dispose of internalized rights */
 		(struct mbuf *);
 	struct	protosw *dom_protosw, *dom_protoswNPROTOSW;

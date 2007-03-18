@@ -53,12 +53,12 @@ struct ucred {
 #ifdef _KERNEL
 #define	crhold(cr)	(cr)->cr_ref++
 
-struct ucred	*crcopy __P((struct ucred *cr));
-struct ucred	*crdup __P((struct ucred *cr));
-void		crfree __P((struct ucred *cr));
-struct ucred	*crget __P((void));
-int		suser __P((struct ucred *cred, u_short *acflag));
-int		groupmember __P((gid_t gid, struct ucred *cred));
+struct ucred	*crcopy(struct ucred *cr);
+struct ucred	*crdup(struct ucred *cr);
+void		crfree(struct ucred *cr);
+struct ucred	*crget(void);
+int		suser(struct ucred *cred, u_short *acflag);
+int		groupmember(gid_t gid, struct ucred *cred);
 #endif /* _KERNEL */
 
 #endif /* !_SYS_UCRED_H_ */
