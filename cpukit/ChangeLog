@@ -1,5 +1,9 @@
 2007-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ppp_tty.c: Use struct rtems_termios_linesw
+	instead of struct linesw (PR 1229)
+	* libnetworking/sys/systm.h: Comment out copyin/copyout to work
+	around clash with defines from rtems_bsdnet_internal.h.
 	* score/src/heapwalk.c: include stdlib.h.
 
 2007-03-17	Ralf Corsépius <ralf.corsepius@rtems.org>
