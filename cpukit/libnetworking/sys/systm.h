@@ -52,12 +52,6 @@ extern const char *panicstr;	/* panic message */
 extern char version[];		/* system version */
 extern char copyright[];	/* system copyright */
 
-extern int nblkdev;		/* number of entries in bdevsw */
-extern int nchrdev;		/* number of entries in cdevsw */
-extern struct swdevt *swdevt;	/* swap-device information */
-extern int nswdev;		/* number of swap devices */
-extern int nswap;		/* size of swap space */
-
 extern int selwait;		/* select timeout address */
 
 extern u_char curpriority;	/* priority of current process */
