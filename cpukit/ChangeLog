@@ -1,5 +1,13 @@
 2007-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/ucred.h: Remove __P().
+	* libnetworking/sys/callout.h: Remove __P().
+	* libnetworking/sys/domain.h: Remove __P().
+	* libnetworking/sys/socketvar.h: Remove __P().
+	* libnetworking/sys/socket.h: Remove __P().
+	* libnetworking/sys/select.h: Remove __P().
+	* libnetworking/sys/kernel.h: Remove __P().
+	* libnetworking/sys/protosw.h: Remove __P().
 	* libnetworking/sys/conf.h: Remove bdevsw, cdevsw, swdevt (Unused).
 	* libnetworking/sys/systm.h: Remove nblkdev, nchrdev,
 	swdevt, nswdev, nswap (Unused).
