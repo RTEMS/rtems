@@ -170,7 +170,7 @@ static void pppasyncrelinq(struct ppp_softc *);
  * Define the PPP line discipline.
  */
 
-static struct linesw pppdisc = {
+static struct rtems_termios_linesw pppdisc = {
 	pppopen, pppclose, pppread, pppwrite,
 	pppinput, pppstart, ppptioctl, NULL
 };
@@ -178,7 +178,7 @@ static struct linesw pppdisc = {
 void
 pppasyncattach()
 {
-    linesw[PPPDISC] = pppdisc;
+    rtems_termios_linesw[PPPDISC] = pppdisc;
 }
 
 TEXT_SET(pseudo_set, pppasyncattach);
