@@ -1,5 +1,6 @@
 2007-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/conf.h: Remove bdevsw, cdevsw, swdevt (Unused).
 	* libnetworking/sys/systm.h: Remove nblkdev, nchrdev,
 	swdevt, nswdev, nswap (Unused).
 
