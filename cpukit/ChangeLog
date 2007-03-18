@@ -1,5 +1,10 @@
 2007-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/ucred.h: Remove crcopy, crdup, crfree, crget,
+	  crhold (Unused/non-implemented).
+
+2007-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/sys/ucred.h: Remove __P().
 	* libnetworking/sys/callout.h: Remove __P().
 	* libnetworking/sys/domain.h: Remove __P().

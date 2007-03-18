@@ -51,14 +51,7 @@ struct ucred {
 #define FSCRED ((struct ucred *)-1)	/* filesystem credential */
 
 #ifdef _KERNEL
-#define	crhold(cr)	(cr)->cr_ref++
-
-struct ucred	*crcopy(struct ucred *cr);
-struct ucred	*crdup(struct ucred *cr);
-void		crfree(struct ucred *cr);
-struct ucred	*crget(void);
 int		suser(struct ucred *cred, u_short *acflag);
-int		groupmember(gid_t gid, struct ucred *cred);
 #endif /* _KERNEL */
 
 #endif /* !_SYS_UCRED_H_ */
