@@ -15,6 +15,8 @@
 #include "config.h"
 #endif
 
+#include <stdlib.h> /* abort */
+
 #include <rtems/system.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>

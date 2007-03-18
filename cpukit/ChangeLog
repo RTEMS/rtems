@@ -1,3 +1,7 @@
+2007-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/src/heapwalk.c: include stdlib.h.
+
 2007-03-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/buf.h, libnetworking/sys/conf.h:
