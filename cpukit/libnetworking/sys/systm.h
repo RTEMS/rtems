@@ -108,8 +108,11 @@ int	copystr(const void *kfaddr, void *kdaddr, size_t len,
 		size_t *lencopied);
 int	copyinstr(const void *udaddr, void *kaddr, size_t len,
 		size_t *lencopied);
+#ifndef __rtems__
+/* FIXME: these clash with defines in rtems_bsdnet_internal.h */
 int	copyin(const void *udaddr, void *kaddr, size_t len);
 int	copyout(const void *kaddr, void *udaddr, size_t len);
+#endif
 
 int	fubyte(const void *base);
 int	fuibyte(const void *base);
