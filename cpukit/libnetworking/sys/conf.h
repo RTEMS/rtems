@@ -78,63 +78,6 @@ typedef int l_rint_t(int c, struct tty *tp);
 typedef int l_start_t(struct tty *tp);
 typedef int l_modem_t(struct tty *tp, int flag);
 
-/*
- * Block device switch table
- */
-struct bdevsw {
-	d_open_t	*d_open;
-	d_close_t	*d_close;
-	d_strategy_t	*d_strategy;
-	d_ioctl_t	*d_ioctl;
-	d_dump_t	*d_dump;
-	d_psize_t	*d_psize;
-	int		d_flags;
-	char 		*d_name;	/* name of the driver e.g. audio */
-	struct cdevsw	*d_cdev; 	/* cross pointer to the cdev */
-	int		d_maj;		/* the major number we were assigned */
-};
-
-#ifdef _KERNEL
-extern struct bdevsw *bdevsw[];
-#endif
-
-/*
- * Character device switch table
- */
-struct cdevsw {
-	d_open_t	*d_open;
-	d_close_t	*d_close;
-	d_read_t	*d_read;
-	d_write_t	*d_write;
-	d_ioctl_t	*d_ioctl;
-	d_stop_t	*d_stop;
-	d_reset_t	*d_reset;	/* XXX not used */
-	d_devtotty_t	*d_devtotty;
-	d_select_t	*d_select;
-	d_mmap_t	*d_mmap;
-	d_strategy_t	*d_strategy;
-	char		*d_name;	/* see above */
-	struct bdevsw	*d_bdev;
-	int		d_maj;
-};
-
-#ifdef _KERNEL
-extern struct cdevsw *cdevsw[];
-#endif
-
-/*
- * Swap device table
- */
-struct swdevt {
-	dev_t	sw_dev;
-	int	sw_flags;
-	int	sw_nblks;
-	struct	vnode *sw_vp;
-};
-#define	SW_FREED	0x01
-#define	SW_SEQUENTIAL	0x02
-#define	sw_freed	sw_flags	/* XXX compat */
-
 #include <machine/conf.h>
 
 #endif /* !_SYS_CONF_H_ */
