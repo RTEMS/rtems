@@ -57,10 +57,6 @@ $(PROJECT_INCLUDE)/machine/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/machine/$(dirstamp)
 
-$(PROJECT_INCLUDE)/machine/conf.h: machine/conf.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/conf.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/conf.h
-
 $(PROJECT_INCLUDE)/machine/cpu.h: machine/cpu.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/cpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/cpu.h
