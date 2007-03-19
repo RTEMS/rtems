@@ -1,5 +1,13 @@
 2007-03-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/conf.h: Don't include machine/conf.h.
+	Update copyright notice.
+	Remove unused/non-implemented declarations.
+	* libnetworking/Makefile.am: Remove machine/conf.h.
+	* libnetworking/machine/conf.h: Remove.
+
+2007-03-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/sys/systm.h: Update copyright notice from FreeBSD.
 	Remove many non-supported/unused declarations.
 
