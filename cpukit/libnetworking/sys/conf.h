@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 1990, 1993
  *	The Regents of the University of California.  All rights reserved.
+ * Copyright (c) 2000
+ *	Poul-Henning Kamp.  All rights reserved.
  * (c) UNIX System Laboratories, Inc.
  * All or some portions of this file are derived from material licensed
  * to the University of California by American Telephone and Telegraph
@@ -15,10 +17,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -36,11 +34,17 @@
  * SUCH DAMAGE.
  *
  *	@(#)conf.h	8.5 (Berkeley) 1/9/95
+ * $FreeBSD: src/sys/sys/conf.h,v 1.231 2007/02/02 22:27:45 bms Exp $
+ */
+
+/*
  * $Id$
  */
 
 #ifndef _SYS_CONF_H_
 #define	_SYS_CONF_H_
+
+#ifdef _KERNEL
 
 /*
  * Definitions of device driver entry switches
@@ -51,33 +55,6 @@ struct proc;
 struct tty;
 struct uio;
 struct vnode;
-
-typedef int d_open_t(dev_t dev, int oflags, int devtype, struct proc *p);
-typedef int d_close_t(dev_t dev, int fflag, int devtype, struct proc *p);
-typedef void d_strategy_t(struct buf *bp);
-typedef int d_ioctl_t(dev_t dev, int cmd, caddr_t data,
-			   int fflag, struct proc *p);
-typedef int d_dump_t(dev_t dev);
-typedef int d_psize_t(dev_t dev);
-
-typedef int d_read_t(dev_t dev, struct uio *uio, int ioflag);
-typedef int d_write_t(dev_t dev, struct uio *uio, int ioflag);
-typedef void d_stop_t(struct tty *tp, int rw);
-typedef int d_reset_t(dev_t dev);
-typedef struct tty *d_devtotty_t(dev_t dev);
-typedef int d_select_t(dev_t dev, int which, struct proc *p);
-typedef int d_mmap_t(dev_t dev, int offset, int nprot);
-
-typedef int l_open_t(dev_t dev, struct tty *tp);
-typedef int l_close_t(struct tty *tp, int flag);
-typedef int l_read_t(struct tty *tp, struct uio *uio, int flag);
-typedef int l_write_t(struct tty *tp, struct uio *uio, int flag);
-typedef int l_ioctl_t(struct tty *tp, int cmd, caddr_t data,
-			   int flag, struct proc *p);
-typedef int l_rint_t(int c, struct tty *tp);
-typedef int l_start_t(struct tty *tp);
-typedef int l_modem_t(struct tty *tp, int flag);
-
-#include <machine/conf.h>
+#endif /* _KERNEL */
 
 #endif /* !_SYS_CONF_H_ */
