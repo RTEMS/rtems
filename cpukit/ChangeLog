@@ -1,5 +1,7 @@
 2007-03-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/buf.h: Remove unused/non-implemented bsd kernel
+	  symbols.
 	* libnetworking/sys/conf.h: Don't include machine/conf.h.
 	Update copyright notice.
 	Remove unused/non-implemented declarations.
