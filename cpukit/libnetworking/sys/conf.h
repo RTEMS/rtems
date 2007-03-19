@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 1990, 1993
  *	The Regents of the University of California.  All rights reserved.
+ * Copyright (c) 2000
+ *	Poul-Henning Kamp.  All rights reserved.
  * (c) UNIX System Laboratories, Inc.
  * All or some portions of this file are derived from material licensed
  * to the University of California by American Telephone and Telegraph
@@ -15,10 +17,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -199,7 +197,5 @@ int	iskmemdev __P((dev_t dev));
 int	iszerodev __P((dev_t dev));
 void	setconf __P((void));
 #endif /* _KERNEL */
-
-#include <machine/conf.h>
 
 #endif /* !_SYS_CONF_H_ */

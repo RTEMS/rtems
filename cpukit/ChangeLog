@@ -1,3 +1,10 @@
+2007-03-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/conf.h: Don't include machine/conf.h.
+	Update copyright notice.
+	* libnetworking/Makefile.am: Remove machine/conf.h.
+	* libnetworking/machine/conf.h: Remove.
+
 2007-03-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/src/heapwalk.c: include stdlib.h.
