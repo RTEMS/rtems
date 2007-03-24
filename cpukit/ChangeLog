@@ -1,5 +1,6 @@
 2007-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/Makefile.am: Remove nfs/nfs.h.
 	* libnetworking/nfs/nfs.h: Remove (Unused).
 
 2007-03-19	Ralf Corsépius <ralf.corsepius@rtems.org>
