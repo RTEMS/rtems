@@ -96,8 +96,7 @@ libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
 
 include_nfsdir = $(includedir)/nfs
 
-include_nfs_HEADERS = nfs/krpc.h
-include_nfs_HEADERS += nfs/nfsproto.h
+include_nfs_HEADERS = nfs/nfsproto.h
 include_nfs_HEADERS += nfs/rpcv2.h
 include_nfs_HEADERS += nfs/xdr_subs.h
 
