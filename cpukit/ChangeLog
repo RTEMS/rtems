@@ -1,5 +1,6 @@
 2007-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/kern/kern_subr.c: Remove #ifdef'ed vax code.
 	* libnetworking/Makefile.am: Remove nfs/nfs.h.
 	* libnetworking/nfs/nfs.h: Remove (Unused).
 
