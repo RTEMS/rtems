@@ -1,3 +1,7 @@
+2007-03-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/nfs/nfs.h: Remove (Unused).
+
 2007-03-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/buf.h: Remove unused/non-implemented bsd kernel
