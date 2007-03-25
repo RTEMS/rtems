@@ -38,12 +38,15 @@
 #include <sys/queue.h>			/* for TAILQ macros */
 #include <sys/select.h>			/* for struct selinfo */
 
+
 /*
  * Kernel structure per socket.
  * Contains send and receive buffer queues,
  * handle on protocol and pointer to protocol
  * private data and error information.
  */
+typedef	u_quad_t so_gen_t;
+
 struct socket {
 	short	so_type;		/* generic type, see socket.h */
 	short	so_options;		/* from socket call, see socket.h */
@@ -77,7 +80,7 @@ struct socket {
 /*
  * Variables for socket buffering.
  */
-	struct	sockbuf {
+	struct sockbuf {
 		u_int	sb_cc;		/* actual chars in buffer */
 		u_int	sb_hiwat;	/* max actual char count */
 		u_int	sb_mbcnt;	/* chars of mbufs used */
