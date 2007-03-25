@@ -256,10 +256,6 @@ $(PROJECT_INCLUDE)/nfs/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 
-$(PROJECT_INCLUDE)/nfs/krpc.h: nfs/krpc.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/krpc.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/krpc.h
-
 $(PROJECT_INCLUDE)/nfs/nfsproto.h: nfs/nfsproto.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/nfsproto.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/nfsproto.h
