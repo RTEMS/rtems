@@ -1,5 +1,6 @@
 2007-03-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/socketvar.h: Cosmetics from FreeBSD.
 	* libnetworking/netinet/if_ether.c: Remove __P().
 	* libnetworking/net/raw_cb.h, libnetworking/net/raw_usrreq.c:
 	More updates from FreeBSD.
