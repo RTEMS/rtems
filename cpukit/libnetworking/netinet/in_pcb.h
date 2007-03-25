@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)in_pcb.h	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/netinet/in_pcb.h,v 1.89 2006/07/18 22:34:27 ups Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -51,8 +51,8 @@ LIST_HEAD(inpcbhead, inpcb);
 typedef	u_int64_t inp_gen_t;
 
 struct inpcb {
-	LIST_ENTRY(inpcb) inp_list;		/* list for all PCBs of this proto */
-	LIST_ENTRY(inpcb) inp_hash;		/* hash list */
+	LIST_ENTRY(inpcb) inp_hash; /* hash list */
+	LIST_ENTRY(inpcb) inp_list; /* list for all PCBs of this proto */
 	struct	inpcbinfo *inp_pcbinfo;	/* PCB list info */
 	struct	in_addr inp_faddr;	/* foreign host table entry */
 	struct	in_addr inp_laddr;	/* local host table entry */
@@ -69,30 +69,19 @@ struct inpcb {
 	u_char	pad[1];			/* alignment */
 	struct	ip_moptions *inp_moptions; /* IP multicast options */
 	inp_gen_t	inp_gencnt;	/* generation count of this instance */
-#if 0 /* Someday, perhaps... */
-	struct	ip inp_ip;		/* header prototype; should have more */
-#endif
 };
 
 /*
  * Interface exported to userland by various protocols which use
  * inpcbs.  Hack alert -- only define if struct xsocket is in scope.
- * 
- * ccj - 20 Nov 2002
- * Double hack alert. This is taken from the pre 5.0 sources and
- * merged into RTEMS. This allows the TCPCTL_PCBLIST code in
- * net-snmp to work.
  */
 #ifdef _SYS_SOCKETVAR_H_
-typedef	u_int64_t so_gen_t; /* should be in sys/sockvar.h */
-
 struct	xinpcb {
 	size_t	xi_len;		/* length of this structure */
 	struct	inpcb xi_inp;
 /*	struct	xsocket xi_socket; ccj removed */
 	u_int64_t	xi_alignment_hack;
 };
-
 
 struct	xinpgen {
 	size_t	xig_len;	/* length of this structure */
@@ -102,9 +91,9 @@ struct	xinpgen {
 };
 #endif /* _SYS_SOCKETVAR_H_ */
 
-struct inpcbinfo {
-	struct inpcbhead *listhead;
-	struct inpcbhead *hashbase;
+struct inpcbinfo {		/* XXX documentation, prefixes */
+	struct	inpcbhead *listhead;
+	struct	inpcbhead *hashbase;
 	unsigned long hashmask;
 	unsigned short lastport;
 	unsigned short lastlow;
@@ -129,29 +118,28 @@ struct inpcbinfo {
 					INP_RECVIF)
 
 #define	INPLOOKUP_WILDCARD	1
-
 #define	sotoinpcb(so)	((struct inpcb *)(so)->so_pcb)
 
 #ifdef _KERNEL
-void	 in_losing __P((struct inpcb *));
-int	 in_pcballoc __P((struct socket *, struct inpcbinfo *));
-int	 in_pcbbind __P((struct inpcb *, struct mbuf *));
-int	 in_pcbconnect __P((struct inpcb *, struct mbuf *));
-void	 in_pcbdetach __P((struct inpcb *));
-void	 in_pcbdisconnect __P((struct inpcb *));
-int	 in_pcbladdr __P((struct inpcb *, struct mbuf *,
-	    struct sockaddr_in **));
+void	in_losing(struct inpcb *);
+int	in_pcballoc(struct socket *, struct inpcbinfo *);
+int	in_pcbbind(struct inpcb *, struct mbuf *);
+int	in_pcbconnect(struct inpcb *, struct mbuf *);
+void	in_pcbdetach(struct inpcb *);
+void	in_pcbdisconnect(struct inpcb *);
+int	in_pcbladdr(struct inpcb *, struct mbuf *,
+	    struct sockaddr_in **);
 struct inpcb *
-	 in_pcblookup __P((struct inpcbinfo *,
-	    struct in_addr, u_int, struct in_addr, u_int, int));
+	in_pcblookup(struct inpcbinfo *,
+	    struct in_addr, u_int, struct in_addr, u_int, int);
 struct inpcb *
-	 in_pcblookuphash __P((struct inpcbinfo *,
-	    struct in_addr, u_int, struct in_addr, u_int, int));
-void	 in_pcbnotify __P((struct inpcbhead *, struct sockaddr *,
-	    u_int, struct in_addr, u_int, int, void (*)(struct inpcb *, int)));
-void	 in_pcbrehash __P((struct inpcb *));
-void	 in_setpeeraddr __P((struct inpcb *, struct mbuf *));
-void	 in_setsockaddr __P((struct inpcb *, struct mbuf *));
-#endif
+	in_pcblookuphash(struct inpcbinfo *,
+	    struct in_addr, u_int, struct in_addr, u_int, int);
+void	in_pcbnotify(struct inpcbhead *, struct sockaddr *,
+	    u_int, struct in_addr, u_int, int, void (*)(struct inpcb *, int));
+void	in_pcbrehash(struct inpcb *);
+void	in_setpeeraddr(struct inpcb *, struct mbuf *);
+void	in_setsockaddr(struct inpcb *, struct mbuf *);
+#endif /* _KERNEL */
 
-#endif
+#endif /* !_NETINET_IN_PCB_H_ */
