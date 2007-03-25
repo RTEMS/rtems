@@ -1,5 +1,6 @@
 2007-03-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/in_var.h: Remove __P().
 	* libnetworking/netinet/in_systm.h: Remove __P().
 	* libnetworking/netinet/in_pcb.h: Partial updates from FreeBSD.
 	* libnetworking/sys/socketvar.h: Cosmetics from FreeBSD.
