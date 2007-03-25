@@ -56,7 +56,7 @@ void
 raw_init()
 {
 
-	rawcb.rcb_next = rawcb.rcb_prev = &rawcb;
+	LIST_INIT(&rawcb_list);
 }
 
 
@@ -76,11 +76,10 @@ raw_input(m0, proto, src, dst)
 {
 	register struct rawcb *rp;
 	register struct mbuf *m = m0;
-	register int sockets = 0;
 	struct socket *last;
 
 	last = 0;
-	for (rp = rawcb.rcb_next; rp != &rawcb; rp = rp->rcb_next) {
+	LIST_FOREACH(rp, &rawcb_list, list) {
 		if (rp->rcb_proto.sp_family != proto->sp_family)
 			continue;
 		if (rp->rcb_proto.sp_protocol  &&
@@ -110,7 +109,6 @@ raw_input(m0, proto, src, dst)
 					m_freem(n);
 				else {
 					sorwakeup(last);
-					sockets++;
 				}
 			}
 		}
@@ -122,7 +120,6 @@ raw_input(m0, proto, src, dst)
 			m_freem(m);
 		else {
 			sorwakeup(last);
-			sockets++;
 		}
 	} else
 		m_freem(m);

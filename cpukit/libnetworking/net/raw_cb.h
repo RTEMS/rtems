@@ -37,13 +37,14 @@
 #ifndef _NET_RAW_CB_H_
 #define _NET_RAW_CB_H_
 
+#include <sys/queue.h>
+
 /*
  * Raw protocol interface control block.  Used
  * to tie a socket to the generic raw interface.
  */
 struct rawcb {
-	struct	rawcb *rcb_next;	/* doubly linked list */
-	struct	rawcb *rcb_prev;
+	LIST_ENTRY(rawcb) list;
 	struct	socket *rcb_socket;	/* back pointer to socket */
 	struct	sockaddr *rcb_faddr;	/* destination address */
 	struct	sockaddr *rcb_laddr;	/* socket's address */
@@ -59,7 +60,7 @@ struct rawcb {
 #define	RAWRCVQ		8192
 
 #ifdef _KERNEL
-extern struct rawcb rawcb;		/* head of list */
+extern LIST_HEAD(rawcb_list_head, rawcb) rawcb_list;
 
 int	 raw_attach(struct socket *, int);
 void	 raw_ctlinput(int, struct sockaddr *, void *);
