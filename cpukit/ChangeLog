@@ -1,5 +1,7 @@
 2007-03-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/raw_cb.h, libnetworking/net/raw_usrreq.c:
+	More updates from FreeBSD.
 	* libnetworking/net/raw_cb.h, libnetworking/net/raw_usrreq.c,
 	libnetworking/net/route.h: Partial update from FreeBSD.
 
