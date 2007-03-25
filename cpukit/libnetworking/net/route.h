@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)route.h	8.4 (Berkeley) 1/9/95
- * $FreeBSD: src/sys/net/route.h,v 1.62 2004/10/05 19:48:33 sam Exp $
+ * $FreeBSD: src/sys/net/route.h,v 1.65 2006/03/15 19:39:09 andre Exp $
  */
 
 /*
@@ -115,9 +115,6 @@ struct rtentry {
 	struct	sockaddr *rt_genmask;	/* for generation of cloned routes */
 	caddr_t	rt_llinfo;		/* pointer to link level info cache */
 	struct	rtentry *rt_gwroute;	/* implied entry for gatewayed routes */
-	int	(*rt_output) __P((struct ifnet *, struct mbuf *,
-				  struct sockaddr *, struct rtentry *));
-					/* output routine for this (rt,if) */
 	struct	rtentry *rt_parent; 	/* cloning parent of this route */
 };
 
@@ -277,18 +274,18 @@ struct route_cb {
 extern struct route_cb route_cb;
 extern struct radix_node_head *rt_tables[AF_MAX+1];
 
-void	 route_init __P((void));
+void	 route_init(void);
 void	 rt_ifmsg(struct ifnet *);
 void	 rt_missmsg(int, struct rt_addrinfo *, int, int);
 void	 rt_newaddrmsg(int, struct ifaddr *, int, struct rtentry *);
 int	 rt_setgate(struct rtentry *, struct sockaddr *, struct sockaddr *);
-void	 rtalloc_ign __P((struct route *, unsigned long));
+void	 rtalloc_ign(struct route *, unsigned long);
 void	 rtalloc(struct route *ro); /* XXX deprecated, use rtalloc_ign(ro, 0) */
 struct rtentry *
-	 rtalloc1 __P((struct sockaddr *, int, unsigned long));
+	 rtalloc1(struct sockaddr *, int, unsigned long);
 void	 rtfree(struct rtentry *);
 int	 rtinit(struct ifaddr *, int, int);
-int	 rtioctl __P((int, caddr_t, struct proc *));
+int	 rtioctl(int, caddr_t, struct proc *);
 void	 rtredirect(struct sockaddr *, struct sockaddr *,
 	    struct sockaddr *, int, struct sockaddr *, struct rtentry **);
 int	 rtrequest(int, struct sockaddr *,
