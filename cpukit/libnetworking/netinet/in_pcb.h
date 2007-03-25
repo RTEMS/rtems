@@ -60,14 +60,22 @@ struct inpcb {
 	u_short	inp_lport;		/* local port */
 	caddr_t	inp_ppcb;		/* pointer to per-protocol pcb */
 	struct	socket *inp_socket;	/* back pointer to socket */
-	struct	mbuf *inp_options;	/* IP options */
 	struct	route inp_route;	/* placeholder for routing entry */
 	int	inp_flags;		/* generic IP/datagram flags */
-	u_char	inp_ip_tos;		/* type of service proto */
+	u_char	inp_vflag;		/* IP version flag (v4/v6) */
 	u_char	inp_ip_ttl;		/* time to live proto */
 	u_char	inp_ip_p;		/* protocol proto */
-	u_char	pad[1];			/* alignment */
-	struct	ip_moptions *inp_moptions; /* IP multicast options */
+	u_char	inp_ip_minttl;		/* minimum TTL or drop */
+
+	/* protocol dependent part; options */
+	struct {
+		u_char	inp4_ip_tos;		/* type of service proto */
+		struct	mbuf *inp4_options;	/* IP options */
+		struct	ip_moptions *inp4_moptions; /* IP multicast options */
+	} inp_depend4;
+#define	inp_ip_tos	inp_depend4.inp4_ip_tos
+#define	inp_options	inp_depend4.inp4_options
+#define	inp_moptions	inp_depend4.inp4_moptions
 	inp_gen_t	inp_gencnt;	/* generation count of this instance */
 };
 
