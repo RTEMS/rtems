@@ -27,7 +27,11 @@
  * SUCH DAMAGE.
  *
  *	@(#)udp_var.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: src/sys/netinet/udp_var.h,v 1.28 2004/08/16 18:32:07 rwatson Exp $
+ * $FreeBSD: src/sys/netinet/udp_var.h,v 1.29 2005/01/07 01:45:45 imp Exp $
+ */
+ 
+/*
+ * $Id$
  */
 
 #ifndef _NETINET_UDP_VAR_H_
@@ -37,7 +41,7 @@
  * UDP kernel structures and variables.
  */
 struct	udpiphdr {
-	struct 	ipovly ui_i;		/* overlaid ip structure */
+	struct	ipovly ui_i;		/* overlaid ip structure */
 	struct	udphdr ui_u;		/* udp header */
 };
 #define	ui_next		ui_i.ih_next
@@ -92,11 +96,11 @@ extern struct	inpcbhead udb;
 extern struct	inpcbinfo udbinfo;
 extern struct	udpstat udpstat;
 
-void	 udp_ctlinput __P((int, struct sockaddr *, void *));
-void	 udp_init __P((void));
-void	 udp_input __P((struct mbuf *, int));
-int	 udp_usrreq __P((struct socket *,
-	    int, struct mbuf *, struct mbuf *, struct mbuf *));
+void	udp_ctlinput(int, struct sockaddr *, void *);
+void	udp_init(void);
+void	udp_input(struct mbuf *, int);
+int	udp_usrreq(struct socket *,
+	    int, struct mbuf *, struct mbuf *, struct mbuf *);
 #endif
 
 #endif
