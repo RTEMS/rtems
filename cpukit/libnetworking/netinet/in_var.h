@@ -227,11 +227,11 @@ struct in_multistep {
 	IN_NEXT_MULTI((step), (inm)); \
 }
 
-struct	in_multi *in_addmulti __P((struct in_addr *, struct ifnet *));
-void	in_delmulti __P((struct in_multi *));
-int	in_control __P((struct socket *, u_long, caddr_t, struct ifnet *));
-void	in_rtqdrain __P((void));
-void	ip_input __P((struct mbuf *));
+struct	in_multi *in_addmulti(struct in_addr *, struct ifnet *);
+void	in_delmulti(struct in_multi *);
+int	in_control(struct socket *, u_long, caddr_t, struct ifnet *);
+void	in_rtqdrain(void);
+void	ip_input(struct mbuf *);
 
 #endif /* _KERNEL */
 
