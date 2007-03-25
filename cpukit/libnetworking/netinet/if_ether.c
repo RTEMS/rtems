@@ -106,9 +106,9 @@ SYSCTL_INT(_net_link_ether_inet, OID_AUTO, useloopback, CTLFLAG_RW,
 SYSCTL_INT(_net_link_ether_inet, OID_AUTO, proxyall, CTLFLAG_RW,
 	   &arp_proxyall, 0, "");
 
-static void	arp_rtrequest __P((int, struct rtentry *, struct sockaddr *));
-static void	arprequest __P((struct arpcom *, u_long *, u_long *, u_char *));
-void	arpintr __P((void));
+static void	arp_rtrequest(int, struct rtentry *, struct sockaddr *);
+static void	arprequest(struct arpcom *, u_long *, u_long *, u_char *);
+void	arpintr(void);
 static void	arptfree(struct llinfo_arp *);
 static void	arptimer(void *);
 static struct llinfo_arp
