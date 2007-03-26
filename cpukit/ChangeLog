@@ -1,5 +1,6 @@
 2007-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/ip_var.h: Eliminate __P().
 	* libnetworking/netinet/in.h: Eliminate __P().
 	* libnetworking/netinet/tcp_var.h: Eliminate __P().
 

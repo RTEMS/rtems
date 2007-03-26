@@ -174,39 +174,39 @@ extern int	(*legal_vif_num)(int);
 extern u_long	(*ip_mcast_src)(int);
 extern int rsvp_on;
 
-int	 ip_ctloutput __P((int, struct socket *, int, int, struct mbuf **));
+int	 ip_ctloutput(int, struct socket *, int, int, struct mbuf **);
 void	 ip_drain(void);
 void	 ip_freemoptions(struct ip_moptions *);
 void	 ip_init(void);
 extern int	 (*ip_mforward)(struct ip *, struct ifnet *, struct mbuf *,
 			  struct ip_moptions *);
-int	 ip_output __P((struct mbuf *,
-	    struct mbuf *, struct route *, int, struct ip_moptions *));
+int	 ip_output(struct mbuf *,
+	    struct mbuf *, struct route *, int, struct ip_moptions *);
 void	 ip_savecontrol(struct inpcb *, struct mbuf **, struct ip *,
 		struct mbuf *);
 void	 ip_slowtimo(void);
 struct mbuf *
-	 ip_srcroute __P((void));
+	 ip_srcroute(void);
 void	 ip_stripoptions(struct mbuf *, struct mbuf *);
-int	 rip_ctloutput __P((int, struct socket *, int, int, struct mbuf **));
+int	 rip_ctloutput(int, struct socket *, int, int, struct mbuf **);
 void	 rip_init(void);
 void	 rip_input(struct mbuf *, int);
 int	 rip_output(struct mbuf *, struct socket *, u_long);
-int	 rip_usrreq __P((struct socket *,
-	    int, struct mbuf *, struct mbuf *, struct mbuf *));
+int	 rip_usrreq(struct socket *,
+	    int, struct mbuf *, struct mbuf *, struct mbuf *);
 void	ipip_input(struct mbuf *, int);
 void	rsvp_input(struct mbuf *, int);
 int	ip_rsvp_init(struct socket *);
 int	ip_rsvp_done(void);
-int	ip_rsvp_vif_init __P((struct socket *, struct mbuf *));
-int	ip_rsvp_vif_done __P((struct socket *, struct mbuf *));
-void	ip_rsvp_force_done __P((struct socket *));
+int	ip_rsvp_vif_init(struct socket *, struct mbuf *);
+int	ip_rsvp_vif_done(struct socket *, struct mbuf *);
+void	ip_rsvp_force_done(struct socket *);
 
 #ifdef IPDIVERT
-void	div_init __P((void));
-void	div_input __P((struct mbuf *, int));
-int	div_usrreq __P((struct socket *,
-		int, struct mbuf *, struct mbuf *, struct mbuf *));
+void	div_init(void);
+void	div_input(struct mbuf *, int);
+int	div_usrreq(struct socket *,
+		int, struct mbuf *, struct mbuf *, struct mbuf *);
 extern u_short ip_divert_port;
 extern u_short ip_divert_ignore;
 #endif /* IPDIVERT */
