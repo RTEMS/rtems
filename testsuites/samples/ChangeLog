@@ -1,3 +1,8 @@
+2007-03-26	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1230/tests
+	* minimum/init.c: Minimum should not configure console driver.
+
 2007-02-21	Joel Sherrill <joel@OARcorp.com>
 
 	* loopback/init.c: Fix exit paths in client thread and main test

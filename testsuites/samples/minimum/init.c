@@ -1,11 +1,6 @@
-/*  Init
+/*  Minimum Size Application Initialization 
  *
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,13 +20,9 @@ rtems_task Init(
 
 /* configuration information */
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
 #define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
-
-#define CONFIGURE_MAXIMUM_TASKS            1
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INIT
 
