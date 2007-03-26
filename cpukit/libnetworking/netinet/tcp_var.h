@@ -381,21 +381,21 @@ extern	struct tcpstat tcpstat;	/* tcp statistics */
 extern	int tcp_mssdflt;	/* XXX */
 extern	u_long tcp_now;		/* for RFC 1323 timestamps */
 
-void	 tcp_canceltimers __P((struct tcpcb *));
+void	 tcp_canceltimers(struct tcpcb *);
 struct tcpcb *
 	 tcp_close(struct tcpcb *);
 void	 tcp_ctlinput(int, struct sockaddr *, void *);
-int	 tcp_ctloutput __P((int, struct socket *, int, int, struct mbuf **));
+int	 tcp_ctloutput(int, struct socket *, int, int, struct mbuf **);
 struct tcpcb *
 	 tcp_drop(struct tcpcb *, int);
 void	 tcp_drain(void);
 void	 tcp_fasttimo(void);
 struct rmxp_tao *
-	 tcp_gettaocache __P((struct inpcb *));
+	 tcp_gettaocache(struct inpcb *);
 void	 tcp_init(void);
 void	 tcp_input(struct mbuf *, int);
 void	 tcp_mss(struct tcpcb *, int);
-int	 tcp_mssopt __P((struct tcpcb *));
+int	 tcp_mssopt(struct tcpcb *);
 void	 tcp_mtudisc(struct inpcb *, int);
 struct tcpcb *
 	 tcp_newtcpcb(struct inpcb *);
@@ -404,11 +404,11 @@ void	 tcp_quench(struct inpcb *, int);
 void	 tcp_respond(struct tcpcb *,
 	    struct tcpiphdr *, struct mbuf *, tcp_seq, tcp_seq, int);
 struct rtentry *
-	 tcp_rtlookup __P((struct inpcb *));
+	 tcp_rtlookup(struct inpcb *);
 void	 tcp_setpersist(struct tcpcb *);
 void	 tcp_slowtimo(void);
 struct tcpiphdr *
-	 tcp_template __P((struct tcpcb *));
+	 tcp_template(struct tcpcb *);
 struct tcpcb *
 	 tcp_timers(struct tcpcb *, int);
 void	 tcp_trace(int, int, struct tcpcb *, struct tcpiphdr *, int);

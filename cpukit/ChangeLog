@@ -1,3 +1,7 @@
+2007-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/tcp_var.h: Eliminate __P().
+
 2007-03-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/netinet/udp_var.h: Cosmetics from FreeBSD.
