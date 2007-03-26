@@ -1,5 +1,7 @@
 2007-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ppp_defs.h, libnetworking/net/if_ppp.h:
+	Partial update from FreeBSD.
 	* libnetworking/netinet/if_ether.h: Eliminate __P().
 	* libnetworking/netinet/ip_var.h: Eliminate __P().
 	* libnetworking/netinet/in.h: Eliminate __P().
