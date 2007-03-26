@@ -1,5 +1,9 @@
 2007-03-26	Joel Sherrill <joel@OARcorp.com>
 
+	* loopback/init.c: Add CVS Id.
+
+2007-03-26	Joel Sherrill <joel@OARcorp.com>
+
 	PR 1230/tests
 	* minimum/init.c: Minimum should not configure console driver.
 

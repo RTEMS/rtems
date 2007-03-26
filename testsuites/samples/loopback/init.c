@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #include <bsp.h>
 
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
@@ -29,6 +33,7 @@ rtems_task Init(rtems_task_argument argument);
 #include <rtems/error.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <sys/socket.h>
