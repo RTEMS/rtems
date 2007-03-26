@@ -35,9 +35,16 @@ include_rtems_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
 ##  General stuff
 ERROR_C_FILES = src/error.c
 
-ASSOCIATION_C_FILES = src/assoc.c src/assocnamebad.c
+ASSOCIATION_C_FILES = src/assoc.c src/assoclocalbyname.c \
+    src/assoclocalbyremotebitfield.c src/assoclocalbyremote.c \
+    src/assocnamebad.c src/assocnamebylocalbitfield.c \
+    src/assocnamebylocal.c src/assocnamebyremotebitfield.c \
+    src/assocnamebyremote.c src/assocptrbylocal.c src/assocptrbyname.c \
+    src/assocptrbyremote.c src/assocremotebylocalbitfield.c \
+    src/assocremotebylocal.c src/assocremotebyname.c
 
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
+    src/libio_init.c \
     src/libio_sockets.c src/eval.c src/fs_null_handlers.c src/privateenv.c
 
 TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
@@ -47,6 +54,7 @@ TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/termiosreserveresources.c
 
 SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
+    src/write_r.c \
     src/lseek.c src/ioctl.c src/mkdir.c src/mknod.c src/mkfifo.c src/rmdir.c \
     src/chdir.c src/chmod.c src/fchdir.c src/fchmod.c src/chown.c src/link.c \
     src/unlink.c src/umask.c src/ftruncate.c src/utime.c src/fstat.c \

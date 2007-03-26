@@ -1,5 +1,10 @@
 2007-03-26	Joel Sherrill <joel@OARcorp.com>
 
+	* libcsupport/Makefile.am: Pick up the Makefile changes associated
+	with the file splitting.
+
+2007-03-26	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/src/assoc.c, libcsupport/src/libio.c, 
 	libcsupport/src/write.c: Split files to shrink minimum.exe. Hopefully
 	this will not be deemed necessary to commit to the 4.7 branch.
