@@ -1,3 +1,7 @@
+2007-03-26	Chris Johns <chrisj@rtems.org>
+
+	* include/bsp.h: Terminate comment.
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* console/uarts.c, include/bsp.h, start/start.S, startup/bspstart.c,

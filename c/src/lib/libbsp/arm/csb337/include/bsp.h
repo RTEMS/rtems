@@ -45,7 +45,7 @@ static inline int32_t BSP_get_baud(void) {return 38400;}
 
 extern rtems_configuration_table BSP_Configuration;
 
-#define ST_PIMR_PIV	33	/* 33 ticks of the 32.768Khz clock ~= 1msec
+#define ST_PIMR_PIV	33	/* 33 ticks of the 32.768Khz clock ~= 1msec */
   
 /*
  * Network driver configuration
