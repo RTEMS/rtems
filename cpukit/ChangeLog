@@ -1,3 +1,29 @@
+2007-03-26	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1231/cpukit
+	* posix/src/adasupp.c, posix/src/clockgetcpuclockid.c,
+	posix/src/clockgetenableattr.c, posix/src/clockgetres.c,
+	posix/src/clockgettime.c, posix/src/clocksetenableattr.c,
+	posix/src/mutex.c, posix/src/mutexattrdestroy.c,
+	posix/src/mutexattrgetprioceiling.c,
+	posix/src/mutexattrgetprotocol.c, posix/src/mutexattrgetpshared.c,
+	posix/src/mutexattrinit.c, posix/src/mutexattrsetprioceiling.c,
+	posix/src/mutexattrsetprotocol.c, posix/src/mutexattrsetpshared.c,
+	posix/src/mutexdefaultattributes.c, posix/src/mutexdestroy.c,
+	posix/src/mutexgetprioceiling.c, posix/src/mutexlock.c,
+	posix/src/mutexlocksupp.c, posix/src/mutexmp.c,
+	posix/src/mutexsetprioceiling.c, posix/src/mutextimedlock.c,
+	posix/src/mutextrylock.c, posix/src/mutexunlock.c,
+	posix/src/nanosleep.c, posix/src/posixintervaltotimespec.c,
+	posix/src/posixtimespecsubtract.c,
+	posix/src/posixtimespectointerval.c,
+	posix/src/psignalclearprocesssignals.c,
+	posix/src/psignalclearsignals.c,
+	posix/src/psignalsetprocesssignals.c,
+	posix/src/psignalunblockthread.c, posix/src/ptimer.c,
+	posix/src/ptimer1.c, posix/src/sched.c, posix/src/time.c: Remove
+	unneeded includes of assert.h
+
 2007-03-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/conf.h: Don't include machine/conf.h.
