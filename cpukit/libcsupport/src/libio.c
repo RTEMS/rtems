@@ -51,57 +51,10 @@
  *  File descriptor Table Information
  */
 
-extern uint32_t    rtems_libio_number_iops;
-rtems_id           rtems_libio_semaphore;
-rtems_libio_t     *rtems_libio_iops;
-rtems_libio_t     *rtems_libio_iop_freelist;
-
-/*
- *  rtems_libio_init
- *
- *  Called by BSP startup code to initialize the libio subsystem.
- */
-
-void rtems_libio_init( void )
-{
-    rtems_status_code rc;
-    int i;
-    rtems_libio_t *iop;
-
-    if (rtems_libio_number_iops > 0)
-    {
-        rtems_libio_iops = (rtems_libio_t *) calloc(rtems_libio_number_iops,
-                                                    sizeof(rtems_libio_t));
-        if (rtems_libio_iops == NULL)
-            rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
-
-        iop = rtems_libio_iop_freelist = rtems_libio_iops;
-	for (i = 0 ; i < (rtems_libio_number_iops - 1) ; i++, iop++)
-		iop->data1 = iop + 1;
-	iop->data1 = NULL;
-    }
-
-  /*
-   *  Create the binary semaphore used to provide mutual exclusion
-   *  on the IOP Table.
-   */
-
-  rc = rtems_semaphore_create(
-    RTEMS_LIBIO_SEM,
-    1,
-    RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-    RTEMS_NO_PRIORITY,
-    &rtems_libio_semaphore
-  );
-  if ( rc != RTEMS_SUCCESSFUL )
-    rtems_fatal_error_occurred( rc );
-
-  /*
-   *  Initialize the base file system infrastructure.
-   */
-
-  rtems_filesystem_initialize();
-}
+extern uint32_t       rtems_libio_number_iops;
+extern rtems_id       rtems_libio_semaphore;
+extern rtems_libio_t *rtems_libio_iops;
+extern rtems_libio_t *rtems_libio_iop_freelist;
 
 /*
  *  rtems_libio_fcntl_flags

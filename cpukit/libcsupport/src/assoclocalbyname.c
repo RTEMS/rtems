@@ -16,20 +16,16 @@
 
 #include <string.h>             /* strcat, strcmp */
 
-
-const rtems_assoc_t *rtems_assoc_ptr_by_name(
+uint32_t rtems_assoc_local_by_name(
   const rtems_assoc_t *ap,
   const char          *name
 )
 {
-  const rtems_assoc_t *default_ap = 0;
+  const rtems_assoc_t *nap;
 
-  if (rtems_assoc_is_default(ap))
-    default_ap = ap++;
+  nap = rtems_assoc_ptr_by_name(ap, name);
+  if (nap)
+    return nap->local_value;
 
-  for ( ; ap->name; ap++)
-    if (strcmp(ap->name, name) == 0)
-	return ap;
-
-  return default_ap;
+  return 0;
 }

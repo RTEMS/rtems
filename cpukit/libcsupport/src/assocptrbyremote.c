@@ -16,10 +16,9 @@
 
 #include <string.h>             /* strcat, strcmp */
 
-
-const rtems_assoc_t *rtems_assoc_ptr_by_name(
+const rtems_assoc_t *rtems_assoc_ptr_by_remote(
   const rtems_assoc_t *ap,
-  const char          *name
+  uint32_t       remote_value
 )
 {
   const rtems_assoc_t *default_ap = 0;
@@ -28,8 +27,8 @@ const rtems_assoc_t *rtems_assoc_ptr_by_name(
     default_ap = ap++;
 
   for ( ; ap->name; ap++)
-    if (strcmp(ap->name, name) == 0)
-	return ap;
+    if (ap->remote_value == remote_value)
+      return ap;
 
   return default_ap;
 }
