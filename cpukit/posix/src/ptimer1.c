@@ -6,7 +6,6 @@
 #include "config.h"
 #endif
 
-#include <assert.h>
 #include <time.h>
 #include <errno.h>
 

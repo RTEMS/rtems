@@ -6,7 +6,6 @@
 #include "config.h"
 #endif
 
-#include <assert.h>
 #include <sched.h>
 #include <errno.h>
 
