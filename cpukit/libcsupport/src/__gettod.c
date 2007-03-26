@@ -73,18 +73,11 @@ int gettimeofday(
   tp->tv_usec = microseconds * _TOD_Microseconds_per_tick;
 
   /*
-   * newlib does not have timezone and daylight savings time
-   * yet.  When it does this needs to be fixed.
+   *  Timezone information ignored by the OS proper.   Per email
+   *  with Eric Norum, this is how GNU/Linux, Solaris, and MacOS X
+   *  do it.  This puts us in good company.
    */
 
-#if 0
-  if ( tzp ) {
-    tzp->tz_minuteswest = 0;  /* at UTC */
-    tzp->tz_dsttime = 0;      /* no daylight savings */
-  tzp->minuteswest = timezone / 60; /* from seconds to minutes */
-  tzp->dsttime = daylight;
-  }
-#endif
   return 0;
 }
 

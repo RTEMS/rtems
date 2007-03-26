@@ -1,3 +1,9 @@
+2007-03-26	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/src/__gettod.c: Replace incorrect comment about timezone
+	support and remove deadcode. Replace with comment explaining that
+	behavior is compatible with GNU/Linux per Eric Norum.
+
 2007-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/ppp_defs.h, libnetworking/net/if_ppp.h:
