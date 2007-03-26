@@ -1,5 +1,10 @@
 2007-03-26	Joel Sherrill <joel@OARcorp.com>
 
+	* libcsupport/include/rtems/assoc.h: Pick up the include file
+	changes associated with the file splitting.
+
+2007-03-26	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/Makefile.am: Pick up the Makefile changes associated
 	with the file splitting.
 
