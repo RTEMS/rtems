@@ -101,11 +101,11 @@ extern u_char	ether_ipmulticast_min[ETHER_ADDR_LEN];
 extern u_char	ether_ipmulticast_max[ETHER_ADDR_LEN];
 extern struct	ifqueue arpintrq;
 
-int	arpresolve __P((struct arpcom *, struct rtentry *, struct mbuf *,
-			struct sockaddr *, u_char *, struct rtentry *));
-void	arp_ifinit __P((struct arpcom *, struct ifaddr *));
-int	ether_addmulti __P((struct ifreq *, struct arpcom *));
-int	ether_delmulti __P((struct ifreq *, struct arpcom *));
+int	arpresolve(struct arpcom *, struct rtentry *, struct mbuf *,
+			struct sockaddr *, u_char *, struct rtentry *);
+void	arp_ifinit(struct arpcom *, struct ifaddr *);
+int	ether_addmulti(struct ifreq *, struct arpcom *);
+int	ether_delmulti(struct ifreq *, struct arpcom *);
 
 /*
  * Ethernet multicast address structure.  There is one of these for each
