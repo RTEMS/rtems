@@ -1,5 +1,3 @@
-/*	$Id$	*/
-
 /*
  * ppp_defs.h - PPP definitions.
  *
@@ -25,6 +23,12 @@
  * ON AN "AS IS" BASIS, AND THE AUSTRALIAN NATIONAL UNIVERSITY HAS NO
  * OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS,
  * OR MODIFICATIONS.
+ *
+ * $FreeBSD: src/sys/net/ppp_defs.h,v 1.8 2005/01/07 01:45:35 imp Exp $
+ */
+
+/*
+ * $Id$
  */
 
 #ifndef _PPP_DEFS_H_
@@ -35,21 +39,7 @@
  */
 #define PPP_HDRLEN	4	/* octets for standard ppp header */
 #define PPP_FCSLEN	2	/* octets for FCS */
-
-/*
- * Packet sizes
- *
- * Note - lcp shouldn't be allowed to negotiate stuff outside these
- *	  limits.  See lcp.h in the pppd directory.
- * (XXX - these constants should simply be shared by lcp.c instead
- *	  of living in lcp.h)
- */
-#define	PPP_MTU		1500	/* Default MTU (size of Info field) */
-#define PPP_MAXMTU	65535 - (PPP_HDRLEN + PPP_FCSLEN)
-#define PPP_MINMTU	64
 #define PPP_MRU		1500	/* default MRU = max length of info field */
-#define PPP_MAXMRU	65000	/* Largest MRU we allow */
-#define PPP_MINMRU	128
 
 #define PPP_ADDRESS(p)	(((u_char *)(p))[0])
 #define PPP_CONTROL(p)	(((u_char *)(p))[1])
@@ -91,20 +81,6 @@
 #define PPP_INITFCS	0xffff	/* Initial FCS value */
 #define PPP_GOODFCS	0xf0b8	/* Good final FCS value */
 #define PPP_FCS(fcs, c)	(((fcs) >> 8) ^ fcstab[((fcs) ^ (c)) & 0xff])
-
-/*
- * A 32-bit unsigned integral type.
- */
-
-#if !defined(__BIT_TYPES_DEFINED__) && !defined(_BITYPES) \
- && !defined(__FreeBSD__) && (NS_TARGET < 40)
-#ifdef	UINT32_T
-typedef UINT32_T	u_int32_t;
-#else
-/*typedef unsigned int	u_int32_t;*/
-/*typedef unsigned short  u_int16_t;*/
-#endif
-#endif
 
 /*
  * Extended asyncmap - allows any character to be escaped.
