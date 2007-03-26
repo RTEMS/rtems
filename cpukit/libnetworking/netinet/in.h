@@ -450,14 +450,14 @@ char 	*inet_ntoa(struct in_addr); /* in libkern */
 
 /* Firewall hooks */
 struct ip;
-typedef	int ip_fw_chk_t __P((struct ip**, int, struct ifnet*, int, struct mbuf**));
-typedef	int ip_fw_ctl_t __P((int, struct mbuf**));
+typedef	int ip_fw_chk_t(struct ip**, int, struct ifnet*, int, struct mbuf**);
+typedef	int ip_fw_ctl_t(int, struct mbuf**);
 extern	ip_fw_chk_t *ip_fw_chk_ptr;
 extern	ip_fw_ctl_t *ip_fw_ctl_ptr;
 
 /* IP NAT hooks */
-typedef	int ip_nat_t __P((struct ip**, struct mbuf**, struct ifnet*, int));
-typedef	int ip_nat_ctl_t __P((int, struct mbuf**));
+typedef	int ip_nat_t(struct ip**, struct mbuf**, struct ifnet*, int);
+typedef	int ip_nat_ctl(int, struct mbuf**);
 extern	ip_nat_t *ip_nat_ptr;
 extern	ip_nat_ctl_t *ip_nat_ctl_ptr;
 #define	IP_NAT_IN	0x00000001
