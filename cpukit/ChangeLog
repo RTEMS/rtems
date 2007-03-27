@@ -1,5 +1,6 @@
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ppp_comp.h: New (copy of ppp-comp.h).
 	* libnetworking/net/ppp-comp.h: Eliminate __P(). Cosmetics from
 	  FreeBSD.
 	* libnetworking/machine/in_cksum.h: Eliminate __P().
