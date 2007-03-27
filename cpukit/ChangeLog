@@ -1,5 +1,7 @@
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ppp-comp.h: Eliminate __P(). Cosmetics from
+	  FreeBSD.
 	* libnetworking/machine/in_cksum.h: Eliminate __P().
 	* pppd/auth.c, pppd/cbcp.c, pppd/ccp.c, pppd/chap.c,
 	pppd/chap_ms.c, pppd/chat.c, pppd/demand.c, pppd/fsm.c,
