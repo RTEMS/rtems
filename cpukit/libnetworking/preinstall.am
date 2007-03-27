@@ -158,6 +158,10 @@ $(PROJECT_INCLUDE)/net/if_media.h: net/if_media.h $(PROJECT_INCLUDE)/net/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_media.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_media.h
 
+$(PROJECT_INCLUDE)/net/ppp_comp.h: net/ppp_comp.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/ppp_comp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/ppp_comp.h
+
 $(PROJECT_INCLUDE)/netinet/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/netinet
 	@: > $(PROJECT_INCLUDE)/netinet/$(dirstamp)
