@@ -249,35 +249,35 @@ extern char *option_source;	/* string saying where the option came from */
 struct protent {
     u_short protocol;		/* PPP protocol number */
     /* Initialization procedure */
-    void (*init) __P((int unit));
+    void (*init)(int unit);
     /* Process a received packet */
-    void (*input) __P((int unit, u_char *pkt, int len));
+    void (*input)(int unit, u_char *pkt, int len);
     /* Process a received protocol-reject */
-    void (*protrej) __P((int unit));
+    void (*protrej)(int unit);
     /* Lower layer has come up */
-    void (*lowerup) __P((int unit));
+    void (*lowerup)(int unit);
     /* Lower layer has gone down */
-    void (*lowerdown) __P((int unit));
+    void (*lowerdown)(int unit);
     /* Open the protocol */
-    void (*open) __P((int unit));
+    void (*open)(int unit);
     /* Close the protocol */
-    void (*close) __P((int unit, char *reason));
+    void (*close)(int unit, char *reason);
     /* Print a packet in readable form */
-    int  (*printpkt) __P((u_char *pkt, int len,
-			  void (*printer) __P((void *, char *, ...)),
-			  void *arg));
+    int  (*printpkt)(u_char *pkt, int len,
+			  void (*printer)(void *, char *, ...),
+			  void *arg);
     /* Process a received data packet */
-    void (*datainput) __P((int unit, u_char *pkt, int len));
+    void (*datainput)(int unit, u_char *pkt, int len);
     bool enabled_flag;		/* 0 iff protocol is disabled */
     char *name;			/* Text name of protocol */
     char *data_name;		/* Text name of corresponding data protocol */
     option_t *options;		/* List of command-line options */
     /* Check requested options, assign defaults */
-    void (*check_options) __P((void));
+    void (*check_options)(void);
     /* Configure interface for demand-dial */
-    int  (*demand_conf) __P((int unit));
+    int  (*demand_conf)(int unit);
     /* Say whether to bring up link for this pkt */
-    int  (*active_pkt) __P((u_char *pkt, int len));
+    int  (*active_pkt)(u_char *pkt, int len);
 };
 
 /* Table of pointers to supported protocols */
@@ -288,31 +288,31 @@ extern struct protent *protocols[];
  */
 
 /* Procedures exported from main.c. */
-void die __P((int));		/* Cleanup and exit */
-void quit __P((void));		/* like die(1) */
-void novm __P((char *));	/* Say we ran out of memory, and die */
-void ppptimeout __P((void (*func)(void *), void *arg, int t));
+void die(int);		/* Cleanup and exit */
+void quit(void);		/* like die(1) */
+void novm(char *);	/* Say we ran out of memory, and die */
+void ppptimeout(void (*func)(void *), void *arg, int t);
 				/* Call func(arg) after t seconds */
-void pppuntimeout __P((void (*func)(void *), void *arg));
+void pppuntimeout(void (*func)(void *), void *arg);
 				/* Cancel call to func(arg) */
-void update_link_stats __P((int)); /* Get stats at link termination */
-void new_phase __P((int));	/* signal start of new phase */
+void update_link_stats(int); /* Get stats at link termination */
+void new_phase(int);	/* signal start of new phase */
 
 /* Procedures exported from utils.c. */
-void log_packet __P((u_char *, int, char *, int));
+void log_packet(u_char *, int, char *, int);
 				/* Format a packet and log it with syslog */
-void print_string __P((void *, int,  void (*) (void *, char *, ...),
-		void *));	/* Format a string for output */
-int slprintf __P((char *, int, char *, ...));		/* sprintf++ */
-int vslprintf __P((char *, int, char *, va_list));	/* vsprintf++ */
-size_t strlcpy __P((char *, const char *, size_t));	/* safe strcpy */
-size_t strlcat __P((char *, const char *, size_t));	/* safe strncpy */
-void pppd_dbglog __P((char *, ...));	/* log a debug message */
-void pppd_info __P((char *, ...));	/* log an informational message */
-void pppd_notice __P((char *, ...));	/* log a notice-level message */
-void pppd_warn __P((char *, ...));	/* log a warning message */
-void pppd_error __P((char *, ...));	/* log an error message */
-void pppd_fatal __P((char *, ...));	/* log an error message and die(1) */
+void print_string(void *, int,  void (*) (void *, char *, ...),
+		void *);	/* Format a string for output */
+int slprintf(char *, int, char *, ...);		/* sprintf++ */
+int vslprintf(char *, int, char *, va_list);	/* vsprintf++ */
+size_t strlcpy(char *, const char *, size_t);	/* safe strcpy */
+size_t strlcat(char *, const char *, size_t);	/* safe strncpy */
+void pppd_dbglog(char *, ...);	/* log a debug message */
+void pppd_info(char *, ...);	/* log an informational message */
+void pppd_notice(char *, ...);	/* log a notice-level message */
+void pppd_warn(char *, ...);	/* log a warning message */
+void pppd_error(char *, ...);	/* log an error message */
+void pppd_fatal(char *, ...);	/* log an error message and die(1) */
 
 #define dbglog pppd_dbglog
 #define info   pppd_info
@@ -322,137 +322,137 @@ void pppd_fatal __P((char *, ...));	/* log an error message and die(1) */
 #define fatal  pppd_fatal
 
 /* Procedures exported from auth.c */
-void link_required __P((int));	  /* we are starting to use the link */
-void link_terminated __P((int));  /* we are finished with the link */
-void link_down __P((int));	  /* the LCP layer has left the Opened state */
-void link_established __P((int)); /* the link is up; authenticate now */
-void start_networks __P((void));  /* start all the network control protos */
-void np_up __P((int, int));	  /* a network protocol has come up */
-void np_down __P((int, int));	  /* a network protocol has gone down */
-void np_finished __P((int, int)); /* a network protocol no longer needs link */
-void auth_peer_fail __P((int, int));
+void link_required(int);	  /* we are starting to use the link */
+void link_terminated(int);  /* we are finished with the link */
+void link_down(int);	  /* the LCP layer has left the Opened state */
+void link_established(int); /* the link is up; authenticate now */
+void start_networks(void);  /* start all the network control protos */
+void np_up(int, int);	  /* a network protocol has come up */
+void np_down(int, int);	  /* a network protocol has gone down */
+void np_finished(int, int); /* a network protocol no longer needs link */
+void auth_peer_fail(int, int);
 				/* peer failed to authenticate itself */
-void auth_peer_success __P((int, int, char *, int));
+void auth_peer_success(int, int, char *, int);
 				/* peer successfully authenticated itself */
-void auth_withpeer_fail __P((int, int));
+void auth_withpeer_fail(int, int);
 				/* we failed to authenticate ourselves */
-void auth_withpeer_success __P((int, int));
+void auth_withpeer_success(int, int);
 				/* we successfully authenticated ourselves */
-int  auth_check_options __P((void));
+int  auth_check_options(void);
 				/* check authentication options supplied */
-void auth_reset __P((int));	/* check what secrets we have */
-int  check_passwd __P((int, char *, int, char *, int, char **));
+void auth_reset(int);	/* check what secrets we have */
+int  check_passwd(int, char *, int, char *, int, char **);
 				/* Check peer-supplied username/password */
-int  get_secret __P((int, char *, char *, unsigned char *, int *, int));
+int  get_secret(int, char *, char *, unsigned char *, int *, int);
 				/* get "secret" for chap */
-int  auth_ip_addr __P((int, u_int32_t));
+int  auth_ip_addr(int, u_int32_t);
 				/* check if IP address is authorized */
-int  bad_ip_adrs __P((u_int32_t));
+int  bad_ip_adrs(u_int32_t);
 				/* check if IP address is unreasonable */
 
 /* Procedures exported from demand.c */
-void demand_conf __P((void));	/* config interface(s) for demand-dial */
-void demand_block __P((void));	/* set all NPs to queue up packets */
-void demand_unblock __P((void)); /* set all NPs to pass packets */
-void demand_discard __P((void)); /* set all NPs to discard packets */
-void demand_rexmit __P((int));	/* retransmit saved frames for an NP */
-int  loop_chars __P((unsigned char *, int)); /* process chars from loopback */
-int  loop_frame __P((unsigned char *, int)); /* should we bring link up? */
+void demand_conf(void);	/* config interface(s) for demand-dial */
+void demand_block(void);	/* set all NPs to queue up packets */
+void demand_unblock(void); /* set all NPs to pass packets */
+void demand_discard(void); /* set all NPs to discard packets */
+void demand_rexmit(int);	/* retransmit saved frames for an NP */
+int  loop_chars(unsigned char *, int); /* process chars from loopback */
+int  loop_frame(unsigned char *, int); /* should we bring link up? */
 
 /* Procedures exported from sys-*.c */
-void sys_init __P((void));	/* Do system-dependent initialization */
-void sys_cleanup __P((void));	/* Restore system state before exiting */
-int  sys_check_options __P((void)); /* Check options specified */
-void sys_close __P((void));	/* Clean up in a child before execing */
-int  ppp_available __P((void));	/* Test whether ppp kernel support exists */
-int  get_pty __P((int *, int *, char *, int));	/* Get pty master/slave */
-int  open_ppp_loopback __P((void)); /* Open loopback for demand-dialling */
-int  establish_ppp __P((int));	/* Turn serial port into a ppp interface */
-void restore_loop __P((void));	/* Transfer ppp unit back to loopback */
-void disestablish_ppp __P((int)); /* Restore port to normal operation */
-void clean_check __P((void));	/* Check if line was 8-bit clean */
-void set_up_tty __P((int, int)); /* Set up port's speed, parameters, etc. */
-void restore_tty __P((int));	/* Restore port's original parameters */
-void setdtr __P((int, int));	/* Raise or lower port's DTR line */
-void output __P((int, u_char *, int)); /* Output a PPP packet */
-void wait_input __P((struct timeval *)); /* Wait for input, with timeout */
+void sys_init(void);	/* Do system-dependent initialization */
+void sys_cleanup(void);	/* Restore system state before exiting */
+int  sys_check_options(void); /* Check options specified */
+void sys_close(void);	/* Clean up in a child before execing */
+int  ppp_available(void);	/* Test whether ppp kernel support exists */
+int  get_pty(int *, int *, char *, int);	/* Get pty master/slave */
+int  open_ppp_loopback(void); /* Open loopback for demand-dialling */
+int  establish_ppp(int);	/* Turn serial port into a ppp interface */
+void restore_loop(void);	/* Transfer ppp unit back to loopback */
+void disestablish_ppp(int); /* Restore port to normal operation */
+void clean_check(void);	/* Check if line was 8-bit clean */
+void set_up_tty(int, int); /* Set up port's speed, parameters, etc. */
+void restore_tty(int);	/* Restore port's original parameters */
+void setdtr(int, int);	/* Raise or lower port's DTR line */
+void output(int, u_char *, int); /* Output a PPP packet */
+void wait_input(struct timeval *); /* Wait for input, with timeout */
 
-void ppp_delay __P((void));       /* delay task for a little while */
-int  read_packet __P((u_char *)); /* Read PPP packet */
-int  get_loop_output __P((void)); /* Read pkts from loopback */
-void ppp_send_config __P((int, int, u_int32_t, int, int));
+void ppp_delay(void);       /* delay task for a little while */
+int  read_packet(u_char *); /* Read PPP packet */
+int  get_loop_output(void); /* Read pkts from loopback */
+void ppp_send_config(int, int, u_int32_t, int, int);
 				/* Configure i/f transmit parameters */
-void ppp_set_xaccm __P((int, ext_accm));
+void ppp_set_xaccm(int, ext_accm);
 				/* Set extended transmit ACCM */
-void ppp_recv_config __P((int, int, u_int32_t, int, int));
+void ppp_recv_config(int, int, u_int32_t, int, int);
 				/* Configure i/f receive parameters */
-int  ccp_test __P((int, u_char *, int, int));
+int  ccp_test(int, u_char *, int, int);
 				/* Test support for compression scheme */
-void ccp_flags_set __P((int, int, int));
+void ccp_flags_set(int, int, int);
 				/* Set kernel CCP state */
-int  ccp_fatal_error __P((int)); /* Test for fatal decomp error in kernel */
-int  get_idle_time __P((int, struct ppp_idle *));
+int  ccp_fatal_error(int); /* Test for fatal decomp error in kernel */
+int  get_idle_time(int, struct ppp_idle *);
 				/* Find out how long link has been idle */
-int  get_ppp_stats __P((int, struct pppd_stats *));
+int  get_ppp_stats(int, struct pppd_stats *);
 				/* Return link statistics */
-int  sifvjcomp __P((int, int, int, int));
+int  sifvjcomp(int, int, int, int);
 				/* Configure VJ TCP header compression */
-int  sifup __P((int));		/* Configure i/f up for one protocol */
-int  sifnpmode __P((int u, int proto, enum NPmode mode));
+int  sifup(int);		/* Configure i/f up for one protocol */
+int  sifnpmode(int u, int proto, enum NPmode mode);
 				/* Set mode for handling packets for proto */
-int  sifdown __P((int));	/* Configure i/f down for one protocol */
-int  sifaddr __P((int, u_int32_t, u_int32_t, u_int32_t));
+int  sifdown(int);	/* Configure i/f down for one protocol */
+int  sifaddr(int, u_int32_t, u_int32_t, u_int32_t);
 				/* Configure IPv4 addresses for i/f */
-int  cifaddr __P((int, u_int32_t, u_int32_t));
+int  cifaddr(int, u_int32_t, u_int32_t);
 				/* Reset i/f IP addresses */
 #ifdef INET6
-int  sif6addr __P((int, eui64_t, eui64_t));
+int  sif6addr(int, eui64_t, eui64_t);
 				/* Configure IPv6 addresses for i/f */
-int  cif6addr __P((int, eui64_t, eui64_t));
+int  cif6addr(int, eui64_t, eui64_t);
 				/* Remove an IPv6 address from i/f */
 #endif
-int  sifdefaultroute __P((int, u_int32_t, u_int32_t));
+int  sifdefaultroute(int, u_int32_t, u_int32_t);
 				/* Create default route through i/f */
-int  cifdefaultroute __P((int, u_int32_t, u_int32_t));
+int  cifdefaultroute(int, u_int32_t, u_int32_t);
 				/* Delete default route through i/f */
-int  sifproxyarp __P((int, u_int32_t));
+int  sifproxyarp(int, u_int32_t);
 				/* Add proxy ARP entry for peer */
-int  cifproxyarp __P((int, u_int32_t));
+int  cifproxyarp(int, u_int32_t);
 				/* Delete proxy ARP entry for peer */
-u_int32_t GetMask __P((u_int32_t)); /* Get appropriate netmask for address */
-int  lock __P((char *));	/* Create lock file for device */
-int  relock __P((int));		/* Rewrite lock file with new pid */
-void unlock __P((void));	/* Delete previously-created lock file */
-void logwtmp __P((const char *, const char *, const char *));
+u_int32_t GetMask(u_int32_t); /* Get appropriate netmask for address */
+int  lock(char *);	/* Create lock file for device */
+int  relock(int);		/* Rewrite lock file with new pid */
+void unlock(void);	/* Delete previously-created lock file */
+void logwtmp(const char *, const char *, const char *);
 				/* Write entry to wtmp file */
-int  get_host_seed __P((void));	/* Get host-dependent random number seed */
-int  have_route_to __P((u_int32_t)); /* Check if route to addr exists */
+int  get_host_seed(void);	/* Get host-dependent random number seed */
+int  have_route_to(u_int32_t); /* Check if route to addr exists */
 #ifdef PPP_FILTER
-int  set_filters __P((struct bpf_program *pass, struct bpf_program *active));
+int  set_filters(struct bpf_program *pass, struct bpf_program *active);
 				/* Set filter programs in kernel */
 #endif
 #ifdef IPX_CHANGE
-int  sipxfaddr __P((int, unsigned long, unsigned char *));
-int  cipxfaddr __P((int));
+int  sipxfaddr(int, unsigned long, unsigned char *);
+int  cipxfaddr(int);
 #endif
 
 /* Procedures exported from options.c */
-int  parse_args __P((int argc, char **argv));
+int  parse_args(int argc, char **argv);
 				/* Parse options from arguments given */
-int  options_from_file __P((char *filename, int must_exist, int check_prot,
-			    int privileged));
+int  options_from_file(char *filename, int must_exist, int check_prot,
+			    int privileged);
 				/* Parse options from an options file */
-int  options_from_user __P((void)); /* Parse options from user's .ppprc */
-int  options_for_tty __P((void)); /* Parse options from /etc/ppp/options.tty */
-int  options_from_list __P((struct wordlist *, int privileged));
+int  options_from_user(void); /* Parse options from user's .ppprc */
+int  options_for_tty(void); /* Parse options from /etc/ppp/options.tty */
+int  options_from_list(struct wordlist *, int privileged);
 				/* Parse options from a wordlist */
-int  getword __P((FILE *f, char *word, int *newlinep, char *filename));
+int  getword(FILE *f, char *word, int *newlinep, char *filename);
 				/* Read a word from a file */
-void option_error __P((char *fmt, ...));
+void option_error(char *fmt, ...);
 				/* Print an error message about an option */
-int int_option __P((char *, int *));
+int int_option(char *, int *);
 				/* Simplified number_option for decimal ints */
-void add_options __P((option_t *)); /* Add extra options */
+void add_options(option_t *); /* Add extra options */
 
 /*
  * This structure is used to store information about certain
@@ -475,19 +475,19 @@ extern struct option_info ptycommand_info;
 /*
  * Hooks to enable plugins to change various things.
  */
-extern int (*new_phase_hook) __P((int));
-extern int (*idle_time_hook) __P((struct ppp_idle *));
-extern int (*holdoff_hook) __P((void));
-extern int (*pap_check_hook) __P((void));
-extern int (*pap_auth_hook) __P((char *user, char *passwd/*, char **msgp,
+extern int (*new_phase_hook)(int);
+extern int (*idle_time_hook)(struct ppp_idle *);
+extern int (*holdoff_hook)(void);
+extern int (*pap_check_hook)(void);
+extern int (*pap_auth_hook)(char *user, char *passwd/*, char **msgp,
 				 struct wordlist **paddrs,
-				 struct wordlist **popts*/));
-extern void (*pap_logout_hook) __P((void));
-extern int (*pap_passwd_hook) __P((char *user, char *passwd));
-extern void (*ip_up_hook) __P((void));
-extern void (*ip_down_hook) __P((void));
-extern void (*auth_linkup_hook) __P((void));
-extern void (*auth_linkdown_hook) __P((void));
+				 struct wordlist **popts*/);
+extern void (*pap_logout_hook)(void);
+extern int (*pap_passwd_hook)(char *user, char *passwd);
+extern void (*ip_up_hook)(void);
+extern void (*ip_down_hook)(void);
+extern void (*auth_linkup_hook)(void);
+extern void (*auth_linkdown_hook)(void);
 
 /*
  * Inline versions of get/put char/short/long.

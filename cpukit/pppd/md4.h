@@ -8,14 +8,6 @@
 ** ********************************************************************
 */
 
-#ifndef __P
-# if defined(__STDC__) || defined(__GNUC__)
-#  define __P(x) x
-# else
-#  define __P(x) ()
-# endif
-#endif
-
 #include <stdint.h>
 
 /* MDstruct is the data structure for a message digest computation.
@@ -30,7 +22,7 @@ typedef struct {
 ** Initialize the MD4_CTX prepatory to doing a message digest
 ** computation.
 */
-extern void MD4Init __P((MD4_CTX *MD));
+extern void MD4Init(MD4_CTX *MD);
 
 /* MD4Update(MD,X,count)
 ** Input: X -- a pointer to an array of unsigned characters.
@@ -44,7 +36,7 @@ extern void MD4Init __P((MD4_CTX *MD));
 ** every MD computation should end with one call to MD4Update with a
 ** count less than 512.  Zero is OK for a count.
 */
-extern void MD4Update __P((MD4_CTX *MD, unsigned char *X, unsigned int count));
+extern void MD4Update(MD4_CTX *MD, unsigned char *X, unsigned int count);
 
 /* MD4Print(MD)
 ** Prints message digest buffer MD as 32 hexadecimal digits.
@@ -52,13 +44,13 @@ extern void MD4Update __P((MD4_CTX *MD, unsigned char *X, unsigned int count));
 ** of buffer[3].
 ** Each byte is printed with high-order hexadecimal digit first.
 */
-extern void MD4Print __P((MD4_CTX *));
+extern void MD4Print(MD4_CTX *);
 
 /* MD4Final(buf, MD)
 ** Returns message digest from MD and terminates the message
 ** digest computation.
 */
-extern void MD4Final __P((unsigned char *, MD4_CTX *));
+extern void MD4Final(unsigned char *, MD4_CTX *);
 
 /*
 ** End of md4.h
