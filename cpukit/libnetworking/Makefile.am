@@ -66,6 +66,7 @@ include_net_HEADERS = net/bpf.h net/ethernet.h net/if.h net/if_arp.h \
     net/netisr.h net/ppp-comp.h net/ppp_defs.h net/radix.h net/raw_cb.h \
     net/route.h net/if_pppvar.h net/pppcompress.h net/slcompress.h
 include_net_HEADERS += net/if_media.h
+include_net_HEADERS += net/ppp_comp.h
 
 libnetworking_a_SOURCES += net/if.c net/if_ethersubr.c net/if_loop.c \
     net/radix.c net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c \
