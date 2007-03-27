@@ -1,5 +1,6 @@
 2007-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/ip_mroute.h: Partial update from FreeBSD.
 	* libnetworking/net/raw_cb.c: Sync with FreeBSD.
 
 2007-03-26	Joel Sherrill <joel@OARcorp.com>

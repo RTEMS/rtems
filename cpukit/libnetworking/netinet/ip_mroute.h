@@ -14,10 +14,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -35,6 +31,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip_mroute.h	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/netinet/ip_mroute.h,v 1.31 2007/02/08 23:05:08 bms Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -48,8 +48,12 @@
  * Modified by Steve Deering, Stanford, February 1989.
  * Modified by Ajit Thyagarajan, PARC, August 1993.
  * Modified by Ajit Thyagarajan, PARC, August 1994.
+ * Modified by Ahmed Helmy, SGI, June 1996.
+ * Modified by Pavlin Radoslavov, ICSI, October 2002.
  *
  * MROUTING Revision: 3.3.1.3
+ * and PIM-SMv2 and PIM-DM support, advanced API support,
+ * bandwidth metering and signaling.
  */
 
 
@@ -63,7 +67,12 @@
 #define MRT_ADD_MFC	104	/* insert forwarding cache entry */
 #define MRT_DEL_MFC	105	/* delete forwarding cache entry */
 #define MRT_VERSION	106	/* get kernel version number */
-#define MRT_ASSERT      107     /* enable PIM assert processing */
+#define MRT_ASSERT      107     /* enable assert processing */
+#define MRT_PIM		MRT_ASSERT /* enable PIM processing */
+#define MRT_API_SUPPORT	109	/* supported MRT API */
+#define MRT_API_CONFIG	110	/* config MRT API */
+#define MRT_ADD_BW_UPCALL 111	/* create bandwidth monitor */
+#define MRT_DEL_BW_UPCALL 112	/* delete bandwidth monitor */
 
 
 #define GET_TIME(t)	microtime(&t)
@@ -248,13 +257,13 @@ struct tbf
 
 #ifdef _KERNEL
 
-extern int	(*ip_mrouter_set) __P((int, struct socket *, struct mbuf *));
-extern int	(*ip_mrouter_get) __P((int, struct socket *, struct mbuf **));
-extern int	(*ip_mrouter_done) __P((void));
+extern int	(*ip_mrouter_set)(int, struct socket *, struct mbuf *);
+extern int	(*ip_mrouter_get)(int, struct socket *, struct mbuf **);
+extern int	(*ip_mrouter_done)(void);
 #ifdef MROUTING
-extern int	(*mrt_ioctl) __P((int, caddr_t));
+extern int	(*mrt_ioctl)(int, caddr_t);
 #else
-extern int	(*mrt_ioctl) __P((int, caddr_t, struct proc *));
+extern int	(*mrt_ioctl)(int, caddr_t, struct proc *);
 #endif
 
 #endif /* _KERNEL */
