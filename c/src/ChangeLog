@@ -1,3 +1,8 @@
+2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/target.m4: Strip CFLAGS (Hack to prevent bsp-cflags from
+	  being used to compile "tools").
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/network/cs8900.c, libchip/network/cs8900.h,
