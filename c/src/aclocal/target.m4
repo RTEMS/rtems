@@ -28,6 +28,7 @@ if test "$no_recursion" != yes; then
     -target ) ac_prev=target_alias ;;
     -build* | --build* ) ;;
     -build ) ac_prev_build_alias ;;
+    CFLAGS=* );; # HACK: Strip CFLAGS
     *_alias=* ) ;; # HACK: Workaround to autoconf passing *_alias
     ],
     [rtems_configure_args])
