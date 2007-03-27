@@ -46,15 +46,11 @@
 
 static const char rcsid[] = RCSID;
 
-#if defined(SUNOS4)
-extern char *strerror();
-#endif
-
-static void pr_log __P((void *, char *, ...));
-static void logit __P((int, char *, va_list));
-static void vslp_printer __P((void *, char *, ...));
-static void format_packet __P((u_char *, int, void (*) (void *, char *, ...),
-			       void *));
+static void pr_log(void *, char *, ...);
+static void logit(int, char *, va_list);
+static void vslp_printer(void *, char *, ...);
+static void format_packet(u_char *, int, void (*) (void *, char *, ...),
+			       void *);
 
 struct buffer_info {
     char *ptr;
@@ -394,7 +390,7 @@ static void
 format_packet(p, len, printer, arg)
     u_char *p;
     int len;
-    void (*printer) __P((void *, char *, ...));
+    void (*printer)(void *, char *, ...);
     void *arg;
 {
     int i, n;
@@ -471,7 +467,7 @@ void
 print_string(p_arg, len, printer, arg)
     void *p_arg;
     int len;
-    void (*printer) __P((void *, char *, ...));
+    void (*printer)(void *, char *, ...);
     void *arg;
 {
     int c;

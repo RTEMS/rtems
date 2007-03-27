@@ -106,25 +106,25 @@ static int passwd_from_file;
 static bool default_auth;
 
 /* Hook for a link status */
-void (*auth_linkup_hook)__P((void)) = NULL;
-void (*auth_linkdown_hook)__P((void)) = NULL;
+void (*auth_linkup_hook)(void) = NULL;
+void (*auth_linkdown_hook)(void) = NULL;
 
 /* Hook to enable a plugin to control the idle time limit */
-int (*idle_time_hook) __P((struct ppp_idle *)) = NULL;
+int (*idle_time_hook)(struct ppp_idle *) = NULL;
 
 /* Hook for a plugin to say whether we can possibly authenticate any peer */
-int (*pap_check_hook) __P((void)) = NULL;
+int (*pap_check_hook)(void) = NULL;
 
 /* Hook for a plugin to check the PAP user and password */
-int (*pap_auth_hook) __P((char *user, char *passwd/*, char **msgp,
+int (*pap_auth_hook)(char *user, char *passwd/*, char **msgp,
 			  struct wordlist **paddrs,
-			  struct wordlist **popts*/)) = NULL;
+			  struct wordlist **popts*/) = NULL;
 
 /* Hook for a plugin to know about the PAP user logout */
-void (*pap_logout_hook) __P((void)) = NULL;
+void (*pap_logout_hook)(void) = NULL;
 
 /* Hook for a plugin to get the PAP password for authenticating us */
-int (*pap_passwd_hook) __P((char *user, char *passwd)) = NULL;
+int (*pap_passwd_hook)(char *user, char *passwd) = NULL;
 
 /*
  * This is used to ensure that we don't start an auth-up/down
@@ -157,23 +157,23 @@ char remote_name[MAXNAMELEN];	/* Peer's name for authentication */
 #define CHAP_WITHPEER	4
 #define CHAP_PEER	8
 
-extern char *crypt __P((const char *, const char *));
+extern char *crypt(const char *, const char *);
 
 /* Prototypes for procedures local to this file. */
 
-static void network_phase __P((int));
-static void check_idle __P((void *));
-static void connect_time_expired __P((void *));
-static int  null_login __P((int));
-static int  get_pap_passwd __P((char *));
-static int  have_pap_secret __P((int *));
-static int  have_chap_secret __P((char *, char *, int, int *));
+static void network_phase(int);
+static void check_idle(void *);
+static void connect_time_expired(void *);
+static int  null_login(int);
+static int  get_pap_passwd(char *);
+static int  have_pap_secret(int *);
+static int  have_chap_secret(char *, char *, int, int *);
 #if 0
-static int  ip_addr_check __P((u_int32_t, struct permitted_ip *));
+static int  ip_addr_check(u_int32_t, struct permitted_ip *);
 #endif
-static void free_wordlist __P((struct wordlist *));
-static void auth_script __P((enum script_state s));
-static void set_allowed_addrs __P((int, struct wordlist *, struct wordlist *));
+static void free_wordlist(struct wordlist *);
+static void auth_script(enum script_state s);
+static void set_allowed_addrs(int, struct wordlist *, struct wordlist *);
 
 
 /*

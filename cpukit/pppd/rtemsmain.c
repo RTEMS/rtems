@@ -93,8 +93,8 @@ int doing_callback;		/* != 0 if we are doing callback */
 char *callback_script;		/* script for doing callback */
 dialerfp pppd_dialer;
 
-int (*holdoff_hook) __P((void)) = NULL;
-int (*new_phase_hook) __P((int)) = NULL;
+int (*holdoff_hook)(void) = NULL;
+int (*new_phase_hook)(int) = NULL;
 
 static int fd_ppp = -1;		/* fd for talking PPP */
 static int pty_master;		/* fd for master side of pty */
@@ -121,17 +121,17 @@ int link_stats_valid;
 
 /* Prototypes for procedures local to this file. */
 
-static void cleanup __P((void));
-static void close_tty __P((void));
-static void get_input __P((void));
-static void calltimeout __P((void));
-static struct timeval *timeleft __P((struct timeval *));
-static void holdoff_end __P((void *));
-static int device_script __P((int, int, char *));
+static void cleanup(void);
+static void close_tty(void);
+static void get_input(void);
+static void calltimeout(void);
+static struct timeval *timeleft(struct timeval *);
+static void holdoff_end(void *);
+static int device_script(int, int, char *);
 
-extern	char	*ttyname __P((int));
-extern	char	*getlogin __P((void));
-int pppdmain __P((int, char *[]));
+extern	char	*ttyname(int);
+extern	char	*getlogin(void);
+int pppdmain(int, char *[]);
 
 /*
  * PPP Data Link Layer "protocol" table.
@@ -738,7 +738,7 @@ update_link_stats(u)
 struct	callout {
     struct timeval	c_time;		/* time at which to call routine */
     void		*c_arg;		/* argument to routine */
-    void		(*c_func) __P((void *)); /* routine */
+    void		(*c_func)(void *); /* routine */
     struct		callout *c_next;
 };
 
@@ -753,7 +753,7 @@ static struct timeval timenow;		/* Current time */
  */
 void
 ppptimeout(func, arg, time)
-    void (*func) __P((void *));
+    void (*func)(void *);
     void *arg;
     int time;
 {
@@ -790,7 +790,7 @@ ppptimeout(func, arg, time)
  */
 void
 pppuntimeout(func, arg)
-    void (*func) __P((void *));
+    void (*func)(void *);
     void *arg;
 {
     struct callout **copp, *freep;

@@ -119,17 +119,14 @@ char temp2[STR_LEN];
 #define SIGTYPE void
 #endif
 
-#undef __P
 #undef __V
 
 #ifdef __STDC__
 #include <stdarg.h>
 #define __V(x)	x
-#define __P(x)	x
 #else
 #include <varargs.h>
 #define __V(x)	(va_alist) va_dcl
-#define __P(x)	()
 #define const
 #endif
 
@@ -187,20 +184,20 @@ int clear_report_next = 0;
 
 int say_next = 0, hup_next = 0;
 
-void *dup_mem __P((void *b, size_t c));
-void *copy_of __P((char *s));
-void break_sequence __P((void));
-static int  get_string __P((register char *string));
-static int  put_string __P((register char *s));
-static int  write_char __P((int c));
-static int  put_char __P((int c));
-static int  get_char __P((void));
-void chat_send __P((register char *s));
-/* static char *character __P((int c)); */
-void chat_expect __P((register char *s));
-static char *clean __P((register char *s, int sending));
-char *expect_strtok __P((char *, char *));
-int chatmain __P((int, int, char *));
+void *dup_mem(void *b, size_t c);
+void *copy_of(char *s);
+void break_sequence(void);
+static int  get_string(register char *string);
+static int  put_string(register char *s);
+static int  write_char(int c);
+static int  put_char(int c);
+static int  get_char(void);
+void chat_send(register char *s);
+/* static char *character(int c); */
+void chat_expect(register char *s);
+static char *clean(register char *s, int sending);
+char *expect_strtok(char *, char *);
+int chatmain(int, int, char *);
 
 
 void *dup_mem(b, c)

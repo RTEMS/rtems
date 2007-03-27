@@ -34,14 +34,14 @@
 
 static const char rcsid[] = RCSID;
 
-static void fsm_timeout __P((void *));
-static void fsm_rconfreq __P((fsm *, u_char, u_char *, int));
-static void fsm_rconfack __P((fsm *, int, u_char *, int));
-static void fsm_rconfnakrej __P((fsm *, int, int, u_char *, int));
-static void fsm_rtermreq __P((fsm *, int, u_char *, int));
-static void fsm_rtermack __P((fsm *));
-static void fsm_rcoderej __P((fsm *, u_char *, int));
-static void fsm_sconfreq __P((fsm *, int));
+static void fsm_timeout(void *);
+static void fsm_rconfreq(fsm *, u_char, u_char *, int);
+static void fsm_rconfack(fsm *, int, u_char *, int);
+static void fsm_rconfnakrej(fsm *, int, int, u_char *, int);
+static void fsm_rtermreq(fsm *, int, u_char *, int);
+static void fsm_rtermack(fsm *);
+static void fsm_rcoderej(fsm *, u_char *, int);
+static void fsm_sconfreq(fsm *, int);
 
 #define PROTO_NAME(f)	((f)->callbacks->proto_name)
 
@@ -496,7 +496,7 @@ fsm_rconfnakrej(f, code, id, inp, len)
     u_char *inp;
     int len;
 {
-    int (*proc) __P((fsm *, u_char *, int));
+    int (*proc)(fsm *, u_char *, int);
     int ret;
 
     if (id != f->reqid || f->seen_ack)	/* Expected id? */

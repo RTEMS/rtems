@@ -53,10 +53,6 @@
 
 #include <net/ppp-comp.h>
 
-#if defined(ultrix) || defined(NeXT)
-char *strdup __P((char *));
-#endif
-
 static const char rcsid[] = RCSID;
 
 /*
@@ -126,30 +122,30 @@ bool log_to_file;		/* log_to_fd is a file opened by us */
 /*
  * Prototypes
  */
-static int setdevname __P((char *));
-static int setipaddr __P((char *));
-static int setspeed __P((char *));
-static int noopt __P((char **));
-static int setdomain __P((char **));
-static int setnetmask __P((char **));
-static int setxonxoff __P((char **));
-static int readfile __P((char **));
-static int callfile __P((char **));
-static void usage __P((void));
-static int setlogfile __P((char **));
+static int setdevname(char *);
+static int setipaddr(char *);
+static int setspeed(char *);
+static int noopt(char **);
+static int setdomain(char **);
+static int setnetmask(char **);
+static int setxonxoff(char **);
+static int readfile(char **);
+static int callfile(char **);
+static void usage(void);
+static int setlogfile(char **);
 #ifdef PLUGIN
-static int loadplugin __P((char **));
+static int loadplugin(char **);
 #endif
 
 #ifdef PPP_FILTER
-static int setpassfilter __P((char **));
-static int setactivefilter __P((char **));
+static int setpassfilter(char **);
+static int setactivefilter(char **);
 #endif
 
-static option_t *find_option __P((char *name));
-static int process_option __P((option_t *, char **));
-static int n_arguments __P((option_t *));
-static int number_option __P((char *, u_int32_t *, int));
+static option_t *find_option(char *name);
+static int process_option(option_t *, char **);
+static int n_arguments(option_t *);
+static int number_option(char *, u_int32_t *, int);
 
 /*
  * Structure to store extra lists of options.
@@ -619,7 +615,7 @@ process_option(opt, argv)
     u_int32_t v;
     int iv, a;
     char *sv;
-    int (*parser) __P((char **));
+    int (*parser)(char **);
 
     if ((opt->flags & OPT_PREPASS) == 0 && prepass)
 	return 1;
@@ -725,7 +721,7 @@ process_option(opt, argv)
 
     case o_special_noarg:
     case o_special:
-	parser = (int (*) __P((char **))) opt->addr;
+	parser = (int (*)(char **)) opt->addr;
 	if (!(*parser)(argv))
 	    return 0;
 	break;
@@ -1502,7 +1498,7 @@ loadplugin(argv)
     char *arg = *argv;
     void *handle;
     const char *err;
-    void (*init) __P((void));
+    void (*init)(void);
 
     handle = dlopen(arg, RTLD_GLOBAL | RTLD_NOW);
     if (handle == 0) {
