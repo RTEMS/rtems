@@ -1,5 +1,9 @@
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* pppd/ccp.c, pppd/options.c: Include <net/ppp_comp.h> instead of
+	  <net/ppp-comp.h>.
+	* libnetworking/net/ppp-comp.h: Include <net/ppp_comp.h>.
+	Warn about using it.
 	* libnetworking/Makefile.am: Add net/ppp_comp.h.
 	* libnetworking/net/ppp_comp.h: New (copy of ppp-comp.h).
 	* libnetworking/net/ppp-comp.h: Eliminate __P(). Cosmetics from
