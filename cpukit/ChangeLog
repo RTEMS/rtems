@@ -1,3 +1,7 @@
+2007-03-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/raw_cb.c: Sync with FreeBSD.
+
 2007-03-26	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1231/cpukit
