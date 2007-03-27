@@ -77,7 +77,7 @@ cat >> Makefile << BSPEOF
 $bsp: src/configure
 	@set fnord \$(MAKEFLAGS); amf=\[$]\[$]2; \\
 	  echo "Configuring RTEMS_BSP=$bsp"; \\
-	  \$(mkdir_p) $bsp; \\
+	  \$(MKDIR_P) $bsp; \\
 	  ( cd $bsp && \\
 	    CONFIG_SHELL=\$(SHELL) RTEMS_BSP=$bsp \$(rtems_bsp_configure) ) \\
 	  || case "\$\$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac;

@@ -1,3 +1,7 @@
+2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Use MKDIR_P instead of mkdir_p.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
