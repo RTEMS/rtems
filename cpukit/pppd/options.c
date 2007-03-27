@@ -51,7 +51,7 @@
 #include "chap.h"
 #include "ccp.h"
 
-#include <net/ppp-comp.h>
+#include <net/ppp_comp.h>
 
 static const char rcsid[] = RCSID;
 
