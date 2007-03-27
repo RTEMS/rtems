@@ -55,15 +55,15 @@
 #endif
 
 #ifndef MROUTING
-extern u_long	_ip_mcast_src __P((int vifi));
-extern int	_ip_mforward __P((struct ip *ip, struct ifnet *ifp,
-				  struct mbuf *m, struct ip_moptions *imo));
-extern int	_ip_mrouter_done __P((void));
-extern int	_ip_mrouter_get __P((int cmd, struct socket *so,
-				     struct mbuf **m));
-extern int	_ip_mrouter_set __P((int cmd, struct socket *so,
-				     struct mbuf *m));
-extern int	_mrt_ioctl __P((int req, caddr_t data, struct proc *p));
+extern u_long	_ip_mcast_src(int vifi);
+extern int	_ip_mforward(struct ip *ip, struct ifnet *ifp,
+				  struct mbuf *m, struct ip_moptions *imo);
+extern int	_ip_mrouter_done(void);
+extern int	_ip_mrouter_get(int cmd, struct socket *so,
+				     struct mbuf **m);
+extern int	_ip_mrouter_set(int cmd, struct socket *so,
+				     struct mbuf *m);
+extern int	_mrt_ioctl(int req, caddr_t data, struct proc *p);
 
 /*
  * Dummy routines and globals used when multicast routing is not compiled in.
@@ -208,7 +208,7 @@ struct mrtstat	mrtstat;
 
 int		ip_mrtproto = IGMP_DVMRP;    /* for netstat only */
 #else /* MROUTE_LKM */
-extern void	X_ipip_input __P((struct mbuf *m, int iphlen));
+extern void	X_ipip_input(struct mbuf *m, int iphlen);
 extern struct mrtstat mrtstat;
 static int ip_mrtproto;
 #endif
@@ -279,13 +279,13 @@ static int have_encap_tunnel = 0;
 static u_long last_encap_src;
 static struct vif *last_encap_vif;
 
-static u_long	X_ip_mcast_src __P((int vifi));
-static int	X_ip_mforward __P((struct ip *ip, struct ifnet *ifp, struct mbuf *m, struct ip_moptions *imo));
-static int	X_ip_mrouter_done __P((void));
-static int	X_ip_mrouter_get __P((int cmd, struct socket *so, struct mbuf **m));
-static int	X_ip_mrouter_set __P((int cmd, struct socket *so, struct mbuf *m));
-static int	X_legal_vif_num __P((int vif));
-static int	X_mrt_ioctl __P((int cmd, caddr_t data));
+static u_long	X_ip_mcast_src(int vifi);
+static int	X_ip_mforward(struct ip *ip, struct ifnet *ifp, struct mbuf *m, struct ip_moptions *imo);
+static int	X_ip_mrouter_done(void);
+static int	X_ip_mrouter_get(int cmd, struct socket *so, struct mbuf **m);
+static int	X_ip_mrouter_set(int cmd, struct socket *so, struct mbuf *m);
+static int	X_legal_vif_num(int vif);
+static int	X_mrt_ioctl(int cmd, caddr_t data);
 
 static int get_sg_cnt(struct sioc_sg_req *);
 static int get_vif_cnt(struct sioc_vif_req *);
