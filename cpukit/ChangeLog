@@ -1,5 +1,6 @@
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/scandir.c: Eliminate __P().
 	* pppd/chap.h, pppd/chap_ms.h, pppd/fsm.h, pppd/ipcp.h,
 	pppd/lcp.h, pppd/magic.h, pppd/md4.h, pppd/pppd.h, pppd/upap.h:
 	Eliminate __P().
