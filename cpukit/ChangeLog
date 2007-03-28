@@ -1,3 +1,7 @@
+2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/if_llc.h: Update from FreeBSD.
+
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* pppd/ccp.c, pppd/options.c: Include <net/ppp_comp.h> instead of
