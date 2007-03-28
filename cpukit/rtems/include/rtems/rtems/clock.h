@@ -11,10 +11,10 @@
  *
  *     + set the current date and time
  *     + obtain the current date and time
+ *     + set the nanoseconds since last clock tick handler
  *     + announce a clock tick
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -54,6 +54,12 @@ typedef struct {
   uint32_t    seconds;
   uint32_t    microseconds;
 } rtems_clock_time_value;
+
+/*
+ *  Type for the nanoseconds since last tick BSP extension.
+ */
+typedef Watchdog_Nanoseconds_since_last_tick_routine
+  rtems_nanoseconds_extension_routine;
 
 /*
  *  rtems_clock_get
@@ -96,6 +102,25 @@ rtems_status_code rtems_clock_set(
  */
 
 rtems_status_code rtems_clock_tick( void );
+
+/*
+ *  rtems_clock_set_nanoseconds_extension
+ *
+ *  DESCRIPTION:
+ *
+ *  This directive sets the BSP provided nanoseconds since last tick
+ *  extension.
+ *
+ *  Input parameters:
+ *    routine - pointer to the extension routine
+ *
+ *  Output parameters:
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code        - if unsuccessful
+ */
+rtems_status_code rtems_clock_set_nanoseconds_extension(
+  rtems_nanoseconds_extension_routine routine
+);
 
 #ifdef __cplusplus
 }

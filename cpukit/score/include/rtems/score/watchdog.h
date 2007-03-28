@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -49,6 +49,13 @@ extern "C" {
  *  This type is used to specify the length of intervals.
  */
 typedef uint32_t   Watchdog_Interval;
+
+/** @brief Watchdog Nanoseconds Since Last Tick Extension
+ *
+ *  This type defines a pointer to the BSP plugin to obtain the number
+ *  of nanoseconds since the last clock tick.
+ */
+typedef uint32_t (*Watchdog_Nanoseconds_since_last_tick_routine)(void);
 
 /** @brief Watchdog Service Routine Return Type
  * 
@@ -157,6 +164,14 @@ SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_count;
  */
 
 SCORE_EXTERN volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
+
+/** @brief Watchdog Nanoseconds Since Last Tick Handler
+ *
+ *  This is a pointer to the optional BSP plugin to obtain the number
+ *  of nanoseconds since the last clock tick.
+ */
+SCORE_EXTERN Watchdog_Nanoseconds_since_last_tick_routine
+    _Watchdog_Nanoseconds_since_tick_handler;
 
 /** @brief Per Ticks Watchdog List
  *

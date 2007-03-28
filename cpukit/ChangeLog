@@ -1,3 +1,13 @@
+2007-03-28	Chris Johns <chrisj@rtems.org>
+
+	* rtems/Makefile.am, rtems/include/rtems/rtems/clock.h,
+	score/include/rtems/score/watchdog.h: Add support for a handler to
+	obtain the number of nanoseconds since the last clock tick. The
+	primary interface for this is rtems_clock_set_nanoseconds_extension.
+	Subsequent commits from Joel will redo the TOD support to use this
+	capability.
+	* rtems/src/clocksetnsecshandler.c: New file.
+
 2007-03-28	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1234/cpukit
