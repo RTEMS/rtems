@@ -1,5 +1,11 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/nfs/bootp_subr.c: Eliminate __P().
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Eliminate __P().
+	* libnetworking/kern/uipc_domain.c: Eliminate __P().
+
+2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/pppcompress.h, libnetworking/net/pppcompress.c:
 	Remove (Abandoned in FreeBSD).
 	* libnetworking/Makefile.am: Remove net/pppcompress.c,
