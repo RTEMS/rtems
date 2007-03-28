@@ -319,10 +319,6 @@ $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
-$(PROJECT_INCLUDE)/sys/buf.h: sys/buf.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/buf.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/buf.h
-
 $(PROJECT_INCLUDE)/sys/callout.h: sys/callout.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/callout.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/callout.h
