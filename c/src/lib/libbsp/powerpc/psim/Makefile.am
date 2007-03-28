@@ -50,11 +50,17 @@ pclock_rel_SOURCES = ../shared/clock/p_clock.c
 pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+## Bulk of Console driver with dependencies that entails
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console-io.c console/consupp.S \
-    ../../shared/console-polled.c
+console_rel_SOURCES = ../../shared/console-polled.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## used for debug IO and bottom of console polled
+noinst_PROGRAMS += consoleio.rel
+consoleio_rel_SOURCES = console/console-io.c console/consupp.S
+consoleio_rel_CPPFLAGS = $(AM_CPPFLAGS)
+consoleio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS = irq/irq.h
 
@@ -85,7 +91,7 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel pclock.rel console.rel irq.rel vectors.rel
+libbsp_a_LIBADD = pclock.rel consoleio.rel console.rel irq.rel vectors.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
@@ -93,6 +99,15 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/exceptions.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
+
+libbsp_a_LIBADD += \
+startup_rel-bspclean.o \
+startup_rel-bsplibc.o \
+startup_rel-bsppost.o \
+startup_rel-bspstart.o \
+startup_rel-bootcard.o \
+startup_rel-sbrk.o \
+startup_rel-gnatinstallhandler.o
 
 if HAS_MP
 libbsp_a_LIBADD += shmsupp.rel

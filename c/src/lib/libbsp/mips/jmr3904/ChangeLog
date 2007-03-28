@@ -1,3 +1,8 @@
+2007-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Modify to avoid pulling in too much into minimum
+	executable.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

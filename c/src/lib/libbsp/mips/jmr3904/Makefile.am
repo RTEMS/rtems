@@ -34,10 +34,17 @@ clock_rel_SOURCES = clock/clockdrv.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+## Bulk of Console driver with dependencies that entails
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console-io.c ../../shared/console-polled.c
+console_rel_SOURCES = ../../shared/console-polled.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## used for debug IO and bottom of console polled
+noinst_PROGRAMS += consoleio.rel
+consoleio_rel_SOURCES = console/console-io.c
+consoleio_rel_CPPFLAGS = $(AM_CPPFLAGS)
+consoleio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
@@ -54,10 +61,19 @@ timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
+libbsp_a_LIBADD = clock.rel console.rel consoleio.rel timer.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel \
     ../../../libcpu/@RTEMS_CPU@/tx39/vectorisrs.rel
+libbsp_a_LIBADD += \
+    startup_rel-bspclean.o \
+    startup_rel-bsplibc.o \
+    startup_rel-bsppost.o \
+    startup_rel-bspstart.o \
+    startup_rel-bootcard.o \
+    startup_rel-sbrk.o \
+    startup_rel-gnatinstallhandler.o \
+    startup_rel-setvec.o
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
