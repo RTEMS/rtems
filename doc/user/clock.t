@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -19,6 +19,7 @@ the clock manager are:
 @itemize @bullet
 @item @code{@value{DIRPREFIX}clock_set} - Set system date and time
 @item @code{@value{DIRPREFIX}clock_get} - Get system date and time information
+@item @code{@value{DIRPREFIX}clock_set_nanoseconds_extension} - Install the nanoseconds since last tick handler
 @item @code{@value{DIRPREFIX}clock_tick} - Announce a clock tick
 @end itemize
 
@@ -394,6 +395,57 @@ system date and time to application specific specifications.
 @c
 @c
 @page
+@subsection CLOCK_SET_NANOSECONDS_EXTENSION - Install the nanoseconds since last tick handler
+
+@cindex clock set nanoseconds extension
+@cindex nanoseconds extension
+@cindex nanoseconds time accuracy
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_set_nanoseconds_extension
+@example
+rtems_status_code rtems_clock_set_nanoseconds_extension(
+  rtems_nanoseconds_extension_routine routine
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+NOT SUPPORTED FROM Ada BINDING
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - clock tick processed successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL
+
+@subheading DESCRIPTION:
+
+This directive is used by the Clock device driver to install the 
+@code{routine} which will be invoked by the internal RTEMS method used to
+obtain a highly accurate time of day.  It is usually called during
+the initialization of the driver.
+
+When the @code{routine} is invoked, it will determine the number of
+nanoseconds which have elapsed since the last invocation of
+the @code{@value{DIRPREFIX}clock_tick} directive.  It should do
+this as quickly as possible with as little impact as possible
+on the device used as a clock source.
+
+@subheading NOTES:
+
+This directive may be called from an ISR.
+
+This directive is called as part of every service to obtain the 
+current date and time as well as timestamps.
+
+@c
+@c
+@c
+@page
 @subsection CLOCK_TICK - Announce a clock tick
 
 @cindex clock tick
@@ -409,9 +461,7 @@ rtems_status_code rtems_clock_tick( void );
 
 @ifset is-Ada
 @example
-procedure Clock_Tick (
-   Result :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -431,7 +481,7 @@ timeslicing.
 
 This directive is typically called from an ISR.
 
-The microseconds_per_tick and ticks_per_timeslice
+The @code{microseconds_per_tick} and @code{ticks_per_timeslice}
 parameters in the Configuration Table contain the number of
 microseconds per tick and number of ticks per timeslice,
 respectively.

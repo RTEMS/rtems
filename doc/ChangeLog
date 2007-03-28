@@ -1,3 +1,11 @@
+2007-03-28	Chris Johns <chrisj@rtems.org>
+
+	* user/Makefile.am, user/clock.t: Add support for a handler to obtain
+	the number of nanoseconds since the last clock tick. The primary
+	interface for this is rtems_clock_set_nanoseconds_extension.
+	Subsequent commits from Joel will redo the TOD support to use this
+	capability.
+
 2007-03-10	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1226/cpukit
