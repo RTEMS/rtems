@@ -96,7 +96,7 @@ static struct tcpcb *
  * and an internet control block.
  */
 static int
-tcp_usr_attach(struct socket *so, int proto)
+tcp_usr_attach(struct socket *so, intptr_t proto)
 {
 	int s = splnet();
 	int error;
@@ -317,7 +317,7 @@ tcp_usr_shutdown(struct socket *so)
  * After a receive, possibly send window update to peer.
  */
 static int
-tcp_usr_rcvd(struct socket *so, int flags)
+tcp_usr_rcvd(struct socket *so, intptr_t flags)
 {
 	int s = splnet();
 	int error = 0;
@@ -447,7 +447,7 @@ tcp_usr_sense(struct socket *so, struct stat *sb)
  * Receive out-of-band data.
  */
 static int
-tcp_usr_rcvoob(struct socket *so, struct mbuf *m, int flags)
+tcp_usr_rcvoob(struct socket *so, struct mbuf *m, intptr_t flags)
 {
 	int s = splnet();
 	int error = 0;
@@ -504,7 +504,7 @@ tcp_usr_peeraddr(struct socket *so, struct mbuf *nam)
  * the types worked out.
  */
 static int
-tcp_usr_control(struct socket *so, int cmd, caddr_t arg, struct ifnet *ifp)
+tcp_usr_control(struct socket *so, intptr_t cmd, caddr_t arg, struct ifnet *ifp)
 {
 	return in_control(so, cmd, arg, ifp);
 }

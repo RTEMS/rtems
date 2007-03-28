@@ -793,7 +793,7 @@ old_accept(struct socket *so, struct mbuf *nam)
 }
 
 static int
-old_attach(struct socket *so, int proto)
+old_attach(struct socket *so, intptr_t proto)
 {
 	return so->so_proto->pr_ousrreq(so, PRU_ATTACH, nomb,
 				       (struct mbuf *)proto, /* XXX */
@@ -820,7 +820,7 @@ old_connect2(struct socket *so1, struct socket *so2)
 }
 
 static int
-old_control(struct socket *so, int cmd, caddr_t data, struct ifnet *ifp)
+old_control(struct socket *so, intptr_t cmd, caddr_t data, struct ifnet *ifp)
 {
 	return so->so_proto->pr_ousrreq(so, PRU_CONTROL, (struct mbuf *)cmd, 
 				       (struct mbuf *)data, 
@@ -852,7 +852,7 @@ old_peeraddr(struct socket *so, struct mbuf *nam)
 }
 
 static int
-old_rcvd(struct socket *so, int flags)
+old_rcvd(struct socket *so, intptr_t flags)
 {
 	return so->so_proto->pr_ousrreq(so, PRU_RCVD, nomb,
 				       (struct mbuf *)flags, /* XXX */
@@ -860,7 +860,7 @@ old_rcvd(struct socket *so, int flags)
 }
 
 static int
-old_rcvoob(struct socket *so, struct mbuf *m, int flags)
+old_rcvoob(struct socket *so, struct mbuf *m, intptr_t flags)
 {
 	return so->so_proto->pr_ousrreq(so, PRU_RCVOOB, m,
 				       (struct mbuf *)flags, /* XXX */
