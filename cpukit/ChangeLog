@@ -1,5 +1,7 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ppp-comp.h: Remove (Unused).
+	* libnetworking/Makefile.am: Remove net/ppp-comp.h.
 	* libnetworking/sys/buf.h: Remove (Unused).
 	* libnetworking/Makefile.am: Remove sys/buf.h.
 	* libnetworking/kern/kern_sysctl.c,
