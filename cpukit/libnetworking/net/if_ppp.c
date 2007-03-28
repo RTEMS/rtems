@@ -117,7 +117,7 @@
 #endif
 
 #ifdef VJC
-#include <net/pppcompress.h>
+#include <net/slcompress.h>
 #endif
 
 #include <net/ppp_defs.h>
@@ -516,7 +516,7 @@ pppalloc(pid)
     MALLOC(sc->sc_comp, struct vjcompress *, sizeof(struct vjcompress),
 	   M_DEVBUF, M_NOWAIT);
     if (sc->sc_comp)
-	vj_compress_init(sc->sc_comp, -1);
+	sl_compress_init(sc->sc_comp, -1);
 #endif
 #ifdef PPP_COMPRESS
     sc->sc_xc_state = NULL;
@@ -693,7 +693,7 @@ pppioctl(sc, cmd, data, flag, p)
     case PPPIOCSMAXCID:
 	if (sc->sc_comp) {
 	    s = splsoftnet();
-	    vj_compress_init(sc->sc_comp, *(int *)data);
+	    sl_compress_init(sc->sc_comp, *(int *)data);
 	    splx(s);
 	}
 	break;
@@ -1225,7 +1225,7 @@ ppp_dequeue(sc)
 	    }
 	    /* this code assumes the IP/TCP header is in one non-shared mbuf */
 	    if (ip->ip_p == IPPROTO_TCP) {
-		type = vj_compress_tcp(mp, ip, sc->sc_comp,
+		type = sl_compress_tcp(mp, ip, sc->sc_comp,
 				       !(sc->sc_flags & SC_NO_TCP_CCID));
 		switch (type) {
 		case TYPE_UNCOMPRESSED_TCP:
@@ -1532,7 +1532,7 @@ ppp_inproc(sc, m)
 	 * packets which don't have an explicit connection ID.
 	 */
 	if (sc->sc_comp)
-	    vj_uncompress_tcp(NULL, 0, TYPE_ERROR, sc->sc_comp);
+	    sl_uncompress_tcp(NULL, 0, TYPE_ERROR, sc->sc_comp);
 	s = splimp();
 	sc->sc_flags &= ~SC_VJ_RESET;
 	splx(s);
@@ -1545,7 +1545,7 @@ ppp_inproc(sc, m)
 	if ((sc->sc_flags & SC_REJ_COMP_TCP) || sc->sc_comp == 0)
 	    goto bad;
 
-	xlen = vj_uncompress_tcp_core(cp + PPP_HDRLEN, m->m_len - PPP_HDRLEN,
+	xlen = sl_uncompress_tcp_core(cp + PPP_HDRLEN, m->m_len - PPP_HDRLEN,
 				      ilen - PPP_HDRLEN, TYPE_COMPRESSED_TCP,
 				      sc->sc_comp, &iphdr, &hlen);
 
@@ -1600,7 +1600,7 @@ ppp_inproc(sc, m)
 	if ((sc->sc_flags & SC_REJ_COMP_TCP) || sc->sc_comp == 0)
 	    goto bad;
 
-	xlen = vj_uncompress_tcp_core(cp + PPP_HDRLEN, m->m_len - PPP_HDRLEN,
+	xlen = sl_uncompress_tcp_core(cp + PPP_HDRLEN, m->m_len - PPP_HDRLEN,
 				      ilen - PPP_HDRLEN, TYPE_UNCOMPRESSED_TCP,
 				      sc->sc_comp, &iphdr, &hlen);
 

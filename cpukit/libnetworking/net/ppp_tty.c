@@ -96,7 +96,7 @@
 #include <netinet/in.h>
 #include <netinet/in_systm.h>
 #include <netinet/ip.h>
-#include <net/pppcompress.h>
+#include <net/slcompress.h>
 #endif
 
 #include <rtems.h>
