@@ -146,10 +146,6 @@ $(PROJECT_INCLUDE)/net/if_pppvar.h: net/if_pppvar.h $(PROJECT_INCLUDE)/net/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_pppvar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_pppvar.h
 
-$(PROJECT_INCLUDE)/net/pppcompress.h: net/pppcompress.h $(PROJECT_INCLUDE)/net/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/pppcompress.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/pppcompress.h
-
 $(PROJECT_INCLUDE)/net/slcompress.h: net/slcompress.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/slcompress.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/slcompress.h
