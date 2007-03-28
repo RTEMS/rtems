@@ -1,5 +1,6 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/in_rmx.c: Eliminate __P().
 	* libnetworking/netinet/tcp_usrreq.c: Eliminate __P().
 	* libnetworking/netinet/udp_usrreq.c: Eliminate __P().
 	* libnetworking/nfs/bootp_subr.c: Eliminate __P().
