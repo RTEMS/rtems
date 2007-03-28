@@ -1,5 +1,7 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/ip_input.c: Eliminate __P().
+	Change "int next" to "int32_t next" for 16bit targets.
 	* libnetworking/netinet/tcp_input.c: Eliminate __P().
 	* libnetworking/netinet/in_rmx.c: Eliminate __P().
 	* libnetworking/netinet/tcp_usrreq.c: Eliminate __P().

@@ -168,17 +168,17 @@ static	struct ip_srcrt {
 static u_short	frag_divert_port;
 #endif
 
-static void save_rte __P((u_char *, struct in_addr));
-static void	 ip_deq __P((struct ipasfrag *));
-static int	 ip_dooptions __P((struct mbuf *));
-static void	 ip_enq __P((struct ipasfrag *, struct ipasfrag *));
-static void	 ip_forward __P((struct mbuf *, int));
-static void	 ip_freef __P((struct ipq *));
+static void save_rte(u_char *, struct in_addr);
+static void	 ip_deq(struct ipasfrag *);
+static int	 ip_dooptions(struct mbuf *);
+static void	 ip_enq(struct ipasfrag *, struct ipasfrag *);
+static void	 ip_forward(struct mbuf *, int);
+static void	 ip_freef(struct ipq *);
 static struct ip *
-	 ip_reass __P((struct ipasfrag *, struct ipq *, struct ipq *));
+	 ip_reass(struct ipasfrag *, struct ipq *, struct ipq *);
 static struct in_ifaddr *
-	 ip_rtaddr __P((struct in_addr));
-void	ipintr __P((void));
+	 ip_rtaddr(struct in_addr);
+void	ipintr(void);
 /*
  * IP initialization: fill in IP protocol switch table.
  * All protocols not implemented in kernel go to raw IP protocol handler.
@@ -611,7 +611,8 @@ ip_reass(ip, fp, where)
 	register struct ipasfrag *q;
 	struct mbuf *t;
 	int hlen = ip->ip_hl << 2;
-	int i, next;
+	int i;
+	int32_t next;
 
 	/*
 	 * Presence of header sizes in mbufs
