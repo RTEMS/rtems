@@ -86,10 +86,10 @@ SYSCTL_STRUCT(_net_inet_udp, UDPCTL_STATS, stats, CTLFLAG_RD,
 
 static struct	sockaddr_in udp_in = { sizeof(udp_in), AF_INET };
 
-static	void udp_detach __P((struct inpcb *));
-static	int udp_output __P((struct inpcb *, struct mbuf *, struct mbuf *,
-			    struct mbuf *));
-static	void udp_notify __P((struct inpcb *, int));
+static	void udp_detach(struct inpcb *);
+static	int udp_output(struct inpcb *, struct mbuf *, struct mbuf *,
+			    struct mbuf *);
+static	void udp_notify(struct inpcb *, int);
 
 void
 udp_init()

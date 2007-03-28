@@ -74,11 +74,11 @@
 extern	char *tcpstates[];
 
 static int	tcp_attach(struct socket *);
-static int	tcp_connect __P((struct tcpcb *, struct mbuf *));
+static int	tcp_connect(struct tcpcb *, struct mbuf *);
 static struct tcpcb *
 		tcp_disconnect(struct tcpcb *);
 static struct tcpcb *
-		tcp_usrclosed __P((struct tcpcb *));
+		tcp_usrclosed(struct tcpcb *);
 
 #ifdef TCPDEBUG
 #define	TCPDEBUG0	int ostate
