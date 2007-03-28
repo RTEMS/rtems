@@ -110,23 +110,23 @@ extern struct nfsv3_diskless nfsv3_diskless;
 
 /* mountd RPC */
 #if !defined(__rtems__)
-static int md_mount __P((struct sockaddr_in *mdsin, char *path,
-	u_char *fhp, int *fhsizep, struct nfs_args *args,struct proc *procp));
-static int md_lookup_swap __P((struct sockaddr_in *mdsin,char *path,
+static int md_mount(struct sockaddr_in *mdsin, char *path,
+	u_char *fhp, int *fhsizep, struct nfs_args *args,struct proc *procp);
+static int md_lookup_swap(struct sockaddr_in *mdsin,char *path,
 			       u_char *fhp, int *fhsizep, 
 			       struct nfs_args *args,
-			       struct proc *procp));
-static int setfs __P((struct sockaddr_in *addr, char *path, char *p));
-static int getdec __P((char **ptr));
+			       struct proc *procp);
+static int setfs(struct sockaddr_in *addr, char *path, char *p);
+static int getdec(char **ptr);
 #endif
 #if !defined(__rtems__)
-static char *substr __P((char *a,char *b));
-static void mountopts __P((struct nfs_args *args, char *p)); 
-static int xdr_opaque_decode __P((struct mbuf **ptr,u_char *buf,
-				  int len));
-static int xdr_int_decode __P((struct mbuf **ptr,int *iptr));
+static char *substr(char *a,char *b);
+static void mountopts(struct nfs_args *args, char *p); 
+static int xdr_opaque_decode(struct mbuf **ptr,u_char *buf,
+				  int len);
+static int xdr_int_decode(struct mbuf **ptr,int *iptr);
 #endif
-static void printip __P((char *prefix,struct in_addr addr));
+static void printip(char *prefix,struct in_addr addr);
 
 #ifdef BOOTP_DEBUG
 void bootpboot_p_sa(struct sockaddr *sa,struct sockaddr *ma);

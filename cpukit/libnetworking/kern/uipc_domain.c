@@ -58,16 +58,16 @@
 
 #if !defined(__rtems__)
 static int	x_save_spl;			/* used by kludge*/
-static void kludge_splimp __P((void *));
-static void kludge_splx __P((void *));
-       void domaininit __P((void *));
+static void kludge_splimp(void *);
+static void kludge_splx(void *);
+       void domaininit(void *);
 SYSINIT(splimp, SI_SUB_PROTO_BEGIN, SI_ORDER_FIRST, kludge_splimp, &x_save_spl)
 SYSINIT(domain, SI_SUB_PROTO_DOMAIN, SI_ORDER_FIRST, domaininit, NULL)
 SYSINIT(splx, SI_SUB_PROTO_END, SI_ORDER_FIRST, kludge_splx, &x_save_spl)
 #endif
 
-static void	pffasttimo __P((void *));
-static void	pfslowtimo __P((void *));
+static void	pffasttimo(void *);
+static void	pfslowtimo(void *);
 
 struct domain *domains;
 

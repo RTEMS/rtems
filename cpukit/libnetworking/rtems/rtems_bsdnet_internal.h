@@ -79,7 +79,7 @@ typedef	u_int64_t	u_quad_t;	/* quads */
 typedef	int64_t		quad_t;
 typedef	quad_t *	qaddr_t;
 
-typedef void __sighandler_t __P((int));
+typedef void __sighandler_t(int);
 typedef	__sighandler_t	*sig_t;	/* type of pointer to a signal function */
 #define NSIG    32
 struct	sigaltstack {
