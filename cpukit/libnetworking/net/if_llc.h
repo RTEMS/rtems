@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *      @(#)if_llc.h	8.1 (Berkeley) 6/10/93
- * $FreeBSD: src/sys/net/if_llc.h,v 1.11 2005/01/07 01:45:34 imp Exp $
+ * $FreeBSD: src/sys/net/if_llc.h,v 1.13 2006/12/01 17:50:11 imp Exp $
  */
  
 /*
@@ -54,45 +54,45 @@
  */
 
 struct llc {
-	u_int8_t	llc_dsap;
-	u_int8_t	llc_ssap;
+	u_int8_t llc_dsap;
+	u_int8_t llc_ssap;
 	union {
 	    struct {
 		u_int8_t control;
 		u_int8_t format_id;
 		u_int8_t class;
 		u_int8_t window_x2;
-	    } type_u __packed;
+	    } __packed type_u;
 	    struct {
 		u_int8_t num_snd_x2;
 		u_int8_t num_rcv_x2;
-	    } type_i __packed;
+	    } __packed type_i;
 	    struct {
 		u_int8_t control;
 		u_int8_t num_rcv_x2;
-	    } type_s __packed;
+	    } __packed type_s;
 	    struct {
 	        u_int8_t control;
 		/*
 		 * We cannot put the following fields in a structure because
 		 * the structure rounding might cause padding.
 		 */
-			u_int8_t frmr_rej_pdu0;
-			u_int8_t frmr_rej_pdu1;
-			u_int8_t frmr_control;
-			u_int8_t frmr_control_ext;
-			u_int8_t frmr_cause;
-	    } type_frmr __packed;
+		u_int8_t frmr_rej_pdu0;
+		u_int8_t frmr_rej_pdu1;
+		u_int8_t frmr_control;
+		u_int8_t frmr_control_ext;
+		u_int8_t frmr_cause;
+	    } __packed type_frmr;
 	    struct {
-		u_int8_t control;
-		u_int8_t org_code[3];
+		u_int8_t  control;
+		u_int8_t  org_code[3];
 		u_int16_t ether_type;
-	    } type_snap __packed;
+	    } __packed type_snap;
 	    struct {
 		u_int8_t control;
 		u_int8_t control_ext;
-	    } type_raw __packed;
-	} llc_un /* XXX __packed ??? */;
+	    } __packed type_raw;
+	} __packed llc_un;
 } __packed;
 
 struct frmrinfo {
@@ -103,11 +103,11 @@ struct frmrinfo {
 	u_int8_t frmr_cause;
 } __packed;
 
-#define llc_control            llc_un.type_u.control
-#define	llc_control_ext        llc_un.type_raw.control_ext
-#define llc_fid                llc_un.type_u.format_id
-#define llc_class              llc_un.type_u.class
-#define llc_window             llc_un.type_u.window_x2
+#define	llc_control		llc_un.type_u.control
+#define	llc_control_ext		llc_un.type_raw.control_ext
+#define	llc_fid			llc_un.type_u.format_id
+#define	llc_class		llc_un.type_u.class
+#define	llc_window		llc_un.type_u.window_x2
 #define	llc_frmrinfo 		llc_un.type_frmr.frmr_rej_pdu0
 #define	llc_frmr_pdu0		llc_un.type_frmr.frmr_rej_pdu0
 #define	llc_frmr_pdu1		llc_un.type_frmr.frmr_rej_pdu1
