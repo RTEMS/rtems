@@ -173,19 +173,19 @@ struct ifnet;
 struct pr_usrreqs {
 	int	(*pru_abort)(struct socket *so);
 	int	(*pru_accept)(struct socket *so, struct mbuf *nam);
-	int	(*pru_attach)(struct socket *so, int proto);
+	int	(*pru_attach)(struct socket *so, intptr_t proto);
 	int	(*pru_bind)(struct socket *so, struct mbuf *nam);
 	int	(*pru_connect)(struct socket *so, struct mbuf *nam);
 	int	(*pru_connect2)(struct socket *so1, struct socket *so2);
-	int	(*pru_control)(struct socket *so, int cmd, caddr_t data,
+	int	(*pru_control)(struct socket *so, intptr_t cmd, caddr_t data,
 				    struct ifnet *ifp);
 	int	(*pru_detach)(struct socket *so);
 	int	(*pru_disconnect)(struct socket *so);
 	int	(*pru_listen)(struct socket *so);
 	int	(*pru_peeraddr)(struct socket *so, struct mbuf *nam);
-	int	(*pru_rcvd)(struct socket *so, int flags);
+	int	(*pru_rcvd)(struct socket *so, intptr_t flags);
 	int	(*pru_rcvoob)(struct socket *so, struct mbuf *m,
-				   int flags);
+				   intptr_t flags);
 	/*
 	 * The `m' parameter here is almost certainly going to become a
 	 * `struct uio' at some point in the future.  Similar changes
