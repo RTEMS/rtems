@@ -452,7 +452,7 @@ int  _CPU_display_memory_attribute(){
   
   regCr0.i = i386_get_cr0();
   
-  printk("\n\n >>>>>>>>>  MEMORY CACHE CONFIGURATION <<<<<<<<<<\n\n");
+  printk("\n\n********* MEMORY CACHE CONFIGURATION *****\n");
 
   printk("CR0 -> paging           : %s\n",(regCr0.cr0.paging ? "ENABLE ":"DISABLE"));
   printk("       page-level cache : %s\n\n",(regCr0.cr0.page_level_cache_disable ? "DISABLE":"ENABLE"));

@@ -1,3 +1,7 @@
+2007-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	* page.c: Redo print to not have cvs conflict marker.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
