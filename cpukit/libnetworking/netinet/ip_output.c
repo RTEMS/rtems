@@ -70,15 +70,15 @@
 
 u_short ip_id;
 
-static struct mbuf *ip_insertoptions __P((struct mbuf *, struct mbuf *, int *));
+static struct mbuf *ip_insertoptions(struct mbuf *, struct mbuf *, int *);
 static void	ip_mloopback
-	__P((struct ifnet *, struct mbuf *, struct sockaddr_in *, int));
+	(struct ifnet *, struct mbuf *, struct sockaddr_in *, int);
 static int	ip_getmoptions
-	__P((int, struct ip_moptions *, struct mbuf **));
-static int	ip_optcopy __P((struct ip *, struct ip *));
-static int	ip_pcbopts __P((struct mbuf **, struct mbuf *));
+	(int, struct ip_moptions *, struct mbuf **);
+static int	ip_optcopy(struct ip *, struct ip *);
+static int	ip_pcbopts(struct mbuf **, struct mbuf *);
 static int	ip_setmoptions
-	__P((int, struct ip_moptions **, struct mbuf *));
+	(int, struct ip_moptions **, struct mbuf *);
 
 extern	struct protosw inetsw[];
 

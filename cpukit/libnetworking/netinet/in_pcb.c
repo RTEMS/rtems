@@ -61,8 +61,8 @@
 
 struct	in_addr zeroin_addr;
 
-static void	 in_pcbinshash __P((struct inpcb *));
-static void	 in_rtchange __P((struct inpcb *, int));
+static void	 in_pcbinshash(struct inpcb *);
+static void	 in_rtchange(struct inpcb *, int);
 
 /*
  * These configure the range of local port addresses assigned to
@@ -513,7 +513,7 @@ in_pcbnotify(head, dst, fport_arg, laddr, lport_arg, cmd, notify)
 	u_int fport_arg, lport_arg;
 	struct in_addr laddr;
 	int cmd;
-	void (*notify) __P((struct inpcb *, int));
+	void (*notify)(struct inpcb *, int);
 {
 	register struct inpcb *inp, *oinp;
 	struct in_addr faddr;

@@ -63,10 +63,10 @@ struct multi_kludge {
 	struct in_multihead mk_head;
 };
 
-static void	in_socktrim __P((struct sockaddr_in *));
-static int	in_ifinit __P((struct ifnet *,
-	    struct in_ifaddr *, struct sockaddr_in *, int));
-static void	in_ifscrub __P((struct ifnet *, struct in_ifaddr *));
+static void	in_socktrim(struct sockaddr_in *);
+static int	in_ifinit(struct ifnet *,
+	    struct in_ifaddr *, struct sockaddr_in *, int);
+static void	in_ifscrub(struct ifnet *, struct in_ifaddr *);
 
 static int subnetsarelocal = 0;
 SYSCTL_INT(_net_inet_ip, OID_AUTO, subnets_are_local, CTLFLAG_RW, 

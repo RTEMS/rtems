@@ -69,7 +69,7 @@
 #include <netinet/igmp_var.h>
 
 static struct router_info *
-		find_rti __P((struct ifnet *ifp));
+		find_rti (struct ifnet *ifp);
 
 static struct igmpstat igmpstat;
 

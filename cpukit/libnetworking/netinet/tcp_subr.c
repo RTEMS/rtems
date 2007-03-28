@@ -84,7 +84,7 @@ SYSCTL_INT(_net_inet_tcp, TCPCTL_DO_RFC1323, rfc1323,
 	CTLFLAG_RW, &tcp_do_rfc1323 , 0, "");
 #endif
 
-static void	tcp_notify __P((struct inpcb *, int));
+static void	tcp_notify(struct inpcb *, int);
 
 /*
  * Target size of TCP PCB hash table. Will be rounded down to a prime
@@ -581,7 +581,7 @@ tcp_ctlinput(cmd, sa, vip)
 {
 	struct ip *ip = vip;
 	struct tcphdr *th;
-	void (*notify) __P((struct inpcb *, int)) = tcp_notify;
+	void (*notify)(struct inpcb *, int) = tcp_notify;
 
 	if (cmd == PRC_QUENCH)
 		notify = tcp_quench;
