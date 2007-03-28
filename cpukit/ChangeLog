@@ -1,5 +1,8 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/kern/kern_sysctl.c,
+	libnetworking/kern/uipc_socket2.c: Include <sys/queue.h> instead of
+	<sys/buf.h>.
 	*  libcsupport/include/sys/sockio.h: Partial update from
 	  FreeBSD.
 
