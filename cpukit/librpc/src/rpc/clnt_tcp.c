@@ -123,10 +123,10 @@ clnttcp_create(raddr, prog, vers, sockp, sendsz, recvsz)
 	register struct ct_data *ct = NULL;
 	struct timeval now;
 	struct rpc_msg call_msg;
-	static u_int32_t disrupt;
+	static uintptr_t disrupt;
 
 	if (disrupt == 0)
-		disrupt = (u_int32_t)(long)raddr;
+		disrupt = (uintptr_t)raddr;
 
 	h  = (CLIENT *)mem_alloc(sizeof(*h));
 	if (h == NULL) {
