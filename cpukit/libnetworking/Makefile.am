@@ -63,7 +63,7 @@ include_netdir = $(includedir)/net
 
 include_net_HEADERS = net/bpf.h net/ethernet.h net/if.h net/if_arp.h \
     net/if_dl.h net/if_llc.h net/if_ppp.h net/if_types.h net/if_var.h \
-    net/netisr.h net/ppp-comp.h net/ppp_defs.h net/radix.h net/raw_cb.h \
+    net/netisr.h net/ppp_defs.h net/radix.h net/raw_cb.h \
     net/route.h net/if_pppvar.h net/slcompress.h
 include_net_HEADERS += net/if_media.h
 include_net_HEADERS += net/ppp_comp.h
