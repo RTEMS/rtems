@@ -1,3 +1,10 @@
+2007-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1234/cpukit
+	* libcsupport/Makefile.am: Provide printk() based implementation of
+	__assert() to reduce dependencies in executables.
+	* libcsupport/src/__assert.c: New file.
+
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* librpc/src/rpc/clnt_tcp.c (clnttcp_create): 
