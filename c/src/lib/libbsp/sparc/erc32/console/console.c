@@ -416,14 +416,3 @@ rtems_device_driver console_control(
 {
   return rtems_termios_ioctl (arg);
 }
-
-/*
- *  To support printk
- */
-
-#include <rtems/bspIo.h>
-
-void BSP_output_char_f(char c) { console_outbyte_polled( 0, c ); }
-
-BSP_output_char_function_type           BSP_output_char = BSP_output_char_f;
-BSP_polling_getchar_function_type       BSP_poll_char = NULL;

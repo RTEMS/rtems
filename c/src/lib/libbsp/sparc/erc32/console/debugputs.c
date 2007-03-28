@@ -16,7 +16,6 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 /*
  *  console_outbyte_polled
@@ -74,7 +73,7 @@ int console_inbyte_nonblocking( int port )
       return (int) ERC32_MEC.UART_Channel_B;
 
     default:
-      assert( 0 );
+      rtems_fatal_error_occurred( 'D' << 8 | (port & 0xffffff) );
   }
 
   return -1;
@@ -110,3 +109,14 @@ void DEBUG_puts(
     console_outbyte_polled( 0, '\n' );
   ERC32_Restore_interrupt( ERC32_INTERRUPT_UART_A_RX_TX, old_level );
 }
+
+/*
+ *  To support printk
+ */
+
+#include <rtems/bspIo.h>
+
+void BSP_output_char_f(char c) { console_outbyte_polled( 0, c ); }
+
+BSP_output_char_function_type           BSP_output_char = BSP_output_char_f;
+BSP_polling_getchar_function_type       BSP_poll_char = NULL;
