@@ -1,5 +1,12 @@
 2007-03-28	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/ckinit.c: Add support to the Clock driver template for
+	rtems_clock_set_nanoseconds_extension and the potential for TOD and
+	timestamps accurate to the nanosecond. On this BSP however, it is
+	only accurate to the microsecond.
+
+2007-03-28	Joel Sherrill <joel@OARcorp.com>
+
 	PR 1233/bsps
 	* Makefile.am, console/console.c, console/debugputs.c: Move printk
 	support code into debug IO file so you do not get the entire console

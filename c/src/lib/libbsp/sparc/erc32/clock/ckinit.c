@@ -46,6 +46,18 @@
 
 extern int CLOCK_SPEED;
 
+
+uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+{
+  uint32_t clicks;
+
+  clicks = ERC32_MEC.Real_Time_Clock_Counter;
+
+  return (uint32_t) (BSP_Configuration.microseconds_per_tick - clicks) * 1000;
+}
+
+#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
+
 #define Clock_driver_support_initialize_hardware() \
   do { \
     /* approximately 1 us per countdown */ \
