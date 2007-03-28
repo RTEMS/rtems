@@ -1,5 +1,6 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/pppcompress.h: Eliminate __P().
 	* libnetworking/net/if_pppvar.h: Cosmetics from FreeBSD.
 	* libnetworking/net/if_llc.h: Update from FreeBSD.
 
