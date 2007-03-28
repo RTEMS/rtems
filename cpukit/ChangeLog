@@ -1,5 +1,13 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/igmp.c: Eliminate __P().
+	* libnetworking/netinet/in.c: Eliminate __P().
+	* libnetworking/netinet/tcp_subr.c: Eliminate __P().
+	* libnetworking/netinet/in_pcb.c: Eliminate __P().
+	* libnetworking/netinet/ip_output.c: Eliminate __P().
+
+2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/sys/protosw.h (pr_usrreqs.pru_attach, 
 	pr_usrreqs.pru_control, pr_usrreqs.pru_rcvd, pr_usrreqs.pru_rcvoob):
 	Change int args to intptr_t because they are casted to pointers.
