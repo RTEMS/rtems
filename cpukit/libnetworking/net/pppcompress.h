@@ -154,11 +154,11 @@ struct vjcompress {
 /* flag values */
 #define SLF_TOSS 1		/* tossing rcvd frames because of input err */
 
-void	 vj_compress_init __P((struct vjcompress *, int));
-u_int	 vj_compress_tcp __P((struct mbuf *,
-	    struct ip *, struct vjcompress *, int));
-int	 vj_uncompress_tcp __P((u_char **, int, u_int, struct vjcompress *));
-int	 vj_uncompress_tcp_core __P((u_char *, int, int, u_int,
-	    struct vjcompress *, u_char **, u_int *));
+void	 vj_compress_init(struct vjcompress *, int);
+u_int	 vj_compress_tcp(struct mbuf *,
+	    struct ip *, struct vjcompress *, int);
+int	 vj_uncompress_tcp(u_char **, int, u_int, struct vjcompress *);
+int	 vj_uncompress_tcp_core(u_char *, int, int, u_int,
+	    struct vjcompress *, u_char **, u_int *);
 
 #endif /* _NET_PPPCOMPRESS_H_ */
