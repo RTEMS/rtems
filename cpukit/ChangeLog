@@ -1,5 +1,13 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/protosw.h (pr_usrreqs.pru_attach, 
+	pr_usrreqs.pru_control, pr_usrreqs.pru_rcvd, pr_usrreqs.pru_rcvoob):
+	Change int args to intptr_t because they are casted to pointers.
+	* libnetworking/netinet/tcp_usrreq.c, 
+	libnetworking/kern/uipc_socket2.c: Reflect changes to sys/protosw.h.
+
+2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/rtems_glue.c: Cast to intptr_t instead of
 	"long", because long is not guaranteed to be castable to char*.
 	* libnetworking/netinet/ip_input.c: Eliminate __P().
