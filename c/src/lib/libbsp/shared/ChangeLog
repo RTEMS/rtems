@@ -1,3 +1,8 @@
+2007-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1232/bsps
+	* bsppost.c: It should not be a fatal error to not have a console.
+
 2007-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* vmeUniverse/vmeUniverse.c: Use size_t for sizes.
