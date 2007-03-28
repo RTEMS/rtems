@@ -1,5 +1,6 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if_pppvar.h: Cosmetics from FreeBSD.
 	* libnetworking/net/if_llc.h: Update from FreeBSD.
 
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
