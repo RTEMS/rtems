@@ -154,7 +154,7 @@ bsd_init (void)
 		printf ("Can't get network cluster memory.\n");
 		return -1;
 	}
-	p = (char *)(((unsigned long)p + (MCLBYTES-1)) & ~(MCLBYTES-1));
+	p = (char *)(((intptr_t)p + (MCLBYTES-1)) & ~(MCLBYTES-1));
 	mbutl = (struct mbuf *)p;
 	for (i = 0; i < nmbclusters; i++) {
 		((union mcluster *)p)->mcl_next = mclfree;

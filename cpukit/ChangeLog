@@ -1,5 +1,7 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_glue.c: Cast to intptr_t instead of
+	"long", because long is not guaranteed to be castable to char*.
 	* libnetworking/netinet/ip_input.c: Eliminate __P().
 	Change "int next" to "int32_t next" for 16bit targets.
 	* libnetworking/netinet/tcp_input.c: Eliminate __P().
