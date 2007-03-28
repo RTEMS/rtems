@@ -1,5 +1,10 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	*  libcsupport/include/sys/sockio.h: Partial update from
+	  FreeBSD.
+
+2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/ip_output.c: Use uint32_t optlen.
 	* libnetworking/netinet/igmp.c: Eliminate __P().
 	* libnetworking/netinet/in.c: Eliminate __P().
