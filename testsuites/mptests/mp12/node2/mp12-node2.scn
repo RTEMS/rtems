@@ -4,7 +4,7 @@ Getting ID of remote Partition (Global)
 Attempting to delete remote Partition (Global)
 rtems_partition_delete correctly returned RTEMS_ILLEGAL_ON_REMOTE_OBJECT
 Obtaining a buffer from the global partition
->>>>>>> address returned will differ
+------> address returned will differ
 Address returned was : 0x200f0000
 Releasing a buffer to the global partition
 *** END OF TEST 12 ***
