@@ -122,10 +122,6 @@ $(PROJECT_INCLUDE)/net/netisr.h: net/netisr.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/netisr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/netisr.h
 
-$(PROJECT_INCLUDE)/net/ppp-comp.h: net/ppp-comp.h $(PROJECT_INCLUDE)/net/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/ppp-comp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/ppp-comp.h
-
 $(PROJECT_INCLUDE)/net/ppp_defs.h: net/ppp_defs.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/ppp_defs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/ppp_defs.h
