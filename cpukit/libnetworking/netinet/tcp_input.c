@@ -87,12 +87,12 @@ u_long	tcp_now;
 struct inpcbhead tcb;
 struct inpcbinfo tcbinfo;
 
-static void	 tcp_dooptions __P((struct tcpcb *,
-	    u_char *, int, struct tcpiphdr *, struct tcpopt *));
-static void	 tcp_pulloutofband __P((struct socket *,
-	    struct tcpiphdr *, struct mbuf *));
-static int	 tcp_reass __P((struct tcpcb *, struct tcpiphdr *, struct mbuf *));
-static void	 tcp_xmit_timer __P((struct tcpcb *, int));
+static void	 tcp_dooptions(struct tcpcb *,
+	    u_char *, int, struct tcpiphdr *, struct tcpopt *);
+static void	 tcp_pulloutofband(struct socket *,
+	    struct tcpiphdr *, struct mbuf *);
+static int	 tcp_reass(struct tcpcb *, struct tcpiphdr *, struct mbuf *);
+static void	 tcp_xmit_timer(struct tcpcb *, int);
 
 #endif /* TUBA_INCLUDE */
 
