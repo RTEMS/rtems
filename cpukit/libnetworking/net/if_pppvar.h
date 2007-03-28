@@ -1,4 +1,3 @@
-/*  $Id$ */
 /*
  * if_pppvar.h - private structures and declarations for PPP.
  *
@@ -38,16 +37,22 @@
  * from this software without specific prior written permission.
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
- * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * $FreeBSD: src/sys/net/if_pppvar.h,v 1.26 2006/12/05 18:54:21 ume Exp $
  */
 
+/*
+ * $Id$
+ */
+ 
 /*
  * Supported network protocols.  These values are used for
  * indexing sc_npmode.
  */
-#define NP_IP                 0 /* Internet Protocol */
-#define NUM_NP                1 /* Number of NPs. */
-#define NUM_MBUFQ            64
+#define NP_IP	0		/* Internet Protocol */
+#define NUM_NP	1		/* Number of NPs. */
+#define NUM_MBUFQ	64
 
 
 /*
@@ -85,26 +90,26 @@ struct ppp_softc {
 #endif
 
 	/* Device-dependent part for async lines. */
-	ext_accm sc_asyncmap;		     /* async control character map */
-	u_long	sc_rasyncmap;		     /* receive async control char map */
-	struct	mbuf *sc_outm;		     /* mbuf chain currently being output */
-	struct	mbuf *sc_outmc;		     /* mbuf currently being output */
-	struct	mbuf *sc_m;		     /* pointer to input mbuf chain */
-	struct	mbuf *sc_mc;		     /* pointer to current input mbuf */
-	char	*sc_mp;			     /* ptr to next char in input mbuf */
-	short	sc_ilen;		     /* length of input packet so far */
-	u_short	sc_fcs;			     /* FCS so far (input) */
-	u_short	sc_outfcs;		     /* FCS so far for output packet */
-	u_char	sc_rawin[16];		     /* chars as received */
-	int	sc_rawin_count;		     /* # in sc_rawin */
+	ext_accm sc_asyncmap;		/* async control character map */
+	u_long	sc_rasyncmap;		/* receive async control char map */
+	struct	mbuf *sc_outm;		/* mbuf chain currently being output */
+	struct	mbuf *sc_outmc;		/* mbuf currently being output */
+	struct	mbuf *sc_m;		/* pointer to input mbuf chain */
+	struct	mbuf *sc_mc;		/* pointer to current input mbuf */
+	char	*sc_mp;			/* ptr to next char in input mbuf */
+	short	sc_ilen;		/* length of input packet so far */
+	u_short	sc_fcs;			/* FCS so far (input) */
+	u_short	sc_outfcs;		/* FCS so far for output packet */
+	u_char	sc_rawin[16];		/* chars as received */
+	int	sc_rawin_count;		/* # in sc_rawin */
 
-	struct	ifqueue sc_freeq;            /* free packets */
-	short	sc_outoff;		     /* output packet byte offset */
-	short	sc_outflag;		     /* output status flag */
-	short	sc_outlen;		     /* length of output packet */
-	short	sc_outfcslen;		     /* length of output fcs data */
-	u_char	sc_outfcsbuf[8];	     /* output packet fcs buffer */
-	u_char *sc_outbuf;		     /* pointer to output data */
+	struct	ifqueue sc_freeq;       /* free packets */
+	short	sc_outoff;		/* output packet byte offset */
+	short	sc_outflag;		/* output status flag */
+	short	sc_outlen;		/* length of output packet */
+	short	sc_outfcslen;		/* length of output fcs data */
+	u_char	sc_outfcsbuf[8];	/* output packet fcs buffer */
+	u_char *sc_outbuf;		/* pointer to output data */
 	u_char  sc_outchar;
 
 	rtems_id sc_rxtask;
