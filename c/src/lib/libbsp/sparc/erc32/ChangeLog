@@ -1,3 +1,10 @@
+2007-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1233/bsps
+	* Makefile.am, console/console.c, console/debugputs.c: Move printk
+	support code into debug IO file so you do not get the entire console
+	driver when you do not want it.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

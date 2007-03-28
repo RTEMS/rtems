@@ -43,10 +43,14 @@ gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c console/consolereserveresources.c \
-    console/debugputs.c
+console_rel_SOURCES = console/console.c console/consolereserveresources.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_PROGRAMS += debugio.rel
+debugio_rel_SOURCES = console/debugputs.c
+debugio_rel_CPPFLAGS = $(AM_CPPFLAGS)
+debugio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/ckinit.c
@@ -68,10 +72,15 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel console.rel clock.rel timer.rel gnatsupp.rel
+libbsp_a_LIBADD = console.rel debugio.rel clock.rel timer.rel gnatsupp.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += erc32sonic.rel
 endif
+
+libbsp_a_LIBADD += startup_rel-boardinit.o startup_rel-bootcard.o \
+    startup_rel-bspclean.o startup_rel-bsplibc.o startup_rel-bsppost.o \
+    startup_rel-bspstart.o startup_rel-erc32mec.o startup_rel-main.o \
+    startup_rel-sbrk.o startup_rel-setvec.o startup_rel-spurious.o
 
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
