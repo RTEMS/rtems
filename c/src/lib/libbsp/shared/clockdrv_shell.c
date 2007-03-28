@@ -152,6 +152,12 @@ void Install_clock(
    */
   Clock_driver_support_install_isr( clock_isr, Old_ticker );
 
+  #if defined(Clock_driver_nanoseconds_since_last_tick)
+    rtems_clock_set_nanoseconds_extension(
+      Clock_driver_nanoseconds_since_last_tick
+    );
+  #endif
+
   /*
    *  Now initialize the hardware that is the source of the tick ISR.
    */

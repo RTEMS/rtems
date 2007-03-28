@@ -1,5 +1,11 @@
 2007-03-28	Joel Sherrill <joel@OARcorp.com>
 
+	* clockdrv_shell.c: Add support to the Clock driver template for
+	rtems_clock_set_nanoseconds_extension and the potential for TOD and
+	timestamps accurate to the nanosecond.
+
+2007-03-28	Joel Sherrill <joel@OARcorp.com>
+
 	PR 1232/bsps
 	* bsppost.c: It should not be a fatal error to not have a console.
 
