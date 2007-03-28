@@ -1,3 +1,8 @@
+2007-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1232/bsps
+	* bsppost.c: It should not be a fatal error to not have a console.
+
 2007-03-09	Joel Sherrill <joel@OARcorp.com>
 
 	* bootcard.c: Change XXX to real comment.
