@@ -1,5 +1,7 @@
 2007-03-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/buf.h: Remove (Unused).
+	* libnetworking/Makefile.am: Remove sys/buf.h.
 	* libnetworking/kern/kern_sysctl.c,
 	libnetworking/kern/uipc_socket2.c: Include <sys/queue.h> instead of
 	<sys/buf.h>.
