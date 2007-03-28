@@ -519,10 +519,10 @@ ip_insertoptions(m, opt, phlen)
 	register struct ipoption *p = mtod(opt, struct ipoption *);
 	struct mbuf *n;
 	register struct ip *ip = mtod(m, struct ip *);
-	unsigned optlen;
+	uint32_t optlen;
 
 	optlen = opt->m_len - sizeof(p->ipopt_dst);
-	if (optlen + (u_short)ip->ip_len > IP_MAXPACKET)
+	if (optlen + ip->ip_len > IP_MAXPACKET)
 		return (m);		/* XXX should fail */
 	if (p->ipopt_dst.s_addr)
 		ip->ip_dst = p->ipopt_dst;
