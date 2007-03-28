@@ -33,7 +33,7 @@ include_rtems_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
     include/zilog/z8536.h
 
 ##  General stuff
-ERROR_C_FILES = src/error.c
+ERROR_C_FILES = src/error.c src/__assert.c
 
 ASSOCIATION_C_FILES = src/assoc.c src/assocnamebad.c
 
