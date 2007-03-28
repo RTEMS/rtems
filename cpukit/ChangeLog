@@ -3,6 +3,7 @@
 	PR 1234/cpukit
 	* libcsupport/Makefile.am: Provide printk() based implementation of
 	__assert() to reduce dependencies in executables.
+	* libcsupport/src/__assert.c: New file.
 
 2007-03-26	Joel Sherrill <joel@OARcorp.com>
 
