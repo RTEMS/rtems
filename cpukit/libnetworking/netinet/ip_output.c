@@ -118,7 +118,12 @@ ip_output(m0, opt, ro, flags, imo)
 	 * Fill in IP header.
 	 */
 	if ((flags & (IP_FORWARDING|IP_RAWOUTPUT)) == 0) {
+#ifdef _IP_VHL
 		ip->ip_vhl = IP_MAKE_VHL(IPVERSION, hlen >> 2);
+#else
+		ip->ip_v = IPVERSION;
+		ip->ip_hl = hlen >> 2;
+#endif
 		ip->ip_off &= IP_DF;
 		ip->ip_id = htons(ip_id++);
 		ipstat.ips_localout++;
@@ -318,7 +323,7 @@ ip_output(m0, opt, ro, flags, imo)
 			goto bad;
 		}
 		/* don't allow broadcast messages to be fragmented */
-		if ((u_short)ip->ip_len > ifp->if_mtu) {
+		if (ip->ip_len > ifp->if_mtu) {
 			error = EMSGSIZE;
 			goto bad;
 		}
@@ -1280,11 +1285,15 @@ ip_mloopback(ifp, m, dst, hlen)
 		ip->ip_len = htons(ip->ip_len);
 		ip->ip_off = htons(ip->ip_off);
 		ip->ip_sum = 0;
+#ifdef _IP_VHL
 		if (ip->ip_vhl == IP_VHL_BORING) {
 			ip->ip_sum = in_cksum_hdr(ip);
 		} else {
 			ip->ip_sum = in_cksum(copym, hlen);
 		}
+#else
+		ip->ip_sum = in_cksum(copym, hlen);
+#endif
 		/*
 		 * NB:
 		 * It's not clear whether there are any lingering
@@ -1298,7 +1307,7 @@ ip_mloopback(ifp, m, dst, hlen)
 		 */
 #ifdef notdef
 		copym->m_pkthdr.rcvif = ifp;
-		ip_input(copym)
+		ip_input(copym);
 #else
 		(void) looutput(ifp, copym, (struct sockaddr *)dst, NULL);
 #endif

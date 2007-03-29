@@ -39,8 +39,8 @@
 
 #include <sys/param.h>
 #include <sys/systm.h>
-#include <sys/malloc.h>
 #include <sys/mbuf.h>
+#include <sys/malloc.h>
 #include <sys/domain.h>
 #include <sys/protosw.h>
 #include <sys/socket.h>
@@ -60,7 +60,6 @@
 #include <netinet/in_var.h>
 #include <netinet/ip.h>
 #include <netinet/in_pcb.h>
-#include <netinet/in_var.h>
 #include <netinet/ip_var.h>
 #include <netinet/ip_icmp.h>
 #include <machine/in_cksum.h>
@@ -77,15 +76,15 @@ struct socket *ip_rsvpd;
 
 int	ipforwarding = 0;
 SYSCTL_INT(_net_inet_ip, IPCTL_FORWARDING, forwarding, CTLFLAG_RW,
-	&ipforwarding, 0, "");
+    &ipforwarding, 0, "Enable IP forwarding between interfaces");
 
 static int	ipsendredirects = 1; /* XXX */
 SYSCTL_INT(_net_inet_ip, IPCTL_SENDREDIRECTS, redirect, CTLFLAG_RW,
-	&ipsendredirects, 0, "");
+    &ipsendredirects, 0, "Enable sending IP redirects");
 
 int	ip_defttl = IPDEFTTL;
 SYSCTL_INT(_net_inet_ip, IPCTL_DEFTTL, ttl, CTLFLAG_RW,
-	&ip_defttl, 0, "");
+    &ip_defttl, 0, "Maximum TTL on IP packets");
 
 static int	ip_dosourceroute = 0;
 SYSCTL_INT(_net_inet_ip, IPCTL_SOURCEROUTE, sourceroute, CTLFLAG_RW,
@@ -107,7 +106,8 @@ struct	ifqueue ipintrq;
 SYSCTL_INT(_net_inet_ip, IPCTL_INTRQMAXLEN, intr_queue_maxlen, CTLFLAG_RD,
 	&ipintrq.ifq_maxlen, 0, "");
 SYSCTL_INT(_net_inet_ip, IPCTL_INTRQDROPS, intr_queue_drops, CTLFLAG_RD,
-	&ipintrq.ifq_drops, 0, "");
+    &ipintrq.ifq_drops, 0,
+    "Number of packets dropped from the IP input queue");
 
 struct ipstat ipstat;
 
@@ -124,7 +124,7 @@ static int    maxnipq;
 
 #ifdef IPCTL_DEFMTU
 SYSCTL_INT(_net_inet_ip, IPCTL_DEFMTU, mtu, CTLFLAG_RW,
-	&ip_mtu, 0, "");
+    &ip_mtu, 0, "Default MTU");
 #endif
 
 #if !defined(COMPAT_IPFW) || COMPAT_IPFW == 1
@@ -190,21 +190,29 @@ ip_init()
 	register int i;
 
 	pr = pffindproto(PF_INET, IPPROTO_RAW, SOCK_RAW);
-	if (pr == 0)
-		panic("ip_init");
+	if (pr == NULL)
+		panic("ip_init: PF_INET not found");
+
+	/* Initialize the entire ip_protox[] array to IPPROTO_RAW. */
 	for (i = 0; i < IPPROTO_MAX; i++)
 		ip_protox[i] = pr - inetsw;
+	/*
+	 * Cycle through IP protocols and put them into the appropriate place
+	 * in ip_protox[].
+	 */
 	for (pr = inetdomain.dom_protosw;
 	    pr < inetdomain.dom_protoswNPROTOSW; pr++)
 		if (pr->pr_domain->dom_family == PF_INET &&
-		    pr->pr_protocol && pr->pr_protocol != IPPROTO_RAW)
+		    pr->pr_protocol && pr->pr_protocol != IPPROTO_RAW) {
 			ip_protox[pr->pr_protocol] = pr - inetsw;
+		}
 
 	for (i = 0; i < IPREASS_NHASH; i++)
 	    ipq[i].next = ipq[i].prev = &ipq[i];
 
 	maxnipq = nmbclusters/4;
 
+	/* Initialize various other remaining things. */
 	ip_id = rtems_bsdnet_seconds_since_boot() & 0xffff;
 	ipintrq.ifq_maxlen = ipqmaxlen;
 #ifdef IPFIREWALL
@@ -259,12 +267,20 @@ ip_input(struct mbuf *m)
 	}
 	ip = mtod(m, struct ip *);
 
+#ifdef _IP_VHL
 	if (IP_VHL_V(ip->ip_vhl) != IPVERSION) {
+#else
+	if (ip->ip_v != IPVERSION) {
+#endif
 		ipstat.ips_badvers++;
 		goto bad;
 	}
 
+#ifdef _IP_VHL
 	hlen = IP_VHL_HL(ip->ip_vhl) << 2;
+#else
+	hlen = ip->ip_hl << 2;
+#endif
 	if (hlen < sizeof(struct ip)) {	/* minimum header length */
 		ipstat.ips_badhlen++;
 		goto bad;
@@ -289,13 +305,13 @@ ip_input(struct mbuf *m)
 	/*
 	 * Convert fields to host representation.
 	 */
-	NTOHS(ip->ip_len);
+	ip->ip_len = ntohs(ip->ip_len);
 	if (ip->ip_len < hlen) {
 		ipstat.ips_badlen++;
 		goto bad;
 	}
 	NTOHS(ip->ip_id);
-	NTOHS(ip->ip_off);
+	ip->ip_off = ntohs(ip->ip_off);
 
 	/*
 	 * Check that the amount of data in the buffers
@@ -568,6 +584,7 @@ found:
 	 * Switch out to protocol's input routine.
 	 */
 	ipstat.ips_delivered++;
+
 	(*inetsw[ip_protox[ip->ip_p]].pr_input)(m, hlen);
 	return;
 bad:
@@ -624,7 +641,7 @@ ip_reass(ip, fp, where)
 	/*
 	 * If first fragment to arrive, create a reassembly queue.
 	 */
-	if (fp == 0) {
+	if (fp == NULL) {
 		if ((t = m_get(M_DONTWAIT, MT_FTABLE)) == NULL)
 			goto dropfrag;
 		fp = mtod(t, struct ipq *);
@@ -714,7 +731,11 @@ insert:
 	/*
 	 * Reassembly is complete.  Make sure the packet is a sane size.
 	 */
+#ifdef _IP_VHL
 	if (next + (IP_VHL_HL(((struct ip *)fp->ipq_next)->ip_vhl) << 2)
+#else
+	if (next + (((struct ip *)fp->ipq_next)->ip_hl) << 2)
+#endif
 							> IP_MAXPACKET) {
 		ipstat.ips_toolong++;
 		ip_freef(fp);
@@ -727,7 +748,7 @@ insert:
 	q = fp->ipq_next;
 	m = dtom(q);
 	t = m->m_next;
-	m->m_next = 0;
+	m->m_next = NULL;
 	m_cat(m, t);
 	q = q->ipf_next;
 	while (q != (struct ipasfrag *)fp) {
@@ -887,7 +908,11 @@ ip_dooptions(m)
 
 	dst = ip->ip_dst;
 	cp = (u_char *)(ip + 1);
+#ifdef _IP_VHL
 	cnt = (IP_VHL_HL(ip->ip_vhl) << 2) - sizeof (struct ip);
+#else
+	cnt = (ip->ip_hl << 2) - sizeof (struct ip);
+#endif
 	for (; cnt > 0; cnt -= optlen, cp += optlen) {
 		opt = cp[IPOPT_OPTVAL];
 		if (opt == IPOPT_EOL)
@@ -1074,7 +1099,11 @@ nosourcerouting:
 	}
 	return (0);
 bad:
+#ifdef _IP_VHL
 	ip->ip_len -= IP_VHL_HL(ip->ip_vhl) << 2;   /* XXX icmp_error adds in hdr length */
+#else
+	ip->ip_len -= ip->ip_hl << 2;   /* XXX icmp_error adds in hdr length */
+#endif
 	icmp_error(m, type, code, 0, 0);
 	ipstat.ips_badoptions++;
 	return (1);
@@ -1088,7 +1117,7 @@ static struct in_ifaddr *
 ip_rtaddr(dst)
 	 struct in_addr dst;
 {
-	register struct sockaddr_in *sin;
+	struct sockaddr_in *sin;
 
 	sin = (struct sockaddr_in *) &ipforward_rt.ro_dst;
 
@@ -1217,14 +1246,23 @@ ip_stripoptions(m, mopt)
 	register caddr_t opts;
 	int olen;
 
+#ifdef _IP_VHL
 	olen = (IP_VHL_HL(ip->ip_vhl) << 2) - sizeof (struct ip);
+#else
+	olen = (ip->ip_hl << 2) - sizeof (struct ip);
+#endif
 	opts = (caddr_t)(ip + 1);
 	i = m->m_len - (sizeof (struct ip) + olen);
 	bcopy(opts + olen, opts, (unsigned)i);
 	m->m_len -= olen;
 	if (m->m_flags & M_PKTHDR)
 		m->m_pkthdr.len -= olen;
+#ifdef _IP_VHL
 	ip->ip_vhl = IP_MAKE_VHL(IPVERSION, sizeof(struct ip) >> 2);
+#else
+	ip->ip_v = IPVERSION;
+	ip->ip_hl = (sizeof(struct ip) >> 2);
+#endif
 }
 
 u_char inetctlerrmap[PRC_NCMDS] = {
@@ -1331,10 +1369,6 @@ ip_forward(struct mbuf *m, int srcrt)
 		    /* Router requirements says to only send host redirects */
 		    type = ICMP_REDIRECT;
 		    code = ICMP_REDIRECT_HOST;
-#ifdef DIAGNOSTIC
-		    if (ipprintfs)
-		        printf("redirect (%d) to %lx\n", code, (u_long)dest);
-#endif
 		}
 	}
 
@@ -1423,7 +1457,7 @@ ip_savecontrol(inp, mp, ip, m)
 	}
 	/* ip_srcroute doesn't do what we want here, need to fix */
 	if (inp->inp_flags & INP_RECVRETOPTS) {
-		*mp = sbcreatecontrol((caddr_t) ip_srcroute(),
+		*mp = sbcreatecontrol((caddr_t) ip_srcroute(m),
 		    sizeof(struct in_addr), IP_RECVRETOPTS, IPPROTO_IP);
 		if (*mp)
 			mp = &(*mp)->m_next;
