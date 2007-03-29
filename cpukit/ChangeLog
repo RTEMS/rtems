@@ -1,5 +1,7 @@
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/tcp_subr.c: Preps to eliminate _IP_VHL
+	  (Abandoned in FreeBSD).
 	* libnetworking/netinet/raw_ip.c: Preps to eliminate _IP_VHL
 	  (Abandoned in FreeBSD).
 	* libnetworking/netinet/ip_output.c: Partial update from FreeBSD.
