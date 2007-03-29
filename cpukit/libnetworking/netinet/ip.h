@@ -48,8 +48,10 @@
 #ifndef __packed
 #if defined(__GNUC__)
 #define __packed __attribute__((packed))
+#define __aligned(x) __attribute__((aligned(x)))
 #else
 #define __packed
+#define __aligned(x)
 #endif
 #endif
 
@@ -81,7 +83,7 @@ struct ip {
 	u_char	ip_p;			/* protocol */
 	u_short	ip_sum;			/* checksum */
 	struct	in_addr ip_src,ip_dst;	/* source and dest address */
-} __packed;
+} __packed __aligned(4);
 
 #ifdef _IP_VHL
 #define	IP_MAKE_VHL(v, hl)	((v) << 4 | (hl))
