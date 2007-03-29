@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)ip_output.c	8.3 (Berkeley) 1/21/94
+ * $FreeBSD: src/sys/netinet/ip_output.c,v 1.271 2007/03/23 09:43:36 bms Exp $
+ */
+
+/*
  *	$Id$
  */
 
@@ -56,9 +56,6 @@
 #include <netinet/in_var.h>
 #include <netinet/ip_var.h>
 
-#ifdef vax
-#include <machine/mtpr.h>
-#endif
 #include <machine/in_cksum.h>
 
 #if !defined(COMPAT_IPFW) || COMPAT_IPFW == 1
@@ -140,7 +137,7 @@ ip_output(m0, opt, ro, flags, imo)
 		RTFREE(ro->ro_rt);
 		ro->ro_rt = (struct rtentry *)0;
 	}
-	if (ro->ro_rt == 0) {
+	if (ro->ro_rt == NULL) {
 		dst->sin_family = AF_INET;
 		dst->sin_len = sizeof(*dst);
 		dst->sin_addr = ip->ip_dst;
@@ -308,7 +305,7 @@ ip_output(m0, opt, ro, flags, imo)
 
 	/*
 	 * Look for broadcast address and
-	 * and verify user is allowed to send
+	 * verify user is allowed to send
 	 * such a packet.
 	 */
 	if (isbroadcast) {
@@ -372,11 +369,12 @@ sendit:
 #endif /* COMPAT_IPFW */
 
 	/*
-	 * If small enough for interface, can just send directly.
+	 * If small enough for interface, or the interface will take
+	 * care of the fragmentation for us, we can just send directly.
 	 */
 	if ((u_short)ip->ip_len <= ifp->if_mtu) {
-		ip->ip_len = htons((u_short)ip->ip_len);
-		ip->ip_off = htons((u_short)ip->ip_off);
+		ip->ip_len = htons(ip->ip_len);
+		ip->ip_off = htons(ip->ip_off);
 		ip->ip_sum = 0;
 		if (ip->ip_vhl == IP_VHL_BORING) {
 			ip->ip_sum = in_cksum_hdr(ip);
@@ -455,8 +453,8 @@ sendit:
 			goto sendorfree;
 		}
 		m->m_pkthdr.len = mhlen + len;
-		m->m_pkthdr.rcvif = (struct ifnet *)0;
-		mhip->ip_off = htons((u_short)mhip->ip_off);
+		m->m_pkthdr.rcvif = NULL;
+		mhip->ip_off = htons(mhip->ip_off);
 		mhip->ip_sum = 0;
 		if (mhip->ip_vhl == IP_VHL_BORING) {
 			mhip->ip_sum = in_cksum_hdr(mhip);
@@ -475,7 +473,8 @@ sendit:
 	m_adj(m, hlen + firstlen - (u_short)ip->ip_len);
 	m->m_pkthdr.len = hlen + firstlen;
 	ip->ip_len = htons((u_short)m->m_pkthdr.len);
-	ip->ip_off = htons((u_short)(ip->ip_off | IP_MF));
+	ip->ip_off |= IP_MF;
+	ip->ip_off = htons(ip->ip_off);
 	ip->ip_sum = 0;
 	if (ip->ip_vhl == IP_VHL_BORING) {
 		ip->ip_sum = in_cksum_hdr(ip);
@@ -600,7 +599,7 @@ ip_ctloutput(op, so, level, optname, mp)
 	int level, optname;
 	struct mbuf **mp;
 {
-	register struct inpcb *inp = sotoinpcb(so);
+	struct	inpcb *inp = sotoinpcb(so);
 	register struct mbuf *m = *mp;
 	register int optval = 0;
 	int error = 0;
@@ -913,13 +912,13 @@ ip_setmoptions(optname, imop, m)
 	struct ip_moptions **imop;
 	struct mbuf *m;
 {
-	register int error = 0;
+	int error = 0;
 	u_char loop;
-	register int i;
+	int i;
 	struct in_addr addr;
-	register struct ip_mreq *mreq;
-	register struct ifnet *ifp;
-	register struct ip_moptions *imo = *imop;
+	struct ip_mreq *mreq;
+	struct ifnet *ifp;
+	struct ip_moptions *imo = *imop;
 	struct route ro;
 	register struct sockaddr_in *dst;
 	int s;
@@ -1278,8 +1277,8 @@ ip_mloopback(ifp, m, dst, hlen)
 		 * than the interface's MTU.  Can this possibly matter?
 		 */
 		ip = mtod(copym, struct ip *);
-		ip->ip_len = htons((u_short)ip->ip_len);
-		ip->ip_off = htons((u_short)ip->ip_off);
+		ip->ip_len = htons(ip->ip_len);
+		ip->ip_off = htons(ip->ip_off);
 		ip->ip_sum = 0;
 		if (ip->ip_vhl == IP_VHL_BORING) {
 			ip->ip_sum = in_cksum_hdr(ip);
