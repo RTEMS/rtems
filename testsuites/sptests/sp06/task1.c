@@ -20,8 +20,9 @@
 
 #include "system.h"
 
-rtems_task Task_1( argument )
-uint32_t   argument;
+rtems_task Task_1(
+  rtems_task_argument   argument
+)
 {
   uint32_t    pass;
   rtems_status_code status;
