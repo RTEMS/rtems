@@ -1,5 +1,7 @@
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/ip_output.c: Preps to eliminate _IP_VHL
+	(Abandoned in FreeBSD). Misc mergers from upstream FreeBSD.
 	* libnetworking/netinet/ip_input.c: Preps to eliminate _IP_VHL
 	(Abandoned in FreeBSD). Misc mergers from upstream FreeBSD.
 	* libnetworking/netinet/ip_icmp.c: Preps to eliminate _IP_VHL
