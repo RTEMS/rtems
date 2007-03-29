@@ -1,3 +1,7 @@
+2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* monitor/init.c, rtmonuse/task1.c: Use rtems_task_argument.
+
 2007-03-13	Joel Sherrill <joel@OARcorp.com>
 
 	* tztest/init.c: Call tzset() even though it may be called for us
