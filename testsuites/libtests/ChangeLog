@@ -1,3 +1,7 @@
+2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* monitor/init.c, rtmonuse/task1.c: Use rtems_task_argument.
+
 2007-02-06	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems++/Task1.cc, rtems++/Task3.cc: Address size_t/uint32_t typing
