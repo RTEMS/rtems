@@ -51,13 +51,6 @@ struct selinfo {
 };
 #define	SI_COLL	0x0001		/* collision occurred */
 
-#ifdef _KERNEL
-struct proc;
-
-void	selrecord(struct proc *selector, struct selinfo *);
-void	selwakeup(struct selinfo *);
-#endif
-
 /* Check the first NFDS descriptors each in READFDS (if not NULL) for read
    readiness, in WRITEFDS (if not NULL) for write readiness, and in EXCEPTFDS
    (if not NULL) for exceptional conditions.  If TIMEOUT is not NULL, time out
