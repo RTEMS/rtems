@@ -1,3 +1,7 @@
+2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp06/task1.c, sp20/task1.c: Use rtems_task_argument.
+
 2007-03-26	Joel Sherrill <joel@OARcorp.com>
 
 	* sp35/priinv.c: Remove warning.
