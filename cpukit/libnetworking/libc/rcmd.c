@@ -53,14 +53,15 @@ static char sccsid[] = "@(#)rcmd.c	8.3 (Berkeley) 3/26/94";
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#ifdef YP
 #include <rpc/rpc.h>
+#ifdef YP
 #include <rpcsvc/yp_prot.h>
 #include <rpcsvc/ypclnt.h>
 #endif
 
-#include <sys/select.h>
-
+#ifndef __rtems__
+extern int innetgr( const char *, const char *, const char *, const char * );
+#endif
 
 #define max(a, b)	((a > b) ? a : b)
 
@@ -69,13 +70,10 @@ int rresvport();
 #define bzero(a,s)		memset((a),0,(s))
 #define bcmp			memcmp
 #define bcopy(s,d,i)	memcpy(d,s,i)
-int bindresvport(int, struct sockaddr_in *);
 #else /* __rtems__ */
 
-extern int innetgr __P(( const char *, const char *, const char *, const char * ));
-
-int	__ivaliduser __P((FILE *, u_long, const char *, const char *));
-static int __icheckhost __P((u_long, char *));
+int __ivaliduser(FILE *, u_int32_t, const char *, const char *);
+static int __icheckhost(const struct sockaddr *, socklen_t, const char *);
 
 #endif
 
