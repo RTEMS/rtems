@@ -1,3 +1,7 @@
+2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/ip_fw.c: Eliminate __P().
+
 2007-03-28	Chris Johns <chrisj@rtems.org>
 
 	* rtems/Makefile.am, rtems/include/rtems/rtems/clock.h,
