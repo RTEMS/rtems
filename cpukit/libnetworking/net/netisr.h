@@ -59,26 +59,17 @@
 #define	NETISR_CCITT	10		/* same as AF_CCITT */
 #define NETISR_ATALK    16              /* same as AF_APPLETALK */
 #define	NETISR_ARP	18		/* same as AF_LINK */
-#define NETISR_IPX	23		/* same as AF_IPX */
-#define	NETISR_ISDN	26		/* same as AF_E164 */
-#define	NETISR_PPP	27		/* PPP soft interrupt */
-
-#define	schednetisr(anisr)	rtems_bsdnet_schednetisr(anisr)
+#define	NETISR_IPX	23		/* same as AF_IPX */
+#define	NETISR_USB	25		/* USB soft interrupt */
+#define	NETISR_PPP	26		/* PPP soft interrupt */
 
 #ifndef LOCORE
 #ifdef _KERNEL
+
+#define NETISR_SET(num, isr)	/* FIXME: dummy, should be removed */
+
 extern volatile unsigned int	netisr;	/* scheduling bits for network */
-
-typedef void netisr_t(void);
-
-struct netisrtab {
-	int nit_num;
-	netisr_t *nit_isr;
-};
-
-#define NETISR_SET(num, isr)
-
-int register_netisr __P((int, netisr_t *));
+#define	schednetisr(anisr)	rtems_bsdnet_schednetisr(anisr)
 
 #endif
 #endif
