@@ -121,7 +121,7 @@ typedef void rtems_task;
  *  The following defines the argument to an RTEMS task.
  */
 
-typedef uint32_t   rtems_task_argument;
+typedef uintptr_t   rtems_task_argument;
 
 /*
  *  The following defines the type for the entry point of an RTEMS task.

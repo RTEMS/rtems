@@ -1,5 +1,10 @@
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/include/rtems/rtems/tasks.h: Change rtems_task_argument to
+	  uintptr_t.
+
+2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/ip_icmp.c, libnetworking/netinet/ip_input.c,
 	libnetworking/netinet/ip_output.c: Further _IP_VHL removal preps.
 
