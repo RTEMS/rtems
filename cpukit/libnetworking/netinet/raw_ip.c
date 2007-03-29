@@ -54,9 +54,9 @@
 #define _IP_VHL
 #include <netinet/in.h>
 #include <netinet/in_systm.h>
-#include <netinet/ip.h>
 #include <netinet/in_pcb.h>
 #include <netinet/in_var.h>
+#include <netinet/ip.h>
 #include <netinet/ip_var.h>
 #include <netinet/ip_mroute.h>
 
@@ -198,10 +198,17 @@ rip_output(struct mbuf *m, struct socket *so, u_long dst)
 		ip = mtod(m, struct ip *);
 		/* don't allow both user specified and setsockopt options,
 		   and don't allow packet length sizes that will crash */
+#ifdef _IP_VHL
 		if (((IP_VHL_HL(ip->ip_vhl) != (sizeof (*ip) >> 2)) 
 		     && inp->inp_options)
 		    || (ip->ip_len > m->m_pkthdr.len)
 		    || (ip->ip_len < (IP_VHL_HL(ip->ip_vhl) << 2))) {
+#else
+		if (((ip->ip_hl != (sizeof (*ip) >> 2))
+		     && inp->inp_options)
+		    || (ip->ip_len > m->m_pkthdr.len)
+		    || (ip->ip_len < (ip->ip_hl << 2))) {
+#endif
 			m_freem(m);
 			return EINVAL;
 		}

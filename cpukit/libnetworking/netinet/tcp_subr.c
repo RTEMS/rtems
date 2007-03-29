@@ -592,9 +592,14 @@ tcp_ctlinput(cmd, sa, vip)
 	else if (!PRC_IS_REDIRECT(cmd) &&
 		 ((unsigned)cmd > PRC_NCMDS || inetctlerrmap[cmd] == 0))
 		return;
-	if (ip) {
+	if (ip != NULL) {
+#ifdef _IP_VHL
 		th = (struct tcphdr *)((caddr_t)ip 
 				       + (IP_VHL_HL(ip->ip_vhl) << 2));
+#else
+		th = (struct tcphdr *)((caddr_t)ip
+				       + (ip->ip_hl << 2));
+#endif
 		in_pcbnotify(&tcb, sa, th->th_dport, ip->ip_src, th->th_sport,
 			cmd, notify);
 	} else
