@@ -1,6 +1,11 @@
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* libnetworking/netinet/ip.h: Add FreeBSD's alignement macros.
+	* libnetworking/netinet/ip_icmp.c, libnetworking/netinet/ip_input.c,
+	libnetworking/netinet/ip_output.c: Further _IP_VHL removal preps.
+
+2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/ip.h: Add FreeBSD's alignment macros.
 	* libnetworking/net/netisr.h: Partial update from FreeBSD.
 	* libcsupport/src/getpwent.c: Remove bogus cast to long.
 	* libnetworking/libc/strsep.c: Don't build if provided by libc.
