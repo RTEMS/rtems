@@ -28,7 +28,7 @@ uint32_t      Iterations[6] = { 0,  50,  50,  50,  50,   1 };
 rtems_task_priority Priorities[6] = { 0,   1,   1,   3,   4,   5 };
 
 rtems_task Task_1_through_5(
-  uint32_t   argument
+  rtems_task_argument argument
 )
 {
   rtems_id          rmid;
