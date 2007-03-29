@@ -734,7 +734,7 @@ insert:
 #ifdef _IP_VHL
 	if (next + (IP_VHL_HL(((struct ip *)fp->ipq_next)->ip_vhl) << 2)
 #else
-	if (next + (((struct ip *)fp->ipq_next)->ip_hl) << 2)
+	if (next + ((((struct ip *)fp->ipq_next)->ip_hl) << 2)
 #endif
 							> IP_MAXPACKET) {
 		ipstat.ips_toolong++;

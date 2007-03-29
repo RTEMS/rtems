@@ -118,7 +118,7 @@ icmp_error(n, type, code, dest, destifp)
 #ifdef _IP_VHL
 	register unsigned oiplen = IP_VHL_HL(oip->ip_vhl) << 2;
 #else
-	register unsigned oiphlen = oip->ip_hl << 2;
+	register unsigned oiplen = oip->ip_hl << 2;
 #endif
 	register struct icmp *icp;
 	register struct mbuf *m;

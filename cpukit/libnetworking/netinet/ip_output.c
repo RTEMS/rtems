@@ -128,7 +128,11 @@ ip_output(m0, opt, ro, flags, imo)
 		ip->ip_id = htons(ip_id++);
 		ipstat.ips_localout++;
 	} else {
+#ifdef _IP_VHL
 		hlen = IP_VHL_HL(ip->ip_vhl) << 2;
+#else
+		hlen = ip->ip_hl << 2;
+#endif
 	}
 
 	dst = (struct sockaddr_in *)&ro->ro_dst;
@@ -381,7 +385,11 @@ sendit:
 		ip->ip_len = htons(ip->ip_len);
 		ip->ip_off = htons(ip->ip_off);
 		ip->ip_sum = 0;
+#ifdef _IP_VHL
 		if (ip->ip_vhl == IP_VHL_BORING) {
+#else
+		if ((ip->ip_hl == 5) && (ip->ip_v = IPVERSION)) {
+#endif
 			ip->ip_sum = in_cksum_hdr(ip);
 		} else {
 			ip->ip_sum = in_cksum(m, hlen);
@@ -439,7 +447,12 @@ sendit:
 		*mhip = *ip;
 		if (hlen > sizeof (struct ip)) {
 			mhlen = ip_optcopy(ip, mhip) + sizeof (struct ip);
+#ifdef _IP_VHL
 			mhip->ip_vhl = IP_MAKE_VHL(IPVERSION, mhlen >> 2);
+#else
+			mhip->ip_v = IPVERSION;
+			mhip->ip_hl = mhlen >> 2;
+#endif
 		}
 		m->m_len = mhlen;
 		mhip->ip_off = ((off - hlen) >> 3) + (ip->ip_off & ~IP_MF);
@@ -461,7 +474,11 @@ sendit:
 		m->m_pkthdr.rcvif = NULL;
 		mhip->ip_off = htons(mhip->ip_off);
 		mhip->ip_sum = 0;
+#ifdef _IP_VHL
 		if (mhip->ip_vhl == IP_VHL_BORING) {
+#else
+		if ((mhip->ip_hl == 5) && (mhip->ip_v == IPVERSION) ) {
+#endif
 			mhip->ip_sum = in_cksum_hdr(mhip);
 		} else {
 			mhip->ip_sum = in_cksum(m, mhlen);
@@ -481,7 +498,11 @@ sendit:
 	ip->ip_off |= IP_MF;
 	ip->ip_off = htons(ip->ip_off);
 	ip->ip_sum = 0;
+#ifdef _IP_VHL
 	if (ip->ip_vhl == IP_VHL_BORING) {
+#else
+	if ((ip->ip_hl == 5) && (ip->ip_v == IPVERSION) ) {
+#endif
 		ip->ip_sum = in_cksum_hdr(ip);
 	} else {
 		ip->ip_sum = in_cksum(m, hlen);
@@ -551,7 +572,12 @@ ip_insertoptions(m, opt, phlen)
 	ip = mtod(m, struct ip *);
 	bcopy(p->ipopt_list, ip + 1, optlen);
 	*phlen = sizeof(struct ip) + optlen;
+#ifdef _IP_VHL
 	ip->ip_vhl = IP_MAKE_VHL(IPVERSION, *phlen >> 2);
+#else
+	ip->ip_v = IPVERSION;
+	ip->ip_hl = *phlen >> 2;
+#endif
 	ip->ip_len += optlen;
 	return (m);
 }
@@ -569,7 +595,11 @@ ip_optcopy(ip, jp)
 
 	cp = (u_char *)(ip + 1);
 	dp = (u_char *)(jp + 1);
+#ifdef _IP_VHL
 	cnt = (IP_VHL_HL(ip->ip_vhl) << 2) - sizeof (struct ip);
+#else
+	cnt = (ip->ip_hl << 2) - sizeof (struct ip);
+#endif
 	for (; cnt > 0; cnt -= optlen, cp += optlen) {
 		opt = cp[0];
 		if (opt == IPOPT_EOL)
