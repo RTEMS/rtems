@@ -317,7 +317,7 @@ static int scangr(
    */
   if (bufsize < (((memcount+1)*sizeof(char *)) + 15))
     return 0;
-  grp->gr_mem = (char **)(((unsigned long)buffer + 15) & ~15);
+  grp->gr_mem = (char **)(((uintptr_t)buffer + 15) & ~15);
 
   /*
    * Fill in pointer array

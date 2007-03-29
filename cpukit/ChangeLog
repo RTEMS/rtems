@@ -1,5 +1,6 @@
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/getpwent.c: Remove bogus cast to long.
 	* libnetworking/libc/strsep.c: Don't build if provided by libc.
 	* libnetworking/libc/rcmd.c: Eliminate __P(). Cosmetics.
 	* libnetworking/sys/select.h: Remove selrecord, selwakeup (Unused).
