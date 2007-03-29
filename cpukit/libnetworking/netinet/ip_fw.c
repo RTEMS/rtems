@@ -81,27 +81,27 @@ SYSCTL_INT(_net_inet_ip_fw, OID_AUTO, verbose_limit, CTLFLAG_RW, &fw_verbose_lim
 
 #define dprint_ip(a)	if (!fw_debug); else print_ip(a)
 
-static int	add_entry __P((struct ip_fw_head *chainptr, struct ip_fw *frwl));
-static int	del_entry __P((struct ip_fw_head *chainptr, u_short number));
-static int	zero_entry __P((struct mbuf *m));
-static struct ip_fw *check_ipfw_struct __P((struct ip_fw *m));
-static struct ip_fw *check_ipfw_mbuf __P((struct mbuf *fw));
-static int	ipopts_match __P((struct ip *ip, struct ip_fw *f));
-static int	port_match __P((u_short *portptr, int nports, u_short port,
-				int range_flag));
-static int	tcpflg_match __P((struct tcphdr *tcp, struct ip_fw *f));
-static int	icmptype_match __P((struct icmp *  icmp, struct ip_fw * f));
-static void	ipfw_report __P((struct ip_fw *f, struct ip *ip,
-				struct ifnet *rif, struct ifnet *oif));
+static int	add_entry(struct ip_fw_head *chainptr, struct ip_fw *frwl);
+static int	del_entry(struct ip_fw_head *chainptr, u_short number);
+static int	zero_entry(struct mbuf *m);
+static struct ip_fw *check_ipfw_struct(struct ip_fw *m);
+static struct ip_fw *check_ipfw_mbuf(struct mbuf *fw);
+static int	ipopts_match(struct ip *ip, struct ip_fw *f);
+static int	port_match(u_short *portptr, int nports, u_short port,
+				int range_flag);
+static int	tcpflg_match(struct tcphdr *tcp, struct ip_fw *f);
+static int	icmptype_match(struct icmp *  icmp, struct ip_fw * f);
+static void	ipfw_report(struct ip_fw *f, struct ip *ip,
+				struct ifnet *rif, struct ifnet *oif);
 
 #ifdef IPFIREWALL_MODULE
 static ip_fw_chk_t *old_chk_ptr;
 static ip_fw_ctl_t *old_ctl_ptr;
 #endif
 
-static int	ip_fw_chk __P((struct ip **pip, int hlen,
-			struct ifnet *oif, int ignport, struct mbuf **m));
-static int	ip_fw_ctl __P((int stage, struct mbuf **mm));
+static int	ip_fw_chk(struct ip **pip, int hlen,
+			struct ifnet *oif, int ignport, struct mbuf **m);
+static int	ip_fw_ctl(int stage, struct mbuf **mm);
 
 static char err_prefix[] = "ip_fw_ctl:";
 
