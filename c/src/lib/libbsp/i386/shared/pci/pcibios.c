@@ -233,7 +233,7 @@ pci_bus_count()
     unsigned char bus;
     unsigned char dev;
     unsigned char hd = 0;
-    unsigned int d = 0;
+    uint32_t d = 0;
     int sig;
 
     ucBusCount = 0;
@@ -320,7 +320,7 @@ pcib_special_cycle(int busNo, int data)
  * Read byte from config space
  */
 int
-pcib_conf_read8(int sig, int off, unsigned char *data)
+pcib_conf_read8(int sig, int off, uint8_t *data)
 {
   if (!pcibInitialized) {
     return PCIB_ERR_UNINITIALIZED;
@@ -356,7 +356,7 @@ pcib_conf_read8(int sig, int off, unsigned char *data)
  * Read word from config space
  */
 int
-pcib_conf_read16(int sig, int off, unsigned short *data)
+pcib_conf_read16(int sig, int off, uint16_t *data)
 {
   if (!pcibInitialized) {
     return PCIB_ERR_UNINITIALIZED;
@@ -392,7 +392,7 @@ pcib_conf_read16(int sig, int off, unsigned short *data)
  * Read dword from config space
  */
 int
-pcib_conf_read32(int sig, int off, unsigned int *data)
+pcib_conf_read32(int sig, int off, uint32_t *data)
 {
   if (!pcibInitialized) {
     return PCIB_ERR_UNINITIALIZED;
@@ -428,7 +428,7 @@ pcib_conf_read32(int sig, int off, unsigned int *data)
  * Write byte into  config space
  */
 int
-pcib_conf_write8(int sig, int off, unsigned int data)
+pcib_conf_write8(int sig, int off, uint8_t data)
 {
   if (!pcibInitialized) {
     return PCIB_ERR_UNINITIALIZED;
@@ -458,7 +458,7 @@ pcib_conf_write8(int sig, int off, unsigned int data)
  * Write word into config space
  */
 int
-pcib_conf_write16(int sig, int off, unsigned int data)
+pcib_conf_write16(int sig, int off, uint16_t data)
 {
   if (!pcibInitialized) {
     return PCIB_ERR_UNINITIALIZED;
@@ -490,7 +490,7 @@ pcib_conf_write16(int sig, int off, unsigned int data)
  * Write dword into config space
  */
 int
-pcib_conf_write32(int sig, int off, unsigned int data)
+pcib_conf_write32(int sig, int off, uint32_t data)
 {
   if (!pcibInitialized){
       return PCIB_ERR_UNINITIALIZED;
@@ -575,7 +575,7 @@ indirect_pci_read_config_dword(
   unsigned char slot,
   unsigned char fun,
   unsigned char offset,
-  unsigned int *val
+  uint32_t     *val
 ) 
 {
   int sig;
@@ -623,7 +623,7 @@ indirect_pci_write_config_dword(
   unsigned char slot,
   unsigned char fun,
   unsigned char offset,
-  unsigned int val
+  uint32_t      val
 ) 
 {
   int sig;

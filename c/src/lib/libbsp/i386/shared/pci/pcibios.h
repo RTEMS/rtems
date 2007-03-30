@@ -29,12 +29,12 @@ extern "C" {
 
 int pcib_find_by_class(int classCode, int idx, int *sig);
 int pcib_special_cycle(int busNo, int data);
-int pcib_conf_read8(int sig, int off, unsigned char *data);
-int pcib_conf_read16(int sig, int off, unsigned short *data);
-int pcib_conf_read32(int sig, int off, unsigned int *data);
-int pcib_conf_write8(int sig, int off, unsigned int data);
-int pcib_conf_write16(int sig, int off, unsigned int data);
-int pcib_conf_write32(int sig, int off, unsigned int data);
+int pcib_conf_read8(int sig, int off, uint8_t *data);
+int pcib_conf_read16(int sig, int off, uint16_t *data);
+int pcib_conf_read32(int sig, int off, uint32_t *data);
+int pcib_conf_write8(int sig, int off, uint8_t data);
+int pcib_conf_write16(int sig, int off, uint16_t data);
+int pcib_conf_write32(int sig, int off, uint32_t data);
 
 int
 pci_find_device( unsigned short vendorid, unsigned short deviceid,
