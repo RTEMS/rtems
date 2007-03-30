@@ -1,5 +1,36 @@
 2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/addr2ascii.c, libnetworking/libc/ascii2addr.c,
+	libnetworking/libc/base64.c, libnetworking/libc/ether_addr.c,
+	libnetworking/libc/gethostbydns.c, libnetworking/libc/gethostbyht.c,
+	libnetworking/libc/gethostbynis.c,
+	libnetworking/libc/gethostnamadr.c,
+	libnetworking/libc/gethostname.c, libnetworking/libc/getnetbydns.c,
+	libnetworking/libc/getnetbyht.c, libnetworking/libc/getnetbynis.c,
+	libnetworking/libc/getnetnamadr.c, libnetworking/libc/getproto.c,
+	libnetworking/libc/getprotoent.c, libnetworking/libc/getprotoname.c,
+	libnetworking/libc/getservbyname.c,
+	libnetworking/libc/getservbyport.c, libnetworking/libc/getservent.c,
+	libnetworking/libc/herror.c, libnetworking/libc/inet_addr.c,
+	libnetworking/libc/inet_lnaof.c, libnetworking/libc/inet_makeaddr.c,
+	libnetworking/libc/inet_net_ntop.c,
+	libnetworking/libc/inet_net_pton.c, libnetworking/libc/inet_neta.c,
+	libnetworking/libc/inet_netof.c, libnetworking/libc/inet_network.c,
+	libnetworking/libc/inet_ntoa.c, libnetworking/libc/inet_ntop.c,
+	libnetworking/libc/inet_pton.c, libnetworking/libc/iso_addr.c,
+	libnetworking/libc/linkaddr.c, libnetworking/libc/map_v4v6.c,
+	libnetworking/libc/ns_addr.c, libnetworking/libc/ns_name.c,
+	libnetworking/libc/ns_netint.c, libnetworking/libc/ns_ntoa.c,
+	libnetworking/libc/ns_parse.c, libnetworking/libc/ns_print.c,
+	libnetworking/libc/ns_ttl.c, libnetworking/libc/nsap_addr.c,
+	libnetworking/libc/rcmd.c, libnetworking/libc/recv.c,
+	libnetworking/libc/res_comp.c, libnetworking/libc/res_data.c,
+	libnetworking/libc/res_debug.c, libnetworking/libc/res_init.c,
+	libnetworking/libc/res_mkquery.c, libnetworking/libc/res_mkupdate.c,
+	libnetworking/libc/res_query.c, libnetworking/libc/res_send.c,
+	libnetworking/libc/res_stubs.c, libnetworking/libc/res_update.c,
+	libnetworking/libc/send.c, libnetworking/libc/strsep.c: Eliminate
+	SCCS, LINT. Add HAVE_CONFIG_H.
 	* libcsupport/src/__assert.c: Add HAVE_CONFIG_H.
 
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
