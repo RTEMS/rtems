@@ -166,11 +166,13 @@ libc_a_SOURCES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/res_mkquery.c libc/res_mkupdate.c libc/res_query.c libc/res_send.c \
     libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c
 libc_a_SOURCES += libc/res_config.h
+libc_a_SOURCES += libc/send.c
+libc_a_SOURCES += libc/recv.c
 endif
 
 UNUSED_FILES += libc/ether_addr.c libc/gethostname.c libc/inet_neta.c \
     libc/inet_net_ntop.c libc/inet_net_pton.c libc/ns_addr.c \
-    libc/ns_ntoa.c libc/recv.c libc/send.c
+    libc/ns_ntoa.c
 
 libc_mans = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \

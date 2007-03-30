@@ -1,6 +1,7 @@
 2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/Makefile.am: Move libc/send.c to libc_a_SOURCES.
+	* libnetworking/Makefile.am: Move libc/recv.c to libc_a_SOURCES.
 	* libnetworking/Makefile.am: Move libc/res_config.h to
 	  libc_a_SOURCES (File is being used).
 	* libnetworking/libc/iso_addr.c, libnetworking/libc/iso_addr.3:
