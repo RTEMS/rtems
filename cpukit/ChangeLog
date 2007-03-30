@@ -1,5 +1,10 @@
 2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/Makefile.am: Move libc/res_config.h to
+	  libnetworking_a_SOURCES (File is being used).
+	* libnetworking/libc/iso_addr.c, libnetworking/libc/iso_addr.3:
+	Remove (Unused).
+	* libnetworking/Makefile.am: Remove libc/iso_addr.c, libc/iso_addr.3.
 	* libnetworking/net/ppp-deflate.c, libnetworking/net/bsd-comp.c:
 	Remove (Unused).
 	* libnetworking/Makefile.am: Remove net/ppp-deflate.c, net/bsd-comp.c.
