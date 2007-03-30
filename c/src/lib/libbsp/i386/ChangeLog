@@ -1,3 +1,9 @@
+2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/pci/pcibios.c, shared/pci/pcibios.h:
+	Reflect changes to rtems/pci.h. Convert to using
+	stdint fixed-size types.
+
 2006-12-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/irq/idt.c: unsigned limits to match with
