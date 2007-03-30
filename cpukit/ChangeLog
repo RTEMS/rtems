@@ -1,3 +1,7 @@
+2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/__assert.c: Add HAVE_CONFIG_H.
+
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/include/rtems/rtems/tasks.h: Change rtems_task_argument to

@@ -10,6 +10,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/bspIo.h>
 #include <rtems.h>
 
