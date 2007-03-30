@@ -15,9 +15,8 @@
  * SOFTWARE.
  */
 
-#if defined(LIBC_SCCS) && !defined(lint)
-static const char orig_rcsid[] = "From Id: inet_net_ntop.c,v 8.2 1996/08/08 06:54:44 vixie Exp";
-static const char rcsid[] = "$Id$";
+#if HAVE_CONFIG_H
+#include "config.h"
 #endif
 
 #include <sys/types.h>

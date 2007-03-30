@@ -33,10 +33,6 @@
  *  $Id$
  */
 
-#if defined(LIBC_SCCS) && !defined(lint)
-static const char sccsid[] = "@(#)strsep.c	8.1 (Berkeley) 6/4/93";
-#endif /* LIBC_SCCS and not lint */
-
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

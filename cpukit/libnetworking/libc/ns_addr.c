@@ -36,9 +36,9 @@
  *  $Id$
  */
 
-#if defined(LIBC_SCCS) && !defined(lint)
-static char sccsid[] = "@(#)ns_addr.c	8.1 (Berkeley) 6/7/93";
-#endif /* LIBC_SCCS and not lint */
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <sys/param.h>
 #include <netns/ns.h>

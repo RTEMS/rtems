@@ -38,6 +38,10 @@
  * turned up all over the place. :-(
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/types.h>
 #include <sys/cdefs.h>
 

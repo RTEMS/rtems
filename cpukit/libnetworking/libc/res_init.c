@@ -68,11 +68,9 @@
  * SOFTWARE.
  */
 
-#if defined(LIBC_SCCS) && !defined(lint)
-static char sccsid[] = "@(#)res_init.c	8.1 (Berkeley) 6/7/93";
-static char orig_rcsid[] = "From: Id: res_init.c,v 8.7 1996/11/18 09:10:04 vixie Exp $";
-static char rcsid[] = "$Id$";
-#endif /* LIBC_SCCS and not lint */
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <sys/types.h>
 #include <sys/param.h>

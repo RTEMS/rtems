@@ -33,9 +33,9 @@
  *  $Id$
  */
 
-#if defined(LIBC_SCCS) && !defined(lint)
-static char sccsid[] = "@(#)rcmd.c	8.3 (Berkeley) 3/26/94";
-#endif /* LIBC_SCCS and not lint */
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <sys/param.h>
 #include <sys/socket.h>

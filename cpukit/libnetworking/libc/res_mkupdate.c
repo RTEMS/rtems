@@ -20,11 +20,9 @@
  * <viraj_bais@ccm.fm.intel.com>
  */
 
-#if !defined(__rtems__)
-#if !defined(lint) && !defined(SABER)
-static char rcsid[] = "$Id$";
-#endif /* not lint */
-#endif /* not rtems */
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <sys/types.h>
 #include <sys/param.h>

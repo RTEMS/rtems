@@ -23,9 +23,9 @@
  * SUCH DAMAGE.
  */
 
-#if defined(LIBC_SCCS) && !defined(lint)
-static char rcsid[] = "$Id$";
-#endif /* LIBC_SCCS and not lint */
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <sys/param.h>
 #include <sys/socket.h>

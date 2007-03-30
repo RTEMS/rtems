@@ -1,9 +1,3 @@
-#if !defined(__rtems__)
-#if !defined(lint) && !defined(SABER)
-static char rcsid[] = "$Id$";
-#endif /* not lint */
-#endif /* not rtems */
-
 /*
  * Copyright (c) 1996 by Internet Software Consortium.
  *
@@ -20,6 +14,10 @@ static char rcsid[] = "$Id$";
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
  * SOFTWARE.
  */
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 /*
  * Based on the Dynamic DNS reference implementation by Viraj Bais
