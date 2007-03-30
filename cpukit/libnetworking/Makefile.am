@@ -14,7 +14,6 @@ UNUSED_FILES = poll.h
 # Original FreeBSD file
 UNUSED_FILES += sys/poll.h
 
-UNUSED_FILES += net/ppp-deflate.c net/bsd-comp.c
 
 if LIBNETWORKING
 # Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
