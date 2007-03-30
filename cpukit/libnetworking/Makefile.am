@@ -164,16 +164,17 @@ libc_a_SOURCES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/ns_netint.c libc/ns_parse.c libc/ns_print.c libc/ns_ttl.c \
     libc/res_comp.c libc/res_data.c libc/res_debug.c libc/res_init.c \
     libc/res_mkquery.c libc/res_mkupdate.c libc/res_query.c libc/res_send.c \
-    libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c
+    libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c \
+    libc/res_config.h
 endif
 
 UNUSED_FILES += libc/ether_addr.c libc/gethostname.c libc/inet_neta.c \
-    libc/inet_net_ntop.c libc/inet_net_pton.c libc/iso_addr.c libc/ns_addr.c \
-    libc/ns_ntoa.c libc/recv.c libc/res_config.h libc/send.c
+    libc/inet_net_ntop.c libc/inet_net_pton.c libc/ns_addr.c \
+    libc/ns_ntoa.c libc/recv.c libc/send.c
 
 libc_mans = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
-    libc/getservent.3 libc/inet.3 libc/iso_addr.3 libc/linkaddr.3 libc/ns.3 \
+    libc/getservent.3 libc/inet.3 libc/linkaddr.3 libc/ns.3 \
     libc/rcmd.3 libc/resolver.3
 EXTRA_DIST += $(libc_mans)
 
