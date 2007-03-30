@@ -294,7 +294,7 @@ static void 		dc_tx_underrun(struct dc_softc *);
 static rtems_isr 	dc_intr(rtems_vector_number);
 static void		dc_daemon(void *);
 static void 		dc_start(struct ifnet *);
-static int 		dc_ioctl(struct ifnet *, u_long, caddr_t);
+static int 		dc_ioctl(struct ifnet *, ioctl_command_t, caddr_t);
 static void 		dc_init(void *);
 static void 		dc_stop(struct dc_softc *);
 static void 		dc_watchdog(struct ifnet *);
@@ -3621,7 +3621,7 @@ static void dc_ifmedia_sts(ifp, ifmr)
 
 static int dc_ioctl(ifp, command, data)
 	struct ifnet		*ifp;
-	u_long			command;
+	ioctl_command_t		command;
 	caddr_t			data;
 {
 	struct dc_softc		*sc = ifp->if_softc;
