@@ -1,3 +1,8 @@
+2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/network/elnk.c: Use ioctl_command_t as ioctl argument.
+	* libchip/network/if_dc.c: Use ioctl_command_t as ioctl argument.
+
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/target.m4: Strip CFLAGS (Hack to prevent bsp-cflags from
