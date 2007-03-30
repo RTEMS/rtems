@@ -521,7 +521,7 @@ ne_init_irq_handler(int irno)
   printk("ne_init_irq_handler(%d)\n", irno);
 #endif
   irq.name = irno;
-  irq.hdl = (rtems_irq_hdl)ne_interrupt_handler;
+  irq.hdl = ne_interrupt_handler;
   irq.handle = irno;
   irq.on = ne_interrupt_on;
   irq.off = ne_interrupt_off;

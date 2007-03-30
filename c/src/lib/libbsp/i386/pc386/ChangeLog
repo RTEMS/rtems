@@ -1,3 +1,7 @@
+2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ne2000/ne2000.c: Remove typecast.
+
 2007-03-11	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/bspstart.c: Remove assignments of
