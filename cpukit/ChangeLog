@@ -1,5 +1,11 @@
 2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ppp-deflate.c, libnetworking/net/bsd-comp.c:
+	Remove (Unused).
+	* libnetworking/Makefile.am: Remove net/ppp-deflate.c, net/bsd-comp.c.
+
+2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/libc/addr2ascii.c, libnetworking/libc/ascii2addr.c,
 	libnetworking/libc/base64.c, libnetworking/libc/ether_addr.c,
 	libnetworking/libc/gethostbydns.c, libnetworking/libc/gethostbyht.c,
