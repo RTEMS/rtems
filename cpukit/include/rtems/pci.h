@@ -18,6 +18,8 @@
 #ifndef _RTEMS_PCI_H
 #define _RTEMS_PCI_H
 
+#include <stdint.h>
+
 /*
  * Under PCI, each device has 256 bytes of configuration address space,
  * of which the first 64 bytes are standardized as follows:
@@ -1098,17 +1100,17 @@
 
 typedef struct  {
   int (*read_config_byte)(unsigned char, unsigned char,  unsigned char,
-                          unsigned char, unsigned char *);
+                          unsigned char, uint8_t *);
   int (*read_config_word)(unsigned char, unsigned char,  unsigned char,
-                          unsigned char, unsigned short *);
+                          unsigned char, uint16_t *);
   int (*read_config_dword)(unsigned char, unsigned char,  unsigned char,
-                           unsigned char, unsigned int *);
+                           unsigned char, uint32_t *);
   int (*write_config_byte)(unsigned char, unsigned char,  unsigned char,
-                           unsigned char, unsigned char);
+                           unsigned char, uint8_t);
   int (*write_config_word)(unsigned char, unsigned char,  unsigned char,
-                           unsigned char, unsigned short);
+                           unsigned char, uint16_t);
   int (*write_config_dword)(unsigned char, unsigned char,  unsigned char,
-                            unsigned char, unsigned int);
+                            unsigned char, uint32_t);
 } pci_config_access_functions;
 
 /* Error codes for pci_initialize */
