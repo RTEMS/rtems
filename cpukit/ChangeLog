@@ -1,3 +1,7 @@
+2007-03-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/rtems/pci.h: Further stdint.h fixed-size types.
+
 2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/rtems/pci.h: Use stdint.h fixed size-types.

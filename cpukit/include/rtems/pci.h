@@ -1138,7 +1138,7 @@ pci_read_config_byte(
   unsigned char slot,
   unsigned char function,
   unsigned char where,
-  unsigned char * val)
+  uint8_t      *val)
 {
   return BSP_pci_configuration.pci_functions->read_config_byte(
             bus, slot, function, where, val);
@@ -1150,7 +1150,7 @@ pci_read_config_word(
   unsigned char slot,
   unsigned char function,
   unsigned char where,
-  unsigned short * val)
+  uint16_t     *val)
 {
   return BSP_pci_configuration.pci_functions->read_config_word(
              bus, slot, function, where, val);
@@ -1162,7 +1162,7 @@ pci_read_config_dword(
   unsigned char slot,
   unsigned char function,
   unsigned char where,
-  unsigned int * val)
+  uint32_t     *val)
 {
   return BSP_pci_configuration.pci_functions->read_config_dword(bus, slot, function, where, val);
 }
@@ -1173,7 +1173,7 @@ pci_write_config_byte(
   unsigned char slot, 
   unsigned char function,
   unsigned char where, 
-  unsigned char val)
+  uint8_t       val)
 {
   return BSP_pci_configuration.pci_functions->write_config_byte(
              bus, slot, function, where, val);
@@ -1185,7 +1185,7 @@ pci_write_config_word(
   unsigned char slot,
   unsigned char function,
   unsigned char where,
-  unsigned short val)
+  uint16_t      val)
 {
   return BSP_pci_configuration.pci_functions->write_config_word(
               bus, slot, function, where, val);
@@ -1197,7 +1197,7 @@ pci_write_config_dword(
   unsigned char slot,
   unsigned char function,
   unsigned char where,
-  unsigned int val)
+  uint32_t      val)
 {
   return BSP_pci_configuration.pci_functions->write_config_dword(
       bus, slot, function, where, val);
