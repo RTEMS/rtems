@@ -1,3 +1,11 @@
+2007-03-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/bootloader/bootldr.h, shared/bootloader/em86.c,
+	shared/bootloader/pci.c, shared/bootloader/pci.h,
+	shared/irq/irq_init.c, shared/pci/detect_raven_bridge.c,
+	shared/pci/pci.c, shared/pci/pcifinddevice.c:
+	Use stdint.h fixed-size types.
+
 2007-03-11	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/startup/bspstart.c: Remove assignments of
