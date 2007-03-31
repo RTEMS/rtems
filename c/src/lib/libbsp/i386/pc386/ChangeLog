@@ -1,3 +1,7 @@
+2007-03-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ne2000/ne2000.c (ne_interrupt_handler): Avoid warning.
+
 2007-03-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ne2000/ne2000.c: Remove typecast.

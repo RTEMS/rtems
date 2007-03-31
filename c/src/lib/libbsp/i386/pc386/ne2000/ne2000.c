@@ -381,8 +381,9 @@ ne_check_status (struct ne_softc *sc, int from_irq_handler)
 /* Handle an NE2000 interrupt.  */
 
 static void
-ne_interrupt_handler (rtems_vector_number v)
+ne_interrupt_handler (rtems_irq_hdl_param cdata)
 {
+  rtems_vector_number v = (rtems_vector_number) cdata;
   struct ne_softc *sc;
 
   sc = ne_device_for_irno (v);
