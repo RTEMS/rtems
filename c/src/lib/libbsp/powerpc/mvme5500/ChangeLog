@@ -1,3 +1,8 @@
+2007-03-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* pci/detect_host_bridge.c, pci/pci.c, pci/pcifinddevice.c:
+	Reflect changes to pci-API.
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* irq/irq_init.c: Correct license URL and/or fix mistake in copyright
