@@ -125,7 +125,7 @@
 /* PCI_MEM_BASE is a possible offset between CPU- and PCI addresses.
  * Should be defined by the BSP.
  */
-typedef unsigned int pci_ulong;
+typedef uint32_t pci_ulong;
 
 #ifndef BSP_PCI2LOCAL_ADDR
 #ifndef PCI_MEM_BASE
