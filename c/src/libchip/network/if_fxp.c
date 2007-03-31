@@ -401,9 +401,9 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	int error = 0;
 	struct fxp_softc *sc;
 	struct ifnet *ifp;
-	u_int16_t val16;
-	u_int32_t val32;
-	u_int16_t data;
+	uint16_t val16;
+	uint32_t val32;
+	uint16_t data;
 	int i;
 	int s;
 	int unitNumber;
