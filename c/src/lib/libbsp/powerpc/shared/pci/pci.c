@@ -83,7 +83,7 @@ indirect_pci_read_config_dword(
   unsigned char slot,
   unsigned char function,
   unsigned char offset,
-  unsigned int *val
+  uint32_t *val
 ) {
   *val = 0xffffffff;
   if (offset&3)
@@ -132,7 +132,7 @@ indirect_pci_write_config_dword(
   unsigned char slot,
   unsigned char function,
   unsigned char offset,
-  unsigned int val
+  uint32_t      val
 ) {
   if (offset&3)
     return PCIBIOS_BAD_REGISTER_NUMBER;
@@ -200,7 +200,7 @@ direct_pci_read_config_dword(
   unsigned char slot,
   unsigned char function,
   unsigned char offset,
-  unsigned int *val
+  uint32_t     *val
 ) {
   *val = 0xffffffff;
   if (offset&3)
@@ -257,7 +257,7 @@ direct_pci_write_config_dword(
   unsigned char slot,
   unsigned char function,
   unsigned char offset,
-  unsigned int val
+  uint32_t      val
 ) {
   if (offset&3)
     return PCIBIOS_BAD_REGISTER_NUMBER;
@@ -581,7 +581,8 @@ int pci_initialize()
   unsigned char ucSlotNumber, ucFnNumber, ucNumFuncs;
   unsigned char ucHeader;
   unsigned char ucMaxSubordinate;
-  unsigned int  ulClass, ulDeviceID;
+  uint32_t ulClass;
+  uint32_t ulDeviceID;
 
   detect_host_bridge();
 

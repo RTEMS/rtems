@@ -45,8 +45,8 @@ typedef union _reg_type1 {
 } reg_type1;
 
 typedef union _reg_type2 {
- 	unsigned e;
-  	unsigned short x;
+ 	uint32_t e;
+  	uint16_t x;
 } reg_type2;
 
 typedef struct _x86 {
@@ -492,7 +492,8 @@ void em86_main(struct pci_dev *dev){
 	u_short signature;
 	u_char length;
 	volatile u_int *src;
-	u_int *dst, left, saved_rom;
+	u_int *dst, left;
+	uint32_t saved_rom;
 #if defined(MONITOR_IO) && !defined(__BOOT__)
 #define IOMASK 0xff
 #else

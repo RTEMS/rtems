@@ -149,8 +149,8 @@ unsigned merst;
 void detect_host_bridge()
 {
   PPC_DEVICE *hostbridge;
-  unsigned int id0;
-  unsigned int tmp;
+  uint32_t id0;
+  uint32_t tmp;
 
   /*
    * This code assumes that the host bridge is located at

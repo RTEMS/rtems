@@ -542,7 +542,7 @@ static void reconfigure_pci(void) {
 
 static int
 indirect_pci_read_config_byte(unsigned char bus, unsigned char dev_fn,
-			      unsigned char offset, unsigned char *val) {
+			      unsigned char offset, uint8_t *val) {
    out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
    *val=in_8(pci->config_data + (offset&3));
@@ -551,7 +551,7 @@ indirect_pci_read_config_byte(unsigned char bus, unsigned char dev_fn,
 
 static int
 indirect_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
-			      unsigned char offset, unsigned short *val) {
+			      unsigned char offset, uint16_t *val) {
    *val = 0xffff;
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
    out_be32(pci->config_addr,
@@ -562,7 +562,7 @@ indirect_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
 
 static int
 indirect_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
-                               unsigned char offset, unsigned int *val) {
+                               unsigned char offset, uint32_t *val) {
    *val = 0xffffffff;
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
    out_be32(pci->config_addr,
@@ -573,7 +573,7 @@ indirect_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
 
 static int
 indirect_pci_write_config_byte(unsigned char bus, unsigned char dev_fn,
-			       unsigned char offset, unsigned char val) {
+			       unsigned char offset, uint8_t val) {
    out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
    out_8(pci->config_data + (offset&3), val);
@@ -582,7 +582,7 @@ indirect_pci_write_config_byte(unsigned char bus, unsigned char dev_fn,
 
 static int
 indirect_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
-			       unsigned char offset, unsigned short val) {
+			       unsigned char offset, uint16_t val) {
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
    out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
@@ -592,7 +592,7 @@ indirect_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
 
 static int
 indirect_pci_write_config_dword(unsigned char bus, unsigned char dev_fn,
-				unsigned char offset, unsigned int val) {
+				unsigned char offset, uint32_t val) {
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
    out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|(offset<<24));
@@ -611,7 +611,7 @@ static const struct pci_bootloader_config_access_functions indirect_functions = 
 
 static int
 direct_pci_read_config_byte(unsigned char bus, unsigned char dev_fn,
-                            unsigned char offset, unsigned char *val) {
+                            unsigned char offset, uint8_t *val) {
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       *val=0xff;
       return PCIBIOS_DEVICE_NOT_FOUND;
@@ -623,7 +623,7 @@ direct_pci_read_config_byte(unsigned char bus, unsigned char dev_fn,
 
 static int
 direct_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
-                            unsigned char offset, unsigned short *val) {
+                            unsigned char offset, uint16_t *val) {
    *val = 0xffff;
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
@@ -637,7 +637,7 @@ direct_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
 
 static int
 direct_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
-                             unsigned char offset, unsigned int *val) {
+                             unsigned char offset, uint32_t *val) {
    *val = 0xffffffff;
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
@@ -651,7 +651,7 @@ direct_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
 
 static int
 direct_pci_write_config_byte(unsigned char bus, unsigned char dev_fn,
-                             unsigned char offset, unsigned char val) {
+                             unsigned char offset, uint8_t val) {
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
    }
@@ -663,7 +663,7 @@ direct_pci_write_config_byte(unsigned char bus, unsigned char dev_fn,
 
 static int
 direct_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
-                             unsigned char offset, unsigned short val) {
+                             unsigned char offset, uint16_t val) {
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
@@ -677,7 +677,7 @@ direct_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
 
 static int
 direct_pci_write_config_dword(unsigned char bus, unsigned char dev_fn,
-                              unsigned char offset, unsigned int val) {
+                              unsigned char offset, uint32_t val) {
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
@@ -785,7 +785,9 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
 
 u_int pci_scan_bus(struct pci_bus *bus)
 {
-   unsigned int devfn, l, max, class;
+   unsigned int devfn, max;
+   uint32_t class;
+   uint32_t l;
    unsigned char irq, hdr_type, is_multi = 0;
    struct pci_dev *dev, **bus_last;
    struct pci_bus *child;
@@ -891,7 +893,7 @@ u_int pci_scan_bus(struct pci_bus *bus)
        * If it's a bridge, scan the bus behind it.
        */
       if ((dev->class >> 8) == PCI_CLASS_BRIDGE_PCI) {
-         unsigned int buses;
+         uint32_t buses;
          unsigned int devfn = dev->devfn;
          unsigned short cr;
 
@@ -1321,7 +1323,7 @@ void pci_init(void)
       }
    } else {
       /* Let us try by experimentation at our own risk! */
-      u_int id0;
+      uint32_t id0;
       bd->pci_functions = &direct_functions;
       /* On all direct bridges I know the host bridge itself
        * appears as device 0 function 0.

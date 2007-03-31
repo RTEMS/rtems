@@ -52,6 +52,7 @@
 #define PCI_INVALID_VENDORDEVICEID  0xffffffff
 #define PCI_MULTI_FUNCTION      0x80
 
+#include <inttypes.h>
 #include <bsp/pci.h>
 #include <rtems/bspIo.h>
 #include <stdio.h>
@@ -127,12 +128,13 @@ dump_dev_cb(
    int dev,
    int fun,
    void *uarg
-) {
-unsigned short vi,di;
-unsigned short cd,st;
-unsigned int   b1,b2;
-unsigned char  il,ip;
-FILE           *f = uarg;
+) 
+{
+  uint16_t vi,di;
+  uint16_t cd,st;
+  uint32_t b1,b2;
+  uint8_t  il,ip;
+  FILE     *f = uarg;
 
 	pci_read_config_word (bus, dev, fun, PCI_VENDOR_ID,      &vi);
 	pci_read_config_word (bus, dev, fun, PCI_DEVICE_ID,      &di);
@@ -143,7 +145,8 @@ FILE           *f = uarg;
 	pci_read_config_byte (bus, dev, fun, PCI_INTERRUPT_LINE, &il);
 	pci_read_config_byte (bus, dev, fun, PCI_INTERRUPT_PIN,  &ip);
 
-	fprintf(f,"%3d:0x%02x:%d    0x%04x-0x%04x:  0x%04x 0x%04x 0x%08x 0x%08x       %d -> %3d (=0x%02x)\n",
+   /*  fprintf(f,"%3d:0x%02x:%d    0x%04x-0x%04x:  0x%04x 0x%04x 0x%08x 0x%08x       %d -> %3d (=0x%02x)\n", */
+       fprintf(f,"%3d:0x%02x:%d    0x%04x-0x%04x:  0x%04x 0x%04x 0x%08" PRIx32 " 0x%08" PRIx32 "       %d -> %3d (=0x%02x)\n",
 		bus, dev, fun, vi, di, cd, st, b1, b2, ip, il, il);
 	return 0;
 }
@@ -164,7 +167,7 @@ BSP_pciScan(
   void *uarg
 ) {
 
-   unsigned int d;
+   uint32_t d;
    unsigned char bus,dev,fun,hd;
 
    bus = PCIB_DEVSIG_BUS(  (unsigned long)handle );
