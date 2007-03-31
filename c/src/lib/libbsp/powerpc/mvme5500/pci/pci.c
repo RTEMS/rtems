@@ -75,8 +75,8 @@ unsigned char ucMaxPCIBus=0;
 
 /* Please note that PCI0 and PCI1 does not correlate with the busNum 0 and 1.
  */
-static int direct_pci_read_config_byte(unsigned char bus,unsigned char dev,unsigned char func,
-unsigned char offset,unsigned char *val)
+static int direct_pci_read_config_byte(unsigned char bus,unsigned char dev,
+  unsigned char func, unsigned char offset, uint8_t *val)
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -101,7 +101,7 @@ unsigned char offset,unsigned char *val)
 }
 
 static int direct_pci_read_config_word(unsigned char bus, unsigned char dev,
-unsigned char func, unsigned char offset, unsigned short *val)
+  unsigned char func, unsigned char offset, uint16_t *val)
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -127,7 +127,7 @@ unsigned char func, unsigned char offset, unsigned short *val)
 }
 
 static int direct_pci_read_config_dword(unsigned char bus, unsigned char dev,
-unsigned char func, unsigned char offset, unsigned int *val) 
+  unsigned char func, unsigned char offset, uint32_t *val) 
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -152,7 +152,8 @@ unsigned char func, unsigned char offset, unsigned int *val)
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int direct_pci_write_config_byte(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned char val) 
+static int direct_pci_write_config_byte(unsigned char bus, unsigned char dev,
+  unsigned char func, unsigned char offset, uint8_t val) 
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -177,7 +178,8 @@ static int direct_pci_write_config_byte(unsigned char bus, unsigned char dev,uns
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int direct_pci_write_config_word(unsigned char bus, unsigned char dev,unsigned char func, unsigned char offset, unsigned short val) 
+static int direct_pci_write_config_word(unsigned char bus, unsigned char dev,
+  unsigned char func, unsigned char offset, uint16_t val) 
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -201,7 +203,8 @@ static int direct_pci_write_config_word(unsigned char bus, unsigned char dev,uns
   return PCIBIOS_SUCCESSFUL;
 }
 
-static int direct_pci_write_config_dword(unsigned char bus,unsigned char dev,unsigned char func, unsigned char offset, unsigned int val) 
+static int direct_pci_write_config_dword(unsigned char bus, unsigned char dev,
+  unsigned char func, unsigned char offset, uint32_t val) 
 {
   volatile unsigned char *config_addr, *config_data;
 
@@ -249,8 +252,8 @@ int pci_initialize()
 {
   int deviceFound;
   unsigned char ucBusNumber, ucSlotNumber, ucFnNumber, ucNumFuncs;
-  unsigned int ulHeader;
-  unsigned int pcidata, ulClass, ulDeviceID;
+  uint32_t ulHeader;
+  uint32_t pcidata, ulClass, ulDeviceID;
 
   pci_interface();
   

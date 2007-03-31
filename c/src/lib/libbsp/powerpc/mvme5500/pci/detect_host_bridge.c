@@ -27,7 +27,7 @@
 
 unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet)
 {
-  unsigned int pcidata, pcidata1;
+  uint32_t pcidata, pcidata1;
   int PciLocal, busNumber=0;
   
   /* On the mvme5500 board, the GT64260B system controller had the MCP

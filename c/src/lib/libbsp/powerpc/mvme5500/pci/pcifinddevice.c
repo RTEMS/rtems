@@ -80,9 +80,10 @@ int BSP_pciFindDevicePrint(unsigned short vendorid, unsigned short deviceid,
 int pci_find_device( unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun )
 {
-  unsigned int d;
-  unsigned short s;
-  unsigned char bus,dev,fun,hd;
+  uint32_t	d;
+  uint16_t	s;
+  unsigned char bus,dev;
+  uint8_t	fun, hd;
 
   for (bus=0; bus<BSP_MAX_PCI_BUS;  bus++) {
       for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
