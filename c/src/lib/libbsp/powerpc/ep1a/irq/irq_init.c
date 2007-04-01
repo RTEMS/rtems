@@ -155,7 +155,7 @@ static unsigned char mcp750_openpic_initsenses[] = {
 void VIA_isa_bridge_interrupts_setup(void)
 {
   pci_isa_bridge_device pci_dev;
-  unsigned int temp;
+  uint32_t temp;
   unsigned char tmp;
   unsigned char maxBus;
   unsigned found = 0;

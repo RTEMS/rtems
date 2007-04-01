@@ -303,13 +303,13 @@ unsigned int rsPMCQ1Init()
 {
   int busNo;
   int slotNo;
-  unsigned int baseaddr = 0;
-  unsigned int bridgeaddr = 0;
+  uint32_t baseaddr = 0;
+  uint32_t bridgeaddr = 0;
   unsigned long pbti0_ctl;
   int i;
   unsigned char int_vector;
   int fun;
-  unsigned int temp;
+  uint32_t temp;
   PPMCQ1BoardData       boardData;
   rtems_irq_connect_data IrqData = {0,
                                     rsPMCQ1Int,
@@ -474,11 +474,11 @@ unsigned int rsPMCQ1Init()
 unsigned int rsPMCQ1Commission( unsigned long busNo, unsigned long slotNo )
 {
   unsigned int status = RTEMS_IO_ERROR;
-  unsigned int bridgeaddr = 0;
+  uint32_t bridgeaddr = 0;
   unsigned long val;
   int i;
-  unsigned int venId1;
-  unsigned int venId2;
+  uint32_t venId1;
+  uint32_t venId2;
 
   pci_read_config_dword(busNo, slotNo, 0, PCI_VENDOR_ID, &venId1);
   pci_read_config_dword(busNo, slotNo, 0, PCI_VENDOR_ID, &venId2);
