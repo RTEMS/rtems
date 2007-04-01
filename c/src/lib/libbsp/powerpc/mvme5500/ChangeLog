@@ -1,3 +1,9 @@
+2007-04-01	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1235/bsps
+	* pci/pci.c: Add conditional declaration of variables used in debug
+	printk's.
+
 2007-03-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* pci/detect_host_bridge.c, pci/pci.c, pci/pcifinddevice.c:
