@@ -881,8 +881,8 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    int          mtu;
    unsigned char cvalue;
 #if defined(__i386__)
-   uint32_t value;
-   unsigned char interrupt;
+   uint32_t	value;
+   uint8_t	interrupt;
 #endif
    int          pbus, pdev, pfun;
 #if defined(__PPC__)

@@ -3125,8 +3125,8 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    int                      numFound = 0;
    int          pbus, pdev, pfun;
 #if defined(__i386__)
-   unsigned int   value;
-   unsigned char  interrupt;
+   uint32_t	value;
+   uint8_t      interrupt;
 #endif
 #if defined(__PPC__)
    uint32_t	lvalue;
