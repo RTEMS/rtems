@@ -1,3 +1,7 @@
+2007-04-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/rsPMCQ1.c, irq/irq_init.c: Reflect changes to pci-API.
+
 2007-03-11	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/bspstart.c: Remove assignments of
