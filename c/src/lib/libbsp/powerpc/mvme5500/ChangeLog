@@ -1,3 +1,9 @@
+2007-04-01	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1235/bsps
+	* pci/pci.c: Add conditional declaration of variables used in debug
+	printk's.
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* irq/irq_init.c: Correct license URL and/or fix mistake in copyright
