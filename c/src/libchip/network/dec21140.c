@@ -886,8 +886,8 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 #endif
    int          pbus, pdev, pfun;
 #if defined(__PPC__)
-   int          tmp;
-   unsigned int lvalue;
+   int		tmp;
+   uint32_t	lvalue;
 #endif
 
    /*

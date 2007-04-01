@@ -3129,7 +3129,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    unsigned char  interrupt;
 #endif
 #if defined(__PPC__)
-   unsigned int lvalue;
+   uint32_t	lvalue;
 #endif
 
 

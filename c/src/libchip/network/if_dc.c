@@ -1912,7 +1912,7 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	struct dc_softc		*sc;
 	struct ifnet		*ifp;
 	struct dc_type		*t;
-	u_int32_t		revision;
+	uint32_t		revision;
 	int			error = 0, mac_offset;
 	uint32_t		value;
 	
