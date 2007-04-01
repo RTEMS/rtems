@@ -1,5 +1,7 @@
 2007-04-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/network/dec21140.c, libchip/network/elnk.c: i386-specific
+	adjustments to pci-API changes.
 	* libchip/network/dec21140.c, libchip/network/elnk.c, 
 	libchip/network/if_dc.c: powerpc-specific adjustments to pci-API
 	changes.
