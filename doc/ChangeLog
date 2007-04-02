@@ -1,3 +1,7 @@
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* user/clock.t: Add clock_get_uptime().
+
 2007-03-28	Chris Johns <chrisj@rtems.org>
 
 	* user/Makefile.am, user/clock.t: Add support for a handler to obtain

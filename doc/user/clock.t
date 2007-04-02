@@ -19,6 +19,7 @@ the clock manager are:
 @itemize @bullet
 @item @code{@value{DIRPREFIX}clock_set} - Set system date and time
 @item @code{@value{DIRPREFIX}clock_get} - Get system date and time information
+@item @code{@value{DIRPREFIX}clock_get_uptime} - Get time since boot
 @item @code{@value{DIRPREFIX}clock_set_nanoseconds_extension} - Install the nanoseconds since last tick handler
 @item @code{@value{DIRPREFIX}clock_tick} - Announce a clock tick
 @end itemize
@@ -441,6 +442,47 @@ This directive may be called from an ISR.
 
 This directive is called as part of every service to obtain the 
 current date and time as well as timestamps.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_GET_UPTIME - Get the time since booy
+
+@cindex clock get uptime
+@cindex uptime
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_get_uptime
+@example
+rtems_status_code rtems_clock_get_uptime(
+  struct timespec *uptime
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+NOT SUPPORTED FROM Ada BINDING
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - clock tick processed successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL
+
+@subheading DESCRIPTION:
+
+This directive returns the seconds and nanoseconds since the
+system was booted.  If the BSP supports nanosecond clock
+accuracy, the time reported will probably be different on every
+call.
+
+@subheading NOTES:
+
+This directive may be called from an ISR.
 
 @c
 @c
