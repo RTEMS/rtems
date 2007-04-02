@@ -368,11 +368,10 @@ uninitialized =
 
 /*timer.h*/     (sizeof _Timer_Information)               +
 
-/*tod.h*/       (sizeof _TOD_Current)                     +
+/*tod.h*/       (sizeof _TOD_Now)                         +
                 (sizeof _TOD_Seconds_since_epoch)         +
                 (sizeof _TOD_Microseconds_per_tick)       +
                 (sizeof _TOD_Ticks_per_second)            +
-                (sizeof _TOD_Seconds_watchdog)            +
 
 /*tqdata.h*/    0                                         +
 
@@ -446,12 +445,9 @@ initialized +=
 /*copyrt.h*/    (strlen(_Copyright_Notice)+1)             +
 
 /*sptables.h*/  (sizeof _Initialization_Default_multiprocessing_table)  +
-                (strlen(_RTEMS_version)+1)      +
+                (strlen(_RTEMS_version)+1);
 
 
-/*tod.h*/       (sizeof _TOD_Days_per_month)    +
-                (sizeof _TOD_Days_to_date)      +
-                (sizeof _TOD_Days_since_last_leap_year);
 
 #ifndef unix /* make sure this is not native */
 #ifdef __sparc__

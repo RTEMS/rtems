@@ -1,3 +1,9 @@
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* spsize/size.c: Convert from Classic API style TOD_Control as
+	fundamental time structure to POSIX struct timespec. Add
+	clock_get_uptime().
+
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp06/task1.c, sp20/task1.c: Use rtems_task_argument.
