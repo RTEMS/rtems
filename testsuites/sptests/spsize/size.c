@@ -369,9 +369,9 @@ uninitialized =
 /*timer.h*/     (sizeof _Timer_Information)               +
 
 /*tod.h*/       (sizeof _TOD_Now)                         +
+                (sizeof _TOD_Uptime)                      +
                 (sizeof _TOD_Seconds_since_epoch)         +
                 (sizeof _TOD_Microseconds_per_tick)       +
-                (sizeof _TOD_Ticks_per_second)            +
 
 /*tqdata.h*/    0                                         +
 

@@ -1,5 +1,9 @@
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
 
+	* spsize/size.c: Eliminate TOD_Ticks_per_second variable.
+
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
 	* spsize/size.c: Convert from Classic API style TOD_Control as
 	fundamental time structure to POSIX struct timespec. Add
 	clock_get_uptime().
