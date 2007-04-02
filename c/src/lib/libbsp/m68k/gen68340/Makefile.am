@@ -46,7 +46,7 @@ clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/Modif_cpu_asm.S console/console.c \
-    console/m340uart.c
+    console/m340uart.c ../../shared/dummy_printk_support.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

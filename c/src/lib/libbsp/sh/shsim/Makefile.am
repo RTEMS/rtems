@@ -61,7 +61,8 @@ gdbsci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 # FIXME: trap34 is unused
 #
 noinst_PROGRAMS += trap34.rel
-trap34_rel_SOURCES = trap34/console-io.c trap34/console-support.S
+trap34_rel_SOURCES = trap34/console-io.c trap34/console-support.S \
+    ../../shared/dummy_printk_support.c
 trap34_rel_CPPFLAGS = $(AM_CPPFLAGS)
 trap34_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -72,7 +73,8 @@ console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel gdbsci.rel scitab.rel
+libbsp_a_LIBADD = startup.rel clock.rel console.rel gdbsci.rel scitab.rel \
+    trap34.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel
 
 include $(srcdir)/preinstall.am

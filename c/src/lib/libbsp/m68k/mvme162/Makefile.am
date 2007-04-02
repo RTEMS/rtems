@@ -18,7 +18,8 @@ noinst_PROGRAMS =
 
 # wrapup is the one that actually builds and installs the library
 # from the individual .rel files built in other directories
-SUBDIRS = . tools
+# XXX ignore tools since it doesn't build
+SUBDIRS = .
 
 include_HEADERS += ../../shared/tod.h
 include_HEADERS += include/coverhd.h
@@ -49,7 +50,7 @@ clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c
+console_rel_SOURCES = console/console.c ../../shared/dummy_printk_support.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

@@ -42,7 +42,7 @@ clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/console.c console/leds.c console/mc68ec.c \
-    console/duart.c
+    console/duart.c ../../shared/dummy_printk_support.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
