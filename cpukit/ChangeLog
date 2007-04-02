@@ -1,5 +1,9 @@
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
 
+	* libcsupport/src/printk.c: Add %p support.
+
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
 	* libmisc/stackchk/check.c: Add code to check validity of frame pointer
 	in addition to the pattern area being overwritten. Also do some
 	cleanup.

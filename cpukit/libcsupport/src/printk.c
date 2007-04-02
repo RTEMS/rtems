@@ -111,20 +111,13 @@ vprintk(char *fmt, va_list ap)
         case 'd': case 'D': base = 10; sign = 1; break;
         case 'u': case 'U': base = 10; sign = 0; break;
         case 'x': case 'X': base = 16; sign = 0; break;
+        case 'p':           base = 16; sign = 0; break;
         case 's':
           for (str = va_arg(ap, char *); *str; str++)
             BSP_output_char(*str);
           break;
         case 'c':
-#if 0
-#if defined(_TMS320C3x) || defined(_TMS320C4x)
           BSP_output_char(va_arg(ap, int));
-#else
-          BSP_output_char(va_arg(ap, char));
-#endif
-#else
-          BSP_output_char(va_arg(ap, int));
-#endif
           break;
         default:
           BSP_output_char(c);
