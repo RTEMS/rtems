@@ -65,6 +65,7 @@ hello/Makefile
 loopback/Makefile
 minimum/Makefile
 fileio/Makefile
+nsecs/Makefile
 paranoia/Makefile
 ticker/Makefile
 unlimited/Makefile

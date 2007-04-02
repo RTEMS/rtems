@@ -1,3 +1,11 @@
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, configure.ac: Convert from Classic API style TOD_Control
+	as fundamental time structure to POSIX struct timespec. Add
+	clock_get_uptime().
+	* nsecs/.cvsignore, nsecs/Makefile.am, nsecs/init.c, nsecs/nsecs.doc,
+	nsecs/nsecs.scn: New files.
+
 2007-03-26	Joel Sherrill <joel@OARcorp.com>
 
 	* loopback/init.c: Add CVS Id.

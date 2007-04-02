@@ -13,6 +13,8 @@ endif
 
 SUBDIRS += paranoia
 
+SUBDIRS += nsecs
+
 if CXXTESTS
 SUBDIRS += iostream cdtest
 endif
