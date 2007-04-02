@@ -6,7 +6,7 @@
  *         CPU grows up or down and installs the correct
  *         extension routines for that direction.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,19 +37,12 @@
 #define DONT_USE_FATAL_EXTENSION
 
 #include <assert.h>
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
+#include <rtems/bspIo.h>
 #include <rtems/stackchk.h>
 #include "internal.h"
-
-/*
- *  This variable contains the name of the task which "blew" the stack.
- *  It is NULL if the system is all right.
- */
-
-Thread_Control *Stack_check_Blown_task;
 
 /*
  *  The extension table for the stack checker.
@@ -77,6 +70,31 @@ rtems_extensions_table Stack_check_Extension_table = {
 Stack_check_Control Stack_check_Pattern;
 
 /*
+ * Helper function to report if the actual stack pointer is in range.
+ *
+ * NOTE: This uses a GCC specific method.
+ */
+
+static inline boolean Stack_check_Frame_pointer_in_range(
+  Stack_Control *the_stack
+)
+{
+  #if defined(__GNUC__)
+    void *sp = __builtin_frame_address(0);
+
+    if ( sp < the_stack->area ) {
+      printk( "Stack Pointer Too Low!\n" );
+      return FALSE;
+    }
+    if ( sp > (the_stack->area + the_stack->size) ) {
+      printk( "Stack Pointer Too High!\n" );
+      return FALSE;
+    }
+  #endif
+  return TRUE;
+}
+
+/*
  *  Where the pattern goes in the stack area is dependent upon
  *  whether the stack grow to the high or low area of the memory.
  *
@@ -95,6 +113,7 @@ Stack_check_Control Stack_check_Pattern;
     ((_the_stack)->area)
 
 #else
+
 
 #define Stack_check_Get_pattern_area( _the_stack ) \
   ((Stack_check_Control *) ((char *)(_the_stack)->area + HEAP_OVERHEAD))
@@ -148,20 +167,10 @@ static int   stack_check_initialized = 0;
 
 void Stack_check_Initialize( void )
 {
-#if 0
-  rtems_status_code    status;
-  Objects_Id           id_ignored;
-#endif
   uint32_t            *p;
-#if 0
-  uint32_t             i;
-  uint32_t             api_index;
-  Thread_Control      *the_thread;
-  Objects_Information *information;
-#endif
 
   if (stack_check_initialized)
-      return;
+    return;
 
   /*
    * Dope the pattern and fill areas
@@ -177,52 +186,6 @@ void Stack_check_Initialize( void )
       p[2] = 0xDEADF00D;          /* DEAD FOOD GOOD DOG */
       p[3] = 0x600D0D06;
   };
-
-#if 0
-  status = rtems_extension_create(
-    rtems_build_name( 'S', 'T', 'C', 'K' ),
-    &Stack_check_Extension_table,
-    &id_ignored
-  );
-  assert ( status == RTEMS_SUCCESSFUL );
-#endif
-
-  Stack_check_Blown_task = 0;
-
-  /*
-   * If installed by a task, that task will not get setup properly
-   * since it missed out on the create hook.  This will cause a
-   * failure on first switch out of that task.
-   * So pretend here that we actually ran create and begin extensions.
-   */
-
-  /* XXX
-   *
-   *  Technically this has not been done for any task created before this
-   *  happened.  So just run through them and fix the situation.
-   */
-#if 0
-  if (_Thread_Executing)
-  {
-      Stack_check_Create_extension(_Thread_Executing, _Thread_Executing);
-  }
-#endif
-
-#if 0
-  for ( api_index = 1;
-        api_index <= OBJECTS_APIS_LAST ;
-        api_index++ ) {
-    if ( !_Objects_Information_table[ api_index ] )
-      continue;
-    information = _Objects_Information_table[ api_index ][ 1 ];
-    if ( information ) {
-      for ( i=1 ; i <= information->maximum ; i++ ) {
-        the_thread = (Thread_Control *)information->local_table[ i ];
-        Stack_check_Create_extension( the_thread, the_thread );
-      }
-    }
-  }
-#endif
 
   /*
    * If appropriate, setup the interrupt stack for high water testing
@@ -300,56 +263,47 @@ void Stack_check_Begin_extension(
  *  Report a blown stack.  Needs to be a separate routine
  *  so that interrupt handlers can use this too.
  *
- *  Caller must have set the Stack_check_Blown_task.
- *
  *  NOTE: The system is in a questionable state... we may not get
  *        the following message out.
  */
 
-void Stack_check_report_blown_task(void)
+void Stack_check_report_blown_task(
+  Thread_Control *running,
+  boolean         pattern_ok
+)
 {
-    Stack_Control *stack;
-    Thread_Control *running;
+    Stack_Control *stack = &running->Start.Initial_stack;
 
-    running = Stack_check_Blown_task;
-    stack = &running->Start.Initial_stack;
-
-    fprintf(
-        stderr,
+    printk(
         "BLOWN STACK!!! Offending task(%p): id=0x%08" PRIx32
              "; name=0x%08" PRIx32,
         running,
         running->Object.id,
         (uint32_t) running->Object.name
     );
-    fflush(stderr);
 
     if (rtems_configuration_get_user_multiprocessing_table())
-        fprintf(
-          stderr,
-          "; node=%" PRId32 "\n",
+        printk(
+          "; node=%d\n",
           rtems_configuration_get_user_multiprocessing_table()->node
        );
     else
-        fprintf(stderr, "\n");
-    fflush(stderr);
+        printk( "\n");
 
-    fprintf(
-        stderr,
-        "  stack covers range %p - %p" PRIx32 " (%" PRId32 " bytes)\n",
+    printk(
+        "  stack covers range %p - %p (%d bytes)\n",
         stack->area,
         stack->area + stack->size - 1,
         stack->size);
-    fflush(stderr);
 
-    fprintf(
-        stderr,
-        "  Damaged pattern begins at 0x%08lx and is %ld bytes long\n",
-        (unsigned long) Stack_check_Get_pattern_area(stack),
-        (long) PATTERN_SIZE_BYTES);
-    fflush(stderr);
+    if ( !pattern_ok ) {
+      printk(
+	  "  Damaged pattern begins at 0x%08lx and is %ld bytes long\n",
+	  (unsigned long) Stack_check_Get_pattern_area(stack),
+	  (long) PATTERN_SIZE_BYTES);
+    }
 
-    rtems_fatal_error_occurred( (uint32_t  ) "STACK BLOWN" );
+    rtems_fatal_error_occurred( (uint32_t) "STACK BLOWN" );
 }
 
 /*PAGE
@@ -362,15 +316,24 @@ void Stack_check_Switch_extension(
   Thread_Control *heir
 )
 {
-  if ( running->Object.id == 0 )        /* skip system tasks */
-    return;
+  Stack_Control *the_stack = &running->Start.Initial_stack;
+  void          *pattern;
+  boolean        sp_ok;
+  boolean        pattern_ok;
 
-  if (0 != memcmp( (void *) Stack_check_Get_pattern_area( &running->Start.Initial_stack)->pattern,
-                  (void *) Stack_check_Pattern.pattern,
-                  PATTERN_SIZE_BYTES))
-  {
-      Stack_check_Blown_task = running;
-      Stack_check_report_blown_task();
+  pattern = (void *) Stack_check_Get_pattern_area(the_stack)->pattern;
+
+
+  /*
+   *  Check for an out of bounds stack pointer and then an overwrite
+   */
+
+  sp_ok = Stack_check_Frame_pointer_in_range( the_stack );
+  pattern_ok = (!memcmp( pattern,
+            (void *) Stack_check_Pattern.pattern, PATTERN_SIZE_BYTES));
+
+  if ( !sp_ok || !pattern_ok ) {
+    Stack_check_report_blown_task( running, pattern_ok );
   }
 }
 
@@ -466,7 +429,7 @@ void Stack_check_Dump_threads_usage(
     if ( info->is_string ) {
       name = (char *) the_thread->Object.name;
     } else {
-      u32_name = (uint32_t )the_thread->Object.name;
+      u32_name = (uint32_t) the_thread->Object.name;
       name[ 0 ] = (u32_name >> 24) & 0xff;
       name[ 1 ] = (u32_name >> 16) & 0xff;
       name[ 2 ] = (u32_name >>  8) & 0xff;
@@ -482,8 +445,7 @@ void Stack_check_Dump_threads_usage(
     name[ 4 ] = '\0';
   }
 
-  fprintf(stdout, "0x%08" PRIx32 "  %4s  %p - %p"
-             "   %8" PRId32 "   %8" PRId32 "\n",
+  printk("0x%08" PRIx32 "  %4s  %p - %p   %8" PRId32 "   %8" PRId32 "\n",
           the_thread ? the_thread->Object.id : ~0,
           name,
           stack->area,
@@ -518,38 +480,16 @@ void Stack_check_Fatal_extension(
 
 void Stack_check_Dump_usage( void )
 {
-  uint32_t             i;
-  uint32_t             api_index;
-  Thread_Control      *the_thread;
-  uint32_t             hit_running = 0;
-  Objects_Information *information;
-
   if (stack_check_initialized == 0)
       return;
 
-  fprintf(stdout,"Stack usage by thread\n");
-  fprintf(stdout,
+  printk("Stack usage by thread\n");
+  printk(
     "    ID      NAME       LOW        HIGH     AVAILABLE      USED\n"
   );
 
-  for ( api_index = 1 ;
-        api_index <= OBJECTS_APIS_LAST ;
-        api_index++ ) {
-    if ( !_Objects_Information_table[ api_index ] )
-      continue;
-    information = _Objects_Information_table[ api_index ][ 1 ];
-    if ( information ) {
-      for ( i=1 ; i <= information->maximum ; i++ ) {
-        the_thread = (Thread_Control *)information->local_table[ i ];
-        Stack_check_Dump_threads_usage( the_thread );
-        if ( the_thread == _Thread_Executing )
-          hit_running = 1;
-      }
-    }
-  }
-
-  if ( !hit_running )
-    Stack_check_Dump_threads_usage( _Thread_Executing );
+  /* iterate over all threads and dump the usage */
+  rtems_iterate_over_all_threads( Stack_check_Dump_threads_usage );
 
   /* dump interrupt stack info if any */
   Stack_check_Dump_threads_usage((Thread_Control *) -1);
