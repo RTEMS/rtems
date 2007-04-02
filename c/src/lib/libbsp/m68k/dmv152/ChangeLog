@@ -1,3 +1,7 @@
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Add dummy printk support so all tests link.
+
 2007-03-11	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/bspstart.c: Remove assignments of

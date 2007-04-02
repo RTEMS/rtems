@@ -1,3 +1,7 @@
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Add dummy printk support so all tests link.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

@@ -1,3 +1,7 @@
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Add dummy printk support so all tests link.
+
 2006-12-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* network/network.c: Use ioctl_command_t as arg in ioctl-functions.
