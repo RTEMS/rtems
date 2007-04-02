@@ -1,3 +1,9 @@
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/stackchk/check.c: Add code to check validity of frame pointer
+	in addition to the pattern area being overwritten. Also do some
+	cleanup.
+
 2007-03-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/rtems/pci.h: Further stdint.h fixed-size types.
