@@ -235,37 +235,3 @@ void Clock_exit()
   BSP_remove_rtems_irq_handler (&clockIrqData);
 }
 
-/*-------------------------------------------------------------------------+
-| PLEASE NOTE: The following is directly transcribed from the go32 BSP for
-|              those who wish to use it with PENTIUM based machine. It needs
-|              to be correctly integrated with the rest of the code!!!
-+--------------------------------------------------------------------------*/
-
-#if 0 && defined(pentium)
-
-/* This can be used to get extremely accurate timing on a pentium. */
-/* It isn't supported. [bryce]                                     */
-
-#define HZ 90.0
-
-volatile long long Last_RDTSC;
-
-#define RDTSC()\
-  ({ long long _now; __asm __volatile (".byte 0x0F,0x31":"=A"(_now)); _now; })
-
-long long Kernel_Time_ns( void )
-{
-  extern uint32_t         _TOD_Ticks_per_second;
-
-  unsigned  isrs_per_second = Clock_isrs_per_tick * _TOD_Ticks_per_second;
-  long long now;
-  int       flags;
-
-  disable_intr(flags);
-  now = 1e9 * Clock_driver_ticks / isrs_per_second +
-        (RDTSC() - Last_RDTSC) * (1000.0/HZ);
-  enable_intr(flags);
-  return now;
-} /* Kernel_Time_ns */
-
-#endif /* 0 && pentium */
