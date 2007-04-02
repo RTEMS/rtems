@@ -41,15 +41,18 @@ rtems_status_code rtems_clock_set(
   rtems_time_of_day *time_buffer
 )
 {
-  rtems_interval     seconds;
+  struct timespec  newtime;
 
   if ( !time_buffer )
     return RTEMS_INVALID_ADDRESS;
 
   if ( _TOD_Validate( time_buffer ) ) {
-    seconds = _TOD_To_seconds( time_buffer );
+    newtime.tv_sec = _TOD_To_seconds( time_buffer );
+    newtime.tv_nsec = time_buffer->ticks * 
+                 (_TOD_Microseconds_per_tick * TOD_NANOSECONDS_PER_MICROSECOND);
+
     _Thread_Disable_dispatch();
-      _TOD_Set( time_buffer, seconds );
+      _TOD_Set( &newtime );
     _Thread_Enable_dispatch();
     return RTEMS_SUCCESSFUL;
   }

@@ -18,7 +18,6 @@ unsigned int sleep(
   unsigned int seconds
 )
 {
-  /* XXX can we get away with this implementation? */
   struct timespec tp;
   struct timespec tm;
 

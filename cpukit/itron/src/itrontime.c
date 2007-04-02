@@ -24,30 +24,12 @@
  *  set_tim - Set System Clock
  */
 
-void converTime(SYSTIME ms, TOD_Control *time)
-{
-  int millisecond;
-
-/* XXX need to dereference structure */
-#if 0
-  milisecond = ms % 1000;
-  tempSecond = ms / 1000;
-#else
-   millisecond = 0;
-#endif
-}
-
-
-/*
- *  set_tim - Set System Clock
- */
-
 ER set_tim(
   SYSTIME *pk_tim
 )
 {
- Watchdog_Interval temp; /* an integer in seconds after conversion from SYSTIME */
- TOD_Control the_tod;
+#if 0
+ struct timespec   time;
 
 /* convert *pk_tim which is 48 bits integer in binary into an ordinary
  integer in milliseconds */
@@ -55,12 +37,11 @@ ER set_tim(
 /* XXX */ temp = 0;
   if(temp > 0) {
     _Thread_Disable_dispatch();
-      _TOD_Set(&the_tod, temp);
+      _TOD_Set(&the_tod);
     _Thread_Enable_dispatch();
-      if(_TOD_Validate(&the_tod)){
-      return E_OK;
-      }
+    return E_OK;
   }
+#endif
   return E_SYS;
 }
 

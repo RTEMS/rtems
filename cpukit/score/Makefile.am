@@ -140,12 +140,12 @@ libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
     src/threadqtimeout.c
 
 ## TOD_C_FILES
-libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodtickle.c \
-    src/coretodtoseconds.c src/coretodvalidate.c
+libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
+    src/coretodgetuptime.c
 
 ## WATCHDOG_C_FILES
-libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c src/watchdoginsert.c \
-    src/watchdogremove.c src/watchdogtickle.c
+libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
+    src/watchdoginsert.c src/watchdogremove.c src/watchdogtickle.c
 
 ## STD_C_FILES
 libscore_a_SOURCES += src/apiext.c src/chain.c \

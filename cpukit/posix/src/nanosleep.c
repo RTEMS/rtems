@@ -54,6 +54,13 @@ int nanosleep(
   ticks = _POSIX_Timespec_to_interval( the_rqtp );
 
   /*
+   * Bump the ticks by one so the delay is at least the number of
+   * ticks requested
+   */
+  ticks++;
+
+  /*
+   *  A nanosleep for zero time is implemented as a yield.
    *  This behavior is also beyond the POSIX specification but is
    *  consistent with the RTEMS api and yields desirable behavior.
    */
@@ -69,6 +76,9 @@ int nanosleep(
     return 0;
   }
 
+  /*
+   *  Block for the desired amount of time
+   */
   _Thread_Disable_dispatch();
     _Thread_Set_state(
       _Thread_Executing,

@@ -41,8 +41,8 @@ extern "C" {
 #endif
 
 #include <rtems/score/object.h>
-#include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/rtems/clock.h>
 #include <rtems/rtems/attr.h>
 
 /*

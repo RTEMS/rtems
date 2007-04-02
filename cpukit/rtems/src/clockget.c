@@ -46,20 +46,35 @@ rtems_status_code rtems_clock_get(
   void                    *time_buffer
 )
 {
-  ISR_Level      level;
-  rtems_interval tmp;
-
-   if ( !time_buffer )
-     return RTEMS_INVALID_ADDRESS;
+  if ( !time_buffer )
+    return RTEMS_INVALID_ADDRESS;
 
   switch ( option ) {
-    case RTEMS_CLOCK_GET_TOD:
+    case RTEMS_CLOCK_GET_TOD: {
+      struct tm time;
+      struct timeval now;
+      rtems_time_of_day *tmbuf = (rtems_time_of_day *)time_buffer;
+
       if ( !_TOD_Is_set )
         return RTEMS_NOT_DEFINED;
 
-      *(rtems_time_of_day *)time_buffer = _TOD_Current;
-      return RTEMS_SUCCESSFUL;
+      /* Obtain the current time */
+      _TOD_Get_timeval( &now );
 
+      /* Split it into a closer format */
+      gmtime_r( &now.tv_sec, &time );
+
+      /* Now adjust it to the RTEMS format */
+      tmbuf->year   = time.tm_year + 1900;
+      tmbuf->month  = time.tm_mon + 1;
+      tmbuf->day    = time.tm_mday;
+      tmbuf->hour   = time.tm_hour;
+      tmbuf->minute = time.tm_min;
+      tmbuf->second = time.tm_sec;
+      tmbuf->ticks  = now.tv_usec / _TOD_Microseconds_per_tick;
+     
+      return RTEMS_SUCCESSFUL;
+    }
     case RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH:
       if ( !_TOD_Is_set )
         return RTEMS_NOT_DEFINED;
@@ -75,20 +90,15 @@ rtems_status_code rtems_clock_get(
       *(rtems_interval *)time_buffer = _TOD_Ticks_per_second;
       return RTEMS_SUCCESSFUL;
 
-    case RTEMS_CLOCK_GET_TIME_VALUE:
+    case RTEMS_CLOCK_GET_TIME_VALUE: {
+      struct timeval *time = (struct timeval *)time_buffer;
       if ( !_TOD_Is_set )
         return RTEMS_NOT_DEFINED;
 
-      _ISR_Disable( level );
-        ((rtems_clock_time_value *)time_buffer)->seconds =
-          _TOD_Seconds_since_epoch;
-        tmp = _TOD_Current.ticks;
-      _ISR_Enable( level );
-
-      tmp *= _TOD_Microseconds_per_tick;
-      ((rtems_clock_time_value *)time_buffer)->microseconds = tmp;
+      _TOD_Get_timeval( time );
 
       return RTEMS_SUCCESSFUL;
+    }
   }
 
   return RTEMS_INTERNAL_ERROR;   /* should never get here */

@@ -47,7 +47,7 @@ typedef struct {
   struct itimerspec timer_data; /* Timing data of the timer              */
   uint32_t          ticks;      /* Number of ticks of the initialization */
   uint32_t          overrun;    /* Number of expirations of the timer    */
-  TOD_Control       time;       /* Time in which the timer was started   */
+  struct timespec   time;       /* Time in which the timer was started   */
 } POSIX_Timer_Control;
 
 /*

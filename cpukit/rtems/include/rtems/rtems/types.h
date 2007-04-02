@@ -61,7 +61,30 @@ typedef Heap_Information_block region_information_block;
  */
 
 typedef Watchdog_Interval rtems_interval;
-typedef TOD_Control       rtems_time_of_day;
+
+
+/**
+ *  The following record defines the time of control block.  This
+ *  control block is used to maintain the current time of day.
+ *
+ *  @note This is an RTEID style time/date.
+ */
+typedef struct {
+  /** This field is the year, A.D. */
+  uint32_t   year;
+  /** This field is the month, 1 -> 12 */
+  uint32_t   month;
+  /** This field is the day, 1 -> 31 */
+  uint32_t   day;
+  /** This field is the hour, 0 -> 23 */
+  uint32_t   hour;
+  /** This field is the minute, 0 -> 59 */
+  uint32_t   minute;
+  /** This field is the second, 0 -> 59 */
+  uint32_t   second;
+  /** This field is the elapsed ticks between secs */
+  uint32_t   ticks;
+}   rtems_time_of_day;
 
 /*
  *  Define the type for an RTEMS API task mode.

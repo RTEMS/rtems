@@ -143,7 +143,7 @@ void _POSIX_Timer_TSR(Objects_Id timer, void *data)
       return;
 
     /* Store the time when the timer was started again */
-    ptimer->time = _TOD_Current;
+    _TOD_Get( &ptimer->time );
 
     /* The state really did not change but just to be safe */
     ptimer->state = STATE_CREATE_RUN_C;
@@ -383,7 +383,7 @@ int timer_settime(
            ptimer->state = STATE_CREATE_RUN_C;
 
            /* Stores the time in which the timer was started again */
-           ptimer->time = _TOD_Current;
+           _TOD_Get( &ptimer->time );
            _Thread_Enable_dispatch();
            return 0;
            break;
@@ -416,7 +416,7 @@ int timer_settime(
 
            /* Indicate that the time is running */
            ptimer->state = STATE_CREATE_RUN_C;
-           ptimer->time = _TOD_Current;
+           _TOD_Get( &ptimer->time );
             _Thread_Enable_dispatch();
            return 0;
       }
@@ -454,15 +454,10 @@ int timer_gettime(
 
   POSIX_Timer_Control *ptimer;
   Objects_Locations    location;
-  rtems_time_of_day    current_time;
-  uint32_t             hours;
-  uint32_t             minutes;
-  uint32_t             seconds;
-  uint32_t             ticks;
-  uint32_t             nanosec;
+  struct timespec      current_time;
 
   /* Reads the current time */
-  current_time = _TOD_Current;
+  _TOD_Get( &current_time );
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
@@ -476,46 +471,10 @@ int timer_gettime(
       rtems_set_errno_and_return_minus_one( EINVAL );
 
     case OBJECTS_LOCAL:
-      /* Calculates the difference between the start time of the timer and
-       * the current one */
-
-      hours    = current_time.hour - ptimer->time.hour;
-
-      if ( current_time.minute < ptimer->time.minute ) {
-        minutes = 60 - ptimer->time.minute + current_time.minute;
-        hours--;
-      } else {
-        minutes = current_time.minute - ptimer->time.minute;
-      }
-
-      if ( current_time.second < ptimer->time.second ) {
-        seconds = 60 - ptimer->time.second + current_time.second;
-        minutes--;
-      } else {
-        seconds = current_time.second - ptimer->time.second;
-      }
-
-      if ( current_time.ticks < ptimer->time.ticks ) {
-        ticks = 100 - ptimer->time.ticks + current_time.ticks;
-        seconds--;
-      } else {
-        ticks = current_time.ticks - ptimer->time.ticks;
-      }
-
-      /* The time that the timer is running is calculated */
-      seconds = hours   * 60 * 60 +
-                minutes * 60      +
-                seconds;
-
-      nanosec  = ticks * 10 *  /* msec     */
-                 1000  *       /* microsec */
-                 1000;         /* nanosec  */
-
 
       /* Calculates the time left before the timer finishes */
 
-      value->it_value.tv_sec  = ptimer->timer_data.it_value.tv_sec - seconds;
-      value->it_value.tv_nsec = ptimer->timer_data.it_value.tv_nsec - nanosec;
+      _POSIX_Timespec_subtract(&ptimer->timer_data.it_value, &current_time, &value->it_value);
 
       value->it_interval.tv_sec  = ptimer->timer_data.it_interval.tv_sec;
       value->it_interval.tv_nsec = ptimer->timer_data.it_interval.tv_nsec;

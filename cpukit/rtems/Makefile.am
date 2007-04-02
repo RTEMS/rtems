@@ -77,7 +77,8 @@ librtems_a_SOURCES += src/barrier.c src/barriercreate.c src/barrierdelete.c \
 
 ## CLOCK_C_FILES
 librtems_a_SOURCES += src/rtclock.c src/clockget.c src/clockset.c \
-    src/clocktick.c src/clocksetnsecshandler.c
+    src/clocktick.c src/clocksetnsecshandler.c src/clockgetuptime.c \
+    src/clocktodtoseconds.c src/clocktodvalidate.c
 
 ## TIMER_C_FILES
 librtems_a_SOURCES += src/rtemstimer.c src/timercancel.c src/timercreate.c \

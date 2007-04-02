@@ -1,8 +1,8 @@
 /*
- *  Time of Day (TOD) Handler
+ *  Time of Day (TOD) Handler - Classic TOD to Seconds
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,10 +17,27 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/rtems/clock.h>
+
+/*
+ *  The following array contains the number of days in all months
+ *  up to the month indicated by the index of the second dimension.
+ *  The first dimension should be 1 for leap years, and 0 otherwise.
+ */
+const uint16_t   _TOD_Days_to_date[2][13] = {
+  { 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 },
+  { 0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 }
+};
+
+/*
+ *  The following array contains the number of days in the years
+ *  since the last leap year.  The index should be 0 for leap
+ *  years, and the number of years since the beginning of a leap
+ *  year otherwise.
+ */
+const uint16_t   _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
+
+
 
 /*PAGE
  *
@@ -37,7 +54,7 @@
  */
 
 uint32_t   _TOD_To_seconds(
-  TOD_Control *the_tod
+  rtems_time_of_day *the_tod
 )
 {
   uint32_t   time;

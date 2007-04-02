@@ -1,8 +1,8 @@
 /*
- *  Time of Day (TOD) Handler
+ *  Time of Day (TOD) Handler -- Validate Classic TOD
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,10 +17,18 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/rtems/clock.h>
+
+/*
+ *  The following array contains the number of days in all months.
+ *  The first dimension should be 1 for leap years, and 0 otherwise.
+ *  The second dimension should range from 1 to 12 for January to
+ *  February, respectively.
+ */
+const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
+  { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
+  { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+};
 
 /*PAGE
  *
@@ -39,7 +47,7 @@
  */
 
 boolean _TOD_Validate(
-  TOD_Control *the_tod
+  rtems_time_of_day *the_tod
 )
 {
   uint32_t   days_in_month;

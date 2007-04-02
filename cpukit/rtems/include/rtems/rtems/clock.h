@@ -32,6 +32,8 @@ extern "C" {
 #endif
 
 #include <rtems/score/tod.h>
+#include <rtems/score/watchdog.h>
+#include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
 /*
@@ -120,6 +122,41 @@ rtems_status_code rtems_clock_tick( void );
  */
 rtems_status_code rtems_clock_set_nanoseconds_extension(
   rtems_nanoseconds_extension_routine routine
+);
+
+/*
+ *  rtems_clock_get_uptime
+ *
+ *  DESCRIPTION:
+ *
+ *  This directive returns the system uptime.
+ *
+ *  Input parameters:
+ *    routine - pointer to the time structure 
+ *
+ *  Output parameters:
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code        - if unsuccessful
+ */
+rtems_status_code rtems_clock_get_uptime(
+  struct timespec *uptime
+);
+
+/** @brief _TOD_Validate
+ *
+ *  This function returns TRUE if THE_TOD contains
+ *  a valid time of day, and FALSE otherwise.
+ */
+boolean _TOD_Validate(
+  rtems_time_of_day *the_tod
+);
+
+/** @brief _TOD_To_seconds
+ *
+ *  This function returns the number seconds between the epoch and THE_TOD.
+ */
+Watchdog_Interval _TOD_To_seconds(
+  rtems_time_of_day *the_tod
 );
 
 #ifdef __cplusplus

@@ -27,31 +27,24 @@ int clock_gettime(
   struct timespec *tp
 )
 {
-  ISR_Level      level;
-  time_t         seconds;
-  long           ticks;
-
   if ( !tp )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   switch ( clock_id ) {
 
     case CLOCK_REALTIME:
-
-      _ISR_Disable( level );
-        seconds = _TOD_Seconds_since_epoch;
-        ticks   = _TOD_Current.ticks;
-      _ISR_Enable( level );
-
-      tp->tv_sec  = seconds + POSIX_TIME_SECONDS_1970_THROUGH_1988;
-      tp->tv_nsec = ticks * _TOD_Microseconds_per_tick *
-                      TOD_NANOSECONDS_PER_MICROSECOND;
+      _TOD_Get(tp);
       break;
+
+#if 0
+    case CLOCK_MONOTONIC:
+      _TOD_Get_uptime(tp);
+      break;
+#endif
 
 #ifdef _POSIX_CPUTIME
     case CLOCK_PROCESS_CPUTIME:
-      /* don't base this on _Watchdog_Ticks_since_boot--duration is too short*/
-      return POSIX_NOT_IMPLEMENTED();
+      _TOD_Get_uptime(tp);
       break;
 #endif
 

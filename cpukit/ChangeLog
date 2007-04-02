@@ -1,5 +1,27 @@
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
 
+	* itron/src/itrontime.c, libcsupport/src/__gettod.c,
+	posix/include/rtems/posix/time.h, posix/include/rtems/posix/timer.h,
+	posix/src/clockgettime.c, posix/src/clocksettime.c,
+	posix/src/nanosleep.c, posix/src/posixtimespecsubtract.c,
+	posix/src/posixtimespectointerval.c, posix/src/ptimer1.c,
+	posix/src/sleep.c, rtems/Makefile.am,
+	rtems/include/rtems/rtems/clock.h, rtems/include/rtems/rtems/timer.h,
+	rtems/include/rtems/rtems/types.h, rtems/src/clockget.c,
+	rtems/src/clockset.c, rtems/src/clocktodtoseconds.c,
+	rtems/src/clocktodvalidate.c, rtems/src/taskwakewhen.c,
+	score/Makefile.am, score/include/rtems/score/tod.h,
+	score/inline/rtems/score/tod.inl, score/src/coretod.c,
+	score/src/coretodset.c: Convert from Classic API style TOD_Control as
+	fundamental time structure to POSIX struct timespec. Add
+	clock_get_uptime().
+	* rtems/src/clockgetuptime.c, score/src/coretodget.c,
+	score/src/coretodgetuptime.c: New files.
+	* score/src/coretodtickle.c, score/src/coretodtoseconds.c,
+	score/src/coretodvalidate.c: Removed.
+
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
 	* libcsupport/src/printk.c: Add %p support.
 
 2007-04-02	Joel Sherrill <joel@OARcorp.com>

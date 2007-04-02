@@ -23,11 +23,12 @@
  */
 
 void _POSIX_Timespec_subtract(
-  const struct timespec *the_start,
+  const struct timespec *start,
   const struct timespec *end,
   struct timespec *result
 )
 {
+#if 0
   struct timespec  start_struct = *the_start;
   struct timespec *start = &start_struct;
   uint32_t   nsecs_per_sec = TOD_NANOSECONDS_PER_SECOND;
@@ -43,7 +44,15 @@ void _POSIX_Timespec_subtract(
     start->tv_nsec += nsecs_per_sec * seconds;
     start->tv_sec -= seconds;
   }
+#else
 
-  result->tv_sec  = end->tv_sec - start->tv_sec;
-  result->tv_nsec = end->tv_nsec - start->tv_nsec;
+#endif
+
+  if (end->tv_nsec < start->tv_nsec) {
+    result->tv_sec  = end->tv_sec - start->tv_sec - 1;
+    result->tv_nsec = (TOD_NANOSECONDS_PER_SECOND - start->tv_nsec) + end->tv_nsec;
+  } else {
+    result->tv_sec  = end->tv_sec - start->tv_sec;
+    result->tv_nsec = end->tv_nsec - start->tv_nsec;
+  }
 }

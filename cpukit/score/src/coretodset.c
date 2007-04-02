@@ -30,37 +30,33 @@
  *  new date and time structure.
  *
  *  Input parameters:
- *    the_tod             - pointer to the time and date structure
- *    seconds_since_epoch - seconds since system epoch
+ *    time                - pointer to the time and date structure
  *
  *  Output parameters: NONE
  */
 
 void _TOD_Set(
-  TOD_Control *the_tod,
-  Watchdog_Interval  seconds_since_epoch
+  const struct timespec *time
 )
 {
-  Watchdog_Interval ticks_until_next_second;
-
   _Thread_Disable_dispatch();
   _TOD_Deactivate();
 
-  if ( seconds_since_epoch < _TOD_Seconds_since_epoch )
+  if ( time->tv_sec < _TOD_Seconds_since_epoch )
     _Watchdog_Adjust_seconds( WATCHDOG_BACKWARD,
-       _TOD_Seconds_since_epoch - seconds_since_epoch );
+       _TOD_Seconds_since_epoch - time->tv_sec );
   else
     _Watchdog_Adjust_seconds( WATCHDOG_FORWARD,
-       seconds_since_epoch - _TOD_Seconds_since_epoch );
+       time->tv_sec - _TOD_Seconds_since_epoch );
 
-  ticks_until_next_second = _TOD_Ticks_per_second;
-  if ( ticks_until_next_second > the_tod->ticks )
-    ticks_until_next_second -= the_tod->ticks;
-
-  _TOD_Current             = *the_tod;
-  _TOD_Seconds_since_epoch = seconds_since_epoch;
+  _TOD_Seconds_since_epoch = time->tv_sec;
   _TOD_Is_set              = TRUE;
-  _TOD_Activate( ticks_until_next_second );
+
+  /* POSIX format TOD (timespec) */
+  _TOD_Now         = *time;
+  _TOD_Now.tv_sec += TOD_SECONDS_1970_THROUGH_1988;
+
+  _TOD_Activate( 0 );
 
   _Thread_Enable_dispatch();
 }
