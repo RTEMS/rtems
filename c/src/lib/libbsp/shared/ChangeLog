@@ -1,3 +1,7 @@
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* dummy_printk_support.c: New file.
+
 2007-03-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* vmeUniverse/vmeUniverse.c: Use uint32_t for pci_ulong.
