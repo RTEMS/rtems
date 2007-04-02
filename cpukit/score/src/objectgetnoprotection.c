@@ -79,9 +79,5 @@ Objects_Control *_Objects_Get_no_protection(
 /*
  *  Not supported for multiprocessing
  */
-#if 0 && defined(RTEMS_MULTIPROCESSING)
-  _Objects_MP_Is_remote( information, id, location, &the_object );
-  return the_object;
-#endif
   return NULL;
 }

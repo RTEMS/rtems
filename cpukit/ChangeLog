@@ -1,5 +1,11 @@
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
 
+	* posix/Makefile.am, score/src/objectgetnoprotection.c: Eliminate some
+	dead code.
+	* posix/src/time.c: Removed.
+
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
 	* posix/include/rtems/posix/timer.h, posix/src/alarm.c,
 	posix/src/posixtimespectointerval.c, posix/src/ptimer1.c,
 	posix/src/sysconf.c, posix/src/ualarm.c, rtems/src/clockget.c,
