@@ -1,3 +1,7 @@
+2007-04-02	Jennifer Averett <jennifer.averrett@oarcorp.com>
+
+	* rtems.adb, rtems.ads: Update.
+
 2005-05-23	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems.adb: Fix variable name.
