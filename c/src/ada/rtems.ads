@@ -7,16 +7,18 @@
 --
 --  DEPENDENCIES:
 --
+--  NOTES:
+--    RTEMS initialization and configuration are called from
+--    the BSP side, therefore should never be called from ADA.
 --
---
---  COPYRIGHT (c) 1997.
+--  COPYRIGHT (c) 1997-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
 --  the file LICENSE in this distribution or at
 --  http://www.rtems.com/license/LICENSE.
 --
---  $Id$
+--  rtems.ads,v 1.19.2.2 2003/11/25 14:07:32 joel Exp
 --
 
 with System;
@@ -182,7 +184,10 @@ pragma Elaborate_Body (RTEMS);
    --  Ident Options
    --
 
-   Search_All_Nodes : constant RTEMS.Node := 0;
+   Search_All_Nodes   : constant RTEMS.Node := 0;
+   Search_Other_Nodes : constant RTEMS.Node := 16#7FFFFFFE#;
+   Search_Local_Node  : constant RTEMS.Node := 16#7FFFFFFF#;
+   Who_Am_I           : constant RTEMS.Node := 0;
 
    --
    --  Options
@@ -221,19 +226,20 @@ pragma Elaborate_Body (RTEMS);
    --  Attribute constants
    --
 
-   Default_Attributes  : constant RTEMS.Attribute := 16#00000000#;
-   No_Floating_Point   : constant RTEMS.Attribute := 16#00000000#;
-   Floating_Point      : constant RTEMS.Attribute := 16#00000001#;
-   Local               : constant RTEMS.Attribute := 16#00000000#;
-   Global              : constant RTEMS.Attribute := 16#00000002#;
-   FIFO                : constant RTEMS.Attribute := 16#00000000#;
-   Priority            : constant RTEMS.Attribute := 16#00000004#;
-   Counting_Semaphore  : constant RTEMS.Attribute := 16#00000000#;
-   Binary_Semaphore    : constant RTEMS.Attribute := 16#00000010#;
-   No_Inherit_Priority : constant RTEMS.Attribute := 16#00000000#;
-   Inherit_Priority    : constant RTEMS.Attribute := 16#00000020#;
-   No_Priority_Ceiling : constant RTEMS.Attribute := 16#00000000#;
-   Priority_Ceiling    : constant RTEMS.Attribute := 16#00000040#;
+   Default_Attributes      : constant RTEMS.Attribute := 16#00000000#;
+   No_Floating_Point       : constant RTEMS.Attribute := 16#00000000#;
+   Floating_Point          : constant RTEMS.Attribute := 16#00000001#;
+   Local                   : constant RTEMS.Attribute := 16#00000000#;
+   Global                  : constant RTEMS.Attribute := 16#00000002#;
+   FIFO                    : constant RTEMS.Attribute := 16#00000000#;
+   Priority                : constant RTEMS.Attribute := 16#00000004#;
+   Counting_Semaphore      : constant RTEMS.Attribute := 16#00000000#;
+   Binary_Semaphore        : constant RTEMS.Attribute := 16#00000010#;
+   Simple_Binary_Semaphore : constant RTEMS.Attribute := 16#00000020#;
+   No_Inherit_Priority     : constant RTEMS.Attribute := 16#00000000#;
+   Inherit_Priority        : constant RTEMS.Attribute := 16#00000040#;
+   No_Priority_Ceiling     : constant RTEMS.Attribute := 16#00000000#;
+   Priority_Ceiling        : constant RTEMS.Attribute := 16#00000080#;
 
    function Interrupt_Level (
       Level : in     RTEMS.Unsigned32
@@ -533,194 +539,6 @@ pragma Elaborate_Body (RTEMS);
    Signal_31   : constant RTEMS.Signal_Set := 16#80000000#;
 
    --
-   --  RTEMS API Configuration Information
-   --
-
-   type Initialization_Tasks_Table_Entry is
-      record
-         Name             : RTEMS.Name;          -- task name
-         Stack_Size       : RTEMS.Unsigned32;    -- task stack size
-         Initial_Priority : RTEMS.Task_priority; -- task priority
-         Attribute_Set    : RTEMS.Attribute;     -- task attributes
-         Entry_Point      : RTEMS.Task_Entry;    -- task entry point
-         Mode_Set         : RTEMS.Mode;          -- task initial mode
-         Argument         : RTEMS.Unsigned32;    -- task argument
-      end record;
-
-   type Initialization_Tasks_Table is array ( RTEMS.Unsigned32 range <> ) of
-     RTEMS.Initialization_Tasks_Table_Entry;
-
-   type Initialization_Tasks_Table_Pointer is access all
-        Initialization_Tasks_Table;
-
-   type API_Configuration_Table is
-      record
-         Maximum_Tasks                   : RTEMS.Unsigned32;
-         Maximum_Timers                  : RTEMS.Unsigned32;
-         Maximum_Semaphores              : RTEMS.Unsigned32;
-         Maximum_Message_queues          : RTEMS.Unsigned32;
-         Maximum_Partitions              : RTEMS.Unsigned32;
-         Maximum_Regions                 : RTEMS.Unsigned32;
-         Maximum_Ports                   : RTEMS.Unsigned32;
-         Maximum_Periods                 : RTEMS.Unsigned32;
-         Number_Of_Initialization_Tasks  : RTEMS.Unsigned32;
-         User_Initialization_Tasks_Table :
-                                   RTEMS.Initialization_Tasks_Table_Pointer;
-      end record;
-
-   type API_Configuration_Table_Pointer is access all API_Configuration_Table;
-
-   --
-   --  RTEMS POSIX API Configuration Information
-   --
-
-   type POSIX_Thread_Entry is access procedure (
-      Argument : in     RTEMS.Address
-   );
-
-   type POSIX_Initialization_Threads_Table_Entry is
-   record
-      Thread_Entry : RTEMS.POSIX_Thread_Entry;
-   end record;
-
-   type POSIX_Initialization_Threads_Table is array
-       ( RTEMS.Unsigned32 range <> ) of
-       RTEMS.POSIX_Initialization_Threads_Table_Entry;
-
-   type POSIX_Initialization_Threads_Table_Pointer is access all
-       POSIX_Initialization_Threads_Table;
-
-   type POSIX_API_Configuration_Table_Entry is
-      record
-         Maximum_Threads                 : Interfaces.C.Int;
-         Maximum_Mutexes                 : Interfaces.C.Int;
-         Maximum_Condition_Variables     : Interfaces.C.Int;
-         Maximum_Keys                    : Interfaces.C.Int;
-         Maximum_Queued_Signals          : Interfaces.C.Int;
-         Number_Of_Initialization_Tasks  : Interfaces.C.Int;
-         User_Initialization_Tasks_Table :
-            RTEMS.POSIX_Initialization_Threads_Table_Pointer;
-      end record;
-
-   type POSIX_API_Configuration_Table is array ( RTEMS.Unsigned32 range <> ) of
-      RTEMS.POSIX_API_Configuration_Table_Entry;
-
-   type POSIX_API_Configuration_Table_Pointer is access all
-          RTEMS.POSIX_API_Configuration_Table;
-
-   --
-   --  MPCI Information include MPCI Configuration
-   --
-
-   type Configuration_Table_Pointer;
-
-   type MP_Packet_Classes is (
-      MP_PACKET_MPCI_INTERNAL,
-      MP_PACKET_TASKS,
-      MP_PACKET_MESSAGE_QUEUE,
-      MP_PACKET_SEMAPHORE,
-      MP_PACKET_PARTITION,
-      MP_PACKET_REGION,
-      MP_PACKET_EVENT,
-      MP_PACKET_SIGNAL
-   );
-
-   for MP_Packet_Classes use (
-      MP_PACKET_MPCI_INTERNAL    => 0,
-      MP_PACKET_TASKS            => 1,
-      MP_PACKET_MESSAGE_QUEUE    => 2,
-      MP_PACKET_SEMAPHORE        => 3,
-      MP_PACKET_PARTITION        => 4,
-      MP_PACKET_REGION           => 5,
-      MP_PACKET_EVENT            => 6,
-      MP_PACKET_SIGNAL           => 7
-   );
-
-   type Packet_Prefix is
-      record
-         The_Class       : RTEMS.MP_Packet_Classes;
-         ID              : RTEMS.ID;
-         Source_TID      : RTEMS.ID;
-         Source_Priority : RTEMS.Task_Priority;
-         Return_Code     : RTEMS.Unsigned32;
-         Length          : RTEMS.Unsigned32;
-         To_Convert      : RTEMS.Unsigned32;
-         Timeout         : RTEMS.Interval;
-      end record;
-
-   type Packet_Prefix_Pointer is access all Packet_Prefix;
-
-   type MPCI_Initialization_Entry is access procedure (
-      Configuration : in     RTEMS.Configuration_Table_Pointer
-   );
-
-   type MPCI_Get_Packet_Entry is access procedure (
-      Packet : access RTEMS.Packet_Prefix_Pointer
-   );
-
-   type MPCI_Return_Packet_Entry is access procedure (
-      Packet : in     RTEMS.Packet_Prefix_Pointer
-   );
-
-   type MPCI_Send_Entry is access procedure (
-      Packet : in     RTEMS.Packet_Prefix_Pointer
-   );
-
-   type MPCI_Receive_Entry is access procedure (
-      Packet : access RTEMS.Packet_Prefix_Pointer
-   );
-
-   type MPCI_Table is
-      record
-         Default_Timeout     : RTEMS.Unsigned32; -- in ticks
-         Maximum_Packet_Size : RTEMS.Unsigned32;
-         Initialization      : RTEMS.MPCI_Initialization_Entry;
-         Get_Packet          : RTEMS.MPCI_Get_Packet_Entry;
-         Return_Packet       : RTEMS.MPCI_Return_Packet_Entry;
-         Send                : RTEMS.MPCI_Send_Entry;
-         Receive             : RTEMS.MPCI_Receive_Entry;
-      end record;
-
-   type MPCI_Table_Pointer is access all MPCI_Table;
-
-   --
-   --  Configuration Information
-   --
-
-   type Multiprocessing_Table is
-      record
-         Node                   : RTEMS.Unsigned32;
-         Maximum_Nodes          : RTEMS.Unsigned32;
-         Maximum_Global_Objects : RTEMS.Unsigned32;
-         Maximum_Proxies        : RTEMS.Unsigned32;
-         User_MPCI_Table        : RTEMS.MPCI_Table_Pointer;
-      end record;
-
-   type Multiprocessing_Table_Pointer is access all Multiprocessing_Table;
-
-   type Configuration_Table is
-      record
-          Work_Space_Start             : RTEMS.Address;
-          Work_Space_Size              : RTEMS.Unsigned32;
-          Maximum_Extensions           : RTEMS.Unsigned32;
-          Microseconds_Per_Tick        : RTEMS.Unsigned32;
-          Ticks_Per_Timeslice          : RTEMS.Unsigned32;
-          Maximum_Devices              : RTEMS.Unsigned32;
-          Maximum_Drivers              : RTEMS.Unsigned32;
-          Number_Of_Device_Drivers     : RTEMS.Unsigned32;
-          Device_Driver_Table          : RTEMS.Driver_Address_Table_Pointer;
-          Number_Of_Initial_Extensions : RTEMS.Unsigned32;
-          User_Extension_Table         : RTEMS.Extensions_Table_Pointer;
-          User_Multiprocessing_Table   : RTEMS.Multiprocessing_Table_Pointer;
-
-          RTEMS_API_Configuration : RTEMS.API_Configuration_Table_Pointer;
-          POSIX_API_Configuration : RTEMS.POSIX_API_Configuration_Table_Pointer;
-          ITRON_API_Configuration : RTEMS.Address; -- XXX FIX ME
-      end record;
-
-   type Configuration_Table_Pointer is access all Configuration_Table;
-
-   --
    --  For now, do not provide access to the CPU Table from Ada.
    --  When this type is provided, a CPU dependent file must
    --  define it.
@@ -797,16 +615,6 @@ pragma Elaborate_Body (RTEMS);
    --
    --  RTEMS API
    --
-
-   --
-   --  Initialization Manager
-   --
-
-   -- RTEMS Initialization not supported from Ada.  Please write BSPs in C.
-
-   procedure Shutdown_Executive (
-      Result : in     RTEMS.Unsigned32
-   );
 
    --
    --  Task Manager
@@ -889,25 +697,25 @@ pragma Elaborate_Body (RTEMS);
       Argument : in     RTEMS.Address
    );
 
-   procedure Task_Variable_Add (
-      ID            : in     RTEMS.ID;
-      Task_Variable : in     RTEMS.Address;
-      Dtor          : in     RTEMS.Task_Variable_Dtor;
-      Result        :    out RTEMS.Status_Codes
-   );
+--   procedure Task_Variable_Add (
+--      ID            : in     RTEMS.ID;
+--      Task_Variable : in     RTEMS.Address;
+--      Dtor          : in     RTEMS.Task_Variable_Dtor;
+--      Result        :    out RTEMS.Status_Codes
+--   );
 
-   procedure Task_Variable_Get (
-      ID                  : in     RTEMS.ID;
-      Task_Variable       :    out RTEMS.Address;
-      Task_Variable_Value :    out RTEMS.Address;
-      Result              :    out RTEMS.Status_Codes
-   );
+--   procedure Task_Variable_Get (
+--      ID                  : in     RTEMS.ID;
+--      Task_Variable       :    out RTEMS.Address;
+--      Task_Variable_Value :    out RTEMS.Address;
+--      Result              :    out RTEMS.Status_Codes
+--   );
 
-   procedure Task_Variable_Delete (
-      ID                  : in     RTEMS.ID;
-      Task_Variable       :    out RTEMS.Address;
-      Result              :    out RTEMS.Status_Codes
-   );
+--   procedure Task_Variable_Delete (
+--      ID                  : in     RTEMS.ID;
+--      Task_Variable       :    out RTEMS.Address;
+--      Result              :    out RTEMS.Status_Codes
+--   );
 
    procedure Task_Wake_When (
       Time_Buffer : in     RTEMS.Time_Of_Day;
@@ -1286,14 +1094,6 @@ pragma Elaborate_Body (RTEMS);
       Result     :    out RTEMS.Status_Codes
    );
 
-   procedure Region_Resize_Segment (
-      ID         : in     RTEMS.ID;
-      Segment    : in     RTEMS.Address;
-      Size       : in     RTEMS.Unsigned32;
-      Old_Size   :    out RTEMS.Unsigned32;
-      Result     :    out RTEMS.Status_Codes
-   );
-
    procedure Region_Return_Segment (
       ID      : in     RTEMS.ID;
       Segment : in     RTEMS.Address;
@@ -1342,13 +1142,6 @@ pragma Elaborate_Body (RTEMS);
    --
    --  Input/Output Manager
    --
-
-   procedure IO_Initialize (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   );
 
    procedure IO_Register_Name (
       Name   : in     String;
@@ -1465,12 +1258,5 @@ pragma Elaborate_Body (RTEMS);
    function Debug_Is_Enabled (
       Level : in     RTEMS.Debug_Set
    ) return RTEMS.Boolean;
-
-  --
-  --  Some Useful Data Items
-  --
-
-  Configuration : RTEMS.Configuration_Table_Pointer;
-  pragma Import (C, Configuration, "_Configuration_Table");
 
 end RTEMS;
