@@ -145,17 +145,6 @@ SCORE_EXTERN Watchdog_Interval _TOD_Seconds_since_epoch;
  */
 SCORE_EXTERN uint32_t   _TOD_Microseconds_per_tick;
 
-/** @brief Clock Ticks per Second
- *
- *  The following contains the number of clock ticks per second.
- *
- *  @note If one second is NOT evenly divisible by the number of microseconds
- *  per clock tick, this value will contain only the integer portion
- *  of the division.  This means that the interval between clock ticks
- *  can be a source of error in the current time of day.
- */
-SCORE_EXTERN uint32_t   _TOD_Ticks_per_second;
-
 /** @brief _TOD_Handler_initialization
  *
  *  This routine performs the initialization necessary for this handler.

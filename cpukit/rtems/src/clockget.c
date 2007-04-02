@@ -75,23 +75,33 @@ rtems_status_code rtems_clock_get(
      
       return RTEMS_SUCCESSFUL;
     }
-    case RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH:
+    case RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH: {
+      rtems_interval *interval = (rtems_interval *)time_buffer;
+
       if ( !_TOD_Is_set )
         return RTEMS_NOT_DEFINED;
 
-      *(rtems_interval *)time_buffer = _TOD_Seconds_since_epoch;
+      *interval = _TOD_Seconds_since_epoch;
       return RTEMS_SUCCESSFUL;
+    }
 
-    case RTEMS_CLOCK_GET_TICKS_SINCE_BOOT:
-      *(rtems_interval *)time_buffer = _Watchdog_Ticks_since_boot;
-      return RTEMS_SUCCESSFUL;
+    case RTEMS_CLOCK_GET_TICKS_SINCE_BOOT: {
+      rtems_interval *interval = (rtems_interval *)time_buffer;
 
-    case RTEMS_CLOCK_GET_TICKS_PER_SECOND:
-      *(rtems_interval *)time_buffer = _TOD_Ticks_per_second;
+      *interval = _Watchdog_Ticks_since_boot;
       return RTEMS_SUCCESSFUL;
+    }
+
+    case RTEMS_CLOCK_GET_TICKS_PER_SECOND: {
+      rtems_interval *interval = (rtems_interval *)time_buffer;
+
+      *interval = TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick;
+      return RTEMS_SUCCESSFUL;
+    }
 
     case RTEMS_CLOCK_GET_TIME_VALUE: {
       struct timeval *time = (struct timeval *)time_buffer;
+
       if ( !_TOD_Is_set )
         return RTEMS_NOT_DEFINED;
 

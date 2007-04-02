@@ -10,34 +10,35 @@
 #define _RTEMS_POSIX_TIMER_H
 
 #include <rtems/posix/config.h>
+
+/* Timer is free */
+#define POSIX_TIMER_STATE_FREE        0x01
+                                                                
+/* Created timer but not running          */
+#define POSIX_TIMER_STATE_CREATE_NEW  0x02
+
+/* Created timer and running              */
+#define POSIX_TIMER_STATE_CREATE_RUN  0x03
+
+/* Created, ran and stopped timer         */
+#define POSIX_TIMER_STATE_CREATE_STOP 0x04
+
+/* Indicates that the fire time is relative to the current one */
+#define POSIX_TIMER_RELATIVE       0
+
 /*
- * Constants
- */ 
-
-#define STATE_FREE_C        0x01 /* Free position of the table of timers   */
-#define STATE_CREATE_NEW_C  0x02 /* Created timer but not running          */
-#define STATE_CREATE_RUN_C  0x03 /* Created timer and running              */
-#define STATE_CREATE_STOP_C 0x04 /* Created, ran and stopped timer         */
-/* Maximum number of nsec allowed         */
-#define MAX_NSEC_C    (uint32_t  )1000000000
-#define MIN_NSEC_C             0 /* Minimum number of nsec allowew         */
-#define TIMER_RELATIVE_C       0 /* Indicates that the fire time is
-                                  * relative to the current one            */
-#define SEC_TO_TICKS_C _TOD_Ticks_per_second /* Number of ticks in a second*/
-/* Nanoseconds in a second               */
-#define NSEC_PER_SEC_C (uint32_t  )1000000000
-
-#define SECONDS_PER_YEAR_C    (uint32_t  )(360 * 24) * (uint32_t  )(60 * 60)
-#define SECONDS_PER_MONTH_C   (uint32_t  )( 30 * 24) * (uint32_t  )(60 * 60)
-#define SECONDS_PER_DAY_C     (uint32_t  )( 24 * 60) * (uint32_t  )(60)
-#define SECONDS_PER_HOUR_C               (uint32_t  )( 60 * 60 )
-#define SECONDS_PER_MINUTE_C                  (uint32_t  )( 60 )
+ * POSIX defines TIMER_ABSTIME but no constant for relative.  So
+ * we have one internally but we need to be careful it has a different
+ * value.
+ */
+#if (POSIX_TIMER_RELATIVE == TIMER_ABSTIME)
+#error "POSIX_TIMER_RELATIVE == TIMER_ABSTIME"
+#endif
 
 
 /*
  * Data for a timer
  */
-
 typedef struct {
   Objects_Control   Object;
   Watchdog_Control  Timer;      /* Internal Timer                        */
@@ -57,14 +58,12 @@ typedef struct {
  *
  *  This routine performs the initialization necessary for this manager.
  */
-
 void _POSIX_Timer_Manager_initialization ( int max_timers );
 
 /*
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-
 POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
 
 #ifndef __RTEMS_APPLICATION__

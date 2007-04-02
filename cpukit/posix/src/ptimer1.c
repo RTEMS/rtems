@@ -67,48 +67,6 @@ boolean _Watchdog_Insert_ticks_helper(
 
 /* #define DEBUG_MESSAGES */
 
-/*
- * ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S
- *
- *  Description: This function converts the data of a structure itimerspec
- *               into structure rtems_time_of_day
-  */
-
-void ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S(
-  const struct itimerspec *itimer,
-  rtems_time_of_day *rtems_time
-)
-{
-   unsigned long int seconds;
-
-   /* The leap years and the months with 28, 29 or 31 days have not been
-    * considered. It will be made in the future */
-
-   seconds            = itimer->it_value.tv_sec;
-
-   rtems_time->year   = seconds / SECONDS_PER_YEAR_C;
-   seconds            = seconds % SECONDS_PER_YEAR_C;
-
-   rtems_time->month  = seconds / SECONDS_PER_MONTH_C;
-   seconds            = seconds % SECONDS_PER_MONTH_C;
-
-   rtems_time->day    = seconds / SECONDS_PER_DAY_C;
-   seconds            = seconds % SECONDS_PER_DAY_C;
-
-   rtems_time->hour   = seconds / SECONDS_PER_HOUR_C;
-   seconds            = seconds % SECONDS_PER_HOUR_C;
-
-   rtems_time->minute = seconds / SECONDS_PER_MINUTE_C;
-   seconds            = seconds % SECONDS_PER_MINUTE_C;
-
-   rtems_time->second = seconds;
-
-   rtems_time->ticks  = itimer->it_value.tv_nsec/
-                        (NSEC_PER_SEC_C / SEC_TO_TICKS_C);
-
-}
-
-
 /* ***************************************************************************
  * _POSIX_Timer_TSR
  *
@@ -146,10 +104,10 @@ void _POSIX_Timer_TSR(Objects_Id timer, void *data)
     _TOD_Get( &ptimer->time );
 
     /* The state really did not change but just to be safe */
-    ptimer->state = STATE_CREATE_RUN_C;
+    ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
   } else {
    /* Indicates that the timer is stopped */
-   ptimer->state = STATE_CREATE_STOP_C;
+   ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
   }
 
   /*
@@ -219,7 +177,7 @@ int timer_create(
 
   /* The data of the created timer are stored to use them later */
 
-  ptimer->state     = STATE_CREATE_NEW_C;
+  ptimer->state     = POSIX_TIMER_STATE_CREATE_NEW;
   ptimer->thread_id = _Thread_Executing->Object.id;
 
   if ( evp != NULL ) {
@@ -274,7 +232,7 @@ int timer_delete(
 
     case OBJECTS_LOCAL:
       _Objects_Close( &_POSIX_Timer_Information, &ptimer->Object );
-      ptimer->state = STATE_FREE_C;
+      ptimer->state = POSIX_TIMER_STATE_FREE;
       (void) _Watchdog_Remove( &ptimer->Timer );
       _POSIX_Timer_Free( ptimer );
       _Thread_Enable_dispatch();
@@ -308,15 +266,15 @@ int timer_settime(
   }
 
   /* First, it verifies if the structure "value" is correct */
-  if ( ( value->it_value.tv_nsec > MAX_NSEC_C ) ||
-       ( value->it_value.tv_nsec < MIN_NSEC_C ) ) {
+  if ( ( value->it_value.tv_nsec > TOD_NANOSECONDS_PER_SECOND ) ||
+       ( value->it_value.tv_nsec < 0 ) ) {
     /* The number of nanoseconds is not correct */
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   
   /* XXX check for seconds in the past */
 
-  if ( flags != TIMER_ABSTIME && flags != TIMER_RELATIVE_C ) {
+  if ( flags != TIMER_ABSTIME && flags != POSIX_TIMER_RELATIVE ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
@@ -348,7 +306,7 @@ int timer_settime(
          /* The new data are set */
          ptimer->timer_data = *value;
          /* Indicates that the timer is created and stopped */
-         ptimer->state = STATE_CREATE_STOP_C;
+         ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
          /* Returns with success */
         _Thread_Enable_dispatch();
         return 0;
@@ -361,11 +319,6 @@ int timer_settime(
            /* The fire time is absolute: use "rtems_time_fire_when" */
            /* First, it converts from struct itimerspec to rtems_time_of_day */
 
-#if 0
-           ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S( value, &tod );
-           status = rtems_timer_fire_when(
-             ptimer->timer_id, &tod, _POSIX_Timer_TSR, ptimer);
-#endif
            _Watchdog_Initialize(
              &ptimer->Timer, _POSIX_Timer_TSR, ptimer->Object.id, ptimer );
 
@@ -380,7 +333,7 @@ int timer_settime(
            ptimer->timer_data = *value;
 
            /* Indicate that the time is running */
-           ptimer->state = STATE_CREATE_RUN_C;
+           ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
 
            /* Stores the time in which the timer was started again */
            _TOD_Get( &ptimer->time );
@@ -389,15 +342,10 @@ int timer_settime(
            break;
 
          /* The fire time is relative: use "rtems_time_fire_after" */
-         case TIMER_RELATIVE_C:
+         case POSIX_TIMER_RELATIVE:
            /* First, convert from seconds and nanoseconds to ticks */
-           ptimer->ticks = ( SEC_TO_TICKS_C * value->it_value.tv_sec ) +
-                ( value->it_value.tv_nsec / (NSEC_PER_SEC_C / SEC_TO_TICKS_C));
+           ptimer->ticks = _POSIX_Timespec_to_interval( &value->it_value );
 
-#if 0
-           status = rtems_timer_fire_after(
-             ptimer->timer_id, ptimer->ticks, _POSIX_Timer_TSR, ptimer );
-#endif
            activated = _Watchdog_Insert_ticks_helper(
              &ptimer->Timer,
              ptimer->ticks,
@@ -415,7 +363,7 @@ int timer_settime(
            ptimer->timer_data = *value;
 
            /* Indicate that the time is running */
-           ptimer->state = STATE_CREATE_RUN_C;
+           ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
            _TOD_Get( &ptimer->time );
             _Thread_Enable_dispatch();
            return 0;
@@ -474,7 +422,8 @@ int timer_gettime(
 
       /* Calculates the time left before the timer finishes */
 
-      _POSIX_Timespec_subtract(&ptimer->timer_data.it_value, &current_time, &value->it_value);
+      _POSIX_Timespec_subtract(
+        &ptimer->timer_data.it_value, &current_time, &value->it_value);
 
       value->it_interval.tv_sec  = ptimer->timer_data.it_interval.tv_sec;
       value->it_interval.tv_nsec = ptimer->timer_data.it_interval.tv_nsec;

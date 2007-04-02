@@ -51,14 +51,7 @@ void _TOD_Handler_initialization(
   /* Seconds since RTEMS Epoch (1988) */
   _TOD_Seconds_since_epoch = 0;
 
-  /* Protect ourselves from a divide by zero fault */
-  if ( microseconds_per_tick == 0 )
-    _TOD_Ticks_per_second = 0;
-  else
-    _TOD_Ticks_per_second =
-       TOD_MICROSECONDS_PER_SECOND / microseconds_per_tick;
-
   /* TOD has not been set */
   _TOD_Is_set = FALSE;
-  _TOD_Activate( _TOD_Ticks_per_second );
+  _TOD_Activate();
 }

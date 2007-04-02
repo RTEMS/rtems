@@ -1,5 +1,14 @@
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
 
+	* posix/include/rtems/posix/timer.h, posix/src/alarm.c,
+	posix/src/posixtimespectointerval.c, posix/src/ptimer1.c,
+	posix/src/sysconf.c, posix/src/ualarm.c, rtems/src/clockget.c,
+	rtems/src/clocktodvalidate.c, score/include/rtems/score/tod.h,
+	score/inline/rtems/score/tod.inl, score/src/coretod.c: Eliminate
+	TOD_Ticks_per_second variable.
+
+2007-04-02	Joel Sherrill <joel@OARcorp.com>
+
 	* itron/src/itrontime.c, libcsupport/src/__gettod.c,
 	posix/include/rtems/posix/time.h, posix/include/rtems/posix/timer.h,
 	posix/src/clockgettime.c, posix/src/clocksettime.c,

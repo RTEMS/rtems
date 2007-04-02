@@ -53,7 +53,8 @@ boolean _TOD_Validate(
   uint32_t   days_in_month;
 
   if ((!the_tod)                                  ||
-      (the_tod->ticks  >= _TOD_Ticks_per_second)  ||
+      (the_tod->ticks  >=
+          (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick))  ||
       (the_tod->second >= TOD_SECONDS_PER_MINUTE) ||
       (the_tod->minute >= TOD_MINUTES_PER_HOUR)   ||
       (the_tod->hour   >= TOD_HOURS_PER_DAY)      ||

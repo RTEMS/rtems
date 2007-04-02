@@ -73,10 +73,12 @@ useconds_t ualarm(
          *  this.
          */
 
-
-        ticks = the_timer->initial -
-         ((the_timer->stop_time - the_timer->start_time) /
-	   _TOD_Ticks_per_second);
+        ticks = the_timer->initial;
+        ticks -= (the_timer->stop_time - the_timer->start_time);
+        
+        /* remaining is now in ticks */
+        ticks *= _TOD_Microseconds_per_tick;
+        ticks /= TOD_MICROSECONDS_PER_SECOND;
 
         _POSIX_Interval_to_timespec( ticks, &tp );
         remaining  = tp.tv_sec * TOD_MICROSECONDS_PER_SECOND;

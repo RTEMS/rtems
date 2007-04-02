@@ -27,7 +27,7 @@ long sysconf(
 
   switch (name) {
     case _SC_CLK_TCK:
-      return _TOD_Ticks_per_second;
+      return (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick);
 
     case _SC_OPEN_MAX: {
         extern uint32_t   rtems_libio_number_iops;

@@ -69,9 +69,12 @@ unsigned int alarm(
          *  this.
          */
 
-        remaining = the_timer->initial -
-         ((the_timer->stop_time - the_timer->start_time) /
-	   _TOD_Ticks_per_second);
+        remaining = the_timer->initial;
+        remaining -= (the_timer->stop_time - the_timer->start_time);
+        
+        /* remaining is now in ticks */
+        remaining *= _TOD_Microseconds_per_tick;
+        remaining /= TOD_MICROSECONDS_PER_SECOND;
         break;
     }
   }

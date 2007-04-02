@@ -28,7 +28,9 @@ Watchdog_Interval _POSIX_Timespec_to_interval(
 {
   Watchdog_Interval  ticks;
 
-  ticks  = (time->tv_sec * _TOD_Ticks_per_second);
+  ticks  = time->tv_sec *
+           (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick);
+
   ticks += (time->tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND) /
              _TOD_Microseconds_per_tick;
 
