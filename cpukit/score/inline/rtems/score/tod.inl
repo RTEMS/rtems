@@ -55,35 +55,6 @@ RTEMS_INLINE_ROUTINE uint32_t _TOD_Add_timespec(
 }
 
 /**
- *  This routine increments the ticks field of the current time of
- *  day at each clock tick.
- */
-
-RTEMS_INLINE_ROUTINE void _TOD_Tickle_ticks( void )
-{
-  struct timespec tick;
-  uint32_t        seconds;
-
-  /* Convert the tick quantum to a timespec */
-  tick.tv_nsec = _TOD_Microseconds_per_tick * 1000;
-  tick.tv_sec  = 0;
-
-  /* Update the counter of ticks since boot */
-  _Watchdog_Ticks_since_boot += 1;
-
-  /* Update the timespec format uptime */
-  (void) _TOD_Add_timespec( &_TOD_Uptime, &tick );
-  /* we do not care how much the uptime changed */
-
-  /* Update the timespec format TOD */
-  seconds = _TOD_Add_timespec( &_TOD_Now, &tick );
-  while ( seconds ) {
-    _Watchdog_Tickle_seconds();
-    seconds--;
-  }
-}
-
-/**
  *  This routine deactivates updating of the current time of day.
  */
 

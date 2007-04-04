@@ -139,9 +139,12 @@ libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
     src/threadqfirstpriority.c src/threadqflush.c src/threadqrequeue.c \
     src/threadqtimeout.c
 
+## TIMESPEC_C_FILES
+## libscore_a_SOURCES += 
+
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
-    src/coretodgetuptime.c
+    src/coretodgetuptime.c src/coretodtickle.c
 
 ## WATCHDOG_C_FILES
 libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \

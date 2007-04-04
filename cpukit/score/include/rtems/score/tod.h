@@ -184,6 +184,12 @@ void _TOD_Get_uptime(
   struct timespec *time
 );
 
+/**
+ *  This routine increments the ticks field of the current time of
+ *  day at each clock tick.
+ */
+void _TOD_Tickle_ticks( void );
+
 /** @brief TOD_MILLISECONDS_TO_MICROSECONDS
  *
  *  This routine converts an interval expressed in milliseconds to microseconds.
