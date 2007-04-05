@@ -1,5 +1,12 @@
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
+	* nsecs/init.c: Provide timespec manipulation routines in the
+	SuperCore. Use them everywhere possible. Perhaps they should be part
+	of the public API so this test and others can use them without
+	peeking into the bowels.
+
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
 	* loopback/init.c: Change all obsoleted CONFIGURE_TEST_NEEDS_XXX
 	configuration constants to CONFIGURE_APPLICATION_NEEDS_XXX.
 

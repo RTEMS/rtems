@@ -1,7 +1,8 @@
 /* 
  *  Nanoseconds accuracy timestamp test
- *
- *  COPYRIGHT (c) 1989-2007.
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,15 +35,15 @@ void subtract_em(
   struct timespec *t
 )
 {
-  extern void _POSIX_Timespec_subtract(
-    const struct timespec *the_start,
+  extern void _Timespec_Subtract(
+    const struct timespec *start,
     const struct timespec *end,
-    struct timespec *result
+    struct timespec       *result
   );
 
   t->tv_sec = 0;
   t->tv_nsec = 0;
-  _POSIX_Timespec_subtract( start, stop, t );
+  _Timespec_Subtract( start, stop, t );
 }
 
 volatile int i;
