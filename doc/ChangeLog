@@ -1,5 +1,10 @@
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
+	* user/example.texi: Change all obsoleted CONFIGURE_TEST_NEEDS_XXX
+	configuration constants to CONFIGURE_APPLICATION_NEEDS_XXX.
+
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
 	* user/task.t: Add rtems_iterate_over_all_threads.
 
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
