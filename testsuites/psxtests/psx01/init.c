@@ -142,7 +142,8 @@ void *POSIX_Init(
   tv.tv_nsec = 0;
   puts( "Init: nanosleep - negative seconds small delay " );
   status = nanosleep ( &tv, &tr );
-  assert( !status );
+  assert( status == -1 );
+  assert( errno == EINVAL );
 
   /* use nanosleep to yield */
 

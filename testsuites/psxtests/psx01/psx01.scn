@@ -2,11 +2,9 @@
 Init: uname - EFAULT (invalid uts pointer argument)
 Init: uts.sysname: RTEMS
 Init: uts.nodename: Node 1
-Init: uts.release: rtems-VERSION
-NOTE: VERSION will vary. 
-Init: uts.version: 
-Init: uts.machine: CPU/CPU Model
-NOTE: CPU/CPU Model will vary. 
+Init: uts.release: 4.7.99.1
+Init: uts.version:
+Init: uts.machine: SPARC/w/FPU
 Init: clock_gettime - EINVAL (invalid clockid)
 Init: clock_settime - EINVAL (invalid clockid)
 Init: clock_getres - EINVAL (invalid clockid)
@@ -20,7 +18,6 @@ Fri May 24 11:05:00 1996
 Fri May 24 11:05:03 1996
 Fri May 24 11:05:03 1996
 Init: seconds remaining (0)
- 
 Init: nanosleep - EINVAL (NULL time)
 Init: nanosleep - EINVAL (too many nanoseconds)
 Init: nanosleep - negative seconds small delay
@@ -39,7 +36,6 @@ Init: pthread_create - EAGAIN (too many threads)
 Init: sched_yield to Task_1
 Task_1: sched_yield to Init
 Init: pthread_exit
- 
 Task_1: ID is 0x0b010002
 Task_1: pthread_equal - match case passed
 Task_1: pthread_equal - different case passed

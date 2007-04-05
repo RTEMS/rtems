@@ -1,3 +1,8 @@
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
+	* psx01/init.c, psx01/psx01.scn: Adjust test to account for nanosleep()
+	behavior more closely matching GNU/Linux.
+
 2006-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxrwlock01/main.c, psxrwlock01/test.c: Improve rwlock test to
