@@ -1,3 +1,7 @@
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clock.c: Removed. File is unused in current source.
+
 2007-03-28	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Modify to avoid pulling in too much into minimum
