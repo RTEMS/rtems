@@ -1,3 +1,7 @@
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
+	* user/task.t: Add rtems_iterate_over_all_threads.
+
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
 
 	* user/clock.t: Add clock_get_uptime().
