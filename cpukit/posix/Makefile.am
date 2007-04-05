@@ -144,11 +144,10 @@ libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
     src/pspinunlock.c
 
 ## TIME_C_FILES
-libposix_a_SOURCES += src/adjtime.c \
-    src/posixtimespecabsolutetimeout.c src/clockgetcpuclockid.c \
-    src/clockgetenableattr.c src/clockgetres.c src/clockgettime.c \
-    src/clocksetenableattr.c src/clocksettime.c src/nanosleep.c src/sleep.c \
-    src/usleep.c
+libposix_a_SOURCES += src/adjtime.c src/posixtimespecabsolutetimeout.c \
+    src/clockgetcpuclockid.c src/clockgetenableattr.c src/clockgetres.c \
+    src/clockgettime.c src/clocksetenableattr.c src/clocksettime.c \
+    src/nanosleep.c src/sleep.c src/usleep.c
 
 # the timer manager needs to be split further but only after its
 # dependence on the Classic API Timer Manager is removed.

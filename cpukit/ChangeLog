@@ -1,5 +1,9 @@
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
+	* posix/Makefile.am: Fix formatting.
+
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
 	* posix/Makefile.am, posix/include/rtems/posix/time.h,
 	posix/src/adjtime.c, posix/src/alarm.c, posix/src/clockgetres.c,
 	posix/src/condtimedwait.c, posix/src/mqueuetimedreceive.c,
