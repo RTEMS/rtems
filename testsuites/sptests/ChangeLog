@@ -1,5 +1,9 @@
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
+	* spsize/size.c: _TOD_Seconds_since_epoch eliminated as a variable.
+
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
 	* sp34/changepri.c, sp35/priinv.c: Change all obsoleted
 	CONFIGURE_TEST_NEEDS_XXX configuration constants to
 	CONFIGURE_APPLICATION_NEEDS_XXX.
