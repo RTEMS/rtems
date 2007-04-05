@@ -1,3 +1,28 @@
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
+	* mptests/mp01/config.h, samples/base_sp/config.h,
+	samples/hello/config.h, samples/ticker/config.h,
+	sptests/sp01/config.h, sptests/sp02/config.h, sptests/sp03/config.h,
+	sptests/sp04/config.h, sptests/sp05/config.h, sptests/sp06/config.h,
+	sptests/sp07/config.h, sptests/sp08/config.h, sptests/sp09/config.h,
+	sptests/sp11/config.h, sptests/sp12/config.h, sptests/sp13/config.h,
+	sptests/sp14/config.h, sptests/sp15/config.h, sptests/sp16/config.h,
+	sptests/sp17/config.h, sptests/sp19/config.h, sptests/sp20/config.h,
+	sptests/sp21/config.h, sptests/sp22/config.h, sptests/sp23/config.h,
+	sptests/sp24/config.h, sptests/sp25/config.h, tmtests/tm01/config.h,
+	tmtests/tm02/config.h, tmtests/tm03/config.h, tmtests/tm04/config.h,
+	tmtests/tm05/config.h, tmtests/tm06/config.h, tmtests/tm07/config.h,
+	tmtests/tm08/config.h, tmtests/tm09/config.h, tmtests/tm10/config.h,
+	tmtests/tm11/config.h, tmtests/tm12/config.h, tmtests/tm13/config.h,
+	tmtests/tm14/config.h, tmtests/tm15/config.h, tmtests/tm16/config.h,
+	tmtests/tm17/config.h, tmtests/tm18/config.h, tmtests/tm19/config.h,
+	tmtests/tm20/config.h, tmtests/tm21/config.h, tmtests/tm22/config.h,
+	tmtests/tm23/config.h, tmtests/tm24/config.h, tmtests/tm25/config.h,
+	tmtests/tm28/config.h, tmtests/tm29/config.h, tmtests/tmck/config.h,
+	tmtests/tmoverhd/config.h: Change all obsoleted
+	CONFIGURE_TEST_NEEDS_XXX configuration constants to
+	CONFIGURE_APPLICATION_NEEDS_XXX.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
