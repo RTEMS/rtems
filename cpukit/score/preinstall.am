@@ -127,6 +127,10 @@ $(PROJECT_INCLUDE)/rtems/score/threadq.h: include/rtems/score/threadq.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadq.h
 
+$(PROJECT_INCLUDE)/rtems/score/timespec.h: include/rtems/score/timespec.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/timespec.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timespec.h
+
 $(PROJECT_INCLUDE)/rtems/score/tod.h: include/rtems/score/tod.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tod.h

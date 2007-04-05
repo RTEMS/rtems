@@ -1,7 +1,7 @@
 /*
- *  XXX 3.4.1 Schedule Alarm, P1003.1b-1993, p. 79
+ *  3.4.1 Schedule Alarm, P1003.1b-1993, p. 79
  *
- *  COPYRIGHT (c) 1989-2003.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -75,12 +75,9 @@ useconds_t ualarm(
 
         ticks = the_timer->initial;
         ticks -= (the_timer->stop_time - the_timer->start_time);
-        
         /* remaining is now in ticks */
-        ticks *= _TOD_Microseconds_per_tick;
-        ticks /= TOD_MICROSECONDS_PER_SECOND;
 
-        _POSIX_Interval_to_timespec( ticks, &tp );
+        _Timespec_From_ticks( ticks, &tp );
         remaining  = tp.tv_sec * TOD_MICROSECONDS_PER_SECOND;
         remaining += tp.tv_nsec / 1000;
         break;
@@ -89,8 +86,7 @@ useconds_t ualarm(
 
   tp.tv_sec = useconds / TOD_MICROSECONDS_PER_SECOND;
   tp.tv_nsec = (useconds % TOD_MICROSECONDS_PER_SECOND) * 1000;
-  ticks = _POSIX_Timespec_to_interval( &tp );
-  _Watchdog_Insert_ticks( the_timer, ticks );
+  _Watchdog_Insert_ticks( the_timer, _Timespec_To_ticks( &tp ) );
 
   return remaining;
 }

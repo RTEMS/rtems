@@ -1,7 +1,8 @@
 /*
  *  3.4.1 Schedule Alarm, P1003.1b-1993, p. 79
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,7 +17,6 @@
 #endif
 
 #include <pthread.h>
-/* #include <errno.h> */
 
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
@@ -69,12 +69,9 @@ unsigned int alarm(
          *  this.
          */
 
-        remaining = the_timer->initial;
-        remaining -= (the_timer->stop_time - the_timer->start_time);
-        
-        /* remaining is now in ticks */
-        remaining *= _TOD_Microseconds_per_tick;
-        remaining /= TOD_MICROSECONDS_PER_SECOND;
+        remaining = the_timer->initial -
+         ((the_timer->stop_time - the_timer->start_time) /
+	   TOD_TICKS_PER_SECOND);
         break;
     }
   }

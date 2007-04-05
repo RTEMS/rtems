@@ -1,7 +1,8 @@
 /*
  *  16.1.2 Thread Creation, P1003.1c/Draft 10, p. 144
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -126,8 +127,8 @@ int pthread_create(
       budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
       budget_callout = _POSIX_Threads_Sporadic_budget_callout;
 
-      if ( _POSIX_Timespec_to_interval( &schedparam.ss_replenish_period ) <
-           _POSIX_Timespec_to_interval( &schedparam.ss_initial_budget ) )
+      if ( _Timespec_To_ticks( &schedparam.ss_replenish_period ) <
+           _Timespec_To_ticks( &schedparam.ss_initial_budget ) )
         return EINVAL;
 
       if ( !_POSIX_Priority_Is_valid( schedparam.ss_low_priority ) )
@@ -230,7 +231,7 @@ int pthread_create(
   if ( schedpolicy == SCHED_SPORADIC ) {
     _Watchdog_Insert_ticks(
       &api->Sporadic_timer,
-      _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period )
+      _Timespec_To_ticks( &api->schedparam.ss_replenish_period )
     );
   }
 

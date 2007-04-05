@@ -1,8 +1,8 @@
 /*
  *  Time of Day (TOD) Handler
- *
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,9 +47,6 @@ void _TOD_Handler_initialization(
   /* Uptime (timespec) */
   _TOD_Uptime.tv_sec  = 0;
   _TOD_Uptime.tv_nsec = 0;
-
-  /* Seconds since RTEMS Epoch (1988) */
-  _TOD_Seconds_since_epoch = 0;
 
   /* TOD has not been set */
   _TOD_Is_set = FALSE;

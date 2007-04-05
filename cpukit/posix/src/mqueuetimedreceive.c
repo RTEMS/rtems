@@ -10,6 +10,15 @@
  *
  *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
  *         time.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
@@ -52,6 +61,6 @@ ssize_t mq_timedreceive(
     msg_ptr,
     msg_len,
     msg_prio,
-    _POSIX_Timespec_to_interval( timeout )
+    _Timespec_To_ticks( timeout )
   );
 }

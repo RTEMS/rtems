@@ -2,6 +2,17 @@
  *  $Id$
  */
 
+/*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
+ */
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -33,24 +44,27 @@ int pthread_cond_timedwait(
   struct timespec   difference;
   boolean           already_timedout = FALSE;
 
-  if ( !abstime )
+  if ( !_Timespec_Is_valid(abstime) )
     return EINVAL;
 
   /*
    *  The abstime is a walltime.  We turn it into an interval.
    */
 
-  (void) clock_gettime( CLOCK_REALTIME, &current_time );
+  _TOD_Get( &current_time );
 
-  /* XXX probably some error checking should go here */
-
-  _POSIX_Timespec_subtract( &current_time, abstime, &difference );
-
-  if ( ( difference.tv_sec < 0 ) || ( ( difference.tv_sec == 0 ) &&
-       ( difference.tv_nsec < 0 ) ) )
+  /*
+   * Make sure the timeout is in the future
+   */
+  if ( _Timespec_Less_than( abstime, &current_time ) ) {
     already_timedout = TRUE;
-
-  timeout = _POSIX_Timespec_to_interval( &difference );
+    difference.tv_sec  = 0;
+    difference.tv_nsec = 0;
+    timeout = 0;
+  } else {
+    _Timespec_Subtract( &current_time, abstime, &difference );
+    timeout = _Timespec_To_ticks( &difference );
+  }
 
   return _POSIX_Condition_variables_Wait_support(
     cond,

@@ -1,8 +1,8 @@
 /*
- *  Time of Day (TOD) Handler
- *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  Time of Day (TOD) Handler -- Set Time
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -49,12 +49,9 @@ void _TOD_Set(
     _Watchdog_Adjust_seconds( WATCHDOG_FORWARD,
        time->tv_sec - _TOD_Seconds_since_epoch );
 
-  _TOD_Seconds_since_epoch = time->tv_sec;
-  _TOD_Is_set              = TRUE;
-
   /* POSIX format TOD (timespec) */
-  _TOD_Now         = *time;
-  _TOD_Now.tv_sec += TOD_SECONDS_1970_THROUGH_1988;
+  _TOD_Now                 = *time;
+  _TOD_Is_set              = TRUE;
 
   _TOD_Activate( 0 );
 

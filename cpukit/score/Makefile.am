@@ -28,10 +28,10 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/object.h include/rtems/score/priority.h \
     include/rtems/score/stack.h include/rtems/score/states.h \
     include/rtems/score/sysstate.h include/rtems/score/thread.h \
-    include/rtems/score/threadq.h include/rtems/score/tod.h \
-    include/rtems/score/tqdata.h include/rtems/score/userext.h \
-    include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
-    include/rtems/score/cpuopts.h
+    include/rtems/score/threadq.h include/rtems/score/timespec.h \
+    include/rtems/score/tod.h include/rtems/score/tqdata.h \
+    include/rtems/score/userext.h include/rtems/score/watchdog.h \
+    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h
 
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
@@ -140,7 +140,9 @@ libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
     src/threadqtimeout.c
 
 ## TIMESPEC_C_FILES
-## libscore_a_SOURCES += 
+libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
+    src/timespecisvalid.c src/timespeclessthan.c src/timespecsubtract.c \
+    src/timespectoticks.c
 
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \

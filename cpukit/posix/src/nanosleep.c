@@ -1,4 +1,11 @@
 /*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -28,41 +35,25 @@ int nanosleep(
 )
 {
   Watchdog_Interval  ticks;
-  struct timespec   *the_rqtp;
 
-  if ( !rqtp )
+  if ( !_Timespec_Is_valid( rqtp ) )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  the_rqtp = (struct timespec *)rqtp;
-
   /*
-   *  Return EAGAIN if the delay interval is negative.
+   *  Return EINVAL if the delay interval is negative.
    *
    *  NOTE:  This behavior is beyond the POSIX specification.
-   *         FSU pthreads shares this behavior.
+   *         FSU and GNU/Linux pthreads shares this behavior.
    */
-
-  if ( the_rqtp->tv_sec < 0 )
-    the_rqtp->tv_sec = 0;
-
-  if ( /* the_rqtp->tv_sec < 0 || */ the_rqtp->tv_nsec < 0 )
-    rtems_set_errno_and_return_minus_one( EAGAIN );
-
-  if ( the_rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
+  if ( rqtp->tv_sec < 0 || rqtp->tv_nsec < 0 )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  ticks = _POSIX_Timespec_to_interval( the_rqtp );
-
-  /*
-   * Bump the ticks by one so the delay is at least the number of
-   * ticks requested
-   */
-  ticks++;
+  ticks = _Timespec_To_ticks( rqtp );
 
   /*
    *  A nanosleep for zero time is implemented as a yield.
    *  This behavior is also beyond the POSIX specification but is
-   *  consistent with the RTEMS api and yields desirable behavior.
+   *  consistent with the RTEMS API and yields desirable behavior.
    */
 
   if ( !ticks ) {
@@ -99,7 +90,7 @@ int nanosleep(
     ticks -=
       _Thread_Executing->Timer.stop_time - _Thread_Executing->Timer.start_time;
 
-    _POSIX_Interval_to_timespec( ticks, rmtp );
+    _Timespec_From_ticks( ticks, rmtp );
 
     /*
      *  If there is time remaining, then we were interrupted by a signal.

@@ -1,8 +1,9 @@
 /*
  *  13.5.2 Dynamic Thread Scheduling Parameters Access,
  *         P1003.1c/Draft 10, p. 124
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -66,8 +67,8 @@ int pthread_setschedparam(
       budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
       budget_callout = _POSIX_Threads_Sporadic_budget_callout;
 
-      if ( _POSIX_Timespec_to_interval( &param->ss_replenish_period ) <
-           _POSIX_Timespec_to_interval( &param->ss_initial_budget ) )
+      if ( _Timespec_To_ticks( &param->ss_replenish_period ) <
+           _Timespec_To_ticks( &param->ss_initial_budget ) )
         return EINVAL;
 
       if ( !_POSIX_Priority_Is_valid( param->ss_low_priority ) )

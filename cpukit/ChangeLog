@@ -1,3 +1,33 @@
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
+	* posix/Makefile.am, posix/include/rtems/posix/time.h,
+	posix/src/adjtime.c, posix/src/alarm.c, posix/src/clockgetres.c,
+	posix/src/condtimedwait.c, posix/src/mqueuetimedreceive.c,
+	posix/src/mqueuetimedsend.c, posix/src/mutextimedlock.c,
+	posix/src/nanosleep.c, posix/src/posixtimespecabsolutetimeout.c,
+	posix/src/pthread.c, posix/src/pthreadcreate.c,
+	posix/src/pthreadsetschedparam.c, posix/src/ptimer1.c,
+	posix/src/sched.c, posix/src/semtimedwait.c,
+	posix/src/sigtimedwait.c, posix/src/ualarm.c,
+	rtems/src/clocktodtoseconds.c, score/Makefile.am,
+	score/preinstall.am, score/include/rtems/score/tod.h,
+	score/inline/rtems/score/tod.inl, score/src/coretod.c,
+	score/src/coretodget.c, score/src/coretodgetuptime.c,
+	score/src/coretodset.c, score/src/coretodtickle.c: Provide timespec
+	manipulation routines in the SuperCore. Use them everywhere possible.
+	This lead to significant cleanup in the API routines and eliminated
+	some of the same code from the POSIX API. At this point, the
+	SuperCore keeps time in POSIX timespec format properly from 1970. You
+	just cannot set it before 1988 in keeping with RTEMS traditional
+	behavior.
+	* score/include/rtems/score/timespec.h, score/src/timespecaddto.c,
+	score/src/timespecfromticks.c, score/src/timespecisvalid.c,
+	score/src/timespeclessthan.c, score/src/timespecsubtract.c,
+	score/src/timespectoticks.c: New files.
+	* posix/src/posixintervaltotimespec.c,
+	posix/src/posixtimespecsubtract.c,
+	posix/src/posixtimespectointerval.c: Removed.
+
 2007-04-04	Joel Sherrill <joel@OARcorp.com>
 
 	* score/Makefile.am, score/include/rtems/score/tod.h,

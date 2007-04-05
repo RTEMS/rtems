@@ -1,5 +1,12 @@
 /*
- *  ptimer.c,v 1.1 1996/06/03 16:29:58 joel Exp
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -344,7 +351,7 @@ int timer_settime(
          /* The fire time is relative: use "rtems_time_fire_after" */
          case POSIX_TIMER_RELATIVE:
            /* First, convert from seconds and nanoseconds to ticks */
-           ptimer->ticks = _POSIX_Timespec_to_interval( &value->it_value );
+           ptimer->ticks = _Timespec_To_ticks( &value->it_value );
 
            activated = _Watchdog_Insert_ticks_helper(
              &ptimer->Timer,
@@ -422,11 +429,13 @@ int timer_gettime(
 
       /* Calculates the time left before the timer finishes */
 
-      _POSIX_Timespec_subtract(
-        &ptimer->timer_data.it_value, &current_time, &value->it_value);
+      _Timespec_Subtract(
+        &ptimer->timer_data.it_value,
+        &current_time,
+        &value->it_value
+      );
 
-      value->it_interval.tv_sec  = ptimer->timer_data.it_interval.tv_sec;
-      value->it_interval.tv_nsec = ptimer->timer_data.it_interval.tv_nsec;
+      value->it_interval  = ptimer->timer_data.it_interval;
 
       _Thread_Enable_dispatch();
       return 0;

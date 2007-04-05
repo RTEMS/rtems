@@ -1,4 +1,11 @@
 /*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -7,24 +14,14 @@
 #endif
 
 #include <time.h>
-#include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 
-#include <rtems/seterr.h>
-#include <rtems/posix/time.h>
-
-/*PAGE
- *
- *  _POSIX_Interval_to_timespec
- */
-
-void _POSIX_Interval_to_timespec(
-  Watchdog_Interval  ticks,
-  struct timespec   *time
+void _Timespec_From_ticks(
+  uint32_t         ticks,
+  struct timespec *time
 )
 {
   uint32_t    usecs;

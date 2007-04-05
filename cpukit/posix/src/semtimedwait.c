@@ -1,4 +1,11 @@
 /*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -43,26 +50,18 @@ int sem_timedwait(
   /*
    *  Error check the absolute time to timeout
    */
-#if 0
-  if ( /* abstime->tv_sec < 0 || */ abstime->tv_nsec ) /* tv_sec is unsigned */
+  if ( !_Timespec_Is_valid( abstime ) ) {
     blocking = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
-  else
-#endif
-  if ( abstime->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
-    blocking = CORE_SEMAPHORE_BAD_TIMEOUT;
   } else { 
-    clock_gettime( CLOCK_REALTIME, &current_time );
+    _TOD_Get( &current_time );
     /*
      *  Make sure the abstime is in the future
      */
-    if ( abstime->tv_sec < current_time.tv_sec )
+    if ( _Timespec_Less_than( abstime, &current_time ) ) {
       blocking = CORE_SEMAPHORE_BAD_TIMEOUT;
-    else if ( (abstime->tv_sec == current_time.tv_sec) &&
-         (abstime->tv_nsec <= current_time.tv_nsec) )
-      blocking = CORE_SEMAPHORE_BAD_TIMEOUT;
-    else {
-      _POSIX_Timespec_subtract( &current_time, abstime, &difference );
-      ticks = _POSIX_Timespec_to_interval( &difference );
+    } else {
+      _Timespec_Subtract( &current_time, abstime, &difference );
+      ticks = _Timespec_To_ticks( &difference );
       blocking = CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT;
     }
    }

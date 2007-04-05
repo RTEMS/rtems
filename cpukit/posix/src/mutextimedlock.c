@@ -1,4 +1,15 @@
 /*
+ *  Mutex Timed Lock
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -31,9 +42,10 @@ int pthread_mutex_timedlock(
   const struct timespec *timeout
 )
 {
+  /* XXX does timeout need to be based on CLOCK_REALTIME and be TOD? */
   return _POSIX_Mutex_Lock_support(
     mutex,
     TRUE,
-    _POSIX_Timespec_to_interval( timeout )
+    _Timespec_To_ticks( timeout )
   );
 }

@@ -1,4 +1,11 @@
 /*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -126,8 +133,6 @@ int sched_rr_get_interval(
   struct timespec  *interval
 )
 {
-  /* XXX do we need to support different time quantums per thread */
-
   /*
    *  Only supported for the "calling process" (i.e. this node).
    */
@@ -138,7 +143,7 @@ int sched_rr_get_interval(
   if ( !interval )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  _POSIX_Interval_to_timespec( _Thread_Ticks_per_timeslice, interval );
+  _Timespec_From_ticks( _Thread_Ticks_per_timeslice, interval );
   return 0;
 }
 

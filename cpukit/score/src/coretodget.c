@@ -17,6 +17,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 
 /*
@@ -49,5 +50,5 @@ void _TOD_Get(
       offset.tv_nsec = (*_Watchdog_Nanoseconds_since_tick_handler)();
   _ISR_Enable( level );
 
-  _TOD_Add_timespec( time, &offset );
+  _Timespec_Add_to( time, &offset );
 }

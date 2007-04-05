@@ -1,4 +1,11 @@
 /*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -70,7 +77,7 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  ticks = _POSIX_Timespec_to_interval( &api->schedparam.ss_initial_budget );
+  ticks = _Timespec_To_ticks( &api->schedparam.ss_initial_budget );
 
   if ( !ticks )
     ticks = 1;
@@ -84,7 +91,7 @@ void _POSIX_Threads_Sporadic_budget_TSR(
        the_thread->current_priority > new_priority )
     _Thread_Change_priority( the_thread, new_priority, TRUE );
 
-  ticks = _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period );
+  ticks = _Timespec_To_ticks( &api->schedparam.ss_replenish_period );
 
   if ( !ticks )
     ticks = 1;

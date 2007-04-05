@@ -1,7 +1,8 @@
 /*
  *  Time of Day (TOD) Handler - get uptime
- *
- *  COPYRIGHT (c) 1989-2007.
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +18,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 
 /*
@@ -48,5 +50,5 @@ void _TOD_Get_uptime(
       offset.tv_nsec = (*_Watchdog_Nanoseconds_since_tick_handler)();
   _ISR_Enable( level );
 
-  _TOD_Add_timespec( uptime, &offset );
+  _Timespec_Add_to( uptime, &offset );
 }

@@ -1,5 +1,14 @@
 /*
  *  Convert abstime timeout to ticks
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
@@ -30,39 +39,23 @@ int _POSIX_Absolute_timeout_to_ticks(
   Watchdog_Interval     *ticks_out
 )
 {
-  struct timespec   current_time;
-  struct timespec   difference;
+  struct timespec current_time;
+  struct timespec difference;
 
-  if ( !abstime )
+  if ( !_Timespec_Is_valid(abstime) )
     return EINVAL;
 
-  /*
-   *  Error check the absolute time to timeout
-   */
-#if 0
-   /* they are unsigned so this is impossible */
-  if ( abstime->tv_sec < 0 || abstime->tv_nsec < 0 )
-    return EINVAL;
-#endif
-
-  if ( abstime->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
-    return EINVAL;
-  
-  (void) clock_gettime( CLOCK_REALTIME, &current_time );
+  _TOD_Get( &current_time );
 
   /*
    *  Make sure the abstime is in the future
    */
-  if ( abstime->tv_sec < current_time.tv_sec )
+  if ( _Timespec_Less_than( abstime, &current_time ) )
     return EINVAL;
 
-  if ( (abstime->tv_sec == current_time.tv_sec) &&
-       (abstime->tv_nsec <= current_time.tv_nsec) )
-    return EINVAL;
+  _Timespec_Subtract( &current_time, abstime, &difference );
 
-  _POSIX_Timespec_subtract( &current_time, abstime, &difference );
-
-  *ticks_out = _POSIX_Timespec_to_interval( &difference );
+  *ticks_out = _Timespec_To_ticks( &difference );
 
   return 0;
 }

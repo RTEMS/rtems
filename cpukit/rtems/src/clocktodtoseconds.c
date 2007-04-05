@@ -1,7 +1,6 @@
 /*
  *  Time of Day (TOD) Handler - Classic TOD to Seconds
  *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -79,6 +78,8 @@ uint32_t   _TOD_To_seconds(
              * TOD_SECONDS_PER_MINUTE;
 
   time += the_tod->second;
+
+  time += TOD_SECONDS_1970_THROUGH_1988;
 
   return( time );
 }

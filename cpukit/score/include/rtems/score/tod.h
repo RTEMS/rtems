@@ -137,7 +137,7 @@ SCORE_EXTERN struct timespec _TOD_Uptime;
  *  The following contains the number of seconds from 00:00:00
  *  January 1, TOD_BASE_YEAR until the current time of day.
  */
-SCORE_EXTERN Watchdog_Interval _TOD_Seconds_since_epoch;
+#define _TOD_Seconds_since_epoch (_TOD_Now.tv_sec)
 
 /** @brief Microseconds per Clock Tick
  *
@@ -216,6 +216,17 @@ void _TOD_Tickle_ticks( void );
 
 #define TOD_MILLISECONDS_TO_TICKS(_ms) \
     (TOD_MILLISECONDS_TO_MICROSECONDS(_ms) / _TOD_Microseconds_per_tick)
+
+
+/** @brief How many ticks in a second?
+ *
+ *  This macro returns the number of ticks in a second.
+ *
+ *  @note If the clock tick value does not multiply evenly into a second
+ *        then this number of ticks will be slightly shorter than a second.
+ */
+#define TOD_TICKS_PER_SECOND \
+  (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick)
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/tod.inl>

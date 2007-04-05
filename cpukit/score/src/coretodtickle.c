@@ -1,8 +1,8 @@
-
 /*
  *  Time of Day (TOD) Handler -- Tickle Ticks
- *
- *  COPYRIGHT (c) 1989-2007.
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
@@ -46,11 +47,11 @@ void _TOD_Tickle_ticks( void )
   _Watchdog_Ticks_since_boot += 1;
 
   /* Update the timespec format uptime */
-  (void) _TOD_Add_timespec( &_TOD_Uptime, &tick );
+  (void) _Timespec_Add_to( &_TOD_Uptime, &tick );
   /* we do not care how much the uptime changed */
 
   /* Update the timespec format TOD */
-  seconds = _TOD_Add_timespec( &_TOD_Now, &tick );
+  seconds = _Timespec_Add_to( &_TOD_Now, &tick );
   while ( seconds ) {
     _Watchdog_Tickle_seconds();
     seconds--;

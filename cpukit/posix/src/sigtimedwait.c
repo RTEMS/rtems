@@ -1,7 +1,7 @@
 /*
  *  3.3.8 Synchronously Accept a Signal, P1003.1b-1993, p. 76
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -68,12 +68,11 @@ int sigtimedwait(
   interval = 0;
   if ( timeout ) {
 
-    if ( timeout->tv_nsec < 0 ||
-         timeout->tv_nsec >= TOD_NANOSECONDS_PER_SECOND) {
+    if ( !_Timespec_Is_valid( timeout ) ) {
       rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
-    interval = _POSIX_Timespec_to_interval( timeout );
+    interval = _Timespec_To_ticks( timeout );
   }
 
   /*
@@ -96,7 +95,13 @@ int sigtimedwait(
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
     the_info->si_signo = _POSIX_signals_Get_highest( api->signals_pending );
-    _POSIX_signals_Clear_signals( api, the_info->si_signo, the_info, FALSE, FALSE );
+    _POSIX_signals_Clear_signals(
+      api,
+      the_info->si_signo,
+      the_info,
+      FALSE,
+      FALSE
+    );
     _ISR_Enable( level );
 
     the_info->si_code = SI_USER;

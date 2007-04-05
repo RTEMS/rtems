@@ -27,34 +27,6 @@
  */
 
 /**
- *
- *  This routines adds two timespecs.  The second argument is added
- *  to the first.
- */
-
-RTEMS_INLINE_ROUTINE uint32_t _TOD_Add_timespec(
-  struct timespec *time,
-  struct timespec *add
-)
-{
-  uint32_t seconds = 0;
-
-  
-  /* Add the basics */
-  time->tv_sec += add->tv_sec;
-  time->tv_nsec += add->tv_nsec;
-
-  /* Now adjust it so nanoseconds is in range */
-  while ( time->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
-    time->tv_nsec -= TOD_NANOSECONDS_PER_SECOND;
-    time->tv_sec++;
-    seconds++;
-  }
-
-  return seconds;
-}
-
-/**
  *  This routine deactivates updating of the current time of day.
  */
 
