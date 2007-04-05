@@ -114,7 +114,8 @@ void _Thread_Dispatch( void )
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-    if ( (executing->fp_context != NULL) && !_Thread_Is_allocated_fp( executing ) ) {
+    if ( (executing->fp_context != NULL) &&
+         !_Thread_Is_allocated_fp( executing ) ) {
       if ( _Thread_Allocated_fp != NULL )
         _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
       _Context_Restore_fp( &executing->fp_context );

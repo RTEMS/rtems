@@ -1,5 +1,12 @@
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
+	* itron/src/itrontime.c: Fix typo.
+	* score/include/rtems/score/tod.h: Add TOD_TICKS_PER_SECOND macro.
+	* score/src/iterateoverthreads.c: Safely take NULL as argument.
+	* score/src/threaddispatch.c: Formatting.
+
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
 	* posix/Makefile.am: Fix formatting.
 
 2007-04-05	Joel Sherrill <joel@OARcorp.com>

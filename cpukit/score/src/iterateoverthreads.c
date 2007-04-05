@@ -29,6 +29,9 @@ void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
   Thread_Control      *the_thread;
   Objects_Information *information;
 
+  if ( !routine )
+    return;
+
   for ( api_index = 1 ;
         api_index <= OBJECTS_APIS_LAST ;
         api_index++ ) {

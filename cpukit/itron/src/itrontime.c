@@ -37,7 +37,7 @@ ER set_tim(
 /* XXX */ temp = 0;
   if(temp > 0) {
     _Thread_Disable_dispatch();
-      _TOD_Set(&the_tod);
+      _TOD_Set(&time);
     _Thread_Enable_dispatch();
     return E_OK;
   }

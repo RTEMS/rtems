@@ -31,7 +31,6 @@ extern "C" {
 #endif
 
 #include <rtems/score/object.h>
-#include <rtems/score/watchdog.h>
 #include <time.h>
 
 /** @defgroup ScoreTODConstants TOD Constants
@@ -107,6 +106,14 @@ extern "C" {
   (4 * TOD_SECONDS_PER_DAY))
 
 /**@}*/
+
+/**  @brief Ticks per Second
+ *  
+ *  This macro calculates the number of ticks per second.
+ */
+
+#define TOD_TICKS_PER_SECOND \
+           (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick)
 
 /** @brief RTEMS Epoch Year
  *
