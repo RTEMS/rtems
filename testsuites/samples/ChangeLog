@@ -1,3 +1,8 @@
+2007-04-05	Joel Sherrill <joel@OARcorp.com>
+
+	* loopback/init.c: Change all obsoleted CONFIGURE_TEST_NEEDS_XXX
+	configuration constants to CONFIGURE_APPLICATION_NEEDS_XXX.
+
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, configure.ac: Convert from Classic API style TOD_Control
