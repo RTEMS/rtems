@@ -1,3 +1,7 @@
+2007-04-06	Ralf Corsépius	<ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove lib (Now expected to exist in GCC).
+
 2007-04-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/rsPMCQ1.c, irq/irq_init.c: Reflect changes to pci-API.

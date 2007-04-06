@@ -1,3 +1,7 @@
+2007-04-06	Ralf Corsépius	<ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove lib (Now expected to exist in GCC).
+
 2007-03-15  Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* startup/bspstart.c: set external clock to 0 for some boards to
