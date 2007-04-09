@@ -1,5 +1,6 @@
 2007-04-09	Ralf Corsépius	<ralf.corsepius@rtems.org>
 
+	* bsp_specs: Use nostdlib instead of nostdlibs (bogus).
 	* bsp_specs: Use old_link for -qrtems (Prevents *.link from killing
 	endianness).
 
