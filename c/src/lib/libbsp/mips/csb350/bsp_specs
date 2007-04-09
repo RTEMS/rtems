@@ -8,7 +8,7 @@
 	%{qrtems_debug: start_g.o%s} crtbegin.o%s }}
 
 *link:
-%(old_link) %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}
+%(old_link) %{qrtems: -dc -dp -N -e _start}
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s crtn.o%s }
