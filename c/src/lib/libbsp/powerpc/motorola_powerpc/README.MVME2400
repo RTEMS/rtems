@@ -1,0 +1,29 @@
+The generic motorla_powerpc BSP was adapted to work on a MVME2432 by
+Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>.
+
+The main steps needed were adaptions to the "Hawk" controller, which
+replaces the MVME2300 Raven and Falcon chips.
+
+This board now runs with the same BSP configuration as the MCP750, so
+select the mcp750 BSP.
+
+The following settings in the PPCBUG's ENV were also important (taken
+from the "README.MVME2300" file:)
+
+VME3PCI Master Master Enable [Y/N] = Y?
+PCI Slave Image 0 Control                = 00000000?   <-----
+PCI Slave Image 0 Base Address Register  = 00000000?
+PCI Slave Image 0 Bound Address Register = 00000000?
+PCI Slave Image 0 Translation Offset     = 00000000?
+PCI Slave Image 1 Control                = 00000000?   <-----
+PCI Slave Image 1 Base Address Register  = 01000000?
+PCI Slave Image 1 Bound Address Register = 20000000?
+PCI Slave Image 1 Translation Offset     = 00000000?
+PCI Slave Image 2 Control                = 00000000?   <-----
+PCI Slave Image 2 Base Address Register  = 20000000?
+PCI Slave Image 2 Bound Address Register = 22000000?
+PCI Slave Image 2 Translation Offset     = D0000000?
+PCI Slave Image 3 Control                = 00000000?   <-----
+PCI Slave Image 3 Base Address Register  = 2FFF0000?
+PCI Slave Image 3 Bound Address Register = 30000000?
+PCI Slave Image 3 Translation Offset     = D0000000?        

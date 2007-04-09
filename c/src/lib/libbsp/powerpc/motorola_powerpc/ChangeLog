@@ -1,3 +1,8 @@
+2007-04-09	Thomas Doerfler |Thomas.Doerfler@embedded-brains.de>
+
+	* README.MVME2400: 
+	Added file to describe setup of a MVME2432 board for use with RTEMS
+
 2007-01-30	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, preinstall.am, include/bsp.h:

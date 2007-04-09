@@ -17,6 +17,7 @@
 #include <rtems/bspIo.h>
 #include <libcpu/io.h>
 #include <string.h>
+#include <libcpu/cpuIdent.h>
 
 /*
 ** Board-specific table that maps interrupt names to onboard PCI
@@ -153,6 +154,45 @@ static struct _int_map mvme23xx_intmap[] = {
 
    NULL_INTMAP };
 
+static struct _int_map mvme24xx_intmap[] = {
+/* Raven Hostbridge; has int_pin == 0
+   {0,  0, 0, {{0, {-1,-1,-1,-1}}, 
+               NULL_PINMAP}},
+*/
+
+/* Winbond PCI/ISA 83c553; has int_pin == 0
+   {0, 11, 0, {{0, {-1,-1,-1,-1}}, 
+               NULL_PINMAP}},
+*/
+
+   {0, 13, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {11,21,-1,-1,-1}},  /* Universe  ISA/PCI */
+			/* strictly speaking, a non-multi function device
+			 * must only use pin A
+			 */
+			 {2, {22,-1,-1,-1,-1}},  /* Universe          */
+			 {3, {23,-1,-1,-1,-1}},  /* Universe          */
+			 {4, {24,-1,-1,-1,-1}},  /* Universe          */
+             NULL_PINMAP}},
+
+   {0, 14, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {10,18,-1,-1}},  /* DEC Tulip enet (ISA/PCI)  */
+             NULL_PINMAP}},
+   {0, 16, PCI_FIXUP_OPT_OVERRIDE_NAME,
+	    {{1, {25,-1,-1,-1}},  /* pci/pmc slot 1   */
+             {2, {26,-1,-1,-1}},
+             {3, {27,-1,-1,-1}},
+             {4, {28,-1,-1,-1}},
+             NULL_PINMAP}},
+
+   {0, 17, PCI_FIXUP_OPT_OVERRIDE_NAME,
+	    {{1, {28,-1,-1,-1}},  /* pci/pmc slot 2   */ /* orig: 0xf */
+             {2, {25,-1,-1,-1}},
+             {3, {26,-1,-1,-1}},
+             {4, {27,-1,-1,-1}},
+             NULL_PINMAP}},
+   NULL_INTMAP };
+
 static struct _int_map mvme2100_intmap[] = {
    {0, 0, 0, {{1, {16,-1,-1,-1}}, /* something shows up in slot 0 and OpenPIC  */
                                   /* 0 is unused.  This hushes the init code.  */
@@ -211,6 +251,7 @@ typedef struct {
    */
       int		cpu_type;
       int		base_type;
+      ppc_cpu_id_t      proc_type;
       const char	*name;
 
       struct _int_map   *intmap;
@@ -218,28 +259,28 @@ typedef struct {
 } mot_info_t;
 
 static const mot_info_t mot_boards[] = {
-  {0x300, 0x00, "MVME 2400", NULL, NULL},
-  {0x010, 0x00, "Genesis", NULL, NULL},
-  {0x020, 0x00, "Powerstack (Series E)", NULL, NULL},
-  {0x040, 0x00, "Blackhawk (Powerstack)", NULL, NULL},
-  {0x050, 0x00, "Omaha (PowerStack II Pro3000)", NULL, NULL},
-  {0x060, 0x00, "Utah (Powerstack II Pro4000)", NULL, NULL},
-  {0x0A0, 0x00, "Powerstack (Series EX)", NULL, NULL},
-  {0x1E0, 0xE0, "Mesquite cPCI (MCP750)", mcp750_intmap, prep_pci_swizzle},
-  {0x1E0, 0xE1, "Sitka cPCI (MCPN750)", mcp750_intmap, prep_pci_swizzle},
-  {0x1E0, 0xE2, "Mesquite cPCI (MCP750) w/ HAC", mcp750_intmap, prep_pci_swizzle},
-  {0x1E0, 0xF6, "MTX Plus", NULL, NULL},
-  {0x1E0, 0xF7, "MTX w/o Parallel Port", mtx603_intmap, prep_pci_swizzle},
-  {0x1E0, 0xF8, "MTX w/ Parallel Port", mtx603_intmap, prep_pci_swizzle},
-  {0x1E0, 0xF9, "MVME 2300", mvme23xx_intmap, prep_pci_swizzle},
-  {0x1E0, 0xFA, "MVME 2300SC/2600", mvme23xx_intmap, prep_pci_swizzle},
-  {0x1E0, 0xFB, "MVME 2600 with MVME712M", NULL, NULL},
-  {0x1E0, 0xFC, "MVME 2600/2700 with MVME761", NULL, NULL},
-  {0x1E0, 0xFD, "MVME 3600 with MVME712M", NULL, NULL},
-  {0x1E0, 0xFE, "MVME 3600 with MVME761", NULL, NULL},
-  {0x1E0, 0xFF, "MVME 1600-001 or 1600-011", NULL, NULL},
-  {0x000, 0x00, ""},   /* end of probeable values for automatic scan */
-  {0x000, 0x00, "MVME 2100", mvme2100_intmap, prep_pci_swizzle},
+  {0x3E0, 0x00, PPC_750,     "MVME 2400", mvme24xx_intmap,prep_pci_swizzle},
+  {0x010, 0x00, PPC_UNKNOWN, "Genesis", NULL, NULL},
+  {0x020, 0x00, PPC_UNKNOWN, "Powerstack (Series E)", NULL, NULL},
+  {0x040, 0x00, PPC_UNKNOWN, "Blackhawk (Powerstack)", NULL, NULL},
+  {0x050, 0x00, PPC_UNKNOWN, "Omaha (PowerStack II Pro3000)", NULL, NULL},
+  {0x060, 0x00, PPC_UNKNOWN, "Utah (Powerstack II Pro4000)", NULL, NULL},
+  {0x0A0, 0x00, PPC_UNKNOWN, "Powerstack (Series EX)", NULL, NULL},
+  {0x1E0, 0xE0, PPC_UNKNOWN, "Mesquite cPCI (MCP750)", mcp750_intmap, prep_pci_swizzle},
+  {0x1E0, 0xE1, PPC_UNKNOWN, "Sitka cPCI (MCPN750)", mcp750_intmap, prep_pci_swizzle},
+  {0x1E0, 0xE2, PPC_UNKNOWN, "Mesquite cPCI (MCP750) w/ HAC", mcp750_intmap, prep_pci_swizzle},
+  {0x1E0, 0xF6, PPC_UNKNOWN, "MTX Plus", NULL, NULL},
+  {0x1E0, 0xF7, PPC_UNKNOWN, "MTX w/o Parallel Port", mtx603_intmap, prep_pci_swizzle},
+  {0x1E0, 0xF8, PPC_UNKNOWN, "MTX w/ Parallel Port", mtx603_intmap, prep_pci_swizzle},
+  {0x1E0, 0xF9, PPC_604,     "MVME 2300", mvme23xx_intmap, prep_pci_swizzle},
+  {0x1E0, 0xFA, PPC_UNKNOWN, "MVME 2300SC/2600", mvme23xx_intmap, prep_pci_swizzle},
+  {0x1E0, 0xFB, PPC_UNKNOWN, "MVME 2600 with MVME712M", NULL, NULL},
+  {0x1E0, 0xFC, PPC_UNKNOWN, "MVME 2600/2700 with MVME761", NULL, NULL},
+  {0x1E0, 0xFD, PPC_UNKNOWN, "MVME 3600 with MVME712M", NULL, NULL},
+  {0x1E0, 0xFE, PPC_UNKNOWN, "MVME 3600 with MVME761", NULL, NULL},
+  {0x1E0, 0xFF, PPC_UNKNOWN, "MVME 1600-001 or 1600-011", NULL, NULL},
+  {0x000, 0x00, PPC_UNKNOWN, ""},   /* end of probeable values for automatic scan */
+  {0x000, 0x00, PPC_UNKNOWN, "MVME 2100", mvme2100_intmap, prep_pci_swizzle},
 };
 
 prep_t currentPrepType;
@@ -279,16 +320,26 @@ motorolaBoard getMotorolaBoard()
 #else
   unsigned char  cpu_type;
   unsigned char  base_mod;
+  ppc_cpu_id_t   proc_type;
   int	       	 entry;
   int	       	 mot_entry = -1;
 
-  cpu_type = inb(MOTOROLA_CPUTYPE_REG) & 0xF0;
-  base_mod = inb(MOTOROLA_BASETYPE_REG);
+  cpu_type  = inb(MOTOROLA_CPUTYPE_REG) & 0xF0;
+  base_mod  = inb(MOTOROLA_BASETYPE_REG);
+  proc_type = get_ppc_cpu_type ();
 
   for (entry = 0; mot_boards[entry].cpu_type != 0; entry++) {
     if ((mot_boards[entry].cpu_type & 0xff) != cpu_type)
       continue;
-
+    
+    if ((mot_boards[entry].proc_type != PPC_UNKNOWN) &&
+	(mot_boards[entry].proc_type != proc_type))
+      /*
+       * IMD: processor type does not match 
+       * (here we distinguish a MVME2300 and a MVME2400)
+       */
+      continue;
+    
     if (mot_boards[entry].base_type == 0) {
       mot_entry = entry;
       break;

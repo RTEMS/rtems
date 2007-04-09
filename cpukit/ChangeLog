@@ -1,3 +1,8 @@
+2007-04-09	Thomas Doerfler |Thomas.Doerfler@embedded-brains.de>
+
+	* include/rtems/pci.h:
+	added device ID for MOTOROLA_HAWK
+
 2007-04-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/newlibc.c: Add __ATTRIBUTE_IMPURE_PTR__ 

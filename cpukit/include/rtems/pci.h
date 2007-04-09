@@ -510,6 +510,7 @@
 #define PCI_DEVICE_ID_MOTOROLA_MPC105              0x0001
 #define PCI_DEVICE_ID_MOTOROLA_MPC106              0x0002
 #define PCI_DEVICE_ID_MOTOROLA_RAVEN               0x4801
+#define PCI_DEVICE_ID_MOTOROLA_HAWK                0x4803
 
 #define PCI_VENDOR_ID_PROMISE                      0x105a
 #define PCI_DEVICE_ID_PROMISE_20246                0x4d33

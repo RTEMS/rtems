@@ -26,6 +26,8 @@
 #include <bsp/pci.h>
 #include <rtems/bspIo.h>
 
+#undef SHOW_PCI_SETTING
+
 /* allow for overriding these definitions */
 #ifndef PCI_CONFIG_ADDR
 #define PCI_CONFIG_ADDR      0xcf8
@@ -359,12 +361,12 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
         pci_read_config_byte(pbus, pslot, 0, PCI_PRIMARY_BUS,    &buspri);
         pci_read_config_byte(pbus, pslot, 0, PCI_SECONDARY_BUS,  &bussec);
 
-#if 0
+#ifdef SHOW_PCI_SETTING
          printk("pci : Found bridge at %d:0x%02x, mybus %d, pribus %d, secbus %d ",
                  pbus, pslot, mybus, buspri, bussec );
 #endif
          if ( bussec == mybus ) {
-#if 0
+#ifdef SHOW_PCI_SETTING
            printk("match\n");
 #endif
            /* found our nearest bridge going towards the root */
@@ -373,7 +375,7 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
 
            return 0;
         }
-#if 0
+#ifdef SHOW_PCI_SETTING
          printk("no match\n");
 #endif
       }
@@ -417,7 +419,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 		/* printk("pci : device %d:0x%02x:%i devid %04x, intpin %d, intline  %d\n",
 		   pbus, pslot, pfun, devid, int_pin, int_name ); */
 
-#if 0
+#ifdef SHOW_PCI_SETTING
 		{
 		  unsigned short cmd,stat;
 		  unsigned char  lat, seclat, csize;

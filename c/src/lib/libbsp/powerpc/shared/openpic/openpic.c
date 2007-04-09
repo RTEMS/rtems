@@ -200,6 +200,11 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
     	vendor = "Motorola";
 	device = "Raven";
 	NumSources += 1;
+    }
+    else if (t == PCI_VENDOR_ID_MOTOROLA + (PCI_DEVICE_ID_MOTOROLA_HAWK<<16)) {
+    	vendor = "Motorola";
+	device = "Hawk";
+	NumSources += 1;
     } else {
 	switch (vendorid) {
 	    case OPENPIC_VENDOR_ID_APPLE:

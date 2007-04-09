@@ -14,6 +14,8 @@
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
 
+#define SHOW_RAVEN_SETTINGS
+
 #define RAVEN_MPIC_IOSPACE_ENABLE  0x0001
 #define RAVEN_MPIC_MEMSPACE_ENABLE 0x0002
 #define RAVEN_MASTER_ENABLE        0x0004
@@ -196,8 +198,13 @@ void detect_host_bridge()
      */
   }
   pci_read_config_dword(0, 0, 0, 0, &id0);
-  if(id0 == PCI_VENDOR_ID_MOTOROLA +
-     (PCI_DEVICE_ID_MOTOROLA_RAVEN<<16)) {
+#ifdef SHOW_RAVEN_SETTINGS
+  printk("idreg 0 = 0x%x\n",id0);
+#endif
+  if((id0 == PCI_VENDOR_ID_MOTOROLA +
+      (PCI_DEVICE_ID_MOTOROLA_RAVEN<<16)) ||
+     (id0 == PCI_VENDOR_ID_MOTOROLA +
+      (PCI_DEVICE_ID_MOTOROLA_HAWK<<16))) {
     /*
      * We have a Raven bridge. We will get information about its settings
      */

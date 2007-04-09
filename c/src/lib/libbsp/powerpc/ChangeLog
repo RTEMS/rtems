@@ -1,3 +1,9 @@
+2007-04-09	Thomas Doerfler |Thomas.Doerfler@embedded-brains.de>
+
+	* shared/motorola/motorola.c,shared/openpic/openpic.c, 
+	* shared/pci/detect_raven_bridge.c, shared/pci/pci.c:
+	adapted to detect/use MVME2400
+
 2007-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/pci/pci.c: More stdint.h fixed-size types.
