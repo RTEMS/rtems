@@ -1,3 +1,10 @@
+2007-04-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/newlibc.c: Add __ATTRIBUTE_IMPURE_PTR__ 
+	(Fixes "relocation truncated to fit: R_MIPS_GPREL16" agains
+	impure_ptr bug).
+	Fix abuse of _REENT_INIT().
+
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
 	* itron/src/itrontime.c: Fix typo.
