@@ -1,3 +1,7 @@
+2007-04-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove lib: (Now supposed to be in GCC).
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* include/coverhd.h, start/start.S, startup/bspclean.c,
