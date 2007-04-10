@@ -51,7 +51,7 @@
 int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
 
 int              libc_reentrant;        /* do we think we are reentrant? */
-struct _reent    libc_global_reent;
+struct _reent    libc_global_reent __ATTRIBUTE_IMPURE_PTR__ = _REENT_INIT(libc_global_reent);
 
 /*
  * CYGNUS newlib routine that does atexit() processing and flushes
@@ -305,7 +305,7 @@ libc_init(int reentrant)
   rtems_status_code       rc;
   rtems_id                extension_id;
 
-  libc_global_reent = (struct _reent) _REENT_INIT((libc_global_reent));
+/*  libc_global_reent = _REENT_INIT(libc_global_reent); */
   _REENT = &libc_global_reent;
 
   if (reentrant) {
