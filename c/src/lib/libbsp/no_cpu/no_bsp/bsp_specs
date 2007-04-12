@@ -1,9 +1,7 @@
 %rename lib old_lib
 
-
 *lib:
 %{!qrtems: %(old_lib)} \
-%{!nostdlib: %{qrtems: --start-group %{!qrtems_debug: -lrtemsbsp -lrtemscpu } %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
- -lc -lgcc --end-group \
- %{!qnolinkcmds: -T linkcmds%s}}}
+%{!nostdlib: %{qrtems: --start-group -lrtemsbsp -lrtemscpu -lc -lgcc --end-group \
+%{!qnolinkcmds: -T linkcmds%s}}}
 
