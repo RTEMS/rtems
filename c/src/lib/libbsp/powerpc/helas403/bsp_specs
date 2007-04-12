@@ -4,7 +4,7 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: }}
+%{!nostdlib: %{qrtems: ecrti%O%s}}
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: ecrtn%O%s}
