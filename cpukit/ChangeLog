@@ -1,3 +1,7 @@
+2007-04-12	Joel Sherrill <joel@OARcorp.com>
+
+	* itron/src/rsm_tsk.c: Correct error returned.
+
 2007-04-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/newlibc.c: Add __ATTRIBUTE_IMPURE_PTR__
