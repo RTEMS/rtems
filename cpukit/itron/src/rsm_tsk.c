@@ -50,7 +50,7 @@ ER rsm_tsk(
         _ITRON_return_errorno( E_OBJ );
 
       if ( ! _States_Is_suspended(the_thread->current_state) )
-        _ITRON_return_errorno( E_OK );
+        _ITRON_return_errorno( E_OBJ );
 
       _Thread_Resume( the_thread, FALSE );
       break;
