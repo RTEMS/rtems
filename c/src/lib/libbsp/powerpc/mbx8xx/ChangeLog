@@ -1,3 +1,7 @@
+2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove qrtems_debug.
+
 2007-04-06	Ralf Corsépius	<ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove lib (Now expected to exist in GCC).

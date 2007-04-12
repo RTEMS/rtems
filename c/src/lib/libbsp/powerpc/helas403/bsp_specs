@@ -3,13 +3,11 @@
 %rename link old_link
 
 *startfile:
-%{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems: \
-%{!qrtems_debug: } \
-%{qrtems_debug: }}}
+%{!qrtems: %(old_startfile)} \
+%{!nostdlib: %{qrtems: }}
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: ecrtn%O%s}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -u flash_entry -N }
-
