@@ -1,3 +1,7 @@
+2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove qrtems_debug.
+
 2007-03-13	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h: Remove redundant prototypes.
