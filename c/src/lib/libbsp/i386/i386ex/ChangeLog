@@ -1,3 +1,7 @@
+2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove qrtems_debug.
+
 2006-12-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* network/network.c (uti596_ioctl): Use ioctl_command_t.
