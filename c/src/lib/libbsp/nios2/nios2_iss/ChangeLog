@@ -1,3 +1,8 @@
+2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove qrtems_debug.
+	Remove *cpp:.
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* include/coverhd.h: Correct license URL and/or fix mistake in
