@@ -1,3 +1,7 @@
+2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/object.h: Use size_t for byte sizes.
+
 2007-04-12	Joel Sherrill <joel@OARcorp.com>
 
 	* itron/src/rsm_tsk.c: Correct error returned.

@@ -331,7 +331,7 @@ typedef struct {
   /** This is the number of objects in a block. */
   uint32_t          allocation_size;
   /** This is the size in bytes of each object instance. */
-  uint32_t          size;
+  size_t            size;
   /** This points to the table of local objects. */
   Objects_Control **local_table;
   /** This points to the table of local object names. */
