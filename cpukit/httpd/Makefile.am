@@ -7,7 +7,7 @@ include $(top_srcdir)/automake/compile.am
 AM_CPPFLAGS += -DWEBS -DUEMF
 
 if LIBNETWORKING
-if HAS_POSIX
+if HAS_PTHREADS
 include_goaheaddir = $(includedir)/goahead
 
 include_HEADERS = rtems_webserver.h
