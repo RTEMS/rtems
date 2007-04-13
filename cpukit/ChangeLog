@@ -1,5 +1,6 @@
 2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/Makefile.am: Cosmetics.
 	* configure.ac: Add AM_CONDITIONAL(HAS_PTHREADS).
 	* httpd/Makefile.am: Use HAS_PTHREADS instead of LIBPOSIX.
 
@@ -17,7 +18,7 @@
 
 	* itron/src/rsm_tsk.c: Correct error returned.
 
-2007-04-09	Thomas Doerfler |Thomas.Doerfler@embedded-brains.de>
+2007-04-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* include/rtems/pci.h: Added device ID for MOTOROLA_HAWK
 
