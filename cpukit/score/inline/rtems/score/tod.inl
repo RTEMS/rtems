@@ -19,6 +19,8 @@
 #ifndef _RTEMS_SCORE_TOD_INL
 #define _RTEMS_SCORE_TOD_INL
 
+#include <sys/time.h> /* struct timeval */
+
 #include <rtems/score/isr.h>
 
 /**
