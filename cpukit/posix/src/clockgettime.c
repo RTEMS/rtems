@@ -35,7 +35,7 @@ int clock_gettime(
       _TOD_Get(tp);
       break;
 
-#if 0
+#ifdef CLOCK_MONOTONIC
     case CLOCK_MONOTONIC:
       _TOD_Get_uptime(tp);
       break;
