@@ -1,5 +1,7 @@
 2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/clockgettime.c, posix/src/clocksettime.c: Don't include 
+	  rtems/posix/time.h.
 	* posix/src/nanosleep.c: Include rtems/score/timespec.h instead of
 	  rtems/posix/time.h.
 	* score/include/rtems/score/object.h: Use size_t for byte sizes.
