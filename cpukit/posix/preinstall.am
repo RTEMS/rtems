@@ -19,6 +19,7 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if LIBPOSIX
+if HAS_PTHREADS
 $(PROJECT_INCLUDE)/sched.h: include/sched.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sched.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sched.h
@@ -176,4 +177,5 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/rwlock.inl
 $(PROJECT_INCLUDE)/rtems/posix/spinlock.inl: inline/rtems/posix/spinlock.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/spinlock.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/spinlock.inl
+endif
 endif
