@@ -1,5 +1,9 @@
 2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/inline/rtems/score/tod.inl: Include <sys/time.h>.
+
+2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/Makefile.am: Cosmetics.
 	* configure.ac: Add AM_CONDITIONAL(HAS_PTHREADS).
 	* httpd/Makefile.am: Use HAS_PTHREADS instead of LIBPOSIX.
