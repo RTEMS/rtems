@@ -29,7 +29,7 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if LIBNETWORKING
-if HAS_POSIX
+if HAS_PTHREADS
 $(PROJECT_INCLUDE)/goahead/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/goahead
 	@: > $(PROJECT_INCLUDE)/goahead/$(dirstamp)
