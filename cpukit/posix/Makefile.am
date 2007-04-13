@@ -15,6 +15,10 @@ noinst_LIBRARIES = libposix.a
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 libposix_a_SOURCES =
 
+libposix_a_SOURCES += src/sleep.c
+libposix_a_SOURCES += src/usleep.c
+
+if HAS_PTHREADS
 # include
 
 include_HEADERS = include/sched.h include/aio.h include/mqueue.h \
@@ -153,7 +157,7 @@ libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
 libposix_a_SOURCES += src/adjtime.c src/posixtimespecabsolutetimeout.c \
     src/clockgetcpuclockid.c src/clockgetenableattr.c src/clockgetres.c \
     src/clockgettime.c src/clocksetenableattr.c src/clocksettime.c \
-    src/nanosleep.c src/sleep.c src/usleep.c
+    src/nanosleep.c
 
 # the timer manager needs to be split further but only after its
 # dependence on the Classic API Timer Manager is removed.
@@ -164,7 +168,7 @@ EXTRA_DIST += src/README.mqueue
 
 libposix_a_SOURCES += src/adasupp.c src/sched.c \
     src/sysconf.c src/types.c
-
+endif
 endif
 
 include $(srcdir)/preinstall.am

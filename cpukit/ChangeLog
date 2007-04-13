@@ -1,5 +1,7 @@
 2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/Makefile.am: Unconditionally build src/sleep.c,
+	  src/usleep.c.
 	* posix/src/clockgettime.c: #ifdef CLOCK_MONOTONIC the
 	  CLOCK_MONOTONIC case.
 	* score/inline/rtems/score/tod.inl: Include <sys/time.h>.
