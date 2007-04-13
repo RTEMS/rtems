@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <rtems/score/timespec.h> /* _Timespec_Substract */
 
 char *my_ctime( time_t t )
 {
@@ -35,12 +36,6 @@ void subtract_em(
   struct timespec *t
 )
 {
-  extern void _Timespec_Subtract(
-    const struct timespec *start,
-    const struct timespec *end,
-    struct timespec       *result
-  );
-
   t->tv_sec = 0;
   t->tv_nsec = 0;
   _Timespec_Subtract( start, stop, t );
