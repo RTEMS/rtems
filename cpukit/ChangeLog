@@ -1,5 +1,7 @@
 2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/Makefile.am, wrapup/Makefile.am, configure.ac: Rename
+	  AM_CONDITIONAL(HAS_POSIX) into LIBPOSIX.
 	* posix/src/clockgettime.c, posix/src/clocksettime.c: Don't include 
 	  rtems/posix/time.h.
 	* posix/src/nanosleep.c: Include rtems/score/timespec.h instead of
