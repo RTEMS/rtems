@@ -1,5 +1,10 @@
 2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add AM_CONDITIONAL(HAS_PTHREADS).
+	* httpd/Makefile.am: Use HAS_PTHREADS instead of LIBPOSIX.
+
+2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/Makefile.am, wrapup/Makefile.am, configure.ac: Rename
 	  AM_CONDITIONAL(HAS_POSIX) into LIBPOSIX.
 	* posix/src/clockgettime.c, posix/src/clocksettime.c: Don't include 
