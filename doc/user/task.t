@@ -31,6 +31,7 @@ by the task manager are:
 @item @code{@value{DIRPREFIX}task_set_note} - Set task notepad entry 
 @item @code{@value{DIRPREFIX}task_wake_after} - Wake up after interval 
 @item @code{@value{DIRPREFIX}task_wake_when} - Wake up when specified  
+@item @code{@value{DIRPREFIX}iterate_over_all_threads} - Iterate Over Tasks
 @item @code{@value{DIRPREFIX}task_variable_add} - Associate per task variable
 @item @code{@value{DIRPREFIX}task_variable_get} - Obtain value of a a per task variable
 @item @code{@value{DIRPREFIX}task_variable_delete} - Remove per task variable
@@ -1607,6 +1608,51 @@ The ticks portion of time_buffer @value{STRUCTURE} is ignored.  The
 timing granularity of this directive is a second.
 
 A clock tick is required to support the functionality of this directive.
+
+@page
+
+@subsection ITERATE_OVER_ALL_THREADS - Iterate Over Tasks
+
+@cindex iterate over all threads
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_iterate_over_all_threads
+@example
+typedef void (*rtems_per_thread_routine)(
+  Thread_Control *the_thread
+);
+
+void rtems_iterate_over_all_threads(
+  rtems_per_thread_routine routine
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+NOT SUPPORTED FROM Ada
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES: NONE
+
+
+@subheading DESCRIPTION:
+
+This directive iterates over all of the existant threads in the 
+system and invokes @code{routine} on each of them.  The user should
+be careful in accessing the contents of @code{the_thread}.
+
+This routine is intended for use in diagnostic utilities and is
+not intented for routine use in an operational system.
+
+@subheading NOTES:
+
+There is NO protection while this routine is called.  Thus it is
+possible that @code{the_thread} could be deleted while this is operating.
+By not having protection, the user is free to invoke support routines
+from the C Library which require semaphores for data structures.
 
 @page
 

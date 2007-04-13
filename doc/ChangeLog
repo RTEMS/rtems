@@ -1,3 +1,7 @@
+2007-04-13	Joel Sherrill <joel@OARcorp.com>
+
+	* user/task.t: Add rtems_iterate_over_all_threads.
+
 2007-03-10	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1226/cpukit
@@ -41,6 +45,7 @@
 
 	* porting/interrupts.t: Fix bogus _CPU_ISR_Get_level.
 
+2006-09-07	Ken Peters <ken.peters@jpl.nasa.gov>
 2006-09-07	Ken Peters <ken.peters@jpl.nasa.gov>
 
 	PR 1171/doc
