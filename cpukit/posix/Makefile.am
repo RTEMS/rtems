@@ -9,6 +9,12 @@ EXTRA_DIST =
 
 if LIBPOSIX
 
+AM_CPPFLAGS += -D__RTEMS_INSIDE__
+
+noinst_LIBRARIES = libposix.a
+libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
+libposix_a_SOURCES =
+
 # include
 
 include_HEADERS = include/sched.h include/aio.h include/mqueue.h \
@@ -45,7 +51,7 @@ include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
 
 # These are really in the stand but not really functional
 ## BUILD_FOR_NOW_C_FILES
-libposix_a_SOURCES = src/aio.c src/devctl.c
+libposix_a_SOURCES += src/aio.c src/devctl.c
 
 ## ENOSYS_C_FILES
 libposix_a_SOURCES += src/execl.c src/execle.c src/execlp.c src/execv.c \
@@ -159,10 +165,6 @@ EXTRA_DIST += src/README.mqueue
 libposix_a_SOURCES += src/adasupp.c src/sched.c \
     src/sysconf.c src/types.c
 
-AM_CPPFLAGS += -D__RTEMS_INSIDE__
-
-noinst_LIBRARIES = libposix.a
-libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 include $(srcdir)/preinstall.am
