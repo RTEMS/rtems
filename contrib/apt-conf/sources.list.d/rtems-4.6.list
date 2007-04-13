@@ -1,4 +1,0 @@
-# Repository for RTEMS-4.6 rpms
-
-rpm     ftp://ftp.rtems.com/pub/rtems/linux redhat/7.3/i386/apt rtems-4.6
-rpm-src ftp://ftp.rtems.com/pub/rtems/linux redhat/7.3/i386/apt rtems-4.6

@@ -1,4 +1,0 @@
-AC_DEFUN([RTEMS_VERSIONING],
-m4_define([_RTEMS_VERSION],[4.6.99.4]))
-
-m4_define([_RTEMS_API],[4.7])

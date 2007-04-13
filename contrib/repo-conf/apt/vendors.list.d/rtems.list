@@ -1,4 +1,0 @@
-simple-key "rtems" { 
-	Fingerprint "CD738F4967B9B2F95EEA2FE846A926C2EAC29B6F";
-	Name "RTEMS Packager (RTEMS Packager) <rtems.packager@rtems.com>";
-}
