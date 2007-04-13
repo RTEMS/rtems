@@ -17,7 +17,7 @@ TMP_LIBS += ../score/libscore.a
 TMP_LIBS += ../sapi/libsapi.a
 TMP_LIBS += ../rtems/librtems.a
 
-if HAS_POSIX
+if LIBPOSIX
 TMP_LIBS += ../posix/libposix.a
 endif
 

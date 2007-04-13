@@ -7,7 +7,7 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
 
-if HAS_POSIX
+if LIBPOSIX
 
 # include
 
