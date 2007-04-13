@@ -22,7 +22,7 @@
 #include <rtems/score/tod.h>
 
 #include <rtems/seterr.h>
-#include <rtems/posix/time.h>
+#include <rtems/score/timespec.h>
 
 /*PAGE
  *
