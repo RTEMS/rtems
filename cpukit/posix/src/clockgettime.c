@@ -15,7 +15,6 @@
 #include <rtems/score/tod.h>
 
 #include <rtems/seterr.h>
-#include <rtems/posix/time.h>
 
 /*PAGE
  *
