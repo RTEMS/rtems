@@ -15,8 +15,8 @@
 #include <rtems/score/tod.h>
 
 
-unsigned usleep(
-  unsigned int useconds
+int usleep(
+  useconds_t useconds
 )
 {
   struct timespec tp;

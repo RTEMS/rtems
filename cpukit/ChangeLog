@@ -1,3 +1,8 @@
+2007-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/usleep.c, libcsupport/src/readlink.c:
+	Update API to SUSv3.
+
 2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/Makefile.am: Unconditionally build src/sleep.c,

@@ -18,10 +18,10 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int readlink(
+ssize_t readlink(
   const char *pathname,
   char       *buf,
-  int         bufsize
+  size_t      bufsize
 )
 {
   rtems_filesystem_location_info_t  loc;
