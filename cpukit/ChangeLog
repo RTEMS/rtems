@@ -1,5 +1,6 @@
 2007-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Redefine LIBPOSIX to !UNIX.
 	* posix/src/usleep.c, libcsupport/src/readlink.c:
 	Update API to SUSv3.
 
