@@ -1,3 +1,7 @@
+2007-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* itron/src/rsm_tsk.c: Correct error returned.
+
 2007-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Redefine LIBPOSIX to !UNIX.
