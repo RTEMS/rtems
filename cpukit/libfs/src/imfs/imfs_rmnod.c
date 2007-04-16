@@ -71,6 +71,10 @@ int IMFS_rmnod(
      * Free memory associated with a memory file.
      */
 
+    if ( the_jnode->type == IMFS_SYM_LINK ) {
+      if ( the_jnode->info.sym_link.name )
+        free( the_jnode->info.sym_link.name );
+    }
     free( the_jnode );
   }
 

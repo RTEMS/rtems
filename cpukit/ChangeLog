@@ -1,3 +1,9 @@
+2007-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	PR 1240/filesystem
+	* libfs/src/imfs/imfs_rmnod.c: Fix link when removing a symlink. Memory
+	for filename was not being freed.
+
 2007-04-12	Joel Sherrill <joel@OARcorp.com>
 
 	* itron/src/rsm_tsk.c: Correct error returned.
