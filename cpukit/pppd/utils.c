@@ -102,7 +102,7 @@ vslprintf(buf, buflen, fmt, args)
     int c, i, n;
     int width, prec, fillch;
     int base, len, neg, quoted;
-    unsigned long val = 0;
+    uintptr_t val = 0;
     char *str, *f, *buf0;
     unsigned char *p;
     char num[32];
@@ -181,7 +181,7 @@ vslprintf(buf, buflen, fmt, args)
 	    base = 16;
 	    break;
 	case 'p':
-	    val = (unsigned long) va_arg(args, void *);
+	    val = (uintptr_t) va_arg(args, void *);
 	    base = 16;
 	    neg = 2;
 	    break;
