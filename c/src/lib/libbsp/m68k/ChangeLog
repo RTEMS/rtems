@@ -1,3 +1,8 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* mcf5206elite/tools/runtest: Do not run pppd.exe from batch mode
+	script.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
