@@ -1,3 +1,7 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* psim/tools/runtest: Do not run pppd.exe from batch mode script.
+
 2007-01-29	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/vme/VMEConfig.h:
