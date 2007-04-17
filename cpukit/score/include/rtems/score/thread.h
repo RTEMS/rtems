@@ -174,7 +174,7 @@ typedef struct {
   Stack_Control        Initial_stack;
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   /** This field is the initial FP context area address. */
-  void                *fp_context;
+  Context_Control_fp  *fp_context;
 #endif
   /** This field is the initial stack area address. */
   void                *stack;
@@ -336,7 +336,7 @@ struct Thread_Control_struct {
   /** This field points to the floating point context for this thread.
    *  If NULL, the thread is integer only.
    */
-  void                                 *fp_context;
+  Context_Control_fp                   *fp_context;
 #endif
   /** This field points to the newlib reentrancy structure for this thread. */
   struct _reent                        *libc_reent;

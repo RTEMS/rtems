@@ -54,7 +54,7 @@ void _CPU_Initialize(
 )
 {
 #if (SPARC_HAS_FPU == 1)
-  void                  *pointer;
+  Context_Control_fp *pointer;
 
   /*
    *  This seems to be the most appropriate way to obtain an initial
