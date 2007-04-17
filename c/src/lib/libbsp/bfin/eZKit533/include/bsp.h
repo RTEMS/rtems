@@ -69,12 +69,12 @@ extern "C" {
 /*
  * Ezkit flash ports
  */
-#define FlashA_PortB_Dir  0x20270007
-#define FlashA_PortB_Data 0x20270005
+#define FlashA_PortB_Dir  0x20270007L
+#define FlashA_PortB_Data 0x20270005L
 
 // Blackfin environment memory map
 //
-#define L1_DATA_SRAM_A 0xff800000
+#define L1_DATA_SRAM_A 0xff800000L
 
 #define FIFOLENGTH 0x100
 
@@ -123,16 +123,14 @@ extern rtems_configuration_table BSP_Configuration;
  * Helper Function to use the EzKits LEDS.
  * Can be used by the Application.
  */
-void setLED (char value);
+void setLED (uint8_t value);
 
 /*
  * Helper Function to use the EzKits LEDS
  */
-char getLED (void);
+uint8_t getLED (void);
 
-void bsp_cleanup( void );
-
-rtems_isr_entry set_vector(                    /* returns old vector */
+rtems_isr_entry set_vector(                     /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */

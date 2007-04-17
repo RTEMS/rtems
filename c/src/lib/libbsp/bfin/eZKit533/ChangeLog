@@ -1,3 +1,8 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h, startup/bspstart.c: Fix compile errors and address
+	most warnings about constants being too large.
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove qrtems_debug.

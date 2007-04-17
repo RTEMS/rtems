@@ -87,18 +87,13 @@ void bsp_pretasking_hook(void)
 void bsp_start( void )
 {
     
-    extern void          * _WorkspaceBase;
-    extern void          *_RamSize;
+  extern void          * _WorkspaceBase;
 
   /* BSP Hardware Initialization*/
   Init_RTC();   /* Blackfin Real Time Clock initialization */  
   Init_PLL();   /* PLL initialization */
   Init_EBIU();  /* EBIU initialization */
   Init_Flags(); /* GPIO initialization */
-
-
-    /*extern unsigned long  _M68k_Ramsize;
-    _M68k_Ramsize = (unsigned long)&_RamSize;*/ /* RAM size set in linker script */
 
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
@@ -126,7 +121,7 @@ void bsp_start( void )
 
   int i=0;
   for (i=5;i<16;i++) {
-    set_vector(null_isr, i, 1);
+    set_vector((rtems_isr_entry)null_isr, i, 1);
   }
   
 }
@@ -167,8 +162,8 @@ void Init_PLL (void)
 void Init_EBIU (void)
 {
   /* Configure FLASH */
-  *((uint16_t*)EBIU_AMBCTL0)  = 0x7bb07bb0;
-  *((uint16_t*)EBIU_AMBCTL1)  = 0x7bb07bb0;
+  *((uint16_t*)EBIU_AMBCTL0)  = 0x7bb07bb0L;
+  *((uint16_t*)EBIU_AMBCTL1)  = 0x7bb07bb0L;
   *((uint16_t*)EBIU_AMGCTL)   = 0x000f;
   
   /* Configure SDRAM 
@@ -198,7 +193,7 @@ void Init_Flags(void)
  * Helper Function to use the EzKits LEDS.
  * Can be used by the Application.
  */
-void setLED (char value)
+void setLED (uint8_t value)
 {
   *((uint8_t*)FlashA_PortB_Data) = value;    
 }
@@ -206,7 +201,7 @@ void setLED (char value)
 /*
  * Helper Function to use the EzKits LEDS
  */
-char getLED (void)
+uint8_t getLED (void)
 {
   return *((uint8_t*)FlashA_PortB_Data);
 }
