@@ -642,7 +642,7 @@ void _CPU_Context_switch(
  */
 
 void _CPU_Context_save_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 /*
@@ -652,7 +652,7 @@ void _CPU_Context_save_fp(
  */
 
 void _CPU_Context_restore_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 #if (M68K_HAS_FPSP_PACKAGE == 1)

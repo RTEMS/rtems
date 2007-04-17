@@ -192,20 +192,20 @@ const unsigned char __BFFFOtable[256] = {
 #if (CPU_SOFTWARE_FP == TRUE)
 extern Context_Control_fp _fpCCR;
 
-void CPU_Context_save_fp (void **fp_context_ptr)
+void CPU_Context_save_fp (Context_Control_fp **fp_context_ptr)
 {
   Context_Control_fp *fp;
 
-  fp = (Context_Control_fp *) *fp_context_ptr;
+  fp = *fp_context_ptr;
 
   *fp = _fpCCR;
 }
 
-void CPU_Context_restore_fp (void **fp_context_ptr)
+void CPU_Context_restore_fp (Context_Control_fp **fp_context_ptr)
 {
   Context_Control_fp *fp;
 
-  fp = (Context_Control_fp *) *fp_context_ptr;
+  fp = *fp_context_ptr;
 
   _fpCCR = *fp;
 }

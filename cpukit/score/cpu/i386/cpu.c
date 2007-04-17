@@ -37,8 +37,8 @@ void _CPU_Initialize(
 )
 {
 #if CPU_HARDWARE_FP
-  register uint16_t    fp_status asm ("ax");
-  register void       *fp_context;
+  register uint16_t		fp_status asm ("ax");
+  register Context_Control_fp  *fp_context;
 #endif
 
   _CPU_Table = *cpu_table;
