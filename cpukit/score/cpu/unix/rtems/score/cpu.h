@@ -777,14 +777,14 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #define _CPU_Context_Initialize_fp( _destination ) \
   { \
-   *((Context_Control_fp *) *((void **) _destination)) = _CPU_Null_fp_context; \
+   *(*(_destination)) = _CPU_Null_fp_context; \
   }
 
 #define _CPU_Context_save_fp( _fp_context ) \
-    _CPU_Save_float_context( *(Context_Control_fp **)(_fp_context))
+    _CPU_Save_float_context(*(_fp_context))
 
 #define _CPU_Context_restore_fp( _fp_context ) \
-    _CPU_Restore_float_context( *(Context_Control_fp **)(_fp_context))
+    _CPU_Restore_float_context(*(_fp_context))
 
 extern void _CPU_Context_Initialize(
   Context_Control  *_the_context,
