@@ -695,7 +695,7 @@ SCORE_EXTERN void _CPU_Context_Initialize(
 #if SH_HAS_FPU
 #define _CPU_Context_Initialize_fp( _destination ) \
   do { \
-     *((Context_Control_fp *) *((void **) _destination)) = _CPU_Null_fp_context;\
+     *(*(_destination)) = _CPU_Null_fp_context;\
   } while(0)
 #else
 #define _CPU_Context_Initialize_fp( _destination ) \
@@ -925,7 +925,7 @@ void _CPU_Context_restore(
  */
 
 void _CPU_Context_save_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 /*
@@ -935,7 +935,7 @@ void _CPU_Context_save_fp(
  */
 
 void _CPU_Context_restore_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 

@@ -956,7 +956,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 #define _CPU_Context_Initialize_fp( _destination ) \
   { \
-   *((Context_Control_fp *) *((void **) _destination)) = _CPU_Null_fp_context; \
+   *(*(_destination)) = _CPU_Null_fp_context; \
   }
 
 /* end of Context handler macros */
@@ -1244,7 +1244,7 @@ void _CPU_Context_restore(
  *  XXX document implementation including references if appropriate
  */
 void _CPU_Context_save_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 /**
@@ -1262,7 +1262,7 @@ void _CPU_Context_save_fp(
  *  XXX document implementation including references if appropriate
  */
 void _CPU_Context_restore_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 /**

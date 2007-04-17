@@ -598,7 +598,7 @@ void _CPU_Context_Initialize(
 
 #define _CPU_Context_Initialize_fp( _destination ) \
   { \
-   ((Context_Control_fp *) *((void **) _destination))->fpscr = PPC_INIT_FPSCR; \
+    (*(_destination))->fpscr = PPC_INIT_FPSCR; \
   }
 
 /* end of Context handler macros */
@@ -761,7 +761,7 @@ void _CPU_Context_restore(
  */
 
 void _CPU_Context_save_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 /*
@@ -771,7 +771,7 @@ void _CPU_Context_save_fp(
  */
 
 void _CPU_Context_restore_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 void _CPU_Fatal_error(
