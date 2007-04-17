@@ -4,7 +4,7 @@
  *  The MMR have been taken from the ADSP-BF533 Blackfin Processor
  *  Hardware Reference from Analog Devices. Mentioned Chapters
  *  refer to this Documentation.
- * 
+ *
  *  The Blackfins MMRs are divided into core MMRs (0xFFE0 0000–0xFFFF FFFF)
  *  and System MMRs (0xFFC0 0000–0xFFE0 0000). The core MMRs are defined
  *  in bfin.h which is included.
@@ -33,73 +33,73 @@ extern "C" {
 
 
 /* Clock and System Control  Chapter 8 */
-#define PLL_CTL                0xFFC00000
-#define PLL_DIV                0xFFC00004
-#define VR_CTL                 0xFFC00008
-#define PLL_STAT               0xFFC0000C
-#define PLL_LOCKCNT            0xFFC00010
-#define SWRST                  0xFFC00100
-#define SYSCR                  0xFFC00104
+#define PLL_CTL                0xFFC00000L
+#define PLL_DIV                0xFFC00004L
+#define VR_CTL                 0xFFC00008L
+#define PLL_STAT               0xFFC0000CL
+#define PLL_LOCKCNT            0xFFC00010L
+#define SWRST                  0xFFC00100L
+#define SYSCR                  0xFFC00104L
 
 /* SPI Controller           Chapter 10 */
-#define SPI_CTL                0xFFC00500
-#define SPI_FLG                0xFFC00504
-#define SPI_STAT               0xFFC00508
-#define SPI_TDBR               0xFFC0050C
-#define SPI_RDBR               0xFFC00510
-#define SPI_BAUD               0xFFC00514
-#define SPI_SHADOW             0xFFC00518
+#define SPI_CTL                0xFFC00500L
+#define SPI_FLG                0xFFC00504L
+#define SPI_STAT               0xFFC00508L
+#define SPI_TDBR               0xFFC0050CL
+#define SPI_RDBR               0xFFC00510L
+#define SPI_BAUD               0xFFC00514L
+#define SPI_SHADOW             0xFFC00518L
 
 /* SPORT0 Controller */
-#define SPORT0_TCR1            0xFFC00800
-#define SPORT0_TCR2            0xFFC00804
-#define SPORT0_TCLKDIV         0xFFC00808
-#define SPORT0_TFSDIV          0xFFC0080C
-#define SPORT0_TX              0xFFC00810
-#define SPORT0_RX              0xFFC00818
-#define SPORT0_RCR1            0xFFC00820
-#define SPORT0_RCR2            0xFFC00824
-#define SPORT0_RCLKDIV         0xFFC00828
-#define SPORT0_RFSDIV          0xFFC0082C
-#define SPORT0_STAT            0xFFC00830
-#define SPORT0_CHNL            0xFFC00834
-#define SPORT0_MCMC1           0xFFC00838
-#define SPORT0_MCMC2           0xFFC0083C
-#define SPORT0_MTCS0           0xFFC00840
-#define SPORT0_MTCS1           0xFFC00844
-#define SPORT0_MTCS2           0xFFC00848
-#define SPORT0_MTCS3           0xFFC0084C
-#define SPORT0_MRCS0           0xFFC00850
-#define SPORT0_MRCS1           0xFFC00854
-#define SPORT0_MRCS2           0xFFC00858
-#define SPORT0_MRCS3           0xFFC0085C
+#define SPORT0_TCR1            0xFFC00800L
+#define SPORT0_TCR2            0xFFC00804L
+#define SPORT0_TCLKDIV         0xFFC00808L
+#define SPORT0_TFSDIV          0xFFC0080CL
+#define SPORT0_TX              0xFFC00810L
+#define SPORT0_RX              0xFFC00818L
+#define SPORT0_RCR1            0xFFC00820L
+#define SPORT0_RCR2            0xFFC00824L
+#define SPORT0_RCLKDIV         0xFFC00828L
+#define SPORT0_RFSDIV          0xFFC0082CL
+#define SPORT0_STAT            0xFFC00830L
+#define SPORT0_CHNL            0xFFC00834L
+#define SPORT0_MCMC1           0xFFC00838L
+#define SPORT0_MCMC2           0xFFC0083CL
+#define SPORT0_MTCS0           0xFFC00840L
+#define SPORT0_MTCS1           0xFFC00844L
+#define SPORT0_MTCS2           0xFFC00848L
+#define SPORT0_MTCS3           0xFFC0084CL
+#define SPORT0_MRCS0           0xFFC00850L
+#define SPORT0_MRCS1           0xFFC00854L
+#define SPORT0_MRCS2           0xFFC00858L
+#define SPORT0_MRCS3           0xFFC0085CL
 
 /* Parallel Peripheral Interface (PPI) Chapter 11 */
-  
-#define PPI_CONTROL            0xFFC01000
-#define PPI_STATUS             0xFFC01004
-#define PPI_COUNT              0xFFC01008
-#define PPI_DELAY              0xFFC0100C
-#define PPI_FRAME              0xFFC01010
 
-/*********  PPI MASKS ***********/         
-/*  PPI_CONTROL Masks */        
-#define PORT_EN                0x00000001 
-#define PORT_DIR               0x00000002      
-#define XFR_TYPE               0x0000000C 
+#define PPI_CONTROL            0xFFC01000L
+#define PPI_STATUS             0xFFC01004L
+#define PPI_COUNT              0xFFC01008L
+#define PPI_DELAY              0xFFC0100CL
+#define PPI_FRAME              0xFFC01010L
+
+/*********  PPI MASKS ***********/
+/*  PPI_CONTROL Masks */
+#define PORT_EN                0x00000001
+#define PORT_DIR               0x00000002
+#define XFR_TYPE               0x0000000C
 #define PORT_CFG               0x00000030
 #define FLD_SEL                0x00000040
 #define PACK_EN                0x00000080
 #define DMA32                  0x00000100
 #define SKIP_EN                0x00000200
 #define SKIP_EO                0x00000400
-#define DLENGTH                0x00003800 
+#define DLENGTH                0x00003800
 #define DLEN_8                 0x0
 #define DLEN(x)                (((x-9) & 0x07) << 11)
-#define POL                    0x0000C000      
+#define POL                    0x0000C000
 
-/* PPI_STATUS Masks */                                         
-#define FLD                    0x00000400  
+/* PPI_STATUS Masks */
+#define FLD                    0x00000400
 #define FT_ERR                 0x00000800
 #define OVR                    0x00001000
 #define UNDR                   0x00002000
@@ -107,65 +107,65 @@ extern "C" {
 #define ERR_NCOR               0x00008000
 
 /* SPORT1 Controller        Chapter 12 */
-#define SPORT1_TCR1            0xFFC00900
-#define SPORT1_TCR2            0xFFC00904
-#define SPORT1_TCLKDIV         0xFFC00908
-#define SPORT1_TFSDIV          0xFFC0090C
-#define SPORT1_TX              0xFFC00910
-#define SPORT1_RX              0xFFC00918
-#define SPORT1_RCR1            0xFFC00920
-#define SPORT1_RCR2            0xFFC00924
-#define SPORT1_RCLKDIV         0xFFC00928
-#define SPORT1_RFSDIV          0xFFC0092C
-#define SPORT1_STAT            0xFFC00930
-#define SPORT1_CHNL            0xFFC00934
-#define SPORT1_MCMC1           0xFFC00938
-#define SPORT1_MCMC2           0xFFC0093C
-#define SPORT1_MTCS0           0xFFC00940
-#define SPORT1_MTCS1           0xFFC00944
-#define SPORT1_MTCS2           0xFFC00948
-#define SPORT1_MTCS3           0xFFC0094C
-#define SPORT1_MRCS0           0xFFC00950
-#define SPORT1_MRCS1           0xFFC00954
-#define SPORT1_MRCS2           0xFFC00958
-#define SPORT1_MRCS3           0xFFC0095C
+#define SPORT1_TCR1            0xFFC00900L
+#define SPORT1_TCR2            0xFFC00904L
+#define SPORT1_TCLKDIV         0xFFC00908L
+#define SPORT1_TFSDIV          0xFFC0090CL
+#define SPORT1_TX              0xFFC00910L
+#define SPORT1_RX              0xFFC00918L
+#define SPORT1_RCR1            0xFFC00920L
+#define SPORT1_RCR2            0xFFC00924L
+#define SPORT1_RCLKDIV         0xFFC00928L
+#define SPORT1_RFSDIV          0xFFC0092CL
+#define SPORT1_STAT            0xFFC00930L
+#define SPORT1_CHNL            0xFFC00934L
+#define SPORT1_MCMC1           0xFFC00938L
+#define SPORT1_MCMC2           0xFFC0093CL
+#define SPORT1_MTCS0           0xFFC00940L
+#define SPORT1_MTCS1           0xFFC00944L
+#define SPORT1_MTCS2           0xFFC00948L
+#define SPORT1_MTCS3           0xFFC0094CL
+#define SPORT1_MRCS0           0xFFC00950L
+#define SPORT1_MRCS1           0xFFC00954L
+#define SPORT1_MRCS2           0xFFC00958L
+#define SPORT1_MRCS3           0xFFC0095CL
 
 /* SPORTx_TCR1 Masks */
 #define TSPEN                  0x0001
-#define ITCLK                  0x0002   
-#define TDTYPE                 0x000C  
-#define TLSBIT                 0x0010  
-#define ITFS                   0x0200   
-#define TFSR                   0x0400   
-#define DITFS                  0x0800   
-#define LTFS                   0x1000   
-#define LATFS                  0x2000   
-#define TCKFE                  0x4000   
+#define ITCLK                  0x0002
+#define TDTYPE                 0x000C
+#define TLSBIT                 0x0010
+#define ITFS                   0x0200
+#define TFSR                   0x0400
+#define DITFS                  0x0800
+#define LTFS                   0x1000
+#define LATFS                  0x2000
+#define TCKFE                  0x4000
 
 /* SPORTx_TCR2 Masks */
-#define SLEN                   0x001F 
+#define SLEN                   0x001F
 #define TXSE                   0x0100
 #define TSFSE                  0x0200
-#define TRFST                  0x0400 
+#define TRFST                  0x0400
 
 /* SPORTx_RCR1 Masks */
-#define RSPEN                  0x0001 
-#define IRCLK                  0x0002 
+#define RSPEN                  0x0001
+#define IRCLK                  0x0002
 #define RDTYPE                 0x000C
-#define RULAW                  0x0008 
-#define RALAW                  0x000C 
+#define RULAW                  0x0008
+#define RALAW                  0x000C
 #define RLSBIT                 0x0010
-#define IRFS                   0x0200 
-#define RFSR                   0x0400 
-#define LRFS                   0x1000 
-#define LARFS                  0x2000 
-#define RCKFE                  0x4000 
+#define IRFS                   0x0200
+#define RFSR                   0x0400
+#define LRFS                   0x1000
+#define LARFS                  0x2000
+#define RCKFE                  0x4000
 
 /* SPORTx_RCR2 Masks */
-#define SLEN                   0x001F 
+#define SLEN                   0x001F
 #define RXSE                   0x0100
 #define RSFSE                  0x0200
-#define RRFST                  0x0400 
+#define RRFST                  0x0400
 
 /* SPORTx_STAT Masks */
 #define RXNE                   0x0001
@@ -186,23 +186,22 @@ extern "C" {
 #define MCDRXPE                0x00000008
 #define MCMEN                  0x00000010
 #define FSDR                   0x00000080
-#define MFD                    0x0000F000   
+#define MFD                    0x0000F000
 
 /* UART Controller          Chapter 13 */
-#define UART_THR               0xFFC00400
-#define UART_RBR               0xFFC00400
-#define UART_DLL               0xFFC00400
-#define UART_IER               0xFFC00404
-#define UART_DLH               0xFFC00404
-#define UART_IIR               0xFFC00408
-#define UART_LCR               0xFFC0040C
-#define UART_MCR               0xFFC00410
-#define UART_LSR               0xFFC00414
+#define UART_THR               0xFFC00400L
+#define UART_RBR               0xFFC00400L
+#define UART_DLL               0xFFC00400L
+#define UART_IER               0xFFC00404L
+#define UART_DLH               0xFFC00404L
+#define UART_IIR               0xFFC00408L
+#define UART_LCR               0xFFC0040CL
+#define UART_MCR               0xFFC00410L
+#define UART_LSR               0xFFC00414L
+#define UART_SCR               0xFFC0041CL
+#define UART_GCTL              0xFFC00424L
 
-#define UART_SCR               0xFFC0041C
-#define UART_GCTL              0xFFC00424
-
-/* 
+/*
  * UART CONTROLLER MASKS
  */
 
@@ -277,23 +276,23 @@ extern "C" {
 #define UCEN_P                 0x00
 
 /* General Purpose IO        Chapter 14*/
-#define FIO_FLAG_D             0xFFC00700
-#define FIO_FLAG_C             0xFFC00704  
-#define FIO_FLAG_S             0xFFC00708  
-#define FIO_FLAG_T             0xFFC0070C  
-#define FIO_MASKA_D            0xFFC00710  
-#define FIO_MASKA_C            0xFFC00714  
-#define FIO_MASKA_S            0xFFC00718
-#define FIO_MASKA_T            0xFFC0071C
-#define FIO_MASKB_D            0xFFC00720
-#define FIO_MASKB_C            0xFFC00724
-#define FIO_MASKB_S            0xFFC00728
-#define FIO_MASKB_T            0xFFC0072C
-#define FIO_DIR                0xFFC00730
-#define FIO_POLAR              0xFFC00734
-#define FIO_EDGE               0xFFC00738
-#define FIO_BOTH               0xFFC0073C
-#define FIO_INEN               0xFFC00740
+#define FIO_FLAG_D             0xFFC00700L
+#define FIO_FLAG_C             0xFFC00704L
+#define FIO_FLAG_S             0xFFC00708L
+#define FIO_FLAG_T             0xFFC0070CL
+#define FIO_MASKA_D            0xFFC00710L
+#define FIO_MASKA_C            0xFFC00714L
+#define FIO_MASKA_S            0xFFC00718L
+#define FIO_MASKA_T            0xFFC0071CL
+#define FIO_MASKB_D            0xFFC00720L
+#define FIO_MASKB_C            0xFFC00724L
+#define FIO_MASKB_S            0xFFC00728L
+#define FIO_MASKB_T            0xFFC0072CL
+#define FIO_DIR                0xFFC00730L
+#define FIO_POLAR              0xFFC00734L
+#define FIO_EDGE               0xFFC00738L
+#define FIO_BOTH               0xFFC0073CL
+#define FIO_INEN               0xFFC00740L
 
 /*  General Purpose IO Masks */
 #define PF0                    0x0001
@@ -312,52 +311,52 @@ extern "C" {
 #define PF13                   0x2000
 #define PF14                   0x4000
 #define PF15                   0x8000
- 
+
 
 /* TIMER 0, 1, 2            Chapter 15 */
-#define TIMER0_CONFIG          0xFFC00600
-#define TIMER0_COUNTER         0xFFC00604
-#define TIMER0_PERIOD          0xFFC00608
-#define TIMER0_WIDTH           0xFFC0060C
+#define TIMER0_CONFIG          0xFFC00600L
+#define TIMER0_COUNTER         0xFFC00604L
+#define TIMER0_PERIOD          0xFFC00608L
+#define TIMER0_WIDTH           0xFFC0060CL
 
-#define TIMER1_CONFIG          0xFFC00610  
-#define TIMER1_COUNTER         0xFFC00614        
-#define TIMER1_PERIOD          0xFFC00618         
-#define TIMER1_WIDTH           0xFFC0061C          
+#define TIMER1_CONFIG          0xFFC00610L
+#define TIMER1_COUNTER         0xFFC00614L
+#define TIMER1_PERIOD          0xFFC00618L
+#define TIMER1_WIDTH           0xFFC0061CL
 
-#define TIMER2_CONFIG          0xFFC00620  
-#define TIMER2_COUNTER         0xFFC00624        
-#define TIMER2_PERIOD          0xFFC00628         
-#define TIMER2_WIDTH           0xFFC0062C          
+#define TIMER2_CONFIG          0xFFC00620L
+#define TIMER2_COUNTER         0xFFC00624L
+#define TIMER2_PERIOD          0xFFC00628L
+#define TIMER2_WIDTH           0xFFC0062CL
 
-#define TIMER_ENABLE           0xFFC00640
-#define TIMER_DISABLE          0xFFC00644
-#define TIMER_STATUS           0xFFC00648
+#define TIMER_ENABLE           0xFFC00640L
+#define TIMER_DISABLE          0xFFC00644L
+#define TIMER_STATUS           0xFFC00648L
 
 /* Real Time Clock          Chapter 16 */
-#define RTC_STAT               0xFFC00300
-#define RTC_ICTL               0xFFC00304
-#define RTC_ISTAT              0xFFC00308
-#define RTC_SWCNT              0xFFC0030C
-#define RTC_ALARM              0xFFC00310
-#define RTC_FAST               0xFFC00314
-#define RTC_PREN               0xFFC00314
+#define RTC_STAT               0xFFC00300L
+#define RTC_ICTL               0xFFC00304L
+#define RTC_ISTAT              0xFFC00308L
+#define RTC_SWCNT              0xFFC0030CL
+#define RTC_ALARM              0xFFC00310L
+#define RTC_FAST               0xFFC00314L
+#define RTC_PREN               0xFFC00314L
 
 /* RTC_FAST Mask (RTC_PREN Mask) */
 #define ENABLE_PRESCALE        0x00000001
 #define PREN                   0x00000001
 
-/* Asynchronous Memory Controller EBUI, Chapter 17*/ 
-#define EBIU_AMGCTL            0xFFC00A00  
-#define EBIU_AMBCTL0           0xFFC00A04
-#define EBIU_AMBCTL1           0xFFC00A08
+/* Asynchronous Memory Controller EBUI, Chapter 17*/
+#define EBIU_AMGCTL            0xFFC00A00L
+#define EBIU_AMBCTL0           0xFFC00A04L
+#define EBIU_AMBCTL1           0xFFC00A08L
 
 /* SDRAM Controller External Bus Interface Unit */
 
-#define EBIU_SDGCTL            0xFFC00A10
-#define EBIU_SDBCTL            0xFFC00A14
-#define EBIU_SDRRC             0xFFC00A18
-#define EBIU_SDSTAT            0xFFC00A1C
+#define EBIU_SDGCTL            0xFFC00A10L
+#define EBIU_SDBCTL            0xFFC00A14L
+#define EBIU_SDRRC             0xFFC00A18L
+#define EBIU_SDSTAT            0xFFC00A1CL
 
 #ifdef __cplusplus
 }
