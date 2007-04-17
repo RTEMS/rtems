@@ -64,7 +64,7 @@ register unsigned long  *stack_ptr asm("r15");
  */
 
 void _CPU_Context_save_fp(
-  void **fp_context_ptr     /* r4 */
+  Context_Control_fp **fp_context_ptr     /* r4 */
 )
 {
 #if SH_HAS_FPU
@@ -121,7 +121,7 @@ asm volatile("\n\
  */
 
 void _CPU_Context_restore_fp(
-  void **fp_context_ptr     /* r4 */
+  Context_Control_fp **fp_context_ptr     /* r4 */
 )
 {
 #if SH_HAS_FPU

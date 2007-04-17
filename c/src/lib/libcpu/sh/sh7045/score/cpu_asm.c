@@ -140,7 +140,7 @@ unsigned int sh_set_irq_priority(
  */
 
 void _CPU_Context_save_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 )
 {
 }
@@ -159,7 +159,7 @@ void _CPU_Context_save_fp(
  */
 
 void _CPU_Context_restore_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 )
 {
 }
