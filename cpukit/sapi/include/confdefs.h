@@ -1182,6 +1182,48 @@ rtems_configuration_table Configuration = {
 
 #endif /* CONFIGURE_HAS_OWN_CONFIGURATION_TABLE */
 
+/*
+ *  If the user has configured a set of Classic API Initialization Tasks,
+ *  then we need to install the code that runs that loop.
+ */
+#ifdef CONFIGURE_INIT
+  #ifdef CONFIGURE_RTEMS_INIT_TASKS_TABLE
+    void (_RTEMS_tasks_Initialize_user_tasks_body)(void);
+    void (*_RTEMS_tasks_Initialize_user_tasks_p)(void) =
+              _RTEMS_tasks_Initialize_user_tasks_body;
+  #else
+    void (*_RTEMS_tasks_Initialize_user_tasks_p)(void) = NULL;
+  #endif
+#endif
+
+/*
+ *  If the user has configured a set of POSIX Initialization Threads,
+ *  then we need to install the code that runs that loop.
+ */
+#ifdef CONFIGURE_INIT
+  #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
+    void _POSIX_Threads_Initialize_user_threads_body(void);
+    void (*_POSIX_Threads_Initialize_user_threads_p)(void) = 
+	      _POSIX_Threads_Initialize_user_threads_body;
+  #else
+    void (*_POSIX_Threads_Initialize_user_threads_p)(void) = NULL;
+  #endif
+#endif
+
+/*
+ *  If the user has configured a set of ITRON Initialization Tasks,
+ *  then we need to install the code that runs that loop.
+ */
+#ifdef CONFIGURE_INIT
+  #ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
+    void _ITRON_Task_Initialize_user_tasks_body(void);
+    void (*_ITRON_Initialize_user_tasks_p)(void) = 
+	      _ITRON_Task_Initialize_user_tasks_body;
+  #else
+    void (*_ITRON_Initialize_user_tasks_p)(void) = NULL;
+  #endif
+#endif
+
 #ifdef __cplusplus
 }
 #endif
@@ -1211,6 +1253,18 @@ rtems_configuration_table Configuration = {
     !defined(CONFIGURE_ITRON_INIT_TASK_TABLE)
 #error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
 #endif
+
+/*
+ *  These names have been obsoleted so make the user application stop compiling
+ */
+#if defined(CONFIGURE_TEST_NEEDS_TIMER_DRIVER) || \
+    defined(CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER) || \
+    defined(CONFIGURE_TEST_NEEDS_CLOCK_DRIVER) || \
+    defined(CONFIGURE_TEST_NEEDS_RTC_DRIVER) || \
+    defined(CONFIGURE_TEST_NEEDS_STUB_DRIVER)
+#error "CONFIGURATION ERROR: CONFIGURE_TEST_XXX constants are obsolete"
+#endif
+
 
 #endif
 /* end of include file */

@@ -2,7 +2,7 @@
  *  RTEMS Task Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +34,7 @@
 
 /*PAGE
  *
- *  _RTEMS_tasks_Initialize_user_tasks
+ *  _RTEMS_tasks_Initialize_user_tasks_body
  *
  *  This routine creates and starts all configured user
  *  initialzation threads.
@@ -44,7 +44,7 @@
  *  Output parameters:  NONE
  */
 
-void _RTEMS_tasks_Initialize_user_tasks( void )
+void _RTEMS_tasks_Initialize_user_tasks_body( void )
 {
   uint32_t                          index;
   uint32_t                          maximum;

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,88 +55,4 @@ void _ITRON_Fixed_memory_pool_Manager_initialization(
    *  NOTE: No MP Support YET in RTEMS ITRON implementation.
    */
 
-}
-
-/*
- *  cre_mpf - Create Fixed-Size Memorypool
- */
-
-ER cre_mpf(
-  ID      mpfid,
-  T_CMPF *pk_cmpf
-)
-{
-  return E_OK;
-}
-
-/*
- *  del_mpf - Delete Fixed-Size Memorypool
- */
-
-ER del_mpf(
-  ID mpfid
-)
-{
-  return E_OK;
-}
-
-/*
- *  get_blf - Get Fixed-Size Memory Block
- */
-
-ER get_blf(
-  VP *p_blf,
-  ID  mpfid
-)
-{
-  return E_OK;
-}
-
-/*
- *  pget_blf - Poll and Get Fixed-Size Memory Block
- */
-
-ER pget_blf(
-  VP *p_blf,
-  ID  mpfid
-)
-{
-  return E_OK;
-}
-
-/*
- *  tget_blf - Get Fixed-Size Memory Block with Timeout
- */
-
-ER tget_blf(
-  VP *p_blf,
-  ID  mpfid,
-  TMO tmout
-)
-{
-  return E_OK;
-}
-
-/*
- *  rel_blf - Release Fixed-Size Memory Block
- */
-
-ER rel_blf(
-  ID mpfid,
-  VP blf
-)
-{
-  return E_OK;
-}
-
-/*
- *  ref_mpf - Reference Fixed-Size Memorypool Status
- */
-
-ER ref_mpf(
-  T_RMPF *pk_rmpf,
-  ID      mpfid
-)
-{
-  return E_OK;
 }

@@ -121,7 +121,8 @@ libposix_a_SOURCES += src/pthread.c src/pthreadsetcputime.c \
     src/pthreadattrsetschedparam.c src/pthreadattrgetschedparam.c \
     src/pthreadattrgetschedpolicy.c src/pthreadattrsetschedpolicy.c \
     src/pthreadattrgetinheritsched.c src/pthreadattrsetinheritsched.c \
-    src/pthreadattrgetscope.c src/pthreadattrsetscope.c
+    src/pthreadattrgetscope.c src/pthreadattrsetscope.c \
+    src/pthreadinitthreads.c
 
 ## PSIGNAL_C_FILES
 libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \

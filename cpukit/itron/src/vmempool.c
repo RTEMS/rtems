@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,91 +55,4 @@ void _ITRON_Variable_memory_pool_Manager_initialization(
    *  NOTE: No MP Support YET in RTEMS ITRON implementation.
    */
 
-}
-
-/*
- *  cre_mpl - Create Variable-Size Memorypool
- */
-
-ER cre_mpl(
-  ID      mplid,
-  T_CMPL *pk_cmpl
-)
-{
-  return E_OK;
-}
-
-/*
- *  del_mpl - Delete Variable-Size Memorypool
- */
-
-ER del_mpl(
-  ID mplid
-)
-{
-  return E_OK;
-}
-
-/*
- *  get_blk - Get Variable-Size Memory Block
- */
-
-ER get_blk(
-  VP  *p_blk,
-  ID   mplid,
-  INT  blksz
-)
-{
-  return E_OK;
-}
-
-/*
- *  pget_blk - Poll and Get Variable-Size Memory Block
- */
-
-ER pget_blk(
-  VP  *p_blk,
-  ID   mplid,
-  INT  blksz
-)
-{
-  return E_OK;
-}
-
-/*
- *  tget_blk - Get Variable-Size Memory Block with Timeout
- */
-
-ER tget_blk(
-  VP  *p_blk,
-  ID   mplid,
-  INT  blksz,
-  TMO  tmout
-)
-{
-  return E_OK;
-}
-
-/*
- *  rel_blk - Release Variable-Size Memory Block
- */
-
-ER rel_blk(
-  ID  mplid,
-  VP  blk
-)
-{
-  return E_OK;
-}
-
-/*
- *  ref_mpl - Reference Variable-Size Memorypool Status
- */
-
-ER ref_mpl(
-  T_RMPL *pk_rmpl,
-  ID      mplid
-)
-{
-  return E_OK;
 }

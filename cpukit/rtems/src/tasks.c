@@ -291,3 +291,22 @@ void _RTEMS_tasks_Manager_initialization(
 #endif
 
 }
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Initialize_user_tasks
+ *
+ *  This routine creates and starts all configured user
+ *  initialzation threads.
+ *
+ *  Input parameters: NONE
+ *
+ *  Output parameters:  NONE
+ */
+
+void _RTEMS_tasks_Initialize_user_tasks( void )
+{
+  extern void (*_RTEMS_tasks_Initialize_user_tasks_p)(void);
+  if ( _RTEMS_tasks_Initialize_user_tasks_p )
+    (*_RTEMS_tasks_Initialize_user_tasks_p)();
+}

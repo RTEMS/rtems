@@ -56,7 +56,8 @@ include_rtems_itron_HEADERS += inline/rtems/itron/eventflags.inl \
 
 TASK_C_FILES = src/task.c src/cre_tsk.c src/del_tsk.c src/sta_tsk.c \
     src/ext_tsk.c src/exd_tsk.c src/ter_tsk.c src/dis_dsp.c src/ena_dsp.c \
-    src/chg_pri.c src/rot_rdq.c src/rel_wai.c src/get_tid.c src/ref_tsk.c
+    src/chg_pri.c src/rot_rdq.c src/rel_wai.c src/get_tid.c src/ref_tsk.c \
+    src/itroninittasks.c
 
 TASKSYNC_C_FILES = src/sus_tsk.c src/rsm_tsk.c src/frsm_tsk.c src/slp_tsk.c \
     src/tslp_tsk.c src/wup_tsk.c src/can_wup.c
@@ -64,7 +65,9 @@ TASKSYNC_C_FILES = src/sus_tsk.c src/rsm_tsk.c src/frsm_tsk.c src/slp_tsk.c \
 SEMAPHORE_C_FILES = src/itronsem.c src/cre_sem.c src/del_sem.c \
     src/preq_sem.c src/ref_sem.c src/sig_sem.c src/twai_sem.c src/wai_sem.c
 
-EVENTFLAGS_C_FILES = src/eventflags.c
+EVENTFLAGS_C_FILES = src/eventflags.c src/cre_flg.c src/del_flg.c \
+    src/set_flg.c src/clr_flg.c src/wai_flg.c src/pol_flg.c \
+    src/twai_flg.c src/ref_flg.c
 
 MAILBOX_C_FILES = src/mbox.c
 
@@ -72,19 +75,29 @@ MSGBUFFER_C_FILES = src/msgbuffer.c src/msgbuffertranslatereturncode.c \
     src/cre_mbf.c src/del_mbf.c src/prcv_mbf.c src/psnd_mbf.c src/rcv_mbf.c \
     src/ref_mbf.c src/snd_mbf.c src/trcv_mbf.c src/tsnd_mbf.c
 
-RENDEZVOUS_C_FILES = src/port.c
+RENDEZVOUS_C_FILES = src/port.c src/cre_por.c src/del_por.c src/cal_por.c \
+    src/pcal_por.c src/tcal_por.c src/acp_por.c src/pacp_por.c \
+    src/tacp_por.c src/fwd_por.c src/rpl_rdv.c src/ref_por.c
 
-INTERRUPT_C_FILES = src/itronintr.c
+INTERRUPT_C_FILES = src/itronintr.c src/def_int.c src/loc_cpu.c \
+    src/unl_cpu.c src/dis_int.c src/ena_int.c src/chg_iXX.c src/ref_iXX.c \
+    src/ret_int.c src/ret_wup.c
 
-VARIABLE_MEMORY_POOL_C_FILES = src/vmempool.c
+VARIABLE_MEMORY_POOL_C_FILES = src/vmempool.c src/cre_mpl.c src/del_mpl.c \
+    src/get_blk.c src/pget_blk.c src/tget_blk.c src/rel_blk.c src/ref_mpl.c
 
-FIXED_MEMORY_POOL_C_FILES = src/fmempool.c
+FIXED_MEMORY_POOL_C_FILES = src/fmempool.c src/cre_mpf.c src/del_mpf.c \
+    src/get_blf.c src/pget_blf.c src/tget_blf.c src/rel_blf.c src/ref_mpf.c
 
-TIME_C_FILES = src/itrontime.c
+TIME_C_FILES = src/itrontime.c src/set_tim.c src/get_tim.c src/dly_tsk.c \
+    src/def_cyc.c src/act_cyc.c src/ref_cyc.c src/def_alm.c src/ref_alm.c \
+    src/ret_tmr.c 
 
-CONFIGURATION_C_FILES = src/sysmgmt.c
+CONFIGURATION_C_FILES = src/sysmgmt.c src/get_ver.c src/ref_sys.c \
+    src/ref_cfg.c src/def_svc.c src/def_exc.c
 
-NETWORK_C_FILES = src/network.c
+NETWORK_C_FILES = src/network.c src/nrea_dat.c src/nwri_dat.c \
+    src/nget_nod.c src/nget_ver.c
 
 C_FILES = $(TASK_C_FILES) $(TASKSYNC_C_FILES) $(SEMAPHORE_C_FILES) \
     $(EVENTFLAGS_C_FILES) $(MAILBOX_C_FILES) $(MSGBUFFER_C_FILES) \

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,55 +17,4 @@
 
 #include <rtems/itron/network.h>
 
-/*
- *  nrea_dat - Read Data from another Node
- */
-
-ER nrea_dat(
-  INT *p_reasz,
-  VP   dstadr,
-  NODE srcnode,
-  VP   srcadr,
-  INT  datsz
-)
-{
-  return E_OK;
-}
-
-/*
- *  nwri_dat - Write Data to another Node
- */
-
-ER nwri_dat(
-  INT  *p_wrisz,
-  NODE  dstnode,
-  VP    dstadr,
-  VP    srcadr,
-  INT   datsz
-)
-{
-  return E_OK;
-}
-
-/*
- *  nget_nod - Get Local Node Number
- */
-
-ER nget_nod(
-  NODE *p_node
-)
-{
-  return E_OK;
-}
-
-/*
- *  nget_ver - Get Version Information of another Node
- */
-
-ER nget_ver(
-  T_VER *pk_ver,
-  NODE   node
-)
-{
-  return E_OK;
-}
+/* no ITRON Network Manager specific initialization required */

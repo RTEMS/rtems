@@ -35,10 +35,10 @@
  */
 
 void _IO_Manager_initialization(
-    rtems_driver_address_table *driver_table,
-    uint32_t                    drivers_in_table,
-    uint32_t                    number_of_drivers,
-    uint32_t                    number_of_devices
+  rtems_driver_address_table *driver_table,
+  uint32_t                    drivers_in_table,
+  uint32_t                    number_of_drivers,
+  uint32_t                    number_of_devices
 )
 {
   void                *tmp;
@@ -46,23 +46,9 @@ void _IO_Manager_initialization(
   rtems_driver_name_t *np;
 
   if ( number_of_drivers < drivers_in_table )
-      number_of_drivers = drivers_in_table;
+    number_of_drivers = drivers_in_table;
 
-  tmp = _Workspace_Allocate_or_fatal_error(
-    sizeof( rtems_driver_address_table ) * ( number_of_drivers )
-  );
-
-  _IO_Driver_address_table = (rtems_driver_address_table *) tmp;
-
-  memset(
-    _IO_Driver_address_table, 0,
-    sizeof( rtems_driver_address_table ) * ( number_of_drivers )
-  );
-
-  if ( drivers_in_table )
-      for ( index = 0 ; index < drivers_in_table ; index++ )
-        _IO_Driver_address_table[index] = driver_table[index];
-
+  _IO_Driver_address_table = driver_table;
   _IO_Number_of_drivers = number_of_drivers;
   _IO_Number_of_devices = number_of_devices;
 
@@ -124,41 +110,39 @@ rtems_status_code rtems_io_register_driver(
     rtems_device_major_number  *registered_major
 )
 {
-    *registered_major = 0;
+  *registered_major = 0;
 
-    /*
-     * Test for initialise/open being present to indicate the driver slot is
-     * in use.
-     */
+  /*
+   * Test for initialise/open being present to indicate the driver slot is
+   * in use.
+   */
 
-    if ( major >= _IO_Number_of_drivers )
-      return RTEMS_INVALID_NUMBER;
+  if ( major >= _IO_Number_of_drivers )
+    return RTEMS_INVALID_NUMBER;
 
-    if ( major == 0 )
-    {
-        for ( major = _IO_Number_of_drivers - 1 ; major ; major-- )
-            if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
-                 _IO_Driver_address_table[major].open_entry == 0 )
-                break;
+  if ( major == 0 ) {
+    for ( major = _IO_Number_of_drivers - 1 ; major ; major-- )
+      if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
+           _IO_Driver_address_table[major].open_entry == 0 )
+        break;
 
-        if (( major == 0 ) &&
-            ( _IO_Driver_address_table[major].initialization_entry == 0 &&
-              _IO_Driver_address_table[major].open_entry == 0 ))
-            return RTEMS_TOO_MANY;
-    }
+      if (( major == 0 ) &&
+          ( _IO_Driver_address_table[major].initialization_entry == 0 &&
+            _IO_Driver_address_table[major].open_entry == 0 ))
+        return RTEMS_TOO_MANY;
+  }
 
-    if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
-         _IO_Driver_address_table[major].open_entry == 0 )
-    {
-        _IO_Driver_address_table[major] = *driver_table;
-        *registered_major               = major;
+  if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
+       _IO_Driver_address_table[major].open_entry == 0 ) {
+    _IO_Driver_address_table[major] = *driver_table;
+    *registered_major               = major;
 
-        rtems_io_initialize( major, 0, NULL );
+    rtems_io_initialize( major, 0, NULL );
 
-        return RTEMS_SUCCESSFUL;
-    }
+    return RTEMS_SUCCESSFUL;
+  }
 
-    return RTEMS_RESOURCE_IN_USE;
+  return RTEMS_RESOURCE_IN_USE;
 }
 
 /*PAGE
@@ -176,19 +160,18 @@ rtems_status_code rtems_io_register_driver(
  */
 
 rtems_status_code rtems_io_unregister_driver(
-    rtems_device_major_number major
+  rtems_device_major_number major
 )
 {
-    if ( major < _IO_Number_of_drivers )
-    {
-        memset(
-            &_IO_Driver_address_table[major],
-            0,
-            sizeof( rtems_driver_address_table )
-        );
-        return RTEMS_SUCCESSFUL;
-    }
-    return RTEMS_UNSATISFIED;
+  if ( major < _IO_Number_of_drivers ) {
+    memset(
+      &_IO_Driver_address_table[major],
+      0,
+      sizeof( rtems_driver_address_table )
+    );
+    return RTEMS_SUCCESSFUL;
+  }
+  return RTEMS_UNSATISFIED;
 }
 
 /*PAGE
@@ -214,31 +197,28 @@ rtems_status_code rtems_io_register_name(
     rtems_device_minor_number minor
   )
 {
-    rtems_driver_name_t *np;
-    uint32_t   level;
-    uint32_t   index;
+  rtems_driver_name_t *np;
+  uint32_t   level;
+  uint32_t   index;
 
-    /* find an empty slot */
-    for( index=0, np = _IO_Driver_name_table ;
-         index < _IO_Number_of_devices ;
-         index++, np++ )
-    {
+  /* find an empty slot */
+  for( index=0, np = _IO_Driver_name_table ;
+       index < _IO_Number_of_devices ;
+       index++, np++ ) {
 
-        _ISR_Disable(level);
-        if (np->device_name == 0)
-        {
-            np->device_name = device_name;
-            np->device_name_length = strlen(device_name);
-            np->major = major;
-            np->minor = minor;
-            _ISR_Enable(level);
+    _ISR_Disable(level);
+      if (np->device_name == 0) {
+	np->device_name = device_name;
+	np->device_name_length = strlen(device_name);
+	np->major = major;
+	np->minor = minor;
+	_ISR_Enable(level);
 
-            return RTEMS_SUCCESSFUL;
-        }
-        _ISR_Enable(level);
-    }
-
-    return RTEMS_TOO_MANY;
+	return RTEMS_SUCCESSFUL;
+      }
+    _ISR_Enable(level);
+  }
+  return RTEMS_TOO_MANY;
 }
 #endif
 
@@ -263,13 +243,13 @@ rtems_status_code rtems_io_initialize(
   void                      *argument
 )
 {
-    rtems_device_driver_entry callout;
+  rtems_device_driver_entry callout;
 
-    if ( major >= _IO_Number_of_drivers )
-        return RTEMS_INVALID_NUMBER;
+  if ( major >= _IO_Number_of_drivers )
+    return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].initialization_entry;
-    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
+  callout = _IO_Driver_address_table[major].initialization_entry;
+  return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -293,13 +273,13 @@ rtems_status_code rtems_io_open(
   void                      *argument
 )
 {
-    rtems_device_driver_entry callout;
+  rtems_device_driver_entry callout;
 
-    if ( major >= _IO_Number_of_drivers )
-        return RTEMS_INVALID_NUMBER;
+  if ( major >= _IO_Number_of_drivers )
+    return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].open_entry;
-    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
+  callout = _IO_Driver_address_table[major].open_entry;
+  return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -323,13 +303,13 @@ rtems_status_code rtems_io_close(
   void                      *argument
 )
 {
-    rtems_device_driver_entry callout;
+  rtems_device_driver_entry callout;
 
-    if ( major >= _IO_Number_of_drivers )
-        return RTEMS_INVALID_NUMBER;
+  if ( major >= _IO_Number_of_drivers )
+    return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].close_entry;
-    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
+  callout = _IO_Driver_address_table[major].close_entry;
+  return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -353,13 +333,13 @@ rtems_status_code rtems_io_read(
   void                      *argument
 )
 {
-    rtems_device_driver_entry callout;
+  rtems_device_driver_entry callout;
 
-    if ( major >= _IO_Number_of_drivers )
-        return RTEMS_INVALID_NUMBER;
+  if ( major >= _IO_Number_of_drivers )
+    return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].read_entry;
-    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
+  callout = _IO_Driver_address_table[major].read_entry;
+  return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -383,13 +363,13 @@ rtems_status_code rtems_io_write(
   void                      *argument
 )
 {
-    rtems_device_driver_entry callout;
+  rtems_device_driver_entry callout;
 
-    if ( major >= _IO_Number_of_drivers )
-        return RTEMS_INVALID_NUMBER;
+  if ( major >= _IO_Number_of_drivers )
+    return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].write_entry;
-    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
+  callout = _IO_Driver_address_table[major].write_entry;
+  return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -413,11 +393,11 @@ rtems_status_code rtems_io_control(
   void                      *argument
 )
 {
-    rtems_device_driver_entry callout;
+  rtems_device_driver_entry callout;
 
-    if ( major >= _IO_Number_of_drivers )
-        return RTEMS_INVALID_NUMBER;
+  if ( major >= _IO_Number_of_drivers )
+    return RTEMS_INVALID_NUMBER;
 
-    callout = _IO_Driver_address_table[major].control_entry;
-    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
+  callout = _IO_Driver_address_table[major].control_entry;
+  return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }

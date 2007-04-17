@@ -1,3 +1,37 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* itron/Makefile.am, itron/src/eventflags.c, itron/src/fmempool.c,
+	itron/src/itronintr.c, itron/src/itrontime.c, itron/src/network.c,
+	itron/src/port.c, itron/src/sysmgmt.c, itron/src/task.c,
+	itron/src/vmempool.c, posix/Makefile.am, posix/src/pthread.c,
+	rtems/src/taskinitusers.c, rtems/src/tasks.c,
+	sapi/include/confdefs.h, sapi/src/io.c: Various modification to
+	reduce executable size. Most were refactoring of files. Split ITRON
+	API files. Implemented mechanism to avoid initialization task/thread
+	loop being linked in when that style of task initialization was not
+	being used.
+	* itron/src/acp_por.c, itron/src/act_cyc.c, itron/src/cal_por.c,
+	itron/src/chg_iXX.c, itron/src/clr_flg.c, itron/src/cre_flg.c,
+	itron/src/cre_mpf.c, itron/src/cre_mpl.c, itron/src/cre_por.c,
+	itron/src/def_alm.c, itron/src/def_cyc.c, itron/src/def_exc.c,
+	itron/src/def_int.c, itron/src/def_svc.c, itron/src/del_flg.c,
+	itron/src/del_mpf.c, itron/src/del_mpl.c, itron/src/del_por.c,
+	itron/src/dis_int.c, itron/src/dly_tsk.c, itron/src/ena_int.c,
+	itron/src/fwd_por.c, itron/src/get_blf.c, itron/src/get_blk.c,
+	itron/src/get_tim.c, itron/src/get_ver.c, itron/src/itroninittasks.c,
+	itron/src/loc_cpu.c, itron/src/nget_nod.c, itron/src/nget_ver.c,
+	itron/src/nrea_dat.c, itron/src/nwri_dat.c, itron/src/pacp_por.c,
+	itron/src/pcal_por.c, itron/src/pget_blf.c, itron/src/pget_blk.c,
+	itron/src/pol_flg.c, itron/src/ref_alm.c, itron/src/ref_cfg.c,
+	itron/src/ref_cyc.c, itron/src/ref_flg.c, itron/src/ref_iXX.c,
+	itron/src/ref_mpf.c, itron/src/ref_mpl.c, itron/src/ref_por.c,
+	itron/src/ref_sys.c, itron/src/rel_blf.c, itron/src/rel_blk.c,
+	itron/src/ret_int.c, itron/src/ret_tmr.c, itron/src/ret_wup.c,
+	itron/src/rpl_rdv.c, itron/src/set_flg.c, itron/src/set_tim.c,
+	itron/src/tacp_por.c, itron/src/tcal_por.c, itron/src/tget_blf.c,
+	itron/src/tget_blk.c, itron/src/twai_flg.c, itron/src/unl_cpu.c,
+	itron/src/wai_flg.c, posix/src/pthreadinitthreads.c: New files.
+
 2007-04-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/score/thread.h: 

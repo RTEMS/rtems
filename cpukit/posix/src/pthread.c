@@ -268,44 +268,9 @@ User_extensions_routine _POSIX_Threads_Exitted_extension(
 
 void _POSIX_Threads_Initialize_user_threads( void )
 {
-  int                                 status;
-  uint32_t                            index;
-  uint32_t                            maximum;
-  posix_initialization_threads_table *user_threads;
-  pthread_t                           thread_id;
-  pthread_attr_t                      attr;
-
-  user_threads = _POSIX_Threads_User_initialization_threads;
-  maximum      = _POSIX_Threads_Number_of_initialization_threads;
-
-  if ( !user_threads || maximum == 0 )
-    return;
-
-  /*
-   *  Be careful .. if the default attribute set changes, this may need to.
-   *
-   *  Setting the attributes explicitly is critical, since we don't want
-   *  to inherit the idle tasks attributes.
-   */
-
-  for ( index=0 ; index < maximum ; index++ ) {
-    status = pthread_attr_init( &attr );
-    assert( !status );
-
-    status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-    assert( !status );
-
-    status = pthread_attr_setstacksize( &attr, user_threads[ index ].stack_size);
-    assert( !status );
-
-    status = pthread_create(
-      &thread_id,
-      &attr,
-      user_threads[ index ].thread_entry,
-      NULL
-    );
-    assert( !status );
-  }
+  extern void (*_POSIX_Threads_Initialize_user_threads_p)(void);
+  if ( _POSIX_Threads_Initialize_user_threads_p )
+    (*_POSIX_Threads_Initialize_user_threads_p)();
 }
 
 /*PAGE
