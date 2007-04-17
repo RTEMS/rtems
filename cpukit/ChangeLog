@@ -1,5 +1,7 @@
 2007-04-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/cpu/i386/rtems/score/cpu.h:
+	  Use Context_Control_fp* instead of void* for fp_contexts.
 	* score/cpu/sparc/cpu.c: 
 	  Use Context_Control_fp* instead of void* for fp_contexts.
 	* score/cpu/sparc/rtems/score/cpu.h, score/cpu/unix/rtems/score/cpu.h:
