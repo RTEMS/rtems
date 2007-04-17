@@ -28,6 +28,20 @@
 #define SHF_MINUTE    6
 #define SHF_SECOND    0
 
+/* The following are inside RTEMS -- we are violating visibility!!!
+ * Perhaps an API could be defined to get days since 1 Jan.
+ */ 
+extern const uint16_t   _TOD_Days_to_date[2][13];
+
+/*
+ *  Prototypes and routines used below
+ */
+int Leap_years_until_now (int year);
+
+void Init_RTC(void)
+{
+  *((uint16_t*)RTC_PREN)    = 0x0001; /* Enable Prescaler */
+}
 
 rtems_device_driver rtc_initialize(
   rtems_device_major_number  major,
@@ -51,13 +65,6 @@ rtems_device_driver rtc_initialize(
   setRealTimeToRTEMS();
   return RTEMS_SUCCESSFUL;
 }
-
-void Init_RTC(void)
-{
-  *((uint16_t*)RTC_PREN)    = 0x0001; /* Enable Prescaler */
-}
-
-int Leap_years_until_now (int year);
 
 /*
  *  Read time from RTEMS' clock manager and set it to RTC
@@ -98,12 +105,19 @@ int setRealTime(
   
   tod_temp = *tod;
   
-  days = (tod_temp.year - TOD_BASE_YEAR)*365 + _TOD_Days_to_date[0][tod_temp.month] + tod_temp.day - 1;
-  if (tod_temp.month < 3) days +=  Leap_years_until_now (tod_temp.year - 1);
-  else days +=  Leap_years_until_now (tod_temp.year);
+  days = (tod_temp.year - TOD_BASE_YEAR) * 365 + \
+          _TOD_Days_to_date[0][tod_temp.month] + tod_temp.day - 1;
+  if (tod_temp.month < 3)
+    days +=  Leap_years_until_now (tod_temp.year - 1);
+  else
+    days +=  Leap_years_until_now (tod_temp.year);
   
-  *((uint32_t*)RTC_STAT) = (days << SHF_DAY)|(tod_temp.hour << SHF_HOUR)|(tod_temp.minute << SHF_MINUTE)|tod_temp.second;
+  *((uint32_t*)RTC_STAT) = (days << SHF_DAY)|
+                           (tod_temp.hour << SHF_HOUR)|
+                           (tod_temp.minute << SHF_MINUTE)|
+                           tod_temp.second;
 
+  return 0;
 }
 
  /*
@@ -124,19 +138,18 @@ void getRealTime(
   
   /* finding year */
   tod_temp.year = days/365 + TOD_BASE_YEAR;
-  if (days%365 >  Leap_years_until_now (tod_temp.year - 1)){
+  if (days%365 >  Leap_years_until_now (tod_temp.year - 1)) {
     days = (days%365) -  Leap_years_until_now (tod_temp.year - 1);
-  }else{
+  } else { 
     tod_temp.year--;
     days = (days%365) + 365 -  Leap_years_until_now (tod_temp.year - 1);
   }
 
   /* finding month and day */  
-  Leap_year = (((!(tod_temp.year%4)) && (tod_temp.year%100)) || (!(tod_temp.year%400)))?1:0;
-  for (n=1; n<=12; n++)
-  {
-    if (days <= _TOD_Days_to_date[Leap_year][n+1])
-    {
+  Leap_year = (((!(tod_temp.year%4)) && (tod_temp.year%100)) ||
+              (!(tod_temp.year%400)))?1:0;
+  for (n=1; n<=12; n++) {
+    if (days <= _TOD_Days_to_date[Leap_year][n+1]) {
       tod_temp.month = n;
       tod_temp.day = days - _TOD_Days_to_date[Leap_year][n];
       break;
@@ -173,5 +186,7 @@ int checkRealTime (void)
 
 int Leap_years_until_now (int year)
 {
-  return ((year/4 - year/100 + year/400) - ((TOD_BASE_YEAR - 1)/4 - (TOD_BASE_YEAR - 1)/100 + (TOD_BASE_YEAR - 1)/400));
+  return ((year/4 - year/100 + year/400) -
+         ((TOD_BASE_YEAR - 1)/4 - (TOD_BASE_YEAR - 1)/100 +
+          (TOD_BASE_YEAR - 1)/400));
 }

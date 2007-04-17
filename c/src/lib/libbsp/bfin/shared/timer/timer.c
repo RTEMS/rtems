@@ -60,9 +60,9 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  uint32_t         clicks;
-  uint32_t         total;
-  register int *cycles asm ("R2");
+  uint32_t          clicks;
+  uint32_t          total;
+  register uint32_t cycles asm ("R2");
 
   /* stop counter */ 
   asm("R2 = SYSCFG;");

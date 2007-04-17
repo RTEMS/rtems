@@ -1,3 +1,8 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/clock/rtc.c, shared/timer/timer.c: Fix compile errors and
+	address most warnings about constants being too large.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
