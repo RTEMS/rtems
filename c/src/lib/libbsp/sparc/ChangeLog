@@ -1,3 +1,8 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* erc32/tools/runtest.in, leon2/tools/runtest.in,
+	leon3/tools/runtest.in: Do not run pppd.exe from batch mode script.
+
 2007-03-11	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/bspstart.c: Remove assignments of
