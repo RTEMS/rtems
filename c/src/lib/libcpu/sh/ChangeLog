@@ -1,3 +1,9 @@
+2007-04-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sh7032/score/cpu_asm.c, sh7045/score/cpu_asm.c,
+	sh7750/score/cpu_asm.c:
+	Use Context_Control_fp* instead of void* for fp_contexts.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
