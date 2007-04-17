@@ -6,7 +6,7 @@
  *  The tick frequency is directly programmed to the configured number of
  *  microseconds per tick.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -130,6 +130,18 @@ void Clock_exit( void )
   (void) BSP_disconnect_clock_handler ();
 }
  
+uint32_t Clock_driver_nanoseconds_since_last_tick(void)
+{
+  uint32_t clicks, tmp;
+
+  PPC_Get_decrementer( clicks ); 
+
+  tmp = (Clock_Decrementer_value - clicks) * 1000000;
+  tmp /= (BSP_bus_frequency/BSP_time_base_divisor);
+
+  return tmp;
+}
+
 /*
  *  Clock_initialize
  *
@@ -145,7 +157,6 @@ void Clock_exit( void )
  *  Return values:
  *    rtems_device_driver status code
  */
-
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -159,6 +170,13 @@ rtems_device_driver Clock_initialize(
    * so no interrupts will happen in a while.
    */
   PPC_Set_decrementer( (unsigned)-1 );
+
+  /*
+   *  Set the nanoseconds since last tick handler
+   */
+  rtems_clock_set_nanoseconds_extension(
+    Clock_driver_nanoseconds_since_last_tick
+  );
 
   /* if a decrementer exception was pending, it is cleared by
    * executing the default (nop) handler at this point;

@@ -1,3 +1,8 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc6xx/clock/c_clock.c: Add initial cut at nanoseconds since last
+	tick handler.
+
 2007-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/include/byteorder.h: Use uint*_t instead of char/short/int.
