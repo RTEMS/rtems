@@ -1,3 +1,9 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* bootcard.c: RTEMS Workspace now defaults to not being zeroed. This
+	significantly speeds up boot time on targets not requiring memory to
+	be touched at boot time.
+
 2007-04-02	Joel Sherrill <joel@OARcorp.com>
 
 	* dummy_printk_support.c: New file.
