@@ -951,7 +951,7 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
 #if ( CPU_HARDWARE_FP == TRUE )
 #define _CPU_Context_Initialize_fp( _destination ) \
   { \
-   *((Context_Control_fp *) *((void **) _destination)) = _CPU_Null_fp_context; \
+   *(*(_destination)) = _CPU_Null_fp_context; \
   }
 #endif
 
@@ -1166,7 +1166,7 @@ void _CPU_Context_restore(
  */
 
 void _CPU_Context_save_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 /*
@@ -1176,7 +1176,7 @@ void _CPU_Context_save_fp(
  */
 
 void _CPU_Context_restore_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 );
 
 /*  The following routine swaps the endian format of an unsigned int.
