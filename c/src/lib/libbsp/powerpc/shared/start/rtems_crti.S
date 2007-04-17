@@ -1,7 +1,6 @@
 /* rtems_crti.S */
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
-#include <libcpu/io.h>
 
 	/* terminate the __init() function and create
 	 * a new head '_init' for use by RTEMS to

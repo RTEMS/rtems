@@ -1,3 +1,7 @@
+2007-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/start/rtems_crti.S: Remove unnecessary include of libcpu/io.h.
+
 2007-04-09	Thomas Doerfler |Thomas.Doerfler@embedded-brains.de>
 
 	* shared/motorola/motorola.c,shared/openpic/openpic.c, 
