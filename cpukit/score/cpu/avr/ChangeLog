@@ -1,3 +1,11 @@
+2007-04-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cpu_asm.c: 
+	  Use Context_Control_fp* instead of void* for fp_contexts.
+	* rtems/score/cpu.h:
+	  Use Context_Control_fp* instead of void* for fp_contexts.
+	  Eliminate evil casts.
+
 2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Remove unsigned64, signed64.
