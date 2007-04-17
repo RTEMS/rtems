@@ -1196,8 +1196,8 @@ rtems_device_driver mscan_read( rtems_device_major_number major,
                                  void * arg
                                )
   {
-  rtems_status_code status;
-  uint32_t          message_size = 0;
+  rtems_status_code          status;
+  size_t                     message_size = 0;
   rtems_libio_rw_args_t     *parms       = (rtems_libio_rw_args_t *)arg;
   struct mscan_rx_parms     *rx_parms    = (struct mscan_rx_parms *)(parms->buffer);
   struct can_message        *rx_mess     = (struct can_message *)(rx_parms->rx_mess);
@@ -1227,7 +1227,7 @@ rtems_device_driver mscan_read( rtems_device_major_number major,
 
   if((status = rtems_message_queue_receive(chan->rx_qid,
                                           (void *)(rx_mess),
-                                          (uint32_t *)&message_size,
+                                          &message_size,
                                           (uint32_t)(rx_parms->rx_flags),
                                           (rtems_interval)(rx_parms->rx_timeout)))
                                           != RTEMS_SUCCESSFUL)
