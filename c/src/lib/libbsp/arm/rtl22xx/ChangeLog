@@ -1,5 +1,6 @@
 2007-04-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Include preinstall.am
 	* bsp_specs: Sync with modern GCC.
 
 2007-04-25	Ray Xu <xr@trasin.net>
