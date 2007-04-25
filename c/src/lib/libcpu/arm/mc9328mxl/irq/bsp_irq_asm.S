@@ -9,7 +9,7 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *
- *  bsp_irq_asm.S,v 1.1 2002/11/13 17:55:06 joel Exp
+ *  $Id$
  */
 #define __asm__
 	

@@ -9,7 +9,7 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *
- *  $Id$Id:$ $
+ *  $Id$
  */
 #include <irq.h>
 #include <bsp.h>

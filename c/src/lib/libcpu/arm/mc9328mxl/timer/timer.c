@@ -20,7 +20,7 @@
  *  It is important that the timer start/stop overhead be determined 
  *  when porting or modifying this code.
  *
- *  timer.c,v 1.1 2002/11/13 17:55:09 joel Exp
+ *  $Id$
 */
 
 #include <rtems.h>
