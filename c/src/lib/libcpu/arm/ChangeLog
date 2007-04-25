@@ -1,3 +1,10 @@
+2007-04-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* lpc22xx/clock/clockdrv.c, lpc22xx/include/lpc22xx.h,
+	lpc22xx/irq/bsp_irq_asm.S, lpc22xx/irq/bsp_irq_init.c,
+	lpc22xx/irq/irq.c, lpc22xx/irq/irq.h, lpc22xx/timer/timer.c:
+	Use current OAR license file URL.
+
 2007-04-25	Ray Xu <xr@trasin.net>
 
 	* Makefile.am, configure.ac: Add lpc22xx support.
