@@ -1,0 +1,5 @@
+2007-04-25	Ray Xu <xr@trasin.net>
+
+	* Makefile.am, README, bsp_specs, configure.ac,
+	console/lpc22xx_uart.h, console/uart.c, include/bsp.h,
+	network/network.c: New (Initial submission).

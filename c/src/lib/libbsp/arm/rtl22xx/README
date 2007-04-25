@@ -1,0 +1,6 @@
+
+RTEMS bsp for Philips's ARM processor
+This BSP is design for Philips's LPC2210/LPC2212/LPC2214/LPC2290/LPC2294 (LPC22xx) serial ARM processor. 
+Philphs's LPC22xx ARM processor got an ARM7TDMI-S core, and can run at 60MHz. It has an external memory bus, and peripherals like UART, I2C, SPI, ADC and etc. Some of them got on chip flash (256k) and CAN.
+The board used to develop the board is compatible with LPC-E2214/LPC-E2294 boards from http://www.olimex.com. The board got a 256K SDRAM and two serial ports.
+The license and distribution terms for this file may be found in the file LICENSE in this distribution or at http://www.rtems.com/license/LICENSE
