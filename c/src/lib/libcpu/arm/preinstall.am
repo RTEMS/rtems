@@ -79,3 +79,12 @@ $(PROJECT_INCLUDE)/irq.h: s3c2400/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
 endif
+if lpc22xx
+$(PROJECT_INCLUDE)/lpc22xx.h: lpc22xx/include/lpc22xx.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/lpc22xx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/lpc22xx.h
+
+$(PROJECT_INCLUDE)/irq.h: lpc22xx/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+endif
