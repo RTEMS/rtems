@@ -115,5 +115,31 @@ s3c2400_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 s3c2400_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if lpc22xx
+include_HEADERS = lpc22xx/include/lpc22xx.h
+
+## lpc22xx/clock
+noinst_PROGRAMS += lpc22xx/clock.rel
+lpc22xx_clock_rel_SOURCES = lpc22xx/clock/clockdrv.c 
+lpc22xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+lpc22xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## lpc22xx/timer
+noinst_PROGRAMS += lpc22xx/timer.rel
+lpc22xx_timer_rel_SOURCES = lpc22xx/timer/timer.c
+lpc22xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+lpc22xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## lpc22xx/interrupt
+include_HEADERS += lpc22xx/irq/irq.h
+
+noinst_PROGRAMS += lpc22xx/irq.rel
+lpc22xx_irq_rel_SOURCES = lpc22xx/irq/irq.c lpc22xx/irq/bsp_irq_init.c \
+    ../../libbsp/arm/shared/irq/irq_init.c lpc22xx/irq/bsp_irq_asm.S \
+    ../../libbsp/arm/shared/irq/irq_asm.S lpc22xx/irq/irq.h
+lpc22xx_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
+lpc22xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

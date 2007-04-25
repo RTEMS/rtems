@@ -1,3 +1,10 @@
+2007-04-25	Ray Xu <xr@trasin.net>
+
+	* Makefile.am, configure.ac: Add lpc22xx support.
+	* lpc22xx/clock/clockdrv.c, lpc22xx/include/lpc22xx.h,
+	lpc22xx/irq/bsp_irq_asm.S, lpc22xx/timer/lpc_timer.h,
+	lpc22xx/timer/timer.c: New (Initial submission).
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* at91rm9200/clock/clock.c, at91rm9200/dbgu/dbgu.c,
