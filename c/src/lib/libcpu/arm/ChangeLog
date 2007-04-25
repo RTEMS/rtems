@@ -3,7 +3,8 @@
 	* Makefile.am, configure.ac: Add lpc22xx support.
 	* lpc22xx/clock/clockdrv.c, lpc22xx/include/lpc22xx.h,
 	lpc22xx/irq/bsp_irq_asm.S, lpc22xx/timer/lpc_timer.h,
-	lpc22xx/timer/timer.c: New (Initial submission).
+	lpc22xx/timer/timer.c, lpc22xx/irq/bsp_irq_init.c
+	lpc22xx/irq/irq.c, lpc22xx/irq/irq.h: New (Initial submission).
 
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
