@@ -14,6 +14,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([gba]);;
   gp32 )
     AC_CONFIG_SUBDIRS([gp32]);;
+  rtl22xx )
+    AC_CONFIG_SUBDIRS([rtl22xx]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
