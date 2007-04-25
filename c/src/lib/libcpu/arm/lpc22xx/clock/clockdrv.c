@@ -10,7 +10,7 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *
- *  clockdrv.c,v 1.1 2002/11/13 17:55:04 joel Exp
+ *  $Id$
 */
 #include <rtems.h>
 #include <bsp.h>
