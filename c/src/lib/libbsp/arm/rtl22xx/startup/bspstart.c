@@ -1,0 +1,284 @@
+/*
+ *  LPC22XX Startup code
+ *
+ *  Copyright (c) 2005 by Ray X <rayx.cn@gmail.com>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *
+ *  $Id$
+*/
+
+#include <bsp.h>
+#include <rtems/libcsupport.h>
+#include <rtems/libio.h>
+#include <lpc22xx.h>
+
+
+/*************************************************************/
+/* Macros                                                    */
+/*************************************************************/
+
+/*************************************************************/
+/* Data Structures                                           */
+/*************************************************************/
+
+/*************************************************************/
+/* Global Variables                                          */
+/*************************************************************/
+/*FIX ME:we do not have SDRAM, but can I define mutiple SRAM?*/
+
+extern void            *_flash_size;
+extern void            *_flash_base;
+extern void            *_sdram_size;
+extern void            *_sdram_base;
+extern void            *_bss_free_start;
+extern void            *_bss_start_;
+extern void            *_bss_end_;
+
+
+unsigned long           free_mem_start;
+unsigned long           free_mem_end;
+
+/* The original BSP configuration table from the application and our copy of it
+   with some changes. */
+
+extern rtems_configuration_table  Configuration;
+rtems_configuration_table  BSP_Configuration;
+
+rtems_cpu_table Cpu_table;                    /* CPU configuration table.    */
+char            *rtems_progname;              /* Program name - from main(). */
+
+/*************************************************************/
+/* Function prototypes                                       */
+/*************************************************************/
+extern void rtems_irq_mngt_init(void);
+void bsp_libc_init( void *, uint32_t, int );
+void bsp_postdriver_hook(void);
+extern void  UART0_Ini(void);
+extern void printi(unsigned long);
+extern void debug_printk(char*);
+/**************************************************************************/
+/*                                                                        */
+/* NAME: bps_pretasking_hook - Function to setup system before startup    */
+/*                                                                        */
+/* DESCRIPTION:                                                           */
+/*   This function is called before drivers are initialized and used      */
+/*   to setup libc and BSP extensions. It configures non cacheable        */
+/*   SDRAM, SRAM, AIM, and ADM regions and sets up the CPU's memory       */
+/*   protection unit.                                                     */
+/*                                                                        */
+/* GLOBALS USED:                                                          */
+/*   free_mem_start                                                 */
+/*   free_mem_end                                                   */
+/*                                                                        */
+/* RESTRICTIONS/LIMITATIONS:                                              */
+/*   Since this function is setting up libc, it cannot use and libc       */
+/*   functions.                                                           */
+/*                                                                        */
+/**************************************************************************/
+void bsp_pretasking_hook(void)
+{
+    uint32_t   heap_start;
+    uint32_t   heap_size;
+
+    /*
+     * Set up the heap. It uses all free SDRAM except that reserved
+     * for non-cached uses.
+     */
+    heap_start =  free_mem_start;
+
+    /*   heap_size = (free_mem_end - heap_start - MEM_NOCACHE_SIZE); */
+    /*the board seems to have only 512K memory, we use 256K as heap*/
+    heap_size = 0x40000;
+
+    bsp_libc_init((void *)heap_start, heap_size, 0);
+
+#ifdef RTEMS_DEBUG
+
+    rtems_debug_enable(RTEMS_DEBUG_ALL_MASK);
+
+#endif /* RTEMS_DEBUG */
+
+} /* bsp_pretasking_hook */
+
+/**************************************************************************/
+/*                                                                        */
+/* NAME: bsp_start_default - BSP initialization function                  */
+/*                                                                        */
+/* DESCRIPTION:                                                           */
+/*   This function is called before RTEMS is initialized and used         */
+/*   adjust the kernel's configuration.                                   */
+/*                                                                        */
+/*   This function also configures the CPU's memory protection unit.      */
+/*                                                                        */
+/* GLOBALS USED:                                                          */
+/*    CPU_table                                                    */
+/*    BSP_Configuration                                            */
+/*    free_mem_start                                               */
+/*    free_mem_end                                                 */
+/*    free_mem_nocache_start                                       */
+/*    _bss_free_start                                              */
+/*    mpu_region_tbl                                               */
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/* RESTRICTIONS/LIMITATIONS:                                              */
+/*   Since RTEMS is not configured, no RTEMS functions can be called.     */
+/*                                                                        */
+/**************************************************************************/
+void bsp_start_default( void )
+{
+    uint32_t i;
+    PINSEL2 =0x0f814914;
+    BCFG0 = 0x1000ffef;
+    BCFG1 = 0x1000ffef;
+
+    MEMMAP = 0x2;  //debug and excute outside chip
+
+    PLLCON = 1;
+#if (Fpclk / (Fcclk / 4)) == 1
+    VPBDIV = 0;
+#endif
+#if (Fpclk / (Fcclk / 4)) == 2
+    VPBDIV = 2;
+#endif
+#if (Fpclk / (Fcclk / 4)) == 4
+    VPBDIV = 1;
+#endif
+
+#if (Fcco / Fcclk) == 2
+    PLLCFG = ((Fcclk / Fosc) - 1) | (0 << 5);
+#endif
+#if (Fcco / Fcclk) == 4
+    PLLCFG = ((Fcclk / Fosc) - 1) | (1 << 5);
+#endif
+#if (Fcco / Fcclk) == 8
+    PLLCFG = ((Fcclk / Fosc) - 1) | (2 << 5);
+#endif
+#if (Fcco / Fcclk) == 16
+    PLLCFG = ((Fcclk / Fosc) - 1) | (3 << 5);
+#endif
+    PLLFEED = 0xaa;
+    PLLFEED = 0x55;
+    while((PLLSTAT & (1 << 10)) == 0);
+    PLLCON = 3;
+    PLLFEED = 0xaa;
+    PLLFEED = 0x55;
+
+    /* memory configure */
+    //MAMCR = 0;
+    // MAMTIM = 3;
+    //MAMCR = 2;
+
+    /* init VIC */
+    VICIntEnClr = 0xffffffff;
+    VICVectAddr = 0;
+    VICIntSelect = 0;
+
+    /* disable interrupts */
+    /* Setup interrupt controller.*/
+    VICProtection = 0;
+
+
+    Cpu_table.pretasking_hook        = bsp_pretasking_hook;
+    Cpu_table.postdriver_hook        = bsp_postdriver_hook;
+    Cpu_table.do_zero_of_workspace   = TRUE;
+    BSP_Configuration.microseconds_per_tick=100000;
+    /* Place RTEMS workspace at beginning of free memory. */
+    BSP_Configuration.work_space_start = (void *)&_bss_free_start;
+
+    free_mem_start = ((uint32_t)&_bss_free_start +
+                      BSP_Configuration.work_space_size);
+
+    free_mem_end = ((uint32_t)&_sdram_base + (uint32_t)&_sdram_size);
+
+    UART0_Ini();
+
+    #if 0
+    debug_printk(" bsp_start_defalt");
+    
+    debug_printk(" _bss_free_start");
+    printi((int)&_bss_free_start);
+
+    debug_printk(" free_mem_start");
+    printi((int)free_mem_start);
+
+    debug_printk(" _sdram_base");
+    printi((int)&_sdram_base);
+
+    debug_printk(" _sdram_size");
+    printi((int)&_sdram_size);
+
+    debug_printk(" free_mem_end");
+    printi((int)free_mem_end);
+
+    
+    printi(free_mem_end);
+    #endif
+
+    /*
+     * Init rtems exceptions management
+     */
+    rtems_exception_init_mngt();
+
+    /*
+     * Init rtems interrupt management
+     */
+    rtems_irq_mngt_init();
+
+    /*
+     *  The following information is very useful when debugging.
+     */
+#if 0
+
+    printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
+    printk( "maximum_extensions = 0x%x\n", BSP_Configuration.maximum_extensions );
+    printk( "microseconds_per_tick = 0x%x\n",
+            BSP_Configuration.microseconds_per_tick );
+    printk( "ticks_per_timeslice = 0x%x\n",
+            BSP_Configuration.ticks_per_timeslice );
+    printk( "maximum_devices = 0x%x\n", BSP_Configuration.maximum_devices );
+    printk( "number_of_device_drivers = 0x%x\n",
+            BSP_Configuration.number_of_device_drivers );
+    printk( "Device_driver_table = 0x%x\n",
+            BSP_Configuration.Device_driver_table );
+
+    /*  printk( "_stack_size = 0x%x\n", _stack_size );*/
+    printk( "work_space_start = 0x%x\n", BSP_Configuration.work_space_start );
+    printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
+#endif
+} /* bsp_start */
+
+
+/**
+ *  Reset the system.
+ *
+ *  This functions enables the watchdog and waits for it to 
+ *  fire, thus resetting the system.
+ */
+/**
+ *  Reset the system.
+ *
+ *  This functions enables the watchdog and waits for it to 
+ *  fire, thus resetting the system.
+ */
+void bsp_reset(void)
+{
+    rtems_interrupt_level level;
+
+    _CPU_ISR_Disable(level);
+
+    while(1);
+}
+
+/*
+ *  By making this a weak alias for bsp_start_default, a brave soul
+ *  can override the actual bsp_start routine used.
+ */
+
+void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));

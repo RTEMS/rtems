@@ -1,0 +1,239 @@
+/*
+ * Philips lpc ARM linker script
+ * By Ray,Xu
+ * Rayx.cn@gmail.com
+ *	
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *
+ *  $Id$
+ *  LPC22xx ARM do not have a 
+*/
+
+OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm",
+	      "elf32-littlearm")
+OUTPUT_ARCH(arm)
+ENTRY(_start)
+
+
+MEMORY {
+	sdram : ORIGIN = 0x81000000, LENGTH = 512K
+	sram : ORIGIN = 0x40000000, LENGTH = 16K
+	regs  : ORIGIN = 0xe0000000, LENGTH = 2M
+}
+
+/*
+ * Declare some sizes.
+ */
+
+_sdram_base = DEFINED(_sdram_base) ? _sdram_base : 0x81000000;
+_sdram_size = DEFINED(_sdram_size) ? _sdram_size : 512K;
+
+
+_irq_stack_size = DEFINED(_irq_stack_size) ? _irq_stack_size : 0x100;
+_fiq_stack_size = DEFINED(_fiq_stack_size) ? _fiq_stack_size : 0x50;
+_abt_stack_size = DEFINED(_abt_stack_size) ? _abt_stack_size : 0x50;
+_svc_stack_size = DEFINED(_svc_stack_size) ? _svc_stack_size : 0x2000;
+
+
+
+/* Do we need any of these for elf?
+   __DYNAMIC = 0;    */
+
+SECTIONS
+{
+  .base :
+  {
+    _sram_base = .;
+    arm_exception_table = .;    
+
+    arm_reset_vect    = .;     /* 0x00 */
+    . += 4;
+
+    arm_undef_vect    = .;     /* 0x04 */
+    . += 4;
+
+    arm_swi_vect      = .;     /* 0x08 */
+    . += 4;
+
+    arm_iabrt_vect    = .;     /* 0x0c */
+    . += 4;
+
+    arm_dabrt_vect    = .;     /* 0x10 */
+    . += 4;
+
+    /* no vector here */
+    . += 4;
+
+    arm_irq_vect      = .;     /* 0x18 */
+    . += 4;
+
+    arm_fiq_vect      = .;     /* 0x1c */
+    . += 4;
+
+
+    rtems_vector_table = .;
+    . += (8 * 4);                     /* 8 ARM interrupts */
+	
+    /*bsp_vector_table = .;*/
+     /*. += (64 * 4);                    64 LPC22xx interrupts */
+
+    . = ALIGN (0x100);
+
+  } > sram
+
+
+  .text      :
+  {
+	_text_start = .;
+	 CREATE_OBJECT_SYMBOLS
+	*(.text) 
+	*(.text.*)
+
+        /*
+         * Special FreeBSD sysctl sections.
+         */
+        . = ALIGN (16);
+        __start_set_sysctl_set = .;
+        *(set_sysctl_*);
+        __stop_set_sysctl_set = ABSOLUTE(.);
+        *(set_domain_*);
+        *(set_pseudo_*);
+
+	/* .gnu.warning sections are handled specially by elf32.em.  */
+	*(.gnu.warning)
+	*(.gnu.linkonce.t*)
+	*(.glue_7)
+	*(.glue_7t)
+
+	/* I think these come from the ld docs: */	
+	___CTOR_LIST__ = .;
+	LONG((___CTOR_END__ - ___CTOR_LIST__) / 4 - 2)
+	*(.ctors)
+	LONG(0)
+	___CTOR_END__ = .;
+	___DTOR_LIST__ = .;
+	LONG((___DTOR_END__ - ___DTOR_LIST__) / 4 - 2)
+	*(.dtors)
+	LONG(0)
+	___DTOR_END__ = .;
+
+	_etext = .;
+	PROVIDE (etext = .);
+  } > sdram  
+
+  .init          : 
+  { 
+    KEEP (*(.init))
+  } > sdram   /*=0*/
+
+  .fini      :
+  {
+    KEEP (*(.fini))
+  } > sdram  /*=0*/
+
+  .data :
+  { 
+    *(.data)
+    *(.data.*)
+    *(.gnu.linkonce.d*)
+    *(.jcr)
+    SORT(CONSTRUCTORS)
+    _edata = .;
+  } > sdram 
+
+  .eh_frame : { *(.eh_frame) } > sdram
+  .data1   : { *(.data1) } > sdram
+  .eh_frame : { *(.eh_frame) } > sdram
+  .gcc_except_table : { *(.gcc_except_table) } > sdram
+
+  .rodata :
+  {
+    *(.rodata)
+    *(.rodata.*)
+    *(.gnu.linkonce.r*)
+  } > sdram
+
+  .bss       :
+  {
+	_bss_start_ = .;
+	_clear_start = .;
+	*(.bss)
+	*(.bss.*)
+	*(.gnu.linkonce.b.*)
+	*(COMMON)
+	. = ALIGN(256);
+	_clear_end = .;
+
+	. = ALIGN (64);
+	_abt_stack = .;
+	. += _abt_stack_size;
+
+	. = ALIGN (256);
+	_irq_stack = .;
+	. += _irq_stack_size;
+
+	. = ALIGN (64);
+	_fiq_stack = .;
+	. += _fiq_stack_size;
+
+	. = ALIGN (64);
+	_svc_stack = .;
+	. += _svc_stack_size;
+
+	_bss_end_ = .;
+	_end = .;
+	__end = .;
+
+	_bss_free_start = .;
+	. = ALIGN (1024);
+  } > sdram
+
+/*
+  .regs	:
+  {
+	lpc22xx_regs_base = .;
+	lpc22xx_regs = .;
+	. += 8192;
+  } > regs
+*/
+
+
+/* Debugging stuff follows? */
+
+  /* Stabs debugging sections.  */
+  .stab 0 : { *(.stab) } 
+  .stabstr 0 : { *(.stabstr) } 
+  .stab.excl 0 : { *(.stab.excl) } 
+  .stab.exclstr 0 : { *(.stab.exclstr) }
+  .stab.index 0 : { *(.stab.index) } 
+  .stab.indexstr 0 : { *(.stab.indexstr) } 
+  .comment 0 : { *(.comment) }
+  /* DWARF debug sections.
+     Symbols in the DWARF debugging sections are relative to the beginning
+     of the section so we begin them at 0.  */
+  /* DWARF 1 */
+  .debug          0 : { *(.debug) }
+  .line           0 : { *(.line) }
+  /* GNU DWARF 1 extensions */
+  .debug_srcinfo  0 : { *(.debug_srcinfo) }
+  .debug_sfnames  0 : { *(.debug_sfnames) }
+  /* DWARF 1.1 and DWARF 2 */
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  /* DWARF 2 */
+  .debug_info     0 : { *(.debug_info) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) } 
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) } 
+
+  /*.stack 0x80000 : { _stack = .; *(.stack) }*/
+  /* These must appear regardless of  .  */
+}
+
