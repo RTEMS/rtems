@@ -1,5 +1,6 @@
 2007-04-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/rtl22xx.cfg: Cleanup.
 	* Makefile.am: Add custom/rtl22xx.cfg.
 
 2007-04-26	Ray Xu <xr@trasin.net>
