@@ -30,7 +30,7 @@ noinst_PROGRAMS += startup.rel
 include_HEADERS += ../../arm/shared/comm/uart.h
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspstart.c startup/exit.c ../../shared/bootcard.c \
-    ../../shared/main.c ../../shared/sbrk.c \
+    ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

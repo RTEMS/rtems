@@ -1,3 +1,7 @@
+2007-04-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove reference to ../../shared/main.c.
+
 2007-04-25	Ray Xu <xr@trasin.net>
 
 	* times: New (Initial submission).
