@@ -4,7 +4,7 @@
 
 2007-02-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* make/Makefile.am: Cleanup.
+	* Makefile.am: Cleanup.
 
 2007-01-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
