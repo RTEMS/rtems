@@ -1,8 +1,6 @@
 /*
- * Motorola LPC22XX Interrupt handler
- *
- * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *      
+ * Motorola LPC22XX/LPC21xx Interrupt handler
+ *  Modified by Ray 2006 <rayx.cn@gmail.com> to support LPC ARM     
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -24,10 +22,17 @@ extern void default_int_handler();
  */
 void BSP_rtems_irq_mngt_init()
 {
+  long *vectorTable;
+  int i;
 
     /* disable all interrupts */
   VICIntEnClr = 0xFFFFFFFF;
 
+  vectorTable = (long *) VECTOR_TABLE;
+  /* Initialize the vector table contents with default handler */
+  for (i=0; i<BSP_MAX_INT; i++) {
+      *(vectorTable + i) = (long)(default_int_handler);
+  }
    
   /*
    * Set IRQHandler
@@ -62,6 +67,5 @@ void BSP_rtems_irq_mngt_init()
   VICProtection = 0;
   VICIntSelect = 0;
   
-
 }
 

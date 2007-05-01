@@ -1,9 +1,7 @@
 /*
- *  LPC22XX Intererrupt handler
+ *  LPC22XX/LPC21xx Intererrupt handler
  *
- *  Copyright (c) 2002 by Jay Monkman <jtm@lopingdog.com>
- *
- *  Modified by ray
+ *  Modified by Ray <rayx.cn@gmail.com> 2006 from Jay Monkman's code
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

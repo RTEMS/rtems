@@ -3,7 +3,7 @@
  *
  * This uses Timer1 for timing measurments.
  *  
- *  By Ray xu, modify form Mc9328mxl	RTEMS DSP
+ *  By Ray xu<rayx.cn@gmail.com>, modify form Mc9328mxl	RTEMS DSP
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -44,12 +44,6 @@ rtems_boolean Timer_driver_Find_average_overhead;
  */
 void Timer_initialize( void )
 {
-	T1TCR &= 0; 	 /* disable and clear timer 0  */ 
-       g_start = (T1TC/(LPC22xx_Fpclk/1000000));
-       T1PC  = 0;            /* TC is incrementet on every pclk.*/ 
-	T1MR0 = ((LPC22xx_Fpclk/1000* BSP_Configuration.microseconds_per_tick) / 1000); /* initialize the timer period and prescaler */  
-       T1EMR = 0;  /*No external match*/ 
-	T1TCR = 1; /*enable timer1*/ 
        g_freq = LPC22xx_Fpclk / 1000;
 }
 
@@ -73,27 +67,12 @@ int Read_timer( void )
   uint32_t t;
   unsigned long long total;
   
-  t = (T1TC/(LPC22xx_Fpclk/1000000));
+  return (T0TC/(LPC22xx_Fpclk/1000000));
   /*
    *  Total is calculated by taking into account the number of timer overflow
    *  interrupts since the timer was initialized and clicks since the last
-   *  interrupts. currently it is not supported
+   *  interrupts.
    */
-
-  total = (t - g_start);
-
-  /* convert to nanoseconds */
-
-  if ( Timer_driver_Find_average_overhead == 1 ) {
-    return (int) total; 
-  } else if ( total < LEAST_VALID ) {
-      return 0;       
-  }
-  /*
-   *  Somehow convert total into microseconds
-   */
-
-  return (total - AVG_OVERHEAD);
 }
 
 /*

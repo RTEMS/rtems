@@ -1,3 +1,11 @@
+2007-05-01	Ray Xu <xr@trasin.net>
+
+	* lpc22xx/clock/clockdrv.c, lpc22xx/include/lpc22xx.h,
+	lpc22xx/irq/bsp_irq_asm.S, lpc22xx/irq/bsp_irq_init.c,
+	lpc22xx/irq/irq.c, lpc22xx/irq/irq.h, lpc22xx/timer/timer.c: Update
+	BSP to address changes between 4.7 and CVS head as well as to address
+	comments from Ralf and Joel.
+
 2007-04-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* lpc22xx/clock/clockdrv.c, lpc22xx/include/lpc22xx.h,

@@ -1,8 +1,7 @@
 /*
- * Motorola LPC22XX Register definitions
+ * Philips LPC22XX/LPC21xx Register definitions
  *
- * Copyright (c) 2003 by Cogent Computer Systems
- * Written by Jay Monkman <jtm@lopingdog.com>
+ * Copyright (c) 2006 by Ray <rayx.cn@gmail.com>
  *	
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

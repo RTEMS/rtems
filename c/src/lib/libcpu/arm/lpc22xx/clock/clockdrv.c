@@ -1,6 +1,8 @@
 /*
- *  LPC22XX clock specific using the System Timer
- * set the Time0
+ *  LPC22XX/LPC21xx clock specific using the System Timer
+ * Copyright (c) 2006 by Ray <rayx.cn@gmail.com>
+ *  Set the Time0 to generate click for RTEMS
+ *
  *  This is hardware specific part of the clock driver. At the end of this
  *  file, the generic part of the driver is #included.
  *
@@ -76,9 +78,9 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
  * NOPs.
  */
  
-  /* set timer to generate interrupt every BSP_Configuration.microseconds_per_tick */
-  /* MR0/(LPC22xx_Fpclk/(PR0+1)) = 10/1000 = 0.01s */
-			
+  /* set timer to generate interrupt every BSP_Configuration.microseconds_per_tick
+   * MR0/(LPC22xx_Fpclk/(PR0+1)) = 10/1000 = 0.01s
+   */			
 	
 #define Clock_driver_support_initialize_hardware() \
   do { \
@@ -103,6 +105,19 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
        T0TCR&=~0x02; \
 	BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
      } while (0)
+
+uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+{
+	uint32_t clicks;
+	
+	clicks = T0TC;  /*T0TC is the 32bit time counter 0*/
+	
+	return (uint32_t) (BSP_Configuration.microseconds_per_tick - clicks) * 1000;
+}
+	
+#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
+
+
 
 /**
  * Enables clock interrupt.

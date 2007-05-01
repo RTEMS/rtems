@@ -1,7 +1,7 @@
 /*
  * Interrupt handler Header file
  *
- * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
+ * Copyright (c) 2006 by Ray <rayx.cn@gmail.com> to support LPC ARM  
  *	
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
