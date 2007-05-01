@@ -1,3 +1,7 @@
+2007-05-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Minor rework to shrink minimum size to <48K.
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove qrtems_debug.
