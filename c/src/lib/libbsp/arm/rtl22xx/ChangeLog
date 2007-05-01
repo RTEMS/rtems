@@ -1,3 +1,11 @@
+2007-05-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Tinkering to reduce .text size of minimum executable
+	from ~64K to ~47K.
+	* Renamed startup/exit.c to startup/bspclean.c 
+	  * startup/bspclean.c: New file.
+	  * startup/exit.c: Removed.
+
 2007-05-01	Ray Xu <xr@trasin.net>
 
 	* README, times, console/lpc22xx_uart.h, console/uart.c, include/bsp.h,
