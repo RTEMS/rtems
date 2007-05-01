@@ -1,7 +1,6 @@
 /*
- * Cirrus LPC22XX BSP Shutdown  code
- *
- * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
+ * Philips LPC22XX/LPC21xx BSP Shutdown  code
+ * Copyright (c) 2007 by Ray Xu <rayx.cn@gmail.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -32,8 +31,8 @@ void bsp_cleanup(void)
    * use polled output/input. This is exactly what printk
    * does.
    */
-  printk("\n");
-  printk(line);
+  debug_printk("\n");
+  debug_printk(line);
   while (uart_poll_read(0) < 0) continue;
 
   /* rtemsReboot(); */

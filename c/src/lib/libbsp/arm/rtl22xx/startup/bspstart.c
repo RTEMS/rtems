@@ -1,7 +1,7 @@
 /*
- *  LPC22XX Startup code
+ *  LPC22XX/LPC21xx Startup code
  *
- *  Copyright (c) 2005 by Ray X <rayx.cn@gmail.com>
+ *  Copyright (c) 2007 by Ray Xu <rayx.cn@gmail.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -92,7 +92,8 @@ void bsp_pretasking_hook(void)
     heap_start =  free_mem_start;
 
     /*   heap_size = (free_mem_end - heap_start - MEM_NOCACHE_SIZE); */
-    /*the board seems to have only 512K memory, we use 256K as heap*/
+    /*the board seems to have only 512K memory, we use 256K as heap, 256K to 
+    store the .text*/
     heap_size = 0x40000;
 
     bsp_libc_init((void *)heap_start, heap_size, 0);
@@ -133,7 +134,6 @@ void bsp_pretasking_hook(void)
 /**************************************************************************/
 void bsp_start_default( void )
 {
-    uint32_t i;
     PINSEL2 =0x0f814914;
     BCFG0 = 0x1000ffef;
     BCFG1 = 0x1000ffef;
@@ -171,6 +171,7 @@ void bsp_start_default( void )
     PLLFEED = 0x55;
 
     /* memory configure */
+    /* it is not needed in my formatter board */
     //MAMCR = 0;
     // MAMTIM = 3;
     //MAMCR = 2;
@@ -201,6 +202,7 @@ void bsp_start_default( void )
 
     #if 0
     debug_printk(" bsp_start_defalt");
+    printi((int)&bsp_start_defalt);
     
     debug_printk(" _bss_free_start");
     printi((int)&_bss_free_start);
@@ -216,9 +218,6 @@ void bsp_start_default( void )
 
     debug_printk(" free_mem_end");
     printi((int)free_mem_end);
-
-    
-    printi(free_mem_end);
     #endif
 
     /*

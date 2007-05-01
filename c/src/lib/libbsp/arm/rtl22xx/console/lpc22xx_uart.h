@@ -1,4 +1,4 @@
-/*Define for LPC22xx*/
+/*Define for LPC22xx/LPC21xx */
 #ifndef UART_H
 #define UART_H
 

@@ -1,3 +1,10 @@
+2007-05-01	Ray Xu <xr@trasin.net>
+
+	* README, times, console/lpc22xx_uart.h, console/uart.c, include/bsp.h,
+	start/start.S, startup/bspstart.c, startup/exit.c, startup/linkcmds:
+	Update BSP to address changes between 4.7 and CVS head as well as to
+	address comments from Ralf and Joel.
+
 2007-04-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove reference to ../../shared/main.c.

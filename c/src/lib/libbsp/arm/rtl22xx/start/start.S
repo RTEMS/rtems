@@ -1,12 +1,8 @@
 /*
- * Philips LPC22XX Startup code
+ * Philips LPC22XX/LPC21xx Startup code
  *
- * Copyright (c) 2005 Ray xu
- *
- * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
- *
- * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
- *
+ * Copyright (c) 2007 Ray Xu<rayx.cn@gmail.com>
+ * Change from CSB337's code by Jay Monkman <jtm@lopingdog.com>
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *

@@ -7,7 +7,7 @@
  *  If you want the driver to be interrupt driven, you 
  *  need to write the ISR, and in the ISR insert the
  *  chars into termios's queue.
- *  Copyright (c) By ray
+ *  Copyright (c) By ray <rayx.cn@gmail.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -168,7 +168,8 @@ static int uart_read(int minor)
             return -1;
         }
     } else {
-        printk("Unknown console minor number: %d\n", minor);
+        debug_printk("Unknown console minor number");
+        printi(minor);
         return -1;
     }
 
@@ -197,7 +198,8 @@ static int uart_write(int minor, const char *buf, int len)
                 U0THR = (char) buf[i];
             }
         }else {
-        printk("Unknown console minor number: %d\n", minor);
+        debug_printk("Unknown console minor number");
+        printi(minor);
         return -1;
     }
     

@@ -1,7 +1,7 @@
 /*
- * Philips LPC22XX BSP header file
+ * Philips LPC22XX/LPC21xx BSP header file
  *
- * by Ray,Xu
+ * by Ray,Xu <Rayx.cn@gmail.com>
  *  
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
