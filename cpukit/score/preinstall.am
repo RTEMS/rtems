@@ -91,6 +91,10 @@ $(PROJECT_INCLUDE)/rtems/score/heap.h: include/rtems/score/heap.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/heap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/heap.h
 
+$(PROJECT_INCLUDE)/rtems/score/protectedheap.h: include/rtems/score/protectedheap.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/protectedheap.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/protectedheap.h
+
 $(PROJECT_INCLUDE)/rtems/score/interr.h: include/rtems/score/interr.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/interr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/interr.h

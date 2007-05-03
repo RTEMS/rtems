@@ -19,7 +19,7 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <rtems/libcsupport.h>
-#include <rtems/score/apimutex.h>
+#include <rtems/score/protectedheap.h>
 #ifdef RTEMS_NEWLIB
 #include <sys/reent.h>
 #endif
@@ -85,9 +85,10 @@ void reportMallocError(const char *msg, struct mallocNode *mp)
 }
 #endif
 
+Heap_Control  RTEMS_Malloc_Heap;
 Chain_Control RTEMS_Malloc_GC_list;
 
-rtems_id RTEMS_Malloc_Heap;
+/* rtems_id RTEMS_Malloc_Heap; */
 size_t RTEMS_Malloc_Sbrk_amount;
 
 #ifdef RTEMS_DEBUG
@@ -119,10 +120,10 @@ void RTEMS_Malloc_Initialize(
   size_t  sbrk_amount
 )
 {
-  rtems_status_code   status;
-  void               *starting_address;
-  uintptr_t           old_address;
-  uintptr_t           uaddress;
+  uint32_t      status;
+  void         *starting_address;
+  uintptr_t     old_address;
+  uintptr_t     uaddress;
 
   /*
    *  Initialize the garbage collection list to start with nothing on it.
@@ -180,15 +181,13 @@ void RTEMS_Malloc_Initialize(
    *  STDIO cannot work because there will be no buffers.
    */
 
-  status = rtems_region_create(
-    rtems_build_name( 'H', 'E', 'A', 'P' ),
+  status = _Protected_heap_Initialize( 
+    &RTEMS_Malloc_Heap,
     starting_address,
     length,
-    CPU_HEAP_ALIGNMENT,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &RTEMS_Malloc_Heap
+    CPU_HEAP_ALIGNMENT
   );
-  if ( status != RTEMS_SUCCESSFUL )
+  if ( !status )
     rtems_fatal_error_occurred( status );
 
 #ifdef MALLOC_STATS
@@ -204,12 +203,11 @@ void *malloc(
   size_t  size
 )
 {
-  void              *return_this;
-  void              *starting_address;
+  void        *return_this;
+  void        *starting_address;
   uint32_t     the_size;
   uint32_t     sbrk_amount;
-  rtems_status_code  status;
-  Chain_Node        *to_be_freed;
+  Chain_Node  *to_be_freed;
 
   MSBUMP(malloc_calls, 1);
 
@@ -235,23 +233,17 @@ void *malloc(
     free(to_be_freed);
 
   /*
-   * Try to give a segment in the current region if there is not
-   * enough space then try to grow the region using rtems_region_extend().
+   * Try to give a segment in the current heap if there is not
+   * enough space then try to grow the heap.
    * If this fails then return a NULL pointer.
    */
 
 #ifdef MALLOC_ARENA_CHECK
   size += sizeof(struct mallocNode) + SENTINELSIZE;
 #endif
-  status = rtems_region_get_segment(
-    RTEMS_Malloc_Heap,
-    size,
-    RTEMS_NO_WAIT,
-    RTEMS_NO_TIMEOUT,
-    &return_this
-  );
+  return_this = _Protected_heap_Allocate( &RTEMS_Malloc_Heap, size );
 
-  if ( status != RTEMS_SUCCESSFUL ) {
+  if ( !return_this ) {
     /*
      *  Round to the "requested sbrk amount" so hopefully we won't have
      *  to grow again for a while.  This effectively does sbrk() calls
@@ -269,12 +261,8 @@ void *malloc(
             == (void*) -1)
       return (void *) 0;
 
-    status = rtems_region_extend(
-      RTEMS_Malloc_Heap,
-      starting_address,
-      the_size
-    );
-    if ( status != RTEMS_SUCCESSFUL ) {
+    if ( !_Protected_heap_Extend(
+            &RTEMS_Malloc_Heap, starting_address, the_size) ) {
       sbrk(-the_size);
       errno = ENOMEM;
       return (void *) 0;
@@ -282,14 +270,8 @@ void *malloc(
 
     MSBUMP(space_available, the_size);
 
-    status = rtems_region_get_segment(
-      RTEMS_Malloc_Heap,
-       size,
-       RTEMS_NO_WAIT,
-       RTEMS_NO_TIMEOUT,
-       &return_this
-    );
-    if ( status != RTEMS_SUCCESSFUL ) {
+    return_this = _Protected_heap_Allocate( &RTEMS_Malloc_Heap, size );
+    if ( !return_this ) {
       errno = ENOMEM;
       return (void *) 0;
     }
@@ -298,10 +280,9 @@ void *malloc(
 #ifdef MALLOC_STATS
   if (return_this)
   {
-      size_t     actual_size;
+      size_t     actual_size = 0;
       uint32_t   current_depth;
-      status = rtems_region_get_segment_size(
-                   RTEMS_Malloc_Heap, return_this, &actual_size);
+      Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &actual_size);
       MSBUMP(lifetime_allocated, actual_size);
       current_depth = rtems_malloc_stats.lifetime_allocated -
                    rtems_malloc_stats.lifetime_freed;
@@ -369,7 +350,6 @@ void *realloc(
 )
 {
   size_t old_size;
-  rtems_status_code status;
   char *new_area;
 
   MSBUMP(realloc_calls, 1);
@@ -399,23 +379,16 @@ void *realloc(
 
 #ifdef MALLOC_ARENA_CHECK
   {
-  void *np;
-  np = malloc(size);
-  if (!np) return np;
-  memcpy(np,ptr,size);
-  free(ptr);
-  return np;
+    void *np;
+    np = malloc(size);
+    if (!np) return np;
+    memcpy(np,ptr,size);
+    free(ptr);
+    return np;
   }
 #endif
-  status =
-    rtems_region_resize_segment( RTEMS_Malloc_Heap, ptr, size, &old_size );
-
-  if( status == RTEMS_SUCCESSFUL ) {
+  if ( _Protected_heap_Resize_block( &RTEMS_Malloc_Heap, ptr, size ) ) {
     return ptr;
-  }
-  else if ( status != RTEMS_UNSATISFIED ) {
-    errno = EINVAL;
-    return (void *) 0;
   }
 
   new_area = malloc( size );
@@ -432,8 +405,7 @@ void *realloc(
     return (void *) 0;
   }
 
-  status = rtems_region_get_segment_size( RTEMS_Malloc_Heap, ptr, &old_size );
-  if ( status != RTEMS_SUCCESSFUL ) {
+  if ( !_Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &old_size) ) {
     errno = EINVAL;
     return (void *) 0;
   }
@@ -449,8 +421,6 @@ void free(
   void *ptr
 )
 {
-  rtems_status_code status;
-
   MSBUMP(free_calls, 1);
 
   if ( !ptr )
@@ -493,16 +463,14 @@ void free(
 #endif
 #ifdef MALLOC_STATS
   {
-      size_t size;
-      status = rtems_region_get_segment_size( RTEMS_Malloc_Heap, ptr, &size );
-      if ( status == RTEMS_SUCCESSFUL ) {
-          MSBUMP(lifetime_freed, size);
-      }
+    size_t size;
+    if (Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &size) ) {
+      MSBUMP(lifetime_freed, size);
+    }
   }
 #endif
 
-  status = rtems_region_return_segment( RTEMS_Malloc_Heap, ptr );
-  if ( status != RTEMS_SUCCESSFUL ) {
+  if ( !_Protected_heap_Free( &RTEMS_Malloc_Heap, ptr ) ) {
     errno = EINVAL;
     assert( 0 );
   }
@@ -565,16 +533,7 @@ void malloc_dump(void)
 
 void malloc_walk(size_t source, size_t printf_enabled)
 {
-   register Region_Control *the_region;
-   Objects_Locations        location;
-
-  _RTEMS_Lock_allocator();                      /* to prevent deletion */
-   the_region = _Region_Get( RTEMS_Malloc_Heap, &location );
-   if ( location == OBJECTS_LOCAL )
-   {
-      _Heap_Walk( &the_region->Memory, source, printf_enabled );
-   }
-  _RTEMS_Unlock_allocator();
+  _Protected_heap_Walk( &RTEMS_Malloc_Heap, source, printf_enabled );
 }
 
 #else

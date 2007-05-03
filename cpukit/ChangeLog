@@ -1,3 +1,28 @@
+2007-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog, libcsupport/src/malloc.c,
+	libcsupport/src/mallocfreespace.c, sapi/include/confdefs.h,
+	score/Makefile.am, score/preinstall.am: malloc never blocks so the
+	Region Manager is quite heavy for implementing this. This patch
+	implements the C Program Heap directly in terms of the new Protected
+	Heap handler. This handler is a direct use of a SuperCore Heap in
+	conjunction with the Allocator Mutex used internally by RTEMS. This
+	saves 3184 bytes on most SPARC test executables.
+	* score/include/rtems/score/protectedheap.h, score/src/pheapallocate.c,
+	score/src/pheapallocatealigned.c, score/src/pheapextend.c,
+	score/src/pheapfree.c, score/src/pheapgetblocksize.c,
+	score/src/pheapgetfreeinfo.c, score/src/pheapgetinfo.c,
+	score/src/pheapinit.c, score/src/pheapresizeblock.c,
+	score/src/pheapwalk.c: New files.
+
+2007-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/src/rmdir.c: Fixed spacing.
+	* libcsupport/Makefile.am, libcsupport/src/newlibc.c: Split _exit from
+	newlibc.c. It is not required for minimum executing and drops 624
+	from SPARC minimum executable.
+	* libcsupport/src/newlibc_exit.c: New file.
+
 2007-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* itron/Makefile.am, itron/src/eventflags.c, itron/src/fmempool.c,

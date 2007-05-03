@@ -23,7 +23,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/corebarrier.h include/rtems/score/coremsg.h \
     include/rtems/score/coremutex.h include/rtems/score/corerwlock.h \
     include/rtems/score/coresem.h include/rtems/score/corespinlock.h \
-    include/rtems/score/heap.h \
+    include/rtems/score/heap.h include/rtems/score/protectedheap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/priority.h \
     include/rtems/score/stack.h include/rtems/score/states.h \
@@ -100,8 +100,8 @@ libscore_a_SOURCES += src/corespinlock.c src/corespinlockrelease.c \
     src/corespinlockwait.c
 
 ## HEAP_C_FILES
-libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c src/heapfree.c \
-    src/heapsizeofuserarea.c src/heapwalk.c src/heapgetinfo.c \
+libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \
+    src/heapfree.c src/heapsizeofuserarea.c src/heapwalk.c src/heapgetinfo.c \
     src/heapgetfreeinfo.c src/heapallocatealigned.c \
     src/heapresizeblock.c
 
@@ -115,6 +115,12 @@ libscore_a_SOURCES += src/object.c src/objectallocate.c \
     src/objectinitializeinformation.c src/objectnametoid.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
     src/objectidtoname.c
+
+## PROTECTED_HEAP_C_FILES
+libscore_a_SOURCES += src/pheapallocatealigned.c src/pheapallocate.c \
+    src/pheapextend.c src/pheapfree.c src/pheapgetblocksize.c \
+    src/pheapgetfreeinfo.c src/pheapgetinfo.c src/pheapinit.c \
+    src/pheapresizeblock.c src/pheapwalk.c
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \

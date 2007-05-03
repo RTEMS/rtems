@@ -19,6 +19,7 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <rtems/libcsupport.h>
+#include <rtems/score/protectedheap.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +28,7 @@
 #include <errno.h>
 #include <string.h>
 
-extern rtems_id RTEMS_Malloc_Heap;
+extern Heap_Control  RTEMS_Malloc_Heap;
 
 /*
  *  Find amount of free heap remaining
@@ -35,10 +36,8 @@ extern rtems_id RTEMS_Malloc_Heap;
 
 size_t malloc_free_space( void )
 {
-  region_information_block   heap_info;
+  Heap_Information info;
 
-  if ( !rtems_region_get_free_information( RTEMS_Malloc_Heap, &heap_info ) ) {
-    return (size_t) heap_info.Free.largest;
-  }
-  return (size_t) -1;
+  _Protected_heap_Get_free_information( &RTEMS_Malloc_Heap, &info );
+  return (size_t) info.largest;
 }
