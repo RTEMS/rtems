@@ -112,7 +112,7 @@ SECTIONS
         }
         .data 0x80000 : AT (ADDR(.text) + SIZEOF (.text)) {
                 PROVIDE (_copy_start = .);
-                *(.data)
+                *(.data*)
 		*(.gnu.linkonce.d*)
 		*(.gcc_except_table)
 		*(.jcr)

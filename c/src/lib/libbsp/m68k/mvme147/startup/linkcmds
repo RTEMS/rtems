@@ -2,7 +2,7 @@
  *  This file contains directives for the GNU linker which are specific
  *  to the Motorola MVME147 boards.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -119,7 +119,7 @@ SECTIONS
         } >ram
         .data : {
                 PROVIDE (_copy_start = .);
-                *(.data)
+                *(.data*)
 		*(.gnu.linkonce.d*)
 		*(.gcc_except_table)
 		*(.jcr)

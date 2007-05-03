@@ -4,7 +4,7 @@
  *
  *  Author: W. Eric Norum <norume@aps.anl.gov>
  *
- *  COPYRIGHT (c) 2005.
+ *  COPYRIGHT (c) 2005-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -146,7 +146,7 @@ SECTIONS
         .data : {
             PROVIDE( _data_dest_start = . );
             PROVIDE( _copy_start = .);
-            *(.data)
+            *(.data*)
             *(.gnu.linkonce.d*)
             *(.gcc_except_table)
             *(.jcr)

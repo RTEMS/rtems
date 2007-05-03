@@ -111,7 +111,7 @@ SECTIONS
   . = ALIGN(128) + (. & (128 - 1));
   .data  .  :
   {
-    *(.data)
+    *(.data*)
     *(.gcc_exc*)
     ___EH_FRAME_BEGIN__ = .;
     *(.eh_fram*)

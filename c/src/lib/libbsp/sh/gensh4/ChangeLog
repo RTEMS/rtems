@@ -1,3 +1,7 @@
+2007-05-03	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Handle .data.* sections
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove qrtems_debug.

@@ -47,7 +47,7 @@ SECTIONS
         AT ( _rom_data_start ) 
         {
         _sdata = .;
-        *(.data);
+        *(.data*);
 	*(.gnu.linkonce.d*)
 	*(.gcc_except_table)
         _edata = .;

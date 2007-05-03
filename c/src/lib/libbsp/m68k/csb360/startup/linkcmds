@@ -108,7 +108,7 @@ SECTIONS
 	copy_start = .;
         *(.shdata)
         . = ALIGN (0x10);
-        *(.data)
+        *(.data*)
         . = ALIGN (0x10);
         *(.gcc_exc)
         *(.gcc_except_table)

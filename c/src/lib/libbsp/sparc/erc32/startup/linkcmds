@@ -157,7 +157,7 @@ SECTIONS
     data_start = .;
     _data_start = .;
     _sdata = . ;
-    *(.data)
+    *(.data*)
     *(.gnu.linkonce.d*)
     *(.gcc_except_table)
     . = ALIGN(0x10);

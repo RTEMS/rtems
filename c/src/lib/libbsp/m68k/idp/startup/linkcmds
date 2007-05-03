@@ -115,7 +115,7 @@ SECTIONS
         } >ram
         .data : {
                 PROVIDE (_copy_start = .);
-                *(.data)
+                *(.data*)
 		*(.gnu.linkonce.d*)
 		*(.gcc_except_table)
 		*(.jcr)

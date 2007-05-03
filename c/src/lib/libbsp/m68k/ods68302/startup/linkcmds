@@ -133,7 +133,7 @@ SECTIONS
         .data (ADDR(.vtable) + SIZEOF(.vtable)) : 
           AT (ADDR(.text) + SIZEOF(.text)) {
                 PROVIDE (_copy_start = .);
-                *(.data)
+                *(.data*)
 		*(.gnu.linkonce.d*)
 		*(.gcc_except_table)
 		*(.jcr)

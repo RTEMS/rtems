@@ -74,7 +74,7 @@ SECTIONS
     }  >ram
     .data SIZEOF(.tors) + ADDR(.tors):
     {
- 	*(.data)
+ 	*(.data*)
         *(.gcc_exc*)
 	CONSTRUCTORS
 	 _edata = .;

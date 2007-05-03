@@ -132,8 +132,7 @@ SECTIONS
   .data    :
   {
     copy_start = .;
-    *(.data)
-    *(.data.*)
+    *(.data*)
     *(.gcc_exc*)
     ___EH_FRAME_BEGIN__ = .;
     *(.eh_fram*)
