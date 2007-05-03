@@ -52,7 +52,8 @@ SECTIONS
 	CONSTRUCTORS
 	 _edata = .;
     }  
-    .bss SIZEOF(.data) + ADDR(.data):
+    . = ALIGN(256) + (. & (256 - 1));
+    .bss :
     { 
 	 _bss_start = .;
 	_clear_start = .;
