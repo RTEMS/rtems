@@ -133,7 +133,7 @@ SECTIONS
   . = ALIGN(128) + (. & (128 - 1));
   .data  .  :
   {
-    *(.data)
+    *(.data*)
     *(.gcc_exc*)
     ___EH_FRAME_BEGIN__ = .;
     *(.eh_fram*)
@@ -220,6 +220,6 @@ SECTIONS
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) }
 
-  .stack 0x0f001ff0 : { _stack = .; *(.stack) } > onchip_ram
+  stack : { _stack = .; *(.stack) } > onchip_ram
   /* These must appear regardless of  .  */
 }
