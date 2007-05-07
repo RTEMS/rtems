@@ -2,8 +2,7 @@
 
 *lib:
 %{!qrtems: %(old_lib)} \
-%{qrtems: %{!qrtems_debug: -lrtemsbsp -lrtemscpu } \
-%{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
+%{qrtems: -lrtemsbsp -lrtemscpu \
 %(old_lib) \
 %{qnolinkcmds: } }
 
