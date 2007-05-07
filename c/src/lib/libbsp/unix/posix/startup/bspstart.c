@@ -117,7 +117,7 @@ void bsp_postdriver_hook(void)
 
 void bsp_start(void)
 {
-    uint32_t   workspace_ptr;
+    uintptr_t   workspace_ptr;
 
     /*
      *  Copy the table (normally done in shared main).
@@ -172,7 +172,7 @@ void bsp_start(void)
      */
 
     workspace_ptr =
-      (uint32_t) sbrk(BSP_Configuration.work_space_size + CPU_ALIGNMENT);
+      (uintptr_t) sbrk(BSP_Configuration.work_space_size + CPU_ALIGNMENT);
     workspace_ptr += CPU_ALIGNMENT - 1;
     workspace_ptr &= ~(CPU_ALIGNMENT - 1);
 

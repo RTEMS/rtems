@@ -1,5 +1,6 @@
 2007-05-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* startup/bspstart.c: Use uintptr_t for address arithmetics.
 	* bsp_specs: Remove -qrtems_debug.
 
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
