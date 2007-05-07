@@ -1,3 +1,7 @@
+2007-05-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mpc8xx/clock/clock.c: Remove unused var extclk_value.
+
 2007-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc6xx/clock/c_clock.c: Add initial cut at nanoseconds since last
