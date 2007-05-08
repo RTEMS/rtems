@@ -75,6 +75,27 @@ AC_CHECK_TYPES([uint64_t, int64_t])
 AC_CHECK_TYPES([uintmax_t, intmax_t])
 AC_CHECK_TYPES([uintptr_t, intptr_t])
 
+AC_CACHE_CHECK([if PRIxPTR works],
+[rtems_cv_PRIxPTR],[
+  AS_IF([test x"$GCC" = xyes],[
+    save_CFLAGS=$CFLAGS
+    CFLAGS=-Werror])
+
+  AC_COMPILE_IFELSE([
+    AC_LANG_PROGRAM([
+      #include <inttypes.h>
+      #include <stdio.h>
+    ],[
+      void *ptr;
+      printf("%" PRIxPTR "\n", (intptr_t) ptr);
+    ])],
+    [rtems_cv_PRIxPTR=yes],
+    [rtems_cv_PRIxPTR=no])
+
+  AS_IF([test x"$GCC" = xyes],[
+    CFLAGS=$save_CFLAGS])
+])
+
 # These are conditionally defined by the toolchain
 # FIXME: we should either conditionally compile those parts in
 # RTEMS depending on them, or abort - For now, simply check.

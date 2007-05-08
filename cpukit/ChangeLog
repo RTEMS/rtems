@@ -1,5 +1,9 @@
 2007-05-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Check for working PRIxPTR.
+
+2007-05-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/include/rtems/score/thread.h, score/inline/rtems/score/stack.inl
 	score/src/threadinitialize.c, score/src/threadstackallocate.c:
 	Use size_t for stack sizes.
