@@ -105,7 +105,7 @@ struct	netent {
 	char		*n_name;	/* official name of net */
 	char		**n_aliases;	/* alias list */
 	int		n_addrtype;	/* net address type */
-	unsigned long	n_net;		/* network # */
+	uint32_t	n_net;		/* network # */
 };
 
 struct	servent {
