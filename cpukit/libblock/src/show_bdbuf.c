@@ -33,6 +33,11 @@
 | 26.09.06  creation                                         doe  |
 |*****************************************************************|
 \*===============================================================*/
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems.h>
 #include <rtems/monitor.h>
 #include <rtems/bdbuf.h>

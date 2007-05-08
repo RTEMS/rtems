@@ -1,5 +1,6 @@
 2007-05-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/show_bdbuf.c: Add HAVE_CONFIG_H magic.
 	* libnetworking/libc/gethostbydns.c, 
 	libnetworking/libc/inet_net_ntop.c,
 	libnetworking/libc/inet_pton.c: Eliminate __P.
