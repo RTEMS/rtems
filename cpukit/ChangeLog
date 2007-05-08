@@ -1,5 +1,7 @@
 2007-05-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/machine/endian.h: Convert htons, htonl, ntohs, ntohl
+	to inline functions, using uint[16,32]_t. 
 	* libnetworking/netdb.h: Change netent->n_net to uint32_t to comply
 	with SUSv3.
 	* telnetd/icmds.c: Add HAVE_CONFIG_H magic.

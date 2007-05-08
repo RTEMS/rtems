@@ -31,10 +31,25 @@
  *  Very simply on big endian CPUs
  */
 
-#define       ntohl(_x)        (_x)
-#define       ntohs(_x)        (_x)
-#define       htonl(_x)        (_x)
-#define       htons(_x)        (_x)
+static inline uint32_t ntohl( uint32_t _x )
+{
+  return _x;
+}
+
+static inline uint16_t ntohs( uint16_t _x )
+{
+  return _x;
+}
+
+static inline uint32_t htonl( uint32_t _x )
+{
+  return _x;
+}
+
+static inline uint16_t htons( uint16_t _x )
+{
+  return _x;
+}
 
 #define NTOHS(x)
 #define HTONS(x)
@@ -47,10 +62,25 @@
  *  A little more complicated on little endian CPUs
  */
 
-#define       ntohl(_x)        ((long)  CPU_swap_u32((uint32_t  )_x))
-#define       ntohs(_x)        ((short) CPU_swap_u16((uint16_t  )_x))
-#define       htonl(_x)        ((long)  CPU_swap_u32((uint32_t  )_x))
-#define       htons(_x)        ((short) CPU_swap_u16((uint16_t  )_x))
+static inline uint32_t ntohl( uint32_t _x )
+{
+  return CPU_swap_u32(_x);
+}
+
+static inline uint16_t ntohs( uint16_t _x )
+{
+  return CPU_swap_u16(_x);
+}
+
+static inline uint32_t htonl( uint32_t _x )
+{
+  return CPU_swap_u32(_x);
+}
+
+static inline uint16_t htons( uint16_t _x )
+{
+  return CPU_swap_u16(_x);
+}
 
 #define NTOHS(x) (x) = ntohs(x)
 #define HTONS(x) (x) = htons(x)
