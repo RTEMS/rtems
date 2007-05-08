@@ -52,18 +52,19 @@
 #include <stdio.h>
 #include <netdb.h>
 #include <sys/select.h>
+#include <inttypes.h>
 
 #if defined(LIBC_SCCS) && !defined(lint)
 /* from: static char sccsid[] = 	"@(#)rtime.c	2.2 88/08/10 4.0 RPCSRC; from 1.8 88/02/08 SMI"; */
 static const char rcsid[] = "$FreeBSD: src/lib/libc/rpc/rtime.c,v 1.5 2000/01/27 23:06:41 jasone Exp $";
 #endif
 
-extern int _rpc_dtablesize __P(( void ));
+extern int _rpc_dtablesize( void );
 
-#define NYEARS	(unsigned long)(1970 - 1900)
-#define TOFFSET (unsigned long)(60*60*24*(365*NYEARS + (NYEARS/4)))
+#define NYEARS	(UINT32_C(1970) - UINT32_C(1900))
+#define TOFFSET (UINT32_C(60)*UINT32_C(60)*UINT32_C(24)*(UINT32_C(365)*NYEARS + (NYEARS/UINT32_C(4))))
 
-static void do_close __P(( int ));
+static void do_close( int );
 
 int
 rtime(addrp, timep, timeout)
@@ -74,7 +75,7 @@ rtime(addrp, timep, timeout)
 	int s;
 	fd_set readfds;
 	int res;
-	unsigned long thetime;
+	uint32_t thetime;
 	struct sockaddr_in from;
 	socklen_t fromlen;
 	int type;

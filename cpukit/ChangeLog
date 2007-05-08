@@ -1,5 +1,9 @@
 2007-05-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/rpc/rtime.c: Use uint32_t instead of unsigned long for
+	return value of ntohl (POSIX requirement). 
+	Use UINT32_C macros to avoid overflows on 16bit targets.
+	Eliminate __P.
 	* configure.ac: Check for working PRIxPTR.
 
 2007-05-08	Ralf Corsépius <ralf.corsepius@rtems.org>
