@@ -45,7 +45,7 @@ boolean _Thread_Initialize(
   Objects_Information                  *information,
   Thread_Control                       *the_thread,
   void                                 *stack_area,
-  uint32_t                              stack_size,
+  size_t                                stack_size,
   boolean                               is_fp,
   Priority_Control                      priority,
   boolean                               is_preemptible,
@@ -55,7 +55,7 @@ boolean _Thread_Initialize(
   Objects_Name                          name
 )
 {
-  uint32_t             actual_stack_size = 0;
+  size_t               actual_stack_size = 0;
   void                *stack = NULL;
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   void                *fp_area;

@@ -33,7 +33,7 @@
 RTEMS_INLINE_ROUTINE void _Stack_Initialize (
   Stack_Control *the_stack,
   void          *starting_address,
-  uint32_t       size
+  size_t         size
 )
 {
   the_stack->area = starting_address;
@@ -46,7 +46,7 @@ RTEMS_INLINE_ROUTINE void _Stack_Initialize (
  */
 
 RTEMS_INLINE_ROUTINE boolean _Stack_Is_enough (
-  uint32_t   size
+  size_t size
 )
 {
   return ( size >= STACK_MINIMUM_SIZE );
@@ -63,7 +63,7 @@ RTEMS_INLINE_ROUTINE boolean _Stack_Is_enough (
  */
 
 RTEMS_INLINE_ROUTINE uint32_t   _Stack_Adjust_size (
-  uint32_t   size
+  size_t size
 )
 {
   return size + CPU_STACK_ALIGNMENT;

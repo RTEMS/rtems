@@ -476,9 +476,9 @@ void _Thread_Dispatch( void );
  *  Set the Start.stack field to the address of the stack
  */
 
-uint32_t   _Thread_Stack_Allocate(
+size_t _Thread_Stack_Allocate(
   Thread_Control *the_thread,
-  uint32_t   stack_size
+  size_t          stack_size
 );
 
 /**
@@ -503,7 +503,7 @@ boolean _Thread_Initialize(
   Objects_Information                  *information,
   Thread_Control                       *the_thread,
   void                                 *stack_area,
-  uint32_t                              stack_size,
+  size_t                                stack_size,
   boolean                               is_fp,
   Priority_Control                      priority,
   boolean                               is_preemptible,

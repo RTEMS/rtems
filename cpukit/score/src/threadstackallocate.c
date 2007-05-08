@@ -40,13 +40,13 @@
  *  Set the Start.stack field to the address of the stack
  */
 
-uint32_t _Thread_Stack_Allocate(
+size_t _Thread_Stack_Allocate(
   Thread_Control *the_thread,
-  uint32_t        stack_size
+  size_t          stack_size
 )
 {
   void *stack_addr = 0;
-  uint32_t the_stack_size = stack_size;
+  size_t the_stack_size = stack_size;
 
   if ( !_Stack_Is_enough( the_stack_size ) )
     the_stack_size = STACK_MINIMUM_SIZE;
