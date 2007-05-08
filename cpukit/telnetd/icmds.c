@@ -1,3 +1,7 @@
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/shell.h>
 #include <rtems/rtems_bsdnet.h>
 
