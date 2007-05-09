@@ -52,7 +52,7 @@ libnetworking_a_SOURCES += kern/kern_mib.c kern/kern_subr.c \
 include_machinedir = $(includedir)/machine
 
 include_machine_HEADERS = machine/cpu.h machine/cpufunc.h \
-    machine/endian.h machine/in_cksum.h machine/vmparam.h
+    machine/in_cksum.h machine/vmparam.h
 
 libnetworking_a_SOURCES += machine/limits.h
 
