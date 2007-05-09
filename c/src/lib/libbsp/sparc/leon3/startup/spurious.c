@@ -52,11 +52,7 @@ rtems_isr bsp_spurious_handler(
 
   real_trap = SPARC_REAL_TRAP_NUMBER(trap);
 
-  strcpy(line, "Unexpected trap (0x  ) at address 0x        ");
-  line[ 19 ] = digits[ real_trap >> 4 ];
-  line[ 20 ] = digits[ real_trap & 0xf ];
-  itos(isf->tpc, &line[36]);
-  DEBUG_puts( line );
+  printk( "Unexpected trap (0x%2d) at address 0x%08x\n", real_trap, isf->tpc);
 
   switch (real_trap) {
 
@@ -65,33 +61,34 @@ rtems_isr bsp_spurious_handler(
      */
 
     case 0x00: 
-      DEBUG_puts( "reset" );
+      printk( "reset\n" );
       break;
     case 0x01: 
-      DEBUG_puts( "instruction access exception" );
+      printk( "instruction access exception\n" );
       break;
     case 0x02: 
-      DEBUG_puts( "illegal instruction" );
+      printk( "illegal instruction\n" );
       break;
     case 0x03: 
-      DEBUG_puts( "privileged instruction" );
+      printk( "privileged instruction\n" );
       break;
     case 0x04: 
-      DEBUG_puts( "fp disabled" );
+      printk( "fp disabled\n" );
       break;
     case 0x07: 
-      DEBUG_puts( "memory address not aligned" );
+      printk( "memory address not aligned\n" );
       break;
     case 0x08: 
-      DEBUG_puts( "fp exception" );
+      printk( "fp exception\n" );
       break;
     case 0x09: 
-      strcpy(line, "data access exception at 0x        " );
-      /* itos(LEON_REG.Failed_Address, &line[27]);  FIXME */
-      DEBUG_puts( line );
+      printk( "Unexpected trap (0x%2d) at address 0x%08x\n",
+        real_trap,
+        abcdef01 /* XXX FIXME isf->tpc */
+      );
       break;
     case 0x0A: 
-      DEBUG_puts( "tag overflow" );
+      printk( "tag overflow\n" );
       break;
 
     /*
@@ -101,31 +98,31 @@ rtems_isr bsp_spurious_handler(
 
       /*
     case LEON_TRAP_TYPE( LEON_INTERRUPT_CORRECTABLE_MEMORY_ERROR ):
-      DEBUG_puts( "LEON_INTERRUPT_CORRECTABLE_MEMORY_ERROR" );
+      printk( "LEON_INTERRUPT_CORRECTABLE_MEMORY_ERROR\n" );
       break;
     case LEON_TRAP_TYPE( LEON_INTERRUPT_UART_2_RX_TX ):
-      DEBUG_puts( "LEON_INTERRUPT_UART_2_RX_TX" );
+      printk( "LEON_INTERRUPT_UART_2_RX_TX\n" );
       break;
     case LEON_TRAP_TYPE( LEON_INTERRUPT_UART_1_RX_TX ):
-      DEBUG_puts( "LEON_INTERRUPT_UART_1_RX_TX" );
+      printk( "LEON_INTERRUPT_UART_1_RX_TX\n" );
       break;
     case LEON_TRAP_TYPE( LEON_INTERRUPT_EXTERNAL_0 ):
-      DEBUG_puts( "LEON_INTERRUPT_EXTERNAL_0" );
+      printk( "LEON_INTERRUPT_EXTERNAL_0\n" );
       break;
     case LEON_TRAP_TYPE( LEON_INTERRUPT_EXTERNAL_1 ):
-      DEBUG_puts( "LEON_INTERRUPT_EXTERNAL_1" );
+      printk( "LEON_INTERRUPT_EXTERNAL_1\n" );
       break;
     case LEON_TRAP_TYPE( LEON_INTERRUPT_EXTERNAL_2 ):
-      DEBUG_puts( "LEON_INTERRUPT_EXTERNAL_2" );
+      printk( "LEON_INTERRUPT_EXTERNAL_2\n" );
       break;
     case LEON_TRAP_TYPE( LEON_INTERRUPT_EXTERNAL_3 ):
-      DEBUG_puts( "LEON_INTERRUPT_EXTERNAL_3" );
+      printk( "LEON_INTERRUPT_EXTERNAL_3\n" );
       break;
     case LEON_TRAP_TYPE( LEON_INTERRUPT_TIMER1 ):
-      DEBUG_puts( "LEON_INTERRUPT_TIMER1" );
+      printk( "LEON_INTERRUPT_TIMER1\n" );
       break;
     case LEON_TRAP_TYPE( LEON_INTERRUPT_TIMER2 ):
-      DEBUG_puts( "LEON_INTERRUPT_TIMER2" );
+      printk( "LEON_INTERRUPT_TIMER2\n" );
       break;
       */
 

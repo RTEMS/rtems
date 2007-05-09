@@ -75,15 +75,10 @@ int rtems_smc91111_driver_attach_leon3 (
     if (addr_pio && addr_mctrl) {
       
       LEON3_IOPORT_Regs_Map *io = (LEON3_IOPORT_Regs_Map *) addr_pio;
-      {
-        char buf[1024];
-        
-        sprintf(buf,
-          "Activating Leon3 io port for smsc_lan91cxx (pio:%x mctrl:%x)\n",
-          (unsigned int)addr_pio,
-          (unsigned int)addr_mctrl);
-        DEBUG_puts(buf);
-      }
+      printk(
+        "Activating Leon3 io port for smsc_lan91cxx (pio:%x mctrl:%x)\n",
+        (unsigned int)addr_pio,
+        (unsigned int)addr_mctrl);
       
       *((volatile unsigned int *)addr_mctrl) |= 0x10f80000;  /*mctrl ctrl 1 */
       io->irqmask |= (1 << leon_scmv91111_configuration.pio);

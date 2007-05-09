@@ -1,3 +1,9 @@
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/debugputs.c, include/bsp.h, leon_smc91111/leon_smc91111.c,
+	startup/bspstart.c, startup/spurious.c: Remove debug print methods
+	that are redundant with prntk and replace their use with printk.
+
 2007-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Handle .data.* sections

@@ -116,8 +116,6 @@ rtems_isr_entry set_vector(                     /* returns old vector */
     int                 type                    /* RTEMS or RAW intr  */
 );
 
-void DEBUG_puts( char *string );
-
 void BSP_fatal_return( void );
 
 void bsp_spurious_initialize( void );
