@@ -33,10 +33,6 @@
 
 #include <bsp.h>
 
-#if defined(__USE_INIT_FINI__)
-#include <stdlib.h> /* for atexit() */
-#endif
-
 extern void bsp_start( void );
 extern void bsp_cleanup( void );
 
@@ -48,11 +44,6 @@ rtems_api_configuration_table BSP_RTEMS_Configuration;
 
 #ifdef RTEMS_POSIX_API
 posix_api_configuration_table BSP_POSIX_Configuration;
-#endif
-
-/* Initialize C++ global Ctor/Dtor and initializes exception handling. */
-#if defined(__USE_INIT_FINI__)
-extern void _fini( void );
 #endif
 
 rtems_interrupt_level bsp_isr_level;
@@ -125,15 +116,6 @@ int boot_card(int argc, char **argv, char **envp)
 
   bsp_isr_level =
     rtems_initialize_executive_early( &BSP_Configuration, &Cpu_table );
-
-  /*
-   *  The atexit hook will be before the static destructor list's entry
-   *  point.
-   */
-
-#if defined(__USE_INIT_FINI__)
-   atexit( _fini );
-#endif
 
   /*
    *  Call c_rtems_main() and eventually let the first task or the real

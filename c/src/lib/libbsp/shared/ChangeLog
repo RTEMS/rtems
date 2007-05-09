@@ -1,3 +1,8 @@
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bootcard.c: Move __fini call to inside executive for
+	symmettry with __init call.
+
 2007-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* bootcard.c: RTEMS Workspace now defaults to not being zeroed. This
