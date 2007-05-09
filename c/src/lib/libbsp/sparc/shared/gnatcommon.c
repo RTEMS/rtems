@@ -6,6 +6,7 @@
  */
 
 #include <bsp.h>
+#include <rtems/bspIo.h>
 #include <signal.h>
 #include <stdlib.h>
 
@@ -65,13 +66,13 @@ __gnat_signals_Abnormal_termination_handler (int signo)
   switch (signo)
     {
     case SIGFPE:
-      DEBUG_puts ("\nConstraint_Error\n");
+      printk("\nConstraint_Error\n");
       break;
     case SIGSEGV:
-      DEBUG_puts ("\nStorage_Error\n");
+      printk("\nStorage_Error\n");
       break;
     default:
-      DEBUG_puts ("\nProgram_Error\n");
+      printk("\nProgram_Error\n");
       break;
     }
   exit (1);

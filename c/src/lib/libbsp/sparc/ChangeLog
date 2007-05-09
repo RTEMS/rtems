@@ -1,3 +1,8 @@
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/bspstart.c, shared/gnatcommon.c: Remove debug print methods
+	that are redundant with prntk and replace their use with printk.
+
 2007-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* erc32/tools/runtest.in, leon2/tools/runtest.in,
