@@ -1,5 +1,8 @@
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/arpa/nameser_compat.h, libnetworking/netinet/in.h,
+	libnetworking/rtems/rtems_bsdnet_internal.h: Include
+	<rtems/endian.h> instead of <machine/endian.h>.
 	* Makefile.am: Add include/rtems/endian.h.
 	* include/rtems/endian.h: New (Copied from
 	  libnetworking/machine/endian.h).
