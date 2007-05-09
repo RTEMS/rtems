@@ -330,10 +330,12 @@ rtems_monitor_node_cmd(
             break;
     }
 
-    if ((new_node >= 1) &&
+    #if defined(RTEMS_MULTIPROCESSING)
+      if ((new_node >= 1) &&
         _Configuration_MP_table &&
         (new_node <= _Configuration_MP_table->maximum_nodes))
             rtems_monitor_default_node = new_node;
+    #endif
 }
 
 

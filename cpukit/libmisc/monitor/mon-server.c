@@ -218,6 +218,7 @@ rtems_monitor_server_init(
     uint32_t   monitor_flags
 )
 {
+    #if defined(RTEMS_MULTIPROCESSING)
     rtems_status_code status;
 
     if (_System_state_Is_multiprocessing    &&
@@ -303,5 +304,6 @@ rtems_monitor_server_init(
     }
 
 done:
+    #endif
     return;
 }
