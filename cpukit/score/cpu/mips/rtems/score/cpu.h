@@ -311,8 +311,6 @@ extern "C" {
  *  routines are handled.
  */
 
-#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
-
 /* __MIPSEB__ or __MIPSEL__ is defined by GCC based on -EB or -EL command line options */
 #if defined(__MIPSEB__)
 #define CPU_BIG_ENDIAN                           TRUE

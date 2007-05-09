@@ -272,8 +272,6 @@ extern "C" {
  *  NOTE: SHes can be big or little endian, the default is big endian
  */
 
-#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
-
 /* __LITTLE_ENDIAN__ is defined if -ml is given to gcc */
 #if defined(__LITTLE_ENDIAN__)
 #define CPU_BIG_ENDIAN                           FALSE

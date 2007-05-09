@@ -116,8 +116,6 @@
  *  routines are handled.
  */
 
-#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
-
 #if defined(__BIG_ENDIAN__) || defined(_BIG_ENDIAN)
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE

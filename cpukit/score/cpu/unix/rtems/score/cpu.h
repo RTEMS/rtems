@@ -284,11 +284,9 @@ extern "C" {
  */
 
 #if defined(__hppa__) || defined(__sparc__)
-#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
 #elif defined(__i386__)
-#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
 #define CPU_BIG_ENDIAN                           FALSE
 #define CPU_LITTLE_ENDIAN                        TRUE
 #else
