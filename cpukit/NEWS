@@ -1,0 +1,7 @@
+Major changes since rtems-4.7.0:
+
+2007-05-09 	Remove define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES (formerly in
+	score/cpu/<cpu>/score/rtems/cpu.h)
+
+	This define has not been used in RTEMS code and therefore has been
+	removed without substitute.
