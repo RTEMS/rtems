@@ -65,10 +65,6 @@ $(PROJECT_INCLUDE)/machine/cpufunc.h: machine/cpufunc.h $(PROJECT_INCLUDE)/machi
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/cpufunc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/cpufunc.h
 
-$(PROJECT_INCLUDE)/machine/endian.h: machine/endian.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/endian.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/endian.h
-
 $(PROJECT_INCLUDE)/machine/in_cksum.h: machine/in_cksum.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/in_cksum.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/in_cksum.h
