@@ -80,37 +80,6 @@ int console_inbyte_nonblocking( int port )
 }
 
 /*
- *  DEBUG_puts
- *
- *  This should be safe in the event of an error.  It attempts to insure
- *  that no TX empty interrupts occur while it is doing polled IO.  Then
- *  it restores the state of that external interrupt.
- *
- *  Input parameters:
- *    string  - pointer to debug output string
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- */
-
-void DEBUG_puts(
-  char *string
-)
-{
-  char *s;
-  uint32_t   old_level;
-
-  ERC32_Disable_interrupt( ERC32_INTERRUPT_UART_A_RX_TX, old_level );
-    for ( s = string ; *s ; s++ )
-      console_outbyte_polled( 0, *s );
-
-    console_outbyte_polled( 0, '\r' );
-    console_outbyte_polled( 0, '\n' );
-  ERC32_Restore_interrupt( ERC32_INTERRUPT_UART_A_RX_TX, old_level );
-}
-
-/*
  *  To support printk
  */
 
