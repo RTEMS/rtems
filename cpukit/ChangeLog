@@ -1,5 +1,7 @@
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/machine/endian.h: Remove
+	  CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES.
 	* NEWS: new.
 
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>

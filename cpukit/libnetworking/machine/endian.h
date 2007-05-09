@@ -23,8 +23,6 @@
 #endif
 #endif
 
-#if ( CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES == FALSE )
-
 #if ( CPU_BIG_ENDIAN == TRUE )
 
 /*
@@ -90,7 +88,5 @@ static inline uint16_t htons( uint16_t _x )
 #else
 #error "Unknown endian-ness for this cpu"
 #endif
-
-#endif  /* CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES */
 
 #endif /* _MACHINE_ENDIAN_H_ */
