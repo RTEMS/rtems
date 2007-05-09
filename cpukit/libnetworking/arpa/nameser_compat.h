@@ -41,7 +41,7 @@
 
 #define	__BIND		19950621	/* (DEAD) interface version stamp. */
 
-#include <machine/endian.h>
+#include <rtems/endian.h>
 
 #if !defined(BYTE_ORDER) || \
     (BYTE_ORDER != BIG_ENDIAN && BYTE_ORDER != LITTLE_ENDIAN && \

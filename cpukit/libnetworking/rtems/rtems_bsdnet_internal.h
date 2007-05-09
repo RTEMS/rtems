@@ -104,7 +104,7 @@ typedef	struct vm_page	*vm_page_t;
 #define	makedev(x,y)	((dev_t)(((x) << 8) | (y)))	/* create dev_t */
 #endif
 
-#include <machine/endian.h>
+#include <rtems/endian.h>
 
 typedef quad_t          rlim_t;         /* resource limit */
 typedef	u_int32_t	fixpt_t;	/* fixed point number */

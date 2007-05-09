@@ -38,7 +38,7 @@
 #define _NETINET_IN_H_
 
 #include <rtems/bsdnet/_types.h>
-#include <machine/endian.h>
+#include <rtems/endian.h>
 
 /* Protocols common to RFC 1700, POSIX, and X/Open. */
 #define	IPPROTO_IP		0		/* dummy for IP */
