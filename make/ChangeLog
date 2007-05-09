@@ -1,5 +1,10 @@
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* compilers/gcc-no_bsp.cfg: There are no longer any required managers.
+	Plus some cleanup
+
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* leaf.cfg, compilers/gcc-no_bsp.cfg: Add optional manager stub
 	for Classic API Barrier.
 
