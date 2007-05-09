@@ -64,10 +64,10 @@ extern itron_api_configuration_table    Configuration_ITRON_API;
  *  RTEMS C Library and Newlib support
  */
 
-#ifdef RTEMS_NEWLIB
-#define CONFIGURE_NEWLIB_EXTENSION 1
+#if (defined(RTEMS_NEWLIB) && defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
+  #define CONFIGURE_NEWLIB_EXTENSION 1
 #else
-#define CONFIGURE_NEWLIB_EXTENSION 0
+  #define CONFIGURE_NEWLIB_EXTENSION 0
 #endif
 
 /*
@@ -130,25 +130,23 @@ extern int rtems_telnetd_maximum_ptys;
 #endif /* CONFIGURE_INIT */
 
 #ifdef CONFIGURE_INIT
-#ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
-rtems_filesystem_mount_table_t configuration_mount_table = {
-#ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-  &IMFS_ops,
-#else  /* using miniIMFS as base filesystem */
-  &miniIMFS_ops,
-#endif
-  RTEMS_FILESYSTEM_READ_WRITE,
-  NULL,
-  NULL
-};
+  #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
+    rtems_filesystem_mount_table_t configuration_mount_table = {
+      #ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
+        &IMFS_ops,
+      #else  /* using miniIMFS as base filesystem */
+        &miniIMFS_ops,
+      #endif
+      RTEMS_FILESYSTEM_READ_WRITE,
+      NULL,
+      NULL
+    };
 
-rtems_filesystem_mount_table_t
-    *rtems_filesystem_mount_table = &configuration_mount_table;
-int rtems_filesystem_mount_table_size = 1;
+    rtems_filesystem_mount_table_t
+	*rtems_filesystem_mount_table = &configuration_mount_table;
+    int rtems_filesystem_mount_table_size = 1;
+  #endif
 #endif
-
-#endif
-
 
 /*
  *  Stack Checker Requirements
@@ -510,25 +508,30 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #ifdef STACK_CHECKER_ON
 #include <rtems/stackchk.h>
 #endif
+#include <rtems/libcsupport.h>
 
 #if defined(CONFIGURE_INITIAL_EXTENSIONS) || \
-    defined(STACK_CHECKER_ON)
-rtems_extensions_table Configuration_Initial_Extensions[] = {
-#ifdef CONFIGURE_INITIAL_EXTENSIONS
-    CONFIGURE_INITIAL_EXTENSIONS,
-#endif
-#ifdef STACK_CHECKER_ON
-    RTEMS_STACK_CHECKER_EXTENSION,
-#endif
-};
+    defined(STACK_CHECKER_ON) || \
+    (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
+  rtems_extensions_table Configuration_Initial_Extensions[] = {
+    #if !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
+      RTEMS_NEWLIB_EXTENSION,
+    #endif
+    #if defined(STACK_CHECKER_ON)
+      RTEMS_STACK_CHECKER_EXTENSION,
+    #endif
+    #if defined(CONFIGURE_INITIAL_EXTENSIONS)
+      CONFIGURE_INITIAL_EXTENSIONS,
+    #endif
+  };
 
-#define CONFIGURE_INITIAL_EXTENSION_TABLE Configuration_Initial_Extensions
-#define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
-  ((sizeof(Configuration_Initial_Extensions) / \
-    sizeof(rtems_extensions_table)))
+  #define CONFIGURE_INITIAL_EXTENSION_TABLE Configuration_Initial_Extensions
+  #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
+    ((sizeof(Configuration_Initial_Extensions) / \
+      sizeof(rtems_extensions_table)))
 #else
-#define CONFIGURE_INITIAL_EXTENSION_TABLE NULL
-#define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
+  #define CONFIGURE_INITIAL_EXTENSION_TABLE NULL
+  #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
 #endif
 
 

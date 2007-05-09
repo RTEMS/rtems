@@ -1,9 +1,5 @@
 /*
- *  User Extension Handler
- *
- *  NOTE: XXX
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,187 +15,40 @@
 
 #include <rtems/system.h>
 #include <rtems/score/userext.h>
+#include <rtems/score/wkspace.h>
+#include <string.h>
 
-/*PAGE
- *
- *  _User_extensions_Thread_create
+/**
+ *  This routine performs the initialization necessary for this handler.
  */
 
-boolean _User_extensions_Thread_create (
-  Thread_Control *the_thread
+void _User_extensions_Handler_initialization (
+  uint32_t                number_of_extensions,
+  User_extensions_Table  *initial_extensions
 )
 {
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
-  boolean                  status;
+  User_extensions_Control *extension;
+  uint32_t                 i;
 
-  for ( the_node = _User_extensions_List.first ;
-        !_Chain_Is_tail( &_User_extensions_List, the_node ) ;
-        the_node = the_node->next ) {
+  _Chain_Initialize_empty( &_User_extensions_List );
+  _Chain_Initialize_empty( &_User_extensions_Switches_list );
 
-    the_extension = (User_extensions_Control *) the_node;
-
-    if ( the_extension->Callouts.thread_create != NULL ) {
-      status = (*the_extension->Callouts.thread_create)(
-        _Thread_Executing,
-        the_thread
+  if ( initial_extensions ) {
+    extension = (User_extensions_Control *)
+      _Workspace_Allocate_or_fatal_error(
+        number_of_extensions * sizeof( User_extensions_Control )
       );
-      if ( !status )
-        return FALSE;
+  
+    memset (
+      extension,
+      0,
+      number_of_extensions * sizeof( User_extensions_Control )
+    );
+  
+    for ( i = 0 ; i < number_of_extensions ; i++ ) {
+      _User_extensions_Add_set (extension, &initial_extensions[i]);
+      extension++;
     }
   }
-
-  return TRUE;
 }
 
-/*PAGE
- *
- *  _User_extensions_Thread_delete
- */
-
-void _User_extensions_Thread_delete (
-  Thread_Control *the_thread
-)
-{
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
-
-  for ( the_node = _User_extensions_List.last ;
-        !_Chain_Is_head( &_User_extensions_List, the_node ) ;
-        the_node = the_node->previous ) {
-
-    the_extension = (User_extensions_Control *) the_node;
-
-    if ( the_extension->Callouts.thread_delete != NULL )
-      (*the_extension->Callouts.thread_delete)(
-        _Thread_Executing,
-        the_thread
-      );
-  }
-}
-
-/*PAGE
- *
- *  _User_extensions_Thread_start
- *
- */
-
-void _User_extensions_Thread_start (
-  Thread_Control *the_thread
-)
-{
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
-
-  for ( the_node = _User_extensions_List.first ;
-        !_Chain_Is_tail( &_User_extensions_List, the_node ) ;
-        the_node = the_node->next ) {
-
-    the_extension = (User_extensions_Control *) the_node;
-
-    if ( the_extension->Callouts.thread_start != NULL )
-      (*the_extension->Callouts.thread_start)(
-        _Thread_Executing,
-        the_thread
-      );
-  }
-}
-
-/*PAGE
- *
- *  _User_extensions_Thread_restart
- *
- */
-
-void _User_extensions_Thread_restart (
-  Thread_Control *the_thread
-)
-{
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
-
-  for ( the_node = _User_extensions_List.first ;
-        !_Chain_Is_tail( &_User_extensions_List, the_node ) ;
-        the_node = the_node->next ) {
-
-    the_extension = (User_extensions_Control *) the_node;
-
-    if ( the_extension->Callouts.thread_restart != NULL )
-      (*the_extension->Callouts.thread_restart)(
-        _Thread_Executing,
-        the_thread
-      );
-  }
-}
-
-/*PAGE
- *
- *  _User_extensions_Thread_begin
- *
- */
-
-void _User_extensions_Thread_begin (
-  Thread_Control *executing
-)
-{
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
-
-  for ( the_node = _User_extensions_List.first ;
-        !_Chain_Is_tail( &_User_extensions_List, the_node ) ;
-        the_node = the_node->next ) {
-
-    the_extension = (User_extensions_Control *) the_node;
-
-    if ( the_extension->Callouts.thread_begin != NULL )
-      (*the_extension->Callouts.thread_begin)( executing );
-  }
-}
-
-/*PAGE
- *
- *  _User_extensions_Thread_exitted
- */
-
-void _User_extensions_Thread_exitted (
-  Thread_Control *executing
-)
-{
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
-
-  for ( the_node = _User_extensions_List.last ;
-        !_Chain_Is_head( &_User_extensions_List, the_node ) ;
-        the_node = the_node->previous ) {
-
-    the_extension = (User_extensions_Control *) the_node;
-
-    if ( the_extension->Callouts.thread_exitted != NULL )
-      (*the_extension->Callouts.thread_exitted)( executing );
-  }
-}
-
-/*PAGE
- *
- *  _User_extensions_Fatal
- */
-
-void _User_extensions_Fatal (
-  Internal_errors_Source  the_source,
-  boolean                 is_internal,
-  uint32_t                the_error
-)
-{
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
-
-  for ( the_node = _User_extensions_List.last ;
-        !_Chain_Is_head( &_User_extensions_List, the_node ) ;
-        the_node = the_node->previous ) {
-
-    the_extension = (User_extensions_Control *) the_node;
-
-    if ( the_extension->Callouts.fatal != NULL )
-      (*the_extension->Callouts.fatal)( the_source, is_internal, the_error );
-  }
-}

@@ -252,10 +252,6 @@ $(PROJECT_INCLUDE)/rtems/score/tqdata.inl: inline/rtems/score/tqdata.inl $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tqdata.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tqdata.inl
 
-$(PROJECT_INCLUDE)/rtems/score/userext.inl: inline/rtems/score/userext.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/userext.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/userext.inl
-
 $(PROJECT_INCLUDE)/rtems/score/watchdog.inl: inline/rtems/score/watchdog.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/watchdog.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/watchdog.inl

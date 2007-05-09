@@ -1,5 +1,31 @@
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/include/rtems/libcsupport.h, libcsupport/src/newlibc.c,
+	sapi/Makefile.am, sapi/include/confdefs.h, sapi/src/exinit.c,
+	score/Makefile.am, score/preinstall.am,
+	score/include/rtems/score/userext.h, score/src/chain.c,
+	score/src/userext.c: Switch to newlib reentrancy extension being
+	installed in the initial set instead of using rtems_extension_create.
+	While implementing this, noticed that user extensions and chain code
+	had multiple functions in a single file which is not desirable in the
+	SuperCore and API portions of RTEMS, so split these into multiple
+	files with one function per file. Also noticed that some of user
+	extension code was inlined for no particular reason so moved that to
+	C bodies.  Split executive shutdown from initialization since not
+	every application shuts down.  Moved __fini call to executive shutdown
+	to be more symmetrical with where it is called at startup. 
+	* sapi/src/exshutdown.c, score/src/chainappend.c,
+	score/src/chainextract.c, score/src/chainget.c,
+	score/src/chaininsert.c, score/src/userextaddapiset.c,
+	score/src/userextaddset.c, score/src/userextremoveset.c,
+	score/src/userextthreadbegin.c, score/src/userextthreadcreate.c,
+	score/src/userextthreaddelete.c, score/src/userextthreadrestart.c,
+	score/src/userextthreadstart.c, score/src/userextthreadswitch.c: New
+	files.
+	* score/inline/rtems/score/userext.inl: Removed.
+
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/src/error.c, sapi/include/rtems/config.h: Do not
 	reference _Configuration_MP_table if multiprocessing is disabled.
 

@@ -51,7 +51,7 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/stack.inl inline/rtems/score/states.inl \
     inline/rtems/score/sysstate.inl inline/rtems/score/thread.inl \
     inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
-    inline/rtems/score/tqdata.inl inline/rtems/score/userext.inl \
+    inline/rtems/score/tqdata.inl \
     inline/rtems/score/watchdog.inl inline/rtems/score/wkspace.inl
 
 if HAS_MP
@@ -158,9 +158,17 @@ libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
 libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
     src/watchdoginsert.c src/watchdogremove.c src/watchdogtickle.c
 
+## USEREXT_C_FILES
+libscore_a_SOURCES += src/userextaddapiset.c src/userextaddset.c \
+    src/userext.c src/userextremoveset.c src/userextthreadbegin.c \
+    src/userextthreadcreate.c src/userextthreaddelete.c \
+    src/userextthreadrestart.c src/userextthreadstart.c \
+    src/userextthreadswitch.c
+
 ## STD_C_FILES
-libscore_a_SOURCES += src/apiext.c src/chain.c \
-    src/interr.c src/isr.c src/userext.c src/wkspace.c
+libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
+    src/chainextract.c src/chainget.c src/chaininsert.c \
+    src/interr.c src/isr.c src/wkspace.c
 
 EXTRA_DIST = src/Unlimited.txt
 

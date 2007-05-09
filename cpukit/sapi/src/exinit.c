@@ -105,7 +105,9 @@ rtems_interrupt_level rtems_initialize_executive_early(
    */
 
   _Configuration_Table    = configuration_table;
+#if defined(RTEMS_MULTIPROCESSING)
   _Configuration_MP_table = multiprocessing_table;
+#endif
 
   /*
    *  Internally we view single processor systems as a very restricted
@@ -276,27 +278,4 @@ void rtems_initialize_executive_late(
    */
 
   _ISR_Enable( bsp_level );
-}
-
-/*PAGE
- *
- *  rtems_shutdown_executive
- *
- *  This kernel routine shutdowns the executive.  It halts multitasking
- *  and returns control to the application execution "thread" which
- *  initialially invoked the rtems_initialize_executive directive.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
-
-void rtems_shutdown_executive(
-   uint32_t   result
-)
-{
-  if ( _System_state_Current != SYSTEM_STATE_SHUTDOWN ) {
-    _System_state_Set( SYSTEM_STATE_SHUTDOWN );
-    _Thread_Stop_multitasking();
-  }
 }

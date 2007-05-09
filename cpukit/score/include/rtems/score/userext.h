@@ -202,6 +202,47 @@ SCORE_EXTERN Chain_Control _User_extensions_Switches_list;
 
 /*@{*/
 
+/** @brief User extensions Handler Initialization
+ *
+ *  This routine performs the initialization necessary for this handler.
+ *
+ *  @param[in] number_of_extensions is the number of extensions
+ *  @param[in] initial_extensions is the initial extension set
+ */
+void _User_extensions_Handler_initialization (
+  uint32_t                number_of_extensions,
+  User_extensions_Table  *initial_extensions
+);
+
+/** @brief User extensions Add to API extension set
+ *
+ *  This routine is used to add an API extension set to the active list.
+ *
+ *  @param[in] the_extension is the extension set to add
+ */
+void _User_extensions_Add_API_set (
+  User_extensions_Control *the_extension
+);
+
+/** @brief User extensions Add extension set
+ *
+ *  This routine is used to add a user extension set to the active list.
+ *
+ *  @param[in] the_extension is the extension set to add
+ *  @param[in] extension_table is the user's extension set
+ */
+void _User_extensions_Add_set (
+  User_extensions_Control *the_extension,
+  User_extensions_Table   *extension_table
+);
+
+/**
+ *  This routine is used to remove a user extension set from the active list.
+ */
+void _User_extensions_Remove_set (
+  User_extensions_Control  *the_extension
+);
+
 /** @brief  User extensions Thread create
  *
  *  This routine is used to invoke the user extension for
@@ -260,6 +301,20 @@ void _User_extensions_Thread_begin (
   Thread_Control *executing
 );
 
+
+/** @brief  User extensions Thread switch
+ *
+ *  This routine is used to invoke the user extension which
+ *  is invoked when a context switch occurs.
+ *
+ *  @param[in] executing is the thread currently executing.
+ *  @param[in] heir is the thread which will execute.
+ */
+void _User_extensions_Thread_switch (
+  Thread_Control *executing,
+  Thread_Control *heir
+);
+
 /** @brief  User extensions Thread exitted
  *
  *  This routine is used to invoke the user extension which
@@ -285,10 +340,6 @@ void _User_extensions_Fatal (
   boolean                 is_internal,
   uint32_t                the_error
 );
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/userext.inl>
-#endif
 
 #ifdef __cplusplus
 }

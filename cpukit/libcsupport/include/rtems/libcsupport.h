@@ -39,6 +39,38 @@ extern int  host_errno(void);
 extern void fix_syscall_errno(void);
 extern size_t malloc_free_space();
 
+/*
+ *  Prototypes required to install newlib reentrancy user extension
+ */
+rtems_boolean libc_create_hook(
+  rtems_tcb *current_task,
+  rtems_tcb *creating_task
+);
+
+#if defined(RTEMS_UNIX) && !defined(hpux)
+  rtems_extension libc_begin_hook(rtems_tcb *current_task);
+  #define __RTEMS_NEWLIB_BEGIN libc_begin_hook
+#else
+  #define __RTEMS_NEWLIB_BEGIN 0
+#endif
+
+rtems_extension libc_delete_hook(
+  rtems_tcb *current_task,
+  rtems_tcb *deleted_task
+);
+
+#define RTEMS_NEWLIB_EXTENSION \
+{ \
+  libc_create_hook,                            /* rtems_task_create  */ \
+  0,                                           /* rtems_task_start   */ \
+  0,                                           /* rtems_task_restart */ \
+  libc_delete_hook,                            /* rtems_task_delete  */ \
+  0,                                           /* task_switch  */ \
+  __RTEMS_NEWLIB_BEGIN,                        /* task_begin   */ \
+  0,                                           /* task_exitted */ \
+  0                                            /* fatal        */ \
+}
+
 #ifdef __cplusplus
 }
 #endif
