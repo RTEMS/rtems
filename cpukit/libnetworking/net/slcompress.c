@@ -40,7 +40,7 @@
  */
 
 #if defined(__rtems__)
-#include <stdint.h>
+#include <rtems/stdint.h>
 #endif
 
 #include <sys/param.h>

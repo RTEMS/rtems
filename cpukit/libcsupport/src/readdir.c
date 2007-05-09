@@ -45,7 +45,7 @@ static char sccsid[] = "@(#)readdir.c	5.7 (Berkeley) 6/1/90";
 #endif
 
 #include <dirent.h>
-#include <stdint.h>
+#include <rtems/stdint.h>
 
 int getdents(
   int dd_fd,
