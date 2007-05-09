@@ -1,5 +1,10 @@
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/src/error.c, sapi/include/rtems/config.h: Do not
+	reference _Configuration_MP_table if multiprocessing is disabled.
+
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libmisc/monitor/mon-monitor.c, libmisc/monitor/mon-server.c: Do not
 	reference _Configuration_MP_table if multiprocessing is disabled.
 

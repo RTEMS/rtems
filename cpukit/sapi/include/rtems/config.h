@@ -124,7 +124,9 @@ typedef struct {
  */
 
 SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
-SAPI_EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
+#if defined(RTEMS_MULTIPROCESSING)
+  SAPI_EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
+#endif
 
 /*
  *  Some handy macros to avoid dependencies on either the BSP
