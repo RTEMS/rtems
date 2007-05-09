@@ -1,3 +1,8 @@
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* leaf.cfg, compilers/gcc-no_bsp.cfg: Add optional manager stub
+	for Classic API Barrier.
+
 2007-04-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* custom/rtl22xx.cfg: Cleanup.
