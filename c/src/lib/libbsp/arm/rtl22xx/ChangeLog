@@ -1,5 +1,9 @@
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* startup/bspclean.c: Remove incldue stdio.h
+
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, console/lpc22xx_uart.h: Remove warnings, cleanup and do
 	not build SPARC code accidentally referenced in Makefile.am.
 
