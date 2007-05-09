@@ -1,3 +1,8 @@
+2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1243
+	* pppd/auth.c (set_allowed_addrs): Remove bogus dereference. 
+
 2007-05-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/machine/endian.h: Convert htons, htonl, ntohs, ntohl
