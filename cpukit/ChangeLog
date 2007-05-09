@@ -1,5 +1,9 @@
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/readdir.c, libnetworking/net/slcompress.c,
+	pppd/md4.h, pppd/md5.h, pppd/pppd.h,
+	score/cpu/m68k/rtems/score/m68k.h: Include <rtems/stdint.h> instead
+	of <stdint.h>.
 	* libnetworking/machine/endian.h: Remove
 	  CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES.
 	* NEWS: new.
