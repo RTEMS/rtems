@@ -75,35 +75,3 @@ int console_inbyte_nonblocking( int port )
 
   return -1;
 }
-
-/*
- *  DEBUG_puts
- *
- *  This should be safe in the event of an error.  It attempts to insure
- *  that no TX empty interrupts occur while it is doing polled IO.  Then
- *  it restores the state of that external interrupt.
- *
- *  Input parameters:
- *    string  - pointer to debug output string
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- */
-
-void DEBUG_puts(
-  char *string
-)
-{
-  char *s;
-  uint32_t old_level;
-
-  LEON_Disable_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level );
-  LEON_REG.UART_Control_1 = LEON_REG_UART_CTRL_TE;
-    for ( s = string ; *s ; s++ ) 
-      console_outbyte_polled( 0, *s );
-
-    console_outbyte_polled( 0, '\r' );
-    console_outbyte_polled( 0, '\n' );
-  LEON_Restore_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level );
-}

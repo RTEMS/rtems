@@ -53,7 +53,7 @@ int rtems_smc91111_driver_attach_leon2(struct rtems_bsdnet_ifconfig *config)
     leon_scmv91111_configuration.ctl_rspeed = 100;
 
   /* activate io area */
-  DEBUG_puts("Activating Leon2 io port\n");
+  printk("Activating Leon2 io port\n");
   /*configure pio */
   *((volatile unsigned int *)0x80000000) |= 0x10f80000;
   *((volatile unsigned int *)0x800000A8) |=
