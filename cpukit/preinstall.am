@@ -117,6 +117,10 @@ $(PROJECT_INCLUDE)/rtems/tar.h: include/rtems/tar.h $(PROJECT_INCLUDE)/rtems/$(d
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tar.h
 
+$(PROJECT_INCLUDE)/rtems/endian.h: include/rtems/endian.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/endian.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/endian.h
+
 $(PROJECT_INCLUDE)/rtems/irq.h: include/rtems/irq.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/irq.h
