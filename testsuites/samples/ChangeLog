@@ -1,3 +1,9 @@
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* minimum/Makefile.am, minimum/init.c: Switch back to using optional
+	manager support. Also add use of CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+	to demonstrate that the newlib reentrancy support is optional.
+
 2007-04-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* nsecs/init.c: Remove private decl of _Timespec_Subtract use the

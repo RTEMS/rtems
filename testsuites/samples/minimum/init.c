@@ -21,8 +21,20 @@ rtems_task Init(
 /* configuration information */
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+/*
+ *  This is the smallest IO subsystem RTEMS currently supports.
+ */
+#define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+
+/*
+ *  This disables reentrancy support in the C Library.  It is usually
+ *  not something an application wants to do unless the development
+ *  team is committed to using C Library routines that are KNOWN to
+ *  be reentrant.  Caveat Emptor!!
+ */
+#define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
 
 #define CONFIGURE_INIT
 
