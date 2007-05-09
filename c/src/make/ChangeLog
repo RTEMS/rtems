@@ -1,3 +1,7 @@
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* leaf.cfg: Add optional manager stub for Barrier.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
