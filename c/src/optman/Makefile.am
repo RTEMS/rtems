@@ -18,6 +18,11 @@ no_io_rel_SOURCES = sapi/no-io.c
 no_io_rel_CPPFLAGS = $(AM_CPPFLAGS)
 no_io_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+project_lib_PROGRAMS += no-barrier.rel
+no_barrier_rel_SOURCES = rtems/no-barrier.c
+no_barrier_rel_CPPFLAGS = $(AM_CPPFLAGS)
+no_barrier_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 project_lib_PROGRAMS += no-dpmem.rel
 no_dpmem_rel_SOURCES = rtems/no-dpmem.c
 no_dpmem_rel_CPPFLAGS = $(AM_CPPFLAGS)

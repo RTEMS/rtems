@@ -26,6 +26,10 @@ $(PROJECT_LIB)/no-io.rel: no-io.rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-io.rel
 TMPINSTALL_FILES += $(PROJECT_LIB)/no-io.rel
 
+$(PROJECT_LIB)/no-barrier.rel: no-barrier.rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-barrier.rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-barrier.rel
+
 $(PROJECT_LIB)/no-dpmem.rel: no-dpmem.rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-dpmem.rel
 TMPINSTALL_FILES += $(PROJECT_LIB)/no-dpmem.rel

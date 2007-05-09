@@ -26,30 +26,3 @@ void _Signal_Manager_initialization( void )
 {
 }
  
-rtems_status_code rtems_signal_catch(
-  rtems_asr_entry   handler,
-  rtems_mode        mode_set
-)
-{
-  _Internal_error_Occurred(
-    INTERNAL_ERROR_RTEMS_API,
-    FALSE,
-    RTEMS_NOT_CONFIGURED
-  );
-  return RTEMS_NOT_CONFIGURED;
-}
-
-rtems_status_code rtems_signal_send(
-  rtems_id         id,
-  rtems_signal_set signal_set
-)
-{
-  _Internal_error_Occurred(
-    INTERNAL_ERROR_RTEMS_API,
-    FALSE,
-    RTEMS_NOT_CONFIGURED
-  );
-  return RTEMS_NOT_CONFIGURED;
-}
-
-/* end of file */

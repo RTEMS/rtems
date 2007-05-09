@@ -1,3 +1,15 @@
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* optman/Makefile.am, optman/preinstall.am, optman/rtems/no-dpmem.c,
+	optman/rtems/no-event.c, optman/rtems/no-mp.c, optman/rtems/no-msg.c,
+	optman/rtems/no-part.c, optman/rtems/no-region.c,
+	optman/rtems/no-rtmon.c, optman/rtems/no-sem.c,
+	optman/rtems/no-signal.c, optman/rtems/no-timer.c,
+	optman/sapi/no-ext.c: Add optional manager stub for Barrier. Simplify
+	other optional managers so using them reduces application size
+	instead of increasing it.
+	* optman/rtems/no-barrier.c: New file.
+
 2007-04-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/dec21140.c, libchip/network/elnk.c: i386-specific
