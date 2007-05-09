@@ -60,7 +60,6 @@ void bsp_libc_init( void *, uint32_t, int );
 void bsp_postdriver_hook(void);
 extern void  UART0_Ini(void);
 extern void printi(unsigned long);
-extern void debug_printk(char*);
 /**************************************************************************/
 /*                                                                        */
 /* NAME: bps_pretasking_hook - Function to setup system before startup    */
@@ -201,23 +200,12 @@ void bsp_start_default( void )
     UART0_Ini();
 
     #if 0
-    debug_printk(" bsp_start_defalt");
-    printi((int)&bsp_start_defalt);
-    
-    debug_printk(" _bss_free_start");
-    printi((int)&_bss_free_start);
-
-    debug_printk(" free_mem_start");
-    printi((int)free_mem_start);
-
-    debug_printk(" _sdram_base");
-    printi((int)&_sdram_base);
-
-    debug_printk(" _sdram_size");
-    printi((int)&_sdram_size);
-
-    debug_printk(" free_mem_end");
-    printi((int)free_mem_end);
+    printk(" bsp_start_default 0x%08x\n", (int)&bsp_start_defalt);
+    printk(" _bss_free_start 0x%08x\n", (int)&_bss_free_start);
+    printk(" free_mem_start 0x%08x\n", (int)free_mem_start);
+    printk(" _sdram_base 0x%08x\n", (int)&_sdram_base);
+    printk(" _sdram_size 0x%08x\n", (int)&_sdram_size);
+    printk(" free_mem_end 0x%08x\n", (int)free_mem_end);
     #endif
 
     /*

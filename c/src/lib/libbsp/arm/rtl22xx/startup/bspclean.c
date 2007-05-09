@@ -25,14 +25,12 @@ void rtemsReboot (void)
 
 void bsp_cleanup(void)
 {
-  static   char line[]="\nEXECUTIVE SHUTDOWN! Any key to reboot...";
   /*
    * AT this point, the console driver is disconnected => we must
    * use polled output/input. This is exactly what printk
    * does.
    */
-  debug_printk("\n");
-  debug_printk(line);
+  printk("\nEXECUTIVE SHUTDOWN! Any key to reboot...");
   while (uart_poll_read(0) < 0) continue;
 
   /* rtemsReboot(); */

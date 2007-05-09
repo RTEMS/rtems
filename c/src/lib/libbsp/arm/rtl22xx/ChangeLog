@@ -1,3 +1,9 @@
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/uart.c, startup/bspclean.c, startup/bspstart.c: Remove debug
+	print methods that are redundant with prntk and replace their usage
+	with printk.
+
 2007-05-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Tinkering to reduce .text size of minimum executable

@@ -168,8 +168,7 @@ static int uart_read(int minor)
             return -1;
         }
     } else {
-        debug_printk("Unknown console minor number");
-        printi(minor);
+        printk("Unknown console minor number %d\n", minor);
         return -1;
     }
 
@@ -197,10 +196,9 @@ static int uart_write(int minor, const char *buf, int len)
                       continue;						/* also either WDOG() or swap()*/
                 U0THR = (char) buf[i];
             }
-        }else {
-        debug_printk("Unknown console minor number");
-        printi(minor);
-        return -1;
+        } else {
+          printk("Unknown console minor number %d\n", minor);
+          return -1;
     }
     
     return 1;
@@ -333,44 +331,4 @@ void  UART0_SendStr(char const *str)
    {  if( *str == '\0' ) break;
       UART0_SendByte(*str++);	    // Send the char
    }
-}
-
-debug_printk(char *dg_str)
-{
-  UART0_SendStr(dg_str);
-  UART0_SendStr("\r\n");
-}
-
-void printi(unsigned long value)
-{
-  static char istring[9]={0,0,0,0,0,0,0,0,0};
-  static char tmp[9]={0,0,0,0,0,0,0,0,0};
-  char *sp;
-  char *tp = tmp;
-
-  long i;
-  unsigned long v = value;
-  int index;
-
-  for(index=0;index<9;index++)
-  	istring[index]=tmp[index]=0x0;
-
-  while (v || tp == tmp)
-  {
-    i = v % 16;
-    v = v / 16;
-    if (i < 10)
-      *tp++ = i+'0';
-    else
-      *tp++ = i + 'a' - 10;
-  }
-
-  sp = istring;
-  while (tp > tmp)
-    *sp++ = *--tp;
-
-  tp=tmp;
-  sp=istring;
-  debug_printk(istring);
-
 }
