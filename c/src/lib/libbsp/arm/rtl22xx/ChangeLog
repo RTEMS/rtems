@@ -1,5 +1,10 @@
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, console/lpc22xx_uart.h: Remove warnings, cleanup and do
+	not build SPARC code accidentally referenced in Makefile.am.
+
+2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* console/uart.c, startup/bspclean.c, startup/bspstart.c: Remove debug
 	print methods that are redundant with prntk and replace their usage
 	with printk.

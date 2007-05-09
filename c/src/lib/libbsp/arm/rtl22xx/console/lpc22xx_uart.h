@@ -1,6 +1,11 @@
-/*Define for LPC22xx/LPC21xx */
-#ifndef UART_H
-#define UART_H
+/*
+ *  Definitions for LPC22xx/LPC21xx
+ *
+ *  $Id$
+ */
+
+#ifndef LPC22XX_UART_H
+#define LPC22XX_UART_H
 
 #define FIFODEEP    16
 
@@ -8,8 +13,6 @@
 #define BD38400     38400
 #define BD9600      9600
 
-#define CR          0x0D
-#define LF          0x0A
 #define U0_PINSEL       (0x00000005)    /* PINSEL0 Value for UART0 */
 #define U0_PINMASK      (0x0000000F)    /* PINSEL0 Mask for UART0 */
 #define U1_PINSEL       (0x00050000)    /* PINSEL0 Value for UART1 */

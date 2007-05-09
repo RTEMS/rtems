@@ -35,12 +35,6 @@ startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-noinst_PROGRAMS += gnatsupp.rel
-gnatsupp_rel_SOURCES = ../../sparc/shared/gnatcommon.c
-gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
-gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = ../../shared/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
@@ -50,7 +44,6 @@ noinst_PROGRAMS += debugio.rel
 debugio_rel_SOURCES = console/uart.c 
 debugio_rel_CPPFLAGS = $(AM_CPPFLAGS)
 debugio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -62,7 +55,7 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD =  gnatsupp.rel console.rel debugio.rel
+libbsp_a_LIBADD =  console.rel debugio.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
