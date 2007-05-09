@@ -57,38 +57,6 @@ set on a processor family that is big endian.
 #define CPU_LITTLE_ENDIAN                        FALSE
 @end example
 
-@subsection Optional Endian Conversion Routines
-
-In a networked environment, each program communicating must agree on the
-format of data passed between the various systems in the networked
-application.  Routines such as @code{ntohl()}
-and @code{htonl()} are used to convert
-between the common network format and the native format used on this
-particular host system.  Although RTEMS has a portable implementation of
-these endian conversion routines, it is often possible to implement these
-routines more efficiently in a processor specific fashion.
-
-The @code{CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES} is set to TRUE when the port
-provides its own implementation of the network to host and host to network
-family of routines.  This set of routines include the following:
-
-@itemize @bullet
-@item @code{ntohl()}
-@item @code{ntohs()}
-@item @code{htonl()}
-@item @code{htons()}
-@end itemize
-
-The following example illustrates how this macro should be set when the
-generic, portable implementation of this family of routines is to be used
-by this port:
-
-@example
-#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
-@end example
-
-@section Extra Stack for MPCI Receive Thread
-
 The @code{CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK} macro is set to the amount of
 stack space above the minimum thread stack space required by the MPCI
 Receive Server Thread.  This macro is needed because in a multiprocessor

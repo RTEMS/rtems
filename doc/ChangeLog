@@ -1,3 +1,8 @@
+2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* porting/miscellaneous.t: Remove subsection on "Optional
+	Endian Conversion Routines", CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES.
+
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
 	* user/example.texi: Change all obsoleted CONFIGURE_TEST_NEEDS_XXX
