@@ -1,5 +1,7 @@
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/machine/endian.h: Remove.
+	* libnetworking/Makefile.am: Remove machine/endian.h.
 	* libnetworking/arpa/nameser_compat.h, libnetworking/netinet/in.h,
 	libnetworking/rtems/rtems_bsdnet_internal.h: Include
 	<rtems/endian.h> instead of <machine/endian.h>.
