@@ -1,0 +1,24 @@
+
+%define cpukit_pkgvers @CPUKIT_PKGVERS@
+%define cpukit_version @CPUKIT_VERS@
+%define cpukit_rpmvers %{expand:%(echo "@CPUKIT_VERS@" | tr - _ )}
+
+Name:         	@rpmprefix@@tool_target@-cpukit
+Summary:      	@tool_target@ cpukit
+
+Group:	      	Development/Tools
+Version:        %{cpukit_rpmvers}
+Release:      	@CPUKIT_RPMREL@%{?dist}
+License:      	GPL
+URL:		http://cpukit.gnu.org
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:	noarch
+
+%define _use_internal_dependency_generator 0
+
+BuildRequires:	@rpmprefix@@tool_target@-gcc
+
+@SOURCES@
+
+%description
+RTEMS cpukit for @tool_target@.

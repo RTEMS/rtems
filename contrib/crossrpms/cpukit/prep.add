@@ -1,0 +1,6 @@
+%prep
+%setup -c -T -n %{name}-%{version}
+
+%setup -q -T -D -n %{name}-%{version} -a0
+
+@PREP@

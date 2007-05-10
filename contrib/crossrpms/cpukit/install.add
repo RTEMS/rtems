@@ -1,0 +1,8 @@
+%install
+  cd build
+
+  make DESTDIR=$RPM_BUILD_ROOT install
+  cd ..
+
+  rm -rf $RPM_BUILD_ROOT%{_prefix}/share/man
+  rm -rf $RPM_BUILD_ROOT%{_prefix}/bin

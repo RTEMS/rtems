@@ -1,0 +1,13 @@
+%build
+  mkdir -p build
+
+  cd build
+  ../rtems-%{cpukit_pkgvers}/configure \
+    --prefix=%{_prefix} \
+    --target=@tool_target@ \
+    --enable-multilib \
+    --disable-rtemsbsp
+
+  make all RTEMS_BSP=
+  cd ..
+
