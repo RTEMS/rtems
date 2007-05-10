@@ -1,5 +1,27 @@
 2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* include/rtems/bsd/sys/queue.h, libcsupport/include/sys/ioccom.h,
+	libnetworking/netdb.h, libnetworking/resolv.h,
+	libnetworking/arpa/inet.h, libnetworking/arpa/nameser.h,
+	libnetworking/libc/gethostbydns.c, libnetworking/libc/res_stubs.c,
+	libnetworking/machine/in_cksum.h, libnetworking/net/ethernet.h,
+	libnetworking/net/if.h, libnetworking/net/if_dl.h,
+	libnetworking/netinet/ip.h, libnetworking/netinet/tcp.h,
+	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/sys/libkern.h, libnetworking/sys/mount.h,
+	libnetworking/sys/poll.h, libnetworking/sys/socket.h,
+	libnetworking/sys/sysctl.h, libnetworking/sys/syslog.h,
+	libnetworking/sys/uio.h, libnetworking/sys/un.h,
+	librpc/include/rpc/auth.h, librpc/include/rpc/auth_unix.h,
+	librpc/include/rpc/clnt.h, librpc/include/rpc/clnt_soc.h,
+	librpc/include/rpc/pmap_clnt.h, librpc/include/rpc/pmap_prot.h,
+	librpc/include/rpc/pmap_rmt.h, librpc/include/rpc/svc.h,
+	librpc/include/rpc/svc_soc.h, librpc/include/rpc/xdr.h,
+	librpc/include/rpcsvc/ypclnt.h: Include <rtems/bsd/sys/cdefs.h> 
+	instead of <sys/cdefs.h>.
+
+2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Reflect introduction of
 	  include/rtems/bsd/sys/cdefs.h.
 	* include/rtems/bsd/sys/cdefs.h: New.
