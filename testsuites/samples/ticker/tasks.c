@@ -18,8 +18,6 @@
  */
 
 #include "system.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 rtems_task Test_task(
   rtems_task_argument unused
@@ -36,7 +34,7 @@ rtems_task Test_task(
     status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
     if ( time.second >= 35 ) {
       puts( "*** END OF CLOCK TICK TEST ***" );
-      exit( 0 );
+      rtems_test_exit( 0 );
     }
     put_name( Task_name[ task_index ], FALSE );
     print_time( " - rtems_clock_get - ", &time, "\n" );

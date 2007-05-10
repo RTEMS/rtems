@@ -1,3 +1,9 @@
+2007-05-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ticker/Makefile.am, ticker/init.c, ticker/system.h, ticker/tasks.c:
+	Test needs clock manager. Should use rtems_test_exit() instead of
+	exit().
+
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* minimum/Makefile.am, minimum/init.c: Switch back to using optional

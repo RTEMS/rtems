@@ -15,6 +15,7 @@
 
 #include <rtems.h>
 #include <inttypes.h>
+#include "../../support/include/buffer_test_io.h"
 
 /* functions */
 
@@ -40,8 +41,11 @@ extern rtems_name Task_name[ 4 ];       /* array of task names */
 
 #include <bsp.h> /* for device driver prototypes */
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#if defined(CONFIGURE_INIT)
+int atexit(void (*function)(void)){}
+#endif
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
 
 #define CONFIGURE_MAXIMUM_TASKS             4
 
@@ -64,7 +68,6 @@ extern rtems_name Task_name[ 4 ];       /* array of task names */
     printf( "%s%02" PRId32 ":%02" PRId32 ":%02" PRId32 "   %02" PRId32 "/%02" PRId32 "/%04" PRId32 "%s", \
        _s1, (_tb)->hour, (_tb)->minute, (_tb)->second, \
        (_tb)->month, (_tb)->day, (_tb)->year, _s2 ); \
-    fflush(stdout); \
   } while ( 0 )
 
 /*

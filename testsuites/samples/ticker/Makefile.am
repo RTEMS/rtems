@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io clock
 
 rtems_tests_PROGRAMS = ticker.exe
 ticker_exe_SOURCES = init.c tasks.c system.h

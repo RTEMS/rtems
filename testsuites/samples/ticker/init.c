@@ -22,7 +22,6 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
-#include <stdio.h>
 
 /*
  *  Keep the names and IDs in global variables so another task can use them.
