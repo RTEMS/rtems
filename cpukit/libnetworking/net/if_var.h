@@ -77,7 +77,7 @@ struct	ether_header;
 struct	carp_if;
 #endif
 
-#include <sys/queue.h>		/* get TAILQ macros */
+#include <rtems/bsd/sys/queue.h>		/* get TAILQ macros */
 
 /*
  * Structure defining a queue for a network interface.

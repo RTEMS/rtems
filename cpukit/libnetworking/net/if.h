@@ -51,7 +51,7 @@
 #endif
 
 #ifdef _KERNEL
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 #endif
 
 #if __BSD_VISIBLE

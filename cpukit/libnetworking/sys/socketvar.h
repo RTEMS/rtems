@@ -35,7 +35,7 @@
 #ifndef _SYS_SOCKETVAR_H_
 #define _SYS_SOCKETVAR_H_
 
-#include <sys/queue.h>			/* for TAILQ macros */
+#include <rtems/bsd/sys/queue.h>			/* for TAILQ macros */
 #include <sys/select.h>			/* for struct selinfo */
 
 

@@ -52,7 +52,7 @@
 
 #ifdef _KERNEL
 
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 
 /*
  * Driver callbacks for media status and change requests.

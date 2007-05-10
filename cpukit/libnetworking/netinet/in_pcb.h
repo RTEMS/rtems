@@ -37,7 +37,7 @@
 #ifndef _NETINET_IN_PCB_H_
 #define _NETINET_IN_PCB_H_
 
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 
 /*
  * Common structure pcb for internet protocol implementation.

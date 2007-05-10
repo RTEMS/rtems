@@ -37,7 +37,7 @@
 #ifndef _NET_RAW_CB_H_
 #define _NET_RAW_CB_H_
 
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 
 /*
  * Raw protocol interface control block.  Used
