@@ -333,6 +333,7 @@ typedef struct {
     uint32_t   o7;
 
     uint32_t   psr;
+    uint32_t   isr_dispatch_disable;
 } Context_Control;
 
 #endif /* ASM */
@@ -378,8 +379,9 @@ typedef struct {
 #define O7_OFFSET    0x7C
 
 #define PSR_OFFSET   0x80
+#define ISR_DISPATCH_DISABLE_STACK_OFFSET 0x84
 
-#define CONTEXT_CONTROL_SIZE 0x84
+#define CONTEXT_CONTROL_SIZE 0x88
 
 /*
  *  The floating point context area.
@@ -551,6 +553,15 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
 
 SCORE_EXTERN void *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void *_CPU_Interrupt_stack_high;
+
+/*
+ *  This flag is context switched with each thread.  It indicates
+ *  that THIS thread has an _ISR_Dispatch stack frame on its stack.
+ *  By using this flag, we can avoid nesting more interrupt dispatching
+ *  attempts on a previously interrupted thread's stack.
+ */
+
+SCORE_EXTERN volatile uint32_t _CPU_ISR_Dispatch_disable;
 
 /*
  *  The following type defines an entry in the SPARC's trap table.

@@ -143,10 +143,18 @@ SYM(_CPU_Context_switch):
         std     %g4, [%o0 + G4_OFFSET]
         std     %g6, [%o0 + G6_OFFSET]
 
+        ! load the address of the ISR stack nesting prevention flag
+        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %g2
+        ld       [%g2 + %lo(SYM(_CPU_ISR_Dispatch_disable))], %g2
+        ! save it a bit later so we do not waste a couple of cycles
+
         std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
         std     %l2, [%o0 + L2_OFFSET]
         std     %l4, [%o0 + L4_OFFSET]
         std     %l6, [%o0 + L6_OFFSET]
+
+        ! Now actually save ISR stack nesting prevention flag
+        st       %g2, [%o0 + ISR_DISPATCH_DISABLE_STACK_OFFSET]
 
         std     %i0, [%o0 + I0_OFFSET]       ! save the input registers
         std     %i2, [%o0 + I2_OFFSET]
@@ -270,10 +278,18 @@ done_flushing:
         ldd     [%o1 + G4_OFFSET], %g4
         ldd     [%o1 + G6_OFFSET], %g6
 
+        ! Load thread specific ISR dispatch prevention flag
+        ld      [%o1 + ISR_DISPATCH_DISABLE_STACK_OFFSET], %o2
+        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %o3
+        ! Store it to memory later to use the cycles
+
         ldd     [%o1 + L0_OFFSET], %l0        ! restore the local registers
         ldd     [%o1 + L2_OFFSET], %l2
         ldd     [%o1 + L4_OFFSET], %l4
         ldd     [%o1 + L6_OFFSET], %l6
+
+        ! Now restore thread specific ISR dispatch prevention flag
+        st       %o2,[%o3 + %lo(SYM(_CPU_ISR_Dispatch_disable))]
 
         ldd     [%o1 + I0_OFFSET], %i0        ! restore the output registers
         ldd     [%o1 + I2_OFFSET], %i2
@@ -633,26 +649,34 @@ dont_fix_pil2:
 
         orcc     %l6, %g0, %g0   ! Is dispatching disabled?
         bnz      simple_return   ! Yes, then do a "simple" exit
-        nop                      ! delay slot
+        ! NOTE: Use the delay slot
+        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l6
+
+        ! Are we dispatching from a previous ISR in the interrupted thread?
+        ld       [%l6 + %lo(SYM(_CPU_ISR_Dispatch_disable))], %l7
+        orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
+        bnz      simple_return   ! Yes, then do a "simple" exit
+        ! NOTE: Use the delay slot
+        sethi    %hi(SYM(_Context_Switch_necessary)), %l4
+        
 
         /*
          *  If a context switch is necessary, then do fudge stack to
          *  return to the interrupt dispatcher.
          */
 
-        sethi    %hi(SYM(_Context_Switch_necessary)), %l4
         ld       [%l4 + %lo(SYM(_Context_Switch_necessary))], %l5
 
         orcc     %l5, %g0, %g0   ! Is thread switch necessary?
         bnz      SYM(_ISR_Dispatch) ! yes, then invoke the dispatcher
-        nop                      ! delay slot
+        ! NOTE: Use the delay slot
+        sethi    %hi(SYM(_ISR_Signals_to_thread_executing)), %l6
 
         /*
          *  Finally, check to see if signals were sent to the currently
          *  executing task.  If so, we need to invoke the interrupt dispatcher.
          */
 
-        sethi    %hi(SYM(_ISR_Signals_to_thread_executing)), %l6
         ld       [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))], %l7
 
         orcc     %l7, %g0, %g0   ! Were signals sent to the currently
@@ -669,6 +693,10 @@ dont_fix_pil2:
 
         PUBLIC(_ISR_Dispatch)
 SYM(_ISR_Dispatch):
+        ! Set ISR dispatch nesting prevention flag
+        mov      1,%l6
+        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l5
+        st       %l6,[%l5 + %lo(SYM(_CPU_ISR_Dispatch_disable))]
 
         /*
          *  The following subtract should get us back on the interrupted
@@ -684,7 +712,7 @@ SYM(_ISR_Dispatch):
         nop
         nop
         nop
-
+isr_dispatch:
         call    SYM(_Thread_Dispatch), 0
         nop
 
@@ -698,6 +726,48 @@ SYM(_ISR_Dispatch):
 	 */
 	mov	2,%g1				! syscall (disable interrupts)
 	ta	0				! syscall (disable interrupts)
+
+        /*
+         *  While we had ISR dispatching disabled in this thread,
+         *  did we miss anything.  If so, then we need to do another
+         *  _Thread_Dispatch before leaving this ISR Dispatch context.
+         */
+
+        sethi    %hi(SYM(_Context_Switch_necessary)), %l4
+        ld       [%l4 + %lo(SYM(_Context_Switch_necessary))], %l5
+
+        ! NOTE: Use some of delay slot to start loading this
+        sethi    %hi(SYM(_ISR_Signals_to_thread_executing)), %l6
+        ld       [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))], %l7
+
+        orcc     %l5, %g0, %g0   ! Is thread switch necessary?
+        bnz      dispatchAgain   ! yes, then invoke the dispatcher AGAIN
+        ! NOTE: Use the delay slot to catch the orcc below
+
+        /*
+         *  Finally, check to see if signals were sent to the currently
+         *  executing task.  If so, we need to invoke the interrupt dispatcher.
+         */
+
+        ! NOTE: Delay slots above were used to perform the load AND
+        !       this orcc falls into the delay slot for bnz above
+        orcc     %l7, %g0, %g0   ! Were signals sent to the currently
+                                 !   executing thread?
+        bz       allow_nest_again ! No, then clear out and return
+        ! NOTE: use the delay slot from the bz to load 3 into %g1
+
+        ! Yes, then invoke the dispatcher
+dispatchAgain:
+	mov	3,%g1				! syscall (enable interrupts)
+	ta	0				! syscall (enable interrupts)
+        ba      isr_dispatch
+        nop
+
+allow_nest_again:
+
+        ! Zero out ISR stack nesting prevention flag
+        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l5
+        st       %g0,[%l5 + %lo(SYM(_CPU_ISR_Dispatch_disable))]
 
         /*
          *  The CWP in place at this point may be different from
