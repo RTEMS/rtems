@@ -1,5 +1,10 @@
 2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/Makefile.am: Reflect having removed sys/queue.h.
+	* libnetworking/sys/queue.h: Remove.
+
+2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* librpc/src/xdr/xdr_float.c: Include <rtems/endian.h> instead of
 	<machine/endian.h>.
 	* libnetworking/rtems/rtems_showroute.c, 
