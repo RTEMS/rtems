@@ -1,5 +1,34 @@
 2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_showroute.c, 
+	libnetworking/rtems/rtems_showipstat.c,
+	libnetworking/rtems/rtems_showtcpstat.c,
+	libnetworking/rtems/rtems_showicmpstat.c,
+	libnetworking/rtems/rtems_showmbuf.c,
+	libnetworking/rtems/rtems_showudpstat.c,
+	libnetworking/rtems/rtems_showifstat.c, libnetworking/net/if.c,
+	libnetworking/net/raw_cb.c, libnetworking/net/route.c,
+	libnetworking/net/rtsock.c, libnetworking/net/raw_usrreq.c,
+	libnetworking/netinet/tcp_usrreq.c,
+	libnetworking/netinet/tcp_timer.c, libnetworking/netinet/if_ether.c,
+	libnetworking/netinet/tcp_debug.c, libnetworking/netinet/ip_fw.c,
+	libnetworking/netinet/ip_output.c,
+	libnetworking/netinet/ip_mroute.c, libnetworking/netinet/in_proto.c,
+	libnetworking/netinet/udp_usrreq.c,
+	libnetworking/netinet/tcp_output.c,
+	libnetworking/netinet/tcp_subr.c, libnetworking/netinet/tcp_input.c,
+	libnetworking/netinet/in_rmx.c, libnetworking/netinet/in_pcb.c,
+	libnetworking/netinet/raw_ip.c, libnetworking/netinet/ip_divert.c,
+	libnetworking/netinet/in.c, libnetworking/kern/uipc_socket2.c,
+	libnetworking/kern/kern_sysctl.c, libnetworking/kern/uipc_socket.c,
+	libnetworking/kern/kern_subr.c: Include <rtems/bsd/sys/queue.h>
+	instead of <sys/queue.h>.
+	* libnetworking/sys/socketvar.h, libnetworking/sys/mount.h,
+	libnetworking/sys/sysctl.h, libnetworking/net/raw_cb.h, 
+	libnetworking/net/if.h, libnetworking/net/if_media.h,
+	libnetworking/net/if_var.h, libnetworking/netinet/in_var.h,
+	libnetworking/netinet/in_pcb.h: Include <rtems/bsd/sys/queue.h>
+	instead of <sys/queue.h>.
 	* Makefile.am: Reflect addition of include/rtems/bsd/sys/queue.h.
 	* include/rtems/bsd/sys/queue.h: New (Copied from
 	  libnetworking/sys/queue.h).
