@@ -1,3 +1,11 @@
+2007-05-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1237/rtems
+	* src/lib/libbsp/shared/bsplibc.c: Add logic to prevent stack creep
+	when interrupts occur at a sufficient rate that the interrupted
+	thread never gets to clean its stack. This patch ensures that an
+	interrupted thread will not nest ISR dispatches on its stack.
+
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use MKDIR_P instead of mkdir_p.
