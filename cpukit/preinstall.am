@@ -28,6 +28,15 @@ $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 
+$(PROJECT_INCLUDE)/rtems/bsd/sys/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/bsd/sys
+	@: > $(PROJECT_INCLUDE)/rtems/bsd/sys/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/bsd/sys/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/bsd/sys/queue.h: include/rtems/bsd/sys/queue.h $(PROJECT_INCLUDE)/rtems/bsd/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsd/sys/queue.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsd/sys/queue.h
+
 if NEWLIB
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
