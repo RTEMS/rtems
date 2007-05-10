@@ -1,5 +1,7 @@
 2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/xdr/xdr_float.c: Include <rtems/endian.h> instead of
+	<machine/endian.h>.
 	* libnetworking/rtems/rtems_showroute.c, 
 	libnetworking/rtems/rtems_showipstat.c,
 	libnetworking/rtems/rtems_showtcpstat.c,
