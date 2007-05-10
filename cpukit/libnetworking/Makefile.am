@@ -130,7 +130,7 @@ include_sysdir = $(includedir)/sys
 
 include_sys_HEADERS = sys/callout.h sys/conf.h sys/domain.h \
     sys/kernel.h sys/libkern.h sys/linker_set.h sys/malloc.h sys/mbuf.h \
-    sys/mount.h sys/proc.h sys/protosw.h sys/queue.h sys/reboot.h \
+    sys/mount.h sys/proc.h sys/protosw.h sys/reboot.h \
     sys/resourcevar.h sys/select.h sys/signalvar.h sys/socket.h \
     sys/socketvar.h sys/sysctl.h sys/syslog.h sys/systm.h sys/ttydefaults.h \
     sys/ucred.h sys/uio.h sys/un.h
