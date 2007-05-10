@@ -39,6 +39,7 @@ include_rtems_rtems_HEADERS =
 
 include_rtems_bsd_sysdir = $(include_rtemsdir)/bsd/sys
 include_rtems_bsd_sys_HEADERS = include/rtems/bsd/sys/queue.h
+include_rtems_bsd_sys_HEADERS += include/rtems/bsd/sys/cdefs.h
 
 if NEWLIB
 include_sysdir = $(includedir)/sys
