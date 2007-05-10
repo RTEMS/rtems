@@ -1,6 +1,7 @@
 2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	
+	* libcsupport/include/rtems/cdefs.h,
+	  libcsupport/include/sys/cdefs.h: Remove.
 	* Makefile.am: Remove libcsupport/include/sys/cdefs.h.
 	* libcsupport/Makefile.am: Remove include/rtems/cdefs.h.
 	* include/rtems/bsd/sys/queue.h, libcsupport/include/sys/ioccom.h,
