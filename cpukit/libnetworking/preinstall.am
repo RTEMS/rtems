@@ -355,10 +355,6 @@ $(PROJECT_INCLUDE)/sys/protosw.h: sys/protosw.h $(PROJECT_INCLUDE)/sys/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/protosw.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/protosw.h
 
-$(PROJECT_INCLUDE)/sys/queue.h: sys/queue.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/queue.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/queue.h
-
 $(PROJECT_INCLUDE)/sys/reboot.h: sys/reboot.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/reboot.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/reboot.h
