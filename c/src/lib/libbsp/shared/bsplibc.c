@@ -31,5 +31,8 @@ void bsp_libc_init(
      * Set up for the libc handling.
      */
 
-    libc_init(1);                /* reentrant if possible */
+    if ( BSP_Configuration.ticks_per_timeslice > 0 )
+        libc_init(1);                /* reentrant if possible */
+    else
+        libc_init(0);                /* non-reentrant */
 }
