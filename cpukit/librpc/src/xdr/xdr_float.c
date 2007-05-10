@@ -70,7 +70,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_float.c,v 1.7 1999/08/28 00
     defined(__AVR__) || \
     defined(__BFIN__)
 
-#include <machine/endian.h>
+#include <rtems/endian.h>
 #if !defined(IEEEFP)
 #define IEEEFP
 #endif
