@@ -21,3 +21,9 @@ GCC_OPTS +=
 ## GDB_VERS = 6.4
 ## include ../gdb.am
 ## GDB_OPTS +=
+
+CPUKIT_VERS = 4.7.99.1
+CPUKIT_PKGVERS = $(CPUKIT_VERS)-20070510
+CPUKIT_RPMREL = 0
+include ../cpukit.am
+CPUKIT_OPTS +=
