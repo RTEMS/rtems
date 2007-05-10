@@ -38,7 +38,7 @@
 
 #ifndef TUBA_INCLUDE
 #include <sys/param.h>
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 #include <sys/systm.h>
 #include <sys/kernel.h>
 #include <sys/sysctl.h>

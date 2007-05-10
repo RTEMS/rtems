@@ -33,7 +33,7 @@
 #include "opt_mrouting.h"
 
 #include <sys/param.h>
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 #include <sys/systm.h>
 #include <sys/kernel.h>
 #include <sys/proc.h>

@@ -44,7 +44,7 @@
 
 #include <sys/param.h>
 #include <sys/kernel.h>
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 #include <sys/sysctl.h>
 #include <sys/systm.h>
 #include <sys/mbuf.h>

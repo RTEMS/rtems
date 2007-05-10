@@ -52,7 +52,7 @@
 #include <sys/sx.h>
 #include <sys/sysproto.h>
 #else
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 
 #include <stdio.h>                                /* for snprintf() */
 size_t   strlcpy(char *, const char *, size_t);

@@ -44,7 +44,7 @@
 #include <sys/kernel.h>
 #include <sys/proc.h>
 #include <sys/file.h>
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 #include <sys/malloc.h>
 #include <sys/mbuf.h>
 #include <sys/protosw.h>

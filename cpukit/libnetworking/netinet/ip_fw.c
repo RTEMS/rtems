@@ -27,7 +27,7 @@
 #include <sys/systm.h>
 #include <sys/malloc.h>
 #include <sys/mbuf.h>
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 #include <sys/kernel.h>
 #include <sys/socket.h>
 #include <sys/time.h>

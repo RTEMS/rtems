@@ -39,7 +39,7 @@
 #include "opt_mac.h"
 
 #include <sys/param.h>
-#include <sys/queue.h>
+#include <rtems/bsd/sys/queue.h>
 #include <sys/malloc.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>
