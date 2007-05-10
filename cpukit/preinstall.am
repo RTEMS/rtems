@@ -83,10 +83,6 @@ $(PROJECT_INCLUDE)/sys/utsname.h: libcsupport/include/sys/utsname.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
 
-$(PROJECT_INCLUDE)/sys/cdefs.h: libcsupport/include/sys/cdefs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/cdefs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
-
 if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/bsdnet
