@@ -1,5 +1,6 @@
 2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Reflect addition of include/rtems/bsd/sys/queue.h.
 	* include/rtems/bsd/sys/queue.h: New (Copied from
 	  libnetworking/sys/queue.h).
 
