@@ -1,5 +1,11 @@
 2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Reflect introduction of
+	  include/rtems/bsd/sys/cdefs.h.
+	* include/rtems/bsd/sys/cdefs.h: New.
+
+2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/Makefile.am: Reflect having removed sys/queue.h.
 	* libnetworking/sys/queue.h: Remove.
 
