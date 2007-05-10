@@ -95,13 +95,11 @@ void _Thread_Change_priority(
    */
   state = the_thread->current_state;
   if ( state != STATES_TRANSIENT ) {
-    if ( _States_Is_waiting_on_thread_queue( state ) ) {
-       _ISR_Enable( level ); 
-      _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );
-      _ISR_Disable( level );  /* redisable so state is cleared with ISR off */
-    }
     the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
     _ISR_Enable( level );
+    if ( _States_Is_waiting_on_thread_queue( state ) ) {
+      _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );
+    }
     return;
   }
 

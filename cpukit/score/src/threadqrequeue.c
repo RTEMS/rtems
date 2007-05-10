@@ -47,8 +47,9 @@ void _Thread_queue_Requeue(
 )
 {
   /* just in case the thread really wasn't blocked here */
-  if ( !the_thread_queue )
+  if ( !the_thread_queue ) {
     return;
+  }
 
   switch ( the_thread_queue->discipline ) {
     case THREAD_QUEUE_DISCIPLINE_FIFO:
@@ -56,12 +57,17 @@ void _Thread_queue_Requeue(
       break;
     case THREAD_QUEUE_DISCIPLINE_PRIORITY: {
       Thread_queue_Control *tq = the_thread_queue;
+      ISR_Level             level;
 
-      _Thread_queue_Enter_critical_section( tq );
+      _ISR_Disable( level );
+      if ( _States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+        _Thread_queue_Enter_critical_section( tq );
         _Thread_queue_Extract_priority_helper( tq, the_thread, TRUE );
         _Thread_queue_Enqueue_priority( tq, the_thread );
       }
+      _ISR_Enable( level );
       break;
-   }
+    }
+  }
 }
 

@@ -1,3 +1,9 @@
+2007-05-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1241/rtems
+	* score/src/threadchangepriority.c, score/src/threadqrequeue.c: Close
+	critical section window added with requeueing support.
+
 2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/rtems/cdefs.h,
