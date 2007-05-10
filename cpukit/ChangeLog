@@ -1,3 +1,8 @@
+2007-05-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/rtems/bsd/sys/queue.h: New (Copied from
+	  libnetworking/sys/queue.h).
+
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/include/rtems/libcsupport.h, libcsupport/src/newlibc.c,
