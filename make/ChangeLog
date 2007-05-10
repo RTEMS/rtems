@@ -1,3 +1,9 @@
+2007-05-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/gba.cfg, custom/gp32.cfg, custom/i386ex.cfg, custom/pc386.cfg,
+	custom/sim68000.cfg, custom/ts_386ex.cfg: Clean up to use .nxe
+	extension instead of BSP unique ones.
+
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* compilers/gcc-no_bsp.cfg: There are no longer any required managers.
