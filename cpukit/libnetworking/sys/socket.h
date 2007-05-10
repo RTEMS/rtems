@@ -37,7 +37,7 @@
 #ifndef _SYS_SOCKET_H_
 #define	_SYS_SOCKET_H_
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 #include <rtems/bsdnet/_types.h>
 
 /*

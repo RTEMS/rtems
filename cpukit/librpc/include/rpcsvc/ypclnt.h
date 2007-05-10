@@ -32,7 +32,7 @@
 #ifndef _RPCSVC_YPCLNT_H_
 #define _RPCSVC_YPCLNT_H_
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 #define YPERR_BADARGS	1		/* args to function are bad */
 #define YPERR_RPC	2		/* RPC failure */

@@ -88,7 +88,7 @@
 
 #ifndef KERNEL
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 #ifndef __ioctl_command_defined
 typedef u_int32_t ioctl_command_t;

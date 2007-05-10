@@ -39,7 +39,7 @@
 #ifndef _MACHINE_IN_CKSUM_H_
 #define	_MACHINE_IN_CKSUM_H_	1
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 /*
  * It it useful to have an Internet checksum routine which is inlineable

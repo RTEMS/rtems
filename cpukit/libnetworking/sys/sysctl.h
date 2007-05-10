@@ -630,7 +630,7 @@ int	sysctl_find_oid(int *name, u_int namelen, struct sysctl_oid **noid,
 int	sysctl_wire_old_buffer(struct sysctl_req *req, size_t len);
 
 #else	/* !_KERNEL */
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 __BEGIN_DECLS
 int	sysctl(int *, u_int, void *, size_t *, void *, size_t);

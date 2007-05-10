@@ -43,7 +43,7 @@
 #endif
 
 #include <sys/types.h>
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 __weak_reference(__inet_addr, inet_addr);
 __weak_reference(__inet_aton, inet_aton);

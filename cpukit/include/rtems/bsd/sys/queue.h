@@ -33,7 +33,7 @@
 #ifndef _RTEMS_BSD_SYS_QUEUE_H
 #define	_RTEMS_BSD_SYS_QUEUE_H
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 /*
  * This file defines four types of data structures: singly-linked lists,

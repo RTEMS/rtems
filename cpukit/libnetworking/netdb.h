@@ -65,7 +65,7 @@
 #ifndef _NETDB_H_
 #define _NETDB_H_
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 #include <rtems/bsdnet/_types.h>
 
 #ifndef _SOCKLEN_T_DECLARED

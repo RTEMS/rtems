@@ -37,7 +37,7 @@
 #ifndef _SYS_UN_H_
 #define _SYS_UN_H_
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 #include <rtems/bsdnet/_types.h>
 
 #ifndef _SA_FAMILY_T_DECLARED

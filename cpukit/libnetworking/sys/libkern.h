@@ -37,7 +37,7 @@
 #ifndef _SYS_LIBKERN_H_
 #define	_SYS_LIBKERN_H_
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 #include <sys/types.h>
 
 /* BCD conversions. */

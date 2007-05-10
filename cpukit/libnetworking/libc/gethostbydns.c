@@ -57,7 +57,7 @@
 #include "config.h"
 #endif
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 #include <sys/types.h>
 #include <sys/param.h>

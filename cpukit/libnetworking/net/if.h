@@ -37,7 +37,7 @@
 #ifndef _NET_IF_H_
 #define	_NET_IF_H_
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 #if defined(__rtems__)
 /*

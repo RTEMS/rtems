@@ -64,7 +64,7 @@
 #ifndef _RPC_CLNT_H_
 #define _RPC_CLNT_H_
 #include <rpc/clnt_stat.h>
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 #include <sys/un.h>
 
 /*

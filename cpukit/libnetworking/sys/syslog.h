@@ -178,7 +178,7 @@ CODE facilitynames[] = {
 
 #else /* not _KERNEL */
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 #include <stdarg.h>
 
 __BEGIN_DECLS

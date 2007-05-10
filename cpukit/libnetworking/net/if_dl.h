@@ -74,7 +74,7 @@ struct sockaddr_dl {
 
 #ifndef _KERNEL
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 __BEGIN_DECLS
 void	link_addr(const char *, struct sockaddr_dl *);

@@ -39,7 +39,7 @@
 
 #ifndef _RPC_SVC_SOC_H
 #define _RPC_SVC_SOC_H
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 
 /* #pragma ident   "@(#)svc_soc.h  1.11    94/04/25 SMI" */
 /*      svc_soc.h 1.8 89/05/01 SMI      */

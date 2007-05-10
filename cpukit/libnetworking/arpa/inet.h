@@ -62,7 +62,7 @@
 
 /* External definitions for functions in inet(3), addr2ascii(3) */
 
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 #include <rtems/bsdnet/_types.h>
 
 #define	INET_ADDRSTRLEN		16

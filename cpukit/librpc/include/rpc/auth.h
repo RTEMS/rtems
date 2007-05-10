@@ -43,7 +43,7 @@
 
 #ifndef _RPC_AUTH_H
 #define _RPC_AUTH_H
-#include <sys/cdefs.h>
+#include <rtems/bsd/sys/cdefs.h>
 #include <sys/socket.h>
 
 #define MAX_AUTH_BYTES	400
