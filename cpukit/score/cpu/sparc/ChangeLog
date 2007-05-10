@@ -1,3 +1,11 @@
+2007-05-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1237/rtems
+	* cpu.c, cpu_asm.S, rtems/score/cpu.h: Add logic to prevent stack creep
+	when interrupts occur at a sufficient rate that the interrupted
+	thread never gets to clean its stack. This patch ensures that an
+	interrupted thread will not nest ISR dispatches on its stack.
+
 2006-11-14	Jiri Gaisler <jiri@gaisler.com>
 
 	* cpu_asm.S: Properly support synchronous traps.

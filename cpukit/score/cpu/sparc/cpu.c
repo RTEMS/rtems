@@ -71,6 +71,13 @@ void _CPU_Initialize(
    */
 
   _CPU_Table = *cpu_table;
+
+  /*
+   *  Since no tasks have been created yet and no interrupts have occurred,
+   *  there is no way that the currently executing thread can have an
+   *  _ISR_Dispatch stack frame on its stack.
+   */
+  _CPU_ISR_Dispatch_disable = 0;
 }
 
 /*PAGE
@@ -327,4 +334,10 @@ void _CPU_Context_Initialize(
       tmp_psr |= SPARC_PSR_EF_MASK;
 #endif
     the_context->psr = tmp_psr;
+
+  /*
+   *  Since THIS thread is being created, there is no way that THIS
+   *  thread can have an _ISR_Dispatch stack frame on its stack.
+   */
+    the_context->isr_dispatch_disable = 0;
 }
