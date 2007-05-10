@@ -37,6 +37,10 @@ $(PROJECT_INCLUDE)/rtems/bsd/sys/queue.h: include/rtems/bsd/sys/queue.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsd/sys/queue.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsd/sys/queue.h
 
+$(PROJECT_INCLUDE)/rtems/bsd/sys/cdefs.h: include/rtems/bsd/sys/cdefs.h $(PROJECT_INCLUDE)/rtems/bsd/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsd/sys/cdefs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsd/sys/cdefs.h
+
 if NEWLIB
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys

@@ -91,10 +91,6 @@ $(PROJECT_INCLUDE)/rtems/termiostypes.h: include/rtems/termiostypes.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/termiostypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/termiostypes.h
 
-$(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cdefs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
-
 $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/zilog
 	@: > $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
