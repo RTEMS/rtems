@@ -1,3 +1,9 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Per Jiri Gaisler remove unused erc32nfp and leon1 BSP
+	variants.
+	* custom/erc32nfp.cfg, custom/leon1.cfg: Removed.
+
 2007-05-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/gba.cfg, custom/gp32.cfg, custom/i386ex.cfg, custom/pc386.cfg,
