@@ -1,5 +1,12 @@
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* rtems/src/region.c, sapi/src/exinit.c: Now that the Region is
+	an optional manager, we cannot depend on it do initialize the
+	internal Allocator Mutex.  This was always a questionable place to
+	do it, so this is a cleanup.
+
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libmisc/cpuuse/cpuuse.c, libmisc/stackchk/check.c,
 	libmisc/stackchk/stackchk.h: Clean up as side-effect of making them
 	suitable for inclusion in the Users Guide.

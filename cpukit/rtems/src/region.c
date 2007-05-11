@@ -42,10 +42,6 @@ void _Region_Manager_initialization(
   uint32_t   maximum_regions
 )
 {
-  /* XXX move me */
-  _API_Mutex_Initialization( 1 );
-  _API_Mutex_Allocate( _RTEMS_Allocator_Mutex );
-
   _Objects_Initialize_information(
     &_Region_Information,      /* object information table */
     OBJECTS_CLASSIC_API,       /* object API */
