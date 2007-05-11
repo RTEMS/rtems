@@ -1,3 +1,15 @@
+2007-05-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* dmv152/.cvsignore, dmv152/ChangeLog, dmv152/Makefile.am,
+	dmv152/bsp_specs, dmv152/configure.ac, dmv152/preinstall.am,
+	dmv152/times, dmv152/clock/ckinit.c, dmv152/console/console.c,
+	dmv152/include/.cvsignore, dmv152/include/bsp.h,
+	dmv152/include/coverhd.h, dmv152/include/tm27.h,
+	dmv152/spurious/spinit.c, dmv152/startup/bspclean.c,
+	dmv152/startup/bspstart.c, dmv152/startup/linkcmds,
+	dmv152/startup/vmeintr.c, dmv152/timer/timer.c,
+	dmv152/timer/timerisr.S: Removed.
+
 2007-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* mcf5206elite/tools/runtest: Do not run pppd.exe from batch mode

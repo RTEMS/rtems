@@ -6,8 +6,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([av5282]);;
   csb360 )
     AC_CONFIG_SUBDIRS([csb360]);;
-  dmv152 )
-    AC_CONFIG_SUBDIRS([dmv152]);;
   gen68302 )
     AC_CONFIG_SUBDIRS([gen68302]);;
   gen68340 )
