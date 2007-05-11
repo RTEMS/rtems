@@ -1,3 +1,8 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/.cvsignore, user/cpuuse.t, user/stackchk.t: Stack checker and
+	CPU usage chapters are now OK in the manual.
+
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* porting/miscellaneous.t: Remove subsection on "Optional

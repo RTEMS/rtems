@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved. 
 @c
@@ -22,11 +22,28 @@ The routines provided by the CPU usage statistics manager are:
 
 @section Background
 
+When analyzing and debugging real-time applications, it is important
+to be able to know how much CPU time each task in the system consumes.
+This support component provides a mechanism to easily obtain this
+information with little burden placed on the target.
+
+The raw data is gathered as part of performing a context switch.  RTEMS
+keeps track of how many clock ticks have occurred which the task being
+switched out has been executing.  If the task has been running less than
+1 clock tick, then for the purposes of the statistics, it is assumed to
+have executed 1 clock tick.  This results in some inaccuracy but the
+alternative is for the task to have appeared to execute 0 clock ticks.
+
+RTEMS versions newer than the 4.7 release series, support the ability
+to obtain timestamps with nanosecond granularity if the BSP provides
+support.  It is a desirable enhancement to change the way the usage
+data is gathered to take advantage of this recently added capability.
+Please consider sponsoring the core RTEMS development team to add
+this capability.
+
 @section Operations
 
-@section Report CPU Usage Statistics
-
-@subsection Reporting Period Statistics
+@subsection Report CPU Usage Statistics
 
 The application may dynamically report the CPU usage for every
 task in the system by calling the
@@ -72,7 +89,7 @@ some type of debug interface.  It is usually fine to think of the
 total idle time as being the sum of the IDLE task and a debug
 task that will not be included in a production build of an application.
 
-@section Reset CPU Usage Statistics
+@subsection Reset CPU Usage Statistics
 
 Invoking the @code{@value{DIRPREFIX}cpu_usage_reset} routine resets
 the CPU usage statistics for all tasks in the system. 
@@ -110,7 +127,7 @@ all tasks in the system.
 
 @subheading NOTES:
 
-NONE
+The table is printed using the @code{printk} routine.
 
 @page
 @subsection cpu_usage_reset - Reset CPU Usage Statistics
