@@ -9,9 +9,7 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
   case $1 in
     bare*)        $2=bare             ;; # EXP: bare-aliases
     c3xsim)       $2=c4xsim           ;; # TI C3x Simulator in gdb
-    erc32nfp)     $2=erc32            ;; # erc32 without fpu
     gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
-    leon1)     	  $2=leon2            ;; # leon without fpu
     mbx8*)        $2=mbx8xx           ;; # MBX821/MBX860 board
     mcp750)       $2=motorola_powerpc ;; # Motorola PPC board variant
     mtx603e)      $2=motorola_powerpc ;; # Motorola PPC board variant

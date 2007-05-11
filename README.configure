@@ -22,23 +22,23 @@ To configure RTEMS for a specific target, run configure in the build
 directory. In addition to the standard configure options, the following
 RTEMS-specific option are supported:
 
-	--disable-rtems-inlines
-	--disable-posix
-	--disable-itron
-	--disable-networking
-        --enable-cxx
-        --enable-bare-cpu-model=<MODEL>
-        --enable-bare-cpu-cflags=<FLAGS>
-        --enable-multiprocessing
-	--enable-rtemsbsp="bsp1 bsp2 ..."
-	--enable-tests
-	--enable-rdbg            (only valid for i386 and some PowerPC BSPs)
-        --enable-docs
+      --disable-rtems-inlines
+      --disable-posix
+      --disable-itron
+      --disable-networking
+      --enable-cxx
+      --enable-bare-cpu-model=<MODEL>
+      --enable-bare-cpu-cflags=<FLAGS>
+      --enable-multiprocessing
+      --enable-rtemsbsp="bsp1 bsp2 ..."
+      --enable-tests
+      --enable-rdbg            (only valid for i386 and some PowerPC BSPs)
+      --enable-docs
 
 In addition, the following standard autoconf options are frequently
 used when configuring RTEMS installations:
 
-        --prefix=INSTALL_DIRECTORY
+      --prefix=INSTALL_DIRECTORY
 
 By default, inline routines are used instead of macros where possible.
 Macros can be selected using the --disable-inlines option.  [NOTE:
@@ -79,38 +79,38 @@ for those BSPs supporting it by the --enable-multiprocessing option.
 By default, all bsps for a target are built. The bare BSP is not built
 unless directly specified. There are  two ways of changing this:
 
-  + use the --enable-rtemsbsp option which will set the specified
-    bsps as the default bsps, or 
-  + set the RTEMS_BSP variable during make (see below).
++ use the --enable-rtemsbsp option which will set the specified
+  bsps as the default bsps, or 
++ set the RTEMS_BSP variable during make (see below).
 
 The --enable-rtemsbsp= option configures RTEMS for a specific board
 within a target architecture.  Remember that the target specifies the
 CPU family while the BSP specifies the precise board you will be using. 
 The following targets are supported:
 
-	(none)			will build the host-based version on Linux,
-				Solaris and HPUX.
+      (none)			will build the host-based version on Linux,
+			      Solaris and HPUX.
 
-        arm-rtems
-        c4x-rtems
-        h8300-rtems
-	i386-rtems
-	m68k-rtems
-	mips-rtems
-        no_cpu-rtems
-        or32-rtems
-	powerpc-rtems
-	sh-rtems
-	sparc-rtems
-        bare                    see notes
+      arm-rtems
+      c4x-rtems
+      h8300-rtems
+      i386-rtems
+      m68k-rtems
+      mips-rtems
+      no_cpu-rtems
+      or32-rtems
+      powerpc-rtems
+      sh-rtems
+      sparc-rtems
+      bare                    see notes
 
 The cross-compiler is set to $(target)-gcc by default. This can be
 overridden by:
 
-  + using the --program-prefix option to configure to specify the
-    string which will prepended to the tool names.  Be sure to include
-    a trailing "-".  For example, to use a m68k-coff toolset, use the
-    --program-prefix=m68k-coff- option.
++ using the --program-prefix option to configure to specify the
+  string which will prepended to the tool names.  Be sure to include
+  a trailing "-".  For example, to use a m68k-coff toolset, use the
+  --program-prefix=m68k-coff- option.
 
 To build, run make in the build directory. To specify which bsps to build,
 add the RTEMS_BSP="bsp1 bsp2 .." to the make command.  Specifying multiple
@@ -120,11 +120,11 @@ Installation is done under $(prefix)/rtems.
 
 As an example, to build and install the mvme136 and mvme162 bsps for m68k do:
 
-	(path_to_rtems_src)/configure --target=m68k-rtems
+      (path_to_rtems_src)/configure --target=m68k-rtems
 
-	make RTEMS_BSP="mvme136 mvme162"
-	
-	make install RTEMS_BSP="mvme136 mvme162"
+      make RTEMS_BSP="mvme136 mvme162"
+      
+      make install RTEMS_BSP="mvme136 mvme162"
 
 The sample tests are built by 'make all', do a 'make test' to build the full
 test suite.
@@ -144,14 +144,14 @@ for the standalone build.
 
 bare:
 
-  1.  See the README in the bare bsp source directory. This should
-      contain all info you need.
-  2.  The bare bsp source contains a script to show how to build it.
-  3.  The configure flags must be used to get the bare bsp to work.
-      The --enable-bare-cpu-model and --enable-bare-cpu-cflags are the
-      only pieces of information. The module is usually a gcc module
-      such as m68302 or mcpu32. The flags are passed directly to gcc.
-      Use "" if more than one option is specified.
+1.  See the README in the bare bsp source directory. This should
+    contain all info you need.
+2.  The bare bsp source contains a script to show how to build it.
+3.  The configure flags must be used to get the bare bsp to work.
+    The --enable-bare-cpu-model and --enable-bare-cpu-cflags are the
+    only pieces of information. The module is usually a gcc module
+    such as m68302 or mcpu32. The flags are passed directly to gcc.
+    Use "" if more than one option is specified.
 
 3. To use the installed RTEMS library
 =====================================
@@ -161,7 +161,7 @@ makefile has to include a bsp-specific makefile that will define the
 RTEMS variables necessary to find include files and libraries. The
 bsp-specific makefile is installed at 
 
-	$(RTEMS_MAKEFILE_PATH)/Makefile.inc
+      $(RTEMS_MAKEFILE_PATH)/Makefile.inc
 
 For the erc32 bsp installed at /usr/local/cross, the environment
 variable RTEMS_MAKEFILE_PATH would be set as follows to the
@@ -176,37 +176,41 @@ The following bsps are supported:
 
 host-based	: posix (on Linux, FreeBSD, Cygwin, Solaris, and HPUX)
 
-arm             : arm_bare_bsp armulator csb336 csb337 edb7312 gp32 vegaplus
+arm             : armulator csb336 csb337 edb7312 gba gp32 rtl22x
+
+avr:            : none
+
+bfin            : eZKit533
 
 c4x             : c3xsim c4xsim
 
 h8300           : h8sim
 
-i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
-                  NOTE: The "pc386" BSP can be compiled to support a 
-                        variety of PC configurations including PC-104
-                        based solutions.
+i386		: 386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
+		NOTE: The "pc386" BSP can be compiled to support a 
+		      variety of PC configurations including PC-104
+		      based solutions.
 
-m68k		: av5282 csb360 gen68302 gen68340 gen68360 gen68360_040 
-                  idp mcf5206elite mcf5235 mrm332 mvme136 mvme147 mvme147s
-                  mvme162 mvme162lx ods68302 sim68000 simcpu32 uC5282
+m68k		: gen68360 gen68360_040 mvme136 mvme147s mvme162 mvme162lx
+		mvme167 ods68302 sim68000 mcf5206elite uC5282 
+		gen68302 csb360 simcpu32 mrm332 av5282 gen68340 mcf5235 idp
 
 no_cpu          : no_bsp  (porting example)
 
-mips            : csb350 genmongoosev
-                  p4600 p4650 (p4000 port with either R4600 or R4650)
-                  jmr3904
+mips            : csb350 genmongoosev hurricane jmr3904 rbtx4925 rbtx4938
 
-powerpc		: ep1a gen405 helas403 mcp750 mbx8xx mtx603e
-                  mpc8260ads mvme230x mvme5500 psim score603e ss555
+powerpc		: psim score603e mcp750 mvme2100 mvme2307 mpc8260ads ss555
+                  mvme5500 ep1a pm520_cr825 pm520_ze30 gen405 helas403
+                  mbx821_001 mbx821_002 mbx821_002b mbx860_1b mbx860_001b
+                  mbx860_002 mbx860_005b mtx603e brs5l gen5200
 
                   NOTE: The "motorola_powerpc" BSP is a single BSP which
                   can be conditionally compiled to support most Motorola
                   VMEbus, CompactPCI, and MTX boards.)
 
-sh              : gensh1 gensh2 shsim simsh4 gensh4
+sh              : gensh1 gensh2 gensh4 shsim simsh4 simsh7045
 
-sparc 		: erc32 erc32nfp leon1 leon2
+sparc 		: erc32 sis leon2 leon3
 
 any             : bare
 
