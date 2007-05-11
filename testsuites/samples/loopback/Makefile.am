@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-MANAGERS = io event
+MANAGERS = all
 
 rtems_tests_PROGRAMS = loopback.exe
 loopback_exe_SOURCES = init.c

@@ -41,11 +41,8 @@ extern rtems_name Task_name[ 4 ];       /* array of task names */
 
 #include <bsp.h> /* for device driver prototypes */
 
-#if defined(CONFIGURE_INIT)
-int atexit(void (*function)(void)){}
-#endif
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             4
 

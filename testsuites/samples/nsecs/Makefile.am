@@ -2,6 +2,8 @@
 ##  $Id$
 ##
 
+MANAGERS = all
+
 rtems_tests_PROGRAMS = nsecs.exe
 nsecs_exe_SOURCES = init.c
 

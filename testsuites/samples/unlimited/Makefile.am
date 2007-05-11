@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-MANAGERS = io event
+MANAGERS = io event semaphore
 
 rtems_tests_PROGRAMS = unlimited.exe
 unlimited_exe_SOURCES = init.c test1.c test2.c test3.c system.h

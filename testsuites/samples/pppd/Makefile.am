@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-MANAGERS = io event semaphore
+MANAGERS = all
 
 rtems_tests_PROGRAMS = pppd.exe
 pppd_exe_SOURCES = init.c pppdapp.c netconfig.h system.h

@@ -1,3 +1,15 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* base_sp/Makefile.am, hello/Makefile.am, iostream/Makefile.am,
+	loopback/Makefile.am, nsecs/Makefile.am,
+	pppd/Makefile.am, ticker/Makefile.am, ticker/system.h,
+	unlimited/Makefile.am: Add optional managers to Makefiles. Clean up
+	test cases so last output line follows END OF pattern. Make sure test
+	case all run. All tests appeared ok on sis.
+	* nsecs/init.c: Commit hack so test will compile when POSIX is
+	disabled.  Remove hack when clock_gettime() is present even when
+	--disable-posix.
+
 2007-05-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* ticker/Makefile.am, ticker/init.c, ticker/system.h, ticker/tasks.c:

@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-MANAGERS = io
+MANAGERS = all
 
 rtems_tests_PROGRAMS = iostream.exe
 iostream_exe_SOURCES = init.cc system.h

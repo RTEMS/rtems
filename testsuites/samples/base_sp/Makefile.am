@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = base_sp.exe
 base_sp_exe_SOURCES = init.c apptask.c system.h

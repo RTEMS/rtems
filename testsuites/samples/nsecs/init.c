@@ -69,21 +69,19 @@ rtems_task Init(
   for (index=0 ; index <10 ; index++ ) {
     struct timespec start, stop;
     struct timespec diff;
+#if 0
     clock_gettime( CLOCK_REALTIME, &start );
     clock_gettime( CLOCK_REALTIME, &stop );
+#else
+    _TOD_Get( &start );
+    _TOD_Get( &stop );
+#endif
 
     subtract_em( &start, &stop, &diff );
-#if 0
-    printf( "%d:%d %d:%d ", 
-      start.tv_sec, start.tv_nsec,
-      stop.tv_sec, stop.tv_nsec,
-    );
-#else
     printf( "Start: %s:%d\nStop : %s:%d",
       my_ctime(start.tv_sec), start.tv_nsec,
       my_ctime(stop.tv_sec), stop.tv_nsec
     );
-#endif
 
    printf( " --> %d:%d\n", diff.tv_sec, diff.tv_nsec );
   }
