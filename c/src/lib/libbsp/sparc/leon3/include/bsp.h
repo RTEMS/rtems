@@ -42,11 +42,6 @@ extern "C" {
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
-/* add a entry to the device driver table so that I can call rtems_io_register_driver */ 
-#define CONFIGURE_NUMBER_OF_DRIVERS_LEON3 \
-  (((sizeof(Device_drivers) / sizeof(rtems_driver_address_table))) + 1)
-#define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS_LEON3
-  
 /*
  * Network driver configuration
  */

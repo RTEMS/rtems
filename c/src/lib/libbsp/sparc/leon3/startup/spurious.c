@@ -70,7 +70,7 @@ rtems_isr bsp_spurious_handler(
     case 0x09: 
       printk( "Unexpected trap (0x%2d) at address XXX\n",
         real_trap
-        XXX FIXME isf->tpc */
+        /* XXX FIXME isf->tpc */
       );
       break;
     case 0x0A: 

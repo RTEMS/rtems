@@ -1,5 +1,10 @@
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* include/bsp.h, startup/bspstart.c, startup/spurious.c: hello and
+	ticker now run using runtest.
+
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* startup/spurious.c: Fix typo from previous commit.
 
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>

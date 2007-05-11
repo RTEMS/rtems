@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modified for LEON3 BSP.
@@ -24,8 +24,7 @@
 #include <string.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
+#include <rtems/bspIo.h>
 
 /*
  *  The original table from the application and our copy of it with
