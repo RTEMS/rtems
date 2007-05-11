@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io event timer
+MANAGERS = io event timer semaphore
 
 rtems_tests_PROGRAMS = tm23.exe
 tm23_exe_SOURCES = task1.c system.h ../include/timesys.h

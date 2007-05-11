@@ -1,3 +1,17 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* tm05/Makefile.am, tm06/Makefile.am, tm07/Makefile.am,
+	tm08/Makefile.am, tm09/Makefile.am, tm10/Makefile.am,
+	tm11/Makefile.am, tm12/Makefile.am, tm13/Makefile.am,
+	tm14/Makefile.am, tm15/Makefile.am, tm16/Makefile.am,
+	tm17/Makefile.am, tm18/Makefile.am, tm19/Makefile.am,
+	tm20/Makefile.am, tm22/Makefile.am, tm23/Makefile.am,
+	tm24/Makefile.am, tm25/Makefile.am, tm26/Makefile.am,
+	tm27/Makefile.am, tm28/Makefile.am, tm29/Makefile.am,
+	tmck/Makefile.am, tmoverhd/Makefile.am: Add optional managers to
+	Makefiles. Clean up test cases so last output line follows END OF
+	pattern. Make sure test case all run. All tests appeared ok on sis.
+
 2007-02-06	Joel Sherrill <joel@OARcorp.com>
 
 	* tm09/task1.c, tm10/task1.c, tm11/task1.c, tm12/task1.c, tm13/task1.c,

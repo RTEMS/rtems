@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io partition region
+MANAGERS = io partition region semaphore
 
 rtems_tests_PROGRAMS = tm20.exe
 tm20_exe_SOURCES = task1.c system.h ../include/timesys.h

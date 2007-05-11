@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic
+MANAGERS = io rate_monotonic semaphore
 
 rtems_tests_PROGRAMS = tm29.exe
 tm29_exe_SOURCES = task1.c system.h ../include/timesys.h

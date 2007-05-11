@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = tmoverhd.exe
 tmoverhd_exe_SOURCES = testtask.c empty.c system.h dumrtems.h ../include/timesys.h

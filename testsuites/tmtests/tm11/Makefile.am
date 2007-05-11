@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io message
+MANAGERS = io message semaphore
 
 rtems_tests_PROGRAMS = tm11.exe
 tm11_exe_SOURCES = task1.c system.h ../include/timesys.h
