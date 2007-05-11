@@ -63,8 +63,7 @@ rtems_isr bsp_spurious_handler(
       printk( "fp exception\n" );
       break;
     case 0x09: 
-      printk("data access exception at 0x%08x\n", 
-        LEON_REG.First_Failing_Address );
+      printk("data access exception at 0x%08x\n", LEON_REG.Failed_Address );
       break;
     case 0x0A: 
       printk( "tag overflow\n" );

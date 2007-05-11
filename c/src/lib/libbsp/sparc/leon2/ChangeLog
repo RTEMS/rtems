@@ -1,3 +1,7 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/spurious.c: Fix typo from previous commit.
+
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/debugputs.c, include/bsp.h, leon_smc91111/leon_smc91111.c,
