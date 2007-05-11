@@ -17,7 +17,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <bsp.h>
-#include <rtems/c4x/c4xio.h>
+#include <rtems/tic4x/c4xio.h>
 
 
 #define CLOCK_VECTOR    9

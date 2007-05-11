@@ -1,3 +1,7 @@
+2007-05-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/clock.c: include <tic4x/c4xio.h>.
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove qrtems_debug.
