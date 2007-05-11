@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io region event
+MANAGERS = io event semaphore clock
 
 rtems_tests_PROGRAMS = sp26.exe
 sp26_exe_SOURCES = init.c task1.c system.h

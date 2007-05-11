@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic
+MANAGERS = io rate_monotonic semaphore clock
 
 rtems_tests_PROGRAMS = sp32.exe
 sp32_exe_SOURCES = init.c

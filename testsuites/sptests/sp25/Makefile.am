@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io region
+MANAGERS = io semaphore clock region
 
 rtems_tests_PROGRAMS = sp25.exe
 sp25_exe_SOURCES = init.c task1.c system.h

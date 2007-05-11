@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io dual_ported_memory
+MANAGERS = io dual_ported_memory semaphore clock
 
 rtems_tests_PROGRAMS = sp23.exe
 sp23_exe_SOURCES = init.c task1.c system.h

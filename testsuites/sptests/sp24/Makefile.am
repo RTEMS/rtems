@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io event timer
+MANAGERS = io event timer semaphore clock
 
 rtems_tests_PROGRAMS = sp24.exe
 sp24_exe_SOURCES = init.c resume.c task1.c system.h

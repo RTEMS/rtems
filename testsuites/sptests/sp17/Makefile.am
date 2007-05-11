@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io signal
+MANAGERS = io signal semaphore clock
 
 rtems_tests_PROGRAMS = sp17.exe
 sp17_exe_SOURCES = init.c asr.c task1.c task2.c system.h

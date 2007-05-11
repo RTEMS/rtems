@@ -1,3 +1,19 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp01/Makefile.am, sp02/Makefile.am, sp03/Makefile.am,
+	sp04/Makefile.am, sp05/Makefile.am, sp06/Makefile.am,
+	sp07/Makefile.am, sp07/tdelete.c, sp08/Makefile.am, sp09/Makefile.am,
+	sp11/Makefile.am, sp12/Makefile.am, sp13/Makefile.am,
+	sp14/Makefile.am, sp15/Makefile.am, sp16/Makefile.am,
+	sp17/Makefile.am, sp19/Makefile.am, sp20/Makefile.am,
+	sp21/Makefile.am, sp22/Makefile.am, sp23/Makefile.am,
+	sp24/Makefile.am, sp25/Makefile.am, sp26/Makefile.am,
+	sp32/Makefile.am, sp33/Makefile.am, sp34/Makefile.am,
+	sp35/Makefile.am, spfatal/Makefile.am, spsize/Makefile.am,
+	spsize/size.c: Add optional managers to Makefiles. Clean up test
+	cases so last output line follows END OF pattern. Make sure test case
+	all run. All tests appeared ok on sis.
+
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
 	* spsize/size.c: _TOD_Seconds_since_epoch eliminated as a variable.

@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore clock
 
 rtems_tests_PROGRAMS = sp21.exe
 sp21_exe_SOURCES = init.c task1.c system.h

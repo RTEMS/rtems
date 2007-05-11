@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io message
+MANAGERS = io message semaphore clock
 
 rtems_tests_PROGRAMS = sp13.exe
 sp13_exe_SOURCES = init.c fillbuff.c putbuff.c task1.c task2.c task3.c system.h

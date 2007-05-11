@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore clock
 
 rtems_tests_PROGRAMS = sp08.exe
 sp08_exe_SOURCES = init.c task1.c system.h

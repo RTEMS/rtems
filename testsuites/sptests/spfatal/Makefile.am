@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = all
 
 rtems_tests_PROGRAMS = spfatal.exe
 spfatal_exe_SOURCES = init.c puterr.c fatal.c task1.c system.h

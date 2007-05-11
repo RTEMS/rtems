@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io partition
+MANAGERS = io partition semaphore clock
 
 rtems_tests_PROGRAMS = sp15.exe
 sp15_exe_SOURCES = init.c task1.c system.h

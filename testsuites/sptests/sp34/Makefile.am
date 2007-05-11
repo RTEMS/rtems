@@ -2,6 +2,8 @@
 ## $Id$
 ##
 
+MANAGERS = all
+
 rtems_tests_PROGRAMS = sp34.exe
 sp34_exe_SOURCES = changepri.c
 

@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore clock
 
 rtems_tests_PROGRAMS = sp19.exe
 sp19_exe_SOURCES = init.c first.c fptask.c task1.c system.h fptest.h inttest.h

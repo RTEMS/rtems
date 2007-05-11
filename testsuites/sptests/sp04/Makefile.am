@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore clock extension
 
 rtems_tests_PROGRAMS = sp04.exe
 sp04_exe_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h

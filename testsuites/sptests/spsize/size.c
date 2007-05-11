@@ -219,7 +219,9 @@ uninitialized =
 /*clock.h*/     0                                         +
 
 /*config.h*/    (sizeof _Configuration_Table)             +
+        #if defined(RTEMS_MULTIPROCESSING)
                 (sizeof _Configuration_MP_table)          +
+        #endif
 
 /*context.h*/   (sizeof _Context_Switch_necessary)        +
 

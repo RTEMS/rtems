@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = all
 
 rtems_tests_PROGRAMS = spsize.exe
 spsize_exe_SOURCES = init.c getint.c size.c system.h

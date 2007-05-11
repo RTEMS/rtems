@@ -2,6 +2,8 @@
 ## $Id$
 ##
 
+MANAGERS = all
+
 rtems_tests_PROGRAMS = sp35.exe
 sp35_exe_SOURCES = priinv.c
 

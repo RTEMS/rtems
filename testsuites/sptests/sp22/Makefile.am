@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io timer
+MANAGERS = io timer semaphore clock
 
 rtems_tests_PROGRAMS = sp22.exe
 sp22_exe_SOURCES = init.c prtime.c delay.c task1.c system.h

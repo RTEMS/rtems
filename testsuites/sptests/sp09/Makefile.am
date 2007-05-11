@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io message dual_ported_memory event multi_processor region \
+MANAGERS = io clock message dual_ported_memory event multi_processor region \
     semaphore signal rate_monotonic timer partition
 
 rtems_tests_PROGRAMS = sp09.exe

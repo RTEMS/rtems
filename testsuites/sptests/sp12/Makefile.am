@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io semaphore
+MANAGERS = io semaphore clock
 
 rtems_tests_PROGRAMS = sp12.exe
 sp12_exe_SOURCES = init.c task1.c task2.c task3.c task4.c task5.c pridrv.c \

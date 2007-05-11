@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io barrier
+MANAGERS = io barrier semaphore clock
 
 rtems_tests_PROGRAMS = sp33.exe
 sp33_exe_SOURCES = init.c

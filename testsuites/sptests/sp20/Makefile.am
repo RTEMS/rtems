@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic
+MANAGERS = io rate_monotonic semaphore clock
 
 rtems_tests_PROGRAMS = sp20.exe
 sp20_exe_SOURCES = init.c getall.c task1.c system.h
