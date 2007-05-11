@@ -1,4 +1,7 @@
 %build
+%if "%{_prefix}" != "/usr"
+  export PATH="%{_bindir}:${PATH}"
+%endif
   mkdir -p build
 
   cd build

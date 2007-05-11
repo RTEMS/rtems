@@ -1,6 +1,9 @@
 %install
+  rm -rf $RPM_BUILD_ROOT
+%if "%{_prefix}" != "/usr"
+  export PATH="%{_bindir}:${PATH}"
+%endif
   cd build
-
   make DESTDIR=$RPM_BUILD_ROOT install
   cd ..
 
