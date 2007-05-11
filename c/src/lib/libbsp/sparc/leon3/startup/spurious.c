@@ -21,20 +21,7 @@
 
 #include <bsp.h>
 
-#include <string.h>
-
-static const char digits[16] = "0123456789abcdef";
-
-/* Simple integer-to-string conversion */
-
-void itos(uint32_t u, char *s)
-{
-  int i;
-
-  for (i=0; i<8; i++) {
-    s[i] =  digits[(u >> (28 - (i*4))) & 0x0f];
-  }
-}
+#include <rtems/bspIo.h>
 
 /*
  *  bsp_spurious_handler
@@ -47,7 +34,6 @@ rtems_isr bsp_spurious_handler(
    CPU_Interrupt_frame *isf
 )
 {
-  char line[ 80 ];
   uint32_t real_trap;
 
   real_trap = SPARC_REAL_TRAP_NUMBER(trap);
@@ -82,9 +68,9 @@ rtems_isr bsp_spurious_handler(
       printk( "fp exception\n" );
       break;
     case 0x09: 
-      printk( "Unexpected trap (0x%2d) at address 0x%08x\n",
-        real_trap,
-        abcdef01 /* XXX FIXME isf->tpc */
+      printk( "Unexpected trap (0x%2d) at address XXX\n",
+        real_trap
+        XXX FIXME isf->tpc */
       );
       break;
     case 0x0A: 
