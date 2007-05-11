@@ -1,3 +1,8 @@
+2007-05-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: DMV152 obsoleted.
+	* custom/dmv152.cfg: Removed.
+
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Per Jiri Gaisler remove unused erc32nfp and leon1 BSP
