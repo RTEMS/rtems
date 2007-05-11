@@ -125,7 +125,7 @@
 /* PCI_MEM_BASE is a possible offset between CPU- and PCI addresses.
  * Should be defined by the BSP.
  */
-typedef uint32_t pci_ulong;
+typedef unsigned int pci_ulong;
 
 #ifndef BSP_PCI2LOCAL_ADDR
 #ifndef PCI_MEM_BASE
@@ -2371,7 +2371,7 @@ rtems_id			q = 0;
 int					installed = 0;
 int					i, err = 0;
 int					doDisable = 0;
-size_t			size;
+uint32_t			size;
 unsigned long		msg;
 char *				irqfmt  = "VME IRQ @vector %3i %s";
 char *				iackfmt = "VME IACK            %s";

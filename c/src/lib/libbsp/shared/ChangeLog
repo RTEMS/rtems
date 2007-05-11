@@ -1,3 +1,8 @@
+2007-05-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeUniverse.c: Changed types to silence
+	compiler warnings.
+
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bootcard.c: Move __fini call to inside executive for
