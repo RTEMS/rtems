@@ -1,9 +1,11 @@
-/*  stackchk.h
+/** @file rtems/stackchk.h
  *
  *  This include file contains information necessary to utilize
  *  and install the stack checker mechanism.
- *
- *  COPYRIGHT (c) 1989-2006.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,48 +22,79 @@
 extern "C" {
 #endif
 
-/*
- *  rtems_stack_checker_initialize
+/** @brief Has Current Task Blown Its Stack
+ *
+ *  This method is used to determine if the current stack pointer
+ *  of the currently executing task is within bounds.
+ *
+ *  @return This method returns true if the currently executing task
+ *  has blown its stack.
+ *
  */
+boolean rtems_stack_checker_is_blown( void );
 
-void rtems_stack_checker_initialize( void );
-
-/*
- *  rtems_stack_checker_Dump_usage
+/** @brief Print Stack Usage Report
+ *
+ *  This method prints a stack usage report for the curently executing
+ *  task.
+ *
+ *  @note It uses printk to print the report.
  */
-
 void rtems_stack_checker_report_usage( void );
 
-/*
- *  rtems_stack_checker_create_extension
- */
+/*************************************************************
+ *************************************************************
+ **  Prototyped only so the user extension can be installed **
+ *************************************************************
+ *************************************************************/
 
+/** @brief Stack Checker Task Create Extension
+ *
+ * This method is the task create extension for the stack checker.
+ *
+ * @param[in] running points to the currently executing task
+ * @param[in] the_thread points to the newly created task
+ *
+ * @note If this this the first task created, the stack checker
+ *       will automatically intialize itself.
+ */
 boolean rtems_stack_checker_create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 );
 
-/*
- *  rtems_stack_checker_begin_extension
+/** @brief Stack Checker Task Begin Extension
+ *
+ * This method is the task begin extension for the stack checker.
+ *
+ * @param[in] the_thread points to task starting to execute
+ *
+ * @note This is called from the internal method _Thread_Handler.
  */
-
 void rtems_stack_checker_begin_extension(
   Thread_Control *the_thread
 );
 
-/*
- *  rtems_stack_checker_switch_extension
+/** @brief Stack Checker Task Context Switch Extension
+ *
+ * This method is the task context switch extension for the stack checker.
+ *
+ * @param[in] running points to the currently executing task which
+ *            is being context switched out
+ * @param[in] running points to the heir task which we are switching to
+ *
+ * @note This is called from the internal method _Thread_Dispatch.
  */
-
 void rtems_stack_checker_switch_extension(
   Thread_Control *running,
   Thread_Control *heir
 );
 
-/*
- *  Extension set definition
+/** @brief Stack Checker Extension Set Definition
+ *
+ *  This macro defines the user extension handler set for the stack
+ *  checker.  This macro is normally only used by confdefs.h.
  */
-
 #define RTEMS_STACK_CHECKER_EXTENSION \
 { \
   rtems_stack_checker_create_extension,        /* rtems_task_create  */ \

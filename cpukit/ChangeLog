@@ -1,3 +1,9 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libmisc/cpuuse/cpuuse.c, libmisc/stackchk/check.c,
+	libmisc/stackchk/stackchk.h: Clean up as side-effect of making them
+	suitable for inclusion in the Users Guide.
+
 2007-05-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ChangeLog: Move all ChangeLog entries for 2006 and earlier to
