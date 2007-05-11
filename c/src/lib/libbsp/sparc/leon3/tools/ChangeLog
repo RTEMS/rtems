@@ -1,3 +1,7 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest.in: Now tries to work with tsim.
+
 2007-01-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Use MKDIR_P instead of mkdir_p.

@@ -182,7 +182,7 @@ do
            # All other tests (single-processor)
            *)
                echo "load $tfile"
-               echo "go 0x02000000"
+               echo "go 0x40000000"
                echo ""
                echo "perf"
                echo "quit"
@@ -199,7 +199,7 @@ do
    fi
 
    # Spin off the simulator in the background
-   sparc-rtems-sis $extra_options -c ${scriptfile} >${logfile}.tmp &
+   tsim-leon3 $extra_options -c ${scriptfile} >${logfile}.tmp &
    sim_pid=$!
 
    # Make sure it won't run forever...
@@ -240,16 +240,16 @@ do
            ;;
        *)
            output_it=1
-           sed -e '1,9d' \
+           sed -e '1,19d' \
                -e 's///' -e '/^$/d' < ${logfile}.tmp | 
              while read line
               do
                 if [ $output_it -eq 1 ] ; then
-                   if [ "$line" = "sis> perf" ] ; then 
+                   if [ "$line" = "tsim> perf" ] ; then 
                      output_it=0
-                   elif [ "$line" = "sis> quit" ] ; then 
+                   elif [ "$line" = "tsim> quit" ] ; then 
                      output_it=0
-                   elif [ "$line" = "sis>" ] ; then 
+                   elif [ "$line" = "tsim>" ] ; then 
                      output_it=0
                    else
                      echo "$line"
@@ -271,13 +271,13 @@ do
          while read line
          do
            if [ $output_it -eq 1 ] ; then
-              if [ "$line" = "sis> quit" ] ; then 
+              if [ "$line" = "tsim> quit" ] ; then 
                 output_it=0
               else
                 echo "$line"
               fi
             else
-              if [ "$line" = "sis> perf" ] ; then 
+              if [ "$line" = "tsim> perf" ] ; then 
                 output_it=1
               fi
             fi
