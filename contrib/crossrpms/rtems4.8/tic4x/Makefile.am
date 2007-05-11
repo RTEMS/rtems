@@ -22,8 +22,9 @@ GCC_OPTS +=
 ## include ../gdb.am
 ## GDB_OPTS +=
 
-CPUKIT_VERS = 4.7.99.1
-CPUKIT_PKGVERS = $(CPUKIT_VERS)-20070510
-CPUKIT_RPMREL = 0
-include ../cpukit.am
-CPUKIT_OPTS +=
+### rtems doesn't build for the tic4x
+## CPUKIT_VERS = 4.7.99.1
+## CPUKIT_PKGVERS = $(CPUKIT_VERS)-20070510
+## CPUKIT_RPMREL = 0
+## include ../cpukit.am
+## CPUKIT_OPTS +=

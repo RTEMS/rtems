@@ -24,8 +24,9 @@ GDB_RPMREL = 1
 include ../gdb.am
 GDB_OPTS +=
 
-CPUKIT_VERS = 4.7.99.1
-CPUKIT_PKGVERS = $(CPUKIT_VERS)-20070510
-CPUKIT_RPMREL = 0
-include ../cpukit.am
-CPUKIT_OPTS +=
+### bfin's GCC is too broken to be usable
+## CPUKIT_VERS = 4.7.99.1
+## CPUKIT_PKGVERS = $(CPUKIT_VERS)-20070510
+## CPUKIT_RPMREL = 0
+## include ../cpukit.am
+## CPUKIT_OPTS +=
