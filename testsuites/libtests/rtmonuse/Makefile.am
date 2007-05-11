@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic
+MANAGERS = io rate_monotonic semaphore
 
 rtems_tests_PROGRAMS = rtmonuse.exe
 rtmonuse_exe_SOURCES = init.c getall.c task1.c system.h

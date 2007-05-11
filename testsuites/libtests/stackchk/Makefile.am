@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = stackchk.exe
 stackchk_exe_SOURCES = blow.c init.c task1.c system.h

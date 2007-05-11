@@ -1,3 +1,11 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpuuse/Makefile.am, malloctest/Makefile.am, putenvtest/Makefile.am,
+	rtmonuse/Makefile.am, stackchk/Makefile.am, termios/Makefile.am: Add
+	optional managers to Makefiles. Clean up test cases so last output
+	line follows END OF pattern. Make sure test case all run. All tests
+	appeared ok on sis.
+
 2007-03-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* monitor/init.c, rtmonuse/task1.c: Use rtems_task_argument.

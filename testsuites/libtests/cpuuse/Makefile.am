@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic
+MANAGERS = io rate_monotonic semaphore extension
 
 rtems_tests_PROGRAMS = cpuuse.exe
 cpuuse_exe_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h

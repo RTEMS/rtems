@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = malloctest.exe
 malloctest_exe_SOURCES = init.c task1.c system.h

@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io
+MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = putenvtest.exe
 putenvtest_exe_SOURCES = init.c
