@@ -42,8 +42,22 @@ Objects_Control *_Objects_Allocate(
   Objects_Information *information
 )
 {
-  Objects_Control *the_object =
-    (Objects_Control *) _Chain_Get( &information->Inactive );
+  Objects_Control *the_object;
+
+  /*
+   *  If the application is using the optional manager stubs and
+   *  still attempts to create the object, the information block
+   *  should be all zeroed out because it is in the BSS.  So let's
+   *  check that code for this manager is even present.
+   */
+  if ( information->size == 0 )
+    return NULL;
+
+  /*
+   *  OK.  The manager should be initialized and configured to have objects.
+   *  With any luck, it is safe to attempt to allocate an object.
+   */
+  the_object = (Objects_Control *) _Chain_Get( &information->Inactive );
 
   if ( information->auto_extend ) {
     /*

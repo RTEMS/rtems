@@ -1,5 +1,14 @@
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/src/coremsgseize.c: A blocking sender's message size was
+	pulled out of the wrong field in the Wait information structure.
+	* score/src/objectallocate.c: With the new optional manager support,
+	we only stub out the initialization. This makes it possible to attempt
+	to create an object with the information structure only initialized
+	with all zeros.  This ensures we return an error cleanly in this case.
+
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* rtems/src/region.c, sapi/src/exinit.c: Now that the Region is
 	an optional manager, we cannot depend on it do initialize the
 	internal Allocator Mutex.  This was always a questionable place to

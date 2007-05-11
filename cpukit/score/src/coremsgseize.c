@@ -7,7 +7,7 @@
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -107,7 +107,7 @@ void _CORE_message_queue_Seize(
      */
 
     the_message->priority  = the_thread->Wait.count;
-    the_message->Contents.size = (uint32_t  )the_thread->Wait.return_argument_1;
+    the_message->Contents.size = (uint32_t)the_thread->Wait.option;
     _CORE_message_queue_Copy_buffer(
       the_thread->Wait.return_argument,
       the_message->Contents.buffer,
