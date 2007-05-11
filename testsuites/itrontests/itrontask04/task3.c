@@ -47,6 +47,6 @@ void Task_3()
     directive_failed( status, "rtems_task_wake_after in TA3" );
   }
 
-  puts( "*** ITRON TASK TEST 4 ***" );
+  puts( "*** END OF ITRON TASK TEST 4 ***" );
   rtems_test_exit( 0 );
 }

@@ -489,7 +489,7 @@ void ITRON_Init( void )
 
   puts( "Init - rsm_tsk - task is NON_DORMANT not suspended - E_OK" );
   status = rsm_tsk( NON_DORMANT_TASK_ID );
-  fatal_directive_status( status, E_OK, "rsm_tsk NON_DORMANT");
+  fatal_directive_status( status, E_OBJ, "rsm_tsk NON_DORMANT");
 
   puts( "Init - rsm_tsk - task does not exist - E_NOEXS" );
   status = rsm_tsk( 5 );

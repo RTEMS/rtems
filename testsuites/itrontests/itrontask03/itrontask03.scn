@@ -18,4 +18,4 @@ TA1 - sus_tsk - suspend TA2
 TA1 -  - delete TA2
 TA1 - rtems_task_wake_after - sleep for 5 seconds
 TA3 - exd_tsk - exit and delete self
-*** ITRON TASK TEST 3 ***
+*** END OF ITRON TASK TEST 3 ***

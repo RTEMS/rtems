@@ -31,4 +31,4 @@ TA3 - rot_rdq priority 2 queue
 TA3 - rtems_task_wake_after - sleep 1 second
 TA2 - rtems_task_suspend RTEMS_SELF
 TA2 - rtems_task_suspend RTEMS_SELF
-*** ITRON TASK TEST 4 ***
+*** END OF ITRON TASK TEST 4 ***

@@ -1,3 +1,12 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* itronmbf01/init.c, itronmbf01/itronmbf01.scn, itrontask02/init.c,
+	itrontask03/itrontask03.scn, itrontask03/task1.c,
+	itrontask04/itrontask04.scn, itrontask04/task3.c: Add optional
+	managers to Makefiles. Clean up test cases so last output line
+	follows END OF pattern. Make sure test case all run. All tests
+	appeared ok on sis.
+
 2007-02-06	Joel Sherrill <joel@OARcorp.com>
 
 	* itronmbf01/init.c: Address size_t/uint32_t typing issues in message
