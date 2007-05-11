@@ -114,12 +114,22 @@ void *POSIX_Init(
   fatal_posix_service_status( status, -1, "sem_timedwait error return status");
   fatal_posix_service_status( errno, ETIMEDOUT, "sem_timedwait errno ETIMEDOUT");
 
+
+  /*
+   * To do this case, we must be blocking when we want the semaphore.
+   * POSIX doesn't want you to check the error if you can get the resource.
+   */
+
+#if 1
+  puts( "Init: sem_timedwait - UNSUCCESSFUL (EINVAL) -- skipping" );
+#else
   puts( "Init: sem_timedwait - UNSUCCESSFUL (EINVAL)" );
   waittime.tv_sec = 0;
   waittime.tv_nsec = 0x7FFFFFFF;
   status = sem_timedwait(&sems[2], &waittime);
   fatal_posix_service_status( status, -1, "sem_timedwait error return status");
   fatal_posix_service_status( errno, EINVAL, "sem_init errno EINVAL");
+#endif
 
   puts( "Init: sem_post - UNSUCCESSFUL (EINVAL)" );
   status = sem_post(&sem2);
@@ -254,7 +264,7 @@ void *POSIX_Init(
 
   /* Try adding in unlinking before closing... (can we still open?) */
 
-  puts( "*** POSIX SEMAPHORE MANAGER TEST 1 COMPLETED ***" );
+  puts( "*** END OF POSIX SEMAPHORE MANAGER TEST 1 ***" );
   rtems_test_exit(0);
 
   return NULL; /* just so the compiler thinks we returned something */

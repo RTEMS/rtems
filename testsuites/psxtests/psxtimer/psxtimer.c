@@ -334,6 +334,6 @@ void *POSIX_Init (
 
    /* execute 20 seconds and finish */
    sleep (20);
-   puts( "\n\n*** End of POSIX Timers Test ***" );
+   puts( "\n\n*** END OF POSIX Timers Test ***" );
    rtems_test_exit (0);
  }

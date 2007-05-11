@@ -1,3 +1,10 @@
+2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* psxsem01/init.c, psxsem01/psxsem01.scn, psxtimer/psxtimer.c,
+	psxtimer/psxtimer.scn: Add optional managers to Makefiles. Clean up
+	test cases so last output line follows END OF pattern. Make sure test
+	case all run. All tests appeared ok on sis.
+
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
 	* psx01/init.c, psx01/psx01.scn: Adjust test to account for nanosleep()

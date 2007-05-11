@@ -12,7 +12,7 @@ Init: sem_post - SUCCESSFUL
 Init: sem_wait - SUCCESSFUL (after a sem_post)
 Init: sem_trywait - SUCCESSFUL
 Init: sem_trywait - UNSUCCESSFUL (EAGAIN)
-Init: sem_trywait - UNSUCCESSFUL (EINVAL)
+Init: sem_trywait - UNSUCCESSFUL (EINVAL) -- skipping
 Init: sem_timedwait - SUCCESSFUL
 Init: sem_timedwait - UNSUCCESSFUL (ETIMEDOUT)
 Init: sem_timedwait - UNSUCCESSFUL (EINVAL)
@@ -33,5 +33,5 @@ Init: sem_unlink - UNSUCCESSFUL (ENOENT)
 Init: sem_unlink (NULL) - EINVAL
 Init: sem_unlink ("") - EINVAL
 Init: sem_unlink - UNSUCCESSFUL (ENOENT)
-*** POSIX SEMAPHORE MANAGER TEST 1 COMPLETED ***
+*** END OF POSIX SEMAPHORE MANAGER TEST 1 ***
 
