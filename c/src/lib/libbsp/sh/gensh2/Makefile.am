@@ -47,15 +47,19 @@ scitab_rel_SOURCES = scitab.c
 scitab_rel_CPPFLAGS = $(AM_CPPFLAGS)
 scitab_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += debugio.rel
+debugio_rel_SOURCES = ../../shared/dummy_printk_support.c
+debugio_rel_CPPFLAGS = $(AM_CPPFLAGS)
+debugio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = ../../sh/shared/console.c console/config.c \
-    ../../shared/dummy_printk_support.c
+console_rel_SOURCES = ../../sh/shared/console.c console/config.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel scitab.rel console.rel
+libbsp_a_LIBADD = startup.rel scitab.rel console.rel debugio.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/sci.rel \
