@@ -88,7 +88,7 @@ libcsupport_a_SOURCES = src/gxx_wrappers.c src/printk.c $(BSD_LIBC_C_FILES) \
     $(ASSOCIATION_C_FILES)
 
 if UNIX
-libcsupport_a_SOURCES += src/unixlibc.c src/hosterr.c
+libcsupport_a_SOURCES += src/unixlibc.c src/unixlibc_io.c src/hosterr.c
 else
 libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
