@@ -1,3 +1,13 @@
+2007-05-09	Ray Xu <rayx@gmail.com>
+
+	* cpu.c: move do_data_abort() to libbsp/arm/shared/abort/
+          implement a compact do_data_abort() in simple_abort.c
+
+2007-05-09	Ray Xu <rayx@gmail.com>
+
+	* cpu.c: move do_data_abort() to libbsp/arm/shared/abort/
+          implement a compact do_data_abort() in simple_abort.c
+
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/cpu.h: Remove CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES.
