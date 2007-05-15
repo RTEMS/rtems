@@ -140,7 +140,7 @@ rtmon.texi: rtmon.t
 	    -n "Barrier Manager" < $< > $@
 
 barrier.texi: barrier.t
-	$(BMENU2) -p "Rate Monotonic Manager RATE_MONOTONIC_GET_STATUS - Obtain status information on period" \
+	$(BMENU2) -p "Rate Monotonic Manager RATE_MONOTONIC_REPORT_STATISTICS - Print period statistics report" \
 	    -u "Top" \
 	    -n "Board Support Packages" < $< > $@
 

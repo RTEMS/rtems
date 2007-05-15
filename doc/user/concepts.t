@@ -76,6 +76,32 @@ assign meaningful ASCII names to each task.  A more convenient
 approach would be to name them the binary values one through
 one-hundred, respectively.
 
+@findex rtems_get_object_name
+
+RTEMS provides a helper routine, @code{@value{DIRPREFIX}get_object_name},
+which can be used to obtain the name of any RTEMS object using just
+its ID.  This routine attempts to convert the name into a printable string.
+
+@ifset is-C
+The following example illustrates the use of this method to print
+an object name:
+
+@example
+#include <rtems.h>
+#include <rtems/bspIo.h>
+
+void print_name(rtems_id the_object)
+@{
+  char  buffer[10];   /* name assumed to be 10 characters or less */
+  char *result;
+
+  result = rtems_get_object_name( id, sizeof(buffer), buffer ); 
+  printk( "ID=0x%08x name=%s\n", id, ((result) ? result : "no name") );
+@}
+@end example
+@end ifset
+
+
 @subsection Object IDs
 
 @cindex object ID

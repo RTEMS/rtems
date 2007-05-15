@@ -19,9 +19,11 @@
 
 @section Introduction
 
-The rate monotonic manager provides facilities to
-implement tasks which execute in a periodic fashion.  The
-directives provided by the rate monotonic manager are:
+The rate monotonic manager provides facilities to implement tasks which execute
+in a periodic fashion.  Critically, it also gathers information about the
+execution of those periods and can provide important statistics to the
+user which can be used to analyze and tune the application.  The directives
+provided by the rate monotonic manager are:
 
 @itemize @bullet
 @item @code{@value{DIRPREFIX}rate_monotonic_create} - Create a rate monotonic period
@@ -29,7 +31,11 @@ directives provided by the rate monotonic manager are:
 @item @code{@value{DIRPREFIX}rate_monotonic_cancel} - Cancel a period
 @item @code{@value{DIRPREFIX}rate_monotonic_delete} - Delete a rate monotonic period
 @item @code{@value{DIRPREFIX}rate_monotonic_period} - Conclude current/Start next period
-@item @code{@value{DIRPREFIX}rate_monotonic_get_status} - Obtain status information on period
+@item @code{@value{DIRPREFIX}rate_monotonic_get_status} - Obtain status from a period
+@item @code{@value{DIRPREFIX}rate_monotonic_get_statistics} - Obtain statistics from a period
+@item @code{@value{DIRPREFIX}rate_monotonic_reset_statistics} - Reset statistics for a period
+@item @code{@value{DIRPREFIX}rate_monotonic_reset_all_statistics} - Reset statistics for all periods
+@item @code{@value{DIRPREFIX}rate_monotonic_report_statistics} - Print period statistics report 
 @end itemize
 
 @section Background
@@ -46,6 +52,78 @@ be used by any application which requires periodic tasks.
 @subsection Rate Monotonic Manager Required Support
 
 A clock tick is required to support the functionality provided by this manager.
+
+@subsection Period Statistics
+
+This manager maintains a set of statistics on each period.  These
+statistics are reset implictly at period creation time and may be
+reset or obtained at any time by the application.  The following
+is a list of the information kept:
+
+@itemize @bullet
+@item @code{owner}
+is the id of the thread that owns this period.
+
+@item @code{count}
+is the total number of periods executed.
+
+@item @code{missed_count}
+is the number of periods that were missed.
+
+@item @code{min_cpu_time}
+is the minimum amount of CPU execution time consumed
+on any execution of the periodic loop.
+
+@item @code{max_cpu_time}
+is the maximum amount of CPU execution time consumed
+on any execution of the periodic loop.
+
+@item @code{total_cpu_time}
+is the total amount of CPU execution time consumed
+by executions of the periodic loop.
+
+@item @code{min_wall_time}
+is the minimum amount of wall time that passed
+on any execution of the periodic loop.
+
+@item @code{max_wall_time}
+is the maximum amount of wall time that passed
+on any execution of the periodic loop.
+
+@item @code{total_wall_time}
+is the total amount of wall time that passed
+during executions of the periodic loop.
+
+@end itemize
+
+The period statistics information is inexpensive to maintain
+and can provide very useful insights into the execution
+characteristics of a periodic task loop.  But it is just information.
+The period statistics reported must be analyzed by the user in terms
+of what the applications is.  For example, in an application where
+priorities are assigned by the Rate Monotonic Algorithm, it would
+be very undesirable for high priority (i.e. frequency) tasks to
+miss their period.  Similarly, in nearly any application, if a
+task were supposed to execute its periodic loop every 10 milliseconds
+and it averaged 11 milliseconds, then application requirements
+are not being met.
+
+The information reported can be used to determine the "hot spots"
+in the application.  Given a period's id, the user can determine
+the length of that period.  From that information and the CPU usage,
+the user can calculate the percentage of CPU time consumed by that
+periodic task.  For example, a task executing for 20 milliseconds
+every 200 milliseconds is consuming 10 percent of the processor's
+execution time.  This is usually enough to make it a good candidate
+for optimization.
+
+However, execution time alone is not enough to gauge the value of
+optimizing a particular task.  It is more important to optimize
+a task executing 2 millisecond every 10 milliseconds (20 percent
+of the CPU) than one executing 10 milliseconds every 100 (10 percent
+of the CPU).  As a general rule of thumb, the higher frequency at
+which a task executes, the more important it is to optimize that
+task.
 
 @subsection Rate Monotonic Manager Definitions
 
@@ -1107,7 +1185,7 @@ This directive will not cause the running task to be preempted.
 @c
 @c
 @page
-@subsection RATE_MONOTONIC_GET_STATUS - Obtain status information on period
+@subsection RATE_MONOTONIC_GET_STATUS - Obtain status from a period
 
 @cindex get status of period
 @cindex obtain status of period
@@ -1177,6 +1255,197 @@ the last invocation of the
 Also in this case, the ticks_executed_since_last_period will indicate
 how much processor time the owning task has consumed since the invocation
 of the @code{@value{DIRPREFIX}rate_monotonic_period} directive.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be preempted.
+
+@c
+@c
+@c
+@page
+@subsection RATE_MONOTONIC_GET_STATISTICS - Obtain statistics from a period
+
+@cindex get statistics of period
+@cindex obtain statistics of period
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_rate_monotonic_get_statistics
+@example
+rtems_status_code rtems_rate_monotonic_get_statistics(
+  rtems_id                                id,
+  rtems_rate_monotonic_period_statistics *statistics
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+not currently supported in Ada binding
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - period initiated successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid rate monotonic period id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid address of statistics@*
+
+@subheading DESCRIPTION:
+
+This directive returns statistics information associated with 
+the rate monotonic period id in the following data @value{STRUCTURE}:
+
+@ifset is-C
+@findex rtems_rate_monotonic_period_statistics
+@example
+typedef struct @{
+ uint32_t     count;           /* periods executed */
+ uint32_t     missed_count;    /* period deadlines missed */
+ uint32_t     min_cpu_time;    /* minimum CPU time used in a period */
+ uint32_t     max_cpu_time;    /* maximum CPU time used in a period */
+ uint32_t     total_cpu_time;  /* total CPU time consumed */
+ uint32_t     min_wall_time;   /* minimum wall time used in a period */
+ uint32_t     max_wall_time;   /* maximum wall time used in a period */
+ uint32_t     total_wall_time; /* total wall time consumed */
+@}  rtems_rate_monotonic_period_statistics;
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+not currently supported in Ada binding
+@end example
+@end ifset
+
+This directive returns the current statistics information for
+the period instance assocaited with @code{id}.  The information
+returned is indicated by the structure above.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be preempted.
+
+@c
+@c
+@c
+@page
+@subsection RATE_MONOTONIC_RESET_STATISTICS - Reset statistics for a period
+
+@cindex reset statistics of period
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_rate_monotonic_reset_statistics
+@example
+rtems_status_code rtems_rate_monotonic_reset_statistics(
+  rtems_id  id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+not currently supported in Ada binding
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - period initiated successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid rate monotonic period id@*
+
+@subheading DESCRIPTION:
+
+This directive resets the statistics information associated with 
+this rate monotonic period instance.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be preempted.
+
+@c
+@c
+@c
+@page
+@subsection RATE_MONOTONIC_RESET_ALL_STATISTICS - Reset statistics for all periods
+
+@cindex reset statistics of all periods
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_rate_monotonic_reset_all_statistics
+@example
+void rtems_rate_monotonic_reset_all_statistics(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+not currently supported in Ada binding
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive resets the statistics information associated with 
+all rate monotonic period instances.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be preempted.
+
+@c
+@c
+@c
+@page
+@subsection RATE_MONOTONIC_REPORT_STATISTICS - Print period statistics report
+
+@cindex print period statistics report
+@cindex period statistics report
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_rate_monotonic_report_statistics
+@example
+void rtems_rate_monotonic_report_statistics(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+not currently supported in Ada binding
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive prints a report on all active periods which have
+executed at least one period. The following is an example of the
+output generated by this directive.
+
+@ifset is-C
+@findex rtems_rate_monotonic_period_statistics
+@example
+   ID      OWNER   PERIODS  MISSED    CPU TIME    WALL TIME
+0x42010001  TA1       502     0       0/1/0.99    0/0/0.00
+0x42010002  TA2       502     0       0/1/0.99    0/0/0.00
+0x42010003  TA3       501     0       0/1/0.99    0/0/0.00
+0x42010004  TA4       501     0       0/1/0.99    0/0/0.00
+0x42010005  TA5        10     0       0/1/0.90    0/0/0.00
+@end example
+@end ifset
 
 @subheading NOTES:
 

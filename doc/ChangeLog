@@ -1,3 +1,13 @@
+2007-05-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/Makefile.am, user/concepts.t, user/rtmon.t: Integrate Rate
+	Monotonic Statistics and Period Usage into Rate Monotonic Manager.
+	Added the following directives: rtems_rate_monotonic_get_statistics,
+	rtems_rate_monotonic_reset_statistics,
+	rtems_rate_montonic_reset_all_statistics,
+	rtems_rate_montonic_report_statistics, and rtems_object_get_name.
+	Obsoleted the rtems/rtmonuse.h file as a public interface.
+
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/.cvsignore, user/cpuuse.t, user/stackchk.t: Stack checker and
