@@ -1,3 +1,7 @@
+2007-05-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/bspstart.c: Add include <rtems/bspIo.h> to remove warning.
+
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/bspstart.c, shared/gnatcommon.c: Remove debug print methods
