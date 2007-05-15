@@ -1,3 +1,14 @@
+2007-05-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, gen_section: Integrate Rate Monotonic Statistics and
+	Period Usage into Rate Monotonic Manager. Added the following
+	directives: rtems_rate_monotonic_get_statistics,
+	rtems_rate_monotonic_reset_statistics,
+	rtems_rate_montonic_reset_all_statistics,
+	rtems_rate_montonic_report_statistics, and rtems_object_get_name.
+	Obsoleted the rtems/rtmonuse.h file as a public interface.
+	* rtmonuse.t: Removed.
+
 2006-01-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* base.t: Remove.

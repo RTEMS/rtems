@@ -129,12 +129,6 @@ case ${chapter} in
     ROUTINES="strcpy strncpy strcat strncat strcmp strncmp strchr strcspn \
        strpbrk strrchr strspn strstr strtok stlen"
     ;;
-  misc_rtmonuse)
-    CHAPTER_CAPS="Rate Monotonic Period Statistics"
-    CHAPTER_LOWER="rate monotonic period statistics"
-    ROUTINES="Period_usage_Initialize Period_usage_Reset \
-        Period_usage_Update Period_usage_Dump"
-    ;;
   misc_error)
     CHAPTER_CAPS="Error Reporting Support"
     CHAPTER_LOWER="error reporting support"
