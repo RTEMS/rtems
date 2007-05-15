@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,17 +24,14 @@
 #define TEST_INIT
 #include "system.h"
 
-#include <rtems/rtmonuse.h>
-
 rtems_task Init(
   rtems_task_argument argument
 )
 {
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
 
   puts( "\n\n*** RATE MONOTONIC PERIOD STATISTICS TEST ***" );
-  Period_usage_Initialize();
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );

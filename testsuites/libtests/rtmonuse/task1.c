@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,7 +21,6 @@
 #include "system.h"
 
 #include <rtems/cpuuse.h>
-#include <rtems/rtmonuse.h>
 
 uint32_t      Periods[6]    = { 0,   2,   2,   2,   2, 100 };
 uint32_t      Iterations[6] = { 0,  50,  50,  50,  50,   1 };
@@ -65,8 +64,6 @@ rtems_task Task_1_through_5(
     case 3:
     case 4:
       while ( FOREVER ) {
-        Period_usage_Update( rmid );
-
         status = rtems_rate_monotonic_period( rmid, Periods[ argument ] );
         directive_failed( status, "rtems_rate_monotonic_period" );
         Count.count[ argument ]++;
@@ -82,8 +79,6 @@ rtems_task Task_1_through_5(
       Get_all_counters();
 
       while ( FOREVER ) {
-        Period_usage_Update( rmid );
-
         status = rtems_rate_monotonic_period( rmid, Periods[ argument ] );
         directive_failed( status, "rtems_rate_monotonic_period 2 of TA5" );
 
@@ -113,7 +108,8 @@ rtems_task Task_1_through_5(
         if ( pass == 10 ) {
           puts( "*** END OF RATE MONOTONIC PERIOD STATISTICS TEST ***" );
           rtems_cpu_usage_report();
-          Period_usage_Dump();
+          rtems_rate_montonic_report_statistics();
+
           rtems_test_exit( 0 );
         }
 
