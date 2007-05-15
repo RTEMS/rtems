@@ -1,3 +1,8 @@
+2007-05-15	Ray Xu <rayx@gmail.com>
+
+	* Makefile.am: Add abort.rel since it is now in the BSP shared source
+	-- not in score/cpu.
+
 2007-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Add alignment between data and bss to avoid linking

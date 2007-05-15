@@ -48,9 +48,14 @@ timer_rel_SOURCES = ../../shared/timerstub.c
 timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += abort.rel
+abort_rel_SOURCES = ../shared/abort/abort.c
+abort_rel_CPPFLAGS = $(AM_CPPFLAGS)
+abort_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
+libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel abort.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
