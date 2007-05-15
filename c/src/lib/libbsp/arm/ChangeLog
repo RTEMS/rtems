@@ -1,5 +1,9 @@
 2007-05-15	Ray Xu <rayx@gmail.com>
 
+	* shared/abort/abort.c, shared/abort/simple_abort.c: New files.
+
+2007-05-15	Ray Xu <rayx@gmail.com>
+
 	* Makefile.am: Add abort.rel since it is now in the BSP shared source,
 	not in score/cpu.
 
