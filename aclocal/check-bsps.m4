@@ -22,7 +22,6 @@ AC_MSG_CHECKING([for available BSPs])
           mvme162)           bsps="mvme162 mvme162lx";;
           mbx8xx)            bsps="mbx821_001 mbx860_001b"
                              bsps="$bsps mbx821_002 mbx821_002b"
-                             bsps="$bsps mbx860_1b"
                              bsps="$bsps mbx860_002"
                              bsps="$bsps mbx860_005b"
                              ;;
