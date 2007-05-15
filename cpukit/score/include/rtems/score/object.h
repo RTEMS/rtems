@@ -798,6 +798,24 @@ Objects_Control *_Objects_Get_next(
     Objects_Id          *next_id_p
 );
 
+/**
+ *  This method objects the name of an object and returns its name
+ *  in the form of a C string.  It attempts to be careful about
+ *  overflowing the user's string and about returning unprintable characters.
+ *
+ *  @param[in] id is the object to obtain the name of
+ *  @param[in] length indicates the length of the caller's buffer
+ *  @param[inout] name is a string which will be filled in.
+ *
+ *  @return This method returns @a name or NULL on error.
+ */
+
+char *_Objects_Get_name_as_string(
+  Objects_Id   id,
+  size_t       length,
+  char        *name
+);
+
 /*
  *  Pieces of object.inl are promoted out to the user
  */

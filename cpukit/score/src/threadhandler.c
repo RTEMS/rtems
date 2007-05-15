@@ -112,7 +112,12 @@ void _Thread_Handler( void )
 
   _Thread_Enable_dispatch();
 #if defined(__USE_INIT_FINI__)
-  if (!doneCons && (volatile void *)_init)
+  /*
+   *  _init could be a weak symbol and we SHOULD test it but it isn't
+   *  in any configuration I know of and it generates a warning on every
+   *  RTEMS target configuration.  --joel (12 May 2007)
+   */
+  if (!doneCons) /* && (volatile void *)_init) */
     _init ();
 #endif
 #if defined(__USE__MAIN__)

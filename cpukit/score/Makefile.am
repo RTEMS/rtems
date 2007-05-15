@@ -114,7 +114,7 @@ libscore_a_SOURCES += src/object.c src/objectallocate.c \
     src/objectgetisr.c src/objectgetbyindex.c src/objectgetnext.c \
     src/objectinitializeinformation.c src/objectnametoid.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
-    src/objectidtoname.c
+    src/objectidtoname.c src/objectgetnameasstring.c
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocatealigned.c src/pheapallocate.c \

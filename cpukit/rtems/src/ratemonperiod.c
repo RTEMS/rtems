@@ -1,8 +1,7 @@
 /*
- *  Rate Monotonic Manager
+ *  Rate Monotonic Manager - Period Blocking and Status
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,6 +22,61 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
+
+void _Rate_monotonic_Update_statistics(
+  Rate_monotonic_Control    *the_period
+)
+{
+  uint32_t  ticks_since_last_period;
+  uint32_t  ticks_executed_since_last_period;
+
+  /*
+   *  Assume we are only called in states where it is appropriate
+   *  to update the statistics.  This should only be RATE_MONOTONIC_ACTIVE
+   *  and RATE_MONOTONIC_EXPIRED.
+   */
+
+  /*
+   *  Grab basic information
+   */
+
+  ticks_since_last_period =
+      _Watchdog_Ticks_since_boot - the_period->time_at_period;
+
+  ticks_executed_since_last_period = the_period->owner->ticks_executed -
+	the_period->owner_ticks_executed_at_period;
+
+  /*
+   *  Now update the statistics
+   */
+
+  the_period->Statistics.count++;
+  if ( the_period->state == RATE_MONOTONIC_EXPIRED )
+    the_period->Statistics.missed_count++;
+  the_period->Statistics.total_cpu_time  += ticks_executed_since_last_period;
+  the_period->Statistics.total_wall_time += ticks_since_last_period;
+
+  /*
+   *  Update CPU time
+   */
+
+  if ( ticks_executed_since_last_period < the_period->Statistics.min_cpu_time )
+    the_period->Statistics.min_cpu_time = ticks_executed_since_last_period;
+
+  if ( ticks_executed_since_last_period > the_period->Statistics.max_cpu_time )
+    the_period->Statistics.max_cpu_time = ticks_executed_since_last_period;
+
+  /*
+   *  Update Wall time
+   */
+
+  if ( ticks_since_last_period < the_period->Statistics.min_wall_time )
+    the_period->Statistics.min_wall_time = ticks_since_last_period;
+
+  if ( ticks_since_last_period > the_period->Statistics.max_wall_time )
+    the_period->Statistics.max_wall_time = ticks_since_last_period;
+}
+
 
 /*PAGE
  *
@@ -86,7 +140,12 @@ rtems_status_code rtems_rate_monotonic_period(
       _ISR_Disable( level );
       switch ( the_period->state ) {
         case RATE_MONOTONIC_INACTIVE:
+          /*
+           *  No need to update statistics -- there are not a period active
+           */
+
           _ISR_Enable( level );
+
           the_period->state = RATE_MONOTONIC_ACTIVE;
           _Watchdog_Initialize(
             &the_period->Timer,
@@ -106,6 +165,12 @@ rtems_status_code rtems_rate_monotonic_period(
           return RTEMS_SUCCESSFUL;
 
         case RATE_MONOTONIC_ACTIVE:
+
+          /*
+           *  Update statistics from the concluding period
+           */
+          _Rate_monotonic_Update_statistics( the_period );
+
           /*
            *  This tells the _Rate_monotonic_Timeout that this task is
            *  in the process of blocking on the period and that we
@@ -143,7 +208,13 @@ rtems_status_code rtems_rate_monotonic_period(
           break;
 
         case RATE_MONOTONIC_EXPIRED:
+          /*
+           *  Update statistics from the concluding period
+           */
+          _Rate_monotonic_Update_statistics( the_period );
+
           _ISR_Enable( level );
+
           the_period->state = RATE_MONOTONIC_ACTIVE;
           the_period->owner_ticks_executed_at_period =
             _Thread_Executing->ticks_executed;

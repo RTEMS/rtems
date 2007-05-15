@@ -206,9 +206,6 @@ $(PROJECT_INCLUDE)/rtems/shell.h: libmisc/shell/shell.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/shell.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/shell.h
 endif
-$(PROJECT_INCLUDE)/rtems/rtmonuse.h: libmisc/rtmonuse/rtmonuse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtmonuse.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtmonuse.h
 
 $(PROJECT_INCLUDE)/rtems/libi2c.h: libi2c/libi2c.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libi2c.h

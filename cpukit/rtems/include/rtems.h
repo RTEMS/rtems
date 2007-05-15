@@ -126,7 +126,7 @@ extern "C" {
  *  object ID.
  *
  *  Input parameters:
- *    id   - message queue id
+ *    id   - object id
  *
  *  Output parameters:
  *    *name            - user defined object name
@@ -137,6 +137,27 @@ extern "C" {
 rtems_status_code rtems_object_id_to_name(
   rtems_id      id,
   rtems_name   *name
+);
+
+/*
+ *  rtems_object_get_name
+ *
+ *  This directive returns the name associated with the specified
+ *  object ID.
+ *
+ *  Input parameters:
+ *    id   - object id
+ *
+ *  Output parameters:
+ *    *name            - user defined object name
+ *    name             - if successful
+ *    NULL             - if unsuccessful
+ */
+
+char *rtems_object_get_name(
+  rtems_id       id,
+  size_t         length,
+  char          *name
 );
 
 #ifdef __cplusplus

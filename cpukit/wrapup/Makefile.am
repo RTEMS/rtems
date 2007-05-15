@@ -38,7 +38,6 @@ TMP_LIBS += ../libmisc/libmonitor.a
 TMP_LIBS += ../libmisc/libuntar.a
 TMP_LIBS += ../libmisc/libstackchk.a
 TMP_LIBS += ../libmisc/libcpuuse.a
-TMP_LIBS += ../libmisc/librtmonuse.a
 
 ## XXX temporarily removed because it causes a
 ## XXX number of BSPs to not link "main(){}" used by autoconf

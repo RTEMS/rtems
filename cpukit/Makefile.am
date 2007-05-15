@@ -114,9 +114,6 @@ if LIBSHELL
 include_rtems_HEADERS += libmisc/shell/shell.h
 endif
 
-## rtmonuse
-include_rtems_HEADERS += libmisc/rtmonuse/rtmonuse.h
-
 ## i2c
 include_rtems_HEADERS += libi2c/libi2c.h
 

@@ -6,7 +6,7 @@
  *  This file contains the static inline  implementation of the inlined
  *  routines in the Rate Monotonic Manager.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

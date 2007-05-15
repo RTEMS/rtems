@@ -1,3 +1,25 @@
+2007-05-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am, libmisc/Makefile.am, rtems/Makefile.am,
+	rtems/include/rtems.h, rtems/include/rtems/rtems/ratemon.h,
+	rtems/inline/rtems/rtems/ratemon.inl, rtems/src/ratemoncancel.c,
+	rtems/src/ratemoncreate.c, rtems/src/ratemondelete.c,
+	rtems/src/ratemongetstatus.c, rtems/src/ratemonident.c,
+	rtems/src/ratemonperiod.c, rtems/src/ratemontimeout.c,
+	score/Makefile.am, score/include/rtems/score/object.h,
+	score/src/threadhandler.c, wrapup/Makefile.am: Integrate Rate
+	Monotonic Statistics and Period Usage into Rate Monotonic Manager.
+	Added the following directives: rtems_rate_monotonic_get_statistics,
+	rtems_rate_monotonic_reset_statistics,
+	rtems_rate_montonic_reset_all_statistics,
+	rtems_rate_montonic_report_statistics, and rtems_object_get_name.
+	Obsoleted the rtems/rtmonuse.h file as a public interface.
+	* rtems/src/ratemongetstatistics.c,
+	rtems/src/ratemonreportstatistics.c, rtems/src/ratemonresetall.c,
+	rtems/src/ratemonresetstatistics.c, rtems/src/rtemsobjectgetname.c,
+	score/src/objectgetnameasstring.c: New files.
+	* libmisc/rtmonuse/rtmonuse.c, libmisc/rtmonuse/rtmonuse.h: Removed.
+
 2007-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/Makefile.am, libcsupport/src/unixlibc.c: Split off dummry

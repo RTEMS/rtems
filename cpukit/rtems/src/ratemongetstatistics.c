@@ -1,5 +1,5 @@
 /*
- *  Rate Monotonic Manager -- Delete a Period
+ *  Rate Monotonic Manager -- Get Statistics
  *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -25,24 +25,31 @@
 
 /*PAGE
  *
- *  rtems_rate_monotonic_delete
+ *  rtems_rate_monotonic_get_statistics
  *
- *  This directive allows a thread to delete a rate monotonic timer.
+ *  This directive allows a thread to obtain statistics information on a
+ *  period.
  *
  *  Input parameters:
- *    id - rate monotonic id
+ *    id         - rate monotonic id
+ *    statistics - pointer to statistics control block
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
  *    error code       - if unsuccessful
+ *
  */
 
-rtems_status_code rtems_rate_monotonic_delete(
-  Objects_Id id
+rtems_status_code rtems_rate_monotonic_get_statistics(
+  Objects_Id                               id,
+  rtems_rate_monotonic_period_statistics  *statistics
 )
 {
-  Rate_monotonic_Control *the_period;
-  Objects_Locations       location;
+  Objects_Locations              location;
+  Rate_monotonic_Control        *the_period;
+
+  if ( !statistics )
+    return RTEMS_INVALID_ADDRESS;
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
@@ -53,10 +60,9 @@ rtems_status_code rtems_rate_monotonic_delete(
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
-      _Objects_Close( &_Rate_monotonic_Information, &the_period->Object );
-      (void) _Watchdog_Remove( &the_period->Timer );
-      the_period->state = RATE_MONOTONIC_INACTIVE;
-      _Rate_monotonic_Free( the_period );
+
+      *statistics = the_period->Statistics;
+
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
   }

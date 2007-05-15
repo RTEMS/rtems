@@ -64,10 +64,6 @@ endif
 
 EXTRA_DIST += shell/README
 
-## rtmonuse
-noinst_LIBRARIES += librtmonuse.a
-librtmonuse_a_SOURCES = rtmonuse/rtmonuse.c rtmonuse/rtmonuse.h
-
 ## serdbg
 
 if LIBSERDBG

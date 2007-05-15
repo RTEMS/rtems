@@ -52,7 +52,7 @@ include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl \
     inline/rtems/rtems/timer.inl
 
 ## src
-librtems_a_SOURCES =
+librtems_a_SOURCES = src/rtemsobjectgetname.c
 
 ## TASK_C_FILES 
 librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
@@ -64,7 +64,9 @@ librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
 
 ## RATEMON_C_FILES 
 librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
-    src/ratemondelete.c src/ratemongetstatus.c src/ratemonident.c \
+    src/ratemondelete.c src/ratemongetstatus.c src/ratemongetstatistics.c \
+    src/ratemonresetstatistics.c src/ratemonresetall.c \
+    src/ratemonreportstatistics.c src/ratemonident.c \
     src/ratemonperiod.c src/ratemontimeout.c
 
 ## INTR_C_FILES 

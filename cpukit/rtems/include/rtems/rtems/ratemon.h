@@ -15,7 +15,7 @@
  *     + conclude current and start the next period
  *     + obtain status information on a period
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,6 +35,9 @@ extern "C" {
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/rtems/status.h>
+
+#include <string.h>
 
 /*
  *  The following enumerated type defines the states in which a
@@ -59,10 +62,26 @@ typedef enum {
 #define RTEMS_PERIOD_STATUS       WATCHDOG_NO_TIMEOUT
 
 /*
+ *  The following defines the statistics kept on each period instance.
+ */
+
+typedef struct {
+  uint32_t     count;
+  uint32_t     missed_count;
+  uint32_t     min_cpu_time;
+  uint32_t     max_cpu_time;
+  uint32_t     total_cpu_time;
+  uint32_t     min_wall_time;
+  uint32_t     max_wall_time;
+  uint32_t     total_wall_time;
+}  rtems_rate_monotonic_period_statistics;
+
+/*
  *  The following defines the period status structure.
  */
 
 typedef struct {
+  Objects_Id                          owner;
   rtems_rate_monotonic_period_states  state;
   uint32_t                            ticks_since_last_period;
   uint32_t                            ticks_executed_since_last_period;
@@ -74,13 +93,14 @@ typedef struct {
  */
 
 typedef struct {
-  Objects_Control                     Object;
-  Watchdog_Control                    Timer;
-  rtems_rate_monotonic_period_states  state;
-  uint32_t                            owner_ticks_executed_at_period;
-  uint32_t                            time_at_period;
-  uint32_t                            next_length;
-  Thread_Control                     *owner;
+  Objects_Control                         Object;
+  Watchdog_Control                        Timer;
+  rtems_rate_monotonic_period_states      state;
+  uint32_t                                owner_ticks_executed_at_period;
+  uint32_t                                time_at_period;
+  uint32_t                                next_length;
+  Thread_Control                         *owner;
+  rtems_rate_monotonic_period_statistics  Statistics;
 }   Rate_monotonic_Control;
 
 RTEMS_EXTERN Objects_Information _Rate_monotonic_Information;
@@ -171,6 +191,52 @@ rtems_status_code rtems_rate_monotonic_get_status(
 );
 
 /*
+ *  rtems_rate_monotonic_get_statistics
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_rate_monotonic_get_statistics directive.
+ *  Statistics gathered from the use of this period are returned.
+ */
+
+rtems_status_code rtems_rate_monotonic_get_statistics(
+  Objects_Id                              id,
+  rtems_rate_monotonic_period_statistics *statistics
+);
+
+/*
+ *  rtems_rate_monotonic_reset_statistics
+ *
+ *  DESCRIPTION:
+ *
+ *  This directive allows a thread to reset the statistics information
+ *  on a specific period instance.
+ */
+rtems_status_code rtems_rate_monotonic_reset_statistics(
+  Objects_Id                               id
+);
+
+/*
+ *  rtems_rate_montonic_reset_all_statistics
+ *
+ *  DESCRIPTION:
+ *
+ *  This directive allows a thread to reset the statistics information
+ *  on ALL period instances.
+ */
+void rtems_rate_montonic_reset_all_statistics( void );
+
+/*
+ *  rtems_rate_montonic_report_statistics
+ *
+ *  DESCRIPTION:
+ *
+ *  This directive allows a thread to print the statistics information
+ *  on ALL period instances which have non-zero counts using printk.
+ */
+void rtems_rate_montonic_report_statistics( void );
+
+/*
  *  rtems_rate_monotonic_period
  *
  *  DESCRIPTION:
@@ -199,11 +265,28 @@ rtems_status_code rtems_rate_monotonic_period(
  *  state and not restarted.
  */
 
-void _Rate_monotonic_Timeout (
+void _Rate_monotonic_Timeout(
   Objects_Id  id,
   void       *ignored
 );
 
+/*
+ *  _Rate_monotonic_Reset_statistics
+ *
+ *  DESCRIPTION:
+ *
+ *  This method resets the statistics information for a period instance.
+ */
+
+#define _Rate_monotonic_Reset_statistics( _the_period ) \
+  do { \
+    memset( \
+      &(_the_period)->Statistics, \
+      0, \
+      sizeof( rtems_rate_monotonic_period_statistics ) \
+    ); \
+  } while (0)
+ 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/ratemon.inl>
 #endif

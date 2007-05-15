@@ -1,8 +1,7 @@
 /*
- *  Rate Monotonic Manager
+ *  Rate Monotonic Manager -- Get Status
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -61,6 +60,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
+      status->owner = ((the_period->owner) ? the_period->owner->Object.id : 0);
       status->state = the_period->state;
 
       if ( status->state == RATE_MONOTONIC_INACTIVE ) {

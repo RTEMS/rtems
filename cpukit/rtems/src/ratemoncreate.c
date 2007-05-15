@@ -1,8 +1,7 @@
 /*
- *  Rate Monotonic Manager
+ *  Rate Monotonic Manager -- Create a Period
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -67,6 +66,8 @@ rtems_status_code rtems_rate_monotonic_create(
   the_period->state = RATE_MONOTONIC_INACTIVE;
 
   _Watchdog_Initialize( &the_period->Timer, NULL, 0, NULL );
+
+  _Rate_monotonic_Reset_statistics( the_period );
 
   _Objects_Open(
     &_Rate_monotonic_Information,
