@@ -1,3 +1,8 @@
+2007-05-15	Ray Xu <rayx@gmail.com>
+
+	* Makefile.am: Add abort.rel since it is now in the BSP shared source,
+	not in score/cpu.
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove qrtems_debug.

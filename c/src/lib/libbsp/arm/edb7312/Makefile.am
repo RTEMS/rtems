@@ -50,6 +50,11 @@ timer_rel_SOURCES = timer/timer.c
 timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += abort.rel
+abort_rel_SOURCES = ../shared/abort/abort.c
+abort_rel_CPPFLAGS = $(AM_CPPFLAGS)
+abort_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 include_HEADERS += irq/irq.h
 
 noinst_PROGRAMS += irq.rel
@@ -69,7 +74,7 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = clock.rel console.rel startup.rel irq.rel timer.rel
+libbsp_a_LIBADD = clock.rel console.rel startup.rel irq.rel timer.rel abort.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif

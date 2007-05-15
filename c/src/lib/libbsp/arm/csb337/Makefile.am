@@ -38,6 +38,11 @@ console_rel_SOURCES = console/uarts.c ../../shared/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += abort.rel
+abort_rel_SOURCES = ../shared/abort/abort.c
+abort_rel_CPPFLAGS = $(AM_CPPFLAGS)
+abort_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += network.rel
@@ -48,7 +53,7 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel console.rel
+libbsp_a_LIBADD = startup.rel console.rel abort.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif

@@ -39,6 +39,11 @@ console_rel_SOURCES = console/uart.c ../../shared/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += abort.rel
+abort_rel_SOURCES = ../shared/abort/abort.c
+abort_rel_CPPFLAGS = $(AM_CPPFLAGS)
+abort_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 noinst_PROGRAMS += smc.rel
 smc_rel_SOURCES = smc/smc.c smc/smc.h
 smc_rel_CPPFLAGS = $(AM_CPPFLAGS)
@@ -46,7 +51,7 @@ smc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel console.rel smc.rel
+libbsp_a_LIBADD = startup.rel console.rel smc.rel abort.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \

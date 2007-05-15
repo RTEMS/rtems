@@ -1,3 +1,8 @@
+2007-05-15	Ray Xu <rayx@gmail.com>
+
+	* Makefile.am: Add abort.rel since it is now in the BSP shared source,
+	not in score/cpu.
+
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspclean.c: Remove incldue stdio.h

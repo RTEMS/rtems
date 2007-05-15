@@ -20,5 +20,8 @@ EXTRA_DIST += shared/comm/uart.c
 EXTRA_DIST += shared/irq/irq_asm.S
 EXTRA_DIST += shared/irq/irq_init.c
 
+# abort
+EXTRA_DIST += shared/abort/simple_abort.c
+
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

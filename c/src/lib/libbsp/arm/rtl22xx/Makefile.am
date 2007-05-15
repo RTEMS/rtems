@@ -40,6 +40,11 @@ console_rel_SOURCES = ../../shared/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += simple_abort.rel
+simple_abort_rel_SOURCES = ../shared/abort/simple_abort.c
+simple_abort_rel_CPPFLAGS = $(AM_CPPFLAGS)
+simple_abort_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 noinst_PROGRAMS += debugio.rel
 debugio_rel_SOURCES = console/uart.c 
 debugio_rel_CPPFLAGS = $(AM_CPPFLAGS)
@@ -55,7 +60,7 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD =  console.rel debugio.rel
+libbsp_a_LIBADD =  console.rel debugio.rel simple_abort.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
