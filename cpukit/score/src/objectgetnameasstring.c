@@ -62,27 +62,21 @@ char *_Objects_Get_name_as_string(
 
     case OBJECTS_LOCAL:
 
-      /*
-       *  Neither the Classic nor ITRON APIs use string names.
-       */
-#ifdef RTEMS_POSIX_API
-	if ( information->is_string ) {
-	  s = the_object->name;
-	} else
-#endif
-      {
-	uint32_t  u32_name = (uint32_t) the_object->name;
+      if ( information->is_string ) {
+        s = the_object->name;
+      } else {
+        uint32_t  u32_name = (uint32_t) the_object->name;
 
-	lname[ 0 ] = (u32_name >> 24) & 0xff;
-	lname[ 1 ] = (u32_name >> 16) & 0xff;
-	lname[ 2 ] = (u32_name >>  8) & 0xff;
-	lname[ 3 ] = (u32_name >>  0) & 0xff;
-	lname[ 4 ] = '\0';
-	s = lname;
+        lname[ 0 ] = (u32_name >> 24) & 0xff;
+        lname[ 1 ] = (u32_name >> 16) & 0xff;
+        lname[ 2 ] = (u32_name >>  8) & 0xff;
+        lname[ 3 ] = (u32_name >>  0) & 0xff;
+        lname[ 4 ] = '\0';
+        s = lname;
       }
 
       for ( i=0, d=name ; i<(length-1) && *s ; i++, s++, d++ ) {
-	*d = (!isprint(*s)) ?  '*' : *s;
+        *d = (!isprint(*s)) ?  '*' : *s;
       }
       *d = '\0';
 

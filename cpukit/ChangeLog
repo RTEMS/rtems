@@ -1,5 +1,13 @@
 2007-05-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/objectgetnameasstring.c: Internal threads use string names
+	so in the current RTEMS source string object name can NOT be
+	disabled. It is probably worth considering converting the internal
+	threads to uint32_t style names so all the support for string names
+	can be conditionally disabled.
+
+2007-05-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/Makefile.am, score/include/rtems/score/timespec.h: Add division
 	and greater than operations for timespecs.
 	* score/src/timespecdivide.c, score/src/timespecgreaterthan.c:
