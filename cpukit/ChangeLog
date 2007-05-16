@@ -1,3 +1,10 @@
+2007-05-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/Makefile.am, score/include/rtems/score/timespec.h: Add division
+	and greater than operations for timespecs.
+	* score/src/timespecdivide.c, score/src/timespecgreaterthan.c:
+	New files.
+
 2007-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/src/objectgetnameasstring.c: Remove bogus ifdef

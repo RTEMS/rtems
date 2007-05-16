@@ -62,6 +62,21 @@ boolean _Timespec_Less_than(
   const struct timespec *rhs
 );
 
+/** @brief Timespec Greater Than Operator
+ *
+ *  This method is the greater than operator for timespecs.
+ *
+ *  @param[in] lhs is the left hand side timespec
+ *  @param[in] rhs is the left hand side timespec
+ *
+ *  @return This method returns true if @a lhs is greater than the @a rhs and 
+ *          false otherwise.
+ */
+boolean _Timespec_Greater_than(
+  const struct timespec *lhs,
+  const struct timespec *rhs
+);
+
 /** @brief Add to a Timespec
  *
  *  This routine adds two timespecs.  The second argument is added
@@ -117,6 +132,24 @@ void _Timespec_From_ticks(
 void _Timespec_Subtract(
   const struct timespec *start,
   const struct timespec *end,
+  struct timespec       *result
+);
+
+/** @brief Divide Timespec
+ *
+ *  This routine divides a timespec by an integer value.  The expected
+ *  use is to assist in benchmark calculations where you typically 
+ *  divide a duration by a number of iterations.
+ *
+ *  @param[in] time is the total
+ *  @param[in] iterations is the number of iterations
+ *  @param[in] result is the average time.
+ *
+ *  @return This method fills in @a result.
+ */
+void _Timespec_Divide(
+  const struct timespec *time,
+  uint32_t               iterations,
   struct timespec       *result
 );
 

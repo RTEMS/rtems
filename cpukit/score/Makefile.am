@@ -147,8 +147,8 @@ libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
 
 ## TIMESPEC_C_FILES
 libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
-    src/timespecisvalid.c src/timespeclessthan.c src/timespecsubtract.c \
-    src/timespectoticks.c
+    src/timespecisvalid.c src/timespeclessthan.c src/timespecgreaterthan.c \
+    src/timespecsubtract.c src/timespectoticks.c src/timespecdivide.c
 
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
