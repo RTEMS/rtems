@@ -1,3 +1,7 @@
+2007-05-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* nsecs/init.c: Remove stray "volatile int i".
+
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* base_sp/Makefile.am, hello/Makefile.am, iostream/Makefile.am,

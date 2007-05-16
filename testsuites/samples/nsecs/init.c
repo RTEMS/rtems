@@ -41,7 +41,6 @@ void subtract_em(
   _Timespec_Subtract( start, stop, t );
 }
 
-volatile int i;
 rtems_task Init(
   rtems_task_argument argument
 )
