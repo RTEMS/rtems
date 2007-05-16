@@ -34,9 +34,7 @@ char *_Objects_Get_name_as_string(
   char             *name
 )
 {
-  #ifdef RTEMS_POSIX_API
-    Objects_Information *information;
-  #endif
+  Objects_Information *information;
   char                  *s;
   char                  *d;
   uint32_t               i;
@@ -67,12 +65,11 @@ char *_Objects_Get_name_as_string(
       /*
        *  Neither the Classic nor ITRON APIs use string names.
        */
-      #ifdef RTEMS_POSIX_API
-
+#ifdef RTEMS_POSIX_API
 	if ( information->is_string ) {
 	  s = the_object->name;
 	} else
-      #endif
+#endif
       {
 	uint32_t  u32_name = (uint32_t) the_object->name;
 
