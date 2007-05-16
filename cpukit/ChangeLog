@@ -1,5 +1,10 @@
 2007-05-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/cpuuse/cpuuse.c: Use rtems_object_get_name and eliminate
+	functionally similar code here. Also cleanup print formats.
+
+2007-05-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/objectgetnameasstring.c: Internal threads use string names
 	so in the current RTEMS source string object name can NOT be
 	disabled. It is probably worth considering converting the internal
