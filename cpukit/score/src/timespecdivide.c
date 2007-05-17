@@ -23,30 +23,35 @@
 #include <rtems/score/tod.h>
 
 void _Timespec_Divide(
-  const struct timespec *time,
-  uint32_t               iterations,
-  struct timespec       *result
+  const struct timespec *lhs,
+  const struct timespec *rhs,
+  uint32_t              *ival_percentage,
+  uint32_t              *fval_percentage
 )
 {
-  uint64_t t;
+  uint64_t left, right, answer;
 
   /*
    *  For math simplicity just convert the timespec to nanoseconds
    *  in a 64-bit integer.
    */
-  t  = time->tv_sec * TOD_NANOSECONDS_PER_SECOND;
-  t += time->tv_nsec;
+  left   = lhs->tv_sec * (uint64_t)TOD_NANOSECONDS_PER_SECOND;
+  left  += lhs->tv_nsec;
+  right  = rhs->tv_sec * (uint64_t)TOD_NANOSECONDS_PER_SECOND;
+  right += rhs->tv_nsec;
 
-  /*
-   *  Divide to get nanoseconds per iteration
-   */
-
-  t /= iterations;
+  if ( rhs == 0 ) {
+    *ival_percentage = 0;
+    *ival_percentage = 0;
+    return;
+  }
 
   /*
    *  Put it back in the timespec result
    */
 
-  result->tv_sec  = t / TOD_NANOSECONDS_PER_SECOND;
-  result->tv_nsec = t % TOD_NANOSECONDS_PER_SECOND;
+  answer = (left * 1000) / right;
+
+  *fval_percentage = answer % 1000;
+  *ival_percentage = answer / 1000;
 }

@@ -32,6 +32,20 @@
 extern "C" {
 #endif
 
+/*
+ *  The user can define this at configure time and go back to ticks
+ *  resolution.
+ */
+#ifndef __RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__
+  /*
+   *  Enable the nanosecond accurate statistics
+   *
+   *  When not defined, the older style tick accurate granularity
+   *  is used.
+   */
+  #define RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+#endif
+
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
@@ -68,12 +82,24 @@ typedef enum {
 typedef struct {
   uint32_t     count;
   uint32_t     missed_count;
-  uint32_t     min_cpu_time;
-  uint32_t     max_cpu_time;
-  uint32_t     total_cpu_time;
-  uint32_t     min_wall_time;
-  uint32_t     max_wall_time;
-  uint32_t     total_wall_time;
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    struct timespec min_cpu_time;
+    struct timespec max_cpu_time;
+    struct timespec total_cpu_time;
+  #else
+    uint32_t  min_cpu_time;
+    uint32_t  max_cpu_time;
+    uint32_t  total_cpu_time;
+  #endif
+  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    struct timespec min_wall_time;
+    struct timespec max_wall_time;
+    struct timespec total_wall_time;
+  #else
+    uint32_t  min_wall_time;
+    uint32_t  max_wall_time;
+    uint32_t  total_wall_time;
+  #endif
 }  rtems_rate_monotonic_period_statistics;
 
 /*
@@ -83,8 +109,16 @@ typedef struct {
 typedef struct {
   Objects_Id                          owner;
   rtems_rate_monotonic_period_states  state;
-  uint32_t                            ticks_since_last_period;
-  uint32_t                            ticks_executed_since_last_period;
+  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    struct timespec                   since_last_period;
+  #else
+    uint32_t                          ticks_since_last_period;
+  #endif
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    struct timespec                   executed_since_last_period;
+  #else
+    uint32_t                          ticks_executed_since_last_period;
+  #endif
 }  rtems_rate_monotonic_period_status;
 
 /*
@@ -96,8 +130,16 @@ typedef struct {
   Objects_Control                         Object;
   Watchdog_Control                        Timer;
   rtems_rate_monotonic_period_states      state;
-  uint32_t                                owner_ticks_executed_at_period;
-  uint32_t                                time_at_period;
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    struct timespec                       owner_executed_at_period;
+  #else
+    uint32_t                              owner_ticks_executed_at_period;
+  #endif
+  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    struct timespec                       time_at_period;
+  #else
+    uint32_t                              time_at_period;
+  #endif
   uint32_t                                next_length;
   Thread_Control                         *owner;
   rtems_rate_monotonic_period_statistics  Statistics;
@@ -217,24 +259,24 @@ rtems_status_code rtems_rate_monotonic_reset_statistics(
 );
 
 /*
- *  rtems_rate_montonic_reset_all_statistics
+ *  rtems_rate_monotonic_reset_all_statistics
  *
  *  DESCRIPTION:
  *
  *  This directive allows a thread to reset the statistics information
  *  on ALL period instances.
  */
-void rtems_rate_montonic_reset_all_statistics( void );
+void rtems_rate_monotonic_reset_all_statistics( void );
 
 /*
- *  rtems_rate_montonic_report_statistics
+ *  rtems_rate_monotonic_report_statistics
  *
  *  DESCRIPTION:
  *
  *  This directive allows a thread to print the statistics information
  *  on ALL period instances which have non-zero counts using printk.
  */
-void rtems_rate_montonic_report_statistics( void );
+void rtems_rate_monotonic_report_statistics( void );
 
 /*
  *  rtems_rate_monotonic_period
@@ -278,6 +320,28 @@ void _Rate_monotonic_Timeout(
  *  This method resets the statistics information for a period instance.
  */
 
+#ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+  #define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
+     do { \
+        /* set the minimums to a large value */ \
+        (_the_period)->Statistics.min_wall_time.tv_sec = 0x7fffffff; \
+        (_the_period)->Statistics.min_wall_time.tv_nsec = 0x7fffffff; \
+     } while (0)
+#else
+  #define _Rate_monotonic_Reset_wall_time_statistics( _the_period )
+#endif
+
+#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+  #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
+     do { \
+        /* set the minimums to a large value */ \
+        (_the_period)->Statistics.min_cpu_time.tv_sec = 0x7fffffff; \
+        (_the_period)->Statistics.min_cpu_time.tv_nsec = 0x7fffffff; \
+     } while (0)
+#else
+  #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period )
+#endif
+
 #define _Rate_monotonic_Reset_statistics( _the_period ) \
   do { \
     memset( \
@@ -285,8 +349,10 @@ void _Rate_monotonic_Timeout(
       0, \
       sizeof( rtems_rate_monotonic_period_statistics ) \
     ); \
+    _Rate_monotonic_Reset_cpu_use_statistics( _the_period ); \
+    _Rate_monotonic_Reset_wall_time_statistics( _the_period ); \
   } while (0)
- 
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/ratemon.inl>
 #endif

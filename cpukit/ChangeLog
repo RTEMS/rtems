@@ -1,3 +1,23 @@
+2007-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ChangeLog, configure.ac, libcsupport/src/__times.c,
+	libmisc/cpuuse/cpuuse.c, libmisc/stackchk/check.c,
+	rtems/include/rtems/rtems/ratemon.h, rtems/src/ratemongetstatus.c,
+	rtems/src/ratemonperiod.c, rtems/src/ratemonreportstatistics.c,
+	rtems/src/ratemonresetall.c, rtems/src/ratemontimeout.c,
+	score/Makefile.am, score/include/rtems/score/thread.h,
+	score/include/rtems/score/timespec.h, score/src/threaddispatch.c,
+	score/src/threadinitialize.c, score/src/threadtickletimeslice.c,
+	score/src/timespecdivide.c: Add nanoseconds granularity to the rate
+	monotonic period statistics and CPU usage statistics. This capability
+	is enabled by default although may be conditionally disabled by the
+	user. It could be too much overhead on small targets but it does not
+	appear to be bad in early testing. Its impact on code size has not
+	been evaluated either. It is possible that both forms of statistics
+	gathering could be disabled with further tweaking of the conditional
+	compilation.
+	* score/src/timespecdividebyinteger.c: New file.
+
 2007-05-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/cpuuse/cpuuse.c: Use rtems_object_get_name and eliminate
@@ -36,8 +56,8 @@
 	Monotonic Statistics and Period Usage into Rate Monotonic Manager.
 	Added the following directives: rtems_rate_monotonic_get_statistics,
 	rtems_rate_monotonic_reset_statistics,
-	rtems_rate_montonic_reset_all_statistics,
-	rtems_rate_montonic_report_statistics, and rtems_object_get_name.
+	rtems_rate_monotonic_reset_all_statistics,
+	rtems_rate_monotonic_report_statistics, and rtems_object_get_name.
 	Obsoleted the rtems/rtmonuse.h file as a public interface.
 	* rtems/src/ratemongetstatistics.c,
 	rtems/src/ratemonreportstatistics.c, rtems/src/ratemonresetall.c,

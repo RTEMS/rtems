@@ -23,9 +23,9 @@
 #include <rtems/score/thread.h>
 
 /*
- *  rtems_rate_montonic_reset_all_statistics
+ *  rtems_rate_monotonic_reset_all_statistics
  */
-void rtems_rate_montonic_reset_all_statistics( void )
+void rtems_rate_monotonic_reset_all_statistics( void )
 {
   Objects_Id        id;
   rtems_status_code status;

@@ -135,7 +135,7 @@ void _Timespec_Subtract(
   struct timespec       *result
 );
 
-/** @brief Divide Timespec
+/** @brief Divide Timespec By Integet
  *
  *  This routine divides a timespec by an integer value.  The expected
  *  use is to assist in benchmark calculations where you typically 
@@ -147,10 +147,29 @@ void _Timespec_Subtract(
  *
  *  @return This method fills in @a result.
  */
-void _Timespec_Divide(
+void _Timespec_Divide_by_integer(
   const struct timespec *time,
   uint32_t               iterations,
   struct timespec       *result
+);
+
+/** @brief Divide Timespec
+ *
+ *  This routine divides a timespec by another timespec.  The 
+ *  intended use is for calculating percentages to three decimal points.
+ *
+ *  @param[in] lhs is the left hand number
+ *  @param[in] rhs is the righ hand number
+ *  @param[in] ival_percentage is the integer portion of the average
+ *  @param[in] fval_percentage is the thousandths of percentage
+ *
+ *  @return This method fills in @a result.
+ */
+void _Timespec_Divide(
+  const struct timespec *lhs,
+  const struct timespec *rhs,
+  uint32_t              *ival_percentage,
+  uint32_t              *fval_percentage
 );
 
 #ifdef __cplusplus

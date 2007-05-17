@@ -208,6 +208,18 @@ RTEMS_CPUOPT([SIZEOF_CPU_CONTEXT],
   [$ac_cv_sizeof_CPU_CONTEXT],
   [The size of a 'CPU_CONTEXT', as computed by sizeof])
 
+RTEMS_CPUOPT([__RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__],
+  [test x"${USE_TICKS_FOR_CPU_USAGE_STATISTICS}" = x"1"],
+  [1],
+  [disable nanosecond granularity for cpu usage statistics]
+)
+
+RTEMS_CPUOPT([__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__],
+  [test x"${USE_TICKS_FOR_RATE_MONOTONIC_STATISTICS}" = x"1"],
+  [1],
+  [disable nanosecond granularity for period statistics]
+)
+
 RTEMS_CPUOPT([__RTEMS_MAJOR__],
   [true],
   [$rtems_major],

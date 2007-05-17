@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,6 +29,11 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
+
+#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+
+  #include <rtems/score/timespec.h>
+#endif
 
 /*PAGE
  *
@@ -78,7 +83,17 @@ void _Thread_Dispatch( void )
       heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
     _ISR_Enable( level );
 
-    heir->ticks_executed++;
+    #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+      {
+        struct timespec uptime, ran;
+        _TOD_Get_uptime( &uptime );
+        _Timespec_Subtract(&_Thread_Time_of_last_context_switch, &uptime, &ran);
+        _Timespec_Add_to( &executing->cpu_time_used, &ran );
+        _Thread_Time_of_last_context_switch = uptime;
+      }
+    #else
+      heir->ticks_executed++;
+    #endif
 
     /*
      * Switch libc's task specific data.

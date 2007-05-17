@@ -22,13 +22,37 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
+#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
+    defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+  #include <rtems/score/timespec.h>
+  extern struct timespec _Thread_Time_of_last_context_switch;
+#endif
 
 void _Rate_monotonic_Update_statistics(
   Rate_monotonic_Control    *the_period
 )
 {
-  uint32_t  ticks_since_last_period;
-  uint32_t  ticks_executed_since_last_period;
+  rtems_rate_monotonic_period_statistics *stats;
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    struct timespec                       executed;
+  #else
+    uint32_t                              ticks_executed_since_last_period;
+  #endif
+  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    struct timespec                       period_start;
+    struct timespec                       since_last_period;
+  #else
+    uint32_t                              ticks_since_last_period;
+  #endif
+  #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
+      defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+    struct timespec  uptime;
+
+    /*
+     * Obtain the current time since boot
+     */
+    _TOD_Get_uptime( &uptime );
+  #endif
 
   /*
    *  Assume we are only called in states where it is appropriate
@@ -40,41 +64,92 @@ void _Rate_monotonic_Update_statistics(
    *  Grab basic information
    */
 
-  ticks_since_last_period =
-      _Watchdog_Ticks_since_boot - the_period->time_at_period;
+  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    period_start               = the_period->time_at_period;
+    the_period->time_at_period = uptime;
+    _Timespec_Subtract( &period_start, &uptime, &since_last_period );
+  #else
+    ticks_since_last_period =
+        _Watchdog_Ticks_since_boot - the_period->time_at_period;
+    the_period->time_at_period = _Watchdog_Ticks_since_boot;
+  #endif
 
-  ticks_executed_since_last_period = the_period->owner->ticks_executed -
-	the_period->owner_ticks_executed_at_period;
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    {
+      struct timespec ran;
+       
+       /* executed = current cpu usage - value at start of period */
+      _Timespec_Subtract( 
+         &the_period->owner_executed_at_period,
+         &_Thread_Executing->cpu_time_used,
+         &executed
+      );
+
+      /* How much time time since last context switch */
+      _Timespec_Subtract(&_Thread_Time_of_last_context_switch, &uptime, &ran);
+
+      /* executed += ran */
+      _Timespec_Add_to( &executed, &ran );
+    }
+  #else
+      ticks_executed_since_last_period = the_period->owner->ticks_executed -
+        the_period->owner_ticks_executed_at_period;
+  #endif
 
   /*
    *  Now update the statistics
    */
 
-  the_period->Statistics.count++;
+  stats = &the_period->Statistics;
+  stats->count++;
+
   if ( the_period->state == RATE_MONOTONIC_EXPIRED )
-    the_period->Statistics.missed_count++;
-  the_period->Statistics.total_cpu_time  += ticks_executed_since_last_period;
-  the_period->Statistics.total_wall_time += ticks_since_last_period;
+    stats->missed_count++;
 
   /*
    *  Update CPU time
    */
 
-  if ( ticks_executed_since_last_period < the_period->Statistics.min_cpu_time )
-    the_period->Statistics.min_cpu_time = ticks_executed_since_last_period;
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    _Timespec_Add_to( &stats->total_cpu_time, &executed );
 
-  if ( ticks_executed_since_last_period > the_period->Statistics.max_cpu_time )
-    the_period->Statistics.max_cpu_time = ticks_executed_since_last_period;
+    if ( _Timespec_Less_than( &executed, &stats->min_cpu_time ) ) 
+      stats->min_cpu_time = executed;
+
+    if ( _Timespec_Greater_than( &executed, &stats->max_cpu_time ) ) 
+      stats->max_cpu_time = executed;
+
+  #else
+    stats->total_cpu_time  += ticks_executed_since_last_period;
+
+    if ( ticks_executed_since_last_period < stats->min_cpu_time )
+      stats->min_cpu_time = ticks_executed_since_last_period;
+
+    if ( ticks_executed_since_last_period > stats->max_cpu_time )
+      stats->max_cpu_time = ticks_executed_since_last_period;
+  #endif
 
   /*
    *  Update Wall time
    */
 
-  if ( ticks_since_last_period < the_period->Statistics.min_wall_time )
-    the_period->Statistics.min_wall_time = ticks_since_last_period;
+  #ifndef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    stats->total_wall_time += ticks_since_last_period;
 
-  if ( ticks_since_last_period > the_period->Statistics.max_wall_time )
-    the_period->Statistics.max_wall_time = ticks_since_last_period;
+    if ( ticks_since_last_period < stats->min_wall_time )
+      stats->min_wall_time = ticks_since_last_period;
+
+    if ( ticks_since_last_period > stats->max_wall_time )
+      stats->max_wall_time = ticks_since_last_period;
+  #else
+    _Timespec_Add_to( &stats->total_wall_time, &since_last_period );
+
+    if ( _Timespec_Less_than( &since_last_period, &stats->min_wall_time ) ) 
+      stats->min_wall_time = since_last_period;
+
+    if ( _Timespec_Greater_than( &since_last_period, &stats->max_wall_time ) ) 
+      stats->max_wall_time = since_last_period;
+  #endif
 }
 
 
@@ -146,6 +221,40 @@ rtems_status_code rtems_rate_monotonic_period(
 
           _ISR_Enable( level );
 
+          #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+            /*
+             * Since the statistics didn't update the starting time,
+             * we do it here.
+             */
+            _TOD_Get_uptime( &the_period->time_at_period );
+          #else
+            the_period->time_at_period = _Watchdog_Ticks_since_boot;
+          #endif
+
+          #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+            { 
+              struct timespec ran, uptime;
+
+              _TOD_Get_uptime( &uptime );
+              
+              the_period->owner_executed_at_period = 
+                _Thread_Executing->cpu_time_used;
+
+              /* How much time time since last context switch */
+              _Timespec_Subtract(
+                &_Thread_Time_of_last_context_switch,
+                &uptime,
+                &ran
+              );
+
+              /* thread had executed before the last context switch also */
+              _Timespec_Add_to( &the_period->owner_executed_at_period, &ran );
+            }
+          #else
+            the_period->owner_ticks_executed_at_period =
+              _Thread_Executing->ticks_executed;
+          #endif
+
           the_period->state = RATE_MONOTONIC_ACTIVE;
           _Watchdog_Initialize(
             &the_period->Timer,
@@ -154,10 +263,6 @@ rtems_status_code rtems_rate_monotonic_period(
             NULL
           );
 
-          the_period->owner_ticks_executed_at_period =
-            _Thread_Executing->ticks_executed;
-
-          the_period->time_at_period = _Watchdog_Ticks_since_boot;
           the_period->next_length = length;
 
           _Watchdog_Insert_ticks( &the_period->Timer, length );
@@ -216,9 +321,6 @@ rtems_status_code rtems_rate_monotonic_period(
           _ISR_Enable( level );
 
           the_period->state = RATE_MONOTONIC_ACTIVE;
-          the_period->owner_ticks_executed_at_period =
-            _Thread_Executing->ticks_executed;
-          the_period->time_at_period = _Watchdog_Ticks_since_boot;
           the_period->next_length = length;
 
           _Watchdog_Insert_ticks( &the_period->Timer, length );

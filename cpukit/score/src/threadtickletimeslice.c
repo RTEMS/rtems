@@ -49,11 +49,12 @@ void _Thread_Tickle_timeslice( void )
 
   executing = _Thread_Executing;
 
-  /*
-   *  Increment the number of ticks this thread has been executing
-   */
-
-  executing->ticks_executed++;
+  #ifndef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    /*
+     *  Increment the number of ticks this thread has been executing
+     */
+    executing->ticks_executed++;
+  #endif
 
   /*
    *  If the thread is not preemptible or is not ready, then

@@ -23,6 +23,11 @@
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
+#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
+    defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+  #include <rtems/score/timespec.h>
+#endif
+
 /*PAGE
  *
  *  rtems_rate_monotonic_get_status
@@ -64,15 +69,51 @@ rtems_status_code rtems_rate_monotonic_get_status(
       status->state = the_period->state;
 
       if ( status->state == RATE_MONOTONIC_INACTIVE ) {
-        status->ticks_since_last_period = 0;
-        status->ticks_executed_since_last_period = 0;
+        #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+          status->since_last_period.tv_sec = 0;
+          status->since_last_period.tv_nsec = 0;
+        #else
+          status->ticks_since_last_period = 0;
+        #endif
+        #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+          status->executed_since_last_period.tv_sec = 0;
+          status->executed_since_last_period.tv_nsec = 0;
+        #else
+          status->ticks_executed_since_last_period = 0;
+        #endif
       } else {
-        status->ticks_since_last_period =
-          _Watchdog_Ticks_since_boot - the_period->time_at_period;
+        /*
+         *  Both nanoseconds granularity options have to know the uptime.
+         *  This lets them share one single invocation of _TOD_Get_uptime().
+         */
+        #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
+            defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+          struct timespec uptime;
+          _TOD_Get_uptime( &uptime );
+        #endif
 
-        status->ticks_executed_since_last_period =
-          the_period->owner->ticks_executed -
-            the_period->owner_ticks_executed_at_period;
+        #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+          _Timespec_Subtract(
+            &the_period->time_at_period,
+            &uptime,
+            &status->since_last_period
+          );
+        #else
+          status->ticks_since_last_period =
+            _Watchdog_Ticks_since_boot - the_period->time_at_period;
+        #endif
+
+        #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+          _Timespec_Subtract(
+            &_Thread_Time_of_last_context_switch,
+            &uptime,
+            &status->executed_since_last_period
+          );
+        #else
+          status->ticks_executed_since_last_period =
+            the_period->owner->ticks_executed -
+              the_period->owner_ticks_executed_at_period;
+        #endif
       }
 
       _Thread_Enable_dispatch();

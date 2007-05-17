@@ -63,18 +63,11 @@ void _Rate_monotonic_Timeout(
       if ( _States_Is_waiting_for_period( the_thread->current_state ) &&
             the_thread->Wait.id == the_period->Object.id ) {
         _Thread_Unblock( the_thread );
-        the_period->owner_ticks_executed_at_period =
-          the_thread->ticks_executed;
-
-        the_period->time_at_period = _Watchdog_Ticks_since_boot;
 
         _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
       } else if ( the_period->state == RATE_MONOTONIC_OWNER_IS_BLOCKING ) {
         the_period->state = RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING;
-        the_period->owner_ticks_executed_at_period =
-          the_thread->ticks_executed;
 
-        the_period->time_at_period = _Watchdog_Ticks_since_boot;
         _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
       } else
         the_period->state = RATE_MONOTONIC_EXPIRED;

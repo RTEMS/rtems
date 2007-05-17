@@ -22,6 +22,9 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <assert.h>
+#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+  #include <rtems/score/timespec.h>
+#endif
 
 clock_t _times(
    struct tms  *ptms
@@ -48,7 +51,28 @@ clock_t _times(
    *  this thread.
    */
 
-  ptms->tms_utime  = _Thread_Executing->ticks_executed;
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    {
+      struct timespec per_tick;
+      uint32_t ticks;
+      uint32_t fractional_ticks;
+      
+      per_tick.tv_sec =
+        _TOD_Microseconds_per_tick / TOD_MILLISECONDS_PER_SECOND;
+      per_tick.tv_nsec =
+        (_TOD_Microseconds_per_tick % TOD_MILLISECONDS_PER_SECOND) / 1000;
+
+      _Timespec_Divide(
+        &_Thread_Executing->cpu_time_used,
+        &per_tick,
+        &ticks,
+        &fractional_ticks
+      );
+      ptms->tms_utime = ticks;
+    }
+  #else
+    ptms->tms_utime  = _Thread_Executing->ticks_executed;
+  #endif
   ptms->tms_stime  = ticks;
   ptms->tms_cutime = 0;
   ptms->tms_cstime = 0;

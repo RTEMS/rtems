@@ -187,17 +187,26 @@ boolean _Thread_Initialize(
       break;
   }
 
-  the_thread->Start.isr_level        = isr_level;
+  the_thread->Start.isr_level         = isr_level;
 
-  the_thread->current_state          = STATES_DORMANT;
-  the_thread->Wait.queue             = NULL;
-  the_thread->resource_count         = 0;
-  the_thread->suspend_count          = 0;
-  the_thread->real_priority          = priority;
-  the_thread->Start.initial_priority = priority;
-  the_thread->ticks_executed         = 0;
-
+  the_thread->current_state           = STATES_DORMANT;
+  the_thread->Wait.queue              = NULL;
+  the_thread->resource_count          = 0;
+  the_thread->suspend_count           = 0;
+  the_thread->real_priority           = priority;
+  the_thread->Start.initial_priority  = priority;
   _Thread_Set_priority( the_thread, priority );
+
+  /*
+   *  Initialize the CPU usage statistics
+   */
+
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    the_thread->cpu_time_used.tv_sec  = 0;
+    the_thread->cpu_time_used.tv_nsec = 0;
+  #else
+    the_thread->ticks_executed        = 0;
+  #endif
 
   /*
    *  Open the object

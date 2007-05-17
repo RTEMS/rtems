@@ -215,7 +215,8 @@ void Stack_check_report_blown_task(
   Stack_Control *stack = &running->Start.Initial_stack;
 
   printk(
-    "BLOWN STACK!!! Offending task(%p): id=0x%08" PRIx32 "; name=0x%08" PRIx32,
+    "BLOWN STACK!!! Offending task(0x%p): "
+        "id=0x%08" PRIx32 "; name=0x%08" PRIx32,
     running,
     running->Object.id,
     (uint32_t) running->Object.name
@@ -233,7 +234,7 @@ void Stack_check_report_blown_task(
   #endif
 
   printk(
-    "  stack covers range %p - %p (%d bytes)\n",
+    "  stack covers range 0x%p - 0x%p (%d bytes)\n",
     stack->area,
     stack->area + stack->size - 1,
     stack->size
@@ -325,8 +326,8 @@ void *Stack_check_find_high_water_mark(
 
     base += length - 1;
     for (ebase = s; base > ebase; base--)
-	if (*base != U32_PATTERN)
-	    return (void *) base;
+      if (*base != U32_PATTERN)
+        return (void *) base;
   #else
     /*
      * start at lower memory and find first word that does not
@@ -335,36 +336,11 @@ void *Stack_check_find_high_water_mark(
 
     base += PATTERN_SIZE_WORDS;
     for (ebase = base + length; base < ebase; base++)
-	if (*base != U32_PATTERN)
-	    return (void *) base;
+      if (*base != U32_PATTERN)
+        return (void *) base;
   #endif
 
   return (void *)0;
-}
-
-/*
- *  Report Name
- */
-
-char *Stack_check_Get_object_name(
-  Objects_Control  *the_object,
-  char            **name
-)
-{
-  Objects_Information *info;
-
-  info = _Objects_Get_information(the_object->id);
-  if ( info->is_string ) {
-    *name = (char *) the_object->name;
-  } else {
-    uint32_t  u32_name = (uint32_t) the_object->name;
-    (*name)[ 0 ] = (u32_name >> 24) & 0xff;
-    (*name)[ 1 ] = (u32_name >> 16) & 0xff;
-    (*name)[ 2 ] = (u32_name >>  8) & 0xff;
-    (*name)[ 3 ] = (u32_name >>  0) & 0xff;
-    (*name)[ 4 ] = '\0';
-  }
-  return *name;
 }
 
 /*
@@ -380,9 +356,7 @@ void Stack_check_Dump_threads_usage(
   void           *low;
   void           *high_water_mark;
   Stack_Control  *stack;
-  uint32_t        u32_name;
-  char            name_str[5];
-  char           *name;
+  char            name[5];
 
   if ( !the_thread )
     return;
@@ -411,19 +385,17 @@ void Stack_check_Dump_threads_usage(
   else
     used = 0;
 
-  name = name_str;
   if ( the_thread ) {
-    name = Stack_check_Get_object_name( &the_thread->Object, &name );
+    rtems_object_get_name( the_thread->Object.id, sizeof(name), name );
   } else {
-    u32_name = rtems_build_name('I', 'N', 'T', 'R');
-    name[ 0 ] = (u32_name >> 24) & 0xff;
-    name[ 1 ] = (u32_name >> 16) & 0xff;
-    name[ 2 ] = (u32_name >>  8) & 0xff;
-    name[ 3 ] = (u32_name >>  0) & 0xff;
+    name[ 0 ] = 'I';
+    name[ 1 ] = 'N';
+    name[ 2 ] = 'T';
+    name[ 3 ] = 'R';
     name[ 4 ] = '\0';
   }
 
-  printk("0x%08" PRIx32 "  %4s  %p - %p   %8" PRId32 "   %8" PRId32 "\n",
+  printk("0x%08" PRIx32 "  %4s  0x%p - 0x%p   %8" PRId32 "   %8" PRId32 "\n",
     the_thread ? the_thread->Object.id : ~0,
     name,
     stack->area,

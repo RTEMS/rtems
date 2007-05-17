@@ -31,6 +31,20 @@
 extern "C" {
 #endif
 
+/*
+ *  The user can define this at configure time and go back to ticks
+ *  resolution.
+ */
+#ifndef __RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__
+  /*
+   *  Enable the nanosecond accurate statistics
+   *
+   *  When not defined, the older style tick accurate granularity
+   *  is used.
+   */
+  #define RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+#endif
+
 #include <rtems/score/context.h>
 #include <rtems/score/cpu.h>
 #if defined(RTEMS_MULTIPROCESSING)
@@ -43,6 +57,10 @@ extern "C" {
 #include <rtems/score/tod.h>
 #include <rtems/score/tqdata.h>
 #include <rtems/score/watchdog.h>
+
+#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+  /* XXX include something for timespec */
+#endif
 
 /**
  *  The following defines the "return type" of a thread.
@@ -318,10 +336,14 @@ struct Thread_Control_struct {
   /** This field is the method invoked with the budgeted time is consumed. */
   Thread_CPU_budget_algorithm_callout   budget_callout;
 
-  /** This field is the number of clock ticks executed by this thread
+  /** This field is the amount of CPU time consumed by this thread
    *  since it was created.
    */
-  uint32_t                              ticks_executed;
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    struct timespec                       cpu_time_used;
+  #else
+    uint32_t                              ticks_executed;
+  #endif
   /** This field points to the Ready FIFO for this priority. */
   Chain_Control                        *ready;
   /** This field contains precalculated priority map indices. */
@@ -434,6 +456,17 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
  * holds a pointer to the task specific data.
  */
 SCORE_EXTERN struct _reent **_Thread_libc_reent;
+
+#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+
+  /**
+   * This contains the time since boot when the last context switch occurred.
+   * By placing it in the BSS, it will automatically be zeroed out at
+   * system initialization and does not need to be known outside this
+   * file.
+   */
+  SCORE_EXTERN struct timespec _Thread_Time_of_last_context_switch;
+#endif
 
 /**
  *  This routine performs the initialization necessary for this handler.
