@@ -103,12 +103,15 @@ rtems_task Task_1_through_5(
 
         printf( "TA5 - PERIODS CHECK OK (%d)\n", pass );
 
-        fflush( stdout );
+        FLUSH_OUTPUT();
 
         if ( pass == 10 ) {
           puts( "*** END OF RATE MONOTONIC PERIOD STATISTICS TEST ***" );
+          puts( "" );
           rtems_cpu_usage_report();
-          rtems_rate_montonic_report_statistics();
+          puts( "" );
+          rtems_rate_monotonic_report_statistics();
+          puts( "" );
 
           rtems_test_exit( 0 );
         }
