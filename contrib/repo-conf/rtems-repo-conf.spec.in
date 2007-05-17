@@ -19,6 +19,7 @@ Apt/yum configuration files to access the apt/yum repositories at ftp://ftp.rtem
 case "%{?dist}" in
 .el*) extra_arg=--enable-os-subdir="redhat/el";;
 .fc*) extra_arg=--enable-os-subdir="fedora/";;
+.rh*) extra_arg=--enable-os-subdir="redhat/";;
 *) extra_arg=--enable-os-subdir="redhat/";;
 esac
 %configure $extra_arg
