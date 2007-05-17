@@ -4,8 +4,8 @@
 	Period Usage into Rate Monotonic Manager. Added the following
 	directives: rtems_rate_monotonic_get_statistics,
 	rtems_rate_monotonic_reset_statistics,
-	rtems_rate_montonic_reset_all_statistics,
-	rtems_rate_montonic_report_statistics, and rtems_object_get_name.
+	rtems_rate_monotonic_reset_all_statistics,
+	rtems_rate_monotonic_report_statistics, and rtems_object_get_name.
 	Obsoleted the rtems/rtmonuse.h file as a public interface.
 	* rtmonuse.t: Removed.
 
