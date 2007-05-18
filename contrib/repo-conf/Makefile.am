@@ -10,6 +10,7 @@ nobase_aptconf_DATA += apt/vendors.list.d/rtems.list
 apt/sources.list.d/rtems-@RTEMS_API@.list: apt/sources.list.d/rtems.list.in
 	@$(mkdir_p) apt/sources.list.d
 	sed -e 's,[@]RTEMS_API[@],@RTEMS_API@,' \
+	  -e 's,[@]OS_SUBDIR[@],@OS_SUBDIR@,' \
 	  < $(srcdir)/apt/sources.list.d/rtems.list.in \
 	  > apt/sources.list.d/rtems-@RTEMS_API@.list
 CLEANFILES += apt/sources.list.d/rtems-@RTEMS_API@.list
@@ -24,6 +25,7 @@ yum.repos.d/rtems-@RTEMS_API@.repo: yum.repos.d/rtems.repo.in
 	@$(mkdir_p) yum.repos.d
 	sed -e 's,[@]sysconfdir[@],$(sysconfdir),' \
 	  -e 's,[@]RTEMS_API[@],@RTEMS_API@,' \
+	  -e 's,[@]OS_SUBDIR[@],@OS_SUBDIR@,' \
 	  < $(srcdir)/yum.repos.d/rtems.repo.in \
 	  > yum.repos.d/rtems-@RTEMS_API@.repo
 CLEANFILES += yum.repos.d/rtems-@RTEMS_API@.repo
