@@ -1,3 +1,10 @@
+2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spsize/size.c: Eliminated the variables
+	_RTEMS_tasks_User_initialization_tasks and
+	_RTEMS_tasks_Number_of_initialization_tasks because they were only
+	used in one place after initialized. It was a waste of space.
+
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp01/Makefile.am, sp02/Makefile.am, sp03/Makefile.am,
