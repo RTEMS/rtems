@@ -36,6 +36,7 @@
     --exec_prefix=%{_exec_prefix} \
     --includedir=%{_includedir} \
     --libdir=%{_libdir} \
+    --libexecdir=%{_libexecdir} \
     --mandir=%{_mandir} \
     --infodir=%{_infodir} \
     --datadir=%{_datadir} \
