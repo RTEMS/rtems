@@ -36,6 +36,10 @@
 #ifndef _RTEMS_RTEMS_TASKS_H
 #define _RTEMS_RTEMS_TASKS_H
 
+#ifndef RTEMS_TASKS_EXTERN
+#define RTEMS_TASKS_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -166,15 +170,7 @@ typedef struct {
  *  manage this class of objects.
  */
 
-RTEMS_EXTERN Objects_Information _RTEMS_tasks_Information;
-
-/*
- *  These are used to manage the user initialization tasks.
- */
-
-RTEMS_EXTERN rtems_initialization_tasks_table
-               *_RTEMS_tasks_User_initialization_tasks;
-RTEMS_EXTERN uint32_t     _RTEMS_tasks_Number_of_initialization_tasks;
+RTEMS_TASKS_EXTERN Objects_Information _RTEMS_tasks_Information;
 
 /*
  *  _RTEMS_tasks_Manager_initialization
@@ -185,9 +181,7 @@ RTEMS_EXTERN uint32_t     _RTEMS_tasks_Number_of_initialization_tasks;
  */
 
 void _RTEMS_tasks_Manager_initialization(
-  uint32_t                          maximum_tasks,
-  uint32_t                          number_of_initialization_tasks,
-  rtems_initialization_tasks_table *user_tasks
+  uint32_t     maximum_tasks
 );
 
 /*

@@ -22,7 +22,6 @@
 #include <rtems/rtems/dpmem.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/dpmem.h>
 
 /*PAGE
  *

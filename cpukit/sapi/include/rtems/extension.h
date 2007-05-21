@@ -13,7 +13,7 @@
  *     + get ID of user extension set
  *     + delete user extension set
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,14 +26,18 @@
 #ifndef _RTEMS_EXTENSION_H
 #define _RTEMS_EXTENSION_H
 
+#ifndef SAPI_EXT_EXTERN
+#define SAPI_EXT_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <rtems/score/object.h>
 #include <rtems/score/userext.h>
-#include <rtems/rtems/status.h>  /* XXX */
-#include <rtems/rtems/types.h>  /* XXX */
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
 
 /*
  *  Extension related types
@@ -58,7 +62,7 @@ typedef User_extensions_Table                     rtems_extensions_table;
  *  this class of objects.
  */
 
-SAPI_EXTERN Objects_Information  _Extension_Information;
+SAPI_EXT_EXTERN Objects_Information  _Extension_Information;
 
 /*
  *  The following records define the control block used to manage

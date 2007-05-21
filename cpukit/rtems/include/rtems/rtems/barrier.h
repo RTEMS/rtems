@@ -14,7 +14,7 @@
  *     + wait for a barrier
  *     + signal a barrier
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,6 +27,10 @@
 #ifndef _RTEMS_RTEMS_BARRIER_H
 #define _RTEMS_RTEMS_BARRIER_H
 
+#ifndef RTEMS_BARRIER_EXTERN
+#define RTEMS_BARRIER_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,6 +38,7 @@ extern "C" {
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/attr.h>
+#include <rtems/rtems/status.h>
 #include <rtems/score/object.h>
 #include <rtems/score/corebarrier.h>
 
@@ -55,7 +60,7 @@ typedef struct {
  *  this class of objects.
  */
 
-RTEMS_EXTERN Objects_Information  _Barrier_Information;
+RTEMS_BARRIER_EXTERN Objects_Information  _Barrier_Information;
 
 /**
  *  @brief _Barrier_Manager_initialization

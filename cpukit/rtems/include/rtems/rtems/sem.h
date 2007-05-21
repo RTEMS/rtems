@@ -16,7 +16,7 @@
  *     + acquire a semaphore
  *     + release a semaphore
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,6 +28,10 @@
 
 #ifndef _RTEMS_RTEMS_SEM_H
 #define _RTEMS_RTEMS_SEM_H
+
+#ifndef RTEMS_SEM_EXTERN
+#define RTEMS_SEM_EXTERN extern
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,7 +63,7 @@ typedef struct {
  *  this class of objects.
  */
 
-RTEMS_EXTERN Objects_Information  _Semaphore_Information;
+RTEMS_SEM_EXTERN Objects_Information  _Semaphore_Information;
 
 /*
  *  _Semaphore_Manager_initialization

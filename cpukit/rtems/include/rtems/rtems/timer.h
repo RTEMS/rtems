@@ -23,7 +23,7 @@
  *     + reset a timer
  *     + cancel a time
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,12 +36,17 @@
 #ifndef _RTEMS_RTEMS_TIMER_H
 #define _RTEMS_RTEMS_TIMER_H
 
+#ifndef RTEMS_TIMER_EXTERN
+#define RTEMS_TIMER_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <rtems/score/object.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/thread.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/attr.h>
 
@@ -74,7 +79,7 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
  *  this class of objects.
  */
 
-RTEMS_EXTERN Objects_Information  _Timer_Information;
+RTEMS_TIMER_EXTERN Objects_Information  _Timer_Information;
 
 /*
  *  Pointer to TCB of the Timer Server.  This is NULL before the
@@ -82,7 +87,7 @@ RTEMS_EXTERN Objects_Information  _Timer_Information;
  *  initiated until the server is started.
  */
 
-RTEMS_EXTERN Thread_Control *_Timer_Server;
+RTEMS_TIMER_EXTERN Thread_Control *_Timer_Server;
 
 /*
  *  The following chains contain the list of interval timers that are

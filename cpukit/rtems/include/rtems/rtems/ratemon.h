@@ -28,6 +28,10 @@
 #ifndef _RTEMS_RTEMS_RATEMON_H
 #define _RTEMS_RTEMS_RATEMON_H
 
+#ifndef RTEMS_RATEMON_EXTERN
+#define RTEMS_RATEMON_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -50,6 +54,7 @@ extern "C" {
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
 
 #include <string.h>
 
@@ -145,7 +150,7 @@ typedef struct {
   rtems_rate_monotonic_period_statistics  Statistics;
 }   Rate_monotonic_Control;
 
-RTEMS_EXTERN Objects_Information _Rate_monotonic_Information;
+RTEMS_RATEMON_EXTERN Objects_Information _Rate_monotonic_Information;
 
 /*
  *  _Rate_monotonic_Manager_initialization

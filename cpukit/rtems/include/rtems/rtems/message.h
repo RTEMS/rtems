@@ -18,8 +18,7 @@
  *     + receive message from a queue
  *     + flush all messages on a queue
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,11 +31,16 @@
 #ifndef _RTEMS_RTEMS_MESSAGE_H
 #define _RTEMS_RTEMS_MESSAGE_H
 
+#ifndef RTEMS_MESSAGE_EXTERN
+#define RTEMS_MESSAGE_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <rtems/rtems/types.h>
+#include <rtems/rtems/status.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/attr.h>
@@ -69,7 +73,7 @@ typedef struct {
  *  manage this class of objects.
  */
 
-RTEMS_EXTERN Objects_Information  _Message_queue_Information;
+RTEMS_MESSAGE_EXTERN Objects_Information  _Message_queue_Information;
 
 /*
  *  _Message_queue_Manager_initialization

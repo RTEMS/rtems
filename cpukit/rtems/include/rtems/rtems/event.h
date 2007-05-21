@@ -13,7 +13,7 @@
  *     + receive event condition
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,11 +26,16 @@
 #ifndef _RTEMS_RTEMS_EVENT_H
 #define _RTEMS_RTEMS_EVENT_H
 
+#ifndef RTEMS_EVENT_EXTERN
+#define RTEMS_EVENT_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <rtems/score/object.h>
+#include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/options.h>
 #include <rtems/score/thread.h>
@@ -161,7 +166,7 @@ void _Event_Timeout (
  *  executing thread are received properly.
  */
 
-RTEMS_EXTERN volatile Event_Sync_states _Event_Sync_state;
+RTEMS_EVENT_EXTERN volatile Event_Sync_states _Event_Sync_state;
 
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/eventmp.h>

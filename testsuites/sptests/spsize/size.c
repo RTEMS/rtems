@@ -344,8 +344,6 @@ uninitialized =
 #endif
 
 /*tasks.h*/     (sizeof _RTEMS_tasks_Information)         +
-                (sizeof _RTEMS_tasks_User_initialization_tasks) +
-                (sizeof _RTEMS_tasks_Number_of_initialization_tasks) +
 
 /*thread.h*/    (sizeof _Thread_BSP_context)              +
                 (sizeof _Thread_Dispatch_disable_level)   +

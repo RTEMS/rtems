@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
@@ -51,13 +52,17 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
   rtems_id                          id;
   rtems_status_code                 return_value;
   rtems_initialization_tasks_table *user_tasks;
+  rtems_api_configuration_table    *api_configuration;
+
+
+  api_configuration = _Configuration_Table->RTEMS_api_configuration;
 
   /*
    *  NOTE:  This is slightly different from the Ada implementation.
    */
 
-  user_tasks = _RTEMS_tasks_User_initialization_tasks;
-  maximum    = _RTEMS_tasks_Number_of_initialization_tasks;
+  user_tasks = api_configuration->User_initialization_tasks_table;
+  maximum    = api_configuration->number_of_initialization_tasks;
 
   if ( !user_tasks || maximum == 0 )
     return;

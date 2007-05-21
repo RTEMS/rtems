@@ -17,7 +17,7 @@
  *     + convert internal to external address
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,11 +30,17 @@
 #ifndef _RTEMS_RTEMS_DPMEM_H
 #define _RTEMS_RTEMS_DPMEM_H
 
+#ifndef RTEMS_DPMEM_EXTERN
+#define RTEMS_DPMEM_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <rtems/score/object.h>
+#include <rtems/rtems/support.h>
+#include <rtems/rtems/status.h>
 
 /*
  *  The following structure defines the port control block.  Each port
@@ -53,7 +59,7 @@ typedef struct {
  *  The following define the internal Dual Ported Memory information.
  */
 
-RTEMS_EXTERN Objects_Information  _Dual_ported_memory_Information;
+RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;
 
 /*
  *  _Dual_ported_memory_Manager_initialization

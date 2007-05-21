@@ -60,14 +60,15 @@ librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
     src/taskissuspended.c src/taskmode.c src/taskrestart.c src/taskresume.c \
     src/tasksetnote.c src/tasksetpriority.c src/taskstart.c \
     src/tasksuspend.c src/taskwakeafter.c src/taskwakewhen.c \
-    src/taskvariableadd.c src/taskvariabledelete.c src/taskvariableget.c
+    src/taskvariableadd.c src/taskvariabledelete.c src/taskvariableget.c \
+    src/taskdata.c
 
 ## RATEMON_C_FILES 
 librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
     src/ratemondelete.c src/ratemongetstatus.c src/ratemongetstatistics.c \
     src/ratemonresetstatistics.c src/ratemonresetall.c \
     src/ratemonreportstatistics.c src/ratemonident.c \
-    src/ratemonperiod.c src/ratemontimeout.c
+    src/ratemonperiod.c src/ratemontimeout.c src/ratemondata.c
 
 ## INTR_C_FILES 
 librtems_a_SOURCES += src/intr.c src/intrbody.c src/intrcatch.c
@@ -75,7 +76,7 @@ librtems_a_SOURCES += src/intr.c src/intrbody.c src/intrcatch.c
 ## BARRIER_C_FILES
 librtems_a_SOURCES += src/barrier.c src/barriercreate.c src/barrierdelete.c \
    src/barrierident.c src/barriertranslatereturncode.c src/barrierrelease.c \
-   src/barrierwait.c
+   src/barrierwait.c src/barrierdata.c
 
 ## CLOCK_C_FILES
 librtems_a_SOURCES += src/rtclock.c src/clockget.c src/clockset.c \
@@ -86,22 +87,23 @@ librtems_a_SOURCES += src/rtclock.c src/clockget.c src/clockset.c \
 librtems_a_SOURCES += src/rtemstimer.c src/timercancel.c src/timercreate.c \
     src/timerdelete.c src/timerfireafter.c src/timerfirewhen.c \
     src/timergetinfo.c src/timerident.c src/timerreset.c src/timerserver.c \
-    src/timerserverfireafter.c src/timerserverfirewhen.c
+    src/timerserverfireafter.c src/timerserverfirewhen.c src/rtemstimerdata.c
 
 ## MESSAGE_QUEUE_C_FILES
 librtems_a_SOURCES += src/msg.c src/msgqallocate.c src/msgqbroadcast.c \
     src/msgqcreate.c src/msgqdelete.c src/msgqflush.c \
     src/msgqgetnumberpending.c src/msgqident.c src/msgqreceive.c \
-    src/msgqsend.c c src/msgqtranslatereturncode.c src/msgqurgent.c
+    src/msgqsend.c c src/msgqtranslatereturncode.c src/msgqurgent.c \
+    src/msgdata.c
 
 ## SEMAPHORE_C_FILES
 librtems_a_SOURCES += src/sem.c src/semcreate.c src/semdelete.c src/semident.c \
     src/semobtain.c src/semrelease.c src/semflush.c \
-    src/semtranslatereturncode.c
+    src/semtranslatereturncode.c src/semdata.c
 
 ## EVENT_C_FILES
 librtems_a_SOURCES += src/event.c src/eventreceive.c src/eventseize.c \
-    src/eventsend.c src/eventsurrender.c src/eventtimeout.c
+    src/eventsend.c src/eventsurrender.c src/eventtimeout.c src/eventdata.c
 
 ## SIGNAL_C_FILES
 librtems_a_SOURCES += src/signal.c src/signalcatch.c src/signalsend.c
@@ -111,16 +113,16 @@ librtems_a_SOURCES += src/region.c src/regioncreate.c src/regiondelete.c \
     src/regionextend.c src/regiongetsegment.c src/regiongetsegmentsize.c \
     src/regionident.c src/regionreturnsegment.c src/regiongetinfo.c \
     src/regiongetfreeinfo.c src/regionresizesegment.c \
-    src/regionprocessqueue.c
+    src/regionprocessqueue.c src/regiondata.c
 
 ## PARTITION_C_FILES
 librtems_a_SOURCES += src/part.c src/partcreate.c src/partdelete.c \
-    src/partgetbuffer.c src/partident.c src/partreturnbuffer.c
+    src/partgetbuffer.c src/partident.c src/partreturnbuffer.c src/partdata.c
 
 ## DPMEM_C_FILES
 librtems_a_SOURCES += src/dpmem.c src/dpmemcreate.c src/dpmemdelete.c \
     src/dpmemexternal2internal.c src/dpmemident.c \
-    src/dpmeminternal2external.c
+    src/dpmeminternal2external.c src/dpmemdata.c
 
 librtems_a_SOURCES += src/attr.c src/rtemsidtoname.c
 

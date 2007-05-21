@@ -72,11 +72,7 @@ void _RTEMS_API_Initialize(
   _Multiprocessing_Manager_initialization();
 #endif
 
-  _RTEMS_tasks_Manager_initialization(
-    api_configuration->maximum_tasks,
-    api_configuration->number_of_initialization_tasks,
-    api_configuration->User_initialization_tasks_table
-  );
+  _RTEMS_tasks_Manager_initialization( api_configuration->maximum_tasks );
 
   _Timer_Manager_initialization( api_configuration->maximum_timers );
 

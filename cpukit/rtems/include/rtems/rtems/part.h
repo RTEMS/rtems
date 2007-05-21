@@ -16,7 +16,7 @@
  *     + get a buffer from a partition
  *     + return a buffer to a partition
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,6 +29,10 @@
 #ifndef _RTEMS_RTEMS_PART_H
 #define _RTEMS_RTEMS_PART_H
 
+#ifndef RTEMS_PART_EXTERN
+#define RTEMS_PART_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,6 +40,8 @@ extern "C" {
 #include <rtems/score/address.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/attr.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/support.h>
 #include <rtems/rtems/types.h>
 
 /*
@@ -57,7 +63,7 @@ typedef struct {
  *  manage this class of objects.
  */
 
-RTEMS_EXTERN Objects_Information _Partition_Information;
+RTEMS_PART_EXTERN Objects_Information _Partition_Information;
 
 /*
  *  _Partition_Manager_initialization

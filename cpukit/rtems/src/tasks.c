@@ -1,8 +1,7 @@
 /*
- *  RTEMS Task Manager
+ *  RTEMS Task Manager -- Initialize Manager
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -243,18 +242,9 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
  */
 
 void _RTEMS_tasks_Manager_initialization(
-  uint32_t                          maximum_tasks,
-  uint32_t                          number_of_initialization_tasks,
-  rtems_initialization_tasks_table *user_tasks
+  uint32_t                          maximum_tasks
 )
 {
-
-  _RTEMS_tasks_Number_of_initialization_tasks = number_of_initialization_tasks;
-  _RTEMS_tasks_User_initialization_tasks = user_tasks;
-
-  /*
-   *  There may not be any RTEMS initialization tasks configured.
-   */
 
   _Objects_Initialize_information(
     &_RTEMS_tasks_Information, /* object information table */
