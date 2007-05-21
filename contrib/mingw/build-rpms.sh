@@ -6,7 +6,7 @@
 #
 # This script builds the RTEMS tools into RPM packages on a Linux Fedora host,
 # and supports Canadian cross builds to other hosts. It is light sugar around
-# the fine work of Ralf Corsepius thats actuallt builds the RPM files.
+# the fine work of Ralf Corsepius thats actually builds the RPM files.
 # 
 # We build all the targets for a given host.
 #
@@ -186,9 +186,9 @@ if [ $local_rpm_database = yes ]; then
   check "making the local RPM database directory: var/lib"
  fi
  if [ $clean = yes -o ! -e var/lib/rpmPackages ]; then
-  echo "Coping RPM database to a local RPM database"
+  echo "Copying RPM database to a local RPM database"
   $cp -r /var/lib/rpm var/lib/rpm
-  check "coping the RPM database to the local database"
+  check "copying the RPM database to the local database"
  fi
 fi
 
