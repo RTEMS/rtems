@@ -1,5 +1,14 @@
 2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/Makefile.am, libmisc/cpuuse/README: Split remaining CPU Usage
+	functionality into multiple files to eliminate unnecessary cohesion.
+	Update README.
+	* libmisc/cpuuse/cpuusagereport.c, libmisc/cpuuse/cpuusagereset.c:
+	New files.
+	* libmisc/cpuuse/cpuuse.c: Removed.
+
+2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/src/ratemonperiod.c: Fix math ordering bug which resulted in a
 	negative value in some circumstances. Also cleaned up to share uptime
 	declaration.

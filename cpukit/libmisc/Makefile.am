@@ -19,7 +19,8 @@ libcapture_a_SOURCES = capture/capture.c capture/capture-cli.c \
 EXTRA_DIST += cpuuse/README
 
 noinst_LIBRARIES += libcpuuse.a
-libcpuuse_a_SOURCES = cpuuse/cpuuse.c cpuuse/cpuuse.h
+libcpuuse_a_SOURCES = cpuuse/cpuusagereport.c cpuuse/cpuusagereset.c \
+    cpuuse/cpuuse.h
 
 ## devnull
 

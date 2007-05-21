@@ -82,7 +82,11 @@ void rtems_cpu_usage_report( void )
   #endif
   
   printk( "CPU Usage by thread\n"
+    #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+          "   ID        NAME    SECONDS   PERCENT\n"
+    #else
           "   ID        NAME     TICKS    PERCENT\n"
+    #endif
   );
 
   for ( api_index = 1 ;
@@ -142,28 +146,4 @@ void rtems_cpu_usage_report( void )
     );
     printk( "Total Units = %" PRId32 "\n\n", total_units );
   #endif
-}
-
-static void CPU_usage_Per_thread_handler(
-  Thread_Control *the_thread
-)
-{
-  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    the_thread->cpu_time_used.tv_sec  = 0;
-    the_thread->cpu_time_used.tv_nsec = 0;
-  #else
-    the_thread->ticks_executed = 0;
-  #endif
-}
-
-/*
- *  rtems_cpu_usage_reset
- */
-void rtems_cpu_usage_reset( void )
-{
-  #ifndef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    CPU_usage_Ticks_at_last_reset = _Watchdog_Ticks_since_boot;
-  #endif
-
-  rtems_iterate_over_all_threads(CPU_usage_Per_thread_handler);
 }
