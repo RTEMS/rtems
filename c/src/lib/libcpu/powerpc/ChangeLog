@@ -1,3 +1,8 @@
+2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mpc6xx/clock/c_clock.c: Tinker with math so it does not overflow on
+	psim and give a negative nanoseconds since last tick.
+
 2007-05-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mpc8xx/clock/clock.c: Remove unused var extclk_value.

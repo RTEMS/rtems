@@ -136,10 +136,14 @@ uint32_t Clock_driver_nanoseconds_since_last_tick(void)
 
   PPC_Get_decrementer( clicks ); 
 
-  tmp = (Clock_Decrementer_value - clicks) * 1000000;
+  /*
+   * Multiply by 1000 here separately from below so we do not overflow
+   * and get a negative value.
+   */
+  tmp = (Clock_Decrementer_value - clicks) * 1000;
   tmp /= (BSP_bus_frequency/BSP_time_base_divisor);
 
-  return tmp;
+  return tmp * 1000;
 }
 
 /*
