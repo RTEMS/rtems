@@ -1,5 +1,27 @@
 2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/Makefile.am, rtems/include/rtems/rtems/barrier.h,
+	rtems/include/rtems/rtems/dpmem.h, rtems/include/rtems/rtems/event.h,
+	rtems/include/rtems/rtems/message.h, rtems/include/rtems/rtems/part.h,
+	rtems/include/rtems/rtems/ratemon.h, rtems/include/rtems/rtems/region.h,
+	rtems/include/rtems/rtems/sem.h, rtems/include/rtems/rtems/tasks.h,
+	rtems/include/rtems/rtems/timer.h, sapi/Makefile.am,
+	sapi/include/rtems/extension.h: Split Classic API data instantiation
+	into individual files. This reduces the size of the BSS section when
+	an optional manager stub is used. Some tests showed about a 600 byte
+	reduction in BSS size.
+	* rtems/src/taskinitusers.c, sapi/src/rtemsapi.c, rtems/src/tasks.c:
+	Eliminated the variables _RTEMS_tasks_User_initialization_tasks and
+	_RTEMS_tasks_Number_of_initialization_tasks because they were only
+	used in one place after initialized. It was a waste of space.
+ 	* rtems/src/barrierdata.c, rtems/src/dpmem.c, rtems/src/dpmemdata.c,
+	rtems/src/eventdata.c, rtems/src/msgdata.c, rtems/src/partdata.c,
+	rtems/src/ratemondata.c, rtems/src/regiondata.c,
+	rtems/src/rtemstimerdata.c, rtems/src/semdata.c, rtems/src/taskdata.c,
+	sapi/src/extensiondata.c: New files.
+
+2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am, libmisc/cpuuse/README: Split remaining CPU Usage
 	functionality into multiple files to eliminate unnecessary cohesion.
 	Update README.
