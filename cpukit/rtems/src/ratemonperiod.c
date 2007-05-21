@@ -76,20 +76,23 @@ void _Rate_monotonic_Update_statistics(
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     {
-      struct timespec ran;
+      struct timespec ran, used;
        
-       /* executed = current cpu usage - value at start of period */
-      _Timespec_Subtract( 
-         &the_period->owner_executed_at_period,
-         &_Thread_Executing->cpu_time_used,
-         &executed
-      );
+      /* Grab CPU usage when the thread got switched in */
+      used = _Thread_Executing->cpu_time_used;
 
       /* How much time time since last context switch */
       _Timespec_Subtract(&_Thread_Time_of_last_context_switch, &uptime, &ran);
 
       /* executed += ran */
-      _Timespec_Add_to( &executed, &ran );
+      _Timespec_Add_to( &used, &ran );
+
+       /* executed = current cpu usage - value at start of period */
+      _Timespec_Subtract( 
+         &the_period->owner_executed_at_period,
+         &used,
+         &executed
+      );
     }
   #else
       ticks_executed_since_last_period = the_period->owner->ticks_executed -
@@ -102,6 +105,7 @@ void _Rate_monotonic_Update_statistics(
 
   stats = &the_period->Statistics;
   stats->count++;
+
 
   if ( the_period->state == RATE_MONOTONIC_EXPIRED )
     stats->missed_count++;
@@ -214,29 +218,38 @@ rtems_status_code rtems_rate_monotonic_period(
 
       _ISR_Disable( level );
       switch ( the_period->state ) {
-        case RATE_MONOTONIC_INACTIVE:
+        case RATE_MONOTONIC_INACTIVE: {
+          #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
+              defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+            struct timespec uptime;
+          #endif
+
           /*
            *  No need to update statistics -- there are not a period active
            */
 
           _ISR_Enable( level );
 
+
+          #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
+              defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+            _TOD_Get_uptime( &uptime );
+          #endif
+              
           #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
             /*
              * Since the statistics didn't update the starting time,
              * we do it here.
              */
-            _TOD_Get_uptime( &the_period->time_at_period );
+            the_period->time_at_period = uptime;
           #else
             the_period->time_at_period = _Watchdog_Ticks_since_boot;
           #endif
 
           #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
             { 
-              struct timespec ran, uptime;
+              struct timespec ran;
 
-              _TOD_Get_uptime( &uptime );
-              
               the_period->owner_executed_at_period = 
                 _Thread_Executing->cpu_time_used;
 
@@ -268,7 +281,7 @@ rtems_status_code rtems_rate_monotonic_period(
           _Watchdog_Insert_ticks( &the_period->Timer, length );
           _Thread_Enable_dispatch();
           return RTEMS_SUCCESSFUL;
-
+        }
         case RATE_MONOTONIC_ACTIVE:
 
           /*
