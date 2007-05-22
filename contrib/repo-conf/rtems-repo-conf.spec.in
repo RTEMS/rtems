@@ -20,6 +20,7 @@ case "%{?dist}" in
 .el*) extra_arg=--enable-os-subdir="redhat/el";;
 .fc*) extra_arg=--enable-os-subdir="fedora/";;
 .rh*) extra_arg=--enable-os-subdir="redhat/";;
+.suse*) extra_arg=--enable-os-subdir="suse/";;
 *) extra_arg=--enable-os-subdir="redhat/";;
 esac
 %configure $extra_arg
