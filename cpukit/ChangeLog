@@ -1,3 +1,7 @@
+2007-05-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/corerwlockrelease.c: Do not dereference NULL.
+
 2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/Makefile.am, rtems/include/rtems/rtems/barrier.h,
