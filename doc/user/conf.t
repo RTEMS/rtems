@@ -221,7 +221,7 @@ of ticks per each task's timeslice.  By default, this is
 
 @findex CONFIGURE_MEMORY_OVERHEAD
 @item @code{CONFIGURE_MEMORY_OVERHEAD} is set to the number of
-bytes the applications wishes to add to the requirements calculated
+kilobytes the applications wishes to add to the requirements calculated
 by @code{confdefs.h}.  The default value is 0.
 
 @findex CONFIGURE_EXTRA_TASK_STACKS

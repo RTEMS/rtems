@@ -1,3 +1,7 @@
+2007-05-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/conf.t: Fix typo -- should have read kilobytes.
+
 2007-04-13	Joel Sherrill <joel@OARcorp.com>
 
 	* user/task.t: Add rtems_iterate_over_all_threads.
@@ -45,7 +49,6 @@
 
 	* porting/interrupts.t: Fix bogus _CPU_ISR_Get_level.
 
-2006-09-07	Ken Peters <ken.peters@jpl.nasa.gov>
 2006-09-07	Ken Peters <ken.peters@jpl.nasa.gov>
 
 	PR 1171/doc
