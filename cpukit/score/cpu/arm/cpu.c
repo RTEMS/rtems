@@ -37,7 +37,6 @@ void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-    _CPU_Table = *cpu_table;
 }
 
 /*

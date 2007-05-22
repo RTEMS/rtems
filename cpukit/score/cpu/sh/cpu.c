@@ -82,10 +82,8 @@ void _CPU_Initialize(
   _CPU_Null_fp_context.fpscr = SH4_FPSCR_DN | SH4_FPSCR_RM;
 #endif
 
-  _CPU_Table = *cpu_table;
-
   /* enable interrupts */
-  _CPU_ISR_Set_level( level);
+  _CPU_ISR_Set_level( level ) ;
 }
 
 /*PAGE

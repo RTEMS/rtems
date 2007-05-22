@@ -94,7 +94,6 @@ void _CPU_Initialize(
   						   control register to prevent underflow and
   						   inexact exceptions */
 #endif
-  _CPU_Table = *cpu_table;
 }
 
 /*PAGE

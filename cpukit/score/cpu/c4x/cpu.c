@@ -59,8 +59,6 @@ void _CPU_Initialize(
 
   /* FP context initialization support goes here */
 #endif
-
-  _CPU_Table = *cpu_table;
 }
 
 /*PAGE

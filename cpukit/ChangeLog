@@ -1,5 +1,14 @@
 2007-05-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/cpu/arm/cpu.c, score/cpu/avr/cpu.c, score/cpu/bfin/cpu.c,
+	score/cpu/c4x/cpu.c, score/cpu/h8300/cpu.c, score/cpu/i386/cpu.c,
+	score/cpu/m68k/cpu.c, score/cpu/mips/cpu.c, score/cpu/nios2/cpu.c,
+	score/cpu/no_cpu/cpu.c, score/cpu/sh/cpu.c, score/cpu/sparc/cpu.c,
+	cpukit/sapi/src/exinit.c: Move copying of CPU Table to shared
+	executive initialization.
+
+2007-05-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/corerwlockrelease.c: Do not dereference NULL.
 
 2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -41,8 +41,6 @@ void _CPU_Initialize(
   register Context_Control_fp  *fp_context;
 #endif
 
-  _CPU_Table = *cpu_table;
-
   /*
    *  The following code saves a NULL i387 context which is given
    *  to each task at start and restart time.  The following code

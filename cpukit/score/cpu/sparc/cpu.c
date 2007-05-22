@@ -67,12 +67,6 @@ void _CPU_Initialize(
 #endif
 
   /*
-   *  Grab our own copy of the user's CPU table.
-   */
-
-  _CPU_Table = *cpu_table;
-
-  /*
    *  Since no tasks have been created yet and no interrupts have occurred,
    *  there is no way that the currently executing thread can have an
    *  _ISR_Dispatch stack frame on its stack.

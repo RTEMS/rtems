@@ -44,8 +44,6 @@ void _CPU_Initialize(
     _CPU_ISR_jump_table[slot].isr_handler = (uint32_t  ) 0xDEADDEAD;
   }
 #endif /* M68K_HAS_VBR */
-
-  _CPU_Table = *cpu_table;
 }
 
 /*PAGE

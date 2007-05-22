@@ -101,6 +101,12 @@ rtems_interrupt_level rtems_initialize_executive_early(
 #endif
 
   /*
+   *  Grab our own copy of the user's CPU table.
+   */
+
+  _CPU_Table = *cpu_table;
+
+  /*
    *  Provided just for user convenience.
    */
 
