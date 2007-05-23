@@ -1,3 +1,10 @@
+2007-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	Yu Chen <chyyuu@gmail.com>
+	* score/src/corespinlockwait.c: Per question posted as
+	http://www.rtems.org/ml/rtems-users/2007/may/msg00180.html, changed
+	logical operator to <=.
+
 2007-05-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/cpu/arm/cpu.c, score/cpu/avr/cpu.c, score/cpu/bfin/cpu.c,

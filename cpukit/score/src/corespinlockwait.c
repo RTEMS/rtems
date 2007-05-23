@@ -72,7 +72,7 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
       /*
        *  They are willing to wait but there could be a timeout.
        */
-      if ( timeout && (limit >= _Watchdog_Ticks_since_boot)) {
+      if ( timeout && (limit <= _Watchdog_Ticks_since_boot) ) {
         the_spinlock->users -= 1;
         _ISR_Enable( level );
         return CORE_SPINLOCK_TIMEOUT;
