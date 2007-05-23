@@ -1001,12 +1001,27 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 
 #endif
 
-#ifndef CONFIGURE_MEMORY_OVERHEAD
-#define CONFIGURE_MEMORY_OVERHEAD 0
-#endif
-
+/*
+ *  This is so we can account for tasks with stacks greater than minimum
+ *  size.  This is in bytes.
+ */
 #ifndef CONFIGURE_EXTRA_TASK_STACKS
 #define CONFIGURE_EXTRA_TASK_STACKS 0
+#endif
+
+/*
+ * Account for pending message buffers in bytes.
+ */
+#ifndef CONFIGURE_MESSAGE_BUFFER_MEMORY
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY 0
+#endif
+
+/*
+ * Catch all for extra memory in case something broken and underestimates.
+ * Historically this was used for message buffers.
+ */
+#ifndef CONFIGURE_MEMORY_OVERHEAD
+#define CONFIGURE_MEMORY_OVERHEAD 0
 #endif
 
 #define CONFIGURE_API_MUTEX_MEMORY \
@@ -1067,9 +1082,10 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
    CONFIGURE_MEMORY_FOR_DEVICES(CONFIGURE_MAXIMUM_DEVICES) + \
    CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
-   (((CONFIGURE_MEMORY_OVERHEAD)+1) * 1024) + \
+   CONFIGURE_MESSAGE_BUFFER_MEMORY + \
+   (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
    (CONFIGURE_EXTRA_TASK_STACKS) + (CONFIGURE_ADA_TASKS_STACK) \
-) & 0xfffffc00)
+) & ~0x7)
 #endif
 
 #ifdef CONFIGURE_GNAT_RTEMS

@@ -1,5 +1,14 @@
 2007-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sapi/include/confdefs.h: Add CONFIGURE_MESSAGE_BUFFER_MEMORY so there
+	is less dependence on CONFIGURE_MEMORY_OVERHEAD. Do not arbitrarily
+	add 1 to CONFIGURE_MEMORY_OVERHEAD so we do not waste a kilobyte for
+	unused Workspace. Round the workspace required size to an 8 byte
+	boundary instead of a 0x400 byte one. We may end up needing to add 8
+	bytes again to account for the alignment rounding.
+
+2007-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	Yu Chen <chyyuu@gmail.com>
 	* score/src/corespinlockwait.c: Per question posted as
 	http://www.rtems.org/ml/rtems-users/2007/may/msg00180.html, changed
