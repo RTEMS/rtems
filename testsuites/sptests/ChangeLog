@@ -1,3 +1,9 @@
+2007-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp13/system.h, sp34/changepri.c, sp35/priinv.c: Avoid using
+	CONFIGURE_MEMORY_OVERHEAD and try to really account for the memory
+	properly.
+
 2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spsize/size.c: Eliminated the variables
