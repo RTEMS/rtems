@@ -45,7 +45,7 @@ mechanism to automate the generation of these structures.
 @cindex confdefs.h
 @findex confdefs.h
 
-RTEMS provides the @code{confdefs.h} C language header file that
+RTEMS provides the @code{rtems/confdefs.h} C language header file that
 based on the setting of a variety of macros can automatically
 produce nearly all of the configuration tables required
 by an RTEMS application.  Rather than building the individual
@@ -73,28 +73,28 @@ device driver (for standard I/O) and a clock tick device driver.
 
 For each configuration parameter in the configuration tables, the
 macro corresponding to that field is discussed.  Most systems
-can be easily configured using the @code{confdefs.h} mechanism.
+can be easily configured using the @code{rtems/confdefs.h} mechanism.
 
 The @code{CONFIGURE_INIT} constant must be defined in order to
-make @code{confdefs.h} instantiate the configuration data
+make @code{rtems/confdefs.h} instantiate the configuration data
 structures.  This can only be defined in one source file per
-application that includes @code{confdefs.h} or the symbol
+application that includes @code{rtems/confdefs.h} or the symbol
 table will be instantiated multiple times and linking errors
 produced.
 
 The user should be aware that the defaults are intentionally
 set as low as possible.  By default, no application resources
-are configured.  The @code{confdefs.h} file ensures that
+are configured.  The @code{rtems/confdefs.h} file ensures that
 at least one application tasks or thread is configured
 and that at least one of the initialization task/thread
 tables is configured.
 
-The @code{confdefs.h} file estimates the amount of 
+The @code{rtems/confdefs.h} file estimates the amount of 
 memory required for the RTEMS Executive Workspace.  This
 estimate is only as accurate as the information given
-to @code{confdefs.h} and may be either too high or too
+to @code{rtems/confdefs.h} and may be either too high or too
 low for a variety of reasons.  Some of the reasons that
-@code{confdefs.h} may reserve too much memory for RTEMS
+@code{rtems/confdefs.h} may reserve too much memory for RTEMS
 are:
 
 @itemize @bullet
@@ -118,7 +118,7 @@ accounted for explicitly by developer.
 @item Requirements for add-on libraries are not included.
 @end itemize
 
-In general, @code{confdefs.h} is very accurate when given
+In general, @code{rtems/confdefs.h} is very accurate when given
 enough information.  However, it is quite easy to use
 a library and not account for its resources.
 
@@ -129,7 +129,7 @@ set by the user.
 
 This section defines the file system and IO library
 related configuration parameters supported by
-@code{confdefs.h}.
+@code{rtems/confdefs.h}.
 
 @itemize @bullet
 @findex CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
@@ -185,7 +185,7 @@ thus stack checking is disabled.
 @subsection Basic System Information
 
 This section defines the general system configuration parameters supported by
-@code{confdefs.h}.
+@code{rtems/confdefs.h}.
 
 @itemize @bullet
 @findex CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
@@ -219,29 +219,35 @@ of time between clock ticks.  By default, this is set to
 of ticks per each task's timeslice.  By default, this is
 50.
 
+@findex CONFIGURE_MESSAGE_BUFFER_MEMORY
+@item @code{CONFIGURE_MESSAGE_BUFFER_MEMORY} is set to the number of
+bytes the application requires to be reserved for pending message queue
+buffers.  This value should include memory for all buffers across
+all APIs.  The default value is 0.
+
 @findex CONFIGURE_MEMORY_OVERHEAD
 @item @code{CONFIGURE_MEMORY_OVERHEAD} is set to the number of
-kilobytes the applications wishes to add to the requirements calculated
-by @code{confdefs.h}.  The default value is 0.
+kilobytes the application wishes to add to the requirements calculated
+by @code{rtems/confdefs.h}.  The default value is 0.
 
 @findex CONFIGURE_EXTRA_TASK_STACKS
 @item @code{CONFIGURE_EXTRA_TASK_STACKS} is set to the number of
 bytes the applications wishes to add to the task stack requirements
-calculated by @code{confdefs.h}.  This parameter is very important.
+calculated by @code{rtems/confdefs.h}.  This parameter is very important.
 If the application creates tasks with stacks larger then the 
-minimum, then that memory is NOT accounted for by @code{confdefs.h}.
+minimum, then that memory is NOT accounted for by @code{rtems/confdefs.h}.
 The default value is 0.
 
 @end itemize
 
 NOTE: The required size of the Executive RAM Work Area is calculated
-automatically when using the @code{confdefs.h} mechanism.
+automatically when using the @code{rtems/confdefs.h} mechanism.
 
 @subsection Device Driver Table
 
 This section defines the configuration parameters related
 to the automatic generation of a Device Driver Table.  As
-@code{confdefs.h} only is aware of a small set of 
+@code{rtems/confdefs.h} only is aware of a small set of 
 standard device drivers, the generated Device Driver
 Table is suitable for simple applications with no
 custom device drivers.
@@ -252,7 +258,7 @@ custom device drivers.
 the application wishes to provide their own Device Driver Table.
 The table generated is an array of @code{rtems_driver_address_table}
 entries named @code{Device_drivers}.  By default, this is not
-defined indicating the @code{confdefs.h} is providing the
+defined indicating the @code{rtems/confdefs.h} is providing the
 device driver table.
 
 @findex CONFIGURE_MAXIMUM_DRIVERS
@@ -305,7 +311,7 @@ By default, this is not defined.
 @subsection Multiprocessing Configuration
 
 This section defines the multiprocessing related
-system configuration parameters supported by @code{confdefs.h}.
+system configuration parameters supported by @code{rtems/confdefs.h}.
 This class of Configuration Constants are only applicable if
 @code{CONFIGURE_MP_APPLICATION} is defined.
 
@@ -346,7 +352,7 @@ this field is @code{&MPCI_table}.
 @subsection Classic API Configuration
 
 This section defines the Classic API related
-system configuration parameters supported by @code{confdefs.h}.
+system configuration parameters supported by @code{rtems/confdefs.h}.
 
 @itemize @bullet
 @findex CONFIGURE_MAXIMUM_TASKS
@@ -398,7 +404,7 @@ The default for this field is 0.
 
 @subsection Classic API Initialization Tasks Table Configuration
 
-The @code{confdefs.h} configuration system can automatically
+The @code{rtems/confdefs.h} configuration system can automatically
 generate an Initialization Tasks Table named 
 @code{Initialization_tasks} with a single entry.  The following
 parameters control the generation of that table.
@@ -521,7 +527,7 @@ The default is 0.
 
 @subsection POSIX Initialization Threads Table Configuration
 
-The @code{confdefs.h} configuration system can automatically
+The @code{rtems/confdefs.h} configuration system can automatically
 generate a POSIX Initialization Threads Table named 
 @code{POSIX_Initialization_threads} with a single entry.  The following
 parameters control the generation of that table.
@@ -616,7 +622,7 @@ The default is 0.
 
 @subsection ITRON Initialization Task Table Configuration
 
-The @code{confdefs.h} configuration system can automatically
+The @code{rtems/confdefs.h} configuration system can automatically
 generate an ITRON Initialization Tasks Table named
 @code{ITRON_Initialization_tasks} with a single entry.  The following
 parameters control the generation of that table.
@@ -669,7 +675,7 @@ the value is @code{RTEMS_MINIMUM_STACK_SIZE}.
 @subsection Ada Tasks
 
 This section defines the system configuration parameters supported
-by @code{confdefs.h} related to configuring RTEMS to support
+by @code{rtems/confdefs.h} related to configuring RTEMS to support
 a task using Ada tasking with GNAT.
 
 @itemize @bullet
@@ -677,7 +683,7 @@ a task using Ada tasking with GNAT.
 @item @code{CONFIGURE_GNAT_RTEMS} is defined to inform
 RTEMS that the GNAT Ada run-time is to be used by the 
 application.  This configuration parameter is critical
-as it makes @code{confdefs.h} configure the resources
+as it makes @code{rtems/confdefs.h} configure the resources
 (mutexes and keys) used implicitly by the GNAT run-time.
 By default, this parameter is not defined.
 
@@ -769,7 +775,7 @@ various object control blocks (TCBs, QCBs, ...) and task stacks.
 If the address is not aligned on a four-word boundary, then
 RTEMS will invoke the fatal error handler during
 @code{@value{DIRPREFIX}initialize_executive}.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}
 which defaults to @code{NULL}.  Normally, this field should be 
@@ -780,14 +786,14 @@ RTEMS RAM Workspace as part of system initialization.
 is the calculated size of the
 RTEMS RAM Workspace.  The section Sizing the RTEMS RAM Workspace
 details how to arrive at this number.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_SIZE}
 and is calculated based on the other system configuration settings.
 
 @item microseconds_per_tick
 is number of microseconds per clock tick.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MICROSECONDS_PER_TICK}.
 If not defined by the application, then the
@@ -796,19 +802,19 @@ If not defined by the application, then the
 
 @item ticks_per_timeslice
 is the number of clock ticks for a timeslice.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_TICKS_PER_TIMESLICE}.
 
 @item maximum_devices
 is the maximum number of devices that can be registered.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_DEVICES}.
 
 @item maximum_drivers
 is the maximum number of device drivers that can be registered.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_DRIVERS}.
 This value is set to @code{maximum_devices} if it is greater 
@@ -818,7 +824,7 @@ than @code{maximum_drivers}.
 is the number of device drivers for the system.  There should be
 the same number of entries in the Device Driver Table.  If this field
 is zero, then the @code{User_driver_address_table} entry should be NULL.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field is calculated
 automatically based on the number of entries in the 
 Device Driver Table.  This calculation is based on the assumption
@@ -845,21 +851,21 @@ is the address of the Device Driver Table.  This table contains the entry
 points for each device driver.  If the number_of_device_drivers field is zero,
 then this entry should be NULL. The format of this table will be
 discussed below.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the Device Driver Table is assumed to be
 named @code{Device_drivers} and defined in C.  If the application is providing
 its own Device Driver Table, then the macro
 @code{CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE} must be defined to indicate
-this and prevent @code{confdefs.h} from generating the table.
+this and prevent @code{rtems/confdefs.h} from generating the table.
 
 @item number_of_initial_extensions
 is the number of initial user extensions.  There should be
 the same number of entries as in the User_extension_table.  If this field
 is zero, then the User_driver_address_table entry should be NULL.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS}
-which is set automatically by @code{confdefs.h} based on the size
+which is set automatically by @code{rtems/confdefs.h} based on the size
 of the User Extensions Table.
 
 @item User_extension_table
@@ -868,7 +874,7 @@ Extension Table.  This table contains the entry points for the
 static set of optional user extensions.  If no user extensions
 are configured, then this entry should be NULL.  The format of
 this table will be discussed below.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the User Extensions Table is named
 @code{Configuration_Initial_Extensions} and defined in
 confdefs.h.  It is initialized based on the following
@@ -892,7 +898,7 @@ is the address of the Multiprocessor Configuration Table.  This
 table contains information needed by RTEMS only when used in a multiprocessor
 configuration.  This field must be NULL when RTEMS is used in a
 single processor configuration.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the Multiprocessor Configuration Table
 is automatically generated when the @code{CONFIGURE_MP_APPLICATION}
 is defined.  If @code{CONFIGURE_MP_APPLICATION} is not defined, the this
@@ -905,7 +911,7 @@ contains information needed by the RTEMS API.  This field should be
 NULL if the RTEMS API is not used.  [NOTE: Currently the RTEMS API
 is required to support support components such as BSPs and libraries 
 which use this API.]  This table is built automatically and this
-entry filled in, if using the @code{confdefs.h} application
+entry filled in, if using the @code{rtems/confdefs.h} application
 configuration mechanism.  The generated table has the name
 @code{Configuration_RTEMS_API}.
 
@@ -913,8 +919,8 @@ configuration mechanism.  The generated table has the name
 is the address of the POSIX API Configuration Table.  This table
 contains information needed by the POSIX API.  This field should be
 NULL if the POSIX API is not used.  This table is built automatically
-and this entry filled in, if using the @code{confdefs.h} application
-configuration mechanism.  The @code{confdefs.h} application 
+and this entry filled in, if using the @code{rtems/confdefs.h} application
+configuration mechanism.  The @code{rtems/confdefs.h} application 
 mechanism will fill this field in with the address of the
 @code{Configuration_POSIX_API} table of POSIX API is configured
 and NULL if the POSIX API is not configured.
@@ -978,7 +984,7 @@ type API_Configuration_Table_Pointer is
 is the maximum number of tasks that
 can be concurrently active (created) in the system including
 initialization tasks.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_TASKS}.
 If not defined by the application, then the @code{CONFIGURE_MAXIMUM_TASKS}
@@ -987,7 +993,7 @@ macro defaults to 10.
 @item maximum_timers
 is the maximum number of timers
 that can be concurrently active in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_TIMERS}.
 If not defined by the application, then the @code{CONFIGURE_MAXIMUM_TIMERS}
@@ -996,7 +1002,7 @@ macro defaults to 0.
 @item maximum_semaphores
 is the maximum number of
 semaphores that can be concurrently active in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_SEMAPHORES}.
 If not defined by the application, then the @code{CONFIGURE_MAXIMUM_SEMAPHORES}
@@ -1005,7 +1011,7 @@ macro defaults to 0.
 @item maximum_message_queues
 is the maximum number of
 message queues that can be concurrently active in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_MESSAGE_QUEUES}.
 If not defined by the application, then the
@@ -1014,7 +1020,7 @@ If not defined by the application, then the
 @item maximum_partitions
 is the maximum number of
 partitions that can be concurrently active in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_PARTITIONS}.
 If not defined by the application, then the @code{CONFIGURE_MAXIMUM_PARTITIONS}
@@ -1023,7 +1029,7 @@ macro defaults to 0.
 @item maximum_regions
 is the maximum number of regions
 that can be concurrently active in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_REGIONS}.
 If not defined by the application, then the @code{CONFIGURE_MAXIMUM_REGIONS}
@@ -1033,7 +1039,7 @@ macro defaults to 0.
 is the maximum number of ports into
 dual-port memory areas that can be concurrently active in the
 system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_PORTS}.
 If not defined by the application, then the @code{CONFIGURE_MAXIMUM_PORTS}
@@ -1043,7 +1049,7 @@ macro defaults to 0.
 is the number of initialization tasks configured.  At least one
 RTEMS initialization task or POSIX initializatin must be configured
 in order for the user's application to begin executing.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the user must define the
 @code{CONFIGURE_RTEMS_INIT_TASKS_TABLE} to indicate that there
 is one or more RTEMS initialization task.  If the application
@@ -1094,7 +1100,7 @@ to the setting of the macro @code{}.
 is the address of the Initialization Task Table. This table contains the
 information needed to create and start each of the
 initialization tasks.  The format of this table will be discussed below.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}.
 
@@ -1178,7 +1184,7 @@ typedef struct @{
 is the maximum number of threads that
 can be concurrently active (created) in the system including
 initialization threads.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_THREADS}.
 If not defined by the application, then the
@@ -1187,7 +1193,7 @@ If not defined by the application, then the
 @item maximum_mutexes
 is the maximum number of mutexes that can be concurrently 
 active in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_MUTEXES}.
 If not defined by the application, then the
@@ -1196,7 +1202,7 @@ If not defined by the application, then the
 @item maximum_condition_variables
 is the maximum number of condition variables that can be 
 concurrently active in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES}.
 If not defined by the application, then the
@@ -1204,7 +1210,7 @@ If not defined by the application, then the
 
 @item maximum_keys
 is the maximum number of keys that can be concurrently active in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_KEYS}.
 If not defined by the application, then the
@@ -1213,7 +1219,7 @@ If not defined by the application, then the
 @item maximum_timers
 is the maximum number of POSIX timers that can be concurrently active
 in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_TIMERS}.
 If not defined by the application, then the
@@ -1222,7 +1228,7 @@ If not defined by the application, then the
 @item maximum_queued_signals
 is the maximum number of queued signals that can be concurrently 
 pending in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS}.
 If not defined by the application, then the
@@ -1231,7 +1237,7 @@ If not defined by the application, then the
 @item number_of_initialization_threads
 is the number of initialization threads configured.  At least one
 initialization threads must be configured.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the user must define the
 @code{CONFIGURE_POSIX_INIT_THREAD_TABLE} to indicate that there
 is one or more POSIX initialization thread.  If the application
@@ -1257,7 +1263,7 @@ is the address of the Initialization Threads Table. This table contains the
 information needed to create and start each of the initialization threads.  
 The format of each entry in this table is defined in the 
 @code{posix_initialization_threads_table} @value{STRUCTURE}.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the address of the @code{POSIX_Initialization_threads} structure.
 
@@ -1275,7 +1281,7 @@ table are discussed in the CPU Dependent Information Table
 chapter of the Applications Supplement document for a specific
 target processor.
 
-The @code{confdefs.h} mechanism does not support generating this
+The @code{rtems/confdefs.h} mechanism does not support generating this
 table.  It is normally filled in by the Board Support Package.
 
 @section Initialization Task Table
@@ -1689,7 +1695,7 @@ Multiprocessor Configuration Table will be provided in the
 Multiprocessing chapter.  
 
 
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the macro @code{CONFIGURE_MP_APPLICATION} must
 be defined to automatically generate the Multiprocessor Configuration Table.
 If @code{CONFIGURE_MP_APPLICATION}, is not defined, then a NULL pointer
@@ -1738,7 +1744,7 @@ inter-processor communication links.  Zero should be avoided as
 a node number because some MPCI layers use node zero to
 represent broadcasted packets.  Thus, it is recommended that
 node numbers start at one and increase sequentially.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MP_NODE_NUMBER}.
 If not defined by the application, then the @code{CONFIGURE_MP_NODE_NUMBER}
@@ -1748,7 +1754,7 @@ set on the compiler command line by the RTEMS Multiprocessing Test Suites.
 
 @item maximum_nodes
 is the number of processor nodes in the system.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MP_MAXIMUM_NODES}.
 If not defined by the application, then the @code{CONFIGURE_MP_MAXIMUM_NODES}
@@ -1759,7 +1765,7 @@ is the maximum number of global objects which can exist at any
 given moment in the entire system.  If this parameter is not the
 same on all nodes in the system, then a fatal error is generated
 to inform the user that the system is inconsistent.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS}.
 If not defined by the application, then the
@@ -1772,7 +1778,7 @@ on this particular node.  A proxy is a substitute task control block
 which represent a task residing on a remote node when that task blocks
 on a remote object.  Proxies are used in situations in which delayed
 interaction is required with a remote node.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MP_MAXIMUM_PROXIES}.
 If not defined by the application, then the @code{CONFIGURE_MP_MAXIMUM_PROXIES}
@@ -1786,7 +1792,7 @@ which constitute the multiprocessor communications layer.  This table
 must be provided in multiprocessor configurations with all
 entries configured.  The format of this table and details
 regarding its entries can be found in the next section.
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MP_MPCI_TABLE_POINTER}.
 If not defined by the application, then the
@@ -1803,7 +1809,7 @@ address of the table named @code{MPCI_table}.
 This table defines the set of callouts that must be provided by 
 an Multiprocessor Communications Interface implementation.  
 
-When using the @code{confdefs.h} mechanism for configuring
+When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the name of this table is assumed
 to be @code{MPCI_table} unless the application sets
 the @code{CONFIGURE_MP_MPCI_TABLE_POINTER} when configuring a
@@ -1950,7 +1956,7 @@ specified in the Configuration Table.  In addition, task stacks
 and floating point context areas are dynamically allocated from
 the RTEMS RAM Workspace.
 
-The @code{confdefs.h} mechanism calcalutes the size
+The @code{rtems/confdefs.h} mechanism calcalutes the size
 of the RTEMS RAM Workspace automatically.  It assumes that
 all tasks are floating point and that all will be allocated
 the miminum stack space.  This calculation also automatically
