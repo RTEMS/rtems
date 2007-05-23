@@ -1,5 +1,5 @@
 /* 
- *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+ *  COPYRIGHT (c) 1989-2007
  *  On-Line Applications Research Corporation (OAR).
  *
  *  $Id$
@@ -38,6 +38,6 @@ rtems_id tcb_to_id(
 
 #define CONFIGURE_INIT
 #define CONFIGURE_GNAT_RTEMS
-#define CONFIGURE_MEMORY_OVERHEAD        (256)
+#define CONFIGURE_MEMORY_OVERHEAD  (256)
 
 #include <config.h>

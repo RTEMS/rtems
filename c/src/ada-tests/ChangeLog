@@ -1,3 +1,7 @@
+2007-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* support/init.c: Spacing cleanup.
+
 2007-04-05	Joel Sherrill <joel@OARcorp.com>
 
 	* mptests/mp01/config.h, samples/base_sp/config.h,
