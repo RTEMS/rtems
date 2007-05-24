@@ -15,7 +15,7 @@
   cd ../../..
 %endif
 
-%if "%{gcc_version}" <= "4.1.1"
+%if "%{gcc_version}" <= "4.1.2"
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
@@ -24,7 +24,7 @@
 %endif
 
   # host library
-  rm -f  ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty.a
+  rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-c++filt%{_exeext}
