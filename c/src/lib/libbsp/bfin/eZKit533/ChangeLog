@@ -1,3 +1,7 @@
+2007-05-24	Alain Schaefer <alani@easc.ch>
+
+	* startup/bspstart.c: Fix a problem in the InitEBIU method.
+
 2007-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Fix compile errors and address

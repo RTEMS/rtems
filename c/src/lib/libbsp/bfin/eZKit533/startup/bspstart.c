@@ -162,12 +162,12 @@ void Init_PLL (void)
 void Init_EBIU (void)
 {
   /* Configure FLASH */
-  *((uint16_t*)EBIU_AMBCTL0)  = 0x7bb07bb0L;
-  *((uint16_t*)EBIU_AMBCTL1)  = 0x7bb07bb0L;
+  *((uint32_t*)EBIU_AMBCTL0)  = 0x7bb07bb0L;
+  *((uint32_t*)EBIU_AMBCTL1)  = 0x7bb07bb0L;
   *((uint16_t*)EBIU_AMGCTL)   = 0x000f;
   
   /* Configure SDRAM 
-  *((uint16_t*)EBIU_SDGCTL) = 0x0091998d;
+  *((uint32_t*)EBIU_SDGCTL) = 0x0091998d;
   *((uint16_t*)EBIU_SDBCTL) = 0x0013;
   *((uint16_t*)EBIU_SDRRC)  = 0x0817;
   */
