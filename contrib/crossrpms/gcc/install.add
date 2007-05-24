@@ -68,7 +68,7 @@
 
 %if %build_newlib
   echo "%defattr(-,root,root,-)" > build/files.newlib
-  TGTDIR="%{_prefix}/@tool_target@/lib"
+  TGTDIR="%{_exec_prefix}/@tool_target@/lib"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> build/files.newlib
@@ -136,7 +136,7 @@
     esac
   done
 
-  TGTDIR="%{_prefix}/@tool_target@/lib"
+  TGTDIR="%{_exec_prefix}/@tool_target@/lib"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in

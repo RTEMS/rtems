@@ -33,6 +33,7 @@
   ../gcc-%{gcc_pkgvers}/configure \
     --prefix=%{_prefix} \
     --bindir=%{_bindir} \
+    --exec_prefix=%{_exec_prefix} \
     --includedir=%{_includedir} \
     --libdir=%{_libdir} \
     --libexecdir=%{_libexecdir} \
@@ -48,7 +49,7 @@
     --disable-win32-registry \
     --enable-version-specific-runtime-libs \
     --enable-threads \
-    --with-sysroot=%{_prefix}/@tool_target@/sys-root \
+    --with-sysroot=%{_exec_prefix}/@tool_target@/sys-root \
     --enable-languages="$languages" $optargs
 
 %if "%_host" != "%_build"
