@@ -380,7 +380,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_MODES_INTERRUPT_MASK   0x00000002
+#define CPU_MODES_INTERRUPT_MASK   0x00000001
 
 /*
  *  Processor defined structures required for cpukit/score.
