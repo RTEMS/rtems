@@ -24,7 +24,7 @@
 %endif
 
   # host library
-  rm -f  ${RPM_BUILD_ROOT}%{_exec_prefix}/lib/libiberty.a
+  rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-c++filt%{_exeext}
