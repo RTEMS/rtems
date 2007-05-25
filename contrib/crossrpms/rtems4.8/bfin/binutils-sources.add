@@ -3,3 +3,6 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
 %if "%{binutils_version}" == "2.17"
 Patch0:		binutils-2.17-rtems4.8-20061021.diff
 %endif
+%if "%{binutils_version}" == "2.17.50"
+Patch0:		binutils-2.17.50-rtems4.8-20070525.diff
+%endif
