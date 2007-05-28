@@ -42,9 +42,9 @@ noinst_LIBRARIES += libmonitor.a
 libmonitor_a_SOURCES = monitor/mon-command.c monitor/mon-symbols.c \
     monitor/mon-prmisc.c monitor/mon-monitor.c monitor/mon-object.c \
     monitor/mon-server.c monitor/mon-task.c monitor/mon-queue.c \
-    monitor/mon-driver.c monitor/mon-dname.c monitor/mon-itask.c \
-    monitor/mon-extension.c monitor/mon-manager.c monitor/mon-config.c \
-    monitor/symbols.h monitor/monitor.h
+    monitor/mon-driver.c monitor/mon-itask.c monitor/mon-extension.c \
+    monitor/mon-manager.c monitor/mon-config.c monitor/symbols.h \
+    monitor/monitor.h
 if HAS_MP
 libmonitor_a_SOURCES += monitor/mon-mpci.c
 endif

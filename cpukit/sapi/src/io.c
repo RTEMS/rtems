@@ -37,35 +37,14 @@
 void _IO_Manager_initialization(
   rtems_driver_address_table *driver_table,
   uint32_t                    drivers_in_table,
-  uint32_t                    number_of_drivers,
-  uint32_t                    number_of_devices
+  uint32_t                    number_of_drivers
 )
 {
-  void                *tmp;
-  uint32_t             index;
-  rtems_driver_name_t *np;
-
   if ( number_of_drivers < drivers_in_table )
     number_of_drivers = drivers_in_table;
 
   _IO_Driver_address_table = driver_table;
   _IO_Number_of_drivers = number_of_drivers;
-  _IO_Number_of_devices = number_of_devices;
-
-  tmp = _Workspace_Allocate_or_fatal_error(
-    sizeof( rtems_driver_name_t ) * ( number_of_devices + 1 )
-  );
-
-  _IO_Driver_name_table = (rtems_driver_name_t *) tmp;
-
-  for( index=0, np = _IO_Driver_name_table ;
-       index < _IO_Number_of_devices ;
-       index++, np++ ) {
-    np->device_name = 0;
-    np->device_name_length = 0;
-    np->major = 0;
-    np->minor = 0;
-  }
 }
 
 /*PAGE
@@ -173,54 +152,6 @@ rtems_status_code rtems_io_unregister_driver(
   }
   return RTEMS_UNSATISFIED;
 }
-
-/*PAGE
- *
- *  rtems_io_register_name
- *
- *  Associate a name with a driver
- *
- *  Input Paramters:
- *    device_name - pointer to name string to associate with device
- *    major       - device major number to receive name
- *    minor       - device minor number to receive name
- *
- *  Output Parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
-
-#if 0
-rtems_status_code rtems_io_register_name(
-    const char *device_name,
-    rtems_device_major_number major,
-    rtems_device_minor_number minor
-  )
-{
-  rtems_driver_name_t *np;
-  uint32_t   level;
-  uint32_t   index;
-
-  /* find an empty slot */
-  for( index=0, np = _IO_Driver_name_table ;
-       index < _IO_Number_of_devices ;
-       index++, np++ ) {
-
-    _ISR_Disable(level);
-      if (np->device_name == 0) {
-	np->device_name = device_name;
-	np->device_name_length = strlen(device_name);
-	np->major = major;
-	np->minor = minor;
-	_ISR_Enable(level);
-
-	return RTEMS_SUCCESSFUL;
-      }
-    _ISR_Enable(level);
-  }
-  return RTEMS_TOO_MANY;
-}
-#endif
 
 /*PAGE
  *

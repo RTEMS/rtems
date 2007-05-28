@@ -340,10 +340,13 @@ rtems_driver_address_table Device_drivers[] = {
 /*
  *  Default the number of devices per device driver.  This value may be
  *  overridden by the user.
+ *
+ *  NOTE: This configuration parameter is obsolete. Thus we will warn the
+ *        user that it is obsolete.
  */
 
-#ifndef CONFIGURE_MAXIMUM_DEVICES
-#define CONFIGURE_MAXIMUM_DEVICES   20
+#ifdef CONFIGURE_MAXIMUM_DEVICES
+#warning "CONFIGURE_MAXIMUM_DEVICES is obsolete.  Do not use any longer."
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
@@ -974,9 +977,6 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
   ( (_extensions) * \
     ( sizeof(Extension_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
 
-#define CONFIGURE_MEMORY_FOR_DEVICES(_devices) \
-  (((_devices) + 1) * ( sizeof(rtems_driver_name_t) ) )
-
 #ifdef CONFIGURE_MP_APPLICATION
 
 #ifndef CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
@@ -1079,7 +1079,6 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
    CONFIGURE_MEMORY_FOR_USER_EXTENSIONS( \
       CONFIGURE_MAXIMUM_USER_EXTENSIONS + CONFIGURE_NEWLIB_EXTENSION + \
       CONFIGURE_STACK_CHECKER_EXTENSION ) + \
-   CONFIGURE_MEMORY_FOR_DEVICES(CONFIGURE_MAXIMUM_DEVICES) + \
    CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
@@ -1175,7 +1174,6 @@ rtems_configuration_table Configuration = {
       CONFIGURE_STACK_CHECKER_EXTENSION,
   CONFIGURE_MICROSECONDS_PER_TICK,
   CONFIGURE_TICKS_PER_TIMESLICE,
-  CONFIGURE_MAXIMUM_DEVICES,
   CONFIGURE_MAXIMUM_DRIVERS,
   CONFIGURE_NUMBER_OF_DRIVERS,               /* number of device drivers */
   Device_drivers,                            /* pointer to driver table */

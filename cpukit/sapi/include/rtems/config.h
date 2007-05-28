@@ -101,21 +101,20 @@ typedef struct {
  */
 
 typedef struct {
-  void                             *work_space_start;
-  uint32_t                    work_space_size;
-  uint32_t                    maximum_extensions;
-  uint32_t                    microseconds_per_tick;
-  uint32_t                    ticks_per_timeslice;
-  uint32_t                    maximum_devices;
-  uint32_t                    maximum_drivers;
-  uint32_t                    number_of_device_drivers;
-  rtems_driver_address_table       *Device_driver_table;
-  uint32_t                    number_of_initial_extensions;
-  rtems_extensions_table           *User_extension_table;
-  rtems_multiprocessing_table      *User_multiprocessing_table;
-  rtems_api_configuration_table    *RTEMS_api_configuration;
-  posix_api_configuration_table    *POSIX_api_configuration;
-  itron_api_configuration_table    *ITRON_api_configuration;
+  void                          *work_space_start;
+  uint32_t                       work_space_size;
+  uint32_t                       maximum_extensions;
+  uint32_t                       microseconds_per_tick;
+  uint32_t                       ticks_per_timeslice;
+  uint32_t                       maximum_drivers;
+  uint32_t                       number_of_device_drivers;
+  rtems_driver_address_table    *Device_driver_table;
+  uint32_t                       number_of_initial_extensions;
+  rtems_extensions_table        *User_extension_table;
+  rtems_multiprocessing_table   *User_multiprocessing_table;
+  rtems_api_configuration_table *RTEMS_api_configuration;
+  posix_api_configuration_table *POSIX_api_configuration;
+  itron_api_configuration_table *ITRON_api_configuration;
 } rtems_configuration_table;
 
 /*

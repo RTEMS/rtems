@@ -168,15 +168,6 @@ typedef struct {
     rtems_monitor_symbol_t control;        /* special functions procedure */
 } rtems_monitor_driver_t;
 
-typedef struct {
-    rtems_id            id;		    /* not used for drivers (yet) */
-    rtems_name          name;               /* not used for drivers (yet) */
-  /* end of common portion */
-    uint32_t            major;
-    uint32_t            minor;
-    char                name_string[64];
-} rtems_monitor_dname_t;
-
 /*
  * System config
  */
@@ -229,7 +220,6 @@ typedef union {
     rtems_monitor_queue_t      queue;
     rtems_monitor_extension_t  extension;
     rtems_monitor_driver_t     driver;
-    rtems_monitor_dname_t      dname;
     rtems_monitor_config_t     config;
 #if defined(RTEMS_MULTIPROCESSING)
     rtems_monitor_mpci_t       mpci;
@@ -421,12 +411,6 @@ void    *rtems_monitor_driver_next(void *, rtems_monitor_driver_t *, rtems_id *)
 void     rtems_monitor_driver_canonical(rtems_monitor_driver_t *, void *);
 void     rtems_monitor_driver_dump_header(boolean);
 void     rtems_monitor_driver_dump(rtems_monitor_driver_t *, boolean);
-
-/* dname.c */
-void    *rtems_monitor_dname_next(void *, rtems_monitor_dname_t *, rtems_id *);
-void     rtems_monitor_dname_canonical(rtems_monitor_dname_t *, void *);
-void     rtems_monitor_dname_dump_header(boolean);
-void     rtems_monitor_dname_dump(rtems_monitor_dname_t *, boolean);
 
 /* symbols.c */
 rtems_symbol_table_t *rtems_symbol_table_create();

@@ -90,8 +90,6 @@ typedef struct {
 
 SAPI_EXTERN uint32_t                    _IO_Number_of_drivers;
 SAPI_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
-SAPI_EXTERN uint32_t                    _IO_Number_of_devices;
-SAPI_EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
 
 /*
  *  _IO_Manager_initialization
@@ -104,8 +102,7 @@ SAPI_EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
 void _IO_Manager_initialization(
   rtems_driver_address_table *driver_table,
   uint32_t                    drivers_in_table,
-  uint32_t                    number_of_drivers,
-  uint32_t                    number_of_devices
+  uint32_t                    number_of_drivers
 );
 
 /*
