@@ -34,8 +34,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
-#undef __assert
-void __assert (const char *file, int line, const char *msg);
 
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -139,44 +137,6 @@ int kbd_poll_read( int minor )
      return c;
   }
   return -1;
-}
-
-/*
-static void*	     termios_ttyp_console         = NULL;
-void enq_key( char key )
-{
-  if( termios_ttyp_console )
-  {
-	  rtems_termios_enqueue_raw_characters(termios_ttyp_console, &key,1 );
-  }
-}
-*/
-
-void __assert (const char *file, int line, const char *msg)
-{
-    static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
-  unsigned char  ch;
-
-  /*
-   * Note we cannot call exit or printf from here,
-   * assert can fail inside ISR too
-   */
-
-   /*
-   * Close console
-   */
-  close(2);
-  close(1);
-  close(0);
-
-  printk("\nassert failed: %s: ", file);
-  printk("%d: ", line);
-  printk("%s\n\n", msg);
-  printk(exit_msg);
-  ch = BSP_poll_char();
-  printk("\n\n");
-  rtemsReboot();
-
 }
 
 /*-------------------------------------------------------------------------+

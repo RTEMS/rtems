@@ -1,3 +1,8 @@
+2007-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1244/bsps
+	* console/console.c: Remove definition of __assert.
+
 2007-01-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/fb_vga.c: Eliminate __u16, __u32.
