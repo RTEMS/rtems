@@ -253,8 +253,6 @@ uninitialized =
 
 /*io.h*/        (sizeof _IO_Number_of_drivers)            +
                 (sizeof _IO_Driver_address_table)         +
-                (sizeof _IO_Number_of_devices)            +
-                (sizeof _IO_Driver_name_table)            +
 
 /*isr.h*/       (sizeof _ISR_Nest_level)                  +
                 (sizeof _ISR_Vector_table)                +
