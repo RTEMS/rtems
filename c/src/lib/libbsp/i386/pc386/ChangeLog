@@ -1,5 +1,11 @@
 2007-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* startup/bspstart.c: Eliminate maximum_drivers configuration parameter
+	since it was used to configure a no longer used feature. Device names
+	are now part of the filesystem not in a table.
+
+2007-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1244/bsps
 	* console/console.c: Remove definition of __assert.
 

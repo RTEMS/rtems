@@ -173,7 +173,6 @@ void bsp_start_default( void )
   printk("maximum_extensions    = 0x%x\n", BSP_Configuration.maximum_extensions);
   printk("microseconds_per_tick = 0x%x\n", BSP_Configuration.microseconds_per_tick);
   printk("ticks_per_timeslice   = 0x%x\n", BSP_Configuration.ticks_per_timeslice);
-  printk("maximum_devices          = 0x%x\n", BSP_Configuration.maximum_devices);
   printk("number_of_device_drivers = 0x%x\n", BSP_Configuration.number_of_device_drivers);
   printk("Device_driver_table      = 0x%x\n", BSP_Configuration.Device_driver_table);
 #endif
