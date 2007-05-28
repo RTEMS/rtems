@@ -726,7 +726,6 @@ typedef struct @{
   rtems_unsigned32                  maximum_extensions;
   rtems_unsigned32                  microseconds_per_tick;
   rtems_unsigned32                  ticks_per_timeslice;
-  rtems_unsigned32                  maximum_devices;
   rtems_unsigned32                  maximum_drivers;
   rtems_unsigned32                  number_of_device_drivers;
   rtems_driver_address_table       *Device_driver_table;
@@ -806,19 +805,11 @@ When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_TICKS_PER_TIMESLICE}.
 
-@item maximum_devices
-is the maximum number of devices that can be registered.
-When using the @code{rtems/confdefs.h} mechanism for configuring
-an RTEMS application, the value for this field corresponds
-to the setting of the macro @code{CONFIGURE_MAXIMUM_DEVICES}.
-
 @item maximum_drivers
 is the maximum number of device drivers that can be registered.
 When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_DRIVERS}.
-This value is set to @code{maximum_devices} if it is greater 
-than @code{maximum_drivers}.
 
 @item number_of_device_drivers
 is the number of device drivers for the system.  There should be
