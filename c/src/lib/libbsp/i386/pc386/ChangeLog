@@ -1,3 +1,8 @@
+2007-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1244/bsps
+	* console/console.c: Remove definition of __assert.
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove qrtems_debug.
