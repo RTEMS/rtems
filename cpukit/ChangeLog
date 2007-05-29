@@ -1,5 +1,15 @@
 2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sapi/Makefile.am, sapi/include/rtems/io.h, sapi/src/io.c: Split into
+	one function per file execpt io.c which contains required
+	initialization methods.
+	* sapi/src/ioclose.c, sapi/src/iocontrol.c, sapi/src/iodata.c,
+	sapi/src/ioinitialize.c, sapi/src/ioopen.c, sapi/src/ioread.c,
+	sapi/src/ioregisterdriver.c, sapi/src/iounregisterdriver.c,
+	sapi/src/iowrite.c: New files.
+
+2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sapi/include/confdefs.h, sapi/src/io.c: Readded code to copy driver
 	table into Workspace but now it is only done if the application needs
 	extra slots for dynamic driver registration. Cleaned up

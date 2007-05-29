@@ -30,6 +30,10 @@
 #ifndef _RTEMS_IO_H
 #define _RTEMS_IO_H
 
+#ifndef SAPI_IO_EXTERN
+#define SAPI_IO_EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -88,8 +92,8 @@ typedef struct {
  *  Address Table and Device Name Table.
  */
 
-SAPI_EXTERN uint32_t                    _IO_Number_of_drivers;
-SAPI_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
+SAPI_IO_EXTERN uint32_t                    _IO_Number_of_drivers;
+SAPI_IO_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
 
 /*
  *  _IO_Manager_initialization
