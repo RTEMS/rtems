@@ -22,8 +22,7 @@
 void _IO_Manager_initialization(
   rtems_driver_address_table *driver_table,
   uint32_t                    drivers_in_table,
-  uint32_t                    number_of_drivers,
-  uint32_t                    number_of_devices
+  uint32_t                    number_of_drivers
 )
 {
 }
