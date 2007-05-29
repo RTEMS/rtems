@@ -1,5 +1,9 @@
 2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/include/rtems/score/copyrt.h: Update copyright notice.
+
+2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sapi/Makefile.am, sapi/include/rtems/io.h, sapi/src/io.c: Split into
 	one function per file execpt io.c which contains required
 	initialization methods.
