@@ -1,3 +1,11 @@
+2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/confdefs.h, sapi/src/io.c: Readded code to copy driver
+	table into Workspace but now it is only done if the application needs
+	extra slots for dynamic driver registration. Cleaned up
+	rtems_io_register_driver and rtems_io_unregister_driver code and
+	added numerous error cases to register.
+
 2007-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libmisc/Makefile.am, libmisc/monitor/mon-object.c,

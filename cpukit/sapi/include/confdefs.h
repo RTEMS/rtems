@@ -1030,11 +1030,11 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
   )
 
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
-  ( CONFIGURE_MEMORY_FOR_TASKS(1) +    /* IDLE */ \
-    (256 * 12) +                       /* Ready chains */ \
-    256        +                       /* name/ptr table overhead */ \
-    CONFIGURE_INTERRUPT_STACK_MEMORY + /* interrupt stack */ \
-    CONFIGURE_API_MUTEX_MEMORY         /* allocation mutex */ \
+  ( CONFIGURE_MEMORY_FOR_TASKS(1) +                  /* IDLE */ \
+    ((PRIORITY_MAXIMUM+1) * sizeof(Chain_Control)) + /* Ready chains */ \
+    256 +                                 /* name/ptr table overhead */ \
+    CONFIGURE_INTERRUPT_STACK_MEMORY +    /* interrupt stack */ \
+    CONFIGURE_API_MUTEX_MEMORY            /* allocation mutex */ \
   )
 
 /*

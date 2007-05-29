@@ -40,11 +40,45 @@ void _IO_Manager_initialization(
   uint32_t                    number_of_drivers
 )
 {
-  if ( number_of_drivers < drivers_in_table )
+  uint32_t index;
+
+  /*
+   *  If the user claims there are less drivers than are actually in
+   *  the table, then let's just go with the table's count.
+   */
+  if ( number_of_drivers <= drivers_in_table )
     number_of_drivers = drivers_in_table;
 
-  _IO_Driver_address_table = driver_table;
+  /*
+   *  If the maximum number of driver is the same as the number in the
+   *  table, then we do not have to copy the driver table.  They can't
+   *  register any dynamically.
+   */
+  if ( number_of_drivers == drivers_in_table ) {
+    _IO_Driver_address_table = driver_table;
+    _IO_Number_of_drivers = number_of_drivers;
+    return;
+  }
+
+  /*
+   *  The application requested extra slots in the driver table, so we
+   *  have to allocate a new driver table and copy theirs to it.
+   */
+
+  _IO_Driver_address_table = (rtems_driver_address_table *) 
+      _Workspace_Allocate_or_fatal_error(
+        sizeof( rtems_driver_address_table ) * ( number_of_drivers )
+      );
   _IO_Number_of_drivers = number_of_drivers;
+
+  memset(
+    _IO_Driver_address_table, 0,
+    sizeof( rtems_driver_address_table ) * ( number_of_drivers )
+  );
+
+  for ( index = 0 ; index < drivers_in_table ; index++ )
+    _IO_Driver_address_table[index] = driver_table[index];
+  number_of_drivers = drivers_in_table;
 }
 
 /*PAGE
@@ -84,44 +118,62 @@ void _IO_Initialize_all_drivers( void )
  */
 
 rtems_status_code rtems_io_register_driver(
-    rtems_device_major_number   major,
-    rtems_driver_address_table *driver_table,
-    rtems_device_major_number  *registered_major
+  rtems_device_major_number   major,
+  rtems_driver_address_table *driver_table,
+  rtems_device_major_number  *registered_major
 )
 {
+
+  /*
+   *  Validate the pointer data and contents passed in
+   */
+  if ( !driver_table )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !registered_major )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !driver_table->initialization_entry && !driver_table->open_entry )
+    return RTEMS_INVALID_ADDRESS;
+
   *registered_major = 0;
+
+  /*
+   *  The requested major number is higher than what is configured.
+   */
+  if ( major >= _IO_Number_of_drivers )
+    return RTEMS_INVALID_NUMBER;
 
   /*
    * Test for initialise/open being present to indicate the driver slot is
    * in use.
    */
 
-  if ( major >= _IO_Number_of_drivers )
-    return RTEMS_INVALID_NUMBER;
-
   if ( major == 0 ) {
-    for ( major = _IO_Number_of_drivers - 1 ; major ; major-- )
-      if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
-           _IO_Driver_address_table[major].open_entry == 0 )
+    boolean found = FALSE;
+    for ( major = _IO_Number_of_drivers - 1 ; major ; major-- ) {
+      if ( !_IO_Driver_address_table[major].initialization_entry &&
+           !_IO_Driver_address_table[major].open_entry ) {
+        found = TRUE;
         break;
+      }
+    }
 
-      if (( major == 0 ) &&
-          ( _IO_Driver_address_table[major].initialization_entry == 0 &&
-            _IO_Driver_address_table[major].open_entry == 0 ))
-        return RTEMS_TOO_MANY;
+    if ( !found )
+      return RTEMS_TOO_MANY;
   }
 
-  if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
-       _IO_Driver_address_table[major].open_entry == 0 ) {
-    _IO_Driver_address_table[major] = *driver_table;
-    *registered_major               = major;
+  if ( _IO_Driver_address_table[major].initialization_entry ||
+       _IO_Driver_address_table[major].open_entry )
+    return RTEMS_RESOURCE_IN_USE;
 
-    rtems_io_initialize( major, 0, NULL );
 
-    return RTEMS_SUCCESSFUL;
-  }
+  _IO_Driver_address_table[major] = *driver_table;
+  *registered_major               = major;
 
-  return RTEMS_RESOURCE_IN_USE;
+  rtems_io_initialize( major, 0, NULL );
+
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
