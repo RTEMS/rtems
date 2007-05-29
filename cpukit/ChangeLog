@@ -1,3 +1,7 @@
+2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/score/copyrt.h: Update copyright notice.
+
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1243
