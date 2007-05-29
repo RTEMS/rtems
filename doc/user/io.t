@@ -20,6 +20,7 @@ directives provided by the I/O manager are:
 
 @itemize @bullet
 @item @code{@value{DIRPREFIX}io_initialize} - Initialize a device driver
+@item @code{@value{DIRPREFIX}io_register_driver - Register a device driver
 @item @code{@value{DIRPREFIX}io_register_name} - Register a device name
 @item @code{@value{DIRPREFIX}io_lookup_name} - Look up a device name
 @item @code{@value{DIRPREFIX}io_open} - Open a device
@@ -274,6 +275,8 @@ No Ada implementation.
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - successfully registered@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid registered major pointer@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid driver table@*
 @code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number@*
 @code{@value{RPREFIX}TOO_MANY} - no available major device table slot@*
 @code{@value{RPREFIX}RESOURCE_IN_USE} - major device number entry in use
