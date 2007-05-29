@@ -1,3 +1,8 @@
+2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp21/sp21.scn, sp21/task1.c: rtems_io_register_driver and
+	rtems_io_unregister_driver did not have any test code.
+
 2007-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spsize/size.c: Eliminate maximum_drivers configuration parameter

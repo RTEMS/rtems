@@ -16,4 +16,13 @@ TA1 - rtems_io_control     - STUB DRIVER RTEMS_SUCCESSFUL
 -----  RETURNING INVALID MAJOR NUMBER -----
 TA1 - rtems_io_initialize  - RTEMS_INVALID_NUMBER
 TA1 - rtems_io_open        - RTEMS_INVALID_NUMBER
+-----  EXERCISE DRIVER REGISTER -----
+TA1 - rtems_io_register_driver - RTEMS_INVALID_ADDRESS - NULL registered
+TA1 - rtems_io_register_driver - RTEMS_INVALID_ADDRESS - NULL device
+TA1 - rtems_io_register_driver - RTEMS_INVALID_ADDRESS - no callouts
+TA1 - rtems_io_register_driver - RTEMS_INVALID_NUMBER - bad major
+TA1 - rtems_io_register_driver - RTEMS_SUCCESSFUL - overwrite NULL
+TA1 - rtems_io_register_driver - RTEMS_TOO_MANY - no slots
+TA1 - rtems_io_register_driver - RTEMS_RESOURCE_IN_USE - major in use
+TA1 - rtems_io_unregister_driver - RTEMS_SUCCESSFUL
 *** END OF TEST 21 ***
