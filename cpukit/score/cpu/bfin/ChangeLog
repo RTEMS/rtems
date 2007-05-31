@@ -1,3 +1,10 @@
+2007-05-31	Alain Schaefer <alani@easc.ch>
+
+	* rtems/score/cpu.h: Modifiy inline assembly language
+	constraints to use a data register as the CTL/STI
+	instructions requires. This is not only more correct,
+	it avoids GCC PR31787.
+
 2007-05-24	Alain Schaefer <alani@easc.ch>
 
 	* rtems/score/cpu.h: Fix incorrect interrupt mask.

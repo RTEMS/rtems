@@ -846,8 +846,8 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 #define _CPU_ISR_Disable( _level ) \
   {                                     \
-    asm volatile ("cli %0 \n"           \
-                   : "=r" (_level) );   \
+       asm volatile ("cli %0 \n"       \
+                : "=d" (_level) );     \
                                         \
   }
   
@@ -865,9 +865,9 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  XXX document implementation including references if appropriate
  */
 #define _CPU_ISR_Enable( _level )  \
-  {                                   \
-    asm volatile ("STI %0"            \
-                   : : "r" (_level) );  \
+  {                                    \
+    asm volatile ("STI %0 \n"                  \
+                   : : "d" (_level) );         \
   }
 
 /**
