@@ -14,9 +14,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.1.2
-%define gcc_version 4.1.2
-%define gcc_rpmvers %{expand:%(echo "4.1.2" | tr - _ )}
+%define gcc_pkgvers 4.2.0
+%define gcc_version 4.2.0
+%define gcc_rpmvers %{expand:%(echo "4.2.0" | tr - _ )}
 
 %define newlib_version		1.15.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -26,7 +26,7 @@ Summary:      	m68k-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	11%{?dist}
+Release:      	17%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -40,7 +40,6 @@ BuildRequires:	flex bison
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.8-m68k-rtems4.8-binutils
 
-Requires:	rtems-4.8-gcc-common
 Requires:	rtems-4.8-m68k-rtems4.8-binutils
 Requires:	rtems-4.8-m68k-rtems4.8-newlib = %{newlib_version}-%{release}
 
@@ -53,15 +52,21 @@ Requires:	rtems-4.8-m68k-rtems4.8-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 %if "%{gcc_version}" == "4.0.3"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.0.3-rtems-20060822.diff
 %endif
 %if "%{gcc_version}" == "4.1.1"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.1.1-rtems4.8-20070201.diff
 %endif
 %if "%{gcc_version}" == "4.1.2"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.1.2-rtems4.8-20070216.diff
+%endif
+%if "%{gcc_version}" == "4.2.0"
+Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070515.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
@@ -150,7 +155,6 @@ cd ..
 %endif
 
   make all
-  make info
   cd ..
 
 %install
@@ -181,9 +185,11 @@ cd ..
   rm -f $RPM_BUILD_ROOT%{_bindir}/m68k-rtems4.8-c++filt%{_exeext}
 
 
-  # We don't ship info/dir
-  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-  touch $RPM_BUILD_ROOT%{_infodir}/dir
+# Conflict with a native GCC's infos
+  rm -rf $RPM_BUILD_ROOT%{_infodir}
+
+# Conflict with a native GCC's man pages
+  rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -376,70 +382,6 @@ GNU cc compiler for m68k-rtems4.8.
 %{gccexec}/m68k-rtems4.8/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
-# rtems-4.8-rtems4.7-base-gcc
-# ==============================================================
-%package -n rtems-4.8-gcc-common
-Summary:	Base package for rtems gcc and newlib C Library
-Group:          Development/Tools
-Version:        %{gcc_rpmvers}
-License:	GPL
-
-Requires(post): 	/sbin/install-info
-Requires(preun):	/sbin/install-info
-
-Provides:	rtems-4.8-rtems4.7-base-gcc = %{gcc_version}-%{release}
-Obsoletes:	rtems-4.8-rtems4.7-base-gcc < %{gcc_rpmvers}-%{release}
-Provides:	rtems-4.8-rtems-base-gcc = %{gcc_version}-%{release}
-Obsoletes:	rtems-4.8-rtems-base-gcc < %{gcc_rpmvers}-%{release}
-
-%description -n rtems-4.8-gcc-common
-
-GCC files that are shared by all targets.
-
-%files -n rtems-4.8-gcc-common
-%defattr(-,root,root)
-%dir %{_infodir}
-%ghost %{_infodir}/dir
-%{_infodir}/cpp.info*
-%{_infodir}/cppinternals.info*
-%{_infodir}/gcc.info*
-%{_infodir}/gccint.info*
-%if "%{gcc_version}" >= "3.4"
-%{_infodir}/gccinstall.info*
-%endif
-
-%dir %{_mandir}
-%if "%{gcc_version}" < "3.4"
-%dir %{_mandir}/man1
-%{_mandir}/man1/cpp.1*
-%{_mandir}/man1/gcov.1*
-%endif
-%dir %{_mandir}/man7
-%{_mandir}/man7/fsf-funding.7*
-%{_mandir}/man7/gfdl.7*
-%{_mandir}/man7/gpl.7*
-
-%post -n rtems-4.8-gcc-common
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cpp.info.gz || :
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
-%if "%{gcc_version}" >= "3.4"
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
-%endif
-
-%preun -n rtems-4.8-gcc-common
-if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cpp.info.gz || :
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
-%if "%{gcc_version}" >= "3.4"
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
-%endif
-fi
-
-# ==============================================================
 # rtems-4.8-m68k-rtems4.8-gcc-c++
 # ==============================================================
 %package -n rtems-4.8-m68k-rtems4.8-gcc-c++
@@ -451,7 +393,6 @@ License:	GPL
 Provides:	rtems-4.8-m68k-rtems4.8-c++ = %{gcc_rpmvers}-%{release}
 Obsoletes:	rtems-4.8-m68k-rtems4.8-c++ < %{gcc_rpmvers}-%{release}
 
-Requires:       rtems-4.8-gcc-common
 Requires:       rtems-4.8-m68k-rtems4.8-gcc = %{gcc_rpmvers}-%{release}
 
 %description -n rtems-4.8-m68k-rtems4.8-gcc-c++
@@ -490,7 +431,6 @@ Version:	%{newlib_version}
 Provides:	rtems-4.8-m68k-rtems4.8-libc = %{newlib_version}-%{release}
 Obsoletes:	rtems-4.8-m68k-rtems4.8-libc < %{newlib_version}-%{release}
 
-Requires:	rtems-4.8-newlib-common
 
 %description -n rtems-4.8-m68k-rtems4.8-newlib
 Newlib C Library for m68k-rtems4.8.
@@ -500,47 +440,4 @@ Newlib C Library for m68k-rtems4.8.
 %dir %{_prefix}
 %dir %{_exec_prefix}/m68k-rtems4.8
 %{_exec_prefix}/m68k-rtems4.8/include
-
-# ==============================================================
-# rtems-4.8-newlib-common
-# ==============================================================
-%package -n rtems-4.8-newlib-common
-Summary:	Base package for RTEMS newlib C Library
-Group:          Development/Tools
-Version:        %{newlib_version}
-License:	Distributable
-
-Provides:	rtems-4.8-rtems4.7-base-newlib = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.8-rtems4.7-base-newlib < %{newlib_version}-%{release}
-Provides:	rtems-4.8-rtems-base-newlib = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.8-rtems-base-newlib < %{newlib_version}-%{release}
-
-Provides:	rtems-4.8-rtems4.7-base-libc = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.8-rtems4.7-base-libc < %{newlib_version}-%{release}
-Provides:	rtems-4.8-rtems-base-libc = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.8-rtems-base-libc < %{newlib_version}-%{release}
-
-
-Requires(post): 	/sbin/install-info
-Requires(preun):	/sbin/install-info
-
-%description -n rtems-4.8-newlib-common
-newlib files that are shared by all targets.
-
-%files -n rtems-4.8-newlib-common
-%defattr(-,root,root)
-%dir %{_infodir}
-%ghost %{_infodir}/dir
-%{_infodir}/libc.info*
-%{_infodir}/libm.info*
-
-%post -n rtems-4.8-newlib-common
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz || :
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz || :
-
-%preun -n rtems-4.8-newlib-common
-if [ $1 -eq 0 ]; then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz || :
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz || :
-fi
 
