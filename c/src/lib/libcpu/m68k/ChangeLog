@@ -1,3 +1,9 @@
+2007-06-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Now use the m68k memcpy and memset recently added to
+	newlib instead of our own.
+	* shared/misc/memcpy.c: Removed.
+
 2007-03-12	Joel Sherrill <joel@OARcorp.com>
 
 	* mcf5272/clock/ckinit.c, mcf5272/include/mcf5272.h,

@@ -32,7 +32,7 @@ M68K_CPPFLAGS = -Dmcf5272
 endif
 
 noinst_PROGRAMS += shared/misc.rel
-shared_misc_rel_SOURCES = shared/misc/memcpy.c shared/misc/m68kidle.c shared/misc/memProbe.c
+shared_misc_rel_SOURCES = shared/misc/m68kidle.c shared/misc/memProbe.c
 shared_misc_rel_CPPFLAGS = $(AM_CPPFLAGS) $(M68K_CPPFLAGS)
 shared_misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
