@@ -55,8 +55,8 @@
 boolean _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
   CORE_message_queue_Attributes *the_message_queue_attributes,
-  uint32_t                     maximum_pending_messages,
-  uint32_t                     maximum_message_size
+  uint32_t                       maximum_pending_messages,
+  uint32_t                       maximum_message_size
 )
 {
   uint32_t message_buffering_required;

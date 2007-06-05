@@ -1,3 +1,7 @@
+2007-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/coremsg.c: Formatting.
+
 2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/include/rtems/score/copyrt.h: Update copyright notice.
