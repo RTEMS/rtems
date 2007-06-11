@@ -1,5 +1,19 @@
 2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/auth.c, shttpd/cgi.c, shttpd/compat_rtems.c,
+	shttpd/compat_rtems.h, shttpd/compat_unix.c, shttpd/compat_unix.h,
+	shttpd/compat_win32.c, shttpd/compat_win32.h, shttpd/compat_wince.c,
+	shttpd/compat_wince.h, shttpd/config.c, shttpd/defs.h,
+	shttpd/io_cgi.c, shttpd/io_dir.c, shttpd/io_emb.c, shttpd/io_file.c,
+	shttpd/io.h, shttpd/io_socket.c, shttpd/io_ssl.c, shttpd/llist.h,
+	shttpd/log.c, shttpd/Makefile, shttpd/md5.c, shttpd/md5.h,
+	shttpd/mime_type.c, shttpd/resources.rc, shttpd/shttpd.1,
+	shttpd/shttpd.c, shttpd/shttpd.h, shttpd/shttpd.ico, shttpd/ssl.h,
+	shttpd/standalone.c, shttpd/std_includes.h, shttpd/string.c: 
+	Import from shttpd-1.37.tar.gz.
+
+2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Remove "pad" from CPU_CONTEXT.
 
 2007-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
