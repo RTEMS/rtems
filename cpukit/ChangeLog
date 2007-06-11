@@ -1,5 +1,10 @@
 2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/compat_rtems.h: Include <arpa/inet.h>.
+	Add config.h support.
+
+2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* shttpd/compat_rtems.h: Define closesocket.
 
 2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>

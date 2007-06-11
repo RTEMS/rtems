@@ -5,12 +5,17 @@
 #ifndef _rtems_rtems_webserver_h
 #define _rtems_rtems_webserver_h
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "shttpd.h"
 
 #include <rtems.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <dirent.h>
+#include <arpa/inet.h>
 
 /* RTEMS is an Real Time Embedded operating system, for operation in hardware.
   It does not have SSL or CGI support, as it does not have dynamic library
