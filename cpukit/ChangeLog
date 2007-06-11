@@ -1,5 +1,13 @@
 2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/compat_rtems.h: Add IS_DIRSEP_CHAR.
+
+2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+	* shttpd/compat_rtems.h, shttpd/compat_rtems.c:
+	Use size_t for stack sizes.
+
+2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac, Makefile.am: Add shttpd.
 	* shttpd/Makefile.am: New.
 	* shttpd/auth.c, shttpd/cgi.c, shttpd/compat_rtems.c,

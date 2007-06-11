@@ -20,6 +20,7 @@
 #define NO_CGI
 
 #define DIRSEP                          '/'
+#define IS_DIRSEP_CHAR(c)               ((c) == '/')
 #define O_BINARY                        0
 #define ERRNO                           errno
 
