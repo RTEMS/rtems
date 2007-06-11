@@ -74,7 +74,7 @@ static rtems_task rtems_httpd_daemon(rtems_task_argument args )
 }
 
 rtems_status_code rtems_initialize_webserver(rtems_task_priority   initial_priority,
-                                             rtems_unsigned32      stack_size,
+                                             size_t                stack_size,
                                              rtems_mode            initial_modes,
                                              rtems_attribute       attribute_set,
                                              rtems_shttpd_init     init_callback,
