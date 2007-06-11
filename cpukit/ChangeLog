@@ -1,5 +1,6 @@
 2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/Makefile.am: Conditionally build on LIBNETWORKING.
 	* shttpd/compat_rtems.h: Include <arpa/inet.h>.
 	Add config.h support.
 

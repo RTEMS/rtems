@@ -1,6 +1,6 @@
 include $(top_srcdir)/automake/compile.am
 
-if NEWLIB
+if LIBNETWORKING
 include_shttpddir = $(includedir)/shttpd
 
 project_lib_LIBRARIES = libshttpd.a
