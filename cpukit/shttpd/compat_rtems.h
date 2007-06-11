@@ -22,6 +22,7 @@
 #define DIRSEP                          '/'
 #define IS_DIRSEP_CHAR(c)               ((c) == '/')
 #define O_BINARY                        0
+#define closesocket(a)			close(a)
 #define ERRNO                           errno
 
 /* RTEMS version is Thread Safe */
