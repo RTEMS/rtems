@@ -120,8 +120,6 @@ AS_IF([test "$HAS_MP" = "yes"],
   [RTEMS_CHECK_SYSV_UNIX])
 
 ## The code fragment below had been used in tools/cpu/unix/gensize.c.
-## FIXME: 
-## * The pad very likely is not necessary.
 AC_CHECK_SIZEOF([CPU_CONTEXT],[],[
 #include <stdio.h>
 #include <setjmp.h>
@@ -129,7 +127,6 @@ AC_CHECK_SIZEOF([CPU_CONTEXT],[],[
 typedef struct {
   jmp_buf     regs;
   int         isr_level;
-  int         pad[4]; /* just in case */
 } CPU_CONTEXT;
 ])
 ])

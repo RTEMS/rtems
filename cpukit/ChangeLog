@@ -1,3 +1,7 @@
+2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove "pad" from CPU_CONTEXT.
+
 2007-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/coremsg.c: Formatting.
