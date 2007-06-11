@@ -48,6 +48,7 @@ AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 # Not really used by this configure script
 # FIXME: They should be eliminated if possible.
 AC_CHECK_FUNCS([strsep strcasecmp snprintf])
+AC_CHECK_FUNCS([strdup strndup strncasecmp])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
@@ -347,6 +348,7 @@ httpd/Makefile
 ftpd/Makefile
 telnetd/Makefile
 pppd/Makefile
+shttpd/Makefile
 wrapup/Makefile])
 
 AC_CONFIG_COMMANDS([preinstall-stamp],
