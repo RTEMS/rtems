@@ -1,0 +1,135 @@
+.\" Process this file with
+.\" groff -man -Tascii shttpd.1
+.\" $Id$
+.Dd Nov 10, 2006
+.Dt SHTTPD 1
+.Sh NAME
+.Nm shttpd
+.Nd lightweight web server
+.Sh SYNOPSIS
+.Nm
+.Op Ar OPTIONS
+.Op Ar config_file
+.Nm
+.Fl A Ar htpasswd_file realm username password
+.Sh DESCRIPTION
+.Nm
+is small, fast and easy to use web server with CGI, SSL, Digest Authorization
+support. It can be run as stand-alone server, be managed by
+.Xr inetd 8
+, or be embedded into existing C/C++ application.
+.Pp
+Unlike other web servers,
+.Nm
+does not expect CGI scirpts to be put in a special directory. They may be
+anywhere. CGI files are recognized by an extension, which is
+.Dq .cgi
+by default.
+.Pp
+By default
+.Nm
+does not use SSL and starts listening on port 80. Specifying the
+.Fl s Ar pem_file
+option automatically switches
+.Nm
+to SSL mode on port 443.
+.Pp
+.Nm
+can take configuration parameters from two sources: from the command
+line and from the configuration file. Command line parameters have
+higher priority. Every command line parameter has associated configuration
+file keyword, except
+.Fl A
+parameter.
+In the configuration file, blank lines and lines started with
+.Dq #
+character are ignored. All other lines must start with the keyword
+followed by a whitespace followed by keyword's value.
+If both command line parameter and configuration
+file option are not specified, the default value is taken. The configuration
+file may not be present at all.
+.Pp
+If
+.Nm
+should be managed by
+.Xr inetd 8 ,
+add this line to
+.Pa inetd.conf :
+.Pp
+.Dl http stream tcp nowait nobody /path/to/shttpd shttpd -I1 -d /my/www
+.Pp
+.Sh OPTIONS
+Below is the list of command line parameters. In the brackets there are
+corresponding configuration file keywords.
+.Bl -tag -width indent
+.It Fl A Ar htpasswd server_name user_name user_password
+Edit the passwords file. Functionality similar to Apache's
+.Ic htdigest
+utility.
+.It Fl C Ar file ( Cm cgi_interpreter Ar file )
+Force
+.Ar file
+to be a CGI interpreter for all CGI scripts. Default: none.
+.It Fl D Ar 0|1 ( Cm list_directories Ar 0|1 )
+Disable directory listing. Default: enabled.
+.It Fl I Ar 0|1 ( Cm inetd_mode Ar 0|1 )
+Enable inetd mode. Default: disabled.
+.It Fl N Ar realm ( Cm server_name Ar realm )
+Authorization realm. Default:
+.Dq mydomain.com .
+.It Fl P Ar file ( Cm global_htpasswd Ar file )
+Location of global passwords file. Per-directory .htpasswd files are
+ignored, if this option is set. Default: not set.
+.It Fl U Ar file ( Cm put_auth Ar file )
+PUT and DELETE passwords file. This must be specified if PUT or
+DELETE methods are used. Default: none.
+.It Fl V Ar string ( Cm cgi_envvar Ar string )
+Pass additional environment variables to the CGI script. These must be
+comma-separated list of var=val pairs, like this: "VAR1=VAL1,VAR2=VAL2".
+Default: not set.
+.It Fl a Ar string ( Cm aliases Ar string )
+Attach directories (even those outside document_root) to URIs. The
+.Ar string
+must be comma-separated list of var=val pairs, like this:
+"/etc/=/my_etc,/tmp=/my_tmp". Default: not set.
+.It Fl c Ar string ( Cm cgi_extension Ar string )
+CGI filename pattern. For every requested file,
+.Nm
+uses the pattern to figure out whether to return the file content,
+ot run the file as CGI application. Default:
+.Dq .cgi .
+.It Fl d Ar directory ( Cm document_root Ar directory )
+Location of the WWW root directory. Default: working directory from which
+.Nm
+has been started.
+.It Fl e Ar file ( Cm error_log Ar file )
+Error log file. Default: not set, no errors are logged.
+.It Fl l Ar file ( Cm access_log Ar file ) 
+Access log file. Default: not set, no logging is done.
+.It Fl m Ar file ( Cm mime_types Ar file )
+Location of mime types file. Default: not set, builtins are used.
+.It Fl p Ar port ( Cm listen_port Ar port )
+Listening port. Default: 80 for non-SSL and 443 for SSL mode.
+.It Fl s Ar pem_file ( Cm ssl_certificate Ar pem_file )
+Location of SSL certificate file. Default: not set.
+.It Fl u Ar login ( Cm runtime_uid Ar login )
+Switch to given user ID after startup. Default: not set
+.El
+.Pp
+.Sh EMBEDDING
+.Nm
+can be built as a library to embed web server functionality
+into C/C++ application. The API functions are declared in a header
+file
+.Pa shttpd.h .
+Please refer to the source package for a header file and the examples.
+.Sh FILES
+.Pa /usr/local/etc/shttpd.conf
+.br
+.Sh SEE ALSO
+.Xr inetd 8 .
+.Sh COPYRIGHT
+.Nm
+is licensed under the terms of beerware license.
+.Sh AUTHOR
+.An Sergey Lyubka Aq valenok@gmail.com .
