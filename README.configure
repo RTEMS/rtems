@@ -176,7 +176,7 @@ The following bsps are supported:
 
 host-based	: posix (on Linux, FreeBSD, Cygwin, Solaris, and HPUX)
 
-arm             : armulator csb336 csb337 edb7312 gba gp32 rtl22x
+arm             : csb336 csb337 edb7312 gba gp32 rtl22x
 
 avr:            : none
 
