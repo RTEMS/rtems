@@ -1,5 +1,7 @@
 2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* pppd/md4.h, pppd/md4.c, pppd/md5.c, pppd/md5.h: Remove (moved to
+	  libmd).
 	* libmd/Makefile.am, libmd/md4.c, libmd/md4.h, libmd/md5.c, 
 	libmd/md5.h, libmd/preinstall.am: New (moved out from pppd).
 	* configure.ac, Makefile.am: Add libmd.
