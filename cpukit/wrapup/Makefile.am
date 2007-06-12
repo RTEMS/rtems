@@ -69,6 +69,10 @@ TMP_LIBS += ../librpc/librpc.a
 TMP_LIBS += ../librpc/libxdr.a
 endif
 
+if NEWLIB
+TMP_LIBS += ../pppd/libmd.a
+endif
+
 librtemscpu.a: $(TMP_LIBS)
 	rm -f $@
 	$(MKDIR_P) $(ARCH)
