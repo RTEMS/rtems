@@ -381,8 +381,18 @@ extern void	my_strlcpy(register char *, register const char *, size_t);
 #define my_strlcpy(d,s,l) strlcpy(d,s,l)
 #endif
 
+#ifndef HAVE_STRNCASECMP
 extern int	my_strncasecmp(register const char *,
 		register const char *, size_t);
+#else
+#ifdef __rtems__
+/* strncasecmp should be in strings.h, but newlib has it in <string.h> */
+#include <string.h>
+#else
+#include <strings.h>
+#endif
+#define my_strncasecmp(s1,s2,l) strncasecmp(s1,s2,l)
+#endif
 
 #ifndef HAVE_STRNDUP
 extern char	*my_strndup(const char *ptr, size_t len);

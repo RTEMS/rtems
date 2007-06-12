@@ -1,5 +1,10 @@
 2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/defs.h: Eliminate my_strncasecmp.
+	* shttpd/string.c: Eliminate my_strncasecmp.
+
+2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* wrapup/Makefile.am: Pickup ../libmd/libmd.a.
 	* pppd/Makefile.am: Reflect moving out md*.
 	* pppd/md4.h, pppd/md4.c, pppd/md5.c, pppd/md5.h: Remove (moved to

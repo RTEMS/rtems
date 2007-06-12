@@ -20,6 +20,7 @@ my_strlcpy(register char *dst, register const char *src, size_t n)
 }
 #endif
 
+#ifndef HAVE_STRNCASECMP
 int
 my_strncasecmp(const char *str1, const char *str2, size_t len)
 {
@@ -33,6 +34,7 @@ my_strncasecmp(const char *str1, const char *str2, size_t len)
 
 	return (ret);
 }
+#endif
 
 #ifndef HAVE_STRNDUP
 char *
