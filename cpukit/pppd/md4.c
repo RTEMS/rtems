@@ -38,7 +38,6 @@
 */
 #include <stdio.h>
 #include "md4.h"
-#include "pppd.h"
 
 #include <inttypes.h>
 
