@@ -4,7 +4,7 @@ if LIBNETWORKING
 include_shttpddir = $(includedir)/shttpd
 
 project_lib_LIBRARIES = libshttpd.a
-libshttpd_a_CPPFLAGS = $(AM_CPPFLAGS)
+libshttpd_a_CPPFLAGS = $(AM_CPPFLAGS) -DHAVE_MD5
 
 SRCS=		string.c shttpd.c log.c auth.c md5.c \
 		cgi.c mime_type.c config.c \

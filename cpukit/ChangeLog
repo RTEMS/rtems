@@ -1,5 +1,10 @@
 2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/Makefile.am: Add -DHAVE_MD5 to use md5 routines from
+	  libmd.a.
+
+2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* wrapup/Makefile.am: Add libmd.a.
 
 2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
