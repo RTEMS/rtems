@@ -1,5 +1,11 @@
 2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* pppd/Makefile.am: Remove md5 and md4 from libpppd.a.
+	  Add pppd/libmd.a.
+	* pppd/md4.c: Don't include pppd.h.
+
+2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* shttpd/shttpd.ico, shttpd/resources.rc: Remove (Unused).
 
 2007-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
