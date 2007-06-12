@@ -1,3 +1,15 @@
+2007-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* armulator/.cvsignore, armulator/ChangeLog, armulator/Makefile.am,
+	armulator/bsp_specs, armulator/configure.ac, armulator/preinstall.am,
+	armulator/clock/clockdrv.c, armulator/console/console-io.c,
+	armulator/console/mon-syscalls.S, armulator/include/.cvsignore,
+	armulator/include/bsp.h, armulator/include/tm27.h,
+	armulator/start/start.S, armulator/startup/bspstart.c,
+	armulator/startup/libcfunc.c, armulator/startup/linkcmds,
+	armulator/startup/swi.h, armulator/startup/syscalls.c,
+	armulator/startup/trap.S: Removed.
+
 2007-05-15	Ray Xu <rayx@gmail.com>
 
 	* shared/abort/abort.c, shared/abort/simple_abort.c: New files.
