@@ -20,7 +20,7 @@ directives provided by the I/O manager are:
 
 @itemize @bullet
 @item @code{@value{DIRPREFIX}io_initialize} - Initialize a device driver
-@item @code{@value{DIRPREFIX}io_register_driver - Register a device driver
+@item @code{@value{DIRPREFIX}io_register_driver} - Register a device driver
 @item @code{@value{DIRPREFIX}io_register_name} - Register a device name
 @item @code{@value{DIRPREFIX}io_lookup_name} - Look up a device name
 @item @code{@value{DIRPREFIX}io_open} - Open a device
