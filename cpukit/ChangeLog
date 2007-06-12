@@ -1,5 +1,7 @@
 2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shttpd/defs.h: Eliminate my_strdup, my_strndup.
+	* shttpd/string.c: Eliminate my_strdup, my_strndup.
 	* shttpd/Makefile.am: Add -DHAVE_MD5 to use md5 routines from
 	  libmd.a.
 
