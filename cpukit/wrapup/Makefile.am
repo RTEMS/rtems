@@ -70,7 +70,7 @@ TMP_LIBS += ../librpc/libxdr.a
 endif
 
 if NEWLIB
-TMP_LIBS += ../pppd/libmd.a
+TMP_LIBS += ../libmd/libmd.a
 endif
 
 librtemscpu.a: $(TMP_LIBS)
