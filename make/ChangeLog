@@ -1,3 +1,7 @@
+2007-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/armulator.cfg: Removed.
+
 2007-05-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* custom/mvme5500.cfg: Use -O2 again.
