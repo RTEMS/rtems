@@ -1,3 +1,7 @@
+2007-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libmd/.cvsignore: New file.
+
 2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shttpd/defs.h: Eliminate my_strncasecmp.
