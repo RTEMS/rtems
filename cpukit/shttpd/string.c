@@ -10,6 +10,7 @@
 
 #include "defs.h"
 
+#ifndef HAVE_STRLCPY
 void
 my_strlcpy(register char *dst, register const char *src, size_t n)
 {
@@ -17,6 +18,7 @@ my_strlcpy(register char *dst, register const char *src, size_t n)
 		*dst++ = *src++;
 	*dst = '\0';
 }
+#endif
 
 int
 my_strncasecmp(const char *str1, const char *str2, size_t len)
