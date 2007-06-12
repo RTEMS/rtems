@@ -32,6 +32,7 @@ my_strncasecmp(const char *str1, const char *str2, size_t len)
 	return (ret);
 }
 
+#ifndef HAVE_STRNDUP
 char *
 my_strndup(const char *ptr, size_t len)
 {
@@ -43,12 +44,15 @@ my_strndup(const char *ptr, size_t len)
 	return (p);
 
 }
+#endif
 
+#ifndef HAVE_STRDUP
 char *
 my_strdup(const char *str)
 {
 	return (my_strndup(str, strlen(str)));
 }
+#endif
 
 /*
  * Sane snprintf(). Acts like snprintf(), but never return -1 or the

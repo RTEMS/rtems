@@ -377,8 +377,19 @@ extern void	log_access(FILE *fp, const struct conn *c);
 extern void	my_strlcpy(register char *, register const char *, size_t);
 extern int	my_strncasecmp(register const char *,
 		register const char *, size_t);
+#ifndef HAVE_STRNDUP
 extern char	*my_strndup(const char *ptr, size_t len);
+#else
+#include <string.h>
+#define my_strndup(x,l) strndup((x),(l))
+#endif
+
+#ifndef HAVE_STRDUP
 extern char	*my_strdup(const char *str);
+#else
+#include <string.h>
+#define my_strdup(x) strdup(x)
+#endif
 extern int	my_snprintf(char *buf, size_t buflen, const char *fmt, ...);
 
 /*
