@@ -343,6 +343,7 @@ libnetworking/Makefile
 librpc/Makefile
 libmisc/Makefile
 libi2c/Makefile
+libmd/Makefile
 zlib/Makefile
 httpd/Makefile
 ftpd/Makefile

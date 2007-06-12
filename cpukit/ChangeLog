@@ -1,5 +1,9 @@
 2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac, Makefile.am: Add libmd.
+
+2007-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* shttpd/defs.h: Eliminate my_strlcpy.
 	* shttpd/string.c: Eliminate my_strlcpy.
 

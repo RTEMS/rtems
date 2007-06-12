@@ -13,6 +13,7 @@ SUBDIRS += libcsupport libblock libfs
 SUBDIRS += libnetworking librpc
 SUBDIRS += libi2c
 SUBDIRS += libmisc
+SUBDIRS += libmd
 SUBDIRS += wrapup
 
 SUBDIRS += zlib
