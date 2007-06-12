@@ -14,14 +14,7 @@ libpppd_a_SOURCES = auth.c ccp.c ccp.h chap.c chap.h chap_ms.c chap_ms.h \
     options.c upap.c upap.h utils.c sys-rtems.c \
     rtemsmain.c rtemspppd.c rtemspppd.h pppd.h patchlevel.h pathnames.h \
     rtemsdialer.h
-libpppd_a_CPPFLAGS = $(AM_CPPFLAGS) -D__BSD_VISIBLE
-endif
-
-if NEWLIB
-noinst_LIBRARIES = libmd.a
-libmd_a_SOURCES = md5.h md5.c
-libmd_a_SOURCES += md4.h md4.c
-libmd_a_CPPFLAGS = $(AM_CPPFLAGS)
+libpppd_a_CPPFLAGS = $(AM_CPPFLAGS) -D__BSD_VISIBLE -I$(srcdir)/../libmd
 endif
 
 include $(srcdir)/preinstall.am
