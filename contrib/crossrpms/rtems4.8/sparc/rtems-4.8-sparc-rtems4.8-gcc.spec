@@ -26,7 +26,7 @@ Summary:      	sparc-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	12%{?dist}
+Release:      	13%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -61,7 +61,10 @@ Patch0:		gcc-core-4.0.3-rtems-20060822.diff
 Patch0:		gcc-core-4.1.1-rtems4.8-20070201.diff
 %endif
 %if "%{gcc_version}" == "4.1.2"
-Patch0:		gcc-core-4.1.2-rtems4.8-20070216.diff
+Patch0:		gcc-core-4.1.2-rtems4.8-20070613.diff
+%endif
+%if "%{gcc_version}" == "4.2.0"
+Patch0:		gcc-core-4.2.0-rtems4.8-20070613.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
