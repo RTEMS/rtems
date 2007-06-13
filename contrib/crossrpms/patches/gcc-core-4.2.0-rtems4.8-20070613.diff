@@ -1,0 +1,43 @@
+diff -uNr gcc-4.2.0.orig/gcc/config/arm/rtems-elf.h gcc-4.2.0/gcc/config/arm/rtems-elf.h
+--- gcc-4.2.0.orig/gcc/config/arm/rtems-elf.h	2005-11-21 23:56:34.000000000 +0100
++++ gcc-4.2.0/gcc/config/arm/rtems-elf.h	2007-06-13 17:12:24.000000000 +0200
+@@ -27,6 +27,7 @@
+ #define TARGET_OS_CPP_BUILTINS()		\
+     do {					\
+ 	builtin_define ("__rtems__");		\
++	builtin_define ("__USE_INIT_FINI__");	\
+ 	builtin_assert ("system=rtems");	\
+     } while (0)
+ 
+diff -uNr gcc-4.2.0.orig/gcc/config/c4x/rtems.h gcc-4.2.0/gcc/config/c4x/rtems.h
+--- gcc-4.2.0.orig/gcc/config/c4x/rtems.h	2005-06-25 03:22:41.000000000 +0200
++++ gcc-4.2.0/gcc/config/c4x/rtems.h	2007-06-13 17:12:24.000000000 +0200
+@@ -24,6 +24,5 @@
+ #define TARGET_OS_CPP_BUILTINS()		\
+     do {					\
+ 	builtin_define ("__rtems__");		\
+-	builtin_define ("__USE_INIT_FINI__");	\
+ 	builtin_assert ("system=rtems");	\
+     } while (0)
+diff -uNr gcc-4.2.0.orig/gcc/config/mips/elf.h gcc-4.2.0/gcc/config/mips/elf.h
+--- gcc-4.2.0.orig/gcc/config/mips/elf.h	2006-10-08 09:35:47.000000000 +0200
++++ gcc-4.2.0/gcc/config/mips/elf.h	2007-06-13 17:12:24.000000000 +0200
+@@ -49,6 +49,4 @@
+ #undef  ENDFILE_SPEC
+ #define ENDFILE_SPEC "crtend%O%s crtn%O%s"
+ 
+-#define NO_IMPLICIT_EXTERN_C 1
+-
+ #define HANDLE_PRAGMA_PACK_PUSH_POP 1
+diff -uNr gcc-4.2.0.orig/gcc/config/sparc/sparc.c gcc-4.2.0/gcc/config/sparc/sparc.c
+--- gcc-4.2.0.orig/gcc/config/sparc/sparc.c	2006-04-14 09:01:38.000000000 +0200
++++ gcc-4.2.0/gcc/config/sparc/sparc.c	2007-06-13 17:13:39.000000000 +0200
+@@ -703,7 +703,7 @@
+ 	error ("-mcmodel= is not supported on 32 bit systems");
+     }
+ 
+-  fpu = TARGET_FPU; /* save current -mfpu status */
++  fpu = target_flags & MASK_FPU; /* save current -mfpu status */
+ 
+   /* Set the default CPU.  */
+   for (def = &cpu_default[0]; def->name; ++def)
