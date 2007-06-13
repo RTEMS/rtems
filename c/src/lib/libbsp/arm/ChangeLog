@@ -1,3 +1,8 @@
+2007-06-13	Ray Xu <rayx@gmail.com>
+
+	* shared/abort/simple_abort.c: Shrink the memory requirements. Joel
+	reformatted for style.
+
 2007-06-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* acinclude.m4: Remove armulator.

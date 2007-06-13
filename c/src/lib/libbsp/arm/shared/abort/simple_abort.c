@@ -46,45 +46,54 @@ extern void printk(char *fmt, ...);
 
 
 char *_print_full_context_mode2txt[0x10]={
-   [0x0]="user",  /* User */
-	[0x1]="fiq",   /* FIQ - Fast Interrupt Request */
-	[0x2]="irq",   /* IRQ - Interrupt Request */
-	[0x3]="super", /* Supervisor */
-	[0x7]="abort", /* Abort */
-	[0xb]="undef", /* Undefined */
-	[0xf]="system" /* System */
-    };
+  [0x0]="user",  /* User */
+  [0x1]="fiq",   /* FIQ - Fast Interrupt Request */
+  [0x2]="irq",   /* IRQ - Interrupt Request */
+  [0x3]="super", /* Supervisor */
+  [0x7]="abort", /* Abort */
+  [0xb]="undef", /* Undefined */
+  [0xf]="system" /* System */
+};
 
 void _print_full_context(uint32_t spsr)
 {
-    char *mode;
-    uint32_t prev_sp,prev_lr,cpsr,tmp;
-    int i;
+  char *mode;
+  uint32_t prev_sp,prev_lr,cpsr,tmp;
+  int i, j;
 
-    printk("active thread thread 0x%08x\n", _Thread_Executing->Object.id);
+  printk("active thread thread 0x%08x\n", _Thread_Executing->Object.id);
 
-    mode=_print_full_context_mode2txt[(spsr&0x1f)-0x10];
-    if(!mode) mode="unknown";
+  mode=_print_full_context_mode2txt[(spsr&0x1f)-0x10];
+  if(!mode) mode="unknown";
 
-    asm volatile ("	MRS  %[cpsr], cpsr \n"
-              "	ORR  %[tmp], %[spsr], #0xc0 \n"
-              "	MSR  cpsr_c, %[tmp] \n"
-              "	MOV  %[prev_sp], sp \n"
-              "	MOV  %[prev_lr], lr \n"
-              "	MSR  cpsr_c, %[cpsr] \n"
-              : [prev_sp] "=&r" (prev_sp), [prev_lr] "=&r" (prev_lr),
-		[cpsr] "=&r" (cpsr), [tmp] "=&r" (tmp)
-              : [spsr] "r" (spsr)
-	      : "cc");
+  asm volatile ("	MRS  %[cpsr], cpsr \n"
+            "	ORR  %[tmp], %[spsr], #0xc0 \n"
+            "	MSR  cpsr_c, %[tmp] \n"
+            "	MOV  %[prev_sp], sp \n"
+            "	MOV  %[prev_lr], lr \n"
+            "	MSR  cpsr_c, %[cpsr] \n"
+            : [prev_sp] "=&r" (prev_sp), [prev_lr] "=&r" (prev_lr),
+              [cpsr] "=&r" (cpsr), [tmp] "=&r" (tmp)
+            : [spsr] "r" (spsr)
+            : "cc");
 
-    printk("Previous sp=0x%08x lr=0x%08x and actual cpsr=%08x\n", prev_sp, prev_lr, cpsr);
+  printk(
+    "Previous sp=0x%08x lr=0x%08x and actual cpsr=%08x\n",
+     prev_sp,
+     prev_lr,
+     cpsr
+  );
 
-    for(i=0;i<48;){
-        printk(" 0x%08x",((uint32_t*)prev_sp)[i++]);
-        if((i%6) == 0)
-            printk("\n");
-    }
-
+  j=0;
+  for(i=0;i<48;) {
+      printk(" 0x%08x",((uint32_t*)prev_sp)[i++]);
+      j++;
+      /*try not to use % because it introduces hundreds of byte overhead*/
+      if((j-6)==0) {
+          printk("\n");
+        j=0;
+      }
+  }
 }
 
 
@@ -94,59 +103,61 @@ void _print_full_context(uint32_t spsr)
  * All unhandled instructions cause the system to hang.
  */
 
-void do_data_abort(uint32_t   insn, uint32_t   spsr, 
-                    Context_Control *ctx)
+void do_data_abort(
+  uint32_t         insn,
+  uint32_t         spsr, 
+  Context_Control *ctx
+)
 {
-    /* Clarify, which type is correct, CPU_Exception_frame or Context_Control */
+  /* Clarify, which type is correct, CPU_Exception_frame or Context_Control */
 
-    uint8_t    decode;
-    uint8_t    insn_type;
+  uint8_t    decode;
+  uint8_t    insn_type;
+  uint32_t    tmp;
 
-    uint32_t    tmp;
+  decode = ((insn >> 20) & 0xff);
 
-    decode = ((insn >> 20) & 0xff);
-
-    insn_type = decode & INSN_MASK;
-    switch(insn_type) {
-    case INSN_STM1:
-        printk("\n\nINSN_STM1\n");
-        break;
-    case INSN_STM2:
-        printk("\n\nINSN_STM2\n");
-        break;
-    case INSN_STR:
-        printk("\n\nINSN_STR\n");
-        break;
-    case INSN_STRB:
-        printk("\n\nINSN_STRB\n");
-        break;
-    case INSN_LDM1:
-        printk("\n\nINSN_LDM1\n");
-        break;
-    case INSN_LDM23:
-        printk("\n\nINSN_LDM23\n");
-        break;
-    case INSN_LDR:
-        printk("\n\nINSN_LDR\n");
-        break;
-    case INSN_LDRB:
-        printk("\n\nINSN_LDRB\n");
-        break;
-    default:
-        printk("\n\nUnrecognized instruction\n");
-        break;
-    }
+  insn_type = decode & INSN_MASK;
+  switch(insn_type) {
+  case INSN_STM1:
+    printk("\n\nINSN_STM1\n");
+    break;
+  case INSN_STM2:
+    printk("\n\nINSN_STM2\n");
+    break;
+  case INSN_STR:
+    printk("\n\nINSN_STR\n");
+    break;
+  case INSN_STRB:
+    printk("\n\nINSN_STRB\n");
+    break;
+  case INSN_LDM1:
+    printk("\n\nINSN_LDM1\n");
+    break;
+  case INSN_LDM23:
+    printk("\n\nINSN_LDM23\n");
+    break;
+  case INSN_LDR:
+    printk("\n\nINSN_LDR\n");
+    break;
+  case INSN_LDRB:
+    printk("\n\nINSN_LDRB\n");
+    break;
+  default:
+    printk("\n\nUnrecognized instruction\n");
+    break;
+  }
     
-    printk("data_abort at address 0x%x, instruction: 0x%x,   spsr = 0x%x\n",
-           ctx->register_lr - 8, insn, spsr);
+  printk("data_abort at address 0x%x, instruction: 0x%x,   spsr = 0x%x\n",
+         ctx->register_lr - 8, insn, spsr);
 
-    _print_full_context(spsr);
+  _print_full_context(spsr);
 
-    /* disable interrupts, wait forever */
-    _CPU_ISR_Disable(tmp);
-    while(1) {
-        continue;
-    }
-    return;
+  /* disable interrupts, wait forever */
+  _CPU_ISR_Disable(tmp);
+  while(1) {
+    continue;
+  }
+  return;
 }
 
