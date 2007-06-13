@@ -2,8 +2,6 @@
 AC_DEFUN([RTEMS_CHECK_BSPDIR],
 [
   case "$1" in
-  armulator )
-    AC_CONFIG_SUBDIRS([armulator]);;
   csb336 )
     AC_CONFIG_SUBDIRS([csb336]);;
   csb337 )

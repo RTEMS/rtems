@@ -1,3 +1,7 @@
+2007-06-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* acinclude.m4: Remove armulator.
+
 2007-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* armulator/.cvsignore, armulator/ChangeLog, armulator/Makefile.am,
