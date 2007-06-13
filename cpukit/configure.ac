@@ -206,6 +206,12 @@ RTEMS_CPUOPT([SIZEOF_CPU_CONTEXT],
   [$ac_cv_sizeof_CPU_CONTEXT],
   [The size of a 'CPU_CONTEXT', as computed by sizeof])
 
+RTEMS_CPUOPT([NDEBUG],
+  [test x"${NDEBUG}" = x"1"],
+  [1],
+  [disable asserts]
+)
+
 RTEMS_CPUOPT([__RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__],
   [test x"${USE_TICKS_FOR_CPU_USAGE_STATISTICS}" = x"1"],
   [1],
