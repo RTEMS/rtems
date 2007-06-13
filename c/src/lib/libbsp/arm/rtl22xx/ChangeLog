@@ -1,3 +1,7 @@
+2007-06-13	Ray Xu <rayx@gmail.com>
+
+	* startup/linkcmds: Shrink the aligment requirements.
+
 2007-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Eliminate maximum_drivers configuration parameter

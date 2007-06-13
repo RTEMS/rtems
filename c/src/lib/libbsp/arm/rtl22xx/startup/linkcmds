@@ -38,7 +38,7 @@ _sdram_size = DEFINED(_sdram_size) ? _sdram_size : 512K;
 _irq_stack_size = DEFINED(_irq_stack_size) ? _irq_stack_size : 0x100;
 _fiq_stack_size = DEFINED(_fiq_stack_size) ? _fiq_stack_size : 0x50;
 _abt_stack_size = DEFINED(_abt_stack_size) ? _abt_stack_size : 0x50;
-_svc_stack_size = DEFINED(_svc_stack_size) ? _svc_stack_size : 0x500;
+_svc_stack_size = DEFINED(_svc_stack_size) ? _svc_stack_size : 0x100;
 
 
 
@@ -83,7 +83,7 @@ SECTIONS
     /*bsp_vector_table = .;*/
      /*. += (64 * 4);                    64 LPC22xx interrupts */
 
-    . = ALIGN (0x100);
+    . = ALIGN (0x10);
 
   } > sram
 
@@ -167,22 +167,22 @@ SECTIONS
 	*(.bss.*)
 	*(.gnu.linkonce.b.*)
 	*(COMMON)
-	. = ALIGN(256);
+	. = ALIGN(0x10);
 	_clear_end = .;
 
-	. = ALIGN (64);
+	. = ALIGN (0x10);
 	_abt_stack = .;
 	. += _abt_stack_size;
 
-	. = ALIGN (256);
+	. = ALIGN (0x10);
 	_irq_stack = .;
 	. += _irq_stack_size;
 
-	. = ALIGN (64);
+	. = ALIGN (0x10);
 	_fiq_stack = .;
 	. += _fiq_stack_size;
 
-	. = ALIGN (64);
+	. = ALIGN (0x10);
 	_svc_stack = .;
 	. += _svc_stack_size;
 
@@ -191,7 +191,7 @@ SECTIONS
 	__end = .;
 
 	_bss_free_start = .;
-	. = ALIGN (1024);
+	. = ALIGN (0x10);
   } > sdram
 
 /*
