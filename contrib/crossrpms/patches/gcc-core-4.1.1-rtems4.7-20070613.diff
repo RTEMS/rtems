@@ -1,0 +1,161 @@
+Common subdirectories: gcc-4.1.1.orig/config and gcc-4.1.1/config
+Common subdirectories: gcc-4.1.1.orig/contrib and gcc-4.1.1/contrib
+Common subdirectories: gcc-4.1.1.orig/fixincludes and gcc-4.1.1/fixincludes
+Common subdirectories: gcc-4.1.1.orig/gcc and gcc-4.1.1/gcc
+diff -uNt gcc-4.1.1.orig/gcc-core-4.1.2-rtems4.8-20070613.diff gcc-4.1.1/gcc-core-4.1.2-rtems4.8-20070613.diff
+--- gcc-4.1.1.orig/gcc-core-4.1.2-rtems4.8-20070613.diff	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.1.1/gcc-core-4.1.2-rtems4.8-20070613.diff	2007-06-14 04:15:19.000000000 +0200
+@@ -0,0 +1,114 @@
++diff -uNr gcc-4.1.2.orig/gcc/config/arm/rtems-elf.h gcc-4.1.2/gcc/config/arm/rtems-elf.h
++--- gcc-4.1.2.orig/gcc/config/arm/rtems-elf.h   2005-11-22 00:28:29.000000000 +0100
+++++ gcc-4.1.2/gcc/config/arm/rtems-elf.h        2007-06-13 17:19:33.000000000 +0200
++@@ -27,6 +27,7 @@
++ #define TARGET_OS_CPP_BUILTINS()               \
++     do {                                       \
++        builtin_define ("__rtems__");           \
+++       builtin_define ("__USE_INIT_FINI__");   \
++        builtin_assert ("system=rtems");        \
++     } while (0)
++ 
++diff -uNr gcc-4.1.2.orig/gcc/config/c4x/rtems.h gcc-4.1.2/gcc/config/c4x/rtems.h
++--- gcc-4.1.2.orig/gcc/config/c4x/rtems.h       2005-06-25 03:22:41.000000000 +0200
+++++ gcc-4.1.2/gcc/config/c4x/rtems.h    2007-06-13 17:19:33.000000000 +0200
++@@ -24,6 +24,5 @@
++ #define TARGET_OS_CPP_BUILTINS()               \
++     do {                                       \
++        builtin_define ("__rtems__");           \
++-       builtin_define ("__USE_INIT_FINI__");   \
++        builtin_assert ("system=rtems");        \
++     } while (0)
++diff -uNr gcc-4.1.2.orig/gcc/config/mips/elf.h gcc-4.1.2/gcc/config/mips/elf.h
++--- gcc-4.1.2.orig/gcc/config/mips/elf.h        2005-07-09 10:46:34.000000000 +0200
+++++ gcc-4.1.2/gcc/config/mips/elf.h     2007-06-13 17:19:33.000000000 +0200
++@@ -48,5 +48,3 @@
++ 
++ #undef  ENDFILE_SPEC
++ #define ENDFILE_SPEC "crtend%O%s crtn%O%s"
++-
++-#define NO_IMPLICIT_EXTERN_C 1
++diff -uNr gcc-4.1.2.orig/gcc/config/mips/mips.h gcc-4.1.2/gcc/config/mips/mips.h
++--- gcc-4.1.2.orig/gcc/config/mips/mips.h       2006-02-17 22:38:59.000000000 +0100
+++++ gcc-4.1.2/gcc/config/mips/mips.h    2007-06-13 17:19:34.000000000 +0200
++@@ -450,6 +450,8 @@
++ #endif
++ #endif /* IN_LIBGCC2 */
++ 
+++#define TARGET_LIBGCC_SDATA_SECTION ".sdata"
+++
++ #ifndef MULTILIB_ENDIAN_DEFAULT
++ #if TARGET_ENDIAN_DEFAULT == 0
++ #define MULTILIB_ENDIAN_DEFAULT "EL"
++@@ -2712,7 +2714,6 @@
++ /* Define the strings to put out for each section in the object file.  */
++ #define TEXT_SECTION_ASM_OP    "\t.text"       /* instructions */
++ #define DATA_SECTION_ASM_OP    "\t.data"       /* large data */
++-#define SDATA_SECTION_ASM_OP   "\t.sdata"      /* small data */
++ 
++ #undef READONLY_DATA_SECTION_ASM_OP
++ #define READONLY_DATA_SECTION_ASM_OP   "\t.rdata"      /* read-only data */
++diff -uNr gcc-4.1.2.orig/gcc/config/sparc/sparc.c gcc-4.1.2/gcc/config/sparc/sparc.c
++--- gcc-4.1.2.orig/gcc/config/sparc/sparc.c     2006-04-14 09:02:43.000000000 +0200
+++++ gcc-4.1.2/gcc/config/sparc/sparc.c  2007-06-13 17:29:33.000000000 +0200
++@@ -675,7 +675,7 @@
++        error ("-mcmodel= is not supported on 32 bit systems");
++     }
++ 
++-  fpu = TARGET_FPU; /* save current -mfpu status */
+++  fpu = target_flags & MASK_FPU; /* save current -mfpu status */
++ 
++   /* Set the default CPU.  */
++   for (def = &cpu_default[0]; def->name; ++def)
++diff -uNr gcc-4.1.2.orig/gcc/config.gcc gcc-4.1.2/gcc/config.gcc
++--- gcc-4.1.2.orig/gcc/config.gcc       2006-10-16 01:12:23.000000000 +0200
+++++ gcc-4.1.2/gcc/config.gcc    2007-06-13 17:19:34.000000000 +0200
++@@ -761,6 +761,11 @@
++         tmake_file=bfin/t-bfin-elf
++         use_collect2=no
++         ;;
+++bfin*-rtems*)
+++       tm_file="${tm_file} dbxelf.h elfos.h bfin/elf.h bfin/rtems.h rtems.h"
+++        tmake_file=bfin/t-bfin-elf
+++        use_collect2=no
+++        ;;
++ bfin*-*)
++        tm_file="${tm_file} dbxelf.h elfos.h bfin/elf.h"
++         tmake_file=bfin/t-bfin
++@@ -1560,7 +1565,7 @@
++        tm_defines="MIPS_ISA_DEFAULT=3 MIPS_ABI_DEFAULT=ABI_O64"
++        use_fixproto=yes
++        ;;
++-mips*-*-rtems*)
+++mips-*-rtems*)
++        tm_file="elfos.h ${tm_file} mips/elf.h mips/rtems.h rtems.h"
++        tmake_file="mips/t-elf t-rtems mips/t-rtems"
++        ;;
++diff -uNr gcc-4.1.2.orig/gcc/crtstuff.c gcc-4.1.2/gcc/crtstuff.c
++--- gcc-4.1.2.orig/gcc/crtstuff.c       2005-11-15 02:21:29.000000000 +0100
+++++ gcc-4.1.2/gcc/crtstuff.c    2007-06-13 17:19:34.000000000 +0200
++@@ -225,6 +225,9 @@
++    in one DSO or the main program is not used in another object.  The
++    dynamic linker takes care of this.  */
++ 
+++#ifdef TARGET_LIBGCC_SDATA_SECTION
+++extern void *__dso_handle __attribute__ ((__section__ (TARGET_LIBGCC_SDATA_SECTION)));
+++#endif
++ #ifdef HAVE_GAS_HIDDEN
++ extern void *__dso_handle __attribute__ ((__visibility__ ("hidden")));
++ #endif
++diff -uNr gcc-4.1.2.orig/Makefile.in gcc-4.1.2/Makefile.in
++--- gcc-4.1.2.orig/Makefile.in  2006-04-04 23:03:05.000000000 +0200
+++++ gcc-4.1.2/Makefile.in       2007-06-13 17:19:34.000000000 +0200
++@@ -329,9 +329,9 @@
++ # CFLAGS will be just -g.  We want to ensure that TARGET libraries
++ # (which we know are built with gcc) are built with optimizations so
++ # prepend -O2 when setting CFLAGS_FOR_TARGET.
++-CFLAGS_FOR_TARGET = -O2 $(CFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET)
+++CFLAGS_FOR_TARGET = $(strip -O2 $(CFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET))
++ SYSROOT_CFLAGS_FOR_TARGET = @SYSROOT_CFLAGS_FOR_TARGET@
++-CXXFLAGS_FOR_TARGET = $(CXXFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET)
+++CXXFLAGS_FOR_TARGET = $(strip $(CXXFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET))
++ LIBCFLAGS_FOR_TARGET = $(CFLAGS_FOR_TARGET)
++ LIBCXXFLAGS_FOR_TARGET = $(CXXFLAGS_FOR_TARGET) -fno-implicit-templates
++ LDFLAGS_FOR_TARGET = 
+Common subdirectories: gcc-4.1.1.orig/include and gcc-4.1.1/include
+Common subdirectories: gcc-4.1.1.orig/INSTALL and gcc-4.1.1/INSTALL
+Common subdirectories: gcc-4.1.1.orig/intl and gcc-4.1.1/intl
+Common subdirectories: gcc-4.1.1.orig/libcpp and gcc-4.1.1/libcpp
+Common subdirectories: gcc-4.1.1.orig/libiberty and gcc-4.1.1/libiberty
+Common subdirectories: gcc-4.1.1.orig/libmudflap and gcc-4.1.1/libmudflap
+Common subdirectories: gcc-4.1.1.orig/libssp and gcc-4.1.1/libssp
+Common subdirectories: gcc-4.1.1.orig/maintainer-scripts and gcc-4.1.1/maintainer-scripts
+diff -uNt gcc-4.1.1.orig/Makefile.in gcc-4.1.1/Makefile.in
+--- gcc-4.1.1.orig/Makefile.in	2006-04-04 23:03:05.000000000 +0200
++++ gcc-4.1.1/Makefile.in	2007-06-14 04:14:41.000000000 +0200
+@@ -329,9 +329,9 @@
+ # CFLAGS will be just -g.  We want to ensure that TARGET libraries
+ # (which we know are built with gcc) are built with optimizations so
+ # prepend -O2 when setting CFLAGS_FOR_TARGET.
+-CFLAGS_FOR_TARGET = -O2 $(CFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET)
++CFLAGS_FOR_TARGET = $(strip -O2 $(CFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET))
+ SYSROOT_CFLAGS_FOR_TARGET = @SYSROOT_CFLAGS_FOR_TARGET@
+-CXXFLAGS_FOR_TARGET = $(CXXFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET)
++CXXFLAGS_FOR_TARGET = $(strip $(CXXFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET))
+ LIBCFLAGS_FOR_TARGET = $(CFLAGS_FOR_TARGET)
+ LIBCXXFLAGS_FOR_TARGET = $(CXXFLAGS_FOR_TARGET) -fno-implicit-templates
+ LDFLAGS_FOR_TARGET = 
+diff -uNt gcc-4.1.1.orig/tmp gcc-4.1.1/tmp
+--- gcc-4.1.1.orig/tmp	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.1.1/tmp	2007-06-14 04:15:43.000000000 +0200
+@@ -0,0 +1,12 @@
++diff -uNr gcc-4.1.2.orig/gcc/config/sparc/sparc.c gcc-4.1.2/gcc/config/sparc/sparc.c
++--- gcc-4.1.2.orig/gcc/config/sparc/sparc.c     2006-04-14 09:02:43.000000000 +0200
+++++ gcc-4.1.2/gcc/config/sparc/sparc.c  2007-06-13 17:29:33.000000000 +0200
++@@ -675,7 +675,7 @@
++        error ("-mcmodel= is not supported on 32 bit systems");
++     }
++ 
++-  fpu = TARGET_FPU; /* save current -mfpu status */
+++  fpu = target_flags & MASK_FPU; /* save current -mfpu status */
++ 
++   /* Set the default CPU.  */
++   for (def = &cpu_default[0]; def->name; ++def)
