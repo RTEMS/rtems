@@ -12,7 +12,7 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.2.0
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 17
+GCC_RPMREL = 18
 NEWLIB_VERS = 1.15.0
 include ../gcc.am
 # ATM, we don't want infos from bleeding edge GCC
