@@ -13,8 +13,8 @@ BINUTILS_OPTS +=
 BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 4.2.0
-GCC_PKGVERS = 4.2-20070221
-GCC_RPMREL = 12
+GCC_PKGVERS = $(GCC_VERS)
+GCC_RPMREL = 13
 NEWLIB_VERS = 1.15.0
 include ../gcc.am
 # ATM, we don't want infos from bleeding edge GCC
