@@ -26,7 +26,7 @@ Summary:      	sparc-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	13%{?dist}
+Release:      	14%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,18 +53,21 @@ Requires:	rtems-4.8-sparc-rtems4.8-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 %if "%{gcc_version}" == "4.0.3"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.0.3-rtems-20060822.diff
 %endif
 %if "%{gcc_version}" == "4.1.1"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.1.1-rtems4.8-20070201.diff
 %endif
 %if "%{gcc_version}" == "4.1.2"
+Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.1.2-rtems4.8-20070613.diff
 %endif
 %if "%{gcc_version}" == "4.2.0"
-Patch0:		gcc-core-4.2.0-rtems4.8-20070613.diff
+Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070613.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
@@ -136,6 +139,7 @@ cd ..
     --datadir=%{_datadir} \
     --build=%_build --host=%_host \
     --target=sparc-rtems4.8 \
+    --disable-libstdcxx-pch \
     --with-gnu-as --with-gnu-ld --verbose \
     --with-newlib \
     --with-system-zlib \

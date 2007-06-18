@@ -132,6 +132,7 @@ cd ..
     --datadir=%{_datadir} \
     --build=%_build --host=%_host \
     --target=bfin-rtems4.8 \
+    --disable-libstdcxx-pch \
     --with-gnu-as --with-gnu-ld --verbose \
     --with-newlib \
     --with-system-zlib \
