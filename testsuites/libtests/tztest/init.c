@@ -12,6 +12,8 @@
  *  $Id$
  */
 
+#define CONFIGURE_INIT
+
 #include <tmacros.h>
 #include <time.h>
 #include <stdlib.h>
@@ -64,7 +66,5 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 1
-
-#define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
