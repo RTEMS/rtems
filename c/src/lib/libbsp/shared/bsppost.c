@@ -20,26 +20,7 @@
 
 void bsp_postdriver_hook(void)
 {
-  int stdin_fd, stdout_fd, stderr_fd;
-  int error_code = 'S' << 24 | 'T' << 16 | 'D' << 8;
+  extern void open_dev_console(void);
 
-  /*
-   * Attempt to open /dev/console.
-   */
-  if ((stdin_fd = open("/dev/console", O_RDONLY, 0)) == -1) {
-    /*
-     * There may not be a console driver so this is OK.
-     */
-    return;
-  } 
-
-  /*
-   *  But if we find /dev/console once, we better find it twice more
-   *  or something is REALLY wrong.
-   */
-  if ((stdout_fd = open("/dev/console", O_WRONLY, 0)) == -1)
-    rtems_fatal_error_occurred( error_code | '1' );
-
-  if ((stderr_fd = open("/dev/console", O_WRONLY, 0)) == -1)
-    rtems_fatal_error_occurred( error_code | '2' );
+  open_dev_console();
 }
