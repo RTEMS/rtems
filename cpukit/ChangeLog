@@ -1,5 +1,10 @@
 2007-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sapi/include/confdefs.h: Do not instantiate initialization
+	thas/thread pointer tables for an API that is not configured.
+
+2007-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/Makefile.am:
 	* libcsupport/src/open_dev_console.c: New file.
 

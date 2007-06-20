@@ -1219,13 +1219,15 @@ rtems_configuration_table Configuration = {
  *  If the user has configured a set of POSIX Initialization Threads,
  *  then we need to install the code that runs that loop.
  */
-#ifdef CONFIGURE_INIT
-  #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
-    void _POSIX_Threads_Initialize_user_threads_body(void);
-    void (*_POSIX_Threads_Initialize_user_threads_p)(void) = 
-	      _POSIX_Threads_Initialize_user_threads_body;
-  #else
-    void (*_POSIX_Threads_Initialize_user_threads_p)(void) = NULL;
+#ifdef RTEMS_POSIX_API
+  #ifdef CONFIGURE_INIT
+    #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
+      void _POSIX_Threads_Initialize_user_threads_body(void);
+      void (*_POSIX_Threads_Initialize_user_threads_p)(void) = 
+		_POSIX_Threads_Initialize_user_threads_body;
+    #else
+      void (*_POSIX_Threads_Initialize_user_threads_p)(void) = NULL;
+    #endif
   #endif
 #endif
 
@@ -1233,13 +1235,15 @@ rtems_configuration_table Configuration = {
  *  If the user has configured a set of ITRON Initialization Tasks,
  *  then we need to install the code that runs that loop.
  */
-#ifdef CONFIGURE_INIT
-  #ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
-    void _ITRON_Task_Initialize_user_tasks_body(void);
-    void (*_ITRON_Initialize_user_tasks_p)(void) = 
-	      _ITRON_Task_Initialize_user_tasks_body;
-  #else
-    void (*_ITRON_Initialize_user_tasks_p)(void) = NULL;
+#ifdef RTEMS_ITRON_API
+  #ifdef CONFIGURE_INIT
+    #ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
+      void _ITRON_Task_Initialize_user_tasks_body(void);
+      void (*_ITRON_Initialize_user_tasks_p)(void) = 
+		_ITRON_Task_Initialize_user_tasks_body;
+    #else
+      void (*_ITRON_Initialize_user_tasks_p)(void) = NULL;
+    #endif
   #endif
 #endif
 
