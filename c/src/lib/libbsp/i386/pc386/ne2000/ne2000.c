@@ -475,7 +475,7 @@ ne_init_hardware (struct ne_softc *sc)
   outport_byte (port + TPSR, NE_FIRST_TX_PAGE);
   outport_byte (port + PSTART, NE_FIRST_RX_PAGE);
 
-  /* Initialize Receiver (ring-buffer) Page Stop and Boundry */
+  /* Initialize Receiver (ring-buffer) Page Stop and Boundary */
   outport_byte (port + PSTOP, NE_STOP_PAGE);
   outport_byte (port + BNRY, NE_STOP_PAGE - 1);
 
