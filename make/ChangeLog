@@ -1,3 +1,8 @@
+2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* custom/gen5200.cfg: Remove junk comment.
+	* custom/ep5200.cfg: New file.
+
 2007-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/armulator.cfg: Removed.
