@@ -90,6 +90,24 @@
 #define	MBAR         0xF0000000
 #define HAS_UBOOT
 
+#elif defined (ep5200)
+/*
+ *  Embedded Planet EP5200 -- should be the same as a Freescale 5200lite
+ *  which is also known as the Ice Cube.  In the RTEMS configuration,
+ *  we load U-Boot on it instead of the default dBug.
+ */
+
+#define HAS_UBOOT
+
+/* These are copied from PM520 but seem to work so OK */
+#define GPIOPCR_INITMASK 0x330F0F77
+#define GPIOPCR_INITVAL  0x01050444
+
+/* we only have PSC1 */
+#define GEN5200_UART_AVAIL_MASK 0x01
+
+#define	MBAR         0xF0000000
+
 #else
 #error "board type not defined"
 #endif
@@ -110,8 +128,10 @@ extern "C" {
 #include <bsp/vectors.h>
 
 #if defined(HAS_UBOOT)
+/* This is the define U-Boot uses to configure which entries in the structure are valid */
 #define CONFIG_MPC5xxx
 #include <u-boot.h>
+
 extern bd_t *uboot_bdinfo_ptr;
 extern bd_t uboot_bdinfo_copy;
 #endif
@@ -189,6 +209,7 @@ void bsp_cleanup(void);
 
 #define SINGLE_CHAR_MODE
 #define UARTS_USE_TERMIOS_INT   1
+/* #define SHOW_MORE_INIT_SETTINGS 1 */
 
 /* ata modes */
 /* #undef ATA_USE_INT */
@@ -203,6 +224,12 @@ void bsp_cleanup(void);
 #define IPB_CLOCK 33000000   /* 33 MHz */
 #define XLB_CLOCK 66000000   /* 66 MHz */
 #define G2_CLOCK  231000000  /* 231 MHz */
+#endif
+
+#if defined(HAS_UBOOT)
+#define GEN5200_CONSOLE_BAUD (uboot_bdinfo_ptr->bi_baudrate)
+#else
+#define GEN5200_CONSOLE_BAUD 9600
 #endif
 
 /*

@@ -170,20 +170,19 @@ void mpc5200_init_gpt(uint32_t gpt_no)
 void mpc5200_set_gpt_count(uint32_t counter_value, uint32_t gpt_no)
   {
   uint32_t prescaler_value = 1;
+  uint32_t counter = counter_value;
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[gpt_no]);
 
   /* Calculate counter/prescaler value, e.g. IPB_Clock=33MHz -> Int. every 0,3 nsecs. - 130 secs.*/
-  while((counter_value >= (1 << 16)) && (prescaler_value < (1 << 16)))
+  while((counter >= (1 << 16)) && (prescaler_value < (1 << 16)))
     {
-
-    prescaler_value++;
-	counter_value /= prescaler_value;
-
+      prescaler_value++;
+      counter = counter_value / prescaler_value;
     }
 
-  counter_value = (uint16_t)counter_value;
+  counter = (uint16_t)counter;
 
-  gpt->count_in = (prescaler_value << 16) + counter_value;
+  gpt->count_in = (prescaler_value << 16) + counter;
 
   }
 

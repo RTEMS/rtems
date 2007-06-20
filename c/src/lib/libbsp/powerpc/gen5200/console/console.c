@@ -497,12 +497,12 @@ void mpc5200_uart_psc_initialize(int minor) {
    */
   psc->tfalarm = 1;
 
-  baud_divider = IPB_CLOCK / (9600 * 32);
+  baud_divider = (IPB_CLOCK + GEN5200_CONSOLE_BAUD *16) / (GEN5200_CONSOLE_BAUD * 32);
+
   /*
    * Set upper timer counter
    */
   psc->ctur = baud_divider >> 16;
-
 
   /*
    * Set lower timer counter

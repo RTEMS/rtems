@@ -1,3 +1,24 @@
+2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Add Embedded Planets EP5200 which is the same as the Freescale
+	5200Lite (a.k.a. IceCube) evaluation board.
+	* Makefile.am: Add linkcmds.ep5200.
+	Add -DMPC5200_BAPI_LIBC_HEADERS to remove some warnings in bestcomm.
+	* preinstall.am: Add linkcmds.ep5200.
+	* clock/clock.c: Correct math for prescaler/counter when bus speed
+	is high enough to require multiple passes of loop.
+	* console/console.c: Use same math for initial baud rate as when it
+	is changed via ioctl.  When HAS_UBOOT is defined, initialize console
+	to the same baud as it was with U-Boot.
+	* include/bsp.h: Add EP5200 and console boot baud support.
+	* include/mpc5200.h: Spacing.
+	* startup/bspstart.c: If HAS_UBOOT and SHOW_MORE_INIT_SETTINGS are
+	both defined, dump the U-Boot BD info structure.
+	* vectors/vectors.S: ep5200 cannot use vectors segment.  When loading
+	it, U-Boot freezes.  Besides, U-Boot can automatically start the BSP
+	so we do not have to run from board reset.
+	* startup/linkcmds.ep5200: New file.
+
 2007-04-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mscan/mscan.c: Use size_t for message sizes. Remove absurd type

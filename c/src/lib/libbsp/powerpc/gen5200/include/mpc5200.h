@@ -699,7 +699,7 @@ typedef struct mpc5200_
 
 
 #endif
-	/*
+    /*
      * programmable serial controller 1 (MBAR + 0x2000)
      */
 

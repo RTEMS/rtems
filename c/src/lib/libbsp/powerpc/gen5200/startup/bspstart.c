@@ -244,8 +244,6 @@ void bsp_predriver_hook(void)
 #endif
 }
 
-
-
 void bsp_start(void)
 {
   extern void *_WorkspaceBase;
@@ -257,13 +255,21 @@ void bsp_start(void)
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
    */
-  myCpu 	    = get_ppc_cpu_type();
+  myCpu         = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
 #if defined(HAS_UBOOT)
   uboot_bdinfo_copy = *uboot_bdinfo_ptr;
   uboot_bdinfo_ptr = &uboot_bdinfo_copy;
 #endif  
+
+#if defined(HAS_UBOOT) && defined(SHOW_MORE_INIT_SETTINGS)
+  {
+    void dumpUBootBDInfo( bd_t * );
+    dumpUBootBDInfo( uboot_bdinfo_ptr );
+  }
+#endif
+
   cpu_init();
 
   /*

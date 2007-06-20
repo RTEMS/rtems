@@ -31,6 +31,7 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 dist_project_lib_DATA += startup/linkcmds.brs5l
+dist_project_lib_DATA += startup/linkcmds.ep5200
 dist_project_lib_DATA += startup/linkcmds.pm520
 
 noinst_PROGRAMS += bestcomm.rel
@@ -51,7 +52,7 @@ bestcomm_rel_SOURCES = bestcomm/include/ppctypes.h \
     bestcomm/task_api/bestcomm_api_mem.h bestcomm/task_api/bestcomm_cntrl.h \
     bestcomm/task_api/tasksetup_bdtable.h \
     bestcomm/task_api/tasksetup_general.h
-bestcomm_rel_CPPFLAGS = $(AM_CPPFLAGS)
+bestcomm_rel_CPPFLAGS = $(AM_CPPFLAGS) -DMPC5200_BAPI_LIBC_HEADERS
 bestcomm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += clock.rel
@@ -111,7 +112,7 @@ include_bsp_HEADERS += vectors/vectors.h
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c \
+    ../../shared/sbrk.c ../shared/uboot_dump_bdinfo.c \
     ../../shared/gnatinstallhandler.c startup/cpuinit.c start/start.S
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

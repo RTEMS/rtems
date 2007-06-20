@@ -66,6 +66,7 @@
 /***********************************************************************/
 
 #include <rtems/asm.h>
+#include <bspopts.h>
 #include <rtems/score/cpu.h>
 #include "vectors.h"	
 
@@ -197,6 +198,7 @@ SYM (push_normalized_frame):
 	SYNC
 	rfi
 
+#if !defined(ep5200)
 	.section .vectors,"awx",@progbits
 
         PUBLIC_VAR (__vectors)
@@ -261,4 +263,4 @@ __vecf:	b	__vecf
 	.rep 63+1024
 	.long 0x04000400
 	.endr
-
+#endif
