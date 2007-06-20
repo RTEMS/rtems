@@ -1,3 +1,7 @@
+2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* aclocal/bsp-alias.m4, README.configure: Add ep5200, IceCube, 5200Lite.
+
 2007-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* README.configure: Removed armulator.
