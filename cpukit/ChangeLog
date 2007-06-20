@@ -1,5 +1,10 @@
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/corerwlock.c: Make sure structure is fully initialized.
+	When reused, some fields will not be zero like at initialization.
+
+2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/confdefs.h: POSIX threads use twice the minimum stack
 	size. Account for this.
 
