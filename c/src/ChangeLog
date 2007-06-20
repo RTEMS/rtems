@@ -1,3 +1,11 @@
+2007-06-20	Ray Xu <rayx@gmail.com>
+
+	* optman/Makefile.am, optman/preinstall.am: Add stubs for file system,
+	console, and libio. This shrinks the memory requirements but Joel has
+	not figured out how best to present this to application space.
+	* optman/no-console.c, optman/no-filesystem.c, optman/no-libio.c:
+	New files.
+
 2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* optman/sapi/no-io.c: Split IO Manager into one function per file so
