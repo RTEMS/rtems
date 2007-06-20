@@ -70,6 +70,7 @@ rtems_task Task_1_through_6(
       while ( FOREVER ) {
         status = rtems_rate_monotonic_period( rmid, Periods[ argument ] );
         directive_failed( status, "rtems_rate_monotonic_period" );
+
         Count.count[ argument ]++;
       }
       break;

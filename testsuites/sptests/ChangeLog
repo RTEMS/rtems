@@ -1,3 +1,8 @@
+2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp20/task1.c, sp34/changepri.c, sp35/priinv.c: Build when using
+	buffered test IO.
+
 2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp21/sp21.scn, sp21/task1.c: rtems_io_register_driver and

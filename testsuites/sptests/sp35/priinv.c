@@ -46,6 +46,8 @@
 #define TEST_EXIT_AFTER_ITERATIONS 10
 /********************************************************************/
 
+#define CONFIGURE_INIT
+
 #include <bsp.h>
 #include <stdio.h>
 #include "tmacros.h"
@@ -480,8 +482,6 @@ rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_MAXIMUM_TASKS 10
 #define CONFIGURE_MAXIMUM_SEMAPHORES 10
-
-#define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
 
