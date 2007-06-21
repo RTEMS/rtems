@@ -1,5 +1,11 @@
 2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libnetworking/rtems/rtems_syscall.c: Remove RTEMS versions of send()
+	and recv(). We already had the BSD versions and these conflict
+	sometimes when linking.
+
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libnetworking/rtems/mkrootfs.h, libnetworking/rtems/rtems_bsdnet.h,
 	libnetworking/rtems/rtems_bsdnet_internal.h: Add extern __cplusplus.
 

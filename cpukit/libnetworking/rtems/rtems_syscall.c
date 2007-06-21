@@ -33,10 +33,17 @@
 #include <net/route.h>
 
 /*
+ *  Since we are "in the kernel", these do not get prototyped in sys/socket.h
+ */
+ssize_t	send(int, const void *, size_t, int);
+ssize_t	recv(int, void *, size_t, int);
+
+/*
  * Hooks to RTEMS I/O system
  */
 static const rtems_filesystem_file_handlers_r socket_handlers;
-int rtems_bsdnet_makeFdForSocket(void *so, const rtems_filesystem_file_handlers_r *h);
+int rtems_bsdnet_makeFdForSocket(
+    void *so, const rtems_filesystem_file_handlers_r *h);
 struct socket *rtems_bsdnet_fdToSocket(int fd);
 
 /*
@@ -374,15 +381,6 @@ sendto (int s, const void *buf, size_t buflen, int flags, const struct sockaddr 
 }
 
 /*
- * Send a message to a connected host
- */
-ssize_t
-send (int s, const void *buf, size_t buflen, int flags)
-{
-	return sendto (s, buf, buflen, flags, NULL, 0);
-}
-
-/*
  * All `receive' operations end up calling this routine.
  */
 ssize_t
@@ -501,15 +499,6 @@ recvfrom (int s, void *buf, size_t buflen, int flags, const struct sockaddr *fro
 	if ((from != NULL) && (fromlen != NULL) && (ret >= 0))
 		*fromlen = msg.msg_namelen;
 	return ret;
-}
-
-/*
- * Receive a message from a connected host
- */
-ssize_t
-recv (int s, void *buf, size_t buflen, int flags)
-{
-	return recvfrom (s, buf, buflen, flags, NULL, NULL);
 }
 
 int
