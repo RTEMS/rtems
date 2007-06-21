@@ -1,3 +1,8 @@
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libnetworking/rtems/mkrootfs.h, libnetworking/rtems/rtems_bsdnet.h,
+	libnetworking/rtems/rtems_bsdnet_internal.h: Add extern __cplusplus.
+
 2007-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h: Do not instantiate initialization

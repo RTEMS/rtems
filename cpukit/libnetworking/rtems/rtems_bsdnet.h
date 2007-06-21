@@ -9,6 +9,10 @@
 #ifndef _RTEMS_BSDNET_H
 #define _RTEMS_BSDNET_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <rtems.h>
 
 /*
@@ -275,5 +279,9 @@ void* rtems_bsdnet_malloc_mbuf(size_t size, int type);
 #define MBUF_MALLOC_NMBCLUSTERS (0)
 #define MBUF_MALLOC_MCLREFCNT   (1)
 #define MBUF_MALLOC_MBUF        (2)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _RTEMS_BSDNET_H */

@@ -24,6 +24,10 @@
 #ifndef _RTEMS_MKROOTFS_H
 #define _RTEMS_MKROOTFS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <rtems.h>
 
 /*
@@ -61,5 +65,9 @@ rtems_rootfs_append_host_rec (unsigned long cip,
 
 int
 rtems_create_root_fs ();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -12,6 +12,10 @@
 #ifndef _RTEMS_RTEMS_BSDNET_INTERNAL_H
 #define _RTEMS_RTEMS_BSDNET_INTERNAL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <rtems.h>
 
 typedef	unsigned int		vm_offset_t;
@@ -194,6 +198,10 @@ int ioctl (int, ioctl_command_t, ...);
 #define NETISR_EVENTS  (NETISR_IP_EVENT|NETISR_ARP_EVENT)
 #if (SBWAIT_EVENT & SOSLEEP_EVENT & NETISR_EVENTS)
 # error "Network event conflict"
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* _RTEMS_RTEMS_BSDNET_INTERNAL_H */
