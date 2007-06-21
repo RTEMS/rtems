@@ -103,6 +103,30 @@ rtems_task Init(
    );
   }
 
+  /*
+   *  Iterate 10 times showing difference in Uptime with different counts
+   */
+  printf( "\n10 iterations of getting Uptime with different loop values\n" );
+  for (index=1 ; index <=10 ; index++ ) {
+    struct timespec start, stop;
+    struct timespec diff;
+    int j, max = (index * 10000);
+    rtems_clock_get_uptime( &start );
+      for (j=0 ; j<max ; j++ ) 
+        Empty_function();
+    rtems_clock_get_uptime( &stop );
+
+    subtract_em( &start, &stop, &diff );
+    printf( "loop of %d %d:%d %d:%d --> %d:%d\n",
+      max,
+      start.tv_sec, start.tv_nsec,
+      stop.tv_sec, stop.tv_nsec,
+      diff.tv_sec, diff.tv_nsec
+   );
+  }
+
+  sleep(1);
+
   puts( "*** END OF NANOSECOND CLOCK TEST ***" );
   exit(0);
 }

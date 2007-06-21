@@ -1,3 +1,8 @@
+2007-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* nsecs/init.c, nsecs/nsecs.scn: Add set of loops so you can see the
+	time varaying in proportion to the length of the loop measured.
+
 2007-05-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* nsecs/init.c: Remove stray "volatile int i".
