@@ -1,5 +1,12 @@
 2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* custom/Linux-posix.cfg: Merge patch from Till Straumann which would
+	work except gcc core dumps with an ICE when may_alias is used in this
+	code. I filed a GCC PR and reduced optimization to -O0 and it does
+	run again.
+
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Templates/Makefile.leaf: At suggestion of Robert Grimes add commented
 	out make-cxx-exe usage example.
 
