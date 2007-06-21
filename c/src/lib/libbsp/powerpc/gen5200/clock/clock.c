@@ -126,6 +126,8 @@ rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
 
+uint64_t Clock_last_TBR;
+
 /*
  *  ISR Handlers
  */
@@ -141,6 +143,7 @@ void mpc5200_gpt_clock_isr(rtems_irq_hdl_param handle)
     {
 
     gpt->status |= GPT_STATUS_TEXP;
+    Clock_last_TBR = PPC_Get_timebase_register();
 
 
     Clock_driver_ticks++;
@@ -186,6 +189,18 @@ void mpc5200_set_gpt_count(uint32_t counter_value, uint32_t gpt_no)
 
   }
 
+uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+{
+  uint64_t new_tbr;
+  uint64_t bus_cycles;
+  uint32_t nsecs;
+
+  new_tbr = PPC_Get_timebase_register();
+  bus_cycles = (new_tbr - Clock_last_TBR) * 4;
+  nsecs =  (uint32_t) (bus_cycles / (XLB_CLOCK / 1000000)) * 1000;
+
+  return nsecs;
+}
 
 /*
  *  Enable MPC5x00 GPT interrupt
@@ -195,6 +210,7 @@ void mpc5200_enable_gpt_int(uint32_t gpt_no)
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[gpt_no]);
 
   gpt->emsel |= GPT_EMSEL_CE | GPT_EMSEL_INTEN;
+  Clock_last_TBR = PPC_Get_timebase_register();
 
   }
 
@@ -226,7 +242,6 @@ uint32_t mpc5200_check_gpt_status(uint32_t gpt_no)
 void clockOn(const rtems_irq_connect_data* irq)
   {
   uint32_t gpt_no;
-
 
   gpt_no = BSP_SIU_IRQ_TMR0 - (irq->name);
 
@@ -375,6 +390,9 @@ void Install_clock(rtems_device_minor_number gpt_no)
 
   ClockInitialized = 1;
 
+    rtems_clock_set_nanoseconds_extension(
+      bsp_clock_nanoseconds_since_last_tick
+    );
   atexit(Clock_exit);
 
   }

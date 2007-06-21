@@ -1,3 +1,7 @@
+2007-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock/clock.c: Add nanoseconds since last tick support.
+
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	Add Embedded Planets EP5200 which is the same as the Freescale
