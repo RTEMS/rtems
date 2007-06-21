@@ -1,3 +1,8 @@
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Templates/Makefile.leaf: At suggestion of Robert Grimes add commented
+	out make-cxx-exe usage example.
+
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* custom/gen5200.cfg: Remove junk comment.

@@ -71,8 +71,14 @@ CLOBBER_ADDITIONS +=
 
 all:	${ARCH} $(SRCS) $(PGMS)
 
+# The following links using C rules.
 ${ARCH}/xxx-your-program-here: ${OBJS} ${LINK_FILES}
 	$(make-exe)
+
+# The following links using C++ rules to get the C++ libraries.
+# Be sure you BSP has a make-cxx-exe rule if you use this.
+# ${ARCH}/xxx-your-program-here: ${OBJS} ${LINK_FILES}
+# 	$(make-cxx-exe)
 
 # Install the program(s), appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)
