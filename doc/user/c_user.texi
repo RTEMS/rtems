@@ -76,6 +76,8 @@
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
+@contents
+
 @include preface.texi
 @include overview.texi
 @include concepts.texi
@@ -166,6 +168,5 @@ This is the online version of the RTEMS C User's Guide.
 @c There are currently no Concept Index entries.
 @printindex cp
 
-@contents
 @bye
 

@@ -61,6 +61,8 @@
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
+@contents
+
 @include intro.texi
 @include require.texi
 @include binaries.texi
@@ -108,6 +110,5 @@ This is the online version of the Getting Started with RTEMS.
 @c There are currently no Concept Index entries.
 @c @printindex cp
 
-@contents
 @bye
 

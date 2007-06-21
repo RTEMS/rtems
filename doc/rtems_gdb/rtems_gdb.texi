@@ -57,6 +57,8 @@
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
+@contents
+
 @include intro.texi
 @include swarch.texi
 @include started.texi
@@ -100,6 +102,5 @@ This is the online version of the RTEMS/GDB User's Guide.
 @c There are currently no Concept Index entries.
 @c @printindex cp
 
-@contents
 @bye
 

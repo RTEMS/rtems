@@ -1,3 +1,15 @@
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ada_user/ada_user.texi, bsp_howto/bsp_howto.texi,
+	cpu_supplement/cpu_supplement.texi, develenv/develenv.texi,
+	filesystem/filesystem.texi, itron3.0/itron.texi,
+	networking/networking.texi, porting/porting.texi,
+	posix1003.1/posix1003_1.texi, posix_users/posix_users.texi,
+	rgdb_specs/rgdb_specs.texi, rtems_gdb/rtems_gdb.texi,
+	started/started.texi, started_ada/started_ada.texi, user/c_user.texi:
+	Print table of contents in front of manual where it should be when
+	you print.
+
 2007-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/io.t: Fix typo.

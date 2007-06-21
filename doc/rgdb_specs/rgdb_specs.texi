@@ -72,6 +72,8 @@
 
 This is the online version of the RTEMS Remote Debugger Server Specifications.
 
+@contents
+
 @menu
 * Introduction::
 * Document Revision History::
@@ -104,6 +106,5 @@ This is the online version of the RTEMS Remote Debugger Server Specifications.
 @c There are currently no Concept Index entries.
 @c @printindex cp
 
-@contents
 @bye
 

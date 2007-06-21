@@ -70,6 +70,8 @@
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
+@contents
+
 @include intro.texi
 @include direct.texi
 @include sample.texi
@@ -109,6 +111,5 @@ There are currently no Command and Variable Index entries.
 There are currently no Concept Index entries.
 @c @printindex cp
 
-@contents
 @bye
 
