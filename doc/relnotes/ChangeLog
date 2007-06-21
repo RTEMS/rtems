@@ -1,3 +1,8 @@
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* relnotes.texi: Print table of contents in front of manual where it
+	should be when you print.
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* intro.texi, status.texi: i960 obsoleted.
