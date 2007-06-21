@@ -453,6 +453,75 @@ void _CPU_Thread_Idle_body( void )
 
 }
 
+
+typedef struct AuxFrame_ {
+	/* stack builds down from here */
+	uint32_t	ebx, esi, edi;
+	void       (*eip)();
+	jmp_buf    *pjb;
+	uint32_t   old_esp;
+} AuxFrame __attribute__((may_alias));
+
+/* MUST make sure this is called in a new frame so it
+ * uses the new stack
+ */
+static void trampo(void (*pc)(), jmp_buf *pjb)
+__attribute__((noinline));
+
+static void trampo(void (*pc)(), jmp_buf *pjb)
+{
+	if ( setjmp( *pjb ) )
+		pc();
+}
+
+/* Same as above; this should probably be entirely coded in assembly
+ * to avoid problems
+ */
+static void cpy_jmpbuf(AuxFrame *new_sp) __attribute__((noinline));
+
+/*
+ * NOTE: this routine relies on the layout of 'AuxFrame' above
+ *
+ * INPUT: pointer to a AuxFrame on new stack;
+ *
+ * What it does:
+ *      1) save current SP in new stack frame
+ *      2) switch stack to new_sp
+ *      3) load registers with desired values (except for PC)
+ *      4) call setjmp() to store context
+ *      4a) setjmp returns 0: restore SP and leave
+ *      4b) setjmp returns 1 (got here from longjmp):
+ *          call code at PC
+ */
+static void cpy_jmpbuf(AuxFrame *new_sp)
+{
+asm volatile(
+	/* Save current ESP in AuxFrame       */
+	"	movl %%esp,0x14(%0)   \n"
+	/* Switch ESP to new stack (AuxFrame) */
+	"	movl %0, %%esp        \n"
+	/* Pop off / load EBX                 */
+	"	popl %%ebx            \n"
+	/* Pop off / load ESI                 */
+	"	popl %%esi            \n"
+	/* Pop off / load EDI                 */
+	"	popl %%edi            \n"
+	/* Pop off EBP; this should never be 
+	 * used - 'trampo' is a C routine and
+	 * saves-restores the 'deadcafe' value.
+	 */
+	"   movl $0xdeadcafe,%%ebp\n"
+	/* Call trampoline                    */
+	"	call trampo           \n"
+	/* If we return (setjmp returned 0)
+	 * then we restore the old SP
+	 */
+	"	movl 8(%%esp),%%esp   \n"
+	::"r"(new_sp):"ebx","esi","edi");
+
+	/* When leaving this routine, the original EBP is restored */
+}
+
 /*PAGE
  *
  *  _CPU_Context_Initialize
@@ -539,24 +608,19 @@ void _CPU_Context_Initialize(
      *  This information was gathered by disassembling setjmp().
      */
 
-    {
-      uint32_t   stack_ptr;
+	{
+      AuxFrame *stack_ptr;
 
-      stack_ptr = _stack_high - CPU_FRAME_SIZE;
+      stack_ptr = (AuxFrame*)( _stack_high - sizeof(AuxFrame));
+	  stack_ptr->ebx = 0xFEEDFEED;
+      stack_ptr->esi = 0xDEADDEAD;
+      stack_ptr->edi = 0xDEAFDEAF;
+	  stack_ptr->eip = (void (*)())jmp_addr;
+	  stack_ptr->pjb = &((Context_Control_overlay *)_the_context)->regs;
 
-      *(addr + EBX_OFF) = 0xFEEDFEED;
-      *(addr + ESI_OFF) = 0xDEADDEAD;
-      *(addr + EDI_OFF) = 0xDEAFDEAF;
-      *(addr + EBP_OFF) = stack_ptr;
-      *(addr + ESP_OFF) = stack_ptr;
-      *(addr + RET_OFF) = jmp_addr;
+	  cpy_jmpbuf(stack_ptr);
 
-      addr = (uint32_t   *) stack_ptr;
-
-      addr[ 0 ] = jmp_addr;
-      addr[ 1 ] = (uint32_t  ) stack_ptr;
-      addr[ 2 ] = (uint32_t  ) stack_ptr;
-    }
+	}
 
 #else
 #error "UNKNOWN CPU!!!"
