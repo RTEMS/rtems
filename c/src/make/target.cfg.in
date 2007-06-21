@@ -50,7 +50,7 @@ export PROJECT_ROOT
 #    region  -- used by lib/libcsupport for malloc()
 #    ext     -- used by libc for libc reentrancy hooks
 
-MANAGERS_REQUIRED=region ext sem
+MANAGERS_REQUIRED=
 
 # Create a RTEMS executable based on MANAGERS which was set in
 #  app's Makefile

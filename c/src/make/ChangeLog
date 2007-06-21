@@ -1,3 +1,8 @@
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* target.cfg.in: region, extension and semaphore are no longer
+	required.
+
 2007-05-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* leaf.cfg: Add optional manager stub for Barrier.
