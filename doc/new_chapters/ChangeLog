@@ -1,3 +1,8 @@
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* new_chapters.texi: Print table of contents in front of manual where
+	it should be when you print.
+
 2007-05-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, gen_section: Integrate Rate Monotonic Statistics and

@@ -78,7 +78,8 @@
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
-@include rtmonuse.texi
+@contents
+
 @include error.texi
 @include monitor.texi
 @ifinfo
@@ -88,7 +89,6 @@
 This is the online version of the RTEMS POSIX API User's Guide
 
 @menu
-* Rate Monotonic Period Statistics::
 * Error Reporting Support::
 * Monitor Task::
 * Command and Variable Index::
@@ -114,6 +114,5 @@ There are currently no Command and Variable Index entries.
 There are currently no Concept Index entries.
 @c @printindex cp
 
-@contents
 @bye
 
