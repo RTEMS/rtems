@@ -1,5 +1,10 @@
 2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* cpu.c: Comment out may_alias so this compiles without a compiler
+	error.
+
+2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* cpu.c: Merge patch from Till Straumann which would work except gcc
 	core dumps with an ICE when may_alias is used in this code. I filed a
 	GCC PR and reduced optimization to -O0 and it does run again.

@@ -460,7 +460,7 @@ typedef struct AuxFrame_ {
 	void       (*eip)();
 	jmp_buf    *pjb;
 	uint32_t   old_esp;
-} AuxFrame __attribute__((may_alias));
+} AuxFrame /* __attribute__((may_alias)) ICE when not commented out*/;
 
 /* MUST make sure this is called in a new frame so it
  * uses the new stack
