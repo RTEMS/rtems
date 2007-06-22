@@ -225,7 +225,7 @@ SECTIONS
       *(.data1)
       *(.data.* .gnu.linkonce.d.*)
       PROVIDE (__SDATA_START__ = .);
-      *(.sdata)
+      *(.sdata*)
       *(.gnu.linkonce.s.*)
       data.end = .;
     } > ram
