@@ -16,7 +16,6 @@
 #include <bsp.h>
 #include <irq.h>
 
-rtems_isr clock_isr(rtems_vector_number vector);
 rtems_isr Clock_isr(rtems_vector_number vector);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
@@ -48,15 +47,15 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
 */
 #define Clock_driver_support_initialize_hardware()                            \
   do {                                                                        \
-      *EP7312_SYSCON1 |= EP7312_SYSCON1_TC1_PRESCALE;                         \
-      *EP7312_TC1D =(BSP_Configuration.microseconds_per_tick * 2000)/1000000; \
-      *EP7312_TC1EOI = 0xFFFFFFFF;                                            \
-     } while (0)
+    *EP7312_SYSCON1 |= EP7312_SYSCON1_TC1_PRESCALE;                         \
+    *EP7312_TC1D =(BSP_Configuration.microseconds_per_tick * 2000)/1000000; \
+    *EP7312_TC1EOI = 0xFFFFFFFF;                                            \
+  } while (0)
 
 #define Clock_driver_support_shutdown_hardware()                        \
   do {                                                                  \
-	BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
-     } while (0)
+    BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
+  } while (0)
 
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
