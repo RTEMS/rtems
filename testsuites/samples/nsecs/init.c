@@ -41,6 +41,9 @@ void subtract_em(
   _Timespec_Subtract( start, stop, t );
 }
 
+/* body below .. hoping it isn't inlined */
+void Empty_function();
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -142,3 +145,6 @@ rtems_task Init(
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>
+
+/* put here hoping it won't get inlined */
+void Empty_function() {}
