@@ -71,12 +71,12 @@ zylons()
 {
   unsigned char *leds 	= (unsigned char *)LED_ADDR;
   unsigned char curled = 0xfe;
-  void delay( int );
+  void rtems_bsp_delay( int );
 
   while (1)
     {
       *leds = curled;
       curled = (curled >> 1) | (curled << 7);
-      delay ( 8000 );
+      rtems_bsp_delay ( 8000 );
     }
 }

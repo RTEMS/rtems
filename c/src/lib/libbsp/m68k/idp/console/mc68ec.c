@@ -8,10 +8,10 @@
 #include "leds.h"
 
 /*
- * delay -- delay execution. This is an ugly hack. It should
+ * rtems_bsp_delay -- delay execution. This is an ugly hack. It should
  *          use the timer, but I'm waiting for docs. (sigh)
  */
-void delay(num)
+void rtems_bsp_delay(num)
 int num;
 {
   while (num--)

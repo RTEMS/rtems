@@ -1,3 +1,8 @@
+2007-06-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/leds.c, console/mc68ec.c: Rename delay to rtems_bsp_delay to
+	avoid conflicts in application space.
+
 2007-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Handle .data.* sections
