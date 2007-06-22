@@ -1,3 +1,8 @@
+2007-06-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* network/network.c: Remove cs8900_get_mac_addr which conflicted with
+	one in libchip AND contained a hard-coded MAC address.
+
 2007-06-13	Ray Xu <rayx@gmail.com>
 
 	* startup/linkcmds: Shrink the aligment requirements.
