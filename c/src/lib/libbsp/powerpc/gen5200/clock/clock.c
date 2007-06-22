@@ -10,6 +10,8 @@
 |                    D-82178 Puchheim                             |
 |                    Germany                                      |
 |                    rtems@embedded-brains.de                     |
+|                                                                 |
+| Reworked by Joel Sherrill to use clockdrv_shell.c               |
 +-----------------------------------------------------------------+
 | The license and distribution terms for this file may be         |
 | found in the file LICENSE in this distribution or at            |
@@ -110,84 +112,67 @@
 #include <stdlib.h>                     /* for atexit() */
 #include "../include/mpc5200.h"
 
-volatile uint32_t Clock_driver_ticks;
+#define GPT (BSP_PERIODIC_TIMER - BSP_SIU_IRQ_TMR0)
 
-void Clock_exit(void);
-
-uint32_t counter_value;
-
-volatile int ClockInitialized = 0;
-
-
-/*
- * These are set by clock driver during its init
- */
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
-
-
+/* this lets us do nanoseconds since last tick */
 uint64_t Clock_last_TBR;
+volatile uint32_t counter_value;
+volatile int ClockInitialized = 0;
 
 /*
  *  ISR Handlers
  */
 void mpc5200_gpt_clock_isr(rtems_irq_hdl_param handle)
-  {
+{
   uint32_t status;
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)handle;
 
   status = gpt->status;
 
-
-  if(ClockInitialized  && (status & GPT_STATUS_TEXP))
-    {
-
+  if (ClockInitialized  && (status & GPT_STATUS_TEXP)) {
     gpt->status |= GPT_STATUS_TEXP;
     Clock_last_TBR = PPC_Get_timebase_register();
 
-
     Clock_driver_ticks++;
     rtems_clock_tick();
-
-    }
-
   }
-
+}
 
 /*
  *  Initialize MPC5x00 GPT
  */
 void mpc5200_init_gpt(uint32_t gpt_no)
-  {
+{
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[gpt_no]);
 
   gpt->status = GPT_STATUS_RESET;
-  gpt->emsel  = GPT_EMSEL_CE | GPT_EMSEL_ST_CONT | GPT_EMSEL_INTEN | GPT_EMSEL_GPIO_OUT_HIGH | GPT_EMSEL_TIMER_MS_GPIO;
+  gpt->emsel  = GPT_EMSEL_CE | GPT_EMSEL_ST_CONT | GPT_EMSEL_INTEN | 
+                GPT_EMSEL_GPIO_OUT_HIGH | GPT_EMSEL_TIMER_MS_GPIO;
 
-  }
-
+}
 
 /*
  *  Set MPC5x00 GPT counter
  */
 void mpc5200_set_gpt_count(uint32_t counter_value, uint32_t gpt_no)
-  {
+{
   uint32_t prescaler_value = 1;
   uint32_t counter = counter_value;
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[gpt_no]);
 
-  /* Calculate counter/prescaler value, e.g. IPB_Clock=33MHz -> Int. every 0,3 nsecs. - 130 secs.*/
-  while((counter >= (1 << 16)) && (prescaler_value < (1 << 16)))
-    {
-      prescaler_value++;
-      counter = counter_value / prescaler_value;
-    }
+  /* Calculate counter/prescaler value, e.g.
+   *   IPB_Clock=33MHz -> Int. every 0,3 nsecs. - 130 secs
+   */
+  while ((counter >= (1 << 16)) && (prescaler_value < (1 << 16))) {
+    prescaler_value++;
+    counter = counter_value / prescaler_value;
+  }
 
   counter = (uint16_t)counter;
 
   gpt->count_in = (prescaler_value << 16) + counter;
 
-  }
+}
 
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
@@ -206,41 +191,35 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
  *  Enable MPC5x00 GPT interrupt
  */
 void mpc5200_enable_gpt_int(uint32_t gpt_no)
-  {
+{
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[gpt_no]);
 
   gpt->emsel |= GPT_EMSEL_CE | GPT_EMSEL_INTEN;
   Clock_last_TBR = PPC_Get_timebase_register();
-
-  }
-
+}
 
 /*
  *  Disable MPC5x00 GPT interrupt
  */
 void mpc5200_disable_gpt_int(uint32_t gpt_no)
-  {
+{
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[gpt_no]);
 
   gpt->emsel &= ~(GPT_EMSEL_CE | GPT_EMSEL_INTEN);
-
-  }
-
+}
 
 /*
  *  Check MPC5x00 GPT status
  */
 uint32_t mpc5200_check_gpt_status(uint32_t gpt_no)
-  {
+{
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[gpt_no]);
 
   return ((gpt->emsel) & (GPT_EMSEL_CE | GPT_EMSEL_INTEN));
-
-  }
-
+}
 
 void clockOn(const rtems_irq_connect_data* irq)
-  {
+{
   uint32_t gpt_no;
 
   gpt_no = BSP_SIU_IRQ_TMR0 - (irq->name);
@@ -251,14 +230,11 @@ void clockOn(const rtems_irq_connect_data* irq)
   mpc5200_set_gpt_count(counter_value, (uint32_t)gpt_no);
   mpc5200_enable_gpt_int((uint32_t)gpt_no);
 
-  Clock_driver_ticks = 0;
   ClockInitialized = 1;
-
-  }
-
+}
 
 void clockOff(const rtems_irq_connect_data* irq)
-  {
+{
   uint32_t gpt_no;
 
   gpt_no = BSP_SIU_IRQ_TMR0 - (irq->name);
@@ -266,87 +242,68 @@ void clockOff(const rtems_irq_connect_data* irq)
   mpc5200_disable_gpt_int((uint32_t)gpt_no);
 
   ClockInitialized = 0;
-
-  }
-
+}
 
 int clockIsOn(const rtems_irq_connect_data* irq)
-  {
+{
   uint32_t gpt_no;
 
   gpt_no = BSP_SIU_IRQ_TMR0 - (irq->name);
 
-  if(mpc5200_check_gpt_status(gpt_no) && ClockInitialized)
+  if (mpc5200_check_gpt_status(gpt_no) && ClockInitialized)
     return ClockInitialized;
-  else
-    return 0;
-  }
+  return 0;
+}
 
 
 int BSP_get_clock_irq_level()
-  {
-
+{
   /*
    * Caution : if you change this, you must change the
    * definition of BSP_PERIODIC_TIMER accordingly
     */
   return BSP_PERIODIC_TIMER;
-  }
+}
 
 
 int BSP_disconnect_clock_handler (void)
-  {
+{
   rtems_irq_connect_data clockIrqData;
   clockIrqData.name   = BSP_PERIODIC_TIMER;
 
 
-  if (!BSP_get_current_rtems_irq_handler(&clockIrqData))
-    {
-
+  if (!BSP_get_current_rtems_irq_handler(&clockIrqData)) {
     printk("Unable to stop system clock\n");
     rtems_fatal_error_occurred(1);
-
-    }
+  }
 
   return BSP_remove_rtems_irq_handler (&clockIrqData);
-
-  }
+}
 
 
 int BSP_connect_clock_handler (uint32_t gpt_no)
-  {
-
+{
   rtems_irq_hdl hdl = 0;
   rtems_irq_connect_data clockIrqData;
-
 
   /*
    * Reinit structure
    */
-
   clockIrqData.name   = BSP_PERIODIC_TIMER;
 
-  if(!BSP_get_current_rtems_irq_handler(&clockIrqData))
-    {
-
+  if (!BSP_get_current_rtems_irq_handler(&clockIrqData)) {
     printk("Unable to get system clock handler\n");
     rtems_fatal_error_occurred(1);
+  }
 
-    }
-
-  if(!BSP_remove_rtems_irq_handler (&clockIrqData))
-    {
-
+  if (!BSP_remove_rtems_irq_handler (&clockIrqData)) {
     printk("Unable to remove current system clock handler\n");
     rtems_fatal_error_occurred(1);
-
-    }
-
-  if ((gpt_no >= GPT0) ||
-      (gpt_no <= GPT7)) {
-    hdl = (rtems_irq_hdl_param )&mpc5200.gpt[gpt_no];
   }
-  else {
+
+  if ((gpt_no >= GPT0) || (gpt_no <= GPT7)) {
+    hdl = (rtems_irq_hdl_param )&mpc5200.gpt[gpt_no];
+  } else {
     printk("Unable to set system clock handler\n");
     rtems_fatal_error_occurred(1);
   }
@@ -358,106 +315,42 @@ int BSP_connect_clock_handler (uint32_t gpt_no)
   clockIrqData.isOn   = clockIsOn;
 
   return BSP_install_rtems_irq_handler (&clockIrqData);
-
-  }
-
-
-/*
- * Called via atexit()
- * Remove the clock interrupt handler by setting handler to NULL
- */
-void Clock_exit(void)
-  {
-
-  (void) BSP_disconnect_clock_handler ();
-
-  }
-
-
-void Install_clock(rtems_device_minor_number gpt_no)
-  {
-
-  Clock_driver_ticks = 0;
-
-  counter_value = rtems_configuration_get_microseconds_per_tick() *
-                      rtems_cpu_configuration_get_clicks_per_usec();
-
-  mpc5200_init_gpt((uint32_t)gpt_no);
-  mpc5200_set_gpt_count(counter_value, (uint32_t)gpt_no);
-
-
-  BSP_connect_clock_handler(gpt_no);
-
-  ClockInitialized = 1;
-
-    rtems_clock_set_nanoseconds_extension(
-      bsp_clock_nanoseconds_since_last_tick
-    );
-  atexit(Clock_exit);
-
-  }
-
-void ReInstall_clock(uint32_t gpt_no)
-  {
-
-  BSP_connect_clock_handler(gpt_no);
-
-  }
-
-
-rtems_device_driver Clock_initialize
-  (
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-  )
-  {
-  /* force minor according to definitions in irq.h */
-  minor = BSP_PERIODIC_TIMER - BSP_SIU_IRQ_TMR0;
-
-  Install_clock((uint32_t)minor);
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
-
-  return RTEMS_SUCCESSFUL;
-
-  }
-
-rtems_device_driver Clock_control
-  (
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-  )  {
-
-  rtems_libio_ioctl_args_t *args = pargp;
-
-  /* forec minor according to definitions in irq.h */
-  minor = BSP_PERIODIC_TIMER - BSP_SIU_IRQ_TMR0;
-
-  if(args != 0) {
-    /*
-     * This is hokey, but until we get a defined interface
-     * to do this, it will just be this simple...
-     */
-    if(args->command == rtems_build_name('I', 'S', 'R', ' ')) {
-      if ((minor >= GPT0) ||
-	  (minor <= GPT7)) {
-	mpc5200_gpt_clock_isr((rtems_irq_hdl_param )&mpc5200.gpt[minor]);
-      }
-      else {
-	printk("Unable to call system clock handler\n");
-	rtems_fatal_error_occurred(1);
-      }
-    }
-    else if(args->command == rtems_build_name('N', 'E', 'W', ' ')) {
-      ReInstall_clock((uint32_t)minor);
-    }
-  }
-  return RTEMS_SUCCESSFUL;
-
 }
+
+#define CLOCK_VECTOR 0
+
+#define Clock_driver_support_at_tick()                                   \
+  do {                                                                   \
+    uint32_t status;                                                     \
+    struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[GPT]); \
+    \
+    status = gpt->status;                                                \
+    \
+    if (ClockInitialized  && (status & GPT_STATUS_TEXP)) {               \
+      gpt->status |= GPT_STATUS_TEXP;                                    \
+      Clock_last_TBR = PPC_Get_timebase_register();                      \
+    }                                                                    \
+  } while(0)
+
+#define Clock_driver_support_install_isr( _new, _old ) \
+  do {                                                 \
+      (_old) = NULL; /* avoid warning */;              \
+      BSP_connect_clock_handler(GPT);                  \
+  } while(0)
+
+/* This driver does this in clockOn called at connection time */
+#define Clock_driver_support_initialize_hardware() \
+  do {        \
+    ;         \
+  } while (0)
+
+#define Clock_driver_nanoseconds_since_last_tick \
+    bsp_clock_nanoseconds_since_last_tick
+
+#define Clock_driver_support_shutdown_hardware() \
+  do { \
+    (void) BSP_disconnect_clock_handler (); \
+  } while (0)
+
+#include "../../../shared/clockdrv_shell.c"
+

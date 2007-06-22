@@ -103,7 +103,7 @@ extern TaskBDIdxTable_t TaskBDIdxTable[MAX_TASKS];
 static TaskId rxTaskId;	/* SDMA RX task ID */
 static TaskId txTaskId;	/* SDMA TX task ID */
 
-/*#define ETH_DEBUG*/
+#define ETH_DEBUG
 
 /*
  * Number of interfaces supported by this driver
@@ -564,6 +564,7 @@ static int mpc5200_fec_reset(struct mpc5200_enet_struct *sc) {
 void mpc5200_fec_off(struct mpc5200_enet_struct *sc)
   {
   int            counter = 0xffff;
+  
 
 #if defined(ETH_DEBUG)
   unsigned short phyStatus, i;
@@ -1241,6 +1242,7 @@ static void mpc5200_fec_initialize_phy(struct mpc5200_enet_struct *sc)
 
 #if defined(ETH_DEBUG)
   int i;
+  unsigned short phyStatus;
  /*
   * Print PHY registers after initialization.
   */

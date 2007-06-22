@@ -1,3 +1,8 @@
+2007-06-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock/clock.c, network_5200/network.c: Convert to using clock driver
+	template.
+
 2007-06-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds.brs5l: Add missing wild card on .sdata section so
