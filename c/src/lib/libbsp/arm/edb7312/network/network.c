@@ -67,16 +67,6 @@ unsigned short cs8900_mem_get_reg (cs8900_device *cs, unsigned long reg)
     return cs8900_io_get_reg(cs, CS8900_IO_PP_DATA_PORT0);
 }
 
-void cs8900_get_mac_addr (cs8900_device *cs, unsigned char *mac_address)
-{
-    mac_address[0] = 0x08;
-    mac_address[1] = 0x00;
-    mac_address[2] = 0x3e;
-    mac_address[3] = 0x21;
-    mac_address[4] = 0xc7;
-    mac_address[5] = 0xf7;
-}
-
 void cs8900_attach_interrupt (cs8900_device *cs)
 {
     g_cs = cs;
