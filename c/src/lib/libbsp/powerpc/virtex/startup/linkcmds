@@ -1,0 +1,169 @@
+/* Greg modifications
+ *  This file contains directives for the GNU linker which are specific
+ *  to the virtex
+ *  This file is intended to be used together with dlentry.s
+ *  it will generate downloadable code
+ *
+ *  Modifications for gen405 by Dennis Ehlin
+ *  Modifications for virtex by Keith, Greg, and Bob
+ *
+ *  $Id$
+ */
+
+OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
+              "elf32-powerpc")
+OUTPUT_ARCH(powerpc)
+
+ENTRY(download_entry)
+
+
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 8M;
+
+
+MEMORY
+  {
+        RAM : ORIGIN = 0, LENGTH = 16M
+        /*FLASH : ORIGIN = 0xFFE00000, LENGTH = 16M*/
+  }
+SECTIONS
+{
+  .text 0x10000:
+  {
+     text.start = . ;
+     *(.entry)
+     *(.entry2)
+     *(.text*)
+     *(.rodata*)
+     *(.rodata1)
+
+     /*
+      * Special FreeBSD sysctl sections.
+      */
+     . = ALIGN (16);
+     __start_set_sysctl_set = .;
+     *(set_sysctl_*);
+     __stop_set_sysctl_set = ABSOLUTE(.);
+     *(set_domain_*);
+     *(set_pseudo_*);
+
+     *(.eh_frame)
+     *(.gnu.linkonce.r*)
+     *(.descriptors)
+     *(rom_ver)
+     etext = ALIGN(0x10);
+     _etext = .;
+
+     *(.gnu.linkonce.t*)
+
+     __CTOR_LIST__ = .;
+     LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+     *(.ctors)
+     LONG(0)
+     __CTOR_END__ = .;
+
+     __DTOR_LIST__ = .;
+     LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+     *(.dtors)
+     LONG(0)
+     __DTOR_END__ = .;
+
+     *(.lit)
+     *(.shdata)
+     _init = .; __init = .; *(.init)
+     _fini = .; __fini = .; *(.fini)
+     _endtext = ALIGN(0x10);
+     text.end = .;
+  } > RAM
+
+  text.size = text.end - text.start;
+
+  /* R/W Data */
+  .data :
+  {
+    *(.data)
+    *(.data1)
+     *(.data.* .gnu.linkonce.d*)
+    PROVIDE (__SDATA_START__ = .);
+    *(.sdata*)
+    *(.gnu.linkonce.s.*)
+  } > RAM
+
+  PROVIDE (__EXCEPT_START__ = .);
+  .gcc_except_table   :
+  {
+	*(.gcc_except_table)
+  } >RAM
+  PROVIDE (__EXCEPT_END__ = .);
+
+  __GOT_START__ = .;
+  .got :
+  {
+     s.got = .;
+     *(.got.plt) *(.got)
+  } > RAM
+  __GOT_END__ = .;
+
+  .got1 :
+  {
+	*(.got1)
+  } >RAM
+
+  PROVIDE (__GOT2_START__ = .);
+  PROVIDE (_GOT2_START_ = .);
+  .got2		  :
+  {
+	*(.got2)
+  } >RAM
+  PROVIDE (__GOT2_END__ = .);
+  PROVIDE (_GOT2_END_ = .);
+
+  PROVIDE (__FIXUP_START__ = .);
+  PROVIDE (_FIXUP_START_ = .);
+  .fixup	  : { *(.fixup) 	} >RAM
+  PROVIDE (_FIXUP_END_ = .);
+  PROVIDE (__FIXUP_END__ = .);
+
+  PROVIDE (__SDATA2_START__ = .);
+  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
+  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
+  PROVIDE (__SBSS2_END__ = .);
+
+  __SBSS_START__ = .;
+  .bss :
+  {
+    bss.start = .;
+    *(.bss .bss* .gnu.linkonce.b*)
+    *(.sbss*) *(COMMON)
+    bss.end = ALIGN(4);
+    bss.size = bss.end - bss.start;
+  } > RAM
+  __SBSS_END__ = .;
+
+  /* align bottom of 32k init stack at a 32k boundary */
+  . = . + 0x4000;
+  . = ALIGN( 0x8000 );
+  stack.start = .;
+  . = . + 0x8000;
+  stack.end   = .;
+  /*
+   * Interrupt stack setup
+   */
+  IntrStack_start = ALIGN(0x10);
+  . += 0x4000;
+  intrStack = .;
+  PROVIDE(intrStackPtr = intrStack);
+
+  PROVIDE(_end = intrStack);
+
+  .line 0 : { *(.line) }
+  .debug 0 : { *(.debug) }
+  .debug_sfnames 0 : { *(.debug_sfnames) }
+  .debug_srcinfo 0 : { *(.debug_srcinfo) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  .debug_aranges 0 : { *(.debug_aranges) }
+  .debug_aregion 0 : { *(.debug_aregion) }
+  .debug_macinfo 0 : { *(.debug_macinfo) }
+  .stab 0 : { *(.stab) }
+  .stabstr 0 : { *(.stabstr) }
+
+}

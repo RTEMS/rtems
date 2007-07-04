@@ -1,0 +1,13 @@
+2007-04-1	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* bsp_specs, bsp_specs.dl, ChangeLog, configure.ac,
+	* console/consolelite.c, dlentry/dlentry.S, include/bsp.h,
+	* include/coverhd.h, include/opbintctrl.h, include/tm27.h,
+	* include/xparameters_dflt.h, irq/irq.h, irq/irq_init.c,
+	* Makefile.am, network/xiltemac.c, network/xiltemac.h,
+	* opbintctrl/opbintctrl.c, preinstall.am, README,
+	* startup/bspclean.c, startup/bspstart.c, startup/linkcmds,
+	* startup/linkcmds.dl, startup/setvec.c;
+
+	integration of virtex BSP into RTEMS source tree
+

@@ -1,0 +1,33 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* If defined, then the PowerPC specific code in RTEMS will use some of the
+   special purpose registers to slightly optimize interrupt response time. The
+   use of these registers can conflict with other tools like debuggers. */
+#undef PPC_USE_SPRG
+
+/* This defines the base address of the exception table. NOTE: Vectors are
+   actually at 0xFFF00000 but file starts at offset. */
+#undef PPC_VECTOR_FILE_BASE
+
+/* This defines the location of the hardware specific "xparameters.h" file. in
+   the file system. Specify an absolute path. Don't forget the double quotes
+   */
+#undef RTEMS_XPARAMETERS_H
+
+/* Defines path to Xilinx XPS PPC libraries. */
+#undef RTEMS_XPPC_BASE

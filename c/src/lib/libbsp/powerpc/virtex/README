@@ -1,0 +1,91 @@
+#
+#  $Id$
+#
+
+# Adapted from vitex BSP
+
+BSP NAME:           Virtex
+BOARD:              Xilinx ML-403 and (hopefully) any vitex/PPC based board
+BUS:                N/A
+CPU FAMILY:         ppc
+CPU:                PowerPC 405GP
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+
+DEBUG MONITOR:
+
+PERIPHERALS
+===========
+TIMERS:             405GP internal
+SERIAL PORTS:       Xilinx consolelite
+REAL-TIME CLOCK:    none
+DMA:                Xilinx vitex internal
+VIDEO:              none
+SCSI:               none
+NETWORKING:         Xilinx TEMAC
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       PPC Decrementer
+IOSUPP DRIVER:      N/A
+SHMSUPP:            N/A
+TIMER DRIVER:       N/A
+TTY DRIVER:         consoleelite
+
+STDIO
+=====
+PORT:               Console port 0
+ELECTRICAL:         RS-232
+BAUD:               as defined in FPGA design
+BITS PER CHARACTER: 8
+PARITY:             None
+STOP BITS:          1
+
+Notes
+=====
+
+Board description
+-----------------
+clock rate:	234 MHz
+ROM:		16MByte FLASH
+RAM:		64MByte DRAM
+
+virtex only supports single processor operations.
+
+Porting
+-------
+This board support package is written for a typical virtex/PPC FPGA
+system. The rough features of such a board are described above.
+
+When a new virtex FPGA system is created (using the Xilinx design
+software), a parameter file "xparameters.h" is also created, which
+describes the basic features of the hardware (like peripherals
+inculded, interrupt routing etc).
+
+This BSP normally takes its basic HW description for the file
+"xparameters_dflt.h", which describes my FPGA system. When this BSP
+should run on a different hardware, a path to the proper
+"xparameters.h" can be provided on the "configure" command line.
+
+For adapting this BSP to other boards, 
+
+the following files should be
+modified:
+
+- c/src/lib/libbsp/powerpc/virtex/startup/linkcmds
+	for the memory layout required
+
+- c/src/lib/libbsp/powerpc/virtex/startup/bspstart.c
+	for adaption of BSP_Configuration. here you can select
+	the clock source for the timers and the serial interface
+	(system clock or external clock pin), the clock rates, initial
+	baud rate and other stuff
+
+- c/src/lib/libbsp/powerpc/virtex/include/bsp.h
+	some BSP-related constants
+
+- c/src/lib/libbsp/powerpc/virtex/*
+	well, they should be generic, so there _should_ be no reason
+	to mess around there (but who knows...)
+
+
