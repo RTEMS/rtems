@@ -1,3 +1,18 @@
+2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* ppc403/clock/clock.c, ppc403/console/console405.c,
+	* ppc403/irq/ictrl.c, ppc403/irq/ictrl.h, ppc403/tty_drv/tty_drv.c:
+	Adapted from old to new exception handling to prepare the "virtex" BSP
+	
+2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, preinstall.am, new-exceptions/asm_utils.S,
+	* new-exceptions/raw_exception.c, new-exceptions/raw_exception.h,
+	* rtems/powerpc/powerpc.h, shared/include/cpuIdent.c shared/include/cpuIdent.h:
+	Created a shared implementation of the PowerPC exception
+	code. These files are a "superset" version of the various
+	implementations that was available up to now.
+	
 2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mpc6xx/clock/c_clock.c: Tinker with math so it does not overflow on

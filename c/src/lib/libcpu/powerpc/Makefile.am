@@ -32,6 +32,15 @@ new_exceptions_rtems_cpu_rel_SOURCES = new-exceptions/cpu.c \
     new-exceptions/cpu_asm.S
 new_exceptions_rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+
+include_libcpu_HEADERS += new-exceptions/raw_exception.h
+noinst_PROGRAMS += new-exceptions/raw_exception.rel
+new_exceptions_raw_exception_rel_SOURCES = new-exceptions/raw_exception.c \
+    new-exceptions/asm_utils.S
+new_exceptions_raw_exception_rel_CPPFLAGS = $(AM_CPPFLAGS)
+new_exceptions_raw_exception_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 endif
 
 ## shared/include
@@ -84,13 +93,27 @@ endif
 ppc403_console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+if OLD_EXCEPTIONS
 ## ppc403/ictrl
 include_HEADERS = ppc403/ictrl/ictrl.h
+else
+include_HEADERS = 
+include_libcpu_HEADERS += shared/include/spr.h 
 
+noinst_PROGRAMS += shared/cpuIdent.rel
+shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c shared/include/cpuIdent.h
+shared_cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
+shared_cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+include_libcpu_HEADERS += shared/include/cpuIdent.h
+
+endif
+
+if OLD_EXCEPTIONS
 noinst_PROGRAMS += ppc403/ictrl.rel
 ppc403_ictrl_rel_SOURCES = ppc403/ictrl/ictrl.c ppc403/ictrl/ictrl.h
 ppc403_ictrl_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_ictrl_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
 
 ## ppc403/timer
 noinst_PROGRAMS += ppc403/timer.rel
@@ -108,11 +131,13 @@ ppc403_tty_drv_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_tty_drv_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if OLD_EXCEPTIONS
 ## ppc403/vectors
 noinst_PROGRAMS += ppc403/vectors.rel
 ppc403_vectors_rel_SOURCES = ppc403/vectors/vectors.S ppc403/vectors/align_h.S
 ppc403_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
 endif
 
 EXTRA_DIST += mpc5xx/README
@@ -189,14 +214,6 @@ mpc505_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mpc6xx
-include_libcpu_HEADERS += mpc6xx/exceptions/raw_exception.h
-
-## mpc6xx/exceptions
-noinst_PROGRAMS += mpc6xx/exceptions.rel
-mpc6xx_exceptions_rel_SOURCES = mpc6xx/exceptions/raw_exception.c \
-    mpc6xx/exceptions/asm_utils.S
-mpc6xx_exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc6xx_exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## mpc6xx/mmu
 include_libcpu_HEADERS += mpc6xx/mmu/bat.h mpc6xx/mmu/pte121.h
@@ -251,15 +268,6 @@ mpc8xx_cpm_rel_SOURCES = mpc8xx/cpm/cp.c mpc8xx/cpm/dpram.c
 mpc8xx_cpm_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8xx_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-## mpc8xx/exceptions
-include_libcpu_HEADERS += mpc8xx/exceptions/raw_exception.h
-
-noinst_PROGRAMS += mpc8xx/exceptions.rel
-mpc8xx_exceptions_rel_SOURCES = mpc8xx/exceptions/raw_exception.c \
-    mpc8xx/exceptions/asm_utils.S
-mpc8xx_exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8xx_exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 ## mpc8xx/mmu
 include_mpc8xx_HEADERS += mpc8xx/include/mmu.h
 
@@ -304,16 +312,6 @@ mpc8260_cpm_rel_SOURCES = mpc8260/cpm/cp.c mpc8260/cpm/dpram.c mpc8260/cpm/brg.c
     mpc8260/include/cpm.h
 mpc8260_cpm_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8260_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## mpc8260/exceptions
-include_libcpu_HEADERS += mpc8260/exceptions/raw_exception.h
-
-noinst_PROGRAMS += mpc8260/exceptions.rel
-mpc8260_exceptions_rel_SOURCES = mpc8260/exceptions/raw_exception.c \
-    mpc8260/exceptions/asm_utils.S \
-    mpc8260/exceptions/raw_exception.h
-mpc8260_exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8260_exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## mpc8260/mmu
 include_mpc8260_HEADERS += mpc8260/include/mmu.h

@@ -25,7 +25,6 @@
 static rtems_raw_except_global_settings exception_config;
 static rtems_raw_except_connect_data    exception_table[LAST_VALID_EXC + 1];
 
-extern exception_handler_t globalExceptHdl;
 exception_handler_t globalExceptHdl;
 
 /* T. Straumann: provide a stack trace
@@ -115,6 +114,7 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
   printk("\t CTR = %x\n", excPtr->EXC_CTR);
   printk("\t XER = %x\n", excPtr->EXC_XER);
   printk("\t LR = %x\n", excPtr->EXC_LR);
+  printk("\t MSR = %x\n", excPtr->EXC_MSR);
   printk("\t DAR = %x\n", excPtr->EXC_DAR);
 
   BSP_printStackTrace(excPtr);
@@ -133,15 +133,19 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
     }
 }
 
-void nop_except_enable(const rtems_raw_except_connect_data* ptr)
+/***********************************************************
+ * dummy functions for on/off/isOn calls
+ * these functions just do nothing fulfill the semantic
+ * requirements to enable/disable a certain exception
+ */
+void exception_nop_enable(const rtems_raw_except_connect_data* ptr)
 {
 }
-int except_always_enabled(const rtems_raw_except_connect_data* ptr)
+
+int exception_always_enabled(const rtems_raw_except_connect_data* ptr)
 {
   return 1;
 }
-
-int mpc60x_vector_is_valid(rtems_vector vector);
 
 void initialize_exceptions()
 {
@@ -174,10 +178,11 @@ void initialize_exceptions()
     default: break;
   }
   for (i=0; i <= exception_config.exceptSize; i++) {
-    if (!mpc60x_vector_is_valid (i)) {
+    if (!ppc_vector_is_valid (i)) {
       continue;
     }
     exception_table[i].exceptIndex	= i;
+#if defined(PPC_HAS_60X_VECTORS)
     if ( has_shadowed_gprs
          && (   ASM_IMISS_VECTOR  == i
              || ASM_DLMISS_VECTOR == i
@@ -185,14 +190,17 @@ void initialize_exceptions()
       exception_table[i].hdl.raw_hdl	  = tgpr_clr_exception_vector_code_prolog;
       exception_table[i].hdl.raw_hdl_size = (unsigned)tgpr_clr_exception_vector_code_prolog_size;
     } else {
-      exception_table[i].hdl		  = exception_config.defaultRawEntry.hdl;
+      exception_table[i].hdl		= exception_config.defaultRawEntry.hdl;
     }
+#else
+    exception_table[i].hdl		= exception_config.defaultRawEntry.hdl;
+#endif
     exception_table[i].hdl.vector	= i;
-    exception_table[i].on		= nop_except_enable;
-    exception_table[i].off		= nop_except_enable;
-    exception_table[i].isOn		= except_always_enabled;
+    exception_table[i].on		= exception_nop_enable;
+    exception_table[i].off		= exception_nop_enable;
+    exception_table[i].isOn		= exception_always_enabled;
   }
-  if (!mpc60x_init_exceptions(&exception_config)) {
+  if (!ppc_init_exceptions(&exception_config)) {
     BSP_panic("Exception handling initialization failed\n");
   }
 #ifdef RTEMS_DEBUG

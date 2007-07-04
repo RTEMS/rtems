@@ -40,8 +40,17 @@
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/libio.h>
-
 #include <stdlib.h>                     /* for atexit() */
+#include <rtems/bspIo.h>
+/*
+ * check, which exception handling code is present
+ */
+#if !defined(ppc405)
+#define PPC_HAS_CLASSIC_EXCEPTIONS TRUE
+#else
+#define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
+#include <bsp/irq.h>
+#endif
 
 volatile uint32_t   Clock_driver_ticks;
 static uint32_t   pit_value, tick_time;
@@ -78,11 +87,14 @@ static inline uint32_t   get_itimer(void)
 /*
  *  ISR Handler
  */
- 
-rtems_isr
-Clock_isr(rtems_vector_number vector)
+
+#if PPC_HAS_CLASSIC_EXCEPTIONS
+rtems_isr Clock_isr(rtems_vector_number vector)
+#else
+void Clock_isr(void* handle)
+#endif
 {
-      uint32_t   clicks_til_next_interrupt;
+    uint32_t   clicks_til_next_interrupt;
     if (!auto_restart)
     {
       uint32_t   itimer_value;
@@ -138,9 +150,42 @@ Clock_isr(rtems_vector_number vector)
     rtems_clock_tick();
 }
 
-void Install_clock(rtems_isr_entry clock_isr)
+#if !PPC_HAS_CLASSIC_EXCEPTIONS
+int ClockIsOn(const rtems_irq_connect_data* unused)
 {
-    rtems_isr_entry previous_isr;
+    register uint32_t   tcr;
+ 
+    asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
+ 
+    return (tcr & 0x04000000) != 0;
+}
+#endif
+
+void ClockOff(
+#if PPC_HAS_CLASSIC_EXCEPTIONS
+	      void
+#else
+	      const rtems_irq_connect_data* unused
+#endif
+	      )
+{
+    register uint32_t   tcr;
+ 
+    asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
+ 
+    tcr &= ~ 0x04400000;
+ 
+    asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */ 
+}
+
+void ClockOn(
+#if PPC_HAS_CLASSIC_EXCEPTIONS
+	      void
+#else
+	      const rtems_irq_connect_data* unused
+#endif
+	      )
+{
     uint32_t   iocr;
     register uint32_t   tcr;
 #ifdef ppc403
@@ -193,16 +238,6 @@ void Install_clock(rtems_isr_entry clock_isr)
     pit_value = rtems_configuration_get_microseconds_per_tick() *
       rtems_cpu_configuration_get_clicks_per_usec();
  
-    /*
-     * initialize the interval here
-     * First tick is set to right amount of time in the future
-     * Future ticks will be incremented over last value set
-     * in order to provide consistent clicks in the face of
-     * interrupt overhead
-     */
-
-    rtems_interrupt_catch(clock_isr, PPC_IRQ_PIT, &previous_isr);
-
      /*
       * Set PIT value
       */
@@ -214,24 +249,107 @@ void Install_clock(rtems_isr_entry clock_isr)
       * Enable PIT interrupt, bit TCR->PIE = 1     0x4000000
       */
     tick_time = get_itimer() + pit_value;
+
     asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */ 
     tcr = (tcr & ~0x04400000) | (auto_restart ? 0x04400000 : 0x04000000);
+#if 1
     asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
+#endif
 
+}
+
+
+
+void Install_clock(
+#if PPC_HAS_CLASSIC_EXCEPTIONS
+		   rtems_isr_entry clock_isr
+#else
+		   void (*clock_isr)(void *)
+#endif
+		   )
+{
+#ifdef ppc403
+    uint32_t   pvr;
+#endif /* ppc403 */
+ 
+    Clock_driver_ticks = 0;
+ 
+    /*
+     * initialize the interval here
+     * First tick is set to right amount of time in the future
+     * Future ticks will be incremented over last value set
+     * in order to provide consistent clicks in the face of
+     * interrupt overhead
+     */
+
+#if PPC_HAS_CLASSIC_EXCEPTIONS
+ {
+    rtems_isr_entry previous_isr;
+    rtems_interrupt_catch(clock_isr, PPC_IRQ_PIT, &previous_isr);
+    ClockOn();
+ }
+#else
+ {
+   rtems_irq_connect_data clockIrqConnData;
+   clockIrqConnData.on   = ClockOn;
+   clockIrqConnData.off  = ClockOff;
+   clockIrqConnData.isOn = ClockIsOn;
+   clockIrqConnData.name = BSP_PIT;
+   clockIrqConnData.hdl  = clock_isr;
+   if (!BSP_install_rtems_irq_handler (&clockIrqConnData)) {
+     printk("Unable to connect Clock Irq handler\n");
+     rtems_fatal_error_occurred(1);
+   }
+ }
+#endif
     atexit(Clock_exit);
 }
 
 void
-ReInstall_clock(rtems_isr_entry new_clock_isr)
+ReInstall_clock(
+#if PPC_HAS_CLASSIC_EXCEPTIONS
+		rtems_isr_entry new_clock_isr
+#else
+		void (*new_clock_isr)(void *)
+#endif
+)
 {
-    rtems_isr_entry previous_isr;
-    uint32_t   isrlevel = 0;
-
-    rtems_interrupt_disable(isrlevel);
+  uint32_t   isrlevel = 0;
+  
+  rtems_interrupt_disable(isrlevel);
+  
+#if PPC_HAS_CLASSIC_EXCEPTIONS
+ {
+   rtems_isr_entry previous_isr;
+   rtems_interrupt_catch(new_clock_isr, PPC_IRQ_PIT, &previous_isr);
+   ClockOn();
+ }
+#else
+  {
+    rtems_irq_connect_data clockIrqConnData;
     
-    rtems_interrupt_catch(new_clock_isr, PPC_IRQ_PIT, &previous_isr);
+    clockIrqConnData.name = BSP_PIT;
+    if (!BSP_get_current_rtems_irq_handler(&clockIrqConnData)) {
+      printk("Unable to stop system clock\n");
+      rtems_fatal_error_occurred(1);
+    }
+    
+    BSP_remove_rtems_irq_handler (&clockIrqConnData);
+    
+    clockIrqConnData.on   = ClockOn;
+    clockIrqConnData.off  = ClockOff;
+    clockIrqConnData.isOn = ClockIsOn;
+    clockIrqConnData.name = BSP_PIT;
+    clockIrqConnData.hdl  = new_clock_isr;
 
-    rtems_interrupt_enable(isrlevel);
+    if (!BSP_install_rtems_irq_handler (&clockIrqConnData)) {
+      printk("Unable to connect Clock Irq handler\n");
+      rtems_fatal_error_occurred(1);
+    }
+  }
+#endif
+
+  rtems_interrupt_enable(isrlevel);
 }
 
 
@@ -243,18 +361,25 @@ ReInstall_clock(rtems_isr_entry new_clock_isr)
  * when bit's are set in TCR they can only be unset by a reset 
  */
 
-void
-Clock_exit(void)
+void Clock_exit(void)
 {
-    register uint32_t   tcr;
+#if PPC_HAS_CLASSIC_EXCEPTIONS
+  ClockOff();
  
-    asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
- 
-    tcr &= ~ 0x04400000;
- 
-    asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
- 
-    (void) set_vector(0, PPC_IRQ_PIT, 1);
+  (void) set_vector(0, PPC_IRQ_PIT, 1);
+#else
+ {
+    rtems_irq_connect_data clockIrqConnData;
+    
+    clockIrqConnData.name = BSP_PIT;
+    if (!BSP_get_current_rtems_irq_handler(&clockIrqConnData)) {
+      printk("Unable to stop system clock\n");
+      rtems_fatal_error_occurred(1);
+    }
+    
+    BSP_remove_rtems_irq_handler (&clockIrqConnData);
+ }
+#endif
 }
 
 rtems_device_driver Clock_initialize(
@@ -293,7 +418,11 @@ rtems_device_driver Clock_control(
  
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
+#if PPC_HAS_CLASSIC_EXCEPTIONS
         Clock_isr(PPC_IRQ_PIT);
+#else
+        Clock_isr(NULL);
+#endif
     }
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {

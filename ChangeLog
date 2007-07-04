@@ -1,3 +1,7 @@
+2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* :README.configure: Add virtex BSP
+
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* aclocal/bsp-alias.m4, README.configure: Add ep5200, IceCube, 5200Lite.

@@ -29,6 +29,7 @@ ppc_cpu_revision_t current_ppc_revision = 0xff;
 char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 {
   switch (cpu) {
+    case PPC_405:		return "PPC405";
     case PPC_601:		return "MPC601";
     case PPC_5XX:		return "MPC5XX";
     case PPC_603:		return "MPC603";
@@ -37,7 +38,7 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_750:		return "MPC750";
     case PPC_7400:		return "MPC7400";
     case PPC_7455:		return "MPC7455";
-    case PPC_7457:      return "MPC7457";
+    case PPC_7457:              return "MPC7457";
     case PPC_603le:		return "MPC603le";
     case PPC_604e:		return "MPC604e";
     case PPC_604r:		return "MPC604r";
@@ -58,6 +59,7 @@ ppc_cpu_id_t get_ppc_cpu_type()
   unsigned int pvr = (_read_PVR() >> 16);
   current_ppc_cpu = (ppc_cpu_id_t) pvr;
   switch (pvr) {
+    case PPC_405:
     case PPC_601:
     case PPC_5XX:
     case PPC_603:
@@ -68,7 +70,7 @@ ppc_cpu_id_t get_ppc_cpu_type()
     case PPC_750:
     case PPC_7400:
     case PPC_7455:
-	case PPC_7457:
+    case PPC_7457:
     case PPC_604e:
     case PPC_620:
     case PPC_860:

@@ -117,14 +117,14 @@ struct ttyasync {
 | Modem status Register.
 +---------------------------------------------------------------------------*/
   unsigned char MSR;	/* 0x06 */
-  #define MSR_DCTS		 0x01
-  #define MSR_DDSR		 0x02
-  #define MSR_TERI		 0x04
-  #define MSR_DDCD		 0x08
-  #define MSR_CTS		 0x10
-  #define MSR_DSR		 0x20
-  #define MSR_RI		 0x40
-  #define MSR_CD		 0x80
+  #define UART_MSR_DCTS		 0x01
+  #define UART_MSR_DDSR		 0x02
+  #define UART_MSR_TERI		 0x04
+  #define UART_MSR_DDCD		 0x08
+  #define UART_MSR_CTS		 0x10
+  #define UART_MSR_DSR		 0x20
+  #define UART_MSR_RI		 0x40
+  #define UART_MSR_CD		 0x80
 
 /*---------------------------------------------------------------------------+
 | Scratch pad Register.

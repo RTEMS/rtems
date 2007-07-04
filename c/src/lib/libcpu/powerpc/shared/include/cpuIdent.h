@@ -29,6 +29,7 @@ typedef enum
   PPC_604e = 0x9,
   PPC_604r = 0xA,
   PPC_7400 = 0xC,
+  PPC_405  = 0x2001,
   PPC_7455 = 0x8001, /* Kate Feng */
   PPC_7457 = 0x8002,
   PPC_620 = 0x16,

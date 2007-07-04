@@ -1,3 +1,17 @@
+2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* acinclude.m4, shared/irq/irq_asm.S, shared/irq/irq.c,
+	* shared/vectors/vectors_entry.S, shared/vectors/vectors.h,
+	* shared/vectors/vectors_init.c, shared/vectors/vectors.S:
+	converted various BSP specific implementations into a more general
+	"shared" one
+
+2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* vitex/:
+	integrated "virtex" BSP to support PPC core implemented in a
+	Xilinx virtex FPGA
+
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/uboot_dump_bdinfo.c: New file.

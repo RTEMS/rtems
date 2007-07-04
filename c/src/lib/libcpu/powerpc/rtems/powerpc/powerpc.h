@@ -108,6 +108,7 @@ extern "C" {
 #define CPU_MODEL_NAME "PowerPC 405"
 #endif
 #define PPC_CACHE_ALIGNMENT	16
+#define PPC_HAS_RI    	        0
 #define PPC_HAS_RFCI    	1
 #define PPC_USE_MULTIPLE	1
 #define PPC_I_CACHE		2048
@@ -361,6 +362,14 @@ extern "C" {
 
 #ifndef PPC_HAS_EXCEPTION_PREFIX
 #define PPC_HAS_EXCEPTION_PREFIX 1
+#endif
+/*
+ *  Unless otherwise specified, assume the model has an RI bit to
+ *  identify non-recoverable interrupts
+ */
+
+#ifndef PPC_HAS_RI
+#define PPC_HAS_RI 1
 #endif
 
 /*
@@ -657,15 +666,17 @@ extern "C" {
  *  Machine Status Register (MSR) Constants Used by RTEMS
  */
 
+#if PPC_HAS_RI
+#define PPC_MSR_RI       0x000000002 /* bit 30 - recoverable exception */
+#endif
+
+#define PPC_MSR_DR       0x000000010 /* bit 27 - data address translation */
+#define PPC_MSR_IR       0x000000020 /* bit 26 - instruction addr translation*/
+
 /*
  *  Some PPC model manuals refer to the Exception Prefix (EP) bit as
  *  IP for no apparent reason.
  */
-
-#define PPC_MSR_RI       0x000000002 /* bit 30 - recoverable exception */
-#define PPC_MSR_DR       0x000000010 /* bit 27 - data address translation */
-#define PPC_MSR_IR       0x000000020 /* bit 26 - instruction addr translation*/
-
 #if (PPC_HAS_EXCEPTION_PREFIX)
 #define PPC_MSR_EP       0x000000040 /* bit 25 - exception prefix */
 #else
@@ -708,4 +719,4 @@ extern "C" {
 }
 #endif
 
-#endif /* _RTEMS_SCORE_POWERPC_H */
+#endif /* _RTEMS_POWERPC_POWERPC_H */

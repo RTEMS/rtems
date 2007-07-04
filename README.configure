@@ -203,6 +203,7 @@ powerpc		: psim score603e mcp750 mvme2100 mvme2307 mpc8260ads ss555
                   mvme5500 ep1a pm520_cr825 pm520_ze30 gen405 helas403
                   mbx821_001 mbx821_002 mbx821_002b mbx860_001b
                   mbx860_002 mbx860_005b mtx603e brs5l gen5200 ep5200
+		  virtex
 
                   NOTE: The "motorola_powerpc" BSP is a single BSP which
                   can be conditionally compiled to support most Motorola

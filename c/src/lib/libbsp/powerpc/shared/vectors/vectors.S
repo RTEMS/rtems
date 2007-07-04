@@ -12,22 +12,11 @@
 #include <rtems/score/cpu.h>
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
-
+		
 #define SYNC \
 	sync; \
 	isync
 
-	PUBLIC_VAR (__rtems_start)
-	.section .entry_point_section,"awx",@progbits
-/*
- * Entry point information used by bootloader code
- */
-SYM (__rtems_start):
-	.long   __rtems_entry_point
-
-	/*
-	 * end of special Entry point section
-	 */
 	.text
 	/* 603e shadows GPR0..GPR3 for certain exceptions. We must switch
 	 * that off before we can use the stack pointer. Note that this is
@@ -72,9 +61,16 @@ SYM (push_normalized_frame):
 	 * r3 = exception vector entry point
 	 * (256 * vector number) + few instructions
 	 */
+	/*
+	 * FIXME: vectors should distingish
+	 * all bits in mask 0x00003ff0
+	 * and keep in mind that the LR/R3 contains the 
+	 * address BEHIND the entry code 
+	 */
 	mflr	r3
 	/* mask upper bits in case vectors are in the high area (psim) */
 	rlwinm  r3, r3, 32-5, 20, 31
+#if defined(ASM_VEC_VECTOR)
 	/*
 	 * Remap altivec unavaliable (0xf20) to its vector number...
 	 */
@@ -82,6 +78,7 @@ SYM (push_normalized_frame):
 	bne     1f
 	li		r3,ASM_VEC_VECTOR<<3
 1:
+#endif
 	/*
 	 * r3 = r3 >> 8 = vector #
 	 */
@@ -92,10 +89,27 @@ SYM (push_normalized_frame):
 	 * save it nevertheless..
 	 */
 	stw	r2, GPR2_OFFSET(r1)
+#if defined(ASM_VECTORS_CRITICAL)
+	lis	r0,ASM_VECTORS_CRITICAL@h
+	ori	r0,r0,ASM_VECTORS_CRITICAL@l
+	rlwnm.  r0,r0,r3,0,0
+	beq	1f
+	/*
+	 * NOTE: srr2/3 are stored in slots SRR0/1
+	 * for critical exceptions
+	 */ 
+	mfsrr2  r3
+	stw	r3, SRR0_FRAME_OFFSET(r1)
+	mfsrr3  r3
+	stw	r3, SRR1_FRAME_OFFSET(r1)
+	b	2f
+1:		
+#endif	
 	mfsrr0  r3
 	stw	r3, SRR0_FRAME_OFFSET(r1)
 	mfsrr1  r3
 	stw	r3, SRR1_FRAME_OFFSET(r1)
+2:	
 	/*
 	 * Save general purpose registers
 	 * Already saved in prolog : R1, R3, LR.
@@ -123,14 +137,16 @@ SYM (push_normalized_frame):
 	 * store it at the right place
 	 */
 	stw     r3, GPR1_OFFSET(r1)
+
+#if defined(PPC_MSR_EXC_BITS)
 	/*
 	 * Enable data and instruction address translation, exception nesting
 	 */
 	mfmsr	r3
-	ori     r3,r3, MSR_RI | MSR_IR | MSR_DR
+	ori     r3,r3, PPC_MSR_EXC_BITS
 	mtmsr   r3
 	SYNC
-
+#endif
 	/*
 	 * Call C exception handler
 	 */
@@ -161,15 +177,45 @@ SYM (push_normalized_frame):
 
 	lmw	r4, GPR4_OFFSET(r1)
 	lwz	r2, GPR2_OFFSET(r1)
-	lwz	r0, GPR0_OFFSET(r1)
 
 	/*
-	 * Disable data and instruction translation. Make path non recoverable...
+	 * Disable data and instruction translation. Mark path non recoverable
 	 */
+#if defined(PPC_MSR_EXC_BITS)
 	mfmsr	r3
-	xori	r3, r3, MSR_RI | MSR_IR | MSR_DR
+	xori	r3, r3, PPC_MSR_EXC_BITS
 	mtmsr   r3
 	SYNC
+#endif
+#if defined(ASM_VECTORS_CRITICAL)
+	/*
+	 * determine, whether to restore from
+	 * srr0/1 or srr2/3
+	 */
+	lis	r0,ASM_VECTORS_CRITICAL@h
+	lwz	r3,EXCEPTION_NUMBER_OFFSET(r1)
+	ori	r0,r0,ASM_VECTORS_CRITICAL@l
+	rlwnm.  r0,r0,r3,0,0
+	beq	1f
+	/*
+	 * NOTE: srr2/3 are stored in slots SRR0/1
+	 * for critical exceptions
+	 */ 
+	lwz	r3, SRR1_FRAME_OFFSET(r1)
+	mtsrr3	r3
+	lwz	r3, SRR0_FRAME_OFFSET(r1)
+	mtsrr2	r3
+	lwz	r3, GPR3_OFFSET(r1)
+	lwz	r0, GPR0_OFFSET(r1)
+	/* DONT add back the frame size but reload the value
+	 * stored in the frame -- maybe the exception handler
+	 * changed it with good reason (e.g., gdb pushed a dummy frame)
+	 */
+	lwz r1, GPR1_OFFSET(r1)
+	SYNC
+	rfci
+1:		
+#endif	
 	/*
 	 * Restore rfi related settings
 	 */
@@ -180,6 +226,7 @@ SYM (push_normalized_frame):
 	mtsrr0	r3
 
 	lwz	r3, GPR3_OFFSET(r1)
+	lwz	r0, GPR0_OFFSET(r1)
 	/* DONT add back the frame size but reload the value
 	 * stored in the frame -- maybe the exception handler
 	 * changed it with good reason (e.g., gdb pushed a dummy frame)

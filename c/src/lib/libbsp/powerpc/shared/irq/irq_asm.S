@@ -30,7 +30,7 @@
 
 	.text
 	.p2align 5
-
+#if defined(ASM_DEC_VECTOR)
 	PUBLIC_VAR(decrementer_exception_vector_prolog_code)
 
 SYM (decrementer_exception_vector_prolog_code):
@@ -45,9 +45,45 @@ SYM (decrementer_exception_vector_prolog_code):
 	PUBLIC_VAR (decrementer_exception_vector_prolog_code_size)
 
 	decrementer_exception_vector_prolog_code_size = . - decrementer_exception_vector_prolog_code
+#endif
 
+#if defined(ASM_PIT_VECTOR)
+	PUBLIC_VAR(pit_exception_vector_prolog_code)
+
+SYM (pit_exception_vector_prolog_code):
+	/*
+	 * let room for exception frame
+	 */
+	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
+	stw	r4, GPR4_OFFSET(r1)
+	li	r4, ASM_PIT_VECTOR
+	ba	shared_raw_irq_code_entry
+
+	PUBLIC_VAR (pit_exception_vector_prolog_code_size)
+
+	pit_exception_vector_prolog_code_size = . - pit_exception_vector_prolog_code
+#endif
+
+#if defined(ASM_FIT_VECTOR)
+	PUBLIC_VAR(fit_exception_vector_prolog_code)
+
+SYM (fit_exception_vector_prolog_code):
+	/*
+	 * let room for exception frame
+	 */
+	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
+	stw	r4, GPR4_OFFSET(r1)
+	li	r4, ASM_FIT_VECTOR
+	ba	shared_raw_irq_code_entry
+
+	PUBLIC_VAR (fit_exception_vector_prolog_code_size)
+
+	fit_exception_vector_prolog_code_size = . - fit_exception_vector_prolog_code
+#endif
+	
 	PUBLIC_VAR(external_exception_vector_prolog_code)
 
+#if defined(ASM_EXT_VECTOR)
 SYM (external_exception_vector_prolog_code):
 	/*
 	 * let room for exception frame
@@ -60,6 +96,7 @@ SYM (external_exception_vector_prolog_code):
 	PUBLIC_VAR (external_exception_vector_prolog_code_size)
 
 	external_exception_vector_prolog_code_size = . - external_exception_vector_prolog_code
+#endif
 
 	PUBLIC_VAR(shared_raw_irq_code_entry)
 	PUBLIC_VAR(C_dispatch_irq_handler)
@@ -90,12 +127,14 @@ SYM (shared_raw_irq_code_entry):
 	stw	r0, SRR0_FRAME_OFFSET(r1)
 	stw	r3, SRR1_FRAME_OFFSET(r1)
 
+#if defined(PPC_MSR_EXC_BITS)
 	mfmsr	r3
 	/*
 	 * Enable data and instruction address translation, exception recovery
 	 */
-	ori     r3, r3, MSR_RI | MSR_IR | MSR_DR
+	ori     r3, r3, PPC_MSR_EXC_BITS
 	mtmsr   r3
+#endif
 	SYNC
 	/*
 	 * Push C scratch registers on the current stack. It may
@@ -280,10 +319,12 @@ nested:
 	/*
 	 * Disable data and instruction translation. Make path non recoverable...
 	 */
+#if defined(PPC_MSR_EXC_BITS)
 	mfmsr	r3
-	xori	r3, r3, MSR_RI | MSR_IR | MSR_DR
+	xori	r3, r3, PPC_MSR_EXC_BITS
 	mtmsr   r3
 	SYNC
+#endif
 	/*
 	 * Restore rfi related settings
 	 */
@@ -331,10 +372,12 @@ easy_exit:
 	 * Disable nested exception processing, data and instruction
 	 * translation.
 	 */
+#if defined(PPC_MSR_EXC_BITS)
 	mfmsr	r3
-	xori	r3, r3, MSR_RI | MSR_IR | MSR_DR
+	xori	r3, r3, PPC_MSR_EXC_BITS
 	mtmsr   r3
 	SYNC
+#endif
 	/*
 	 * Restore rfi related settings
 	 */

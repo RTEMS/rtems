@@ -49,6 +49,11 @@ if OLD_EXCEPTIONS
 $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: old-exceptions/rtems/score/ppc_offs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
+
+else
+$(PROJECT_INCLUDE)/libcpu/raw_exception.h: new-exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 endif
 if shared
 $(PROJECT_INCLUDE)/libcpu/io.h: shared/include/io.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
@@ -88,10 +93,20 @@ $(PROJECT_INCLUDE)/libcpu/stackTrace.h: shared/src/stackTrace.h $(PROJECT_INCLUD
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/stackTrace.h
 endif
 if ppc403
+if OLD_EXCEPTIONS
 $(PROJECT_INCLUDE)/ictrl.h: ppc403/ictrl/ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ictrl.h
 
+else
+$(PROJECT_INCLUDE)/libcpu/spr.h: shared/include/spr.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/spr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/spr.h
+
+$(PROJECT_INCLUDE)/libcpu/cpuIdent.h: shared/include/cpuIdent.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
+endif
 if ppc405
 $(PROJECT_INCLUDE)/tty_drv.h: ppc403/tty_drv/tty_drv.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tty_drv.h
@@ -130,10 +145,6 @@ $(PROJECT_INCLUDE)/ictrl.h: mpc505/ictrl/ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ictrl.h
 endif
 if mpc6xx
-$(PROJECT_INCLUDE)/libcpu/raw_exception.h: mpc6xx/exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
-
 $(PROJECT_INCLUDE)/libcpu/bat.h: mpc6xx/mmu/bat.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/bat.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/bat.h
@@ -164,10 +175,6 @@ $(PROJECT_INCLUDE)/mpc8xx/cpm.h: mpc8xx/include/cpm.h $(PROJECT_INCLUDE)/mpc8xx/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8xx/cpm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx/cpm.h
 
-$(PROJECT_INCLUDE)/libcpu/raw_exception.h: mpc8xx/exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
-
 $(PROJECT_INCLUDE)/mpc8xx/mmu.h: mpc8xx/include/mmu.h $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8xx/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx/mmu.h
@@ -189,10 +196,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/console.h
 $(PROJECT_INCLUDE)/mpc8260/cpm.h: mpc8260/include/cpm.h $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/cpm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/cpm.h
-
-$(PROJECT_INCLUDE)/libcpu/raw_exception.h: mpc8260/exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 
 $(PROJECT_INCLUDE)/mpc8260/mmu.h: mpc8260/include/mmu.h $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/mmu.h
