@@ -1,3 +1,7 @@
+2007-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore: New file.
+
 2007-04-1	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* bsp_specs, bsp_specs.dl, ChangeLog, configure.ac,
