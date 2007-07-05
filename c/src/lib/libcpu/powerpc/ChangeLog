@@ -1,3 +1,9 @@
+2007-07-05	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* configure.ac, Makefile.am:
+	added ppc403 and ppc405 to "shared" conditional	
+	adapted to shared setting
+	
 2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* ppc403/clock/clock.c, ppc403/console/console405.c,

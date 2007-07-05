@@ -98,13 +98,9 @@ if OLD_EXCEPTIONS
 include_HEADERS = ppc403/ictrl/ictrl.h
 else
 include_HEADERS = 
-include_libcpu_HEADERS += shared/include/spr.h 
-
-noinst_PROGRAMS += shared/cpuIdent.rel
-shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c shared/include/cpuIdent.h
+shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c 
 shared_cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shared_cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-include_libcpu_HEADERS += shared/include/cpuIdent.h
 
 endif
 

@@ -97,15 +97,6 @@ if OLD_EXCEPTIONS
 $(PROJECT_INCLUDE)/ictrl.h: ppc403/ictrl/ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ictrl.h
-
-else
-$(PROJECT_INCLUDE)/libcpu/spr.h: shared/include/spr.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/spr.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/spr.h
-
-$(PROJECT_INCLUDE)/libcpu/cpuIdent.h: shared/include/cpuIdent.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
 endif
 if ppc405
 $(PROJECT_INCLUDE)/tty_drv.h: ppc403/tty_drv/tty_drv.h $(PROJECT_INCLUDE)/$(dirstamp)

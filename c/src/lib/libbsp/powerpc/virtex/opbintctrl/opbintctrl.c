@@ -100,7 +100,6 @@ void BSP_irq_handle_at_opbintc(void)
  */
 rtems_status_code opb_intc_init(void)
 {
-   uint32_t msr_value;
   uint32_t i, mask = 0;
 
   /* mask off all interrupts */
@@ -124,19 +123,6 @@ rtems_status_code opb_intc_init(void)
   /* Enable master interrupt switch for the interrupt controller */
   *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_MER)) =
     (OPB_INTC_MER_HIE | OPB_INTC_MER_ME);
-
-#if 0 /* EB: we do it somewhere else */
-  /*
-   * enable (non-critical) exceptions
-   */
-
-   _CPU_MSR_GET(msr_value);
-   msr_value |= PPC_MSR_EE;
-   _CPU_MSR_SET(msr_value);
-
-  /* install exit handler to close opb_intc when program atexit called */
-  /* atexit(opb_intc_exit); */
-#endif
 
   return RTEMS_SUCCESSFUL;
 }

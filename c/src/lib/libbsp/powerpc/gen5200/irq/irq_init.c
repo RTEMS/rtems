@@ -273,7 +273,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   vectorDesc.off               = nop_func;
   vectorDesc.isOn              = connected;
 
-  if (!mpc60x_set_exception (&vectorDesc))
+  if (!ppc_set_exception (&vectorDesc))
     {
     BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
     }
@@ -283,7 +283,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   vectorDesc.hdl.raw_hdl       = external_exception_vector_prolog_code;
   vectorDesc.hdl.raw_hdl_size  = (unsigned) &external_exception_vector_prolog_code_size;
 
-  if (!mpc60x_set_exception (&vectorDesc))
+  if (!ppc_set_exception (&vectorDesc))
     {
     BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }
@@ -293,7 +293,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   vectorDesc.hdl.raw_hdl       = system_management_exception_vector_prolog_code;
   vectorDesc.hdl.raw_hdl_size  = (unsigned) &system_management_exception_vector_prolog_code_size;
 
-  if (!mpc60x_set_exception (&vectorDesc))
+  if (!ppc_set_exception (&vectorDesc))
     {
     BSP_panic("Unable to initialize RTEMS system management raw exception\n");
     }

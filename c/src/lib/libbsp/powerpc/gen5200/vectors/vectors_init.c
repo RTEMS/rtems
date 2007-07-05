@@ -186,7 +186,7 @@ void initialize_exceptions()
 
     printk("installing exception number %d\n", i);
 
-  	if (!mpc60x_vector_is_valid(i))
+  	if (!ppc_vector_is_valid(i))
         continue;
 
     exception_table[i].exceptIndex	= i;
@@ -197,7 +197,7 @@ void initialize_exceptions()
     exception_table[i].isOn		    = except_always_enabled;
   }
 
-  if (!mpc60x_init_exceptions(&exception_config))
+  if (!ppc_init_exceptions(&exception_config))
     BSP_panic("Exception handling initialization failed\n");
   else
     printk("Exception handling initialization done\n");

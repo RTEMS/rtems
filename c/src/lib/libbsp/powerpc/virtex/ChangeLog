@@ -1,3 +1,13 @@
+2007-07-05	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* include/bsp.h:
+	added bsp/vectors.h and bsp/irq.h to list of included headers
+
+2007-07-05	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* opbintctrl/opbintctrl.c:
+	removed obsolete code
+
 2007-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore: New file.

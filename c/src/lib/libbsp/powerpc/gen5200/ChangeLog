@@ -1,3 +1,7 @@
+2007-07-06	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* irq_init.c, Makefile.am: adapted to shared exception code
+
 2007-06-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* clock/clock.c, network_5200/network.c: Convert to using clock driver
