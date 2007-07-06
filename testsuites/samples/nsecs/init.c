@@ -42,7 +42,7 @@ void subtract_em(
 }
 
 /* body below .. hoping it isn't inlined */
-void Empty_function();
+void dummy_function_empty_body_to_force_call();
 
 rtems_task Init(
   rtems_task_argument argument
@@ -116,7 +116,7 @@ rtems_task Init(
     int j, max = (index * 10000);
     rtems_clock_get_uptime( &start );
       for (j=0 ; j<max ; j++ ) 
-        Empty_function();
+        dummy_function_empty_body_to_force_call();
     rtems_clock_get_uptime( &stop );
 
     subtract_em( &start, &stop, &diff );
@@ -147,4 +147,4 @@ rtems_task Init(
 #include <rtems/confdefs.h>
 
 /* put here hoping it won't get inlined */
-void Empty_function() {}
+void dummy_function_empty_body_to_force_call() {}
