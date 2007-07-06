@@ -651,12 +651,17 @@ int mpc5200_uart_write(int minor, const char *buf, int len)
  *  Print functions prototyped in bspIo.h
  */
 static void A_BSP_output_char( char c )
-  {
+{
   char cr = '\r';
 
-
-  if(console_initialized == TRUE)
-    {
+  /*
+   *  If we are using U-Boot, then the console is already initialized
+   *  and we can just poll bytes out at any time.
+   */
+  #if !defined(HAS_UBOOT)
+    if (console_initialized == FALSE )
+     return
+  #endif
 
 #define PRINTK_WRITE mpc5200_uart_pollWrite
 
@@ -664,10 +669,7 @@ static void A_BSP_output_char( char c )
 
     if( c == '\n' )
       PRINTK_WRITE( PRINTK_MINOR, &cr, 1 );
-
-    }
-
-  }
+}
 
 /*
  ***************

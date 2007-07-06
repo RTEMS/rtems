@@ -341,7 +341,10 @@ int BSP_connect_clock_handler (uint32_t gpt_no)
 /* This driver does this in clockOn called at connection time */
 #define Clock_driver_support_initialize_hardware() \
   do {        \
-    ;         \
+    counter_value = rtems_configuration_get_microseconds_per_tick() * \
+                    rtems_cpu_configuration_get_clicks_per_usec(); \
+    mpc5200_init_gpt(GPT); \
+    mpc5200_set_gpt_count(counter_value, GPT); \
   } while (0)
 
 #define Clock_driver_nanoseconds_since_last_tick \

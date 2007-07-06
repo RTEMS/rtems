@@ -1,3 +1,8 @@
+2007-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock/clock.c, console/console.c: Add clock HW initialization missed
+	in earlier conversion.
+
 2007-07-06	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* irq_init.c, Makefile.am: adapted to shared exception code
