@@ -473,10 +473,8 @@ skip_ROM_start:
         xor     r3, r3, r3
         xor     r4, r4, r4	 		/* Clear argc and argv */
         
-#if 1     
         bl      SYM (boot_card)			/* Call the first C routine */
-#endif
-	
+
 #if defined(BRS5L)
 twiddle:				
 	b	twiddle				/* We don't expect to return from boot_card but if we do */

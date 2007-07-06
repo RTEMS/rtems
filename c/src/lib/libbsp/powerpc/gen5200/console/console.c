@@ -116,29 +116,29 @@
 
 uint32_t mpc5200_uart_avail_mask = GEN5200_UART_AVAIL_MASK;
 
-uint8_t psc_minor_to_irqname[NUM_PORTS] =
-  {BSP_SIU_IRQ_PSC1,
-   BSP_SIU_IRQ_PSC2,
-   BSP_SIU_IRQ_PSC3,
-   BSP_SIU_IRQ_PSC4,
-   BSP_SIU_IRQ_PSC5,
-   BSP_SIU_IRQ_PSC6};
-static int mpc5200_psc_irqname_to_minor(int name)
-{
-  int minor;
-  uint8_t *chrptr;
+#if defined(UARTS_USE_TERMIOS_INT)
+  uint8_t psc_minor_to_irqname[NUM_PORTS] =
+    {BSP_SIU_IRQ_PSC1,
+     BSP_SIU_IRQ_PSC2,
+     BSP_SIU_IRQ_PSC3,
+     BSP_SIU_IRQ_PSC4,
+     BSP_SIU_IRQ_PSC5,
+     BSP_SIU_IRQ_PSC6};
 
-  chrptr = memchr(psc_minor_to_irqname,
-		  name,
-		  sizeof(psc_minor_to_irqname));
-  if (chrptr != NULL) {
-    minor = chrptr - psc_minor_to_irqname;
+  static int mpc5200_psc_irqname_to_minor(int name)
+  {
+    int minor;
+    uint8_t *chrptr;
+
+    uuchrptr = memchr(psc_minor_to_irqname, name, sizeof(psc_minor_to_irqname));
+    if (chrptr != NULL) {
+      minor = chrptr - psc_minor_to_irqname;
+    } else {
+      minor = -1;
+    }
+    return minor;
   }
-  else {
-    minor = -1;
-  }
-  return minor;
-}
+#endif
 
 static void A_BSP_output_char(char c);
 BSP_output_char_function_type BSP_output_char = A_BSP_output_char;

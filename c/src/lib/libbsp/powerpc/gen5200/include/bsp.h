@@ -108,6 +108,10 @@
 
 #define	MBAR         0xF0000000
 
+/* We want to prompt for a reset and then reset the board */
+#define BSP_PRESS_KEY_FOR_RESET 1
+#define BSP_RESET_BOARD_AT_EXIT 1
+
 #else
 #error "board type not defined"
 #endif
@@ -208,7 +212,7 @@ void bsp_cleanup(void);
 #define PRINTK_MINOR PSC1_MINOR
 
 #define SINGLE_CHAR_MODE
-#define UARTS_USE_TERMIOS_INT   1
+/* #define UARTS_USE_TERMIOS_INT   1 */
 /* #define SHOW_MORE_INIT_SETTINGS 1 */
 
 /* ata modes */

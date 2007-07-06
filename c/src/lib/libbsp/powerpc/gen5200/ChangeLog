@@ -1,5 +1,15 @@
 2007-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am: Add startup/bspclean.c
+	* console/console.c: Remove warning.
+	* include/bsp.h: Add conditionals for prompt for reset and resetting
+	board.
+	* start/start.S: Remove if 1 around section.
+	* vectors/vectors_init.c: Do not print unless noisy init enabled.
+	* startup/bspclean.c: New file. Will prompt for reset and reset.
+
+2007-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* clock/clock.c, console/console.c: Add clock HW initialization missed
 	in earlier conversion.
 

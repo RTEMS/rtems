@@ -184,7 +184,9 @@ void initialize_exceptions()
   for (i=0; i <= exception_config.exceptSize; i++)
   	{
 
-    printk("installing exception number %d\n", i);
+    #if defined(SHOW_MORE_INIT_SETTINGS)
+      printk("installing exception number %d\n", i);
+    #endif
 
   	if (!ppc_vector_is_valid(i))
         continue;
