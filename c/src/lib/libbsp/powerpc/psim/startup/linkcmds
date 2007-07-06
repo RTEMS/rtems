@@ -209,8 +209,8 @@ SECTIONS
    *(.bss .bss* .gnu.linkonce.b*)
    *(COMMON)
   } >RAM
-  . =  ALIGN(8) + 0x8000;
   __rtems_end = . ;
+  . =  ALIGN(8) + 0x8000;
   PROVIDE(__stack = .);
   PROVIDE(_end = .);
   PROVIDE(end = .);
