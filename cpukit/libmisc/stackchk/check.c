@@ -266,10 +266,10 @@ void rtems_stack_checker_switch_extension(
   pattern = (void *) Stack_check_Get_pattern_area(the_stack)->pattern;
 
   /*
-   *  Check for an out of bounds stack pointer and then an overwrite
+   *  Check for an out of bounds stack pointer or an overwrite
    */
-
   sp_ok = Stack_check_Frame_pointer_in_range( the_stack );
+
   pattern_ok = (!memcmp( pattern,
             (void *) Stack_check_Pattern.pattern, PATTERN_SIZE_BYTES));
 
@@ -284,19 +284,26 @@ void rtems_stack_checker_switch_extension(
 boolean rtems_stack_checker_is_blown( void )
 {
   Stack_Control *the_stack = &_Thread_Executing->Start.Initial_stack;
-  void          *pattern;
   boolean        sp_ok;
   boolean        pattern_ok = TRUE;
 
-  pattern = (void *) Stack_check_Get_pattern_area(the_stack)->pattern;
-
   /*
-   *  Check for an out of bounds stack pointer and then an overwrite
+   *  Check for an out of bounds stack pointer
    */
 
   sp_ok = Stack_check_Frame_pointer_in_range( the_stack );
-  pattern_ok = (!memcmp( pattern,
-            (void *) Stack_check_Pattern.pattern, PATTERN_SIZE_BYTES));
+
+  /*
+   * The stack checker must be initialized before the pattern is there
+   * to check.
+   */
+  if ( Stack_check_Initialized ) {
+    pattern_ok = (!memcmp(
+      (void *) Stack_check_Get_pattern_area(the_stack)->pattern,
+      (void *) Stack_check_Pattern.pattern,
+      PATTERN_SIZE_BYTES
+    ));
+  }
 
   if ( !sp_ok || !pattern_ok ) {
     return TRUE;

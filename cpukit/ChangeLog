@@ -1,3 +1,9 @@
+2007-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/stackchk/check.c: Make checking the integrity of the pattern
+	area contingent on the stack checker user extension having been
+	initialized.
+
 2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libnetworking/rtems/rtems_syscall.c: Remove RTEMS versions of send()
