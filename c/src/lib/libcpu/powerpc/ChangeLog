@@ -1,3 +1,9 @@
+2007-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* configure.ac, Makefile.am, mpc83xx/include/mpc83xx.h,
+	* mpc83xx/network/tsec.c, mpc83xx/network/tsec.h :
+	added support for MPC83xx controllers
+	
 2007-07-05	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* configure.ac, Makefile.am:

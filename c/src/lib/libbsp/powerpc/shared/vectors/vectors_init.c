@@ -173,6 +173,11 @@ void initialize_exceptions()
 
   switch ( get_ppc_cpu_type() ) {
     case PPC_603e:
+    case PPC_603ev:
+    case PPC_603le:
+    case PPC_e300c1:
+    case PPC_e300c2:
+    case PPC_e300c3:
     case PPC_8240:
       has_shadowed_gprs = 1;  
     default: break;

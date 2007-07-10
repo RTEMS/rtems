@@ -8,7 +8,7 @@
 
 #include <rtems.h>
 #include "cache_.h"
-
+#include <rtems/powerpc/registers.h>
 
 /*
  * CACHE MANAGER: The following functions are CPU-specific.
@@ -19,7 +19,7 @@
  * FIXME: Some functions simply have not been implemented.
  */
  
-#if defined(ppc603) || defined(mpc8260)	   /* And possibly others */
+#if defined(ppc603) || defined(ppc603e) || defined(mpc8260) /* And possibly others */
 
 /* Helpful macros */
 #define PPC_Get_HID0( _value ) \
@@ -49,7 +49,7 @@ void _CPU_cache_enable_data (
 {
   uint32_t   value;
   PPC_Get_HID0( value );
-  value |= 0x00004000;        /* set DCE bit */
+  value |= HID0_DCE;        /* set DCE bit */
   PPC_Set_HID0( value );
 }
 
@@ -58,8 +58,59 @@ void _CPU_cache_disable_data (
 {
   uint32_t   value;
   PPC_Get_HID0( value );
-  value &= 0xFFFFBFFF;        /* clear DCE bit */
+  value &= ~HID0_DCE;        /* clear DCE bit */
   PPC_Set_HID0( value );
+}
+
+void _CPU_cache_invalidate_1_data_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "dcbi 0,%0" :: "r"(__address) : "memory" );
+}
+
+void _CPU_cache_invalidate_entire_data (
+	void )
+{
+  uint32_t  value;
+  PPC_Get_HID0( value );
+  value |= HID0_DCI;        /* set data flash invalidate bit */
+  PPC_Set_HID0( value );
+  value &= ~HID0_DCI;        /* clear data flash invalidate bit */
+  PPC_Set_HID0( value );
+}
+
+void _CPU_cache_freeze_data (
+	void )
+{
+  uint32_t  value;
+  PPC_Get_HID0( value );
+  value |= HID0_DLOCK;        /* set data cache lock bit */
+  PPC_Set_HID0( value );
+}
+
+void _CPU_cache_unfreeze_data (
+	void )
+{
+  uint32_t  value;
+  PPC_Get_HID0( value );
+  value &= ~HID0_DLOCK;        /* set data cache lock bit */
+  PPC_Set_HID0( value );
+}
+
+void _CPU_cache_flush_1_data_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "dcbf 0,%0" :: "r" (__address) : "memory" );
+}
+
+void _CPU_cache_flush_entire_data (
+	void )
+{
+  /*
+   * FIXME: how can we do this?
+   */
 }
 
 void _CPU_cache_enable_instruction (
@@ -77,6 +128,42 @@ void _CPU_cache_disable_instruction (
   uint32_t   value;
   PPC_Get_HID0( value );
   value &= 0xFFFF7FFF;       /* Clear ICE bit */
+  PPC_Set_HID0( value );
+}
+
+void _CPU_cache_invalidate_1_instruction_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "icbi 0,%0" :: "r" (__address) : "memory");
+}
+
+void _CPU_cache_invalidate_entire_instruction (
+	void )
+{
+  uint32_t  value;
+  PPC_Get_HID0( value );
+  value |= HID0_ICFI;        /* set data flash invalidate bit */
+  PPC_Set_HID0( value );
+  value &= ~HID0_ICFI;        /* clear data flash invalidate bit */
+  PPC_Set_HID0( value );
+}
+
+void _CPU_cache_freeze_instruction (
+	void )
+{
+  uint32_t  value;
+  PPC_Get_HID0( value );
+  value |= HID0_ILOCK;        /* set instruction cache lock bit */
+  PPC_Set_HID0( value );
+}
+
+void _CPU_cache_unfreeze_instruction (
+	void )
+{
+  uint32_t  value;
+  PPC_Get_HID0( value );
+  value &= ~HID0_ILOCK;        /* set instruction cache lock bit */
   PPC_Set_HID0( value );
 }
 

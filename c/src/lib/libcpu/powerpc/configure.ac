@@ -45,12 +45,13 @@ AM_CONDITIONAL(shared, \
 || test "$RTEMS_CPU_MODEL" = "ppc405" \
 || test "$RTEMS_CPU_MODEL" = "mpc604" \
 || test "$RTEMS_CPU_MODEL" = "mpc6xx" \
+|| test "$RTEMS_CPU_MODEL" = "mpc8xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc821" \
 || test "$RTEMS_CPU_MODEL" = "mpc860" \
 || test "$RTEMS_CPU_MODEL" = "mpc8240" \
 || test "$RTEMS_CPU_MODEL" = "mpc8245" \
 || test "$RTEMS_CPU_MODEL" = "mpc8260" \
-|| test "$RTEMS_CPU_MODEL" = "mpc8xx" )
+|| test "$RTEMS_CPU_MODEL" = "mpc83xx" )
 
 ## test on CPU type
 AM_CONDITIONAL(mpc505, test "$RTEMS_CPU_MODEL" = "mpc505")
@@ -63,11 +64,13 @@ AM_CONDITIONAL(mpc6xx, test "$RTEMS_CPU_MODEL" = "mpc6xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc7457" \
 || test "$RTEMS_CPU_MODEL" = "mpc750" \
 || test "$RTEMS_CPU_MODEL" = "mpc8240" \
-|| test "$RTEMS_CPU_MODEL" = "mpc8245" )
+|| test "$RTEMS_CPU_MODEL" = "mpc8245" \
+|| test "$RTEMS_CPU_MODEL" = "mpc83xx" )
 AM_CONDITIONAL(mpc8xx, test "$RTEMS_CPU_MODEL" = "mpc8xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc821" \
 || test "$RTEMS_CPU_MODEL" = "mpc860" )
 AM_CONDITIONAL(mpc8260, test "$RTEMS_CPU_MODEL" = "mpc8260")
+AM_CONDITIONAL(mpc83xx, test "$RTEMS_CPU_MODEL" = "mpc83xx")
 
 # the ppc405 shares files with the ppc403
 AM_CONDITIONAL(ppc403,[test "$RTEMS_CPU_MODEL" = "ppc403" \

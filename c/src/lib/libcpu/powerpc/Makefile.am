@@ -324,5 +324,17 @@ mpc8260_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8260_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if mpc83xx
+include_mpc83xxdir = $(includedir)/mpc83xx
+include_mpc83xx_HEADERS  = mpc83xx/include/mpc83xx.h
+include_mpc83xx_HEADERS += mpc83xx/network/tsec.h
+## mpc83xx/network
+noinst_PROGRAMS += mpc83xx/tsec.rel
+mpc83xx_tsec_rel_SOURCES   = mpc83xx/network/tsec.c
+mpc83xx_tsec_rel_CPPFLAGS  = $(AM_CPPFLAGS) 
+mpc83xx_tsec_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
+mpc83xx_tsec_rel_LDFLAGS   = $(RTEMS_RELLDFLAGS)
+endif
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

@@ -192,3 +192,17 @@ $(PROJECT_INCLUDE)/mpc8260/mmu.h: mpc8260/include/mmu.h $(PROJECT_INCLUDE)/mpc82
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/mmu.h
 endif
+if mpc83xx
+$(PROJECT_INCLUDE)/mpc83xx/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc83xx
+	@: > $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mpc83xx/mpc83xx.h: mpc83xx/include/mpc83xx.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/mpc83xx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx.h
+
+$(PROJECT_INCLUDE)/mpc83xx/tsec.h: mpc83xx/network/tsec.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/tsec.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/tsec.h
+endif

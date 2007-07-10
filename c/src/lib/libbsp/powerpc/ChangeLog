@@ -1,3 +1,8 @@
+2007-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* acinclude.m4, gen83xx/:
+	added support for MPC83xx controllers and MPC8349EAMDS board
+	
 2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* acinclude.m4, shared/irq/irq_asm.S, shared/irq/irq.c,
@@ -8,7 +13,7 @@
 
 2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* vitex/:
+	* virtex/:
 	integrated "virtex" BSP to support PPC core implemented in a
 	Xilinx virtex FPGA
 

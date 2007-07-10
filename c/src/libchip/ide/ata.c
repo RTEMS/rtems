@@ -1168,7 +1168,7 @@ ata_initialize(rtems_device_major_number major,
 		ata_irq_data.name   =
 		  IDE_Controller_Table[ctrl_minor].int_vec;
 		ata_irq_data.hdl    = ata_interrupt_handler;
-		ata_irq_data.handle = ctrl_minor;
+		ata_irq_data.handle = (rtems_irq_hdl_param) ctrl_minor;
 
 		status = ((0 == BSP_install_rtems_irq_handler(&ata_irq_data))
 			  ? RTEMS_INVALID_NUMBER

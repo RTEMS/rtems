@@ -1,6 +1,11 @@
+2007-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4, README.configure:
+	Add gen83xx and mpc8349eamds BSP 
+
 2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* :README.configure: Add virtex BSP
+	* README.configure: Add virtex BSP
 
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 

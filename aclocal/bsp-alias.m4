@@ -26,6 +26,7 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     brs5l*)       $2=gen5200          ;; # MPC5200 based board
     pm520*)       $2=gen5200          ;; # MPC5200 based board
     ep5200*)      $2=gen5200          ;; # MPC5200 based board
+    mpc8349eamds) $2=gen83xx          ;; # MPC8349 based board
     simcpu32)     $2=sim68000         ;; # BSVC CPU32 variant
     simsh7032)    $2=shsim            ;; # SH7032 simulator
     simsh7045)    $2=shsim            ;; # SH7045 simulator

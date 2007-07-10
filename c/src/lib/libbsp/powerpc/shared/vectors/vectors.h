@@ -87,12 +87,22 @@ extern	unsigned int  tgpr_clr_exception_vector_code_prolog_size[];
  */
 extern  void external_exception_vector_prolog_code();
 extern  unsigned int  external_exception_vector_prolog_code_size[];
+#if defined(ASM_DEC_VECTOR)
 extern  void decrementer_exception_vector_prolog_code();
 extern  unsigned int  decrementer_exception_vector_prolog_code_size[];
+#endif
+#if defined(ASM_SYSMGMT_VECTOR)
+extern  void sysmgmt_exception_vector_prolog_code();
+extern  unsigned int  sysmgmt_exception_vector_prolog_code_size[];
+#endif
+#if defined(ASM_PIT_VECTOR)
 extern  void pit_exception_vector_prolog_code();
 extern  unsigned int  pit_exception_vector_prolog_code_size[];
+#endif
+#if defined(ASM_FIT_VECTOR)
 extern  void fit_exception_vector_prolog_code();
 extern  unsigned int  fit_exception_vector_prolog_code_size[];
+#endif
 
 /* codemove is like memmove, but it also gets the cache line size
  * as 4th parameter to synchronize them. If this last parameter is

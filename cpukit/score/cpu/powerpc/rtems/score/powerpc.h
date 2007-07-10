@@ -144,6 +144,7 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC 603"
 
 #define PPC_ALIGNMENT		8
+#define PPC_CACHE_ALIGNMENT	16
 
 #elif defined(ppc603e)
  
@@ -155,6 +156,7 @@ extern "C" {
  */
 
 #define PPC_ALIGNMENT		8
+#define PPC_CACHE_ALIGNMENT	16
 
 #elif defined(mpc604)
 /*

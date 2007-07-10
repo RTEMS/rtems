@@ -40,6 +40,9 @@ typedef enum
   PPC_8240 = PPC_8260,
   PPC_8245 = 0x8081,
   PPC_603le = 0x8082, /* 603le core, in MGT5100 and MPC5200 */
+  PPC_e300c1  = 0x8083, /* e300c1  core, in MPC83xx*/
+  PPC_e300c2  = 0x8084, /* e300c2  core */
+  PPC_e300c3  = 0x8085, /* e300c3  core */
   PPC_PSIM = 0xfffe,  /* GDB PowerPC simulator -- fake version */
   PPC_UNKNOWN = 0xffff
 } ppc_cpu_id_t;

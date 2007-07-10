@@ -47,6 +47,24 @@ SYM (decrementer_exception_vector_prolog_code):
 	decrementer_exception_vector_prolog_code_size = . - decrementer_exception_vector_prolog_code
 #endif
 
+#if defined(ASM_SYSMGMT_VECTOR)
+	PUBLIC_VAR(sysmgmt_exception_vector_prolog_code)
+
+SYM (sysmgmt_exception_vector_prolog_code):
+	/*
+	 * let room for exception frame
+	 */
+	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
+	stw	r4, GPR4_OFFSET(r1)
+	li	r4, ASM_SYSMGMT_VECTOR
+	ba	shared_raw_irq_code_entry
+
+	PUBLIC_VAR (sysmgmt_exception_vector_prolog_code_size)
+
+	sysmgmt_exception_vector_prolog_code_size = . - sysmgmt_exception_vector_prolog_code
+#endif
+
+
 #if defined(ASM_PIT_VECTOR)
 	PUBLIC_VAR(pit_exception_vector_prolog_code)
 

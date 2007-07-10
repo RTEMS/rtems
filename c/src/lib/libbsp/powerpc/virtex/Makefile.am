@@ -9,8 +9,10 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = bsp_specs
 
-include_HEADERS = include/bsp.h
+include_HEADERS = include/bsp.h 
 include_HEADERS += include/tm27.h
+include_HEADERS += include/xparameters_dflt.h
+include_HEADERS += network/xiltemac.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
@@ -21,7 +23,13 @@ include_bspdir = $(includedir)/bsp
 
 include_HEADERS += include/coverhd.h
 
-dist_project_lib_DATA += startup/linkcmds startup/linkcmds.dl
+EXTRA_DIST = ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = rtems_crti.$(OBJEXT)
+
+dist_project_lib_DATA += startup/linkcmds
+
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
@@ -68,16 +76,6 @@ noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/xiltemac.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-
-##RSG Start
-## include_HEADERS += include/xiltemac.h
-#noinst_PROGRAMS += xiltemac.rel
-#xiltemac_rel_SOURCES = network/xiltemac.c
-#xiltemac_rel_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ $(AM_CPPFLAGS) -O0 -g
-#xiltemac_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-##RSG End
-
 endif
 
 noinst_LIBRARIES = libbsp.a
@@ -93,7 +91,7 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/tty_drv.rel
 
-EXTRA_DIST = times
+EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
