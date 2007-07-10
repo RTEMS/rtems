@@ -259,7 +259,9 @@ void _CPU_Context_Initialize(
    */
   _CPU_MSR_GET( msr_value );
   the_context->msr |= (msr_value & PPC_MSR_EP);
+#if defined(PPC_MSR_RI)
   the_context->msr |= PPC_MSR_RI;
+#endif
   the_context->msr |= msr_value & (PPC_MSR_DR|PPC_MSR_IR);
 
 #if (PPC_ABI == PPC_ABI_SVR4)

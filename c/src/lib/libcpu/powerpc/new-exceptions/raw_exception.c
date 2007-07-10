@@ -119,7 +119,7 @@ int mpc860_vector_is_valid(rtems_vector vector)
 
 #if (defined(mpc555) || defined(mpc505))
 
-int ppc_vector_is_valid(rtems_vector vector)
+int mpc5xx_vector_is_valid(rtems_vector vector)
 {
   switch (current_ppc_cpu) {
     case PPC_5XX:
@@ -346,6 +346,13 @@ int ppc_vector_is_valid(rtems_vector vector)
             break;
         case PPC_PSIM:
             if (!PSIM_vector_is_valid(vector)) {
+                return 0;
+            }
+            break;
+#endif
+#if ( defined(mpc555) || defined(mpc505) )
+        case PPC_5XX:
+            if (!mpc5xx_vector_is_valid(vector)) {
                 return 0;
             }
             break;

@@ -84,7 +84,7 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/cpm.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8260/exceptions.rel
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel
 
 EXTRA_DIST += times
 

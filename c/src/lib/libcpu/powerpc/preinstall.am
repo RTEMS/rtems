@@ -51,9 +51,11 @@ $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: old-exceptions/rtems/score/ppc_offs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 
 else
+if !mpc5xx
 $(PROJECT_INCLUDE)/libcpu/raw_exception.h: new-exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+endif
 endif
 if shared
 $(PROJECT_INCLUDE)/libcpu/io.h: shared/include/io.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)

@@ -120,7 +120,7 @@ void initialize_exceptions()
 /*
     printk("installing exception number %d\n", i);
 */
-    if (!mpc8xx_vector_is_valid (i)) {
+    if (!ppc_vector_is_valid (i)) {
       continue;
     }
     exception_table[i].exceptIndex	= i;
@@ -133,7 +133,7 @@ void initialize_exceptions()
 
 /*  _BSP_GPLED0_on(); */
 
-  if (!mpc8xx_init_exceptions(&exception_config)) {
+  if (!ppc_init_exceptions(&exception_config)) {
     /*
      * At this stage we may not call BSP_Panic because it uses exceptions!!!
      */

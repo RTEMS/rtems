@@ -112,7 +112,7 @@ void initialize_exceptions()
   exception_config.defaultRawEntry.hdl.raw_hdl_size = (unsigned) &default_exception_vector_code_prolog_size;
   for (i=0; i <= exception_config.exceptSize; i++) {
     printk("installing exception number %d\n", i);
-    if (!mpc8xx_vector_is_valid (i)) {
+    if (!ppc_vector_is_valid (i)) {
       continue;
     }
 #if 0 /* FIXME: refine this condition, leave Syscall for EPPCBug console */
@@ -127,7 +127,7 @@ void initialize_exceptions()
     exception_table[i].off		= nop_except_enable;
     exception_table[i].isOn		= except_always_enabled;
   }
-  if (!mpc8xx_init_exceptions(&exception_config)) {
+  if (!ppc_init_exceptions(&exception_config)) {
     /*
      * At this stage we may not call BSP_Panic because it uses exceptions!!!
      */

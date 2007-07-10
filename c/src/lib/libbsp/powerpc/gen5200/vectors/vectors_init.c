@@ -76,7 +76,6 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
-extern int mpc60x_vector_is_valid(rtems_vector);
 static rtems_raw_except_global_settings exception_config;
 static rtems_raw_except_connect_data    exception_table[LAST_VALID_EXC + 1];
 
