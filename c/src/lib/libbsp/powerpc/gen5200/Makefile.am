@@ -29,6 +29,11 @@ start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
+EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA += rtems_crti.$(OBJEXT)
+
 dist_project_lib_DATA += startup/linkcmds
 dist_project_lib_DATA += startup/linkcmds.brs5l
 dist_project_lib_DATA += startup/linkcmds.ep5200
@@ -113,7 +118,7 @@ noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../shared/uboot_dump_bdinfo.c \
-    ../../shared/gnatinstallhandler.c startup/cpuinit.c start/start.S
+    ../../shared/gnatinstallhandler.c startup/cpuinit.c 
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

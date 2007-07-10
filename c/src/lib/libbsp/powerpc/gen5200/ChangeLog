@@ -1,6 +1,7 @@
 2007-07-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* bsp_specs, startup/linkcmds: add c++ support again
+	* bsp_specs, startup/linkcmds, startup/linkcmds.pm520: 
+	add c++ support again
 	* preinstall.am: some fixes
 
 2007-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>

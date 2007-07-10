@@ -166,7 +166,7 @@ SECTIONS
  
     } > ram
 
-  .jcr : { KEEP (*(.jcr)) } >RAM
+  .jcr : { KEEP (*(.jcr)) } >ram
 
     .rel.dyn : {
       *(.rel.init)

@@ -59,7 +59,6 @@ SECTIONS
     /* Actual Code */
     *(.text*)
 
-
     *(.rodata*)
     *(.rodata1)
 
@@ -136,7 +135,26 @@ SECTIONS
     *(rom_ver)
     _erodata = .;
 
-
+    PROVIDE (__EXCEPT_START__ = .);
+    *(.gcc_except_table)
+    PROVIDE (__EXCEPT_END__ = .);
+    __GOT_START__ = .;
+    s.got = .;
+    *(.got.plt) 
+    *(.got)
+    *(.got1)
+    PROVIDE (__GOT2_START__ = .);
+    PROVIDE (_GOT2_START_ = .);
+    *(.got2)
+    PROVIDE (__GOT2_END__ = .);
+    PROVIDE (_GOT2_END_ = .);
+    
+    PROVIDE (__FIXUP_START__ = .);
+    PROVIDE (_FIXUP_START_ = .);
+    *(.fixup)
+    PROVIDE (_FIXUP_END_ = .);
+    PROVIDE (__FIXUP_END__ = .);
+    
     /* Various possible names for the end of the .text section */
     etext = ALIGN(0x10);
     _etext = .;
@@ -147,31 +165,8 @@ SECTIONS
  
     } > ram
 
-	
-    PROVIDE (__EXCEPT_START__ = .);
-    .gcc_except_table   : { *(.gcc_except_table) } >ram
-    PROVIDE (__EXCEPT_END__ = .);
-    __GOT_START__ = .;
-    .got :
-    {
-      s.got = .;
-      *(.got.plt) *(.got)
-    } > ram
-    __GOT_END__ = .;
-	
-    .got1		  : { *(.got1) 		} >ram
-    PROVIDE (__GOT2_START__ = .);
-    PROVIDE (_GOT2_START_ = .);
-    .got2		  :  { *(.got2) 	} >ram
-    PROVIDE (__GOT2_END__ = .);
-    PROVIDE (_GOT2_END_ = .);
-    
-    PROVIDE (__FIXUP_START__ = .);
-    PROVIDE (_FIXUP_START_ = .);
-    .fixup	  : { *(.fixup) 	} >ram
-    PROVIDE (_FIXUP_END_ = .);
-    PROVIDE (__FIXUP_END__ = .);
- 
+  .jcr : { KEEP (*(.jcr)) } >ram
+
     .rel.dyn : {
       *(.rel.init)
       *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
@@ -211,13 +206,29 @@ SECTIONS
     } >ram
 
     PROVIDE (__SDATA2_START__ = .);
-    .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >ram
-    .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >ram
+  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >ram
+  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >ram
     PROVIDE (__SBSS2_END__ = .);
 	
     .sbss2   	  : { *(.sbss2) 	} >ram
     PROVIDE (__SBSS2_END__ = .);
 	
+    /* R/W Data */
+    .data ( . ) :
+    {
+      . = ALIGN (4);
+
+      data.start = .;
+
+      *(.data)
+      *(.data1)
+      *(.data.* .gnu.linkonce.d.*)
+      PROVIDE (__SDATA_START__ = .);
+      *(.sdata*)
+      *(.gnu.linkonce.s.*)
+      data.end = .;
+    } > ram
+
     __SBSS_START__ = .;
     .bss :
     {
@@ -228,31 +239,6 @@ SECTIONS
       bss.end = .;
     } > ram
     __SBSS_END__ = .;
-
-
-
-
-
-    /* R/W Data */
-    .data ( . ) :
-    {
-      . = ALIGN (4);
-
-      data.start = .;
-
-      *(.data)
-      *(.data.rel.*)
-      *(.data1)
-      *(.data.* .gnu.linkonce.d.*)
-      PROVIDE (__SDATA_START__ = .);
-      *(.sdata*)
-      *(.gnu.linkonce.s.*)
-      data.end = .;
-    } > ram
-
-    data.size = data.end - data.start;
-    bss.size = bss.end - bss.start;
-    text.size = text.end - text.start;
 
     PROVIDE(_bss_start   = ADDR(.bss));
     PROVIDE(_bss_size    = SIZEOF(.bss));
@@ -275,6 +261,7 @@ SECTIONS
     . += 0x4000;
     intrStack = .;
     PROVIDE(intrStackPtr = intrStack);
+
 
 
 
