@@ -1,3 +1,8 @@
+2007-07-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* bsp_specs, startup/linkcmds: add c++ support again
+	* preinstall.am: some fixes
+
 2007-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Add startup/bspclean.c
