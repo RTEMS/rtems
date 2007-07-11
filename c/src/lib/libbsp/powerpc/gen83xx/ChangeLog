@@ -1,3 +1,7 @@
+2007-07-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/.cvsignore: New file.
+
 2007-07-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* network/network.c: Removed warning.
