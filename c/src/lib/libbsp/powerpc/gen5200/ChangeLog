@@ -1,5 +1,9 @@
 2007-07-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* README.IceCube: New file.
+
+2007-07-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* console/console.c: Fix typo accidentally introduced.
 	* network_5200/network.c: Fix warning.
 
