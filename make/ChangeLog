@@ -1,6 +1,6 @@
 2007-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* custom/gen83xx.cfg, custom/mpc8349eamds: added file to support
+	* custom/gen83xx.cfg, custom/mpc8349eamds.cfg: added file to support
 	MPC83xx controller based boards
 	
 2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
