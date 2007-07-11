@@ -1,3 +1,7 @@
+2007-07-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds.ep5200: Add .jcr section.
+
 2007-07-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* bsp_specs, startup/linkcmds, startup/linkcmds.pm520: 
