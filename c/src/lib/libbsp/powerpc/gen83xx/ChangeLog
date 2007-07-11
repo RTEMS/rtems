@@ -1,5 +1,9 @@
 2007-07-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* network/network.c: Removed warning.
+
+2007-07-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* ChangeLog: New file.
 	* aclocal.m4, include/bspopts.h.in: Removed.
 

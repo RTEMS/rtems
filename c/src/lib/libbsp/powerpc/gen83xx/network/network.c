@@ -20,6 +20,7 @@
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/rtems_bsdnet_internal.h>
 #include <bsp.h>
 #include <mpc83xx/tsec.h>
 #include <mpc83xx/mpc83xx.h>
