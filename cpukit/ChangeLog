@@ -1,3 +1,12 @@
+2007-07-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/malloc.c: Clean up Malloc debug code.
+	* score/include/rtems/score/heap.h: Spacing.
+	* score/inline/rtems/score/thread.inl:
+	* score/src/heapfree.c. Clean up and add explicit check of the address
+	being freed actually being in the heap.
+	* score/src/heapwalk.c: Switch to printk and do not call abort.
+
 2007-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/stackchk/check.c: Make checking the integrity of the pattern

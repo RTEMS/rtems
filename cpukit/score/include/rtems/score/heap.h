@@ -497,7 +497,7 @@ extern uint32_t _Heap_Block_allocate(
 
 #define _HAssert(cond_) \
   do { \
-    if(the_heap->stats.instance && !(cond_)) \
+    if (the_heap->stats.instance && !(cond_)) \
       __assert(__FILE__, __LINE__, #cond_);  \
   } while(0)
 

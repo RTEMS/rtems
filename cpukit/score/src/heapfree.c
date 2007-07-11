@@ -1,7 +1,7 @@
 /*
  *  Heap Handler
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -40,18 +40,23 @@ boolean _Heap_Free(
   void                *starting_address
 )
 {
-  Heap_Block        *the_block;
-  Heap_Block        *next_block;
+  Heap_Block      *the_block;
+  Heap_Block      *next_block;
   uint32_t         the_size;
   uint32_t         next_size;
   Heap_Statistics *const stats = &the_heap->stats;
-  boolean            next_is_free;
+  boolean          next_is_free;
+
+  if ( !_Addresses_Is_in_range(
+       starting_address, (void *)the_heap->start, (void *)the_heap->final ) ) {
+    _HAssert(starting_address != NULL);
+    return( FALSE );
+  }
 
   _Heap_Start_of_block( the_heap, starting_address, &the_block );
 
   if ( !_Heap_Is_block_in( the_heap, the_block ) ) {
-    _HAssert(starting_address == NULL);
-    _HAssert(FALSE);
+    _HAssert( FALSE );
     return( FALSE );
   }
 
@@ -59,12 +64,12 @@ boolean _Heap_Free(
   next_block = _Heap_Block_at( the_block, the_size );
 
   if ( !_Heap_Is_block_in( the_heap, next_block ) ) {
-    _HAssert(FALSE);
+    _HAssert( FALSE );
     return( FALSE );
   }
 
   if ( !_Heap_Is_prev_used( next_block ) ) {
-    _HAssert(FALSE);
+    _HAssert( FALSE );
     return( FALSE );
   }
 
@@ -77,14 +82,14 @@ boolean _Heap_Free(
     Heap_Block *const prev_block = _Heap_Block_at( the_block, -prev_size );
 
     if ( !_Heap_Is_block_in( the_heap, prev_block ) ) {
-      _HAssert(FALSE);
+      _HAssert( FALSE );
       return( FALSE );
     }
 
     /* As we always coalesce free blocks, the block that preceedes prev_block
        must have been used. */
     if ( !_Heap_Is_prev_used ( prev_block) ) {
-      _HAssert(FALSE);
+      _HAssert( FALSE );
       return( FALSE );
     }
 

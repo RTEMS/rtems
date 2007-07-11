@@ -94,6 +94,8 @@ size_t RTEMS_Malloc_Sbrk_amount;
 #ifdef RTEMS_DEBUG
 #define MALLOC_STATS
 #define MALLOC_DIRTY
+/*#define MALLOC_ARENA_CHECK
+void checkMallocArena(void); */
 #endif
 
 #ifdef MALLOC_STATS
@@ -282,7 +284,8 @@ void *malloc(
   {
       size_t     actual_size = 0;
       uint32_t   current_depth;
-      Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &actual_size);
+      void      *ptr = return_this;
+      _Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &actual_size);
       MSBUMP(lifetime_allocated, actual_size);
       current_depth = rtems_malloc_stats.lifetime_allocated -
                    rtems_malloc_stats.lifetime_freed;
@@ -464,7 +467,7 @@ void free(
 #ifdef MALLOC_STATS
   {
     size_t size;
-    if (Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &size) ) {
+    if (_Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &size) ) {
       MSBUMP(lifetime_freed, size);
     }
   }
