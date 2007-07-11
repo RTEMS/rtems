@@ -1,0 +1,18 @@
+2007-07-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ChangeLog: New file.
+	* aclocal.m4, include/bspopts.h.in: Removed.
+
+2007-07-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ChangeLog: New file.
+	* aclocal.m4, include/bspopts.h.in: Removed.
+
+2007-07-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* .cvsignore: New file.
+	* Makefile.in: Removed.
+
+2007-07-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* New BSP -- generic 83xx but tested on mpc8349eamds.
