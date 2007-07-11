@@ -103,7 +103,7 @@ extern TaskBDIdxTable_t TaskBDIdxTable[MAX_TASKS];
 static TaskId rxTaskId;	/* SDMA RX task ID */
 static TaskId txTaskId;	/* SDMA TX task ID */
 
-#define ETH_DEBUG
+/* #define ETH_DEBUG */
 
 /*
  * Number of interfaces supported by this driver
@@ -745,6 +745,7 @@ static void mpc5200_fec_retire_tbd(struct mpc5200_enet_struct *sc,
   }
 }
 
+#if 0
  /*
   * Function:	     mpc5200_fec_tx_bd_requeue
   *
@@ -776,6 +777,7 @@ static void mpc5200_fec_tx_bd_requeue(struct mpc5200_enet_struct *sc)
     }    
   }
 }
+#endif
 
 static void mpc5200_fec_sendpacket(struct ifnet *ifp,struct mbuf *m) {
   struct mpc5200_enet_struct *sc = ifp->if_softc;

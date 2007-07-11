@@ -130,7 +130,7 @@ uint32_t mpc5200_uart_avail_mask = GEN5200_UART_AVAIL_MASK;
     int minor;
     uint8_t *chrptr;
 
-    uuchrptr = memchr(psc_minor_to_irqname, name, sizeof(psc_minor_to_irqname));
+    chrptr = memchr(psc_minor_to_irqname, name, sizeof(psc_minor_to_irqname));
     if (chrptr != NULL) {
       minor = chrptr - psc_minor_to_irqname;
     } else {
