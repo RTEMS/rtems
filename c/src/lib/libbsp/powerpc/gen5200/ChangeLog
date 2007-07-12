@@ -1,3 +1,7 @@
+2007-07-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds.brs5l: Add .jcr section.
+
 2007-07-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* README.IceCube: New file.

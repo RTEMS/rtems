@@ -168,6 +168,8 @@ SECTIONS
  
     } > ram
 
+    .jcr : { KEEP (*(.jcr)) } >ram
+
     .rel.dyn : {
       *(.rel.init)
       *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
