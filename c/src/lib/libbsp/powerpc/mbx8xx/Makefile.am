@@ -81,12 +81,12 @@ endif
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/exceptions.rel
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
