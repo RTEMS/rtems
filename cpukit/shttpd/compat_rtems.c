@@ -26,12 +26,13 @@
 typedef struct RTEMS_HTTPD_ARGS {
     rtems_shttpd_init     init_callback;
     rtems_shttpd_addpages addpages_callback;
+    unsigned int          port;
     char                  webroot[MAX_WEB_BASE_PATH_LENGTH];
 } RTEMS_HTTPD_ARGS;
 
 static int rtems_webserver_running = FALSE; //not running.
 
-static rtems_task rtems_httpd_daemon(rtems_task_argument args )
+static rtems_task rtems_httpd_daemon(rtems_task_argument args)
 {
   RTEMS_HTTPD_ARGS *httpd_args = (RTEMS_HTTPD_ARGS*)args;
 
@@ -59,7 +60,7 @@ static rtems_task rtems_httpd_daemon(rtems_task_argument args )
     free(httpd_args);
 
   /* Open listening socket */
-  shttpd_listen(ctx, 9000);
+  shttpd_listen(ctx, httpd_args->port);
 
   rtems_webserver_running = TRUE;
 
@@ -79,7 +80,8 @@ rtems_status_code rtems_initialize_webserver(rtems_task_priority   initial_prior
                                              rtems_attribute       attribute_set,
                                              rtems_shttpd_init     init_callback,
                                              rtems_shttpd_addpages addpages_callback,
-                                             char                 *webroot
+                                             char                 *webroot,
+                                             unsigned int          port
                                             )
 {
   rtems_status_code   sc;
@@ -95,6 +97,7 @@ rtems_status_code rtems_initialize_webserver(rtems_task_priority   initial_prior
   {
     args->init_callback = init_callback;
     args->addpages_callback = addpages_callback;
+    args->port = port;
     strncpy(args->webroot,webroot,MAX_WEB_BASE_PATH_LENGTH);
 
     sc = rtems_task_create(rtems_build_name('H', 'T', 'P', 'D'),
@@ -119,7 +122,7 @@ rtems_status_code rtems_initialize_webserver(rtems_task_priority   initial_prior
 
 void rtems_terminate_webserver(void)
 {
-  rtems_webserver_running = FALSE; //not running, so terminate
+  rtems_webserver_running = FALSE; // not running, so terminate
 }
 
 int rtems_webserver_ok(void)

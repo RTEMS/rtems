@@ -56,7 +56,8 @@ rtems_status_code rtems_initialize_webserver(rtems_task_priority   initial_prior
                                              rtems_attribute       attribute_set,
                                              rtems_shttpd_init     init_callback,
                                              rtems_shttpd_addpages addpages_callback,
-                                             char                 *webroot
+                                             char                 *webroot,
+                                             unsigned int          port
                                             );
 void rtems_terminate_webserver(void);
 int  rtems_webserver_ok(void);
