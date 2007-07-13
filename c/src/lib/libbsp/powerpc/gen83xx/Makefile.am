@@ -33,7 +33,7 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds.mpc8349eamds
+dist_project_lib_DATA += startup/linkcmds startup/linkcmds.mpc8349eamds
 
 noinst_PROGRAMS += mpc83xx_regs.rel
 mpc83xx_regs_rel_SOURCES = startup/mpc83xx_regs.c

@@ -1,3 +1,10 @@
+2007-07-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, preinstall.am: Install a linkcmds all the time.
+	* startup/bspstart.c, startup/cpuinit.c,
+	startup/linkcmds.mpc8349eamds, startup/mpc83xx_regs.c: Add missing $Id$.
+	* startup/linkcmds: New file.
+
 2007-07-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/.cvsignore: New file.

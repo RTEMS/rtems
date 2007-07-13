@@ -17,6 +17,10 @@
 | this file contains the BSP startup code                         |
 \*===============================================================*/
 
+/*
+ *  $Id$
+ */
+
 #include <bsp.h>
 
 #include <rtems/libio.h>

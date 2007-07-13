@@ -1,6 +1,9 @@
 /*
  *  This file contains directives for the GNU linker which are specific
- *  to a gen8349eamds board
+ *  to a gen8349eamds board.
+ *
+ *  You MUST have a linker script named linkcmds autoconf tests which
+ *  use the "-B... -specs bsp_specs -qrtems" arguments work.
  *
  *  $Id$
  */

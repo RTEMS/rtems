@@ -65,6 +65,10 @@ $(PROJECT_LIB)/rtems_crti.$(OBJEXT): rtems_crti.$(OBJEXT) $(PROJECT_LIB)/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
 
+$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
 $(PROJECT_LIB)/linkcmds.mpc8349eamds: startup/linkcmds.mpc8349eamds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc8349eamds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc8349eamds
