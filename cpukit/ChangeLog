@@ -1,3 +1,7 @@
+2007-07-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/mount.c: Allow null for output parameter.
+
 2007-07-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shttpd/compat_rtems.c, shttpd/compat_rtems.h: Add port to listen on

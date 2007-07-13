@@ -229,7 +229,8 @@ int mount(
 
   Chain_Append( &rtems_filesystem_mount_table_control, &temp_mt_entry->Node );
 
-  *mt_entry = temp_mt_entry;
+  if ( mt_entry )
+    *mt_entry = temp_mt_entry;
 
   return 0;
 
