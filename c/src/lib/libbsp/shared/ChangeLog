@@ -1,3 +1,7 @@
+2007-07-15	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeTsi148.c: Use size_t for sizes.
+
 2007-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bsppost.c: Split open of the console from the standard BSP code so it
