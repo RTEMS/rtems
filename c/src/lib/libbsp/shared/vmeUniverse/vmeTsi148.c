@@ -1904,7 +1904,7 @@ rtems_id			q = 0;
 int					installed = 0;
 int					i, err = 0;
 int					doDisable = 0;
-uint32_t			size;
+size_t				size;
 unsigned long		msg;
 char *				irqfmt  = "VME IRQ @vector %3i %s";
 char *				iackfmt = "VME IACK            %s";
