@@ -5,7 +5,7 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = nsecs.exe
-nsecs_exe_SOURCES = init.c
+nsecs_exe_SOURCES = init.c empty.c
 
 dist_rtems_tests_DATA = nsecs.scn
 dist_rtems_tests_DATA += nsecs.doc

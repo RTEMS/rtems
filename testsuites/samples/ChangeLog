@@ -1,3 +1,9 @@
+2007-07-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* nsecs/Makefile.am, nsecs/init.c: Move empty body to another file. The
+	loop was being optimized out on the PowerPC.
+	* nsecs/empty.c: New file.
+
 2007-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* nsecs/init.c: Change name to avoid any hint of the timer driver.
