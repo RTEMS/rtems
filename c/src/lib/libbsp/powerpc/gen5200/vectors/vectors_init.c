@@ -138,69 +138,68 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
 #else
     recoverable = 0;
 #endif
-    if (!recoverable) {
-      printk("unrecoverable exception!!! Push reset button\n");
-      while(1);
-
-  }
 #endif
 
-
+  CPU_print_stack();
+  if (!recoverable) {
+    printk("unrecoverable exception!!! Push reset button\n");
+    bsp_cleanup();
+  }
 }
 
 void nop_except_enable(const rtems_raw_except_connect_data* ptr)
 {
 }
+
 int except_always_enabled(const rtems_raw_except_connect_data* ptr)
 {
   return 1;
 }
 
 void initialize_exceptions()
-  {
+{
   int i;
 
   /*
    * Initialize pointer used by low level execption handling
    */
-  globalExceptHdl 				= C_exception_handler;
+  globalExceptHdl                               = C_exception_handler;
   /*
    * Put  default_exception_vector_code_prolog at relevant exception
    * code entry addresses
    */
-  exception_config.exceptSize 			        = LAST_VALID_EXC + 1;
-  exception_config.rawExceptHdlTbl 		        = &exception_table[0];
-  exception_config.defaultRawEntry.exceptIndex	= 0;
-  exception_config.defaultRawEntry.hdl.vector	= 0;
-  exception_config.defaultRawEntry.hdl.raw_hdl	= default_exception_vector_code_prolog;
+  exception_config.exceptSize                   = LAST_VALID_EXC + 1;
+  exception_config.rawExceptHdlTbl              = &exception_table[0];
+  exception_config.defaultRawEntry.exceptIndex  = 0;
+  exception_config.defaultRawEntry.hdl.vector   = 0;
+  exception_config.defaultRawEntry.hdl.raw_hdl  = default_exception_vector_code_prolog;
   /*
    * Note that next line the '&' before default_exception_vector_code_prolog_size
    * is not a bug as it is defined a .set directly in asm...
    */
-  exception_config.defaultRawEntry.hdl.raw_hdl_size = (unsigned) &default_exception_vector_code_prolog_size;
+  exception_config.defaultRawEntry.hdl.raw_hdl_size =
+       (unsigned) &default_exception_vector_code_prolog_size;
 
 
-  for (i=0; i <= exception_config.exceptSize; i++)
-  	{
+  for (i=0; i <= exception_config.exceptSize; i++) {
 
     #if defined(SHOW_MORE_INIT_SETTINGS)
       printk("installing exception number %d\n", i);
     #endif
 
-  	if (!ppc_vector_is_valid(i))
-        continue;
+    if (!ppc_vector_is_valid(i))
+      continue;
 
-    exception_table[i].exceptIndex	= i;
-    exception_table[i].hdl		    = exception_config.defaultRawEntry.hdl;
-    exception_table[i].hdl.vector	= i;
-    exception_table[i].on		    = nop_except_enable;
-    exception_table[i].off		    = nop_except_enable;
-    exception_table[i].isOn		    = except_always_enabled;
+    exception_table[i].exceptIndex = i;
+    exception_table[i].hdl         = exception_config.defaultRawEntry.hdl;
+    exception_table[i].hdl.vector  = i;
+    exception_table[i].on          = nop_except_enable;
+    exception_table[i].off         = nop_except_enable;
+    exception_table[i].isOn        = except_always_enabled;
   }
 
   if (!ppc_init_exceptions(&exception_config))
     BSP_panic("Exception handling initialization failed\n");
   else
     printk("Exception handling initialization done\n");
-
-  }
+}

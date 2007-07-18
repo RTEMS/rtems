@@ -1,3 +1,7 @@
+2007-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, vectors/vectors_init.c: Print stack trace on exception.
+
 2007-07-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds.brs5l: Add .jcr section.
