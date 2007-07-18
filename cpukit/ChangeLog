@@ -1,3 +1,11 @@
+2007-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/Makefile.am, libmisc/cpuuse/cpuusagereport.c,
+	libmisc/cpuuse/cpuusagereset.c: Fix bug where cpu usage calculation
+	was always using uptime not time since last cpu usage reset when
+	using nanoseconds granularity.
+	* libmisc/cpuuse/cpuusagedata.c: New file.
+
 2007-07-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/mount.c: Allow null for output parameter.

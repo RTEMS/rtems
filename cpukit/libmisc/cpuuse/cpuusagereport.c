@@ -35,8 +35,10 @@
   #define PERCENT_FMT "%04" PRId32
 #endif
 
-#ifndef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-  uint32_t   CPU_usage_Ticks_at_last_reset;
+#ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+  extern struct timespec    CPU_usage_Uptime_at_last_reset;
+#else
+  extern uint32_t           CPU_usage_Ticks_at_last_reset;
 #endif
 
 /*PAGE
@@ -53,7 +55,7 @@ void rtems_cpu_usage_report( void )
   char                 name[5];
   uint32_t             ival, fval;
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec    uptime;
+    struct timespec    uptime, total;
   #else
     uint32_t           total_units = 0;
   #endif
@@ -65,6 +67,7 @@ void rtems_cpu_usage_report( void )
    */
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     _TOD_Get_uptime( &uptime );
+    _Timespec_Subtract( &CPU_usage_Uptime_at_last_reset, &uptime, &total );
   #else
     for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
       if ( !_Objects_Information_table[ api_index ] )
@@ -107,7 +110,7 @@ void rtems_cpu_usage_report( void )
         printk( "0x%08" PRIx32 "   %4s    ", the_thread->Object.id, name );
 
         #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-          _Timespec_Divide( &the_thread->cpu_time_used, &uptime, &ival, &fval );
+          _Timespec_Divide( &the_thread->cpu_time_used, &total, &ival, &fval );
 
           printk(
             "%" PRId32 ".%06d"                 /* cpu time used */     
@@ -135,9 +138,9 @@ void rtems_cpu_usage_report( void )
   }
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    printk( "Uptime %d.%06d seconds\n\n",
-       uptime.tv_sec,
-       uptime.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND
+    printk( "Time since last reset %d.%06d seconds\n",
+       total.tv_sec,
+       total.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND
     );
   #else
     printk(

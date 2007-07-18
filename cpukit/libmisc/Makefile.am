@@ -20,7 +20,7 @@ EXTRA_DIST += cpuuse/README
 
 noinst_LIBRARIES += libcpuuse.a
 libcpuuse_a_SOURCES = cpuuse/cpuusagereport.c cpuuse/cpuusagereset.c \
-    cpuuse/cpuuse.h
+    cpuuse/cpuuse.h cpuuse/cpuusagedata.c
 
 ## devnull
 
