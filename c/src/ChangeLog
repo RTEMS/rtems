@@ -1,8 +1,10 @@
 2007-07-18	Thomas Doerfler (Thomas.Doerfler@embedded-brains.de>:
+
 	* libchip/serial/ns16550.c: removed timed out wait for transmitter
 	to become ready: This will not work for fast CPUs. 
 
 2007-07-09	Thomas Doerfler (Thomas.Doerfler@embedded-brains.de>:
+
 	* libchip/ide/ata.c: fixed warning
 
 2007-06-20	Ray Xu <rayx@gmail.com>
