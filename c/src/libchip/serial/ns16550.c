@@ -194,7 +194,6 @@ NS16550_STATIC void ns16550_write_polled(
 {
   uint32_t                pNS16550;
   unsigned char           ucLineStatus;
-  int                     iTimeout;
   getRegister_f           getReg;
   setRegister_f           setReg;
 
@@ -205,7 +204,6 @@ NS16550_STATIC void ns16550_write_polled(
   /*
    * wait for transmitter holding register to be empty
    */
-  iTimeout=10000;
   ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
   while ((ucLineStatus & SP_LSR_THOLD) == 0) {
     /*
@@ -217,9 +215,6 @@ NS16550_STATIC void ns16550_write_polled(
      }
 #endif
      ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
-     if(!--iTimeout) {
-       break;
-     }
   }
 
   /*

@@ -1,3 +1,8 @@
+2007-07-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* new-exceptions/raw_exception.c:
+	added PPC_e300c1/2/3 to vector validation code
+	
 2007-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* configure.ac, Makefile.am, mpc83xx/include/mpc83xx.h,

@@ -340,6 +340,9 @@ int ppc_vector_is_valid(rtems_vector vector)
         case PPC_8260:
         /* case PPC_8240: -- same value as 8260 */
         case PPC_8245:
+        case PPC_e300c1:
+        case PPC_e300c2:
+        case PPC_e300c3:
             if (!mpc603_vector_is_valid(vector)) {
                 return 0;
             }
