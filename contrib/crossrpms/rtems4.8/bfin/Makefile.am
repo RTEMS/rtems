@@ -12,13 +12,11 @@ BINUTILS_OPTS +=
 # We don't want docs from bleeding edge upstream
 BINUTILS_OPTS += --disable-infos
 
-GCC_VERS = 4.2.0
+GCC_VERS = 4.2.1
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 14
+GCC_RPMREL = 20
 NEWLIB_VERS = 1.15.0
 include ../gcc.am
-# ATM, we don't want infos from bleeding edge GCC
-GCC_OPTS += --disable-infos
 
 GDB_VERS = 6.5
 GDB_PKGVERS = $(GDB_VERS)
