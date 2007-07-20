@@ -11,7 +11,11 @@ URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if "%{gdb_version}" >= "6.6"
+%if "%{?suse}"
+BuildRequires:	expat
+%else 
 BuildRequires:	expat-devel
+%endif
 %endif
 %if %build_infos
 # Required for building the infos
