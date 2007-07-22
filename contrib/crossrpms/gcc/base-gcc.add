@@ -1,6 +1,6 @@
 %if %build_infos
 # ==============================================================
-# @rpmprefix@rtems4.7-base-gcc
+# @rpmprefix@gcc-common
 # ==============================================================
 %package -n @rpmprefix@gcc-common
 Summary:	Base package for rtems gcc and newlib C Library
@@ -10,11 +10,6 @@ License:	GPL
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
-
-Provides:	@rpmprefix@rtems4.7-base-gcc = %{gcc_version}-%{release}
-Obsoletes:	@rpmprefix@rtems4.7-base-gcc < %{gcc_rpmvers}-%{release}
-Provides:	@rpmprefix@rtems-base-gcc = %{gcc_version}-%{release}
-Obsoletes:	@rpmprefix@rtems-base-gcc < %{gcc_rpmvers}-%{release}
 
 %description -n @rpmprefix@gcc-common
 

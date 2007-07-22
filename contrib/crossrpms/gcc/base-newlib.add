@@ -9,17 +9,6 @@ Group:          Development/Tools
 Version:        %{newlib_version}
 License:	Distributable
 
-Provides:	@rpmprefix@rtems4.7-base-newlib = %{newlib_version}-%{release}
-Obsoletes:	@rpmprefix@rtems4.7-base-newlib < %{newlib_version}-%{release}
-Provides:	@rpmprefix@rtems-base-newlib = %{newlib_version}-%{release}
-Obsoletes:	@rpmprefix@rtems-base-newlib < %{newlib_version}-%{release}
-
-Provides:	@rpmprefix@rtems4.7-base-libc = %{newlib_version}-%{release}
-Obsoletes:	@rpmprefix@rtems4.7-base-libc < %{newlib_version}-%{release}
-Provides:	@rpmprefix@rtems-base-libc = %{newlib_version}-%{release}
-Obsoletes:	@rpmprefix@rtems-base-libc < %{newlib_version}-%{release}
-
-
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
 

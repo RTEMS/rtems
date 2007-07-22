@@ -12,11 +12,6 @@ License:	GPL
 Requires(post): 	/sbin/install-info
 Requires(preun): 	/sbin/install-info
 
-Provides:	@rpmprefix@rtems4.7-base-g77 = %{gcc_rpmvers}-%{release}
-Obsoletes:	@rpmprefix@rtems4.7-base-g77 < %{gcc_rpmvers}-%{release}
-Provides:	@rpmprefix@rtems-base-g77 = %{gcc_rpmvers}-%{release}
-Obsoletes:	@rpmprefix@rtems-base-g77 < %{gcc_rpmvers}-%{release}
-
 %description -n @rpmprefix@gcc-g77-common
 RTEMS is an open source operating system for embedded systems.
 
