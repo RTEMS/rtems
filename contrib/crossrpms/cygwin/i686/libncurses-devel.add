@@ -1,0 +1,39 @@
+%define libncurses_devel_version @NCURSES_VERS@
+%define libncurses_devel_rpmvers %{expand:%(echo @NCURSES_VERS@ | tr - _)} 
+
+Name:         @rpmprefix@@tool_target@-libncurses-devel
+Release:      @NCURSES_RPMREL@%{?dist}
+License:      GPL
+Group:        Development/Tools
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:	noarch
+
+Version:      	%libncurses_devel_rpmvers
+Summary:      	Cygwin libncurses_devel Libraries
+
+Source0:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses-devel/libncurses-devel-%{libncurses_devel_version}.tar.bz2
+%{?_without_sources:NoSource:	0}
+
+%description
+Cygwin libncurses-devel libraries.
+
+%prep
+%setup -c -q
+
+%build
+  rm -rf @tool_target@
+
+  # Setup sys-root (Usable for gcc >= 3.4)
+  mkdir -p @tool_target@/sys-root
+  ( cd @tool_target@/sys-root ; %{__tar} xvjf %{SOURCE0})
+
+  sed -i 's,^prefix=\(.*\)$,prefix=$RPM_BUILD_ROOT%{_prefix}/@tool_target@/sys-root\1,' etc/postinstall/libncurses-devel.sh
+
+%install
+  rm -rf $RPM_BUILD_ROOT
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}
+  cp -a @tool_target@ $RPM_BUILD_ROOT%{_prefix}
+  ./etc/postinstall/libncurses-devel.sh
+
+
