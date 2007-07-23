@@ -202,8 +202,8 @@ leaveparms:
 return_here:
 	/* now we move the entire rest of the image */
 #ifdef ASSUME_RTEMS_INSTALLS_VECTORS
-	lis		r3,__rtems_start@h
-	ori		r3,r3,__rtems_start@l
+	lis		r3,__rtems_entry_point@h
+	ori		r3,r3,__rtems_entry_point@l
 	lis		r0,preload@h	/* calculate/adjust from address */
 	ori		r0,r0,preload@l
 	sub		r0,r3,r0
