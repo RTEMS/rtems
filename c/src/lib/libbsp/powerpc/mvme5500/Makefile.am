@@ -83,6 +83,7 @@ include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h \
 
 noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors_init.c \
+    ../../powerpc/shared/vectors/vectors_entry.S \
     vectors/exceptionhandler.c ../../powerpc/shared/vectors/vectors.S
 vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

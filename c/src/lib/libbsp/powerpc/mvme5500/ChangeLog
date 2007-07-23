@@ -1,3 +1,7 @@
+2007-07-23	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am: added shared/vectors/vectors_entry.S
+
 2007-07-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* irq/irq_init.c: adapted to shared exception code
