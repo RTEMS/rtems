@@ -5,7 +5,7 @@ TARGET = i686-pc-cygwin
 include $(top_srcdir)/mkspec.am
 
 CYGWIN_VERS = 1.5.24-2
-CYGWIN_RPMREL = @VERSION@
+CYGWIN_RPMREL = 0.20070723.1
 EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
 
@@ -30,7 +30,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 
 W32API_VERS = 3.8-1
-W32API_RPMREL = @VERSION@
+W32API_RPMREL = 0.20070723.1
 EXTRA_DIST += target-w32api.add
 EXTRA_DIST += w32api.add
 
@@ -53,16 +53,40 @@ CLEANFILES += $(TARGET)-w32api.spec.in
 CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
 noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
-# Cygwin's binutil's versioning is bizarre
+NCURSES_VERS = 5.5-3
+NCURSES_RPMREL = 0.20070723.2
+EXTRA_DIST += target-libncurses-devel.add
+EXTRA_DIST += libncurses-devel.add
+
+NCURSES_SUBPACKAGES = $(top_srcdir)/common/common.add
+NCURSES_SUBPACKAGES += $(srcdir)/libncurses-devel.add
+NCURSES_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
+NCURSES_SUBPACKAGES += $(top_srcdir)/common/clean.add
+NCURSES_SUBPACKAGES += $(srcdir)/target-libncurses-devel.add
+
+$(TARGET)-libncurses-devel.spec.in: $(NCURSES_SUBPACKAGES) Makefile.am
+	cat $(NCURSES_SUBPACKAGES) | sed \
+	  -e "s/[@]NCURSES_VERS[@]/$(NCURSES_VERS)/g" \
+	  -e "s/[@]NCURSES_RPMREL[@]/$(NCURSES_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{libncurses_devel_rpmvers},g" \
+	| $(MKSPEC0) > $(TARGET)-libncurses-devel.spec.in
+CLEANFILES += $(TARGET)-libncurses-devel.spec.in
+	                      
+@rpmprefix@$(TARGET)-libncurses-devel.spec: $(TARGET)-libncurses-devel.spec.in
+	$(MKSPEC) $(TARGET)-libncurses-devel.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-libncurses-devel.spec
+noinst_DATA += @rpmprefix@$(TARGET)-libncurses-devel.spec
+
+# Cygwin's binutils' versioning is bizarre
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.17.50
 BINUTILS_PKGVERS = 20060817-1
-BINUTILS_RPMREL = @VERSION@
+BINUTILS_RPMREL = 0.20070723.1
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 3.4.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = @VERSION@
+GCC_RPMREL = 0.20070723.1
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
