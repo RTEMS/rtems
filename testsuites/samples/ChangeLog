@@ -1,3 +1,7 @@
+2007-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* nsecs/init.c: Add include of unistd.h for sleep() prototype.
+
 2007-07-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* nsecs/Makefile.am, nsecs/init.c: Move empty body to another file. The
