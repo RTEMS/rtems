@@ -138,7 +138,7 @@ set_close_on_exec(int fd)
         // but it doesnt hurt either.
         (void) fcntl(fd, F_SETFD, FD_CLOEXEC);
 }
-
+#ifndef __rtems__
 int
 my_stat(const char *path, struct stat *stp)
 {
@@ -174,7 +174,7 @@ my_getcwd(char *buffer, int maxlen)
 {
 	return (getcwd(buffer, maxlen));
 }
-
+#endif
 int
 set_non_blocking_mode(int fd)
 {
