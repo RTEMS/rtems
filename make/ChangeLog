@@ -1,5 +1,11 @@
 2007-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* custom/Linux-posix.cfg: Make Linux link with just a C main -- avoid
+	using C++ ctor trick. An RTEMS C++ application running on this BSP
+	may have initialization order issues to address.
+
+2007-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* custom/Linux-posix.cfg: Linux BSP must be linked with C++ compiler.
 
 2007-07-11	Joel Sherrill <joel.sherrill@OARcorp.com>
