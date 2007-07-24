@@ -24,16 +24,11 @@ ENTRY(_start)
 
 MEMORY
 {
-/* Real memory layout submitted
   rom           : o = 0x00000000, l = 128k
-  ram           : o = 0x00040000, l = 256k
-*/
-
-/* Memory layout which links all tests */
-  rom           : o = 0x01000000, l = 512k
-  ram           : o = 0x00040000, l = 512k
-
   onchip_peri	: o = 0x05000000, l = 512
+  ram           : o = 0x00040000, l = 256k
+
+  onchip_ram    : o = 0x00080000, l = 8k
 }
 
 SECTIONS
@@ -178,7 +173,7 @@ SECTIONS
   PROVIDE( _HeapEnd = . );
 
   _WorkSpaceStart = . ;
-  /* XXX . = 0x00080000 ; */
+  . = 0x00080000 ;
   PROVIDE(_WorkSpaceEnd = .);
 
   _CPU_Interrupt_stack_low  = 0x00080000 ;
@@ -218,6 +213,6 @@ SECTIONS
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) }
 
-  .stack /* 0x00081ff0 */: { _stack = .; *(.stack) } > ram /* > onchip_ram */
+  .stack 0x00081ff0 : { _stack = .; *(.stack) } /* > onchip_ram */
   /* These must appear regardless of  .  */
 }

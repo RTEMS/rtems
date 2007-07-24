@@ -25,7 +25,7 @@ start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
+dist_project_lib_DATA += startup/linkcmds startup/linkcmds.sim
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
