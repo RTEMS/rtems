@@ -13,7 +13,7 @@ Summary:      	@tool_target@ gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	@GCC_RPMREL@%{?dist}
+Release:      	@GCC_RPMREL@
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

@@ -61,6 +61,6 @@ BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 4.1.0
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = @VERSION@
+GCC_RPMREL = @VERSION@%{?dist}
 include ../gcc.am
 GCC_OPTS += --languages=c

@@ -36,6 +36,6 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.1.2
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = @VERSION@
+GCC_RPMREL = @VERSION@%{?dist}
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx,f95,objc
