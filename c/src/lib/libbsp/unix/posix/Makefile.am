@@ -26,22 +26,22 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 project_lib_DATA =
 noinst_LIBRARIES =
-if HAS_CXX
-noinst_LIBRARIES += librtemscxx.a
-
-librtemscxx_a_SOURCES = startup/no-ctor.c
-
-# Install as a separate .$(OBJEXT)
-project_lib_DATA += no-ctor.$(OBJEXT)
-
-# We install the RTEMS constructor as a separate .$(OBJEXT)
-# so it can be easily place correctly by the compiler config file.
-project_lib_DATA += rtems-ctor.$(OBJEXT)
-endif
+## if HAS_CXX
+## noinst_LIBRARIES += librtemscxx.a
+## 
+## librtemscxx_a_SOURCES = startup/no-ctor.c
+## 
+## # Install as a separate .$(OBJEXT)
+## project_lib_DATA += no-ctor.$(OBJEXT)
+## 
+## # We install the RTEMS constructor as a separate .$(OBJEXT)
+## # so it can be easily place correctly by the compiler config file.
+## project_lib_DATA += rtems-ctor.$(OBJEXT)
+## endif
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    startup/bspstart.c startup/setvec.c
+    startup/bspstart.c startup/setvec.c ../../shared/bootcard.c
 if !HAS_CXX
 startup_rel_SOURCES += startup/main.c
 endif
@@ -74,9 +74,9 @@ endif
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
-if HAS_CXX
-libbsp_a_SOURCES += startup/rtems-ctor.cc
-endif
+## if HAS_CXX
+## libbsp_a_SOURCES += startup/rtems-ctor.cc
+## endif
 libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
 if HAS_MP
 libbsp_a_LIBADD += shmsupp.rel

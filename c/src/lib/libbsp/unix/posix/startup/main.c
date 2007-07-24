@@ -24,31 +24,7 @@ int main(
   char **argv
 )
 {
-  rtems_argc = argc;
-  rtems_argv = argv;
-
-  bsp_start();
-
-  if ((argc > 0) && argv && argv[0])
-      rtems_progname = argv[0];
-  else
-      rtems_progname = "RTEMS";
-
-  /*
-   *  Start multitasking
-   */
-
-  rtems_initialize_executive_late( bsp_isr_level );
-
-  /*
-   * Returns when multitasking is stopped
-   * This allows our destructors to get run normally
-   */
-
-  fflush( stdout );
-  fflush( stderr );
-
-  bsp_cleanup();
+  boot_card();
 
   return 0;
 }

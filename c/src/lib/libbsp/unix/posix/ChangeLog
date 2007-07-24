@@ -1,3 +1,11 @@
+2007-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, startup/main.c: Now can link with C compiler and not
+	require C++ compiler to link. The file rtems-ctor.cc is not being
+	built but if there is a need for C++ code to run on this BSP, then it
+	will have to be addressed. The simplest solution which might work is
+	to check the RTEMS system state before calling bsp_start() in main().
+
 2007-05-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c: Use uintptr_t for address arithmetics.
