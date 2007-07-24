@@ -77,6 +77,30 @@ CLEANFILES += $(TARGET)-libncurses-devel.spec.in
 CLEANFILES += @rpmprefix@$(TARGET)-libncurses-devel.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libncurses-devel.spec
 
+ZLIB_VERS = 1.2.3-2
+ZLIB_RPMREL = 0.20070723.1
+EXTRA_DIST += target-zlib.add
+EXTRA_DIST += zlib.add
+
+ZLIB_SUBPACKAGES = $(top_srcdir)/common/common.add
+ZLIB_SUBPACKAGES += $(srcdir)/zlib.add
+ZLIB_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
+ZLIB_SUBPACKAGES += $(top_srcdir)/common/clean.add
+ZLIB_SUBPACKAGES += $(srcdir)/target-zlib.add
+
+$(TARGET)-zlib.spec.in: $(ZLIB_SUBPACKAGES) Makefile.am
+	cat $(ZLIB_SUBPACKAGES) | sed \
+	  -e "s/[@]ZLIB_VERS[@]/$(ZLIB_VERS)/g" \
+	  -e "s/[@]ZLIB_RPMREL[@]/$(ZLIB_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{zlib_rpmvers},g" \
+	| $(MKSPEC0) > $(TARGET)-zlib.spec.in
+CLEANFILES += $(TARGET)-zlib.spec.in
+	                      
+@rpmprefix@$(TARGET)-zlib.spec: $(TARGET)-zlib.spec.in
+	$(MKSPEC) $(TARGET)-zlib.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-zlib.spec
+noinst_DATA += @rpmprefix@$(TARGET)-zlib.spec
+
 # Cygwin's binutils' versioning is bizarre
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.17.50
