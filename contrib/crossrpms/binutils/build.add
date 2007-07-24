@@ -1,4 +1,8 @@
 %build
+%if "@tool_target@" == "i686-pc-cygwin"
+# The cygwin sources are leaking memory
+  RPM_OPT_FLAGS="$(echo "$RPM_OPT_FLAGS"|sed -e 's; -Wp,-D_FORTIFY_SOURCE=2;;')"
+%endif
   mkdir -p build
   cd build
   CFLAGS="$RPM_OPT_FLAGS" \

@@ -15,6 +15,10 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
+%else
+%if "@tool_target@" == "i686-pc-cygwin"
+BuildRequires:	texinfo >= 4.2
+%endif
 %endif
 BuildRequires:	flex
 BuildRequires:	bison
