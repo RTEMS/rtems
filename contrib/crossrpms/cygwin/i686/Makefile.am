@@ -105,7 +105,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-zlib.spec
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.17.50
 BINUTILS_PKGVERS = 20060817-1
-BINUTILS_RPMREL = 0.20070724.1
+BINUTILS_RPMREL = 0.20070724.1%{?dist}
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 

@@ -6,7 +6,7 @@ Name:		@rpmprefix@@tool_target@-binutils
 Summary:	Binutils for target @tool_target@
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	@BINUTILS_RPMREL@%{?dist}
+Release:	@BINUTILS_RPMREL@
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

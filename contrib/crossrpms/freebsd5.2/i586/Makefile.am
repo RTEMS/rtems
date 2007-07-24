@@ -30,7 +30,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 BINUTILS_VERS = 2.17
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = @VERSION@
+BINUTILS_RPMREL = @VERSION@%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
 

@@ -6,7 +6,7 @@ include $(top_srcdir)/mkspec.am
 
 BINUTILS_VERS = 2.17.50
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 1
+BINUTILS_RPMREL = 1%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
 # We don't want docs from bleeding edge upstream

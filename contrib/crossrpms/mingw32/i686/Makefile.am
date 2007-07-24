@@ -55,7 +55,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
 BINUTILS_VERS = 2.16.91-20060119-1
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 1
+BINUTILS_RPMREL = 1%{?dist}
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
