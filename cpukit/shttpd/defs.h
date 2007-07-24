@@ -414,12 +414,21 @@ extern int	my_snprintf(char *buf, size_t buflen, const char *fmt, ...);
  */
 extern void	set_close_on_exec(int fd);
 extern int	set_non_blocking_mode(int fd);
+#if __rtems__
+#define my_stat	stat
+#define my_open open
+#define my_remove remove
+#define my_rename rename
+#define my_mkdir mkdir
+#define my_getcwd getcwd
+#else
 extern int	my_stat(const char *, struct stat *stp);
 extern int	my_open(const char *, int flags, int mode);
 extern int	my_remove(const char *);
 extern int	my_rename(const char *, const char *);
 extern int	my_mkdir(const char *, int);
 extern char *	my_getcwd(char *, int);
+#endif
 extern int	spawn_process(struct conn *c, const char *prog,
 		char *envblk, char *envp[], int sock, const char *dir);
 
