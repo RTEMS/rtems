@@ -1,3 +1,9 @@
+2007-07-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shttpd/Makefile.am: Prefix all non-public symbols with _shttp_.
+	* shttpd/compat_rtems.c: Don't build my_stat for rtems.
+	* shttpd/defs.h: Don't build most of my_* wrappers for rtems.
+
 2007-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/Makefile.am, libmisc/cpuuse/cpuusagereport.c,
