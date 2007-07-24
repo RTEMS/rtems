@@ -1,3 +1,9 @@
+2007-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpuuse/init.c: Do not delete the Init task. Leaving it suspended lets
+	the CPU Usage Report include it. If it is deleted, the CPU time it
+	had consumed is not listed later in the report.
+
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tztest/init.c: Build when using buffered test IO.
