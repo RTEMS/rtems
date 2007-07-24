@@ -17,6 +17,8 @@
 #include "config.h"
 #endif
 
+#include <stdio.h>
+
 #include <rtems/system.h>
 #include <sys/types.h>
 #include <rtems/score/timespec.h>
@@ -50,7 +52,7 @@ void _Timespec_Divide(
    *  Put it back in the timespec result
    */
 
-  answer = (left * 1000) / right;
+  answer = (left * 100000) / right;
 
   *fval_percentage = answer % 1000;
   *ival_percentage = answer / 1000;

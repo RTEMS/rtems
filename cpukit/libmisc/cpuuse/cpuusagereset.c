@@ -44,6 +44,7 @@ void rtems_cpu_usage_reset( void )
     extern struct timespec CPU_usage_Uptime_at_last_reset;
     
     _TOD_Get_uptime( &CPU_usage_Uptime_at_last_reset );
+    _Thread_Time_of_last_context_switch = CPU_usage_Uptime_at_last_reset;
   #else
     extern uint32_t   CPU_usage_Ticks_at_last_reset;
 

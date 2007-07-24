@@ -20,6 +20,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <ctype.h>
 #include <inttypes.h>
 
@@ -29,10 +30,6 @@
 #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
     defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
   #include <rtems/score/timespec.h>
-
-  /* We print to 1/10's of milliseconds */
-  #define NANOSECONDS_DIVIDER 100000
-  #define PERCENT_FMT "%04" PRId32
 #endif
 
 #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
@@ -55,7 +52,7 @@ void rtems_cpu_usage_report( void )
   char                 name[5];
   uint32_t             ival, fval;
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec    uptime, total;
+    struct timespec    uptime, total, ran;
   #else
     uint32_t           total_units = 0;
   #endif
@@ -86,7 +83,7 @@ void rtems_cpu_usage_report( void )
   
   printk( "CPU Usage by thread\n"
     #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-          "   ID        NAME    SECONDS   PERCENT\n"
+          "   ID        NAME     SECONDS  PERCENT\n"
     #else
           "   ID        NAME     TICKS    PERCENT\n"
     #endif
@@ -110,16 +107,26 @@ void rtems_cpu_usage_report( void )
         printk( "0x%08" PRIx32 "   %4s    ", the_thread->Object.id, name );
 
         #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-          _Timespec_Divide( &the_thread->cpu_time_used, &total, &ival, &fval );
+          /*
+           * If this is the currently executing thread, account for time
+           * since the last context switch.
+           */
+          ran = the_thread->cpu_time_used;
+          if ( _Thread_Executing->Object.id == the_thread->Object.id ) {
+            struct timespec used;
+            _Timespec_Subtract(
+              &_Thread_Time_of_last_context_switch, &uptime, &used
+            );
+            _Timespec_Add_to( &ran, &used );
+          };
+          _Timespec_Divide( &ran, &total, &ival, &fval );
 
-          printk(
-            "%" PRId32 ".%06d"                 /* cpu time used */     
-            " %3" PRId32 ".%02" PRId32 "\n",  /* percentage */
-            the_thread->cpu_time_used.tv_sec,
-              the_thread->cpu_time_used.tv_nsec /
-                 TOD_NANOSECONDS_PER_MICROSECOND,
-            ival,
-            fval
+          /*
+           * Print the information
+           */
+          printk("%2" PRId32 ".%06" PRId32 " %3" PRId32 ".%02" PRId32 "\n",
+            ran.tv_sec, ran.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND,
+            ival, fval
           );
         #else
           ival = (total_units) ?
@@ -138,7 +145,8 @@ void rtems_cpu_usage_report( void )
   }
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    printk( "Time since last reset %d.%06d seconds\n",
+    printk( "Time since last CPU Usage reset %" PRId32
+            ".%06" PRId32 " seconds\n",
        total.tv_sec,
        total.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND
     );
