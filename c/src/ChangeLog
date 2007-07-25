@@ -1,3 +1,18 @@
+2007-07-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* nfsclient/README, nfsclient/proto/nfs_prot_xdr.c,
+	nfsclient/proto/mount_prot.x, nfsclient/proto/mount_prot_xdr.c,
+	nfsclient/proto/Makefile, nfsclient/proto/mount_prot.h,
+	nfsclient/proto/nfs_prot.h, nfsclient/proto/nfs_prot.x,
+	nfsclient/Makefile, nfsclient/ChangeLog, nfsclient/src/dirutils.c,
+	nfsclient/src/nfsTest.c, nfsclient/src/rpcio.h, 
+	nfsclient/src/nfs.modini.c, nfsclient/src/xdr_mbuf.c,
+	nfsclient/src/cexphelp.c, nfsclient/src/Makefile,
+	nfsclient/src/sock_mbuf.c, nfsclient/src/nfs.c,
+	nfsclient/src/librtemsNfs.h, nfsclient/src/rpcio.modini.c
+	nfsclient/src/rpcio.c, nfsclient/rtems-filesystem-patch,
+	nfsclient/rfc1094.txt, nfsclient/LICENSE: Import from rtems-nfs-1.5.
+
 2007-07-18	Thomas Doerfler (Thomas.Doerfler@embedded-brains.de>:
 
 	* libchip/serial/ns16550.c: removed timed out wait for transmitter
