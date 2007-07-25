@@ -1,5 +1,10 @@
 2007-07-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* nfsclient/ChangeLog: Remove (Rename into ChangeLog.slac).
+	* nfsclient/ChangeLog.slac: New (Renamed from ChangeLog).
+
+2007-07-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* nfsclient/README, nfsclient/proto/nfs_prot_xdr.c,
 	nfsclient/proto/mount_prot.x, nfsclient/proto/mount_prot_xdr.c,
 	nfsclient/proto/Makefile, nfsclient/proto/mount_prot.h,
