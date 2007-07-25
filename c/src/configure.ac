@@ -153,6 +153,7 @@ fi
 BSP_SUBDIRS="$BSP_SUBDIRS lib"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
+BSP_SUBDIRS="$BSP_SUBDIRS nfsclient"
 
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
   AC_CONFIG_SUBDIRS([librtems++])
@@ -270,6 +271,7 @@ lib/libcpu/Makefile
 
 lib/libbsp/Makefile
 
+nfsclient/Makefile
 ada/Makefile
 
 wrapup/Makefile

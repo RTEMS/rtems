@@ -1,5 +1,6 @@
 2007-07-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 	
+	* configure.ac: Add nfsclient.
 	* nfsclient/Makefile.am: New.
 	* nfsclient/proto/Makefile, nfsclient/Makefile,
 	  nfsclient/src/Makefile: Remove.
