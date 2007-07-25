@@ -1,5 +1,8 @@
 2007-07-25	Ralf Corsépius <ralf.corsepius@rtems.org>
-
+	
+	* nfsclient/Makefile.am: New.
+	* nfsclient/proto/Makefile, nfsclient/Makefile,
+	  nfsclient/src/Makefile: Remove.
 	* nfsclient/ChangeLog: Remove (Rename into ChangeLog.slac).
 	* nfsclient/ChangeLog.slac: New (Renamed from ChangeLog).
 
