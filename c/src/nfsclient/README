@@ -1,0 +1,548 @@
+RTEMS-NFS
+=========
+
+A NFS-V2 client implementation for the RTEMS real-time
+executive.
+
+Author: Till Straumann <strauman@slac.stanford.edu>, 2002
+
+Copyright 2002, Stanford University and
+                Till Straumann <strauman@slac.stanford.edu>
+
+Stanford Notice
+***************
+
+Acknowledgement of sponsorship
+* * * * * * * * * * * * * * * *
+This software was produced by the Stanford Linear Accelerator Center,
+Stanford University, under Contract DE-AC03-76SFO0515 with the Department
+of Energy.
+
+
+Contents
+--------
+I   Overview
+  1) Performance
+  2) Reference Platform / Test Environment
+
+II  Usage
+  1) Initialization
+  2) Mounting Remote Server Filesystems
+  3) Unmounting
+  4) Unloading
+  5) Dumping Information / Statistics
+
+III Implementation Details
+  1) RPCIOD
+  2) NFS
+  3) RTEMS Resources Used By NFS/RPCIOD
+  4) Caveats & Bugs
+
+IV  Licensing & Disclaimers
+
+I  Overview
+-----------
+
+This package implements a simple non-caching NFS
+client for RTEMS. Most of the system calls are
+supported with the exception of 'mount', i.e. it
+is not possible to mount another FS on top of NFS
+(mostly because of the difficulty that arises when
+mount points are deleted on the server). It
+shouldn't be hard to do, though.
+
+Note: this client supports NFS vers. 2 / MOUNT vers. 1;
+      NFS Version 3 or higher are NOT supported.
+
+The package consists of two modules: RPCIOD and NFS
+itself.
+
+ - RPCIOD is a UDP/RPC multiplexor daemon. It takes
+   RPC requests from multiple local client threads,
+   funnels them through a single socket to multiple
+   servers and dispatches the replies back to the
+   (blocked) requestor threads.
+   RPCIOD does packet retransmission and handles
+   timeouts etc.
+   Note however, that it does NOT do any XDR
+   marshalling - it is up to the requestor threads
+   to do the XDR encoding/decoding. RPCIOD _is_ RPC
+   specific, though, because its message dispatching
+   is based on the RPC transaction ID.
+
+ - The NFS package maps RTEMS filesystem calls
+   to proper RPCs, it does the XDR work and
+   hands marshalled RPC requests to RPCIOD.
+   All of the calls are synchronous, i.e. they
+   block until they get a reply.
+
+1) Performance
+- - - - - - - -
+Performance sucks (due to the lack of
+readahead/delayed write and caching). On a fast
+(100Mb/s) ethernet, it takes about 20s to copy a
+10MB file from NFS to NFS.  I found, however, that
+vxWorks' NFS client doesn't seem to be any
+faster...
+
+Since there is no buffer cache with read-ahead
+implemented, all NFS reads are synchronous RPC
+calls. Every read operation involves sending a
+request and waiting for the reply. As long as the
+overhead (sending request + processing it on the
+server) is significant compared to the time it
+takes to transferring the actual data, increasing
+the amount of data per request results in better
+throughput. The UDP packet size limit imposes a
+limit of 8k per RPC call, hence reading from NFS
+in chunks of 8k is better than chunks of 1k [but
+chunks >8k are not possible, i.e., simply not
+honoured: read(a_nfs_fd, buf, 20000) returns
+8192]. This is similar to the old linux days
+(mount with rsize=8k).  You can let stdio take
+care of the buffering or use 8k buffers with
+explicit read(2) operations. Note that stdio
+honours the file-system's st_blksize field
+if newlib is compiled with HAVE_BLKSIZE defined.
+In this case, stdio uses 8k buffers for files
+on NFS transparently. The blocksize NFS 
+reports can be tuned with a global variable
+setting (see nfs.c for details).
+
+Further increase of throughput can be achieved
+with read-ahead (issuing RPC calls in parallel
+[send out request for block n+1 while you are
+waiting for data of block n to arrive]).  Since
+this is not handled by the file system itself, you
+would have to code this yourself e.g., using
+parallel threads to read from a single file from
+interleaved offsets.
+
+Another obvious improvement can be achieved if
+processing the data takes a significant amount of
+time. Then, having a pipeline of threads for
+reading data and processing them makes sense
+[thread b processes chunk n while thread a blocks
+in read(chunk n+1)].
+
+Some performance figures:
+Software: src/nfsTest.c:nfsReadTest() [data not
+          processed in any way].
+Hardware: MVME6100
+Network:  100baseT-FD
+Server:   Linux-2.6/RHEL4-smp [dell precision 420]
+File:     10MB
+
+Results:
+Single threaded ('normal') NFS read, 1k buffers: 3.46s (2.89MB/s)
+Single threaded ('normal') NFS read, 8k buffers: 1.31s (7.63MB/s)
+Multi  threaded; 2 readers, 8k buffers/xfers:    1.12s (8.9 MB/s)  
+Multi  threaded; 3 readers, 8k buffers/xfers:    1.04s (9.6 MB/s)
+
+2) Reference Platform
+- - - - - - - - - - -
+RTEMS-NFS was developed and tested on
+
+ o RTEMS-ss20020301 (local patches applied)
+ o PowerPC G3, G4 on Synergy SVGM series board
+   (custom 'SVGM' BSP, to be released soon)
+ o PowerPC 604 on MVME23xx
+   (powerpc/shared/motorola-powerpc BSP)
+ o Test Environment:
+    - RTEMS executable running CEXP
+    - rpciod/nfs dynamically loaded from TFTPfs
+    - EPICS application dynamically loaded from NFS;
+      the executing IOC accesses all of its files
+      on NFS.
+
+II Usage
+---------
+
+After linking into the system and proper initialization
+(rtems-NFS supports 'magic' module initialization when
+loaded into a running system with the CEXP loader),
+you are ready for mounting NFSes from a server
+(I avoid the term NFS filesystem because NFS already
+stands for 'Network File System').
+
+You should also read the
+
+  - "RTEMS Resources Used By NFS/RPCIOD"
+  - "CAVEATS & BUGS"
+
+below.
+
+1) Initialization
+- - - - - - - - - 
+NFS consists of two modules who must be initialized:
+
+ a) the RPCIO daemon package; by calling
+
+      rpcUdpInit();
+
+    note that this step must be performed prior to
+    initializing NFS:
+
+ b) NFS is initialized by calling
+
+      nfsInit( smallPoolDepth, bigPoolDepth );
+
+    if you supply 0 (zero) values for the pool
+    depths, the compile-time default configuration
+    is used which should work fine.
+
+NOTE: when using CEXP to load these modules into a
+running system, initialization will be performed
+automagically.
+
+2) Mounting Remote Server Filesystems
+- - - - - - - - - - - - - - - - - - -
+
+There are two interfaces for mounting an NFS:
+
+ - The (non-POSIX) RTEMS 'mount()' call:
+
+     mount( &mount_table_entry_pointer,
+            &filesystem_operations_table_pointer,
+            options,
+            device,
+            mount_point )
+
+    Note that you must specify a 'mount_table_entry_pointer'
+    (use a dummy) - RTEMS' mount() doesn't grok a NULL for
+    the first argument.
+
+     o for the 'filesystem_operations_table_pointer', supply
+
+         &nfs_fs_ops
+   
+     o options are constants (see RTEMS headers) for specifying
+       read-only / read-write mounts.
+
+     o the 'device' string specifies the remote filesystem
+       who is to be mounted. NFS expects a string conforming
+       to the following format (EBNF syntax):
+
+         [ <uid> '.' <gid> '@' ] <hostip> ':' <path>
+
+       The first optional part of the string allows you
+       to specify the credentials to be used for all
+       subsequent transactions with this server. If the
+       string is omitted, the EUID/EGID of the executing
+       thread (i.e. the thread performing the 'mount' - 
+       NFS will still 'remember' these values and use them
+       for all future communication with this server).
+       
+       The <hostip> part denotes the server IP address
+       in standard 'dot' notation. It is followed by
+       a colon and the (absolute) path on the server.
+       Note that no extra characters or whitespace must
+       be present in the string. Example 'device' strings
+       are:
+
+         "300.99@192.168.44.3:/remote/rtems/root"
+
+         "192.168.44.3:/remote/rtems/root"
+
+    o the 'mount_point' string identifies the local
+      directory (most probably on IMFS) where the NFS
+      is to be mounted. Note that the mount point must
+      already exist with proper permissions.
+
+ - Alternate 'mount' interface. NFS offers a more
+   convenient wrapper taking three string arguments:
+
+	nfsMount(uidgid_at_host, server_path, mount_point)
+
+   This interface does DNS lookup (see reentrancy note
+   below) and creates the mount point if necessary.
+   
+   o the first argument specifies the server and
+     optionally the uid/gid to be used for authentication.
+     The semantics are exactly as described above:
+
+       [ <uid> '.' <gid> '@' ] <host>
+     
+     The <host> part may be either a host _name_ or
+     an IP address in 'dot' notation. In the former
+     case, nfsMount() uses 'gethostbyname()' to do
+     a DNS lookup.
+
+     IMPORTANT NOTE: gethostbyname() is NOT reentrant/
+     thread-safe and 'nfsMount()' (if not provided with an
+     IP/dot address string) is hence subject to race conditions.
+ 
+   o the 'server_path' and 'mount_point' arguments
+     are described above.
+     NOTE: If the mount point does not exist yet,
+           nfsMount() tries to create it.
+
+   o if nfsMount() is called with a NULL 'uidgid_at_host'
+     argument, it lists all currently mounted NFS
+
+3) Unmounting
+- - - - - - -
+An NFS can be unmounted using RTEMS 'unmount()'
+call (yep, it is unmount() - not umount()):
+
+  unmount(mount_point)
+
+Note that you _must_ supply the mount point (string
+argument). It is _not_ possible to specify the
+'mountee' when unmounting. NFS implements no
+convenience wrapper for this (yet), essentially because
+(although this sounds unbelievable) it is non-trivial
+to lookup the path leading to an RTEMS filesystem
+directory node.
+
+4) Unloading
+- - - - - - -
+After unmounting all NFS from the system, the NFS
+and RPCIOD modules may be stopped and unloaded.
+Just call 'nfsCleanup()' and 'rpcUdpCleanup()'
+in this order. You should evaluate the return value
+of these routines which is non-zero if either
+of them refuses to yield (e.g. because there are
+still mounted filesystems).
+Again, when unloading is done by CEXP this is
+transparently handled.
+
+5) Dumping Information / Statistics
+- - - - - - - - - - - - - - - - - -
+
+Rudimentary RPCIOD statistics are printed
+to a file (stdout when NULL) by
+
+  int rpcUdpStats(FILE *f)
+
+A list of all currently mounted NFS can be
+printed to a file (stdout if NULL) using
+
+  int nfsMountsShow(FILE *f)
+
+For convenience, this routine is also called
+by nfsMount() when supplying NULL arguments.
+
+III Implementation Details
+--------------------------
+
+1) RPCIOD
+- - - - -
+
+RPCIOD was created to
+
+a) avoid non-reentrant librpc calls.
+b) support 'asynchronous' operation over a single
+   socket.
+
+RPCIOD is a daemon thread handling 'transaction objects'
+(XACTs) through an UDP socket.  XACTs are marshalled RPC
+calls/replies associated with RPC servers and requestor
+threads.
+
+requestor thread:                 network:
+
+       XACT                        packet  
+        |                            |
+        V                            V
+  | message queue |              ( socket )
+        |                            |  ^
+        ---------->          <-----  |  |
+                     RPCIOD             |
+                   /       --------------
+           timeout/         (re) transmission
+                         
+
+A requestor thread drops a transaction into 
+the message queue and goes to sleep.  The XACT is
+picked up by rpciod who is listening for events from
+three sources:
+
+  o the request queue
+  o packet arrival at the socket
+  o timeouts
+
+RPCIOD sends the XACT to its destination server and
+enqueues the pending XACT into an ordered list of
+outstanding transactions.
+
+When a packet arrives, RPCIOD (based on the RPC transaction
+ID) looks up the matching XACT and wakes up the requestor
+who can then XDR-decode the RPC results found in the XACT
+object's buffer.
+
+When a timeout expires, RPCIOD examines the outstanding
+XACT that is responsible for the timeout. If its lifetime
+has not expired yet, RPCIOD resends the request. Otherwise,
+the XACT's error status is set and the requestor is woken up.
+
+RPCIOD dynamically adjusts the retransmission intervals
+based on the average round-trip time measured (on a per-server
+basis).
+
+Having the requestors event driven (rather than blocking
+e.g. on a semaphore) is geared to having many different
+requestors (one synchronization object per requestor would
+be needed otherwise).
+
+Requestors who want to do asynchronous IO need a different
+interface which will be added in the future.
+
+1.a) Reentrancy
+- - - - - - - - 
+RPCIOD does no non-reentrant librpc calls.
+
+1.b) Efficiency
+- - - - - - - - 
+We shouldn't bother about efficiency until pipelining (read-ahead/
+delayed write) and caching are implemented. The round-trip delay
+associated with every single RPC transaction clearly is a big
+performance killer.
+
+Nevertheless, I could not withstand the temptation to eliminate
+the extra copy step involved with socket IO:
+
+A user data object has to be XDR encoded into a buffer. The 
+buffer given to the socket where it is copied into MBUFs.
+(The network chip driver might even do more copying).
+
+Likewise, on reception 'recvfrom' copies MBUFS into a user
+buffer which is XDR decoded into the final user data object.
+
+Eliminating the copying into (possibly multiple) MBUFS by
+'sendto()' is actually a piece of cake. RPCIOD uses the
+'sosend()' routine [properly wrapped] supplying a single
+MBUF header who directly points to the marshalled buffer
+:-)
+
+Getting rid of the extra copy on reception was (only a little)
+harder: I derived a 'XDR-mbuf' stream from SUN's xdr_mem which
+allows for XDR-decoding out of a MBUF chain who is obtained by
+soreceive().
+
+2) NFS
+- - - -
+The actual NFS implementation is straightforward and essentially
+'passive' (no threads created). Any RTEMS task executing a
+filesystem call dispatched to NFS (such as 'opendir()', 'lseek()'
+or 'unlink()') ends up XDR encoding arguments, dropping a
+XACT into RPCIOD's message queue and going to sleep.
+When woken up by RPCIOD, the XACT is decoded (using the XDR-mbuf
+stream mentioned above) and the properly cooked-up results are
+returned.
+
+3) RTEMS Resources Used By NFS/RPCIOD
+- - - - - - - - - - - - - - - - - - -
+
+The RPCIOD/NFS package uses the following resources. Some
+parameters are compile-time configurable - consult the
+source files for details.
+
+RPCIOD:
+ o 1 task 
+ o 1 message queue
+ o 1 socket/filedescriptor
+ o 2 semaphores (a third one is temporarily created during
+   rpcUdpCleanup()).
+ o 1 RTEMS EVENT (by default RTEMS_EVENT_30).
+   IMPORTANT: this event is used by _every_ thread executing
+              NFS system calls and hence is RESERVED.
+ o 3 events only used by RPCIOD itself, i.e. these must not
+   be sent to RPCIOD by no other thread (except for the intended
+   use, of course). The events involved are 1,2,3.
+ o preemption disabled sections:      NONE
+ o sections with interrupts disabled: NONE
+ o NO 'timers' are used (timer code would run in IRQ context)
+ o memory usage: n.a
+
+NFS:
+ o 2 message queues
+ o 2 semaphores
+ o 1 semaphore per mounted NFS
+ o 1 slot in driver entry table (for major number)
+ o preemption disabled sections:      NONE
+ o sections with interrupts disabled: NONE
+ o 1 task + 1 semaphore temporarily created when
+   listing mounted filesystems (rtems_filesystem_resolve_location())
+
+4) CAVEATS & BUGS
+- - - - - - - - -
+Unfortunately, some bugs crawl around in the filesystem generics.
+(Some of them might already be fixed in versions later than
+rtems-ss-20020301).
+I recommend to use the patch distributed with RTEMS-NFS.
+
+ o RTEMS uses/used (Joel said it has been fixed already) a 'short'
+   ino_t which is not enough for NFS.
+   The driver detects this problem and enables a workaround. In rare
+   situations (mainly involving 'getcwd()' improper inode comparison
+   may result (due to the restricted size, stat() returns st_ino modulo
+   2^16). In most cases, however, st_dev is compared along with st_ino
+   which will give correct results (different files may yield identical
+   st_ino but they will have different st_dev). However, there is 
+   code (in getcwd(), for example) who assumes that files residing
+   in one directory must be hosted by the same device and hence omits
+   the st_dev comparison. In such a case, the workaround will fail.
+ 
+   NOTE: changing the size (sys/types.h) of ino_t from 'short' to 'long'
+         is strongly recommended. It is NOT included in the patch, however
+         as this is a major change requiring ALL of your sources to
+         be recompiled.
+
+   THE ino_t SIZE IS FIXED IN GCC-3.2/NEWLIB-1.10.0-2 DISTRIBUTED BY
+   OAR.
+
+ o You may work around most filesystem bugs by observing the following
+   rules:
+
+    * never use chroot() (fixed by the patch)
+    * never use getpwent(), getgrent() & friends - they are NOT THREAD
+      safe (fixed by the patch)
+    * NEVER use rtems_libio_share_private_env() - not even with the
+      patch applied. Just DONT - it is broken by design.
+    * All threads who have their own userenv (who have called
+      rtems_libio_set_private_env()) SHOULD 'chdir("/")' before
+      terminating. Otherwise, (i.e. if their cwd is on NFS), it will
+      be impossible to unmount the NFS involved.
+
+ o The patch slightly changes the semantics of 'getpwent()' and
+   'getgrent()' & friends (to what is IMHO correct anyways - the patch is
+   also needed to fix another problem, however): with the patch applied,
+   the passwd and group files are always accessed from the 'current' user
+   environment, i.e. a thread who has changed its 'root' or 'uid' might
+   not be able to access these files anymore.
+      
+ o NOTE: RTEMS 'mount()' / 'unmount()' are NOT THREAD SAFE.
+
+ o The NFS protocol has no 'append' or 'seek_end' primitive. The client
+   must query the current file size (this client uses cached info) and
+   change the local file pointer accordingly (in 'O_APPEND' mode).
+   Obviously, this involves a race condition and hence multiple clients
+   writing the same file may lead to corruption.
+
+IV Licensing & Disclaimers
+--------------------------
+
+NFS is distributed under the SLAC License - consult the
+separate 'LICENSE' file.
+
+Government disclaimer of liability
+- - - - - - - - - - - - - - - - -
+Neither the United States nor the United States Department of Energy,
+nor any of their employees, makes any warranty, express or implied,
+or assumes any legal liability or responsibility for the accuracy,
+completeness, or usefulness of any data, apparatus, product, or process
+disclosed, or represents that its use would not infringe privately
+owned rights.
+
+Stanford disclaimer of liability
+- - - - - - - - - - - - - - - - -
+Stanford University makes no representations or warranties, express or
+implied, nor assumes any liability for the use of this software.
+
+Maintenance of notice
+- - - - - - - - - - -
+In the interest of clarity regarding the origin and status of this
+software, Stanford University requests that any recipient of it maintain
+this notice affixed to any distribution by the recipient that contains a
+copy or derivative of this software.

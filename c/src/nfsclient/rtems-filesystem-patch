@@ -1,0 +1,860 @@
+# Diffed against OAR_orig (ss-20020301) on Sun Nov  3 00:24:13 PST 2002
+# T.S.
+
+For more information about this patch consult README (CAVEATS section).
+
+To apply this patch,
+
+chdir to c/src/lib/libc
+
+and issue 
+
+	patch -p0 < this_file
+
+It is always a good idea to try a "dry-run" before applying a patch:
+
+    patch --dry-run -p0 < this_file
+
+Index: Makefile.am
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/Makefile.am,v
+retrieving revision 1.1.1.2
+retrieving revision 1.2
+diff -c -r1.1.1.2 -r1.2
+*** Makefile.am	7 Mar 2002 01:53:46 -0000	1.1.1.2
+--- Makefile.am	28 Mar 2002 20:59:16 -0000	1.2
+***************
+*** 1,5 ****
+  ##
+! ##  $Id$
+  ##
+  
+  AUTOMAKE_OPTIONS = foreign 1.4
+--- 1,5 ----
+  ##
+! ##  $Id$
+  ##
+  
+  AUTOMAKE_OPTIONS = foreign 1.4
+***************
+*** 32,37 ****
+--- 32,39 ----
+  
+  MALLOC_C_FILES = malloc.c mallocfreespace.c __brk.c __sbrk.c
+  
++ ENVIRON_C_FILES = envlock.c
++ 
+  PASSWORD_GROUP_C_FILES = getpwent.c getgrent.c
+  
+  TERMINAL_IDENTIFICATION_C_FILES = ctermid.c isatty.c ttyname.c ttyname_r.c
+***************
+*** 42,48 ****
+  UNIX_LIBC_C_FILES = unixlibc.c hosterr.c
+  
+  COMMON_C_FILES = gxx_wrappers.c printk.c $(BASE_FS_C_FILES) \
+!     $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
+      $(ASSOCIATION_C_FILES)
+  
+  UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
+--- 44,50 ----
+  UNIX_LIBC_C_FILES = unixlibc.c hosterr.c
+  
+  COMMON_C_FILES = gxx_wrappers.c printk.c $(BASE_FS_C_FILES) \
+!     $(MALLOC_C_FILES) $(ENVIRON_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
+      $(ASSOCIATION_C_FILES)
+  
+  UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
+Index: base_fs.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/base_fs.c,v
+retrieving revision 1.1.1.1
+diff -c -r1.1.1.1 base_fs.c
+*** base_fs.c	14 Dec 2001 22:52:31 -0000	1.1.1.1
+--- base_fs.c	26 Oct 2002 02:45:15 -0000
+***************
+*** 49,54 ****
+--- 49,55 ----
+    int                                   status;
+    rtems_filesystem_mount_table_entry_t *entry;
+    rtems_filesystem_mount_table_t       *mt;
++   rtems_filesystem_location_info_t		loc;
+    
+    /*
+     *  Set the default umask to "022".
+***************
+*** 75,82 ****
+      rtems_fatal_error_occurred( 0xABCD0002 );
+  
+    rtems_filesystem_link_counts = 0;
+    rtems_filesystem_root        = entry->mt_fs_root;
+!   rtems_filesystem_current     = rtems_filesystem_root;
+  
+  
+    /*
+--- 76,113 ----
+      rtems_fatal_error_occurred( 0xABCD0002 );
+  
+    rtems_filesystem_link_counts = 0;
++ 
++   /* setup the 'current' and 'root' directories
++    *
++    * NOTE: cloning the pathlocs is not strictly
++    *       necessary. Since we implicitely let
++    *       all threads that don't call
++    *       libio_set_private_env() share the same
++    *       (initial) 'root' and 'current' locs,
++    *       we (also implicitely) assume that the
++    *       root filesystem doesn't care about
++    *       reference counts.
++    *       I just inserted the code snippet below
++    *       to remind everybody of the fact by
++    *       making it more explicit...
++    *       Ideally, every thread would have to
++    *       call either share_private_env() or
++    *       set_private_env() - but then: that's
++    *       gonna hit performance.
++    *
++    *       Till Straumann, 10/25/2002
++    */
+    rtems_filesystem_root        = entry->mt_fs_root;
+!   /* Clone the root pathloc */
+!   rtems_filesystem_evaluate_path("/", 0, &loc, 0);
+!   rtems_filesystem_root        = loc;
+!   /* One more clone for the current node */
+!   rtems_filesystem_evaluate_path("/", 0, &loc, 0);
+!   rtems_filesystem_current     = loc;
+! 
+!   /* Note: the global_env's refcnt doesn't matter
+!    * as the global env is never released
+!    */
+  
+  
+    /*
+Index: chroot.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/chroot.c,v
+retrieving revision 1.1.1.2
+diff -c -r1.1.1.2 chroot.c
+*** chroot.c	7 Mar 2002 01:53:47 -0000	1.1.1.2
+--- chroot.c	29 Oct 2002 03:01:47 -0000
+***************
+*** 38,51 ****
+      rtems_set_errno_and_return_minus_one( ENOTSUP );
+    }; 
+  
+-   loc = rtems_filesystem_root;     /* save the value */
+- 
+    result = chdir(pathname);
+    if (result) {
+-     rtems_filesystem_root = loc; /* restore the value */
+      rtems_set_errno_and_return_minus_one( errno );
+    };
+!   rtems_filesystem_root = rtems_filesystem_current;
+  
+    return 0;
+  }
+--- 38,53 ----
+      rtems_set_errno_and_return_minus_one( ENOTSUP );
+    }; 
+  
+    result = chdir(pathname);
+    if (result) {
+      rtems_set_errno_and_return_minus_one( errno );
+    };
+!   /* clone the new root location */
+!   if (rtems_filesystem_evaluate_path(".", 0, &loc, 0)) {
+!     rtems_set_errno_and_return_minus_one( errno );
+!   }
+!   rtems_filesystem_freenode(&rtems_filesystem_root);
+!   rtems_filesystem_root = loc;
+  
+    return 0;
+  }
+Index: eval.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/eval.c,v
+retrieving revision 1.1.1.2
+retrieving revision 1.2
+diff -c -r1.1.1.2 -r1.2
+*** eval.c	7 Mar 2002 01:53:48 -0000	1.1.1.2
+--- eval.c	29 Oct 2002 21:03:50 -0000	1.2
+***************
+*** 10,16 ****
+   *  found in the file LICENSE in this distribution or at
+   *  http://www.OARcorp.com/rtems/license.html.
+   *
+!  *  $Id$
+   */
+  
+  #if HAVE_CONFIG_H
+--- 10,16 ----
+   *  found in the file LICENSE in this distribution or at
+   *  http://www.OARcorp.com/rtems/license.html.
+   *
+!  *  $Id$
+   */
+  
+  #if HAVE_CONFIG_H
+***************
+*** 60,76 ****
+  
+    if ( (result == 0) && follow_link ) {
+  
+!     if ( !pathloc->ops->node_type_h )
+        rtems_set_errno_and_return_minus_one( ENOTSUP );
+  
+      type = (*pathloc->ops->node_type_h)( pathloc );
+  
+      if ( ( type == RTEMS_FILESYSTEM_HARD_LINK ) ||
+           ( type == RTEMS_FILESYSTEM_SYM_LINK ) ) {
+  
+!         if ( !pathloc->ops->eval_link_h )
+            rtems_set_errno_and_return_minus_one( ENOTSUP );
+  
+           result =  (*pathloc->ops->eval_link_h)( pathloc, flags );
+   
+      }
+--- 60,93 ----
+  
+    if ( (result == 0) && follow_link ) {
+  
+!     if ( !pathloc->ops->node_type_h ) {
+! 	  rtems_filesystem_freenode(pathloc);
+        rtems_set_errno_and_return_minus_one( ENOTSUP );
++ 	}
+  
+      type = (*pathloc->ops->node_type_h)( pathloc );
+  
+      if ( ( type == RTEMS_FILESYSTEM_HARD_LINK ) ||
+           ( type == RTEMS_FILESYSTEM_SYM_LINK ) ) {
+  
+!         if ( !pathloc->ops->eval_link_h ) {
+! 	      rtems_filesystem_freenode(pathloc);
+            rtems_set_errno_and_return_minus_one( ENOTSUP );
++ 		}
+  
++ 		/* what to do with the valid node pathloc points to
++ 		 * if eval_link_h() fails?
++ 		 * Let the FS implementation deal with this case. It
++ 		 * should probably free pathloc in either case:
++ 		 *   - if the link evaluation fails, it must free the
++ 		 *     original (valid) pathloc because we are going
++ 		 *     to return -1 and hence the FS generics won't
++ 		 *     cleanup pathloc
++ 		 *   - if the link evaluation is successful, the updated
++ 		 *     pathloc will be passed up (and eventually released).
++ 		 *     Hence, the (valid) original node that we submit to 
++ 		 *     eval_link_h() should be released by the handler.
++ 		 */
+           result =  (*pathloc->ops->eval_link_h)( pathloc, flags );
+   
+      }
+Index: fchdir.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/fchdir.c,v
+retrieving revision 1.1.1.2
+diff -c -r1.1.1.2 fchdir.c
+*** fchdir.c	7 Mar 2002 01:53:48 -0000	1.1.1.2
+--- fchdir.c	25 Oct 2002 23:59:03 -0000
+***************
+*** 29,34 ****
+--- 29,35 ----
+  )
+  {
+    rtems_libio_t *iop;
++   rtems_filesystem_location_info_t loc;
+    
+    rtems_libio_check_fd( fd );
+    iop = rtems_libio_iop( fd );
+***************
+*** 65,74 ****
+     *         this node which we are making here. I can
+     *         see the freenode interface but do not see
+     *         allocnode node interface. It maybe node_type.
+     */
+    
+    rtems_filesystem_current = iop->pathinfo;
+    
+    return 0;
+  }
+- 
+--- 66,80 ----
+     *         this node which we are making here. I can
+     *         see the freenode interface but do not see
+     *         allocnode node interface. It maybe node_type.
++    *
++    * FIXEC:  T.Straumann: it is evaluate_path()
+     */
+    
+    rtems_filesystem_current = iop->pathinfo;
+    
++   /* clone the current node */
++   rtems_filesystem_evaluate_path(".", 0, &loc, 0);
++   rtems_filesystem_current = loc;
++   
+    return 0;
+  }
+Index: getgrent.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/getgrent.c,v
+retrieving revision 1.1.1.1
+diff -c -r1.1.1.1 getgrent.c
+*** getgrent.c	14 Dec 2001 22:52:31 -0000	1.1.1.1
+--- getgrent.c	27 Oct 2002 18:24:20 -0000
+***************
+*** 50,63 ****
+--- 50,69 ----
+  )
+  {
+    FILE *fp;
++ #if 0
+    rtems_user_env_t * aux=rtems_current_user_env; /* save */
++ #endif
+  
+    init_etc_passwd_group();
++ #if 0
+    rtems_current_user_env=&rtems_global_user_env; /* set root */
++ #endif
+  
+    if ((fp = fopen ("/etc/group", "r")) == NULL) {
+      errno = EINVAL;
++ #if 0
+      rtems_current_user_env=aux; /* restore */
++ #endif
+      return -1;
+    }
+  
+***************
+*** 72,84 ****
+--- 78,94 ----
+      if (!strcmp (groupname, name)) {
+        fclose (fp);
+        *result = grp;
++ #if 0
+        rtems_current_user_env=aux; /* restore */
++ #endif
+        return 0;
+      }
+    }
+    fclose (fp);
+    errno = EINVAL;
++ #if 0
+    rtems_current_user_env=aux; /* restore */
++ #endif
+    return -1;
+  }
+  
+***************
+*** 104,118 ****
+--- 114,134 ----
+  )
+  {
+    FILE *fp;
++ #if 0
+    rtems_user_env_t * aux=rtems_current_user_env; /* save */
++ #endif
+  
+  
+    init_etc_passwd_group();
++ #if 0
+    rtems_current_user_env=&rtems_global_user_env; /* set root */
++ #endif
+  
+    if ((fp = fopen ("/etc/group", "r")) == NULL) {
+      errno = EINVAL;
++ #if 0
+      rtems_current_user_env=aux; /* restore */
++ #endif
+      return -1;
+    }
+  
+***************
+*** 128,140 ****
+--- 144,160 ----
+      if (gid == gr_group.gr_gid) {
+        fclose (fp);
+        *result = grp;
++ #if 0
+        rtems_current_user_env=aux; /* restore */
++ #endif
+        return 0;
+      }
+    }
+    fclose (fp);
+    errno = EINVAL;
++ #if 0
+    rtems_current_user_env=aux; /* restore */
++ #endif
+    return -1;
+  }
+  
+***************
+*** 174,188 ****
+--- 194,214 ----
+  void
+  setgrent ()
+  {
++ #if 0
+    rtems_user_env_t * aux=rtems_current_user_env; /* save */
++ #endif
+    init_etc_passwd_group();
++ #if 0
+    rtems_current_user_env=&rtems_global_user_env; /* set root */
++ #endif
+  
+    if (group_fp != NULL)
+      fclose (group_fp);
+  
+    group_fp = fopen ("/etc/group", "r");
++ #if 0
+    rtems_current_user_env=aux; /* restore */
++ #endif
+  }
+  
+  void
+Index: getpwent.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/getpwent.c,v
+retrieving revision 1.1.1.1
+diff -c -r1.1.1.1 getpwent.c
+*** getpwent.c	14 Dec 2001 22:52:31 -0000	1.1.1.1
+--- getpwent.c	27 Oct 2002 18:18:52 -0000
+***************
+*** 97,110 ****
+--- 97,116 ----
+  )
+  {
+    FILE *fp;
++ #if 0
+    rtems_user_env_t * aux=rtems_current_user_env; /* save */
++ #endif
+  
+    init_etc_passwd_group();
++ #if 0
+    rtems_current_user_env=&rtems_global_user_env; /* set root */
++ #endif
+  
+    if ((fp = fopen ("/etc/passwd", "r")) == NULL) {
+      errno = EINVAL;
++ #if 0
+      rtems_current_user_env=aux; /* restore */
++ #endif
+      return -1;
+    }
+  
+***************
+*** 123,135 ****
+--- 129,145 ----
+      if (!strcmp (logname, name)) {
+        fclose (fp);
+        *result = pwd;
++ #if 0
+        rtems_current_user_env=aux; /* restore */
++ #endif
+        return 0;
+      }
+    }
+    fclose (fp);
+    errno = EINVAL;
++ #if 0
+      rtems_current_user_env=aux; /* restore */
++ #endif
+    return -1;
+  }
+  
+***************
+*** 155,168 ****
+--- 165,184 ----
+  )
+  {
+    FILE *fp;
++ #if 0
+    rtems_user_env_t * aux=rtems_current_user_env; /* save */
++ #endif
+  
+    init_etc_passwd_group();
++ #if 0
+    rtems_current_user_env=&rtems_global_user_env; /* set root */
++ #endif
+  
+    if ((fp = fopen ("/etc/passwd", "r")) == NULL) {
+      errno = EINVAL;
++ #if 0
+      rtems_current_user_env=aux; /* restore */
++ #endif
+      return -1;
+    }
+  
+***************
+*** 181,193 ****
+--- 197,213 ----
+      if (uid == pwd->pw_uid) {
+        fclose (fp);
+        *result = pwd;
++ #if 0
+        rtems_current_user_env=aux; /* restore */
++ #endif
+        return 0;
+      }
+    }
+    fclose (fp);
+    errno = EINVAL;
++ #if 0
+    rtems_current_user_env=aux; /* restore */
++ #endif
+    return -1;
+  }
+  
+***************
+*** 230,244 ****
+--- 250,270 ----
+  
+  void setpwent( void )
+  {
++ #if 0
+    rtems_user_env_t * aux=rtems_current_user_env; /* save */
++ #endif
+    init_etc_passwd_group();
++ #if 0
+    rtems_current_user_env=&rtems_global_user_env; /* set root */
++ #endif
+  
+    if (passwd_fp != NULL)
+      fclose (passwd_fp);
+  
+    passwd_fp = fopen ("/etc/passwd", "r");
++ #if 0
+    rtems_current_user_env=aux; /* restore */
++ #endif
+  }
+  
+  void endpwent( void )
+Index: mknod.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/mknod.c,v
+retrieving revision 1.1.1.2
+retrieving revision 1.2
+diff -c -r1.1.1.2 -r1.2
+*** mknod.c	7 Mar 2002 01:53:51 -0000	1.1.1.2
+--- mknod.c	29 Oct 2002 21:03:50 -0000	1.2
+***************
+*** 12,18 ****
+   *  found in the file LICENSE in this distribution or at
+   *  http://www.OARcorp.com/rtems/license.html.
+   *
+!  *  $Id$
+   */
+  
+  #if HAVE_CONFIG_H
+--- 12,18 ----
+   *  found in the file LICENSE in this distribution or at
+   *  http://www.OARcorp.com/rtems/license.html.
+   *
+!  *  $Id$
+   */
+  
+  #if HAVE_CONFIG_H
+***************
+*** 49,55 ****
+    rtems_filesystem_get_start_loc( pathname, &i, &temp_loc );
+  
+    if ( !temp_loc.ops->evalformake_h ) {
+-     rtems_filesystem_freenode( &temp_loc );
+      rtems_set_errno_and_return_minus_one( ENOTSUP );
+    }
+  
+--- 49,54 ----
+Index: mount.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/mount.c,v
+retrieving revision 1.1.1.1
+diff -c -r1.1.1.1 mount.c
+*** mount.c	14 Dec 2001 22:52:33 -0000	1.1.1.1
+--- mount.c	30 Oct 2002 06:39:09 -0000
+***************
+*** 14,20 ****
+   *  found in the file LICENSE in this distribution or at
+   *  http://www.OARcorp.com/rtems/license.html.
+   *
+!  *  $Id$
+   */
+  
+  #if HAVE_CONFIG_H
+--- 14,20 ----
+   *  found in the file LICENSE in this distribution or at
+   *  http://www.OARcorp.com/rtems/license.html.
+   *
+!  *  $Id$
+   */
+  
+  #if HAVE_CONFIG_H
+***************
+*** 101,106 ****
+--- 101,113 ----
+      return -1;
+    }
+  
++   /* Do they support being mounted at all ? */
++   if ( !fs_ops->fsmount_me_h ) {
++     errno = ENOTSUP;
++     goto cleanup_and_bail;
++   }
++ 
++ 
+    /*
+     * Allocate a mount table entry 
+     */
+***************
+*** 140,145 ****
+--- 147,158 ----
+       */
+  
+      loc_to_free = &loc;
++ 
++ 	if ( !loc.ops->node_type_h ) {
++ 	  errno = ENOTSUP;
++       goto cleanup_and_bail;
++ 	}
++ 
+      if ( loc.ops->node_type_h( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
+        errno = ENOTDIR;
+        goto cleanup_and_bail;
+***************
+*** 198,210 ****
+      temp_mt_entry->mt_point_node.mt_entry = NULL;
+    }
+  
+!   if ( !fs_ops->fsmount_me_h ) {
+!     errno = ENOTSUP;
+      goto cleanup_and_bail;
+    }
+- 
+-   if ( fs_ops->fsmount_me_h( temp_mt_entry ) )
+-     goto cleanup_and_bail;
+  
+    /*
+     *  Add the mount table entry to the mount table chain 
+--- 211,223 ----
+      temp_mt_entry->mt_point_node.mt_entry = NULL;
+    }
+  
+!   if ( fs_ops->fsmount_me_h( temp_mt_entry ) ) {
+! 	/* try to undo the mount operation */
+! 	if ( loc.ops->unmount_h ) {
+! 		loc.ops->unmount_h( temp_mt_entry );
+!     }
+      goto cleanup_and_bail;
+    }
+  
+    /*
+     *  Add the mount table entry to the mount table chain 
+Index: newlibc.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/newlibc.c,v
+retrieving revision 1.1.1.1
+retrieving revision 1.3
+diff -c -r1.1.1.1 -r1.3
+*** newlibc.c	14 Dec 2001 22:52:33 -0000	1.1.1.1
+--- newlibc.c	16 Apr 2002 19:41:03 -0000	1.3
+***************
+*** 9,15 ****
+   *  found in the file LICENSE in this distribution or at
+   *  http://www.OARcorp.com/rtems/license.html.
+   *
+!  *  $Id$
+   *
+   */
+  
+--- 9,15 ----
+   *  found in the file LICENSE in this distribution or at
+   *  http://www.OARcorp.com/rtems/license.html.
+   *
+!  *  $Id$
+   *
+   */
+  
+Index: privateenv.c
+===================================================================
+RCS file: /afs/slac/g/spear/cvsrep/rtems/src/c/src/lib/libc/privateenv.c,v
+retrieving revision 1.1.1.2
+diff -c -r1.1.1.2 privateenv.c
+*** privateenv.c	7 Mar 2002 01:53:51 -0000	1.1.1.2
+--- privateenv.c	27 Oct 2002 18:35:34 -0000
+***************
+*** 23,47 ****
+  #include <rtems/libio.h>
+  #include <rtems/libio_.h>
+  
+  rtems_status_code rtems_libio_set_private_env(void) {
+!   rtems_status_code sc;
+!   rtems_id          task_id;
+  
+    sc=rtems_task_ident(RTEMS_SELF,0,&task_id);
+    if (sc != RTEMS_SUCCESSFUL) return sc;
+  
+    /* Only for the first time a malloc is necesary */
+!   if (rtems_current_user_env==&rtems_global_user_env) { 
+!    sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,free);
+!    if (sc != RTEMS_SUCCESSFUL) return sc;
+!    rtems_current_user_env = malloc(sizeof(rtems_user_env_t));
+!    if (!rtems_current_user_env)
+       return RTEMS_NO_MEMORY;
+    }; 
+  
+-   /* the side effect desired . chroot("/") */
+    *rtems_current_user_env = rtems_global_user_env; /* get the global values*/
+    rtems_current_user_env->task_id=task_id;         /* mark the local values*/
+  
+    return RTEMS_SUCCESSFUL;
+  }
+--- 23,92 ----
+  #include <rtems/libio.h>
+  #include <rtems/libio_.h>
+  
++ extern Chain_Control rtems_filesystem_mount_table_control;
++ 
++ #define THE_ROOT_FS_LOC \
++ 	(((rtems_filesystem_mount_table_entry_t*)\
++ 	   rtems_filesystem_mount_table_control.first)->mt_fs_root)
++ 
++ /* cleanup a user environment
++  * NOTE: this must be called with
++  *       thread dispatching disabled!
++  */
++ static void
++ free_user_env(rtems_user_env_t *env)
++ {
++ 	if (env != &rtems_global_user_env 
++ 		&& --env->refcnt <= 0) {
++ 		rtems_filesystem_freenode( &env->current_directory);
++ 		rtems_filesystem_freenode( &env->root_directory);
++ 		free(env);
++ 	}
++ }
++ 
+  rtems_status_code rtems_libio_set_private_env(void) {
+!   rtems_status_code 					sc;
+!   rtems_id          					task_id;
+!   rtems_filesystem_location_info_t		loc;
+  
+    sc=rtems_task_ident(RTEMS_SELF,0,&task_id);
+    if (sc != RTEMS_SUCCESSFUL) return sc;
+  
+    /* Only for the first time a malloc is necesary */
+!   if (rtems_current_user_env==&rtems_global_user_env) {
+!    rtems_user_env_t	*tmp = malloc(sizeof(rtems_user_env_t));
+!    if (!tmp)
+       return RTEMS_NO_MEMORY;
++ 
++    tmp->refcnt = 1;
++ 
++    sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,free_user_env);
++    if (sc != RTEMS_SUCCESSFUL) {
++ 	 /* don't use free_user_env because the pathlocs are
++ 	  * not initialized yet
++ 	  */
++      free(tmp);
++      return sc;
++    }
++    rtems_current_user_env = tmp;
+    }; 
+  
+    *rtems_current_user_env = rtems_global_user_env; /* get the global values*/
+    rtems_current_user_env->task_id=task_id;         /* mark the local values*/
++   
++   /* get a clean root */
++   rtems_filesystem_root    = THE_ROOT_FS_LOC;
++ 
++   /* Clone the pathlocs. In contrast to most other
++    * code we must _not_ free the original locs because
++    * what we are trying to do here is forking off
++    * clones.
++    */
++ 
++   rtems_filesystem_evaluate_path("/", 0, &loc, 0);
++   rtems_filesystem_root    = loc;
++   rtems_filesystem_evaluate_path("/", 0, &loc, 0);
++   rtems_filesystem_current = loc;
+  
+    return RTEMS_SUCCESSFUL;
+  }
+***************
+*** 51,56 ****
+--- 96,115 ----
+   *   Task_id (remote) and RTEMS_SELF(current).
+   */
+  
++ /* NOTE:
++  *
++  * THIS CODE HAS NO PROTECTION IMPLEMENTED
++  *
++  * Tasks who wish to share their environments must
++  *
++  *  a) assert that no participants are concurrently
++  *     executing
++  *     libio_share_private_env() and/or libio_set_private_env()
++  *
++  *  b) mutex access to rtems_filesystem_current, rtems_filesytem_root
++  *     while changing any of those (chdir(), chroot()).
++  */
++ 
+  rtems_status_code rtems_libio_share_private_env(rtems_id task_id) {
+    rtems_status_code  sc;
+    rtems_user_env_t * shared_user_env;
+***************
+*** 61,81 ****
+  
+    if (rtems_current_user_env->task_id==current_task_id) {
+     /* kill the current user env & task_var*/	  
+!    free(rtems_current_user_env);	  
+     sc = rtems_task_variable_delete(RTEMS_SELF,(void*)&rtems_current_user_env);
+     if (sc != RTEMS_SUCCESSFUL) return sc;
+    };
+  
+    sc = rtems_task_variable_get(task_id,(void*)&rtems_current_user_env,
+  		                       (void*)&shared_user_env       );
+!   if (sc != RTEMS_SUCCESSFUL) return sc;
+  
+!   /* don't free(NULL'ed) at the task_delete. It is a shared var... */	   
+!   sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,NULL);
+!   if (sc != RTEMS_SUCCESSFUL) return sc;
+    
+    /* the current_user_env is the same pointer that remote env */
+    rtems_current_user_env = shared_user_env;
+  
+    return RTEMS_SUCCESSFUL;
+  }
+--- 120,152 ----
+  
+    if (rtems_current_user_env->task_id==current_task_id) {
+     /* kill the current user env & task_var*/	  
+! 	rtems_user_env_t 	*tmp = rtems_current_user_env;
+     sc = rtems_task_variable_delete(RTEMS_SELF,(void*)&rtems_current_user_env);
+     if (sc != RTEMS_SUCCESSFUL) return sc;
++    free_user_env(tmp);	  
+    };
+  
++   /* AT THIS POINT, rtems_current_user_env is DANGLING */
++ 
+    sc = rtems_task_variable_get(task_id,(void*)&rtems_current_user_env,
+  		                       (void*)&shared_user_env       );
+!   if (sc != RTEMS_SUCCESSFUL)
+!     goto bailout;
+  
+!   sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,free_user_env);
+!   if (sc != RTEMS_SUCCESSFUL)
+!     goto bailout;
+    
+    /* the current_user_env is the same pointer that remote env */
+    rtems_current_user_env = shared_user_env;
+  
++   /* increase the reference count */
++   rtems_current_user_env->refcnt++;
++ 
+    return RTEMS_SUCCESSFUL;
++ 
++ bailout:
++   /* fallback to the global env */
++   rtems_current_user_env = &rtems_global_user_env;
++   return sc;
+  }
