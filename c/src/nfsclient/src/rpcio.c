@@ -1137,7 +1137,7 @@ rtems_interval    next_retrans, then, unow;
 long			  now;	/* need to do signed comparison with age! */
 rtems_event_set   events;
 ListNode          newList;
-uint32_t	  size;
+size_t            size;
 rtems_id          q          =  0;
 ListNodeRec       listHead   = {0};
 unsigned long     epoch      = RPCIOD_EPOCH_SECS * ticksPerSec;
@@ -1535,7 +1535,7 @@ RpcUdpXact
 rpcUdpXactPoolGet(RpcUdpXactPool pool, XactPoolGetMode mode)
 {
 RpcUdpXact	 xact = 0;
-uint32_t	 size;
+size_t           size;
 
 	if (RTEMS_SUCCESSFUL != rtems_message_queue_receive(
 								pool->box,
