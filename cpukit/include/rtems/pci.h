@@ -20,6 +20,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Under PCI, each device has 256 bytes of configuration address space,
  * of which the first 64 bytes are standardized as follows:
@@ -1224,5 +1228,9 @@ pci_find_device(
  * Return the number of PCI busses in the system
  */
 extern unsigned char pci_bus_count();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _RTEMS_PCI_H */
