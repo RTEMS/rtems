@@ -14,6 +14,10 @@
 #ifndef _RTEMS_BSPIO_H
 #define _RTEMS_BSPIO_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * All the functions declared as extern after this comment
  * MUST be implemented in each BSP. Using this function,
@@ -35,5 +39,9 @@ extern 	BSP_polling_getchar_function_type 	BSP_poll_char;
 #include <stdarg.h>
 extern void vprintk(char *fmt, va_list ap);
 extern void printk(char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

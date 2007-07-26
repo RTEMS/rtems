@@ -1,3 +1,9 @@
+2007-07-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/rtems/bspIo.h, include/rtems/pci.h:
+	Add extern "C" guards. Reported by
+	Robert S. Grimes <rsg@alum.mit.edu>.
+
 2007-05-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/include/rtems/score/copyrt.h: Update copyright notice.
