@@ -32,6 +32,7 @@ Cygwin libncurses-devel libraries.
     > etc/postinstall/libncurses-devel.sh \
     > etc/postinstall/libncurses-devel.sh~
   mv etc/postinstall/libncurses-devel.sh~ etc/postinstall/libncurses-devel.sh
+  chmod +x etc/postinstall/libncurses-devel.sh
 
 %install
   rm -rf $RPM_BUILD_ROOT
