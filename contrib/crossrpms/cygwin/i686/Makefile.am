@@ -54,7 +54,7 @@ CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
 noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
 NCURSES_VERS = 5.5-3
-NCURSES_RPMREL = 0.20070724.2
+NCURSES_RPMREL = 0.20070726.1
 EXTRA_DIST += target-libncurses-devel.add
 EXTRA_DIST += libncurses-devel.add
 
