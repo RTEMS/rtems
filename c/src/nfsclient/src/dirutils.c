@@ -69,9 +69,9 @@
 int
 pwd(void)
 {
-char buf[MAXPATHLEN];
+char buf[PATH_MAX];
 
-	if ( !getcwd(buf,MAXPATHLEN)) {
+	if ( !getcwd(buf,PATH_MAX)) {
 		perror("getcwd");
 		return -1;
 	} else {
@@ -120,7 +120,7 @@ int
 ls(char *dir, char *opts)
 {
 struct dirent	*de;
-char			path[MAXPATHLEN+1];
+char			path[PATH_MAX+1];
 char			*chpt;
 DIR				*dp  = 0;
 int				rval = -1;
@@ -129,8 +129,8 @@ struct stat		buf;
 	if ( !dir )
 		dir = ".";
 
-	strncpy(path, dir, MAXPATHLEN);
-	path[MAXPATHLEN] = 0;
+	strncpy(path, dir, PATH_MAX);
+	path[PATH_MAX] = 0;
 	chpt = path+strlen(path);
 
 	if ( !(dp=opendir(dir)) ) {

@@ -1,3 +1,12 @@
+2007-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* nfsclient/src/dirutils.c: Use PATH_MAX instead of MAXPATHLEN.
+
+2007-07-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* nfsclient/src/rpcio.c: Use size_t instead of uint32_t for message
+	  sizes.
+
 2007-07-27	Chris Johns <chrisj@rtems.org>
 
 	* wrapup/Makefile.am: Create archive from a file for hosts
