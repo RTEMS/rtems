@@ -100,8 +100,9 @@ librtemscpu.a: $(TMP_LIBS)
 	    ;; \
 	  esac; \
 	done
-	$(AR) rc $@ $(ARCH)/*
-	rm -f $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
+	ls $(ARCH)/* > $@-list
+	$(AR) rc $@ @$@-list
+	rm -f $@-list $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	$(RANLIB) $@
 
 all-local: $(TMPINSTALL_FILES)
