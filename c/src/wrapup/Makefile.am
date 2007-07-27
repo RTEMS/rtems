@@ -64,8 +64,9 @@ o-optimize/librtemsbsp.a: $(SRCS)
 	    ;; \
 	  esac; \
 	done
-	$(AR) rc $@ o-optimize/*
-	rm -f o-optimize/*.$(OBJEXT) o-optimize/*.rel
+	ls o-optimize/*.$(OBJEXT) o-optimize/*.rel > $@-list
+	$(AR) rc $@ @$@-list
+	rm -f $@-list o-optimize/*.$(OBJEXT) o-optimize/*.rel
 	$(RANLIB) $@
 
 include $(srcdir)/preinstall.am
