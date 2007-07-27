@@ -1,24 +1,23 @@
 2007-07-27	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
-	* linkcmds:
-	removed superfluous bss section
+
+	* linkcmds: removed superfluous bss section
 
 2007-07-27	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
-	* autom4te.cache/, network.old/:
-	removed
+
+	* autom4te.cache/, network.old/: Removed.
 
 2007-07-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
-	* startup/linkcmds.dl: 
-	removed
+
+	* startup/linkcmds.dl: Removed.
 
 2007-07-05	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* include/bsp.h:
-	added bsp/vectors.h and bsp/irq.h to list of included headers
+	* include/bsp.h: Added bsp/vectors.h and bsp/irq.h to list of
+	included headers.
 
 2007-07-05	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* opbintctrl/opbintctrl.c:
-	removed obsolete code
+	* opbintctrl/opbintctrl.c: Removed obsolete code.
 
 2007-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
