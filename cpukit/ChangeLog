@@ -1,3 +1,8 @@
+2007-07-27	Chris Johns <chrisj@rtems.org>
+
+	* wrapup/Makefile.am: Create archive from a file for hosts
+	with a limited command line size.
+
 2007-07-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/rtems/bspIo.h, include/rtems/pci.h:
