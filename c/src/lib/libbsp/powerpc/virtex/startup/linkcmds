@@ -210,21 +210,9 @@ SECTIONS
       bss.start = .;
       *(.bss .bss* .gnu.linkonce.b*)
       *(.sbss*) *(COMMON)
-      . = ALIGN(4);
-      bss.end = .;
+    bss.end = ALIGN(4);
     } >RAM
-    __SBSS_END__ = .;
-
-    __SBSS_START__ = .;
-    .bss :
-    {
-      bss.start = .;
-      *(.bss .bss* .gnu.linkonce.b*)
-      *(.sbss*) *(COMMON)
-      . = ALIGN(4);
-      bss.end = .;
       bss.size = bss.end - bss.start;
-    } >RAM
     __SBSS_END__ = .;
     
     PROVIDE(_bss_start   = ADDR(.bss));
