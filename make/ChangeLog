@@ -1,5 +1,6 @@
 2007-07-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/Linux-posix.cfg: Use -O2.
 	* custom/rbtx4938.cfg: Add missing -O2.
 	* custom/rtl22xx.cfg: Adjust indentation.
 	* custom/virtex.cfg: Use -O2.
