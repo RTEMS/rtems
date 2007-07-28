@@ -30,14 +30,14 @@ check()
 
 processor=$(uname -p)
 
-version=4.7
+. $source/version
 
 base_tool_list="binutils gcc"
 
 target_list=$(cat $source/targets)
 host_list="cygwin freebsd5.2 freebsd6.0 freebsd6.1 mingw32"
 
-rtems_tool_list="autoconf automake $base_tool_list"
+rtems_tool_list="autoconf automake $base_tool_list gdb"
 linux_tool_list="autoconf automake $base_tool_list"
 cygwin_tool_list="w32api libs autoconf automake $base_tool_list"
 freebsd_tool_list="libs autoconf automake $base_tool_list"
@@ -323,7 +323,7 @@ do
     case $s in
      autoconf|automake)
       # Hack around the prefix in the spec files for autotools.
-      ba="-ba $prefix/autotools/$rpm_prefix$s-rtems.spec"
+      ba="-ba $prefix/autotools/$rpm_prefix$s.spec"
       ;;
      *)
       ba="-ba $prefix/$sd/$p/$rpm_prefix$pth-$s.spec"
@@ -350,7 +350,7 @@ do
    case $s in
     autoconf|automake)
      # Hack around the prefix in the spec files for autotools.
-     ba="-ba $prefix/autotools/$rpm_prefix$s-rtems.spec"
+     ba="-ba $prefix/autotools/$rpm_prefix$s.spec"
      ;;
     *)
      ba="-ba $prefix/rtems$version/$t/$rpm_prefix$t-rtems$version-$s.spec"

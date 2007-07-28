@@ -1,3 +1,13 @@
+2007-07-28	Chris Johns <chisj@rtems.org>
+	* README, build-rpms.sh, rtems.ini, build-exes.sh,
+	rtems-tools.nsi: Updated to the new 4.8 build plus a new
+	installer.
+
+	* autoconf.def, automake.def, ba-wrap.sh, build-autotools.sh,
+	msys-path.nsi, rtems-autotools.nsi, target-section-text,
+	upload.sh, version: New to version 4.8. Autotools is built when
+	installing.
+
 2007-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* build-rpms.sh: Fix typos.

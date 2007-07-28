@@ -10,7 +10,7 @@
 
 !define PRODUCT_NAME      "RTEMS Tools"
 !define PRODUCT_VERSION   ${RTEMS_VERSION}
-!define PRODUCT_PUBLISHER "RTEM Project Team"
+!define PRODUCT_PUBLISHER "RTEMS Project Team"
 !define PRODUCT_WEB_SITE  "http://www.rtems.org/"
 
 ; MUI 1.66 compatible ------
@@ -57,8 +57,12 @@ ReserveFile "rtems.ini"
 !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION} (${RTEMS_TARGET})"
-OutFile "${RTEMS_BINARY}/rtems${PRODUCT_VERSION}-${RTEMS_TARGET}-${RTEMS_BUILD_VERSION}.exe"
-InstallDir "C:\rtems\${RTEMS_TARGET}"
+!ifdef COMMON_FILES
+OutFile "${RTEMS_BINARY}/rtems${PRODUCT_VERSION}-tools-${RTEMS_BUILD_VERSION}.exe"
+!else
+OutFile "${RTEMS_BINARY}/${RTEMS_OUTFILE}"
+!endif
+InstallDir "C:\opt\rtems-${PRODUCT_VERSION}"
 ShowInstDetails show
 ShowUnInstDetails show
 BrandingText "RTEMS ${RTEMS_TARGET} Tools v${PRODUCT_VERSION}"
@@ -66,13 +70,20 @@ AllowRootDirInstall false
 AutoCloseWindow false
 CRCCheck force
 
-Section "RTEMS ${RTEMS_TARGET} Tools" SecTools
+!include "${RTEMS_SOURCE}/msys-path.nsi"
+
+Section -SecFiles
+ !insertmacro RTEMS_INSTALL_FILES
+SectionEnd
+
+!ifdef COMMON_FILES
+Section -SecCommon
  SetOutPath "$INSTDIR"
  File "${RTEMS_SOURCE}/AUTHORS"
  File "${RTEMS_SOURCE}/COPYING"
  File "${RTEMS_SOURCE}/README"
- !insertmacro RTEMS_INSTALL_FILES
 SectionEnd
+!endif
 
 !macro FILE_WRITE_LINE Handle Text
   FileWrite     ${Handle} `${Text}`
@@ -159,7 +170,7 @@ loop:
   IntOp $R1 $R1 - 1
   StrCpy $R2 $R0 1 $R1
   StrCmp $R2 "" done
- StrCmp $R2 "\" 0 loop
+ StrCmp $R2 "\" 0 loop  ; "
   StrCpy $R2 $R0 $R1
    Push $R1
   IntOp $R1 $R1 + 1
@@ -174,23 +185,24 @@ done:
  Exch $R0
 FunctionEnd
 
+!ifdef COMMON_FILES
 Section -BatchFiles
  FileOpen $9 $INSTDIR\rtems.bat w
  !insertmacro FILE_WRITE_LINE $9 "@echo off"
- !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_TARGET} (${RTEMS_VERSION})"
+ !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_VERSION}-${RTEMS_BUILD_VERSION}"
  !insertmacro FILE_WRITE_LINE $9 "set PATH=$INSTDIR\bin;c:\mingw\bin;c:\msys\1.0\bin;%PATH%"
- !insertmacro FILE_WRITE_LINE $9 "set PROMPT=RTEMS(${RTEMS_TARGET}) $$P$$G"
+ !insertmacro FILE_WRITE_LINE $9 "set PROMPT=RTEMS $$P$$G"
  !insertmacro FILE_WRITE_LINE $9 "If $\"x%OS%x$\" == $\"xWindows_NTx$\" Goto WinNT_Title"
  !insertmacro FILE_WRITE_LINE $9 "doskey > Nul"
  !insertmacro FILE_WRITE_LINE $9 "goto Finished"
  !insertmacro FILE_WRITE_LINE $9 ":WinNT_Title"
- !insertmacro FILE_WRITE_LINE $9 "Title RTEMS(${RTEMS_TARGET})"
+ !insertmacro FILE_WRITE_LINE $9 "Title RTEMS ${RTEMS_VERSION}-${RTEMS_BUILD_VERSION}"
  !insertmacro FILE_WRITE_LINE $9 ":Finished"
  FileClose $9
 
  FileOpen $9 $INSTDIR\rtems-cmd.bat w
  !insertmacro FILE_WRITE_LINE $9 "@echo off"
- !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_TARGET} (${RTEMS_VERSION})"
+ !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_VERSION}-${RTEMS_BUILD_VERSION}"
  !insertmacro FILE_WRITE_LINE $9 "If $\"x%OS%x$\" == $\"xWindows_NTx$\" Goto WinNT"
  !insertmacro FILE_WRITE_LINE $9 "start command.com /e:4096 /k $INSTDIR\rtems.bat %1 %2 %3 %4"
  !insertmacro FILE_WRITE_LINE $9 "exit"
@@ -201,6 +213,7 @@ Section -BatchFiles
 
  FileOpen $9 $INSTDIR\sh-run.bat w
  !insertmacro FILE_WRITE_LINE $9 "@echo off"
+ !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_VERSION}-${RTEMS_BUILD_VERSION}"
  !insertmacro FILE_WRITE_LINE $9 "rem We can only handle 9 parameters. More is too hard."
  !insertmacro FILE_WRITE_LINE $9 "call $INSTDIR\rtems.bat"
  !insertmacro FILE_WRITE_LINE $9 "%1 %2 %3 %4 %5 %6 %7 %8 %9"
@@ -208,6 +221,7 @@ Section -BatchFiles
 
  FileOpen $9 $INSTDIR\vs-make.sh w
  !insertmacro FILE_WRITE_LINE $9 "#! /bin/sh"
+ !insertmacro FILE_WRITE_LINE $9 "# RTEMS script: ${RTEMS_VERSION}-${RTEMS_BUILD_VERSION}"
  !insertmacro FILE_WRITE_LINE $9 "if [ ! -d $$1 ]; then"
  !insertmacro FILE_WRITE_LINE $9 " echo $\"error: no build directory found$\""
  !insertmacro FILE_WRITE_LINE $9 " exit 1"
@@ -222,25 +236,43 @@ Section -BatchFiles
 SectionEnd
 
 Section -MSYSLinks
- FindFirst $8 $1 c:\msys\1.0\etc\fstab
- StrCmp $1 "" MSYSLinksdone
+ Call MSYSDetectSilent
+ Pop $R0
+ ifFileExists "$R0\etc\fstab" 0 Done
+  Push $R0
   Push $INSTDIR
-  Call StrSlash
+  Push '\\'
   Pop $R0
-  DetailPrint "Setting MSYS fstab: $R0 -> ${TOOL_PREFIX}"
-  FileOpen $9 "c:\msys\1.0\etc\fstab" a
+  Call StrSlash
+  Pop $R1
+  Pop $R0
+  DetailPrint "Setting MSYS fstab: $R1 -> /opt/rtems-${PRODUCT_VERSION}"
+  StrCpy $R1 "$R1 /opt/rtems-${PRODUCT_VERSION}$\n"
+  FileOpen $9 "$R0\etc\fstab" a
+  ifErrors 0 +3
+    MessageBox MB_OK "Cannot open $R0\etc\fstab. MSYS mount point no added."
+    Goto Close
+  FileSeek $9 0 SET
+ ReadLoop:
+  FileRead $9 $R2
+  ifErrors Append
+  StrCmp $R1 $R2 Close ReadLoop
+ Append:
   FileSeek $9 0 END
-  FileWrite $9 $R0
-  FileWriteByte $9 "32"
-  FileWrite $9 ${TOOL_PREFIX}
-  FileWriteByte $9 "10"
+  FileWrite $9 $R1
+ Close:
   FileClose $9
- MSYSLinksdone:
- FindClose $8
+ Done:
+  ClearErrors
 SectionEnd
+!endif
 
 Section -Post
- WriteUninstaller "$INSTDIR\rtems-${RTEMS_TARGET}-uninst.exe"
+!ifdef COMMON_FILES
+ WriteUninstaller "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-uninst.exe"
+!else
+ WriteUninstaller "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
+!endif
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                   "DisplayName" "$(^Name)"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
@@ -255,14 +287,27 @@ SectionEnd
 
 Function un.onInit
  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
-            "Are you sure you want to uninstall RTEMS Tools?" IDYES +2
+            "Are you sure you want to uninstall RTEMS Tools (${RTEMS_TARGET})?" IDYES +2
  Abort
 FunctionEnd
 
 Section Uninstall
- Delete $INSTDIR\rtems-${RTEMS_TARGET}-uninst.exe
+ SetDetailsView show
  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
- DetailPrint "Delete the install directory"
+ DetailPrint "Delete the installed files"
+ !insertmacro RTEMS_DELETE_FILES
+!ifdef COMMON_FILES
+ FindFirst $0 $1 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-*-uninst.exe"
+ Uninstall_Targets:
+  StrCmp $1 "" Uninstall_Targets_Done
+  DetailPrint "Uninstalling $1"
+  ExecWait '"$INSTDIR\$1" /S'
+  Delete $1
+  BringToFront
+  FindNext $0 $1
+  Goto Uninstall_Targets
+ Uninstall_Targets_Done:
+ FindClose $0
  Delete "$INSTDIR\AUTHORS"
  Delete "$INSTDIR\COPYING"
  Delete "$INSTDIR\README"
@@ -270,7 +315,12 @@ Section Uninstall
  Delete "$INSTDIR\rtems-cmd.bat"
  Delete "$INSTDIR\sh-run.bat"
  Delete "$INSTDIR\vs-make.sh"
- !insertmacro RTEMS_DELETE_FILES
+ Delete "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-uninst.exe"
+!else
+ Delete "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
+ Delete "$INSTDIR\Packages"
+!endif
+ RMDir "$INSTDIR"
  DetailPrint "All done."
- SetAutoClose true
+ SetAutoClose false
 SectionEnd

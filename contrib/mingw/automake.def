@@ -1,0 +1,4 @@
+package_name=automake-1.10
+package_source=$package_name.tar.bz2
+package_taropts=jxf
+package_patches=

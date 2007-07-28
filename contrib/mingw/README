@@ -1,5 +1,5 @@
 
-    Copyright (C) 2006	Chris Johns, Sydney, Australia <chrisj@rtems.org>
+    Copyright (C) 2006-2007 Chris Johns, Sydney, Australia <chrisj@rtems.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,3 +16,65 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 
+To build mingw32 tools on a Fedora Core 7 box:
+
+1. Add makensis to your path.
+
+   $ export PATH=/opt/nsis/2.29/bin:$PATH
+
+2. Set up the RPM packages:
+
+   $ cat ~/.rpmrc
+   os_canon: mingw32: mingw32 23
+   arch_canon: mingw32: i686 1
+   arch_compat: mingw32: i686 noarch
+   buildarch_compat: mingw32: i686 noarch
+   optflags: mingw32 -O2 -g
+   optflags: i686 -O2 -pipe
+   $ cat ~/.rpmmacros
+   %_topdir /home2/work/chris/rtems/4.8/packages
+   %_tmppath /home2/work/chris/tmp/rtems
+   %_rpmdir        %_topdir/%_target_os/RPMS
+   %_srcrpmdir     %_topdir/%_target_os/SRPMS
+   %_signature gpg
+   # %_gpg_path ~/.gnupg
+   # %_gpg_name "RTEMS Packager"
+   %_gpg_name rtems
+   %vendor: RTEMS Project
+   %packager chrisj@rtems.org
+   %distribution RTEMS Project http://www.rtems.org/
+   $ mkdir -p /home2/work/chris/rtems/4.8/packages
+   $ mkdir /home2/work/chris/rtems/4.8/packages/SOURCES
+   $ mkdir /home2/work/chris/rtems/4.8/packages/BUILD
+   $ mkdir -p /home2/work/chris/rtems/4.8/packages/linux/SRPMS
+   $ mkdir -p /home2/work/chris/rtems/4.8/packages/linux/RPMS
+   $ mkdir -p /home2/work/chris/rtems/4.8/packages/mingw32/SRPMS
+   $ mkdir -p /home2/work/chris/rtems/4.8/packages/mingw32/RPMS
+   $ cp /home2/work/chris/rtems/4.8/head/contrib/crossrpms/patches/* \
+        /home2/work/chris/rtems/4.8/packages/SOURCES/.
+
+   Download the required sources to:
+
+     /home2/work/chris/rtems/4.8/packages/SOURCES
+
+   The list you need depends on what version you build. A tool exists
+   that atempts to determine the package. Ask on the list for it.
+
+2. Run the build.sh script where:
+
+    -d            : debug output from the script and nested scripts
+    -h host       : the host to buidl for
+    -p prefix     : the prefix (not that important for mingw)
+    -s crossrpms  : the path to the crossrpms source tree
+    -r relocation : the path for the NSIS installer executables
+
+   $ export PATH=/opt/rtems-4.8/bin:$PATH
+   $ cd /home2/work/chris/rtems/4.8/head/contrib/crossrpms
+   $ ./bootstrap
+   $ cd /home2/work/chris/rtems/4.8/head/contrib/mingw
+   $ ./build.sh -d -h mingw32 \
+         -p /home2/work/chris/rtems/4.8/build/rpms \
+         -s /home2/work/chris/rtems/4.8/head/contrib/crossrpms \
+         -r /home2/work/chris/rtems/4.8/build/mingw
+
+   Sit back and wait. The build take a long time on a fast machine.

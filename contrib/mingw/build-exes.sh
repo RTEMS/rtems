@@ -4,9 +4,11 @@
 #
 # RTEMS Build Executable Installers script.
 #
-# This script takes the RPM files built using the crossrpms/build-rpms.sh
+# This script takes the RPM files built using the mingw/build-rpms.sh
 # script.
 #
+
+echo $*
 
 source=$(dirname $0)
 
@@ -23,20 +25,26 @@ check()
  fi
 }
 
-version=4.7
-tool_build=3
+. $source/version
 
 target_list=$(cat $source/targets)
+
+. $source/target-section-text
 
 mingw32_cpu_list="i686"
 
 rpm_topdir=$(rpm --eval "%{_topdir}")
+
+rtems_url="http://www.rtems.org/ftp/pub/rtems/windows/${version}/build-${tool_build}"
 
 common_label="common"
 local_rpm_database=yes
 targets=$target_list
 run_prefix=
 relocation=
+rpm_install=yes
+
+package_source=$(cat $HOME/.rpmmacros | grep "^%_topdir" | sed -e "s/^.* //g")/SOURCES
 
 if [ "$source" = "." ]; then
  source=$(pwd)
@@ -47,6 +55,9 @@ do
  case $1 in
   -d)
    set -x
+   ;;
+  -i)
+   rpm_install=no
    ;;
   -l)
    shift
@@ -105,6 +116,12 @@ else
   rpm_database=
 fi
 
+#
+# Get the RPM list given the architecture and the package.
+#
+# $1 - architecture
+# $2 - package
+#
 get_rpm_list()
 {
   if [ -d $rpm_topdir/mingw32/RPMS/$1 ]; then
@@ -113,38 +130,51 @@ get_rpm_list()
 }
 
 #
-# Handle each type of host processor.
+# Create the installer given the architecture and package.
 #
-for p in $mingw32_cpu_list
-do
- common_rpms="$(get_rpm_list noarch auto) $(get_rpm_list $p $common_label)"
- check "getting the autotools and common RPM list"
+# $1 - architecture/processor
+# $2 - package
+# $3 - package name
+create_installer()
+{
+  local p=$1
+  local t=$2
+  local n=$3
 
- rpm_options="--ignoreos --force --nodeps --noorder "
+  rpm_options="--ignoreos --force --nodeps --noorder "
 
- for t in $targets
- do
   rpms=$(get_rpm_list $p $t)
-  check "getting the RPM list"
+  check "getting the $n RPM list"
+
   if [ -n "$rpms" ]; then
-   echo "Clean the relocation directory"
-   $rm -rf $relocation
-   check "removing the relocation directory: $relocation"
+   treloc=$relocation/$n
+   echo "Relocation path: $treloc"
 
-   for r in $common_rpms $rpms
-   do
-    echo "rpm $rpm_database --relocate $prefix=$relocation $rpm_options -i $r"
-    $rpm $rpm_database --relocate $prefix=$relocation $rpm_options -i $r
-    check "installing rpm: $r"
-   done
+   if [ $rpm_install = yes ]; then
+    echo "Clean the relocation directory: $treloc"
+    $rm -rf $treloc
+    check "removing the relocation directory: $treloc"
 
-   files=$(find $relocation -type f | sed -e "s/^$(echo ${relocation} | sed 's/\//\\\//g')//" -e "s/^\///" | sort)
+    for r in $rpms
+    do
+     echo "rpm $rpm_database --relocate $prefix=$treloc $rpm_options -i $r"
+     $rpm $rpm_database --relocate $prefix=$treloc $rpm_options -i $r
+     check "installing rpm: $r"
+    done
+   fi
 
-   echo "$files" > $relocation/files.txt
-
+   files=$(find $treloc -type f -a -not \( -name \*.gch \
+                                        -o -name rtems.nsi \
+                                        -o -name rtems-files.nsi \
+                                        -o -name rtems.ini \
+                                        -o -name files.txt \) | \
+           sed -e "s/^$(echo ${treloc} | sed 's/\//\\\//g')//" -e "s/^\///" | sort)
    check "find the file list"
 
-   of=$relocation/rtems-files.nsi
+   echo "$files" > $treloc/files.txt
+   check "write the file list"
+
+   of=$treloc/rtems-files.nsi
 
    echo "!macro RTEMS_INSTALL_FILES" > $of
    echo " !ifndef EMPTY_INSTALLER" >> $of
@@ -159,7 +189,7 @@ do
      echo "  SetOutPath \"\$INSTDIR\\$id\"" >> $of
      install_dir=$d
     fi
-    echo "  File \"$relocation/$f\"" >> $of
+    echo "  File \"$treloc/$f\"" >> $of
    done
 
    echo " !endif" >> $of
@@ -168,18 +198,52 @@ do
    echo "!macro RTEMS_DELETE_FILES" >> $of
    echo " !ifndef EMPTY_INSTALLER" >> $of
 
+   #
+   # Get a list of directories so we can delete them once all
+   # the files have been deleted. We need to be selective as
+   # the directory maybe used by another installer.
+   #
+   # Once we get a list we need to also add the path down
+   # to that node and then sort them so we work from bottom up.
+   #
+
    remove_dirs=
-   remove_dir=
 
    for f in $files
    do
     d=$(dirname $f)
-    if [ "$remove_dir" != "$d" ]; then
+    found=no
+    for rd in $remove_dirs
+    do
+     if [ "$d" = "$rd" ]; then
+      found=yes
+      break;
+     fi
+    done
+    if [ $found = no ]; then
      remove_dirs="$remove_dirs $d"
-     remove_dir=$d
     fi
     rf=$(echo $f | sed -e 's/\//\\/g' -e 's/\/$//')
     echo "  Delete \"\$INSTDIR\\$rf\"" >> $of
+   done
+
+   for d in $remove_dirs
+   do
+    while [ $d != . ]
+    do
+     found=no
+     for rd in $remove_dirs
+     do
+      if [ "$d" = "$rd" ]; then
+       found=yes
+       break
+      fi
+     done
+     if [ $found = no ]; then
+      remove_dirs="$remove_dirs $d"
+     fi
+     d=$(dirname $d)
+    done
    done
 
    remove_dirs=$(for r in $remove_dirs; do echo $r; done | sort -r -u)
@@ -201,28 +265,200 @@ do
    $mkdir -p $rtems_binary
    check "make the RTEMS binary install point: $rtems_binary"
 
-   of=$relocation/rtems.nsi
-   echo "!define RTEMS_TARGET \"$t\"" > $of
+   outfile=rtems$version-tools-$n-$tool_build.exe
+
+   of=$treloc/rtems.nsi
+   echo "!define RTEMS_TARGET \"$n\"" > $of
    echo "!define RTEMS_VERSION \"$version\"" >> $of
    echo "!define RTEMS_BUILD_VERSION \"$tool_build\"" >> $of
    echo "!define RTEMS_PREFIX \"rtems-tools\"" >> $of
    echo "!define RTEMS_SOURCE \"$source\"" >> $of
-   echo "!define RTEMS_RELOCATION \"$relocation\"" >> $of
+   echo "!define RTEMS_RELOCATION \"$treloc\"" >> $of
    echo "!define RTEMS_LOGO \"$source/rtems_logo.bmp\"" >> $of
    echo "!define RTEMS_BINARY \"$rtems_binary\"" >> $of
    echo "!define RTEMS_LICENSE_FILE \"$source/rtems-license.rtf\"" >> $of
+   echo "!define RTEMS_OUTFILE \"$outfile\"" >> $of
    echo "!define TOOL_PREFIX \"$prefix\"" >> $of
-   echo "!include \"$relocation/rtems-files.nsi\"" >> $of
+
+   if [ $n = $common_label ]; then
+     echo "!define COMMON_FILES" >> $of
+   fi
+
+   echo "!include \"$treloc/rtems-files.nsi\"" >> $of
    echo "!include \"$source/rtems-tools.nsi\"" >> $of
 
-   echo "cp $source/rtems.ini $relocation/rtems.ini"
-   $cp $source/rtems.ini $relocation/rtems.ini
-   check "coping the dialog definition file: $relocation/rtems.ini"
+   if [ $n = $common_label ]; then
+     echo "!include \"$relocation/rtems-sections.nsi\"" >> $of
+   fi
+
+   echo "cp $source/rtems.ini $treloc/rtems.ini"
+   $cp $source/rtems.ini $treloc/rtems.ini
+   check "coping the dialog definition file: $treloc/rtems.ini"
 
    echo "makensis $of"
    $makensis $of
    check "making the installer: $of"
 
+   if [ $n != $common_label ]; then
+     of=$relocation/rtems-sections.nsi
+     tst=${t}_section_text
+     echo "" >> $of
+     echo "; Target: $t" >> $of
+     echo "Section \"${!tst}\" Section_$t" >> $of
+     echo " StrCpy \$1 \$EXEDIR\\$outfile" >> $of
+     echo " DetailPrint \"Checking for \$1\"" >> $of
+     echo " IfFileExists \$1 ${t}_found" >> $of
+     echo " StrCpy \$1 \$INSTDIR\\Packages\\$outfile" >> $of
+     echo " DetailPrint \"Checking for \$1\"" >> $of
+     echo " IfFileExists \$1 ${t}_found" >> $of
+     echo "  SetOutPath \"\$INSTDIR\\Packages\"" >> $of
+     echo "  DetailPrint \"Downloading $rtems_url/$outfile\"" >> $of
+     echo "  NSISdl::download $rtems_url/$outfile $outfile" >> $of
+     echo "  Pop \$R0" >> $of
+     echo "  StrCmp \$R0 \"success\" ${t}_found_2 ${t}_not_found_2" >> $of
+     echo " ${t}_not_found_2:" >> $of
+     echo "   SetDetailsView show" >> $of
+     echo "   DetailPrint \"Download failed: \$R0\"" >> $of
+     echo "   MessageBox MB_OK \"Download failed: \$R0\"" >> $of
+     echo "   Goto ${t}_done" >> $of
+     echo " ${t}_found_2:" >> $of
+     echo "   Strcpy \$1 \"\$INSTDIR\\Packages\\$outfile\"" >> $of
+     echo " ${t}_found:" >> $of
+     echo "  DetailPrint \"Installing: \$1\"" >> $of
+     echo "  ExecWait '\"\$1\" /S'" >> $of
+     echo "  BringToFront" >> $of
+     echo " ${t}_done:" >> $of
+     echo "SectionEnd" >> $of
+   else
+     echo "Section -SecCommon" >> $of
+     echo " SetOutPath \"\$INSTDIR"\" >> $of
+     echo " File \"\${RTEMS_SOURCE}/AUTHORS"\" >> $of
+     echo " File \"\${RTEMS_SOURCE}/COPYING\"" >> $of
+     echo " File \"\${RTEMS_SOURCE}/README\"" >> $of
+     echo "SectionEnd" >> $of
+   fi
   fi
+}
+
+create_autotools_installer()
+{
+  local p=$1
+  local t=$2
+  local n=$3
+
+  treloc=$relocation/$n
+  echo "Relocation path: $treloc"
+
+  echo "Clean the relocation directory: $treloc"
+  $rm -rf $treloc
+  check "removing the relocation directory: $treloc"
+  mkdir -p $treloc
+  check "creating relocation directory: $treloc"
+
+  rtems_binary=$rpm_topdir/mingw32/exe/$p
+  echo "mkdir -p $rtems_binary"
+  $mkdir -p $rtems_binary
+  check "make the RTEMS binary install point: $rtems_binary"
+
+  outfile=rtems$version-tools-$n-$tool_build.exe
+
+  of=$treloc/rtems.nsi
+  echo "!define RTEMS_TARGET \"$n\"" > $of
+  echo "!define RTEMS_VERSION \"$version\"" >> $of
+  echo "!define RTEMS_BUILD_VERSION \"$tool_build\"" >> $of
+  echo "!define RTEMS_PREFIX \"rtems-tools\"" >> $of
+  echo "!define RTEMS_SOURCE \"$source\"" >> $of
+  echo "!define RTEMS_PACKAGE_SOURCE \"$package_source\"" >> $of
+  echo "!define RTEMS_LOGO \"$source/rtems_logo.bmp\"" >> $of
+  echo "!define RTEMS_BINARY \"$rtems_binary\"" >> $of
+  echo "!define RTEMS_LICENSE_FILE \"$source/rtems-license.rtf\"" >> $of
+  echo "!define RTEMS_OUTFILE \"$outfile\"" >> $of
+  echo "!define TOOL_PREFIX \"$prefix\"" >> $of
+
+  . $source/autoconf.def
+
+  echo "!define RTEMS_AUTOCONF \"$package_name\"" >> $of
+  echo "!define RTEMS_AUTOCONF_SOURCE \"$package_source\"" >> $of
+  echo "!macro RTEMS_AUTOCONF_PATCHES" >> $of
+  for p in $package_patches
+  do
+    echo " File \"\${RTEMS_PACKAGE_SOURCE}/$p\"" >> $of
+  done
+  echo "!macroend" >> $of 
+
+  echo "!macro RTEMS_DELETE_AUTOCONF_PATCHES" >> $of
+  for p in $package_patches
+  do
+    echo " Delete \"\$INSTDIR\\Packages\\Source\\$p\"" >> $of
+  done
+  echo "!macroend" >> $of 
+
+  . $source/automake.def
+
+  echo "!define RTEMS_AUTOMAKE \"$package_name\"" >> $of
+  echo "!define RTEMS_AUTOMAKE_SOURCE \"$package_source\"" >> $of
+  echo "!macro RTEMS_AUTOMAKE_PATCHES" >> $of
+  for p in $package_patches
+  do
+    echo " File \"\${RTEMS_PACKAGE_SOURCE}/$p\"" >> $of
+  done
+  echo "!macroend" >> $of 
+
+  echo "!macro RTEMS_DELETE_AUTOMAKE_PATCHES" >> $of
+  for p in $package_patches
+  do
+    echo " Delete \"\$INSTDIR\\Packages\\Source\\$p\"" >> $of
+  done
+  echo "!macroend" >> $of 
+
+  echo "!include \"$source/rtems-autotools.nsi\"" >> $of
+
+  echo "cp $source/rtems.ini $treloc/rtems.ini"
+  $cp $source/rtems.ini $treloc/rtems.ini
+  check "coping the dialog definition file: $treloc/rtems.ini"
+
+  echo "makensis $of"
+  $makensis $of
+  check "making the installer: $of"
+
+  of=$relocation/rtems-sections.nsi
+  tst=${t}_section_text
+  echo "" >> $of
+  echo "; Target: $t" >> $of
+  echo "Section \"${!tst}\" Section_$t" >> $of
+  echo " StrCpy \$1 \$EXEDIR\\$outfile" >> $of
+  echo " IfFileExists \$1 ${t}_found" >> $of
+  echo "  SetOutPath \"\$INSTDIR\Packages\"" >> $of
+  echo "  DetailPrint \"Downloading $rtems_url/$outfile\"" >> $of
+  echo "  NSISdl::download $rtems_url/$outfile $outfile" >> $of
+  echo "  Pop \$R0" >> $of
+  echo "  StrCmp \$R0 \"success\" ${t}_found_2 ${t}_not_found_2" >> $of
+  echo " ${t}_not_found_2:" >> $of
+  echo "   SetDetailsView show" >> $of
+  echo "   DetailPrint \"Download failed: \$R0\"" >> $of
+  echo "   MessageBox MB_OK \"Download failed: \$R0\"" >> $of
+  echo "   Goto ${t}_done" >> $of
+  echo " ${t}_found_2:" >> $of
+  echo "   Strcpy \$1 \"\$INSTDIR\\Packages\\$outfile\"" >> $of
+  echo " ${t}_found:" >> $of
+  echo "  DetailPrint \"Installing: \$1\"" >> $of
+  echo "  ExecWait '\"\$1\" /S'" >> $of
+  echo "  BringToFront" >> $of
+  echo " ${t}_done:" >> $of
+  echo "SectionEnd" >> $of
+}
+
+#
+# Handle each type of host processor.
+#
+for p in $mingw32_cpu_list
+do
+ echo "; Components based on each target." > $relocation/rtems-sections.nsi
+ create_autotools_installer noarch auto autotools
+ for t in $targets
+ do
+  create_installer $p $t $t
  done
+ # Must be done last
+ create_installer $p $common_label $common_label
 done

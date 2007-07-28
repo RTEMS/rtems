@@ -1,0 +1,4 @@
+package_name=autoconf-2.61
+package_source=$package_name.tar.bz2
+package_taropts=jxf
+package_patches=autoconf-20070411-cross-test-x.patch
