@@ -23,7 +23,7 @@
 	
 2007-07-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* custom/vitex.cfg: added file to support PPC core in a xilinx
+	* custom/virtex.cfg: added file to support PPC core in a xilinx
 	virtex FPGA
 	
 2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
