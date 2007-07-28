@@ -1,5 +1,6 @@
 2007-07-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/rtl22xx.cfg: Adjust indentation.
 	* custom/virtex.cfg: Use -O2.
 
 2007-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
