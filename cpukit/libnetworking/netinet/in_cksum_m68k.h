@@ -37,7 +37,7 @@
 #include <sys/param.h>
 #include <sys/mbuf.h>
 
-#if (defined (__mcf5200__))
+#if defined(__mcoldfire__)
 # define IS_COLDFIRE 1
 #else
 # define IS_COLDFIRE 0

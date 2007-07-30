@@ -1,5 +1,10 @@
 2007-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/in_cksum_m68k.h: Use __mcoldfire__ to
+	  identify coldfire cpus.
+
+2007-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* shttpd/log.c: Activate SPLIT_SNPRINTF for gcc <= 4.2.1 and
 	  coldfire.
 
