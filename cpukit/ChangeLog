@@ -1,3 +1,9 @@
+2007-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shttpd/log.c: Add preliminary version of SPLIT_SNPRINTF to
+	  work-around bug m68k/coldfire -fomit-frame-pointer bug
+	  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=32307.
+
 2007-07-27	Chris Johns <chrisj@rtems.org>
 
 	* wrapup/Makefile.am: Create archive from a file for hosts

@@ -61,6 +61,22 @@ elog(int flags, struct conn *c, const char *fmt, ...)
 		exit(EXIT_FAILURE);
 }
 
+/* HACK: m68k-gcc <= 4.2.1 ICEs on the snprintf below for some 
+ * coldfire variants for yet unknown reasons.
+ */
+#if defined(__GNUC__) && \
+   ( (__GNUC__ < 4 ) || \
+     ( (__GNUC__ == 4 ) && (__GNUC_MINOR__ < 2 ) ) || \
+       ( (__GNUC__ == 4 ) && (__GNUC_MINOR__ == 2 ) && (__GNUC_PATCHLEVEL__ <= 1 ) ) )
+#if defined(__mcf528x__) 
+//# define SPLIT_SNPRINTF 1
+#endif /* __mcf528x__ */
+#if defined(__mcf5200__) 
+#endif /* __mcf5200__ */
+#if defined(__mcoldfire__) 
+#endif /* __mcoldfire__ */
+#endif /* __GNUC__ */
+
 void
 log_access(FILE *fp, const struct conn *c)
 {
@@ -87,6 +103,19 @@ log_access(FILE *fp, const struct conn *c)
 	(void) strftime(date, sizeof(date), "%d/%b/%Y:%H:%M:%S",
 			localtime(&current_time));
 
+#if SPLIT_SNPRINTF
+	{
+	  int num;
+	  num = my_snprintf(buf, sizeof(buf),
+	    "%s - %.*s [%s %+05d] \"%s\" %d %lu",
+	    inet_ntoa(c->sa.u.sin.sin_addr), user->len, user->ptr,
+	    date, tz_offset, c->request ? c->request : "-",
+	    c->status, c->loc.io.total );
+	  my_snprintf(&buf[num], sizeof(buf)-num, " %s%.*s%s" " %s%.*s%s",
+	    q1, referer->len, referer->ptr, q1,
+	    q2, user_agent->len, user_agent->ptr, q2);
+	}
+#else
 	(void) my_snprintf(buf, sizeof(buf),
 	    "%s - %.*s [%s %+05d] \"%s\" %d %lu %s%.*s%s %s%.*s%s",
 	    inet_ntoa(c->sa.u.sin.sin_addr), user->len, user->ptr,
@@ -94,6 +123,7 @@ log_access(FILE *fp, const struct conn *c)
 	    c->status, (unsigned long) c->loc.io.total,
 	    q1, referer->len, referer->ptr, q1,
 	    q2, user_agent->len, user_agent->ptr, q2);
+#endif
 
 	if (fp != NULL) {
 		(void) fprintf(fp, "%s\n", buf);
