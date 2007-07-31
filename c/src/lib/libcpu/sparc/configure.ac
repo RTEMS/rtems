@@ -22,7 +22,7 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
 AM_CONDITIONAL(has_instruction_cache, test "$RTEMS_CPU_MODEL" = "leon1" \
-|| test "$RTEMS_CPU_MODEL" = "leon2" )
+|| test "$RTEMS_CPU_MODEL" = "leon2" || test "$RTEMS_CPU_MODEL" = "leon3" )
 
 RTEMS_AMPOLISH3
 
