@@ -107,7 +107,7 @@ norst:  frestore a0@+                     | restore the fp state frame
  *    transfer control to the interrupt dispatcher.
  */
 
-#if ( M68K_COLDFIRE_ARCH == 1 )
+#if ( defined(__mcoldfire__) )
 .set SR_OFFSET,    2                     | Status register offset
 .set PC_OFFSET,    4                     | Program Counter offset
 .set FVO_OFFSET,   0                     | Format/vector offset
@@ -128,7 +128,7 @@ norst:  frestore a0@+                     | restore the fp state frame
 
 SYM (_ISR_Handler):
         addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking
-#if ( M68K_COLDFIRE_ARCH == 0 )
+#if ( !defined(__mcoldfire__) )
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
 #else
 	lea	a7@(-SAVED),a7
@@ -192,7 +192,7 @@ SYM (_ISR_Handler):
  * see if it is _ISR_Handler.  If it is we have the case of nesting interrupts
  * without the dispatch level being incremented.
  */
-  #if ( M68K_COLDFIRE_ARCH == 0 && M68K_MC68060_ARCH == 0 )
+  #if ( !defined(__mcoldfire__) && M68K_MC68060_ARCH == 0 )
         cmpl    #_ISR_Handler,a7@(SAVED+PC_OFFSET)
         beq.b   exit        
   #endif
@@ -218,7 +218,7 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
         jsr SYM (_Thread_Dispatch)       | Perform context switch
 #endif
 
-#if ( M68K_COLDFIRE_ARCH == 0 )
+#if ( !defined(__mcoldfire__) )
 exit:   moveml  a7@+,d0-d1/a0-a1	 | restore d0-d1,a0-a1
 #else
 exit:	moveml	a7@,d0-d1/a0-a1		 | restore d0-d1,a0-a1
@@ -247,7 +247,7 @@ exit:	moveml	a7@,d0-d1/a0-a1		 | restore d0-d1,a0-a1
 
         .global SYM (_ISR_Dispatch)
 SYM (_ISR_Dispatch):
-#if ( M68K_COLDFIRE_ARCH == 0 )
+#if ( !defined(__mcoldfire__) )
         movml   d0-d1/a0-a1,a7@-
         jsr     SYM (_Thread_Dispatch)
         movml   a7@+,d0-d1/a0-a1

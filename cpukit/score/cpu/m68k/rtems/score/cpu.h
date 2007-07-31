@@ -436,7 +436,7 @@ void _CPU_Thread_Idle_body( void );
  *    + disable interrupts and halt the CPU
  */
 
-#if ( M68K_COLDFIRE_ARCH == 1 )
+#if ( defined(__mcoldfire__) )
 #define _CPU_Fatal_halt( _error ) \
   { asm volatile( "move.w %%sr,%%d0\n\t" \
 		  "or.l %2,%%d0\n\t" \
@@ -494,7 +494,7 @@ void _CPU_Thread_Idle_body( void );
 /* duplicates BFFFO results for 16 bits (i.e., 15-(_priority) in
    _CPU_Priority_bits_index is not needed), handles the 0 case, and
    does not molest _value -- jsg */
-#if ( M68K_COLDFIRE_ARCH == 1 )
+#if ( defined(__mcoldfire__) )
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
     extern const unsigned char __BFFFOtable[256]; \

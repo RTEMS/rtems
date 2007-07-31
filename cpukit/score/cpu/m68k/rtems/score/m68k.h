@@ -208,7 +208,6 @@ extern "C" {
 #define M68K_HAS_MISALIGNED      1
 #define M68K_HAS_FPU             0
 #define M68K_HAS_FPSP_PACKAGE    0
-#define M68K_COLDFIRE_ARCH       1
 #define M68K_HAS_ISA_APLUS       1
 
 #elif defined(__mcf5200__)
@@ -222,7 +221,6 @@ extern "C" {
 #define M68K_HAS_MISALIGNED      1
 #define M68K_HAS_FPU             0
 #define M68K_HAS_FPSP_PACKAGE    0
-#define M68K_COLDFIRE_ARCH       1
 #define M68K_HAS_ISA_APLUS       0
 
 #elif defined(__mc68000__)
@@ -254,19 +252,20 @@ extern "C" {
 #endif
 
 /*
- *  If the above did not specify a ColdFire architecture, then set
- *  this flag to indicate that it is not a ColdFire CPU.
+ * OBSOLETE: Backward compatibility only - Don't use.
+ * Use __mcoldfire__ instead.
  */
-
-#if !defined(M68K_COLDFIRE_ARCH)
-#define M68K_COLDFIRE_ARCH       0
+#if defined(__mcoldfire__)
+#define M68K_COLDFIRE_ARCH      1
+#else
+#define M68K_COLDFIRE_ARCH	0
 #endif
 
 /*
  *  Define the name of the CPU family.
  */
 
-#if ( M68K_COLDFIRE_ARCH == 1 )
+#if ( defined(__mcoldfire__) )
   #define CPU_NAME "Motorola ColdFire"
 #else
   #define CPU_NAME "Motorola MC68xxx"
@@ -274,7 +273,7 @@ extern "C" {
 
 #ifndef ASM
 
-#if ( M68K_COLDFIRE_ARCH == 1 )
+#if ( defined(__mcoldfire__) )
 #define m68k_disable_interrupts( _level ) \
    do { register uint32_t   _tmpsr = 0x0700; \
         asm volatile ( "move.w %%sr,%0\n\t" \
@@ -294,7 +293,7 @@ extern "C" {
 #define m68k_enable_interrupts( _level ) \
   asm volatile ( "move.w  %0,%%sr " : : "d" (_level) : "cc");
 
-#if ( M68K_COLDFIRE_ARCH == 1 )
+#if ( defined(__mcoldfire__) )
 #define m68k_flash_interrupts( _level ) \
    do { register uint32_t   _tmpsr = 0x0700; \
 	asm volatile ( "move.w %2,%%sr\n\t" \
@@ -328,14 +327,14 @@ extern "C" {
     asm volatile( "move.w  %0,%%sr" : : "d" (_tmpsr)); \
   } while (0)
 
-#if ( M68K_HAS_VBR == 1 && M68K_COLDFIRE_ARCH == 0 )
+#if ( M68K_HAS_VBR == 1 && !defined(__mcoldfire__) )
 #define m68k_get_vbr( vbr ) \
   asm volatile ( "movec   %%vbr,%0 " : "=r" (vbr))
 
 #define m68k_set_vbr( vbr ) \
   asm volatile ( "movec   %0,%%vbr " : : "r" (vbr))
 
-#elif ( M68K_COLDFIRE_ARCH == 1 )
+#elif ( defined(__mcoldfire__) )
 extern void*                     _VBR; 
 #define m68k_get_vbr( _vbr ) _vbr = &_VBR
 
@@ -354,7 +353,7 @@ extern void*                     _VBR;
  *  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
  */
-#if ( M68K_COLDFIRE_ARCH == 1 )
+#if ( defined(__mcoldfire__) )
 
 /* There are no rotate commands in Coldfire architecture. We will use
  * generic implementation of endian swapping for Coldfire.
