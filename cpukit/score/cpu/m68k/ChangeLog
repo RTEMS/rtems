@@ -1,3 +1,8 @@
+2007-07-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cpu_asm.S, rtems/score/cpu.h, rtems/score/m68k.h:
+	Replace M68K_COLDFIRE_ARCH with __mcoldfire__.
+
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/cpu.h: Remove CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES.
