@@ -1,3 +1,10 @@
+2007-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1249/build
+	* configure.ac: Jerry Needell <jerry.needell@unh.edu> reported that the
+	leon3 was left out of the cache enable logic. Thus the cache
+	management support code was empty on LEON3 CPUs.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
