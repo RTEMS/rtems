@@ -807,6 +807,7 @@ rtems_bsdnet_setup (void)
 	struct sockaddr_in broadcast;
 	struct sockaddr_in gateway;
 	int i;
+	int any_if_configured = 0;
 
 	/*
 	 * Set local parameters
@@ -883,6 +884,9 @@ rtems_bsdnet_setup (void)
 			printf ("Can't read %s flags: %s\n", ifp->name, strerror (errno));
 			continue;
 		}
+
+		any_if_configured = 1;
+
 		if (flags & IFF_BROADCAST) {
 			memset (&broadcast, '\0', sizeof broadcast);
 			broadcast.sin_len = sizeof broadcast;
@@ -904,7 +908,7 @@ rtems_bsdnet_setup (void)
 	/*
 	 * Set default route
 	 */
-	if (rtems_bsdnet_config.gateway) {
+	if (rtems_bsdnet_config.gateway && any_if_configured) {
 		address.sin_addr.s_addr = INADDR_ANY;
 		netmask.sin_addr.s_addr = INADDR_ANY;
 		memset (&gateway, '\0', sizeof gateway);
