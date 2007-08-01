@@ -1,3 +1,11 @@
+2007-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1248/networking
+	* libnetworking/rtems/rtems_glue.c: Luke Stras <luke@spacequest.com>
+	reported that when no interfaces are successfully attached, the
+	default route is broken and may result in a jump to an illegal
+	address.
+
 2007-07-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/inline/rtems/score/priority.inl: Use size_t instead of
