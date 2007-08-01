@@ -48,12 +48,12 @@ $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-if HAS_CXX
-$(PROJECT_LIB)/no-ctor.$(OBJEXT): no-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-ctor.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-ctor.$(OBJEXT)
-
-$(PROJECT_LIB)/rtems-ctor.$(OBJEXT): rtems-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
-endif
+##if HAS_CXX
+##$(PROJECT_LIB)/no-ctor.$(OBJEXT): no-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+##	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-ctor.$(OBJEXT)
+##TMPINSTALL_FILES += $(PROJECT_LIB)/no-ctor.$(OBJEXT)
+##
+##$(PROJECT_LIB)/rtems-ctor.$(OBJEXT): rtems-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+##	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
+##TMPINSTALL_FILES += $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
+##endif

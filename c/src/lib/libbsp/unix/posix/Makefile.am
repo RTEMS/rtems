@@ -42,9 +42,10 @@ noinst_LIBRARIES =
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c startup/setvec.c ../../shared/bootcard.c
-if !HAS_CXX
+## for now always using main.c style startup
+##if !HAS_CXX
 startup_rel_SOURCES += startup/main.c
-endif
+##endif
 
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

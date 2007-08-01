@@ -1,3 +1,8 @@
+2007-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, preinstall.am: You need main() to link all applications.
+	There is no C++ specific way to link currently.
+
 2007-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, startup/main.c: Now can link with C compiler and not
