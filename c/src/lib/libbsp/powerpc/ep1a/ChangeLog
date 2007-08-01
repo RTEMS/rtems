@@ -1,3 +1,7 @@
+2007-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, startup/bspstart.c: Use shared ShowBATS() method.
+
 2007-07-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* irq/irq_init.c: adapted to shared exception code

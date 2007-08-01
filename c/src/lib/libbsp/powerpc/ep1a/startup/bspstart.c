@@ -40,34 +40,14 @@ extern void bsp_cleanup(void);
 extern Triv121PgTbl BSP_pgtbl_setup();
 extern void BSP_pgtbl_activate();
 extern void BSP_vme_config();
+extern void ShowBATS();
 unsigned int rsPMCQ1Init();
 
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
-void ShowBATS(){
-  uint32_t lower;
-  uint32_t upper;
-
-  __MFSPR(536, upper);
-  __MFSPR(537, lower);
-  printk("BAT0 %08x %08x\n", upper, lower );
- 
-  __MFSPR(538, upper);
-  __MFSPR(539, lower);
-  printk("BAT1 %08x %08x\n", upper, lower );
-                                                                                                                 
-  __MFSPR(540, upper);
-  __MFSPR(541, lower);
-  printk("BAT2 %08x %08x\n", upper, lower );
-                                                                                                                 
-  __MFSPR(542, upper);
-  __MFSPR(543, lower);
-  printk("BAT3 %08x %08x\n", upper, lower );
-                                                                                                                 
-}
-
 uint8_t LightIdx = 0;
+
 void BSP_Increment_Light(){
   uint8_t data;
   data = *GENERAL_REGISTER1;

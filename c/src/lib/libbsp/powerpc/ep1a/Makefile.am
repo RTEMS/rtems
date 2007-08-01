@@ -29,7 +29,8 @@ startup_rel_SOURCES = startup/bspstart.c ../../shared/bootcard.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bspclean.c \
     ../../shared/gnatinstallhandler.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
-    ../../powerpc/shared/startup/pgtbl_activate.c
+    ../../powerpc/shared/startup/pgtbl_activate.c \
+    ../../powerpc/shared/showbats.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
