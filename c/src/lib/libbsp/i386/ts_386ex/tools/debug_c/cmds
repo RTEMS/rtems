@@ -124,9 +124,6 @@ dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/libnetworking/rtems_servers
 dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/libnetworking/sys
 dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/libnetworking/vm
 dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/libnetworking/wrapup
-dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/librdbg
-dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/librdbg/i386
-dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/librdbg/i386/pc386
 dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/librpc
 dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/librtems++
 dir /usr/local/rtems/tools/rtems-19990709/c/src/lib/start
