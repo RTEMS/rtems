@@ -60,7 +60,6 @@ rtems-$(rtems_version)$(TAG_SUFFIX).tar.bz2: rtems-$(rtems_version)/stamp.autofi
 rtems-$(rtems_version)/stamp.cleanup: rtems-$(rtems_version)/stamp.export.$(rtems_tag)$(TAG_SUFFIX)
 	find rtems-$(rtems_version) -name .cvsignore -exec rm -f {} \;
 	find rtems-$(rtems_version) -name preinstall.am -exec touch {} \;
-	touch rtems-$(rtems_version)/c/src/librdbg/src/*/*/remdeb*.[hc]
 	rm -rf rtems-$(rtems_version)/contrib
 	touch rtems-$(rtems_version)/stamp.cleanup
 

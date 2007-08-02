@@ -1,3 +1,8 @@
+2007-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.maint, configure.ac, release_support: Remove RDBG.
+	* aclocal/enable-rdbg.m4: Removed.
+
 2007-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4, README.configure:
