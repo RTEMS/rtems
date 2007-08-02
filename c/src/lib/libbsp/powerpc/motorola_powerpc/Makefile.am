@@ -41,6 +41,7 @@ dist_project_lib_DATA += ../shared/startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../powerpc/shared/startup/bspstart.c \
+ 	../../powerpc/shared/showbats.c \
  	../../powerpc/shared/startup/pretaskinghook.c \
  	../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \

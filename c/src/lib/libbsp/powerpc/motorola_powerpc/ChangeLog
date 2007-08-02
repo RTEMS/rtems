@@ -1,3 +1,8 @@
+2007-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: ShowBATS() split out to helper routine so sharable by
+	more BSPs.
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove qrtems_debug.
