@@ -1,3 +1,9 @@
+2007-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/startup/bspstart.c: Split out ShowBATS() so it can be shared
+	by more BSPs.
+	* shared/showbats.c: New file.
+
 2007-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* acinclude.m4, gen83xx/:
