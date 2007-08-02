@@ -1,3 +1,7 @@
+2007-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac: Remove RDBG.
+
 2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* target.cfg.in: region, extension and semaphore are no longer
