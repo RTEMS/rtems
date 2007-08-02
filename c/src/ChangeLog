@@ -1,3 +1,31 @@
+2007-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac, wrapup/Makefile.am: Remove RDBG.
+	* aclocal/check-rdbg.m4, aclocal/enable-rdbg.m4, librdbg/.cvsignore,
+	librdbg/Makefile.am, librdbg/preinstall.am,
+	librdbg/include/rdbg/rdbg.h, librdbg/include/rdbg/servrpc.h,
+	librdbg/include/rdbg/i386/rdbg_f.h, librdbg/include/rdbg/i386/reg.h,
+	librdbg/include/rdbg/m68k/rdbg_f.h, librdbg/include/rdbg/m68k/reg.h,
+	librdbg/include/rdbg/powerpc/rdbg_f.h,
+	librdbg/include/rdbg/powerpc/reg.h, librdbg/src/_servtgt.c,
+	librdbg/src/awk.svc, librdbg/src/excep.c, librdbg/src/ptrace.c,
+	librdbg/src/rdbg.c, librdbg/src/remdeb.x, librdbg/src/servbkpt.c,
+	librdbg/src/servcon.c, librdbg/src/servrpc.c, librdbg/src/servtgt.c,
+	librdbg/src/servtsp.c, librdbg/src/servutil.c,
+	librdbg/src/i386/excep_f.c, librdbg/src/i386/rdbg_cpu_asm.S,
+	librdbg/src/i386/rdbg_f.c, librdbg/src/i386/any/remdeb.h,
+	librdbg/src/i386/any/remdeb_f.x, librdbg/src/i386/any/remdeb_svc.c,
+	librdbg/src/i386/any/remdeb_xdr.c, librdbg/src/m68k/excep_f.c,
+	librdbg/src/m68k/rdbg_cpu_asm.S, librdbg/src/m68k/rdbg_f.c,
+	librdbg/src/m68k/any/remdeb.h, librdbg/src/m68k/any/remdeb_f.x,
+	librdbg/src/m68k/any/remdeb_svc.c, librdbg/src/m68k/any/remdeb_xdr.c,
+	librdbg/src/powerpc/excep_f.c, librdbg/src/powerpc/rdbg_cpu_asm.S,
+	librdbg/src/powerpc/rdbg_f.c,
+	librdbg/src/powerpc/new_exception_processing/remdeb.h,
+	librdbg/src/powerpc/new_exception_processing/remdeb_f.x,
+	librdbg/src/powerpc/new_exception_processing/remdeb_svc.c,
+	librdbg/src/powerpc/new_exception_processing/remdeb_xdr.c: Removed.
+
 2007-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* nfsclient/src/dirutils.c: Use PATH_MAX instead of MAXPATHLEN.

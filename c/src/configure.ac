@@ -9,7 +9,6 @@ RTEMS_TOP(../..)
 
 RTEMS_ENABLE_CXX
 RTEMS_ENABLE_NETWORKING
-RTEMS_ENABLE_RDBG
 
 RTEMS_CANONICAL_TARGET_CPU
 
@@ -105,12 +104,6 @@ AM_PROG_CC_C_O
 RTEMS_PROG_CCAS
 RTEMS_CANONICALIZE_TOOLS
 
-AS_IF([test "$HAS_NETWORKING" = "yes"],[
-  AS_IF([test "$RTEMS_HAS_RDBG" = "yes"],[
-    RTEMS_CHECK_RDBG(RTEMS_BSP)
-  ])
-])
-
 RTEMS_CHECK_GCC_WEAK
 
 AC_SUBST(CUSTOM_CFG_FILES)
@@ -152,7 +145,6 @@ fi
 
 BSP_SUBDIRS="$BSP_SUBDIRS lib"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
-BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
 BSP_SUBDIRS="$BSP_SUBDIRS nfsclient"
 
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
@@ -220,15 +212,6 @@ AS_IF([test "$host_cpu" = sparc],[
 
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 
-# FIXME: This is sick
-AM_CONDITIONAL([HAS_RDBG],[test "$HAS_RDBG" = "yes"])
-AM_CONDITIONAL([HAS_RDBG_i386],[test "$HAS_RDBG" = "yes" \
- && test $RTEMS_CPU = "i386"])
-AM_CONDITIONAL([HAS_RDBG_m68k],[test "$HAS_RDBG" = "yes" \
- && test $RTEMS_CPU = "m68k"])
-AM_CONDITIONAL([HAS_RDBG_powerpc],[test "$HAS_RDBG" = "yes" \
- && test $RTEMS_CPU = "powerpc"])
-
 AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 
 # The posix bsp doesn't support libchip
@@ -258,8 +241,6 @@ AC_CONFIG_FILES([Makefile],
 
 AC_CONFIG_FILES([
 support/Makefile 
-
-librdbg/Makefile
 
 libchip/Makefile
 
