@@ -1,5 +1,10 @@
 2007-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* ide/pcmcia_ide.c: Added prototype of mpc5200_pcmciaide_dma_blockop to
+	eliminate warning.
+
+2007-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am: Add shared ShowBATS().
 	* startup/cpuinit.c: Split out BAT initialization into subroutine
 	that is defined based upon conditionals set.  More critically

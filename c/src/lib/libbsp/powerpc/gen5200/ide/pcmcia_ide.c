@@ -142,6 +142,8 @@ uint32_t mpc5200_pcmciaide_read_block_block_cnt  = 0;
 extern volatile uint32_t * mpc5200_ata_drive_regs[];
 extern uint32_t ata_pio_timings[2][6];
 
+void mpc5200_pcmciaide_dma_blockop(
+  boolean, int, uint16_t, blkdev_sg_buffer *, uint32_t *, uint32_t *);
 /*
  * support functions for PCMCIA IDE IF
  */
