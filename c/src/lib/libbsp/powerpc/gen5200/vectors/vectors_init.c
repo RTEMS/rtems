@@ -81,6 +81,8 @@ static rtems_raw_except_connect_data    exception_table[LAST_VALID_EXC + 1];
 
 exception_handler_t globalExceptHdl;
 
+extern void CPU_print_stack(void);
+
 void C_exception_handler(BSP_Exception_frame* excPtr)
 {
   int recoverable = 0;
@@ -200,6 +202,8 @@ void initialize_exceptions()
 
   if (!ppc_init_exceptions(&exception_config))
     BSP_panic("Exception handling initialization failed\n");
-  else
+
+  #if defined(SHOW_MORE_INIT_SETTINGS)
     printk("Exception handling initialization done\n");
+  #endif
 }

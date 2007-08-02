@@ -1,3 +1,15 @@
+2007-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add shared ShowBATS().
+	* startup/cpuinit.c: Split out BAT initialization into subroutine
+	that is defined based upon conditionals set.  More critically
+	added code to detect and correct for a buggy U-Boot found on
+	some Freescale LITE5200B boards which report Flash memory to
+	be for 32MB at 0xFF000000 instead of 0xFE000000.  If we use
+	the reported information, the system gives an exception just
+	after the BAT is programmed.
+	* vectors/vectors_init.c: Turn off message unless verbose is on.
+
 2007-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, vectors/vectors_init.c: Print stack trace on exception.

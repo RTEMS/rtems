@@ -92,6 +92,11 @@ void calc_dbat_regvals(BAT *bat_ptr,
   uint32_t end_addr;
 
   /*
+   * clear dbat
+   */
+  memset(bat_ptr, 0,sizeof(BAT));
+
+  /*
    * determine block mask, that overlaps the whole block
    */
   end_addr = base_addr+size-1;
@@ -113,26 +118,11 @@ void calc_dbat_regvals(BAT *bat_ptr,
   bat_ptr->batl.pp = flg_bpp; 
 }
 
-void cpu_init(void)
-  {
-  register unsigned long reg;
+#if defined (BRS5L)
+void cpu_init_bsp(void)
+{
   BAT dbat;
 
-  /*
-   * clear dbat
-   */
-  memset(&dbat, 0,sizeof(dbat));
-
-  /* enable instruction cache */
-  GET_HID0(reg);
-  reg |= HID0_ICE;
-  SET_HID0(reg);
-
-  
-  /*
-   * set up DBAT registers in MMU
-   */
-#if defined (BRS5L)
   calc_dbat_regvals(&dbat,RAM_START,RAM_SIZE,1,0,0,0,BPP_RW);
   SET_DBAT(0,dbat.batu,dbat.batl);
 
@@ -144,23 +134,50 @@ void cpu_init(void)
 
   calc_dbat_regvals(&dbat,DPRAM_START,128*1024,1,1,1,1,BPP_RW);
   SET_DBAT(3,dbat.batu,dbat.batl);
-#endif
-#if defined (HAS_UBOOT)
+}
+#elif defined (HAS_UBOOT)
+void cpu_init_bsp(void)
+{
+  BAT dbat;
+  
+  /*
+   * Program BAT0 for RAM
+   */
   calc_dbat_regvals(&dbat,
 		    uboot_bdinfo_ptr->bi_memstart,
 		    uboot_bdinfo_ptr->bi_memsize,
 		    1,0,0,0,BPP_RW);
   SET_DBAT(0,dbat.batu,dbat.batl);
 
-  calc_dbat_regvals(&dbat,
-		    uboot_bdinfo_ptr->bi_flashstart,
-		    uboot_bdinfo_ptr->bi_flashsize,
-		    1,0,0,0,BPP_RX);
+  /*
+   * Program BAT1 for Flash
+   *
+   * WARNING!! Some Freescale LITE5200B boards ship with a version of
+   * U-Boot that lies about the starting address of Flash.  This check
+   * corrects that.
+   */
+  if ( (uboot_bdinfo_ptr->bi_flashstart + uboot_bdinfo_ptr->bi_flashsize) <
+	uboot_bdinfo_ptr->bi_flashstart ) {
+    uint32_t start = 0 - uboot_bdinfo_ptr->bi_flashsize;
+    calc_dbat_regvals(&dbat,
+		      start, uboot_bdinfo_ptr->bi_flashsize, 1,0,0,0,BPP_RX);
+  } else {
+    calc_dbat_regvals(&dbat,
+		      uboot_bdinfo_ptr->bi_flashstart,
+		      uboot_bdinfo_ptr->bi_flashsize,
+		      1,0,0,0,BPP_RX);
+  }
   SET_DBAT(1,dbat.batu,dbat.batl);
 
+  /*
+   * Program BAT2 for the MBAR
+   */
   calc_dbat_regvals(&dbat,MBAR,128*1024,1,1,1,1,BPP_RW);
   SET_DBAT(2,dbat.batu,dbat.batl);
 
+  /*
+   * If there is SRAM, program BAT3 for that memory
+   */
   if (uboot_bdinfo_ptr->bi_sramsize != 0) {
     calc_dbat_regvals(&dbat,
 		      uboot_bdinfo_ptr->bi_sramstart,
@@ -168,19 +185,46 @@ void cpu_init(void)
 		      0,1,1,1,BPP_RW);
     SET_DBAT(3,dbat.batu,dbat.batl);
   }
+}
+#else
+#warning "Using BAT register values set by environment"
 #endif
+
+
+
+void cpu_init(void)
+{
+  register unsigned long reg;
+
+  /*
+   * Enable instruction cache
+   */
+  GET_HID0(reg);
+  reg |= HID0_ICE;
+  SET_HID0(reg);
+
+  /*
+   * set up DBAT registers in MMU
+   */
+  cpu_init_bsp();
+
+  #if defined(SHOW_MORE_INIT_SETTINGS)
+    { extern void ShowBATS(void);
+      ShowBATS();
+    }
+  #endif
 
   /*
    * enable data MMU in MSR
    */
   _write_MSR(_read_MSR() | MSR_DR);
 
-#if 1 /* TRACE32 now supports data cache for MGT5x00 */
   /* 
    * enable data cache 
+   *
+   * NOTE: TRACE32 now supports data cache for MGT5x00
    */
   GET_HID0(reg);
   reg |= HID0_DCE;
   SET_HID0(reg);
-#endif
-  }
+}
