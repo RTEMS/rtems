@@ -258,11 +258,6 @@ This directory contains the networking components which
 might be tailored based upon the particular BSP.  This
 includes the RTEMS telnetd, httpd, and ftpd servers.
 
-@item $@{RTEMS_ROOT@}/c/src/librdbg/
-This directory contains the Ethernet-based remote debugging
-stub.  This software must be built to be intimately aware
-of a particular CPU model.
-
 @item $@{RTEMS_ROOT@}/c/src/librtems++/
 This directory contains C++ classes which map to the RTEMS
 Classic API.

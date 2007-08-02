@@ -1,2 +1,0 @@
-Figure: Debug session initialization.
-       (Not available in ASCII version of this document.)

@@ -209,8 +209,6 @@ filesystem/Makefile
 itron3.0/Makefile
 ada_user/Makefile
 started_ada/Makefile
-rtems_gdb/Makefile
-rgdb_specs/Makefile
 relnotes/Makefile
 new_chapters/Makefile
 cpu_supplement/Makefile

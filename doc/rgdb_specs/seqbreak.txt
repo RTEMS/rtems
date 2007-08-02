@@ -1,2 +1,0 @@
-Figure: Breakpoint and process execution.
-       (Not available in ASCII version of this document.)

@@ -1,2 +1,0 @@
-Figure: Remote debugger tasks and handlers.
-       (Not available in ASCII version of this document.)

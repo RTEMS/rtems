@@ -1,3 +1,22 @@
+2007-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac, develenv/direct.t: Remove RDBG.
+	* rgdb_specs/.cvsignore, rgdb_specs/Makefile.am, rgdb_specs/comm.t,
+	rgdb_specs/conclusion.t, rgdb_specs/daemon.t,
+	rgdb_specs/gdbinternals.t, rgdb_specs/interfacing.t,
+	rgdb_specs/intro.t, rgdb_specs/layers.eps, rgdb_specs/layers.jpg,
+	rgdb_specs/layers.txt, rgdb_specs/objectives.t,
+	rgdb_specs/process.eps, rgdb_specs/process.jpg,
+	rgdb_specs/process.txt, rgdb_specs/revision.t,
+	rgdb_specs/rgdb_specs.texi, rgdb_specs/seqbreak.eps,
+	rgdb_specs/seqbreak.jpg, rgdb_specs/seqbreak.txt,
+	rgdb_specs/seqdetach.eps, rgdb_specs/seqdetach.jpg,
+	rgdb_specs/seqdetach.txt, rgdb_specs/seqinit.eps,
+	rgdb_specs/seqinit.jpg, rgdb_specs/seqinit.txt, rtems_gdb/.cvsignore,
+	rtems_gdb/Makefile.am, rtems_gdb/commands.t, rtems_gdb/example.t,
+	rtems_gdb/intro.t, rtems_gdb/rtems_gdb.texi, rtems_gdb/started.t,
+	rtems_gdb/swarch.t, rtems_gdb/trouble.t: Removed.
+
 2007-06-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* ada_user/ada_user.texi, bsp_howto/bsp_howto.texi,
