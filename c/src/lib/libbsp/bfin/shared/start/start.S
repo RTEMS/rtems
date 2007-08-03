@@ -52,7 +52,7 @@ __start:
 
     RAISE 15;
     
-    PO.l = WAIT;
+    P0.l = WAIT;
     P0.h = WAIT;
 
     RETI = P0;
