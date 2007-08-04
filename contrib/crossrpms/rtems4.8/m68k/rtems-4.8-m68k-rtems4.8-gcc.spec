@@ -26,7 +26,7 @@ Summary:      	m68k-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	20%{?dist}
+Release:      	22%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -71,7 +71,7 @@ Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070613.diff
 %endif
 %if "%{gcc_version}" == "4.2.1"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.1-rtems4.8-20070719.diff
+Patch0:		gcc-core-4.2.1-rtems4.8-20070804.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
@@ -80,7 +80,7 @@ Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-g++-%{gcc_pkgvers}.ta
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.15.0"
-Patch50:	newlib-1.15.0-rtems4.8-20070413.diff
+Patch50:	newlib-1.15.0-rtems4.8-20070804.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
