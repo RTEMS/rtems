@@ -1,3 +1,7 @@
+2007-08-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/cpu.h: Use uintptr_t instead of uint32_t.
+
 2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/cpu.h: Remove CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES.
