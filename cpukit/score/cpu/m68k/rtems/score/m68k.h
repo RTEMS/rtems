@@ -223,6 +223,49 @@ extern "C" {
 #define M68K_HAS_FPSP_PACKAGE    0
 #define M68K_HAS_ISA_APLUS       0
 
+#elif defined(__mcf5307__)
+/* UNCHECKED */
+/* Motorola ColdFire 5307 */ 
+#define CPU_MODEL_NAME         "m5307"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_PREINDEXING     0
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+#define M68K_HAS_FPU             0
+#define M68K_HAS_FPSP_PACKAGE    0
+#define M68K_HAS_ISA_APLUS       0
+
+#elif defined(__mcf5407__)
+#if defined(__mcfv4e__)
+/* UNCHECKED */
+/* Motorola ColdFire V4e */ 
+#define CPU_MODEL_NAME         "mcfv4e"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_PREINDEXING     0
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+#define M68K_HAS_FPU             0
+#define M68K_HAS_FPSP_PACKAGE    0
+#define M68K_HAS_ISA_APLUS       0
+#else
+/* UNCHECKED */
+/* Motorola ColdFire 5407 */ 
+#define CPU_MODEL_NAME         "m5407"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_PREINDEXING     0
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+#define M68K_HAS_FPU             0
+#define M68K_HAS_FPSP_PACKAGE    0
+#define M68K_HAS_ISA_APLUS       0
+#endif
+
 #elif defined(__mc68000__)
  
 #define CPU_MODEL_NAME          "m68000"

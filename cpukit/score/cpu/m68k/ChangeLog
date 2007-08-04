@@ -1,3 +1,7 @@
+2007-08-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/m68k.h: Add stubs for mcf5307, mcf5407, mcfv4e.
+
 2007-07-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* cpu_asm.S, rtems/score/cpu.h, rtems/score/m68k.h:
