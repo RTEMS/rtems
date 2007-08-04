@@ -890,9 +890,9 @@ void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, _isr, _entry_point, _is_fp ) \
   { \
- 	uint32_t   _stack_tmp = \
-           (uint32_t  )(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
-        uint32_t   _intlvl = _isr & 0xff; \
+ 	uintptr_t  _stack_tmp = \
+           (uintptr_t)(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
+        uintptr_t  _intlvl = _isr & 0xff; \
   	_stack_tmp &= ~(CPU_STACK_ALIGNMENT - 1); \
   	(_the_context)->sp = _stack_tmp; \
   	(_the_context)->fp = _stack_tmp; \
