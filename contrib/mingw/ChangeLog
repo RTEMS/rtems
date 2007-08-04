@@ -1,3 +1,18 @@
+2007-08-03	Chris Johns <chisj@rtems.org>
+	* rtems_logo.bmp: Clipped to get the correct proportions
+	in the installer's header.
+
+	* upload.sh: Install only the specific build installers.
+
+	* rtems.ini: Change to show the actual web paths.
+
+	* version: Build 15.
+
+	* build-exes.sh, msys-path.nsi, rtems-autotools.nsi,
+	rtems-tools.nsi: Fixed MSYS path detection. Fixed the uninstaller
+	registry data. Changed the way the top level is generated. Now all
+	the sections are added no matter what target is specified.
+
 2007-07-28	Chris Johns <chisj@rtems.org>
 	* README, build-rpms.sh, rtems.ini, build-exes.sh,
 	rtems-tools.nsi: Updated to the new 4.8 build plus a new

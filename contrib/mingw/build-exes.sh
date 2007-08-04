@@ -8,7 +8,7 @@
 # script.
 #
 
-echo $*
+echo $0 $*
 
 source=$(dirname $0)
 
@@ -130,16 +130,97 @@ get_rpm_list()
 }
 
 #
+# Write target installer code.
+#
+# $1 - target
+# $2 - target section test
+# $3 - size of the tools
+# $4 - Installer output file name
+# $5 - Output file
+# 
+target_installer_exec()
+{
+  local t=$1
+  local tst=$2
+  local size_in_k=$3
+  local outfile=$4
+  local of=$5
+
+  echo "" >> $of
+  echo "; Target: $t" >> $of
+  echo "Section \"${!tst}\" Section_$t" >> $of
+  echo " AddSize $size_in_k" >> $of
+  echo " StrCpy \$1 \$EXEDIR\\$outfile" >> $of
+  echo " DetailPrint \"Checking for \$1\"" >> $of
+  echo " IfFileExists \$1 ${t}_found" >> $of
+  echo " StrCpy \$1 \$INSTDIR\\Packages\\$outfile" >> $of
+  echo " DetailPrint \"Checking for \$1\"" >> $of
+  echo " IfFileExists \$1 ${t}_found" >> $of
+  echo "  SetOutPath \"\$INSTDIR\Packages\"" >> $of
+  echo "  DetailPrint \"Downloading $rtems_url/$outfile\"" >> $of
+  echo "  NSISdl::download $rtems_url/$outfile $outfile" >> $of
+  echo "  Pop \$R0" >> $of
+  echo "  StrCmp \$R0 \"success\" ${t}_found_2 ${t}_not_found_2" >> $of
+  echo " ${t}_not_found_2:" >> $of
+  echo "   SetDetailsView show" >> $of
+  echo "   DetailPrint \"Download failed: \$R0\"" >> $of
+  echo "   MessageBox MB_OK \"Download failed: \$R0\"" >> $of
+  echo "   Goto ${t}_done" >> $of
+  echo " ${t}_found_2:" >> $of
+  echo "   Strcpy \$1 \"\$INSTDIR\\Packages\\$outfile\"" >> $of
+  echo " ${t}_found:" >> $of
+  echo "  DetailPrint \"Installing: \$1\"" >> $of
+  echo "  ExecWait '\"\$1\" /S /D=\$INSTDIR' \$0" >> $of
+  echo "  BringToFront" >> $of
+  echo "  IntCmp \$0 0 +3" >> $of
+  echo "   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \"${!tst} install failed. Do you wish to continue ?\" IDYES +2" >> $of
+  echo "   Abort" >> $of
+  echo " ${t}_done:" >> $of
+  echo "SectionEnd" >> $of
+}
+
+#
+# Get the size if kilo-bytes of the package as the listed files.
+#
+# $1 - relocation directory of installed files.
+#
+get_size_in_k()
+{
+  if [ ! -d $1 ]; then
+    terminate "target directory not found: $1"
+  fi
+  if [ ! -f $1/files.txt ]; then
+    terminate "target files not found: $1/files.txt"
+  fi
+
+  local here=$(pwd)
+  check "getting the current directory"
+  cd $1
+  check "changing directory: $1"
+
+  local size_in_k=$(du -c -k $(cat files.txt) | grep total | sed -e "s/\t.*//g")
+  check "getting total size"
+
+  cd $here
+  check "changing directory: $here"
+
+  echo $size_in_k
+}
+
+#
 # Create the installer given the architecture and package.
 #
 # $1 - architecture/processor
 # $2 - package
 # $3 - package name
+# $4 - outfile
+#
 create_installer()
 {
   local p=$1
   local t=$2
   local n=$3
+  local outfile=$4
 
   rpm_options="--ignoreos --force --nodeps --noorder "
 
@@ -173,6 +254,8 @@ create_installer()
 
    echo "$files" > $treloc/files.txt
    check "write the file list"
+
+   size_in_k=$(get_size_in_k $treloc)
 
    of=$treloc/rtems-files.nsi
 
@@ -265,8 +348,6 @@ create_installer()
    $mkdir -p $rtems_binary
    check "make the RTEMS binary install point: $rtems_binary"
 
-   outfile=rtems$version-tools-$n-$tool_build.exe
-
    of=$treloc/rtems.nsi
    echo "!define RTEMS_TARGET \"$n\"" > $of
    echo "!define RTEMS_VERSION \"$version\"" >> $of
@@ -279,6 +360,7 @@ create_installer()
    echo "!define RTEMS_LICENSE_FILE \"$source/rtems-license.rtf\"" >> $of
    echo "!define RTEMS_OUTFILE \"$outfile\"" >> $of
    echo "!define TOOL_PREFIX \"$prefix\"" >> $of
+   echo "!define RTEMS_TOOLS_SIZE \"$size_in_k\"" >> $of
 
    if [ $n = $common_label ]; then
      echo "!define COMMON_FILES" >> $of
@@ -295,41 +377,7 @@ create_installer()
    $cp $source/rtems.ini $treloc/rtems.ini
    check "coping the dialog definition file: $treloc/rtems.ini"
 
-   echo "makensis $of"
-   $makensis $of
-   check "making the installer: $of"
-
-   if [ $n != $common_label ]; then
-     of=$relocation/rtems-sections.nsi
-     tst=${t}_section_text
-     echo "" >> $of
-     echo "; Target: $t" >> $of
-     echo "Section \"${!tst}\" Section_$t" >> $of
-     echo " StrCpy \$1 \$EXEDIR\\$outfile" >> $of
-     echo " DetailPrint \"Checking for \$1\"" >> $of
-     echo " IfFileExists \$1 ${t}_found" >> $of
-     echo " StrCpy \$1 \$INSTDIR\\Packages\\$outfile" >> $of
-     echo " DetailPrint \"Checking for \$1\"" >> $of
-     echo " IfFileExists \$1 ${t}_found" >> $of
-     echo "  SetOutPath \"\$INSTDIR\\Packages\"" >> $of
-     echo "  DetailPrint \"Downloading $rtems_url/$outfile\"" >> $of
-     echo "  NSISdl::download $rtems_url/$outfile $outfile" >> $of
-     echo "  Pop \$R0" >> $of
-     echo "  StrCmp \$R0 \"success\" ${t}_found_2 ${t}_not_found_2" >> $of
-     echo " ${t}_not_found_2:" >> $of
-     echo "   SetDetailsView show" >> $of
-     echo "   DetailPrint \"Download failed: \$R0\"" >> $of
-     echo "   MessageBox MB_OK \"Download failed: \$R0\"" >> $of
-     echo "   Goto ${t}_done" >> $of
-     echo " ${t}_found_2:" >> $of
-     echo "   Strcpy \$1 \"\$INSTDIR\\Packages\\$outfile\"" >> $of
-     echo " ${t}_found:" >> $of
-     echo "  DetailPrint \"Installing: \$1\"" >> $of
-     echo "  ExecWait '\"\$1\" /S'" >> $of
-     echo "  BringToFront" >> $of
-     echo " ${t}_done:" >> $of
-     echo "SectionEnd" >> $of
-   else
+   if [ $n = $common_label ]; then
      echo "Section -SecCommon" >> $of
      echo " SetOutPath \"\$INSTDIR"\" >> $of
      echo " File \"\${RTEMS_SOURCE}/AUTHORS"\" >> $of
@@ -337,6 +385,11 @@ create_installer()
      echo " File \"\${RTEMS_SOURCE}/README\"" >> $of
      echo "SectionEnd" >> $of
    fi
+
+   echo "makensis $of"
+   $makensis $of
+   check "making the installer: $of"
+
   fi
 }
 
@@ -360,6 +413,8 @@ create_autotools_installer()
   $mkdir -p $rtems_binary
   check "make the RTEMS binary install point: $rtems_binary"
 
+  size_in_k=2000
+
   outfile=rtems$version-tools-$n-$tool_build.exe
 
   of=$treloc/rtems.nsi
@@ -374,6 +429,7 @@ create_autotools_installer()
   echo "!define RTEMS_LICENSE_FILE \"$source/rtems-license.rtf\"" >> $of
   echo "!define RTEMS_OUTFILE \"$outfile\"" >> $of
   echo "!define TOOL_PREFIX \"$prefix\"" >> $of
+  echo "!define RTEMS_TOOLS_SIZE \"$size_in_k\"" >> $of
 
   . $source/autoconf.def
 
@@ -420,32 +476,6 @@ create_autotools_installer()
   echo "makensis $of"
   $makensis $of
   check "making the installer: $of"
-
-  of=$relocation/rtems-sections.nsi
-  tst=${t}_section_text
-  echo "" >> $of
-  echo "; Target: $t" >> $of
-  echo "Section \"${!tst}\" Section_$t" >> $of
-  echo " StrCpy \$1 \$EXEDIR\\$outfile" >> $of
-  echo " IfFileExists \$1 ${t}_found" >> $of
-  echo "  SetOutPath \"\$INSTDIR\Packages\"" >> $of
-  echo "  DetailPrint \"Downloading $rtems_url/$outfile\"" >> $of
-  echo "  NSISdl::download $rtems_url/$outfile $outfile" >> $of
-  echo "  Pop \$R0" >> $of
-  echo "  StrCmp \$R0 \"success\" ${t}_found_2 ${t}_not_found_2" >> $of
-  echo " ${t}_not_found_2:" >> $of
-  echo "   SetDetailsView show" >> $of
-  echo "   DetailPrint \"Download failed: \$R0\"" >> $of
-  echo "   MessageBox MB_OK \"Download failed: \$R0\"" >> $of
-  echo "   Goto ${t}_done" >> $of
-  echo " ${t}_found_2:" >> $of
-  echo "   Strcpy \$1 \"\$INSTDIR\\Packages\\$outfile\"" >> $of
-  echo " ${t}_found:" >> $of
-  echo "  DetailPrint \"Installing: \$1\"" >> $of
-  echo "  ExecWait '\"\$1\" /S'" >> $of
-  echo "  BringToFront" >> $of
-  echo " ${t}_done:" >> $of
-  echo "SectionEnd" >> $of
 }
 
 #
@@ -455,10 +485,20 @@ for p in $mingw32_cpu_list
 do
  echo "; Components based on each target." > $relocation/rtems-sections.nsi
  create_autotools_installer noarch auto autotools
+ target_installer_exec auto auto_section_text 2000 \
+                       rtems$version-tools-autotools-$tool_build.exe \
+                       $relocation/rtems-sections.nsi
  for t in $targets
  do
-  create_installer $p $t $t
+  create_installer $p $t $t rtems$version-tools-$t-$tool_build.exe
+ done
+ for t in $(cat $source/targets)
+ do
+  target_installer_exec $t ${t}_section_text \
+                        $(get_size_in_k $relocation/$t) \
+                        rtems$version-tools-$t-$tool_build.exe \
+                        $relocation/rtems-sections.nsi
  done
  # Must be done last
- create_installer $p $common_label $common_label
+ create_installer $p $common_label $common_label $version-tools-$tool_build.exe
 done

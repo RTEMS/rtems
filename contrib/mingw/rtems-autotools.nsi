@@ -70,13 +70,16 @@ CRCCheck force
 
 Section "RTEMS ${RTEMS_TARGET} Tools" SecTools
  SetDetailsView show
+ AddSize ${RTEMS_TOOLS_SIZE}
 
  /*
   * Detect if MSYS is installed.
   */
  Call MSYSDetect
  Pop $9
-
+ StrCmp $9 "not-found" 0 +3
+  MessageBox MB_OK "Could not find a valid MSYS. Please install from http://www.mingw.org/"
+  Abort
  SetOutPath "$INSTDIR\Uninstall"
  SetOutPath "$INSTDIR\Packages\Build"
  SetOutPath "$INSTDIR\Packages\Build"
@@ -351,13 +354,14 @@ done:
 FunctionEnd
 
 Section -Post
- WriteUninstaller "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
+ StrCpy $R0 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
+ WriteUninstaller "$R0"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                   "DisplayName" "$(^Name)"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                  "UninstallString" "$INSTDIR\uninst.exe"
+                  "UninstallString" "$R0"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                  "DisplayVersion" "${PRODUCT_VERSION}"
+                  "DisplayVersion" "${PRODUCT_VERSION} Build-${RTEMS_BUILD_VERSION}"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                   "URLInfoAbout" "${PRODUCT_WEB_SITE}"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \

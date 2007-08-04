@@ -47,13 +47,13 @@ Function MSYSDetect
   Call MsysPath
   Pop $R0
   ifErrors 0 +3
-   MessageBox MB_OK "MSYS Not Installed. Please install MSYS."
+   MessageBox MB_OK "MSYS Not Installed. Please install MSYS from http://www.mingw.org/"
    Abort
   DetailPrint "Checking Registry for MSYS DTK Installed Path"
   Call MsysDTKPath
   Pop $R1
   ifErrors 0 +3
-   MessageBox MB_OK "MSYS DTK Not Installed. Please install MSYS DTK."
+   MessageBox MB_OK "MSYS DTK Not Installed. Please install MSYS DTK from http://www.mingw.org/"
    Abort
   StrCmp $R0 $R1 +3 0
    MessageBox MB_OK "MSYS and MSYS DTK installed to different paths. This is not supported."
@@ -62,7 +62,7 @@ Function MSYSDetect
   Call MSYSCheckExes
   Pop $R0
   StrCmp $R0 "ok" Found
-   MessageBox MB_OK "MSYS Executable '$R0' not found. Please install."
+   MessageBox MB_OK "MSYS Executable '$R0' not found. Please install from http://www.mingw.org/"
    Abort
  Found:
   StrCpy $R0 $R1

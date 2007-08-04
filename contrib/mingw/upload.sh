@@ -78,7 +78,7 @@ srcbase=${prefix}/${version}/packages/mingw32/SRPMS
 mkdir -p ${ftpbase}/${version}/build-${tool_build}/source
 check "creating: ${ftpbase}/${version}/build-${tool_build}/source"
 
-exes=$(find $exebase -name \*.exe)
+exes=$(find $exebase -name \*-${tool_build}.exe)
 for e in $exes
 do
   echo "cp $e ${ftpbase}/${version}/build-${tool_build}/."

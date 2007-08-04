@@ -73,6 +73,7 @@ CRCCheck force
 !include "${RTEMS_SOURCE}/msys-path.nsi"
 
 Section -SecFiles
+ AddSize ${RTEMS_TOOLS_SIZE}
  !insertmacro RTEMS_INSTALL_FILES
 SectionEnd
 
@@ -269,16 +270,17 @@ SectionEnd
 
 Section -Post
 !ifdef COMMON_FILES
- WriteUninstaller "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-uninst.exe"
+ StrCpy $R0 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-uninst.exe"
 !else
- WriteUninstaller "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
+ StrCpy $R0 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
 !endif
+ WriteUninstaller "$R0"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                   "DisplayName" "$(^Name)"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                  "UninstallString" "$INSTDIR\uninst.exe"
+                  "UninstallString" "$R0"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                  "DisplayVersion" "${PRODUCT_VERSION}"
+                  "DisplayVersion" "${PRODUCT_VERSION} Build-${RTEMS_BUILD_VERSION}"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                   "URLInfoAbout" "${PRODUCT_WEB_SITE}"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
