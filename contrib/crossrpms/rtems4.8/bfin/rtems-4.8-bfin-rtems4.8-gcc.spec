@@ -14,9 +14,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.2.0
-%define gcc_version 4.2.0
-%define gcc_rpmvers %{expand:%(echo "4.2.0" | tr - _ )}
+%define gcc_pkgvers 4.2.1
+%define gcc_version 4.2.1
+%define gcc_rpmvers %{expand:%(echo "4.2.1" | tr - _ )}
 
 %define newlib_version		1.15.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -26,7 +26,7 @@ Summary:      	bfin-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	14%{?dist}
+Release:      	21%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -40,6 +40,7 @@ BuildRequires:	flex bison
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.8-bfin-rtems4.8-binutils
 
+Requires:	rtems-4.8-gcc-common
 Requires:	rtems-4.8-bfin-rtems4.8-binutils
 Requires:	rtems-4.8-bfin-rtems4.8-newlib = %{newlib_version}-%{release}
 
@@ -68,11 +69,15 @@ Patch0:		gcc-core-4.1.2-rtems4.8-20070613.diff
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070613.diff
 %endif
+%if "%{gcc_version}" == "4.2.1"
+Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		gcc-core-4.2.1-rtems4.8-20070719.diff
+%endif
 %{?_without_sources:NoSource:	0}
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.15.0"
-Patch50:	newlib-1.15.0-rtems4.8-20070413.diff
+Patch50:	newlib-1.15.0-rtems4.8-20070804.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -150,6 +155,7 @@ cd ..
 %endif
 
   make all
+  make info
   cd ..
 
 %install
@@ -180,11 +186,9 @@ cd ..
   rm -f $RPM_BUILD_ROOT%{_bindir}/bfin-rtems4.8-c++filt%{_exeext}
 
 
-# Conflict with a native GCC's infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
-
-# Conflict with a native GCC's man pages
-  rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
+  # We don't ship info/dir
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -365,7 +369,7 @@ GNU cc compiler for bfin-rtems4.8.
 
 %dir %{gcclib}/bfin-rtems4.8/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
-%if "bfin-rtems4.8" != "bfin-rtems4.7"
+%if "bfin-rtems4.8" != "bfin-rtems4.8"
 %dir %{gcclib}/bfin-rtems4.8/%{gcc_version}/include/ssp
 %endif
 %endif
@@ -375,6 +379,65 @@ GNU cc compiler for bfin-rtems4.8.
 %dir %{gccexec}/bfin-rtems4.8/%{gcc_version}
 %{gccexec}/bfin-rtems4.8/%{gcc_version}/cc1%{_exeext}
 %{gccexec}/bfin-rtems4.8/%{gcc_version}/collect2%{_exeext}
+
+# ==============================================================
+# rtems-4.8-gcc-common
+# ==============================================================
+%package -n rtems-4.8-gcc-common
+Summary:	Base package for rtems gcc and newlib C Library
+Group:          Development/Tools
+Version:        %{gcc_rpmvers}
+License:	GPL
+
+Requires(post): 	/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+%description -n rtems-4.8-gcc-common
+
+GCC files that are shared by all targets.
+
+%files -n rtems-4.8-gcc-common
+%defattr(-,root,root)
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/cpp.info*
+%{_infodir}/cppinternals.info*
+%{_infodir}/gcc.info*
+%{_infodir}/gccint.info*
+%if "%{gcc_version}" >= "3.4"
+%{_infodir}/gccinstall.info*
+%endif
+
+%dir %{_mandir}
+%if "%{gcc_version}" < "3.4"
+%dir %{_mandir}/man1
+%{_mandir}/man1/cpp.1*
+%{_mandir}/man1/gcov.1*
+%endif
+%dir %{_mandir}/man7
+%{_mandir}/man7/fsf-funding.7*
+%{_mandir}/man7/gfdl.7*
+%{_mandir}/man7/gpl.7*
+
+%post -n rtems-4.8-gcc-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cpp.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
+%if "%{gcc_version}" >= "3.4"
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
+%endif
+
+%preun -n rtems-4.8-gcc-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cpp.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
+%if "%{gcc_version}" >= "3.4"
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
+%endif
+fi
 
 
 
@@ -391,6 +454,7 @@ Version:	%{newlib_version}
 Provides:	rtems-4.8-bfin-rtems4.8-libc = %{newlib_version}-%{release}
 Obsoletes:	rtems-4.8-bfin-rtems4.8-libc < %{newlib_version}-%{release}
 
+Requires:	rtems-4.8-newlib-common
 
 %description -n rtems-4.8-bfin-rtems4.8-newlib
 Newlib C Library for bfin-rtems4.8.
@@ -400,4 +464,36 @@ Newlib C Library for bfin-rtems4.8.
 %dir %{_prefix}
 %dir %{_exec_prefix}/bfin-rtems4.8
 %{_exec_prefix}/bfin-rtems4.8/include
+
+# ==============================================================
+# rtems-4.8-newlib-common
+# ==============================================================
+%package -n rtems-4.8-newlib-common
+Summary:	Base package for RTEMS newlib C Library
+Group:          Development/Tools
+Version:        %{newlib_version}
+License:	Distributable
+
+Requires(post): 	/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+%description -n rtems-4.8-newlib-common
+newlib files that are shared by all targets.
+
+%files -n rtems-4.8-newlib-common
+%defattr(-,root,root)
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/libc.info*
+%{_infodir}/libm.info*
+
+%post -n rtems-4.8-newlib-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libc.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libm.info.gz || :
+
+%preun -n rtems-4.8-newlib-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libc.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/libm.info.gz || :
+fi
 
