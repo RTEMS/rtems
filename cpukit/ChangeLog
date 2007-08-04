@@ -1,8 +1,3 @@
-2007-08-04	Ralf Corsépius <ralf.corsepius@rtems.org>
-
-	* score/cpu/mips/rtems/score/cpu.h: Use uintptr_t instead of
-	  uint32_t.
-
 2007-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1248/networking
