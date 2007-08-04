@@ -8,7 +8,7 @@ HAS_MP = @HAS_MP@
 ##
 ## Does this BSP support RTEMS's remote debugger ?
 ##
-HAS_RDBG = @HAS_RDBG@
+HAS_RDBG = no
 
 ##
 ## Does this BSP support RTEMS's posix API ?
