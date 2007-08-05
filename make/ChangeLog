@@ -1,5 +1,6 @@
 2007-08-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* custom/mcf5235.cfg: Remove bogus -m5200 from linker calls.
 	* custom/av5282.cfg: Remove bogus -qnolinkcmds, -m5200 from linker
 	  calls.
 	* custom/gen83xx.cfg: Use -O2.
