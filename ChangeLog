@@ -1,3 +1,9 @@
+2007-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* README.configure, aclocal/bsp-alias.m4: Rename EP5200 to IceCube
+	since that is the nickname for the Freescale evaluation board it is
+	based upon. BSP was tested on a Freescale MPC5200LITE.
+
 2007-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.maint, configure.ac, release_support: Remove RDBG.
