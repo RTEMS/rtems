@@ -36,7 +36,7 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 dist_project_lib_DATA += startup/linkcmds.brs5l
-dist_project_lib_DATA += startup/linkcmds.ep5200
+dist_project_lib_DATA += startup/linkcmds.icecube
 dist_project_lib_DATA += startup/linkcmds.pm520
 
 noinst_PROGRAMS += bestcomm.rel

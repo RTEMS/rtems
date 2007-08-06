@@ -90,11 +90,12 @@
 #define	MBAR         0xF0000000
 #define HAS_UBOOT
 
-#elif defined (ep5200)
+#elif defined (icecube)
 /*
- *  Embedded Planet EP5200 -- should be the same as a Freescale 5200lite
- *  which is also known as the Ice Cube.  In the RTEMS configuration,
- *  we load U-Boot on it instead of the default dBug.
+ *  Codename: IceCube
+ *  Compatible Boards:
+ *     Freescape MPC5200LITE 
+ *     Embedded Planet EP5200
  */
 
 #define HAS_UBOOT

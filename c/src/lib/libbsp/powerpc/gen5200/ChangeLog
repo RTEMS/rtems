@@ -1,3 +1,10 @@
+2007-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, README.IceCube, preinstall.am, include/bsp.h,
+	vectors/vectors.S: Rename EP5200 to IceCube since that is the
+	nickname for the Freescale evaluation board it is based upon. BSP was
+	tested on a Freescale MPC5200LITE.
+
 2007-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ide/pcmcia_ide.c: Added prototype of mpc5200_pcmciaide_dma_blockop to

@@ -8,7 +8,7 @@ The most complete and up to date information will be found on the
 RTEMS Wiki.  We know of the following boards which are the IceCube:
 
  + FreeScale MPC5200LITE
- + Embedded Planets EP52000
+ + Embedded Planets EP52000 (does not ship with U-Boot)
 
 U-Boot supports this board very well. When using U-Boot the following
 command sequence is used to transform an ELF file into a U-Boot image.

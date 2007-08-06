@@ -198,7 +198,7 @@ SYM (push_normalized_frame):
 	SYNC
 	rfi
 
-#if !defined(ep5200)
+#if !defined(icecube)
 	.section .vectors,"awx",@progbits
 
         PUBLIC_VAR (__vectors)
