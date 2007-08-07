@@ -26,11 +26,13 @@ License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-%if "sparc-rtems4.8" == "i686-pc-cygwin"
+# Required for building the infos
+BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
-%endif
 BuildRequires:	flex
 BuildRequires:	bison
+
+Requires:	rtems-4.8-binutils-common
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	0}
@@ -72,6 +74,7 @@ cd ..
     --mandir=%{_mandir} --infodir=%{_infodir}
 
   make all
+  make info
   cd ..
 
 %install
@@ -87,9 +90,23 @@ cd ..
     exec_prefix=$RPM_BUILD_ROOT%{_exec_prefix} \
     install
 
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    exec_prefix=$RPM_BUILD_ROOT%{_exec_prefix} \
+    install-info
 
-# Conflict with a native binutils' infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
+# Dropped in FSF-binutils-2.9.5, but Cygwin still ships it.
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/configure.info*
+
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
+
+# binutils does not install share/locale, however it uses it
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}/share/locale
 
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
@@ -167,4 +184,70 @@ GNU binutils targetting sparc-rtems4.8.
 
 %dir %{_exec_prefix}/sparc-rtems4.8/lib
 %{_exec_prefix}/sparc-rtems4.8/lib/ldscripts
+# ==============================================================
+# rtems-4.8-binutils-common
+# ==============================================================
+%package -n rtems-4.8-binutils-common
+Summary:      Base package for RTEMS binutils
+Group: Development/Tools
+Requires(post):		/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+Provides:	rtems-4.8-rtems4.7-base-binutils = %{binutils_version}-%{release}
+Obsoletes:	rtems-4.8-rtems4.7-base-binutils < %{binutils_version}-%{release}
+Provides:	rtems-4.8-rtems-base-binutils = %{binutils_version}-%{release}
+Obsoletes:	rtems-4.8-rtems-base-binutils < %{binutils_version}-%{release}
+
+%description -n rtems-4.8-binutils-common
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the base for binutils regardless of target CPU.
+
+%post -n rtems-4.8-binutils-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/as.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/bfd.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/binutils.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/ld.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
+%if "%{binutils_version}" > "2.17"
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
+%endif
+%if "%{binutils_version}" < "2.13"
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gasp.info.gz || :
+%endif
+
+%preun -n rtems-4.8-binutils-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/as.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/bfd.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/binutils.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/ld.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
+%if "%{binutils_version}" > "2.17"
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
+%endif
+%if "%{binutils_version}" < "2.13"
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gasp.info.gz || :
+%endif
+fi
+
+%files -n rtems-4.8-binutils-common
+%defattr(-,root,root)
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/as.info*
+%{_infodir}/bfd.info*
+%{_infodir}/binutils.info*
+%{_infodir}/ld.info*
+%{_infodir}/standards.info*
+%if "%{binutils_version}" > "2.17"
+%{_infodir}/gprof.info*
+%endif
+%if "%{binutils_version}" < "2.13"
+%{_infodir}/gasp.info*
+%endif
+
+%dir %{_prefix}/share
+%dir %{_prefix}/share/locale
 
