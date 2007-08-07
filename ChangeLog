@@ -1,3 +1,8 @@
+2007-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.maint: Add touching master files for various manuals so the
+	date on the cover page will reflect the date a tarball is cut.
+
 2007-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* README.configure, aclocal/bsp-alias.m4: Rename EP5200 to IceCube
