@@ -6,7 +6,7 @@ include $(top_srcdir)/mkspec.am
 
 BINUTILS_VERS = 2.17.90
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 1%{?dist}
+BINUTILS_RPMREL = 2%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
 
