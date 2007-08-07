@@ -9,8 +9,6 @@ BINUTILS_PKGVERS = $(BINUTILS_VERS)
 BINUTILS_RPMREL = 1%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
-# We don't want docs from bleeding edge upstream
-BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 4.1.2
 GCC_PKGVERS = $(GCC_VERS)
