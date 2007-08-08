@@ -14,9 +14,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.1.2
-%define gcc_version 4.1.2
-%define gcc_rpmvers %{expand:%(echo "4.1.2" | tr - _ )}
+%define gcc_pkgvers 4.2.1
+%define gcc_version 4.2.1
+%define gcc_rpmvers %{expand:%(echo "4.2.1" | tr - _ )}
 
 %define newlib_version		1.15.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -26,7 +26,7 @@ Summary:      	arm-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	13%{?dist}
+Release:      	23%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -69,6 +69,10 @@ Patch0:		gcc-core-4.1.2-rtems4.8-20070613.diff
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070613.diff
 %endif
+%if "%{gcc_version}" == "4.2.1"
+Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		gcc-core-4.2.1-rtems4.8-20070804.diff
+%endif
 %{?_without_sources:NoSource:	0}
 
 Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-g++-%{gcc_pkgvers}.tar.bz2
@@ -76,7 +80,7 @@ Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-g++-%{gcc_pkgvers}.ta
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.15.0"
-Patch50:	newlib-1.15.0-rtems4.8-20070413.diff
+Patch50:	newlib-1.15.0-rtems4.8-20070804.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -371,7 +375,7 @@ GNU cc compiler for arm-rtems4.8.
 
 %dir %{gcclib}/arm-rtems4.8/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
-%if "arm-rtems4.8" != "bfin-rtems4.7"
+%if "arm-rtems4.8" != "bfin-rtems4.8"
 %dir %{gcclib}/arm-rtems4.8/%{gcc_version}/include/ssp
 %endif
 %endif
@@ -383,7 +387,7 @@ GNU cc compiler for arm-rtems4.8.
 %{gccexec}/arm-rtems4.8/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
-# rtems-4.8-rtems4.7-base-gcc
+# rtems-4.8-gcc-common
 # ==============================================================
 %package -n rtems-4.8-gcc-common
 Summary:	Base package for rtems gcc and newlib C Library
@@ -393,11 +397,6 @@ License:	GPL
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
-
-Provides:	rtems-4.8-rtems4.7-base-gcc = %{gcc_version}-%{release}
-Obsoletes:	rtems-4.8-rtems4.7-base-gcc < %{gcc_rpmvers}-%{release}
-Provides:	rtems-4.8-rtems-base-gcc = %{gcc_version}-%{release}
-Obsoletes:	rtems-4.8-rtems-base-gcc < %{gcc_rpmvers}-%{release}
 
 %description -n rtems-4.8-gcc-common
 
@@ -516,17 +515,6 @@ Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
 License:	Distributable
-
-Provides:	rtems-4.8-rtems4.7-base-newlib = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.8-rtems4.7-base-newlib < %{newlib_version}-%{release}
-Provides:	rtems-4.8-rtems-base-newlib = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.8-rtems-base-newlib < %{newlib_version}-%{release}
-
-Provides:	rtems-4.8-rtems4.7-base-libc = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.8-rtems4.7-base-libc < %{newlib_version}-%{release}
-Provides:	rtems-4.8-rtems-base-libc = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.8-rtems-base-libc < %{newlib_version}-%{release}
-
 
 Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
