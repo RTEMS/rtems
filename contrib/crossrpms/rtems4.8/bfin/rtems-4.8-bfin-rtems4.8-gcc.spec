@@ -26,7 +26,7 @@ Summary:      	bfin-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	21%{?dist}
+Release:      	23%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -71,7 +71,7 @@ Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070613.diff
 %endif
 %if "%{gcc_version}" == "4.2.1"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.1-rtems4.8-20070719.diff
+Patch0:		gcc-core-4.2.1-rtems4.8-20070804.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
