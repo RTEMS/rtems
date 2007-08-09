@@ -22,13 +22,9 @@ GDB files shared by all targets.
 %if "%{gdb_version}" < "6.3"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz || :
 %endif
-%if "%{gdb_version}" >= "5.0"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
-%endif
-%if "{gdb_version}" >= "6.0"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
-%endif
 
 %preun -n @rpmprefix@gdb-common
 if [ $1 -eq 0 ]; then
@@ -36,13 +32,9 @@ if [ $1 -eq 0 ]; then
 %if "%{gdb_version}" < "6.3"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz || :
 %endif
-%if "%{gdb_version}" >= "5.0"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
-%endif
-%if "{gdb_version}" >= "6.0"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
-%endif
 fi
 
 %files -n @rpmprefix@gdb-common
@@ -55,14 +47,8 @@ fi
 %if "%{gdb_version}" < "6.3"
 %{_infodir}/mmalloc.info*
 %endif
-# FIXME: When had gdbint and stabs been introduced?
-%if "%{gdb_version}" >= "5.0"
 %{_infodir}/gdbint.info*
 %{_infodir}/stabs.info*
-%endif
-
-%if "{gdb_version}" >= "6.0"
 %{_infodir}/annotate.info*
-%endif
 
 %endif
