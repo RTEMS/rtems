@@ -5,7 +5,7 @@ Name:		@rpmprefix@@tool_target@-gdb
 Summary:	Gdb for target @tool_target@
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	@GDB_RPMREL@%{?dist}
+Release:	@GDB_RPMREL@
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
