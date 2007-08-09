@@ -16,9 +16,9 @@ GCC_RPMREL = 12%{?dist}
 NEWLIB_VERS = 1.15.0
 include ../gcc.am
 
-GDB_VERS = 6.5
+GDB_VERS = 6.6
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 2%{?dist}
+GDB_RPMREL = 9%{?dist}
 include ../gdb.am
 GDB_OPTS +=
 

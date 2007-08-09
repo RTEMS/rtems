@@ -13,14 +13,14 @@
 %define _exeext %{nil}
 %endif
 
-%define gdb_version 6.5
-%define gdb_rpmvers %{expand:%(echo 6.5 | tr - _)} 
+%define gdb_version 6.6
+%define gdb_rpmvers %{expand:%(echo 6.6 | tr - _)} 
 
 Name:		rtems-4.8-i386-rtems4.8-gdb
 Summary:	Gdb for target i386-rtems4.8
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	9%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
