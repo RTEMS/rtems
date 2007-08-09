@@ -276,7 +276,7 @@ void xilTemacStart(struct ifnet *ifp)
     /* Set the link speed */
     uint32_t emcfg = IN32(base + XTE_ECFG_OFFSET);
     printk("xiltemacStart, default linkspeed: %08x\n", emcfg);
-    emcfg |= XTE_ECFG_LINKSPD_100;
+    emcfg = (emcfg & ~XTE_ECFG_LINKSPD_MASK) | XTE_ECFG_LINKSPD_100;
     OUT32(base + XTE_ECFG_OFFSET, emcfg);
 
     /* Set phy divisor and enable mdio.  For a plb bus freq of 150MHz (the

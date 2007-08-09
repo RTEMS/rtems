@@ -1,3 +1,8 @@
+2007-08-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+	* network/xiltemac.c:
+	applied patch from Robert Grimes to correctly set the link speed
+	to 100MBit
+
 2007-07-27	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* linkcmds: removed superfluous bss section
