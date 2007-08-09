@@ -8,11 +8,6 @@ Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-Provides:	@rpmprefix@rtems4.7-base-gdb = %{gdb_version}-%{release}
-Obsoletes:	@rpmprefix@rtems4.7-base-gdb < %{gdb_version}-%{release}
-Provides:	@rpmprefix@rtems-base-gdb = %{gdb_version}-%{release}
-Obsoletes:	@rpmprefix@rtems-base-gdb < %{gdb_version}-%{release}
-
 %description -n @rpmprefix@gdb-common
 
 GDB files shared by all targets.
