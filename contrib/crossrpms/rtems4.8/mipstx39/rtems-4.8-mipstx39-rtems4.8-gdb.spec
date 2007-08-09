@@ -20,13 +20,17 @@ Name:		rtems-4.8-mipstx39-rtems4.8-gdb
 Summary:	Gdb for target mipstx39-rtems4.8
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if "%{gdb_version}" >= "6.6"
+%if "%{?suse}"
+BuildRequires:	expat
+%else 
 BuildRequires:	expat-devel
+%endif
 %endif
 # Required for building the infos
 BuildRequires:	/sbin/install-info
@@ -44,7 +48,7 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 Patch0:		gdb-6.5-rtems-20060713.diff
 %endif
 %if "%{gdb_version}" == "6.6"
-Patch0:		gdb-6.6-rtems4.8-20070218.diff
+Patch0:		gdb-6.6-rtems4.8-20070306.diff
 %endif
 
 %description
@@ -182,11 +186,6 @@ Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-Provides:	rtems-4.8-rtems4.7-base-gdb = %{gdb_version}-%{release}
-Obsoletes:	rtems-4.8-rtems4.7-base-gdb < %{gdb_version}-%{release}
-Provides:	rtems-4.8-rtems-base-gdb = %{gdb_version}-%{release}
-Obsoletes:	rtems-4.8-rtems-base-gdb < %{gdb_version}-%{release}
-
 %description -n rtems-4.8-gdb-common
 
 GDB files shared by all targets.
@@ -196,13 +195,9 @@ GDB files shared by all targets.
 %if "%{gdb_version}" < "6.3"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz || :
 %endif
-%if "%{gdb_version}" >= "5.0"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
-%endif
-%if "{gdb_version}" >= "6.0"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
-%endif
 
 %preun -n rtems-4.8-gdb-common
 if [ $1 -eq 0 ]; then
@@ -210,13 +205,9 @@ if [ $1 -eq 0 ]; then
 %if "%{gdb_version}" < "6.3"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz || :
 %endif
-%if "%{gdb_version}" >= "5.0"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
-%endif
-%if "{gdb_version}" >= "6.0"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
-%endif
 fi
 
 %files -n rtems-4.8-gdb-common
@@ -229,13 +220,7 @@ fi
 %if "%{gdb_version}" < "6.3"
 %{_infodir}/mmalloc.info*
 %endif
-# FIXME: When had gdbint and stabs been introduced?
-%if "%{gdb_version}" >= "5.0"
 %{_infodir}/gdbint.info*
 %{_infodir}/stabs.info*
-%endif
-
-%if "{gdb_version}" >= "6.0"
 %{_infodir}/annotate.info*
-%endif
 
