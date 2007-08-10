@@ -73,6 +73,10 @@ $(PROJECT_LIB)/linkcmds.mpc8349eamds: startup/linkcmds.mpc8349eamds $(PROJECT_LI
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc8349eamds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc8349eamds
 
+$(PROJECT_LIB)/linkcmds.hsc_cm01: startup/linkcmds.hsc_cm01 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.hsc_cm01
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.hsc_cm01
+
 $(PROJECT_INCLUDE)/bsp/irq.h: ./irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h

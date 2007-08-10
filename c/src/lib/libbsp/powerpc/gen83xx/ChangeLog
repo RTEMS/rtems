@@ -1,3 +1,7 @@
+2007-08-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, i2c/i2c_init.c: add i2c initialization
+
 2007-07-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Install a linkcmds all the time.

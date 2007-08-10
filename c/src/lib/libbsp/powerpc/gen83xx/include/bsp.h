@@ -41,11 +41,80 @@
 #define BSP_SYSPLL_MF 4 /* FIXME: derive from clock register */
 
 /*
+ * Reset configuration words
+ */
+#define RESET_CONF_WRD_L (RCWLR_LBIUCM_1_1 |	\
+			  RCWLR_DDRCM_1_1  |	\
+			  RCWLR_SPMF(4)    |	\
+			  RCWLR_COREPLL(4))
+
+#define RESET_CONF_WRD_H (RCWHR_PCI_HOST     |	\
+			  RCWHR_PCI_32       |	\
+			  RCWHR_PCI1ARB_EN   |	\
+			  RCWHR_PCI2ARB_EN   |	\
+			  RCWHR_CORE_EN      |	\
+			  RCWHR_BMS_LOW      |	\
+			  RCWHR_BOOTSEQ_NONE |	\
+			  RCWHR_SW_DIS       |	\
+			  RCWHR_ROMLOC_LB16  |	\
+			  RCWHR_TSEC1M_GMII  |	\
+			  RCWHR_TSEC2M_GMII  |	\
+			  RCWHR_ENDIAN_BIG   |	\
+			  RCWHR_LALE_NORM    |	\
+			  RCWHR_LDP_PAR)
+/*
+ * for JPK HSC_CM01
+ */
+#elsif defined(HSC_CM01)
+/*
+ * one DUART channel (UART1) supported
+ */
+#define GEN83xx_DUART_AVAIL_MASK 0x01
+
+/* we need the low level initialization in start.S*/
+#define NEED_LOW_LEVEL_INIT
+/*
+ * clocking infos
+ */
+#define BSP_CLKIN_FRQ 66000000L
+#define BSP_SYSPLL_MF 4 /* FIXME: derive from clock register */
+
+/*
+ * Reset configuration words
+ */
+#define RESET_CONF_WRD_L (RCWLR_LBIUCM_1_1 |	\
+			  RCWLR_DDRCM_1_1  |	\
+			  RCWLR_SPMF(4)    |	\
+			  RCWLR_COREPLL(4))
+
+#define RESET_CONF_WRD_H (RCWHR_PCI_HOST     |	\
+			  RCWHR_PCI_32       |	\
+			  RCWHR_PCI1ARB_EN   |	\
+			  RCWHR_PCI2ARB_EN   |	\
+			  RCWHR_CORE_EN      |	\
+			  RCWHR_BMS_LOW      |	\
+			  RCWHR_BOOTSEQ_NONE |	\
+			  RCWHR_SW_DIS       |	\
+			  RCWHR_ROMLOC_LB16  |	\
+			  RCWHR_TSEC1M_RGMII |	\
+			  RCWHR_TSEC2M_GMII  |	\
+			  RCWHR_ENDIAN_BIG   |	\
+			  RCWHR_LALE_NORM    |	\
+			  RCWHR_LDP_PAR)
+#else
+#error "board type not defined"
+#endif
+
+/*
+ * for JPK HSC_CM01 and freescale MPC8349EAMDS
+ */
+#if defined(MPC8349EAMDS) || defined(HSC_CM01)
+/*
  * address range definitions
  */
-/* ROM definitions (2 MB) */
-#define	ROM_START	0xFFE00000
-#define ROM_SIZE        0x00200000
+/* ROM definitions (8 MB, mirrored multiple times) */
+#define	ROM_START	0xFE000000
+#define ROM_SIZE        0x02000000
 #define	ROM_END		(ROM_START+ROM_SIZE-1)
 #define	BOOT_START      ROM_START
 #define	BOOT_END        ROM_END
@@ -54,6 +123,7 @@
 #define	RAM_START       0x00000000
 #define RAM_SIZE        0x10000000
 #define	RAM_END		(RAM_START+RAM_SIZE-1)
+
 
 /* working internal memory map base address */
 #define	IMMRBAR         0xE0000000
@@ -125,14 +195,6 @@ extern "C" {
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 
-/*
- * Network driver configuration
- */
-struct rtems_bsdnet_ifconfig;
-extern int rtems_mpc83xx_tsec_driver_attach_detach (struct rtems_bsdnet_ifconfig *config, int attaching);
-#define RTEMS_BSP_NETWORK_DRIVER_NAME	"tsec1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_mpc83xx_tsec_driver_attach_detach
-
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
@@ -176,6 +238,7 @@ extern rtems_configuration_table BSP_Configuration;
 /* functions */
 
 void bsp_cleanup(void);
+rtems_status_code bsp_register_i2c(void);
 
 /* console modes (only termios) */
 #ifdef  PRINTK_MINOR
@@ -210,6 +273,12 @@ extern int BSP_tsec_attach(struct rtems_bsdnet_ifconfig *config,int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	BSP_tsec_attach
 
 #define RTEMS_BSP_NETWORK_DRIVER_NAME2	"tsec2"
+
+/*
+ * i2c EEPROM device name
+ */
+#define RTEMS_BSP_I2C_EEPROM_DEVICE_NAME "eeprom"
+#define RTEMS_BSP_I2C_EEPROM_DEVICE_PATH "/dev/i2c1.eeprom"
 
 #ifdef __cplusplus
 }

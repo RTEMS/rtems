@@ -43,6 +43,11 @@ SECTIONS
     *mpc83xx_regs*(*)
     } > mpc83xx_regs
 
+   .resconf 0x000 :
+    {
+    *(.resconf)
+    } > ram
+
    .vectors 0x100 :
     {
     *(.vectors)

@@ -73,6 +73,8 @@
 	sync
 .endm
 
+#define REP8(l) l ; l; l; l; l; l; l; l;
+
 .extern	_bss_start
 .extern	_bss_size
 .extern	_data_start
@@ -83,31 +85,48 @@
 .extern boot_card
 .extern MBAR   
 
-.section ".vectors"  
+.section ".resconf","ax"
+PUBLIC_VAR (reset_conf_words)
+reset_conf_words:	
+	REP8( .byte ((RESET_CONF_WRD_L >> 24) & 0xff))
+	REP8( .byte ((RESET_CONF_WRD_L >> 16) & 0xff))
+	REP8( .byte ((RESET_CONF_WRD_L >>  8) & 0xff))
+	REP8( .byte ((RESET_CONF_WRD_L >>  0) & 0xff))
+
+	REP8( .byte ((RESET_CONF_WRD_H >> 24) & 0xff))
+	REP8( .byte ((RESET_CONF_WRD_H >> 16) & 0xff))
+	REP8( .byte ((RESET_CONF_WRD_H >>  8) & 0xff))
+	REP8( .byte ((RESET_CONF_WRD_H >>  0) & 0xff))
+
+.section ".vectors","ax"
 PUBLIC_VAR (reset_vec)
 reset_vec:	
-	bl start
+	bl rom_entry
+	
 .section ".entry"  
 PUBLIC_VAR (start)
 start:
 	/*
-	 * FIXME: basic CPU setup:	
-	 *        init MSR
+	 * basic CPU setup:	
+	 * init MSR
 	 */
 	mfmsr	r30
 	SETBITS r30, r29, MSR_ME|MSR_RI
 	CLRBITS r30, r29, MSR_IP|MSR_EE
 	mtmsr	r30 				/* Set RI/ME, Clr EE in MSR */
+	b start_rom_skip
+	
+PUBLIC_VAR (rom_entry)
+rom_entry:
 	/*
-	 * check, wether we are starting from ROM 
-	 * detect this using the absolute code address:
-	 * when the upper 4 bits are 0xF, then we are in ROM
+	 * basic CPU setup:	
+	 * init MSR
 	 */
-	bl 1f
-1:	mflr r28
-	LWI  r29,0xF0000000
-	TSTBITS r28,r29,r30,0xF0000000
-	bne start_rom_skip
+	mfmsr	r30
+	SETBITS r30, r29, MSR_ME|MSR_RI
+	CLRBITS r30, r29, MSR_IP|MSR_EE
+	mtmsr	r30 				/* Set RI/ME, Clr EE in MSR */
+	
 	/*
 	 * ROM startup: remap IMMR to 0xE0000000
 	 * use special sequence from MPC8349EA RM Rev 1, 5.2.4.1.1 "Updating IMMRBAR"
@@ -116,22 +135,49 @@ start:
 	LWI  r31,IMMRBAR
 	lwz  r29,0(r30)
 	stw  r31,0(r30)
+#if 0
 	lwz  r29,0(r28) /* read from ROM... */
+#endif
 	isync
 	lwz  r29,0(r31) /* read from IMMRBAR... */
 	isync
 	/*
 	 * NOTE:	 now r31 points to onchip registers
-	
+	*/
 	/*
-	 * ROM startup: init local access windows
+	 * FIXME:	 
+	 * we start from 0x100, so ROM is currently mapped to
+	 * 0x00000000..
+	 * in the next step, ROM will be remapped to its final location
+	 * at 0xfe000000... (using LBLAWBAR1 with LBLAWBAR0 value)
+	 * and we jump to that location.
+	 * then we remove the ROM mapping to zero
 	 */
+#ifdef LBLAWBAR0_VAL
+	SET_IMM_REGW r31,r30,LBLAWBAR1_OFF,LBLAWBAR0_VAL
+#endif
+#ifdef LBLAWAR0_VAL
+	SET_IMM_REGW r31,r30,LBLAWAR1_OFF,LBLAWAR0_VAL
+#endif
+
+
+	/*
+	 * ROM startup: jump to code final ROM location
+	 */
+	LA	r20, ROM_START /* ROM-RAM reloc in r20 */
+	LA	r29, start_code_in_rom /* get compile time addr of label */
+	add	r29,r20,r29    /* compute exec address */
+	mtlr	r29
+	blr                     /* now further execution in upper ROM */
+
+start_code_in_rom:	
+
 #ifdef LBLAWBAR0_VAL
 	SET_IMM_REGW r31,r30,LBLAWBAR0_OFF,LBLAWBAR0_VAL
 #endif
 #ifdef LBLAWAR0_VAL
 	SET_IMM_REGW r31,r30,LBLAWAR0_OFF,LBLAWAR0_VAL
-#endif
+#endif	
 #ifdef LBLAWBAR1_VAL
 	SET_IMM_REGW r31,r30,LBLAWBAR1_OFF,LBLAWBAR1_VAL
 #endif
@@ -275,20 +321,22 @@ start:
 	LA	r29, _data_start /* get start address of data section in RAM */
 	LA	r28, _data_size  /* get size of RAM image */
 	bl	copy_image       /* copy initialized data section from ROM to RAM location */
-start_rom_skip:	
-	/*
-	 * ROM startup: clear bss in SDRAM
-	 */
-	LWI	r30, _bss_start  /* get start address of bss section */
-        LWI	r29, _bss_size   /* get size of bss section */
-        bl      clr_mem          /* Clear the bss section */
 	/*
 	 * ROM startup: jump to code copy in  SDRAM
 	 */
 	LA	r29, start_code_in_ram /* get compile time address of label */
 	mtlr	r29
 	blr                     /* now further execution RAM */
+
 start_code_in_ram:	
+
+start_rom_skip:	
+	/*
+	 * ROM/RAM startup: clear bss in SDRAM
+	 */
+	LWI	r30, _bss_start  /* get start address of bss section */
+        LWI	r29, _bss_size   /* get size of bss section */
+        bl      clr_mem          /* Clear the bss section */
 	/*
 	 * call boot_card
 	 */

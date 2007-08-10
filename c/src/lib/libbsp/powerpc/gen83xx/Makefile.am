@@ -33,7 +33,9 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds startup/linkcmds.mpc8349eamds
+dist_project_lib_DATA += startup/linkcmds \
+                         startup/linkcmds.mpc8349eamds \
+                         startup/linkcmds.hsc_cm01
 
 noinst_PROGRAMS += mpc83xx_regs.rel
 mpc83xx_regs_rel_SOURCES = startup/mpc83xx_regs.c
@@ -85,11 +87,16 @@ network_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
 
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += bsp_i2c.rel
+bsp_i2c_rel_SOURCES   = i2c/i2c_init.c 
+bsp_i2c_rel_CPPFLAGS  = $(AM_CPPFLAGS)
+bsp_i2c_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel pclock.rel console.rel \
                   vectors.rel irq.rel mpc83xx_regs.rel
-libbsp_a_LIBADD += network.rel
+libbsp_a_LIBADD += network.rel bsp_i2c.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
@@ -99,7 +106,8 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
+    ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel
 
 EXTRA_DIST += README.mpc8349eamds
 EXTRA_DIST += times.mpc8349eamds
