@@ -315,7 +315,8 @@ mpc8260_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_mpc8260_HEADERS += mpc8260/include/mmu.h
 
 noinst_PROGRAMS += mpc8260/mmu.rel
-mpc8260_mmu_rel_SOURCES = mpc8260/mmu/mmu.c mpc8260/include/mmu.h
+mpc8260_mmu_rel_SOURCES = mpc8260/mmu/mmu.c \
+                          mpc8260/include/mmu.h
 mpc8260_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8260_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -336,6 +337,15 @@ mpc83xx_tsec_rel_SOURCES   = mpc83xx/network/tsec.c
 mpc83xx_tsec_rel_CPPFLAGS  = $(AM_CPPFLAGS) 
 mpc83xx_tsec_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
 mpc83xx_tsec_rel_LDFLAGS   = $(RTEMS_RELLDFLAGS)
+
+## mpc83xx/i2c
+include_mpc83xx_HEADERS += mpc83xx/i2c/mpc83xx_i2cdrv.h
+noinst_PROGRAMS += mpc83xx/i2c.rel
+mpc83xx_i2c_rel_SOURCES   = mpc83xx/i2c/mpc83xx_i2cdrv.c \
+                            mpc83xx/i2c/mpc83xx_i2cdrv.h
+mpc83xx_i2c_rel_CPPFLAGS  = $(AM_CPPFLAGS) 
+mpc83xx_i2c_rel_LDFLAGS   = $(RTEMS_RELLDFLAGS)
+
 endif
 
 include $(srcdir)/preinstall.am

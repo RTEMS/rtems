@@ -207,4 +207,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx.h
 $(PROJECT_INCLUDE)/mpc83xx/tsec.h: mpc83xx/network/tsec.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/tsec.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/tsec.h
+
+$(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h: mpc83xx/i2c/mpc83xx_i2cdrv.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h
 endif

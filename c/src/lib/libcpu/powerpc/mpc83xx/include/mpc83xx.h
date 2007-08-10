@@ -274,14 +274,38 @@ typedef struct m83xxDDRRegisters_ {
 
   /* I2C Controller */
 typedef struct m83xxI2CRegisters_ {
-  volatile uint32_t i2cadr; /* 0x0_3000 I2C1 address register R/W 0x00 17.3.1.1/17-5 */
-  volatile uint32_t i2cfdr; /* 0x0_3004 I2C1 frequency divider register R/W 0x00 17.3.1.2/17-5 */
-  volatile uint32_t i2ccr; /* 0x0_3008 I2C1 control register R/W 0x00 17.3.1.3/17-6 */
-  volatile uint32_t i2csr; /* 0x0_300C I2C1 status register R/W 0x81 17.3.1.4/17-8 */
-  volatile uint32_t i2cdr; /* 0x0_3010 I2C1 data register R/W 0x00 17.3.1.5/17-9 */
-  volatile uint32_t i2cdfsrr; /* 0x0_3014 I2C1 digital filter sampling rate register R/W 0x0001_0000 17.3.1.6/17-10 */
+  volatile uint8_t i2cadr;  /* 0x0_3000 I2C1 address register R/W 0x00 17.3.1.1/17-5 */
+  uint8_t reserved0_3001[0x03004-0x03001];
+  volatile uint8_t i2cfdr; /* 0x0_3004 I2C1 frequency divider register R/W 0x00 17.3.1.2/17-5 */
+  uint8_t reserved0_3005[0x03008-0x03005];
+  volatile uint8_t i2ccr; /* 0x0_3008 I2C1 control register R/W 0x00 17.3.1.3/17-6 */
+  uint8_t reserved0_3009[0x0300C-0x03009];
+  volatile uint8_t i2csr; /* 0x0_300C I2C1 status register R/W 0x81 17.3.1.4/17-8 */
+  uint8_t reserved0_300D[0x03010-0x0300D];
+  volatile uint8_t i2cdr; /* 0x0_3010 I2C1 data register R/W 0x00 17.3.1.5/17-9 */
+  uint8_t reserved0_3011[0x03014-0x03011];
+  volatile uint8_t i2cdfsrr; /* 0x0_3014 I2C1 digital filter sampling rate register R/W 0x0001_0000 17.3.1.6/17-10 */
+  uint8_t reserved0_3015[0x03018-0x03015];
   uint8_t reserved0_3018[0x03100-0x03018]; /* 0x0_3018-30FF Reserved, should be cleared */
 } m83xxI2CRegisters_t;
+
+#define  MPC83XX_I2CCR_MEN  (1 << 7)     /* module enable */
+#define  MPC83XX_I2CCR_MIEN (1 << 6)     /* module interrupt enable */
+#define  MPC83XX_I2CCR_MSTA (1 << 5)     /* 0->1 generates a start condiiton, 1->0 a stop */
+#define  MPC83XX_I2CCR_MTX  (1 << 4)     /* 0 = receive mode, 1 = transmit mode           */
+#define  MPC83XX_I2CCR_TXAK (1 << 3)     /* 0 = send ack 1 = send nak during receive      */
+#define  MPC83XX_I2CCR_RSTA (1 << 2)     /* 1 = send repeated start condition             */
+#define  MPC83XX_I2CCR_BCST (1 << 0)     /* 0 = disable 1 = enable broadcast accept       */
+
+#define  MPC83XX_I2CSR_MCF  (1 << 7)     /* data transfer (0=transfer in progres) */
+#define  MPC83XX_I2CSR_MAAS (1 << 6)     /* addessed as slave   */
+#define  MPC83XX_I2CSR_MBB  (1 << 5)     /* bus busy            */
+#define  MPC83XX_I2CSR_MAL  (1 << 4)     /* arbitration lost    */
+#define  MPC83XX_I2CSR_BCSTM (1 << 3)    /* broadcast match     */
+#define  MPC83XX_I2CSR_SRW  (1 << 2)     /* slave read/write    */
+#define  MPC83XX_I2CSR_MIF  (1 << 1)     /* module interrupt    */
+#define  MPC83XX_I2CSR_RXAK (1 << 0)     /* receive acknowledge */
+
 
   /* DUART */
 typedef struct m83xxDUARTRegisters_ {
@@ -1079,6 +1103,75 @@ extern m83xxRegisters_t mpc83xx;
 #define DDR_SDRAM_MD_ITVL_OFF        0x02124
 #define DDR_SDRAM_CLK_CNTL_OFF       0x02130
 #define DDR_SDRAM_INIT_ADDR_OFF      0x02148
+
+/*
+ * bits in reset configuration words/registers
+ */
+                                           /* Local bus clocking mode */
+#define RCWLR_LBIUCM_1_1 (0 << (31- 0))    /* 1:1 */
+#define RCWLR_LBIUCM_2_1 (1 << (31- 0))    /* 2:1 */
+                                           /* DDR clocking mode      */
+#define RCWLR_DDRCM_1_1  (0 << (31- 1))    /* 1:1 */
+#define RCWLR_DDRCM_2_1  (1 << (31- 1))    /* 2:1 */
+                                          /* System PLL mult. factor */
+#define RCWLR_SPMF(n) (((n)&0xf)<<(31- 7)) 
+                                          /* Core PLL mult. factor   */
+#define RCWLR_COREPLL(n) (((n)&0xff)<<(31-15)) 
+
+                                           /* PCI host mode          */
+#define RCWHR_PCI_AGENT  (0 << (31- 0))    /* agent mode             */
+#define RCWHR_PCI_HOST   (1 << (31- 0))    /* host mode              */
+
+#define RCWHR_PCI_32     (0 << (31- 1))    /* PCI bus width 32 bit   */
+#define RCWHR_PCI_64     (1 << (31- 1))    /* PCI bus width 64 bit   */
+
+#define RCWHR_PCI1ARB_DIS (0 << (31- 2))   /* PCI1 arbiter disabled */
+#define RCWHR_PCI1ARB_EN  (1 << (31- 2))   /* PCI1 arbiter enabled  */
+#define RCWHR_PCI2ARB_DIS (0 << (31- 3))   /* PCI2 arbiter disabled */
+#define RCWHR_PCI2ARB_EN  (1 << (31- 3))   /* PCI2 arbiter enabled  */
+
+#define RCWHR_CORE_DIS    (1 << (31- 4))   /* CPU core disabled     */
+#define RCWHR_CORE_EN     (0 << (31- 4))   /* CPU core enabled      */
+
+#define RCWHR_BMS_LOW     (0 << (31- 5))   /* Boot from low addr  0x00000100 */
+#define RCWHR_BMS_HIGH    (1 << (31- 5))   /* Boot from high addr 0xFFF00100 */
+
+#define RCWHR_BOOTSEQ_NONE (0 <<(31- 7))   /* Bootsequencer off              */
+#define RCWHR_BOOTSEQ_NORM (1 <<(31- 7))   /* Bootsequencer normal I2C       */
+#define RCWHR_BOOTSEQ_EXTD (2 <<(31- 7))   /* Bootsequencer extended I2C     */
+#define RCWHR_BOOTSEQ_RSRV (3 <<(31- 7))   /* Bootsequencer reserved         */
+
+#define RCWHR_SW_DIS      (0 << (31- 8))   /* Watchdog disabled     */
+#define RCWHR_SW_EN       (1 << (31- 8))   /* Watchdog enabled      */
+
+#define RCWHR_ROMLOC_DDR  (0 << (31-11))   /* Initial ROM location:DDR Ram   */
+#define RCWHR_ROMLOC_PCI1 (1 << (31-11))   /* Initial ROM location:PCI 1     */
+#define RCWHR_ROMLOC_PCI2 (2 << (31-11))   /* Initial ROM location:PCI 2     */
+#define RCWHR_ROMLOC_RSV1 (3 << (31-11))   /* Initial ROM location:Reserved  */
+#define RCWHR_ROMLOC_RSV2 (4 << (31-11))   /* Initial ROM location:Reserved  */
+#define RCWHR_ROMLOC_LB08 (5 << (31-11))   /* Initial ROM location:LBus  8bit*/
+#define RCWHR_ROMLOC_LB16 (6 << (31-11))   /* Initial ROM location:LBus 16bit*/
+#define RCWHR_ROMLOC_LB32 (7 << (31-11))   /* Initial ROM location:LBus 32bit*/
+
+#define RCWHR_TSEC1M_RGMII (0 << (31-17))  /* TSEC1 Mode: RGMII  */
+#define RCWHR_TSEC1M_RTBI  (1 << (31-17))  /* TSEC1 Mode: RTBI   */
+#define RCWHR_TSEC1M_GMII  (2 << (31-17))  /* TSEC1 Mode: GMII   */
+#define RCWHR_TSEC1M_TBI   (3 << (31-17))  /* TSEC1 Mode: TBI    */
+
+#define RCWHR_TSEC2M_RGMII (0 << (31-19))  /* TSEC2 Mode: RGMII  */
+#define RCWHR_TSEC2M_RTBI  (1 << (31-19))  /* TSEC2 Mode: RTBI   */
+#define RCWHR_TSEC2M_GMII  (2 << (31-19))  /* TSEC2 Mode: GMII   */
+#define RCWHR_TSEC2M_TBI   (3 << (31-19))  /* TSEC2 Mode: TBI    */
+
+#define RCWHR_ENDIAN_BIG  (0 << (31-28))   /* Big Endian Mode         */
+#define RCWHR_ENDIAN_LIT  (1 << (31-28))   /* True Little Endian Mode */
+
+#define RCWHR_LALE_NORM   (0 << (31-29))   /* normal LALE timing      */
+#define RCWHR_LALE_EARLY  (1 << (31-29))   /* early LALE negation     */
+
+#define RCWHR_LDP_PAR     (0 << (31-30))   /* LDP0-3 are parity pins  */
+#define RCWHR_LDP_SPC     (1 << (31-30))   /* LDP0-3 are special pins */
+
 
 #if !defined(ASM)
 typedef struct PQ_BufferDescriptor_ {

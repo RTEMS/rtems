@@ -1,0 +1,478 @@
+/*===============================================================*\
+| Project: RTEMS support for MPC83xx                              |
++-----------------------------------------------------------------+
+|                    Copyright (c) 2007                           |
+|                    Embedded Brains GmbH                         |
+|                    Obere Lagerstr. 30                           |
+|                    D-82178 Puchheim                             |
+|                    Germany                                      |
+|                    rtems@embedded-brains.de                     |
++-----------------------------------------------------------------+
+| The license and distribution terms for this file may be         |
+| found in the file LICENSE in this distribution or at            |
+|                                                                 |
+| http://www.rtems.com/license/LICENSE.                           |
+|                                                                 |
++-----------------------------------------------------------------+
+| this file contains the MPC83xx I2C driver                       |
+\*===============================================================*/
+#include <stdlib.h>
+#include <bsp.h>
+#include <bsp/irq.h>
+#include <mpc83xx/mpc83xx.h>
+#include <mpc83xx/mpc83xx_i2cdrv.h>
+#include <rtems/error.h>
+#include <rtems/bspIo.h>
+#include <errno.h>
+#include <rtems/libi2c.h>
+
+/* #define DEBUG */
+
+/*
+ * XXX: for the beginning, this driver works polled
+ */
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static int mpc83xx_i2c_find_clock_divider
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   determine proper divider value                                          |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ uint8_t *result,                        /* result value                   */
+ int divider                             /* requested divider              */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+  int i;
+  int fdr_val;
+  struct {
+    int divider;
+    int fdr_val;
+  } dividers[] ={
+    {  256,0x20 }, {  288,0x21 }, {  320,0x22 }, {  352,0x23 }, 
+    {  384,0x00 }, {  416,0x01 }, {  448,0x25 }, {  480,0x02 },
+    {  512,0x26 }, {  576,0x03 }, {  640,0x04 }, {  704,0x05 },
+    {  768,0x29 }, {  832,0x06 }, {  896,0x2a }, { 1024,0x07 },
+    { 1152,0x08 }, { 1280,0x09 }, { 1536,0x0A }, { 1792,0x2E },
+    { 1920,0x0B }, { 2048,0x2F }, { 2304,0x0C }, { 2560,0x0D },
+    { 3072,0x0E }, { 3584,0x32 }, { 3840,0x0F }, { 4096,0x33 },
+    { 4608,0x10 }, { 5120,0x11 }, { 6144,0x12 }, { 7168,0x36 },
+    { 7680,0x13 }, { 8192,0x37 }, { 9216,0x14 }, {10240,0x15 },
+    {12288,0x16 }, {14336,0x3A }, {15360,0x17 }, {16384,0x3B },
+    {18432,0x18 }, {20480,0x19 }, {24576,0x1A }, {28672,0x3E },
+    {30720,0x1B }, {32768,0x3F }, {36864,0x1C }, {40960,0x1D },
+    {49152,0x1E }, {61440,0x1F }
+  };
+
+  for (i = 0, fdr_val = -1; i < sizeof(dividers)/sizeof(dividers[0]); i++) {
+    fdr_val = dividers[i].fdr_val;
+    if (dividers[i].divider >= divider)
+      {
+	break;
+      }
+  }
+  *result = fdr_val;
+  return 0;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static int mpc83xx_i2c_wait
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   wait for i2c to become idle                                             |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ mpc83xx_i2c_softc_t *softc_ptr,          /* handle              */
+ uint8_t              desired_status,     /* desired status word */
+ uint8_t              status_mask         /* status word mask    */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+  uint8_t act_status;
+  rtems_status_code rc;
+  uint32_t tout;
+
+#if defined(DEBUG)
+  printk("mpc83xx_i2c_wait called... ");
+#endif
+  softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MIEN;
+
+  if (softc_ptr->initialized) {
+    rc = rtems_semaphore_obtain(softc_ptr->irq_sema_id,RTEMS_WAIT,100);
+    if (rc != RTEMS_SUCCESSFUL) {
+      return rc;
+    }
+  }
+  else {
+    tout = 0;
+    do {
+      if (tout++ > 1000000) {
+#if defined(DEBUG)
+	printk("... exit with RTEMS_TIMEOUT\r\n");
+#endif
+	return RTEMS_TIMEOUT;
+      }
+    } while (!(softc_ptr->reg_ptr->i2csr & MPC83XX_I2CSR_MIF));
+  }
+  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MIEN;
+
+  act_status = softc_ptr->reg_ptr->i2csr & status_mask;
+  if (act_status != desired_status) {
+#if defined(DEBUG)
+    printk("... exit with RTEMS_IO_ERROR\r\n");
+#endif
+    return RTEMS_IO_ERROR;
+  }
+#if defined(DEBUG)
+	printk("... exit OK\r\n");
+#endif
+  return RTEMS_SUCCESSFUL;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static rtems_status_code mpc83xx_i2c_init
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   initialize the driver                                                   |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_libi2c_bus_t *bh                  /* bus specifier structure        */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+  mpc83xx_i2c_softc_t *softc_ptr = &(((mpc83xx_i2c_desc_t *)(bh))->softc);
+  uint8_t fdr_val;
+  int errval;
+#if defined(DEBUG)
+  printk("mpc83xx_i2c_init called... ");
+#endif
+  /*
+   * init HW registers
+   */
+  /*
+   * init frequency divider to 100kHz
+   */
+  errval = mpc83xx_i2c_find_clock_divider(&fdr_val,
+					  BSP_CSB_CLK_FRQ/3/100000);
+  if (errval != 0) {
+    return errval;
+  }
+  softc_ptr->reg_ptr->i2cfdr = fdr_val;
+  /*
+   * init digital filter sampling rate
+   */
+  softc_ptr->reg_ptr->i2cdfsrr = 0x10 ; /* no special filtering needed */
+  /*
+   * set own slave address to broadcasr (0x00)
+   */
+  softc_ptr->reg_ptr->i2cadr = 0x00 ; 
+
+  /*
+   * set control register to module enable
+   */
+  softc_ptr->reg_ptr->i2ccr = MPC83XX_I2CCR_MEN;
+  
+  /*
+   * FIXME: init interrupt stuff
+   */  
+  /*
+   * FIXME: init other stuff
+   */
+#if defined(DEBUG)
+  printk("... exit OK\r\n");
+#endif
+  return RTEMS_SUCCESSFUL;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static rtems_status_code mpc83xx_i2c_send_start
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   send a start condition to bus                                           |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_libi2c_bus_t *bh                  /* bus specifier structure        */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+  mpc83xx_i2c_softc_t *softc_ptr = &(((mpc83xx_i2c_desc_t *)(bh))->softc);
+
+#if defined(DEBUG)
+  printk("mpc83xx_i2c_send_start called... ");
+#endif
+  if (0 != (softc_ptr->reg_ptr->i2ccr & MPC83XX_I2CCR_MSTA)) {
+    /*
+     * already started, so send a "repeated start" 
+     */
+    softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_RSTA;
+  }
+  else {
+    softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MSTA;
+  }
+
+#if defined(DEBUG)
+  printk("... exit OK\r\n");
+#endif
+  return 0;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static rtems_status_code mpc83xx_i2c_send_stop
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   send a stop condition to bus                                            |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_libi2c_bus_t *bh                  /* bus specifier structure        */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+  mpc83xx_i2c_softc_t *softc_ptr = &(((mpc83xx_i2c_desc_t *)(bh))->softc);
+
+#if defined(DEBUG)
+  printk("mpc83xx_i2c_send_stop called... ");
+#endif
+  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MSTA;
+
+#if defined(DEBUG)
+  printk("... exit OK\r\n");
+#endif
+  return 0;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static rtems_status_code mpc83xx_i2c_send_addr
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   address a slave device on the bus                                       |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_libi2c_bus_t *bh,                 /* bus specifier structure        */
+ uint32_t addr,                          /* address to send on bus         */
+ int rw                                  /* 0=write,1=read                 */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    o = ok or error code                                                   |
+\*=========================================================================*/
+{
+  mpc83xx_i2c_softc_t *softc_ptr = &(((mpc83xx_i2c_desc_t *)(bh))->softc);
+  rtems_boolean long_addr = FALSE;
+  uint8_t addr_byte;
+  rtems_status_code rc;
+
+#if defined(DEBUG)
+  printk("mpc83xx_i2c_send_addr called... ");
+#endif
+  softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MTX;
+  /*
+   * determine, whether short or long address is needed, determine rd/wr
+   */
+  if (addr > 0x7f) {
+    long_addr = TRUE;
+    addr_byte = (0xf0 
+		 | ((addr >> 7) & 0x06)
+		 | ((rw) ? 1 : 0));
+    /*
+     * send first byte 
+     */
+    softc_ptr->reg_ptr->i2cdr = addr_byte;
+    /*
+     * wait for successful transfer
+     */
+    rc = mpc83xx_i2c_wait(softc_ptr,
+			  MPC83XX_I2CSR_MCF,
+			  MPC83XX_I2CSR_MCF);
+    if (rc != RTEMS_SUCCESSFUL) {
+#if defined(DEBUG)
+      printk("... exit rc=%d\r\n",rc);
+#endif
+      return rc;
+    }
+  }
+  addr_byte = (0xf0 
+	       | ((addr >> 7) & 0x06)
+	       | ((rw) ? 1 : 0));
+  /*
+   * send (final) byte 
+   */
+  addr_byte = ((addr << 1) 
+	       | ((rw) ? 1 : 0));
+
+  softc_ptr->reg_ptr->i2cdr = addr_byte;
+  /*
+   * wait for successful transfer
+   */
+  rc = mpc83xx_i2c_wait(softc_ptr,
+			MPC83XX_I2CSR_MCF,
+			MPC83XX_I2CSR_MCF);
+
+#if defined(DEBUG)
+  printk("... exit rc=%d\r\n",rc);
+#endif
+  return rc;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static int mpc83xx_i2c_read_bytes
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   receive some bytes from I2C device                                      |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_libi2c_bus_t *bh,                 /* bus specifier structure        */
+ unsigned char *buf,                     /* buffer to store bytes          */
+ int len                                 /* number of bytes to receive     */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    number of bytes received or (negative) error code                      |
+\*=========================================================================*/
+{
+  mpc83xx_i2c_softc_t *softc_ptr = &(((mpc83xx_i2c_desc_t *)(bh))->softc);
+  rtems_status_code rc;
+  unsigned char *p = buf;
+  unsigned char dummy;
+
+#if defined(DEBUG)
+  printk("mpc83xx_i2c_read_bytes called... ");
+#endif
+  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MTX;
+  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_TXAK;
+  /*
+   * we need a dummy transfer here to start the first read
+   */
+  dummy = softc_ptr->reg_ptr->i2cdr;
+
+  while (len-- > 0) {
+    if (len == 0) {
+      /*
+       * last byte is not acknowledged
+       */
+      softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_TXAK;
+    }
+    /*
+     * wait 'til end of transfer
+     */
+    rc = mpc83xx_i2c_wait(softc_ptr,
+			  MPC83XX_I2CSR_MCF,
+			  MPC83XX_I2CSR_MCF);
+    if (rc != RTEMS_SUCCESSFUL) {
+#if defined(DEBUG)
+      printk("... exit rc=%d\r\n",-rc);
+#endif
+      return -rc;
+    }
+    *p++ = softc_ptr->reg_ptr->i2cdr;
+      
+  }
+#if defined(DEBUG)
+  printk("... exit OK, rc=%d\r\n",p-buf);
+#endif
+  return p - buf;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static int mpc83xx_i2c_write_bytes
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   send some bytes to I2C device                                           |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_libi2c_bus_t *bh,                 /* bus specifier structure        */
+ unsigned char *buf,                     /* buffer to send                 */
+ int len                                 /* number of bytes to send        */
+
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    number of bytes sent or (negative) error code                          |
+\*=========================================================================*/
+{
+  mpc83xx_i2c_softc_t *softc_ptr = &(((mpc83xx_i2c_desc_t *)(bh))->softc);
+  rtems_status_code rc;
+  unsigned char *p = buf;
+
+#if defined(DEBUG)
+  printk("mpc83xx_i2c_write_bytes called... ");
+#endif
+  softc_ptr->reg_ptr->i2ccr = 
+    (softc_ptr->reg_ptr->i2ccr & ~MPC83XX_I2CCR_TXAK) | MPC83XX_I2CCR_MTX;
+  while (len-- > 0) {
+    softc_ptr->reg_ptr->i2cdr = *p++;
+    /*
+     * wait 'til end of transfer
+     */
+    rc = mpc83xx_i2c_wait(softc_ptr,
+			  MPC83XX_I2CSR_MCF,
+			  MPC83XX_I2CSR_MCF);
+    if (rc != RTEMS_SUCCESSFUL) {
+#if defined(DEBUG)
+      printk("... exit rc=%d\r\n",-rc);
+#endif
+      return -rc;
+    }
+  }
+#if defined(DEBUG)
+  printk("... exit OK, rc=%d\r\n",p-buf);
+#endif
+  return p - buf;
+}
+
+rtems_libi2c_bus_ops_t mpc83xx_i2c_ops = {
+  init:        mpc83xx_i2c_init,
+  send_start:  mpc83xx_i2c_send_start,
+  send_stop:   mpc83xx_i2c_send_stop,
+  send_addr:   mpc83xx_i2c_send_addr,
+  read_bytes:  mpc83xx_i2c_read_bytes,
+  write_bytes: mpc83xx_i2c_write_bytes,
+};
+
