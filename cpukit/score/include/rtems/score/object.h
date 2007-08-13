@@ -236,7 +236,7 @@ typedef enum {
 } Objects_Classic_API;
 
 /** This macro is used to generically specify the last API index. */
-#define OBJECTS_RTEMS_CLASSES_LAST OBJECTS_RTEMS_EXTENSIONS
+#define OBJECTS_RTEMS_CLASSES_LAST OBJECTS_RTEMS_BARRIERS
 
 /**
  *  This enumerated type is used in the class field of the object ID

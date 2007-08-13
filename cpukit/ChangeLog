@@ -1,3 +1,7 @@
+2007-08-13	Chris Johns <chrisj@rtems.org>
+	* score/include/rtems/score/object.h: Point the
+	OBJECTS_RTEMS_CLASSES_LAST macro to the last entry.
+
 2007-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1248/networking
