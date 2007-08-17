@@ -4,7 +4,7 @@
 
           RTEMS Performance Monitoring and Measurement Framework
 
-                                      Copyright 2002 Chris Johns (ccj@acm.org)
+                              Copyright 2002-2007 Chris Johns (chrisj@rtems.org)
                                                                  23 April 2002
 
 This directory contains the source code for the performance monitoring and

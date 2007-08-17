@@ -38,7 +38,7 @@
 #include <rtems/capture-cli.h>
 #include <rtems/monitor.h>
 
-#define RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS (32)
+#define RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS (20)
 
 /*
  * The user capture timestamper.
@@ -63,20 +63,19 @@ static volatile int cli_load_thread_active;
 static const char* open_usage = "usage: copen [-i] size\n";
 
 static void
-rtems_capture_cli_open (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_open (int                          argc,
+                        char**                       argv,
+                        rtems_monitor_command_arg_t* command_arg,
+                        boolean                      verbose)
 {
-  uint32_t    size = 0;
+  uint32_t          size = 0;
   rtems_boolean     enable = 0;
   rtems_status_code sc;
   int               arg;
 
   if (argc <= 1)
   {
-    fprintf(stdout,open_usage);
+    fprintf (stdout, open_usage);
     return;
   }
 
@@ -87,7 +86,7 @@ rtems_capture_cli_open (
       if (argv[arg][1] == 'i')
         enable = 1;
       else
-        fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+        fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
     else
     {
@@ -95,7 +94,7 @@ rtems_capture_cli_open (
 
       if (size < 100)
       {
-        fprintf(stdout,"error: size must be greater than or equal to 100\n");
+        fprintf (stdout, "error: size must be greater than or equal to 100\n");
         return;
       }
     }
@@ -105,11 +104,11 @@ rtems_capture_cli_open (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: open failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: open failed: %s\n", rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"capture engine opened.\n");
+  fprintf (stdout, "capture engine opened.\n");
 
   if (!enable)
     return;
@@ -118,11 +117,11 @@ rtems_capture_cli_open (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: open enable failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: open enable failed: %s\n", rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"capture engine enabled.\n");
+  fprintf (stdout, "capture engine enabled.\n");
 }
 
 /*
@@ -135,11 +134,10 @@ rtems_capture_cli_open (
  */
 
 static void
-rtems_capture_cli_close (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_close (int                          argc,
+                         char**                       argv,
+                         rtems_monitor_command_arg_t* command_arg,
+                         boolean                      verbose)
 {
   rtems_status_code sc;
 
@@ -147,11 +145,11 @@ rtems_capture_cli_close (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: close failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: close failed: %s\n", rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"capture engine closed.\n");
+  fprintf (stdout, "capture engine closed.\n");
 }
 
 /*
@@ -164,11 +162,10 @@ rtems_capture_cli_close (
  */
 
 static void
-rtems_capture_cli_enable (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_enable (int                          argc,
+                          char**                       argv,
+                          rtems_monitor_command_arg_t* command_arg,
+                          boolean                      verbose)
 {
   rtems_status_code sc;
 
@@ -176,11 +173,11 @@ rtems_capture_cli_enable (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: enable failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: enable failed: %s\n", rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"capture engine enabled.\n");
+  fprintf (stdout, "capture engine enabled.\n");
 }
 
 /*
@@ -193,11 +190,10 @@ rtems_capture_cli_enable (
  */
 
 static void
-rtems_capture_cli_disable (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_disable (int                          argc,
+                           char**                       argv,
+                           rtems_monitor_command_arg_t* command_arg,
+                           boolean                      verbose)
 {
   rtems_status_code sc;
 
@@ -205,11 +201,11 @@ rtems_capture_cli_disable (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: disable failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: disable failed: %s\n", rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"capture engine disabled.\n");
+  fprintf (stdout, "capture engine disabled.\n");
 }
 
 /*
@@ -222,17 +218,16 @@ rtems_capture_cli_disable (
  */
 
 static void
-rtems_capture_cli_task_list (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_task_list (int                          argc,
+                             char**                       argv,
+                             rtems_monitor_command_arg_t* command_arg,
+                             boolean                      verbose)
 {
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority   floor = rtems_capture_watch_get_floor ();
   rtems_capture_task_t* task = rtems_capture_get_task_list ();
-  uint32_t        ticks;
-  uint32_t        tick_offset;
+  uint32_t              ticks;
+  uint32_t              tick_offset;
   unsigned long long    total_time;
   int                   count = rtems_capture_task_count ();
 
@@ -244,9 +239,7 @@ rtems_capture_cli_task_list (
     tick_offset = 0;
   }
 
-  total_time = (ticks * rtems_capture_task_time (task)) + tick_offset;
-
-  fprintf(stdout,"total %i\n", count);
+  fprintf (stdout, "total %i\n", count);
 
   while (task)
   {
@@ -254,11 +247,14 @@ rtems_capture_cli_task_list (
     int32_t             stack_used;
     int32_t             time_used;
 
-    stack_used = rtems_capture_task_stack_usage (task) * 100;
-    stack_used /= rtems_capture_task_stack_size (task);
+    stack_used = rtems_capture_task_stack_usage (task);
+    if (stack_used)
+      stack_used = (stack_used * 100) / stack_used;
 
     if (stack_used > 100)
       stack_used = 100;
+
+    total_time = (ticks * rtems_capture_task_time (task)) + tick_offset;
 
     time_used = (rtems_capture_task_time (task) * 100) / total_time;
 
@@ -267,32 +263,33 @@ rtems_capture_cli_task_list (
 
     priority = rtems_capture_task_real_priority (task);
 
-    fprintf(stdout," ");
+    fprintf (stdout, " ");
     rtems_monitor_dump_id (rtems_capture_task_id (task));
-    fprintf(stdout," ");
+    fprintf (stdout, " ");
     rtems_monitor_dump_name (rtems_capture_task_name (task));
-    fprintf(stdout," ");
+    fprintf (stdout, " ");
     rtems_monitor_dump_priority (rtems_capture_task_start_priority (task));
-    fprintf(stdout," ");
+    fprintf (stdout, " ");
     rtems_monitor_dump_priority (rtems_capture_task_real_priority (task));
-    fprintf(stdout," ");
+    fprintf (stdout, " ");
     rtems_monitor_dump_priority (rtems_capture_task_curr_priority (task));
-    fprintf(stdout," ");
+    fprintf (stdout, " ");
     rtems_monitor_dump_state (rtems_capture_task_state (task));
-    fprintf(stdout," %c%c%c%c%c",
-            rtems_capture_task_valid (task) ? 'a' : 'd',
-            rtems_capture_task_flags (task) & RTEMS_CAPTURE_TRACED ? 't' : '-',
-            rtems_capture_task_control_flags (task) & RTEMS_CAPTURE_TO_ANY ? 'F' : '-',
-            rtems_capture_task_control_flags (task) & RTEMS_CAPTURE_FROM_ANY ? 'T' : '-',
-            rtems_capture_task_control_flags (task) & RTEMS_CAPTURE_FROM_TO ? 'E' : '-');
+    fprintf (stdout, " %c%c",
+             rtems_capture_task_valid (task) ? 'a' : 'd',
+             rtems_capture_task_flags (task) & RTEMS_CAPTURE_TRACED ? 't' : '-');
+
     if ((floor > ceiling) && (ceiling > priority))
-      fprintf(stdout,"--");
+      fprintf (stdout, "--");
     else
-      fprintf(stdout,"%c%c",
-              rtems_capture_task_control (task) ?
-              (rtems_capture_task_control_flags (task) & RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
-              rtems_capture_watch_global_on () ? 'g' : '-');
-    fprintf(stdout," %3" PRId32 "%% %3" PRId32 "%% (%" PRIu32 ")\n",
+    {
+      uint32_t flags = rtems_capture_task_control_flags (task);
+      fprintf (stdout, "%c%c",
+               rtems_capture_task_control (task) ?
+               (flags & RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
+               rtems_capture_watch_global_on () ? 'g' : '-');
+    }
+    fprintf (stdout, " %3" PRId32 "%% %3" PRId32 "%% (%" PRIu32 ")\n",
             stack_used, time_used, rtems_capture_task_ticks (task));
 
     task = rtems_capture_next_task (task);
@@ -314,10 +311,7 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
   rtems_task_priority ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority floor = rtems_capture_watch_get_floor ();
   int                 last_count = 0;
-
-  fprintf(stdout,"\x1b[2J Press ENTER to exit.\n\n");
-  fprintf(stdout,"     PID NAME RPRI CPRI STATE  %%CPU     %%STK FLGS   EXEC TIME\n");
-
+  
   for (;;)
   {
     rtems_capture_task_t* tasks[RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS + 1];
@@ -341,6 +335,8 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
 
     task = rtems_capture_get_task_list ();
 
+    total_time = 0;
+
     while (task)
     {
       if (rtems_capture_task_valid (task))
@@ -348,6 +344,8 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
         unsigned long long l = rtems_capture_task_delta_time (task);
 
         count++;
+
+        total_time += l;
 
         for (i = 0; i < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS; i++)
         {
@@ -371,12 +369,9 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
       task = rtems_capture_next_task (task);
     }
 
-    fprintf(stdout,"\x1b[4;0H");
-
-    total_time = 0;
-
-    for (i = 0; i < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS; i++)
-      total_time += load[i];
+    fprintf (stdout, "\x1b[H\x1b[J Press ENTER to exit.\n\n");
+    fprintf (stdout,
+             "     PID NAME RPRI CPRI STATE  %%CPU     %%STK FLGS    EXEC TIME\n");
 
     if (count > last_count)
       j = count;
@@ -395,8 +390,9 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
 
       j--;
 
-      stack_used = rtems_capture_task_stack_usage (tasks[i]) * 100;
-      stack_used /= rtems_capture_task_stack_size (tasks[i]);
+      stack_used = rtems_capture_task_stack_usage (tasks[i]);
+      if (stack_used)
+        stack_used = (stack_used * 100) / stack_used;
 
       if (stack_used > 100)
         stack_used = 100;
@@ -405,33 +401,32 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
 
       priority = rtems_capture_task_real_priority (tasks[i]);
 
-      fprintf(stdout,"\x1b[K");
+      fprintf (stdout, "\x1b[K");
       rtems_monitor_dump_id (rtems_capture_task_id (tasks[i]));
-      fprintf(stdout," ");
+      fprintf (stdout, " ");
       rtems_monitor_dump_name (rtems_capture_task_name (tasks[i]));
-      fprintf(stdout,"  ");
+      fprintf (stdout, "  ");
       rtems_monitor_dump_priority (priority);
-      fprintf(stdout,"  ");
+      fprintf (stdout, "  ");
       rtems_monitor_dump_priority (rtems_capture_task_curr_priority (tasks[i]));
-      fprintf(stdout," ");
+      fprintf (stdout, " ");
       k = rtems_monitor_dump_state (rtems_capture_task_state (tasks[i]));
-      fprintf(stdout,"%*c %3i.%03i%% ", 6 - k, ' ', task_load / 1000, task_load % 1000);
-      fprintf(stdout,"%3i%% %c%c%c%c%c", stack_used,
+      fprintf (stdout, "%*c %3i.%03i%% ", 6 - k, ' ',
+               task_load / 1000, task_load % 1000);
+      fprintf (stdout, "%3i%% %c%c", stack_used,
               rtems_capture_task_valid (tasks[i]) ? 'a' : 'd',
-              rtems_capture_task_flags (tasks[i]) & RTEMS_CAPTURE_TRACED ? 't' : '-',
-              rtems_capture_task_control_flags (tasks[i]) & RTEMS_CAPTURE_TO_ANY ? 'F' : '-',
-              rtems_capture_task_control_flags (tasks[i]) & RTEMS_CAPTURE_FROM_ANY ? 'T' : '-',
-              rtems_capture_task_control_flags (tasks[i]) & RTEMS_CAPTURE_FROM_TO ? 'E' : '-');
+              rtems_capture_task_flags (tasks[i]) & RTEMS_CAPTURE_TRACED ? 't' : '-');
+
       if ((floor > ceiling) && (ceiling > priority))
-        fprintf(stdout,"--");
+        fprintf (stdout, "--");
       else
-        fprintf(stdout,"%c%c",
+        fprintf (stdout, "%c%c",
                 rtems_capture_task_control (tasks[i]) ?
                 (rtems_capture_task_control_flags (tasks[i]) &
                  RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
                 rtems_capture_watch_global_on () ? 'g' : '-');
 
-      fprintf(stdout,"   %qi\n", rtems_capture_task_time (tasks[i]));
+      fprintf (stdout, "   %qi\n", rtems_capture_task_time (tasks[i]));
     }
 
     if (count < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS)
@@ -439,7 +434,7 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
       j = RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS - count;   
       while (j > 0)
       {
-        fprintf(stdout,"\x1b[K\n");
+        fprintf (stdout, "\x1b[K\n");
         j--;
       }
     }
@@ -462,11 +457,10 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
  */
 
 static void
-rtems_capture_cli_task_load (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_task_load (int                          argc,
+                             char**                       argv,
+                             rtems_monitor_command_arg_t* command_arg,
+                             boolean                      verbose)
 {
   rtems_status_code   sc;
   rtems_task_priority priority;
@@ -477,20 +471,22 @@ rtems_capture_cli_task_load (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: cannot obtain the current priority: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: cannot obtain the current priority: %s\n",
+             rtems_status_text (sc));
     return;
   }
 
-  memcpy (&name, "CPlt", 4);
-
-  sc = rtems_task_create (name, priority, 1024,
+  name = rtems_build_name('C', 'P', 'l', 't');
+  
+  sc = rtems_task_create (name, priority, 4 * 1024,
                           RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
                           RTEMS_PREEMPT | RTEMS_TIMESLICE | RTEMS_NO_ASR,
                           &id);
-
-  if (sc != RTEMS_SUCCESSFUL)
+  
+  if (sc != RTEMS_SUCCESSFUL) 
   {
-    fprintf(stdout,"error: cannot create helper thread: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: cannot create helper thread: %s\n",
+             rtems_status_text (sc));
     return;
   }
 
@@ -498,7 +494,8 @@ rtems_capture_cli_task_load (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: cannot start helper thread: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: cannot start helper thread: %s\n",
+             rtems_status_text (sc));
     rtems_task_delete (id);
     return;
   }
@@ -516,7 +513,7 @@ rtems_capture_cli_task_load (
 
       rtems_task_delete (id);
 
-      fprintf(stdout,"load monitoring stopped.\n");
+      fprintf (stdout, "load monitoring stopped.\n");
 
       return;
     }
@@ -533,63 +530,81 @@ rtems_capture_cli_task_load (
  */
 
 static void
-rtems_capture_cli_watch_list (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_watch_list (int                          argc,
+                              char**                       argv,
+                              rtems_monitor_command_arg_t* command_arg,
+                              boolean                      verbose)
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
   rtems_task_priority      ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority      floor = rtems_capture_watch_get_floor ();
 
-  fprintf(stdout,"watch priority ceiling is %" PRId32 "\n", ceiling);
-  fprintf(stdout,"watch priority floor is %" PRId32 "\n", floor);
-  fprintf(stdout,"global watch is %s\n",
+  fprintf (stdout, "watch priority ceiling is %" PRId32 "\n", ceiling);
+  fprintf (stdout, "watch priority floor is %" PRId32 "\n", floor);
+  fprintf (stdout, "global watch is %s\n",
           rtems_capture_watch_global_on () ? "enabled" : "disabled");
-  fprintf(stdout,"total %" PRId32 "\n", rtems_capture_control_count ());
+  fprintf (stdout, "total %" PRId32 "\n", rtems_capture_control_count ());
 
   while (control)
   {
-    int f;
-    int fshowed;
-    int lf;
+    uint32_t flags;
+    int      f;
+    int      fshowed;
+    int      lf;
 
-    fprintf(stdout," ");
+    fprintf (stdout, " ");
     rtems_monitor_dump_id (rtems_capture_control_id (control));
-    fprintf(stdout," ");
+    fprintf (stdout, " ");
     rtems_monitor_dump_name (rtems_capture_control_name (control));
-    fprintf(stdout," %c%c%c%c%c",
-            rtems_capture_control_flags (control) & RTEMS_CAPTURE_WATCH ? 'w' : '-',
-            rtems_capture_watch_global_on () ? 'g' : '-',
-            rtems_capture_control_flags (control) & RTEMS_CAPTURE_TO_ANY ? 'F' : '-',
-            rtems_capture_control_flags (control) & RTEMS_CAPTURE_FROM_ANY ? 'T' : '-',
-            rtems_capture_control_flags (control) & RTEMS_CAPTURE_FROM_TO ? 'E' : '-');
+    flags = rtems_capture_control_flags (control);
+    fprintf (stdout, " %c%c ",
+             rtems_capture_watch_global_on () ? 'g' : '-',
+             flags & RTEMS_CAPTURE_WATCH ? 'w' : '-');
+    flags = rtems_capture_control_to_triggers (control);
+    fprintf (stdout, " T:%c%c%c%c%c%c%c",
+             flags & RTEMS_CAPTURE_SWITCH    ? 'S' : '-',
+             flags & RTEMS_CAPTURE_CREATE ? 'C' : '-',
+             flags & RTEMS_CAPTURE_START ? 'S' : '-',
+             flags & RTEMS_CAPTURE_RESTART ? 'R' : '-',
+             flags & RTEMS_CAPTURE_DELETE ? 'D' : '-',
+             flags & RTEMS_CAPTURE_BEGIN ? 'B' : '-',
+             flags & RTEMS_CAPTURE_EXITTED ? 'E' : '-');
+    flags = rtems_capture_control_from_triggers (control);
+    fprintf (stdout, " F:%c%c%c%c%c",
+             flags & RTEMS_CAPTURE_SWITCH  ? 'S' : '-',
+             flags & RTEMS_CAPTURE_CREATE  ? 'C' : '-',
+             flags & RTEMS_CAPTURE_START   ? 'S' : '-',
+             flags & RTEMS_CAPTURE_RESTART ? 'R' : '-',
+             flags & RTEMS_CAPTURE_DELETE  ? 'D' : '-');
 
     for (f = 0, fshowed = 0, lf = 1; f < RTEMS_CAPTURE_TRIGGER_TASKS; f++)
     {
-      if (lf && ((fshowed % 16) == 0))
+      if (rtems_capture_control_by_valid (control, f))
       {
-        fprintf(stdout,"\n");
-        lf = 0;
-      }
+        if (lf && ((fshowed % 3) == 0))
+        {
+          fprintf (stdout, "\n");
+          lf = 0;
+        }
 
-      /*
-       * FIXME: name test.
-       */
-      if (rtems_capture_control_from_name (control, f))
-      {
-        fprintf(stdout,"  %2i:", f);
-        rtems_monitor_dump_name (rtems_capture_control_from_name (control, f));
-        fprintf(stdout,"/");
-        rtems_monitor_dump_id (rtems_capture_control_from_id (control, f));
+        fprintf (stdout, "  %2i:", f);
+        rtems_monitor_dump_name (rtems_capture_control_by_name (control, f));
+        fprintf (stdout, "/");
+        rtems_monitor_dump_id (rtems_capture_control_by_id (control, f));
+        flags = rtems_capture_control_by_triggers (control, f);
+        fprintf (stdout, ":%c%c%c%c%c",
+                 flags & RTEMS_CAPTURE_SWITCH  ? 'S' : '-',
+                 flags & RTEMS_CAPTURE_CREATE  ? 'C' : '-',
+                 flags & RTEMS_CAPTURE_START   ? 'S' : '-',
+                 flags & RTEMS_CAPTURE_RESTART ? 'R' : '-',
+                 flags & RTEMS_CAPTURE_DELETE  ? 'D' : '-');
         fshowed++;
         lf = 1;
       }
     }
 
     if (lf)
-      fprintf(stdout,"\n");
+      fprintf (stdout, "\n");
 
     control = rtems_capture_next_control (control);
   }
@@ -611,13 +626,12 @@ rtems_capture_cli_get_name_id (char*          arg,
                                rtems_name*    name,
                                rtems_id*      id)
 {
-  uint32_t   objclass;
-  size_t     l;
-  size_t     i;
+  size_t l;
+  size_t i;
 
   if (*valid_name && *valid_id)
   {
-    fprintf(stdout,"error: too many arguments\n");
+    fprintf (stdout, "error: too many arguments\n");
     return 0;
   }
 
@@ -631,15 +645,26 @@ rtems_capture_cli_get_name_id (char*          arg,
     if (!isxdigit (arg[i]))
       break;
 
-  *id = strtoul (arg, 0, 16);
-
-  objclass = _Objects_Get_class (*id);
-
-  if ((i == l))
+  if (i == l)
+  {
+    *id = strtoul (arg, 0, 16);
     *valid_id = 1;
+  }
   else
   {
-    memcpy (name, arg, sizeof (rtems_name));
+    /*
+     * This is a bit of hack but it should work on all platforms
+     * as it is what the score does with names.
+     *
+     * @warning The extra assigns play with the byte order so do not
+     *          remove unless the score has been updated.
+     */
+    Objects_Name object_name;
+    rtems_name   rname;
+    
+    rname = rtems_build_name(arg[0], arg[1], arg[2], arg[3]);
+    object_name = (Objects_Name) rname;
+    *name = (rtems_name) object_name;
     *valid_name = 1;
   }
 
@@ -659,11 +684,10 @@ rtems_capture_cli_get_name_id (char*          arg,
 static char const * watch_add_usage = "usage: cwadd [task name] [id]\n";
 
 static void
-rtems_capture_cli_watch_add (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_watch_add (int                          argc,
+                             char**                       argv,
+                             rtems_monitor_command_arg_t* command_arg,
+                             boolean                      verbose)
 {
   rtems_status_code sc;
   int               arg;
@@ -674,7 +698,7 @@ rtems_capture_cli_watch_add (
 
   if (argc <= 1)
   {
-    fprintf(stdout,watch_add_usage);
+    fprintf (stdout, watch_add_usage);
     return;
   }
 
@@ -682,18 +706,19 @@ rtems_capture_cli_watch_add (
   {
     if (argv[arg][0] == '-')
     {
-      fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+      fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
     else
     {
-      if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name, &valid_id, &name, &id))
+      if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name, &valid_id,
+                                          &name, &id))
         return;
     }
   }
 
   if (!valid_name && !valid_id)
   {
-    fprintf(stdout,"error: no valid name or task id located\n");
+    fprintf (stdout, "error: no valid name or task id located\n");
     return;
   }
 
@@ -701,11 +726,12 @@ rtems_capture_cli_watch_add (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: watch add failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout,
+             "error: watch add failed: %s\n", rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"watch added.\n");
+  fprintf (stdout, "watch added.\n");
 }
 
 /*
@@ -721,11 +747,10 @@ rtems_capture_cli_watch_add (
 static char const * watch_del_usage = "usage: cwdel [task name] [id]\n";
 
 static void
-rtems_capture_cli_watch_del (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_watch_del (int                          argc,
+                             char**                       argv,
+                             rtems_monitor_command_arg_t* command_arg,
+                             boolean                      verbose)
 {
   rtems_status_code sc;
   int               arg;
@@ -736,7 +761,7 @@ rtems_capture_cli_watch_del (
 
   if (argc <= 1)
   {
-    fprintf(stdout,watch_del_usage);
+    fprintf (stdout, watch_del_usage);
     return;
   }
 
@@ -744,18 +769,19 @@ rtems_capture_cli_watch_del (
   {
     if (argv[arg][0] == '-')
     {
-      fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+      fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
     else
     {
-      if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name, &valid_id, &name, &id))
+      if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name, &valid_id,
+                                          &name, &id))
         return;
     }
   }
 
   if (!valid_name && !valid_id)
   {
-    fprintf(stdout,"error: no valid name or task id located\n");
+    fprintf (stdout, "error: no valid name or task id located\n");
     return;
   }
 
@@ -763,11 +789,12 @@ rtems_capture_cli_watch_del (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: watch delete failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: watch delete failed: %s\n",
+             rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"watch delete.\n");
+  fprintf (stdout, "watch delete.\n");
 }
 
 /*
@@ -782,11 +809,10 @@ rtems_capture_cli_watch_del (
 static char const * watch_control_usage = "usage: cwctl [task name] [id] on/off\n";
 
 static void
-rtems_capture_cli_watch_control (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_watch_control (int                          argc,
+                                 char**                       argv,
+                                 rtems_monitor_command_arg_t* command_arg,
+                                 boolean                      verbose)
 {
   rtems_status_code sc;
   int               arg;
@@ -798,7 +824,7 @@ rtems_capture_cli_watch_control (
 
   if (argc <= 2)
   {
-    fprintf(stdout,watch_control_usage);
+    fprintf (stdout, watch_control_usage);
     return;
   }
 
@@ -806,7 +832,7 @@ rtems_capture_cli_watch_control (
   {
     if (argv[arg][0] == '-')
     {
-      fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+      fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
     else
     {
@@ -814,14 +840,15 @@ rtems_capture_cli_watch_control (
         enable = 1;
       else if (strcmp (argv[arg], "off") == 0)
         enable = 0;
-      else if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name, &valid_id, &name, &id))
+      else if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name,
+                                               &valid_id, &name, &id))
         return;
     }
   }
 
   if (!valid_name && !valid_id)
   {
-    fprintf(stdout,"error: no valid name or task id located\n");
+    fprintf (stdout, "error: no valid name or task id located\n");
     return;
   }
 
@@ -829,11 +856,12 @@ rtems_capture_cli_watch_control (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: watch control failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: watch control failed: %s\n",
+             rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"watch %s.\n", enable ? "enabled" : "disabled");
+  fprintf (stdout, "watch %s.\n", enable ? "enabled" : "disabled");
 }
 
 /*
@@ -848,11 +876,10 @@ rtems_capture_cli_watch_control (
 static char const * watch_global_usage = "usage: cwglob on/off\n";
 
 static void
-rtems_capture_cli_watch_global (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_watch_global (int                          argc,
+                                char**                       argv,
+                                rtems_monitor_command_arg_t* command_arg,
+                                boolean                      verbose)
 {
   rtems_status_code sc;
   int               arg;
@@ -860,7 +887,7 @@ rtems_capture_cli_watch_global (
 
   if (argc <= 1)
   {
-    fprintf(stdout,watch_global_usage);
+    fprintf (stdout, watch_global_usage);
     return;
   }
 
@@ -868,7 +895,7 @@ rtems_capture_cli_watch_global (
   {
     if (argv[arg][0] == '-')
     {
-      fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+      fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
     else
     {
@@ -883,11 +910,12 @@ rtems_capture_cli_watch_global (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: global watch failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: global watch failed: %s\n",
+             rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"global watch %s.\n", enable ? "enabled" : "disabled");
+  fprintf (stdout, "global watch %s.\n", enable ? "enabled" : "disabled");
 }
 
 /*
@@ -902,11 +930,10 @@ rtems_capture_cli_watch_global (
 static char const * watch_ceiling_usage = "usage: cwceil priority\n";
 
 static void
-rtems_capture_cli_watch_ceiling (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_watch_ceiling (int                          argc,
+                                 char**                       argv,
+                                 rtems_monitor_command_arg_t* command_arg,
+                                 boolean                      verbose)
 {
   rtems_status_code   sc;
   int                 arg;
@@ -914,7 +941,7 @@ rtems_capture_cli_watch_ceiling (
 
   if (argc <= 1)
   {
-    fprintf(stdout,watch_ceiling_usage);
+    fprintf (stdout, watch_ceiling_usage);
     return;
   }
 
@@ -922,7 +949,7 @@ rtems_capture_cli_watch_ceiling (
   {
     if (argv[arg][0] == '-')
     {
-      fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+      fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
     else
     {
@@ -934,11 +961,12 @@ rtems_capture_cli_watch_ceiling (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: watch ceiling failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: watch ceiling failed: %s\n",
+             rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"watch ceiling is %" PRId32 ".\n", priority);
+  fprintf (stdout, "watch ceiling is %" PRId32 ".\n", priority);
 }
 
 /*
@@ -953,11 +981,10 @@ rtems_capture_cli_watch_ceiling (
 static char const * watch_floor_usage = "usage: cwfloor priority\n";
 
 static void
-rtems_capture_cli_watch_floor (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_watch_floor (int                          argc,
+                               char**                       argv,
+                               rtems_monitor_command_arg_t* command_arg,
+                               boolean                      verbose)
 {
   rtems_status_code   sc;
   int                 arg;
@@ -965,7 +992,7 @@ rtems_capture_cli_watch_floor (
 
   if (argc <= 1)
   {
-    fprintf(stdout,watch_floor_usage);
+    fprintf (stdout, watch_floor_usage);
     return;
   }
 
@@ -973,7 +1000,7 @@ rtems_capture_cli_watch_floor (
   {
     if (argv[arg][0] == '-')
     {
-      fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+      fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
     else
     {
@@ -985,11 +1012,241 @@ rtems_capture_cli_watch_floor (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: watch floor failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: watch floor failed: %s\n",
+             rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"watch floor is %" PRId32 ".\n", priority);
+  fprintf (stdout, "watch floor is %" PRId32 ".\n", priority);
+}
+
+/*
+ * rtems_capture_cli_trigger_worker
+ *
+ *  DESCRIPTION:
+ *
+ * This function is a monitor command that sets or clears a trigger.
+ *
+ */
+
+static char const *trigger_set_usage =
+      "usage: %s [-?] type [to name/id] [from] [from name/id]\n";
+
+static char const *trigger_set_types =
+      "  You can say 'type TASK' or 'type TO from FROM'\n" \
+      "  where TASK is the task the event is happening to\n" \
+      "  or you can say the event TO this task FROM this task.\n" \
+      "  No type defaults to 'switch'.\n" \
+      "   switch  : context switch TASK or FROM or FROM->TO\n" \
+      "   create  : create TASK, or create TO from FROM\n" \
+      "   start   : start TASK, or start TO from FROM\n" \
+      "   restart : restart TASK, or restart TO from FROM\n" \
+      "   delete  : delete TASK or delete TO from FROM\n" \
+      "   begin   : begin TASK\n" \
+      "   exitted : exitted TASK\n";
+
+/*
+ * Structure to handle the parsing of the trigger command line.
+ */
+typedef struct rtems_capture_cli_triggers_s
+{
+  char const *            name;
+  rtems_capture_trigger_t type;
+  int                     to_only;
+} rtems_capture_cli_triggers_t;
+
+static rtems_capture_cli_triggers_t rtems_capture_cli_triggers[] =
+{
+  { "switch",  rtems_capture_switch,  0 }, /* must be first */
+  { "create",  rtems_capture_create,  0 },
+  { "start",   rtems_capture_start,   0 },
+  { "restart", rtems_capture_restart, 0 },
+  { "delete",  rtems_capture_delete,  0 },
+  { "begin",   rtems_capture_begin,   1 },
+  { "exitted", rtems_capture_exitted, 1 }
+};
+
+typedef enum rtems_capture_cli_trig_state_e
+{
+  trig_type,
+  trig_to,
+  trig_from_from,
+  trig_from
+} rtems_capture_cli_trig_state_t;
+
+#define RTEMS_CAPTURE_CLI_TRIGGERS_NUM \
+  (sizeof (rtems_capture_cli_triggers) / sizeof (rtems_capture_cli_triggers_t))
+
+static void
+rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
+{
+  rtems_status_code            sc;
+  int                          arg;
+  int                          trigger = 0; /* switch */
+  rtems_capture_trigger_mode_t trigger_mode = rtems_capture_from_any;
+  rtems_boolean                trigger_set = 0;
+  rtems_boolean                is_from = 0;
+  rtems_name                   name = 0;
+  rtems_id                     id = 0;
+  rtems_boolean                valid_name = 0;
+  rtems_boolean                valid_id = 0;
+  rtems_name                   from_name = 0;
+  rtems_id                     from_id = 0;
+  rtems_boolean                from_valid_name = 0;
+  rtems_boolean                from_valid_id = 0;
+  rtems_name                   to_name = 0;
+  rtems_id                     to_id = 0;
+  rtems_boolean                to_valid_name = 0;
+  rtems_boolean                to_valid_id = 0;
+
+  for (arg = 1; arg < argc; arg++)
+  {
+    if (argv[arg][0] == '-')
+    {
+      switch (argv[arg][1])
+      {
+        case '?':
+          fprintf (stdout, trigger_set_usage, set ? "ctset" : "ctclear");
+          fprintf (stdout, trigger_set_types);
+          return;
+        default:
+          fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
+          break;
+      }
+    }
+    else
+    {
+      if (!trigger_set)
+      {
+        rtems_boolean found = 0;
+        int           t;
+        
+        for (t = 0; t < RTEMS_CAPTURE_CLI_TRIGGERS_NUM; t++)
+          if (strcmp (argv[arg], rtems_capture_cli_triggers[t].name) == 0)
+          {
+            trigger = t;
+            found = 1;
+            break;
+          }
+
+        trigger_set = 1;
+
+        /*
+         * If a trigger was not found assume the default and
+         * assume the parameter is a task name or id.
+         */
+        if (found)
+          continue;
+      }
+
+      if (strcmp (arg[argv], "from") == 0)
+      {
+        if (is_from)
+          fprintf (stdout, "warning: extra 'from' ignored\n");
+        
+        is_from = 1;
+        continue;
+      }
+
+      if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name, &valid_id,
+                                          &name, &id))
+        return;
+
+      if (valid_name)
+      {
+        if (is_from)
+        {
+          if (!from_valid_name && !from_valid_id)
+          {
+            from_valid_name = 1;
+            from_name       = name;
+          }
+          else
+            fprintf (stdout, "warning: extra arguments ignored\n");
+        }
+        else if (!to_valid_name && !to_valid_id)
+        {
+          to_valid_name = 1;
+          to_name       = name;
+        }
+        else
+          fprintf (stdout, "warning: extra arguments ignored\n");
+      }
+          
+      if (valid_id)
+      {
+        if (is_from)
+        {
+          if (!from_valid_name && !from_valid_id)
+          {
+            from_valid_id = 1;
+            from_id       = id;
+          }
+          else
+            fprintf (stdout, "warning: extra arguments ignored\n");
+        }
+        else if (!to_valid_name && !to_valid_id)
+        {
+          to_valid_id = 1;
+          to_id       = id;
+        }
+        else
+          fprintf (stdout, "warning: extra arguments ignored\n");
+      }
+    }
+  }
+
+  if (is_from && rtems_capture_cli_triggers[trigger].to_only)
+  {
+    fprintf (stdout, "error: a %s trigger can be a TO trigger\n",
+             rtems_capture_cli_triggers[trigger].name);
+    return;
+  }
+  
+  if (!to_valid_name && !to_valid_id && !from_valid_name && !from_valid_id)
+  {
+    fprintf (stdout, trigger_set_usage);
+    return;
+  }
+
+  if (!is_from && !to_valid_name && !to_valid_id)
+  {
+    fprintf (stdout, "error: a %s trigger needs a TO name or id\n",
+             rtems_capture_cli_triggers[trigger].name);
+    return;
+  }
+
+  if (is_from && !from_valid_name && !from_valid_id)
+  {
+    fprintf (stdout, "error: a %s trigger needs a FROM name or id\n",
+             rtems_capture_cli_triggers[trigger].name);
+    return;
+  }
+
+  if ((from_valid_name || from_valid_id) && (to_valid_name || to_valid_id))
+    trigger_mode = rtems_capture_from_to;
+  else if (from_valid_name || from_valid_id)
+    trigger_mode = rtems_capture_to_any;
+  else if (to_valid_name || to_valid_id)
+    trigger_mode = rtems_capture_from_any;
+
+  if (set)
+    sc = rtems_capture_set_trigger (from_name, from_id, to_name, to_id,
+                                    trigger_mode,
+                                    rtems_capture_cli_triggers[trigger].type);
+  else
+    sc = rtems_capture_clear_trigger (from_name, from_id, to_name, to_id,
+                                      trigger_mode,
+                                      rtems_capture_cli_triggers[trigger].type);
+
+  if (sc != RTEMS_SUCCESSFUL)
+  {
+    fprintf (stdout, "error: %sing the trigger failed: %s\n",
+             set ? "sett" : "clear", rtems_status_text (sc));
+    return;
+  }
+
+  fprintf (stdout, "trigger %s.\n", set ? "set" : "cleared");
 }
 
 /*
@@ -1001,153 +1258,31 @@ rtems_capture_cli_watch_floor (
  *
  */
 
-static char const *trigger_set_usage = "usage: ctrig type [from] [fromid] [to] [to id]\n";
+static void
+rtems_capture_cli_trigger_set (int                          argc,
+                               char**                       argv,
+                               rtems_monitor_command_arg_t* command_arg,
+                               boolean                      verbose)
+{
+  rtems_capture_cli_trigger_worker (1, argc, argv);
+}
+
+/*
+ * rtems_capture_cli_trigger_clear
+ *
+ *  DESCRIPTION:
+ *
+ * This function is a monitor command that clears a trigger.
+ *
+ */
 
 static void
-rtems_capture_cli_trigger_set (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_trigger_clear (int                          argc,
+                                 char**                       argv,
+                                 rtems_monitor_command_arg_t* command_arg,
+                                 boolean                      verbose)
 {
-  rtems_status_code       sc;
-  int                     arg;
-  rtems_capture_trigger_t trigger = rtems_capture_from_to;
-  rtems_boolean           trigger_set = 0;
-  rtems_name              name = 0;
-  rtems_id                id = 0;
-  rtems_boolean           valid_name = 0;
-  rtems_boolean           valid_id = 0;
-  rtems_name              from_name = 0;
-  rtems_id                from_id = 0;
-  rtems_boolean           from_valid_name = 0;
-  rtems_boolean           from_valid_id = 0;
-  rtems_name              to_name = 0;
-  rtems_id                to_id = 0;
-  rtems_boolean           to_valid_name = 0;
-  rtems_boolean           to_valid_id = 0;
-
-  if (argc <= 2)
-  {
-    fprintf(stdout,trigger_set_usage);
-    return;
-  }
-
-  for (arg = 1; arg < argc; arg++)
-  {
-    if (argv[arg][0] == '-')
-    {
-      fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
-    }
-    else
-    {
-      if (!trigger_set)
-      {
-        if (strcmp (argv[arg], "from") == 0)
-          trigger = rtems_capture_to_any;
-        else if (strcmp (argv[arg], "to") == 0)
-          trigger = rtems_capture_from_any;
-        else if (strcmp (argv[arg], "edge") == 0)
-          trigger = rtems_capture_from_any;
-        else
-        {
-          fprintf(stdout,"error: the first argument is the trigger type (from/to/edge)\n");
-          return;
-        }
-        trigger_set = 1;
-      }
-      else
-      {
-        if (trigger == rtems_capture_to_any)
-        {
-          if (from_valid_name && from_valid_id)
-            fprintf(stdout,"warning: extra arguments ignored\n");
-          else if (!rtems_capture_cli_get_name_id (argv[arg], &from_valid_name, &from_valid_id,
-                                           &from_name, &from_id))
-            return;
-        }
-        else if (trigger == rtems_capture_from_any)
-        {
-          if (to_valid_name && to_valid_id)
-            fprintf(stdout,"warning: extra arguments ignored\n");
-          else if (!rtems_capture_cli_get_name_id (argv[arg], &to_valid_name, &to_valid_id,
-                                           &to_name, &to_id))
-            return;
-        }
-        else if (trigger == rtems_capture_from_to)
-        {
-          if (from_valid_name && from_valid_id && to_valid_name && to_valid_id)
-            fprintf(stdout,"warning: extra arguments ignored\n");
-          else
-          {
-            if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name, &valid_id,
-                                        &name, &id))
-              return;
-
-            if (valid_name)
-            {
-              if (!from_valid_name && !from_valid_id)
-              {
-                from_valid_name = 1;
-                from_name       = name;
-              }
-              else if (to_valid_name)
-                fprintf(stdout,"warning: extra arguments ignored\n");
-              else
-              {
-                to_valid_name = 1;
-                to_name       = name;
-              }
-            }
-            if (valid_id)
-            {
-              if (!from_valid_id && !to_valid_name)
-              {
-                from_valid_id = 1;
-                from_id       = id;
-              }
-              else if (to_valid_id)
-                fprintf(stdout,"warning: extra arguments ignored\n");
-              else
-              {
-                to_valid_id = 1;
-                to_id       = id;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  if ((trigger == rtems_capture_to_any) && !from_valid_name && !from_valid_id)
-  {
-    fprintf(stdout,"error: a from trigger need a to name or id\n");
-    return;
-  }
-
-  if ((trigger == rtems_capture_from_any) && !to_valid_name && !to_valid_id)
-  {
-    fprintf(stdout,"error: a to trigger need a from name or id\n");
-    return;
-  }
-
-  if ((trigger == rtems_capture_from_to) &&
-      ((!from_valid_name && !from_valid_id) || (!to_valid_name && !to_valid_id)))
-  {
-    fprintf(stdout,"error: an edge trigger need a from and to name or id\n");
-    return;
-  }
-
-  sc = rtems_capture_set_trigger (from_name, from_id, to_name, to_id, trigger);
-
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-    fprintf(stdout,"error: setting the trigger failed: %s\n", rtems_status_text (sc));
-    return;
-  }
-
-  fprintf(stdout,"trigger set.\n");
+  rtems_capture_cli_trigger_worker (0, argc, argv);
 }
 
 /*
@@ -1160,18 +1295,17 @@ rtems_capture_cli_trigger_set (
  */
 
 static void
-rtems_capture_cli_trace_records (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_trace_records (int                          argc,
+                                 char**                       argv,
+                                 rtems_monitor_command_arg_t* command_arg,
+                                 boolean                      verbose)
 {
   rtems_status_code       sc;
   rtems_boolean           csv = 0;
-  static int              dump_total = 32;
+  static int              dump_total = 22;
   int                     total;
   int                     count;
-  uint32_t          read;
+  uint32_t                read;
   rtems_capture_record_t* rec;
   int                     arg;
 
@@ -1181,31 +1315,24 @@ rtems_capture_cli_trace_records (
     {
       if (argv[arg][1] == 'c')
         csv = 1;
-      else if (argv[arg][1] == 'r')
-      {
-        int i;
-        int l;
+      else
+        fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
+    }
+    else
+    {
+      int i;
+      int l;
 
-        arg++;
-        if (arg == argc)
+      l = strlen (argv[arg]);
+
+      for (i = 0; i < l; i++)
+        if (!isdigit (argv[arg][i]))
         {
-          fprintf(stdout,"error: option -r requires number\n");
+          fprintf (stdout, "error: not a number\n");
           return;
         }
 
-        l = strlen (argv[arg]);
-
-        for (i = 0; i < l; i++)
-          if (!isdigit (argv[arg][i]))
-          {
-            fprintf(stdout,"error: option -r requires number and currently it is not\n");
-            return;
-          }
-
-        dump_total = strtoul (argv[arg], 0, 0);
-      }
-      else
-        fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+      dump_total = strtoul (argv[arg], 0, 0);
     }
   }
 
@@ -1217,18 +1344,28 @@ rtems_capture_cli_trace_records (
 
     if (sc != RTEMS_SUCCESSFUL)
     {
-      fprintf(stdout,"error: trace read failed: %s\n", rtems_status_text (sc));
+      fprintf (stdout, "error: trace read failed: %s\n", rtems_status_text (sc));
       rtems_capture_flush (0);
       return;
     }
 
+    /*
+     * If we have no records then just exist. We still need to release
+     * the reader lock.
+     */
+    
     if (read == 0)
+    {
+      rtems_capture_release (read);
       break;
+    }
 
-    for (count = 0; count < read; count++, rec++)
+    count = total < read ? total : read;
+    
+    while (count--)
     {
       if (csv)
-        fprintf(stdout,"%08" PRIx32 ",%03" PRIu32
+        fprintf (stdout, "%08" PRIx32 ",%03" PRIu32
                    ",%03" PRIu32 ",%04" PRIx32 ",%" PRId32 ",%" PRId32 "\n",
                 (uint32_t) rec->task,
                 (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
@@ -1251,12 +1388,12 @@ rtems_capture_cli_trace_records (
         {
           if (event & 1)
           {
-            fprintf(stdout,"%9li.%06li ", (unsigned long) (t / 1000000),
+            fprintf (stdout, "%9li.%06li ", (unsigned long) (t / 1000000),
                     (unsigned long) (t % 1000000));
             rtems_monitor_dump_id (rtems_capture_task_id (rec->task));
-            fprintf(stdout," ");
+            fprintf (stdout, " ");
             rtems_monitor_dump_name (rtems_capture_task_name (rec->task));
-            fprintf(stdout," %3" PRId32 " %3" PRId32 " %s\n",
+            fprintf (stdout, " %3" PRId32 " %3" PRId32 " %s\n",
                     (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
                     (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
                     rtems_capture_event_text (e));
@@ -1264,14 +1401,17 @@ rtems_capture_cli_trace_records (
           event >>= 1;
         }
       }
+      rec++;
     }
 
-    if (read < total)
-      total -= read;
+    count = total < read ? total : read;
+    
+    if (count < total)
+      total -= count;
     else
       total = 0;
 
-    rtems_capture_release (read);
+    rtems_capture_release (count);
   }
 }
 
@@ -1286,11 +1426,10 @@ rtems_capture_cli_trace_records (
  */
 
 static void
-rtems_capture_cli_flush (
-  int argc,
-  char **argv,
-  rtems_monitor_command_arg_t *command_arg,
-  boolean verbose )
+rtems_capture_cli_flush (int                          argc,
+                         char**                       argv,
+                         rtems_monitor_command_arg_t* command_arg,
+                         boolean                      verbose)
 {
   rtems_status_code sc;
   rtems_boolean     prime = 1;
@@ -1303,7 +1442,7 @@ rtems_capture_cli_flush (
       if (argv[arg][1] == 'n')
         prime = 0;
       else
-        fprintf(stdout,"warning: option -%c ignored\n", argv[arg][1]);
+        fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
   }
 
@@ -1311,11 +1450,12 @@ rtems_capture_cli_flush (
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf(stdout,"error: flush failed: %s\n", rtems_status_text (sc));
+    fprintf (stdout, "error: flush failed: %s\n", rtems_status_text (sc));
     return;
   }
 
-  fprintf(stdout,"trace buffer flushed and %s.\n", prime ? "primed" : "not primed");
+  fprintf (stdout, "trace buffer flushed and %s.\n",
+           prime ? "primed" : "not primed");
 }
 
 static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
@@ -1433,10 +1573,18 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     0
   },
   {
-    "ctrig",
-    "usage: ctrig type [from name] [from id] [to name] [to id]\n",
+    "ctset",
+    "usage: ctset -h\n",
     0,
     rtems_capture_cli_trigger_set,
+    { 0 },
+    0
+  },
+  {
+    "ctclear",
+    "usage: ctclear -?\n",
+    0,
+    rtems_capture_cli_trigger_clear,
     { 0 },
     0
   },

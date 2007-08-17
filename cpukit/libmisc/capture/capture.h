@@ -22,7 +22,6 @@
   ------------------------------------------------------------------------
 
   RTEMS Performance Monitoring and Measurement Framework.
-
   This is the Capture Engine component.
 
 */
@@ -42,31 +41,85 @@ extern "C" {
 #define RTEMS_CAPTURE_TRIGGER_TASKS (32)
 
 /**
+ * rtems_capture_from_t
+ *
+ *  DESCRIPTION:
+ *
+ * A from capture is a task id and a mask for the type of
+ * from trigger we are interested in. The mask uses the same
+ * bit maps as the flags field in the control structure. There
+ * will only be a from type trigger if the flags in the control
+ * structure has the specific *_BY bit set.
+ */
+typedef struct rtems_capture_from_s
+{
+  rtems_name name;
+  rtems_id   id;
+  uint32_t   trigger;
+} rtems_capture_from_t;
+
+/**
  * rtems_capture_control_t
  *
  *  DESCRIPTION:
  *
  * RTEMS control holds the trigger and watch configuration for a group of
- * tasks with the same name.
+ * tasks with the same name. The flags hold global control flags.
+ *
+ * The to_triggers fields holds triggers TO this task. The from_triggers holds
+ * triggers from this task. The by_triggers is an OR or triggers which are
+ * caused BY the task listed TO this task. The by_valid flag which entries
+ * in by are valid.
  */
 typedef struct rtems_capture_control_s
 {
   rtems_name                      name;
   rtems_id                        id;
-  uint32_t                  flags;
-  rtems_name                      from[RTEMS_CAPTURE_TRIGGER_TASKS];
-  rtems_id                        from_id[RTEMS_CAPTURE_TRIGGER_TASKS];
+  uint32_t                        flags;
+  uint32_t                        to_triggers;
+  uint32_t                        from_triggers;
+  uint32_t                        by_triggers;
+  uint32_t                        by_valid;
+  rtems_capture_from_t            by[RTEMS_CAPTURE_TRIGGER_TASKS];
   struct rtems_capture_control_s* next;
 } rtems_capture_control_t;
+
+/**
+ * The from_valid mask.
+ */
+#define RTEMS_CAPTURE_CONTROL_FROM_MASK(_s) \
+ (1 << (RTEMS_CAPTURE_TRIGGER_TASKS - ((_s) + 1)))
 
 /**
  * Control flags.
  */
 #define RTEMS_CAPTURE_WATCH         (1 << 0)
-#define RTEMS_CAPTURE_FROM_ANY      (1 << 1)
-#define RTEMS_CAPTURE_TO_ANY        (1 << 2)
-#define RTEMS_CAPTURE_FROM_TO       (1 << 3)
 
+/**
+ * Control triggers.
+ */
+#define RTEMS_CAPTURE_SWITCH        (1 << 0)
+#define RTEMS_CAPTURE_CREATE        (1 << 1)
+#define RTEMS_CAPTURE_START         (1 << 2)
+#define RTEMS_CAPTURE_RESTART       (1 << 3)
+#define RTEMS_CAPTURE_DELETE        (1 << 4)
+#define RTEMS_CAPTURE_BEGIN         (1 << 5)
+#define RTEMS_CAPTURE_EXITTED       (1 << 6)
+
+#define RTEMS_CAPTURE_FROM_TRIGS    (RTEMS_CAPTURE_SWITCH  | \
+                                     RTEMS_CAPTURE_CREATE | \
+                                     RTEMS_CAPTURE_START | \
+                                     RTEMS_CAPTURE_RESTART | \
+                                     RTEMS_CAPTURE_DELETE)
+
+#define RTEMS_CAPTURE_TO_TRIGS      (RTEMS_CAPTURE_SWITCH | \
+                                     RTEMS_CAPTURE_CREATE | \
+                                     RTEMS_CAPTURE_START | \
+                                     RTEMS_CAPTURE_RESTART | \
+                                     RTEMS_CAPTURE_DELETE | \
+                                     RTEMS_CAPTURE_BEGIN | \
+                                     RTEMS_CAPTURE_EXITTED)
+                                     
 /**
  * rtems_capture_control_t
  *
@@ -74,12 +127,14 @@ typedef struct rtems_capture_control_s
  *
  * RTEMS capture control provdes the information about a task, along
  * with its trigger state. The control is referenced by each
- * capture record. This is* information neeed by the decoder. The
+ * capture record. This is information neeed by the decoder. The
  * capture record cannot assume the task will exist when the record is
  * dumped via the target interface so task info needed for tracing is
- * copied and held here.
+ * copied and held here. Once the references in the trace buffer
+ * have been removed and the task is deleted this structure is
+ * released back to the heap.
  *
- * The inline heper functions provide more details about the info
+ * The inline helper functions provide more details about the info
  * contained in this structure.
  *
  * Note, the tracer code exploits the fact an rtems_name is a
@@ -89,19 +144,20 @@ typedef struct rtems_capture_task_s
 {
   rtems_name                   name;
   rtems_id                     id;
-  uint32_t               flags;
+  uint32_t                     flags;
+  uint32_t                     refcount;
   rtems_tcb*                   tcb;
-  uint32_t               in;
-  uint32_t               out;
+  uint32_t                     in;
+  uint32_t                     out;
   rtems_task_priority          start_priority;
-  uint32_t               stack_size;
-  uint32_t               stack_clean;
-  uint32_t               ticks;
-  uint32_t               tick_offset;
-  uint32_t               ticks_in;
-  uint32_t               tick_offset_in;
-  uint32_t               last_ticks;
-  uint32_t               last_tick_offset;
+  uint32_t                     stack_size;
+  uint32_t                     stack_clean;
+  uint32_t                     ticks;
+  uint32_t                     tick_offset;
+  uint32_t                     ticks_in;
+  uint32_t                     tick_offset_in;
+  uint32_t                     last_ticks;
+  uint32_t                     last_tick_offset;
   rtems_capture_control_t*     control;
   struct rtems_capture_task_s* forw;
   struct rtems_capture_task_s* back;
@@ -124,46 +180,64 @@ typedef struct rtems_capture_task_s
 typedef struct rtems_capture_record_s
 {
   rtems_capture_task_t* task;
-  uint32_t        events;
-  uint32_t        ticks;
-  uint32_t        tick_offset;
+  uint32_t              events;
+  uint32_t              ticks;
+  uint32_t              tick_offset;
 } rtems_capture_record_t;
 
 /**
  * The capture record event flags.
  */
-#define RTEMS_CAPTURE_REAL_PRI_EVENT_MASK UINT32_C(0x000000ff)
-#define RTEMS_CAPTURE_CURR_PRI_EVENT_MASK UINT32_C(0x0000ff00)
+#define RTEMS_CAPTURE_REAL_PRI_EVENT_MASK UINT32_C (0x000000ff)
+#define RTEMS_CAPTURE_CURR_PRI_EVENT_MASK UINT32_C (0x0000ff00)
 #define RTEMS_CAPTURE_REAL_PRIORITY_EVENT (0)
 #define RTEMS_CAPTURE_CURR_PRIORITY_EVENT (8)
 #define RTEMS_CAPTURE_EVENT_START         (16)
-#define RTEMS_CAPTURE_CREATED_BY_EVENT    UINT32_C(0x00010000)
-#define RTEMS_CAPTURE_CREATED_EVENT       UINT32_C(0x00020000)
-#define RTEMS_CAPTURE_STARTED_BY_EVENT    UINT32_C(0x00040000)
-#define RTEMS_CAPTURE_STARTED_EVENT       UINT32_C(0x00080000)
-#define RTEMS_CAPTURE_RESTARTED_BY_EVENT  UINT32_C(0x00100000)
-#define RTEMS_CAPTURE_RESTARTED_EVENT     UINT32_C(0x00200000)
-#define RTEMS_CAPTURE_DELETED_BY_EVENT    UINT32_C(0x00400000)
-#define RTEMS_CAPTURE_DELETED_EVENT       UINT32_C(0x00800000)
-#define RTEMS_CAPTURE_BEGIN_EVENT         UINT32_C(0x01000000)
-#define RTEMS_CAPTURE_EXITTED_EVENT       UINT32_C(0x02000000)
-#define RTEMS_CAPTURE_SWITCHED_OUT_EVENT  UINT32_C(0x04000000)
-#define RTEMS_CAPTURE_SWITCHED_IN_EVENT   UINT32_C(0x08000000)
-#define RTEMS_CAPTURE_TIMESTAMP           UINT32_C(0x10000000)
+#define RTEMS_CAPTURE_CREATED_BY_EVENT    UINT32_C (0x00010000)
+#define RTEMS_CAPTURE_CREATED_EVENT       UINT32_C (0x00020000)
+#define RTEMS_CAPTURE_STARTED_BY_EVENT    UINT32_C (0x00040000)
+#define RTEMS_CAPTURE_STARTED_EVENT       UINT32_C (0x00080000)
+#define RTEMS_CAPTURE_RESTARTED_BY_EVENT  UINT32_C (0x00100000)
+#define RTEMS_CAPTURE_RESTARTED_EVENT     UINT32_C (0x00200000)
+#define RTEMS_CAPTURE_DELETED_BY_EVENT    UINT32_C (0x00400000)
+#define RTEMS_CAPTURE_DELETED_EVENT       UINT32_C (0x00800000)
+#define RTEMS_CAPTURE_BEGIN_EVENT         UINT32_C (0x01000000)
+#define RTEMS_CAPTURE_EXITTED_EVENT       UINT32_C (0x02000000)
+#define RTEMS_CAPTURE_SWITCHED_OUT_EVENT  UINT32_C (0x04000000)
+#define RTEMS_CAPTURE_SWITCHED_IN_EVENT   UINT32_C (0x08000000)
+#define RTEMS_CAPTURE_TIMESTAMP           UINT32_C (0x10000000)
 #define RTEMS_CAPTURE_EVENT_END           (28)
+
+/**
+ * rtems_capture_trigger_mode_t
+ *
+ *  DESCRIPTION:
+ *
+ * The types of trigger modes that exist.
+ */
+typedef enum rtems_capture_trigger_mode_e
+{
+  rtems_capture_to_any,
+  rtems_capture_from_any,
+  rtems_capture_from_to
+} rtems_capture_trigger_mode_t;
 
 /**
  * rtems_capture_trigger_t
  *
  *  DESCRIPTION:
  *
- * The types of triggers that exist. FIXME: add more here.
+ * The types of triggers that exist.
  */
-typedef enum rtems_capture_trigger_t
+typedef enum rtems_capture_trigger_e
 {
-  rtems_capture_to_any,
-  rtems_capture_from_any,
-  rtems_capture_from_to
+  rtems_capture_switch,
+  rtems_capture_create,
+  rtems_capture_start,
+  rtems_capture_restart,
+  rtems_capture_delete,
+  rtems_capture_begin,
+  rtems_capture_exitted
 } rtems_capture_trigger_t;
 
 /**
@@ -177,30 +251,21 @@ typedef enum rtems_capture_trigger_t
  */
 
 typedef void (*rtems_capture_timestamp)
-                (uint32_t  * ticks, uint32_t  * micro);
+                (uint32_t* ticks, uint32_t* micro);
 
 /**
  * rtems_capture_open
  *
  *  DESCRIPTION:
  *
- * This function initialises the realtime trace manager allocating the capture
- * buffer. It is assumed we have a working heap at stage of initialisation.
+ * This function initialises the realtime trace manager allocating the
+ * capture buffer. It is assumed we have a working heap at stage of
+ * initialisation.
  *
  */
 rtems_status_code
-rtems_capture_open (uint32_t          size,
+rtems_capture_open (uint32_t                size,
                     rtems_capture_timestamp timestamp);
-
-/**
- * rtems_capture_free_info_on_task_delete
- *
- *  DESCRIPTION:
- *
- * If non-zero task informaion if freed when a task is deleted.
- *
- */
-extern int rtems_capture_free_info_on_task_delete;
 
 /**
  * rtems_capture_close
@@ -222,6 +287,18 @@ rtems_capture_close ();
  */
 rtems_status_code
 rtems_capture_control (rtems_boolean enable);
+
+/**
+ * rtems_capture_monitor
+ *
+ *  DESCRIPTION:
+ *
+ * This function enable the monitor mode. When in the monitor mode
+ * the tasks are monitored but no data is saved. This can be used
+ * to profile the load on a system.
+ */
+rtems_status_code
+rtems_capture_monitor (rtems_boolean enable);
 
 /*
  * rtems_capture_flush
@@ -268,16 +345,18 @@ rtems_capture_watch_del (rtems_name name, rtems_id id);
  * disabled.
  */
 rtems_status_code
-rtems_capture_watch_ctrl (rtems_name name, rtems_id id, rtems_boolean enable);
+rtems_capture_watch_ctrl (rtems_name    name,
+                          rtems_id      id,
+                          rtems_boolean enable);
 
 /**
  * rtems_capture_watch_global
  *
  *  DESCRIPTION:
  *
- * This function allows control of a global watch. The watch can be enabled or
- * disabled. A global watch configures all tasks below the ceiling and above
- * the floor to be traced.
+ * This function allows control of a global watch. The watch can
+ * be enabled or disabled. A global watch configures all tasks below
+ * the ceiling and above the floor to be traced.
  */
 rtems_status_code
 rtems_capture_watch_global (rtems_boolean enable);
@@ -343,14 +422,7 @@ rtems_capture_watch_get_floor ();
  *
  *  DESCRIPTION:
  *
- * This function sets an edge trigger. Left is the left side of
- * the edge and right is right side of the edge. The trigger type
- * can be -
- *
- *  FROM_ANY : a switch from any task to the right side of the edge.
- *  TO_ANY   : a switch from the left side of the edge to any task.
- *  FROM_TO  : a switch from the left side of the edge to the right
- *             side of the edge.
+ * This function sets a trigger.
  *
  * This set trigger routine will create a trace control for the
  * target task. The task list is searched and any existing tasks
@@ -361,11 +433,29 @@ rtems_capture_watch_get_floor ();
  * linked to single control.
  */
 rtems_status_code
-rtems_capture_set_trigger (rtems_name              from,
-                           rtems_id                from_id,
-                           rtems_name              to,
-                           rtems_id                to_id,
-                           rtems_capture_trigger_t trigger);
+rtems_capture_set_trigger (rtems_name                   from_name,
+                           rtems_id                     from_id,
+                           rtems_name                   to_name,
+                           rtems_id                     to_id,
+                           rtems_capture_trigger_mode_t mode,
+                           rtems_capture_trigger_t      trigger);
+
+/**
+ * rtems_capture_clear_trigger
+ *
+ *  DESCRIPTION:
+ *
+ * This function clears a trigger.
+ *
+ * This clear trigger routine will not clear a watch.
+ */
+rtems_status_code
+rtems_capture_clear_trigger (rtems_name                   from_name,
+                             rtems_id                     from_id,
+                             rtems_name                   to_name,
+                             rtems_id                     to_id,
+                             rtems_capture_trigger_mode_t mode,
+                             rtems_capture_trigger_t      trigger);
 
 /**
  * rtems_capture_read
@@ -394,14 +484,14 @@ rtems_capture_set_trigger (rtems_name              from,
  * thrashing occuring for a small number of records, yet allows
  * a user configured latiency to be applied for single events.
  *
- * The 'timeout' parameter is in micro-seconds. A value of 0 will disable
- * the timeout.
+ * The 'timeout' parameter is in micro-seconds. A value of 0 will
+ * disable the timeout.
  *
  */
 rtems_status_code
-rtems_capture_read (uint32_t           threshold,
-                    uint32_t           timeout,
-                    uint32_t  *        read,
+rtems_capture_read (uint32_t                 threshold,
+                    uint32_t                 timeout,
+                    uint32_t*                read,
                     rtems_capture_record_t** recs);
 
 /**
@@ -413,7 +503,7 @@ rtems_capture_read (uint32_t           threshold,
  * to the capture engine. The count must match the number read.
  */
 rtems_status_code
-rtems_capture_release (uint32_t   count);
+rtems_capture_release (uint32_t count);
 
 /**
  * rtems_capture_tick_time
@@ -825,33 +915,101 @@ rtems_capture_control_flags (rtems_capture_control_t* control)
 }
 
 /**
- * rtems_capture_control_from_name
+ * rtems_capture_control_to_triggers
  *
  *  DESCRIPTION:
  *
- * This function returns the control from task name.
+ * This function returns the task control to triggers.
  */
-static inline rtems_name
-rtems_capture_control_from_name (rtems_capture_control_t* control, int from)
+static inline uint32_t
+rtems_capture_control_to_triggers (rtems_capture_control_t* control)
 {
-  if (from < RTEMS_CAPTURE_TRIGGER_TASKS)
-    return control->from[from];
-  return control->from[0];
+  return control->to_triggers;
 }
 
 /**
- * rtems_capture_control_from_id
+ * rtems_capture_control_from_triggers
  *
  *  DESCRIPTION:
  *
- * This function returns the control from task id.
+ * This function returns the task control from triggers.
+ */
+static inline uint32_t
+rtems_capture_control_from_triggers (rtems_capture_control_t* control)
+{
+  return control->from_triggers;
+}
+
+/**
+ * rtems_capture_control_all_by_triggers
+ *
+ *  DESCRIPTION:
+ *
+ * This function returns the task control by triggers.
+ */
+static inline uint32_t
+rtems_capture_control_all_by_triggers (rtems_capture_control_t* control)
+{
+  return control->by_triggers;
+}
+
+/**
+ * rtems_capture_control_by_valid
+ *
+ *  DESCRIPTION:
+ *
+ * This function returns the control valid BY flags.
+ */
+static inline int
+rtems_capture_control_by_valid (rtems_capture_control_t* control, int slot)
+{
+  return control->by_valid & RTEMS_CAPTURE_CONTROL_FROM_MASK (slot);
+}
+
+/**
+ * rtems_capture_control_by_name
+ *
+ *  DESCRIPTION:
+ *
+ * This function returns the control BY task name.
+ */
+static inline rtems_name
+rtems_capture_control_by_name (rtems_capture_control_t* control, int by)
+{
+  if (by < RTEMS_CAPTURE_TRIGGER_TASKS)
+    return control->by[by].name;
+  return control->by[0].name;
+}
+
+/**
+ * rtems_capture_control_by_id
+ *
+ *  DESCRIPTION:
+ *
+ * This function returns the control BY task id.
  */
 static inline rtems_id
-rtems_capture_control_from_id (rtems_capture_control_t* control, int from)
+rtems_capture_control_by_id (rtems_capture_control_t* control, int by)
 {
-  if (from < RTEMS_CAPTURE_TRIGGER_TASKS)
-    return control->from_id[from];
-  return control->from_id[0];
+  if (by < RTEMS_CAPTURE_TRIGGER_TASKS)
+    return control->by[by].id;
+  return control->by[0].id;
+}
+
+/**
+ * rtems_capture_control_by_triggers
+ *
+ *  DESCRIPTION:
+ *
+ * This function returns the control BY task triggers.
+ */
+static inline uint32_t
+rtems_capture_control_by_triggers (rtems_capture_control_t* control,
+                                   int                      by)
+{
+  if (by < RTEMS_CAPTURE_TRIGGER_TASKS)
+    return control->by[by].trigger;
+  return control->by[0].trigger;
 }
 
 /**
@@ -866,7 +1024,7 @@ static inline uint32_t
 rtems_capture_control_count ()
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
-  uint32_t           count = 0;
+  uint32_t                 count = 0;
 
   while (control)
   {
