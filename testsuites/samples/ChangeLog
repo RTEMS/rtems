@@ -1,3 +1,10 @@
+2007-08-17	Chris Johns <chrisj@rtems.org>
+
+	* Makefile.am, README, configure.ac, capture/.cvsignore,
+	capture/Makefile.am, capture/capture.doc, capture/capture.scn,
+	capture/init.c, capture/system.h, capture/test1.c: Add a sample
+	test for the capture engine.
+
 2007-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* nsecs/init.c: Add include of unistd.h for sleep() prototype.

@@ -75,5 +75,6 @@ base_mp/node2/Makefile
 iostream/Makefile
 cdtest/Makefile
 pppd/Makefile
+capture/Makefile
 ])
 AC_OUTPUT

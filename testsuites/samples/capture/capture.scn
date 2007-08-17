@@ -1,0 +1,137 @@
+*** CAPTURE ENGING TEST ***
+
+Monitor ready, press enter to login.
+
+rtems $ 
+rtems $ copen 5000
+capture engine open
+rtems $ cwceil 100
+watch ceiling 100.
+rtems $ cwfloor 102
+watch floor is 102.
+rtems $ cwglob on
+global watch enabled.
+rtems $ ctset RMON
+trigger set.
+rtems $ cwlist
+watch priority ceiling is 100
+watch priority floor is 102
+global watch is enabled
+total 1
+ 00000000 RMON g-  T:S------ F:-----
+rtems $ cenable
+capture engine enabled.
+rtems $ ctrace
+rtems $ test1 
+rtems $ ctrace
+       91.980000 0a010002 RMON   1   1 CREATED_BY
+       91.980000 0a010003 CT1a 102 102 CREATED
+       91.980000 0a010002 RMON   1   1 STARTED_BY
+       91.980000 0a010003 CT1a 102 102 STARTED
+       91.980000 0a010003 CT1a 102 102 SWITCHED_IN
+       91.980000 0a010003 CT1a 102 102 BEGIN
+       91.980000 0a010003 CT1a 102 102 SWITCHED_OUT
+       92.980000 0a010002 RMON   1   1 CREATED_BY
+       92.980000 0a010004 CT1b 101 101 CREATED
+       92.980000 0a010002 RMON   1   1 STARTED_BY
+       92.980000 0a010004 CT1b 101 101 STARTED
+       92.980000 0a010004 CT1b 101 101 SWITCHED_IN
+       92.980000 0a010004 CT1b 101 101 BEGIN
+       93.980000 0a010004 CT1b 101 101 SWITCHED_OUT
+       93.980000 0a010002 RMON   1   1 CREATED_BY
+       93.980000 0a010004 CT1c 100 100 CREATED
+       93.980000 0a010002 RMON   1   1 STARTED_BY
+       93.980000 0a010005 CT1c 100 100 STARTED
+       93.980000 0a010005 CT1c 100 100 SWITCHED_IN
+       93.980000 0a010005 CT1c 100 100 BEGIN
+       93.980000 0a010005 CT1c 100 100 SWITCHED_OUT
+       93.980000 0a010004 CT1b 101 101 SWITCHED_IN
+rtems $ ctrace
+       94.480000 0a010004 CT1b 101 101 SWITCHED_OUT
+       94.480000 0a010003 CT1a 102 100 SWITCHED_IN
+       94.480000 0a010003 CT1a 102 102 SWITCHED_OUT
+       94.480000 0a010005 CT1c 100 100 SWITCHED_IN
+       94.480000 0a010005 CT1c 100 100 SWITCHED_OUT
+       94.480000 0a010004 CT1b 101 101 SWITCHED_IN
+       94.980000 0a010004 CT1b 101 101 SWITCHED_OUT
+       94.980000 0a010005 CT1c 100 100 SWITCHED_IN
+       94.980000 0a010005 CT1c 100 100 DETELED_BY
+       94.980000 0a010005 CT1c 100 100 DETELED
+       94.980000 0a010004 CT1b 101 101 SWITCHED_IN
+       94.980000 0a010004 CT1b 101 101 DELETED_BY
+       94.980000 0a010004 CT1b 101 101 DELETED
+       94.980000 0a010003 CT1a 102 100 SWITCHED_IN
+       94.980000 0a010003 CT1a 102 100 DELETED_BY
+       94.980000 0a010003 CT1a 102 100 DELETED
+
+*** CAPTURE ENGING TEST ***
+
+Monitor ready, press enter to login.
+
+rtems $ copen 5000
+capture engine open
+rtems $ cenable
+capture engine enabled.
+rtems $ cwadd CT1c
+watch added.
+rtems $ cwctl CT1c on
+watch enabled.
+rtems $ ctset switch CT1c from CT1a
+trigger set.
+rtems $ cwlist
+watch priority ceiling is 0
+watch priority floor is 0
+global watch is disabled
+total 1
+ 00000000 CT1c -w  T:------- F:-----
+   0:CT1a/00000000:S----
+rtems $ test1
+rtems $ ctrace
+       61.150000 0a010005 CT1c 100 100 SWITCHED_IN
+       61.150000 0a010005 CT1c 100 100 SWITCHED_OUT
+       61.650000 0a010005 CT1c 100 100 SWITCHED_IN
+       61.650000 0a010005 CT1c 100 100 DELETED_BY
+       61.650000 0a010005 CT1c 100 100 DELETED
+
+*** CAPTURE ENGING TEST ***
+
+Monitor ready, press enter to login.
+
+rtems $ copen 5000
+capture engine open
+rtems $ cenable
+capture engine enabled.
+rtems $ cwadd CT1b
+watch added.
+rtems $ cwctl CT1b on
+watch enabled.
+rtems $ ctset switch CT1c from CT1a
+trigger set.
+rtems $ cwlist
+watch priority ceiling is 0
+watch priority floor is 0
+global watch is disabled
+total 2
+ 00000000 CT1c --  T:------- F:-----
+   0:CT1a/00000000:S----
+ 00000000 CT1b -w  T:------- F:-----
+rtems $ ctlist
+total 2
+ 09010001 IDLE 255 255 255 READY a---   0%   0% (10682)
+ 0a010002 RMON   1   1   1 READY a---   0%   0% (826)
+rtems $ test1
+rtems $ ctlist
+total 3
+ 0a010004 CT1b 101   0   0 READY dtw- 100%   0% (200)
+ 09010001 IDLE 255 255 255 READY a---   0%   0% (10682)
+ 0a010002 RMON   1   1   1 READY a---   0%   0% (826)
+rtems $ ctrace
+      551.630000 0a010004 CT1b 101 101 SWITCHED_IN
+      552.130000 0a010004 CT1b 101 101 SWITCHED_OUT
+      552.130000 0a010004 CT1b 101 101 SWITCHED_IN
+      552.130000 0a010004 CT1b 101 101 DELETED_BY
+      552.130000 0a010004 CT1b 101 101 DELETED
+rtems $ ctlist
+total 2
+ 09010001 IDLE 255 255 255 READY a---   0%   0% (10682)
+ 0a010002 RMON   1   1   1 READY a---   0%   0% (826)

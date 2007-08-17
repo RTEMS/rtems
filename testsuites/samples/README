@@ -42,6 +42,12 @@ The following describes each of the sample applications:
       This is intended as a starting point for custom developed single
       processor applications.
 
+   capture
+
+      This simple application starts the monitor and allows you access
+      to the capture engine. The capture engine provides a trace of
+      RTEMS activity and is used to debug your application.
+
    cdtest
 
       A very simple C++ application which demonstrates that it is
@@ -70,3 +76,8 @@ The following describes each of the sample applications:
       This test has an initialization task create three application
       tasks which sleep and periodically wake up and print the time.
 
+   unlimited
+
+      This is a test for the umlimited object feature of RTEMS. Here
+      you can configure RTEMS to give as many objects as memory
+      in the Workspace.

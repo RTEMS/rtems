@@ -1,0 +1,508 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-1999.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+Capture Engine Tutorial
+
+The Capture Engine is a software trace tool built into the RTEMS operating
+system. Being software it does use CPU and memory resources. If do not use it
+does not effect RTEMS or your application. The Capture Engine is designed to
+placed the lowest load possible on the system when operating and when disabled
+does not effect RTEMS. It binds to RTEMS at runtime and does not require RTEMS
+or your application to be rebuilt inorder to use it.
+
+This tutorial will guide you through the building of RTEMS and the sample
+programs for the pc586 BSP on Windows using the MinGW tools. The RTEMS Capture
+Engine sample programmes are found in CVS and will be available in the next
+release of RTEMS. The turoial will show how to create filters and triggers and
+how to obtain a trace of the tasks running. The Capture Engine Command Line
+Interface (CLI) will be used as this currently is the only available interface
+to the Capture Engine.
+
+The tutorial uses the PC586 BSP running under QEMU. This provides a stable
+environment that be easly duplicated on readly available hardware. If you are
+new to RTEMS, simulators helps you get RTEMS running quickly. The RTEMS Wiki
+provides the information needed to download and install these tools.
+
+In this tutorial I have placed the RTEMS source code into the Windows
+directory:
+
+  c:\rtems\src\rtems-4.7.0
+
+RTEMS is configured using the shell MSYS with this command:
+
+ $ /c/rtems/src
+ $ mkdir pc586
+ $ cd pc586
+ $ /c/rtems/src/rtems-4.7.0/configure --target=i386-rtems4.8 \
+           --enable-network --enable-posix --enable-itron \
+           --enable-tests=samples --enable-maintainer-mode \
+           --enable-cxx --enable-rtems-bsp=pc586
+ $ make all
+
+If you wish to use the Windows Command prompt open an RTEMS Command prompt
+window by running the c:\rtems\i386\rtems-cmd.bat batch file from Explorer. The
+shell commands become:
+
+ RTEMS(i386) C:\rtems\i386> cd ..\src 
+ RTEMS(i386) C:\rtems\src> mkdir pc586
+ RTEMS(i386) C:\rtems\src> cd pc586 
+ RTEMS(i386) C:\rtems\src\pc586> sh /c/rtems/src/rtems-4.7.0/configure
+ --target=i386-rtems4.7 --enable-network --enable-posix --enable-itron
+ --enable-tests=samples --enable-maintainer-mode --enable-cxx
+ --enable-rtems-bsp=pc586
+ RTEMS(i386) C:\rtems\src\pc586> make all
+
+Install the Windows version of QEMU and run with the following command:
+
+ RTEMS(i386) C:\rtems\src\pc586> type c:\rtems\i386\bin\qemu.bat
+ rem @echo off
+ set QEMU=C:\rtems\i386\qemu-0.8.2-windows
+ %QEMU%\qemu -L %QEMU% -m 128 -boot a -fda c:\rtems\i386\rtems-boot.img
+ -hda fat:%1 %2 %3
+
+You will need to download the GRUB boot loader image from the RTEMS
+website. This image will boot the QEMU PC and attempt to read a GRUB
+configuration file from the hda root directory. You pass the qemu.bat file the
+path on your disk to the hda root directory. The capture engine examples are in
+the standard testsuite examples directory. For our Windows host once built they
+are in:
+
+ rtems\src\pc586\i386-rtems4.8\c\pc586\testsuites\samples
+
+In this directory create a GRUB configuration file with an entry similar to
+this one:
+
+ RTEMS(i386) C:\rtems\src\pc586> type i386-rtems4.8\c\pc586\testsuites\sam
+ ples\rtems-grub.cfg
+ # RTEMS Grub configuration for the Samples
+ set default=0
+
+ menuentry "RTEMS - Capture" {
+  set root=(hd0,0)
+  multiboot (hd0,0)/capture/capture.exe
+ }
+
+It has a single entry the Capture Engine test. Change to the samples directory
+and run QEMU using the QEMU batch file we created above:
+
+ RTEMS(i386) C:\rtems\src\pc586> cd i386-rtems4.7\c\pc586\testsuites\samples
+ RTEMS(i386) C:\rtems\src\pc586\i386-rtems4.7\c\pc586\testsuites\samples> qemu .
+
+A QEMU console will open and you will see the GNU GRUB menu. The "RTEM -
+Capture" menu item will be highlighted. Press Enter and GRUB will load and
+execute the RTEMS Capture Engine example.
+
+RTEMS will only take a moment to initialise and you will be presented with the
+RTEMS monitor login prompt:
+
+ Initialized console on port CONSOLE
+
+
+ *** CAPTURE ENGING TEST ***
+
+ Monitor ready, press enter to login.
+
+ rtems $ 
+
+The standard configuration is the Capture Engine not initialised and not
+running. It needs to be initialised. You enter a trace buffer size in bytes
+with the open command:
+
+ rtems $ copen 5000
+ capture engine open
+ rtems $ 
+
+If you look in the Capture Engine example source code 'test1.c' a CLI command
+'test1' is added to the RTEMS monitor. When you enter the 'test1' command the
+'RMON' task will call 'capture_test_1()'. This function creates a task called
+'CT1a' and starts it, then task 'CT1b' is created and started and finally
+'CT1c' is created and started. All tasks are passed the object id of a
+semaphore as a task argument. The RMON command thread then loops sleeping for 1
+second, waking to check if all of the tasks that have been created have been
+deleted themselves. Once all tasks have been deleted the command returns
+presenting the prompt to the user.
+
+The first task started is 'CT1a'. It obtains the mutex, waits 2.5 seconds,
+releases it then deletes itself. The second task 'CT1b' loops until task 'CT1c'
+has been deleted. The last task 'CT1c' also obtains the semaphore, waits 0.5
+seconds, releases the semaphore then deletes itself.
+
+The priority of RMON is 1 and is the highest priority task. The task 'CT1a' has
+the lowest priority of 102, task 'CT1b' has a priority of 101, and 'CT1c' is the
+highest priority of the three created tasks with 100.
+
+The test generates priority inheritance where task 'CT1a' inherits the priority
+of task 'CT1c' and the Capture Engine captures this for you to observe. Task
+'CT1a' obtains the semaphore with a priority of 102 then sleeps. Task 'CT1b'
+consumes all of the CPU time with a priority of 101. Normally task 'CT1a' would
+never run again. Task 'CT1c' runs and blocks waiting for the semaphore. When
+task 'CT1a' wakes after 2.5 seconds it inherits the priority of task 'CT1c'
+which is 100, higher than task 'CT1b'. Task 'CT1a' can now run and releases the
+semaphore which task 'CT1c' obtains. After it wakes from a 0.5 second sleep it
+releases the semaphore and deletes itself which causes task 'CT1b' to delete
+itself.
+
+We could just open the capture engine, enable it and start tracing how-ever
+there could be a large number of context switches before we get to our test and
+the tasks events we are interested in. This would create a large amount of
+trace noise and add extra load onto the system capturing this noise. A software
+capture tool like this one is effective if we can filter the events recorded
+into the trace buffer and if we can control when we trigger to start
+recording.
+
+The simplest type of filter is the ceiling and floor priority filter. Here we
+narrow the range of priorities captured. This is useful for applications which
+typically have a middle range of priorites removing device type tasks such as
+networking tasks or file system tasks as well as low priority back ground
+tasks. Our test tasks have a priority range of 100 to 102. The filter is set
+with the following commands:
+
+ rtems $ cwceil 100
+ watch ceiling 100.
+ rtems $ cwfloor 102
+ watch floor is 102.
+ rtems $ 
+
+We also need to enable the global watch. This causes all tasks in the priority
+range to be captured:
+
+ rtems $ cwglob on
+ global watch enabled.
+ rtems $ 
+
+You can set or clear a trigger. To start with we will use the simplest trigger
+we can have. This is just a task name. As the RMON task handles the RTEMS
+monitor keyboard and executes the commands we shall trigger when this task
+effects a task in our priority range. To set the trigger use this command:
+
+ rtems $ ctset RMON
+ trigger set.
+ rtems $ cwlist
+ watch priority ceiling is 100
+ watch priority floor is 102
+ global watch is enabled
+ total 1
+  00000000 RMON g-  T:S------ F:-----
+ rtems $ 
+
+The 'cwlist' command lists the watch and trigger configuration. You will see
+the RMON trigger line has a number, a label and flags. Later you will be given
+more detail on these values. The number is an RTEMS object id. It is 0 which
+means use the label when looking for the trigger. We could have entered the
+task id for RMON in the trigger rather than the label.
+
+The capture engine is disabled after being opened and needs to be enabled. The
+ability to enable and disable the capture engine with a single command allows
+you to remove any effect the capture may have on the application while you are
+tracing a problem. To enable enter:
+
+ rtems $ cenable
+ capture engine enabled.
+ rtems $ 
+
+To dump a recorded the trace you enter:
+
+ rtems $ ctrace
+ rtems $ 
+
+The trace buffer is empty. Notice how the capture engine is not triggering on
+the RMON task or the execution of any other tasks that may be in the
+system. Every monitor key press causes the RMON task to be switched in to
+run. It is now time to run the test so enter the 'test1' command:
+
+ rtems $ test1 
+ rtems $ 
+
+After a few seconds the RTEMS monitor prompt will return and we can dump the
+trace.
+
+ rtems $ ctrace
+        91.980000 0a010002 RMON   1   1 CREATED_BY
+        91.980000 0a010003 CT1a 102 102 CREATED
+        91.980000 0a010002 RMON   1   1 STARTED_BY
+        91.980000 0a010003 CT1a 102 102 STARTED
+        91.980000 0a010003 CT1a 102 102 SWITCHED_IN
+        91.980000 0a010003 CT1a 102 102 BEGIN
+        91.980000 0a010003 CT1a 102 102 SWITCHED_OUT
+        92.980000 0a010002 RMON   1   1 CREATED_BY
+        92.980000 0a010004 CT1b 101 101 CREATED
+        92.980000 0a010002 RMON   1   1 STARTED_BY
+        92.980000 0a010004 CT1b 101 101 STARTED
+        92.980000 0a010004 CT1b 101 101 SWITCHED_IN
+        92.980000 0a010004 CT1b 101 101 BEGIN
+        93.980000 0a010004 CT1b 101 101 SWITCHED_OUT
+        93.980000 0a010002 RMON   1   1 CREATED_BY
+        93.980000 0a010004 CT1c 100 100 CREATED
+        93.980000 0a010002 RMON   1   1 STARTED_BY
+        93.980000 0a010005 CT1c 100 100 STARTED
+        93.980000 0a010005 CT1c 100 100 SWITCHED_IN
+        93.980000 0a010005 CT1c 100 100 BEGIN
+        93.980000 0a010005 CT1c 100 100 SWITCHED_OUT
+        93.980000 0a010004 CT1b 101 101 SWITCHED_IN
+ rtems $ 
+
+The trace dump command by default displays 24 trace records. We have more so
+enter the trace command until all have been displayed. The details of the trace
+data will be discussed once we have all the trace data.
+
+ rtems $ ctrace
+        94.480000 0a010004 CT1b 101 101 SWITCHED_OUT
+        94.480000 0a010003 CT1a 102 100 SWITCHED_IN
+        94.480000 0a010003 CT1a 102 102 SWITCHED_OUT
+        94.480000 0a010005 CT1c 100 100 SWITCHED_IN
+        94.480000 0a010005 CT1c 100 100 SWITCHED_OUT
+        94.480000 0a010004 CT1b 101 101 SWITCHED_IN
+        94.980000 0a010004 CT1b 101 101 SWITCHED_OUT
+        94.980000 0a010005 CT1c 100 100 SWITCHED_IN
+        94.980000 0a010005 CT1c 100 100 DETELED_BY
+        94.980000 0a010005 CT1c 100 100 DETELED
+        94.980000 0a010004 CT1b 101 101 SWITCHED_IN
+        94.980000 0a010004 CT1b 101 101 DELETED_BY
+        94.980000 0a010004 CT1b 101 101 DELETED
+        94.980000 0a010003 CT1a 102 100 SWITCHED_IN
+        94.980000 0a010003 CT1a 102 100 DELETED_BY
+        94.980000 0a010003 CT1a 102 100 DELETED
+ rtems $
+
+The first column of the trace data is the time stamp. The test command started
+when the time stamp was 91.98 seconds and took 3 seconds to run. Your trace
+will have a different starting value but the total time should be 3
+seconds. The actual start value is the time it takes you to enter the various
+capture commands. It would seem I am rather slow.
+
+The second column is the object id. In this case they are task ids. The third
+column is the object name.
+
+The fourth is the real task priority and fifth column is the executing task
+priority. The executing priority follows any priority inheritance. The last
+column is the event the capture engine has captured.
+
+The first couple of records:
+
+        91.980000 0a010002 RMON   1   1 CREATED_BY
+        91.980000 0a010003 CT1a 102 102 CREATED
+
+show at 91.98 seconds task id '0a010002' named 'RMON' with a priority of 1 and
+executing at a priority of 1 created task id '0a010003' named 'CT1a' with a
+priority of 102 and an executing priority of 102. Next 'RMON' started 'CT1a'
+and it was switch into context, began running, then was switched out.
+
+        91.980000 0a010002 RMON   1   1 STARTED_BY
+        91.980000 0a010003 CT1a 102 102 STARTED
+        91.980000 0a010003 CT1a 102 102 SWITCHED_IN
+        91.980000 0a010003 CT1a 102 102 BEGIN
+        91.980000 0a010003 CT1a 102 102 SWITCHED_OUT
+
+The task 'CT1a' was switched out because it blocked on the semaphore.
+
+If you look at the 'test1' command's code you will see the command sleeps for 1
+second after starting the task. This is why the lower priority task 'CT1a' is
+switched in and able to run. The sleep can be seen in the next event where
+'RMON' creates 'CT1b'. The timestamp is 1 second later.
+
+        92.980000 0a010002 RMON   1   1 CREATED_BY
+        92.980000 0a010004 CT1b 101 101 CREATED
+        92.980000 0a010002 RMON   1   1 STARTED_BY
+        92.980000 0a010004 CT1b 101 101 STARTED
+        92.980000 0a010004 CT1b 101 101 SWITCHED_IN
+        92.980000 0a010004 CT1b 101 101 BEGIN
+        93.980000 0a010004 CT1b 101 101 SWITCHED_OUT
+
+There are no 'RMON' switched in or switched out events. These are being
+filtered by the priority range filter. We see the 'RMON' CREATED_BY events as
+these are actually occuring on test tasks which are in the priority range.
+
+The create and start process is repeated for the remaining two tasks. The
+following section of the trace show 'CT1c' being switch out and 'CT1b' being
+switch in. Task 'CT1b' loops consuming all of the CPU time until 'CT1a'
+wakes. This is 500 milli-seconds.
+
+        93.980000 0a010005 CT1c 100 100 BEGIN
+        93.980000 0a010005 CT1c 100 100 SWITCHED_OUT
+        93.980000 0a010004 CT1b 101 101 SWITCHED_IN
+        94.480000 0a010004 CT1b 101 101 SWITCHED_OUT
+        94.480000 0a010003 CT1a 102 100 SWITCHED_IN
+
+When 'CT1a' wakes it is executing at the priority of 'CT1c' of 100 and so
+higher than 'CT1b'. Task 'CT1a' then releases the semaphore dropping it
+priority back to 102 allowing 'CT1c' to run.
+
+        94.480000 0a010003 CT1a 102 102 SWITCHED_OUT
+        94.480000 0a010005 CT1c 100 100 SWITCHED_IN
+        94.480000 0a010005 CT1c 100 100 SWITCHED_OUT
+        94.480000 0a010004 CT1b 101 101 SWITCHED_IN
+        94.980000 0a010004 CT1b 101 101 SWITCHED_OUT
+        94.980000 0a010005 CT1c 100 100 SWITCHED_IN
+
+Task 'CT1c' release the semaphore and deletes itself. Task 'CT1b' is switched
+in and it is looping waiting for 'CT1c' to delete. This has happen so 'CT1b'
+deletes itself. Finally 'CT1a' deletes itself.
+
+        94.980000 0a010005 CT1c 100 100 DETELED_BY
+        94.980000 0a010005 CT1c 100 100 DETELED
+        94.980000 0a010004 CT1b 101 101 SWITCHED_IN
+        94.980000 0a010004 CT1b 101 101 DELETED_BY
+        94.980000 0a010004 CT1b 101 101 DELETED
+        94.980000 0a010003 CT1a 102 100 SWITCHED_IN
+        94.980000 0a010003 CT1a 102 100 DELETED_BY
+        94.980000 0a010003 CT1a 102 100 DELETED
+
+The delete event shows the task deleting itself as the DELETED_BY event is the
+same as the DELETED event.
+
+We will now explore some more complex filters and triggers. First close the
+QEMU window and start QEMU again and open and enable the capture engine:
+
+ rtems $ copen 5000
+ capture engine open
+ rtems $ cenable
+ capture engine enabled.
+ rtems $ 
+
+In this example we only want to monitor task 'CT1c' and wish to trigger on a
+context switch from 'CT1c' to 'CT1a'. This happens when 'CT1a' releases the
+semaphore and CT1c claims it. The set up is:
+
+ rtems $ cwadd CT1c
+ watch added.
+ rtems $ cwctl CT1c on
+ watch enabled.
+ rtems $ ctset switch CT1c from CT1a
+ trigger set.
+ rtems $ cwlist
+ watch priority ceiling is 0
+ watch priority floor is 0
+ global watch is disabled
+ total 1
+  00000000 CT1c -w  T:------- F:-----
+    0:CT1a/00000000:S----
+ rtems $ 
+
+We run the test and capture the output:
+
+ rtems $ test1
+ rtems $ ctrace
+        61.150000 0a010005 CT1c 100 100 SWITCHED_IN
+        61.150000 0a010005 CT1c 100 100 SWITCHED_OUT
+        61.650000 0a010005 CT1c 100 100 SWITCHED_IN
+        61.650000 0a010005 CT1c 100 100 DELETED_BY
+        61.650000 0a010005 CT1c 100 100 DELETED
+ rtems $ 
+
+The trace shows CT1c being switched in once it has the semaphore then switching
+out while it waits 500 milli-seconds, waking and being switched in to delete
+itself. The filtering means we can focus on the specific events which we are
+interested in and the trigger means we only trace once the specific event we
+are interested in occurs.
+
+The filter and trigger do not need to relate. Lets run a variation of the last
+configuation where we watch 'CT1b' and trigger on 'CT1c' being switched to from
+'CT1a'. Close the QEMU window and start QEMU again and open and enable the
+capture engine:
+
+ rtems $ copen 5000
+ capture engine open
+ rtems $ cenable
+ capture engine enabled.
+ rtems $ cwadd CT1b
+ watch added.
+ rtems $ cwctl CT1b on
+ watch enabled.
+ rtems $ ctset switch CT1c from CT1a
+ trigger set.
+ rtems $ cwlist
+ watch priority ceiling is 0
+ watch priority floor is 0
+ global watch is disabled
+ total 2
+  00000000 CT1c --  T:------- F:-----
+    0:CT1a/00000000:S----
+  00000000 CT1b -w  T:------- F:-----
+ rtems $ 
+
+You can see 2 watch controls exist, one for the trigger and one for the filter.
+Before we run the test we will take a look at the task list using the 'ctlist'.
+
+ rtems $ ctlist
+ total 2
+  09010001 IDLE 255 255 255 READY a---   0%   0% (10682)
+  0a010002 RMON   1   1   1 READY a---   0%   0% (826)
+ rtems $
+
+You can see the 2 tasks that are active. These tasks existed before the capture
+engine started. The capture engine learns about tasks that exist in a system if
+they do something. If a task exists and does nothing the capture engine will
+not know about it. Lets run the test then list the tasks again:
+
+ rtems $ test1
+ rtems $ ctlist
+ total 3
+  0a010004 CT1b 101   0   0 READY dtw- 100%   0% (200)
+  09010001 IDLE 255 255 255 READY a---   0%   0% (10682)
+  0a010002 RMON   1   1   1 READY a---   0%   0% (826)
+ rtems $
+ 
+This time the task lists the test task we are watching 'CT1b'. If how-ever has
+been deleted and the task list shows this with the 'd' in the flags. The active
+tasks have an 'a'. The capture engine has to retain information on tasks that
+have been deleted so the trace data can be generated. The trace buffer holds a
+reference to the task's details not the specific details. Once the trace data
+has been viewed the task data is no longer needed and released.
+
+ rtems $ ctrace
+       551.630000 0a010004 CT1b 101 101 SWITCHED_IN
+       552.130000 0a010004 CT1b 101 101 SWITCHED_OUT
+       552.130000 0a010004 CT1b 101 101 SWITCHED_IN
+       552.130000 0a010004 CT1b 101 101 DELETED_BY
+       552.130000 0a010004 CT1b 101 101 DELETED
+ rtems $ ctlist
+ total 2
+  09010001 IDLE 255 255 255 READY a---   0%   0% (10682)
+  0a010002 RMON   1   1   1 READY a---   0%   0% (826)
+ rtems $
+
+Listing the tasks shows 'CT1b' has gone. The trace buffer does not reference
+it any more.
+
+We have now seen the following capture commands:
+
+ copen
+ cenable
+ ctlist
+ cwceil
+ cwfloor
+ cwglob
+ cwadd
+ cwctl
+ ctset
+ ctrace
+
+The ctset is worth a closer look. The general form of the command is:
+
+ ctset [-?] type [to name/id] [from] [from name/id]
+
+The 'type' is the type of trigger. The following possible types of triggers
+exist:
+
+ switch  - a context switch from one task to another task
+ create  - the executing task creates a task
+ start   - the executing task starts a task
+ restart - the executing task restarts a task
+ delete  - the executing task deletes a task
+ begin   - a task is beginning
+ exitted - a task is exitting
+
+With the ctset command you set a trigger for a task. If you do not supply a
+from task the type of event can be from any task. You can be more specific by
+stating the event for a task must be by a specific task. Looking at the examples
+from before we set a trigger on a context switch from CT1a to CT1c with:
+
+ ctset switch CT1c from CT1a
