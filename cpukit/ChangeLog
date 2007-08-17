@@ -1,4 +1,5 @@
 2007-08-17	Chris Johns <chrisj@rtems.org>
+
 	* libmisc/capture/README: Minor copyright change.
 	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
 	libmisc/capture/capture.h: Fixed the memory leak when lots of
@@ -6,6 +7,7 @@
 	interface so all task type actions can be caught.
 
 2007-08-13	Chris Johns <chrisj@rtems.org>
+
 	* score/include/rtems/score/object.h: Point the
 	OBJECTS_RTEMS_CLASSES_LAST macro to the last entry.
 
