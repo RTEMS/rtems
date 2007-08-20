@@ -1,3 +1,13 @@
+;
+; $Id$
+;
+; RTEMS Tools Installer.
+;
+; Copyright Chris Johns (chrisj@rtems.org)
+;
+
+!include "${RTEMS_SOURCE}/strslash.nsi"
+
 Function MsysPath
   Push $R0
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MSYS-1.0_is1" "Inno Setup: App Path"
@@ -106,4 +116,36 @@ Function MSYSDetectSilent
   DetailPrint "MSYS Result: $R0"
   Pop $R1
   Exch $R0
+FunctionEnd
+
+Function MSYSFstabUpdate
+ Call MSYSDetectSilent
+ Pop $R0
+ Push $R0
+ Push $INSTDIR
+ Push '\\'
+ Pop $R0
+ Call StrSlash
+ Pop $R1
+ Pop $R0
+ DetailPrint "Setting MSYS fstab: $R1 -> /opt/rtems-${PRODUCT_VERSION}"
+ StrCpy $R1 "$R1 /opt/rtems-${PRODUCT_VERSION}$\n"
+ FileOpen $9 "$R0\etc\fstab" a
+ ifErrors 0 +3
+   MessageBox MB_OK "Cannot open $R0\etc\fstab. MSYS mount point not added."
+   Goto Close
+ FileSeek $9 0 SET
+ReadLoop:
+ FileRead $9 $R2
+ ifErrors Append
+ StrCmp $R1 $R2 Close ReadLoop
+Append:
+ FileSeek $9 0 END
+ StrCpy $R2 $R2 1 -1
+ StrCmp $R2 "$\n" +2 0
+ FileWrite $9 "$\n"
+ FileWrite $9 $R1
+Close:
+ FileClose $9
+ ClearErrors
 FunctionEnd

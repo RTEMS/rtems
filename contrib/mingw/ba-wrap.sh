@@ -12,4 +12,8 @@ echo "Build output: $source/at-log.txt"
 echo
 $source/build-autotools.sh $* 2>&1 >> $source/at-log.txt
 ec=$?
+if [ $ec -ne 0 ]; then
+  echo "ERROR: code '$ec'. Press Any Key to continue"
+  read
+fi
 exit $ec

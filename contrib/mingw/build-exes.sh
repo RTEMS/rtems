@@ -170,7 +170,7 @@ target_installer_exec()
   echo "   Strcpy \$1 \"\$INSTDIR\\Packages\\$outfile\"" >> $of
   echo " ${t}_found:" >> $of
   echo "  DetailPrint \"Installing: \$1\"" >> $of
-  echo "  ExecWait '\"\$1\" /S /D=\$INSTDIR' \$0" >> $of
+  echo "  ExecWait '\"\$1\" \$SilentOption \$DebugOption /D=\$INSTDIR' \$0" >> $of
   echo "  BringToFront" >> $of
   echo "  IntCmp \$0 0 +3" >> $of
   echo "   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \"${!tst} install failed. Do you wish to continue ?\" IDYES +2" >> $of
@@ -367,11 +367,13 @@ create_installer()
    fi
 
    echo "!include \"$treloc/rtems-files.nsi\"" >> $of
-   echo "!include \"$source/rtems-tools.nsi\"" >> $of
+   echo "!include \"$source/options.nsi\"" >> $of
 
    if [ $n = $common_label ]; then
      echo "!include \"$relocation/rtems-sections.nsi\"" >> $of
    fi
+
+   echo "!include \"$source/rtems-tools.nsi\"" >> $of
 
    echo "cp $source/rtems.ini $treloc/rtems.ini"
    $cp $source/rtems.ini $treloc/rtems.ini

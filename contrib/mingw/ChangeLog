@@ -1,3 +1,23 @@
+2007-08-20	Chris Johns <chisj@rtems.org>
+
+	* filewrite.nsi, getparameters.nsi, instance-check.nsi,
+	mingw-path.nsi, sm-dummy.nsi, strslash.nsi, strstr.nsi,
+	options.nsi: Added the shared between the 2 installer scripts.
+	
+	* msys-path.nsi: Fixed the last LF bug.
+
+	* rtems-autotools.nsi, rtems-tools.nsi: Fixed the instance check,
+	added a start menu, remove pages from target installers.
+	
+	* rtems.ini: Fixed the URL links. Added support link.
+
+	* rtems_logo.bmp: Trimmed a little more to get a better image.
+	
+	* ba-wrap.sh: Stop on a error.
+
+	* build-exes.sh: Use the option parameter variables. Change the
+	order the section appear in the installer.
+	
 2007-08-03	Chris Johns <chisj@rtems.org>
 	* rtems_logo.bmp: Clipped to get the correct proportions
 	in the installer's header.

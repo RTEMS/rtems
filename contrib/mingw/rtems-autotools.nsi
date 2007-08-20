@@ -12,6 +12,10 @@
 !define PRODUCT_VERSION   ${RTEMS_VERSION}
 !define PRODUCT_PUBLISHER "RTEM Project Team"
 !define PRODUCT_WEB_SITE  "http://www.rtems.org/"
+!define PRODUCT_TITLE     "${PRODUCT_NAME} ${PRODUCT_VERSION} (${RTEMS_TARGET})"
+!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}"
+!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+!define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
 
 ; MUI 1.66 compatible ------
 !include "MUI.nsh"
@@ -26,21 +30,18 @@
 
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
-; Welcome page
-!insertmacro MUI_PAGE_WELCOME
-; Details of what will happen.
-Page custom RTEMSMessage
-; License page
-;!define MUI_LICENSEPAGE_CHECKBOX
-!insertmacro MUI_PAGE_LICENSE "${RTEMS_LICENSE_FILE}"
-; Components page
-!insertmacro MUI_PAGE_COMPONENTS
-; Directory page
-!insertmacro MUI_PAGE_DIRECTORY
+; Start Menu Support
+!include "${RTEMS_SOURCE}/sm-dummy.nsi"
+var smfolder
+!define MUI_STARTMENUPAGE_DISABLE
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "RTEMS ${PRODUCT_VERSION}"
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
+!insertmacro MUI_PAGE_STARTMENU_DUMMY Application $smfolder
+
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
-; Finish page
-!insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -63,14 +64,20 @@ ShowInstDetails show
 ShowUnInstDetails show
 BrandingText "RTEMS ${RTEMS_TARGET} Tools v${PRODUCT_VERSION}"
 AllowRootDirInstall false
-AutoCloseWindow false
+AutoCloseWindow true
 CRCCheck force
 
+!include "${RTEMS_SOURCE}/instance-check.nsi"
+!include "${RTEMS_SOURCE}/mingw-path.nsi"
 !include "${RTEMS_SOURCE}/msys-path.nsi"
+!include "${RTEMS_SOURCE}/options.nsi"
+!include "${RTEMS_SOURCE}/filewrite.nsi"
 
 Section "RTEMS ${RTEMS_TARGET} Tools" SecTools
  SetDetailsView show
  AddSize ${RTEMS_TOOLS_SIZE}
+
+ Call MSYSFstabUpdate
 
  /*
   * Detect if MSYS is installed.
@@ -117,8 +124,8 @@ Section "RTEMS ${RTEMS_TARGET} Tools" SecTools
  Pop $R0
  Call StrSlash
  Pop $R0
- DetailPrint "Building autoconf. Command window closes automatically."
- ExecWait '"$9\bin\sh" --login -c "$R1 -p /opt/rtems-${PRODUCT_VERSION} -b $R2 -c $R0"' $0
+ DetailPrint "Building automake. Command window closes automatically. Debug:$DebugScriptOption"
+ ExecWait '"$9\bin\sh" --login -c "$R1 $DebugScriptOption -p /opt/rtems-${PRODUCT_VERSION} -b $R2 -c $R0"' $0
  BringToFront
  IntCmp $0 0 +3
   MessageBox MB_OK "Autoconf build failed. See $INSTDIR\Packages\Source\at-log.txt"
@@ -137,8 +144,8 @@ Section "RTEMS ${RTEMS_TARGET} Tools" SecTools
  Pop $R0
  Call StrSlash
  Pop $R0
- DetailPrint "Building automake. Command window closes automatically."
- ExecWait '"$9\bin\sh" --login -c "$R1 -p /opt/rtems-${PRODUCT_VERSION} -b $R2 -c $R0"' $0
+ DetailPrint "Building automake. Command window closes automatically. Debug:$DebugScriptOption"
+ ExecWait '"$9\bin\sh" --login -c "$R1 $DebugScriptOption -p /opt/rtems-${PRODUCT_VERSION} -b $R2 -c $R0"' $0
  BringToFront
  IntCmp $0 0 +3
   MessageBox MB_OK "Automake build failed. See $INSTDIR\Packages\Source\at-log.txt"
@@ -153,74 +160,15 @@ Section "RTEMS ${RTEMS_TARGET} Tools" SecTools
  RMDir /r "$INSTDIR\Packages\Build"
 SectionEnd
 
-!macro FILE_WRITE_LINE Handle Text
-  FileWrite     ${Handle} `${Text}`
-  FileWriteByte ${Handle} "13"
-  FileWriteByte ${Handle} "10"
-!macroend
-
 Function .onInit
-  ;Extract InstallOptions INI files
-  !insertmacro MUI_INSTALLOPTIONS_EXTRACT "rtems.ini"
-FunctionEnd
-
-Function RTEMSMessage
-
-  !insertmacro MUI_HEADER_TEXT \
-               "RTEMS Tools (Autoconf/Automake)" \
-               "A tool set for the RTEMS operating system."
-
-  ;Display the Install Options dialog
-
-  Push $R0
-  Push $R1
-  Push $R2
-
-    InstallOptions::initDialog /NOUNLOAD "$PLUGINSDIR\rtems.ini"
-    Pop $R0
-
-    GetDlgItem $R1 $R0 1200 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1201 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "12" "700"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1202 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1203 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1204 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1205 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1206 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    InstallOptions::show
-    Pop $R0
-
-  Pop $R2
-  Pop $R1
-  Pop $R0
-
+  ;Check if we are the correct instance for our mode.
+  Call CheckInstance
+  ;Handle the Command line options
+  Call CheckSilent
+  Call CheckDebug
+  ;See if MinGW and MSYS are installed
+  Call MinGWDetect
+  Call MSYSDetect
 FunctionEnd
 
 Var FileList
@@ -323,54 +271,31 @@ Function un.RemoveFilesFromFile
   Pop $R7
 FunctionEnd
 
-; Push $filenamestring (e.g. 'c:\this\and\that\filename.htm')
-; Push '\\'
-; Pop $R0
-; Call StrSlash
-; Pop $R0
-; ;Now $R0 contains 'c:/this/and/that/filename.htm'
-Function StrSlash
- Exch $R0
- Push $R1
- Push $R2
- StrCpy $R1 0
-loop:
-  IntOp $R1 $R1 - 1
-  StrCpy $R2 $R0 1 $R1
-  StrCmp $R2 "" done
- StrCmp $R2 "\" 0 loop ;" keep to get Emacs for fontlock
-  StrCpy $R2 $R0 $R1
-   Push $R1
-  IntOp $R1 $R1 + 1
-  StrCpy $R1 $R0 "" $R1
- StrCpy $R0 "$R2/$R1"
-   Pop $R1
-  IntOp $R1 $R1 - 1
- Goto loop
-done:
- Pop $R2
- Pop $R1
- Exch $R0
-FunctionEnd
-
 Section -Post
  StrCpy $R0 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
+ StrCpy $R1 "RTEMS ${RTEMS_TARGET} Tools.lnk"
  WriteUninstaller "$R0"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "DisplayName" "$(^Name)"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "UninstallString" "$R0"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "DisplayVersion" "${PRODUCT_VERSION} Build-${RTEMS_BUILD_VERSION}"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "URLInfoAbout" "${PRODUCT_WEB_SITE}"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "Publisher" "${PRODUCT_PUBLISHER}"
+ !insertmacro MUI_STARTMENU_GETFOLDER "Application" $R2
+ !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+ CreateDirectory "$SMPROGRAMS\$R2"
+ CreateDirectory "$SMPROGRAMS\$R2\Uninstall"
+ CreateShortCut "$SMPROGRAMS\$R2\Uninstall\$R1" "$R0"
+ !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Section Uninstall
  SetDetailsView show
- DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+ DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}"
  DetailPrint "Delete the installed files"
  Push "$INSTDIR\Uninstall\${RTEMS_AUTOCONF}-files"
  call un.RemoveFilesFromFile 
@@ -388,8 +313,10 @@ Section Uninstall
  !insertmacro RTEMS_DELETE_AUTOMAKE_PATCHES
  RMDir "$INSTDIR\Packages\Source"
  RMDir "$INSTDIR\Packages\Build"
+ !insertmacro MUI_STARTMENU_GETFOLDER "Application" $smfolder
+ Delete "$SMPROGRAMS\$smfolder\Uninstall\RTEMS ${RTEMS_TARGET} Tools.lnk"
  Delete $INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe
  RMDir "$INSTDIR"
  DetailPrint "All done."
- SetAutoClose false
+ SetAutoClose true
 SectionEnd

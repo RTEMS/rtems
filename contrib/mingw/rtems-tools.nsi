@@ -12,11 +12,20 @@
 !define PRODUCT_VERSION   ${RTEMS_VERSION}
 !define PRODUCT_PUBLISHER "RTEMS Project Team"
 !define PRODUCT_WEB_SITE  "http://www.rtems.org/"
+!ifdef COMMON_FILES
+!define PRODUCT_TITLE     "${PRODUCT_NAME} ${PRODUCT_VERSION} (Build ${RTEMS_BUILD_VERSION})"
+!else
+!define PRODUCT_TITLE     "${PRODUCT_NAME} ${PRODUCT_VERSION} (${RTEMS_TARGET})"
+!endif
+!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}"
+!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+!define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
 
 ; MUI 1.66 compatible ------
 !include "MUI.nsh"
 
 ; MUI Settings
+!define MUI_FUNCTION_GUIINIT
 !define MUI_ABORTWARNING
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\win-install.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
@@ -26,21 +35,45 @@
 
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
+!ifdef COMMON_FILES
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; Details of what will happen.
 Page custom RTEMSMessage
 ; License page
-;!define MUI_LICENSEPAGE_CHECKBOX
 !insertmacro MUI_PAGE_LICENSE "${RTEMS_LICENSE_FILE}"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
+
 ; Directory page
+!define MUI_PAGE_HEADER_SUBTEXT "Choose the folder in which to install the RTEMS Tools."
+!define MUI_DIRECTORYPAGE_TEXT_TOP "${PRODUCT_NAME} will install RTEMS Tools in the following directory. To install in a different folder click Browse and select another folder. Click Next to continue."
 !insertmacro MUI_PAGE_DIRECTORY
+!endif
+
+; Start menu page
+!ifndef COMMON_FILES
+!include "${RTEMS_SOURCE}/sm-dummy.nsi"
+!endif
+var smfolder
+!define MUI_STARTMENUPAGE_NODISABLE
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "RTEMS ${PRODUCT_VERSION}"
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
+!ifdef COMMON_FILES
+!insertmacro MUI_PAGE_STARTMENU Application $smfolder
+!else
+!insertmacro MUI_PAGE_STARTMENU_DUMMY Application $smfolder
+!endif
+
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
+
+!ifdef COMMON_FILES
 ; Finish page
 !insertmacro MUI_PAGE_FINISH
+!endif
 
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -56,21 +89,27 @@ Page custom RTEMSMessage
 ReserveFile "rtems.ini"
 !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
 
-Name "${PRODUCT_NAME} ${PRODUCT_VERSION} (${RTEMS_TARGET})"
 !ifdef COMMON_FILES
+Name "${PRODUCT_NAME} ${PRODUCT_VERSION} (Build ${RTEMS_BUILD_VERSION})"
 OutFile "${RTEMS_BINARY}/rtems${PRODUCT_VERSION}-tools-${RTEMS_BUILD_VERSION}.exe"
+BrandingText "RTEMS Tools v${PRODUCT_VERSION}"
+AutoCloseWindow false
 !else
+Name "${PRODUCT_NAME} ${PRODUCT_VERSION} (${RTEMS_TARGET})"
 OutFile "${RTEMS_BINARY}/${RTEMS_OUTFILE}"
+BrandingText "RTEMS ${RTEMS_TARGET} Tools v${PRODUCT_VERSION}"
+AutoCloseWindow true
 !endif
 InstallDir "C:\opt\rtems-${PRODUCT_VERSION}"
 ShowInstDetails show
 ShowUnInstDetails show
-BrandingText "RTEMS ${RTEMS_TARGET} Tools v${PRODUCT_VERSION}"
 AllowRootDirInstall false
-AutoCloseWindow false
 CRCCheck force
 
+!include "${RTEMS_SOURCE}/instance-check.nsi"
 !include "${RTEMS_SOURCE}/msys-path.nsi"
+!include "${RTEMS_SOURCE}/options.nsi"
+!include "${RTEMS_SOURCE}/filewrite.nsi"
 
 Section -SecFiles
  AddSize ${RTEMS_TOOLS_SIZE}
@@ -86,21 +125,20 @@ Section -SecCommon
 SectionEnd
 !endif
 
-!macro FILE_WRITE_LINE Handle Text
-  FileWrite     ${Handle} `${Text}`
-  FileWriteByte ${Handle} "13"
-  FileWriteByte ${Handle} "10"
-!macroend
-
 Function .onInit
+  ;Check if we are the correct instance for our mode.
+  Call CheckInstance
   ;Extract InstallOptions INI files
   !insertmacro MUI_INSTALLOPTIONS_EXTRACT "rtems.ini"
+  ;Handle the Command line options
+  Call CheckSilent
+  Call CheckDebug
+  Call MSYSFstabUpdate
 FunctionEnd
 
 Function RTEMSMessage
-
   !insertmacro MUI_HEADER_TEXT \
-               "RTEMS Tools (${RTEMS_TARGET})" \
+               "RTEMS Tools (Build ${RTEMS_BUILD_VERSION})" \
                "A tool set for the RTEMS operating system."
 
   ;Display the Install Options dialog
@@ -109,86 +147,54 @@ Function RTEMSMessage
   Push $R1
   Push $R2
 
-    InstallOptions::initDialog /NOUNLOAD "$PLUGINSDIR\rtems.ini"
-    Pop $R0
+  InstallOptions::initDialog /NOUNLOAD "$PLUGINSDIR\rtems.ini"
+  Pop $R0
 
-    GetDlgItem $R1 $R0 1200 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1201 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "12" "700"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1202 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1203 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1204 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1205 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    GetDlgItem $R1 $R0 1206 ;1200 + Field number - 1
-    ;$R1 contains the HWND of the first field
-    CreateFont $R2 "Tahoma" "8" "300"
-    SendMessage $R1 ${WM_SETFONT} $R2 0
-	
-    InstallOptions::show
-    Pop $R0
-
+  GetDlgItem $R1 $R0 1200 ;1200 + Field number - 1
+  ;$R1 contains the HWND of the first field
+  CreateFont $R2 "Tahoma" "8" "300"
+  SendMessage $R1 ${WM_SETFONT} $R2 0
+      
+  GetDlgItem $R1 $R0 1201 ;1200 + Field number - 1
+  ;$R1 contains the HWND of the first field
+  CreateFont $R2 "Tahoma" "12" "700"
+  SendMessage $R1 ${WM_SETFONT} $R2 0
+      
+  GetDlgItem $R1 $R0 1202 ;1200 + Field number - 1
+  ;$R1 contains the HWND of the first field
+  CreateFont $R2 "Tahoma" "8" "300"
+  SendMessage $R1 ${WM_SETFONT} $R2 0
+      
+  GetDlgItem $R1 $R0 1203 ;1200 + Field number - 1
+  ;$R1 contains the HWND of the first field
+  CreateFont $R2 "Tahoma" "8" "300"
+  SendMessage $R1 ${WM_SETFONT} $R2 0
+      
+  GetDlgItem $R1 $R0 1204 ;1200 + Field number - 1
+  ;$R1 contains the HWND of the first field
+  CreateFont $R2 "Tahoma" "8" "300"
+  SendMessage $R1 ${WM_SETFONT} $R2 0
+      
+  GetDlgItem $R1 $R0 1205 ;1200 + Field number - 1
+  ;$R1 contains the HWND of the first field
+  CreateFont $R2 "Tahoma" "8" "300"
+  SendMessage $R1 ${WM_SETFONT} $R2 0
+      
+  GetDlgItem $R1 $R0 1206 ;1200 + Field number - 1
+  ;$R1 contains the HWND of the first field
+  CreateFont $R2 "Tahoma" "8" "300"
+  SendMessage $R1 ${WM_SETFONT} $R2 0
+      
+  InstallOptions::show
+  Pop $R0
   Pop $R2
   Pop $R1
   Pop $R0
-
-FunctionEnd
-
-; Push $filenamestring (e.g. 'c:\this\and\that\filename.htm')
-; Push '\\'
-; Pop $R0
-; Call StrSlash
-; Pop $R0
-; ;Now $R0 contains 'c:/this/and/that/filename.htm'
-Function StrSlash
- Exch $R0
- Push $R1
- Push $R2
- StrCpy $R1 0
-loop:
-  IntOp $R1 $R1 - 1
-  StrCpy $R2 $R0 1 $R1
-  StrCmp $R2 "" done
- StrCmp $R2 "\" 0 loop  ; "
-  StrCpy $R2 $R0 $R1
-   Push $R1
-  IntOp $R1 $R1 + 1
-  StrCpy $R1 $R0 "" $R1
- StrCpy $R0 "$R2/$R1"
-   Pop $R1
-  IntOp $R1 $R1 - 1
- Goto loop
-done:
- Pop $R2
- Pop $R1
- Exch $R0
 FunctionEnd
 
 !ifdef COMMON_FILES
 Section -BatchFiles
- FileOpen $9 $INSTDIR\rtems.bat w
+ FileOpen $9 $INSTDIR\rtems-env.bat w
  !insertmacro FILE_WRITE_LINE $9 "@echo off"
  !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_VERSION}-${RTEMS_BUILD_VERSION}"
  !insertmacro FILE_WRITE_LINE $9 "set PATH=$INSTDIR\bin;c:\mingw\bin;c:\msys\1.0\bin;%PATH%"
@@ -201,14 +207,14 @@ Section -BatchFiles
  !insertmacro FILE_WRITE_LINE $9 ":Finished"
  FileClose $9
 
- FileOpen $9 $INSTDIR\rtems-cmd.bat w
+ FileOpen $9 $INSTDIR\rtems.bat w
  !insertmacro FILE_WRITE_LINE $9 "@echo off"
  !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_VERSION}-${RTEMS_BUILD_VERSION}"
  !insertmacro FILE_WRITE_LINE $9 "If $\"x%OS%x$\" == $\"xWindows_NTx$\" Goto WinNT"
- !insertmacro FILE_WRITE_LINE $9 "start command.com /e:4096 /k $INSTDIR\rtems.bat %1 %2 %3 %4"
+ !insertmacro FILE_WRITE_LINE $9 "start command.com /e:4096 /k $INSTDIR\rtems-env.bat %1 %2 %3 %4"
  !insertmacro FILE_WRITE_LINE $9 "exit"
  !insertmacro FILE_WRITE_LINE $9 ":WinNT"
- !insertmacro FILE_WRITE_LINE $9 "start cmd.exe /k $INSTDIR\rtems.bat %1 %2 %3 %4"
+ !insertmacro FILE_WRITE_LINE $9 "start cmd.exe /k $INSTDIR\rtems-env.bat %1 %2 %3 %4"
  !insertmacro FILE_WRITE_LINE $9 "exit"
  FileClose $9
 
@@ -216,7 +222,7 @@ Section -BatchFiles
  !insertmacro FILE_WRITE_LINE $9 "@echo off"
  !insertmacro FILE_WRITE_LINE $9 "rem RTEMS batch file: ${RTEMS_VERSION}-${RTEMS_BUILD_VERSION}"
  !insertmacro FILE_WRITE_LINE $9 "rem We can only handle 9 parameters. More is too hard."
- !insertmacro FILE_WRITE_LINE $9 "call $INSTDIR\rtems.bat"
+ !insertmacro FILE_WRITE_LINE $9 "call $INSTDIR\rtems-env.bat"
  !insertmacro FILE_WRITE_LINE $9 "%1 %2 %3 %4 %5 %6 %7 %8 %9"
  FileClose $9
 
@@ -235,94 +241,101 @@ Section -BatchFiles
  !insertmacro FILE_WRITE_LINE $9 "                   -e 's/s:\([0-9]*\):/s(\1):/'"
  FileClose $9
 SectionEnd
-
-Section -MSYSLinks
- Call MSYSDetectSilent
- Pop $R0
- ifFileExists "$R0\etc\fstab" 0 Done
-  Push $R0
-  Push $INSTDIR
-  Push '\\'
-  Pop $R0
-  Call StrSlash
-  Pop $R1
-  Pop $R0
-  DetailPrint "Setting MSYS fstab: $R1 -> /opt/rtems-${PRODUCT_VERSION}"
-  StrCpy $R1 "$R1 /opt/rtems-${PRODUCT_VERSION}$\n"
-  FileOpen $9 "$R0\etc\fstab" a
-  ifErrors 0 +3
-    MessageBox MB_OK "Cannot open $R0\etc\fstab. MSYS mount point no added."
-    Goto Close
-  FileSeek $9 0 SET
- ReadLoop:
-  FileRead $9 $R2
-  ifErrors Append
-  StrCmp $R1 $R2 Close ReadLoop
- Append:
-  FileSeek $9 0 END
-  FileWrite $9 $R1
- Close:
-  FileClose $9
- Done:
-  ClearErrors
-SectionEnd
 !endif
 
 Section -Post
 !ifdef COMMON_FILES
  StrCpy $R0 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-uninst.exe"
+ StrCpy $R1 "RTEMS Tools.lnk"
 !else
  StrCpy $R0 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
+ StrCpy $R1 "RTEMS ${RTEMS_TARGET} Tools.lnk"
+ !insertmacro MUI_STARTMENU_GETFOLDER "Application" $smfolder
 !endif
  WriteUninstaller "$R0"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "DisplayName" "$(^Name)"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "UninstallString" "$R0"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "DisplayVersion" "${PRODUCT_VERSION} Build-${RTEMS_BUILD_VERSION}"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "URLInfoAbout" "${PRODUCT_WEB_SITE}"
- WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+ WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_TITLE}" \
                   "Publisher" "${PRODUCT_PUBLISHER}"
+ !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+ CreateDirectory "$SMPROGRAMS\$smfolder"
+!ifdef COMMON_FILES
+ SetOutPath $INSTDIR
+ WriteIniStr "$INSTDIR\RTEMS.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+ WriteIniStr "$INSTDIR\RTEMS-Wiki.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}wiki"
+ WriteIniStr "$INSTDIR\RTEMS-Documentation.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}onlinedocs/releases/rtemsdocs-4.7.99.2/share/rtems/html/"
+ WriteIniStr "$INSTDIR\RTEMS-Support.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}support.html"
+ CreateShortCut "$SMPROGRAMS\$smfolder\RTEMS Tools.lnk" "$INSTDIR\rtems.bat"
+ CreateShortCut "$SMPROGRAMS\$smfolder\RTEMS Website.lnk" "$INSTDIR\RTEMS.url"
+ CreateShortCut "$SMPROGRAMS\$smfolder\RTEMS Wiki.lnk" "$INSTDIR\RTEMS-Wiki.url"
+ CreateShortCut "$SMPROGRAMS\$smfolder\RTEMS Documentation.lnk" "$INSTDIR\RTEMS-Documentation.url"
+ CreateShortCut "$SMPROGRAMS\$smfolder\RTEMS Support.lnk" "$INSTDIR\RTEMS-Support.url"
+!endif
+ CreateDirectory "$SMPROGRAMS\$smfolder\Uninstall"
+ CreateShortCut "$SMPROGRAMS\$smfolder\Uninstall\$R1" "$R0"
+ !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Function un.onInit
  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
-            "Are you sure you want to uninstall RTEMS Tools (${RTEMS_TARGET})?" IDYES +2
+            "Are you sure you want to uninstall ${PRODUCT_TITLE} ?" IDYES +2
  Abort
 FunctionEnd
 
 Section Uninstall
  SetDetailsView show
- DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
- DetailPrint "Delete the installed files"
- !insertmacro RTEMS_DELETE_FILES
+ StrCpy $2 0
 !ifdef COMMON_FILES
  FindFirst $0 $1 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-*-uninst.exe"
  Uninstall_Targets:
   StrCmp $1 "" Uninstall_Targets_Done
+  IntCmp $2 0 0 +3
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
+             "You have tools installed. Are you sure you want to uninstall all RTEMS Tools ?" IDYES +2
+    Abort
+  StrCpy $2 1
   DetailPrint "Uninstalling $1"
-  ExecWait '"$INSTDIR\$1" /S'
+  ExecWait '"$INSTDIR\$1" $SilentOption $DebugOption'
   Delete $1
   BringToFront
   FindNext $0 $1
   Goto Uninstall_Targets
  Uninstall_Targets_Done:
  FindClose $0
+!endif
+ DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
+ DetailPrint "Delete the installed files"
+ !insertmacro RTEMS_DELETE_FILES
+ !insertmacro MUI_STARTMENU_GETFOLDER "Application" $smfolder
+!ifdef COMMON_FILES
  Delete "$INSTDIR\AUTHORS"
  Delete "$INSTDIR\COPYING"
  Delete "$INSTDIR\README"
  Delete "$INSTDIR\rtems.bat"
- Delete "$INSTDIR\rtems-cmd.bat"
+ Delete "$INSTDIR\rtems-env.bat"
  Delete "$INSTDIR\sh-run.bat"
  Delete "$INSTDIR\vs-make.sh"
+ Delete "$INSTDIR\RTEMS.url"
+ Delete "$INSTDIR\RTEMS-Wiki.url"
+ Delete "$INSTDIR\RTEMS-Documentation.url"
+ Delete "$INSTDIR\RTEMS-Support.url"
+ RMDir /r "$SMPROGRAMS\$smfolder"
  Delete "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-uninst.exe"
 !else
+ Delete "$SMPROGRAMS\$smfolder\Uninstall\RTEMS ${RTEMS_TARGET} Tools.lnk"
  Delete "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-${RTEMS_TARGET}-uninst.exe"
- Delete "$INSTDIR\Packages"
 !endif
  RMDir "$INSTDIR"
  DetailPrint "All done."
+!ifdef COMMON_FILES
  SetAutoClose false
+!else
+ SetAutoClose true
+!endif
 SectionEnd
