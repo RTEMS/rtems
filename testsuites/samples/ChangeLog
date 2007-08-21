@@ -1,3 +1,8 @@
+2007-08-21	Chris Johns <chrisj@rtems.org>
+
+	* capture/init.c, capture/system.h, capture/test1.c: Removed CRs
+	from files. Committed incorrectly.
+	 
 2007-08-17	Chris Johns <chrisj@rtems.org>
 
 	* Makefile.am, README, configure.ac, capture/.cvsignore,
