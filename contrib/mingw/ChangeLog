@@ -1,3 +1,8 @@
+2007-0823	Chris Johns <chisj@rtems.org>
+
+	* mingw-path.nsi: Change the forward slashes to back slashes for
+	Windows.
+
 2007-08-20	Chris Johns <chisj@rtems.org>
 
 	* filewrite.nsi, getparameters.nsi, instance-check.nsi,

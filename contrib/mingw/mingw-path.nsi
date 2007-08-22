@@ -26,17 +26,17 @@ FunctionEnd
 Function MinGWCheckExes
   Exch $R0
   Push $R1
-  StrCpy $R1 "$R0/bin/gcc.exe"
+  StrCpy $R1 "$R0\bin\gcc.exe"
   Push $R1
   Call MinGWCheckFile
   Pop $R1
   StrCmp "ok" 0 Done
-  StrCpy $R1 "$R0/bin/as.exe"
+  StrCpy $R1 "$R0\bin\as.exe"
   Push $R1
   Call MinGWCheckFile
   Pop $R1
   StrCmp "ok" 0 Done
-  StrCpy $R1 "$R0/bin/ld.exe"
+  StrCpy $R1 "$R0\bin\ld.exe"
   Push $R1
   Call MinGWCheckFile
   Pop $R1
