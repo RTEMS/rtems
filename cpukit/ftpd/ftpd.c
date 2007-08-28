@@ -1436,13 +1436,19 @@ command_port(FTPD_SessionInfo_t *info, char const *args)
   if(NUM_FIELDS == n)
   {
     int i;
-    uint8_t b[NUM_FIELDS];
+    union {
+      uint8_t b[NUM_FIELDS];
+      struct {
+        uint32_t ip;
+        uint16_t port;
+      };
+    } ip_info;
 
     for(i = 0; i < NUM_FIELDS; ++i)
     {
       if(a[i] > 255)
         break;
-      b[i] = (uint8_t)a[i];
+      ip_info.b[i] = (uint8_t)a[i];
     }
 
     if(i == NUM_FIELDS)
@@ -1450,11 +1456,10 @@ command_port(FTPD_SessionInfo_t *info, char const *args)
       /* Note: while it contradicts with RFC959, we don't allow PORT command
        * to specify IP address different than those of the originating client
        * for the sake of safety. */
-      uint32_t const *ip   = (uint32_t *)b;
-      if(*ip == info->def_addr.sin_addr.s_addr)
+      if (ip_info.ip == info->def_addr.sin_addr.s_addr)
       {
-        info->data_addr.sin_addr.s_addr = *ip;
-        info->data_addr.sin_port        = *(uint16_t *)(b + 4);
+        info->data_addr.sin_addr.s_addr = ip_info.ip;
+        info->data_addr.sin_port        = ip_info.port;
         info->data_addr.sin_family      = AF_INET;
         memset(info->data_addr.sin_zero, 0, sizeof(info->data_addr.sin_zero));
 

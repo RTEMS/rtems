@@ -1,5 +1,10 @@
 2007-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	PR 1256/networking
+	* ftpd/ftpd.c: Fix unaligned access.
+
+2007-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/Makefile.am: Always build nanosleep.
 
 2007-08-17	Chris Johns <chrisj@rtems.org>
