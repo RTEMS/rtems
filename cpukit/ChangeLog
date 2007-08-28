@@ -1,5 +1,10 @@
 2007-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* rtems/include/rtems/rtems/clock.h, score/src/threadhandler.c: Fix
+	spacing and spelling.
+
+2007-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1256/networking
 	* ftpd/ftpd.c: Fix unaligned access.
 

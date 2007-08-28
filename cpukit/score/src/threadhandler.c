@@ -125,7 +125,6 @@ void _Thread_Handler( void )
     __main ();
 #endif
 
-
   switch ( executing->Start.prototype ) {
     case THREAD_START_NUMERIC:
       executing->Wait.return_argument =

@@ -118,7 +118,7 @@ rtems_status_code rtems_clock_tick( void );
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 rtems_status_code rtems_clock_set_nanoseconds_extension(
   rtems_nanoseconds_extension_routine routine
@@ -136,7 +136,7 @@ rtems_status_code rtems_clock_set_nanoseconds_extension(
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 rtems_status_code rtems_clock_get_uptime(
   struct timespec *uptime
