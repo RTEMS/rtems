@@ -1,3 +1,7 @@
+2007-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/Makefile.am: Always build nanosleep.
+
 2007-08-17	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/capture/README: Minor copyright change.

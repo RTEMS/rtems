@@ -17,6 +17,7 @@ libposix_a_SOURCES =
 
 libposix_a_SOURCES += src/sleep.c
 libposix_a_SOURCES += src/usleep.c
+libposix_a_SOURCES += src/nanosleep.c
 
 if HAS_PTHREADS
 # include
@@ -157,8 +158,7 @@ libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
 ## TIME_C_FILES
 libposix_a_SOURCES += src/adjtime.c src/posixtimespecabsolutetimeout.c \
     src/clockgetcpuclockid.c src/clockgetenableattr.c src/clockgetres.c \
-    src/clockgettime.c src/clocksetenableattr.c src/clocksettime.c \
-    src/nanosleep.c
+    src/clockgettime.c src/clocksetenableattr.c src/clocksettime.c
 
 # the timer manager needs to be split further but only after its
 # dependence on the Classic API Timer Manager is removed.
