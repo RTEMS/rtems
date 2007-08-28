@@ -660,7 +660,7 @@ static void A_BSP_output_char( char c )
    */
   #if !defined(HAS_UBOOT)
     if (console_initialized == FALSE )
-     return
+     return;
   #endif
 
 #define PRINTK_WRITE mpc5200_uart_pollWrite

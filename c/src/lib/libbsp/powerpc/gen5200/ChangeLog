@@ -1,3 +1,7 @@
+2007-08-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/console.c: Add missing semi-colon.
+
 2007-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, README.IceCube, preinstall.am, include/bsp.h,
