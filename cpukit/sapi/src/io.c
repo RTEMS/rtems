@@ -136,16 +136,15 @@ rtems_status_code rtems_io_register_driver(
 
     if ( major == 0 )
     {
-        bool found = FALSE;
         for ( major = _IO_Number_of_drivers - 1 ; major ; major-- )
             if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
-                 _IO_Driver_address_table[major].open_entry == 0 ) {
-                found = FALSE;
+                 _IO_Driver_address_table[major].open_entry == 0 )
                 break;
-            }
 
-        if ( !found )
-          return RTEMS_TOO_MANY;
+        if (( major == 0 ) &&
+            ( _IO_Driver_address_table[major].initialization_entry == 0 &&
+              _IO_Driver_address_table[major].open_entry == 0 ))
+            return RTEMS_TOO_MANY;
     }
 
     if ( _IO_Driver_address_table[major].initialization_entry == 0 &&

@@ -1,7 +1,12 @@
 2007-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* ChangeLog, sapi/src/io.c: Revert change accidentally committed to
+	io.c.
+
+2007-08-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1256/networking
-	* ftpd/ftpd.c, sapi/src/io.c: Fix unaligned access.
+	* ftpd/ftpd.c: Fix unaligned access.
 
 2007-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
