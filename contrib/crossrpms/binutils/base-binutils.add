@@ -8,11 +8,6 @@ Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-Provides:	@rpmprefix@rtems4.7-base-binutils = %{binutils_version}-%{release}
-Obsoletes:	@rpmprefix@rtems4.7-base-binutils < %{binutils_version}-%{release}
-Provides:	@rpmprefix@rtems-base-binutils = %{binutils_version}-%{release}
-Obsoletes:	@rpmprefix@rtems-base-binutils < %{binutils_version}-%{release}
-
 %description -n @rpmprefix@binutils-common
 
 RTEMS is an open source operating system for embedded systems.
