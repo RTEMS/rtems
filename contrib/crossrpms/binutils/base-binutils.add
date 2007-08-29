@@ -28,9 +28,6 @@ This is the base for binutils regardless of target CPU.
 %if "%{binutils_version}" > "2.17"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
 %endif
-%if "%{binutils_version}" < "2.13"
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gasp.info.gz || :
-%endif
 
 %preun -n @rpmprefix@binutils-common
 if [ $1 -eq 0 ]; then
@@ -41,9 +38,6 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
 %if "%{binutils_version}" > "2.17"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
-%endif
-%if "%{binutils_version}" < "2.13"
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gasp.info.gz || :
 %endif
 fi
 
@@ -58,9 +52,6 @@ fi
 %{_infodir}/standards.info*
 %if "%{binutils_version}" > "2.17"
 %{_infodir}/gprof.info*
-%endif
-%if "%{binutils_version}" < "2.13"
-%{_infodir}/gasp.info*
 %endif
 
 %sysdir %{_prefix}/share
