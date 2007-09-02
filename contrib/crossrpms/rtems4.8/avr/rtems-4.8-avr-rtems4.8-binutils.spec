@@ -13,15 +13,15 @@
 %define _exeext %{nil}
 %endif
 
-%define binutils_pkgvers 2.17.90
-%define binutils_version 2.17.90
-%define binutils_rpmvers %{expand:%(echo "2.17.90" | tr - _ )}
+%define binutils_pkgvers 2.18
+%define binutils_version 2.18
+%define binutils_rpmvers %{expand:%(echo "2.18" | tr - _ )}
 
 Name:		rtems-4.8-avr-rtems4.8-binutils
 Summary:	Binutils for target avr-rtems4.8
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	2%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -193,11 +193,6 @@ Group: Development/Tools
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-Provides:	rtems-4.8-rtems4.7-base-binutils = %{binutils_version}-%{release}
-Obsoletes:	rtems-4.8-rtems4.7-base-binutils < %{binutils_version}-%{release}
-Provides:	rtems-4.8-rtems-base-binutils = %{binutils_version}-%{release}
-Obsoletes:	rtems-4.8-rtems-base-binutils < %{binutils_version}-%{release}
-
 %description -n rtems-4.8-binutils-common
 
 RTEMS is an open source operating system for embedded systems.
@@ -213,9 +208,6 @@ This is the base for binutils regardless of target CPU.
 %if "%{binutils_version}" > "2.17"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
 %endif
-%if "%{binutils_version}" < "2.13"
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gasp.info.gz || :
-%endif
 
 %preun -n rtems-4.8-binutils-common
 if [ $1 -eq 0 ]; then
@@ -226,9 +218,6 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/standards.info.gz || :
 %if "%{binutils_version}" > "2.17"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gprof.info.gz || :
-%endif
-%if "%{binutils_version}" < "2.13"
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gasp.info.gz || :
 %endif
 fi
 
@@ -243,9 +232,6 @@ fi
 %{_infodir}/standards.info*
 %if "%{binutils_version}" > "2.17"
 %{_infodir}/gprof.info*
-%endif
-%if "%{binutils_version}" < "2.13"
-%{_infodir}/gasp.info*
 %endif
 
 %dir %{_prefix}/share
