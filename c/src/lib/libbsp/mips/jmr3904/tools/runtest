@@ -147,7 +147,7 @@ do
 
    case $tname in
        # size is no longer interactive.
-       monitor* | termios* | fileio* | pppd*)
+       capture* | monitor* | termios* | fileio* | pppd*)
             if [ $run_to_completion = "yes" ]
             then
                  warn "Skipping $tname; it is interactive"
