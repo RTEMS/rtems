@@ -1,3 +1,8 @@
+2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.maint: touch all documentation master files so the date on
+	the manual reflects the release date of the software.
+
 2007-02-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Use MKDIR_P instead of mkdir_p.
