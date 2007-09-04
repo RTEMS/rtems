@@ -54,6 +54,15 @@ rtems-$(rtems_version)/stamp.export.$(rtems_tag)$(TAG_SUFFIX):
 rtems-$(rtems_version)$(TAG_SUFFIX).tar.bz2: rtems-$(rtems_version)/stamp.autofiles \
 	  rtems-$(rtems_version)/excludes \
 	  rtems-$(rtems_version)/TOOL_VERSIONS
+	cd rtems-$(rtems_version) ; \
+	  touch doc/ada_user/ada_user.texi doc/bsp_howto/bsp_howto.texi \
+	    doc/cpu_supplement/cpu_supplement.texi \
+	    doc/develenv/develenv.texi doc/filesystem/filesystem.texi \
+	    doc/itron3.0/itron.texi doc/networking/networking.texi \
+	    doc/new_chapters/new_chapters.texi doc/porting/porting.texi \
+	    doc/posix1003.1/posix1003_1.texi doc/posix_users/posix_users.texi \
+	    doc/relnotes/relnotes.texi doc/started_ada/started_ada.texi \
+	    doc/started/started.texi doc/user/c_user.texi
 	tar -cj -X rtems-$(rtems_version)/excludes \
 	  -f rtems-$(rtems_version)$(TAG_SUFFIX).tar.bz2 rtems-$(rtems_version)
 
@@ -64,14 +73,6 @@ rtems-$(rtems_version)/stamp.cleanup: rtems-$(rtems_version)/stamp.export.$(rtem
 	find rtems-$(rtems_version) -name preinstall.am -exec touch {} \;
 	rm -rf rtems-$(rtems_version)/contrib
 	touch rtems-$(rtems_version)/stamp.cleanup
-	touch doc/ada_user/ada_user.texi doc/bsp_howto/bsp_howto.texi \
-	    doc/cpu_supplement/cpu_supplement.texi \
-	    doc/develenv/develenv.texi doc/filesystem/filesystem.texi \
-	    doc/itron3.0/itron.texi doc/networking/networking.texi \
-	    doc/new_chapters/new_chapters.texi doc/porting/porting.texi \
-	    doc/posix1003.1/posix1003_1.texi doc/posix_users/posix_users.texi \
-	    doc/relnotes/relnotes.texi doc/started_ada/started_ada.texi \
-	    doc/started/started.texi doc/user/c_user.texi
 
 rtems-$(rtems_version)/stamp.autofiles: rtems-$(rtems_version)/stamp.cleanup
 	cd rtems-$(rtems_version) && ./bootstrap -r
