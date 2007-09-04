@@ -1,3 +1,9 @@
+2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add bin2c so we can have a more reliable way to convert
+	binary files to objects. If they are in C, we can use the correct CPU
+	CFLAGS and they will link easier.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

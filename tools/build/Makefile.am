@@ -4,7 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-bin_PROGRAMS = cklength eolstrip packhex unhex
+bin_PROGRAMS = cklength eolstrip packhex unhex bin2c
 
 noinst_PROGRAMS = binpatch
 
@@ -13,6 +13,7 @@ eolstrip_SOURCES = eolstrip.c
 packhex_SOURCES = packhex.c
 unhex_SOURCES = unhex.c
 binpatch_SOURCES = binpatch.c
+bin2c_SOURCES = bin2c.c
 
 bin_SCRIPTS = install-if-change
 
