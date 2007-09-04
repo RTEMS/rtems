@@ -315,7 +315,7 @@ rtems_monitor_object_cmd(
 {
     int arg;
     rtems_monitor_object_info_t *info = 0;
-    rtems_monitor_object_type_t  type ;
+    rtems_monitor_object_type_t  type;
 
     /* what is the default type? */
     type = command_arg->monitor_object;

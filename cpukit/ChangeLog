@@ -1,5 +1,11 @@
 2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/monitor/mon-monitor.c, libmisc/monitor/mon-object.c,
+	libmisc/monitor/monitor.h: Merge minor parts of Thomas' improvements
+	that are needed by osmonweb.
+
+2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/untar/untar.c, libmisc/untar/untar.h: Add const to char *.
 	Use printk.
 

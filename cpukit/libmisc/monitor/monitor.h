@@ -18,7 +18,7 @@ extern "C" {
 #endif
 
 /* Forward decls from symbols.h */
-typedef struct _rtems_symbol_t rtems_symbol_t ;
+typedef struct _rtems_symbol_t rtems_symbol_t;
 typedef struct _rtems_symbol_table_t rtems_symbol_table_t;
 
 /*
@@ -52,7 +52,9 @@ typedef enum {
 
 #define RTEMS_MONITOR_SUSPEND	0x0001		/* suspend monitor on startup */
 #define RTEMS_MONITOR_GLOBAL    0x0002          /* monitor should be global */
-
+#define RTEMS_MONITOR_NOTASK    0x0004 /* do not start monitor task */
+#define RTEMS_MONITOR_NOSYMLOAD 0x0008 /* do not load symbols       */
+#define RTEMS_MONITOR_WAITQUIT  0x0010 /* wait for monitor task to terminate */
 
 /*
  * Public interfaces for RTEMS data structures monitor is aware of.
@@ -283,10 +285,10 @@ typedef void ( *rtems_monitor_command_function_t )(
              );
 
 union _rtems_monitor_command_arg_t {
-  rtems_monitor_object_type_t 	monitor_object ;
-  rtems_status_code		status_code ;
-  rtems_symbol_table_t 		**symbol_table ;
-  rtems_monitor_command_entry_t *monitor_command_entry ;
+  rtems_monitor_object_type_t 	monitor_object;
+  rtems_status_code		status_code;
+  rtems_symbol_table_t 		**symbol_table;
+  rtems_monitor_command_entry_t *monitor_command_entry;
 };
 
 struct rtems_monitor_command_entry_s {
@@ -428,6 +430,12 @@ uint32_t   rtems_monitor_symbol_dump(rtems_monitor_symbol_t *, boolean);
 void    rtems_monitor_symbol_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
 
 
+/* mon-object.c */
+rtems_monitor_object_info_t *rtems_monitor_object_lookup(
+  rtems_monitor_object_type_t type
+);
+
+/* shared data */
 extern rtems_symbol_table_t *rtems_monitor_symbols;
 
 /* FIXME: This should not be here */

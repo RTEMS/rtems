@@ -578,16 +578,15 @@ rtems_monitor_init(
     if (monitor_flags & RTEMS_MONITOR_GLOBAL)
         rtems_monitor_server_init(monitor_flags);
 
-    /*
-     * Start the monitor task itself
-     */
-
-    status = rtems_task_start(rtems_monitor_task_id,
-                              rtems_monitor_task,
-                              monitor_flags);
-    if (status != RTEMS_SUCCESSFUL)
-    {
+    if (!(monitor_flags & RTEMS_MONITOR_NOTASK)) {
+      /*
+       * Start the monitor task itself
+       */
+      status = rtems_task_start(
+        rtems_monitor_task_id, rtems_monitor_task, monitor_flags);
+      if (status != RTEMS_SUCCESSFUL) {
         rtems_error(status, "could not start monitor");
         return;
-    }
+      }
+   }
 }
