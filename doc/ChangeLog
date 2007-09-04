@@ -1,3 +1,7 @@
+2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems_footer.html.in, common/cpright.texi: Update copyright.
+
 2007-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac, develenv/direct.t: Remove RDBG.
