@@ -1,3 +1,8 @@
+2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest.in: Add capture to list of interative tests to skip in batch
+	mode.
+
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest.in: Now works with tsim.
