@@ -1,17 +1,23 @@
-// bin2c.c
-//
-// convert a binary file into a C source vector
-//
-// put into the public domain by Sandro Sigala
-//
-// syntax:  bin2c [-c] [-z] <input_file> <output_file>
-//
-//          -c    add the "const" keyword to definition
-//          -z    terminate the array with a zero (useful for embedded C strings)
-//
-// examples:
-//     bin2c -c myimage.png myimage_png.cpp
-//     bin2c -z sometext.txt sometext_txt.cpp
+/*
+ * bin2c.c
+ *
+ * convert a binary file into a C source vector
+ *
+ * put into the public domain by Sandro Sigala
+ *
+ * syntax:  bin2c [-c] [-z] <input_file> <output_file>
+ *
+ *    -c    do NOT add the "const" keyword to definition
+ *    -s    add the "static" keywork to definition
+ *    -z    terminate the array with a zero (useful for embedded C strings)
+ *
+ * examples:
+ *     bin2c -c myimage.png myimage_png.cpp
+ *     bin2c -z sometext.txt sometext_txt.cpp
+ *
+ * From:
+ *   http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images-Bin2c_In_C
+ */
 
 #include <ctype.h>
 #include <stdio.h>
@@ -22,87 +28,235 @@
 #define PATH_MAX 1024
 #endif
 
-int useconst = 0;
+int useconst = 1;
+int usestatic = 0;
+int verbose = 0;
 int zeroterminated = 0;
 
 int myfgetc(FILE *f)
 {
-	int c = fgetc(f);
-	if (c == EOF && zeroterminated) {
-		zeroterminated = 0;
-		return 0;
-	}
-	return c;
+  int c = fgetc(f);
+  if (c == EOF && zeroterminated) {
+    zeroterminated = 0;
+    return 0;
+  }
+  return c;
 }
 
 void process(const char *ifname, const char *ofname)
 {
-	FILE *ifile, *ofile;
-	ifile = fopen(ifname, "rb");
-	if (ifile == NULL) {
-		fprintf(stderr, "cannot open %s for reading\n", ifname);
-		exit(1);
-	}
-	ofile = fopen(ofname, "wb");
-	if (ofile == NULL) {
-		fprintf(stderr, "cannot open %s for writing\n", ofname);
-		exit(1);
-	}
-	char buf[PATH_MAX], *p;
-	const char *cp;
-	if ((cp = strrchr(ifname, '/')) != NULL)
-		++cp;
-	else {
-		if ((cp = strrchr(ifname, '\\')) != NULL)
-			++cp;
-		else
-			cp = ifname;
-	}
-	strcpy(buf, cp);
-	for (p = buf; *p != '\0'; ++p)
-		if (!isalnum(*p))
-			*p = '_';
-	fprintf(ofile, "static %sunsigned char %s[] = {\n", useconst ? "const " : "", buf);
-	int c, col = 1;
-	while ((c = myfgetc(ifile)) != EOF) {
-		if (col >= 78 - 6) {
-			fputc('\n', ofile);
-			col = 1;
-		}
-		fprintf(ofile, "0x%.2x, ", c);
-		col += 6;
+  FILE *ifile, *ocfile, *ohfile;
+  char buf[PATH_MAX], *p;
+  char obasename[PATH_MAX];
+  char ocname[PATH_MAX];
+  char ohname[PATH_MAX];
+  const char *cp;
+  size_t len;
 
-	}
-	fprintf(ofile, "\n};\n");
+  /* Error check */
+  if ( !ifname || !ofname ) {
+    fprintf(stderr, "process has NULL filename\n");
+    exit(1);
+  }
 
-	fclose(ifile);
-	fclose(ofile);
+  strncpy( obasename, ofname, PATH_MAX );
+  len = strlen( obasename );
+  if ( obasename[len-2] == '.' && obasename[len-1] == 'c' )
+    obasename[len-2] = '\0';
+
+  sprintf( ocname, "%s.c", obasename );
+  sprintf( ohname, "%s.h", obasename );
+
+  if ( verbose ) {
+    fprintf(
+      stderr,
+      "in file: %s\n"
+      "c file: %s\n"
+      "h file: %s\n",
+      ifname,
+      ocname,
+      ohname
+    );
+  }
+
+  /* Open input and output files */
+  ifile = fopen(ifname, "rb");
+  if (ifile == NULL) {
+    fprintf(stderr, "cannot open %s for reading\n", ifname);
+    exit(1);
+  }
+  ocfile = fopen(ocname, "wb");
+  if (ocfile == NULL) {
+    fprintf(stderr, "cannot open %s for writing\n", ocname);
+    exit(1);
+  }
+
+  ohfile = fopen(ohname, "wb");
+  if (ohfile == NULL) {
+    fprintf(stderr, "cannot open %s for writing\n", ohname);
+    exit(1);
+  }
+
+  /* find basename */
+  if ((cp = strrchr(ifname, '/')) != NULL)
+    ++cp;
+  else {
+    if ((cp = strrchr(ifname, '\\')) != NULL)
+      ++cp;
+    else
+      cp = ifname;
+  }
+  strcpy(buf, cp);
+  for (p = buf; *p != '\0'; ++p)
+    if (!isalnum(*p))
+      *p = '_';
+
+  /* print C file header */
+  fprintf(
+    ocfile,
+    "/*\n"
+    " *  Declarations for C structure representing binary file %s\n"
+    " *\n"
+    " *  WARNING: Automatically generated -- do not edit!\n"
+    " */\n"
+    "\n"
+    "#include <sys/types.h>\n"
+    "\n",
+    ifname
+  );
+
+  /* print structure */
+  fprintf(
+    ocfile,
+    "%s%sunsigned char %s[] = {\n  ",
+    ((usestatic) ? "static " : ""),
+    ((useconst) ? "const " : ""),
+    buf
+  );
+  int c, col = 1;
+  while ((c = myfgetc(ifile)) != EOF) {
+    if (col >= 78 - 6) {
+      fprintf(ocfile, "\n  ");
+      col = 1;
+    }
+    fprintf(ocfile, "0x%.2x, ", c);
+    col += 6;
+
+  }
+  fprintf(ocfile, "\n};\n");
+
+  /* print sizeof */
+  fprintf(
+    ocfile,
+    "\n"
+    "%s%ssize_t %s_size = sizeof(%s);\n",
+    ((usestatic) ? "static " : ""),
+    ((useconst) ? "const " : ""),
+    buf,
+    buf
+  );
+ 
+  /*****************************************************************/
+  /******                    END OF C FILE                     *****/
+  /*****************************************************************/
+
+  /* print H file header */
+  fprintf(
+    ohfile,
+    "/*\n"
+    " *  Extern declarations for C structure representing binary file %s\n"
+    " *\n"
+    " *  WARNING: Automatically generated -- do not edit!\n"
+    " */\n"
+    "\n"
+    "#ifndef __%s_h\n"
+    "#define __%s_h\n"
+    "\n"
+    "#include <sys/types.h>\n"
+    "\n",
+    obasename,  /* header */
+    obasename,  /* ifndef */
+    obasename   /* define */
+  );
+
+  /* print structure */
+  fprintf(
+    ohfile,
+    "extern %s%sunsigned char %s[];",
+    ((usestatic) ? "static " : ""),
+    ((useconst) ? "const " : ""),
+    buf
+  );
+  /* print sizeof */
+  fprintf(
+    ohfile,
+    "\n"
+    "extern %s%ssize_t %s_size;\n",
+    ((usestatic) ? "static " : ""),
+    ((useconst) ? "const " : ""),
+    buf
+  );
+
+  fprintf(
+    ohfile,
+    "\n"
+    "#endif\n"
+  );
+
+  /*****************************************************************/
+  /******                    END OF H FILE                     *****/
+  /*****************************************************************/
+  
+  fclose(ifile);
+  fclose(ocfile);
+  fclose(ohfile);
 }
 
 void usage(void)
 {
-	fprintf(stderr, "usage: bin2c [-cz] <input_file> <output_file>\n");
-	exit(1);
+  fprintf(
+     stderr,
+     "usage: bin2c [-csvz] <input_file> <output_file>\n"
+     "  <input_file> is the binary file to convert\n"
+     "  <output_file> should not have a .c or .h extension\n"
+     "\n"
+     "  -c - do NOT use const in declaration\n"
+     "  -s - do use static in declaration\n"
+     "  -v - verbose\n"
+     "  -z - add zero terminator\n"
+    );
+  exit(1);
 }
 
 int main(int argc, char **argv)
 {
-	while (argc > 3) {
-		if (!strcmp(argv[1], "-c")) {
-			useconst = 1;
-			--argc;
-			++argv;
-		} else if (!strcmp(argv[1], "-z")) {
-			zeroterminated = 1;
-			--argc;
-			++argv;
-		} else {
-			usage();
-		}
-	}
-	if (argc != 3) {
-		usage();
-	}
-	process(argv[1], argv[2]);
-	return 0;
+  while (argc > 3) {
+    if (!strcmp(argv[1], "-c")) {
+      useconst = 0;
+      --argc;
+      ++argv;
+    } else if (!strcmp(argv[1], "-s")) {
+      usestatic = 1;
+      --argc;
+      ++argv;
+    } else if (!strcmp(argv[1], "-v")) {
+      usestatic = 1;
+      --argc;
+      ++argv;
+    } else if (!strcmp(argv[1], "-z")) {
+      zeroterminated = 1;
+      --argc;
+      ++argv;
+    } else {
+      usage();
+    }
+  }
+  if (argc != 3) {
+    usage();
+  }
+
+  /* process( input_file, output_basename ) */
+  process(argv[1], argv[2]);
+  return 0;
 }
+

@@ -1,5 +1,11 @@
 2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* bin2c.c: Significant improvements -- add multiple options, generate
+	both C and H files, do not always generate static. fix indentation,
+	add comments.
+
+2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* bin2c.c: New file.
 	http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images-Bin2c_In_C
 
