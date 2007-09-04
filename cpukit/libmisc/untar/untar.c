@@ -1,8 +1,7 @@
 /* FIXME:
  *   1. Symbolic links are not created.
- *   2. Untar_FromMemory has printfs.
- *   3. Untar_FromMemory uses FILE *fp.
- *   4. How to determine end of archive?
+ *   2. Untar_FromMemory uses FILE *fp.
+ *   3. How to determine end of archive?
  *
  *  Written by: Jake Janovetz <janovetz@tempest.ece.uiuc.edu>
  *
@@ -24,6 +23,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <rtems/untar.h>
+#include <rtems/bspIo.h>
 
 
 /**************************************************************************
@@ -66,7 +66,10 @@
  * unsigned long.  Only support 32-bit numbers for now.
  *************************************************************************/
 unsigned long
-_rtems_octal2ulong(const char *octascii, size_t len)
+_rtems_octal2ulong(
+  const char *octascii,
+  size_t len
+)
 {
    size_t        i;
    unsigned long num;
@@ -95,7 +98,7 @@ _rtems_octal2ulong(const char *octascii, size_t len)
  *                                                                        *
  * Inputs:                                                                *
  *                                                                        *
- *    char          *tar_buf    - Pointer to TAR buffer.                  *
+ *    const char *   tar_buf    - Pointer to TAR buffer.                  *
  *    size_t         size       - Length of TAR buffer.                   *
  *                                                                        *
  *                                                                        *
@@ -105,15 +108,15 @@ _rtems_octal2ulong(const char *octascii, size_t len)
  *          UNTAR_INVALID_CHECKSUM  for an invalid header checksum.       *
  *          UNTAR_INVALID_HEADER    for an invalid header.                *
  *                                                                        *
- **************************************************************************
- * Change History:                                                        *
- *  12/30/1998 - Creation (JWJ)                                           *
- *************************************************************************/
+ **************************************************************************/
 int
-Untar_FromMemory(char *tar_buf, size_t size)
+Untar_FromMemory(
+  const char *tar_buf,
+  size_t size
+)
 {
    FILE           *fp;
-   char           *bufr;
+   const char     *bufr;
    size_t         n;
    char           fname[100];
    char           linkname[100];
@@ -181,7 +184,7 @@ Untar_FromMemory(char *tar_buf, size_t size)
          nblocks = (((file_size) + 511) & ~511) / 512;
          if ((fp = fopen(fname, "w")) == NULL)
          {
-            fprintf(stdout,"Untar failed to create file %s\n", fname);
+            printk("Untar: failed to create file %s\n", fname);
             ptr += 512 * nblocks;
          }
          else
@@ -199,7 +202,7 @@ Untar_FromMemory(char *tar_buf, size_t size)
                n = fwrite(&tar_buf[ptr], 1, len, fp);
                if (n != len)
                {
-                  fprintf(stdout,"Error during write\n");
+                  printk("untar: Error during write\n");
                   break;
                }
                ptr += 512;
@@ -229,7 +232,7 @@ Untar_FromMemory(char *tar_buf, size_t size)
  *                                                                        *
  * Inputs:                                                                *
  *                                                                        *
- *    char *tar_name   - TAR filename.                                    *
+ *    const char *tar_name   - TAR filename.                              *
  *                                                                        *
  *                                                                        *
  * Output:                                                                *
@@ -243,7 +246,9 @@ Untar_FromMemory(char *tar_buf, size_t size)
  *  12/30/1998 - Creation (JWJ)                                           *
  *************************************************************************/
 int
-Untar_FromFile(char *tar_name)
+Untar_FromFile(
+  const char *tar_name
+)
 {
    int            fd;
    char           *bufr;
@@ -357,7 +362,9 @@ Untar_FromFile(char *tar_name)
  * header, but the checksum field is substituted with blanks.
  ************************************************************************/
 int
-_rtems_tar_header_checksum(const char *bufr)
+_rtems_tar_header_checksum(
+  const char *bufr
+)
 {
    int  i, sum;
 

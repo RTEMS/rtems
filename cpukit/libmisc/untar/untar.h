@@ -24,8 +24,8 @@ extern "C" {
 #define UNTAR_INVALID_HEADER     3
 
 
-int Untar_FromMemory(char *tar_buf, size_t size);
-int Untar_FromFile(char *tar_name);
+int Untar_FromMemory(const char *tar_buf, size_t size);
+int Untar_FromFile(const char *tar_name);
 
 /**************************************************************************
  * This converts octal ASCII number representations into an
