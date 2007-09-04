@@ -1,5 +1,10 @@
 2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* bin2c.c: New file.
+	http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images-Bin2c_In_C
+
+2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am: Add bin2c so we can have a more reliable way to convert
 	binary files to objects. If they are in C, we can use the correct CPU
 	CFLAGS and they will link easier.
