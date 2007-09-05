@@ -33,6 +33,9 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 
+/* SPARC CPU variant: LEON3 */
+#define LEON3 1
+
 /*
  *  confdefs.h overrides for this BSP:
  *   - two termios serial ports

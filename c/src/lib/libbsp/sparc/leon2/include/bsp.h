@@ -32,6 +32,9 @@ extern "C" {
 #include <leon.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
+
+/* SPARC CPU variant: LEON2 */
+#define LEON2 1
   
 /*
  *  confdefs.h overrides for this BSP:
