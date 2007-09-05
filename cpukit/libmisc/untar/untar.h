@@ -24,7 +24,7 @@ extern "C" {
 #define UNTAR_INVALID_HEADER     3
 
 
-int Untar_FromMemory(const char *tar_buf, size_t size);
+int Untar_FromMemory(void *tar_buf, size_t size);
 int Untar_FromFile(const char *tar_name);
 
 /**************************************************************************

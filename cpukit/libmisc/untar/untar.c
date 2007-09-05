@@ -98,8 +98,8 @@ _rtems_octal2ulong(
  *                                                                        *
  * Inputs:                                                                *
  *                                                                        *
- *    const char *   tar_buf    - Pointer to TAR buffer.                  *
- *    size_t         size       - Length of TAR buffer.                   *
+ *    void *  tar_buf    - Pointer to TAR buffer.                         *
+ *    size_t  size       - Length of TAR buffer.                          *
  *                                                                        *
  *                                                                        *
  * Output:                                                                *
@@ -111,11 +111,12 @@ _rtems_octal2ulong(
  **************************************************************************/
 int
 Untar_FromMemory(
-  const char *tar_buf,
-  size_t size
+  void   *tar_buf,
+  size_t  size
 )
 {
    FILE           *fp;
+   const char     *tar_ptr = (const char *)tar_buf;
    const char     *bufr;
    size_t         n;
    char           fname[100];
@@ -140,7 +141,7 @@ Untar_FromMemory(
       }
 
       /* Read the header */
-      bufr = &tar_buf[ptr];
+      bufr = &tar_ptr[ptr];
       ptr += 512;
       if (strncmp(&bufr[257], "ustar  ", 7))
       {
@@ -199,7 +200,7 @@ Untar_FromMemory(
             for (i=0; i<nblocks; i++)
             {
                len = ((sizeToGo < 512L)?(sizeToGo):(512L));
-               n = fwrite(&tar_buf[ptr], 1, len, fp);
+               n = fwrite(&tar_ptr[ptr], 1, len, fp);
                if (n != len)
                {
                   printk("untar: Error during write\n");

@@ -1,5 +1,9 @@
 2007-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/untar/untar.c, libmisc/untar/untar.h: Clean up prototype.
+
+2007-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am: Add new files.
 
 2007-09-05	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
