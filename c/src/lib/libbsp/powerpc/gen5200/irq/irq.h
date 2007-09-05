@@ -87,58 +87,62 @@
 #ifndef LIBBSP_POWERPC_MPC5200_IRQ_IRQ_H
 #define LIBBSP_POWERPC_MPC5200_IRQ_IRQ_H
 
-#define CHK_CE_SHADOW(pmce)  ((pmce) & 0x00000001)
-#define CHK_CSE_STICKY(pmce) (((pmce) >> 10) & 0x00000001)
-#define CHK_MSE_STICKY(pmce) (((pmce) >> 21) & 0x00000001)
-#define CHK_PSE_STICKY(pmce) (((pmce) >> 29) & 0x00000001)
-#define CLR_CSE_STICKY(pmce) ((pmce) |= (1 << 29 ))
-#define CLR_MSE_STICKY(pmce) ((pmce) |= (1 << 21 ))
-#define CLR_PSE_STICKY(pmce) ((pmce) |= (1 << 10 ))
-#define CSE_SOURCE(source)	 (((source) >> 8) & 0x00000003)
-#define MSE_SOURCE(source)	 (((source) >> 16) & 0x0000001F)
-#define PSE_SOURCE(source)	 (((source) >> 24) & 0x0000001F)
+#define CHK_CE_SHADOW(_pmce)	((_pmce) & 0x00000001)
+#define CHK_CSE_STICKY(_pmce)	(((_pmce) >> 10) & 0x00000001)
+#define CHK_MSE_STICKY(_pmce)	(((_pmce) >> 21) & 0x00000001)
+#define CHK_PSE_STICKY(_pmce)	(((_pmce) >> 29) & 0x00000001)
+#define CLR_CSE_STICKY(_pmce)	((_pmce) |= (1 << 29 ))
+#define CLR_MSE_STICKY(_pmce)	((_pmce) |= (1 << 21 ))
+#define CLR_PSE_STICKY(_pmce)	((_pmce) |= (1 << 10 ))
+#define CSE_SOURCE(_source)	(((_source) >> 8) & 0x00000003)
+#define MSE_SOURCE(_source)	(((_source) >> 16) & 0x0000001F)
+#define PSE_SOURCE(_source)	(((_source) >> 24) & 0x0000001F)
 
 /*
  * Base index for the module specific irq handlers
  */
-#define BSP_ASM_IRQ_VECTOR_BASE 			0
-#define BSP_PER_VECTOR_BASE					BSP_ASM_IRQ_VECTOR_BASE /* 0 */
+#define BSP_ASM_IRQ_VECTOR_BASE 	0
+#define BSP_PER_VECTOR_BASE		BSP_ASM_IRQ_VECTOR_BASE /* 0 */
 /*
  * Peripheral IRQ handlers related definitions
  */
-#define BSP_PER_IRQ_NUMBER					22
-#define BSP_PER_IRQ_LOWEST_OFFSET			BSP_PER_VECTOR_BASE  /* 0 */
-#define BSP_PER_IRQ_MAX_OFFSET				BSP_PER_IRQ_LOWEST_OFFSET + BSP_PER_IRQ_NUMBER - 1 /* 21 */
+#define BSP_PER_IRQ_NUMBER		22
+#define BSP_PER_IRQ_LOWEST_OFFSET	BSP_PER_VECTOR_BASE  /* 0 */
+#define BSP_PER_IRQ_MAX_OFFSET		\
+	(BSP_PER_IRQ_LOWEST_OFFSET + BSP_PER_IRQ_NUMBER - 1) /* 21 */
 /*
  * Main IRQ handlers related definitions
  */
-#define BSP_MAIN_IRQ_NUMBER					17
-#define BSP_MAIN_IRQ_LOWEST_OFFSET			BSP_PER_IRQ_MAX_OFFSET + 1 /* 22 */
-#define BSP_MAIN_IRQ_MAX_OFFSET				BSP_MAIN_IRQ_LOWEST_OFFSET + BSP_MAIN_IRQ_NUMBER - 1 /* 38 */
+#define BSP_MAIN_IRQ_NUMBER		17
+#define BSP_MAIN_IRQ_LOWEST_OFFSET	BSP_PER_IRQ_MAX_OFFSET + 1 /* 22 */
+#define BSP_MAIN_IRQ_MAX_OFFSET		\
+	(BSP_MAIN_IRQ_LOWEST_OFFSET + BSP_MAIN_IRQ_NUMBER - 1) /* 38 */
 /*
  * Critical IRQ handlers related definitions
  */
-#define BSP_CRIT_IRQ_NUMBER					4
-#define BSP_CRIT_IRQ_LOWEST_OFFSET			BSP_MAIN_IRQ_MAX_OFFSET + 1 /* 39 */
-#define BSP_CRIT_IRQ_MAX_OFFSET				BSP_CRIT_IRQ_LOWEST_OFFSET + BSP_CRIT_IRQ_NUMBER - 1 /* 42 */
+#define BSP_CRIT_IRQ_NUMBER		4
+#define BSP_CRIT_IRQ_LOWEST_OFFSET	BSP_MAIN_IRQ_MAX_OFFSET + 1 /* 39 */
+#define BSP_CRIT_IRQ_MAX_OFFSET		\
+	(BSP_CRIT_IRQ_LOWEST_OFFSET + BSP_CRIT_IRQ_NUMBER - 1) /* 42 */
 /*
  * Summary of SIU interrupts
  */
-#define BSP_SIU_IRQ_NUMBER					BSP_CRIT_IRQ_MAX_OFFSET + 1 /* 43 */
-#define BSP_SIU_IRQ_LOWEST_OFFSET			BSP_PER_IRQ_LOWEST_OFFSET /* 0 */
-#define BSP_SIU_IRQ_MAX_OFFSET				BSP_CRIT_IRQ_MAX_OFFSET	 /* 42 */
+#define BSP_SIU_IRQ_NUMBER		BSP_CRIT_IRQ_MAX_OFFSET + 1 /* 43 */
+#define BSP_SIU_IRQ_LOWEST_OFFSET	BSP_PER_IRQ_LOWEST_OFFSET /* 0 */
+#define BSP_SIU_IRQ_MAX_OFFSET		BSP_CRIT_IRQ_MAX_OFFSET	 /* 42 */
 /*
  * Processor IRQ handlers related definitions
  */
-#define BSP_PROCESSOR_IRQ_NUMBER			3
-#define BSP_PROCESSOR_IRQ_LOWEST_OFFSET		BSP_CRIT_IRQ_MAX_OFFSET + 1 /* 44  */
-#define BSP_PROCESSOR_IRQ_MAX_OFFSET		BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER - 1 /* 46 */
+#define BSP_PROCESSOR_IRQ_NUMBER	3
+#define BSP_PROCESSOR_IRQ_LOWEST_OFFSET	BSP_CRIT_IRQ_MAX_OFFSET + 1 /* 44  */
+#define BSP_PROCESSOR_IRQ_MAX_OFFSET	\
+        (BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER - 1) /* 46 */
 /*
  * Summary
  */
-#define BSP_IRQ_NUMBER						BSP_PROCESSOR_IRQ_MAX_OFFSET + 1 /* 47 */
-#define BSP_LOWEST_OFFSET					BSP_PER_IRQ_LOWEST_OFFSET /* 0 */
-#define BSP_MAX_OFFSET						BSP_PROCESSOR_IRQ_MAX_OFFSET /* 46 */
+#define BSP_IRQ_NUMBER		BSP_PROCESSOR_IRQ_MAX_OFFSET + 1 /* 47 */
+#define BSP_LOWEST_OFFSET	BSP_PER_IRQ_LOWEST_OFFSET /* 0 */
+#define BSP_MAX_OFFSET		BSP_PROCESSOR_IRQ_MAX_OFFSET /* 46 */
 
 #ifndef ASM
 
@@ -149,59 +153,60 @@ extern volatile unsigned int ppc_cached_irq_mask;
 /*
  * index table for the module specific handlers, a few entries are only placeholders
  */
-typedef enum
-	{
-  	BSP_SIU_IRQ_SMARTCOMM	=	BSP_PER_IRQ_LOWEST_OFFSET + 0,
-  	BSP_SIU_IRQ_PSC1		=	BSP_PER_IRQ_LOWEST_OFFSET + 1,
-  	BSP_SIU_IRQ_PSC2		=	BSP_PER_IRQ_LOWEST_OFFSET + 2,
-  	BSP_SIU_IRQ_PSC3		=	BSP_PER_IRQ_LOWEST_OFFSET + 3,
-  	BSP_SIU_IRQ_PSC6		=	BSP_PER_IRQ_LOWEST_OFFSET + 4,
-  	BSP_SIU_IRQ_ETH			=	BSP_PER_IRQ_LOWEST_OFFSET + 5,
-  	BSP_SIU_IRQ_USB			=	BSP_PER_IRQ_LOWEST_OFFSET + 6,
-  	BSP_SIU_IRQ_ATA			=	BSP_PER_IRQ_LOWEST_OFFSET + 7,
-  	BSP_SIU_IRQ_PCI_CRT		=	BSP_PER_IRQ_LOWEST_OFFSET + 8,
-  	BSP_SIU_IRQ_PCI_SC_RX	        =	BSP_PER_IRQ_LOWEST_OFFSET + 9,
-  	BSP_SIU_IRQ_PCI_SC_TX	        =	BSP_PER_IRQ_LOWEST_OFFSET + 10,
-	BSP_SIU_IRQ_PSC4		=	BSP_PER_IRQ_LOWEST_OFFSET + 11,
-  	BSP_SIU_IRQ_PSC5		=	BSP_PER_IRQ_LOWEST_OFFSET + 12,
-  	BSP_SIU_IRQ_SPI_MODF	        =	BSP_PER_IRQ_LOWEST_OFFSET + 13,
-  	BSP_SIU_IRQ_SPI_SPIF	        =	BSP_PER_IRQ_LOWEST_OFFSET + 14,
-  	BSP_SIU_IRQ_I2C1		=	BSP_PER_IRQ_LOWEST_OFFSET + 15,
-  	BSP_SIU_IRQ_I2C2		=	BSP_PER_IRQ_LOWEST_OFFSET + 16,
-  	BSP_SIU_IRQ_MSCAN1		=	BSP_PER_IRQ_LOWEST_OFFSET + 17,
-  	BSP_SIU_IRQ_MSCAN2		=	BSP_PER_IRQ_LOWEST_OFFSET + 18,
-  	BSP_SIU_IRQ_IR_RX		=	BSP_PER_IRQ_LOWEST_OFFSET + 19,
-  	BSP_SIU_IRQ_IR_TX		=	BSP_PER_IRQ_LOWEST_OFFSET + 20,
-  	BSP_SIU_IRQ_XLB_ARB		=	BSP_PER_IRQ_LOWEST_OFFSET + 21,
+typedef enum {
+  BSP_SIU_IRQ_SMARTCOMM		= BSP_PER_IRQ_LOWEST_OFFSET + 0,
+  BSP_SIU_IRQ_PSC1		= BSP_PER_IRQ_LOWEST_OFFSET + 1,
+  BSP_SIU_IRQ_PSC2		= BSP_PER_IRQ_LOWEST_OFFSET + 2,
+  BSP_SIU_IRQ_PSC3		= BSP_PER_IRQ_LOWEST_OFFSET + 3,
+  BSP_SIU_IRQ_PSC6		= BSP_PER_IRQ_LOWEST_OFFSET + 4,
+  BSP_SIU_IRQ_ETH		= BSP_PER_IRQ_LOWEST_OFFSET + 5,
+  BSP_SIU_IRQ_USB		= BSP_PER_IRQ_LOWEST_OFFSET + 6,
+  BSP_SIU_IRQ_ATA		= BSP_PER_IRQ_LOWEST_OFFSET + 7,
+  BSP_SIU_IRQ_PCI_CRT		= BSP_PER_IRQ_LOWEST_OFFSET + 8,
+  BSP_SIU_IRQ_PCI_SC_RX	        = BSP_PER_IRQ_LOWEST_OFFSET + 9,
+  BSP_SIU_IRQ_PCI_SC_TX	        = BSP_PER_IRQ_LOWEST_OFFSET + 10,
+  BSP_SIU_IRQ_PSC4		= BSP_PER_IRQ_LOWEST_OFFSET + 11,
+  BSP_SIU_IRQ_PSC5		= BSP_PER_IRQ_LOWEST_OFFSET + 12,
+  BSP_SIU_IRQ_SPI_MODF	        = BSP_PER_IRQ_LOWEST_OFFSET + 13,
+  BSP_SIU_IRQ_SPI_SPIF	        = BSP_PER_IRQ_LOWEST_OFFSET + 14,
+  BSP_SIU_IRQ_I2C1		= BSP_PER_IRQ_LOWEST_OFFSET + 15,
+  BSP_SIU_IRQ_I2C2		= BSP_PER_IRQ_LOWEST_OFFSET + 16,
+  BSP_SIU_IRQ_MSCAN1		= BSP_PER_IRQ_LOWEST_OFFSET + 17,
+  BSP_SIU_IRQ_MSCAN2		= BSP_PER_IRQ_LOWEST_OFFSET + 18,
+  BSP_SIU_IRQ_IR_RX		= BSP_PER_IRQ_LOWEST_OFFSET + 19,
+  BSP_SIU_IRQ_IR_TX		= BSP_PER_IRQ_LOWEST_OFFSET + 20,
+  BSP_SIU_IRQ_XLB_ARB		= BSP_PER_IRQ_LOWEST_OFFSET + 21,
 
-  	BSP_SIU_IRQ_SL_TIMER1	        =	BSP_MAIN_IRQ_LOWEST_OFFSET + 0, /* handler entry only used in case of SMI */
-	BSP_SIU_IRQ_IRQ1		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 1,
-	BSP_SIU_IRQ_IRQ2		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 2,
-	BSP_SIU_IRQ_IRQ3		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 3,
-	BSP_SIU_IRQ_LO_INT		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 4, /* handler entry never used (only placeholder) */
-	BSP_SIU_IRQ_RTC_PER	    =	BSP_MAIN_IRQ_LOWEST_OFFSET + 5,
-	BSP_SIU_IRQ_RTC_STW	    =	BSP_MAIN_IRQ_LOWEST_OFFSET + 6,
-	BSP_SIU_IRQ_GPIO_STD	=	BSP_MAIN_IRQ_LOWEST_OFFSET + 7,
-	BSP_SIU_IRQ_GPIO_WKUP	=	BSP_MAIN_IRQ_LOWEST_OFFSET + 8,
-	BSP_SIU_IRQ_TMR0		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 9,
-	BSP_SIU_IRQ_TMR1		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 10,
-	BSP_SIU_IRQ_TMR2		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 1,
-	BSP_SIU_IRQ_TMR3		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 12,
-	BSP_SIU_IRQ_TMR4		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 13,
-	BSP_SIU_IRQ_TMR5		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 14,
-	BSP_SIU_IRQ_TMR6		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 15,
-	BSP_SIU_IRQ_TMR7		=	BSP_MAIN_IRQ_LOWEST_OFFSET + 16,
+  /* SL_TIMER1 -- handler entry only used in case of SMI */
+  BSP_SIU_IRQ_SL_TIMER1	        = BSP_MAIN_IRQ_LOWEST_OFFSET + 0,
+  BSP_SIU_IRQ_IRQ1		= BSP_MAIN_IRQ_LOWEST_OFFSET + 1,
+  BSP_SIU_IRQ_IRQ2		= BSP_MAIN_IRQ_LOWEST_OFFSET + 2,
+  BSP_SIU_IRQ_IRQ3		= BSP_MAIN_IRQ_LOWEST_OFFSET + 3,
+  /* LO_INT --  handler entry never used (only placeholder) */
+  BSP_SIU_IRQ_LO_INT		= BSP_MAIN_IRQ_LOWEST_OFFSET + 4,
+  BSP_SIU_IRQ_RTC_PER		= BSP_MAIN_IRQ_LOWEST_OFFSET + 5,
+  BSP_SIU_IRQ_RTC_STW		= BSP_MAIN_IRQ_LOWEST_OFFSET + 6,
+  BSP_SIU_IRQ_GPIO_STD		= BSP_MAIN_IRQ_LOWEST_OFFSET + 7,
+  BSP_SIU_IRQ_GPIO_WKUP		= BSP_MAIN_IRQ_LOWEST_OFFSET + 8,
+  BSP_SIU_IRQ_TMR0		= BSP_MAIN_IRQ_LOWEST_OFFSET + 9,
+  BSP_SIU_IRQ_TMR1		= BSP_MAIN_IRQ_LOWEST_OFFSET + 10,
+  BSP_SIU_IRQ_TMR2		= BSP_MAIN_IRQ_LOWEST_OFFSET + 1,
+  BSP_SIU_IRQ_TMR3		= BSP_MAIN_IRQ_LOWEST_OFFSET + 12,
+  BSP_SIU_IRQ_TMR4		= BSP_MAIN_IRQ_LOWEST_OFFSET + 13,
+  BSP_SIU_IRQ_TMR5		= BSP_MAIN_IRQ_LOWEST_OFFSET + 14,
+  BSP_SIU_IRQ_TMR6		= BSP_MAIN_IRQ_LOWEST_OFFSET + 15,
+  BSP_SIU_IRQ_TMR7		= BSP_MAIN_IRQ_LOWEST_OFFSET + 16,
 
-	BSP_SIU_IRQ_IRQ0		=	BSP_CRIT_IRQ_LOWEST_OFFSET + 0,
-	BSP_SIU_IRQ_SL_TIMER0	=	BSP_CRIT_IRQ_LOWEST_OFFSET + 1,
-	BSP_SIU_IRQ_HI_INT		=	BSP_CRIT_IRQ_LOWEST_OFFSET + 2, /* handler entry never used (only placeholder) */
-	BSP_SIU_IRQ_CSS_WKUP	=	BSP_CRIT_IRQ_LOWEST_OFFSET + 3,
+  BSP_SIU_IRQ_IRQ0		= BSP_CRIT_IRQ_LOWEST_OFFSET + 0,
+  BSP_SIU_IRQ_SL_TIMER0		= BSP_CRIT_IRQ_LOWEST_OFFSET + 1,
+  /* HI_INT -- handler entry never used (only placeholder) */
+  BSP_SIU_IRQ_HI_INT		= BSP_CRIT_IRQ_LOWEST_OFFSET + 2,
+  BSP_SIU_IRQ_CSS_WKUP		= BSP_CRIT_IRQ_LOWEST_OFFSET + 3,
 
-	BSP_DECREMENTER		    =	BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 0,
-	BSP_SYSMGMT				=   BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 1,
-	BSP_EXT                 =   BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 2
-
-	}rtems_irq_symbolic_name;
+  BSP_DECREMENTER		= BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 0,
+  BSP_SYSMGMT			= BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 1,
+  BSP_EXT                 	= BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 2
+} rtems_irq_symbolic_name;
 
 #define BSP_CRIT_IRQ_PRIO_LEVELS	  		  4
 /*#define BSP_PERIODIC_TIMER                  BSP_DECREMENTER*/
@@ -217,10 +222,10 @@ struct 	__rtems_irq_connect_data__;	/* forward declaratiuon */
 
 typedef unsigned int rtems_irq_number;
 typedef void *rtems_irq_hdl_param;
-typedef void (*rtems_irq_hdl)           (rtems_irq_hdl_param);
-typedef void (*rtems_irq_enable)	    (const struct __rtems_irq_connect_data__*);
-typedef void (*rtems_irq_disable)	    (const struct __rtems_irq_connect_data__*);
-typedef int  (*rtems_irq_is_enabled)	(const struct __rtems_irq_connect_data__*);
+typedef void (*rtems_irq_hdl)(rtems_irq_hdl_param);
+typedef void (*rtems_irq_enable)(const struct __rtems_irq_connect_data__*);
+typedef void (*rtems_irq_disable)(const struct __rtems_irq_connect_data__*);
+typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);
 
 typedef struct __rtems_irq_connect_data__ {
   /*
@@ -294,7 +299,7 @@ typedef struct {
    * The interrupt source  will be physically masked at i8259 level.
    */
     rtems_irq_prio*		irqPrioTbl;
-}rtems_irq_global_settings;
+} rtems_irq_global_settings;
 
 
 
@@ -310,13 +315,13 @@ typedef struct {
  * this function, even if the device asserts the interrupt line it will
  * not be propagated further to the processor
  */
-int BSP_irq_disable_at_siu        (const rtems_irq_symbolic_name irqLine);
+int BSP_irq_disable_at_siu(const rtems_irq_symbolic_name irqLine);
 /*
  * function to enable a particular irq. After calling
  * this function, if the device asserts the interrupt line it will
  * be propagated further to the processor
  */
-int BSP_irq_enable_at_siu		(const rtems_irq_symbolic_name irqLine);
+int BSP_irq_enable_at_siu(const rtems_irq_symbolic_name irqLine);
 /*
  * function to acknoledge a particular irq. After calling
  * this function, if a device asserts an enabled interrupt line it will
@@ -324,11 +329,11 @@ int BSP_irq_enable_at_siu		(const rtems_irq_symbolic_name irqLine);
  * writting raw handlers as this is automagically done for rtems managed
  * handlers.
  */
-int BSP_irq_ack_at_siu              	(const rtems_irq_symbolic_name irqLine);
+int BSP_irq_ack_at_siu(const rtems_irq_symbolic_name irqLine);
 /*
  * function to check if a particular irq is enabled. After calling
  */
-int BSP_irq_enabled_at_siu     	(const rtems_irq_symbolic_name irqLine);
+int BSP_irq_enabled_at_siu(const rtems_irq_symbolic_name irqLine);
 
 
 
@@ -368,19 +373,18 @@ int BSP_irq_enabled_at_siu     	(const rtems_irq_symbolic_name irqLine);
  *	6) restore initial execution flow
  *
  */
-int BSP_install_rtems_irq_handler   	(const rtems_irq_connect_data*);
+int BSP_install_rtems_irq_handler(const rtems_irq_connect_data*);
 /*
  * function to get the current RTEMS irq handler for ptr->name. It enables to
  * define hanlder chain...
  */
-int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* ptr);
+int BSP_get_current_rtems_irq_handler(rtems_irq_connect_data* ptr);
 /*
  * function to get disconnect the RTEMS irq handler for ptr->name.
  * This function checks that the value given is the current one for safety reason.
  * The user can use the previous function to get it.
  */
-int BSP_remove_rtems_irq_handler    	(const rtems_irq_connect_data*);
-
+int BSP_remove_rtems_irq_handler(const rtems_irq_connect_data*);
 
 void BSP_rtems_irq_mng_init(unsigned cpuId);
 

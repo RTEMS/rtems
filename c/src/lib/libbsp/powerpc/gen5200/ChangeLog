@@ -1,3 +1,7 @@
+2007-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* irq/irq.h: Reformat -- make things line up.
+
 2007-08-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console/console.c: Add missing semi-colon.
