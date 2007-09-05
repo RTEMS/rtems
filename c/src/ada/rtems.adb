@@ -237,7 +237,7 @@ package body RTEMS is
          ID               : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Task_Create_Base, "rtems_task_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
       Result := Task_Create_Base (
         Name,
@@ -263,7 +263,7 @@ package body RTEMS is
          ID               : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Task_Ident_Base, "rtems_task_ident");
-      ID_Base     : aliased RTEMS.ID := ID;
+      ID_Base     : aliased RTEMS.ID;
 
    begin
 
@@ -360,7 +360,7 @@ package body RTEMS is
          Old_Priority : access RTEMS.Task_Priority
       )  return RTEMS.Status_Codes;
       pragma Import (C, Task_Set_Priority_Base, "rtems_task_set_priority");
-      Old_Priority_Base : aliased RTEMS.Task_Priority := Old_Priority;
+      Old_Priority_Base : aliased RTEMS.Task_Priority;
    begin
  
       Result := Task_Set_Priority_Base (
@@ -384,7 +384,7 @@ package body RTEMS is
          Previous_Mode_Set : access RTEMS.Mode
       )  return RTEMS.Status_Codes;
       pragma Import (C, Task_Mode_Base, "rtems_task_mode");
-      Previous_Mode_Set_Base : aliased RTEMS.Mode := Previous_Mode_Set;
+      Previous_Mode_Set_Base : aliased RTEMS.Mode;
    begin
 
       Result := Task_Mode_Base (
@@ -408,7 +408,7 @@ package body RTEMS is
          Note    : access RTEMS.Unsigned32
       )  return RTEMS.Status_Codes;
       pragma Import (C, Task_Get_Note_Base, "rtems_task_get_note");
-      Note_Base : aliased RTEMS.Unsigned32 := Note;
+      Note_Base : aliased RTEMS.Unsigned32;
    begin
 
       Result := Task_Get_Note_Base ( ID, Notepad, Note_Base'Unchecked_Access );
@@ -478,7 +478,7 @@ package body RTEMS is
          Old_ISR_Handler : access RTEMS.Address
       )  return RTEMS.Status_Codes;
       pragma Import (C, Interrupt_Catch_Base, "rtems_interrupt_catch");
-      Old_ISR_Handler_Base : aliased RTEMS.Address := Old_ISR_Handler;
+      Old_ISR_Handler_Base : aliased RTEMS.Address;
    begin
  
       Result := Interrupt_Catch_Base (
@@ -556,7 +556,7 @@ package body RTEMS is
          ID     : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Extension_Create_Base, "rtems_extension_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Extension_Create_Base ( Name, Table, ID_Base'Unchecked_Access );
@@ -574,7 +574,7 @@ package body RTEMS is
          ID     : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Extension_Ident_Base, "rtems_extension_ident");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Extension_Ident_Base ( Name, ID_Base'Unchecked_Access ); 
@@ -610,7 +610,7 @@ package body RTEMS is
          ID     : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Timer_Create_Base, "rtems_timer_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Timer_Create_Base ( Name, ID_Base'Unchecked_Access );
@@ -628,7 +628,7 @@ package body RTEMS is
          ID     : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Timer_Ident_Base, "rtems_timer_ident");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Timer_Ident_Base ( Name, ID_Base'Unchecked_Access );
@@ -810,7 +810,7 @@ package body RTEMS is
          ID               : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Semaphore_Create_Base, "rtems_semaphore_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Semaphore_Create_Base (
@@ -850,7 +850,7 @@ package body RTEMS is
          ID   : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Semaphore_Ident_Base, "rtems_semaphore_ident");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Semaphore_Ident_Base ( Name, Node, ID_Base'Unchecked_Access );
@@ -912,7 +912,7 @@ package body RTEMS is
       )  return RTEMS.Status_Codes;
       pragma Import (C,
         Message_Queue_Create_Base, "rtems_message_queue_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Message_Queue_Create_Base (
@@ -938,7 +938,7 @@ package body RTEMS is
          ID   : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Message_Queue_Ident_Base, "rtems_message_queue_ident");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result :=
@@ -1014,7 +1014,7 @@ package body RTEMS is
       )  return RTEMS.Status_Codes;
       pragma Import (C, Message_Queue_Broadcast_Base,
          "rtems_message_queue_broadcast");
-      Count_Base : aliased RTEMS.Unsigned32 := Count;
+      Count_Base : aliased RTEMS.Unsigned32;
    begin
  
       Result := Message_Queue_Broadcast_Base ( 
@@ -1068,7 +1068,7 @@ package body RTEMS is
          Count : access RTEMS.Unsigned32
       )  return RTEMS.Status_Codes;
       pragma Import (C, Message_Queue_Flush_Base, "rtems_message_queue_flush");
-      COUNT_Base : aliased RTEMS.Unsigned32 := Count;
+      COUNT_Base : aliased RTEMS.Unsigned32;
    begin
  
       Result := Message_Queue_Flush_Base ( ID, COUNT_Base'Unchecked_Access );
@@ -1110,7 +1110,7 @@ package body RTEMS is
          Event_Out  : access RTEMS.Event_Set
       )  return RTEMS.Status_Codes;
       pragma Import (C, Event_Receive_Base, "rtems_event_receive");
-      Event_Out_Base : aliased RTEMS.Event_Set; -- := Event_Out;
+      Event_Out_Base : aliased RTEMS.Event_Set;
    begin
 
       Result := Event_Receive_Base (
@@ -1182,7 +1182,7 @@ package body RTEMS is
          ID               : access RTEMS.Event_Set
       )  return RTEMS.Status_Codes;
       pragma Import (C, Partition_Create_Base, "rtems_partition_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Partition_Create_Base (
@@ -1209,7 +1209,7 @@ package body RTEMS is
          ID   : access RTEMS.Event_Set
       )  return RTEMS.Status_Codes;
       pragma Import (C, Partition_Ident_Base, "rtems_partition_ident");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Partition_Ident_Base ( Name, Node, ID_Base'Unchecked_Access );
@@ -1242,7 +1242,7 @@ package body RTEMS is
       )  return RTEMS.Status_Codes;
       pragma Import (C, Partition_Get_Buffer_Base,
          "rtems_partition_get_buffer");
-      Buffer_Base : aliased RTEMS.Address := Buffer;
+      Buffer_Base : aliased RTEMS.Address;
    begin
  
       Result := Partition_Get_Buffer_Base ( ID, Buffer_Base'Unchecked_Access );
@@ -1289,7 +1289,7 @@ package body RTEMS is
          ID               : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Region_Create_Base, "rtems_region_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Region_Create_Base (
@@ -1314,7 +1314,7 @@ package body RTEMS is
          ID     : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Region_Ident_Base, "rtems_region_ident");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Region_Ident_Base ( Name, ID_Base'Unchecked_Access );
@@ -1370,7 +1370,7 @@ package body RTEMS is
          Segment    : access RTEMS.Address
       )  return RTEMS.Status_Codes;
       pragma Import (C, Region_Get_Segment_Base, "rtems_region_get_segment");
-      Segment_Base : aliased RTEMS.Address := Segment;
+      Segment_Base : aliased RTEMS.Address;
    begin
  
       Result := Region_Get_Segment_Base (
@@ -1397,7 +1397,7 @@ package body RTEMS is
       )  return RTEMS.Status_Codes;
       pragma Import (C, Region_Get_Segment_Size_Base,
          "rtems_region_get_segment_size");
-      Size_Base : aliased RTEMS.Unsigned32 := Size;
+      Size_Base : aliased RTEMS.Unsigned32;
    begin
  
       Result := Region_Get_Segment_Size_Base (
@@ -1446,7 +1446,7 @@ package body RTEMS is
          ID             : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Port_Create_Base, "rtems_port_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Port_Create_Base (
@@ -1470,7 +1470,7 @@ package body RTEMS is
          ID   : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Port_Ident_Base, "rtems_port_ident");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Port_Ident_Base ( Name, ID_Base'Unchecked_Access );
@@ -1505,7 +1505,7 @@ package body RTEMS is
       )  return RTEMS.Status_Codes;
       pragma Import (C, Port_External_To_Internal_Base,
          "rtems_port_external_to_internal");
-      Internal_Base : aliased RTEMS.Address := Internal;
+      Internal_Base : aliased RTEMS.Address;
    begin
  
       Result := Port_External_To_Internal_Base (
@@ -1530,7 +1530,7 @@ package body RTEMS is
       )  return RTEMS.Status_Codes;
       pragma Import (C, Port_Internal_To_External_Base,
          "rtems_port_internal_to_external");
-      External_Base : aliased RTEMS.Address := External;
+      External_Base : aliased RTEMS.Address;
    begin
  
       Result := Port_Internal_To_External_Base (
@@ -1708,7 +1708,7 @@ package body RTEMS is
          ID     : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Rate_Monotonic_Create_base, "rtems_rate_monotonic_create");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Rate_Monotonic_Create_base ( Name, ID_Base'Unchecked_Access );
@@ -1726,7 +1726,7 @@ package body RTEMS is
          ID     : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Rate_Monotonic_Ident_Base, "rtems_rate_monotonic_ident");
-      ID_Base : aliased RTEMS.ID := ID;
+      ID_Base : aliased RTEMS.ID;
    begin
  
       Result := Rate_Monotonic_Ident_Base ( Name, ID_Base'Unchecked_Access );
