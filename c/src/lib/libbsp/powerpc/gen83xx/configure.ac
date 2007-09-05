@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.60)
-AC_INIT([rtems-c-src-lib-libbsp-powerpc-gen5200],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
+AC_INIT([rtems-c-src-lib-libbsp-powerpc-gen83xx],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 

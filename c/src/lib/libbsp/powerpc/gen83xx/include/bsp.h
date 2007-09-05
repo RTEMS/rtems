@@ -65,7 +65,7 @@
 /*
  * for JPK HSC_CM01
  */
-#elsif defined(HSC_CM01)
+#elif defined(HSC_CM01)
 /*
  * one DUART channel (UART1) supported
  */

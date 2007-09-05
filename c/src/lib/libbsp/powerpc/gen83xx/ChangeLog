@@ -1,3 +1,8 @@
+2007-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac: Fix path.
+	* include/bsp.h: Fix typo.
+
 2007-08-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* Makefile.am, i2c/i2c_init.c: add i2c initialization
