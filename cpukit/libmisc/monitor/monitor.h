@@ -105,6 +105,7 @@ typedef struct {
     uint32_t            notepad[RTEMS_NUMBER_NOTEPADS];
     rtems_id            wait_id;
     uint32_t            wait_args;
+    uint32_t            ticks;
 } rtems_monitor_task_t;
 
 /*
@@ -138,6 +139,20 @@ typedef struct {
 } rtems_monitor_queue_t;
 
 /*
+ * Semaphore
+ */
+typedef struct {
+    rtems_id            id;
+    rtems_name          name;
+  /* end of common portion */
+    rtems_attribute     attribute;
+    rtems_task_priority priority_ceiling;
+    uint32_t            max_count;
+    uint32_t            cur_count;
+    rtems_id            holder_id;
+} rtems_monitor_sema_t;
+
+/*
  * Extension
  */
 typedef struct {
@@ -153,6 +168,35 @@ typedef struct {
     rtems_monitor_symbol_t  e_exitted;
     rtems_monitor_symbol_t  e_fatal;
 } rtems_monitor_extension_t;
+
+ /*
+ * Region
+ */
+typedef struct {
+    rtems_id            id;
+    rtems_name          name;
+  /* end of common portion */
+  rtems_attribute     attribute;
+  void *              start_addr;
+  uint32_t            length;
+  uint32_t            page_size;
+  uint32_t            max_seg_size;
+  uint32_t            used_blocks;
+} rtems_monitor_region_t;
+
+/*
+ * Partition
+ */
+typedef struct {
+    rtems_id            id;
+    rtems_name          name;
+  /* end of common portion */
+  rtems_attribute     attribute;
+  void *              start_addr;
+  uint32_t            length;
+  uint32_t            buf_size;
+  uint32_t            used_blocks;
+} rtems_monitor_part_t;
 
 /*
  * Device driver
@@ -220,9 +264,12 @@ typedef union {
     rtems_monitor_generic_t    generic;
     rtems_monitor_task_t       task;
     rtems_monitor_queue_t      queue;
+    rtems_monitor_sema_t       sema;
     rtems_monitor_extension_t  extension;
     rtems_monitor_driver_t     driver;
     rtems_monitor_config_t     config;
+    rtems_monitor_region_t     region;
+    rtems_monitor_part_t       part;
 #if defined(RTEMS_MULTIPROCESSING)
     rtems_monitor_mpci_t       mpci;
 #endif
@@ -364,6 +411,7 @@ int        rtems_monitor_dump_notepad(uint32_t   *notepad);
 
 /* object.c */
 rtems_id   rtems_monitor_id_fixup(rtems_id, uint32_t  , rtems_monitor_object_type_t);
+rtems_monitor_object_info_t *rtems_monitor_object_lookup(rtems_monitor_object_type_t type);
 rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems_id, void *, size_t *size_p);
 rtems_id   rtems_monitor_object_canonical_next(rtems_monitor_object_info_t *, rtems_id, void *);
 void      *rtems_monitor_object_next(void *, void *, rtems_id, rtems_id *);
@@ -403,10 +451,25 @@ void    rtems_monitor_task_canonical(rtems_monitor_task_t *, void *);
 void    rtems_monitor_task_dump_header(boolean verbose);
 void    rtems_monitor_task_dump(rtems_monitor_task_t *, boolean);
 
+/* sema.c */
+void    rtems_monitor_sema_canonical(rtems_monitor_sema_t *, void *);
+void    rtems_monitor_sema_dump_header(boolean verbose);
+void    rtems_monitor_sema_dump(rtems_monitor_sema_t *, boolean);
+
 /* queue.c */
 void    rtems_monitor_queue_canonical(rtems_monitor_queue_t *, void *);
 void    rtems_monitor_queue_dump_header(boolean verbose);
 void    rtems_monitor_queue_dump(rtems_monitor_queue_t *, boolean);
+
+/* region.c */
+void    rtems_monitor_region_canonical(rtems_monitor_region_t *, void *);
+void    rtems_monitor_region_dump_header(boolean verbose);
+void    rtems_monitor_region_dump(rtems_monitor_region_t *, boolean);
+
+/* partition.c */
+void    rtems_monitor_part_canonical(rtems_monitor_part_t *, void *);
+void    rtems_monitor_part_dump_header(boolean verbose);
+void    rtems_monitor_part_dump(rtems_monitor_part_t *, boolean);
 
 /* driver.c */
 void    *rtems_monitor_driver_next(void *, rtems_monitor_driver_t *, rtems_id *);

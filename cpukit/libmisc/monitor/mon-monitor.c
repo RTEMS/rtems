@@ -160,6 +160,33 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { RTEMS_MONITOR_OBJECT_QUEUE },
       &rtems_monitor_commands[11],
     },
+    { "sema",
+      "sema [id [id ... ] ]\n"
+      "  display information about the specified semaphores\n"
+      "  Default is to display information about all semaphores on this node\n"
+      ,
+      0,
+      rtems_monitor_object_cmd,
+      RTEMS_MONITOR_OBJECT_SEMAPHORE,
+    },
+    { "region",
+      "region [id [id ... ] ]\n"
+      "  display information about the specified regions\n"
+      "  Default is to display information about all regions on this node\n"
+      ,
+      0,
+      rtems_monitor_object_cmd,
+      RTEMS_MONITOR_OBJECT_REGION,
+    },
+    { "part",
+      "part [id [id ... ] ]\n"
+      "  display information about the specified partitions\n"
+      "  Default is to display information about all partitions on this node\n"
+      ,
+      0,
+      rtems_monitor_object_cmd,
+      RTEMS_MONITOR_OBJECT_SEMAPHORE,
+    },
     { "object",
       "Display information about specified RTEMS objects. "
       "Object id's must include 'type' information. "
@@ -505,6 +532,10 @@ rtems_monitor_task(
       }
     }
 
+    if (!(monitor_flags & RTEMS_MONITOR_NOSYMLOAD)) {
+      rtems_monitor_symbols_loadup();
+    }
+
     if (monitor_flags & RTEMS_MONITOR_SUSPEND)
         (void) rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
 
@@ -573,10 +604,7 @@ rtems_monitor_init(
     rtems_monitor_node = rtems_get_node(rtems_monitor_task_id);
     rtems_monitor_default_node = rtems_monitor_node;
 
-    rtems_monitor_symbols_loadup();
-
-    if (monitor_flags & RTEMS_MONITOR_GLOBAL)
-        rtems_monitor_server_init(monitor_flags);
+    rtems_monitor_server_init(monitor_flags);
 
     if (!(monitor_flags & RTEMS_MONITOR_NOTASK)) {
       /*

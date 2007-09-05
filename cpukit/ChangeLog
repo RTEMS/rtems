@@ -1,3 +1,11 @@
+2007-09-05	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libmisc/monitor/mon-object.c,	
+	* libmisc/monitor/monitor.h, libmisc/monitor/mon-part.c, 
+	* libmisc/monitor/mon-region.c, libmisc/monitor/mon-sema.c, 
+	* libmisc/monitor/mon-task, libmisc/Makefile.am: 
+	Added functionality for osmonweb support
+
 2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/monitor/mon-monitor.c, libmisc/monitor/mon-object.c,
