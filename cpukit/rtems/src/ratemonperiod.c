@@ -66,8 +66,8 @@ void _Rate_monotonic_Update_statistics(
 
   #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
     period_start               = the_period->time_at_period;
-    the_period->time_at_period = uptime;
     _Timespec_Subtract( &period_start, &uptime, &since_last_period );
+    the_period->time_at_period = uptime;
   #else
     ticks_since_last_period =
         _Watchdog_Ticks_since_boot - the_period->time_at_period;
@@ -122,7 +122,6 @@ void _Rate_monotonic_Update_statistics(
 
     if ( _Timespec_Greater_than( &executed, &stats->max_cpu_time ) ) 
       stats->max_cpu_time = executed;
-
   #else
     stats->total_cpu_time  += ticks_executed_since_last_period;
 
@@ -148,10 +147,10 @@ void _Rate_monotonic_Update_statistics(
   #else
     _Timespec_Add_to( &stats->total_wall_time, &since_last_period );
 
-    if ( _Timespec_Less_than( &since_last_period, &stats->min_wall_time ) ) 
+    if ( _Timespec_Less_than( &since_last_period, &stats->min_wall_time ) )
       stats->min_wall_time = since_last_period;
 
-    if ( _Timespec_Greater_than( &since_last_period, &stats->max_wall_time ) ) 
+    if ( _Timespec_Greater_than( &since_last_period, &stats->max_wall_time ) )
       stats->max_wall_time = since_last_period;
   #endif
 }
@@ -260,7 +259,10 @@ rtems_status_code rtems_rate_monotonic_period(
                 &ran
               );
 
-              /* thread had executed before the last context switch also */
+              /* The thread had executed before the last context switch also.
+               *   
+               *     the_period->owner_executed_at_period += ran
+               */
               _Timespec_Add_to( &the_period->owner_executed_at_period, &ran );
             }
           #else

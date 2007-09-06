@@ -1,5 +1,10 @@
 2007-09-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/src/ratemonperiod.c: Clean up.
+	* rtems/src/ratemonreportstatistics.c: Clarify period statistics output.
+
+2007-09-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/monitor/mon-monitor.c: Fix warnings and typo.
 
 2007-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
