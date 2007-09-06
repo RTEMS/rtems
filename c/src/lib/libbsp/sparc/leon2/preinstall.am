@@ -57,6 +57,91 @@ $(PROJECT_INCLUDE)/ambapp.h: ../../sparc/shared/include/ambapp.h $(PROJECT_INCLU
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ambapp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ambapp.h
 
+
+# Companion Chip
+$(PROJECT_INCLUDE)/cchip.h: include/cchip.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/cchip.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/cchip.h
+
+
+# PCI
+$(PROJECT_INCLUDE)/pci.h: ../../sparc/shared/include/pci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/pci.h
+
+
+# DEBUG
+$(PROJECT_INCLUDE)/debug_defs.h: ../../sparc/shared/include/debug_defs.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/debug_defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/debug_defs.h
+
+
+# SpaceWire GRSPW
+$(PROJECT_INCLUDE)/grspw.h: ../../sparc/shared/include/grspw.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw.h
+
+$(PROJECT_INCLUDE)/grspw_pci.h: ../../sparc/shared/include/grspw_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw_pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw_pci.h
+
+$(PROJECT_INCLUDE)/grspw_rasta.h: ../../sparc/shared/include/grspw_rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw_rasta.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw_rasta.h
+
+
+# RASTA
+$(PROJECT_INCLUDE)/rasta.h: include/rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rasta.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rasta.h
+
+
+# B1553BRM
+$(PROJECT_INCLUDE)/b1553brm.h: ../../sparc/shared/include/b1553brm.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/b1553brm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/b1553brm.h
+
+$(PROJECT_INCLUDE)/b1553brm_pci.h: ../../sparc/shared/include/b1553brm_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/b1553brm_pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/b1553brm_pci.h
+
+$(PROJECT_INCLUDE)/b1553brm_rasta.h: ../../sparc/shared/include/b1553brm_rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/b1553brm_rasta.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/b1553brm_rasta.h
+
+
+# CAN
+$(PROJECT_INCLUDE)/occan.h: ../../sparc/shared/include/occan.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/occan.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/occan.h
+
+$(PROJECT_INCLUDE)/occan_pci.h: ../../sparc/shared/include/occan_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/occan_pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/occan_pci.h
+
+$(PROJECT_INCLUDE)/grcan.h: ../../sparc/shared/include/grcan.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grcan.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grcan.h
+
+$(PROJECT_INCLUDE)/grcan_rasta.h: ../../sparc/shared/include/grcan_rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grcan_rasta.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grcan_rasta.h
+
+
+# UART
+$(PROJECT_INCLUDE)/apbuart.h: ../../sparc/shared/include/apbuart.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/apbuart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/apbuart.h
+
+$(PROJECT_INCLUDE)/apbuart_pci.h: ../../sparc/shared/include/apbuart_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/apbuart_pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/apbuart_pci.h
+
+$(PROJECT_INCLUDE)/apbuart_rasta.h: ../../sparc/shared/include/apbuart_rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/apbuart_rasta.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/apbuart_rasta.h
+
+
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)

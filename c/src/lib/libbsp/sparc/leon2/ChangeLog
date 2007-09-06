@@ -1,3 +1,8 @@
+2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
+
+	* Makefile.am, preinstall.am: Use the following new drivers from
+	sparc/shared: PCI, b1553BRM, SpaceWire(GRSPW), CAN (GRCAN), Raw UART.
+
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
 
 	* include/bsp.h: LEON2 and LEON3 Data cache snooping detection on
