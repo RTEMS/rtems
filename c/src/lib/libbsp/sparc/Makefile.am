@@ -14,5 +14,9 @@ EXTRA_DIST += shared/bspstart.c
 EXTRA_DIST += shared/gnatcommon.c
 EXTRA_DIST += shared/start.S
 
+# AMBA Plug&Play bus
+EXTRA_DIST += shared/include/ambapp.h
+EXTRA_DIST += shared/amba/ambapp.c
+
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
