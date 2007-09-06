@@ -74,15 +74,16 @@ static rtems_task rtems_httpd_daemon(rtems_task_argument args)
   rtems_task_delete( RTEMS_SELF );
 }
 
-rtems_status_code rtems_initialize_webserver(rtems_task_priority   initial_priority,
-                                             size_t                stack_size,
-                                             rtems_mode            initial_modes,
-                                             rtems_attribute       attribute_set,
-                                             rtems_shttpd_init     init_callback,
-                                             rtems_shttpd_addpages addpages_callback,
-                                             char                 *webroot,
-                                             unsigned int          port
-                                            )
+rtems_status_code rtems_initialize_webserver(
+  rtems_task_priority   initial_priority,
+  size_t                stack_size,
+  rtems_mode            initial_modes,
+  rtems_attribute       attribute_set,
+  rtems_shttpd_init     init_callback,
+  rtems_shttpd_addpages addpages_callback,
+  char                 *webroot,
+  unsigned int          port
+)
 {
   rtems_status_code   sc;
   rtems_id            tid;
@@ -93,8 +94,7 @@ rtems_status_code rtems_initialize_webserver(rtems_task_priority   initial_prior
 
   args = malloc(sizeof(RTEMS_HTTPD_ARGS));
 
-  if (args != NULL)
-  {
+  if (args != NULL) {
     args->init_callback = init_callback;
     args->addpages_callback = addpages_callback;
     args->port = port;
@@ -107,13 +107,10 @@ rtems_status_code rtems_initialize_webserver(rtems_task_priority   initial_prior
                            attribute_set,
                            &tid);
 
-    if (sc == RTEMS_SUCCESSFUL)
-    {
+    if (sc == RTEMS_SUCCESSFUL) {
       sc = rtems_task_start(tid, rtems_httpd_daemon, (rtems_task_argument)args);
     }
-  }
-  else
-  {
+  } else {
     sc = RTEMS_NO_MEMORY;
   }
 
@@ -142,60 +139,60 @@ set_close_on_exec(int fd)
 int
 my_stat(const char *path, struct stat *stp)
 {
-        return (stat(path, stp));
+  return (stat(path, stp));
 }
 
 int
 my_open(const char *path, int flags, int mode)
 {
-        return (open(path, flags, mode));
+  return (open(path, flags, mode));
 }
 
 int
 my_remove(const char *path)
 {
-	return (remove(path));
+  return (remove(path));
 }
 
 int
 my_rename(const char *path1, const char *path2)
 {
-	return (rename(path1, path2));
+  return (rename(path1, path2));
 }
 
 int
 my_mkdir(const char *path, int mode)
 {
-	return (mkdir(path, mode));
+  return (mkdir(path, mode));
 }
 
 char *
 my_getcwd(char *buffer, int maxlen)
 {
-	return (getcwd(buffer, maxlen));
+  return (getcwd(buffer, maxlen));
 }
 #endif
 int
 set_non_blocking_mode(int fd)
 {
-        int     ret = -1;
-        int     flags;
+  int     ret = -1;
+  int     flags;
 
-        if ((flags = fcntl(fd, F_GETFL, 0)) == -1) {
-                DBG(("nonblock: fcntl(F_GETFL): %d", ERRNO));
-        } else if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) != 0) {
-                DBG(("nonblock: fcntl(F_SETFL): %d", ERRNO));
-        } else {
-                ret = 0;        /* Success */
-        }
+  if ((flags = fcntl(fd, F_GETFL, 0)) == -1) {
+    DBG(("nonblock: fcntl(F_GETFL): %d", ERRNO));
+  } else if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) != 0) {
+    DBG(("nonblock: fcntl(F_SETFL): %d", ERRNO));
+  } else {
+    ret = 0;        /* Success */
+  }
 
-        return (ret);
+  return (ret);
 }
 
 #if !defined(NO_CGI)
 int
 spawn_process(struct conn *c, const char *prog, char *envblk, char **envp)
 {
-        return (-1); // RTEMS does not have subprocess support as standard.
+  return (-1); // RTEMS does not have subprocess support as standard.
 }
 #endif

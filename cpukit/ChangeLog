@@ -1,5 +1,9 @@
 2007-09-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* shttpd/compat_rtems.c: Style clean up.
+
+2007-09-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/src/ratemonperiod.c: Clean up.
 	* rtems/src/ratemonreportstatistics.c: Clarify period statistics output.
 
