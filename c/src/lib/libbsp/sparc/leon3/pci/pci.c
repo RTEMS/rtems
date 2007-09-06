@@ -25,6 +25,7 @@
  */
 
 #include <pci.h>
+#include <stdlib.h>
 #include <rtems/bspIo.h>
 
 #define PCI_ADDR 0x80000400
@@ -97,8 +98,14 @@ static inline unsigned int flip_dword (unsigned int l)
  
 
 int
-pci_read_config_dword(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned int *val) {
-
+pci_read_config_dword(
+  unsigned char bus,
+  unsigned char slot,
+  unsigned char function,
+  unsigned char offset,
+  unsigned int *val
+)
+{
     volatile unsigned int *pci_conf;
 
     if (offset & 3) return PCIBIOS_BAD_REGISTER_NUMBER;
@@ -108,7 +115,8 @@ pci_read_config_dword(unsigned char bus, unsigned char slot, unsigned char funct
         return PCIBIOS_SUCCESSFUL;
     }
 
-    pci_conf = PCI_CONF + ((slot<<11) | (function<<8) | offset);
+    pci_conf = (volatile unsigned int *) (PCI_CONF +
+        ((slot<<11) | (function<<8) | offset));
 
 #ifdef BT_ENABLED
     *val =  flip_dword(*pci_conf);
@@ -160,7 +168,8 @@ pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char func
     if (offset & 3 || bus != 0) return PCIBIOS_BAD_REGISTER_NUMBER;
 
 
-    pci_conf = PCI_CONF + ((slot<<11) | (function<<8) | (offset & ~3));
+    pci_conf = (volatile unsigned int *) (PCI_CONF +
+                  ((slot<<11) | (function<<8) | (offset & ~3)));
 
 #ifdef BT_ENABLED
         value = flip_dword(val);
