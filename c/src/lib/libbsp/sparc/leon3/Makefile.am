@@ -11,6 +11,7 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
+include_HEADERS += ../../sparc/shared/include/debug_defs.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
@@ -23,7 +24,6 @@ SUBDIRS = . tools
 
 include_HEADERS += include/leon.h
 include_HEADERS += include/coverhd.h
-include_HEADERS += include/spacewire.h
 
 EXTRA_DIST = ../../sparc/shared/start.S
 start.$(OBJEXT): ../../sparc/shared/start.S
@@ -55,15 +55,55 @@ amba_rel_CPPFLAGS = $(AM_CPPFLAGS)
 amba_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c console/consolereserveresources.c \
-    console/debugputs.c
+console_rel_SOURCES = console/console.c console/consolereserveresources.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_PROGRAMS += debugio.rel
+debugio_rel_SOURCES = console/debugputs.c
+debugio_rel_CPPFLAGS = $(AM_CPPFLAGS)
+debugio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/ckinit.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# PCI
+include_HEADERS += ../../sparc/shared/include/pci.h
+noinst_PROGRAMS += pci.rel
+pci_rel_SOURCES = pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
+pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
+pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# B1553BRM
+include_HEADERS += ../../sparc/shared/include/b1553brm.h ../../sparc/shared/include/b1553brm_pci.h
+noinst_PROGRAMS += brm.rel
+brm_rel_SOURCES = ../../sparc/shared/1553/b1553brm.c ../../sparc/shared/1553/b1553brm_pci.c
+brm_rel_CPPFLAGS = $(AM_CPPFLAGS)
+brm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# CAN
+include_HEADERS += ../../sparc/shared/include/occan.h ../../sparc/shared/include/occan_pci.h ../../sparc/shared/include/grcan.h
+noinst_PROGRAMS += can.rel
+can_rel_SOURCES = ../../sparc/shared/can/occan.c ../../sparc/shared/can/occan_pci.c  ../../sparc/shared/can/grcan.c
+can_rel_CPPFLAGS = $(AM_CPPFLAGS)
+can_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# SpaceWire
+include_HEADERS += ../../sparc/shared/include/grspw.h ../../sparc/shared/include/grspw_pci.h
+noinst_PROGRAMS += spw.rel
+spw_rel_SOURCES = ../../sparc/shared/spw/grspw.c ../../sparc/shared/spw/grspw_pci.c
+spw_rel_CPPFLAGS = $(AM_CPPFLAGS)
+spw_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# UART
+include_HEADERS += ../../sparc/shared/include/apbuart.h ../../sparc/shared/include/apbuart_pci.h
+noinst_PROGRAMS += uart.rel
+uart_rel_SOURCES = ../../sparc/shared/uart/apbuart.c ../../sparc/shared/uart/apbuart_pci.c
+uart_rel_CPPFLAGS = $(AM_CPPFLAGS)
+uart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_smc91111.rel
@@ -96,8 +136,8 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel amba.rel console.rel clock.rel timer.rel \
-    gnatsupp.rel
+libbsp_a_LIBADD = startup.rel amba.rel console.rel clock.rel debugio.rel \
+  timer.rel gnatsupp.rel brm.rel can.rel spw.rel uart.rel pci.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += leon_open_eth.rel

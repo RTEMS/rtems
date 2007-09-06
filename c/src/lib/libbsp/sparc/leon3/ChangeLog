@@ -1,5 +1,13 @@
 2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
 
+	* Makefile.am, preinstall.am: New files, split of printk.
+	* console/console.c, console/debugputs.c: Split printk support out.
+	* include/spacewire.h: Removed.
+	* Makefile.am, preinstall.am: Use the following new drivers from
+	sparc/shared: PCI, b1553BRM, SpaceWire(GRSPW), CAN (GRCAN), Raw UART.
+
+2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
+
 	* console/debugputs.c: Now works on multi-CPU systems.
 
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
