@@ -77,6 +77,12 @@ static void bsp_out_char(char c)
   console_outbyte_polled(0, c);
 }
 
+/*
+ *  To support printk
+ */
+
+#include <rtems/bspIo.h>
+
 BSP_output_char_function_type BSP_output_char = bsp_out_char;
 
 static char bsp_in_char(void)
