@@ -42,9 +42,34 @@ rtems_cpu_table Cpu_table;
 
 extern uint32_t rdb_start;
 
+/*
+ * Tells us if data cache snooping is available
+ */ 
+
+int CPU_SPARC_HAS_SNOOPING;
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 extern void bsp_spurious_initialize();
+
+/*
+ * set_snooping
+ * 
+ * Read the data cache configuration register to determine if
+ * bus snooping is available. This is needed for some drivers so
+ * that they can select the most efficient copy routines.  
+ *
+ */
+
+static inline int set_snooping(void) 
+{
+        int tmp;        
+        asm(" lda [%1] 2, %0 "
+            : "=r"(tmp)
+            : "r"(0xC)
+        );
+        return (tmp >> 27) & 1;
+}
 
 /*
  *  bsp_pretasking_hook
@@ -112,4 +137,6 @@ void bsp_start( void )
   }
 
   BSP_Configuration.work_space_start = work_space_start;
+  
+  CPU_SPARC_HAS_SNOOPING = set_snooping();
 }

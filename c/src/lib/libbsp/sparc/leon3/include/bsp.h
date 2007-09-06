@@ -83,6 +83,8 @@ extern int rtems_leon_greth_driver_attach(
 extern void Clock_delay(uint32_t microseconds);
 
 #define delay( microseconds ) Clock_delay(microseconds)
+extern int   CPU_SPARC_HAS_SNOOPING;
+
 
 /* Constants */
 
