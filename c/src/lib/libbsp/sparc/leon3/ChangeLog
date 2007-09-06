@@ -1,3 +1,7 @@
+2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
+
+	* console/debugputs.c: Now works on multi-CPU systems.
+
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
 
 	* clock/ckinit.c, console/console.c, leon_greth/leon_greth.c,
