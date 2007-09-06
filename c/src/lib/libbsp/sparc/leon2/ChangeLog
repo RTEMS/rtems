@@ -1,5 +1,13 @@
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
 
+	* include/bsp.h: LEON2 and LEON3 Data cache snooping detection on
+	startup, for drivers. (LEON2,3 are configurable processors, they can
+	be with or without DCache snooping. Caches without snooping needs the
+	drivers to flush cache or use the sparc instruction lda to force
+	cache miss...)
+
+2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
+
 	* Makefile.am, preinstall.am: LEON3 AMBA PnP bus scanning moved to
 	shared/amba/amba.c and shared/include/ambapp.h. The AMBA scanning was
 	improved to take account for PnP info address translation. This is

@@ -68,6 +68,8 @@ extern int rtems_smc91111_driver_attach_leon2(struct rtems_bsdnet_ifconfig *conf
 extern void Clock_delay(uint32_t microseconds);
 
 #define delay( microseconds ) Clock_delay(microseconds)
+extern int   CPU_SPARC_HAS_SNOOPING;
+
 
 /* Constants */
 
