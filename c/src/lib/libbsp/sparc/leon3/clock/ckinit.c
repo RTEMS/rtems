@@ -44,29 +44,20 @@ static int clkirq;
 #define Clock_driver_support_at_tick()
 
 #define Clock_driver_support_find_timer() \
-  do {  \
-    int i; \
-    unsigned int iobar, conf; \
+  do { \
+    int cnt; \
+    amba_apb_device dev; \
     \
-    /* Find GP Timer */ \
-    i = 0; \
-    while (i < amba_conf.apbslv.devnr) { \
-      conf = amba_get_confword(amba_conf.apbslv, i, 0); \
-      if ((amba_vendor(conf) == VENDOR_GAISLER) && \
-          (amba_device(conf) == GAISLER_GPTIMER)) { \
-        iobar = amba_apb_get_membar(amba_conf.apbslv, i);       \
-        LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) \
-           amba_iobar_start(amba_conf.apbmst, iobar); \
-        break; \
+    /* Find LEON3 Interrupt controler */ \
+    cnt = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_IRQMP,&dev); \
+    if ( cnt > 0 ){ \
+      /* Found APB IRQ_MP Interrupt Controller */ \
+      LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start; \
+      clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3; \
+      \
+      if (Configuration.User_multiprocessing_table != NULL) { \
+        clkirq += LEON3_Cpu_Index; \
       } \
-      i++; \
-    } \
-    \
-    clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3; \
-    \
-    /* MP */ \
-    if (Configuration.User_multiprocessing_table != NULL) { \
-      clkirq += LEON3_Cpu_Index; \
     } \
   } while (0)
 

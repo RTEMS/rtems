@@ -1,5 +1,13 @@
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
 
+	* clock/ckinit.c, console/console.c, leon_greth/leon_greth.c,
+	leon_smc91111/leon_smc91111.c: LEON3 BSP drivers updated to use new
+	AMBA PnP scanning functions. Affected drivers:
+	amba/amba.c,clock/ckinit.c,console/console.c,
+	leon_greth/leon_greth.c, leon_smc9111.c.
+
+2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
+
 	* include/bsp.h, startup/bspstart.c: LEON2 and LEON3 Data cache
 	snooping detection on startup, for drivers. (LEON2,3 are configurable
 	processors, they can be with or without DCache snooping. Caches

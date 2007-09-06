@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <rtems/bspIo.h>
+#include <amba.h>
 
 /*
  *  Should we use a polled or interrupt drived console?
@@ -85,8 +86,26 @@ int console_write_support (int minor, const char *buf, int len)
  *  Console Device Driver Entry Points
  *
  */
+int uarts = 0;
+static int isinit = 0;
+volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 
-volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];  
+int scan_uarts() {	
+  unsigned int iobar, conf;
+  int i;
+	amba_apb_device apbuarts[LEON3_APBUARTS];
+	
+  if (isinit == 0) {
+    i = 0; uarts = 0;
+    
+    uarts = amba_find_apbslvs(&amba_conf,VENDOR_GAISLER,GAISLER_APBUART,apbuarts,LEON3_APBUARTS);
+    for(i=0; i<uarts; i++){
+			LEON3_Console_Uart[i] = apbuarts[i].start;
+		}
+    isinit = 1;
+  }
+  return uarts;
+}
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
@@ -95,37 +114,30 @@ rtems_device_driver console_initialize(
 )
 {
   rtems_status_code status;
-  unsigned int iobar, conf;
-  int i, uarts;
-  char *console_name = "/dev/console_a";
-
+  int i, uart0;
+  char console_name[16];
+  extern rtems_configuration_table Configuration;
 
   rtems_termios_initialize();
 
   /* Find UARTs */
-  
-  i = 0; uarts = 0;
-  while (i < amba_conf.apbslv.devnr) 
-  {
-    conf = amba_get_confword(amba_conf.apbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_APBUART))
-    {
-      iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
-      LEON3_Console_Uart[uarts] = (volatile LEON3_UART_Regs_Map *) amba_iobar_start(amba_conf.apbmst, iobar);
-      uarts++;
-    }
-    i++;
-  }
+  scan_uarts();
+	
+  if (Configuration.User_multiprocessing_table != NULL)
+    uart0 =  LEON3_Cpu_Index;
+  else
+    uart0 = 0;  
 
   /*  Register Device Names */
   
-  if (uarts) 
+  if (uarts && (uart0 < uarts)) 
   {  
     status = rtems_io_register_name( "/dev/console", major, 0 );
     if (status != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred(status);
 
-    for (i = 1; i < uarts; i++)
+    strcpy(console_name,"/dev/console_a");
+    for (i = uart0+1; i < uarts; i++)
     {
       console_name[13]++;
       status = rtems_io_register_name( console_name, major, i);
@@ -136,11 +148,14 @@ rtems_device_driver console_initialize(
   /*
    *  Initialize Hardware
    */
-
-  for (i = 0; i < uarts; i++)
+  if ((Configuration.User_multiprocessing_table == NULL) ||
+      ((Configuration.User_multiprocessing_table)->node == 1))
   {
-    LEON3_Console_Uart[i]->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
-    LEON3_Console_Uart[i]->status = 0;  
+    for (i = uart0; i < uarts; i++)
+    {
+      LEON3_Console_Uart[i]->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
+      LEON3_Console_Uart[i]->status = 0;  
+    }
   }
 
   return RTEMS_SUCCESSFUL;

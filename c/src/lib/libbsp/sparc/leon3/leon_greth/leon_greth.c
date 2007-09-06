@@ -36,24 +36,15 @@ int rtems_leon_greth_driver_attach(
   unsigned int conf, iobar;
   unsigned int base_addr = 0; /* avoid warnings */
   unsigned int eth_irq = 0;   /* avoid warnings */
+	amba_apb_device apbgreth;
 
   /* Scan for MAC AHB slave interface */
-  for (i = 0; i < amba_conf.apbslv.devnr; i++)
+	device_found = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_ETHMAC,&apbgreth);
+  if (device_found == 1) 
   {
-    conf = amba_get_confword(amba_conf.apbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) &&
-        (amba_device(conf) == GAISLER_ETHMAC))
-    {
-      iobar = amba_apb_get_membar(amba_conf.apbslv, i);
-      base_addr = amba_iobar_start(amba_conf.apbmst, iobar);
-      eth_irq = amba_irq(conf) + 0x10;
-      device_found = 1;
-      break;
-    }
-  }
-
-  if (device_found) 
-  {
+		base_addr = apbgreth.start;
+		eth_irq = apbgreth.irq + 0x10;
+		
     /* clear control register and reset NIC */
     *(volatile int *) base_addr = 0;
     *(volatile int *) base_addr = GRETH_CTRL_RST;
