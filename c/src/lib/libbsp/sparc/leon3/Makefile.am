@@ -47,9 +47,10 @@ gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_HEADERS += include/amba.h
+include_HEADERS += ../../sparc/shared/include/ambapp.h
 
 noinst_PROGRAMS += amba.rel
-amba_rel_SOURCES = amba/amba.c
+amba_rel_SOURCES = amba/amba.c ../../sparc/shared/amba/ambapp.c
 amba_rel_CPPFLAGS = $(AM_CPPFLAGS)
 amba_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

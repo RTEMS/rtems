@@ -15,16 +15,6 @@
 
 #include <bsp.h>
 
-#define amba_insert_device(tab, address) \
-{ \
-  if (*(address)) \
-  { \
-    (tab)->addr[(tab)->devnr] = (address); \
-    (tab)->devnr ++; \
-  } \
-} while(0)
-
-
 /* Structure containing address to devices found on the Amba Plug&Play bus */
 amba_confarea_type amba_conf;
 
@@ -57,44 +47,12 @@ extern rtems_configuration_table Configuration;
 
 void bsp_leon3_predriver_hook(void)
 {
-  unsigned int *cfg_area;  /* address to configuration area */
-  unsigned int mbar, iobar, conf;
-  int i, j;
+  unsigned int iobar, conf;
+  int i;
   unsigned int tmp;
-
-  amba_conf.ahbmst.devnr = 0; amba_conf.ahbslv.devnr = 0; amba_conf.apbslv.devnr = 0;
-  cfg_area = (unsigned int *) (LEON3_IO_AREA | LEON3_CONF_AREA);
-
-  for (i = 0; i < LEON3_AHB_MASTERS; i++) 
-  {
-    amba_insert_device(&amba_conf.ahbmst, cfg_area);
-    cfg_area += LEON3_AHB_CONF_WORDS;
-  }
-
-  cfg_area = (unsigned int *) (LEON3_IO_AREA | LEON3_CONF_AREA | LEON3_AHB_SLAVE_CONF_AREA);
-  for (i = 0; i < LEON3_AHB_SLAVES; i++) 
-  {
-    amba_insert_device(&amba_conf.ahbslv, cfg_area);
-    cfg_area += LEON3_AHB_CONF_WORDS;
-  }  
-
-  for (i = 0; i < amba_conf.ahbslv.devnr; i ++) 
-  {
-    conf = amba_get_confword(amba_conf.ahbslv, i, 0);
-    mbar = amba_ahb_get_membar(amba_conf.ahbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_APBMST) &&
-	(apb_init == 0))
-    {
-      amba_conf.apbmst = amba_membar_start(mbar);
-      cfg_area = (unsigned int *) (amba_conf.apbmst | LEON3_CONF_AREA);
-      for (j = amba_conf.apbslv.devnr; j < LEON3_APB_SLAVES; j++)
-      {
-	amba_insert_device(&amba_conf.apbslv, cfg_area);
-	cfg_area += LEON3_APB_CONF_WORDS;
-      }
-      apb_init = 1;
-    }
-  }    
+	
+	/* Scan the AMBA Plug&Play info at the default LEON3 area */
+	amba_scan(&amba_conf,LEON3_IO_AREA,NULL);
 
   /* Find LEON3 Interrupt controler */
   i = 0;
@@ -104,12 +62,12 @@ void bsp_leon3_predriver_hook(void)
     if ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_IRQMP))
     {
       iobar = amba_apb_get_membar(amba_conf.apbslv, i);
-      LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) amba_iobar_start(amba_conf.apbmst, iobar);
+      LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) amba_iobar_start(amba_conf.apbslv.apbmst[i], iobar);
       /* asm("mov %%asr17, %0": : "r" (tmp)); */
       if (Configuration.User_multiprocessing_table != NULL)
       {	
-	tmp = getasr17();
-	LEON3_Cpu_Index = (tmp >> 28) & 3;
+	      tmp = getasr17();
+       	LEON3_Cpu_Index = (tmp >> 28) & 3;
       }
       break;
     }
@@ -124,12 +82,10 @@ void bsp_leon3_predriver_hook(void)
        (amba_device(conf) == GAISLER_GPTIMER)) {
       iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
       LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *)
-        amba_iobar_start(amba_conf.apbmst, iobar);
+      amba_iobar_start(amba_conf.apbslv.apbmst[i], iobar);
       break;
     }
     i++;
   }
 
 }
-
-

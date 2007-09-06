@@ -114,33 +114,11 @@ typedef struct {
 } LEON3_UART_Regs_Map;
 
 typedef struct {
-  volatile unsigned int ilevel;
-  volatile unsigned int ipend;
-  volatile unsigned int iforce;
-  volatile unsigned int iclear;
-  volatile unsigned int mpstat;
-  volatile unsigned int notused01;
-  volatile unsigned int notused02;
-  volatile unsigned int notused03;
-  volatile unsigned int notused10;
-  volatile unsigned int notused11;
-  volatile unsigned int notused12;
-  volatile unsigned int notused13;
-  volatile unsigned int notused20;
-  volatile unsigned int notused21;
-  volatile unsigned int notused22;
-  volatile unsigned int notused23;
-  volatile unsigned int mask[16];
-  volatile unsigned int force[16];
-} LEON3_IrqCtrl_Regs_Map; 
-
-typedef struct {
   volatile unsigned int value;
   volatile unsigned int reload;
   volatile unsigned int conf;
   volatile unsigned int notused;
 } LEON3_Timer_SubType;
-
 
 typedef struct {
   volatile unsigned int scaler_value;   /* common timer registers */
@@ -229,29 +207,6 @@ typedef struct {
 #define LEON_REG_UART_CTRL_FL     0x00000040 /* Flow control enable */
 #define LEON_REG_UART_CTRL_LB     0x00000080 /* Loop Back enable */
 
-
-/*
- *  Types and structure used for AMBA Plug & Play bus scanning 
- *
- */
-
-typedef struct amba_device_table {
-  int            devnr;           /* numbrer of devices on AHB or APB bus */
-  unsigned int   *addr[16];       /* addresses to the devices configuration tables */
-} amba_device_table;
-
-typedef struct amba_confarea_type {
-  amba_device_table ahbmst;
-  amba_device_table ahbslv;
-  amba_device_table apbslv;
-  unsigned int      apbmst;
-} amba_confarea_type;
-
-  extern amba_confarea_type amba_conf;  
-  /* extern amba_device_table amba_ahb_masters; 
-extern amba_device_table amba_ahb_slaves;  
-extern amba_device_table amba_apb_slaves;  */
-extern unsigned int amba_apbmst_base;    /* APB master base address */
 extern volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;  /* LEON3 Interrupt Controller */
 extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs; /* LEON3 GP Timer */
 extern volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];

@@ -68,3 +68,7 @@ $(PROJECT_INCLUDE)/amba.h: include/amba.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/amba.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/amba.h
 
+# AMBA Plug&Play Bus
+$(PROJECT_INCLUDE)/ambapp.h: ../../sparc/shared/include/ambapp.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ambapp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ambapp.h
