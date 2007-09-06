@@ -167,7 +167,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       ,
       0,
       rtems_monitor_object_cmd,
-      RTEMS_MONITOR_OBJECT_SEMAPHORE,
+      { RTEMS_MONITOR_OBJECT_SEMAPHORE },
     },
     { "region",
       "region [id [id ... ] ]\n"
@@ -176,7 +176,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       ,
       0,
       rtems_monitor_object_cmd,
-      RTEMS_MONITOR_OBJECT_REGION,
+      { RTEMS_MONITOR_OBJECT_REGION },
     },
     { "part",
       "part [id [id ... ] ]\n"
@@ -185,7 +185,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       ,
       0,
       rtems_monitor_object_cmd,
-      RTEMS_MONITOR_OBJECT_SEMAPHORE,
+      { RTEMS_MONITOR_OBJECT_PARTITION },
     },
     { "object",
       "Display information about specified RTEMS objects. "
