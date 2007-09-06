@@ -1,5 +1,9 @@
 2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
 
+	* pci/pci.c: New file missed on previous commit.
+
+2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
+
 	* Makefile.am, preinstall.am: New files, split of printk.
 	* console/console.c, console/debugputs.c: Split printk support out.
 	* include/spacewire.h: Removed.
