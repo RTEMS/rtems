@@ -232,7 +232,7 @@ static void apbuart_interrupt_handler(rtems_vector_number v){
 static void apbuart_interrupt(apbuart_priv *uart){
 	unsigned int status;
 	int empty;
-	unsigned char c, *next_char;
+	unsigned char c, *next_char = NULL;
 	int signal;
 	
 	/* Clear & record any error */
@@ -595,7 +595,7 @@ static rtems_device_driver apbuart_write(rtems_device_major_number major, rtems_
 {
 	rtems_libio_rw_args_t *rw_args;
 	unsigned int count, oldLevel, ctrl;
-	unsigned char *buf;
+	char *buf;
 	apbuart_priv *uart = &apbuarts[minor];
 	int direct=0;
 	
@@ -820,11 +820,11 @@ static rtems_device_driver apbuart_control(rtems_device_major_number major, rtem
 
 static apbuart_fifo *apbuart_fifo_create(int size){
 	apbuart_fifo *fifo;
-	fifo = (apbuart_fifo *) malloc( size + sizeof(apbuart_fifo));
-	if ( fifo ){
+	fifo = (apbuart_fifo *) malloc(size + sizeof(apbuart_fifo));
+	if ( fifo ) {
 		/* Init fifo */
 		fifo->size = size;
-		fifo->buf = (char *)(fifo+1);
+		fifo->buf = (unsigned char *)(fifo+1);
 		fifo->tail = fifo->buf;
 		fifo->head = fifo->buf;
 		fifo->max = &fifo->buf[size-1];
