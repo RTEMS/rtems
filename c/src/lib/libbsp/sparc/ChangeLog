@@ -1,3 +1,17 @@
+2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
+
+	* Makefile.am: Add the following new drivers: PCI, b1553BRM,
+	SpaceWire(GRSPW), CAN (GRCAN,OC_CAN), Raw UART.
+	* shared/include/apbuart.h, shared/include/apbuart_pci.h,
+	shared/include/apbuart_rasta.h, shared/include/b1553brm.h,
+	shared/include/b1553brm_pci.h, shared/include/b1553brm_rasta.h,
+	shared/include/debug_defs.h, shared/include/grcan.h,
+	shared/include/grcan_rasta.h, shared/include/grcan_spwrtc.h,
+	shared/include/grspw.h, shared/include/grspw_pci.h,
+	shared/include/grspw_rasta.h, shared/include/occan.h,
+	shared/include/occan_pci.h, shared/include/pci.h: New files.
+
+
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
 
 	* shared/bspstart.c: LEON2 and LEON3 Data cache snooping detection on
