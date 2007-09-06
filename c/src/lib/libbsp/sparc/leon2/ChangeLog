@@ -1,5 +1,18 @@
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
 
+	* Makefile.am, preinstall.am: LEON3 AMBA PnP bus scanning moved to
+	shared/amba/amba.c and shared/include/ambapp.h. The AMBA scanning was
+	improved to take account for PnP info address translation. This is
+	useful when scanning remote AMBA busses for example when a board
+	connected with PCI has an AMBA bus that needs to be scanned, before
+	the addresses was hard coded. Also, LEON2 now have AMBA PnP bus
+	scanning support. By using the new AMBA scanning routines it is
+	possible to isolate the AMBA scanning code to ambapp.c, however
+	existing drivers should be updated to use them in order to save
+	space.
+
+2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
+
 	* include/bsp.h: This patch prepares bsp.h so that shared code (new
 	drivers) can easily have small small sections of BSP specific code.
 

@@ -11,6 +11,7 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
+include_HEADERS += ../../sparc/shared/include/ambapp.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
@@ -56,6 +57,11 @@ clock_rel_SOURCES = clock/ckinit.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += amba.rel
+amba_rel_SOURCES = ../../sparc/shared/amba/ambapp.c
+amba_rel_CPPFLAGS = $(AM_CPPFLAGS)
+amba_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_smc91111.rel
 leon_smc91111_rel_SOURCES = leon_smc91111/leon_smc91111.c
@@ -79,7 +85,8 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel console.rel clock.rel timer.rel gnatsupp.rel
+libbsp_a_LIBADD = startup.rel console.rel clock.rel timer.rel gnatsupp.rel \
+                  amba.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += leon_open_eth.rel
