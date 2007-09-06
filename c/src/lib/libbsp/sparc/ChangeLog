@@ -1,5 +1,9 @@
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
 
+	* shared/amba/ambapp.c, shared/include/ambapp.h: New files.
+
+2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
+
 	* Makefile.am: LEON3 AMBA PnP bus scanning moved to shared/amba/amba.c
 	and shared/include/ambapp.h. The AMBA scanning was improved to take
 	account for PnP info address translation. This is useful when
