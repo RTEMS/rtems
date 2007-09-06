@@ -40,7 +40,10 @@
  *  inside and outside of RTEMS.  It is presented as part of the Manager
  *  but actually uses other services of the Manager.
  */
-void rtems_rate_monotonic_report_statistics( void )
+void rtems_rate_monotonic_report_statistics_with_plugin(
+  void                  *context,
+  rtems_printk_plugin_t  print
+)
 {
   rtems_status_code                      status;
   rtems_id                               id;
@@ -48,13 +51,16 @@ void rtems_rate_monotonic_report_statistics( void )
   rtems_rate_monotonic_period_status     the_status;
   char                                   name[5];
 
-  printk( "Period information by period\n" );
+  if ( !print )
+    return;
+
+  (*print)( context, "Period information by period\n" );
 #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
-  printk( "--- Period times are seconds:microseconds ---\n" );
+  (*print)( context, "--- Period times are seconds:microseconds ---\n" );
 #endif
     
 #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-  printk( "--- CPU Usage times are seconds:microseconds ---\n" );
+  (*print)( context, "--- CPU Usage times are seconds:microseconds ---\n" );
 #endif
 /*
 Layout by columns -- in memory of Hollerith :)
@@ -66,10 +72,10 @@ ididididid NNNN ccccc mmmmmm X
   Uncomment the following if you are tinkering with the formatting.
   Be sure to test the various cases.
 */
-  printk("\
+  (*print)( context,"\
 1234567890123456789012345678901234567890123456789012345678901234567890123456789\
 \n");
-  printk( "   ID     OWNER COUNT MISSED     CPU TIME     "
+  (*print)( context, "   ID     OWNER COUNT MISSED     CPU TIME     "
        #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
           "    "
        #endif
@@ -108,7 +114,7 @@ ididididid NNNN ccccc mmmmmm X
      *  Print part of report line that is not dependent on granularity 
      */
 
-    printk(
+    (*print)( context,
       "0x%08" PRIx32 " %4s %5" PRId32 " %6" PRId32 " ",
       id, name,
       the_stats.count, the_stats.missed_count
@@ -126,7 +132,7 @@ ididididid NNNN ccccc mmmmmm X
          the_stats.count,
          &cpu_average
       );
-      printk(
+      (*print)( context,
         "%" PRId32 ":"  NANOSECONDS_FMT "/"        /* min cpu time */
         "%" PRId32 ":"  NANOSECONDS_FMT "/"        /* max cpu time */
         "%" PRId32 ":"  NANOSECONDS_FMT " ",       /* avg cpu time */
@@ -144,7 +150,7 @@ ididididid NNNN ccccc mmmmmm X
       fval_cpu = ival_cpu % 100;
       ival_cpu /= 100;
 
-      printk(
+      (*print)( context,
         "%3" PRId32 "/%4" PRId32 "/%3" PRId32 ".%02" PRId32 " ",
         the_stats.min_cpu_time, the_stats.max_cpu_time, ival_cpu, fval_cpu
       );
@@ -162,7 +168,7 @@ ididididid NNNN ccccc mmmmmm X
          the_stats.count,
          &wall_average
       );
-      printk(
+      (*print)( context,
         "%" PRId32 ":" PERCENT_FMT "/"        /* min wall time */
         "%" PRId32 ":" PERCENT_FMT "/"        /* max wall time */
         "%" PRId32 ":" PERCENT_FMT "\n",      /* avg wall time */
@@ -179,11 +185,16 @@ ididididid NNNN ccccc mmmmmm X
       ival_wall = the_stats.total_wall_time * 100 / the_stats.count;
       fval_wall = ival_wall % 100;
       ival_wall /= 100;
-      printk(
+      (*print)( context,
         "%3" PRId32 "/%4" PRId32 "/%3" PRId32 ".%02" PRId32 "\n",
         the_stats.min_wall_time, the_stats.max_wall_time, ival_wall, fval_wall
       );
     #endif
     }
   }
+}
+
+void rtems_rate_monotonic_report_statistics( void )
+{
+  rtems_rate_monotonic_report_statistics_with_plugin( NULL, printk_plugin );
 }

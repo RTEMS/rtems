@@ -1,22 +1,21 @@
-/*-------------------------------------------------------------------------+
-| printk.c v1.1 - PC386 BSP - 1997/08/07
-+--------------------------------------------------------------------------+
-| (C) Copyright 1997 -
-| - NavIST Group - Real-Time Distributed Systems and Industrial Automation
-|
-| http://pandora.ist.utl.pt
-|
-| Instituto Superior Tecnico * Lisboa * PORTUGAL
-+--------------------------------------------------------------------------+
-| Disclaimer:
-|
-| This file is provided "AS IS" without warranty of any kind, either
-| expressed or implied.
-+--------------------------------------------------------------------------+
-| This code is based on code by: Jose Rufino - IST
-|
-|  $Id$
-+--------------------------------------------------------------------------*/
+/*
+ *
+ * (C) Copyright 1997 -
+ * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
+ *
+ * http://pandora.ist.utl.pt
+ *
+ * Instituto Superior Tecnico * Lisboa * PORTUGAL
+ *
+ * Disclaimer:
+ *
+ * This file is provided "AS IS" without warranty of any kind, either
+ * expressed or implied.
+ *--------------------------------------------------------------------------+
+ * This code is based on code by: Jose Rufino - IST
+ *
+ *  $Id$
+ *--------------------------------------------------------------------------*/
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +70,7 @@ printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-vprintk(char *fmt, va_list ap)
+vprintk(const char *fmt, va_list ap)
 {
   char     c, *str;
   int      lflag, base, sign, width, lead;
@@ -138,7 +137,7 @@ vprintk(char *fmt, va_list ap)
 } /* vprintk */
 
 void
-printk(char *fmt, ...)
+printk(const char *fmt, ...)
 {
   va_list  ap;      /* points to each unnamed argument in turn */
 

@@ -27,8 +27,7 @@
 #include <rtems/cpuuse.h>
 #include <rtems/bspIo.h>
 
-#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
-    defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+#if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
   #include <rtems/score/timespec.h>
 #endif
 
@@ -43,7 +42,10 @@
  *  rtems_cpu_usage_report
  */
 
-void rtems_cpu_usage_report( void )
+void rtems_cpu_usage_report_with_plugin(
+  void                  *context,
+  rtems_printk_plugin_t  print
+)
 {
   uint32_t             i;
   uint32_t             api_index;
@@ -56,6 +58,9 @@ void rtems_cpu_usage_report( void )
   #else
     uint32_t           total_units = 0;
   #endif
+
+  if ( !print )
+    return;
 
   /*
    *  When not using nanosecond CPU usage resolution, we have to count
@@ -81,7 +86,10 @@ void rtems_cpu_usage_report( void )
     }
   #endif
   
-  printk( "CPU Usage by thread\n"
+  #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+    (*print)( context, "--- CPU Usage times are seconds:microseconds ---\n" );
+  #endif
+  (*print)( context, "CPU Usage by thread\n"
     #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
           "   ID        NAME     SECONDS  PERCENT\n"
     #else
@@ -104,7 +112,7 @@ void rtems_cpu_usage_report( void )
 
         rtems_object_get_name( the_thread->Object.id, sizeof(name), name );
  
-        printk( "0x%08" PRIx32 "   %4s    ", the_thread->Object.id, name );
+        (*print)( context, "0x%08" PRIx32 "   %4s    ", the_thread->Object.id, name );
 
         #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
           /*
@@ -124,7 +132,9 @@ void rtems_cpu_usage_report( void )
           /*
            * Print the information
            */
-          printk("%2" PRId32 ".%06" PRId32 " %3" PRId32 ".%02" PRId32 "\n",
+
+          (*print)( context,
+            "%2" PRId32 ":%06" PRId32 " %3" PRId32 ".%02" PRId32 "\n",
             ran.tv_sec, ran.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND,
             ival, fval
           );
@@ -133,7 +143,7 @@ void rtems_cpu_usage_report( void )
                    the_thread->ticks_executed * 10000 / total_units : 0;
           fval = ival % 100;
           ival /= 100;
-          printk(
+          (*print)( context,
             "%8" PRId32 "     %3" PRId32 ".%02" PRId32"\n",
             the_thread->ticks_executed,
             ival,
@@ -145,16 +155,21 @@ void rtems_cpu_usage_report( void )
   }
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    printk( "Time since last CPU Usage reset %" PRId32
+    (*print)( context, "Time since last CPU Usage reset %" PRId32
             ".%06" PRId32 " seconds\n",
        total.tv_sec,
        total.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND
     );
   #else
-    printk(
+    (*print)( context,
       "Ticks since last reset = %" PRId32 "\n",
       _Watchdog_Ticks_since_boot - CPU_usage_Ticks_at_last_reset
     );
-    printk( "Total Units = %" PRId32 "\n\n", total_units );
+    (*print)( context, "Total Units = %" PRId32 "\n\n", total_units );
   #endif
+}
+
+void rtems_cpu_usage_report( void )
+{
+  rtems_cpu_usage_report_with_plugin( NULL, printk_plugin );
 }

@@ -18,6 +18,8 @@
 #ifndef __RTEMS_STACK_CHECKER_h
 #define __RTEMS_STACK_CHECKER_h
 
+#include <rtems/bspIo.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -41,6 +43,21 @@ boolean rtems_stack_checker_is_blown( void );
  *  @note It uses printk to print the report.
  */
 void rtems_stack_checker_report_usage( void );
+
+/** @brief Print Stack Usage Report 
+ *
+ *  This method prints a stack usage report for the curently executing
+ *  task.
+ *
+ *  @param[in] context is the context to pass to the print handler 
+ *  @param[in] print is the print handler 
+ *
+ *  @note It uses the CALLER's routine to print the report.
+ */
+void rtems_stack_checker_report_usage_with_plugin(
+  void                  *context,
+  rtems_printk_plugin_t  print
+);
 
 /*************************************************************
  *************************************************************

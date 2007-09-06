@@ -37,8 +37,25 @@ extern 	BSP_polling_getchar_function_type 	BSP_poll_char;
  * and initialisation of the previous variable are done.
  */
 #include <stdarg.h>
-extern void vprintk(char *fmt, va_list ap);
-extern void printk(char *fmt, ...);
+
+extern void vprintk(const char *fmt, va_list ap);
+extern void printk(const char *fmt, ...);
+
+/*
+ *  This routine is passed into RTEMS reporting functions
+ *  that may have their output redirected.  In particular,
+ *  the cpu usage, period usage, and stack usage reporting
+ *  functions use this.  If the user provides their
+ *  own "printf plugin", then they may redirect those reports
+ *  as they see fit.
+ */
+extern int printk_plugin(void *context, const char *fmt, ...);
+ 
+/*
+ *  Type definition for function which can be plugged in to
+ *  certain reporting routines to redirect the output
+ */
+typedef int (*rtems_printk_plugin_t)(void *, const char *format, ...);
 
 #ifdef __cplusplus
 }

@@ -32,6 +32,8 @@
 #define RTEMS_RATEMON_EXTERN extern
 #endif
 
+#include <rtems/bspIo.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -272,6 +274,19 @@ rtems_status_code rtems_rate_monotonic_reset_statistics(
  *  on ALL period instances.
  */
 void rtems_rate_monotonic_reset_all_statistics( void );
+
+/*
+ *  rtems_rate_monotonic_report_statistics
+ *
+ *  DESCRIPTION:
+ *
+ *  This directive allows a thread to print the statistics information
+ *  on ALL period instances which have non-zero counts using printk.
+ */
+void rtems_rate_monotonic_report_statistics_with_plugin(
+  void                  *context,
+  rtems_printk_plugin_t  print
+);
 
 /*
  *  rtems_rate_monotonic_report_statistics

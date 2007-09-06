@@ -351,10 +351,13 @@ void *Stack_check_find_high_water_mark(
 }
 
 /*
- *  Stack_check_Dump_threads_usage(
+ *  Stack_check_Dump_threads_usage
  *
  *  Try to print out how much stack was actually used by the task.
  */
+static void                   *print_context;
+static rtems_printk_plugin_t   print_handler;
+
 void Stack_check_Dump_threads_usage(
   Thread_Control *the_thread
 )
@@ -366,6 +369,9 @@ void Stack_check_Dump_threads_usage(
   char            name[5];
 
   if ( !the_thread )
+    return;
+
+  if ( !print_handler )
     return;
 
   /*
@@ -402,7 +408,9 @@ void Stack_check_Dump_threads_usage(
     name[ 4 ] = '\0';
   }
 
-  printk("0x%08" PRIx32 "  %4s  0x%p - 0x%p   %8" PRId32 "   %8" PRId32 "\n",
+  (*print_handler)(
+    print_context,
+    "0x%08" PRIx32 "  %4s  0x%p - 0x%p   %8" PRId32 "   %8" PRId32 "\n",
     the_thread ? the_thread->Object.id : ~0,
     name,
     stack->area,
@@ -432,13 +440,19 @@ void Stack_check_Dump_threads_usage(
  *  rtems_stack_checker_report_usage
  */
 
-void rtems_stack_checker_report_usage( void )
+void rtems_stack_checker_report_usage_with_plugin(
+  void                  *context,
+  rtems_printk_plugin_t  print
+)
 {
   if (Stack_check_Initialized == 0)
       return;
 
-  printk("Stack usage by thread\n");
-  printk(
+  print_context = context;
+  print_handler = print;
+
+  (*print)( context, "Stack usage by thread\n");
+  (*print)( context, 
     "    ID      NAME       LOW        HIGH     AVAILABLE      USED\n"
   );
 
@@ -447,4 +461,13 @@ void rtems_stack_checker_report_usage( void )
 
   /* dump interrupt stack info if any */
   Stack_check_Dump_threads_usage((Thread_Control *) -1);
+
+  print_context = NULL;
+  print_handler = NULL;
+
+}
+
+void rtems_stack_checker_report_usage( void )
+{
+  rtems_stack_checker_report_usage_with_plugin( NULL, printk_plugin );
 }

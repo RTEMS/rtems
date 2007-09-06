@@ -1,5 +1,21 @@
 2007-09-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/Makefile.am, libcsupport/src/printk.c:
+	* libcsupport/src/printk_plugin.c: New file.
+	include/rtems/bspIo.h, libmisc/cpuuse/cpuusagereport.c,
+	libmisc/cpuuse/cpuuse.h, libmisc/stackchk/check.c,
+	libmisc/stackchk/stackchk.h: rtems/include/rtems/rtems/ratemon.h,
+	rtems/src/ratemonreportstatistics.c: Added capability to specify
+	your own "printf" routine to various reporting functions.  This
+	added an XXX_with_plugin as the underlying implementation for
+	  + rtems_rate_monotonic_report_statistics
+	  + rtems_stack_checker_report_usage
+	  + rtems_cpu_usage_report
+	As demonstration, the http netdemo can now print out stack
+	and cpu usage reports.
+
+2007-09-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* shttpd/compat_rtems.c: Style clean up.
 
 2007-09-06	Joel Sherrill <joel.sherrill@oarcorp.com>
