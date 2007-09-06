@@ -48,11 +48,11 @@ static int clkirq;
     int cnt; \
     amba_apb_device dev; \
     \
-    /* Find LEON3 Interrupt controler */ \
-    cnt = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_IRQMP,&dev); \
+    /* Find LEON3 GP Timer */ \
+    cnt = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&dev); \
     if ( cnt > 0 ){ \
-      /* Found APB IRQ_MP Interrupt Controller */ \
-      LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start; \
+      /* Found APB GPTIMER Timer */ \
+      LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start; \
       clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3; \
       \
       if (Configuration.User_multiprocessing_table != NULL) { \

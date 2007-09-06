@@ -22,7 +22,6 @@ amba_confarea_type amba_conf;
 volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
 
 int LEON3_Cpu_Index = 0;
-static int apb_init = 0;
 
 /*
  *  bsp_leon3_predriver_hook
@@ -41,51 +40,34 @@ asm(" .text  \n"
     "retl \n"
     "mov %asr17, %o0\n"
 );
-    
-      
+
+
 extern rtems_configuration_table Configuration;
 
 void bsp_leon3_predriver_hook(void)
 {
-  unsigned int iobar, conf;
   int i;
   unsigned int tmp;
+  amba_apb_device dev;
 	
 	/* Scan the AMBA Plug&Play info at the default LEON3 area */
 	amba_scan(&amba_conf,LEON3_IO_AREA,NULL);
 
   /* Find LEON3 Interrupt controler */
-  i = 0;
-  while (i < amba_conf.apbslv.devnr) 
-  {
-    conf = amba_get_confword(amba_conf.apbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_IRQMP))
-    {
-      iobar = amba_apb_get_membar(amba_conf.apbslv, i);
-      LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) amba_iobar_start(amba_conf.apbslv.apbmst[i], iobar);
-      /* asm("mov %%asr17, %0": : "r" (tmp)); */
-      if (Configuration.User_multiprocessing_table != NULL)
-      {	
-	      tmp = getasr17();
-       	LEON3_Cpu_Index = (tmp >> 28) & 3;
-      }
-      break;
+  i = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_IRQMP,&dev);
+  if ( i > 0 ){
+    /* Found APB IRQ_MP Interrupt Controller */
+    LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start;
+    if (Configuration.User_multiprocessing_table != NULL) {	
+	    tmp = getasr17();
+     	LEON3_Cpu_Index = (tmp >> 28) & 3;
     }
-    i++;
   }
+  
   /* find GP Timer */
-  i = 0;
- while (i < amba_conf.apbslv.devnr) 
-  {
-    conf = amba_get_confword(amba_conf.apbslv, i, 0);
-    if ((amba_vendor(conf) == VENDOR_GAISLER) &&
-       (amba_device(conf) == GAISLER_GPTIMER)) {
-      iobar = amba_apb_get_membar(amba_conf.apbslv, i);      
-      LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *)
-      amba_iobar_start(amba_conf.apbslv.apbmst[i], iobar);
-      break;
-    }
-    i++;
+  i = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&dev);
+  if ( i > 0 ){
+    LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start;
   }
 
 }
