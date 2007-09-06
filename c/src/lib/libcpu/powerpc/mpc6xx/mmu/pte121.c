@@ -183,7 +183,7 @@ seg2vsid (uint32_t ea)
 /* Horrible Macros */
 #ifdef __rtems__
 /* must not use printf until multitasking is up */
-typedef void (*PrintF) (char *, ...);
+typedef void (*PrintF) (const char *, ...);
 static PrintF
 whatPrintf (void)
 {
