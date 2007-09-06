@@ -1,5 +1,16 @@
 2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
 
+	New drivers: PCI, b1553BRM, SpaceWire(GRSPW), CAN (GRCAN,OC_CAN),
+	Raw UART.
+	* shared/1553/b1553brm.c, shared/1553/b1553brm_pci.c,
+	shared/1553/b1553brm_rasta.c, shared/can/grcan.c,
+	shared/can/grcan_rasta.c, shared/can/occan.c, shared/can/occan_pci.c,
+	shared/spw/grspw.c, shared/spw/grspw_pci.c, shared/spw/grspw_rasta.c,
+	shared/uart/apbuart.c, shared/uart/apbuart_pci.c,
+	shared/uart/apbuart_rasta.c: New files missed in previous commit.
+
+2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
+
 	* Makefile.am: Add the following new drivers: PCI, b1553BRM,
 	SpaceWire(GRSPW), CAN (GRCAN,OC_CAN), Raw UART.
 	* shared/include/apbuart.h, shared/include/apbuart_pci.h,
