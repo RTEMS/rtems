@@ -1,5 +1,10 @@
 2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
 
+	* cchip/cchip.c, include/cchip.h, include/rasta.h,
+	rasta/rasta.c: New files missed in previous commit.
+
+2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
+
 	* Makefile.am, preinstall.am: Use the following new drivers from
 	sparc/shared: PCI, b1553BRM, SpaceWire(GRSPW), CAN (GRCAN), Raw UART.
 
