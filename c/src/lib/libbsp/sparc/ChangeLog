@@ -1,5 +1,13 @@
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
 
+	* shared/bspstart.c: LEON2 and LEON3 Data cache snooping detection on
+	startup, for drivers. (LEON2,3 are configurable processors, they can
+	be with or without DCache snooping. Caches without snooping needs the
+	drivers to flush cache or use the sparc instruction lda to force
+	cache miss...)
+
+2007-09-05	Daniel Hellstrom <daniel@gaisler.com>
+
 	* shared/amba/ambapp.c, shared/include/ambapp.h: New files.
 
 2007-09-05	Daniel Hellstrom <daniel@gaisler.com>

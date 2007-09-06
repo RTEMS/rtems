@@ -47,6 +47,14 @@ rtems_cpu_table Cpu_table;
 
 extern uint32_t rdb_start;
 
+#ifdef LEON2
+/*
+ * Tells us if data cache snooping is available
+ */ 
+
+int CPU_SPARC_HAS_SNOOPING;
+#endif
+
 /*
  *  Use the shared implementations of the following routines
  */
@@ -54,6 +62,23 @@ extern uint32_t rdb_start;
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 extern void bsp_spurious_initialize();
+
+#ifdef LEON2
+/*
+ * set_snooping
+ * 
+ * Read the data cache configuration register to determine if
+ * bus snooping is available. This is needed for some drivers so
+ * that they can select the most efficient copy routines.  
+ *
+ */
+
+static inline int set_snooping(void) 
+{
+        unsigned int tmp = *(unsigned int *)0x80000014; /* Cache control register */
+        return ((tmp>>23) & 1); /* Data cache snooping enabled */
+}
+#endif
 
 /*
  *  bsp_pretasking_hook
@@ -118,4 +143,8 @@ void bsp_start( void )
   }
 
   BSP_Configuration.work_space_start = work_space_start;
+  
+  #ifdef LEON2
+  CPU_SPARC_HAS_SNOOPING = set_snooping();
+  #endif
 }
