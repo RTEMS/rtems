@@ -1,3 +1,7 @@
+2007-09-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bin2c.c: Update comments.
+
 2007-09-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bin2c.c: Significant improvements -- add multiple options, generate

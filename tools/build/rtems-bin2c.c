@@ -1,22 +1,26 @@
 /*
  * bin2c.c
  *
- * convert a binary file into a C source vector
+ * convert a binary file into a C source array.
  *
- * put into the public domain by Sandro Sigala
+ * Origin:
+ *   put into the public domain by Sandro Sigala
+ *   http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images-Bin2c_In_C
+ *
+ * Subsequently modified by Joel Sherrill <joel.sherrill@oarcorp.com>
+ * to add a number of capabilities not in the original.
  *
  * syntax:  bin2c [-c] [-z] <input_file> <output_file>
  *
  *    -c    do NOT add the "const" keyword to definition
  *    -s    add the "static" keywork to definition
+ *    -v    verbose
  *    -z    terminate the array with a zero (useful for embedded C strings)
  *
  * examples:
  *     bin2c -c myimage.png myimage_png.cpp
  *     bin2c -z sometext.txt sometext_txt.cpp
  *
- * From:
- *   http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images-Bin2c_In_C
  */
 
 #include <ctype.h>
