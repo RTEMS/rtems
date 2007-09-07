@@ -64,8 +64,10 @@ void reportMallocError(const char *msg, struct mallocNode *mp)
     static char cbuf[500];
     ind += sprintf(cbuf+ind, "Malloc Error: %s\n", msg);
     if ((mp->forw->back != mp) || (mp->back->forw != mp))
-        ind += sprintf(cbuf+ind, "mp:0x%x  mp->forw:0x%x  mp->forw->back:0x%x  mp->back:0x%x  mp->back->forw:0x%x\n",
-                        mp, mp->forw, mp->forw->back, mp->back, mp->back->forw);
+        ind += sprintf(cbuf+ind,
+            "mp:0x%x  mp->forw:0x%x  mp->forw->back:0x%x  "
+            "mp->back:0x%x  mp->back->forw:0x%x\n",
+            mp, mp->forw, mp->forw->back, mp->back, mp->back->forw);
     if (mp->memory != (mp + 1))
         ind += sprintf(cbuf+ind, "mp+1:0x%x  ", mp + 1);
     ind += sprintf(cbuf+ind, "mp->memory:0x%x  mp->size:%d\n", mp->memory, mp->size);
@@ -192,6 +194,15 @@ void RTEMS_Malloc_Initialize(
   if ( !status )
     rtems_fatal_error_occurred( status );
 
+  #if defined(RTEMS_HEAP_DEBUG)
+    if ( _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, FALSE ) ) {
+      printk( "Malloc heap not initialized correctly\n" );
+      rtems_print_buffer( start, 32 );
+      printk( "\n" );
+      rtems_print_buffer( (start + length) - 48, 48 );
+      rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
+    }
+  #endif
 #ifdef MALLOC_STATS
   /* zero all the stats */
   (void) memset( &rtems_malloc_stats, 0, sizeof(rtems_malloc_stats) );
@@ -215,6 +226,10 @@ void *malloc(
 
   if ( !size )
     return (void *) 0;
+
+  #if defined(RTEMS_HEAP_DEBUG)
+    _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, FALSE );
+  #endif
 
   /*
    *  Do not attempt to allocate memory if in a critical section or ISR.
@@ -428,6 +443,10 @@ void free(
 
   if ( !ptr )
     return;
+
+  #if defined(RTEMS_HEAP_DEBUG)
+    _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, FALSE );
+  #endif
 
   /*
    *  Do not attempt to free memory if in a critical section or ISR.

@@ -1,5 +1,12 @@
 2007-09-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/malloc.c: If RTEMS_HEAP_DEBUG is defined, add heap
+	walk on init, malloc, and free. The ability to walk the heap appears
+	to disappeared during the rework of the C Program heap to skip the
+	Region.
+
+2007-09-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/heap.c: Style.
 	* score/src/heapwalk.c: Add more information to prints.
 	* score/src/pheapwalk.c: Do not lock allocator mutex if dispatching
