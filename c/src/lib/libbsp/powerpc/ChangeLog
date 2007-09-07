@@ -1,3 +1,7 @@
+2007-09-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/console/polled_io.c: Change prototype so code compiles.
+
 2007-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/startup/bspstart.c: Split out ShowBATS() so it can be shared

@@ -891,7 +891,7 @@ static int skip_atoi(const char **s)
  */
 int k_vsprintf(char *buf, const char *fmt, va_list args);
 
-int printk(const char *fmt, ...) {
+void  printk(const char *fmt, ...) {
 	va_list args;
 	int i;
 	/* Should not be a problem with 8kB of stack */
@@ -901,7 +901,6 @@ int printk(const char *fmt, ...) {
 	i = k_vsprintf(buf, fmt, args);
 	va_end(args);
 	my_puts((u_char*)buf);
-	return  i;
 }
 
 #endif
