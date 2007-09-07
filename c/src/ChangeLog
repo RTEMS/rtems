@@ -1,3 +1,8 @@
+2007-09-07	Daniel Hellstrom <daniel@gaisler.com>
+
+	* libchip/network/greth.c, libchip/network/greth.h: GRETH_GBIT support
+	and GBIT PHY support for 10/100 MAC, also auto negotiation updated.
+
 2007-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* configure.ac, wrapup/Makefile.am: Remove RDBG.

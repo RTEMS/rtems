@@ -1,14 +1,14 @@
 /*
- *  RTEMS driver for Opencores Ethernet Controller
- *
- *  Weakly based on dec21140 rtems driver and open_eth linux driver
- *  Written by Jiri Gaisler, Gaisler Research
+ * Gaisler Research ethernet MAC driver
+ * adapted from Opencores driver by Marko Isomaki
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
+ *
+ * 2007-09-07, Ported GBIT support from 4.6.5
  */
 
 #include <rtems.h>
@@ -18,6 +18,7 @@
 
 #include <inttypes.h>
 #include <errno.h>
+#include <rtems/bspIo.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -47,9 +48,8 @@ extern m68k_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 #endif
 
-/*
-#define GRETH_DEBUG
-*/
+
+/* #define GRETH_DEBUG */
 
 #ifdef CPU_U32_FIX
 extern void ipalign(struct mbuf *m);
@@ -91,12 +91,21 @@ extern void ipalign(struct mbuf *m);
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
 
+/* 4s Autonegotiation Timeout */
+#ifndef GRETH_AUTONEGO_TIMEOUT_MS
+#define GRETH_AUTONEGO_TIMEOUT_MS 4000
+#endif
+
+/* For optimizing the autonegotiation time */
+#define GRETH_AUTONEGO_PRINT_TIME
+
 /* Ethernet buffer descriptor */
 
 typedef struct _greth_rxtxdesc {
    volatile uint32_t ctrl; /* Length and status */
    uint32_t *addr;         /* Buffer pointer */
 } greth_rxtxdesc;
+
 
 /*
  * Per-device data
@@ -113,14 +122,26 @@ struct greth_softc
    rtems_id txDaemonTid;
    
    unsigned int tx_ptr;
+   unsigned int tx_dptr;
+   unsigned int tx_cnt;
    unsigned int rx_ptr;
    unsigned int txbufs;
    unsigned int rxbufs;
    greth_rxtxdesc *txdesc;
    greth_rxtxdesc *rxdesc;
    struct mbuf **rxmbuf;
+   struct mbuf **txmbuf;
    rtems_vector_number vector;
-    
+   
+   /*Status*/
+   struct phy_device_info phydev;
+   int fd;
+   int sp;
+   int gb;
+   int gbit_mac;
+   int auto_neg;
+   unsigned int auto_neg_time;
+   
    /*
     * Statistics
     */
@@ -139,6 +160,7 @@ struct greth_softc
    unsigned long txLateCollision;
    unsigned long txRetryLimit;
    unsigned long txUnderrun;
+
 };
 
 static struct greth_softc greth;
@@ -156,36 +178,36 @@ static char *almalloc(int sz)
 static rtems_isr
 greth_interrupt_handler (rtems_vector_number v)
 {
-    uint32_t status;
-    /* read and clear interrupt cause */
-
-    status = greth.regs->status;
-    greth.regs->status = status;
-
-    /* Frame received? */
-    if (status & (GRETH_STATUS_RXERR | GRETH_STATUS_RXIRQ))
-      {
-        greth.rxInterrupts++;
-        rtems_event_send (greth.rxDaemonTid, INTERRUPT_EVENT);
-      }
+        uint32_t status;
+        /* read and clear interrupt cause */
+        
+        status = greth.regs->status;
+        greth.regs->status = status;
+        
+        /* Frame received? */
+        if (status & (GRETH_STATUS_RXERR | GRETH_STATUS_RXIRQ))
+        {
+                greth.rxInterrupts++;
+                rtems_event_send (greth.rxDaemonTid, INTERRUPT_EVENT);
+        }
 #ifdef GRETH_SUSPEND_NOTXBUF
-    if (status & (GRETH_STATUS_TXERR | GRETH_STATUS_TXIRQ))
-      {
-        greth.txInterrupts++;
-        rtems_event_send (greth.txDaemonTid, GRETH_TX_WAIT_EVENT);
-      }
+        if (status & (GRETH_STATUS_TXERR | GRETH_STATUS_TXIRQ))
+        {
+                greth.txInterrupts++;
+                rtems_event_send (greth.txDaemonTid, GRETH_TX_WAIT_EVENT);
+        }
 #endif
-      /*
-#ifdef __leon__
-      LEON_Clear_interrupt(v-0x10);
-#endif
-      */
+        /*
+          #ifdef __leon__
+          LEON_Clear_interrupt(v-0x10);
+          #endif
+        */
 }
 
-static uint32_t read_mii(uint32_t addr)
+static uint32_t read_mii(uint32_t phy_addr, uint32_t reg_addr)
 {
     while (greth.regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
-    greth.regs->mdio_ctrl = addr << 6 | GRETH_MDIO_READ;
+    greth.regs->mdio_ctrl = (phy_addr << 11) | (reg_addr << 6) | GRETH_MDIO_READ;
     while (greth.regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
     if (!(greth.regs->mdio_ctrl & GRETH_MDIO_LINKFAIL))
         return((greth.regs->mdio_ctrl >> 16) & 0xFFFF);
@@ -195,13 +217,40 @@ static uint32_t read_mii(uint32_t addr)
     }
 }
 
-static void write_mii(uint32_t addr, uint32_t data)
+static void write_mii(uint32_t phy_addr, uint32_t reg_addr, uint32_t data)
 {
     while (greth.regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
-    greth.regs->mdio_ctrl = 
-    ((data & 0xFFFF) << 16) | (addr << 8) | GRETH_MDIO_WRITE;
+    greth.regs->mdio_ctrl =
+     ((data & 0xFFFF) << 16) | (phy_addr << 11) | (reg_addr << 6) | GRETH_MDIO_WRITE;
     while (greth.regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
 }
+
+static void print_init_info(struct greth_softc *sc) 
+{
+        printf("greth: driver attached\n");
+        printf("**** PHY ****\n");
+        printf("Vendor: %x   Device: %x   Revision: %d\n",sc->phydev.vendor, sc->phydev.device, sc->phydev.rev);
+        printf("Current Operating Mode: ");
+        if (sc->gb) {
+                printf("1000 Mbit ");
+        } else if (sc->sp) {
+                printf("100 Mbit ");
+        } else {
+                printf("10 Mbit ");
+        }
+        if (sc->fd) {
+                printf("Full Duplex\n");
+        } else {
+                printf("Half Duplex\n");
+        }
+#ifdef GRETH_AUTONEGO_PRINT_TIME
+        if ( sc->auto_neg ){
+          printf("Autonegotiation Time: %dms\n",sc->auto_neg_time);
+        }
+#endif
+}
+
+
 /*
  * Initialize the ethernet hardware
  */
@@ -210,12 +259,18 @@ greth_initialize_hardware (struct greth_softc *sc)
 {
     struct mbuf *m;
     int i;
-    int fd;
-    
+    int phyaddr;
+    int phyctrl;
+    int phystatus;
+    int tmp1;
+    int tmp2;
+    unsigned int msecs;
+    rtems_clock_time_value tstart, tnow;
+
     greth_regs *regs;
 
     regs = sc->regs;
-
+    
     /* Reset the controller.  */
     greth.rxInterrupts = 0;
     greth.rxPackets = 0;
@@ -224,44 +279,172 @@ greth_initialize_hardware (struct greth_softc *sc)
     regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
     regs->ctrl = 0;			/* Reset OFF */
     
-    /* reset PHY and wait for complettion */
-    /*
-    */
-    write_mii(0, 0x8000);
-    while (read_mii(0) & 0x8000) {}
-    fd = regs->mdio_ctrl >> 24; /*duplex mode*/
-    printf(
-      "greth: driver attached, PHY config: 0x%04" PRIx32 "\n", read_mii(0));
+    /* Check if mac is gbit capable*/
+    sc->gbit_mac = (regs->ctrl >> 27) & 1;  
+    
+    /* Get the phy address which assumed to have been set
+       correctly with the reset value in hardware*/
+    phyaddr = (regs->mdio_ctrl >> 11) & 0x1F;
+
+    /* get phy control register default values */
+    while ((phyctrl = read_mii(phyaddr, 0)) & 0x8000) {}
+    
+    /* reset PHY and wait for completion */
+    write_mii(phyaddr, 0, 0x8000 | phyctrl);
+
+    while ((read_mii(phyaddr, 0)) & 0x8000) {}
+    
+    /* Check if PHY is autoneg capable and then determine operating mode, 
+       otherwise force it to 10 Mbit halfduplex */
+    sc->gb = 0;
+    sc->fd = 0;
+    sc->sp = 0;
+    sc->auto_neg = 0;
+    sc->auto_neg_time = 0;
+    if ((phyctrl >> 12) & 1) {
+            /*wait for auto negotiation to complete*/
+            msecs = 0;
+            sc->auto_neg = 1;
+            if ( rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE,&tstart) == RTEMS_NOT_DEFINED){
+                /* Not inited, set to epoch */
+                rtems_time_of_day time;
+                time.year   = 1988;
+                time.month  = 1;
+                time.day    = 1;
+                time.hour   = 0;
+                time.minute = 0;
+                time.second = 0;
+                time.ticks  = 0;
+                rtems_clock_set(&time);
+
+                tstart.seconds = 0;
+                tstart.microseconds = 0;
+                rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE,&tstart);
+            }
+            while (!(((phystatus = read_mii(phyaddr, 1)) >> 5) & 1)) {
+                    if ( rtems_clock_get(RTEMS_CLOCK_GET_TIME_VALUE,&tnow) != RTEMS_SUCCESSFUL )
+                      printk("rtems_clock_get failed\n\r");
+                    msecs = (tnow.seconds-tstart.seconds)*1000+(tnow.microseconds-tstart.microseconds)/1000;
+                    if ( msecs > GRETH_AUTONEGO_TIMEOUT_MS ){
+                            sc->auto_neg_time = msecs;
+                            printk("Auto negotiation timed out. Selecting default config\n\r");
+                            tmp1 = read_mii(phyaddr, 0);
+                            sc->gb = ((phyctrl >> 6) & 1) && !((phyctrl >> 13) & 1);
+                            sc->sp = !((phyctrl >> 6) & 1) && ((phyctrl >> 13) & 1);
+                            sc->fd = (phyctrl >> 8) & 1;
+                            goto auto_neg_done;
+                    }
+            }
+            sc->auto_neg_time = msecs;
+            sc->phydev.adv = read_mii(phyaddr, 4);
+            sc->phydev.part = read_mii(phyaddr, 5);
+            if ((phystatus >> 8) & 1) {
+                    sc->phydev.extadv = read_mii(phyaddr, 9);
+                    sc->phydev.extpart = read_mii(phyaddr, 10);
+                       if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000FD) &&
+                            (sc->phydev.extpart & GRETH_MII_EXTPRT_1000FD)) {
+                               sc->gb = 1;
+                               sc->fd = 1;
+                       }
+                       if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000HD) &&
+                            (sc->phydev.extpart & GRETH_MII_EXTPRT_1000HD)) {
+                               sc->gb = 1;
+                               sc->fd = 0;
+                       }
+            }
+            if ((sc->gb == 0) || ((sc->gb == 1) && (sc->gbit_mac == 0))) {
+                    if ( (sc->phydev.adv & GRETH_MII_100TXFD) &&
+                         (sc->phydev.part & GRETH_MII_100TXFD)) {
+                            sc->sp = 1;
+                            sc->fd = 1;
+                    }
+                    if ( (sc->phydev.adv & GRETH_MII_100TXHD) &&
+                         (sc->phydev.part & GRETH_MII_100TXHD)) {
+                            sc->sp = 1;
+                            sc->fd = 0;
+                    }
+                    if ( (sc->phydev.adv & GRETH_MII_10FD) &&
+                         (sc->phydev.part & GRETH_MII_10FD)) {
+                            sc->fd = 1;
+                    }
+            }
+    }
+auto_neg_done:
+    sc->phydev.vendor = 0;
+    sc->phydev.device = 0;
+    sc->phydev.rev = 0;
+    phystatus = read_mii(phyaddr, 1);
+    
+    /*Read out PHY info if extended registers are available */
+    if (phystatus & 1) {  
+            tmp1 = read_mii(phyaddr, 2);
+            tmp2 = read_mii(phyaddr, 3);
+
+            sc->phydev.vendor = (tmp1 << 6) | ((tmp2 >> 10) & 0x3F);
+            sc->phydev.rev = tmp2 & 0xF;
+            sc->phydev.device = (tmp2 >> 4) & 0x3F;
+    }
+
+    /* Force to 10 mbit half duplex if the 10/100 MAC is used with a 1000 PHY*/
+    /*check if marvell 88EE1111 PHY. Needs special reset handling */
+    if ((phystatus & 1) && (sc->phydev.vendor == 0x005043) && (sc->phydev.device == 0x0C)) {
+            if (((sc->gb) && !(sc->gbit_mac)) || !((phyctrl >> 12) & 1)) {
+                    write_mii(phyaddr, 0, sc->sp << 13);
+                    write_mii(phyaddr, 0, 0x8000);
+                    sc->gb = 0;
+                    sc->sp = 0;
+                    sc->fd = 0;
+            }
+    } else {
+            if (((sc->gb) && !(sc->gbit_mac))  || !((phyctrl >> 12) & 1)) {
+                    write_mii(phyaddr, 0, sc->sp << 13);
+                    sc->gb = 0;
+                    sc->sp = 0;
+                    sc->fd = 0;
+            }
+    }
+    while ((read_mii(phyaddr, 0)) & 0x8000) {}
+
+    regs->ctrl = 0;
+    regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
+    regs->ctrl = 0;
 
     /* Initialize rx/tx descriptor pointers */
     sc->txdesc = (greth_rxtxdesc *) almalloc(1024);
     sc->rxdesc = (greth_rxtxdesc *) almalloc(1024);
     sc->tx_ptr = 0;
+    sc->tx_dptr = 0;
+    sc->tx_cnt = 0;
     sc->rx_ptr = 0;
     regs->txdesc = (int) sc->txdesc;
     regs->rxdesc = (int) sc->rxdesc;
     
     sc->rxmbuf = calloc(sc->rxbufs, sizeof(*sc->rxmbuf));
+    sc->txmbuf = calloc(sc->txbufs, sizeof(*sc->txmbuf));
 
     for (i = 0; i < sc->txbufs; i++)
       {
-          sc->txdesc[i].addr = (uint32_t *) calloc(1, GRETH_MAXBUF_LEN);
+              sc->txdesc[i].ctrl = 0;
+              if (!(sc->gbit_mac)) {
+                      sc->txdesc[i].addr = malloc(GRETH_MAXBUF_LEN);
+              }
 #ifdef GRETH_DEBUG
-	  printf("TXBUF: %08x\n", (int) sc->txdesc[i].addr);
+              /* printf("TXBUF: %08x\n", (int) sc->txdesc[i].addr); */
 #endif
       }
-    /*printf("RXbufs: %i\n", sc->rxbufs);*/
     for (i = 0; i < sc->rxbufs; i++)
       {
 
           MGETHDR (m, M_WAIT, MT_DATA);
           MCLGET (m, M_WAIT);
+          if (sc->gbit_mac)
+                  m->m_data += 2;
 	  m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
           sc->rxmbuf[i] = m;
 	  sc->rxdesc[i].addr = (uint32_t *) mtod(m, uint32_t *);
           sc->rxdesc[i].ctrl = GRETH_RXD_ENABLE | GRETH_RXD_IRQ;
 #ifdef GRETH_DEBUG
-	  printf("RXBUF: %08x\n", (int) sc->rxdesc[i].addr);
+/* 	  printf("RXBUF: %08x\n", (int) sc->rxdesc[i].addr); */
 #endif
       }
     sc->rxdesc[sc->rxbufs - 1].ctrl |= GRETH_RXD_WRAP;
@@ -284,7 +467,9 @@ greth_initialize_hardware (struct greth_softc *sc)
     regs->ctrl |= GRETH_CTRL_TXIRQ;
 #endif
 
-    regs->ctrl |= GRETH_CTRL_RXEN | (fd << 4) | GRETH_CTRL_RXIRQ;
+    regs->ctrl |= GRETH_CTRL_RXEN | (sc->fd << 4) | GRETH_CTRL_RXIRQ | (sc->sp << 7) | (sc->gb << 8);
+
+    print_init_info(sc);
 }
 
 static void
@@ -297,7 +482,6 @@ greth_rxDaemon (void *arg)
     unsigned int len, len_status, bad;
     rtems_event_set events;
     
-    /*printf("Started RxDaemon\n");*/
     for (;;)
       {
         rtems_bsdnet_event_receive (INTERRUPT_EVENT,
@@ -307,73 +491,75 @@ greth_rxDaemon (void *arg)
 #ifdef GRETH_ETH_DEBUG
     printf ("r\n");
 #endif
-    /*printf("Packet received\n");*/
-            while (!((len_status =
-		   dp->rxdesc[dp->rx_ptr].ctrl) & GRETH_RXD_ENABLE))
+    while (!((len_status =
+		    dp->rxdesc[dp->rx_ptr].ctrl) & GRETH_RXD_ENABLE))
 	    {
-              /*printf("Status: %x\n", dp->rxdesc[dp->rx_ptr].ctrl);*/
-		bad = 0;
-
-                if (len_status & GRETH_RXD_TOOLONG)
-		  {
-		      dp->rxLengthError++;
-		      bad = 1;
-		  }
-		if (len_status & GRETH_RXD_DRIBBLE)
-		  {
-		      dp->rxNonOctet++;
-		      bad = 1;
-		  }
-		if (len_status & GRETH_RXD_CRCERR)
-		  {
-		      dp->rxBadCRC++;
-		      bad = 1;
-		  }
-		if (len_status & GRETH_RXD_OVERRUN)
-		  {
-		      dp->rxOverrun++;
-		      bad = 1;
-		  }
-                if (!bad)
-		  {
-                    /*printf("Received Ok packet\n");*/
-		      /* pass on the packet in the receive buffer */
-                    len = len_status & 0x7FF;
-                    m = dp->rxmbuf[dp->rx_ptr];
-                    m->m_len = m->m_pkthdr.len =
-                      len - sizeof (struct ether_header);
-                    /*printf("Packet of length: %i\n", len);*/
-                    eh = mtod (m, struct ether_header *);
-                    m->m_data += sizeof (struct ether_header);
-                    /*printf("Mbuf handling done\n");*/
-#ifdef CPU_U32_FIX
-                    /*printf("Ip aligning\n");*/
-                    ipalign(m);	/* Align packet on 32-bit boundary */
+                    bad = 0;
+                    if (len_status & GRETH_RXD_TOOLONG)
+                    {
+                            dp->rxLengthError++;
+                            bad = 1;
+                    }
+                    if (len_status & GRETH_RXD_DRIBBLE)
+                    {
+                            dp->rxNonOctet++;
+                            bad = 1;
+                    }
+                    if (len_status & GRETH_RXD_CRCERR)
+                    {
+                            dp->rxBadCRC++;
+                            bad = 1;
+                    }
+                    if (len_status & GRETH_RXD_OVERRUN)
+                    {
+                            dp->rxOverrun++;
+                            bad = 1;
+                    }
+                    if (len_status & GRETH_RXD_LENERR)
+                    {
+                            dp->rxLengthError++;
+                            bad = 1;
+                    }
+                    if (!bad)
+                    {
+                            /* pass on the packet in the receive buffer */
+                            len = len_status & 0x7FF;
+                            m = dp->rxmbuf[dp->rx_ptr];
+#ifdef GRETH_DEBUG
+                            int i;
+                            printf("RX: 0x%08x, Len: %d : ", (int) m->m_data, len);
+                            for (i=0; i<len; i++)
+                                    printf("%x%x", (m->m_data[i] >> 4) & 0x0ff, m->m_data[i] & 0x0ff);
+                            printf("\n");
 #endif
-                    /*printf("Calling stack\n");*/
-                    /*printf("Ifp: %x, Eh: %x, M: %x\n", (int)ifp, (int)eh, (int)m);*/
-                    ether_input (ifp, eh, m);
-                    /*printf("Returned from stack\n");*/
-                    /* get a new mbuf */
-                    /*printf("Getting new mbuf\n");*/
-                    MGETHDR (m, M_WAIT, MT_DATA);
-                    MCLGET (m, M_WAIT);
-                    /*printf("Got new mbuf\n");*/
-                    dp->rxmbuf[dp->rx_ptr] = m;
-                    m->m_pkthdr.rcvif = ifp;
-                    dp->rxdesc[dp->rx_ptr].addr =
-                      (uint32_t *) mtod (m, uint32_t *);
-                    dp->rxPackets++;
-                  }
-                /*printf("Reenabling desc\n");*/
-                dp->rxdesc[dp->rx_ptr].ctrl = GRETH_RXD_ENABLE | GRETH_RXD_IRQ;
-                if (dp->rx_ptr == dp->rxbufs - 1) {
-                  dp->rxdesc[dp->rx_ptr].ctrl |= GRETH_RXD_WRAP;
-                }
-                dp->regs->ctrl |= GRETH_CTRL_RXEN;
-                /*printf("rxptr: %i\n", dp->rx_ptr);*/
-                dp->rx_ptr = (dp->rx_ptr + 1) % dp->rxbufs;
-                /*printf("RxDesc reenabled\n");*/
+                            m->m_len = m->m_pkthdr.len =
+                                    len - sizeof (struct ether_header);
+
+                            eh = mtod (m, struct ether_header *);
+                            m->m_data += sizeof (struct ether_header);
+#ifdef CPU_U32_FIX
+                            if(!(dp->gbit_mac))
+                                    ipalign(m);	/* Align packet on 32-bit boundary */
+#endif
+
+                            ether_input (ifp, eh, m);
+                            MGETHDR (m, M_WAIT, MT_DATA);
+                            MCLGET (m, M_WAIT);
+                            if (dp->gbit_mac)
+                                    m->m_data += 2;
+                            dp->rxmbuf[dp->rx_ptr] = m;
+                            m->m_pkthdr.rcvif = ifp;
+                            dp->rxdesc[dp->rx_ptr].addr =
+                                    (uint32_t *) mtod (m, uint32_t *);
+                            dp->rxPackets++;
+                    }
+                    if (dp->rx_ptr == dp->rxbufs - 1) {
+                            dp->rxdesc[dp->rx_ptr].ctrl = GRETH_RXD_ENABLE | GRETH_RXD_IRQ | GRETH_RXD_WRAP;
+                    } else {
+                            dp->rxdesc[dp->rx_ptr].ctrl = GRETH_RXD_ENABLE | GRETH_RXD_IRQ;
+                    }
+                    dp->regs->ctrl |= GRETH_CTRL_RXEN;
+                    dp->rx_ptr = (dp->rx_ptr + 1) % dp->rxbufs;
             }
       }
     
@@ -410,40 +596,109 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
     len = 0;
     temp = (unsigned char *) dp->txdesc[dp->tx_ptr].addr;
 #ifdef GRETH_DEBUG
-    printf("TXD: 0x%08x\n", (int) m->m_data);
+    printf("TXD: 0x%08x : BUF: 0x%08x\n", (int) m->m_data, (int) temp);
 #endif
     for (;;)
-        {
+    {
 #ifdef GRETH_DEBUG
-	  int i;
-          printf("MBUF: 0x%08x : ", (int) m->m_data);
-	  for (i=0;i<m->m_len;i++)
-	    printf("%x%x", (m->m_data[i] >> 4) & 0x0ff, m->m_data[i] & 0x0ff);
-	  printf("\n");
+            int i;
+            printf("MBUF: 0x%08x : ", (int) m->m_data);
+            for (i=0;i<m->m_len;i++)
+                    printf("%x%x", (m->m_data[i] >> 4) & 0x0ff, m->m_data[i] & 0x0ff);
+            printf("\n");
 #endif
-	  len += m->m_len;
-	  if (len <= RBUF_SIZE)
-	    memcpy ((void *) temp, (char *) m->m_data, m->m_len);
-	  temp += m->m_len;
-	  if ((m = m->m_next) == NULL)
-	      break;
-        }
-
+            len += m->m_len;
+            if (len <= RBUF_SIZE)
+                    memcpy ((void *) temp, (char *) m->m_data, m->m_len);
+            temp += m->m_len;
+            if ((m = m->m_next) == NULL)
+                    break;
+    }
+    
     m_freem (n);
-
+    
     /* don't send long packets */
 
     if (len <= GRETH_MAXBUF_LEN) {
-      if (dp->tx_ptr < dp->txbufs-1) {
-        dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_ENABLE | len;
-      } else {
-        dp->txdesc[dp->tx_ptr].ctrl = 
-          GRETH_TXD_WRAP | GRETH_TXD_ENABLE | len;
-      }
-      dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
-      dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
+            if (dp->tx_ptr < dp->txbufs-1) {
+                    dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_ENABLE | len;
+            } else {
+                    dp->txdesc[dp->tx_ptr].ctrl = 
+                            GRETH_TXD_WRAP | GRETH_TXD_ENABLE | len;
+            }
+            dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
+            dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
     }
     inside = 0;
+}
+
+
+static void
+sendpacket_gbit (struct ifnet *ifp, struct mbuf *m)
+{
+        struct greth_softc *dp = ifp->if_softc;
+        unsigned int len;
+
+        /*printf("Send packet entered\n");*/
+        if (inside) printf ("error: sendpacket re-entered!!\n");
+        inside = 1;
+        /*
+         * Waiting for Transmitter ready
+         */
+        
+        len = 0;
+#ifdef GRETH_DEBUG
+        printf("TXD: 0x%08x\n", (int) m->m_data);
+#endif
+        for (;;)
+        {
+                while (dp->txdesc[dp->tx_ptr].ctrl & GRETH_TXD_ENABLE)
+                {
+#ifdef GRETH_SUSPEND_NOTXBUF
+                        dp->txdesc[dp->tx_ptr].ctrl |= GRETH_TXD_IRQ;
+                        rtems_event_set events;
+                        rtems_bsdnet_event_receive (GRETH_TX_WAIT_EVENT,
+                                                    RTEMS_WAIT | RTEMS_EVENT_ANY,
+                                                    TOD_MILLISECONDS_TO_TICKS(500), &events);
+#endif
+                }
+#ifdef GRETH_DEBUG
+                int i;
+                printf("MBUF: 0x%08x, Len: %d : ", (int) m->m_data, m->m_len);
+                for (i=0; i<m->m_len; i++)
+                        printf("%x%x", (m->m_data[i] >> 4) & 0x0ff, m->m_data[i] & 0x0ff);
+                printf("\n");
+#endif
+            len += m->m_len;
+            dp->txdesc[dp->tx_ptr].addr = (uint32_t *)m->m_data;
+            if (dp->tx_ptr < dp->txbufs-1) {
+                    if ((m->m_next) == NULL) {
+                            dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_ENABLE | GRETH_TXD_CS | m->m_len;
+                            break; 
+                    } else {
+                            dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_ENABLE | GRETH_TXD_MORE | GRETH_TXD_CS | m->m_len;
+                    }
+            } else {
+                    if ((m->m_next) == NULL) {
+                            dp->txdesc[dp->tx_ptr].ctrl = 
+                                    GRETH_TXD_WRAP | GRETH_TXD_ENABLE | GRETH_TXD_CS | m->m_len;
+                            break;
+                    } else {
+                            dp->txdesc[dp->tx_ptr].ctrl = 
+                                    GRETH_TXD_WRAP | GRETH_TXD_ENABLE | GRETH_TXD_MORE | GRETH_TXD_CS | m->m_len;
+                    }
+            }
+            dp->txmbuf[dp->tx_ptr] = m;
+            dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
+            dp->tx_cnt++;
+            m = m->m_next;
+            
+    }
+        dp->txmbuf[dp->tx_ptr] = m;
+        dp->tx_cnt++;
+        dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
+        dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
+        inside = 0;
 }
 
 /*
@@ -458,34 +713,81 @@ greth_txDaemon (void *arg)
     rtems_event_set events;
     
     for (;;)
-      {
-	  /*
-	   * Wait for packet
-	   */
-
-        rtems_bsdnet_event_receive (START_TRANSMIT_EVENT,
-				      RTEMS_EVENT_ANY | RTEMS_WAIT,
-				      RTEMS_NO_TIMEOUT, &events);
+    {
+            /*
+             * Wait for packet
+             */
+            
+            rtems_bsdnet_event_receive (START_TRANSMIT_EVENT,
+                                        RTEMS_EVENT_ANY | RTEMS_WAIT,
+                                        RTEMS_NO_TIMEOUT, &events);
 #ifdef GRETH_DEBUG
-    printf ("t\n");
+            printf ("t\n");
 #endif
-
-	  /*
-	   * Send packets till queue is empty
-	   */
-	  for (;;)
+            
+            /*
+             * Send packets till queue is empty
+             */
+            
+            
+            for (;;)
 	    {
-		/*
-		 * Get the next mbuf chain to transmit.
-		 */
-		IF_DEQUEUE (&ifp->if_snd, m);
-		if (!m)
-		    break;
-                
-		sendpacket (ifp, m);
-	    }
-	  ifp->if_flags &= ~IFF_OACTIVE;
-      }
+                    /*
+                     * Get the next mbuf chain to transmit.
+                     */
+                    IF_DEQUEUE (&ifp->if_snd, m);
+                    if (!m)
+                            break;
+                    sendpacket(ifp, m);
+            }
+            ifp->if_flags &= ~IFF_OACTIVE;
+    }
+}
+
+/*
+ * Driver transmit daemon
+ */
+void
+greth_txDaemon_gbit (void *arg)
+{
+    struct greth_softc *sc = (struct greth_softc *) arg;
+    struct ifnet *ifp = &sc->arpcom.ac_if;
+    struct mbuf *m;
+    rtems_event_set events;
+    
+    for (;;)
+    {
+            /*
+             * Wait for packet
+             */
+            
+            rtems_bsdnet_event_receive (START_TRANSMIT_EVENT,
+                                        RTEMS_EVENT_ANY | RTEMS_WAIT,
+                                        RTEMS_NO_TIMEOUT, &events);
+#ifdef GRETH_DEBUG
+            printf ("t\n");
+#endif
+            
+            /*
+             * Send packets till queue is empty
+             */
+            for (;;)
+	    {
+                    while((sc->tx_cnt > 0) && !(sc->txdesc[sc->tx_dptr].ctrl & GRETH_TXD_ENABLE)) {
+                            m_free(sc->txmbuf[sc->tx_dptr]);
+                            sc->tx_dptr = (sc->tx_dptr + 1) % sc->txbufs;
+                            sc->tx_cnt--;
+                    }
+                    /*
+                     * Get the next mbuf chain to transmit.
+                     */
+                    IF_DEQUEUE (&ifp->if_snd, m);
+                    if (!m)
+                            break;
+                    sendpacket_gbit(ifp, m);
+            }
+            ifp->if_flags &= ~IFF_OACTIVE;
+    }
 }
 
 
@@ -521,8 +823,14 @@ greth_init (void *arg)
 	   */
 	  sc->rxDaemonTid = rtems_bsdnet_newproc ("DCrx", 4096,
 						  greth_rxDaemon, sc);
-	  sc->txDaemonTid = rtems_bsdnet_newproc ("DCtx", 4096,
-						  greth_txDaemon, sc);
+          if (sc->gbit_mac) {
+                  sc->txDaemonTid = rtems_bsdnet_newproc ("DCtx", 4096,
+                                                          greth_txDaemon_gbit, sc);
+          } else {
+                  sc->txDaemonTid = rtems_bsdnet_newproc ("DCtx", 4096,
+                                                          greth_txDaemon, sc);
+          }
+          
       }
 
     /*
