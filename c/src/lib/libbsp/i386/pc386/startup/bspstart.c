@@ -59,7 +59,8 @@ uint32_t         _heap_size = 0;
 /* Alternative way to hardcode the board's memory size [rather than heap size].
  * Can easily be overridden by application.
  */
-extern uint32_t bsp_mem_size __attribute__ ((weak, alias("bsp_mem_size_default")));
+extern uint32_t bsp_mem_size
+  __attribute__ ((weak, alias("bsp_mem_size_default")));
 uint32_t bsp_mem_size_default = 0;
 
 /* Size of stack used during initialization. Defined in 'start.s'.  */
@@ -97,8 +98,8 @@ void bsp_postdriver_hook(void);
 +--------------------------------------------------------------------------*/
 void bsp_pretasking_hook(void)
 {
-  uint32_t         topAddr, val;
-  int i, lowest;
+  uint32_t topAddr, val;
+  int      i, lowest;
 
   if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
     rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
@@ -111,14 +112,13 @@ void bsp_pretasking_hook(void)
   /* The memory detection algorithm is very crude; try
    * to use multiboot info, if possible (set from start.S)
    */
-  if (   bsp_mem_size == 0
-      && (_boot_multiboot_info.flags & 1)
-      && _boot_multiboot_info.mem_upper ) {
+  if ( bsp_mem_size == 0 &&
+       (_boot_multiboot_info.flags & 1) &&
+       _boot_multiboot_info.mem_upper ) {
     bsp_mem_size = _boot_multiboot_info.mem_upper * 1024;
   }
 
-  if (_heap_size == 0) {
-
+  if ( _heap_size == 0 ) {
     if ( bsp_mem_size == 0 ) {
         /*
          * We have to dynamically size memory. Memory size can be anything
@@ -139,13 +139,15 @@ void bsp_pretasking_hook(void)
         }
       
         topAddr = (i-1)*1024*1024 - 4;
-
       } else {
-
         topAddr = bsp_mem_size;
-
       }
 
+    if ( rtemsFreeMemStart > topAddr ) {
+      printk( "Out of memory -- unable to initialize BSP\n" );
+      rtems_fatal_error_occurred( 0x85858585 ); 
+    }
+ 
     _heap_size = topAddr - rtemsFreeMemStart;
   }
 
@@ -153,10 +155,9 @@ void bsp_pretasking_hook(void)
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
 
 #ifdef RTEMS_DEBUG
-
   rtems_debug_enable(RTEMS_DEBUG_ALL_MASK);
-
 #endif /* RTEMS_DEBUG */
+
 } /* bsp_pretasking_hook */
 
 /*-------------------------------------------------------------------------+

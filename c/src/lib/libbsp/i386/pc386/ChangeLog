@@ -1,3 +1,8 @@
+2007-09-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: If we cannot find enough memory to run the
+	program, generate a fatal error and print a message.
+
 2007-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* ne2000/ne2000.c: Fix spelling error.
