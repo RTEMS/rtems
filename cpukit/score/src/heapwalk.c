@@ -99,7 +99,7 @@ boolean _Heap_Walk(
     error = 1;
   }
 
-  while ( the_block < end ) {
+  while ( the_block != end ) {
     uint32_t const the_size = _Heap_Block_size(the_block);
     Heap_Block *const next_block = _Heap_Block_at(the_block, the_size);
     boolean prev_used = _Heap_Is_prev_used(the_block);
@@ -165,12 +165,14 @@ boolean _Heap_Walk(
   }
 
   if (the_block != end) {
-    printk("PASS: %d !last block address isn't equal to 'final'\n", source);
+    printk("PASS: %d !last block address isn't equal to 'final' %p %p\n",
+      source, the_block, end);
     error = 1;
   }
 
   if (_Heap_Block_size(the_block) != the_heap->page_size) {
-    printk("PASS: %d !last block's size isn't page_size\n", source);
+    printk("PASS: %d !last block's size isn't page_size (%d != %d)\n", source,
+           _Heap_Block_size(the_block), the_heap->page_size);
     error = 1;
   }
 

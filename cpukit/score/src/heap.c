@@ -117,14 +117,14 @@ uint32_t   _Heap_Initialize(
   uint32_t             page_size
 )
 {
-  Heap_Block *the_block;
-  uint32_t  the_size;
-  _H_uptr_t   start;
-  _H_uptr_t   aligned_start;
-  uint32_t  overhead;
+  Heap_Block            *the_block;
+  uint32_t               the_size;
+  _H_uptr_t              start;
+  _H_uptr_t              aligned_start;
+  uint32_t               overhead;
   Heap_Statistics *const stats = &the_heap->stats;
 
-  if(page_size == 0)
+  if (page_size == 0)
     page_size = CPU_ALIGNMENT;
   else
     _Heap_Align_up( &page_size, CPU_ALIGNMENT );

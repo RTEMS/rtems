@@ -24,8 +24,19 @@ boolean _Protected_heap_Walk(
 {
   boolean status;
 
-  _RTEMS_Lock_allocator();
+  /*
+   * If we are called from within a dispatching critical section,
+   * then it is forbidden to lock a mutex.  But since we are inside
+   * a critical section, it should be safe to walk it unlocked.
+   * 
+   * NOTE: Dispatching is also disabled during initialization.
+   */
+  if ( !_Thread_Dispatch_disable_level ) {
+    _RTEMS_Lock_allocator();
+      status = _Heap_Walk( the_heap, source, do_dump );
+    _RTEMS_Unlock_allocator();
+  } else {
     status = _Heap_Walk( the_heap, source, do_dump );
-  _RTEMS_Unlock_allocator();
+  }
   return status;
 }
