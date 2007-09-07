@@ -1,3 +1,7 @@
+2007-09-07	Daniel Hellstrom <daniel@gaisler.com>
+
+	* leon_smc91111/leon_smc91111.c, rasta/rasta.c: Remove warnings.
+
 2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
 
 	* pci/pci.c: New file.

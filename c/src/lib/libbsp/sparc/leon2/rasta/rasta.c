@@ -58,7 +58,7 @@ typedef struct {
 static int bus, dev, fun;
 
 LEON3_IrqCtrl_Regs_Map *irq = NULL;
-LEON_Register_Map      *regs = 0x80000000;
+LEON_Register_Map      *regs = (LEON_Register_Map *)0x80000000;
 
 struct gpio_reg *gpio0, *gpio1;
 
@@ -205,7 +205,7 @@ void rasta_interrrupt_register(void *handler, int irqno, void *arg)
 }
 
 
-int rasta_get_gpio(amba_confarea_type *abus, int index, unsigned int *address, int *irq)
+int rasta_get_gpio(amba_confarea_type *abus, int index, struct gpio_reg **regs, int *irq)
 {
   amba_apb_device dev;
   int cores;
@@ -218,8 +218,8 @@ int rasta_get_gpio(amba_confarea_type *abus, int index, unsigned int *address, i
   if ( cores < 1 )
     return -1;
   
-  if ( address )
-    *address = dev.start;
+  if ( regs )
+    *regs = (struct gpio_reg *)dev.start;
   
   if ( irq )
     *irq = dev.irq;
@@ -261,10 +261,10 @@ int rasta_register(void)
     pci_read_config_dword(bus, dev, fun, 0x10, &bar0);
     pci_read_config_dword(bus, dev, fun, 0x14, &bar1);
 
-    page0 = bar0 + 0x400000; 
+    page0 = (unsigned int *)(bar0 + 0x400000); 
     *page0 = 0x80000000;                  /* Point PAGE0 to start of APB       */
 
-    apb_base = bar0+APB2_OFFSET;
+    apb_base = (unsigned int *)(bar0+APB2_OFFSET);
 
 /*  apb_base[0] = 0x000002ff;
     apb_base[1] = 0x8a205260;
@@ -368,13 +368,13 @@ int rasta_register(void)
     }
 
     /* Find GPIO0 address */
-    if ( rasta_get_gpio(&abus,0,(unsigned int *)&gpio0,NULL) ){
+    if ( rasta_get_gpio(&abus,0,&gpio0,NULL) ){
       printk("Failed to get address for RASTA GPIO0\n\r");
       return -1;
     }
         
     /* Find GPIO1 address */
-    if ( rasta_get_gpio(&abus,1,(unsigned int *)&gpio1,NULL) ){
+    if ( rasta_get_gpio(&abus,1,&gpio1,NULL) ){
       printk("Failed to get address for RASTA GPIO1\n\r");
       return -1;
     }

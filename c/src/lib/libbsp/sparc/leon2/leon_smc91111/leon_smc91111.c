@@ -5,7 +5,7 @@
 #include <rtems.h>
 
 #include <bsp.h>
-#include <stdio.h>
+#include <rtems/bspIo.h>
 
 #include <stdlib.h>
 #include <stdio.h>
