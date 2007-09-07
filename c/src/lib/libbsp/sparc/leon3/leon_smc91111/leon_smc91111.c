@@ -4,7 +4,7 @@
 
 #include <bsp.h>
 #include <libchip/smc91111exp.h>
-#include <stdio.h>
+#include <rtems/bspIo.h>
 
 
 #define SMC91111_BASE_ADDR (void*)0x20000300
@@ -33,9 +33,10 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
   unsigned long addr_mctrl = 0;
   LEON3_IOPORT_Regs_Map *io;
 
-  amba_apb_device apbpio, apbmctrl;
+  amba_apb_device apbpio;
+  amba_ahb_device apbmctrl;
   
-  if ( amba_find_ahbslv(&amba_conf,VENDOR_GAISLER,GAISLER_PIOPORT,&apbpio) != 1 ){
+  if ( amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_PIOPORT,&apbpio) != 1 ){
     printk("SMC9111_leon3: didn't find PIO\n");
     return 0;
   }

@@ -32,8 +32,6 @@ int rtems_leon_greth_driver_attach(
 )
 {
   int device_found = 0;
-  int i;
-  unsigned int conf, iobar;
   unsigned int base_addr = 0; /* avoid warnings */
   unsigned int eth_irq = 0;   /* avoid warnings */
 	amba_apb_device apbgreth;

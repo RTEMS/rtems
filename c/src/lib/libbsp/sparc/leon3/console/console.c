@@ -91,7 +91,6 @@ static int isinit = 0;
 volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 
 int scan_uarts() {	
-  unsigned int iobar, conf;
   int i;
 	amba_apb_device apbuarts[LEON3_APBUARTS];
 	
@@ -100,7 +99,7 @@ int scan_uarts() {
     
     uarts = amba_find_apbslvs(&amba_conf,VENDOR_GAISLER,GAISLER_APBUART,apbuarts,LEON3_APBUARTS);
     for(i=0; i<uarts; i++){
-			LEON3_Console_Uart[i] = apbuarts[i].start;
+			LEON3_Console_Uart[i] = (volatile LEON3_UART_Regs_Map *)apbuarts[i].start;
 		}
     isinit = 1;
   }
